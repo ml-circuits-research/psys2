@@ -13,9 +13,9 @@ import { createSpeech, createMicLock, measureSpeed, speechSupport, LANG_TAGS } f
 import { classifyVoice } from './ui/voice-noise.mjs';
 import { createSwitchTranslator, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
-import { findDispatcherModel, dispatcherLoader, versionLabel } from './ui/dispatcher-host.mjs';
-import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.mjs';
-import { sessionOptions } from './lib/dialog/runtime-config.mjs';
+import { findDispatcherModel, versionLabel } from './ui/dispatcher-host.mjs';
+import { findNormalizerModel } from './ui/normalizer-host.mjs';
+import { createEngineClient } from './ui/engine-client.mjs';
 import { normalizeNxStrategy } from './lib/formalizer/nx.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
@@ -48,7 +48,7 @@ async function loadTabPlugins(base) {
 const SHELL = 'ui.shell';
 /** Turn lifecycle (spec 06): one message at a time, a hard limit from Enter, every host effect bounded. */
 export const TURN_LIMITS = Object.freeze({ watchdogMs: TIME_LIMIT_DEFAULTS.watchdogMs, softFraction: 0.65, backstopMs: 1500, speakPerCharMs: 90 });   // effectMs, speakBaseMs, speakMaxMs live in LIMITS (Settings › Developer › Time limits)
-export const TOO_LONG = 'That took too long, so I stopped. Try a shorter request.';
+export const TOO_LONG = 'That took too long, I stopped it.';
 export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
 export const BUSY_HINT = 'Wait for the answer or press Stop.';
 const EXAMPLES = [
@@ -92,7 +92,9 @@ export async function mountPsys2(element, options = {}) {
   const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
-  let engine = null, session = null, translator = null, speech = null;
+  let engine = null, session = null, translator = null, speech = null, engineClient = null;
+  const stageLog = [], longTasks = [];   // COMPUTE-BUDGET: host stage transitions and every main-thread task over 200 ms (PerformanceObserver 'longtask')
+  const hostStage = (stage, recId = null) => { stageLog.push({ at: performance.now(), stage, recId }); if (stageLog.length > 400) stageLog.splice(0, 200); };
   let view = tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
@@ -431,8 +433,7 @@ export async function mountPsys2(element, options = {}) {
   // ---------- sending ----------
   const robotUI = () => panelUI.robot?.ui;
   function serializeWires(wires) {
-    const L = engine.set.legends;
-    const shaped = wires.map((w) => ({ ...w, entries: w.entries.map((e) => ({ key: L.shortKey?.(w.type, e.key) ?? e.key, value: e.value })) }));
+    const shaped = wires.map((w) => ({ ...w, entries: w.entries.map((e, i) => ({ key: w.sk?.[i] ?? e.key, value: e.value })) }));   // the engine worker adds `sk` (short keys): the legends stay there
     return lib.serialize(shaped);
   }
   /** Background work (rule compilation, warm-up) steps aside while a turn runs: the person's message always comes first (PERF round 3). */
@@ -449,12 +450,14 @@ export async function mountPsys2(element, options = {}) {
   async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {
     user ??= addMessage('user', text);
     const ctl = new AbortController();
-    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode };
+    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode, recId };
     busy++; setStatus();
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
     const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), thinkingLabel), { className: 'is-typing' });
     typing.msg.removeAttribute('aria-live');
     translator.resetUsage();
+    hostStage('thinking', recId);
+    if (engineClient?.booting) { try { await engineClient.ready(); } catch { /* the turn then reports the engine error */ } tPress = performance.now(); tn.t0 = tPress; }   // a replacement engine worker is still starting: the turn limit counts from when it is ready
     const limit = options.watchdogMs ?? LIMITS.watchdogMs;   // live: Settings › Developer › Time limits
     const tStart = tPress;
     const ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; }, 100);
@@ -476,7 +479,7 @@ export async function mountPsys2(element, options = {}) {
     } finally {
       clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker);
       if (typing.msg.isConnected) typing.msg.remove();
-      if (turn === tn) { turn = null; lastTurnEnd = performance.now(); }
+      if (turn === tn) { turn = null; lastTurnEnd = performance.now(); hostStage('idle'); }
       effectsPending = 0;
       busy = Math.max(0, busy - 1); setStatus(); scrollDown();
       queueMicrotask(() => { if (!turn && !destroyed) drainQueue(); });   // the next waiting message runs now
@@ -488,8 +491,10 @@ export async function mountPsys2(element, options = {}) {
     clearInterval(ticker);
     typing.msg.remove();
     const reason = tn.reason ?? e?.reason ?? 'timeout';
-    const stage = e?.stage ?? guard.trippedStage ?? 'unknown';
+    const stage = e?.stage ?? guard.trippedStage ?? engineClient?.stage ?? 'unknown';
     const ms = Math.round(performance.now() - tStart);
+    console.warn('turn stopped', { reason, stage, ms, text, tab: view });   // COMPUTE-BUDGET: stage and input of every stopped turn
+    hostStage('idle');
     try { if (tn.undo) session.restore(tn.undo); applyState(session.state?.()); } catch (err) { console.warn('restore after abort failed', err); }
     if (recId) {
       try { phrases.update(recId, (r) => completeStopped(r, { reason, stage, ms })); if (!settingsEl.hidden) renderPhraseLog(); } catch (err) { console.warn('phrase log failed', err); }
@@ -514,6 +519,7 @@ export async function mountPsys2(element, options = {}) {
       reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true, nx: settings.nxStrategy,
         signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
+      if (e instanceof TurnAborted && engineClient?.stage) e.stage = engineClient.stage;   // the stage the engine worker reported last (the page-side deadline only knows 'turn')
       if (e instanceof TurnAborted || tn.ctl.signal.aborted) throw e;
       if (/timed out after/.test(e?.message ?? '')) throw new TurnAborted('timeout', guard.stage ?? 'engine');
       throw e;
@@ -521,6 +527,7 @@ export async function mountPsys2(element, options = {}) {
     clearInterval(ticker);
     const engineMs = performance.now() - tStart;
     const tHost = performance.now();
+    hostStage('render', recId);
     typing.msg.remove();
     const usage = translator.usage.map((u) => ({ ...u }));
     const detection = translator.detectUsage.map((u) => ({ ...u }));
@@ -548,6 +555,7 @@ export async function mountPsys2(element, options = {}) {
     lastAnswerLen = String(answer).length;
     if (settings.speaker && speech && speechSupport.synthesis) speech.speak(answer, { lang: speechLangTag() });
     const tEffects = performance.now();
+    hostStage('effects', recId);
     let effects;
     try { effects = await runEffects(reply.effects); } catch (e) { botMsg.msg.remove(); throw e; }   // stopped while the effects ran: the answer is withdrawn
     const effectsMs = performance.now() - tEffects;
@@ -576,6 +584,7 @@ export async function mountPsys2(element, options = {}) {
     const totalMs = performance.now() - tStart;
     reply.perf = { ...(reply.perf ?? { total: engineMs, stages: {} }), engineMs: Math.round(engineMs), render: Math.round((performance.now() - tHost - effectsMs) * 10) / 10, effects: Math.round(effectsMs * 10) / 10, totalMs: Math.round(totalMs) };
     botMsg.meta.append(h('span', { class: 'p2-took', title: 'Time from sending to the answer on screen' }, `answered in ${fmtDur(totalMs)}`));
+    if (reply.budget && recId) { try { phrases.update(recId, (r) => ({ budget: reply.budget, ...(r.detail ? { detail: { ...r.detail, budget: reply.budget } } : {}) })); } catch { /* ignore */ } }   // ticks per site of this turn (the engine's step budget)
     if (detail && recId) { try { phrases.update(recId, (r) => ({ detail: { ...(r.detail ?? detail), perf: { ...(r.detail?.perf ?? {}), totalMs: reply.perf.totalMs, engineMs: reply.perf.engineMs, render: reply.perf.render, effects: reply.perf.effects, stages: reply.perf.stages ?? null } } })); } catch { /* ignore */ } }
     const rec = { text, ...reply.perf, formalizer: settings.formalizer };
     (globalThis.__psys2Perf ??= []).push(rec);
@@ -626,6 +635,8 @@ export async function mountPsys2(element, options = {}) {
           formalizer: settings.formalizer,
           dispatcher: { label: dispatcherLabel, status: { ...dispatcherStatus }, source: modelSource, version: dispatcherVersion },
           normalizer: normalizerHost ? { label: normalizerHost.label, model: normalizerHost.meta?.model ?? null, status: { ...normalizerHost.status } } : null,
+          engine: { stats: engineClient ? { ...engineClient.stats } : null, badInputs: engineClient?.badInputs() ?? [] },
+          longTasks: longTasks.slice(-30),
         }),
       });
       return dbg;
@@ -640,7 +651,18 @@ export async function mountPsys2(element, options = {}) {
     syncDebugButton();
     if (!settingsEl.hidden) renderSettings();
   }
-  on(dbgBtn, 'click', async () => { const d = await loadDebug(); d?.open(view, dbgBtn); });
+  /** Developer mode only: the world and command listings of the debug view read the worlds, which live in the engine worker; a second copy (no rule compilation) is loaded here on first use. */
+  async function ensureIntroEngine() {
+    if (introEngine) return introEngine;
+    try {
+      const [dialog, loaders] = await Promise.all([import(new URL('lib/dialog/index.mjs', base).href), import(new URL('lib/loaders/bundle-loader.mjs', base).href)]);
+      const bundle = await (await fetch(new URL('worlds/index.json', base))).json();
+      for (const [id, w] of Object.entries(bundle.worlds)) { if (options.worlds && id !== 'core' && !options.worlds.includes(id)) delete bundle.worlds[id]; else if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, base).href; }
+      introEngine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator: null });
+    } catch (e) { console.warn('debug: worlds not available', e); }
+    return introEngine;
+  }
+  on(dbgBtn, 'click', async () => { const d = await loadDebug(); await ensureIntroEngine(); d?.open(view, dbgBtn); });
 
   // ---------- feedback (FB): thumbs up / down under every answer ----------
   let lastAnswer = null, pendingCorrection = null;
@@ -1163,7 +1185,7 @@ export async function mountPsys2(element, options = {}) {
   const MODE_NAME = { typed: 'typed', voice: 'spoken', chip: 'button' };
   /** One click: the share sheet where the browser offers one for files (phones), else a download. Returns the number of records. */
   function exportPhrases() {
-    const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true });
+    const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true, diagnostics: diagnostics() });
     const n = JSON.parse(body).count;
     if (!n) { toast('No phrases to export yet'); return 0; }
     saveFile(exportFilename(), body);
@@ -1201,13 +1223,29 @@ export async function mountPsys2(element, options = {}) {
   let modelsAllowed = false;   // the models load after the page is usable (PERF): the rules answer meanwhile
   function applyEngineSettings() {
     if (!session) return;
-    Object.assign(session, sessionOptions(settings));
-    session.fastPath = settings.fastPath === true;
-    if (session.settings && typeof session.settings === 'object') session.settings.formalizer = settings.formalizer;
-    session.setOption?.('formalizer', settings.formalizer);
-    if (settings.formalizer === 'encoder' && dispatcherEnc && modelsAllowed) dispatcherEnc.prepare().catch(() => {});   // lazy: only now is the model fetched
+    session.applySettings(settings, { prepare: !!dispatcherEnc && modelsAllowed });   // the engine worker keeps its own copy; every turn also carries the current settings
   }
   speech.onVoicesChanged(() => renderSettings());
+
+  // ---------- evidence from real browsers (COMPUTE-BUDGET 5) ----------
+  /** The host stage a main-thread task started in: the last transition before it. */
+  const stageAt = (t) => { let hit = null; for (const x of stageLog) { if (x.at <= t) hit = x; else break; } return hit ?? { stage: 'idle', recId: null }; };   // bounded: stageLog is capped at 400 entries
+  try {
+    if (typeof PerformanceObserver === 'function' && PerformanceObserver.supportedEntryTypes?.includes('longtask')) {
+      const po = new PerformanceObserver((list) => {
+        for (const e of list.getEntries()) {
+          if (e.duration < 200) continue;
+          const at = stageAt(e.startTime);
+          const lt = { at: new Date(performance.timeOrigin + e.startTime).toISOString(), ms: Math.round(e.duration), stage: at.stage, engineStage: at.stage === 'thinking' ? engineClient?.stage ?? null : null, tab: view };
+          longTasks.push(lt); if (longTasks.length > 200) longTasks.shift();
+          if (at.recId && settings.logPhrases) { try { phrases.update(at.recId, (r) => ({ longtasks: [...(r.longtasks ?? []), lt].slice(-10) })); } catch { /* ignore */ } }
+        }
+      });
+      po.observe({ type: 'longtask', buffered: true });
+      cleanups.push(() => po.disconnect());
+    }
+  } catch { /* no Long Tasks API */ }
+  const diagnostics = () => ({ longTasks: longTasks.slice(-100), engine: engineClient ? { ...engineClient.stats, bad: engineClient.badInputs().map(({ key, reason, stage, site, kind, at }) => ({ key, reason, stage, site, kind, at })) } : null, ort: globalThis.__psys2Ort ? { restarts: globalThis.__psys2Ort.restarts, stats: globalThis.__psys2Ort.stats } : null });
 
   // ---------- boot ----------
   langSel.value = settings.language;
@@ -1216,64 +1254,61 @@ export async function mountPsys2(element, options = {}) {
   renderSettings();
   setStatus();
 
-  let lib, rulesReady = Promise.resolve();
+  let lib, introEngine = null;
+  const testHooksOn = (() => { try { return new URLSearchParams(globalThis.location?.search ?? '').get('psys2test') === '1' || globalThis.__psys2TestHooks === true; } catch { return false; } })();   // fault injection (tests only): inert without it
+  const engineSettings = () => { try { return JSON.parse(JSON.stringify(settings)); } catch { return {}; } };
+  // the engine worker's events: model status, ORT counters, stage
+  const ortMirror = { restarts: 0, stats: {}, paused: null, speed: 1, limits: null, lanes: {}, resume() { this.paused = null; engineClient?.call('ort-resume').catch(() => {}); }, restart: (lane, why) => engineClient.call('ort-restart', { lane, why }) };   // the real ORT client lives in the engine worker; this mirror is refreshed by its events
+  function onEngineEvent(name, data) {
+    if (name === 'dispatcher-status') {
+      if (data.state === 'error') encoderFailed(data.message); else if (data.state === 'ready') encoderNoticed = false;
+      dispatcherStatus = { ...data, message: data.state === 'loading' ? dispatcherStatus.message || data.message : data.message }; setStatus(); if (!settingsEl.hidden) renderSettings();
+    } else if (name === 'normalizer-status') { if (normalizerHost) normalizerHost.status = data; if (!settingsEl.hidden) renderSettings(); }
+    else if (name === 'model-source') modelSource = data;
+    else if (name === 'progress') { dispatcherStatus = { ...dispatcherStatus, message: data }; setStatus(); }
+    else if (name === 'ort') { Object.assign(ortMirror, data); globalThis.__psys2Ort = ortMirror; }
+    else if (name === 'ort-paused') { ortMirror.paused = data; try { globalThis.dispatchEvent?.(new CustomEvent('psys2-ort-paused', { detail: data })); } catch { /* no events */ } }
+    else if (name === 'rules-compiled') mark('rules-compiled');
+    else if (name === 'warm') mark(`warm-${data}`);
+  }
   try {
-    const [dialog, loaders, translate, soplang] = await Promise.all([
-      import(new URL('lib/dialog/index.mjs', base).href), import(new URL('lib/loaders/bundle-loader.mjs', base).href),
-      import(new URL('lib/translate/index.mjs', base).href), import(new URL('lib/soplang/index.mjs', base).href),
-    ]);
-    const early = globalThis.__psys2Early?.worlds; if (early) delete globalThis.__psys2Early.worlds;   // started by index.html before the module graph was loaded
-    const res = await (early ?? fetch(new URL('worlds/index.json', base) + (globalThis.__psys2Mod?.['worlds/index.json'] ? `?v=${globalThis.__psys2Mod['worlds/index.json']}` : ''))).catch(() => fetch(new URL('worlds/index.json', base)));
-    if (!res.ok) throw new Error(`worlds/index.json: HTTP ${res.status}`);
-    const bundle = await res.json();
-    for (const [id, w] of Object.entries(bundle.worlds)) {
-      if (options.worlds && id !== 'core' && !options.worlds.includes(id)) delete bundle.worlds[id];
-      else if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, base).href;
-    }
+    const soplang = await import(new URL('lib/soplang/index.mjs', base).href);
     lib = { serialize: soplang.serialize };
-    translator = createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection });
-    engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
-    rulesReady = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); await userFirst(); } }) ?? Promise.resolve()).catch(() => {}).then(() => mark('rules-compiled'));   // starts at once, in slices that yield: it overlaps the rest of the boot (network waits, tab modules), so a first message finds the rules compiled
-    try {   // Encoder formalizer (the default): only when this build ships the dispatcher model; the model is fetched at once, in the background, and cached by version
-      const [meta, nzMeta] = await Promise.all([findDispatcherModel(base), findNormalizerModel(base)]);
-      if (meta) {
-        if (nzMeta) {
-          const nzrt = await import(new URL('lib/dialog/normalizer-runtime.mjs', base).href);
-          normalizerHost = createNormalizerHost({ base, meta: nzMeta, lib: nzrt, onStatus: () => { if (!settingsEl.hidden) renderSettings(); } });
-        }
-        const [rc, wp] = await Promise.all([import(new URL('lib/dialog/runtime-config.mjs', base).href), import(new URL('lib/formalizer/wordpiece.mjs', base).href)]);
-        dispatcherEnc = rc.createRuntime({   // the shared factory (lib/dialog/runtime-config.mjs, spec 03 section 7.14): same policy as the evaluators
-          engine, settings,
-          load: dispatcherLoader({ base, meta, lib: wp, onSource: (src) => { modelSource = src; }, onProgress: (m) => { dispatcherStatus = { ...dispatcherStatus, message: m }; setStatus(); } }),
-          normalizer: normalizerHost?.provider ?? null,
-          waitForModel: false,   // the model loads in the background; the rules answer until it is ready
-          isPaused: () => !!globalThis.__psys2Ort?.paused,   // ORT paused after repeated worker restarts: the rules answer (ADR-009)
-        });
-        dispatcherVersion = meta.version ?? null;
-        dispatcherLabel = versionLabel(meta);
-        dispatcherEnc.onStatus((st) => { if (st.state === 'error') encoderFailed(st.message); else if (st.state === 'ready') encoderNoticed = false; dispatcherStatus = { ...st, message: st.state === 'loading' ? dispatcherStatus.message || st.message : st.message }; setStatus(); if (!settingsEl.hidden) renderSettings(); });
-      }
-      encoderChecked = true;
-    } catch (e) { encoderChecked = true; console.warn('Encoder formalizer unavailable', e); }
+    let meta = null, nzMeta = null;
+    try { [meta, nzMeta] = await Promise.all([findDispatcherModel(base), findNormalizerModel(base)]); } catch (e) { console.warn('Encoder formalizer unavailable', e); }
+    encoderChecked = true;
+    // Facades of the models that live in the engine worker (the page only needs their labels, status and a way to start loading them)
+    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getSettings: engineSettings, getTab: () => view, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
+    if (meta) {
+      dispatcherEnc = { prepare: () => engineClient.call('prepare', { which: 'dispatcher' }) };
+      dispatcherVersion = meta.version ?? null;
+      dispatcherLabel = versionLabel(meta);
+    }
+    if (meta && nzMeta) normalizerHost = { meta: nzMeta, label: versionLabel(nzMeta), status: { state: 'idle', message: '' }, timings: [], prepare: () => engineClient.call('prepare', { which: 'normalizer' }) };
+    // The browser Translation API lives on the window, not in a worker: the engine reads other languages with the rules translator.
+    translator = { get usage() { return engineClient.usage; }, get detectUsage() { return engineClient.detection; }, resetUsage() { engineClient.resetUsage(); },
+      translatorState: () => 'the engine runs in a worker, which uses the rules translator', prepareTranslator: async () => {}, rules: null };
+    const worldsVer = globalThis.__psys2Mod?.['worlds/index.json'];
+    const info = await engineClient.boot({ worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    engine = { worlds: () => info.worlds.map((id) => ({ id })), problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
+    if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
-    const problems = engine.problems?.() ?? [];
-    if (problems.length) console.warn('PSys2 world problems:', problems);
-    session = engine.createSession({ language: settings.language }); mark('session');
+    session = engineClient.session; mark('session');
   } catch (e) {
     console.error(e);
     statusEl.textContent = 'Could not start';
     note(`PSys2 could not start: ${e?.message ?? e}. If you opened this page from disk, serve it over HTTP instead; if lib/ or worlds/ are missing, run "npm run build:webchat".`);
     input.disabled = sendBtn.disabled = dieBtn.disabled = true;
-    return { settings, destroy() {} };
+    return { settings, destroy() { engineClient?.destroy(); } };
   }
   if (destroyed) return { settings, destroy() {} };
 
   // the pool loads in the background; the die button is ready a moment after the page
   (async () => {
     try {
-      const [{ candidateExamples, createSurprisePicker }, pool] = await Promise.all([import(new URL('lib/dialog/surprise.mjs', base).href),
+      const [{ createSurprisePicker }, pool] = await Promise.all([import(new URL('lib/dialog/surprise.mjs', base).href),
         fetch(new URL('surprise-pool.json', base)).then((r) => (r.ok ? r.json() : null)).catch(() => null)]);
-      surprisePicker = createSurprisePicker(Array.isArray(pool) && pool.length ? pool : candidateExamples(engine));   // unvalidated fallback: the build writes the validated pool
+      surprisePicker = createSurprisePicker(Array.isArray(pool) && pool.length ? pool : await engineClient.call('candidates'));   // unvalidated fallback: the build writes the validated pool
     } catch (e) { console.warn('surprise pool unavailable', e); }
   })();
 
@@ -1306,12 +1341,12 @@ export async function mountPsys2(element, options = {}) {
     addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
   }
   const handle = {
-    engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
+    engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab, get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),
     get micLog() { return micLog; }, micClick,
-    destroy() { destroyed = true; cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
+    destroy() { destroyed = true; engineClient?.destroy(); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   // FREEZE: the listening state is never restored; the microphone starts only with a click
   if (settings.devMode === true) { syncDebugButton(); loadDebug(); }   // DBG: developer mode is remembered
@@ -1335,28 +1370,13 @@ export async function mountPsys2(element, options = {}) {
   };
   const warm = async () => {
     mark('warm-start');
-    const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };
     try {
-      await rulesReady;
-      const s = engine.createSession({ language: 'en' });
-      for (const m of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) { await userFirst(); await s.send(m, opts); await sleep(0); }
-      mark('warm-rules');
-      try {   // the Romanian rules translator (lexicons, phrase tables) and the English-to-Romanian reply tables: a cold first Romanian message took 5-9 s at 4x CPU
-        await userFirst();
-        const tr = translator?.rules;
-        if (tr) {
-          tr.detectLanguage?.('repede: câte zile are iunie?');
-          const out = tr.translate('repede: câte zile are iunie?', { from: 'ro', to: 'en' });
-          await sleep(0); await userFirst();
-          tr.translate('There are 30 days in June.', { from: 'en', to: 'ro' });
-        }
-      } catch { /* best effort */ }
-      mark('warm-translator');
+      await engineClient.warm({ phase: 'rules' });   // in the worker: the rules, the Romanian translator tables; a user turn goes first
       if (destroyed) return;
       modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
       if (dispatcherEnc && settings.formalizer === 'encoder') {
         await dispatcherEnc.prepare(); mark('dispatcher-ready');
-        if (!destroyed) await s.send('what is 3 plus 4', { ...opts, formalizer: 'encoder' });
+        if (!destroyed) await engineClient.warm({ phase: 'model' });
         scheduleNormalizerIdle();
       }
     } catch { /* warm-up is best effort */ }

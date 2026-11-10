@@ -119,8 +119,8 @@ async function writeEarlyLoad({ outDir, tabFiles, ids }) {
   const file = path.join(outDir, 'index.html');
   if (!(await exists(file))) return;
   const html = await readFile(file, 'utf8');
-  const roots = ['app.mjs', 'lib/dialog/index.mjs', 'lib/loaders/bundle-loader.mjs', 'lib/translate/index.mjs', 'lib/soplang/index.mjs', 'lib/dialog/runtime-config.mjs', 'lib/formalizer/wordpiece.mjs',
-    ...tabFiles.map((f) => `ui/tabs/${f}`), ...ids.map((id) => `worlds/${id}/ops.mjs`)];
+  // the engine (dialog, formalizers, translators, world operations) runs in ui/engine-worker.mjs (COMPUTE-BUDGET): the page thread does not preload it
+  const roots = ['app.mjs', 'lib/soplang/index.mjs', 'lib/dialog/time-limits.mjs', ...tabFiles.map((f) => `ui/tabs/${f}`)];
   const mods = await importGraph(outDir, roots);
   // Cache busting (URGENT-FREEZE): GitHub Pages serves everything with max-age=600, so after a deploy a browser mixes old and new files for ten minutes
   // (and an unversioned worker URL can stay old). An import map sends every module URL to `<url>?v=<content hash>`: one index.html always names one

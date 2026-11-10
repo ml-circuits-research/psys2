@@ -130,9 +130,9 @@ export function exportRecord(r) {
 /** Chips are not human phrasing: excluded unless includeChips. */
 export function selectForExport(list, { includeChips = false } = {}) { return list.filter((r) => includeChips || r.source !== 'chip'); }
 /** One JSON document: { format, exported, count, records } (the learning loop reads this and the older JSONL alike). */
-export function toJSON(list, { includeChips = false } = {}) {
+export function toJSON(list, { includeChips = false, diagnostics = null } = {}) {
   const records = selectForExport(list, { includeChips }).map(exportRecord);
-  return `${JSON.stringify({ format: 'psys2-phrase-log/2', exported: new Date().toISOString(), count: records.length, records }, null, 1)}\n`;
+  return `${JSON.stringify({ format: 'psys2-phrase-log/2', exported: new Date().toISOString(), count: records.length, ...(diagnostics ? { diagnostics } : {}), records }, null, 1)}\n`;
 }
 export function toJSONL(list, { includeChips = false } = {}) {
   return selectForExport(list, { includeChips }).map((r) => JSON.stringify(exportRecord(r))).join('\n') + (list.length ? '\n' : '');

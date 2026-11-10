@@ -16,7 +16,7 @@ export async function getOrtClient(base) {
     speed,
     onPause: (p) => { try { globalThis.dispatchEvent?.(new CustomEvent('psys2-ort-paused', { detail: p })); } catch { /* no events */ } },
     graceMs: () => LIMITS.graceMs,
-    spawn: () => new Worker(url, { type: 'module' }),
+    spawn: globalThis.__psys2OrtSpawn ?? (() => new Worker(url, { type: 'module' })),   // inside the engine worker the page owns the ORT workers (COMPUTE-BUDGET): __psys2OrtSpawn asks it for one over a MessagePort
     log: (...a) => { if (debug) console.debug('ORTLOG', ...a); if (a[0] === 'restart') console.warn('ORT worker restarted:', a[1]); },
   });
   client.limits = LIMITS;   // live time limits (Settings › Developer); hosts read them per call

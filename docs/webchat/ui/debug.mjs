@@ -219,6 +219,7 @@ export function createDebug(host) {
       ['Voice or spelling corrections', (trace.segments ?? []).flatMap((s) => (s.corrections ?? []).map((c) => `${c.to} ← ${c.from}`)).join(', ') || undefined],
       ['Reply', t.answer ?? undefined], ['Outcome', t.outcome ? `${t.outcome} in stage ${t.stage ?? '?'}` : undefined],
       ['State', stateChanged == null ? undefined : stateChanged ? 'changed by this turn' : 'unchanged'],
+      ['Step budget', r?.budget ? `${r.budget.ticks} ticks: ${Object.entries(r.budget.bySite ?? {}).map(([k, v]) => `${k} ${v}`).join(', ')}` : undefined],
       ['Timing', r?.perf ? `${r.perf.totalMs ?? r.perf.total} ms total, engine ${r.perf.engineMs ?? '?'} ms, render ${r.perf.render ?? '?'} ms, host effects ${r.perf.effects ?? '?'} ms` : t.ms != null ? `${Math.round(t.ms)} ms` : undefined],
     ])];
     if (t.readings.length) {
@@ -346,6 +347,9 @@ export function createDebug(host) {
       toolbar('models', () => data),
       sec('Dispatcher', kv([['Formalizer setting', m.formalizer], ['Model', m.dispatcher?.label || 'none'], ['Status', m.dispatcher?.status?.state ? `${m.dispatcher.status.state}${m.dispatcher.status.message ? `: ${m.dispatcher.status.message}` : ''}` : undefined], ['Source', m.dispatcher?.source ?? undefined], ['Version', m.dispatcher?.version ? JSON.stringify(m.dispatcher.version) : undefined]])),
       sec('Normalizer', kv([['Model', m.normalizer?.label ?? 'none in this build'], ['Status', m.normalizer?.status?.state ?? undefined], ['Source', m.normalizer?.status?.source ?? undefined], ['Loaded in', m.normalizer?.status?.ms != null ? `${m.normalizer.status.ms} ms` : undefined]])),
+      sec('Engine worker', kv([['Starts / crashes', `${m.engine?.stats?.starts ?? 0} / ${m.engine?.stats?.crashes ?? 0}`], ['Turns / dry reads / refused repeats', `${m.engine?.stats?.sends ?? 0} / ${m.engine?.stats?.dryRuns ?? 0} / ${m.engine?.stats?.refused ?? 0}`],
+        ['Inputs that were stopped (never run again)', (m.engine?.badInputs ?? []).map((b) => `${b.key} (${b.reason}, stage ${b.stage ?? '?'}${b.site ? `, site ${b.site}` : ''})`).join('; ') || 'none'],
+        ['Main-thread tasks over 200 ms', (m.longTasks ?? []).slice(-8).map((t) => `${t.ms} ms in ${t.stage}`).join('; ') || 'none']])),
       sec('ORT worker (onnxruntime-web)', ortInfo ? kv([['Restarts', String(ortInfo.restarts ?? 0)], ['Requests / responses', `${ortInfo.stats?.requests ?? 0} / ${ortInfo.stats?.responses ?? 0}`], ['Timeouts / aborts / cancelled', `${ortInfo.stats?.timeouts ?? 0} / ${ortInfo.stats?.aborts ?? 0} / ${ortInfo.stats?.cancelled ?? 0}`], ['By call', JSON.stringify(ortInfo.stats?.byLabel ?? {})], ['Lanes', ortInfo.lanes ? JSON.stringify(ortInfo.lanes) : undefined], ['Sessions', ortInfo.sessions?.join(', ') || undefined]]) : h('p', { class: 'p2-muted' }, 'No ORT worker was started (the rules answer, or the models are not loaded yet).')),
       sec(`Last model calls for ${cur.world}`, calls.length ? h('table', { class: 'p2-table' }, h('thead', {}, h('tr', {}, ['Turn', 'Model', 'Input', 'Output', 'ms'].map((x) => h('th', {}, x)))), h('tbody', {}, calls.map((c) => h('tr', {}, h('td', {}, String(c.seq)), h('td', {}, c.model), h('td', {}, clip(c.input, 60)), h('td', {}, clip(c.output, 120)), h('td', {}, c.ms != null ? String(Math.round(c.ms)) : ''))))) : h('p', { class: 'p2-muted' }, 'No model call recorded for this world (formalizer "rules", or a fast-path turn).')),
     ];
