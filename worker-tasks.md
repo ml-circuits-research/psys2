@@ -610,6 +610,61 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
+### SOPWORLD-1 — sopworld as the reasoning core, stage 1: three pilot worlds behind a setting (user decision 14:11; pilot validated 17:05) — after the open COMPUTE-BUDGET review items
+
+**What it is.** `sopworld` (https://github.com/ml-circuits-research/soplang-words-lib, same owner, MIT) is a general library for self-consistent worlds of SOP Lang wires:
+- a schema with type hierarchy;
+- rules, denies, defaults;
+- sequence and fluents (state changed by events);
+- aggregates;
+- queries with a status, written as answer wires;
+- actions as transactions;
+- retract and replace;
+- abduction;
+- explain;
+- step budgets on every loop;
+- a structural `fork()`.
+
+The user wants it as the centre of the worlds, so they share one representation and one reasoner: less code, uniform behaviour, better answers. It reads our `.sop` files as they are.
+
+**The pilot, validated by the reviewer at commit 09d310f** (in its `compat/psys2/`: our legends through a mapping file, three worlds rebuilt as matrices, run on our own test cases):
+
+| World | Cases passed | Matrix + fns lines | Our `ops.mjs` lines |
+| --- | --- | --- | --- |
+| kids.shop | 147 of 147 | 71 + 0 | 159 |
+| kids.arith | 207 of 217 | 114 + 0 | 237 |
+| kids.tasks | 231 of 232 | 18 + 86 | 231 |
+
+It also gives things we do not have: a missing argument asked as a question, a default withdrawn by a later statement, retract as undo, explain, abduction ("what did I pay?"). The ten arith failures are being closed there now (ambiguous ties, soft constraints, division by zero, rounding, "received 2" with an unknown start).
+
+**Read first:** its `docs/integration.md`, `SPEC.md` and `compat/psys2/` (`mapping.sop`, `matrices/`, `run.mjs`, `demo.mjs`).
+
+**Stage 1 (this task): no behaviour change by default.**
+1. **Vendor** the built single file `docs/sopworld.mjs` at a pinned commit (or the 0.5.0 tag when it exists) into `src/vendor/sopworld/`, with its LICENSE, an entry in the vendor LICENSES notes, and the commit hash. No network at run time. The build copies it for the engine worker (versioned URL like every module).
+2. **`src/reasoner/`** — a thin host layer, not a second interpreter:
+   - one `World` per dialogue session;
+   - our legends loaded through the mapping (copy `mapping.sop` into `worlds/core/` as data);
+   - session wires told as they are produced;
+   - `core.question` / `core.request` wires answered by `world.query` / actions, with the result turned into our envelope (statuses map 1:1; `refused` → `conflicting` with the reason);
+   - `fork()` for dry runs and validation;
+   - our step budget passed in as the library's budget (one budget per turn, sites prefixed `sopworld.`).
+3. **Per-world opt-in:** a world may ship `matrix.sop` (and a small `fns.mjs` where really needed). Its `world.sop` says `reasoner=matrix`; the default stays `ops`. Bring `kids.shop`, `kids.arith` and `kids.tasks` over from the pilot's matrices (adapt, do not rewrite). Reply wording stays in our templates.
+4. **A setting** (Settings › Developer › Reasoner: `ops` (default) | `matrix where available`), plus the same switch in the CLI and the eval runners.
+5. **Parity gates, with the switch on:**
+   - `test-world kids.shop` 147/147, `kids.tasks` ≥ 231/232, `kids.arith` ≥ 207/217 (every failure listed, linked to the library follow-up that closes it);
+   - the operational set, Romanian set and dialogues unchanged for all other worlds, and within the listed failures for these three;
+   - ms per turn not worse than `ops` by more than 20% on these worlds;
+   - the fault-injection and loop-guard tests still green (the library has its own loop scan: run it on the vendored source in our suite).
+6. **Show the gains in the webchat** with the switch on, as browser rows:
+   - "add to my list" with no item asks "What shall I put on the list?" and the answer completes it;
+   - "I buy a ball" then "three of them" revises the purchase;
+   - "undo that" retracts the purchase and the money is back;
+   - "why?" after a shop answer gives the explanation from `explain`;
+   - "I got 5 lei back for a book, what did I pay?" answers 17.
+7. **Report** in `worker-log.md`: the parity table, lines removed if these three `ops.mjs` were dropped, bundle size added (the file is about 110 kB before these features; report the real figure and its gzip size), turn-time comparison, and **a list of what you had to work around**, as issues for the library session (the reviewer passes them on; do not patch the vendored file).
+
+**Not in stage 1:** removing any `ops.mjs`, changing the default, other worlds. Stage 2 (after the user sees stage 1): the session memory and question resolution of `src/interpreter/` on the library, then kids.time, kids.animals, kids.shapes, user.profile and the game rules; the engine-heavy worlds keep their engines and move only state and validation.
+
 ### COMPUTE-BUDGET — loops and freezes made impossible by construction (user decision, 13:44 local) — P0, before anything else
 
 **What the user decided.** Infinite loops must be prevented on principle, not one bug at a time. Every place where a loop or a repeated computation can happen gets a compute budget, and a computation that ran out of budget is not repeated. The user's tab still freezes on every command with **Reading strategy = Rules only**, so it is not the model. The reviewer cannot reproduce it headless.
