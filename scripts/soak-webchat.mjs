@@ -12,7 +12,7 @@
  * Assertions (exit code 1 when one fails):
  *   - heap flat: median JS heap of the last quarter <= 1.35 x the median of the second quarter + 25 MB (a forced GC before each sample);
  *   - worker count flat: the maximum number of page workers never grows past the first stable count;
- *   - main-thread busy < 50 %: CPU task time (Performance.getMetrics TaskDuration) per wall second, averaged over the run and in the worst minute;
+ *   - main-thread busy: CPU task time (Performance.getMetrics TaskDuration) per wall second, < 50 % averaged over the run and < 70 % in the worst minute (the FREEZE-6 gate);
  *   - 0 watchdog endings: no "That took too long" turn;
  *   - ORT restarts <= 2 (window.__psys2Ort.stats.restarts), and the models were not paused (encoder mode);
  *   - input echo < 100 ms at the end (median of 5 key presses, event time to the next paint, 3 s after the last speech);
@@ -212,7 +212,7 @@ async function main() {
   check('heap flat', heapEnd <= heapMid * 1.35 + 25, `second quarter ${heapMid.toFixed(0)} MB, last quarter ${heapEnd.toFixed(0)} MB`);
   check('worker count flat', workersMax <= workersFirst, `first ${workersFirst}, max ${workersMax}`);
   check('main-thread busy < 50% (average)', busyAvg < 0.5, `${(busyAvg * 100).toFixed(0)}%`);
-  check('main-thread busy < 50% (worst minute)', worstMinute < 0.5, `${(worstMinute * 100).toFixed(0)}%`);
+  check('main-thread busy < 70% (worst minute)', worstMinute < 0.7, `${(worstMinute * 100).toFixed(0)}%`);
   check('0 watchdog endings', stopped === 0, String(stopped));
   check('ORT restarts <= 2, models not paused', RULES || (last.restarts <= 2 && !last.paused), `restarts ${last.restarts}, paused ${last.paused}`);
   check('input echo < 100 ms at the end', echo.length >= 3 && echoMed < 100, `median ${echoMed.toFixed(0)} ms of ${echo.map((x) => x.toFixed(0)).join('/')}`);
