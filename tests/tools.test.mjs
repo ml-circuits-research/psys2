@@ -146,11 +146,11 @@ test('session formalizer option: preference, per-message override, fallback and 
   assert.equal(e.formalizers.rules.id, 'rules');
   assert.equal(e.formalizers.encoder.id, 'encoder');
   const r0 = await rulesSession.send('Hello');
-  assert.deepEqual(r0.trace.formalizer, { preferred: 'rules', used: ['rules'] });
+  assert.deepEqual({ preferred: r0.trace.formalizer.preferred, used: r0.trace.formalizer.used }, { preferred: 'rules', used: ['rules'] });
   assert.equal(r0.trace.segments[0].strategy, 'rules');
   const encSession = e.createSession({ formalizer: 'encoder' });
   const r1 = await encSession.send('Hello');
-  assert.deepEqual(r1.trace.formalizer, { preferred: 'encoder', used: ['encoder'] });
+  assert.deepEqual({ preferred: r1.trace.formalizer.preferred, used: r1.trace.formalizer.used }, { preferred: 'encoder', used: ['encoder'] });
   assert.equal(r1.trace.segments[0].strategy, 'encoder');
   // an unparsed encoder segment falls back to the rules
   fake.formalize = (text) => ({ segments: [{ text, span: [0, text.length], isQuestion: false, worlds: [], match: null, wires: [], unparsed: true, alternatives: [], errors: [] }], wires: [] });
@@ -165,7 +165,7 @@ test('session formalizer option: preference, per-message override, fallback and 
   // encoder preferred but not available: rules
   const e2 = await fixtureEngine();
   const r4 = await e2.createSession({ formalizer: 'encoder' }).send('Hello');
-  assert.deepEqual(r4.trace.formalizer, { preferred: 'encoder', used: ['rules'] });
+  assert.deepEqual({ preferred: r4.trace.formalizer.preferred, used: r4.trace.formalizer.used }, { preferred: 'encoder', used: ['rules'] });
 });
 
 test('server accepts { formalizer } when creating a session', async () => {

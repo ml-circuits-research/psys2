@@ -75,6 +75,8 @@ export function renderTrace(reply, extra = {}) {
       ['Matched pattern', s.match?.patternId],
       ['Slots', s.match?.slots ? Object.entries(s.match.slots).map(([k, v]) => `${k}=${v.text ?? v.value ?? ''}`).join(', ') : undefined],
       ['Formalizer', s.formalizer ?? extra.formalizer ?? 'rules'],
+      ['Read by', s.reading ? `${s.reading}${s.reading === 'model' && s.nx ? ` (operation ${s.nx.op} at ${Number(s.nx.p).toFixed(3)}, pattern ${s.nx.pattern}, spans ${Object.entries(s.nx.spans ?? {}).map(([k, v]) => `${k.split('|').pop().split('.').pop()}=“${v}”`).join(', ') || 'none'}; the rules built the wires, the validator accepted them)` : ''}` : undefined],
+      ['Reading strategy', i === 0 && t.formalizer?.nx ? `${t.formalizer.nx.strategy}${t.formalizer.nx.model ? '' : ' (model not used for this message)'}` : undefined],
       ['Corrections', s.corrections?.length ? s.corrections.map((c) => `${c.to} ← ${c.from}`).join(', ') : undefined],
       ['Ignored (not understood)', s.ignored?.length ? s.ignored.map((x) => `“${x}”`).join(', ') : undefined],
       ['Alternatives', s.alternatives?.length ? s.alternatives.map((a) => a.worldId).join(', ') : undefined],

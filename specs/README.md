@@ -22,3 +22,4 @@ PSys2 is a neurosymbolic assistant that runs entirely in the browser, with no se
 | [decisions/ADR-006](decisions/ADR-006-discourse-layer.md) | Rule-based discourse layer |
 | [13-discussions.md](13-discussions.md) | ASTRA: discussions, world instances, dialogue moves, task frames, focus, event log and persistence |
 | [decisions/ADR-008](decisions/ADR-008-astra-discussions.md) | ASTRA as a core library with a compatibility layer over per-world state |
+| [decisions/ADR-009](decisions/ADR-009-nx-encoder-formalizer-in-the-webchat.md) | The NX encoder formalizer in the webchat: strategy setting (hybrid default, neural, rules), one encoder pass |

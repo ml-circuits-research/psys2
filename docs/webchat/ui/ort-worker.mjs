@@ -25,7 +25,7 @@ async function exec(m) {
   if (!s) throw new Error('unknown session');
   const feeds = {};
   for (const [k, v] of Object.entries(m.feeds)) feeds[k] = toTensor(v);
-  const out = await s.run(feeds);
+  const out = await (Array.isArray(m.fetch) && m.fetch.length ? s.run(feeds, m.fetch) : s.run(feeds));   // `fetch`: only the outputs the caller needs are computed and copied back
   const outputs = {}, transfer = [];
   for (const [k, v] of Object.entries(out)) { outputs[k] = copyOut(v); transfer.push(outputs[k].data.buffer); }
   return { id: m.id, outputs, transfer };

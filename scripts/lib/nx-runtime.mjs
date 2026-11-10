@@ -25,6 +25,12 @@ export const EXPORTS = {
 export async function buildSystem({ system, ortPath, threads = 1, gate = null }) {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
   if (system === 'rules') return { engine, settings: settingsForMode('rules'), stats: {} };
+  // NX-INTEGRATION: the shipped webchat configuration (encoder + normalizer + fast path, the published dispatcher model with the NX heads) with one NX strategy
+  const wc = /^webchat-(hybrid|neural|rules)$/.exec(system);
+  if (wc) {
+    const rt = await openNodeRuntime({ engine, mode: 'encoder+n1+fast', ortPath, ortThreads: threads, overrides: { nxStrategy: wc[1] } });
+    return { engine, settings: rt.settings, get stats() { return engine.formalizers.nx?.stats ?? {}; } };
+  }
   if (system === 'enc-n1') {
     const rt = await openNodeRuntime({ engine, mode: 'encoder+n1', ortPath, ortThreads: threads });
     return { engine, settings: rt.settings, stats: {} };

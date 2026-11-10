@@ -160,3 +160,13 @@ test('HANG2 replay: a model call that hangs in the worker never costs a turn; th
   assert.equal(c.restarts, 1);
   assert.ok(log.runs >= 5, 'the model was called again after the restart');
 });
+
+test('ort client: the `fetch` option reaches the worker (only the named outputs are computed and copied)', async () => {
+  const seen = [];
+  const { spawn } = fakeWorkerFactory((job) => { seen.push(job.fetch ?? null); return { kind: 'ok', ms: 1 }; });
+  const c = createOrtClient({ spawn, defaultDeadlineMs: 500 });
+  const s = await c.ort.InferenceSession.create(new Uint8Array(4), { name: 't' });
+  await s.run(feeds(c.ort), { fetch: ['seg_logits'] });
+  await s.run(feeds(c.ort));
+  assert.deepEqual(seen, [['seg_logits'], null]);
+});

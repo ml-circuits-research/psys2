@@ -15,6 +15,7 @@ import { validateWorldSet } from '../worlds/validate.mjs';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs';
 import { createInterpreter } from '../interpreter/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs';
@@ -36,7 +37,8 @@ export { runWorldTests } from './test-runner.mjs';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
-  unparsed: s.unparsed, discourse: s.discourse ?? null, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [], ignored: s.ignored ?? [], dispatch: s.dispatch ?? null,
+  unparsed: s.unparsed, discourse: s.discourse ?? null, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, reading: s.strategy === 'model' ? 'model' : 'rules', corrections: s.corrections ?? [], ignored: s.ignored ?? [], dispatch: s.dispatch ?? null,
+  ...(s.nx ? { nx: { op: s.nx.op, world: s.nx.world, pattern: s.nx.pattern, p: s.nx.p, spans: s.nx.spans } } : {}),
   wires: s.wires.map((w) => w.id),
 });
 
@@ -154,8 +156,10 @@ function runningGame(st, last) {
 }
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY } = {}) {
     this.engine = engine;
+    /** NX reading strategy (ADR-009): 'hybrid' (default) | 'neural' | 'rules'. Only used with the encoder formalizer and when `engine.formalizers.nx` is ready; otherwise the rules path answers. */
+    this.nx = normalizeNxStrategy(nx);
     /** Best effort with loose words (spec 03 section 7.15): after everything else failed, execute the most sensible reading of the content words (off in the library, on in the shipped settings). */
     this.bestEffort = bestEffort;
     /** Encoder fast path (PERF): when the rules read the whole message and the interpreter accepts every reading, skip the model. */
@@ -778,7 +782,42 @@ export class DialogSession {
     return { segments: r2.segments, wires: r2.segments.flatMap((s) => s.wires) };
   }
 
+  /**
+   * Formalize one message (spec 03 section 7.16). The NX strategy picks who reads first:
+   *   rules   the shipped path (`_formalizeShipped`)
+   *   hybrid  the shipped path, then the model reads the segments it left unparsed (gate and validator)
+   *   neural  the model reads the whole message first; any segment it does not read sends the message to the shipped path
+   * The model is only asked when the encoder formalizer is preferred, the model is ready and ORT is not paused; a model failure keeps the rules' answer.
+   */
   async _formalize(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial, fastPath: this.fastPath }) {
+    const want = preferred === 'encoder' ? normalizeNxStrategy(lenient.nx ?? this.nx) : 'rules';
+    const nx = want !== 'rules' ? this.engine.formalizers.nx : null;
+    let on = false;
+    try { on = !!nx && nx.available(); } catch { on = false; }
+    const tag = (r, by) => { r.nx = { strategy: want, model: on, by }; return r; };
+    if (!on) return tag(await this._formalizeShipped(english, sid, preferred, lenient), 'rules');
+    const { set } = this.engine;
+    const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
+    if (want === 'neural') {
+      try {
+        if (!nx.untrainedReads(english, opts)) {
+          const r = await perf.time('nx', () => guard.abortable(nx.formalize(english, opts), 'nx'));
+          if (r.complete) return tag({ segments: r.segments, wires: r.wires, dispatch: null }, 'model');
+        }
+      } catch (e) { if (e instanceof TurnAborted) throw e; /* the model failed: the rules path answers */ }
+    }
+    const res = await this._formalizeShipped(english, sid, preferred, lenient);
+    if (want === 'hybrid' && res.segments.some((x) => x.unparsed)) {
+      try {
+        const o2 = { ...opts, context: this.context() };
+        const refined = await perf.time('nx', () => guard.abortable(nx.refine(res, o2), 'nx'));
+        return tag(refined, refined === res ? 'rules' : 'model');
+      } catch (e) { if (e instanceof TurnAborted) throw e; }
+    }
+    return tag(res, 'rules');
+  }
+
+  async _formalizeShipped(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial, fastPath: this.fastPath }) {
     const { set, formalizers } = this.engine;
     const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
     const rules = formalizers.rules;
@@ -890,7 +929,7 @@ export class DialogSession {
     for (const k of [...this.sources.keys()]) if (!snap.sources.has(k)) this.sources.delete(k);
   }
 
-  async _send(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode } = {}) {
+  async _send(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx } = {}) {
     const { engine } = this;
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
@@ -956,7 +995,7 @@ export class DialogSession {
         if (!pre) { const bare = engine.interp.lang.stripConnective(english); if (bare !== english && QUESTION_WORD.test(bare)) formalText = bare; }
       }
     }
-    let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial, fastPath: fastPath ?? this.fastPath }));
+    let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial, fastPath: fastPath ?? this.fastPath, nx: nx ?? this.nx }));
     if (meta?.rewrite && !pre) for (const sg of formal.segments) sg.discourse = meta.info;
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
@@ -1127,7 +1166,7 @@ export class DialogSession {
     return {
       text: reply, parts, lang, ...(switchedLanguage ? { switchedLanguage } : {}), translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}),
       trace: {
-        intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], ...(encoderError ? { error: encoderError } : {}) },
+        intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], nx: formal.nx ?? null, ...(encoderError ? { error: encoderError } : {}) },
         dispatch: dispatch ?? null,
         discourse: { resolved: pre?.info ?? null, meta: meta?.info ?? null, ...(feedback ? { feedback } : {}), pending: disc.pending ? { type: disc.pending.type, world: disc.pending.world, key: disc.pending.key, expected: disc.pending.expected, question: disc.pending.question } : null, consumed: pend ? { type: pend.type, world: pend.world, question: pend.question } : null, frames: disc.frames.length },
         ...(feedback ? { feedback } : {}),

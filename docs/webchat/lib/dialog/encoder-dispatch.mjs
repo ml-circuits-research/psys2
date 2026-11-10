@@ -38,6 +38,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
   let validator = null;
   let runtime = null;
   let loading = null;
+  let nxMeta = null;   // the NX heads' label tables (the load result's `nx`), when the model has the heads
   let status = { state: 'idle', message: '' };
   const listeners = new Set();
   const history = new WeakMap();   // isession -> the earlier messages this strategy formalized (seeds the validator's sessions)
@@ -49,6 +50,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
       const t0 = now();
       setStatus({ state: 'loading', message: 'loading the dispatcher model' });
       loading = Promise.resolve().then(load).then((parts) => {
+        nxMeta = parts?.nx ?? null;
         runtime = typeof parts?.predict === 'function' ? parts : createDispatcherRuntime(parts);   // a ready runtime is accepted too (tests)
         setStatus({ state: 'ready', message: 'dispatcher ready', ms: now() - t0 });
         return runtime;
@@ -71,6 +73,8 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
     prepare,
     retry() { if (status.state === 'error') { loading = null; setStatus({ state: 'idle', message: '' }); } },
     ready: () => status.state === 'ready',
+    /** The dispatcher runtime and the NX label tables once the model is ready and carries the NX heads (src/formalizer/nx.mjs shares its passes), else null. */
+    get nxParts() { return runtime && nxMeta ? { runtime, meta: nxMeta } : null; },
     /** With `waitForModel: false` (the webchat loads the model in the background) the strategy is unavailable, so the rules answer, until the model is ready. */
     available: () => typeof load === 'function' && status.state !== 'error' && (waitForModel || status.state === 'ready'),
     /**

@@ -108,6 +108,6 @@ export function dispatcherLoader({ base, meta, lib, onProgress = () => {}, onSou
     // the session reloads its bytes from the Cache API when the worker is re-created; the first load hands out the bytes already in memory
     let first = bytes;
     const session = await ort.InferenceSession.create(async () => { if (first) { const b = first; first = null; return b; } return (await getModelFiles({ base, meta })).bytes; }, { name: 'dispatcher', lane: 'dispatcher', deadlineMs: () => ortc.limits?.dispatcherMs ?? 2500 });
-    return { ort, session, tokenizer: lib.createWordPieceTokenizer(vocab), worlds: meta.worlds, editTags, editTau: meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
+    return { ort, session, tokenizer: lib.createWordPieceTokenizer(vocab), worlds: meta.worlds, editTags, editTau: meta.edit_threshold ?? 0.5, useContext: meta.context !== false, nx: meta.nx ?? null };
   };
 }

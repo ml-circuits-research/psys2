@@ -1111,3 +1111,41 @@ Note on condition 1: the literal comparison (D against the rules alone) is met b
 **Verdict: all four conditions hold for A3, with the spec gate and with the guard (conditions 2 and 3 are met exactly: D adds no wrong answer anywhere). The price is that the gate is nearly closed: the real extra recovery over encoder+n1 is small (about +5 points on the rules-fail paraphrases, +0.6 points on Romanian, 0 on operational, dialogues and the real phrases).** The tuning is only as good as the dev set (small; 0 added wrong on 2,833 dev records), and the guard point passes 12 dev readings, so a slightly larger wrong rate on fresh data is possible; A+3 with the guard added 1 wrong on the operational set (+0.07, inside the limit). Nothing was integrated by this agent.
 
 **Model-first over the encoder strategy slot (A3-first / A+3-first: the model reads every segment, the validator always checks, the rules read what it could not; the normalizer is not part of this path, as in NX5).** Without the gate this fails condition 2 and 3 by a wide margin: operational right 72.8 % (A3) / 74.1 % (A+3) against 98.6 % shipped, wrong 16.2 % / 15.4 % against 0.3 %; operational + long wrong +17.0 / +15.7 points; dialogues turns right 76.4 % / 75.5 % (-20.3 / -21.2 points), wrong +13.1; Romanian right -19.3 / -15.5 points. It does recover more on the rules-fail sets (gold-para 75 / 80 % against 33 % shipped; nxtest-rules-fail 22 / 29 of 44; real 09c 17 / 16 of 22; mobile answered 94 / 91 of 108 but world agreement on the supported 18 falls to 11 / 8), at the cost of 333 / 296 Romanian and 201 / 192 operational right -> wrong. So model-first is not a safe default; as a user-chosen strategy it is a recall mode that trades about 25 points of right on the sets we care about for about 40 more recovered paraphrases of 100.
+
+
+## NX-INTEGRATION (2026-11-10): the NX encoder formalizer in the webchat, with a strategy setting
+Decision record: `specs/decisions/ADR-009-nx-encoder-formalizer-in-the-webchat.md`; spec 03 section 7.16; spec 06 (reading strategy). Code: `src/formalizer/nx.mjs` (browser-safe port of `scripts/lib/nx-formalizer.mjs`), `src/formalizer/dispatcher-runtime.mjs` (the NX heads of the routing pass kept in its cache: one encoder pass), `src/dialog/index.mjs` (`_formalize` picks the strategy, `_formalizeShipped` is today's path), `src/dialog/runtime-config.mjs` (`nxStrategy`, the `engine.formalizers.nx` facade, `isPaused`), `docs/webchat` (Settings > Understanding > "Reading strategy", trace "Read by"). Tests: `tests/nx-strategy.test.mjs`, `tests/dispatcher-runtime.test.mjs`, `tests/ort-client.test.mjs`, `tests/webchat-nx.test.mjs` + `scripts/test-webchat-nx.mjs` (browser).
+
+**Model.** A3 (`training/runs/export/nx-a-nx3`), int8, 68.0 MB, sha256 `56741a80...`, published in `docs/webchat/models/dispatcher/` (one commit). Dispatcher outputs against the previous published v4 (sha 6c41eb24): max abs diff **0.0** for seg, world and edit logits over 600 inputs (300 operational messages, raw and with the routing prefix). `meta.json` now carries `nx` (509 operations, 679 tag labels, trained worlds, the hybrid gate) and `version.checkpoint` / `sha256`.
+
+**Strategies and defaults.** `hybrid` is the default (user decision 2026-11-10 after the NX7 numbers; one constant, `DEFAULT_NX_STRATEGY`). `hybrid`: the shipped path unchanged, the model reads only segments it left unparsed, NX7 gate tau_op 0.99, tau_frame 0.9, spans in frame, negation guard. `neural`: model first (negation guard, minimum word coverage 0.6 added after the first smoke test read "tom has 3 apples and eats 2. how many does he have" as only its first clause); any segment not read sends the whole message to the shipped path. `rules`: no model reading. `user.profile` is read by the rules only (no model candidate; in `neural` an untrained-world probe).
+
+**Measured in the webchat configuration** (`node scripts/eval-nx.mjs --system webchat-<rules|hybrid|neural> --ort <onnxruntime-node> --sets operational,operational-ro,dialogues,gold,real,mobile --jobs 16`, then `node scripts/nx-integration-report.mjs`; `encoder+n1+fast`, the published A3 model; `rules` = the shipped pipeline as before; counts are right / wrong / abstain, `partly` = executed only part):
+
+| set | n | rules | hybrid (default) | neural |
+| --- | --- | --- | --- | --- |
+| operational | 1296 | 1279 / 4 / 12 (+1 partly) | 1279 / 4 / 12 (+1 partly) | 1231 / 34 / 22 (+9 partly) |
+| operational-long | 154 | 145 / 3 / 1 (+5 partly) | 145 / 3 / 1 (+5 partly) | 145 / 2 / 1 (+6 partly) |
+| operational-ro (Romanian, translated) | 2480 | 2112 / 64 / 282 (+22 partly) | 2127 / 64 / 267 (+22 partly) | 2065 / 115 / 269 (+31 partly) |
+| dialogues, dialogue right | 449 | 398 / 51 | 398 / 51 | 353 / 96 |
+| dialogues, turns | 2177 | 2104 / 25 / 40 (+8 partly) | 2104 / 25 / 40 (+8 partly) | 2020 / 79 / 66 (+12 partly) |
+| gold-para | 100 | 32 / 43 / 25 | 37 / 43 / 20 | 44 / 36 / 20 |
+| gold-rules | 150 | 147 / 1 / 2 | 147 / 1 / 2 | 141 / 7 / 2 |
+| gold-real | 50 | 24 / 18 / 8 | 24 / 18 / 8 | 24 / 19 / 7 |
+| real phrases 09c / 09d / 09e (world level) | 24 / 15 / 21 | 13 / 1 / 8, 15 / 0 / 0, 18 / 0 / 3 | same | same |
+| mobile export (answered / abstained) | 108 | 67 / 41 | 67 / 41 | 71 / 37 |
+
+Readings: **hybrid adds no wrong answer anywhere** (operational wrong 4 = 0.3 %, same as shipped; the dialogues are identical) and recovers 5 of the 25 `gold-para` abstentions and 15 Romanian operational cases; model readings are rare (counters of the busiest of 16 workers: 5 read, 38 gate rejections, 8 `none`, 6 without a valid reading). **neural** is better where the phrasing is outside the patterns (`gold-para` 44 right against 32, wrong 36 against 43, mobile 71 answered against 67), and worse on traffic the rules already read: operational wrong 2.6 % (34 of 1,296; the NX7 model-first measurement was 16.2 %, the negation guard and the coverage rule remove most of it), dialogues right 78.6 % against 88.6 % (-10 points), `gold-rules` 94.0 % against 98.0 %. This is why the default is hybrid.
+
+**Perf** (`node scripts/perf-webchat.mjs --mode encoder+n1 --nx <s> --throttle 4`, mobile viewport, 6 messages after the model is ready; ms):
+
+| strategy | input | ready | first answer | model ready | p50 msg | p95 msg |
+| --- | --- | --- | --- | --- | --- | --- |
+| rules | 763 | 1981 | 444 | 5419 | 122 | 329 |
+| hybrid | 714 | 1948 | 470 | 5428 | 117 | 336 |
+| neural | 703 | 1930 | 302 | 5392 | 285 | 524 |
+
+The model download is the same size class (68.0 MB against 67.1 MB). Neural is slower per message (about +160 ms p50 at 4x throttling): it runs a routing pass for every message, where the fast path skips the model when the rules read the whole message.
+**Soak** (`node scripts/soak-webchat.mjs --minutes 3 --throttle 4 --nx <s>`, FREEZE-6 gate busy < 50 %): hybrid 10/10 checks (busy 17 % average, 21 % worst minute, heap 105 -> 109 MB, 0 ORT restarts, 0 watchdog endings, input echo 26 ms), neural 10/10 (busy 20 % / 25 %, heap 110 -> 114 MB, 0 restarts, echo 22 ms). The encoder pass runs in the ORT worker; the page thread only decodes the logits. The segmentation pass asks the worker for `seg_logits` only (no copy of the tag logits).
+
+Caveats: single runs on a shared machine (perf and soak vary a lot, SOAK-BUSY); the NX7 tau values were tuned on dev data and the full-set hybrid numbers above are their first measurement in the shipped configuration (the model reads few segments: it adds nothing wrong and little right on the operational sets, its gain is on paraphrases); `gold-real` labels come from Sonnet (NX2); the Romanian rows go through the translator first.

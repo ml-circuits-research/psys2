@@ -81,7 +81,8 @@ export async function copyDispatcherModel({ root = REPO, outDir, exportDir = DEF
     sha256: await fileSha256(path.join(to, 'model.int8.onnx')),
     metrics: { split: 'test', world_top1: r3(res.test?.world?.top1), world_top3: r3(res.test?.world?.top3), seg_f1: r3(seg?.f1) },
   };
-  await writeFile(path.join(to, 'meta.json'), JSON.stringify({ model: meta.model, worlds: meta.worlds, context: meta.context, max_len: meta.max_len, onnx: meta.onnx, ...(meta.edit_tags ? { edit_threshold: meta.edit_threshold ?? 0.5 } : {}), version }, null, 1) + '\n');
+  const published = await readJson(path.join(to, 'meta.json'));   // NX integration: the heads' label tables and gate live in the published meta.json; a regeneration keeps them
+  await writeFile(path.join(to, 'meta.json'), JSON.stringify({ model: meta.model, worlds: meta.worlds, context: meta.context, max_len: meta.max_len, onnx: meta.onnx, ...(meta.edit_tags ? { edit_threshold: meta.edit_threshold ?? 0.5 } : {}), version, ...(published.nx ? { nx: published.nx } : {}) }, null, 1) + '\n');
   log(`webchat: dispatcher model (${meta.model}, int8, sha256 ${version.sha256.slice(0, 12)}) -> ${to}${metaOnly ? ' (meta.json only)' : ''}`);
   return Object.keys(files).concat('meta.json');
 }

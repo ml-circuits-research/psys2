@@ -1,6 +1,7 @@
 // Webchat settings (spec 06 "Webchat settings"): defaults, the version bump and the one-time migration. Pure, no DOM, so node:test can import it.
 
 import { RUNTIME_DEFAULTS } from '../lib/dialog/runtime-config.mjs';
+import { normalizeNxStrategy } from '../lib/formalizer/nx.mjs';
 import { TIME_LIMIT_DEFAULTS } from '../lib/dialog/time-limits.mjs';
 
 /** Bumped whenever a default changes in a way saved settings must follow once. */
@@ -33,6 +34,7 @@ export function migrateSettings(saved) {
   s.settingsVersion = SETTINGS_VERSION;
   s.handsFree = false;   // FREEZE: the listening state is never persisted; every page load starts with the microphone off (an older saved `true` no longer starts it)
   if (s.formalizer !== 'rules' && s.formalizer !== 'encoder') s.formalizer = DEFAULT_SETTINGS.formalizer;
+  s.nxStrategy = normalizeNxStrategy(s.nxStrategy);   // ADR-009: an unknown saved value falls back to the default
   return { settings: s, migrated };
 }
 

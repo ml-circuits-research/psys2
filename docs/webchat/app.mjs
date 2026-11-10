@@ -16,6 +16,7 @@ import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, dispatcherLoader, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.mjs';
 import { sessionOptions } from './lib/dialog/runtime-config.mjs';
+import { normalizeNxStrategy } from './lib/formalizer/nx.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
@@ -510,7 +511,7 @@ export async function mountPsys2(element, options = {}) {
     try { tn.stateBefore = dbg ? dbg.beforeTurn() : hashState(session.state?.() ?? null); } catch { tn.stateBefore = null; }   // FB: the state hash before the turn, stored with the record
     let reply;
     try {
-      reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true,
+      reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true, nx: settings.nxStrategy,
         signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
       if (e instanceof TurnAborted || tn.ctl.signal.aborted) throw e;
@@ -1106,6 +1107,9 @@ export async function mountPsys2(element, options = {}) {
           : dispatcherStatus.state === 'error' ? `The model could not be loaded (${dispatcherStatus.message}); the rules are in use. Reload the page to try again.`
           : !dispatcherEnc ? 'This build has no dispatcher model (see docs/webchat/README.md). The rules are used.'
           : `A small neural dispatcher (DistilBERT, int8, in your browser) proposes how to cut the message and which worlds fit each piece; the rules check every proposal. It is kept up to date automatically and cached in this browser. Status: ${dispatcherStatus.state === 'ready' ? `ready (${modelSource === 'cache' ? 'from the cache' : 'downloaded'}, ${Math.round((dispatcherStatus.ms ?? 0) / 100) / 10} s)` : dispatcherStatus.state === 'loading' ? `loading, ${dispatcherStatus.message}; the rules answer meanwhile` : 'not loaded (the rules are in use)'}.`)),
+      ...(dispatcherEnc ? [field('Reading strategy', select([['hybrid', 'Hybrid (rules first, the model reads what they could not)'], ['neural', 'Neural (the model first, rules as fallback)'], ['rules', 'Rules only']], normalizeNxStrategy(settings.nxStrategy),
+        (v) => { settings.nxStrategy = v; applyEngineSettings(); save(); renderSettings(); }),
+        'Who reads a message first. Hybrid keeps today’s answers and lets a small model (the heads of the same encoder pass, no second pass) read only a part that nothing else understood, when it is very sure and the part has no negation. Neural lets the model read first; a part it cannot read, or that fails the checks, goes to the rules. Rules only never asks the model to read. In every case the rules build the wires and the validator checks them; user.profile is always read by the rules. Needs the encoder formalizer.')] : []),
       ...(dispatcherEnc ? [check('Accept parses the interpreter refuses (for example “move the piece” when no game is on)', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
       check('Spellcheck: correct typos and chat abbreviations against the worlds’ vocabulary (for example “yes” → “eyes”)', settings.spellcheck, (v) => { settings.spellcheck = v; applyEngineSettings(); save(); }),
       check(`Simplify phrasing (normalizer): only when nothing else reads a sentence, a small model proposes a simpler wording that the rules must read and that keeps every number, name, colour and negation (${normalizerText()})`, settings.normalizer !== false, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, normalizerHost ? null : 'no model in this build'),
@@ -1243,6 +1247,7 @@ export async function mountPsys2(element, options = {}) {
           load: dispatcherLoader({ base, meta, lib: wp, onSource: (src) => { modelSource = src; }, onProgress: (m) => { dispatcherStatus = { ...dispatcherStatus, message: m }; setStatus(); } }),
           normalizer: normalizerHost?.provider ?? null,
           waitForModel: false,   // the model loads in the background; the rules answer until it is ready
+          isPaused: () => !!globalThis.__psys2Ort?.paused,   // ORT paused after repeated worker restarts: the rules answer (ADR-009)
         });
         dispatcherVersion = meta.version ?? null;
         dispatcherLabel = versionLabel(meta);

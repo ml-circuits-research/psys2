@@ -25,7 +25,7 @@ test('policy and session options follow the settings', () => {
   const live = { ...RUNTIME_DEFAULTS };
   live.spellcheck = false;
   assert.equal(policyFromSettings(live).trySpell, false);
-  assert.deepEqual(sessionOptions(settingsForMode('rules'), { language: 'en' }), { formalizer: 'rules', spell: true, partial: true, bestEffort: true, language: 'en' });
+  assert.deepEqual(sessionOptions(settingsForMode('rules'), { language: 'en' }), { formalizer: 'rules', nx: 'hybrid', spell: true, partial: true, bestEffort: true, language: 'en' });
 });
 
 test('the S1 edit head is off by default and a setting turns it on (review decision e)', () => {

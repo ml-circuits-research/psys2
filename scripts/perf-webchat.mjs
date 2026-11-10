@@ -5,7 +5,7 @@
 //
 //   node scripts/perf-webchat.mjs [--mode rules|encoder|encoder+n1|all] [--throttle 4] [--runs 1] [--json out.json]
 //                                 [--chrome /usr/bin/chromium] [--messages "a|b|c"]
-//                                 [--net none|fast4g|slow4g] [--cache cold|warm] [--http h1|h2]
+//                                 [--nx hybrid|neural|rules] [--net none|fast4g|slow4g] [--cache cold|warm] [--http h1|h2]
 //
 // DEFINITIONS (printed in the output, the reviewer measures the same things):
 //   input        navigation start -> the text input exists in the DOM.
@@ -80,7 +80,7 @@ async function runOnce(puppeteer, chrome, port, mode, scheme) {
   try {
     if (CACHE === 'warm') {   // visit once without throttling, wait for the models, then measure a fresh page in the same profile
       const w = await browser.newPage();
-      const ws = { settingsVersion: 2, formalizer: mode === 'rules' ? 'rules' : 'encoder', normalizer: mode === 'encoder+n1', showTrace: false };
+      const ws = { settingsVersion: 2, formalizer: mode === 'rules' ? 'rules' : 'encoder', normalizer: mode === 'encoder+n1', showTrace: false, ...(opt('nx', null) ? { nxStrategy: opt('nx') } : {}) };   // --nx hybrid|neural|rules: the NX reading strategy (default: the webchat default)
       await w.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify(s)); } catch { /* ignore */ } }, ws);
       w.on('pageerror', (e) => console.error('warm pageerror', String(e).slice(0, 200))); w.on('console', (m) => { if (m.type() === 'error') console.error('warm console', m.text().slice(0, 200)); });
       await w.goto(`${scheme}://localhost:${port}/webchat/index.html`, { waitUntil: 'domcontentloaded' });
@@ -94,7 +94,7 @@ async function runOnce(puppeteer, chrome, port, mode, scheme) {
     const cdp = await pg.createCDPSession();
     if (NET !== 'none') { await cdp.send('Network.enable'); await cdp.send('Network.emulateNetworkConditions', { offline: false, ...NETS[NET] }); }
     if (THROTTLE > 1) await cdp.send('Emulation.setCPUThrottlingRate', { rate: THROTTLE });
-    const settings = { settingsVersion: 2, formalizer: mode === 'rules' ? 'rules' : 'encoder', normalizer: mode === 'encoder+n1', showTrace: false };
+    const settings = { settingsVersion: 2, formalizer: mode === 'rules' ? 'rules' : 'encoder', normalizer: mode === 'encoder+n1', showTrace: false, ...(opt('nx', null) ? { nxStrategy: opt('nx') } : {}) };   // --nx hybrid|neural|rules: the NX reading strategy (default: the webchat default)
     await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify(s)); } catch { /* ignore */ } }, settings);
     pg.on('console', (m) => { if (/VOCAB/.test(m.text())) console.log(m.text().slice(0, 700)); }); pg.on('pageerror', (e) => console.error('pageerror', String(e).slice(0, 200)));
     const t0 = Date.now();

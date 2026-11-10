@@ -79,7 +79,7 @@ test('predict: segmentation beam + top-3 worlds as softmax probabilities, one wo
   assert.ok(worldCalls.length >= 2);
   const before = session.calls.length;
   await rt.predict(text, { tab: 'robot', recent_worlds: ['kids.shop'] });
-  assert.equal(session.calls.length - before, 1, 'second identical request: only the segmentation pass, world scores come from the cache');
+  assert.equal(session.calls.length - before, 0, 'second identical request: the segmentation pass and the world scores come from the caches (the NX reading and the dispatcher share one pass per text)');
 });
 
 test('createDispatcherRuntime validates its arguments', () => {
@@ -117,4 +117,34 @@ test('F8: an over-long segment is routed by overlapping windows with averaged wo
   assert.equal(r.simplified, null);
   const short = await rt.rankFull('open the map', {});
   assert.equal(short.windows, 1);
+});
+
+test('NX heads: one pass gives the dispatcher outputs and the operation / tag logits; the segmentation pass asks for seg_logits only', async () => {
+  const fetches = [];
+  const session = {
+    calls: 0,
+    async run(feeds, opts) {
+      this.calls++; fetches.push(opts?.fetch ?? null);
+      const t = feeds.input_ids.data.length;
+      return {
+        seg_logits: new Tensor('float32', new Float32Array(t * 2), [1, t, 2]),
+        world_logits: new Tensor('float32', Float32Array.from([2, 0, 0]), [1, WORLDS.length]),
+        op_logits: new Tensor('float32', Float32Array.from([0, 1, 0, 0]), [1, 4]),
+        tag_logits: new Tensor('float32', new Float32Array(t * 5), [1, t, 5]),
+      };
+    },
+  };
+  const rt = createDispatcherRuntime({ ort, session, tokenizer: tk, worlds: WORLDS });
+  const r = await rt.rankFull('add milk', { tab: 'robot', recent_worlds: [] });
+  assert.equal(session.calls, 1);
+  assert.equal(r.worlds[0].world, 'kids.shop');
+  assert.equal(r.nx.op.length, 4);
+  assert.equal(r.nx.L, 5);
+  assert.equal(r.nx.pre, 'tab: robot ; recent: none ;; '.length);
+  await rt.rankFull('add milk', { tab: 'robot', recent_worlds: [] });
+  assert.equal(session.calls, 1, 'the dispatcher and the NX reading share the pass');
+  await rt.segment('open the map');
+  assert.deepEqual(fetches.at(-1), ['seg_logits']);
+  await rt.segment('open the map');
+  assert.equal(session.calls, 2, 'segmentation is cached too');
 });

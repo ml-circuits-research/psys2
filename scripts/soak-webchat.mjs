@@ -7,7 +7,7 @@
  *   - random Romanian and English background talk every few seconds (room noise, not commands),
  * with the microphone switched on once and left on. A second tab is opened at the midpoint.
  *
- *   node scripts/soak-webchat.mjs [--minutes 30] [--throttle 4] [--chrome /usr/bin/chromium] [--rules] [--json out.json] [--seed 1]
+ *   node scripts/soak-webchat.mjs [--minutes 30] [--throttle 4] [--chrome /usr/bin/chromium] [--rules] [--nx hybrid|neural|rules] [--json out.json] [--seed 1]
  *
  * Assertions (exit code 1 when one fails):
  *   - heap flat: median JS heap of the last quarter <= 1.35 x the median of the second quarter + 25 MB (a forced GC before each sample);
@@ -89,7 +89,7 @@ async function main() {
     try { const p = path.join(DOCS, decodeURIComponent(q.url.split('?')[0])); const f = p.endsWith('/') ? `${p}index.html` : p; r.setHeader('content-type', TYPES[path.extname(f)] ?? 'application/octet-stream'); r.end(await readFile(f)); } catch { r.statusCode = 404; r.end('nf'); }
   }).listen(0);
   const browser = await puppeteer.launch({ executablePath: await findChrome(opt('chrome')), headless: true, args: ['--no-sandbox', '--js-flags=--expose-gc'] });
-  const settings = { settingsVersion: 2, formalizer: RULES ? 'rules' : 'encoder', normalizer: !RULES, showTrace: false, language: 'auto', keepListening: true };
+  const settings = { settingsVersion: 2, formalizer: RULES ? 'rules' : 'encoder', normalizer: !RULES, showTrace: false, language: 'auto', keepListening: true, ...(opt('nx', null) ? { nxStrategy: opt('nx') } : {}) };
   const url = `http://localhost:${srv.address().port}/webchat/index.html`;
   const openTab = async () => {
     const pg = await browser.newPage();

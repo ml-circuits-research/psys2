@@ -16,7 +16,7 @@
  * Each `opts.lane` (default 'default') has its own worker, so a long session load of one model never blocks the calls of the other.
  *
  * The object `client.ort` has the part of the onnxruntime API that the runtimes use: `Tensor`, `InferenceSession.create(source, opts)` and
- * `session.run(feeds, { signal, deadlineMs })`. `source` is a Uint8Array or a function returning one (or a promise of one); with a function the
+ * `session.run(feeds, { signal, deadlineMs, fetch })` (`fetch`: the output names the caller needs; the worker computes and copies only those). `source` is a Uint8Array or a function returning one (or a promise of one); with a function the
  * session survives a restart. `opts.deadlineMs` (a number or a function) is the default deadline of the session's calls; `opts.name` labels the log.
  */
 
@@ -147,7 +147,7 @@ export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 300
         await s.ready;
         return {
           name,
-          async run(feeds, { signal = null, deadlineMs: d } = {}) {
+          async run(feeds, { signal = null, deadlineMs: d, fetch = null } = {}) {
             if (paused) throw new OrtPaused(paused.reason);
             if (!s.ready) s.ready = load(s);              // after a restart without a source function it loads from the bytes it kept
             await s.ready;
@@ -155,7 +155,7 @@ export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 300
             for (const [k, t] of Object.entries(feeds)) f[k] = { type: t.type, data: t.data, dims: t.dims };
             // inside a turn the call also ends with the turn: its abort signal and what is left of its hard deadline
             const left = guard.remaining();
-            const m = await request(s.lane, name, { op: 'run', sid: s.sid, feeds: f }, { deadlineMs: Math.min(d ?? (typeof s.deadlineMs === 'function' ? s.deadlineMs() : s.deadlineMs) ?? defaultDeadlineMs, Math.max(left, 1)), signal: signal ?? guard.signal });
+            const m = await request(s.lane, name, { op: 'run', sid: s.sid, feeds: f, ...(fetch ? { fetch } : {}) }, { deadlineMs: Math.min(d ?? (typeof s.deadlineMs === 'function' ? s.deadlineMs() : s.deadlineMs) ?? defaultDeadlineMs, Math.max(left, 1)), signal: signal ?? guard.signal });
             return wrapOut(m.outputs);
           },
           release() { sessions.delete(s.sid); try { post(s.lane, { op: 'release', sid: s.sid }); } catch { /* ignore */ } },

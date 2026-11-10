@@ -7,6 +7,7 @@
  *   const session = engine.createSession(sessionOptions(settings));
  */
 import { createDispatcherFormalizer } from './encoder-dispatch.mjs';
+import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs';
 
 /** The shipped defaults of everything that changes what the pipeline answers (the webchat adds UI-only keys on top). */
 export const RUNTIME_DEFAULTS = Object.freeze({
@@ -17,6 +18,7 @@ export const RUNTIME_DEFAULTS = Object.freeze({
   spellcheck: true,               // spell correction against the worlds' vocabulary (7.9)
   bestEffort: true,               // after everything else failed, execute the most sensible reading of loose words and say what was understood (7.15)
   editHead: false,                // the S1 edit head's simplified text as a candidate reading: OFF in the shipped pipeline (review decision e: 3 recovered against 7 misled); the code stays behind this flag
+  nxStrategy: DEFAULT_NX_STRATEGY, // who reads first, ADR-009: 'hybrid' (the rules path as shipped, the model reads what it left unparsed, gated) | 'neural' (model first) | 'rules'; used with the encoder formalizer
   fastPath: false,                // encoder only: skip the model when the rules read the whole message and the interpreter accepts it (PERF; the webchat turns it on)
 });
 
@@ -54,16 +56,36 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
+  return { formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
 }
 
 /**
  * The encoder strategy for `engine`, wired from `settings` (pass the live object) and registered as `engine.formalizers.encoder`.
  * `load` loads the dispatcher parts (host specific), `normalizer` is the host's normalizer provider or null.
  */
-export function createRuntime({ engine, settings, load, normalizer = null, waitForModel = true, ...rest }) {
+export function createRuntime({ engine, settings, load, normalizer = null, waitForModel = true, isPaused = null, ...rest }) {
   const enc = createDispatcherFormalizer({ load, getPolicy: () => policyFromSettings(settings), normalizer, waitForModel, ...rest });
   enc.attach(engine);
   engine.formalizers.encoder = enc;
+  // The NX strategy (ADR-009) shares the dispatcher's passes; it exists once the model is loaded and carries the heads. `isPaused` (the host's ORT
+  // client: models paused after repeated worker restarts) switches it off, the rules answer.
+  let nx = null;
+  const real = () => {
+    if (nx) return nx;
+    const p = enc.nxParts;
+    if (!p) return null;
+    nx = createNxStrategy({ runtime: p.runtime, meta: p.meta, available: () => enc.ready() });
+    nx.attach(engine);
+    return nx;
+  };
+  const gone = () => { try { return !!isPaused?.(); } catch { return false; } };
+  engine.formalizers.nx = {
+    id: 'nx',
+    get stats() { return real()?.stats ?? {}; },
+    available: () => !gone() && !!real()?.available(),
+    untrainedReads: (t, o) => real()?.untrainedReads(t, o) ?? false,
+    formalize: (t, o) => real().formalize(t, o),
+    refine: (r, o) => real().refine(r, o),
+  };
   return enc;
 }

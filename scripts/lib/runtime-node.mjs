@@ -80,7 +80,7 @@ export async function openNodeRuntime({ engine, mode, ortPath, dispatcherDir, no
     const session = await ort.InferenceSession.create(join(dDir, 'model.int8.onnx'), { graphOptimizationLevel: 'all', ...threadOpts });
     const editTags = meta.onnx?.outputs?.includes('edit_logits') ? readJSON(join(dDir, 'edit-vocab.json')).tags : null;
     const vocab = join(dDir, existsSync(join(dDir, 'vocab.txt')) ? 'vocab.txt' : 'tokenizer/vocab.txt');
-    return { ort, session, tokenizer: createWordPieceTokenizer(readFileSync(vocab, 'utf8')), worlds: meta.worlds, editTags, editTau: editTau ?? meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
+    return { ort, session, tokenizer: createWordPieceTokenizer(readFileSync(vocab, 'utf8')), worlds: meta.worlds, editTags, editTau: editTau ?? meta.edit_threshold ?? 0.5, useContext: meta.context !== false, nx: meta.nx ?? null };
   };
   const enc = createRuntime({ engine, settings, load, normalizer: normalizerHost?.provider ?? null, waitForModel: true });
   const t0 = performance.now();
