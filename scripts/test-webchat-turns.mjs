@@ -35,7 +35,7 @@ export async function findChrome(given) {
   throw new Error('no Chrome/Chromium found');
 }
 
-export async function openChat({ throttle = 4, chrome, init = null, settings = { formalizer: 'rules', normalizer: false, showTrace: false }, viewport = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true }, hash = '' } = {}) {
+export async function openChat({ throttle = 4, chrome, init = null, settings = { formalizer: 'rules', normalizer: false, showTrace: false }, viewport = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true }, hash = '', query = '' } = {}) {
   const puppeteer = await loadPuppeteer();
   const srv = http.createServer(async (q, r) => {
     try { const p = path.join(DOCS, decodeURIComponent(q.url.split('?')[0])); const f = p.endsWith('/') ? `${p}index.html` : p; r.setHeader('content-type', TYPES[path.extname(f)] ?? 'application/octet-stream'); r.end(await readFile(f)); } catch { r.statusCode = 404; r.end('nf'); }
@@ -50,7 +50,7 @@ export async function openChat({ throttle = 4, chrome, init = null, settings = {
   const consoleErrors = [];
   pg.on('pageerror', (e) => errors.push(String(e).slice(0, 200)));
   pg.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
-  await pg.goto(`http://localhost:${srv.address().port}/webchat/index.html${hash}`, { waitUntil: 'domcontentloaded' });
+  await pg.goto(`http://localhost:${srv.address().port}/webchat/index.html${query}${hash}`, { waitUntil: 'domcontentloaded' });
   await pg.waitForFunction(() => document.querySelector('.p2-msg.is-hint'), { timeout: 120000, polling: 50 });
   const api = {
     pg, errors, consoleErrors, srvPort: srv.address().port,

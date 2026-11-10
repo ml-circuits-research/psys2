@@ -35,8 +35,8 @@ test('the webchat build writes a modulepreload block into index.html, idempotent
     await buildWebchat({ outDir: out });
     const first = await readFile(path.join(out, 'index.html'), 'utf8');
     assert.match(first, /<link rel="modulepreload" href="app\.mjs\?v=[0-9a-f]+">/);
-    assert.match(first, /<link rel="modulepreload" href="lib\/dialog\/index\.mjs\?v=[0-9a-f]+">/);
-    assert.match(first, /<link rel="modulepreload" href="worlds\/kids\.arith\/ops\.mjs\?v=[0-9a-f]+">/);
+    assert.match(first, /<link rel="modulepreload" href="lib\/soplang\/index\.mjs\?v=[0-9a-f]+">/);
+    assert.doesNotMatch(first, /modulepreload" href="(lib\/dialog\/index|worlds\/[^"]*\/ops)\.mjs/, 'the engine (dialog, world operations) loads in the engine worker, not on the page thread');
     assert.match(first, /window\.__psys2Early = /);
     await buildWebchat({ outDir: out });
     assert.equal(await readFile(path.join(out, 'index.html'), 'utf8'), first, 'a second build changes nothing');

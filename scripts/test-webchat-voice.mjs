@@ -16,7 +16,7 @@ export const check = (name, ok, detail = '') => { results.push({ name, ok }); co
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /** Installed before the page scripts: a SpeechRecognition that does nothing by itself; the test drives it through window.__sr. */
-function fakeSpeech() {
+export function fakeSpeech() {
   const all = [];
   window.__srCfg = { startMs: 20, stopMs: 20 };
   class FakeSR {

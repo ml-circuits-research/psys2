@@ -71,7 +71,7 @@ export const SCENARIOS = {
     try {
       await modelReady(c.pg);
       await c.pg.evaluate(() => { window.psys2.settings.nxStrategy = 'neural'; window.psys2.session.nx = 'neural'; });
-      await c.pg.evaluate(() => { const k = window.__psys2Ort; k.restart('dispatcher', 'test'); k.restart('dispatcher', 'test'); k.restart('dispatcher', 'test'); });
+      await c.pg.evaluate(async () => { const k = window.__psys2Ort; await k.restart('dispatcher', 'test'); await k.restart('dispatcher', 'test'); await k.restart('dispatcher', 'test'); });   // the ORT client lives in the engine worker; the page holds a mirror
       check('paused: the ORT client is paused', await c.pg.evaluate(() => !!window.__psys2Ort.paused));
       const r = await c.say(MSG);
       const t = await lastTrace(c.pg);
