@@ -1,5 +1,5 @@
 @gen.user.profile.kb core.note
-    text="The interview plan: sections, fields (priority 1 to 10, sensitivity, question phrasings, follow-up, example), industries, reactions and activity words. Sensitive topics (health, religion, politics, sexuality, exact address, income, age) are deliberately absent: they are never asked for."
+    text="The interview plan: sections, fields (priority 1 to 10, sensitivity, question phrasings, follow-up, example), industries, reactions and activity words. Sensitive topics (health, religion, politics, sexuality, exact address, income) are deliberately absent: they are never asked for. Age and the number of children are plain facts: never asked (askable=false) but kept when the user says them."
     core.source="specs/12-profile.md"
 
 @sec.basics user.profile.section
@@ -95,6 +95,44 @@
     ack="Ah, {v}. Thanks!"
     ack="{v}, nice."
     askable=true
+    core.source="specs/12-profile.md"
+
+@f.age user.profile.field
+    label="Age"
+    section=basics
+    prio=2
+    card=one
+    sens=low
+    want="your age (only when you volunteer it)"
+    example="45"
+    q="Would you like to tell me your age, if you do not mind?"
+    q="May I ask your age? Skip it if you prefer."
+    q="Would you like to tell me your age?"
+    follow="Is that right?"
+    followMode=unclear
+    ack="{v} years old, noted."
+    ack="Thanks, I will remember that you are {v}."
+    ack="Got it: {v} years old."
+    askable=false
+    core.source="specs/12-profile.md"
+
+@f.children user.profile.field
+    label="Children"
+    section=basics
+    prio=2
+    card=one
+    sens=low
+    want="how many children you have (only when you volunteer it)"
+    example="2"
+    q="Do you have children?"
+    q="Are there any kids in your life?"
+    q="Do you have any children?"
+    follow="Is that right?"
+    followMode=unclear
+    ack="Noted: children, {v}."
+    ack="Got it, children: {v}."
+    ack="Thanks, I will remember: children, {v}."
+    askable=false
     core.source="specs/12-profile.md"
 
 @f.role user.profile.field

@@ -89,7 +89,12 @@ test('extraction does not take commands or other talk as answers about the user'
 });
 
 test('sensitive content is detected and never extracted as a field', () => {
-  assert.equal(sensitive("I'm 34 years old", lex)?.cat, 'age');
+  assert.equal(sensitive("I'm 34 years old", lex), null);   // a plain age is a profile fact (COMPUTE-BUDGET C), kept as a private note only on "remember"
+  assert.equal(sensitive("I'm 34 years old, remember that", lex)?.cat, 'age');
+  assert.deepEqual(items("I'm 34 years old"), { age: '34' });
+  assert.deepEqual(items('I have two kids'), { children: '2' });
+  assert.deepEqual(items('I have no kids'), { children: '0' });
+  assert.equal(items('I like chess, music and maps').hobbies.length >= 1, true);
   assert.equal(sensitive('I have diabetes', lex)?.cat, 'health');
   assert.equal(sensitive('I am a democrat, remember that', lex)?.remember, true);
   assert.equal(sensitive('I live at 12 Baker Street', lex)?.cat, 'address');

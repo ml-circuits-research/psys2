@@ -166,9 +166,21 @@
 
 @t.user.profile.t030 core.test
     input="I am 34 years old."
-    expect="do not keep"
+    expect="34 years old"
+    expectState="fields.age.v=34"
     expectState="sensitive.length=0"
-    expectState="counts.known=0"
+    expectState="counts.known=1"
+
+@t.user.profile.t030b core.test
+    input="I have two kids."
+    expect="children"
+    expectState="fields.children.v=2"
+    expectState="sensitive.length=0"
+
+@t.user.profile.t030c core.test
+    input="I like chess, music and maps."
+    expectState="fields.hobbies.v.length=3"
+    expectState="counts.known=1"
 
 @t.user.profile.t031 core.test
     input="Remember that I am 34 years old."
@@ -202,7 +214,7 @@
 
 @t.user.profile.t037 core.test
     input="How well do you know me?"
-    expect="0 of 21"
+    expect="0 of 23"
     session=p4
 
 @t.user.profile.t038 core.test
@@ -283,7 +295,7 @@
 
 @t.user.profile.t053 core.test
     input="Andy"
-    expect="(1 of 21 known)"
+    expect="(1 of 23 known)"
     expectState="fields.name.v=Andy"
     expectState="pending.key=role"
     session=a
@@ -299,7 +311,7 @@
 
 @t.user.profile.t055 core.test
     input="yes"
-    expect="(3 of 21 known)"
+    expect="(3 of 23 known)"
     expectState="fields.field.src=said"
     expectState="pending.key=hobbies"
     session=a
@@ -320,7 +332,7 @@
 
 @t.user.profile.t058 core.test
     input="leadership and writing"
-    expect="(5 of 21 known)"
+    expect="(5 of 23 known)"
     expectState="fields.skills.v.0=leadership"
     expectState="fields.skills.v.1=writing"
     expectState="pending.key=learning"
@@ -336,7 +348,7 @@
 @t.user.profile.t060 core.test
     input="stop"
     expect="pick this up"
-    expect="(5 of 21 known)"
+    expect="(5 of 23 known)"
     expectState="active=false"
     expectState="inputMode=null"
     session=a

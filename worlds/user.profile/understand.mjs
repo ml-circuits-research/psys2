@@ -101,7 +101,7 @@ export function sensitive(text, lex) {
   const n = norm(text);
   if (!n) return null;
   const remember = /\b(?:remember|keep|note|save|store)\b/.test(n) && !/\b(?:do not|dont|don t|not) (?:remember|keep|save|store)\b/.test(n);
-  if (/\b(\d{1,3}) years? old\b/.test(n) || /^i am (\d{2})$/.test(n) || /\bmy age is\b/.test(n) || /\bi am (?:in my )?(?:\d0s|\d{2}) /.test(n) && /\bold\b/.test(n)) return { cat: 'age', remember };
+  if (/\b(\d{1,3}) years? old\b/.test(n) || /^i am (\d{2})$/.test(n) || /\bmy age is\b/.test(n) || /\bi am (?:in my )?(?:\d0s|\d{2}) /.test(n) && /\bold\b/.test(n)) return remember ? { cat: 'age', remember } : null;   // a plain age is a profile fact (see extract); a private note only on "remember"
   if (/\b\d{1,4}\s+[a-z]+\s+(?:street|st|road|rd|avenue|ave|lane|boulevard|blvd|drive)\b/.test(n) || /\bmy (?:home )?address\b/.test(n)) return { cat: 'address', remember };
   const first = /\b(?:i am|i have|i had|i suffer|i take|i follow|i practice|i practise|i identify|i vote|i voted|i earn|i make|i was diagnosed|i am diagnosed|i belong|i believe|i support|my)\b/.test(n);
   if (!first) return null;
@@ -197,6 +197,7 @@ export function fits(key, value) {
   const s = clean(Array.isArray(value) ? value.join(' ') : value);
   if (!s) return false;
   if (key === 'years') return /\d/.test(s) && !clauseLike(s.replace(/\d+\+?/g, '')) ;
+  if (key === 'age' || key === 'children') return /^\d{1,3}$/.test(s);
   if (clauseLike(s)) return false;
   if (key === 'career' || key === 'year') return words(s).length <= MAX_WORDS[key];
   if (/\b(?:i|me|we|you)\b/i.test(s)) return false;
@@ -205,6 +206,28 @@ export function fits(key, value) {
 }
 /** A value that is safe to repeat in an acknowledgement (short, and not a clause). */
 export const echoable = (v) => { const s = clean(Array.isArray(v) ? v.join(' ') : v); return !!s && words(s).length <= 8 && !clauseLike(s) && !/\b(?:i|me|we|you)\b/i.test(s); };
+
+/** True when `a` is `b` with one edit (substitution, insertion, deletion or adjacent swap); both at least 5 letters, so short words are never "corrected". */
+function withinOne(a, b) {
+  if (a === b) return true;
+  if (a.length < 5 || b.length < 5 || Math.abs(a.length - b.length) > 1) return false;
+  let i = 0;
+  while (i < a.length && i < b.length && a[i] === b[i]) i++;
+  if (a.length === b.length) return a.slice(i + 1) === b.slice(i + 1) || (a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2));
+  return a.length > b.length ? a.slice(i + 1) === b.slice(i) : b.slice(i + 1) === a.slice(i);
+}
+/** The items of a free preference list ("I like chess, music and maps"), canonical where the lexicon knows them (a one-letter typo of a one-word entry is repaired: "hikng" is hiking). */
+export function likesItems(raw, lex) {
+  const known = (lex('interests') ?? []).filter((e) => !e.includes('_'));
+  const items = listItems(String(raw ?? '').replace(/\b(?:lol|haha|hehe|lmao|please|pls|thanks|though)\s*[.!?]*$/i, '')).map((x) => {
+    const c = canonItem(x, [lex('interests') ?? []]);
+    if (c !== x && c !== x.toLowerCase()) return c;
+    const w = x.toLowerCase();
+    const fix = /^[a-z]+$/.test(w) ? known.find((e) => e !== w && withinOne(w, e)) : null;
+    return fix ? pretty(fix) : c;
+  });
+  return [...new Set(items.filter((x) => x && !/^\d/.test(x)))];
+}
 
 export function extract(text, env) {
   const { lex = () => [], industries = [], pending = null } = env ?? {};
@@ -430,6 +453,21 @@ export function extract(text, env) {
     const cleaned = clean(raw.replace(/[‘’]/g, "'").replace(/\bI'm\b/gi, 'I am').replace(/^(?:it is|it's|i am|my name is|the name is|they call me|i go by|just|please|hi|hello|hey|call me|you can call me|well|so|um)[\s,]+/gi, '').replace(/[.!]+$/, ''));
     const w = cleaned.split(/\s+/).filter(Boolean);
     if (w.length >= 1 && w.length <= 3 && w.every((x) => /^[\p{L}][\p{L}'.-]*$/u.test(x)) && !NOT_NAME.has(w[0].toLowerCase()) && !(w.length === 1 && lex('roles').includes(w[0].toLowerCase()))) put('name', w.map(sentenceCase).join(' '), { how: 'name-bare' });
+  }
+  // ---- age and number of children (plain facts, never asked) ---------------------------------------------------------------
+  {
+    const NUM = { a: 1, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+    const am = /\b(?:i am|i m|im|my age is|i just turned|i turned)\s+(\d{1,3})(?:\s+years?(?:\s+old|\s+of age)?)?$/.exec(n) ?? /\b(?:i am|i m|im)\s+(\d{1,3})\s+years?\s+old\b/.exec(n) ?? /\bmy age is\s+(\d{1,3})\b/.exec(n);
+    if (am && (/\b(?:years? old|my age|turned|years? of age)\b/.test(n) || pending === 'age') && Number(am[1]) >= 1 && Number(am[1]) <= 120) put('age', am[1], { how: 'age' });
+    const KIDS = '(?:kids?|children|child|sons?|daughters?)';
+    const km = new RegExp(`\\b(?:i have|i have got|we have)\\s+(a|an|one|two|three|four|five|six|seven|eight|nine|ten|\\d{1,2})\\s+${KIDS}\\b`).exec(n);
+    if (km) put('children', String(NUM[km[1]] ?? Number(km[1])), { how: 'children' });
+    else if (/\bi (?:have|got) no (?:kids|children)\b|\bi (?:do not|dont|don t) have (?:any )?(?:kids|children)\b/.test(n)) put('children', '0', { how: 'children' });
+  }
+  // ---- "I like chess, music and maps": a preference statement, remembered as hobbies (free list, no lexicon needed) ----------------
+  if (!out.items.length && /^(?:i (?:really )?(?:like|love|enjoy|adore)|i am into|i am a (?:big )?fan of) (?!to\b)/.test(n) && !/\b(?:you|your|me|my|it|them|this|that)\b/.test(n)) {
+    const items = likesItems(raw, lex);
+    if (items.length && items.length <= 6) put('hobbies', [...new Set(items)], { how: 'interest' });
   }
   out.items = out.items.map((it) => {
     const vals = Array.isArray(it.value) ? it.value : [it.value];

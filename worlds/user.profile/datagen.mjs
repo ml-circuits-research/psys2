@@ -99,7 +99,7 @@ export function generate({ rng: r, count = 300, context } = {}) {
   add('confirm', 'request', () => { const w = pick(r, ['field', 'industry', 'job', 'role']); return { text: `Confirm my ${w}.`, expect: E('confirm', { w }) }; });
   add('mention', 'request', () => { const w = pick(r, fw); return { text: pick(r, [`Ask me about my ${w}.`, `Quiz me about my ${w}.`]), expect: E('mention', { w }) }; });
   add('sensitive', 'statement', () => { const n = 18 + Math.floor(r() * 60); return pick(r, [
-    { text: `I am ${n} years old.`, expect: E('sensitive', { cat: 'age', text: q(String(n)) }) },
+    { text: `I am ${n} years old.`, expect: E('tell', { kind: 'age', n: String(n) }) },
     { text: `Remember that I am ${n} years old.`, expect: E('sensitive', { cat: 'age', text: q(`age ${n}`), remember: 'true' }) },
     { text: pick(r, ['I have diabetes.', 'I have asthma.', 'I suffer from anxiety.']), expect: null },
   ]); });

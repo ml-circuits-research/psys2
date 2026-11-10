@@ -429,11 +429,42 @@
 
 @pat.user.profile.sens.age core.pattern
     canonical="I am 34 years old."
-    match="[i_am|im] {n:number} [years_old|year_old]"
-    emit="@{_} core.request action=prof.sensitive arg.cat=age arg.text=\"{n}\""
+    match="[$lang.self.age] {n:number} [years_old|year_old|years_of_age]"
+    emit="@{_} core.request action=prof.tell arg.kind=age arg.n={n}"
     kind=request
     priority=10
     example="I am 34 years old."
+    example="I just turned 40."
+
+@pat.user.profile.age.is core.pattern
+    match="[$lang.self.age.is] {n:number} [years_old|year_old|years]?"
+    emit="@{_} core.request action=prof.tell arg.kind=age arg.n={n}"
+    kind=request
+    priority=10
+    example="My age is 45."
+
+@pat.user.profile.children core.pattern
+    canonical="I have two kids."
+    match="[$lang.self.have] {n:number} [$lang.child.noun]"
+    emit="@{_} core.request action=prof.tell arg.kind=children arg.n={n}"
+    kind=request
+    priority=10
+    example="I have two kids."
+    example="I have 3 children."
+
+@pat.user.profile.children.one core.pattern
+    match="[$lang.self.have] [a|an|one] [$lang.child.noun]"
+    emit="@{_} core.request action=prof.tell arg.kind=children arg.n=1"
+    kind=request
+    priority=10
+    example="I have a daughter."
+
+@pat.user.profile.likes core.pattern
+    match="[$lang.self.like] {l:words(8,noun)}"
+    emit="@{_} core.request action=prof.tell arg.kind=likes arg.l=\"{l}\""
+    kind=request
+    priority=8
+    whole=true
 
 @pat.user.profile.sens.age.remember core.pattern
     match="remember [that]? [i_am|im] {n:number} [years_old|year_old]"

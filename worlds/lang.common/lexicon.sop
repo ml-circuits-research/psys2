@@ -2035,3 +2035,45 @@
     alt=the_other_ones
     alt=other_ones
     alt=the_rest_of_the_others
+
+@phrase.lang.self.like core.phrase
+    doc="A person says what they like: \"I like chess, music and maps\" (COMPUTE-BUDGET C). A preference statement, never a command."
+    alt=i_like
+    alt=i_love
+    alt=i_enjoy
+    alt=i_really_like
+    alt=i_really_love
+    alt=i_adore
+    alt=i_am_into
+    alt=i_am_a_fan_of
+    alt=i_am_a_big_fan_of
+
+@phrase.lang.self.have core.phrase
+    doc="A person says what they have: \"I have two kids\" (COMPUTE-BUDGET C)."
+    alt=i_have
+    alt=i_have_got
+    alt=we_have
+
+@phrase.lang.child.noun core.phrase
+    doc="Children of the speaker (\"two kids\", \"a daughter\")."
+    alt=kids
+    alt=kid
+    alt=children
+    alt=child
+    alt=sons
+    alt=son
+    alt=daughters
+    alt=daughter
+
+@phrase.lang.self.age core.phrase
+    doc="A person says their age: \"I am 45 years old\", \"my age is 45\" (COMPUTE-BUDGET C)."
+    alt=i_am
+    alt=i_m
+    alt=im
+    alt=i_just_turned
+    alt=i_turned
+
+@phrase.lang.self.age.is core.phrase
+    doc="\"my age is 45\": the age stated without a unit (COMPUTE-BUDGET C)."
+    alt=my_age_is
+    alt=my_age_is_about
