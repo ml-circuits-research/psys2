@@ -6,14 +6,18 @@
  *   readFile(id, name)      -> Promise<string | null>   file text, null when absent
  *   loadOps(id)             -> Promise<object | null>   module namespace of ops.mjs
  */
-import { parse, get, getAll } from '../soplang/index.mjs?v=dd6ba0649b';
-import { Legends } from '../legends/index.mjs?v=837f55d958';
+import { parse, get, getAll } from '../soplang/index.mjs?v=002f3588a0';
+import { Legends } from '../legends/index.mjs?v=b96c4d4b93';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=5f0f2033de';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=5af6ee0ffc';
 import { lexIndex } from './lexicon.mjs?v=e3316469a7';
-import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
+import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
+// Reasoner files (spec 15). `matrix.sop` and `mapping.sop` are data for src/reasoner. The `matrix.*.sop` extras are appended to the world's own
+// patterns, operations and templates only when the engine runs with reasoner=matrix and the world says reasoner=matrix (the default `ops` loads none of them).
+const MATRIX_FILES = ['matrix.sop', 'mapping.sop'];
+const MATRIX_EXTRAS = { 'patterns.sop': 'matrix.patterns.sop', 'operations.sop': 'matrix.operations.sop', 'templates.sop': 'matrix.templates.sop' };
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
 const txt = (w, k) => get(w, k)?.v;
 
@@ -36,6 +40,9 @@ export class World {
     this.tests = [];
     this.ops = {};
     this.wires = [];     // every wire of every file, for validation lookups
+    this.raw = {};       // reasoner data as text: { legend, kb, matrix, mapping } (only the files the world has)
+    this.fns = null;     // functions of fns.mjs (actions and calc functions of the matrix), or null
+    this.voice = null;   // `voice(ctx)` of fns.mjs (reply facts for the templates), or null
   }
   get title() { return txt(this.manifest ?? { entries: [] }, 'title') ?? this.id; }
   get status() { return txt(this.manifest ?? { entries: [] }, 'status'); }
@@ -43,6 +50,10 @@ export class World {
   /** Short phrase of what the world lets the assistant do ("do sums"); undefined when not declared, '' to stay out of the capabilities answer. */
   get summaryPhrase() { return txt(this.manifest ?? { entries: [] }, 'summary'); }
   get doc() { return txt(this.manifest ?? { entries: [] }, 'doc'); }
+  /** Which reasoner the world opts into: `ops` (default, operations.sop + ops.mjs) or `matrix` (matrix.sop on the sopworld library, spec 15). */
+  get reasoner() { return txt(this.manifest ?? { entries: [] }, 'reasoner') === 'matrix' ? 'matrix' : 'ops'; }
+  /** Wire types the world's matrix actions write and other worlds read from the session memory (`mirror=<type>`, repeatable): the host layer copies them there. */
+  get mirrors() { return getAll(this.manifest ?? { entries: [] }, 'mirror').map((v) => v.v); }
   get language() { return txt(this.manifest ?? { entries: [] }, 'language') ?? 'en'; }
   /** Plain summary for listings. */
   summary() {
@@ -125,9 +136,16 @@ function readEntries(world, file, text) {
   return wires;
 }
 
-function buildWorld(id, files, ops) {
+function buildWorld(id, files, ops, { fns = null, voice = null, matrix = false } = {}) {
   const w = new World(id);
   w.ops = ops ?? {};
+  w.fns = fns;
+  w.voice = voice;
+  for (const [k, f] of [['legend', 'legend.sop'], ['kb', 'kb.sop'], ['matrix', 'matrix.sop'], ['mapping', 'mapping.sop']]) if (files[f] != null) w.raw[k] = files[f];
+  if (matrix && /\breasoner=matrix\b/.test(files['world.sop'] ?? '')) {
+    // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
+    for (const [base, extra] of Object.entries(MATRIX_EXTRAS)) if (files[extra] != null) files[base] = base === 'templates.sop' ? files[extra] + '\n' + (files[base] ?? '') : (files[base] ?? '') + '\n' + files[extra];
+  }
   const wires = Object.fromEntries(FILES.map((f) => [f, readEntries(w, f, files[f])]));
   w.manifest = wires['world.sop'].find((x) => x.type === 'core.world') ?? null;
   if (!w.manifest) w.errors.push({ message: 'world.sop has no core.world wire' });
@@ -195,16 +213,19 @@ function buildWorld(id, files, ops) {
 }
 
 /** Load every world the loader lists. Never throws on world content errors; see `allErrors()`. */
-export async function loadWorlds(loader) {
+export async function loadWorlds(loader, { reasoner = 'ops' } = {}) {
   const set = new WorldSet();
   const ids = await loader.listWorlds();
   const built = new Map();
   for (const id of ids) {
     const files = {};
-    await Promise.all(FILES.map(async (f) => { files[f] = await loader.readFile(id, f); }));
-    let ops = null;
+    const matrix = reasoner === 'matrix';
+    await Promise.all([...FILES, ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
+    let ops = null, fns = null, voice = null;
+    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }
-    const w = buildWorld(id, files, ops);
+    const w = buildWorld(id, files, ops, { fns, voice, matrix });
+    if (built.has(id + ':fnsError')) w.errors.push({ message: `fns.mjs failed to load: ${built.get(id + ':fnsError').message}` });
     if (built.has(id + ':opsError')) w.errors.push({ message: `ops.mjs failed to load: ${built.get(id + ':opsError').message}` });
     built.set(id, w);
   }

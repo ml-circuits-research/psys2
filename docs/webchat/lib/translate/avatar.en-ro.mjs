@@ -3,7 +3,7 @@
 // authored Romanian phrase of every variant of the robot, emoji, person, cartoon and kid characters, keyed like ops.mjs builds the English
 // phrase (the article rules are copied from there). Browser-safe, data only. `avatarBitRo(bit)` -> Romanian phrase | null.
 
-import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
+import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 const a = (w) => (/s$/.test(w) && !/ss$/.test(w) ? '' : /^[aeiou]/i.test(w) ? 'an' : 'a');
 const NO_ARTICLE_HAIR = /^(?:.*\bhair(?: with .*)?|.*\b(?:knots|buns|braids|dreadlocks|twists)|cornrows.*|shoulder-length.*)$/;
 const hairPhrase = (d) => (NO_ARTICLE_HAIR.test(d) ? d : /^(?:long|short) \d+$/.test(d) ? `${d} hair` : `${/^[a-z]+s$/.test(d) && !/ss$/.test(d) ? '' : /^[aeiou]/i.test(d) ? 'an' : 'a'} ${d}`);

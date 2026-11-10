@@ -21,7 +21,7 @@
  */
 
 import { guard } from './guard.mjs?v=ded769d6bc';
-import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
+import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
 export class OrtTimeout extends Error {
   constructor(label, ms) { super(`${label} timed out after ${ms} ms`); this.name = 'OrtTimeout'; this.label = label; }

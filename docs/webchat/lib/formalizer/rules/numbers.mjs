@@ -1,6 +1,6 @@
 /** Number words to digits (spec 03 section 1.4). Browser-safe. */
 
-import { budget } from '../../dialog/budget.mjs?v=9f5360afbc';
+import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
 const UNITS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9 };
 // common misspellings (fourty, ninty, fiveteen, ...) are read as the right number
 const TEENS = { fiveteen: 15, eightteen: 18, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19 };

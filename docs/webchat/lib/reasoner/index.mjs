@@ -12,7 +12,7 @@
  * What the library gets: `worlds/core/mapping.sop` (how it reads our legends), the legends of the matrix worlds and their imports as they are,
  * the knowledge bases, the matrices (`matrix.sop`) and the functions (`fns.mjs`) of the worlds that opt in. Reply wording stays in our templates.
  */
-import { serialize, parse as parseOurs, ref as refValue, atom as atomValue } from '../soplang/index.mjs?v=e9c4160179';
+import { serialize, parse as parseOurs, ref as refValue, atom as atomValue } from '../soplang/index.mjs?v=002f3588a0';
 import { budget as turnBudget } from '../dialog/budget.mjs?v=123c3e1329';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */

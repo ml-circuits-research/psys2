@@ -1,5 +1,5 @@
 /** Static validation of a loaded WorldSet (used by `test-world` and tests). Browser-safe. */
-import { checkPattern } from '../formalizer/rules/index.mjs?v=5f0f2033de';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=5af6ee0ffc';
 
 const STATUS = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 const MODES = new Set(['value', 'exists', 'list', 'count']);
@@ -28,7 +28,7 @@ export function validateWorldSet(set) {
     for (const k of w.kbRaw) if (!k.entries.some((e) => e.key === 'core.source')) out.push(`${w.id}: kb wire '${k.id}' has no core.source`);
     for (const p of w.patterns) for (const m of checkPattern(p, set)) out.push(`${w.id}: ${m}`);
     for (const o of w.operations) {
-      if (typeof w.ops[o.impl] !== 'function') out.push(`${w.id}: operation ${o.id}: ops.mjs has no function '${o.impl}'`);
+      if (o.impl !== 'matrix' && typeof w.ops[o.impl] !== 'function') out.push(`${w.id}: operation ${o.id}: ops.mjs has no function '${o.impl}'`);
       if (!['query', 'compute', 'action'].includes(o.semantics)) out.push(`${w.id}: operation ${o.id}: unknown semantics '${o.semantics}'`);
       for (const k of [...o.outputs, ...o.inputs]) if (!L.keyInfo(k)) out.push(`${w.id}: operation ${o.id}: unknown key '${k}'`);
     }

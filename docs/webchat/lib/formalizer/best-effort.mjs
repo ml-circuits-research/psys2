@@ -11,9 +11,9 @@
  *   // [{ world: 'ui.avatar', patternId, text: 'make your eyes square', score, coverage, used, ignored: ['robot'] }, ...]
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
-import { isNumberWord } from './rules/numbers.mjs?v=63770707cb';
-import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=04c22749e7';
-import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
+import { isNumberWord } from './rules/numbers.mjs?v=616917393c';
+import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=d3b6e999df';
+import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
 const WORD_RE = /[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu;
 const SLOT_RE = /\{[A-Za-z_0-9]+:([A-Za-z_.0-9]+)\}/g;

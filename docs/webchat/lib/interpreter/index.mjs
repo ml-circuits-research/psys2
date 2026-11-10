@@ -14,11 +14,11 @@
  *  - `ctx.emit` accepts `{_}` / `{_1}` fresh-id placeholders like pattern emit templates.
  */
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=ded769d6bc';
-import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=9f5360afbc';
-import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=dd6ba0649b';
+import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=123c3e1329';
+import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=002f3588a0';
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 import { Renderer, fallbackText, listText } from './render.mjs?v=237d079f93';
-import { FormSession } from '../formalizer/rules/session.mjs?v=0a048c7593';
+import { FormSession } from '../formalizer/rules/session.mjs?v=0cc69bdd0e';
 import { makeLang } from './lang.mjs?v=512d13f1bb';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
@@ -55,6 +55,8 @@ export class Session {
     this.effects = [];   // effects queued by ctx.effect during the current message (spec 07)
     this.form = new FormSession();
     this._answers = 0;
+    /** The library World of this session (spec 15) when the engine runs with reasoner=matrix and a world opted in; null otherwise. */
+    this.rs = interp.reasoner?.session() ?? null;
     // Tool worlds export initialState() from ops.mjs; the engine seeds their state at session start.
     for (const w of interp.set.list()) {
       if (typeof w.ops?.initialState === 'function') this.state[w.id] = structuredClone(w.ops.initialState());
@@ -65,16 +67,19 @@ export class Session {
     const s = Object.create(Session.prototype);
     s.interp = this.interp; s.memory = this.memory.clone(); s.state = structuredClone(this.state);
     s.effects = structuredClone(this.effects); s.form = this.form.clone(); s._answers = this._answers;
+    s.rs = this.rs?.fork() ?? null;
     return s;
   }
   /** Add wires (full keys) to working memory. */
-  add(wires) { for (const w of wires) this.memory.add(w); }
+  add(wires) { for (const w of wires) this.memory.add(w); this.rs?.tell(wires); }
   nextAnswerId() { return 'a' + (++this._answers); }
 }
 
 export class Interpreter {
-  constructor(set, { opTimeoutMs = 200, maxDepth = 8, maxVisited = 10000 } = {}) {
+  constructor(set, { opTimeoutMs = 200, maxDepth = 8, maxVisited = 10000, reasoner = null } = {}) {
     this.set = set;
+    /** The sopworld host layer (src/reasoner) or null (the default: every world answers through its ops.mjs). */
+    this.reasoner = reasoner;
     this.legends = set.legends;
     this.opTimeoutMs = opTimeoutMs;
     this.maxDepth = maxDepth;
@@ -130,7 +135,7 @@ export class Interpreter {
   _resolveQuestion(session, wire) {
     const spec = this._questionSpec(wire);
     const st = { depth: 0, visited: 0, ops: [] };
-    const envelope = this._ask(session, spec, st);
+    const envelope = (session.rs?.owns(wire) ? session.rs.resolve(wire) : null) ?? this._ask(session, spec, st);
     const answer = this._writeAnswer(session, wire, envelope, spec);
     return { kind: 'question', wire, spec, envelope, answer, ops: st.ops, status: envelope.status };
   }
@@ -446,8 +451,9 @@ export class Interpreter {
     const st = { depth: 0, visited: 0, ops: [] };
     const op = this.set.list().flatMap((w) => w.operations).find((o) => o.semantics === 'action' && (o.id === action || o.action === action));
     const spec = { wire, action, args, where: {}, mode: 'value' };
-    let envelope;
-    if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
+    let envelope = session.rs?.owns(wire) ? session.rs.resolve(wire) : null;
+    if (envelope) session.rs.syncTo(session);   // answered by the library (spec 15); what its actions wrote is copied to the session memory
+    else if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
     else envelope = this._runOp(session, op, spec, {}, st, { ...args, request: wire });
     spec.op = op;
     const answer = this._writeAnswer(session, wire, envelope, spec);
@@ -509,6 +515,9 @@ export class Interpreter {
     if (env.ask) vars.ask = { text: env.ask };
     if (env.missing) vars.missing = { items: env.missing.map((m) => ({ text: m })) };
     if (env.note) vars.note = { text: env.note };
+    if (env.why) vars.why = { text: env.why };
+    // the other keys of the library's answer wire (or of the wires a refusal rests on): the matrix says what it knows, the templates say how
+    for (const [k, v] of Object.entries(env.vars ?? {})) if (!(k in vars)) put(k, v, !!mem.get(v));
 
     const action = result.kind === 'request' ? (spec.op?.action ?? spec.action) : null;
     const fors = result.kind === 'request'
