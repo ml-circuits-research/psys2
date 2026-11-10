@@ -50,6 +50,7 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
   2. BUSY-LOST;
   3. DIAG3b;
   4. RP5b.
+- **Track 1 status (reviewer, 04:00 local):** no commit for the MOBILE-VOICE review fixes, FREEZE-6, BUSY-LOST, RP5c item 1 or GAPS-1 since 23:58, except RP5b and RP5c. Track 2 is done with NX, so **move its agents to Track 1 now**, in this order: MOBILE-VOICE review fixes, BUSY-LOST, FREEZE-6, GAPS-1 (items 1–2), RP5c item 1. If something blocks, write it to `questions.md` and go on to the next item.
 - **Track 2, GPU and LLM APIs, 2 agents at most:** NX below.
   - Labelling by API batches or by vLLM on the GPU loads neither the CPU nor the agent count.
   - Do not run test suites from Track 2 agents, except the NX unit tests.
