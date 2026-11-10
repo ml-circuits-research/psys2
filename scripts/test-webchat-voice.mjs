@@ -480,7 +480,7 @@ export const SCENARIOS = {
       await c.pg.click('button.p2-mic'); await waitRec(c);
       let prev = rows[0].t, fed = 0, paused = 0;
       for (const r of rows) {
-        await sleep(Math.min(Math.max(0, r.t - prev), 6000)); prev = r.t;
+        await sleep(Math.min(Math.max(0, r.t - prev), 3500)); prev = r.t;
         if (await c.pg.evaluate((t) => window.__sr.final(t), r.text)) fed++; else paused++;
       }
       await sleep(4000); await idle(c);
