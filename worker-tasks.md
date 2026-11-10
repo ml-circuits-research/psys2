@@ -673,7 +673,7 @@ It also gives things we do not have: a missing argument asked as a question, a d
 **Read first:** its `docs/integration.md`, `SPEC.md` and `compat/psys2/` (`mapping.sop`, `matrices/`, `run.mjs`, `demo.mjs`).
 
 **Stage 1 (this task): no behaviour change by default.**
-1. **Vendor** the built single file `docs/sopworld.mjs` at a pinned commit (or the 0.5.0 tag when it exists) into `src/vendor/sopworld/`, with its LICENSE, an entry in the vendor LICENSES notes, and the commit hash. No network at run time. The build copies it for the engine worker (versioned URL like every module).
+1. **Vendor** the built single file `docs/sopworld.mjs` at a pinned commit (start with the current `main`; the library is adding certainty tiers, `describe`, atomic patch checks and relations in its round 3, and will tag 0.5.0 — re-vendor then) into `src/vendor/sopworld/`, with its LICENSE, an entry in the vendor LICENSES notes, and the commit hash. No network at run time. The build copies it for the engine worker (versioned URL like every module).
 2. **`src/reasoner/`** — a thin host layer, not a second interpreter:
    - one `World` per dialogue session;
    - our legends loaded through the mapping (copy `mapping.sop` into `worlds/core/` as data);
@@ -695,6 +695,14 @@ It also gives things we do not have: a missing argument asked as a question, a d
    - "why?" after a shop answer gives the explanation from `explain`;
    - "I got 5 lei back for a book, what did I pay?" answers 17.
 7. **Report** in `worker-log.md`: the parity table, lines removed if these three `ops.mjs` were dropped, bundle size added (the file is about 110 kB before these features; report the real figure and its gzip size), turn-time comparison, and **a list of what you had to work around**, as issues for the library session (the reviewer passes them on; do not patch the vendored file).
+
+8. **Measure both strategies on the same sets (user, 17:23: "a measurable strategy flag").** `scripts/eval-reasoner.mjs --reasoner ops|matrix` writes one table to `training/RESULTS.md` (section SOPWORLD-1) and `training/results/sopworld1-*.json`, with a column per strategy:
+   - **(a) Parity:** operational, operational-ro, dialogues: right / partly / wrong / not understood, for the three worlds and for everything else (which must be identical).
+   - **(b) Consistency audit:** after **every turn** of every dialogue and operational case that touches the three worlds, check the world state against the matrix (the library's `check` on the whole state): count turns that leave a violation (negative money, two values for a single-valued key, a dangling reference, a broken bound). Run it for `ops` too, by loading the `ops` session's wires and state into a World: this is the number that shows whether the current code keeps worlds coherent.
+   - **(c) Coherence set:** `training/eval/coherence-2026-11-10.jsonl` (30 cases written by the reviewer: 10 per world; kinds: contradiction, missing-arg, default-revision, undo, explain, deduce, abduce, assumption-visible, stale). Each case has `turns`, an `expect` sentence and a `check` object with machine-checkable hints (`final_answer_contains`, `asks_question`, `state_unchanged`, `status`, …). Write the runner so that each hint is checked; where a hint cannot be checked mechanically, print the transcript for the reviewer. Report passed / total per kind, per strategy. The reviewer expects `ops` to fail many of them: that is the point of the comparison. Do not tune the cases; if a case is wrong, say so in `questions.md`.
+   - **(d) Assumptions made visible:** how many answers relied on a default or a guess, and in how many the reply said so.
+   - **(e) Cost:** ms per turn (p50, p95), bundle bytes (raw and gzip), lines of world code.
+9. **What sopworld can and cannot replace, as a table per world** (all 24, not only the three): for each `ops.mjs`, classify its functions as *state and rules* (replaceable by a matrix), *queries and aggregates* (replaceable), *text handling*, *engine / geometry / search*, *reply wording* — with line counts. One page in `docs/` and in the log. This is the map for stage 2.
 
 **Not in stage 1:** removing any `ops.mjs`, changing the default, other worlds. Stage 2 (after the user sees stage 1): the session memory and question resolution of `src/interpreter/` on the library, then kids.time, kids.animals, kids.shapes, user.profile and the game rules; the engine-heavy worlds keep their engines and move only state and validation.
 
