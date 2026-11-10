@@ -543,43 +543,21 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
-### RP5b — what still fails after cc78918 (reviewer probe in real Chrome, Romanian session, 23:00 local)
+### RP5c — small leftovers after 6377c61 (reviewer probe, 01:10 local)
 
-Probe: `/home/claude/shot/rp5.mjs` and `rp5b.mjs` (`openChat` with `settings: { language: 'ro' }`, throttle 1, 0 page errors). **Fixed and validated:**
-- fii bucuros / nervos → Romanian replies;
-- încearcă gura următoare;
-- fa ochi visatori → "ochi somnoroși";
-- joc a unu;
-- desenează un sare → a sun (Drawing tab);
-- desenează o maimuță → the Romanian list of animals it can draw;
-- desenează liniuță;
-- pește mic și albastru;
-- șterge peștii.
+RP5b is validated: `/home/claude/shot/rp5.mjs` and `rp5b.mjs` in real Chrome, Romanian session, default settings, 0 errors. All of these now give a Romanian reply:
+- the tab names (desen, diagramă, x și zero, avatar);
+- the cartoon and kid descriptions;
+- the game start, the missing-place prompt;
+- "în apă" (with water added);
+- "o gură grătar", "Ești deja pe fila Avatar";
+- "desenează trei cercuri în diagramă" → "Am desenat c1, c2 și c3.";
+- a click on the Diagram tab, then "desenează trei cercuri" → diagram c1..c3.
 
-Still failing:
-1. **Diagram tab (rp5-18, 19).** The Diagram tab was clicked and empty. "desenează trei cercuri" → art.draw "Am desenat 3 cercuri roșii", and the tab **switches to Drawing**. "desenează trei cercuri în diagramă" → "I did not understand where to put it ("in the chart")".
-   - **"diagramă" translates to "chart"**: map diagramă / diagrama / în diagramă → diagram, and keep grafic → chart.
-   - Run the case with the webchat's **default settings** (the encoder dispatch path), not only the rules formalizer. Your log says you could not check that path; this is that path, and it fails.
-2. **Tab names in Romanian.**
-   - "deschide tabul desen" → "Nu am înțeles … Ai vrut să spui „Deschide fila albumului foto”?" (and an English second line).
-   - "deschide tabul diagramă" → "I could not find numbers in "Open the tab a"" (broken translation, charts world).
-   - Every tab must open by its Romanian name and the usual voice variants: desen, desenat, diagramă, grafic / grafice, hartă, muzică, editor, șah, spânzurătoarea, x și zero, ghicește animalul, documente, avatar, profil.
-3. **Replies still in English in the Romanian session:**
-   - "fii un carton" / "fiind copil" → "Done! Now I am a cartoon. I have collared clothes…" / "There you go! Now I am a kid…";
-   - "Fă o gură mare" → "I cannot change the size of my mouth…";
-   - "pornește x și zero" → "OK, let's play tic-tac-toe! You are X…";
-   - "mută peștele" → "Where should it go? You can say…";
-   - the chart "could not find numbers" reply.
-
-   `check-ro-replies` reports 377 replies kept in English. Translate at least every reply family the user hit today (avatar become/describe, mouth-size refusal, game start, missing-place prompt, chart help), and make the check list the remaining English families by count.
-4. **Wording.**
-   - "mută peștele în apă" → "Am mutat peștele pe pământ" (on land). Say "în apă" when the target was water, and add water to the scene if there is none.
-   - "Ești deja pe avatar filă" → "Ești deja pe fila Avatar".
-   - "un grătar gură" → "o gură grătar".
-   - The tab-switch replies begin with "Am înțeles asta: "open the avatar tab"". Show the English reading only in the trace, not in the reply.
-5. **rp5-21 (background talk)** stays with NOISE / MOBILE-VOICE (speech filters).
-
-Done when all 21 rows of `expectations-2026-11-09e.jsonl` (except rp5-21) pass in a browser test with default settings and `language: 'ro'`; add that test (`scripts/test-webchat-ro-rp5.mjs`).
+Left:
+1. **A tab opened by a command does not count as the active tab for tier T.** In the same session: "deschide tabul diagramă" → "Bine, iată fila Diagramă." (the Diagram tab is shown), then "desenează trei cercuri" → art.draw "Am desenat 3 cercuri roșii" and the tab **switches to Drawing**. With a click instead of the command it works. The `ui.shell` open-tab operation must set `activeTab` exactly like `userTab`. Add this order to `scripts/test-webchat-ro-rp5.mjs` (open by command, then draw).
+2. "deschide tabul desen" while already on Drawing → "OK, aici este desenul tablă." It should be "Ești deja pe fila Desen." (the same phrase family as Avatar; the "already here" reply of art.draw is missing from the phrase table).
+3. Minor: "Nu pot găsi cerc roșu în tabloul tău." for "toate cercurile roșii" should use the plural ("Nu găsesc cercuri roșii în desen."). And "Fă o gură mare" could take the widest smile instead of refusing (you noted it).
 
 ### RP5 — Romanian voice failures from the same session
 
@@ -1911,3 +1889,5 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - TIER-T-LONG (1160540) and R5b (3e0ac18), files match the log: accepted on the logged numbers. Long set 80.5 → 94.2 right, 1296 set 98.6 / 0.3; v5 is not published, v4e stays. The reviewer did not rerun them (2-vCPU host).
 - NX1 (5956e32): the label format in `training/nx/README.md` is good: spans relative to the segment, BIO loss masked for `partial`, synthesized `ask` marked.
 - NX2 (5214a55), NX4-A (28c5077) and NX5-lite (45a5d03), files match the log: pilot table and selection rule applied (labeler Sonnet; judge Sonnet, none qualifies); A exported with outputs identical to v4 (+0.9 MB); A+ shows no accuracy forgetting but is not a drop-in; operation agreement with verified rules readings 85.4 / 88.5%. Follow-ups are in the NX reviewer notes.
+- RP5b (6377c61, files match the log): validated in real Chrome. The root cause (a tab click never told the engine the active tab) is fixed. The three leftovers are in RP5c.
+- NX4-B (ebea7bd): accepted. Seen worlds: span F1 .92, operation .88. Unseen worlds do not generalise (operation .40, span F1 .41), at ~40 passes per segment. The A seeds are stable (±0.1). The reviewer confirms the real exported A model costs the same as dispatcher v4 in the browser harness (50.2 vs 49.6 ms at 32 tokens, `results-nx-a.json`).
