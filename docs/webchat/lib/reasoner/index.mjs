@@ -23,6 +23,8 @@ const keyName = (k) => String(k).split('.').pop();
 const bare = (v) => String(v).replace(/^\$/, '');
 const unquote = (v) => { const s = String(v); return s.length > 1 && s.startsWith('"') && s.endsWith('"') ? s.slice(1, -1) : s; };
 const first = (a) => (Array.isArray(a) ? a[0] : a);
+/** slots map of the library's compiled matrix -> the keys a completing could fill (required or with a default); see `ReasonerSession._mayFill`. */
+const FILLABLE = new WeakMap();
 
 /** An attribute map of the library ({ key: [values] }) as a flat object (first value of each key, quotes and `$` removed), without the library's bookkeeping keys. */
 function flat(attrs) {
@@ -54,7 +56,13 @@ export async function createReasoner(set, { lib = null } = {}) {
   const host = {
     lexicon,
     view: (c) => {
-      const key = (w, k) => { const r = legends.tryResolveKey(w.type, k); return r.error ? null : r; };
+      const keys = new Map();   // (type, key) -> the resolved key (a world's tables ask for the same few thousands of times per turn)
+      const key = (w, k) => {
+        const id = `${w.type}\u0001${k}`;
+        let r = keys.get(id);
+        if (r === undefined) { r = legends.tryResolveKey(w.type, k); if (r.error) r = null; keys.set(id, r); }
+        return r;
+      };
       const decode = (r, t) => legends.decode(r.info, lib.readValue(t));
       return {
         lexicon,
@@ -177,10 +185,31 @@ export class ReasonerSession {
   /** What the matrix declares as a default is applied (tier `default`) once the wires are told, so that an answer resting on it can say so. */
   _defaults() {
     if (this.world.stamp === this.completedAt) return;   // nothing changed since the last completing: it would find nothing to do
+    if (!this._mayFill()) { this.completedAt = this.world.stamp; return; }   // no cell is open and no default is missing: `complete` would only walk the world to find that
     let done = true;
     try { const r = this.world.complete({ defaults: true, budget: this._limit() }); if (r?.budget) done = false; } catch { done = false; /* a default that cannot be applied stays open */ }
     this._charge();
     this.completedAt = done ? this.world.stamp : null;   // an incomplete completing is tried again with the next budget
+  }
+
+  /**
+   * Can `complete({ defaults: true })` fill anything? Only a wire with a slot that has no value and a candidate to fill it with (a default, or for a required
+   * slot an enum, a type or a range: the library's `_next`; a required slot without any is only a question) gives it work; the library's completing walks every cell of the world (`assumptions()`) before it finds that out
+   * (0.8-1.3 ms in a world with the game's wires). This is the same test in one pass over the wires, so an answer, a question or a statement that leaves
+   * nothing open costs no completing. When the compiled matrix cannot be read, the answer is yes (the completing runs as before).
+   */
+  _mayFill() {
+    let c;
+    try { c = this.world._compiled?.(); } catch { return true; }
+    if (!c?.slots?.get) return true;
+    for (const w of this.world.wires.values()) {
+      const slots = c.slots.get(w.type);
+      if (!slots) continue;
+      let need = FILLABLE.get(slots);
+      if (need === undefined) { need = [...slots.values()].filter((s) => !s.prefix && (s.default !== undefined || (s.required && (s.enum || s.type || s.range)))).map((s) => s.key); FILLABLE.set(slots, need); }
+      for (const k of need) if (!w.attrs[k]) return true;
+    }
+    return false;
   }
 
   // ---- turns, undo, rewind ---------------------------------------------------------------------------------------------------------
