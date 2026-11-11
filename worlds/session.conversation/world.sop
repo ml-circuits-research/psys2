@@ -1,0 +1,20 @@
+@world.session.conversation core.world
+    namespace=session.conversation
+    version=0.1.0
+    legend=$legend.session.conversation
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    reasoner=matrix
+    compose=world.kids.shop
+    compose=world.kids.arith
+    compose=world.kids.tasks
+    compose=world.kids.time
+    compose=world.kids.animals
+    compose=world.kids.shapes
+    compose=world.user.profile
+    language=en
+    status=fixture
+    title="The conversation (one instance per session)"
+    summary=""
+    doc="Not a world the user talks to: the declaration that the worlds listed in compose= live in ONE library World per session, because they talk about the same people and things (the user, the people named, what they have, buy, own and do). Every other world (the games, the tab worlds with engines) has its own instance and shares nothing but the agents. Hand-built platform fixture, not produced by the C1 workflow."

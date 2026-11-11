@@ -43,7 +43,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['docs.editor', 'docs.reader', 'games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'user.profile']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['docs.editor', 'docs.reader', 'games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'user.profile']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
@@ -388,7 +388,7 @@ test('games.tictactoe: "undo" (typed, or as a command) goes back through the lib
   assert.equal(rs.of('games.tictactoe').ofType('ttt.move').length, 0);
   sameAsLibrary(s, ['games.tictactoe']);
   const none = await s.send('oops, take that back', {});
-  assert.equal(none.text, 'There is nothing to undo yet: no move has been played.');
+  assert.equal(none.text, 'There is nothing more to undo.');
   assert.deepEqual(none.statuses, ['missing']);
   assert.match((await s.send('top left', {})).text, /You took top left\./);
 });
@@ -419,7 +419,7 @@ test('games.tictactoe: bare "undo" off the game tab is the dialogue layer\'s gen
   await s.send("Let's play tic tac toe", {});
   await s.send('center', {});
   s.setWorldState('ui.shell', { activeTab: 'robot' });
-  assert.match((await s.send('undo', {})).text, /^OK, I took that back: "center"\.$/);
+  assert.match((await s.send('undo', {})).text, /^OK, I took back your last move and my answer\. It is your move again\.$/);
   assert.equal(s.isession.rs.of('games.tictactoe').ofType('ttt.move').length, 0);
 });
 
@@ -492,7 +492,7 @@ test('games.hangman: undo goes back through the library: a guess, a hint, a lost
   assert.equal(s.isession.state['games.hangman'].wrongLeft, 6);
   await s.send('I give up', {});
   assert.equal(s.isession.state['games.hangman'].status, 'lost');
-  assert.match((await s.send('undo', {})).text, /^OK, I took back your last guess\./);
+  assert.match((await s.send('undo', {})).text, /^OK, I took back the end of the game\./);
   assert.equal(s.isession.state['games.hangman'].status, 'playing', 'undo reopens the game that was given up');
   await s.send('play hangman with the word cat', {});
   assert.equal(s.isession.state['games.hangman'].word, 'cat');
@@ -573,7 +573,7 @@ test('games.guess: a taught animal is a wire of the library (kids.animals.animal
 test('games.guess: undo goes back through the library: a clue, an answer (the question is asked again); nothing to undo before a game', async () => {
   const { s } = await say(matrix, ['I am thinking of an animal.', 'yes', 'it eats meat']);
   assert.equal(s.isession.state['games.guess'].evidence.length, 1);
-  assert.match((await s.send('undo', {})).text, /^OK, I took that back\./);
+  assert.match((await s.send('undo', {})).text, /^OK, I took that back: "it eats meat"\./);
   assert.equal(s.isession.state['games.guess'].evidence.length, 0);
   const r = await s.send('undo', {});
   assert.match(r.text, /^OK, I took back your last answer\. I am asking that question again: Does it have 4 legs\?$/);
@@ -768,36 +768,41 @@ test('user.profile: the facts are wires of the library (one per field), the stat
   sameAsLibrary(s, ['user.profile']);
 });
 
-test('one instance per world (user decision 2026-11-11): created on first use, isolated, the shared wires copied, undo rewinds the instance of the world that changed', async () => {
+test('one instance per group (user decision 2026-11-11): created on first use, the conversation worlds in one, every game in its own, the shared wires copied, undo rewinds the instance of the world that changed', async () => {
   const s = matrix.createSession({ language: 'en' }), rs = s.isession.rs;
   assert.equal(rs.insts.size, 0, 'a fresh session holds no World');
   await s.send('A ball costs 5 lei.', {});
-  assert.deepEqual([...rs.insts.keys()], ['kids.shop'], 'only the world that was used has an instance');
-  assert.ok(!rs.of('kids.shop').schema('kids.arith.holding'), 'the shop knows nothing of the arithmetic world');
+  assert.deepEqual([...rs.insts.keys()], ['session.conversation'], 'only the conversation instance exists: no game was used');
   await s.send('Tom has 3 apples.', {});
-  assert.deepEqual([...rs.insts.keys()].sort(), ['kids.arith', 'kids.shop']);
+  assert.deepEqual([...rs.insts.keys()], ['session.conversation'], 'the arithmetic world lives in the same instance as the shop');
   assert.equal(rs.of('kids.arith').ofType('kids.arith.holding').length, 1);
-  assert.ok(rs.of('kids.arith').ofType('kids.shop.price').length > 0, 'the arithmetic world reads the facts of the shop (reads=): what was told before it was used is replayed into it');
+  assert.ok(rs.of('kids.arith').ofType('kids.shop.price').length > 0, 'the arithmetic rules see the shop facts (the same World)');
   assert.ok(rs.sharedLog.every((x) => rs.reasoner.route(x.w.type).shared), 'only wires several worlds know are in the shared log');
-  assert.equal(rs.turns.at(-1).mark.marks.has('kids.arith'), true, 'the turn is the arithmetic world\'s (the shop instance only got the shared agent)');
+  await s.send("Let's play tic tac toe", {});
+  await s.send('center', {});
+  assert.deepEqual([...rs.insts.keys()].sort(), ['games.tictactoe', 'session.conversation']);
+  assert.equal(rs.of('games.tictactoe').ofType('kids.shop.price').length, 0, 'the game holds nothing of the conversation worlds');
+  assert.equal(rs.turns.at(-1).mark.marks.has('games.tictactoe'), true, 'the last turn is the game\'s');
+  assert.equal(rs.turns.at(-1).mark.marks.has('session.conversation'), false, 'and does not touch the conversation instance');
   await s.send('undo that', {});
-  assert.equal(rs.of('kids.arith').ofType('kids.arith.holding').length, 0);
-  assert.ok(rs.of('kids.shop').ofType('kids.shop.price').length > 0, 'the shop instance is not rewound by the arithmetic turn');
+  assert.equal(rs.of('games.tictactoe').ofType('ttt.move').length, 0);
+  assert.equal(rs.of('kids.arith').ofType('kids.arith.holding').length, 1, 'the conversation instance is not rewound by the game turn');
   const fork = rs.fork();
-  assert.deepEqual([...fork.insts.keys()].sort(), ['kids.arith', 'kids.shop']);
+  assert.deepEqual([...fork.insts.keys()].sort(), ['games.tictactoe', 'session.conversation']);
 });
 
 test('composite world: compose= builds one instance from the legends and matrices of the worlds it names; reads= only their legends and facts', async () => {
   const e = await engineWith('matrix');
-  Object.defineProperty(e.set.get('kids.tasks'), 'compose', { get: () => ['kids.shop'] });
   const r = e.reasoner;
-  assert.deepEqual(r.matrixWorlds('kids.tasks'), ['kids.shop', 'kids.tasks']);
-  assert.ok(r.schemaWorlds('kids.tasks').includes('kids.shop'));
-  assert.ok(!r.schemaWorlds('kids.shop').includes('kids.tasks'), 'the composed world stays isolated');
-  assert.ok(r.schemaWorlds('kids.arith').includes('kids.shop'), 'reads=');
-  assert.deepEqual(r.matrixWorlds('kids.arith'), ['kids.arith'], 'reads= loads no matrix');
+  assert.deepEqual(r.matrixWorlds('session.conversation').sort(), ['kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'user.profile']);
+  assert.ok(r.schemaWorlds('session.conversation').includes('kids.shop'));
+  assert.ok(!r.schemaWorlds('games.hangman').includes('kids.shop'), 'a game holds the legends of its own imports only');
+  Object.defineProperty(e.set.get('games.guess'), 'reads', { get: () => ['kids.shop'] });   // a world may still read another's facts (the light form of sharing)
+  assert.ok(r.schemaWorlds('games.guess').includes('kids.shop'), 'reads=');
+  assert.deepEqual(r.matrixWorlds('games.guess'), ['games.guess'], 'reads= loads no matrix');
   assert.deepEqual(r.buildAll(), []);
   const rs = r.session();
   assert.ok(rs.of('kids.tasks').schema('kids.shop.purchase'), 'the composite knows the shop types');
-  assert.ok(rs.of('kids.tasks').matrix.size > rs.of('kids.shop').matrix.size, 'and holds the matrices of both');
+  assert.ok(rs.of('kids.tasks').matrix.size > rs.of('games.tictactoe').matrix.size, 'and holds the matrices of all its worlds');
+  assert.equal(rs.of('kids.tasks'), rs.of('kids.shop'));
 });

@@ -1,0 +1,66 @@
+@t.conv.n1 core.test
+    session=c1
+    reasoner=matrix
+    input="My name is Ana."
+    expect="Nice to meet you, Ana!"
+
+@t.conv.n2 core.test
+    session=c1
+    reasoner=matrix
+    input="Ana has 3 apples."
+    expect="OK, Ana has 3 apples."
+
+@t.conv.n3 core.test
+    session=c1
+    reasoner=matrix
+    input="She eats 1."
+    expect="OK, Ana ate 1 apple."
+
+@t.conv.n4 core.test
+    session=c1
+    reasoner=matrix
+    input="How many apples does she have?"
+    expect="Ana has 2 apples."
+
+@t.conv.n5 core.test
+    session=c1
+    reasoner=matrix
+    input="What is my name?"
+    expect="Your name is Ana."
+
+@t.conv.n6 core.test
+    session=c2
+    reasoner=matrix
+    input="I have 20 lei."
+    expect="OK, you have 20 lei."
+
+@t.conv.n7 core.test
+    session=c2
+    reasoner=matrix
+    input="I buy a ball."
+    expect="OK, you bought 1 ball."
+
+@t.conv.n8 core.test
+    session=c2
+    reasoner=matrix
+    input="Add milk to my shopping list."
+    expect="Done! I added milk to your shopping list."
+
+@t.conv.n9 core.test
+    session=c2
+    reasoner=matrix
+    input="Undo."
+    expect="OK, I took that back: "
+    doc="the milk is named in the reply (the full wording is in tests/reasoner-worlds-apart.test.mjs)"
+
+@t.conv.n10 core.test
+    session=c2
+    reasoner=matrix
+    input="Undo."
+    expect="OK, I took that back: "
+
+@t.conv.n11 core.test
+    session=c2
+    reasoner=matrix
+    input="How much money do I have?"
+    expect="You have 20 lei now."

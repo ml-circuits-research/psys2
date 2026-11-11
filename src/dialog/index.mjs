@@ -837,6 +837,9 @@ export class DialogSession {
     }
     if (r2.segments.length === 1 && r2.segments[0].unparsed && this._beNow) { try { r2 = await this._withBestEffort(r2, o2); } catch { return null; } }
     if (!r2.segments.length || r2.segments.some((x) => x.unparsed)) return null;
+    // the world just found wrong is not the better reading: a world that answered a moment ago (so it is among the recent ones) must not come back through the leniency
+    // ("what is on my shopping list?" after a removal was re-read by the same world as "is it on your list", ignoring "what")
+    if (r2.segments.some((x) => x.match?.worldId && excluded.includes(x.match.worldId))) return null;
     // a word some world knows, or an inflection of its correction ("move" -> "moves"), is never a typo here
     const gv = spellVocabulary(set);
     if (r2.segments.some((x) => (x.corrections ?? []).some((c) => c.kind !== 'abbreviation' && (sameWordForm(c.from.toLowerCase(), c.to.toLowerCase()) || isKnownWord(c.from.toLowerCase(), gv))))) return null;
@@ -1272,7 +1275,7 @@ export class DialogSession {
     if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
     if (!disc.pending) disc.openConfirm(englishReply, this._msg);
     this.isession.rs?.adoptState(this.isession);   // whatever else changed the state of a world with `adopt` in this turn (another world's request) is taken over before the turn is kept
-    this.isession.rs?.commitTurn(this._msg);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
+    this.isession.rs?.commitTurn(this._msg, english);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };

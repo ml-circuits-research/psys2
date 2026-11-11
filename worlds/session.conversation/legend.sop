@@ -1,0 +1,6 @@
+@legend.session.conversation core.legend
+    namespace=session.conversation
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="No types of its own: the conversation instance holds the legends of the worlds it composes (compose= in world.sop)."

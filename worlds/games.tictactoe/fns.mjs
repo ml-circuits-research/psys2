@@ -150,5 +150,8 @@ export const fns = {
 export function undoWords({ before, after }) {
   if (!before) return { status: 'missing', note: 'There is nothing to undo yet: no move has been played.' };
   const n = (x) => x.board.filter(Boolean).length;
-  return { value: n(after) < n(before) ? 'OK, I took back your last move and my answer. It is your move again.' : 'OK, I took that back.', openTab: 'tictactoe' };
+  const value = n(after) < n(before) ? 'OK, I took back your last move and my answer. It is your move again.'
+    : before.winner && !after.winner ? 'OK, I took back the end of the game. The game goes on.'
+    : null;   // a change the board cannot tell (a new game, a level): the host's generic words quote what the user said
+  return { value, openTab: 'tictactoe' };
 }
