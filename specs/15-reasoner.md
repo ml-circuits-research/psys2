@@ -59,3 +59,8 @@ The library is the only record of what was said. Nothing else holds state that c
 - The old operations are not removed, and `ops` stays the default.
 - A statement the library refuses (a hard deny) is not reported to the user (it is in `session.rs.refused` and the trace); a soft one is kept and flagged (above). Telling the user about a refused statement is SOPWORLD-1b item 2.
 - Kept in the host layer, not the library's job: reply wording (a/an, plurals, "costs" or "cost", "about", "from Tom"); the sentence for a zero divisor; which item to name when a price is missing (a lookup of the price wires); the text handling of kids.tasks (splitting "milk, eggs and bread", list names, what a named thing matches).
+
+- A statement the library refuses is not reported to the user (it is in `session.rs.refused` and the trace); the library follow-ups close the listed arith cases.
+
+## SOPWORLD-1b: what the default `ops` strategy does now
+The coherence failures that were ours (unread sentences, "why?", impossible statements, ties, unknown start) are closed in the rules and the dialogue layer, so both strategies are measured on sentences they can read: see spec 11 section 12. The `ops` strategy keeps the `from` list of every answer and explains with it; its impossible statements are refused when told (the matrix keeps them and flags them). New rules, phrase groups (`lang.quant.some`, `lang.quant.something`, `lang.then.now`) and replies are shared by both strategies; patterns whose reading differs from a matrix extra have a lower priority than the matrix extra, so the matrix reading still wins in matrix mode.

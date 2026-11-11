@@ -210,6 +210,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     id: x.id, wire: x, worldId: id, input: txt(x, 'input'), expect: getAll(x, 'expect').map((v) => v.v),
     expectStatus: txt(x, 'expectStatus'),
     expectState: getAll(x, 'expectState').map((v) => v.v), expectEffect: getAll(x, 'expectEffect').map((v) => v.v), language: txt(x, 'language') ?? 'en', session: txt(x, 'session'),
+    reasoner: txt(x, 'reasoner'),   // `ops` or `matrix`: the test only runs with that reasoner strategy (spec 15); absent = both
   }));
   return w;
 }

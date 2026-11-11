@@ -30,7 +30,7 @@ const REPAIR_CORRECT = [
   new RegExp(`^(?:${REPAIR_LEAD}[ ,]+)*(?:i meant|i mean|i said|i wanted|rather|let it be|it should be|should be|it must be)\\s+(.+)$`),
   // imperatives that are ordinary commands on their own count as a correction only after a lead word ("actually make it green")
   new RegExp(`^(?:${REPAIR_LEAD}[ ,]+)+(?:make it|make that|make them|change that to|change it to|change them to|instead|use|try|paint it|colour it|color it|put|give it|give me)\\s+(.+)$`),
-  /^(?:no|nope|nah|wait|oops|sorry|actually|hmm)(?:\s*,\s*|\s+(?=(?:the|a|an|that|this)\s))(?!more\b|less\b|thanks\b|thank\b)(?:the |a |an )?(.+)$/,
+  /^(?:no|nope|nah|wait|oops|sorry|actually|hmm)(?:\s*,\s*|\s+(?=(?:the|a|an|that|this|to|in|on|into|onto|at|for|from|with)\s))(?!more\b|less\b|thanks\b|thank\b)(?:the |a |an )?(.+)$/,
 ];
 const NOT_THAT = /^(?:no |nope |nah )?not (?:that|this|the same) one(?:[ ,]+(?:but |instead |use |i meant |the )?(.*))?$/;
 const NOT_X = /^(?:no |nope |nah )?not (?:the )?([a-z\- ]+?)[ ,]+(?:but |instead |use |i meant )?((?:the |a |an )?[a-z\- ]+)$/;

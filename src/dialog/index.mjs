@@ -390,6 +390,19 @@ export class DialogSession {
     return focus;
   }
 
+  /**
+   * Ops reasoner: ask the world whether the facts just told still make a consistent world (hook `checkStatement(ctx, { ids })`, which
+   * returns { problem } or nothing). A problem retracts the facts and is returned as the sentence to say; otherwise null.
+   */
+  _refuseFacts(worldId, facts) {
+    if (!worldId) return null;
+    const ids = facts.filter((w) => !w.type.startsWith('core.')).map((w) => w.id);
+    const r = this.engine.interp.hook(this.isession, worldId, 'checkStatement', { ids });
+    if (!r?.problem) return null;
+    for (const id of ids) this.isession.memory.retract(id, 'refused: ' + r.problem);
+    return `That does not add up. ${r.problem}`;
+  }
+
   _noteWorlds(segments) {
     const ids = segments.map((s) => s.match?.worldId).filter((w) => w && w !== 'ui.shell' && w !== 'kids.common');
     const game = ids.find((w) => w.startsWith('games.'));
@@ -1113,7 +1126,7 @@ export class DialogSession {
     const tInterp = perf.active ? performance.now() : 0;
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
     const lines = icpt?.reply ? [[T(icpt.reply)]] : [];   // each line is an array of parts [{ text, translate, quote? }]
-    if (meta?.reply != null) lines.push([T(meta.reply)]);
+    if (meta?.reply != null) lines.push(meta.parts ?? [T(meta.reply)]);
     else if (meta?.prefix) lines.push([T(meta.prefix)]);
     const answers = [];
     const statuses = icpt || meta?.reply != null ? [meta?.status ?? 'supported'] : [];
@@ -1184,7 +1197,7 @@ export class DialogSession {
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
-        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.via === 'core.matrix') fr.from = r.envelope.from ?? []; } }
+        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.from?.length) fr.from = r.envelope.from; } }
         else if (r.status === 'missing' && r.envelope?.pending) disc.openFill(seg, r.envelope, rendered, this._msg);
         answerWires.push(r.answer);
         answers.push({
@@ -1193,7 +1206,14 @@ export class DialogSession {
         });
       }
       const facts = statements.filter((w) => !w.type.startsWith('core.'));
-      if (facts.length) lines.push([T(interp.renderAck(this.isession, facts))]);
+      if (facts.length) {
+        // a statement that cannot be true next to what is already known ("Tom has 3 apples" then "Tom ate 5") is said to the user and taken back (ops
+        // reasoner; the matrix keeps it and flags it, spec 15): the world's `checkStatement` hook names the problem
+        const bad = this.isession.rs ? null : this._refuseFacts(seg.match?.worldId, facts);
+        if (bad) { lines.push([T(bad)]); statuses.push('conflicting'); }
+        else lines.push([T(interp.renderAck(this.isession, facts))]);
+        if (!bad) disc.noteFacts(facts, this._msg, seg.text, seg.match?.worldId);
+      }
       if (seg.alternatives.length) {
         const titles = seg.alternatives.map((a) => set.get(a.worldId)?.title ?? a.worldId);
         const used = set.get(seg.match.worldId)?.title ?? seg.match.worldId;
@@ -1238,6 +1258,7 @@ export class DialogSession {
         reply = parts.map((p) => p.text).join('');
       } catch { parts = englishParts.map(({ join, fallback, ...p }) => p); reply = englishReply; }
     }
+    disc.noteShown(this._msg, reply);
     if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
     if (!disc.pending) disc.openConfirm(englishReply, this._msg);
     this.isession.rs?.commitTurn(this._msg);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)

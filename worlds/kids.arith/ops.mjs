@@ -20,8 +20,24 @@ const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', '
 const num = (x) => (x === undefined ? undefined : Number(x));
 
 /**
+ * Apply `sign * n` to a person (sign +1 receives, -1 loses). `n` undefined is an unknown amount ("some"): the exact count is lost, only a bound stays
+ * (more than before for a receiver, fewer than before for a giver). With a known count the number moves; with an unknown start the net change is kept
+ * in `delta`, so a later "now has 3" tells what the start was.
+ */
+function move(p, sign, n) {
+  if (n === undefined) {
+    if (p.n !== undefined) { if (sign > 0) p.floor = p.n; else p.ceil = p.n; p.n = undefined; }
+    p.fuzzy = true;
+    return;
+  }
+  if (p.fuzzy) return;
+  if (p.n !== undefined) p.n += sign * n;
+  else p.delta += sign * n;
+}
+
+/**
  * Replay every holding statement and every event about `item` in core.seq order.
- * people: id -> { n: number | undefined, from: string[], conflict?: string }
+ * people: id -> { n: number | undefined, from: string[], conflict?: string, start?: number, delta, fuzzy, floor?, ceil? }
  */
 function replay(ctx, item) {
   // "I buy 4 stickers" is read by kids.shop when the item is on its price list; if that world is loaded,
@@ -34,14 +50,19 @@ function replay(ctx, item) {
     ...shopped,
   ].sort((a, b) => seqOf(ctx, a.w) - seqOf(ctx, b.w));
   const people = new Map();
-  const who = (id) => { if (!people.has(id)) people.set(id, { n: undefined, from: [] }); return people.get(id); };
+  const who = (id) => { if (!people.has(id)) people.set(id, { n: undefined, from: [], delta: 0, fuzzy: false }); return people.get(id); };
   const plain = (kind) => ({ eat: 'eat', lose: 'lose', break: 'break' })[kind];
   for (const { w, holding, shop } of events) {
     if (holding) {
       const p = who(ctx.val(w, 'owner'));
-      p.n = ctx.val(w, 'count');
-      p.from = [w.id];
-      p.conflict = undefined;
+      const c = ctx.val(w, 'count');
+      // the first number ever said (or worked out from "now has 3" after events on an unknown start) is the start
+      if (p.start === undefined && c !== undefined && !p.fuzzy && c - p.delta >= 0) p.start = c - p.delta;   // a negative start: the statement is a fresh count, not the state after the events
+      p.n = c;
+      p.from.push(w.id);
+      p.conflict = undefined; p.fuzzy = false; p.floor = undefined; p.ceil = undefined;
+      p.recv = undefined; p.donors = undefined; p.delta = 0;
+      if (c === undefined) p.start = undefined;
       continue;
     }
     const kind = shop ? 'buy' : w.type.slice(K('').length);
@@ -52,25 +73,27 @@ function replay(ctx, item) {
       const toId = ctx.val(w, 'to');
       const to = who(toId);
       actor.from.push(w.id); to.from.push(w.id);
-      if (actor.n !== undefined && actor.n < n) {
+      if (n !== undefined && actor.n !== undefined && actor.n < n) {
         const why = `${cap(subject(ctx, actorId))} only had ${actor.n} ${plural(item, actor.n)}, so ${subject(ctx, actorId)} cannot give away ${n}.`;
         actor.conflict = why; to.conflict = why;
         continue;
       }
-      if (actor.n !== undefined) actor.n -= n;
-      if (to.n !== undefined) to.n += n;
-      else { to.recv = (to.recv ?? 0) + n; (to.donors ??= []).push(actorId); }   // start unknown: only what was received is known
+      const toKnown = to.n !== undefined;
+      move(actor, -1, n);
+      move(to, +1, n);
+      if (!toKnown && n !== undefined) { to.recv = (to.recv ?? 0) + n; (to.donors ??= []).push(actorId); }   // start unknown: only what was received is known
     } else if (kind === 'receive' || kind === 'buy') {
       actor.from.push(w.id);
-      if (actor.n !== undefined) actor.n += n;
-      else actor.recv = (actor.recv ?? 0) + n;
+      const known = actor.n !== undefined;
+      move(actor, +1, n);
+      if (!known && n !== undefined) actor.recv = (actor.recv ?? 0) + n;
     } else {
       actor.from.push(w.id);
-      if (actor.n !== undefined && actor.n < n) {
+      if (n !== undefined && actor.n !== undefined && actor.n < n) {
         actor.conflict = `${cap(subject(ctx, actorId))} only had ${actor.n} ${plural(item, actor.n)}, so ${subject(ctx, actorId)} cannot ${plain(kind)} ${n}.`;
         continue;
       }
-      if (actor.n !== undefined) actor.n -= n;
+      move(actor, -1, n);
     }
   }
   for (const p of people.values()) if (p.n !== undefined) p.n = round10(p.n);
@@ -84,6 +107,12 @@ export function currentCount(ctx, { owner, item }) {
   if (!owner || !item) return needItem(key);
   const p = replay(ctx, item).get(owner);
   if (p?.conflict) return { status: 'conflicting', alternatives: [], from: p.from, note: p.conflict };
+  if (p && p.n === undefined && p.fuzzy && (p.floor !== undefined || p.ceil !== undefined)) {
+    // "Ana gives him some": a number is not known, but a bound is
+    return p.floor !== undefined
+      ? { status: 'supported', value: p.floor, unit: 'more_than', from: p.from }
+      : { status: 'supported', value: p.ceil, unit: 'fewer_than', from: p.from };
+  }
   if (p && p.n === undefined && p.recv > 0) {
     // start unknown, but the dialog said what was received ("And Ana?" after "Tom gives 2 to Ana"): report that, not a total
     const donors = [...new Set(p.donors ?? [])].map((d) => subject(ctx, d));
@@ -93,6 +122,63 @@ export function currentCount(ctx, { owner, item }) {
     return { status: 'missing', missing: [key], from: p?.from, note: `the starting number of ${item} of ${ctx.name(owner)} is not known` };
   }
   return { status: 'supported', value: p.n, from: p.from };
+}
+
+/** How many someone had at first: the first number said, or worked out from "ate 2 and now has 3" (5). */
+export function startCount(ctx, { owner, item }) {
+  const key = K('holding.start');
+  if (!owner || !item) return needItem(key);
+  const p = replay(ctx, item).get(owner);
+  if (p?.conflict) return { status: 'conflicting', alternatives: [], from: p.from, note: p.conflict };
+  if (!p || p.start === undefined) return { status: 'missing', missing: [key], from: p?.from, note: `the starting number of ${item} of ${ctx.name(owner)} is not known` };
+  return { status: 'supported', value: round10(p.start), from: p.from };
+}
+
+/**
+ * Hook (ops reasoner): do the statements just told (`ids`) still make a possible world? Returns { problem } or undefined. The dialog layer
+ * retracts the statements and says the problem instead of "OK".
+ */
+export function checkStatement(ctx, { ids }) {
+  const items = new Set();
+  const people = new Set();
+  for (const id of ids ?? []) {
+    const w = ctx.get(id);
+    if (!w) continue;
+    items.add(ctx.val(w, 'item'));
+    for (const k of ['owner', 'who', 'to']) { const v = ctx.val(w, k); if (v) people.add(v); }
+  }
+  for (const item of items) {
+    if (!item) continue;
+    const r = replay(ctx, item);
+    for (const id of people) if (r.get(id)?.conflict) return { problem: r.get(id).conflict };
+  }
+  return undefined;
+}
+
+/** Hook: "why?" about a count, answered from what is known: the facts the number came from, in order. */
+export function why(ctx, { text } = {}) {
+  const t = String(text ?? '').toLowerCase();
+  // the newest holding or event decides which person and item "why?" is about, unless a name or an item is in the question
+  const all = [...ctx.find(K('holding')), ...ctx.find(K('change'))].sort((a, b) => seqOf(ctx, a) - seqOf(ctx, b));
+  if (!all.length) return undefined;
+  const named = all.slice().reverse().find((w) => [ctx.val(w, 'owner'), ctx.val(w, 'who'), ctx.val(w, 'to')].some((id) => id && id !== 'e.user' && t.includes(String(ctx.name(id)).toLowerCase())));
+  if (/^why (?:is|are) /.test(t) && !named) return undefined;   // "why is milk done?" is not about counts
+  const w = named ?? all.at(-1);
+  const item = ctx.val(w, 'item');
+  const id = ctx.val(w, 'to') ?? ctx.val(w, 'owner') ?? ctx.val(w, 'who');
+  const p = replay(ctx, item).get(id);
+  if (!p) return undefined;
+  const r = currentCount(ctx, { owner: id, item });
+  const who = subject(ctx, id);
+  const things = (n) => `${n} ${plural(item, n)}`;
+  let out;
+  if (r.status === 'supported' && r.unit === 'more_than') out = `${cap(who)} ${verbHas(id)} more than ${things(r.value)}: some more came and I was not told how many.`;
+  else if (r.status === 'supported' && r.unit === 'fewer_than') out = `${cap(who)} ${verbHas(id)} fewer than ${things(r.value)}: some were gone and I was not told how many.`;
+  else if (r.status === 'supported' && r.unit === 'received') out = `I do not know how many ${plural(item, 2)} ${who} had; ${who} got ${r.value}${r.note ?? ''}.`;
+  else if (r.status === 'supported') out = `${cap(who)} ${verbHas(id)} ${things(r.value)}.`;
+  else if (r.status === 'conflicting') out = cap(String(r.note));
+  else out = `I do not know yet how many ${plural(item, 2)} ${who} ${verbHas(id)}.`;
+  return { text: out, from: r.from ?? p.from };
 }
 
 export function totalCount(ctx, { item, who1, who2 }) {

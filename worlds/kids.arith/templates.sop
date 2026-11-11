@@ -1,7 +1,31 @@
 @tpl.kids.arith.count.received core.template
     for=kids.arith.holding.count
     when="unit=received"
-    text="{owner:cap} got {value} {item:plural}{note}. I don't know how many {owner} had before."
+    text="I don't know how many {item:plural} {owner} had; {owner} got {value}{note}."
+
+@tpl.kids.arith.count.more core.template
+    for=kids.arith.holding.count
+    when="unit=more_than"
+    text="{owner:cap} {owner:has} more than {value} {item:plural}: I was only told that some more came, not how many."
+
+@tpl.kids.arith.count.fewer core.template
+    for=kids.arith.holding.count
+    when="unit=fewer_than"
+    text="{owner:cap} {owner:has} fewer than {value} {item:plural}: I was only told that some were gone, not how many."
+
+@tpl.kids.arith.start core.template
+    for=kids.arith.holding.start
+    text="{owner:cap} had {value} {item:plural} at first."
+
+@tpl.kids.arith.start.missing core.template
+    for=kids.arith.holding.start
+    status=missing
+    text="I don't know how many {item:plural} {owner} had at first. Tell me, or tell me how many {owner} has now after something happened."
+
+@tpl.kids.arith.start.conflicting core.template
+    for=kids.arith.holding.start
+    status=conflicting
+    text="That does not add up. {note}"
 
 @tpl.kids.arith.count core.template
     for=kids.arith.holding.count
@@ -65,7 +89,7 @@
 @tpl.kids.arith.leader.tie core.template
     for=kids.arith.leader.winner
     status=ambiguous
-    text="{alternatives:list} are tied: {note} {item:plural} each."
+    text="They have the same ({alternatives:list}): {note} {item:plural} each."
 
 @tpl.kids.arith.leader.conflicting core.template
     for=kids.arith.leader.winner
@@ -158,3 +182,19 @@
 @tpl.kids.arith.ack.break core.template
     for=ack.kids.arith.break
     text="OK, {who} broke {count} {item:plural}."
+
+@tpl.kids.arith.ack.holding.some core.template
+    for=ack.kids.arith.holding
+    text="OK, {owner} had some {item:plural}. I don't know how many yet."
+
+@tpl.kids.arith.ack.give.some core.template
+    for=ack.kids.arith.give
+    text="OK, {who} gave {to} some {item:plural}. I don't know how many."
+
+@tpl.kids.arith.ack.receive.some core.template
+    for=ack.kids.arith.receive
+    text="OK, {who} got some {item:plural}. I don't know how many."
+
+@tpl.kids.arith.ack.eat.some core.template
+    for=ack.kids.arith.eat
+    text="OK, {who} ate some {item:plural}. I don't know how many."

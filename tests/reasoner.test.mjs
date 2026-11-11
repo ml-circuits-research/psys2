@@ -94,7 +94,7 @@ test('gain 4: "why?" after a shop answer says what it rests on (the library\'s e
   const { out } = await say(matrix, ['I have 20 lei', 'I buy a ball', 'how much money do I have?', 'why?']);
   assert.match(out[3], /I worked that out from what you told me: "I have 20 lei" and "I buy a ball"/);
   const ops_ = await say(ops, ['I have 20 lei', 'I buy a ball', 'how much money do I have?', 'why?']);
-  assert.doesNotMatch(ops_.out[3], /worked that out/, 'with the switch off the answer is the old one');
+  assert.match(ops_.out[3], /I worked that out from what you told me: "I have 20 lei" and "I buy a ball"/, 'SOPWORLD-1b: the default ops reasoner says what it knows too (the `from` list of the answer)');
 });
 
 test('gain 5: "I got 5 lei back for a book, what did I pay?" answers 17 (abduction)', async () => {

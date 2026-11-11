@@ -61,3 +61,17 @@
     for=kids.shop.leftafter.amount
     status=conflicting
     text="{note}"
+
+@tpl.kids.shop.reviseLast core.template
+    for=action.shop.reviseLast
+    text="OK, that makes {value} {unit:plural}."
+
+@tpl.kids.shop.reviseLast.conflicting core.template
+    for=action.shop.reviseLast
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.shop.reviseLast.missing core.template
+    for=action.shop.reviseLast
+    status=missing
+    text="I have no purchase to change yet."

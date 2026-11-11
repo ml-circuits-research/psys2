@@ -1173,3 +1173,90 @@
     input="Add milk to my shopping list. I want to clear my shopping list. Show me my shopping list."
     expect="Your shopping list is empty."
     session=ksh2
+
+@t.tasks.coh01 core.test
+    session=coh1
+    input="Add to my shopping list."
+    expect="What shall I add to your shopping list?"
+    expectStatus=missing
+    doc="SOPWORLD-1b: the item is not said: a question back; the next word completes the request"
+    reasoner=ops
+
+@t.tasks.coh02 core.test
+    session=coh1
+    input="milk"
+    expect="I added milk to your shopping list."
+    reasoner=ops
+
+@t.tasks.coh03 core.test
+    session=coh3
+    input="Add milk to my list."
+    expect="I added milk to your to-do list."
+    reasoner=ops
+
+@t.tasks.coh04 core.test
+    session=coh3
+    input="Which list did you put it on?"
+    expect="You did not say which list, so I assumed your to-do list."
+    doc="SOPWORLD-1b: says which list was used, and that it was an assumption"
+    reasoner=ops
+
+@t.tasks.coh05 core.test
+    session=coh5
+    input="Add milk to my shopping list."
+    expect="I added milk to your shopping list."
+    reasoner=ops
+
+@t.tasks.coh06 core.test
+    session=coh5
+    input="No, to my to-do list."
+    expect="I added milk to your to-do list."
+    doc="SOPWORLD-1b: a correction of the target list moves the item"
+    reasoner=ops
+
+@t.tasks.coh07 core.test
+    session=coh5
+    input="What is on my shopping list?"
+    expect="Your shopping list is empty."
+    reasoner=ops
+
+@t.tasks.coh08 core.test
+    session=coh8
+    input="Add milk to my shopping list. Mark milk as done."
+    expect="ticked off milk"
+    reasoner=ops
+
+@t.tasks.coh09 core.test
+    session=coh8
+    input="Why is milk done?"
+    expect="Because you marked milk as done on your shopping list."
+    reasoner=ops
+
+@t.tasks.coh10 core.test
+    language=ro
+    session=coh10
+    input="Adaugă pe lista mea de cumpărături."
+    expect="What shall I add to your shopping list?"
+    reasoner=ops
+
+@t.tasks.coh11 core.test
+    language=ro
+    session=coh11
+    input="Adaugă lapte pe lista mea."
+    expect="I added milk to your to-do list."
+    reasoner=ops
+
+@t.tasks.coh12 core.test
+    language=ro
+    session=coh11
+    input="Nu, pe lista mea de cumpărături."
+    expect="I added milk to your shopping list."
+    reasoner=ops
+
+@t.tasks.coh13 core.test
+    language=ro
+    session=coh11
+    input="Pe ce listă ai pus?"
+    expect="I put milk on your shopping list."
+    reasoner=ops
+

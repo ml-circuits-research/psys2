@@ -2077,3 +2077,41 @@
     doc="\"my age is 45\": the age stated without a unit (COMPUTE-BUDGET C)."
     alt=my_age_is
     alt=my_age_is_about
+
+@phrase.lang.quant.some core.phrase
+    frame=false
+    doc="An amount that is not said (\"some\", \"a few\", \"several\"): the event happens, the number is unknown (SOPWORLD-1b)."
+    alt=a_couple_of
+    alt=a_few
+    alt=several
+    alt=some
+
+@phrase.lang.quant.some.of core.phrase
+    frame=false
+    doc="Tail of an unknown amount without a noun (\"some of them\", \"some more\")."
+    alt=some_of_them
+    alt=some_of_it
+    alt=some_more
+    alt=a_few_more
+
+@phrase.lang.then.now core.phrase
+    frame=false
+    doc="Joins an event to the state after it (\"and now\", \"so now\", \"and then has\")."
+    alt=and_now
+    alt=and_then
+    alt=but_now
+    alt=so_now
+    alt=and
+    alt=but
+    alt=then
+    alt=so
+
+@phrase.lang.quant.something core.phrase
+    frame=false
+    doc="An item that is not said (\"something\", \"anything\", \"some stuff\"): the sentence asks what it is (SOPWORLD-1b)."
+    alt=something_else
+    alt=something
+    alt=anything
+    alt=some_stuff
+    alt=some_things
+    alt=stuff

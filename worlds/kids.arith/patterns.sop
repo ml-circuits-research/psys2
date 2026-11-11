@@ -1809,3 +1809,98 @@
     priority=10
     example="How many apples Tom has?"
     doc="RP3: the question with the verb last (spoken or typed without 'does')."
+
+@pat.kids.arith.give.some core.pattern
+    canonical="Ana gave Tom some apples."
+    match="{who:agent} [gives|gave|give] {to:agent} [$lang.quant.some] [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.give who={who} to={to} item={item}"
+    kind=statement
+    priority=10
+    example="Ana gave Tom some apples."
+    doc="SOPWORLD-1b: an amount that is not said ('some'): the gift happens, the count is unknown."
+
+@pat.kids.arith.give.some.omit core.pattern
+    match="{who:agent} [gives|gave|give] {to:agent} [$lang.quant.some|$lang.quant.some.of] {item:recent(lex.kids.arith.items,to)}"
+    emit="@{_} kids.arith.give who={who} to={to} item={item}"
+    kind=statement
+    priority=13
+    example="Ana gives him some."
+    doc="Unknown amount, item taken from the person who got them (the item most recently counted for them)."
+
+@pat.kids.arith.give.some.to core.pattern
+    match="{who:agent} [gives|gave|give] [$lang.quant.some] {item:lex.kids.arith.items} to {to:agent}"
+    emit="@{_} kids.arith.give who={who} to={to} item={item}"
+    kind=statement
+    priority=10
+    example="Ana gave some apples to Tom."
+
+@pat.kids.arith.get.some core.pattern
+    match="{who:agent} [$kids.arith.g32_gets] [$lang.quant.some] [more|new]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.receive who={who} item={item}"
+    kind=statement
+    priority=10
+    example="Tom found some marbles."
+
+@pat.kids.arith.eat.some core.pattern
+    match="{who:agent} [eats|ate|eat] [$lang.quant.some] [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.eat who={who} item={item}"
+    kind=statement
+    priority=10
+    example="Tom ate some apples."
+
+@pat.kids.arith.eat.some.omit core.pattern
+    match="{who:agent} [eats|ate|eat] [$lang.quant.some|$lang.quant.some.of] {item:recent(lex.kids.arith.items,who)}"
+    emit="@{_} kids.arith.eat who={who} item={item}"
+    kind=statement
+    priority=13
+    example="Tom ate some of them."
+
+@pat.kids.arith.has.some core.pattern
+    canonical="Tom had some apples."
+    match="{who:agent} [has|have|had] [got]? [$lang.quant.some] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.holding owner={who} item={item}"
+    kind=statement
+    priority=10
+    example="Tom had some apples."
+    doc="A holding whose count is not said: the owner has the things, how many is unknown until a later fact says."
+
+@pat.kids.arith.eat.then core.pattern
+    canonical="Tom ate 2 apples and now has 3."
+    match="{who:agent} [eats|ate|eat] {n:number} [of_them|of_it]? {item:recent(lex.kids.arith.items,who)} [$lang.then.now] [now]? [he|she|they]? [has|have|had] [got]? {m:number} [{item2:lex.kids.arith.items}|left|now|remaining]?"
+    emit="@{_} kids.arith.eat who={who} count={n} item={item}\n@{_1} kids.arith.holding owner={who} count={m} item={item}"
+    kind=statement
+    priority=14
+    example="Tom ate 2 apples and now has 3."
+    doc="An event and the state after it in one sentence: the start follows (5) and can be asked."
+
+@pat.kids.arith.q.start core.pattern
+    canonical="How many apples did Tom have at first?"
+    match="how_many {item:lex.kids.arith.items} [did|does|had] {who:agent} have [at_first|at_the_start|at_the_beginning|to_begin_with|originally|initially|before|first|in_the_beginning]"
+    emit="@{_} core.question type=kids.arith.holding seek=start where.owner={who} where.item={item}"
+    kind=question
+    priority=12
+    example="How many apples did Tom have at first?"
+    doc="The start of a count: the first number said, or worked out from an event and the state after it."
+
+@pat.kids.arith.q.start.with core.pattern
+    match="how_many {item:lex.kids.arith.items} [did|does] {who:agent} [start|begin] with"
+    emit="@{_} core.question type=kids.arith.holding seek=start where.owner={who} where.item={item}"
+    kind=question
+    priority=12
+    example="How many apples did Tom start with?"
+
+@pat.kids.arith.q.start.omit core.pattern
+    match="how_many [did|does] {who:agent} have [at_first|at_the_start|at_the_beginning|to_begin_with|originally|initially|in_the_beginning] {item:recent(lex.kids.arith.items,who)}"
+    emit="@{_} core.question type=kids.arith.holding seek=start where.owner={who} where.item={item}"
+    kind=question
+    priority=12
+    example="How many did Tom have at first?"
+
+@pat.kids.arith.q.leader.plain core.pattern
+    canonical="Who has more apples?"
+    match="who [has|have|got|owns] [more|the_most] {item:lex.kids.arith.items}"
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item}"
+    kind=question
+    priority=12
+    example="Who has more apples?"
+    doc="Who has more of a kind, over everybody; equal counts are said as a tie."

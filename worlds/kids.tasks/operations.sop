@@ -75,3 +75,15 @@
     semantics=action
     action=tasks.lists
     doc="Lists the lists that have items, with their sizes."
+
+@op.kids.tasks.whichList core.operation
+    impl=whichList
+    semantics=action
+    action=tasks.whichList
+    doc="Which list the last item was put on, and whether the list was an assumption (the user did not name it)."
+
+@op.kids.tasks.whyDone core.operation
+    impl=whyDone
+    semantics=action
+    action=tasks.whyDone
+    doc="Why an item is done: the user marked it done."

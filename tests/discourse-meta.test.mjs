@@ -320,7 +320,7 @@ test('kids.arith: "And Ana?" answers what Ana received when her start is unknown
   const s = fresh();
   await s.send('Tom has 5 apples. He gives 2 to Ana. How many does he have now?');
   const r = await s.send('And Ana?');
-  assert.equal(r.text, "Ana got 2 apples from Tom. I don't know how many Ana had before.");
+  assert.equal(r.text, "I don't know how many apples Ana had; Ana got 2 from Tom.");
   assert.equal(r.trace.discourse.resolved.kind, 'ellipsis');
   const k = fresh();
   await k.send('Ana has 1 apple. Tom has 5 apples. He gives 2 to Ana. How many does he have now?');

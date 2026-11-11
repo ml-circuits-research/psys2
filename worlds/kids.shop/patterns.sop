@@ -3408,3 +3408,20 @@
     kind=question
     priority=11
     example="I want a ball and a pencil and I pay 20 lei. What is the change?"
+
+@pat.kids.shop.revise.count core.pattern
+    match="{n:number} [of_them|of_those|of_these|of_it]"
+    emit="@{_} core.request action=shop.reviseLast arg.count={n}"
+    kind=request
+    priority=11
+    example="Three of them."
+    doc="SOPWORLD-1b: the count of the last purchase is revised (the first count was only assumed to be 1)."
+
+@pat.kids.shop.buy.something core.pattern
+    canonical="I buy something."
+    match="[$lang.shop.want|i_want_to_buy|i_will_buy|i_buy|i_bought|i_am_buying|i_ll_buy|i_d_like_to_buy] [$lang.quant.something]"
+    emit="@{_} core.request action=chat.ask arg.q=\"What do you want to buy?\" arg.template=\"i buy <x>\" arg.world=\"kids.shop\""
+    kind=request
+    priority=12
+    example="I buy something."
+    doc="The item is not said: ask for it (a question back), buy nothing and guess nothing."

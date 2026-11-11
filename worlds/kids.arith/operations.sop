@@ -6,6 +6,14 @@
     semantics=query
     doc="The number someone has after applying, in dialog order, every statement of having and every giving, getting, eating, losing, buying and breaking. A person whose starting count is unknown stays unknown; an impossible event gives a conflict."
 
+@op.kids.arith.startCount core.operation
+    outputs=kids.arith.holding.start
+    inputs=kids.arith.holding.owner
+    inputs=kids.arith.holding.item
+    impl=startCount
+    semantics=query
+    doc="How many someone had at the start: the first number said, or worked out from an event and the result afterwards (ate 2 and now has 3: 5)."
+
 @op.kids.arith.totalCount core.operation
     outputs=kids.arith.total.count
     inputs=kids.arith.total.item
