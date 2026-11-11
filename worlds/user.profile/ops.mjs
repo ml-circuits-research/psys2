@@ -499,8 +499,9 @@ export const nameOf = (ctx) => ok(list(st(ctx).fields.name?.v)[0] ?? '');
 /** "Where do I live?" and friends: one stored field, or an honest "I do not know yet". */
 export function fieldOf(ctx, { field = 'location' } = {}) {
   const v = list(st(ctx).fields[field]?.v);
-  const what = { location: 'where you live', name: 'your name', role: 'what you do', org: 'where you work' }[field] ?? `your ${field}`;
+  const what = { location: 'where you live', name: 'your name', age: 'your age', role: 'what you do', org: 'where you work' }[field] ?? `your ${field}`;
   if (!v.length) return ok(`I do not know ${what} yet. You can tell me, and I will remember it.`);
+  if (field === 'age') return ok(`You are ${v[0]} years old.`);
   return ok(field === 'location' ? `You live in ${v.join(', ')}.` : `${field}: ${v.join(', ')}.`);
 }
 

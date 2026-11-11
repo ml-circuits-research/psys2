@@ -26,9 +26,9 @@ const TAB_NAMES_RO = [
   ['music', ['muzică', 'muzica', 'pian', 'pianul']],
   ['editor', ['editor', 'editorul']],
   ['chess', ['șah', 'șahul', 'sah', 'sahul']],
-  ['hangman', ['spânzurătoarea', 'spânzurătoare', 'spanzuratoarea']],
-  ['tic tac toe', ['x și zero', 'x și 0', 'x și o', 'x și zerou']],
-  ['guess the animal', ['ghicește animalul', 'ghici animalul', 'ghicitul animalului', 'ghicește animal']],
+  ['hangman', ['spânzurătoarea', 'spânzurătoare', 'spanzuratoarea', 'jocul spânzurătoarea', 'jocul de spânzurătoare']],
+  ['tic tac toe', ['x și zero', 'x și 0', 'x și o', 'x și zerou', 'jocul de x și zero', 'jocul de x și 0']],
+  ['guess the animal', ['ghicește animalul', 'ghici animalul', 'ghicitul animalului', 'ghicește animal', 'jocul de ghicit', 'jocul de ghicit animale', 'jocul de ghicit animalul', 'jocul cu animale', 'ghicitul', 'jocul ghicește animalul']],
   ['documents', ['documente', 'documentele', 'documentul']],
   ['avatar', ['avatar', 'avatarul', 'robot', 'robotul']],
   ['profile', ['profil', 'profilul']],
@@ -41,6 +41,12 @@ const TAB_FRAMES = TAB_NAMES_RO.flatMap(([en, names]) => names.flatMap((n) => [
   F(`mergi|treci|comută|du-mă|întoarce-te la|pe ${n}`, `open the ${en} tab`),
   F(`${TAB_NOUNS_RO} ${n}`, `open the ${en} tab`),
 ])).concat([
+  ...['jocul de ghicit', 'jocul de ghicit animale', 'jocul cu animale', 'ghicitul', 'ghicește animalul'].flatMap((n) => [F(`joacă|începe|pornește|lansează ${n}`, 'play guess the animal'), F(`hai să jucăm ${n}`, 'play guess the animal')]),
+  // the shop is a topic of the conversation (kids.shop), not a tab: "open the shop" brings it back
+  Q('câți ani am', 'how old am I'),
+  Q('câți ani am eu', 'how old am I'),
+  Q('cum mă numesc', 'what is my name'),
+  Q('cum mă cheamă', 'what is my name'),
   // names the phrase table already turns into one noun ("x și zero" -> tic tac toe) or the lexicon knows
   F(`deschide|deschide-mi|arată|arată-mi|afișează ${TAB_NOUNS_RO} {np:bare}`, 'open the {np} tab'),
   F(`mergi|treci|comută|du-mă|întoarce-te la|pe ${TAB_NOUNS_RO} {np:bare}`, 'open the {np} tab'),
@@ -381,6 +387,11 @@ export const COMMAND_FRAMES = [
   F('revino la normal', 'go back to normal'),
   Q('cum arăți', 'what do you look like'),
   // ---- shell
+  // the shop is a topic of the conversation (kids.shop), not a tab: "open the shop" brings it back (before the general noun frame, which would read "store")
+  F('deschide|deschide-mi|arată|arată-mi|afișează magazin', 'open the shop'),
+  F('deschide|deschide-mi|arată|arată-mi|afișează magazinul', 'open the shop'),
+  F('deschide|deschide-mi|arată|arată-mi|afișează magazinul de jucării', 'open the shop'),
+  F('mergi|treci|du-mă|întoarce-te la magazin', 'open the shop'),
   F('deschide {np}', 'open {np}'),
   F('mergi la fila de {np:bare}', 'go to the {np} tab'),
   F('hai să jucăm un joc', "let's play a game"),

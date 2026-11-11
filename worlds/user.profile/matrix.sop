@@ -26,7 +26,7 @@
 @pf.t.young core.check fn=lt args=?a args=0
 @pf.t.old core.check fn=gt args=?a args=120
 @pf.d.young core.deny when=$pf.a if=$pf.t.young why="That is not an age: ?a years."
-@pf.d.old core.deny when=$pf.a if=$pf.t.old why="That is not an age: ?a years."
+@pf.d.old core.deny when=$pf.a if=$pf.t.old why="No one is ?a years old. Did you mean another number?"
 
 # ---- nobody has worked for longer than they have lived: the two facts cannot both be right, and the user is asked which one is
 @pf.ag user.profile.fact field=age num=?a

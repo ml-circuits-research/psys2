@@ -460,7 +460,7 @@ export function extract(text, env) {
   {
     const NUM = { a: 1, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
     const am = /\b(?:i am|i m|im|my age is|i just turned|i turned)\s+(\d{1,3})(?:\s+years?(?:\s+old|\s+of age)?)?$/.exec(n) ?? /\b(?:i am|i m|im)\s+(\d{1,3})\s+years?\s+old\b/.exec(n) ?? /\bmy age is\s+(\d{1,3})\b/.exec(n);
-    if (am && (/\b(?:years? old|my age|turned|years? of age)\b/.test(n) || pending === 'age') && Number(am[1]) >= 1 && Number(am[1]) <= 120) put('age', am[1], { how: 'age' });
+    if (am && (/\b(?:years? old|my age|turned|years? of age)\b/.test(n) || pending === 'age') && Number(am[1]) >= 1) put('age', am[1], { how: 'age' });
     const KIDS = '(?:kids?|children|child|sons?|daughters?)';
     const km = new RegExp(`\\b(?:i have|i have got|we have)\\s+(a|an|one|two|three|four|five|six|seven|eight|nine|ten|\\d{1,2})\\s+${KIDS}\\b`).exec(n);
     if (km) put('children', String(NUM[km[1]] ?? Number(km[1])), { how: 'children' });

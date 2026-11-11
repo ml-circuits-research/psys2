@@ -476,6 +476,12 @@ export class Discourse {
   /** A reply made of parts (translated runs and quoted user text): `reply` is the English text, `parts` what the translator works on. */
   _say(parts, info) { return { reply: parts.map((p) => p.text).join(''), parts, info }; }
 
+  /** True when the user typed the turn in another language (the source keeps the original text, distinct from the English reading). */
+  _translated(turn) { const src = this.dialog.sources.get(`msg${turn}`); return !!src?.original && src.original !== src.english; }
+
+  /** What was shown for a turn (already in the user's language: kept as is), else the English reply, which is translated with the rest. */
+  _shownOr(turn, english) { const shown = this.shown[turn]; return shown && shown !== english ? { text: shown, translate: false } : { text: english, translate: true }; }
+
   /** The user's own words of a past turn, quoted as typed (never back-translated); the English reading when the source is gone. */
   _quoted(turn, fallback) {
     const src = this.dialog.sources.get(`msg${turn}`);
@@ -646,7 +652,7 @@ export class Discourse {
     if (pend?.type === 'choice') { const r = this._answerChoice(pend, text); if (r) return r; }
     if (pend?.type === 'offer') {
       const y = this.lang.yesNo(text);
-      if (y === 'yes' && pend.accept === 'undo') { const a = pend.action; const said = a?.frames[0]?.reply; return this.undoAction(a) ? { reply: `OK, I undid it${said ? `: ${said}` : ''}.`.replace(/\.+$/, '.'), info: { kind: 'offer', accept: 'undo', of: a.text } } : null; }
+      if (y === 'yes' && pend.accept === 'undo') { const a = pend.action; const said = a?.frames[0]?.reply; return this.undoAction(a) ? this._say(said ? [{ text: 'OK, I undid it: ', translate: true }, this._shownOr(a.frames[0].turn, said), { text: '.', translate: false }] : [{ text: 'OK, I undid it.', translate: true }], { kind: 'offer', accept: 'undo', of: a.text }) : null; }
       if (y === 'yes' && pend.accept === 'rewrite') return { rewrite: pend.rewrite, info: { kind: 'offer', accept: 'rewrite', rewrite: pend.rewrite, world: pend.world } };
       if (y === 'no' || /^(?:no|nope|nah|not now|not really)(?: (?:thanks|thank you|leave it|keep it|its fine|never mind|leave it as it is|keep it as it is|leave it alone|leave it that way|keep it that way|its ok|its okay))?$/.test(t)) return { reply: 'OK, I will leave it as it is.', info: { kind: 'offer', declined: true } };
     }
@@ -677,7 +683,7 @@ export class Discourse {
       if (turn != null) { this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn); }
       const own = turn != null && uw ? d.isession.rs.undoSays(uw, uwBefore, said ? String(said).replace(/[.!?\s]+$/, '') : null) : null;
       if (own) return { reply: own, info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };
-      if (turn != null) return { reply: said ? `OK, I took that back: "${String(said).replace(/[.!?\s]+$/, '')}".` : 'OK, I took that back.', info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };
+      if (turn != null) return this._say(said ? [{ text: 'OK, I took that back: ', translate: true }, this._quoted(turn, said), { text: '.', translate: false }] : [{ text: 'OK, I took that back.', translate: true }], { kind: 'undo', of: said ?? null, via: 'core.matrix' });   // the user's own words, never the English reading
     }
     // ops reasoner: "No, she gives him 4." revises the statement just made
     { const cf = await this._correctFact(text, sid); if (cf) return cf; }
@@ -782,6 +788,8 @@ export class Discourse {
   _explain(t = '') {
     // "what did you do?" asks about the last thing that CHANGED something (a question later on changed nothing); "why?" asks about the newest turn
     const doing = /^what (?:did you|have you) (?:just )?(?:do|done|change)/.test(t);
+    // inside a running game "why?" is about the game's last question, not about the facts told before it
+    if (!doing) { const tw = this.dialog.context().gameWorld; if (tw && /^games\./.test(tw)) { const r = this.dialog.engine.interp.hook(this.dialog.isession, tw, 'why', { text: 'why' }); const said = r?.text ?? (typeof r?.value === 'string' ? r.value : null); if (said) return this._say([{ text: said, translate: true }], { kind: 'explain', of: t, world: tw, from: [] }); } }
     // the newest turn only told a fact: "why?" asks about the world that fact belongs to, answered from what is known (hook `why` of the world)
     if (!doing && this.lastFacts && this.dialog._msg - this.lastFacts.turn <= 1 && this.lastFacts.turn >= (this.frames[0]?.turn ?? -1)) { const wf = this._whyFact('why'); if (wf) return wf; }
     // matrix strategy: the newest turn was a statement to a world that explains its own facts (`why` of its fns.mjs: the user profile)
@@ -800,15 +808,17 @@ export class Discourse {
       const asked = sayText(ic.text);
       const wasQuestion = /\?$/.test(ic.text) || QUESTION_START.test(asked);
       const imperative = !wasQuestion && IMPERATIVE_START.test(asked);
-      const what = imperative ? `You asked me to ${asked.replace(/^please\s+/i, '').replace(/^(\w)/, (c) => c.toLowerCase())}` : `You said "${asked}"`;
-      return { reply: `${what}, so ${wasQuestion ? 'I answered it' : 'I did it'}. What I answered: ${ic.reply}`, info: { kind: 'explain', of: ic.text, world: ic.world, changed: [] } };
+      const own = this._translated(ic.turn);   // typed in another language: the user's words are quoted, not re-said in English
+      const what = imperative && !own ? `You asked me to ${asked.replace(/^please\s+/i, '').replace(/^(\w)/, (c) => c.toLowerCase())}` : `You said "${asked}"`;
+      const head = imperative && !own ? [{ text: `${what}, so I did it. What I answered: `, translate: true }] : [{ text: 'You said ', translate: true }, this._quoted(ic.turn, asked), { text: `, so ${wasQuestion ? 'I answered it' : 'I did it'}. What I answered: `, translate: true }];
+      return this._say([...head, this._shownOr(ic.turn, ic.reply)], { kind: 'explain', of: ic.text, world: ic.world, changed: [] });
     }
     if (!f) {
       // chat, navigation and games leave no frame: explain from the last thing this session said and answered
       const lw = this.lastByWorld[this.lastWorld];
       if (!lw) return doing ? null : this._whyFact('why');   // no frame and nothing answered: a world that holds facts may still say what it knows
       if (!doing && !lw.reply) return this._whyFact('why') ?? null;
-      return { reply: `You said "${sayText(lw.text)}", so I answered it. What I answered: ${lw.reply}`, info: { kind: 'explain', of: lw.text, world: this.lastWorld, changed: [] } };
+      return this._say([{ text: 'You said ', translate: true }, this._quoted(lw.turn, sayText(lw.text)), { text: ', so I answered it. What I answered: ', translate: true }, this._shownOr(lw.turn, lw.reply)], { kind: 'explain', of: lw.text, world: this.lastWorld, changed: [] });
     }
     // plain wording for the user; ids (rule, operation) stay in info and the trace only
     const asked = String(f.text ?? '').trim().replace(/[.!\s]+$/, '');
@@ -823,8 +833,10 @@ export class Discourse {
       if (f.reply) parts.push({ text: ' What I answered: ', translate: true }, shown ? { text: shown, translate: false } : { text: f.reply, translate: true });
       return this._say([...parts, ...this._because(f)], info);
     }
-    const said = f.reply ? ` What I answered: ${f.reply}` : '';
-    return { reply: `${what}, so ${a ? 'I did it' : 'I answered it'}.${said}${this._because(f).map((p) => p.text).join('')}`, info };
+    const own = this._translated(f.turn);
+    const head = own ? [{ text: 'You said ', translate: true }, this._quoted(f.turn, asked), { text: `, so ${a ? 'I did it' : 'I answered it'}.`, translate: true }] : [{ text: `${what}, so ${a ? 'I did it' : 'I answered it'}.`, translate: true }];
+    if (f.reply) head.push({ text: ' What I answered: ', translate: true }, this._shownOr(f.turn, f.reply));
+    return this._say([...head, ...this._because(f)], info);
   }
 
   /** The statements an answer rests on, as the user said them ("I worked it out from ..."); with the matrix reasoner they come from the library's explanation. */

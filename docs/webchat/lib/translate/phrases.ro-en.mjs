@@ -8,7 +8,7 @@
 // (multi-word units that must still take part in the clause grammar: "de ce" -> wh why).
 //   full:true   must cover the whole sentence       start:true   must begin the sentence
 
-import { COMMAND_FRAMES } from './phrases.commands.ro-en.mjs?v=487b0303ab';
+import { COMMAND_FRAMES } from './phrases.commands.ro-en.mjs?v=1348d74234';
 
 const BASE_FRAMES = [
   // ---- polite request openers (RD5)
@@ -61,6 +61,11 @@ const BASE_FRAMES = [
   { p: 'câți ani ai', out: 'how old are you' },
   { p: 'câți ani are {name}', out: 'how old is {name}' },
   { p: 'am {num} ani', out: 'I am {num} years old' },
+  { p: 'am {num} de ani', out: 'I am {num} years old' },
+  { p: 'am împlinit {num} de ani', out: 'I am {num} years old' },
+  { p: 'am {num} de copii', out: 'I have {num} children' },
+  { p: 'ai {num} de ani', out: 'you are {num} years old' },
+  { p: '{name} are {num} de ani', out: '{name} is {num} years old' },
   { p: 'ai {num} ani', out: 'you are {num} years old' },
   { p: '{name} are {num} ani', out: '{name} is {num} years old' },
   { p: 'mi-e|ți-e foame', out: 'I am hungry', sub: { 'ți-e': 'you are hungry' } },

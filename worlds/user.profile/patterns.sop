@@ -166,6 +166,15 @@
     priority=13
     example="Where do I live?"
 
+@pat.user.profile.age.ask core.pattern
+    canonical="How old am I?"
+    match="[how_old_am_i|what_is_my_age|what_age_am_i|do_you_know_how_old_i_am|how_old_do_you_think_i_am]"
+    emit="@{_} core.request action=prof.fieldOf arg.field=age"
+    kind=question
+    priority=13
+    example="How old am I?"
+    example="What is my age?"
+
 @pat.user.profile.learn core.pattern
     match="[i_want_to_learn|i_would_like_to_learn|i_wanna_learn|i_am_learning|i_would_love_to_learn] {g:words(6)}"
     emit="@{_} core.request action=prof.tell arg.kind=learn arg.g=\"{g}\""

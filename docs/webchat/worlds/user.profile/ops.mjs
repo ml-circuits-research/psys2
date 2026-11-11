@@ -8,7 +8,7 @@
 // The plan (fields, priorities, sensitivity, phrasings, follow-ups) is read from the knowledge base (kb.sop); answers are read by understand.mjs.
 // Modal input: while `inputMode` is set, the engine offers every message to interceptInput(); clear commands for other worlds and this world's own
 // commands pass through (handled: false), everything else is read as the answer. Effects: file.download { filename, text, mime }.
-import { extract, likesItems, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle, _findEntries as findEntries } from './understand.mjs?v=966df2bc13';
+import { extract, likesItems, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle, _findEntries as findEntries } from './understand.mjs?v=88aa7bbf4a';
 import { toJson, toMarkdown, counts, PLAN_FALLBACK, SECTIONS_FALLBACK } from './cv.mjs?v=28a6cad39b';
 
 const TAB = 'profile';
@@ -499,8 +499,9 @@ export const nameOf = (ctx) => ok(list(st(ctx).fields.name?.v)[0] ?? '');
 /** "Where do I live?" and friends: one stored field, or an honest "I do not know yet". */
 export function fieldOf(ctx, { field = 'location' } = {}) {
   const v = list(st(ctx).fields[field]?.v);
-  const what = { location: 'where you live', name: 'your name', role: 'what you do', org: 'where you work' }[field] ?? `your ${field}`;
+  const what = { location: 'where you live', name: 'your name', age: 'your age', role: 'what you do', org: 'where you work' }[field] ?? `your ${field}`;
   if (!v.length) return ok(`I do not know ${what} yet. You can tell me, and I will remember it.`);
+  if (field === 'age') return ok(`You are ${v[0]} years old.`);
   return ok(field === 'location' ? `You live in ${v.join(', ')}.` : `${field}: ${v.join(', ')}.`);
 }
 
