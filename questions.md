@@ -82,3 +82,5 @@ Context: 18 of 24 worlds now run on sopworld behind the flag (ops is the baselin
     Question: OK to ask for these as one "host API" task?
 
 Blocking: no. Meanwhile the host keeps its workarounds (`kb=lookup`, `redo=`/`isView`/`passive`, generated tables, regex ranking). The per-world numbers are in `sop_world_status.md` ("Per-world comparison"). The next host fix on our side is the undo timeline after a restart, saved with the state (proposal 3, last bullet).
+
+Q1 answered by the reviewer in worker-tasks.md ("Answer to Q1 ... RE-VENDOR 0.7.1 + namespaces", 2026-11-11 23:35). The worker keeps this file append-only, so the reviewer may remove Q1.

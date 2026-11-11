@@ -545,3 +545,12 @@ Stopped by the user: the demo on GitHub Pages is in order. Landed today after NX
 ## RESTORE-1: the matrix undo timeline survives a watchdog restart
 
 `DialogSession.memoryJSON()` now carries `rs` (`ReasonerSession.timelineJSON`: per instance the library log of the instance and of every mark of the kept 40 turns, entries stored once, plus the timeline, shared log, told, said); `restoreMemory` replays it into fresh instances (`restoreJSON`, marks re-taken from the replayed worlds). Spec 15 "The timeline survives a restart". Measured on a 40-turn session (conversation + art.draw): 48 KB record, 0.8 ms to write per turn, 58 ms to restore; capped at 1.5 MB (oldest turns dropped first, `dropped` reported). Not restored: the redo stack (functions). Tests: `tests/reasoner-restore.test.mjs` (undo to the end identical with and without restart, both reasoners), `tests/discourse-memory.test.mjs`, Chrome scenario `restart-undo` in `scripts/test-webchat-matrix.mjs`. Library improvement (proposal 3 of questions.md Q1): the host uses `world.log` and the underscore `World._replay` and rebuilds marks by hand; a library-level `snapshotJSON({ marks })` / `restore(json, { base })` would replace it. Note: a game action can rewrite an entry of the base log (tictactoe), so the record keeps `p` (shared prefix) per log.
+
+## 2026-11-12 — RESTORE-1 merged; next: re-vendor 0.7.1, E1 audit, RO-TRANSLATE-FALLBACK
+
+- RESTORE-1 (725eb66, merged a7c668c): the undo timeline survives a watchdog restart. 1399 tests pass, Chrome matrix 180/180.
+- Started, after the reviewer's answer to Q1 and the user's FORMALIZE-FROM-WORLDS direction:
+  - re-vendor sopworld 0.7.1 at 93362d7, with before/after bench and ab, then removal of the host workarounds per the Q1 answer;
+  - E1 error audit (measurement only);
+  - RO-TRANSLATE-FALLBACK with the small RO findings of waves 3–5.
+- Namespaces (R7.9 prep) wait for the re-vendor. E2 waits for E1 and 0.7.1. E3 waits for E1.
