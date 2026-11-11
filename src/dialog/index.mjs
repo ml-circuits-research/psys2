@@ -137,6 +137,7 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
 import { LIMITS } from './time-limits.mjs';
+import { languageCommand } from '../translate/language-command.mjs';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1063,6 +1064,8 @@ export class DialogSession {
         }
       } else lang = 'en';
     }
+    // LANG-FIXED: an explicit "switch the language" command is read as such in either language, whatever language is selected ("treci pe engleză" while English is selected)
+    { const switchTo = languageCommand(text); if (switchTo) english = switchTo; }
     this.sources.set(sid, { original: text, english, lang, alignment: translation?.alignment });
     // Correction phase (spec 03 section 1c, review G2): "knight to f3, no, knight to c3" is resolved on the whole message, before the
     // modal interceptors, discourse, segmentation and routing, so the abandoned variant never has an effect.

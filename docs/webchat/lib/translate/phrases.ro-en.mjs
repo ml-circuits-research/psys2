@@ -8,7 +8,7 @@
 // (multi-word units that must still take part in the clause grammar: "de ce" -> wh why).
 //   full:true   must cover the whole sentence       start:true   must begin the sentence
 
-import { COMMAND_FRAMES } from './phrases.commands.ro-en.mjs?v=7be43a0846';
+import { COMMAND_FRAMES } from './phrases.commands.ro-en.mjs?v=487b0303ab';
 
 const BASE_FRAMES = [
   // ---- polite request openers (RD5)

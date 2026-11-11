@@ -151,6 +151,7 @@ const TABLE = [
   ['OK, I undid the last change.', 'Bine, am anulat ultima schimbare.'], ['OK, I undid the last change to the map.', 'Bine, am anulat ultima schimbare a hărții.'],
   ['OK, I undid the last change to the chart.', 'Bine, am anulat ultima schimbare a graficului.'],
   ['OK, I switched to English.', 'Bine, am trecut la engleză.'],
+  ['OK, I switched to Romanian.', 'Bine, am trecut la română.'],
   // ---- arithmetic and calendar
   ['{n} divided by {n2} is {n3}.', '{n} împărțit la {n2} este {n3}.'],
   ['Double {n} is {n2}.', 'Dublul lui {n} este {n2}.'],

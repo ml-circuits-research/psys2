@@ -28,7 +28,9 @@ const LIMIT_MS = 8000;
 export async function loadPuppeteer() {
   const core = process.env.PUPPETEER_CORE;
   if (!core) throw new Error('set PUPPETEER_CORE to a scratch puppeteer-core install');
-  const pp = await import(pathToFileURL(path.join(core, 'lib/puppeteer/puppeteer-core.js')).href);
+  let pp = null;
+  for (const rel of ['lib/puppeteer/puppeteer-core.js', 'lib/esm/puppeteer/puppeteer-core.js']) { try { pp = await import(pathToFileURL(path.join(core, rel)).href); break; } catch { /* the other layout */ } }
+  if (!pp) throw new Error(`no puppeteer-core entry under ${core}`);
   return pp.default ?? pp;
 }
 export async function findChrome(given) {

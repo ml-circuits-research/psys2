@@ -18,7 +18,7 @@ import { restrictedSet } from '../formalizer/spell.mjs?v=d3b6e999df';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=5de885797a';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
-import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=2f2d0408d3';
+import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=d1c52c97ac';
 import { budget } from './budget.mjs?v=123c3e1329';
 
 export const FRAME_LIMIT = 5;
@@ -36,6 +36,7 @@ const META_SKIP = new Set(['add', 'remove', 'delete', 'show', 'open', 'what', 'w
 /** A modifying command that points at one thing by a bare noun ("make the house red", "delete the tree"). */
 const AMBIGUOUS_VERB = /^(?:please\s+|can you\s+|could you\s+|will you\s+)?(?:make|paint|colou?r|move|delete|remove|erase|resize|turn|flip|rotate|copy|duplicate|select|change|shrink|grow|enlarge)\s+(the|that|this)\s+([a-z]+)\b/i;
 
+const WHY_FACT = /^why (?:do|does|did|am|are|is|have|has) \w+/;
 const QUESTION_START = /^(?:what|who|whom|whose|where|when|why|how|which|is|are|was|were|does|do|did|can|could|will|would|should)\b/i;
 const IMPERATIVE_START = /^(?:please\s+)?(?!(?:i|we|you|my|the|a|an|no|nope|wait|sorry)\b)[a-z]+\b/i;
 
@@ -86,6 +87,8 @@ export class Discourse {
     this.pending = null; // { type: 'fill' | 'confirm', world, ... }
     this.last = null;    // provenance of the last resolution (for the trace)
     this.actions = [];   // effectful turns, newest first: { turn, text, worlds, before, after, frames } (undo, repair, explain)
+    this.shown = {};          // turn -> the reply as the user saw it (translated), for "why?"
+    this.lastFacts = null;    // { turn, ids, types, text, world }: the fact wires of the newest statement turn (ops reasoner)
     this.lastAnswer = null;   // { text, turn }: the last reply that was not itself a repeat or an explanation
     this.lastByWorld = {};    // world id -> { text, reply, turn } (topic return)
     this.topics = [];         // worlds the conversation was about, newest first
@@ -343,6 +346,18 @@ export class Discourse {
         }
       }
     }
+    // "No, to my to-do list" after "Add milk to my list": a fragment that opens with a preposition of the request replaces everything
+    // from that same preposition to the end of the request (the target phrase), whatever slots the old wording had
+    if (fragPrep) {
+      const fw = wordsOf(frame.text);
+      let at = -1;
+      for (let i = fw.length - 1; i > 0; i--) if (fw[i].toLowerCase() === fragPrep) { at = i; break; }
+      if (at > 0) {
+        const head = fw.slice(0, at).join(' ');
+        const out = `${head} ${content.join(' ')}${/\?$/.test(frame.text) ? '?' : ''}`;
+        yield { text: out, slot: '*', cls: 'tail', start: head.length + 1, end: out.length, wild: true, whole: true, direct: false };
+      }
+    }
     const order = [...frame.slots].sort((a, b) => (wild(a) - wild(b)) || b.start - a.start);
     for (const s of order) {
       const before = wordsOf(frame.text.slice(0, s.start));
@@ -406,6 +421,86 @@ export class Discourse {
     this.lastByWorld[w] = { text, reply, turn };
     this.lastWorld = w;
     if (!NO_TOPIC.has(w)) this.topics = [w, ...this.topics.filter((x) => x !== w)].slice(0, 6);
+  }
+
+  noteShown(turn, text) { this.shown[turn] = text; const k = Object.keys(this.shown); if (k.length > 12) delete this.shown[k[0]]; }
+
+  /** The fact wires the newest statement turn told (ops reasoner): what "no, she gives him 4" takes back, and what "why?" falls back on. */
+  noteFacts(facts, turn, text, world = null) {
+    const own = facts.filter((w) => !w.type.startsWith('core.'));
+    this.lastFacts = own.length ? { turn, ids: own.map((w) => w.id), types: own.map((w) => w.type), text, world } : null;
+  }
+
+  /**
+   * "No, she gives him 4." right after "Ana gives him 3 apples.": a correction that is itself a statement of the same kind revises the last
+   * statement. The old fact is retracted and the new sentence goes through the normal pipeline (ops reasoner; the matrix has its own `revise`).
+   */
+  async _correctFact(text, sid) {
+    const lf = this.lastFacts, d = this.dialog;
+    if (!lf || d.isession.rs || d._msg - lf.turn > 1) return null;
+    const m = /^\s*(?:no|nope|nah|wait|actually|sorry|oops)\b[\s,.:;!-]+(.+?)\s*$/i.exec(String(text));
+    if (!m) return null;
+    const seg = await this._readSeg(m[1], sid);
+    if (!seg || seg.match?.kind !== 'statement') return null;
+    const types = new Set(seg.wires.filter((w) => !w.type.startsWith('core.')).map((w) => w.type));
+    if (!lf.types.some((t) => types.has(t))) return null;
+    for (const id of lf.ids) d.isession.memory.retract(id, 'corrected by the user');
+    this.lastFacts = null;
+    return { rewrite: m[1], prefix: 'OK, I took that back.', info: { kind: 'repair', how: 'fact', undone: lf.text, fragment: m[1] } };
+  }
+
+  /**
+   * "Why do I have nothing left?" / "why is milk done?": a question about a fact the user can name. The worlds that export `why(ctx, { text })`
+   * answer from what is known: { text, from }. Returns null when no world takes it (the sentence then goes to the normal pipeline).
+   */
+  _whyFact(t) {
+    const d = this.dialog, { set, interp } = d.engine;
+    const order = [this.lastFacts?.world, d.context().lastWorld, this.lastWorld, ...set.list().map((w) => w.id)].filter(Boolean);
+    for (const w of [...new Set(order)]) {
+      const r = interp.hook(d.isession, w, 'why', { text: t });
+      if (r?.text) return this._say([{ text: r.text, translate: true }, ...this._known(r.from)], { kind: 'explain', of: t, world: w, from: r.from ?? [] });
+    }
+    return null;
+  }
+
+  /** A reply made of parts (translated runs and quoted user text): `reply` is the English text, `parts` what the translator works on. */
+  _say(parts, info) { return { reply: parts.map((p) => p.text).join(''), parts, info }; }
+
+  /** The user's own words of a past turn, quoted as typed (never back-translated); the English reading when the source is gone. */
+  _quoted(turn, fallback) {
+    const src = this.dialog.sources.get(`msg${turn}`);
+    const text = String(src?.original ?? fallback ?? '').trim().replace(/[.!?\s]+$/, '');
+    return { text: `"${text}"`, translate: false, quote: true };
+  }
+
+  /**
+   * The facts a list of wire ids rests on, in order, as the user said them: parts for " I worked that out from what you told me: "...", "..." and
+   * "...".", or [] when nothing is known. Wires without a source of the dialog (the price list) are said as such.
+   */
+  _known(ids) {
+    const d = this.dialog;
+    const said = [], seen = new Set();
+    let kb = false;
+    for (const id of ids ?? []) {
+      const w = d.isession.memory.get(id);
+      if (!w) continue;
+      const src = w.entries.find((e) => e.key === 'core.source')?.value?.v;
+      const sid = String(src ?? '').replace(/^"|"$/g, '').split('#')[0];
+      const rec = sid ? d.sources.get(sid) : null;
+      if (rec?.english) { if (!seen.has(sid)) { seen.add(sid); said.push({ text: `"${String(rec.original ?? rec.english).trim().replace(/[.!?\s]+$/, '')}"`, translate: false, quote: true }); } }
+      else kb = true;
+    }
+    return this._knownParts(said, kb);
+  }
+
+  _knownParts(said, kb) {
+    if (!said.length && !kb) return [];
+    if (!said.length) return [{ text: ' I worked that out from the price list.', translate: true }];
+    const out = [{ text: ' I worked that out from what you told me: ', translate: true }];
+    said.forEach((q, i) => { if (i) out.push({ text: i === said.length - 1 ? ' and ' : ', ', translate: true }); out.push(q); });
+    if (kb) out.push({ text: ' and from the price list', translate: true });
+    out.push({ text: '.', translate: false });
+    return out;
   }
 
   /** End of turn: when the turn changed the state of a world, keep what is needed to take it back (undo, repair). */
@@ -538,6 +633,10 @@ export class Discourse {
       if (turn != null) { this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn); }
       if (turn != null) return { reply: said ? `OK, I took that back: "${String(said).replace(/[.!?\s]+$/, '')}".` : 'OK, I took that back.', info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };
     }
+    // ops reasoner: "No, she gives him 4." revises the statement just made
+    { const cf = await this._correctFact(text, sid); if (cf) return cf; }
+    // "Why do I have nothing left?", "why is milk done?": the worlds that can explain the named fact answer from what is known
+    if (WHY_FACT.test(t)) { const wf = this._whyFact(t); if (wf) return wf; }
     // chat spellings of short words ("bk to the doc", "nxt") are read as the word for the recognizers; the sentence itself is passed on unchanged
     const spelled = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);
     const c = classify(spelled, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
@@ -637,6 +736,8 @@ export class Discourse {
   _explain(t = '') {
     // "what did you do?" asks about the last thing that CHANGED something (a question later on changed nothing); "why?" asks about the newest turn
     const doing = /^what (?:did you|have you) (?:just )?(?:do|done|change)/.test(t);
+    // the newest turn only told a fact: "why?" asks about the world that fact belongs to, answered from what is known (hook `why` of the world)
+    if (!doing && this.lastFacts && this.dialog._msg - this.lastFacts.turn <= 1 && this.lastFacts.turn >= (this.frames[0]?.turn ?? -1)) { const wf = this._whyFact('why'); if (wf) return wf; }
     const eff = (() => { const x = this._recentAction(6); return x && x.frames.some((fr) => !/\?$/.test(fr.text) && !QUESTION_START.test(fr.text)) ? x : null; })();
     const a0 = doing && eff ? eff : this._repairable(6), a = a0?.readOnly ? null : a0;
     const f = a0?.frames[0] ?? this.frames[0];
@@ -653,7 +754,8 @@ export class Discourse {
     if (!f) {
       // chat, navigation and games leave no frame: explain from the last thing this session said and answered
       const lw = this.lastByWorld[this.lastWorld];
-      if (!lw) return null;
+      if (!lw) return doing ? null : this._whyFact('why');   // no frame and nothing answered: a world that holds facts may still say what it knows
+      if (!doing && !lw.reply) return this._whyFact('why') ?? null;
       return { reply: `You said "${sayText(lw.text)}", so I answered it. What I answered: ${lw.reply}`, info: { kind: 'explain', of: lw.text, world: this.lastWorld, changed: [] } };
     }
     // plain wording for the user; ids (rule, operation) stay in info and the trace only
@@ -661,26 +763,32 @@ export class Discourse {
     const isQuestion = /\?$/.test(asked) || QUESTION_START.test(asked);
     const imperative = !isQuestion && IMPERATIVE_START.test(asked);
     const what = imperative ? `You asked me to ${asked.replace(/^please\s+/i, '').replace(/^(\w)/, (c) => c.toLowerCase())}` : `You said "${asked}"`;
+    const info = { kind: 'explain', of: f.text, world: f.world, pattern: f.patternId, op: f.opId, changed: a?.worlds ?? [] };
+    // what the user said (as typed) and what was answered (as it was shown): parts, so the Romanian reply is built from the Romanian words
+    if (!imperative) {
+      const shown = this.shown[f.turn];
+      const parts = [{ text: 'You said ', translate: true }, this._quoted(f.turn, asked), { text: `, so ${a ? 'I did it' : 'I answered it'}.`, translate: true }];
+      if (f.reply) parts.push({ text: ' What I answered: ', translate: true }, shown ? { text: shown, translate: false } : { text: f.reply, translate: true });
+      return this._say([...parts, ...this._because(f)], info);
+    }
     const said = f.reply ? ` What I answered: ${f.reply}` : '';
-    const reply = `${what}, so ${a ? 'I did it' : 'I answered it'}.${said}${this._because(f)}`;
-    return { reply, info: { kind: 'explain', of: f.text, world: f.world, pattern: f.patternId, op: f.opId, changed: a?.worlds ?? [] } };
+    return { reply: `${what}, so ${a ? 'I did it' : 'I answered it'}.${said}${this._because(f).map((p) => p.text).join('')}`, info };
   }
 
   /** Matrix reasoner (spec 15): the statements an answer rests on, from the library's `explain` ("I worked it out from ..."); '' for any other answer. */
   _because(f) {
     const d = this.dialog, rs = d.isession.rs;
-    if (!rs || !f.from?.length) return '';
+    if (!f.from?.length) return [];
+    if (!rs) return this._known(f.from);   // ops reasoner: the `from` list of the answer, in order
     const leaves = rs.leaves(f.from, d.isession);
     const said = [], seen = new Set();
     for (const l of leaves) {
       const sid = String(l.source ?? '').replace(/^"|"$/g, '').split('#')[0];
-      const text = d.sources.get(sid)?.english;
-      if (text && !seen.has(sid)) { seen.add(sid); said.push(`"${String(text).trim().replace(/[.!?\s]+$/, '')}"`); }
+      const rec = d.sources.get(sid);
+      const text = rec?.original ?? rec?.english;
+      if (text && !seen.has(sid)) { seen.add(sid); said.push({ text: `"${String(text).trim().replace(/[.!?\s]+$/, '')}"`, translate: false, quote: true }); }
     }
-    const list = said.length > 1 ? `${said.slice(0, -1).join(', ')} and ${said.at(-1)}` : said[0];
-    const kb = leaves.some((l) => l.kb);
-    if (!list && !kb) return '';
-    return ` I worked that out from ${list ? `what you told me: ${list}` : 'the price list'}${list && kb ? ' and from the price list' : ''}.`;
+    return this._knownParts(said, leaves.some((l) => l.kb));
   }
 
   // ---- topic return --------------------------------------------------------------------------------------------------------------
