@@ -66,6 +66,10 @@ export class World {
   get sourcePhrase() { return txt(this.manifest ?? { entries: [] }, 'source') ?? null; }
   /** Keys (`type.key`) whose questions the matrix leaves to the operations (`ops=<key>`, repeatable). */
   get opsKeys() { return getAll(this.manifest ?? { entries: [] }, 'ops').map((v) => v.v); }
+  /** Worlds this composite world composes (`compose=<world>`, repeatable; spec 15): ids, in the order written. */
+  get compose() { return getAll(this.manifest ?? { entries: [] }, 'compose').map((v) => worldIdOf(v.v)); }
+  /** Worlds whose legends and knowledge bases this world's matrix reads facts of (`reads=world.<id>`, repeatable; spec 15): their wires are copied into this world's instance, their matrices are not loaded. */
+  get reads() { return getAll(this.manifest ?? { entries: [] }, 'reads').map((v) => worldIdOf(v.v)); }
   get language() { return txt(this.manifest ?? { entries: [] }, 'language') ?? 'en'; }
   /** Plain summary for listings. */
   summary() {
