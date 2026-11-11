@@ -31,6 +31,13 @@ function flat(attrs) {
   return out;
 }
 
+/** A wire of ours ({ id, type, entries }) as the library's in-memory wire ({ id, type, attrs: { key: [token] } }). */
+function libWire(lib, w) {
+  const attrs = {};
+  for (const e of w.entries) (attrs[e.key] ??= []).push(lib.writeValue(e.value));
+  return { id: w.id, type: w.type, attrs, pattern: false };
+}
+
 /**
  * Builds the shared base World once per engine: mapping, legends in dependency order, knowledge bases, matrices. Sessions fork it.
  * Returns null when no world opts in (`reasoner=matrix` in its world.sop, with a matrix.sop).
@@ -51,7 +58,14 @@ export async function createReasoner(set, { lib = null } = {}) {
   for (const w of ordered) load(`${w.id}/legend.sop`, w.raw.legend);
   for (const w of worlds) load(`${w.id}/kb.sop`, w.raw.kb);
   load('user', '@e.user core.agent');   // the user is a built-in agent of every session
-  for (const w of worlds) load(`${w.id}/matrix.sop`, w.raw.matrix);
+  // one SOP Lang parser in the product: our parser reads the matrices and the library is handed their wires
+  const loadOurs = (what, text) => {
+    if (text == null) return;
+    const { wires, errors } = parseOurs(text, { source: what });
+    if (errors.length) { problems.push(`${what}: ${errors[0].line}:${errors[0].column} ${errors[0].message}`); return; }
+    load(what, wires.map((w) => libWire(lib, w)));
+  };
+  for (const w of worlds) loadOurs(`${w.id}/matrix.sop`, w.raw.matrix);
   const owners = worlds.map((w) => w.id).sort((a, b) => b.length - a.length);
   const actionOwner = new Map();
   for (const w of worlds) for (const o of w.operations) if (o.semantics === 'action') { actionOwner.set(o.id, w.id); if (o.action) actionOwner.set(o.action, w.id); }

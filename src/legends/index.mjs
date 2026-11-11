@@ -271,6 +271,7 @@ export class Legends {
     }
     const k = info.value.literal;
     if (k === 'any') return null;
+    if (value.kind === 'var') return `a variable (?${value.v}) is only legal in a rule file, not in a fact`;
     if (value.kind === 'ref') return `expected ${k}, got a reference`;
     const v = value.v;
     switch (k) {

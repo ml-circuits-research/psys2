@@ -12,7 +12,7 @@
  * What the library gets: `worlds/core/mapping.sop` (how it reads our legends), the legends of the matrix worlds and their imports as they are,
  * the knowledge bases, the matrices (`matrix.sop`) and the functions (`fns.mjs`) of the worlds that opt in. Reply wording stays in our templates.
  */
-import { serialize, parse as parseOurs, ref as refValue, atom as atomValue } from '../soplang/index.mjs?v=002f3588a0';
+import { serialize, parse as parseOurs, ref as refValue, atom as atomValue } from '../soplang/index.mjs?v=26885599a7';
 import { budget as turnBudget } from '../dialog/budget.mjs?v=123c3e1329';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */
@@ -29,6 +29,13 @@ function flat(attrs) {
   const out = {};
   for (const [k, v] of Object.entries(attrs ?? {})) if (!k.startsWith('core.')) out[k] = unquote(bare(first(v)));
   return out;
+}
+
+/** A wire of ours ({ id, type, entries }) as the library's in-memory wire ({ id, type, attrs: { key: [token] } }). */
+function libWire(lib, w) {
+  const attrs = {};
+  for (const e of w.entries) (attrs[e.key] ??= []).push(lib.writeValue(e.value));
+  return { id: w.id, type: w.type, attrs, pattern: false };
 }
 
 /**
@@ -51,7 +58,14 @@ export async function createReasoner(set, { lib = null } = {}) {
   for (const w of ordered) load(`${w.id}/legend.sop`, w.raw.legend);
   for (const w of worlds) load(`${w.id}/kb.sop`, w.raw.kb);
   load('user', '@e.user core.agent');   // the user is a built-in agent of every session
-  for (const w of worlds) load(`${w.id}/matrix.sop`, w.raw.matrix);
+  // one SOP Lang parser in the product: our parser reads the matrices and the library is handed their wires
+  const loadOurs = (what, text) => {
+    if (text == null) return;
+    const { wires, errors } = parseOurs(text, { source: what });
+    if (errors.length) { problems.push(`${what}: ${errors[0].line}:${errors[0].column} ${errors[0].message}`); return; }
+    load(what, wires.map((w) => libWire(lib, w)));
+  };
+  for (const w of worlds) loadOurs(`${w.id}/matrix.sop`, w.raw.matrix);
   const owners = worlds.map((w) => w.id).sort((a, b) => b.length - a.length);
   const actionOwner = new Map();
   for (const w of worlds) for (const o of w.operations) if (o.semantics === 'action') { actionOwner.set(o.id, w.id); if (o.action) actionOwner.set(o.action, w.id); }

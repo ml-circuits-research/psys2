@@ -16,7 +16,7 @@
 <li><code>wireId</code> and <code>wireType</code> are <strong>identifiers</strong>: one or more segments <code>[A-Za-z_][A-Za-z0-9_-]*</code> joined by <code>.</code> (<code>b1</code>, <code>kids.arith.holding</code>, <code>legend.kids.arith</code>).</li>
 <li>An <strong>entry</strong> is <code>key=value</code> with no spaces around <code>=</code>. Keys are identifiers.</li>
 <li>Tokens are separated by whitespace (spaces, tabs, newlines).</li>
-<li>There are <strong>no comments</strong> in v1. Use a <code>doc="..."</code> entry or a <code>core.note</code> wire.</li>
+<li><strong>Comments</strong> (v1.1): <code>#</code> where a token could start runs to the end of the line; variables <code>?name</code> are a fourth value kind, legal only in wires a rule names (spec 01).  A <code>doc="..."</code> entry or a <code>core.note</code> wire still carries a note that must be kept.</li>
 <li>A repeated key is kept as several entries in order. Whether repetition is legal is decided by the legend (cardinality), not by the parser.</li>
 </ul>
 <h3>Values</h3>
