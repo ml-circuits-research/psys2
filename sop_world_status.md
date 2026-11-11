@@ -316,6 +316,37 @@ Intended differences: none in behaviour. One world file changed because the isol
 
 Session creation (matrix): 2.09 ms before, 1.03 ms now (ops 1.01): a session creates no World until a world is used. The matrix is now at or under the operations on p50 in every group (the copy-on-write after a fork is paid for the size of one world, and the legends of the ten worlds are no longer loaded together). The first use of a world in an engine builds its base (a few ms, once per engine).
 
+## Verdict of the all-worlds move (2026-11-11, after wave 4)
+
+- **Coverage.** 21 of the 24 worlds have a sopworld version, behind the flag, and pass all their tests in both modes. The other three have no logic of their own (`core`, `lang.common`, `kids.common`). The worlds are grouped into one conversation instance (kids.*, user.profile), one instance per game, and one per tab world.
+- **Correctness: equal or better everywhere.** Every existing test passes in both modes. Each world adds matrix-only gains:
+  - refusals with a reason instead of a silent accept or a vague "I did not catch that";
+  - an undo that names what it took back and walks back across worlds;
+  - assumptions said once;
+  - "why?" with sources.
+
+  Measured on the first worlds: the coherence set went from 25 to 31 of 33, and turns that leave the world inconsistent went from 1.9% to 0%.
+- **Speed: not yet at the custom code's level.** Matrix mode is slower on every world, by about 1–3.6 ms per turn at p50 (examples: chess 7.2 → 9.1 ms, diagram 8.9 → 12.5 ms, shell 9.5 → 12.7 ms). The main cause is the library's copy-on-write of the whole instance at the first write after each mark, and the per-turn state takeover.
+- **Code: nothing replaced yet.** No line of any `ops.mjs` was deleted. Every matrix version is a layer of state and validation over the engines, and the share expressed as rules is 0–10% in the engine worlds. What keeps the code custom is consistent across worlds:
+  - text and strings;
+  - large tables, which are too expensive as wires;
+  - move generation and geometry;
+  - the redo / view-step bookkeeping.
+- **What would close the gap** is the library generalizations listed in `questions.md` Q1, in this order:
+  1. structural sharing instead of copying, which is the speed fix for every world;
+  2. external or frozen fact sources;
+  3. undo and redo in the library;
+  4. aggregates and lists;
+  5. multi-valued answers;
+  6. better refusals;
+  7. value kinds;
+  8. cost control for rules;
+  9. expressions;
+  10. a public host API.
+
+  After 1 and 2 land, rerun the bench. Then, world by world, delete the `ops.mjs` code that the rules now cover. Only then is the comparison "library vs custom code" on equal terms.
+- **Open regression, being fixed:** after a watchdog restart the undo timeline is lost in matrix mode, because it is not part of the saved state yet.
+
 ## Per-world comparison (all worlds on sopworld vs custom code)
 
 | World | Tests ops / matrix | p50 ms ops / matrix | ops.mjs replaced by rules | Stayed custom (why) | Library improvement needed |
