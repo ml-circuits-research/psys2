@@ -2392,3 +2392,10 @@ What this changes:
 4. **Keep `Memory`** as the reader's view for worlds that are not on the matrix. Move a world to the library only when it gains something there (rules, denies, defaults, derived facts), case by case, as in stage 2 so far.
 
 Write the change in spec 15 and in worker-log.md, then go on with RO-MATRIX and UNDO-1.
+- **WORLDS-APART, concrete grouping (user, 19:26): one instance per tab, plus one combined instance for the worlds that only answer in the conversation.**
+  - **Conversation instance, one per session.** Members: world.core facts (the user, the people named, their names), kids.common, lang.common, kids.shop, kids.arith, kids.tasks, kids.time, kids.animals and kids.shapes. They talk about the same people and things, so "Ana has 5 lei, she buys…" or "how many does she have now?" must see one another's facts.
+  - **One instance per game,** each its own World: games.tictactoe, games.hangman and games.guess. They share no facts.
+  - **Tab worlds with engines** (chess, draw, charts, map, documents, music, diagram, avatar) stay as they are. Each gets its own instance only if it moves to the matrix later.
+  - **user.profile has a tab but holds the user's facts.** Its facts belong to the conversation instance, and its tab reads them from there.
+  - **Every instance can read the conversation instance's agents** (the user's name, the people named), so a name told once is known in every tab. Read only: a tab never writes into another instance.
+  - **"undo"** uses the session history across instances (item 3 above).
