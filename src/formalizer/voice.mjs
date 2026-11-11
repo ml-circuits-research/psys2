@@ -84,17 +84,19 @@ export function skeleton(w) {
   return out;
 }
 
-const BUDGET_MS = 40;
+// Bounds are counts of work, never wall-clock time: a time budget made the result depend on the machine's load (a slow run cut the search short and the test of
+// "mcdavatara human" failed under load). STEP_BUDGET counts the piece lookups of one call, MAX_WEAK_WORDS the words of weakSoundAlikes.
+const STEP_BUDGET = 3000, MAX_WEAK_WORDS = 8;
 const MAX_UNKNOWN = 3, MAX_TOKEN = 24, MAX_PIECES = 4, MAX_COST = 2;
 
 /**
  * Candidate texts for a spoken message whose unknown words are garbled run-together or split words. `vocab` is the vocabulary of the ACTIVE world
  * (a Set of words; `vocab.global` optional: a word any world knows is never touched). Each candidate carries its cost (0 exact words, 1 per
- * sound-alike piece); the caller executes cost <= 1 and asks for more. Bounded: at most 3 unknown words of at most 24 letters, 4 pieces, a 40 ms budget.
+ * sound-alike piece); the caller executes cost <= 1 and asks for more. Bounded by counts (deterministic): at most 3 unknown words of at most 24 letters, 4 pieces, STEP_BUDGET piece lookups.
  * @returns {{ text: string, cost: number, corrections: { from: string, to: string, span: [number, number], kind: 'voice' }[] }[]}
  */
 export function garbleCandidates(text, { vocab, known = () => false, functionWords = new Set(), maxTexts = 4 } = {}) {
-  const t0 = Date.now();
+  let steps = 0;
   const toks = [...text.matchAll(WORD)];
   if (!toks.length || toks.length > MAX_WORDS) return [];
   const isKnown = (w) => functionWords.has(w) || vocab.has(w) || known(w) || /\d/.test(w);
@@ -112,6 +114,7 @@ export function garbleCandidates(text, { vocab, known = () => false, functionWor
   function split(word) {
     const n = word.length, memo = new Map();
     const pieceBest = (i, j) => {   // best vocabulary word for word[i..j): [cost, word]
+      steps++;
       const seg = word.slice(i, j), len = seg.length;
       if (len === 1) return seg === 'a' || seg === 'i' ? [0, seg] : null;
       if (vocab.has(seg) || functionWords.has(seg)) return [0, seg];
@@ -132,7 +135,7 @@ export function garbleCandidates(text, { vocab, known = () => false, functionWor
       const key = `${i}:${pieces}`;
       if (memo.has(key)) return memo.get(key);
       let best = null;
-      if (pieces < MAX_PIECES && Date.now() - t0 < BUDGET_MS) {
+      if (pieces < MAX_PIECES && steps < STEP_BUDGET) {
         for (let j = n; j > i; j--) {
           const p = pieceBest(i, j);
           if (!p) continue;
@@ -151,7 +154,7 @@ export function garbleCandidates(text, { vocab, known = () => false, functionWor
 
   for (const t of unknown) {
     guard.check('voice');
-    if (Date.now() - t0 > BUDGET_MS * 2) break;
+    if (steps >= STEP_BUDGET * 2) break;
     const r = split(t[0].toLowerCase());
     if (!r) continue;
     const start = t.index, end = start + t[0].length;
@@ -183,13 +186,13 @@ export const LEADING_CONFUSIONS = { add: ['on', 'are', 'and', 'at', 'ad', 'had',
  * @returns {{ from: string, to: string }[]}
  */
 export function weakSoundAlikes(text, { vocab, functionWords = new Set(), protect = null } = {}) {
-  const t0 = Date.now();
+  let tried = 0;
   const out = [];
   const cands = [...vocab].filter((w) => /^[a-z]{6,}$/.test(w));
   for (const m of text.matchAll(WORD)) {
-    if (Date.now() - t0 > BUDGET_MS) break;
     const w = m[0].toLowerCase();
     if (!/^[a-z]{6,}$/.test(w) || vocab.has(w) || functionWords.has(w) || protect?.has(w)) continue;
+    if (++tried > MAX_WEAK_WORDS) break;
     let best = null, bd = 3;
     for (const c of cands) {
       if (c[0] !== w[0] || Math.abs(c.length - w.length) > 2) continue;
