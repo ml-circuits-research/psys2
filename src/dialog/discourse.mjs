@@ -437,14 +437,16 @@ export class Discourse {
    */
   async _correctFact(text, sid) {
     const lf = this.lastFacts, d = this.dialog;
-    if (!lf || d.isession.rs || d._msg - lf.turn > 1) return null;
+    if (!lf || d._msg - lf.turn > 1) return null;
     const m = /^\s*(?:no|nope|nah|wait|actually|sorry|oops)\b[\s,.:;!-]+(.+?)\s*$/i.exec(String(text));
     if (!m) return null;
     const seg = await this._readSeg(m[1], sid);
     if (!seg || seg.match?.kind !== 'statement') return null;
     const types = new Set(seg.wires.filter((w) => !w.type.startsWith('core.')).map((w) => w.type));
     if (!lf.types.some((t) => types.has(t))) return null;
-    for (const id of lf.ids) d.isession.memory.retract(id, 'corrected by the user');
+    // matrix strategy: the library takes the old facts out (retract: what followed from them goes too) and the corrected sentence is told as a new statement
+    if (d.isession.rs) { if (!d.isession.rs.retractFacts(lf.ids, d.isession, 'corrected by the user')) return null; }
+    else for (const id of lf.ids) d.isession.memory.retract(id, 'corrected by the user');
     this.lastFacts = null;
     return { rewrite: m[1], prefix: 'OK, I took that back.', info: { kind: 'repair', how: 'fact', undone: lf.text, fragment: m[1] } };
   }
@@ -478,17 +480,25 @@ export class Discourse {
    * "...".", or [] when nothing is known. Wires without a source of the dialog (the price list) are said as such.
    */
   _known(ids) {
-    const d = this.dialog;
+    const d = this.dialog, rs = d.isession.rs;
     const said = [], seen = new Set();
     let kb = false;
-    for (const id of ids ?? []) {
-      const w = d.isession.memory.get(id);
-      if (!w) continue;
-      const src = w.entries.find((e) => e.key === 'core.source')?.value?.v;
+    const add = (src) => {
       const sid = String(src ?? '').replace(/^"|"$/g, '').split('#')[0];
       const rec = sid ? d.sources.get(sid) : null;
-      if (rec?.english) { if (!seen.has(sid)) { seen.add(sid); said.push({ text: `"${String(rec.original ?? rec.english).trim().replace(/[.!?\s]+$/, '')}"`, translate: false, quote: true }); } }
-      else kb = true;
+      if (!rec?.english) return false;
+      if (!seen.has(sid)) { seen.add(sid); said.push({ text: `"${String(rec.original ?? rec.english).trim().replace(/[.!?\s]+$/, '')}"`, translate: false, quote: true }); }
+      return true;
+    };
+    // matrix strategy (spec 15): the library's explanation knows the chain, so the facts an answer rests on are the told leaves of it, oldest first
+    const leaves = rs ? rs.leaves(ids, d.isession) : [];
+    for (const l of leaves) if (!add(l.source)) kb = true;   // a told wire without a sentence of the dialogue is the price list
+    const have = new Set(leaves.map((l) => l.id));
+    for (const id of ids ?? []) {
+      if (have.has(id)) continue;
+      const w = d.isession.memory.get(id);
+      if (!w) continue;
+      if (!add(w.entries.find((e) => e.key === 'core.source')?.value?.v)) kb = true;
     }
     return this._knownParts(said, kb);
   }
@@ -782,21 +792,8 @@ export class Discourse {
     return { reply: `${what}, so ${a ? 'I did it' : 'I answered it'}.${said}${this._because(f).map((p) => p.text).join('')}`, info };
   }
 
-  /** Matrix reasoner (spec 15): the statements an answer rests on, from the library's `explain` ("I worked it out from ..."); '' for any other answer. */
-  _because(f) {
-    const d = this.dialog, rs = d.isession.rs;
-    if (!f.from?.length) return [];
-    if (!rs) return this._known(f.from);   // ops reasoner: the `from` list of the answer, in order
-    const leaves = rs.leaves(f.from, d.isession);
-    const said = [], seen = new Set();
-    for (const l of leaves) {
-      const sid = String(l.source ?? '').replace(/^"|"$/g, '').split('#')[0];
-      const rec = d.sources.get(sid);
-      const text = rec?.original ?? rec?.english;
-      if (text && !seen.has(sid)) { seen.add(sid); said.push({ text: `"${String(text).trim().replace(/[.!?\s]+$/, '')}"`, translate: false, quote: true }); }
-    }
-    return this._knownParts(said, leaves.some((l) => l.kb));
-  }
+  /** The statements an answer rests on, as the user said them ("I worked it out from ..."); with the matrix reasoner they come from the library's explanation. */
+  _because(f) { return f.from?.length ? this._known(f.from) : []; }
 
   // ---- topic return --------------------------------------------------------------------------------------------------------------
 

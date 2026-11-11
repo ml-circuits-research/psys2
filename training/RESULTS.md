@@ -1251,28 +1251,28 @@ Written by `node scripts/eval-reasoner.mjs --reasoner ops|matrix` (rules formali
 | --- | --- | --- |
 | (a) operational, three worlds | 219/226 right, 5 partly, 0 wrong, 2 not understood | 219/226 right, 5 partly, 0 wrong, 2 not understood |
 | (a) operational, all other worlds | 1020/1070 right, 17 partly, 6 wrong, 27 not understood | 1020/1070 right, 17 partly, 6 wrong, 27 not understood |
-| (a) operational-ro, three worlds | 397/452 right, 7 partly, 8 wrong, 40 not understood | 397/452 right, 7 partly, 8 wrong, 40 not understood |
+| (a) operational-ro, three worlds | 399/452 right, 7 partly, 6 wrong, 40 not understood | 399/452 right, 7 partly, 6 wrong, 40 not understood |
 | (a) operational-ro, all other worlds | 1638/2028 right, 41 partly, 55 wrong, 294 not understood | 1638/2028 right, 41 partly, 55 wrong, 294 not understood |
 | (a) dialogues (turns), three worlds | 220/232 right, 0 partly, 4 wrong, 8 not understood | 220/232 right, 0 partly, 5 wrong, 7 not understood |
 | (a) dialogues (turns), all other worlds | 1954/2009 right, 10 partly, 15 wrong, 30 not understood | 1954/2009 right, 10 partly, 15 wrong, 30 not understood |
 | (a) cases whose outcome differs between the strategies | 1 | |
 | (b) turns audited (session holds facts of the three worlds) | 774 | 758 |
-| (b) turns that leave a violation (library check of the whole state) | 15 (1.9%) {"domain":19} | 6 (0.8%) {"balance":2,"domain":4} |
-| (c) coherence set passed / total (mechanical hints) | 25/33 (+3 with a hint for the reviewer) | 28/33 (+3 with a hint for the reviewer) |
+| (b) turns that leave a violation (library check of the whole state) | 15 (1.9%) {"domain":19} | 0 (0%) {} |
+| (c) coherence set passed / total (mechanical hints) | 25/33 (+3 with a hint for the reviewer) | 31/33 (+3 with a hint for the reviewer) |
 | (c) kind contradiction | 6/7 | 6/7 |
 | (c) kind missing-arg | 3/3 | 3/3 |
-| (c) kind default-revision | 3/3 | 2/3 |
+| (c) kind default-revision | 3/3 | 3/3 |
 | (c) kind undo | 0/3 | 3/3 |
-| (c) kind explain | 3/3 | 2/3 |
-| (c) kind abduce | 1/2 | 1/2 |
+| (c) kind explain | 3/3 | 3/3 |
+| (c) kind abduce | 1/2 | 2/2 |
 | (c) kind stale | 3/3 | 3/3 |
 | (c) kind assumption-visible | 4/6 | 6/6 |
 | (c) kind deduce | 2/3 | 2/3 |
-| (d) answers that relied on a default or a guess / said so | 0 / 0 (of 53 answers) | 3 / 2 (of 52 answers) |
-| (e) ms per turn, three worlds p50 / p95 | 13.9 / 80.4 | 17.4 / 82 |
-| (e) ms per turn, everything p50 / p95 | 11 / 66.2 | 12.9 / 69.6 |
-| (e) lines of world code (three worlds: ops.mjs / matrix + fns + extras) | shop 200/252, arith 297/211, tasks 206/153 | shop 200/252, arith 297/211, tasks 206/153 |
-| (e) bytes added to the webchat: library raw / gzip, host layer raw | 271470 / 77251, 26857 | 271470 / 77251, 26857 |
+| (d) answers that relied on a default or a guess / said so | 0 / 0 (of 53 answers) | 3 / 2 (of 51 answers) |
+| (e) ms per turn, three worlds p50 / p95 | 13.1 / 81.2 | 17.6 / 82.2 |
+| (e) ms per turn, everything p50 / p95 | 11 / 67 | 12.6 / 67.2 |
+| (e) lines of world code (three worlds: ops.mjs / matrix + fns + extras) | shop 200/268, arith 297/253, tasks 206/158 | shop 200/268, arith 297/253, tasks 206/158 |
+| (e) bytes added to the webchat: library raw / gzip, host layer raw | 271470 / 77251, 27590 | 271470 / 77251, 27590 |
 
 The audit tells the fact wires of the session (and its agents), in dialogue order, to a fresh library World and counts the wires it refuses (a deny, a conflict, a broken bound, a reference to an agent that is not there) and a refused balance. `ops`: every wire the operations replay. `matrix`: the wires the library holds; the ones it refused when told are not in its World and are counted apart (`audit.dropped_by_library` in the JSON, the largest number in one session). A purchase the library accepted that leaves the money negative is a violation of both columns: the matrix only says so when asked.
 

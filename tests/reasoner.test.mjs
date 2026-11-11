@@ -48,8 +48,8 @@ test('matrix mode: four worlds opt in, the library loads without problems, the e
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-test('parity gate (switch on): kids.shop 147+4, kids.tasks 232, kids.arith 217, games.tictactoe 160+13 (the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 151], ['kids.tasks', 232], ['kids.arith', 217], ['games.tictactoe', 173]]) {
+test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }
@@ -140,12 +140,13 @@ test('forks: a dry run or a snapshot of a session never changes the original Wor
   assert.equal(q(f.isession), '15');
 });
 
-test('an impossible statement is kept and flagged by the library (a soft constraint), and the answer says why', async () => {
+test('an impossible statement is refused when told: the library\'s soft constraint raised an issue, the statement is taken back and the answer says why', async () => {
   const { s, out } = await say(matrix, ['Tom has 2 apples', 'Tom gives away 5 apples', 'How many apples does Tom have?']);
   const rs = s.isession.rs;
-  assert.equal(rs.refused.length, 0, 'nothing is refused: the statement stays, somebody said it');
-  assert.equal(rs.world.ofType('core.issue').length, 1, 'and it stands as an issue of the world');
-  assert.match(out[2], /does not add up. Tom only had 2 apples, so Tom cannot \w+( away)? 5/);
+  assert.match(out[1], /^That does not add up\. Tom only had 2 apples, so Tom cannot \w+( away)? 5\.$/);
+  assert.equal(rs.world.ofType('core.issue').length, 0, 'the statement is out of the library, so nothing stands as an issue');
+  assert.equal(rs.world.ofType('kids.arith.give').length, 0);
+  assert.match(out[2], /Tom has 2 apples/);
 });
 
 // the state of the three worlds is derived from the library (toState), so the dialogue layer's snapshots cannot hold something the library does not

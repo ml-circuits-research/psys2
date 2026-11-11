@@ -10,11 +10,11 @@
  * Without it all input is treated as English.
  */
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=46116712b1';
-import { loadWorlds } from '../worlds/index.mjs?v=304bb0fd54';
+import { loadWorlds } from '../worlds/index.mjs?v=52363131fb';
 import { validateWorldSet } from '../worlds/validate.mjs?v=1eb2f0538f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=853e7376d5';
-import { createReasoner } from '../reasoner/index.mjs?v=d3e6211cc2';
+import { createReasoner } from '../reasoner/index.mjs?v=cee479f5d5';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=14798d6e5b';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=13d688a978';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -29,7 +29,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=e468d994f5';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=8ba02e1397';
 import { checkValues } from './value-check.mjs?v=dbf4aad634';
-import { Discourse } from './discourse.mjs?v=a757d86cc9';
+import { Discourse } from './discourse.mjs?v=60bac799e2';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
@@ -1212,7 +1212,8 @@ export class DialogSession {
       if (facts.length) {
         // a statement that cannot be true next to what is already known ("Tom has 3 apples" then "Tom ate 5") is said to the user and taken back (ops
         // reasoner; the matrix keeps it and flags it, spec 15): the world's `checkStatement` hook names the problem
-        const bad = this.isession.rs ? null : this._refuseFacts(seg.match?.worldId, facts);
+        const rsWhy = this.isession.rs?.refuseFacts(facts, this.isession);
+        const bad = this.isession.rs ? (rsWhy ? `That does not add up. ${rsWhy}` : null) : this._refuseFacts(seg.match?.worldId, facts);
         if (bad) { lines.push([T(bad)]); statuses.push('conflicting'); }
         else lines.push([T(interp.renderAck(this.isession, facts))]);
         if (!bad) disc.noteFacts(facts, this._msg, seg.text, seg.match?.worldId);

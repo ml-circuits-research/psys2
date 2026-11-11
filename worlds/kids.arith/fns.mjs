@@ -56,6 +56,14 @@ export function voice(ctx) {
       // an event that took more than the actor had is kept, flagged by the library: the question about the item is conflicting, with the reason
       const why = (env.status === 'missing' || env.status === 'conflicting') && impossible(ctx, item);
       if (why) return { status: 'conflicting', note: why };
+      // an event with no amount after the last statement ("Ana gives him some"): the count is a bound, never a made-up number
+      if (ok) {
+        const owner = bare(where.owner), at = Math.max(...(ctx.find(K('holding')).find((h) => bare(h.attrs.owner?.[0]) === owner && bare(h.attrs.item?.[0]) === item)?.attrs['core.seq'] ?? [0]).map(Number));
+        const open = (kind, key) => ctx.find(K(kind)).some((w) => bare(w.attrs[key]?.[0]) === owner && bare(w.attrs.item?.[0]) === item && w.attrs.count === undefined && seqOf(w) > at);
+        const more = open('give', 'to') || open('receive', 'who') || open('buy', 'who');
+        const fewer = open('give', 'who') || open('eat', 'who') || open('lose', 'who') || open('break', 'who');
+        if (more !== fewer) return { unit: more ? 'more_than' : 'fewer_than' };
+      }
       // only events were told (no start): the library knows the change since the last statement (`received`), and no more
       if (env.status === 'missing' && s.received !== undefined && Number(s.received) > 0) return { status: 'supported', value: s.received, unit: 'received', note: donor(ctx, bare(where.owner), item) };
       return {};
@@ -102,4 +110,16 @@ export function toState({ find }) {
     (holdings[un(w.attrs.owner?.[0])] ??= {})[un(w.attrs.item?.[0])] = n === undefined ? null : Number(n);
   }
   return { holdings };
+}
+
+/** The sentence for a statement the library cannot take (spec 11 section 12): the soft issue it raised, in the words of the ops reasoner ("Tom only had 3 apples, so Tom cannot eat 5."). */
+export function problem(ctx) {
+  const owner = bare(ctx.issue?.about?.owner), item = bare(ctx.issue?.about?.item);
+  if (!owner || !item || ctx.issue?.key !== 'count') return undefined;
+  // what the actor had before the statement: the count that now stands plus what the statement takes
+  const takes = ctx.facts.filter((f) => TAKES[f.type.split('.').pop()] && bare(f.attrs.who) === owner && bare(f.attrs.item) === item);
+  const last = takes.at(-1);
+  if (!last) return undefined;
+  const had = Number(ctx.issue.about.count) + takes.reduce((n, f) => n + Number(f.attrs.count ?? 0), 0);
+  return `${cap(subject(ctx, owner))} only had ${had} ${plural(item, had)}, so ${subject(ctx, owner)} cannot ${TAKES[last.type.split('.').pop()]} ${last.attrs.count}.`;
 }

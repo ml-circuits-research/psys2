@@ -246,6 +246,10 @@ const TABLE = [
   ['OK, the selection is now bold.', 'Bine, selecția este acum aldină.'], ['OK, the selection is now italic.', 'Bine, selecția este acum cursivă.'], ['OK, the selection is now underlined.', 'Bine, selecția este acum subliniată.'],
   // ---- SOPWORLD-1b: refused statements, unknown amounts, ties, "why?", corrections (worlds kids.arith, kids.shop, kids.tasks; src/dialog/discourse.mjs)
   ['That does not add up.', 'Nu se potrivește.'],
+  ['You have 1 leu left.', 'Ți-a rămas 1 leu.'],
+  ['You have {n} lei left.', 'Ți-au rămas {n:de} lei.'],
+  ['You have {n} {np} left.', 'Ți-au rămas {n:de} {np}.'],
+  ['You have {n} lei now.', 'Acum ai {n:de} lei.'],
   ['{w} only had {n} {np}, so {w2} cannot eat {n2}.', '{w} a avut doar {n:de} {np}, deci {w2} nu poate mânca {n2:de}.'],
   ['{w} only had {n} {np}, so {w2} cannot give away {n2}.', '{w} a avut doar {n:de} {np}, deci {w2} nu poate da {n2:de}.'],
   ['{w} only had {n} {np}, so {w2} cannot lose {n2}.', '{w} a avut doar {n:de} {np}, deci {w2} nu poate pierde {n2:de}.'],

@@ -46,7 +46,7 @@ One budget per turn. Every library call gets `{ steps: left }` where `left` is w
 | "I got 5 lei back for a book, what did I pay?" | 17 | `shop.gotBack` tells the purchase with its change as a goal, `shop.whatPaid` asks the library with `mode=abduce` for the open key `paid` |
 | "Ana got 2 apples from Tom. How many does Ana have?" | "Ana got 2 apples from Tom. I don't know how many Ana had before." | `delta=received` on the fluent: the known change stays when the start is unknown |
 | "Tom has 3, Mia has 3. Who has the most?" | `ambiguous` with both | the library's tie |
-| "Tom has 2 apples. Tom gives away 5" | kept; "That does not add up. Tom only had 2 apples, so Tom cannot give away 5." | `soft=true` on the count slot; the voice reads `issues()` |
+| "Tom has 2 apples. Tom gives away 5" | refused when told: "That does not add up. Tom only had 2 apples, so Tom cannot give away 5."; nothing changes | `soft=true` on the count slot raises an issue; `ReasonerSession.refuseFacts` sees the new issue (or a hard deny of the library), the world's `problem(ctx)` says it, and the library goes back (`rewind`) to before the statement (section "Coherence in matrix mode") |
 
 ## One undo
 The library is the only record of what was said. Nothing else holds state that could diverge from it:
@@ -57,13 +57,19 @@ The library is the only record of what was said. Nothing else holds state that c
 ## Stage 1 limits
 - The library holds the facts of the three worlds; the other worlds keep their engines and state. The switch never touches a world without `reasoner=matrix`: the same messages give the same replies, statuses and state in both settings (`tests/reasoner.test.mjs`).
 - The old operations are not removed, and `ops` stays the default.
-- A statement the library refuses (a hard deny) is not reported to the user (it is in `session.rs.refused` and the trace); a soft one is kept and flagged (above). Telling the user about a refused statement is SOPWORLD-1b item 2.
 - Kept in the host layer, not the library's job: reply wording (a/an, plurals, "costs" or "cost", "about", "from Tom"); the sentence for a zero divisor; which item to name when a price is missing (a lookup of the price wires); the text handling of kids.tasks (splitting "milk, eggs and bread", list names, what a named thing matches).
 
-- A statement the library refuses is not reported to the user (it is in `session.rs.refused` and the trace); the library follow-ups close the listed arith cases.
+
+## Coherence in matrix mode (SOPWORLD-1b item 2 in both strategies)
+The coherence measures of spec 11 section 12 hold when `reasoner=matrix`, through the library:
+- **A statement that cannot be true is said, not acknowledged.** Every segment's statements are told to the library; `ReasonerSession.refuseFacts` then looks for a hard deny of the library on those wires or a new issue (a soft constraint, `core.issue`) that was not standing at the start of the turn. The words come from the world's `problem(ctx)` export in `fns.mjs` (`ctx`: `why` = the deny's or issue's own text, `issue`, `facts`, `find`, `query`, `name`), else from the library's text (a `why` may quote the values, `?m`). The reply is "That does not add up. <reason>" with status `conflicting`, and the library is rewound to the mark taken before the segment's first tell (what the segment told is gone from the library and the session memory; the turn is a no-op for undo when nothing else changed).
+- **"No, ..." revises the last statement through the library.** `Discourse._correctFact` calls `ReasonerSession.retractFacts` (library `retract`: what followed from the facts goes too; refused when the library will not) and tells the corrected sentence as a new statement. "Undo" takes the correction back as one turn.
+- **"Why?" is the library's explanation.** `Discourse._known(ids)` takes the told leaves of `explain(id)` for each wire the answer (or the world's `why` hook) rests on, oldest first, and quotes the user's own sentence of each (`core.source`), never back-translated; a told wire counts even when other facts changed its value (Tom has 5, then gifts and meals: all three sentences are named). A told wire without a sentence of the dialogue is the price list. English and Romanian use the same parts (spec 11 section 12).
+- **Unknown amounts and starts.** The matrix of kids.arith answers "How many apples did Tom have at first?" with rules (the count a statement gave minus the sums of what came in and went out); "Ana gives him some" leaves a bound that `voice` says ("more than 5").
+- **"Which list did you put it on?"** kids.tasks' entries carry `batch` and `assumed` (legend keys); `toState` derives `last` from them.
 
 ## SOPWORLD-1b: what the default `ops` strategy does now
-The coherence failures that were ours (unread sentences, "why?", impossible statements, ties, unknown start) are closed in the rules and the dialogue layer, so both strategies are measured on sentences they can read: see spec 11 section 12. The `ops` strategy keeps the `from` list of every answer and explains with it; its impossible statements are refused when told (the matrix keeps them and flags them). New rules, phrase groups (`lang.quant.some`, `lang.quant.something`, `lang.then.now`) and replies are shared by both strategies; patterns whose reading differs from a matrix extra have a lower priority than the matrix extra, so the matrix reading still wins in matrix mode.
+The coherence failures that were ours (unread sentences, "why?", impossible statements, ties, unknown start) are closed in the rules and the dialogue layer, so both strategies are measured on sentences they can read: see spec 11 section 12. The `ops` strategy keeps the `from` list of every answer and explains with it; its impossible statements are refused when told (so does the matrix now, above). New rules, phrase groups (`lang.quant.some`, `lang.quant.something`, `lang.then.now`) and replies are shared by both strategies; patterns whose reading differs from a matrix extra have a lower priority than the matrix extra, so the matrix reading still wins in matrix mode.
 
 ## Certainty in replies (SOPWORLD-1b item 4, matrix mode)
 An answer that rests on a value of tier `default` or `guessed` says so once, after the answer, and the turn records it. Nothing of this exists in `ops`.

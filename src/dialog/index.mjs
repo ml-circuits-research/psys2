@@ -1212,7 +1212,8 @@ export class DialogSession {
       if (facts.length) {
         // a statement that cannot be true next to what is already known ("Tom has 3 apples" then "Tom ate 5") is said to the user and taken back (ops
         // reasoner; the matrix keeps it and flags it, spec 15): the world's `checkStatement` hook names the problem
-        const bad = this.isession.rs ? null : this._refuseFacts(seg.match?.worldId, facts);
+        const rsWhy = this.isession.rs?.refuseFacts(facts, this.isession);
+        const bad = this.isession.rs ? (rsWhy ? `That does not add up. ${rsWhy}` : null) : this._refuseFacts(seg.match?.worldId, facts);
         if (bad) { lines.push([T(bad)]); statuses.push('conflicting'); }
         else lines.push([T(interp.renderAck(this.isession, facts))]);
         if (!bad) disc.noteFacts(facts, this._msg, seg.text, seg.match?.worldId);

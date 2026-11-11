@@ -114,23 +114,16 @@
     input="Can I buy a ball?"
     expectStatus=missing
 
-@t.shop.n28 core.test
-    input="I have 4 lei. I buy a book. How much money do I have left?"
-    expectStatus=conflicting
-    reasoner=matrix
-
 @t.shop.n28o core.test
     input="I have 4 lei. I buy a book."
     expect="You only had 4 lei, so you cannot spend 12 lei."
     expectStatus=conflicting
     doc="SOPWORLD-1b: a purchase the user cannot pay is said, not acknowledged with OK, and does not happen"
-    reasoner=ops
 
 @t.shop.n28b core.test
     session=n28
     input="I have 4 lei. I buy a book. How much money do I have left?"
     expect="You have 4 lei"
-    reasoner=ops
 
 @t.shop.n29 core.test
     input="My mom gives me 10 lei. I have 3 lei. How much money do I have?"
@@ -730,65 +723,55 @@
     expect="What do you want to buy?"
     expectStatus=missing
     doc="SOPWORLD-1b: the item is not said: a question back, nothing bought, no item guessed"
-    reasoner=ops
 
 @t.shop.coh02 core.test
     session=coh1
     input="a ball"
     expect="OK, you bought 1 ball."
-    reasoner=ops
 
 @t.shop.coh03 core.test
     session=coh3
     input="I have 20 lei. I buy a ball."
     expect="you bought 1 ball"
-    reasoner=ops
 
 @t.shop.coh04 core.test
     session=coh3
     input="Three of them."
     expect="OK, that makes 3 balls."
     doc="SOPWORLD-1b: the count of the last purchase is revised, not a second purchase"
-    reasoner=ops
 
 @t.shop.coh05 core.test
     session=coh3
     input="How much money do I have?"
     expect="You have 5 lei left."
-    reasoner=ops
 
 @t.shop.coh06 core.test
     session=coh6
     input="I have 20 lei. I buy 2 kites."
     expect="OK, you bought 2 kites."
-    reasoner=ops
 
 @t.shop.coh06b core.test
     session=coh6
     input="Why do I have nothing left?"
     expect="you bought 2 kites (10 lei each, 20 lei in all), so nothing is left."
     doc="SOPWORLD-1b: why? names the facts used"
-    reasoner=ops
 
 @t.shop.coh07 core.test
     session=coh6
     input="why?"
     expect="I worked that out from what you told me"
-    reasoner=ops
 
 @t.shop.coh08 core.test
     language=ro
     session=coh8
     input="Am 20 de lei. Cumpăr 2 zmeie."
     expect="ai cumpărat 2 zmeie"
-    reasoner=ops
 
 @t.shop.coh08b core.test
     language=ro
     session=coh8
     input="De ce nu mai am nimic?"
     expect="nu a rămas nimic"
-    reasoner=ops
 
 @t.shop.coh09 core.test
     language=ro
@@ -796,14 +779,12 @@
     input="Am 10 lei. Cumpăr o carte."
     expect="nu poți cheltui 12 lei"
     expectStatus=conflicting
-    reasoner=ops
 
 @t.shop.coh10 core.test
     language=ro
     session=coh10
     input="Am 20 de lei. Cumpăr ceva."
     expect="What do you want to buy?"
-    reasoner=ops
 
 
 @t.shop.m01 core.test

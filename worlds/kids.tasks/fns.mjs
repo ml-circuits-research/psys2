@@ -30,18 +30,19 @@ const named = (items, text) => {
 const missing = (value) => ({ status: 'missing', ...(value === undefined ? {} : { value }) });
 const ambiguous = (found) => ({ status: 'ambiguous', alternatives: found.map((e) => `${e.text} (${e.list})`) });
 
-function addTo(ctx, list, item) {
+function addTo(ctx, list, item, assumed = false) {
   const have = entries(ctx, list).map((e) => e.text);
   const all = split(item);
   const added = all.filter((text) => !have.includes(text)), present = all.filter((text) => have.includes(text));
-  for (const text of added) ctx.tell(`@task_${ctx.world.seq + 1} kids.tasks.entry list=${q(list)} text=${q(text)} progress=todo`);
+  const batch = ctx.world.seq + 1;   // the request: "which list did you put it on?" answers about the newest one
+  for (const text of added) ctx.tell(`@task_${ctx.world.seq + 1} kids.tasks.entry list=${q(list)} text=${q(text)} progress=todo batch=${batch}${assumed ? ' assumed=true' : ''}`);
   if (!all.length) return missing(list);
   const note = !present.length ? undefined : added.length ? `${cap(joinAnd(present))} ${were(present, 'were', 'was')} already there.` : `${cap(joinAnd(present))} ${were(present, 'are', 'is')} already on your ${list} list.`;
   return { value: list, ...(added.length ? { values: added } : {}), ...(note ? { note } : {}) };
 }
 
 export const fns = {
-  add: (ctx, { item, list }) => addTo(ctx, listName(list), item),
+  add: (ctx, { item, list, assumed }) => addTo(ctx, listName(list), item, assumed === 'true' || assumed === true),
   remind: (ctx, { item }) => addTo(ctx, 'reminders', item),
   remove(ctx, { item, list }) {
     const name = list === undefined ? undefined : listName(list);
@@ -126,7 +127,12 @@ export function toState({ find }) {
     counter++;
     (lists[un(w.attrs.list?.[0])] ??= []).push({ id: w.id, text: un(w.attrs.text?.[0]), done: un(w.attrs.progress?.[0]) === 'done' });
   }
-  return { lists, counter };
+  // the newest request that put something on a list (ops keeps it as `last`: "which list did you put it on?")
+  const batches = find('kids.tasks.entry').filter((w) => w.attrs.batch);
+  const top = Math.max(0, ...batches.map((w) => Number(w.attrs.batch[0])));
+  const mine = batches.filter((w) => Number(w.attrs.batch[0]) === top);
+  const last = mine.length ? { list: un(mine[0].attrs.list?.[0]), items: mine.map((w) => un(w.attrs.text?.[0])), assumed: mine.some((w) => un(w.attrs.assumed?.[0]) === 'true') } : undefined;
+  return { lists, counter, ...(last ? { last } : {}) };
 }
 
 /** An entry that was not marked done is "todo" by default; that is how a list is read, not an assumption worth saying. */

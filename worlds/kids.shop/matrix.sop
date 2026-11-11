@@ -76,7 +76,7 @@
 @shop.a.bal kids.shop.balance core.on=$shop.q.bal amount=?m
 @shop.r.bal core.rule when=$shop.q.bal when=$shop.w then=$shop.a.bal
 # spending more than there was is kept (somebody said it) and stands as an issue of the wallet: every answer that rests on the wallet says so
-@shop.d.debt core.deny soft=true when=$shop.w if=$shop.t.debt why="more was spent than there was"
+@shop.d.debt core.deny soft=true when=$shop.w if=$shop.t.debt why="you would be left with ?m lei"
 
 # ---- can I afford it: the money against the cost
 @shop.q.aff kids.shop.affordability

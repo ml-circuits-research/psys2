@@ -127,3 +127,20 @@ export function assumed({ key, value, attrs }) {
   if (key !== 'count' || !attrs.item) return null;
   return `${value} ${attrs.item}${Number(value) === 1 ? '' : 's'}`;
 }
+
+/** The sentence for a statement the library cannot take (spec 11 section 12): "You only had 10 lei, so you cannot spend 12 lei." (the wallet's issue says what is left: negative). */
+export function problem(ctx) {
+  const amount = Number(ctx.issue?.about?.amount);
+  if (!Number.isFinite(amount)) return undefined;
+  let spent = 0;
+  for (const f of ctx.facts) {
+    if (/\.expense$/.test(f.type)) spent += Number(f.attrs.count ?? 0);
+    else if (/\.purchase$/.test(f.type)) {
+      const where = { item: f.attrs.item, count: f.attrs.count ?? 1 };
+      const r = ctx.query({ type: K('total'), seek: 'total', where });
+      if (r.status !== 'supported') return undefined;
+      spent += Number(r.value);
+    }
+  }
+  return spent ? `You only had ${amount + spent} lei, so you cannot spend ${spent} lei.` : undefined;
+}
