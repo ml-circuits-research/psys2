@@ -2515,3 +2515,20 @@ In Chrome (`undo-cross.mjs`, `shared.mjs`, `undo-cross3.mjs`), every undo now na
 The tic-tac-toe sequence is also right: the move, then the new game, then "she eats 1 apple". "what is on my shopping list?" after a removal now answers that the list is empty.
 
 Still open: RE-VENDOR at 89bf69d (or at the end of the library's Round 6, see below), RO-TRANSLATE-FALLBACK, and the docs finding (the title is missing in "read sentence 900").
+
+## Wave 2: geo.map + data.charts (reviewer, 2026-11-11 22:55)
+
+Accepted (6975928). The report is honest: about 10% of the map's ops.mjs is replaced by rules and none of it is removed; the 1,250-place kb is kept out of the wires (37 ms against 6 ms); matrix is +6% per turn.
+- The library ideas are now Round 6 R6.13–R6.17 (573e2c1). Copy-on-write cost and redo were done in the library's Round 5 and R6.8. **After the re-vendor, measure the kb as wires again**: P2 may make it affordable.
+- In Chrome (`/home/claude/shot/map-charts.mjs matrix|ops`), matrix and ops give identical replies, EN and RO.
+- The duplicate-label deny is a real gain.
+
+Both modes, pre-existing; add these to RO-TRANSLATE-FALLBACK:
+- "cât de departe e Parisul de Roma?" is answered in English.
+- "care e cel mai mare?" gives "Pears is the biggest, with 5.": English, and the label is not the user's word ("pere").
+- "o bară grafic" should read "un grafic cu bare".
+- "show Atlantis" gives "I did not understand…". An unknown place should be said as one: "I do not know a place called Atlantis."
+
+`npm test` result is below.
+- npm test: # pass 1341
+- npm test: # fail 0
