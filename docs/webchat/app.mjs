@@ -1168,9 +1168,9 @@ export async function mountPsys2(element, options = {}) {
   }
   /** Settings › Developer › Reasoner (spec 15): which engine answers the worlds that ship a matrix. Read when the engine starts, so a change restarts it from the last state. */
   function reasonerGroup() {
-    const current = settings.reasoner === 'matrix' ? 'matrix' : 'ops';
-    return field('Reasoner', select([['ops', 'Operations (default)'], ['matrix', 'Matrix where available (sopworld)']], current, (v) => {
-      settings.reasoner = v === 'matrix' ? 'matrix' : 'ops'; save();
+    const current = settings.reasoner === 'ops' ? 'ops' : 'matrix';
+    return field('Reasoner', select([['matrix', 'Matrix where available (sopworld, default)'], ['ops', 'Operations (fallback)']], current, (v) => {
+      settings.reasoner = v === 'ops' ? 'ops' : 'matrix'; save();
       Promise.resolve(engineClient?.restart?.('reasoner')).catch(() => {});
       renderSettings();
     }), 'Operations: every world answers through its own code, as always. Matrix: kids.shop, kids.arith and kids.tasks answer through the sopworld library (rules, states, aggregates, retract, explain) and gain a few things: a missing item is asked for, “three of them” revises a purchase, “undo that” takes it back, “why?” says what an answer rests on, “what did I pay?” is worked backwards. Changing it restarts the engine; what you said so far in the other worlds is kept, the shop, arithmetic and list facts are not.');

@@ -793,7 +793,7 @@ export class Discourse {
   }
 
   /** The statements an answer rests on, as the user said them ("I worked it out from ..."); with the matrix reasoner they come from the library's explanation. */
-  _because(f) { return f.from?.length ? this._known(f.from) : []; }
+  _because(f) { return f.from?.length ? this._known(f.from) : f.fromLater ? this._known(f.fromLater()) : []; }
 
   // ---- topic return --------------------------------------------------------------------------------------------------------------
 

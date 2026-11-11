@@ -11,6 +11,7 @@
     kind=request
     priority=14
     example="I got 5 lei back for a book."
+    canonical="I got 5 lei back for a book."
 
 @pat.kids.shop.m.whatpaid core.pattern
     match="what did i pay"
@@ -18,6 +19,7 @@
     kind=request
     priority=14
     example="What did I pay?"
+    canonical="What did I pay?"
 
 @pat.kids.shop.m.buy.the core.pattern
     match="i [$kids.shop.g95_buy] [the|that|this] {i1:lex.kids.shop.items}"

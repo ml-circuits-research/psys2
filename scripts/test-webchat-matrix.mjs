@@ -3,18 +3,19 @@
 /**
  * Matrix reasoner in the real webchat (SOPWORLD-1, spec 15): headless Chrome, 390x844, CPU throttling (default 4x), rules formalizer.
  *
- *   default   the Reasoner setting is `ops`: "add to my list" still reads as before and nothing of the matrix shows.
+ *   default   no saved Reasoner: the default is `matrix` (user decision 2026-11-11): "add to my list" asks, and a saved `ops` of an older settings version is migrated once.
+ *   ops       the explicit `ops` fallback: "add to my list" still reads as before and nothing of the matrix shows.
  *   ask       matrix: "add to my list" asks "What shall I put on the list?" and "bread" completes it.
  *   revise    matrix: "I buy a ball" then "three of them" revises the purchase; the money follows.
  *   undo      matrix: "undo that" takes the purchase back and the money is back.
  *   why       matrix: "why?" after a shop answer says what the answer rests on (the library's `explain`).
  *   abduce    matrix: "I got 5 lei back for a book, what did I pay?" answers 17.
- *   setting   Settings > Developer > Reasoner switches the engine (a restart) and the gains appear.
+ *   setting   Settings > Developer > Reasoner (default matrix) switches the engine to ops (a restart) and the matrix gains disappear.
  *   assume    matrix: "I buy the ball" then "how much money do I have?" says "I assumed 1 ball." once; the phrase log record carries the assumption.
  *   tictactoe matrix: an illegal move is refused with the reason and the tab board does not change, "undo" takes the move back (the board on the tab follows),
  *             "why did you play there?" explains, a finished game refuses moves.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ask,revise,undo,why,abduce,setting,assume,tictactoe] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -23,21 +24,35 @@ import { fileURLToPath } from 'node:url';
 import { openChat } from './test-webchat-turns.mjs';
 
 const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' };
+const OPS = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 4 };   // an explicit choice of the current settings version
 const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? `  (${detail})` : ''}`); return ok; };
 const say = async (c, text) => { const r = await c.say(text); return r.reply; };
 
 export const SCENARIOS = {
   async default(o) {
-    const c = await openChat({ ...o, settings: { formalizer: 'rules', normalizer: false, showTrace: false } });
+    // no `reasoner` saved; and a saved `ops` from settings version 3 (the old default, not a choice) is migrated to matrix once
+    for (const [label, settings] of [['nothing saved', { formalizer: 'rules', normalizer: false, showTrace: false }], ['old saved ops (v3)', { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 3 }]]) {
+      const c = await openChat({ ...o, settings });
+      try {
+        const a = await say(c, 'add to my list');
+        check(`default (${label}): the reasoner is matrix, "add to my list" asks what to put on the list`, /What shall I put on the list\?/.test(a), a.slice(0, 80));
+        const saved = await c.pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.settings') ?? '{}').reasoner);
+        check(`default (${label}): the saved setting is matrix or absent`, saved === 'matrix' || saved === undefined, String(saved));
+        check(`default (${label}): no page errors`, c.errors.length === 0, c.errors[0] ?? '');
+      } finally { await c.close(); }
+    }
+  },
+  async ops(o) {
+    const c = await openChat({ ...o, settings: OPS });
     try {
       const a = await say(c, 'add to my list');
-      check('default: the setting is ops, "add to my list" is read as it always was (no question asked)', !/What shall I put on the list/.test(a), a.slice(0, 80));
+      check('ops: the explicit ops setting is respected, "add to my list" is read as it always was (no question asked)', !/What shall I put on the list/.test(a), a.slice(0, 80));
       await say(c, 'I have 20 lei'); await say(c, 'I buy a ball');
       // Since SOPWORLD-1b item 2 the ops rules also revise the last purchase (shop.reviseLast), so both strategies read it.
       const t = await say(c, 'three of them');
-      check('default: "three of them" revises the purchase in ops too (shop.reviseLast)', /3 balls|that makes 3/i.test(t), t.slice(0, 80));
-      check('default: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+      check('ops: "three of them" revises the purchase in ops too (shop.reviseLast)', /3 balls|that makes 3/i.test(t), t.slice(0, 80));
+      check('ops: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
   async ask(o) {
@@ -98,19 +113,19 @@ export const SCENARIOS = {
       await pg.waitForSelector('#p2-st-developer', { timeout: 5000 });
       await pg.click('#p2-st-developer');
       await pg.waitForSelector('#p2-f-reasoner', { timeout: 5000 });
-      check('setting: Settings > Developer has a Reasoner select, default ops', (await pg.$eval('#p2-f-reasoner', (s) => s.value)) === 'ops');
+      check('setting: Settings > Developer has a Reasoner select, default matrix', (await pg.$eval('#p2-f-reasoner', (s) => s.value)) === 'matrix');
       const opts = await pg.$$eval('#p2-f-reasoner option', (os) => os.map((x) => x.value));
-      check('setting: the options are ops and matrix', JSON.stringify(opts) === JSON.stringify(['ops', 'matrix']), opts.join(','));
-      await pg.select('#p2-f-reasoner', 'matrix');
+      check('setting: the options are matrix and ops', JSON.stringify(opts) === JSON.stringify(['matrix', 'ops']), opts.join(','));
+      await pg.select('#p2-f-reasoner', 'ops');
       const saved = await pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.settings') ?? '{}').reasoner);
-      check('setting: the choice is saved', saved === 'matrix', String(saved));
+      check('setting: the choice is saved', saved === 'ops', String(saved));
       await pg.keyboard.press('Escape');
       await pg.waitForFunction(() => !document.querySelector('.p2-modal'), { timeout: 5000 }).catch(() => {});
       // the engine restarts: wait until it answers again
       await new Promise((r) => setTimeout(r, 500));
       let a = '';
-      for (let i = 0; i < 3 && !/What shall I put on the list\?/.test(a); i++) a = await say(c, 'add to my list');
-      check('setting: after the switch the matrix reasoner answers ("add to my list" asks)', /What shall I put on the list\?/.test(a), a.slice(0, 80));
+      for (let i = 0; i < 3 && !a; i++) a = await say(c, 'add to my list');
+      check('setting: after the switch to ops "add to my list" no longer asks', a !== '' && !/What shall I put on the list\?/.test(a), a.slice(0, 80));
       check('setting: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },

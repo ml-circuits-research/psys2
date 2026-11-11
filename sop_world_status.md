@@ -4,13 +4,13 @@ Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-
 
 ## How it is switched
 
-- sopworld is a **strategy behind a flag**, not the default. The default reasoner is `ops`.
+- **User decision 2026-11-11: sopworld (`matrix`) is the default reasoner.** `ops` stays available behind the same flag as the fallback.
 - Switch:
-  - Webchat: Settings › Developer › Reasoner (`ops` / `matrix`).
-  - CLI and evaluations: `--reasoner ops|matrix`, or the environment variable `PSYS2_REASONER=matrix`.
+  - Webchat: Settings › Developer › Reasoner (`matrix` default / `ops`); settings version 4 migrates a saved `ops` once to `matrix`.
+  - CLI and evaluations: `--reasoner ops|matrix` (default `matrix`), or the environment variable `PSYS2_REASONER=ops`.
 - Only worlds that opt in with `reasoner=matrix` (plus a `matrix.sop` and a `fns.mjs`) use the library: today `kids.shop`, `kids.arith` and `kids.tasks`. Every other world takes the `ops` path in both modes.
 - `games.guess#030.ro` seemed to change outcome with the switch. Cause: not that world. The eval counted kids.arith's lazily created empty state as a change in ops mode only. Fixed (a matrix world's state now appears with its first answer, as in ops); a test asserts identical replies, statuses and state for a non-matrix world under both settings.
-- The library is vendored as one file in `src/vendor/sopworld/` and loaded lazily, only in matrix mode. The host layer is `src/reasoner/index.mjs` and the spec is 15.
+- The library is vendored as one file in `src/vendor/sopworld/` and loaded lazily (a dynamic import in the engine worker), only in matrix mode, which is now the default. The host layer is `src/reasoner/index.mjs` and the spec is 15.
 
 ## The experiment: what sopworld gains
 
@@ -235,4 +235,4 @@ Verdict, in plain words:
 
 - The library adds 75.7 kB gzip in matrix mode. It is acceptable while the bundle loads lazily, but it should be measured on a phone.
 - Matrix mode is 9% slower per turn (p50). It must be rechecked with 0.6.1 and inside the compute budgets (`src/dialog/budget-limits.mjs`).
-- The default stays `ops` until the A/B experiment shows a clear gain with no regression on the user's real phrases.
+- **Decided 2026-11-11: the default is `matrix`.** The two wording points where ops was better in the A/B are fixed ("what did you do?" keeps its source sentence; a purchase without a count says "OK, you bought 1 ball. I assumed 1 ball.").

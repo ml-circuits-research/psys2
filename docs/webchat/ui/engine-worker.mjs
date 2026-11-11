@@ -120,7 +120,7 @@ async function init(m) {
   // The browser Translation API and language detector exist on the page only: the worker asks the page for them, with a deadline (then the rules answer)
   const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
-  engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'matrix' ? 'matrix' : 'ops' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
+  engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
   if (testHooks) installFaults();
   const rules = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
   rules.catch(() => {});

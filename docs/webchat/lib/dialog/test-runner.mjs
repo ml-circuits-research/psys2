@@ -18,7 +18,7 @@ export async function runWorldTests(engine, worldId) {
   if (!world) { result.failed.push({ id: worldId, message: 'unknown world' }); return result; }
   const sessions = new Map();
   for (const t of [...world.tests].sort((a, b) => natural(a.id, b.id))) {
-    if (t.reasoner && t.reasoner !== (engine.reasonerMode ?? 'ops')) { result.other.push(t.id); continue; }   // a test of the other strategy is neither run nor counted
+    if (t.reasoner && t.reasoner !== (engine.reasonerMode ?? 'matrix')) { result.other.push(t.id); continue; }   // a test of the other strategy is neither run nor counted
     result.total++;
     if (t.language !== 'en' && !engine.translator) { result.skipped.push({ id: t.id, reason: 'no translator available' }); continue; }
     let s = t.session ? sessions.get(t.session) : null;
