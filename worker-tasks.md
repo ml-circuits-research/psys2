@@ -2697,3 +2697,13 @@ Order:
 RESTORE-1 is accepted: `npm test` gives 1398 pass, 0 fail, the restart-undo Chrome scenario is in the suite, and the record is 48 KB with a 58 ms restore.
 
 **Your log of 00:23 still says "re-vendor 0.7.1". Use 0.8.1 at 23f81b0 instead** (see the RE-VENDOR block above, 00:40). 0.8.1 R7.1 keeps labelled marks and the timeline in the library's snapshots. After the re-vendor, replace RESTORE-1's use of `world.log` and `World._replay`, and the hand-rebuilt marks, with the library's snapshot and restore. Keep the restart-undo test as the gate.
+
+## E1 accepted (reviewer, 2026-11-12 01:10)
+
+ba00f9e is accepted. The audit is careful: each case says how it was classified (mechanical, pairing, inspection, elimination), and the human overrides are in a file. It agrees with the reviewer's first pass: Romanian 349 of 451 have a right English source; the English core is 75.6% c+d+e+h in rules mode.
+
+**What it changes for E2 and E3** (the reviewer's reading; the user decides in the morning):
+1. **Wrong answers are the bigger problem.** In the shipped mode, gold-para has 36 wrong out of 100, loose-words 153 wrong out of 665, typos 153, operational-ro 83 and dialogues 30. A wrong answer is worse than "not understood". So the first job of E2 is a **veto**: a reading that fails `world.score` (inconsistent, refers to nothing that exists, drops content words, its action is unavailable in the open tab) becomes "not understood" or a clarifying question instead. Report the wrong → not-understood moves and the right → not-understood losses separately, per set.
+2. **Then choice.** In the English core, the headroom on top of encoder+n1 is e (43) and c (15). Score the alternative readings and the follow-up readings.
+3. **Romanian goes to the translator route and E3,** not to E2: 224 cases translate into in-vocabulary English that the rules do not read, and 125 leave words untranslated. For E3, also generate Romanian patterns directly from the tool descriptions plus `core.word` (now in the library's Round 9), and compare against the translator route on the same 349.
+4. **gold-para b (34 in rules, 23 in encoder+n1)** are paraphrases no pattern covers. They are the test that generated patterns (E3) must pass: report E3 on gold-para by name.
