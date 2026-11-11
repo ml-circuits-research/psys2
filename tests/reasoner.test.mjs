@@ -35,7 +35,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
   assert.equal(ops.set.get('kids.time').reasoner, 'ops', 'every other world stays on ops');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
@@ -43,13 +43,13 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.problems, []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.arith', 'kids.shop', 'kids.tasks']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130]]) {
+test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }
@@ -580,4 +580,46 @@ test('games.guess: undo goes back through the library: a clue, an answer (the qu
   sameAsLibrary(s, ['games.guess']);
   const none = await say(matrix, ['undo']);
   assert.equal(none.out[0], 'There is nothing to undo.', 'nothing to undo before any game (generic undo)');
+});
+
+// ---- kids.shapes on the matrix (stage 2) --------------------------------------------------------------------------------------------------------
+
+const SHAPES = ['How many sides does a hexagon have?', 'why?', 'Is a square a rectangle?', 'Is a rectangle a square?', 'Is a circle a polygon?', 'Describe a circle', 'Describe a hexagon',
+  'A trapezium has 4 sides.', 'How many corners does a trapezium have?', 'Which shapes have 4 sides?', 'What color is a banana?', 'Is a banana red?', 'Is a zebra white?', 'What do red and yellow make?',
+  'What do yellow and red make?', 'Which colors make orange?', 'Is red a primary color?', 'Is orange a primary color?', 'A square has 5 sides.', 'How many sides does a square have?',
+  'Describe a unicorn', 'Is a unicorn a polygon?', 'Which shapes have 12 sides?', 'What kind of color is green?', 'Which colors make pink?'];
+
+test('kids.shapes: a scripted session says the same as the ops reasoner, word for word, with the same statuses', async () => {
+  const run = async (eng) => {
+    const s = eng.createSession({ language: 'en' });
+    const out = [];
+    for (const l of SHAPES) { const r = await s.send(l, {}); out.push([r.text, r.statuses.join()]); }
+    return { s, out };
+  };
+  const o = await run(ops), m = await run(matrix);
+  assert.deepEqual(m.out, o.out);
+  assert.deepEqual(matrix.reasoner.problems, []);
+});
+
+test('kids.shapes: the questions the matrix answers come from the library, the checks and the lookups it leaves (ops=) from the operations', async () => {
+  const s = matrix.createSession({ language: 'en' });
+  const via = async (text) => { const r = await s.send(text, {}); return r.answers?.[0]?.envelope?.via ?? null; };
+  assert.equal(await via('Describe a circle'), 'core.matrix');
+  assert.equal(await via('Is a rectangle a square?'), 'core.matrix');
+  assert.equal(await via('How many sides does a hexagon have?'), 'core.matrix');
+  assert.notEqual(await via('Is a banana red?'), 'core.matrix', 'a check carries the value it seeks');
+  assert.notEqual(await via('What do red and yellow make?'), 'core.matrix');
+  const lib = s.isession.rs.world;
+  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'circle').map((w) => w.attrs.summary), [['round']]);
+  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'hexagon').map((w) => w.attrs.summary), [['flat']]);
+});
+
+test('kids.shapes: a taught fact is a wire of the library: the rules read it (flat), a question answers from it, undo takes it back', async () => {
+  const { s } = await say(matrix, ['A trapezium has 4 sides.']);
+  const lib = s.isession.rs.world;
+  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'trapezium').map((w) => w.attrs.summary), [['flat']]);
+  assert.equal((await s.send('How many sides does a trapezium have?', {})).text, 'A trapezium has 4 sides.');
+  assert.match((await s.send('undo', {})).text, /^OK, I took that back/);
+  assert.equal(lib.ofType('kids.shapes.shape').some((w) => w.attrs.name?.[0] === 'trapezium'), false);
+  assert.deepEqual((await s.send('How many sides does a trapezium have?', {})).statuses, ['missing']);
 });

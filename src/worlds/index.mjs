@@ -61,6 +61,8 @@ export class World {
   get undoAction() { return txt(this.manifest ?? { entries: [] }, 'undo') ?? null; }
   /** Wire types the world's matrix actions write and other worlds read from the session memory (`mirror=<type>`, repeatable): the host layer copies them there. */
   get mirrors() { return getAll(this.manifest ?? { entries: [] }, 'mirror').map((v) => v.v); }
+  /** Keys (`type.key`) whose questions the matrix leaves to the operations (`ops=<key>`, repeatable). */
+  get opsKeys() { return getAll(this.manifest ?? { entries: [] }, 'ops').map((v) => v.v); }
   get language() { return txt(this.manifest ?? { entries: [] }, 'language') ?? 'en'; }
   /** Plain summary for listings. */
   summary() {

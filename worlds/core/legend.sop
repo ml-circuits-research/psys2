@@ -333,6 +333,12 @@
     ask="which wire types?"
     doc="Wire types that the world's matrix actions write and other worlds read from the session memory (for example kids.tasks.entry for charts and documents). With reasoner=matrix the host layer copies them from the library's World into the session memory after every action."
 
+@core.world.ops core.key
+    value=atom
+    card=many
+    ask="which keys?"
+    doc="With reasoner=matrix: keys (type.key, for example kids.shapes.thing.is_color) whose questions the matrix leaves to the operations of the world (ops.mjs): checks that carry the value they seek (\"is a banana red?\": a library query would answer the value it was given) and lookups that read the facts in both orders. A question about one of them is never asked to the library."
+
 @core.world.undo core.key
     value=atom
     card=one

@@ -92,12 +92,13 @@ export async function createReasoner(set, { lib = null } = {}) {
   const whyOf = new Map(worlds.filter((w) => typeof w.whyWords === 'function').map((w) => [w.id, w.whyWords]));
   const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
   const mirrors = [...new Set(worlds.flatMap((w) => w.mirrors))];
+  const opsKeys = new Set(worlds.flatMap((w) => w.opsKeys));   // questions the matrix leaves to the operations (world.sop `ops=`)
   const empties = new Map();
   // the matrix's own declarations of its actions (`core.action name=... ask.<key>=... template.<key>=...`): what a missing argument asks and how the answer completes the sentence
   const actions = new Map();
   for (const m of base.matrix.values()) if (m.type === 'core.action') actions.set(unquote(first(m.attrs.name)), m.attrs);
   const reasoner = {
-    lib, base, voices, assumedBy, problemOf, whyOf, undoOf, mirrors, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
+    lib, base, voices, assumedBy, problemOf, whyOf, undoOf, mirrors, opsKeys, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
     /** The matrix world that owns a question type (longest world id that prefixes it), or null. */
     ownerOfType: (type) => owners.find((id) => type === id || String(type).startsWith(id + '.')) ?? null,
     ownerOfAction: (action) => actionOwner.get(action) ?? null,
@@ -302,7 +303,7 @@ export class ReasonerSession {
   owns(wire) {
     const val = (k) => wire.entries.find((e) => e.key === k)?.value?.v;
     const L = this.reasoner.legends;
-    if (L.isA(wire.type, 'core.question')) return !!this.reasoner.ownerOfType(val('core.question.type'));
+    if (L.isA(wire.type, 'core.question')) return !!this.reasoner.ownerOfType(val('core.question.type')) && !this.reasoner.opsKeys.has(`${val('core.question.type')}.${keyName(val('core.question.seek') ?? '')}`);
     if (L.isA(wire.type, 'core.request')) return !!this.reasoner.ownerOfAction(val('core.request.action'));
     return false;
   }

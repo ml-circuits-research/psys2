@@ -1,0 +1,18 @@
+@tpl.kids.shapes.m.summary core.template
+    for=kids.shapes.shape.summary
+    text="{name:a:cap} is {value}"
+
+@tpl.kids.shapes.m.holds.yes core.template
+    for=kids.shapes.family.holds
+    when="value=true"
+    text="Yes, {shape:a} is {kind:a}."
+
+@tpl.kids.shapes.m.holds.no.because core.template
+    for=kids.shapes.family.holds
+    when="value=false"
+    text="No, {shape:a} is not {kind:a}. {note}"
+
+@tpl.kids.shapes.m.holds.no core.template
+    for=kids.shapes.family.holds
+    when="value=false"
+    text="No, {shape:a} is not {kind:a}."

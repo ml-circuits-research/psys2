@@ -2351,3 +2351,56 @@
     input="how is a circle different from other shapes"
     expect="round shape"
     doc="GAPS-1"
+
+@t.kids.shapes.m01 core.test
+    session=ksm1
+    input="Describe a circle"
+    expect="A circle is a round shape with no sides and no corners."
+    expectStatus=supported
+    doc="SOPWORLD stage 2: round or flat is a rule of the matrix, an explicit no comes with its reason, a taught fact is undone with the library"
+    reasoner=matrix
+
+@t.kids.shapes.m02 core.test
+    session=ksm1
+    input="A trapezium has 4 sides."
+    expect="OK, a trapezium has 4 sides."
+    reasoner=matrix
+
+@t.kids.shapes.m03 core.test
+    session=ksm1
+    input="How many sides does a trapezium have?"
+    expect="A trapezium has 4 sides."
+    reasoner=matrix
+
+@t.kids.shapes.m04 core.test
+    session=ksm1
+    input="undo"
+    expect="OK, I took that back"
+    expectStatus=supported
+    reasoner=matrix
+
+@t.kids.shapes.m05 core.test
+    session=ksm1
+    input="How many sides does a trapezium have?"
+    expectStatus=missing
+    reasoner=matrix
+
+@t.kids.shapes.m06 core.test
+    session=ksm1
+    input="Is a rectangle a square?"
+    expect="No, a rectangle is not a square. A rectangle is a square only when all four sides are equal."
+    expectStatus=supported
+    reasoner=matrix
+
+@t.kids.shapes.m07 core.test
+    session=ksm1
+    input="Is a square a rectangle?"
+    expect="Yes, a square is a rectangle."
+    reasoner=matrix
+
+@t.kids.shapes.m08 core.test
+    session=ksm1
+    input="Is a banana red?"
+    expect="No, a banana is not red. It is usually yellow."
+    expectStatus=supported
+    reasoner=matrix
