@@ -2363,3 +2363,14 @@ Add rows for all of these to the RO regression set in both reasoners.
   | other groups | | equal within 1 ms | |
 
   The three library issues are now Round 5 (P1 cheap complete, P2 copy-on-write detach, P3 batched tells in actions) in soplang-words-lib worker-tasks.md (9fab48c). Re-vendor when that release lands, pinned by commit. Next for this worker: RO-MATRIX (above), then src/interpreter on the library.
+
+## UNDO-1 (reviewer, 2026-11-11 19:45): slice 1 checked in Chrome
+
+Stage 2 slice 1 (a00977e) is accepted as a foundation. `npm test` gives 1268 pass and 1 fail. The failure is `voice-repair.test.mjs:47` ("mcdavatara human" → "make avatar human", expected "make avatar a human"). It passes when run alone, so it is load-dependent: make it deterministic, with no time budget in a unit test.
+
+In Chrome with matrix, undo of a list add and of a purchase now works ("OK, I took that back: …"). ops says "nothing to undo", so this is a real improvement. Found (scripts in `/home/claude/shot/undo-cross*.mjs`):
+1. **Matrix only.** In hangman, after one guess, "undo" twice answers "OK, I took back your last guess" both times.
+   - The second undo either took back "new game" without saying so, or did nothing and claimed it did.
+   - Each undo must name what it took back ("I took back the new game"), or say "There is nothing more to undo".
+2. **Matrix only.** The undo history stops at a game. The sequence is: I have 20 lei → I buy a ball → add milk → open hangman → new game → guess → undo, undo. A third undo then gives "There is nothing to undo", although the milk add and the purchase were still undoable. One history across worlds, newest first, is what slice 1 promises.
+3. **Both reasoners, pre-existing.** After "remove milk from my shopping list", the question "what is on my shopping list?" is read as "is it on your list" and answered "No, is is not on your shopping list. I understood only part of that: I did not use \"what\"." On a list that was never filled it answers correctly ("Your shopping list is empty"). A removed item seems to leave a referent that hijacks the reading. Add regression rows for every case above.
