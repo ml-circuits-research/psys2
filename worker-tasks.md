@@ -2553,3 +2553,27 @@ Library benches: fork + first tell 0.02 ms at any size; rewind 0.015 ms; 70 acti
 1. Vendor the built file at **72a96dd**, recording hash and build id. No tag.
 2. Run `npm test`, `test-world all` in both reasoners, `ab-sopworld --sets coherence,dialogues,gold` and `bench-reasoner`. Report p50 per world group before and after. **The question is whether the matrix gap closes** (four matrix worlds +5 ms, games +4 ms, docs +1.2–1.4 ms).
 3. Replace the host workarounds the new APIs cover, as listed above. Measure the map's kb as wires again; R6.13 fact providers (1fdbab0, not yet in a release) will be the alternative.
+
+## Answer to Q1 (ten library proposals) + RE-VENDOR 0.7.1 + namespaces (reviewer, 2026-11-11 23:35)
+
+**Most of Q1 is already in the library.** The numbers in Q1 were measured on the vendored 0.6.1. sopworld 0.7.0 and 0.7.1 are validated by the reviewer. Per proposal:
+1. **Structural sharing.** Done: P2 copy-on-write layers. fork + first tell takes 0.02 ms at 60, 600 or 6,000 wires; rewind takes 0.015 ms, flat. Re-measure geo.map with its kb as wires, the avatar kb, and "all legends in one World" after the re-vendor.
+2. **External facts.** Done in R6.13: `new World({ facts: { type: provider } })`, matched like wires and never copied. Bench: a large table builds in 1.6 ms against 58 ms, snapshot 1 kB. Replace `kb=lookup` with it. For "member of a many-valued wire", use R6.1 `many` plus a check.
+3. **Undo/redo.** Partly done: `transient=true` types and `world.redo()` (R6.8). Labelled marks, `rewind({ only })` and a timeline saved in `toJSON`/`fromJSON` are now R7.1 in the library. Until then, the host's restart regression is yours to fix: save the timeline with the state.
+4. **Aggregates.** Done: `core.aggregate default= by=` (R6.6), `core.rank` (R6.7), `ties=all` (R6.17). Lists in reasons and distinct anchors are R7.4.
+5. **Multi-valued answers.** Done: `many` slots answer lists in value mode (R6.1), and `mode=check` (R6.2). Move kids.animals.
+6. **Refusals.**
+   - Done: `violations[i].vars` and registered filters (R6.5).
+   - In the library's Round 7: deny priority and `why=` on slot violations (R7.2), `kind=ref` and `unique=true` (R7.3).
+7. **Value kinds.** Done: `kind=blob` (R6.4), `kind=json` with paths (R6.15), replace in place in `applyPatch` (R6.9). Drop `chess.g_1`-style revisions and JSON strings.
+8. **Cost control.** Unread keys skip the rules pass automatically (R6.12; bench 2.7 ms against 13 ms). Lazy rules are R7.5 and pure actions R7.6.
+9. **Expressions.** `matches`, `startsWith`, `lower`, `abs` and `min` exist (R6.10). `between`, `sign` and `clamp` are R7.7. Whether `expr=` enters SOP Lang v1.2 is a language decision: the library will propose it, and the user decides.
+10. **Host API.** Done: `canComplete()` (P1), per-key assumptions told by the host (R6.16, "I assumed a bar chart"). `assumptions(ids)` and a stable change stamp are R7.8.
+
+**To do now, in this order:**
+1. **RE-VENDOR sopworld 0.7.1 at 93362d7.** This replaces both 89bf69d and 72a96dd. Run `npm test`, `test-world all` in both reasoners, `ab-sopworld --sets coherence,dialogues,gold` and `bench-reasoner`. Report p50 per world group before and after. **The question is whether the matrix gap closes.**
+2. **Remove workarounds per world.** Use the APIs above. Report the per-world rows again, with lines of host code removed and time. Where a world still loses to ops, file it as a library item with a minimal repro, as you did.
+3. **Namespaces (user decision, 23:12).** The library will add fact namespaces (R7.9: qualified ids per instance or per tell, references local first, merges only within a namespace, `exports=`, an ambiguity warning). On our side, prepare now: give each world instance its namespace, prefix the ids generated per turn with the turn, so two requests can never merge facts, and declare `exports=` for what `reads=` uses (kids.shop for kids.arith). Implement it when the library releases R7.9.
+4. Continue RO-TRANSLATE-FALLBACK and the open small findings (docs title, unknown place, RO notes).
+
+Q1 is answered; remove it from questions.md.
