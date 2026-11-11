@@ -1,6 +1,6 @@
 # sopworld in PSys2: status and observations
 
-Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-11.
+Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-11 (after SOPWORLD-1b items 1, 3, 7).
 
 ## How it is switched
 
@@ -9,7 +9,7 @@ Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-
   - Webchat: Settings › Developer › Reasoner (`ops` / `matrix`).
   - CLI and evaluations: `--reasoner ops|matrix`, or the environment variable `PSYS2_REASONER=matrix`.
 - Only worlds that opt in with `reasoner=matrix` (plus a `matrix.sop` and a `fns.mjs`) use the library: today `kids.shop`, `kids.arith` and `kids.tasks`. Every other world takes the `ops` path in both modes.
-- Known defect: `games.guess#030.ro` changes outcome when the switch flips, although that world does not use the matrix. The switch must not touch other worlds. Being fixed in SOPWORLD-1b, item 7.
+- `games.guess#030.ro` seemed to change outcome with the switch. Cause: not that world. The eval counted kids.arith's lazily created empty state as a change in ops mode only. Fixed (a matrix world's state now appears with its first answer, as in ops); a test asserts identical replies, statuses and state for a non-matrix world under both settings.
 - The library is vendored as one file in `src/vendor/sopworld/` and loaded lazily, only in matrix mode. The host layer is `src/reasoner/index.mjs` and the spec is 15.
 
 ## The experiment: what sopworld gains
@@ -37,7 +37,33 @@ Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-
 - `test-world --reasoner matrix`: kids.shop 147/147, kids.tasks 232/232, kids.arith 210/217. The 7 failures are listed in `worker-log.md` (SOPWORLD-1).
 - Webchat in real Chrome (`scripts/test-webchat-matrix.mjs`): 18/18.
 
-### Why the stage 1 comparison is not yet fair
+### After SOPWORLD-1b items 1, 3, 7 (sopworld 0.6.1, commit 775dfe7, 2026-11-11)
+
+| Measure | ops | matrix |
+| --- | --- | --- |
+| Operational, three worlds | 219/226 | 219/226 |
+| Operational, other worlds | 1020/1070 | 1020/1070 (identical) |
+| Operational-ro, three worlds | 397/452 (6 wrong) | 397/452 (8 wrong) |
+| Dialogues, three worlds | 220/232 | 220/232 |
+| Dialogues, other worlds | 1954/2009 | 1954/2009 (identical) |
+| Turns that leave a violation | 21 (2.8%) | 6 (0.8%, all are impossible events kept and flagged on purpose) |
+| Coherence set (30) | 17 | **22** |
+| Undo | 0/3 | **3/3** |
+| Default revision | 1/3 | 2/3 |
+| Abduction | 0/2 | 1/2 |
+| Explain | 0/3 | 0/3 |
+| Turn time p50, three worlds | 14.6 ms | 17.2 ms (+18%) |
+| Library bundle (matrix only) | — | 271 kB raw / 77 kB gzip; host layer 7.6 kB gzip |
+
+- `test-world --reasoner matrix`: kids.shop 147/147, kids.tasks 232/232, **kids.arith 217/217** (the 7 old failures are gone). Under ops: the same counts.
+- Webchat in real Chrome (`scripts/test-webchat-matrix.mjs`): 18/18.
+- Workarounds removed: function prefixes, second queries in `voice`, rebuilding wires for a refusal and for "three of them", the audit by re-telling (now `world.check()`), abduction (`mode=abduce`), unknown start (`delta`), ties (`ambiguous`), impossible events (`soft=true` + `issues()`), rounding (`core.precision`).
+- Still in our code, on purpose: reply wording (plurals, articles), splitting "milk, eggs and bread" and list names in kids.tasks `fns.mjs`.
+- One undo: in matrix mode "undo that", "that's wrong" + "yes" and repair all call the library's `mark` / `rewind`; the state of all three worlds is derived from the library; tests assert library = session state = memory.
+- The 8 coherence failures left are formalizer or reply matters, not reasoner ones ("Why do I have nothing left?", "No, she gives him 4", "Tom had some apples", "Why?", "Remove eggs.", the debt refusal's wording). They are agent B's work in progress.
+- Reading: matrix wins on consistency (violations 2.8% → 0.8%), undo and coherence (+5 of 30) with no change on the operational and dialogue sets; it costs about 2.6 ms per turn and 77 kB gzip loaded only in matrix mode.
+
+### Why the stage 1 comparison was not fair
 
 - **Shared formalizer gaps.** Many coherence cases fail in both modes because the rules do not read the sentence: "Ana gives him some", "Tom had some apples", "He ate 2 and now has 3", "No, she gives him 4", "why?". A failure there says nothing about the reasoner.
 - **Workarounds.** Version 0.4.0 needed ten workarounds in our host layer: function prefixes, second queries, rebuilding the answer wire, an audit done by re-telling, and others. The library has since fixed them as its tasks W1–W8, G11 and L1.
