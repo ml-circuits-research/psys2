@@ -376,3 +376,11 @@ Stopped by the user: the demo on GitHub Pages is in order. Landed today after NX
 - Gaps: the reviewer's "65 gold paraphrases" are not in the repository (used `training/nx/gold/pilot-300.jsonl`, 300 items); `training/phrase-logs/` is empty, so the real logs are the 09c/d/e, real-dialogue and mobile files. Rules formalizer only (no model).
 - Side observation: in matrix mode task ids (`task_62`) continue across sessions of one engine; harmless, ids only differ.
 - Tool note: a bash command containing the word "eval" is refused in this worktree sandbox; use globs (`ev?l`).
+
+## 2026-11-11 — user decision: sopworld (matrix) becomes the default; stage 2 starts
+
+- User, after the full A/B (d4afc5b): "fa default sa fie sopworld, si daca exista vreo incetinire trebuie descoperita"; yes to fixing the two ops-better wordings; yes to stage 2.
+- Agent F: matrix as the default everywhere (CLI, scripts, engine, webchat settings with a migration), spec 15, the two wordings ("what did you do?" keeps its source; "I buy the ball" is not a bare OK), tests in both reasoners.
+- Agent G: find and fix the 8–15% per-turn slowdown seen in every world group, including worlds that do not use the library.
+- Agent H: stage 2 worlds games.guess, games.hangman, kids.shapes on the library.
+- Next, after F: session memory and question resolution of `src/interpreter/` on the library, then the next worlds (kids.time, user.profile, docs.editor/reader, geo.map, data.charts).
