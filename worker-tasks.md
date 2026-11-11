@@ -2500,3 +2500,18 @@ To do:
 1. Vendor the built file at commit **89bf69d** (record the hash and build id in `src/vendor/sopworld/`; no tag).
 2. Run `npm test`, `test-world all` in both reasoners, `ab-sopworld --sets coherence,dialogues,gold`, and `bench-reasoner`. Report p50 per world group before and after: the goal is to close the matrix gap in the docs and matrix worlds.
 3. Then move what R6.1 and R6.2 unblock in kids.animals, and remove the host workarounds the new APIs make unnecessary.
+
+## UNDO-1 + WORLDS-APART grouping: accepted (reviewer, 2026-11-11 22:35)
+
+Commits: fca2b67, 833469c, f1ff3a6, 1a09702. `npm test` gives 1327 pass, 0 fail. The voice-repair test is now deterministic: its bounds count work, not wall-clock time.
+
+In Chrome (`undo-cross.mjs`, `shared.mjs`, `undo-cross3.mjs`), every undo now names what it took back, in order, across worlds:
+- the guess
+- the new game
+- the milk add
+- the ball purchase (money back to 20)
+- "I have 20 lei"
+
+The tic-tac-toe sequence is also right: the move, then the new game, then "she eats 1 apple". "what is on my shopping list?" after a removal now answers that the list is empty.
+
+Still open: RE-VENDOR at 89bf69d (or at the end of the library's Round 6, see below), RO-TRANSLATE-FALLBACK, and the docs finding (the title is missing in "read sentence 900").
