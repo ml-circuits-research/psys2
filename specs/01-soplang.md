@@ -1,6 +1,6 @@
 # 01 — SOP Lang v1.1
 
-Normative summary of vision §2, plus the exact parser contract used by `src/soplang/`. This is SOP Lang **v1.1**: the one language of facts, rule files and the consistency matrix, adopted from the sopworld library's "The language" (`docs/language.md`, library 0.6.1, vendored at `src/vendor/sopworld`). Every v1 text is a v1.1 text with the same meaning. There is one parser in the product: `src/soplang/` also reads the `matrix.sop` files, and `src/reasoner/` hands the library their wires.
+Normative summary of vision §2, plus the exact parser contract used by `src/soplang/`. This is SOP Lang **v1.1**: the one language of facts, rule files and the consistency matrix, adopted from the sopworld library's "The language" (`docs/language.md`, library 0.7.1, vendored at `src/vendor/sopworld`). Every v1 text is a v1.1 text with the same meaning. There is one parser in the product: `src/soplang/` also reads the `matrix.sop` files, and `src/reasoner/` hands the library their wires.
 
 ## Syntax
 

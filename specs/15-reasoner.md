@@ -1,6 +1,6 @@
 # 15 — The reasoner host layer (sopworld), stage 1
 
-Implementation: `src/reasoner/`, the vendored library `src/vendor/sopworld/` (0.6.1, see `src/vendor/LICENSES.md`), per-world `matrix.sop` + `fns.mjs`. Browser-safe. Tasks: SOPWORLD-1 and SOPWORLD-1b (worker-tasks). The numbers are in `worker-log.md`.
+Implementation: `src/reasoner/`, the vendored library `src/vendor/sopworld/` (0.7.1, see `src/vendor/LICENSES.md`), per-world `matrix.sop` + `fns.mjs`. Browser-safe. Tasks: SOPWORLD-1 and SOPWORLD-1b (worker-tasks). The numbers are in `worker-log.md`.
 
 ## Purpose
 `sopworld` (https://github.com/ml-circuits-research/soplang-words-lib, MIT, same owner) is a general library for self-consistent worlds of SOP Lang wires: a schema with a type hierarchy, rules, denies, defaults, a sequence with states changed by events (fluents), aggregates, queries with a status, actions as transactions, retract and replace, abduction, explain, step budgets on every loop and a structural `fork()`. The user wants it to become the centre of the worlds, so that they share one representation and one reasoner. Stage 1 proves it on three worlds without changing any default behaviour. Stage 2 (after the user sees stage 1): the session memory and question resolution of `src/interpreter/` on the library, then more worlds.
