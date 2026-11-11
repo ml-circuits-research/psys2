@@ -31,7 +31,9 @@ export const SCENARIOS = {
       const a = await say(c, 'add to my list');
       check('default: the setting is ops, "add to my list" is read as it always was (no question asked)', !/What shall I put on the list/.test(a), a.slice(0, 80));
       await say(c, 'I have 20 lei'); await say(c, 'I buy a ball');
-      check('default: "three of them" is not a matrix command', !/that makes 3/.test(await say(c, 'three of them')));
+      // Since SOPWORLD-1b item 2 the ops rules also revise the last purchase (shop.reviseLast), so both strategies read it.
+      const t = await say(c, 'three of them');
+      check('default: "three of them" revises the purchase in ops too (shop.reviseLast)', /3 balls|that makes 3/i.test(t), t.slice(0, 80));
       check('default: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
