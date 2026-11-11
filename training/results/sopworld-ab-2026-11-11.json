@@ -1,0 +1,2711 @@
+{
+ "date": "2026-11-11",
+ "limit": null,
+ "sessions": 6806,
+ "elapsed_s": 876,
+ "counts": {
+  "operational": {
+   "sessions": 1296,
+   "turns": 1783,
+   "differing": 1,
+   "view_only": 103
+  },
+  "operational-long": {
+   "sessions": 154,
+   "turns": 163,
+   "differing": 0,
+   "view_only": 7
+  },
+  "operational-ro": {
+   "sessions": 2480,
+   "turns": 3310,
+   "differing": 2,
+   "view_only": 185
+  },
+  "dialogues": {
+   "sessions": 470,
+   "turns": 2241,
+   "differing": 5,
+   "view_only": 40
+  },
+  "loose-words": {
+   "sessions": 670,
+   "turns": 801,
+   "differing": 0,
+   "view_only": 14
+  },
+  "typos": {
+   "sessions": 1394,
+   "turns": 1394,
+   "differing": 0,
+   "view_only": 27
+  },
+  "real-09c": {
+   "sessions": 2,
+   "turns": 68,
+   "differing": 1,
+   "view_only": 1
+  },
+  "real-09d": {
+   "sessions": 1,
+   "turns": 10,
+   "differing": 0
+  },
+  "real-09e": {
+   "sessions": 3,
+   "turns": 67,
+   "differing": 0,
+   "view_only": 1
+  },
+  "mobile": {
+   "sessions": 1,
+   "turns": 108,
+   "differing": 0
+  },
+  "real-dialogue": {
+   "sessions": 2,
+   "turns": 63,
+   "differing": 1,
+   "view_only": 1
+  },
+  "gold": {
+   "sessions": 300,
+   "turns": 468,
+   "differing": 2,
+   "view_only": 17
+  },
+  "coherence": {
+   "sessions": 33,
+   "turns": 99,
+   "differing": 7,
+   "view_only": 16
+  }
+ },
+ "outcomes": {
+  "operational": {
+   "ops:four": {
+    "n": 269,
+    "right": 259,
+    "partly": 5,
+    "not_understood": 5,
+    "wrong": 0
+   },
+   "matrix:four": {
+    "n": 269,
+    "right": 259,
+    "partly": 5,
+    "not_understood": 5,
+    "wrong": 0
+   },
+   "ops:others": {
+    "n": 1027,
+    "right": 980,
+    "partly": 17,
+    "not_understood": 24,
+    "wrong": 6
+   },
+   "matrix:others": {
+    "n": 1027,
+    "right": 980,
+    "partly": 17,
+    "not_understood": 24,
+    "wrong": 6
+   }
+  },
+  "operational-long": {
+   "ops:four": {
+    "n": 19,
+    "right": 14,
+    "partly": 2,
+    "not_understood": 1,
+    "wrong": 2
+   },
+   "matrix:four": {
+    "n": 19,
+    "right": 14,
+    "partly": 2,
+    "not_understood": 1,
+    "wrong": 2
+   },
+   "ops:others": {
+    "n": 135,
+    "right": 73,
+    "partly": 12,
+    "not_understood": 17,
+    "wrong": 33
+   },
+   "matrix:others": {
+    "n": 135,
+    "right": 73,
+    "partly": 12,
+    "not_understood": 17,
+    "wrong": 33
+   }
+  },
+  "operational-ro": {
+   "ops:four": {
+    "n": 538,
+    "right": 455,
+    "partly": 7,
+    "not_understood": 68,
+    "wrong": 8
+   },
+   "matrix:four": {
+    "n": 538,
+    "right": 455,
+    "partly": 7,
+    "not_understood": 68,
+    "wrong": 8
+   },
+   "ops:others": {
+    "n": 1942,
+    "right": 1582,
+    "partly": 41,
+    "not_understood": 266,
+    "wrong": 53
+   },
+   "matrix:others": {
+    "n": 1942,
+    "right": 1582,
+    "partly": 41,
+    "not_understood": 266,
+    "wrong": 53
+   }
+  },
+  "dialogues": {
+   "ops:four": {
+    "n": 304,
+    "right": 292,
+    "partly": 0,
+    "not_understood": 8,
+    "wrong": 4
+   },
+   "matrix:four": {
+    "n": 304,
+    "right": 292,
+    "partly": 0,
+    "not_understood": 7,
+    "wrong": 5
+   },
+   "ops:others": {
+    "n": 1937,
+    "right": 1882,
+    "partly": 10,
+    "not_understood": 30,
+    "wrong": 15
+   },
+   "matrix:others": {
+    "n": 1937,
+    "right": 1882,
+    "partly": 10,
+    "not_understood": 30,
+    "wrong": 15
+   }
+  }
+ },
+ "timing": {
+  "ops": {
+   "four": {
+    "n": 1965,
+    "p50": 12.2,
+    "p95": 113.4
+   },
+   "avatar/shell/editor": {
+    "n": 2046,
+    "p50": 11.5,
+    "p95": 73.5
+   },
+   "kids-other": {
+    "n": 1585,
+    "p50": 13.3,
+    "p95": 104.5
+   },
+   "music/draw/map/charts": {
+    "n": 2845,
+    "p50": 12.4,
+    "p95": 56.6
+   },
+   "games": {
+    "n": 1326,
+    "p50": 10.6,
+    "p95": 36.9
+   },
+   "documents": {
+    "n": 386,
+    "p50": 24.9,
+    "p95": 77.4
+   },
+   "other": {
+    "n": 422,
+    "p50": 10.4,
+    "p95": 38.6
+   }
+  },
+  "matrix": {
+   "four": {
+    "n": 1965,
+    "p50": 14,
+    "p95": 116.2
+   },
+   "avatar/shell/editor": {
+    "n": 2046,
+    "p50": 12.7,
+    "p95": 75.3
+   },
+   "kids-other": {
+    "n": 1585,
+    "p50": 15,
+    "p95": 104.4
+   },
+   "music/draw/map/charts": {
+    "n": 2845,
+    "p50": 13.7,
+    "p95": 58.3
+   },
+   "games": {
+    "n": 1326,
+    "p50": 11.7,
+    "p95": 39.1
+   },
+   "documents": {
+    "n": 386,
+    "p50": 26.9,
+    "p95": 78.7
+   },
+   "other": {
+    "n": 422,
+    "p50": 11.7,
+    "p95": 42.5
+   }
+  }
+ },
+ "bundle": {
+  "library": {
+   "raw": 271470,
+   "gzip": 77251
+  },
+  "host_layer": {
+   "raw": 31848,
+   "gzip": 10117
+  }
+ },
+ "by_class": {
+  "neutral wording": {
+   "operational": 1,
+   "operational-ro": 2,
+   "dialogues": 4,
+   "real-09c": 1,
+   "real-dialogue": 1,
+   "gold": 2
+  },
+  "ops better": {
+   "dialogues": 1,
+   "coherence": 1
+  },
+  "matrix better": {
+   "coherence": 6
+  }
+ },
+ "differing": 19,
+ "differences_in_other_worlds": [
+  "operational:kids.common#029 (kids.common)",
+  "operational-ro:kids.common#029.ro (kids.common)",
+  "operational-ro:kids.common#029.roc (kids.common)",
+  "dialogues:dlg.doc#031 (media.music)",
+  "dialogues:dlg.rd#001 (ui.avatar)",
+  "dialogues:dlg.rp3#009 (media.music)",
+  "real-09c:real-09c#s1 (docs.editor)",
+  "real-dialogue:rd#real-dialogue-2026-11-09.txt (session)",
+  "gold:real#rp3-17 (media.music)",
+  "gold:real#rp3-18 (media.music)"
+ ],
+ "diffs": [
+  {
+   "key": "operational:kids.common#029",
+   "set": "operational",
+   "id": "kids.common#029",
+   "world": "kids.common",
+   "group": "kids",
+   "four": false,
+   "tab": null,
+   "class": "neutral wording",
+   "note": "kids.common is not a matrix world; 'how are you' has several phrasings and the two engines picked different ones",
+   "random": true,
+   "outcome": {
+    "ops": "right",
+    "matrix": "right"
+   },
+   "first_diff_turn": 0,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "how are you",
+     "differs": true,
+     "ops": "I am fine, thank you!",
+     "matrix": "I am great! What shall we do?",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "operational-ro:kids.common#029.ro",
+   "set": "operational-ro",
+   "id": "kids.common#029.ro",
+   "world": "kids.common",
+   "group": "kids",
+   "four": false,
+   "tab": null,
+   "class": "neutral wording",
+   "note": "same as the English case: another phrasing of the same greeting",
+   "random": true,
+   "outcome": {
+    "ops": "right",
+    "matrix": "right"
+   },
+   "first_diff_turn": 0,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "Ce mai faci?",
+     "differs": true,
+     "ops": "I am great! What shall we do?",
+     "matrix": "Sunt bine, mulțumesc că ai întrebat!",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "operational-ro:kids.common#029.roc",
+   "set": "operational-ro",
+   "id": "kids.common#029.roc",
+   "world": "kids.common",
+   "group": "kids",
+   "four": false,
+   "tab": null,
+   "class": "neutral wording",
+   "note": "same as the English case: another phrasing of the same greeting",
+   "random": true,
+   "outcome": {
+    "ops": "right",
+    "matrix": "right"
+   },
+   "first_diff_turn": 0,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "ce mai faci",
+     "differs": true,
+     "ops": "Sunt bine, mulțumesc!",
+     "matrix": "Sunt bine, mulțumesc că ai întrebat!",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "dialogues:dlg.kidsA#010",
+   "set": "dialogues",
+   "id": "dlg.kidsA#010",
+   "world": "kids.arith",
+   "group": "kids",
+   "four": true,
+   "tab": null,
+   "class": "neutral wording",
+   "note": "identical replies; the label differs only because matrix mirrors the library's fact (Zoe 6 marbles) into the state view while the reply says it did not understand the question",
+   "random": false,
+   "outcome": {
+    "ops": [
+     "right",
+     "not_understood",
+     "right",
+     "right",
+     "right"
+    ],
+    "matrix": [
+     "right",
+     "wrong",
+     "right",
+     "right",
+     "right"
+    ]
+   },
+   "first_diff_turn": 1,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "Zoe has 14 marbles.",
+     "differs": false,
+     "ops": "OK, Zoe has 14 marbles.",
+     "matrix": "OK, Zoe has 14 marbles.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Zoe eats 8. How many marbles are left?",
+     "differs": true,
+     "ops": "OK, Zoe ate 8 marbles. I did not understand \"How many marbles are left\". Did you mean \"How many pieces are left?\" or \"How many guesses are left?\"?",
+     "matrix": "OK, Zoe ate 8 marbles. I did not understand \"How many marbles are left\". Did you mean \"How many pieces are left?\" or \"How many guesses are left?\"?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": [
+      "kids.arith: ops absent | matrix {\"holdings\":{\"e.zoe\":{\"marble\":6}}}"
+     ],
+     "outcome": [
+      "not_understood",
+      "wrong"
+     ]
+    },
+    {
+     "message": "Zoe finds 5 more. How many marbles does she have now?",
+     "differs": false,
+     "ops": "OK, Zoe got 5 marbles. Zoe has 11 marbles.",
+     "matrix": "OK, Zoe got 5 marbles. Zoe has 11 marbles.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Leo has 4 marbles.",
+     "differs": false,
+     "ops": "OK, Leo has 4 marbles.",
+     "matrix": "OK, Leo has 4 marbles.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "how many marbles do they have together?",
+     "differs": false,
+     "ops": "There are 15 marbles altogether.",
+     "matrix": "There are 15 marbles altogether.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "dialogues:dlg.kidsB#016",
+   "set": "dialogues",
+   "id": "dlg.kidsB#016",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": null,
+   "class": "ops better",
+   "note": "'what did you do?' in ops also says what the answer rested on (A puzzle costs 11 lei); matrix says only what was answered",
+   "random": false,
+   "outcome": {
+    "ops": [
+     "right",
+     "right",
+     "right",
+     "right"
+    ],
+    "matrix": [
+     "right",
+     "right",
+     "right",
+     "right"
+    ]
+   },
+   "first_diff_turn": 2,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "A puzzle costs 11 lei.",
+     "differs": false,
+     "ops": "OK, one puzzle costs 11 lei.",
+     "matrix": "OK, one puzzle costs 11 lei.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "how much do 2 puzzles cost?",
+     "differs": false,
+     "ops": "2 puzzles cost 22 lei.",
+     "matrix": "2 puzzles cost 22 lei.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "what did you do?",
+     "differs": true,
+     "ops": "You said \"how much do 2 puzzles cost\", so I answered it. What I answered: 2 puzzles cost 22 lei. I worked that out from what you told me: \"A puzzle costs 11 lei\".",
+     "matrix": "You said \"how much do 2 puzzles cost\", so I answered it. What I answered: 2 puzzles cost 22 lei.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "how much do 5 puzzles cost?",
+     "differs": false,
+     "ops": "5 puzzles cost 55 lei.",
+     "matrix": "5 puzzles cost 55 lei.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "dialogues:dlg.doc#031",
+   "set": "dialogues",
+   "id": "dlg.doc#031",
+   "world": "media.music",
+   "group": "music/draw/map/charts",
+   "four": false,
+   "tab": "music",
+   "class": "neutral wording",
+   "note": "random output (differs between two runs of ops)",
+   "random": true,
+   "outcome": {
+    "ops": [
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right"
+    ],
+    "matrix": [
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right"
+    ]
+   },
+   "first_diff_turn": 0,
+   "turns_differing": 2,
+   "turns": [
+    {
+     "message": "Play.",
+     "differs": true,
+     "ops": "Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major.",
+     "matrix": "Playing \"Old MacDonald Had a Farm\" on the piano at 110 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.tempo: ops 108 | matrix 110",
+      "media.music.current.title: ops \"Ode to Joy\" | matrix \"Old MacDonald Had a Farm\"",
+      "media.music.current.abc: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:Old MacDonald Had a Farm\\nC:Traditional folk song\\nM:4/4\\nL:1/",
+      "media.music.current.notes: ops [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"E4\",\"F4\",\"G4\",\"D4\",\"C4\",\"G3\"] | matrix [\"C4\",\"G4\",\"A4\",\"E4\",\"D4\"]",
+      "media.music.current.songId: ops \"ode\" | matrix \"macdonald\"",
+      "media.music.score: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:Old MacDonald Had a Farm\\nC:Traditional folk song\\nM:4/4\\nL:1/"
+     ]
+    },
+    {
+     "message": "Play middle C",
+     "differs": false,
+     "ops": "Playing middle C (C4), 261.6 Hz, on the piano.",
+     "matrix": "Playing middle C (C4), 261.6 Hz, on the piano.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Set the tempo to 90.",
+     "differs": true,
+     "ops": "Playing again at 90 beats per minute (it was 108).",
+     "matrix": "Playing again at 90 beats per minute (it was 110).",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.settingHistory: ops [{\"tempo\":108,\"tempoLocked\":false,\"volume\":70,\"instrument\":\"piano\"}] | matrix [{\"tempo\":110,\"tempoLocked\":false,\"volume\":70,\"instrument\":\"piano\"}]"
+     ]
+    },
+    {
+     "message": "Make it a bit louder.",
+     "differs": false,
+     "ops": "OK, the volume is 75 percent.",
+     "matrix": "OK, the volume is 75 percent.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Make it much quieter.",
+     "differs": false,
+     "ops": "OK, the volume is 50 percent.",
+     "matrix": "OK, the volume is 50 percent.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Let's draw a house.",
+     "differs": false,
+     "ops": "Ta-da! I drew a yellow house.",
+     "matrix": "Ta-da! I drew a yellow house.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Back to the music.",
+     "differs": false,
+     "ops": "Back to Music. Now playing middle C in C major on the piano, at 90 beats per minute.",
+     "matrix": "Back to Music. Now playing middle C in C major on the piano, at 90 beats per minute.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "dialogues:dlg.rd#001",
+   "set": "dialogues",
+   "id": "dlg.rd#001",
+   "world": "ui.avatar",
+   "group": "avatar/shell/editor",
+   "four": false,
+   "tab": "robot",
+   "class": "neutral wording",
+   "note": "random output (differs between two runs of ops)",
+   "random": true,
+   "outcome": {
+    "ops": [
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "not_understood",
+     "not_understood",
+     "not_understood",
+     "right",
+     "not_understood",
+     "not_understood",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "not_understood",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "partly",
+     "partly",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right"
+    ],
+    "matrix": [
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "not_understood",
+     "not_understood",
+     "not_understood",
+     "right",
+     "not_understood",
+     "not_understood",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "not_understood",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "partly",
+     "partly",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right"
+    ]
+   },
+   "first_diff_turn": 13,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "i want a human as avatar",
+     "differs": false,
+     "ops": "Okay! Now I am a person. I have a smile expression and short side-parted hair.",
+     "matrix": "Okay! Now I am a person. I have a smile expression and short side-parted hair.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make a human",
+     "differs": false,
+     "ops": "I am a person already.",
+     "matrix": "I am a person already.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "what command do tou recognise",
+     "differs": false,
+     "ops": "I can chat, talk about shapes and colors, shopping, animals and time, draw pictures, charts and diagrams, do sums, keep your lists, edit documents, answer questions about your documents, play chess, guess the animal, hangman, tic-tac-toe and music, show places on a map, change my face, and get to know you and keep your profile. Ask me \"what can I say here?\" for examples.",
+     "matrix": "I can chat, talk about shapes and colors, shopping, animals and time, draw pictures, charts and diagrams, do sums, keep your lists, edit documents, answer questions about your documents, play chess, guess the animal, hangman, tic-tac-toe and music, show places on a map, change my face, and get to know you and keep your profile. Ask me \"what can I say here?\" for examples.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "show me bucharest",
+     "differs": false,
+     "ops": "Here is Bucharest: capital of Romania · 1.9 million people.",
+     "matrix": "Here is Bucharest: capital of Romania · 1.9 million people.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "transform my avatar in a human",
+     "differs": false,
+     "ops": "I am a person already.",
+     "matrix": "I am a person already.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make bigger yes and a red had",
+     "differs": false,
+     "ops": "Okay! A person's eyes follow the expression, so I made it wide-eyed. Ta-da! I have a ginger beanie now. I do not have red for that; ginger is the closest.",
+     "matrix": "Okay! A person's eyes follow the expression, so I made it wide-eyed. Ta-da! I have a ginger beanie now. I do not have red for that; ginger is the closest.",
+     "statuses": [
+      "supported,supported",
+      "supported,supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "use the cyclops eye",
+     "differs": false,
+     "ops": "A person has no cyclops eyes, but the robot does. Say \"yes\" to become the robot and do that.",
+     "matrix": "A person has no cyclops eyes, but the robot does. Say \"yes\" to become the robot and do that.",
+     "statuses": [
+      "unsupported",
+      "unsupported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "why you turned it in a robot, this ia wrong",
+     "differs": false,
+     "ops": "I am a person now, not a robot.",
+     "matrix": "I am a person now, not a robot.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "turn it in a human again",
+     "differs": false,
+     "ops": "I am a person already.",
+     "matrix": "I am a person already.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make blue eyes",
+     "differs": false,
+     "ops": "A person has no eye color, but the robot does: its eyes glow in any color. Say \"yes\" to become the robot and do that.",
+     "matrix": "A person has no eye color, but the robot does: its eyes glow in any color. Say \"yes\" to become the robot and do that.",
+     "statuses": [
+      "unsupported",
+      "unsupported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "help",
+     "differs": false,
+     "ops": "The Avatar tab lets you change my face. You can say, for example: \"Try the next mouth\", \"What character is on screen\" or \"Make your body lighter\". Ask \"what can you do?\" for the whole list, \"more examples\" for others, or \"how do I ...?\" to find a command.",
+     "matrix": "The Avatar tab lets you change my face. You can say, for example: \"Try the next mouth\", \"What character is on screen\" or \"Make your body lighter\". Ask \"what can you do?\" for the whole list, \"more examples\" for others, or \"how do I ...?\" to find a command.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "what can i say here",
+     "differs": false,
+     "ops": "On the Avatar tab you can say, for example: \"What name do you go by\", \"What colors can your screen be\", \"What seed is this look from\", \"What colors can you change\" or \"Is your face happy\". Say \"more examples\" for others.",
+     "matrix": "On the Avatar tab you can say, for example: \"What name do you go by\", \"What colors can your screen be\", \"What seed is this look from\", \"What colors can you change\" or \"Is your face happy\". Say \"more examples\" for others.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "look suprised",
+     "differs": false,
+     "ops": "Sure! Now I look surprised. (I read \"suprised\" as \"surprised\")",
+     "matrix": "Sure! Now I look surprised. (I read \"suprised\" as \"surprised\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "give tourself a random look",
+     "differs": true,
+     "ops": "Done! Surprise! My new look has the seed hvdzf5. (I read \"tourself\" as \"yourself\")",
+     "matrix": "Ta-da! Surprise! My new look has the seed mk50wn. (I read \"tourself\" as \"yourself\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "ui.avatar.seed: ops \"hvdzf5\" | matrix \"mk50wn\"",
+      "ui.avatar.person.head: ops \"mediumBangs\" | matrix \"turban\"",
+      "ui.avatar.person.expression: ops \"smileLOL\" | matrix \"monster\"",
+      "ui.avatar.person.accessories: ops \"none\" | matrix \"glasses\"",
+      "ui.avatar.person.facialHair: ops \"moustache6\" | matrix \"none\"",
+      "ui.avatar.person.colors.skin: ops \"d08b5b\" | matrix \"ffdbb4\"",
+      "ui.avatar.person.colors.headContrast: ops \"f59797\" | matrix \"d6b370\"",
+      "ui.avatar.caption.for: ops \"[[\\\"accessories\\\",\\\"none\\\"],[\\\"expression\\\",\\\"smileLOL\\\"],[\\\"facialHa | matrix \"[[\\\"accessories\\\",\\\"glasses\\\"],[\\\"expression\\\",\\\"monster\\\"],[\\\"facial"
+     ]
+    },
+    {
+     "message": "fa-mi avatarul ca om",
+     "differs": false,
+     "ops": "I did not understand \"fa-mi avatarul ca om\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa-mi avatarul ca om\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "fa avatarul ca om",
+     "differs": false,
+     "ops": "I did not understand \"fa avatarul ca om\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa avatarul ca om\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "fa-i ochii mari",
+     "differs": false,
+     "ops": "I did not understand \"fa-i ochii mari\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa-i ochii mari\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "eys express fear",
+     "differs": false,
+     "ops": "Ta-da! Now I look scared. (I read \"eys\" as \"eyes\")",
+     "matrix": "Ta-da! Now I look scared. (I read \"eys\" as \"eyes\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "fa ochii mari",
+     "differs": false,
+     "ops": "I did not understand \"fa ochii mari\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa ochii mari\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "fa ochi visatori",
+     "differs": false,
+     "ops": "I did not understand \"fa ochi visatori\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa ochi visatori\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make bigger eyes",
+     "differs": false,
+     "ops": "Okay! A person's eyes follow the expression, so I made it wide-eyed.",
+     "matrix": "Okay! A person's eyes follow the expression, so I made it wide-eyed.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make eyes sleepy",
+     "differs": false,
+     "ops": "There you go! A person's eyes follow the expression, so I made it sleepy-eyed.",
+     "matrix": "There you go! A person's eyes follow the expression, so I made it sleepy-eyed.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "b1",
+     "differs": false,
+     "ops": "You took top middle. I took the center. Your move.",
+     "matrix": "You took top middle. I took the center. Your move.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "c3",
+     "differs": false,
+     "ops": "You took bottom right. I took middle left. Your move.",
+     "matrix": "You took bottom right. I took middle left. Your move.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "c1",
+     "differs": false,
+     "ops": "You took top right. I took middle right. I win this time! Say \"new game\" to play again.",
+     "matrix": "You took top right. I took middle right. I win this time! Say \"new game\" to play again.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make a chart: apples 5, pears 3, plums 8",
+     "differs": false,
+     "ops": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8.",
+     "matrix": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "add a cloud nect to a house",
+     "differs": false,
+     "ops": "Ta-da! I drew a yellow house and a cloud next to the yellow house. (I read \"nect\" as \"next\")",
+     "matrix": "Ta-da! I drew a yellow house and a cloud next to the yellow house. (I read \"nect\" as \"next\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "next",
+     "differs": false,
+     "ops": "I did not understand \"next\". Did you mean \"What is next to the sun?\" or \"Put the cat next to the house.\"?",
+     "matrix": "I did not understand \"next\". Did you mean \"What is next to the sun?\" or \"Put the cat next to the house.\"?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "add a cloud next to a house",
+     "differs": false,
+     "ops": "Here you go! I drew a cloud next to the yellow house.",
+     "matrix": "Here you go! I drew a cloud next to the yellow house.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "add a sun",
+     "differs": false,
+     "ops": "There! I drew a yellow sun.",
+     "matrix": "There! I drew a yellow sun.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "move the cloud near sun",
+     "differs": false,
+     "ops": "Done! I moved the cloud next to the yellow sun. There are 2 clouds, so I took the last one. You can say \"the first cloud\" or \"all the clouds\".",
+     "matrix": "Done! I moved the cloud next to the yellow sun. There are 2 clouds, so I took the last one. You can say \"the first cloud\" or \"all the clouds\".",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "add more clouds",
+     "differs": false,
+     "ops": "Look at that! I drew 2 clouds.",
+     "matrix": "Look at that! I drew 2 clouds.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "more",
+     "differs": false,
+     "ops": "Nice! I drew 2 clouds.",
+     "matrix": "Nice! I drew 2 clouds.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "more",
+     "differs": false,
+     "ops": "Voila! I drew 2 clouds.",
+     "matrix": "Voila! I drew 2 clouds.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw a girl",
+     "differs": false,
+     "ops": "Ta-da! I drew a girl.",
+     "matrix": "Ta-da! I drew a girl.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "a man",
+     "differs": false,
+     "ops": "Here you go! I drew a man.",
+     "matrix": "Here you go! I drew a man.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw 2 people",
+     "differs": false,
+     "ops": "There! I drew 2 blue people.",
+     "matrix": "There! I drew 2 blue people.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw another house",
+     "differs": false,
+     "ops": "Done! I drew a yellow house.",
+     "matrix": "Done! I drew a yellow house.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "a bigger house",
+     "differs": false,
+     "ops": "Look at that! I drew a big yellow house (bigger than the house I had).",
+     "matrix": "Look at that! I drew a big yellow house (bigger than the house I had).",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw a bigger house",
+     "differs": false,
+     "ops": "Nice! I drew a big yellow house (bigger than the house I had).",
+     "matrix": "Nice! I drew a big yellow house (bigger than the house I had).",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "bugger house pls",
+     "differs": false,
+     "ops": "Voila! I made the house bigger. There are 4 houses, so I took the last one. You can say \"the first house\" or \"all the houses\". (I read \"bugger\" as \"bigger\")",
+     "matrix": "Voila! I made the house bigger. There are 4 houses, so I took the last one. You can say \"the first house\" or \"all the houses\". (I read \"bugger\" as \"bigger\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "bigger house please",
+     "differs": false,
+     "ops": "Ta-da! I made the house bigger. There are 4 houses, so I took the last one. You can say \"the first house\" or \"all the houses\".",
+     "matrix": "Ta-da! I made the house bigger. There are 4 houses, so I took the last one. You can say \"the first house\" or \"all the houses\".",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw a red house",
+     "differs": false,
+     "ops": "Here you go! I drew a red house.",
+     "matrix": "Here you go! I drew a red house.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make a happy man",
+     "differs": false,
+     "ops": "There! I drew a happy man.",
+     "matrix": "There! I drew a happy man.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "transform the avatar in a man",
+     "differs": false,
+     "ops": "Ta-da! A person shows being a man through hair, so I gave myself short neat hair and a short beard.",
+     "matrix": "Ta-da! A person shows being a man through hair, so I gave myself short neat hair and a short beard.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "now in a women",
+     "differs": false,
+     "ops": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "matrix": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "the avatar",
+     "differs": false,
+     "ops": "You are already on the Avatar tab.",
+     "matrix": "You are already on the Avatar tab.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "the avatar should be a women",
+     "differs": false,
+     "ops": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "matrix": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make the avatar a women",
+     "differs": false,
+     "ops": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "matrix": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "dialogues:dlg.rp3#009",
+   "set": "dialogues",
+   "id": "dlg.rp3#009",
+   "world": "media.music",
+   "group": "music/draw/map/charts",
+   "four": false,
+   "tab": "music",
+   "class": "neutral wording",
+   "note": "random output (differs between two runs of ops)",
+   "random": true,
+   "outcome": {
+    "ops": [
+     "right",
+     "right",
+     "right",
+     "right"
+    ],
+    "matrix": [
+     "right",
+     "right",
+     "right",
+     "right"
+    ]
+   },
+   "first_diff_turn": 1,
+   "turns_differing": 3,
+   "turns": [
+    {
+     "message": "open the music tab",
+     "differs": false,
+     "ops": "You are already on the Music tab.",
+     "matrix": "You are already on the Music tab.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "play",
+     "differs": true,
+     "ops": "Playing \"Row, Row, Row Your Boat\" on the piano at 100 beats per minute. It is in C major.",
+     "matrix": "Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.tempo: ops 100 | matrix 80",
+      "media.music.current.title: ops \"Row, Row, Row Your Boat\" | matrix \"Brahms' Lullaby\"",
+      "media.music.current.abc: ops \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL | matrix \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK:",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"] | matrix [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C#5\",\"D5\"]",
+      "media.music.current.seq: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"] | matrix [\"F#4\",\"A4\",\"D5\",\"C#5\",\"B4\",\"E4\",\"G4\",\"D4\"]",
+      "media.music.current.key: ops \"C major\" | matrix \"D major\"",
+      "media.music.current.songId: ops \"row\" | matrix \"brahms\"",
+      "media.music.score: ops \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL | matrix \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK:"
+     ]
+    },
+    {
+     "message": "play a random song",
+     "differs": true,
+     "ops": "Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major.",
+     "matrix": "Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.tempo: ops 108 | matrix 110",
+      "media.music.current.title: ops \"Ode to Joy\" | matrix \"London Bridge Is Falling Down\"",
+      "media.music.current.abc: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:London Bridge Is Falling Down\\nC:Traditional English nursery r",
+      "media.music.current.notes: ops [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"E4\",\"F4\",\"G4\",\"D4\",\"C4\",\"G3\"] | matrix [\"G4\",\"A4\",\"F4\",\"E4\",\"D4\",\"C4\"]",
+      "media.music.current.songId: ops \"ode\" | matrix \"london\"",
+      "media.music.score: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:London Bridge Is Falling Down\\nC:Traditional English nursery r"
+     ]
+    },
+    {
+     "message": "surprise me",
+     "differs": true,
+     "ops": "Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major.",
+     "matrix": "Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.tempo: ops 80 | matrix 108",
+      "media.music.current.title: ops \"Brahms' Lullaby\" | matrix \"Ode to Joy\"",
+      "media.music.current.abc: ops \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK: | matrix \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK",
+      "media.music.current.notes: ops [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C#5\",\"D5\"] | matrix [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"]",
+      "media.music.current.seq: ops [\"F#4\",\"A4\",\"D5\",\"C#5\",\"B4\",\"E4\",\"G4\",\"D4\"] | matrix [\"E4\",\"F4\",\"G4\",\"D4\",\"C4\",\"G3\"]",
+      "media.music.current.key: ops \"D major\" | matrix \"C major\"",
+      "media.music.current.songId: ops \"brahms\" | matrix \"ode\"",
+      "media.music.score: ops \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK: | matrix \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "real-09c:real-09c#s1",
+   "set": "real-09c",
+   "id": "real-09c#s1",
+   "world": "docs.editor",
+   "group": "avatar/shell/editor",
+   "four": false,
+   "tab": null,
+   "class": "neutral wording",
+   "note": "random output (differs between two runs of ops)",
+   "random": true,
+   "outcome": null,
+   "first_diff_turn": 2,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "set title to Title 1",
+     "differs": false,
+     "ops": "OK, the title is now \"Title 1\".",
+     "matrix": "OK, the title is now \"Title 1\".",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "create chapter one",
+     "differs": false,
+     "ops": "OK, I started chapter 1, \"One\".",
+     "matrix": "OK, I started chapter 1, \"One\".",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "play",
+     "differs": true,
+     "ops": "Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major.",
+     "matrix": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.tempo: ops 110 | matrix 100",
+      "media.music.current.title: ops \"Mary Had a Little Lamb\" | matrix \"Twinkle, Twinkle, Little Star\"",
+      "media.music.current.abc: ops \"X:1\\nT:Mary Had a Little Lamb\\nC:Traditional tune\\nM:4/4\\nL:1/4\\nQ:1/ | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"E4\",\"D4\",\"C4\",\"G4\"] | matrix [\"C4\",\"G4\",\"A4\",\"F4\",\"E4\",\"D4\"]",
+      "media.music.current.songId: ops \"mary\" | matrix \"twinkle\"",
+      "media.music.score: ops \"X:1\\nT:Mary Had a Little Lamb\\nC:Traditional tune\\nM:4/4\\nL:1/4\\nQ:1/ | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:"
+     ]
+    },
+    {
+     "message": "play a random song",
+     "differs": false,
+     "ops": "Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major.",
+     "matrix": "Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "play",
+     "differs": false,
+     "ops": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "matrix": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "play",
+     "differs": false,
+     "ops": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "matrix": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "play",
+     "differs": false,
+     "ops": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "matrix": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Little Star",
+     "differs": false,
+     "ops": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
+     "matrix": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "real-dialogue:rd#real-dialogue-2026-11-09.txt",
+   "set": "real-dialogue",
+   "id": "rd#real-dialogue-2026-11-09.txt",
+   "world": "session",
+   "group": "other",
+   "four": false,
+   "tab": "robot",
+   "class": "neutral wording",
+   "note": "random output (differs between two runs of ops)",
+   "random": true,
+   "outcome": null,
+   "first_diff_turn": 13,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "i want a human as avatar",
+     "differs": false,
+     "ops": "Okay! Now I am a person. I have a smile expression and short side-parted hair.",
+     "matrix": "Okay! Now I am a person. I have a smile expression and short side-parted hair.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make a human",
+     "differs": false,
+     "ops": "I am a person already.",
+     "matrix": "I am a person already.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "what command do tou recognise",
+     "differs": false,
+     "ops": "I can chat, talk about shapes and colors, shopping, animals and time, draw pictures, charts and diagrams, do sums, keep your lists, edit documents, answer questions about your documents, play chess, guess the animal, hangman, tic-tac-toe and music, show places on a map, change my face, and get to know you and keep your profile. Ask me \"what can I say here?\" for examples.",
+     "matrix": "I can chat, talk about shapes and colors, shopping, animals and time, draw pictures, charts and diagrams, do sums, keep your lists, edit documents, answer questions about your documents, play chess, guess the animal, hangman, tic-tac-toe and music, show places on a map, change my face, and get to know you and keep your profile. Ask me \"what can I say here?\" for examples.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "show me bucharest",
+     "differs": false,
+     "ops": "Here is Bucharest: capital of Romania · 1.9 million people.",
+     "matrix": "Here is Bucharest: capital of Romania · 1.9 million people.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "transform my avatar in a human",
+     "differs": false,
+     "ops": "I am a person already.",
+     "matrix": "I am a person already.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make bigger yes and a red had",
+     "differs": false,
+     "ops": "Okay! A person's eyes follow the expression, so I made it wide-eyed. Ta-da! I have a ginger beanie now. I do not have red for that; ginger is the closest.",
+     "matrix": "Okay! A person's eyes follow the expression, so I made it wide-eyed. Ta-da! I have a ginger beanie now. I do not have red for that; ginger is the closest.",
+     "statuses": [
+      "supported,supported",
+      "supported,supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "use the cyclops eye",
+     "differs": false,
+     "ops": "A person has no cyclops eyes, but the robot does. Say \"yes\" to become the robot and do that.",
+     "matrix": "A person has no cyclops eyes, but the robot does. Say \"yes\" to become the robot and do that.",
+     "statuses": [
+      "unsupported",
+      "unsupported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "why you turned it in a robot, this ia wrong",
+     "differs": false,
+     "ops": "I am a person now, not a robot.",
+     "matrix": "I am a person now, not a robot.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "turn it in a human again",
+     "differs": false,
+     "ops": "I am a person already.",
+     "matrix": "I am a person already.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make blue eyes",
+     "differs": false,
+     "ops": "A person has no eye color, but the robot does: its eyes glow in any color. Say \"yes\" to become the robot and do that.",
+     "matrix": "A person has no eye color, but the robot does: its eyes glow in any color. Say \"yes\" to become the robot and do that.",
+     "statuses": [
+      "unsupported",
+      "unsupported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "help",
+     "differs": false,
+     "ops": "The Avatar tab lets you change my face. You can say, for example: \"Try the next mouth\", \"What character is on screen\" or \"Make your body lighter\". Ask \"what can you do?\" for the whole list, \"more examples\" for others, or \"how do I ...?\" to find a command.",
+     "matrix": "The Avatar tab lets you change my face. You can say, for example: \"Try the next mouth\", \"What character is on screen\" or \"Make your body lighter\". Ask \"what can you do?\" for the whole list, \"more examples\" for others, or \"how do I ...?\" to find a command.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "what can i say here",
+     "differs": false,
+     "ops": "On the Avatar tab you can say, for example: \"What name do you go by\", \"What colors can your screen be\", \"What seed is this look from\", \"What colors can you change\" or \"Is your face happy\". Say \"more examples\" for others.",
+     "matrix": "On the Avatar tab you can say, for example: \"What name do you go by\", \"What colors can your screen be\", \"What seed is this look from\", \"What colors can you change\" or \"Is your face happy\". Say \"more examples\" for others.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "look suprised",
+     "differs": false,
+     "ops": "Sure! Now I look surprised. (I read \"suprised\" as \"surprised\")",
+     "matrix": "Sure! Now I look surprised. (I read \"suprised\" as \"surprised\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "give tourself a random look",
+     "differs": true,
+     "ops": "There you go! Surprise! My new look has the seed u01182. (I read \"tourself\" as \"yourself\")",
+     "matrix": "There you go! Surprise! My new look has the seed 8d82ez. (I read \"tourself\" as \"yourself\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "ui.avatar.seed: ops \"u01182\" | matrix \"8d82ez\"",
+      "ui.avatar.person.head: ops \"medium2\" | matrix \"shaved2\"",
+      "ui.avatar.person.expression: ops \"cyclops\" | matrix \"calm\"",
+      "ui.avatar.person.facialHair: ops \"chin\" | matrix \"none\"",
+      "ui.avatar.person.colors.skin: ops \"d08b5b\" | matrix \"edb98a\"",
+      "ui.avatar.person.colors.clothing: ops \"fdea6b\" | matrix \"9ddadb\"",
+      "ui.avatar.person.colors.headContrast: ops \"e8e1e1\" | matrix \"c93305\"",
+      "ui.avatar.caption.for: ops \"[[\\\"accessories\\\",\\\"none\\\"],[\\\"expression\\\",\\\"cyclops\\\"],[\\\"facialHai | matrix \"[[\\\"accessories\\\",\\\"none\\\"],[\\\"expression\\\",\\\"calm\\\"],[\\\"facialHair\\\""
+     ]
+    },
+    {
+     "message": "fa-mi avatarul ca om",
+     "differs": false,
+     "ops": "I did not understand \"fa-mi avatarul ca om\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa-mi avatarul ca om\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "fa avatarul ca om",
+     "differs": false,
+     "ops": "I did not understand \"fa avatarul ca om\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa avatarul ca om\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "fa-i ochii mari",
+     "differs": false,
+     "ops": "I did not understand \"fa-i ochii mari\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa-i ochii mari\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "eys express fear",
+     "differs": false,
+     "ops": "Ta-da! Now I look scared. (I read \"eys\" as \"eyes\")",
+     "matrix": "Ta-da! Now I look scared. (I read \"eys\" as \"eyes\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "fa ochii mari",
+     "differs": false,
+     "ops": "I did not understand \"fa ochii mari\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa ochii mari\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "fa ochi visatori",
+     "differs": false,
+     "ops": "I did not understand \"fa ochi visatori\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "I did not understand \"fa ochi visatori\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make bigger eyes",
+     "differs": false,
+     "ops": "Okay! A person's eyes follow the expression, so I made it wide-eyed.",
+     "matrix": "Okay! A person's eyes follow the expression, so I made it wide-eyed.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make eyes sleepy",
+     "differs": false,
+     "ops": "There you go! A person's eyes follow the expression, so I made it sleepy-eyed.",
+     "matrix": "There you go! A person's eyes follow the expression, so I made it sleepy-eyed.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "b1",
+     "differs": false,
+     "ops": "B1 looks like a game move. Do you want to play tic-tac-toe or chess?",
+     "matrix": "B1 looks like a game move. Do you want to play tic-tac-toe or chess?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "c3",
+     "differs": false,
+     "ops": "C3 looks like a game move. Do you want to play tic-tac-toe or chess?",
+     "matrix": "C3 looks like a game move. Do you want to play tic-tac-toe or chess?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "c1",
+     "differs": false,
+     "ops": "C1 looks like a game move. Do you want to play tic-tac-toe or chess?",
+     "matrix": "C1 looks like a game move. Do you want to play tic-tac-toe or chess?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make a chart: apples 5, pears 3, plums 8",
+     "differs": false,
+     "ops": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8.",
+     "matrix": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "add a cloud nect to a house",
+     "differs": false,
+     "ops": "I did not understand where to put it (\"nect to a house\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
+     "matrix": "I did not understand where to put it (\"nect to a house\"). You can say, for example, \"in the top right corner\", \"next to the sun\" or \"under the tree\".",
+     "statuses": [
+      "unsupported",
+      "unsupported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "next",
+     "differs": false,
+     "ops": "I did not understand \"next\". Did you mean \"Try the next mouth.\" or \"What is next to the sun?\"?",
+     "matrix": "I did not understand \"next\". Did you mean \"Try the next mouth.\" or \"What is next to the sun?\"?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "add a cloud next to a house",
+     "differs": false,
+     "ops": "Ta-da! I drew a yellow house and a cloud next to the yellow house.",
+     "matrix": "Ta-da! I drew a yellow house and a cloud next to the yellow house.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "add a sun",
+     "differs": false,
+     "ops": "Here you go! I drew a yellow sun.",
+     "matrix": "Here you go! I drew a yellow sun.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "move the cloud near sun",
+     "differs": false,
+     "ops": "There! I moved the cloud next to the yellow sun.",
+     "matrix": "There! I moved the cloud next to the yellow sun.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "add more clouds",
+     "differs": false,
+     "ops": "Done! I drew 3 clouds.",
+     "matrix": "Done! I drew 3 clouds.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "more",
+     "differs": false,
+     "ops": "Look at that! I drew 2 clouds.",
+     "matrix": "Look at that! I drew 2 clouds.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "more",
+     "differs": false,
+     "ops": "Nice! I drew 2 clouds.",
+     "matrix": "Nice! I drew 2 clouds.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw a girl",
+     "differs": false,
+     "ops": "Voila! I drew a girl.",
+     "matrix": "Voila! I drew a girl.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "a man",
+     "differs": false,
+     "ops": "Ta-da! I drew a man.",
+     "matrix": "Ta-da! I drew a man.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw 2 people",
+     "differs": false,
+     "ops": "Here you go! I drew 2 blue people.",
+     "matrix": "Here you go! I drew 2 blue people.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw another house",
+     "differs": false,
+     "ops": "There! I drew a yellow house.",
+     "matrix": "There! I drew a yellow house.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "a bigger house",
+     "differs": false,
+     "ops": "Done! I drew a big yellow house (bigger than the house I had).",
+     "matrix": "Done! I drew a big yellow house (bigger than the house I had).",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw a bigger house",
+     "differs": false,
+     "ops": "Look at that! I drew a big yellow house (bigger than the house I had).",
+     "matrix": "Look at that! I drew a big yellow house (bigger than the house I had).",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "bugger house pls",
+     "differs": false,
+     "ops": "Nice! I made the house bigger. There are 4 houses, so I took the last one. You can say \"the first house\" or \"all the houses\". (I read \"bugger\" as \"bigger\")",
+     "matrix": "Nice! I made the house bigger. There are 4 houses, so I took the last one. You can say \"the first house\" or \"all the houses\". (I read \"bugger\" as \"bigger\")",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "bigger house please",
+     "differs": false,
+     "ops": "Voila! I made the house bigger. There are 4 houses, so I took the last one. You can say \"the first house\" or \"all the houses\".",
+     "matrix": "Voila! I made the house bigger. There are 4 houses, so I took the last one. You can say \"the first house\" or \"all the houses\".",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "draw a red house",
+     "differs": false,
+     "ops": "Ta-da! I drew a red house.",
+     "matrix": "Ta-da! I drew a red house.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make a happy man",
+     "differs": false,
+     "ops": "Here you go! I drew a happy man.",
+     "matrix": "Here you go! I drew a happy man.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "transform the avatar in a man",
+     "differs": false,
+     "ops": "Ta-da! A person shows being a man through hair, so I gave myself short neat hair and a short beard.",
+     "matrix": "Ta-da! A person shows being a man through hair, so I gave myself short neat hair and a short beard.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "now in a women",
+     "differs": false,
+     "ops": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "matrix": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "the avatar",
+     "differs": false,
+     "ops": "You are already on the Avatar tab.",
+     "matrix": "You are already on the Avatar tab.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "the avatar should be a women",
+     "differs": false,
+     "ops": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "matrix": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make the avatar a women",
+     "differs": false,
+     "ops": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "matrix": "Sure! A person shows being a woman through hair, so I gave myself long hair and no beard.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "gold:real#rp3-17",
+   "set": "gold",
+   "id": "real#rp3-17",
+   "world": "media.music",
+   "group": "music/draw/map/charts",
+   "four": false,
+   "tab": "music",
+   "class": "neutral wording",
+   "note": "random output (differs between two runs of ops)",
+   "random": true,
+   "outcome": null,
+   "first_diff_turn": 1,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "open the music tab",
+     "differs": false,
+     "ops": "You are already on the Music tab.",
+     "matrix": "You are already on the Music tab.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "play",
+     "differs": true,
+     "ops": "Playing \"Frère Jacques\" on the piano at 120 beats per minute. It is in C major.",
+     "matrix": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.tempo: ops 120 | matrix 100",
+      "media.music.current.title: ops \"Frère Jacques\" | matrix \"Twinkle, Twinkle, Little Star\"",
+      "media.music.current.abc: ops \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:",
+      "media.music.current.notes: ops [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\",\"G3\"] | matrix [\"C4\",\"G4\",\"A4\",\"F4\",\"E4\",\"D4\"]",
+      "media.music.current.songId: ops \"jacques\" | matrix \"twinkle\"",
+      "media.music.score: ops \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "gold:real#rp3-18",
+   "set": "gold",
+   "id": "real#rp3-18",
+   "world": "media.music",
+   "group": "music/draw/map/charts",
+   "four": false,
+   "tab": "music",
+   "class": "neutral wording",
+   "note": "random choice of a song (\"play a random song\"); the two modes drew different songs",
+   "random": false,
+   "outcome": null,
+   "first_diff_turn": 1,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "open the music tab",
+     "differs": false,
+     "ops": "You are already on the Music tab.",
+     "matrix": "You are already on the Music tab.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "play a random song",
+     "differs": true,
+     "ops": "Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major.",
+     "matrix": "Playing \"Row, Row, Row Your Boat\" on the piano at 100 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.tempo: ops 110 | matrix 100",
+      "media.music.current.title: ops \"Mary Had a Little Lamb\" | matrix \"Row, Row, Row Your Boat\"",
+      "media.music.current.abc: ops \"X:1\\nT:Mary Had a Little Lamb\\nC:Traditional tune\\nM:4/4\\nL:1/4\\nQ:1/ | matrix \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"]",
+      "media.music.current.seq: ops [\"E4\",\"D4\",\"C4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"]",
+      "media.music.current.songId: ops \"mary\" | matrix \"row\"",
+      "media.music.score: ops \"X:1\\nT:Mary Had a Little Lamb\\nC:Traditional tune\\nM:4/4\\nL:1/4\\nQ:1/ | matrix \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "coherence:coh.shop.04",
+   "set": "coherence",
+   "id": "coh.shop.04",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "matrix better",
+   "note": "",
+   "random": false,
+   "outcome": {
+    "ops": "failed",
+    "matrix": "passed"
+   },
+   "first_diff_turn": 2,
+   "turns_differing": 2,
+   "turns": [
+    {
+     "message": "I have 20 lei.",
+     "differs": false,
+     "ops": "OK, you have 20 lei.",
+     "matrix": "OK, you have 20 lei.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "I buy a kite.",
+     "differs": false,
+     "ops": "OK, you bought 1 kite.",
+     "matrix": "OK, you bought 1 kite.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Undo that.",
+     "differs": true,
+     "ops": "There is nothing to undo.",
+     "matrix": "OK, I took that back: \"I buy a kite\".",
+     "statuses": [
+      "missing",
+      "supported"
+     ],
+     "state_diff": [
+      "ui.avatar.portrait: ops {\"colors\":{\"hair\":\"2c1b18\",\"skin\":\"edb98a\"},\"beard\":\"none\",\"earrings\": | matrix absent",
+      "ui.avatar.cartoon: ops {\"colors\":{\"base\":\"f9c9b6\",\"earring\":\"f9c9b6\",\"eyeShadow\":\"d2eff3\",\"gl | matrix absent",
+      "ui.avatar.kid: ops {\"colors\":{\"hair\":\"220f00\",\"skin\":\"ffe4c0\"},\"accessories\":\"none\",\"eyes | matrix absent",
+      "ui.avatar.pixel: ops {\"colors\":{\"accessories\":\"daa520\",\"clothing\":\"5bc0de\",\"eyes\":\"76778b\", | matrix absent",
+      "ui.avatar.pixelbot: ops {\"colors\":{\"background\":\"0f172a\",\"glow\":\"7dd3fc\"},\"eyes\":\"round\",\"mout | matrix absent",
+      "ui.avatar.funemoji: ops {\"colors\":{\"background\":\"059ff2\"},\"eyes\":\"cute\",\"mouth\":\"lilSmile\"} | matrix absent",
+      "kids.shop: ops absent | matrix {\"money\":20}"
+     ]
+    },
+    {
+     "message": "How much money do I have?",
+     "differs": true,
+     "ops": "You have 10 lei left.",
+     "matrix": "You have 20 lei now.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "ui.avatar.portrait: ops {\"colors\":{\"hair\":\"2c1b18\",\"skin\":\"edb98a\"},\"beard\":\"none\",\"earrings\": | matrix absent",
+      "ui.avatar.cartoon: ops {\"colors\":{\"base\":\"f9c9b6\",\"earring\":\"f9c9b6\",\"eyeShadow\":\"d2eff3\",\"gl | matrix absent",
+      "ui.avatar.kid: ops {\"colors\":{\"hair\":\"220f00\",\"skin\":\"ffe4c0\"},\"accessories\":\"none\",\"eyes | matrix absent",
+      "ui.avatar.pixel: ops {\"colors\":{\"accessories\":\"daa520\",\"clothing\":\"5bc0de\",\"eyes\":\"76778b\", | matrix absent",
+      "ui.avatar.pixelbot: ops {\"colors\":{\"background\":\"0f172a\",\"glow\":\"7dd3fc\"},\"eyes\":\"round\",\"mout | matrix absent",
+      "ui.avatar.funemoji: ops {\"colors\":{\"background\":\"059ff2\"},\"eyes\":\"cute\",\"mouth\":\"lilSmile\"} | matrix absent",
+      "kids.shop: ops absent | matrix {\"money\":20}"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "coherence:coh.shop.06",
+   "set": "coherence",
+   "id": "coh.shop.06",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "matrix better",
+   "note": "",
+   "random": false,
+   "outcome": {
+    "ops": "failed",
+    "matrix": "passed"
+   },
+   "first_diff_turn": 0,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "I got 5 lei back for a book. What did I pay?",
+     "differs": true,
+     "ops": "OK, you got 5 lei. I do not know your name yet. Tell me: \"my name is ...\". (I read \"pay\" as \"say\")",
+     "matrix": "OK, you got 5 lei back for a book. You paid 17 lei.",
+     "statuses": [
+      "supported",
+      "supported,supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "coherence:coh.arith.04",
+   "set": "coherence",
+   "id": "coh.arith.04",
+   "world": "kids.arith",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "matrix better",
+   "note": "",
+   "random": false,
+   "outcome": {
+    "ops": "failed",
+    "matrix": "passed"
+   },
+   "first_diff_turn": 2,
+   "turns_differing": 2,
+   "turns": [
+    {
+     "message": "Tom has 5 apples.",
+     "differs": false,
+     "ops": "OK, Tom has 5 apples.",
+     "matrix": "OK, Tom has 5 apples.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Tom eats 2 apples.",
+     "differs": false,
+     "ops": "OK, Tom ate 2 apples.",
+     "matrix": "OK, Tom ate 2 apples.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Undo that.",
+     "differs": true,
+     "ops": "There is nothing to undo.",
+     "matrix": "OK, I took that back: \"Tom eats 2 apples\".",
+     "statuses": [
+      "missing",
+      "supported"
+     ],
+     "state_diff": [
+      "ui.avatar.portrait: ops {\"colors\":{\"hair\":\"2c1b18\",\"skin\":\"edb98a\"},\"beard\":\"none\",\"earrings\": | matrix absent",
+      "ui.avatar.cartoon: ops {\"colors\":{\"base\":\"f9c9b6\",\"earring\":\"f9c9b6\",\"eyeShadow\":\"d2eff3\",\"gl | matrix absent",
+      "ui.avatar.kid: ops {\"colors\":{\"hair\":\"220f00\",\"skin\":\"ffe4c0\"},\"accessories\":\"none\",\"eyes | matrix absent",
+      "ui.avatar.pixel: ops {\"colors\":{\"accessories\":\"daa520\",\"clothing\":\"5bc0de\",\"eyes\":\"76778b\", | matrix absent",
+      "ui.avatar.pixelbot: ops {\"colors\":{\"background\":\"0f172a\",\"glow\":\"7dd3fc\"},\"eyes\":\"round\",\"mout | matrix absent",
+      "ui.avatar.funemoji: ops {\"colors\":{\"background\":\"059ff2\"},\"eyes\":\"cute\",\"mouth\":\"lilSmile\"} | matrix absent",
+      "kids.arith: ops absent | matrix {\"holdings\":{\"e.tom\":{\"apple\":5}}}"
+     ]
+    },
+    {
+     "message": "How many apples does Tom have?",
+     "differs": true,
+     "ops": "Tom has 3 apples.",
+     "matrix": "Tom has 5 apples.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "ui.avatar.portrait: ops {\"colors\":{\"hair\":\"2c1b18\",\"skin\":\"edb98a\"},\"beard\":\"none\",\"earrings\": | matrix absent",
+      "ui.avatar.cartoon: ops {\"colors\":{\"base\":\"f9c9b6\",\"earring\":\"f9c9b6\",\"eyeShadow\":\"d2eff3\",\"gl | matrix absent",
+      "ui.avatar.kid: ops {\"colors\":{\"hair\":\"220f00\",\"skin\":\"ffe4c0\"},\"accessories\":\"none\",\"eyes | matrix absent",
+      "ui.avatar.pixel: ops {\"colors\":{\"accessories\":\"daa520\",\"clothing\":\"5bc0de\",\"eyes\":\"76778b\", | matrix absent",
+      "ui.avatar.pixelbot: ops {\"colors\":{\"background\":\"0f172a\",\"glow\":\"7dd3fc\"},\"eyes\":\"round\",\"mout | matrix absent",
+      "ui.avatar.funemoji: ops {\"colors\":{\"background\":\"059ff2\"},\"eyes\":\"cute\",\"mouth\":\"lilSmile\"} | matrix absent",
+      "kids.arith: ops absent | matrix {\"holdings\":{\"e.tom\":{\"apple\":5}}}"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "coherence:coh.tasks.03",
+   "set": "coherence",
+   "id": "coh.tasks.03",
+   "world": "kids.tasks",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "matrix better",
+   "note": "",
+   "random": false,
+   "outcome": {
+    "ops": "failed",
+    "matrix": "passed"
+   },
+   "first_diff_turn": 2,
+   "turns_differing": 2,
+   "turns": [
+    {
+     "message": "Add milk to my shopping list.",
+     "differs": false,
+     "ops": "Done! I added milk to your shopping list.",
+     "matrix": "Done! I added milk to your shopping list.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Add bread to my shopping list.",
+     "differs": false,
+     "ops": "Done! I added bread to your shopping list.",
+     "matrix": "Done! I added bread to your shopping list.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "Undo that.",
+     "differs": true,
+     "ops": "There is nothing to undo.",
+     "matrix": "OK, I took that back: \"Add bread to my shopping list\".",
+     "statuses": [
+      "missing",
+      "supported"
+     ],
+     "state_diff": [
+      "ui.avatar.portrait: ops {\"colors\":{\"hair\":\"2c1b18\",\"skin\":\"edb98a\"},\"beard\":\"none\",\"earrings\": | matrix absent",
+      "ui.avatar.cartoon: ops {\"colors\":{\"base\":\"f9c9b6\",\"earring\":\"f9c9b6\",\"eyeShadow\":\"d2eff3\",\"gl | matrix absent",
+      "ui.avatar.kid: ops {\"colors\":{\"hair\":\"220f00\",\"skin\":\"ffe4c0\"},\"accessories\":\"none\",\"eyes | matrix absent",
+      "ui.avatar.pixel: ops {\"colors\":{\"accessories\":\"daa520\",\"clothing\":\"5bc0de\",\"eyes\":\"76778b\", | matrix absent",
+      "ui.avatar.pixelbot: ops {\"colors\":{\"background\":\"0f172a\",\"glow\":\"7dd3fc\"},\"eyes\":\"round\",\"mout | matrix absent",
+      "ui.avatar.funemoji: ops {\"colors\":{\"background\":\"059ff2\"},\"eyes\":\"cute\",\"mouth\":\"lilSmile\"} | matrix absent",
+      "kids.tasks.lists.shopping: ops [{\"id\":\"task_#\",\"text\":\"milk\",\"done\":false},{\"id\":\"task_#\",\"text\":\"bre | matrix [{\"id\":\"task_#\",\"text\":\"milk\",\"done\":false}]",
+      "kids.tasks.counter: ops 2 | matrix 1"
+     ]
+    },
+    {
+     "message": "What is on my shopping list?",
+     "differs": true,
+     "ops": "On your shopping list: milk and bread.",
+     "matrix": "On your shopping list: milk.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "ui.avatar.portrait: ops {\"colors\":{\"hair\":\"2c1b18\",\"skin\":\"edb98a\"},\"beard\":\"none\",\"earrings\": | matrix absent",
+      "ui.avatar.cartoon: ops {\"colors\":{\"base\":\"f9c9b6\",\"earring\":\"f9c9b6\",\"eyeShadow\":\"d2eff3\",\"gl | matrix absent",
+      "ui.avatar.kid: ops {\"colors\":{\"hair\":\"220f00\",\"skin\":\"ffe4c0\"},\"accessories\":\"none\",\"eyes | matrix absent",
+      "ui.avatar.pixel: ops {\"colors\":{\"accessories\":\"daa520\",\"clothing\":\"5bc0de\",\"eyes\":\"76778b\", | matrix absent",
+      "ui.avatar.pixelbot: ops {\"colors\":{\"background\":\"0f172a\",\"glow\":\"7dd3fc\"},\"eyes\":\"round\",\"mout | matrix absent",
+      "ui.avatar.funemoji: ops {\"colors\":{\"background\":\"059ff2\"},\"eyes\":\"cute\",\"mouth\":\"lilSmile\"} | matrix absent",
+      "kids.tasks.lists.shopping: ops [{\"id\":\"task_#\",\"text\":\"milk\",\"done\":false},{\"id\":\"task_#\",\"text\":\"bre | matrix [{\"id\":\"task_#\",\"text\":\"milk\",\"done\":false}]",
+      "kids.tasks.counter: ops 2 | matrix 1"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "coherence:coh.shop.11",
+   "set": "coherence",
+   "id": "coh.shop.11",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "matrix better",
+   "note": "",
+   "random": false,
+   "outcome": {
+    "ops": "failed",
+    "matrix": "passed"
+   },
+   "first_diff_turn": 1,
+   "turns_differing": 2,
+   "turns": [
+    {
+     "message": "I have 20 lei.",
+     "differs": false,
+     "ops": "OK, you have 20 lei.",
+     "matrix": "OK, you have 20 lei.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "I buy the ball.",
+     "differs": true,
+     "ops": "I took that as: \"i buy a ball\" OK, you bought 1 ball.",
+     "matrix": "OK.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": [
+      "kids.shop: ops absent | matrix {\"money\":15,\"purchases\":[{\"id\":\"w2\",\"item\":\"ball\",\"count\":1}]}"
+     ]
+    },
+    {
+     "message": "How much money do I have?",
+     "differs": true,
+     "ops": "You have 15 lei left.",
+     "matrix": "You have 15 lei left. I assumed 1 ball.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "kids.shop: ops absent | matrix {\"money\":15,\"purchases\":[{\"id\":\"w2\",\"item\":\"ball\",\"count\":1}]}"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "coherence:coh.shop.12",
+   "set": "coherence",
+   "id": "coh.shop.12",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "ops better",
+   "note": "both pass; ops answers 'I buy the ball' with 'you bought 1 ball', matrix with a bare 'OK.' (it says 'I assumed 1 ball.' only at the next answer, which this case does not reach)",
+   "random": false,
+   "outcome": {
+    "ops": "passed",
+    "matrix": "passed"
+   },
+   "first_diff_turn": 1,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "I have 20 lei.",
+     "differs": false,
+     "ops": "OK, you have 20 lei.",
+     "matrix": "OK, you have 20 lei.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "I buy the ball.",
+     "differs": true,
+     "ops": "I took that as: \"i buy a ball\" OK, you bought 1 ball.",
+     "matrix": "OK.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": [
+      "kids.shop: ops absent | matrix {\"money\":15,\"purchases\":[{\"id\":\"w2\",\"item\":\"ball\",\"count\":1}]}"
+     ]
+    },
+    {
+     "message": "Three of them.",
+     "differs": false,
+     "ops": "OK, that makes 3 balls.",
+     "matrix": "OK, that makes 3 balls.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "How much money do I have?",
+     "differs": false,
+     "ops": "You have 5 lei left.",
+     "matrix": "You have 5 lei left.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "coherence:coh.shop.13",
+   "set": "coherence",
+   "id": "coh.shop.13",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "matrix better",
+   "note": "",
+   "random": false,
+   "outcome": {
+    "ops": "failed",
+    "matrix": "passed"
+   },
+   "first_diff_turn": 1,
+   "turns_differing": 2,
+   "turns": [
+    {
+     "message": "I have 20 lei.",
+     "differs": false,
+     "ops": "OK, you have 20 lei.",
+     "matrix": "OK, you have 20 lei.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "I buy the ball.",
+     "differs": true,
+     "ops": "I took that as: \"i buy a ball\" OK, you bought 1 ball.",
+     "matrix": "OK.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": [
+      "kids.shop: ops absent | matrix {\"money\":15,\"purchases\":[{\"id\":\"w2\",\"item\":\"ball\",\"count\":1}]}"
+     ]
+    },
+    {
+     "message": "How much money do I have?",
+     "differs": true,
+     "ops": "You have 15 lei left.",
+     "matrix": "You have 15 lei left. I assumed 1 ball.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "kids.shop: ops absent | matrix {\"money\":15,\"purchases\":[{\"id\":\"w2\",\"item\":\"ball\",\"count\":1}]}"
+     ]
+    },
+    {
+     "message": "How much money do I have?",
+     "differs": false,
+     "ops": "You have 15 lei left.",
+     "matrix": "You have 15 lei left.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  }
+ ]
+}
