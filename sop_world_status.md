@@ -345,7 +345,7 @@ Session creation (matrix): 2.09 ms before, 1.03 ms now (ops 1.01): a session cre
   10. a public host API.
 
   After 1 and 2 land, rerun the bench. Then, world by world, delete the `ops.mjs` code that the rules now cover. Only then is the comparison "library vs custom code" on equal terms.
-- **Open regression, being fixed:** after a watchdog restart the undo timeline is lost in matrix mode, because it is not part of the saved state yet.
+- **Fixed (RESTORE-1):** the undo timeline now survives a watchdog restart. Each committed turn carries the instances' logs, about 48 KB for 40 turns. Writing costs 0.8 ms per turn and a restore about 58 ms. Redo is not restored across a restart.
 
 ## Per-world comparison (all worlds on sopworld vs custom code)
 
