@@ -5,6 +5,14 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    source="the documents you opened"
+    untold=docs.reader.document
+    untold=docs.reader.sentence
+    untold=docs.reader.entity
+    untold=docs.reader.event
+    untold=docs.reader.said
+    untold=docs.reader.relation
     language=en
     status=fixture
     tab=documents

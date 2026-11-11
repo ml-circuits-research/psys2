@@ -118,6 +118,8 @@ export async function createReasoner(set, { lib = null } = {}) {
   const undoOf = new Map(worlds.filter((w) => w.undoAction).map((w) => [w.undoAction, w]));   // action -> the world whose "undo" the library answers by rewinding
   const redoOf = new Map(worlds.filter((w) => w.redoAction).map((w) => [w.redoAction, w]));   // action -> the world whose "redo" the library answers by re-applying the last undo
   const guardOf = new Map(worlds.filter((w) => typeof w.guard === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world that refuses a request on a target that does not exist, with the reason
+  const untold = new Set(worlds.flatMap((w) => w.untold));   // wire types the session memory keeps and the library does not hold
+  const keyOf = new Map(worlds.filter((w) => typeof w.stateKey === 'function').map((w) => [w.id, w.stateKey]));   // world id -> the cheap text that says whether its state changed (a state with big derived or immutable parts is not worth stringifying whole)
   const viewOf = new Map(worlds.filter((w) => typeof w.isView === 'function').map((w) => [w.id, w]));   // world id -> the world that says which library steps only moved what the user looks at
   const wordsOf = new Map(worlds.filter((w) => typeof w.undoWords === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world that says what a generic "undo that" took back (undoWords over its toState)
   const adoptOf = new Map(worlds.filter((w) => typeof w.adopt === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world whose operations change its state and hand it back to the library (`adopt`)
@@ -131,7 +133,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const declared = new Map();   // world id -> Map(action name -> attrs of the matrix's `core.action`): what a missing argument asks and how the answer completes the sentence
   const routes = new Map();
   const reasoner = {
-    lib, voices, assumedBy, problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, wordsOf, adoptOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
+    lib, voices, assumedBy, problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, untold, wordsOf, adoptOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
     /** The base World of a matrix world (built on first use, once per engine). */
     baseOf: (id) => { let b = bases.get(id); if (!b) { b = buildBase(id); bases.set(id, b); } return b; },
     /** Builds every base and returns the problems found (tests, `test-world`). */
@@ -168,11 +170,13 @@ export async function createReasoner(set, { lib = null } = {}) {
       const val = (k) => wire.entries.find((e) => e.key === k)?.value?.v;
       return set.legends.isA(wire.type, 'core.question') ? reasoner.ownerOfType(val('core.question.type')) : reasoner.ownerOfAction(val('core.request.action'));
     },
+    /** The text that stands for a world's state when the host asks whether it changed (`stateKey` of the world's fns.mjs, else the JSON of the state). */
+    json: (id, s) => { const k = keyOf.get(id); return k ? k(s) : JSON.stringify(s); },
     /** What a world's `toState` says of an instance with nothing told: { json, obj } (a state equal to it is not worth creating); `json` is '' when it cannot be read. */
     emptyState: (id) => {
       let e = empties.get(id);
       if (e === undefined) {
-        try { const base = reasoner.baseOf(id); const obj = stateOf.get(id)({ find: (t) => base.ofType(t), query: (q) => base.query(q) }); e = { json: JSON.stringify(obj), obj }; } catch { e = { json: '', obj: null }; }
+        try { const base = reasoner.baseOf(id); const obj = stateOf.get(id)({ find: (t) => base.ofType(t), query: (q) => base.query(q) }); e = { json: reasoner.json(id, obj), obj }; } catch { e = { json: '', obj: null }; }
         empties.set(id, e);
       }
       return e;
@@ -267,7 +271,7 @@ export class ReasonerSession {
   _rebuildShared() { this.sharedIds = new Set(this.sharedLog.filter((x) => !x.dead).map((x) => x.w.id)); }
 
   isFact(type) {
-    if (NOT_FACTS.has(type)) return false;
+    if (NOT_FACTS.has(type) || this.reasoner.untold.has(type)) return false;
     let k = this.known.get(type);
     if (k === undefined) { k = this.reasoner.route(type).ids.length > 0; this.known.set(type, k); }
     return k;
@@ -485,7 +489,7 @@ export class ReasonerSession {
         this._charge(i.world);
       }
     }
-    for (const id of this.reasoner.adoptOf.keys()) if (session.state[id]) this.written.set(id, JSON.stringify(session.state[id]));   // the library is the record again: a state the operations changed is overwritten by what it says
+    for (const id of this.reasoner.adoptOf.keys()) if (session.state[id]) this.written.set(id, this.reasoner.json(id, session.state[id]));   // the library is the record again: a state the operations changed is overwritten by what it says
     const told = this.told, gone = [];
     this.told = told.filter((id) => { if (this._held(id)) return true; const w = session.memory.get(id); if (w) gone.push(w); return false; });
     for (const w of gone) session.memory.retract(w.id, 'taken back');
@@ -591,7 +595,7 @@ export class ReasonerSession {
     for (const [id, w] of this.reasoner.adoptOf) {
       const cur = session.state[id];
       if (!cur) continue;
-      const json = JSON.stringify(cur);
+      const json = this.reasoner.json(id, cur);
       if ((this.written.get(id) ?? this.reasoner.emptyState(id).json) === json) continue;
       const inst = this._inst(id);
       let plan;
@@ -881,20 +885,20 @@ export class ReasonerSession {
         const stamp = `${inst ? inst.world.stamp : -1}/${rc}`;
         let d = this.derived.get(id);
         if (d?.stamp !== stamp) { d = { stamp, json: undefined }; this.derived.set(id, d); }   // what toState said of this very instance state (an instance state has one stamp)
-        if (cur && this.reasoner.adoptOf.has(id) && JSON.stringify(cur) !== (this.written.get(id) ?? this.reasoner.emptyState(id).json)) continue;   // the operations changed it since the library said it: `adoptState` takes it over first
-        if (cur && d.json !== undefined && d.json === JSON.stringify(cur)) { this.written.set(id, d.json); continue; }   // the state already is what the library says
+        if (cur && this.reasoner.adoptOf.has(id) && this.reasoner.json(id, cur) !== (this.written.get(id) ?? this.reasoner.emptyState(id).json)) continue;   // the operations changed it since the library said it: `adoptState` takes it over first
+        if (cur && d.json !== undefined && d.json === this.reasoner.json(id, cur)) { this.written.set(id, d.json); continue; }   // the state already is what the library says
         let next, json;
-        if (inst) { next = toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), redo: rc }); json = JSON.stringify(next); }
+        if (inst) { next = toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), redo: rc }); json = this.reasoner.json(id, next); }
         else { const e = this.reasoner.emptyState(id); if (e.json === '') continue; next = structuredClone(e.obj); json = e.json; }
         d.json = json;
         if (!cur) {
           if (id !== touched && json === this.reasoner.emptyState(id).json) continue;
           cur = (session.state[id] = {});
         }
-        if (json === JSON.stringify(cur)) { this.written.set(id, json); continue; }
+        if (json === this.reasoner.json(id, cur)) { this.written.set(id, json); continue; }
         for (const k of Object.keys(cur)) delete cur[k];
         Object.assign(cur, next);
-        this.written.set(id, JSON.stringify(cur));
+        this.written.set(id, this.reasoner.json(id, cur));
       } catch { /* the state stays as it was */ }
     }
   }

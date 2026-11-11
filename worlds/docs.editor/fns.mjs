@@ -16,7 +16,13 @@ const OWN = new Set(['title', 'blocks', 'cursor', 'selection', 'doc', 'stats', '
 const restOf = (s) => ({ ...Object.fromEntries(Object.entries(s).filter(([k, v]) => !OWN.has(k) && v !== undefined)), ...(s.history?.length ? { histN: s.history.length } : {}) });   // how many undo steps there are (the tab shows it; the steps themselves are the library's)
 const VIEW = new Set(['cursor', 'selection', 'focus', 'dictBlock', 'inputMode', 'doc', 'stats', 'history', 'future']);   // not the content of the document
 const tokens = (o) => JSON.stringify(o);
-const canon = (attrs) => JSON.stringify(Object.keys(attrs ?? {}).filter((k) => !k.startsWith('core.')).sort().map((k) => [k, attrs[k]]));
+/** Do two wires say the same? (the keys the library adds itself, core.*, are not compared) */
+const same = (a, b) => {
+  const ka = Object.keys(a ?? {}).filter((k) => !k.startsWith('core.')), kb = Object.keys(b ?? {});
+  if (ka.length !== kb.length) return false;
+  for (const k of ka) { const x = a[k], y = b[k]; if (!y || x.length !== y.length) return false; for (let i = 0; i < x.length; i++) if (x[i] !== y[i]) return false; }
+  return true;
+};
 
 /** The state ops.mjs keeps (the tab renders it), derived from the wires. History and future are not kept: undo and redo are the library's. */
 export function toState({ find, redo = 0 }) {
@@ -96,7 +102,7 @@ export function adopt({ state, find }) {
       continue;
     }
     kept.add(base);
-    if (canon(h.w.attrs) === canon(w.attrs)) continue;
+    if (same(h.w.attrs, w.attrs)) continue;
     const single = keysOf(h.w.attrs) === keysOf(w.attrs) && Object.keys(w.attrs).every((k) => w.attrs[k].length === 1 && (h.w.attrs[k] ?? []).length === 1);
     if (!single) { retract.push(h.id); tell.push(line(`${base}.r${h.rev + 1}`, w)); continue; }
     for (const [k, vs] of Object.entries(w.attrs)) if (h.w.attrs[k][0] !== vs[0]) sets.push({ id: h.id, key: k, value: vs[0] });
@@ -184,4 +190,10 @@ export function undoWords({ before, after, steps, redo }) {
   if (!parts.length) return { value: redo ? 'OK, I did it again.' : steps > 1 ? `OK, I undid the last ${steps} changes.` : 'OK, I undid the last change.' };
   const text = `OK, ${parts.join(', and ')}.`;
   return { value: !redo && steps > 1 ? `${text.slice(0, -1)} (${steps} changes).` : text };
+}
+
+/** Whether the state changed: the host compares this instead of stringifying the whole state (`doc` and `stats` follow from the blocks, the undo steps are only counted). */
+export function stateKey(s) {
+  const { doc, stats, history, future, ...rest } = s;
+  return JSON.stringify([rest, history?.length ?? 0, future?.length ?? 0]);
 }

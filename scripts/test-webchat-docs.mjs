@@ -29,4 +29,23 @@ export const docScenarios = ({ openChat, MATRIX, check, say }) => ({
       check('editor: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
+  async reader(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      const shelf = () => c.pg.$$eval('.dr-doc', (els) => els.length).catch(() => -1);
+      const title = () => c.pg.$eval('.dr-title', (el) => el.innerText).catch(() => '');
+      await say(c, 'Show me the documents tab');
+      const a = await say(c, 'who is Hansel?');
+      check('reader: a question is answered from the open document and the tab shows it', /^Hansel is a boy/.test(a) && /Hansel and Gretel/.test(await title()), `${a.slice(0, 40)} | ${await title()}`);
+      const r = await say(c, 'read sentence 99');
+      check('reader: a sentence that does not exist is refused by the rules, with the reason', r === 'There is no sentence 99; the document has 66 sentences.', r.slice(0, 80));
+      await say(c, 'close the document');
+      const n = await shelf();
+      const q = await say(c, 'who is Hansel?');
+      check('reader: a closed document is gone from the shelf and the question says there is none', n === 0 && /^There is no document open\./.test(q), `${n} | ${q.slice(0, 60)}`);
+      const u = await say(c, 'undo that');
+      check('reader: "undo that" puts it back, in the world\'s words, and the shelf shows it again', u === 'OK, I put "Hansel and Gretel" back on the shelf.' && (await shelf()) === 1, `${u.slice(0, 60)} | ${await shelf()}`);
+      check('reader: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
 });
