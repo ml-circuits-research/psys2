@@ -121,3 +121,9 @@ export function toState({ find }) {
     purchases: find(K('purchase')).map((w) => ({ id: w.id, item: un(w.attrs.item?.[0]), count: Number(w.attrs.count?.[0] ?? 1) })),
   };
 }
+
+/** The words for a default or guessed value an answer rests on (spec 15, certainty): "I assumed 1 ball." */
+export function assumed({ key, value, attrs }) {
+  if (key !== 'count' || !attrs.item) return null;
+  return `${value} ${attrs.item}${Number(value) === 1 ? '' : 's'}`;
+}

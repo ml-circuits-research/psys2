@@ -1,0 +1,14 @@
+@pat.games.tictactoe.m.why core.pattern
+    match="[$lang.lead.filler|pls|hey]? why [$lang.why.did] you [$lang.why.act] [$lang.why.there]"
+    emit="@{_} core.request action=ttt.why"
+    kind=request
+    priority=14
+    example="Why did you play there?"
+    example="Why did you pick that square?"
+
+@pat.games.tictactoe.m.why.short core.pattern
+    match="[$lang.lead.filler|pls|hey]? why [$lang.why.place]"
+    emit="@{_} core.request action=ttt.why"
+    kind=request
+    priority=14
+    example="Why there?"

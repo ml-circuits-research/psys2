@@ -340,6 +340,8 @@ export class Interpreter {
         if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
         const target = this._actionOp(action);
         if (!target) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
+        const viaLibrary = session.rs?.request(action, args, session);   // an action the matrix reasoner answers (spec 15) is answered by it whoever asks
+        if (viaLibrary) { session.rs.syncTo(session); if (viaLibrary.openTab) { this.runAction(session, 'ui.openTab', { tab: viaLibrary.openTab }); delete viaLibrary.openTab; } return viaLibrary; }
         st.depth++;
         try { return this._runOp(session, target, { wire: null, action, args, where: {}, mode: 'value' }, {}, st, { ...args }); }
         finally { st.depth--; }
@@ -452,7 +454,10 @@ export class Interpreter {
     const op = this.set.list().flatMap((w) => w.operations).find((o) => o.semantics === 'action' && (o.id === action || o.action === action));
     const spec = { wire, action, args, where: {}, mode: 'value' };
     let envelope = session.rs?.owns(wire) ? session.rs.resolve(wire, session) : null;
-    if (envelope) session.rs.syncTo(session);   // answered by the library (spec 15); what its actions wrote is copied to the session memory
+    if (envelope) {
+      session.rs.syncTo(session);   // answered by the library (spec 15); what its actions wrote is copied to the session memory
+      if (envelope.openTab) { this.runAction(session, 'ui.openTab', { tab: envelope.openTab }); delete envelope.openTab; }   // a game's action brings its tab forward, as its operation did
+    }
     else if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
     else envelope = this._runOp(session, op, spec, {}, st, { ...args, request: wire });
     spec.op = op;
@@ -524,11 +529,13 @@ export class Interpreter {
       ? [spec.op?.id, action && 'action.' + action, spec.action && 'action.' + spec.action]
       : [env.via && env.via !== 'core.lookup' ? env.via : null, spec.seek];
     const mode = result.kind === 'question' ? spec.mode : 'value';
+    // an answer that rests on an assumed value (matrix reasoner, spec 15) says so once, after the answer
+    const said = (text) => (env.assumed && env.status === 'supported' ? `${text} ${env.assumed}` : text);
     for (const t of R.pick(fors, env.status, mode, vars)) {
       const text = R.fill(t.text, vars, mem);
-      if (text !== null) return text;
+      if (text !== null) return said(text);
     }
-    return fallbackText(env, { mode, ask: env.ask });
+    return said(fallbackText(env, { mode, ask: env.ask }));
   }
 
   /** Acknowledge statement wires with ack.<type> templates (fallback "OK."). */

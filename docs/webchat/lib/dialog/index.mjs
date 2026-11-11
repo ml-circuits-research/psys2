@@ -10,11 +10,11 @@
  * Without it all input is treated as English.
  */
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=46116712b1';
-import { loadWorlds } from '../worlds/index.mjs?v=dcce5aea74';
+import { loadWorlds } from '../worlds/index.mjs?v=304bb0fd54';
 import { validateWorldSet } from '../worlds/validate.mjs?v=1eb2f0538f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=e174b1e71d';
-import { createReasoner } from '../reasoner/index.mjs?v=94e3c8b675';
+import { createInterpreter } from '../interpreter/index.mjs?v=853e7376d5';
+import { createReasoner } from '../reasoner/index.mjs?v=d3e6211cc2';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=14798d6e5b';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=13d688a978';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -29,7 +29,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=e468d994f5';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=8ba02e1397';
 import { checkValues } from './value-check.mjs?v=dbf4aad634';
-import { Discourse } from './discourse.mjs?v=cf3508a639';
+import { Discourse } from './discourse.mjs?v=a757d86cc9';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
@@ -1274,8 +1274,9 @@ export class DialogSession {
     this._astraTurn({ sid, english, meta, pre, pend, segments, state, stateBefore, tabBefore });
     const effects = this.isession.effects;
     this.isession.effects = [];
+    const assumptions = answers.flatMap((a) => a.envelope?.assumptions ?? []);   // the default / guessed values the answers rest on (matrix reasoner; absent otherwise)
     return {
-      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}),
+      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}), ...(assumptions.length ? { assumptions } : {}),
       trace: {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], nx: formal.nx ?? null, ...(encoderError ? { error: encoderError } : {}) },
         dispatch: dispatch ?? null,

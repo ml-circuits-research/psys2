@@ -805,3 +805,30 @@
     expect="What do you want to buy?"
     reasoner=ops
 
+
+@t.shop.m01 core.test
+    session=m1
+    input="I have 20 lei. I buy the ball."
+    expect="OK"
+    doc="SOPWORLD-1b item 4: nobody said how many balls, so one is assumed (tier default) and an answer that rests on it says so, once"
+    reasoner=matrix
+
+@t.shop.m02 core.test
+    session=m1
+    input="How much money do I have?"
+    expect="You have 15 lei left."
+    expect="I assumed 1 ball."
+    reasoner=matrix
+
+@t.shop.m03 core.test
+    session=m1
+    input="How much money do I have?"
+    expect="You have 15 lei left."
+    reasoner=matrix
+
+@t.shop.m04 core.test
+    session=m2
+    input="I have 20 lei. I buy the ball. Three of them. How much money do I have?"
+    expect="You have 5 lei left."
+    doc="three of them is told: the assumption is gone and nothing is said about assuming"
+    reasoner=matrix

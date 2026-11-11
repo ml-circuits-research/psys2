@@ -12,8 +12,8 @@ export function initialState() {
   return { board: Array(9).fill(''), user: 'X', turn: 'X', winner: null, level: 'easy', seed: 20240607, last: { user: null, system: null } };
 }
 
-const LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-const NAMES = ['top left', 'top middle', 'top right', 'middle left', 'the center', 'middle right', 'bottom left', 'bottom middle', 'bottom right'];
+export const LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+export const NAMES = ['top left', 'top middle', 'top right', 'middle left', 'the center', 'middle right', 'bottom left', 'bottom middle', 'bottom right'];
 const ORDER = [4, 0, 2, 6, 8, 1, 3, 5, 7];
 const POS = {
   top_left: 0, upper_left: 0, top_middle: 1, top_center: 1, top_centre: 1, top_right: 2, upper_right: 2,
@@ -27,12 +27,12 @@ for (const r of Object.keys(RC)) for (const c of Object.keys(CC)) {
   POS[`${r}_row_${c}`] = RC[r] * 3 + CC[c];
   POS[`${c}_column_${r}`] = RC[r] * 3 + CC[c];
 }
-const LEVEL_OF = { easy: 'easy', easier: 'easy', simple: 'easy', beginner: 'easy', perfect: 'perfect', perfectly: 'perfect', hard: 'perfect', harder: 'perfect', hardest: 'perfect', unbeatable: 'perfect', expert: 'perfect', difficult: 'perfect', lighter: 'easy', light: 'easy', easiest: 'easy', lowest: 'easy', weak: 'easy', max: 'perfect', maximum: 'perfect', highest: 'perfect', toughest: 'perfect', tough: 'perfect', impossible: 'perfect', strong: 'perfect', smart: 'perfect', maxed: 'perfect' };
+export const LEVEL_OF = { easy: 'easy', easier: 'easy', simple: 'easy', beginner: 'easy', perfect: 'perfect', perfectly: 'perfect', hard: 'perfect', harder: 'perfect', hardest: 'perfect', unbeatable: 'perfect', expert: 'perfect', difficult: 'perfect', lighter: 'easy', light: 'easy', easiest: 'easy', lowest: 'easy', weak: 'easy', max: 'perfect', maximum: 'perfect', highest: 'perfect', toughest: 'perfect', tough: 'perfect', impossible: 'perfect', strong: 'perfect', smart: 'perfect', maxed: 'perfect' };
 
 const ok = (value) => ({ status: 'supported', value });
 const no = (status, note) => ({ status, note });
-const other = (m) => (m === 'X' ? 'O' : 'X');
-const winnerOf = (b) => { for (const [x, y, z] of LINES) if (b[x] && b[x] === b[y] && b[x] === b[z]) return b[x]; return b.every(Boolean) ? 'draw' : null; };
+export const other = (m) => (m === 'X' ? 'O' : 'X');
+export const winnerOf = (b) => { for (const [x, y, z] of LINES) if (b[x] && b[x] === b[y] && b[x] === b[z]) return b[x]; return b.every(Boolean) ? 'draw' : null; };
 const empties = (b) => b.map((c, i) => (c ? -1 : i)).filter((i) => i >= 0);
 const moves = (b) => b.filter(Boolean).length;
 const show = (ctx) => ctx.request('ui.openTab', { tab: 'tictactoe' });
@@ -51,7 +51,7 @@ function minimax(b, mark, me, depth = 0) {
   }
   return best;
 }
-function bestMove(b, mark) {
+export function bestMove(b, mark) {
   let best = null, bestV = -Infinity;
   for (const i of ORDER) {
     if (b[i]) continue;
@@ -62,11 +62,11 @@ function bestMove(b, mark) {
   }
   return best;
 }
-function findWin(b, mark) {
+export function findWin(b, mark) {
   for (const i of empties(b)) { b[i] = mark; const w = winnerOf(b); b[i] = ''; if (w === mark) return i; }
   return null;
 }
-function chooseEasy(s, mark) {
+export function chooseEasy(s, mark) {
   const b = s.board;
   const win = findWin(b, mark); if (win !== null) return win;
   const block = findWin(b, other(mark)); if (block !== null) return block;
@@ -90,7 +90,7 @@ function systemMove(s) {
   finish(s);
   return i;
 }
-function ending(s) {
+export function ending(s) {
   if (s.winner === 'draw') return ' It is a draw!';
   if (s.winner === s.user) return ' You win! Well done.';
   if (s.winner) return ' I win this time! Say "new game" to play again.';
@@ -104,7 +104,7 @@ function startGame(s, user) {
   if (user === 'O') return systemMove(s);
   return null;
 }
-function intro(s, first) {
+export function intro(s, first) {
   const lvl = s.level === 'perfect' ? 'I play perfectly.' : 'I play at the easy level.';
   const who = s.user === 'X' ? 'You are X and you go first.' : `You are O and I go first: I took ${NAMES[first]}.`;
   return `${who} ${lvl} Say a place like "center" or "top left", or a coordinate like B2 (letter for the column, number for the row).`;
@@ -137,22 +137,30 @@ const ORD = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, last:
 const ROWW = { top: 0, upper: 0, up: 0, high: 0, highest: 0, first: 0, middle: 1, mid: 1, center: 1, centre: 1, second: 1, bottom: 2, lower: 2, down: 2, low: 2, lowest: 2, third: 2, last: 2 };
 const COLW = { left: 0, first: 0, middle: 1, mid: 1, center: 1, centre: 1, second: 1, right: 2, third: 2, last: 2 };
 
-function _move(ctx, { pos, col, row, numeric, rname, cname }) {
-  const s = ctx.state;
+/** The square a move names (index 0-8, row-major), or `{ fail }` with the answer for a place that is not on the board. Shared with the matrix actions (fns.mjs). */
+export function placeIndex({ pos, col, row, numeric, rname, cname }) {
   let idx;
   if (rname !== undefined && cname !== undefined) {
     const r = ROWW[rname], c = COLW[cname];
-    if (r === undefined || c === undefined) return no('unsupported', `I do not know the place ${rname} ${cname}.`);
+    if (r === undefined || c === undefined) return { fail: no('unsupported', `I do not know the place ${rname} ${cname}.`) };
     idx = r * 3 + c;
   } else if (pos !== undefined) idx = POS[pos] ?? POS[String(pos).replace(/-/g, '_')];
   else {
     const colL = PHON[String(col).toLowerCase()] ?? String(col).toLowerCase();
     const c = numeric === 'true' ? (ORD[colL] ?? Number(col)) - 1 : 'abc'.indexOf(colL);
     const r = (ORD[String(row).toLowerCase()] ?? Number(row)) - 1;
-    if (!(c >= 0 && c <= 2 && r >= 0 && r <= 2)) return no('unsupported', 'The board has columns A to C and rows 1 to 3, for example B2.');
+    if (!(c >= 0 && c <= 2 && r >= 0 && r <= 2)) return { fail: no('unsupported', 'The board has columns A to C and rows 1 to 3, for example B2.') };
     idx = r * 3 + c;
   }
-  if (idx === undefined) return no('unsupported', `I do not know the place ${pos}.`);
+  if (idx === undefined) return { fail: no('unsupported', `I do not know the place ${pos}.`) };
+  return { idx };
+}
+
+function _move(ctx, args) {
+  const s = ctx.state;
+  const p = placeIndex(args);
+  if (p.fail) return p.fail;
+  const idx = p.idx;
   show(ctx);
   if (s.winner) return no('unsupported', 'The game is over. Say "new game" to play again.');
   if (s.board[idx]) return no('unsupported', `${NAMES[idx][0].toUpperCase()}${NAMES[idx].slice(1)} is already taken by ${s.board[idx] === s.user ? 'you' : 'me'}. Please pick another place.`);

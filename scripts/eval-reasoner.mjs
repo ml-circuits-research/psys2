@@ -90,7 +90,7 @@ function onTurn(label) {
 
 // ---- (d) assumptions ------------------------------------------------------------------------------------------------------------
 const assumptions = { answers: 0, relied: 0, said: 0, examples: [] };
-const SAYS = /\b(assum|guess|default|i took|i read|i supposed|because|you said)\b/i;
+const SAYS = /\b(assum\w*|guess\w*|default|i took|i read|i supposed|because|you said)\b/i;
 function noteAnswers(reply, s) {
   for (const a of reply.answers ?? []) {
     assumptions.answers++;
@@ -159,7 +159,7 @@ async function runCoherence(c) {
     if (i === c.turns.length - 1) beforeLast = { money: sig(s, SIG.money), list: sig(s, SIG.list) };
     const r = await s.send(m, {});
     noteAnswers(r, s);
-    turns.push({ message: m, reply: r.text, statuses: r.statuses });
+    turns.push({ message: m, reply: r.text, statuses: r.statuses, assumptions: r.assumptions ?? [] });
     await onTurnCoh(s);
     const b = moneyBalance();
     if (b && (b.status === 'refused' || b.status === 'conflicting' || (b.status === 'supported' && Number(b.value) < 0))) negativeMoney = true;
@@ -190,6 +190,15 @@ async function runCoherence(c) {
         add(h, /added|put|on your/i.test(f.text) && has(f.text, v[0])); break;
       }
       case 'followup_state': add(h, s.isession.memory.find('kids.tasks.entry').some((w) => w.entries.some((e) => e.key.endsWith('.text') && has(String(e.value.v), 'milk')) && w.entries.some((e) => e.key.endsWith('.list') && /shopping/.test(e.value.v)))); break;
+      // certainty (SOPWORLD-1b item 4): true = the last answer rests on an assumed value (reply.assumptions, from the tiers) and says "I assumed ..." exactly once;
+      // 'once' = across the dialogue the sentence is said in exactly one reply, which carries the assumption; 'none' = no turn rests on an assumption and none says it
+      case 'assumption_visible': case 'assumption-visible': {
+        const says = (t) => (t.reply.match(/\b(I assumed|Am presupus)\b/g) ?? []).length;
+        if (v === 'none') add(h, turns.every((t) => !t.assumptions.length && !says(t)));
+        else if (v === 'once') add(h, turns.filter((t) => says(t) === 1 && t.assumptions.length).length === 1 && turns.every((t) => says(t) <= 1));
+        else add(h, last.assumptions.length > 0 && says(last) === 1);
+        break;
+      }
       case 'flags_problem': add(h, last.statuses.includes('conflicting') || PROBLEM.test(last.reply) || turns.some((t) => t.statuses.includes('conflicting')), true); break;
       case 'not_supported_number': case 'not_plain_certain': add(h, null, true); break;
       default: add(h, null, true);
@@ -285,7 +294,7 @@ function writeSection() {
     `| (a) cases whose outcome differs between the strategies | ${dif} | |`,
     row('(b) turns audited (session holds facts of the three worlds)', (r) => String(r.audit.turns)),
     row('(b) turns that leave a violation (library check of the whole state)', (r) => `${r.audit.with_violation} (${r.audit.violation_rate_pct}%) ${JSON.stringify(r.audit.kinds)}`),
-    row('(c) coherence set passed / 30 (mechanical hints)', (r) => `${r.coherence?.total.passed}/${r.coherence?.total.total} (+${r.coherence?.total.review} with a hint for the reviewer)`),
+    row('(c) coherence set passed / total (mechanical hints)', (r) => `${r.coherence?.total.passed}/${r.coherence?.total.total} (+${r.coherence?.total.review} with a hint for the reviewer)`),
     ...kinds.map((k) => row(`(c) kind ${k}`, (r) => { const x = r.coherence?.byKind[k]; return x ? `${x.passed}/${x.total}` : 'n/a'; })),
     row('(d) answers that relied on a default or a guess / said so', (r) => `${r.assumptions.relied} / ${r.assumptions.said} (of ${r.assumptions.answers} answers)`),
     row('(e) ms per turn, three worlds p50 / p95', (r) => `${r.ms_per_turn.three.p50} / ${r.ms_per_turn.three.p95}`),

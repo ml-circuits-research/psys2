@@ -2115,3 +2115,45 @@
     alt=some_stuff
     alt=some_things
     alt=stuff
+
+@phrase.lang.why.did core.phrase
+    doc="The auxiliary after why in a question about what the assistant did (\"why did you ...\")."
+    alt=did
+    alt=do
+    alt=would
+
+@phrase.lang.why.act core.phrase
+    doc="What the assistant did, asked about after \"why did you\" (play, choose, take a square)."
+    alt=put_your_mark
+    alt=place_it
+    alt=put_it
+    alt=choose
+    alt=select
+    alt=play
+    alt=move
+    alt=pick
+    alt=take
+    alt=mark
+    alt=go
+
+@phrase.lang.why.there core.phrase
+    doc="The place or thing that \"why did you ...\" points at (there, that square, that move)."
+    alt=that_square
+    alt=that_place
+    alt=that_move
+    alt=that_spot
+    alt=that_one
+    alt=that_way
+    alt=there
+    alt=here
+    alt=that
+    alt=it
+
+@phrase.lang.why.place core.phrase
+    doc="A place or a move named on its own after \"why\" (\"why there?\", \"why that square?\"): only phrases that cannot be mistaken for another question."
+    alt=that_square
+    alt=that_place
+    alt=that_move
+    alt=that_spot
+    alt=that_one
+    alt=there

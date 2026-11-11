@@ -4,8 +4,8 @@
  "limit": null,
  "coherence": {
   "total": {
-   "passed": 17,
-   "total": 30,
+   "passed": 25,
+   "total": 33,
    "review": 3
   },
   "byKind": {
@@ -15,12 +15,12 @@
     "review": 1
    },
    "missing-arg": {
-    "passed": 2,
+    "passed": 3,
     "total": 3,
     "review": 1
    },
    "default-revision": {
-    "passed": 1,
+    "passed": 3,
     "total": 3,
     "review": 0
    },
@@ -30,12 +30,12 @@
     "review": 0
    },
    "explain": {
-    "passed": 0,
+    "passed": 3,
     "total": 3,
     "review": 0
    },
    "abduce": {
-    "passed": 0,
+    "passed": 1,
     "total": 2,
     "review": 0
    },
@@ -45,8 +45,8 @@
     "review": 0
    },
    "assumption-visible": {
-    "passed": 3,
-    "total": 3,
+    "passed": 4,
+    "total": 6,
     "review": 1
    },
    "deduce": {
@@ -60,7 +60,7 @@
     "id": "coh.shop.01",
     "kind": "contradiction",
     "world": "kids.shop",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
@@ -69,7 +69,7 @@
      },
      {
       "hint": "never_state",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -94,12 +94,12 @@
     "id": "coh.shop.03",
     "kind": "default-revision",
     "world": "kids.shop",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "final_answer_contains",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -120,12 +120,12 @@
     "id": "coh.shop.05",
     "kind": "explain",
     "world": "kids.shop",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "answer_mentions",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -202,12 +202,12 @@
     "id": "coh.arith.01",
     "kind": "contradiction",
     "world": "kids.arith",
-    "passed": true,
+    "passed": false,
     "needs_review": false,
     "hints": [
      {
       "hint": "status",
-      "ok": true
+      "ok": false
      },
      {
       "hint": "never_answer",
@@ -232,12 +232,12 @@
     "id": "coh.arith.03",
     "kind": "default-revision",
     "world": "kids.arith",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "final_answer_contains",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -258,7 +258,7 @@
     "id": "coh.arith.05",
     "kind": "explain",
     "world": "kids.arith",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
@@ -267,7 +267,7 @@
      },
      {
       "hint": "answer_mentions",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -309,12 +309,12 @@
     "id": "coh.arith.08",
     "kind": "abduce",
     "world": "kids.arith",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "final_answer_contains",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -348,20 +348,20 @@
     "id": "coh.tasks.01",
     "kind": "missing-arg",
     "world": "kids.tasks",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "asks_question",
-      "ok": false
+      "ok": true
      },
      {
       "hint": "followup",
-      "ok": false
+      "ok": true
      },
      {
       "hint": "followup_state",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -455,12 +455,12 @@
     "id": "coh.tasks.08",
     "kind": "explain",
     "world": "kids.tasks",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "answer_mentions_any",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -489,48 +489,60 @@
       "ok": true
      }
     ]
-   }
-  ],
-  "transcripts": [
+   },
    {
-    "id": "coh.shop.01",
-    "kind": "contradiction",
-    "expect": "A book costs 12 lei and the user has 10: the purchase must be refused (or recorded as a problem), never leave negative money. The last answer is 10 lei.",
+    "id": "coh.shop.11",
+    "kind": "assumption-visible",
+    "world": "kids.shop",
     "passed": false,
+    "needs_review": false,
     "hints": [
      {
       "hint": "final_answer_contains",
       "ok": true
      },
      {
-      "hint": "never_state",
+      "hint": "assumption_visible",
       "ok": false
      }
-    ],
-    "turns": [
-     "> I have 10 lei.\n  OK, you have 10 lei.",
-     "> I buy a book.\n  OK, you bought 1 book.",
-     "> How much money do I have?\n  That does not add up. You only had 10 lei, so you cannot spend 12 lei."
     ]
    },
    {
-    "id": "coh.shop.03",
-    "kind": "default-revision",
-    "expect": "The purchase is first one ball (count assumed 1, 15 left); 'three of them' revises the same purchase to 3 balls (not a second purchase): 5 lei left.",
-    "passed": false,
+    "id": "coh.shop.12",
+    "kind": "assumption-visible",
+    "world": "kids.shop",
+    "passed": true,
+    "needs_review": false,
     "hints": [
      {
       "hint": "final_answer_contains",
-      "ok": false
+      "ok": true
+     },
+     {
+      "hint": "assumption_visible",
+      "ok": true
      }
-    ],
-    "turns": [
-     "> I have 20 lei.\n  OK, you have 20 lei.",
-     "> I buy a ball.\n  OK, you bought 1 ball.",
-     "> Three of them.\n  I did not understand \"Three of them\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
-     "> How much money do I have?\n  You have 15 lei left."
     ]
    },
+   {
+    "id": "coh.shop.13",
+    "kind": "assumption-visible",
+    "world": "kids.shop",
+    "passed": false,
+    "needs_review": false,
+    "hints": [
+     {
+      "hint": "final_answer_contains",
+      "ok": true
+     },
+     {
+      "hint": "assumption_visible",
+      "ok": false
+     }
+    ]
+   }
+  ],
+  "transcripts": [
    {
     "id": "coh.shop.04",
     "kind": "undo",
@@ -550,23 +562,6 @@
     ]
    },
    {
-    "id": "coh.shop.05",
-    "kind": "explain",
-    "expect": "The explanation names the facts used: 20 lei, 2 kites, 10 lei each, 20 spent.",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "answer_mentions",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> I have 20 lei.\n  OK, you have 20 lei.",
-     "> I buy 2 kites.\n  OK, you bought 2 kites.",
-     "> Why do I have nothing left?\n  I don't know whether you have a nothing. You can tell me: I have a nothing called Rex. I understood only part of that: I did not use \"Why\" and \"left\"."
-    ]
-   },
-   {
     "id": "coh.shop.06",
     "kind": "abduce",
     "expect": "17 lei (a book costs 12).",
@@ -582,6 +577,27 @@
     ]
    },
    {
+    "id": "coh.arith.01",
+    "kind": "contradiction",
+    "expect": "Eating more than he has is impossible: flagged with the reason (conflicting), never -2.",
+    "passed": false,
+    "hints": [
+     {
+      "hint": "status",
+      "ok": false
+     },
+     {
+      "hint": "never_answer",
+      "ok": true
+     }
+    ],
+    "turns": [
+     "> Tom has 3 apples.\n  OK, Tom has 3 apples.",
+     "> Tom eats 5 apples.\n  That does not add up. Tom only had 3 apples, so Tom cannot eat 5.",
+     "> How many apples does Tom have?\n  Tom has 3 apples."
+    ]
+   },
+   {
     "id": "coh.arith.02",
     "kind": "missing-arg",
     "expect": "The amount given is unknown: the count is unknown/at least 5, or it asks how many; never a made-up number.",
@@ -594,26 +610,8 @@
     ],
     "turns": [
      "> Tom has 5 apples.\n  OK, Tom has 5 apples.",
-     "> Ana gives him some.\n  I did not understand \"Ana gives him some\". Did you mean \"Ana gave Tom an apple.\" or \"Ana gave an apple to Tom.\"?",
-     "> How many apples does Tom have?\n  Tom has 5 apples."
-    ]
-   },
-   {
-    "id": "coh.arith.03",
-    "kind": "default-revision",
-    "expect": "The correction replaces the event (not a second gift): 9.",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "final_answer_contains",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> Tom has 5 apples.\n  OK, Tom has 5 apples.",
-     "> Ana gives him 3 apples.\n  OK, Ana gave Tom 3 apples.",
-     "> No, she gives him 4.\n  We are not playing twenty questions. Say \"guess my animal\" to start. OK, Ana gave Tom 4 apples.",
-     "> How many apples does Tom have?\n  Tom has 12 apples."
+     "> Ana gives him some.\n  OK, Ana gave Tom some apples. I don't know how many.",
+     "> How many apples does Tom have?\n  Tom has more than 5 apples: I was only told that some more came, not how many."
     ]
    },
    {
@@ -635,46 +633,6 @@
     ]
    },
    {
-    "id": "coh.arith.05",
-    "kind": "explain",
-    "expect": "6, and the explanation lists the three facts in order (5, +3, -2).",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "answers_contain",
-      "ok": true
-     },
-     {
-      "hint": "answer_mentions",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> Tom has 5 apples.\n  OK, Tom has 5 apples.",
-     "> Ana gives him 3 apples.\n  OK, Ana gave Tom 3 apples.",
-     "> He eats 2.\n  OK, Tom ate 2 apples.",
-     "> How many apples does Tom have?\n  Tom has 6 apples.",
-     "> Why?\n  You said \"How many apples does Tom have?\", so I answered it. What I answered: Tom has 6 apples."
-    ]
-   },
-   {
-    "id": "coh.arith.08",
-    "kind": "abduce",
-    "expect": "5.",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "final_answer_contains",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> Tom had some apples.\n  I did not understand \"Tom had some apples\". Did you mean \"Tom ate 2 apples.\" or \"Ana gave Tom an apple.\"?",
-     "> He ate 2 and now has 3.\n  I did not understand \"He ate 2 and now has 3\". Did you mean \"Tom ate 2 apples.\"?",
-     "> How many apples did Tom have at first?\n  I did not understand \"How many apples did Tom have at first\". Did you mean \"How many apples does Tom have?\" or \"Ana gave Tom an apple.\"?"
-    ]
-   },
-   {
     "id": "coh.arith.09",
     "kind": "assumption-visible",
     "expect": "Tom's starting count was never said: unknown, or 'at least 2 / received 2' said as such; not a plain 2 presented as certain.",
@@ -687,7 +645,7 @@
     ],
     "turns": [
      "> Ana gives Tom 2 apples.\n  OK, Ana gave Tom 2 apples.",
-     "> How many apples does Tom have?\n  Tom got 2 apples from Ana. I don't know how many Tom had before."
+     "> How many apples does Tom have?\n  I don't know how many apples Tom had; Tom got 2 from Ana."
     ]
    },
    {
@@ -704,32 +662,8 @@
     "turns": [
      "> Tom has 5 apples.\n  OK, Tom has 5 apples.",
      "> Tom gives Ana 2 apples.\n  OK, Tom gave Ana 2 apples.",
-     "> Tom gives Ana 4 apples.\n  OK, Tom gave Ana 4 apples.",
-     "> How many apples does Ana have?\n  That does not add up. Tom only had 3 apples, so Tom cannot give away 4."
-    ]
-   },
-   {
-    "id": "coh.tasks.01",
-    "kind": "missing-arg",
-    "expect": "Asks what to put on the list; then a one-word answer completes it.",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "asks_question",
-      "ok": false
-     },
-     {
-      "hint": "followup",
-      "ok": false
-     },
-     {
-      "hint": "followup_state",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> Add to my shopping list.\n  Done! I added add to your shopping list.",
-     "> milk\n  I did not understand \"milk\". Did you mean \"I didn't buy milk.\" or \"Add milk to my list.\"?"
+     "> Tom gives Ana 4 apples.\n  That does not add up. Tom only had 3 apples, so Tom cannot give away 4.",
+     "> How many apples does Ana have?\n  I don't know how many apples Ana had; Ana got 2 from Tom."
     ]
    },
    {
@@ -755,23 +689,6 @@
     ]
    },
    {
-    "id": "coh.tasks.08",
-    "kind": "explain",
-    "expect": "Because the user marked it done (names the turn).",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "answer_mentions_any",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> Add milk to my shopping list.\n  Done! I added milk to your shopping list.",
-     "> Mark milk as done.\n  Well done! I ticked off milk on your shopping list.",
-     "> Why is milk done?\n  Yes, you finished milk. I understood only part of that: I did not use \"Why\"."
-    ]
-   },
-   {
     "id": "coh.tasks.09",
     "kind": "deduce",
     "expect": "2.",
@@ -786,6 +703,49 @@
      "> Add milk, eggs and bread to my shopping list.\n  Done! I added milk, eggs and bread to your shopping list.",
      "> Remove eggs.\n  I do not know what \"eggs\" is. You can say the car, the tree, the sky, the grass, or everything.",
      "> How many things are on my shopping list?\n  You have 3 things on your shopping list."
+    ]
+   },
+   {
+    "id": "coh.shop.11",
+    "kind": "assumption-visible",
+    "expect": "The user did not say how many balls: one is assumed (tier default). The answer is 15 lei and it says once that it assumed 1 ball.",
+    "passed": false,
+    "hints": [
+     {
+      "hint": "final_answer_contains",
+      "ok": true
+     },
+     {
+      "hint": "assumption_visible",
+      "ok": false
+     }
+    ],
+    "turns": [
+     "> I have 20 lei.\n  OK, you have 20 lei.",
+     "> I buy the ball.\n  I took that as: \"i buy a ball\" OK, you bought 1 ball.",
+     "> How much money do I have?\n  You have 15 lei left."
+    ]
+   },
+   {
+    "id": "coh.shop.13",
+    "kind": "assumption-visible",
+    "expect": "An assumption is said once: the first answer says it assumed 1 ball, the repeated question does not say it again.",
+    "passed": false,
+    "hints": [
+     {
+      "hint": "final_answer_contains",
+      "ok": true
+     },
+     {
+      "hint": "assumption_visible",
+      "ok": false
+     }
+    ],
+    "turns": [
+     "> I have 20 lei.\n  OK, you have 20 lei.",
+     "> I buy the ball.\n  I took that as: \"i buy a ball\" OK, you bought 1 ball.",
+     "> How much money do I have?\n  You have 15 lei left.",
+     "> How much money do I have?\n  You have 15 lei left."
     ]
    }
   ]
@@ -870,42 +830,42 @@
     "kids.arith#061": "OK, Zoe has 14 marbles. OK, Zoe ate 8 marbles. Zoe has 6 marbles.",
     "kids.arith#062": "OK, Ben has 4 pears. OK, Zoe gave Ben 2 pears. Ben has 6 pears.",
     "kids.arith#063": "OK, Zoe has 7 stickers. OK, Ana has 6 stickers. There are 13 stickers altogether.",
-    "kids.arith#064": "OK, Ben has 6 apples. OK, Tom has 7 apples. I did not understand \"Who has more apples\". Did you mean \"Who has the most apples?\" or \"Tom has 5 apples left.\"?",
+    "kids.arith#064": "OK, Ben has 6 apples. OK, Tom has 7 apples. Tom has the most apples: 7.",
     "kids.arith#065": "OK, Ana has 3 pears. OK, Ana got 5 pears. Ana has 8 pears.",
     "kids.arith#066": "OK, Sam has 6 marbles. OK, Sam ate 1 marble. Sam has 5 marbles.",
     "kids.arith#067": "OK, Ana has 8 pencils. OK, Ben gave Ana 6 pencils. Ana has 14 pencils.",
     "kids.arith#068": "OK, Sam has 9 pears. OK, Zoe has 1 pear. There are 10 pears altogether.",
-    "kids.arith#069": "OK, Mia has 4 marbles. OK, Tom has 3 marbles. I did not understand \"who has more marbles\". Did you mean \"Who has the most apples?\" or \"Who has the first turn?\"?",
+    "kids.arith#069": "OK, Mia has 4 marbles. OK, Tom has 3 marbles. Mia has the most marbles: 4.",
     "kids.arith#070": "OK, Sam has 9 apples. OK, Sam bought 7 apples. Sam has 16 apples.",
     "kids.arith#071": "OK, Ben has 8 apples. OK, Ben lost 6 apples. Ben has 2 apples.",
     "kids.arith#072": "OK, Zoe has 12 marbles. OK, Ben gave Zoe 7 marbles. Zoe has 19 marbles.",
     "kids.arith#073": "OK, Tom has 11 pencils. OK, Leo has 1 pencil. There are 12 pencils altogether.",
-    "kids.arith#074": "OK, Mia has 4 marbles. OK, Sam has 1 marble. I did not understand \"Who has more marbles\". Did you mean \"Who has the most apples?\" or \"Who has the first turn?\"?",
+    "kids.arith#074": "OK, Mia has 4 marbles. OK, Sam has 1 marble. Mia has the most marbles: 4.",
     "kids.arith#075": "OK, Ben has 9 apples. OK, Ben got 6 apples. Ben has 15 apples.",
     "kids.arith#076": "OK, Mia has 4 pears. OK, Mia ate 3 pears. Mia has 1 pear.",
     "kids.arith#077": "OK, Leo has 14 pears. OK, Tom gave Leo 6 pears. Leo has 20 pears.",
     "kids.arith#078": "OK, Ben has 6 pencils. OK, Tom has 8 pencils. There are 14 pencils altogether.",
-    "kids.arith#079": "OK, Zoe has 6 stickers. OK, Ben has 5 stickers. I did not understand \"Who has more stickers\". Did you mean \"Who has the most apples?\" or \"Who has the first turn?\"?",
+    "kids.arith#079": "OK, Zoe has 6 stickers. OK, Ben has 5 stickers. Zoe has the most stickers: 6.",
     "kids.arith#080": "OK, Mia has 10 pears. OK, Mia got 7 pears. Mia has 17 pears.",
     "kids.arith#081": "OK, Ana has 14 marbles. OK, Ana ate 8 marbles. Ana has 6 marbles.",
     "kids.arith#082": "OK, Sam has 5 apples. OK, Mia gave Sam 3 apples. Sam has 8 apples.",
     "kids.arith#083": "OK, Lily has 9 apples. OK, Leo has 7 apples. There are 16 apples altogether.",
-    "kids.arith#084": "OK, Tom has 11 apples. OK, Mia has 1 apple. I did not understand \"who has more apples\". Did you mean \"Who has the most apples?\" or \"Tom has 5 apples left.\"?",
+    "kids.arith#084": "OK, Tom has 11 apples. OK, Mia has 1 apple. Tom has the most apples: 11.",
     "kids.arith#085": "OK, Zoe has 4 pears. OK, Zoe bought 1 pear. Zoe has 5 pears.",
     "kids.arith#086": "OK, Ben has 9 apples. OK, Ben ate 6 apples. Ben has 3 apples.",
     "kids.arith#087": "OK, Mia has 10 stickers. OK, Tom gave Mia 3 stickers. Mia has 13 stickers.",
     "kids.arith#088": "OK, Lily has 6 stickers. OK, Sam has 7 stickers. There are 13 stickers altogether.",
-    "kids.arith#089": "OK, Mia has 13 stickers. OK, Ben has 1 sticker. I did not understand \"Who has more stickers\". Did you mean \"Who has the most apples?\" or \"Who has the first turn?\"?",
+    "kids.arith#089": "OK, Mia has 13 stickers. OK, Ben has 1 sticker. Mia has the most stickers: 13.",
     "kids.arith#090": "OK, Lily has 4 pears. OK, Lily bought 2 pears. Lily has 6 pears.",
     "kids.arith#091": "OK, Ana has 6 apples. OK, Ana ate 5 apples. Ana has 1 apple.",
     "kids.arith#092": "OK, Zoe has 3 pencils. OK, Ana gave Zoe 5 pencils. Zoe has 8 pencils.",
     "kids.arith#093": "OK, Lily has 6 pears. OK, Zoe has 6 pears. There are 12 pears altogether.",
-    "kids.arith#094": "OK, Ben has 13 marbles. OK, Zoe has 3 marbles. I did not understand \"Who has more marbles\". Did you mean \"Who has the most apples?\" or \"Who has the first turn?\"?",
+    "kids.arith#094": "OK, Ben has 13 marbles. OK, Zoe has 3 marbles. Ben has the most marbles: 13.",
     "kids.arith#095": "OK, Leo has 9 stickers. OK, Leo got 5 stickers. Leo has 14 stickers.",
     "kids.arith#096": "OK, Tom has 6 pears. OK, Tom ate 1 pear. Tom has 5 pears.",
     "kids.arith#097": "OK, Ana has 13 stickers. OK, Tom gave Ana 1 sticker. Ana has 14 stickers.",
     "kids.arith#098": "OK, Ben has 4 stickers. OK, Zoe has 1 sticker. There are 5 stickers altogether.",
-    "kids.arith#099": "OK, Tom has 11 pencils. OK, Ana has 1 pencil. I did not understand \"who has more pencils\". Did you mean \"Who has the most apples?\" or \"Sam has broken 2 pencils.\"?",
+    "kids.arith#099": "OK, Tom has 11 pencils. OK, Ana has 1 pencil. Tom has the most pencils: 11.",
     "kids.arith#100": "Tom has 5 apples.",
     "kids.arith#101": "OK, Tom ate 2 apples. Tom has 3 apples.",
     "kids.arith#102": "There are 9 apples altogether.",
@@ -1040,8 +1000,8 @@
     "n": 452,
     "right": 397,
     "partly": 7,
-    "wrong": 6,
-    "not_understood": 42
+    "wrong": 8,
+    "not_understood": 40
    },
    "others": {
     "n": 2028,
@@ -1177,8 +1137,8 @@
     "kids.arith#062.roc": "OK, Ben has 4 pears. OK, Zoe gave Ben 2 pears. Ben has 6 pears.",
     "kids.arith#063.ro": "OK, Zoe has 7 stickers. OK, Ana has 6 stickers. There are 13 stickers altogether.",
     "kids.arith#063.roc": "OK, Zoe has 7 stickers. OK, Ana has 6 stickers. There are 13 stickers altogether.",
-    "kids.arith#064.ro": "OK, Ben has 6 apples. OK, Tom has 7 apples. I did not understand \"Cine are mai multe mere\". Did you mean \"Cine are cele mai multe mere?\" or \"Tom mai are 5 mere.\"?",
-    "kids.arith#064.roc": "OK, Ben has 6 apples. OK, Tom has 7 apples. I did not understand \"cine are mai multe mere\". Did you mean \"Cine are cele mai multe mere?\" or \"Tom mai are 5 mere.\"?",
+    "kids.arith#064.ro": "OK, Ben has 6 apples. OK, Tom has 7 apples. Tom has the most apples: 7.",
+    "kids.arith#064.roc": "OK, Ben has 6 apples. OK, Tom has 7 apples. Tom has the most apples: 7.",
     "kids.arith#065.ro": "OK, Ana has 3 pears. OK, Ana got 5 pears. Ana has 8 pears.",
     "kids.arith#065.roc": "OK, Ana has 3 pears. OK, Ana got 5 pears. Ana has 8 pears.",
     "kids.arith#066.ro": "OK, Sam has 6 marbles. OK, Sam ate 1 marble. Sam has 5 marbles.",
@@ -1187,8 +1147,8 @@
     "kids.arith#067.roc": "OK, Ana has 8 pencils. OK, Ben gave Ana 6 pencils. Ana has 14 pencils.",
     "kids.arith#068.ro": "OK, Sam has 9 pears. OK, Zoe has 1 pear. There are 10 pears altogether.",
     "kids.arith#068.roc": "OK, Sam has 9 pears. OK, Zoe has 1 pear. There are 10 pears altogether.",
-    "kids.arith#069.ro": "OK, Mia has 4 marbles. OK, Tom has 3 marbles. I did not understand \"Cine are mai multe bile\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
-    "kids.arith#069.roc": "OK, Mia has 4 marbles. OK, Tom has 3 marbles. I did not understand \"cine are mai multe bile\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
+    "kids.arith#069.ro": "OK, Mia has 4 marbles. OK, Tom has 3 marbles. Mia has the most marbles: 4.",
+    "kids.arith#069.roc": "OK, Mia has 4 marbles. OK, Tom has 3 marbles. Mia has the most marbles: 4.",
     "kids.arith#070.ro": "OK, Sam has 9 apples. OK, Sam bought 7 apples. Sam has 16 apples.",
     "kids.arith#070.roc": "OK, Sam has 9 apples. OK, Sam bought 7 apples. Sam has 16 apples.",
     "kids.arith#071.ro": "OK, Ben has 8 apples. OK, Ben lost 6 apples. Ben has 2 apples.",
@@ -1197,8 +1157,8 @@
     "kids.arith#072.roc": "OK, Zoe has 12 marbles. OK, Ben gave Zoe 7 marbles. Zoe has 19 marbles.",
     "kids.arith#073.ro": "OK, Tom has 11 pencils. OK, Leo has 1 pencil. There are 12 pencils altogether.",
     "kids.arith#073.roc": "OK, Tom has 11 pencils. OK, Leo has 1 pencil. There are 12 pencils altogether.",
-    "kids.arith#074.ro": "OK, Mia has 4 marbles. OK, Sam has 1 marble. I did not understand \"Cine are mai multe bile\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
-    "kids.arith#074.roc": "OK, Mia has 4 marbles. OK, Sam has 1 marble. I did not understand \"cine are mai multe bile\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
+    "kids.arith#074.ro": "OK, Mia has 4 marbles. OK, Sam has 1 marble. Mia has the most marbles: 4.",
+    "kids.arith#074.roc": "OK, Mia has 4 marbles. OK, Sam has 1 marble. Mia has the most marbles: 4.",
     "kids.arith#075.ro": "OK, Ben has 9 apples. OK, Ben got 6 apples. Ben has 15 apples.",
     "kids.arith#075.roc": "OK, Ben has 9 apples. OK, Ben got 6 apples. Ben has 15 apples.",
     "kids.arith#076.ro": "OK, Mia has 4 pears. OK, Mia ate 3 pears. Mia has 1 pear.",
@@ -1207,8 +1167,8 @@
     "kids.arith#077.roc": "OK, Leo has 14 pears. OK, Tom gave Leo 6 pears. Leo has 20 pears.",
     "kids.arith#078.ro": "OK, Ben has 6 pencils. OK, Tom has 8 pencils. There are 14 pencils altogether.",
     "kids.arith#078.roc": "OK, Ben has 6 pencils. OK, Tom has 8 pencils. There are 14 pencils altogether.",
-    "kids.arith#079.ro": "OK, Zoe has 6 stickers. OK, Ben has 5 stickers. I did not understand \"Cine are mai multe abțibilduri\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
-    "kids.arith#079.roc": "OK, Zoe has 6 stickers. OK, Ben has 5 stickers. I did not understand \"cine are mai multe abtibilduri\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
+    "kids.arith#079.ro": "OK, Zoe has 6 stickers. OK, Ben has 5 stickers. Zoe has the most stickers: 6.",
+    "kids.arith#079.roc": "OK, Zoe has 6 stickers. OK, Ben has 5 stickers. Zoe has the most stickers: 6.",
     "kids.arith#080.ro": "OK, Mia has 10 pears. OK, Mia got 7 pears. Mia has 17 pears.",
     "kids.arith#080.roc": "OK, Mia has 10 pears. OK, Mia got 7 pears. Mia has 17 pears.",
     "kids.arith#081.ro": "OK, Ana has 14 marbles. OK, Ana lost 8 marbles. Ana has 6 marbles.",
@@ -1217,8 +1177,8 @@
     "kids.arith#082.roc": "OK, Sam has 5 apples. OK, Mia gave Sam 3 apples. Sam has 8 apples.",
     "kids.arith#083.ro": "OK, Lily has 9 apples. OK, Leo has 7 apples. There are 16 apples altogether.",
     "kids.arith#083.roc": "OK, Lily has 9 apples. OK, Leo has 7 apples. There are 16 apples altogether.",
-    "kids.arith#084.ro": "OK, Tom has 11 apples. OK, Mia has 1 apple. I did not understand \"Cine are mai multe mere\". Did you mean \"Cine are cele mai multe mere?\" or \"Tom mai are 5 mere.\"?",
-    "kids.arith#084.roc": "OK, Tom has 11 apples. OK, Mia has 1 apple. I did not understand \"cine are mai multe mere\". Did you mean \"Cine are cele mai multe mere?\" or \"Tom mai are 5 mere.\"?",
+    "kids.arith#084.ro": "OK, Tom has 11 apples. OK, Mia has 1 apple. Tom has the most apples: 11.",
+    "kids.arith#084.roc": "OK, Tom has 11 apples. OK, Mia has 1 apple. Tom has the most apples: 11.",
     "kids.arith#085.ro": "OK, Zoe has 4 pears. OK, Zoe bought 1 pear. Zoe has 5 pears.",
     "kids.arith#085.roc": "OK, Zoe has 4 pears. OK, Zoe bought 1 pear. Zoe has 5 pears.",
     "kids.arith#086.ro": "OK, Ben has 9 apples. OK, Ben ate 6 apples. Ben has 3 apples.",
@@ -1227,8 +1187,8 @@
     "kids.arith#087.roc": "OK, Mia has 10 stickers. OK, Tom gave Mia 3 stickers. Mia has 13 stickers.",
     "kids.arith#088.ro": "OK, Lily has 6 stickers. OK, Sam has 7 stickers. There are 13 stickers altogether.",
     "kids.arith#088.roc": "OK, Lily has 6 stickers. OK, Sam has 7 stickers. There are 13 stickers altogether.",
-    "kids.arith#089.ro": "OK, Mia has 13 stickers. OK, Ben has 1 sticker. I did not understand \"Cine are mai multe abțibilduri\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
-    "kids.arith#089.roc": "OK, Mia has 13 stickers. OK, Ben has 1 sticker. I did not understand \"cine are mai multe abtibilduri\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
+    "kids.arith#089.ro": "OK, Mia has 13 stickers. OK, Ben has 1 sticker. Mia has the most stickers: 13.",
+    "kids.arith#089.roc": "OK, Mia has 13 stickers. OK, Ben has 1 sticker. Mia has the most stickers: 13.",
     "kids.arith#090.ro": "OK, Lily has 4 pears. OK, Lily bought 2 pears. Lily has 6 pears.",
     "kids.arith#090.roc": "OK, Lily has 4 pears. OK, Lily bought 2 pears. Lily has 6 pears.",
     "kids.arith#091.ro": "OK, Ana has 6 apples. OK, Ana ate 5 apples. Ana has 1 apple.",
@@ -1237,8 +1197,8 @@
     "kids.arith#092.roc": "OK, Zoe has 3 pencils. OK, Ana gave Zoe 5 pencils. Zoe has 8 pencils.",
     "kids.arith#093.ro": "OK, Lily has 6 pears. OK, Zoe has 6 pears. There are 12 pears altogether.",
     "kids.arith#093.roc": "OK, Lily has 6 pears. OK, Zoe has 6 pears. There are 12 pears altogether.",
-    "kids.arith#094.ro": "OK, Ben has 13 marbles. OK, Zoe has 3 marbles. I did not understand \"Cine are mai multe bile\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
-    "kids.arith#094.roc": "OK, Ben has 13 marbles. OK, Zoe has 3 marbles. I did not understand \"cine are mai multe bile\". Did you mean \"Cine are cele mai multe mere?\" or \"Cine are prima tură?\"?",
+    "kids.arith#094.ro": "OK, Ben has 13 marbles. OK, Zoe has 3 marbles. Ben has the most marbles: 13.",
+    "kids.arith#094.roc": "OK, Ben has 13 marbles. OK, Zoe has 3 marbles. Ben has the most marbles: 13.",
     "kids.arith#095.ro": "OK, Leo has 9 stickers. OK, Leo got 5 stickers. Leo has 14 stickers.",
     "kids.arith#095.roc": "OK, Leo has 9 stickers. OK, Leo got 5 stickers. Leo has 14 stickers.",
     "kids.arith#096.ro": "OK, Tom has 6 pears. OK, Tom ate 1 pear. Tom has 5 pears.",
@@ -1247,8 +1207,8 @@
     "kids.arith#097.roc": "OK, Ana has 13 stickers. OK, Tom gave Ana 1 sticker. Ana has 14 stickers.",
     "kids.arith#098.ro": "OK, Ben has 4 stickers. OK, Zoe has 1 sticker. There are 5 stickers altogether.",
     "kids.arith#098.roc": "OK, Ben has 4 stickers. OK, Zoe has 1 sticker. There are 5 stickers altogether.",
-    "kids.arith#099.ro": "OK, Tom has 11 pencils. OK, Ana has 1 pencil. I did not understand \"Cine are mai multe creioane\". Did you mean \"Cine are cele mai multe mere?\" or \"Sam a rupt 2 creioane.\"?",
-    "kids.arith#099.roc": "OK, Tom has 11 pencils. OK, Ana has 1 pencil. I did not understand \"cine are mai multe creioane\". Did you mean \"Cine are cele mai multe mere?\" or \"Sam a rupt 2 creioane.\"?",
+    "kids.arith#099.ro": "OK, Tom has 11 pencils. OK, Ana has 1 pencil. Tom has the most pencils: 11.",
+    "kids.arith#099.roc": "OK, Tom has 11 pencils. OK, Ana has 1 pencil. Tom has the most pencils: 11.",
     "kids.arith#100.ro": "Tom has 5 apples.",
     "kids.arith#100.roc": "Tom has 5 apples.",
     "kids.arith#101.ro": "OK, Tom ate 2 apples. Tom has 3 apples.",
@@ -1424,7 +1384,7 @@
     "kids.tasks#006.ro": "I do not know what \"milk\" is. You can say the house, the tree, the sun, it, or everything.",
     "kids.tasks#006.roc": "I do not know what \"milk\" is. You can say the house, the tree, the sun, it, or everything.",
     "kids.tasks#007.ro": "Done! I added bread to your shopping list.",
-    "kids.tasks#007.roc": "I did not understand \"adauga paine pe lista de cumparaturi\". Did you mean \"Adaugă o listă.\" or \"Adaugă lapte pe lista mea.\"?",
+    "kids.tasks#007.roc": "I did not understand \"adauga paine pe lista de cumparaturi\". Did you mean \"Adaugă la cumpărăturile mea listă.\" or \"Adaugă o listă.\"?",
     "kids.tasks#008.ro": "Your garden list is empty. You can say: Add milk to my shopping list. I understood only part of that: I did not use \"Socks on the\".",
     "kids.tasks#008.roc": "Your garden list is empty. You can say: Add milk to my shopping list. I understood only part of that: I did not use \"Socks on the\".",
     "kids.tasks#009.ro": "On your shopping list: milk and eggs.",
@@ -1465,8 +1425,8 @@
     "kids.tasks#026.roc": "On your reminders list: feed the cat.",
     "kids.tasks#027.ro": "I took that as: \"what is on my mementourile list\" Your mementourile list is empty. You can say: Add milk to my shopping list.",
     "kids.tasks#027.roc": "I took that as: \"what is on my mementourile list\" Your mementourile list is empty. You can say: Add milk to my shopping list.",
-    "kids.tasks#028.ro": "I did not understand \"adaugă lapte și ouă pe lista mea de cumpărături\". Did you mean \"Adaugă lapte pe lista mea.\" or \"Adaugă o listă.\"?",
-    "kids.tasks#028.roc": "I did not understand \"adauga lapte si oua pe lista mea de cumparaturi\". Did you mean \"Adaugă lapte pe lista mea.\" or \"Adaugă o listă.\"?",
+    "kids.tasks#028.ro": "I did not understand \"adaugă lapte și ouă pe lista mea de cumpărături\". Did you mean \"Adaugă lapte pe lista mea.\" or \"Adaugă la cumpărăturile mea listă.\"?",
+    "kids.tasks#028.roc": "I did not understand \"adauga lapte si oua pe lista mea de cumparaturi\". Did you mean \"Adaugă lapte pe lista mea.\" or \"Adaugă la cumpărăturile mea listă.\"?",
     "kids.tasks#029.ro": "Done! I added milk to your shopping list. I did not understand \"adaugă lapte pe lista mea de cumpărături și pâine pe lista de grădină\". Did you mean \"Pune pâine pe lista mea.\"?",
     "kids.tasks#029.roc": "Done! I added milk to your shopping list. I did not understand \"adauga lapte pe lista mea de cumparaturi si paine pe lista de gradina\". Did you mean \"Pune pâine pe lista mea.\"?",
     "kids.tasks#030.ro": "Done! I added milk to your shopping list. 2 plus 2 is 4.",
@@ -1516,21 +1476,21 @@
    "others": {
     "n": 2009,
     "right": 1954,
-    "partly": 9,
+    "partly": 10,
     "wrong": 15,
-    "not_understood": 31
+    "not_understood": 30
    }
   }
  },
  "ms_per_turn": {
   "three": {
-   "p50": 14.6,
-   "p95": 92.2,
+   "p50": 13.9,
+   "p95": 80.4,
    "n": 910
   },
   "all": {
-   "p50": 12.6,
-   "p95": 81.1,
+   "p50": 11,
+   "p95": 66.2,
    "n": 9115
   }
  },
@@ -5022,8 +4982,8 @@
    "kids.tasks#038.roc": "not_understood",
    "kids.shop#042.ro": "right",
    "kids.shop#042.roc": "right",
-   "kids.shop#043.ro": "not_understood",
-   "kids.shop#043.roc": "not_understood",
+   "kids.shop#043.ro": "wrong",
+   "kids.shop#043.roc": "wrong",
    "kids.common#035.ro": "right",
    "kids.common#035.roc": "right",
    "kids.common#036.ro": "right",
@@ -6728,7 +6688,7 @@
    "dlg.doc#032#0": "right",
    "dlg.doc#032#1": "right",
    "dlg.doc#032#2": "right",
-   "dlg.doc#032#3": "not_understood",
+   "dlg.doc#032#3": "right",
    "dlg.doc#032#4": "right",
    "dlg.doc#033#0": "right",
    "dlg.doc#033#1": "right",
@@ -7177,11 +7137,11 @@
    "dlg.g7#115#3": "right",
    "dlg.g7#115#4": "right",
    "dlg.g7#116#0": "right",
-   "dlg.g7#116#1": "not_understood",
+   "dlg.g7#116#1": "partly",
    "dlg.g7#116#2": "right",
    "dlg.g7#116#3": "not_understood",
    "dlg.g7#116#4": "right",
-   "dlg.g7#116#5": "right",
+   "dlg.g7#116#5": "not_understood",
    "dlg.g7#116#6": "right",
    "dlg.avt#046#0": "right",
    "dlg.avt#046#1": "right",
@@ -7560,73 +7520,12 @@
   }
  },
  "audit": {
-  "turns": 761,
-  "with_violation": 21,
+  "turns": 774,
+  "with_violation": 15,
   "kinds": {
-   "balance": 2,
-   "domain": 23
+   "domain": 19
   },
   "examples": [
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "balance",
-      "why": "more was spent than there was",
-      "wire": "shop.wallet"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "balance",
-      "why": "more was spent than there was",
-      "wire": "shop.wallet"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "domain",
-      "why": "count must be at least 0",
-      "wire": "w1"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "domain",
-      "why": "count must be at least 0",
-      "wire": "w1"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "domain",
-      "why": "count must be at least 0",
-      "wire": "w1"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "domain",
-      "why": "count must be at least 0",
-      "wire": "w1"
-     }
-    ]
-   },
    {
     "at": "coherence",
     "problems": [
@@ -7737,14 +7636,92 @@
       "type": "kids.tasks.entry"
      }
     ]
+   },
+   {
+    "at": "operational-ro:kids.tasks#013.ro",
+    "problems": [
+     {
+      "kind": "domain",
+      "why": "progress",
+      "wire": "task_1",
+      "type": "kids.tasks.entry"
+     }
+    ]
+   },
+   {
+    "at": "operational-ro:kids.tasks#013.ro",
+    "problems": [
+     {
+      "kind": "domain",
+      "why": "progress",
+      "wire": "task_1",
+      "type": "kids.tasks.entry"
+     }
+    ]
+   },
+   {
+    "at": "operational-ro:kids.tasks#013.roc",
+    "problems": [
+     {
+      "kind": "domain",
+      "why": "progress",
+      "wire": "task_1",
+      "type": "kids.tasks.entry"
+     }
+    ]
+   },
+   {
+    "at": "operational-ro:kids.tasks#013.roc",
+    "problems": [
+     {
+      "kind": "domain",
+      "why": "progress",
+      "wire": "task_1",
+      "type": "kids.tasks.entry"
+     }
+    ]
+   },
+   {
+    "at": "operational-ro:kids.tasks#016.ro",
+    "problems": [
+     {
+      "kind": "domain",
+      "why": "progress",
+      "wire": "task_1",
+      "type": "kids.tasks.entry"
+     },
+     {
+      "kind": "domain",
+      "why": "progress",
+      "wire": "task_2",
+      "type": "kids.tasks.entry"
+     }
+    ]
+   },
+   {
+    "at": "operational-ro:kids.tasks#016.roc",
+    "problems": [
+     {
+      "kind": "domain",
+      "why": "progress",
+      "wire": "task_1",
+      "type": "kids.tasks.entry"
+     },
+     {
+      "kind": "domain",
+      "why": "progress",
+      "wire": "task_2",
+      "type": "kids.tasks.entry"
+     }
+    ]
    }
   ],
   "dropped_by_library": 0,
-  "ms": 434,
-  "violation_rate_pct": 2.8
+  "ms": 830,
+  "violation_rate_pct": 1.9
  },
  "assumptions": {
-  "answers": 46,
+  "answers": 53,
   "relied": 0,
   "said": 0,
   "examples": []
@@ -7756,29 +7733,29 @@
     "gzip": 77251
    },
    "host_layer": {
-    "raw": 22861,
-    "gzip": 7618
+    "raw": 26857,
+    "gzip": 8837
    },
    "worlds_index": {
-    "raw": 4814826,
-    "gzip": 684739
+    "raw": 4836251,
+    "gzip": 689816
    }
   },
   "lines": {
    "kids.shop": {
-    "ops": 148,
-    "matrix": 241
+    "ops": 200,
+    "matrix": 252
    },
    "kids.arith": {
-    "ops": 218,
+    "ops": 297,
     "matrix": 211
    },
    "kids.tasks": {
-    "ops": 192,
-    "matrix": 151
+    "ops": 206,
+    "matrix": 153
    }
   },
-  "host_layer_lines": 344
+  "host_layer_lines": 398
  },
- "elapsed_s": 169
+ "elapsed_s": 142
 }

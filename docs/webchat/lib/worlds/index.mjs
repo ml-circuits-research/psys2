@@ -43,6 +43,8 @@ export class World {
     this.raw = {};       // reasoner data as text: { legend, kb, matrix, mapping } (only the files the world has)
     this.fns = null;     // functions of fns.mjs (actions and calc functions of the matrix), or null
     this.toState = null; // `toState(ctx)` of fns.mjs (the session state ops.mjs would keep), or null
+    this.undoWords = null;   // `undoWords({ before, after })` of fns.mjs: what "undo" says once the library went back, or null
+    this.assumed = null;   // `assumed(cell)` of fns.mjs (the words for a default or guessed value an answer rests on), or null
     this.voice = null;   // `voice(ctx)` of fns.mjs (reply facts for the templates), or null
   }
   get title() { return txt(this.manifest ?? { entries: [] }, 'title') ?? this.id; }
@@ -53,6 +55,8 @@ export class World {
   get doc() { return txt(this.manifest ?? { entries: [] }, 'doc'); }
   /** Which reasoner the world opts into: `ops` (default, operations.sop + ops.mjs) or `matrix` (matrix.sop on the sopworld library, spec 15). */
   get reasoner() { return txt(this.manifest ?? { entries: [] }, 'reasoner') === 'matrix' ? 'matrix' : 'ops'; }
+  /** The action that takes the last move back (`undo=<action>` in world.sop): the host layer answers it by rewinding the library (spec 15), or null. */
+  get undoAction() { return txt(this.manifest ?? { entries: [] }, 'undo') ?? null; }
   /** Wire types the world's matrix actions write and other worlds read from the session memory (`mirror=<type>`, repeatable): the host layer copies them there. */
   get mirrors() { return getAll(this.manifest ?? { entries: [] }, 'mirror').map((v) => v.v); }
   get language() { return txt(this.manifest ?? { entries: [] }, 'language') ?? 'en'; }
@@ -137,11 +141,13 @@ function readEntries(world, file, text) {
   return wires;
 }
 
-function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, matrix = false } = {}) {
+function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, assumed = null, undoWords = null, matrix = false } = {}) {
   const w = new World(id);
   w.ops = ops ?? {};
   w.fns = fns;
   w.voice = voice;
+  w.assumed = assumed;
+  w.undoWords = undoWords;
   w.toState = toState;
   for (const [k, f] of [['legend', 'legend.sop'], ['kb', 'kb.sop'], ['matrix', 'matrix.sop'], ['mapping', 'mapping.sop']]) if (files[f] != null) w.raw[k] = files[f];
   if (matrix && /\breasoner=matrix\b/.test(files['world.sop'] ?? '')) {
@@ -224,10 +230,10 @@ export async function loadWorlds(loader, { reasoner = 'ops' } = {}) {
     const files = {};
     const matrix = reasoner === 'matrix';
     await Promise.all([...FILES, ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
-    let ops = null, fns = null, voice = null, toState = null;
-    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
+    let ops = null, fns = null, voice = null, toState = null, assumed = null, undoWords = null;
+    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }
-    const w = buildWorld(id, files, ops, { fns, voice, toState, matrix });
+    const w = buildWorld(id, files, ops, { fns, voice, toState, assumed, undoWords, matrix });
     if (built.has(id + ':fnsError')) w.errors.push({ message: `fns.mjs failed to load: ${built.get(id + ':fnsError').message}` });
     if (built.has(id + ':opsError')) w.errors.push({ message: `ops.mjs failed to load: ${built.get(id + ':opsError').message}` });
     built.set(id, w);

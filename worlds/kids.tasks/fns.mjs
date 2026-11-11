@@ -128,3 +128,6 @@ export function toState({ find }) {
   }
   return { lists, counter };
 }
+
+/** An entry that was not marked done is "todo" by default; that is how a list is read, not an assumption worth saying. */
+export const assumed = () => null;

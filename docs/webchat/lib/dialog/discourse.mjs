@@ -628,7 +628,14 @@ export class Discourse {
     if (!this.list) { const ac = runDiscussionCommand(d, text, d._msg); if (ac) return ac; }
     // matrix reasoner (spec 15): "undo that" takes back what the turn before told the library (a purchase, a statement); the money and the counts follow
     if (UNDO.test(t) && d.isession.rs?.canUndo(d._msg)) {
-      const turn = d.isession.rs.undo(d.isession);
+      // a world with its own "undo" action (world.sop `undo=`) whose tab is open says what it took back in its own words ("I took back your last move and my answer")
+      const gw = [...d.isession.rs.reasoner.undoOf.values()].find((w) => w.id === d.context().tabWorld);
+      if (gw) {
+        const env = d.isession.rs.undoAction(gw, d.isession);
+        if (env.undoneTurn != null) { this.actions = this.actions.filter((a) => a.turn !== env.undoneTurn); this.frames = this.frames.filter((f) => f.turn !== env.undoneTurn); }
+        if (env.status === 'supported' && env.value) return { reply: env.value, info: { kind: 'undo', of: null, via: 'core.matrix' } };
+      }
+      const turn = gw ? null : d.isession.rs.undo(d.isession);
       const said = turn != null ? this.actions.find((a) => a.turn === turn)?.text ?? d.sources.get(`msg${turn}`)?.english : null;
       if (turn != null) { this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn); }
       if (turn != null) return { reply: said ? `OK, I took that back: "${String(said).replace(/[.!?\s]+$/, '')}".` : 'OK, I took that back.', info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };

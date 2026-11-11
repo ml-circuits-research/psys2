@@ -1,0 +1,105 @@
+# games.tictactoe as a matrix: the rules of the game, said with rules and denies. The board on the screen, the computer's choice of a move
+# and the words of the replies stay in the world (ops.mjs and fns.mjs); the matrix is what is allowed, whose turn it is and how the game ends.
+#
+# A move is a mark on a square: by = X or O, at = 0..8 (row by row, top left first), n = how many moves came before it (X plays move 0).
+# The system's own moves say why they were chosen (why=win|block|center|random|best, and the line they complete or stop).
+
+@ttt.k.by core.slot of=ttt.move key=by kind=atom enum=X enum=O required=true
+@ttt.k.at core.slot of=ttt.move key=at kind=integer min=0 max=8 required=true
+@ttt.k.n core.slot of=ttt.move key=n kind=integer min=0 max=8 required=true
+@ttt.k.user core.slot of=ttt.game key=user kind=atom enum=X enum=O
+@ttt.k.level core.slot of=ttt.game key=level kind=atom enum=easy enum=perfect
+@ttt.k.seed core.slot of=ttt.game key=seed kind=integer
+@ttt.k.turn core.slot of=ttt.turn key=by kind=atom enum=X enum=O
+
+# ---- the board and the lines that win
+@ttt.g ttt.game user=X level=easy seed=20240607
+@ttt.cell0 ttt.cell at=0 name="Top left"
+@ttt.cell1 ttt.cell at=1 name="Top middle"
+@ttt.cell2 ttt.cell at=2 name="Top right"
+@ttt.cell3 ttt.cell at=3 name="Middle left"
+@ttt.cell4 ttt.cell at=4 name="The center"
+@ttt.cell5 ttt.cell at=5 name="Middle right"
+@ttt.cell6 ttt.cell at=6 name="Bottom left"
+@ttt.cell7 ttt.cell at=7 name="Bottom middle"
+@ttt.cell8 ttt.cell at=8 name="Bottom right"
+@ttt.line0 ttt.line a=0 b=1 c=2 name="the top row"
+@ttt.line1 ttt.line a=3 b=4 c=5 name="the middle row"
+@ttt.line2 ttt.line a=6 b=7 c=8 name="the bottom row"
+@ttt.line3 ttt.line a=0 b=3 c=6 name="the left column"
+@ttt.line4 ttt.line a=1 b=4 c=7 name="the middle column"
+@ttt.line5 ttt.line a=2 b=5 c=8 name="the right column"
+@ttt.line6 ttt.line a=0 b=4 c=8 name="the diagonal from the top left"
+@ttt.line7 ttt.line a=2 b=4 c=6 name="the diagonal from the top right"
+
+# ---- how the game ends: three of one mark on a line, a resignation, or nine moves with no winner
+@ttt.wm1 ttt.move by=?p at=?a n=?n1
+@ttt.wm2 ttt.move by=?p at=?b n=?n2
+@ttt.wm3 ttt.move by=?p at=?c n=?n3
+@ttt.wl ttt.line a=?a b=?b c=?c name=?line
+@ttt.won ttt.won winner=?p how=?line
+@ttt.r.win core.rule when=$ttt.wm1 when=$ttt.wm2 when=$ttt.wm3 when=$ttt.wl then=$ttt.won
+
+@ttt.rsX ttt.resign by=X
+@ttt.wO ttt.won winner=O how=resigned
+@ttt.r.resX core.rule when=$ttt.rsX then=$ttt.wO
+@ttt.rsO ttt.resign by=O
+@ttt.wX ttt.won winner=X how=resigned
+@ttt.r.resO core.rule when=$ttt.rsO then=$ttt.wX
+
+@ttt.dg ttt.game
+@ttt.dm ttt.move
+@ttt.dw ttt.won
+@ttt.dc core.calc out=?cnt fn=count over=$ttt.dm
+@ttt.t.full core.check fn=eq args=?cnt args=9
+@ttt.drawn ttt.drawn
+@ttt.r.draw core.rule when=$ttt.dg with=$ttt.dc if=$ttt.t.full not=$ttt.dw then=$ttt.drawn
+
+# ---- whose turn it is: X after an even number of moves, O after an odd one, nobody when the game is over
+@ttt.tc core.calc out=?r fn=mod args=?cnt args=2
+@ttt.t.even core.check fn=eq args=?r args=0
+@ttt.t.odd core.check fn=eq args=?r args=1
+@ttt.tx ttt.turn by=X
+@ttt.to ttt.turn by=O
+@ttt.r.turnX core.rule when=$ttt.dg with=$ttt.dc with=$ttt.tc if=$ttt.t.even not=$ttt.dw not=$ttt.dd then=$ttt.tx
+@ttt.r.turnO core.rule when=$ttt.dg with=$ttt.dc with=$ttt.tc if=$ttt.t.odd not=$ttt.dw not=$ttt.dd then=$ttt.to
+@ttt.dd ttt.drawn
+
+# ---- the squares that are free (the legal moves): not taken, and the game not over
+@ttt.fc ttt.cell at=?at
+@ttt.fm ttt.move at=?at
+@ttt.free ttt.free at=?at
+@ttt.r.free core.rule when=$ttt.fc not=$ttt.fm not=$ttt.dw not=$ttt.dd then=$ttt.free
+
+# ---- what may not be: a square taken twice, a move out of turn, a move after the game ended
+@ttt.tk1 ttt.move at=?at by=?who n=?n1
+@ttt.tk2 ttt.move at=?at n=?n2
+@ttt.tkc ttt.cell at=?at name=?name
+@ttt.tku ttt.game user=?u
+@ttt.t.later core.check fn=gt args=?n2 args=?n1
+@ttt.t.byuser core.check fn=eq args=?who args=?u
+@ttt.t.bysys core.check fn=neq args=?who args=?u
+@ttt.d.takenYou core.deny when=$ttt.tk1 when=$ttt.tk2 when=$ttt.tkc when=$ttt.tku if=$ttt.t.later if=$ttt.t.byuser why="?name is already taken by you. Please pick another place."
+@ttt.d.takenMe core.deny when=$ttt.tk1 when=$ttt.tk2 when=$ttt.tkc when=$ttt.tku if=$ttt.t.later if=$ttt.t.bysys why="?name is already taken by me. Please pick another place."
+
+@ttt.nb ttt.move by=?b n=?n
+@ttt.nr core.calc out=?nr fn=mod args=?n args=2
+@ttt.t.nEven core.check fn=eq args=?nr args=0
+@ttt.t.nOdd core.check fn=eq args=?nr args=1
+@ttt.t.isX core.check fn=eq args=?b args=X
+@ttt.t.isO core.check fn=eq args=?b args=O
+@ttt.d.turnX core.deny when=$ttt.nb with=$ttt.nr if=$ttt.t.nEven if=$ttt.t.isO why="It is not your turn."
+@ttt.d.turnO core.deny when=$ttt.nb with=$ttt.nr if=$ttt.t.nOdd if=$ttt.t.isX why="It is not your turn."
+
+@ttt.om ttt.move
+@ttt.ow ttt.won
+@ttt.t.after core.check fn=after args=$ttt.om args=$ttt.ow
+@ttt.d.over core.deny when=$ttt.om when=$ttt.ow if=$ttt.t.after why="The game is over. Say \"new game\" to play again."
+
+# ---- the actions (fns.mjs); `ttt.why` (the reason of the computer's last move) exists only in matrix mode, see matrix.patterns.sop
+@ttt.a.move core.action name=ttt.move fn=tttMove
+@ttt.a.new core.action name=ttt.new fn=tttNew
+@ttt.a.first core.action name=ttt.first fn=tttFirst
+@ttt.a.level core.action name=ttt.level fn=tttLevel
+@ttt.a.giveup core.action name=ttt.giveup fn=tttGiveUp
+@ttt.a.why core.action name=ttt.why fn=tttWhy

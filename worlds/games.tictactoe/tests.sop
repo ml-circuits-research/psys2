@@ -811,3 +811,95 @@
     input="can u suggest where i play"
     expect="How about"
     doc="GAPS-1"
+
+@t.games.tictactoe.m01 core.test
+    session=m1
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    doc="SOPWORLD-1b item 5: the rules are in matrix.sop; a refused move says why, undo goes through the library"
+    reasoner=matrix
+
+@t.games.tictactoe.m02 core.test
+    session=m1
+    input="center"
+    expect="You took the center."
+    expectState="board.4=X"
+    reasoner=matrix
+
+@t.games.tictactoe.m03 core.test
+    session=m1
+    input="center"
+    expect="The center is already taken by you."
+    expectStatus=unsupported
+    expectState="board.4=X"
+    reasoner=matrix
+
+@t.games.tictactoe.m04 core.test
+    session=m1
+    input="why did you play there?"
+    expect="I played"
+    expect="because"
+    expectStatus=supported
+    reasoner=matrix
+
+@t.games.tictactoe.m05 core.test
+    session=m1
+    input="undo"
+    expectState="board.4="
+    expectState="turn=X"
+    reasoner=matrix
+
+@t.games.tictactoe.m06 core.test
+    session=m1
+    input="top left"
+    expect="You took top left."
+    expectState="board.0=X"
+    reasoner=matrix
+
+@t.games.tictactoe.m07 core.test
+    session=m1
+    input="oops, take that back"
+    expect="took back your last move and my answer"
+    expectState="board.0="
+    reasoner=matrix
+
+@t.games.tictactoe.m08 core.test
+    session=m2
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    reasoner=matrix
+
+@t.games.tictactoe.m09 core.test
+    session=m2
+    input="I give up"
+    expect="you give up"
+    expectState="winner=O"
+    expectState="turn=null"
+    reasoner=matrix
+
+@t.games.tictactoe.m10 core.test
+    session=m2
+    input="center"
+    expect="The game is over."
+    expectStatus=unsupported
+    expectState="board.4="
+    reasoner=matrix
+
+@t.games.tictactoe.m11 core.test
+    session=m2
+    input="undo"
+    expectState="winner=null"
+    reasoner=matrix
+
+@t.games.tictactoe.m12 core.test
+    session=m2
+    input="center"
+    expect="You took the center."
+    expectState="board.4=X"
+    reasoner=matrix
+
+@t.games.tictactoe.m13 core.test
+    session=m3
+    input="why did you play there?"
+    expectStatus=missing
+    reasoner=matrix

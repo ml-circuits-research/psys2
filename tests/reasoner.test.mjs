@@ -35,21 +35,21 @@ test('default: the engine is ops, no library is loaded and no session has a Worl
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
   assert.equal(ops.set.get('kids.time').reasoner, 'ops', 'every other world stays on ops');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
 });
 
-test('matrix mode: three worlds opt in, the library loads without problems, the engine has no problems', () => {
+test('matrix mode: four worlds opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.problems, []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['kids.arith', 'kids.shop', 'kids.tasks']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.tictactoe', 'kids.arith', 'kids.shop', 'kids.tasks']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-test('parity gate (switch on): kids.shop 147/147, kids.tasks 232/232, kids.arith 217/217', async () => {
-  for (const [id, n] of [['kids.shop', 147], ['kids.tasks', 232], ['kids.arith', 217]]) {
+test('parity gate (switch on): kids.shop 147+4, kids.tasks 232, kids.arith 217, games.tictactoe 160+13 (the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 151], ['kids.tasks', 232], ['kids.arith', 217], ['games.tictactoe', 173]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }
@@ -256,4 +256,174 @@ test('the build ships the library and the fns of matrix worlds, versioned like e
     assert.match(reasoner, /\.\.\/vendor\/sopworld\/sopworld\.mjs\?v=[0-9a-f]{10}/, 'so is the vendored library');
     assert.equal((await readFile(path.join(out, 'lib/vendor/sopworld/sopworld.mjs'))).length, readFileSync(path.join(ROOT, 'src/vendor/sopworld/sopworld.mjs')).length, 'copied as it is');
   } finally { await rm(out, { recursive: true, force: true }); }
+});
+
+// ---- certainty: an answer that rests on a default or a guess says so once (SOPWORLD-1b item 4) -----------------------------------------------
+
+test('certainty: nobody said how many balls, so the answer says "I assumed 1 ball." once and the turn record carries the assumption', async () => {
+  const s = matrix.createSession({ language: 'en' });
+  await s.send('I have 20 lei', {});
+  const told = await s.send('I buy the ball', {});
+  assert.equal(told.assumptions, undefined, 'a statement is not an answer: nothing rests on the default yet');
+  const r = await s.send('How much money do I have?', {});
+  assert.equal(r.text, 'You have 15 lei left. I assumed 1 ball.');
+  assert.deepEqual(r.assumptions.map((a) => a.replace(/^\S+\.count/, 'count')), ['count=1 (default)'], 'the cell and its tier');
+  assert.equal(r.answers[0].envelope.assumed, 'I assumed 1 ball.');
+  const w = s.isession.rs.world;
+  assert.deepEqual(w.assumptions().map((a) => [a.key, a.tier]), [['count', 'default']], 'the library lists it');
+  assert.equal((await s.send('How much money do I have?', {})).text, 'You have 15 lei left.', 'said once');
+  assert.equal((await s.send('How much did the ball cost?', {})).assumptions, undefined, 'an answer that does not rest on it does not say it');
+  const t = await s.send('Three of them', {});
+  assert.match(t.text, /that makes 3 balls/);
+  const after = await s.send('How much money do I have?', {});
+  assert.equal(after.text, 'You have 5 lei left.', 'a told count replaces the assumption');
+  assert.equal(after.assumptions, undefined);
+  assert.deepEqual(w.assumptions(), []);
+});
+
+test('certainty: ops mode never says it; a told count ("a ball") is not an assumption; several are said in one sentence', async () => {
+  const o = await say(ops, ['I have 20 lei', 'I buy a ball', 'How much money do I have?']);
+  assert.equal(o.out[2], 'You have 15 lei left.');
+  const m = await say(matrix, ['I have 20 lei', 'I buy a ball', 'How much money do I have?']);
+  assert.equal(m.out[2], 'You have 15 lei left.', '"a ball" states the count: nothing is assumed');
+  const x = await say(matrix, ['I have 20 lei', 'I buy the ball', 'I buy the pen', 'How much money do I have?']);
+  assert.match(x.out[3], /I assumed 1 ball and 1 pen\.$/);
+});
+
+test('certainty: in Romanian the sentence goes through the reply table', async () => {
+  const { createTranslator } = await import('../src/translate/index.mjs');
+  const { settingsForMode, sessionOptions } = await import('../src/dialog/runtime-config.mjs');
+  const e = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator(), options: { reasoner: 'matrix' } });
+  const s = e.createSession(sessionOptions(settingsForMode('rules'), { language: 'ro' }));
+  s.setWorldState('ui.shell', { activeTab: 'robot' });
+  await s.send('Am 20 de lei', {});
+  await s.send('Cumpăr mingea', {});
+  const r = await s.send('Câți bani am?', {});
+  assert.match(r.text, /Am presupus 1 minge\.$/);
+  assert.equal(r.lang, 'ro');
+});
+
+// ---- games.tictactoe on the matrix (SOPWORLD-1b item 5) ----------------------------------------------------------------------------------------
+
+const GAME = ["Let's play tic tac toe", 'center', 'top left', 'bottom right', 'top middle', 'b3', 'level perfect', 'new game', 'a1', 'center', 'c3', 'I give up', 'center', 'new game', 'I go first',
+  'which level', 'who is winning', 'where did you play', 'how many moves', 'describe the board', 'hint', 'a1', 'a1', 'b2', 'c3', 'a2', 'c1', 'new game'];
+
+test('games.tictactoe: a whole game says the same as the ops reasoner, word for word, with the same board and statuses', async () => {
+  const run = async (eng) => {
+    const s = eng.createSession({ language: 'en' });
+    const out = [];
+    for (const l of GAME) { const r = await s.send(l, {}); out.push([r.text, r.statuses.join(), JSON.stringify(r.state?.['games.tictactoe']?.board ?? null)]); }
+    return { s, out };
+  };
+  const o = await run(ops), m = await run(matrix);
+  assert.deepEqual(m.out, o.out);
+  const { history, ...opsState } = o.s.isession.state['games.tictactoe'];   // (ops keeps its own undo snapshots; the matrix has the library's marks)
+  assert.deepEqual(m.s.isession.state['games.tictactoe'], opsState);
+  sameAsLibrary(m.s, ['games.tictactoe']);
+});
+
+test('games.tictactoe: an illegal move is refused with the rules\' reason, and nothing changes', async () => {
+  const { s } = await say(matrix, ["Let's play tic tac toe", 'center']);
+  const state = () => JSON.stringify(s.isession.state['games.tictactoe']);
+  const before = state();
+  const taken = await s.send('center', {});
+  assert.equal(taken.text, 'The center is already taken by you. Please pick another place.');
+  assert.deepEqual(taken.statuses, ['unsupported']);
+  assert.equal(state(), before, 'the board did not change');
+  assert.equal(s.isession.rs.refused.length, 0);
+  const mine = JSON.parse(before).last.system;
+  const sq = ['top left', 'top middle', 'top right', 'middle left', 'the center', 'middle right', 'bottom left', 'bottom middle', 'bottom right'][mine];
+  assert.match((await s.send(sq, {})).text, /is already taken by me\. Please pick another place\.$/);
+  assert.ok(s.isession.rs.world.check().ok, 'the library holds a valid game');
+  await s.send('I give up', {});
+  const over = await s.send('bottom left', {});
+  assert.equal(over.text, 'The game is over. Say "new game" to play again.');
+  assert.deepEqual(over.statuses, ['unsupported']);
+});
+
+test('games.tictactoe: the rules in the matrix: whose turn it is, the free squares, a win, a draw, a resignation, a move out of turn', async () => {
+  const lib = matrix.reasoner.session().world;
+  const turn = () => lib.ofType('ttt.turn').map((x) => x.attrs.by[0]);
+  const free = () => lib.ofType('ttt.free').map((x) => Number(x.attrs.at[0])).sort((a, b) => a - b);
+  let n = 0;
+  const play = (by, at) => lib.tell(`@mv${n} ttt.move by=${by} at=${at} n=${n++}`);
+  assert.deepEqual(turn(), ['X']);
+  assert.deepEqual(free(), [0, 1, 2, 3, 4, 5, 6, 7, 8]);
+  assert.ok(play('X', 4).ok);
+  assert.deepEqual(turn(), ['O']);
+  assert.deepEqual(free(), [0, 1, 2, 3, 5, 6, 7, 8]);
+  assert.equal(lib.check({ wires: `@mv${n} ttt.move by=X at=0 n=${n}` }).violations[0].why, 'It is not your turn.', 'X after X');
+  assert.equal(lib.check({ wires: `@mv${n} ttt.move by=O at=4 n=${n}` }).violations[0].why, 'The center is already taken by you. Please pick another place.');
+  for (const [by, at] of [['O', 0], ['X', 8], ['O', 2], ['X', 6]]) assert.ok(play(by, at).ok, `${by}${at}`);
+  assert.equal(lib.ofType('ttt.won').length, 0);
+  assert.ok(play('O', 1).ok);   // O has 0, 1 and 2: the top row
+  assert.deepEqual(lib.ofType('ttt.won').map((x) => [x.attrs.winner[0], x.attrs.how[0]]), [['O', '"the top row"']]);
+  assert.deepEqual(turn(), [], 'nobody is to move');
+  assert.deepEqual(free(), [], 'no legal move is left');
+  assert.equal(lib.check({ wires: `@mv${n} ttt.move by=X at=3 n=${n}` }).violations.some((v) => v.why === 'The game is over. Say "new game" to play again.'), true);
+  const d = matrix.reasoner.session().world;   // a draw
+  let k = 0;
+  for (const [by, at] of [['X', 0], ['O', 1], ['X', 2], ['O', 4], ['X', 3], ['O', 5], ['X', 7], ['O', 6], ['X', 8]]) assert.ok(d.tell(`@mv${k} ttt.move by=${by} at=${at} n=${k++}`).ok);
+  assert.equal(d.ofType('ttt.drawn').length, 1);
+  assert.equal(d.ofType('ttt.won').length, 0);
+  const r = matrix.reasoner.session().world;   // a resignation is the other player's win
+  r.tell('@rs ttt.resign by=X');
+  assert.deepEqual(r.ofType('ttt.won').map((x) => x.attrs.winner[0]), ['O']);
+});
+
+test('games.tictactoe: "undo" (typed, or as a command) goes back through the library: the move and my answer are gone, state and library agree', async () => {
+  const { s } = await say(matrix, ["Let's play tic tac toe", 'center', 'top left']);
+  const rs = s.isession.rs;
+  assert.equal(rs.world.ofType('ttt.move').length, 4);
+  assert.equal((await s.send('undo', {})).text, 'OK, I took back your last move and my answer. It is your move again.', 'bare undo with the game open: the world\'s words');
+  assert.equal(rs.world.ofType('ttt.move').length, 2);
+  assert.equal(s.isession.state['games.tictactoe'].board.filter(Boolean).length, 2);
+  const c = await s.send('oops, take that back', {});
+  assert.equal(c.text, 'OK, I took back your last move and my answer. It is your move again.');
+  assert.equal(rs.world.ofType('ttt.move').length, 0);
+  sameAsLibrary(s, ['games.tictactoe']);
+  const none = await s.send('oops, take that back', {});
+  assert.equal(none.text, 'There is nothing to undo yet: no move has been played.');
+  assert.deepEqual(none.statuses, ['missing']);
+  assert.match((await s.send('top left', {})).text, /You took top left\./);
+});
+
+test('games.tictactoe: "why did you play there?" says why the computer chose its last square (a free square, a block, the best move) and that it has not played yet', async () => {
+  const none = await say(matrix, ['why did you play there?']);
+  assert.equal(none.out[0], 'I have not played yet.');
+  const a = await say(matrix, ["Let's play tic tac toe", 'center']);
+  assert.match((await a.s.send('why did you play there?', {})).text, /^I played .+ because I could not win and did not have to block, so I took any free square\.$/);
+  const b = await say(matrix, ["Let's play tic tac toe", 'center', 'top left']);   // X has the center and the top left: the computer must stop the diagonal at the bottom right
+  const reply = (await b.s.send('why did you play there?', {})).text;
+  assert.match(reply, /^I played (bottom right|.+) because (you were about to complete the diagonal from the top left there, so I stopped you|I could not win and did not have to block, so I took any free square)\.$/);
+  if (b.s.isession.state['games.tictactoe'].last.system === 8) assert.match(reply, /^I played bottom right because you were about to complete the diagonal from the top left/);
+  const p = await say(matrix, ["Let's play tic tac toe", 'level perfect', 'new game', 'center']);
+  assert.match((await p.s.send('why did you play there?', {})).text, /because it is the best move: I looked at every way the game can go from here\.$/);
+});
+
+test('games.tictactoe: another world that asks for a move (a note name that reads as a square) reaches the matrix, not the ops function', async () => {
+  const s = matrix.createSession({ language: 'en' });
+  const r = await s.send('Play B2', {});
+  assert.match(r.text, /^You took the center\. I took /);
+  assert.equal(s.isession.rs.world.ofType('ttt.move').length, 2, 'the move is in the library');
+  assert.equal(s.isession.state['games.tictactoe'].board[4], 'X');
+});
+
+test('games.tictactoe: bare "undo" off the game tab is the dialogue layer\'s generic undo (the same rewind)', async () => {
+  const s = matrix.createSession({ language: 'en' });
+  await s.send("Let's play tic tac toe", {});
+  await s.send('center', {});
+  s.setWorldState('ui.shell', { activeTab: 'robot' });
+  assert.match((await s.send('undo', {})).text, /^OK, I took that back: "center"\.$/);
+  assert.equal(s.isession.rs.world.ofType('ttt.move').length, 0);
+});
+
+test('games.tictactoe: with the default (ops) no library is involved and the state is the one ops.mjs keeps', async () => {
+  const s = ops.createSession({ language: 'en' });
+  assert.equal(s.isession.rs, null);
+  await s.send("Let's play tic tac toe", {});
+  await s.send('center', {});
+  const st = s.isession.state['games.tictactoe'];
+  assert.equal(st.board[4], 'X');
+  assert.ok(Array.isArray(st.history), 'ops keeps its own undo snapshots');
 });
