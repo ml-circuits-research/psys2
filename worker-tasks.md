@@ -2374,3 +2374,21 @@ In Chrome with matrix, undo of a list add and of a purchase now works ("OK, I to
    - Each undo must name what it took back ("I took back the new game"), or say "There is nothing more to undo".
 2. **Matrix only.** The undo history stops at a game. The sequence is: I have 20 lei → I buy a ball → add milk → open hangman → new game → guess → undo, undo. A third undo then gives "There is nothing to undo", although the milk add and the purchase were still undoable. One history across worlds, newest first, is what slice 1 promises.
 3. **Both reasoners, pre-existing.** After "remove milk from my shopping list", the question "what is on my shopping list?" is read as "is it on your list" and answered "No, is is not on your shopping list. I understood only part of that: I did not use \"what\"." On a list that was never filled it answers correctly ("Your shopping list is empty"). A removed item seems to leave a referent that hijacks the reading. Add regression rows for every case above.
+
+## WORLDS-APART (user decision, 2026-11-11 19:26): do not put every world into one library World
+
+The user, in his words: it depends on the case, but there is no reason to combine worlds that have nothing to do with each other. Undo can be done another way. There are situations where you want to combine them, and there are needless complications if we force combining them.
+
+What this changes:
+1. **Spec 15 stage 2.** Drop the target "one World per session with every world's legend". It is not blocked on fork cost; it is not wanted. Rewrite that design bullet to match.
+2. **Combine only by declaration.**
+   - Worlds share one library World only when they really share facts. Example: kids.arith reads the money of kids.shop, and both use the agents.
+   - The sharing is declared in world.sop (an import or a `shares=` list) and is never automatic.
+   - Every other world on the matrix gets its own small World, forked on its own and loaded lazily when the world is first used.
+3. **Undo across worlds without one World.**
+   - The session keeps a short history of turns, each entry being {world, how to take it back}. The how is either the mark of that world's library World or the dialogue snapshot for engine worlds.
+   - "undo" takes back the newest entry, whatever world it belongs to, and says which one.
+   - This also fixes UNDO-1 item 2: the history stopped at a game.
+4. **Keep `Memory`** as the reader's view for worlds that are not on the matrix. Move a world to the library only when it gains something there (rules, denies, defaults, derived facts), case by case, as in stage 2 so far.
+
+Write the change in spec 15 and in worker-log.md, then go on with RO-MATRIX and UNDO-1.
