@@ -2469,3 +2469,17 @@ Small notes, no separate task; fold them into RO-TRANSLATE-FALLBACK:
 - (c) The quotes are ASCII `"…"`. Romanian uses „…”, as in the undo reply.
 
 Still open: RO-TRANSLATE-FALLBACK (the translator as a safety net) and UNDO-1.
+
+## Wave 1: docs.editor + docs.reader (reviewer, 2026-11-11 22:10)
+
+Accepted (d70591e, c7ec844, 1590826). `npm test` gives 1314 pass, 0 fail. The report is honest: 0 lines of ops.mjs deleted, and matrix is about 1.2–1.4 ms slower per turn in both worlds. The library ideas are now Round 6 R6.4–R6.12 in soplang-words-lib (b7c2d9b).
+
+In Chrome (`/home/claude/shot/docs-probe.mjs` and `docs-probe-ops.mjs`), matrix equals ops except:
+- **(+)** "undo" names the change: "the heading \"Plans\" you added is gone".
+- **(−)** "read sentence 900" lost the document's title: ops says "\"Hansel and Gretel\" has only 66 sentences.", matrix says "There is no sentence 900; the document has 66 sentences." Keep the title.
+
+Both modes, pre-existing:
+- "deschide documentele" opens the **Editor** tab instead of Documents.
+- In Romanian, "citește propoziția 900" gives a vague "Nu este nicio propoziție acolo." The English reply says how many sentences there are.
+
+The goal set by the user is at least ops's speed. Docs is not there yet, so list in the per-world row what would close the gap: P2 and P3 of Round 5, and R6.12.
