@@ -63,6 +63,20 @@ Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-
 - The 8 coherence failures left are formalizer or reply matters, not reasoner ones ("Why do I have nothing left?", "No, she gives him 4", "Tom had some apples", "Why?", "Remove eggs.", the debt refusal's wording). They are agent B's work in progress.
 - Reading: matrix wins on consistency (violations 2.8% → 0.8%), undo and coherence (+5 of 30) with no change on the operational and dialogue sets; it costs about 2.6 ms per turn and 77 kB gzip loaded only in matrix mode.
 
+### After SOPWORLD-1b item 2 (formalizer gaps closed in ops, 2026-11-11)
+
+- Coherence set, ops: 17 → **24 of 30** (measured before merging with items 1, 3, 7; the combined rerun is part of the A/B experiment).
+- The ops rules now read "Ana gives him some", "Tom had some apples", "He ate 2 and now has 3", "No, she gives him 4", "No, to my to-do list", "I buy something", "Which list did you put it on?", "three of them"; "why?" answers from the facts behind the answer; impossible statements are refused with the reason and retracted; ties and an unknown start get the same wording as matrix mode. All in Romanian too.
+- Still failing in ops: undo ×3 (only the library has it), shop abduction, and `coh.arith.01`, which now fails by design: the impossible statement is refused when told, so the later question is consistent rather than `conflicting`.
+- Consequence for the comparison: most of matrix mode's earlier lead came from features stage 1 built only on the matrix side. With the gaps closed in both, the remaining differences are what the library brings by itself: undo, abduction, default revision, and the per-turn consistency audit.
+- The language switch "treci pe engleză" and its variants are recognized by shape (`src/translate/language-command.mjs`).
+
+### In progress (wave 2)
+
+- Item 4: certainty in replies ("I assumed 1 ball.") plus the `assumption-visible` coherence hint.
+- Item 5: `games.tictactoe` in matrix mode: illegal moves refused with the reason, undo, "why did you play there?".
+- Item 10: SOP Lang v1.1. Our parser reads variables and `#` comments, and `matrix.sop` goes through our parser to the library as wires, so the product has one parser.
+
 ### Why the stage 1 comparison was not fair
 
 - **Shared formalizer gaps.** Many coherence cases fail in both modes because the rules do not read the sentence: "Ana gives him some", "Tom had some apples", "He ate 2 and now has 3", "No, she gives him 4", "why?". A failure there says nothing about the reasoner.
