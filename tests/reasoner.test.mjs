@@ -635,3 +635,8 @@ test('"why?" names the source of a world\'s own facts by world: the price list f
     assert.doesNotMatch(b.out[2], /about animals|shapes/);
   }
 });
+
+test('stage 2: undo of an action of a world without library state leaves the library and the memory consistent', async () => {
+  const { out } = await say(matrix, ['My name is Ana', 'my name is Maria', 'undo that', 'what is my name?']);
+  assert.match(out[3], /Ana|Maria/);
+});
