@@ -363,6 +363,12 @@
     ask="which action?"
     doc="With reasoner=matrix: the action that takes the last move back (for example ttt.undo). The host layer answers it by rewinding the library to before the last turn that changed it, and the world's fns.mjs `undoWords` says what was taken back. Worlds that do not set it keep their own undo operation."
 
+@core.world.redo core.key
+    value=atom
+    card=one
+    ask="which action?"
+    doc="With reasoner=matrix and undo=: the action that puts back what the last undo took out (for example doc.redo). The host layer re-applies it from the marks the undo kept; a turn that changes the library empties them."
+
 @core.world.reasoner core.key
     value=atom
     card=one
