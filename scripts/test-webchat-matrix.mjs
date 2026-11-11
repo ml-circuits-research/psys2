@@ -25,8 +25,11 @@
  *   removed   matrix (UNDO-1): "what is on my shopping list?" after a removal is read as the question it is.
  *   profile   matrix (stage 2): two facts that cannot both be right are refused with the reason (and the tab keeps the first), "undo that" says what was forgotten.
  *   romanian  matrix (RO-MATRIX): a Romanian session: undo quotes the user's own words, a bare yes, a refusal, the shop tab name and the profile answer in Romanian.
+ *   geomap    matrix (stage 2, one instance per world): the state of the map is wires of the library: the counts and the length of the lines come from rules, a "No" about a
+ *             place has the reason of the denies, "zoom to 15" stays at 12, and the world's own undo and redo take the map back and forth (the tab follows).
+ *   charts    matrix (stage 2): the totals are rules, "rename apples to pears" is refused with the reason and the chart on the tab keeps its labels, undo and redo follow.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -366,6 +369,59 @@ export const SCENARIOS = {
       const w = await say(c, 'de ce?');
       check('romanian: "de ce?" quotes the user\'s own words', /"câți ani am"/.test(w) && !/[A-Z][a-z]+ [a-z]+ [a-z]+ [a-z]+ (the|you|your)\b/.test(w), w.slice(0, 120));
       check('romanian: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+
+  // ---- stage 2, one instance per world: geo.map and data.charts (a separate block) -----------------------------------------------------------------------------------------
+  async geomap(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    const st = async () => JSON.parse(await c.state())['geo.map'] ?? {};
+    try {
+      await say(c, 'mark Paris'); await say(c, 'mark Rome');
+      const d = await say(c, 'how far is Rome from Paris');
+      const t = await say(c, 'how long are the lines in total');
+      check('geomap: the counts and the length of the lines come from the library', /^There are 2 markers and 1 line on the map; the lines add up to 1,107 km\.$/.test(t), `${d.slice(0, 40)} | ${t.slice(0, 100)}`);
+      const s1 = await st();
+      check('geomap: the tab state has both markers and the line', s1.markers?.length === 2 && s1.lines?.length === 1, JSON.stringify([s1.markers?.length, s1.lines?.length]));
+      const n = await say(c, 'Is Paris in Germany?');
+      check('geomap: a "No" has the reason of the denies', n === 'No, Paris is not in Germany; it is in France.', n.slice(0, 80));
+      const w = await say(c, 'why?');
+      check('geomap: "why?" names the source of the world', /what I know about places/.test(w), w.slice(0, 120));
+      await say(c, 'street map');
+      await say(c, 'zoom to 15');
+      const s2 = await st();
+      check('geomap: the street map zooms to 15, the library accepts it', s2.layer === 'osm' && s2.zoom === 15, JSON.stringify([s2.layer, s2.zoom]));
+      await say(c, 'offline map');
+      const s3 = await st();
+      check('geomap: back on the offline map the zoom is at most 12 (the library refuses more)', s3.layer === 'offline' && s3.zoom <= 12, JSON.stringify([s3.layer, s3.zoom]));
+      const u = await say(c, 'undo');
+      const s4 = await st();
+      check('geomap: the world\'s own undo takes the last change back and the tab state follows', /undid the last change to the map/.test(u) && s4.layer === 'osm', `${u.slice(0, 50)} | ${s4.layer}`);
+      const r = await say(c, 'redo');
+      const s5 = await st();
+      check('geomap: redo does it again', /did it again/.test(r) && s5.layer === 'offline', `${r.slice(0, 40)} | ${s5.layer}`);
+      check('geomap: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async charts(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    const st = async () => JSON.parse(await c.state())['data.charts'] ?? {};
+    try {
+      const a = await say(c, 'Make a chart: apples 5, pears 3, plums 8');
+      check('charts: the chart is built and on the tab state', /bar chart with 3 items/.test(a) && (await st()).charts?.[0]?.labels?.length === 3, a.slice(0, 80));
+      const b = await say(c, 'what is the biggest');
+      const t = await say(c, 'what is the total');
+      check('charts: the biggest and the total come from the rules', b === 'Plums is the biggest, with 8.' && t === 'The total is 16.', `${b} | ${t}`);
+      const r = await say(c, 'rename apples to pears');
+      check('charts: a label that is already there is refused with the reason, the chart keeps its labels', r === 'That does not add up. Pears is in the chart twice.' && (await st()).charts?.[0]?.labels?.[0] === 'Apples', r.slice(0, 100));
+      await say(c, 'add bananas 4');
+      const p = await say(c, 'what percent is bananas');
+      check('charts: a percentage follows the new number', p === 'Bananas is 20% of the total (4 of 20).', p);
+      const u = await say(c, 'undo');
+      check('charts: the world\'s own undo takes the number back (the tab state follows)', /undid the last change to the chart/.test(u) && (await st()).charts?.[0]?.labels?.length === 3, u.slice(0, 60));
+      const x = await say(c, 'undo the undo');
+      check('charts: and does it again', /did it again/.test(x) && (await st()).charts?.[0]?.labels?.length === 4, x.slice(0, 60));
+      check('charts: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 };

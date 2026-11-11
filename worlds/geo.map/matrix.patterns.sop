@@ -1,0 +1,9 @@
+@pat.geo.map.m.onmap core.pattern
+    match="[$lang.lead.polite|$geo.map.g7_you_can]? [how_long_are_the_lines|how_long_are_all_the_lines|how_long_is_the_route|how_long_is_my_route|what_is_the_total_distance|what_is_the_total_length|how_far_in_total|how_many_markers_and_lines_are_there|how_many_things_are_on_the_map|how_much_is_on_the_map] [in_total|altogether|in_all|on_the_map]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=geo.onmap"
+    kind=request
+    priority=13
+    canonical="How long are the lines in total?"
+    example="How long are the lines in total?"
+    example="What is the total distance?"
+    example="How many things are on the map?"

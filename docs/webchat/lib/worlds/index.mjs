@@ -71,6 +71,8 @@ export class World {
   get mirrors() { return getAll(this.manifest ?? { entries: [] }, 'mirror').map((v) => v.v); }
   /** How the world calls its own facts in "why?" (`source="the price list"`), or null (the host says "what I know"). */
   get sourcePhrase() { return txt(this.manifest ?? { entries: [] }, 'source') ?? null; }
+  /** `kb=lookup`: the world's knowledge base and those of its imports are not loaded into the library's instances (a big table is copied by the library on the first write after every fork); they are a static, read-only index that actions read through `ctx.host.kb(id)` and tell the few wires a question needs to the rules (spec 15). */
+  get kbLookup() { return txt(this.manifest ?? { entries: [] }, 'kb') === 'lookup'; }
   /** Keys (`type.key`) whose questions the matrix leaves to the operations (`ops=<key>`, repeatable). */
   get opsKeys() { return getAll(this.manifest ?? { entries: [] }, 'ops').map((v) => v.v); }
   /** Worlds this composite world composes (`compose=<world>`, repeatable; spec 15): ids, in the order written. */

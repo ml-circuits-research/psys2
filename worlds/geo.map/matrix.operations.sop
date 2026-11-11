@@ -1,0 +1,5 @@
+@op.geo.map.onmap core.operation
+    impl=matrix
+    semantics=action
+    action=geo.onmap
+    doc="Matrix mode: what is on the map (markers, highlighted countries, lines and the length of the lines), from the derived counts of the library."

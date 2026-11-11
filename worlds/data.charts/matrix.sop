@@ -1,0 +1,102 @@
+# data.charts as a matrix: the charts and their numbers are wires, and what follows from the numbers (the total of a label, the total and the extremes of a chart, the
+# total of a series) is rules and aggregates.
+#
+# The operations that build and change charts (ops.mjs: parsing "apples 5, pears 3", reading the other worlds' holdings, prices and lists, types, titles, colors,
+# palettes, order, orientation, the pictures and files, undo and redo) are unchanged and keep working on the session state; the library takes the state over after
+# each of them (fns.mjs, `adopt`; `toState` is the way back): one data.charts.chart per chart (its type, title, whether it is the active one, its options, and `obj`,
+# the exact chart object, so the state is derived without loss), one data.charts.point per number (the chart, the series, the place, the label, the value) and
+# data.charts.dialog for the bookkeeping the operations keep (nextId, inputMode, the undo and redo history). The questions about the data (biggest, total, average,
+# difference, comparison, percentage, a value, how many) are answered from the derived wires by the actions below (fns.mjs says them in the words of ops.mjs).
+# Drawing, parsing, colors and the pictures stay in the operations.
+
+@dc.seq core.sequence key=core.seq
+
+# ---- the state as wires
+@dc.k.c.cid core.slot of=data.charts.chart key=cid kind=string required=true
+@dc.k.c.ord core.slot of=data.charts.chart key=ord kind=integer required=true
+@dc.k.c.type core.slot of=data.charts.chart key=type kind=atom enum=bar enum=line enum=pie enum=doughnut enum=radar enum=polarArea enum=scatter combine=intersect
+@dc.k.c.active core.slot of=data.charts.chart key=active kind=boolean required=true
+@dc.k.c.nseries core.slot of=data.charts.chart key=nseries kind=integer required=true
+@dc.k.c.obj core.slot of=data.charts.chart key=obj kind=string required=true
+@dc.k.p.cid core.slot of=data.charts.point key=cid kind=string required=true
+@dc.k.p.si core.slot of=data.charts.point key=si kind=integer required=true
+@dc.k.p.i core.slot of=data.charts.point key=i kind=integer required=true
+@dc.k.p.label core.slot of=data.charts.point key=label kind=string required=true
+@dc.k.p.series core.slot of=data.charts.point key=series kind=string required=true
+@dc.k.p.value core.slot of=data.charts.point key=value kind=number required=true
+@dc.k.d.rest core.slot of=data.charts.dialog key=rest kind=string required=true
+
+# ---- what cannot be: a number of a chart that is not there, two charts active at once, the same label twice in one series
+@dc.pn data.charts.point cid=?c label=?l
+@dc.cn data.charts.chart cid=?c
+@dc.d.orphan core.deny when=$dc.pn not=$dc.cn why="The number for ?l belongs to a chart that is not there."
+@dc.a1 data.charts.chart active=true cid=?c1
+@dc.a2 data.charts.chart active=true cid=?c2
+@dc.t.two core.check fn=neq args=?c1 args=?c2
+@dc.d.active core.deny when=$dc.a1 when=$dc.a2 if=$dc.t.two why="Only one chart is active at a time, not ?c1 and ?c2."
+@dc.u1 data.charts.point cid=?c si=?s label=?l
+@dc.u2 data.charts.point cid=?c si=?s label=?l
+@dc.t.diff core.check fn=neq args=$dc.u1 args=$dc.u2
+@dc.d.twice core.deny when=$dc.u1 when=$dc.u2 if=$dc.t.diff why="?l is in the chart twice."
+
+# ---- what follows from the numbers
+@dc.k.lt.cid core.slot of=data.charts.labeltotal key=cid kind=string
+@dc.k.lt.label core.slot of=data.charts.labeltotal key=label kind=string
+@dc.k.lt.total core.slot of=data.charts.labeltotal key=total kind=number
+@dc.k.ct.cid core.slot of=data.charts.charttotal key=cid kind=string
+@dc.k.ct.sum core.slot of=data.charts.charttotal key=sum kind=number
+@dc.k.ct.count core.slot of=data.charts.charttotal key=count kind=integer
+@dc.k.ct.max core.slot of=data.charts.charttotal key=max kind=number
+@dc.k.ct.min core.slot of=data.charts.charttotal key=min kind=number
+@dc.k.st.cid core.slot of=data.charts.seriestotal key=cid kind=string
+@dc.k.st.si core.slot of=data.charts.seriestotal key=si kind=integer
+@dc.k.st.series core.slot of=data.charts.seriestotal key=series kind=string
+@dc.k.st.total core.slot of=data.charts.seriestotal key=total kind=number
+@dc.k.top.cid core.slot of=data.charts.top key=cid kind=string
+@dc.k.top.label core.slot of=data.charts.top key=label kind=string
+@dc.k.bot.cid core.slot of=data.charts.bottom key=cid kind=string
+@dc.k.bot.label core.slot of=data.charts.bottom key=label kind=string
+
+# the total of a label over the series of its chart
+@dc.p data.charts.point cid=?c label=?l value=?v
+@dc.p1 data.charts.point cid=?c label=?l
+@dc.c.lt core.calc out=?t fn=sum over=$dc.p args=?v
+@dc.lt data.charts.labeltotal cid=?c label=?l total=?t
+@dc.r.lt core.rule when=$dc.p1 with=$dc.c.lt then=$dc.lt
+
+# the total, the number of labels, the biggest and the smallest total of a chart
+@dc.l data.charts.labeltotal cid=?c total=?t
+@dc.l1 data.charts.labeltotal cid=?c
+@dc.c.sum core.calc out=?s fn=sum over=$dc.l args=?t
+@dc.c.n core.calc out=?n fn=count over=$dc.l
+@dc.c.max core.calc out=?mx fn=max over=$dc.l args=?t
+@dc.c.min core.calc out=?mn fn=min over=$dc.l args=?t
+@dc.ct data.charts.charttotal cid=?c sum=?s count=?n max=?mx min=?mn
+@dc.r.ct core.rule when=$dc.l1 with=$dc.c.sum with=$dc.c.n with=$dc.c.max with=$dc.c.min then=$dc.ct
+
+# the labels that have the biggest total, and those that have the smallest (all of them when tied)
+@dc.tl data.charts.labeltotal cid=?c label=?l total=?t
+@dc.tc data.charts.charttotal cid=?c max=?mx min=?mn
+@dc.t.ismax core.check fn=eq args=?t args=?mx
+@dc.t.ismin core.check fn=eq args=?t args=?mn
+@dc.top data.charts.top cid=?c label=?l
+@dc.bot data.charts.bottom cid=?c label=?l
+@dc.r.top core.rule when=$dc.tl when=$dc.tc if=$dc.t.ismax then=$dc.top
+@dc.r.bot core.rule when=$dc.tl when=$dc.tc if=$dc.t.ismin then=$dc.bot
+
+# the total of a series
+@dc.sp data.charts.point cid=?c si=?s series=?n value=?v
+@dc.sp1 data.charts.point cid=?c si=?s series=?n
+@dc.c.st core.calc out=?t fn=sum over=$dc.sp args=?v
+@dc.st data.charts.seriestotal cid=?c si=?s series=?n total=?t
+@dc.r.st core.rule when=$dc.sp1 with=$dc.c.st then=$dc.st
+
+# ---- the questions about the data (fns.mjs); everything else the operations do (ops.mjs), and the library takes the state over after them
+@dc.a.extreme core.action name=chart.extreme fn=dcExtreme
+@dc.a.total core.action name=chart.total fn=dcTotal
+@dc.a.average core.action name=chart.average fn=dcAverage
+@dc.a.difference core.action name=chart.difference fn=dcDifference
+@dc.a.compare core.action name=chart.compare fn=dcCompare
+@dc.a.percent core.action name=chart.percent fn=dcPercent
+@dc.a.valueOf core.action name=chart.valueOf fn=dcValueOf
+@dc.a.count core.action name=chart.countItems fn=dcCount

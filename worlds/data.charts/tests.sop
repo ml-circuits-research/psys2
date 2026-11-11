@@ -1394,3 +1394,71 @@
     input="i want to delete this chart"
     expect="There are no charts left."
     session=csh
+
+@t.data.charts.m01 core.test
+    session=dm1
+    input="Make a chart: apples 5, pears 3, plums 8"
+    expectState="charts.0.labels.length=3"
+    doc="SOPWORLD stage 2: the chart and its numbers are wires of the library; the totals are rules and aggregates"
+    reasoner=matrix
+
+@t.data.charts.m02 core.test
+    session=dm1
+    input="What is the biggest?"
+    expect="Plums is the biggest, with 8."
+    reasoner=matrix
+
+@t.data.charts.m03 core.test
+    session=dm1
+    input="What is the total?"
+    expect="The total is 16."
+    reasoner=matrix
+
+@t.data.charts.m04 core.test
+    session=dm1
+    input="Rename apples to pears"
+    expect="That does not add up. Pears is in the chart twice."
+    expectStatus=conflicting
+    expectState="charts.0.labels.0=Apples"
+    doc="a state that cannot be (the same label twice) is refused with the reason and the chart stays as it was; the operations alone would have kept it"
+    reasoner=matrix
+
+@t.data.charts.m05 core.test
+    session=dm1
+    input="Rename apples to cherries"
+    expect="cherries"
+    expectState="charts.0.labels.0=Cherries"
+    reasoner=matrix
+
+@t.data.charts.m06 core.test
+    session=dm1
+    input="What is the total?"
+    expect="The total is 16."
+    reasoner=matrix
+
+@t.data.charts.m07 core.test
+    session=dm1
+    input="undo"
+    expect="I undid the last change"
+    expectState="charts.0.labels.0=Apples"
+    doc="undo goes through the library (undo=chart.undo, redo=chart.redo)"
+    reasoner=matrix
+
+@t.data.charts.m08 core.test
+    session=dm1
+    input="Add bananas 4"
+    expectState="charts.0.labels.length=4"
+    reasoner=matrix
+
+@t.data.charts.m09 core.test
+    session=dm1
+    input="What percent is bananas?"
+    expect="Bananas is 20% of the total (4 of 20)."
+    reasoner=matrix
+
+@t.data.charts.m10 core.test
+    session=dm1
+    input="why?"
+    expect="I worked that out from what you told me"
+    doc="the numbers came from the user's own words: the answer says what it rests on"
+    reasoner=matrix
