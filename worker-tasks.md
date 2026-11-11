@@ -2354,3 +2354,12 @@ Add rows for all of these to the RO regression set in both reasoners.
 
   The remaining cost sits in the matrix worlds themselves, at about +8–9 ms per turn. Profile one kids.shop turn and one hangman turn and say where those milliseconds go: fork, mirror into state, query, or the library's own fixpoint. Reduce them if possible; p95 is unchanged.
   The differing counts grew to dialogues 6, gold 4 and coherence 8, and 6 cases are now "unjudged". dlg.kidsB#016 is still listed as "ops better" after F. Refresh the classes file after F and stage 2, and classify the new cases.
+- PERF round 2 (25b7401) and A/B refresh (16f7f2a): accepted. Reviewer rerun, p50 ms, ops vs matrix (this box is slower than the DGX):
+
+  | world group | ops | matrix | before the fix |
+  | --- | --- | --- | --- |
+  | four matrix worlds | 14.8 | 19.8 | 22.4 |
+  | games | 15.5 | 19.4 | 23.8 |
+  | other groups | | equal within 1 ms | |
+
+  The three library issues are now Round 5 (P1 cheap complete, P2 copy-on-write detach, P3 batched tells in actions) in soplang-words-lib worker-tasks.md (9fab48c). Re-vendor when that release lands, pinned by commit. Next for this worker: RO-MATRIX (above), then src/interpreter on the library.
