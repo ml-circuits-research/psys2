@@ -15,6 +15,9 @@
 @pf.k.at core.slot of=user.profile.fact key=at kind=integer
 @pf.k.note core.slot of=user.profile.fact key=note kind=string
 @pf.k.num core.slot of=user.profile.fact key=num kind=integer
+@pf.k.said core.slot of=user.profile.fact key=said kind=string
+@pf.k.asked core.slot of=user.profile.fact key=asked kind=string
+@pf.k.req core.slot of=user.profile.fact key=req kind=string
 @pf.k.rest core.slot of=user.profile.dialog key=rest kind=string required=true
 @pf.k.plan core.slot of=user.profile.plan key=json kind=string required=true
 

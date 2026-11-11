@@ -819,3 +819,53 @@
     expectState="active=true"
     doc="an answer in the interview is a statement too: the same refusal, and the interview goes on from the question it was at"
     reasoner=matrix
+
+@t.user.profile.m14 core.test
+    session=pw1
+    input="I am 34 years old."
+    expectState="fields.age.v=34"
+    reasoner=matrix
+
+@t.user.profile.m15 core.test
+    session=pw1
+    input="Why do you think I am 34?"
+    expect="I think your age is 34 because you told me so."
+    expect="I am 34 years old"
+    doc="why? about a profile fact is explained from the library instance: the fact, and the statement of the user that told it"
+    reasoner=matrix
+
+@t.user.profile.m16 core.test
+    session=pw2
+    input="interview me"
+    expectState="active=true"
+    reasoner=matrix
+
+@t.user.profile.m17 core.test
+    session=pw2
+    input="Andy"
+    expectState="fields.name.v=Andy"
+    reasoner=matrix
+
+@t.user.profile.m18 core.test
+    session=pw2
+    input="why?"
+    expect="you answered \"Andy\""
+    expect="I asked you"
+    doc="a bare why? after an interview answer says the question that was asked and what the user answered"
+    reasoner=matrix
+
+@t.user.profile.m19 core.test
+    language=ro
+    session=pw3
+    input="Locuiesc în Cluj."
+    expectState="fields.location.v=Cluj"
+    reasoner=matrix
+
+@t.user.profile.m20 core.test
+    language=ro
+    session=pw3
+    input="De ce?"
+    expect="Am notat Cluj la"
+    expect="Locuiesc în Cluj"
+    doc="Romanian: the fact, and the user's own words as typed"
+    reasoner=matrix

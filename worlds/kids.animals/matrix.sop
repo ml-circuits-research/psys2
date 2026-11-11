@@ -3,8 +3,13 @@
 # explicit "no" is kept apart from unknown, "yes" and "no" together are a conflict, and the library says which statements it rests on). There are no rules of
 # our own to add: nothing follows from the facts that a child has not said (an animal is not guessed to fly from its class).
 #
-# Left to the operations (ops.mjs, `ops=` in world.sop), because a library query cannot say them: the checks that carry the value they seek ("is a whale a
-# fish?": the library would answer the value it was given), the phrases of where an animal lives and what covers it (several habitats are one sentence, not a
-# conflict), the description of an animal and the search for the animals that match several properties. Their words are the world's own tables in ops.mjs.
-#
+# Left to the operations (ops.mjs, `ops=` in world.sop): the checks that carry the value they seek ("is a whale a fish?": the library supposes a wire with the
+# value it was given and answers it), the phrases of where an animal lives and what covers it (several habitats are one sentence), the description of an animal
+# and the search for the animals that match several properties. Why the library does not do the habitats and coverings (searched in the library's docs and
+# source, 2026-11-11): several values of a key are a `conflicting` answer in value mode, and `mode=list` is the only way to get them as `supported`; the
+# question wires of kids.animals' patterns are shared with the ops strategy and carry no mode, and a template without `mode` renders value questions only. A key
+# cannot say "answer as a list" (there is no `answer=list` or `combine=union` for a query), and no aggregate joins the values into one text (`collect` makes
+# several values again). The issue is written in worker-log.md. Conflicting taught facts need nothing more: the library says them (a conflict, not a refusal).
+# Their words are the world's own tables in ops.mjs.
+
 # What a child teaches is told as wires and is undone with the rest (undo, "that's wrong"); `fns.mjs` says in the world's words what was taken back.
