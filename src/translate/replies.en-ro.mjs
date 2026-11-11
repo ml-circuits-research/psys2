@@ -280,6 +280,7 @@ const TABLE = [
   ['What shall I add to your to-do list?', 'Ce să adaug pe lista ta de lucruri de făcut?'],
   ['I put {t} on your {lst} list.', 'Am pus {t} pe lista ta de {lst}.'], ['Done!', 'Gata!'], ['I added {t} to your {lst} list.', 'Am adăugat {t} pe lista ta de {lst}.'],
   ['You did not say which list, so I assumed your {lst} list.', 'Nu ai spus ce listă, așa că am presupus lista ta de {lst}.'],
+  ['I assumed {t}.', 'Am presupus {t}.'],
   ['I have not put anything on a list yet.', 'Încă nu am pus nimic pe nicio listă.'],
   ['Because you marked {t} as done on your {lst} list.', 'Pentru că ai marcat {t} ca terminat pe lista ta de {lst}.'],
   ['I do not see that as done on any list.', 'Nu văd asta ca terminat pe nicio listă.'],

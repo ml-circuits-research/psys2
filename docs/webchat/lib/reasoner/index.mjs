@@ -12,7 +12,7 @@
  * What the library gets: `worlds/core/mapping.sop` (how it reads our legends), the legends of the matrix worlds and their imports as they are,
  * the knowledge bases, the matrices (`matrix.sop`) and the functions (`fns.mjs`) of the worlds that opt in. Reply wording stays in our templates.
  */
-import { serialize, parse as parseOurs, ref as refValue, atom as atomValue } from '../soplang/index.mjs?v=002f3588a0';
+import { serialize, parse as parseOurs, ref as refValue, atom as atomValue, str as strValue } from '../soplang/index.mjs?v=002f3588a0';
 import { budget as turnBudget } from '../dialog/budget.mjs?v=123c3e1329';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */
@@ -56,6 +56,8 @@ export async function createReasoner(set, { lib = null } = {}) {
   const actionOwner = new Map();
   for (const w of worlds) for (const o of w.operations) if (o.semantics === 'action') { actionOwner.set(o.id, w.id); if (o.action) actionOwner.set(o.action, w.id); }
   const voices = new Map(worlds.filter((w) => typeof w.voice === 'function').map((w) => [w.id, w.voice]));
+  const assumedBy = new Map(worlds.filter((w) => typeof w.assumed === 'function').map((w) => [w.id, w.assumed]));
+  const undoOf = new Map(worlds.filter((w) => w.undoAction).map((w) => [w.undoAction, w]));   // action -> the world whose "undo" the library answers by rewinding
   const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
   const mirrors = [...new Set(worlds.flatMap((w) => w.mirrors))];
   const empties = new Map();
@@ -63,7 +65,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const actions = new Map();
   for (const m of base.matrix.values()) if (m.type === 'core.action') actions.set(unquote(first(m.attrs.name)), m.attrs);
   const reasoner = {
-    lib, base, voices, mirrors, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
+    lib, base, voices, assumedBy, undoOf, mirrors, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
     /** The matrix world that owns a question type (longest world id that prefixes it), or null. */
     ownerOfType: (type) => owners.find((id) => type === id || String(type).startsWith(id + '.')) ?? null,
     ownerOfAction: (action) => actionOwner.get(action) ?? null,
@@ -90,6 +92,7 @@ export class ReasonerSession {
     this.refused = [];   // wires the library refused to take: [{ id, type, violations }], for the trace
     this.last = null;    // the last library result, for explain / why
     this.known = new Map();
+    this.said = new Set();       // assumed cells already said to the user (an assumption is said once)
     this.mirrored = new Map();   // id -> { text, type } of the wire last copied to the session memory
     this.told = [];              // ids of the dialogue wires the library holds, oldest first (a rewind retracts the ones that are gone from the session memory)
     this.cur = null;             // the turn in progress: { turn, mark, stamp }
@@ -99,7 +102,7 @@ export class ReasonerSession {
   /** A copy that shares the state until one of the two changes (nothing is copied). */
   fork() {
     const r = new ReasonerSession(this.reasoner, this.world.fork());
-    r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.mirrored = new Map(this.mirrored); r.told = [...this.told];
+    r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.said = new Set(this.said); r.mirrored = new Map(this.mirrored); r.told = [...this.told];
     r.cur = this.cur && { ...this.cur }; r.turns = this.turns.map((t) => ({ ...t }));
     return r;
   }
@@ -128,7 +131,14 @@ export class ReasonerSession {
       if (!r.ok) this.refused.push({ id: w.id, type: w.type, violations: r.violations });
       else this.told.push(w.id);
     }
+    this._defaults();
     if (session) this._state(session);
+  }
+
+  /** What the matrix declares as a default is applied (tier `default`) once the wires are told, so that an answer resting on it can say so. */
+  _defaults() {
+    try { this.world.complete({ defaults: true, budget: this._limit() }); } catch { /* a default that cannot be applied stays open */ }
+    this._charge();
   }
 
   // ---- turns, undo, rewind ---------------------------------------------------------------------------------------------------------
@@ -221,6 +231,8 @@ export class ReasonerSession {
    * answer wire (or of the wires a refusal rests on) for the templates; or null when the library does not know it (the caller falls back).
    */
   resolve(wire, session = null) {
+    const undo = !this.reasoner.legends.isA(wire.type, 'core.question') && this.reasoner.undoOf.get(wire.entries.find((e) => e.key === 'core.request.action')?.value?.v);
+    if (undo && session) return this.undoAction(undo, session);
     const lw = this._wire(wire);
     const isQuestion = this.reasoner.legends.isA(wire.type, 'core.question');
     const limit = this._limit();
@@ -234,6 +246,25 @@ export class ReasonerSession {
     const answered = this._voice(wire, env, r, isQuestion);
     if (session) this._state(session, this.reasoner.ownerOfWire?.(wire) ?? null);
     return answered;
+  }
+
+  /** An action another world asks for by name and arguments (no wire of the dialogue): its envelope when the library owns the action, else null. */
+  request(action, args, session) {
+    if (!this.reasoner.ownerOfAction(action)) return null;
+    const value = (v) => (/^[\w.-]+$/.test(String(v)) ? atomValue(v) : strValue(v));
+    const entries = [{ key: 'core.request.action', value: atomValue(action) }, ...Object.entries(args ?? {}).map(([k, v]) => ({ key: `core.request.arg.${k}`, value: value(v) }))];
+    return this.resolve({ id: 'req_via_world', type: 'core.request', entries }, session);
+  }
+
+  /** A world's own "undo" action (world.sop `undo=`): the library goes back to before the last turn that changed it; the world says what that was (`undoWords`). */
+  undoAction(world, session) {
+    const toState = this.reasoner.stateOf.get(world.id);
+    const stateNow = () => toState({ find: (t) => this.world.ofType(t), query: (q) => this.world.query(q) });
+    const before = this.turns.length ? stateNow() : null;
+    const turn = before ? this.undo(session) : null;
+    const patch = world.undoWords?.({ before, after: before ? stateNow() : null }) ?? (before ? { value: 'OK, I took that back.' } : { status: 'missing', note: 'There is nothing to undo yet.' });
+    this._state(session, world.id);
+    return { via: 'core.matrix', status: 'supported', ...patch, undoneTurn: turn };
   }
 
   /** The owning world's `voice(ctx)` (fns.mjs) puts the words around the numbers on the envelope (`note`, `unit`, `vars`); the templates stay ours. */
@@ -280,7 +311,34 @@ export class ReasonerSession {
       delete env.vars[seek];
     }
     if (env.vars.unit !== undefined) { env.unit = env.vars.unit; delete env.vars.unit; }
+    if (r.status === 'supported') this._assumed(env, r.rests);
     return env;
+  }
+
+  /**
+   * Certainty (spec 15): an answer that rests on a value of tier `default` or `guessed` (`rests` of the library's result) says so once and records it.
+   * `env.assumptions` are the cells ("w2.count=1 (default)"), `env.assumed` the sentence ("I assumed 1 ball."). The words of a cell come from the owning
+   * world's `assumed(cell)` (fns.mjs): a phrase, or null for a default that is not worth saying; without one, "<key> is <value>".
+   */
+  _assumed(env, rests) {
+    const cells = [], words = [];
+    for (const c of rests ?? []) {
+      if (c.tier !== 'default' && c.tier !== 'guessed') continue;
+      const w = this.world.get(c.id);
+      const cell = { id: c.id, key: keyName(c.key), value: unquote(bare(c.value)), tier: c.tier, type: w?.type ?? null, attrs: flat(w?.attrs), name: (id) => this._nameOf(id) };
+      const hook = this.reasoner.assumedBy.get(this.reasoner.ownerOfType(cell.type));
+      let said;
+      try { said = hook ? hook(cell) : undefined; } catch { said = undefined; }
+      const label = `${c.id}.${cell.key}=${cell.value} (${c.tier})`;
+      cells.push(label);
+      if (said === null || this.said.has(label)) continue;
+      this.said.add(label);
+      const phrase = said ?? `${cell.key} is ${cell.value}`;
+      if (!words.includes(phrase)) words.push(phrase);
+    }
+    if (!cells.length) return;
+    env.assumptions = cells;
+    if (words.length) env.assumed = `I assumed ${words.length > 1 ? words.slice(0, -1).join(', ') + ' and ' + words.at(-1) : words[0]}.`;
   }
 
   _actionEnvelope(r, action) {

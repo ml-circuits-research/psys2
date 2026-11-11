@@ -1274,8 +1274,9 @@ export class DialogSession {
     this._astraTurn({ sid, english, meta, pre, pend, segments, state, stateBefore, tabBefore });
     const effects = this.isession.effects;
     this.isession.effects = [];
+    const assumptions = answers.flatMap((a) => a.envelope?.assumptions ?? []);   // the default / guessed values the answers rest on (matrix reasoner; absent otherwise)
     return {
-      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}),
+      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}), ...(assumptions.length ? { assumptions } : {}),
       trace: {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], nx: formal.nx ?? null, ...(encoderError ? { error: encoderError } : {}) },
         dispatch: dispatch ?? null,

@@ -333,6 +333,12 @@
     ask="which wire types?"
     doc="Wire types that the world's matrix actions write and other worlds read from the session memory (for example kids.tasks.entry for charts and documents). With reasoner=matrix the host layer copies them from the library's World into the session memory after every action."
 
+@core.world.undo core.key
+    value=atom
+    card=one
+    ask="which action?"
+    doc="With reasoner=matrix: the action that takes the last move back (for example ttt.undo). The host layer answers it by rewinding the library to before the last turn that changed it, and the world's fns.mjs `undoWords` says what was taken back. Worlds that do not set it keep their own undo operation."
+
 @core.world.reasoner core.key
     value=atom
     card=one

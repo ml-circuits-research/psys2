@@ -1,0 +1,5 @@
+@op.games.tictactoe.why core.operation
+    impl=matrix
+    semantics=action
+    action=ttt.why
+    doc="Matrix mode: why the computer played its last move (win, block, center, a free square, or the best move), from what the rules and the chooser recorded on it."

@@ -18,3 +18,10 @@
     kind=request
     priority=14
     example="What did I pay?"
+
+@pat.kids.shop.m.buy.the core.pattern
+    match="i [$kids.shop.g95_buy] [the|that|this] {i1:lex.kids.shop.items}"
+    emit="@{_} kids.shop.purchase item={i1}"
+    kind=statement
+    priority=12
+    example="I buy the ball."

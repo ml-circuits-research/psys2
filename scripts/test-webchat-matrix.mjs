@@ -10,8 +10,11 @@
  *   why       matrix: "why?" after a shop answer says what the answer rests on (the library's `explain`).
  *   abduce    matrix: "I got 5 lei back for a book, what did I pay?" answers 17.
  *   setting   Settings > Developer > Reasoner switches the engine (a restart) and the gains appear.
+ *   assume    matrix: "I buy the ball" then "how much money do I have?" says "I assumed 1 ball." once; the phrase log record carries the assumption.
+ *   tictactoe matrix: an illegal move is refused with the reason and the tab board does not change, "undo" takes the move back (the board on the tab follows),
+ *             "why did you play there?" explains, a finished game refuses moves.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ask,revise,undo,why,abduce,setting] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ask,revise,undo,why,abduce,setting,assume,tictactoe] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -109,6 +112,52 @@ export const SCENARIOS = {
       for (let i = 0; i < 3 && !/What shall I put on the list\?/.test(a); i++) a = await say(c, 'add to my list');
       check('setting: after the switch the matrix reasoner answers ("add to my list" asks)', /What shall I put on the list\?/.test(a), a.slice(0, 80));
       check('setting: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async assume(o) {
+    const c = await openChat({ ...o, settings: { ...MATRIX, logPhrases: true } });
+    try {
+      await say(c, 'I have 20 lei');
+      await say(c, 'I buy the ball');
+      const a = await say(c, 'how much money do I have?');
+      check('assume: the answer says what it assumed, once', /You have 15 lei left\. I assumed 1 ball\./.test(a) && (a.match(/I assumed/g) ?? []).length === 1, a.slice(0, 120));
+      const rec = await c.lastPhrase();
+      check('assume: the phrase log record carries the assumption', JSON.stringify(rec?.detail?.assumptions ?? rec?.assumptions ?? '').includes('count=1 (default)'), JSON.stringify(rec?.detail?.assumptions ?? null));
+      const b = await say(c, 'how much money do I have?');
+      check('assume: asked again, it does not repeat itself', !/I assumed/.test(b), b.slice(0, 80));
+      check('assume: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async tictactoe(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      // the board of the tab, row by row, as a 9-character string: X, O or .
+      const board = () => c.pg.$$eval('.p2-ttt-cell', (cs) => cs.map((x) => (x.classList.contains('is-x') ? 'X' : x.classList.contains('is-o') ? 'O' : '.')).join(''));
+      const marks = (b) => b.replace(/\./g, '').length;
+      const a = await say(c, "Let's play tic tac toe");
+      check('tictactoe: the game starts and its tab is open', /You are X and you go first/.test(a) && (await board()).length === 9, a.slice(0, 80));
+      const m = await say(c, 'center');
+      const b1 = await board();
+      check('tictactoe: my move and the answer are on the tab board', /You took the center\. I took/.test(m) && b1[4] === 'X' && marks(b1) === 2, `${m.slice(0, 60)} | ${b1}`);
+      const r = await say(c, 'center');
+      const b2 = await board();
+      check('tictactoe: a taken square is refused with the reason, and the tab board does not change', r === 'The center is already taken by you. Please pick another place.' && b2 === b1, `${r.slice(0, 80)} | ${b2}`);
+      const w = await say(c, 'why did you play there?');
+      check('tictactoe: "why did you play there?" explains the computer\'s move', /^I played .+ because /.test(w), w.slice(0, 120));
+      const u = await say(c, 'undo');
+      const b3 = await board();
+      check('tictactoe: "undo" takes the move and the answer back, the tab board follows', /took back your last move and my answer/.test(u) && marks(b3) === 0, `${u.slice(0, 60)} | ${b3}`);
+      await say(c, 'top left');
+      const u2 = await say(c, 'oops, take that back');
+      const b4 = await board();
+      check('tictactoe: "oops, take that back" says what it took back and the board is empty again', /took back your last move and my answer/.test(u2) && marks(b4) === 0, `${u2.slice(0, 80)} | ${b4}`);
+      await say(c, 'I give up');
+      const o2 = await say(c, 'bottom right');
+      check('tictactoe: a move after the game is over is refused', o2 === 'The game is over. Say "new game" to play again.' && marks(await board()) === 0, o2.slice(0, 80));
+      await say(c, 'undo');
+      const g = await say(c, 'center');
+      check('tictactoe: undo of the resignation reopens the game', /You took the center\./.test(g) && marks(await board()) === 2, g.slice(0, 80));
+      check('tictactoe: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 };

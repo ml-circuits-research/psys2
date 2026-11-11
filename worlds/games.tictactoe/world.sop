@@ -5,6 +5,8 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    undo=ttt.undo
     language=en
     status=fixture
     title="Tic-tac-toe"
