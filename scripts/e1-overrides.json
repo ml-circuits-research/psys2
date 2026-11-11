@@ -1,0 +1,20 @@
+{
+ "operational|ui.avatar#081": {"cls":"h","why":"X then undo in one message: the undo is read against the state before the first action ran (sequencing of the segments)"},
+ "operational|geo.map#078": {"cls":"h","why":"X then undo in one message: the undo is evaluated before the marker exists (sequencing of the segments)"},
+ "operational|docs.editor#030": {"cls":"h","why":"X then undo in one message: the undo is evaluated before the heading exists (sequencing of the segments)"},
+ "operational|art.draw#075": {"cls":"h","why":"'twice, then undo': the segments are executed in the wrong order or count"},
+ "operational|kids.animals#029": {"cls":"h","why":"'what do red and yellow make' is cut at the inner 'and' inside a compound message"},
+ "operational|games.chess#028": {"cls":"g","why":"the expectation needs the engine's reply to have arrived ('It is not your turn, I am still thinking'): timing of the chess engine, not the reading"},
+ "operational|games.hangman#025": {"cls":"g","why":"expects the answer to contain the secret word 'lion' for 'tell me a fact about it'; revealing it would spoil the game, the reply (a hint) is right"},
+ "operational|media.music#035": {"cls":"g","why":"the reply says 261.63 Hz and the expectation 261.6: the checker compares whole numbers, the answer is right"},
+ "operational|docs.reader#018": {"cls":"g","why":"the setup 'count the witch' creates no search, so 'There is no search yet' is the state-correct reply; the expectation assumes a search"},
+ "operational|games.chess#026": {"cls":"h","why":"three moves in one message with no separator ('e4 e5 nf3'): a list of moves is not segmented"},
+ "operational|kids.tasks#032": {"cls":"c","why":"'remove it' went to art.draw (nothing is drawn) while the only referent is the shopping-list item added in the setup: the state has exactly one candidate"},
+ "operational|docs.reader#023": {"cls":"e","why":"self-correction inside the message ('words in the story, no, sections'): intent after the correction"},
+ "operational|art.draw#073": {"cls":"e","why":"self-correction ('draw a blue car, no, a red one'): the second clause has an implicit object"},
+ "operational|ui.avatar#111": {"cls":"a","why":"'siren' is not in any lexicon (reviewer: missing word); the routing to art.draw is a consequence"},
+ "operational|ui.avatar#107": {"cls":"a","why":"'grill' is not an avatar mouth word"},
+ "operational|art.draw#085": {"cls":"a","why":"'dragon' is not a drawable (reviewer: missing word); the reply should list what the lexicon draws"},
+ "operational|games.tictactoe#039": {"cls":"h","why":"'center and what is 3 times 3': the tail is routed to the document instead of being split off as a second request"},
+ "operational|ui.avatar#118": {"cls":"b","why":"'i would rather talk to a human': wording with no pattern"}
+}
