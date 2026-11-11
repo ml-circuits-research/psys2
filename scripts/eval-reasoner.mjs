@@ -49,25 +49,29 @@ const THREE_FACT = /^kids\.(shop|arith|tasks)\./;
 const audit = { turns: 0, with_violation: 0, kinds: {}, examples: [], dropped_by_library: 0, ms: 0 };
 const isRetracted = (w) => w.entries.some((e) => e.key === 'core.status' && e.value.v === 'retracted');
 const seqOf = (w) => Number(w.entries.find((e) => e.key === 'core.seq')?.value?.v ?? 1e9);
-/** The violations of the whole state of a session, by the library: every fact wire told in dialogue order to a fresh World; the balance asked. */
+/**
+ * The violations of the whole state of a session, by the library's `check()` (every violation and every standing issue of a World). matrix: the session's own World is
+ * checked as it is, nothing is told again. ops: its wires come from elsewhere, so they are told in dialogue order to a fresh World first (what it refuses is a problem).
+ */
 export function auditSession(s) {
   const rs = s.isession.rs;
   const wires = s.isession.memory.sessionWires().filter((w) => !isRetracted(w) && FACT.test(w.type));
   if (!wires.some((w) => THREE_FACT.test(w.type))) return null;
   const t0 = performance.now();
   const problems = [];
-  // the state of the session as the strategy keeps it, told in dialogue order to a fresh World: ops = every wire the operations replay; matrix = the wires the
-  // library holds (the ones it refused are not in its World; they are counted apart)
-  const held = STRATEGY === 'matrix' && rs ? wires.filter((w) => rs.world.has(w.id)) : wires;
-  if (STRATEGY === 'matrix' && rs) audit.dropped_by_library = Math.max(audit.dropped_by_library, rs.refused.length);
-  const f = checker.reasoner.session();
-  for (const w of held.sort((x, y) => seqOf(x) - seqOf(y))) f.tell([w]);
-  for (const r of f.refused) problems.push({ kind: r.violations?.[0]?.kind ?? 'refused', why: r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? '', wire: r.id, type: r.type });
-  const fresh = f.world;
-  if (wires.some((w) => w.type.startsWith('kids.shop.'))) {
-    const q = fresh.query({ type: 'kids.shop.balance', seek: 'amount' });
-    if (q.status === 'refused' || q.status === 'conflicting') problems.push({ kind: 'balance', why: q.violations?.[0]?.why ?? 'two values', type: 'kids.shop.balance' });
+  let world;
+  if (STRATEGY === 'matrix' && rs) {
+    world = rs.world;
+    audit.dropped_by_library = Math.max(audit.dropped_by_library, rs.refused.length);   // what the library refused when told is not in its World: counted apart
+  } else {
+    const f = checker.reasoner.session();
+    for (const w of wires.sort((x, y) => seqOf(x) - seqOf(y))) f.tell([w]);
+    for (const r of f.refused) problems.push({ kind: r.violations?.[0]?.kind ?? 'refused', why: r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? '', wire: r.id, type: r.type });
+    world = f.world;
   }
+  const c = world.check();
+  for (const v of c.violations) problems.push({ kind: v.kind, why: v.why ?? '', wire: v.id });
+  for (const i of c.issues) problems.push({ kind: /debt/.test(i.rule ?? '') ? 'balance' : 'domain', why: i.why ?? '', wire: i.about?.[0] });
   audit.ms += performance.now() - t0;
   return problems;
 }
@@ -158,7 +162,7 @@ async function runCoherence(c) {
     turns.push({ message: m, reply: r.text, statuses: r.statuses });
     await onTurnCoh(s);
     const b = moneyBalance();
-    if (b && (b.status === 'refused' || (b.status === 'supported' && Number(b.value) < 0))) negativeMoney = true;
+    if (b && (b.status === 'refused' || b.status === 'conflicting' || (b.status === 'supported' && Number(b.value) < 0))) negativeMoney = true;
   }
   const last = turns.at(-1), k = c.check;
   const hints = [];

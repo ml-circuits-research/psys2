@@ -6,7 +6,7 @@
  *   const reasoner = await createReasoner(set);        // null when no loaded world says reasoner=matrix
  *   const rs = reasoner.session();                     // one library World per dialogue session
  *   rs.tell(wires)                                     // session wires, as the dialogue produces them
- *   rs.resolve(wire)                                   // a core.question / core.request wire -> our result envelope, or null (not ours)
+ *   rs.resolve(wire, session)                          // a core.question / core.request wire -> our result envelope, or null (not ours)
  *   rs.fork()                                          // dry runs, validation and snapshots
  *
  * What the library gets: `worlds/core/mapping.sop` (how it reads our legends), the legends of the matrix worlds and their imports as they are,
@@ -18,16 +18,16 @@ import { budget as turnBudget } from '../dialog/budget.mjs';
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */
 const NOT_FACTS = new Set(['core.question', 'core.request', 'core.answer', 'core.observation']);
 /** The library's statuses mapped to ours (spec 04). `refused` (the thing asked about cannot be) is our `conflicting`. */
-const STATUS = { supported: 'supported', conflicting: 'conflicting', missing: 'missing', refused: 'conflicting', no: 'supported', unknown: 'missing', budget: 'budget' };
+const STATUS = { supported: 'supported', conflicting: 'conflicting', ambiguous: 'ambiguous', missing: 'missing', refused: 'conflicting', unsupported: 'unsupported', no: 'supported', unknown: 'missing', budget: 'budget' };
 const keyName = (k) => String(k).split('.').pop();
 const bare = (v) => String(v).replace(/^\$/, '');
 const unquote = (v) => { const s = String(v); return s.length > 1 && s.startsWith('"') && s.endsWith('"') ? s.slice(1, -1) : s; };
 const first = (a) => (Array.isArray(a) ? a[0] : a);
 
-/** The attribute values of a library wire as a flat object (first value of each key, quotes and `$` removed), without the library's bookkeeping keys. */
-function attrsOf(w) {
+/** An attribute map of the library ({ key: [values] }) as a flat object (first value of each key, quotes and `$` removed), without the library's bookkeeping keys. */
+function flat(attrs) {
   const out = {};
-  for (const [k, v] of Object.entries(w?.attrs ?? {})) if (!k.startsWith('core.')) out[k] = unquote(bare(first(v)));
+  for (const [k, v] of Object.entries(attrs ?? {})) if (!k.startsWith('core.')) out[k] = unquote(bare(first(v)));
   return out;
 }
 
@@ -41,9 +41,9 @@ export async function createReasoner(set, { lib = null } = {}) {
   lib ??= await import('../vendor/sopworld/sopworld.mjs');
   const wanted = new Set(worlds.flatMap((w) => set.available(w.id)));
   const ordered = set.list().filter((w) => wanted.has(w.id));
-  const fns = {};
+  const fns = {};   // the worlds' action functions (the library keeps them apart from its own arithmetic)
   for (const w of worlds) Object.assign(fns, w.fns ?? {});
-  const base = new lib.World({ fns, vocabulary: { status: 'core.status' } });
+  const base = new lib.World({ actions: fns, vocabulary: { status: 'core.status' } });
   const problems = [];
   const load = (what, text) => { if (text == null) return; const r = base.load(text); if (!r.ok) problems.push(`${what}: ${r.violations?.[0]?.kind ?? 'refused'} ${r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? ''}`.trim()); };
   const mapping = set.list().map((w) => w.raw.mapping).find((t) => t != null);
@@ -58,6 +58,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const voices = new Map(worlds.filter((w) => typeof w.voice === 'function').map((w) => [w.id, w.voice]));
   const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
   const mirrors = [...new Set(worlds.flatMap((w) => w.mirrors))];
+  const empties = new Map();
   // the matrix's own declarations of its actions (`core.action name=... ask.<key>=... template.<key>=...`): what a missing argument asks and how the answer completes the sentence
   const actions = new Map();
   for (const m of base.matrix.values()) if (m.type === 'core.action') actions.set(unquote(first(m.attrs.name)), m.attrs);
@@ -66,12 +67,22 @@ export async function createReasoner(set, { lib = null } = {}) {
     /** The matrix world that owns a question type (longest world id that prefixes it), or null. */
     ownerOfType: (type) => owners.find((id) => type === id || String(type).startsWith(id + '.')) ?? null,
     ownerOfAction: (action) => actionOwner.get(action) ?? null,
+    /** The matrix world that answers a question or request wire (the state of that world comes into being with its first answer). */
+    ownerOfWire: (wire) => {
+      const val = (k) => wire.entries.find((e) => e.key === k)?.value?.v;
+      return set.legends.isA(wire.type, 'core.question') ? reasoner.ownerOfType(val('core.question.type')) : reasoner.ownerOfAction(val('core.request.action'));
+    },
+    /** What a world's `toState` says of a library with nothing told (JSON): a state equal to it is not worth creating. */
+    emptyState: (id) => { let e = empties.get(id); if (e === undefined) { try { e = JSON.stringify(stateOf.get(id)({ find: (t) => base.ofType(t), query: (q) => base.query(q) })); } catch { e = ''; } empties.set(id, e); } return e; },
     session: () => new ReasonerSession(reasoner, base.fork()),
   };
   return reasoner;
 }
 
-/** One dialogue session on the library: one World, session wires told as they arrive. */
+/**
+ * One dialogue session on the library: one World, session wires told as they arrive. The library is the only record of what was said: undo, "that's wrong",
+ * the per-world state the hooks and the dialogue layer's snapshots read (`toState`) and the session memory's mirrors are all derived from it, so they cannot diverge.
+ */
 export class ReasonerSession {
   constructor(reasoner, world) {
     this.reasoner = reasoner;
@@ -80,14 +91,16 @@ export class ReasonerSession {
     this.last = null;    // the last library result, for explain / why
     this.known = new Map();
     this.mirrored = new Map();   // id -> { text, type } of the wire last copied to the session memory
-    this.pendingIds = [];        // dialogue wires told during the turn in progress
-    this.lastTurn = null;        // the turn before: { turn, text, ids } (what "undo that" takes back)
+    this.told = [];              // ids of the dialogue wires the library holds, oldest first (a rewind retracts the ones that are gone from the session memory)
+    this.cur = null;             // the turn in progress: { turn, mark, stamp }
+    this.turns = [];             // the turns that changed the library, oldest first: { turn, mark } (the mark is the World as it was before the turn)
   }
 
   /** A copy that shares the state until one of the two changes (nothing is copied). */
   fork() {
     const r = new ReasonerSession(this.reasoner, this.world.fork());
-    r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.mirrored = new Map(this.mirrored); r.pendingIds = [...this.pendingIds]; r.lastTurn = this.lastTurn && { ...this.lastTurn };
+    r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.mirrored = new Map(this.mirrored); r.told = [...this.told];
+    r.cur = this.cur && { ...this.cur }; r.turns = this.turns.map((t) => ({ ...t }));
     return r;
   }
 
@@ -105,37 +118,63 @@ export class ReasonerSession {
     return this.reasoner.lib.parse(serialize([short]))[0];
   }
 
-  /** Tell the session wires the library knows the type of; a wire it refuses is recorded and the world stays as it was. */
-  tell(wires) {
+  /** Tell the session wires the library knows the type of; a wire it refuses is recorded and the world stays as it was. `session` (the interpreter session) gets the derived state. */
+  tell(wires, session = null) {
     for (const w of wires) {
       if (!this.isFact(w.type) || this.world.has(w.id)) continue;
       let r;
       try { r = this.world.tell([this._wire(w)], { budget: this._limit() }); } catch (e) { r = { ok: false, violations: [{ kind: 'error', why: String(e?.message ?? e) }] }; }
       this._charge();
       if (!r.ok) this.refused.push({ id: w.id, type: w.type, violations: r.violations });
-      else if (w.entries.some((e) => e.key === 'core.source')) this.pendingIds.push(w.id);
+      else this.told.push(w.id);
     }
+    if (session) this._state(session);
   }
 
-  /** End of a dialogue turn: what the turn told is what "undo that" takes back next turn. */
-  commitTurn(turn, text) {
-    if (this.pendingIds.length) this.lastTurn = { turn, text, ids: this.pendingIds };
-    this.pendingIds = [];
+  // ---- turns, undo, rewind ---------------------------------------------------------------------------------------------------------
+
+  /** Start of a dialogue turn: the World as it is now is what the turn can be taken back to. */
+  beginTurn(turn) { this.cur = { turn, mark: this.world.mark(), stamp: this.world.stamp }; }
+  /** End of a dialogue turn: a turn that changed the library is kept, with its mark (what "undo that" and the dialogue layer's undo take back). */
+  commitTurn(turn) {
+    const c = this.cur;
+    this.cur = null;
+    if (c?.turn === turn && this.world.stamp !== c.stamp) { this.turns.push({ turn, mark: c.mark }); if (this.turns.length > 12) this.turns.shift(); }
   }
+  /** After a rewind the turn in progress starts again from where the library is: a pure undo then changes nothing (it is not an action to take back), a repair that tells the corrected sentence does. */
+  _restart() { if (this.cur) this.cur = { turn: this.cur.turn, mark: this.world.mark(), stamp: this.world.stamp }; }
+  /** The mark of a turn that changed the library (undefined for a turn that did not). */
+  markOf(turn) { return this.turns.find((t) => t.turn === turn)?.mark; }
   /** Is there something told in the last few turns to take back? */
-  canUndo(turn) { return !!this.lastTurn && turn - this.lastTurn.turn <= 6; }
-  /** Retract everything the last turn told (the library withdraws what followed from it) and in the session memory; returns the text of that turn or null. */
+  canUndo(turn) { const t = this.turns.at(-1); return !!t && turn - t.turn <= 6; }
+  /** "Undo that": the library goes back to before the last turn that changed it (everything that followed from it goes too). Returns the turn's number or null. */
   undo(session) {
-    const t = this.lastTurn;
+    const t = this.turns.at(-1);
     if (!t) return null;
-    for (const id of t.ids) {
-      try { this.world.retract(id, { budget: this._limit() }); } catch { /* already gone */ }
-      this._charge();
-      session.memory.retract(id, 'undone by the user');
-    }
-    this.lastTurn = null;
+    this.rewind(t.mark, session);
+    return t.turn;
+  }
+  /**
+   * Puts the library back to a mark (library `rewind`) and the session memory with it (the dialogue wires the library no longer holds are retracted there),
+   * and derives the state and the mirrors again. Returns a function that undoes the rewind (a repair of the dialogue layer gives up with it).
+   */
+  rewind(mark, session) {
+    const at = this.turns.findIndex((t) => t.mark === mark);
+    const dropped = at < 0 ? [] : this.turns.splice(at);
+    const after = this.world.mark();
+    this.world.rewind(mark);
+    const told = this.told, gone = [];
+    this.told = told.filter((id) => { if (this.world.has(id)) return true; const w = session.memory.get(id); if (w) gone.push(w); return false; });
+    for (const w of gone) session.memory.retract(w.id, 'taken back');
+    this._restart();
     this.syncTo(session);
-    return t.text;
+    return () => {
+      this.world.rewind(after);
+      this.told = told; this.turns.push(...dropped);
+      for (const w of gone) session.memory.own.add(w);
+      this._restart();
+      this.syncTo(session);
+    };
   }
 
   /** The dialogue wires an answer rests on, oldest first: [{ id, source, seq }] (the leaves of the library's explanation of each wire in `ids`). */
@@ -181,7 +220,7 @@ export class ReasonerSession {
    * Answer a question or request wire. Returns an envelope (spec 04) with `via: 'core.matrix'` and, in `vars`, the other keys of the
    * answer wire (or of the wires a refusal rests on) for the templates; or null when the library does not know it (the caller falls back).
    */
-  resolve(wire) {
+  resolve(wire, session = null) {
     const lw = this._wire(wire);
     const isQuestion = this.reasoner.legends.isA(wire.type, 'core.question');
     const limit = this._limit();
@@ -190,13 +229,15 @@ export class ReasonerSession {
     catch (e) { return { status: 'error', note: `the reasoner failed: ${e?.message ?? e}`, via: 'core.matrix' }; }
     this._charge();
     this.last = { wire: wire.id, result: r };
-    if (r.status === 'unsupported') return null;
+    if (r.status === 'unsupported' && !r.reason) return null;   // the library does not know this question (a calculation that cannot be done has a reason)
     const env = isQuestion ? this._questionEnvelope(r, lw) : this._actionEnvelope(r, wire.entries.find((e) => e.key === 'core.request.action')?.value?.v);
-    return this._voice(wire, env, isQuestion);
+    const answered = this._voice(wire, env, r, isQuestion);
+    if (session) this._state(session, this.reasoner.ownerOfWire?.(wire) ?? null);
+    return answered;
   }
 
   /** The owning world's `voice(ctx)` (fns.mjs) puts the words around the numbers on the envelope (`note`, `unit`, `vars`); the templates stay ours. */
-  _voice(wire, env, isQuestion) {
+  _voice(wire, env, result, isQuestion) {
     const val = (k) => wire.entries.find((e) => e.key === k)?.value?.v;
     const type = isQuestion ? val('core.question.type') : null, action = isQuestion ? null : val('core.request.action');
     const owner = isQuestion ? this.reasoner.ownerOfType(type) : this.reasoner.ownerOfAction(action);
@@ -205,22 +246,13 @@ export class ReasonerSession {
     const pre = isQuestion ? 'core.question.where.' : 'core.request.arg.';
     const where = {};
     for (const e of wire.entries) if (e.key.startsWith(pre)) where[keyName(e.key.slice(pre.length))] = bare(e.value.v);
-    const ask = (q) => { const r = this.world.query(q, { budget: this._limit() }); this._charge(); return r; };
+    // `supposed`: the answer wire as the rules left it (the keys they set); `issues`: the problems that stand in the world (soft constraints), as flat attribute maps
+    const supposed = flat(result.supposed?.attrs);
+    const issues = () => this.world.ofType('core.issue').map((i) => ({ why: unquote(first(i.attrs.why) ?? ''), key: first(i.attrs.key), aboutId: bare(first(i.attrs.about)), about: flat(this.world.get(bare(first(i.attrs.about)))?.attrs) }));
     let patch;
-    try { patch = voice({ kind: isQuestion ? 'question' : 'request', type, action, where, env, query: ask, find: (t) => this.world.ofType(t), name: (id) => this._nameOf(id) }); }
+    try { patch = voice({ kind: isQuestion ? 'question' : 'request', type, action, where, env, supposed, issues, find: (t) => this.world.ofType(t), name: (id) => this._nameOf(id) }); }
     catch (e) { return { ...env, note: env.note ?? `the reply words failed: ${e?.message ?? e}` }; }
     return patch ? { ...env, ...patch } : env;
-  }
-
-  _varsOf(ids, seek) {
-    const vars = {};
-    for (const id of ids ?? []) {
-      const w = this.world.get(id);
-      if (!w) continue;
-      const a = attrsOf(w);
-      for (const [k, v] of Object.entries(a)) if (!(k in vars) && k !== seek) vars[k] = v;
-    }
-    return vars;
   }
 
   _questionEnvelope(r, lw) {
@@ -234,11 +266,19 @@ export class ReasonerSession {
     if (r.alternatives?.length) env.alternatives = r.alternatives.map((a) => unquote(bare(a.value ?? a)));
     if (r.missing?.length) { env.missing = r.missing.map((m) => m.key); const ask = r.missing.find((m) => m.ask)?.ask; if (ask) env.ask = ask; }
     if (r.status === 'refused') {
+      // the deny's reason quotes the values it was decided on (`bindings`), and `involved` has the wires as they were before the supposition was undone
       const v = r.violations?.[0];
       env.reason = 'precondition_failed';
       env.why = v?.why;
-      env.vars = this._varsOf([...(v?.wires ?? []), ...(r.wires ?? [])], seek);
-    } else env.vars = this._varsOf(r.wires, seek);
+      env.vars = {};
+      for (const w of v?.involved ?? []) for (const [k, x] of Object.entries(flat(w.attrs))) if (!(k in env.vars) && k !== seek) env.vars[k] = x;
+      for (const [k, x] of Object.entries(v?.bindings ?? {})) if (!k.includes('.') && !(k in env.vars)) env.vars[k] = unquote(bare(x));
+    } else {
+      if (r.status === 'unsupported') { env.reason = 'unsupported'; env.why = r.reason; }
+      else if (r.reason) env.why = r.reason;   // what a standing issue (a soft constraint) says about the answer
+      env.vars = flat(r.supposed?.attrs);
+      delete env.vars[seek];
+    }
     if (env.vars.unit !== undefined) { env.unit = env.vars.unit; delete env.vars.unit; }
     return env;
   }
@@ -246,7 +286,8 @@ export class ReasonerSession {
   _actionEnvelope(r, action) {
     const env = { via: 'core.matrix' };
     if (r.status === 'done') {
-      const res = r.result && typeof r.result === 'object' ? r.result : {};
+      // a function's result is the envelope's facts; an action written as wires returns the library's change result (not facts: its `value` is the answer)
+      const res = r.result && typeof r.result === 'object' && !Array.isArray(r.result.violations) ? r.result : {};
       Object.assign(env, { status: 'supported' }, res);
       if (r.value !== undefined && env.value === undefined) env.value = r.value;
     } else if (r.status === 'missing') {
@@ -275,15 +316,33 @@ export class ReasonerSession {
   }
 
   /**
-   * Copies the wires of the mirrored types (world.sop `mirror=`) from the library's World into the session memory, in our wire shape: what a
-   * matrix action wrote is then visible to the worlds that read the memory (charts, documents), as what ops.mjs emitted was. A wire the action removed is retracted there.
+   * The state ops.mjs would keep (spec 15), derived from the library: the hooks of a world and the dialogue layer's snapshots read it from the session. Like the
+   * operations' state it comes into being the first time the world answers (`touched`) or has something to say: a session that never used a world has none of it.
+   */
+  _state(session, touched = null) {
+    for (const [id, toState] of this.reasoner.stateOf) {
+      try {
+        const next = toState({ find: (t) => this.world.ofType(t), query: (q) => this.world.query(q) });
+        let cur = session.state[id];
+        if (!cur) {
+          if (id !== touched && JSON.stringify(next) === this.reasoner.emptyState(id)) continue;
+          cur = (session.state[id] = {});
+        }
+        if (JSON.stringify(next) === JSON.stringify(cur)) continue;
+        for (const k of Object.keys(cur)) delete cur[k];
+        Object.assign(cur, next);
+      } catch { /* the state stays as it was */ }
+    }
+  }
+
+  /**
+   * Derives the state of the matrix worlds from the library and copies the wires of the mirrored types (world.sop `mirror=`) from the library's World
+   * into the session memory, in our wire shape: what a matrix action wrote is then visible to the worlds that read the memory (charts, documents), as what
+   * ops.mjs emitted was. A wire the action removed is retracted there.
    */
   syncTo(session) {
     const L = this.reasoner.legends;
-    // the state ops.mjs would keep (spec 15): the hooks and the dialogue layer's snapshots of a world read it
-    for (const [id, toState] of this.reasoner.stateOf) {
-      try { const cur = (session.state[id] ??= {}); const next = toState({ find: (t) => this.world.ofType(t) }); for (const k of Object.keys(cur)) delete cur[k]; Object.assign(cur, next); } catch { /* the state stays as it was */ }
-    }
+    this._state(session);
     for (const type of this.reasoner.mirrors) {
       const live = new Set();
       for (const w of this.world.ofType(type)) {
@@ -311,4 +370,3 @@ export class ReasonerSession {
   /** The explanation of a wire as a tree: { wire, via?, told?, from: [...] } (library `explain`), or null. */
   explain(id) { return this.world.explain(id); }
 }
-

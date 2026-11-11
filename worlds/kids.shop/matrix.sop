@@ -4,32 +4,32 @@
 @shop.seq core.sequence key=core.seq
 
 # ---- prices: one wire per item; a price stated in the dialog is a new statement about it
-@shop.k.item core.slot of=kids.shop.price key=item kind=atom id=true
+@shop.k.item core.slot of=kids.shop.price key=item kind=atom id=true combine=intersect
 @shop.f.cost core.fluent of=kids.shop.price key=cost
 
 # ---- a basket is a wire that names an item and a count (a question about a state, or a
 #      purchase), with an optional second pair. Each pair is a part; a part whose item
 #      has a price is a line.
-?shop.b1 core.state item=?i count=?n
+@shop.b1 core.state item=?i count=?n
 @shop.p1 shop.part of=$shop.b1 item=?i count=?n
 @shop.r.part1 core.rule when=$shop.b1 then=$shop.p1
-?shop.b2 core.state item2=?i count2=?n
+@shop.b2 core.state item2=?i count2=?n
 @shop.p2 shop.part of=$shop.b2 item=?i count=?n
 @shop.r.part2 core.rule when=$shop.b2 then=$shop.p2
-?shop.b3 kids.shop.purchase item=?i count=?n
+@shop.b3 kids.shop.purchase item=?i count=?n
 @shop.p3 shop.part of=$shop.b3 item=?i count=?n
 @shop.r.part3 core.rule when=$shop.b3 then=$shop.p3
 
-?shop.pt shop.part of=?b item=?i count=?n
-?shop.pr kids.shop.price item=?i cost=?c
+@shop.pt shop.part of=?b item=?i count=?n
+@shop.pr kids.shop.price item=?i cost=?c
 @shop.c.line core.calc out=?a fn=mul args=?n args=?c
 @shop.ln shop.line of=?b item=?i amount=?a
 @shop.r.line core.rule when=$shop.pt when=$shop.pr with=$shop.c.line then=$shop.ln
 
 # the cost of a basket: the sum of its lines, when every part has one
-?shop.bk shop.part of=?b
-?shop.o.part shop.part of=?b
-?shop.o.line shop.line of=?b amount=?a
+@shop.bk shop.part of=?b
+@shop.o.part shop.part of=?b
+@shop.o.line shop.line of=?b amount=?a
 @shop.c.parts core.calc out=?np fn=count over=$shop.o.part
 @shop.c.lines core.calc out=?nl fn=count over=$shop.o.line
 @shop.c.sum core.calc out=?sum fn=sum over=$shop.o.line args=?a
@@ -38,14 +38,14 @@
 @shop.r.cost core.rule when=$shop.bk with=$shop.c.parts with=$shop.c.lines with=$shop.c.sum if=$shop.t.all then=$shop.cost
 
 # ---- what things cost
-?shop.q.total kids.shop.total
-?shop.q.total.c shop.cost of=$shop.q.total total=?s
+@shop.q.total kids.shop.total
+@shop.q.total.c shop.cost of=$shop.q.total total=?s
 @shop.a.total kids.shop.total core.on=$shop.q.total total=?s
 @shop.r.total core.rule when=$shop.q.total when=$shop.q.total.c then=$shop.a.total
 
 # ---- change: what was paid minus the cost; paying too little cannot be
-?shop.q.chg kids.shop.change paid=?p
-?shop.q.chg.c shop.cost of=$shop.q.chg total=?s
+@shop.q.chg kids.shop.change paid=?p
+@shop.q.chg.c shop.cost of=$shop.q.chg total=?s
 @shop.c.chg core.calc out=?d fn=sub args=?p args=?s
 @shop.a.chg kids.shop.change core.on=$shop.q.chg amount=?d
 @shop.r.chg core.rule when=$shop.q.chg when=$shop.q.chg.c with=$shop.c.chg then=$shop.a.chg
@@ -60,47 +60,48 @@
 @shop.e.out core.effect on=kids.shop.expense fluent=$shop.f.money op=sub amount=count where.core.in=core.in
 @shop.e.buy core.effect on=shop.spend fluent=$shop.f.money op=sub amount=amount where.core.in=core.in
 # an item bought without a count counts once (a default: a later statement replaces it)
-@shop.k.count core.slot of=kids.shop.purchase key=count kind=number required=true default=1
+@shop.k.count core.slot of=kids.shop.purchase key=count kind=number required=true default=1 combine=intersect
 # what was paid may be assumed, to ask "what must I pay to get this change?"
 @shop.ab.paid core.abducible of=kids.shop.change key=paid
 # a purchase spends what its basket costs, at the place in the sequence where it was made
-?shop.buy kids.shop.purchase core.in=?in core.seq=?at
-?shop.buy.c shop.cost of=$shop.buy total=?s
+@shop.buy kids.shop.purchase core.in=?in core.seq=?at
+@shop.buy.c shop.cost of=$shop.buy total=?s
 @shop.spend shop.spend of=$shop.buy amount=?s core.in=?in core.seq=?at
 @shop.r.spend core.rule when=$shop.buy when=$shop.buy.c then=$shop.spend
 
-?shop.w shop.wallet amount=?m
+@shop.w shop.wallet amount=?m
 @shop.t.debt core.check fn=lt args=?m args=0
 
-?shop.q.bal kids.shop.balance
+@shop.q.bal kids.shop.balance
 @shop.a.bal kids.shop.balance core.on=$shop.q.bal amount=?m
 @shop.r.bal core.rule when=$shop.q.bal when=$shop.w then=$shop.a.bal
-@shop.d.bal core.deny when=$shop.q.bal when=$shop.w if=$shop.t.debt why="more was spent than there was"
+# spending more than there was is kept (somebody said it) and stands as an issue of the wallet: every answer that rests on the wallet says so
+@shop.d.debt core.deny soft=true when=$shop.w if=$shop.t.debt why="more was spent than there was"
 
 # ---- can I afford it: the money against the cost
-?shop.q.aff kids.shop.affordability
-?shop.q.aff.c shop.cost of=$shop.q.aff total=?s
+@shop.q.aff kids.shop.affordability
+@shop.q.aff.c shop.cost of=$shop.q.aff total=?s
 @shop.t.can core.check fn=gte args=?m args=?s
 @shop.t.cannot core.check fn=lt args=?m args=?s
-@shop.a.yes kids.shop.affordability core.on=$shop.q.aff answer=yes
-@shop.a.no kids.shop.affordability core.on=$shop.q.aff answer=no
+@shop.a.yes kids.shop.affordability core.on=$shop.q.aff answer=yes cost=?s have=?m
+@shop.a.no kids.shop.affordability core.on=$shop.q.aff answer=no cost=?s have=?m
 @shop.r.yes core.rule when=$shop.q.aff when=$shop.q.aff.c when=$shop.w if=$shop.t.can then=$shop.a.yes
 @shop.r.no core.rule when=$shop.q.aff when=$shop.q.aff.c when=$shop.w if=$shop.t.cannot then=$shop.a.no
-@shop.d.aff core.deny when=$shop.q.aff when=$shop.w if=$shop.t.debt why="more was spent than there was"
 
 # ---- what would be left: the money minus the cost, nothing recorded
-?shop.q.left kids.shop.leftafter
-?shop.q.left.c shop.cost of=$shop.q.left total=?s
+@shop.q.left kids.shop.leftafter
+@shop.q.left.c shop.cost of=$shop.q.left total=?s
 @shop.c.left core.calc out=?d fn=sub args=?m args=?s
 @shop.a.left kids.shop.leftafter core.on=$shop.q.left amount=?d
 @shop.r.left core.rule when=$shop.q.left when=$shop.q.left.c when=$shop.w with=$shop.c.left then=$shop.a.left
 @shop.d.left core.deny when=$shop.q.left when=$shop.q.left.c when=$shop.w if=$shop.t.cannot why="there is not enough money for it"
-@shop.d.left.debt core.deny when=$shop.q.left when=$shop.w if=$shop.t.debt why="more was spent than there was"
 
 # ---- what the library gives beyond the operations (matrix mode only, see matrix.patterns.sop)
-# "I buy a ball" ... "three of them": the count of the last purchase is revised; what was spent follows
-@shop.a.revise core.action name=shop.revise fn=shop.revise required=count ask.count="How many?"
+# "I buy a ball" ... "three of them": the count of the last purchase is revised (an action written as wires: the latest purchase, its count set); what was spent follows
+@shop.rv.last kids.shop.purchase core.select=latest
+@shop.rv.set kids.shop.purchase core.on=$shop.rv.last count=?count
+@shop.a.revise core.action name=shop.revise param=count when=$shop.rv.last set=$shop.rv.set returns=?count ask.count="How many?"
 # "I got 5 lei back for a book" ... "what did I pay?": the change is the goal, what was paid is assumed (abduction)
 @shop.k.back core.slot of=kids.shop.change key=back kind=number
-@shop.a.gotBack core.action name=shop.gotBack fn=shop.gotBack required=item ask.item="What did you buy?"
-@shop.a.whatPaid core.action name=shop.whatPaid fn=shop.whatPaid
+@shop.a.gotBack core.action name=shop.gotBack fn=gotBack required=item ask.item="What did you buy?"
+@shop.a.whatPaid core.action name=shop.whatPaid fn=whatPaid

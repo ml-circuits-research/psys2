@@ -3,22 +3,22 @@
 # which requests exist and what each one needs.
 
 @tasks.seq core.sequence key=core.seq
-@tasks.k.list core.slot of=kids.tasks.entry key=list kind=string id=true
-@tasks.k.text core.slot of=kids.tasks.entry key=text kind=string id=true
-@tasks.k.progress core.slot of=kids.tasks.entry key=progress kind=atom enum=todo enum=done default=todo
+@tasks.k.list core.slot of=kids.tasks.entry key=list kind=string id=true combine=intersect
+@tasks.k.text core.slot of=kids.tasks.entry key=text kind=string id=true combine=intersect
+@tasks.k.progress core.slot of=kids.tasks.entry key=progress kind=atom enum=todo enum=done default=todo combine=intersect
 # progress is a state: saying it again is a new statement, not a contradiction
 @tasks.f.progress core.fluent of=kids.tasks.entry key=progress
 
-@tasks.a.add core.action name=tasks.add fn=tasks.add required=item ask.item="What shall I put on the list?" template.item="add <x> to my list"
-@tasks.a.remind core.action name=tasks.remind fn=tasks.remind required=item ask.item="What shall I remind you of?"
-@tasks.a.remove core.action name=tasks.remove fn=tasks.remove required=item ask.item="What shall I take off?"
-@tasks.a.done core.action name=tasks.done fn=tasks.done required=item ask.item="What have you done?"
-@tasks.a.check core.action name=tasks.check fn=tasks.check required=item ask.item="Which thing do you mean?"
-@tasks.a.has core.action name=tasks.has fn=tasks.has required=item ask.item="Which thing do you mean?"
-@tasks.a.show core.action name=tasks.show fn=tasks.show
-@tasks.a.pending core.action name=tasks.pending fn=tasks.pending
-@tasks.a.count core.action name=tasks.count fn=tasks.count
-@tasks.a.countPending core.action name=tasks.countPending fn=tasks.countPending
-@tasks.a.clear core.action name=tasks.clear fn=tasks.clear
-@tasks.a.lists core.action name=tasks.lists fn=tasks.lists
-@tasks.a.notDone core.action name=tasks.notDone fn=tasks.notDone
+@tasks.a.add core.action name=tasks.add fn=add required=item ask.item="What shall I put on the list?" template.item="add <x> to my list"
+@tasks.a.remind core.action name=tasks.remind fn=remind required=item ask.item="What shall I remind you of?"
+@tasks.a.remove core.action name=tasks.remove fn=remove required=item ask.item="What shall I take off?"
+@tasks.a.done core.action name=tasks.done fn=done required=item ask.item="What have you done?"
+@tasks.a.check core.action name=tasks.check fn=check required=item ask.item="Which thing do you mean?"
+@tasks.a.has core.action name=tasks.has fn=has required=item ask.item="Which thing do you mean?"
+@tasks.a.show core.action name=tasks.show fn=show
+@tasks.a.pending core.action name=tasks.pending fn=pending
+@tasks.a.count core.action name=tasks.count fn=count
+@tasks.a.countPending core.action name=tasks.countPending fn=countPending
+@tasks.a.clear core.action name=tasks.clear fn=clear
+@tasks.a.lists core.action name=tasks.lists fn=lists
+@tasks.a.notDone core.action name=tasks.notDone fn=notDone

@@ -13,8 +13,8 @@ import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=5
 import { loadWorlds } from '../worlds/index.mjs?v=85b3de2986';
 import { validateWorldSet } from '../worlds/validate.mjs?v=cb794a5c06';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=862e504068';
-import { createReasoner } from '../reasoner/index.mjs?v=1a9d0d9a63';
+import { createInterpreter } from '../interpreter/index.mjs?v=f58bed0b83';
+import { createReasoner } from '../reasoner/index.mjs?v=db35887592';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=d95a109e4e';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=1038719bc1';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=002f3588a0';
@@ -29,7 +29,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=e468d994f5';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=ff02c23979';
 import { checkValues } from './value-check.mjs?v=5fa9ffdfc7';
-import { Discourse } from './discourse.mjs?v=7306f831ad';
+import { Discourse } from './discourse.mjs?v=829b73c75a';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
@@ -1058,6 +1058,7 @@ export class DialogSession {
     if (selfCorrections.corrections.length) english = selfCorrections.text;
 
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
+    this.isession.rs?.beginTurn(this._msg);   // the library as it is now is what this turn can be taken back to (spec 15)
     this.isession.effects = [];
     const disc = this.discourse;
     const tabBefore = this.isession.state['ui.shell']?.activeTab;
@@ -1239,7 +1240,7 @@ export class DialogSession {
     }
     if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
     if (!disc.pending) disc.openConfirm(englishReply, this._msg);
-    this.isession.rs?.commitTurn(this._msg, english);   // what the turn told the library: what "undo that" takes back (spec 15)
+    this.isession.rs?.commitTurn(this._msg);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };
