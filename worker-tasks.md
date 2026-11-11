@@ -2293,3 +2293,13 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - **But matrix mode did not get the same fixes: matrix coherence is still 22/30** (explain 0/3, revision 2/3, missing-arg 2/3). The comparison is now ops 24 vs matrix 22, and the gap is only the host features, not the reasoner. **Item 2 must hold in both modes**: the why hooks, the corrections, "I buy something" and the refusal hook must work when `reasoner=matrix` (in matrix mode "why" should use the library's `explain`, which knows the chain). Rerun and report both columns; the coherence set is the measure.
   - The Romanian wrong count rose to 8 in **both** modes (was 6 in ops). Find the two new wrong cases from item 2's Romanian frames and fix them.
 - SOPWORLD-1 item 10, SOP Lang v1.1 (f3803aa, be17689, f0f7b93): **accepted.** `specs/01-soplang.md` is v1.1, taken from the library's language reference. Our parser reads `?var` as `{kind:'var'}`, skips `#` comments and keeps `#` inside strings. The matrix files carry comments and are read by our parser. Matrix `test-world`: 147/147, 217/217, 232/232. One language and one parser, as the user decided.
+- SOPWORLD-1b items 4 and 5 (bbacb37, 2e73527), files match the log: **accepted.**
+  - Reviewer rerun: matrix `test-world` kids.shop 151/151 and games.tictactoe 173/173; `scripts/test-webchat-matrix.mjs` 31/31 in Chrome.
+  - Reviewer probe with the switch on: an illegal move is refused with the reason; "why did you play there?" is explained; "undo" takes back the move and the answer; 0 errors.
+  - Coherence 25/33 (ops) vs 28/33 (matrix).
+  - **Still open before the combined A/B run:**
+    - item 2's host fixes in matrix mode (explain is 0/3 in matrix, 3/3 in ops: "why" in matrix mode must use the library's `explain`);
+    - the two new Romanian wrongs;
+    - "You have 15 lei left." → "Ai 15 lei pleca." (add the reply-table entry: "Îți rămân 15 lei.").
+
+    Then run the combined A/B experiment described in `sop_world_status.md`.
