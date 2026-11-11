@@ -29,6 +29,8 @@
  *             place has the reason of the denies, "zoom to 15" stays at 12, and the world's own undo and redo take the map back and forth (the tab follows).
  *   charts    matrix (stage 2): the totals are rules, "rename apples to pears" is refused with the reason and the chart on the tab keeps its labels, undo and redo follow.
  *
+ *   draw, diagram   matrix (art.draw, diagram.sketch): see scripts/test-webchat-draw-matrix.mjs.
+ *
  *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
@@ -37,6 +39,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openChat } from './test-webchat-turns.mjs';
 import { docScenarios } from './test-webchat-docs.mjs';
+import { drawScenarios } from './test-webchat-draw-matrix.mjs';
 
 const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' };
 const OPS = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 4 };   // an explicit choice of the current settings version
@@ -428,6 +431,8 @@ export const SCENARIOS = {
 
 // the document worlds' scenarios (scripts/test-webchat-docs.mjs)
 Object.assign(SCENARIOS, docScenarios({ openChat, MATRIX, check, say }));
+// art.draw and diagram.sketch (scripts/test-webchat-draw-matrix.mjs)
+Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, check, say }));
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };

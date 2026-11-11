@@ -6,6 +6,10 @@
     imports=world.kids.common
     imports=world.kids.shapes
     formalization=rules
+    reasoner=matrix
+    undo=draw.undo
+    redo=draw.redo
+    source="the picture"
     language=en
     status=fixture
     title="Drawing board (rough.js)"

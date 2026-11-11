@@ -1,0 +1,165 @@
+@tpl.art.draw.add.m.refused core.template
+    for=op.art.draw.add
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.ground.m.refused core.template
+    for=op.art.draw.ground
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.scene.m.refused core.template
+    for=op.art.draw.scene
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.setMood.m.refused core.template
+    for=op.art.draw.setMood
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.recolor.m.refused core.template
+    for=op.art.draw.recolor
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.givePart.m.refused core.template
+    for=op.art.draw.givePart
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.resize.m.refused core.template
+    for=op.art.draw.resize
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.matchSize.m.refused core.template
+    for=op.art.draw.matchSize
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.setSize.m.refused core.template
+    for=op.art.draw.setSize
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.move.m.refused core.template
+    for=op.art.draw.move
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.nudge.m.refused core.template
+    for=op.art.draw.nudge
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.turn.m.refused core.template
+    for=op.art.draw.turn
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.remove.m.refused core.template
+    for=op.art.draw.remove
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.removeIt.m.refused core.template
+    for=op.art.draw.removeIt
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.clearEverything.m.refused core.template
+    for=op.art.draw.clearEverything
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.newDrawing.m.refused core.template
+    for=op.art.draw.newDrawing
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.undo.m.refused core.template
+    for=op.art.draw.undo
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.redo.m.refused core.template
+    for=op.art.draw.redo
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.select.m.refused core.template
+    for=op.art.draw.select
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.deselect.m.refused core.template
+    for=op.art.draw.deselect
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.fillMode.m.refused core.template
+    for=op.art.draw.fillMode
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.duplicate.m.refused core.template
+    for=op.art.draw.duplicate
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.describe.m.refused core.template
+    for=op.art.draw.describe
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.count.m.refused core.template
+    for=op.art.draw.count
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.whereIs.m.refused core.template
+    for=op.art.draw.whereIs
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.exists.m.refused core.template
+    for=op.art.draw.exists
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.colorOfThing.m.refused core.template
+    for=op.art.draw.colorOfThing
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.whatsNear.m.refused core.template
+    for=op.art.draw.whatsNear
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.help.m.refused core.template
+    for=op.art.draw.help
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.colors.m.refused core.template
+    for=op.art.draw.colors
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.save.m.refused core.template
+    for=op.art.draw.save
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.openTab.m.refused core.template
+    for=op.art.draw.openTab
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.askKind.m.refused core.template
+    for=op.art.draw.askKind
+    status=conflicting
+    text="{note}"
+
