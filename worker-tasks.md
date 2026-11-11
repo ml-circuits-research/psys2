@@ -2622,3 +2622,15 @@ The user's priorities, in his words: less code and speed are secondary, unless i
 - Report what a description needs that we do not have, and how much of it can be derived automatically from the existing files.
 
 Order: E1 first (it decides where the effort pays), then E2 and E3 in parallel. Keep RO-TRANSLATE-FALLBACK and the re-vendor of 0.7.1 going; E2 needs 0.7.1.
+- **Reviewer's first pass for E1 (23:55, rules mode, current main).** Use it as a starting point; verify and extend it.
+  - **Romanian.** 2,480 messages: 81.9% right, 3.1% wrong, 13.1% not understood. **351 of the 449 non-right RO cases have an English source case that is right**: 281 not understood and 59 wrong. So 78% of the Romanian errors are reading-only; the world already handles the English. Top worlds: ui.avatar 63, kids.tasks 31, ui.shell 27, tictactoe 24, art.draw 22. This bounds what the translator route (RO-TRANSLATE-FALLBACK) or generated RO patterns (E3) can win: up to about +14 points.
+  - **English.** 1,296 messages: 95.4% right. The 57 non-right cases, classified by hand from `--replies`:
+    - about 30 compound messages, two requests in one, segmented wrongly. "what do red and yellow make" fails only inside compounds.
+    - about 11 routed to the wrong world or tab, where the open tab or the known entities would have decided. Examples: "put it in the top right corner" in draw is played as a tic-tac-toe move; "change the instrument to flute" goes to the document; "colour Spain in" goes to draw; "center and what is 3 times 3" goes to the document; "add milk … and also can penguins fly" creates a "fly" list.
+    - about 6 follow-ups or ellipsis ("no, a red one", "no, sections", "make it yellow").
+    - 3 "X then undo" in one message.
+    - about 4 missing words (dragon, grill, siren).
+    - 2 typos.
+
+    So in English, about 17 of 57 are of the (c), (d) or (e) kind that E2 targets, and about 30 are segmentation.
+  - Add a class (h), **segmentation of compound messages**. E2 can help there too: score the alternative splits against the world.
