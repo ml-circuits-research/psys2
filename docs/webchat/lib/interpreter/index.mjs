@@ -375,6 +375,7 @@ export class Interpreter {
   intercept(session, text) {
     for (const w of this.set.list()) {
       if (typeof w.ops?.interceptInput !== 'function' || !session.state[w.id]?.inputMode) continue;
+      if (session.rs && w.undoAction && /^(?:undo(?: that)?|scratch that)[.!]*$/i.test(String(text).trim())) continue;   // matrix mode: the library takes the last step back (spec 15), not the world's own history
       const op = { id: `op.${w.id}.interceptInput`, worldId: w.id, semantics: 'action' };
       const st = { depth: 0, visited: 0, ops: [] };
       const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
@@ -462,7 +463,9 @@ export class Interpreter {
       if (envelope.openTab) { this.runAction(session, 'ui.openTab', { tab: envelope.openTab }); delete envelope.openTab; }   // a game's action brings its tab forward, as its operation did
     }
     else if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
-    else {
+    else if (op && (envelope = session.rs?.guardRequest(session, op.worldId, action, args) ?? null)) {   // a world's rules say the target does not exist (spec 15, `guard`)
+      envelope = { ...envelope, reason: 'precondition_failed', from: [] };
+    } else {
       envelope = this._runOp(session, op, spec, {}, st, { ...args, request: wire });
       // a world whose operations keep their own state (spec 15, `adopt`): the library takes over what they did, or refuses it with the reason
       const refused = session.rs?.adoptState(session);
