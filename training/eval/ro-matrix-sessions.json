@@ -5,7 +5,7 @@
       ["cumpăr o minge", "minge"],
       ["anulează", "^Am anulat: \"cumpăr o minge\"\\.$"],
       ["anulează", "^Am anulat: \"am 20 de lei\"\\.$"],
-      ["anulează", "^Nu am ce anula\\.$"]
+      ["anulează", "^Nu (mai )?am ce anula\\."]
     ] },
   { "id": "why-own-words", "doc": "why / what did you do: the told fact is quoted as the user typed it",
     "turns": [

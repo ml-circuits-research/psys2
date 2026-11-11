@@ -276,7 +276,7 @@ const TABLE = [
   ['OK, I took that back.', 'Bine, am retras asta.'],
   // ---- the dialogue layer's own sentences: undo, bare yes/no, refusals (the user's own words arrive as quoted parts, never translated)
   ['OK, I took that back:', 'Am anulat:'], ['OK, I undid it:', 'Am anulat:'], ['OK, I undid it.', 'Am anulat.'],
-  ['There is nothing to undo.', 'Nu am ce anula.'], ['There is nothing to undo yet.', 'Nu am ce anula.'],
+  ['There is nothing to undo.', 'Nu am ce anula.'], ['There is nothing more to undo.', 'Nu mai am ce anula.'], ['There is nothing to undo yet.', 'Nu am ce anula.'],
   ['Yes to what?', 'Da, la ce?'], ['No to what?', 'Nu, la ce?'],
   ['You can ask me a question, give me a command, or say "help" to see what I can do.', 'Poți să-mi pui o întrebare, să-mi dai o comandă sau să spui "ajutor" ca să vezi ce pot face.'],
   ['OK, I will leave it as it is.', 'Bine, las așa cum este.'],
