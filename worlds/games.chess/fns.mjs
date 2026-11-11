@@ -280,5 +280,5 @@ export function undoWords({ before, after }) {
   if (gone <= 0) return { value: 'OK, I took that back.', openTab: 'chess' };
   const byUser = Array.from({ length: gone }, (_, i) => (after.history.length + i) % 2 === (before.user === 'white' ? 0 : 1)).filter(Boolean).length;
   const what = byUser === 0 ? 'my last move' : byUser === gone ? (gone === 1 ? 'your last move' : `your last ${gone} moves`) : byUser === 1 && gone === 2 ? 'your last move and my reply' : `the last ${gone} moves`;
-  return { value: `OK, I took back ${what}. ${after.turn === after.user ? 'It is your move.' : 'It is my move.'}`, openTab: 'chess' };
+  return { value: `OK, I took back ${what}. ${after.history.length === 0 ? 'We are back at the start. ' : ''}${after.turn === after.user ? 'It is your move.' : 'It is my move.'}`, openTab: 'chess' };
 }

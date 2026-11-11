@@ -210,7 +210,7 @@ const handlers = {
     return mods.lang.suggestSwitch(m.text, mods.lang.normalize(m.selected), { detect: (x) => t.detectLanguage(x), evidence: (x) => t.evidence(x) });
   },
   async observe(m) {
-    const out = await session.observe(m.obs);
+    const out = await session.observeIn(m.obs, { language: mods.lang.normalize(settings.language) });   // the reaction (the engine's chess move) is shown in the selected language
     annotateWires(out);
     return { follow: out, state: stateOf() };
   },

@@ -29,7 +29,11 @@ export function buildRecord({ text, mode = 'typed', language = 'en', tab = null,
   let formalizer = null;
   try { const used = reply?.trace?.formalizer?.used; formalizer = (Array.isArray(used) ? used.join('+') : used ? String(used) : null) ?? segments[0]?.strategy ?? null; } catch { formalizer = null; }
   const english = reply?.lang && reply.lang !== 'en' ? (reply.trace?.english ?? null) : null;
+  // RO-TRANSLATE-FALLBACK: the turns that needed the Translator or the fixed Romanian line: 'translator-in' | 'translator-out' | 'rules-translate' | 'ro-generic'
+  let via = [];
+  try { via = [reply?.trace?.via, ...(reply?.trace?.replyVia ?? [])].filter(Boolean); } catch { via = []; }
   return {
+    ...(via.length ? { via: [...new Set(via)] } : {}),
     id: id ?? newId(now), time: new Date(now).toISOString(), text: String(text ?? ''), mode: MODES.includes(mode) ? mode : 'typed',
     source: mode === 'chip' ? 'chip' : 'human', lang: reply?.lang ?? language, english, tab, segments,
     unparsed: segments.some((s) => s.unparsed), formalizer,

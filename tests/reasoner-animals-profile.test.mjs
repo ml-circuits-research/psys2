@@ -68,5 +68,5 @@ test('profile: Romanian "de ce?" gives the fact and the user\'s own words as typ
   const s = session(matrix, 'ro');
   await say(s, 'Locuiesc în Cluj.', 'ro');
   const r = await say(s, 'De ce?', 'ro');
-  assert.match(r, /^Am notat Cluj la „[^”]+”, pentru că mi-ai spus asta\. Am aflat asta din ce mi-ai spus: "Locuiesc în Cluj"/);
+  assert.match(r, /^Am notat Cluj la „[^”]+”, pentru că mi-ai spus asta\. Am aflat asta din ce mi-ai spus: „Locuiesc în Cluj”/);
 });

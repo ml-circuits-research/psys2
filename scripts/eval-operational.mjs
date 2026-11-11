@@ -87,6 +87,7 @@ export async function runCase(engine, settings, c, { onTurn } = {}) {   // onTur
     trivial: items.filter((x) => x.trivial).length,
     n_items: items.filter((x) => !(x.trivial && items.some((y) => !y.trivial))).length,
     strategy: [...new Set(reply.segments.map((x) => x.strategy))].join(','),
+    ...(ro && (reply.trace?.via || reply.trace?.replyVia) ? { via: [reply.trace.via, ...(reply.trace.replyVia ?? [])].filter(Boolean) } : {}),
     ...(last ? {} : {}),
   };
 }
@@ -210,7 +211,7 @@ async function main() {
       console.log(`Romanian (language auto, English reply checked): ${all.n} messages  right ${all.right_pct}%  wrong ${all.wrong_pct}%`);
       line('with diacritics', dia); line('casual, no diacritics', cas);
       for (const [g, t] of Object.entries(summarize(roCases, roRows).by_group)) line(`ro ${g}`, t);
-      const unq = (t) => String(t).replace(/"[^"]*"/g, '');   // the user's own quoted words stay as typed
+      const unq = (t) => String(t).replace(/"[^"]*"|„[^”]*”/g, '');   // the user's own quoted words stay as typed
       const mixed = roRows.filter((r) => r.reply_shown && unq(r.reply_shown) !== unq(r.reply) && /\b(the|you|your|is|my|I|did|could|can|what|how|and|with|have|has)\b/.test(unq(r.reply_shown)));
       const keptEnglish = roRows.filter((r) => r.lang === 'ro' && r.reply_shown && unq(r.reply_shown) === unq(r.reply)).length;
       console.log(`  replies: ${roRows.length - keptEnglish - mixed.length} in Romanian, ${keptEnglish} kept in English (could not be translated fully), ${mixed.length} mixed`);
