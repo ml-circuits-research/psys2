@@ -2399,3 +2399,23 @@ Write the change in spec 15 and in worker-log.md, then go on with RO-MATRIX and 
   - **user.profile has a tab but holds the user's facts.** Its facts belong to the conversation instance, and its tab reads them from there.
   - **Every instance can read the conversation instance's agents** (the user's name, the people named), so a name told once is known in every tab. Read only: a tab never writes into another instance.
   - **"undo"** uses the session history across instances (item 3 above).
+
+## Stage 2, kids.time / kids.animals / user.profile (reviewer, 2026-11-11 20:15)
+
+Accepted (e2bbb21, 02ed556, 3abe7d3). `npm test` 1275 pass, 0 fail. The log says the work goes to per-world instances, as WORLDS-APART asks.
+
+In Chrome (`/home/claude/shot/stage2b.mjs` and `stage2b-ops.mjs`), matrix is better than ops on three things:
+- "it is 25 o'clock" is refused with the reason; ops accepts it.
+- "undo that" forgets the told day and the taught penguin fact; ops says "nothing to undo".
+- After the undo, "can a penguin fly?" gives a clean "No". ops reports conflicting information.
+
+Found, all present in **both** reasoners unless marked:
+1. **Matrix: Romanian replies.** In a Romanian session, "e ora 25" is refused in English ("That does not add up. That is not an hour on a clock: 25 o'clock."). Add it to RO-MATRIX item 1: every refusal or deny text needs its Romanian template.
+2. **The new profile deny does not reach the chat.** "I am 300 years old" gives "I did not quite catch that." Either the reading fails before the deny, or the deny reason is lost. The log says denies were added for an impossible age, so show the reason ("No one is 300 years old. …").
+3. **"how old am I?" is not understood** right after "I am 8 years old". The reply suggests "I am 34 years old.", and the 34 comes from nowhere.
+4. **Romanian profile:**
+   - "am 8 ani" and "mă numesc Ana" are answered in English ("8 years old, noted.", "Ana, lovely to meet you.").
+   - "câți ani am?" is read as "how many legs on a years".
+   - "cum mă numesc?" is not understood.
+
+   Move these to RO-MATRIX item 2 (pre-existing) and add regression rows for both reasoners.
