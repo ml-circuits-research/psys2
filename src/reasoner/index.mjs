@@ -547,6 +547,7 @@ export class ReasonerSession {
         live.add(w.id);
         const text = this.reasoner.lib.format(w);
         if (this.mirrored.get(w.id)?.text === text) continue;
+        if (!this.mirrored.has(w.id) && session.memory.get(w.id)) { this.mirrored.set(w.id, { text, type, own: true }); continue; }   // a wire the memory already has (a knowledge base) is not copied, nor retracted
         this.mirrored.set(w.id, { text, type });
         const { wires } = parseOurs(text);
         if (!wires[0]) continue;
@@ -559,6 +560,7 @@ export class ReasonerSession {
       for (const [id, m] of [...this.mirrored]) {
         turnBudget.tick('sopworld.mirror');
         if (m.type !== type || live.has(id)) continue;
+        if (m.own) { this.mirrored.delete(id); continue; }
         session.memory.retract(id, 'removed by the matrix reasoner');
         this.mirrored.delete(id);
       }

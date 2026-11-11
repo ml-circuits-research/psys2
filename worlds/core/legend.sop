@@ -333,6 +333,12 @@
     ask="which wire types?"
     doc="Wire types that the world's matrix actions write and other worlds read from the session memory (for example kids.tasks.entry for charts and documents). With reasoner=matrix the host layer copies them from the library's World into the session memory after every action."
 
+@core.world.source core.key
+    value=string
+    card=one
+    ask="how does the world call its own facts?"
+    doc="The phrase \"why?\" uses for facts that no sentence of the dialogue told, after \"from\" (for example \"the price list\", \"what I know about animals\"). Without it the phrase is \"what I know\"."
+
 @core.world.ops core.key
     value=atom
     card=many

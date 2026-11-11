@@ -482,7 +482,13 @@ export class Discourse {
   _known(ids) {
     const d = this.dialog, rs = d.isession.rs;
     const said = [], seen = new Set();
-    let kb = false;
+    const kb = [];   // the phrases of the worlds whose own facts (no sentence of the dialogue) the answer rests on
+    const from = (id) => {
+      const type = rs?.world.get(id)?.type ?? d.isession.memory.get(id)?.type ?? '';
+      const w = this.dialog.engine.set.list().filter((x) => type === x.id || String(type).startsWith(x.id + '.')).sort((a, b) => b.id.length - a.id.length)[0];
+      const phrase = w?.sourcePhrase ?? 'what I know';
+      if (!kb.includes(phrase)) kb.push(phrase);
+    };
     const add = (src) => {
       const sid = String(src ?? '').replace(/^"|"$/g, '').split('#')[0];
       const rec = sid ? d.sources.get(sid) : null;
@@ -492,23 +498,24 @@ export class Discourse {
     };
     // matrix strategy (spec 15): the library's explanation knows the chain, so the facts an answer rests on are the told leaves of it, oldest first
     const leaves = rs ? rs.leaves(ids, d.isession) : [];
-    for (const l of leaves) if (!add(l.source)) kb = true;   // a told wire without a sentence of the dialogue is the price list
+    for (const l of leaves) if (!add(l.source)) from(l.id);   // a told wire without a sentence of the dialogue is the price list
     const have = new Set(leaves.map((l) => l.id));
     for (const id of ids ?? []) {
       if (have.has(id)) continue;
       const w = d.isession.memory.get(id);
       if (!w) continue;
-      if (!add(w.entries.find((e) => e.key === 'core.source')?.value?.v)) kb = true;
+      if (!add(w.entries.find((e) => e.key === 'core.source')?.value?.v)) from(id);
     }
     return this._knownParts(said, kb);
   }
 
   _knownParts(said, kb) {
-    if (!said.length && !kb) return [];
-    if (!said.length) return [{ text: ' I worked that out from the price list.', translate: true }];
+    if (!said.length && !kb.length) return [];
+    const phrase = kb.length > 1 ? `${kb.slice(0, -1).join(', ')} and ${kb.at(-1)}` : kb[0];
+    if (!said.length) return [{ text: ` I worked that out from ${phrase}.`, translate: true }];
     const out = [{ text: ' I worked that out from what you told me: ', translate: true }];
     said.forEach((q, i) => { if (i) out.push({ text: i === said.length - 1 ? ' and ' : ', ', translate: true }); out.push(q); });
-    if (kb) out.push({ text: ' and from the price list', translate: true });
+    if (kb.length) out.push({ text: ` and from ${phrase}`, translate: true });
     out.push({ text: '.', translate: false });
     return out;
   }

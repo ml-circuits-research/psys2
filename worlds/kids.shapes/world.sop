@@ -11,6 +11,7 @@
     ops=kids.shapes.color.is_kind
     ops=kids.shapes.mix.result
     ops=kids.shapes.mix.recipe
+    source="what I know about shapes and colors"
     language=en
     status=fixture
     title="Shapes and colors (primary school)"

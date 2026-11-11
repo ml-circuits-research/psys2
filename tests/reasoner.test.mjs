@@ -438,6 +438,8 @@ test('matrix: "what did you do?" keeps the source sentence of a computed answer,
     const { out } = await say(mode, ['A puzzle costs 11 lei.', 'how much do 2 puzzles cost?', 'what did you do?']);
     assert.match(out[2], /What I answered: 2 puzzles cost 22 lei\. I worked that out from what you told me: "A puzzle costs 11 lei"/);
   }
+});
+
 // ---- games.hangman on the matrix (stage 2) -----------------------------------------------------------------------------------------------------
 
 const HANGMAN = ['is there an e?', 'play hangman', 'hint', 'e', 'a', 'e', 'guess x', 'zebra', 'hint', 'what is the word', 'status', 'new game', 'I give up', 'e', 'hint',
@@ -622,4 +624,14 @@ test('kids.shapes: a taught fact is a wire of the library: the rules read it (fl
   assert.match((await s.send('undo', {})).text, /^OK, I took that back/);
   assert.equal(lib.ofType('kids.shapes.shape').some((w) => w.attrs.name?.[0] === 'trapezium'), false);
   assert.deepEqual((await s.send('How many sides does a trapezium have?', {})).statuses, ['missing']);
+});
+
+test('"why?" names the source of a world\'s own facts by world: the price list for the shop, what I know about shapes and colors, a general phrase otherwise', async () => {
+  for (const eng of [ops, matrix]) {
+    const a = await say(eng, ['How many sides does a hexagon have?', 'why?']);
+    assert.match(a.out[1], /I worked that out from what I know about shapes and colors\.$/);
+    assert.doesNotMatch(a.out[1], /price list/);
+    const b = await say(eng, ['I have 20 lei', 'How much does a ball cost?', 'why?']);
+    assert.doesNotMatch(b.out[2], /about animals|shapes/);
+  }
 });

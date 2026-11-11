@@ -291,6 +291,8 @@ const TABLE = [
   ['You said', 'Ai spus'], ['What I answered:', 'Am răspuns:'],
   [', so I answered it.', ', deci am răspuns.'], [', so I did it.', ', deci am făcut-o.'], ['so I answered it.', 'deci am răspuns.'], ['so I did it.', 'deci am făcut-o.'],
   ['I worked that out from what you told me:', 'Am aflat asta din ce mi-ai spus:'], ['I worked that out from the price list.', 'Am aflat asta din lista de prețuri.'],
+  ['I worked that out from what I know.', 'Am aflat asta din ce știu.'], ['I worked that out from what I know about animals.', 'Am aflat asta din ce știu despre animale.'], ['I worked that out from what I know about shapes and colors.', 'Am aflat asta din ce știu despre forme și culori.'],
+  ['and from what I know', 'și din ce știu'], ['and from what I know about animals', 'și din ce știu despre animale'], ['and from what I know about shapes and colors', 'și din ce știu despre forme și culori'],
   ['and from the price list', 'și din lista de prețuri'], ['and', 'și'],
   // ---- lists
   ['Hello!', 'Bună!'],

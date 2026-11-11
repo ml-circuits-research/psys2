@@ -8,6 +8,7 @@
     formalization=rules
     reasoner=matrix
     undo=guess.undo
+    mirror=kids.animals.animal
     language=en
     status=fixture
     title="Guess the animal (twenty questions)"

@@ -10,11 +10,11 @@
  * Without it all input is treated as English.
  */
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=46116712b1';
-import { loadWorlds } from '../worlds/index.mjs?v=37c7acfba4';
+import { loadWorlds } from '../worlds/index.mjs?v=5784d13c9a';
 import { validateWorldSet } from '../worlds/validate.mjs?v=1eb2f0538f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=853e7376d5';
-import { createReasoner } from '../reasoner/index.mjs?v=a026765281';
+import { createReasoner } from '../reasoner/index.mjs?v=101a7554bd';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=14798d6e5b';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=13d688a978';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -29,7 +29,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=e468d994f5';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=8ba02e1397';
 import { checkValues } from './value-check.mjs?v=dbf4aad634';
-import { Discourse } from './discourse.mjs?v=1c8eb06420';
+import { Discourse } from './discourse.mjs?v=72ca4fb3c2';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
