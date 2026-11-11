@@ -21,7 +21,7 @@
 @t.arith.n5 core.test
     session=s1
     input="Who has more apples?"
-    expectStatus=unparsed
+    expect="Tom has the most apples: 8."
 
 @t.arith.n6 core.test
     session=s1
@@ -77,14 +77,36 @@
 @t.arith.n17 core.test
     input="Tom has 2 apples. Tom gives Ana 3 apples. How many apples does Tom have?"
     expectStatus=conflicting
+    reasoner=matrix
+
+@t.arith.n17o core.test
+    input="Tom has 2 apples. Tom gives Ana 3 apples."
+    expect="Tom only had 2 apples, so Tom cannot give away 3."
+    expectStatus=conflicting
+    doc="SOPWORLD-1b: an impossible statement is said to the user (not OK) and taken back"
+    reasoner=ops
 
 @t.arith.n18 core.test
     input="Lily has 3 cards. Lily gives 5 cards to Max. How many cards does Max have?"
     expect="Lily only had 3 cards, so Lily cannot give away 5."
+    reasoner=matrix
+
+@t.arith.n18o core.test
+    input="Lily has 3 cards. Lily gives 5 cards to Max."
+    expect="Lily only had 3 cards, so Lily cannot give away 5."
+    expectStatus=conflicting
+    reasoner=ops
 
 @t.arith.n19 core.test
     input="Zoe has 3 marbles. Zoe ate 4 marbles. How many marbles does Zoe have?"
     expectStatus=conflicting
+    reasoner=matrix
+
+@t.arith.n19o core.test
+    input="Zoe has 3 marbles. Zoe ate 4 marbles."
+    expect="Zoe only had 3 marbles, so Zoe cannot eat 4."
+    expectStatus=conflicting
+    reasoner=ops
 
 @t.arith.n20 core.test
     input="Jack has 7 coins. Jack loses 2 of his coins. Jack finds 4 coins. How many coins does Jack have?"
@@ -104,7 +126,7 @@
 
 @t.arith.n24 core.test
     input="Tom gets 3 apples from Ana. How many apples does Tom have?"
-    expect="Tom got 3 apples from Ana. I don't know how many Tom had before."
+    expect="I don't know how many apples Tom had; Tom got 3 from Ana."
 
 @t.arith.n25 core.test
     input="What is 7 plus 5?"
@@ -189,7 +211,7 @@
 @t.arith.ell2 core.test
     session=ellipsis
     input="How many apples does Ana have?"
-    expect="Ana got 2 apples from Tom. I don't know how many Ana had before."
+    expect="I don't know how many apples Ana had; Ana got 2 from Tom."
 
 @t.arith.ell3 core.test
     session=ellipsis
@@ -902,7 +924,7 @@
 
 @t.kids.arith.dm102 core.test
     input="And Ana?"
-    expect="Ana got 2 apples from Tom. I don't know how many Ana had before."
+    expect="I don't know how many apples Ana had; Ana got 2 from Tom."
     session=dm1
 
 @t.arith.xa01 core.test
@@ -1049,3 +1071,140 @@
     input="Two of them flew away."
     expect="Tom lost 2 bees"
     session=rp3ar
+
+@t.arith.coh01 core.test
+    session=coh1
+    input="Tom has 5 apples. Ana gives him some. How many apples does Tom have?"
+    expect="Tom has more than 5 apples"
+    doc="SOPWORLD-1b: an unknown amount ('some'): a bound, never a made-up number"
+    reasoner=ops
+
+@t.arith.coh02 core.test
+    session=coh2
+    input="Tom had some apples. He ate 2 and now has 3. How many apples did Tom have at first?"
+    expect="Tom had 5 apples at first."
+    doc="SOPWORLD-1b: a past-tense start with an unknown amount, then an event and the state after it imply the start"
+    reasoner=ops
+
+@t.arith.coh03a core.test
+    session=coh3
+    input="Tom has 5 apples. Ana gives him 3 apples."
+    expect="Ana gave Tom 3 apples"
+    reasoner=ops
+
+@t.arith.coh03b core.test
+    session=coh3
+    input="No, she gives him 4."
+    expect="Ana gave Tom 4 apples"
+    doc="SOPWORLD-1b: 'No, ...' revises the last event, it is not a second gift"
+    reasoner=ops
+
+@t.arith.coh03c core.test
+    session=coh3
+    input="How many apples does Tom have?"
+    expect="Tom has 9 apples."
+    reasoner=ops
+
+@t.arith.coh04 core.test
+    session=coh4
+    input="Ana gives Tom 2 apples. How many apples does Tom have?"
+    expect="I don't know how many apples Tom had; Tom got 2 from Ana."
+    reasoner=ops
+
+@t.arith.coh05 core.test
+    session=coh5
+    input="Tom has 5 apples. Ana has 5 apples. Who has more apples?"
+    expect="They have the same"
+    expectStatus=ambiguous
+    reasoner=ops
+
+@t.arith.coh06a core.test
+    session=coh6
+    input="Tom has 5 apples. Ana gives him 3 apples. He eats 2. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    reasoner=ops
+
+@t.arith.coh06b core.test
+    session=coh6
+    input="Why?"
+    expect="I worked that out from what you told me"
+    doc="SOPWORLD-1b: why? gives the facts the answer came from (the from list), in order"
+    reasoner=ops
+
+@t.arith.coh08 core.test
+    session=coh8
+    input="Tom has 5 apples. Tom ate 2. He eats 5."
+    expect="Tom only had 3 apples, so Tom cannot eat 5."
+    expectStatus=conflicting
+    reasoner=ops
+
+@t.arith.coh09 core.test
+    session=coh9
+    input="Tom had some apples. Tom ate 2 and now has 3."
+    expect="OK, Tom has 3 apples."
+    reasoner=ops
+
+@t.arith.coh10a core.test
+    session=coh10
+    input="Tom has 5 apples. Ana gives him some."
+    expect="I don't know how many"
+    reasoner=ops
+
+@t.arith.coh10b core.test
+    session=coh10
+    input="Why?"
+    expect="Tom has more than 5 apples"
+    doc="why? after a statement: what is known about the last count, from the facts told"
+    reasoner=ops
+
+@t.arith.coh11 core.test
+    language=ro
+    session=coh11
+    input="Tom are 5 mere. Ana îi dă câteva. Câte mere are Tom?"
+    expect="Tom has more than 5 apples"
+    doc="Romanian: the same unknown amount, through the translator boundary"
+    reasoner=ops
+
+@t.arith.coh12 core.test
+    language=ro
+    session=coh12
+    input="Tom a avut niște mere. El a mâncat 2 și acum are 3. Câte mere a avut Tom la început?"
+    expect="Tom had 5 apples at first."
+    reasoner=ops
+
+@t.arith.coh13a core.test
+    language=ro
+    session=coh13
+    input="Tom are 5 mere. Ana îi dă lui Tom 3 mere."
+    expect="Ana i-a dat lui Tom 3 mere"
+    reasoner=ops
+
+@t.arith.coh13b core.test
+    language=ro
+    session=coh13
+    input="Nu, ea îi dă 4."
+    expect="Ana i-a dat lui Tom 4 mere"
+    reasoner=ops
+
+@t.arith.coh13c core.test
+    language=ro
+    session=coh13
+    input="Câte mere are Tom?"
+    expect="Tom has 9 apples."
+    reasoner=ops
+
+@t.arith.coh14 core.test
+    language=ro
+    session=coh14
+    input="Tom are 5 mere. Ana are 5 mere. Cine are mai multe mere?"
+    expect="They have the same"
+    reasoner=ops
+
+@t.arith.coh15 core.test
+    language=ro
+    session=coh15
+    input="Tom are 3 mere. Tom mănâncă 5 mere."
+    expect="Tom nu poate mânca 5."
+    expectStatus=conflicting
+    reasoner=ops
+

@@ -163,6 +163,18 @@ export const SCENARIOS = {
       check('command: the recognizer restarts as en-US', await c.pg.waitForFunction(() => window.__sr.live()?.lang === 'en-US', { timeout: 4000, polling: 50 }).then(() => true).catch(() => false));
       await voiceTurn(c, 'switch to Romanian');
       check('command: the spoken command switches too', (await selector(c)) === 'ro' && await c.pg.waitForFunction(() => window.__sr.live()?.lang === 'ro-RO', { timeout: 4000, polling: 50 }).then(() => true).catch(() => false));
+      // the common variants, in both languages and both directions, from either selected language (LANG-FIXED follow-up: "treci pe engleză")
+      const tag = { en: 'en-US', ro: 'ro-RO' };
+      for (const [text, want] of [['treci pe engleză', 'en'], ['treci pe română', 'ro'], ['schimbă limba în engleză', 'en'], ['vreau în română', 'ro'], ['vorbește englezește', 'en'], ['treci pe română', 'ro'],
+        ['speak English please', 'en'], ['vorbește românește', 'ro'], ['change the language to English', 'en'], ['switch to Romanian', 'ro'], ['vreau în engleză', 'en'], ['schimbă limba în română', 'ro'],
+        ['can you speak English?', 'en'], ['speak Romanian please', 'ro']]) {
+        const r = await c.say(text);
+        await sleep(900);   // a restart of the recognizer settles before the next switch (a burst of restarts pauses the microphone by design)
+        const okSel = (await selector(c)) === want;
+        // the recognizer follows the selector while it listens (the microphone pauses itself after a burst of restarts: then only the selector is checked)
+        const okTag = await c.pg.waitForFunction((t) => { const l = window.__sr.live(); return !l || l.lang === t; }, { timeout: 4000, polling: 50 }, tag[want]).then(() => true).catch(() => false);
+        check(`command variant: "${text}" -> ${want} (selector and recognizer tag)`, okSel && okTag, `${await selector(c)} live=${await c.pg.evaluate(() => window.__sr.live()?.lang ?? null)} ${r.reply.slice(0, 50)}`);
+      }
       const st = await saved(c);
       check('command: the switch is saved', st.language === 'ro');
       const sel = await c.pg.evaluate(() => { const e = document.querySelector('select.p2-select'); e.value = 'en'; e.dispatchEvent(new Event('change')); return e.value; });

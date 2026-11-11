@@ -28,6 +28,12 @@
     observe=true
     compute=true
 
+@kids.arith.holding.start core.key
+    value=number
+    card=one
+    ask="How many were there at the start?"
+    compute=true
+
 @kids.arith.change core.type
     extends=core.event
     doc="Something happens to the number of items someone has. Events are applied in dialog order (core.seq)."

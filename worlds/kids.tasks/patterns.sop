@@ -1,7 +1,7 @@
 @pat.kids.tasks.add1 core.pattern
     canonical="Add milk to my list."
     match="[$lang.lead.polite]? add {item:words} to [my|the|our]? list"
-    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do arg.assumed=true"
     kind=request
     priority=13
     example="Add milk to my list."
@@ -16,7 +16,7 @@
 @pat.kids.tasks.add3 core.pattern
     canonical="Put bread on my list."
     match="put {item:words} on [my|the|our]? list"
-    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do arg.assumed=true"
     kind=request
     priority=13
     example="Put bread on my list."
@@ -1629,3 +1629,37 @@
     emit="@{_} core.request action=tasks.show arg.list=\"{list}\""
     priority=10
     example="Show me my shopping list."
+
+@pat.kids.tasks.add.bare core.pattern
+    canonical="Add to my shopping list."
+    match="[$lang.lead.polite]? add to [my|the|our] {list:words} list"
+    emit="@{_} core.request action=chat.ask arg.q=\"What shall I add to your {list} list?\" arg.template=\"add <x> to my {list} list\" arg.world=\"kids.tasks\""
+    kind=request
+    priority=14
+    example="Add to my shopping list."
+    doc="SOPWORLD-1b: the item is not said: ask for it; the next word completes the request."
+
+@pat.kids.tasks.add.bare.default core.pattern
+    match="[$lang.lead.polite]? add to [my|the|our]? list"
+    emit="@{_} core.request action=chat.ask arg.q=\"What shall I add to your to-do list?\" arg.template=\"add <x> to my list\" arg.world=\"kids.tasks\""
+    kind=request
+    priority=11
+    example="Add to my list."
+
+@pat.kids.tasks.which core.pattern
+    canonical="Which list did you put it on?"
+    match="[which_list|what_list] [did_you|have_you|was_it|is_it|is_that] [put|add|added|save|saved|write|wrote|put_it|add_it]? [it|that|the_item|the_thing]? [on|to|in|onto|into]?"
+    emit="@{_} core.request action=tasks.whichList"
+    kind=request
+    priority=12
+    example="Which list did you put it on?"
+    example="Which list is it on?"
+    doc="SOPWORLD-1b: says which list the last item went to, and that it was assumed when the user did not name a list."
+
+@pat.kids.tasks.whydone core.pattern
+    canonical="Why is milk done?"
+    match="why [is|are] {item:words} [done|finished|completed|ticked|ticked_off|checked|crossed_off|marked|marked_done]"
+    emit="@{_} core.request action=tasks.whyDone arg.item=\"{item}\""
+    kind=request
+    priority=12
+    example="Why is milk done?"

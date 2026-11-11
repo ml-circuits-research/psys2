@@ -11,7 +11,7 @@ const worlds = engine.set.list().filter((w) => w.patterns.length);
 const TAB = { 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman', 'docs.editor': 'editor', 'ui.avatar': 'robot' };
 const tabOf = (w) => w.tab?.id ?? TAB[w.id];
 // operations that only exist as a follow-up, a refusal, or are owned by the shell / the open game (see scripts/mark-canonical.mjs), and one question that its twin covers
-const EXEMPT = new Set(['chat.ask', 'draw.askKind', 'docr.pick', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown', 'draw.open', 'ui.newGame', 'ui.hint',
+const EXEMPT = new Set(['chat.ask', 'shop.reviseLast', 'draw.askKind', 'docr.pick', 'chess.pick', 'music.askWhat', 'geo.askPlace', 'geo.unknown', 'avatar.setPartUnknown', 'draw.open', 'ui.newGame', 'ui.hint',
   'core.question:kids.shapes.shape/sides']);
 const allCanonical = new Set(worlds.flatMap((w) => w.patterns.flatMap((p) => p.canonical ?? [])));
 

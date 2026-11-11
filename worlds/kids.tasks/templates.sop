@@ -185,3 +185,26 @@
 @tpl.kids.tasks.notDone core.template
     for=action.tasks.notDone
     text="{note}"
+
+@tpl.kids.tasks.which.assumed core.template
+    for=action.tasks.whichList
+    when="unit=assumed"
+    text="I put {values:list} on your {value} list. You did not say which list, so I assumed your {value} list."
+
+@tpl.kids.tasks.which core.template
+    for=action.tasks.whichList
+    text="I put {values:list} on your {value} list."
+
+@tpl.kids.tasks.which.missing core.template
+    for=action.tasks.whichList
+    status=missing
+    text="I have not put anything on a list yet."
+
+@tpl.kids.tasks.whydone core.template
+    for=action.tasks.whyDone
+    text="Because you marked {values:list} as done on your {value} list."
+
+@tpl.kids.tasks.whydone.missing core.template
+    for=action.tasks.whyDone
+    status=missing
+    text="I do not see that as done on any list."

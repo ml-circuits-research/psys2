@@ -97,3 +97,30 @@ test('the engine never switches an explicit language, and the explicit switch co
     assert.equal(s.state()['ui.shell'].language, 'ro', t); assert.match(r.text, /switched to Romanian/i, t);
   }
 });
+
+test('languageCommand: the switch command is a shape (verbs, wishes, the language word, a preposition, the target), in both languages and both directions', async () => {
+  const { languageCommand } = await import('../src/translate/language-command.mjs');
+  const TO_EN = ['treci pe engleză', 'treci la engleză', 'treci în engleză', 'schimbă limba în engleză', 'schimbă limba pe engleză', 'vreau în engleză', 'vreau engleză', 'vorbește englezește', 'vorbește în engleză',
+    'vorbește engleza', 'te rog vorbește în engleză', 'hai să vorbim în engleză', 'comută pe engleză', 'folosește engleza', 'pune limba engleză', 'poți să vorbești în engleză?', 'în engleză te rog',
+    'speak English please', 'switch to English', 'change the language to English', 'switch language to English', 'in English please', 'go back to English', 'I want English', 'talk to me in English', 'can you speak English?', 'let us speak English', 'use English', 'Switch to English!'];
+  const TO_RO = ['treci pe română', 'treci în română', 'schimbă limba în română', 'schimbă limba pe română', 'vreau în română', 'vorbește românește', 'vorbește în română', 'răspunde în română', 'Vorbește romaneste',
+    'speak Romanian please', 'switch to Romanian', 'change the language to Romanian', 'in Romanian please', 'go back to Romanian', 'I want Romanian', 'talk to me in Romanian', 'can you speak Romanian?', 'let us speak Romanian', 'use Romanian'];
+  for (const t of TO_EN) assert.equal(languageCommand(t), 'Change the language to English.', t);
+  for (const t of TO_RO) assert.equal(languageCommand(t), 'Change the language to Romanian.', t);
+  for (const t of ['how do I say hello in English', "don't speak English", 'nu vorbi engleza', 'translate this to English', 'what language do you speak', 'English', 'engleză', 'from English to Romanian', 'make the house bigger',
+    'I like English', 'Romania is a country', 'speak', 'what is the English word for apple', 'draw a house and speak English to the cat now please thanks', 'adaugă lapte pe lista mea']) assert.equal(languageCommand(t), null, t);
+});
+
+test('the explicit switch command works in either language, whatever language is selected (treci pe engleză while English is selected)', async () => {
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
+  const st = settingsForMode('rules');
+  const open = (language) => { const s = engine.createSession(sessionOptions(st, { language })); s.setWorldState('ui.shell', { language }); return s; };
+  for (const [from, t, to] of [['ro', 'treci pe engleză', 'en'], ['ro', 'schimbă limba în engleză', 'en'], ['ro', 'vreau în engleză', 'en'], ['en', 'treci pe română', 'ro'], ['en', 'vorbește românește', 'ro'], ['en', 'schimbă limba în română', 'ro'],
+    ['ro', 'speak English please', 'en'], ['en', 'speak Romanian please', 'ro'], ['en', 'switch to Romanian', 'ro'], ['ro', 'switch to English', 'en'], ['en', 'change the language to Romanian', 'ro']]) {
+    const s = open(from); const r = await s.send(t, { language: from });
+    assert.equal(s.state()['ui.shell'].language, to, `${from}: ${t}`);
+    assert.match(r.text, to === 'en' ? /am trecut la engleză/i : /switched to Romanian/i, t);
+  }
+  const s = open('ro'); const r = await s.send('vorbește românește', { language: 'ro' });
+  assert.match(r.text, /am trecut la română/i, 'already Romanian: the confirmation is still Romanian');
+});

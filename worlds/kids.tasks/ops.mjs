@@ -66,7 +66,7 @@ function candidates(st, list, q) {
 }
 
 // ---- add / remind ----------------------------------------------------------------------------
-function addTo(ctx, name, rawItem) {
+function addTo(ctx, name, rawItem, assumed = false) {
   const st = store(ctx);
   const items = splitItems(rawItem);
   if (!items.length) return { status: 'missing', missing: ['item'], value: name };
@@ -80,6 +80,7 @@ function addTo(ctx, name, rawItem) {
     added.push(text);
     mirror(ctx, name, item, 'todo');
   }
+  st.last = { list: name, items: [...added, ...present], assumed };   // "which list did you put it on?"
   const res = { status: 'supported', value: name };
   if (added.length) res.values = added;
   if (present.length) {
@@ -91,7 +92,22 @@ function addTo(ctx, name, rawItem) {
 }
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
-export function addItems(ctx, { item, list }) { return addTo(ctx, listName(list), item); }
+export function addItems(ctx, { item, list, assumed }) { return addTo(ctx, listName(list), item, assumed === 'true' || assumed === true); }
+
+/** "Which list did you put it on?": the list the last item went to, and whether the list was an assumption (the user did not name it). */
+export function whichList(ctx) {
+  const last = store(ctx).last;
+  if (!last) return { status: 'missing', missing: ['item'] };
+  return { status: 'supported', value: last.list, values: last.items, ...(last.assumed ? { unit: 'assumed' } : {}) };
+}
+
+/** "Why is milk done?": because the user marked it done (the list still says so). */
+export function whyDone(ctx, { item }) {
+  const q = clean(item);
+  const found = q ? candidates(store(ctx), undefined, q).filter((c) => c.item.done) : [];
+  if (!found.length) return { status: 'missing', missing: ['item'] };
+  return { status: 'supported', value: found[0].name, values: [found[0].item.text] };
+}
 export function remindMe(ctx, { item }) { return addTo(ctx, 'reminders', item); }
 
 // ---- remove ------------------------------------------------------------------------------------

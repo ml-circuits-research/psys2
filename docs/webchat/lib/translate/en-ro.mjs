@@ -5,7 +5,7 @@ import * as M from './morphology.ro.mjs?v=c18835e9d6';
 import * as L from './lexicon.ro-en.mjs?v=0823d91a10';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
-import { translateReplySentence } from './replies.en-ro.mjs?v=abb10e254f';
+import { translateReplySentence } from './replies.en-ro.mjs?v=ad81e5b4f9';
 import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
@@ -926,7 +926,7 @@ export function translateEnRo(original) {
   const t = source.trim();
   if (CANONICAL_RO[t]) return { text: source.replace(t, CANONICAL_RO[t]), alignment: [], unknown: [], notes: ['canonical example'], confidence: 1 };
   const sentences = splitReply(source);
-  if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, () => null))) return withQuoteGuard(source, translateEnRoGrammar(source));
+  if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, (t) => t))) return withQuoteGuard(source, translateEnRoGrammar(source));
   const sub = (x) => { const r = translateEnRoGrammar(x.replace(/^(.)/, (c, a) => (/[A-Z]/.test(a) ? a.toLowerCase() : a))); return r.text && !r.unknown.length && !r.untranslatable?.length ? r.text.replace(/[.!?]$/, '').replace(/^\p{Lu}/u, (c) => (/^[A-Z]/.test(x) ? c : c.toLowerCase())) : null; };
   const unknown = [], notes = [];
   let text = '';

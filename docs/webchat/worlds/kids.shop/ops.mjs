@@ -157,3 +157,58 @@ export function leftAfter(ctx, args) {
   }
   return { status: 'supported', value: round2(w.amount - c.total), unit: 'leu', from };
 }
+
+/** Hook (ops reasoner): do the statements just told still leave the user with money? Returns { problem } or undefined (the dialog says it and takes them back). */
+export function checkStatement(ctx, { ids }) {
+  const bought = (ids ?? []).map((id) => ctx.get(id)).filter((w) => w && /\.(purchase|expense)$/.test(w.type));
+  if (!bought.length) return undefined;
+  const w = wallet(ctx);
+  return w.env?.status === 'conflicting' ? { problem: w.env.note } : undefined;
+}
+
+/** Hook: "why?" about the money, answered from what is known: what the user had, what was bought at what price, what is left. */
+export function why(ctx, { text } = {}) {
+  const t = String(text ?? '').toLowerCase();
+  if (t !== 'why' && !/\b(left|money|lei|leu|nothing|broke|pay|paid|cost|spent|spend)\b/.test(t)) return undefined;
+  const w = wallet(ctx);
+  if (w.env) return undefined;
+  const evs = [
+    ...ctx.find(K('money')).map((x) => ({ w: x, k: 'money' })),
+    ...ctx.find(K('income')).map((x) => ({ w: x, k: 'income' })),
+    ...ctx.find(K('expense')).map((x) => ({ w: x, k: 'expense' })),
+    ...ctx.find(K('purchase')).map((x) => ({ w: x, k: 'purchase' })),
+  ].sort((a, b) => seqOf(ctx, a.w) - seqOf(ctx, b.w));
+  let start = -1;
+  evs.forEach((e, i) => { if (e.k === 'money') start = i; });
+  const parts = [];
+  for (const { w: x, k } of evs.slice(Math.max(start, 0))) {
+    if (k === 'money') { parts.push(`you had ${money(ctx.val(x, 'count'))}`); continue; }
+    if (k === 'income') { parts.push(`you got ${money(ctx.val(x, 'count'))}`); continue; }
+    if (k === 'expense') { parts.push(`you spent ${money(ctx.val(x, 'count'))}`); continue; }
+    const item = ctx.val(x, 'item'), n = ctx.val(x, 'count');
+    const c = cost(ctx, [{ item, count: n }], seqOf(ctx, x));
+    parts.push(c.env ? `you bought ${n} ${asName(item)}` : `you bought ${c.text} (${money(round2(c.total / n))} each, ${money(c.total)} in all)`);
+  }
+  if (!parts.length) return undefined;
+  const left = w.amount === 0 ? 'nothing is left' : `${money(w.amount)} ${w.amount === 1 ? 'is' : 'are'} left`;
+  return { text: `${cap(parts.join(', '))}, so ${left}.`, from: w.from };
+}
+
+/** "Three of them": the count of the user's last purchase is changed (a count that was only assumed is withdrawn); the money follows. */
+export function reviseLast(ctx, { count }) {
+  const n = Number(count);
+  const newest = () => ctx.find(K('purchase')).sort((a, b) => seqOf(ctx, b) - seqOf(ctx, a))[0];
+  const last = newest();
+  if (!last || Number.isNaN(n)) return { status: 'missing', note: 'I have no purchase to change yet.' };
+  const item = ctx.val(last, 'item');
+  const was = ctx.val(last, 'count');
+  ctx.retract(last.id, 'the count was revised');
+  ctx.emit(`@{_} kids.shop.purchase item=${item} count=${n}`);
+  const w = wallet(ctx);
+  if (w.env?.status === 'conflicting') {
+    ctx.retract(newest().id, 'refused');
+    ctx.emit(`@{_} kids.shop.purchase item=${item} count=${was}`);
+    return { status: 'conflicting', alternatives: [], note: w.env.note, from: w.env.from };
+  }
+  return { status: 'supported', value: n, unit: asName(item), note: asName(item), from: w.env ? [] : w.from };
+}

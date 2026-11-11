@@ -710,6 +710,11 @@
     card=many
     ask="Which state value must hold after the input (<dot.path>=<value>, optionally <worldId>:<dot.path>=<value>)?"
 
+@core.test.reasoner core.key
+    value=atom
+    card=one
+    ask="Which reasoner strategy (ops or matrix) does the test run with? Absent means both."
+
 @core.test.expectEffect core.key
     value=atom
     card=many

@@ -926,7 +926,7 @@ export function translateEnRo(original) {
   const t = source.trim();
   if (CANONICAL_RO[t]) return { text: source.replace(t, CANONICAL_RO[t]), alignment: [], unknown: [], notes: ['canonical example'], confidence: 1 };
   const sentences = splitReply(source);
-  if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, () => null))) return withQuoteGuard(source, translateEnRoGrammar(source));
+  if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, (t) => t))) return withQuoteGuard(source, translateEnRoGrammar(source));
   const sub = (x) => { const r = translateEnRoGrammar(x.replace(/^(.)/, (c, a) => (/[A-Z]/.test(a) ? a.toLowerCase() : a))); return r.text && !r.unknown.length && !r.untranslatable?.length ? r.text.replace(/[.!?]$/, '').replace(/^\p{Lu}/u, (c) => (/^[A-Z]/.test(x) ? c : c.toLowerCase())) : null; };
   const unknown = [], notes = [];
   let text = '';

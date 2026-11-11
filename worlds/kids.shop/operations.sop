@@ -51,3 +51,9 @@
     impl=leftAfter
     semantics=query
     doc="The current money minus the cost of the basket; nothing is recorded."
+
+@op.kids.shop.reviseLast core.operation
+    impl=reviseLast
+    semantics=action
+    action=shop.reviseLast
+    doc="Ops reasoner: the count of the user's last purchase is changed (\"Three of them\"); the old purchase is withdrawn, so it is not a second purchase, and the money follows."
