@@ -1,0 +1,106 @@
+# games.guess as a matrix: the rules of twenty questions, said with rules and denies. The choice of the best question, how an answer narrows the animals
+# and the words of the replies stay in the world (ops.mjs and fns.mjs); the matrix is which phase the game is in, what may be answered, which animals are
+# still possible and how many questions are left.
+#
+# The game is a set of wires: one guess.game (max = how many questions may be asked), one guess.animal for every animal the game started with (name, i = its
+# place in the list), one guess.out for every animal that an answer, a clue or a wrong guess took out (how = ans|ev|rej), one guess.ans for every answered
+# question and one guess.ev for every clue the player volunteered, the open question guess.q or the open guess guess.try, guess.learn when the game waits for
+# the name of the animal, guess.solved when it is over. guess.learned keeps what the game was taught, from game to game.
+
+@gs.k.max core.slot of=guess.game key=max kind=integer
+@gs.k.aname core.slot of=guess.animal key=name kind=atom required=true
+@gs.k.ai core.slot of=guess.animal key=i kind=integer required=true
+@gs.k.oname core.slot of=guess.out key=name kind=atom required=true
+@gs.k.ohow core.slot of=guess.out key=how kind=atom enum=ans enum=ev enum=rej required=true
+@gs.k.ok core.slot of=guess.out key=k kind=integer
+@gs.k.an core.slot of=guess.ans key=n kind=integer required=true
+@gs.k.af core.slot of=guess.ans key=feature kind=atom required=true
+@gs.k.av core.slot of=guess.ans key=value kind=string required=true
+@gs.k.at core.slot of=guess.ans key=text kind=string required=true
+@gs.k.aa core.slot of=guess.ans key=answer kind=atom enum=yes enum=no enum=maybe enum=dontknow required=true
+@gs.k.ek core.slot of=guess.ev key=k kind=integer required=true
+@gs.k.ef core.slot of=guess.ev key=feature kind=atom required=true
+@gs.k.ev core.slot of=guess.ev key=value kind=string required=true
+@gs.k.et core.slot of=guess.ev key=text kind=string required=true
+@gs.k.ea core.slot of=guess.ev key=answer kind=atom enum=yes enum=no required=true
+@gs.k.qf core.slot of=guess.q key=feature kind=atom required=true
+@gs.k.qv core.slot of=guess.q key=value kind=string required=true
+@gs.k.qt core.slot of=guess.q key=text kind=string required=true
+@gs.k.qy core.slot of=guess.q key=yes kind=integer
+@gs.k.qn core.slot of=guess.q key=no kind=integer
+@gs.k.qo core.slot of=guess.q key=of kind=integer
+@gs.k.tn core.slot of=guess.try key=name kind=atom required=true
+@gs.k.tl core.slot of=guess.try key=label kind=string
+@gs.k.sn core.slot of=guess.solved key=name kind=atom required=true
+@gs.k.ln core.slot of=guess.learned key=name kind=atom required=true
+@gs.k.lt core.slot of=guess.learned key=trait kind=string card=many
+@gs.k.lx core.slot of=guess.learned key=not kind=string card=many
+@gs.k.rp core.slot of=guess.reply key=answer kind=atom enum=yes enum=no enum=maybe enum=dontknow required=true
+@gs.k.cl core.slot of=guess.clue key=feature kind=atom
+@gs.k.qu core.slot of=guess.quit key=why kind=atom
+@gs.k.nm core.slot of=guess.named key=name kind=atom
+
+# ---- the animals that are still possible: the ones the game started with, less those that were taken out
+@gs.an guess.animal name=?n i=?i
+@gs.ot guess.out name=?n
+@gs.cn guess.cand name=?n i=?i
+@gs.r.cand core.rule when=$gs.an not=$gs.ot then=$gs.cn
+
+# ---- how many questions were asked and how many are left
+@gs.gg guess.game max=?m
+@gs.oa guess.ans
+@gs.c.asked core.calc out=?c fn=count over=$gs.oa
+@gs.c.left core.calc out=?l fn=sub args=?m args=?c
+@gs.tally guess.tally count=?c left=?l
+@gs.r.tally core.rule when=$gs.gg with=$gs.c.asked with=$gs.c.left then=$gs.tally
+
+# ---- the phase of the game: a question is open, a guess is open, the game waits to be taught, or it is over
+@gs.q0 guess.q
+@gs.ph.ask guess.phase p=asking
+@gs.r.ph.ask core.rule when=$gs.q0 then=$gs.ph.ask
+@gs.t0 guess.try
+@gs.ph.guess guess.phase p=guessing
+@gs.r.ph.guess core.rule when=$gs.t0 not=$gs.s0 then=$gs.ph.guess
+@gs.l0 guess.learn
+@gs.ph.learn guess.phase p=learning
+@gs.r.ph.learn core.rule when=$gs.l0 then=$gs.ph.learn
+@gs.s0 guess.solved
+@gs.ph.done guess.phase p=done
+@gs.r.ph.done core.rule when=$gs.s0 then=$gs.ph.done
+
+# ---- what may not be: an answer when no question is open, a "maybe" to my guess, a clue when no question is open, giving up when no game is on
+@gs.rp guess.reply
+@gs.nogame guess.game
+@gs.d.reply.none core.deny when=$gs.rp not=$gs.nogame why="We are not playing twenty questions. Say \"guess my animal\" to start."
+@gs.pd guess.phase p=done
+@gs.d.reply.done core.deny when=$gs.rp when=$gs.pd why="The game is over. Say \"new game\" to play again."
+@gs.pl guess.phase p=learning
+@gs.d.reply.learn core.deny when=$gs.rp when=$gs.pl why="I am waiting to learn the animal. Tell me, for example: \"it was a zebra\"."
+@gs.rm guess.reply answer=maybe
+@gs.rk guess.reply answer=dontknow
+@gs.gt guess.try label=?l
+@gs.d.reply.maybe core.deny when=$gs.rm when=$gs.gt why="Please answer yes or no: is it ?l?"
+@gs.d.reply.dontknow core.deny when=$gs.rk when=$gs.gt why="Please answer yes or no: is it ?l?"
+
+@gs.cu guess.clue
+@gs.d.clue.none core.deny when=$gs.cu not=$gs.nogame why="We are not playing twenty questions. Say \"guess my animal\" to start."
+@gs.d.clue.done core.deny when=$gs.cu when=$gs.pd why="We are not playing twenty questions. Say \"guess my animal\" to start."
+@gs.d.clue.learn core.deny when=$gs.cu when=$gs.pl why="That does not help right now."
+@gs.pg guess.phase p=guessing
+@gs.d.clue.guess core.deny when=$gs.cu when=$gs.pg why="That does not help right now."
+
+@gs.qu guess.quit
+@gs.d.quit.none core.deny when=$gs.qu not=$gs.nogame why="We are not in the middle of a game of twenty questions."
+@gs.d.quit.done core.deny when=$gs.qu when=$gs.pd why="We are not in the middle of a game of twenty questions."
+@gs.d.quit.learn core.deny when=$gs.qu when=$gs.pl why="We are not in the middle of a game of twenty questions."
+
+@gs.nm guess.named
+@gs.d.named.none core.deny when=$gs.nm not=$gs.nogame why="We are not playing twenty questions. Say \"guess my animal\" to start."
+
+# ---- the actions (fns.mjs); the others (why, remaining, count, repeat, hint) read the state derived from these wires and stay in ops.mjs
+@gs.a.start core.action name=guess.start fn=gsStart
+@gs.a.answer core.action name=guess.answer fn=gsAnswer
+@gs.a.correct core.action name=guess.correct fn=gsCorrect
+@gs.a.reveal core.action name=guess.reveal fn=gsReveal
+@gs.a.giveup core.action name=guess.giveup fn=gsGiveUp
+@gs.a.evidence core.action name=guess.evidence fn=gsEvidence
