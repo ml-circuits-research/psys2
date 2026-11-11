@@ -31,6 +31,8 @@
  *   chess     matrix: a move the rules refuse says why (the tab board does not change), the engine's answer is taken over by the library, "why did you play that?" explains, "undo" takes the move and the reply back.
  *   music     matrix: a tempo, a key or an instrument the rules refuse says why and the tab keeps its setting, the default tempo is assumed and said once, "undo" and "why?" in the world's words.
  *
+ *   restart-undo  matrix (RESTORE-1): a watchdog restart of the engine worker (fault hooks) keeps the library timeline, undo walks back across it.
+ *
  *   draw, diagram   matrix (art.draw, diagram.sketch): see scripts/test-webchat-draw-matrix.mjs.
  *
  *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,music,draw,diagram,editor,reader,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
@@ -477,6 +479,35 @@ export const SCENARIOS = {
       const st = await c.pg.evaluate(() => JSON.parse(JSON.stringify(window.psys2.session.state()['media.music'])));
       check('music: the state of the tab follows (tempo 108)', st.tempo === 108, String(st.tempo));
       check('music: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async 'restart-undo'(o) {
+    // RESTORE-1 (spec 15): a watchdog restart of the engine worker keeps the library timeline: undo walks back across it (fault hooks of test-webchat-budget.mjs)
+    const c = await openChat({ ...o, query: '?psys2test=1', settings: { ...MATRIX, timeLimits: { watchdogMs: 2000 } } });
+    const stats = () => c.pg.evaluate(() => JSON.parse(JSON.stringify(window.psys2.engineClient.stats)));
+    try {
+      await c.pg.evaluate(() => { window.__psys2Fault = { 'what is 3 plus 4': 'op' }; });
+      await say(c, 'I have 20 lei'); await say(c, 'I buy a ball'); await say(c, 'add milk to my shopping list');
+      await say(c, 'Play hangman with the word zebra'); await say(c, 'Is there a Z?');
+      const s0 = await stats();
+      await c.pg.type('input.p2-text', 'what is 3 plus 4', { delay: 0 }); await c.pg.keyboard.press('Enter');
+      await c.pg.waitForFunction(() => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing'), { timeout: 20000, polling: 30 });
+      await c.pg.waitForFunction((n) => window.psys2.engineClient.stats.kills.length > n, { timeout: 5000, polling: 20 }, s0.kills.length).catch(() => {});
+      const s1 = await stats();
+      check('restart-undo: the worker was replaced by the watchdog', s1.starts === s0.starts + 1 && s1.kills.length === s0.kills.length + 1, `starts ${s1.starts - s0.starts}`);
+      const u = [];
+      for (let i = 0; i < 3; i++) u.push(await say(c, 'undo'));
+      check('restart-undo: the first undo after the restart names the guess (not "nothing to undo")', /took back your last guess/.test(u[0]), u[0].slice(0, 80));
+      check('restart-undo: then the hangman game', /took back the new game/.test(u[1]), u[1].slice(0, 80));
+      check('restart-undo: then the milk, from another instance', /took that back: "add milk to my shopping list"/.test(u[2]), u[2].slice(0, 80));
+      const p = await say(c, 'undo');
+      check('restart-undo: then the purchase', /took that back: "I buy a ball"/.test(p), p.slice(0, 80));
+      check('restart-undo: the money is back to 20 lei', /20 lei/.test(await say(c, 'how much money do I have?')));
+      const last = await say(c, 'undo');
+      check('restart-undo: "I have 20 lei" goes too', /took that back: "I have 20 lei"/.test(last), last.slice(0, 80));
+      const end = await say(c, 'undo');
+      check('restart-undo: then nothing is left', /nothing more to undo/i.test(end), end.slice(0, 80));
+      check('restart-undo: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 };

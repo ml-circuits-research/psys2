@@ -14,7 +14,7 @@ import { loadWorlds } from '../worlds/index.mjs?v=a646b8d525';
 import { validateWorldSet } from '../worlds/validate.mjs?v=1eb2f0538f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=5efba9b13a';
-import { createReasoner } from '../reasoner/index.mjs?v=4bcb5a8dbb';
+import { createReasoner } from '../reasoner/index.mjs?v=a5ffd01d30';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=14798d6e5b';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=13d688a978';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -1002,7 +1002,9 @@ export class DialogSession {
   memoryJSON() {
     let astra = null;
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
-    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null };
+    let rs = null;
+    try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
+    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
@@ -1012,6 +1014,7 @@ export class DialogSession {
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
     if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
     if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
+    if (mem.rs && this.isession.rs) this.isession.rs.restoreJSON(mem.rs, this.isession);   // after the world states: the timeline of the matrix reasoner
     return true;
   }
 

@@ -1002,7 +1002,9 @@ export class DialogSession {
   memoryJSON() {
     let astra = null;
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
-    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null };
+    let rs = null;
+    try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
+    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
@@ -1012,6 +1014,7 @@ export class DialogSession {
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
     if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
     if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
+    if (mem.rs && this.isession.rs) this.isession.rs.restoreJSON(mem.rs, this.isession);   // after the world states: the timeline of the matrix reasoner
     return true;
   }
 

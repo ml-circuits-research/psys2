@@ -264,6 +264,111 @@ export class ReasonerSession {
     return r;
   }
 
+  // ---- the timeline as plain data (spec 15, "The timeline survives a restart") -------------------------------------------------------
+
+  /**
+   * The session's library state and undo timeline as JSON (a host that restarts its engine worker keeps it with the committed state). Per instance it holds the
+   * library's log (what the instance was told, as the library's own `toJSON` keeps it, minus the base's entries) of the instance as it is and of every mark of
+   * the kept turns; the entries are stored once and the logs are lists of their indices. `restoreJSON` replays them. Returns null when the record is over
+   * `maxBytes` even without turns. The oldest turns are dropped until the record fits.
+   */
+  timelineJSON({ maxBytes = 1_500_000 } = {}) {
+    let keep = this.turns.length;
+    for (let tries = 0; tries < 8; tries++) {   // 40 -> 20 -> 10 -> 5 -> 2 -> 1 -> 0
+      turnBudget.tick('reasoner.serialize');
+      const rec = this._record(this.turns.slice(this.turns.length - keep));
+      const size = JSON.stringify(rec).length;
+      if (size <= maxBytes) { rec.bytes = size; rec.dropped = this.turns.length - keep; return rec; }
+      if (keep === 0) return null;
+      keep = Math.floor(keep / 2);
+    }
+    return null;
+  }
+  _record(turns) {
+    const table = [], at = new Map(), insts = {}, logOfInst = new Map();
+    const idx = (e) => { let i = at.get(e); if (i === undefined) { i = table.length; table.push(e); at.set(e, i); } return i; };
+    for (const [id, i] of this.insts) {
+      const baseLog = this.reasoner.baseOf(id).log, logs = [], seen = new Map();
+      const logOf = (world) => {
+        const log = world.log;
+        let n = seen.get(log);
+        if (n !== undefined) return n;
+        let p = 0;   // the entries it shares with the base (a game's action may have rewritten one of the base's: the rest is then kept as entries)
+        for (let k = 0, lim = Math.min(baseLog.length, log.length); k < lim && log[k] === baseLog[k]; k++) { turnBudget.tick('reasoner.serialize'); p = k + 1; }
+        n = logs.length;
+        logs.push({ p, e: log.slice(p).map((e) => { turnBudget.tick('reasoner.serialize'); return idx(e); }) });
+        seen.set(log, n);
+        return n;
+      };
+      const cur = logOf(i.world);
+      insts[id] = { cur, done: i.completedAt === i.world.stamp, logs };
+      logOfInst.set(id, logOf);
+    }
+    const out = [];
+    for (const t of turns) {
+      const marks = [];
+      for (const [id, e] of t.mark.marks) {
+        const logOf = logOfInst.get(id);
+        if (!logOf) continue;
+        marks.push([id, logOf(e.mark.world), e.birth ? 1 : 0]);
+      }
+      out.push({ turn: t.turn, ops: t.mark.ops, marks, worlds: t.worlds, said: t.said });
+    }
+    return { v: 1, entries: table, insts, turns: out, ops: this.ops, sharedLog: this.sharedLog.map((x) => ({ w: x.w, add: x.add, dead: x.dead })), told: [...this.told], said: [...this.said], undone: this.undone, undoneAt: this.undoneAt };
+  }
+  /**
+   * Puts a `timelineJSON()` record back into this (fresh) session: each instance is a fork of its base with the logs replayed, the marks of the kept turns are taken
+   * from the replayed worlds (a mark is the world at that point of its log), so "undo" walks the timeline of before the restart. `session` is the interpreter
+   * session (its state is restored already; the derived state is compared with it). Nothing changes when the record cannot be read (false). Not restored: the
+   * redo stack (functions) and the memory wires the dialogue held (the page never kept them either).
+   */
+  restoreJSON(rec, session) {
+    try {
+      if (!rec || rec.v !== 1 || !Array.isArray(rec.entries) || !rec.insts || typeof rec.insts !== 'object' || !Array.isArray(rec.turns)) return false;
+      const entries = rec.entries, insts = new Map(), worldsOf = new Map();   // id -> inst; id -> Map(log number -> the replayed world)
+      for (const [id, d] of Object.entries(rec.insts)) {
+        const base = this.reasoner.baseOf(id);
+        const logs = d.logs.map((l) => base.log.slice(0, l.p).concat(l.e.map((i) => entries[i])));
+        const roots = new Map(), rootOf = (p) => {   // the base itself, or (a base entry was rewritten) a world that replays the base's entries up to there
+          if (!roots.has(p)) {
+            let w = base;
+            if (p < base.log.length) { w = new base.constructor(base.options); if (p) { const r = w._replay(base.log.slice(0, p)); if (r) throw new Error('replay refused'); } }
+            roots.set(p, { log: base.log.slice(0, p), world: w });
+          }
+          return roots.get(p);
+        };
+        const order = logs.map((l, n) => n).sort((a, b) => logs[a].length - logs[b].length), built = [];
+        for (const n of order) {
+          let prior = rootOf(d.logs[n].p);
+          for (const b of built) if (b.log.length > prior.log.length && b.log.length <= logs[n].length && b.log.every((e, k) => e === logs[n][k])) prior = b;
+          const w = prior.world.fork();
+          const rest = logs[n].slice(prior.log.length);
+          turnBudget.tick('reasoner.restore', rest.length + 1);
+          if (rest.length) { const r = w._replay(rest); if (r) throw new Error('replay refused'); }
+          built.push({ log: logs[n], world: w, n });
+        }
+        const by = new Map(built.map((b) => [b.n, b.world]));
+        worldsOf.set(id, by);
+        const world = by.get(d.cur).fork();
+        insts.set(id, { id, world, completedAt: d.done ? world.stamp : null });
+      }
+      const turns = rec.turns.map((t) => {
+        const marks = new Map();
+        for (const [id, n, birth] of t.marks) marks.set(id, { mark: worldsOf.get(id).get(n).mark(), stamp: -1, ...(birth ? { birth: true } : {}) });
+        return { turn: t.turn, mark: { marks, ops: t.ops }, worlds: [...(t.worlds ?? [])], said: t.said ?? null };
+      });
+      this.insts = insts; this.turns = turns; this.ops = rec.ops ?? 0;
+      this.sharedLog = (rec.sharedLog ?? []).map((x) => ({ ...x })); this._rebuildShared();
+      this.told = [...(rec.told ?? [])]; this.said = new Set(rec.said ?? []); this.undone = rec.undone ?? 0; this.undoneAt = rec.undoneAt ?? 0;
+      this.redos = []; this.cur = null; this.seg = null; this.refused = []; this.last = null; this.mirrored = new Map(); this.derived = new Map(); this.written = new Map();
+      if (session) {
+        for (const id of this.reasoner.stateOf.keys()) if (session.state[id]) this.written.set(id, this.reasoner.json(id, session.state[id]));   // the state is what the library said
+        this.syncTo(session);
+      }
+      return true;
+    } catch { return false; }
+  }
+
   // ---- instances -----------------------------------------------------------------------------------------------------------------
 
   /** The instance of a world: created on first use (a fork of the world's base, plus the shared wires its schema knows). */

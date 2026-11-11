@@ -38,7 +38,7 @@ test('after a restart an ellipsis still resolves against the remembered frame', 
   assert.equal(r.trace.discourse.resolved.kind, 'ellipsis');
 });
 
-test('after a restart a pending question is answered and undo still works (ops: the board keeps its history in the state; matrix: the timeline is session memory, so there is nothing to undo after a restart)', async () => {
+test('after a restart a pending question is answered and undo still works in both reasoners (ops: the board keeps its history in the state; matrix: the timeline travels in the memory record, spec 15)', async () => {
   const s = opsEngine.createSession({ language: 'en' });
   await say(s, 'open the drawing tab', 'Draw a house');
   const before = JSON.stringify(s.isession.state['art.draw']);
@@ -51,8 +51,8 @@ test('after a restart a pending question is answered and undo still works (ops: 
   const m = engine.createSession({ language: 'en' });
   await say(m, 'open the drawing tab', 'Draw a house', 'Make the house red');
   const mb = restarted(m, { viaJson: false });
-  assert.match((await mb.send('undo that')).text, /nothing to undo/i, 'matrix: the library of a restarted session has no turns');
-  assert.deepEqual(mb.isession.state['art.draw'].objects.map((o) => o.color), ['red'], 'and the picture is as it was');
+  assert.doesNotMatch((await mb.send('undo that')).text, /did not understand|nothing (more )?to undo/i, 'matrix: the library timeline came back with the memory');
+  assert.deepEqual(mb.isession.state['art.draw'].objects.map((o) => o.color), [null], 'and the colour change was taken back');
 
   const c = engine.createSession({ language: 'en' });
   await say(c, 'open the drawing tab');
