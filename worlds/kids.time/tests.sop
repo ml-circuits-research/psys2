@@ -1035,3 +1035,67 @@
     input="I should tell you, today is Friday. What day is tomorrow?"
     expect="Tomorrow is Saturday."
     doc="GAPS-1: an announcement before a statement is not a to-do item"
+
+@t.time.m01 core.test
+    input="It is 30 o'clock."
+    expect="That does not add up. That is not an hour on a clock: 30 o'clock."
+    expectStatus=conflicting
+    doc="SOPWORLD stage 2: an hour the clock does not have is refused when told, with the reason (matrix.sop deny)"
+    reasoner=matrix
+
+@t.time.m02 core.test
+    session=ktm2
+    input="It is 3 o'clock."
+    expect="OK, it is 3 o'clock."
+    reasoner=matrix
+
+@t.time.m03 core.test
+    session=ktm2
+    input="It is 30 o'clock."
+    expect="That is not an hour on a clock: 30 o'clock."
+    expectStatus=conflicting
+    reasoner=matrix
+
+@t.time.m04 core.test
+    session=ktm2
+    input="What time is it?"
+    expect="It is 3 o'clock."
+    doc="the refused statement left nothing in the library: the clock still says 3"
+    reasoner=matrix
+
+@t.time.m05 core.test
+    session=ktm3
+    input="Today is Friday."
+    expect="OK, today is Friday."
+    reasoner=matrix
+
+@t.time.m06 core.test
+    session=ktm3
+    input="Today is Monday."
+    expect="OK, today is Monday."
+    reasoner=matrix
+
+@t.time.m07 core.test
+    session=ktm3
+    input="undo that"
+    expect="OK, today is Friday again."
+    doc="undo goes back through the library and says it in the world's words"
+    reasoner=matrix
+
+@t.time.m08 core.test
+    session=ktm3
+    input="What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    reasoner=matrix
+
+@t.time.m09 core.test
+    session=ktm3
+    input="undo that"
+    expect="OK, I forgot what day it is today."
+    reasoner=matrix
+
+@t.time.m10 core.test
+    session=ktm3
+    input="What day is tomorrow?"
+    expectStatus=missing
+    reasoner=matrix

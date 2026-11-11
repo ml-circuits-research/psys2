@@ -35,21 +35,21 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
-  assert.equal(ops.set.get('kids.time').reasoner, 'ops', 'every other world stays on ops');
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  assert.equal(ops.set.get('kids.animals').reasoner, 'ops', 'every other world stays on ops');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
 });
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.problems, []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484]]) {
+test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }
@@ -253,7 +253,7 @@ test('the build ships the library and the fns of matrix worlds, versioned like e
     const index = JSON.parse(await readFile(path.join(out, 'worlds/index.json'), 'utf8'));
     assert.equal(index.worlds['kids.shop'].fnsUrl, 'worlds/kids.shop/fns.mjs');
     assert.ok(index.worlds['kids.shop'].files['matrix.sop']);
-    assert.equal(index.worlds['kids.time'].fnsUrl, undefined);
+    assert.equal(index.worlds['data.charts'].fnsUrl, undefined);
     const dialog = await readFile(path.join(out, 'lib/dialog/index.mjs'), 'utf8');
     assert.match(dialog, /\.\.\/reasoner\/index\.mjs\?v=[0-9a-f]{10}/, 'the reasoner module is in the versioned graph');
     const reasoner = await readFile(path.join(out, 'lib/reasoner/index.mjs'), 'utf8');
@@ -639,4 +639,48 @@ test('"why?" names the source of a world\'s own facts by world: the price list f
 test('stage 2: undo of an action of a world without library state leaves the library and the memory consistent', async () => {
   const { out } = await say(matrix, ['My name is Ana', 'my name is Maria', 'undo that', 'what is my name?']);
   assert.match(out[3], /Ana|Maria/);
+});
+
+// ---- kids.time on the matrix (stage 2) -----------------------------------------------------------------------------------------------------------
+
+const TIME = ['What day is tomorrow?', 'Today is Friday.', 'What day is tomorrow?', 'What day was yesterday?', 'What day will it be in 3 days?', 'How many days until Tuesday?',
+  'What day comes after Sunday?', 'Today is Monday.', 'What day is the day after tomorrow?', 'This month is May.', 'What month is next month?', 'What month comes before January?',
+  'What season comes after winter?', 'How many days are in February?', 'How many days are in March?', 'How many days from Thursday to Sunday?', 'How many hours from 9 to 3?',
+  'How many hours from 3 to 3?', 'How many hours from 3 to 15?', 'How many days in a week?', 'How many minutes in an hour?', "It is 3 o'clock.", 'What time is it?',
+  'What time will it be in 2 hours?', 'What day comes after Blursday?', "It is 30 o'clock.", 'What time is it?', 'undo that', 'What day is tomorrow?'];
+const TIME_GAINS = new Set([25, 26, 27]);   // an hour the clock does not have is refused when told (the clock keeps its hour); undo says it in the world's words
+
+test('kids.time: a scripted session says the same as the ops reasoner, word for word, with the same statuses, except the listed gains', async () => {
+  const run = async (eng) => {
+    const s = eng.createSession({ language: 'en' });
+    const out = [];
+    for (const l of TIME) { const r = await s.send(l, {}); out.push([r.text, r.statuses.join()]); }
+    return { s, out };
+  };
+  const o = await run(ops), m = await run(matrix);
+  m.out.forEach((x, i) => { if (!TIME_GAINS.has(i)) assert.deepEqual(x, o.out[i], `turn ${i}: ${TIME[i]}`); });
+  assert.deepEqual(m.out[25], ["That does not add up. That is not an hour on a clock: 30 o'clock.", 'conflicting']);
+  assert.deepEqual(m.out[26], ["It is 3 o'clock.", 'supported'], 'the refused hour is gone from the library and the memory');
+  assert.equal(m.out[27][0], 'OK, I forgot what time it is.');
+  assert.deepEqual(matrix.reasoner.problems, []);
+});
+
+test('kids.time: the calendar answers come from the library, the lengths of spans and the clock text from the operations; the library holds what was told', async () => {
+  const s = matrix.createSession({ language: 'en' });
+  const via = async (text) => { const r = await s.send(text, {}); return r.answers?.[0]?.envelope?.via ?? null; };
+  await s.send('Today is Friday.', {});
+  assert.equal(await via('What day is tomorrow?'), 'core.matrix');
+  assert.equal(await via('How many days until Tuesday?'), 'core.matrix');
+  assert.equal(await via('How many days are in February?'), 'core.matrix');
+  assert.equal(await via('How many hours from 9 to 3?'), 'core.matrix');
+  assert.notEqual(await via('How many minutes in an hour?'), 'core.matrix');
+  const lib = s.isession.rs.world;
+  assert.deepEqual(lib.ofType('kids.time.nowday').map((w) => w.attrs.day), [['friday']]);
+  assert.deepEqual(s.isession.state['kids.time'], { today: 'friday', month: null, hour: null });
+  await s.send('Today is Saturday.', {});
+  assert.deepEqual(lib.ofType('kids.time.nowday').map((w) => w.attrs.day), [['saturday']], 'the latest statement is what holds');
+  assert.equal((await s.send('What day is tomorrow?', {})).text, 'Tomorrow is Sunday.');
+  assert.equal((await s.send('undo that', {})).text, 'OK, today is Friday again.');
+  assert.equal((await s.send('What day is tomorrow?', {})).text, 'Tomorrow is Saturday.');
+  sameAsLibrary(s, ['kids.time']);
 });
