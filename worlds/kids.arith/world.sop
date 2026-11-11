@@ -6,7 +6,6 @@
     imports=world.kids.common
     formalization=rules
     reasoner=matrix
-    reads=world.kids.shop
     language=en
     status=fixture
     title="Counting and arithmetic (primary school)"

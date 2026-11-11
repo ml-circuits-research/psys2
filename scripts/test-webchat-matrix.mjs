@@ -20,10 +20,13 @@
  *   time      matrix (stage 2): the day, the days until a day and the hours between come from the library, an hour the clock does not have is refused with the reason
  *             and the clock keeps its hour, "undo that" says it in the world's words.
  *   animals   matrix (stage 2): a taught fact is answered from the library and "undo that" forgets it in the world's words.
+ *   shared    matrix (WORLDS-APART): a name told once is known in the shop, in a game and in arithmetic; "Ana has 3 apples / she eats 1 / how many" is 2.
+ *   undo-cross matrix (UNDO-1): one undo history across the instances (hangman, tic-tac-toe, shop, list), each undo names what it took back, money back at the end.
+ *   removed   matrix (UNDO-1): "what is on my shopping list?" after a removal is read as the question it is.
  *   profile   matrix (stage 2): two facts that cannot both be right are refused with the reason (and the tab keeps the first), "undo that" says what was forgotten.
  *   romanian  matrix (RO-MATRIX): a Romanian session: undo quotes the user's own words, a bare yes, a refusal, the shop tab name and the profile answer in Romanian.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -260,6 +263,73 @@ export const SCENARIOS = {
       const l = await say(c, 'How many legs does a spider have?');
       check('animals: a knowledge base fact comes from the library', l === 'A spider has 8 legs.', l);
       check('animals: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async shared(o) {
+    // WORLDS-APART: the people and names are shared by the instances; the user's name told once is known in the shop, in the game and in arithmetic
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      const a = await say(c, 'my name is Ana');
+      check('shared: the name is taken', /Nice to meet you, Ana/.test(a), a.slice(0, 60));
+      await say(c, 'I have 20 lei');
+      await say(c, "Let's play tic tac toe");
+      const n = await say(c, 'what is my name?');
+      check('shared: after the shop and a game the name is still known', n === 'Your name is Ana.', n);
+      await say(c, 'Ana has 3 apples');
+      await say(c, 'she eats 1');
+      const h = await say(c, 'how many apples does she have?');
+      check('shared: "Ana has 3 apples / she eats 1 / how many" is 2 with a game open', /Ana has 2 apples/.test(h), h.slice(0, 60));
+      const m = await say(c, 'how much money do I have?');
+      check('shared: the money of the shop is still there', /20 lei/.test(m), m.slice(0, 60));
+      check('shared: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async 'undo-cross'(o) {
+    // UNDO-1: one history across the instances, newest first, every undo says what it took back; a game with nothing left falls through to the session
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      await say(c, 'I have 20 lei'); await say(c, 'I buy a ball'); await say(c, 'add milk to my shopping list');
+      await say(c, 'Play hangman with the word zebra'); await say(c, 'new game'); await say(c, 'Is there a Z?');
+      const u = [];
+      for (let i = 0; i < 4; i++) u.push(await say(c, 'undo'));
+      check('undo-cross (hangman): the guess is named', /took back your last guess/.test(u[0]), u[0].slice(0, 80));
+      check('undo-cross (hangman): then the new game, not "the last guess" again', /took back the new game/.test(u[1]), u[1].slice(0, 80));
+      check('undo-cross (hangman): then the first game of the session', /took back the new game/.test(u[2]), u[2].slice(0, 80));
+      check('undo-cross (hangman): then the milk, named, from another instance', /took that back: "add milk to my shopping list"/.test(u[3]), u[3].slice(0, 80));
+      const p = await say(c, 'undo');
+      check('undo-cross (hangman): then the purchase', /took that back: "I buy a ball"/.test(p), p.slice(0, 80));
+      const money = await say(c, 'how much money do I have?');
+      check('undo-cross (hangman): the money is back to 20 lei', /20 lei/.test(money), money.slice(0, 60));
+      const none = await say(c, 'undo');
+      check('undo-cross (hangman): "I have 20 lei" goes too, then nothing is left', /took that back: "I have 20 lei"/.test(none), none.slice(0, 80));
+      const end = await say(c, 'undo');
+      check('undo-cross (hangman): when nothing is left it says so', /nothing more to undo/i.test(end), end.slice(0, 80));
+      check('undo-cross (hangman): no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+    const t = await openChat({ ...o, settings: MATRIX });
+    try {
+      await say(t, 'I have 20 lei'); await say(t, 'I buy a ball'); await say(t, 'add milk to my shopping list');
+      await say(t, "Let's play tic tac toe"); await say(t, 'center');
+      const board = () => t.pg.$$eval('.p2-ttt-cell', (cs) => cs.filter((x) => x.classList.contains('is-x') || x.classList.contains('is-o')).length);
+      const u1 = await say(t, 'undo');
+      check('undo-cross (tic-tac-toe): the move and my answer are named, the board is empty', /took back your last move and my answer/.test(u1) && (await board()) === 0, u1.slice(0, 80));
+      const u2 = await say(t, 'undo');
+      check('undo-cross (tic-tac-toe): then the milk, named', /took that back: "add milk to my shopping list"/.test(u2), u2.slice(0, 80));
+      const u3 = await say(t, 'undo');
+      check('undo-cross (tic-tac-toe): then the purchase, named', /took that back: "I buy a ball"/.test(u3), u3.slice(0, 80));
+      const money = await say(t, 'how much money do I have?');
+      check('undo-cross (tic-tac-toe): the money is back to 20 lei', /20 lei/.test(money), money.slice(0, 60));
+      check('undo-cross (tic-tac-toe): no page errors', t.errors.length === 0, t.errors[0] ?? '');
+    } finally { await t.close(); }
+  },
+  async removed(o) {
+    // UNDO-1 item 3: a removed item leaves nothing that hijacks the next question
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      await say(c, 'add milk to my shopping list'); await say(c, 'remove milk from my shopping list');
+      const a = await say(c, 'what is on my shopping list?');
+      check('removed: "what is on my shopping list?" after a removal says the list is empty', /^Your shopping list is empty/.test(a) && !/understood only part|is is/.test(a), a.slice(0, 100));
+      check('removed: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
   async profile(o) {

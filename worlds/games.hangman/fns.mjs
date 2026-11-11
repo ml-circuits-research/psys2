@@ -120,8 +120,11 @@ export const fns = {
 export function undoWords({ before, after }) {
   if (!before) return { status: 'missing', note: 'There is nothing to undo yet: no guess has been made.' };
   const tried = (s) => s.guessed.length + s.wrong.length;
-  const value = after.hints < before.hints ? 'OK, I took back the last hint.'
-    : tried(after) < tried(before) || after.status !== before.status ? 'OK, I took back your last guess. The word is as it was before.'
-    : 'OK, I took that back.';
+  // every undo names what it took back; a change the state cannot tell is left to the host's generic words, which quote what the user said
+  const value = after.word !== before.word ? (after.word ? 'OK, I took back the new game. The game before it is back.' : 'OK, I took back the new game.')
+    : after.hints < before.hints ? 'OK, I took back the last hint.'
+    : tried(after) < tried(before) ? 'OK, I took back your last guess. The word is as it was before.'
+    : after.status !== before.status ? 'OK, I took back the end of the game. We are playing again.'
+    : null;
   return { value, openTab: 'hangman' };
 }

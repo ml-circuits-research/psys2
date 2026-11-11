@@ -664,26 +664,30 @@ export class Discourse {
     }
     // discussion commands (spec 13 section 8): only "new discussion", "my discussions" and a reference that names an existing discussion
     if (!this.list) { const ac = runDiscussionCommand(d, text, d._msg); if (ac) return ac; }
+    // everything the session timeline held has been taken back: say so (a world's own "undo" would answer for itself, or another world's, whatever its tab)
+    if (UNDO.test(t) && d.isession.rs && !d.isession.rs.turns.length && d.isession.rs.undone > 0 && !(this.actions[0]?.turn > d.isession.rs.undoneAt)) return { reply: 'There is nothing more to undo.', status: 'missing', info: { kind: 'undo', of: null, via: 'core.matrix' } };
     // matrix reasoner (spec 15): "undo that" takes back what the turn before told the library (a purchase, a statement); the money and the counts follow
     if (UNDO.test(t) && d.isession.rs?.canUndo(d._msg) && !(this.actions[0]?.turn > d.isession.rs.turns.at(-1).turn)) {   // not when a newer action of a world without library state is what "that" means
-      // a world with its own "undo" action (world.sop `undo=`) whose tab is open says what it took back in its own words ("I took back your last move and my answer")
-      const gw = [...d.isession.rs.reasoner.undoOf.values()].find((w) => w.id === d.context().tabWorld);
+      const rs = d.isession.rs;
+      // a tab world whose own undo counts views or steps (docs.editor, docs.reader: a selection move is not an entry) answers for itself, in its words
+      const gw = [...rs.reasoner.undoOf.values()].find((w) => w.id === d.context().tabWorld && w.isView);
       if (gw) {
-        const env = d.isession.rs.undoAction(gw, d.isession);
+        const env = rs.undoAction(gw, d.isession);
         if (env.undoneTurn != null) { this.actions = this.actions.filter((a) => a.turn !== env.undoneTurn); this.frames = this.frames.filter((f) => f.turn !== env.undoneTurn); }
+        rs.undoneAt = d._msg;
         if (env.status === 'supported' && env.value) return { reply: env.value, info: { kind: 'undo', of: null, via: 'core.matrix' } };
       }
-      // a world that says what a generic "undo that" took back in its own words (fns.mjs `undoWords`): the state before the rewind is what it compares with
-      const lastWorlds = gw ? [] : d.isession.rs.turns.at(-1)?.worlds ?? [];
-      const uw = lastWorlds.length === 1 && d.isession.rs.reasoner.wordsOf.has(lastWorlds[0]) ? lastWorlds[0] : null;
-      const uwBefore = uw ? d.isession.rs.stateOfWorld(uw) : null;
-      const turn = gw ? null : d.isession.rs.undo(d.isession);
-      if (turn != null) { const act = this.actions.find((a) => a.turn === turn); if (act) this._setState(Object.fromEntries(act.worlds.filter((w) => !d.isession.rs.reasoner.stateOf.has(w)).map((w) => [w, act.before[w]]))); }   // worlds whose state is not derived from the library
-      const said = turn != null ? this.actions.find((a) => a.turn === turn)?.text ?? d.sources.get(`msg${turn}`)?.english : null;
-      if (turn != null) { this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn); }
-      const own = turn != null && uw ? d.isession.rs.undoSays(uw, uwBefore, said ? String(said).replace(/[.!?\s]+$/, '') : null) : null;
-      if (own) return { reply: own, info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };
-      if (turn != null) return this._say(said ? [{ text: 'OK, I took that back: ', translate: true }, this._quoted(turn, said), { text: '.', translate: false }] : [{ text: 'OK, I took that back.', translate: true }], { kind: 'undo', of: said ?? null, via: 'core.matrix' });   // the user's own words, never the English reading
+      // one timeline across the worlds' instances (spec 15): the newest turn that changed anything goes back, whichever world it belonged to, and the reply says
+      // what it was, in the words of that world (a game's "took back your last guess") or by quoting what the user said (their own words, never the English reading)
+      const turn0 = rs.turns.at(-1).turn;
+      const act0 = this.actions.find((a) => a.turn === turn0);
+      const r = rs.undoLast(d.isession, act0?.text ?? d.sources.get(`msg${turn0}`)?.english ?? null);
+      const turn = r.turn;
+      rs.undoneAt = d._msg;
+      if (act0) this._setState(Object.fromEntries(act0.worlds.filter((w) => !rs.reasoner.stateOf.has(w)).map((w) => [w, act0.before[w]])));   // worlds whose state is not derived from the library
+      this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn);
+      if (r.quote) return this._say([{ text: 'OK, I took that back: ', translate: true }, this._quoted(turn, r.quote), { text: '.', translate: false }], { kind: 'undo', of: r.quote, via: 'core.matrix' });
+      return { reply: r.value, info: { kind: 'undo', of: act0?.text ?? null, via: 'core.matrix' } };
     }
     // ops reasoner: "No, she gives him 4." revises the statement just made
     { const cf = await this._correctFact(text, sid); if (cf) return cf; }

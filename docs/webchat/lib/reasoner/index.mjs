@@ -89,6 +89,13 @@ export async function createReasoner(set, { lib = null } = {}) {
     return r;
   };
   /** The matrix worlds whose matrices and functions an instance of `id` holds: the worlds it composes (when they are matrix worlds), then itself. */
+  /**
+   * The instance a world lives in (spec 15, "The conversation instance"): the composite world (`compose=`) that names it, else itself. A composed world has no
+   * instance of its own: its facts, rules and questions are in the composite's World, which is how worlds that talk about the same things share facts.
+   */
+  const homes = new Map();
+  for (const w of worlds) for (const c of w.compose) if (byId.has(c) && !homes.has(c)) homes.set(c, w.id);
+  const instKey = (id) => homes.get(id) ?? id;
   const matrixWorlds = (id) => [...new Set([...(byId.get(id)?.compose ?? []), id])].filter((x) => byId.has(x));
   const bases = new Map();
   const buildBase = (id) => {
@@ -133,13 +140,14 @@ export async function createReasoner(set, { lib = null } = {}) {
   const declared = new Map();   // world id -> Map(action name -> attrs of the matrix's `core.action`): what a missing argument asks and how the answer completes the sentence
   const routes = new Map();
   const reasoner = {
-    lib, voices, assumedBy, problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, untold, wordsOf, adoptOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
+    lib, voices, assumedBy, instKey, composites: new Set(homes.values()), problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, untold, wordsOf, adoptOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
     /** The base World of a matrix world (built on first use, once per engine). */
-    baseOf: (id) => { let b = bases.get(id); if (!b) { b = buildBase(id); bases.set(id, b); } return b; },
+    baseOf: (id) => { id = instKey(id); let b = bases.get(id); if (!b) { b = buildBase(id); bases.set(id, b); } return b; },
     /** Builds every base and returns the problems found (tests, `test-world`). */
     buildAll: () => { for (const w of worlds) reasoner.baseOf(w.id); return problems; },
+    /** Does the instance of matrix world `id` know this wire type? (the instance key of the world's home) */
     /** Does the instance of matrix world `id` know this wire type (its schema holds the legend that declares it)? */
-    knows: (id, type) => schemaWorlds(id).includes(owner(type)),
+    knows: (id, type) => schemaWorlds(instKey(id)).includes(owner(type)),
     /**
      * Where a session wire of this type goes: `ids` = the matrix worlds whose instances know the type, `owner` = the matrix world that declares it (null for
      * `core.agent` and the like), `shared` = the wire is copied to several instances and kept in the session's log (spec 15, "What is shared").
@@ -148,8 +156,9 @@ export async function createReasoner(set, { lib = null } = {}) {
       let r = routes.get(type);
       if (!r) {
         const o = owner(type);
-        const ids = o == null ? [] : worlds.filter((w) => schemaWorlds(w.id).includes(o)).map((w) => w.id);
-        r = { ids, owner: byId.has(o) ? o : null, shared: ids.length > 1 || (ids.length > 0 && !byId.has(o)) };
+        // a type of a matrix world is told to the instance of that world only (the games share nothing); a type no matrix world declares (core.agent, kids.common) is shared
+        const ids = o == null ? [] : byId.has(o) ? [instKey(o)] : [...new Set(worlds.filter((w) => schemaWorlds(instKey(w.id)).includes(o)).map((w) => instKey(w.id)))];
+        r = { ids, owner: byId.has(o) ? instKey(o) : null, world: byId.has(o) ? o : null, shared: ids.length > 1 || (ids.length > 0 && !byId.has(o)) };
         routes.set(type, r);
       }
       return r;
@@ -209,6 +218,8 @@ export class ReasonerSession {
     this.told = [];              // ids of the dialogue wires the library holds, oldest first (a rewind retracts the ones that are gone from the session memory)
     this.redos = [];             // what the last undo steps took out, newest last: { world, undo: [functions that put it back] } (a turn that changes the library empties it)
     this.cur = null;             // the turn in progress: { turn, marks: Map(world id -> { mark, stamp, birth? }), ops, owners: Set(world ids whose types the turn told) }
+    this.undoneAt = 0;           // the message of the last undo
+    this.undone = 0;             // undos done since the last turn that changed the library (an undo is a turn too: it does not age what is left to take back)
     this.turns = [];             // the turns that changed the library, oldest first: { turn, mark: { marks, ops } } (the marks are the instances as they were before the turn)
     this.seg = null;             // the statements of the segment in progress: { marks, ops, clean, ids } (what a refused statement is taken back to)
     this.issueSeen = new Set();  // keys of the standing issues before the turn: an issue that appears with a statement means the statement cannot be true
@@ -221,7 +232,7 @@ export class ReasonerSession {
     r.sharedLog = this.sharedLog.map((x) => ({ ...x })); r.sharedIds = new Set(this.sharedIds); r.ops = this.ops;
     r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.said = new Set(this.said); r.mirrored = new Map(this.mirrored); r.told = [...this.told]; r.written = new Map(this.written);
     r.cur = this.cur && { ...this.cur, marks: new Map(this.cur.marks), owners: new Set(this.cur.owners ?? []) }; r.seg = this.seg && { ...this.seg, marks: new Map(this.seg.marks), ids: [...this.seg.ids] };
-    r.issueSeen = new Set(this.issueSeen); r.turns = this.turns.map((t) => ({ ...t }));
+    r.undone = this.undone; r.undoneAt = this.undoneAt; r.issueSeen = new Set(this.issueSeen); r.turns = this.turns.map((t) => ({ ...t }));
     if (r.last?.inst) r.last = { ...r.last, inst: r.insts.get(r.last.inst.id) };
     return r;
   }
@@ -230,6 +241,7 @@ export class ReasonerSession {
 
   /** The instance of a world: created on first use (a fork of the world's base, plus the shared wires its schema knows). */
   _inst(id) {
+    id = this.reasoner.instKey(id);
     let i = this.insts.get(id);
     if (i) return i;
     const world = this.reasoner.baseOf(id).fork();
@@ -296,7 +308,7 @@ export class ReasonerSession {
       this.seg.ids.push(w.id);
       const route = this.reasoner.route(w.type);
       const targets = [];
-      if (route.owner && this.cur?.owners) this.cur.owners.add(route.owner);
+      if (route.world && this.cur?.owners) this.cur.owners.add(route.world);
       if (route.owner) targets.push(this._inst(route.owner));   // the owner's instance is created by its first fact (the others only get what they have)
       for (const id of route.ids) if (id !== route.owner && this.insts.has(id)) targets.push(this.insts.get(id));
       if (route.shared) { this.sharedLog.push({ w, add: ++this.ops, dead: 0 }); this.sharedIds.add(w.id); }
@@ -389,7 +401,7 @@ export class ReasonerSession {
     const ownerId = this.reasoner.ownerOfType(facts.find((w) => !w.type.startsWith('core.'))?.type);
     const hook = this.reasoner.problemOf.get(ownerId);
     if (hook) {
-      const inst = this.insts.get(ownerId) ?? added?.inst ?? [...this.insts.values()][0];
+      const inst = this.insts.get(this.reasoner.instKey(ownerId)) ?? added?.inst ?? [...this.insts.values()][0];
       try {
         const issue = added && { why, key: first(added.w.attrs.key), aboutId: bare(first(added.w.attrs.about)), about: flat(added.inst.world.get(bare(first(added.w.attrs.about)))?.attrs) };
         const said = hook({ why, issue, facts: facts.map((w) => ({ type: w.type, attrs: Object.fromEntries(w.entries.map((e) => [keyName(e.key), String(e.value.v)])) })), find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), name: (id) => this._nameOf(id, inst), issues: () => this._issues(inst).map((i) => this._issueInfo(i)) });
@@ -403,7 +415,7 @@ export class ReasonerSession {
     return `${t.charAt(0).toUpperCase()}${t.slice(1)}.`;
   }
   /** End of a dialogue turn: a turn that changed the library is kept, with its marks (what "undo that" and the dialogue layer's undo take back). */
-  commitTurn(turn) {
+  commitTurn(turn, said = null) {
     const c = this.cur;
     this.cur = null;
     if (c?.turn !== turn) return;
@@ -416,7 +428,15 @@ export class ReasonerSession {
       if (moved) changed = true;
       if (moved || e.birth) marks.set(id, e);   // an instance created in the turn is taken back to its birth even when nothing was told to it
     }
-    if (changed) { this.redos = []; this.turns.push({ turn, mark: { marks, ops: c.ops }, worlds: [...(c.owners ?? [])] }); if (this.turns.length > 12) this.turns.shift(); }
+    if (changed) {
+      // the worlds the turn concerned: the ones whose types it told and the games whose own instance it changed (a game's actions change its instance without a wire of the dialogue)
+      const worlds = new Set(c.owners ?? []);
+      for (const id of marks.keys()) if (this.reasoner.worlds.includes(id) && !this.reasoner.composites.has(id)) worlds.add(id);
+      this.redos = [];
+      this.turns.push({ turn, mark: { marks, ops: c.ops }, worlds: [...worlds], said });
+      this.undone = 0;
+      if (this.turns.length > 40) this.turns.shift();
+    }
   }
   /** The library takes statements out (`retract`: what followed from them goes too) and the session memory with them; false (nothing changed) when the library will not. */
   retractFacts(ids, session, why = 'taken back') {
@@ -443,14 +463,15 @@ export class ReasonerSession {
   _restart() { if (this.cur) this.cur = { turn: this.cur.turn, marks: this._marks(), ops: this.ops, owners: this.cur.owners }; }
   /** The mark of a turn that changed the library (undefined for a turn that did not). */
   markOf(turn) { return this.turns.find((t) => t.turn === turn)?.mark; }
-  /** Is there something told in the last few turns to take back? */
-  canUndo(turn) { const t = this.turns.at(-1); return !!t && turn - t.turn <= 6; }
+  /** Is there something told in the last few turns to take back (or, once the user is undoing, anything left)? */
+  canUndo(turn) { const t = this.turns.at(-1); return !!t && (this.undone > 0 || turn - t.turn <= 6); }   // in a run of undos (one per message) the history is walked back whatever its age
   /** "Undo that": the instances go back to before the last turn that changed the library (everything that followed from it goes too). Returns the turn's number or null. */
   undo(session, redos = null) {
     const t = this.turns.at(-1);
     if (!t) return null;
     const redo = this.rewind(t.mark, session);
     if (redos) redos.push(redo);
+    this.undone++;
     return t.turn;
   }
   /**
@@ -663,10 +684,28 @@ export class ReasonerSession {
    * The words of a generic "undo that" in a world's own voice (`undoWords` of its fns.mjs, over the states before and after): null when the world has none or
    * the words say nothing. `said` is the sentence the user had said.
    */
-  undoSays(worldId, before, said) {
+  undoSays(worldId, before, said) { return this.undoPatch(worldId, before, said)?.value ?? null; }
+  /** The same with the rest of what the world says ({ value, openTab }), or null when the world has no words or the words say nothing (the state did not change in a way it can tell). */
+  undoPatch(worldId, before, said) {
     const w = this.reasoner.wordsOf.get(worldId);
     if (!w) return null;
-    try { const p = w.undoWords({ before, after: this.stateOfWorld(worldId), said }); return p?.value ?? null; } catch { return null; }
+    try { const p = w.undoWords({ before, after: this.stateOfWorld(worldId), said }); return p?.value ? p : null; } catch { return null; }
+  }
+  /**
+   * "Undo": the newest turn of the session that changed anything goes back, whichever world it belongs to (one timeline across the instances), and the reply names
+   * what was taken back: in the words of the world the turn concerned (`undoWords` over its state before and after) or, when that world has none or cannot tell
+   * what changed, "OK, I took that back: "<what the user said>"". Returns { turn, value, openTab? }, or null when there is nothing left to take back.
+   */
+  undoLast(session, said = null) {
+    const t = this.turns.at(-1);
+    if (!t) return null;
+    said ??= t.said ?? null;
+    const w = t.worlds.length === 1 && this.reasoner.wordsOf.has(t.worlds[0]) ? t.worlds[0] : null;
+    const before = w ? this.stateOfWorld(w) : null;
+    const turn = this.undo(session);
+    const quote = said ? String(said).replace(/[.!?\s]+$/, '') : '';
+    const patch = w ? this.undoPatch(w, before, quote || null) : null;
+    return { turn, value: patch?.value ?? (quote ? `OK, I took that back: "${quote}".` : 'OK, I took that back.'), quote: patch?.value || !quote ? null : quote, openTab: patch?.openTab };
   }
 
   /**
@@ -675,6 +714,7 @@ export class ReasonerSession {
    * What was taken out is kept for `redoAction`.
    */
   undoAction(world, session, n = 1) {
+    if (!world.isView && n <= 1) return this._undoOne(world, session);   // a world without views or counted undos: the session timeline names what it took back
     const toState = this.reasoner.stateOf.get(world.id);
     const inst = this._inst(world.id);
     const stateNow = () => toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q) });
@@ -690,6 +730,17 @@ export class ReasonerSession {
     const patch = world.undoWords?.({ before, after: before ? stateNow() : null, steps }) ?? (before ? { value: 'OK, I took that back.' } : { status: 'missing', note: 'There is nothing to undo yet.' });
     this._state(session, world.id);
     return { via: 'core.matrix', status: 'supported', ...patch, undoneTurn: turn };
+  }
+  /** The undo of a world without views: the newest turn of the session goes back and the reply names it (`undoLast`). */
+  _undoOne(world, session) {
+    const turn = this.turns.at(-1)?.turn;
+    if (turn == null) {
+      const note = this.undone ? 'There is nothing more to undo.' : (world.undoWords?.({ before: null, after: null })?.note ?? 'There is nothing to undo yet.');
+      return { via: 'core.matrix', status: 'missing', note, undoneTurn: null };
+    }
+    const r = this.undoLast(session);
+    this._state(session, world.id);
+    return { via: 'core.matrix', status: 'supported', value: r.value, ...(r.openTab ? { openTab: r.openTab } : {}), undoneTurn: r.turn };
   }
   /** A world's own "redo" action: puts back what the last undo took out (the library as it was before it, with the turns), and says what that was. */
   redoAction(world, session) {
@@ -878,7 +929,7 @@ export class ReasonerSession {
   _state(session, touched = null) {
     for (const [id, toState] of this.reasoner.stateOf) {
       try {
-        const inst = this.insts.get(id);
+        const inst = this.insts.get(this.reasoner.instKey(id));
         let cur = session.state[id];
         if (!inst && !cur && id !== touched) continue;   // a world nobody used: no instance, no state
         const rc = this._redoCount(id);
@@ -913,7 +964,7 @@ export class ReasonerSession {
     this._state(session);
     for (const [type, worldId] of this.reasoner.mirrorTypes) {
       const live = new Set();
-      for (const w of this.insts.get(worldId)?.world.ofType(type) ?? []) {
+      for (const w of this.insts.get(this.reasoner.instKey(worldId))?.world.ofType(type) ?? []) {
         live.add(w.id);
         const text = this.reasoner.lib.format(w);
         if (this.mirrored.get(w.id)?.text === text) continue;

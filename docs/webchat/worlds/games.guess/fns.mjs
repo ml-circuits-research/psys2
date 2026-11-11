@@ -227,6 +227,7 @@ export function undoWords({ before, after }) {
   const asking = after.phase === 'asking' && after.current ? ` I am asking that question again: ${after.current.text}` : '';
   const value = after.asked.length < before.asked.length ? `OK, I took back your last answer.${asking}`
     : after.learned.length < before.learned.length ? 'OK, I forgot the animal you taught me.'
-    : 'OK, I took that back.';
+    : after.phase === 'idle' && before.phase !== 'idle' ? 'OK, I took back the start of the game.'
+    : null;   // a change the state cannot tell: the host's generic words quote what the user said
   return { value, openTab: 'guess' };
 }
