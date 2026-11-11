@@ -2451,3 +2451,62 @@
     input="the sound of a duck"
     expect="A duck goes quack."
     session=nsh4
+
+@t.animals.m01 core.test
+    session=kam1
+    input="A zebra can swim."
+    expect="I will remember that about zebras."
+    reasoner=matrix
+    doc="SOPWORLD stage 2: what a child teaches is a wire of the library"
+
+@t.animals.m02 core.test
+    session=kam1
+    input="Can a zebra swim?"
+    expect="Yes, a zebra can swim."
+    expectStatus=supported
+    reasoner=matrix
+
+@t.animals.m03 core.test
+    session=kam1
+    input="undo that"
+    expect="OK, I forgot what you taught me about zebras."
+    doc="undo goes back through the library and says it in the world's words"
+    reasoner=matrix
+
+@t.animals.m04 core.test
+    session=kam1
+    input="Can a zebra swim?"
+    expectStatus=missing
+    reasoner=matrix
+
+@t.animals.m05 core.test
+    session=kam2
+    input="My dog is called Rex."
+    expect="Your dog is called Rex."
+    reasoner=matrix
+
+@t.animals.m06 core.test
+    session=kam2
+    input="undo that"
+    expect="OK, I forgot your dog Rex."
+    reasoner=matrix
+
+@t.animals.m07 core.test
+    session=kam2
+    input="What is my dog called?"
+    expectStatus=missing
+    reasoner=matrix
+
+@t.animals.m08 core.test
+    session=kam3
+    input="A spider has 6 legs."
+    expect="a spider has 6 legs"
+    reasoner=matrix
+
+@t.animals.m09 core.test
+    session=kam3
+    input="How many legs does a spider have?"
+    expect="conflicting information about the legs of a spider: 8 and 6"
+    expectStatus=conflicting
+    doc="the knowledge base says 8, the child said 6: the library keeps both and says so"
+    reasoner=matrix

@@ -5,6 +5,12 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    ops=kids.animals.animal.is_a
+    ops=kids.animals.animal.lives
+    ops=kids.animals.animal.covered
+    ops=kids.animals.animal.summary
+    ops=kids.animals.animal.matching
     source="what I know about animals"
     language=en
     status=fixture

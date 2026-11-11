@@ -35,21 +35,21 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
-  assert.equal(ops.set.get('kids.animals').reasoner, 'ops', 'every other world stays on ops');
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  assert.equal(ops.set.get('data.charts').reasoner, 'ops', 'every other world stays on ops');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
 });
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.problems, []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227]]) {
+test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227, kids.animals 506 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }
@@ -683,4 +683,43 @@ test('kids.time: the calendar answers come from the library, the lengths of span
   assert.equal((await s.send('undo that', {})).text, 'OK, today is Friday again.');
   assert.equal((await s.send('What day is tomorrow?', {})).text, 'Tomorrow is Saturday.');
   sameAsLibrary(s, ['kids.time']);
+});
+
+// ---- kids.animals on the matrix (stage 2) --------------------------------------------------------------------------------------------------------
+
+const ANIMALS = ['What does a rabbit eat?', 'How many legs does a spider have?', 'Can a penguin fly?', 'Can a bat fly?', 'Can a zebra swim?', 'Is a whale a fish?', 'Is a cow a herbivore?',
+  'Where do camels live?', 'What covers a cow?', 'Describe a dolphin', 'Which birds can swim?', 'What sound does a duck make?', 'What is a baby dog called?', 'A zebra can swim.',
+  'Can a zebra swim?', 'A spider has 6 legs.', 'How many legs does a spider have?', 'A whale is a fish.', 'Is a whale a fish?', 'My dog is called Rex.', 'What is my dog called?',
+  'Do I have a cat?', 'Can a unicorn fly?', 'undo that', 'Can a zebra swim?'];
+const ANIMALS_GAINS = new Set([23]);   // undo says what was forgotten in the world's words
+
+test('kids.animals: a scripted session says the same as the ops reasoner, word for word, with the same statuses, except the listed gains', async () => {
+  const run = async (eng) => {
+    const s = eng.createSession({ language: 'en' });
+    const out = [];
+    for (const l of ANIMALS) { const r = await s.send(l, {}); out.push([r.text, r.statuses.join()]); }
+    return { s, out };
+  };
+  const o = await run(ops), m = await run(matrix);
+  m.out.forEach((x, i) => { if (!ANIMALS_GAINS.has(i)) assert.deepEqual(x, o.out[i], `turn ${i}: ${ANIMALS[i]}`); });
+  assert.match(m.out[23][0], /^OK, I forgot (what you taught me about|your)/);
+  assert.deepEqual(matrix.reasoner.problems, []);
+});
+
+test('kids.animals: the questions the library can answer come from it, the ones it leaves (ops=) from the operations; what was taught is a wire and goes with undo', async () => {
+  const s = matrix.createSession({ language: 'en' });
+  const via = async (text) => { const r = await s.send(text, {}); return r.answers?.[0]?.envelope?.via ?? null; };
+  assert.equal(await via('How many legs does a spider have?'), 'core.matrix');
+  assert.equal(await via('Can a bat fly?'), 'core.matrix');
+  assert.equal(await via('What does a rabbit eat?'), 'core.matrix');
+  assert.notEqual(await via('Is a whale a fish?'), 'core.matrix', 'a check carries the value it seeks');
+  assert.notEqual(await via('Describe a dolphin'), 'core.matrix');
+  const lib = s.isession.rs.world;
+  await s.send('A zebra can swim.', {});
+  assert.deepEqual(s.isession.state['kids.animals'], { taught: [{ name: 'zebra', facts: ['can_swim=true'] }], pets: [] });
+  assert.ok(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra' && !String(w.id).startsWith('kb.')));
+  assert.equal((await s.send('undo that', {})).text, 'OK, I forgot what you taught me about zebras.');
+  assert.equal(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra' && w.attrs.can_swim?.[0] === 'true' && !String(w.id).startsWith('kb.')), false);
+  assert.deepEqual((await s.send('Can a zebra swim?', {})).statuses, ['missing']);
+  sameAsLibrary(s, ['kids.animals']);
 });
