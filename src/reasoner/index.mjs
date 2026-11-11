@@ -22,7 +22,7 @@ const NOT_FACTS = new Set(['core.question', 'core.request', 'core.answer', 'core
 const STATUS = { supported: 'supported', conflicting: 'conflicting', ambiguous: 'ambiguous', missing: 'missing', refused: 'conflicting', unsupported: 'unsupported', no: 'supported', unknown: 'missing', budget: 'budget' };
 const keyName = (k) => String(k).split('.').pop();
 const bare = (v) => String(v).replace(/^\$/, '');
-const unquote = (v) => { const s = String(v); return s.length > 1 && s.startsWith('"') && s.endsWith('"') ? s.slice(1, -1) : s; };
+const unquote = (v) => { const s = String(v); if (!(s.length > 1 && s.startsWith('"') && s.endsWith('"'))) return s; try { return JSON.parse(s); } catch { return s.slice(1, -1); } };   // a string value is its text (the escapes of a quote or a line end undone)
 const first = (a) => (Array.isArray(a) ? a[0] : a);
 /** slots map of the library's compiled matrix -> the keys a completing could fill (required or with a default); see `ReasonerSession._mayFill`. */
 const FILLABLE = new WeakMap();

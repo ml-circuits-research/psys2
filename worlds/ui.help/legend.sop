@@ -14,3 +14,23 @@
     value=atom
     card=one
     ask="Which help topic is it?"
+
+@ui.help.area core.type
+    extends=core.thing
+    doc="What one area of the app can do: a word that names it (a tab, a world), the world behind it and the sentence that says what can be said there. The knowledge base of the help (generated from the manifests and the canonical examples, kb.sop)."
+    example="What can you do in the map?"
+
+@ui.help.area.word core.key
+    value=atom
+    card=one
+    ask="Which area is it?"
+
+@ui.help.area.world core.key
+    value=atom
+    card=one
+    ask="Which world is behind it?"
+
+@ui.help.area.says core.key
+    value=string
+    card=one
+    ask="What can be said there?"

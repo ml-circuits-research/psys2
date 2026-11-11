@@ -16,7 +16,7 @@
     ask="Which tab is it?"
 
 @ui.shell.known core.type
-    extends=core.state
+    extends=core.thing
     doc="A tab of the app that the knowledge base knows: its id, the title the app shows and the world behind it (generated from the manifests, kb.sop)."
 
 @ui.shell.known.id core.key
@@ -32,7 +32,7 @@
     ask="Which world is behind it?"
 
 @ui.shell.alias core.type
-    extends=core.state
+    extends=core.thing
     doc="A word that names a tab (its id, its title or an alias a world declares)."
 
 @ui.shell.alias.word core.key
@@ -44,7 +44,7 @@
     ask="Which tab does it name?"
 
 @ui.shell.game core.type
-    extends=core.state
+    extends=core.thing
     doc="The game actions of a tab: the one that starts a game, asks for a hint and gives up."
 
 @ui.shell.game.tab core.key
@@ -64,7 +64,7 @@
     ask="Which action gives up?"
 
 @ui.shell.lang core.type
-    extends=core.state
+    extends=core.thing
     doc="A language the app speaks and a word that names it."
 
 @ui.shell.lang.word core.key
@@ -76,7 +76,7 @@
     ask="Which language code?"
 
 @ui.shell.settings core.type
-    extends=core.state
+    extends=core.thing
     doc="The tabs of the Settings dialog, as one sentence."
 
 @ui.shell.settings.tabs core.key
@@ -84,7 +84,7 @@
     ask="Which tabs does it have?"
 
 @ui.shell.stab core.type
-    extends=core.state
+    extends=core.thing
     doc="A tab of the Settings dialog."
 
 @ui.shell.stab.id core.key
@@ -96,7 +96,7 @@
     ask="What is it called?"
 
 @ui.shell.salias core.type
-    extends=core.state
+    extends=core.thing
     doc="A word that names a tab of the Settings dialog."
 
 @ui.shell.salias.word core.key

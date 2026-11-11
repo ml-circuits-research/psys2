@@ -1,5 +1,5 @@
 @ui.avatar.char core.type
-    extends=core.state
+    extends=core.thing
     doc="What a character is called: its id, the words that name it with an article, and the same with a capital."
 
 @ui.avatar.char.id core.key
@@ -15,7 +15,7 @@
     ask="Which cap?"
 
 @ui.avatar.slot core.type
-    extends=core.state
+    extends=core.thing
     doc="A part a character has (its eyes, its mouth ...) and whether it can be absent."
 
 @ui.avatar.slot.ch core.key
@@ -31,7 +31,7 @@
     ask="Which optional?"
 
 @ui.avatar.paint core.type
-    extends=core.state
+    extends=core.thing
     doc="The color a spoken part means for a character (the hair of a person is its head contrast)."
 
 @ui.avatar.paint.part core.key
@@ -47,7 +47,7 @@
     ask="Which key?"
 
 @ui.avatar.partname core.type
-    extends=core.state
+    extends=core.thing
     doc="A spoken part the world knows a color for (or knows it has none)."
 
 @ui.avatar.partname.word core.key
@@ -55,7 +55,7 @@
     ask="Which word?"
 
 @ui.avatar.colorname core.type
-    extends=core.state
+    extends=core.thing
     doc="A color people can say, and its hex entry."
 
 @ui.avatar.colorname.name core.key
@@ -67,7 +67,7 @@
     ask="Which hex?"
 
 @ui.avatar.start core.type
-    extends=core.state
+    extends=core.thing
     doc="The look an AV character has when it is first shown (the first variant of each part, none where a part is optional, the first palette entry), as JSON. Generated."
 
 @ui.avatar.start.ch core.key

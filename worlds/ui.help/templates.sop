@@ -37,3 +37,12 @@
 @tpl.ui.help.helpIdentity core.template
     for=action.ui.helpIdentity
     text="{value}"
+
+@tpl.ui.help.area core.template
+    for=ui.help.area.says
+    text="{value}"
+
+@tpl.ui.help.area.missing core.template
+    for=ui.help.area.says
+    status=missing
+    text="I do not know an area called {word}. Say \"what can you do?\" for the whole list."

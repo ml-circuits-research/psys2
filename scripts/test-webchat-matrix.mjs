@@ -33,7 +33,7 @@
  *
  *   draw, diagram   matrix (art.draw, diagram.sketch): see scripts/test-webchat-draw-matrix.mjs.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,music,draw,diagram] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,music,draw,diagram,editor,reader,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -42,6 +42,7 @@ import { fileURLToPath } from 'node:url';
 import { openChat } from './test-webchat-turns.mjs';
 import { docScenarios } from './test-webchat-docs.mjs';
 import { drawScenarios } from './test-webchat-draw-matrix.mjs';
+import { uiScenarios } from './test-webchat-ui-matrix.mjs';
 
 const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' };
 const OPS = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 4 };   // an explicit choice of the current settings version
@@ -482,6 +483,8 @@ export const SCENARIOS = {
 Object.assign(SCENARIOS, docScenarios({ openChat, MATRIX, check, say }));
 // art.draw and diagram.sketch (scripts/test-webchat-draw-matrix.mjs)
 Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, check, say }));
+// the UI worlds' scenarios (scripts/test-webchat-ui-matrix.mjs)
+Object.assign(SCENARIOS, uiScenarios({ openChat, MATRIX, check, say }));
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };

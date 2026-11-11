@@ -14,7 +14,7 @@ const matrix = await engineWith('matrix');
 const ops = await engineWith('ops');
 const session = (e) => e.createSession({ language: 'en' });
 const say = async (s, lines) => { const out = []; for (const l of lines) { const r = await s.send(l, {}); out.push({ text: r.text, statuses: r.statuses }); } return out; };
-const UI = ['ui.shell', 'ui.avatar'];   // the UI worlds that are on the matrix
+const UI = ['ui.shell', 'ui.avatar', 'ui.help'];   // the UI worlds that are on the matrix
 const guard = (s, world, action, args) => s.isession.rs.guardRequest(s.isession, world, action, args);
 
 test('the three UI worlds opt in, the matrices load without problems, the knowledge bases are what the generator writes', async () => {
@@ -191,4 +191,50 @@ test('ui.avatar: ops and matrix say the same on a scripted session (words, statu
   const A = structuredClone(a.isession.state['ui.avatar']), B = structuredClone(b.isession.state['ui.avatar']);
   delete A.undo; delete B.undo;
   assert.deepEqual(A, B);
+});
+
+// ---- ui.help ------------------------------------------------------------------------------------------------------------------------------------------------
+
+test('ui.help: "what can you do in the map?" is answered from the knowledge base, the same words in both modes; the lexicon of the pattern is the kb\'s words', async () => {
+  const m = session(matrix), o = session(ops);
+  const [a] = await say(m, ['What can you do in the map?']), [b] = await say(o, ['What can you do in the map?']);
+  assert.equal(a.text, 'To show places on a map, you can say, for example: "Show latitude 48.8 longitude 2.3", "Is Paris the capital of France" or "Zoom all the way out".');
+  assert.deepEqual(a, b);
+  assert.equal(a.statuses[0], 'supported');
+  assert.equal((await say(m, ['what can I do with the chess tab']))[0].text.startsWith('To play chess, you can say, for example: "'), true);
+  assert.equal((await say(m, ['What can you do in the avatar area?']))[0].text.startsWith('To change my face, you can say'), true);
+  const areas = m.isession.rs.of('ui.help').ofType('ui.help.area');
+  assert.ok(areas.length > 40, 'the areas are wires of the help instance');
+  const { files } = await import('../scripts/gen-ui-kb.mjs');
+  await buildAll();
+  const lex = matrix.set.list().flatMap((w) => w.lexicons).find((x) => x.id === 'lex.ui.help.areas');
+  assert.deepEqual([...lex.words].sort(), files.helpWords, 'the words of the lexicon are the words of the kb: run node scripts/gen-ui-kb.mjs and update lex.ui.help.areas');
+});
+
+test('ui.help: the state is one wire; "more examples" is a step "undo that" takes back; a sentence that was not understood is not a step (the world is passive)', async () => {
+  const s = session(matrix);
+  await say(s, ['what can I say here?']);
+  const [w] = s.isession.rs.of('ui.help').ofType('ui.help.state');
+  assert.ok(w, 'the help was used: one state wire');
+  const pos = s.isession.state['ui.help'].pos['ui.avatar'];
+  assert.ok(pos > 0);
+  await say(s, ['more examples']);
+  assert.ok(s.isession.state['ui.help'].pos['ui.avatar'] > pos);
+  assert.equal((await say(s, ['undo that']))[0].text, 'OK, the examples are back where they were.');
+  assert.equal(s.isession.state['ui.help'].pos['ui.avatar'], pos);
+  const t = session(matrix);
+  await say(t, ['I have 20 lei', 'I buy a ball']);
+  await say(t, ['zzzz qqqq xxxx']);
+  assert.equal(t.isession.state['ui.help'].lastUnparsed?.text, 'zzzz qqqq xxxx', 'the dialog layer wrote it and the library took it over');
+  assert.equal(t.isession.rs.turns.at(-1).moved.includes('ui.help'), false);
+  assert.match((await say(t, ['undo that']))[0].text, /took that back|bought/i);
+  assert.equal(t.isession.state['kids.shop'].purchases?.length ?? 0, 0);
+});
+
+test('ui.help: ops and matrix say the same on a scripted session (words, statuses, state)', async () => {
+  const lines = ['what can I say here?', 'more examples', 'how do I change the eyes?', 'what can you do?', 'what does this tab do?', 'zzzz qqqq xxxx', 'why did you not understand that?', 'who are you?'];
+  const a = session(matrix), b = session(ops);
+  const ra = await say(a, lines), rb = await say(b, lines);
+  assert.deepEqual(ra, rb);
+  assert.deepEqual(a.isession.state['ui.help'], b.isession.state['ui.help']);
 });
