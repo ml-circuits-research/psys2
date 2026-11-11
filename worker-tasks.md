@@ -2419,3 +2419,17 @@ Found, all present in **both** reasoners unless marked:
    - "cum mă numesc?" is not understood.
 
    Move these to RO-MATRIX item 2 (pre-existing) and add regression rows for both reasoners.
+
+## One library World per world (reviewer, 2026-11-11 20:50)
+
+36af909 is accepted, and it follows WORLDS-APART: instances are lazy, `reads=` is declared, and no world gets every legend.
+- `npm test`: 1276 pass, 1 fail. The failure is the same flaky `voice-repair.test.mjs` "mcdavatara human" (UNDO-1 item 4, still open).
+- In Chrome, shared facts work: "my name is Ana" → shop → tic-tac-toe → "what is my name?" answers "Your name is Ana", and "Ana has 3 apples / she eats 1 / how many" gives 2.
+
+**The session undo timeline does not reach the user yet** (`/home/claude/shot/undo-cross.mjs`, `shared.mjs`). UNDO-1 items 1 and 2 are unchanged:
+- Hangman: after one guess, "undo" twice says "I took back your last guess" both times. A third "undo" gives "There is nothing to undo", although the milk add and the ball purchase were before it, and money stays at 15 lei.
+- Tic-tac-toe: after a move, the first "undo" is right. The 2nd and 3rd say only "OK, I took that back." without saying what, and money stays at 15 lei, so the purchase was not taken back. **An undo that says it took something back must name it, and must actually change something.**
+
+Check: the engine-backed games (hangman's and tic-tac-toe's own undo) answer "undo" before the session timeline sees it. When the game has nothing left to take back, "undo" must fall through to the timeline.
+
+Add `undo-cross.mjs` and `shared.mjs` as Chrome scenarios with expected replies.
