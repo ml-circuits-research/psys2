@@ -173,7 +173,7 @@ test('ui.avatar: "undo" goes back through the library and says what it took back
   assert.match(r[3].text, /^OK, I went back to how I was before: I have .* expression again\.$/);
   assert.equal(r[4].text, 'OK, I went back to how I was before: I am a robot again.');
   assert.equal(s.isession.state['ui.avatar'].character, 'robot');
-  assert.equal(r[5].text, 'There is nothing to undo.');
+  assert.equal(r[5].text, 'There is nothing more to undo.');
 });
 
 test('ui.avatar: "undo" does not take the avatar tab\'s world as the one that changed: a statement of another world is taken back, a settings change too', async () => {
@@ -226,7 +226,7 @@ test('ui.help: the state is one wire; "more examples" is a step "undo that" take
   await say(t, ['I have 20 lei', 'I buy a ball']);
   await say(t, ['zzzz qqqq xxxx']);
   assert.equal(t.isession.state['ui.help'].lastUnparsed?.text, 'zzzz qqqq xxxx', 'the dialog layer wrote it and the library took it over');
-  assert.equal(t.isession.rs.turns.at(-1).moved.includes('ui.help'), false);
+  assert.equal(t.isession.rs.turns.at(-1).worlds.includes('ui.help'), false);
   assert.match((await say(t, ['undo that']))[0].text, /took that back|bought/i);
   assert.equal(t.isession.state['kids.shop'].purchases?.length ?? 0, 0);
 });
