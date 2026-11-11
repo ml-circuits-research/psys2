@@ -48,15 +48,31 @@ export async function createReasoner(set, { lib = null } = {}) {
   lib ??= await import('../vendor/sopworld/sopworld.mjs');
   const wanted = new Set(worlds.flatMap((w) => set.available(w.id)));
   const ordered = set.list().filter((w) => wanted.has(w.id));
+  const legends = set.legends;
+  const lexicon = (id) => { const l = set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; };
+  /** What the host gives an action function besides the library's own context (`ctx.host`, spec 15): the lexicons, and `view(ctx)`, an ops-shaped read-only context (find, val, vals, lexicon) over the library, so the tables of a world's ops.mjs can be shared. */
+  const host = {
+    lexicon,
+    view: (c) => {
+      const key = (w, k) => { const r = legends.tryResolveKey(w.type, k); return r.error ? null : r; };
+      const decode = (r, t) => legends.decode(r.info, lib.readValue(t));
+      return {
+        lexicon,
+        find: (type, where = {}) => c.find(type, where),
+        val: (w, k) => { const r = key(w, k); const t = r && w.attrs[keyName(r.key)]?.[0]; return t === undefined ? undefined : decode(r, t); },
+        vals: (w, k) => { const r = key(w, k); return r ? (w.attrs[keyName(r.key)] ?? []).map((t) => decode(r, t)) : []; },
+      };
+    },
+  };
   const fns = {};   // the worlds' action functions (the library keeps them apart from its own arithmetic)
-  for (const w of worlds) Object.assign(fns, w.fns ?? {});
+  for (const w of worlds) for (const [name, f] of Object.entries(w.fns ?? {})) fns[name] = (c, args) => f({ ...c, host }, args);
   const base = new lib.World({ actions: fns, vocabulary: { status: 'core.status' } });
   const problems = [];
   const load = (what, text) => { if (text == null) return; const r = base.load(text); if (!r.ok) problems.push(`${what}: ${r.violations?.[0]?.kind ?? 'refused'} ${r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? ''}`.trim()); };
   const mapping = set.list().map((w) => w.raw.mapping).find((t) => t != null);
   load('mapping', mapping);
   for (const w of ordered) load(`${w.id}/legend.sop`, w.raw.legend);
-  for (const w of worlds) load(`${w.id}/kb.sop`, w.raw.kb);
+  for (const w of ordered) load(`${w.id}/kb.sop`, w.raw.kb);   // the knowledge bases of the matrix worlds and of what they import (games.guess reads kids.animals)
   load('user', '@e.user core.agent');   // the user is a built-in agent of every session
   // one SOP Lang parser in the product: our parser reads the matrices and the library is handed their wires
   const loadOurs = (what, text) => {

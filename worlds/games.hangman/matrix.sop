@@ -1,0 +1,81 @@
+# games.hangman as a matrix: the rules of the game, said with rules and denies. The choice of the word, the hints and the words of the replies
+# stay in the world (ops.mjs and fns.mjs); the matrix is what is allowed, how many guesses are left and how the game ends.
+#
+# The game is a set of wires: one hm.game (the secret word, as a string, and the seed of the next choice), one hm.ch for each distinct letter of the word,
+# one hm.guess for each guess (n = how many guesses came before it; kind = letter or word; what = the letter or the word), one hm.hint for each hint given,
+# and hm.giveup when the player gives up. Everything else is derived: hits, misses, the letters still hidden, the lives left and how the game ends.
+
+@hm.k.word core.slot of=hm.game key=word kind=string required=true
+@hm.k.seed core.slot of=hm.game key=seed kind=integer
+@hm.k.ch core.slot of=hm.ch key=ch kind=string required=true
+@hm.k.gn core.slot of=hm.guess key=n kind=integer required=true
+@hm.k.gk core.slot of=hm.guess key=kind kind=atom enum=letter enum=word required=true
+@hm.k.gw core.slot of=hm.guess key=what kind=string required=true
+@hm.k.hn core.slot of=hm.hint key=n kind=integer required=true
+
+# ---- a guess is a hit or a miss: a letter that is in the word, or the whole word
+@hm.gl hm.guess kind=letter what=?c n=?n
+@hm.cl hm.ch ch=?c
+@hm.hitL hm.hit n=?n what=?c kind=letter
+@hm.r.hitL core.rule when=$hm.gl when=$hm.cl then=$hm.hitL
+@hm.missL hm.miss n=?n what=?c kind=letter
+@hm.r.missL core.rule when=$hm.gl not=$hm.cl then=$hm.missL
+
+@hm.gw hm.guess kind=word what=?w n=?n
+@hm.gm hm.game word=?w
+@hm.hitW hm.hit n=?n what=?w kind=word
+@hm.r.hitW core.rule when=$hm.gw when=$hm.gm then=$hm.hitW
+@hm.gw2 hm.guess kind=word what=?w n=?n
+@hm.gm2 hm.game word=?v
+@hm.t.differ core.check fn=neq args=?w args=?v
+@hm.missW hm.miss n=?n what=?w kind=word
+@hm.r.missW core.rule when=$hm.gw2 when=$hm.gm2 if=$hm.t.differ then=$hm.missW
+
+# ---- six wrong guesses are allowed: the lives left are six minus the misses
+@hm.om hm.miss
+@hm.mc core.calc out=?m fn=count over=$hm.om
+@hm.lc core.calc out=?l fn=sub args=6 args=?m
+@hm.mg hm.game
+@hm.lives hm.lives left=?l
+@hm.r.lives core.rule when=$hm.mg with=$hm.mc with=$hm.lc then=$hm.lives
+
+# ---- the letters of the word that no letter guess has named yet
+@hm.c1 hm.ch ch=?c
+@hm.g1 hm.guess kind=letter what=?c
+@hm.leftT hm.left ch=?c
+@hm.r.left core.rule when=$hm.c1 not=$hm.g1 then=$hm.leftT
+
+# ---- how the game ends: no letter hidden any more, the whole word guessed, no lives left, or the player gives up
+@hm.wg hm.game
+@hm.wl hm.left
+@hm.won1 hm.over how=won
+@hm.r.won1 core.rule when=$hm.wg not=$hm.wl then=$hm.won1
+@hm.hw hm.hit kind=word
+@hm.won2 hm.over how=won
+@hm.r.won2 core.rule when=$hm.hw then=$hm.won2
+@hm.lv hm.lives left=?l
+@hm.t.dead core.check fn=lte args=?l args=0
+@hm.lost hm.over how=lost
+@hm.r.lost core.rule when=$hm.lv if=$hm.t.dead then=$hm.lost
+@hm.gu hm.giveup
+@hm.gave hm.over how=giveup
+@hm.r.gave core.rule when=$hm.gu then=$hm.gave
+
+# ---- what may not be: a guess when no game is on or the game is over, the same letter twice
+@hm.dg hm.guess
+@hm.dgm hm.game
+@hm.d.nogame core.deny when=$hm.dg not=$hm.dgm why="We are not playing hangman. Say \"play hangman\" to start."
+@hm.do hm.over
+@hm.t.after core.check fn=after args=$hm.dg args=$hm.do
+@hm.d.over core.deny when=$hm.dg when=$hm.do if=$hm.t.after why="We are not playing hangman. Say \"play hangman\" to start."
+@hm.u1 hm.guess kind=letter what=?c n=?n1
+@hm.u2 hm.guess kind=letter what=?c n=?n2
+@hm.t.later core.check fn=gt args=?n2 args=?n1
+@hm.d.dup core.deny when=$hm.u1 when=$hm.u2 if=$hm.t.later why="You already tried ?c."
+
+# ---- the actions (fns.mjs); the others (status) read the state derived from these wires and stay in ops.mjs
+@hm.a.new core.action name=hm.new fn=hmNew
+@hm.a.letter core.action name=hm.letter fn=hmLetter
+@hm.a.word core.action name=hm.word fn=hmWord
+@hm.a.hint core.action name=hm.hint fn=hmHint
+@hm.a.giveup core.action name=hm.giveup fn=hmGiveUp

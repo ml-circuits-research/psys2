@@ -698,3 +698,127 @@
     input="could you maybe guess the letter e"
     expect="Yes, there are 2 Es!"
     session=hsh
+
+@t.games.hangman.m01 core.test
+    session=hm1
+    input="Play hangman with the word zebra"
+    expectStatus=supported
+    expectState="status=playing"
+    expectState="wrongLeft=6"
+    doc="SOPWORLD stage 2: the rules are in matrix.sop; a repeated letter is answered by the rules, the game is wires, undo goes through the library"
+    reasoner=matrix
+
+@t.games.hangman.m02 core.test
+    session=hm1
+    input="Is there a Z?"
+    expect="Yes, there is one Z!"
+    expectState="masked=z _ _ _ _"
+    reasoner=matrix
+
+@t.games.hangman.m03 core.test
+    session=hm1
+    input="Is there a Z?"
+    expect="You already tried Z."
+    expectStatus=supported
+    expectState="guessed.0=z"
+    expectState="wrongLeft=6"
+    reasoner=matrix
+
+@t.games.hangman.m04 core.test
+    session=hm1
+    input="Is there an X?"
+    expect="No, there is no X. 5 wrong guesses left."
+    expectState="wrong.0=x"
+    reasoner=matrix
+
+@t.games.hangman.m05 core.test
+    session=hm1
+    input="undo"
+    expect="took back your last guess"
+    expectStatus=supported
+    expectState="wrongLeft=6"
+    expectState="masked=z _ _ _ _"
+    reasoner=matrix
+
+@t.games.hangman.m06 core.test
+    session=hm1
+    input="I give up"
+    expect="The word was zebra."
+    expectState="status=lost"
+    reasoner=matrix
+
+@t.games.hangman.m07 core.test
+    session=hm1
+    input="Is there an E?"
+    expect="We are not playing hangman."
+    expectStatus=missing
+    expectState="status=lost"
+    reasoner=matrix
+
+@t.games.hangman.m08 core.test
+    session=hm1
+    input="undo"
+    expect="took back"
+    expectState="status=playing"
+    expectState="masked=z _ _ _ _"
+    reasoner=matrix
+
+@t.games.hangman.m09 core.test
+    session=hm2
+    input="Play hangman with the word cat"
+    expectState="word=cat"
+    reasoner=matrix
+
+@t.games.hangman.m10 core.test
+    session=hm2
+    input="Is there an X?"
+    expect="5 wrong guesses left."
+    reasoner=matrix
+
+@t.games.hangman.m11 core.test
+    session=hm2
+    input="the word is dog"
+    expect="No, it is not dog. 4 wrong guesses left."
+    expectState="wrong.1=dog"
+    reasoner=matrix
+
+@t.games.hangman.m12 core.test
+    session=hm2
+    input="Is there a Q?"
+    expect="3 wrong guesses left."
+    reasoner=matrix
+
+@t.games.hangman.m13 core.test
+    session=hm2
+    input="Is there a J?"
+    expect="2 wrong guesses left."
+    reasoner=matrix
+
+@t.games.hangman.m14 core.test
+    session=hm2
+    input="Is there a K?"
+    expect="1 wrong guess left."
+    reasoner=matrix
+
+@t.games.hangman.m15 core.test
+    session=hm2
+    input="Is there a V?"
+    expect="you ran out of guesses"
+    expectState="status=lost"
+    expectState="wrongLeft=0"
+    reasoner=matrix
+
+@t.games.hangman.m16 core.test
+    session=hm2
+    input="Is there a C?"
+    expect="We are not playing hangman."
+    expectStatus=missing
+    reasoner=matrix
+
+@t.games.hangman.m17 core.test
+    session=hm2
+    input="undo"
+    expect="took back your last guess"
+    expectState="status=playing"
+    expectState="wrongLeft=1"
+    reasoner=matrix
