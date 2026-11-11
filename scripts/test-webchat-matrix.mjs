@@ -322,6 +322,8 @@ export const SCENARIOS = {
       const board = () => t.pg.$$eval('.p2-ttt-cell', (cs) => cs.filter((x) => x.classList.contains('is-x') || x.classList.contains('is-o')).length);
       const u1 = await say(t, 'undo');
       check('undo-cross (tic-tac-toe): the move and my answer are named, the board is empty', /took back your last move and my answer/.test(u1) && (await board()) === 0, u1.slice(0, 80));
+      const u1b = await say(t, 'undo');
+      check('undo-cross (tic-tac-toe): then the start of the game (the shell\'s own turn), named', /Let's play tic tac toe|back on the Avatar tab/.test(u1b), u1b.slice(0, 80));
       const u2 = await say(t, 'undo');
       check('undo-cross (tic-tac-toe): then the milk, named', /took that back: "add milk to my shopping list"/.test(u2), u2.slice(0, 80));
       const u3 = await say(t, 'undo');
