@@ -34,4 +34,28 @@ export const drawScenarios = ({ openChat, MATRIX, check, say }) => ({
       check('draw: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
+  async diagram(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    const st = async () => JSON.parse(await c.state())['diagram.sketch'] ?? {};
+    try {
+      await say(c, 'draw a red circle called A');
+      await say(c, 'draw a blue square called B');
+      await say(c, 'connect A to B');
+      const a = await st();
+      check('diagram: the tab has both shapes and the arrow', a.shapes?.length === 2 && a.edges?.length === 1, JSON.stringify([a.shapes?.length, a.edges?.length]));
+      const r = await say(c, 'connect A to B');
+      check('diagram: an arrow that is already there is refused with the reason', r === 'That arrow already connects A and B.' && (await st()).edges.length === 1, r.slice(0, 80));
+      await say(c, 'connect B to A');
+      const u = await say(c, 'undo');
+      check('diagram: "undo" takes the last arrow back and the tab follows', u === 'Undid the last change.' && (await st()).edges.length === 1, `${u.slice(0, 40)} | ${(await st()).edges?.length}`);
+      const x = await say(c, 'redo');
+      check('diagram: "redo" puts it back', x === 'Redid it.' && (await st()).edges.length === 2, `${x.slice(0, 40)} | ${(await st()).edges?.length}`);
+      await say(c, 'make a tree');
+      const t = await st();
+      check('diagram: a template adds its shapes and arrows to the tab', t.shapes.length > 4 && t.edges.length > 2, JSON.stringify([t.shapes?.length, t.edges?.length]));
+      await say(c, 'undo');
+      check('diagram: and one undo takes the whole template back', (await st()).shapes.length === 2, String((await st()).shapes?.length));
+      check('diagram: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
 });
