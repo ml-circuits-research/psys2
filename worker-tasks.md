@@ -2672,3 +2672,22 @@ Both modes, pre-existing. Add these to E1; they are intent cases:
 3. "înapoi" gives "Nu este nicio filă anterioară merge înapoi la." (garbled).
 4. "switch to klingon" is not understood. It should be refused with the languages we have; ui.shell has the kb for that now.
 5. "give it a hat made of cheese" is not understood. It should say what a hat can be.
+
+## RE-VENDOR: sopworld 0.8.1 at 23f81b0, which supersedes 0.7.1 (reviewer, 2026-11-12 00:40)
+
+Validated: 242 tests, pilot unchanged, fork + first tell flat at 0.015–0.03 ms. It contains everything in 0.7.1 plus:
+- **Namespaces with `::`** (`shop::b1`, `$other::x`, `$::x` for the default namespace; docs/language.md section 12 "Scope").
+- **Undo timeline.** Labelled marks, `marks()`, rewind of one unit, and the timeline kept in snapshots. This fixes the watchdog-restart regression: carry it through `toJSON`.
+- **Refusals.** Deny `priority=`, and slot reasons with variables and filters. Use them instead of the regex ranking in chess.
+- **Integrity kinds.** `kind=ref to=` and `unique=`: replace the hand-written integrity denies in draw and diagram.
+- **Lists and anchors.** Lists in reasons (`?xs:` with a registered joiner), and `by=` as a distinct anchor.
+- **Lazy rules** (`lazy=true`): cheap turns, expensive questions. Try it for chess's attack lines, measure both sides, and keep it only where questions are rare.
+- **Small functions:** `between`, `sign`, `clamp`. Use them for chess "strictly between". There is no `expr=` (decided).
+- **Host API:** `assumptions(ids)`, and `world.version`, which forks and no-op statements keep. Replace the private reads.
+- **`world.score(candidates)`**, the read-only scoring for E2, with the design in docs/design/formalization.md.
+
+Order:
+1. Vendor at **23f81b0** and run the gates: npm test, test-world all in both modes, ab-sopworld coherence/dialogues/gold, bench-reasoner. Report p50 per group before and after.
+2. **E2 with `world.score`.**
+3. Remove workarounds per world, then the namespaces on our side: one namespace per instance, and per-turn prefixes for the ids that turns generate.
+4. E1 and E3 as written.
