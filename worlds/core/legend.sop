@@ -345,6 +345,12 @@
     ask="which keys?"
     doc="With reasoner=matrix: keys (type.key, for example kids.shapes.thing.is_color) whose questions the matrix leaves to the operations of the world (ops.mjs): checks that carry the value they seek (\"is a banana red?\": a library query would answer the value it was given) and lookups that read the facts in both orders. A question about one of them is never asked to the library."
 
+@core.world.kb core.key
+    value=atom
+    card=one
+    ask="how is the knowledge base kept?"
+    doc="With reasoner=matrix: `lookup` keeps the world's knowledge base (and those of its imports) out of the library's instances: a big table of facts (geo.map: 1,250 places) is copied by the library on the first write after every fork, which made a turn six times slower. The facts stay a static, read-only index that the world's actions read through ctx.host.kb(id); an action tells the rules the few wires a question needs (the library's check then judges them)."
+
 @core.world.compose core.key
     value=atom
     card=many

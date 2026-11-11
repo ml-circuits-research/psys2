@@ -5,6 +5,11 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    undo=geo.undo
+    redo=geo.redo
+    kb=lookup
+    source="what I know about places"
     language=en
     status=fixture
     title="World map"

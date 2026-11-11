@@ -52,7 +52,7 @@ const ok = (value, extra) => ({ status: 'supported', value, ...extra });
 const no = (status, note) => ({ status, note, ...(/^I do not see /.test(note) ? { reason: 'unknown_argument' } : {}) });
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const sp = (w) => String(w).replace(/_/g, ' ');
-const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
+export const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
 const plural = (w, n = 2) => {
   const x = sp(w);
   if (n === 1) return x;
@@ -64,7 +64,7 @@ const plural = (w, n = 2) => {
   if (/(s|x|z|ch|sh)$/.test(x)) return `${x}es`;
   return `${x}s`;
 };
-const round = (x, d = 2) => { const f = 10 ** d; return Math.round(x * f) / f; };
+export const round = (x, d = 2) => { const f = 10 ** d; return Math.round(x * f) / f; };
 export const fmt = (n) => String(round(Number(n), 2));
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'chart';
 const idsOf = (args) => (args?.request?.id ? [args.request.id] : []);
@@ -142,7 +142,7 @@ const current = (ctx) => { const s = st(ctx); return s.charts.find((c) => c.id =
 const touch = (ctx) => { const s = st(ctx); const c = current(ctx); s.inputMode = c && c.labels.length ? 'chart' : null; };
 const show = (ctx) => { try { ctx.request('ui.openTab', { tab: TAB }); } catch { /* the shell may be absent */ } };
 const done = (ctx, value, extra) => { touch(ctx); show(ctx); return ok(value, extra); };
-const NONE = 'There is no chart yet. Say, for example: "make a chart: apples 5, pears 3, plums 8".';
+export const NONE = 'There is no chart yet. Say, for example: "make a chart: apples 5, pears 3, plums 8".';
 const needChart = (ctx) => { const c = current(ctx); return c ? { c } : { env: no('missing', NONE) }; };
 const needData = (ctx) => {
   const r = needChart(ctx);
@@ -164,9 +164,9 @@ function find(c, text) {
 }
 const totals = (c) => c.labels.map((_, i) => c.datasets.reduce((a, d) => a + (Number(d.data[i]) || 0), 0));
 const multi = (c) => c.datasets.length > 1;
-const low = (c, l) => (c.proper ? l : String(l).toLowerCase());
+export const low = (c, l) => (c.proper ? l : String(l).toLowerCase());
 const kindWord = (c) => TYPE_NAME[c.type] ?? 'chart';
-const itemsWord = (c, n) => (POINT_TYPES.has(c.type) ? (n === 1 ? 'slice' : 'slices') : c.type === 'bar' ? (n === 1 ? 'bar' : 'bars') : (n === 1 ? 'point' : 'points'));
+export const itemsWord = (c, n) => (POINT_TYPES.has(c.type) ? (n === 1 ? 'slice' : 'slices') : c.type === 'bar' ? (n === 1 ? 'bar' : 'bars') : (n === 1 ? 'point' : 'points'));
 
 // ---- creating a chart from a built source -------------------------------------------------------------
 /** Put a built chart on screen: the active chart when it is empty, else a new one. */
@@ -599,7 +599,7 @@ function _setPalette(ctx, { p }) {
   return done(ctx, `OK, ${name === 'classic' ? 'every bar has its own color now' : `the chart uses ${name} colors now`}.`);
 }
 const UP = new Set(['biggest', 'largest', 'highest', 'greatest', 'most', 'big', 'large', 'high', 'top', 'descending', 'tallest', 'maximum', 'max', 'longest', 'best', 'bigger', 'larger', 'higher', 'greater', 'desc']);
-const DOWN = new Set(['smallest', 'lowest', 'least', 'small', 'low', 'bottom', 'ascending', 'shortest', 'minimum', 'min', 'fewest', 'worst', 'smaller', 'lower', 'less', 'fewer', 'tiniest', 'littlest', 'tiny', 'little', 'asc']);
+export const DOWN = new Set(['smallest', 'lowest', 'least', 'small', 'low', 'bottom', 'ascending', 'shortest', 'minimum', 'min', 'fewest', 'worst', 'smaller', 'lower', 'less', 'fewer', 'tiniest', 'littlest', 'tiny', 'little', 'asc']);
 function _setSort(ctx, { from, mode }) {
   const r = needChart(ctx);
   if (r.env) return r.env;

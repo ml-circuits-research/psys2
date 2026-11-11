@@ -35,28 +35,29 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'docs.editor', 'docs.reader']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
-  assert.equal(ops.set.get('data.charts').reasoner, 'ops', 'every other world stays on ops');
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'docs.editor', 'docs.reader', 'geo.map', 'data.charts']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  assert.equal(ops.set.get('docs.editor').reasoner, 'matrix');
+  assert.equal(ops.set.get('ui.shell').reasoner, 'ops', 'every other world stays on ops');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
 });
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['docs.editor', 'docs.reader', 'games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'user.profile']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['data.charts', 'docs.editor', 'docs.reader', 'games.guess', 'games.hangman', 'games.tictactoe', 'geo.map', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'user.profile']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
 test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227, kids.animals 506, user.profile 146 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506], ['user.profile', 146]]) {
+  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506], ['user.profile', 146], ['geo.map', 459], ['data.charts', 277]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }
 });
 
 test('parity: the other worlds that read these three (charts, documents) are unchanged with the switch on', async () => {
-  for (const id of ['data.charts', 'docs.editor']) {
+  for (const id of ['docs.editor']) {
     const r = await runWorldTests(matrix, id);
     const o = await runWorldTests(ops, id);
     assert.deepEqual(r.failed, o.failed, `${id} fails the same tests with the switch on and off`);
@@ -253,7 +254,8 @@ test('the build ships the library and the fns of matrix worlds, versioned like e
     const index = JSON.parse(await readFile(path.join(out, 'worlds/index.json'), 'utf8'));
     assert.equal(index.worlds['kids.shop'].fnsUrl, 'worlds/kids.shop/fns.mjs');
     assert.ok(index.worlds['kids.shop'].files['matrix.sop']);
-    assert.equal(index.worlds['data.charts'].fnsUrl, undefined);
+    assert.equal(index.worlds['data.charts'].fnsUrl, 'worlds/data.charts/fns.mjs');
+    assert.equal(index.worlds['ui.shell'].fnsUrl, undefined);
     const dialog = await readFile(path.join(out, 'lib/dialog/index.mjs'), 'utf8');
     assert.match(dialog, /\.\.\/reasoner\/index\.mjs\?v=[0-9a-f]{10}/, 'the reasoner module is in the versioned graph');
     const reasoner = await readFile(path.join(out, 'lib/reasoner/index.mjs'), 'utf8');

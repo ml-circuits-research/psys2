@@ -2274,3 +2274,122 @@
     input="tell me the country of Paris"
     expect="Paris is in France."
     session=gsh5
+
+@t.geo.map.m01 core.test
+    session=gm1
+    input="mark Paris"
+    expectState="markers.length=1"
+    doc="SOPWORLD stage 2: the state of the view is wires of the library (markers, highlights, lines), the operations are unchanged"
+    reasoner=matrix
+
+@t.geo.map.m02 core.test
+    session=gm1
+    input="mark Rome"
+    expectState="markers.length=2"
+    reasoner=matrix
+
+@t.geo.map.m03 core.test
+    session=gm1
+    input="how far is Rome from Paris"
+    expect="about 1,107 km"
+    expectState="lines.length=1"
+    reasoner=matrix
+
+@t.geo.map.m04 core.test
+    session=gm1
+    input="how long are the lines in total"
+    expect="There are 2 markers and 1 line on the map; the lines add up to 1,107 km."
+    doc="the counts and the total length are derived by rules and aggregates of matrix.sop"
+    reasoner=matrix
+
+@t.geo.map.m05 core.test
+    session=gm1
+    input="what is the total distance"
+    expect="the lines add up to 1,107 km"
+    reasoner=matrix
+
+@t.geo.map.m06 core.test
+    session=gm1
+    input="undo"
+    expect="I undid the last change"
+    expectState="lines.length=0"
+    doc="undo goes through the library (undo=geo.undo, redo=geo.redo): the world's own words"
+    reasoner=matrix
+
+@t.geo.map.m07 core.test
+    session=gm1
+    input="redo"
+    expect="I did it again"
+    expectState="lines.length=1"
+    reasoner=matrix
+
+@t.geo.map.m08 core.test
+    session=gm1
+    input="how long are the lines"
+    expect="1 line"
+    reasoner=matrix
+
+@t.geo.map.m09 core.test
+    session=gm2
+    input="how many things are on the map"
+    expect="The map is empty: no markers, highlights or lines."
+    reasoner=matrix
+
+@t.geo.map.m10 core.test
+    session=gm3
+    input="Is Paris in Germany?"
+    expect="No, Paris is not in Germany; it is in France."
+    expectStatus=supported
+    doc="the reason of a No is the library's deny over the wires of the knowledge base the claim needs"
+    reasoner=matrix
+
+@t.geo.map.m11 core.test
+    session=gm3
+    input="why?"
+    expect="what I know about places"
+    doc="the answer rests on the knowledge base, which the world calls source=\"what I know about places\""
+    reasoner=matrix
+
+@t.geo.map.m12 core.test
+    session=gm4
+    input="Berlin is the capital of France"
+    expect="No, the capital of France is Paris."
+    reasoner=matrix
+
+@t.geo.map.m13 core.test
+    session=gm4
+    input="Spain borders Germany"
+    expect="No, Spain and Germany do not share a border."
+    reasoner=matrix
+
+@t.geo.map.m14 core.test
+    session=gm4
+    input="Is Spain in Asia?"
+    expect="No, Spain is not in Asia; it is in Europe."
+    reasoner=matrix
+
+@t.geo.map.m15 core.test
+    session=gm4
+    input="Is the Netherlands in Asia?"
+    expect="No, Netherlands is not in Asia; it is in Europe."
+    reasoner=matrix
+
+@t.geo.map.m16 core.test
+    session=gm4
+    input="Is Paris in France?"
+    expect="Yes, Paris is in France."
+    reasoner=matrix
+
+@t.geo.map.m17 core.test
+    session=gm4
+    input="does France border Spain"
+    expect="Yes, France and Spain share a border."
+    reasoner=matrix
+
+@t.geo.map.m18 core.test
+    session=gm5
+    input="zoom to 15"
+    expect="Zoom is now 12."
+    expectState="zoom=12"
+    doc="the offline map zooms to 12 at most (the operations clamp; the library refuses any state above it)"
+    reasoner=matrix
