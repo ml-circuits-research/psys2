@@ -412,16 +412,29 @@ export class Discourse {
   commitTurn({ turn, text, before }) {
     const st = this.dialog.isession.state;
     const frames = this.frames.filter((f) => f.turn === turn);
+    const rsMark = this.dialog.isession.rs?.markOf(turn);   // matrix reasoner (spec 15): the library as it was before this turn
     // a question only creates the (lazy) state of a world on first use: that is no action to undo
     const onlyQuestions = frames.length > 0 && frames.every((f) => f.kind === 'question');
     const worlds = Object.keys(st).filter((id) => !NO_TOPIC.has(id) && JSON.stringify(st[id]) !== before[id] && !(onlyQuestions && before[id] === undefined));
     if (!worlds.length || !frames.length) return null;
     if (frames.some((f) => /undo/i.test(`${f.patternId} ${f.op}`))) { this.actions.shift(); return null; }   // the world took the last action back itself
     if (frames.some((f) => /redo/i.test(`${f.patternId} ${f.op}`))) return null;
-    const act = { turn, text, worlds, before: Object.fromEntries(worlds.map((id) => [id, before[id]])), after: Object.fromEntries(worlds.map((id) => [id, JSON.stringify(st[id])])), frames: frames.slice().reverse() };
+    const act = { turn, text, worlds, before: Object.fromEntries(worlds.map((id) => [id, before[id]])), after: Object.fromEntries(worlds.map((id) => [id, JSON.stringify(st[id])])), frames: frames.slice().reverse(), rsMark };
     this.actions.unshift(act);
     this.actions.length = Math.min(this.actions.length, 10);
     return act;
+  }
+
+  /**
+   * Puts the world(s) of an action back to what they were before it. With the matrix reasoner (spec 15) the library is rewound to its mark of that turn (the
+   * state of its worlds is derived from it, so state and library cannot diverge); otherwise the saved state is restored. Returns a function that undoes it.
+   */
+  _back(act) {
+    const d = this.dialog, rs = d.isession.rs;
+    if (rs && act.rsMark) return rs.rewind(act.rsMark, d.isession);
+    const now = Object.fromEntries(act.worlds.map((w) => [w, JSON.stringify(d.isession.state[w])]));
+    this._setState(act.before);
+    return () => this._setState(now);
   }
 
   _setState(map) {
@@ -454,7 +467,7 @@ export class Discourse {
   /** Take back the effect of an action (restores the states it changed). */
   undoAction(act) {
     if (!act) return false;
-    this._setState(act.before);
+    this._back(act);
     this.actions = this.actions.filter((x) => x !== act);
     this.frames = this.frames.filter((f) => f.turn !== act.turn);
     return true;
@@ -520,8 +533,10 @@ export class Discourse {
     if (!this.list) { const ac = runDiscussionCommand(d, text, d._msg); if (ac) return ac; }
     // matrix reasoner (spec 15): "undo that" takes back what the turn before told the library (a purchase, a statement); the money and the counts follow
     if (UNDO.test(t) && d.isession.rs?.canUndo(d._msg)) {
-      const said = d.isession.rs.undo(d.isession);
-      if (said) return { reply: `OK, I took that back: "${String(said).replace(/[.!?\s]+$/, '')}".`, info: { kind: 'undo', of: said, via: 'core.matrix' } };
+      const turn = d.isession.rs.undo(d.isession);
+      const said = turn != null ? this.actions.find((a) => a.turn === turn)?.text ?? d.sources.get(`msg${turn}`)?.english : null;
+      if (turn != null) { this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn); }
+      if (turn != null) return { reply: said ? `OK, I took that back: "${String(said).replace(/[.!?\s]+$/, '')}".` : 'OK, I took that back.', info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };
     }
     // chat spellings of short words ("bk to the doc", "nxt") are read as the word for the recognizers; the sentence itself is passed on unchanged
     const spelled = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);
@@ -838,9 +853,8 @@ export class Discourse {
     if (!act) return null;
     const f = frame ?? act.frames.find((x) => x.slots?.length) ?? act.frames[0];
     if (!f) return null;
-    const afterNow = Object.fromEntries(act.worlds.map((w) => [w, JSON.stringify(d.isession.state[w])]));
-    if (!undone) this._setState(act.before);
-    const giveUp = () => { if (!undone) this._setState(afterNow); return null; };
+    const restore = undone ? null : this._back(act);
+    const giveUp = () => { restore?.(); return null; };
     if (how === 'retarget' && !content) {
       // "not that one": take it back and ask which one is meant
       this.undoAction(act);
