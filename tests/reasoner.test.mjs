@@ -44,7 +44,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['art.draw', 'data.charts', 'diagram.sketch', 'docs.editor', 'docs.reader', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'geo.map', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'media.music', 'session.conversation', 'ui.shell', 'user.profile']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['art.draw', 'data.charts', 'diagram.sketch', 'docs.editor', 'docs.reader', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'geo.map', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'media.music', 'session.conversation', 'ui.avatar', 'ui.shell', 'user.profile']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });

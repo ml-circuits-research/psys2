@@ -182,6 +182,9 @@ const TABLE = [
   ['I have a zigzag mouth now.', 'Acum am gura în zigzag.'],
   // ---- games
   ['You are X and you go first.', 'Ești X și începi tu.'], ['You are O and I go first: I took {pos}.', 'Ești O și încep eu: am luat {pos}.'], ['I play perfectly.', 'Joc perfect.'],
+  ['OK, I am back on the {tab} tab.', 'Bine, am revenit pe fila {tab}.'], ['There is no {w} tab.', 'Nu există nicio filă „{w}”.'], ['There is no {w} game.', 'Nu există niciun joc „{w}”.'], ['I do not speak {w} yet.', 'Încă nu vorbesc {w}.'],
+  ['OK, I speak English again.', 'Bine, vorbesc din nou engleza.'], ['OK, I speak Romanian again.', 'Bine, vorbesc din nou româna.'], ['OK, the speaker is on again.', 'Bine, difuzorul este din nou pornit.'], ['OK, the speaker is off again.', 'Bine, difuzorul este din nou oprit.'],
+  ['OK, my speech rate is {n} again.', 'Bine, viteza mea de vorbire este din nou {n}.'], ['OK, I went back to how I was before.', 'Bine, m-am întors la cum eram înainte.'],
   ['OK, here is the {tab} tab.', 'Bine, iată fila {tab}.'], ['You are already on the {tab} tab.', 'Ești deja pe fila {tab}.'], ['There is no game open on the {tab} tab.', 'Nu este niciun joc deschis în fila {tab}.'],
   ['I moved {np} into the water.', 'Am mutat {np} în apă.'], ['I moved {np} onto the sand.', 'Am mutat {np} pe nisip.'], ['I moved {np} onto the snow.', 'Am mutat {np} pe zăpadă.'], ['I moved {np} onto the grass.', 'Am mutat {np} pe iarbă.'],
   ['There was no water, so I added it to the ground.', 'Nu era apă, așa că am adăugat-o pe pământ.'], ['There was no sand, so I added it to the ground.', 'Nu era nisip, așa că l-am adăugat pe pământ.'], ['There was no snow, so I added it to the ground.', 'Nu era zăpadă, așa că am adăugat-o pe pământ.'], ['There was no grass, so I added it to the ground.', 'Nu era iarbă, așa că am adăugat-o pe pământ.'],

@@ -600,7 +600,7 @@ export class ReasonerSession {
     const val = (k) => wire.entries.find((e) => e.key === k)?.value?.v;
     const L = this.reasoner.legends;
     if (L.isA(wire.type, 'core.question')) return !!this.reasoner.ownerOfType(val('core.question.type')) && !this.reasoner.opsKeys.has(`${val('core.question.type')}.${keyName(val('core.question.seek') ?? '')}`);
-    if (L.isA(wire.type, 'core.request')) return !!this.reasoner.ownerOfAction(val('core.request.action'));
+    if (L.isA(wire.type, 'core.request')) { const a = val('core.request.action'); return !!this.reasoner.ownerOfAction(a) && (!!this.reasoner.declOf(a) || this.reasoner.undoOf.has(a) || this.reasoner.redoOf.has(a)); }   // an action the matrix does not declare is the operations' (a world that keeps its state with `adopt`): no instance is made to ask the library
     return false;
   }
 
@@ -640,7 +640,7 @@ export class ReasonerSession {
 
   /** An action another world asks for by name and arguments (no wire of the dialogue): its envelope when the library owns the action, else null. */
   request(action, args, session) {
-    if (!this.reasoner.ownerOfAction(action)) return null;
+    if (!this.reasoner.ownerOfAction(action) || !this.reasoner.declOf(action)) return null;
     const value = (v) => (/^[\w.-]+$/.test(String(v)) ? atomValue(v) : strValue(v));
     const entries = [{ key: 'core.request.action', value: atomValue(action) }, ...Object.entries(args ?? {}).map(([k, v]) => ({ key: `core.request.arg.${k}`, value: value(v) }))];
     return this.resolve({ id: 'req_via_world', type: 'core.request', entries }, session);
@@ -704,11 +704,12 @@ export class ReasonerSession {
     if (!w || !session.state[worldId]) return null;
     const bad = this.adoptState(session);
     if (bad) return { status: 'conflicting', why: bad.why, note: `That does not add up. ${bad.why}` };
-    const inst = this._inst(worldId);
-    const check = ({ wires }) => { try { return inst.world.check({ wires }); } catch { return { ok: true }; } };
+    let held = null;
+    const inst = () => (held ??= this._inst(worldId));   // the instance is made when the guard asks the rules, not for a request the guard has nothing to say about
+    const check = ({ wires }) => { try { return inst().world.check({ wires }); } catch { return { ok: true }; } };
     let g = null;
-    try { g = w.guard({ action, args, state: session.state[worldId], check, find: (ty) => inst.world.ofType(ty) }); } catch { g = null; }
-    this._charge(inst.world);
+    try { g = w.guard({ action, args, state: session.state[worldId], check, find: (ty) => inst().world.ofType(ty) }); } catch { g = null; }
+    if (held) this._charge(held.world);
     return g ? { status: g.status ?? 'missing', note: g.note, why: g.why ?? g.note, ...(g.reason ? { reason: g.reason } : {}) } : null;
   }
 

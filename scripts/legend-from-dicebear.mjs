@@ -311,8 +311,9 @@ export async function generate() {
     for (const col of c.colors) X.push(lexicon(`lex.ui.avatar.palette.${c.id}.${col.key}`, 'data', `ops data: palette of ${c.noun}.${col.key}`, col.values));
   }
   const sep = '\n';
+  const legendExtra = await readFile(path.join(WORLD, 'legend.extra.sop'), 'utf8').catch(() => '');   // the hand-written types of the knowledge base (kb.sop)
   return {
-    'legend.sop': L.join(sep),
+    'legend.sop': L.join(sep) + (legendExtra.trim() ? `${sep}${sep}${legendExtra.trim()}\n` : ''),
     'lexicon.sop': X.join(sep) + (verbatim.trim() ? `${sep}${verbatim}` : ''),
     summary: { core: ver.core, styles: ver.styles, options: options.size, characters: model.map((c) => c.id), synonyms: synonyms.length },
   };

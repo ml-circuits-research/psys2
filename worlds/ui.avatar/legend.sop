@@ -559,3 +559,97 @@
     card=one
     ask="Which color is your background?"
     doc="A 6-digit hex entry of the style palette: 059ff2, d9915b, f6d594, 71cf62, d84be5, fcbc34."
+
+
+@ui.avatar.char core.type
+    extends=core.state
+    doc="What a character is called: its id, the words that name it with an article, and the same with a capital."
+
+@ui.avatar.char.id core.key
+    value=atom
+    ask="Which id?"
+
+@ui.avatar.char.spoken core.key
+    value=string
+    ask="Which spoken?"
+
+@ui.avatar.char.cap core.key
+    value=string
+    ask="Which cap?"
+
+@ui.avatar.slot core.type
+    extends=core.state
+    doc="A part a character has (its eyes, its mouth ...) and whether it can be absent."
+
+@ui.avatar.slot.ch core.key
+    value=atom
+    ask="Which ch?"
+
+@ui.avatar.slot.key core.key
+    value=atom
+    ask="Which key?"
+
+@ui.avatar.slot.optional core.key
+    value=boolean
+    ask="Which optional?"
+
+@ui.avatar.paint core.type
+    extends=core.state
+    doc="The color a spoken part means for a character (the hair of a person is its head contrast)."
+
+@ui.avatar.paint.part core.key
+    value=atom
+    ask="Which part?"
+
+@ui.avatar.paint.ch core.key
+    value=atom
+    ask="Which ch?"
+
+@ui.avatar.paint.key core.key
+    value=atom
+    ask="Which key?"
+
+@ui.avatar.partname core.type
+    extends=core.state
+    doc="A spoken part the world knows a color for (or knows it has none)."
+
+@ui.avatar.partname.word core.key
+    value=atom
+    ask="Which word?"
+
+@ui.avatar.colorname core.type
+    extends=core.state
+    doc="A color people can say, and its hex entry."
+
+@ui.avatar.colorname.name core.key
+    value=atom
+    ask="Which name?"
+
+@ui.avatar.colorname.hex core.key
+    value=atom
+    ask="Which hex?"
+
+@ui.avatar.start core.type
+    extends=core.state
+    doc="The look an AV character has when it is first shown (the first variant of each part, none where a part is optional, the first palette entry), as JSON. Generated."
+
+@ui.avatar.start.ch core.key
+    value=atom
+    ask="Which character?"
+
+@ui.avatar.start.look core.key
+    value=string
+    ask="Which look?"
+
+
+@ui.avatar.slot.nouns core.key
+    value=string
+    ask="What are its variants called, in the plural?"
+
+@ui.avatar.slot.list core.key
+    value=string
+    ask="Which variants does it have?"
+
+@ui.avatar.partname.core core.key
+    value=boolean
+    ask="Can the robot, the person or the emoji color it?"

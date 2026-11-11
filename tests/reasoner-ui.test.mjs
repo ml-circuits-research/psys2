@@ -14,7 +14,7 @@ const matrix = await engineWith('matrix');
 const ops = await engineWith('ops');
 const session = (e) => e.createSession({ language: 'en' });
 const say = async (s, lines) => { const out = []; for (const l of lines) { const r = await s.send(l, {}); out.push({ text: r.text, statuses: r.statuses }); } return out; };
-const UI = ['ui.shell'];   // the UI worlds that are on the matrix
+const UI = ['ui.shell', 'ui.avatar'];   // the UI worlds that are on the matrix
 const guard = (s, world, action, args) => s.isession.rs.guardRequest(s.isession, world, action, args);
 
 test('the three UI worlds opt in, the matrices load without problems, the knowledge bases are what the generator writes', async () => {
@@ -114,4 +114,81 @@ test('ui.shell: ops and matrix say the same on a scripted session (words, status
   const ra = await say(a, lines), rb = await say(b, lines);
   assert.deepEqual(ra, rb);
   assert.deepEqual(a.isession.state['ui.shell'], b.isession.state['ui.shell']);
+});
+
+// ---- ui.avatar ----------------------------------------------------------------------------------------------------------------------------------------------
+
+const wires = (s, type) => s.isession.rs.of('ui.avatar').ofType(type);
+
+test('ui.avatar: nothing is told until the look changes; then one look wire, a wire for each part and color of the shown character, the state is derived from them', async () => {
+  const s = session(matrix);
+  await say(s, ['how are you', 'what is your name']);
+  assert.equal(s.isession.rs.insts.has('ui.avatar'), false, 'a question costs no instance');
+  await say(s, ['make your hair red']);   // the robot has no hair: the offer waits for a yes
+  await say(s, ['yes']);
+  const [look] = wires(s, 'ui.avatar.look');
+  assert.equal(look.attrs.character[0], 'person');
+  const parts = Object.fromEntries(wires(s, 'ui.avatar.part').filter((w) => w.attrs.ch[0] === 'person').map((w) => [w.attrs.key[0], w.attrs.value[0]]));
+  assert.deepEqual(Object.keys(parts), ['head', 'expression', 'accessories', 'facialHair', 'mask']);
+  const st = s.isession.state['ui.avatar'];
+  assert.equal(st.character, 'person');
+  assert.equal(Object.keys(st.person.colors).join(), 'skin,clothing,headContrast');
+  assert.ok(st.portrait && st.kid, 'the characters nobody showed are their start look (the kb), as the operations fill them in');
+  assert.equal(wires(s, 'ui.avatar.part').some((w) => w.attrs.ch[0] === 'portrait'), false, 'and are not wires');
+});
+
+test('ui.avatar: a color nobody knows, a part that has no color and the part of a character that has none are refused by the rules with the reason', async () => {
+  const s = session(matrix), o = session(ops);
+  const r = await say(s, ['make your mouth purple']);
+  assert.equal(r[0].text, 'A robot has no mouth color. Mouths can be grill, speaker, line, smile and zigzag.');
+  assert.equal(r[0].statuses[0], 'unsupported');
+  assert.equal((await say(o, ['make your mouth purple']))[0].text, 'A robot has no mouth color.');
+  const g = (a, args) => guard(s, 'ui.avatar', a, args);
+  assert.equal(g('avatar.setColor', { part: 'body', color: 'plaid' }).note, 'I do not know the color plaid.');
+  assert.equal(g('avatar.setColor', { part: 'body', color: 'plaid' }).reason, 'unknown_argument');
+  assert.equal(g('avatar.setColor', { part: 'wibble', color: 'red' }).note, 'I do not know what my wibble color is.');
+  assert.equal(g('avatar.setColor', { part: 'body', color: 'light_blue' }), null);
+  assert.equal(g('avatar.setColor', { part: 'hair', color: 'red' }), null, 'the person has hair color: the operation offers it (a yes becomes the person)');
+  const p = session(matrix);
+  await say(p, ['become a person']);
+  assert.equal(guard(p, 'ui.avatar', 'avatar.setColor', { part: 'mouth', color: 'red' }).note, 'A person has no mouth color.', 'no mouth component, so no list of mouths');
+});
+
+test('ui.avatar: a look the rules cannot allow is refused and the library goes back (the glow of a robot like its body)', async () => {
+  const s = session(matrix);
+  await say(s, ['become a person', 'become a robot']);
+  const rs = s.isession.rs;
+  const st = s.isession.state['ui.avatar'];
+  st.robot.colors.glow = st.robot.colors.body;
+  const bad = rs.adoptState(s.isession, 'ui.avatar');
+  assert.equal(bad.why, 'The glow of the robot cannot be the color of its body.');
+  assert.notEqual(s.isession.state['ui.avatar'].robot.colors.glow, s.isession.state['ui.avatar'].robot.colors.body, 'the state is the library\'s again');
+});
+
+test('ui.avatar: "undo" goes back through the library and says what it took back; with nothing to undo it says so', async () => {
+  const s = session(matrix);
+  const r = await say(s, ['undo', 'become a person', 'look surprised', 'undo', 'undo', 'undo']);
+  assert.equal(r[0].text, 'There is nothing to undo.');
+  assert.equal(r[0].statuses[0], 'missing');
+  assert.match(r[3].text, /^OK, I went back to how I was before: I have .* expression again\.$/);
+  assert.equal(r[4].text, 'OK, I went back to how I was before: I am a robot again.');
+  assert.equal(s.isession.state['ui.avatar'].character, 'robot');
+  assert.equal(r[5].text, 'There is nothing to undo.');
+});
+
+test('ui.avatar: "undo" does not take the avatar tab\'s world as the one that changed: a statement of another world is taken back, a settings change too', async () => {
+  const s = session(matrix);
+  const r = await say(s, ['I have 20 lei', 'I buy a ball', 'undo', 'speak slower', 'undo']);
+  assert.match(r[2].text, /took that back|undid|bought/i);
+  assert.equal(r[4].text, 'OK, my speech rate is 1 again.');
+});
+
+test('ui.avatar: ops and matrix say the same on a scripted session (words, statuses, state), except the sentences the rules say', async () => {
+  const lines = ['how are you', 'make your eyes square', 'become a person', 'make your hair red', 'look surprised', 'make your hair blue', 'describe yourself', 'what are you wearing', 'become a robot', 'change your name to Bo', 'what is your name'];
+  const a = session(matrix), b = session(ops);
+  const ra = await say(a, lines), rb = await say(b, lines);
+  assert.deepEqual(ra, rb);
+  const A = structuredClone(a.isession.state['ui.avatar']), B = structuredClone(b.isession.state['ui.avatar']);
+  delete A.undo; delete B.undo;
+  assert.deepEqual(A, B);
 });

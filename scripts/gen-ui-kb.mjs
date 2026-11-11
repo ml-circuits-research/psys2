@@ -74,7 +74,43 @@ async function shellKb(set, worlds) {
 // ---- ui.help ----------------------------------------------------------------------------------------------------------------------------------------------
 async function helpKb() { return ''; }
 // ---- ui.avatar --------------------------------------------------------------------------------------------------------------------------------------------
-async function avatarKb() { return ''; }
+async function avatarKb(set) {
+  const ops = await import('../worlds/ui.avatar/ops.mjs');
+  const lex = (id) => { const l = set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; };
+  const tok = (v) => (/^[\w.-]+$/.test(String(v)) ? String(v) : str(v));
+  const cap = (x) => x.replace(/^./, (c) => c.toUpperCase());
+  const plural = (x) => (/s$/.test(x) ? x : `${x}s`);
+  const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
+  const out = [NOTE('worlds/ui.avatar/lexicon.sop (the DiceBear data lexicons) and the tables of worlds/ui.avatar/ops.mjs'), ''];
+  for (const ch of ops.CHARACTERS) {
+    const spoken = ops.SPOKEN_CHARACTER[ch];
+    out.push(`@kb.av.char.${ch} ui.avatar.char id=${ch} spoken=${str(spoken)} cap=${str(cap(spoken))}`);
+  }
+  const comps = {};
+  for (const ch of ops.CHARACTERS) comps[ch] = lex(`${ops.DATA}${ch}.components`);
+  for (const ch of ops.CHARACTERS) for (const key of comps[ch]) {
+    const optional = new Set(lex(`${ops.DATA}${ch}.optional`));
+    const seen = new Set(), shown = [];
+    for (const w of lex(`${ops.DATA}${ch}.${key}`)) {
+      const [, id, display] = w.split(':');
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const d = (display ?? id).replace(/_/g, ' ');
+      shown.push(d);
+    }
+    const names = [...new Set(shown)];
+    const list = names.length > 10 ? `${names.slice(0, 10).join(', ')} and ${names.length - 10} more` : joinAnd(names);
+    out.push(`@kb.av.slot.${ch}.${idPart(key)} ui.avatar.slot ch=${ch} key=${atom(key)} optional=${optional.has(key)} nouns=${str(cap(plural(ops.LABEL[key] ?? key)))} list=${str(list)}`);
+  }
+  const init = ops.initialState();
+  for (const ch of ops.CHARACTERS) if (!init[ch]) out.push(`@kb.av.start.${ch} ui.avatar.start ch=${ch} look=${str(JSON.stringify(ops.defaultLook({ lexicon: lex }, ch)))}`);
+  for (const [part, map] of Object.entries(ops.COLOR_KEYS)) {
+    out.push(`@kb.av.partname.${idPart(part)} ui.avatar.partname word=${atom(part)} core=${ops.CORE.some((c) => map[c])}`);
+    for (const ch of ops.CHARACTERS) if (map[ch]) out.push(`@kb.av.paint.${idPart(part)}.${ch} ui.avatar.paint part=${atom(part)} ch=${ch} key=${atom(map[ch])}`);
+  }
+  for (const w of lex('lex.ui.avatar.data.colornames')) { const [name, hex] = w.split(':'); out.push(`@kb.av.cname.${idPart(name)} ui.avatar.colorname name=${atom(name)} hex=${tok(hex)}`); }
+  return `${out.join('\n')}\n`;
+}
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const files = await buildAll();
