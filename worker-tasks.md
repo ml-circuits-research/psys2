@@ -2483,3 +2483,20 @@ Both modes, pre-existing:
 - In Romanian, "citește propoziția 900" gives a vague "Nu este nicio propoziție acolo." The English reply says how many sentences there are.
 
 The goal set by the user is at least ops's speed. Docs is not there yet, so list in the per-world row what would close the gap: P2 and P3 of Round 5, and R6.12.
+
+## RE-VENDOR sopworld at 89bf69d (reviewer, 2026-11-11 22:15)
+
+The library's Round 5 (0.6.2) and R6.1–R6.3 are validated: 213 tests, the pilot unchanged, no host names in `src/`.
+
+What is new for us:
+- **P1.** `complete()` with nothing changed takes 0.006 ms, and there is a public `canComplete()`. Replace our private `world._compiled().slots` test (`_mayFill`) with it.
+- **P2.** A fork or mark followed by its first change no longer copies the world: 0.02–0.06 ms at any size.
+- **P3.** The tells of an action propagate once. `ctx.flush()` and `tell(x, { now: true })` keep the old per-tell check where an action needs it.
+- **R6.1.** A slot declared `many` answers all its values in value mode. This unblocks kids.animals: lives, covered, describe.
+- **R6.2.** `query` has `mode=check` ("is a whale a fish?"): it answers yes, or no with the actual value.
+- **R6.3.** Supposed answers carry `from` and `via`, and deny reasons can carry values.
+
+To do:
+1. Vendor the built file at commit **89bf69d** (record the hash and build id in `src/vendor/sopworld/`; no tag).
+2. Run `npm test`, `test-world all` in both reasoners, `ab-sopworld --sets coherence,dialogues,gold`, and `bench-reasoner`. Report p50 per world group before and after: the goal is to close the matrix gap in the docs and matrix worlds.
+3. Then move what R6.1 and R6.2 unblock in kids.animals, and remove the host workarounds the new APIs make unnecessary.
