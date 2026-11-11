@@ -12,7 +12,7 @@
 // for the split and survive a "no" answer but not a "yes".
 // Effects: none. Cross-world: ctx.request('ui.openTab', { tab: 'guess' }).
 
-const FEATURES = ['class', 'legs', 'fly', 'swim', 'habitat', 'diet', 'covering'];
+export const FEATURES = ['class', 'legs', 'fly', 'swim', 'habitat', 'diet', 'covering'];
 const HABITAT = { sea: 'in the sea', farm: 'on a farm', forest: 'in the forest', river: 'in or near rivers', jungle: 'in the jungle', desert: 'in the desert', polar: 'in the polar regions', home: 'at home', garden: 'in the garden', savanna: 'on the savanna', grassland: 'in grasslands', mountain: 'in the mountains' };
 const COVER = { fur: 'Does it have fur?', feather: 'Does it have feathers?', scale: 'Does it have scales?', skin: 'Does it have bare skin?', shell: 'Does it have a shell?', wool: 'Does it have wool?', spine: 'Does it have spines?' };
 const DIET = { herbivore: 'Does it eat only plants?', carnivore: 'Does it eat only meat?', omnivore: 'Does it eat both plants and meat?' };
@@ -37,12 +37,12 @@ export function initialState() {
 
 const ok = (value) => ({ status: 'supported', value });
 const no = (status, note) => ({ status, note });
-const words = (s) => String(s).replace(/_/g, ' ');
-const an = (w) => (/^[aeiou]/i.test(w) ? 'an ' : 'a ') + words(w);
+export const words = (s) => String(s).replace(/_/g, ' ');
+export const an = (w) => (/^[aeiou]/i.test(w) ? 'an ' : 'a ') + words(w);
 const uniq = (a) => [...new Set(a)];
 
 /** Merged animal profiles: [{ name, class, legs, fly, swim, habitat, diet, covering }]; values are arrays (unknown = empty). */
-function readAnimals(ctx, learned) {
+export function readAnimals(ctx, learned) {
   const map = new Map();
   for (const w of ctx.find('kids.animals.animal')) {
     const name = ctx.val(w, 'name');
@@ -71,7 +71,7 @@ function readAnimals(ctx, learned) {
 }
 
 /** true / false / undefined (unknown) */
-function truth(p, f, v) {
+export function truth(p, f, v) {
   if (p.not.includes(`${f}=${v}`)) return false;
   const vals = p[f];
   if (f === 'fly' || f === 'swim') return vals.includes(true) ? true : vals.includes(false) ? false : undefined;
@@ -92,7 +92,7 @@ function questionText(f, v) {
 }
 
 /** The best question for the candidate profiles (not yet asked), or null when none splits them. */
-function pickQuestion(profiles, asked) {
+export function pickQuestion(profiles, asked) {
   const done = new Set(asked.map((a) => `${a.feature}=${a.value}`));
   let best = null;
   for (const f of FEATURES) {
@@ -186,7 +186,7 @@ export function correct(ctx, { answer: a }) {
   return ok(`OK, I changed my note of "${last.text}" from ${said[was] ?? was} to ${said[a] ?? a}. ${next(ctx)}`);
 }
 
-const slug = (t) => {
+export const slug = (t) => {
   let n = String(t).toLowerCase().trim().replace(/[^a-z ]/g, '').replace(/\s+/g, '_');
   if (n.length > 3 && n.endsWith('ies')) n = n.slice(0, -3) + 'y';
   else if (n.length > 3 && n.endsWith('s') && !n.endsWith('ss')) n = n.slice(0, -1);
@@ -268,7 +268,7 @@ export function repeat(ctx) {
 /** What a fact the player volunteers means: feature, the values that satisfy it ('a|b' = either), and how it is said. */
 const FOOD_MEAT = new Set(['meat', 'flesh', 'fish', 'insects', 'mice', 'rats', 'birds', 'animals', 'prey']);
 const FOOD_PLANT = new Set(['plants', 'plant', 'grass', 'leaves', 'vegetables', 'fruit', 'fruits', 'seeds', 'nuts', 'hay', 'herbs']);
-function factOf(kind, value) {
+export function factOf(kind, value) {
   const v = String(value).toLowerCase().replace(/_/g, ' ').trim();
   switch (kind) {
     case 'eats':
