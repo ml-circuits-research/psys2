@@ -2634,3 +2634,19 @@ Order: E1 first (it decides where the effort pays), then E2 and E3 in parallel. 
 
     So in English, about 17 of 57 are of the (c), (d) or (e) kind that E2 targets, and about 30 are segmentation.
   - Add a class (h), **segmentation of compound messages**. E2 can help there too: score the alternative splits against the world.
+
+## Waves 3 and 4: games.chess, media.music, art.draw, diagram.sketch (reviewer, 2026-11-12 00:00)
+
+Accepted. `npm test` gives 1375 pass, 0 fail. The rows are honest: 0–8% of ops.mjs replaced, and matrix is +2–4 ms per turn on the vendored 0.6.1. The re-vendor of 0.7.1 should be measured here first.
+
+In Chrome (`/home/claude/shot/w34.mjs matrix|ops`, diff of the two runs), matrix equals ops except for two things:
+- The engine's random reply to "e4" differs between the runs. That is neutral.
+- **A small loss in matrix.** Chess "undo" drops "We are back at the start." Keep it.
+
+Both modes, pre-existing. Put these in RO-TRANSLATE-FALLBACK or the E1 audit:
+1. "open draw" is not understood in English, while "deschide desenul" works.
+2. In Romanian, the engine's chess replies are English ("I play pawn to e6. Your move.").
+3. "Ești alb și mutare prim" should read "Ești cu albele și muți primul".
+4. The music title is mangled in Romanian: "Twinkle, Twinkle, stea". Song titles should stay as they are, or use a known Romanian title.
+5. "connect Start to End" when End does not exist gives "A connection needs two ends, e.g. …". It should say "There is no box called End. Shall I add it?". This is a state-aware reply, an E2 case.
+6. "delete the dragon" in draw lists things that are not in the picture ("the car, the sky, the grass"). It should list what is there. This is also state-aware.
