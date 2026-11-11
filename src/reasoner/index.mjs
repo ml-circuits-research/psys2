@@ -97,6 +97,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const assumedBy = new Map(worlds.filter((w) => typeof w.assumed === 'function').map((w) => [w.id, w.assumed]));
   const undoOf = new Map(worlds.filter((w) => w.undoAction).map((w) => [w.undoAction, w]));   // action -> the world whose "undo" the library answers by rewinding
   const wordsOf = new Map(worlds.filter((w) => typeof w.undoWords === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world that says what a generic "undo that" took back (undoWords over its toState)
+  const adoptOf = new Map(worlds.filter((w) => typeof w.adopt === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world whose operations change its state and hand it back to the library (`adopt`)
   const problemOf = new Map(worlds.filter((w) => typeof w.problem === 'function').map((w) => [w.id, w.problem]));
   const whyOf = new Map(worlds.filter((w) => typeof w.whyWords === 'function').map((w) => [w.id, w.whyWords]));
   const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
@@ -107,7 +108,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const actions = new Map();
   for (const m of base.matrix.values()) if (m.type === 'core.action') actions.set(unquote(first(m.attrs.name)), m.attrs);
   const reasoner = {
-    lib, base, voices, assumedBy, problemOf, whyOf, undoOf, wordsOf, mirrors, opsKeys, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
+    lib, base, voices, assumedBy, problemOf, whyOf, undoOf, wordsOf, adoptOf, mirrors, opsKeys, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
     /** The matrix world that owns a question type (longest world id that prefixes it), or null. */
     ownerOfType: (type) => owners.find((id) => type === id || String(type).startsWith(id + '.')) ?? null,
     ownerOfAction: (action) => actionOwner.get(action) ?? null,
@@ -134,6 +135,7 @@ export class ReasonerSession {
     this.refused = [];   // wires the library refused to take: [{ id, type, violations }], for the trace
     this.last = null;    // the last library result, for explain / why
     this.known = new Map();
+    this.written = new Map();    // world id -> JSON of the state as the library last said it (a world with `adopt`: a state that differs was changed by its operations since)
     this.derived = null;         // { stamp, json }: the derived state per world for the library's current stamp
     this.completedAt = null;     // the library's stamp after the last complete defaults (null: unknown)
     this.said = new Set();       // assumed cells already said to the user (an assumption is said once)
@@ -148,7 +150,7 @@ export class ReasonerSession {
   /** A copy that shares the state until one of the two changes (nothing is copied). */
   fork() {
     const r = new ReasonerSession(this.reasoner, this.world.fork());
-    r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.said = new Set(this.said); r.mirrored = new Map(this.mirrored); r.told = [...this.told]; r.completedAt = this.completedAt;
+    r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.said = new Set(this.said); r.mirrored = new Map(this.mirrored); r.told = [...this.told]; r.completedAt = this.completedAt; r.written = new Map(this.written);
     r.cur = this.cur && { ...this.cur, owners: new Set(this.cur.owners ?? []) }; r.seg = this.seg && { ...this.seg, ids: [...this.seg.ids] }; r.issueSeen = new Set(this.issueSeen); r.turns = this.turns.map((t) => ({ ...t }));
     return r;
   }
@@ -293,6 +295,7 @@ export class ReasonerSession {
     const dropped = at < 0 ? [] : this.turns.splice(at);
     const after = this.world.mark();
     this.world.rewind(mark);
+    for (const id of this.reasoner.adoptOf.keys()) if (session.state[id]) this.written.set(id, JSON.stringify(session.state[id]));   // the library is the record again: a state the operations changed is overwritten by what it says
     const told = this.told, gone = [];
     this.told = told.filter((id) => { if (this.world.has(id)) return true; const w = session.memory.get(id); if (w) gone.push(w); return false; });
     for (const w of gone) session.memory.retract(w.id, 'taken back');
@@ -375,6 +378,52 @@ export class ReasonerSession {
     const value = (v) => (/^[\w.-]+$/.test(String(v)) ? atomValue(v) : strValue(v));
     const entries = [{ key: 'core.request.action', value: atomValue(action) }, ...Object.entries(args ?? {}).map(([k, v]) => ({ key: `core.request.arg.${k}`, value: value(v) }))];
     return this.resolve({ id: 'req_via_world', type: 'core.request', entries }, session);
+  }
+
+  /**
+   * The operations of a world with `adopt` (fns.mjs) changed its session state (an action, the modal input of an interview): the library takes the new state
+   * over as wires (`adopt({ state, find })` says which to retract and which to tell), so that undo, the rules and the explanation read what the operations did.
+   * A state the rules cannot allow (a deny, a new soft issue) is refused: the library goes back to before, the state with it, and the reason is returned
+   * ({ world, why }); null when the library took the state over (or nothing changed).
+   */
+  adoptState(session) {
+    let refused = null;
+    for (const [id, w] of this.reasoner.adoptOf) {
+      const cur = session.state[id];
+      if (!cur) continue;
+      const json = JSON.stringify(cur);
+      if ((this.written.get(id) ?? this.reasoner.emptyState(id)) === json) continue;
+      let plan;
+      try { plan = w.adopt({ state: cur, find: (t) => this.world.ofType(t) }); } catch { plan = null; }
+      const clean = this.cur ? this.world.stamp === this.cur.stamp : false;
+      const mark = this.world.mark();
+      const seen = new Set(this._issues().map((i) => i.id));
+      let bad = null;
+      if (plan && (plan.retract?.length || plan.tell || plan.sets?.length)) {
+        // one transaction: the wires that changed are retracted and told together (a retract and a tell of their own cost a pass of the rules each)
+        let r;
+        const patch = { retract: (plan.retract ?? []).filter((rid) => this.world.has(rid)) };
+        if (plan.tell) patch.wires = plan.tell;
+        if (plan.sets?.length) patch.sets = plan.sets;
+        try { r = this.world.applyPatch(patch, { budget: this._limit() }); } catch (e) { r = { ok: false, violations: [{ kind: 'error', why: String(e?.message ?? e) }] }; }
+        this._charge();
+        if (!r.ok) bad = r.violations?.[0]?.why ?? 'that cannot be true';
+        if (!bad) { const added = this._issues().find((i) => !seen.has(i.id)); if (added) bad = unquote(first(added.attrs.why) ?? '') || 'that cannot be true'; }
+      }
+      if (bad) {
+        this.world.rewind(mark);
+        if (clean && this.cur) this.cur.stamp = this.world.stamp;   // nothing else changed the library in this turn: the turn is no action to take back
+        refused = { world: id, why: bad };
+      }
+      if (!bad && this.cur?.owners && (plan?.retract?.length || plan?.tell || plan?.sets?.length)) this.cur.owners.add(id);
+      this.written.set(id, json);   // the state is the library's to say again: derived and written back (the refused one is replaced by the one before)
+      this._state(session, id);
+    }
+    if (refused) {
+      const t = String(refused.why).trim();   // a reason that ends in a question ("Which one is right?") keeps it
+      refused.why = `${t.charAt(0).toUpperCase()}${t.slice(1)}${/[.!?]$/.test(t) ? '' : '.'}`;
+    }
+    return refused;
   }
 
   /** What a world's `toState` says of the library now (null for a world without one). */
@@ -577,7 +626,8 @@ export class ReasonerSession {
       try {
         let cur = session.state[id];
         const seen = this.derived.json.get(id);
-        if (cur && seen !== undefined && seen === JSON.stringify(cur)) continue;   // the state already is what the library says
+        if (cur && this.reasoner.adoptOf.has(id) && JSON.stringify(cur) !== (this.written.get(id) ?? this.reasoner.emptyState(id))) continue;   // the operations changed it since the library said it: `adoptState` takes it over first
+        if (cur && seen !== undefined && seen === JSON.stringify(cur)) { this.written.set(id, seen); continue; }   // the state already is what the library says
         const next = toState({ find: (t) => this.world.ofType(t), query: (q) => this.world.query(q) });
         const json = JSON.stringify(next);
         if (this.world.stamp === stamp) this.derived.json.set(id, json);
@@ -585,9 +635,10 @@ export class ReasonerSession {
           if (id !== touched && json === this.reasoner.emptyState(id)) continue;
           cur = (session.state[id] = {});
         }
-        if (json === JSON.stringify(cur)) continue;
+        if (json === JSON.stringify(cur)) { this.written.set(id, json); continue; }
         for (const k of Object.keys(cur)) delete cur[k];
         Object.assign(cur, next);
+        this.written.set(id, JSON.stringify(cur));
       } catch { /* the state stays as it was */ }
     }
   }

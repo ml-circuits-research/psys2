@@ -1,0 +1,37 @@
+# user.profile as a matrix: what the user told about themselves is wires, and what cannot be true together is refused with the reason.
+#
+# The interview, the reading of answers and the CV stay in the operations (ops.mjs, understand.mjs, cv.mjs): they keep working on the session state, and the
+# library takes the state over as wires after each of them (fns.mjs, `adopt`; `toState` is the way back). One user.profile.fact per field (the value or values,
+# who said it: said | guessed, when, an optional note, and num when the value is a whole number); one user.profile.dialog for the bookkeeping of the
+# interview (skipped fields, how often a field was asked, the question that waits ...), as the text of the JSON it is; one user.profile.plan (the plan of the
+# knowledge base as the operations read it).
+
+@pf.seq core.sequence key=core.seq
+
+@pf.k.field core.slot of=user.profile.fact key=field kind=atom required=true
+@pf.k.value core.slot of=user.profile.fact key=value kind=string many=true
+@pf.k.arr core.slot of=user.profile.fact key=arr kind=boolean
+@pf.k.src core.slot of=user.profile.fact key=src kind=atom enum=said enum=guessed
+@pf.k.at core.slot of=user.profile.fact key=at kind=integer
+@pf.k.note core.slot of=user.profile.fact key=note kind=string
+@pf.k.num core.slot of=user.profile.fact key=num kind=integer
+@pf.k.rest core.slot of=user.profile.dialog key=rest kind=string required=true
+@pf.k.plan core.slot of=user.profile.plan key=json kind=string required=true
+
+# ---- an age is a number of years of a life
+@pf.a user.profile.fact field=age num=?a
+@pf.t.young core.check fn=lt args=?a args=0
+@pf.t.old core.check fn=gt args=?a args=120
+@pf.d.young core.deny when=$pf.a if=$pf.t.young why="That is not an age: ?a years."
+@pf.d.old core.deny when=$pf.a if=$pf.t.old why="That is not an age: ?a years."
+
+# ---- nobody has worked for longer than they have lived: the two facts cannot both be right, and the user is asked which one is
+@pf.ag user.profile.fact field=age num=?a
+@pf.yr user.profile.fact field=years num=?y
+@pf.t.longer core.check fn=gt args=?y args=?a
+@pf.d.years core.deny when=$pf.ag when=$pf.yr if=$pf.t.longer why="You said you are ?a years old, but also that you have been working for ?y years. Which one is right?"
+
+# ---- there is no such thing as a negative number of children, and nobody has more than a few dozen
+@pf.c user.profile.fact field=children num=?c
+@pf.t.many core.check fn=gt args=?c args=40
+@pf.d.many core.deny when=$pf.c if=$pf.t.many why="That is a lot of children: ?c. Did you mean another number?"

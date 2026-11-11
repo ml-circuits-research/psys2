@@ -45,6 +45,7 @@ export class World {
     this.toState = null; // `toState(ctx)` of fns.mjs (the session state ops.mjs would keep), or null
     this.problem = null;   // `problem(ctx)` of fns.mjs: the sentence for a statement the library cannot take (a refusal or a new issue), or null
     this.whyWords = null;  // `why(ctx)` of fns.mjs: the words of "why?" about a fact the user can name (matrix strategy), or null
+    this.adopt = null;   // `adopt({ state, find })` of fns.mjs: the library wires for a state the operations changed (the inverse of toState), or null
     this.undoWords = null;   // `undoWords({ before, after })` of fns.mjs: what "undo" says once the library went back, or null
     this.assumed = null;   // `assumed(cell)` of fns.mjs (the words for a default or guessed value an answer rests on), or null
     this.voice = null;   // `voice(ctx)` of fns.mjs (reply facts for the templates), or null
@@ -147,7 +148,7 @@ function readEntries(world, file, text) {
   return wires;
 }
 
-function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, assumed = null, undoWords = null, problem = null, whyWords = null, matrix = false } = {}) {
+function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, adopt = null, assumed = null, undoWords = null, problem = null, whyWords = null, matrix = false } = {}) {
   const w = new World(id);
   w.problem = problem;
   w.whyWords = whyWords;
@@ -157,6 +158,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
   w.assumed = assumed;
   w.undoWords = undoWords;
   w.toState = toState;
+  w.adopt = adopt;
   for (const [k, f] of [['legend', 'legend.sop'], ['kb', 'kb.sop'], ['matrix', 'matrix.sop'], ['mapping', 'mapping.sop']]) if (files[f] != null) w.raw[k] = files[f];
   if (matrix && /\breasoner=matrix\b/.test(files['world.sop'] ?? '')) {
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
@@ -238,10 +240,10 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
     const files = {};
     const matrix = reasoner === 'matrix';
     await Promise.all([...FILES, ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
-    let ops = null, fns = null, voice = null, toState = null, assumed = null, undoWords = null, problem = null, whyWords = null;
-    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
+    let ops = null, fns = null, voice = null, toState = null, adopt = null, assumed = null, undoWords = null, problem = null, whyWords = null;
+    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }
-    const w = buildWorld(id, files, ops, { fns, voice, toState, assumed, undoWords, problem, whyWords, matrix });
+    const w = buildWorld(id, files, ops, { fns, voice, toState, adopt, assumed, undoWords, problem, whyWords, matrix });
     if (built.has(id + ':fnsError')) w.errors.push({ message: `fns.mjs failed to load: ${built.get(id + ':fnsError').message}` });
     if (built.has(id + ':opsError')) w.errors.push({ message: `ops.mjs failed to load: ${built.get(id + ':opsError').message}` });
     built.set(id, w);

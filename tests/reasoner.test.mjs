@@ -35,7 +35,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
   assert.equal(ops.set.get('data.charts').reasoner, 'ops', 'every other world stays on ops');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
@@ -43,13 +43,13 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.problems, []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'user.profile']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227, kids.animals 506 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506]]) {
+test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227, kids.animals 506, user.profile 139 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506], ['user.profile', 139]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }
@@ -722,4 +722,48 @@ test('kids.animals: the questions the library can answer come from it, the ones 
   assert.equal(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra' && w.attrs.can_swim?.[0] === 'true' && !String(w.id).startsWith('kb.')), false);
   assert.deepEqual((await s.send('Can a zebra swim?', {})).statuses, ['missing']);
   sameAsLibrary(s, ['kids.animals']);
+});
+
+// ---- user.profile on the matrix (stage 2) --------------------------------------------------------------------------------------------------------
+
+const PROFILE = ['What do you know about me?', 'I am a nurse.', 'yes', 'Call me Andy.', 'I live in Cluj.', 'I am 34 years old.', "I've been teaching for 12 years.", 'I love hiking and jazz.',
+  'Where do I live?', 'What is my name?', 'interview me', 'Mostly Python and SQL.', 'pause', 'Forget my hobbies.', 'What do you know about me?', 'How much do you know?',
+  'I am 12 years old.', "I've been teaching for 20 years.", 'I have 50 kids', 'Remember that I am 34 years old.', 'Delete my profile.', 'no', 'undo that'];
+const PROFILE_GAINS = new Set([16, 17, 18, 19, 20, 21, 22]);   // an age the user then contradicts and a number of children nobody has are refused with the reason; undo says it in the world's words
+
+test('user.profile: a scripted session says the same as the ops reasoner, word for word, with the same statuses and the same state, except the listed gains', async () => {
+  const run = async (eng) => {
+    const s = eng.createSession({ language: 'en' });
+    const out = [], states = [];
+    for (const l of PROFILE) { const r = await s.send(l, {}); out.push([r.text, r.statuses.join()]); states.push(JSON.stringify(s.isession.state['user.profile'] ?? null)); }
+    return { s, out, states };
+  };
+  const o = await run(ops), m = await run(matrix);
+  m.out.forEach((x, i) => { if (!PROFILE_GAINS.has(i)) { assert.deepEqual(x, o.out[i], `turn ${i}: ${PROFILE[i]}`); assert.equal(m.states[i], o.states[i], `state after turn ${i}: ${PROFILE[i]}`); } });
+  assert.match(m.out[17][0], /^That does not add up\. You said you are 12 years old, but also that you have been working for 20 years\. Which one is right\?$/);
+  assert.deepEqual(m.out[17][1], 'conflicting');
+  assert.equal(m.out[18][0], 'That does not add up. That is a lot of children: 50. Did you mean another number?');
+  assert.deepEqual(matrix.reasoner.problems, []);
+});
+
+test('user.profile: the facts are wires of the library (one per field), the state is derived from them, undo goes back through the library and says what was forgotten', async () => {
+  const s = matrix.createSession({ language: 'en' });
+  const lib = s.isession.rs.world;
+  await s.send('I am a nurse.', {});
+  assert.equal(s.isession.state['user.profile'].inputMode, 'confirm', 'the guess waits to be confirmed');
+  await s.send('I am 34 years old.', {});
+  const facts = () => Object.fromEntries(lib.ofType('user.profile.fact').map((w) => [w.attrs.field[0], w.attrs.value?.map((v) => JSON.parse(v))]));
+  assert.deepEqual(facts(), { role: ['nurse'], field: ['Healthcare'], age: ['34'] });
+  assert.equal(s.isession.state['user.profile'].fields.role.v, 'nurse');
+  assert.equal((await s.send('undo that', {})).text, 'OK, I forgot your age (34).');
+  assert.deepEqual(facts(), { role: ['nurse'], field: ['Healthcare'] });
+  assert.equal(s.isession.state['user.profile'].fields.age, undefined);
+  // the refusal of two facts that cannot both be right leaves the library and the state as they were
+  await s.send('I am 12 years old.', {});
+  const before = JSON.stringify(s.isession.state['user.profile']);
+  assert.match((await s.send("I've been teaching for 20 years.", {})).text, /^That does not add up\./);
+  assert.equal(JSON.stringify(s.isession.state['user.profile']), before);
+  assert.deepEqual(facts(), { role: ['nurse'], field: ['Healthcare'], age: ['12'] });
+  assert.deepEqual(lib.ofType('core.issue'), []);
+  sameAsLibrary(s, ['user.profile']);
 });
