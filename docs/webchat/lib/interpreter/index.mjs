@@ -380,7 +380,10 @@ export class Interpreter {
       const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
       let res;
       try { res = w.ops.interceptInput(ctx, text); } catch (e) { res = { handled: true, reply: `Something went wrong while I handled that (${e?.message ?? e}).` }; }
-      if (res?.handled) return { worldId: w.id, reply: res.reply, ops: st.ops };
+      if (res?.handled) {
+        const refused = session.rs?.adoptState(session);   // the answer to an interview question is a statement too: the library takes it over or refuses it with the reason
+        return { worldId: w.id, reply: refused ? `That does not add up. ${refused.why}` : res.reply, ops: st.ops };
+      }
     }
     return null;
   }
@@ -459,7 +462,12 @@ export class Interpreter {
       if (envelope.openTab) { this.runAction(session, 'ui.openTab', { tab: envelope.openTab }); delete envelope.openTab; }   // a game's action brings its tab forward, as its operation did
     }
     else if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
-    else envelope = this._runOp(session, op, spec, {}, st, { ...args, request: wire });
+    else {
+      envelope = this._runOp(session, op, spec, {}, st, { ...args, request: wire });
+      // a world whose operations keep their own state (spec 15, `adopt`): the library takes over what they did, or refuses it with the reason
+      const refused = session.rs?.adoptState(session);
+      if (refused) envelope = { status: 'conflicting', reason: 'precondition_failed', why: refused.why, note: `That does not add up. ${refused.why}`, from: [] };
+    }
     spec.op = op;
     const answer = this._writeAnswer(session, wire, envelope, spec);
     return { kind: 'request', wire, spec, envelope, answer, ops: st.ops, status: envelope.status };

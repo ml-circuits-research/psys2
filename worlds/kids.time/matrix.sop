@@ -1,0 +1,149 @@
+# kids.time as a matrix: the calendar is wires (the knowledge base, kb.sop) and what follows from them is rules. Told: what day it is today, which month it is now,
+# what the clock shows (each telling is a new wire; the latest is what holds). Left to the operations (ops.mjs, `ops=` in world.sop): how many small spans fit in
+# a big one (a shortest chain over the length facts), the 12-hour clock text and reading the real clock. The words around the numbers ("The day after Monday is",
+# "Tomorrow is", the remark about February) are the world's (fns.mjs, `voice`).
+
+@tm.seq core.sequence key=core.seq
+
+# ---- what the dialogue says about now: the latest statement of each
+@tm.td kids.time.today core.select=latest day=?d
+@tm.nd kids.time.nowday day=?d
+@tm.r.nd core.rule when=$tm.td then=$tm.nd
+@tm.tm kids.time.thismonth core.select=latest month=?m
+@tm.nm kids.time.nowmonth month=?m
+@tm.r.nm core.rule when=$tm.tm then=$tm.nm
+@tm.tc kids.time.clockset core.select=latest hour=?h
+@tm.nc kids.time.nowclock hour=?h
+@tm.r.nc core.rule when=$tm.tc then=$tm.nc
+
+# ---- the clock has hours 0 to 24 only: another hour is refused when told, with the reason
+@tm.hb kids.time.clockset hour=?h
+@tm.t.low core.check fn=lt args=?h args=0
+@tm.t.high core.check fn=gt args=?h args=24
+@tm.d.low core.deny when=$tm.hb if=$tm.t.low why="That is not an hour on a clock: ?h o'clock."
+@tm.d.high core.deny when=$tm.hb if=$tm.t.high why="That is not an hour on a clock: ?h o'clock."
+
+# ---- keys the rules fill on a question
+@tm.k.shift.start core.slot of=kids.time.shift key=start kind=atom
+@tm.k.shift.pos core.slot of=kids.time.shift key=pos kind=integer
+@tm.k.ss.start core.slot of=kids.time.seasonshift key=start kind=atom
+@tm.k.ss.pos core.slot of=kids.time.seasonshift key=pos kind=integer
+@tm.k.gap.start core.slot of=kids.time.gap key=start kind=atom
+@tm.k.gap.unit core.slot of=kids.time.gap key=unit kind=atom
+@tm.k.hg.unit core.slot of=kids.time.hoursgap key=unit kind=atom
+
+# ---- the day after or before another day, wrapping round the week: start (a name, or the one told for "today"), the place counted from it, the one at that place
+@tm.sd.q1 kids.time.shift unit=day from=?f
+@tm.sd.d1 kids.time.dayinfo name=?f
+@tm.sd.s1 kids.time.shift core.on=$tm.sd.q1 start=?f
+@tm.sd.r.s1 core.rule when=$tm.sd.q1 when=$tm.sd.d1 then=$tm.sd.s1
+@tm.sd.q2 kids.time.shift unit=day from=today
+@tm.sd.n2 kids.time.nowday day=?d
+@tm.sd.s2 kids.time.shift core.on=$tm.sd.q2 start=?d
+@tm.sd.r.s2 core.rule when=$tm.sd.q2 when=$tm.sd.n2 then=$tm.sd.s2
+@tm.sd.q3 kids.time.shift unit=day start=?s by=?n
+@tm.sd.d3 kids.time.dayinfo name=?s index=?i
+@tm.sd.c1 core.calc out=?a fn=add args=?i args=?n
+@tm.sd.c2 core.calc out=?b fn=sub args=?a args=1
+@tm.sd.c3 core.calc out=?c fn=mod args=?b args=7
+@tm.sd.c4 core.calc out=?e fn=add args=?c args=1
+@tm.sd.s3 kids.time.shift core.on=$tm.sd.q3 pos=?e
+@tm.sd.r.s3 core.rule when=$tm.sd.q3 when=$tm.sd.d3 with=$tm.sd.c1 with=$tm.sd.c2 with=$tm.sd.c3 with=$tm.sd.c4 then=$tm.sd.s3
+@tm.sd.q4 kids.time.shift unit=day pos=?e
+@tm.sd.d4 kids.time.dayinfo index=?e name=?x
+@tm.sd.s4 kids.time.shift core.on=$tm.sd.q4 result=?x
+@tm.sd.r.s4 core.rule when=$tm.sd.q4 when=$tm.sd.d4 then=$tm.sd.s4
+
+# ---- the month some steps from another one, wrapping round the year: start (a name, or the one told for "this_month"), the place counted from it, the one at that place
+@tm.sm.q1 kids.time.shift unit=month from=?f
+@tm.sm.d1 kids.time.monthinfo name=?f
+@tm.sm.s1 kids.time.shift core.on=$tm.sm.q1 start=?f
+@tm.sm.r.s1 core.rule when=$tm.sm.q1 when=$tm.sm.d1 then=$tm.sm.s1
+@tm.sm.q2 kids.time.shift unit=month from=this_month
+@tm.sm.n2 kids.time.nowmonth month=?d
+@tm.sm.s2 kids.time.shift core.on=$tm.sm.q2 start=?d
+@tm.sm.r.s2 core.rule when=$tm.sm.q2 when=$tm.sm.n2 then=$tm.sm.s2
+@tm.sm.q3 kids.time.shift unit=month start=?s by=?n
+@tm.sm.d3 kids.time.monthinfo name=?s index=?i
+@tm.sm.c1 core.calc out=?a fn=add args=?i args=?n
+@tm.sm.c2 core.calc out=?b fn=sub args=?a args=1
+@tm.sm.c3 core.calc out=?c fn=mod args=?b args=12
+@tm.sm.c4 core.calc out=?e fn=add args=?c args=1
+@tm.sm.s3 kids.time.shift core.on=$tm.sm.q3 pos=?e
+@tm.sm.r.s3 core.rule when=$tm.sm.q3 when=$tm.sm.d3 with=$tm.sm.c1 with=$tm.sm.c2 with=$tm.sm.c3 with=$tm.sm.c4 then=$tm.sm.s3
+@tm.sm.q4 kids.time.shift unit=month pos=?e
+@tm.sm.d4 kids.time.monthinfo index=?e name=?x
+@tm.sm.s4 kids.time.shift core.on=$tm.sm.q4 result=?x
+@tm.sm.r.s4 core.rule when=$tm.sm.q4 when=$tm.sm.d4 then=$tm.sm.s4
+
+# ---- the season some steps from another one: start (a name, or the one told for "now"), the place counted from it, the one at that place
+@tm.ss.q1 kids.time.shift unit=season from=?f
+@tm.ss.d1 kids.time.seasoninfo name=?f
+@tm.ss.s1 kids.time.shift core.on=$tm.ss.q1 start=?f
+@tm.ss.r.s1 core.rule when=$tm.ss.q1 when=$tm.ss.d1 then=$tm.ss.s1
+@tm.ss.q3 kids.time.shift unit=season start=?s by=?n
+@tm.ss.d3 kids.time.seasoninfo name=?s index=?i
+@tm.ss.c1 core.calc out=?a fn=add args=?i args=?n
+@tm.ss.c2 core.calc out=?b fn=sub args=?a args=1
+@tm.ss.c3 core.calc out=?c fn=mod args=?b args=4
+@tm.ss.c4 core.calc out=?e fn=add args=?c args=1
+@tm.ss.s3 kids.time.shift core.on=$tm.ss.q3 pos=?e
+@tm.ss.r.s3 core.rule when=$tm.ss.q3 when=$tm.ss.d3 with=$tm.ss.c1 with=$tm.ss.c2 with=$tm.ss.c3 with=$tm.ss.c4 then=$tm.ss.s3
+@tm.ss.q4 kids.time.shift unit=season pos=?e
+@tm.ss.d4 kids.time.seasoninfo index=?e name=?x
+@tm.ss.s4 kids.time.shift core.on=$tm.ss.q4 result=?x
+@tm.ss.r.s4 core.rule when=$tm.ss.q4 when=$tm.ss.d4 then=$tm.ss.s4
+
+# ---- the same, asked as a season question: start (a name, or the one told for "now"), the place counted from it, the one at that place
+@tm.ts.q1 kids.time.seasonshift unit=season from=?f
+@tm.ts.d1 kids.time.seasoninfo name=?f
+@tm.ts.s1 kids.time.seasonshift core.on=$tm.ts.q1 start=?f
+@tm.ts.r.s1 core.rule when=$tm.ts.q1 when=$tm.ts.d1 then=$tm.ts.s1
+@tm.ts.q3 kids.time.seasonshift unit=season start=?s by=?n
+@tm.ts.d3 kids.time.seasoninfo name=?s index=?i
+@tm.ts.c1 core.calc out=?a fn=add args=?i args=?n
+@tm.ts.c2 core.calc out=?b fn=sub args=?a args=1
+@tm.ts.c3 core.calc out=?c fn=mod args=?b args=4
+@tm.ts.c4 core.calc out=?e fn=add args=?c args=1
+@tm.ts.s3 kids.time.seasonshift core.on=$tm.ts.q3 pos=?e
+@tm.ts.r.s3 core.rule when=$tm.ts.q3 when=$tm.ts.d3 with=$tm.ts.c1 with=$tm.ts.c2 with=$tm.ts.c3 with=$tm.ts.c4 then=$tm.ts.s3
+@tm.ts.q4 kids.time.seasonshift unit=season pos=?e
+@tm.ts.d4 kids.time.seasoninfo index=?e name=?x
+@tm.ts.s4 kids.time.seasonshift core.on=$tm.ts.q4 result=?x
+@tm.ts.r.s4 core.rule when=$tm.ts.q4 when=$tm.ts.d4 then=$tm.ts.s4
+
+# ---- how many days until a day of the week comes, counting forward (from a named day or from today)
+@tm.g.q1 kids.time.gap from=?f
+@tm.g.d1 kids.time.dayinfo name=?f
+@tm.g.s1 kids.time.gap core.on=$tm.g.q1 start=?f
+@tm.g.r.s1 core.rule when=$tm.g.q1 when=$tm.g.d1 then=$tm.g.s1
+@tm.g.q2 kids.time.gap from=today
+@tm.g.n2 kids.time.nowday day=?d
+@tm.g.s2 kids.time.gap core.on=$tm.g.q2 start=?d
+@tm.g.r.s2 core.rule when=$tm.g.q2 when=$tm.g.n2 then=$tm.g.s2
+@tm.g.q3 kids.time.gap start=?s to=?t
+@tm.g.d3 kids.time.dayinfo name=?s index=?i
+@tm.g.d4 kids.time.dayinfo name=?t index=?j
+@tm.g.c1 core.calc out=?a fn=sub args=?j args=?i
+@tm.g.c2 core.calc out=?c fn=mod args=?a args=7
+@tm.g.s3 kids.time.gap core.on=$tm.g.q3 count=?c unit=day
+@tm.g.r.s3 core.rule when=$tm.g.q3 when=$tm.g.d3 when=$tm.g.d4 with=$tm.g.c1 with=$tm.g.c2 then=$tm.g.s3
+
+# ---- hours from one o'clock to another on a 12-hour clock: 12 when the two hours are different and a whole turn apart, 0 when they are the same
+@tm.h.q kids.time.hoursgap from=?a to=?b
+@tm.h.t1 core.check fn=gte args=?a args=0
+@tm.h.t2 core.check fn=lte args=?a args=24
+@tm.h.t3 core.check fn=gte args=?b args=0
+@tm.h.t4 core.check fn=lte args=?b args=24
+@tm.h.c1 core.calc out=?d fn=sub args=?b args=?a
+@tm.h.c2 core.calc out=?m fn=mod args=?d args=12
+@tm.h.t.nz core.check fn=neq args=?m args=0
+@tm.h.t.z core.check fn=eq args=?m args=0
+@tm.h.t.same core.check fn=eq args=?a args=?b
+@tm.h.t.diff core.check fn=neq args=?a args=?b
+@tm.h.a1 kids.time.hoursgap core.on=$tm.h.q count=?m unit=hour
+@tm.h.a2 kids.time.hoursgap core.on=$tm.h.q count=0 unit=hour
+@tm.h.a3 kids.time.hoursgap core.on=$tm.h.q count=12 unit=hour
+@tm.h.r1 core.rule when=$tm.h.q with=$tm.h.c1 with=$tm.h.c2 if=$tm.h.t1 if=$tm.h.t2 if=$tm.h.t3 if=$tm.h.t4 if=$tm.h.t.nz then=$tm.h.a1
+@tm.h.r2 core.rule when=$tm.h.q with=$tm.h.c1 with=$tm.h.c2 if=$tm.h.t1 if=$tm.h.t2 if=$tm.h.t3 if=$tm.h.t4 if=$tm.h.t.z if=$tm.h.t.same then=$tm.h.a2
+@tm.h.r3 core.rule when=$tm.h.q with=$tm.h.c1 with=$tm.h.c2 if=$tm.h.t1 if=$tm.h.t2 if=$tm.h.t3 if=$tm.h.t4 if=$tm.h.t.z if=$tm.h.t.diff then=$tm.h.a3

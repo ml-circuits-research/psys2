@@ -1,0 +1,10 @@
+# kids.animals as a matrix: the animals are wires (the knowledge base kb.sop, and what the dialogue teaches or tells about pets), and a question about one is
+# a query the library answers by itself: the class, the legs, the food, the sound, the baby's name, the pets, and the abilities (can_fly and can_swim: an
+# explicit "no" is kept apart from unknown, "yes" and "no" together are a conflict, and the library says which statements it rests on). There are no rules of
+# our own to add: nothing follows from the facts that a child has not said (an animal is not guessed to fly from its class).
+#
+# Left to the operations (ops.mjs, `ops=` in world.sop), because a library query cannot say them: the checks that carry the value they seek ("is a whale a
+# fish?": the library would answer the value it was given), the phrases of where an animal lives and what covers it (several habitats are one sentence, not a
+# conflict), the description of an animal and the search for the animals that match several properties. Their words are the world's own tables in ops.mjs.
+#
+# What a child teaches is told as wires and is undone with the rest (undo, "that's wrong"); `fns.mjs` says in the world's words what was taken back.

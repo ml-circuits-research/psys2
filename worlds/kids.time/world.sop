@@ -5,6 +5,11 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    ops=kids.time.length.count
+    ops=kids.time.clock.result
+    ops=kids.time.reading.time
+    source="what I know about the calendar"
     language=en
     status=fixture
     title="Days, months, seasons and the clock"

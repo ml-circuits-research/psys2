@@ -23,7 +23,7 @@ export function initialState() {
 }
 
 // ---- knowledge base: the plan -----------------------------------------------------------------------------------------
-function planOf(ctx) {
+export function planOf(ctx) {
   const wires = ctx.find('user.profile.field');
   if (!wires.length) return PLAN_FALLBACK.map((p) => ({ ...p, q: [], ack: [], follow: '', followKey: '', followMode: 'unclear', sens: 'none', askable: p.askable !== false }));
   return wires.map((w) => ({
@@ -57,13 +57,16 @@ function st(ctx) {
 }
 const known = (s, key) => list(s.fields[key]?.v).length > 0;
 const isOpen = (s, key) => !known(s, key) && !s.skipped[key];
-function sync(ctx, plan) {
-  const s = st(ctx);
-  plan ??= planOf(ctx);
+/** What the tab reads and the engine's modal input follows, derived from the rest of the state: the plan, the counts, the input mode (shared with the matrix, fns.mjs). */
+export function derive(s, plan) {
   s.plan = plan.map((p) => ({ id: p.id, section: p.section, label: p.label, prio: p.prio, card: p.card, want: p.want, example: p.example, needs: p.needs || undefined }));
   s.counts = counts(s, s.plan);
   s.inputMode = s.active ? 'interview' : s.pending && ['confirm', 'delete'].includes(s.pending.kind) ? 'confirm' : null;
   if (!s.pending) s.question = s.question && s.active ? s.question : '';
+}
+function sync(ctx, plan) {
+  const s = st(ctx);
+  derive(s, plan ?? planOf(ctx));
 }
 const W = (fn) => (ctx, args) => { const r = fn(ctx, args ?? {}); sync(ctx); return r; };
 const meter = (s, plan) => { const c = counts(s, plan); return `(${c.known} of ${c.total} known)`; };

@@ -46,6 +46,12 @@ const PHRASE = {
   },
 };
 
+/** The words before a shifted day, month or season ("The day after Monday is", "Tomorrow is"); `now` = counted from today / this month. Shared with the matrix (fns.mjs). */
+export function shiftNote(unit, start, n, now) {
+  const ph = PHRASE[unit];
+  return now ? (ph.now[String(n)] ?? ph.fromNow(n)) : ph.from(start, n);
+}
+
 export function shift(ctx, { unit, from, by }) {
   const n = Number(by);
   const type = { day: K('dayinfo'), month: K('monthinfo'), season: K('seasoninfo') }[unit];
@@ -65,8 +71,7 @@ export function shift(ctx, { unit, from, by }) {
   const i = list.findIndex((x) => x.name === start);
   if (i < 0) return { status: 'unsupported', note: `I do not know ${word(start)}.` };
   const r = list[mod(i + n, list.length)];
-  const ph = PHRASE[unit];
-  const note = now ? (ph.now[String(n)] ?? ph.fromNow(n)) : ph.from(start, n);
+  const note = shiftNote(unit, start, n, now);
   return { status: 'supported', value: r.name, note, from: [...usedFrom, list[i].w.id, r.w.id] };
 }
 

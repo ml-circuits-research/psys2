@@ -726,3 +726,96 @@
     input="what do you know about me?"
     expect="know"
     session=dlg09
+
+@t.user.profile.m01 core.test
+    session=pm1
+    input="I am 12 years old."
+    expect="12 years old"
+    expectState="fields.age.v=12"
+    reasoner=matrix
+    doc="SOPWORLD stage 2: the facts are wires of the library; facts that cannot both be true are refused with the reason and the user is asked which is right"
+
+@t.user.profile.m02 core.test
+    session=pm1
+    input="I've been teaching for 20 years."
+    expect="That does not add up. You said you are 12 years old, but also that you have been working for 20 years. Which one is right?"
+    expectStatus=conflicting
+    expectState="fields.age.v=12"
+    expectState="counts.known=1"
+    reasoner=matrix
+
+@t.user.profile.m03 core.test
+    session=pm1
+    input="I am 30 years old."
+    expect="30"
+    expectState="fields.age.v=30"
+    reasoner=matrix
+
+@t.user.profile.m04 core.test
+    session=pm1
+    input="I've been teaching for 20 years."
+    expect="teacher"
+    expectState="fields.years.v=20"
+    expectState="fields.role.v=teacher"
+    reasoner=matrix
+
+@t.user.profile.m05 core.test
+    session=pm1
+    input="undo that"
+    expect="OK, I forgot your current role (teacher), years of experience (20) and field or industry (Education)."
+    expectState="counts.known=1"
+    reasoner=matrix
+    doc="undo goes back through the library and says in the world's words what was forgotten"
+
+@t.user.profile.m06 core.test
+    input="I have 50 kids"
+    expect="That does not add up. That is a lot of children: 50. Did you mean another number?"
+    expectStatus=conflicting
+    expectState="fields.children=undefined"
+    reasoner=matrix
+
+@t.user.profile.m07 core.test
+    session=pm2
+    input="Call me Ana."
+    expectState="fields.name.v=Ana"
+    reasoner=matrix
+
+@t.user.profile.m08 core.test
+    session=pm2
+    input="undo that"
+    expect="OK, I forgot your preferred name (Ana)."
+    expectState="fields.name=undefined"
+    reasoner=matrix
+
+@t.user.profile.m09 core.test
+    session=pm2
+    input="What do you know about me?"
+    expect="do not know anything"
+    reasoner=matrix
+
+@t.user.profile.m10 core.test
+    session=pm3
+    input="I am 12 years old."
+    expectState="fields.age.v=12"
+    reasoner=matrix
+
+@t.user.profile.m11 core.test
+    session=pm3
+    input="interview me"
+    expectState="active=true"
+    reasoner=matrix
+
+@t.user.profile.m12 core.test
+    session=pm3
+    input="Andy"
+    expectState="fields.name.v=Andy"
+    reasoner=matrix
+
+@t.user.profile.m13 core.test
+    session=pm3
+    input="I'm a teacher with 20 years of experience"
+    expect="That does not add up. You said you are 12 years old, but also that you have been working for 20 years. Which one is right?"
+    expectState="fields.role.v=undefined"
+    expectState="active=true"
+    doc="an answer in the interview is a statement too: the same refusal, and the interview goes on from the question it was at"
+    reasoner=matrix

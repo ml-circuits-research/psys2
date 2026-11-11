@@ -5,6 +5,8 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    source="what you told me about yourself"
     language=en
     status=fixture
     tab=profile

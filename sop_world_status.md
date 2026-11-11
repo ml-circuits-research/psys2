@@ -286,3 +286,7 @@ Fixes (outputs byte-identical; 4,733 sessions of the operational, operational-ro
 | other | 10.9 \| 11.4 | 9.1 \| 9.8 |
 
 The gap of the matrix worlds went from +4.8 to +2.0 ms (four) and from +4.5 to +2.6 ms (games) on this machine (the reviewer's box shows about twice the absolute numbers); p95 is within noise. What remains is library cost: the first change of a fork or after a mark (`_detach`, grows with the size of the world: the knowledge-base wires and the game's animals), `tell` propagation, `act`. These grow with the number of wires in the base, which matters as more worlds move to the library: see the worker-log issue.
+
+## Stage 2: kids.time, kids.animals, user.profile (2026-11-11)
+- Ten worlds now run on the matrix (spec 15 "Stage 2, continued"). test-world: kids.time 227, kids.animals 506, user.profile 139 under matrix (217 / 497 / 126 under ops); all worlds pass in both modes.
+- Bench (p50 ms, matrix, same interleaved ops control; shared machine): before: four 11.1, kids-other 9.9, other 10.1, all 9.9; after kids.time: 10.9 / 10.4 / 9.8 / 10.0; after kids.animals: 11.6 / 11.0 / 9.4 / 10.2; after user.profile: 12.1 / 11.5 / 11.1 / 10.8 against ops controls 9.8 / 10.4 / 9.2 / 9.4 (profile sessions add about 1 ms per turn: one library transaction per state change; its legend and kb add about 1.1 ms to session creation in the combined base, which the per-world split removes).

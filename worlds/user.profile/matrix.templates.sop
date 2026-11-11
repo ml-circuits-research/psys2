@@ -1,0 +1,14 @@
+@tpl.user.profile.m.tell.refused core.template
+    for=op.user.profile.tell
+    status=conflicting
+    text="{note}"
+
+@tpl.user.profile.m.sensitive.refused core.template
+    for=op.user.profile.sensitive
+    status=conflicting
+    text="{note}"
+
+@tpl.user.profile.m.setName.refused core.template
+    for=op.user.profile.setName
+    status=conflicting
+    text="{note}"

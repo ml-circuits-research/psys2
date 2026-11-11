@@ -17,8 +17,12 @@
  *   hangman   matrix (stage 2): a repeated letter is answered by the rules and the tab does not change, "undo" takes the last guess back (the letter on the tab is
  *             free again), a finished game refuses guesses and undo reopens it.
  *   guess     matrix (stage 2): the animals still possible follow the answers on the tab, "undo" asks the last question again, a reply that does not fit is refused.
+ *   time      matrix (stage 2): the day, the days until a day and the hours between come from the library, an hour the clock does not have is refused with the reason
+ *             and the clock keeps its hour, "undo that" says it in the world's words.
+ *   animals   matrix (stage 2): a taught fact is answered from the library and "undo that" forgets it in the world's words.
+ *   profile   matrix (stage 2): two facts that cannot both be right are refused with the reason (and the tab keeps the first), "undo that" says what was forgotten.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -217,6 +221,59 @@ export const SCENARIOS = {
       const r = await say(c, 'yes');
       check('guess: an answer that does not fit the game is refused with the reason', r === 'I am waiting to learn the animal. Tell me, for example: "it was a zebra".', r.slice(0, 80));
       check('guess: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async time(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      const a = await say(c, 'What day is tomorrow?');
+      check('time: without a told day the answer asks for it', /^I need to know what day it is today\./.test(a), a.slice(0, 80));
+      await say(c, 'Today is Friday.');
+      const t = await say(c, 'What day is tomorrow?');
+      check('time: tomorrow is worked out by the library from the day told', t === 'Tomorrow is Saturday.', t);
+      const g = await say(c, 'How many days until Tuesday?');
+      check('time: the days until a day', g === 'From today to Tuesday is 4 days.', g);
+      const h = await say(c, 'How many hours from 9 to 3?');
+      check('time: the hours between two o\'clock times', h === "It is 6 hours from 9 o'clock to 3 o'clock.", h);
+      await say(c, "It is 3 o'clock.");
+      const r = await say(c, "It is 30 o'clock.");
+      check('time: an hour the clock does not have is refused with the reason', r === "That does not add up. That is not an hour on a clock: 30 o'clock.", r);
+      const k = await say(c, 'What time is it?');
+      check('time: the clock keeps its hour', k === "It is 3 o'clock.", k);
+      const u = await say(c, 'undo that');
+      check('time: "undo that" says what it took back in the world\'s words', u === 'OK, I forgot what time it is.', u);
+      check('time: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async animals(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      const a = await say(c, 'A zebra can swim.');
+      const q = await say(c, 'Can a zebra swim?');
+      check('animals: a taught fact is answered from the library', /remember/.test(a) && q === 'Yes, a zebra can swim.', `${a.slice(0, 50)} | ${q}`);
+      const u = await say(c, 'undo that');
+      check('animals: "undo that" forgets it in the world\'s words', u === 'OK, I forgot what you taught me about zebras.', u);
+      const m = await say(c, 'Can a zebra swim?');
+      check('animals: after the undo the question is open again', /^I don't know whether a zebra can swim\./.test(m), m.slice(0, 80));
+      const l = await say(c, 'How many legs does a spider have?');
+      check('animals: a knowledge base fact comes from the library', l === 'A spider has 8 legs.', l);
+      check('animals: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async profile(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      await say(c, 'I am 12 years old.');
+      const r = await say(c, "I've been teaching for 20 years.");
+      check('profile: two facts that cannot both be right are refused with the reason, and the user is asked which is right', r === 'That does not add up. You said you are 12 years old, but also that you have been working for 20 years. Which one is right?', r.slice(0, 160));
+      const k = await say(c, 'What do you know about me?');
+      check('profile: the first fact is kept and the second is not', /age: 12/.test(k) && !/teacher|years of experience/.test(k), k.slice(0, 120));
+      await say(c, 'I am 30 years old.');
+      const t = await say(c, "I've been teaching for 20 years.");
+      check('profile: after the user says which one is right the statement is taken', /teacher/i.test(t), t.slice(0, 80));
+      const u = await say(c, 'undo that');
+      check('profile: "undo that" says what was forgotten', /^OK, I forgot your current role \(teacher\)/.test(u), u.slice(0, 120));
+      check('profile: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 };

@@ -659,10 +659,16 @@ export class Discourse {
         if (env.undoneTurn != null) { this.actions = this.actions.filter((a) => a.turn !== env.undoneTurn); this.frames = this.frames.filter((f) => f.turn !== env.undoneTurn); }
         if (env.status === 'supported' && env.value) return { reply: env.value, info: { kind: 'undo', of: null, via: 'core.matrix' } };
       }
+      // a world that says what a generic "undo that" took back in its own words (fns.mjs `undoWords`): the state before the rewind is what it compares with
+      const lastWorlds = gw ? [] : d.isession.rs.turns.at(-1)?.worlds ?? [];
+      const uw = lastWorlds.length === 1 && d.isession.rs.reasoner.wordsOf.has(lastWorlds[0]) ? lastWorlds[0] : null;
+      const uwBefore = uw ? d.isession.rs.stateOfWorld(uw) : null;
       const turn = gw ? null : d.isession.rs.undo(d.isession);
       if (turn != null) { const act = this.actions.find((a) => a.turn === turn); if (act) this._setState(Object.fromEntries(act.worlds.filter((w) => !d.isession.rs.reasoner.stateOf.has(w)).map((w) => [w, act.before[w]]))); }   // worlds whose state is not derived from the library
       const said = turn != null ? this.actions.find((a) => a.turn === turn)?.text ?? d.sources.get(`msg${turn}`)?.english : null;
       if (turn != null) { this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn); }
+      const own = turn != null && uw ? d.isession.rs.undoSays(uw, uwBefore, said ? String(said).replace(/[.!?\s]+$/, '') : null) : null;
+      if (own) return { reply: own, info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };
       if (turn != null) return { reply: said ? `OK, I took that back: "${String(said).replace(/[.!?\s]+$/, '')}".` : 'OK, I took that back.', info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };
     }
     // ops reasoner: "No, she gives him 4." revises the statement just made
