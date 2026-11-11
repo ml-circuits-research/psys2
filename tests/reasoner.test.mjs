@@ -255,7 +255,8 @@ test('the build ships the library and the fns of matrix worlds, versioned like e
     assert.equal(index.worlds['kids.shop'].fnsUrl, 'worlds/kids.shop/fns.mjs');
     assert.ok(index.worlds['kids.shop'].files['matrix.sop']);
     assert.equal(index.worlds['data.charts'].fnsUrl, 'worlds/data.charts/fns.mjs');
-    assert.equal(index.worlds['ui.shell'].fnsUrl, undefined);
+    assert.equal(index.worlds['ui.shell'].fnsUrl, 'worlds/ui.shell/fns.mjs');
+    assert.equal(index.worlds['lang.common'].fnsUrl, undefined);
     const dialog = await readFile(path.join(out, 'lib/dialog/index.mjs'), 'utf8');
     assert.match(dialog, /\.\.\/reasoner\/index\.mjs\?v=[0-9a-f]{10}/, 'the reasoner module is in the versioned graph');
     const reasoner = await readFile(path.join(out, 'lib/reasoner/index.mjs'), 'utf8');
