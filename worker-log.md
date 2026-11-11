@@ -429,3 +429,11 @@ Stopped by the user: the demo on GitHub Pages is in order. Landed today after NX
 - New world keys: `compose=world.<id>` (composite world, specified and implemented, unused) and `reads=world.<id>` (legend + facts of another world, used by kids.arith for its rule on kids.shop purchases).
 - Verification: `scripts/dump-turns.mjs` before/after on 4 591 turns: only a random-song turn differs. Bench and table in sop_world_status.md (all p50 9.13 vs 10.71 before; session creation 1.03 vs 2.09 ms).
 - Tests: `tests/reasoner.test.mjs` updated (`rs.of(world)` instead of `rs.world`, `reasoner.buildAll()` instead of `problems`) plus two new tests. `scripts/eval-reasoner.mjs` audits every instance.
+
+## 2026-11-11 — user decision: every world moves to sopworld, behind the flag; the comparison is per world against the custom code
+
+- User (to the DGX session): with the flag in place, move **all** worlds to sopworld and test them. The goal is to reach at least the performance (correctness and speed) of the custom `ops.mjs` code in each world. Where the library cannot reach it, the comparison must produce **concrete ideas to generalize and improve the library**, not cherry-picked wins.
+- So "move a world only when it gains something" (WORLDS-APART item 4) is superseded: every world gets a matrix version; `ops` stays as the fallback and as the baseline of the comparison.
+- The WORLDS-APART grouping stays (one conversation instance for the chat worlds, one instance per game, engine tab worlds each their own instance). RO-MATRIX and UNDO-1 continue in parallel.
+- Per world, the report has: tests passing in both modes, the per-turn time against ops (bench-reasoner), the share of `ops.mjs` replaced by rules, what had to stay in custom code and why, and the library improvements that would let it move (filed for the library session).
+- Waves (at most four agents at a time): docs.editor + docs.reader (running); geo.map + data.charts; games.chess + media.music; ui.avatar + ui.shell + ui.help; art.draw + diagram.sketch (engine-heavy: state and validation on the library, engines stay).

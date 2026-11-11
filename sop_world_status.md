@@ -1,5 +1,7 @@
 # sopworld in PSys2: status and observations
 
+> **User decision 2026-11-11 (evening):** every world moves to sopworld behind the flag. The comparison is per world against the custom `ops.mjs` code: reach at least its correctness and speed, or say exactly what the library lacks and how to generalize it. Results go into the table "Per-world comparison" below as each wave lands.
+
 Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-11 (after SOPWORLD-1b items 1, 3, 7).
 
 ## How it is switched
@@ -313,3 +315,9 @@ Intended differences: none in behaviour. One world file changed because the isol
 | all | 12072 | 9.13 | 10.71 | 8.98 | 37.9 | 33.4 | 15.6 | 13.6 |
 
 Session creation (matrix): 2.09 ms before, 1.03 ms now (ops 1.01): a session creates no World until a world is used. The matrix is now at or under the operations on p50 in every group (the copy-on-write after a fork is paid for the size of one world, and the legends of the ten worlds are no longer loaded together). The first use of a world in an engine builds its base (a few ms, once per engine).
+
+## Per-world comparison (all worlds on sopworld vs custom code)
+
+| World | Tests ops / matrix | p50 ms ops / matrix | ops.mjs replaced by rules | Stayed custom (why) | Library improvement needed |
+| --- | --- | --- | --- | --- | --- |
+| (filled per wave) | | | | | |
