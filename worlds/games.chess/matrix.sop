@@ -1,0 +1,369 @@
+# games.chess as a matrix: the rules of the game said with rules and denies. The move engine stays in ops.mjs / fns.mjs: finding the legal moves of a position
+# (chess.js), the search and the choice of the computer's move, reading "knight to f3", the questions about the position and the words of the replies.
+# The matrix is what is on the board, whose turn it is, what a move may not be (and why), and how the game stands: check, checkmate, stalemate, a draw, a resignation.
+#
+# The game is a set of wires, all told by fns.mjs from the position chess.js holds:
+#   chess.game   one: user, level, seed, orient, engine, fen (the exact position: castling rights, en passant, clocks) and rest (the transient state of the tab, JSON)
+#   chess.piece  one per piece on the board: sq, type (p n b r q k), color (white black), f and r (file and rank as numbers 0..7)
+#   chess.move   one per ply: n (0 = white's first), by, from, to, piece, san, cap (the type captured), promo, why (the system's reason), f1 r1 f2 r2
+#   chess.legal  how many legal moves the side to move has (counted by the move generator)
+#   chess.drawn  a draw chess.js found (insufficient material, threefold repetition, the fifty-move rule); chess.resign and chess.agreed: a resignation, an agreed draw
+# A move that is only being thought of is a chess.try (never told, only checked): who, which piece, from and to as squares and as numbers, what the user named.
+
+@chess.k.user core.slot of=chess.game key=user kind=atom enum=white enum=black
+@chess.k.level core.slot of=chess.game key=level kind=integer min=1 max=8
+@chess.k.seed core.slot of=chess.game key=seed kind=integer
+@chess.k.mn core.slot of=chess.move key=n kind=integer min=0 required=true
+@chess.k.mby core.slot of=chess.move key=by kind=atom enum=white enum=black required=true
+@chess.k.pcolor core.slot of=chess.piece key=color kind=atom enum=white enum=black required=true
+@chess.k.ptype core.slot of=chess.piece key=type kind=atom enum=p enum=n enum=b enum=r enum=q enum=k required=true
+
+# ---- what the pieces are called and are worth, the colours, the way pawns go, the lines the long-range pieces move on
+@chess.nP chess.name type=p word=pawn
+@chess.nN chess.name type=n word=knight
+@chess.nB chess.name type=b word=bishop
+@chess.nR chess.name type=r word=rook
+@chess.nQ chess.name type=q word=queen
+@chess.nK chess.name type=k word=king
+@chess.vP chess.value type=p v=1
+@chess.vN chess.value type=n v=3
+@chess.vB chess.value type=b v=3
+@chess.vR chess.value type=r v=5
+@chess.vQ chess.value type=q v=9
+@chess.vK chess.value type=k v=0
+@chess.cW chess.colour color=white
+@chess.cB chess.colour color=black
+@chess.oW chess.opp of=white is=black
+@chess.oB chess.opp of=black is=white
+@chess.dW chess.dir color=white d=1 start=1
+@chess.dB chess.dir color=black d=-1 start=6
+@chess.slRf chess.slide type=r kind=file
+@chess.slRr chess.slide type=r kind=rank
+@chess.slBd chess.slide type=b kind=diag
+@chess.slQf chess.slide type=q kind=file
+@chess.slQr chess.slide type=q kind=rank
+@chess.slQd chess.slide type=q kind=diag
+
+# ---- whose turn it is: white after an even number of plies, black after an odd one
+@chess.sm chess.move
+@chess.smc core.calc out=?cnt fn=count over=$chess.sm
+@chess.smr core.calc out=?rem fn=mod args=?cnt args=2
+@chess.sg chess.game
+@chess.t.even core.check fn=eq args=?rem args=0
+@chess.t.odd core.check fn=eq args=?rem args=1
+@chess.sdW chess.side by=white
+@chess.sdB chess.side by=black
+@chess.r.sideW core.rule when=$chess.sg with=$chess.smc with=$chess.smr if=$chess.t.even then=$chess.sdW
+@chess.r.sideB core.rule when=$chess.sg with=$chess.smc with=$chess.smr if=$chess.t.odd then=$chess.sdB
+
+# ---- captured pieces and the material each side has (the points of the pieces on the board)
+@chess.cp1 chess.move n=?n by=?by cap=?t
+@chess.taken chess.taken n=?n by=?by piece=?t
+@chess.r.taken core.rule when=$chess.cp1 then=$chess.taken
+@chess.mc1 chess.colour color=?c
+@chess.mp1 chess.piece color=?c type=?t
+@chess.mp2 chess.value type=?t v=?v
+@chess.msum core.calc out=?pts fn=sum over=$chess.mp1 over=$chess.mp2 args=?v
+@chess.material chess.material color=?c points=?pts
+@chess.r.material core.rule when=$chess.mc1 with=$chess.msum then=$chess.material
+
+# ---- is a king attacked? One question for the position now (tid=now: the king of the side to move) and one for every move that is tried (the king
+# after the move, with the moving piece gone from its square and standing on the target square, and what stood there taken)
+@chess.q1 chess.side by=?c
+@chess.q2 chess.piece type=k color=?c f=?kf r=?kr sq=?ks
+@chess.tgtNow chess.tgt tid=now by=?c f=?kf r=?kr ex=none cx=none xf=99 xr=99
+@chess.r.tgtNow core.rule when=$chess.q1 when=$chess.q2 then=$chess.tgtNow
+
+@chess.p1 chess.try tid=?t by=?c piece=?pt fs=?fs ts=?ts f2=?f2 r2=?r2
+@chess.pk chess.piece type=k color=?c f=?kf r=?kr
+@chess.t.notK core.check fn=neq args=?pt args=k
+@chess.t.isK core.check fn=eq args=?pt args=k
+@chess.tgtT1 chess.tgt tid=?t by=?c f=?kf r=?kr ex=?fs cx=?ts xf=?f2 xr=?r2
+@chess.r.tgtT1 core.rule when=$chess.p1 when=$chess.pk if=$chess.t.notK then=$chess.tgtT1
+@chess.tgtT2 chess.tgt tid=?t by=?c f=?f2 r=?r2 ex=?fs cx=?ts xf=99 xr=99
+@chess.r.tgtT2 core.rule when=$chess.p1 if=$chess.t.isK then=$chess.tgtT2
+
+# a rook, bishop or queen of the other side on a line with the king (the line, not yet whether something is in the way)
+@chess.g1 chess.tgt tid=?t by=?c f=?kf r=?kr ex=?ex cx=?cx xf=?xf xr=?xr
+@chess.g2 chess.piece type=?ty color=?ec sq=?es f=?ef r=?er
+@chess.t.enemy core.check fn=neq args=?ec args=?c
+@chess.t.notCx core.check fn=neq args=?es args=?cx
+@chess.t.sameF core.check fn=eq args=?ef args=?kf
+@chess.t.sameR core.check fn=eq args=?er args=?kr
+@chess.t.difF core.check fn=neq args=?ef args=?kf
+@chess.t.difR core.check fn=neq args=?er args=?kr
+@chess.gF chess.slide type=?ty kind=file
+@chess.gR chess.slide type=?ty kind=rank
+@chess.gD chess.slide type=?ty kind=diag
+@chess.gdf core.calc out=?gdf fn=sub args=?ef args=?kf
+@chess.gdr core.calc out=?gdr fn=sub args=?er args=?kr
+@chess.gadf core.calc out=?gadf fn=abs args=?gdf
+@chess.gadr core.calc out=?gadr fn=abs args=?gdr
+@chess.t.diag core.check fn=eq args=?gadf args=?gadr
+@chess.ray chess.ray tid=?t by=?c e=?es ef=?ef er=?er kf=?kf kr=?kr ex=?ex xf=?xf xr=?xr
+@chess.r.rayF core.rule when=$chess.g1 when=$chess.g2 when=$chess.gF if=$chess.t.enemy if=$chess.t.notCx if=$chess.t.sameF if=$chess.t.difR then=$chess.ray
+@chess.r.rayR core.rule when=$chess.g1 when=$chess.g2 when=$chess.gR if=$chess.t.enemy if=$chess.t.notCx if=$chess.t.sameR if=$chess.t.difF then=$chess.ray
+@chess.r.rayD core.rule when=$chess.g1 when=$chess.g2 when=$chess.gD with=$chess.gdf with=$chess.gdr with=$chess.gadf with=$chess.gadr if=$chess.t.enemy if=$chess.t.notCx if=$chess.t.difF if=$chess.t.diag then=$chess.ray
+
+# something in the way on that line: a piece strictly between the two (on the line, inside the box, and neither the attacker nor the king)
+@chess.s1 chess.ray tid=?t e=?es ef=?ef er=?er kf=?kf kr=?kr ex=?ex
+@chess.s2 chess.piece sq=?ps f=?pf r=?pr
+@chess.t.pNotEx core.check fn=neq args=?ps args=?ex
+@chess.t.pNotE core.check fn=neq args=?ps args=?es
+@chess.sa core.calc out=?sa fn=sub args=?pf args=?ef
+@chess.sb core.calc out=?sb fn=sub args=?kr args=?er
+@chess.sc core.calc out=?sc fn=mul args=?sa args=?sb
+@chess.sd core.calc out=?sd fn=sub args=?pr args=?er
+@chess.se core.calc out=?se fn=sub args=?kf args=?ef
+@chess.sf core.calc out=?sf fn=mul args=?sd args=?se
+@chess.sx core.calc out=?cross fn=sub args=?sc args=?sf
+@chess.sminf core.calc out=?minf fn=min args=?ef args=?kf
+@chess.smaxf core.calc out=?maxf fn=max args=?ef args=?kf
+@chess.sminr core.calc out=?minr fn=min args=?er args=?kr
+@chess.smaxr core.calc out=?maxr fn=max args=?er args=?kr
+@chess.skf core.calc out=?skf fn=sub args=?pf args=?kf
+@chess.skr core.calc out=?skr fn=sub args=?pr args=?kr
+@chess.sakf core.calc out=?sakf fn=abs args=?skf
+@chess.sakr core.calc out=?sakr fn=abs args=?skr
+@chess.skk core.calc out=?skk fn=add args=?sakf args=?sakr
+@chess.t.col core.check fn=eq args=?cross args=0
+@chess.t.inF1 core.check fn=gte args=?pf args=?minf
+@chess.t.inF2 core.check fn=lte args=?pf args=?maxf
+@chess.t.inR1 core.check fn=gte args=?pr args=?minr
+@chess.t.inR2 core.check fn=lte args=?pr args=?maxr
+@chess.t.notKing core.check fn=gt args=?skk args=0
+@chess.shield chess.shield tid=?t e=?es
+@chess.r.shieldP core.rule when=$chess.s1 when=$chess.s2 with=$chess.sa with=$chess.sb with=$chess.sc with=$chess.sd with=$chess.se with=$chess.sf with=$chess.sx with=$chess.sminf with=$chess.smaxf with=$chess.sminr with=$chess.smaxr with=$chess.skf with=$chess.skr with=$chess.sakf with=$chess.sakr with=$chess.skk if=$chess.t.pNotEx if=$chess.t.pNotE if=$chess.t.col if=$chess.t.inF1 if=$chess.t.inF2 if=$chess.t.inR1 if=$chess.t.inR2 if=$chess.t.notKing then=$chess.shield
+# ... and the piece that has just moved there (it stands on the target square, so it is in the way too)
+@chess.x1 chess.ray tid=?t e=?es ef=?ef er=?er kf=?kf kr=?kr xf=?pf xr=?pr
+@chess.r.shieldX core.rule when=$chess.x1 with=$chess.sa with=$chess.sb with=$chess.sc with=$chess.sd with=$chess.se with=$chess.sf with=$chess.sx with=$chess.sminf with=$chess.smaxf with=$chess.sminr with=$chess.smaxr with=$chess.skf with=$chess.skr with=$chess.sakf with=$chess.sakr with=$chess.skk if=$chess.t.col if=$chess.t.inF1 if=$chess.t.inF2 if=$chess.t.inR1 if=$chess.t.inR2 if=$chess.t.notKing then=$chess.shield
+
+# a line with nothing in the way is an attack; so are a knight at an L, a pawn diagonally ahead of it, a king next to the king
+@chess.h1 chess.ray tid=?t by=?c e=?es
+@chess.h2 chess.shield tid=?t e=?es
+@chess.hit chess.hit tid=?t by=?c e=?es
+@chess.r.hitLine core.rule when=$chess.h1 not=$chess.h2 then=$chess.hit
+
+@chess.n1 chess.tgt tid=?t by=?c f=?kf r=?kr cx=?cx
+@chess.n2 chess.piece type=n color=?ec sq=?es f=?ef r=?er
+@chess.ndf core.calc out=?ndf fn=sub args=?ef args=?kf
+@chess.ndr core.calc out=?ndr fn=sub args=?er args=?kr
+@chess.nadf core.calc out=?nadf fn=abs args=?ndf
+@chess.nadr core.calc out=?nadr fn=abs args=?ndr
+@chess.nprod core.calc out=?nprod fn=mul args=?nadf args=?nadr
+@chess.t.nL core.check fn=eq args=?nprod args=2
+@chess.r.hitN core.rule when=$chess.n1 when=$chess.n2 with=$chess.ndf with=$chess.ndr with=$chess.nadf with=$chess.nadr with=$chess.nprod if=$chess.t.nL if=$chess.t.enemy if=$chess.t.notCx then=$chess.hit
+
+@chess.w1 chess.tgt tid=?t by=?c f=?kf r=?kr cx=?cx
+@chess.w2 chess.piece type=p color=?ec sq=?es f=?ef r=?er
+@chess.w3 chess.dir color=?ec d=?wd
+@chess.wdr core.calc out=?wdr fn=sub args=?kr args=?er
+@chess.wdf core.calc out=?wdf fn=sub args=?kf args=?ef
+@chess.wadf core.calc out=?wadf fn=abs args=?wdf
+@chess.t.wFwd core.check fn=eq args=?wdr args=?wd
+@chess.t.wOne core.check fn=eq args=?wadf args=1
+@chess.r.hitP core.rule when=$chess.w1 when=$chess.w2 when=$chess.w3 with=$chess.wdr with=$chess.wdf with=$chess.wadf if=$chess.t.wFwd if=$chess.t.wOne if=$chess.t.enemy if=$chess.t.notCx then=$chess.hit
+
+@chess.k1 chess.tgt tid=?t by=?c f=?kf r=?kr cx=?cx
+@chess.k2 chess.piece type=k color=?ec sq=?es f=?ef r=?er
+@chess.kdf core.calc out=?kdf fn=sub args=?ef args=?kf
+@chess.kdr core.calc out=?kdr fn=sub args=?er args=?kr
+@chess.kadf core.calc out=?kadf fn=abs args=?kdf
+@chess.kadr core.calc out=?kadr fn=abs args=?kdr
+@chess.kmax core.calc out=?kmax fn=max args=?kadf args=?kadr
+@chess.t.kNear core.check fn=eq args=?kmax args=1
+@chess.r.hitK core.rule when=$chess.k1 when=$chess.k2 with=$chess.kdf with=$chess.kdr with=$chess.kadf with=$chess.kadr with=$chess.kmax if=$chess.t.kNear if=$chess.t.enemy if=$chess.t.notCx then=$chess.hit
+
+# the king of the side to move is attacked now: check
+@chess.ih chess.hit tid=now by=?c
+@chess.incheck chess.incheck by=?c
+@chess.r.incheck core.rule when=$chess.ih then=$chess.incheck
+
+# ---- how the game ends: checkmate (in check, no legal move), stalemate (no legal move, no check), a draw chess.js found, a resignation, an agreed draw
+@chess.o1 chess.incheck by=?c
+@chess.o2 chess.legal count=0
+@chess.o3 chess.opp of=?c is=?w
+@chess.mate chess.over how=checkmate winner=?w reason=checkmate
+@chess.r.mate core.rule when=$chess.o1 when=$chess.o2 when=$chess.o3 then=$chess.mate
+@chess.st1 chess.legal count=0
+@chess.st2 chess.side by=?c
+@chess.st3 chess.incheck
+@chess.stale chess.over how=stalemate reason=stalemate
+@chess.r.stale core.rule when=$chess.st1 when=$chess.st2 not=$chess.st3 then=$chess.stale
+@chess.dw1 chess.drawn reason=?r
+@chess.drawn chess.over how=draw reason=?r
+@chess.r.drawn core.rule when=$chess.dw1 then=$chess.drawn
+@chess.rs1 chess.resign by=?c
+@chess.rs2 chess.opp of=?c is=?w
+@chess.resigned chess.over how=resigned winner=?w reason=resignation
+@chess.r.resign core.rule when=$chess.rs1 when=$chess.rs2 then=$chess.resigned
+@chess.ag1 chess.agreed
+@chess.agreedOver chess.over how=draw reason=agreement
+@chess.r.agreed core.rule when=$chess.ag1 then=$chess.agreedOver
+
+# ---- what may not be (the reply is the deny's reason; fns.mjs picks the most basic one when several hold: the game is over, not your turn, the squares, the way
+# the piece moves, something in the way, the king left in check)
+@chess.nmT chess.name type=?pt word=?pw
+
+# the game is over
+@chess.dT chess.try by=?c
+@chess.dOverMateYou chess.over how=checkmate winner=?w
+@chess.dGameUser chess.game user=?w
+@chess.dGameOther chess.game user=?u
+@chess.t.notWinner core.check fn=neq args=?w args=?u
+@chess.d.overMateYou core.deny when=$chess.dT when=$chess.dOverMateYou when=$chess.dGameUser why="The game is over: checkmate, you won. Say \"new game\" to play again."
+@chess.d.overMateMe core.deny when=$chess.dT when=$chess.dOverMateYou when=$chess.dGameOther if=$chess.t.notWinner why="The game is over: checkmate, I won. Say \"new game\" to play again."
+@chess.dOverRes chess.over how=resigned
+@chess.d.overResigned core.deny when=$chess.dT when=$chess.dOverRes why="You resigned this game. Say \"new game\" to play again."
+@chess.dOverDraw chess.over how=draw reason=?r
+@chess.d.overDraw core.deny when=$chess.dT when=$chess.dOverDraw why="The game is over: ?r. Say \"new game\" to play again."
+@chess.dOverStale chess.over how=stalemate reason=?r
+@chess.d.overStale core.deny when=$chess.dT when=$chess.dOverStale why="The game is over: ?r. Say \"new game\" to play again."
+
+# not your turn
+@chess.dSide chess.side by=?s
+@chess.t.notSide core.check fn=neq args=?c args=?s
+@chess.d.turn core.deny when=$chess.dT when=$chess.dSide if=$chess.t.notSide why="It is not your turn."
+
+# the squares: nothing there, the other side's piece, not the piece that was named, the same square, one of your own pieces on the target
+@chess.pNone chess.try piece=none fs=?fs
+@chess.d.nopiece core.deny when=$chess.pNone why="There is no piece on ?fs."
+@chess.pTheirs chess.try by=?c piece=?pt pc=?pc fs=?fs
+@chess.t.notMine core.check fn=neq args=?pc args=?c
+@chess.d.theirs core.deny when=$chess.pTheirs when=$chess.nmT if=$chess.t.notMine why="The ?pw on ?fs is mine, not yours."
+@chess.pWant chess.try piece=?pt want=?wt fs=?fs
+@chess.wantNm chess.name type=?wt word=?ww
+@chess.t.notWant core.check fn=neq args=?wt args=?pt
+@chess.t.wantSome core.check fn=neq args=?wt args=none
+@chess.d.want core.deny when=$chess.pWant when=$chess.nmT when=$chess.wantNm if=$chess.t.notWant if=$chess.t.wantSome why="The piece on ?fs is your ?pw, not a ?ww."
+@chess.sq1 chess.try piece=?pt ts=?ts f1=?f1 r1=?r1 f2=?f2 r2=?r2
+@chess.t.sameSq1 core.check fn=eq args=?f1 args=?f2
+@chess.t.sameSq2 core.check fn=eq args=?r1 args=?r2
+@chess.d.same core.deny when=$chess.sq1 when=$chess.nmT if=$chess.t.sameSq1 if=$chess.t.sameSq2 why="Your ?pw is already on ?ts."
+@chess.ow1 chess.try tid=?t by=?c piece=?pt fs=?fs ts=?ts
+@chess.ow2 chess.piece sq=?ts color=?c type=?dt
+@chess.ow3 chess.name type=?dt word=?dw
+@chess.t.notSame core.check fn=neq args=?fs args=?ts
+@chess.d.own core.deny when=$chess.ow1 when=$chess.ow2 when=$chess.ow3 when=$chess.nmT if=$chess.t.notSame why="Your ?pw on ?fs can't go to ?ts: your ?dw is already there."
+
+# the way each piece moves
+@chess.gm chess.try piece=?pt fs=?fs ts=?ts f1=?f1 r1=?r1 f2=?f2 r2=?r2
+@chess.gmdf core.calc out=?df fn=sub args=?f2 args=?f1
+@chess.gmdr core.calc out=?dr fn=sub args=?r2 args=?r1
+@chess.gmadf core.calc out=?adf fn=abs args=?df
+@chess.gmadr core.calc out=?adr fn=abs args=?dr
+@chess.gmprod core.calc out=?prod fn=mul args=?adf args=?adr
+@chess.gmmax core.calc out=?mx fn=max args=?adf args=?adr
+@chess.t.isN core.check fn=eq args=?pt args=n
+@chess.t.isB core.check fn=eq args=?pt args=b
+@chess.t.isR core.check fn=eq args=?pt args=r
+@chess.t.isQ core.check fn=eq args=?pt args=q
+@chess.t.isKing core.check fn=eq args=?pt args=k
+@chess.t.notL core.check fn=neq args=?prod args=2
+@chess.t.notDiag core.check fn=neq args=?adf args=?adr
+@chess.t.dfNz core.check fn=neq args=?df args=0
+@chess.t.drNz core.check fn=neq args=?dr args=0
+@chess.t.tooFar core.check fn=gt args=?mx args=1
+@chess.t.moved core.check fn=gt args=?mx args=0
+@chess.d.geoN core.deny when=$chess.gm when=$chess.nmT with=$chess.gmdf with=$chess.gmdr with=$chess.gmadf with=$chess.gmadr with=$chess.gmprod with=$chess.gmmax if=$chess.t.isN if=$chess.t.notL if=$chess.t.moved why="A knight moves in an L shape, so your knight on ?fs can't go to ?ts."
+@chess.d.geoB core.deny when=$chess.gm with=$chess.gmdf with=$chess.gmdr with=$chess.gmadf with=$chess.gmadr with=$chess.gmmax if=$chess.t.isB if=$chess.t.notDiag if=$chess.t.moved why="A bishop moves diagonally, so your bishop on ?fs can't go to ?ts."
+@chess.d.geoR core.deny when=$chess.gm with=$chess.gmdf with=$chess.gmdr with=$chess.gmadf with=$chess.gmadr with=$chess.gmmax if=$chess.t.isR if=$chess.t.dfNz if=$chess.t.drNz why="A rook moves in straight lines, so your rook on ?fs can't go to ?ts."
+@chess.d.geoQ core.deny when=$chess.gm with=$chess.gmdf with=$chess.gmdr with=$chess.gmadf with=$chess.gmadr with=$chess.gmmax if=$chess.t.isQ if=$chess.t.dfNz if=$chess.t.drNz if=$chess.t.notDiag why="A queen moves in straight lines and diagonals, so your queen on ?fs can't go to ?ts."
+@chess.d.geoK core.deny when=$chess.gm with=$chess.gmdf with=$chess.gmdr with=$chess.gmadf with=$chess.gmadr with=$chess.gmmax if=$chess.t.isKing if=$chess.t.tooFar why="A king moves one square at a time (castling is the only exception), so your king on ?fs can't go to ?ts."
+
+# pawns: they go forward, one square or two from the starting rank, and capture one square diagonally ahead
+@chess.pw1 chess.try by=?c piece=p fs=?fs ts=?ts f1=?f1 r1=?r1 f2=?f2 r2=?r2 ep=?ep
+@chess.pw2 chess.dir color=?c d=?d start=?st
+@chess.pwTo chess.piece sq=?ts
+@chess.pwdf core.calc out=?df fn=sub args=?f2 args=?f1
+@chess.pwdr core.calc out=?dr fn=sub args=?r2 args=?r1
+@chess.pwm core.calc out=?m fn=mul args=?dr args=?d
+@chess.pwadf core.calc out=?adf fn=abs args=?df
+@chess.t.straight core.check fn=eq args=?df args=0
+@chess.t.diagStep core.check fn=eq args=?adf args=1
+@chess.t.wide core.check fn=gt args=?adf args=1
+@chess.t.back core.check fn=lt args=?m args=0
+@chess.t.far core.check fn=gt args=?m args=2
+@chess.t.two core.check fn=eq args=?m args=2
+@chess.t.notStart core.check fn=neq args=?r1 args=?st
+@chess.t.fwdOne core.check fn=eq args=?m args=1
+@chess.t.notFwdOne core.check fn=neq args=?m args=1
+@chess.t.noEp core.check fn=neq args=?ep args=true
+@chess.d.pawnBack core.deny when=$chess.pw1 when=$chess.pw2 with=$chess.pwdf with=$chess.pwdr with=$chess.pwm if=$chess.t.straight if=$chess.t.back why="Pawns never move backward, so your pawn on ?fs can't go to ?ts."
+@chess.d.pawnFar core.deny when=$chess.pw1 when=$chess.pw2 with=$chess.pwdf with=$chess.pwdr with=$chess.pwm if=$chess.t.straight if=$chess.t.far why="A pawn moves one square forward, or two from its starting rank, so your pawn on ?fs can't go to ?ts."
+@chess.d.pawnTwo core.deny when=$chess.pw1 when=$chess.pw2 with=$chess.pwdf with=$chess.pwdr with=$chess.pwm if=$chess.t.straight if=$chess.t.two if=$chess.t.notStart why="A pawn moves one square forward, or two from its starting rank, so your pawn on ?fs can't go to ?ts."
+@chess.d.pawnEmptyDiag core.deny when=$chess.pw1 when=$chess.pw2 not=$chess.pwTo with=$chess.pwdf with=$chess.pwdr with=$chess.pwm with=$chess.pwadf if=$chess.t.diagStep if=$chess.t.fwdOne if=$chess.t.noEp why="A pawn only moves diagonally when it captures, and ?ts is empty."
+@chess.d.pawnShapeWide core.deny when=$chess.pw1 when=$chess.pw2 with=$chess.pwdf with=$chess.pwdr with=$chess.pwm with=$chess.pwadf if=$chess.t.wide why="A pawn moves straight ahead and captures one square diagonally, so your pawn on ?fs can't go to ?ts."
+@chess.d.pawnShapeStep core.deny when=$chess.pw1 when=$chess.pw2 with=$chess.pwdf with=$chess.pwdr with=$chess.pwm with=$chess.pwadf if=$chess.t.diagStep if=$chess.t.notFwdOne why="A pawn moves straight ahead and captures one square diagonally, so your pawn on ?fs can't go to ?ts."
+
+# something in the way of a rook, bishop or queen (a piece strictly between), or of a pawn that goes straight ahead (a piece between or on the target)
+@chess.lgB chess.long type=b
+@chess.lgR chess.long type=r
+@chess.lgQ chess.long type=q
+@chess.bl1 chess.try tid=?t piece=?pt fs=?fs ts=?ts f1=?f1 r1=?r1 f2=?f2 r2=?r2
+@chess.bl0 chess.long type=?pt
+@chess.bl2 chess.piece sq=?ps f=?pf r=?pr type=?bt color=?bc
+@chess.t.bNotFrom core.check fn=neq args=?ps args=?fs
+@chess.t.bNotTo core.check fn=neq args=?ps args=?ts
+@chess.ba core.calc out=?ba fn=sub args=?pf args=?f1
+@chess.bb core.calc out=?bb fn=sub args=?r2 args=?r1
+@chess.bc core.calc out=?bc2 fn=mul args=?ba args=?bb
+@chess.bd core.calc out=?bd fn=sub args=?pr args=?r1
+@chess.be core.calc out=?be fn=sub args=?f2 args=?f1
+@chess.bf core.calc out=?bf fn=mul args=?bd args=?be
+@chess.bx core.calc out=?bcross fn=sub args=?bc2 args=?bf
+@chess.bminf core.calc out=?bminf fn=min args=?f1 args=?f2
+@chess.bmaxf core.calc out=?bmaxf fn=max args=?f1 args=?f2
+@chess.bminr core.calc out=?bminr fn=min args=?r1 args=?r2
+@chess.bmaxr core.calc out=?bmaxr fn=max args=?r1 args=?r2
+@chess.bdf core.calc out=?bdf fn=abs args=?ba
+@chess.bdr core.calc out=?bdr fn=abs args=?bd
+@chess.bdist core.calc out=?bdist fn=max args=?bdf args=?bdr
+@chess.t.bcol core.check fn=eq args=?bcross args=0
+@chess.t.binF1 core.check fn=gte args=?pf args=?bminf
+@chess.t.binF2 core.check fn=lte args=?pf args=?bmaxf
+@chess.t.binR1 core.check fn=gte args=?pr args=?bminr
+@chess.t.binR2 core.check fn=lte args=?pr args=?bmaxr
+@chess.blk chess.blk tid=?t sq=?ps type=?bt color=?bc dist=?bdist
+@chess.r.blkLong core.rule when=$chess.bl1 when=$chess.bl0 when=$chess.bl2 with=$chess.ba with=$chess.bb with=$chess.bc with=$chess.bd with=$chess.be with=$chess.bf with=$chess.bx with=$chess.bminf with=$chess.bmaxf with=$chess.bminr with=$chess.bmaxr with=$chess.bdf with=$chess.bdr with=$chess.bdist if=$chess.t.bNotFrom if=$chess.t.bNotTo if=$chess.t.bcol if=$chess.t.binF1 if=$chess.t.binF2 if=$chess.t.binR1 if=$chess.t.binR2 then=$chess.blk
+@chess.bp1 chess.try tid=?t piece=p fs=?fs f1=?f1 r1=?r1 f2=?f1 r2=?r2
+@chess.bp2 chess.piece sq=?ps f=?f1 r=?pr type=?bt color=?bc
+@chess.bpmin core.calc out=?pminr fn=min args=?r1 args=?r2
+@chess.bpmax core.calc out=?pmaxr fn=max args=?r1 args=?r2
+@chess.bpd core.calc out=?pd fn=sub args=?pr args=?r1
+@chess.bpdist core.calc out=?pdist fn=abs args=?pd
+@chess.t.pIn1 core.check fn=gte args=?pr args=?pminr
+@chess.t.pIn2 core.check fn=lte args=?pr args=?pmaxr
+@chess.blkP chess.blk tid=?t sq=?ps type=?bt color=?bc dist=?pdist
+@chess.r.blkPawn core.rule when=$chess.bp1 when=$chess.bp2 with=$chess.bpmin with=$chess.bpmax with=$chess.bpd with=$chess.bpdist if=$chess.t.bNotFrom if=$chess.t.pIn1 if=$chess.t.pIn2 then=$chess.blkP
+@chess.nr1 chess.try tid=?t
+@chess.nr2 chess.blk tid=?t dist=?dd
+@chess.nrmin core.calc out=?mind fn=min over=$chess.nr2 args=?dd
+@chess.near chess.near tid=?t dist=?mind
+@chess.r.near core.rule when=$chess.nr1 with=$chess.nrmin then=$chess.near
+@chess.bk1 chess.try tid=?t by=?c piece=?pt fs=?fs
+@chess.bk2 chess.blk tid=?t sq=?ps type=?bt color=?bc dist=?dd
+@chess.bk3 chess.near tid=?t dist=?dd
+@chess.bk4 chess.name type=?bt word=?bw
+@chess.bk5 chess.name type=?pt word=?pw
+@chess.t.bMine core.check fn=eq args=?bc args=?c
+@chess.t.bTheirs core.check fn=neq args=?bc args=?c
+@chess.d.blockedOwn core.deny when=$chess.bk1 when=$chess.bk2 when=$chess.bk3 when=$chess.bk4 when=$chess.bk5 if=$chess.t.bMine why="Your ?pw on ?fs is blocked by your ?bw on ?ps."
+@chess.d.blockedTheirs core.deny when=$chess.bk1 when=$chess.bk2 when=$chess.bk3 when=$chess.bk4 when=$chess.bk5 if=$chess.t.bTheirs why="Your ?pw on ?fs is blocked by my ?bw on ?ps."
+
+# the king left in check: a king that steps onto an attacked square; a move that does not stop a check; a piece that is pinned
+@chess.ck1 chess.try tid=?t piece=k ts=?ts
+@chess.ck2 chess.hit tid=?t
+@chess.d.kingAttacked core.deny when=$chess.ck1 when=$chess.ck2 why="Your king can't go to ?ts: that square is attacked."
+@chess.cm1 chess.try tid=?t by=?c piece=?pt fs=?fs ts=?ts
+@chess.cm2 chess.hit tid=?t
+@chess.cm3 chess.incheck by=?c
+@chess.t.notKingPiece core.check fn=neq args=?pt args=k
+@chess.d.mustStop core.deny when=$chess.cm1 when=$chess.cm2 when=$chess.cm3 when=$chess.nmCm if=$chess.t.notKingPiece why="Your king is in check, so your move has to stop the check, and ?pw to ?ts does not."
+@chess.nmCm chess.name type=?pt word=?pw
+@chess.d.pinned core.deny when=$chess.cm1 when=$chess.cm2 not=$chess.cm3 when=$chess.nmCm if=$chess.t.notKingPiece why="Your ?pw on ?fs is pinned: moving it would leave your king in check."
+
+# ---- the actions (fns.mjs); the others (the questions about the position, hints, levels, flipping the board) stay in ops.mjs and read the state derived from these wires
+@chess.a.move core.action name=chess.move fn=chessMove
+@chess.a.can core.action name=chess.can fn=chessCan
+@chess.a.why core.action name=chess.why fn=chessWhy

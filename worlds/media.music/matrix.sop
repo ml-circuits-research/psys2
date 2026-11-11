@@ -1,0 +1,128 @@
+# media.music as a matrix: what the player may be set to, said with rules and denies. The sound engine stays in ops.mjs and fns.mjs: the notes and the ABC, the songs, transposing,
+# the effects the host plays, reading what the user said and the words of the replies. The matrix is what the player is (its settings and where each came from), what a tempo,
+# a key or an instrument may not be (and why), the tempo marking, and what was assumed.
+#
+# The player is a set of wires, all told by fns.mjs from the state ops.mjs keeps:
+#   music.player   one: instrument, tempo, key, volume, locked, playing, loop, songIndex, plays and where each setting came from (tsrc, isrc, ksrc = default | user | song);
+#                  rest = the rest of the state of the tab as JSON (the score, the keys lit, the settings the user can undo). A setting nobody made is not told: the slot's default
+#                  stands (tier `default`), so an answer that rests on it can say "I assumed ..." once.
+#   music.current  what is loaded now (a note, a chord, a scale, a song or the melody): kind, title, key, songId, mine, data (the object as JSON)
+#   music.note     one per note of the melody the user composes (the queue): n, p (the pitches, a rest has none), beats; music.melody: its ABC
+#   music.said     an assumption that has been told (once)
+# A thing that is only being thought of is a music.try (never told, only checked): a tempo, a key or an instrument.
+
+@music.k.tempo core.slot of=music.player key=tempo kind=integer default=100
+@music.k.instrument core.slot of=music.player key=instrument kind=atom default=piano
+@music.k.key core.slot of=music.player key=key kind=string default="C major"
+
+# ---- what the player can do: tempos from 30 to 240 beats per minute, from a quarter of the speed to four times the speed
+@music.lT music.limit what=tempo min=30 max=240
+@music.lF music.limit what=factor min=0.25 max=4
+
+@music.tr1 music.try what=tempo value=?v
+@music.tl1 music.limit what=tempo min=?lo max=?hi
+@music.t.fast core.check fn=gt args=?v args=?hi
+@music.t.slow core.check fn=lt args=?v args=?lo
+@music.d.tempoFast core.deny when=$music.tr1 when=$music.tl1 if=$music.t.fast why="That tempo is too fast: at most ?hi beats per minute."
+@music.d.tempoSlow core.deny when=$music.tr1 when=$music.tl1 if=$music.t.slow why="That tempo is too slow: at least ?lo beats per minute."
+@music.tr2 music.try what=factor value=?v
+@music.tl2 music.limit what=factor min=?lo max=?hi
+@music.d.factorFast core.deny when=$music.tr2 when=$music.tl2 if=$music.t.fast why="That is too fast: I can play at most four times the speed."
+@music.d.factorSlow core.deny when=$music.tr2 when=$music.tl2 if=$music.t.slow why="That is too slow: I can play at least a quarter of the speed."
+
+# ---- the tempo marking of the tempo the player has (the words musicians use)
+@music.mkL music.mark word=largo lo=30 hi=59
+@music.mkA music.mark word=adagio lo=60 hi=75
+@music.mkN music.mark word=andante lo=76 hi=107
+@music.mkM music.mark word=moderato lo=108 hi=119
+@music.mkG music.mark word=allegro lo=120 hi=155
+@music.mkP music.mark word=presto lo=156 hi=240
+@music.mp music.player tempo=?t
+@music.mm music.mark word=?w lo=?lo hi=?hi
+@music.t.geLo core.check fn=gte args=?t args=?lo
+@music.t.leHi core.check fn=lte args=?t args=?hi
+@music.marking music.marking word=?w
+@music.r.marking core.rule when=$music.mp when=$music.mm if=$music.t.geLo if=$music.t.leHi then=$music.marking
+
+# ---- the melody the user composes: how many notes (not rests) it has so far
+@music.nn music.note
+@music.nc core.calc out=?cnt fn=count over=$music.nn
+@music.ng music.melody
+@music.len music.length notes=?cnt
+@music.r.len core.rule when=$music.ng with=$music.nc then=$music.len
+
+# ---- what may not be: a key that has no signature (there is no H major, no G sharp major), an instrument the player does not have
+@music.tr3 music.try what=key root=?r mode=?m
+@music.k1 music.keysig root=?r mode=?m
+@music.d.nokey core.deny when=$music.tr3 not=$music.k1 why="There is no ?r ?m."
+@music.tr4 music.try what=instrument name=?n shown=?sh
+@music.i1 music.alias name=?n
+@music.d.noinst core.deny when=$music.tr4 not=$music.i1 why="I do not have an instrument called ?sh. I can play piano, organ, flute, strings, bells, bass and marimba."
+
+# the key signatures that exist: fifteen major and fifteen minor keys (seven sharps or flats at most), as `music.keysig`
+@music.ks.Cb music.keysig root="Cb" mode=major sharps=-7
+@music.ks.Gb music.keysig root="Gb" mode=major sharps=-6
+@music.ks.Db music.keysig root="Db" mode=major sharps=-5
+@music.ks.Ab music.keysig root="Ab" mode=major sharps=-4
+@music.ks.Eb music.keysig root="Eb" mode=major sharps=-3
+@music.ks.Bb music.keysig root="Bb" mode=major sharps=-2
+@music.ks.F music.keysig root="F" mode=major sharps=-1
+@music.ks.C music.keysig root="C" mode=major sharps=0
+@music.ks.G music.keysig root="G" mode=major sharps=1
+@music.ks.D music.keysig root="D" mode=major sharps=2
+@music.ks.A music.keysig root="A" mode=major sharps=3
+@music.ks.E music.keysig root="E" mode=major sharps=4
+@music.ks.B music.keysig root="B" mode=major sharps=5
+@music.ks.Fs music.keysig root="F#" mode=major sharps=6
+@music.ks.Cs music.keysig root="C#" mode=major sharps=7
+@music.ks.Abm music.keysig root="Ab" mode=minor sharps=-7
+@music.ks.Ebm music.keysig root="Eb" mode=minor sharps=-6
+@music.ks.Bbm music.keysig root="Bb" mode=minor sharps=-5
+@music.ks.Fm music.keysig root="F" mode=minor sharps=-4
+@music.ks.Cm music.keysig root="C" mode=minor sharps=-3
+@music.ks.Gm music.keysig root="G" mode=minor sharps=-2
+@music.ks.Dm music.keysig root="D" mode=minor sharps=-1
+@music.ks.Am music.keysig root="A" mode=minor sharps=0
+@music.ks.Em music.keysig root="E" mode=minor sharps=1
+@music.ks.Bm music.keysig root="B" mode=minor sharps=2
+@music.ks.Fsm music.keysig root="F#" mode=minor sharps=3
+@music.ks.Csm music.keysig root="C#" mode=minor sharps=4
+@music.ks.Gsm music.keysig root="G#" mode=minor sharps=5
+@music.ks.Dsm music.keysig root="D#" mode=minor sharps=6
+@music.ks.Asm music.keysig root="A#" mode=minor sharps=7
+
+# the names of the instruments a person may say, and the preset each stands for (the lexicon of the world)
+@music.al.piano music.alias name="piano" id=piano
+@music.al.keyboard music.alias name="keyboard" id=piano
+@music.al.grand_piano music.alias name="grand_piano" id=piano
+@music.al.electric_piano music.alias name="electric_piano" id=piano
+@music.al.organ music.alias name="organ" id=organ
+@music.al.church_organ music.alias name="church_organ" id=organ
+@music.al.flute music.alias name="flute" id=flute
+@music.al.whistle music.alias name="whistle" id=flute
+@music.al.recorder music.alias name="recorder" id=flute
+@music.al.string music.alias name="string" id=strings
+@music.al.violin music.alias name="violin" id=strings
+@music.al.cello music.alias name="cello" id=strings
+@music.al.fiddle music.alias name="fiddle" id=strings
+@music.al.orchestra music.alias name="orchestra" id=strings
+@music.al.bell music.alias name="bell" id=bells
+@music.al.glockenspiel music.alias name="glockenspiel" id=bells
+@music.al.chime music.alias name="chime" id=bells
+@music.al.celesta music.alias name="celesta" id=bells
+@music.al.bass music.alias name="bass" id=bass
+@music.al.bass_guitar music.alias name="bass_guitar" id=bass
+@music.al.double_bass music.alias name="double_bass" id=bass
+@music.al.marimba music.alias name="marimba" id=marimba
+@music.al.xylophone music.alias name="xylophone" id=marimba
+@music.al.vibraphone music.alias name="vibraphone" id=marimba
+
+# ---- the actions (fns.mjs); the others (notes, chords, scales, songs, composing, theory questions) stay in ops.mjs and read the state derived from these wires
+@music.a.tempo core.action name=music.tempo fn=musicTempo
+@music.a.playAny core.action name=music.playAny fn=musicPlayAny
+@music.a.playScale core.action name=music.playScale fn=musicPlayScale
+@music.a.key core.action name=music.key fn=musicKey
+@music.a.transposeTo core.action name=music.transposeTo fn=musicTransposeTo
+@music.a.instrument core.action name=music.instrument fn=musicInstrument
+@music.a.status core.action name=music.status fn=musicStatus
+@music.a.why core.action name=music.why fn=musicWhy

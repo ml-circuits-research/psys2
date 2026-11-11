@@ -15,7 +15,7 @@ import { Note, pcFromLex, spoken, list, scaleNotes as tScale, chordNotes as tCho
 import { parseAbc, transposeAbc, buildAbc, parsePitchName, parseKeyField, shiftBetween, keyField } from './abc.mjs';
 
 export const INSTRUMENTS = ['piano', 'organ', 'flute', 'strings', 'bells', 'bass', 'marimba'];
-const INST_OF = {
+export const INST_OF = {
   piano: 'piano', keyboard: 'piano', grand_piano: 'piano', electric_piano: 'piano', organ: 'organ', church_organ: 'organ',
   flute: 'flute', whistle: 'flute', recorder: 'flute', string: 'strings', violin: 'strings', cello: 'strings', fiddle: 'strings', orchestra: 'strings',
   bell: 'bells', glockenspiel: 'bells', chime: 'bells', celesta: 'bells', bass: 'bass', bass_guitar: 'bass', double_bass: 'bass',

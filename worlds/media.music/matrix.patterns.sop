@@ -1,0 +1,38 @@
+@pat.media.music.m.why.tempo core.pattern
+    match="[$lang.lead.filler|pls|hey]? why [is|was] [the|that|this|my|your]? [tempo|speed] [so|too|set|that|this|like_this|like_that|what_it_is]? [slow|fast|quick|this_way|that_way]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=music.why arg.what=tempo"
+    kind=request
+    priority=14
+    example="Why is the tempo so slow?"
+    canonical="Why is the tempo what it is?"
+    example="Why is the speed like that?"
+
+@pat.media.music.m.why.fast core.pattern
+    match="[$lang.lead.filler|pls|hey]? why is it [so|too|this|that] [slow|fast|quick] [$lang.tail.filler]?"
+    emit="@{_} core.request action=music.why arg.what=tempo"
+    kind=request
+    priority=14
+    example="Why is it so slow?"
+
+@pat.media.music.m.why.instrument core.pattern
+    match="[$lang.lead.filler|pls|hey]? why [are|do|did] you [use|using|play|playing|pick|picking|choose|choosing|have] [the|a|that|this]? {inst:lex.media.music.instruments} [$lang.tail.filler]?"
+    emit="@{_} core.request action=music.why arg.what=instrument"
+    kind=request
+    priority=14
+    example="Why are you playing the piano?"
+    canonical="Why do you use the piano?"
+
+@pat.media.music.m.why.instrument.plain core.pattern
+    match="[$lang.lead.filler|pls|hey]? why [this|that|the]? instrument [$lang.tail.filler]?"
+    emit="@{_} core.request action=music.why arg.what=instrument"
+    kind=request
+    priority=14
+    example="Why this instrument?"
+
+@pat.media.music.m.why.key core.pattern
+    match="[$lang.lead.filler|pls|hey]? why [is|was] [the|that|this|my|your]? key [set|like_that|like_this|what_it_is|this_one]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=music.why arg.what=key"
+    kind=request
+    priority=14
+    example="Why is the key what it is?"
+    example="Why is the key like that?"

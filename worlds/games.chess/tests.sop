@@ -1411,3 +1411,95 @@
     input="can i castle"
     expect="castle"
     session=chsh3
+
+@t.games.chess.m01 core.test
+    session=mc1
+    input="Let's play chess."
+    expect="You are white"
+    expectState="status=playing"
+    doc="the matrix: whose turn it is, what a move may not be and why, the position as wires; the engine and the notation stay in ops.mjs / fns.mjs"
+    reasoner=matrix
+
+@t.games.chess.m02 core.test
+    session=mc1
+    input="Pawn e2 to e4."
+    expect="You play pawn to e4"
+    expectState="history.0=e4"
+    expectState="turn=black"
+    expectState="pendingEngine=true"
+    expectEffect=chess.engine.bestmove
+    reasoner=matrix
+
+@t.games.chess.m03 core.test
+    session=mc1
+    input="Knight to f3."
+    expect="It is not your turn."
+    expectStatus=missing
+    expectState="history.length=1"
+    reasoner=matrix
+
+@t.games.chess.m04 core.test
+    session=mc1
+    input="Make your move."
+    expect="I play"
+    expectState="history.length=2"
+    expectState="turn=white"
+    reasoner=matrix
+
+@t.games.chess.m05 core.test
+    session=mc1
+    input="Why did you play that?"
+    expect="I played"
+    expect="because"
+    expectStatus=supported
+    reasoner=matrix
+
+@t.games.chess.m06 core.test
+    session=mc1
+    input="Rook on a1 to a3."
+    expect="Your rook on a1 is blocked by your pawn on a2"
+    expectStatus=unsupported
+    expectState="history.length=2"
+    reasoner=matrix
+
+@t.games.chess.m07 core.test
+    session=mc1
+    input="Move the knight on b1 to b4."
+    expect="A knight moves in an L shape"
+    expectStatus=unsupported
+    reasoner=matrix
+
+@t.games.chess.m08 core.test
+    session=mc1
+    input="Undo my move."
+    expect="took back your last move and my reply"
+    expectState="history.length=0"
+    expectState="turn=white"
+    reasoner=matrix
+
+@t.games.chess.m09 core.test
+    session=mc1
+    input="Why did you play that?"
+    expect="I have not played yet."
+    expectStatus=missing
+    reasoner=matrix
+
+@t.games.chess.m10 core.test
+    session=mc2
+    input="Play black."
+    expect="you play black"
+    reasoner=matrix
+
+@t.games.chess.m11 core.test
+    session=mc2
+    input="Resign."
+    expect="you resign"
+    expectState="status=resigned"
+    reasoner=matrix
+
+@t.games.chess.m12 core.test
+    session=mc2
+    input="Pawn to e5."
+    expect="You resigned this game. Say \"new game\" to play again."
+    expectStatus=unsupported
+    reasoner=matrix

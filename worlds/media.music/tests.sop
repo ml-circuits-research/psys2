@@ -2084,3 +2084,88 @@
     input="what key are we in"
     expect="The key is"
     session=msh9
+
+@t.media.music.m01 core.test
+    session=mm1
+    input="Set the tempo to 300."
+    expect="That tempo is too fast: at most 240 beats per minute."
+    expectStatus=unsupported
+    expectState="tempo=100"
+    doc="the matrix: what a tempo, a key or an instrument may be (rules and denies in matrix.sop), the defaults assumed once, undo and why in the world's words"
+    reasoner=matrix
+
+@t.media.music.m02 core.test
+    session=mm1
+    input="Set the tempo to 20."
+    expect="That tempo is too slow: at least 30 beats per minute."
+    expectStatus=unsupported
+    expectState="tempo=100"
+    reasoner=matrix
+
+@t.media.music.m03 core.test
+    session=mm1
+    input="Set the key to G sharp major."
+    expect="There is no G# major."
+    expectStatus=unsupported
+    expectState="key=C major"
+    reasoner=matrix
+
+@t.media.music.m04 core.test
+    session=mm1
+    input="What tempo is it?"
+    expect="The tempo is 100 beats per minute. I assumed 100 beats per minute"
+    expectStatus=supported
+    reasoner=matrix
+
+@t.media.music.m05 core.test
+    session=mm1
+    input="Why is the tempo so slow?"
+    expect="I play at 100 beats per minute (andante) because nobody has set it: it is my default."
+    reasoner=matrix
+
+@t.media.music.m06 core.test
+    session=mm1
+    input="Make it 90 beats per minute."
+    expectState="tempo=90"
+    expectState="tempoLocked=true"
+    reasoner=matrix
+
+@t.media.music.m07 core.test
+    session=mm1
+    input="Why is the tempo so slow?"
+    expect="I play at 90 beats per minute (andante) because you asked for it."
+    reasoner=matrix
+
+@t.media.music.m08 core.test
+    session=mm1
+    input="Undo."
+    expect="OK, the tempo is back to 100 beats per minute."
+    expectState="tempo=100"
+    reasoner=matrix
+
+@t.media.music.m09 core.test
+    session=mm1
+    input="Play Ode to Joy."
+    expect="Playing"
+    expectState="playing=true"
+    expectEffect=music.play
+    reasoner=matrix
+
+@t.media.music.m10 core.test
+    session=mm1
+    input="Why is it so slow?"
+    expect="because that is how \"Ode to Joy\" goes."
+    reasoner=matrix
+
+@t.media.music.m11 core.test
+    session=mm1
+    input="Set the key to D major."
+    expect="Transposed from C major to D major."
+    expectState="key=D major"
+    reasoner=matrix
+
+@t.media.music.m12 core.test
+    session=mm1
+    input="Why is the key like that?"
+    expect="The key is D major because you asked for it."
+    reasoner=matrix

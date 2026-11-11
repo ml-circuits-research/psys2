@@ -35,7 +35,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'docs.editor', 'docs.reader', 'geo.map', 'data.charts']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes', 'kids.time', 'kids.animals', 'user.profile', 'docs.editor', 'docs.reader', 'geo.map', 'data.charts', 'games.chess', 'media.music']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
   assert.equal(ops.set.get('docs.editor').reasoner, 'matrix');
   assert.equal(ops.set.get('ui.shell').reasoner, 'ops', 'every other world stays on ops');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
@@ -44,7 +44,7 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
 
 test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.buildAll(), []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['data.charts', 'docs.editor', 'docs.reader', 'games.guess', 'games.hangman', 'games.tictactoe', 'geo.map', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'session.conversation', 'user.profile']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['data.charts', 'docs.editor', 'docs.reader', 'games.chess', 'games.guess', 'games.hangman', 'games.tictactoe', 'geo.map', 'kids.animals', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks', 'kids.time', 'media.music', 'session.conversation', 'user.profile']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });

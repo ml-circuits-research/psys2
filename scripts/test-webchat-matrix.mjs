@@ -28,8 +28,10 @@
  *   geomap    matrix (stage 2, one instance per world): the state of the map is wires of the library: the counts and the length of the lines come from rules, a "No" about a
  *             place has the reason of the denies, "zoom to 15" stays at 12, and the world's own undo and redo take the map back and forth (the tab follows).
  *   charts    matrix (stage 2): the totals are rules, "rename apples to pears" is refused with the reason and the chart on the tab keeps its labels, undo and redo follow.
+ *   chess     matrix: a move the rules refuse says why (the tab board does not change), the engine's answer is taken over by the library, "why did you play that?" explains, "undo" takes the move and the reply back.
+ *   music     matrix: a tempo, a key or an instrument the rules refuse says why and the tab keeps its setting, the default tempo is assumed and said once, "undo" and "why?" in the world's words.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,music] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -422,6 +424,53 @@ export const SCENARIOS = {
       const x = await say(c, 'undo the undo');
       check('charts: and does it again', /did it again/.test(x) && (await st()).charts?.[0]?.labels?.length === 4, x.slice(0, 60));
       check('charts: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  // ---- games.chess and media.music on the matrix (user decision 2026-11-11: every world moves to sopworld)
+  async chess(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      const plies = () => c.pg.$$eval('.cx-moves .m', (els) => els.map((e) => e.textContent).filter(Boolean));
+      const waitPlies = async (n, ms = 60000) => { for (let t = 0; t < ms; t += 250) { if ((await plies()).length >= n) return true; await new Promise((r) => setTimeout(r, 250)); } return false; };
+      const a = await say(c, "Let's play chess");
+      check('chess: the game starts and the tab is open', /You are white and you move first/.test(a), a.slice(0, 80));
+      const m = await say(c, 'e4');
+      check('chess: my move is on the tab board', /You play pawn to e4|I play/.test(m) && (await plies())[0] === 'e4', `${m.slice(0, 50)} | ${(await plies()).join(' ')}`);
+      check('chess: the computer\'s answer (Stockfish, or the built-in player) arrives as an observation and is on the board', await waitPlies(2), (await plies()).join(' '));
+      const r = await say(c, 'Rook on a1 to a3');
+      check('chess: a move the rules refuse says why and the board does not change', /^Your rook on a1 is blocked by your pawn on a2\./.test(r) && (await plies()).length === 2, `${r.slice(0, 80)} | ${(await plies()).join(' ')}`);
+      const w = await say(c, 'Why did you play that?');
+      check('chess: "why did you play that?" explains the computer\'s move (the engine\'s move was taken over by the library)', /^I played .+ because .+\./.test(w), w.slice(0, 120));
+      const u = await say(c, 'undo');
+      check('chess: "undo" takes my move and the computer\'s reply back and the tab follows', /^OK, I took back your last move and my reply\./.test(u) && (await plies()).length === 0, `${u.slice(0, 80)} | ${(await plies()).join(' ')}`);
+      const again = await say(c, 'Knight to f3');
+      check('chess: after the undo the game goes on from the start', /You play knight to f3|I play/.test(again) && (await plies())[0] === 'Nf3', `${again.slice(0, 60)} | ${(await plies()).join(' ')}`);
+      check('chess: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async music(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      const a = await say(c, 'Open the music tab');
+      check('music: the tab is open', /Music tab/.test(a), a.slice(0, 60));
+      const f = await say(c, 'Set the tempo to 300');
+      check('music: a tempo the player cannot play is refused with the limit', f === 'That tempo is too fast: at most 240 beats per minute.', f.slice(0, 80));
+      const k = await say(c, 'Set the key to G sharp major');
+      check('music: a key that does not exist is refused with the reason', k === 'There is no G# major.', k.slice(0, 80));
+      const s = await say(c, 'What tempo is it?');
+      check('music: the default tempo is an assumption, said once', s === 'The tempo is 100 beats per minute. I assumed 100 beats per minute: nobody has set it yet.', s.slice(0, 120));
+      const s2 = await say(c, 'What tempo is it?');
+      check('music: asked again, it does not repeat the assumption', s2 === 'The tempo is 100 beats per minute.', s2.slice(0, 80));
+      const p = await say(c, 'Play Ode to Joy');
+      check('music: a song plays (the host got the sound to play)', /^Playing "Ode to Joy"/.test(p), p.slice(0, 80));
+      const w = await say(c, 'Why is it so slow?');
+      check('music: "why?" says where the tempo came from', /because that is how "Ode to Joy" goes\.$/.test(w), w.slice(0, 120));
+      await say(c, 'Make it 150 beats per minute');
+      const u = await say(c, 'undo');
+      check('music: "undo" says what it took back, in the world\'s words', /^OK, the tempo is back to 108 beats per minute\./.test(u), u.slice(0, 100));
+      const st = await c.pg.evaluate(() => JSON.parse(JSON.stringify(window.psys2.session.state()['media.music'])));
+      check('music: the state of the tab follows (tempo 108)', st.tempo === 108, String(st.tempo));
+      check('music: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 };

@@ -1,0 +1,5 @@
+@op.games.chess.why core.operation
+    impl=matrix
+    semantics=action
+    action=chess.why
+    doc="Matrix mode: why the computer played its last move (it mates, castles, promotes, captures, gives check, develops a piece, takes the center, or was the best move found), from what the move did, recorded on its wire."

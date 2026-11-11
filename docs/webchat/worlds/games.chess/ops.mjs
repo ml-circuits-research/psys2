@@ -17,12 +17,12 @@
 import { Chess } from './vendor/chess.mjs?v=9a44601d41';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
-const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-const NAME = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const PLURAL = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queens', k: 'kings' };
-const VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+export const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+export const NAME = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+export const PLURAL = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queens', k: 'kings' };
+export const VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const ORDER = 'kqrbnp';
-const PIECE_WORD = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k', horse: 'n', night: 'n', rock: 'r', kngt: 'n', knite: 'n', nite: 'n', horsey: 'n', bish: 'b', pown: 'p', rok: 'r', p: 'p', n: 'n', b: 'b', r: 'r', q: 'q', k: 'k' };
+export const PIECE_WORD = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k', horse: 'n', night: 'n', rock: 'r', kngt: 'n', knite: 'n', nite: 'n', horsey: 'n', bish: 'b', pown: 'p', rok: 'r', p: 'p', n: 'n', b: 'b', r: 'r', q: 'q', k: 'k' };
 const FILE_WORD = { alpha: 'a', bravo: 'b', charlie: 'c', delta: 'd', echo: 'e', foxtrot: 'f', golf: 'g', hotel: 'h', bee: 'b', dee: 'd', eff: 'f', gee: 'g', aitch: 'h' };
 const LEVEL_NAME = ['', 'beginner', 'easy', 'casual', 'intermediate', 'club player', 'strong', 'expert', 'master'];
 const MOVETIME = [0, 150, 200, 300, 450, 650, 900, 1200, 1800];
@@ -36,18 +36,18 @@ const ORD_WORD = { first: 0, second: 1, third: 2, fourth: 3 };
 
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
 const no = (note, status = 'unsupported') => ({ status, note });
-const cap1 = (t) => t[0].toUpperCase() + t.slice(1);
-const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
+export const cap1 = (t) => t[0].toUpperCase() + t.slice(1);
+export const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
 const joinOr = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} or ${a.at(-1)}`);
-const article = (t) => `${/^[aeiou]/.test(t) ? 'an' : 'a'} ${t}`;
-const fi = (sq) => sq.charCodeAt(0) - 97;
-const ri = (sq) => Number(sq[1]) - 1;
+export const article = (t) => `${/^[aeiou]/.test(t) ? 'an' : 'a'} ${t}`;
+export const fi = (sq) => sq.charCodeAt(0) - 97;
+export const ri = (sq) => Number(sq[1]) - 1;
 const sqName = (f, r) => String.fromCharCode(97 + f) + (r + 1);
-const colorName = (l) => (l === 'w' ? 'white' : 'black');
+export const colorName = (l) => (l === 'w' ? 'white' : 'black');
 const letter = (name) => (name === 'white' ? 'w' : 'b');
-const ucol = (s) => letter(s.user);
-const ecol = (s) => (s.user === 'white' ? 'b' : 'w');
-const other = (name) => (name === 'white' ? 'black' : 'white');
+export const ucol = (s) => letter(s.user);
+export const ecol = (s) => (s.user === 'white' ? 'b' : 'w');
+export const other = (name) => (name === 'white' ? 'black' : 'white');
 
 // ------------------------------------------------------------------ state
 
@@ -62,7 +62,7 @@ export function initialState() {
 }
 
 /** The game as a chess.js instance: the SAN history is replayed (so repetition and the fifty-move rule are right). */
-function load(s) {
+export function load(s) {
   const c = new Chess();
   try {
     for (const san of s.history) c.move(san);
@@ -71,7 +71,7 @@ function load(s) {
   return new Chess(s.fen);
 }
 
-function board(c) {
+export function board(c) {
   const out = [];
   for (const row of c.board()) for (const p of row) if (p) out.push(p);
   return out;
@@ -80,7 +80,7 @@ const piecesOf = (c, color, type) => board(c).filter((p) => p.color === color &&
 const kingSquare = (c, color) => board(c).find((p) => p.type === 'k' && p.color === color)?.square ?? null;
 
 /** Recomputes every derived field of the state from the game `c`. */
-function refresh(s, c) {
+export function refresh(s, c) {
   const hv = c.history({ verbose: true });
   s.fen = c.fen();
   s.history = hv.map((m) => m.san);
@@ -109,7 +109,7 @@ function refresh(s, c) {
   }
 }
 
-function clearTransient(s) { s.pending = null; s.highlights = []; s.hint = null; s.pendingHint = false; }
+export function clearTransient(s) { s.pending = null; s.highlights = []; s.hint = null; s.pendingHint = false; }
 
 // ------------------------------------------------------------------ cross-world routing
 // Some of our phrases are also phrases of other tabs ("a3", "who is winning?", "describe the board", "undo"). They are
@@ -136,7 +136,7 @@ const show = (ctx) => { try { ctx.request('ui.openTab', { tab: 'chess' }); } cat
 
 // ------------------------------------------------------------------ speech
 
-function sayMove(m) {
+export function sayMove(m) {
   if (m.flags.includes('k')) return 'castle kingside';
   if (m.flags.includes('q')) return 'castle queenside';
   let t = m.captured ? `play ${NAME[m.piece]} takes ${NAME[m.captured]} on ${m.to}${m.flags.includes('e') ? ' en passant' : ''}` : `play ${NAME[m.piece]} to ${m.to}`;
@@ -144,8 +144,8 @@ function sayMove(m) {
   return t;
 }
 /** "knight to f3" without the leading verb, for hints and reports. */
-const plainMove = (m) => sayMove(m).replace(/^play /, '').replace(/^castle /, 'castling ');
-function endText(s, mover) {
+export const plainMove = (m) => sayMove(m).replace(/^play /, '').replace(/^castle /, 'castling ');
+export function endText(s, mover) {
   if (s.status === 'checkmate') return mover === 'user' ? 'Checkmate! You win. Well played!' : 'Checkmate! I win this time. Good game! Say "new game" to play again.';
   if (s.status === 'stalemate') return 'Stalemate: nobody can move, so the game is a draw.';
   if (s.status === 'draw') return `The game is a draw by ${s.reason}.`;
@@ -187,7 +187,7 @@ function scoreMove(c, m) {
   c.undo();
   return sc;
 }
-function choose(c, s, noise) {
+export function choose(c, s, noise) {
   let best = null, bestScore = -Infinity;
   for (const m of c.moves({ verbose: true })) {
     const sc = scoreMove(c, m);
@@ -210,7 +210,7 @@ function playEngine(s, c, uci) {
   refresh(s, c);
   return mv;
 }
-function engineText(s, c, mv) {
+export function engineText(s, c, mv) {
   let t = `I ${sayMove(mv).replace(/^play /, 'play ')}.`;
   if (s.status !== 'playing') return `${t} ${endText(s, 'engine')}`;
   if (c.isCheck()) t += ' Check!';
@@ -314,7 +314,7 @@ function explainCastle(c, s, side) {
   return `Castling ${label} is not possible right now.`;
 }
 const checkPrefix = (c) => (c.isCheck() ? 'Your king is in check, so every move has to get out of check. ' : '');
-function explainNone(c, s, it) {
+export function explainNone(c, s, it) {
   const user = ucol(s);
   if (it.castle === 'k' || it.castle === 'q') return explainCastle(c, s, it.castle);
   if (it.castle === 'any') return explainCastle(c, s, 'k').replace('kingside', 'on either side').replace('Castling on either side', 'Castling');
@@ -355,7 +355,7 @@ function explainNone(c, s, it) {
 // ------------------------------------------------------------------ move language
 
 const isSq = (f, r) => f !== undefined && r !== undefined;
-function sqOf(f, r) {
+export function sqOf(f, r) {
   const file = FILE_WORD[String(f).toLowerCase()] ?? String(f).toLowerCase();
   const rank = Number(r);
   if (!/^[a-h]$/.test(file) || !Number.isInteger(rank) || rank < 1 || rank > 8) return { error: `There is no square ${String(f)[0]}${r}. The board has the files a to h and the ranks 1 to 8.` };
@@ -378,7 +378,7 @@ function sanIntent(raw, rank) {
   return null;
 }
 /** Turns the request arguments into an intent { pt, from, fromFile, to, cap, tp, wp, promo, castle } or { error }. */
-function intent(a) {
+export function intent(a) {
   const it = {};
   if (a.piece && PIECE_WORD[String(a.piece).toLowerCase()]) it.pt = PIECE_WORD[String(a.piece).toLowerCase()];
   if (a.tp && PIECE_WORD[String(a.tp).toLowerCase()]) it.tp = PIECE_WORD[String(a.tp).toLowerCase()];
@@ -407,7 +407,7 @@ function filterLegal(legal, it) {
     && (!it.castle || (it.castle === 'any' ? isCastle(m) : m.flags.includes(it.castle))));
 }
 /** @returns {{kind:'move',move}|{kind:'ambiguous',options}|{kind:'promotion',from,to}|{kind:'none'}} */
-function resolve(c, it) {
+export function resolve(c, it) {
   let cand = filterLegal(c.moves({ verbose: true }), it);
   if (it.promo) { const withPromo = cand.filter((m) => m.promotion === it.promo); if (withPromo.length || cand.every((m) => m.promotion)) cand = withPromo; }
   if (!cand.length) return { kind: 'none' };

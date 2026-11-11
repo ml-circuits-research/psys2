@@ -1,0 +1,3 @@
+@tpl.media.music.m.why core.template
+    for=action.music.why
+    text="{value}"
