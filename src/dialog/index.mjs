@@ -1200,7 +1200,7 @@ export class DialogSession {
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
-        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.from?.length) fr.from = r.envelope.from; } }
+        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.from?.length) fr.from = r.envelope.from; else if (r.envelope?.fromLater) fr.fromLater = r.envelope.fromLater; } }
         else if (r.status === 'missing' && r.envelope?.pending) disc.openFill(seg, r.envelope, rendered, this._msg);
         answerWires.push(r.answer);
         answers.push({
@@ -1215,7 +1215,10 @@ export class DialogSession {
         const rsWhy = this.isession.rs?.refuseFacts(facts, this.isession);
         const bad = this.isession.rs ? (rsWhy ? `That does not add up. ${rsWhy}` : null) : this._refuseFacts(seg.match?.worldId, facts);
         if (bad) { lines.push([T(bad)]); statuses.push('conflicting'); }
-        else lines.push([T(interp.renderAck(this.isession, facts))]);
+        else {
+          const ex = this.isession.rs?.ackExtras(facts);   // matrix reasoner: a default the library filled is told with the acknowledgement
+          lines.push([T(interp.renderAck(this.isession, ex?.facts ?? facts) + (ex?.assumed ? ' ' + ex.assumed : ''))]);
+        }
         if (!bad) disc.noteFacts(facts, this._msg, seg.text, seg.match?.worldId);
       }
       if (seg.alternatives.length) {
@@ -1295,8 +1298,8 @@ export class DialogSession {
 
 /** Create the dialog engine: loads and checks all worlds. */
 export async function createEngine({ loader, translator = null, options = {}, formalizers = {} }) {
-  // Reasoner switch (spec 15): 'ops' (default) or 'matrix' (the worlds that say reasoner=matrix answer through the sopworld library). The option wins over PSYS2_REASONER.
-  const mode = (options.reasoner ?? globalThis.process?.env?.PSYS2_REASONER) === 'matrix' ? 'matrix' : 'ops';
+  // Reasoner switch (spec 15): 'matrix' (default) or 'ops' (the fallback; the worlds that say reasoner=matrix answer through the sopworld library). The option wins over PSYS2_REASONER.
+  const mode = (options.reasoner ?? globalThis.process?.env?.PSYS2_REASONER) === 'ops' ? 'ops' : 'matrix';
   const set = await loadWorlds(loader, { reasoner: mode });
   const reasoner = mode === 'matrix' ? await createReasoner(set) : null;
   const interp = createInterpreter(set, { ...options, reasoner });

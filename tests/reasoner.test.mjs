@@ -29,9 +29,9 @@ test('vendor: the library is the pinned file, unmodified, and passes its own loo
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });
 
-test('default: the engine is ops, no library is loaded and no session has a World', async () => {
+test('default: the engine is matrix (user decision 2026-11-11); explicit ops loads no library and no session has a World', async () => {
   const e = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-  assert.equal(e.reasonerMode, process.env.PSYS2_REASONER === 'matrix' ? 'matrix' : 'ops');
+  assert.equal(e.reasonerMode, process.env.PSYS2_REASONER === 'ops' ? 'ops' : 'matrix');
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
@@ -233,10 +233,13 @@ test('the switch does not touch a world without reasoner=matrix: the same messag
   assert.equal(on[1].changed, true);
 });
 
-test('the setting is part of the webchat defaults and an unknown saved value is ops', async () => {
-  const { DEFAULT_SETTINGS, migrateSettings } = await import('../docs/webchat/ui/settings.mjs');
-  assert.equal(DEFAULT_SETTINGS.reasoner, 'ops');
-  assert.equal(migrateSettings({ reasoner: 'magic', settingsVersion: 2 }).settings.reasoner, 'ops');
+test('the setting is part of the webchat defaults: matrix, a saved ops of an older version is migrated once, a later explicit ops is kept', async () => {
+  const { DEFAULT_SETTINGS, SETTINGS_VERSION, migrateSettings } = await import('../docs/webchat/ui/settings.mjs');
+  assert.equal(DEFAULT_SETTINGS.reasoner, 'matrix');
+  assert.equal(migrateSettings({ reasoner: 'magic', settingsVersion: SETTINGS_VERSION }).settings.reasoner, 'matrix');
+  assert.equal(migrateSettings({ reasoner: 'ops', settingsVersion: 3 }).settings.reasoner, 'matrix', 'the old default is not a choice: migrated once');
+  assert.equal(migrateSettings({ reasoner: 'ops', settingsVersion: 3 }).migrated, true);
+  assert.equal(migrateSettings({ reasoner: 'ops', settingsVersion: SETTINGS_VERSION }).settings.reasoner, 'ops', 'an explicit choice after the migration is respected');
   assert.equal(migrateSettings({ reasoner: 'matrix', settingsVersion: 2 }).settings.reasoner, 'matrix');
 });
 
@@ -266,6 +269,7 @@ test('certainty: nobody said how many balls, so the answer says "I assumed 1 bal
   await s.send('I have 20 lei', {});
   const told = await s.send('I buy the ball', {});
   assert.equal(told.assumptions, undefined, 'a statement is not an answer: nothing rests on the default yet');
+  assert.equal(told.text, 'OK, you bought 1 ball. I assumed 1 ball.', 'the acknowledgement says what was bought and the assumption (2026-11-11), not a bare OK.');
   const r = await s.send('How much money do I have?', {});
   assert.equal(r.text, 'You have 15 lei left. I assumed 1 ball.');
   assert.deepEqual(r.assumptions.map((a) => a.replace(/^\S+\.count/, 'count')), ['count=1 (default)'], 'the cell and its tier');
@@ -427,4 +431,11 @@ test('games.tictactoe: with the default (ops) no library is involved and the sta
   const st = s.isession.state['games.tictactoe'];
   assert.equal(st.board[4], 'X');
   assert.ok(Array.isArray(st.history), 'ops keeps its own undo snapshots');
+});
+
+test('matrix: "what did you do?" keeps the source sentence of a computed answer, like ops (2026-11-11)', async () => {
+  for (const mode of [matrix, ops]) {
+    const { out } = await say(mode, ['A puzzle costs 11 lei.', 'how much do 2 puzzles cost?', 'what did you do?']);
+    assert.match(out[2], /What I answered: 2 puzzles cost 22 lei\. I worked that out from what you told me: "A puzzle costs 11 lei"/);
+  }
 });

@@ -309,6 +309,7 @@ export class ReasonerSession {
     if (r.status === 'unsupported' && !r.reason) return null;   // the library does not know this question (a calculation that cannot be done has a reason)
     const env = isQuestion ? this._questionEnvelope(r, lw) : this._actionEnvelope(r, wire.entries.find((e) => e.key === 'core.request.action')?.value?.v);
     const answered = this._voice(wire, env, r, isQuestion);
+    if (isQuestion && r.status === 'supported' && !answered.from && r.supposed) this._restsLater(answered, r.supposed);
     if (session) this._state(session, this.reasoner.ownerOfWire?.(wire) ?? null);
     return answered;
   }
@@ -349,6 +350,35 @@ export class ReasonerSession {
     try { patch = voice({ kind: isQuestion ? 'question' : 'request', type, action, where, env, supposed, issues, find: (t) => this.world.ofType(t), name: (id) => this._nameOf(id) }); }
     catch (e) { return { ...env, note: env.note ?? `the reply words failed: ${e?.message ?? e}` }; }
     return patch ? { ...env, ...patch } : env;
+  }
+
+  /**
+   * A computed answer (a total) is worked out on a supposed wire that the library takes away again, so its `from` is empty. The facts it rests on are
+   * found when someone asks ("what did you do?"): the world as it was is forked (nothing is copied) and the supposed wire is told to it again.
+   * `env.fromLater()` (not enumerable, so it is not part of the envelope) returns the told dialogue-wire ids, or [].
+   */
+  _restsLater(env, sup) {
+    const snap = this.world.fork();
+    const skip = new Set(Object.keys(sup.set ?? {}));
+    const attrs = Object.fromEntries(Object.entries(sup.attrs ?? {}).filter(([k]) => !skip.has(k)));
+    Object.defineProperty(env, 'fromLater', { enumerable: false, value: () => {
+      try {
+        const id = 'why_suppose';
+        const tr = snap.tell([{ id, type: sup.type, attrs, pattern: false }], { strict: false })
+        if (!tr?.ok) return [];
+        const out = new Set();
+        const walk = (n, depth) => {
+          turnBudget.tick('sopworld.explain');
+          if (!n || depth > 40) return;
+          if (n.told && n.id !== id) out.add(n.id);
+          for (const c of n.from ?? []) walk(c, depth + 1);
+        };
+        walk(snap.explain(id), 0);
+        for (const d of tr.derived ?? []) walk(snap.explain(d), 0);   // what a rule derived on the way (a line of the basket) can rest on a fact the sum does not name
+        for (const tid of this.told) { turnBudget.tick('sopworld.explain'); const r = snap.resolve(tid); if (r !== tid && out.has(r)) out.add(tid); }   // a statement merged into an older wire of the same thing (a price told again)
+        return [...out];
+      } catch { return []; }
+    } });
   }
 
   _questionEnvelope(r, lw) {
@@ -404,6 +434,34 @@ export class ReasonerSession {
     if (!cells.length) return;
     env.assumptions = cells;
     if (words.length) env.assumed = `I assumed ${words.length > 1 ? words.slice(0, -1).join(', ') + ' and ' + words.at(-1) : words[0]}.`;
+  }
+
+  /**
+   * The acknowledgement of a statement: a value the matrix filled by default (a purchase without a count counts once) is part of what the user is told ("OK, you
+   * bought 1 ball. I assumed 1 ball."). Returns { facts, assumed }: the statement wires with the defaulted keys added, and the sentence (or null). The assumption is
+   * not marked as said: the first answer that rests on it still says it (spec 15, certainty).
+   */
+  ackExtras(facts) {
+    const words = [], out = [];
+    for (const w of facts) {
+      const lw = this.world.get(w.id);
+      if (!lw) { out.push(w); continue; }
+      const have = new Set(w.entries.map((e) => keyName(e.key)));
+      const extra = [];
+      for (const [k, v] of Object.entries(lw.attrs ?? {})) {
+        turnBudget.tick('sopworld.explain');
+        const name = keyName(k);
+        if (name.startsWith('core') || have.has(name) || this.world.tier(lw.id, k) !== 'default') continue;
+        const value = unquote(bare(first(v)));
+        const hook = this.reasoner.assumedBy.get(this.reasoner.ownerOfType(lw.type));
+        let said;
+        try { said = hook ? hook({ id: lw.id, key: name, value, tier: 'default', type: lw.type, attrs: flat(lw.attrs), name: (id) => this._nameOf(id) }) : undefined; } catch { said = undefined; }
+        extra.push({ key: `${w.type}.${name}`, value: { kind: /^-?\d+(\.\d+)?$/.test(value) ? 'number' : 'str', v: value } });
+        if (said !== null) { const phrase = said ?? `${name} is ${value}`; if (!words.includes(phrase)) words.push(phrase); }
+      }
+      out.push(extra.length ? { ...w, entries: [...w.entries, ...extra] } : w);
+    }
+    return { facts: out, assumed: words.length ? `I assumed ${words.length > 1 ? words.slice(0, -1).join(', ') + ' and ' + words.at(-1) : words[0]}.` : null };
   }
 
   _actionEnvelope(r, action) {

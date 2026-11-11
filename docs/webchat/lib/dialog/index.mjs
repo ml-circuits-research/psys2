@@ -10,11 +10,11 @@
  * Without it all input is treated as English.
  */
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=46116712b1';
-import { loadWorlds } from '../worlds/index.mjs?v=52363131fb';
+import { loadWorlds } from '../worlds/index.mjs?v=37c7acfba4';
 import { validateWorldSet } from '../worlds/validate.mjs?v=1eb2f0538f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=853e7376d5';
-import { createReasoner } from '../reasoner/index.mjs?v=cee479f5d5';
+import { createReasoner } from '../reasoner/index.mjs?v=a026765281';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=14798d6e5b';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=13d688a978';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -29,14 +29,14 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=e468d994f5';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=8ba02e1397';
 import { checkValues } from './value-check.mjs?v=dbf4aad634';
-import { Discourse } from './discourse.mjs?v=60bac799e2';
+import { Discourse } from './discourse.mjs?v=1c8eb06420';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=03dfa399b9';
 
-export { runWorldTests } from './test-runner.mjs?v=011a380c6b';
+export { runWorldTests } from './test-runner.mjs?v=4483a1dec0';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
@@ -1200,7 +1200,7 @@ export class DialogSession {
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
-        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.from?.length) fr.from = r.envelope.from; } }
+        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.from?.length) fr.from = r.envelope.from; else if (r.envelope?.fromLater) fr.fromLater = r.envelope.fromLater; } }
         else if (r.status === 'missing' && r.envelope?.pending) disc.openFill(seg, r.envelope, rendered, this._msg);
         answerWires.push(r.answer);
         answers.push({
@@ -1215,7 +1215,10 @@ export class DialogSession {
         const rsWhy = this.isession.rs?.refuseFacts(facts, this.isession);
         const bad = this.isession.rs ? (rsWhy ? `That does not add up. ${rsWhy}` : null) : this._refuseFacts(seg.match?.worldId, facts);
         if (bad) { lines.push([T(bad)]); statuses.push('conflicting'); }
-        else lines.push([T(interp.renderAck(this.isession, facts))]);
+        else {
+          const ex = this.isession.rs?.ackExtras(facts);   // matrix reasoner: a default the library filled is told with the acknowledgement
+          lines.push([T(interp.renderAck(this.isession, ex?.facts ?? facts) + (ex?.assumed ? ' ' + ex.assumed : ''))]);
+        }
         if (!bad) disc.noteFacts(facts, this._msg, seg.text, seg.match?.worldId);
       }
       if (seg.alternatives.length) {
@@ -1295,8 +1298,8 @@ export class DialogSession {
 
 /** Create the dialog engine: loads and checks all worlds. */
 export async function createEngine({ loader, translator = null, options = {}, formalizers = {} }) {
-  // Reasoner switch (spec 15): 'ops' (default) or 'matrix' (the worlds that say reasoner=matrix answer through the sopworld library). The option wins over PSYS2_REASONER.
-  const mode = (options.reasoner ?? globalThis.process?.env?.PSYS2_REASONER) === 'matrix' ? 'matrix' : 'ops';
+  // Reasoner switch (spec 15): 'matrix' (default) or 'ops' (the fallback; the worlds that say reasoner=matrix answer through the sopworld library). The option wins over PSYS2_REASONER.
+  const mode = (options.reasoner ?? globalThis.process?.env?.PSYS2_REASONER) === 'ops' ? 'ops' : 'matrix';
   const set = await loadWorlds(loader, { reasoner: mode });
   const reasoner = mode === 'matrix' ? await createReasoner(set) : null;
   const interp = createInterpreter(set, { ...options, reasoner });

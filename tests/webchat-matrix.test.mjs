@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The matrix reasoner in the real webchat (SOPWORLD-1, spec 15): runs when PUPPETEER_CORE points to a scratch puppeteer-core install and a Chrome exists.
-// Scenarios: scripts/test-webchat-matrix.mjs (default off, the five gains, the Settings > Developer > Reasoner switch).
+// Scenarios: scripts/test-webchat-matrix.mjs (default matrix, explicit ops, the five gains, the Settings > Developer > Reasoner switch).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -13,7 +13,7 @@ const CHROME = process.env.CHROME || '/usr/bin/chromium';
 const ok = async (p) => { try { await access(p); return true; } catch { return false; } };
 const can = !!CORE && await ok(path.join(CORE, 'lib/puppeteer/puppeteer-core.js')) && await ok(CHROME) && await ok(path.join(ROOT, 'docs/webchat/lib/dialog/index.mjs'));
 
-test('webchat matrix reasoner: default off, the five gains with the switch on, the setting restarts the engine', { skip: can ? false : 'set PUPPETEER_CORE (scratch puppeteer-core install) to run', timeout: 600000 }, async () => {
+test('webchat matrix reasoner: matrix is the default, explicit ops is respected, the setting restarts the engine', { skip: can ? false : 'set PUPPETEER_CORE (scratch puppeteer-core install) to run', timeout: 600000 }, async () => {
   const { SCENARIOS } = await import('../scripts/test-webchat-matrix.mjs');
   const logs = [];
   const orig = console.log;

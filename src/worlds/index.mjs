@@ -15,7 +15,7 @@ import { budget } from '../dialog/budget.mjs';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 // Reasoner files (spec 15). `matrix.sop` and `mapping.sop` are data for src/reasoner. The `matrix.*.sop` extras are appended to the world's own
-// patterns, operations and templates only when the engine runs with reasoner=matrix and the world says reasoner=matrix (the default `ops` loads none of them).
+// patterns, operations and templates only when the engine runs with reasoner=matrix and the world says reasoner=matrix (the `ops` fallback loads none of them).
 const MATRIX_FILES = ['matrix.sop', 'mapping.sop'];
 const MATRIX_EXTRAS = { 'patterns.sop': 'matrix.patterns.sop', 'operations.sop': 'matrix.operations.sop', 'templates.sop': 'matrix.templates.sop' };
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
@@ -226,7 +226,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
 }
 
 /** Load every world the loader lists. Never throws on world content errors; see `allErrors()`. */
-export async function loadWorlds(loader, { reasoner = 'ops' } = {}) {
+export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   const set = new WorldSet();
   const ids = await loader.listWorlds();
   const built = new Map();
