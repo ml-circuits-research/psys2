@@ -73,6 +73,18 @@ const meter = (s, plan) => { const c = counts(s, plan); return `(${c.known} of $
 const display = (v) => joinAnd(list(v).map((x) => String(x)));
 const toTab = (ctx) => { try { ctx.request('ui.openTab', { tab: TAB }); } catch { /* the shell may be absent */ } };
 
+// ---- where a fact came from (for "why?"): the user's words and the question they answered. Kept in a property of the state that is not enumerable, so the state
+// the operations and the tests see is unchanged; the matrix keeps it as the `said`, `asked` and `req` of the fact wire (fns.mjs) and `why` of fns.mjs reads it.
+let CUR = null;   // { said, asked, req } of the turn being worked on
+const clipQ = (q) => String(q ?? '').replace(/\s*\(\d+ of \d+ known\)\s*$/, '').trim();
+/** The newest request wire of the dialogue (the statement being executed): its `core.source` is the user's own sentence as typed. */
+const reqOf = (ctx) => { try { const r = ctx.ordered('core.request'); return r.length ? String(r.at(-1).id) : ''; } catch { return ''; } };
+export function provOf(s) {
+  if (!Object.getOwnPropertyDescriptor(s, '_prov')) Object.defineProperty(s, '_prov', { value: {}, enumerable: false, writable: true, configurable: true });
+  return s._prov;
+}
+const noteProv = (s, key) => { if (CUR) provOf(s)[key] = { said: CUR.said, req: CUR.req, asked: CUR.key === key ? CUR.asked : '' }; };   // the question counts only for the field it asked about
+
 // ---- applying what was understood ----------------------------------------------------------------------------------------
 function applyItems(ctx, s, plan, env, items, correction) {
   const changes = [];
@@ -93,6 +105,7 @@ function applyItems(ctx, s, plan, env, items, correction) {
     s.fields[it.key] = { v, src: it.guessed ? 'guessed' : 'said', at: ++s.n, ...(same && prev?.note ? { note: prev.note } : {}) };
     delete s.skipped[it.key];
     s.focus = { key: it.key, n: s.n };
+    noteProv(s, it.key);
     changes.push({ key: it.key, value: pl.card === 'many' ? incoming : incoming[0], prev: prev?.v, entry: it.entry, how: it.how, id: it.id, added: pl.card === 'many' ? incoming.filter((x) => !list(prev?.v).some((o) => o.toLowerCase() === x.toLowerCase())) : [incoming[0]], same });
   }
   // a guessed field from the role
@@ -103,6 +116,7 @@ function applyItems(ctx, s, plan, env, items, correction) {
     const cur = s.fields.field;
     if (ind && !changes.some((c) => c.key === 'field') && (!cur || cur.src === 'guessed') && !(s.skipped.field)) {
       s.fields.field = { v: ind.label, src: 'guessed', at: ++s.n };
+      noteProv(s, 'field');
       guess = { key: 'field', value: ind.label, role: list(s.fields.role.v)[0] };
     } else if (!ind && cur?.src === 'guessed' && correction) delete s.fields.field;
   }
@@ -210,6 +224,7 @@ function interceptTurn(ctx, text) {
   const raw = String(text ?? '');
   const n = norm(raw);
   const p = s.pending;
+  CUR = { said: raw.trim(), asked: p && ['ask', 'follow', 'confirm'].includes(p.kind) ? clipQ(s.question) : '', key: p?.kind === 'follow' ? (p.followKey || p.key) : p?.key, req: '' };
   if (META.test(n) && !(p?.kind === 'delete' && (YES.test(n) || NO.test(n)))) { if (p && ['confirm', 'delete'].includes(p.kind)) { s.pending = null; } return { handled: false }; }
   // a clear command or question for another world passes through, unless it also says something about the user
   const envPlain = envOf(ctx, null);
@@ -340,7 +355,7 @@ function interceptTurn(ctx, text) {
   void answered;
   return { handled: true, reply: `${head} ${nextQuestion(s, plan, true)}` };
 }
-export const interceptInput = W(interceptTurn);
+export const interceptInput = W((ctx, text) => { try { return interceptTurn(ctx, text); } finally { CUR = null; } });
 
 function sensitiveReply(s, plan, sens, raw, cur) {
   let lead;
@@ -407,8 +422,10 @@ export const progress = W((ctx) => {
 });
 
 /** A statement about oneself, rebuilt as a sentence from the pattern's slots and read by the same rules as an interview answer. */
-export const tell = W((ctx, a) => {
+export const tell = W((ctx, a) => { try { return tellFact(ctx, a); } finally { CUR = null; } });
+function tellFact(ctx, a) {
   const s = st(ctx);
+  CUR = { said: '', asked: '', req: reqOf(ctx) };
   const plan = planOf(ctx);
   const env = envOf(ctx, null);
   const sp = (x) => String(x ?? '').replace(/_/g, ' ');
@@ -455,7 +472,7 @@ export const tell = W((ctx, a) => {
     return ok(`${ack} ${s.question}`);
   }
   return ok(ack);
-});
+}
 
 const FIELD_WORDS = {
   job: ['role'], role: ['role'], position: ['role'], profession: ['role'], work: ['role'], occupation: ['role'], career: ['career'], name: ['name'], nickname: ['name'],
@@ -473,6 +490,7 @@ export const setName = W((ctx, { name }) => {
   const n = clean(name);
   if (!n) return no('unsupported', 'What should I call you?');
   s.fields.name = { v: n, src: 'said', at: ++s.n };
+  provOf(s).name = { said: '', asked: '', req: reqOf(ctx) };
   delete s.skipped.name;
   s.focus = { key: 'name', n: s.n };
   return ok(n);

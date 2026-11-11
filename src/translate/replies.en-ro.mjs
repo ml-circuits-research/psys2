@@ -289,6 +289,11 @@ const TABLE = [
   ['Because you marked {t} as done on your {lst} list.', 'Pentru că ai marcat {t} ca terminat pe lista ta de {lst}.'],
   ['I do not see that as done on any list.', 'Nu văd asta ca terminat pe nicio listă.'],
   ['You said', 'Ai spus'], ['What I answered:', 'Am răspuns:'],
+  // "why?" about a fact of the user profile (user.profile `why`): the fact, the question it answered and the user's words (quoted, so they are separate runs)
+  ['I think your {t} is {q} because you told me so.', 'Am notat {q} la „{t}”, pentru că mi-ai spus asta.'],
+  ['I think your {t} is {q} because you answered', 'Am notat {q} la „{t}”, pentru că ai răspuns'],
+  ['I think your {t} is {q} because I asked you', 'Am notat {q} la „{t}”, pentru că te-am întrebat'], ['and you answered', 'iar tu ai răspuns'],
+  ['I only guessed that your {t} is {q}, from what you told me about your role. Tell me if that is wrong.', 'Am presupus doar că la „{t}” este {q}, din ce mi-ai spus despre rolul tău. Spune-mi dacă greșesc.'],
   [', so I answered it.', ', deci am răspuns.'], [', so I did it.', ', deci am făcut-o.'], ['so I answered it.', 'deci am răspuns.'], ['so I did it.', 'deci am făcut-o.'],
   ['I worked that out from what you told me:', 'Am aflat asta din ce mi-ai spus:'], ['I worked that out from the price list.', 'Am aflat asta din lista de prețuri.'],
   ['I worked that out from what I know.', 'Am aflat asta din ce știu.'], ['I worked that out from what I know about animals.', 'Am aflat asta din ce știu despre animale.'], ['I worked that out from what I know about shapes and colors.', 'Am aflat asta din ce știu despre forme și culori.'],

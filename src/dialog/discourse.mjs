@@ -455,10 +455,18 @@ export class Discourse {
    * "Why do I have nothing left?" / "why is milk done?": a question about a fact the user can name. The worlds that export `why(ctx, { text })`
    * answer from what is known: { text, from }. Returns null when no world takes it (the sentence then goes to the normal pipeline).
    */
-  _whyFact(t) {
+  _whyFact(t, only = null) {
     const d = this.dialog, { set, interp } = d.engine;
-    const order = [this.lastFacts?.world, d.context().lastWorld, this.lastWorld, ...set.list().map((w) => w.id)].filter(Boolean);
+    const order = only ? [only] : [this.lastFacts?.world, d.context().lastWorld, this.lastWorld, ...set.list().map((w) => w.id)].filter(Boolean);
+    const rs = d.isession.rs;
     for (const w of [...new Set(order)]) {
+      // matrix strategy (spec 15): a world that exports `why` in its fns.mjs explains from the library instance that holds its facts
+      const own = rs?.reasoner.whyOf.get(w);
+      if (own) {
+        let r;
+        try { const lib = rs.of(w); r = own({ text: t, state: d.isession.state[w], find: (ty) => lib.ofType(ty), explain: (id) => rs.explain(id) }); } catch { r = undefined; }
+        if (r?.text) return this._say([...(r.parts ?? [{ text: r.text, translate: true }]), ...this._known(r.from)], { kind: 'explain', of: t, world: w, from: r.from ?? [] });
+      }
       const r = interp.hook(d.isession, w, 'why', { text: t });
       if (r?.text) return this._say([{ text: r.text, translate: true }, ...this._known(r.from)], { kind: 'explain', of: t, world: w, from: r.from ?? [] });
     }
@@ -776,6 +784,12 @@ export class Discourse {
     const doing = /^what (?:did you|have you) (?:just )?(?:do|done|change)/.test(t);
     // the newest turn only told a fact: "why?" asks about the world that fact belongs to, answered from what is known (hook `why` of the world)
     if (!doing && this.lastFacts && this.dialog._msg - this.lastFacts.turn <= 1 && this.lastFacts.turn >= (this.frames[0]?.turn ?? -1)) { const wf = this._whyFact('why'); if (wf) return wf; }
+    // matrix strategy: the newest turn was a statement to a world that explains its own facts (`why` of its fns.mjs: the user profile)
+    if (!doing && this.dialog.isession.rs?.reasoner.whyOf.size) {
+      const fr = this.frames[0], ic0 = this.icptTurn;
+      const last = ic0 && (!fr || ic0.turn > fr.turn) ? { turn: ic0.turn, text: ic0.text, world: ic0.world } : fr ? { turn: fr.turn, text: fr.text, world: fr.world } : null;
+      if (last && this.dialog._msg - last.turn <= 1 && this.dialog.isession.rs.reasoner.whyOf.has(last.world) && !/\?$/.test(String(last.text).trim())) { const wf = this._whyFact('why', last.world); if (wf) return wf; }
+    }
     const eff = (() => { const x = this._recentAction(6); return x && x.frames.some((fr) => !/\?$/.test(fr.text) && !QUESTION_START.test(fr.text)) ? x : null; })();
     const a0 = doing && eff ? eff : this._repairable(6), a = a0?.readOnly ? null : a0;
     const f = a0?.frames[0] ?? this.frames[0];
