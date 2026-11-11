@@ -14,3 +14,95 @@
     value=atom
     card=one
     ask="Which tab is it?"
+
+@ui.shell.known core.type
+    extends=core.state
+    doc="A tab of the app that the knowledge base knows: its id, the title the app shows and the world behind it (generated from the manifests, kb.sop)."
+
+@ui.shell.known.id core.key
+    value=atom
+    ask="Which tab is it?"
+
+@ui.shell.known.title core.key
+    value=string
+    ask="What is it called in the app?"
+
+@ui.shell.known.world core.key
+    value=atom
+    ask="Which world is behind it?"
+
+@ui.shell.alias core.type
+    extends=core.state
+    doc="A word that names a tab (its id, its title or an alias a world declares)."
+
+@ui.shell.alias.word core.key
+    value=atom
+    ask="Which word?"
+
+@ui.shell.alias.tab core.key
+    value=atom
+    ask="Which tab does it name?"
+
+@ui.shell.game core.type
+    extends=core.state
+    doc="The game actions of a tab: the one that starts a game, asks for a hint and gives up."
+
+@ui.shell.game.tab core.key
+    value=atom
+    ask="Which tab?"
+
+@ui.shell.game.new core.key
+    value=atom
+    ask="Which action starts a game?"
+
+@ui.shell.game.hint core.key
+    value=atom
+    ask="Which action asks for a hint?"
+
+@ui.shell.game.giveup core.key
+    value=atom
+    ask="Which action gives up?"
+
+@ui.shell.lang core.type
+    extends=core.state
+    doc="A language the app speaks and a word that names it."
+
+@ui.shell.lang.word core.key
+    value=atom
+    ask="Which word?"
+
+@ui.shell.lang.code core.key
+    value=atom
+    ask="Which language code?"
+
+@ui.shell.settings core.type
+    extends=core.state
+    doc="The tabs of the Settings dialog, as one sentence."
+
+@ui.shell.settings.tabs core.key
+    value=string
+    ask="Which tabs does it have?"
+
+@ui.shell.stab core.type
+    extends=core.state
+    doc="A tab of the Settings dialog."
+
+@ui.shell.stab.id core.key
+    value=atom
+    ask="Which settings tab?"
+
+@ui.shell.stab.title core.key
+    value=string
+    ask="What is it called?"
+
+@ui.shell.salias core.type
+    extends=core.state
+    doc="A word that names a tab of the Settings dialog."
+
+@ui.shell.salias.word core.key
+    value=atom
+    ask="Which word?"
+
+@ui.shell.salias.tab core.key
+    value=atom
+    ask="Which settings tab does it name?"

@@ -5,6 +5,9 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    passive=true
+    source="the app"
     language=en
     status=fixture
     title="App shell and voice settings"
