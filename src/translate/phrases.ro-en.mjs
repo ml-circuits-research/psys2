@@ -117,6 +117,8 @@ const BASE_FRAMES = [
   { p: 'ai|ați putea să {rest:binf}', out: 'could you {rest:binf}' },
   { p: 'te|vă rog să {rest:binf}', out: 'please {rest:binf}' },
   { p: 'hai să {rest:binf}', out: 'let us {rest:binf}' },
+  // "Pot cumpăra 2 mingi?" is the speaker asking (can I buy ...), not a question about what the balls can do: the shop verb comes before the general subject-after-verb frame
+  { p: 'pot cumpăra {np}', out: 'can I buy {np}', q: true, full: true },
   { p: 'pot|poate {v} {np:bare}', out: 'can {np} {v}', q: true },
   { p: '{np:bare} pot|poate {v}', out: 'can {np} {v}' },
   { p: 'există {np}', out: 'is there {np}', q: true },

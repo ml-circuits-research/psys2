@@ -22,3 +22,11 @@
 @kids.tasks.entry.progress core.key
     value=atom
     ask="Is it todo, done or removed?"
+
+@kids.tasks.entry.batch core.key
+    value=number
+    ask="Which request put the item on the list?"
+
+@kids.tasks.entry.assumed core.key
+    value=atom
+    ask="Was the list assumed because the user did not name it?"

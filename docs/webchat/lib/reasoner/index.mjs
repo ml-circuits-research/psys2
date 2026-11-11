@@ -72,6 +72,8 @@ export async function createReasoner(set, { lib = null } = {}) {
   const voices = new Map(worlds.filter((w) => typeof w.voice === 'function').map((w) => [w.id, w.voice]));
   const assumedBy = new Map(worlds.filter((w) => typeof w.assumed === 'function').map((w) => [w.id, w.assumed]));
   const undoOf = new Map(worlds.filter((w) => w.undoAction).map((w) => [w.undoAction, w]));   // action -> the world whose "undo" the library answers by rewinding
+  const problemOf = new Map(worlds.filter((w) => typeof w.problem === 'function').map((w) => [w.id, w.problem]));
+  const whyOf = new Map(worlds.filter((w) => typeof w.whyWords === 'function').map((w) => [w.id, w.whyWords]));
   const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
   const mirrors = [...new Set(worlds.flatMap((w) => w.mirrors))];
   const empties = new Map();
@@ -79,7 +81,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const actions = new Map();
   for (const m of base.matrix.values()) if (m.type === 'core.action') actions.set(unquote(first(m.attrs.name)), m.attrs);
   const reasoner = {
-    lib, base, voices, assumedBy, undoOf, mirrors, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
+    lib, base, voices, assumedBy, problemOf, whyOf, undoOf, mirrors, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
     /** The matrix world that owns a question type (longest world id that prefixes it), or null. */
     ownerOfType: (type) => owners.find((id) => type === id || String(type).startsWith(id + '.')) ?? null,
     ownerOfAction: (action) => actionOwner.get(action) ?? null,
@@ -111,13 +113,15 @@ export class ReasonerSession {
     this.told = [];              // ids of the dialogue wires the library holds, oldest first (a rewind retracts the ones that are gone from the session memory)
     this.cur = null;             // the turn in progress: { turn, mark, stamp }
     this.turns = [];             // the turns that changed the library, oldest first: { turn, mark } (the mark is the World as it was before the turn)
+    this.seg = null;             // the statements of the segment in progress: { mark, clean, ids } (what a refused statement is taken back to)
+    this.issueSeen = new Set();  // ids of the standing issues before the turn: an issue that appears with a statement means the statement cannot be true
   }
 
   /** A copy that shares the state until one of the two changes (nothing is copied). */
   fork() {
     const r = new ReasonerSession(this.reasoner, this.world.fork());
     r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.said = new Set(this.said); r.mirrored = new Map(this.mirrored); r.told = [...this.told];
-    r.cur = this.cur && { ...this.cur }; r.turns = this.turns.map((t) => ({ ...t }));
+    r.cur = this.cur && { ...this.cur }; r.seg = this.seg && { ...this.seg, ids: [...this.seg.ids] }; r.issueSeen = new Set(this.issueSeen); r.turns = this.turns.map((t) => ({ ...t }));
     return r;
   }
 
@@ -139,6 +143,8 @@ export class ReasonerSession {
   tell(wires, session = null) {
     for (const w of wires) {
       if (!this.isFact(w.type) || this.world.has(w.id)) continue;
+      if (!this.seg) this.seg = { mark: this.world.mark(), clean: this.world.stamp === this.cur?.stamp, ids: [] };
+      this.seg.ids.push(w.id);
       let r;
       try { r = this.world.tell([this._wire(w)], { budget: this._limit() }); } catch (e) { r = { ok: false, violations: [{ kind: 'error', why: String(e?.message ?? e) }] }; }
       this._charge();
@@ -158,12 +164,57 @@ export class ReasonerSession {
   // ---- turns, undo, rewind ---------------------------------------------------------------------------------------------------------
 
   /** Start of a dialogue turn: the World as it is now is what the turn can be taken back to. */
-  beginTurn(turn) { this.cur = { turn, mark: this.world.mark(), stamp: this.world.stamp }; }
+  beginTurn(turn) { this.cur = { turn, mark: this.world.mark(), stamp: this.world.stamp }; this.seg = null; this.issueSeen = new Set(this._issues().map((i) => i.id)); }
+  _issues() { return this.world.ofType('core.issue'); }
+  /**
+   * A statement that cannot be true (spec 11 section 12, matrix strategy): the library refused the wires of the segment (a deny: the reason is its text) or
+   * accepted them and a soft constraint now stands as a new issue (the issue's `why`). The segment's facts are taken back, in the library (`rewind` to before
+   * the segment's tell) and in the session memory, and the reason is returned (capitalised, with a full stop); null when the statements are fine.
+   */
+  refuseFacts(facts, session) {
+    const seg = this.seg;
+    this.seg = null;
+    if (!seg) return null;
+    const ids = new Set(seg.ids);
+    const refused = this.refused.find((r) => ids.has(r.id));
+    const added = refused ? null : this._issues().find((i) => !this.issueSeen.has(i.id));
+    if (!refused && !added) { for (const i of this._issues()) this.issueSeen.add(i.id); return null; }
+    let why = refused ? refused.violations?.[0]?.why : unquote(first(added.attrs.why) ?? '');
+    this.refused = this.refused.filter((r) => !ids.has(r.id));
+    // the world may say it in its own words (the issue and the facts are still in the library: it reads them before they are taken back)
+    const hook = this.reasoner.problemOf.get(this.reasoner.ownerOfType(facts.find((w) => !w.type.startsWith('core.'))?.type));
+    if (hook) {
+      try {
+        const issue = added && { why, key: first(added.attrs.key), aboutId: bare(first(added.attrs.about)), about: flat(this.world.get(bare(first(added.attrs.about)))?.attrs) };
+        const said = hook({ why, issue, facts: facts.map((w) => ({ type: w.type, attrs: Object.fromEntries(w.entries.map((e) => [keyName(e.key), String(e.value.v)])) })), find: (t) => this.world.ofType(t), query: (q) => this.world.query(q), name: (id) => this._nameOf(id), issues: () => this._issues().map((i) => ({ why: unquote(first(i.attrs.why) ?? ''), key: first(i.attrs.key), aboutId: bare(first(i.attrs.about)), about: flat(this.world.get(bare(first(i.attrs.about)))?.attrs) })) });
+        if (said) why = said;
+      } catch { /* the library's reason stays */ }
+    }
+    this.rewind(seg.mark, session, { restart: false });
+    if (seg.clean && this.cur) this.cur.stamp = this.world.stamp;   // nothing else changed the library in this turn: the turn is no action to take back
+    const t = String(why || 'that cannot be true').trim().replace(/[.!?\s]+$/, '');
+    return `${t.charAt(0).toUpperCase()}${t.slice(1)}.`;
+  }
   /** End of a dialogue turn: a turn that changed the library is kept, with its mark (what "undo that" and the dialogue layer's undo take back). */
   commitTurn(turn) {
     const c = this.cur;
     this.cur = null;
     if (c?.turn === turn && this.world.stamp !== c.stamp) { this.turns.push({ turn, mark: c.mark }); if (this.turns.length > 12) this.turns.shift(); }
+  }
+  /** The library takes statements out (`retract`: what followed from them goes too) and the session memory with them; false (nothing changed) when the library will not. */
+  retractFacts(ids, session, why = 'taken back') {
+    const mark = this.world.mark();
+    for (const id of ids) {
+      if (!this.world.has(id)) continue;
+      let r;
+      try { r = this.world.retract(id, { budget: this._limit() }); } catch { r = { ok: false }; }
+      this._charge();
+      if (r.ok === false || r.violations?.length) { this.world.rewind(mark); return false; }
+    }
+    this.told = this.told.filter((id) => !ids.includes(id));
+    for (const id of ids) session.memory.retract(id, why);
+    this.syncTo(session);
+    return true;
   }
   /** After a rewind the turn in progress starts again from where the library is: a pure undo then changes nothing (it is not an action to take back), a repair that tells the corrected sentence does. */
   _restart() { if (this.cur) this.cur = { turn: this.cur.turn, mark: this.world.mark(), stamp: this.world.stamp }; }
@@ -182,7 +233,7 @@ export class ReasonerSession {
    * Puts the library back to a mark (library `rewind`) and the session memory with it (the dialogue wires the library no longer holds are retracted there),
    * and derives the state and the mirrors again. Returns a function that undoes the rewind (a repair of the dialogue layer gives up with it).
    */
-  rewind(mark, session) {
+  rewind(mark, session, { restart = true } = {}) {
     const at = this.turns.findIndex((t) => t.mark === mark);
     const dropped = at < 0 ? [] : this.turns.splice(at);
     const after = this.world.mark();
@@ -190,7 +241,7 @@ export class ReasonerSession {
     const told = this.told, gone = [];
     this.told = told.filter((id) => { if (this.world.has(id)) return true; const w = session.memory.get(id); if (w) gone.push(w); return false; });
     for (const w of gone) session.memory.retract(w.id, 'taken back');
-    this._restart();
+    if (restart) this._restart();
     this.syncTo(session);
     return () => {
       this.world.rewind(after);
@@ -207,14 +258,14 @@ export class ReasonerSession {
     const walk = (n, depth) => {   // a depth limit and a visited map
       turnBudget.tick('sopworld.explain');
       if (!n || depth > 40 || out.has(n.id)) return;
-      if (!n.from?.length) {
+      if (!n.from?.length || n.told) {   // a told wire is a fact of the answer even when other facts changed it (Tom has 5, then gifts and meals)
         const w = session.memory.get(n.id) ?? session.memory.get(String(n.id));
         const src = w?.entries.find((e) => e.key === 'core.source')?.value?.v;
         const seq = Number(w?.entries.find((e) => e.key === 'core.seq')?.value?.v ?? NaN);
         out.set(n.id, { id: n.id, source: src ?? null, seq: Number.isFinite(seq) ? seq : null, kb: !!n.told && !src && !!session.memory.base?.byId?.has?.(n.id) });
-        return;
+        if (!n.from?.length) return;
       }
-      for (const c of n.from) walk(c, depth + 1);
+      for (const c of n.from ?? []) walk(c, depth + 1);
     };
     for (const id of ids ?? []) { try { walk(this.world.explain(id), 0); } catch { /* no explanation */ } }
     return [...out.values()].sort((a, b) => (a.seq ?? 1e9) - (b.seq ?? 1e9));

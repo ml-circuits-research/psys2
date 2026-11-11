@@ -68,6 +68,33 @@
 @arith.a.leader kids.arith.leader core.on=$arith.q.leader winner=?top count=?topn
 @arith.r.leader core.rule when=$arith.q.leader with=$arith.c.asked with=$arith.c.known with=$arith.c.top with=$arith.c.topn if=$arith.t.all if=$arith.t.any then=$arith.a.leader
 
+# ---- how many someone had at first: the count a statement gave minus what the events did to it (the sum of what came in minus what went out; "ate 2 and now has 3" gives 5)
+@arith.q.start kids.arith.holding owner=?o item=?i
+@arith.hs kids.arith.holding owner=?o item=?i count=?c
+@arith.ev.give kids.arith.give who=?o item=?i count=?n
+@arith.ev.given kids.arith.give to=?o item=?i count=?n
+@arith.ev.recv kids.arith.receive who=?o item=?i count=?n
+@arith.ev.buy kids.arith.buy who=?o item=?i count=?n
+@arith.ev.eat kids.arith.eat who=?o item=?i count=?n
+@arith.ev.lose kids.arith.lose who=?o item=?i count=?n
+@arith.ev.break kids.arith.break who=?o item=?i count=?n
+@arith.c.s.give core.calc out=?sgive fn=sum over=$arith.ev.give args=?n
+@arith.c.s.given core.calc out=?sgiven fn=sum over=$arith.ev.given args=?n
+@arith.c.s.recv core.calc out=?srecv fn=sum over=$arith.ev.recv args=?n
+@arith.c.s.buy core.calc out=?sbuy fn=sum over=$arith.ev.buy args=?n
+@arith.c.s.eat core.calc out=?seat fn=sum over=$arith.ev.eat args=?n
+@arith.c.s.lose core.calc out=?slose fn=sum over=$arith.ev.lose args=?n
+@arith.c.s.break core.calc out=?sbreak fn=sum over=$arith.ev.break args=?n
+@arith.c.in1 core.calc out=?in1 fn=add args=?sgiven args=?srecv
+@arith.c.in2 core.calc out=?in2 fn=add args=?in1 args=?sbuy
+@arith.c.out1 core.calc out=?out1 fn=add args=?sgive args=?seat
+@arith.c.out2 core.calc out=?out2 fn=add args=?out1 args=?slose
+@arith.c.out3 core.calc out=?out3 fn=add args=?out2 args=?sbreak
+@arith.c.net core.calc out=?net fn=sub args=?in2 args=?out3
+@arith.c.start core.calc out=?s fn=sub args=?c args=?net
+@arith.a.start kids.arith.holding core.on=$arith.q.start start=?s
+@arith.r.start core.rule when=$arith.q.start when=$arith.hs with=$arith.c.s.give with=$arith.c.s.given with=$arith.c.s.recv with=$arith.c.s.buy with=$arith.c.s.eat with=$arith.c.s.lose with=$arith.c.s.break with=$arith.c.in1 with=$arith.c.in2 with=$arith.c.out1 with=$arith.c.out2 with=$arith.c.out3 with=$arith.c.net with=$arith.c.start then=$arith.a.start
+
 # ---- two people compared
 @arith.h1 kids.arith.holding owner=?w1 item=?i count=?c1
 @arith.h2 kids.arith.holding owner=?w2 item=?i count=?c2

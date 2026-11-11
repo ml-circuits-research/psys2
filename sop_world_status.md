@@ -98,6 +98,22 @@ Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-
   - certainty in replies ("I assumed 1 ball.") and `assumptions` in the phrase log;
   - `games.tictactoe` as a visible matrix world: illegal moves refused with the reason, undo of a move, "why did you play there?".
 
+### After SOPWORLD-1b item 2 in both strategies (2026-11-11)
+
+| Measure | ops | matrix |
+| --- | --- | --- |
+| Coherence set (33) | 25 | **31** |
+| Contradiction | 6/7 | 6/7 (the last case, arith.01, answers 3 after a refused event: by design in both) |
+| Default revision | 3/3 | 3/3 (was 2/3) |
+| Explain | 3/3 | 3/3 (was 2/3) |
+| Abduction | 1/2 | **2/2** (was 1/2) |
+| Undo, assumptions | 0/3, 4/6 (no such feature in ops) | 3/3, 6/6 |
+| Turns that leave a violation | 15 (1.9%) | 0 (statements the library cannot take are refused when told) |
+| Operational-ro, three worlds wrong | 6 (was 8) | 6 (was 8) |
+
+- In matrix mode a statement that cannot be true is refused when told (the library's deny or a new soft issue, then a `rewind`), a correction is `retract` plus the corrected statement, and "why?" quotes the told leaves of the library's `explain`. See spec 15, "Coherence in matrix mode".
+- Remaining in both: "Remove eggs." in the robot tab is read by another world (coh.tasks.09), and arith.01 expects `conflicting` at the question after the refusal.
+
 ## Planned full A/B experiment (after SOPWORLD-1b lands)
 
 One combined run in both modes, started only after the pending changes are merged, so the results are not invalidated:

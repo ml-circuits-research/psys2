@@ -998,9 +998,9 @@
   "operational-ro": {
    "three": {
     "n": 452,
-    "right": 397,
+    "right": 399,
     "partly": 7,
-    "wrong": 8,
+    "wrong": 6,
     "not_understood": 40
    },
    "others": {
@@ -1461,8 +1461,8 @@
     "kids.tasks#038.roc": "I did not understand \"aminteste-mi sa o sun pe bunica\". Did you mean \"Îmi amintește chema bunica\" or \"Îmi amintește despre meu chema bunică\"?",
     "kids.shop#042.ro": "OK, one toy car costs 9 lei. 2 toy cars cost 18 lei.",
     "kids.shop#042.roc": "OK, one toy car costs 9 lei. 2 toy cars cost 18 lei.",
-    "kids.shop#043.ro": "OK, one ball costs 5 lei. OK, you have 12 lei. I did not understand \"Pot cumpăra 2 mingi\". Did you mean \"Pot plăti pentru 2 mingi?\" or \"Rest pentru 2 mingi cu 5 lei?\"?",
-    "kids.shop#043.roc": "OK, one ball costs 5 lei. OK, you have 12 lei. I did not understand \"pot cumpara 2 mingi\". Did you mean \"Pot plăti pentru 2 mingi?\" or \"Rest pentru 2 mingi cu 5 lei?\"?"
+    "kids.shop#043.ro": "OK, one ball costs 5 lei. OK, you have 12 lei. Yes. 2 balls cost 10 lei and you have 12 lei.",
+    "kids.shop#043.roc": "OK, one ball costs 5 lei. OK, you have 12 lei. Yes. 2 balls cost 10 lei and you have 12 lei."
    }
   },
   "dialogues": {
@@ -1484,13 +1484,13 @@
  },
  "ms_per_turn": {
   "three": {
-   "p50": 13.9,
-   "p95": 80.4,
+   "p50": 13.1,
+   "p95": 81.2,
    "n": 910
   },
   "all": {
    "p50": 11,
-   "p95": 66.2,
+   "p95": 67,
    "n": 9115
   }
  },
@@ -4982,8 +4982,8 @@
    "kids.tasks#038.roc": "not_understood",
    "kids.shop#042.ro": "right",
    "kids.shop#042.roc": "right",
-   "kids.shop#043.ro": "wrong",
-   "kids.shop#043.roc": "wrong",
+   "kids.shop#043.ro": "right",
+   "kids.shop#043.roc": "right",
    "kids.common#035.ro": "right",
    "kids.common#035.roc": "right",
    "kids.common#036.ro": "right",
@@ -7717,7 +7717,7 @@
    }
   ],
   "dropped_by_library": 0,
-  "ms": 830,
+  "ms": 869,
   "violation_rate_pct": 1.9
  },
  "assumptions": {
@@ -7733,8 +7733,8 @@
     "gzip": 77251
    },
    "host_layer": {
-    "raw": 26857,
-    "gzip": 8837
+    "raw": 27590,
+    "gzip": 9072
    },
    "worlds_index": {
     "raw": 4836251,
@@ -7744,18 +7744,18 @@
   "lines": {
    "kids.shop": {
     "ops": 200,
-    "matrix": 252
+    "matrix": 268
    },
    "kids.arith": {
     "ops": 297,
-    "matrix": 211
+    "matrix": 253
    },
    "kids.tasks": {
     "ops": 206,
-    "matrix": 153
+    "matrix": 158
    }
   },
-  "host_layer_lines": 398
+  "host_layer_lines": 460
  },
- "elapsed_s": 142
+ "elapsed_s": 141
 }

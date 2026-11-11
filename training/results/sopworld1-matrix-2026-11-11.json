@@ -4,7 +4,7 @@
  "limit": null,
  "coherence": {
   "total": {
-   "passed": 28,
+   "passed": 31,
    "total": 33,
    "review": 3
   },
@@ -20,7 +20,7 @@
     "review": 1
    },
    "default-revision": {
-    "passed": 2,
+    "passed": 3,
     "total": 3,
     "review": 0
    },
@@ -30,12 +30,12 @@
     "review": 0
    },
    "explain": {
-    "passed": 2,
+    "passed": 3,
     "total": 3,
     "review": 0
    },
    "abduce": {
-    "passed": 1,
+    "passed": 2,
     "total": 2,
     "review": 0
    },
@@ -60,16 +60,16 @@
     "id": "coh.shop.01",
     "kind": "contradiction",
     "world": "kids.shop",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "final_answer_contains",
-      "ok": false
+      "ok": true
      },
      {
       "hint": "never_state",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -202,12 +202,12 @@
     "id": "coh.arith.01",
     "kind": "contradiction",
     "world": "kids.arith",
-    "passed": true,
+    "passed": false,
     "needs_review": false,
     "hints": [
      {
       "hint": "status",
-      "ok": true
+      "ok": false
      },
      {
       "hint": "never_answer",
@@ -232,12 +232,12 @@
     "id": "coh.arith.03",
     "kind": "default-revision",
     "world": "kids.arith",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "final_answer_contains",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -258,7 +258,7 @@
     "id": "coh.arith.05",
     "kind": "explain",
     "world": "kids.arith",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
@@ -267,7 +267,7 @@
      },
      {
       "hint": "answer_mentions",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -309,12 +309,12 @@
     "id": "coh.arith.08",
     "kind": "abduce",
     "world": "kids.arith",
-    "passed": false,
+    "passed": true,
     "needs_review": false,
     "hints": [
      {
       "hint": "final_answer_contains",
-      "ok": false
+      "ok": true
      }
     ]
    },
@@ -544,24 +544,24 @@
   ],
   "transcripts": [
    {
-    "id": "coh.shop.01",
+    "id": "coh.arith.01",
     "kind": "contradiction",
-    "expect": "A book costs 12 lei and the user has 10: the purchase must be refused (or recorded as a problem), never leave negative money. The last answer is 10 lei.",
+    "expect": "Eating more than he has is impossible: flagged with the reason (conflicting), never -2.",
     "passed": false,
     "hints": [
      {
-      "hint": "final_answer_contains",
+      "hint": "status",
       "ok": false
      },
      {
-      "hint": "never_state",
-      "ok": false
+      "hint": "never_answer",
+      "ok": true
      }
     ],
     "turns": [
-     "> I have 10 lei.\n  OK, you have 10 lei.",
-     "> I buy a book.\n  OK, you bought 1 book.",
-     "> How much money do I have?\n  That does not add up. more was spent than there was"
+     "> Tom has 3 apples.\n  OK, Tom has 3 apples.",
+     "> Tom eats 5 apples.\n  That does not add up. Tom only had 3 apples, so Tom cannot eat 5.",
+     "> How many apples does Tom have?\n  Tom has 3 apples."
     ]
    },
    {
@@ -578,65 +578,7 @@
     "turns": [
      "> Tom has 5 apples.\n  OK, Tom has 5 apples.",
      "> Ana gives him some.\n  OK, Ana gave Tom some apples. I don't know how many.",
-     "> How many apples does Tom have?\n  Tom has 5 apples."
-    ]
-   },
-   {
-    "id": "coh.arith.03",
-    "kind": "default-revision",
-    "expect": "The correction replaces the event (not a second gift): 9.",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "final_answer_contains",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> Tom has 5 apples.\n  OK, Tom has 5 apples.",
-     "> Ana gives him 3 apples.\n  OK, Ana gave Tom 3 apples.",
-     "> No, she gives him 4.\n  We are not playing twenty questions. Say \"guess my animal\" to start. OK, Ana gave Tom 4 apples.",
-     "> How many apples does Tom have?\n  Tom has 12 apples."
-    ]
-   },
-   {
-    "id": "coh.arith.05",
-    "kind": "explain",
-    "expect": "6, and the explanation lists the three facts in order (5, +3, -2).",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "answers_contain",
-      "ok": true
-     },
-     {
-      "hint": "answer_mentions",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> Tom has 5 apples.\n  OK, Tom has 5 apples.",
-     "> Ana gives him 3 apples.\n  OK, Ana gave Tom 3 apples.",
-     "> He eats 2.\n  OK, Tom ate 2 apples.",
-     "> How many apples does Tom have?\n  Tom has 6 apples.",
-     "> Why?\n  You said \"How many apples does Tom have\", so I answered it. What I answered: Tom has 6 apples. I worked that out from what you told me: \"Ana gives him 3 apples\" and \"He eats 2\"."
-    ]
-   },
-   {
-    "id": "coh.arith.08",
-    "kind": "abduce",
-    "expect": "5.",
-    "passed": false,
-    "hints": [
-     {
-      "hint": "final_answer_contains",
-      "ok": false
-     }
-    ],
-    "turns": [
-     "> Tom had some apples.\n  OK, Tom had some apples. I don't know how many yet.",
-     "> He ate 2 and now has 3.\n  OK, Tom ate 2 apples. OK, Tom has 3 apples.",
-     "> How many apples did Tom have at first?\n  I don't know how many apples Tom had at first. Tell me, or tell me how many Tom has now after something happened."
+     "> How many apples does Tom have?\n  Tom has more than 5 apples: I was only told that some more came, not how many."
     ]
    },
    {
@@ -669,8 +611,8 @@
     "turns": [
      "> Tom has 5 apples.\n  OK, Tom has 5 apples.",
      "> Tom gives Ana 2 apples.\n  OK, Tom gave Ana 2 apples.",
-     "> Tom gives Ana 4 apples.\n  OK, Tom gave Ana 4 apples.",
-     "> How many apples does Ana have?\n  That does not add up. Tom only had 5 apples, so Tom cannot give away 4."
+     "> Tom gives Ana 4 apples.\n  That does not add up. Tom only had 3 apples, so Tom cannot give away 4.",
+     "> How many apples does Ana have?\n  I don't know how many apples Ana had; Ana got 2 from Tom."
     ]
    },
    {
@@ -940,9 +882,9 @@
   "operational-ro": {
    "three": {
     "n": 452,
-    "right": 397,
+    "right": 399,
     "partly": 7,
-    "wrong": 8,
+    "wrong": 6,
     "not_understood": 40
    },
    "others": {
@@ -1403,8 +1345,8 @@
     "kids.tasks#038.roc": "I did not understand \"aminteste-mi sa o sun pe bunica\". Did you mean \"Îmi amintește chema bunica\" or \"Îmi amintește despre meu chema bunică\"?",
     "kids.shop#042.ro": "OK, one toy car costs 9 lei. 2 toy cars cost 18 lei.",
     "kids.shop#042.roc": "OK, one toy car costs 9 lei. 2 toy cars cost 18 lei.",
-    "kids.shop#043.ro": "OK, one ball costs 5 lei. OK, you have 12 lei. I did not understand \"Pot cumpăra 2 mingi\". Did you mean \"Pot plăti pentru 2 mingi?\" or \"Rest pentru 2 mingi cu 5 lei?\"?",
-    "kids.shop#043.roc": "OK, one ball costs 5 lei. OK, you have 12 lei. I did not understand \"pot cumpara 2 mingi\". Did you mean \"Pot plăti pentru 2 mingi?\" or \"Rest pentru 2 mingi cu 5 lei?\"?"
+    "kids.shop#043.ro": "OK, one ball costs 5 lei. OK, you have 12 lei. Yes. 2 balls cost 10 lei and you have 12 lei.",
+    "kids.shop#043.roc": "OK, one ball costs 5 lei. OK, you have 12 lei. Yes. 2 balls cost 10 lei and you have 12 lei."
    }
   },
   "dialogues": {
@@ -1426,13 +1368,13 @@
  },
  "ms_per_turn": {
   "three": {
-   "p50": 17.4,
-   "p95": 82,
+   "p50": 17.6,
+   "p95": 82.2,
    "n": 910
   },
   "all": {
-   "p50": 12.9,
-   "p95": 69.6,
+   "p50": 12.6,
+   "p95": 67.2,
    "n": 9115
   }
  },
@@ -4924,8 +4866,8 @@
    "kids.tasks#038.roc": "not_understood",
    "kids.shop#042.ro": "right",
    "kids.shop#042.roc": "right",
-   "kids.shop#043.ro": "wrong",
-   "kids.shop#043.roc": "wrong",
+   "kids.shop#043.ro": "right",
+   "kids.shop#043.roc": "right",
    "kids.common#035.ro": "right",
    "kids.common#035.roc": "right",
    "kids.common#036.ro": "right",
@@ -7463,79 +7405,15 @@
  },
  "audit": {
   "turns": 758,
-  "with_violation": 6,
-  "kinds": {
-   "balance": 2,
-   "domain": 4
-  },
-  "examples": [
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "balance",
-      "why": "more was spent than there was",
-      "wire": "shop.wallet"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "balance",
-      "why": "more was spent than there was",
-      "wire": "shop.wallet"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "domain",
-      "why": "count must be at least 0",
-      "wire": "w1"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "domain",
-      "why": "count must be at least 0",
-      "wire": "w1"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "domain",
-      "why": "count must be at least 0",
-      "wire": "w1"
-     }
-    ]
-   },
-   {
-    "at": "coherence",
-    "problems": [
-     {
-      "kind": "domain",
-      "why": "count must be at least 0",
-      "wire": "w1"
-     }
-    ]
-   }
-  ],
+  "with_violation": 0,
+  "kinds": {},
+  "examples": [],
   "dropped_by_library": 0,
-  "ms": 62,
-  "violation_rate_pct": 0.8
+  "ms": 71,
+  "violation_rate_pct": 0
  },
  "assumptions": {
-  "answers": 52,
+  "answers": 51,
   "relied": 3,
   "said": 2,
   "examples": [
@@ -7560,8 +7438,8 @@
     "gzip": 77251
    },
    "host_layer": {
-    "raw": 26857,
-    "gzip": 8837
+    "raw": 27590,
+    "gzip": 9072
    },
    "worlds_index": {
     "raw": 4836251,
@@ -7571,19 +7449,19 @@
   "lines": {
    "kids.shop": {
     "ops": 200,
-    "matrix": 252
+    "matrix": 268
    },
    "kids.arith": {
     "ops": 297,
-    "matrix": 211
+    "matrix": 253
    },
    "kids.tasks": {
     "ops": 206,
-    "matrix": 153
+    "matrix": 158
    }
   },
-  "host_layer_lines": 398
+  "host_layer_lines": 460
  },
- "elapsed_s": 158,
+ "elapsed_s": 155,
  "refused_by_library": "see session.rs.refused (statements the library dropped, listed in the log)"
 }
