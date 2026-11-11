@@ -14,8 +14,11 @@
  *   assume    matrix: "I buy the ball" then "how much money do I have?" says "I assumed 1 ball." once; the phrase log record carries the assumption.
  *   tictactoe matrix: an illegal move is refused with the reason and the tab board does not change, "undo" takes the move back (the board on the tab follows),
  *             "why did you play there?" explains, a finished game refuses moves.
+ *   hangman   matrix (stage 2): a repeated letter is answered by the rules and the tab does not change, "undo" takes the last guess back (the letter on the tab is
+ *             free again), a finished game refuses guesses and undo reopens it.
+ *   guess     matrix (stage 2): the animals still possible follow the answers on the tab, "undo" asks the last question again, a reply that does not fit is refused.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -173,6 +176,47 @@ export const SCENARIOS = {
       const g = await say(c, 'center');
       check('tictactoe: undo of the resignation reopens the game', /You took the center\./.test(g) && marks(await board()) === 2, g.slice(0, 80));
       check('tictactoe: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async hangman(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      const word = () => c.pg.$eval('.p2-hang-word', (e) => e.textContent.replace(/\s+/g, ''));
+      const letters = () => c.pg.$$eval('.p2-letter', (cs) => cs.map((x) => (x.classList.contains('is-right') ? 'r' : x.classList.contains('is-wrong') ? 'w' : '.')).join(''));
+      const a = await say(c, 'Play hangman with the word zebra');
+      check('hangman: the game starts and its tab shows a blank word', /Hangman! I have chosen a word of 5 letters/.test(a) && (await word()) === '_____', `${a.slice(0, 60)} | ${await word()}`);
+      const z = await say(c, 'Is there a Z?');
+      check('hangman: a hit is on the tab', /Yes, there is one Z!/.test(z) && (await word()) === 'Z____' && (await letters())[25] === 'r', `${z.slice(0, 50)} | ${await word()}`);
+      const l1 = await letters();
+      const d = await say(c, 'Is there a Z?');
+      check('hangman: a repeated letter is answered and the tab does not change', /^You already tried Z\./.test(d) && (await letters()) === l1 && (await word()) === 'Z____', d.slice(0, 60));
+      await say(c, 'Is there an X?');
+      check('hangman: a miss is marked wrong on the tab', (await letters())[23] === 'w', await letters());
+      const u = await say(c, 'undo');
+      check('hangman: "undo" takes the last guess back, the letter on the tab is free again', /took back your last guess/.test(u) && (await letters())[23] === '.' && (await word()) === 'Z____', `${u.slice(0, 60)} | ${await letters()}`);
+      await say(c, 'I give up');
+      const o2 = await say(c, 'Is there an E?');
+      check('hangman: a guess after the game is refused', /^We are not playing hangman\./.test(o2) && (await word()) === 'ZEBRA', `${o2.slice(0, 60)} | ${await word()}`);
+      await say(c, 'undo');
+      const g = await say(c, 'Is there an E?');
+      check('hangman: undo of the give-up reopens the game', /Yes, there is one E!/.test(g) && (await word()) === 'ZE___', `${g.slice(0, 50)} | ${await word()}`);
+      check('hangman: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async guess(o) {
+    const c = await openChat({ ...o, settings: MATRIX });
+    try {
+      const asked = () => c.pg.$$eval('.p2-guess-history li', (l) => l.length);
+      const a = await say(c, 'Guess my animal');
+      check('guess: the game starts and asks the first question', /Question 1: Does it have 4 legs\?/.test(a), a.slice(0, 100));
+      const y = await say(c, 'yes');
+      check('guess: an answer is on the tab and the next question is asked', /^Good\. Question 2:/.test(y) && (await asked()) === 1, `${y.slice(0, 60)} | ${await asked()}`);
+      const u = await say(c, 'undo');
+      check('guess: "undo" takes the answer back and asks that question again', /took back your last answer\. I am asking that question again: Does it have 4 legs\?/.test(u) && (await asked()) === 0, `${u.slice(0, 80)} | ${await asked()}`);
+      await say(c, 'I give up');
+      const r = await say(c, 'yes');
+      check('guess: an answer that does not fit the game is refused with the reason', r === 'I am waiting to learn the animal. Tell me, for example: "it was a zebra".', r.slice(0, 80));
+      check('guess: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 };

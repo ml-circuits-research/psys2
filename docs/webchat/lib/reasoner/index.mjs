@@ -48,15 +48,31 @@ export async function createReasoner(set, { lib = null } = {}) {
   lib ??= await import('../vendor/sopworld/sopworld.mjs?v=b80a005fd0');
   const wanted = new Set(worlds.flatMap((w) => set.available(w.id)));
   const ordered = set.list().filter((w) => wanted.has(w.id));
+  const legends = set.legends;
+  const lexicon = (id) => { const l = set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; };
+  /** What the host gives an action function besides the library's own context (`ctx.host`, spec 15): the lexicons, and `view(ctx)`, an ops-shaped read-only context (find, val, vals, lexicon) over the library, so the tables of a world's ops.mjs can be shared. */
+  const host = {
+    lexicon,
+    view: (c) => {
+      const key = (w, k) => { const r = legends.tryResolveKey(w.type, k); return r.error ? null : r; };
+      const decode = (r, t) => legends.decode(r.info, lib.readValue(t));
+      return {
+        lexicon,
+        find: (type, where = {}) => c.find(type, where),
+        val: (w, k) => { const r = key(w, k); const t = r && w.attrs[keyName(r.key)]?.[0]; return t === undefined ? undefined : decode(r, t); },
+        vals: (w, k) => { const r = key(w, k); return r ? (w.attrs[keyName(r.key)] ?? []).map((t) => decode(r, t)) : []; },
+      };
+    },
+  };
   const fns = {};   // the worlds' action functions (the library keeps them apart from its own arithmetic)
-  for (const w of worlds) Object.assign(fns, w.fns ?? {});
+  for (const w of worlds) for (const [name, f] of Object.entries(w.fns ?? {})) fns[name] = (c, args) => f({ ...c, host }, args);
   const base = new lib.World({ actions: fns, vocabulary: { status: 'core.status' } });
   const problems = [];
   const load = (what, text) => { if (text == null) return; const r = base.load(text); if (!r.ok) problems.push(`${what}: ${r.violations?.[0]?.kind ?? 'refused'} ${r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? ''}`.trim()); };
   const mapping = set.list().map((w) => w.raw.mapping).find((t) => t != null);
   load('mapping', mapping);
   for (const w of ordered) load(`${w.id}/legend.sop`, w.raw.legend);
-  for (const w of worlds) load(`${w.id}/kb.sop`, w.raw.kb);
+  for (const w of ordered) load(`${w.id}/kb.sop`, w.raw.kb);   // the knowledge bases of the matrix worlds and of what they import (games.guess reads kids.animals)
   load('user', '@e.user core.agent');   // the user is a built-in agent of every session
   // one SOP Lang parser in the product: our parser reads the matrices and the library is handed their wires
   const loadOurs = (what, text) => {
@@ -76,12 +92,13 @@ export async function createReasoner(set, { lib = null } = {}) {
   const whyOf = new Map(worlds.filter((w) => typeof w.whyWords === 'function').map((w) => [w.id, w.whyWords]));
   const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
   const mirrors = [...new Set(worlds.flatMap((w) => w.mirrors))];
+  const opsKeys = new Set(worlds.flatMap((w) => w.opsKeys));   // questions the matrix leaves to the operations (world.sop `ops=`)
   const empties = new Map();
   // the matrix's own declarations of its actions (`core.action name=... ask.<key>=... template.<key>=...`): what a missing argument asks and how the answer completes the sentence
   const actions = new Map();
   for (const m of base.matrix.values()) if (m.type === 'core.action') actions.set(unquote(first(m.attrs.name)), m.attrs);
   const reasoner = {
-    lib, base, voices, assumedBy, problemOf, whyOf, undoOf, mirrors, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
+    lib, base, voices, assumedBy, problemOf, whyOf, undoOf, mirrors, opsKeys, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
     /** The matrix world that owns a question type (longest world id that prefixes it), or null. */
     ownerOfType: (type) => owners.find((id) => type === id || String(type).startsWith(id + '.')) ?? null,
     ownerOfAction: (action) => actionOwner.get(action) ?? null,
@@ -286,7 +303,7 @@ export class ReasonerSession {
   owns(wire) {
     const val = (k) => wire.entries.find((e) => e.key === k)?.value?.v;
     const L = this.reasoner.legends;
-    if (L.isA(wire.type, 'core.question')) return !!this.reasoner.ownerOfType(val('core.question.type'));
+    if (L.isA(wire.type, 'core.question')) return !!this.reasoner.ownerOfType(val('core.question.type')) && !this.reasoner.opsKeys.has(`${val('core.question.type')}.${keyName(val('core.question.seek') ?? '')}`);
     if (L.isA(wire.type, 'core.request')) return !!this.reasoner.ownerOfAction(val('core.request.action'));
     return false;
   }
@@ -530,6 +547,7 @@ export class ReasonerSession {
         live.add(w.id);
         const text = this.reasoner.lib.format(w);
         if (this.mirrored.get(w.id)?.text === text) continue;
+        if (!this.mirrored.has(w.id) && session.memory.get(w.id)) { this.mirrored.set(w.id, { text, type, own: true }); continue; }   // a wire the memory already has (a knowledge base) is not copied, nor retracted
         this.mirrored.set(w.id, { text, type });
         const { wires } = parseOurs(text);
         if (!wires[0]) continue;
@@ -542,6 +560,7 @@ export class ReasonerSession {
       for (const [id, m] of [...this.mirrored]) {
         turnBudget.tick('sopworld.mirror');
         if (m.type !== type || live.has(id)) continue;
+        if (m.own) { this.mirrored.delete(id); continue; }
         session.memory.retract(id, 'removed by the matrix reasoner');
         this.mirrored.delete(id);
       }

@@ -5,6 +5,13 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    ops=kids.shapes.thing.is_color
+    ops=kids.shapes.thing.color
+    ops=kids.shapes.color.is_kind
+    ops=kids.shapes.mix.result
+    ops=kids.shapes.mix.recipe
+    source="what I know about shapes and colors"
     language=en
     status=fixture
     title="Shapes and colors (primary school)"

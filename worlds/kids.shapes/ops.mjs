@@ -27,19 +27,24 @@ export const holdsYes = (ctx, { shape, kind }) => holds(ctx, shape, kind, true);
 export const holdsNo = (ctx, { shape, kind }) => holds(ctx, shape, kind, false);
 
 // ---- describe a shape ------------------------------------------------------------------------------
-export function describeShape(ctx, { name }) {
-  const ws = ctx.find(`${NS}.shape`, { name });
-  if (!ws.length) return missingKey('shape', 'sides');
-  const sides = ws.map((w) => ctx.val(w, 'sides')).find((v) => v !== undefined);
-  const corners = ws.map((w) => ctx.val(w, 'corners')).find((v) => v !== undefined);
-  if (sides === undefined && corners === undefined) return missingKey('shape', 'sides');
+/** "a flat shape with 6 sides and 6 corners." (`sides` and `corners` are numbers or undefined; shared with the matrix, fns.mjs). */
+export function summaryWords(sides, corners) {
   const n = (v, word) => (v === 0 ? `no ${word}s` : `${v} ${word}${v === 1 ? '' : 's'}`);
   const bits = [];
   if (sides !== undefined) bits.push(n(sides, 'side'));
   if (corners !== undefined) bits.push(n(corners, 'corner'));
   const round = sides === 0 && corners === 0;
   const head = round ? 'a round shape' : 'a flat shape';
-  return { status: 'supported', value: `${head} with ${joinAnd(bits)}.`, from: ws.map((w) => w.id) };
+  return `${head} with ${joinAnd(bits)}.`;
+}
+
+export function describeShape(ctx, { name }) {
+  const ws = ctx.find(`${NS}.shape`, { name });
+  if (!ws.length) return missingKey('shape', 'sides');
+  const sides = ws.map((w) => ctx.val(w, 'sides')).find((v) => v !== undefined);
+  const corners = ws.map((w) => ctx.val(w, 'corners')).find((v) => v !== undefined);
+  if (sides === undefined && corners === undefined) return missingKey('shape', 'sides');
+  return { status: 'supported', value: summaryWords(sides, corners), from: ws.map((w) => w.id) };
 }
 
 // ---- colors of things -------------------------------------------------------------------------------

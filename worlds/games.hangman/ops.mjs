@@ -8,7 +8,7 @@
 // Hints are facts about the animal read from kids.animals (FALLBACK_FACTS for the fallback words).
 // Cross-world: ctx.request('ui.openTab', { tab: 'hangman' }).
 
-const MAX_WRONG = 6;
+export const MAX_WRONG = 6;
 // FALLBACK: used only when kids.animals is not loaded.
 const FALLBACK_WORDS = ['elephant', 'giraffe', 'penguin', 'dolphin', 'butterfly', 'kangaroo', 'crocodile', 'zebra', 'tiger', 'spider'];
 const FALLBACK_FACTS = {
@@ -28,10 +28,10 @@ export function initialState() {
 
 const ok = (value) => ({ status: 'supported', value });
 const no = (status, note) => ({ status, note });
-const NOT_PLAYING = 'We are not playing hangman. Say "play hangman" to start.';
+export const NOT_PLAYING = 'We are not playing hangman. Say "play hangman" to start.';
 const show = (ctx) => ctx.request('ui.openTab', { tab: 'hangman' });
 
-function wordList(ctx) {
+export function wordList(ctx) {
   const names = new Set();
   for (const w of ctx.lexicon('lex.kids.animals.names')) names.add(w);
   for (const w of ctx.find('kids.animals.animal')) { const n = ctx.val(w, 'name'); if (n) names.add(n); }
@@ -106,7 +106,7 @@ export function word(ctx, { word: w }) {
 }
 
 /** Facts about the animal, in a fixed order, from the kids.animals knowledge base. */
-function facts(ctx, name) {
+export function facts(ctx, name) {
   const ws = ctx.find('kids.animals.animal', { name });
   if (!ws.length) return FALLBACK_FACTS[name] ?? [];
   const vals = (k) => [...new Set(ws.flatMap((w) => ctx.vals(w, k)))];

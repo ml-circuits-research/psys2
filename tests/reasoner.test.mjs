@@ -35,21 +35,21 @@ test('default: the engine is matrix (user decision 2026-11-11); explicit ops loa
   assert.equal(ops.reasonerMode, 'ops');
   assert.equal(ops.reasoner, null);
   assert.equal(ops.createSession({ language: 'en' }).isession.rs, null);
-  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
+  for (const id of ['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe', 'games.hangman', 'games.guess', 'kids.shapes']) assert.equal(ops.set.get(id).reasoner, 'matrix', `${id} opts in`);
   assert.equal(ops.set.get('kids.time').reasoner, 'ops', 'every other world stays on ops');
   assert.equal(ops.set.get('kids.shop').patterns.some((p) => p.id.includes('.m.')), false, 'the matrix-only patterns are not loaded in ops mode');
   assert.deepEqual(ops.problems(), []);
 });
 
-test('matrix mode: four worlds opt in, the library loads without problems, the engine has no problems', () => {
+test('matrix mode: the worlds that opt in, the library loads without problems, the engine has no problems', () => {
   assert.deepEqual(matrix.reasoner.problems, []);
-  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.tictactoe', 'kids.arith', 'kids.shop', 'kids.tasks']);
+  assert.deepEqual(matrix.reasoner.worlds.sort(), ['games.guess', 'games.hangman', 'games.tictactoe', 'kids.arith', 'kids.shapes', 'kids.shop', 'kids.tasks']);
   assert.deepEqual(matrix.problems(), []);
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173]]) {
+test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }
@@ -437,5 +437,201 @@ test('matrix: "what did you do?" keeps the source sentence of a computed answer,
   for (const mode of [matrix, ops]) {
     const { out } = await say(mode, ['A puzzle costs 11 lei.', 'how much do 2 puzzles cost?', 'what did you do?']);
     assert.match(out[2], /What I answered: 2 puzzles cost 22 lei\. I worked that out from what you told me: "A puzzle costs 11 lei"/);
+  }
+});
+
+// ---- games.hangman on the matrix (stage 2) -----------------------------------------------------------------------------------------------------
+
+const HANGMAN = ['is there an e?', 'play hangman', 'hint', 'e', 'a', 'e', 'guess x', 'zebra', 'hint', 'what is the word', 'status', 'new game', 'I give up', 'e', 'hint',
+  'play hangman with the word zebra', 'z', 'e', 'b', 'a', 'r', 'a', 'play hangman', 'keep going', 'q', 'j', 'k', 'v', 'w', 'y', 'e', 'new game'];
+
+test('games.hangman: a scripted game says the same as the ops reasoner, word for word, with the same statuses and state (undo is the matrix\'s own)', async () => {
+  const run = async (eng) => {
+    const s = eng.createSession({ language: 'en' });
+    const out = [];
+    for (const l of HANGMAN) { const r = await s.send(l, {}); out.push([r.text, r.statuses.join(), JSON.stringify(r.state?.['games.hangman'] ?? null)]); }
+    return { s, out };
+  };
+  const o = await run(ops), m = await run(matrix);
+  assert.deepEqual(m.out, o.out);
+  assert.deepEqual(m.s.isession.state['games.hangman'], o.s.isession.state['games.hangman']);
+  assert.deepEqual(matrix.reasoner.problems, []);
+  sameAsLibrary(m.s, ['games.hangman']);
+});
+
+test('games.hangman: the rules in the matrix: hits and misses, lives, the letters still hidden, a win, a loss, a guess out of turn', async () => {
+  const { s } = await say(matrix, ['play hangman with the word cat']);
+  const lib = s.isession.rs.world;
+  const of = (t) => lib.ofType(t);
+  assert.deepEqual(of('hm.left').map((x) => x.attrs.ch[0]).sort(), ['"a"', '"c"', '"t"']);
+  await s.send('is there a c?', {}); await s.send('is there an x?', {});
+  assert.deepEqual(of('hm.hit').map((x) => x.attrs.what[0]), ['"c"']);
+  assert.deepEqual(of('hm.miss').map((x) => x.attrs.what[0]), ['"x"']);
+  assert.deepEqual(of('hm.lives').map((x) => x.attrs.left[0]), ['5']);
+  assert.deepEqual(of('hm.left').map((x) => x.attrs.ch[0]).sort(), ['"a"', '"t"']);
+  assert.equal(of('hm.over').length, 0);
+  const dup = lib.check({ wires: '@d hm.guess n=2 kind=letter what="x"' });
+  assert.equal(dup.violations.find((v) => /\.dup$/.test(v.rule)).why, 'You already tried x.');
+  await s.send('a', {}); await s.send('t', {});
+  assert.deepEqual(of('hm.over').map((x) => x.attrs.how[0]), ['won']);
+  const after = lib.check({ wires: '@d hm.guess n=4 kind=letter what="z"' });
+  assert.equal(after.violations.some((v) => /\.over$/.test(v.rule)), true, 'a guess after the game is refused');
+  const word = await say(matrix, ['play hangman with the word cat', 'cat']);
+  assert.deepEqual(word.s.isession.rs.world.ofType('hm.over').map((x) => x.attrs.how[0]), ['won'], 'the whole word wins without the letters');
+  const none = await say(matrix, ['e']);
+  assert.equal(none.out[0], 'We are not playing hangman. Say "play hangman" to start.');
+});
+
+test('games.hangman: undo goes back through the library: a guess, a hint, a lost game, a new game; state and library agree', async () => {
+  const { s } = await say(matrix, ['play hangman with the word zebra', 'z', 'x', 'hint']);
+  const rs = s.isession.rs;
+  assert.equal((await s.send('undo', {})).text, 'OK, I took back the last hint.');
+  assert.equal(s.isession.state['games.hangman'].hints, 0);
+  assert.equal((await s.send('undo', {})).text, 'OK, I took back your last guess. The word is as it was before.');
+  assert.equal(rs.world.ofType('hm.guess').length, 1);
+  assert.equal(s.isession.state['games.hangman'].wrongLeft, 6);
+  await s.send('I give up', {});
+  assert.equal(s.isession.state['games.hangman'].status, 'lost');
+  assert.match((await s.send('undo', {})).text, /^OK, I took back your last guess\./);
+  assert.equal(s.isession.state['games.hangman'].status, 'playing', 'undo reopens the game that was given up');
+  await s.send('play hangman with the word cat', {});
+  assert.equal(s.isession.state['games.hangman'].word, 'cat');
+  await s.send('undo', {});
+  assert.equal(s.isession.state['games.hangman'].word, 'zebra', 'undo of a new game brings the old one back');
+  sameAsLibrary(s, ['games.hangman']);
+  const none = await say(matrix, ['undo']);
+  assert.equal(none.out[0], 'There is nothing to undo.', 'nothing to undo before any game (generic undo)');
+});
+
+test('games.hangman: the word the library holds is the one the seed chooses, as ops.mjs chooses it (the lexicon and the knowledge base reach the matrix)', async () => {
+  const o = await say(ops, ['play hangman', 'new game', 'new game']);
+  const m = await say(matrix, ['play hangman', 'new game', 'new game']);
+  assert.deepEqual(m.out, o.out);
+  assert.equal(m.s.isession.state['games.hangman'].word, o.s.isession.state['games.hangman'].word);
+  assert.equal(m.s.isession.state['games.hangman'].seed, o.s.isession.state['games.hangman'].seed);
+});
+
+// ---- games.guess on the matrix (stage 2) --------------------------------------------------------------------------------------------------------
+
+const GUESS = ['yes', 'I am thinking of an animal.', 'why did you ask that?', 'which animals are left?', 'yes', 'I dont know', 'maybe', 'no', 'wait, I meant yes', 'it eats meat',
+  'repeat the question', 'no', 'yes', 'no', 'yes', 'yes', 'no', 'no', 'yes', 'yes', 'yes', 'it was a zebra', 'new game', 'yes', 'no', 'I give up', 'yes', 'it was a quokka', 'yes',
+  'new game', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'it was a zebra', 'is it a dog?', 'new game', 'yes', 'it was a bird'];
+
+test('games.guess: a scripted session says the same as the ops reasoner, word for word, with the same statuses and state', async () => {
+  const run = async (eng) => {
+    const s = eng.createSession({ language: 'en' });
+    const out = [];
+    for (const l of GUESS) { const r = await s.send(l, {}); out.push([r.text, r.statuses.join(), JSON.stringify(r.state?.['games.guess'] ?? null)]); }
+    return { s, out };
+  };
+  const o = await run(ops), m = await run(matrix);
+  assert.deepEqual(m.out, o.out);
+  assert.deepEqual(m.s.isession.state['games.guess'], o.s.isession.state['games.guess']);
+  assert.ok(o.out.some((x) => x[0].startsWith('I got it!')) && o.out.some((x) => x[0].startsWith('Thank you! I learned about')) && o.out.some((x) => x[0].startsWith('OK, I changed my note')), 'the script covers a solved game, a taught animal and a corrected answer');
+  assert.deepEqual(matrix.reasoner.problems, []);
+  sameAsLibrary(m.s, ['games.guess']);
+});
+
+test('games.guess: the rules in the matrix: the animals still possible, the questions asked and left, the phase, the refusals', async () => {
+  const { s } = await say(matrix, ['I am thinking of an animal.', 'yes']);
+  const lib = s.isession.rs.world, of = (t) => lib.ofType(t);
+  const st = () => s.isession.state['games.guess'];
+  assert.equal(of('guess.cand').length, st().candidates.length);
+  assert.equal(of('guess.animal').length - of('guess.out').length, st().candidates.length, 'the animals still possible are the ones the game started with, less those taken out');
+  assert.deepEqual(of('guess.tally').map((x) => [x.attrs.count[0], x.attrs.left[0]]), [['1', '19']]);
+  assert.deepEqual(of('guess.phase').map((x) => x.attrs.p[0]), ['asking']);
+  assert.equal(lib.check({ wires: '@p guess.reply answer=yes' }).ok, true);
+  await s.send('no', {});
+  assert.deepEqual(of('guess.tally').map((x) => x.attrs.count[0]), ['2']);
+  await s.send('I give up', {});
+  assert.deepEqual(of('guess.phase').map((x) => x.attrs.p[0]), ['learning']);
+  assert.equal(lib.check({ wires: '@p guess.reply answer=yes' }).violations[0].why, 'I am waiting to learn the animal. Tell me, for example: "it was a zebra".');
+  assert.equal(lib.check({ wires: '@p guess.clue' }).violations[0].why, 'That does not help right now.');
+  await s.send('it was a quokka', {});
+  assert.deepEqual(of('guess.phase').map((x) => x.attrs.p[0]), ['done']);
+  assert.equal(lib.check({ wires: '@p guess.reply answer=no' }).violations[0].why, 'The game is over. Say "new game" to play again.');
+  assert.equal(lib.check({ wires: '@p guess.quit' }).violations[0].why, 'We are not in the middle of a game of twenty questions.');
+  const none = matrix.createSession({ language: 'en' }).isession.rs.world;
+  assert.equal(none.check({ wires: '@p guess.reply answer=yes' }).violations[0].why, 'We are not playing twenty questions. Say "guess my animal" to start.');
+  assert.ok(lib.check().ok, 'the library holds a valid game');
+});
+
+test('games.guess: a taught animal is a wire of the library (kids.animals.animal) and the next game asks about it; undo forgets it', async () => {
+  const { s } = await say(matrix, ['I am thinking of an animal.', 'yes', 'no', 'I give up', 'it was a quokka']);
+  const lib = s.isession.rs.world;
+  assert.deepEqual(lib.ofType('kids.animals.animal').filter((w) => w.attrs.name[0] === 'quokka').map((w) => w.attrs.legs?.[0]), ['4']);
+  assert.deepEqual(s.isession.state['games.guess'].learned.map((l) => l.name), ['quokka']);
+  await s.send('new game', {});
+  assert.ok(s.isession.state['games.guess'].candidates.includes('quokka'), 'the new game starts with the taught animal');
+  await s.send('undo', {});
+  await s.send('undo', {});
+  assert.deepEqual(s.isession.state['games.guess'].learned, [], 'undo took the lesson back');
+  assert.equal(lib.ofType('kids.animals.animal').some((w) => w.attrs.name[0] === 'quokka'), false);
+  sameAsLibrary(s, ['games.guess']);
+});
+
+test('games.guess: undo goes back through the library: a clue, an answer (the question is asked again); nothing to undo before a game', async () => {
+  const { s } = await say(matrix, ['I am thinking of an animal.', 'yes', 'it eats meat']);
+  assert.equal(s.isession.state['games.guess'].evidence.length, 1);
+  assert.match((await s.send('undo', {})).text, /^OK, I took that back\./);
+  assert.equal(s.isession.state['games.guess'].evidence.length, 0);
+  const r = await s.send('undo', {});
+  assert.match(r.text, /^OK, I took back your last answer\. I am asking that question again: Does it have 4 legs\?$/);
+  assert.equal(s.isession.state['games.guess'].count, 0);
+  assert.deepEqual(r.statuses, ['supported']);
+  sameAsLibrary(s, ['games.guess']);
+  const none = await say(matrix, ['undo']);
+  assert.equal(none.out[0], 'There is nothing to undo.', 'nothing to undo before any game (generic undo)');
+});
+
+// ---- kids.shapes on the matrix (stage 2) --------------------------------------------------------------------------------------------------------
+
+const SHAPES = ['How many sides does a hexagon have?', 'why?', 'Is a square a rectangle?', 'Is a rectangle a square?', 'Is a circle a polygon?', 'Describe a circle', 'Describe a hexagon',
+  'A trapezium has 4 sides.', 'How many corners does a trapezium have?', 'Which shapes have 4 sides?', 'What color is a banana?', 'Is a banana red?', 'Is a zebra white?', 'What do red and yellow make?',
+  'What do yellow and red make?', 'Which colors make orange?', 'Is red a primary color?', 'Is orange a primary color?', 'A square has 5 sides.', 'How many sides does a square have?',
+  'Describe a unicorn', 'Is a unicorn a polygon?', 'Which shapes have 12 sides?', 'What kind of color is green?', 'Which colors make pink?'];
+
+test('kids.shapes: a scripted session says the same as the ops reasoner, word for word, with the same statuses', async () => {
+  const run = async (eng) => {
+    const s = eng.createSession({ language: 'en' });
+    const out = [];
+    for (const l of SHAPES) { const r = await s.send(l, {}); out.push([r.text, r.statuses.join()]); }
+    return { s, out };
+  };
+  const o = await run(ops), m = await run(matrix);
+  assert.deepEqual(m.out, o.out);
+  assert.deepEqual(matrix.reasoner.problems, []);
+});
+
+test('kids.shapes: the questions the matrix answers come from the library, the checks and the lookups it leaves (ops=) from the operations', async () => {
+  const s = matrix.createSession({ language: 'en' });
+  const via = async (text) => { const r = await s.send(text, {}); return r.answers?.[0]?.envelope?.via ?? null; };
+  assert.equal(await via('Describe a circle'), 'core.matrix');
+  assert.equal(await via('Is a rectangle a square?'), 'core.matrix');
+  assert.equal(await via('How many sides does a hexagon have?'), 'core.matrix');
+  assert.notEqual(await via('Is a banana red?'), 'core.matrix', 'a check carries the value it seeks');
+  assert.notEqual(await via('What do red and yellow make?'), 'core.matrix');
+  const lib = s.isession.rs.world;
+  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'circle').map((w) => w.attrs.summary), [['round']]);
+  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'hexagon').map((w) => w.attrs.summary), [['flat']]);
+});
+
+test('kids.shapes: a taught fact is a wire of the library: the rules read it (flat), a question answers from it, undo takes it back', async () => {
+  const { s } = await say(matrix, ['A trapezium has 4 sides.']);
+  const lib = s.isession.rs.world;
+  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'trapezium').map((w) => w.attrs.summary), [['flat']]);
+  assert.equal((await s.send('How many sides does a trapezium have?', {})).text, 'A trapezium has 4 sides.');
+  assert.match((await s.send('undo', {})).text, /^OK, I took that back/);
+  assert.equal(lib.ofType('kids.shapes.shape').some((w) => w.attrs.name?.[0] === 'trapezium'), false);
+  assert.deepEqual((await s.send('How many sides does a trapezium have?', {})).statuses, ['missing']);
+});
+
+test('"why?" names the source of a world\'s own facts by world: the price list for the shop, what I know about shapes and colors, a general phrase otherwise', async () => {
+  for (const eng of [ops, matrix]) {
+    const a = await say(eng, ['How many sides does a hexagon have?', 'why?']);
+    assert.match(a.out[1], /I worked that out from what I know about shapes and colors\.$/);
+    assert.doesNotMatch(a.out[1], /price list/);
+    const b = await say(eng, ['I have 20 lei', 'How much does a ball cost?', 'why?']);
+    assert.doesNotMatch(b.out[2], /about animals|shapes/);
   }
 });
