@@ -1572,3 +1572,6 @@ export function summary(ctx) {
   const r = describe(ctx, {});
   return r?.value ?? null;
 }
+
+// What the matrix reasoner's functions (fns.mjs) share with the operations: the words, so that a refusal or a count says the same in both modes.
+export { describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP };
