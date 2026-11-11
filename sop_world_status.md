@@ -71,7 +71,26 @@ Owner: the worker session. Updated as SOPWORLD work lands. Last update: 2026-11-
 - Consequence for the comparison: most of matrix mode's earlier lead came from features stage 1 built only on the matrix side. With the gaps closed in both, the remaining differences are what the library brings by itself: undo, abduction, default revision, and the per-turn consistency audit.
 - The language switch "treci pe engleză" and its variants are recognized by shape (`src/translate/language-command.mjs`).
 
-### In progress (wave 2)
+### After items 4, 5, 10 (2026-11-11 afternoon)
+
+| Measure | ops | matrix |
+| --- | --- | --- |
+| Operational and dialogue sets, all worlds | identical except 1 case (`dlg.kidsA#010#1`) | |
+| Turns leaving a violation | 15 (1.9%) | 6 (0.8%) |
+| Coherence set (now 33 cases) | 25/33 | **28/33** |
+| assumption-visible | 4/6 | 6/6 |
+| undo | 0/3 | 3/3 |
+| default revision | 3/3 | 2/3 |
+| explain | 3/3 | 2/3 |
+| Answers that rested on an assumption / said so | 0 / 0 | 3 / 2 (the third had already been said) |
+| ms per turn, three worlds, p50 / p95 | 13.9 / 80.4 | 17.4 / 82 |
+
+- Certainty: in matrix mode "I buy the ball" assumes 1 and the reply says "I assumed 1 ball." ("Am presupus 1 minge."); the phrase log records `assumptions`.
+- games.tictactoe runs on the matrix (173/173): illegal moves are refused with the reason, "undo" takes back the move and the answer, "why did you play there?" explains. A scripted 28-message game gives identical replies and board in both modes. Chrome: 31/31.
+- SOP Lang v1.1: one language and one parser; `matrix.sop` goes through our parser to the library as wires; all 177 world files parse as before.
+- Reviewer (9ce4f5d): the item 2 fixes must also hold in matrix mode (where "why?" should use the library's `explain`). The two new Romanian wrong answers must be fixed. Being done now.
+
+### Wave 2 (done, kept for history)
 
 - Item 4: certainty in replies ("I assumed 1 ball.") plus the `assumption-visible` coherence hint.
 - Item 5: `games.tictactoe` in matrix mode: illegal moves refused with the reason, undo, "why did you play there?".
