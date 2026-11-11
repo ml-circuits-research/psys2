@@ -126,13 +126,7 @@
 
 @t.arith.n24 core.test
     input="Tom gets 3 apples from Ana. How many apples does Tom have?"
-    expect="Tom got 3 apples from Ana. I don't know how many Tom had before."
-    reasoner=matrix
-
-@t.arith.n24o core.test
-    input="Tom gets 3 apples from Ana. How many apples does Tom have?"
     expect="I don't know how many apples Tom had; Tom got 3 from Ana."
-    reasoner=ops
 
 @t.arith.n25 core.test
     input="What is 7 plus 5?"
@@ -217,14 +211,7 @@
 @t.arith.ell2 core.test
     session=ellipsis
     input="How many apples does Ana have?"
-    expect="Ana got 2 apples from Tom. I don't know how many Ana had before."
-    reasoner=matrix
-
-@t.arith.ell2o core.test
-    session=ellipsis
-    input="How many apples does Ana have?"
     expect="I don't know how many apples Ana had; Ana got 2 from Tom."
-    reasoner=ops
 
 @t.arith.ell3 core.test
     session=ellipsis
@@ -937,15 +924,8 @@
 
 @t.kids.arith.dm102 core.test
     input="And Ana?"
-    expect="Ana got 2 apples from Tom. I don't know how many Ana had before."
-    session=dm1
-    reasoner=matrix
-
-@t.kids.arith.dm102o core.test
-    input="And Ana?"
     expect="I don't know how many apples Ana had; Ana got 2 from Tom."
     session=dm1
-    reasoner=ops
 
 @t.arith.xa01 core.test
     input="take 3 away from 7"
