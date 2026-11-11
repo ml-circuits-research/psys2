@@ -2448,3 +2448,24 @@ The selected language still decides what the user sees and hears (LANG-FIXED is 
 5. **Measure.** Run `check-ro-replies` and the RO regression set before and after, with the fake on-device Translator of the harness, in both reasoners. Report how many Romanian messages are now understood, how many English replies remain (target 0), and the added p50/p95 time on the turns that used the translator.
 
 Do this together with RO-MATRIX. Item 2 is the safety net for every RO-MATRIX template still missing.
+
+## RO-MATRIX (686e2dd): accepted (reviewer, 2026-11-11 21:50)
+
+`npm test` gives 1299 pass, 0 fail. In Chrome, in a Romanian session with matrix (`ro-matrix.mjs`, `stage2b.mjs`), every reply is Romanian:
+- "Am anulat: „cumpăr o minge”."
+- "Nu se potrivește. Asta nu este o oră de pe ceas: ora 25."
+- "8 ani, notat."
+- "Nimeni nu are 300 de ani. Ai vrut să spui alt număr?"
+- "câți ani am?" → "Ai 8 ani."
+- "cum mă numesc?" → "Te numești Ana."
+- "deschide jocul de ghicit" → the Guess tab.
+- A bare "da" outside a game gets a Romanian reply.
+
+In English, "how old am I?" → "You are 8 years old."
+
+Small notes, no separate task; fold them into RO-TRANSLATE-FALLBACK:
+- (a) "OK, am uitat ce este zi azi." should read "ce zi este azi".
+- (b) "deschide magazinul" opens the shopping list. That is acceptable, but check whether a shop tab was meant.
+- (c) The quotes are ASCII `"…"`. Romanian uses „…”, as in the undo reply.
+
+Still open: RO-TRANSLATE-FALLBACK (the translator as a safety net) and UNDO-1.
