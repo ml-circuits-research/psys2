@@ -543,7 +543,14 @@ export class Discourse {
    */
   _back(act) {
     const d = this.dialog, rs = d.isession.rs;
-    if (rs && act.rsMark) return rs.rewind(act.rsMark, d.isession);
+    if (rs && act.rsMark) {
+      // the library is rewound; the state of a world that does not derive it from the library (no `toState`) is restored from the snapshot (spec 15, stage 2)
+      const own = act.worlds.filter((w) => !rs.reasoner.stateOf.has(w));
+      const now = Object.fromEntries(own.map((w) => [w, JSON.stringify(d.isession.state[w])]));
+      const again = rs.rewind(act.rsMark, d.isession);
+      this._setState(Object.fromEntries(own.map((w) => [w, act.before[w]])));
+      return () => { again(); this._setState(now); };
+    }
     const now = Object.fromEntries(act.worlds.map((w) => [w, JSON.stringify(d.isession.state[w])]));
     this._setState(act.before);
     return () => this._setState(now);
@@ -644,7 +651,7 @@ export class Discourse {
     // discussion commands (spec 13 section 8): only "new discussion", "my discussions" and a reference that names an existing discussion
     if (!this.list) { const ac = runDiscussionCommand(d, text, d._msg); if (ac) return ac; }
     // matrix reasoner (spec 15): "undo that" takes back what the turn before told the library (a purchase, a statement); the money and the counts follow
-    if (UNDO.test(t) && d.isession.rs?.canUndo(d._msg)) {
+    if (UNDO.test(t) && d.isession.rs?.canUndo(d._msg) && !(this.actions[0]?.turn > d.isession.rs.turns.at(-1).turn)) {   // not when a newer action of a world without library state is what "that" means
       // a world with its own "undo" action (world.sop `undo=`) whose tab is open says what it took back in its own words ("I took back your last move and my answer")
       const gw = [...d.isession.rs.reasoner.undoOf.values()].find((w) => w.id === d.context().tabWorld);
       if (gw) {
@@ -653,6 +660,7 @@ export class Discourse {
         if (env.status === 'supported' && env.value) return { reply: env.value, info: { kind: 'undo', of: null, via: 'core.matrix' } };
       }
       const turn = gw ? null : d.isession.rs.undo(d.isession);
+      if (turn != null) { const act = this.actions.find((a) => a.turn === turn); if (act) this._setState(Object.fromEntries(act.worlds.filter((w) => !d.isession.rs.reasoner.stateOf.has(w)).map((w) => [w, act.before[w]]))); }   // worlds whose state is not derived from the library
       const said = turn != null ? this.actions.find((a) => a.turn === turn)?.text ?? d.sources.get(`msg${turn}`)?.english : null;
       if (turn != null) { this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn); }
       if (turn != null) return { reply: said ? `OK, I took that back: "${String(said).replace(/[.!?\s]+$/, '')}".` : 'OK, I took that back.', info: { kind: 'undo', of: said ?? null, via: 'core.matrix' } };
