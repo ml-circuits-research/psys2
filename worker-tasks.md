@@ -2303,3 +2303,13 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
     - "You have 15 lei left." → "Ai 15 lei pleca." (add the reply-table entry: "Îți rămân 15 lei.").
 
     Then run the combined A/B experiment described in `sop_world_status.md`.
+- SOPWORLD-1b item 2 in matrix mode + Romanian wrongs (a76b310, 276e7ce, c5a42ed), files match the log: **accepted.** Reviewer rerun of `eval-reasoner`:
+
+  | | ops | matrix |
+  | --- | --- | --- |
+  | coherence | 25/33 | **31/33** |
+  | turns leaving a violation | 15 (1.9%) | **0** |
+  | dialogues | 220/232 | 220/232 |
+  | operational-ro | 399/452, 6 wrong | 399/452, 6 wrong |
+
+  **Next: the combined A/B experiment** (`sop_world_status.md`), with transcripts of every differing case. Include the user's real phrase logs (training/eval/real-phrases-2026-11-09*.json and the expectations files), the gold paraphrases, all 24 worlds' `test-world`, turn time p50/p95 at 4× in the browser (`scripts/perf-webchat.mjs` with the switch on and off), and bundle bytes. End with a recommendation on the default, stated with the numbers; the user decides.
