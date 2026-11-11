@@ -2341,3 +2341,16 @@ Found in a Romanian session in Chrome (language = ro, `/home/claude/shot/ro-matr
 3. **Minor:** in games.guess right after "Question 1", "why?" answers the shop's last question. Inside a running game, "why?" should be about the game's last question ("I ask that to split the animals left: …").
 
 Add rows for all of these to the RO regression set in both reasoners.
+- PERF b1dc7ef: accepted for non-matrix worlds. Reviewer rerun with `ab-sopworld --sets coherence,dialogues,gold`, p50 in ms, ops vs matrix:
+
+  | world group | ops | matrix |
+  | --- | --- | --- |
+  | avatar/shell/editor | 15.5 | 16.5 |
+  | music/draw/map/charts | 16.7 | 16.9 |
+  | documents | 19.4 | 18.8 |
+  | other | 17.5 | 18.9 |
+  | four matrix worlds | 14.7 | 22.4 |
+  | games, now partly on the matrix | 14.5 | 23.8 |
+
+  The remaining cost sits in the matrix worlds themselves, at about +8–9 ms per turn. Profile one kids.shop turn and one hangman turn and say where those milliseconds go: fork, mirror into state, query, or the library's own fixpoint. Reduce them if possible; p95 is unchanged.
+  The differing counts grew to dialogues 6, gold 4 and coherence 8, and 6 cases are now "unjudged". dlg.kidsB#016 is still listed as "ops better" after F. Refresh the classes file after F and stage 2, and classify the new cases.
