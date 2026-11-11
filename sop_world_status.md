@@ -194,7 +194,9 @@ Results:
 
 Times: each session ran in both modes, alternating which went first, on a quiet machine. Matrix is 1 to 2 ms slower in every group, **including worlds that do not use the library**. So part of the cost is per-turn work of the matrix engine, not only the library's reasoning. The cause was found and fixed afterwards: see "Turn-time cost of matrix mode".
 
-Differences by class (19 sessions that differ in a reply, a status or an outcome):
+**Refreshed 2026-11-11 (after matrix became the default, the two wording fixes, stage 2 worlds hangman/guess/shapes, and the perf work below).** Same command, 6,806 sessions, 908 s. 20 sessions differ, **0 unjudged**: matrix better 6 (all coherence, the same six), ops better **0**, neutral wording 14 (dialogues 6, gold 4, coherence 2, real-09c 1, real-dialogue 1). Outcomes on the expectation sets are the same in both modes (dlg.kidsA#010 differs only by the state-view label). The old "ops better" cases are resolved: dlg.kidsB#016 ("what did you do?") now says what ops says and adds "and from the price list" (right in both, matrix not worse); coh.shop.12 now answers "OK, you bought 1 ball. I assumed 1 ball." (ops quotes its reading). New neutral cases: dlg.drm#026 (random song), two gold paraphrases and coh.shop.08 (not understood in both; only the "did you mean" candidates differ, matrix offers "What did I pay?"). The three stage-2 worlds add no difference in reply or outcome in any set. Data: `training/results/sopworld-ab-2026-11-11.{json,md,classes.json}`.
+
+Differences by class in the first run (19 sessions that differ in a reply, a status or an outcome):
 
 | Class | Count | What |
 | --- | --- | --- |
@@ -257,3 +259,30 @@ The A/B experiment saw `matrix` 8-15% slower per turn (p50, 1-2 ms) in every wor
 p95 is within 1-4% in every group before and after. Session creation: matrix 1.4 ms against 1.0 ms (a library `World` fork and the `ReasonerSession` state, once per session; unchanged).
 
 **What remains for the four matrix worlds (about 1.1-1.2 ms per turn that tells or asks the library; the profile, after the fix):** `lib.tell` 380 ms and `lib.complete` 134 ms for 2,133 tells (0.2 ms each), `rs.resolve` 300 ms for 1,100 library answers (query 130 ms, act 120 ms), `lib.check` 27 ms for 84 calls. Not ours to remove: the cost of a first change after a `mark()` or `fork()` is the library's copy-on-write `_detach` (see the library issue in worker-log.md). Non-matrix worlds still tell their `core.agent` wires (the user, the people named) because a later matrix question may rest on them; one such tell costs the same detach (0.07 ms) once per turn that introduces an agent.
+
+### Second round: the +8-9 ms the reviewer saw (2026-11-11)
+
+Why the two measurements disagreed: `bench-reasoner.mjs` runs the operational set, where most sessions are a single statement or question (one dry-run fork, library mostly untouched), and its 'four' group is mostly shop/arith questions. The `ab-sopworld` sets (coherence, dialogues, gold) are multi-turn sessions that tell facts and run actions: every statement turn pays tells in 3-4 forks, and the games run whole actions (hangman, guess) in dry runs. Per-turn profile (`ONLY=matrix`, instrumented, 3 reps; ms per turn):
+- kids.shop (170 turns): `rs._defaults` -> `lib.complete` 3.4 (1.1 ms per call, about 3 per statement turn: one in each of 3 dry-run forks and one in the real session), `lib.tell` 1.9, `lib.query` 0.5, `rs._state` 0.1. Mark/fork/rewind/detach, `_wire`, `beginTurn`, `commitTurn`: below 0.1 each.
+- games.hangman (143 turns): `lib.complete` 2.6, `lib.act` 2.0 (the action functions plus their tells), `lib.tell` 0.6.
+- games.guess (162 turns, "new game" tells about 70 animal wires): `lib.act` 7.1 (new game 7.4 ms in a dry-run fork, 3.7 ms in the real session: the fork's first change pays the library's `_detach`), `lib.complete` 3.5, `lib.tell` 2.2, plus 0.4 in our `host.view` key lookups.
+- The ~1 ms per `complete` is the library walking every cell of the world (`assumptions()` in `_next`) before it finds nothing to fill. It does so also when the only open slot can never be filled (the built-in user's `name` is always open).
+
+Fixes (outputs byte-identical; 4,733 sessions of the operational, operational-ro, operational-long, dialogue, coherence and gold sets compared turn by turn, reply, statuses and state, matrix before and after: only 7 sessions differ, all random output; `npm test`, `test-world all` in both reasoners, Chrome matrix test 50/50):
+1. `ReasonerSession._mayFill`: a completing runs only when some wire has an empty slot that has a candidate (a default, or for a required slot an enum, a type or a range); otherwise nothing can be filled and the stamp is recorded as completed. Same test as the library's, in one pass over the wires.
+2. `DialogSession._dryStatuses` (src/dialog/index.mjs): the spelling stage and the name repair dry-ran the same reading of the same message on separate forks, executing every action twice more; now once per reading per turn (both reasoners).
+3. `host.view` memoizes `legends.tryResolveKey` per (type, key) (the games' tables ask thousands of times per turn).
+
+`ab-sopworld --sets coherence,dialogues,gold`, p50 ms, ops | matrix, before -> after:
+
+| world group | before | after |
+| --- | --- | --- |
+| four matrix worlds | 8.6 \| 13.4 | 9.2 \| 11.2 |
+| games | 8.6 \| 13.1 | 8.0 \| 10.6 |
+| kids-other | 8.8 \| 9.4 | 9.2 \| 9.9 |
+| avatar/shell/editor | 9.4 \| 10.2 | 8.9 \| 9.4 |
+| music/draw/map/charts | 10.2 \| 10.5 | 9.6 \| 10.3 |
+| documents | 11.0 \| 11.5 | 9.8 \| 10.4 |
+| other | 10.9 \| 11.4 | 9.1 \| 9.8 |
+
+The gap of the matrix worlds went from +4.8 to +2.0 ms (four) and from +4.5 to +2.6 ms (games) on this machine (the reviewer's box shows about twice the absolute numbers); p95 is within noise. What remains is library cost: the first change of a fork or after a mark (`_detach`, grows with the size of the world: the knowledge-base wires and the game's animals), `tell` propagation, `act`. These grow with the number of wires in the base, which matters as more worlds move to the library: see the worker-log issue.

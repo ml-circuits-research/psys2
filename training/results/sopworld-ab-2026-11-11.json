@@ -2,12 +2,12 @@
  "date": "2026-11-11",
  "limit": null,
  "sessions": 6806,
- "elapsed_s": 876,
+ "elapsed_s": 908,
  "counts": {
   "operational": {
    "sessions": 1296,
    "turns": 1783,
-   "differing": 1,
+   "differing": 0,
    "view_only": 103
   },
   "operational-long": {
@@ -19,13 +19,13 @@
   "operational-ro": {
    "sessions": 2480,
    "turns": 3310,
-   "differing": 2,
+   "differing": 0,
    "view_only": 185
   },
   "dialogues": {
    "sessions": 470,
    "turns": 2241,
-   "differing": 5,
+   "differing": 6,
    "view_only": 40
   },
   "loose-words": {
@@ -71,14 +71,14 @@
   "gold": {
    "sessions": 300,
    "turns": 468,
-   "differing": 2,
+   "differing": 4,
    "view_only": 17
   },
   "coherence": {
    "sessions": 33,
    "turns": 99,
-   "differing": 7,
-   "view_only": 16
+   "differing": 8,
+   "view_only": 15
   }
  },
  "outcomes": {
@@ -207,75 +207,75 @@
   "ops": {
    "four": {
     "n": 1965,
-    "p50": 12.2,
-    "p95": 113.4
+    "p50": 12.1,
+    "p95": 117.6
    },
    "avatar/shell/editor": {
     "n": 2046,
-    "p50": 11.5,
-    "p95": 73.5
+    "p50": 11.3,
+    "p95": 77.4
    },
    "kids-other": {
     "n": 1585,
-    "p50": 13.3,
-    "p95": 104.5
+    "p50": 13.5,
+    "p95": 111.4
    },
    "music/draw/map/charts": {
     "n": 2845,
-    "p50": 12.4,
-    "p95": 56.6
+    "p50": 13,
+    "p95": 60.7
    },
    "games": {
     "n": 1326,
-    "p50": 10.6,
-    "p95": 36.9
+    "p50": 10.4,
+    "p95": 41.2
    },
    "documents": {
     "n": 386,
-    "p50": 24.9,
-    "p95": 77.4
+    "p50": 21.5,
+    "p95": 87.8
    },
    "other": {
     "n": 422,
-    "p50": 10.4,
-    "p95": 38.6
+    "p50": 10.5,
+    "p95": 43.9
    }
   },
   "matrix": {
    "four": {
     "n": 1965,
-    "p50": 14,
-    "p95": 116.2
+    "p50": 14.5,
+    "p95": 120.9
    },
    "avatar/shell/editor": {
     "n": 2046,
-    "p50": 12.7,
-    "p95": 75.3
+    "p50": 11.7,
+    "p95": 78.5
    },
    "kids-other": {
     "n": 1585,
-    "p50": 15,
-    "p95": 104.4
+    "p50": 14.3,
+    "p95": 111.4
    },
    "music/draw/map/charts": {
     "n": 2845,
-    "p50": 13.7,
-    "p95": 58.3
+    "p50": 13.5,
+    "p95": 62
    },
    "games": {
     "n": 1326,
-    "p50": 11.7,
-    "p95": 39.1
+    "p50": 13.2,
+    "p95": 43.3
    },
    "documents": {
     "n": 386,
-    "p50": 26.9,
-    "p95": 78.7
+    "p50": 22.1,
+    "p95": 89.9
    },
    "other": {
     "n": 422,
-    "p50": 11.7,
-    "p95": 42.5
+    "p50": 11,
+    "p95": 45.2
    }
   }
  },
@@ -285,32 +285,25 @@
    "gzip": 77251
   },
   "host_layer": {
-   "raw": 31848,
-   "gzip": 10117
+   "raw": 40241,
+   "gzip": 12702
   }
  },
  "by_class": {
   "neutral wording": {
-   "operational": 1,
-   "operational-ro": 2,
-   "dialogues": 4,
+   "dialogues": 6,
    "real-09c": 1,
    "real-dialogue": 1,
-   "gold": 2
-  },
-  "ops better": {
-   "dialogues": 1,
-   "coherence": 1
+   "gold": 4,
+   "coherence": 2
   },
   "matrix better": {
    "coherence": 6
   }
  },
- "differing": 19,
+ "differing": 20,
  "differences_in_other_worlds": [
-  "operational:kids.common#029 (kids.common)",
-  "operational-ro:kids.common#029.ro (kids.common)",
-  "operational-ro:kids.common#029.roc (kids.common)",
+  "dialogues:dlg.drm#026 (media.music)",
   "dialogues:dlg.doc#031 (media.music)",
   "dialogues:dlg.rd#001 (ui.avatar)",
   "dialogues:dlg.rp3#009 (media.music)",
@@ -320,99 +313,6 @@
   "gold:real#rp3-18 (media.music)"
  ],
  "diffs": [
-  {
-   "key": "operational:kids.common#029",
-   "set": "operational",
-   "id": "kids.common#029",
-   "world": "kids.common",
-   "group": "kids",
-   "four": false,
-   "tab": null,
-   "class": "neutral wording",
-   "note": "kids.common is not a matrix world; 'how are you' has several phrasings and the two engines picked different ones",
-   "random": true,
-   "outcome": {
-    "ops": "right",
-    "matrix": "right"
-   },
-   "first_diff_turn": 0,
-   "turns_differing": 1,
-   "turns": [
-    {
-     "message": "how are you",
-     "differs": true,
-     "ops": "I am fine, thank you!",
-     "matrix": "I am great! What shall we do?",
-     "statuses": [
-      "supported",
-      "supported"
-     ],
-     "state_diff": []
-    }
-   ]
-  },
-  {
-   "key": "operational-ro:kids.common#029.ro",
-   "set": "operational-ro",
-   "id": "kids.common#029.ro",
-   "world": "kids.common",
-   "group": "kids",
-   "four": false,
-   "tab": null,
-   "class": "neutral wording",
-   "note": "same as the English case: another phrasing of the same greeting",
-   "random": true,
-   "outcome": {
-    "ops": "right",
-    "matrix": "right"
-   },
-   "first_diff_turn": 0,
-   "turns_differing": 1,
-   "turns": [
-    {
-     "message": "Ce mai faci?",
-     "differs": true,
-     "ops": "I am great! What shall we do?",
-     "matrix": "Sunt bine, mulțumesc că ai întrebat!",
-     "statuses": [
-      "supported",
-      "supported"
-     ],
-     "state_diff": []
-    }
-   ]
-  },
-  {
-   "key": "operational-ro:kids.common#029.roc",
-   "set": "operational-ro",
-   "id": "kids.common#029.roc",
-   "world": "kids.common",
-   "group": "kids",
-   "four": false,
-   "tab": null,
-   "class": "neutral wording",
-   "note": "same as the English case: another phrasing of the same greeting",
-   "random": true,
-   "outcome": {
-    "ops": "right",
-    "matrix": "right"
-   },
-   "first_diff_turn": 0,
-   "turns_differing": 1,
-   "turns": [
-    {
-     "message": "ce mai faci",
-     "differs": true,
-     "ops": "Sunt bine, mulțumesc!",
-     "matrix": "Sunt bine, mulțumesc că ai întrebat!",
-     "statuses": [
-      "supported",
-      "supported"
-     ],
-     "state_diff": []
-    }
-   ]
-  },
   {
    "key": "dialogues:dlg.kidsA#010",
    "set": "dialogues",
@@ -514,8 +414,8 @@
    "group": "kids",
    "four": true,
    "tab": null,
-   "class": "ops better",
-   "note": "'what did you do?' in ops also says what the answer rested on (A puzzle costs 11 lei); matrix says only what was answered",
+   "class": "neutral wording",
+   "note": "rechecked after the wording fix: matrix now says the same as ops and adds the knowledge-base source (\"and from the price list\"); the outcome is right in both, matrix is not worse",
    "random": false,
    "outcome": {
     "ops": [
@@ -560,7 +460,7 @@
      "message": "what did you do?",
      "differs": true,
      "ops": "You said \"how much do 2 puzzles cost\", so I answered it. What I answered: 2 puzzles cost 22 lei. I worked that out from what you told me: \"A puzzle costs 11 lei\".",
-     "matrix": "You said \"how much do 2 puzzles cost\", so I answered it. What I answered: 2 puzzles cost 22 lei.",
+     "matrix": "You said \"how much do 2 puzzles cost\", so I answered it. What I answered: 2 puzzles cost 22 lei. I worked that out from what you told me: \"A puzzle costs 11 lei\" and from the price list.",
      "statuses": [
       "supported",
       "supported"
@@ -572,6 +472,76 @@
      "differs": false,
      "ops": "5 puzzles cost 55 lei.",
      "matrix": "5 puzzles cost 55 lei.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "dialogues:dlg.drm#026",
+   "set": "dialogues",
+   "id": "dlg.drm#026",
+   "world": "media.music",
+   "group": "music/draw/map/charts",
+   "four": false,
+   "tab": "music",
+   "class": "neutral wording",
+   "note": "random choice: \"Play\" with no song picks a random one (Ode to Joy against Brahms' Lullaby); the rest of the dialogue is identical",
+   "random": false,
+   "outcome": {
+    "ops": [
+     "right",
+     "right",
+     "right"
+    ],
+    "matrix": [
+     "right",
+     "right",
+     "right"
+    ]
+   },
+   "first_diff_turn": 0,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "Play",
+     "differs": true,
+     "ops": "Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major.",
+     "matrix": "Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": [
+      "media.music.tempo: ops 108 | matrix 80",
+      "media.music.current.title: ops \"Ode to Joy\" | matrix \"Brahms' Lullaby\"",
+      "media.music.current.abc: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK:",
+      "media.music.current.notes: ops [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C#5\",\"D5\"]",
+      "media.music.current.seq: ops [\"E4\",\"F4\",\"G4\",\"D4\",\"C4\",\"G3\"] | matrix [\"F#4\",\"A4\",\"D5\",\"C#5\",\"B4\",\"E4\",\"G4\",\"D4\"]",
+      "media.music.current.key: ops \"C major\" | matrix \"D major\"",
+      "media.music.current.songId: ops \"ode\" | matrix \"brahms\"",
+      "media.music.score: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK:"
+     ]
+    },
+    {
+     "message": "twinkle",
+     "differs": false,
+     "ops": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
+     "matrix": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
+     "statuses": [
+      "supported",
+      "supported"
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "make it faster",
+     "differs": false,
+     "ops": "Playing again at 125 beats per minute (it was 100).",
+     "matrix": "Playing again at 125 beats per minute (it was 100).",
      "statuses": [
       "supported",
       "supported"
@@ -612,25 +582,24 @@
     ]
    },
    "first_diff_turn": 0,
-   "turns_differing": 2,
+   "turns_differing": 1,
    "turns": [
     {
      "message": "Play.",
      "differs": true,
-     "ops": "Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major.",
-     "matrix": "Playing \"Old MacDonald Had a Farm\" on the piano at 110 beats per minute. It is in C major.",
+     "ops": "Playing \"Old MacDonald Had a Farm\" on the piano at 110 beats per minute. It is in C major.",
+     "matrix": "Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major.",
      "statuses": [
       "supported",
       "supported"
      ],
      "state_diff": [
-      "media.music.tempo: ops 108 | matrix 110",
-      "media.music.current.title: ops \"Ode to Joy\" | matrix \"Old MacDonald Had a Farm\"",
-      "media.music.current.abc: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:Old MacDonald Had a Farm\\nC:Traditional folk song\\nM:4/4\\nL:1/",
-      "media.music.current.notes: ops [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"G4\",\"A4\"]",
-      "media.music.current.seq: ops [\"E4\",\"F4\",\"G4\",\"D4\",\"C4\",\"G3\"] | matrix [\"C4\",\"G4\",\"A4\",\"E4\",\"D4\"]",
-      "media.music.current.songId: ops \"ode\" | matrix \"macdonald\"",
-      "media.music.score: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:Old MacDonald Had a Farm\\nC:Traditional folk song\\nM:4/4\\nL:1/"
+      "media.music.current.title: ops \"Old MacDonald Had a Farm\" | matrix \"London Bridge Is Falling Down\"",
+      "media.music.current.abc: ops \"X:1\\nT:Old MacDonald Had a Farm\\nC:Traditional folk song\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:London Bridge Is Falling Down\\nC:Traditional English nursery r",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"G4\",\"A4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"C4\",\"G4\",\"A4\",\"E4\",\"D4\"] | matrix [\"G4\",\"A4\",\"F4\",\"E4\",\"D4\",\"C4\"]",
+      "media.music.current.songId: ops \"macdonald\" | matrix \"london\"",
+      "media.music.score: ops \"X:1\\nT:Old MacDonald Had a Farm\\nC:Traditional folk song\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:London Bridge Is Falling Down\\nC:Traditional English nursery r"
      ]
     },
     {
@@ -646,16 +615,14 @@
     },
     {
      "message": "Set the tempo to 90.",
-     "differs": true,
-     "ops": "Playing again at 90 beats per minute (it was 108).",
+     "differs": false,
+     "ops": "Playing again at 90 beats per minute (it was 110).",
      "matrix": "Playing again at 90 beats per minute (it was 110).",
      "statuses": [
       "supported",
       "supported"
      ],
-     "state_diff": [
-      "media.music.settingHistory: ops [{\"tempo\":108,\"tempoLocked\":false,\"volume\":70,\"instrument\":\"piano\"}] | matrix [{\"tempo\":110,\"tempoLocked\":false,\"volume\":70,\"instrument\":\"piano\"}]"
-     ]
+     "state_diff": []
     },
     {
      "message": "Make it a bit louder.",
@@ -967,21 +934,21 @@
     {
      "message": "give tourself a random look",
      "differs": true,
-     "ops": "Done! Surprise! My new look has the seed hvdzf5. (I read \"tourself\" as \"yourself\")",
-     "matrix": "Ta-da! Surprise! My new look has the seed mk50wn. (I read \"tourself\" as \"yourself\")",
+     "ops": "Okay! Surprise! My new look has the seed 4tdoeo. (I read \"tourself\" as \"yourself\")",
+     "matrix": "Okay! Surprise! My new look has the seed afyvae. (I read \"tourself\" as \"yourself\")",
      "statuses": [
       "supported",
       "supported"
      ],
      "state_diff": [
-      "ui.avatar.seed: ops \"hvdzf5\" | matrix \"mk50wn\"",
-      "ui.avatar.person.head: ops \"mediumBangs\" | matrix \"turban\"",
-      "ui.avatar.person.expression: ops \"smileLOL\" | matrix \"monster\"",
-      "ui.avatar.person.accessories: ops \"none\" | matrix \"glasses\"",
-      "ui.avatar.person.facialHair: ops \"moustache6\" | matrix \"none\"",
-      "ui.avatar.person.colors.skin: ops \"d08b5b\" | matrix \"ffdbb4\"",
-      "ui.avatar.person.colors.headContrast: ops \"f59797\" | matrix \"d6b370\"",
-      "ui.avatar.caption.for: ops \"[[\\\"accessories\\\",\\\"none\\\"],[\\\"expression\\\",\\\"smileLOL\\\"],[\\\"facialHa | matrix \"[[\\\"accessories\\\",\\\"glasses\\\"],[\\\"expression\\\",\\\"monster\\\"],[\\\"facial"
+      "ui.avatar.seed: ops \"4tdoeo\" | matrix \"afyvae\"",
+      "ui.avatar.person.head: ops \"mediumBangs3\" | matrix \"medium2\"",
+      "ui.avatar.person.expression: ops \"concernedFear\" | matrix \"calm\"",
+      "ui.avatar.person.accessories: ops \"glasses4\" | matrix \"none\"",
+      "ui.avatar.person.facialHair: ops \"goatee2\" | matrix \"none\"",
+      "ui.avatar.person.colors.clothing: ops \"e78276\" | matrix \"8fa7df\"",
+      "ui.avatar.person.colors.headContrast: ops \"f59797\" | matrix \"a55728\"",
+      "ui.avatar.caption.for: ops \"[[\\\"accessories\\\",\\\"glasses4\\\"],[\\\"expression\\\",\\\"concernedFear\\\"],[\\ | matrix \"[[\\\"accessories\\\",\\\"none\\\"],[\\\"expression\\\",\\\"calm\\\"],[\\\"facialHair\\\""
      ]
     },
     {
@@ -1413,60 +1380,59 @@
     {
      "message": "play",
      "differs": true,
-     "ops": "Playing \"Row, Row, Row Your Boat\" on the piano at 100 beats per minute. It is in C major.",
-     "matrix": "Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major.",
+     "ops": "Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major.",
+     "matrix": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
      "statuses": [
       "supported",
       "supported"
      ],
      "state_diff": [
-      "media.music.tempo: ops 100 | matrix 80",
-      "media.music.current.title: ops \"Row, Row, Row Your Boat\" | matrix \"Brahms' Lullaby\"",
-      "media.music.current.abc: ops \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL | matrix \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK:",
-      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"] | matrix [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C#5\",\"D5\"]",
-      "media.music.current.seq: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"] | matrix [\"F#4\",\"A4\",\"D5\",\"C#5\",\"B4\",\"E4\",\"G4\",\"D4\"]",
-      "media.music.current.key: ops \"C major\" | matrix \"D major\"",
-      "media.music.current.songId: ops \"row\" | matrix \"brahms\"",
-      "media.music.score: ops \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL | matrix \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK:"
+      "media.music.tempo: ops 80 | matrix 100",
+      "media.music.current.title: ops \"Brahms' Lullaby\" | matrix \"Twinkle, Twinkle, Little Star\"",
+      "media.music.current.abc: ops \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK: | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:",
+      "media.music.current.notes: ops [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C#5\",\"D5\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"F#4\",\"A4\",\"D5\",\"C#5\",\"B4\",\"E4\",\"G4\",\"D4\"] | matrix [\"C4\",\"G4\",\"A4\",\"F4\",\"E4\",\"D4\"]",
+      "media.music.current.key: ops \"D major\" | matrix \"C major\"",
+      "media.music.current.songId: ops \"brahms\" | matrix \"twinkle\"",
+      "media.music.score: ops \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK: | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:"
      ]
     },
     {
      "message": "play a random song",
      "differs": true,
-     "ops": "Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major.",
-     "matrix": "Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major.",
+     "ops": "Playing \"Frère Jacques\" on the piano at 120 beats per minute. It is in C major.",
+     "matrix": "Playing \"Jingle Bells\" on the piano at 120 beats per minute. It is in C major.",
      "statuses": [
       "supported",
       "supported"
      ],
      "state_diff": [
-      "media.music.tempo: ops 108 | matrix 110",
-      "media.music.current.title: ops \"Ode to Joy\" | matrix \"London Bridge Is Falling Down\"",
-      "media.music.current.abc: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:London Bridge Is Falling Down\\nC:Traditional English nursery r",
-      "media.music.current.notes: ops [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
-      "media.music.current.seq: ops [\"E4\",\"F4\",\"G4\",\"D4\",\"C4\",\"G3\"] | matrix [\"G4\",\"A4\",\"F4\",\"E4\",\"D4\",\"C4\"]",
-      "media.music.current.songId: ops \"ode\" | matrix \"london\"",
-      "media.music.score: ops \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK | matrix \"X:1\\nT:London Bridge Is Falling Down\\nC:Traditional English nursery r"
+      "media.music.current.title: ops \"Frère Jacques\" | matrix \"Jingle Bells\"",
+      "media.music.current.abc: ops \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n",
+      "media.music.current.notes: ops [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"]",
+      "media.music.current.seq: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\",\"G3\"] | matrix [\"E4\",\"G4\",\"C4\",\"D4\",\"F4\"]",
+      "media.music.current.songId: ops \"jacques\" | matrix \"jingle\"",
+      "media.music.score: ops \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n"
      ]
     },
     {
      "message": "surprise me",
      "differs": true,
      "ops": "Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major.",
-     "matrix": "Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major.",
+     "matrix": "Playing \"Row, Row, Row Your Boat\" on the piano at 100 beats per minute. It is in C major.",
      "statuses": [
       "supported",
       "supported"
      ],
      "state_diff": [
-      "media.music.tempo: ops 80 | matrix 108",
-      "media.music.current.title: ops \"Brahms' Lullaby\" | matrix \"Ode to Joy\"",
-      "media.music.current.abc: ops \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK: | matrix \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK",
-      "media.music.current.notes: ops [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C#5\",\"D5\"] | matrix [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"]",
-      "media.music.current.seq: ops [\"F#4\",\"A4\",\"D5\",\"C#5\",\"B4\",\"E4\",\"G4\",\"D4\"] | matrix [\"E4\",\"F4\",\"G4\",\"D4\",\"C4\",\"G3\"]",
+      "media.music.tempo: ops 80 | matrix 100",
+      "media.music.current.title: ops \"Brahms' Lullaby\" | matrix \"Row, Row, Row Your Boat\"",
+      "media.music.current.abc: ops \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK: | matrix \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL",
+      "media.music.current.notes: ops [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C#5\",\"D5\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"]",
+      "media.music.current.seq: ops [\"F#4\",\"A4\",\"D5\",\"C#5\",\"B4\",\"E4\",\"G4\",\"D4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"]",
       "media.music.current.key: ops \"D major\" | matrix \"C major\"",
-      "media.music.current.songId: ops \"brahms\" | matrix \"ode\"",
-      "media.music.score: ops \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK: | matrix \"X:1\\nT:Ode to Joy\\nC:Ludwig van Beethoven\\nM:4/4\\nL:1/4\\nQ:1/4=108\\nK"
+      "media.music.current.songId: ops \"brahms\" | matrix \"row\"",
+      "media.music.score: ops \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK: | matrix \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL"
      ]
     }
    ]
@@ -1484,7 +1450,7 @@
    "random": true,
    "outcome": null,
    "first_diff_turn": 2,
-   "turns_differing": 1,
+   "turns_differing": 5,
    "turns": [
     {
      "message": "set title to Title 1",
@@ -1511,65 +1477,93 @@
     {
      "message": "play",
      "differs": true,
-     "ops": "Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major.",
-     "matrix": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
+     "ops": "Playing \"Row, Row, Row Your Boat\" on the piano at 100 beats per minute. It is in C major.",
+     "matrix": "Playing \"Happy Birthday to You\" on the piano at 100 beats per minute. It is in G major.",
      "statuses": [
       "supported",
       "supported"
      ],
      "state_diff": [
-      "media.music.tempo: ops 110 | matrix 100",
-      "media.music.current.title: ops \"Mary Had a Little Lamb\" | matrix \"Twinkle, Twinkle, Little Star\"",
-      "media.music.current.abc: ops \"X:1\\nT:Mary Had a Little Lamb\\nC:Traditional tune\\nM:4/4\\nL:1/4\\nQ:1/ | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:",
-      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
-      "media.music.current.seq: ops [\"E4\",\"D4\",\"C4\",\"G4\"] | matrix [\"C4\",\"G4\",\"A4\",\"F4\",\"E4\",\"D4\"]",
-      "media.music.current.songId: ops \"mary\" | matrix \"twinkle\"",
-      "media.music.score: ops \"X:1\\nT:Mary Had a Little Lamb\\nC:Traditional tune\\nM:4/4\\nL:1/4\\nQ:1/ | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:"
+      "media.music.current.title: ops \"Row, Row, Row Your Boat\" | matrix \"Happy Birthday to You\"",
+      "media.music.current.abc: ops \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL | matrix \"X:1\\nT:Happy Birthday to You\\nC:Patty Hill and Mildred J. Hill\\nM:3/4",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"] | matrix [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C5\",\"D5\"]",
+      "media.music.current.seq: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"] | matrix [\"D4\",\"E4\",\"G4\",\"F#4\",\"A4\",\"D5\",\"B4\",\"C5\"]",
+      "media.music.current.key: ops \"C major\" | matrix \"G major\"",
+      "media.music.current.songId: ops \"row\" | matrix \"birthday\"",
+      "media.music.score: ops \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL | matrix \"X:1\\nT:Happy Birthday to You\\nC:Patty Hill and Mildred J. Hill\\nM:3/4"
      ]
     },
     {
      "message": "play a random song",
-     "differs": false,
-     "ops": "Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major.",
-     "matrix": "Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major.",
+     "differs": true,
+     "ops": "Playing \"Jingle Bells\" on the piano at 120 beats per minute. It is in C major.",
+     "matrix": "Playing \"Frère Jacques\" on the piano at 120 beats per minute. It is in C major.",
      "statuses": [
       "supported",
       "supported"
      ],
-     "state_diff": []
+     "state_diff": [
+      "media.music.current.title: ops \"Jingle Bells\" | matrix \"Frère Jacques\"",
+      "media.music.current.abc: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"E4\",\"G4\",\"C4\",\"D4\",\"F4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\",\"G3\"]",
+      "media.music.current.songId: ops \"jingle\" | matrix \"jacques\"",
+      "media.music.score: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/"
+     ]
     },
     {
      "message": "play",
-     "differs": false,
-     "ops": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
-     "matrix": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "differs": true,
+     "ops": "Playing \"Jingle Bells\" again on the piano at 120 beats per minute.",
+     "matrix": "Playing \"Frère Jacques\" again on the piano at 120 beats per minute.",
      "statuses": [
       "supported",
       "supported"
      ],
-     "state_diff": []
+     "state_diff": [
+      "media.music.current.title: ops \"Jingle Bells\" | matrix \"Frère Jacques\"",
+      "media.music.current.abc: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"E4\",\"G4\",\"C4\",\"D4\",\"F4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\",\"G3\"]",
+      "media.music.current.songId: ops \"jingle\" | matrix \"jacques\"",
+      "media.music.score: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/"
+     ]
     },
     {
      "message": "play",
-     "differs": false,
-     "ops": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
-     "matrix": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "differs": true,
+     "ops": "Playing \"Jingle Bells\" again on the piano at 120 beats per minute.",
+     "matrix": "Playing \"Frère Jacques\" again on the piano at 120 beats per minute.",
      "statuses": [
       "supported",
       "supported"
      ],
-     "state_diff": []
+     "state_diff": [
+      "media.music.current.title: ops \"Jingle Bells\" | matrix \"Frère Jacques\"",
+      "media.music.current.abc: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"E4\",\"G4\",\"C4\",\"D4\",\"F4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\",\"G3\"]",
+      "media.music.current.songId: ops \"jingle\" | matrix \"jacques\"",
+      "media.music.score: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/"
+     ]
     },
     {
      "message": "play",
-     "differs": false,
-     "ops": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
-     "matrix": "Playing \"London Bridge Is Falling Down\" again on the piano at 110 beats per minute.",
+     "differs": true,
+     "ops": "Playing \"Jingle Bells\" again on the piano at 120 beats per minute.",
+     "matrix": "Playing \"Frère Jacques\" again on the piano at 120 beats per minute.",
      "statuses": [
       "supported",
       "supported"
      ],
-     "state_diff": []
+     "state_diff": [
+      "media.music.current.title: ops \"Jingle Bells\" | matrix \"Frère Jacques\"",
+      "media.music.current.abc: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"E4\",\"G4\",\"C4\",\"D4\",\"F4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\",\"G3\"]",
+      "media.music.current.songId: ops \"jingle\" | matrix \"jacques\"",
+      "media.music.score: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/"
+     ]
     },
     {
      "message": "Little Star",
@@ -1745,21 +1739,21 @@
     {
      "message": "give tourself a random look",
      "differs": true,
-     "ops": "There you go! Surprise! My new look has the seed u01182. (I read \"tourself\" as \"yourself\")",
-     "matrix": "There you go! Surprise! My new look has the seed 8d82ez. (I read \"tourself\" as \"yourself\")",
+     "ops": "Sure! Surprise! My new look has the seed 2rzj8r. (I read \"tourself\" as \"yourself\")",
+     "matrix": "There you go! Surprise! My new look has the seed tdean6. (I read \"tourself\" as \"yourself\")",
      "statuses": [
       "supported",
       "supported"
      ],
      "state_diff": [
-      "ui.avatar.seed: ops \"u01182\" | matrix \"8d82ez\"",
-      "ui.avatar.person.head: ops \"medium2\" | matrix \"shaved2\"",
-      "ui.avatar.person.expression: ops \"cyclops\" | matrix \"calm\"",
-      "ui.avatar.person.facialHair: ops \"chin\" | matrix \"none\"",
-      "ui.avatar.person.colors.skin: ops \"d08b5b\" | matrix \"edb98a\"",
-      "ui.avatar.person.colors.clothing: ops \"fdea6b\" | matrix \"9ddadb\"",
-      "ui.avatar.person.colors.headContrast: ops \"e8e1e1\" | matrix \"c93305\"",
-      "ui.avatar.caption.for: ops \"[[\\\"accessories\\\",\\\"none\\\"],[\\\"expression\\\",\\\"cyclops\\\"],[\\\"facialHai | matrix \"[[\\\"accessories\\\",\\\"none\\\"],[\\\"expression\\\",\\\"calm\\\"],[\\\"facialHair\\\""
+      "ui.avatar.seed: ops \"2rzj8r\" | matrix \"tdean6\"",
+      "ui.avatar.person.head: ops \"shaved1\" | matrix \"medium2\"",
+      "ui.avatar.person.expression: ops \"awe\" | matrix \"solemn\"",
+      "ui.avatar.person.accessories: ops \"glasses5\" | matrix \"glasses2\"",
+      "ui.avatar.person.facialHair: ops \"moustache2\" | matrix \"none\"",
+      "ui.avatar.person.colors.skin: ops \"d08b5b\" | matrix \"694d3d\"",
+      "ui.avatar.person.colors.clothing: ops \"e78276\" | matrix \"9ddadb\"",
+      "ui.avatar.person.colors.headContrast: ops \"f59797\" | matrix \"4a312c\""
      ]
     },
     {
@@ -2150,6 +2144,84 @@
    ]
   },
   {
+   "key": "gold:para#ace4799a6a549fd9",
+   "set": "gold",
+   "id": "para#ace4799a6a549fd9",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "neutral wording",
+   "note": "not understood in both modes; only the \"did you mean\" candidates differ (matrix offers \"What did I pay?\", ops \"What should I call you?\"); matrix suggests the closer question",
+   "random": false,
+   "outcome": null,
+   "first_diff_turn": 1,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "A ball costs 7 lei.",
+     "differs": false,
+     "ops": "OK, one ball costs 7 lei.",
+     "matrix": "OK, one ball costs 7 lei.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "whats the total for a ball i pay",
+     "differs": true,
+     "ops": "I did not understand \"whats the total for a ball i pay\". Did you mean \"What is the total?\" or \"What should I call you?\"?",
+     "matrix": "I did not understand \"whats the total for a ball i pay\". Did you mean \"What did I pay?\" or \"What is the total?\"?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "gold:para#64b3cbbcda86d86c",
+   "set": "gold",
+   "id": "para#64b3cbbcda86d86c",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "neutral wording",
+   "note": "not understood in both modes; only the \"did you mean\" candidates differ (matrix offers \"What did I pay?\", ops \"What should I call you?\")",
+   "random": false,
+   "outcome": null,
+   "first_diff_turn": 1,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "A ball costs 7 lei.",
+     "differs": false,
+     "ops": "OK, one ball costs 7 lei.",
+     "matrix": "OK, one ball costs 7 lei.",
+     "statuses": [
+      "",
+      ""
+     ],
+     "state_diff": []
+    },
+    {
+     "message": "50 lei to pay for a ball, what do i get back",
+     "differs": true,
+     "ops": "I did not understand \"50 lei to pay for a ball, what do i get back\". Did you mean \"I want a puzzle and I pay 10 lei. What is the change?\" or \"What should I call you?\"?",
+     "matrix": "I did not understand \"50 lei to pay for a ball, what do i get back\". Did you mean \"What did I pay?\" or \"I want a puzzle and I pay 10 lei. What is the change?\"?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
    "key": "gold:real#rp3-17",
    "set": "gold",
    "id": "real#rp3-17",
@@ -2178,7 +2250,7 @@
     {
      "message": "play",
      "differs": true,
-     "ops": "Playing \"Frère Jacques\" on the piano at 120 beats per minute. It is in C major.",
+     "ops": "Playing \"Jingle Bells\" on the piano at 120 beats per minute. It is in C major.",
      "matrix": "Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major.",
      "statuses": [
       "supported",
@@ -2186,12 +2258,12 @@
      ],
      "state_diff": [
       "media.music.tempo: ops 120 | matrix 100",
-      "media.music.current.title: ops \"Frère Jacques\" | matrix \"Twinkle, Twinkle, Little Star\"",
-      "media.music.current.abc: ops \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:",
-      "media.music.current.notes: ops [\"G3\",\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
-      "media.music.current.seq: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\",\"G3\"] | matrix [\"C4\",\"G4\",\"A4\",\"F4\",\"E4\",\"D4\"]",
-      "media.music.current.songId: ops \"jacques\" | matrix \"twinkle\"",
-      "media.music.score: ops \"X:1\\nT:Frère Jacques\\nC:Traditional French nursery rhyme\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:"
+      "media.music.current.title: ops \"Jingle Bells\" | matrix \"Twinkle, Twinkle, Little Star\"",
+      "media.music.current.abc: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"A4\"]",
+      "media.music.current.seq: ops [\"E4\",\"G4\",\"C4\",\"D4\",\"F4\"] | matrix [\"C4\",\"G4\",\"A4\",\"F4\",\"E4\",\"D4\"]",
+      "media.music.current.songId: ops \"jingle\" | matrix \"twinkle\"",
+      "media.music.score: ops \"X:1\\nT:Jingle Bells\\nC:James Lord Pierpont\\nM:4/4\\nL:1/4\\nQ:1/4=120\\n | matrix \"X:1\\nT:Twinkle, Twinkle, Little Star\\nC:Traditional\\nM:4/4\\nL:1/4\\nQ:"
      ]
     }
    ]
@@ -2206,7 +2278,7 @@
    "tab": "music",
    "class": "neutral wording",
    "note": "random choice of a song (\"play a random song\"); the two modes drew different songs",
-   "random": false,
+   "random": true,
    "outcome": null,
    "first_diff_turn": 1,
    "turns_differing": 1,
@@ -2225,20 +2297,21 @@
     {
      "message": "play a random song",
      "differs": true,
-     "ops": "Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major.",
-     "matrix": "Playing \"Row, Row, Row Your Boat\" on the piano at 100 beats per minute. It is in C major.",
+     "ops": "Playing \"Old MacDonald Had a Farm\" on the piano at 110 beats per minute. It is in C major.",
+     "matrix": "Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major.",
      "statuses": [
       "supported",
       "supported"
      ],
      "state_diff": [
-      "media.music.tempo: ops 110 | matrix 100",
-      "media.music.current.title: ops \"Mary Had a Little Lamb\" | matrix \"Row, Row, Row Your Boat\"",
-      "media.music.current.abc: ops \"X:1\\nT:Mary Had a Little Lamb\\nC:Traditional tune\\nM:4/4\\nL:1/4\\nQ:1/ | matrix \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL",
-      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"]",
-      "media.music.current.seq: ops [\"E4\",\"D4\",\"C4\",\"G4\"] | matrix [\"C4\",\"D4\",\"E4\",\"F4\",\"G4\",\"C5\"]",
-      "media.music.current.songId: ops \"mary\" | matrix \"row\"",
-      "media.music.score: ops \"X:1\\nT:Mary Had a Little Lamb\\nC:Traditional tune\\nM:4/4\\nL:1/4\\nQ:1/ | matrix \"X:1\\nT:Row, Row, Row Your Boat\\nC:Traditional nursery rhyme\\nM:6/8\\nL"
+      "media.music.tempo: ops 110 | matrix 80",
+      "media.music.current.title: ops \"Old MacDonald Had a Farm\" | matrix \"Brahms' Lullaby\"",
+      "media.music.current.abc: ops \"X:1\\nT:Old MacDonald Had a Farm\\nC:Traditional folk song\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK:",
+      "media.music.current.notes: ops [\"C4\",\"D4\",\"E4\",\"G4\",\"A4\"] | matrix [\"D4\",\"E4\",\"F#4\",\"G4\",\"A4\",\"B4\",\"C#5\",\"D5\"]",
+      "media.music.current.seq: ops [\"C4\",\"G4\",\"A4\",\"E4\",\"D4\"] | matrix [\"F#4\",\"A4\",\"D5\",\"C#5\",\"B4\",\"E4\",\"G4\",\"D4\"]",
+      "media.music.current.key: ops \"C major\" | matrix \"D major\"",
+      "media.music.current.songId: ops \"macdonald\" | matrix \"brahms\"",
+      "media.music.score: ops \"X:1\\nT:Old MacDonald Had a Farm\\nC:Traditional folk song\\nM:4/4\\nL:1/ | matrix \"X:1\\nT:Brahms' Lullaby\\nC:Johannes Brahms\\nM:3/4\\nL:1/8\\nQ:1/4=80\\nK:"
      ]
     }
    ]
@@ -2349,6 +2422,50 @@
      "statuses": [
       "supported",
       "supported,supported"
+     ],
+     "state_diff": []
+    }
+   ]
+  },
+  {
+   "key": "coherence:coh.shop.08",
+   "set": "coherence",
+   "id": "coh.shop.08",
+   "world": "kids.shop",
+   "group": "kids",
+   "four": true,
+   "tab": "robot",
+   "class": "neutral wording",
+   "note": "both pass; \"pay\" is not understood in both, matrix suggests \"What did I pay?\", ops two unrelated examples; the answer to the next question is the same",
+   "random": false,
+   "outcome": {
+    "ops": "passed",
+    "matrix": "passed"
+   },
+   "first_diff_turn": 0,
+   "turns_differing": 1,
+   "turns": [
+    {
+     "message": "I buy a ball and pay.",
+     "differs": true,
+     "ops": "OK, you bought 1 ball. I did not understand \"pay\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+     "matrix": "OK, you bought 1 ball. I did not understand \"pay\". Did you mean \"What did I pay?\"?",
+     "statuses": [
+      "unparsed",
+      "unparsed"
+     ],
+     "state_diff": [
+      "kids.shop: ops absent | matrix {\"purchases\":[{\"id\":\"w1\",\"item\":\"ball\",\"count\":1}]}"
+     ]
+    },
+    {
+     "message": "What is my change?",
+     "differs": false,
+     "ops": "I took that as: \"what can i change\" I am a robot. You can change my chest, eyes, mouth and top piece, and my colors: background, body, accent color, screen and glow. Ask \"what eyes can you have?\" for the choices, say \"next eyes\" or \"surprise me\", or tell me to become a person, an emoji, a portrait, a cartoon, a kid, a pixel person, a pixel robot or a fun emoji.",
+     "matrix": "I took that as: \"what can i change\" I am a robot. You can change my chest, eyes, mouth and top piece, and my colors: background, body, accent color, screen and glow. Ask \"what eyes can you have?\" for the choices, say \"next eyes\" or \"surprise me\", or tell me to become a person, an emoji, a portrait, a cartoon, a kid, a pixel person, a pixel robot or a fun emoji.",
+     "statuses": [
+      "supported",
+      "supported"
      ],
      "state_diff": []
     }
@@ -2549,7 +2666,7 @@
      "message": "I buy the ball.",
      "differs": true,
      "ops": "I took that as: \"i buy a ball\" OK, you bought 1 ball.",
-     "matrix": "OK.",
+     "matrix": "OK, you bought 1 ball. I assumed 1 ball.",
      "statuses": [
       "",
       ""
@@ -2581,8 +2698,8 @@
    "group": "kids",
    "four": true,
    "tab": "robot",
-   "class": "ops better",
-   "note": "both pass; ops answers 'I buy the ball' with 'you bought 1 ball', matrix with a bare 'OK.' (it says 'I assumed 1 ball.' only at the next answer, which this case does not reach)",
+   "class": "neutral wording",
+   "note": "rechecked after the wording fix: both pass; ops quotes its reading (\"I took that as: i buy a ball\"), matrix says \"OK, you bought 1 ball. I assumed 1 ball.\"",
    "random": false,
    "outcome": {
     "ops": "passed",
@@ -2606,7 +2723,7 @@
      "message": "I buy the ball.",
      "differs": true,
      "ops": "I took that as: \"i buy a ball\" OK, you bought 1 ball.",
-     "matrix": "OK.",
+     "matrix": "OK, you bought 1 ball. I assumed 1 ball.",
      "statuses": [
       "",
       ""
@@ -2672,7 +2789,7 @@
      "message": "I buy the ball.",
      "differs": true,
      "ops": "I took that as: \"i buy a ball\" OK, you bought 1 ball.",
-     "matrix": "OK.",
+     "matrix": "OK, you bought 1 ball. I assumed 1 ball.",
      "statuses": [
       "",
       ""

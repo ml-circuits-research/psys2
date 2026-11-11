@@ -14,7 +14,7 @@ import { loadWorlds } from '../worlds/index.mjs?v=5784d13c9a';
 import { validateWorldSet } from '../worlds/validate.mjs?v=1eb2f0538f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=853e7376d5';
-import { createReasoner } from '../reasoner/index.mjs?v=4b5d3794f1';
+import { createReasoner } from '../reasoner/index.mjs?v=c52ca48b18';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=14798d6e5b';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=13d688a978';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -641,6 +641,26 @@ export class DialogSession {
   }
 
   /**
+   * The interpreter's statuses (supported, missing, unsupported, error ...) of a reading on a copy of the session (a dry run: the actions run on the copy). The
+   * spelling stage, the name repair and the capability check all ask this of the SAME reading of the SAME message (one `segments` array), and a dry run of an
+   * action is a whole execution of it, so the answer is kept for the array within the turn (the session does not change before the real run).
+   */
+  _dryStatuses(segments) {
+    const hit = this._dryMemo?.get(segments);
+    if (hit && hit.msg === this._msg) return [...hit.out];
+    const out = [];
+    try {
+      const f = this.forkForValidation();
+      for (const seg of segments) {
+        f.isession.add(seg.wires);
+        for (const w of seg.wires) { const r = this.engine.interp.resolve(f.isession, w); if (r?.status) out.push(r.status); }
+      }
+    } catch { return out; /* no dry run: no statuses (not kept) */ }
+    (this._dryMemo ??= new WeakMap()).set(segments, { msg: this._msg, out: [...out] });
+    return out;
+  }
+
+  /**
    * Active world first (RD1, spec 03 section 7.9a): a message the rules read completely can still carry a typo that another world's free slot
    * swallowed ("bugger house pls" read as "where do buggers live") or that the active world's own free tail hides ("nect to a house").
    * The text is spell-corrected against the vocabulary of the OPEN TAB's world only. The corrected reading replaces the original when
@@ -656,17 +676,7 @@ export class DialogSession {
     const world = ctx.tabWorld;
     if (!world || !set.get(world)?.patterns?.length) return null;   // an open modal input that did not consume the message does not matter here
     // the dry run of a reading on a copy of the session: the interpreter's statuses (supported, missing, unsupported, error ...)
-    const statusesOf = (segments) => {
-      const out = [];
-      try {
-        const f = this.forkForValidation();
-        for (const seg of segments) {
-          f.isession.add(seg.wires);
-          for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r?.status) out.push(r.status); }
-        }
-      } catch { /* no dry run: no statuses */ }
-      return out;
-    };
+    const statusesOf = (segments) => this._dryStatuses(segments);
     const refused = (segments) => statusesOf(segments).some((x) => x === 'unsupported' || x === 'error');
     // is the original weaker? another world read it, or the interpreter refused it
     const origStatuses = statusesOf(res.segments);
@@ -760,14 +770,7 @@ export class DialogSession {
     await this._prepareWorldsOf(res.segments);
     const { set, formalizers, interp } = this.engine;
     const ctx = opts.context ?? this.context();
-    const dry = (segments) => {
-      const out = [];
-      try {
-        const f = this.forkForValidation();
-        for (const seg of segments) { f.isession.add(seg.wires); for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r?.status) out.push(r.status); } }
-      } catch { /* no dry run */ }
-      return out;
-    };
+    const dry = (segments) => this._dryStatuses(segments);
     if (!dry(res.segments).includes('missing')) return null;   // (PERF round 3: the cheap test first; the name vocabulary is built only when something is missing)
     let cands;
     try { cands = nameCandidates(english, { set, vocab: spellVocabulary(set), worldOrder: [...new Set([ctx.tabWorld, ...(ctx.recentWorlds ?? [])].filter(Boolean).flatMap((w) => set.available(w)))] }); } catch { return null; }
