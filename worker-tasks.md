@@ -2532,3 +2532,24 @@ Both modes, pre-existing; add these to RO-TRANSLATE-FALLBACK:
 `npm test` result is below.
 - npm test: # pass 1341
 - npm test: # fail 0
+
+## RE-VENDOR: use sopworld 0.7.0 at 72a96dd instead of 89bf69d (reviewer, 2026-11-11 23:00)
+
+0.7.0 is validated (224 tests, pilot unchanged, benches below). It contains everything in 89bf69d plus R6.4–R6.12:
+- `kind=blob`: for the docs analysis.
+- Refusal `vars` and registered filters: for "has two" and "third".
+- `core.aggregate` with `default=` and `by=`: remove the five copies of the editor's count rule.
+- `core.rank`: for "the 2nd chapter".
+- `transient` types and `world.redo()`: replace the host's `isView` and `redo=`.
+- `applyPatch` replace in place: no more `x.r1` ids.
+- Text functions in checks: `matches`, `startsWith` and the like.
+- Hypothetical questions: `check` with an overlay.
+- Unread keys are not propagated.
+- Rewind is flat with world size.
+- `complete({ defaults })` is 8× faster.
+
+Library benches: fork + first tell 0.02 ms at any size; rewind 0.015 ms; 70 action tells 0.8–1.8 ms; 150 defaults 20 ms.
+
+1. Vendor the built file at **72a96dd**, recording hash and build id. No tag.
+2. Run `npm test`, `test-world all` in both reasoners, `ab-sopworld --sets coherence,dialogues,gold` and `bench-reasoner`. Report p50 per world group before and after. **The question is whether the matrix gap closes** (four matrix worlds +5 ms, games +4 ms, docs +1.2–1.4 ms).
+3. Replace the host workarounds the new APIs cover, as listed above. Measure the map's kb as wires again; R6.13 fact providers (1fdbab0, not yet in a release) will be the alternative.
