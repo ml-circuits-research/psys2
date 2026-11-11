@@ -125,6 +125,8 @@ export class ReasonerSession {
     this.refused = [];   // wires the library refused to take: [{ id, type, violations }], for the trace
     this.last = null;    // the last library result, for explain / why
     this.known = new Map();
+    this.derived = null;         // { stamp, json }: the derived state per world for the library's current stamp
+    this.completedAt = null;     // the library's stamp after the last complete defaults (null: unknown)
     this.said = new Set();       // assumed cells already said to the user (an assumption is said once)
     this.mirrored = new Map();   // id -> { text, type } of the wire last copied to the session memory
     this.told = [];              // ids of the dialogue wires the library holds, oldest first (a rewind retracts the ones that are gone from the session memory)
@@ -137,7 +139,7 @@ export class ReasonerSession {
   /** A copy that shares the state until one of the two changes (nothing is copied). */
   fork() {
     const r = new ReasonerSession(this.reasoner, this.world.fork());
-    r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.said = new Set(this.said); r.mirrored = new Map(this.mirrored); r.told = [...this.told];
+    r.refused = [...this.refused]; r.last = this.last; r.known = new Map(this.known); r.said = new Set(this.said); r.mirrored = new Map(this.mirrored); r.told = [...this.told]; r.completedAt = this.completedAt;
     r.cur = this.cur && { ...this.cur }; r.seg = this.seg && { ...this.seg, ids: [...this.seg.ids] }; r.issueSeen = new Set(this.issueSeen); r.turns = this.turns.map((t) => ({ ...t }));
     return r;
   }
@@ -168,14 +170,17 @@ export class ReasonerSession {
       if (!r.ok) this.refused.push({ id: w.id, type: w.type, violations: r.violations });
       else this.told.push(w.id);
     }
-    this._defaults();
-    if (session) this._state(session);
+    this._defaults();   // a no-op while the library has not changed since the last completing
+    if (session) this._state(session);   // cheap, and the session state may have been put back by a snapshot since
   }
 
   /** What the matrix declares as a default is applied (tier `default`) once the wires are told, so that an answer resting on it can say so. */
   _defaults() {
-    try { this.world.complete({ defaults: true, budget: this._limit() }); } catch { /* a default that cannot be applied stays open */ }
+    if (this.world.stamp === this.completedAt) return;   // nothing changed since the last completing: it would find nothing to do
+    let done = true;
+    try { const r = this.world.complete({ defaults: true, budget: this._limit() }); if (r?.budget) done = false; } catch { done = false; /* a default that cannot be applied stays open */ }
     this._charge();
+    this.completedAt = done ? this.world.stamp : null;   // an incomplete completing is tried again with the next budget
   }
 
   // ---- turns, undo, rewind ---------------------------------------------------------------------------------------------------------
@@ -518,15 +523,21 @@ export class ReasonerSession {
    * operations' state it comes into being the first time the world answers (`touched`) or has something to say: a session that never used a world has none of it.
    */
   _state(session, touched = null) {
+    const stamp = this.world.stamp;
+    if (this.derived?.stamp !== stamp) this.derived = { stamp, json: new Map() };   // what toState said of this very library state (a library state has one stamp)
     for (const [id, toState] of this.reasoner.stateOf) {
       try {
-        const next = toState({ find: (t) => this.world.ofType(t), query: (q) => this.world.query(q) });
         let cur = session.state[id];
+        const seen = this.derived.json.get(id);
+        if (cur && seen !== undefined && seen === JSON.stringify(cur)) continue;   // the state already is what the library says
+        const next = toState({ find: (t) => this.world.ofType(t), query: (q) => this.world.query(q) });
+        const json = JSON.stringify(next);
+        if (this.world.stamp === stamp) this.derived.json.set(id, json);
         if (!cur) {
-          if (id !== touched && JSON.stringify(next) === this.reasoner.emptyState(id)) continue;
+          if (id !== touched && json === this.reasoner.emptyState(id)) continue;
           cur = (session.state[id] = {});
         }
-        if (JSON.stringify(next) === JSON.stringify(cur)) continue;
+        if (json === JSON.stringify(cur)) continue;
         for (const k of Object.keys(cur)) delete cur[k];
         Object.assign(cur, next);
       } catch { /* the state stays as it was */ }

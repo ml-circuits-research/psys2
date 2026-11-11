@@ -192,7 +192,7 @@ Results:
 | other (core, profile, help) | 10.4 / 38.6 | 11.7 / 42.5 (+13%) |
 | Bundle | none | library 271 kB raw / 77.3 kB gzip, host layer 31.8 kB raw / 10.1 kB gzip: 87.4 kB gzip, loaded only in matrix mode |
 
-Times: each session ran in both modes, alternating which went first, on a quiet machine. Matrix is 1 to 2 ms slower in every group, **including worlds that do not use the library**. So part of the cost is per-turn work of the matrix engine, not only the library's reasoning. The cause is not yet found (only measured).
+Times: each session ran in both modes, alternating which went first, on a quiet machine. Matrix is 1 to 2 ms slower in every group, **including worlds that do not use the library**. So part of the cost is per-turn work of the matrix engine, not only the library's reasoning. The cause was found and fixed afterwards: see "Turn-time cost of matrix mode".
 
 Differences by class (19 sessions that differ in a reply, a status or an outcome):
 
@@ -234,5 +234,26 @@ Verdict, in plain words:
 ## Open questions and risks
 
 - The library adds 75.7 kB gzip in matrix mode. It is acceptable while the bundle loads lazily, but it should be measured on a phone.
-- Matrix mode is 9% slower per turn (p50). It must be rechecked with 0.6.1 and inside the compute budgets (`src/dialog/budget-limits.mjs`).
+- Matrix mode was 8-15% slower per turn in every group; found and fixed (see "Turn-time cost of matrix mode"): now within noise for non-matrix worlds and +10-12% (about 1.1 ms) on turns that use the library. Budgets were re-measured: library sites peak at 5,880 ticks per turn.
 - **Decided 2026-11-11: the default is `matrix`.** The two wording points where ops was better in the A/B are fixed ("what did you do?" keeps its source sentence; a purchase without a count says "OK, you bought 1 ball. I assumed 1 ball.").
+
+## Turn-time cost of matrix mode (2026-11-11)
+
+The A/B experiment saw `matrix` 8-15% slower per turn (p50, 1-2 ms) in every world group, including the 20 worlds that do not use the library. Reproduced and explained with `scripts/bench-reasoner.mjs` (operational + dialogue sets, 1,766 sessions, 12,072 turns per mode per run, warm-up, 3 interleaved repetitions; `--instrument` times every `ReasonerSession` method and library call per world group; data in `training/results/reasoner-bench-2026-11-11.json`).
+
+**Cause.** `ReasonerSession.tell` runs `world.complete({ defaults: true })` after every `session.add(wires)`, including adds of wires the library never sees (answers, questions, observations, the wires of non-matrix worlds), and dry runs / validations fork the session (`ReasonerSession.fork`) and each fork completed again from scratch. In the profile (500 cases) 14,237 of 18,189 completings were for non-matrix worlds: 2.4 s of 3.2 s, about 0.17 ms each, several per turn. That is the whole non-matrix slowdown. Nothing else is done per turn for such worlds apart from `beginTurn` (one `mark()` and one `ofType('core.issue')`, 0.01 ms), `_state` (the derivation of the four matrix worlds' state, now memoized per library stamp) and one fork per session (+0.4 ms per session, not per turn).
+
+**Fix** (`src/reasoner/index.mjs` only, outputs identical): `_defaults` is skipped while the library's `stamp` equals the stamp after its last completing (`completedAt`, copied by `fork`, cleared when the completing ran out of budget); `_state` skips a world whose session state already equals the JSON `toState` gave for the same stamp. Verified: the replies, statuses and final state of 1,799 sessions (operational, dialogues, coherence) in matrix mode are byte-identical before and after (only the four known random-output sessions differ, as they do between two runs of the same code); `npm test`, `test-world all` and the four matrix worlds in matrix mode pass.
+
+| p50 / mean ms per turn (ops -> matrix) | before | after |
+| --- | --- | --- |
+| non-matrix worlds, all groups together | 9.2-11.8 -> 1.12-1.17x p50, 1.06-1.12x mean | 1.00-1.03x p50, 1.00-1.01x mean (noise) |
+| kids-other | 10.54 -> 11.78 (1.12x) | 10.13 -> 10.28 (1.02x) |
+| games | 9.52 -> 10.65 (1.12x) | 8.78 -> 8.79 (1.00x) |
+| music/draw/map/charts | 9.82 -> 11.21 (1.14x) | 9.92 -> 10.24 (1.03x) |
+| the four matrix worlds | 9.78 -> 11.81 (1.21x p50, 1.14x mean) | 9.97 -> 11.12 (1.12x p50, 1.10x mean) |
+| all turns | 9.85 -> 11.18 (1.14x) | 9.65 -> 9.93 (1.03x) |
+
+p95 is within 1-4% in every group before and after. Session creation: matrix 1.4 ms against 1.0 ms (a library `World` fork and the `ReasonerSession` state, once per session; unchanged).
+
+**What remains for the four matrix worlds (about 1.1-1.2 ms per turn that tells or asks the library; the profile, after the fix):** `lib.tell` 380 ms and `lib.complete` 134 ms for 2,133 tells (0.2 ms each), `rs.resolve` 300 ms for 1,100 library answers (query 130 ms, act 120 ms), `lib.check` 27 ms for 84 calls. Not ours to remove: the cost of a first change after a `mark()` or `fork()` is the library's copy-on-write `_detach` (see the library issue in worker-log.md). Non-matrix worlds still tell their `core.agent` wires (the user, the people named) because a later matrix question may rest on them; one such tell costs the same detach (0.07 ms) once per turn that introduces an agent.

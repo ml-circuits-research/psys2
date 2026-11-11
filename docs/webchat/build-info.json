@@ -52,7 +52,7 @@
     "lib/dialog/discourse.mjs": "85080bfabac30c1b",
     "lib/dialog/dispatch-validate.mjs": "b369d02cd6b09083",
     "lib/dialog/encoder-dispatch.mjs": "b637a5f544a1e2c8",
-    "lib/dialog/index.mjs": "5261d082e1d6d978",
+    "lib/dialog/index.mjs": "70d47022ff325c6c",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/runtime-config.mjs": "3d5891ad1ab337e5",
@@ -91,7 +91,7 @@
     "lib/interpreter/render.mjs": "29d3ec2c79479fb9",
     "lib/legends/index.mjs": "ada11d48a49f2c91",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
-    "lib/reasoner/index.mjs": "8f93ac32db9e7fdb",
+    "lib/reasoner/index.mjs": "0b6ae0f5fffa8466",
     "lib/soplang/index.mjs": "c3ef0aeb95aea0b7",
     "lib/translate/avatar.en-ro.mjs": "78e6b458378d43a3",
     "lib/translate/canonical.en-ro.mjs": "e8ac6d4a2fe6d734",
@@ -206,5 +206,5 @@
     "worlds/user.profile/ops.mjs": "de95285fcb713c66",
     "worlds/user.profile/understand.mjs": "0971331c8e30f3c8"
   },
-  "builtAt": "2026-11-11T15:35:12.664Z"
+  "builtAt": "2026-11-11T15:47:24.750Z"
 }
