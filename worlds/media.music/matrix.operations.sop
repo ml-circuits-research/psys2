@@ -1,0 +1,5 @@
+@op.media.music.why core.operation
+    impl=matrix
+    semantics=action
+    action=music.why
+    doc="Matrix mode: why the player has the tempo, the instrument or the key it has (nobody set it, the user asked for it, the song brings it), from where the setting came, recorded on the player wire."

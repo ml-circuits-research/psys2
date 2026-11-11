@@ -160,7 +160,7 @@
     "worlds/geo.map/coverage.md": "6430b2b8af786241",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "a904bd92b29cb1f3",
+    "worlds/index.json": "3cf21649d8f8ba44",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -191,7 +191,8 @@
     "worlds/media.music/abc.mjs": "674f8003b19cb1b2",
     "worlds/media.music/coverage.md": "c25b13b42f25250c",
     "worlds/media.music/datagen.mjs": "903a79bd78d548f2",
-    "worlds/media.music/ops.mjs": "60b62985284400b9",
+    "worlds/media.music/fns.mjs": "9b833567f101bb04",
+    "worlds/media.music/ops.mjs": "52dbd6ce7d8ac70d",
     "worlds/media.music/theory.mjs": "22f906418690fd78",
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
     "worlds/ui.avatar/coverage.md": "7f8a2b93f4fd3dea",
@@ -210,5 +211,5 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-11T21:18:28.416Z"
+  "builtAt": "2026-11-11T21:43:30.938Z"
 }
