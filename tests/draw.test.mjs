@@ -47,7 +47,8 @@ test('art.draw: undo restores the scene and history stays bounded', async () => 
   const lines = [];
   for (let i = 0; i < 60; i++) lines.push('Draw a star.');
   const { s } = await session(lines);
-  assert.ok(s.state('art.draw').history.length <= 50);
+  assert.ok((s.state('art.draw').history?.length ?? 0) <= 50, 'ops: the board keeps at most 50 snapshots');   // matrix mode: no history key, the session timeline (40 turns) is the history
+  assert.ok((s.isession.rs?.turns.length ?? 0) <= 40);
   const r = await s.send('Undo.');
   assert.match(r.text, /undid|took/i);
 });

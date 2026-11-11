@@ -5,6 +5,10 @@
     imports=world.core
     imports=world.lang.common
     formalization=rules
+    reasoner=matrix
+    undo=diagram.undo
+    redo=diagram.redo
+    source="the diagram"
     language=en
     status=fixture
     title="Diagram editor (from diagram-vss-demo)"

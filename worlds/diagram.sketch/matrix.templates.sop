@@ -1,0 +1,280 @@
+@tpl.diagram.sketch.undo.m.refused core.template
+    for=op.diagram.sketch.undo
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.redo.m.refused core.template
+    for=op.diagram.sketch.redo
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.create.m.refused core.template
+    for=op.diagram.sketch.create
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.delete.m.refused core.template
+    for=op.diagram.sketch.delete
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.move.m.refused core.template
+    for=op.diagram.sketch.move
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.set.m.refused core.template
+    for=op.diagram.sketch.set
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.resize.m.refused core.template
+    for=op.diagram.sketch.resize
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.rename.m.refused core.template
+    for=op.diagram.sketch.rename
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.label.m.refused core.template
+    for=op.diagram.sketch.label
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.duplicate.m.refused core.template
+    for=op.diagram.sketch.duplicate
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.swap.m.refused core.template
+    for=op.diagram.sketch.swap
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.group.m.refused core.template
+    for=op.diagram.sketch.group
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ungroup.m.refused core.template
+    for=op.diagram.sketch.ungroup
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.connect.m.refused core.template
+    for=op.diagram.sketch.connect
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.disconnect.m.refused core.template
+    for=op.diagram.sketch.disconnect
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.align.m.refused core.template
+    for=op.diagram.sketch.align
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.arrange.m.refused core.template
+    for=op.diagram.sketch.arrange
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.distribute.m.refused core.template
+    for=op.diagram.sketch.distribute
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.toFront.m.refused core.template
+    for=op.diagram.sketch.toFront
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.toBack.m.refused core.template
+    for=op.diagram.sketch.toBack
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.forget.m.refused core.template
+    for=op.diagram.sketch.forget
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.improve.m.refused core.template
+    for=op.diagram.sketch.improve
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.respace.m.refused core.template
+    for=op.diagram.sketch.respace
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.snap.m.refused core.template
+    for=op.diagram.sketch.snap
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.flip.m.refused core.template
+    for=op.diagram.sketch.flip
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.reverse.m.refused core.template
+    for=op.diagram.sketch.reverse
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.sort.m.refused core.template
+    for=op.diagram.sketch.sort
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.groupBy.m.refused core.template
+    for=op.diagram.sketch.groupBy
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.equalize.m.refused core.template
+    for=op.diagram.sketch.equalize
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.straighten.m.refused core.template
+    for=op.diagram.sketch.straighten
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.untangle.m.refused core.template
+    for=op.diagram.sketch.untangle
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.fit.m.refused core.template
+    for=op.diagram.sketch.fit
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.members.m.refused core.template
+    for=op.diagram.sketch.ask.members
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.groupOf.m.refused core.template
+    for=op.diagram.sketch.ask.groupOf
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.count.m.refused core.template
+    for=op.diagram.sketch.ask.count
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.list.m.refused core.template
+    for=op.diagram.sketch.ask.list
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.exists.m.refused core.template
+    for=op.diagram.sketch.ask.exists
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.property.m.refused core.template
+    for=op.diagram.sketch.ask.property
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.check.m.refused core.template
+    for=op.diagram.sketch.ask.check
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.describe.m.refused core.template
+    for=op.diagram.sketch.ask.describe
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.neighbors.m.refused core.template
+    for=op.diagram.sketch.ask.neighbors
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.connected.m.refused core.template
+    for=op.diagram.sketch.ask.connected
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.degree.m.refused core.template
+    for=op.diagram.sketch.ask.degree
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.nearest.m.refused core.template
+    for=op.diagram.sketch.ask.nearest
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.extreme.m.refused core.template
+    for=op.diagram.sketch.ask.extreme
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.path.m.refused core.template
+    for=op.diagram.sketch.ask.path
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.reachable.m.refused core.template
+    for=op.diagram.sketch.ask.reachable
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.cycle.m.refused core.template
+    for=op.diagram.sketch.ask.cycle
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.ask.rules.m.refused core.template
+    for=op.diagram.sketch.ask.rules
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.fact.m.refused core.template
+    for=op.diagram.sketch.fact
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.rule.m.refused core.template
+    for=op.diagram.sketch.rule
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.new.m.refused core.template
+    for=op.diagram.sketch.new
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.openTab.m.refused core.template
+    for=op.diagram.sketch.openTab
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.export.m.refused core.template
+    for=op.diagram.sketch.export
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.answerNew.m.refused core.template
+    for=op.diagram.sketch.answerNew
+    status=conflicting
+    text="{note}"
+
+@tpl.diagram.sketch.select.m.refused core.template
+    for=op.diagram.sketch.select
+    status=conflicting
+    text="{note}"
+

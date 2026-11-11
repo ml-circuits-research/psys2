@@ -5,13 +5,14 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
+const opsEngine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'ops' } });
 const say = async (s, ...texts) => { let r; for (const t of texts) r = await s.send(t); return r; };
 
 /** What the page does on a watchdog restart: the world states and the memory travel as plain data to a brand-new session. */
-function restarted(old, { viaJson = true } = {}) {
+function restarted(old, { viaJson = true, eng = engine } = {}) {
   const mem = old.memoryJSON();
   const wire = viaJson ? JSON.parse(JSON.stringify(mem)) : structuredClone(mem);
-  const fresh = engine.createSession({ language: 'en' });
+  const fresh = eng.createSession({ language: 'en' });
   fresh.isession.state = structuredClone(old.isession.state);
   fresh._msg = old._msg;
   assert.equal(fresh.restoreMemory(wire), true);
@@ -37,16 +38,21 @@ test('after a restart an ellipsis still resolves against the remembered frame', 
   assert.equal(r.trace.discourse.resolved.kind, 'ellipsis');
 });
 
-test('after a restart a pending question is answered and undo still works', async () => {
-  const s = engine.createSession({ language: 'en' });
+test('after a restart a pending question is answered and undo still works (ops: the board keeps its history in the state; matrix: the timeline is session memory, so there is nothing to undo after a restart)', async () => {
+  const s = opsEngine.createSession({ language: 'en' });
   await say(s, 'open the drawing tab', 'Draw a house');
   const before = JSON.stringify(s.isession.state['art.draw']);
   await s.send('Make the house red');
   assert.notEqual(JSON.stringify(s.isession.state['art.draw']), before);
-  const b = restarted(s, { viaJson: false });
+  const b = restarted(s, { viaJson: false, eng: opsEngine });
   const r = await b.send('undo that');
   assert.doesNotMatch(r.text, /did not understand|nothing to undo/i);
   assert.deepEqual(b.isession.state['art.draw'].objects.map((o) => o.color), [null], 'the colour change was taken back');
+  const m = engine.createSession({ language: 'en' });
+  await say(m, 'open the drawing tab', 'Draw a house', 'Make the house red');
+  const mb = restarted(m, { viaJson: false });
+  assert.match((await mb.send('undo that')).text, /nothing to undo/i, 'matrix: the library of a restarted session has no turns');
+  assert.deepEqual(mb.isession.state['art.draw'].objects.map((o) => o.color), ['red'], 'and the picture is as it was');
 
   const c = engine.createSession({ language: 'en' });
   await say(c, 'open the drawing tab');

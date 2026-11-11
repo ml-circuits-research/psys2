@@ -31,7 +31,9 @@
  *   chess     matrix: a move the rules refuse says why (the tab board does not change), the engine's answer is taken over by the library, "why did you play that?" explains, "undo" takes the move and the reply back.
  *   music     matrix: a tempo, a key or an instrument the rules refuse says why and the tab keeps its setting, the default tempo is assumed and said once, "undo" and "why?" in the world's words.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,music] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   draw, diagram   matrix (art.draw, diagram.sketch): see scripts/test-webchat-draw-matrix.mjs.
+ *
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,music,draw,diagram] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -39,6 +41,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openChat } from './test-webchat-turns.mjs';
 import { docScenarios } from './test-webchat-docs.mjs';
+import { drawScenarios } from './test-webchat-draw-matrix.mjs';
 
 const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' };
 const OPS = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 4 };   // an explicit choice of the current settings version
@@ -477,6 +480,8 @@ export const SCENARIOS = {
 
 // the document worlds' scenarios (scripts/test-webchat-docs.mjs)
 Object.assign(SCENARIOS, docScenarios({ openChat, MATRIX, check, say }));
+// art.draw and diagram.sketch (scripts/test-webchat-draw-matrix.mjs)
+Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, check, say }));
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
