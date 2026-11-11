@@ -2288,3 +2288,7 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - `eval-reasoner` rerun gives the logged numbers: violating turns 2.8% → 0.8% (the 6 are standing soft issues, by design); coherence 17 → 22 of 30 (undo 0 → 3/3, revision 1 → 2/3, abduction 0 → 1/2, explain 0/3 both); dialogues 220/232 both; Romanian 397/452 both (wrong 6 → 8: look at those two in item 2).
   - Seven of the ten workarounds are gone.
   - Continue with items 2, 4, 5, 6 and 10. Item 9 of "Remain" (our parser has no `#` comments) is item 10 (SOP Lang v1.1).
+- SOPWORLD-1b item 2 + language switch variants (d0491c7, 26a34fb, b639f9f, 4e66043), files match the log: **accepted.**
+  - Reviewer rerun of `eval-reasoner`: **ops** coherence 17 → **24/30** (explain 3/3, revision 3/3, missing-arg 3/3); `scripts/test-webchat-language.mjs` 54/54 in Chrome ("treci pe engleză" and the other variants).
+  - **But matrix mode did not get the same fixes: matrix coherence is still 22/30** (explain 0/3, revision 2/3, missing-arg 2/3). The comparison is now ops 24 vs matrix 22, and the gap is only the host features, not the reasoner. **Item 2 must hold in both modes**: the why hooks, the corrections, "I buy something" and the refusal hook must work when `reasoner=matrix` (in matrix mode "why" should use the library's `explain`, which knows the chain). Rerun and report both columns; the coherence set is the measure.
+  - The Romanian wrong count rose to 8 in **both** modes (was 6 in ops). Find the two new wrong cases from item 2's Romanian frames and fix them.
