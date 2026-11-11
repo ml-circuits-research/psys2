@@ -59,17 +59,18 @@ export function auditSession(s) {
   if (!wires.some((w) => THREE_FACT.test(w.type))) return null;
   const t0 = performance.now();
   const problems = [];
-  let world;
+  let worlds;
   if (STRATEGY === 'matrix' && rs) {
-    world = rs.world;
+    worlds = [...rs.insts.values()].map((i) => i.world);
     audit.dropped_by_library = Math.max(audit.dropped_by_library, rs.refused.length);   // what the library refused when told is not in its World: counted apart
   } else {
     const f = checker.reasoner.session();
     for (const w of wires.sort((x, y) => seqOf(x) - seqOf(y))) f.tell([w]);
     for (const r of f.refused) problems.push({ kind: r.violations?.[0]?.kind ?? 'refused', why: r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? '', wire: r.id, type: r.type });
-    world = f.world;
+    worlds = [...f.insts.values()].map((i) => i.world);
   }
-  const c = world.check();
+  const c = { violations: [], issues: [] };
+  for (const w of worlds) { const r = w.check(); c.violations.push(...r.violations); c.issues.push(...r.issues); }
   for (const v of c.violations) problems.push({ kind: v.kind, why: v.why ?? '', wire: v.id });
   for (const i of c.issues) problems.push({ kind: /debt/.test(i.rule ?? '') ? 'balance' : 'domain', why: i.why ?? '', wire: i.about?.[0] });
   audit.ms += performance.now() - t0;
@@ -153,7 +154,7 @@ async function runCoherence(c) {
   if (c.tab) s.setWorldState('ui.shell', { activeTab: c.tab });
   const turns = [];
   let beforeLast = null;
-  const moneyBalance = () => { try { const f = checker.reasoner.session(); f.tell(s.isession.memory.sessionWires().filter((w) => !isRetracted(w) && FACT.test(w.type)).sort((a, b) => seqOf(a) - seqOf(b))); return f.world.query({ type: 'kids.shop.balance', seek: 'amount' }); } catch { return null; } };
+  const moneyBalance = () => { try { const f = checker.reasoner.session(); f.tell(s.isession.memory.sessionWires().filter((w) => !isRetracted(w) && FACT.test(w.type)).sort((a, b) => seqOf(a) - seqOf(b))); return f.of('kids.shop').query({ type: 'kids.shop.balance', seek: 'amount' }); } catch { return null; } };
   let negativeMoney = false;
   for (const [i, m] of c.turns.entries()) {
     if (i === c.turns.length - 1) beforeLast = { money: sig(s, SIG.money), list: sig(s, SIG.list) };

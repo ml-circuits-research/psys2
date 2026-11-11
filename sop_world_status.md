@@ -290,3 +290,26 @@ The gap of the matrix worlds went from +4.8 to +2.0 ms (four) and from +4.5 to +
 ## Stage 2: kids.time, kids.animals, user.profile (2026-11-11)
 - Ten worlds now run on the matrix (spec 15 "Stage 2, continued"). test-world: kids.time 227, kids.animals 506, user.profile 139 under matrix (217 / 497 / 126 under ops); all worlds pass in both modes.
 - Bench (p50 ms, matrix, same interleaved ops control; shared machine): before: four 11.1, kids-other 9.9, other 10.1, all 9.9; after kids.time: 10.9 / 10.4 / 9.8 / 10.0; after kids.animals: 11.6 / 11.0 / 9.4 / 10.2; after user.profile: 12.1 / 11.5 / 11.1 / 10.8 against ops controls 9.8 / 10.4 / 9.2 / 9.4 (profile sessions add about 1 ms per turn: one library transaction per state change; its legend and kb add about 1.1 ms to session creation in the combined base, which the per-world split removes).
+
+
+## One library World per world (user decision 2026-11-11)
+Design in spec 15, "One instance per world". A session holds one World per world that was used (created on first use, a fork of that world's base, built once per engine); worlds are isolated; what several worlds know (`core.agent`, and the facts of a world another one `reads=`) is copied into the instances that know the type and replayed into one created later; undo is a session timeline of the instances each turn changed.
+
+### Behaviour: before and after, ten matrix worlds
+`scripts/dump-turns.mjs` (new): the operational, dialogues, coherence and gold sets (2 099 sessions, 4 591 turns, matrix mode, all worlds) as one JSON line per turn (reply, statuses, state), run on main (9815977) and on this change, task ids normalised. Two runs of main differ in 48 turns (random output: songs, looks), so those turns are noise. **Result: one differing turn of 4 591, and it is random output** ("play a random song"). Replies, statuses and state of the ten matrix worlds are byte-identical. `npm test`, `test-world all` (both reasoners), the webchat matrix scenarios (68/68) and `npm run test:browser` pass.
+
+Intended differences: none in behaviour. One world file changed because the isolation exposed a real cross-world rule: `kids.arith/matrix.sop` counts what the user buys in the shop (`arith.shop`: a `kids.shop.purchase` is a buy), which only worked because both worlds were in one World. `kids.arith` now says `reads=world.kids.shop` (new key `core.world.reads`: the other world's legend and facts are in this instance, its matrix is not). Hosts: `core.world.compose` (composite worlds, specified and implemented, no world uses it) and `core.world.reads`.
+
+### Turn time (`bench-reasoner.mjs --reps 3`, 12 072 turns, ms, same machine and run, main = 9815977)
+| group | n | ops p50 | main matrix p50 | per-world p50 | main p95 | per-world p95 | main mean | per-world mean |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| four (shop, arith, tasks, tictactoe) | 1989 | 9.67 | 12.08 | 9.28 | 49.4 | 45.6 | 19.7 | 15.7 |
+| avatar/shell/editor | 2529 | 8.59 | 9.28 | 7.89 | 31.3 | 27.1 | 12.7 | 11.3 |
+| kids-other | 1488 | 9.91 | 11.24 | 9.90 | 69.2 | 63.7 | 20.4 | 19.0 |
+| music/draw/map/charts | 3228 | 9.29 | 10.03 | 8.84 | 33.2 | 30.9 | 13.3 | 11.9 |
+| games | 1356 | 8.23 | 10.90 | 8.96 | 24.5 | 20.8 | 12.1 | 9.9 |
+| documents | 687 | 9.95 | 10.38 | 9.71 | 49.7 | 48.0 | 16.7 | 15.6 |
+| other | 795 | 9.28 | 11.29 | 10.04 | 42.0 | 39.2 | 19.3 | 17.4 |
+| all | 12072 | 9.13 | 10.71 | 8.98 | 37.9 | 33.4 | 15.6 | 13.6 |
+
+Session creation (matrix): 2.09 ms before, 1.03 ms now (ops 1.01): a session creates no World until a world is used. The matrix is now at or under the operations on p50 in every group (the copy-on-write after a fork is paid for the size of one world, and the legends of the ten worlds are no longer loaded together). The first use of a world in an engine builds its base (a few ms, once per engine).

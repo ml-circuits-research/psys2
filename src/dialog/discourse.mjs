@@ -484,7 +484,7 @@ export class Discourse {
     const said = [], seen = new Set();
     const kb = [];   // the phrases of the worlds whose own facts (no sentence of the dialogue) the answer rests on
     const from = (id) => {
-      const type = rs?.world.get(id)?.type ?? d.isession.memory.get(id)?.type ?? '';
+      const type = rs?.get(id)?.type ?? d.isession.memory.get(id)?.type ?? '';
       const w = this.dialog.engine.set.list().filter((x) => type === x.id || String(type).startsWith(x.id + '.')).sort((a, b) => b.id.length - a.id.length)[0];
       const phrase = w?.sourcePhrase ?? 'what I know';
       if (!kb.includes(phrase)) kb.push(phrase);

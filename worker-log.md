@@ -423,3 +423,9 @@ Stopped by the user: the demo on GitHub Pages is in order. Landed today after NX
 - **Bench (p50 ms, matrix, `bench-reasoner --reps 3`, machine shared with other agents so absolute numbers drift +-0.5):** see sop_world_status.md.
 - **Not done:** "why?" about a profile fact (operations' answers have no `from`); assumptions for profile guesses (the interview already confirms them); lives/covered/describe/search of animals as rules (a many-valued native answer is `conflicting` in value mode).
 - **Tool note.** `git`/`python3` with variables or heredocs inside compound commands are refused in the worktree sandbox: use the Write tool for scripts and plain commands.
+
+## 2026-11-11 - One library World per world (user decision, spec 15 "One instance per world")
+- `ReasonerSession` holds `insts` (world id -> World, created on first use from a per-world base built once per engine, `reasoner.baseOf`); routing by the owner of a type (`reasoner.route`); wires several worlds know are copied to the existing instances and kept in a small `sharedLog` replayed into later instances; session timeline of marks per turn (`{ marks: Map(world -> mark), ops }`), undo / repair / refusal rewind the instances the turn changed; why, check/issues, assumptions, toState, mirrors, adopt, undoWords per instance; forks are structural per instance.
+- New world keys: `compose=world.<id>` (composite world, specified and implemented, unused) and `reads=world.<id>` (legend + facts of another world, used by kids.arith for its rule on kids.shop purchases).
+- Verification: `scripts/dump-turns.mjs` before/after on 4 591 turns: only a random-song turn differs. Bench and table in sop_world_status.md (all p50 9.13 vs 10.71 before; session creation 1.03 vs 2.09 ms).
+- Tests: `tests/reasoner.test.mjs` updated (`rs.of(world)` instead of `rs.world`, `reasoner.buildAll()` instead of `problems`) plus two new tests. `scripts/eval-reasoner.mjs` audits every instance.

@@ -345,6 +345,18 @@
     ask="which keys?"
     doc="With reasoner=matrix: keys (type.key, for example kids.shapes.thing.is_color) whose questions the matrix leaves to the operations of the world (ops.mjs): checks that carry the value they seek (\"is a banana red?\": a library query would answer the value it was given) and lookups that read the facts in both orders. A question about one of them is never asked to the library."
 
+@core.world.compose core.key
+    value=atom
+    card=many
+    ask="which worlds?"
+    doc="With reasoner=matrix: makes this world a composite (spec 15, composite worlds): its library instance is built from the legends, knowledge bases and matrices of the named worlds plus its own matrix. The named worlds keep their own isolated instances; nothing is composed implicitly."
+
+@core.world.reads core.key
+    value=atom
+    card=many
+    ask="which worlds?"
+    doc="With reasoner=matrix: worlds whose legends and knowledge bases this world's matrix reads facts of (kids.arith reads the purchases of kids.shop). Their wires are copied into this world's library instance; their matrices are not loaded and nothing else is shared (spec 15, one instance per world)."
+
 @core.world.undo core.key
     value=atom
     card=one

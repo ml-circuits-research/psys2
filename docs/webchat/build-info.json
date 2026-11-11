@@ -49,10 +49,10 @@
     "lib/astra/where.mjs": "9573ed8c2f8b1345",
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "b5d3c84d4136c146",
-    "lib/dialog/discourse.mjs": "17f68157123ba467",
+    "lib/dialog/discourse.mjs": "fec7714132e9f7d5",
     "lib/dialog/dispatch-validate.mjs": "b369d02cd6b09083",
     "lib/dialog/encoder-dispatch.mjs": "b637a5f544a1e2c8",
-    "lib/dialog/index.mjs": "50783b79daa82643",
+    "lib/dialog/index.mjs": "154b85e29858ace9",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/runtime-config.mjs": "3d5891ad1ab337e5",
@@ -91,7 +91,7 @@
     "lib/interpreter/render.mjs": "29d3ec2c79479fb9",
     "lib/legends/index.mjs": "ada11d48a49f2c91",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
-    "lib/reasoner/index.mjs": "80821c60e80073ea",
+    "lib/reasoner/index.mjs": "1c78937cc3a149e7",
     "lib/soplang/index.mjs": "c3ef0aeb95aea0b7",
     "lib/translate/avatar.en-ro.mjs": "78e6b458378d43a3",
     "lib/translate/canonical.en-ro.mjs": "e8ac6d4a2fe6d734",
@@ -112,7 +112,7 @@
     "lib/vendor/sopworld/sopworld.mjs": "ff7ef552a22e6713",
     "lib/vendor/sopworld/tools/scan-loops.mjs": "c468386b69b7edda",
     "lib/worlds/canonical.mjs": "331dd143a11d8880",
-    "lib/worlds/index.mjs": "a19acdacfc972bdb",
+    "lib/worlds/index.mjs": "e5e2f7d43082cb4d",
     "lib/worlds/lexicon.mjs": "eacdc3fe6ef44a6e",
     "lib/worlds/validate.mjs": "e992a81a45fe3cd5",
     "worlds/art.draw/coverage.md": "e028db6e48c71587",
@@ -159,7 +159,7 @@
     "worlds/geo.map/coverage.md": "6430b2b8af786241",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "0a7d797dbc7fb3b9",
+    "worlds/index.json": "5141c8a0ee8206e4",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -209,5 +209,5 @@
     "worlds/user.profile/ops.mjs": "2d113f7f5ef5632f",
     "worlds/user.profile/understand.mjs": "0971331c8e30f3c8"
   },
-  "builtAt": "2026-11-11T18:38:44.292Z"
+  "builtAt": "2026-11-11T19:11:50.829Z"
 }

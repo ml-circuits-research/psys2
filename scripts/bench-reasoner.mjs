@@ -53,7 +53,7 @@ function wrap(obj, name, label) {
 }
 if (INSTR) {
   for (const m of ['tell', '_defaults', 'beginTurn', 'commitTurn', 'refuseFacts', '_state', 'syncTo', 'resolve', 'request', 'fork', 'leaves', 'rewind', '_charge']) wrap(ReasonerSession.prototype, m, `rs.${m}`);
-  const proto = Object.getPrototypeOf(engines.matrix.reasoner.session().world);
+  const proto = Object.getPrototypeOf(engines.matrix.reasoner.session().of('kids.shop'));
   for (const m of ['mark', 'rewind', 'tell', 'complete', 'query', 'act', 'explain', 'ofType', 'fork', 'stats', 'check']) if (typeof proto[m] === 'function') wrap(proto, m, `lib.${m}`);
 }
 async function run(mode, x) {
