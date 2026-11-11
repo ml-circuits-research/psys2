@@ -2315,3 +2315,29 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   **Next: the combined A/B experiment** (`sop_world_status.md`), with transcripts of every differing case. Include the user's real phrase logs (training/eval/real-phrases-2026-11-09*.json and the expectations files), the gold paraphrases, all 24 worlds' `test-world`, turn time p50/p95 at 4× in the browser (`scripts/perf-webchat.mjs` with the switch on and off), and bundle bytes. End with a recommendation on the default, stated with the numbers; the user decides.
 
 - SOPWORLD-1b item 6, full A/B (4c047b0): accepted. Reviewer rerun of `scripts/ab-sopworld.mjs` on coherence, dialogues, gold, real-09c and real-dialogue gives the same differing counts per set (7, 5, 2, 1, 1). Matrix is better in 6 coherence cases, ops is better in 2 wordings (being fixed by agent F), and 11 differences are neutral. The full run takes more than 25 min on the reviewer box. Rerun timing: matrix p50 is 2–5 ms higher in every world group, including groups that do not use the library. This confirms what agent G is hunting. The user decided the default (matrix) through the DGX session.
+
+## RO-MATRIX (reviewer, 2026-11-11 17:05): Romanian replies with matrix as the default
+
+Validated: 1babc11 / dd547be (matrix as the default) and stage 2 (2aca36b, 55b9fb8, e681e49, c14dfe0).
+- `npm test`: 1268 pass, 0 fail.
+- In Chrome:
+  - A fresh load uses matrix.
+  - A saved v2 `ops` is migrated to matrix; an `ops` saved at v4 is kept.
+  - "I buy the ball" → "OK, you bought 1 ball. I assumed 1 ball."
+  - "what did you do?" names its sources.
+  - Hangman guess + undo works.
+  - 0 console errors.
+
+Found in a Romanian session in Chrome (language = ro, `/home/claude/shot/ro-matrix.mjs` and `ro-ops.mjs`).
+1. **Matrix only, regression:** "am 20 de lei / cumpăr o minge / anulează" gives "OK, I took that back: \"I buy a ball\"."
+   - The reply is in English, and it quotes the English canonical sentence rather than the user's words. ops answers in Romanian.
+   - Every reply the reasoner host layer writes itself must go through the same Romanian templates as the operations' replies: undo ("Am anulat: „cumpăr o minge”."), "I assumed …", the "why"/"what did you do" source lines, refusals, conflicts. Quote the user's own words.
+   - Add a check-ro-replies gate in matrix mode that fails on any English reply when the language is ro.
+2. **Both modes, pre-existing:**
+   - (a) A bare "da" gives "Yes to what? …" in English.
+   - (b) "Nu este nimic anula." should read "Nu am ce anula."
+   - (c) The "did you mean" line appends the English sentence ("Open the fairy tale story.") under the Romanian one.
+   - (d) "deschide magazinul" and "deschide jocul de ghicit" are not understood. The English "open the shop" and "open the guess game" work, so they need Romanian names for these tabs.
+3. **Minor:** in games.guess right after "Question 1", "why?" answers the shop's last question. Inside a running game, "why?" should be about the game's last question ("I ask that to split the animals left: …").
+
+Add rows for all of these to the RO regression set in both reasoners.
