@@ -2650,3 +2650,25 @@ Both modes, pre-existing. Put these in RO-TRANSLATE-FALLBACK or the E1 audit:
 4. The music title is mangled in Romanian: "Twinkle, Twinkle, stea". Song titles should stay as they are, or use a known Romanian title.
 5. "connect Start to End" when End does not exist gives "A connection needs two ends, e.g. …". It should say "There is no box called End. Shall I add it?". This is a state-aware reply, an E2 case.
 6. "delete the dragon" in draw lists things that are not in the picture ("the car, the sky, the grass"). It should list what is there. This is also state-aware.
+
+## Wave 5: ui.shell, ui.avatar, ui.help + the verdict (reviewer, 2026-11-12 00:20)
+
+Accepted (0d6a789, 477328f, dbca342, the rebase fixes, cc28209). `npm test` gives 1392 pass, 0 fail. The verdict in sop_world_status.md is honest and matches what the reviewer measured:
+- correctness is equal or better everywhere;
+- matrix is slower by 1–3.6 ms on the vendored 0.6.1;
+- no custom code has been replaced;
+- understanding is not improved, because the formalizer is the same in both modes.
+
+That last point is exactly what the user's new direction (FORMALIZE-FROM-WORLDS) addresses. It is now the priority, after the re-vendor of 0.7.1.
+
+In Chrome (`/home/claude/shot/ui.mjs matrix|ops`, diff), matrix equals ops except for:
+- **(+)** "open the dragons tab" → "There is no dragons tab." In Romanian, "Nu există nicio filă „dragons”" is better than ops's "Nu știu o filă chema dragoni".
+- **(−)** That Romanian reply quotes the English word "dragons", not the user's "dragoni". Quote the user's words, as the undo replies do.
+- **(neutral)** The avatar undo lost its "Ta-da!".
+
+Both modes, pre-existing. Add these to E1; they are intent cases:
+1. **WRONG.** "fă părul roșu" is read as "make it red": the body turns light red and "părul" is dropped. The English "make the hair red" correctly offers to switch to the person. A wrong state change is worse than not understood. With E2, the reading that drops a word should lose to one that uses every word.
+2. "ce poți face pe hartă?" is answered in English.
+3. "înapoi" gives "Nu este nicio filă anterioară merge înapoi la." (garbled).
+4. "switch to klingon" is not understood. It should be refused with the languages we have; ui.shell has the kb for that now.
+5. "give it a hat made of cheese" is not understood. It should say what a hat can be.
