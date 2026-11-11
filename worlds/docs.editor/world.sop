@@ -8,6 +8,10 @@
     imports=world.kids.animals
     imports=world.kids.arith
     formalization=rules
+    reasoner=matrix
+    undo=doc.undo
+    redo=doc.redo
+    source="the document"
     language=en
     status=fixture
     title="Document editor"

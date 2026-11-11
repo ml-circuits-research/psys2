@@ -30,6 +30,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openChat } from './test-webchat-turns.mjs';
+import { docScenarios } from './test-webchat-docs.mjs';
 
 const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' };
 const OPS = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 4 };   // an explicit choice of the current settings version
@@ -298,6 +299,9 @@ export const SCENARIOS = {
     } finally { await c.close(); }
   },
 };
+
+// the document worlds' scenarios (scripts/test-webchat-docs.mjs)
+Object.assign(SCENARIOS, docScenarios({ openChat, MATRIX, check, say }));
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };

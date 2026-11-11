@@ -59,6 +59,8 @@ function sync(s) {
   s.doc = toDoc(s);
   s.stats = computeStats(s);
 }
+/** The derived parts (TipTap JSON, statistics) and the clamped selection of a state: what the matrix's `toState` calls (fns.mjs). */
+export const finish = sync;
 /** Chat abbreviations of block kinds ("read para 1"). */
 const KIND_ALIAS = { para: 'paragraph', paras: 'paragraph', graf: 'paragraph', hed: 'heading', head: 'heading', bullet: 'list' };
 const W = (fn) => (ctx, args) => {

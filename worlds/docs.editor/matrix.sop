@@ -1,0 +1,109 @@
+# docs.editor as a matrix: the document as wires, and the rules of what may exist and what may be targeted.
+#
+# The text engine stays in ops.mjs, model.mjs and target.mjs (editing operations, reference resolution, marks, rendering, search, statistics); it keeps working on
+# the session state and the library takes the state over as wires after each operation (fns.mjs, `adopt`; `toState` is the way back).
+#   docs.editor.doc    one: the title, the cursor (index of the block last added or changed), how many blocks there are, the rest as JSON (marks and size of the title,
+#                      the next block number, the focus of the navigation, the dictation mode)
+#   docs.editor.block  one for each block: bid, n (its place, from 0), kind, level (headings), chap (a heading that starts a chapter) and sec (its number among the
+#                      chapters), json (the block itself)
+#   docs.editor.sel    one when something is selected: type (blocks | range), block (the selected blocks), json
+#   docs.editor.gone   one for each block that was taken out: its bid, kind and, for a chapter heading, the number it had (sec)
+# Derived: how many blocks of each kind there are (docs.editor.have). A request that names a target is asked to the rules as a docs.editor.want wire (fns.mjs, `guard`).
+
+@ed.seq core.sequence key=core.seq
+
+@ed.k.dtitle core.slot of=docs.editor.doc key=title kind=string required=true
+@ed.k.dcursor core.slot of=docs.editor.doc key=cursor kind=integer required=true
+@ed.k.dcount core.slot of=docs.editor.doc key=count kind=integer required=true
+@ed.k.drest core.slot of=docs.editor.doc key=rest kind=string required=true
+@ed.k.bid core.slot of=docs.editor.block key=bid kind=atom required=true
+@ed.k.bn core.slot of=docs.editor.block key=n kind=integer required=true
+@ed.k.bkind core.slot of=docs.editor.block key=kind kind=atom enum=heading enum=paragraph enum=quote enum=list enum=table enum=rule required=true
+@ed.k.blevel core.slot of=docs.editor.block key=level kind=integer
+@ed.k.bchap core.slot of=docs.editor.block key=chap kind=boolean
+@ed.k.bsec core.slot of=docs.editor.block key=sec kind=integer
+@ed.k.bcols core.slot of=docs.editor.block key=cols kind=integer
+@ed.k.bminc core.slot of=docs.editor.block key=minc kind=integer
+@ed.k.bjson core.slot of=docs.editor.block key=json kind=string required=true
+@ed.k.stype core.slot of=docs.editor.sel key=type kind=atom enum=blocks enum=range required=true
+@ed.k.sblock core.slot of=docs.editor.sel key=block kind=atom many=true
+@ed.k.sjson core.slot of=docs.editor.sel key=json kind=string required=true
+@ed.k.gbid core.slot of=docs.editor.gone key=bid kind=atom required=true
+@ed.k.gkind core.slot of=docs.editor.gone key=kind kind=atom required=true
+@ed.k.gsec core.slot of=docs.editor.gone key=sec kind=integer
+@ed.k.wkind core.slot of=docs.editor.want key=kind kind=atom required=true
+@ed.k.wn core.slot of=docs.editor.want key=n kind=integer
+@ed.k.word core.slot of=docs.editor.want key=ord kind=atom
+@ed.k.hkind core.slot of=docs.editor.have key=kind kind=atom required=true
+@ed.k.hcount core.slot of=docs.editor.have key=count kind=integer required=true
+
+# ---- how many blocks of each kind the document has (derived; the rules hang on the document wire, which exists as soon as the document is not empty)
+@ed.dd docs.editor.doc
+@ed.bh docs.editor.block kind=heading
+@ed.ch core.calc out=?c fn=count over=$ed.bh
+@ed.hh docs.editor.have kind=heading count=?c
+@ed.r.hh core.rule when=$ed.dd with=$ed.ch then=$ed.hh
+@ed.bp docs.editor.block kind=paragraph
+@ed.cp core.calc out=?c fn=count over=$ed.bp
+@ed.hp docs.editor.have kind=paragraph count=?c
+@ed.r.hp core.rule when=$ed.dd with=$ed.cp then=$ed.hp
+@ed.bq docs.editor.block kind=quote
+@ed.cq core.calc out=?c fn=count over=$ed.bq
+@ed.hq docs.editor.have kind=quote count=?c
+@ed.r.hq core.rule when=$ed.dd with=$ed.cq then=$ed.hq
+@ed.bl docs.editor.block kind=list
+@ed.cl core.calc out=?c fn=count over=$ed.bl
+@ed.hl docs.editor.have kind=list count=?c
+@ed.r.hl core.rule when=$ed.dd with=$ed.cl then=$ed.hl
+@ed.bt docs.editor.block kind=table
+@ed.ct core.calc out=?c fn=count over=$ed.bt
+@ed.ht docs.editor.have kind=table count=?c
+@ed.r.ht core.rule when=$ed.dd with=$ed.ct then=$ed.ht
+
+@ed.bs docs.editor.block kind=heading chap=true
+@ed.cs core.calc out=?c fn=count over=$ed.bs
+@ed.hs docs.editor.have kind=section count=?c
+@ed.r.hs core.rule when=$ed.dd with=$ed.cs then=$ed.hs
+
+# ---- what the document may be: a heading has a level from 1 to 3, two blocks never share a place, the cursor and the selection are in the document, a table has
+# ---- rows of one length
+@ed.hl1 docs.editor.block kind=heading level=?l
+@ed.t.lvl.low core.check fn=lt args=?l args=1
+@ed.t.lvl.high core.check fn=gt args=?l args=3
+@ed.d.lvl.low core.deny when=$ed.hl1 if=$ed.t.lvl.low why="A heading has a level from 1 to 3, not ?l."
+@ed.d.lvl.high core.deny when=$ed.hl1 if=$ed.t.lvl.high why="A heading has a level from 1 to 3, not ?l."
+@ed.u1 docs.editor.block n=?n bid=?a
+@ed.u2 docs.editor.block n=?n bid=?b
+@ed.t.two core.check fn=neq args=?a args=?b
+@ed.d.place core.deny when=$ed.u1 when=$ed.u2 if=$ed.t.two why="Two blocks cannot be in the same place (?n)."
+@ed.dc docs.editor.doc cursor=?c count=?k
+@ed.t.cur core.check fn=gte args=?c args=?k
+@ed.d.cursor core.deny when=$ed.dc if=$ed.t.cur why="The cursor is at block ?c but the document has only ?k blocks."
+@ed.ds docs.editor.sel block=?b
+@ed.db docs.editor.block bid=?b
+@ed.d.sel core.deny when=$ed.ds not=$ed.db why="The selection is on a block that is not in the document (?b)."
+@ed.tb docs.editor.block kind=table cols=?c minc=?m
+@ed.t.rag core.check fn=neq args=?c args=?m
+@ed.d.table core.deny when=$ed.tb if=$ed.t.rag why="The rows of a table must all have the same length (?m and ?c cells)."
+
+# ---- what an operation may target (asked by `guard` in fns.mjs before the operation runs, as a docs.editor.want wire that is never kept)
+@ed.w docs.editor.want kind=?k n=?n ord=?o
+@ed.wh docs.editor.have kind=?k count=?c
+@ed.t.over core.check fn=gt args=?n args=?c
+@ed.t.pos core.check fn=gt args=?c args=0
+@ed.t.zero core.check fn=eq args=?c args=0
+@ed.d.over core.deny when=$ed.w when=$ed.wh if=$ed.t.over if=$ed.t.pos why="There is no ?o ?k; the document has ?c."
+@ed.w3 docs.editor.want kind=?k n=?n
+@ed.wh3 docs.editor.have kind=?k count=?c
+@ed.d.zero core.deny when=$ed.w3 when=$ed.wh3 if=$ed.t.zero why="There is no ?k in the document."
+@ed.w2 docs.editor.want kind=?k n=?n
+@ed.wh2 docs.editor.have kind=?k
+@ed.d.none core.deny when=$ed.w2 not=$ed.wh2 why="There is no ?k in the document."
+@ed.ws docs.editor.want kind=section n=?n
+@ed.gs docs.editor.gone kind=heading sec=?n
+@ed.hs1 docs.editor.have kind=section count=?c
+@ed.d.gone core.deny when=$ed.ws when=$ed.gs when=$ed.hs1 if=$ed.t.over why="That section is already deleted."
+@ed.ws2 docs.editor.want kind=section n=?n
+@ed.gs2 docs.editor.gone kind=heading sec=?n
+@ed.hs2 docs.editor.have kind=section
+@ed.d.gone2 core.deny when=$ed.ws2 when=$ed.gs2 not=$ed.hs2 why="That section is already deleted."
