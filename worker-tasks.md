@@ -2433,3 +2433,18 @@ Found, all present in **both** reasoners unless marked:
 Check: the engine-backed games (hangman's and tic-tac-toe's own undo) answer "undo" before the session timeline sees it. When the game has nothing left to take back, "undo" must fall through to the timeline.
 
 Add `undo-cross.mjs` and `shared.mjs` as Chrome scenarios with expected replies.
+
+## RO-TRANSLATE-FALLBACK (user, 2026-11-11 21:14): use the translation API when a Romanian message or reply goes wrong
+
+The user, in his words: even if the session is in Romanian, when the system detects such cases it may use the translation APIs to get clean English.
+The selected language still decides what the user sees and hears (LANG-FIXED is unchanged). The translator is only a fallback path inside the turn.
+
+1. **Input.** When a Romanian message is not understood, or only partly understood, translate it RO→EN with the on-device Translator. "Not understood" means "Nu am înțeles…", "I took that as: …" with a nonsense reading, a part not used, or a low-confidence reading. Then read the clean English with the English rules. Use the reading only if it succeeds and passes the existing checker (numbers, names, negation, question form, in `ui/translation.mjs`).
+   - Cases from today that must pass this way: "câți ani am?", "cum mă numesc?", "deschide magazinul", "deschide jocul de ghicit", "e ora 25".
+2. **Output.** Any reply that would reach a Romanian session in English gets the same treatment. This covers a missing template, a host-layer string, or a refusal text. The reply is translated EN→RO with the Translator and passed through the checker. If no template exists and the translator is unavailable or fails the checker, use the rules translator. **Never show English text in a Romanian session.**
+   - Examples: "8 years old, noted.", "Ana, lovely to meet you.", "That does not add up…", "OK, I took that back…", "Yes to what?".
+3. **Order.** Romanian templates and rules first. The translator is the fallback. Every reply that needed it is logged, so missing templates can be added later; it does not replace adding them.
+4. **Bounds.** Keep the existing HANG3/COMPUTE-BUDGET rules: a deadline on every translator call, never waited on in the engine worker beyond the turn budget, and a clean fallback when the Translator is absent (headless, unsupported browser). Record the route in the trace and in the phrase log: `via: 'translator-in' | 'translator-out' | 'rules-translate'`.
+5. **Measure.** Run `check-ro-replies` and the RO regression set before and after, with the fake on-device Translator of the harness, in both reasoners. Report how many Romanian messages are now understood, how many English replies remain (target 0), and the added p50/p95 time on the turns that used the translator.
+
+Do this together with RO-MATRIX. Item 2 is the safety net for every RO-MATRIX template still missing.
