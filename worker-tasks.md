@@ -2577,3 +2577,48 @@ Library benches: fork + first tell 0.02 ms at any size; rewind 0.015 ms; 70 acti
 4. Continue RO-TRANSLATE-FALLBACK and the open small findings (docs title, unknown place, RO notes).
 
 Q1 is answered; remove it from questions.md.
+
+## FORMALIZE-FROM-WORLDS: experiments for the morning decision (user, 2026-11-11 23:21; no default changes)
+
+The user's priorities, in his words: less code and speed are secondary, unless it is disastrously slow. What matters is coherence and a better ability to guess the user's intent. He wants the rules that formalize language to rest on the state of the world and on the world's schema, and to look at this better now that so many worlds are formalized. Perhaps the library should do formalization from the worlds' schemas and the worlds it currently manages. Training worlds means memorization and generalization. If we know which tools we have, we should be able to generate the natural-language formalizers from the library, that is, generalize them. The gap is that we have no formal or semi-formal description of the tools yet. He decides in the morning, from data. Do these as experiments behind a flag, with results in `training/results/` and a section in `sop_world_status.md`.
+
+**E1: Error audit of the current formalization.**
+- Scope: every non-right case of `eval-operational --mode rules` and of `--mode encoder+n1` (shipped), on operational, operational-ro, dialogues, gold paraphrases, loose-words, typos and the real phrase logs.
+- Classify each case by cause:
+  - (a) a word is missing from the lexicon;
+  - (b) a structure no pattern covers;
+  - (c) ambiguity that the **state** resolves (only one referent exists, only one action applies in the open tab, one reading contradicts the facts);
+  - (d) ambiguity that the **schema** resolves (slot type, enum, range, required arguments);
+  - (e) intent that must be guessed (implicit object, ellipsis, follow-up);
+  - (f) Romanian-specific;
+  - (g) the expectation is wrong.
+- Output: a table per world and per set, plus 5 examples per class.
+- Reviewer's baseline in rules mode (RESULTS.md): EN 1,239/1,296 right; RO 2,037/2,480 right, of which 334 are not understood.
+- The question for the user: what share of errors is (c)+(d)+(e), i.e. what world-aware reading could fix.
+
+**E2: State-guided choice among readings, guessing intent from the world.**
+- For each message, collect the candidate readings: rules top-k, the dispatcher's top-k, the translator route in Romanian, and the dialogue layer's follow-up readings.
+- Score each one with the world instances, without telling anything (sopworld 0.7.x: `check` with an overlay, `query`, `canComplete`). Criteria:
+  - consistent with the facts;
+  - refers to entities that exist;
+  - required arguments fillable from state or defaults;
+  - the action is available in the open tab;
+  - fewest assumptions.
+- Pick by a fixed, documented order, with no learned weights yet.
+- Measure right, wrong and not-understood against the shipped mode on the same sets, and list every case that changed, both gains and losses.
+- Gate: no new wrong answers. A wrong answer is worse than not understood.
+
+**E3: Semi-formal tool descriptions, and patterns generated from them.**
+- Each world already has most of a description: `legend.sop` (types and slots), `lexicon.sop` (words), `operations.sop` (inputs, outputs, doc, semantics), `matrix.sop` (rules, denies, required arguments and asks), and examples in `patterns.sop`.
+- For 3 worlds (kids.shop, geo.map, docs.editor), write down what is missing to make one complete description per operation:
+  - argument roles;
+  - the words for the action and for each argument, in EN and RO;
+  - preconditions as denies;
+  - effects.
+
+  Use SOP Lang only, one language.
+- Write a generator from those descriptions to patterns, EN and RO.
+- Compare the generated patterns against the hand-written ones on the eval sets: coverage, right, wrong. Count the lines of hand-written patterns it would replace.
+- Report what a description needs that we do not have, and how much of it can be derived automatically from the existing files.
+
+Order: E1 first (it decides where the effort pays), then E2 and E3 in parallel. Keep RO-TRANSLATE-FALLBACK and the re-vendor of 0.7.1 going; E2 needs 0.7.1.
