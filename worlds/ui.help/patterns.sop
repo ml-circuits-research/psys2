@@ -555,3 +555,13 @@
     kind=question
     priority=13
     example="What are hangman's rules?"
+
+@pat.ui.help.area core.pattern
+    canonical="What can you do in the map?"
+    match="[$lang.lead.question|hey|so]? [what_can_you_do|what_can_u_do|what_can_i_do|what_can_i_say|what_do_you_do] [in|on|with|for|about|inside|at]? [the|this|my]? {w:lex.ui.help.areas} [tab|area|part|section|world|game]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=ui.help.area seek=says where.word={w}"
+    kind=question
+    priority=12
+    example="What can you do with charts?"
+    example="What can I do on the chess tab?"
+    example="What can I say in the avatar area?"

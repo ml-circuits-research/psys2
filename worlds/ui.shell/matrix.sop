@@ -1,0 +1,77 @@
+# ui.shell as a matrix: the tab the app shows and the settings the chat can change are wires, and the rules say which tab, language and Settings tab exist.
+#
+# The operations (ops.mjs) keep working on the session state; the library takes the state over as wires after each of them (fns.mjs, `adopt`; `toState` is the
+# way back), so "undo that" takes a tab switch or a setting back in the world's words. What the app has (the tabs, the words that name them, the games of a tab,
+# the languages, the tabs of the Settings dialog) is the knowledge base (kb.sop, generated from the worlds' manifests by scripts/gen-ui-kb.mjs).
+#   ui.shell.view    one, once anything changed: tab, prev (the tab before, or `none`), speaker, listening, handsfree, rate (hundredths: 100 is normal speed), lang,
+#                    rest (the other keys of the state as JSON, for example the game the host says is active)
+# A request that names a tab, a game, a language or a Settings tab is asked to the rules as a ui.shell.want wire (fns.mjs, `guard`).
+
+@sh.seq core.sequence key=core.seq
+
+@sh.k.tab core.slot of=ui.shell.view key=tab kind=atom required=true
+@sh.k.prev core.slot of=ui.shell.view key=prev kind=atom required=true
+@sh.k.speaker core.slot of=ui.shell.view key=speaker kind=boolean required=true
+@sh.k.listening core.slot of=ui.shell.view key=listening kind=boolean required=true
+@sh.k.hands core.slot of=ui.shell.view key=handsfree kind=boolean required=true
+@sh.k.rate core.slot of=ui.shell.view key=rate kind=integer min=50 max=200 required=true
+@sh.k.lang core.slot of=ui.shell.view key=lang kind=atom enum=en enum=ro required=true
+@sh.k.rest core.slot of=ui.shell.view key=rest kind=string required=true
+
+
+@sh.k.want.kind core.slot of=ui.shell.want key=kind kind=atom enum=tab enum=play enum=game enum=back enum=lang enum=settab required=true
+@sh.k.want.a core.slot of=ui.shell.want key=a kind=atom
+@sh.k.want.b core.slot of=ui.shell.want key=b kind=atom
+@sh.k.want.c core.slot of=ui.shell.want key=c kind=atom
+@sh.k.want.word core.slot of=ui.shell.want key=word kind=string
+@sh.k.want.which core.slot of=ui.shell.want key=which kind=atom enum=new enum=hint enum=giveup
+
+# (the types of the knowledge base, ui.shell.known .alias .game .lang .settings .stab .salias, are declared by the legend)
+
+# ---- what the state may be: the speech rate is from half to twice the normal speed (the slot says it). The tab is not checked: the host shows tabs of its own
+# ---- (a click, a test tab) and names them as it likes (`avatar` and `robot` are the same tab); what the chat may ask for is checked below.
+
+# ---- what a request may name: a tab (by its id, its title or an alias, as it is, normalized, or without a plural s)
+@sh.w1 ui.shell.want kind=tab a=?a b=?b c=?c word=?w
+@sh.a1 ui.shell.alias word=?a
+@sh.a2 ui.shell.alias word=?b
+@sh.a3 ui.shell.alias word=?c
+@sh.d.notab core.deny when=$sh.w1 not=$sh.a1 not=$sh.a2 not=$sh.a3 why="There is no ?w tab."
+
+# ---- a game: the one that is asked to start (or to give up, or to hint) has a tab; the tab that is open has to have one
+@sh.w2 ui.shell.want kind=play a=?a b=?b c=?c word=?w
+@sh.b1 ui.shell.alias word=?a
+@sh.b2 ui.shell.alias word=?b
+@sh.b3 ui.shell.alias word=?c
+@sh.d.nogame core.deny when=$sh.w2 not=$sh.b1 not=$sh.b2 not=$sh.b3 why="There is no ?w game."
+@sh.w3 ui.shell.want kind=game which=new
+@sh.v3 ui.shell.view tab=?t
+@sh.t3 ui.shell.known id=?t title=?ti
+@sh.g3 ui.shell.game tab=?t new=?x
+@sh.d.new core.deny when=$sh.w3 when=$sh.v3 when=$sh.t3 not=$sh.g3 why="There is no game open on the ?ti tab. You can say, for example, \"let's play hangman\"."
+@sh.w4 ui.shell.want kind=game which=hint
+@sh.v4 ui.shell.view tab=?t
+@sh.t4 ui.shell.known id=?t title=?ti
+@sh.g4 ui.shell.game tab=?t hint=?x
+@sh.d.hint core.deny when=$sh.w4 when=$sh.v4 when=$sh.t4 not=$sh.g4 why="There is no game open on the ?ti tab. You can say, for example, \"let's play hangman\"."
+@sh.w5 ui.shell.want kind=game which=giveup
+@sh.v5 ui.shell.view tab=?t
+@sh.t5 ui.shell.known id=?t title=?ti
+@sh.g5 ui.shell.game tab=?t giveup=?x
+@sh.d.giveup core.deny when=$sh.w5 when=$sh.v5 when=$sh.t5 not=$sh.g5 why="There is no game open on the ?ti tab. You can say, for example, \"let's play hangman\"."
+
+# ---- "go back" needs a tab to go back to
+@sh.w6 ui.shell.want kind=back
+@sh.v6 ui.shell.view prev=none
+@sh.d.noback core.deny when=$sh.w6 when=$sh.v6 why="There is no previous tab to go back to."
+
+# ---- a language the app speaks
+@sh.w7 ui.shell.want kind=lang a=?a word=?w
+@sh.l1 ui.shell.lang word=?a
+@sh.d.nolang core.deny when=$sh.w7 not=$sh.l1 why="I do not speak ?w yet."
+
+# ---- a tab of the Settings dialog
+@sh.w8 ui.shell.want kind=settab a=?a word=?w
+@sh.s1 ui.shell.salias word=?a
+@sh.s0 ui.shell.settings tabs=?l
+@sh.d.nostab core.deny when=$sh.w8 when=$sh.s0 not=$sh.s1 why="I do not have a settings tab called ?w. The tabs are ?l."

@@ -88,11 +88,12 @@ test('undo, hangman: after one guess two undos do not both say "your last guess"
 });
 
 test('undo, tic-tac-toe: the move, then what came before it in any world, each named, and money changes back', async () => {
-  const { s, out } = await say(matrix, ['I have 20 lei', 'I buy a ball', 'add milk to my shopping list', 'Let\'s play tic tac toe', 'center', 'undo', 'undo', 'undo', 'how much money do I have?']);
+  const { s, out } = await say(matrix, ['I have 20 lei', 'I buy a ball', 'add milk to my shopping list', 'Let\'s play tic tac toe', 'center', 'undo', 'undo', 'undo', 'undo', 'how much money do I have?']);
   assert.match(out[5], /took back your last move and my answer/);
-  assert.match(out[6], /took that back: "add milk to my shopping list"/);
-  assert.match(out[7], /took that back: "I buy a ball"/);
-  assert.match(out[8], /20 lei/);
+  assert.match(out[6], /Let's play tic tac toe|back on the Avatar tab/, 'the start of the game is the shell\'s own turn (the tab switch): a step too');
+  assert.match(out[7], /took that back: "add milk to my shopping list"/);
+  assert.match(out[8], /took that back: "I buy a ball"/);
+  assert.match(out[9], /20 lei/);
   assert.equal(s.isession.state['games.tictactoe']?.board.filter(Boolean).length ?? 0, 0);
 });
 

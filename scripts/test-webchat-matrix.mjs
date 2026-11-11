@@ -33,7 +33,7 @@
  *
  *   draw, diagram   matrix (art.draw, diagram.sketch): see scripts/test-webchat-draw-matrix.mjs.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,music,draw,diagram] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,music,draw,diagram,editor,reader,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -42,6 +42,7 @@ import { fileURLToPath } from 'node:url';
 import { openChat } from './test-webchat-turns.mjs';
 import { docScenarios } from './test-webchat-docs.mjs';
 import { drawScenarios } from './test-webchat-draw-matrix.mjs';
+import { uiScenarios } from './test-webchat-ui-matrix.mjs';
 
 const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' };
 const OPS = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'ops', settingsVersion: 4 };   // an explicit choice of the current settings version
@@ -321,6 +322,8 @@ export const SCENARIOS = {
       const board = () => t.pg.$$eval('.p2-ttt-cell', (cs) => cs.filter((x) => x.classList.contains('is-x') || x.classList.contains('is-o')).length);
       const u1 = await say(t, 'undo');
       check('undo-cross (tic-tac-toe): the move and my answer are named, the board is empty', /took back your last move and my answer/.test(u1) && (await board()) === 0, u1.slice(0, 80));
+      const u1b = await say(t, 'undo');
+      check('undo-cross (tic-tac-toe): then the start of the game (the shell\'s own turn), named', /Let's play tic tac toe|back on the Avatar tab/.test(u1b), u1b.slice(0, 80));
       const u2 = await say(t, 'undo');
       check('undo-cross (tic-tac-toe): then the milk, named', /took that back: "add milk to my shopping list"/.test(u2), u2.slice(0, 80));
       const u3 = await say(t, 'undo');
@@ -482,6 +485,8 @@ export const SCENARIOS = {
 Object.assign(SCENARIOS, docScenarios({ openChat, MATRIX, check, say }));
 // art.draw and diagram.sketch (scripts/test-webchat-draw-matrix.mjs)
 Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, check, say }));
+// the UI worlds' scenarios (scripts/test-webchat-ui-matrix.mjs)
+Object.assign(SCENARIOS, uiScenarios({ openChat, MATRIX, check, say }));
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };

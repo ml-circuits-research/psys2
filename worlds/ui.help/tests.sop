@@ -437,3 +437,24 @@
     input="what are hangman's rules"
     expect="secret word"
     doc="GAPS-1"
+
+@t.ui.help.area1 core.test
+    input="What can you do in the map?"
+    expect="To show places on a map, you can say, for example:"
+    expectStatus=supported
+    doc="the area answered from the knowledge base"
+
+@t.ui.help.area2 core.test
+    input="What can I do with charts?"
+    expect="To draw charts, you can say, for example:"
+    expectStatus=supported
+
+@t.ui.help.area3 core.test
+    input="What can you do on the chess tab?"
+    expect="To play chess, you can say, for example:"
+    expectStatus=supported
+
+@t.ui.help.area4 core.test
+    input="What can I say in the avatar area?"
+    expect="To change my face, you can say, for example:"
+    expectStatus=supported

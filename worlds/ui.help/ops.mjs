@@ -27,8 +27,8 @@ export function initialState() { return { pos: {}, lastUnparsed: null, lastHelp:
 
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
 const no = (status, note) => ({ status, note });
-const quote = (e) => `"${String(e).replace(/[.!?]$/, '')}"`;
-const joinOr = (a) => (a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + ' or ' + a.at(-1));
+export const quote = (e) => `"${String(e).replace(/[.!?]$/, '')}"`;
+export const joinOr = (a) => (a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + ' or ' + a.at(-1));
 const lowerFirst = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 
 // ---------------------------------------------------------------- tabs and games
@@ -46,7 +46,7 @@ function tabInfo(ctx) {
 }
 
 /** The pattern examples of a world: one per pattern first (spread over the pattern kinds), then the further examples. */
-function exampleList(ctx, worldId) {
+export function exampleList(ctx, worldId) {
   const pats = ctx.patterns(worldId).map((p) => ({ ...p, examples: p.canonical ?? [] })).filter((p) => p.examples.length);   // canonical examples only (RD6)
   const kinds = [...new Set(pats.map((p) => p.kind))];
   const firsts = [];

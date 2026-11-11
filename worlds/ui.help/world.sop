@@ -5,6 +5,9 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    passive=true
+    source="the help I know"
     language=en
     status=fixture
     title="Contextual help"

@@ -17,10 +17,10 @@
 
 /** The three original characters: only they are reached from another character ("only the person has glasses: say yes to become one"). */
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
-const CORE = ['robot', 'person', 'emoji'];
+export const CORE = ['robot', 'person', 'emoji'];
 /** Every character, in the order of the gallery. The others (AV) are reached by becoming them and then answer for their own parts. */
-const CHARACTERS = [...CORE, 'portrait', 'cartoon', 'kid', 'pixel', 'pixelbot', 'funemoji'];
-const DATA = 'lex.ui.avatar.data.';
+export const CHARACTERS = [...CORE, 'portrait', 'cartoon', 'kid', 'pixel', 'pixelbot', 'funemoji'];
+export const DATA = 'lex.ui.avatar.data.';
 
 export function initialState() {
   return {
@@ -51,7 +51,7 @@ export const PART_KEYS = {
   mask: ['mask'], cheek: ['cheeks'], eyebrow: ['eyebrows'], brow: ['eyebrows'], nose: ['nose'],
 };
 /** Spoken colored part (lemma) -> color key per character. */
-const COLOR_KEYS = {
+export const COLOR_KEYS = {
   body: { robot: 'body', person: 'clothing', emoji: 'face' }, shell: { robot: 'body' }, metal: { robot: 'body' },
   head: { robot: 'body', person: 'skin', emoji: 'face' }, face: { robot: 'screen', person: 'skin', emoji: 'face' },
   skin: { robot: 'body', person: 'skin', emoji: 'face' }, complexion: { person: 'skin' },
@@ -72,10 +72,10 @@ Object.assign(COLOR_KEYS.hair, { portrait: 'hair', cartoon: 'hair', kid: 'hair',
 for (const k of ['clothing', 'clothe', 'shirt', 'sweater', 'jacket', 'body', 'main']) Object.assign(COLOR_KEYS[k], { cartoon: 'shirt', pixel: 'clothing' });
 for (const k of ['background', 'backdrop']) Object.assign(COLOR_KEYS[k], { pixelbot: 'background', funemoji: 'background' });
 for (const k of ['glow', 'light', 'eye']) Object.assign(COLOR_KEYS[k], { pixelbot: 'glow' });
-const COLOR_SAY = { base: ['skin', 'is'], hair: ['hair', 'is'], shirt: ['shirt', 'is'], earring: ['earrings', 'are'], eyeShadow: ['eye shadow', 'is'], glasses: ['glasses', 'are'], hat: ['hat', 'is'], body: ['body', 'is'], accent: ['accent color', 'is'], screen: ['screen', 'is'], glow: ['glow', 'is'], background: ['background', 'is'], skin: ['skin', 'is'], clothing: ['clothes', 'are'], headContrast: ['hair', 'is'], face: ['face', 'is'] };
+export const COLOR_SAY = { base: ['skin', 'is'], hair: ['hair', 'is'], shirt: ['shirt', 'is'], earring: ['earrings', 'are'], eyeShadow: ['eye shadow', 'is'], glasses: ['glasses', 'are'], hat: ['hat', 'is'], body: ['body', 'is'], accent: ['accent color', 'is'], screen: ['screen', 'is'], glow: ['glow', 'is'], background: ['background', 'is'], skin: ['skin', 'is'], clothing: ['clothes', 'are'], headContrast: ['hair', 'is'], face: ['face', 'is'] };
 /** A glow must not equal the body color (style definition: notEqualTo). */
-const NOT_EQUAL = { glow: 'body', body: 'glow' };
-const LABEL = { hair: 'hairstyle', eyebrows: 'eyebrows', nose: 'nose', beard: 'beard', glasses: 'glasses', earrings: 'earrings', clothes: 'clothes', hat: 'hat', freckles: 'freckles', ears: 'ears', hairAccessories: 'hair accessory', details: 'details', sideburns: 'sideburns', eyes: 'eyes', mouth: 'mouth', top: 'top piece', chest: 'chest', head: 'hairstyle', expression: 'expression', accessories: 'accessories', facialHair: 'facial hair', mask: 'mask', face: 'face shape', cheeks: 'cheeks' };
+export const NOT_EQUAL = { glow: 'body', body: 'glow' };
+export const LABEL = { hair: 'hairstyle', eyebrows: 'eyebrows', nose: 'nose', beard: 'beard', glasses: 'glasses', earrings: 'earrings', clothes: 'clothes', hat: 'hat', freckles: 'freckles', ears: 'ears', hairAccessories: 'hair accessory', details: 'details', sideburns: 'sideburns', eyes: 'eyes', mouth: 'mouth', top: 'top piece', chest: 'chest', head: 'hairstyle', expression: 'expression', accessories: 'accessories', facialHair: 'facial hair', mask: 'mask', face: 'face shape', cheeks: 'cheeks' };
 /** Hairstyle names that read without an article ("short curly hair", "twin buns", "cornrows in a ponytail"). */
 const NO_ARTICLE_HAIR = /^(?:.*\bhair(?: with .*)?|.*\b(?:knots|buns|braids|dreadlocks|twists)|cornrows.*|shoulder-length.*)$/;
 const EYES_PHRASE = { pupils: 'round eyes with pupils', 'big pupils': 'big pupils', 'tall pupils': 'tall pupils', sparkle: 'sparkling eyes', 'look side': 'eyes looking sideways', 'look down': 'eyes looking down', 'look up': 'eyes looking up', wink: 'a winking eye' };
@@ -88,9 +88,9 @@ const PHRASE = {
   head: hairPhrase, expression: (d) => `${a(d)} ${d} expression`, accessories: (d) => `${a(d)} ${d}`, facialHair: (d) => `${a(d)} ${d}`,
   mask: (d) => `${a(d)} ${d}`, face: (d) => `${a(d)} ${d} face`, cheeks: (d) => `${d} cheeks`,
 };
-const NONE_PHRASE = { hair: 'no hair', beard: 'no beard', glasses: 'no glasses', earrings: 'no earrings', freckles: 'no freckles', hat: 'no hat', hairAccessories: 'no hair accessory', top: 'nothing on top', chest: 'nothing on my chest', accessories: 'no accessories', facialHair: 'no facial hair', mask: 'no mask', cheeks: 'no cheeks' };
+export const NONE_PHRASE = { hair: 'no hair', beard: 'no beard', glasses: 'no glasses', earrings: 'no earrings', freckles: 'no freckles', hat: 'no hat', hairAccessories: 'no hair accessory', top: 'nothing on top', chest: 'nothing on my chest', accessories: 'no accessories', facialHair: 'no facial hair', mask: 'no mask', cheeks: 'no cheeks' };
 const NONE_PROBABILITY = { accessories: 0.6, facialHair: 0.6, mask: 0.8, top: 0.15, chest: 0.15, cheeks: 0.4 };
-const SPOKEN_CHARACTER = { robot: 'a robot', person: 'a person', emoji: 'an emoji', portrait: 'a portrait', cartoon: 'a cartoon', kid: 'a kid', pixel: 'a pixel person', pixelbot: 'a pixel robot', funemoji: 'a fun emoji' };
+export const SPOKEN_CHARACTER = { robot: 'a robot', person: 'a person', emoji: 'an emoji', portrait: 'a portrait', cartoon: 'a cartoon', kid: 'a kid', pixel: 'a pixel person', pixelbot: 'a pixel robot', funemoji: 'a fun emoji' };
 /** mood -> expression of each character (ids of the style definitions). */
 export const MOODS = {
   happy: { person: 'smile', emoji: { eyes: 'happy', mouth: 'smile' }, robot: { eyes: 'happy', mouth: 'smile' } },
@@ -141,7 +141,7 @@ const OPENERS = ['Done!', 'Okay!', 'Sure!', 'Ta-da!', 'There you go!'];
 // ---- small helpers ----------------------------------------------------------------------------------------------
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
 const no = (note) => ({ status: 'unsupported', note });
-const hash = (str) => { let h = 2166136261; for (const c of String(str)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; };
+export const hash = (str) => { let h = 2166136261; for (const c of String(str)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; };
 const rng = (seed) => { let t = hash(seed) + 0x6d2b79f5; return () => { t = (t + 0x6d2b79f5) >>> 0; let r = Math.imul(t ^ (t >>> 15), 1 | t); r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r; return (((r ^ (r >>> 14)) >>> 0) / 4294967296); }; };
 const opener = (key) => OPENERS[hash(key) % OPENERS.length];
 const a = (word) => ((w) => (/s$/.test(w) && !/ss$/.test(w) ? '' : /^[aeiou]/i.test(w) ? 'an' : 'a'))(String(word).replace(/\s*\d+$/, ''));
@@ -165,10 +165,10 @@ function caption(ctx) {
 }
 const done = (ctx, key, sentence) => { ensure(ctx); caption(ctx); ctx.request('ui.openTab', { tab: 'robot' }); return ok(`${opener(key)} ${sentence}`); };
 const clean = (s) => String(s ?? '').replace(/ {2,}/g, ' ').trim();
-const say = (key, display) => (/^style \d+$/.test(display) ? `${STYLE_NOUN[key] ?? LABEL[key] ?? key} ${display}` : clean(PHRASE[key] ? PHRASE[key](display) : `${display} ${LABEL[key] ?? key}`));
+export const say = (key, display) => (/^style \d+$/.test(display) ? `${STYLE_NOUN[key] ?? LABEL[key] ?? key} ${display}` : clean(PHRASE[key] ? PHRASE[key](display) : `${display} ${LABEL[key] ?? key}`));
 
 /** The start look of an AV character, from the generated data (DEFAULT_LOOK first). */
-function defaultLook(ctx, ch) {
+export function defaultLook(ctx, ch) {
   const want = DEFAULT_LOOK[ch] ?? {}, v = { colors: {} };
   for (const key of components(ctx, ch)) {
     const ids = idsOf(entries(ctx, ch, key));

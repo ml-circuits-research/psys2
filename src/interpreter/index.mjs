@@ -393,7 +393,7 @@ export class Interpreter {
       let res;
       try { res = w.ops.interceptInput(ctx, text); } catch (e) { res = { handled: true, reply: `Something went wrong while I handled that (${e?.message ?? e}).` }; }
       if (res?.handled) {
-        const refused = session.rs?.adoptState(session);   // the answer to an interview question is a statement too: the library takes it over or refuses it with the reason
+        const refused = session.rs?.adoptState(session, w.id);   // the answer to an interview question is a statement too: the library takes it over or refuses it with the reason
         return { worldId: w.id, reply: refused ? `That does not add up. ${refused.why}` : res.reply, ops: st.ops };
       }
     }
@@ -480,11 +480,11 @@ export class Interpreter {
     }
     else if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
     else if (op && (envelope = session.rs?.guardRequest(session, op.worldId, action, args) ?? null)) {   // a world's rules say the target does not exist (spec 15, `guard`)
-      envelope = { ...envelope, reason: 'precondition_failed', from: [] };
+      envelope = { ...envelope, reason: envelope.reason ?? 'precondition_failed', from: [] };
     } else {
       envelope = this._runOp(session, op, spec, {}, st, { ...args, request: wire });
       // a world whose operations keep their own state (spec 15, `adopt`): the library takes over what they did, or refuses it with the reason
-      const refused = session.rs?.adoptState(session);
+      const refused = session.rs?.adoptState(session, op.worldId);
       if (refused) envelope = { status: 'conflicting', reason: 'precondition_failed', why: refused.why, note: `That does not add up. ${refused.why}`, from: [] };
     }
     spec.op = op;

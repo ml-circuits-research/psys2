@@ -375,6 +375,12 @@
     ask="which action?"
     doc="With reasoner=matrix and undo=: the action that puts back what the last undo took out (for example doc.redo). The host layer re-applies it from the marks the undo kept; a turn that changes the library empties them."
 
+@core.world.passive core.key
+    value=atom
+    card=one
+    ask="true or false?"
+    doc="With reasoner=matrix: true for a world whose state follows the other worlds (the shell's tab: an editor brings its tab forward). What another world's request changed in it is not a step of the turn, so undoing that turn leaves it alone; only a turn of the world's own undoes its changes."
+
 @core.world.untold core.key
     value=atom
     card=many

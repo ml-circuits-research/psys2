@@ -22,7 +22,7 @@ const NOT_FACTS = new Set(['core.question', 'core.request', 'core.answer', 'core
 const STATUS = { supported: 'supported', conflicting: 'conflicting', ambiguous: 'ambiguous', missing: 'missing', refused: 'conflicting', unsupported: 'unsupported', no: 'supported', unknown: 'missing', budget: 'budget' };
 const keyName = (k) => String(k).split('.').pop();
 const bare = (v) => String(v).replace(/^\$/, '');
-const unquote = (v) => { const s = String(v); return s.length > 1 && s.startsWith('"') && s.endsWith('"') ? s.slice(1, -1) : s; };
+const unquote = (v) => { const s = String(v); if (!(s.length > 1 && s.startsWith('"') && s.endsWith('"'))) return s; try { return JSON.parse(s); } catch { return s.slice(1, -1); } };   // a string value is its text (the escapes of a quote or a line end undone)
 const first = (a) => (Array.isArray(a) ? a[0] : a);
 /** slots map of the library's compiled matrix -> the keys a completing could fill (required or with a default); see `ReasonerSession._mayFill`. */
 const FILLABLE = new WeakMap();
@@ -151,6 +151,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const undoOf = new Map(worlds.filter((w) => w.undoAction).map((w) => [w.undoAction, w]));   // action -> the world whose "undo" the library answers by rewinding
   const redoOf = new Map(worlds.filter((w) => w.redoAction).map((w) => [w.redoAction, w]));   // action -> the world whose "redo" the library answers by re-applying the last undo
   const guardOf = new Map(worlds.filter((w) => typeof w.guard === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world that refuses a request on a target that does not exist, with the reason
+  const passive = new Set(worlds.filter((w) => w.passive).map((w) => w.id));   // worlds whose state follows the others: only a turn of their own takes their changes back
   const untold = new Set(worlds.flatMap((w) => w.untold));   // wire types the session memory keeps and the library does not hold
   const keyOf = new Map(worlds.filter((w) => typeof w.stateKey === 'function').map((w) => [w.id, w.stateKey]));   // world id -> the cheap text that says whether its state changed (a state with big derived or immutable parts is not worth stringifying whole)
   const viewOf = new Map(worlds.filter((w) => typeof w.isView === 'function').map((w) => [w.id, w]));   // world id -> the world that says which library steps only moved what the user looks at
@@ -166,7 +167,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const declared = new Map();   // world id -> Map(action name -> attrs of the matrix's `core.action`): what a missing argument asks and how the answer completes the sentence
   const routes = new Map();
   const reasoner = {
-    lib, voices, assumedBy, instKey, composites: new Set(homes.values()), problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, untold, wordsOf, adoptOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
+    lib, voices, assumedBy, instKey, composites: new Set(homes.values()), problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, passive, untold, wordsOf, adoptOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
     /** The base World of a matrix world (built on first use, once per engine). */
     baseOf: (id) => { id = instKey(id); let b = bases.get(id); if (!b) { b = buildBase(id); bases.set(id, b); } return b; },
     /** Builds every base and returns the problems found (tests, `test-world`). */
@@ -450,9 +451,10 @@ export class ReasonerSession {
     for (const [id, e] of c.marks) {
       const inst = this.insts.get(id);
       if (!inst) continue;
-      const moved = inst.world.stamp !== e.stamp;
+      const exempt = this.reasoner.passive.has(id) && !c.owners?.has(id);   // a passive world moved (or created) by another world's request is not a step of this turn
+      const moved = inst.world.stamp !== e.stamp && !exempt;
       if (moved) changed = true;
-      if (moved || e.birth) marks.set(id, e);   // an instance created in the turn is taken back to its birth even when nothing was told to it
+      if (moved || (e.birth && !exempt)) marks.set(id, e);   // an instance created in the turn is taken back to its birth even when nothing was told to it
     }
     if (changed) {
       // the worlds the turn concerned: the ones whose types it told and the games whose own instance it changed (a game's actions change its instance without a wire of the dialogue)
@@ -598,7 +600,7 @@ export class ReasonerSession {
     const val = (k) => wire.entries.find((e) => e.key === k)?.value?.v;
     const L = this.reasoner.legends;
     if (L.isA(wire.type, 'core.question')) return !!this.reasoner.ownerOfType(val('core.question.type')) && !this.reasoner.opsKeys.has(`${val('core.question.type')}.${keyName(val('core.question.seek') ?? '')}`);
-    if (L.isA(wire.type, 'core.request')) return !!this.reasoner.ownerOfAction(val('core.request.action'));
+    if (L.isA(wire.type, 'core.request')) { const a = val('core.request.action'); return !!this.reasoner.ownerOfAction(a) && (!!this.reasoner.declOf(a) || this.reasoner.undoOf.has(a) || this.reasoner.redoOf.has(a)); }   // an action the matrix does not declare is the operations' (a world that keeps its state with `adopt`): no instance is made to ask the library
     return false;
   }
 
@@ -638,7 +640,7 @@ export class ReasonerSession {
 
   /** An action another world asks for by name and arguments (no wire of the dialogue): its envelope when the library owns the action, else null. */
   request(action, args, session) {
-    if (!this.reasoner.ownerOfAction(action)) return null;
+    if (!this.reasoner.ownerOfAction(action) || !this.reasoner.declOf(action)) return null;
     const value = (v) => (/^[\w.-]+$/.test(String(v)) ? atomValue(v) : strValue(v));
     const entries = [{ key: 'core.request.action', value: atomValue(action) }, ...Object.entries(args ?? {}).map(([k, v]) => ({ key: `core.request.arg.${k}`, value: value(v) }))];
     return this.resolve({ id: 'req_via_world', type: 'core.request', entries }, session);
@@ -650,7 +652,7 @@ export class ReasonerSession {
    * did. A state the rules cannot allow (a deny, a new soft issue) is refused: the instance goes back to before, the state with it, and the reason is returned
    * ({ world, why }); null when the library took the state over (or nothing changed). `adopt` touches only the world's own wires, so only its own instance is read.
    */
-  adoptState(session) {
+  adoptState(session, ownId = null) {
     let refused = null;
     for (const [id, w] of this.reasoner.adoptOf) {
       const cur = session.state[id];
@@ -681,7 +683,7 @@ export class ReasonerSession {
         if (clean && e) e.stamp = inst.world.stamp;   // nothing else changed the library in this turn: the turn is no action to take back
         refused = { world: id, why: bad };
       }
-      if (!bad && this.cur?.owners && (plan?.retract?.length || plan?.tell || plan?.sets?.length)) this.cur.owners.add(id);
+      if (!bad && this.cur?.owners && (plan?.retract?.length || plan?.tell || plan?.sets?.length) && (!this.reasoner.passive.has(id) || id === ownId)) this.cur.owners.add(id);
       this.written.set(id, json);   // the state is the library's to say again: derived and written back (the refused one is replaced by the one before)
       this._state(session, id);
     }
@@ -702,12 +704,13 @@ export class ReasonerSession {
     if (!w || !session.state[worldId]) return null;
     const bad = this.adoptState(session);
     if (bad) return { status: 'conflicting', why: bad.why, note: `That does not add up. ${bad.why}` };
-    const inst = this._inst(worldId);
-    const check = ({ wires }) => { try { return inst.world.check({ wires }); } catch { return { ok: true }; } };
+    let held = null;
+    const inst = () => (held ??= this._inst(worldId));   // the instance is made when the guard asks the rules, not for a request the guard has nothing to say about
+    const check = ({ wires }) => { try { return inst().world.check({ wires }); } catch { return { ok: true }; } };
     let g = null;
-    try { g = w.guard({ action, args, state: session.state[worldId], check, find: (ty) => inst.world.ofType(ty) }); } catch { g = null; }
-    this._charge(inst.world);
-    return g ? { status: g.status ?? 'missing', note: g.note, why: g.why ?? g.note } : null;
+    try { g = w.guard({ action, args, state: session.state[worldId], check, find: (ty) => inst().world.ofType(ty) }); } catch { g = null; }
+    if (held) this._charge(held.world);
+    return g ? { status: g.status ?? 'missing', note: g.note, why: g.why ?? g.note, ...(g.reason ? { reason: g.reason } : {}) } : null;
   }
 
   /** What a world's `toState` says of its instance now (null for a world without one). */
@@ -757,13 +760,15 @@ export class ReasonerSession {
     const toState = this.reasoner.stateOf.get(world.id);
     const inst = this._inst(world.id);
     const stateNow = () => toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q) });
-    const before = this.turns.length ? stateNow() : null;
+    const mine = (t) => t.worlds?.includes(world.id);   // a turn that changed this world (a tab switch of the shell or a turn of another world is not one of its steps)
+    const before = this.turns.some(mine) ? stateNow() : null;
     let turn = null, steps = 0;
     const group = [];
-    for (let k = 0; this.turns.length && steps < n && k < 60; k++) {
+    for (let k = 0; this.turns.some(mine) && steps < n && k < 60; k++) {
+      const own = mine(this.turns.at(-1));
       const was = world.isView ? stateNow() : null;
       turn = this.undo(session, group);
-      steps += world.isView?.({ before: was, after: stateNow() }) ? 0 : 1;
+      if (own) steps += world.isView?.({ before: was, after: stateNow() }) ? 0 : 1;
     }
     if (group.length) this.redos.push({ world: world.id, undo: group });
     const patch = world.undoWords?.({ before, after: before ? stateNow() : null, steps }) ?? (before ? { value: 'OK, I took that back.' } : { status: 'missing', note: 'There is nothing to undo yet.' });
