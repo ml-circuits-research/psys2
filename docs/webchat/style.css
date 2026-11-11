@@ -313,9 +313,9 @@
 .p2-jkey { color: var(--muted); }
 .p2-j-string { color: #2a7f4f; } .p2-j-number { color: #1c6ea4; } .p2-j-boolean { color: #a0522d; } .p2-j-null { color: var(--muted); }
 .p2-j.is-changed, .p2-jt.is-changed > summary { background: rgba(240, 180, 40, .35); border-radius: 3px; }
-.sop-id { color: #b04a8a; font-weight: 600; } .sop-type { color: #1c6ea4; } .sop-key { color: #8a5a00; } .sop-str { color: #2a7f4f; } .sop-num { color: #a0522d; } .sop-note { color: var(--muted); }
+.sop-id { color: #b04a8a; font-weight: 600; } .sop-type { color: #1c6ea4; } .sop-key { color: #8a5a00; } .sop-str { color: #2a7f4f; } .sop-num { color: #a0522d; } .sop-note { color: var(--muted); font-style: italic; } .sop-var { color: #7a3fb0; font-style: italic; }
 :root[data-theme="dark"] .sop-id, .p2-dark .sop-id { color: #e58fc4; }
-@media (prefers-color-scheme: dark) { .sop-id { color: #e58fc4; } .sop-type { color: #6fb7ee; } .sop-key { color: #e0b457; } .sop-str { color: #7fd1a0; } .sop-num { color: #e0997a; } .p2-j-string { color: #7fd1a0; } .p2-j-number { color: #6fb7ee; } }
+@media (prefers-color-scheme: dark) { .sop-id { color: #e58fc4; } .sop-type { color: #6fb7ee; } .sop-key { color: #e0b457; } .sop-str { color: #7fd1a0; } .sop-num { color: #e0997a; } .sop-var { color: #c9a0f0; } .p2-j-string { color: #7fd1a0; } .p2-j-number { color: #6fb7ee; } }
 
 /* COMPUTE-BUDGET E: the avatar's idle animations (inner SVG nodes, repainted on the main thread) rest while a turn runs and shortly after it */
 .p2.p2-rest .p2-avatar-layer svg * { animation: none !important; }

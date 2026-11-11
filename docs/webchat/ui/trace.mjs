@@ -13,7 +13,8 @@ const code = (text) => h('pre', { class: 'p2-code' }, h('code', {}, text));
 /** SOP Lang text with syntax colouring: wire ids, types, keys, strings, numbers, notes (DBG). Returns a DocumentFragment. */
 export function colorSop(text) {
   const frag = document.createDocumentFragment();
-  const re = /(@[\w.$#-]+)|("(?:[^"\\]|\\.)*")|([\w.-]+)(=)|(\bcore\.[\w.]+)|(\b\d+(?:\.\d+)?\b)|(#[^\n]*)/g;
+  // comments start where a token could start (`colour=#fff` is an atom); variables are `?name` and `$?name` in value position
+  const re = /(@[\w.$#-]+)|("(?:[^"\\]|\\.)*")|(\$?\?[A-Za-z_][\w.-]*)|([\w.-]+)(=)|(\bcore\.[\w.]+)|(\b\d+(?:\.\d+)?\b)|((?<![^\s])#[^\n]*)/g;
   const span = (cls, t) => { const e = document.createElement('span'); e.className = cls; e.textContent = t; return e; };
   const src = String(text ?? '');
   let last = 0;
@@ -21,10 +22,12 @@ export function colorSop(text) {
     if (m.index > last) frag.append(src.slice(last, m.index));
     if (m[1]) frag.append(span('sop-id', m[1]));
     else if (m[2]) frag.append(span('sop-str', m[2]));
-    else if (m[3]) frag.append(span('sop-key', m[3]), '=');
-    else if (m[5]) frag.append(span('sop-type', m[5]));
-    else if (m[6]) frag.append(span('sop-num', m[6]));
-    else frag.append(span('sop-note', m[7]));
+    else if (m[3]) frag.append(span('sop-var', m[3]));
+    else if (m[4]) frag.append(span('sop-key', m[4]), '=');
+    else if (m[6]) frag.append(span('sop-type', m[6]));
+    else if (m[7]) frag.append(span('sop-num', m[7]));
+    else if (m[8]) frag.append(span('sop-note', m[8]));
+    else frag.append(m[0]);
     last = m.index + m[0].length;
   }
   if (last < src.length) frag.append(src.slice(last));

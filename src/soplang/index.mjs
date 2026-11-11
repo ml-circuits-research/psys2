@@ -1,14 +1,16 @@
 /**
- * SOP Lang v1 parser and serializer (spec 01). Browser-safe: no node:* imports.
+ * SOP Lang v1.1 parser and serializer (spec 01). Browser-safe: no node:* imports.
  *
  * Wire  = { id, type, entries: [{ key, value }], span: { start, end, line }, source }
- * value = { kind: 'atom' | 'string' | 'ref', v: string }
+ * value = { kind: 'atom' | 'string' | 'ref' | 'var', v: string }
+ *   ref `$id` has v = 'id'; `$?x` (the wire whose id the variable ?x holds) has v = '?x'; var `?name` has v = 'name'.
  */
 import { budget } from '../dialog/budget.mjs';
 
-const IDENT = /^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z_][A-Za-z0-9_-]*)*$/;
+const IDENT = /^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_][A-Za-z0-9_-]*)*$/;
+const REFID = /^\??[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_][A-Za-z0-9_-]*)*$/;
 const WS = /\s/;
-/** Characters that can never be part of an unquoted token. */
+/** Characters that end an identifier-like token (ids, types, keys, references, variables). */
 const DELIM = new Set(['"', '@', '$', '=', '\\']);
 
 /** True when `s` is a valid SOP Lang identifier. */
@@ -31,6 +33,7 @@ export class SopSyntaxError extends Error {
 export const atom = (v) => ({ kind: 'atom', v: String(v) });
 export const str = (v) => ({ kind: 'string', v: String(v) });
 export const ref = (v) => ({ kind: 'ref', v: String(v).replace(/^\$/, '') });
+export const variable = (v) => ({ kind: 'var', v: String(v).replace(/^\?/, '') });
 
 /** Build a wire programmatically from [key, value] pairs. */
 export function makeWire(id, type, pairs = [], extra = {}) {
@@ -66,15 +69,29 @@ export function parse(text, { source } = {}) {
   };
 
   let i = 0;
-  const skipWs = () => { while (i < n && WS.test(src[i])) { budget.tick('index.skipWs'); i++; } };
+  /** Skip white space and `#` comments (a comment starts where a token could start and runs to the end of the line). */
+  const skipWs = () => {
+    while (i < n) {
+      budget.tick('index.skipWs');
+      if (WS.test(src[i])) i++;
+      else if (src[i] === '#') { while (i < n && src[i] !== '\n') { budget.tick('index.comment'); i++; } }
+      else break;
+    }
+  };
   /** Read a run of characters that are not whitespace or delimiters. */
   const run = () => {
     const s = i;
     while (i < n && !WS.test(src[i]) && !DELIM.has(src[i])) { budget.tick('index.run'); i++; }
     return src.slice(s, i);
   };
-  /** Skip to the next '@' (error recovery). */
-  const resync = () => { while (i < n && src[i] !== '@') { budget.tick('index.resync'); i++; } };
+  /** Read the run of an unquoted value: everything up to white space, a quote or a backslash. */
+  const atomRun = () => {
+    const s = i;
+    while (i < n && !WS.test(src[i]) && src[i] !== '"' && src[i] !== '\\') { budget.tick('index.atomRun'); i++; }
+    return src.slice(s, i);
+  };
+  /** Skip to the next '@' that starts a token (error recovery). */
+  const resync = () => { while (i < n && !(src[i] === '@' && (i === 0 || WS.test(src[i - 1]) || src[i - 1] === '"'))) { budget.tick('index.resync'); i++; } };
   const atBoundary = () => i >= n || WS.test(src[i]) || src[i] === '@';
 
   /** Scan a quoted string starting at src[i] === '"'. Returns the decoded value or null. */
@@ -94,13 +111,13 @@ export function parse(text, { source } = {}) {
         }
         return fail(`bad escape '\\${e}' in string`, i);
       }
-      if (c < ' ') return fail('unescaped control character in string (use \\n, \\t)', i);
       i++;
     }
     if (i >= n) return fail('unterminated string', start);
     const raw = src.slice(start, i + 1);
     i++;
-    return JSON.parse(raw);
+    // a line end, a tab or any other control character may stand in a string as it is; the stored text is the same
+    return JSON.parse(/[\u0000-\u001f]/.test(raw) ? raw.replace(/[\u0000-\u001f]/g, (ch) => '\\u' + ch.charCodeAt(0).toString(16).padStart(4, '0')) : raw);
   };
 
   const readValue = () => {
@@ -115,13 +132,21 @@ export function parse(text, { source } = {}) {
       const s = i;
       i++;
       const id = run();
-      if (!IDENT.test(id)) return fail(`invalid reference '$${id}'`, s);
+      if (!REFID.test(id)) return fail(`invalid reference '$${id}'`, s);
       if (!atBoundary()) return fail('unexpected character after reference', i);
       return { kind: 'ref', v: id };
     }
+    if (c === '?') {
+      const s = i;
+      i++;
+      const id = run();
+      if (!IDENT.test(id)) return fail(`invalid variable '?${id}'`, s);
+      if (!atBoundary()) return fail('unexpected character after variable', i);
+      return { kind: 'var', v: id };
+    }
     const s = i;
-    const v = run();
-    if (v === '') return fail(c === '=' || c === '\\' ? `unexpected '${c}' in value` : 'empty value', s);
+    const v = atomRun();
+    if (v === '') return fail(`unexpected '${c}' in value`, s);
     if (!atBoundary()) return fail(`character '${src[i]}' is not allowed in an unquoted value (quote the string)`, i);
     return { kind: 'atom', v };
   };
@@ -189,6 +214,7 @@ export function parseOrThrow(text, opts) {
 export function formatValue(value) {
   if (value.kind === 'string') return JSON.stringify(value.v);
   if (value.kind === 'ref') return '$' + value.v;
+  if (value.kind === 'var') return '?' + value.v;
   return value.v;
 }
 

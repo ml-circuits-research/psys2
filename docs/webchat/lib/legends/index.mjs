@@ -8,7 +8,7 @@
  *  - `core.key` may carry `dynamic=true`: the key is a prefix; `<prefix>.<anything>` is accepted
  *    (used for where.* and arg.*). Its value kind is `any`.
  */
-import { get, getAll } from '../soplang/index.mjs?v=002f3588a0';
+import { get, getAll } from '../soplang/index.mjs?v=26885599a7';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
 const LITERAL_KINDS = new Set(['integer', 'number', 'string', 'atom', 'boolean', 'any']);
@@ -271,6 +271,7 @@ export class Legends {
     }
     const k = info.value.literal;
     if (k === 'any') return null;
+    if (value.kind === 'var') return `a variable (?${value.v}) is only legal in a rule file, not in a fact`;
     if (value.kind === 'ref') return `expected ${k}, got a reference`;
     const v = value.v;
     switch (k) {

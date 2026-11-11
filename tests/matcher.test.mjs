@@ -268,7 +268,7 @@ const PATS = `@p.m.has core.pattern
     priority=10
 @p.m.two core.pattern
     match="swap {a:agent} and {b:agent}"
-    emit="@{_} m.holding owner={a} item=x@{_1} m.holding owner={b} item=y"
+    emit="@{_} m.holding owner={a} item=x\\n@{_1} m.holding owner={b} item=y"
     kind=statement
     priority=1
 `;

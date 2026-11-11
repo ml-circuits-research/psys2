@@ -9,27 +9,27 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=5af6ee0ffc';
-import { loadWorlds } from '../worlds/index.mjs?v=9be8992262';
-import { validateWorldSet } from '../worlds/validate.mjs?v=cb794a5c06';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=46116712b1';
+import { loadWorlds } from '../worlds/index.mjs?v=dcce5aea74';
+import { validateWorldSet } from '../worlds/validate.mjs?v=1eb2f0538f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=f58bed0b83';
-import { createReasoner } from '../reasoner/index.mjs?v=db35887592';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=d95a109e4e';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=1038719bc1';
-import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=002f3588a0';
+import { createInterpreter } from '../interpreter/index.mjs?v=e174b1e71d';
+import { createReasoner } from '../reasoner/index.mjs?v=94e3c8b675';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=14798d6e5b';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=13d688a978';
+import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=817decdde7';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=ddda322026';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=d3b6e999df';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=0dff04aff9';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=14e30cabba';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=a0880cdceb';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=fd62b893eb';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=ded769d6bc';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=e468d994f5';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=ff02c23979';
-import { checkValues } from './value-check.mjs?v=5fa9ffdfc7';
-import { Discourse } from './discourse.mjs?v=eeabd3b11f';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=8ba02e1397';
+import { checkValues } from './value-check.mjs?v=dbf4aad634';
+import { Discourse } from './discourse.mjs?v=cf3508a639';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';

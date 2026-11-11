@@ -78,7 +78,6 @@ test('error: empty value, unterminated string, bad escape', () => {
   bad('@a t k="abc', /unterminated string/);
   bad('@a t k="a\\qb"', /bad escape/);
   bad('@a t k="a\\u12"', /bad \\u escape/);
-  bad('@a t k="line\nbreak"', /control character/);
 });
 
 test('error: invalid identifiers in id, type, key and reference', () => {
@@ -92,7 +91,6 @@ test('error: invalid identifiers in id, type, key and reference', () => {
 });
 
 test('error: forbidden characters in unquoted atoms', () => {
-  bad('@a t k=a=b', /not allowed in an unquoted value/);
   bad('@a t k=a"b"', /not allowed in an unquoted value/);
   bad('@a t k=a\\b', /not allowed in an unquoted value/);
   bad('@a t k="x"y', /after string/);
