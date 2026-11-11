@@ -1,13 +1,16 @@
 # kids.arith as a matrix: what worlds/kids.arith/ops.mjs computes, said with rules.
 
 @arith.seq core.sequence key=core.seq
+# numbers that do not come out even are shown with two decimals
+@arith.precision core.precision decimals=2
 
 # ---- who has how many: one wire per owner and item; the count is a state that
-#      statements set and events change. Nobody can have fewer than none.
-@arith.k.owner core.slot of=kids.arith.holding key=owner type=core.agent id=true
-@arith.k.item core.slot of=kids.arith.holding key=item kind=atom id=true
-@arith.k.count core.slot of=kids.arith.holding key=count kind=number min=0
-@arith.f core.fluent of=kids.arith.holding key=count
+#      statements set and events change. Nobody can have fewer than none: an event that
+#      says otherwise is kept (somebody said it) and stands as an issue.
+@arith.k.owner core.slot of=kids.arith.holding key=owner type=core.agent id=true combine=intersect
+@arith.k.item core.slot of=kids.arith.holding key=item kind=atom id=true combine=intersect
+@arith.k.count core.slot of=kids.arith.holding key=count kind=number min=0 soft=true combine=intersect
+@arith.f core.fluent of=kids.arith.holding key=count delta=received
 @arith.e.give core.effect on=kids.arith.give fluent=$arith.f op=sub amount=count where.owner=who where.item=item
 @arith.e.given core.effect on=kids.arith.give fluent=$arith.f op=add amount=count where.owner=to where.item=item
 @arith.e.receive core.effect on=kids.arith.receive fluent=$arith.f op=add amount=count where.owner=who where.item=item
@@ -17,66 +20,72 @@
 @arith.e.break core.effect on=kids.arith.break fluent=$arith.f op=sub amount=count where.owner=who where.item=item
 
 # what the user buys in the shop world, when that world is loaded too, is a buy here
-?arith.shop kids.shop.purchase item=?i count=?n core.seq=?at
+@arith.shop kids.shop.purchase item=?i count=?n core.seq=?at
 @arith.shop.buy kids.arith.buy who=$e.user item=?i count=?n core.seq=?at
 @arith.r.shop core.rule when=$arith.shop then=$arith.shop.buy
 
 # ---- does someone have any
-?arith.q.has kids.arith.has owner=?o item=?i
-?arith.h kids.arith.holding owner=?o item=?i count=?c
+@arith.q.has kids.arith.has owner=?o item=?i
+@arith.h kids.arith.holding owner=?o item=?i count=?c
 @arith.t.some core.check fn=gt args=?c args=0
 @arith.t.none core.check fn=eq args=?c args=0
-@arith.a.has.yes kids.arith.has core.on=$arith.q.has answer=yes
-@arith.a.has.no kids.arith.has core.on=$arith.q.has answer=no
+@arith.a.has.yes kids.arith.has core.on=$arith.q.has answer=yes count=?c
+@arith.a.has.no kids.arith.has core.on=$arith.q.has answer=no count=?c
 @arith.r.has.yes core.rule when=$arith.q.has when=$arith.h if=$arith.t.some then=$arith.a.has.yes
 @arith.r.has.no core.rule when=$arith.q.has when=$arith.h if=$arith.t.none then=$arith.a.has.no
 
 # ---- whom a question is about: the two people it names, or everybody whose count is known
-?arith.s.q1 core.state who1=?w
+@arith.s.q1 core.state who1=?w
 @arith.s.p1 arith.scope of=$arith.s.q1 who=?w
 @arith.r.scope1 core.rule when=$arith.s.q1 then=$arith.s.p1
-?arith.s.q2 core.state who2=?w
+@arith.s.q2 core.state who2=?w
 @arith.s.p2 arith.scope of=$arith.s.q2 who=?w
 @arith.r.scope2 core.rule when=$arith.s.q2 then=$arith.s.p2
-?arith.s.h kids.arith.holding owner=?w item=?i count=?c
-?arith.s.qt kids.arith.total item=?i core.absent=who1
+@arith.s.h kids.arith.holding owner=?w item=?i count=?c
+@arith.s.qt kids.arith.total item=?i core.absent=who1
 @arith.s.pt arith.scope of=$arith.s.qt who=?w
 @arith.r.scope.total core.rule when=$arith.s.qt when=$arith.s.h then=$arith.s.pt
-?arith.s.ql kids.arith.leader item=?i core.absent=who1
+@arith.s.ql kids.arith.leader item=?i core.absent=who1
 @arith.s.pl arith.scope of=$arith.s.ql who=?w
 @arith.r.scope.leader core.rule when=$arith.s.ql when=$arith.s.h then=$arith.s.pl
 
 # ---- how many together, and who has the most: over the people in scope, all of them known
-?arith.o.s arith.scope of=?q
-?arith.o.k arith.scope of=?q who=?w
-?arith.o.h kids.arith.holding owner=?w item=?i count=?c
+@arith.o.s arith.scope of=?q
+@arith.o.k arith.scope of=?q who=?w
+@arith.o.h kids.arith.holding owner=?w item=?i count=?c
 @arith.c.asked core.calc out=?asked fn=count over=$arith.o.s
 @arith.c.known core.calc out=?known fn=count over=$arith.o.k over=$arith.o.h
 @arith.c.sum core.calc out=?sum fn=sum over=$arith.o.k over=$arith.o.h args=?c
 @arith.c.top core.calc out=?top fn=argmax over=$arith.o.k over=$arith.o.h args=?c pick=?w
+@arith.c.topn core.calc out=?topn fn=max over=$arith.o.k over=$arith.o.h args=?c
 @arith.t.all core.check fn=eq args=?asked args=?known
 @arith.t.any core.check fn=gt args=?asked args=0
 
-?arith.q.total kids.arith.total item=?i
+@arith.q.total kids.arith.total item=?i
 @arith.a.total kids.arith.total core.on=$arith.q.total count=?sum
 @arith.r.total core.rule when=$arith.q.total with=$arith.c.asked with=$arith.c.known with=$arith.c.sum if=$arith.t.all if=$arith.t.any then=$arith.a.total
-?arith.q.leader kids.arith.leader item=?i
-@arith.a.leader kids.arith.leader core.on=$arith.q.leader winner=?top
-@arith.r.leader core.rule when=$arith.q.leader with=$arith.c.asked with=$arith.c.known with=$arith.c.top if=$arith.t.all if=$arith.t.any then=$arith.a.leader
+@arith.q.leader kids.arith.leader item=?i
+@arith.a.leader kids.arith.leader core.on=$arith.q.leader winner=?top count=?topn
+@arith.r.leader core.rule when=$arith.q.leader with=$arith.c.asked with=$arith.c.known with=$arith.c.top with=$arith.c.topn if=$arith.t.all if=$arith.t.any then=$arith.a.leader
 
 # ---- two people compared
-?arith.h1 kids.arith.holding owner=?w1 item=?i count=?c1
-?arith.h2 kids.arith.holding owner=?w2 item=?i count=?c2
-?arith.q.gap kids.arith.gap item=?i who1=?w1 who2=?w2
+@arith.h1 kids.arith.holding owner=?w1 item=?i count=?c1
+@arith.h2 kids.arith.holding owner=?w2 item=?i count=?c2
+@arith.q.gap kids.arith.gap item=?i who1=?w1 who2=?w2
 @arith.c.gap core.calc out=?d fn=sub args=?c1 args=?c2
 @arith.c.abs core.calc out=?g fn=abs args=?d
-@arith.a.gap kids.arith.gap core.on=$arith.q.gap diff=?g
+@arith.a.gap kids.arith.gap core.on=$arith.q.gap diff=?g signed=?d
 @arith.r.gap core.rule when=$arith.q.gap when=$arith.h1 when=$arith.h2 with=$arith.c.gap with=$arith.c.abs then=$arith.a.gap
-?arith.q.more kids.arith.verdict item=?i who1=?w1 who2=?w2
+
+# who has the most, between two named people: both counts are on the answer ("3 against 4")
+@arith.q.pair kids.arith.leader item=?i who1=?w1 who2=?w2
+@arith.a.pair kids.arith.leader core.on=$arith.q.pair count1=?c1 count2=?c2
+@arith.r.pair core.rule when=$arith.q.pair when=$arith.h1 when=$arith.h2 then=$arith.a.pair
+@arith.q.more kids.arith.verdict item=?i who1=?w1 who2=?w2
 @arith.t.more core.check fn=gt args=?c1 args=?c2
 @arith.t.notmore core.check fn=lte args=?c1 args=?c2
-@arith.a.more kids.arith.verdict core.on=$arith.q.more answer=yes
-@arith.a.notmore kids.arith.verdict core.on=$arith.q.more answer=no
+@arith.a.more kids.arith.verdict core.on=$arith.q.more answer=yes count1=?c1 count2=?c2
+@arith.a.notmore kids.arith.verdict core.on=$arith.q.more answer=no count1=?c1 count2=?c2
 @arith.r.more core.rule when=$arith.q.more when=$arith.h1 when=$arith.h2 if=$arith.t.more then=$arith.a.more
 @arith.r.notmore core.rule when=$arith.q.more when=$arith.h1 when=$arith.h2 if=$arith.t.notmore then=$arith.a.notmore
 
@@ -85,50 +94,50 @@
 @arith.op.minus arith.op name=minus rank=1
 @arith.op.times arith.op name=times rank=2
 @arith.op.div arith.op name=divided_by rank=2
-?arith.st.plus arith.step op=plus a=?a b=?b
+@arith.st.plus arith.step op=plus a=?a b=?b
 @arith.c.plus core.calc out=?v fn=add args=?a args=?b
 @arith.v.plus arith.step core.on=$arith.st.plus v=?v
 @arith.r.plus core.rule when=$arith.st.plus with=$arith.c.plus then=$arith.v.plus
-?arith.st.minus arith.step op=minus a=?a b=?b
+@arith.st.minus arith.step op=minus a=?a b=?b
 @arith.c.minus core.calc out=?v fn=sub args=?a args=?b
 @arith.v.minus arith.step core.on=$arith.st.minus v=?v
 @arith.r.minus core.rule when=$arith.st.minus with=$arith.c.minus then=$arith.v.minus
-?arith.st.times arith.step op=times a=?a b=?b
+@arith.st.times arith.step op=times a=?a b=?b
 @arith.c.times core.calc out=?v fn=mul args=?a args=?b
 @arith.v.times arith.step core.on=$arith.st.times v=?v
 @arith.r.times core.rule when=$arith.st.times with=$arith.c.times then=$arith.v.times
-?arith.st.div arith.step op=divided_by a=?a b=?b
+@arith.st.div arith.step op=divided_by a=?a b=?b
 @arith.c.div core.calc out=?v fn=div args=?a args=?b
 @arith.v.div arith.step core.on=$arith.st.div v=?v
 @arith.r.div core.rule when=$arith.st.div with=$arith.c.div then=$arith.v.div
 
-?arith.q1 kids.arith.calc op=?o a=?a b=?b core.absent=op2
+@arith.q1 kids.arith.calc op=?o a=?a b=?b core.absent=op2
 @arith.q1.s arith.step of=$arith.q1 n=last op=?o a=?a b=?b
 @arith.r.one core.rule when=$arith.q1 then=$arith.q1.s
-?arith.q2 kids.arith.calc op=?o a=?a b=?b op2=?o2 c=?c
-?arith.rank1 arith.op name=?o rank=?r1
-?arith.rank2 arith.op name=?o2 rank=?r2
+@arith.q2 kids.arith.calc op=?o a=?a b=?b op2=?o2 c=?c
+@arith.rank1 arith.op name=?o rank=?r1
+@arith.rank2 arith.op name=?o2 rank=?r2
 @arith.t.left core.check fn=gte args=?r1 args=?r2
 @arith.t.right core.check fn=lt args=?r1 args=?r2
 @arith.q2.l arith.step of=$arith.q2 n=first op=?o a=?a b=?b
 @arith.r.left core.rule when=$arith.q2 when=$arith.rank1 when=$arith.rank2 if=$arith.t.left then=$arith.q2.l
 @arith.q2.r arith.step of=$arith.q2 n=first op=?o2 a=?b b=?c
 @arith.r.right core.rule when=$arith.q2 when=$arith.rank1 when=$arith.rank2 if=$arith.t.right then=$arith.q2.r
-?arith.first arith.step of=$arith.q2 n=first v=?v
+@arith.first arith.step of=$arith.q2 n=first v=?v
 @arith.q2.ll arith.step of=$arith.q2 n=last op=?o2 a=?v b=?c
 @arith.r.left2 core.rule when=$arith.q2 when=$arith.rank1 when=$arith.rank2 when=$arith.first if=$arith.t.left then=$arith.q2.ll
 @arith.q2.rr arith.step of=$arith.q2 n=last op=?o a=?a b=?v
 @arith.r.right2 core.rule when=$arith.q2 when=$arith.rank1 when=$arith.rank2 when=$arith.first if=$arith.t.right then=$arith.q2.rr
-?arith.q kids.arith.calc
-?arith.last arith.step of=$arith.q n=last v=?v
+@arith.q kids.arith.calc
+@arith.last arith.step of=$arith.q n=last v=?v
 @arith.a.calc kids.arith.calc core.on=$arith.q result=?v
 @arith.r.calc core.rule when=$arith.q when=$arith.last then=$arith.a.calc
 
-?arith.q.half kids.arith.half n=?n
+@arith.q.half kids.arith.half n=?n
 @arith.c.half core.calc out=?v fn=div args=?n args=2
 @arith.a.half kids.arith.half core.on=$arith.q.half result=?v
 @arith.r.half core.rule when=$arith.q.half with=$arith.c.half then=$arith.a.half
-?arith.q.double kids.arith.double n=?n
+@arith.q.double kids.arith.double n=?n
 @arith.c.double core.calc out=?v fn=mul args=?n args=2
 @arith.a.double kids.arith.double core.on=$arith.q.double result=?v
 @arith.r.double core.rule when=$arith.q.double with=$arith.c.double then=$arith.a.double

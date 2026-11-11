@@ -20,10 +20,11 @@ const ops = await engineWith('ops');
 test('vendor: the library is the pinned file, unmodified, and passes its own loop scan', () => {
   const notes = readFileSync(path.join(ROOT, 'src/vendor/LICENSES.md'), 'utf8');
   const file = readFileSync(path.join(ROOT, 'src/vendor/sopworld/sopworld.mjs'));
-  assert.match(notes, /a7a8e1669c8a74fba5225a28186d6d83a14d457a/, 'the commit is named');
+  assert.match(notes, /775dfe7cd468fab8e4a48fb6dd9ca83e3414c576/, 'the commit is named');
+  assert.match(notes, /build `c034e3804d4e`/, 'the build is recorded');
   assert.match(notes, new RegExp(`${file.length} bytes`), 'the size is recorded');
   assert.match(notes, new RegExp(createHash('sha256').update(file).digest('hex')), 'the sha256 of the vendored file is recorded');
-  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.4\.0 /);
+  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.6\.1 /);
   assert.equal(scan(path.join(ROOT, 'src/vendor/sopworld')).join('\n'), '', 'the library\'s own scanner finds no unguarded loop in the vendored file');
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });
@@ -47,25 +48,11 @@ test('matrix mode: three worlds opt in, the library loads without problems, the 
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-// the failures that remain, each with the library follow-up that closes it (worker-log SOPWORLD-1)
-const ARITH_FAILURES = {
-  't.arith.ell2': 'G14: "received 2" with an unknown start is reported as what was received',
-  't.arith.n24': 'G14: "received 3" with an unknown start',
-  't.kids.arith.dm102': 'G14: "received 2" with an unknown start',
-  't.arith.n17': 'the library refuses an impossible event when it is told; the old system reports it when asked',
-  't.arith.n18': 'same: an impossible event is refused when told',
-  't.arith.n19': 'same: an impossible event is refused when told',
-  't.arith.n37': 'G10: a tie is ambiguous, the matrix picks one',
-};
-
-test('parity gate (switch on): kids.shop 147/147, kids.tasks >= 231/232, kids.arith >= 207/217, every failure listed', async () => {
-  const shop = await runWorldTests(matrix, 'kids.shop');
-  assert.deepEqual(shop.failed, []); assert.equal(shop.total, 147);
-  const tasks = await runWorldTests(matrix, 'kids.tasks');
-  assert.ok(tasks.passed >= 231, `${tasks.passed}/${tasks.total}: ${JSON.stringify(tasks.failed)}`);
-  const arith = await runWorldTests(matrix, 'kids.arith');
-  assert.ok(arith.passed >= 207, `${arith.passed}/${arith.total}`);
-  assert.deepEqual(arith.failed.map((f) => f.id).sort(), Object.keys(ARITH_FAILURES).sort(), 'the failures are exactly the listed ones');
+test('parity gate (switch on): kids.shop 147/147, kids.tasks 232/232, kids.arith 217/217', async () => {
+  for (const [id, n] of [['kids.shop', 147], ['kids.tasks', 232], ['kids.arith', 217]]) {
+    const r = await runWorldTests(matrix, id);
+    assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
+  }
 });
 
 test('parity: the other worlds that read these three (charts, documents) are unchanged with the switch on', async () => {
@@ -153,10 +140,96 @@ test('forks: a dry run or a snapshot of a session never changes the original Wor
   assert.equal(q(f.isession), '15');
 });
 
-test('a statement the library refuses is recorded and the world stays as it was', async () => {
-  const { s } = await say(matrix, ['Tom has 2 apples', 'Tom gives away 5 apples']);
-  assert.ok(s.isession.rs.refused.length >= 1, JSON.stringify(s.isession.rs.refused));
-  assert.equal(s.isession.rs.world.query({ type: 'kids.arith.holding', seek: 'count', where: { owner: '$e.tom', item: 'apple' } }).value, '2');
+test('an impossible statement is kept and flagged by the library (a soft constraint), and the answer says why', async () => {
+  const { s, out } = await say(matrix, ['Tom has 2 apples', 'Tom gives away 5 apples', 'How many apples does Tom have?']);
+  const rs = s.isession.rs;
+  assert.equal(rs.refused.length, 0, 'nothing is refused: the statement stays, somebody said it');
+  assert.equal(rs.world.ofType('core.issue').length, 1, 'and it stands as an issue of the world');
+  assert.match(out[2], /does not add up. Tom only had 2 apples, so Tom cannot \w+( away)? 5/);
+});
+
+// the state of the three worlds is derived from the library (toState), so the dialogue layer's snapshots cannot hold something the library does not
+const derived = (s) => {
+  const rs = s.isession.rs;
+  const states = {};
+  for (const [id, toState] of rs.reasoner.stateOf) states[id] = toState({ find: (t) => rs.world.ofType(t), query: (q) => rs.world.query(q) });
+  return states;
+};
+const sameAsLibrary = (s, ids) => {
+  const d = derived(s);
+  for (const id of ids) {
+    if (s.isession.state[id] === undefined) assert.equal(JSON.stringify(d[id]), s.isession.rs.reasoner.emptyState(id), `${id}: a world nobody used has no state and the library has nothing of it`);
+    else assert.deepEqual(s.isession.state[id], d[id], `${id}: the session state is what the library says`);
+  }
+};
+
+test('one undo: "that\'s wrong" + "yes" rewinds the library, and the state and the memory follow (shop, arith and tasks)', async () => {
+  const shop = await say(matrix, ['I have 20 lei', 'I buy a ball', 'three of them', 'how much money do I have?', "that's wrong", 'yes', 'how much money do I have?']);
+  assert.match(shop.out[3], /5 lei/);
+  assert.match(shop.out[4], /Shall I undo it/);
+  assert.match(shop.out[5], /undid it/);
+  assert.match(shop.out[6], /15 lei/, 'the library has the purchase back at one ball');
+  assert.equal(shop.s.isession.state['kids.shop'].money, 15);
+  assert.deepEqual(shop.s.isession.state['kids.shop'].purchases.map((p) => p.count), [1]);
+  sameAsLibrary(shop.s, ['kids.shop', 'kids.arith', 'kids.tasks']);
+
+  // kids.arith has no request that changes the world, so its statements are taken back with "undo that" (next test)
+
+  const tasks = await say(matrix, ['add milk to my shopping list', 'add eggs to my shopping list', "that's wrong", 'yes', 'what is on my shopping list?']);
+  assert.match(tasks.out[4], /milk/);
+  assert.doesNotMatch(tasks.out[4], /eggs/);
+  assert.equal(tasks.s.isession.state['kids.tasks'].lists.shopping.length, 1);
+  sameAsLibrary(tasks.s, ['kids.shop', 'kids.arith', 'kids.tasks']);
+});
+
+test('one undo: a statement of kids.arith is taken back with "undo that": library, state and memory agree', async () => {
+  const arith = await say(matrix, ['Tom has 3 apples', 'Ana has 2 apples', 'Tom gives 2 apples to Ana', 'How many apples does Ana have?', 'undo that', 'How many apples does Ana have?', 'How many apples does Tom have?']);
+  assert.match(arith.out[3], /Ana has 4 apples/);
+  assert.match(arith.out[4], /took that back/);
+  assert.match(arith.out[5], /Ana has 2 apples/);
+  assert.match(arith.out[6], /Tom has 3 apples/);
+  assert.deepEqual(arith.s.isession.state['kids.arith'].holdings, { 'e.tom': { apple: 3 }, 'e.ana': { apple: 2 } });
+  assert.equal(arith.s.isession.memory.find('kids.arith.give').length, 0);
+  sameAsLibrary(arith.s, ['kids.shop', 'kids.arith', 'kids.tasks']);
+});
+
+test('one undo: "undo that" and the undo of the dialogue layer are the same rewind; a repair that gives up puts the library back', async () => {
+  const a = await say(matrix, ['I have 20 lei', 'I buy a ball', 'undo that', 'how much money do I have?']);
+  assert.match(a.out[2], /took that back/);
+  assert.match(a.out[3], /20 lei/);
+  sameAsLibrary(a.s, ['kids.shop']);
+  assert.equal(a.s.isession.rs.canUndo(a.s._msg), true, 'the money statement can still be taken back');
+  const b = await say(matrix, ['I have 20 lei', 'I buy a ball', 'three of them', 'undo that', 'how much money do I have?', 'undo that', 'how much money do I have?']);
+  assert.match(b.out[4], /15 lei/, 'undo takes back the revision only');
+  assert.match(b.out[6], /20 lei|know/, 'and the next one the purchase');
+  sameAsLibrary(b.s, ['kids.shop']);
+  // the function a rewind returns puts everything back: the library, the state and the session memory
+  const c = await say(matrix, ['I have 20 lei', 'I buy a ball']);
+  const rs = c.s.isession.rs, bal = () => rs.world.query({ type: 'kids.shop.balance', seek: 'amount' }).value;
+  const redo = rs.rewind(rs.turns.at(-1).mark, c.s.isession);
+  assert.equal(bal(), '20'); assert.equal(c.s.isession.memory.find('kids.shop.purchase').length, 0);
+  redo();
+  assert.equal(bal(), '15'); assert.equal(c.s.isession.memory.find('kids.shop.purchase').length, 1);
+  sameAsLibrary(c.s, ['kids.shop']);
+});
+
+test('the switch does not touch a world without reasoner=matrix: the same messages give the same replies, statuses and state under both settings', async () => {
+  const run = async (e) => {
+    const s = e.createSession({ language: 'en' });
+    s.setWorldState('ui.shell', { activeTab: 'guess' });
+    const rows = [];
+    for (const m of ['I am thinking of an animal', 'Sigur, bine.', 'yes', 'is it big?', 'what is the answer to life']) {
+      const before = JSON.stringify(Object.fromEntries(Object.entries(s.state()).filter(([k]) => !['ui.help'].includes(k))));
+      const r = await s.send(m, m === 'Sigur, bine.' ? { language: 'auto' } : {});
+      const after = JSON.stringify(Object.fromEntries(Object.entries(s.state()).filter(([k]) => !['ui.help'].includes(k))));
+      rows.push({ m, text: r.text, statuses: r.statuses, changed: before !== after, guess: s.state()['games.guess'] });
+    }
+    return rows;
+  };
+  const off = await run(ops), on = await run(matrix);
+  assert.deepEqual(on, off);
+  // the case that once differed (games.guess#030.ro): a world that is not a matrix world must be read and answered alike; the lazily created state of the world that read the sentence counts as a change in both
+  assert.equal(on[1].changed, true);
 });
 
 test('the setting is part of the webchat defaults and an unknown saved value is ops', async () => {

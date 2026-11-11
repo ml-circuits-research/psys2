@@ -71,7 +71,7 @@ export class Session {
     return s;
   }
   /** Add wires (full keys) to working memory. */
-  add(wires) { for (const w of wires) this.memory.add(w); this.rs?.tell(wires); }
+  add(wires) { for (const w of wires) this.memory.add(w); this.rs?.tell(wires, this); }
   nextAnswerId() { return 'a' + (++this._answers); }
 }
 
@@ -135,7 +135,7 @@ export class Interpreter {
   _resolveQuestion(session, wire) {
     const spec = this._questionSpec(wire);
     const st = { depth: 0, visited: 0, ops: [] };
-    const envelope = (session.rs?.owns(wire) ? session.rs.resolve(wire) : null) ?? this._ask(session, spec, st);
+    const envelope = (session.rs?.owns(wire) ? session.rs.resolve(wire, session) : null) ?? this._ask(session, spec, st);
     const answer = this._writeAnswer(session, wire, envelope, spec);
     return { kind: 'question', wire, spec, envelope, answer, ops: st.ops, status: envelope.status };
   }
@@ -451,7 +451,7 @@ export class Interpreter {
     const st = { depth: 0, visited: 0, ops: [] };
     const op = this.set.list().flatMap((w) => w.operations).find((o) => o.semantics === 'action' && (o.id === action || o.action === action));
     const spec = { wire, action, args, where: {}, mode: 'value' };
-    let envelope = session.rs?.owns(wire) ? session.rs.resolve(wire) : null;
+    let envelope = session.rs?.owns(wire) ? session.rs.resolve(wire, session) : null;
     if (envelope) session.rs.syncTo(session);   // answered by the library (spec 15); what its actions wrote is copied to the session memory
     else if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
     else envelope = this._runOp(session, op, spec, {}, st, { ...args, request: wire });

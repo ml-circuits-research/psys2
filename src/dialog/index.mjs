@@ -1058,6 +1058,7 @@ export class DialogSession {
     if (selfCorrections.corrections.length) english = selfCorrections.text;
 
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
+    this.isession.rs?.beginTurn(this._msg);   // the library as it is now is what this turn can be taken back to (spec 15)
     this.isession.effects = [];
     const disc = this.discourse;
     const tabBefore = this.isession.state['ui.shell']?.activeTab;
@@ -1239,7 +1240,7 @@ export class DialogSession {
     }
     if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
     if (!disc.pending) disc.openConfirm(englishReply, this._msg);
-    this.isession.rs?.commitTurn(this._msg, english);   // what the turn told the library: what "undo that" takes back (spec 15)
+    this.isession.rs?.commitTurn(this._msg);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };

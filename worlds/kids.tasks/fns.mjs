@@ -41,9 +41,9 @@ function addTo(ctx, list, item) {
 }
 
 export const fns = {
-  'tasks.add': (ctx, { item, list }) => addTo(ctx, listName(list), item),
-  'tasks.remind': (ctx, { item }) => addTo(ctx, 'reminders', item),
-  'tasks.remove'(ctx, { item, list }) {
+  add: (ctx, { item, list }) => addTo(ctx, listName(list), item),
+  remind: (ctx, { item }) => addTo(ctx, 'reminders', item),
+  remove(ctx, { item, list }) {
     const name = list === undefined ? undefined : listName(list);
     const removed = [], absent = [];
     let where = name;
@@ -57,7 +57,7 @@ export const fns = {
     }
     return removed.length ? { value: where, values: removed, ...(absent.length ? { note: `${cap(joinAnd(absent))} ${were(absent, 'were', 'was')} not on the list.` } : {}) } : missing(name);
   },
-  'tasks.done'(ctx, { item, list }) {
+  done(ctx, { item, list }) {
     const name = list === undefined ? undefined : listName(list);
     let found = named(entries(ctx, name), clean(item));
     if (!clean(item) || !found.length) return missing(name);
@@ -67,48 +67,48 @@ export const fns = {
     ctx.fill(found[0].id, 'progress', 'done');
     return { value: found[0].list, values: [found[0].text] };
   },
-  'tasks.check'(ctx, { item }) {
+  check(ctx, { item }) {
     const found = named(entries(ctx), clean(item));
     const done = found.find((e) => e.done);
     if (!found.length) return missing();
     return done ? { value: done.list, values: [done.text] } : { ...missing(found[0].list), values: [found[0].text] };
   },
-  'tasks.has'(ctx, { item, list }) {
+  has(ctx, { item, list }) {
     const [hit] = named(entries(ctx, listName(list)), clean(item));
     return hit ? { value: hit.list, values: [hit.text], ...(hit.done ? { note: 'It is already done.' } : {}) } : missing(listName(list));
   },
-  'tasks.show'(ctx, { list }) {
+  show(ctx, { list }) {
     const name = listName(list), items = entries(ctx, name);
     if (!items.length) return missing(name);
     const todo = items.filter((e) => !e.done).map((e) => e.text), done = items.filter((e) => e.done).map((e) => e.text);
     return { value: name, ...(todo.length ? { values: todo } : {}), ...(done.length ? { note: todo.length ? `Done: ${joinAnd(done)}.` : `Everything on your ${name} list is done. Well done!` } : {}) };
   },
-  'tasks.pending'(ctx, { list }) {
+  pending(ctx, { list }) {
     const name = listName(list), items = entries(ctx, name);
     if (!items.length) return missing(name);
     const todo = items.filter((e) => !e.done).map((e) => e.text);
     return todo.length ? { value: name, values: todo } : { value: name, note: `Everything on your ${name} list is done. Well done!` };
   },
-  'tasks.count'(ctx, { list }) {
+  count(ctx, { list }) {
     const items = entries(ctx, listName(list)), done = items.filter((e) => e.done).length;
     return items.length ? { value: items.length, unit: THING, ...(done ? { note: `${done} ${done === 1 ? 'is' : 'are'} done.` } : {}) } : { ...missing(0), unit: THING };
   },
-  'tasks.countPending'(ctx, { list }) {
+  countPending(ctx, { list }) {
     const name = listName(list), items = entries(ctx, name);
     if (!items.length) return { ...missing(0), unit: THING };
     const todo = items.filter((e) => !e.done).length;
     return { value: todo, unit: THING, ...(todo ? {} : { note: `Nothing is left on your ${name} list. Well done!` }) };
   },
-  'tasks.clear'(ctx, { list }) {
+  clear(ctx, { list }) {
     const name = listName(list), items = entries(ctx, name);
     for (const e of items) ctx.retract(e.id);
     return items.length ? { value: items.length, unit: THING } : { note: `Your ${name} list is already empty.` };
   },
-  'tasks.lists'(ctx) {
+  lists(ctx) {
     const names = [...new Set(entries(ctx).map((e) => e.list))];
     return names.length ? { values: names.map((n) => `${n} (${entries(ctx, n).length})`) } : missing();
   },
-  'tasks.notDone': (ctx, { item } = {}) => {
+  notDone: (ctx, { item } = {}) => {
     const what = clean(item);
     return { note: what ? `Okay, I did not tick off ${what}. Nothing changed on your lists. Tell me when you have done it.` : 'Okay, nothing changed on your lists.' };
   },
