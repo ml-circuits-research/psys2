@@ -328,3 +328,10 @@ Everything is behind `reasoner=matrix`; the default (`ops`) is unchanged (`npm t
 
 ## SESSION END (2026-11-10, evening)
 Stopped by the user: the demo on GitHub Pages is in order. Landed today after NX integration: GAPS-1/1b, RP5c, ELLIPSIS, NX3b (A3b not published), URGENT-FREEZE hardening, COMPUTE-BUDGET A-F (engine worker + watchdog, step budgets, loop guard, freeze cause: empty-match regex loop after on-device translation), LANG-FIXED, SOPWORLD-1 stage 1 (behind a setting), BUDGET-HEARTBEAT, full budget scenarios in the gate. Open: SOPWORLD-1 item 10 (one SOP Lang v1.1), waiting for sopworld 0.5.0; continues in the next days.
+
+## 2026-11-11 — session resumed: SOPWORLD-1b started
+
+- Library main is now 0.6.1 (`775dfe7`, build c034e3804d4e), which includes the one-language syntax (L1), so item 10 (SOP Lang v1.1) is unblocked.
+- Agent A: re-vendor at `775dfe7`, migrate the three matrices, remove workarounds, one undo (item 3), the `games.guess#030.ro` switch difference (item 7).
+- Agent B: coherence sentences the formalizer does not read, explain / refusals / ties / unknown start in `ops` (item 2), and the "treci pe engleză" switch variants.
+- Next, after A lands: certainty in replies (item 4), games.tictactoe in matrix mode (item 5), and the eval-reasoner rerun (item 6).
