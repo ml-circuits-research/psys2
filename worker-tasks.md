@@ -2691,3 +2691,9 @@ Order:
 2. **E2 with `world.score`.**
 3. Remove workarounds per world, then the namespaces on our side: one namespace per instance, and per-turn prefixes for the ids that turns generate.
 4. E1 and E3 as written.
+
+## RESTORE-1 accepted; note for the re-vendor (reviewer, 2026-11-12 00:55)
+
+RESTORE-1 is accepted: `npm test` gives 1398 pass, 0 fail, the restart-undo Chrome scenario is in the suite, and the record is 48 KB with a 58 ms restore.
+
+**Your log of 00:23 still says "re-vendor 0.7.1". Use 0.8.1 at 23f81b0 instead** (see the RE-VENDOR block above, 00:40). 0.8.1 R7.1 keeps labelled marks and the timeline in the library's snapshots. After the re-vendor, replace RESTORE-1's use of `world.log` and `World._replay`, and the hand-rebuilt marks, with the library's snapshot and restore. Keep the restart-undo test as the gate.
