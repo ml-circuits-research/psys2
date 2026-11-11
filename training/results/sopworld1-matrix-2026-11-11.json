@@ -1368,12 +1368,12 @@
  },
  "ms_per_turn": {
   "three": {
-   "p50": 17.6,
-   "p95": 82.2,
+   "p50": 17.3,
+   "p95": 78.1,
    "n": 910
   },
   "all": {
-   "p50": 12.6,
+   "p50": 12.5,
    "p95": 67.2,
    "n": 9115
   }
@@ -7409,7 +7409,7 @@
   "kinds": {},
   "examples": [],
   "dropped_by_library": 0,
-  "ms": 71,
+  "ms": 59,
   "violation_rate_pct": 0
  },
  "assumptions": {
@@ -7438,12 +7438,12 @@
     "gzip": 77251
    },
    "host_layer": {
-    "raw": 27590,
-    "gzip": 9072
+    "raw": 31848,
+    "gzip": 10117
    },
    "worlds_index": {
-    "raw": 4836251,
-    "gzip": 689816
+    "raw": 4838538,
+    "gzip": 690287
    }
   },
   "lines": {
@@ -7462,6 +7462,6 @@
   },
   "host_layer_lines": 460
  },
- "elapsed_s": 155,
+ "elapsed_s": 152,
  "refused_by_library": "see session.rs.refused (statements the library dropped, listed in the log)"
 }

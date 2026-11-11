@@ -1269,10 +1269,10 @@ Written by `node scripts/eval-reasoner.mjs --reasoner ops|matrix` (rules formali
 | (c) kind assumption-visible | 4/6 | 6/6 |
 | (c) kind deduce | 2/3 | 2/3 |
 | (d) answers that relied on a default or a guess / said so | 0 / 0 (of 53 answers) | 3 / 2 (of 51 answers) |
-| (e) ms per turn, three worlds p50 / p95 | 13.1 / 81.2 | 17.6 / 82.2 |
-| (e) ms per turn, everything p50 / p95 | 11 / 67 | 12.6 / 67.2 |
+| (e) ms per turn, three worlds p50 / p95 | 13.9 / 79.8 | 17.3 / 78.1 |
+| (e) ms per turn, everything p50 / p95 | 11 / 66.5 | 12.5 / 67.2 |
 | (e) lines of world code (three worlds: ops.mjs / matrix + fns + extras) | shop 200/268, arith 297/253, tasks 206/158 | shop 200/268, arith 297/253, tasks 206/158 |
-| (e) bytes added to the webchat: library raw / gzip, host layer raw | 271470 / 77251, 27590 | 271470 / 77251, 27590 |
+| (e) bytes added to the webchat: library raw / gzip, host layer raw | 271470 / 77251, 31848 | 271470 / 77251, 31848 |
 
 The audit tells the fact wires of the session (and its agents), in dialogue order, to a fresh library World and counts the wires it refuses (a deny, a conflict, a broken bound, a reference to an agent that is not there) and a refused balance. `ops`: every wire the operations replay. `matrix`: the wires the library holds; the ones it refused when told are not in its World and are counted apart (`audit.dropped_by_library` in the JSON, the largest number in one session). A purchase the library accepted that leaves the money negative is a violation of both columns: the matrix only says so when asked.
 

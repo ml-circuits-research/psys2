@@ -1,0 +1,30 @@
+{
+  "operational:kids.common#029": [
+    "neutral wording",
+    "kids.common is not a matrix world; 'how are you' has several phrasings and the two engines picked different ones"
+  ],
+  "operational-ro:kids.common#029.ro": [
+    "neutral wording",
+    "same as the English case: another phrasing of the same greeting"
+  ],
+  "operational-ro:kids.common#029.roc": [
+    "neutral wording",
+    "same as the English case: another phrasing of the same greeting"
+  ],
+  "dialogues:dlg.kidsB#016": [
+    "ops better",
+    "'what did you do?' in ops also says what the answer rested on (A puzzle costs 11 lei); matrix says only what was answered"
+  ],
+  "dialogues:dlg.kidsA#010": [
+    "neutral wording",
+    "identical replies; the label differs only because matrix mirrors the library's fact (Zoe 6 marbles) into the state view while the reply says it did not understand the question"
+  ],
+  "coherence:coh.shop.12": [
+    "ops better",
+    "both pass; ops answers 'I buy the ball' with 'you bought 1 ball', matrix with a bare 'OK.' (it says 'I assumed 1 ball.' only at the next answer, which this case does not reach)"
+  ],
+  "gold:real#rp3-18": [
+    "neutral wording",
+    "random choice of a song (\"play a random song\"); the two modes drew different songs"
+  ]
+}
