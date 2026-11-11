@@ -21,8 +21,9 @@
  *             and the clock keeps its hour, "undo that" says it in the world's words.
  *   animals   matrix (stage 2): a taught fact is answered from the library and "undo that" forgets it in the world's words.
  *   profile   matrix (stage 2): two facts that cannot both be right are refused with the reason (and the tab keeps the first), "undo that" says what was forgotten.
+ *   romanian  matrix (RO-MATRIX): a Romanian session: undo quotes the user's own words, a bare yes, a refusal, the shop tab name and the profile answer in Romanian.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -274,6 +275,26 @@ export const SCENARIOS = {
       const u = await say(c, 'undo that');
       check('profile: "undo that" says what was forgotten', /^OK, I forgot your current role \(teacher\)/.test(u), u.slice(0, 120));
       check('profile: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  async romanian(o) {
+    // RO-MATRIX: a Romanian session on the matrix answers in Romanian, also what the dialogue layer writes itself, and quotes the user's own words
+    const c = await openChat({ ...o, settings: { ...MATRIX, language: 'ro' } });
+    try {
+      await say(c, 'am 20 de lei'); await say(c, 'cumpăr o minge');
+      const u = await say(c, 'anulează');
+      check('romanian: undo says what it took back in Romanian, with the user\'s own words', /^Am anulat: .cumpăr o minge.\.$/.test(u), u);
+      const n = await say(c, 'da');
+      check('romanian: a bare "da" is answered in Romanian', /^Da, la ce\?/.test(n), n.slice(0, 60));
+      const t = await say(c, 'e ora 25');
+      check('romanian: a refusal comes with its reason in Romanian', /^Nu se potrivește\. .*25/.test(t), t);
+      const s = await say(c, 'deschide magazinul');
+      check('romanian: "deschide magazinul" is understood', /cumpărături/.test(s), s.slice(0, 80));
+      const a = await say(c, 'am 8 ani'); const b = await say(c, 'câți ani am?');
+      check('romanian: the profile age is noted and read back in Romanian', /^8 ani, notat/.test(a) && /^Ai 8 ani\./.test(b), `${a} | ${b}`);
+      const w = await say(c, 'de ce?');
+      check('romanian: "de ce?" quotes the user\'s own words', /"câți ani am"/.test(w) && !/[A-Z][a-z]+ [a-z]+ [a-z]+ [a-z]+ (the|you|your)\b/.test(w), w.slice(0, 120));
+      check('romanian: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 };

@@ -1,0 +1,48 @@
+[
+  { "id": "undo-own-words", "doc": "RO-MATRIX 1: undo quotes the user's own words, in Romanian; nothing left to undo says so",
+    "turns": [
+      ["am 20 de lei", "20 de lei"],
+      ["cumpăr o minge", "minge"],
+      ["anulează", "^Am anulat: \"cumpăr o minge\"\\.$"],
+      ["anulează", "^Am anulat: \"am 20 de lei\"\\.$"],
+      ["anulează", "^Nu am ce anula\\.$"]
+    ] },
+  { "id": "why-own-words", "doc": "why / what did you do: the told fact is quoted as the user typed it",
+    "turns": [
+      ["am 20 de lei", "20 de lei"],
+      ["de ce?", "Ai avut 20 de lei, deci au rămas 20 de lei\\..*\"am 20 de lei\""]
+    ] },
+  { "id": "bare-yes-no", "doc": "RO-MATRIX 2a: a bare yes or no that answers nothing",
+    "turns": [
+      ["da", "^Da, la ce\\? "],
+      ["nu", "^Nu, la ce\\? "]
+    ] },
+  { "id": "refusal-clock", "doc": "RO-MATRIX 1: a refusal with its reason in Romanian (kids.time)",
+    "turns": [
+      ["e ora 25", "^Nu se potrivește\\. .*25"]
+    ] },
+  { "id": "open-tabs", "doc": "RO-MATRIX 2d: Romanian names of the shop and the guess game",
+    "turns": [
+      ["deschide magazinul", "Lista ta de cumpărături"],
+      ["deschide jocul de ghicit", "Ghicește animalul"],
+      ["deschide spânzurătoarea", "Spânzurătoarea"]
+    ] },
+  { "id": "profile-ro", "doc": "RO-MATRIX 2 / stage 2 finding 4: the profile in Romanian",
+    "turns": [
+      ["am 8 ani", "^8 ani, notat\\.$"],
+      ["mă numesc Ana", "Ana"],
+      ["câți ani am?", "^Ai 8 ani\\.$"],
+      ["cum mă numesc?", "Ana"],
+      ["am 300 de ani", "^Nu se potrivește\\. Nimeni nu are 300 de ani\\."]
+    ] },
+  { "id": "game-why", "doc": "RO-MATRIX 3: inside a running game why? is about the game's last question",
+    "turns": [
+      ["am 20 de lei", "20 de lei"],
+      ["începe jocul de ghicit", "Întrebarea 1"],
+      ["de ce?", "^Am întrebat \"[^\"]+\" pentru că împarte cele \\d+ (de )?animale"]
+    ] },
+  { "id": "profile-deny-age", "doc": "stage 2 finding 2: an impossible age is refused with the reason",
+    "turns": [
+      ["am 300 de ani", "Nimeni nu are 300 de ani"]
+    ] }
+]

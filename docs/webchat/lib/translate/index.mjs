@@ -9,8 +9,8 @@
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs?v=136a228c61';
 import { analyze, placeOf } from './morphology.ro.mjs?v=c18835e9d6';
-import { translateRoEn } from './ro-en.mjs?v=6dacbb2951';
-import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs?v=f44fb2c07f';
+import { translateRoEn } from './ro-en.mjs?v=1a5ae90346';
+import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs?v=a8d1a44e3e';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
 // Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;

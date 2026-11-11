@@ -5,7 +5,7 @@
 // from the knowledge base; its presence also says that the profile was used). The library is the record: `toState` derives the state
 // from the wires, `adopt` says which wires to retract and tell for a state the operations changed (the inverse), so undo, the rules of matrix.sop (an age that
 // cannot be, an experience longer than a life) and the sources read what was said. Browser-safe; it imports its sibling files.
-import { initialState, derive } from './ops.mjs?v=be2d325158';
+import { initialState, derive } from './ops.mjs?v=44747acdf3';
 
 const list = (v) => (Array.isArray(v) ? v : v === undefined || v === null || v === '' ? [] : [v]);
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
