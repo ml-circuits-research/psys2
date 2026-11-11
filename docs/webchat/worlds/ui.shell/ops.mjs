@@ -8,20 +8,20 @@
 // Cross-world request used by the other tool worlds to bring their tab forward:
 //   ctx.request('ui.openTab', { tab: 'editor' })
 
-const TABS = {
+export const TABS = {
   robot: { title: 'Avatar', world: 'ui.avatar' },
   editor: { title: 'Editor', world: 'docs.editor' },
   tictactoe: { title: 'Tic-tac-toe', world: 'games.tictactoe' },
   guess: { title: 'Guess the animal', world: 'games.guess' },
   hangman: { title: 'Hangman', world: 'games.hangman' },
 };
-const TAB_OF_WORD = {
+export const TAB_OF_WORD = {
   robot: 'robot', face: 'robot', avatar: 'robot', editor: 'editor', document: 'editor', doc: 'editor',
   tic_tac_toe: 'tictactoe', tictactoe: 'tictactoe', noughts_and_cross: 'tictactoe',
   guess: 'guess', guess_the_animal: 'guess', guessing_game: 'guess', twenty_question: 'guess', animal_game: 'guess',
   hangman: 'hangman',
 };
-const GAME_ACTIONS = {
+export const GAME_ACTIONS = {
   new: { tictactoe: 'ttt.new', guess: 'guess.start', hangman: 'hm.new' },
   giveUp: { tictactoe: 'ttt.giveup', guess: 'guess.giveup', hangman: 'hm.giveup' },
   hint: { tictactoe: 'ttt.hint', guess: 'guess.hint', hangman: 'hm.hint' },
@@ -30,8 +30,8 @@ const GAME_ACTIONS = {
  * Tabs declared by other worlds in their manifests (spec 07 §6: tab, tabTitle, tabAlias, tabNew, tabHint, tabGiveUp)
  * are merged into the tables above, so a new tool world gets voice navigation without editing this world.
  */
-const norm = (w) => String(w ?? '').toLowerCase().trim().replace(/^(the|a|an|my|your)\s+/, '').replace(/[\s-]+/g, '_');
-function refresh(ctx) {
+export const norm = (w) => String(w ?? '').toLowerCase().trim().replace(/^(the|a|an|my|your)\s+/, '').replace(/[\s-]+/g, '_');
+export function refresh(ctx) {
   for (const w of ctx.worlds?.() ?? []) {
     const t = w.tab;
     if (!t?.id) continue;
@@ -136,8 +136,9 @@ export function rate(ctx, { dir, value }) {
   return ok(`OK, my speech rate is ${word} ${next}.`.replace('is set to', 'is now').replace(/: (\d)/, ' now, $1').replace(/ now, /, ': '));
 }
 
+export const LANG_OF = { english: 'en', romanian: 'ro', en: 'en', ro: 'ro' };
 export function language(ctx, { lang }) {
-  const code = { english: 'en', romanian: 'ro', en: 'en', ro: 'ro' }[lang];
+  const code = LANG_OF[lang];
   if (!code) return no('unsupported', `I do not speak ${lang} yet.`);
   ctx.state.language = code;
   return ok(code === 'ro' ? 'OK, I switched to Romanian.' : 'OK, I switched to English.');
@@ -165,11 +166,11 @@ export function phraseLog(ctx, { what }) {
 }
 
 /** Settings modal commands (SET); the host owns the modal and carries out the effect settings { action: open | close, tab }. */
-const SETTINGS_TABS = {
+export const SETTINGS_TABS = {
   understanding: 'understanding', formalizer: 'understanding', language: 'language', translation: 'language', voice: 'voice', speech: 'voice', audio: 'voice', sound: 'voice',
   phrase_log: 'phrases', phrases: 'phrases', models: 'models', model: 'models', developer: 'developer', dev: 'developer', about: 'about', licence: 'about', license: 'about',
 };
-const SETTINGS_TITLES = { understanding: 'Understanding', language: 'Language', voice: 'Voice', phrases: 'Phrase log', models: 'Models', developer: 'Developer', about: 'About' };
+export const SETTINGS_TITLES = { understanding: 'Understanding', language: 'Language', voice: 'Voice', phrases: 'Phrase log', models: 'Models', developer: 'Developer', about: 'About' };
 export function settings(ctx, { what, tab }) {
   if (what === 'close') { ctx.effect('settings', { action: 'close' }); return ok('OK, the settings are closed.'); }
   const id = tab === undefined ? null : SETTINGS_TABS[norm(tab)];

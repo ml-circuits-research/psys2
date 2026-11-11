@@ -65,6 +65,8 @@ export class World {
   get undoAction() { return txt(this.manifest ?? { entries: [] }, 'undo') ?? null; }
   /** The action that takes an undo back (`redo=<action>` in world.sop; with `undo=`): the host layer re-applies what the last undo took out, or null. */
   get redoAction() { return txt(this.manifest ?? { entries: [] }, 'redo') ?? null; }
+  /** A world whose state follows the other worlds (the shell's tab: an editor brings its tab forward): what another world's request changed in it is not a step of the turn, so undoing that turn leaves it alone (`passive=true`). Only a turn of its own undoes its changes. */
+  get passive() { return txt(this.manifest ?? { entries: [] }, 'passive') === 'true'; }
   /** Wire types the world's operations emit that only the session memory keeps (`untold=<type>`, repeatable): the library does not hold them (facts the engine reads from its own state: the sentences of a document). */
   get untold() { return getAll(this.manifest ?? { entries: [] }, 'untold').map((v) => v.v); }
   /** Wire types the world's matrix actions write and other worlds read from the session memory (`mirror=<type>`, repeatable): the host layer copies them there. */
