@@ -1,0 +1,15 @@
+@pat.games.chess.m.why core.pattern
+    match="[$lang.lead.filler|pls|hey]? why [$lang.why.did] you [$lang.why.act] [$lang.why.there]"
+    emit="@{_} core.request action=chess.why"
+    kind=request
+    priority=14
+    example="Why did you play that?"
+    canonical="Why did you play that?"
+    example="Why did you move that piece?"
+
+@pat.games.chess.m.why.short core.pattern
+    match="[$lang.lead.filler|pls|hey]? why [$lang.why.place]"
+    emit="@{_} core.request action=chess.why"
+    kind=request
+    priority=14
+    example="Why that move?"

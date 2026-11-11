@@ -93,7 +93,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const bases = new Map();
   const buildBase = (id) => {
     const fns = {};   // the world's action functions (the library keeps them apart from its own arithmetic)
-    for (const m of matrixWorlds(id)) for (const [name, f] of Object.entries(byId.get(m).fns ?? {})) fns[name] = (c, args) => f({ ...c, host }, args);
+    for (const m of matrixWorlds(id)) for (const [name, f] of Object.entries(byId.get(m).fns ?? {})) fns[name] = (c, args) => f({ ...c, host, live: reasoner.live }, args);
     const base = new lib.World({ actions: fns, vocabulary: { status: 'core.status' } });
     const load = (what, text) => { if (text == null) return; const r = base.load(text); if (!r.ok) problems.push(`${what}: ${r.violations?.[0]?.kind ?? 'refused'} ${r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? ''}`.trim()); };
     const ordered = schemaWorlds(id).map((x) => set.get(x));
@@ -552,11 +552,16 @@ export class ReasonerSession {
     const isQuestion = this.reasoner.legends.isA(wire.type, 'core.question');
     const limit = this._limit();
     let r;
+    const stamp0 = inst.world.stamp;
+    this.reasoner.live = this.live ?? null;   // what the host offers an action while it runs: `request(action, args)` to ask another world (the active tab), `batch`
     try { r = isQuestion ? inst.world.query(lw, { budget: limit }) : inst.world.act(lw, { budget: limit }); }
     catch (e) { return { status: 'error', note: `the reasoner failed: ${e?.message ?? e}`, via: 'core.matrix' }; }
+    finally { this.reasoner.live = null; }
     this._charge(inst.world);
+    if (!isQuestion && this.cur?.owners && inst.world.stamp !== stamp0 && this.reasoner.adoptOf.has(ownerId)) this.cur.owners.add(ownerId);   // an action of a world that takes its state over (`adopt`) changed its wires: a generic "undo that" is said in that world's words
     this.last = { wire: wire.id, result: r, inst };
     if (r.status === 'unsupported' && !r.reason) return null;   // the library does not know this question (a calculation that cannot be done has a reason)
+    if (!isQuestion && r.status === 'done' && r.result?.decline === true) return null;   // an action that hands the request back to the world's operations (it changed nothing)
     const env = isQuestion ? this._questionEnvelope(r, lw, inst) : this._actionEnvelope(r, wire.entries.find((e) => e.key === 'core.request.action')?.value?.v);
     const answered = this._voice(wire, env, r, isQuestion, inst);
     if (isQuestion && r.status === 'supported' && !answered.from && r.supposed) this._restsLater(answered, r.supposed, inst);

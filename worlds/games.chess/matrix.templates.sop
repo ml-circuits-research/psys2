@@ -1,0 +1,8 @@
+@tpl.games.chess.m.why core.template
+    for=action.chess.why
+    text="{value}"
+
+@tpl.games.chess.m.why.missing core.template
+    for=action.chess.why
+    status=missing
+    text="I have not played yet."

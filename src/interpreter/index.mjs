@@ -340,8 +340,9 @@ export class Interpreter {
         if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
         const target = this._actionOp(action);
         if (!target) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
+        if (session.rs) session.rs.live = { request: (a, args2) => this.runAction(session, a, args2), batch: session.batch ?? null };
         const viaLibrary = session.rs?.request(action, args, session);   // an action the matrix reasoner answers (spec 15) is answered by it whoever asks
-        if (viaLibrary) { session.rs.syncTo(session); if (viaLibrary.openTab) { this.runAction(session, 'ui.openTab', { tab: viaLibrary.openTab }); delete viaLibrary.openTab; } return viaLibrary; }
+        if (viaLibrary) { session.rs.syncTo(session); this._libraryExtras(session, viaLibrary, action); return viaLibrary; }
         st.depth++;
         try { return this._runOp(session, target, { wire: null, action, args, where: {}, mode: 'value' }, {}, st, { ...args }); }
         finally { st.depth--; }
@@ -360,6 +361,16 @@ export class Interpreter {
       worlds: () => this.set.list().map((w) => ({ id: w.id, title: w.title, summary: w.summaryPhrase, status: w.status, doc: w.doc, tab: w.tab })),
     };
     return ctx;
+  }
+
+  /** What an action of the library asks of the host besides its answer: the tab to bring forward (`openTab`) and the client-side effects it queues (`effects`: [{ name, args }]). */
+  _libraryExtras(session, env, action) {
+    if (env.openTab) { this.runAction(session, 'ui.openTab', { tab: env.openTab }); delete env.openTab; }
+    if (Array.isArray(env.effects)) {
+      const world = session.rs?.reasoner.ownerOfAction(action) ?? null;
+      for (const e of env.effects) session.effects.push({ name: String(e.name), args: structuredClone(e.args ?? {}), world });
+      delete env.effects;
+    }
   }
 
   /** The action operation (semantics=action) whose id or action name is `action`. */
@@ -398,7 +409,11 @@ export class Interpreter {
     const op = { id: `op.${w.id}.onObservation`, worldId: w.id, semantics: 'action' };
     const st = { depth: 0, visited: 0, ops: [] };
     const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
-    try { return w.ops.onObservation(ctx, obs) ?? null; } catch (e) { return { reply: `Something went wrong while I handled the result of ${obs.effect} (${e?.message ?? e}).` }; }
+    try {
+      const out = w.ops.onObservation(ctx, obs) ?? null;
+      session.rs?.adoptState(session);   // a world whose state the library takes over (`adopt`) sees what the observation changed (the engine's move)
+      return out;
+    } catch (e) { return { reply: `Something went wrong while I handled the result of ${obs.effect} (${e?.message ?? e}).` }; }
   }
 
   /**
@@ -456,10 +471,11 @@ export class Interpreter {
     const st = { depth: 0, visited: 0, ops: [] };
     const op = this.set.list().flatMap((w) => w.operations).find((o) => o.semantics === 'action' && (o.id === action || o.action === action));
     const spec = { wire, action, args, where: {}, mode: 'value' };
+    if (session.rs) session.rs.live = { request: (a, args) => this.runAction(session, a, args), batch: session.batch ?? null };   // offered to the library's actions while they run
     let envelope = session.rs?.owns(wire) ? session.rs.resolve(wire, session) : null;
     if (envelope) {
       session.rs.syncTo(session);   // answered by the library (spec 15); what its actions wrote is copied to the session memory
-      if (envelope.openTab) { this.runAction(session, 'ui.openTab', { tab: envelope.openTab }); delete envelope.openTab; }   // a game's action brings its tab forward, as its operation did
+      this._libraryExtras(session, envelope, action);   // a game's action brings its tab forward, as its operation did, and queues the effects it asked for
     }
     else if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
     else {
