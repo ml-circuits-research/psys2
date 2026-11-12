@@ -2715,3 +2715,23 @@ ba00f9e is accepted. The audit is careful: each case says how it was classified 
 Its default order puts **words left out before assumptions**. That is the "fă părul roșu" fix in principle: a reading that drops "părul" loses.
 
 Vendor **f062052** instead of 0.8.1. The rest of the RE-VENDOR block applies unchanged. For E2, use `score` and `rank` from the library rather than a host-side ordering, and report where the library's order and yours disagree.
+
+## E3 accepted as an experiment; three corrections before it grows (reviewer, 2026-11-12 01:45)
+
+8bfe5a4 is accepted. The report is honest and the result is real:
+- kids.shop is at parity from 127 lines of description, against 2,936 lines of hand-written patterns.
+- geo.map reaches 99% of the hand-written result, docs.editor 91%.
+- Every loss is traced to a description gap: missing variants and words.
+- The `add` mode changes nothing in English, so generation adds no coverage today. The gain is the source of the patterns, not more coverage.
+
+Before more worlds are described:
+1. **One language: no mini-grammar inside strings.** `arg="i2:lex.kids.shop.items?*n2;prep=and|plus"` packs a second notation into a value. In it, `?` means "optional", while in SOP Lang `?` means only a variable. That is exactly what the user ruled out. `:`, `;`, `*` and `|` also get meanings of their own. Language decisions are delegated to the reviewer under the user's rule, and the decision is: **express it as wires and keys.** One `core.describe.arg` wire per argument, with `of=$describe…`, `name=i2`, `class=lex.kids.shop.items`, `optional=true`, `qty=n2`, `prep=and` (repeated key for alternatives: `prep=and prep=plus`), `unit=lei unit=leu`, `open=true` for the open classes of point 5. A repeated key is SOP Lang's existing way to give several values. Do the same for `verb=` / `rest=` lists, where the `|` alternatives become repeated keys. Same generator, no new notation. Write it in spec 03 section 2c.
+2. **Use the library's words.** sopworld 0.9.0 has `core.word lang= text= means=` (Q17), with `interpret`, `rank` and `examples` built on it. Make the description words `core.word` wires (`lang=en`, `means=kids.shop.purchase`, or `means=<op>.<arg>`) instead of a host-only key, so the same words feed the generated patterns, the library's `interpret`, and E2's scoring. Report anything `core.word` cannot carry.
+3. **Romanian: a decision for the user.** The report keeps Romanian out because AGENTS.md says everything in a world is English and Romanian enters through the translator. The user's direction last night was to generate the interpreters from the tool descriptions, and E1 says 349 Romanian errors are reading-only. Prepare, as a measured proposal without changing AGENTS.md:
+   - the same descriptions plus `core.word lang=ro` wires kept in a language pack outside the worlds (e.g. `lang/ro/<world>.sop`);
+   - the generator producing Romanian patterns from the frames, with Romanian frames for word order, articles and the "cât costă" forms;
+   - a run of the 349 E1 f-cases for kids.shop, geo.map and docs.editor through generated RO patterns against the translator route.
+
+   The user decides in the morning whether worlds may have Romanian words in a pack.
+
+Order unchanged: RE-VENDOR 0.9.0, then E2 (veto first), then these E3 corrections.
