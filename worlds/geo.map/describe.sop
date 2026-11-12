@@ -1,0 +1,374 @@
+@describe.geo.map.capital core.describe
+    op=geo.capital
+    intent=query
+    emit="@{_} core.request action=geo.capital arg.c={c}"
+    arg="c:lex.geo.map.places"
+    noun="capital|capital_city"
+    frames=qnoun,tell,poss,rev
+    priority=12
+    shortPriority=10
+    sample="c=Japan"
+    example="What is the capital of Japan?"
+    effect="answers the capital of a country"
+
+@describe.geo.map.population core.describe
+    op=geo.population
+    intent=query
+    emit="@{_} core.request action=geo.population arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="population|number_of_people|number_of_inhabitants"
+    ask="how_many_people_live_in|how_many_people_are_in|how_many_inhabitants_does_have"
+    frames=qnoun,tell,poss,rev,ask
+    priority=12
+    shortPriority=10
+    sample="p=Brazil"
+    example="What is the population of Brazil?"
+    effect="answers the population of a place"
+
+@describe.geo.map.currency core.describe
+    op=geo.currency
+    intent=query
+    emit="@{_} core.request action=geo.currency arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="currency|money|currencies"
+    ask="what_do_they_pay_with_in|what_money_do_they_use_in"
+    frames=qnoun,tell,poss,rev,ask
+    priority=12
+    shortPriority=10
+    sample="p=Japan"
+    example="What is the currency of Japan?"
+    effect="answers the currency of a country"
+
+@describe.geo.map.continent core.describe
+    op=geo.continent
+    intent=query
+    emit="@{_} core.request action=geo.continent arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="continent"
+    ask="which_continent_is|what_continent_is|on_which_continent_is"
+    rest="on|in"
+    frames=qnoun,tell,poss,rev,ask
+    priority=12
+    shortPriority=10
+    sample="p=Peru"
+    example="Which continent is Peru on?"
+    effect="answers the continent of a place"
+
+@describe.geo.map.country core.describe
+    op=geo.country
+    intent=query
+    emit="@{_} core.request action=geo.country arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="country|nation"
+    ask="which_country_is|what_country_is|in_which_country_is"
+    rest="in"
+    frames=qnoun,tell,poss,rev,ask
+    priority=12
+    shortPriority=10
+    sample="p=Paris"
+    example="Which country is Paris in?"
+    effect="answers the country of a city"
+
+@describe.geo.map.area core.describe
+    op=geo.area
+    intent=query
+    emit="@{_} core.request action=geo.area arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="area|size|surface"
+    ask="how_big_is|how_large_is|how_much_land_does_cover"
+    rest="in_km|in_square_kilometres|in_size"
+    frames=qnoun,tell,poss,rev,ask
+    priority=12
+    shortPriority=10
+    sample="p=France"
+    example="What is the area of France?"
+    effect="answers the area of a country"
+
+@describe.geo.map.languages core.describe
+    op=geo.languages
+    intent=query
+    emit="@{_} core.request action=geo.languages arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="language|languages|official_language"
+    ask="what_language_do_they_speak_in|what_languages_are_spoken_in|what_do_they_speak_in|what_do_people_speak_in"
+    frames=qnoun,tell,poss,rev,ask
+    priority=12
+    shortPriority=10
+    sample="p=Brazil"
+    example="What languages are spoken in Switzerland?"
+    effect="answers the languages of a country"
+
+@describe.geo.map.landlocked core.describe
+    op=geo.landlocked
+    intent=query
+    emit="@{_} core.request action=geo.landlocked arg.p={p}"
+    arg="p:lex.geo.map.places"
+    ask="is|does|can_i_say_that"
+    rest="landlocked|surrounded_by_land|have_a_coast|have_a_sea_border|touch_the_sea|have_no_coast"
+    frames=ask,last
+    priority=12
+    sample="p=Hungary"
+    example="Is Hungary landlocked?"
+    effect="answers yes or no"
+
+@describe.geo.map.neighbourCount core.describe
+    op=geo.neighbourCount
+    intent=query
+    emit="@{_} core.request action=geo.neighbourCount arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="number_of_neighbours|neighbour_count|number_of_countries_bordering"
+    ask="how_many_neighbours_does|how_many_land_neighbours_does|how_many_countries_border|how_many_countries_share_a_border_with"
+    rest="have|has"
+    verb="count"
+    frames=ask,tell,poss,rev,last
+    priority=12
+    shortPriority=10
+    sample="p=Hungary"
+    example="How many neighbours does Hungary have?"
+    effect="answers the number of countries that border a country"
+
+@describe.geo.map.borders core.describe
+    op=geo.borders
+    intent=query
+    emit="@{_} core.request action=geo.borders arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="neighbours|neighbors|borders|neighbouring_countries"
+    ask="which_countries_border|what_countries_border|who_borders|what_borders|which_countries_are_next_to|what_countries_are_next_to|countries_bordering|countries_next_to|which_countries_touch|which_countries_share_a_border_with|what_countries_share_a_border_with|which_countries_are_neighbours_of"
+    frames=ask,qnoun,tell,poss,rev
+    priority=12
+    shortPriority=10
+    sample="p=Hungary"
+    example="Which countries border Hungary?"
+    effect="lists the countries that border a country"
+
+@describe.geo.map.where core.describe
+    op=geo.where
+    intent=query
+    emit="@{_} core.request action=geo.where arg.p={p}"
+    arg="p:lex.geo.map.places"
+    noun="location|position"
+    ask="where_is|where_s|wheres|where_are|where_can_i_find|where_can_i_see"
+    rest="on_the_map|located"
+    frames=ask,qnoun,rev
+    priority=13
+    shortPriority=11
+    sample="p=Paris"
+    example="Where is Paris?"
+    effect="shows the place on the map and says where it is"
+
+@describe.geo.map.distance core.describe
+    op=geo.distance
+    intent=query
+    emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
+    arg="a:lex.geo.map.places;prep=from|between|of|to"
+    arg="b:lex.geo.map.places;prep=to|and|from|between"
+    noun="distance|length|km|kilometres"
+    ask="how_far_is|how_far_are|how_far_apart_are|how_far_it_is_from|how_many_kilometres_are_there_between|how_many_km_between"
+    verb="measure|draw|trace|connect|link|join"
+    rest="apart|away|in_km"
+    frames=ask,qnoun,tell,rev,bare,imp,wish,ind,can
+    priority=12
+    shortPriority=10
+    sample="a=Paris;b=Rome"
+    example="How far is Paris from Rome?"
+    effect="draws a line and answers the distance"
+
+@describe.geo.map.compare core.describe
+    op=geo.compare
+    intent=command
+    emit="@{_} core.request action=geo.compare arg.a={a} arg.b={b}"
+    arg="a:lex.geo.map.places;prep=with|between|against"
+    arg="b:lex.geo.map.places;prep=and|with|against|vs|versus|to"
+    verb="compare|match_up|contrast"
+    rest="side_by_side|please"
+    frames=imp,wish,ind,can,short
+    priority=12
+    shortPriority=10
+    sample="a=Spain;b=Italy"
+    example="Compare Spain and Italy."
+    effect="compares two places by area, population and borders"
+
+@describe.geo.map.show core.describe
+    op=geo.show
+    intent=command
+    emit="@{_} core.request action=geo.show arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
+    arg="a:lex.geo.map.places;prep=of|at|on|to|in"
+    arg="b:lex.geo.map.places?;prep=and|,"
+    arg="c:lex.geo.map.places?;prep=and|,"
+    arg="d:lex.geo.map.places?;prep=and|,"
+    arg="e:lex.geo.map.places?;prep=and|,"
+    verb="show|show_me|display|find|locate|focus_on|look_at|go_to|fly_to|take_me_to|zoom_to|center_on|centre_on|navigate_to|jump_to|open|visit|bring_up|see|view|pull_up|let_me_see|i_want_to_see"
+    rest="on_the_map|on_map|in_the_map|for_me"
+    frames=imp,wish,ind,can,short
+    priority=14
+    shortPriority=6
+    sample="a=Bucharest"
+    example="Show me Bucharest."
+    effect="centres the map on the places and fits them"
+
+@describe.geo.map.highlight core.describe
+    op=geo.highlight
+    intent=command
+    emit="@{_} core.request action=geo.highlight arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
+    arg="a:lex.geo.map.places"
+    arg="b:lex.geo.map.places?;prep=and|,"
+    arg="c:lex.geo.map.places?;prep=and|,"
+    arg="d:lex.geo.map.places?;prep=and|,"
+    arg="e:lex.geo.map.places?;prep=and|,"
+    verb="highlight|hilight|colour|color|light_up|mark_in_color|shade"
+    rest="on_the_map|in_color|in_colour"
+    frames=imp,wish,ind,can
+    priority=16
+    sample="a=Romania"
+    example="Highlight Romania."
+    effect="highlights the countries"
+
+@describe.geo.map.mark core.describe
+    op=geo.mark
+    intent=command
+    emit="@{_} core.request action=geo.mark arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
+    arg="a:lex.geo.map.places;prep=on|for|at|in"
+    arg="b:lex.geo.map.places?;prep=and|,"
+    arg="c:lex.geo.map.places?;prep=and|,"
+    arg="d:lex.geo.map.places?;prep=and|,"
+    arg="e:lex.geo.map.places?;prep=and|,"
+    verb="mark|pin|put_a_marker|add_a_marker|drop_a_pin|put_a_pin|place_a_marker|put_a_marker_on|add_a_pin|flag"
+    rest="on_the_map|with_a_marker|with_a_pin"
+    frames=imp,wish,ind,can,short
+    priority=12
+    shortPriority=10
+    sample="a=Cluj"
+    example="Mark Paris and Rome."
+    effect="adds a marker for each place"
+
+@describe.geo.map.markHere core.describe
+    op=geo.markHere
+    intent=command
+    emit="@{_} core.request action=geo.markHere"
+    verb="put|place|drop|add|mark|pin|stick"
+    noun="marker|pin|flag|spot|this_place"
+    rest="here|right_here|on_the_map"
+    frames=imp,wish,ind,can
+    priority=13
+    example="Put a marker here."
+    effect="adds a marker at the centre of the view"
+
+@describe.geo.map.clearMarkers core.describe
+    op=geo.clearMarkers
+    intent=command
+    emit="@{_} core.request action=geo.clearMarkers"
+    verb="remove|delete|clear|erase|take_off|get_rid_of|wipe"
+    noun="markers|pins|flags|marker|pin"
+    rest="from_the_map|off_the_map"
+    frames=imp,wish,ind,can
+    priority=14
+    example="Remove the markers."
+    effect="removes every marker"
+
+@describe.geo.map.zoomIn core.describe
+    op=geo.zoom
+    intent=command
+    emit="@{_} core.request action=geo.zoom arg.dir=in arg.amt={amt}"
+    arg="amt:lex.geo.map.amounts?"
+    verb="zoom_in|go_closer|get_closer|come_closer|move_closer|zoom_closer|magnify|enlarge|make_it_bigger"
+    rest="more|further|closer|again|on_the_map|on_it"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Zoom in."
+    effect="zooms the map in by the amount"
+
+@describe.geo.map.zoomOut core.describe
+    op=geo.zoom
+    intent=command
+    emit="@{_} core.request action=geo.zoom arg.dir=out arg.amt={amt}"
+    arg="amt:lex.geo.map.amounts?"
+    verb="zoom_out|zoom_away|get_farther|go_farther|move_farther|move_away|farther|further|step_back|move_back|make_it_smaller|shrink"
+    rest="more|further|farther|again|on_the_map|on_it"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Zoom out."
+    effect="zooms the map out by the amount"
+
+@describe.geo.map.world core.describe
+    op=geo.world
+    intent=command
+    emit="@{_} core.request action=geo.world"
+    verb="show|display|see|view|zoom_out_to|go_to|back_to|fit"
+    noun="whole_world|world|planet|globe|entire_world|global_map|earth|world_map"
+    rest="on_the_map|please"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Show the whole world."
+    effect="fits the whole world in the view"
+
+@describe.geo.map.reset core.describe
+    op=geo.reset
+    intent=command
+    emit="@{_} core.request action=geo.reset arg.all=false"
+    verb="reset|restore|recenter|recentre|re_center"
+    noun="view|zoom|map_view|position|camera"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Reset the view."
+    effect="puts the view back to the start; markers stay"
+
+@describe.geo.map.resetAll core.describe
+    op=geo.reset
+    intent=command
+    emit="@{_} core.request action=geo.reset arg.all=true"
+    verb="reset|restart|start_over_with|start_again_with"
+    noun="map|atlas|whole_map"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Reset the map."
+    effect="puts the view back to the start and removes markers, lines and highlights"
+
+@describe.geo.map.clearAll core.describe
+    op=geo.clearAll
+    intent=command
+    emit="@{_} core.request action=geo.clearAll"
+    verb="clear|wipe|clean|erase|blank|empty"
+    noun="map|everything|it_all|the_whole_thing|all_of_it"
+    rest="off_the_map|on_the_map|from_the_map|please"
+    frames=imp,wish,ind,can
+    priority=13
+    example="Clear the map."
+    effect="removes markers, lines and highlights and resets the view"
+
+@describe.geo.map.here core.describe
+    op=geo.here
+    intent=query
+    emit="@{_} core.request action=geo.here"
+    ask="what_is_here|what_s_here|whats_here|what_am_i_looking_at|what_is_at_this_spot|which_place_am_i_looking_at|what_is_this_place|what_is_around_this_point|what_s_around_me"
+    rest="on_the_map|right_now"
+    frames=ask
+    priority=12
+    example="What is here?"
+    effect="names the place at the centre of the view"
+
+@describe.geo.map.layer core.describe
+    op=geo.layer
+    intent=command
+    emit="@{_} core.request action=geo.layer arg.l={l}"
+    arg="l:lex.geo.map.layers;prep=to|into"
+    verb="switch_to|use|go_back_to|change_the_map_to|change_to|show_me|give_me|i_want"
+    rest="map|version_of_the_map|style|layer"
+    frames=imp,wish,ind,can,short
+    priority=12
+    shortPriority=10
+    sample="l=street"
+    example="Switch to the street map."
+    effect="switches the map layer"
+
+@describe.geo.map.isIn core.describe
+    op=geo.isIn
+    intent=query
+    emit="@{_} core.request action=geo.isIn arg.p={p} arg.q={q}"
+    arg="p:lex.geo.map.places"
+    arg="q:lex.geo.map.places;prep=in|inside|within"
+    ask="is|are|does"
+    frames=ask,last
+    priority=12
+    sample="p=Paris;q=France"
+    example="Is Paris in France?"
+    effect="answers yes or no: the place is inside the other one"

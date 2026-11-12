@@ -1,0 +1,2476 @@
+{
+ "date": "2026-11-12",
+ "task": "E3",
+ "mode": "rules (no model); hand-written patterns vs patterns generated from core.describe wires",
+ "worlds": [
+  "kids.shop",
+  "geo.map",
+  "docs.editor"
+ ],
+ "only": {
+  "sets": {
+   "operational": {
+    "all": {
+     "base": {
+      "n": 1296,
+      "right": 1236,
+      "wrong": 32,
+      "not_understood": 28,
+      "other": 0
+     },
+     "gen": {
+      "n": 1296,
+      "right": 1227,
+      "wrong": 36,
+      "not_understood": 33,
+      "other": 0
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 236,
+      "right": 229,
+      "wrong": 5,
+      "not_understood": 2,
+      "other": 0
+     },
+     "gen": {
+      "n": 236,
+      "right": 220,
+      "wrong": 9,
+      "not_understood": 7,
+      "other": 0
+     }
+    }
+   },
+   "operational-ro": {
+    "all": {
+     "base": {
+      "n": 2480,
+      "right": 2029,
+      "wrong": 126,
+      "not_understood": 325,
+      "other": 0
+     },
+     "gen": {
+      "n": 2480,
+      "right": 2002,
+      "wrong": 144,
+      "not_understood": 334,
+      "other": 0
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 360,
+      "right": 309,
+      "wrong": 26,
+      "not_understood": 25,
+      "other": 0
+     },
+     "gen": {
+      "n": 360,
+      "right": 283,
+      "wrong": 43,
+      "not_understood": 34,
+      "other": 0
+     }
+    }
+   },
+   "dialogues": {
+    "all": {
+     "base": {
+      "n": 2241,
+      "right": 2170,
+      "wrong": 32,
+      "not_understood": 39,
+      "other": 0
+     },
+     "gen": {
+      "n": 2241,
+      "right": 2152,
+      "wrong": 38,
+      "not_understood": 51,
+      "other": 0
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 350,
+      "right": 344,
+      "wrong": 0,
+      "not_understood": 6,
+      "other": 0
+     },
+     "gen": {
+      "n": 350,
+      "right": 328,
+      "wrong": 5,
+      "not_understood": 17,
+      "other": 0
+     }
+    }
+   },
+   "gold": {
+    "all": {
+     "base": {
+      "n": 300,
+      "right": 202,
+      "wrong": 51,
+      "not_understood": 47,
+      "other": 0
+     },
+     "gen": {
+      "n": 300,
+      "right": 201,
+      "wrong": 51,
+      "not_understood": 48,
+      "other": 0
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 37,
+      "right": 23,
+      "wrong": 9,
+      "not_understood": 5,
+      "other": 0
+     },
+     "gen": {
+      "n": 37,
+      "right": 22,
+      "wrong": 9,
+      "not_understood": 6,
+      "other": 0
+     }
+    }
+   },
+   "real": {
+    "all": {
+     "base": {
+      "n": 148,
+      "right": 45,
+      "wrong": 2,
+      "not_understood": 33,
+      "other": 68
+     },
+     "gen": {
+      "n": 148,
+      "right": 45,
+      "wrong": 2,
+      "not_understood": 33,
+      "other": 68
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 5,
+      "right": 3,
+      "wrong": 0,
+      "not_understood": 2,
+      "other": 0
+     },
+     "gen": {
+      "n": 5,
+      "right": 3,
+      "wrong": 0,
+      "not_understood": 2,
+      "other": 0
+     }
+    }
+   }
+  },
+  "changeCounts": {
+   "right->not_understood": 25,
+   "wrong->right": 3,
+   "right->wrong": 33,
+   "not_understood->wrong": 1,
+   "wrong->not_understood": 3
+  },
+  "audited": {
+   "right_to_wrong": 14,
+   "right_to_partly": 17,
+   "right_to_not_understood": 24,
+   "gained_wrong_to_right": 3,
+   "gained_not_understood_to_right": 0,
+   "new_wrong_total": 16
+  },
+  "outsideAudited": [
+   {
+    "set": "operational-ro",
+    "id": "kids.time#036.roc",
+    "world": "kids.time",
+    "from": "right",
+    "to": "partly"
+   },
+   {
+    "set": "dialogues",
+    "id": "dlg.avt#029#t1",
+    "world": "ui.help",
+    "from": "right",
+    "to": "wrong"
+   },
+   {
+    "set": "dialogues",
+    "id": "dlg.rd#002#t4",
+    "world": "ui.avatar",
+    "from": "right",
+    "to": "not_understood"
+   }
+  ],
+  "newWrong": [
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "make a todo list: wash, cook",
+    "from": "right",
+    "patBase": "pat.docs.editor.list.task",
+    "patGen": "pat.docs.editor.task.v2"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "add a heading A, a heading B and a heading C",
+    "from": "right",
+    "patBase": "pat.docs.editor.heading",
+    "patGen": "pat.docs.editor.addHeading.imp"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "add a paragraph with 45.5 degrees",
+    "from": "right",
+    "patBase": "pat.docs.editor.paragraph",
+    "patGen": "pat.docs.editor.addParagraph.imp"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "add a list and make it numbered",
+    "from": "right",
+    "patBase": "pat.docs.editor.s2.list.empty",
+    "patGen": "pat.docs.editor.addList.imp"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "add a numbered list",
+    "from": "right",
+    "patBase": "pat.docs.editor.s2.list.empty.numbered",
+    "patGen": "pat.kids.tasks.w.add.f1"
+   },
+   {
+    "set": "operational-ro",
+    "world": "geo.map",
+    "message": "du-ma la madrid",
+    "from": "not_understood",
+    "patBase": null,
+    "patGen": "pat.geo.map.compare.short"
+   },
+   {
+    "set": "operational-ro",
+    "world": "geo.map",
+    "message": "Șterge tot de pe hartă.",
+    "from": "right",
+    "patBase": "pat.geo.map.w.clearall1",
+    "patGen": "pat.art.draw.remove"
+   },
+   {
+    "set": "operational-ro",
+    "world": "geo.map",
+    "message": "sterge tot de pe harta",
+    "from": "right",
+    "patBase": "pat.geo.map.w.clearall1",
+    "patGen": "pat.art.draw.remove"
+   },
+   {
+    "set": "operational-ro",
+    "world": "docs.editor",
+    "message": "adaugă un titlu A, un titlu B și un titlu C",
+    "from": "right",
+    "patBase": "pat.docs.editor.heading",
+    "patGen": "pat.docs.editor.addHeading.imp"
+   },
+   {
+    "set": "operational-ro",
+    "world": "docs.editor",
+    "message": "adauga un titlu A, un titlu B si un titlu C",
+    "from": "right",
+    "patBase": "pat.docs.editor.heading",
+    "patGen": "pat.docs.editor.addHeading.imp"
+   },
+   {
+    "set": "operational-ro",
+    "world": "docs.editor",
+    "message": "adaugă un paragraf cu 45.5 grade",
+    "from": "right",
+    "patBase": "pat.docs.editor.paragraph",
+    "patGen": "pat.docs.editor.addParagraph.imp"
+   },
+   {
+    "set": "operational-ro",
+    "world": "docs.editor",
+    "message": "adauga un paragraf cu 45.5 grade",
+    "from": "right",
+    "patBase": "pat.docs.editor.paragraph",
+    "patGen": "pat.docs.editor.addParagraph.imp"
+   },
+   {
+    "set": "operational-ro",
+    "world": "docs.editor",
+    "message": "adaugă o listă și fă-o numerotată",
+    "from": "right",
+    "patBase": "pat.docs.editor.s2.list.empty",
+    "patGen": "pat.docs.editor.addList.imp"
+   },
+   {
+    "set": "operational-ro",
+    "world": "docs.editor",
+    "message": "adauga o lista si fa-o numerotata",
+    "from": "right",
+    "patBase": "pat.docs.editor.s2.list.empty",
+    "patGen": "pat.docs.editor.addList.imp"
+   },
+   {
+    "set": "dialogues",
+    "world": "ui.help",
+    "message": "what can I do with it?",
+    "from": "right",
+    "patBase": "pat.ui.help.here",
+    "patGen": "pat.ui.help.here"
+   },
+   {
+    "set": "gold-rules",
+    "world": "docs.editor",
+    "message": "make a todo list: wash, cook",
+    "from": "right",
+    "patBase": "pat.docs.editor.list.task",
+    "patGen": "pat.docs.editor.task.v2"
+   }
+  ],
+  "lost": [
+   {
+    "set": "operational",
+    "world": "geo.map",
+    "message": "Zoom out 2 levels.",
+    "to": "not_understood",
+    "patBase": "pat.geo.map.w.zout.n",
+    "patGen": null
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "start the document with a title: My trip",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.s2.start.title",
+    "patGen": null
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "scratch the last thing i added",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.s2.undo.scratch",
+    "patGen": null
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "make a todo list: wash, cook",
+    "to": "wrong",
+    "patBase": "pat.docs.editor.list.task",
+    "patGen": "pat.docs.editor.task.v2"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "add a heading A, a heading B and a heading C",
+    "to": "wrong",
+    "patBase": "pat.docs.editor.heading",
+    "patGen": "pat.docs.editor.addHeading.imp"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "add a paragraph with 45.5 degrees",
+    "to": "wrong",
+    "patBase": "pat.docs.editor.paragraph",
+    "patGen": "pat.docs.editor.addParagraph.imp"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "add a list and make it numbered",
+    "to": "wrong",
+    "patBase": "pat.docs.editor.s2.list.empty",
+    "patGen": "pat.docs.editor.addList.imp"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "read para 1",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.ord.read.para1",
+    "patGen": null
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "chapter 3: The End",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.ed.chapter.num.bare",
+    "patGen": "pat.docs.editor.movebottom.num"
+   },
+   {
+    "set": "operational",
+    "world": "docs.editor",
+    "message": "add a numbered list",
+    "to": "wrong",
+    "patBase": "pat.docs.editor.s2.list.empty.numbered",
+    "patGen": "pat.kids.tasks.w.add.f1"
+   },
+   {
+    "set": "dialogues",
+    "world": "ui.help",
+    "message": "what can I do with it?",
+    "to": "wrong",
+    "patBase": "pat.ui.help.here",
+    "patGen": "pat.ui.help.here"
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "and a list: milk, bread",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.s2.list.bare",
+    "patGen": null
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "and a heading Dairy too",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.s2.heading.bare",
+    "patGen": "pat.games.hangman.word3"
+   },
+   {
+    "set": "dialogues",
+    "world": "geo.map",
+    "message": "Remove the last marker.",
+    "to": "not_understood",
+    "patBase": "pat.geo.map.clearlast",
+    "patGen": "pat.art.draw.remove"
+   },
+   {
+    "set": "dialogues",
+    "world": "geo.map",
+    "message": "Switch to the street map.",
+    "to": "not_understood",
+    "patBase": "pat.geo.map.w.layer1",
+    "patGen": null
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "Add a new paragraph saying Hello class.",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.para.v2",
+    "patGen": null
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "What is 7 times 8?",
+    "to": "partly",
+    "patBase": "pat.kids.arith.calc.times",
+    "patGen": "pat.kids.arith.calc.times"
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "What sound does a dog make?",
+    "to": "partly",
+    "patBase": "pat.kids.animals.sound.q",
+    "patGen": "pat.kids.animals.sound.q"
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "How many days are in a week?",
+    "to": "partly",
+    "patBase": "pat.kids.time.sw.len.ab.whole.week",
+    "patGen": "pat.kids.time.sw.len.ab.whole.week"
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "What is the capital of Italy?",
+    "to": "partly",
+    "patBase": "pat.geo.map.capital.q.2",
+    "patGen": "pat.geo.map.capital.qnoun"
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "Back to the document.",
+    "to": "not_understood",
+    "patBase": null,
+    "patGen": null
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "Make the title bold.",
+    "to": "partly",
+    "patBase": "pat.docs.editor.fmt.make",
+    "patGen": "pat.docs.editor.fmt.make"
+   },
+   {
+    "set": "dialogues",
+    "world": "ui.avatar",
+    "message": "get me to New Youk",
+    "to": "not_understood",
+    "patBase": "pat.geo.map.show",
+    "patGen": null
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "chapter 1: The Forest",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.ed.chapter.num.bare",
+    "patGen": null
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "chapter 2: The Cave",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.ed.chapter.num.bare",
+    "patGen": null
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "read chapter 2",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.ed.read.chapter",
+    "patGen": "pat.docs.editor.readNum.imp"
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "on the new chapter",
+    "to": "not_understood",
+    "patBase": "pat.docs.editor.ed.chapter.bare",
+    "patGen": null
+   },
+   {
+    "set": "dialogues",
+    "world": "docs.editor",
+    "message": "Chester",
+    "to": "not_understood",
+    "patBase": null,
+    "patGen": null
+   },
+   {
+    "set": "gold-rules",
+    "world": "docs.editor",
+    "message": "make a todo list: wash, cook",
+    "to": "wrong",
+    "patBase": "pat.docs.editor.list.task",
+    "patGen": "pat.docs.editor.task.v2"
+   }
+  ],
+  "gained": [
+   {
+    "set": "operational",
+    "world": "geo.map",
+    "message": "mark Paris and Rome and highlight Italy",
+    "from": "wrong",
+    "patBase": "pat.geo.map.mark2",
+    "patGen": "pat.geo.map.mark.imp"
+   },
+   {
+    "set": "operational-ro",
+    "world": "geo.map",
+    "message": "Marchează Parisul și Roma și evidențiază Italia.",
+    "from": "wrong",
+    "patBase": "pat.geo.map.mark2",
+    "patGen": "pat.geo.map.mark.imp"
+   },
+   {
+    "set": "operational-ro",
+    "world": "geo.map",
+    "message": "marcheaza parisul si roma si evidentiaza italia",
+    "from": "wrong",
+    "patBase": "pat.geo.map.mark2",
+    "patGen": "pat.geo.map.mark.imp"
+   }
+  ]
+ },
+ "add": {
+  "sets": {
+   "operational": {
+    "all": {
+     "base": {
+      "n": 1296,
+      "right": 1236,
+      "wrong": 32,
+      "not_understood": 28,
+      "other": 0
+     },
+     "gen": {
+      "n": 1296,
+      "right": 1236,
+      "wrong": 32,
+      "not_understood": 28,
+      "other": 0
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 236,
+      "right": 229,
+      "wrong": 5,
+      "not_understood": 2,
+      "other": 0
+     },
+     "gen": {
+      "n": 236,
+      "right": 229,
+      "wrong": 5,
+      "not_understood": 2,
+      "other": 0
+     }
+    }
+   },
+   "operational-ro": {
+    "all": {
+     "base": {
+      "n": 2480,
+      "right": 2029,
+      "wrong": 126,
+      "not_understood": 325,
+      "other": 0
+     },
+     "gen": {
+      "n": 2480,
+      "right": 2029,
+      "wrong": 127,
+      "not_understood": 324,
+      "other": 0
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 360,
+      "right": 309,
+      "wrong": 26,
+      "not_understood": 25,
+      "other": 0
+     },
+     "gen": {
+      "n": 360,
+      "right": 309,
+      "wrong": 27,
+      "not_understood": 24,
+      "other": 0
+     }
+    }
+   },
+   "dialogues": {
+    "all": {
+     "base": {
+      "n": 2241,
+      "right": 2170,
+      "wrong": 32,
+      "not_understood": 39,
+      "other": 0
+     },
+     "gen": {
+      "n": 2241,
+      "right": 2170,
+      "wrong": 32,
+      "not_understood": 39,
+      "other": 0
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 350,
+      "right": 344,
+      "wrong": 0,
+      "not_understood": 6,
+      "other": 0
+     },
+     "gen": {
+      "n": 350,
+      "right": 344,
+      "wrong": 0,
+      "not_understood": 6,
+      "other": 0
+     }
+    }
+   },
+   "gold": {
+    "all": {
+     "base": {
+      "n": 300,
+      "right": 202,
+      "wrong": 51,
+      "not_understood": 47,
+      "other": 0
+     },
+     "gen": {
+      "n": 300,
+      "right": 202,
+      "wrong": 51,
+      "not_understood": 47,
+      "other": 0
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 37,
+      "right": 23,
+      "wrong": 9,
+      "not_understood": 5,
+      "other": 0
+     },
+     "gen": {
+      "n": 37,
+      "right": 23,
+      "wrong": 9,
+      "not_understood": 5,
+      "other": 0
+     }
+    }
+   },
+   "real": {
+    "all": {
+     "base": {
+      "n": 148,
+      "right": 45,
+      "wrong": 2,
+      "not_understood": 33,
+      "other": 68
+     },
+     "gen": {
+      "n": 148,
+      "right": 45,
+      "wrong": 2,
+      "not_understood": 33,
+      "other": 68
+     }
+    },
+    "audited": {
+     "base": {
+      "n": 5,
+      "right": 3,
+      "wrong": 0,
+      "not_understood": 2,
+      "other": 0
+     },
+     "gen": {
+      "n": 5,
+      "right": 3,
+      "wrong": 0,
+      "not_understood": 2,
+      "other": 0
+     }
+    }
+   }
+  },
+  "changeCounts": {
+   "not_understood->wrong": 1
+  },
+  "audited": {
+   "right_to_wrong": 0,
+   "right_to_partly": 0,
+   "right_to_not_understood": 0,
+   "gained_wrong_to_right": 0,
+   "gained_not_understood_to_right": 0,
+   "new_wrong_total": 1
+  },
+  "outsideAudited": [],
+  "newWrong": [
+   {
+    "set": "operational-ro",
+    "world": "geo.map",
+    "message": "du-ma la madrid",
+    "from": "not_understood",
+    "patBase": null,
+    "patGen": "pat.geo.map.compare.short"
+   }
+  ],
+  "lost": [],
+  "gained": []
+ },
+ "inventory": {
+  "kids.shop": {
+   "operationKeysInPatterns": 15,
+   "operationKeysDescribed": 10,
+   "descriptions": 11,
+   "handPatternBlocksTotal": 486,
+   "handPatternLinesTotal": 2972,
+   "handBlocksReplaced": 481,
+   "handLinesReplaced": 2936,
+   "generatedPatterns": 194,
+   "descriptionLines": 127,
+   "ops": [
+    {
+     "key": "kids.shop.change",
+     "handBlocks": 149,
+     "handLines": 899,
+     "slotsInPatterns": [
+      "m:number",
+      "n1:number",
+      "i1:lex.kids.shop.items",
+      "n2:number",
+      "i2:lex.kids.shop.items"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 5,
+     "operationOutputs": 1,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "kids.shop.total",
+     "handBlocks": 136,
+     "handLines": 818,
+     "slotsInPatterns": [
+      "n1:number",
+      "i1:lex.kids.shop.items",
+      "n2:number",
+      "i2:lex.kids.shop.items"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 4,
+     "operationOutputs": 1,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "kids.shop.affordability",
+     "handBlocks": 110,
+     "handLines": 662,
+     "slotsInPatterns": [
+      "n1:number",
+      "i1:lex.kids.shop.items",
+      "n2:number",
+      "i2:lex.kids.shop.items",
+      "m:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 4,
+     "operationOutputs": 1,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "kids.shop.leftafter",
+     "handBlocks": 24,
+     "handLines": 145,
+     "slotsInPatterns": [
+      "n1:number",
+      "i1:lex.kids.shop.items",
+      "n2:number",
+      "i2:lex.kids.shop.items"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 4,
+     "operationOutputs": 1,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "kids.shop.balance",
+     "handBlocks": 19,
+     "handLines": 129,
+     "slotsInPatterns": [
+      "item:lex.kids.shop.items"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 1,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "kids.shop.price",
+     "handBlocks": 17,
+     "handLines": 110,
+     "slotsInPatterns": [
+      "item:noun",
+      "n:number",
+      "item:lex.kids.shop.items"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 1,
+     "operationOutputs": 1,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "kids.shop.purchase",
+     "handBlocks": 11,
+     "handLines": 70,
+     "slotsInPatterns": [
+      "n1:number",
+      "i1:lex.kids.shop.items",
+      "n2:number",
+      "i2:lex.kids.shop.items"
+     ],
+     "inOperationsSop": false,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": false,
+     "described": true
+    },
+    {
+     "key": "kids.shop.money",
+     "handBlocks": 7,
+     "handLines": 46,
+     "slotsInPatterns": [
+      "n:number"
+     ],
+     "inOperationsSop": false,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": false,
+     "described": true
+    },
+    {
+     "key": "kids.shop.expense",
+     "handBlocks": 4,
+     "handLines": 30,
+     "slotsInPatterns": [
+      "n:number"
+     ],
+     "inOperationsSop": false,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": false,
+     "described": true
+    },
+    {
+     "key": "kids.shop.income",
+     "handBlocks": 4,
+     "handLines": 27,
+     "slotsInPatterns": [
+      "n:number",
+      "g:agent"
+     ],
+     "inOperationsSop": false,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": false,
+     "described": true
+    },
+    {
+     "key": "chat.ask",
+     "handBlocks": 1,
+     "handLines": 9,
+     "slotsInPatterns": [],
+     "inOperationsSop": false,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": false,
+     "described": false
+    },
+    {
+     "key": "shop.reviseLast",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "n:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "shop.gotBack",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "n:number",
+      "i1:lex.kids.shop.items"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "shop.whatPaid",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "shop.revise",
+     "handBlocks": 1,
+     "handLines": 6,
+     "slotsInPatterns": [
+      "n:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    }
+   ],
+   "withArgsFromPatternsOnly": 5,
+   "describedFieldsUsed": 26,
+   "requiresDeclared": 3
+  },
+  "geo.map": {
+   "operationKeysInPatterns": 49,
+   "operationKeysDescribed": 25,
+   "descriptions": 27,
+   "handPatternBlocksTotal": 335,
+   "handPatternLinesTotal": 2306,
+   "handBlocksReplaced": 176,
+   "handLinesReplaced": 1241,
+   "generatedPatterns": 127,
+   "descriptionLines": 348,
+   "ops": [
+    {
+     "key": "geo.superlative",
+     "handBlocks": 54,
+     "handLines": 339,
+     "slotsInPatterns": [
+      "m:lex.geo.map.superlatives",
+      "k:lex.geo.map.kinds",
+      "p:lex.geo.map.places",
+      "n:number",
+      "d:lex.geo.map.demonyms"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.zoom",
+     "handBlocks": 14,
+     "handLines": 95,
+     "slotsInPatterns": [
+      "amt:lex.geo.map.amounts",
+      "n:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.compare",
+     "handBlocks": 12,
+     "handLines": 80,
+     "slotsInPatterns": [
+      "m:lex.geo.map.measures",
+      "a:lex.geo.map.places",
+      "b:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.markSet",
+     "handBlocks": 11,
+     "handLines": 72,
+     "slotsInPatterns": [
+      "r:lex.geo.map.places",
+      "n:number",
+      "m:lex.geo.map.superlatives"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.distance",
+     "handBlocks": 10,
+     "handLines": 71,
+     "slotsInPatterns": [
+      "a:lex.geo.map.places",
+      "b:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.borders",
+     "handBlocks": 10,
+     "handLines": 68,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.show",
+     "handBlocks": 9,
+     "handLines": 66,
+     "slotsInPatterns": [
+      "a:lex.geo.map.places",
+      "b:lex.geo.map.places",
+      "c:lex.geo.map.places",
+      "d:lex.geo.map.places",
+      "e:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.clearMarkers",
+     "handBlocks": 10,
+     "handLines": 65,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.continent",
+     "handBlocks": 8,
+     "handLines": 63,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.neighbourCount",
+     "handBlocks": 9,
+     "handLines": 61,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.pan",
+     "handBlocks": 8,
+     "handLines": 58,
+     "slotsInPatterns": [
+      "amt:lex.geo.map.amounts",
+      "d:lex.geo.map.directions",
+      "amt2:lex.geo.map.amounts",
+      "km:number",
+      "d:lex.geo.map.compass"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.highlight",
+     "handBlocks": 9,
+     "handLines": 58,
+     "slotsInPatterns": [
+      "a:lex.geo.map.places",
+      "b:lex.geo.map.places",
+      "c:lex.geo.map.places",
+      "d:lex.geo.map.places",
+      "e:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.coords",
+     "handBlocks": 8,
+     "handLines": 53,
+     "slotsInPatterns": [
+      "la:number",
+      "lo:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.capitalOfWhich",
+     "handBlocks": 8,
+     "handLines": 52,
+     "slotsInPatterns": [
+      "c:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.population",
+     "handBlocks": 7,
+     "handLines": 52,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.country",
+     "handBlocks": 7,
+     "handLines": 52,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.count",
+     "handBlocks": 7,
+     "handLines": 47,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.currency",
+     "handBlocks": 6,
+     "handLines": 46,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places",
+      "d:lex.geo.map.demonyms"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.distanceFrom",
+     "handBlocks": 7,
+     "handLines": 45,
+     "slotsInPatterns": [
+      "b:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.highlights",
+     "handBlocks": 7,
+     "handLines": 45,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.landlocked",
+     "handBlocks": 6,
+     "handLines": 44,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.here",
+     "handBlocks": 6,
+     "handLines": 44,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.markers",
+     "handBlocks": 6,
+     "handLines": 44,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.mark",
+     "handBlocks": 6,
+     "handLines": 43,
+     "slotsInPatterns": [
+      "a:lex.geo.map.places",
+      "b:lex.geo.map.places",
+      "c:lex.geo.map.places",
+      "d:lex.geo.map.places",
+      "e:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.clearHighlight",
+     "handBlocks": 6,
+     "handLines": 41,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.zoomTo",
+     "handBlocks": 6,
+     "handLines": 40,
+     "slotsInPatterns": [
+      "n:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.reset",
+     "handBlocks": 6,
+     "handLines": 40,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.markHere",
+     "handBlocks": 6,
+     "handLines": 40,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.area",
+     "handBlocks": 6,
+     "handLines": 40,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.languages",
+     "handBlocks": 6,
+     "handLines": 40,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places",
+      "d:lex.geo.map.demonyms"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.world",
+     "handBlocks": 5,
+     "handLines": 35,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.info",
+     "handBlocks": 5,
+     "handLines": 35,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.where",
+     "handBlocks": 5,
+     "handLines": 34,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.compareYN",
+     "handBlocks": 5,
+     "handLines": 34,
+     "slotsInPatterns": [
+      "a:lex.geo.map.places",
+      "m:lex.geo.map.measures",
+      "b:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.borderYN",
+     "handBlocks": 4,
+     "handLines": 32,
+     "slotsInPatterns": [
+      "a:lex.geo.map.places",
+      "b:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.layer",
+     "handBlocks": 4,
+     "handLines": 31,
+     "slotsInPatterns": [
+      "l:lex.geo.map.layers"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.clearAll",
+     "handBlocks": 4,
+     "handLines": 30,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.locate",
+     "handBlocks": 4,
+     "handLines": 28,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.capital",
+     "handBlocks": 3,
+     "handLines": 27,
+     "slotsInPatterns": [
+      "c:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.clearLines",
+     "handBlocks": 3,
+     "handLines": 23,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.isCapital",
+     "handBlocks": 2,
+     "handLines": 16,
+     "slotsInPatterns": [
+      "a:lex.geo.map.places",
+      "b:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.isIn",
+     "handBlocks": 2,
+     "handLines": 16,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places",
+      "q:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "geo.listOp",
+     "handBlocks": 2,
+     "handLines": 15,
+     "slotsInPatterns": [
+      "p:lex.geo.map.places"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.onmap",
+     "handBlocks": 1,
+     "handLines": 10,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.undo",
+     "handBlocks": 1,
+     "handLines": 9,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.describe",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.askPlace",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.redo",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "geo.unknown",
+     "handBlocks": 1,
+     "handLines": 6,
+     "slotsInPatterns": [
+      "x:words"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    }
+   ],
+   "withArgsFromPatternsOnly": 20,
+   "describedFieldsUsed": 64,
+   "requiresDeclared": 0
+  },
+  "docs.editor": {
+   "operationKeysInPatterns": 57,
+   "operationKeysDescribed": 13,
+   "descriptions": 25,
+   "handPatternBlocksTotal": 414,
+   "handPatternLinesTotal": 2741,
+   "handBlocksReplaced": 139,
+   "handLinesReplaced": 947,
+   "generatedPatterns": 77,
+   "descriptionLines": 289,
+   "ops": [
+    {
+     "key": "doc.format",
+     "handBlocks": 98,
+     "handLines": 598,
+     "slotsInPatterns": [
+      "t:words",
+      "m:lex.docs.editor.marks",
+      "m:lex.docs.editor.markverbs",
+      "t:rest",
+      "m:lex.docs.editor.unmarkverbs",
+      "c:lex.docs.editor.colors",
+      "w:word"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.goto",
+     "handBlocks": 35,
+     "handLines": 229,
+     "slotsInPatterns": [
+      "w:lex.docs.editor.positions",
+      "w:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.select",
+     "handBlocks": 34,
+     "handLines": 211,
+     "slotsInPatterns": [
+      "t:rest",
+      "w:word"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.read",
+     "handBlocks": 29,
+     "handLines": 195,
+     "slotsInPatterns": [
+      "kind:lex.docs.editor.kinds",
+      "kind:lex.docs.editor.chapterkinds",
+      "n:number",
+      "ord:lex.docs.editor.ordinals"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.delete",
+     "handBlocks": 23,
+     "handLines": 171,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.copy",
+     "handBlocks": 16,
+     "handLines": 109,
+     "slotsInPatterns": [
+      "f:lex.docs.editor.formats"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.align",
+     "handBlocks": 17,
+     "handLines": 104,
+     "slotsInPatterns": [
+      "t:rest",
+      "t:words",
+      "a:lex.docs.editor.aligns",
+      "d:lex.docs.editor.determiners",
+      "k:lex.docs.editor.kinds"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addHeading",
+     "handBlocks": 13,
+     "handLines": 94,
+     "slotsInPatterns": [
+      "t:rest",
+      "t:words",
+      "role:lex.docs.editor.headroles",
+      "n:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.link",
+     "handBlocks": 10,
+     "handLines": 62,
+     "slotsInPatterns": [
+      "u:words",
+      "t:rest",
+      "u:rest",
+      "t:words",
+      "w:word"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addList",
+     "handBlocks": 9,
+     "handLines": 58,
+     "slotsInPatterns": [
+      "t:rest",
+      "t:words"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.move",
+     "handBlocks": 8,
+     "handLines": 50,
+     "slotsInPatterns": [
+      "ord:lex.docs.editor.ordinals",
+      "kind:lex.docs.editor.kinds",
+      "n:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.checkTask",
+     "handBlocks": 8,
+     "handLines": 50,
+     "slotsInPatterns": [
+      "ord:lex.docs.editor.ordinals",
+      "n:number",
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.countTasks",
+     "handBlocks": 7,
+     "handLines": 47,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.undo",
+     "handBlocks": 7,
+     "handLines": 46,
+     "slotsInPatterns": [
+      "n:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.convert",
+     "handBlocks": 6,
+     "handLines": 41,
+     "slotsInPatterns": [
+      "t:words",
+      "n:number",
+      "d:lex.docs.editor.determiners",
+      "k:lex.docs.editor.convert"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.stats",
+     "handBlocks": 6,
+     "handLines": 40,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "chat.ask",
+     "handBlocks": 5,
+     "handLines": 35,
+     "slotsInPatterns": [],
+     "inOperationsSop": false,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": false,
+     "described": false
+    },
+    {
+     "key": "doc.count",
+     "handBlocks": 5,
+     "handLines": 34,
+     "slotsInPatterns": [
+      "kind:lex.docs.editor.kinds"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addTable",
+     "handBlocks": 5,
+     "handLines": 33,
+     "slotsInPatterns": [
+      "t:rest",
+      "t:words",
+      "n:number"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.newBlank",
+     "handBlocks": 4,
+     "handLines": 33,
+     "slotsInPatterns": [
+      "k:lex.docs.editor.blanks",
+      "pos:lex.docs.editor.insertpos",
+      "r:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addParagraph",
+     "handBlocks": 5,
+     "handLines": 32,
+     "slotsInPatterns": [
+      "t:rest",
+      "t:words"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.addStructure",
+     "handBlocks": 4,
+     "handLines": 31,
+     "slotsInPatterns": [
+      "a:lex.docs.editor.structsmany",
+      "a:lex.docs.editor.structs",
+      "b:lex.docs.editor.structs",
+      "c:lex.docs.editor.structs",
+      "d:lex.docs.editor.structs"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.write",
+     "handBlocks": 4,
+     "handLines": 29,
+     "slotsInPatterns": [
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addTask",
+     "handBlocks": 4,
+     "handLines": 28,
+     "slotsInPatterns": [
+      "t:rest",
+      "t:words"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.clearFormat",
+     "handBlocks": 4,
+     "handLines": 26,
+     "slotsInPatterns": [
+      "d:lex.docs.editor.determiners",
+      "t:words",
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.pageBreak",
+     "handBlocks": 3,
+     "handLines": 23,
+     "slotsInPatterns": [
+      "pos:lex.docs.editor.insertpos",
+      "r:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.whatSelected",
+     "handBlocks": 2,
+     "handLines": 22,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.size",
+     "handBlocks": 3,
+     "handLines": 21,
+     "slotsInPatterns": [
+      "s:lex.docs.editor.sizeverbs",
+      "t:rest",
+      "k:lex.docs.editor.sizeables",
+      "s:lex.docs.editor.sizes",
+      "ord:lex.docs.editor.ordinals"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.holdings",
+     "handBlocks": 2,
+     "handLines": 15,
+     "slotsInPatterns": [
+      "who:words"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.deleteTarget",
+     "handBlocks": 2,
+     "handLines": 15,
+     "slotsInPatterns": [
+      "w:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addItem",
+     "handBlocks": 2,
+     "handLines": 15,
+     "slotsInPatterns": [
+      "t:rest",
+      "st:lex.docs.editor.itemstyles"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.setTitle",
+     "handBlocks": 2,
+     "handLines": 14,
+     "slotsInPatterns": [
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.newDoc",
+     "handBlocks": 2,
+     "handLines": 14,
+     "slotsInPatterns": [
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.askTitle",
+     "handBlocks": 2,
+     "handLines": 14,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.dictate",
+     "handBlocks": 2,
+     "handLines": 14,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.fromList",
+     "handBlocks": 2,
+     "handLines": 14,
+     "slotsInPatterns": [
+      "list:words"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addRow",
+     "handBlocks": 2,
+     "handLines": 14,
+     "slotsInPatterns": [
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addColumn",
+     "handBlocks": 2,
+     "handLines": 14,
+     "slotsInPatterns": [
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.listTasks",
+     "handBlocks": 2,
+     "handLines": 13,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.download",
+     "handBlocks": 1,
+     "handLines": 9,
+     "slotsInPatterns": [
+      "f:lex.docs.editor.formats"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.report",
+     "handBlocks": 1,
+     "handLines": 9,
+     "slotsInPatterns": [
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addRule",
+     "handBlocks": 1,
+     "handLines": 9,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.unselect",
+     "handBlocks": 1,
+     "handLines": 8,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.deleteSentence",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.clear",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.replace",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "a:words",
+      "b:words"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.redo",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": true
+    },
+    {
+     "key": "doc.whatIs",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "ord:lex.docs.editor.ordinals",
+      "kind:lex.docs.editor.kinds"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.say",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.mentions",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "w:words"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.isEmpty",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.dictateStop",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.deleteRow",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "name:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.deleteColumn",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "name:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.fillTable",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.setCell",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "r:number",
+      "c:number",
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    },
+    {
+     "key": "doc.addQuote",
+     "handBlocks": 1,
+     "handLines": 7,
+     "slotsInPatterns": [
+      "t:rest"
+     ],
+     "inOperationsSop": true,
+     "operationInputs": 0,
+     "operationOutputs": 0,
+     "operationDoc": true,
+     "described": false
+    }
+   ],
+   "withArgsFromPatternsOnly": 7,
+   "describedFieldsUsed": 40,
+   "requiresDeclared": 5
+  }
+ }
+}
