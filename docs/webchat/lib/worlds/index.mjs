@@ -9,7 +9,7 @@
 import { parse, get, getAll } from '../soplang/index.mjs?v=26885599a7';
 import { Legends } from '../legends/index.mjs?v=48b634e4da';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
-import { describePatterns, descriptionFor, readDescriptionWires, emitKey, EN } from './describe.mjs?v=943522e8fb';
+import { describePatterns, descriptionFor, readDescriptionWires, emitKey, EN } from './describe.mjs?v=9fa4a2df34';
 import { checkPattern } from '../formalizer/rules/index.mjs?v=85b9949394';
 import { lexIndex } from './lexicon.mjs?v=e3316469a7';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
