@@ -55,6 +55,8 @@ An action the matrix does not declare is scored too (sopworld 0.12): the library
 
 ## 6. Results
 
+Default-on measurement (veto, 2026-11-12, after the false-veto fixes): `training/results/e2-default-veto-2026-11-12.md` (0 new wrong, rules and encoder+n1).
+
 See `training/results/e2-world-aware-2026-11-12.md` (per set, per mode, every changed case, the reviewer's named cases, every disagreement between the library's order and the host's). Totals over the judged sets (operational, operational-ro, dialogues, gold, loose-words, typos, real phrases; about 8,430 messages), right / wrong / not understood:
 
 | mode | off | veto | choose | veto-strict |

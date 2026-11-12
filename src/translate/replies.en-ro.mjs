@@ -523,6 +523,22 @@ const TABLE = [
 
 ];
 
+// World-aware veto replies (spec 16): the user's label in quotes, the user's own noun, one short question.
+const VETO_BOXES = { box: ['o cutie', 'nicio cutie', 'numită', 'o'], circle: ['un cerc', 'niciun cerc', 'numit', 'l'], rectangle: ['un dreptunghi', 'niciun dreptunghi', 'numit', 'l'], square: ['un pătrat', 'niciun pătrat', 'numit', 'l'],
+  oval: ['un oval', 'niciun oval', 'numit', 'l'], ellipse: ['o elipsă', 'nicio elipsă', 'numită', 'o'], triangle: ['un triunghi', 'niciun triunghi', 'numit', 'l'], diamond: ['un romb', 'niciun romb', 'numit', 'l'] };
+const VETO_PLURAL = { box: 'cutii', circle: 'cercuri', rectangle: 'dreptunghiuri', square: 'pătrate', oval: 'ovaluri', ellipse: 'elipse', triangle: 'triunghiuri', diamond: 'romburi' };
+const VETO_PLURAL_EN = { box: 'boxes', circle: 'circles', rectangle: 'rectangles', square: 'squares', oval: 'ovals', ellipse: 'ellipses', triangle: 'triangles', diamond: 'diamonds' };
+for (const [noun, [, none, called, clitic]] of Object.entries(VETO_BOXES)) {
+  TABLE.push([`I can't find a ${noun} called \u201c{q}\u201d.`, `Nu găsesc ${none} ${called} \u201e{q}\u201d.`]);
+  TABLE.push([`I can't find ${VETO_PLURAL_EN[noun]} called \u201c{q}\u201d or \u201c{q2}\u201d.`, `Nu găsesc ${VETO_PLURAL[noun]} numite \u201e{q}\u201d sau \u201e{q2}\u201d.`]);
+}
+TABLE.push(['The picture is empty.', 'Imaginea este goală.']);
+TABLE.push(['Shall I add it?', 'Să adaug?'], ['Shall I add them?', 'Să le adaug?']);
+TABLE.push(['I can\'t find \u201c{q}\u201d in the picture.', 'Nu găsesc \u201e{q}\u201d în imagine.']);
+TABLE.push(['In the picture I can see: {t}.', 'În imagine văd: {t}.']);
+TABLE.push(['We are not playing {w} right now.', 'Acum nu jucăm {w}.'], ['Tell me you want to play it, then say your move.', 'Spune-mi că vrei să joci, apoi spune-mi mutarea.']);
+
+
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const COMPILED = TABLE.map(([en, ro]) => {
   const keys = [];

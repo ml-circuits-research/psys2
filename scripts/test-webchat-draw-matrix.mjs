@@ -34,6 +34,26 @@ export const drawScenarios = ({ openChat, MATRIX, check, say }) => ({
       check('draw: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
+  async veto(o) {
+    // world-aware veto is the default (spec 16): plain-language replies, the user's label in quotes, one short question; English and Romanian (through the translator)
+    for (const [lang, connect, remove] of [['en', 'connect Start to End', 'delete the dragon'], ['ro', 'conectează c1 cu End', 'șterge dragonul']]) {
+      const c = await openChat({ ...o, settings: { ...MATRIX, language: lang } });
+      try {
+        if (lang === 'ro') await say(c, 'deschide fila diagramă');
+        await say(c, lang === 'en' ? 'draw a red box called Start' : 'desenează un cerc roșu');
+        const r = await say(c, connect);
+        console.log(`veto ${lang} connect: ${r}`);
+        check(`veto ${lang}: "${connect}" names the missing box in plain words and asks once`, lang === 'en' ? r === 'I can\'t find a box called \u201cEnd\u201d. Shall I add it?' : r === 'Nu găsesc nicio cutie numită \u201eEnd\u201d. Să adaug?', r.slice(0, 120));
+        const st0 = JSON.parse(await c.state())['diagram.sketch'] ?? {};
+        check(`veto ${lang}: nothing was added before the answer`, (st0.shapes?.length ?? 0) <= 1 && (st0.edges?.length ?? 0) === 0, JSON.stringify([st0.shapes?.length, st0.edges?.length]));
+        await say(c, lang === 'en' ? 'draw a house' : 'desenează o casă');
+        const d = await say(c, remove);
+        console.log(`veto ${lang} delete: ${d}`);
+        check(`veto ${lang}: "${remove}" says what it cannot find and what the picture has`, (lang === 'en' ? /^I can't find \u201cdragon\u201d in the picture\. In the picture I can see: .*house/.test(d) : /^Nu găsesc \u201edragonul\u201d în imagine\. În imagine văd: .*casă/.test(d)), d.slice(0, 140));
+        check(`veto ${lang}: no page errors`, c.errors.length === 0, c.errors[0] ?? '');
+      } finally { await c.close(); }
+    }
+  },
   async diagram(o) {
     const c = await openChat({ ...o, settings: MATRIX });
     const st = async () => JSON.parse(await c.state())['diagram.sketch'] ?? {};
