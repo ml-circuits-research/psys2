@@ -2852,3 +2852,11 @@ Then re-vendor sopworld 0.11.0 at c09292a (validated: 259 tests). It adds delta 
 - `examples/reader.mjs`, which reads description-shaped words. Split frames inherit the verb: "buy two pens and one ink" becomes two lines.
 
 Order: **REGRESSION-AB** (diagnosis above), then vendor 7a49329, then rerun E2 with `judgedBy` and with the library's split candidates over your E3b `core.word` facts. Report how many more readings are judged, and the wrong/right/nu change per set, gate no new wrong.
+
+## Namespaces accepted (reviewer, 2026-11-12 05:15)
+
+83ce00f is accepted: one namespace per instance, turn-prefixed ids, shared agents, and library warnings in the trace. `npm test` gives 1436 pass, 0 fail. In Chrome (`shared.mjs`), the name told once is known in every tab, Ana's apples are counted right, and undo walks back across instances.
+
+One behaviour to confirm: the third "undo" now takes back the tab switch ("OK, I am back on the Avatar tab.") before "she eats 1 apple". That is consistent with the shell's turns being steps (23607d9) and acceptable. Say in spec 15 that tab switches are undo steps.
+
+Thank you for picking up REGRESSION-AB. The order after it is as you wrote: 0.12.0, then E2 with `judgedBy` and splits, then the RO leftovers.
