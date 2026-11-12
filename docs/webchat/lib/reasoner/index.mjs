@@ -15,7 +15,7 @@
  */
 import { serialize, parse as parseOurs, ref as refValue, atom as atomValue, str as strValue } from '../soplang/index.mjs?v=26885599a7';
 import { budget as turnBudget } from '../dialog/budget.mjs?v=123c3e1329';
-import { nsWorld, nsContext, strip, replayInto, SHARED_TYPES, NO_NAMESPACE } from './ns.mjs?v=66baf25c98';
+import { nsWorld, nsContext, strip } from './ns.mjs?v=655a807958';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */
 const NOT_FACTS = new Set(['core.question', 'core.request', 'core.answer', 'core.observation']);
@@ -105,19 +105,17 @@ export async function createReasoner(set, { lib = null } = {}) {
   for (const w of worlds) for (const c of w.compose) if (byId.has(c) && !homes.has(c)) homes.set(c, w.id);
   const instKey = (id) => homes.get(id) ?? id;
   const matrixWorlds = (id) => [...new Set([...(byId.get(id)?.compose ?? []), id])].filter((x) => byId.has(x));
-  /** The legend text as the library reads it: a type of `SHARED_TYPES` says `shared=true` (our legends have no such attribute; it is the library's, spec 15 "Namespaces"). */
-  const sharing = (text) => (text == null ? text : text.replace(/^(@(\S+) core\.type)(?=[ \t]|$)/gm, (m, head, name) => (SHARED_TYPES.has(name) ? `${head} shared=true` : m)));
   const bases = new Map();
   const buildBase = (id) => {
     const fns = {};   // the world's action functions (the library keeps them apart from its own arithmetic)
-    const ns = NO_NAMESPACE.has(instKey(id)) ? '' : instKey(id);   // the namespace of the instance (spec 15, "Namespaces"): every fact of it is `<ns>::<id>` in the library
+    const ns = instKey(id);   // the namespace of the instance (spec 15, "Namespaces"): every fact of it is `<ns>::<id>` in the library
     for (const m of matrixWorlds(id)) for (const [name, f] of Object.entries(byId.get(m).fns ?? {})) fns[name] = (c, args) => f({ ...nsContext(c, ns), host, live: reasoner.live }, strip(ns, args));
     const raw = new lib.World({ ns, actions: fns, filters: FILTERS, vocabulary: { status: 'core.status' } });
     const base = nsWorld(raw, ns);
     const load = (what, text) => { if (text == null) return; const r = base.load(text); if (!r.ok) problems.push(`${what}: ${r.violations?.[0]?.kind ?? 'refused'} ${r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? ''}`.trim()); };
     const ordered = schemaWorlds(id).map((x) => set.get(x));
     load('mapping', set.list().map((w) => w.raw.mapping).find((t) => t != null));
-    for (const w of ordered) load(`${w.id}/legend.sop`, sharing(w.raw.legend));
+    for (const w of ordered) load(`${w.id}/legend.sop`, w.raw.legend);
     for (const w of ordered) load(`${w.id}/kb.sop`, w.raw.kb);   // the knowledge bases of the world and of what it imports (games.guess reads kids.animals): each instance has its own
     { const r = raw.tell('@e.user core.agent', { ns: '' }); if (!r.ok) problems.push(`user: ${r.violations?.[0]?.kind ?? 'refused'}`); }   // the user is in the default namespace (a shared type: every namespace reads it, and the matrices name it as `$e.user`)
     // one SOP Lang parser in the product: our parser reads the matrices and the library is handed their wires
@@ -321,7 +319,7 @@ export class ReasonerSession {
         const roots = new Map(), rootOf = (p) => {   // the base itself, or (a base entry was rewritten) a world that replays the base's entries up to there
           if (!roots.has(p)) {
             let w = base;
-            if (p < base.log.length) { w = nsWorld(new base.raw.constructor(base.options), base.ns); if (p) { const r = replayInto(w, base.log.slice(0, p)); if (r) throw new Error('replay refused'); } }
+            if (p < base.log.length) { w = nsWorld(new base.raw.constructor(base.options), base.ns); if (p) { const r = w._replay(base.log.slice(0, p)); if (r) throw new Error('replay refused'); } }
             roots.set(p, { log: base.log.slice(0, p), world: w });
           }
           return roots.get(p);
@@ -333,7 +331,7 @@ export class ReasonerSession {
           const w = prior.world.fork();
           const rest = logs[n].slice(prior.log.length);
           turnBudget.tick('reasoner.restore', rest.length + 1);
-          if (rest.length) { const r = replayInto(w, rest); if (r) throw new Error('replay refused'); }
+          if (rest.length) { const r = w._replay(rest); if (r) throw new Error('replay refused'); }
           built.push({ log: logs[n], world: w, n });
         }
         const by = new Map(built.map((b) => [b.n, b.world]));

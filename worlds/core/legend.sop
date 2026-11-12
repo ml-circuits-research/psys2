@@ -16,6 +16,7 @@
 
 @core.agent core.type
     extends=core.thing
+    shared=true
     doc="A person or participant that can be mentioned in dialog."
     example="Tom"
 
@@ -268,6 +269,11 @@
     value=boolean
     card=one
     ask="Are the facts of this type complete (closed world)?"
+
+@core.type.shared core.key
+    value=boolean
+    card=one
+    ask="Do the facts of this type belong to every namespace?"
 
 @core.key.value core.key
     value=any

@@ -7,7 +7,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { FormSession } from '../src/formalizer/rules/session.mjs';
-import { nsWorld, strip, qualify, toLib, SHARED_TYPES, NO_NAMESPACE } from '../src/reasoner/ns.mjs';
+import { nsWorld, strip, qualify, inQuestion } from '../src/reasoner/ns.mjs';
 import * as lib from '../src/vendor/sopworld/sopworld.mjs';
 
 const matrix = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
@@ -25,9 +25,7 @@ test('every instance has a namespace: the conversation, each game, each tab; the
     assert.ok(facts.filter((k) => k.includes('::')).every((k) => k.startsWith(`${id}::`)), `${id}: no id of another namespace`);
     assert.ok(inst.ofType('core.thing').every((w) => !w.id.includes('::')), `${id}: the host reads bare ids`);
   }
-  assert.equal(rs.of('docs.editor').ns, '', 'docs.editor stays in the default namespace (library item: an aggregate is told there)');
-  assert.ok(NO_NAMESPACE.has('docs.editor'));
-  assert.ok(SHARED_TYPES.has('core.agent'));
+  assert.equal(rs.of('docs.editor').ns, 'docs.editor', 'docs.editor is a namespace of its own too (N2: an aggregate is told in the namespace of the wires it counts)');
   // the facts the user told are found by their bare id, and a reference to them is bare too
   const buy = rs.of('kids.shop').ofType('kids.shop.purchase')[0];
   assert.ok(buy && /^t2_w\d+$/.test(buy.id), `the purchase carries its turn: ${buy?.id}`);
@@ -78,23 +76,22 @@ test('draw objects made in different turns with the same name are two things; th
   assert.equal(d.s.isession.rs.of('diagram.sketch').ofType('diagram.sketch.shape').length, 1);
 });
 
-test('the facade: ids go in qualified and come out bare, the default namespace is read, replace keeps the namespace', () => {
+test('the facade: ids go in qualified and come out bare, the default namespace is read (N5), replace keeps the namespace (N1)', () => {
   const raw = new lib.World({ ns: 'A' });
-  raw.load('@agent core.type\n@t core.type\n@t.k core.slot of=t key=k kind=number\n@t.o core.slot of=t key=o type=agent');
+  raw.load('@agent core.type shared=true\n@t core.type\n@t.k core.slot of=t key=k kind=number\n@t.o core.slot of=t key=o type=agent');
   raw.tell('@e.user agent', { ns: '' });
   const w = nsWorld(raw, 'A');
-  assert.equal(w.tell('@x t k=1 o=$e.user').ok, true, 'a reference to the user is written out for the library');
+  assert.equal(w.tell('@x t k=1 o=$e.user').ok, true, 'N5: a bare reference to a fact of a shared type in the default namespace resolves');
   assert.deepEqual([...raw.wires.keys()].sort(), ['A::x', 'e.user']);
   assert.equal(w.get('x').id, 'x');
   assert.equal(w.get('x').attrs.o[0], '$e.user');
   assert.equal(w.has('x'), true);
   assert.equal(w.has('e.user'), true, 'the user, in the default namespace, is found by its bare id');
   assert.equal(w.replace('x', '@x t k=2').ok, true);
-  assert.ok(raw.has('A::x') && !raw.has('x'), 'replace puts the wire back in the namespace (library 0.9.0 drops it into the default one)');
+  assert.ok(raw.has('A::x') && !raw.has('x'), 'N1: replace keeps the namespace of the wire it replaces');
   assert.deepEqual(w.ofType('t').map((x) => [x.id, x.attrs.k[0]]), [['x', '2']]);
   assert.equal(strip('A', { a: ['$A::x', 'A::y'], b: 3 }).a.join(), '$x,y');
   assert.equal(qualify('A', '$x'), '$A::x');
-  assert.equal(toLib('@x t o=$e.user p=$e.users'), '@x t o=$::e.user p=$e.users');
   assert.ok(nsWorld(w, 'A') === w, 'a facade is not wrapped twice');
   assert.equal(w.fork().ns, 'A');
 });
@@ -106,4 +103,24 @@ test('the library warnings are in the reply (debug trace), once, and not in the 
   assert.ok(w.every((x) => x.kind && x.world), 'each has a kind and the instance');
   assert.equal(out[1].warnings, undefined, 'a warning is reported once per session');
   assert.doesNotMatch(out[0].text, /warn|template\.item/i);
+});
+
+test('N3 (a type declared through core.schema.map reads shared), N4 (a replay keeps the default-namespace facts), N2 (an aggregate counts in its namespace), N6 (check asks in the patch namespace)', () => {
+  const raw = new lib.World({ ns: 'A' });
+  raw.load('@m core.schema.map from=mytype as=type name=id shared=shared'); raw.load('@agent mytype shared=true\n@t core.type\n@t.k core.slot of=t key=k kind=number');
+  assert.ok(raw._compiled().shared.has('agent'), 'N3');
+  raw.tell('@e.user agent', { ns: '' });
+  raw.tell('@x t k=1');
+  const w2 = new lib.World({ ns: 'A' });
+  assert.equal(w2._replay(raw.log), null);
+  assert.deepEqual([...w2.wires.keys()].filter((k) => !k.startsWith('_')).sort(), [...raw.wires.keys()].filter((k) => !k.startsWith('_')).sort(), 'N4: the replay is the same world');
+  const f = nsWorld(w2, 'A');
+  const r = f.check({ wires: [{ id: 'y', type: 't', attrs: { k: ['2'] } }] }, { query: { type: 't', seek: 'k', where: { k: '2' } } });
+  assert.equal(r.ok, true, 'N6: the check sees the namespace of the patch');
+  assert.ok(r.answer, 'N6: the query was answered');
+});
+
+test('what is left of N5: a reference to the user in a question is written for the default namespace, in a wire it is not', () => {
+  assert.equal(inQuestion('owner=$e.user and $e.users'), 'owner=$::e.user and $e.users');
+  assert.deepEqual(inQuestion({ where: { owner: '$e.user' }, n: 3 }), { where: { owner: '$::e.user' }, n: 3 });
 });
