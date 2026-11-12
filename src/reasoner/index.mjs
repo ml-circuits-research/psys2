@@ -579,6 +579,12 @@ export class ReasonerSession {
   }
   /** After a rewind the turn in progress starts again from where the library is: a pure undo then changes nothing (it is not an action to take back), a repair that tells the corrected sentence does. */
   _restart() { if (this.cur) this.cur = { turn: this.cur.turn, marks: this._marks(), ops: this.ops, owners: this.cur.owners }; }
+  /**
+   * A world's action reports that something happened by itself in the middle of the user's turn: the engine's reply to an earlier move that landed late ("Meanwhile I
+   * play ..."). It is not part of the user's step: the step begins again from the library as it is now, and the engine's move stays with the earlier step that caused it
+   * (rewinding that step takes it back). So "undo" takes back exactly the user's own move, as the world's own undo does (REGRESSION-AB).
+   */
+  checkpoint(prefix = null) { if (prefix !== null && this.reasoner.live) this.ckpt = { prefix }; else this._restart(); }
   /** The mark of a turn that changed the library (undefined for a turn that did not). */
   markOf(turn) { return this.turns.find((t) => t.turn === turn)?.mark; }
   /** Is there something told in the last few turns to take back (or, once the user is undoing, anything left)? */
@@ -713,7 +719,12 @@ export class ReasonerSession {
     let r;
     const stamp0 = inst.world.stamp;
     this.reasoner.live = this.live ?? null;   // what the host offers an action while it runs: `request(action, args)` to ask another world (the active tab), `batch`
-    try { r = isQuestion ? inst.world.query(lw, { budget: limit }) : inst.world.act(lw, { budget: limit }); }
+    this.ckpt = null;
+    try {
+      r = isQuestion ? inst.world.query(lw, { budget: limit }) : inst.world.act(lw, { budget: limit });
+      // the action reported that the engine's late reply landed in it (`live.checkpoint`) and stopped there: that change is committed, the user's step begins after it (a mark cannot be taken in the middle of an action), and the action runs again on the position it left
+      if (this.ckpt && !isQuestion) { const c = this.ckpt; this.ckpt = null; this._restart(); this.reasoner.live.carry = c.prefix; try { r = inst.world.act(lw, { budget: limit }); } finally { this.reasoner.live.carry = null; } }
+    }
     catch (e) { return { status: 'error', note: `the reasoner failed: ${e?.message ?? e}`, via: 'core.matrix' }; }
     finally { this.reasoner.live = null; }
     this._charge(inst.world);
@@ -832,7 +843,8 @@ export class ReasonerSession {
         if (clean && e) e.stamp = inst.world.stamp;   // nothing else changed the library in this turn: the turn is no action to take back
         refused = { world: id, why: bad };
       }
-      if (!bad && this.cur?.owners && (plan?.retract?.length || plan?.tell || plan?.sets?.length || plan?.replace?.length) && (!this.reasoner.passive.has(id) || id === ownId)) this.cur.owners.add(id);
+      if (!bad && plan?.quiet && clean) { const e = this.cur?.marks.get(id); if (e) e.stamp = inst.world.stamp; }   // bookkeeping only (`quiet`: a counter, a hint that was shown) and nothing else changed in this turn: it is no step to take back, so "undo" goes back over it to the move
+      else if (!bad && this.cur?.owners && (plan?.retract?.length || plan?.tell || plan?.sets?.length || plan?.replace?.length) && (!this.reasoner.passive.has(id) || id === ownId)) this.cur.owners.add(id);
       this.written.set(id, json);   // the state is the library's to say again: derived and written back (the refused one is replaced by the one before)
       this._state(session, id);
     }

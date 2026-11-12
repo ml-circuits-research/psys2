@@ -1,0 +1,78 @@
+{
+ "operational:kids.common#029": [
+  "neutral wording",
+  "kids.common is not a matrix world; 'how are you' has several phrasings and the two engines picked different ones"
+ ],
+ "operational-ro:kids.common#029.ro": [
+  "neutral wording",
+  "same as the English case: another phrasing of the same greeting"
+ ],
+ "operational-ro:kids.common#029.roc": [
+  "neutral wording",
+  "same as the English case: another phrasing of the same greeting"
+ ],
+ "dialogues:dlg.kidsB#016": [
+  "neutral wording",
+  "unchanged from 2026-11-11: matrix adds the knowledge-base source (\"and from the price list\") to the explanation; right in both"
+ ],
+ "dialogues:dlg.kidsA#010": [
+  "neutral wording",
+  "identical replies; the label differs only because matrix mirrors the library's fact (Zoe 6 marbles) into the state view while the reply says it did not understand the question"
+ ],
+ "coherence:coh.shop.12": [
+  "neutral wording",
+  "rechecked after the wording fix: both pass; ops quotes its reading (\"I took that as: i buy a ball\"), matrix says \"OK, you bought 1 ball. I assumed 1 ball.\""
+ ],
+ "gold:real#rp3-18": [
+  "neutral wording",
+  "random choice of a song (\"play a random song\"); the two modes drew different songs"
+ ],
+ "dialogues:dlg.drm#026": [
+  "neutral wording",
+  "random choice: \"Play\" with no song picks a random one (Ode to Joy against Brahms' Lullaby); the rest of the dialogue is identical"
+ ],
+ "gold:para#ace4799a6a549fd9": [
+  "neutral wording",
+  "not understood in both modes; only the \"did you mean\" candidates differ (matrix offers \"What did I pay?\", ops \"What should I call you?\"); matrix suggests the closer question"
+ ],
+ "gold:para#64b3cbbcda86d86c": [
+  "neutral wording",
+  "not understood in both modes; only the \"did you mean\" candidates differ (matrix offers \"What did I pay?\", ops \"What should I call you?\")"
+ ],
+ "coherence:coh.shop.08": [
+  "neutral wording",
+  "both pass; \"pay\" is not understood in both, matrix suggests \"What did I pay?\", ops two unrelated examples; the answer to the next question is the same"
+ ],
+ "dialogues:dlg.avt#001": [
+  "matrix better",
+  "undo of a part change: matrix names what came back (\"I have visor eyes again\"); ops only says it went back"
+ ],
+ "dialogues:dlg.avt#011": [
+  "neutral wording",
+  "undo of \"Yes\" (become the emoji): the replies are the same up to the opener; the library goes back to the state before \"Yes\", which still holds the open offer (ui.avatar.pending, inputMode=confirm), ops forgets the offer. Open question for the reviewer: should an undo of the confirmation also drop the offer it answered?"
+ ],
+ "dialogues:dlg.avt#036": [
+  "matrix better",
+  "undo and redo in docs.editor: matrix says what was taken back and put back (\"the list you added is gone\", \"I added the list again\"); the history keys of the state differ only because the matrix history is the library's"
+ ],
+ "dialogues:dlg.drm#007": [
+  "neutral wording",
+  "random opener (Here you go / Ta-da); after an undo the matrix rewinds nextId, so the next object gets o1 again where ops counts on (o2): ids are not shown"
+ ],
+ "dialogues:dlg.drm#025": [
+  "neutral wording",
+  "same as dlg.drm#007: random opener, and the object ids restart after an undo in matrix"
+ ],
+ "dialogues:dlg.drm#038": [
+  "neutral wording",
+  "two undos of a tempo change: both say the tempo that is back (ops adds the instrument); the state differs only in the lastChangeWasSetting flag, which ops keeps and the library does not need"
+ ],
+ "dialogues:dlg.ed#006": [
+  "matrix better",
+  "undo in docs.editor: matrix names what it put back (\"the paragraph you deleted\"); ops says \"the last change\""
+ ],
+ "gold:real#rp5-15": [
+  "matrix better",
+  "art.draw after a not-understood Romanian turn (nothing drawn): 'Move the fish' where ops asks where it should go, matrix says there is no fish in the empty picture; matrix is the accurate one"
+ ]
+}

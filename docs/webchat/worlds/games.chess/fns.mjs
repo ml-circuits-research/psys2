@@ -7,7 +7,7 @@
 // library takes it over as wires), so the rules, the undo and the explanation always read the game on the screen.
 // Browser-safe. It imports its sibling ops.mjs (a world is plain files) and the vendored chess.js.
 import { Chess } from './vendor/chess.mjs?v=9a44601d41';
-import { initialState, load, refresh, intent, resolve, move as opsMove, can as opsCan, NAME, VAL, colorName, other, fi, ri, ucol, plainMove } from './ops.mjs?v=d3ec534f37';
+import { initialState, load, refresh, intent, resolve, move as opsMove, can as opsCan, NAME, VAL, colorName, other, fi, ri, ucol, plainMove } from './ops.mjs?v=f34fecc62f';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const un = (v) => { const s = String(v ?? ''); if (s.startsWith('"')) { try { return JSON.parse(s); } catch { /* not JSON */ } } return s; };
@@ -143,13 +143,19 @@ function planOf(s, find) {
 /** The operations of ops.mjs changed the state: the wires that say the same (host: `ReasonerSession.adoptState`). */
 export function adopt({ state, find }) {
   const p = planOf(state, find);
-  return p.retract.length || p.replace.length || p.tell ? p : null;
+  if (!(p.retract.length || p.replace.length || p.tell)) return null;
+  // only the transient rest of the game moved (the wait counter of an engine move, a shown hint): no move, no new position. `quiet`: the host does not count it as a step to undo.
+  const game = find('chess.game')[0];
+  const quiet = !p.retract.length && !p.tell && p.replace.length === 1 && p.replace[0].type === 'chess.game' && game && un(String(p.replace[0].attrs.fen?.[0])) === val(game, 'fen');
+  return quiet ? { ...p, quiet: true } : p;
 }
 
 // ------------------------------------------------------------------ the actions
 
 const stateOf = (ctx) => toState({ find: ctx.find });
+class Checkpoint { constructor(text) { this.text = text; } }
 const SCRATCH = (ctx, st, effects) => ({
+  checkpoint: ctx.live?.checkpoint ? (text) => { throw new Checkpoint(text); } : undefined,   // a late engine reply is its own change, not the user's step: the action stops, the host marks the timeline and runs it again
   state: st,
   effect: (name, args = {}) => effects.push({ name: String(name), args: structuredClone(args) }),
   request: () => ({ status: 'unsupported' }),   // the tab routing of ops.mjs: the actions that need it are declined below
@@ -216,7 +222,14 @@ function validated(ctx, args0, name) {
   const it = intent(args);
   const before = st.history.length, pending = st.pending;
   const effects = [];
-  const r = (name === 'move' ? opsMove : opsCan)(SCRATCH(ctx, st, effects), args);
+  let r;
+  try { r = (name === 'move' ? opsMove : opsCan)(SCRATCH(ctx, st, effects), args); }
+  catch (e) {
+    if (!(e instanceof Checkpoint)) throw e;
+    commit(ctx, st);   // the engine's reply that was waiting is told now; the user's move is read again on the position it left
+    ctx.live.checkpoint(e.text);
+    return { value: e.text, openTab: 'chess' };
+  }
   const refused = name === 'move' ? r.status === 'unsupported' : typeof r.value === 'string' && r.value.startsWith('No. ');
   if (!turnWhy && !it.error && !pending && refused) {
     // a move that no legal move matches: the rules explain it when the squares can be told
@@ -237,6 +250,8 @@ function validated(ctx, args0, name) {
   }
   commit(ctx, st);
   const out = envelope(r, effects);
+  const carried = ctx.live?.carry;   // what the engine said when its late reply was told in the run before this one
+  if (carried) { if (typeof out.value === 'string') out.value = `${carried} ${out.value}`; else if (typeof out.note === 'string') out.note = `${carried} ${out.note}`; }
   if (turnWhy && out.note && out.status === 'missing') out.note = `${turnWhy} ${out.note}`;
   return out;
 }

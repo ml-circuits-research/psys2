@@ -21,6 +21,7 @@ import { parseJobs, runSharded, serveShard } from './lib/shard.mjs';
 import { evaluateCase, classify } from './lib/operational-check.mjs';
 import { wireToRec } from './lib/nx-read.mjs';
 import { evaluateRows } from './eval-loose-words.mjs';
+import { visibleState } from './lib/visible-state.mjs';
 
 const SELF = fileURLToPath(import.meta.url);
 const REPO = resolve(dirname(SELF), '..');
@@ -28,7 +29,7 @@ const MAIN = '/home/salboaie/work/psys2/';   // untracked data lives in the main
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const jl = (f) => readFileSync(f, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
 const pick = (rel) => (existsSync(join(REPO, rel)) ? join(REPO, rel) : join(MAIN, rel));
-const strip = (st) => { const { 'ui.help': _h, ...rest } = st; return JSON.stringify(rest); };
+const strip = (st) => JSON.stringify(visibleState(st));
 const normVal = (v) => (v == null ? '' : typeof v === 'number' ? String(v) : String(v).replace(/^\$(e\.)?/, '').toLowerCase().replace(/_/g, ' ').trim().replace(/^(-?\d+)\.0+$/, '$1'));
 
 function buildItems(sets, limit) {

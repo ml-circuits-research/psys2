@@ -17,6 +17,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { DEFAULT_MODE, MODES, sessionOptions } from '../src/dialog/runtime-config.mjs';
 import { openNodeRuntime } from './lib/runtime-node.mjs';
+import { visibleState } from './lib/visible-state.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
@@ -28,7 +29,7 @@ function newSession(engine, settings, row) {
   return s;
 }
 
-const strip = (st) => { const { 'ui.help': _h, ...rest } = st; return rest; };
+const strip = (st) => visibleState(st);
 /** What a reply did: state, effects and answer values (not the wording). */
 function signature(s, reply) {
   return JSON.stringify({ state: strip(s.state()), effects: reply.effects.filter((e) => e.name !== 'chat.suggest').map((e) => [e.name, e.args]), values: reply.answers.map((a) => a.value) });

@@ -50,7 +50,7 @@ test('art.draw: the scene is wires, and toState derives the session state back w
   assert.equal(w.ofType('art.draw.scene').length, 1);
   assert.equal(JSON.stringify(drawState({ find: (t) => w.ofType(t) })), JSON.stringify(s.state()['art.draw']), 'library = session state, key by key and in order');
   assert.deepEqual(drawAdopt({ state: stateOf(s, 'art.draw'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [], replace: [] }, 'nothing left to take over');
-  assert.equal(stateOf(s, 'art.draw').history, undefined, 'the history is the library\'s, not a key of the state');
+  assert.deepEqual(stateOf(s, 'art.draw').history, [], 'the history is the library\'s: the state keeps the key, empty (so the view does not change shape between turns)');
 });
 
 test('art.draw: a thing that moved is one set of its wire, not a new wire (the cost of churn)', async () => {

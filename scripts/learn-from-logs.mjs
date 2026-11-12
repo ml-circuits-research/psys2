@@ -37,6 +37,7 @@ import { openNodeRuntime } from './lib/runtime-node.mjs';
 import { parseJobs, runSharded, serveShard } from './lib/shard.mjs';
 import { serialize, parse } from '../src/soplang/index.mjs';
 import { normalizedSop } from './collect-paraphrases.mjs';
+import { visibleState } from './lib/visible-state.mjs';
 import {
   isComplaintRecord, thumbsOf, listLogFiles, loadLogRecords, recordsFromGold, recordsFromEval, sessionsOf, correctionSignals, summarizeReply, decideSelfLabel, labelledRows, queueRow,
   candidateWorlds, buildPatternIndex, nearestExample, SELF_LABEL_RULES,
@@ -52,7 +53,7 @@ const readJsonl = (f) => readFileSync(f, 'utf8').split('\n').filter((l) => l.tri
 const pct = (n, d) => (d ? Math.round((1000 * n) / d) / 10 : 0);
 
 // ---- the replay (runs in shard workers) ----------------------------------------------------------------------------------------------
-const strip = (st) => { const { 'ui.help': _h, ...rest } = st; return JSON.stringify(rest); };
+const strip = (st) => JSON.stringify(visibleState(st));
 
 /** Replays one session (records in time order) through the pipeline; one result per record. */
 export async function replaySession(env, session) {

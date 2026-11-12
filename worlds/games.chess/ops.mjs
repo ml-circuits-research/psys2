@@ -456,6 +456,7 @@ function settle(ctx, s) {
   if (s.status !== 'playing' || c.turn() !== ecol(s)) { s.pendingEngine = false; refresh(s, c); return {}; }
   const mv = playEngine(s, c, null);
   s.engine = 'builtin';
+  ctx.checkpoint?.(`Meanwhile ${engineText(s, c, mv).replace(' Your move.', '')}`);   // the engine's late reply is not a step of the user's turn: the matrix reasoner marks its timeline after it and says it first
   return { text: `Meanwhile ${engineText(s, c, mv).replace(' Your move.', '')}` };
 }
 const overText = (s) => (s.status === 'resigned' ? 'You resigned this game.' : `The game is over: ${s.status === 'checkmate' ? `checkmate, ${s.winner === s.user ? 'you won' : 'I won'}` : s.reason}.`) + ' Say "new game" to play again.';
