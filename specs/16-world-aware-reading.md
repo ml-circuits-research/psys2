@@ -43,7 +43,7 @@ Two host criteria on top of the library's order (`pick.libraryDefault` is the li
 
 An action the matrix does not declare is scored too (sopworld 0.12): the library judges it by a fallback (referents, slots, denies) and says so in `judged` / `judgedBy`; `ReasonerSession.score` passes both through and adds `libVeto`, the reasons of the library's `veto(result)` for the reading. `libVeto` is recorded in `wa`; it is a veto kind (`library`, every reason but `inconsistent`, `nothing` and `action-unavailable`) only when `PSYS2_WA_KINDS` asks for it (measured in `training/results/e2-world-aware-2026-11-12b.md`).
 
-`choose` reorders only when the library's first reading differs from the router's (a tie keeps the router's order). Not implemented, and why: the dispatcher's top-k (the encoder strategy returns one reading per clause), the library's split candidates for compound messages as an acting reading (measured only: `src/dialog/word-reader.mjs`, `scripts/e2-splits.mjs`; the library reads only worlds whose `core.word` `means` name matrix keys, which is kids.shop alone, and answers none of the cases the rules miss), the dialogue layer's follow-up readings (the discourse layer changes its state before it reads, so a second reading would have to be undone), the Romanian translator route (one candidate).
+`choose` reorders only when the library's first reading differs from the router's (a tie keeps the router's order). Not implemented, and why: the dispatcher's top-k (the encoder strategy returns one reading per clause), the library's split candidates for compound messages as an acting reading (since READER-ROUTE: section 7, behind its own option), the dialogue layer's follow-up readings (the discourse layer changes its state before it reads, so a second reading would have to be undone), the Romanian translator route (one candidate).
 
 ## 5. Rules of the layer
 
@@ -70,3 +70,67 @@ What it shows, honestly:
 - **`choose`** adds little over `veto`. Against `off`, rules: 26 wrong to not understood, 7 wrong to right, 1 not understood to right, 7 right to not understood, no new wrong; encoder+n1: identical to `veto` (no disagreement at all). Against `veto`, rules: 3 not understood to right and 3 partly to right (a move in an idle game loses to the reading of the open tab: "put it in the top right corner" on the Drawing tab now moves the house; "My name is not Ana, it is Irina" is read by user.profile, not by Hangman), and one case that stays wrong ("e... center": the library picked a music reading over the hangman one; wrong in `off` as well). 20 disagreements are listed for rules: 14 reorderings applied by the host criterion for an idle game, and 6 (Romanian "how many ... in total" questions) where the library's default order would pick a different reading than the router did (it counts the answer a question cannot give yet as a lack); the host's criterion keeps the router's reading, which is right in all six.
 - The matrices declare few actions (spec 15), so `score` returns `judged = false` for most readings and the library's criteria alone rarely separate two readings. The named cases that need the open tab or the knowledge of another world to be decided (the document that takes "center and what is 3 times 3", "colour Spain in", "add milk ... and also can penguins fly") are not changed: the right reading is not among the readings the formalizers found.
 - Romanian: not addressed here (E1: 349 of 451 are translator or lexicon cases), except where the English reading names something the world does not have.
+
+## 7. The reader as a third source of readings (READER-ROUTE)
+
+Code: `src/dialog/reader-route.mjs`, the stage `_withReader` of `src/dialog/index.mjs`, the loader flag in `src/worlds/index.mjs`. Measurement: `scripts/e1-collect.mjs --reader <mode>`, `scripts/reader-route-report.mjs`, `scripts/e2-splits.mjs`; results in `training/results/reader-route-2026-11-12.{json,md}`. Tests: `tests/reader-route.test.mjs`.
+
+### 7.1 What it is
+
+The library's reader core (`interpret` over the English `core.word` facts of a world's `describe.sop`, split candidates, `score`, `rank`) reads a clause and gives readings. They are turned into the **same dialogue wires the rules produce**: the description's own `emit` template filled with what the library found, normalized and validated like the rules' wires (`buildWires`, `normalizeWire`, `validateWire`). The segment is marked `strategy: 'reader'` and carries `reader` (the world, the operation, what was assumed, why it was taken). It is a third source next to the rules and the encoder and uses the same judging (`ReasonerSession.score`).
+
+### 7.2 The option
+
+`reader` is a session option of `engine.createSession` (`'off' | 'fill' | 'choose'`, default `'off'`; a per-message option of `send` overrides it; the environment variable `PSYS2_READER` sets the default of command-line tools; `scripts/e1-collect.mjs --reader <mode>` passes it to the evaluation). `describe.sop` is read by the loader only when the flag is on (as with `PSYS_GEN_PATTERNS`; it is `PSYS2_READER` at engine creation). With `off` nothing in this section runs and the turn is byte for byte the shipped one.
+
+| mode | what it does |
+| --- | --- |
+| `fill` | A clause that nothing read (unparsed, after the rules, the encoder, the leniency stages and the best-effort reader) takes the reader's reading when the reader has one that passes section 7.4. |
+| `choose` | `fill`, and a clause that was read takes the reader's reading when the library's `rank` (`ReasonerSession.score` over the current reading with the words it leaves out, and the reader's) puts the reader's first. A tie keeps the current reading (the given order). Only a rival reading of the world the clause was read in, or of the open tab, is considered. |
+
+The reader reads only the worlds the user is in (the open tab's world, the modal world, the running game's world). A world with no English description is not read. After the stage, the world-aware layer (sections 2 to 5) judges the reader's reading like any other (`veto`, `choose`).
+
+### 7.3 The mapping of `means`
+
+The 0.12 finding: with the words told to the world's matrix instance, only kids.shop's words resolved (geo.map 341 and docs.editor 247 `unknown-word` warnings), because a `means` of a description word is an **emit key** (`geo.capital`, `doc.addHeading`), not a name the matrix declares (the matrices declare few actions, spec 15). The reader therefore keeps a small **reader world** (a library `World`, built once per loaded world set, memoized, never holding user state) in which every `means` has a place the library knows:
+
+- every description (`core.describe`) is a **type** named by its id (not by its `op`: several descriptions may share one `op` and differ in emit and words, as a title and a heading do);
+- every argument is a **slot** of that type (`op.arg` is the key the words of an argument mean; a quantity slot `qty=` is a number slot); a `number` argument is a number slot, an argument of a lexicon class (`lex.x`) is a slot that holds a wire of the class, whose wires are the lexicon's words (identifying key `name`), any other class (`rest`, `noun`, `words`) is a free string slot;
+- the words of a description are told per description and role (`verb`, `tverb`, `noun`, `ask`, `rest`, `pre`, `mid`, `subject` mean the type; `prep.x`, `det.x`, `unit.x` mean the key `type.x`); a text of several words is one token with `_` (the library keeps the quotes of a quoted text), and the host merges the tokens of a clause that spell such a word or a name ("how many people live in", "new_york") before the library sees them; a plural name is read as its singular (the rules' lemma).
+
+So a `means` that names an operation, an argument or a value always resolves (`readerCoverage` reports it per world; the tests require no `unknown-word` warning and no unused word). Where the matrix does declare the name (kids.shop) the reading is the same; the matrix is not touched: the reading is judged on the real instance afterwards, as the rules' readings are.
+
+### 7.4 What the reader may take (the policy, `READER_POLICY`)
+
+A reading is taken only when all of these hold; each was added because a measurement showed a wrong answer without it.
+
+1. It leaves nothing out: every word of the clause is a word of the chosen description (role words, argument words), the value of an argument, a glue word (the host's fillers, question words, auxiliaries, prepositions), or the spelling the library corrected (`assumes`). A split candidate must read every frame of the split: the library drops a frame it has no reading for without counting its words (library item in `worker-log.md`), so a split with fewer parts than frames is no reading.
+2. A word the library read as a near known word is corrected by one letter at most (`maxAssume`; "moved" read as "money" is not a spelling of it).
+3. It rests on a content word of the description (`anchor`): one of its role words that is not glue, spelled as in the description or one letter away. "Is Kyoto" alone is not "is Kyoto landlocked".
+4. It is unambiguous: no reading of another set of wires is as good on every criterion (words left out, assumptions, a verb word rather than an implied verb, words used) in a world as near the conversation. Two descriptions that emit the same wires are one reading.
+5. Every number of the clause is a value of the reading.
+6. No negation in the clause (the reader has no way to say it).
+7. **No free text** (`freeText: false`): an argument that takes any words (class `rest`, `noun`, `words`) is not filled by the reader. The descriptions cover only part of a world, so a word they do not know may be content that the rules know ("make the heading bigger", "heading underline", "center the title" were read as headings with that text in the first measurement: 30 wrong answers). Descriptions with such an argument give the reader no reading.
+
+### 7.5 Rules of the stage
+
+- Read-only: `interpret`, `score` and `rank` run on the reader world and on forks; nothing is told to any world (`tests/reader-route.test.mjs`).
+- Bounded: the stage ticks the turn budget (`dialog.reader`, `reader.world`, `reader.tokens`, `reader.build`); `interpret` takes the library's own limit (12 candidates a clause).
+- Never throws: a failure keeps the reading.
+- English only: a Romanian message is read through the translator first and then the same English route.
+- The follow-up readings of the library (`previous`, `correction`, `other`) are not used: the discourse layer has already handled follow-ups before the formalizer runs.
+
+### 7.6 Results
+
+See `training/results/reader-route-2026-11-12.md` (and `-splits.json`). Rules / encoder+n1, over operational, operational-ro (Romanian through the rules translator), dialogues, gold, loose-words and typos, right / wrong / not understood:
+
+| mode | rules | encoder+n1 |
+| --- | --- | --- |
+| reader off | 7,221 / 424 / 642 | 7,394 / 473 / 479 |
+| `fill` | 4 not understood to right, 1 to wrong | 2 to right, 1 to wrong |
+| `choose` | 5 to right, 1 to wrong | 2 to right, 1 to wrong |
+
+- The one new wrong answer is a label mismatch (gold-real "on the new chapter": the reply is the rules' reply to "add a new chapter"; the gold op differs). No other case changed, in either mode, with or without the world-aware layer on top (E2 `choose`: the same 4 and 1; encoder+n1 the same 2 and 1).
+- Coverage of `means`: kids.shop 173 of 173 words (0.12: 0 unknown), docs.editor 247 of 247 (0.12: 247 unknown), geo.map 344 of 344 (0.12: 341 unknown); no `unknown-word` warning after the mapping.
+- The reader adds little because only three worlds have a description and it reads only the world the user is in; gold-para (class b) and loose-words (class e) gain nothing (no accepted reading of 14 and 105 messages of described worlds). Its value grows with the descriptions, with no change of code.
+- The library's split candidates are read and judged; a split is taken only when every frame reads. In the measurement of the reader alone (`scripts/e2-splits.mjs`, 1,500 messages of the three worlds) 11 accepted readings are splits of compound messages; none changed an outcome.

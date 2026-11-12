@@ -1,0 +1,1090 @@
+{
+ "date": "2026-11-12T06:50:40.774Z",
+ "coverage": {
+  "kids.shop": {
+   "words": 173,
+   "descriptions": 11,
+   "asIs": {
+    "unknown": 0
+   },
+   "mapped": {
+    "words": 173,
+    "mapped": 173,
+    "unmapped": 0,
+    "descriptions": 11,
+    "types": 11,
+    "entityClasses": 1,
+    "wordLines": 179,
+    "resolved": 179,
+    "warnings": 0,
+    "unmappedIds": []
+   }
+  },
+  "docs.editor": {
+   "words": 247,
+   "descriptions": 25,
+   "asIs": {
+    "unknown": 247
+   },
+   "mapped": {
+    "words": 247,
+    "mapped": 247,
+    "unmapped": 0,
+    "descriptions": 25,
+    "types": 25,
+    "entityClasses": 4,
+    "wordLines": 350,
+    "resolved": 350,
+    "warnings": 0,
+    "unmappedIds": []
+   }
+  },
+  "geo.map": {
+   "words": 344,
+   "descriptions": 27,
+   "asIs": {
+    "unknown": 341
+   },
+   "mapped": {
+    "words": 344,
+    "mapped": 344,
+    "unmapped": 0,
+    "descriptions": 27,
+    "types": 27,
+    "entityClasses": 3,
+    "wordLines": 350,
+    "resolved": 350,
+    "warnings": 0,
+    "unmappedIds": []
+   }
+  }
+ },
+ "sets": {
+  "rules|off": {
+   "operational": {
+    "n": 1296,
+    "right": 1236,
+    "partly": 22,
+    "not_understood": 28,
+    "wrong": 10
+   },
+   "operational-ro": {
+    "n": 2480,
+    "right": 2029,
+    "not_understood": 326,
+    "wrong": 77,
+    "partly": 48
+   },
+   "dialogues": {
+    "n": 2241,
+    "right": 2174,
+    "not_understood": 40,
+    "partly": 10,
+    "wrong": 17
+   },
+   "gold-rules": {
+    "n": 150,
+    "right": 147,
+    "not_understood": 2,
+    "wrong": 1
+   },
+   "gold-para": {
+    "n": 100,
+    "right": 32,
+    "not_understood": 34,
+    "wrong": 34
+   },
+   "gold-real": {
+    "n": 50,
+    "right": 23,
+    "wrong": 16,
+    "not_understood": 11
+   },
+   "loose-words": {
+    "n": 670,
+    "wrong": 101,
+    "not_understood": 146,
+    "right": 418,
+    "invalid": 5
+   },
+   "typos": {
+    "n": 1394,
+    "right": 1162,
+    "wrong": 168,
+    "not_understood": 55,
+    "invalid": 9
+   }
+  },
+  "rules|fill": {
+   "operational": {
+    "n": 1296,
+    "right": 1237,
+    "partly": 22,
+    "not_understood": 27,
+    "wrong": 10
+   },
+   "operational-ro": {
+    "n": 2480,
+    "right": 2029,
+    "not_understood": 326,
+    "wrong": 77,
+    "partly": 48
+   },
+   "dialogues": {
+    "n": 2241,
+    "right": 2174,
+    "not_understood": 40,
+    "partly": 10,
+    "wrong": 17
+   },
+   "gold-rules": {
+    "n": 150,
+    "right": 147,
+    "not_understood": 2,
+    "wrong": 1
+   },
+   "gold-para": {
+    "n": 100,
+    "right": 32,
+    "not_understood": 34,
+    "wrong": 34
+   },
+   "gold-real": {
+    "n": 50,
+    "right": 23,
+    "wrong": 17,
+    "not_understood": 10
+   },
+   "loose-words": {
+    "n": 670,
+    "wrong": 101,
+    "not_understood": 146,
+    "right": 418,
+    "invalid": 5
+   },
+   "typos": {
+    "n": 1394,
+    "right": 1165,
+    "wrong": 168,
+    "not_understood": 52,
+    "invalid": 9
+   }
+  },
+  "rules|choose": {
+   "operational": {
+    "n": 1296,
+    "right": 1237,
+    "partly": 22,
+    "not_understood": 27,
+    "wrong": 10
+   },
+   "operational-ro": {
+    "n": 2480,
+    "right": 2029,
+    "not_understood": 326,
+    "wrong": 77,
+    "partly": 48
+   },
+   "dialogues": {
+    "n": 2241,
+    "right": 2174,
+    "not_understood": 40,
+    "partly": 10,
+    "wrong": 17
+   },
+   "gold-rules": {
+    "n": 150,
+    "right": 147,
+    "not_understood": 2,
+    "wrong": 1
+   },
+   "gold-para": {
+    "n": 100,
+    "right": 32,
+    "not_understood": 34,
+    "wrong": 34
+   },
+   "gold-real": {
+    "n": 50,
+    "right": 23,
+    "wrong": 17,
+    "not_understood": 10
+   },
+   "loose-words": {
+    "n": 670,
+    "wrong": 101,
+    "not_understood": 146,
+    "right": 418,
+    "invalid": 5
+   },
+   "typos": {
+    "n": 1394,
+    "right": 1166,
+    "wrong": 168,
+    "not_understood": 51,
+    "invalid": 9
+   }
+  },
+  "encoder+n1|off": {
+   "operational": {
+    "n": 1296,
+    "right": 1272,
+    "not_understood": 14,
+    "wrong": 9,
+    "partly": 1
+   },
+   "operational-ro": {
+    "n": 2480,
+    "right": 2112,
+    "not_understood": 267,
+    "wrong": 80,
+    "partly": 21
+   },
+   "dialogues": {
+    "n": 2241,
+    "right": 2170,
+    "not_understood": 41,
+    "wrong": 25,
+    "partly": 5
+   },
+   "gold-rules": {
+    "n": 150,
+    "right": 147,
+    "not_understood": 2,
+    "wrong": 1
+   },
+   "gold-para": {
+    "n": 100,
+    "right": 45,
+    "not_understood": 19,
+    "wrong": 36
+   },
+   "gold-real": {
+    "n": 50,
+    "right": 24,
+    "wrong": 16,
+    "not_understood": 10
+   },
+   "loose-words": {
+    "n": 670,
+    "wrong": 153,
+    "not_understood": 95,
+    "right": 417,
+    "invalid": 5
+   },
+   "typos": {
+    "n": 1394,
+    "right": 1207,
+    "wrong": 153,
+    "not_understood": 31,
+    "invalid": 3
+   }
+  },
+  "encoder+n1|fill": {
+   "operational": {
+    "n": 1296,
+    "right": 1273,
+    "not_understood": 13,
+    "wrong": 9,
+    "partly": 1
+   },
+   "operational-ro": {
+    "n": 2480,
+    "right": 2112,
+    "not_understood": 267,
+    "wrong": 80,
+    "partly": 21
+   },
+   "dialogues": {
+    "n": 2241,
+    "right": 2170,
+    "not_understood": 41,
+    "wrong": 25,
+    "partly": 5
+   },
+   "gold-rules": {
+    "n": 150,
+    "right": 147,
+    "not_understood": 2,
+    "wrong": 1
+   },
+   "gold-para": {
+    "n": 100,
+    "right": 45,
+    "not_understood": 19,
+    "wrong": 36
+   },
+   "gold-real": {
+    "n": 50,
+    "right": 24,
+    "wrong": 17,
+    "not_understood": 9
+   },
+   "loose-words": {
+    "n": 670,
+    "wrong": 153,
+    "not_understood": 95,
+    "right": 417,
+    "invalid": 5
+   },
+   "typos": {
+    "n": 1394,
+    "right": 1208,
+    "wrong": 153,
+    "not_understood": 30,
+    "invalid": 3
+   }
+  },
+  "encoder+n1|choose": {
+   "operational": {
+    "n": 1296,
+    "right": 1273,
+    "not_understood": 13,
+    "wrong": 9,
+    "partly": 1
+   },
+   "operational-ro": {
+    "n": 2480,
+    "right": 2112,
+    "not_understood": 267,
+    "wrong": 80,
+    "partly": 21
+   },
+   "dialogues": {
+    "n": 2241,
+    "right": 2170,
+    "not_understood": 41,
+    "wrong": 25,
+    "partly": 5
+   },
+   "gold-rules": {
+    "n": 150,
+    "right": 147,
+    "not_understood": 2,
+    "wrong": 1
+   },
+   "gold-para": {
+    "n": 100,
+    "right": 45,
+    "not_understood": 19,
+    "wrong": 36
+   },
+   "gold-real": {
+    "n": 50,
+    "right": 24,
+    "wrong": 17,
+    "not_understood": 9
+   },
+   "loose-words": {
+    "n": 670,
+    "wrong": 153,
+    "not_understood": 95,
+    "right": 417,
+    "invalid": 5
+   },
+   "typos": {
+    "n": 1394,
+    "right": 1208,
+    "wrong": 153,
+    "not_understood": 30,
+    "invalid": 3
+   }
+  }
+ },
+ "transitions": {
+  "rules|fill": {
+   "not_understood->right": 4,
+   "not_understood->wrong": 1
+  },
+  "rules|choose": {
+   "not_understood->right": 5,
+   "not_understood->wrong": 1
+  },
+  "encoder+n1|fill": {
+   "not_understood->right": 2,
+   "not_understood->wrong": 1
+  },
+  "encoder+n1|choose": {
+   "not_understood->right": 2,
+   "not_understood->wrong": 1
+  }
+ },
+ "changed": {
+  "rules|fill": [
+   {
+    "set": "operational",
+    "world": "geo.map",
+    "message": "shw me Pariss",
+    "english": "shw me Pariss",
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"shw me Pariss\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capita",
+    "now": "Here is Paris: capital of France · 2.1 million people."
+   },
+   {
+    "set": "gold-real",
+    "world": "docs.editor",
+    "message": "on the new chapter",
+    "english": null,
+    "transition": "not_understood->wrong",
+    "how": "unparsed:doc.addHeading",
+    "off": "I did not understand \"on the new chapter\". Did you mean \"Add a new chapter.\" or \"Start a new chapter.\"?",
+    "now": "OK, I started chapter 1."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Snow me Bucharest.",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"Snow me Bucharest\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the ca",
+    "now": "Here is Bucharest: capital of Romania · 1.9 million people."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Park Paris and Rome.",
+    "transition": "wrong->wrong (same outcome)",
+    "how": "unparsed:geo.mark",
+    "off": "I did not understand \"Park Paris\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital o",
+    "now": "OK, I put a marker on Paris. Here is Rome: capital of Italy · 2.3 million people."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Show me Hyderabadd.",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"Show me Hyderabadd\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the c",
+    "now": "Here is Hyderabad: city of India · 3.6 million people."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Show me Mins.",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"Show me Mins\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital",
+    "now": "Here is Minsk: capital of Belarus · 1.7 million people."
+   }
+  ],
+  "rules|choose": [
+   {
+    "set": "operational",
+    "world": "geo.map",
+    "message": "shw me Pariss",
+    "english": "shw me Pariss",
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"shw me Pariss\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capita",
+    "now": "Here is Paris: capital of France · 2.1 million people."
+   },
+   {
+    "set": "gold-real",
+    "world": "docs.editor",
+    "message": "on the new chapter",
+    "english": null,
+    "transition": "not_understood->wrong",
+    "how": "unparsed:doc.addHeading",
+    "off": "I did not understand \"on the new chapter\". Did you mean \"Add a new chapter.\" or \"Start a new chapter.\"?",
+    "now": "OK, I started chapter 1."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Snow me Bucharest.",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"Snow me Bucharest\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the ca",
+    "now": "Here is Bucharest: capital of Romania · 1.9 million people."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Park Paris and Rome.",
+    "transition": "wrong->wrong (same outcome)",
+    "how": "unparsed:geo.mark",
+    "off": "I did not understand \"Park Paris\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital o",
+    "now": "OK, I put a marker on Paris. Here is Rome: capital of Italy · 2.3 million people."
+   },
+   {
+    "set": "typos",
+    "world": "kids.shop",
+    "message": "If I pay 50 lei for a hall and 2 pencils, what is my change?",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "knock-on",
+    "off": "I did not understand \"If I pay 50 lei for a hall and 2 pencils, what is my change\". Did you mean \"Change for 2",
+    "now": "Your change from 50 lei is 41 lei. (I read \"hall\" as \"ball\")"
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Show me Hyderabadd.",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"Show me Hyderabadd\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the c",
+    "now": "Here is Hyderabad: city of India · 3.6 million people."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Show me Mins.",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"Show me Mins\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital",
+    "now": "Here is Minsk: capital of Belarus · 1.7 million people."
+   }
+  ],
+  "encoder+n1|fill": [
+   {
+    "set": "operational",
+    "world": "geo.map",
+    "message": "shw me Pariss",
+    "english": "shw me Pariss",
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"shw me Pariss\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capita",
+    "now": "Here is Paris: capital of France · 2.1 million people."
+   },
+   {
+    "set": "gold-real",
+    "world": "docs.editor",
+    "message": "on the new chapter",
+    "english": null,
+    "transition": "not_understood->wrong",
+    "how": "unparsed:doc.addHeading",
+    "off": "I did not understand \"on the new chapter\". Did you mean \"Add a new chapter.\" or \"Start a new chapter.\"?",
+    "now": "OK, I started chapter 1."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Show me Mins.",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"Show me Mins\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital",
+    "now": "Here is Minsk: capital of Belarus · 1.7 million people."
+   }
+  ],
+  "encoder+n1|choose": [
+   {
+    "set": "operational",
+    "world": "geo.map",
+    "message": "shw me Pariss",
+    "english": "shw me Pariss",
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"shw me Pariss\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capita",
+    "now": "Here is Paris: capital of France · 2.1 million people."
+   },
+   {
+    "set": "gold-real",
+    "world": "docs.editor",
+    "message": "on the new chapter",
+    "english": null,
+    "transition": "not_understood->wrong",
+    "how": "unparsed:doc.addHeading",
+    "off": "I did not understand \"on the new chapter\". Did you mean \"Add a new chapter.\" or \"Start a new chapter.\"?",
+    "now": "OK, I started chapter 1."
+   },
+   {
+    "set": "typos",
+    "world": "geo.map",
+    "message": "Show me Mins.",
+    "english": null,
+    "transition": "not_understood->right",
+    "how": "unparsed:geo.show",
+    "off": "I did not understand \"Show me Mins\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital",
+    "now": "Here is Minsk: capital of Belarus · 1.7 million people."
+   }
+  ]
+ },
+ "usage": {
+  "rules|fill": {
+   "operational": {
+    "offered": 1,
+    "used": 1,
+    "ambiguous": 0
+   },
+   "operational-ro": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "dialogues": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "gold-rules": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "gold-para": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "gold-real": {
+    "offered": 1,
+    "used": 1,
+    "ambiguous": 0
+   },
+   "loose-words": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "typos": {
+    "offered": 4,
+    "used": 4,
+    "ambiguous": 0
+   }
+  },
+  "rules|choose": {
+   "operational": {
+    "offered": 94,
+    "used": 1,
+    "ambiguous": 93
+   },
+   "operational-ro": {
+    "offered": 160,
+    "used": 0,
+    "ambiguous": 160
+   },
+   "dialogues": {
+    "offered": 81,
+    "used": 0,
+    "ambiguous": 81
+   },
+   "gold-rules": {
+    "offered": 6,
+    "used": 0,
+    "ambiguous": 6
+   },
+   "gold-para": {
+    "offered": 2,
+    "used": 0,
+    "ambiguous": 2
+   },
+   "gold-real": {
+    "offered": 1,
+    "used": 1,
+    "ambiguous": 0
+   },
+   "loose-words": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "typos": {
+    "offered": 245,
+    "used": 4,
+    "ambiguous": 241
+   }
+  },
+  "encoder+n1|fill": {
+   "operational": {
+    "offered": 1,
+    "used": 1,
+    "ambiguous": 0
+   },
+   "operational-ro": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "dialogues": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "gold-rules": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "gold-para": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "gold-real": {
+    "offered": 1,
+    "used": 1,
+    "ambiguous": 0
+   },
+   "loose-words": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "typos": {
+    "offered": 1,
+    "used": 1,
+    "ambiguous": 0
+   }
+  },
+  "encoder+n1|choose": {
+   "operational": {
+    "offered": 95,
+    "used": 1,
+    "ambiguous": 94
+   },
+   "operational-ro": {
+    "offered": 165,
+    "used": 0,
+    "ambiguous": 165
+   },
+   "dialogues": {
+    "offered": 82,
+    "used": 0,
+    "ambiguous": 82
+   },
+   "gold-rules": {
+    "offered": 6,
+    "used": 0,
+    "ambiguous": 6
+   },
+   "gold-para": {
+    "offered": 3,
+    "used": 0,
+    "ambiguous": 3
+   },
+   "gold-real": {
+    "offered": 1,
+    "used": 1,
+    "ambiguous": 0
+   },
+   "loose-words": {
+    "offered": 0,
+    "used": 0,
+    "ambiguous": 0
+   },
+   "typos": {
+    "offered": 244,
+    "used": 1,
+    "ambiguous": 243
+   }
+  }
+ },
+ "e2": {
+  "rules": {
+   "off": {
+    "operational": {
+     "n": 1296,
+     "right": 1237,
+     "partly": 22,
+     "not_understood": 28,
+     "wrong": 9
+    },
+    "operational-ro": {
+     "n": 2480,
+     "right": 2026,
+     "not_understood": 332,
+     "wrong": 75,
+     "partly": 47
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2178,
+     "not_understood": 42,
+     "partly": 6,
+     "wrong": 15
+    },
+    "gold-rules": {
+     "n": 150,
+     "right": 147,
+     "not_understood": 2,
+     "wrong": 1
+    },
+    "gold-para": {
+     "n": 100,
+     "right": 32,
+     "not_understood": 42,
+     "wrong": 26
+    },
+    "gold-real": {
+     "n": 50,
+     "right": 23,
+     "wrong": 16,
+     "not_understood": 11
+    },
+    "loose-words": {
+     "n": 670,
+     "wrong": 90,
+     "not_understood": 152,
+     "right": 423,
+     "invalid": 5
+    },
+    "typos": {
+     "n": 1394,
+     "right": 1159,
+     "wrong": 160,
+     "not_understood": 66,
+     "invalid": 9
+    }
+   },
+   "on": {
+    "operational": {
+     "n": 1296,
+     "right": 1238,
+     "partly": 22,
+     "not_understood": 27,
+     "wrong": 9
+    },
+    "operational-ro": {
+     "n": 2480,
+     "right": 2026,
+     "not_understood": 332,
+     "wrong": 75,
+     "partly": 47
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2178,
+     "not_understood": 42,
+     "partly": 6,
+     "wrong": 15
+    },
+    "gold-rules": {
+     "n": 150,
+     "right": 147,
+     "not_understood": 2,
+     "wrong": 1
+    },
+    "gold-para": {
+     "n": 100,
+     "right": 32,
+     "not_understood": 42,
+     "wrong": 26
+    },
+    "gold-real": {
+     "n": 50,
+     "right": 23,
+     "wrong": 17,
+     "not_understood": 10
+    },
+    "loose-words": {
+     "n": 670,
+     "wrong": 90,
+     "not_understood": 152,
+     "right": 423,
+     "invalid": 5
+    },
+    "typos": {
+     "n": 1394,
+     "right": 1162,
+     "wrong": 160,
+     "not_understood": 63,
+     "invalid": 9
+    }
+   },
+   "transitions": {
+    "not_understood->right": 4,
+    "not_understood->wrong": 1
+   },
+   "changed": [
+    {
+     "set": "operational",
+     "world": "geo.map",
+     "message": "shw me Pariss",
+     "transition": "not_understood->right",
+     "how": "unparsed:geo.show",
+     "off": "I did not understand \"shw me Pariss\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capita",
+     "now": "Here is Paris: capital of France · 2.1 million people."
+    },
+    {
+     "set": "gold-real",
+     "world": "docs.editor",
+     "message": "on the new chapter",
+     "transition": "not_understood->wrong",
+     "how": "unparsed:doc.addHeading",
+     "off": "I did not understand \"on the new chapter\". Did you mean \"Add a new chapter.\" or \"Start a new chapter.\"?",
+     "now": "OK, I started chapter 1."
+    },
+    {
+     "set": "typos",
+     "world": "geo.map",
+     "message": "Snow me Bucharest.",
+     "transition": "not_understood->right",
+     "how": "unparsed:geo.show",
+     "off": "I did not understand \"Snow me Bucharest\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the ca",
+     "now": "Here is Bucharest: capital of Romania · 1.9 million people."
+    },
+    {
+     "set": "typos",
+     "world": "geo.map",
+     "message": "Show me Hyderabadd.",
+     "transition": "not_understood->right",
+     "how": "unparsed:geo.show",
+     "off": "I did not understand \"Show me Hyderabadd\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the c",
+     "now": "Here is Hyderabad: city of India · 3.6 million people."
+    },
+    {
+     "set": "typos",
+     "world": "geo.map",
+     "message": "Show me Mins.",
+     "transition": "not_understood->right",
+     "how": "unparsed:geo.show",
+     "off": "I did not understand \"Show me Mins\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital",
+     "now": "Here is Minsk: capital of Belarus · 1.7 million people."
+    }
+   ]
+  },
+  "encoder+n1": {
+   "off": {
+    "operational": {
+     "n": 1296,
+     "right": 1272,
+     "not_understood": 14,
+     "wrong": 9,
+     "partly": 1
+    },
+    "operational-ro": {
+     "n": 2480,
+     "right": 2111,
+     "not_understood": 273,
+     "wrong": 76,
+     "partly": 20
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2170,
+     "not_understood": 42,
+     "wrong": 25,
+     "partly": 4
+    },
+    "gold-rules": {
+     "n": 150,
+     "right": 147,
+     "not_understood": 2,
+     "wrong": 1
+    },
+    "gold-para": {
+     "n": 100,
+     "right": 46,
+     "not_understood": 24,
+     "wrong": 30
+    },
+    "gold-real": {
+     "n": 50,
+     "right": 24,
+     "wrong": 16,
+     "not_understood": 10
+    },
+    "loose-words": {
+     "n": 670,
+     "wrong": 143,
+     "not_understood": 101,
+     "right": 421,
+     "invalid": 5
+    },
+    "typos": {
+     "n": 1394,
+     "right": 1206,
+     "wrong": 147,
+     "not_understood": 38,
+     "invalid": 3
+    }
+   },
+   "on": {
+    "operational": {
+     "n": 1296,
+     "right": 1273,
+     "not_understood": 13,
+     "wrong": 9,
+     "partly": 1
+    },
+    "operational-ro": {
+     "n": 2480,
+     "right": 2111,
+     "not_understood": 273,
+     "wrong": 76,
+     "partly": 20
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2170,
+     "not_understood": 42,
+     "wrong": 25,
+     "partly": 4
+    },
+    "gold-rules": {
+     "n": 150,
+     "right": 147,
+     "not_understood": 2,
+     "wrong": 1
+    },
+    "gold-para": {
+     "n": 100,
+     "right": 46,
+     "not_understood": 24,
+     "wrong": 30
+    },
+    "gold-real": {
+     "n": 50,
+     "right": 24,
+     "wrong": 17,
+     "not_understood": 9
+    },
+    "loose-words": {
+     "n": 670,
+     "wrong": 143,
+     "not_understood": 101,
+     "right": 421,
+     "invalid": 5
+    },
+    "typos": {
+     "n": 1394,
+     "right": 1207,
+     "wrong": 147,
+     "not_understood": 37,
+     "invalid": 3
+    }
+   },
+   "transitions": {
+    "not_understood->right": 2,
+    "not_understood->wrong": 1
+   },
+   "changed": [
+    {
+     "set": "operational",
+     "world": "geo.map",
+     "message": "shw me Pariss",
+     "transition": "not_understood->right",
+     "how": "unparsed:geo.show",
+     "off": "I did not understand \"shw me Pariss\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capita",
+     "now": "Here is Paris: capital of France · 2.1 million people."
+    },
+    {
+     "set": "gold-real",
+     "world": "docs.editor",
+     "message": "on the new chapter",
+     "transition": "not_understood->wrong",
+     "how": "unparsed:doc.addHeading",
+     "off": "I did not understand \"on the new chapter\". Did you mean \"Add a new chapter.\" or \"Start a new chapter.\"?",
+     "now": "OK, I started chapter 1."
+    },
+    {
+     "set": "typos",
+     "world": "geo.map",
+     "message": "Show me Mins.",
+     "transition": "not_understood->right",
+     "how": "unparsed:geo.show",
+     "off": "I did not understand \"Show me Mins\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital",
+     "now": "Here is Minsk: capital of Belarus · 1.7 million people."
+    }
+   ]
+  }
+ }
+}

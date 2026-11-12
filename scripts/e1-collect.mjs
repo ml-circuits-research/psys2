@@ -67,7 +67,7 @@ const segInfo = (x) => ({
   candidates: (x.worlds ?? []).map((w) => `${w.id}:${w.score}`), contested: !!x.routing?.contested, tier: x.routing?.tierName ?? null,
   winner: x.routing?.winner?.worldId ?? null, runnerUp: x.routing?.runnerUp?.worldId ?? null, tabWorld: x.routing?.context?.tabWorld ?? null,
   activeTab: x.routing?.context?.activeTab ?? null, errors: (x.errors ?? []).slice(0, 2).map((e) => String(e).slice(0, 120)),
-  alts: (x.alternatives ?? []).length, partial: !!x.partial, nxFrom: x.nxFrom ?? null, wa: x.wa ?? null, veto: x.veto ?? null, pick: x.pick ?? null,
+  alts: (x.alternatives ?? []).length, partial: !!x.partial, nxFrom: x.nxFrom ?? null, reader: x.reader ?? null, wa: x.wa ?? null, veto: x.veto ?? null, pick: x.pick ?? null,
 });
 
 function newSession(env, c) {
@@ -175,14 +175,17 @@ async function typoRead(env, text, tab) {
   const s = env.engine.createSession(sessionOptions(env.settings, { language: 'en' }));
   if (tab) s.setWorldState('ui.shell', { activeTab: tab });
   const reply = await s.send(text);
-  return { understood: reply.segments.some((x) => !x.unparsed), sig: reply.segments.map((x) => `${x.match?.worldId ?? '-'}:${x.match?.patternId ?? '-'}`).join('+'), state: strip(s.state()), reply, text: reply.text };
+  return { understood: reply.segments.some((x) => !x.unparsed), viaReader: reply.segments.some((x) => x.reader?.used), sig: reply.segments.map((x) => `${x.match?.worldId ?? '-'}:${x.match?.patternId ?? '-'}`).join('+'), state: strip(s.state()), reply, text: reply.text };
 }
+const plain = (t) => String(t).replace(/\s*\(I read [^)]*\)/g, '').trim();   // the note that says a word was spelled another way is no part of the answer
 async function runTypo(env, it) {
   const r = it.r;
   const o = await typoRead(env, r.original, r.tab);
   if (!o.understood) return { id: r.id, world: r.world, outcome: 'invalid', message: r.typo, setup: [] };
   const t = await typoRead(env, r.typo, r.tab);
-  const outcome = !t.understood ? 'not_understood' : t.sig === o.sig && t.state === o.state ? 'right' : 'wrong';
+  // a reading of the reader (READER-ROUTE) has no pattern id of the rules: it is the same reading when the world state and the reply are the same
+  const same = t.sig === o.sig || ((t.viaReader || o.viaReader) && plain(t.text) === plain(o.text));
+  const outcome = !t.understood ? 'not_understood' : same && t.state === o.state ? 'right' : 'wrong';
   return { id: r.id, world: r.world, tab: r.tab ?? null, message: r.typo, original: r.original, typoKind: r.kind, lang: 'en', setup: [], outcome, reply: t.text.slice(0, 200), segments: t.reply.segments.map(segInfo) };
 }
 
@@ -203,6 +206,7 @@ if (!isMainThread) {
   });
 } else if (process.argv[1] && resolve(process.argv[1]) === SELF) {
   const mode = arg('mode', 'rules');
+  if (arg('reader')) process.env.PSYS2_READER = arg('reader');   // READER-ROUTE (spec 16 section 7): off | fill | choose
   if (arg('world-aware')) process.env.PSYS2_WORLD_AWARE = arg('world-aware');   // E2: off | veto | choose | observe (worker threads inherit the environment)
   const sets = arg('sets', 'operational,operational-ro,dialogues,gold,loose,typos,real,mobile').split(',');
   const items = buildItems(sets, arg('limit') ? Number(arg('limit')) : 0);
