@@ -128,6 +128,134 @@
    "describeLines": 1145,
    "droppedLines": 1320,
    "gaps": "Description gaps that cost cases in `only` (what the hand-written patterns say and the description cannot):\n\n- **Reversed or non-adjacent operand order**: \"take 7 away from 16\", \"subtract 6 from 20\", \"2 less than 6\" (the description must not claim `less than`: it reverses the operands, an early draft of it gave a new wrong answer in `add` and was removed).\n- **Symbols and chains**: `/`, `-`, `*` are not SOP atoms, so \"8 / 2\", \"14 - 8\", \"3*4\" stay hand-written; chained arithmetic (\"7 plus 5 minus 2\") and \"squared\" have no description.\n- **Two statements in one sentence** (\"Ben has 12 marbles and loses 5\", \"gives away 6\", \"Tom has 2 apples and Ana has 3\", \"gives 3 of his pears\"): needs a multi-wire emit with a second subject; descriptions state one operation per wire.\n- **Hand-written shapes that already cover the phrase** (\"how many pears does Ana have now?\" variants with typos, \"if i add eight and seven what do i get\" through a shape with a lead-in).\n- Added to the description after the first run: the omitted-item forms (\"Tom eats 3\", \"Tom gets 3 more\": item resolved by `recent(...)`, which the class of an argument can carry as it is), \"whats left for Mia\", \"they/we\" totals, the `to` order of give, and the new generic frame `askpred` (\"what is 6 plus 3\": opener, first argument, verb, second argument).\n- Not found in the sets but visible in the generated patterns: optional words (`prep`, `unit`) are always optional, so an operand pair with an optional operator word reads \"6 3\"; the calc description therefore puts the operator words in `verb` (mandatory) and uses `pred` / `askpred`.\n"
+  },
+  "kids.tasks": {
+   "world": "kids.tasks",
+   "descriptions": 18,
+   "generatedPatterns": 42,
+   "handWrittenPatterns": 231,
+   "replacedByOnly": 228,
+   "neededHandWritten": 11,
+   "replaceableHandWritten": 217,
+   "add": {
+    "sets": {
+     "operational": {
+      "base": {
+       "n": 38,
+       "right": 34,
+       "wrong": 3,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 38,
+       "right": 34,
+       "wrong": 3,
+       "not_understood": 1,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 51,
+       "right": 48,
+       "wrong": 2,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 51,
+       "right": 48,
+       "wrong": 2,
+       "not_understood": 1,
+       "other": 0
+      }
+     }
+    },
+    "newWrongAll": [],
+    "changeCounts": {
+     "not_understood->right": 1
+    }
+   },
+   "only": {
+    "sets": {
+     "operational": {
+      "base": {
+       "n": 38,
+       "right": 34,
+       "wrong": 3,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 38,
+       "right": 25,
+       "wrong": 5,
+       "not_understood": 8,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 51,
+       "right": 48,
+       "wrong": 2,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 51,
+       "right": 40,
+       "wrong": 5,
+       "not_understood": 6,
+       "other": 0
+      }
+     }
+    },
+    "setsVsPrevOnly": {
+     "operational": {
+      "base": {
+       "n": 38,
+       "right": 34,
+       "wrong": 3,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 38,
+       "right": 25,
+       "wrong": 5,
+       "not_understood": 8,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 51,
+       "right": 48,
+       "wrong": 2,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 51,
+       "right": 40,
+       "wrong": 5,
+       "not_understood": 6,
+       "other": 0
+      }
+     }
+    },
+    "changeCounts": {
+     "wrong->right": 2,
+     "right->wrong": 8,
+     "right->not_understood": 13,
+     "wrong->not_understood": 1
+    }
+   },
+   "describeLines": 677,
+   "droppedLines": 1140,
+   "gaps": "Description gaps that cost cases in `only`:\n\n- **Optional completing words cannot be made mandatory.** `rest`, `prep`, `unit` and `tverb` are always optional in the generated pattern, so a form whose only anchor is a trailing word (\"why is X done\", \"is X done\", \"is X on my list\" without a list name, \"add X to my list\") would match any sentence with a free-text argument. Those forms stay hand-written. The first draft had a bare \"add X\" and `short` frames for the free-text commands; they stole sentences from other worlds in `add` (\"add bananas 4 then remove pears\", \"ok thanks\" as a reminder, \"What is 7 times 8?\" as a reminder), so every description here has `skip=short` and the bare form is not described.\n- **The default list (no name given).** The hand-written patterns emit `arg.list=to-do` (or none, or `assumed=true`) depending on the form; a description states one emit per wire and every form of \"add X\" would share it, so only the forms with a named list (a lexicon of list names, `lex.kids.tasks.listnames`) are described.\n- **Free-text list names** (\"my birthday party list\") need `{list:words}` followed by the mandatory word \"list\"; the generator has no mandatory trailing word, so only the lexicon of list names is used.\n- **Discourse forms**: \"cross milk off\", \"what is still on it?\", \"any reminders for me?\", pronoun and ellipsis follow-ups, which the hand-written patterns express with `recent(...)` and context slots.\n- Added after the first run: the two question forms of show and pending (\"what is on my shopping list\", \"what is still on my shopping list\") and the `asn` frame for \"mark X as done\".\n"
   }
  }
 }

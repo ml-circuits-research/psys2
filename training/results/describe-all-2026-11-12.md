@@ -28,3 +28,29 @@ Description gaps that cost cases in `only` (what the hand-written patterns say a
 - Added to the description after the first run: the omitted-item forms ("Tom eats 3", "Tom gets 3 more": item resolved by `recent(...)`, which the class of an argument can carry as it is), "whats left for Mia", "they/we" totals, the `to` order of give, and the new generic frame `askpred` ("what is 6 plus 3": opener, first argument, verb, second argument).
 - Not found in the sets but visible in the generated patterns: optional words (`prep`, `unit`) are always optional, so an operand pair with an optional operator word reads "6 3"; the calc description therefore puts the operator words in `verb` (mandatory) and uses `pred` / `askpred`.
 
+
+## kids.tasks
+
+- Descriptions: 18; generated patterns (add): 42.
+- Hand-written patterns of the described operations: 231 (pattern wires; shapes are separate). `only` drops 228.
+- Hand-written patterns dropped by `only`: 228, replaced by 42 generated ones. Of the dropped, 11 were the reading of at least one set case that got worse (the description misses what they said); the other 217 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 677, dropped patterns about 1140.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 34/3/1 of 38 | 34/3/1 of 38 | 48/2/1 of 51 | 48/2/1 of 51 |
+| only | 34/3/1 of 38 | 25/5/8 of 38 | 48/2/1 of 51 | 40/5/6 of 51 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"wrong->right":2,"right->wrong":8,"right->not_understood":13,"wrong->not_understood":1}.
+
+Description gaps that cost cases in `only`:
+
+- **Optional completing words cannot be made mandatory.** `rest`, `prep`, `unit` and `tverb` are always optional in the generated pattern, so a form whose only anchor is a trailing word ("why is X done", "is X done", "is X on my list" without a list name, "add X to my list") would match any sentence with a free-text argument. Those forms stay hand-written. The first draft had a bare "add X" and `short` frames for the free-text commands; they stole sentences from other worlds in `add` ("add bananas 4 then remove pears", "ok thanks" as a reminder, "What is 7 times 8?" as a reminder), so every description here has `skip=short` and the bare form is not described.
+- **The default list (no name given).** The hand-written patterns emit `arg.list=to-do` (or none, or `assumed=true`) depending on the form; a description states one emit per wire and every form of "add X" would share it, so only the forms with a named list (a lexicon of list names, `lex.kids.tasks.listnames`) are described.
+- **Free-text list names** ("my birthday party list") need `{list:words}` followed by the mandatory word "list"; the generator has no mandatory trailing word, so only the lexicon of list names is used.
+- **Discourse forms**: "cross milk off", "what is still on it?", "any reminders for me?", pronoun and ellipsis follow-ups, which the hand-written patterns express with `recent(...)` and context slots.
+- Added after the first run: the two question forms of show and pending ("what is on my shopping list", "what is still on my shopping list") and the `asn` frame for "mark X as done".
+
