@@ -1,0 +1,420 @@
+@describe.kids.shop.money.ro core.describe.words
+    of=$describe.kids.shop.money
+    lang=ro
+    nosubject=true
+    verb=$w.ro.am.kids.shop.money
+    verb=$w.ro.avem.kids.shop.money
+    verb=$w.ro.mai_am.kids.shop.money
+    verb=$w.ro.am_acum.kids.shop.money
+    verb=$w.ro.am_in_portofel.kids.shop.money
+    rest=$w.ro.acum.kids.shop.money
+    rest=$w.ro.azi.kids.shop.money
+    rest=$w.ro.in_portofel.kids.shop.money
+    rest=$w.ro.in_pusculita.kids.shop.money
+    rest=$w.ro.la_mine.kids.shop.money
+    rest=$w.ro.ramasi.kids.shop.money
+    rest=$w.ro.de_cheltuit.kids.shop.money
+    rest=$w.ro.inca.kids.shop.money
+    unit.n=$w.ro.lei.kids.shop.money.n
+    unit.n=$w.ro.leu.kids.shop.money.n
+    sample.n=20
+    example="Am 20 de lei."
+
+@describe.kids.shop.income.ro core.describe.words
+    of=$describe.kids.shop.income
+    lang=ro
+    nosubject=true
+    verb=$w.ro.primesc.kids.shop.income
+    verb=$w.ro.am_primit.kids.shop.income
+    verb=$w.ro.am_gasit.kids.shop.income
+    verb=$w.ro.gasesc.kids.shop.income
+    verb=$w.ro.castig.kids.shop.income
+    verb=$w.ro.am_castigat.kids.shop.income
+    verb=$w.ro.am_economisit.kids.shop.income
+    verb=$w.ro.economisesc.kids.shop.income
+    unit.n=$w.ro.lei.kids.shop.income.n
+    unit.n=$w.ro.leu.kids.shop.income.n
+    sample.n=5
+    example="Am găsit 5 lei."
+
+@describe.kids.shop.expense.ro core.describe.words
+    of=$describe.kids.shop.expense
+    lang=ro
+    nosubject=true
+    verb=$w.ro.am_cheltuit.kids.shop.expense
+    verb=$w.ro.cheltuiesc.kids.shop.expense
+    verb=$w.ro.am_pierdut.kids.shop.expense
+    verb=$w.ro.pierd.kids.shop.expense
+    verb=$w.ro.am_platit.kids.shop.expense
+    verb=$w.ro.platesc.kids.shop.expense
+    verb=$w.ro.am_dat.kids.shop.expense
+    verb=$w.ro.dau.kids.shop.expense
+    unit.n=$w.ro.lei.kids.shop.expense.n
+    unit.n=$w.ro.leu.kids.shop.expense.n
+    sample.n=5
+    example="Am cheltuit 5 lei."
+
+@describe.kids.shop.purchase.ro core.describe.words
+    of=$describe.kids.shop.purchase
+    lang=ro
+    nosubject=true
+    verb=$w.ro.cumpar.kids.shop.purchase
+    verb=$w.ro.am_cumparat.kids.shop.purchase
+    verb=$w.ro.iau.kids.shop.purchase
+    verb=$w.ro.am_luat.kids.shop.purchase
+    verb=$w.ro.achizitionez.kids.shop.purchase
+    verb=$w.ro.am_achizitionat.kids.shop.purchase
+    prep.i2=$w.ro.si.kids.shop.purchase.i2
+    prep.i2=$w.ro.plus.kids.shop.purchase.i2
+    prep.i2=$w.ro.cu.kids.shop.purchase.i2
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="Cumpăr 2 mingi și 3 creioane."
+
+@describe.kids.shop.price.set.ro core.describe.words
+    of=$describe.kids.shop.price.set
+    lang=ro
+    nosubject=true
+    verb=$w.ro.costa.kids.shop.price
+    verb=$w.ro.e.kids.shop.price
+    verb=$w.ro.este.kids.shop.price
+    verb=$w.ro.sunt.kids.shop.price
+    verb=$w.ro.face.kids.shop.price
+    verb=$w.ro.fac.kids.shop.price
+    det.item=$w.ro.un.kids.shop.price.item
+    det.item=$w.ro.o.kids.shop.price.item
+    det.item=$w.ro.unul.kids.shop.price.item
+    det.item=$w.ro.una.kids.shop.price.item
+    unit.n=$w.ro.lei.kids.shop.price.n
+    unit.n=$w.ro.leu.kids.shop.price.n
+    sample.item=ball
+    sample.n=7
+    example="O minge costă 7 lei."
+
+@describe.kids.shop.price.ask.ro core.describe.words
+    of=$describe.kids.shop.price.ask
+    lang=ro
+    tverb=$w.ro.costa.kids.shop.price
+    tverb=$w.ro.face.kids.shop.price
+    noun=$w.ro.pretul.kids.shop.price
+    noun=$w.ro.costul.kids.shop.price
+    noun=$w.ro.pret.kids.shop.price
+    noun=$w.ro.cost.kids.shop.price
+    ask=$w.ro.cat_costa.kids.shop.price
+    ask=$w.ro.cat_face.kids.shop.price
+    ask=$w.ro.cat_e.kids.shop.price
+    ask=$w.ro.cat_este.kids.shop.price
+    ask=$w.ro.care_este.kids.shop.price
+    prep.item=$w.ro.al.kids.shop.price.item
+    prep.item=$w.ro.a.kids.shop.price.item
+    prep.item=$w.ro.pentru.kids.shop.price.item
+    prep.item=$w.ro.de.kids.shop.price.item
+    prep.item=$w.ro.lui.kids.shop.price.item
+    det.item=$w.ro.un.kids.shop.price.item
+    det.item=$w.ro.o.kids.shop.price.item
+    sample.item=pen
+    example="Cât costă un pix?"
+
+@describe.kids.shop.total.ro core.describe.words
+    of=$describe.kids.shop.total
+    lang=ro
+    tverb=$w.ro.costa.kids.shop.total
+    tverb=$w.ro.fac.kids.shop.total
+    tverb=$w.ro.face.kids.shop.total
+    tverb=$w.ro.ajung.kids.shop.total
+    noun=$w.ro.totalul.kids.shop.total
+    noun=$w.ro.pretul.kids.shop.total
+    noun=$w.ro.costul.kids.shop.total
+    noun=$w.ro.suma.kids.shop.total
+    noun=$w.ro.nota.kids.shop.total
+    ask=$w.ro.cat_costa.kids.shop.total
+    ask=$w.ro.cat_fac.kids.shop.total
+    ask=$w.ro.cat_face.kids.shop.total
+    ask=$w.ro.cat_e.kids.shop.total
+    ask=$w.ro.cat_este.kids.shop.total
+    ask=$w.ro.cat_sunt.kids.shop.total
+    rest=$w.ro.in_total.kids.shop.total
+    rest=$w.ro.impreuna.kids.shop.total
+    rest=$w.ro.toate.kids.shop.total
+    rest=$w.ro.laolalta.kids.shop.total
+    prep.i1=$w.ro.pentru.kids.shop.total.i1
+    prep.i1=$w.ro.de.kids.shop.total.i1
+    prep.i1=$w.ro.pe.kids.shop.total.i1
+    prep.i2=$w.ro.si.kids.shop.total.i2
+    prep.i2=$w.ro.plus.kids.shop.total.i2
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="Cât costă 2 mingi și 3 creioane?"
+
+@describe.kids.shop.balance.ro core.describe.words
+    of=$describe.kids.shop.balance
+    lang=ro
+    noun=$w.ro.banii.kids.shop.balance
+    noun=$w.ro.suma.kids.shop.balance
+    noun=$w.ro.soldul.kids.shop.balance
+    ask=$w.ro.cati_bani.kids.shop.balance
+    ask=$w.ro.cati_lei.kids.shop.balance
+    ask=$w.ro.cat_mai.kids.shop.balance
+    ask=$w.ro.ce_suma.kids.shop.balance
+    ask=$w.ro.cati_bani_mai.kids.shop.balance
+    ask=$w.ro.cati_lei_mai.kids.shop.balance
+    rest=$w.ro.mai_am.kids.shop.balance
+    rest=$w.ro.am.kids.shop.balance
+    rest=$w.ro.am_acum.kids.shop.balance
+    rest=$w.ro.am_ramasi.kids.shop.balance
+    rest=$w.ro.au_ramas.kids.shop.balance
+    rest=$w.ro.am_in_portofel.kids.shop.balance
+    example="Câți bani mai am?"
+
+@describe.kids.shop.affordable.ro core.describe.words
+    of=$describe.kids.shop.affordable
+    lang=ro
+    verb=$w.ro.plati.kids.shop.affordability
+    verb=$w.ro.cumpara.kids.shop.affordability
+    verb=$w.ro.lua.kids.shop.affordability
+    verb=$w.ro.achizitiona.kids.shop.affordability
+    verb=$w.ro.permite.kids.shop.affordability
+    verb=$w.ro.imi_permit.kids.shop.affordability
+    prep.i2=$w.ro.si.kids.shop.affordability.i2
+    prep.i2=$w.ro.plus.kids.shop.affordability.i2
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="Pot cumpăra 2 mingi și 3 creioane?"
+
+@describe.kids.shop.change.ro core.describe.words
+    of=$describe.kids.shop.change
+    lang=ro
+    verb=$w.ro.dau.kids.shop.change
+    verb=$w.ro.platesc.kids.shop.change
+    verb=$w.ro.cumpar.kids.shop.change
+    verb=$w.ro.iau.kids.shop.change
+    tverb=$w.ro.primesc.kids.shop.change
+    tverb=$w.ro.mai_primesc.kids.shop.change
+    tverb=$w.ro.iau.kids.shop.change
+    noun=$w.ro.restul.kids.shop.change
+    noun=$w.ro.rest.kids.shop.change
+    ask=$w.ro.cat_rest.kids.shop.change
+    ask=$w.ro.cat_primesc_inapoi.kids.shop.change
+    ask=$w.ro.care_e_restul.kids.shop.change
+    ask=$w.ro.care_este_restul.kids.shop.change
+    ask=$w.ro.cat_mai_primesc.kids.shop.change
+    pre=$w.ro.vreau.kids.shop.change
+    pre=$w.ro.as_vrea.kids.shop.change
+    pre=$w.ro.cumpar.kids.shop.change
+    pre=$w.ro.iau.kids.shop.change
+    mid=$w.ro.si_platesc.kids.shop.change
+    mid=$w.ro.si_dau.kids.shop.change
+    mid=$w.ro.si_platesc_cu.kids.shop.change
+    prep.m=$w.ro.din.kids.shop.change.m
+    prep.m=$w.ro.cu.kids.shop.change.m
+    prep.m=$w.ro.de_la.kids.shop.change.m
+    unit.m=$w.ro.lei.kids.shop.change.m
+    unit.m=$w.ro.leu.kids.shop.change.m
+    prep.i1=$w.ro.daca_cumpar.kids.shop.change.i1
+    prep.i1=$w.ro.daca_iau.kids.shop.change.i1
+    prep.i1=$w.ro.pentru.kids.shop.change.i1
+    prep.i1=$w.ro.la.kids.shop.change.i1
+    prep.i1=$w.ro.cand_cumpar.kids.shop.change.i1
+    prep.i2=$w.ro.si.kids.shop.change.i2
+    prep.i2=$w.ro.plus.kids.shop.change.i2
+    sample.m=50
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="Care este restul din 50 de lei dacă cumpăr 2 mingi și 3 creioane?"
+
+@describe.kids.shop.leftafter.ro core.describe.words
+    of=$describe.kids.shop.leftafter
+    lang=ro
+    verb=$w.ro.cumpar.kids.shop.leftafter
+    verb=$w.ro.iau.kids.shop.leftafter
+    verb=$w.ro.achizitionez.kids.shop.leftafter
+    noun=$w.ro.banii_ramasi.kids.shop.leftafter
+    noun=$w.ro.soldul.kids.shop.leftafter
+    noun=$w.ro.restul.kids.shop.leftafter
+    ask=$w.ro.cati_bani_mai_am.kids.shop.leftafter
+    ask=$w.ro.cati_lei_mai_am.kids.shop.leftafter
+    ask=$w.ro.cat_mai_am.kids.shop.leftafter
+    ask=$w.ro.cat_ramane.kids.shop.leftafter
+    prep.i1=$w.ro.dupa_ce_cumpar.kids.shop.leftafter.i1
+    prep.i1=$w.ro.daca_cumpar.kids.shop.leftafter.i1
+    prep.i1=$w.ro.dupa_cumparaturi.kids.shop.leftafter.i1
+    prep.i1=$w.ro.dupa_ce_iau.kids.shop.leftafter.i1
+    prep.i2=$w.ro.si.kids.shop.leftafter.i2
+    prep.i2=$w.ro.plus.kids.shop.leftafter.i2
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="Câți bani mai am după ce cumpăr 2 mingi și 3 creioane?"
+
+@w.ro.am.kids.shop.money core.word lang=ro text=am means=kids.shop.money
+@w.ro.avem.kids.shop.money core.word lang=ro text=avem means=kids.shop.money
+@w.ro.mai_am.kids.shop.money core.word lang=ro text="mai am" means=kids.shop.money
+@w.ro.am_acum.kids.shop.money core.word lang=ro text="am acum" means=kids.shop.money
+@w.ro.am_in_portofel.kids.shop.money core.word lang=ro text="am in portofel" means=kids.shop.money
+@w.ro.acum.kids.shop.money core.word lang=ro text=acum means=kids.shop.money
+@w.ro.azi.kids.shop.money core.word lang=ro text=azi means=kids.shop.money
+@w.ro.in_portofel.kids.shop.money core.word lang=ro text="în portofel" means=kids.shop.money
+@w.ro.in_pusculita.kids.shop.money core.word lang=ro text="în pușculiță" means=kids.shop.money
+@w.ro.la_mine.kids.shop.money core.word lang=ro text="la mine" means=kids.shop.money
+@w.ro.ramasi.kids.shop.money core.word lang=ro text="rămași" means=kids.shop.money
+@w.ro.de_cheltuit.kids.shop.money core.word lang=ro text="de cheltuit" means=kids.shop.money
+@w.ro.inca.kids.shop.money core.word lang=ro text="încă" means=kids.shop.money
+@w.ro.lei.kids.shop.money.n core.word lang=ro text=lei means=kids.shop.money.n
+@w.ro.leu.kids.shop.money.n core.word lang=ro text=leu means=kids.shop.money.n
+@w.ro.primesc.kids.shop.income core.word lang=ro text=primesc means=kids.shop.income
+@w.ro.am_primit.kids.shop.income core.word lang=ro text="am primit" means=kids.shop.income
+@w.ro.am_gasit.kids.shop.income core.word lang=ro text="am găsit" means=kids.shop.income
+@w.ro.gasesc.kids.shop.income core.word lang=ro text="găsesc" means=kids.shop.income
+@w.ro.castig.kids.shop.income core.word lang=ro text="câștig" means=kids.shop.income
+@w.ro.am_castigat.kids.shop.income core.word lang=ro text="am câștigat" means=kids.shop.income
+@w.ro.am_economisit.kids.shop.income core.word lang=ro text="am economisit" means=kids.shop.income
+@w.ro.economisesc.kids.shop.income core.word lang=ro text=economisesc means=kids.shop.income
+@w.ro.lei.kids.shop.income.n core.word lang=ro text=lei means=kids.shop.income.n
+@w.ro.leu.kids.shop.income.n core.word lang=ro text=leu means=kids.shop.income.n
+@w.ro.am_cheltuit.kids.shop.expense core.word lang=ro text="am cheltuit" means=kids.shop.expense
+@w.ro.cheltuiesc.kids.shop.expense core.word lang=ro text=cheltuiesc means=kids.shop.expense
+@w.ro.am_pierdut.kids.shop.expense core.word lang=ro text="am pierdut" means=kids.shop.expense
+@w.ro.pierd.kids.shop.expense core.word lang=ro text=pierd means=kids.shop.expense
+@w.ro.am_platit.kids.shop.expense core.word lang=ro text="am plătit" means=kids.shop.expense
+@w.ro.platesc.kids.shop.expense core.word lang=ro text="plătesc" means=kids.shop.expense
+@w.ro.am_dat.kids.shop.expense core.word lang=ro text="am dat" means=kids.shop.expense
+@w.ro.dau.kids.shop.expense core.word lang=ro text=dau means=kids.shop.expense
+@w.ro.lei.kids.shop.expense.n core.word lang=ro text=lei means=kids.shop.expense.n
+@w.ro.leu.kids.shop.expense.n core.word lang=ro text=leu means=kids.shop.expense.n
+@w.ro.cumpar.kids.shop.purchase core.word lang=ro text="cumpăr" means=kids.shop.purchase
+@w.ro.am_cumparat.kids.shop.purchase core.word lang=ro text="am cumpărat" means=kids.shop.purchase
+@w.ro.iau.kids.shop.purchase core.word lang=ro text=iau means=kids.shop.purchase
+@w.ro.am_luat.kids.shop.purchase core.word lang=ro text="am luat" means=kids.shop.purchase
+@w.ro.achizitionez.kids.shop.purchase core.word lang=ro text="achiziționez" means=kids.shop.purchase
+@w.ro.am_achizitionat.kids.shop.purchase core.word lang=ro text="am achiziționat" means=kids.shop.purchase
+@w.ro.si.kids.shop.purchase.i2 core.word lang=ro text="și" means=kids.shop.purchase.i2
+@w.ro.plus.kids.shop.purchase.i2 core.word lang=ro text=plus means=kids.shop.purchase.i2
+@w.ro.cu.kids.shop.purchase.i2 core.word lang=ro text=cu means=kids.shop.purchase.i2
+@w.ro.costa.kids.shop.price core.word lang=ro text="costă" means=kids.shop.price
+@w.ro.e.kids.shop.price core.word lang=ro text=e means=kids.shop.price
+@w.ro.este.kids.shop.price core.word lang=ro text=este means=kids.shop.price
+@w.ro.sunt.kids.shop.price core.word lang=ro text=sunt means=kids.shop.price
+@w.ro.face.kids.shop.price core.word lang=ro text=face means=kids.shop.price
+@w.ro.fac.kids.shop.price core.word lang=ro text=fac means=kids.shop.price
+@w.ro.un.kids.shop.price.item core.word lang=ro text=un means=kids.shop.price.item
+@w.ro.o.kids.shop.price.item core.word lang=ro text=o means=kids.shop.price.item
+@w.ro.unul.kids.shop.price.item core.word lang=ro text=unul means=kids.shop.price.item
+@w.ro.una.kids.shop.price.item core.word lang=ro text=una means=kids.shop.price.item
+@w.ro.lei.kids.shop.price.n core.word lang=ro text=lei means=kids.shop.price.n
+@w.ro.leu.kids.shop.price.n core.word lang=ro text=leu means=kids.shop.price.n
+@w.ro.pretul.kids.shop.price core.word lang=ro text="prețul" means=kids.shop.price
+@w.ro.costul.kids.shop.price core.word lang=ro text=costul means=kids.shop.price
+@w.ro.pret.kids.shop.price core.word lang=ro text="preț" means=kids.shop.price
+@w.ro.cost.kids.shop.price core.word lang=ro text=cost means=kids.shop.price
+@w.ro.cat_costa.kids.shop.price core.word lang=ro text="cât costă" means=kids.shop.price
+@w.ro.cat_face.kids.shop.price core.word lang=ro text="cât face" means=kids.shop.price
+@w.ro.cat_e.kids.shop.price core.word lang=ro text="cât e" means=kids.shop.price
+@w.ro.cat_este.kids.shop.price core.word lang=ro text="cât este" means=kids.shop.price
+@w.ro.care_este.kids.shop.price core.word lang=ro text="care este" means=kids.shop.price
+@w.ro.al.kids.shop.price.item core.word lang=ro text=al means=kids.shop.price.item
+@w.ro.a.kids.shop.price.item core.word lang=ro text=a means=kids.shop.price.item
+@w.ro.pentru.kids.shop.price.item core.word lang=ro text=pentru means=kids.shop.price.item
+@w.ro.de.kids.shop.price.item core.word lang=ro text=de means=kids.shop.price.item
+@w.ro.lui.kids.shop.price.item core.word lang=ro text=lui means=kids.shop.price.item
+@w.ro.costa.kids.shop.total core.word lang=ro text="costă" means=kids.shop.total
+@w.ro.fac.kids.shop.total core.word lang=ro text=fac means=kids.shop.total
+@w.ro.face.kids.shop.total core.word lang=ro text=face means=kids.shop.total
+@w.ro.ajung.kids.shop.total core.word lang=ro text=ajung means=kids.shop.total
+@w.ro.totalul.kids.shop.total core.word lang=ro text=totalul means=kids.shop.total
+@w.ro.pretul.kids.shop.total core.word lang=ro text="prețul" means=kids.shop.total
+@w.ro.costul.kids.shop.total core.word lang=ro text=costul means=kids.shop.total
+@w.ro.suma.kids.shop.total core.word lang=ro text=suma means=kids.shop.total
+@w.ro.nota.kids.shop.total core.word lang=ro text=nota means=kids.shop.total
+@w.ro.cat_costa.kids.shop.total core.word lang=ro text="cât costă" means=kids.shop.total
+@w.ro.cat_fac.kids.shop.total core.word lang=ro text="cât fac" means=kids.shop.total
+@w.ro.cat_face.kids.shop.total core.word lang=ro text="cât face" means=kids.shop.total
+@w.ro.cat_e.kids.shop.total core.word lang=ro text="cât e" means=kids.shop.total
+@w.ro.cat_este.kids.shop.total core.word lang=ro text="cât este" means=kids.shop.total
+@w.ro.cat_sunt.kids.shop.total core.word lang=ro text="cât sunt" means=kids.shop.total
+@w.ro.in_total.kids.shop.total core.word lang=ro text="în total" means=kids.shop.total
+@w.ro.impreuna.kids.shop.total core.word lang=ro text="împreună" means=kids.shop.total
+@w.ro.toate.kids.shop.total core.word lang=ro text=toate means=kids.shop.total
+@w.ro.laolalta.kids.shop.total core.word lang=ro text="laolaltă" means=kids.shop.total
+@w.ro.pentru.kids.shop.total.i1 core.word lang=ro text=pentru means=kids.shop.total.i1
+@w.ro.de.kids.shop.total.i1 core.word lang=ro text=de means=kids.shop.total.i1
+@w.ro.pe.kids.shop.total.i1 core.word lang=ro text=pe means=kids.shop.total.i1
+@w.ro.si.kids.shop.total.i2 core.word lang=ro text="și" means=kids.shop.total.i2
+@w.ro.plus.kids.shop.total.i2 core.word lang=ro text=plus means=kids.shop.total.i2
+@w.ro.banii.kids.shop.balance core.word lang=ro text=banii means=kids.shop.balance
+@w.ro.suma.kids.shop.balance core.word lang=ro text=suma means=kids.shop.balance
+@w.ro.soldul.kids.shop.balance core.word lang=ro text=soldul means=kids.shop.balance
+@w.ro.cati_bani.kids.shop.balance core.word lang=ro text="câți bani" means=kids.shop.balance
+@w.ro.cati_lei.kids.shop.balance core.word lang=ro text="câți lei" means=kids.shop.balance
+@w.ro.cat_mai.kids.shop.balance core.word lang=ro text="cât mai" means=kids.shop.balance
+@w.ro.ce_suma.kids.shop.balance core.word lang=ro text="ce sumă" means=kids.shop.balance
+@w.ro.cati_bani_mai.kids.shop.balance core.word lang=ro text="câți bani mai" means=kids.shop.balance
+@w.ro.cati_lei_mai.kids.shop.balance core.word lang=ro text="câți lei mai" means=kids.shop.balance
+@w.ro.mai_am.kids.shop.balance core.word lang=ro text="mai am" means=kids.shop.balance
+@w.ro.am.kids.shop.balance core.word lang=ro text=am means=kids.shop.balance
+@w.ro.am_acum.kids.shop.balance core.word lang=ro text="am acum" means=kids.shop.balance
+@w.ro.am_ramasi.kids.shop.balance core.word lang=ro text="am rămași" means=kids.shop.balance
+@w.ro.au_ramas.kids.shop.balance core.word lang=ro text="au rămas" means=kids.shop.balance
+@w.ro.am_in_portofel.kids.shop.balance core.word lang=ro text="am în portofel" means=kids.shop.balance
+@w.ro.plati.kids.shop.affordability core.word lang=ro text="plăti" means=kids.shop.affordability
+@w.ro.cumpara.kids.shop.affordability core.word lang=ro text="cumpăra" means=kids.shop.affordability
+@w.ro.lua.kids.shop.affordability core.word lang=ro text=lua means=kids.shop.affordability
+@w.ro.achizitiona.kids.shop.affordability core.word lang=ro text="achiziționa" means=kids.shop.affordability
+@w.ro.permite.kids.shop.affordability core.word lang=ro text=permite means=kids.shop.affordability
+@w.ro.imi_permit.kids.shop.affordability core.word lang=ro text="îmi permit" means=kids.shop.affordability
+@w.ro.si.kids.shop.affordability.i2 core.word lang=ro text="și" means=kids.shop.affordability.i2
+@w.ro.plus.kids.shop.affordability.i2 core.word lang=ro text=plus means=kids.shop.affordability.i2
+@w.ro.dau.kids.shop.change core.word lang=ro text=dau means=kids.shop.change
+@w.ro.platesc.kids.shop.change core.word lang=ro text="plătesc" means=kids.shop.change
+@w.ro.cumpar.kids.shop.change core.word lang=ro text="cumpăr" means=kids.shop.change
+@w.ro.iau.kids.shop.change core.word lang=ro text=iau means=kids.shop.change
+@w.ro.primesc.kids.shop.change core.word lang=ro text=primesc means=kids.shop.change
+@w.ro.mai_primesc.kids.shop.change core.word lang=ro text="mai primesc" means=kids.shop.change
+@w.ro.restul.kids.shop.change core.word lang=ro text=restul means=kids.shop.change
+@w.ro.rest.kids.shop.change core.word lang=ro text=rest means=kids.shop.change
+@w.ro.cat_rest.kids.shop.change core.word lang=ro text="cât rest" means=kids.shop.change
+@w.ro.cat_primesc_inapoi.kids.shop.change core.word lang=ro text="cât primesc înapoi" means=kids.shop.change
+@w.ro.care_e_restul.kids.shop.change core.word lang=ro text="care e restul" means=kids.shop.change
+@w.ro.care_este_restul.kids.shop.change core.word lang=ro text="care este restul" means=kids.shop.change
+@w.ro.cat_mai_primesc.kids.shop.change core.word lang=ro text="cât mai primesc" means=kids.shop.change
+@w.ro.vreau.kids.shop.change core.word lang=ro text=vreau means=kids.shop.change
+@w.ro.as_vrea.kids.shop.change core.word lang=ro text="aș vrea" means=kids.shop.change
+@w.ro.si_platesc.kids.shop.change core.word lang=ro text="și plătesc" means=kids.shop.change
+@w.ro.si_dau.kids.shop.change core.word lang=ro text="și dau" means=kids.shop.change
+@w.ro.si_platesc_cu.kids.shop.change core.word lang=ro text="și plătesc cu" means=kids.shop.change
+@w.ro.din.kids.shop.change.m core.word lang=ro text=din means=kids.shop.change.m
+@w.ro.cu.kids.shop.change.m core.word lang=ro text=cu means=kids.shop.change.m
+@w.ro.de_la.kids.shop.change.m core.word lang=ro text="de la" means=kids.shop.change.m
+@w.ro.lei.kids.shop.change.m core.word lang=ro text=lei means=kids.shop.change.m
+@w.ro.leu.kids.shop.change.m core.word lang=ro text=leu means=kids.shop.change.m
+@w.ro.daca_cumpar.kids.shop.change.i1 core.word lang=ro text="dacă cumpăr" means=kids.shop.change.i1
+@w.ro.daca_iau.kids.shop.change.i1 core.word lang=ro text="dacă iau" means=kids.shop.change.i1
+@w.ro.pentru.kids.shop.change.i1 core.word lang=ro text=pentru means=kids.shop.change.i1
+@w.ro.la.kids.shop.change.i1 core.word lang=ro text=la means=kids.shop.change.i1
+@w.ro.cand_cumpar.kids.shop.change.i1 core.word lang=ro text="când cumpăr" means=kids.shop.change.i1
+@w.ro.si.kids.shop.change.i2 core.word lang=ro text="și" means=kids.shop.change.i2
+@w.ro.plus.kids.shop.change.i2 core.word lang=ro text=plus means=kids.shop.change.i2
+@w.ro.cumpar.kids.shop.leftafter core.word lang=ro text="cumpăr" means=kids.shop.leftafter
+@w.ro.iau.kids.shop.leftafter core.word lang=ro text=iau means=kids.shop.leftafter
+@w.ro.achizitionez.kids.shop.leftafter core.word lang=ro text="achiziționez" means=kids.shop.leftafter
+@w.ro.banii_ramasi.kids.shop.leftafter core.word lang=ro text="banii rămași" means=kids.shop.leftafter
+@w.ro.soldul.kids.shop.leftafter core.word lang=ro text=soldul means=kids.shop.leftafter
+@w.ro.restul.kids.shop.leftafter core.word lang=ro text=restul means=kids.shop.leftafter
+@w.ro.cati_bani_mai_am.kids.shop.leftafter core.word lang=ro text="câți bani mai am" means=kids.shop.leftafter
+@w.ro.cati_lei_mai_am.kids.shop.leftafter core.word lang=ro text="câți lei mai am" means=kids.shop.leftafter
+@w.ro.cat_mai_am.kids.shop.leftafter core.word lang=ro text="cât mai am" means=kids.shop.leftafter
+@w.ro.cat_ramane.kids.shop.leftafter core.word lang=ro text="cât rămâne" means=kids.shop.leftafter
+@w.ro.dupa_ce_cumpar.kids.shop.leftafter.i1 core.word lang=ro text="după ce cumpăr" means=kids.shop.leftafter.i1
+@w.ro.daca_cumpar.kids.shop.leftafter.i1 core.word lang=ro text="dacă cumpăr" means=kids.shop.leftafter.i1
+@w.ro.dupa_cumparaturi.kids.shop.leftafter.i1 core.word lang=ro text="după cumpărături" means=kids.shop.leftafter.i1
+@w.ro.dupa_ce_iau.kids.shop.leftafter.i1 core.word lang=ro text="după ce iau" means=kids.shop.leftafter.i1
+@w.ro.si.kids.shop.leftafter.i2 core.word lang=ro text="și" means=kids.shop.leftafter.i2
+@w.ro.plus.kids.shop.leftafter.i2 core.word lang=ro text=plus means=kids.shop.leftafter.i2

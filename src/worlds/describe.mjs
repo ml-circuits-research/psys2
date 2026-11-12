@@ -125,7 +125,7 @@ export function describePatterns(d, { phrases = null, lexicons = null, lg = EN }
     const bases = frameName === 'qnoun' ? ['qnoun', 'qnoun.2'] : frameName === 'tell' ? ['tell', 'tell.tv'] : [frameName];
     for (const fn of bases) {
       const f = FR[fn];
-      if (!f) throw new Error(`describe '${d.id}': unknown frame '${fn}'`);
+      if (!f) { if (lg !== EN) continue; throw new Error(`describe '${d.id}': unknown frame '${fn}'`); }   // a language may not have every frame of English
       if (f.needs.some((n) => (n === 'A' ? !args.length : n === 'AI' ? !args.some((a) => a.qty) : n === 'AP' ? !args.some((a) => !a.qty) : tokenValue[n] == null))) continue;
       const dp = (i) => (f.ofprep && i === 0 ? lg.ofPrep.split('|') : null);   // the thing asked about: "the capital OF Japan"
       const variants = cartesian(args.map((a, i) => argVariants(a, false, dp(i), lg)));
@@ -160,6 +160,8 @@ export function emitKey(emit) {
 
 /** The token of a `core.word` text in a match string: spaces and apostrophes become `_` ("how much" -> how_much). */
 export const wordToken = (text) => String(text).trim().replace(/[\s']+/g, '_');
+/** Diacritics folded away (a language pack's words and the text it reads are both folded: `plătește` = `plateste`). */
+export const foldText = (s) => String(s).normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC');
 const ROLES = ['verb', 'tverb', 'noun', 'ask', 'rest', 'pre', 'mid', 'subject'];
 const val = (x, k) => get(x, k)?.v;
 const refId = (v) => (v == null ? v : String(v).replace(/^\$/, ''));
@@ -196,13 +198,13 @@ export function readDescriptionWires(wires, into = null) {
     const lang = val(x, 'lang');
     if (!d) { err(`words ${x.id}: of=${val(x, 'of')} is not a described operation`); continue; }
     if (!lang) { err(`words ${x.id}: no lang`); continue; }
-    const w = { lang, wire: x, noSubject: String(val(x, 'nosubject')) === 'true', sample: {}, example: getAll(x, 'example').map((v) => v.v), roles: {}, argWords: {} };
+    const w = { lang, wire: x, frames: getAll(x, 'frames').map((v) => v.v), skip: getAll(x, 'skip').map((v) => v.v), noSubject: String(val(x, 'nosubject')) === 'true', sample: {}, example: getAll(x, 'example').map((v) => v.v), roles: {}, argWords: {} };
     const resolve = (ref, expectMeans, where) => {
       const wd = out.words.get(refId(ref));
       if (!wd) { err(`${x.id}: ${where} refers to ${ref}, which is not a core.word wire`); return null; }
       if (wd.lang !== lang) err(`${x.id}: ${where} word ${wd.id} is lang=${wd.lang}, not ${lang}`);
       if (wd.means !== expectMeans) err(`${x.id}: ${where} word ${wd.id} means ${wd.means}, expected ${expectMeans}`);
-      return wordToken(wd.text);
+      return lang === 'en' ? wordToken(wd.text) : foldText(wordToken(wd.text)).toLowerCase();
     };
     for (const r of ROLES) w.roles[r] = getAll(x, r).map((v) => resolve(v.v, d.op, r)).filter(Boolean);
     for (const e of x.entries) {
@@ -222,7 +224,7 @@ export function descriptionFor(desc, lang) {
   const w = desc.words.get(lang);
   if (!w) return null;
   return {
-    id: desc.id, op: desc.op, intent: desc.intent, emit: desc.emit, frames: desc.frames, skip: desc.skip, priority: desc.priority, shortPriority: desc.shortPriority,
+    id: desc.id, op: desc.op, intent: desc.intent, emit: desc.emit, frames: w.frames.length ? w.frames : desc.frames, skip: w.skip.length ? w.skip : desc.skip, priority: desc.priority, shortPriority: desc.shortPriority,
     bareVerb: desc.bareVerb, kind: desc.kind, args: desc.args.map((a) => makeArg(a, w.argWords[a.name] ?? {})), noSubject: w.noSubject, sample: w.sample, example: w.example,
     verb: w.roles.verb, tverb: w.roles.tverb, noun: w.roles.noun, ask: w.roles.ask, rest: w.roles.rest, pre: w.roles.pre, mid: w.roles.mid, subject: w.roles.subject,
   };
@@ -247,4 +249,21 @@ export function readFrames(wires, lang) {
     }
   }
   return lg;
+}
+
+/**
+ * A reader for the values of slots in another language (`core.word lang= text= means=<canonical value> of=<slot>`): returns `(text) => text` that replaces each such word by its
+ * canonical (English) value, longest word first, on whole words, diacritics and case folded. The patterns of a language pack capture the canonical value; this is the lexicon side
+ * of the pack, until the engine's lexicons carry a surface form per language.
+ */
+export function entityReader(entries) {
+  const map = new Map();
+  for (const e of entries) {
+    const k = foldText(e.text).toLowerCase().trim();
+    if (k && !map.has(k)) map.set(k, String(e.means).replace(/_/g, ' '));
+  }
+  const keys = [...map.keys()].sort((a, b) => b.length - a.length).map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  if (!keys.length) return (t) => t;
+  const re = new RegExp(`(?<![\\p{L}\\p{N}-])(${keys.join('|')})(?![\\p{L}\\p{N}-])`, 'giu');
+  return (text) => foldText(text).replace(re, (m) => map.get(m.toLowerCase()) ?? m);
 }

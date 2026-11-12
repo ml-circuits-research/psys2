@@ -22,6 +22,7 @@ const MATRIX_EXTRAS = { 'patterns.sop': 'matrix.patterns.sop', 'operations.sop':
 // Operation descriptions (E3, spec 03 section 2c): describe.sop is read only when PSYS_GEN_PATTERNS is `add` (generated patterns are appended to the
 // hand-written ones) or `only` (hand-written patterns and shapes of the described operations are dropped first). Default: off, nothing is read.
 const genLang = () => { const m = globalThis.PSYS_GEN_LANG ?? globalThis.process?.env?.PSYS_GEN_LANG; return m && /^[a-z]{2}$/.test(m) && m !== 'en' ? m : null; };   // opt-in language pack (lang/<lang>/, outside the worlds)
+const genLangOnly = () => !!(globalThis.PSYS_GEN_LANG_ONLY ?? globalThis.process?.env?.PSYS_GEN_LANG_ONLY);   // measurement only: the world reads nothing but the language pack's patterns
 const genMode = () => { const m = globalThis.PSYS_GEN_PATTERNS ?? globalThis.process?.env?.PSYS_GEN_PATTERNS; return m === 'add' || m === 'only' ? m : null; };
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
 const txt = (w, k) => get(w, k)?.v;
@@ -300,7 +301,11 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   const lang = genLang();
   if (lang && loader.readLangPack) {   // the pack of the language: grammar (frames) and one file per world, outside the worlds
     set.langPack = { lang, frames: await loader.readLangPack(lang, 'frames'), worlds: new Map() };
-    for (const id of ids) { const t = await loader.readLangPack(lang, id); if (t != null) set.langPack.worlds.set(id, t); }
+    for (const id of ids) {   // `<world>.sop` (words of the descriptions) and `<world>.entities.sop` (words of slot values, generated from the translator's tables)
+      const parts = [];
+      for (const name of [id, `${id}.entities`]) { const t = await loader.readLangPack(lang, name); if (t != null) parts.push([name, t]); }
+      if (parts.length) set.langPack.worlds.set(id, parts);
+    }
   }
   resolveLexiconExtends(set);
   expandShapes(set);
@@ -388,13 +393,15 @@ function expandDescriptions(set) {
   const lgRo = pack?.frames ? readFrames(parse(pack.frames, { source: `lang/${lang}/frames.sop` }).wires, lang) : null;
   if (lang && !lgRo) set.errors.push({ message: `language pack '${lang}': lang/${lang}/frames.sop has no core.describe.lang wire` });
   for (const w of set.list()) {
-    if (!w.descriptions.length) continue;
+    if (!w.descriptions.length) { if (lgRo && genLangOnly()) w.patterns = []; continue; }   // isolation (E3b measurement): a world without a Romanian description reads no Romanian
     if (lang && pack?.worlds.get(w.id)) {
-      const { wires, errors } = parse(pack.worlds.get(w.id), { source: `lang/${lang}/${w.id}.sop` });
-      for (const e of errors) w.errors.push({ file: `lang/${lang}/${w.id}.sop`, ...e });
-      const n = w.descReader.errors.length;
-      readDescriptionWires(wires, w.descReader);
-      for (const m of w.descReader.errors.slice(n)) w.errors.push({ file: `lang/${lang}/${w.id}.sop`, message: m });
+      for (const [name, text] of pack.worlds.get(w.id)) {
+        const { wires, errors } = parse(text, { source: `lang/${lang}/${name}.sop` });
+        for (const e of errors) w.errors.push({ file: `lang/${lang}/${name}.sop`, ...e });
+        const n = w.descReader.errors.length;
+        readDescriptionWires(wires, w.descReader);
+        for (const m of w.descReader.errors.slice(n)) w.errors.push({ file: `lang/${lang}/${name}.sop`, message: m });
+      }
       w.langWords ??= {};
       w.langWords[lang] = [...w.descReader.words.values()].filter((x) => x.lang === lang && x.of);   // words of the values of a slot (entities): `means` is the canonical value
     }
@@ -424,5 +431,6 @@ function expandDescriptions(set) {
         }
       }
     }
+    if (lgRo && genLangOnly()) w.patterns = w.patterns.filter((p) => p.lang === lang);   // isolation of the pack (E3b measurement): no English pattern reads the Romanian text
   }
 }
