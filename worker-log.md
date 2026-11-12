@@ -749,3 +749,16 @@ Key numbers (rules mode): English core (operational + dialogues) 131 non-right, 
 - A/B gate: 16 dialogues, "ops better": none
 
 - Nothing above the tolerance and no coherence failure: keep going.
+
+## 2026-11-12 — PAUSE (user: weekly quota; resume in about 15 hours)
+
+- The user asked to stop starting tasks until the quota resets. All agents are stopped. Their committed work was merged and pushed:
+  - SHIP-NOW partial: the build is visible (commit and time in About and on the first line of the debug panel), a new-version banner, a one-reload version test, the avatar "fă părul roșu" veto reply, the ro-fallback test now counting model calls, and scripts/regression-note.mjs;
+  - language gate at 70%;
+  - ui.help description under the size gate.
+- Gates on the final tree: npm test 1500 pass, 1 fail (webchat-build modulepreload; it passes alone, which looks like a race with a concurrent build in the suite; to check); test-world all is clean in both reasoners; Chrome matrix 208/208.
+- Open when resuming:
+  - MT round-trip mining (classify A/B/C, add class B as training rows and general phrasings) was not started beyond the 70% gate;
+  - DESCRIBE-ALL for media.music, data.charts, docs.reader, ui.avatar, art.draw, diagram.sketch;
+  - the SHIP-NOW cache check on a real phone and a first regression note;
+  - the remaining reviewer items (knowledge worlds, when the task arrives).
