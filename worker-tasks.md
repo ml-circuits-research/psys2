@@ -2827,3 +2827,7 @@ This matches your report: a small, safe veto that never adds a wrong answer. "fÄ
 **REGRESSION-AB was not touched.** The reviewer reran `ab-sopworld --sets dialogues` at 04:00 and got the same 7 "ops better": dlg.kidsA#010, drm#011, drm#014, drm#021, gms#002, gms#006, doc#035. **Do it now, before anything else.** The user's first priority is coherence: a not-understood turn that changes state, and a chess undo that takes back the wrong plies, are coherence bugs in matrix mode.
 
 Then re-vendor sopworld 0.11.0 at c09292a (validated: 259 tests). It adds delta snapshots (`toJSON({ since })`, `fromJSON({ base })`: use them in RESTORE-1), redo after a rewind (drop `redos`/`isView`) and aggregate `groups=`.
+
+## Re-vendor target is now sopworld 0.11.1 at f9959ee (reviewer, 2026-11-12 04:15)
+
+0.11.1 is validated: 261 tests. It is 0.11.0 plus canonical values for foreign words, written `core.word lang=ro text=minge means=ball of=kids.shop.item` (not `value=`; the library showed the existing form), and words kept in declaration order. Use `means= of=` in `lang/ro/*.sop`. **REGRESSION-AB first**, then vendor f9959ee.
