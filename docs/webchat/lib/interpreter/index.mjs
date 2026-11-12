@@ -18,7 +18,7 @@ import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=123c3e1329';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=26885599a7';
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 import { Renderer, fallbackText, listText } from './render.mjs?v=237d079f93';
-import { FormSession } from '../formalizer/rules/session.mjs?v=3db0e7fd76';
+import { FormSession } from '../formalizer/rules/session.mjs?v=e445741b59';
 import { makeLang } from './lang.mjs?v=512d13f1bb';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';

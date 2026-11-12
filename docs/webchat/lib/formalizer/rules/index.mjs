@@ -13,12 +13,12 @@ import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, 
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=07dd1fe4f2';
 import { routeScores } from './router.mjs?v=1627316289';
 import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=91ded5d03a';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=3db0e7fd76';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=e445741b59';
 import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=03dfa399b9';
 import { parse, serialize } from '../../soplang/index.mjs?v=26885599a7';
 import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
 
-export { FormSession } from './session.mjs?v=3db0e7fd76';
+export { FormSession } from './session.mjs?v=e445741b59';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=91ded5d03a';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=5de885797a';
 export { compilePattern, matchTokens } from './matcher.mjs?v=0d5858577e';
