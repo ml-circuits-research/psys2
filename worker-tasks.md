@@ -3089,3 +3089,19 @@ Reviewer limits and findings:
 **Language gate: a decision for the user.** No language reaches 80% in the round trip; the best is French at 75.9%. The reviewer will ask him. Until then, the selector shows English and Romanian.
 
 **Next re-vendor: sopworld 0.14.0 at c7247e2.** Validated: 278 tests. It brings declared host functions (`core.function`, `core.function.arg`, load checks, `pure=`, `functions()`; facts never call functions) and R14.1. Declare the functions of each world's `fns.mjs` with it. That is the tool description the formalization work wants.
+
+## Reviewer 2026-11-12 10:25 — MINIMAL-PAIRS, COMMON-SENSE, DESCRIBE-ALL accepted; language gate decided; ROUND-TRIP-MINING
+
+**Validated at 9b8c559:** npm test exit 0 (699 s). minimal-pairs 122 cases (rules): right 91.8%, wrong 1.6%, not understood 4.9%; avatar/shell/editor is the weak group (71.4%, wrong 14.3%). Chrome draw probe: fish in the sky, second sun, car in the sky are all drawn, with one friendly note after the action; "draw a fish" makes a pond. Accepted.
+
+**Found in the probe (fix, with a test each):**
+1. "open draw" -> "I did not understand" ("open drawing" and "open the drawing" work). Probably lost under the DESCRIBE-ALL size gate for ui.shell (8ec507b). Every tab must open by its short name ("open draw", "open chess", "open map", "open charts", "open music", "open editor", "open diagram"); add these to the shell tests so a size cut cannot drop them again.
+2. "draw a sky" -> not understood (and once read as "drag"). A sky (also ground, sea, grass) is a background, not an object: draw it as a background band. The drawable things should come from sop-knowledge-worlds k.objects once it exists; for now a small list in art.draw is fine.
+
+**Language gate (owner, 10:07): show the languages under 80% as "beta".** The selector lists English and Romanian, then every engine language with "beta" and its round-trip number. Settings › About keeps the numbers. Keep QUALITY_GATE at 80; it now separates normal from beta.
+
+**ROUND-TRIP-MINING (new, the owner's idea).** When a round trip fails, the reason is either (a) the model translated wrongly, or (b) the English that comes back is correct, but phrased differently from what we read. Case (b) is a gap in our English reading, and the round-trip outputs are a free source of real paraphrases.
+- For the 216-case sample and the 8 best languages (fr it nb de nl is bg es) plus ro, save each case as `{original, back-translation, reading, verdict}` in `training/results/round-trip-cases-2026-11-12.jsonl`. This must run on the DGX, because the reviewer box cannot reach the models.
+- Classify every failure: `mt-wrong` (meaning changed), `reader-gap` (same meaning, we fail), `judge-strict` (we read it right, but the judge compares UI words). Use the judge and a hand check of 40 cases. Report the shares per language in worker-log.
+- Turn `reader-gap` cases into a paraphrase eval set (`training/eval/paraphrases-rt-2026-11-12.jsonl`, deduplicated, English only), and fix the reading by world descriptions and word groups. No phrase memorization (DESCRIBE-ALL size gate applies). Fix `judge-strict` in the judge.
+- Report the new gate numbers. If English reading gets better, every language gets better.
