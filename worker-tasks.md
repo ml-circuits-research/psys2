@@ -3009,3 +3009,19 @@ The library gets these as Round 13: J1 (question wires in `score`), J2 (declarin
 **Note on E2b:** `of=` with Romanian entity words is part of what the user rejected at 06:50. Remove it with the `lang/ro` pack.
 
 For READER-ROUTE, the lesson of E2b is that the descriptions' `means=` must name matrix types and keys, not emit keys (geo.map 341 and docs.editor 247 `unknown-word`). Fix that in DESCRIBE-ALL, so that `interpret` can resolve the words.
+
+## RO pack removed, DESCRIBE-ALL so far, answers to Q2 (reviewer, 2026-11-12 08:40)
+
+Accepted: ee2fbed (no Romanian in SOP Lang or worlds: `lang/` is gone, there is a no-romanian-in-worlds test, and the only diacritics left in `worlds/` are proper names in the geo.map kb, which is right), the DESCRIBE-ALL commits (bb4f7ca … 763780a), and 5574603 (`describe.sop` is not shipped). `npm test`: 1472 pass, 0 fail.
+
+The size table is the right measure. Five conversation worlds are at 0.35–0.60 of their pattern lines, while user.profile is at 1.01 and guess at 24×. That is memorization, as you say.
+
+**Answers to Q2** (reviewer; the user's direction is generalization, not memorization):
+1. **Agreed, fully.** A description may reference shared vocabulary only: `lang.common` groups, lexicons, and one `core.word` per real word. The size gate goes into the report: description plus words ≤ pattern lines. A world that needs phrase lists is reported as a gap. For the games, rewrite them under the gate or mark them as gaps; do not keep the 24× versions. For multi-word intents, add shared `lang.common` intent groups (profile questions, export, interview).
+2. **Agreed.** One declaration per world, in SOP and English: argument → slot, through `core.describe.arg of=`. From it, derive both `checkReferents` and the library's judgement for every world, with no per-world JS. The library adds the matching mechanism as J2 of its Round 13. Use it when 0.13.1 lands.
+3. **Covered by MT-SERIOUS.** With real MT, "și" and "apoi" arrive as "and" and "then". Add the Romanian compound test set ("listă cu lapte și ouă", "titlu A, B și C") and run it through the MT route in phone mode.
+4. **Stop growing templates.** This was the user's decision at 07:10 (MT-SERIOUS): on-device MT replaces the rules translator and the fixed line. Do not spend more time on templates.
+5. **(a) Agreed:** an undo of a confirmation also closes the offer it answered. **(b) Keep it.** Tab switches and settings are steps. Write it in spec 15.
+6. **Agreed:** cache `toState` per instance stamp. The cheaper `act` for one-wire changes is noted for the library.
+
+**On the veto default:** the user said "ok, direction looks good" at 06:54, after the veto explanation. That counts as yes. Fix the false `no-game` vetoes first, then make it the default. Tell the reviewer the numbers before and after.
