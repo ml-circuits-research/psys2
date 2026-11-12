@@ -6,7 +6,7 @@
 // takes the state over after every operation (`adopt`; `toState` is the way back), so its rules refuse a diagram that cannot be (an arrow to a shape that is not
 // there, two arrows for one pair, two shapes with one name, a group member that is not there, a selection of nothing), derive the degree of every shape, and refuse
 // a request that would only repeat an arrow. Undo and redo are the session timeline's, in the words of the editor. Browser-safe; it imports its sibling ops.mjs.
-import { initialState, read } from './ops.mjs?v=b3ec5e9421';
+import { initialState, read } from './ops.mjs?v=99cb851626';
 
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
 const str = (v) => JSON.stringify(String(v));

@@ -1575,7 +1575,7 @@
 
 @t.diagram.sketch.b.connect.k01.b core.test
     input="Hook Start up to Done with a dashed arrow"
-    expect="Connected Start → Done (a1)."
+    expect="Connected Start → Done."
     expectState="shapes.length=4"
     expectState="edges.length=1"
     session=b.connect.k01
@@ -1588,7 +1588,7 @@
 
 @t.diagram.sketch.b.connect.k02.b core.test
     input="Draw an arrow from Done to Start"
-    expect="Connected Done → Start (a1)."
+    expect="Connected Done → Start."
     expectState="shapes.length=4"
     expectState="edges.length=1"
     session=b.connect.k02
@@ -1601,7 +1601,7 @@
 
 @t.diagram.sketch.b.connect.k03.b core.test
     input="Connect the circles in a chain"
-    expect="Connected Start → Process (a1), Process → Check (a2) and"
+    expect="Connected Start → Process, Process → Check and"
     expectState="shapes.length=4"
     expectState="edges.length=3"
     session=b.connect.k03
@@ -1627,7 +1627,7 @@
 
 @t.diagram.sketch.b.connect.k05.b core.test
     input="Join Process with Check using a dotted line"
-    expect="Connected Process — Check (a1)."
+    expect="Connected Process — Check."
     expectState="shapes.length=4"
     expectState="edges.length=1"
     session=b.connect.k05
@@ -1640,7 +1640,7 @@
 
 @t.diagram.sketch.b.connect.k06.b core.test
     input="Wire Check to Done with a red arrow"
-    expect="Connected Check → Done (a1)."
+    expect="Connected Check → Done."
     expectState="shapes.length=4"
     expectState="edges.length=1"
     session=b.connect.k06
@@ -1666,7 +1666,7 @@
 
 @t.diagram.sketch.b.create.k02.b core.test
     input="Add three yellow triangles"
-    expect="Drew t1, t2 and t3."
+    expect="Drew 3 triangles."
     expectState="shapes.length=7"
     expectState="edges.length=0"
     session=b.create.k02
@@ -1679,7 +1679,7 @@
 
 @t.diagram.sketch.b.create.k03.b core.test
     input="Put a small orange star next to Check"
-    expect="Drew k1."
+    expect="Drew a star."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.create.k03
@@ -1692,7 +1692,7 @@
 
 @t.diagram.sketch.b.create.k04.b core.test
     input="Could you sketch me a tiny purple hexagon?"
-    expect="Drew h1."
+    expect="Drew a hexagon."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.create.k04
@@ -1705,7 +1705,7 @@
 
 @t.diagram.sketch.b.create.k05.b core.test
     input="Throw a big yellow star in the upper left corner"
-    expect="Drew k1."
+    expect="Drew a star."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.create.k05
@@ -1965,7 +1965,7 @@
 
 @t.diagram.sketch.b.duplicate.k01.b core.test
     input="Make a copy of Done"
-    expect="Drew c5."
+    expect="Drew a circle."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.duplicate.k01
@@ -1978,7 +1978,7 @@
 
 @t.diagram.sketch.b.duplicate.k02.b core.test
     input="duplicate Check"
-    expect="Drew c5."
+    expect="Drew a circle."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.duplicate.k02
@@ -1991,7 +1991,7 @@
 
 @t.diagram.sketch.b.duplicate.k03.b core.test
     input="copy Start twice"
-    expect="Drew c6."
+    expect="Drew a circle."
     expectState="shapes.length=6"
     expectState="edges.length=0"
     session=b.duplicate.k03
@@ -2004,7 +2004,7 @@
 
 @t.diagram.sketch.b.duplicate.k04.b core.test
     input="could you clone Box1"
-    expect="Drew c2."
+    expect="Drew a circle."
     expectState="shapes.length=2"
     expectState="edges.length=0"
     session=b.duplicate.k04
@@ -2017,7 +2017,7 @@
 
 @t.diagram.sketch.b.duplicate.k05.b core.test
     input="could you duplicate Start 3 times"
-    expect="Drew c4."
+    expect="Drew a circle."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.duplicate.k05
@@ -2030,7 +2030,7 @@
 
 @t.diagram.sketch.b.duplicate.k06.b core.test
     input="could you clone Delta"
-    expect="Drew c2."
+    expect="Drew a circle."
     expectState="shapes.length=2"
     expectState="edges.length=0"
     session=b.duplicate.k06
@@ -4832,3 +4832,23 @@
     expectState="edges.length=2"
     session=ex.story
 
+
+@t.diagram.sketch.random.a core.test
+    input="make a random diagram"
+    expect="I drew a random "
+    session=random.a
+
+@t.diagram.sketch.random.b core.test
+    input="draw a diagram"
+    expect="I drew a random "
+    session=random.b
+
+@t.diagram.sketch.random.c core.test
+    input="Create a sample diagram please."
+    expect="I drew a random "
+    session=random.c
+
+@t.diagram.sketch.plain.a core.test
+    input="Add a star to the diagram."
+    expect="Drew a star."
+    session=plain.a
