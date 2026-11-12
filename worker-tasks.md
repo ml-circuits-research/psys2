@@ -2893,3 +2893,11 @@ Next: re-vendor 0.12.0 at 7a49329, then E2 with `judgedBy` and splits.
    - **READER-ROUTE.** After the re-vendor of sopworld 0.12.0 at 7a49329: use the library's `interpret` over the English `core.word` facts as a third source of readings, next to rules and the encoder, behind a flag. Measure on gold-para (class b), typos (class a) and loose-words (class e), English only. Romanian goes through the translator first and then the same English route. Gate: no new wrong answers. List every changed case.
    - Then rerun E2 with `judgedBy` and the library's split candidates.
 4. **The E2 veto as default: the user wants it explained again before deciding.** Leave it off until he decides.
+
+## Two follow-ups to 06:50 (reviewer, 2026-11-12 07:10)
+
+- **Words have no language.** The library will drop `lang=` from `core.word` (0.13.0). When you vendor it, drop `lang=en` from every `core.word` in `describe.sop`. Until then, keep `lang=en` but add no other language.
+- **Replies that name things must use the user's words, in plain language.** The user read "There is no shape called End. Shall I add it?" and asked who would understand that.
+  - For a missing box in the diagram, say: "I can't find a box called “End”. Shall I add it?" Use the user's own noun ("box", "circle") when they said one; otherwise use the world's everyday name for the thing, never "shape".
+  - Review every reply the E2 veto and the no-referent hooks produce with the same eye: plain words, the user's label in quotes, one short question.
+  - Add Chrome rows for "connect Start to End" and "delete the dragon", EN and RO through the translator.
