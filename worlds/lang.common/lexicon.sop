@@ -2810,3 +2810,121 @@
     alt=my_animal_is_ready
     alt=im_ready
     alt=i_am_ready
+
+@phrase.lang.intent.interview core.phrase
+    doc="Ask the assistant to interview the user or to get to know them."
+    alt=interview_me
+    alt=quiz_me
+    alt=quiz_me_about_myself
+    alt=ask_me_something
+    alt=ask_me_a_question
+    alt=ask_me_anything
+    alt=ask_me_some_questions
+    alt=ask_me_more
+    alt=get_to_know_me
+    alt=lets_get_to_know_me
+    alt=let_us_get_to_know_me
+    alt=do_you_want_to_get_to_know_me
+    alt=start_the_interview
+    alt=begin_the_interview
+    alt=resume_the_interview
+    alt=continue_the_interview
+    alt=start_the_profile_interview
+    alt=lets_play_get_to_know_me
+    alt=play_get_to_know_me
+    alt=lets_play_the_get_to_know_me_game
+    alt=back_to_the_interview
+    alt=lets_get_back_to_the_interview
+    alt=lets_go_back_to_the_questions
+    alt=back_to_getting_to_know_me
+
+@phrase.lang.intent.stopinterview core.phrase
+    doc="Ask the assistant to stop interviewing or asking questions."
+    alt=stop_asking_me_questions
+    alt=stop_asking
+    alt=stop_the_questions
+    alt=stop_the_interview
+    alt=pause_the_interview
+    alt=end_the_interview
+    alt=finish_the_interview
+    alt=pause_the_game
+    alt=stop_the_game
+    alt=that_is_enough_questions
+    alt=that_is_enough
+    alt=no_more_questions
+    alt=enough_questions
+    alt=enough_questions_for_now
+
+@phrase.lang.intent.whatyouknow core.phrase
+    doc="Ask what the assistant knows or has learned about the user."
+    alt=what_do_you_know_about_me
+    alt=what_have_you_learned_about_me
+    alt=what_did_you_learn_about_me
+    alt=what_have_you_found_out_about_me
+    alt=what_did_i_tell_you_about_me
+    alt=what_do_you_remember_about_me
+    alt=tell_me_what_you_know_about_me
+    alt=tell_me_what_you_learned_about_me
+    alt=show_me_what_you_know_about_me
+    alt=show_me_what_you_learned_about_me
+    alt=say_what_you_know_about_me
+    alt=what_is_in_my_profile
+    alt=whats_in_my_profile
+    alt=show_me_my_profile
+    alt=show_my_profile
+    alt=my_profile
+    alt=tell_me_about_myself
+    alt=what_do_you_think_i_am_like
+
+@phrase.lang.intent.howmuchknown core.phrase
+    doc="Ask how much the assistant already knows about the user, or how many questions are left."
+    alt=how_much_do_you_know_about_me
+    alt=how_much_do_you_know_me
+    alt=how_well_do_you_know_me
+    alt=how_much_have_you_learned_about_me
+    alt=how_far_are_we
+    alt=how_far_along_are_we
+    alt=how_many_questions_are_left
+    alt=how_many_questions_left
+    alt=how_many_more_questions
+
+@phrase.lang.intent.deleteprofile core.phrase
+    doc="Delete everything the assistant knows about the user."
+    alt=delete_my_profile
+    alt=erase_my_profile
+    alt=wipe_my_profile
+    alt=clear_my_profile
+    alt=remove_my_profile
+    alt=reset_my_profile
+    alt=delete_the_profile
+    alt=delete_all_my_data
+    alt=delete_everything
+    alt=erase_everything
+    alt=wipe_everything
+    alt=delete_everything_you_know_about_me
+    alt=erase_everything_you_know_about_me
+    alt=forget_everything
+    alt=forget_everything_about_me
+    alt=forget_me
+    alt=erase_everything_about_me
+
+@phrase.lang.intent.whereilive core.phrase
+    doc="Ask where the user lives."
+    alt=where_do_i_live
+    alt=where_do_i_stay
+    alt=where_am_i_from
+    alt=where_do_i_come_from
+    alt=where_is_my_home
+    alt=what_city_do_i_live_in
+    alt=which_city_do_i_live_in
+    alt=where_am_i_based
+    alt=do_you_know_where_i_live
+
+@phrase.lang.intent.howoldami core.phrase
+    doc="Ask how old the user is."
+    alt=how_old_am_i
+    alt=what_is_my_age
+    alt=whats_my_age
+    alt=what_age_am_i
+    alt=do_you_know_how_old_i_am
+    alt=how_old_do_you_think_i_am

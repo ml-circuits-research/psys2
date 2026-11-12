@@ -359,3 +359,9 @@
     alt=i_have
     alt=i_suffer_from
     alt=i_was_diagnosed_with
+
+@lex.user.profile.yearwords core.lexicon
+    class=noun
+    doc="The word for years after a number of years of experience."
+    word=years
+    word=year
