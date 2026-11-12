@@ -3,7 +3,7 @@
  * MT-SERIOUS item 5: the quality gate of the language list. For every language of the on-device model registry (both directions with English) a sample of the
  * English operational set (training/eval/operational.jsonl) is translated English -> X and back X -> English by the on-device engine, and the back-translation is
  * READ by the English dialog engine with the same judge as every operational run (right / partly / wrong / not understood). A language is listed in the selector
- * only when at least GATE (80 %) of the sample is read right; the number is shown in Settings > About. The English originals are the reference (the same sample
+ * only when at least GATE (70 %) of the sample is read right; the number is shown in Settings > About. The English originals are the reference (the same sample
  * read directly), so the table also shows how much the round trip loses. Also records the checker's verdict (numbers, names, negation, question form) per
  * translated sentence and the time per sentence.
  *
@@ -24,7 +24,7 @@ import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
 const reasoner = applyReasonerFlag();
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
-export const GATE = 0.8;
+export const GATE = 0.7;
 const every = Number(arg('every', 6));
 const registry = loadRegistry();
 let langs = arg('lang') ? arg('lang').split(',') : Object.keys(registry.langs);

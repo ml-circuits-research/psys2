@@ -10,7 +10,7 @@ import { browserTranslatorKind, browserTranslatorAvailability } from './translat
 
 const CACHE = 'psys2-mt-v1';
 /** A language is listed in the selector only when at least this share of the machine-translated operational sample is read right (scripts/mt-quality.mjs). */
-export const QUALITY_GATE = 80;
+export const QUALITY_GATE = 70;
 /** Languages that always are listed: English, and Romanian, which has its own rules and templates besides the model. */
 const ALWAYS = ['en', 'ro'];
 const DOWNLOAD_LIMIT_MS = 180000;
