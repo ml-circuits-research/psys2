@@ -1,0 +1,294 @@
+@describe.capabilities core.describe
+    op=chat.capabilities
+    intent=command
+    emit="@{_} core.request action=chat.capabilities"
+    priority=14
+    kind=question
+    frames=phr
+    frames=imp
+
+@describe.capabilities.en core.describe.words
+    of=$describe.capabilities
+    lang=en
+    phrase=$phrase.lang.intent.capabilities
+    verb=$w.en.show.chat.capabilities
+    verb=$w.en.list.chat.capabilities
+    verb=$w.en.tell.chat.capabilities
+    noun=$w.en.abilities.chat.capabilities
+    noun=$w.en.capabilities.chat.capabilities
+    noun=$w.en.skills.chat.capabilities
+    noun=$w.en.features.chat.capabilities
+
+@describe.help core.describe
+    op=ui.help
+    intent=command
+    emit="@{_} core.request action=ui.help"
+    priority=12
+    kind=request
+    frames=phr
+    frames=imp
+
+@describe.help.en core.describe.words
+    of=$describe.help
+    lang=en
+    phrase=$phrase.lang.intent.whatcanisay
+    phrase=$phrase.lang.intent.showexamples
+    verb=$w.en.show.ui.help
+    verb=$w.en.give.ui.help
+    verb=$w.en.list.ui.help
+    verb=$w.en.tell.ui.help
+    noun=$w.en.examples.ui.help
+    noun=$w.en.commands.ui.help
+    noun=$w.en.ideas.ui.help
+    noun=$w.en.options.ui.help
+    noun=$w.en.suggestions.ui.help
+
+@describe.help.one core.describe
+    op=ui.help
+    intent=command
+    emit="@{_} core.request action=ui.help arg.count=1"
+    priority=13
+    kind=request
+    frames=phr
+    frames=imp
+
+@describe.help.one.en core.describe.words
+    of=$describe.help.one
+    lang=en
+    phrase=$phrase.lang.intent.oneexample
+    verb=$w.en.show.ui.help
+    verb=$w.en.give.ui.help
+    verb=$w.en.tell.ui.help
+    noun=$w.en.example.ui.help
+    noun=$w.en.sample.ui.help
+
+@describe.helpMe core.describe
+    op=ui.helpMe
+    intent=command
+    emit="@{_} core.request action=ui.helpMe"
+    priority=12
+    kind=request
+    frames=phr
+
+@describe.helpMe.en core.describe.words
+    of=$describe.helpMe
+    lang=en
+    phrase=$phrase.lang.intent.helpme
+
+@describe.surprise core.describe
+    op=ui.surprise
+    intent=command
+    emit="@{_} core.request action=ui.surprise"
+    priority=12
+    kind=request
+    frames=phr
+    frames=imp
+
+@describe.surprise.en core.describe.words
+    of=$describe.surprise
+    lang=en
+    phrase=$phrase.lang.ask.surprise
+    verb=$w.en.surprise.ui.surprise
+    verb=$w.en.pick.ui.surprise
+    verb=$w.en.choose.ui.surprise
+    verb=$w.en.try.ui.surprise
+    noun=$w.en.example.ui.surprise
+    noun=$w.en.command.ui.surprise
+
+@describe.more core.describe
+    op=ui.helpMore
+    intent=command
+    emit="@{_} core.request action=ui.helpMore"
+    priority=12
+    kind=request
+    frames=phr
+    frames=imp
+
+@describe.more.en core.describe.words
+    of=$describe.more
+    lang=en
+    phrase=$phrase.lang.intent.moreexamples
+    verb=$w.en.show.ui.helpMore
+    verb=$w.en.give.ui.helpMore
+    verb=$w.en.tell.ui.helpMore
+    noun=$w.en.more.ui.helpMore
+    noun=$w.en.examples.ui.helpMore
+
+@describe.about core.describe
+    op=ui.helpAbout
+    intent=command
+    emit="@{_} core.request action=ui.helpAbout"
+    priority=12
+    kind=request
+    frames=phr
+    frames=imp
+
+@describe.about.en core.describe.words
+    of=$describe.about
+    lang=en
+    phrase=$phrase.lang.intent.abouttab
+    verb=$w.en.explain.ui.helpAbout
+    verb=$w.en.describe.ui.helpAbout
+    noun=$w.en.tab.ui.helpAbout
+    noun=$w.en.page.ui.helpAbout
+
+@describe.game core.describe
+    op=ui.helpGame
+    intent=command
+    emit="@{_} core.request action=ui.helpGame"
+    priority=12
+    kind=request
+    frames=phr
+
+@describe.game.en core.describe.words
+    of=$describe.game
+    lang=en
+    phrase=$phrase.lang.intent.howtoplay
+
+@describe.game.of core.describe
+    op=ui.helpGame
+    intent=command
+    emit="@{_} core.request action=ui.helpGame arg.game={g}"
+    priority=13
+    kind=request
+    frames=phr
+    frames=imp
+
+@describe.game.of.g core.describe.arg
+    of=$describe.game.of
+    name=g
+    class=lex.ui.help.games
+
+@describe.game.of.en core.describe.words
+    of=$describe.game.of
+    lang=en
+    phrase=$phrase.lang.intent.howtoplay
+    verb=$w.en.explain.ui.helpGame
+    verb=$w.en.show.ui.helpGame
+    verb=$w.en.tell.ui.helpGame
+    verb=$w.en.teach.ui.helpGame
+    noun=$w.en.rules.ui.helpGame
+    noun=$w.en.goal.ui.helpGame
+    prep.g=$w.en.of.ui.helpGame.g
+    prep.g=$w.en.for.ui.helpGame.g
+    prep.g=$w.en.to_play.ui.helpGame.g
+    det.g=$w.en.the.ui.helpGame.g
+    det.g=$w.en.a.ui.helpGame.g
+    unit.g=$w.en.game.ui.helpGame.g
+
+@describe.how core.describe
+    op=ui.helpHow
+    intent=command
+    emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
+    priority=6
+    kind=request
+    frames=phr
+
+@describe.how.what core.describe.arg
+    of=$describe.how
+    name=what
+    class=words
+    size=8
+
+@describe.how.en core.describe.words
+    of=$describe.how
+    lang=en
+    phrase=$phrase.lang.intent.howdoi
+
+@describe.why core.describe
+    op=ui.helpWhy
+    intent=command
+    emit="@{_} core.request action=ui.helpWhy"
+    priority=12
+    kind=request
+    frames=phr
+
+@describe.why.en core.describe.words
+    of=$describe.why
+    lang=en
+    phrase=$phrase.lang.intent.whynotunderstood
+
+@describe.id.what core.describe
+    op=ui.helpIdentity
+    intent=command
+    emit="@{_} core.request action=ui.helpIdentity arg.what=what"
+    priority=14
+    kind=question
+    frames=phr
+
+@describe.id.what.en core.describe.words
+    of=$describe.id.what
+    lang=en
+    phrase=$phrase.lang.intent.whatareyou
+
+@describe.id.how core.describe
+    op=ui.helpIdentity
+    intent=command
+    emit="@{_} core.request action=ui.helpIdentity arg.what=how"
+    priority=14
+    kind=question
+    frames=phr
+
+@describe.id.how.en core.describe.words
+    of=$describe.id.how
+    lang=en
+    phrase=$phrase.lang.intent.howdoyouwork
+
+@describe.id.ai core.describe
+    op=ui.helpIdentity
+    intent=command
+    emit="@{_} core.request action=ui.helpIdentity arg.what=ai"
+    priority=14
+    kind=question
+    frames=phr
+
+@describe.id.ai.en core.describe.words
+    of=$describe.id.ai
+    lang=en
+    phrase=$phrase.lang.intent.areyouai
+
+@w.en.show.chat.capabilities core.word text=show means=chat.capabilities
+@w.en.list.chat.capabilities core.word text=list means=chat.capabilities
+@w.en.tell.chat.capabilities core.word text=tell means=chat.capabilities
+@w.en.abilities.chat.capabilities core.word text=abilities means=chat.capabilities
+@w.en.capabilities.chat.capabilities core.word text=capabilities means=chat.capabilities
+@w.en.skills.chat.capabilities core.word text=skills means=chat.capabilities
+@w.en.features.chat.capabilities core.word text=features means=chat.capabilities
+@w.en.show.ui.help core.word text=show means=ui.help
+@w.en.give.ui.help core.word text=give means=ui.help
+@w.en.list.ui.help core.word text=list means=ui.help
+@w.en.tell.ui.help core.word text=tell means=ui.help
+@w.en.examples.ui.help core.word text=examples means=ui.help
+@w.en.commands.ui.help core.word text=commands means=ui.help
+@w.en.ideas.ui.help core.word text=ideas means=ui.help
+@w.en.options.ui.help core.word text=options means=ui.help
+@w.en.suggestions.ui.help core.word text=suggestions means=ui.help
+@w.en.example.ui.help core.word text=example means=ui.help
+@w.en.sample.ui.help core.word text=sample means=ui.help
+@w.en.surprise.ui.surprise core.word text=surprise means=ui.surprise
+@w.en.pick.ui.surprise core.word text=pick means=ui.surprise
+@w.en.choose.ui.surprise core.word text=choose means=ui.surprise
+@w.en.try.ui.surprise core.word text=try means=ui.surprise
+@w.en.example.ui.surprise core.word text=example means=ui.surprise
+@w.en.command.ui.surprise core.word text=command means=ui.surprise
+@w.en.show.ui.helpMore core.word text=show means=ui.helpMore
+@w.en.give.ui.helpMore core.word text=give means=ui.helpMore
+@w.en.tell.ui.helpMore core.word text=tell means=ui.helpMore
+@w.en.more.ui.helpMore core.word text=more means=ui.helpMore
+@w.en.examples.ui.helpMore core.word text=examples means=ui.helpMore
+@w.en.explain.ui.helpAbout core.word text=explain means=ui.helpAbout
+@w.en.describe.ui.helpAbout core.word text=describe means=ui.helpAbout
+@w.en.tab.ui.helpAbout core.word text=tab means=ui.helpAbout
+@w.en.page.ui.helpAbout core.word text=page means=ui.helpAbout
+@w.en.explain.ui.helpGame core.word text=explain means=ui.helpGame
+@w.en.show.ui.helpGame core.word text=show means=ui.helpGame
+@w.en.tell.ui.helpGame core.word text=tell means=ui.helpGame
+@w.en.teach.ui.helpGame core.word text=teach means=ui.helpGame
+@w.en.rules.ui.helpGame core.word text=rules means=ui.helpGame
+@w.en.goal.ui.helpGame core.word text=goal means=ui.helpGame
+@w.en.of.ui.helpGame.g core.word text=of means=ui.helpGame.g
+@w.en.for.ui.helpGame.g core.word text=for means=ui.helpGame.g
+@w.en.to_play.ui.helpGame.g core.word text="to play" means=ui.helpGame.g
+@w.en.the.ui.helpGame.g core.word text=the means=ui.helpGame.g
+@w.en.a.ui.helpGame.g core.word text=a means=ui.helpGame.g
+@w.en.game.ui.helpGame.g core.word text=game means=ui.helpGame.g
