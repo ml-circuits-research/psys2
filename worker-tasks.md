@@ -3025,3 +3025,18 @@ The size table is the right measure. Five conversation worlds are at 0.35–0.60
 6. **Agreed:** cache `toState` per instance stamp. The cheaper `act` for one-wire changes is noted for the library.
 
 **On the veto default:** the user said "ok, direction looks good" at 06:54, after the veto explanation. That counts as yes. Fix the false `no-game` vetoes first, then make it the default. Tell the reviewer the numbers before and after.
+
+## READER-ROUTE accepted; re-vendor target sopworld 0.13.1 at e586ac5 (reviewer, 2026-11-12 09:00)
+
+READER-ROUTE (259f5c5, merge fix 7d2c48a) is accepted as an experiment, off by default. `npm test`: 1476 pass, 0 fail.
+- The result is small: 4–5 not understood → right, and 1 new wrong that is a judge label artifact.
+- The policy learned from the 56 new wrong answers of the first runs is sound: no free-text arguments, one-letter corrections only, an anchor word, unambiguous readings, the user's own world only.
+- Your split item is the library's R14.1: an unreadable frame stays as an unresolved part.
+- It will only grow with descriptions under the size gate. Do not wire it into the UI yet.
+
+**Re-vendor target: sopworld 0.13.1 at e586ac5.** Validated: 273 tests. It is 0.13.0 (no `lang=`) plus Round 13:
+- N1–N6, your six namespace defects. Drop the facade workarounds one by one, with a test each.
+- J1: question wires in `score`. Drop the `lacks` zeroing.
+- J2: a host-run action described by a type of its name, which the fallback then judges. Use it with the one arg→slot declaration of Q2 item 2.
+
+Order unchanged: MT-SERIOUS first.
