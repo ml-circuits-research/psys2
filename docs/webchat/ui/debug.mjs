@@ -219,6 +219,7 @@ export function createDebug(host) {
       ['Reply', t.answer ?? undefined], ['Outcome', t.outcome ? `${t.outcome} in stage ${t.stage ?? '?'}` : undefined],
       ['State', stateChanged == null ? undefined : stateChanged ? 'changed by this turn' : 'unchanged'],
       ['Runaway computation', t.runaway ? JSON.stringify(t.runaway) : undefined],
+      ['Library warnings', r?.warnings?.length ? r.warnings.map((w) => `${w.kind}${w.id ? ` ${w.id}` : ''}: ${w.why} [${w.world}]`).join('; ') : undefined],
       ['Step budget', r?.budget ? `${r.budget.ticks} ticks: ${Object.entries(r.budget.bySite ?? {}).map(([k, v]) => `${k} ${v}`).join(', ')}` : undefined],
       ['Timing', r?.perf ? `${r.perf.totalMs ?? r.perf.total} ms total, engine ${r.perf.engineMs ?? '?'} ms, render ${r.perf.render ?? '?'} ms, host effects ${r.perf.effects ?? '?'} ms` : t.ms != null ? `${Math.round(t.ms)} ms` : undefined],
     ])];

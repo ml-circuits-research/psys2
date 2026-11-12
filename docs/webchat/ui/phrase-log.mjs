@@ -74,7 +74,7 @@ export function buildDetail(reply, { serialize = null, state = null, tab = null 
   });
   return {
     tab, worlds: [...new Set(readings.map((r) => r.world).filter(Boolean))], status: d?.status ?? null, readings,
-    answer: clip(reply.text, 400), ...(reply.assumptions?.length ? { assumptions: reply.assumptions.slice(0, 8) } : {}), effects: (reply.effects ?? []).slice(0, 8).map((e) => ({ name: e.name ?? e.effect ?? null })),
+    answer: clip(reply.text, 400), ...(reply.assumptions?.length ? { assumptions: reply.assumptions.slice(0, 8) } : {}), ...(reply.warnings?.length ? { warnings: reply.warnings.slice(0, 8) } : {}), effects: (reply.effects ?? []).slice(0, 8).map((e) => ({ name: e.name ?? e.effect ?? null })),
     budget: reply.budget ?? null, budgetExceeded: reply.budgetExceeded ?? null,   // COMPUTE-BUDGET: ticks per site, and where a loop tripped the budget (site, ticks, table, input, tab, stage, stack)
     state: state ?? null, perf: reply.perf ? { totalMs: reply.perf.totalMs ?? null, engineMs: reply.perf.engineMs ?? null, stages: reply.perf.stages ?? null } : null,
   };

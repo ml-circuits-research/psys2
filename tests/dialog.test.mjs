@@ -232,7 +232,7 @@ test('server: health, worlds, sessions, messages, memory, 501 for learning', asy
     assert.equal(JSON.parse(m.body).answers[0].value, 5);
     const mem = await call('GET', `/v1/sessions/${sessionId}/memory`);
     assert.match(mem.type, /text\/plain/);
-    assert.match(mem.body, /@w1 test.counting.holding/);
+    assert.match(mem.body, /@t1_w1 test.counting.holding/);
     assert.equal((await call('POST', `/v1/sessions/${sessionId}/messages`, { nope: 1 })).status, 400);
     assert.equal((await call('POST', '/v1/sessions/unknown/messages', { text: 'x' })).status, 404);
     assert.equal((await call('POST', '/v1/learn/anything', {})).status, 501);
