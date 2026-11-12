@@ -660,3 +660,10 @@ Key numbers (rules mode): English core (operational + dialogues) 131 non-right, 
 - Not done, with reasons: facade workarounds stay (none of the six namespace items is fixed in 0.10 to 0.12, probed); delta snapshots (836 kB and 109 ms against our 52 kB and 24 ms); library redo (per World, ours is across instances); `lacks` zeroing stays (below).
 - Library items (0.12.0): (a) `score` of a question given as a wire (`attrs.seek`) about a computed answer that does not exist yet still gives `lacks: [{ type: 'kids.arith.total', key: 'count' }]`; the sought-value test needs `q.seek` and an `m.id`; accept a question wire (seek in attrs) and a missing subject whose type/key is the sought one. (b) The fallback judgement needs `type.key` argument names or `of`: a host action with bare argument names stays unjudged and `veto` reports `action-unavailable` for it; a way to declare an action's parameters as slots (`core.action ... param=` exists for declared actions) for an action the host carries out would let the fallback judge it. (c) The six namespace items of the 0.9.0 entry are open.
 - Gate result of E2: no new wrong answers. The reviewer's games item: report in the status file (no trivial byte-identical fix).
+
+## 2026-11-12 — DESCRIBE-ALL, game and tab worlds (partial)
+
+- Done: `describe.sop` for games.tictactoe, games.hangman, games.guess (one commit each, English words only, `core.word` wires, no notation in values). Results and gaps: `training/results/describe-all-tabs-2026-11-12.{json,md}`.
+- Gate: no new wrong answers in `add` on operational and dialogues (all three worlds); `only` has no new wrong answers, only right to not understood (tests.sop in `only`: 147/173, 147/154, 123/130).
+- Finding: the descriptions are 3 to 24 times longer than the hand-written patterns in these phrase-list worlds (one `core.word` wire per phrase); the webchat bundle grows 1.2 MB. Generator gaps found: optional `unit` / `prep` / noun cannot be made mandatory (caused new wrong answers until worked around), no verb-free non-short frame.
+- Not done: games.chess, media.music, data.charts, docs.reader, ui.avatar, ui.shell, ui.help, art.draw, diagram.sketch.

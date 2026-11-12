@@ -1,0 +1,25 @@
+{
+  "task": "DESCRIBE-ALL, game and tab worlds (partial: games.tictactoe, games.hangman, games.guess done)",
+  "date": "2026-11-12",
+  "sets": "operational (1296 cases) and dialogues (2241 turns), rules mode, baseline = main without PSYS_GEN_PATTERNS; audited = the cases of the described world; plus the world's own tests.sop (test-world)",
+  "triple": "[right, wrong, not understood]",
+  "worlds": {
+    "games.tictactoe": {
+      "describe": {"descriptions": 23, "generatedPatterns": 35, "descriptionLines": 2177, "wordWires": 907, "handWrittenLinesOfDescribedOps": 705, "handWrittenLines": 719},
+      "add": {"operational": {"base": [40, 0, 3], "gen": [41, 0, 2], "of": 43}, "dialogues": {"base": [72, 0, 0], "gen": [72, 0, 0], "of": 72}, "testWorld": "173/173", "newWrong": 0},
+      "only": {"operational": {"base": [40, 0, 3], "gen": [40, 0, 3], "of": 43}, "dialogues": {"base": [72, 0, 0], "gen": [72, 0, 0], "of": 72}, "testWorld": "147/173", "newWrong": 0}
+    },
+    "games.hangman": {
+      "describe": {"descriptions": 33, "generatedPatterns": 33, "descriptionLines": 3394, "wordWires": 1354, "handWrittenLinesOfDescribedOps": 638, "handWrittenLines": 638},
+      "add": {"operational": {"base": [31, 1, 0], "gen": [31, 1, 0], "of": 32}, "dialogues": {"base": [60, 0, 0], "gen": [60, 0, 0], "of": 60}, "testWorld": "154/154", "newWrong": 0},
+      "only": {"operational": {"base": [31, 1, 0], "gen": [31, 1, 0], "of": 32}, "dialogues": {"base": [60, 0, 0], "gen": [60, 0, 0], "of": 60}, "testWorld": "147/154", "newWrong": 0}
+    },
+    "games.guess": {
+      "describe": {"descriptions": 44, "generatedPatterns": 44, "descriptionLines": 11939, "wordWires": 5411, "handWrittenLinesOfDescribedOps": 500, "handWrittenLines": 500},
+      "add": {"operational": {"base": [32, 0, 0], "gen": [32, 0, 0], "of": 32}, "dialogues": {"base": [69, 0, 0], "gen": [69, 0, 0], "of": 69}, "testWorld": "130/130", "newWrong": 0},
+      "only": {"operational": {"base": [32, 0, 0], "gen": [31, 0, 1], "of": 32}, "dialogues": {"base": [69, 0, 0], "gen": [67, 0, 2], "of": 69}, "testWorld": "123/130", "newWrong": 0}
+    }
+  },
+  "notDone": ["games.chess", "media.music", "data.charts", "docs.reader", "ui.avatar", "ui.shell", "ui.help", "art.draw", "diagram.sketch"],
+  "note": "Changes of other worlds in the `only` runs (docs.editor, geo.map, kids.shop descriptions of E3: 19 right to not understood and 11 right to wrong in the combined run) are identical in every run and are not attributed to these worlds."
+}
