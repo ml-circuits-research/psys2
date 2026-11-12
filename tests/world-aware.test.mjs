@@ -151,3 +151,27 @@ test('sayMissing: an offer asks, a plain refusal says what the world holds', () 
   assert.equal(sayMissing({ missing: [{ name: 'dragon', kind: 'thing' }], here: 'a house', where: 'picture' }).text, 'I can\'t find \u201cdragon\u201d in the picture. In the picture I can see: a house.');
   assert.equal(sayMissing({ missing: [{ name: 'dragon', kind: 'thing' }], here: null, where: 'picture' }).text, 'I can\'t find \u201cdragon\u201d in the picture. The picture is empty.');
 });
+
+// Correction 2 (SHIP-NOW): the veto never contradicts itself and the open tab's world answers when it reads the message.
+test('veto: "make the hair red" on the Avatar tab is the avatar world\'s answer (offers the person), not the drawing world\'s veto', async () => {
+  for (const tab of ['robot', 'draw']) {
+    const s = await session('veto', tab);
+    const r = await s.send('make the hair red');
+    if (tab === 'robot') {
+      assert.match(r.text, /has no hair color, but the person does/);
+      assert.match(r.text, /"yes"/);
+      assert.ok(r.segments.every((x) => !x.veto), 'no veto: the avatar world reads the message');
+    }
+    assert.ok(!/did not know the word/i.test(r.text));
+  }
+});
+
+test('veto: a word that a vetoed reading names is never reported as "I did not know the word" (Romanian; the reading itself depends on the MT)', async () => {
+  const { createTranslator } = await import('../src/translate/index.mjs');
+  const ro = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), translator: createTranslator() });
+  const s = ro.createSession({ language: 'ro' });
+  s.setWorldState('ui.shell', { activeTab: 'robot' });
+  const r = await s.send('fă părul roșu', { language: 'ro' });
+  assert.match(r.text, /părul/);
+  assert.ok(!/Nu am știut cuvântul/.test(r.text), r.text);
+});
