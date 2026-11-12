@@ -53,7 +53,7 @@ function buildReaderWorld(lib, set, worldId) {
   const descs = [...read.descriptions.values()].filter((d) => d.op && d.emit && d.words.has('en'));
   if (!descs.length) return null;
   const lex = lexIndex(set);
-  const world = new lib.World({ lemmas: { en: (tok) => [lex.lemma(String(tok).toLowerCase())] } });
+  const world = new lib.World({ lemma: (tok) => [lex.lemma(String(tok).toLowerCase())] });
   let n = 0;
   const id = () => `r${++n}`;
   const schema = [], facts = [], wordLines = [];
@@ -80,12 +80,12 @@ function buildReaderWorld(lib, set, worldId) {
       const m = /^(verb|tverb|noun|ask|rest|pre|mid|subject|prep\.\w+|det\.\w+|unit\.\w+)$/.exec(e.key);
       if (!m) continue;
       const wd = read.words.get(refId(e.value.v));
-      if (!wd || wd.lang !== 'en') continue;
+      if (!wd) continue;   // words have no language since sopworld 0.13; the description's own `lang=en` wording picked them
       const key = e.key.includes('.') ? `${T}.${e.key.split('.')[1]}` : T;
       const text = tok(wd.text);
       if (seen.has(`${text}|${key}`)) continue;
       seen.add(`${text}|${key}`);
-      wordLines.push(`@${id()} core.word lang=en text=${/^[\p{L}\p{N}_.-]+$/u.test(text) ? text : quote(text)} means=${key}`);
+      wordLines.push(`@${id()} core.word text=${/^[\p{L}\p{N}_.-]+$/u.test(text) ? text : quote(text)} means=${key}`);
       o.roleWords.add(text);
       mapped.add(wd.id);
     }
@@ -100,8 +100,8 @@ function buildReaderWorld(lib, set, worldId) {
   world.load(schema.join('\n'));
   world.tell(facts.join('\n'));
   world.tell(wordLines.join('\n'));
-  const en = [...read.words.values()].filter((x) => x.lang === 'en' && !x.of);
-  const lexicon = world.words('en');
+  const en = [...read.words.values()].filter((x) => !x.of);
+  const lexicon = world.words();
   const cov = { words: en.length, mapped: en.filter((x) => mapped.has(x.id)).length, unmapped: en.filter((x) => !mapped.has(x.id)).map((x) => x.id), descriptions: descs.length, types: ops.size, entityClasses: entityClasses.size,
     wordLines: wordLines.length, resolved: [...lexicon.values()].reduce((k, es) => k + es.filter((e) => e.meanings.length).length, 0), warnings: world.warnings.filter((x) => x.kind === 'unknown-word').length };
   // the tokens the host merges before the library sees them: multi-word texts of words and names ("how_many_people_live_in" is one token, "new_york" too)
@@ -147,7 +147,7 @@ function clauseTokens(text, rw) {
   return out;
 }
 
-const verbish = (rw, t) => (rw.world.words('en').get(t) ?? []).some((e) => e.meanings?.some((m) => m.kind === 'type' || m.kind === 'action'));
+const verbish = (rw, t) => (rw.world.words().get(t) ?? []).some((e) => e.meanings?.some((m) => m.kind === 'type' || m.kind === 'action'));
 
 /** Alternative splits of a text: the clauses one by one and, for a compound text, as one clause (the library keeps the better). */
 function framesOf(text, rw) {
@@ -156,7 +156,7 @@ function framesOf(text, rw) {
   const frame = (toks) => {   // a glue word the world has a word for stays ("have" is the verb of a statement)
     const numbers = toks.filter((x) => x.num !== undefined).map((x) => x.num);
     const words = toks.filter((x) => x.num === undefined && !(GLUE.has(x.t) && !rw.known.has(x.t))).map((x) => x.t);
-    return { lang: 'en', words, numbers };
+    return { words, numbers };
   };
   const frames = cl.map(frame);
   const whole = cl.length > 1 ? [frame(cl.flat())] : null;
@@ -367,13 +367,13 @@ export function readerCoverage(lib, set, matrixOf) {
   const out = {};
   for (const w of set.list()) {
     const read = w.descReader;
-    const en = read ? [...read.words.values()].filter((x) => x.lang === 'en' && !x.of) : [];
+    const en = read ? [...read.words.values()].filter((x) => !x.of) : [];
     if (!en.length) continue;
     let asIs = null;
     try {
       const fork = matrixOf(w.id);
       const before = fork.warnings.length;
-      fork.tell(en.map((x, i) => `@cw${i} core.word lang=en text=${quote(String(x.text).toLowerCase())} means=${x.means}`).join('\n'));
+      fork.tell(en.map((x, i) => `@cw${i} core.word text=${quote(String(x.text).toLowerCase())} means=${x.means}`).join('\n'));
       asIs = { unknown: fork.warnings.slice(before).filter((x) => x.kind === 'unknown-word').length };
     } catch (e) { asIs = { error: String(e?.message ?? e).slice(0, 80) }; }
     const rw = rws.get(w.id);

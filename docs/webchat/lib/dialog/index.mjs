@@ -10,11 +10,11 @@
  * Without it all input is treated as English.
  */
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=85b9949394';
-import { loadWorlds } from '../worlds/index.mjs?v=29d6d69933';
+import { loadWorlds } from '../worlds/index.mjs?v=2fb86746f7';
 import { validateWorldSet } from '../worlds/validate.mjs?v=ad3c8ef24d';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=deb03b682c';
-import { createReasoner } from '../reasoner/index.mjs?v=8b0dd3e3aa';
+import { createReasoner } from '../reasoner/index.mjs?v=a1d93d48a2';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=6ff4aeaed2';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=e1e88d78a9';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -31,8 +31,8 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=6f60935e0f';
 import { Discourse } from './discourse.mjs?v=0ada15a3e1';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=c108731866';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=fb5303f0bb';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=e5a60d4ae2';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=5611588f0f';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -1312,7 +1312,7 @@ export class DialogSession {
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
-    const segments = !icpt && !pre && !meta && waMode !== 'off' ? reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    const segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
