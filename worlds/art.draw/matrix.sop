@@ -49,48 +49,19 @@
 @ad.ls art.draw.last oid=?i
 @ad.d.last core.deny when=$ad.ls not=$ad.on why="?i, the thing the last command touched, is not in the picture."
 
-# ---- what is in the picture: the number of things and of a kind (the count of a colour is a filter over the object wires: see fns.mjs) (the kinds as static facts, so that an empty kind still has its 0)
+# ---- what is in the picture: the number of things and of a kind (the count of a colour is a filter over the object wires: see fns.mjs)
 @ad.k.tt.n core.slot of=art.draw.total key=n kind=integer
 @ad.k.t.kind core.slot of=art.draw.tally key=kind kind=atom
 @ad.k.t.n core.slot of=art.draw.tally key=n kind=integer
-@ad.k.kf.kind core.slot of=art.draw.kindfact key=kind kind=atom
 @ad.sc art.draw.scene
 @ad.oo art.draw.object
 @ad.c.all core.calc out=?na fn=count over=$ad.oo
 @ad.tt art.draw.total n=?na
 @ad.r.tt core.rule when=$ad.sc with=$ad.c.all then=$ad.tt
-# one count per kind, anchored on the kind (a static fact below), not on a thing of the kind: an anchor per thing would count the whole group once for each of its members
-@ad.kf art.draw.kindfact kind=?k
+# one count per kind: an aggregate by kind whose declared groups are the kinds (sopworld 0.11 `groups=`), so that a kind with no thing has its 0
 @ad.ok art.draw.object kind=?k
-@ad.c.k core.calc out=?nk fn=count over=$ad.ok
 @ad.tk art.draw.tally kind=?k n=?nk
-@ad.r.tk core.rule when=$ad.kf with=$ad.c.k then=$ad.tk
-@ad.kind.circle art.draw.kindfact kind=circle
-@ad.kind.oval art.draw.kindfact kind=oval
-@ad.kind.square art.draw.kindfact kind=square
-@ad.kind.rectangle art.draw.kindfact kind=rectangle
-@ad.kind.triangle art.draw.kindfact kind=triangle
-@ad.kind.star art.draw.kindfact kind=star
-@ad.kind.heart art.draw.kindfact kind=heart
-@ad.kind.line art.draw.kindfact kind=line
-@ad.kind.arrow art.draw.kindfact kind=arrow
-@ad.kind.house art.draw.kindfact kind=house
-@ad.kind.tree art.draw.kindfact kind=tree
-@ad.kind.sun art.draw.kindfact kind=sun
-@ad.kind.cloud art.draw.kindfact kind=cloud
-@ad.kind.car art.draw.kindfact kind=car
-@ad.kind.flower art.draw.kindfact kind=flower
-@ad.kind.cat art.draw.kindfact kind=cat
-@ad.kind.dog art.draw.kindfact kind=dog
-@ad.kind.fish art.draw.kindfact kind=fish
-@ad.kind.bird art.draw.kindfact kind=bird
-@ad.kind.boat art.draw.kindfact kind=boat
-@ad.kind.mountain art.draw.kindfact kind=mountain
-@ad.kind.rainbow art.draw.kindfact kind=rainbow
-@ad.kind.person art.draw.kindfact kind=person
-@ad.kind.balloon art.draw.kindfact kind=balloon
-@ad.kind.rocket art.draw.kindfact kind=rocket
-@ad.kind.moon art.draw.kindfact kind=moon
+@ad.ag.k core.aggregate over=$ad.ok by=?k groups=circle groups=oval groups=square groups=rectangle groups=triangle groups=star groups=heart groups=line groups=arrow groups=house groups=tree groups=sun groups=cloud groups=car groups=flower groups=cat groups=dog groups=fish groups=bird groups=boat groups=mountain groups=rainbow groups=person groups=balloon groups=rocket groups=moon count=?nk then=$ad.tk
 
 # ---- a request about a thing that is not there (asked by `guard` in fns.mjs, a dry run: the wire is never kept)
 @ad.k.w.kind core.slot of=art.draw.want key=kind kind=atom required=true

@@ -25,6 +25,7 @@ export const baseMode = (m) => String(m ?? 'off').replace(/-strict$/, '');
 
 /** The reasons a reading can be vetoed. The default set is the one the measurements support (spec 16, section 6); `-strict` adds `words-partial`; `PSYS2_WA_KINDS` (a comma list) overrides for experiments. */
 export const VETO_KINDS = Object.freeze(['no-referent', 'no-game', 'words-best-effort']);
+/** `library`: the library's own `veto(result)` on the reading (its reasons except `inconsistent` (the world's refusal, answered), `nothing` and `action-unavailable` (an action the operations carry out)). Not in the default set: opt in with `PSYS2_WA_KINDS`. */
 const kinds = (mode) => {
   const e = globalThis.process?.env?.PSYS2_WA_KINDS;
   if (e) return new Set(e.split(',').map((x) => x.trim()));
@@ -99,7 +100,7 @@ function judgeOne(rs, seg, foreign) {
 }
 
 const summary = (j, seg) => ({
-  judged: j.c.judged, ok: j.c.ok, world: j.c.world, kind: j.c.kind ?? null, action: j.c.actionName ?? null,
+  judged: j.c.judged, judgedBy: j.c.judgedBy ?? null, libVeto: j.c.libVeto?.answer === false ? j.c.libVeto.reasons : null, ok: j.c.ok, world: j.c.world, kind: j.c.kind ?? null, action: j.c.actionName ?? null,
   availability: j.c.action ? { available: j.c.action.available, status: j.c.action.status } : null,
   answer: j.c.answer ? { status: j.c.answer.status } : null,
   lacks: (j.c.lacks ?? []).map((l) => l.referent ?? l.key ?? '?').slice(0, 4),
@@ -126,12 +127,15 @@ export function vetoOf(wa, seg, ref, mode) {
     const s = sayMissing(ref);
     return { kind: 'no-referent', why: `the world has no ${ref.missing.map((m) => m.name).join(' or ')}`, say: s.text, status: 'missing', ...(ref.offer ? { offer: { rewrite: ref.offer, world: ref.world, question: s.question } } : {}) };
   }
+  if (k.has('library') && wa.libVeto?.some((x) => !LIB_KEEP.has(x))) { const why = wa.libVeto.filter((x) => !LIB_KEEP.has(x)); return { kind: 'library', why: `the library's veto: ${why.join(', ')}`, reasons: why }; }
   if (wa.left.length && wa.how === 'best-effort' && k.has('words-best-effort')) return { kind: 'words-best-effort', why: `the reading leaves out "${wa.left.join('", "')}"`, words: wa.left };
   if (wa.left.length && wa.how !== 'best-effort' && k.has('words-partial')) return { kind: 'words-partial', why: `the reading leaves out "${wa.left.join('", "')}"`, words: wa.left };
   return null;
 }
 
-const HOLDS = new Set(['no-referent', 'words-partial', 'words-best-effort']);
+/** The library's veto reasons that are not a veto for the host: the world's own refusal (answered, with its reason), no reading, and an action that the matrix does not declare (the operations carry it out). */
+const LIB_KEEP = new Set(['inconsistent', 'nothing', 'action-unavailable']);
+const HOLDS = new Set(['no-referent', 'words-partial', 'words-best-effort', 'library']);
 
 /**
  * Review the readings of a message (segments as the formalizer or the dispatcher gave them) before anything is executed. Returns the segments, with a
@@ -205,7 +209,7 @@ export function makePicker(dialog) {
     const top = r.order[0];
     const note = {
       source: 'rules', host: id(cands[0]), library: id(cands[top]), libraryDefault: id(cands[r.libraryOrder[0]]), disagree: top !== 0, applied: false,
-      readings: cands.map((c, i) => ({ reading: id(c), judged: r.results[i].judged, ok: r.results[i].ok, lacks: (r.results[i].lacks ?? []).length, idleGame: !!idle[i], place: r.ranked[i].place, why: r.ranked[i].why })),
+      readings: cands.map((c, i) => ({ reading: id(c), judged: r.results[i].judged, judgedBy: r.results[i].judgedBy ?? null, ok: r.results[i].ok, lacks: (r.results[i].lacks ?? []).length, idleGame: !!idle[i], place: r.ranked[i].place, why: r.ranked[i].why })),
     };
     if (top === 0 || baseMode(dialog._wa) !== 'choose') return { matches, note };
     note.applied = true;

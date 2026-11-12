@@ -765,7 +765,8 @@ export class ReasonerSession {
       const isQ = L.isA(wire.type, 'core.question');
       const action = isQ ? null : val(wire, 'core.request.action');
       const ownerId = this.reasoner.ownerOfWire(wire);
-      if (!ownerId || (!isQ && (this.reasoner.undoOf.has(action) || this.reasoner.redoOf.has(action) || !this.reasoner.declOf(action)))) return out;
+      // an action the matrix does not declare is scored too: the library (>= 0.12) judges it by a fallback (referents, slots, denies) and says so in `judgedBy`
+      if (!ownerId || (!isQ && (this.reasoner.undoOf.has(action) || this.reasoner.redoOf.has(action)))) return out;
       if (isQ && this.reasoner.opsKeys.has(`${val(wire, 'core.question.type')}.${keyName(val(wire, 'core.question.seek') ?? '')}`)) return out;
       const key = this.reasoner.instKey(ownerId);
       const world = peek(key);
@@ -788,10 +789,15 @@ export class ReasonerSession {
         const real = c.violations.filter((v) => !(v.kind === 'dangling-ref' || (v.kind === 'domain' && /^\$e\./.test(String(v.value ?? '')))));   // an uncommitted entity ($e.ben) is not a refusal
         if (!real.length) { c.ok = true; c.violations = []; } else c.violations = real;
       }
-      return Object.assign(c, { index, judged: true, world: ownerId, kind: isQ ? 'question' : 'request', actionName: action });
+      // `judged` and `judgedBy` are the library's (a declared action, a statement or question, or the fallback for an action the matrix does not declare)
+      let veto = null;
+      try { veto = world.veto(r); } catch { /* the library's own answer is optional */ }
+      return Object.assign(c, { index, world: ownerId, kind: isQ ? 'question' : 'request', actionName: action, libVeto: veto && { answer: veto.answer, reasons: veto.reasons.map((x) => x.reason) } });
     });
-    // The host's one change to the library's order (spec 16, section 4): a question whose answer is not known yet lacks nothing (its reading is not defective, the world
-    // just has not been told); counted as lacking it would lose to a statement that tells nonsense. `libraryOrder` is the library's own default, kept to report disagreements.
+    // The host's one change to the library's order (spec 16, section 4). sopworld 0.12 no longer counts the value a question asks for as a lack, but only when the wire the
+    // question is about exists (`m.id`) and the question is given as `{ type, seek }`; the host's questions are wires (`seek` in `attrs`) about a computed answer that does not
+    // exist yet (a total), so the library still reports `lacks count` for them (library item in worker-log.md). A question reading therefore lacks nothing here;
+    // `libraryOrder` is the library's own default, kept to report disagreements.
     const hostRanking = lib.RANKING.map((c) => (c.name === 'lacks' ? { ...c, measure: (r) => (r.kind === 'question' ? 0 : (r.lacks ?? []).length) } : c));
     const { order, ranked } = lib.rank(results, hostRanking);
     return { results, order, ranked, libraryOrder: lib.rank(results).order };
