@@ -43,7 +43,7 @@ test('the English variant (en-GB) changes the English tag only', () => {
   l.set('ro'); assert.equal(l.tag(), 'ro-RO');
   l.set('en'); assert.equal(l.tag(), 'en-GB');
   l.setVariant('en-US'); assert.equal(l.tag(), 'en-US');
-  assert.equal(tagOf('ro', 'en-GB'), LANG_TAGS.ro); assert.equal(tagOf('xx'), 'en-US');
+  assert.equal(tagOf('ro', 'en-GB'), LANG_TAGS.ro); assert.equal(tagOf('auto'), 'en-US'); assert.equal(tagOf('xx'), 'xx');   // MT-SERIOUS: any language code has its own tag (a registry language), only a non-code falls back to English
 });
 
 test('helpers', () => {

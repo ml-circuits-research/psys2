@@ -35,7 +35,12 @@ export function checkTranslation(src, tgt, { from, to }) {
   if (!tgt || !String(tgt).trim()) return 'empty translation';
   const missing = numbers(src).filter((n) => !numbers(tgt).includes(n));
   if (missing.length) return `numbers not preserved (${missing.join(', ')})`;
-  const lostNames = names(src).filter((n) => !fold(tgt).includes(fold(n)));
+  // a name is kept when the target has it, or a word that starts like it ("Japan" / "Japón", "July" / "julio"); German capitalises every noun and a non-Latin target
+  // transliterates names, so for those the check is skipped (the numbers and the "?" are still checked)
+  const latin = (String(tgt).match(/\p{Script=Latin}/gu) ?? []).length >= (String(tgt).match(/\p{L}/gu) ?? []).length / 2;
+  const tgtWords = fold(tgt).match(/[a-z0-9]+/g) ?? [];
+  const keeps = (n) => { const f = fold(n); return fold(tgt).includes(f) || tgtWords.some((w) => w.slice(0, Math.min(4, f.length)) === f.slice(0, Math.min(4, f.length))); };
+  const lostNames = from === 'de' || !latin ? [] : names(src).filter((n) => !keeps(n));
   if (lostNames.length) return `names not preserved (${lostNames.join(', ')})`;
   // negation and question words are known for English and Romanian only; for any other language the "?" and the numbers and names are what is checked
   const negOf = (l) => (l === 'en' ? NEG_EN : l === 'ro' ? NEG_RO : null), whOf = (l) => (l === 'en' ? WH_EN : l === 'ro' ? WH_RO : null);

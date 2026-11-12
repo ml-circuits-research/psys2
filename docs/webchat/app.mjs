@@ -10,7 +10,7 @@ import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, createMicLock, measureSpeed, speechSupport } from './ui/speech.mjs';
-import { createLanguage, hintText, LANG_TAGS, LANG_NAMES, langName, tagOf } from './ui/language.mjs';
+import { createLanguage, hintText, LANG_TAGS, LANG_NAMES, langName, langTag, tagOf } from './ui/language.mjs';
 import { createTranslationLayer, QUALITY_GATE } from './ui/translation-ui.mjs';
 import { classifyVoice } from './ui/voice-noise.mjs';
 import { createSwitchTranslator, createBrowserBackend, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
@@ -342,7 +342,7 @@ export async function mountPsys2(element, options = {}) {
     'speech.say': async ({ text, lang }) => {
       if (!speechSupport.synthesis || !speech) return { ok: false, detail: 'speech synthesis is not supported by this browser' };
       if (!String(text ?? '').trim()) return { ok: false, detail: 'no text' };
-      speech.speak(String(text), lang ? { lang: LANG_TAGS[lang] ?? lang } : undefined);
+      speech.speak(String(text), lang ? { lang: langTag(lang) } : undefined);
       return { ok: true };
     },
     'chat.suggest': async ({ items }) => {
@@ -1300,8 +1300,8 @@ export async function mountPsys2(element, options = {}) {
     if (!speechSupport.synthesis) return 'Speech synthesis is not supported by this browser.';
     if (!voices.length) return 'Voices are still loading or none are installed.';
     const tag = speechLangTag(), v = speech?.voiceFor(tag);
-    if (!v) return language.get() === 'ro' ? `No Romanian voice is installed on this device: answers are read with the default voice (it may sound foreign). Install one in the system settings (text-to-speech, Romanian).` : `No ${LANG_NAMES[language.get()].en} voice is installed on this device: answers are read with the default voice.`;
-    return `Reads ${LANG_NAMES[language.get()].en} with: ${v.name} (${v.lang}).`;
+    if (!v) return language.get() === 'ro' ? `No Romanian voice is installed on this device: answers are read with the default voice (it may sound foreign). Install one in the system settings (text-to-speech, Romanian).` : `No ${langName(language.get())} voice is installed on this device: answers are read with the default voice.`;
+    return `Reads ${langName(language.get())} with: ${v.name} (${v.lang}).`;
   }
   function voiceBody() {
     const voices = speech?.voices() ?? [];
