@@ -2920,3 +2920,36 @@ Do, in this order:
 4. **"a random diagram"** should make one: pick a template, fill it with sample labels, and say so in plain words ("I drew a random cycle diagram with four steps."). Never answer with ids like "c1"; use the box label or "a circle".
 
 This comes before DESCRIBE-ALL and READER-ROUTE. The user is testing on the phone now.
+
+## MT-SERIOUS (user decision, 2026-11-12 07:10): real translation, lazy, and the hacks go
+
+The user wants serious translation support. The translation part loads lazily, only when the browser has no Translator API. He also wants our own translation hacks removed, because they cost too much time and are not good quality.
+
+1. **Order in the translation layer:**
+   - (a) the browser's Translator API when present (desktop Chrome);
+   - (b) otherwise an on-device open-source MT model, **loaded lazily** the first time Romanian is used without (a);
+   - (c) nothing else.
+
+   The phone case is (b): Chrome on Android has no Translator API.
+2. **Engine for (b):** evaluate first, then choose one and say why.
+   - **Bergamot** (Mozilla; Marian models through WASM; the Firefox translation models). Check that ro→en and en→ro models exist in `mozilla/firefox-translations-models` and give their sizes and licenses.
+   - **Opus-MT** in ONNX through our onnxruntime-web: `Xenova/opus-mt-en-ro` for en→ro (about 107 MB quantized), and `opus-mt-ROMANCE-en` or `opus-mt-ro-en` for ro→en.
+
+   Measure on the Romanian sets for each candidate:
+   - download size;
+   - first-load and per-sentence time on a mid phone profile (Chrome throttled 4× CPU, plus the user's phone if he tests);
+   - quality: ro→en reading (right/wrong/nu on operational-ro, the same judge) and en→ro replies (`check-ro-replies` and a sample read by the reviewer).
+
+   It runs in a worker, under the turn budget with a deadline, and is cached after the first download (Cache Storage). It is never on the first-paint path.
+3. **Remove the hacks once (b) is in and measured at least equal.** Delete:
+   - the rules translator's Romanian tables and pre-pass;
+   - the Romanian reply templates and `userWordMap` hacks;
+   - the `ro-generic` fixed line;
+   - the Romanian-specific reading patches in `src/translate`;
+   - RO-PHONE item 1's template work (do not build more templates; stop it now).
+
+   Keep only: the language selector, the checker that compares source and translation (numbers, names, negation, question form), and quoting the user's own words.
+   - Report the lines removed.
+   - Report the Romanian numbers before and after, in desktop mode (Translator API) and phone mode (no Translator API).
+4. **Tests:** the harness gets a "phone" mode (no Translator API, MT model loaded) for the Romanian sets and the Chrome rows. The fake Translator stays only for unit tests of the layer's order and deadlines.
+5. **Supersedes RO-PHONE items 1–3.** Item 4 stays: "a random diagram" should really draw one, described in plain words without ids. Do MT-SERIOUS before DESCRIBE-ALL and READER-ROUTE.
