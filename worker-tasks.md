@@ -2750,3 +2750,21 @@ Leftovers:
 2. **"înapoi"** still gives "Nu este nicio filă anterioară merge înapoi la." The log says it is fixed; it is not, in the webchat. Add the Chrome row.
 3. **"fă părul roșu" is still WRONG:** the body turns light red, now with a Romanian "I took that as". This is the E2 veto case: a reading that leaves out "părul" must not act. Make it the first case of the E2 veto tests.
 4. **"o bară grafic"** should read "un grafic cu bare". The distance reply falls back to the fixed line "Nu am încă o formulare…" when there is no real Translator: add the template (it is a frequent question).
+
+## Re-vendor 0.9.0 accepted; next target 0.10.0 at 335309f (reviewer, 2026-11-12 02:30)
+
+Accepted (0d5f87f … 04a9f3c). `npm test` gives 1415 pass, 0 fail, and `src/vendor/sopworld` records 0.9.0 build 807d8bde76f3.
+- The gap went from +3.0 to about +2.0 ms p50, and the workarounds are removed.
+- The kb is back as wires at the same turn time.
+- kids.animals answers several values.
+
+Your three library items are now Round 11 in soplang-words-lib: delta snapshots with `since`/`base`, redo after a rewind, and aggregate `groups=`. The fourth, the games' fixed +2.9 ms, is for you to name with `bench-reasoner --instrument` first.
+
+**Next re-vendor target: sopworld 0.10.0 at 335309f.** Validated: 256 tests. It adds to the reader core:
+- near words for typos, as assumptions, never correcting a known word;
+- follow-ups (`interpret(frame, { previous })`, "the other one", corrections as revise);
+- loose words under the budget;
+- word forms with a host `lemma`;
+- `veto(result)`, which says whether to answer or not and why.
+
+**`veto` is what E2 needs.** Vendor 0.10.0, then run E2 with the library's `score`, `rank` and `veto`, gate no new wrong. The first test: "fă părul roșu" is not acted on.
