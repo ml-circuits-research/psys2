@@ -1125,3 +1125,69 @@
     input="Why?"
     expect="Tom has more than 5 apples"
     doc="why? after a statement: what is known about the last count, from the facts told"
+
+# ---- MINIMAL-PAIRS (2026-11-12): comparisons and negated statements, each with its swapped twin
+@t.arith.mp1 core.test
+    session=mp1
+    input="Ion has 4 apples. Ana has 3 more apples than Ion. How many apples does Ana have?"
+    expect="Ana has 7 apples."
+
+@t.arith.mp2 core.test
+    session=mp2
+    input="Ana has 4 apples. Ion has 3 more apples than Ana. How many apples does Ana have?"
+    expect="Ana has 4 apples."
+
+@t.arith.mp3 core.test
+    session=mp3
+    input="Ion has 4 apples. Ana has 3 fewer apples than Ion. How many apples does Ana have?"
+    expect="Ana has 1 apple."
+
+@t.arith.mp4 core.test
+    session=mp4
+    input="Ana has 4 apples. Ana has 3 fewer apples than Ion. How many apples does Ion have?"
+    expect="Ion has 7 apples."
+
+@t.arith.mp5 core.test
+    session=mp5
+    input="Ion has 6 apples. Ana has twice as many apples as Ion. How many apples does Ana have?"
+    expect="Ana has 12 apples."
+
+@t.arith.mp6 core.test
+    session=mp6
+    input="Ion has 6 apples. Ion has twice as many apples as Ana. How many apples does Ana have?"
+    expect="Ana has 3 apples."
+
+@t.arith.mp7 core.test
+    session=mp7
+    input="Ion has 6 apples. Ana has half as many apples as Ion. How many apples does Ana have?"
+    expect="Ana has 3 apples."
+
+@t.arith.mp8 core.test
+    session=mp8
+    input="Ana has 5 apples. Ion has 2 apples. Ana does not give Ion any apples."
+    expect="OK, Ana did not give Ion any apples. Nothing changes."
+
+@t.arith.mp8b core.test
+    session=mp8
+    input="How many apples does Ion have?"
+    expect="Ion has 2 apples."
+
+@t.arith.mp9 core.test
+    session=mp9
+    input="Ana has 5 apples. Ion has 2 apples. Ana gives Ion 3 apples. How many apples does Ion have?"
+    expect="Ion has 5 apples."
+
+@t.arith.mp10 core.test
+    session=mp10
+    input="Ana has 5 apples. Ion has 2 apples. Ion does not eat 1 apple. Ion doesn't lose any apples. How many apples does Ion have?"
+    expect="Ion has 2 apples."
+
+@t.arith.mp11 core.test
+    session=mp11
+    input="Ana has 5 apples. Ana does not give 2 apples to Ion."
+    expect="OK, Ana did not give Ion 2 apples. Nothing changes."
+
+@t.arith.mp11b core.test
+    session=mp11
+    input="How many apples does Ana have?"
+    expect="Ana has 5 apples."

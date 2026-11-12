@@ -281,3 +281,65 @@
     value=number
     card=one
     ask="What is the third number?"
+
+@kids.arith.relation core.type
+    extends=core.state
+    doc="One person has some more, some fewer, or some times as many items of one kind as another: a comparison told as a statement. It fixes the count of whichever of the two is not known yet, from the one that is."
+    example="Ana has 3 more apples than Ion."
+    negative="Ana has more apples."
+
+@kids.arith.relation.who core.key
+    value=$core.agent
+    card=one
+    ask="Who has more, fewer or times as many?"
+
+@kids.arith.relation.ref core.key
+    value=$core.agent
+    card=one
+    ask="Compared with whom?"
+
+@kids.arith.relation.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.relation.kind core.key
+    value=atom
+    card=one
+    ask="More, fewer or times as many?"
+
+@kids.arith.relation.count core.key
+    value=number
+    card=one
+    ask="How many more, fewer or times as many?"
+
+@kids.arith.negated core.type
+    extends=core.state
+    doc="Someone did not do something to the counts (did not give, eat, lose, buy, break or get any). It is understood and said back, and nothing changes: the counts are not touched."
+    example="Ana does not give Ion any apples."
+    negative="Ana gives Ion 3 apples."
+
+@kids.arith.negated.who core.key
+    value=$core.agent
+    card=one
+    ask="Who did not do it?"
+
+@kids.arith.negated.to core.key
+    value=$core.agent
+    card=one
+    ask="Who would have received the items?"
+
+@kids.arith.negated.verb core.key
+    value=atom
+    card=one
+    ask="What did not happen (give, eat, lose, buy, break, get)?"
+
+@kids.arith.negated.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.negated.count core.key
+    value=number
+    card=one
+    ask="How many (when a number was said)?"

@@ -2146,3 +2146,53 @@
     alt=that_spot
     alt=that_one
     alt=there
+
+# ---- MINIMAL-PAIRS block (2026-11-12): comparison and negation phrasing shared by every world that says "more than", "twice as many as", "does not ..."
+@phrase.lang.neg.aux core.phrase
+    frame=false
+    doc="The negation of a plain verb in a statement (Ana does not give, they did not eat, I do not buy): auxiliary and not, with and without the contraction."
+    alt=does_not
+    alt=do_not
+    alt=did_not
+    alt=doesnt
+    alt=dont
+    alt=didnt
+    alt=never
+
+@phrase.lang.neg.any core.phrase
+    frame=false
+    doc="The word that follows a negated verb before the thing (not give ANY apples, not buy ANY of them)."
+    alt=any
+    alt=any_of_the
+    alt=even_one
+    alt=a_single
+
+@phrase.lang.cmp.more core.phrase
+    frame=false
+    doc="More of the same kind, before the thing (3 MORE apples than Ion)."
+    alt=more
+    alt=extra
+    alt=additional
+
+@phrase.lang.cmp.fewer core.phrase
+    frame=false
+    doc="Fewer of the same kind, before the thing (3 FEWER apples than Ion)."
+    alt=fewer
+    alt=less
+    alt=lesser
+
+@phrase.lang.cmp.than core.phrase
+    frame=false
+    doc="The word that introduces the thing compared with (more apples THAN Ion)."
+    alt=than
+    alt=compared_to
+    alt=compared_with
+
+@phrase.lang.cmp.twice core.phrase
+    frame=false
+    doc="Two times as many, said as one word or two (TWICE as many apples as Ion)."
+    alt=twice
+    alt=two_times
+    alt=double
+    alt=doubly
+    alt=twofold

@@ -1904,3 +1904,190 @@
     priority=12
     example="Who has more apples?"
     doc="Who has more of a kind, over everybody; equal counts are said as a tie."
+
+# ---- MINIMAL-PAIRS block (2026-11-12): comparisons told as statements, and negated statements (understood, nothing changes). The words are lang.common groups (lang.cmp.*, lang.neg.*).
+
+@pat.kids.arith.rel.more core.pattern
+    canonical="Ana has 3 more apples than Ion."
+    match="{who:agent} [has|have|had] [got]? {n:number} [$lang.cmp.more] {item:lex.kids.arith.items} [$lang.cmp.than] {ref:agent}"
+    emit="@{_} kids.arith.relation kind=more who={who} ref={ref} item={item} count={n}"
+    kind=statement
+    priority=11
+    example="Ana has 3 more apples than Ion."
+
+@pat.kids.arith.rel.more.one core.pattern
+    match="{who:agent} [has|have|had] [got]? [a|an|one] [$lang.cmp.more] {item:lex.kids.arith.items} [$lang.cmp.than] {ref:agent}"
+    emit="@{_} kids.arith.relation kind=more who={who} ref={ref} item={item} count=1"
+    kind=statement
+    priority=11
+    example="Ana has one more apple than Ion."
+
+@pat.kids.arith.rel.fewer core.pattern
+    canonical="Ana has 3 fewer apples than Ion."
+    match="{who:agent} [has|have|had] [got]? {n:number} [$lang.cmp.fewer] {item:lex.kids.arith.items} [$lang.cmp.than] {ref:agent}"
+    emit="@{_} kids.arith.relation kind=fewer who={who} ref={ref} item={item} count={n}"
+    kind=statement
+    priority=11
+    example="Ana has 3 fewer apples than Ion."
+
+@pat.kids.arith.rel.fewer.one core.pattern
+    match="{who:agent} [has|have|had] [got]? [a|an|one] [$lang.cmp.fewer] {item:lex.kids.arith.items} [$lang.cmp.than] {ref:agent}"
+    emit="@{_} kids.arith.relation kind=fewer who={who} ref={ref} item={item} count=1"
+    kind=statement
+    priority=11
+    example="Ana has one fewer apple than Ion."
+
+@pat.kids.arith.rel.twice core.pattern
+    canonical="Ana has twice as many apples as Ion."
+    match="{who:agent} [has|have|had] [got]? [$lang.cmp.twice] [as_many|as_much] {item:lex.kids.arith.items} as {ref:agent} [has|have|does|do]?"
+    emit="@{_} kids.arith.relation kind=times who={who} ref={ref} item={item} count=2"
+    kind=statement
+    priority=11
+    example="Ana has twice as many apples as Ion."
+
+@pat.kids.arith.rel.times core.pattern
+    match="{who:agent} [has|have|had] [got]? {n:number} times [as_many|as_much] {item:lex.kids.arith.items} as {ref:agent} [has|have|does|do]?"
+    emit="@{_} kids.arith.relation kind=times who={who} ref={ref} item={item} count={n}"
+    kind=statement
+    priority=11
+    example="Ana has 3 times as many apples as Ion."
+
+@pat.kids.arith.rel.half core.pattern
+    match="{who:agent} [has|have|had] [got]? half [as_many|as_much] {item:lex.kids.arith.items} as {ref:agent} [has|have|does|do]?"
+    emit="@{_} kids.arith.relation kind=times who={who} ref={ref} item={item} count=0.5"
+    kind=statement
+    priority=11
+    example="Ana has half as many apples as Ion."
+
+@pat.kids.arith.neg.eat.n core.pattern
+    match="{who:agent} [$lang.neg.aux] eat {n:number} {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=eat who={who} item={item} count={n}"
+    kind=statement
+    priority=12
+    example="Ion does not eat 2 apples."
+
+@pat.kids.arith.neg.eat.a core.pattern
+    match="{who:agent} [$lang.neg.aux] eat [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=eat who={who} item={item} count=1"
+    kind=statement
+    priority=12
+    example="Ion does not eat an apple."
+
+@pat.kids.arith.neg.eat.any core.pattern
+    match="{who:agent} [$lang.neg.aux] eat [$lang.neg.any] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=eat who={who} item={item}"
+    kind=statement
+    priority=12
+    example="Ion does not eat any apples."
+
+@pat.kids.arith.neg.lose.n core.pattern
+    match="{who:agent} [$lang.neg.aux] lose {n:number} {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=lose who={who} item={item} count={n}"
+    kind=statement
+    priority=12
+    example="Ion does not lose 2 apples."
+
+@pat.kids.arith.neg.lose.a core.pattern
+    match="{who:agent} [$lang.neg.aux] lose [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=lose who={who} item={item} count=1"
+    kind=statement
+    priority=12
+    example="Ion does not lose an apple."
+
+@pat.kids.arith.neg.lose.any core.pattern
+    match="{who:agent} [$lang.neg.aux] lose [$lang.neg.any] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=lose who={who} item={item}"
+    kind=statement
+    priority=12
+    example="Ion does not lose any apples."
+
+@pat.kids.arith.neg.buy.n core.pattern
+    match="{who:agent} [$lang.neg.aux] buy {n:number} {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=buy who={who} item={item} count={n}"
+    kind=statement
+    priority=12
+    example="Ion does not buy 2 apples."
+
+@pat.kids.arith.neg.buy.a core.pattern
+    match="{who:agent} [$lang.neg.aux] buy [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=buy who={who} item={item} count=1"
+    kind=statement
+    priority=12
+    example="Ion does not buy an apple."
+
+@pat.kids.arith.neg.buy.any core.pattern
+    match="{who:agent} [$lang.neg.aux] buy [$lang.neg.any] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=buy who={who} item={item}"
+    kind=statement
+    priority=12
+    example="Ion does not buy any apples."
+
+@pat.kids.arith.neg.break.n core.pattern
+    match="{who:agent} [$lang.neg.aux] break {n:number} {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=break who={who} item={item} count={n}"
+    kind=statement
+    priority=12
+    example="Ion does not break 2 apples."
+
+@pat.kids.arith.neg.break.a core.pattern
+    match="{who:agent} [$lang.neg.aux] break [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=break who={who} item={item} count=1"
+    kind=statement
+    priority=12
+    example="Ion does not break an apple."
+
+@pat.kids.arith.neg.break.any core.pattern
+    match="{who:agent} [$lang.neg.aux] break [$lang.neg.any] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=break who={who} item={item}"
+    kind=statement
+    priority=12
+    example="Ion does not break any apples."
+
+@pat.kids.arith.neg.receive.n core.pattern
+    match="{who:agent} [$lang.neg.aux] [get|receive|find] {n:number} [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=receive who={who} item={item} count={n}"
+    kind=statement
+    priority=12
+    example="Ion does not get 2 apples."
+
+@pat.kids.arith.neg.receive.any core.pattern
+    match="{who:agent} [$lang.neg.aux] [get|receive|find] [$lang.neg.any] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=receive who={who} item={item}"
+    kind=statement
+    priority=12
+    example="Ion does not get any apples."
+
+@pat.kids.arith.neg.give.n core.pattern
+    match="{who:agent} [$lang.neg.aux] give {to:agent} {n:number} {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=give who={who} to={to} item={item} count={n}"
+    kind=statement
+    priority=12
+    example="Ana does not give Ion 3 apples."
+
+@pat.kids.arith.neg.give.a core.pattern
+    match="{who:agent} [$lang.neg.aux] give {to:agent} [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=give who={who} to={to} item={item} count=1"
+    kind=statement
+    priority=12
+    example="Ana does not give Ion an apple."
+
+@pat.kids.arith.neg.give.any core.pattern
+    match="{who:agent} [$lang.neg.aux] give {to:agent} [$lang.neg.any] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.negated verb=give who={who} to={to} item={item}"
+    kind=statement
+    priority=12
+    example="Ana does not give Ion any apples."
+
+@pat.kids.arith.neg.give.to.n core.pattern
+    match="{who:agent} [$lang.neg.aux] give {n:number} {item:lex.kids.arith.items} to {to:agent}"
+    emit="@{_} kids.arith.negated verb=give who={who} to={to} item={item} count={n}"
+    kind=statement
+    priority=12
+    example="Ana does not give 3 apples to Ion."
+
+@pat.kids.arith.neg.give.to.any core.pattern
+    match="{who:agent} [$lang.neg.aux] give [$lang.neg.any] {item:lex.kids.arith.items} to {to:agent}"
+    emit="@{_} kids.arith.negated verb=give who={who} to={to} item={item}"
+    kind=statement
+    priority=12
+    example="Ana does not give any apples to Ion."
