@@ -445,3 +445,5 @@ Totals against ef58f35 (code only, no generated files, no E3): `src/reasoner/ind
 ### Where a world still loses to ops
 
 Games (+2.9 ms p50, x1.35) did not move and the cause is not diagnosed; the instance work per turn (fork, mirror of the conversation, `_state`) is the same for every group, so the games' lower ops time (8.3 ms) makes the same fixed cost visible. `bench-reasoner.mjs --instrument` is the next step. All other groups are within +1.6-2.2 ms.
+
+A/B in one process (`ab-sopworld.mjs --sets coherence,dialogues,gold`, matrix minus ops p50 ms per group, before -> after): four +3.4 -> +2.2, kids-other +2.9 -> +1.9, avatar/shell/editor +2.1 -> +1.6, music/draw/map/charts +2.9 -> +2.2, games +3.1 -> +3.1, documents +1.7 -> +1.0, other +2.8 -> +2.2. Outcomes are identical (dialogues: ops 292 + 1,882 right, matrix 292 + 1,878 right, same wrong and not-understood counts as before); 33 coherence, 470 dialogue and 300 gold sessions differ in the same 33 places as before.
