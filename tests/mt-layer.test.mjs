@@ -88,7 +88,7 @@ test('the bridge into the engine worker gets the longer deadline when a model ex
 test('the checker: numbers and names for any language, negation and question words only where the tables exist', () => {
   assert.equal(checkTranslation('Wie viel ist 3 plus 4?', 'How much is 3 plus 4?', { from: 'de', to: 'en' }), null);
   assert.match(checkTranslation('Wie viel ist 3 plus 4?', 'How much is 3 plus 5?', { from: 'de', to: 'en' }), /numbers/);
-  assert.match(checkTranslation('Wie viel ist das?', 'How much is that', { from: 'de', to: 'en' }), /question/);
+  assert.match(checkTranslation('Wie viel ist das?', 'It is that much', { from: 'de', to: 'en' }), /question/);
   assert.match(checkTranslation('Nu desena nimic', 'Draw something', { from: 'ro', to: 'en' }), /negation/);
   assert.equal(checkTranslation('Draw nothing', 'Zeichne etwas', { from: 'en', to: 'de' }), null);   // no German negation table: not checked
   assert.equal(checkTranslation('Zeichne nichts', 'Draw something', { from: 'de', to: 'en' }), null);   // no German negation table: not checked
