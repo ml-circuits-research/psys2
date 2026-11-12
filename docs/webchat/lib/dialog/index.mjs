@@ -10,7 +10,7 @@
  * Without it all input is treated as English.
  */
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=85b9949394';
-import { loadWorlds } from '../worlds/index.mjs?v=ad621f13ad';
+import { loadWorlds } from '../worlds/index.mjs?v=29d6d69933';
 import { validateWorldSet } from '../worlds/validate.mjs?v=ad3c8ef24d';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=deb03b682c';

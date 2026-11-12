@@ -188,11 +188,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
     for (const [base, extra] of Object.entries(MATRIX_EXTRAS)) if (files[extra] != null) files[base] = base === 'templates.sop' ? files[extra] + '\n' + (files[base] ?? '') : (files[base] ?? '') + '\n' + files[extra];
   }
-<<<<<<< HEAD
-  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() ? null : files[f])]));
-=======
-  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() && !genLang() && !readerOn() ? null : files[f])]));
->>>>>>> worktree-agent-a11663a517acfe1c6
+  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() && !readerOn() ? null : files[f])]));
   w.manifest = wires['world.sop'].find((x) => x.type === 'core.world') ?? null;
   if (!w.manifest) w.errors.push({ message: 'world.sop has no core.world wire' });
   else {
@@ -271,11 +267,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   for (const id of ids) {
     const files = {};
     const matrix = reasoner === 'matrix';
-<<<<<<< HEAD
-    await Promise.all([...FILES, ...(genMode() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
-=======
-    await Promise.all([...FILES, ...(genMode() || genLang() || readerOn() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
->>>>>>> worktree-agent-a11663a517acfe1c6
+    await Promise.all([...FILES, ...(genMode() || readerOn() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
     let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, problem = null, whyWords = null;
     if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }
