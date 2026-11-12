@@ -817,6 +817,7 @@
     of=$describe.chess.level.set
     name=n
     class=number
+    slot=chess.game.level
 
 @describe.chess.level.set.en core.describe.words
     of=$describe.chess.level.set

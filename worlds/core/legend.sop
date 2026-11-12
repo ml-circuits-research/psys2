@@ -16,6 +16,7 @@
 
 @core.agent core.type
     extends=core.thing
+    shared=true
     doc="A person or participant that can be mentioned in dialog."
     example="Tom"
 
@@ -81,7 +82,7 @@
 
 @core.describe.arg core.type
     extends=core.thing
-    doc="One argument role of an operation description: of (the description), name, class (a lexicon id, number, rest, noun, words), size (the maximum of words), optional=true, qty (the count slot of a quantified item)."
+    doc="One argument role of an operation description: of (the description), name, class (a lexicon id, number, rest, noun, words), size (the maximum of words), optional=true, qty (the count slot of a quantified item), slot (the slot of the legend the argument fills, spec 16 section 8)."
 
 @core.describe.words core.type
     extends=core.thing
@@ -268,6 +269,11 @@
     value=boolean
     card=one
     ask="Are the facts of this type complete (closed world)?"
+
+@core.type.shared core.key
+    value=boolean
+    card=one
+    ask="Do the facts of this type belong to every namespace?"
 
 @core.key.value core.key
     value=any
@@ -936,7 +942,7 @@
     ask="What did the host report?"
 
 @core.describe.arg.of core.key
-    value=string
+    value=$core.describe
     card=one
     ask="Which operation description does the argument belong to (a $reference)?"
 
@@ -964,6 +970,11 @@
     value=atom
     card=one
     ask="Which slot holds the count of a quantified item?"
+
+@core.describe.arg.slot core.key
+    value=atom
+    card=one
+    ask="Which slot of the legend (<type>.<key>) does the argument fill?"
 
 @core.describe.words.of core.key
     value=string

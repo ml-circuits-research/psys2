@@ -18,13 +18,14 @@ import { readFile, writeFile, readdir, mkdir, rm, cp, stat } from 'node:fs/promi
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { slotDeclarations } from '../src/worlds/describe.mjs';
 
 const REPO = fileURLToPath(new URL('..', import.meta.url));
 const LIB_DIRS = ['soplang', 'legends', 'worlds', 'formalizer', 'interpreter', 'dialog', 'translate', 'astra', 'reasoner', 'vendor'];
 const LIB_FILES = ['loaders/bundle-loader.mjs'];
 const WORLD_TEXT = /\.(sop|json|txt|md)$/;
 // Files the browser never reads (the loader treats a missing tests.sop as empty; coverage.md is a human catalogue): left out of worlds/index.json to keep it small (L10).
-// describe.sop (core.describe, E3/DESCRIBE-ALL) is read only with PSYS_GEN_PATTERNS in Node tools; the webchat never generates patterns, so it is not shipped.
+// describe.sop (core.describe, E3/DESCRIBE-ALL) is read in full only with PSYS_GEN_PATTERNS in Node tools; the webchat never generates patterns, so only its slot= declarations are shipped (below).
 const BROWSER_SKIP = new Set(['tests.sop', 'coverage.md', 'describe.sop']);
 
 const exists = (p) => stat(p).then(() => true, () => false);
@@ -221,6 +222,11 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
       if (f === 'coverage.md') {   // not in index.json; the debug view (developer mode) fetches it on demand
         await mkdir(path.join(outDir, 'worlds', id), { recursive: true });
         await cp(path.join(dir, f), path.join(outDir, 'worlds', id, f));
+        continue;
+      }
+      if (f === 'describe.sop') {   // only the `slot=` declarations (spec 16 section 8) go to the browser, not the wording
+        const decl = slotDeclarations(await readFile(path.join(dir, f), 'utf8'));
+        if (decl) entry.files[f] = decl;
         continue;
       }
       if (BROWSER_SKIP.has(f)) continue;

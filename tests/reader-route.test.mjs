@@ -21,7 +21,7 @@ test('option: default off, unknown values are off', async () => {
   for (const m of ['off', 'fill', 'choose']) assert.equal(normalizeReader(m), m);
   const s = plain.createSession({ language: 'en' });
   assert.equal(s.reader, 'off');
-  assert.ok(plain.set.list().every((w) => w.descriptions.length === 0), 'describe.sop is not read with the reader off');
+  assert.ok(plain.set.list().every((w) => w.descriptions.every((d) => d.words.size === 0)), 'a describe.sop with wording is not read with the reader off (an args-only one is: spec 16 section 8)');
   const r = await s.send('what is the capital of Japan');
   assert.ok(r.segments.every((x) => x.reader === undefined));
 });

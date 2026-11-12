@@ -15,7 +15,7 @@
  */
 import { serialize, parse as parseOurs, ref as refValue, atom as atomValue, str as strValue } from '../soplang/index.mjs';
 import { budget as turnBudget } from '../dialog/budget.mjs';
-import { nsWorld, nsContext, strip, replayInto, SHARED_TYPES, NO_NAMESPACE } from './ns.mjs';
+import { nsWorld, nsContext, strip } from './ns.mjs';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */
 const NOT_FACTS = new Set(['core.question', 'core.request', 'core.answer', 'core.observation']);
@@ -105,19 +105,17 @@ export async function createReasoner(set, { lib = null } = {}) {
   for (const w of worlds) for (const c of w.compose) if (byId.has(c) && !homes.has(c)) homes.set(c, w.id);
   const instKey = (id) => homes.get(id) ?? id;
   const matrixWorlds = (id) => [...new Set([...(byId.get(id)?.compose ?? []), id])].filter((x) => byId.has(x));
-  /** The legend text as the library reads it: a type of `SHARED_TYPES` says `shared=true` (our legends have no such attribute; it is the library's, spec 15 "Namespaces"). */
-  const sharing = (text) => (text == null ? text : text.replace(/^(@(\S+) core\.type)(?=[ \t]|$)/gm, (m, head, name) => (SHARED_TYPES.has(name) ? `${head} shared=true` : m)));
   const bases = new Map();
   const buildBase = (id) => {
     const fns = {};   // the world's action functions (the library keeps them apart from its own arithmetic)
-    const ns = NO_NAMESPACE.has(instKey(id)) ? '' : instKey(id);   // the namespace of the instance (spec 15, "Namespaces"): every fact of it is `<ns>::<id>` in the library
+    const ns = instKey(id);   // the namespace of the instance (spec 15, "Namespaces"): every fact of it is `<ns>::<id>` in the library
     for (const m of matrixWorlds(id)) for (const [name, f] of Object.entries(byId.get(m).fns ?? {})) fns[name] = (c, args) => f({ ...nsContext(c, ns), host, live: reasoner.live }, strip(ns, args));
     const raw = new lib.World({ ns, actions: fns, filters: FILTERS, vocabulary: { status: 'core.status' } });
     const base = nsWorld(raw, ns);
     const load = (what, text) => { if (text == null) return; const r = base.load(text); if (!r.ok) problems.push(`${what}: ${r.violations?.[0]?.kind ?? 'refused'} ${r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? ''}`.trim()); };
     const ordered = schemaWorlds(id).map((x) => set.get(x));
     load('mapping', set.list().map((w) => w.raw.mapping).find((t) => t != null));
-    for (const w of ordered) load(`${w.id}/legend.sop`, sharing(w.raw.legend));
+    for (const w of ordered) load(`${w.id}/legend.sop`, w.raw.legend);
     for (const w of ordered) load(`${w.id}/kb.sop`, w.raw.kb);   // the knowledge bases of the world and of what it imports (games.guess reads kids.animals): each instance has its own
     { const r = raw.tell('@e.user core.agent', { ns: '' }); if (!r.ok) problems.push(`user: ${r.violations?.[0]?.kind ?? 'refused'}`); }   // the user is in the default namespace (a shared type: every namespace reads it, and the matrices name it as `$e.user`)
     // one SOP Lang parser in the product: our parser reads the matrices and the library is handed their wires
@@ -126,6 +124,27 @@ export async function createReasoner(set, { lib = null } = {}) {
       const { wires, errors } = parseOurs(byId.get(m).raw.matrix, { source: what });
       if (errors.length) { problems.push(`${what}: ${errors[0].line}:${errors[0].column} ${errors[0].message}`); continue; }
       load(what, wires.map((w) => libWire(lib, w)));
+    }
+    // The parameter types of the host-run actions (spec 16 section 8): `core.describe.arg slot=<type>.<key>` says which slot of the legend an argument fills; the library judges an
+    // action it does not declare against the slots of a type named like it (J2, sopworld 0.13.1), so that type is derived here from the slots the arguments name (kind, enum, range).
+    {
+      const c = raw._compiled();
+      const lines = [];
+      for (const m of matrixWorlds(id)) {
+        for (const [action, args] of byId.get(m).argSlots ?? []) {
+          if (c.actions.get(action) || c.slots.get(action)) continue;   // the matrix declares it, or the type exists already
+          const keys = [];
+          for (const [arg, slot] of args) {
+            const at = slot.lastIndexOf('.');
+            const def = at > 0 ? c.slots.get(slot.slice(0, at))?.get(slot.slice(at + 1)) : null;
+            if (!def) { problems.push(`${m}/describe.sop: ${action}.${arg}: slot ${slot} is not declared by the legends`); continue; }
+            const extra = ['kind', 'enum', 'min', 'max', 'step'].flatMap((k) => (def.attrs?.[k] ?? []).map((v) => `${k}=${v}`));
+            keys.push(`@${action}.${arg} core.slot of=${action} key=${arg} ${extra.join(' ')}`.trim());
+          }
+          if (keys.length) lines.push(`@${action} core.type`, ...keys);
+        }
+      }
+      if (lines.length) load('parameter types', lines.join('\n'));
     }
     return base;
   };
@@ -143,6 +162,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const viewOf = new Map(worlds.filter((w) => typeof w.isView === 'function').map((w) => [w.id, w]));   // world id -> the world that says which library steps only moved what the user looks at
   const wordsOf = new Map(worlds.filter((w) => typeof w.undoWords === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world that says what a generic "undo that" took back (undoWords over its toState)
   const adoptOf = new Map(worlds.filter((w) => typeof w.adopt === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world whose operations change its state and hand it back to the library (`adopt`)
+  const offerOf = new Map(worlds.filter((w) => typeof w.closeOffer === 'function' && typeof w.adopt === 'function').map((w) => [w.id, w.closeOffer]));   // world id -> `closeOffer(state)`: an undo that brings an answered offer back closes it
   const problemOf = new Map(worlds.filter((w) => typeof w.problem === 'function').map((w) => [w.id, w.problem]));
   const whyOf = new Map(worlds.filter((w) => typeof w.whyWords === 'function').map((w) => [w.id, w.whyWords]));
   const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
@@ -153,7 +173,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const declared = new Map();   // world id -> Map(action name -> attrs of the matrix's `core.action`): what a missing argument asks and how the answer completes the sentence
   const routes = new Map();
   const reasoner = {
-    lib, voices, assumedBy, instKey, composites: new Set(homes.values()), problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, passive, untold, wordsOf, adoptOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
+    lib, voices, assumedBy, instKey, composites: new Set(homes.values()), problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, passive, untold, wordsOf, adoptOf, offerOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
     /** The base World of a matrix world (built on first use, once per engine). */
     baseOf: (id) => { id = instKey(id); let b = bases.get(id); if (!b) { b = buildBase(id); bases.set(id, b); } return b; },
     /** Builds every base and returns the problems found (tests, `test-world`). */
@@ -225,7 +245,7 @@ export class ReasonerSession {
     this.last = null;    // the last library result, for explain / why: { wire, result, inst }
     this.known = new Map();
     this.written = new Map();    // world id -> JSON of the state as the library last said it (a world with `adopt`: a state that differs was changed by its operations since)
-    this.derived = new Map();    // world id -> { stamp, json }: what toState said of the instance as it was at that stamp
+    this.derived = new Map(); this.stateCache = new Map(); this.stateHits = 0;    // world id -> { stamp, json }: what toState said of the instance as it was at that stamp
     this.said = new Set();       // assumed cells already said to the user (an assumption is said once)
     this.advised = new Set();    // keys of the advice (issues of common sense) already said while they stand
     this.advice = [];            // advice collected and not yet taken by the turn
@@ -321,7 +341,7 @@ export class ReasonerSession {
         const roots = new Map(), rootOf = (p) => {   // the base itself, or (a base entry was rewritten) a world that replays the base's entries up to there
           if (!roots.has(p)) {
             let w = base;
-            if (p < base.log.length) { w = nsWorld(new base.raw.constructor(base.options), base.ns); if (p) { const r = replayInto(w, base.log.slice(0, p)); if (r) throw new Error('replay refused'); } }
+            if (p < base.log.length) { w = nsWorld(new base.raw.constructor(base.options), base.ns); if (p) { const r = w._replay(base.log.slice(0, p)); if (r) throw new Error('replay refused'); } }
             roots.set(p, { log: base.log.slice(0, p), world: w });
           }
           return roots.get(p);
@@ -333,7 +353,7 @@ export class ReasonerSession {
           const w = prior.world.fork();
           const rest = logs[n].slice(prior.log.length);
           turnBudget.tick('reasoner.restore', rest.length + 1);
-          if (rest.length) { const r = replayInto(w, rest); if (r) throw new Error('replay refused'); }
+          if (rest.length) { const r = w._replay(rest); if (r) throw new Error('replay refused'); }
           built.push({ log: logs[n], world: w, n });
         }
         const by = new Map(built.map((b) => [b.n, b.world]));
@@ -349,7 +369,7 @@ export class ReasonerSession {
       this.insts = insts; this.turns = turns; this.ops = rec.ops ?? 0;
       this.sharedLog = (rec.sharedLog ?? []).map((x) => ({ ...x })); this._rebuildShared();
       this.told = [...(rec.told ?? [])]; this.said = new Set(rec.said ?? []); this.undone = rec.undone ?? 0; this.undoneAt = rec.undoneAt ?? 0;
-      this.redos = []; this.cur = null; this.seg = null; this.refused = []; this.last = null; this.mirrored = new Map(); this.derived = new Map(); this.written = new Map();
+      this.redos = []; this.cur = null; this.seg = null; this.refused = []; this.last = null; this.mirrored = new Map(); this.derived = new Map(); this.stateCache = new Map(); this.written = new Map();
       if (session) {
         for (const id of this.reasoner.stateOf.keys()) if (session.state[id]) this.written.set(id, this.reasoner.json(id, session.state[id]));   // the state is what the library said
         this.syncTo(session);
@@ -612,6 +632,26 @@ export class ReasonerSession {
   canUndo(turn) { const t = this.turns.at(-1); return !!t && (this.undone > 0 || turn - t.turn <= 6); }   // in a run of undos (one per message) the history is walked back whatever its age
   /** "Undo that": the instances go back to before the last turn that changed the library (everything that followed from it goes too). Returns the turn's number or null. */
   undo(session, redos = null) {
+    const modes = new Map([...this.reasoner.offerOf.keys()].map((id) => [id, session.state[id]?.inputMode ?? null]));
+    const done = this._undo(session, redos);
+    if (done != null) this._closeOffers(session, modes);
+    return done;
+  }
+  /**
+   * An undo of a confirmation (the state before the rewind had no open offer, the state after it has one) goes back to the library as it was when the offer was made,
+   * so the offer it answered is open again. The world closes it (`closeOffer`), the instance takes the closed state over, and the turn is no step: "yes" afterwards
+   * answers "Yes to what?" in both strategies (Q2 item 5a; dlg.avt#011).
+   */
+  _closeOffers(session, modes) {
+    for (const [id, close] of this.reasoner.offerOf) {
+      const st = session.state[id];
+      if (modes.get(id) || !st || st.inputMode !== 'confirm') continue;
+      try { close(st); } catch { continue; }
+      this.adoptState(session, id);
+      this._restart();   // the closing is bookkeeping: the undo turn starts from the library as it is now
+    }
+  }
+  _undo(session, redos = null) {
     if (this.cur && !this._clean()) {   // "make it a pie chart then undo": what the same message changed before the undo goes back first, not the turn before
       const marks = new Map();
       for (const [id, e] of this.cur.marks) if (this.insts.get(id) && this.insts.get(id).world.stamp !== e.stamp) marks.set(id, e);
@@ -815,13 +855,10 @@ export class ReasonerSession {
       try { veto = world.veto(r); } catch { /* the library's own answer is optional */ }
       return Object.assign(c, { index, world: ownerId, kind: isQ ? 'question' : 'request', actionName: action, libVeto: veto && { answer: veto.answer, reasons: veto.reasons.map((x) => x.reason) } });
     });
-    // The host's one change to the library's order (spec 16, section 4). sopworld 0.12 no longer counts the value a question asks for as a lack, but only when the wire the
-    // question is about exists (`m.id`) and the question is given as `{ type, seek }`; the host's questions are wires (`seek` in `attrs`) about a computed answer that does not
-    // exist yet (a total), so the library still reports `lacks count` for them (library item in worker-log.md). A question reading therefore lacks nothing here;
-    // `libraryOrder` is the library's own default, kept to report disagreements.
-    const hostRanking = lib.RANKING.map((c) => (c.name === 'lacks' ? { ...c, measure: (r) => (r.kind === 'question' ? 0 : (r.lacks ?? []).length) } : c));
-    const { order, ranked } = lib.rank(results, hostRanking);
-    return { results, order, ranked, libraryOrder: lib.rank(results).order };
+    // The order is the library's own (`rank`, RANKING). Since sopworld 0.13.1 (J1) a question given as a wire is understood by `score`, and a computed answer that does not
+    // exist yet (a total) is not a lack, so the host no longer zeroes the `lacks` of a question reading. `libraryOrder` stays for the reports of disagreements (now the same).
+    const { order, ranked } = lib.rank(results);
+    return { results, order, ranked, libraryOrder: order };
   }
 
   /** An action another world asks for by name and arguments (no wire of the dialogue): its envelope when the library owns the action, else null. */
@@ -910,13 +947,29 @@ export class ReasonerSession {
 
   /** What a world's `toState` says of its instance now (null for a world without one). */
   stateOfWorld(id) {
-    const toState = this.reasoner.stateOf.get(id);
-    if (!toState) return null;
+    if (!this.reasoner.stateOf.has(id)) return null;
     const inst = this._inst(id);
-    return toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), redo: this._redoCount(id) });
+    return this._toState(id, inst, this._redoCount(id));
   }
   /** How many undos of a world can be taken back (a world's `toState` may show it, the editor's redo button). */
   _redoCount(id) { let n = 0; for (const r of this.redos) if (r.world === id) n++; return n; }
+  /**
+   * What a world's `toState` says of its instance: a pure function of the instance, so it is computed once per instance state (`stamp`; the library gives a
+   * state one stamp) and redo count, and every later reader gets a copy of that (Q2 item 6). `redo` is passed as the callers did: undefined where they gave none.
+   */
+  _toState(id, inst, redo) {
+    const toState = this.reasoner.stateOf.get(id);
+    const c = this.stateCache.get(id);
+    // a copy keeps the hidden (non-enumerable) properties of the state, which a structured clone drops (ui.shell's `_titles`); they are read only, so they are shared
+    const copy = (c) => { const x = structuredClone(c.state); for (const [k, v] of c.hidden) Object.defineProperty(x, k, { value: v, enumerable: false }); return x; };
+    if (c && c.world === inst.world && c.stamp === inst.world.stamp && c.redo === redo) { this.stateHits++; return copy(c); }
+    const state = toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), redo });
+    let keep;
+    try { keep = structuredClone(state); } catch { this.stateCache.delete(id); return state; }   // not plain data: not cached
+    const hidden = Object.getOwnPropertyNames(state).filter((k) => !Object.prototype.propertyIsEnumerable.call(state, k)).map((k) => [k, state[k]]);
+    this.stateCache.set(id, { world: inst.world, stamp: inst.world.stamp, redo, state: keep, hidden });
+    return state;
+  }
   /**
    * The words of a generic "undo that" in a world's own voice (`undoWords` of its fns.mjs, over the states before and after): null when the world has none or
    * the words say nothing. `said` is the sentence the user had said.
@@ -952,9 +1005,8 @@ export class ReasonerSession {
    */
   undoAction(world, session, n = 1) {
     if (!world.isView && n <= 1) return this._undoOne(world, session);   // a world without views or counted undos: the session timeline names what it took back
-    const toState = this.reasoner.stateOf.get(world.id);
     const inst = this._inst(world.id);
-    const stateNow = () => toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q) });
+    const stateNow = () => this._toState(world.id, inst, undefined);
     const mine = (t) => t.worlds?.includes(world.id);   // a turn that changed this world (a tab switch of the shell or a turn of another world is not one of its steps)
     const before = this.turns.some(mine) ? stateNow() : null;
     let turn = null, steps = 0;
@@ -983,9 +1035,8 @@ export class ReasonerSession {
   }
   /** A world's own "redo" action: puts back what the last undo took out (the library as it was before it, with the turns), and says what that was. */
   redoAction(world, session) {
-    const toState = this.reasoner.stateOf.get(world.id);
     const inst = this._inst(world.id);
-    const stateNow = () => toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q) });
+    const stateNow = () => this._toState(world.id, inst, undefined);
     const r = this.redos.at(-1)?.world === world.id ? this.redos.pop() : null;
     const before = stateNow();
     if (r) for (const f of [...r.undo].reverse()) f();
@@ -1166,7 +1217,7 @@ export class ReasonerSession {
    * it. A world's state is derived from its own instance only; a world with no instance has the empty state.
    */
   _state(session, touched = null) {
-    for (const [id, toState] of this.reasoner.stateOf) {
+    for (const [id] of this.reasoner.stateOf) {
       try {
         const inst = this.insts.get(this.reasoner.instKey(id));
         let cur = session.state[id];
@@ -1178,7 +1229,7 @@ export class ReasonerSession {
         if (cur && this.reasoner.adoptOf.has(id) && this.reasoner.json(id, cur) !== (this.written.get(id) ?? this.reasoner.emptyState(id).json)) continue;   // the operations changed it since the library said it: `adoptState` takes it over first
         if (cur && d.json !== undefined && d.json === this.reasoner.json(id, cur)) { this.written.set(id, d.json); continue; }   // the state already is what the library says
         let next, json;
-        if (inst) { next = toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), redo: rc }); json = this.reasoner.json(id, next); }
+        if (inst) { next = this._toState(id, inst, rc); json = this.reasoner.json(id, next); }
         else { const e = this.reasoner.emptyState(id); if (e.json === '') continue; next = structuredClone(e.obj); json = e.json; }
         d.json = json;
         if (!cur) {

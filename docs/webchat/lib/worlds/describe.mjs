@@ -4,7 +4,8 @@
  * An operation is described by wires, in SOP Lang only (no notation inside a string):
  *   core.describe        the operation: `op`, `intent`, `emit`, `frames` / `skip` (repeated), `priority`, `shortPriority`, `bareVerb`, `kind`, `requires` (repeated), `effect`
  *   core.describe.arg    one per argument: `of=$<describe>`, `name`, `class` (a lexicon id, `number`, `rest`, `noun`, `words`), `size` (the maximum of `words`),
- *                        `optional=true`, `qty=<count slot>` (a quantified item: "2 balls" or "a ball")
+ *                        `optional=true`, `qty=<count slot>` (a quantified item: "2 balls" or "a ball"), `slot=<type>.<key>` (the slot of the world's legend the argument fills:
+ *                        the one declaration from which the host derives the library's judgement of a host-run action and the check of what the reading names, spec 16 section 8)
  *   core.describe.words  the wording of one language: `of=$<describe>`, `lang`, and the words of each role as repeated keys whose values are `core.word` wires:
  *                        `verb tverb noun ask rest pre mid subject`, and for an argument `prep.<name> det.<name> unit.<name>`; `nosubject=true`;
  *                        `sample.<slot>=value` (example values), `example` (extra example sentences)
@@ -195,7 +196,7 @@ export function readDescriptionWires(wires, into = null) {
     if (x.type !== 'core.describe.arg') continue;
     const d = out.descriptions.get(refId(val(x, 'of')));
     if (!d) { err(`argument ${x.id}: of=${val(x, 'of')} is not a described operation`); continue; }
-    d.args.push({ name: val(x, 'name'), cls: val(x, 'class'), optional: String(val(x, 'optional')) === 'true', qty: val(x, 'qty') ?? null, size: val(x, 'size') ?? null });
+    d.args.push({ name: val(x, 'name'), cls: val(x, 'class'), optional: String(val(x, 'optional')) === 'true', qty: val(x, 'qty') ?? null, size: val(x, 'size') ?? null, slot: val(x, 'slot') ?? null });
   }
   for (const x of wires) {
     if (x.type !== 'core.describe.words') continue;
@@ -222,6 +223,20 @@ export function readDescriptionWires(wires, into = null) {
     d.words.set(lang, w);
   }
   return out;
+}
+
+/**
+ * The part of a `describe.sop` that declares what the arguments fill: every `core.describe.arg` wire that has a `slot=` and the `core.describe` wire it belongs to, as SOP text.
+ * The host reads (and the webchat ships) only this, so a description with wording costs nothing when it is not used to generate patterns (spec 16 section 8). '' when there is none.
+ */
+export function slotDeclarations(text) {
+  if (text == null || !text.includes('slot=')) return '';
+  const chunks = String(text).split(/\n[ \t]*\n/);
+  const head = (c) => /^@(\S+)\s+(core\.describe(?:\.arg)?)\b/m.exec(c);
+  const arg = chunks.filter((c) => head(c)?.[2] === 'core.describe.arg' && /^\s*slot=/m.test(c));
+  const wanted = new Set(arg.map((c) => /^\s*of=\$?(\S+)/m.exec(c)?.[1]).filter(Boolean));
+  const desc = chunks.filter((c) => head(c)?.[2] === 'core.describe' && wanted.has(head(c)[1]));
+  return [...desc, ...arg].map((c) => c.replace(/^\s*\n/, '').trimEnd()).join('\n\n') + (arg.length ? '\n' : '');
 }
 
 /** The input of `describePatterns` for one description in one language, or null when the description has no wording in it. */
