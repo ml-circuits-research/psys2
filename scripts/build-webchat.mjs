@@ -24,7 +24,8 @@ const LIB_DIRS = ['soplang', 'legends', 'worlds', 'formalizer', 'interpreter', '
 const LIB_FILES = ['loaders/bundle-loader.mjs'];
 const WORLD_TEXT = /\.(sop|json|txt|md)$/;
 // Files the browser never reads (the loader treats a missing tests.sop as empty; coverage.md is a human catalogue): left out of worlds/index.json to keep it small (L10).
-const BROWSER_SKIP = new Set(['tests.sop', 'coverage.md']);
+// describe.sop (core.describe, E3/DESCRIBE-ALL) is read only with PSYS_GEN_PATTERNS in Node tools; the webchat never generates patterns, so it is not shipped.
+const BROWSER_SKIP = new Set(['tests.sop', 'coverage.md', 'describe.sop']);
 
 const exists = (p) => stat(p).then(() => true, () => false);
 
