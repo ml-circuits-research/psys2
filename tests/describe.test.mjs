@@ -70,19 +70,3 @@ test('`only` replaces the hand-written patterns of the described operations', as
     assert.ok(w.patterns.filter((p) => !p.generatedFrom).every((p) => !keys.has(emitKey(p.emit))), `${id}: a hand-written pattern of a described operation stayed`);
   }
 });
-
-test('the Romanian language pack is opt-in, loads clean and generates Romanian patterns; the default loads none', async () => {
-  const base = await load(null);
-  assert.equal(base.worlds.get('kids.shop').patterns.some((p) => p.lang), false);
-  globalThis.PSYS_GEN_LANG = 'ro';
-  let set;
-  try { set = await loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] })); } finally { delete globalThis.PSYS_GEN_LANG; }
-  for (const id of WORLDS) {
-    const w = set.worlds.get(id);
-    assert.deepEqual(w.errors.filter((e) => /describe|lang\/ro/.test(e.file ?? '')), [], `${id}: pack errors`);
-    const ro = w.patterns.filter((p) => p.lang === 'ro');
-    assert.ok(ro.length > 0, `${id}: no Romanian patterns`);
-    assert.equal(w.patterns.length, base.worlds.get(id).patterns.length + ro.length, `${id}: the pack only adds patterns`);
-    assert.ok(w.langWords.ro.length > 0, `${id}: no entity words`);
-  }
-});

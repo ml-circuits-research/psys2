@@ -49,8 +49,8 @@ test('matrix mode: the worlds that opt in, the library loads without problems, t
   assert.ok(matrix.createSession({ language: 'en' }).isession.rs, 'a session has its own World');
 });
 
-test('parity gate (switch on): kids.shop 164, kids.tasks 245, kids.arith 237, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227, kids.animals 506, user.profile 146 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 164], ['kids.tasks', 245], ['kids.arith', 237], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506], ['user.profile', 146], ['geo.map', 459], ['data.charts', 277], ['art.draw', 562], ['diagram.sketch', 756]]) {
+test('parity gate (switch on): kids.shop 160, kids.tasks 241, kids.arith 230, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227, kids.animals 506, user.profile 144 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 160], ['kids.tasks', 241], ['kids.arith', 230], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506], ['user.profile', 144], ['geo.map', 459], ['data.charts', 277], ['art.draw', 562], ['diagram.sketch', 756]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }

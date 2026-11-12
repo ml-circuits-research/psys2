@@ -853,19 +853,3 @@
     expect="I asked you"
     doc="a bare why? after an interview answer says the question that was asked and what the user answered"
     reasoner=matrix
-
-@t.user.profile.m19 core.test
-    language=ro
-    session=pw3
-    input="Locuiesc în Cluj."
-    expectState="fields.location.v=Cluj"
-    reasoner=matrix
-
-@t.user.profile.m20 core.test
-    language=ro
-    session=pw3
-    input="De ce?"
-    expect="Am notat Cluj la"
-    expect="Locuiesc în Cluj"
-    doc="Romanian: the fact, and the user's own words as typed"
-    reasoner=matrix

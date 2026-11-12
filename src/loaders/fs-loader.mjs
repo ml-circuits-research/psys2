@@ -35,10 +35,6 @@ export function createFsLoader({ roots = [DEFAULT_ROOT] } = {}) {
       if (!dir) return null;
       try { return await readFile(path.join(dir, name), 'utf8'); } catch { return null; }
     },
-    /** A file of a language pack, `<repo>/lang/<lang>/<name>.sop` (outside the worlds; opt-in, `PSYS_GEN_LANG`), or null. */
-    async readLangPack(lang, name) {
-      try { return await readFile(path.join(DEFAULT_ROOT, '..', 'lang', lang, `${name}.sop`), 'utf8'); } catch { return null; }
-    },
     async loadOps(id) {
       await scan();
       const dir = dirs.get(id);

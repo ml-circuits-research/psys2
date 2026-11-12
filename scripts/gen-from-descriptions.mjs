@@ -3,24 +3,20 @@
 /**
  * E3 (spec 03 section 2c): print the patterns generated from the `core.describe` wires of a world, as SOP, or statistics.
  *
- *   node scripts/gen-from-descriptions.mjs <world> [--describe <id>] [--lang ro] [--stats] [--json]
+ *   node scripts/gen-from-descriptions.mjs <world> [--describe <id>] [--stats] [--json]
  *
- * The loader reads `describe.sop` only when PSYS_GEN_PATTERNS=add|only; this script sets it to `add` itself. `--lang ro` prints the patterns of the
- * Romanian language pack (lang/ro/, spec 03 section 2c) instead of the English ones.
- */
+ * The loader reads `describe.sop` only when PSYS_GEN_PATTERNS=add|only; this script sets it to `add` itself. */
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { loadWorlds } from '../src/worlds/index.mjs';
 
-const lang = process.argv.includes('--lang') ? process.argv[process.argv.indexOf('--lang') + 1] : null;
 globalThis.PSYS_GEN_PATTERNS = 'add';
-if (lang) globalThis.PSYS_GEN_LANG = lang;
-const [world] = process.argv.slice(2).filter((a, i, all) => !a.startsWith('--') && all[i - 1] !== '--lang' && all[i - 1] !== '--describe');
+const [world] = process.argv.slice(2).filter((a, i, all) => !a.startsWith('--') && all[i - 1] !== '--describe');
 const arg = (k) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : null; };
 const set = await loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] }));
 const w = set.worlds.get(world);
 if (!w) { console.error(`unknown world '${world}'`); process.exit(1); }
 const only = arg('describe');
-const gen = w.patterns.filter((p) => p.generatedFrom && (lang ? p.lang === lang : !p.lang) && (!only || p.generatedFrom === `describe.${only}`));
+const gen = w.patterns.filter((p) => p.generatedFrom && (!only || p.generatedFrom === `describe.${only}`));
 const errs = w.errors.filter((e) => e.file === 'describe.sop');
 if (process.argv.includes('--json')) console.log(JSON.stringify({ world, descriptions: w.descriptions.length, generated: gen.length, errors: errs }, null, 1));
 else if (process.argv.includes('--stats')) {
