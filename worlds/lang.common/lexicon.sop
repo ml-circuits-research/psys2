@@ -1764,17 +1764,6 @@
     alt=thats_all
     alt=that_is_all
     alt=stop_recording
-    alt=oprește_microfonul
-    alt=opreste_microfonul
-    alt=închide_microfonul
-    alt=inchide_microfonul
-    alt=pune_pe_mute
-    alt=nu_mai_asculta
-    alt=taci_din_ascultat
-    alt=gata_cu_ascultatul
-    alt=gata_cu_microfonul
-    alt=stop_microfon
-    alt=microfon_oprit
 
 @phrase.lang.obligation.tell core.phrase
     doc="Announcing that the speaker has something to tell the assistant (\"I should tell you\", \"I have to say\", \"just so you know\"): a statement follows, never a to-do item (GAPS-1)."

@@ -761,32 +761,6 @@
     input="why?"
     expect="I worked that out from what you told me"
 
-@t.shop.coh08 core.test
-    language=ro
-    session=coh8
-    input="Am 20 de lei. Cumpăr 2 zmeie."
-    expect="ai cumpărat 2 zmeie"
-
-@t.shop.coh08b core.test
-    language=ro
-    session=coh8
-    input="De ce nu mai am nimic?"
-    expect="nu a rămas nimic"
-
-@t.shop.coh09 core.test
-    language=ro
-    session=coh9
-    input="Am 10 lei. Cumpăr o carte."
-    expect="nu poți cheltui 12 lei"
-    expectStatus=conflicting
-
-@t.shop.coh10 core.test
-    language=ro
-    session=coh10
-    input="Am 20 de lei. Cumpăr ceva."
-    expect="What do you want to buy?"
-
-
 @t.shop.m01 core.test
     session=m1
     input="I have 20 lei. I buy the ball."

@@ -1222,28 +1222,3 @@
     session=coh8
     input="Why is milk done?"
     expect="Because you marked milk as done on your shopping list."
-
-@t.tasks.coh10 core.test
-    language=ro
-    session=coh10
-    input="Adaugă pe lista mea de cumpărături."
-    expect="What shall I add to your shopping list?"
-
-@t.tasks.coh11 core.test
-    language=ro
-    session=coh11
-    input="Adaugă lapte pe lista mea."
-    expect="I added milk to your to-do list."
-
-@t.tasks.coh12 core.test
-    language=ro
-    session=coh11
-    input="Nu, pe lista mea de cumpărături."
-    expect="I added milk to your shopping list."
-
-@t.tasks.coh13 core.test
-    language=ro
-    session=coh11
-    input="Pe ce listă ai pus?"
-    expect="I put milk on your shopping list."
-

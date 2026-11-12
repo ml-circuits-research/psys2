@@ -77,7 +77,7 @@
 
 @core.describe core.type
     extends=core.thing
-    doc="An operation description: one operation (op, intent, emit, frames). Its arguments are core.describe.arg wires, its wording one core.describe.words wire per language, its words core.word wires; request, question and statement patterns are generated from them (spec 03 section 2c). Read only with PSYS_GEN_PATTERNS or PSYS_GEN_LANG."
+    doc="An operation description: one operation (op, intent, emit, frames). Its arguments are core.describe.arg wires, its wording one core.describe.words wire per language, its words core.word wires; request, question and statement patterns are generated from them (spec 03 section 2c). Read only with PSYS_GEN_PATTERNS."
 
 @core.describe.arg core.type
     extends=core.thing
@@ -86,14 +86,6 @@
 @core.describe.words core.type
     extends=core.thing
     doc="The wording of one operation description in one language: of (the description), lang, then repeated keys whose values are core.word wires: verb tverb noun ask rest pre mid subject, and for an argument prep.<name> det.<name> unit.<name>; nosubject=true; sample.<slot>=value; example (sentences)."
-
-@core.describe.frame core.type
-    extends=core.thing
-    doc="One frame of a language pack (lang/<lang>/frames.sop): lang, name, tpl (a template over the tokens of the generator), needs (repeated), short, ofprep, mid (true). Not used by English, whose frames are in src/worlds/describe.mjs."
-
-@core.describe.lang core.type
-    extends=core.thing
-    doc="The settings of a language pack's grammar (lang/<lang>/frames.sop): lang, lead, tail, article, determiners, ofPrep, and command / query / statement as repeated keys listing the default frames of the intent."
 
 @core.word core.type
     extends=core.thing

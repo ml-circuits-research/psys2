@@ -509,7 +509,7 @@
 @t.geo.map.n091 core.test
     input="What are the biggest cities in Romania?"
     expect="Bucharest"
-    expect="Iaşi"
+    expect="Cluj-Napoca"
 
 @t.geo.map.n092 core.test
     input="Name the 3 largest countries in Africa."

@@ -9,7 +9,7 @@
 import { parse, get, getAll } from '../soplang/index.mjs?v=26885599a7';
 import { Legends } from '../legends/index.mjs?v=48b634e4da';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
-import { describePatterns, descriptionFor, readDescriptionWires, readFrames, emitKey, EN } from './describe.mjs?v=041fabfbcd';
+import { describePatterns, descriptionFor, readDescriptionWires, emitKey, EN } from './describe.mjs?v=b9fe78de1e';
 import { checkPattern } from '../formalizer/rules/index.mjs?v=85b9949394';
 import { lexIndex } from './lexicon.mjs?v=e3316469a7';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
@@ -21,8 +21,6 @@ const MATRIX_FILES = ['matrix.sop', 'mapping.sop'];
 const MATRIX_EXTRAS = { 'patterns.sop': 'matrix.patterns.sop', 'operations.sop': 'matrix.operations.sop', 'templates.sop': 'matrix.templates.sop' };
 // Operation descriptions (E3, spec 03 section 2c): describe.sop is read only when PSYS_GEN_PATTERNS is `add` (generated patterns are appended to the
 // hand-written ones) or `only` (hand-written patterns and shapes of the described operations are dropped first). Default: off, nothing is read.
-const genLang = () => { const m = globalThis.PSYS_GEN_LANG ?? globalThis.process?.env?.PSYS_GEN_LANG; return m && /^[a-z]{2}$/.test(m) && m !== 'en' ? m : null; };   // opt-in language pack (lang/<lang>/, outside the worlds)
-const genLangOnly = () => !!(globalThis.PSYS_GEN_LANG_ONLY ?? globalThis.process?.env?.PSYS_GEN_LANG_ONLY);   // measurement only: the world reads nothing but the language pack's patterns
 const genMode = () => { const m = globalThis.PSYS_GEN_PATTERNS ?? globalThis.process?.env?.PSYS_GEN_PATTERNS; return m === 'add' || m === 'only' ? m : null; };
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
 const txt = (w, k) => get(w, k)?.v;
@@ -188,7 +186,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
     for (const [base, extra] of Object.entries(MATRIX_EXTRAS)) if (files[extra] != null) files[base] = base === 'templates.sop' ? files[extra] + '\n' + (files[base] ?? '') : (files[base] ?? '') + '\n' + files[extra];
   }
-  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() && !genLang() ? null : files[f])]));
+  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() ? null : files[f])]));
   w.manifest = wires['world.sop'].find((x) => x.type === 'core.world') ?? null;
   if (!w.manifest) w.errors.push({ message: 'world.sop has no core.world wire' });
   else {
@@ -267,7 +265,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   for (const id of ids) {
     const files = {};
     const matrix = reasoner === 'matrix';
-    await Promise.all([...FILES, ...(genMode() || genLang() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
+    await Promise.all([...FILES, ...(genMode() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
     let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, problem = null, whyWords = null;
     if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }
@@ -297,15 +295,6 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
     const w = built.get(id);
     set.worlds.set(id, w);
     set.legends.add(w.legendWires, { worldId: id });
-  }
-  const lang = genLang();
-  if (lang && loader.readLangPack) {   // the pack of the language: grammar (frames) and one file per world, outside the worlds
-    set.langPack = { lang, frames: await loader.readLangPack(lang, 'frames'), worlds: new Map() };
-    for (const id of ids) {   // `<world>.sop` (words of the descriptions) and `<world>.entities.sop` (words of slot values, generated from the translator's tables)
-      const parts = [];
-      for (const name of [id, `${id}.entities`]) { const t = await loader.readLangPack(lang, name); if (t != null) parts.push([name, t]); }
-      if (parts.length) set.langPack.worlds.set(id, parts);
-    }
   }
   resolveLexiconExtends(set);
   expandShapes(set);
@@ -382,36 +371,20 @@ function expandShapes(set) {
 
 /**
  * Generate the patterns of every `core.describe` wire (spec 03 section 2c); `only` first drops the hand-written patterns of the described operations.
- * A language pack (`PSYS_GEN_LANG=ro`, `lang/ro/`, outside the worlds) adds the wording of another language to the same descriptions and its patterns are appended
- * (never replacing anything), tagged `lang`.
  */
 function expandDescriptions(set) {
-  const mode = genMode(), lang = genLang();
-  if ((!mode && !lang) || !set.list().some((w) => w.descriptions.length)) return;
+  const mode = genMode();
+  if (!mode || !set.list().some((w) => w.descriptions.length)) return;
   const lex = lexIndex(set);
-  const pack = lang ? set.langPack : null;
-  const lgRo = pack?.frames ? readFrames(parse(pack.frames, { source: `lang/${lang}/frames.sop` }).wires, lang) : null;
-  if (lang && !lgRo) set.errors.push({ message: `language pack '${lang}': lang/${lang}/frames.sop has no core.describe.lang wire` });
   for (const w of set.list()) {
-    if (!w.descriptions.length) { if (lgRo && genLangOnly()) w.patterns = []; continue; }   // isolation (E3b measurement): a world without a Romanian description reads no Romanian
-    if (lang && pack?.worlds.get(w.id)) {
-      for (const [name, text] of pack.worlds.get(w.id)) {
-        const { wires, errors } = parse(text, { source: `lang/${lang}/${name}.sop` });
-        for (const e of errors) w.errors.push({ file: `lang/${lang}/${name}.sop`, ...e });
-        const n = w.descReader.errors.length;
-        readDescriptionWires(wires, w.descReader);
-        for (const m of w.descReader.errors.slice(n)) w.errors.push({ file: `lang/${lang}/${name}.sop`, message: m });
-      }
-      w.langWords ??= {};
-      w.langWords[lang] = [...w.descReader.words.values()].filter((x) => x.lang === lang && x.of);   // words of the values of a slot (entities): `means` is the canonical value
-    }
+    if (!w.descriptions.length) continue;
     const keys = new Set(w.descriptions.map((d) => d.op));
     w.generated = { mode, replaced: [], patterns: [] };
     if (mode === 'only') {
       w.generated.replaced = w.patterns.filter((p) => keys.has(emitKey(p.emit))).map((p) => p.id);
       w.patterns = w.patterns.filter((p) => !keys.has(emitKey(p.emit)));
     }
-    const runs = [...(mode ? [{ lang: 'en', lg: EN }] : []), ...(lgRo ? [{ lang, lg: lgRo }] : [])];
+    const runs = [{ lang: 'en', lg: EN }];
     for (const run of runs) {
       for (const desc of w.descriptions) {
         const d = descriptionFor(desc, run.lang);
@@ -421,9 +394,8 @@ function expandDescriptions(set) {
         if (emitKey(desc.emit) !== desc.op) w.errors.push({ file: 'describe.sop', message: `describe ${desc.id}: op '${desc.op}' differs from the key of its emit ('${emitKey(desc.emit)}')` });
         for (const g of list) {
           const p = {
-            id: run.lang === 'en' ? `pat.${g.id}` : `pat.${run.lang}.${g.id}`, wire: null, worldId: w.id, match: g.match, emit: g.emit, kind: g.kind, priority: g.priority,
+            id: `pat.${g.id}`, wire: null, worldId: w.id, match: g.match, emit: g.emit, kind: g.kind, priority: g.priority,
             tabOnly: false, tabPriority: null, yieldsTo: [], needsState: null, tabFollow: false, signal: false, whole: false, examples: g.example, form: g.form, shape: null, generatedFrom: desc.wireId, canonical: [],
-            ...(run.lang === 'en' ? {} : { lang: run.lang }),
           };
           for (const problem of checkPattern(p, set)) w.errors.push({ file: 'describe.sop', message: `describe ${desc.id} (${run.lang}): ${problem}` });
           w.patterns.push(p);
@@ -431,6 +403,5 @@ function expandDescriptions(set) {
         }
       }
     }
-    if (lgRo && genLangOnly()) w.patterns = w.patterns.filter((p) => p.lang === lang);   // isolation of the pack (E3b measurement): no English pattern reads the Romanian text
   }
 }

@@ -1,0 +1,552 @@
+@describe.start core.describe
+    op=prof.start
+    intent=command
+    emit="@{_} core.request action=prof.start"
+    frames=ask
+    skip=short
+    priority=12
+    kind=request
+    effect="starts or resumes the get-to-know-me interview"
+
+@describe.start.en core.describe.words
+    of=$describe.start
+    lang=en
+    ask=$w.en.interview_me.prof.start
+    ask=$w.en.ask_me_something.prof.start
+    ask=$w.en.ask_me_a_question.prof.start
+    ask=$w.en.ask_me_anything.prof.start
+    ask=$w.en.ask_me_some_questions.prof.start
+    ask=$w.en.get_to_know_me.prof.start
+    ask=$w.en.lets_get_to_know_me.prof.start
+    ask=$w.en.start_the_interview.prof.start
+    ask=$w.en.begin_the_interview.prof.start
+    ask=$w.en.resume_the_interview.prof.start
+    ask=$w.en.play_the_get_to_know_me_game.prof.start
+    example="Interview me."
+
+@describe.know core.describe
+    op=prof.know
+    intent=command
+    emit="@{_} core.request action=prof.know"
+    frames=ask
+    skip=short
+    priority=14
+    kind=question
+    effect="tells what the profile holds"
+
+@describe.know.en core.describe.words
+    of=$describe.know
+    lang=en
+    ask=$w.en.what_do_you_know_about_me.prof.know
+    ask=$w.en.what_have_you_learned_about_me.prof.know
+    ask=$w.en.what_did_you_learn_about_me.prof.know
+    ask=$w.en.what_did_i_tell_you_about_me.prof.know
+    ask=$w.en.tell_me_what_you_know_about_me.prof.know
+    ask=$w.en.show_me_what_you_know_about_me.prof.know
+    ask=$w.en.what_is_in_my_profile.prof.know
+    example="What do you know about me?"
+
+@describe.delete core.describe
+    op=prof.delete
+    intent=command
+    emit="@{_} core.request action=prof.delete"
+    frames=ask
+    skip=short
+    priority=12
+    kind=request
+    effect="deletes the whole profile"
+
+@describe.delete.en core.describe.words
+    of=$describe.delete
+    lang=en
+    ask=$w.en.delete_everything.prof.delete
+    ask=$w.en.erase_everything.prof.delete
+    ask=$w.en.wipe_everything.prof.delete
+    ask=$w.en.delete_all_my_data.prof.delete
+    ask=$w.en.erase_all_my_data.prof.delete
+    ask=$w.en.delete_everything_you_know_about_me.prof.delete
+    ask=$w.en.delete_my_profile.prof.delete
+    ask=$w.en.erase_my_profile.prof.delete
+    ask=$w.en.wipe_my_profile.prof.delete
+    ask=$w.en.reset_my_profile.prof.delete
+    example="Delete my profile."
+
+@describe.progress core.describe
+    op=prof.progress
+    intent=command
+    emit="@{_} core.request action=prof.progress"
+    frames=ask
+    skip=short
+    priority=12
+    kind=request
+    effect="tells how much of the profile is known"
+
+@describe.progress.en core.describe.words
+    of=$describe.progress
+    lang=en
+    ask=$w.en.how_much_do_you_know_about_me.prof.progress
+    ask=$w.en.how_far_are_we.prof.progress
+    ask=$w.en.how_many_questions_are_left.prof.progress
+    ask=$w.en.how_many_questions_left.prof.progress
+    example="How far are we?"
+
+@describe.pause core.describe
+    op=prof.pause
+    intent=command
+    emit="@{_} core.request action=prof.pause"
+    frames=ask
+    skip=short
+    priority=12
+    kind=request
+    effect="pauses the interview"
+
+@describe.pause.en core.describe.words
+    of=$describe.pause
+    lang=en
+    ask=$w.en.stop_asking_me_questions.prof.pause
+    ask=$w.en.that_is_enough_questions.prof.pause
+    ask=$w.en.no_more_questions.prof.pause
+    ask=$w.en.stop_the_questions.prof.pause
+    ask=$w.en.pause_the_interview.prof.pause
+    ask=$w.en.stop_the_interview.prof.pause
+    ask=$w.en.end_the_interview.prof.pause
+    ask=$w.en.stop_the_game.prof.pause
+    example="Stop the questions."
+
+@describe.export.md core.describe
+    op=prof.export
+    intent=command
+    emit="@{_} core.request action=prof.export arg.fmt=md"
+    frames=ask
+    skip=short
+    priority=12
+    kind=request
+    effect="exports the profile as a markdown CV"
+
+@describe.export.md.en core.describe.words
+    of=$describe.export.md
+    lang=en
+    ask=$w.en.export_my_cv.prof.export
+    ask=$w.en.download_my_cv.prof.export
+    ask=$w.en.save_my_cv.prof.export
+    ask=$w.en.get_my_cv.prof.export
+    ask=$w.en.export_my_resume.prof.export
+    ask=$w.en.download_my_resume.prof.export
+    ask=$w.en.export_my_profile_as_markdown.prof.export
+    ask=$w.en.download_my_profile_as_markdown.prof.export
+    example="Download my CV."
+
+@describe.export.json core.describe
+    op=prof.export
+    intent=command
+    emit="@{_} core.request action=prof.export arg.fmt=json"
+    frames=ask
+    skip=short
+    priority=12
+    kind=request
+    effect="exports the profile as JSON"
+
+@describe.export.json.en core.describe.words
+    of=$describe.export.json
+    lang=en
+    ask=$w.en.export_my_profile_as_json.prof.export
+    ask=$w.en.download_my_profile_as_json.prof.export
+    ask=$w.en.save_my_profile_as_json.prof.export
+    ask=$w.en.export_my_profile_in_json.prof.export
+    ask=$w.en.get_my_profile_as_a_json_file.prof.export
+    example="Export my profile as JSON."
+
+@describe.fieldof.location core.describe
+    op=prof.fieldOf
+    intent=command
+    emit="@{_} core.request action=prof.fieldOf arg.field=location"
+    frames=ask
+    skip=short
+    priority=12
+    kind=question
+    effect="answers the location stored in the profile"
+
+@describe.fieldof.location.en core.describe.words
+    of=$describe.fieldof.location
+    lang=en
+    ask=$w.en.where_do_i_live.prof.fieldOf
+    ask=$w.en.where_do_i_stay.prof.fieldOf
+    ask=$w.en.where_am_i_from.prof.fieldOf
+    ask=$w.en.where_do_i_come_from.prof.fieldOf
+    ask=$w.en.what_city_do_i_live_in.prof.fieldOf
+    ask=$w.en.which_city_do_i_live_in.prof.fieldOf
+    example="Where do I live?"
+
+@describe.fieldof.age core.describe
+    op=prof.fieldOf
+    intent=command
+    emit="@{_} core.request action=prof.fieldOf arg.field=age"
+    frames=ask
+    skip=short
+    priority=12
+    kind=question
+    effect="answers the age stored in the profile"
+
+@describe.fieldof.age.en core.describe.words
+    of=$describe.fieldof.age
+    lang=en
+    ask=$w.en.how_old_am_i.prof.fieldOf
+    ask=$w.en.what_is_my_age.prof.fieldOf
+    ask=$w.en.what_age_am_i.prof.fieldOf
+    ask=$w.en.do_you_know_how_old_i_am.prof.fieldOf
+    example="How old am I?"
+
+@describe.age core.describe
+    op=prof.tell
+    intent=statement
+    emit="@{_} core.request action=prof.tell arg.kind=age arg.n={n}"
+    frames=stmt
+    skip=short
+    priority=10
+    kind=request
+    effect="records the age"
+
+@describe.age.n core.describe.arg
+    of=$describe.age
+    name=n
+    class=number
+
+@describe.age.en core.describe.words
+    of=$describe.age
+    lang=en
+    nosubject=true
+    verb=$w.en.i_am.prof.tell
+    verb=$w.en.im.prof.tell
+    verb=$w.en.i_just_turned.prof.tell
+    verb=$w.en.i_turned.prof.tell
+    unit.n=$w.en.years_old.prof.tell.n
+    unit.n=$w.en.year_old.prof.tell.n
+    unit.n=$w.en.years_of_age.prof.tell.n
+    unit.n=$w.en.years.prof.tell.n
+    sample.n=40
+    example="I am 40 years old."
+
+@describe.years core.describe
+    op=prof.tell
+    intent=statement
+    emit="@{_} core.request action=prof.tell arg.kind=years arg.n={n}"
+    frames=stmt
+    skip=short
+    priority=10
+    kind=request
+    effect="records the years of experience"
+
+@describe.years.n core.describe.arg
+    of=$describe.years
+    name=n
+    class=number
+
+@describe.years.en core.describe.words
+    of=$describe.years
+    lang=en
+    nosubject=true
+    verb=$w.en.i_have_worked_for.prof.tell
+    verb=$w.en.i_worked_for.prof.tell
+    verb=$w.en.i_have_been_working_for.prof.tell
+    unit.n=$w.en.years.prof.tell.n
+    unit.n=$w.en.year.prof.tell.n
+    sample.n=12
+    example="I have worked for 12 years."
+
+@describe.location core.describe
+    op=prof.tell
+    intent=statement
+    emit="@{_} core.request action=prof.tell arg.kind=location arg.city=\"{c}\""
+    frames=stmt
+    skip=short
+    priority=10
+    kind=request
+    effect="records where the user lives"
+
+@describe.location.c core.describe.arg
+    of=$describe.location
+    name=c
+    class=words
+    size=3
+
+@describe.location.en core.describe.words
+    of=$describe.location
+    lang=en
+    nosubject=true
+    verb=$w.en.i_live_in.prof.tell
+    verb=$w.en.i_am_based_in.prof.tell
+    verb=$w.en.i_am_from.prof.tell
+    verb=$w.en.i_come_from.prof.tell
+    verb=$w.en.i_am_living_in.prof.tell
+    verb=$w.en.i_moved_to.prof.tell
+    verb=$w.en.i_have_moved_to.prof.tell
+    verb=$w.en.i_just_moved_to.prof.tell
+    verb=$w.en.i_relocated_to.prof.tell
+    verb=$w.en.we_moved_to.prof.tell
+    verb=$w.en.i_now_live_in.prof.tell
+    sample.c=Berlin
+    example="I live in Berlin."
+
+@describe.name core.describe
+    op=prof.tell
+    intent=statement
+    emit="@{_} core.request action=prof.tell arg.kind=name arg.name=\"{n}\""
+    frames=stmt
+    skip=short
+    priority=10
+    kind=request
+    effect="records the name the user goes by"
+
+@describe.name.n core.describe.arg
+    of=$describe.name
+    name=n
+    class=words
+    size=2
+
+@describe.name.en core.describe.words
+    of=$describe.name
+    lang=en
+    nosubject=true
+    verb=$w.en.call_me.prof.tell
+    verb=$w.en.you_can_call_me.prof.tell
+    verb=$w.en.just_call_me.prof.tell
+    verb=$w.en.please_call_me.prof.tell
+    verb=$w.en.my_name_is.prof.tell
+    verb=$w.en.i_am_called.prof.tell
+    verb=$w.en.people_call_me.prof.tell
+    verb=$w.en.everyone_calls_me.prof.tell
+    verb=$w.en.i_go_by.prof.tell
+    sample.n=Andy
+    example="Call me Andy."
+
+@describe.role core.describe
+    op=prof.tell
+    intent=statement
+    emit="@{_} core.request action=prof.tell arg.kind=role arg.role={r}"
+    frames=stmt
+    skip=short
+    priority=10
+    kind=request
+    effect="records the role of the user"
+
+@describe.role.r core.describe.arg
+    of=$describe.role
+    name=r
+    class=lex.user.profile.roles
+
+@describe.role.en core.describe.words
+    of=$describe.role
+    lang=en
+    nosubject=true
+    verb=$w.en.i_am.prof.tell
+    verb=$w.en.im.prof.tell
+    verb=$w.en.i_work_as.prof.tell
+    verb=$w.en.i_work_as_a.prof.tell
+    verb=$w.en.i_am_working_as.prof.tell
+    det.r=$w.en.a.prof.tell.r
+    det.r=$w.en.an.prof.tell.r
+    sample.r=teacher
+    example="I am a teacher."
+
+@describe.edu core.describe
+    op=prof.tell
+    intent=statement
+    emit="@{_} core.request action=prof.tell arg.kind=edu arg.s={s}"
+    frames=stmt
+    skip=short
+    priority=10
+    kind=request
+    effect="records what the user studied"
+
+@describe.edu.s core.describe.arg
+    of=$describe.edu
+    name=s
+    class=lex.user.profile.subjects
+
+@describe.edu.en core.describe.words
+    of=$describe.edu
+    lang=en
+    nosubject=true
+    verb=$w.en.i_studied.prof.tell
+    verb=$w.en.i_study.prof.tell
+    verb=$w.en.i_majored_in.prof.tell
+    verb=$w.en.i_graduated_in.prof.tell
+    verb=$w.en.i_have_a_degree_in.prof.tell
+    verb=$w.en.i_hold_a_degree_in.prof.tell
+    verb=$w.en.i_got_a_degree_in.prof.tell
+    sample.s=physics
+    example="I studied physics."
+
+@describe.forget core.describe
+    op=prof.forget
+    intent=command
+    emit="@{_} core.request action=prof.forget arg.w={w}"
+    frames=ind
+    skip=short
+    priority=12
+    kind=request
+    effect="forgets one field of the profile"
+
+@describe.forget.w core.describe.arg
+    of=$describe.forget
+    name=w
+    class=lex.user.profile.fieldwords
+
+@describe.forget.en core.describe.words
+    of=$describe.forget
+    lang=en
+    verb=$w.en.forget.prof.forget
+    verb=$w.en.delete.prof.forget
+    verb=$w.en.remove.prof.forget
+    verb=$w.en.erase.prof.forget
+    verb=$w.en.clear.prof.forget
+    verb=$w.en.forget_about.prof.forget
+    det.w=$w.en.my.prof.forget.w
+    det.w=$w.en.the.prof.forget.w
+    sample.w=hobbies
+    example="Delete my hobbies."
+
+@describe.mention core.describe
+    op=prof.mention
+    intent=command
+    emit="@{_} core.request action=prof.mention arg.w={w}"
+    frames=ind
+    skip=short
+    priority=12
+    kind=request
+    effect="asks the user about one field"
+
+@describe.mention.w core.describe.arg
+    of=$describe.mention
+    name=w
+    class=lex.user.profile.fieldwords
+
+@describe.mention.en core.describe.words
+    of=$describe.mention
+    lang=en
+    verb=$w.en.ask_me_about.prof.mention
+    verb=$w.en.quiz_me_about.prof.mention
+    verb=$w.en.let_me_tell_you_about.prof.mention
+    det.w=$w.en.my.prof.mention.w
+    sample.w=hobbies
+    example="Ask me about my hobbies."
+
+@w.en.interview_me.prof.start core.word lang=en text="interview me" means=prof.start
+@w.en.ask_me_something.prof.start core.word lang=en text="ask me something" means=prof.start
+@w.en.ask_me_a_question.prof.start core.word lang=en text="ask me a question" means=prof.start
+@w.en.ask_me_anything.prof.start core.word lang=en text="ask me anything" means=prof.start
+@w.en.ask_me_some_questions.prof.start core.word lang=en text="ask me some questions" means=prof.start
+@w.en.get_to_know_me.prof.start core.word lang=en text="get to know me" means=prof.start
+@w.en.lets_get_to_know_me.prof.start core.word lang=en text="lets get to know me" means=prof.start
+@w.en.start_the_interview.prof.start core.word lang=en text="start the interview" means=prof.start
+@w.en.begin_the_interview.prof.start core.word lang=en text="begin the interview" means=prof.start
+@w.en.resume_the_interview.prof.start core.word lang=en text="resume the interview" means=prof.start
+@w.en.play_the_get_to_know_me_game.prof.start core.word lang=en text="play the get to know me game" means=prof.start
+@w.en.what_do_you_know_about_me.prof.know core.word lang=en text="what do you know about me" means=prof.know
+@w.en.what_have_you_learned_about_me.prof.know core.word lang=en text="what have you learned about me" means=prof.know
+@w.en.what_did_you_learn_about_me.prof.know core.word lang=en text="what did you learn about me" means=prof.know
+@w.en.what_did_i_tell_you_about_me.prof.know core.word lang=en text="what did i tell you about me" means=prof.know
+@w.en.tell_me_what_you_know_about_me.prof.know core.word lang=en text="tell me what you know about me" means=prof.know
+@w.en.show_me_what_you_know_about_me.prof.know core.word lang=en text="show me what you know about me" means=prof.know
+@w.en.what_is_in_my_profile.prof.know core.word lang=en text="what is in my profile" means=prof.know
+@w.en.delete_everything.prof.delete core.word lang=en text="delete everything" means=prof.delete
+@w.en.erase_everything.prof.delete core.word lang=en text="erase everything" means=prof.delete
+@w.en.wipe_everything.prof.delete core.word lang=en text="wipe everything" means=prof.delete
+@w.en.delete_all_my_data.prof.delete core.word lang=en text="delete all my data" means=prof.delete
+@w.en.erase_all_my_data.prof.delete core.word lang=en text="erase all my data" means=prof.delete
+@w.en.delete_everything_you_know_about_me.prof.delete core.word lang=en text="delete everything you know about me" means=prof.delete
+@w.en.delete_my_profile.prof.delete core.word lang=en text="delete my profile" means=prof.delete
+@w.en.erase_my_profile.prof.delete core.word lang=en text="erase my profile" means=prof.delete
+@w.en.wipe_my_profile.prof.delete core.word lang=en text="wipe my profile" means=prof.delete
+@w.en.reset_my_profile.prof.delete core.word lang=en text="reset my profile" means=prof.delete
+@w.en.how_much_do_you_know_about_me.prof.progress core.word lang=en text="how much do you know about me" means=prof.progress
+@w.en.how_far_are_we.prof.progress core.word lang=en text="how far are we" means=prof.progress
+@w.en.how_many_questions_are_left.prof.progress core.word lang=en text="how many questions are left" means=prof.progress
+@w.en.how_many_questions_left.prof.progress core.word lang=en text="how many questions left" means=prof.progress
+@w.en.stop_asking_me_questions.prof.pause core.word lang=en text="stop asking me questions" means=prof.pause
+@w.en.that_is_enough_questions.prof.pause core.word lang=en text="that is enough questions" means=prof.pause
+@w.en.no_more_questions.prof.pause core.word lang=en text="no more questions" means=prof.pause
+@w.en.stop_the_questions.prof.pause core.word lang=en text="stop the questions" means=prof.pause
+@w.en.pause_the_interview.prof.pause core.word lang=en text="pause the interview" means=prof.pause
+@w.en.stop_the_interview.prof.pause core.word lang=en text="stop the interview" means=prof.pause
+@w.en.end_the_interview.prof.pause core.word lang=en text="end the interview" means=prof.pause
+@w.en.stop_the_game.prof.pause core.word lang=en text="stop the game" means=prof.pause
+@w.en.export_my_cv.prof.export core.word lang=en text="export my cv" means=prof.export
+@w.en.download_my_cv.prof.export core.word lang=en text="download my cv" means=prof.export
+@w.en.save_my_cv.prof.export core.word lang=en text="save my cv" means=prof.export
+@w.en.get_my_cv.prof.export core.word lang=en text="get my cv" means=prof.export
+@w.en.export_my_resume.prof.export core.word lang=en text="export my resume" means=prof.export
+@w.en.download_my_resume.prof.export core.word lang=en text="download my resume" means=prof.export
+@w.en.export_my_profile_as_markdown.prof.export core.word lang=en text="export my profile as markdown" means=prof.export
+@w.en.download_my_profile_as_markdown.prof.export core.word lang=en text="download my profile as markdown" means=prof.export
+@w.en.export_my_profile_as_json.prof.export core.word lang=en text="export my profile as json" means=prof.export
+@w.en.download_my_profile_as_json.prof.export core.word lang=en text="download my profile as json" means=prof.export
+@w.en.save_my_profile_as_json.prof.export core.word lang=en text="save my profile as json" means=prof.export
+@w.en.export_my_profile_in_json.prof.export core.word lang=en text="export my profile in json" means=prof.export
+@w.en.get_my_profile_as_a_json_file.prof.export core.word lang=en text="get my profile as a json file" means=prof.export
+@w.en.where_do_i_live.prof.fieldOf core.word lang=en text="where do i live" means=prof.fieldOf
+@w.en.where_do_i_stay.prof.fieldOf core.word lang=en text="where do i stay" means=prof.fieldOf
+@w.en.where_am_i_from.prof.fieldOf core.word lang=en text="where am i from" means=prof.fieldOf
+@w.en.where_do_i_come_from.prof.fieldOf core.word lang=en text="where do i come from" means=prof.fieldOf
+@w.en.what_city_do_i_live_in.prof.fieldOf core.word lang=en text="what city do i live in" means=prof.fieldOf
+@w.en.which_city_do_i_live_in.prof.fieldOf core.word lang=en text="which city do i live in" means=prof.fieldOf
+@w.en.how_old_am_i.prof.fieldOf core.word lang=en text="how old am i" means=prof.fieldOf
+@w.en.what_is_my_age.prof.fieldOf core.word lang=en text="what is my age" means=prof.fieldOf
+@w.en.what_age_am_i.prof.fieldOf core.word lang=en text="what age am i" means=prof.fieldOf
+@w.en.do_you_know_how_old_i_am.prof.fieldOf core.word lang=en text="do you know how old i am" means=prof.fieldOf
+@w.en.i_am.prof.tell core.word lang=en text="i am" means=prof.tell
+@w.en.im.prof.tell core.word lang=en text=im means=prof.tell
+@w.en.i_just_turned.prof.tell core.word lang=en text="i just turned" means=prof.tell
+@w.en.i_turned.prof.tell core.word lang=en text="i turned" means=prof.tell
+@w.en.years_old.prof.tell.n core.word lang=en text="years old" means=prof.tell.n
+@w.en.year_old.prof.tell.n core.word lang=en text="year old" means=prof.tell.n
+@w.en.years_of_age.prof.tell.n core.word lang=en text="years of age" means=prof.tell.n
+@w.en.years.prof.tell.n core.word lang=en text=years means=prof.tell.n
+@w.en.i_have_worked_for.prof.tell core.word lang=en text="i have worked for" means=prof.tell
+@w.en.i_worked_for.prof.tell core.word lang=en text="i worked for" means=prof.tell
+@w.en.i_have_been_working_for.prof.tell core.word lang=en text="i have been working for" means=prof.tell
+@w.en.year.prof.tell.n core.word lang=en text=year means=prof.tell.n
+@w.en.i_live_in.prof.tell core.word lang=en text="i live in" means=prof.tell
+@w.en.i_am_based_in.prof.tell core.word lang=en text="i am based in" means=prof.tell
+@w.en.i_am_from.prof.tell core.word lang=en text="i am from" means=prof.tell
+@w.en.i_come_from.prof.tell core.word lang=en text="i come from" means=prof.tell
+@w.en.i_am_living_in.prof.tell core.word lang=en text="i am living in" means=prof.tell
+@w.en.i_moved_to.prof.tell core.word lang=en text="i moved to" means=prof.tell
+@w.en.i_have_moved_to.prof.tell core.word lang=en text="i have moved to" means=prof.tell
+@w.en.i_just_moved_to.prof.tell core.word lang=en text="i just moved to" means=prof.tell
+@w.en.i_relocated_to.prof.tell core.word lang=en text="i relocated to" means=prof.tell
+@w.en.we_moved_to.prof.tell core.word lang=en text="we moved to" means=prof.tell
+@w.en.i_now_live_in.prof.tell core.word lang=en text="i now live in" means=prof.tell
+@w.en.call_me.prof.tell core.word lang=en text="call me" means=prof.tell
+@w.en.you_can_call_me.prof.tell core.word lang=en text="you can call me" means=prof.tell
+@w.en.just_call_me.prof.tell core.word lang=en text="just call me" means=prof.tell
+@w.en.please_call_me.prof.tell core.word lang=en text="please call me" means=prof.tell
+@w.en.my_name_is.prof.tell core.word lang=en text="my name is" means=prof.tell
+@w.en.i_am_called.prof.tell core.word lang=en text="i am called" means=prof.tell
+@w.en.people_call_me.prof.tell core.word lang=en text="people call me" means=prof.tell
+@w.en.everyone_calls_me.prof.tell core.word lang=en text="everyone calls me" means=prof.tell
+@w.en.i_go_by.prof.tell core.word lang=en text="i go by" means=prof.tell
+@w.en.i_work_as.prof.tell core.word lang=en text="i work as" means=prof.tell
+@w.en.i_work_as_a.prof.tell core.word lang=en text="i work as a" means=prof.tell
+@w.en.i_am_working_as.prof.tell core.word lang=en text="i am working as" means=prof.tell
+@w.en.a.prof.tell.r core.word lang=en text=a means=prof.tell.r
+@w.en.an.prof.tell.r core.word lang=en text=an means=prof.tell.r
+@w.en.i_studied.prof.tell core.word lang=en text="i studied" means=prof.tell
+@w.en.i_study.prof.tell core.word lang=en text="i study" means=prof.tell
+@w.en.i_majored_in.prof.tell core.word lang=en text="i majored in" means=prof.tell
+@w.en.i_graduated_in.prof.tell core.word lang=en text="i graduated in" means=prof.tell
+@w.en.i_have_a_degree_in.prof.tell core.word lang=en text="i have a degree in" means=prof.tell
+@w.en.i_hold_a_degree_in.prof.tell core.word lang=en text="i hold a degree in" means=prof.tell
+@w.en.i_got_a_degree_in.prof.tell core.word lang=en text="i got a degree in" means=prof.tell
+@w.en.forget.prof.forget core.word lang=en text=forget means=prof.forget
+@w.en.delete.prof.forget core.word lang=en text=delete means=prof.forget
+@w.en.remove.prof.forget core.word lang=en text=remove means=prof.forget
+@w.en.erase.prof.forget core.word lang=en text=erase means=prof.forget
+@w.en.clear.prof.forget core.word lang=en text=clear means=prof.forget
+@w.en.forget_about.prof.forget core.word lang=en text="forget about" means=prof.forget
+@w.en.my.prof.forget.w core.word lang=en text=my means=prof.forget.w
+@w.en.the.prof.forget.w core.word lang=en text=the means=prof.forget.w
+@w.en.ask_me_about.prof.mention core.word lang=en text="ask me about" means=prof.mention
+@w.en.quiz_me_about.prof.mention core.word lang=en text="quiz me about" means=prof.mention
+@w.en.let_me_tell_you_about.prof.mention core.word lang=en text="let me tell you about" means=prof.mention
+@w.en.my.prof.mention.w core.word lang=en text=my means=prof.mention.w

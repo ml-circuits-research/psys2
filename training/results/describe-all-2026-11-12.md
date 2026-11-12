@@ -1,0 +1,191 @@
+# DESCRIBE-ALL for the conversation worlds (2026-11-12)
+
+One section per world, appended as each description lands. Method: `PSYS_GEN_PATTERNS=add|only`, `scripts/e1-collect.mjs --mode rules --sets operational,dialogues`, compared with `scripts/e3-compare.mjs`; base is the default (hand-written only) run. Gate: no new wrong answer in `add`. In `only` the baseline for "all worlds" is an `only` run without the world's description.
+
+## Summary (audited world rows of the operational and dialogue sets together, rules mode)
+
+| world | descriptions | generated (add) | hand-written dropped by only | needed by a lost case | add: new wrong | only: right (base to gen) | only: wrong (base to gen) |
+|---|---:|---:|---:|---:|---:|---|---|
+| kids.arith | 28 | 53 | 264 | 17 | 0 | 256 to 232 | 3 to 10 |
+| kids.tasks | 18 | 42 | 228 | 11 | 0 | 82 to 65 | 5 to 10 |
+| kids.time | 27 | 27 | 388 | 12 | 0 | 148 to 126 | 3 to 6 |
+| kids.animals | 22 | 22 | 261 | 9 | 0 | 136 to 127 | 3 to 5 |
+| kids.shapes | 16 | 16 | 153 | 6 | 0 | 99 to 88 | 7 to 7 |
+| user.profile | 17 | 17 | 60 | 13 | 0 | 218 to 193 | 7 to 23 |
+
+The gate (no new wrong answer in `add`) holds for all six worlds after the fixes noted in each section. In `only` every hand-written pattern of a described operation is dropped, so the loss column measures how much of the hand-written coverage the description does not yet state; the per-world sections list the gaps. Descriptions are most useful where the hand-written patterns are many near-copies of one phrase family (arithmetic statements and questions, animals and shapes question families) and least where a free-text slot or discourse context carries the meaning (tasks, profile).
+
+## kids.arith
+
+- Descriptions: 28; generated patterns (add): 53.
+- Hand-written patterns of the described operations: 264 (pattern wires; shapes are separate). `only` drops 264.
+- Hand-written patterns dropped by `only`: 264, replaced by 53 generated ones. Of the dropped, 17 were the reading of at least one set case that got worse (the description misses what they said); the other 247 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 1145, dropped patterns about 1320.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 143/2/0 of 145 | 143/2/0 of 145 | 113/1/3 of 117 | 114/1/2 of 117 |
+| only | 143/2/0 of 145 | 124/4/17 of 145 | 113/1/3 of 117 | 108/6/3 of 117 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"right->not_understood":17,"partly->not_understood":1,"right->wrong":8,"not_understood->right":1}.
+
+Description gaps that cost cases in `only` (what the hand-written patterns say and the description cannot):
+
+- **Reversed or non-adjacent operand order**: "take 7 away from 16", "subtract 6 from 20", "2 less than 6" (the description must not claim `less than`: it reverses the operands, an early draft of it gave a new wrong answer in `add` and was removed).
+- **Symbols and chains**: `/`, `-`, `*` are not SOP atoms, so "8 / 2", "14 - 8", "3*4" stay hand-written; chained arithmetic ("7 plus 5 minus 2") and "squared" have no description.
+- **Two statements in one sentence** ("Ben has 12 marbles and loses 5", "gives away 6", "Tom has 2 apples and Ana has 3", "gives 3 of his pears"): needs a multi-wire emit with a second subject; descriptions state one operation per wire.
+- **Hand-written shapes that already cover the phrase** ("how many pears does Ana have now?" variants with typos, "if i add eight and seven what do i get" through a shape with a lead-in).
+- Added to the description after the first run: the omitted-item forms ("Tom eats 3", "Tom gets 3 more": item resolved by `recent(...)`, which the class of an argument can carry as it is), "whats left for Mia", "they/we" totals, the `to` order of give, and the new generic frame `askpred` ("what is 6 plus 3": opener, first argument, verb, second argument).
+- Not found in the sets but visible in the generated patterns: optional words (`prep`, `unit`) are always optional, so an operand pair with an optional operator word reads "6 3"; the calc description therefore puts the operator words in `verb` (mandatory) and uses `pred` / `askpred`.
+
+
+## kids.tasks
+
+- Descriptions: 18; generated patterns (add): 42.
+- Hand-written patterns of the described operations: 231 (pattern wires; shapes are separate). `only` drops 228.
+- Hand-written patterns dropped by `only`: 228, replaced by 42 generated ones. Of the dropped, 11 were the reading of at least one set case that got worse (the description misses what they said); the other 217 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 677, dropped patterns about 1140.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 34/3/1 of 38 | 34/3/1 of 38 | 48/2/1 of 51 | 48/2/1 of 51 |
+| only | 34/3/1 of 38 | 25/5/8 of 38 | 48/2/1 of 51 | 40/5/6 of 51 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"wrong->right":2,"right->wrong":8,"right->not_understood":13,"wrong->not_understood":1}.
+
+Description gaps that cost cases in `only`:
+
+- **Optional completing words cannot be made mandatory.** `rest`, `prep`, `unit` and `tverb` are always optional in the generated pattern, so a form whose only anchor is a trailing word ("why is X done", "is X done", "is X on my list" without a list name, "add X to my list") would match any sentence with a free-text argument. Those forms stay hand-written. The first draft had a bare "add X" and `short` frames for the free-text commands; they stole sentences from other worlds in `add` ("add bananas 4 then remove pears", "ok thanks" as a reminder, "What is 7 times 8?" as a reminder), so every description here has `skip=short` and the bare form is not described.
+- **The default list (no name given).** The hand-written patterns emit `arg.list=to-do` (or none, or `assumed=true`) depending on the form; a description states one emit per wire and every form of "add X" would share it, so only the forms with a named list (a lexicon of list names, `lex.kids.tasks.listnames`) are described.
+- **Free-text list names** ("my birthday party list") need `{list:words}` followed by the mandatory word "list"; the generator has no mandatory trailing word, so only the lexicon of list names is used.
+- **Discourse forms**: "cross milk off", "what is still on it?", "any reminders for me?", pronoun and ellipsis follow-ups, which the hand-written patterns express with `recent(...)` and context slots.
+- Added after the first run: the two question forms of show and pending ("what is on my shopping list", "what is still on my shopping list") and the `asn` frame for "mark X as done".
+
+
+## kids.time
+
+- Descriptions: 27; generated patterns (add): 27.
+- Hand-written patterns of the described operations: 401 (pattern wires; shapes are separate). `only` drops 388.
+- Hand-written patterns dropped by `only`: 388, replaced by 27 generated ones. Of the dropped, 12 were the reading of at least one set case that got worse (the description misses what they said); the other 377 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 932, dropped patterns about 1940.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 93/3/1 of 97 | 93/3/1 of 97 | 55/0/2 of 57 | 55/0/2 of 57 |
+| only | 93/3/1 of 97 | 78/6/13 of 97 | 55/0/2 of 57 | 48/0/9 of 57 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"right->not_understood":1,"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"right->not_understood":20,"right->wrong":3}.
+
+Description gaps that cost cases in `only`:
+
+- **Discourse and ellipsis** (the largest loss): "and the day after that", "and 5 days before Wednesday?", "and before March?", "and minutes in an hour?", "ok what day was the day before Wednesday" (a filler lead plus a context slot). The hand-written patterns take their anchor from the previous turn (`recent(...)`, the `sw.*` short-word forms); a description states a complete sentence of one operation.
+- **Conditional forms** ("If it is 3 o'clock, what time will it be in 2 hours?", "what is the day after tomorrow if today is Monday", "how many days till Sunday if its Thursday"): the `cond` frame needs a verb and an argument order the clock and gap operations do not use; they are not described.
+- **Words that stand for a value**: "tomorrow", "today", "this month" map to literal emit values (`where.from=today`), one emit per wire, so each would be its own description; only the weekday / month / season lexicons and the numbers are described.
+- Some phrasings need a part-specific `has` verb ("how many hours does a day have"): the generated `length` forms put `have` nowhere because a trailing verb is optional and sits after the arguments.
+- Noise: the add runs show one right to not-understood and one not-understood to right on both sides of the comparison that does not involve this world's patterns (cases of other worlds); they are timing-dependent in the baseline too.
+
+
+## kids.animals
+
+- Descriptions: 22; generated patterns (add): 22.
+- Hand-written patterns of the described operations: 265 (pattern wires; shapes are separate). `only` drops 261.
+- Hand-written patterns dropped by `only`: 261, replaced by 22 generated ones. Of the dropped, 9 were the reading of at least one set case that got worse (the description misses what they said); the other 252 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 767, dropped patterns about 1305.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 77/3/0 of 80 | 77/3/0 of 80 | 59/0/0 of 59 | 59/0/0 of 59 |
+| only | 77/3/0 of 80 | 68/5/7 of 80 | 59/0/0 of 59 | 59/0/0 of 59 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"right->wrong":4,"right->not_understood":7}.
+
+Description gaps that cost cases in `only` (9 distinct hand-written patterns carried a lost case):
+
+- **Free-text slots must be anchored by a closed word list.** An open `noun` slot with only optional trailing words matches any sentence ("what is my name" became a pet question, "what is the weather today" a covering question in an early draft; both stole sentences in `add`). The descriptions therefore use the lexicons (`lex.kids.animals.names`, `kinds`, `classes`, `abilities`, `babies`, `diets`) wherever the hand-written pattern had a bare `noun`, and drop the open forms ("what is X covered in" without the verb).
+- **Verb variants and typos** the lexicon of verbs does not list: "how many legs has a spider", "where does a camel come from", "how is my pet called", "info on dolphins pls", "swimming bird please" (a participle before a class noun), "do dolphins breathe air or are they fish" (a two-option question).
+- **Reversed forms** ("a spider, how many legs?") and the stand-alone noun phrase forms (the `short` / `rev` / `bare` frames are skipped on purpose: a lone noun phrase is the most ambiguous input across the worlds).
+- **Plural / singular of the animal name**: `x.legs.walks`, `desc.f1` read "dolphins" through the `noun` class and its plural handling, which the lexicon class does not apply.
+- The question types `kids.animals.animal` and `kids.animals.pet` have no statement operations, so no statement descriptions were needed.
+
+
+## kids.shapes
+
+- Descriptions: 16; generated patterns (add): 16.
+- Hand-written patterns of the described operations: 153 (pattern wires; shapes are separate). `only` drops 153.
+- Hand-written patterns dropped by `only`: 153, replaced by 16 generated ones. Of the dropped, 6 were the reading of at least one set case that got worse (the description misses what they said); the other 147 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 601, dropped patterns about 765.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 56/5/1 of 62 | 56/5/1 of 62 | 43/2/0 of 45 | 43/2/0 of 45 |
+| only | 56/5/1 of 62 | 48/5/9 of 62 | 43/2/0 of 45 | 40/2/3 of 45 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"right->not_understood":12}.
+
+Description gaps that cost cases in `only` (6 distinct hand-written patterns carried a lost case):
+
+- **Subject-first and verb-last phrasing**: "mixing yellow and blue gives what colour", "tell me what a rectangle is" (an embedded question), "name something that looks like a rectangle". The `ask` frame puts the opener first; the generator has no frame that closes with a question word.
+- **Adjective forms without a kind word** ("is a circle round": the hand pattern reads `round` as the kind `round_shape`), "how is a circle different from other shapes" (a comparison operation with no argument).
+- **Noun variants of a modifier** ("how do i make orange paint": a trailing noun after the color).
+- **Closed lexicons carry the whole load**: every description anchors its free slots with a `lex.kids.shapes.*` class (shapes, things, colors, parts, kinds, colorkinds), as the hand-written patterns do for the same reason; there are no `noun` slots, so nothing steals a sentence from another world (add: 0 new wrong, 0 not-understood).
+- No `short`, `rev` or `bare` frames (a bare "circle sides" is the most ambiguous input across worlds).
+
+
+## user.profile
+
+- Descriptions: 17; generated patterns (add): 17.
+- Hand-written patterns of the described operations: 71 (pattern wires; shapes are separate). `only` drops 60.
+- Hand-written patterns dropped by `only`: 60, replaced by 17 generated ones. Of the dropped, 13 were the reading of at least one set case that got worse (the description misses what they said); the other 48 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 553, dropped patterns about 300.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | no cases | no cases | 218/7/5 of 230 | 218/7/5 of 230 |
+| only | no cases | no cases | 218/7/5 of 230 | 193/23/14 of 230 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"partly->not_understood":1,"right->wrong":18,"right->not_understood":9}.
+
+Notes on this world: the operational set has no user.profile case (the audited rows are the dialogue set only, 230 turns); most of the world is `prof.tell` statements whose arguments are free text or whose phrases the hand-written patterns build from the shared `lang.self.*` groups.
+
+Description gaps that cost cases in `only` (13 distinct hand-written patterns carried a lost case):
+
+- **The `know` question, the largest loss** ("What do you know about me?", 6 cases): the generated `ask` pattern is read, but the hand-written one carries `priority=14` and the generated patterns a lower default; with the hand pattern gone, shared patterns of other worlds (`kids.common` "what is my name" style) win. Descriptions cannot yet say that a pattern must outrank a neighbour's, only give it a number.
+- **Statements about the user that other worlds also read**: "Forget my name" (a `kids.common` pattern wins), "where do I live" (`geo.map.locate`), "I use pyhton and SQL" (a hangman pattern), "I have two kids" (an art.draw pattern). The hand patterns win only by priority; a statement of fact with an optional unit word has no anchor of its own.
+- **Optional unit words**: "I am 40", "I have 2" would match without "years old" / "kids" (a unit is an optional word), so `age`, `years` and `children` are described only with their anchor verbs ("i have worked for N", "i am N years old") and the bare forms stay hand-written. The first draft had "I have been teaching for N years" without the verb argument the hand pattern keeps (`arg.v`), which gave a new wrong answer in `add` and was removed.
+- **Lists and conjunctions** ("I love hiking and jazz", "I use Python and SQL", "I use A, B and C"): a description has one wire per argument count and a free-text list element; not described.
+- **Trailing qualifiers** ("I studied physics at Cluj": the organisation argument), "I work for myself", `my age is N`, "coming back to knowing me ...".
+- Not described: `likes`, `learn`, `lang`, `interests`, `tools`, `field`, `pref`, `previous`, `rolefield`, `sensitive` and the "fix" variants (corrections with `arg.fix=true`), because each needs a free-text slot or a conjunction (see above); the 17 descriptions cover start, know, delete, progress, pause, export (md, json), fieldOf (location, age), forget, mention, and the name, age, years, location, role and edu statements.
+
+
+## Size ratio (coordinator's request: compactness, not memorization)
+
+Lines of `describe.sop` (core.word wires in brackets) against lines of the hand-written `patterns.sop` (already macro-compressed by `migrate-macros`, so the ratio understates the saving against raw pattern text).
+
+| world | describe.sop lines | core.word wires | patterns.sop lines | ratio |
+|---|---:|---:|---:|---:|
+| kids.arith | 1144 | 162 | 1906 | 0.60 |
+| kids.tasks | 676 | 142 | 1665 | 0.41 |
+| kids.time | 931 | 129 | 2623 | 0.35 |
+| kids.animals | 766 | 130 | 1919 | 0.40 |
+| kids.shapes | 600 | 109 | 1120 | 0.54 |
+| user.profile | 552 | 119 | 547 | 1.01 |
+
+Five worlds are well under parity and the free slots reference the world's lexicons (`lex.kids.*`) and the generator's frames, not enumerated sentences. The compact form still repeats a word once per operation (a `core.word` wire is per op: `means` names the op), so a verb shared by seven statements is seven wires; the library cannot yet share a word across ops. user.profile reaches parity only by listing whole phrases ("what do you know about me", "delete my profile"), which is memorization in another form: those multi-word openers are the gap to report, not to grow; the sound fix is a shared phrase group in `lang.common` per intent (profile questions, export, interview) referenced by the description instead of a `core.word` per phrase.

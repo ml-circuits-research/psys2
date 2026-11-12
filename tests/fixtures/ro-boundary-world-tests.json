@@ -1,0 +1,160 @@
+[
+ {
+  "world": "kids.arith",
+  "id": "t.arith.coh11",
+  "session": "coh11",
+  "input": "Tom are 5 mere. Ana îi dă câteva. Câte mere are Tom?",
+  "expect": [
+   "Tom has more than 5 apples"
+  ]
+ },
+ {
+  "world": "kids.arith",
+  "id": "t.arith.coh12",
+  "session": "coh12",
+  "input": "Tom a avut niște mere. El a mâncat 2 și acum are 3. Câte mere a avut Tom la început?",
+  "expect": [
+   "Tom had 5 apples at first."
+  ]
+ },
+ {
+  "world": "kids.arith",
+  "id": "t.arith.coh13a",
+  "session": "coh13",
+  "input": "Tom are 5 mere. Ana îi dă lui Tom 3 mere.",
+  "expect": [
+   "Ana i-a dat lui Tom 3 mere"
+  ]
+ },
+ {
+  "world": "kids.arith",
+  "id": "t.arith.coh13b",
+  "session": "coh13",
+  "input": "Nu, ea îi dă 4.",
+  "expect": [
+   "Ana i-a dat lui Tom 4 mere"
+  ]
+ },
+ {
+  "world": "kids.arith",
+  "id": "t.arith.coh13c",
+  "session": "coh13",
+  "input": "Câte mere are Tom?",
+  "expect": [
+   "Tom has 9 apples."
+  ]
+ },
+ {
+  "world": "kids.arith",
+  "id": "t.arith.coh14",
+  "session": "coh14",
+  "input": "Tom are 5 mere. Ana are 5 mere. Cine are mai multe mere?",
+  "expect": [
+   "They have the same"
+  ]
+ },
+ {
+  "world": "kids.arith",
+  "id": "t.arith.coh15",
+  "session": "coh15",
+  "input": "Tom are 3 mere. Tom mănâncă 5 mere.",
+  "expect": [
+   "Tom nu poate mânca 5."
+  ],
+  "expectStatus": "conflicting"
+ },
+ {
+  "world": "user.profile",
+  "id": "t.user.profile.m19",
+  "session": "pw3",
+  "input": "Locuiesc în Cluj.",
+  "expectState": [
+   "fields.location.v=Cluj"
+  ],
+  "reasoner": "matrix"
+ },
+ {
+  "world": "user.profile",
+  "id": "t.user.profile.m20",
+  "session": "pw3",
+  "input": "De ce?",
+  "expect": [
+   "Am notat Cluj la",
+   "Locuiesc în Cluj"
+  ],
+  "reasoner": "matrix"
+ },
+ {
+  "world": "kids.shop",
+  "id": "t.shop.coh08",
+  "session": "coh8",
+  "input": "Am 20 de lei. Cumpăr 2 zmeie.",
+  "expect": [
+   "ai cumpărat 2 zmeie"
+  ]
+ },
+ {
+  "world": "kids.shop",
+  "id": "t.shop.coh08b",
+  "session": "coh8",
+  "input": "De ce nu mai am nimic?",
+  "expect": [
+   "nu a rămas nimic"
+  ]
+ },
+ {
+  "world": "kids.shop",
+  "id": "t.shop.coh09",
+  "session": "coh9",
+  "input": "Am 10 lei. Cumpăr o carte.",
+  "expect": [
+   "nu poți cheltui 12 lei"
+  ],
+  "expectStatus": "conflicting"
+ },
+ {
+  "world": "kids.shop",
+  "id": "t.shop.coh10",
+  "session": "coh10",
+  "input": "Am 20 de lei. Cumpăr ceva.",
+  "expect": [
+   "What do you want to buy?"
+  ]
+ },
+ {
+  "world": "kids.tasks",
+  "id": "t.tasks.coh10",
+  "session": "coh10",
+  "input": "Adaugă pe lista mea de cumpărături.",
+  "expect": [
+   "What shall I add to your shopping list?"
+  ]
+ },
+ {
+  "world": "kids.tasks",
+  "id": "t.tasks.coh11",
+  "session": "coh11",
+  "input": "Adaugă lapte pe lista mea.",
+  "expect": [
+   "I added milk to your to-do list."
+  ]
+ },
+ {
+  "world": "kids.tasks",
+  "id": "t.tasks.coh12",
+  "session": "coh11",
+  "input": "Nu, pe lista mea de cumpărături.",
+  "expect": [
+   "I added milk to your shopping list."
+  ]
+ },
+ {
+  "world": "kids.tasks",
+  "id": "t.tasks.coh13",
+  "session": "coh11",
+  "input": "Pe ce listă ai pus?",
+  "expect": [
+   "I put milk on your shopping list."
+  ]
+ }
+]

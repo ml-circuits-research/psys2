@@ -1,0 +1,676 @@
+@describe.add.list core.describe
+    op=tasks.add
+    intent=command
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
+    skip=short
+    priority=10
+    effect="adds an item to a named list"
+
+@describe.add.list.item core.describe.arg
+    of=$describe.add.list
+    name=item
+    class=words
+
+@describe.add.list.list core.describe.arg
+    of=$describe.add.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.add.list.en core.describe.words
+    of=$describe.add.list
+    lang=en
+    nosubject=true
+    verb=$w.en.add.tasks.add
+    verb=$w.en.put.tasks.add
+    verb=$w.en.write.tasks.add
+    verb=$w.en.append.tasks.add
+    verb=$w.en.include.tasks.add
+    verb=$w.en.insert.tasks.add
+    verb=$w.en.stick.tasks.add
+    rest=$w.en.list.tasks.add
+    prep.list=$w.en.to.tasks.add.list
+    prep.list=$w.en.on.tasks.add.list
+    prep.list=$w.en.in.tasks.add.list
+    prep.list=$w.en.onto.tasks.add.list
+    det.list=$w.en.my.tasks.add.list
+    det.list=$w.en.the.tasks.add.list
+    det.list=$w.en.our.tasks.add.list
+    sample.item=milk
+    sample.list=shopping
+    example="Add milk to my shopping list."
+
+@describe.done.list core.describe
+    op=tasks.done
+    intent=command
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\" arg.list=\"{list}\""
+    skip=short
+    priority=10
+    effect="marks an item of a named list as done"
+
+@describe.done.list.item core.describe.arg
+    of=$describe.done.list
+    name=item
+    class=words
+
+@describe.done.list.list core.describe.arg
+    of=$describe.done.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.done.list.en core.describe.words
+    of=$describe.done.list
+    lang=en
+    nosubject=true
+    verb=$w.en.tick_off.tasks.done
+    verb=$w.en.cross_off.tasks.done
+    verb=$w.en.check_off.tasks.done
+    rest=$w.en.list.tasks.done
+    prep.list=$w.en.on.tasks.done.list
+    prep.list=$w.en.from.tasks.done.list
+    prep.list=$w.en.in.tasks.done.list
+    det.list=$w.en.my.tasks.done.list
+    det.list=$w.en.the.tasks.done.list
+    det.list=$w.en.our.tasks.done.list
+    sample.item=milk
+    sample.list=shopping
+    example="Tick off milk on my shopping list."
+
+@describe.done.item core.describe
+    op=tasks.done
+    intent=command
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    skip=short
+    priority=9
+    effect="marks an item as done"
+
+@describe.done.item.item core.describe.arg
+    of=$describe.done.item
+    name=item
+    class=words
+
+@describe.done.item.en core.describe.words
+    of=$describe.done.item
+    lang=en
+    nosubject=true
+    verb=$w.en.tick_off.tasks.done
+    verb=$w.en.cross_off.tasks.done
+    verb=$w.en.check_off.tasks.done
+    sample.item=milk
+    sample.list=shopping
+    example="Tick off milk."
+
+@describe.done.asn core.describe
+    op=tasks.done
+    intent=command
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    frames=asn
+    skip=short
+    priority=10
+    effect="marks an item as done"
+
+@describe.done.asn.item core.describe.arg
+    of=$describe.done.asn
+    name=item
+    class=words
+
+@describe.done.asn.en core.describe.words
+    of=$describe.done.asn
+    lang=en
+    nosubject=true
+    verb=$w.en.mark.tasks.done
+    noun=$w.en.done.tasks.done
+    noun=$w.en.finished.tasks.done
+    noun=$w.en.completed.tasks.done
+    noun=$w.en.complete.tasks.done
+    sample.item=milk
+    sample.list=shopping
+    example="Mark milk as done."
+
+@describe.remove.list core.describe
+    op=tasks.remove
+    intent=command
+    emit="@{_} core.request action=tasks.remove arg.item=\"{item}\" arg.list=\"{list}\""
+    skip=short
+    priority=10
+    effect="removes an item from a named list"
+
+@describe.remove.list.item core.describe.arg
+    of=$describe.remove.list
+    name=item
+    class=words
+
+@describe.remove.list.list core.describe.arg
+    of=$describe.remove.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.remove.list.en core.describe.words
+    of=$describe.remove.list
+    lang=en
+    nosubject=true
+    verb=$w.en.remove.tasks.remove
+    verb=$w.en.delete.tasks.remove
+    verb=$w.en.drop.tasks.remove
+    verb=$w.en.erase.tasks.remove
+    verb=$w.en.scratch.tasks.remove
+    rest=$w.en.list.tasks.remove
+    prep.list=$w.en.from.tasks.remove.list
+    prep.list=$w.en.off.tasks.remove.list
+    prep.list=$w.en.on.tasks.remove.list
+    det.list=$w.en.my.tasks.remove.list
+    det.list=$w.en.the.tasks.remove.list
+    det.list=$w.en.our.tasks.remove.list
+    sample.item=milk
+    sample.list=shopping
+    example="Remove milk from my shopping list."
+
+@describe.clear.list core.describe
+    op=tasks.clear
+    intent=command
+    emit="@{_} core.request action=tasks.clear arg.list=\"{list}\""
+    skip=short
+    priority=10
+    effect="empties a named list"
+
+@describe.clear.list.list core.describe.arg
+    of=$describe.clear.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.clear.list.en core.describe.words
+    of=$describe.clear.list
+    lang=en
+    nosubject=true
+    verb=$w.en.clear.tasks.clear
+    verb=$w.en.empty.tasks.clear
+    verb=$w.en.wipe.tasks.clear
+    rest=$w.en.list.tasks.clear
+    prep.list=$w.en.of.tasks.clear.list
+    prep.list=$w.en.on.tasks.clear.list
+    det.list=$w.en.my.tasks.clear.list
+    det.list=$w.en.the.tasks.clear.list
+    det.list=$w.en.our.tasks.clear.list
+    sample.item=milk
+    sample.list=shopping
+    example="Clear my shopping list."
+
+@describe.show.list core.describe
+    op=tasks.show
+    intent=command
+    emit="@{_} core.request action=tasks.show arg.list=\"{list}\""
+    skip=short
+    priority=10
+    effect="shows the items of a named list"
+
+@describe.show.list.list core.describe.arg
+    of=$describe.show.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.show.list.en core.describe.words
+    of=$describe.show.list
+    lang=en
+    nosubject=true
+    verb=$w.en.show.tasks.show
+    verb=$w.en.read.tasks.show
+    verb=$w.en.open.tasks.show
+    verb=$w.en.display.tasks.show
+    verb=$w.en.view.tasks.show
+    rest=$w.en.list.tasks.show
+    prep.list=$w.en.of.tasks.show.list
+    prep.list=$w.en.on.tasks.show.list
+    det.list=$w.en.my.tasks.show.list
+    det.list=$w.en.the.tasks.show.list
+    det.list=$w.en.our.tasks.show.list
+    sample.item=milk
+    sample.list=shopping
+    example="Show my shopping list."
+
+@describe.pending.list core.describe
+    op=tasks.pending
+    intent=command
+    emit="@{_} core.request action=tasks.pending arg.list=\"{list}\""
+    skip=short
+    priority=10
+    effect="shows the items of a named list that are not done yet"
+
+@describe.pending.list.list core.describe.arg
+    of=$describe.pending.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.pending.list.en core.describe.words
+    of=$describe.pending.list
+    lang=en
+    nosubject=true
+    verb=$w.en.show_what_is_left_on.tasks.pending
+    verb=$w.en.read_what_is_left_on.tasks.pending
+    verb=$w.en.tell_me_what_is_left_on.tasks.pending
+    verb=$w.en.show_what_is_still_on.tasks.pending
+    rest=$w.en.list.tasks.pending
+    prep.list=$w.en.of.tasks.pending.list
+    prep.list=$w.en.on.tasks.pending.list
+    det.list=$w.en.my.tasks.pending.list
+    det.list=$w.en.the.tasks.pending.list
+    det.list=$w.en.our.tasks.pending.list
+    sample.item=milk
+    sample.list=shopping
+    example="Show what is left on my shopping list."
+
+@describe.show.ask core.describe
+    op=tasks.show
+    intent=query
+    emit="@{_} core.request action=tasks.show arg.list=\"{list}\""
+    frames=ask
+    skip=short
+    priority=10
+    effect="shows the items of a named list"
+
+@describe.show.ask.list core.describe.arg
+    of=$describe.show.ask
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.show.ask.en core.describe.words
+    of=$describe.show.ask
+    lang=en
+    ask=$w.en.what_is_on.tasks.show
+    ask=$w.en.what_are_on.tasks.show
+    ask=$w.en.what_is_in.tasks.show
+    ask=$w.en.what_is_there_on.tasks.show
+    ask=$w.en.whats_on.tasks.show
+    rest=$w.en.list.tasks.show
+    det.list=$w.en.my.tasks.show.list
+    det.list=$w.en.the.tasks.show.list
+    det.list=$w.en.our.tasks.show.list
+    sample.item=milk
+    sample.list=shopping
+    example="What is on my shopping list?"
+
+@describe.pending.ask core.describe
+    op=tasks.pending
+    intent=query
+    emit="@{_} core.request action=tasks.pending arg.list=\"{list}\""
+    frames=ask
+    skip=short
+    priority=10
+    effect="shows the items of a named list that are not done yet"
+
+@describe.pending.ask.list core.describe.arg
+    of=$describe.pending.ask
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.pending.ask.en core.describe.words
+    of=$describe.pending.ask
+    lang=en
+    ask=$w.en.what_is_still_on.tasks.pending
+    ask=$w.en.what_is_left_on.tasks.pending
+    ask=$w.en.what_is_remaining_on.tasks.pending
+    ask=$w.en.what_else_is_on.tasks.pending
+    ask=$w.en.whats_left_on.tasks.pending
+    rest=$w.en.list.tasks.pending
+    det.list=$w.en.my.tasks.pending.list
+    det.list=$w.en.the.tasks.pending.list
+    det.list=$w.en.our.tasks.pending.list
+    sample.item=milk
+    sample.list=shopping
+    example="What is still on my shopping list?"
+
+@describe.count.list core.describe
+    op=tasks.count
+    intent=query
+    emit="@{_} core.request action=tasks.count arg.list=\"{list}\""
+    frames=ask
+    skip=short
+    priority=10
+    effect="counts the items of a named list"
+
+@describe.count.list.list core.describe.arg
+    of=$describe.count.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.count.list.en core.describe.words
+    of=$describe.count.list
+    lang=en
+    ask=$w.en.how_many_things_are.tasks.count
+    ask=$w.en.how_many_items_are.tasks.count
+    ask=$w.en.how_many_tasks_are.tasks.count
+    rest=$w.en.list.tasks.count
+    prep.list=$w.en.on.tasks.count.list
+    prep.list=$w.en.in.tasks.count.list
+    det.list=$w.en.my.tasks.count.list
+    det.list=$w.en.the.tasks.count.list
+    det.list=$w.en.our.tasks.count.list
+    sample.item=milk
+    sample.list=shopping
+    example="How many things are on my shopping list?"
+
+@describe.countpending.list core.describe
+    op=tasks.countPending
+    intent=query
+    emit="@{_} core.request action=tasks.countPending arg.list=\"{list}\""
+    frames=ask
+    skip=short
+    priority=10
+    effect="counts the items of a named list that are not done yet"
+
+@describe.countpending.list.list core.describe.arg
+    of=$describe.countpending.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.countpending.list.en core.describe.words
+    of=$describe.countpending.list
+    lang=en
+    ask=$w.en.how_many_things_are_left.tasks.countPending
+    ask=$w.en.how_many_items_are_left.tasks.countPending
+    ask=$w.en.how_many_tasks_are_left.tasks.countPending
+    ask=$w.en.how_many_things_are_still.tasks.countPending
+    rest=$w.en.list.tasks.countPending
+    prep.list=$w.en.on.tasks.countPending.list
+    prep.list=$w.en.in.tasks.countPending.list
+    det.list=$w.en.my.tasks.countPending.list
+    det.list=$w.en.the.tasks.countPending.list
+    det.list=$w.en.our.tasks.countPending.list
+    sample.item=milk
+    sample.list=shopping
+    example="How many things are left on my shopping list?"
+
+@describe.has.list core.describe
+    op=tasks.has
+    intent=query
+    emit="@{_} core.request action=tasks.has arg.item=\"{item}\" arg.list=\"{list}\""
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers whether an item is on a named list"
+
+@describe.has.list.item core.describe.arg
+    of=$describe.has.list
+    name=item
+    class=words
+
+@describe.has.list.list core.describe.arg
+    of=$describe.has.list
+    name=list
+    class=lex.kids.tasks.listnames
+
+@describe.has.list.en core.describe.words
+    of=$describe.has.list
+    lang=en
+    ask=$w.en.is.tasks.has
+    ask=$w.en.are.tasks.has
+    ask=$w.en.do_i_have.tasks.has
+    ask=$w.en.did_i_put.tasks.has
+    rest=$w.en.list.tasks.has
+    prep.list=$w.en.on.tasks.has.list
+    prep.list=$w.en.in.tasks.has.list
+    det.list=$w.en.my.tasks.has.list
+    det.list=$w.en.the.tasks.has.list
+    det.list=$w.en.our.tasks.has.list
+    sample.item=milk
+    sample.list=shopping
+    example="Is milk on my shopping list?"
+
+@describe.remind core.describe
+    op=tasks.remind
+    intent=command
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    skip=short
+    priority=10
+    effect="adds a reminder"
+
+@describe.remind.item core.describe.arg
+    of=$describe.remind
+    name=item
+    class=words
+
+@describe.remind.en core.describe.words
+    of=$describe.remind
+    lang=en
+    nosubject=true
+    verb=$w.en.remind_me_to.tasks.remind
+    verb=$w.en.remind_me_about.tasks.remind
+    verb=$w.en.remind_me_of.tasks.remind
+    verb=$w.en.set_a_reminder_to.tasks.remind
+    verb=$w.en.set_a_reminder_for.tasks.remind
+    verb=$w.en.set_a_reminder_about.tasks.remind
+    verb=$w.en.make_a_reminder_to.tasks.remind
+    verb=$w.en.make_a_reminder_for.tasks.remind
+    sample.item="call mum"
+    example="Remind me to call mum."
+
+@describe.check core.describe
+    op=tasks.check
+    intent=query
+    emit="@{_} core.request action=tasks.check arg.item=\"{item}\""
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers whether an item is done"
+
+@describe.check.item core.describe.arg
+    of=$describe.check
+    name=item
+    class=words
+
+@describe.check.en core.describe.words
+    of=$describe.check
+    lang=en
+    ask=$w.en.did_i_finish.tasks.check
+    ask=$w.en.did_i_complete.tasks.check
+    ask=$w.en.have_i_finished.tasks.check
+    ask=$w.en.have_i_completed.tasks.check
+    ask=$w.en.have_i_done.tasks.check
+    sample.item=milk
+    example="Did I finish milk?"
+
+@describe.notdone core.describe
+    op=tasks.notDone
+    intent=statement
+    emit="@{_} core.request action=tasks.notDone arg.item=\"{item}\""
+    frames=stmt
+    skip=short
+    priority=10
+    effect="marks an item as not done"
+
+@describe.notdone.item core.describe.arg
+    of=$describe.notdone
+    name=item
+    class=words
+
+@describe.notdone.en core.describe.words
+    of=$describe.notdone
+    lang=en
+    nosubject=true
+    verb=$w.en.did_not_finish.tasks.notDone
+    verb=$w.en.did_not_complete.tasks.notDone
+    verb=$w.en.did_not_buy.tasks.notDone
+    verb=$w.en.have_not_finished.tasks.notDone
+    verb=$w.en.have_not_bought.tasks.notDone
+    verb=$w.en.never_bought.tasks.notDone
+    verb=$w.en.never_finished.tasks.notDone
+    verb=$w.en.forgot_to_buy.tasks.notDone
+    subject=$w.en.i.tasks.notDone
+    subject=$w.en.we.tasks.notDone
+    sample.item=milk
+    example="I did not buy milk."
+
+@describe.lists core.describe
+    op=tasks.lists
+    intent=query
+    emit="@{_} core.request action=tasks.lists"
+    frames=ask
+    skip=short
+    priority=10
+    effect="lists the names of the lists"
+
+@describe.lists.en core.describe.words
+    of=$describe.lists
+    lang=en
+    ask=$w.en.what_lists_do_i_have.tasks.lists
+    ask=$w.en.which_lists_do_i_have.tasks.lists
+    ask=$w.en.what_lists_have_i_got.tasks.lists
+    ask=$w.en.show_my_lists.tasks.lists
+
+@describe.whichlist core.describe
+    op=tasks.whichList
+    intent=query
+    emit="@{_} core.request action=tasks.whichList"
+    frames=ask
+    skip=short
+    priority=10
+    effect="tells which list an item was just put on"
+
+@describe.whichlist.en core.describe.words
+    of=$describe.whichlist
+    lang=en
+    ask=$w.en.which_list_did_you_put_it_on.tasks.whichList
+    ask=$w.en.which_list_did_you_add_it_to.tasks.whichList
+    ask=$w.en.what_list_was_that.tasks.whichList
+    ask=$w.en.which_list_was_that.tasks.whichList
+
+@w.en.add.tasks.add core.word lang=en text=add means=tasks.add
+@w.en.put.tasks.add core.word lang=en text=put means=tasks.add
+@w.en.write.tasks.add core.word lang=en text=write means=tasks.add
+@w.en.append.tasks.add core.word lang=en text=append means=tasks.add
+@w.en.include.tasks.add core.word lang=en text=include means=tasks.add
+@w.en.insert.tasks.add core.word lang=en text=insert means=tasks.add
+@w.en.stick.tasks.add core.word lang=en text=stick means=tasks.add
+@w.en.list.tasks.add core.word lang=en text=list means=tasks.add
+@w.en.to.tasks.add.list core.word lang=en text=to means=tasks.add.list
+@w.en.on.tasks.add.list core.word lang=en text=on means=tasks.add.list
+@w.en.in.tasks.add.list core.word lang=en text=in means=tasks.add.list
+@w.en.onto.tasks.add.list core.word lang=en text=onto means=tasks.add.list
+@w.en.my.tasks.add.list core.word lang=en text=my means=tasks.add.list
+@w.en.the.tasks.add.list core.word lang=en text=the means=tasks.add.list
+@w.en.our.tasks.add.list core.word lang=en text=our means=tasks.add.list
+@w.en.tick_off.tasks.done core.word lang=en text="tick off" means=tasks.done
+@w.en.cross_off.tasks.done core.word lang=en text="cross off" means=tasks.done
+@w.en.check_off.tasks.done core.word lang=en text="check off" means=tasks.done
+@w.en.list.tasks.done core.word lang=en text=list means=tasks.done
+@w.en.on.tasks.done.list core.word lang=en text=on means=tasks.done.list
+@w.en.from.tasks.done.list core.word lang=en text=from means=tasks.done.list
+@w.en.in.tasks.done.list core.word lang=en text=in means=tasks.done.list
+@w.en.my.tasks.done.list core.word lang=en text=my means=tasks.done.list
+@w.en.the.tasks.done.list core.word lang=en text=the means=tasks.done.list
+@w.en.our.tasks.done.list core.word lang=en text=our means=tasks.done.list
+@w.en.mark.tasks.done core.word lang=en text=mark means=tasks.done
+@w.en.done.tasks.done core.word lang=en text=done means=tasks.done
+@w.en.finished.tasks.done core.word lang=en text=finished means=tasks.done
+@w.en.completed.tasks.done core.word lang=en text=completed means=tasks.done
+@w.en.complete.tasks.done core.word lang=en text=complete means=tasks.done
+@w.en.remove.tasks.remove core.word lang=en text=remove means=tasks.remove
+@w.en.delete.tasks.remove core.word lang=en text=delete means=tasks.remove
+@w.en.drop.tasks.remove core.word lang=en text=drop means=tasks.remove
+@w.en.erase.tasks.remove core.word lang=en text=erase means=tasks.remove
+@w.en.scratch.tasks.remove core.word lang=en text=scratch means=tasks.remove
+@w.en.list.tasks.remove core.word lang=en text=list means=tasks.remove
+@w.en.from.tasks.remove.list core.word lang=en text=from means=tasks.remove.list
+@w.en.off.tasks.remove.list core.word lang=en text=off means=tasks.remove.list
+@w.en.on.tasks.remove.list core.word lang=en text=on means=tasks.remove.list
+@w.en.my.tasks.remove.list core.word lang=en text=my means=tasks.remove.list
+@w.en.the.tasks.remove.list core.word lang=en text=the means=tasks.remove.list
+@w.en.our.tasks.remove.list core.word lang=en text=our means=tasks.remove.list
+@w.en.clear.tasks.clear core.word lang=en text=clear means=tasks.clear
+@w.en.empty.tasks.clear core.word lang=en text=empty means=tasks.clear
+@w.en.wipe.tasks.clear core.word lang=en text=wipe means=tasks.clear
+@w.en.list.tasks.clear core.word lang=en text=list means=tasks.clear
+@w.en.of.tasks.clear.list core.word lang=en text=of means=tasks.clear.list
+@w.en.on.tasks.clear.list core.word lang=en text=on means=tasks.clear.list
+@w.en.my.tasks.clear.list core.word lang=en text=my means=tasks.clear.list
+@w.en.the.tasks.clear.list core.word lang=en text=the means=tasks.clear.list
+@w.en.our.tasks.clear.list core.word lang=en text=our means=tasks.clear.list
+@w.en.show.tasks.show core.word lang=en text=show means=tasks.show
+@w.en.read.tasks.show core.word lang=en text=read means=tasks.show
+@w.en.open.tasks.show core.word lang=en text=open means=tasks.show
+@w.en.display.tasks.show core.word lang=en text=display means=tasks.show
+@w.en.view.tasks.show core.word lang=en text=view means=tasks.show
+@w.en.list.tasks.show core.word lang=en text=list means=tasks.show
+@w.en.of.tasks.show.list core.word lang=en text=of means=tasks.show.list
+@w.en.on.tasks.show.list core.word lang=en text=on means=tasks.show.list
+@w.en.my.tasks.show.list core.word lang=en text=my means=tasks.show.list
+@w.en.the.tasks.show.list core.word lang=en text=the means=tasks.show.list
+@w.en.our.tasks.show.list core.word lang=en text=our means=tasks.show.list
+@w.en.show_what_is_left_on.tasks.pending core.word lang=en text="show what is left on" means=tasks.pending
+@w.en.read_what_is_left_on.tasks.pending core.word lang=en text="read what is left on" means=tasks.pending
+@w.en.tell_me_what_is_left_on.tasks.pending core.word lang=en text="tell me what is left on" means=tasks.pending
+@w.en.show_what_is_still_on.tasks.pending core.word lang=en text="show what is still on" means=tasks.pending
+@w.en.list.tasks.pending core.word lang=en text=list means=tasks.pending
+@w.en.of.tasks.pending.list core.word lang=en text=of means=tasks.pending.list
+@w.en.on.tasks.pending.list core.word lang=en text=on means=tasks.pending.list
+@w.en.my.tasks.pending.list core.word lang=en text=my means=tasks.pending.list
+@w.en.the.tasks.pending.list core.word lang=en text=the means=tasks.pending.list
+@w.en.our.tasks.pending.list core.word lang=en text=our means=tasks.pending.list
+@w.en.what_is_on.tasks.show core.word lang=en text="what is on" means=tasks.show
+@w.en.what_are_on.tasks.show core.word lang=en text="what are on" means=tasks.show
+@w.en.what_is_in.tasks.show core.word lang=en text="what is in" means=tasks.show
+@w.en.what_is_there_on.tasks.show core.word lang=en text="what is there on" means=tasks.show
+@w.en.whats_on.tasks.show core.word lang=en text="whats on" means=tasks.show
+@w.en.what_is_still_on.tasks.pending core.word lang=en text="what is still on" means=tasks.pending
+@w.en.what_is_left_on.tasks.pending core.word lang=en text="what is left on" means=tasks.pending
+@w.en.what_is_remaining_on.tasks.pending core.word lang=en text="what is remaining on" means=tasks.pending
+@w.en.what_else_is_on.tasks.pending core.word lang=en text="what else is on" means=tasks.pending
+@w.en.whats_left_on.tasks.pending core.word lang=en text="whats left on" means=tasks.pending
+@w.en.how_many_things_are.tasks.count core.word lang=en text="how many things are" means=tasks.count
+@w.en.how_many_items_are.tasks.count core.word lang=en text="how many items are" means=tasks.count
+@w.en.how_many_tasks_are.tasks.count core.word lang=en text="how many tasks are" means=tasks.count
+@w.en.list.tasks.count core.word lang=en text=list means=tasks.count
+@w.en.on.tasks.count.list core.word lang=en text=on means=tasks.count.list
+@w.en.in.tasks.count.list core.word lang=en text=in means=tasks.count.list
+@w.en.my.tasks.count.list core.word lang=en text=my means=tasks.count.list
+@w.en.the.tasks.count.list core.word lang=en text=the means=tasks.count.list
+@w.en.our.tasks.count.list core.word lang=en text=our means=tasks.count.list
+@w.en.how_many_things_are_left.tasks.countPending core.word lang=en text="how many things are left" means=tasks.countPending
+@w.en.how_many_items_are_left.tasks.countPending core.word lang=en text="how many items are left" means=tasks.countPending
+@w.en.how_many_tasks_are_left.tasks.countPending core.word lang=en text="how many tasks are left" means=tasks.countPending
+@w.en.how_many_things_are_still.tasks.countPending core.word lang=en text="how many things are still" means=tasks.countPending
+@w.en.list.tasks.countPending core.word lang=en text=list means=tasks.countPending
+@w.en.on.tasks.countPending.list core.word lang=en text=on means=tasks.countPending.list
+@w.en.in.tasks.countPending.list core.word lang=en text=in means=tasks.countPending.list
+@w.en.my.tasks.countPending.list core.word lang=en text=my means=tasks.countPending.list
+@w.en.the.tasks.countPending.list core.word lang=en text=the means=tasks.countPending.list
+@w.en.our.tasks.countPending.list core.word lang=en text=our means=tasks.countPending.list
+@w.en.is.tasks.has core.word lang=en text=is means=tasks.has
+@w.en.are.tasks.has core.word lang=en text=are means=tasks.has
+@w.en.do_i_have.tasks.has core.word lang=en text="do i have" means=tasks.has
+@w.en.did_i_put.tasks.has core.word lang=en text="did i put" means=tasks.has
+@w.en.list.tasks.has core.word lang=en text=list means=tasks.has
+@w.en.on.tasks.has.list core.word lang=en text=on means=tasks.has.list
+@w.en.in.tasks.has.list core.word lang=en text=in means=tasks.has.list
+@w.en.my.tasks.has.list core.word lang=en text=my means=tasks.has.list
+@w.en.the.tasks.has.list core.word lang=en text=the means=tasks.has.list
+@w.en.our.tasks.has.list core.word lang=en text=our means=tasks.has.list
+@w.en.remind_me_to.tasks.remind core.word lang=en text="remind me to" means=tasks.remind
+@w.en.remind_me_about.tasks.remind core.word lang=en text="remind me about" means=tasks.remind
+@w.en.remind_me_of.tasks.remind core.word lang=en text="remind me of" means=tasks.remind
+@w.en.set_a_reminder_to.tasks.remind core.word lang=en text="set a reminder to" means=tasks.remind
+@w.en.set_a_reminder_for.tasks.remind core.word lang=en text="set a reminder for" means=tasks.remind
+@w.en.set_a_reminder_about.tasks.remind core.word lang=en text="set a reminder about" means=tasks.remind
+@w.en.make_a_reminder_to.tasks.remind core.word lang=en text="make a reminder to" means=tasks.remind
+@w.en.make_a_reminder_for.tasks.remind core.word lang=en text="make a reminder for" means=tasks.remind
+@w.en.did_i_finish.tasks.check core.word lang=en text="did i finish" means=tasks.check
+@w.en.did_i_complete.tasks.check core.word lang=en text="did i complete" means=tasks.check
+@w.en.have_i_finished.tasks.check core.word lang=en text="have i finished" means=tasks.check
+@w.en.have_i_completed.tasks.check core.word lang=en text="have i completed" means=tasks.check
+@w.en.have_i_done.tasks.check core.word lang=en text="have i done" means=tasks.check
+@w.en.did_not_finish.tasks.notDone core.word lang=en text="did not finish" means=tasks.notDone
+@w.en.did_not_complete.tasks.notDone core.word lang=en text="did not complete" means=tasks.notDone
+@w.en.did_not_buy.tasks.notDone core.word lang=en text="did not buy" means=tasks.notDone
+@w.en.have_not_finished.tasks.notDone core.word lang=en text="have not finished" means=tasks.notDone
+@w.en.have_not_bought.tasks.notDone core.word lang=en text="have not bought" means=tasks.notDone
+@w.en.never_bought.tasks.notDone core.word lang=en text="never bought" means=tasks.notDone
+@w.en.never_finished.tasks.notDone core.word lang=en text="never finished" means=tasks.notDone
+@w.en.forgot_to_buy.tasks.notDone core.word lang=en text="forgot to buy" means=tasks.notDone
+@w.en.i.tasks.notDone core.word lang=en text=i means=tasks.notDone
+@w.en.we.tasks.notDone core.word lang=en text=we means=tasks.notDone
+@w.en.what_lists_do_i_have.tasks.lists core.word lang=en text="what lists do i have" means=tasks.lists
+@w.en.which_lists_do_i_have.tasks.lists core.word lang=en text="which lists do i have" means=tasks.lists
+@w.en.what_lists_have_i_got.tasks.lists core.word lang=en text="what lists have i got" means=tasks.lists
+@w.en.show_my_lists.tasks.lists core.word lang=en text="show my lists" means=tasks.lists
+@w.en.which_list_did_you_put_it_on.tasks.whichList core.word lang=en text="which list did you put it on" means=tasks.whichList
+@w.en.which_list_did_you_add_it_to.tasks.whichList core.word lang=en text="which list did you add it to" means=tasks.whichList
+@w.en.what_list_was_that.tasks.whichList core.word lang=en text="what list was that" means=tasks.whichList
+@w.en.which_list_was_that.tasks.whichList core.word lang=en text="which list was that" means=tasks.whichList

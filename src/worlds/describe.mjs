@@ -59,6 +59,7 @@ export const FRAMES = {
   compound: { tpl: '<L> <PRE> <AI> [and|,]? <MID> <AP> [,]? <Q> <NN?> <R?> <T>', needs: ['Q', 'PRE', 'MID', 'AI', 'AP'] },
   stmt: { tpl: '<SJ> <V> <A> <R?> <T>', needs: ['V'] },
   pred: { tpl: '<L> <A0> <V> <A+> <R?> <T>', needs: ['V', 'A'] },
+  askpred: { tpl: '<L> <Q> <A0> <V> <A+> <R?> <T>', needs: ['Q', 'V', 'A'] },
   about: { tpl: '[my|the] <N> [has|had|is|was|holds|contains] <A> <R?> <T>', needs: ['N', 'A'] },
 };
 
@@ -204,7 +205,7 @@ export function readDescriptionWires(wires, into = null) {
       if (!wd) { err(`${x.id}: ${where} refers to ${ref}, which is not a core.word wire`); return null; }
       if (wd.lang !== lang) err(`${x.id}: ${where} word ${wd.id} is lang=${wd.lang}, not ${lang}`);
       if (wd.means !== expectMeans) err(`${x.id}: ${where} word ${wd.id} means ${wd.means}, expected ${expectMeans}`);
-      return lang === 'en' ? wordToken(wd.text) : foldText(wordToken(wd.text)).toLowerCase();
+      return wordToken(wd.text);
     };
     for (const r of ROLES) w.roles[r] = getAll(x, r).map((v) => resolve(v.v, d.op, r)).filter(Boolean);
     for (const e of x.entries) {
@@ -228,42 +229,4 @@ export function descriptionFor(desc, lang) {
     bareVerb: desc.bareVerb, kind: desc.kind, args: desc.args.map((a) => makeArg(a, w.argWords[a.name] ?? {})), noSubject: w.noSubject, sample: w.sample, example: w.example,
     verb: w.roles.verb, tverb: w.roles.tverb, noun: w.roles.noun, ask: w.roles.ask, rest: w.roles.rest, pre: w.roles.pre, mid: w.roles.mid, subject: w.roles.subject,
   };
-}
-
-/**
- * The grammar of another language, from the wires of its pack (`lang/<lang>/frames.sop`): one `core.describe.lang` wire (`lang`, `lead`, `tail`, `article`, `determiners`,
- * `ofPrep`: strings of the match syntax, and `command` / `query` / `statement` as repeated keys listing the default frames of the intent in order) and one
- * `core.describe.frame` wire per frame (`lang`, `name`, `tpl`, repeated `needs`, `short` / `ofprep` / `mid` = true). Returns the `lg` option of `describePatterns`, or null.
- */
-export function readFrames(wires, lang) {
-  const frames = {};
-  const intentFrames = { command: [], query: [], statement: [] };
-  let lg = null;
-  for (const x of wires) {
-    if (x.type === 'core.describe.frame' && val(x, 'lang') === lang) {
-      const flag = (k) => (String(val(x, k)) === 'true' ? { [k]: true } : {});
-      frames[val(x, 'name')] = { tpl: val(x, 'tpl'), needs: getAll(x, 'needs').map((v) => v.v), ...flag('short'), ...flag('ofprep'), ...flag('mid') };
-    } else if (x.type === 'core.describe.lang' && val(x, 'lang') === lang) {
-      lg = { lang, frames, intentFrames, lead: val(x, 'lead'), tail: val(x, 'tail'), article: val(x, 'article') ?? EN.article, determiners: val(x, 'determiners') ?? EN.determiners, ofPrep: val(x, 'ofPrep') ?? EN.ofPrep };
-      for (const k of Object.keys(intentFrames)) intentFrames[k] = getAll(x, k).map((v) => v.v);
-    }
-  }
-  return lg;
-}
-
-/**
- * A reader for the values of slots in another language (`core.word lang= text= means=<canonical value> of=<slot>`): returns `(text) => text` that replaces each such word by its
- * canonical (English) value, longest word first, on whole words, diacritics and case folded. The patterns of a language pack capture the canonical value; this is the lexicon side
- * of the pack, until the engine's lexicons carry a surface form per language.
- */
-export function entityReader(entries) {
-  const map = new Map();
-  for (const e of entries) {
-    const k = foldText(e.text).toLowerCase().trim();
-    if (k && !map.has(k)) map.set(k, String(e.means).replace(/_/g, ' '));
-  }
-  const keys = [...map.keys()].sort((a, b) => b.length - a.length).map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-  if (!keys.length) return (t) => t;
-  const re = new RegExp(`(?<![\\p{L}\\p{N}-])(${keys.join('|')})(?![\\p{L}\\p{N}-])`, 'giu');
-  return (text) => foldText(text).replace(re, (m) => map.get(m.toLowerCase()) ?? m);
 }

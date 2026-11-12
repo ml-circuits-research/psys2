@@ -1,0 +1,1144 @@
+@describe.receive.omit core.describe
+    op=kids.arith.receive
+    intent=statement
+    emit="@{_} kids.arith.receive who={who} count={n} item={item}"
+    frames=pred
+    priority=13
+    effect="same as the full form, the item is the one the person was last told about"
+
+@describe.receive.omit.who core.describe.arg
+    of=$describe.receive.omit
+    name=who
+    class=agent
+
+@describe.receive.omit.n core.describe.arg
+    of=$describe.receive.omit
+    name=n
+    class=number
+
+@describe.receive.omit.item core.describe.arg
+    of=$describe.receive.omit
+    name=item
+    class=recent(lex.kids.arith.items,who)
+
+@describe.receive.omit.en core.describe.words
+    of=$describe.receive.omit
+    lang=en
+    nosubject=true
+    verb=$w.en.gets.kids.arith.receive
+    verb=$w.en.got.kids.arith.receive
+    verb=$w.en.receives.kids.arith.receive
+    verb=$w.en.received.kids.arith.receive
+    verb=$w.en.find.kids.arith.receive
+    verb=$w.en.finds.kids.arith.receive
+    verb=$w.en.found.kids.arith.receive
+    unit.n=$w.en.more.kids.arith.receive.n
+    unit.n=$w.en.new.kids.arith.receive.n
+    sample.who=Tom
+    sample.n=3
+    sample.item=apple
+    example="Tom gets 3 more."
+
+@describe.eat.omit core.describe
+    op=kids.arith.eat
+    intent=statement
+    emit="@{_} kids.arith.eat who={who} count={n} item={item}"
+    frames=pred
+    priority=13
+    effect="same as the full form, the item is the one the person was last told about"
+
+@describe.eat.omit.who core.describe.arg
+    of=$describe.eat.omit
+    name=who
+    class=agent
+
+@describe.eat.omit.n core.describe.arg
+    of=$describe.eat.omit
+    name=n
+    class=number
+
+@describe.eat.omit.item core.describe.arg
+    of=$describe.eat.omit
+    name=item
+    class=recent(lex.kids.arith.items,who)
+
+@describe.eat.omit.en core.describe.words
+    of=$describe.eat.omit
+    lang=en
+    nosubject=true
+    verb=$w.en.eats.kids.arith.eat
+    verb=$w.en.ate.kids.arith.eat
+    verb=$w.en.eat.kids.arith.eat
+    sample.who=Tom
+    sample.n=3
+    sample.item=apple
+    example="Tom eats 3."
+
+@describe.lose.omit core.describe
+    op=kids.arith.lose
+    intent=statement
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    frames=pred
+    priority=13
+    effect="same as the full form, the item is the one the person was last told about"
+
+@describe.lose.omit.who core.describe.arg
+    of=$describe.lose.omit
+    name=who
+    class=agent
+
+@describe.lose.omit.n core.describe.arg
+    of=$describe.lose.omit
+    name=n
+    class=number
+
+@describe.lose.omit.item core.describe.arg
+    of=$describe.lose.omit
+    name=item
+    class=recent(lex.kids.arith.items,who)
+
+@describe.lose.omit.en core.describe.words
+    of=$describe.lose.omit
+    lang=en
+    nosubject=true
+    verb=$w.en.loses.kids.arith.lose
+    verb=$w.en.lost.kids.arith.lose
+    verb=$w.en.lose.kids.arith.lose
+    sample.who=Tom
+    sample.n=3
+    sample.item=apple
+    example="Tom loses 3."
+
+@describe.buy.omit core.describe
+    op=kids.arith.buy
+    intent=statement
+    emit="@{_} kids.arith.buy who={who} count={n} item={item}"
+    frames=pred
+    priority=13
+    effect="same as the full form, the item is the one the person was last told about"
+
+@describe.buy.omit.who core.describe.arg
+    of=$describe.buy.omit
+    name=who
+    class=agent
+
+@describe.buy.omit.n core.describe.arg
+    of=$describe.buy.omit
+    name=n
+    class=number
+
+@describe.buy.omit.item core.describe.arg
+    of=$describe.buy.omit
+    name=item
+    class=recent(lex.kids.arith.items,who)
+
+@describe.buy.omit.en core.describe.words
+    of=$describe.buy.omit
+    lang=en
+    nosubject=true
+    verb=$w.en.buys.kids.arith.buy
+    verb=$w.en.bought.kids.arith.buy
+    verb=$w.en.buy.kids.arith.buy
+    unit.n=$w.en.more.kids.arith.buy.n
+    unit.n=$w.en.new.kids.arith.buy.n
+    sample.who=Tom
+    sample.n=3
+    sample.item=apple
+    example="Tom buys 3 more."
+
+@describe.break.omit core.describe
+    op=kids.arith.break
+    intent=statement
+    emit="@{_} kids.arith.break who={who} count={n} item={item}"
+    frames=pred
+    priority=13
+    effect="same as the full form, the item is the one the person was last told about"
+
+@describe.break.omit.who core.describe.arg
+    of=$describe.break.omit
+    name=who
+    class=agent
+
+@describe.break.omit.n core.describe.arg
+    of=$describe.break.omit
+    name=n
+    class=number
+
+@describe.break.omit.item core.describe.arg
+    of=$describe.break.omit
+    name=item
+    class=recent(lex.kids.arith.items,who)
+
+@describe.break.omit.en core.describe.words
+    of=$describe.break.omit
+    lang=en
+    nosubject=true
+    verb=$w.en.breaks.kids.arith.break
+    verb=$w.en.broke.kids.arith.break
+    verb=$w.en.break.kids.arith.break
+    verb=$w.en.broken.kids.arith.break
+    sample.who=Tom
+    sample.n=3
+    sample.item=apple
+    example="Tom breaks 3."
+
+@describe.left core.describe
+    op=kids.arith.holding
+    intent=query
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    frames=ask
+    effect="answers what is left for a person, about the item last mentioned for them"
+
+@describe.left.who core.describe.arg
+    of=$describe.left
+    name=who
+    class=agent
+
+@describe.left.item core.describe.arg
+    of=$describe.left
+    name=item
+    class=recent(lex.kids.arith.items,who)
+
+@describe.left.en core.describe.words
+    of=$describe.left
+    lang=en
+    ask=$w.en.what_is_left.kids.arith.holding
+    ask=$w.en.whats_left.kids.arith.holding
+    ask=$w.en.what_is_remaining.kids.arith.holding
+    ask=$w.en.how_much_is_left.kids.arith.holding
+    ask=$w.en.how_many_are_left.kids.arith.holding
+    ask=$w.en.what_remains.kids.arith.holding
+    prep.who=$w.en.for.kids.arith.holding.who
+    prep.who=$w.en.with.kids.arith.holding.who
+    prep.who=$w.en.of.kids.arith.holding.who
+    sample.who=Mia
+    sample.item=apple
+    example="Whats left for Mia?"
+
+@describe.holding core.describe
+    op=kids.arith.holding
+    intent=statement
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}"
+    frames=pred
+    effect="states how many items a person has"
+
+@describe.holding.who core.describe.arg
+    of=$describe.holding
+    name=who
+    class=agent
+
+@describe.holding.item core.describe.arg
+    of=$describe.holding
+    name=item
+    class=lex.kids.arith.items
+    qty=n
+
+@describe.holding.en core.describe.words
+    of=$describe.holding
+    lang=en
+    nosubject=true
+    verb=$w.en.has.kids.arith.holding
+    verb=$w.en.have.kids.arith.holding
+    verb=$w.en.had.kids.arith.holding
+    verb=$w.en.has_got.kids.arith.holding
+    verb=$w.en.have_got.kids.arith.holding
+    verb=$w.en.had_got.kids.arith.holding
+    verb=$w.en.owns.kids.arith.holding
+    rest=$w.en.now.kids.arith.holding
+    rest=$w.en.left.kids.arith.holding
+    rest=$w.en.today.kids.arith.holding
+    rest=$w.en.at_first.kids.arith.holding
+    rest=$w.en.at_the_start.kids.arith.holding
+    sample.who=Tom
+    sample.n=5
+    sample.item=apple
+    example="Tom has 5 apples."
+
+@describe.give core.describe
+    op=kids.arith.give
+    intent=statement
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    frames=pred
+    effect="records the event give for the person and applies it to the counts"
+
+@describe.give.who core.describe.arg
+    of=$describe.give
+    name=who
+    class=agent
+
+@describe.give.to core.describe.arg
+    of=$describe.give
+    name=to
+    class=agent
+
+@describe.give.item core.describe.arg
+    of=$describe.give
+    name=item
+    class=lex.kids.arith.items
+    qty=n
+
+@describe.give.en core.describe.words
+    of=$describe.give
+    lang=en
+    nosubject=true
+    verb=$w.en.gives.kids.arith.give
+    verb=$w.en.gave.kids.arith.give
+    verb=$w.en.give.kids.arith.give
+    sample.who=Tom
+    sample.n=5
+    sample.item=apple
+    sample.to=Ana
+    example="Ana gives Tom 5 apples."
+
+@describe.givefrom core.describe
+    op=kids.arith.give
+    intent=statement
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    frames=pred
+    effect="records the event give for the person and applies it to the counts"
+
+@describe.givefrom.who core.describe.arg
+    of=$describe.givefrom
+    name=who
+    class=agent
+
+@describe.givefrom.item core.describe.arg
+    of=$describe.givefrom
+    name=item
+    class=lex.kids.arith.items
+    qty=n
+
+@describe.givefrom.to core.describe.arg
+    of=$describe.givefrom
+    name=to
+    class=agent
+
+@describe.givefrom.en core.describe.words
+    of=$describe.givefrom
+    lang=en
+    nosubject=true
+    verb=$w.en.gives.kids.arith.give
+    verb=$w.en.gave.kids.arith.give
+    verb=$w.en.give.kids.arith.give
+    prep.to=$w.en.to.kids.arith.give.to
+    sample.who=Ana
+    sample.n=5
+    sample.item=apple
+    sample.to=Tom
+    example="Ana gives 5 apples to Tom."
+
+@describe.lose core.describe
+    op=kids.arith.lose
+    intent=statement
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    frames=pred
+    effect="records the event lose for the person and applies it to the counts"
+
+@describe.lose.who core.describe.arg
+    of=$describe.lose
+    name=who
+    class=agent
+
+@describe.lose.item core.describe.arg
+    of=$describe.lose
+    name=item
+    class=lex.kids.arith.items
+    qty=n
+
+@describe.lose.en core.describe.words
+    of=$describe.lose
+    lang=en
+    nosubject=true
+    verb=$w.en.loses.kids.arith.lose
+    verb=$w.en.lost.kids.arith.lose
+    verb=$w.en.lose.kids.arith.lose
+    sample.who=Tom
+    sample.n=5
+    sample.item=apple
+    example="Tom lost 5 apples."
+
+@describe.eat core.describe
+    op=kids.arith.eat
+    intent=statement
+    emit="@{_} kids.arith.eat who={who} count={n} item={item}"
+    frames=pred
+    effect="records the event eat for the person and applies it to the counts"
+
+@describe.eat.who core.describe.arg
+    of=$describe.eat
+    name=who
+    class=agent
+
+@describe.eat.item core.describe.arg
+    of=$describe.eat
+    name=item
+    class=lex.kids.arith.items
+    qty=n
+
+@describe.eat.en core.describe.words
+    of=$describe.eat
+    lang=en
+    nosubject=true
+    verb=$w.en.eats.kids.arith.eat
+    verb=$w.en.ate.kids.arith.eat
+    verb=$w.en.eat.kids.arith.eat
+    verb=$w.en.eaten.kids.arith.eat
+    sample.who=Tom
+    sample.n=5
+    sample.item=apple
+    example="Tom ate 5 apples."
+
+@describe.buy core.describe
+    op=kids.arith.buy
+    intent=statement
+    emit="@{_} kids.arith.buy who={who} count={n} item={item}"
+    frames=pred
+    effect="records the event buy for the person and applies it to the counts"
+
+@describe.buy.who core.describe.arg
+    of=$describe.buy
+    name=who
+    class=agent
+
+@describe.buy.item core.describe.arg
+    of=$describe.buy
+    name=item
+    class=lex.kids.arith.items
+    qty=n
+
+@describe.buy.en core.describe.words
+    of=$describe.buy
+    lang=en
+    nosubject=true
+    verb=$w.en.buys.kids.arith.buy
+    verb=$w.en.bought.kids.arith.buy
+    verb=$w.en.buy.kids.arith.buy
+    sample.who=Tom
+    sample.n=5
+    sample.item=apple
+    example="Tom bought 5 apples."
+
+@describe.receive core.describe
+    op=kids.arith.receive
+    intent=statement
+    emit="@{_} kids.arith.receive who={who} count={n} item={item}"
+    frames=pred
+    effect="records the event receive for the person and applies it to the counts"
+
+@describe.receive.who core.describe.arg
+    of=$describe.receive
+    name=who
+    class=agent
+
+@describe.receive.item core.describe.arg
+    of=$describe.receive
+    name=item
+    class=lex.kids.arith.items
+    qty=n
+
+@describe.receive.en core.describe.words
+    of=$describe.receive
+    lang=en
+    nosubject=true
+    verb=$w.en.gets.kids.arith.receive
+    verb=$w.en.got.kids.arith.receive
+    verb=$w.en.receives.kids.arith.receive
+    verb=$w.en.received.kids.arith.receive
+    verb=$w.en.find.kids.arith.receive
+    verb=$w.en.finds.kids.arith.receive
+    verb=$w.en.found.kids.arith.receive
+    sample.who=Tom
+    sample.n=5
+    sample.item=apple
+    example="Tom got 5 apples."
+
+@describe.break core.describe
+    op=kids.arith.break
+    intent=statement
+    emit="@{_} kids.arith.break who={who} count={n} item={item}"
+    frames=pred
+    effect="records the event break for the person and applies it to the counts"
+
+@describe.break.who core.describe.arg
+    of=$describe.break
+    name=who
+    class=agent
+
+@describe.break.item core.describe.arg
+    of=$describe.break
+    name=item
+    class=lex.kids.arith.items
+    qty=n
+
+@describe.break.en core.describe.words
+    of=$describe.break
+    lang=en
+    nosubject=true
+    verb=$w.en.breaks.kids.arith.break
+    verb=$w.en.broke.kids.arith.break
+    verb=$w.en.break.kids.arith.break
+    verb=$w.en.broken.kids.arith.break
+    sample.who=Tom
+    sample.n=5
+    sample.item=apple
+    example="Tom broke 5 apples."
+
+@describe.current core.describe
+    op=kids.arith.holding
+    intent=query
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    frames=ask
+    frames=qnoun
+    frames=tell
+    effect="answers how many items a person has now, replaying the events in order"
+
+@describe.current.item core.describe.arg
+    of=$describe.current
+    name=item
+    class=lex.kids.arith.items
+
+@describe.current.who core.describe.arg
+    of=$describe.current
+    name=who
+    class=agent
+
+@describe.current.en core.describe.words
+    of=$describe.current
+    lang=en
+    tverb=$w.en.have.kids.arith.holding
+    tverb=$w.en.has.kids.arith.holding
+    tverb=$w.en.left.kids.arith.holding
+    tverb=$w.en.now.kids.arith.holding
+    tverb=$w.en.got.kids.arith.holding
+    noun=$w.en.number_of.kids.arith.holding
+    noun=$w.en.count_of.kids.arith.holding
+    ask=$w.en.how_many.kids.arith.holding
+    ask=$w.en.how_much.kids.arith.holding
+    rest=$w.en.now.kids.arith.holding
+    rest=$w.en.left.kids.arith.holding
+    rest=$w.en.today.kids.arith.holding
+    rest=$w.en.still.kids.arith.holding
+    prep.who=$w.en.do.kids.arith.holding.who
+    prep.who=$w.en.does.kids.arith.holding.who
+    prep.who=$w.en.did.kids.arith.holding.who
+    prep.who=$w.en.will.kids.arith.holding.who
+    sample.item=apple
+    sample.who=Tom
+    example="How many apples does Tom have?"
+
+@describe.hasany core.describe
+    op=kids.arith.has
+    intent=query
+    emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
+    frames=ask
+    effect="answers yes or no: does the person have any of the items"
+
+@describe.hasany.who core.describe.arg
+    of=$describe.hasany
+    name=who
+    class=agent
+
+@describe.hasany.item core.describe.arg
+    of=$describe.hasany
+    name=item
+    class=lex.kids.arith.items
+
+@describe.hasany.en core.describe.words
+    of=$describe.hasany
+    lang=en
+    tverb=$w.en.have.kids.arith.has
+    ask=$w.en.does.kids.arith.has
+    ask=$w.en.do.kids.arith.has
+    ask=$w.en.did.kids.arith.has
+    prep.item=$w.en.have_any.kids.arith.has.item
+    prep.item=$w.en.have_a.kids.arith.has.item
+    prep.item=$w.en.have_an.kids.arith.has.item
+    prep.item=$w.en.have_some.kids.arith.has.item
+    prep.item=$w.en.have.kids.arith.has.item
+    sample.who=Tom
+    sample.item=apple
+    example="Does Tom have any apples?"
+
+@describe.total core.describe
+    op=kids.arith.total
+    intent=query
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    frames=ask
+    frames=qnoun
+    frames=tell
+    frames=bare
+    effect="answers the sum of the counts of everybody"
+
+@describe.total.item core.describe.arg
+    of=$describe.total
+    name=item
+    class=lex.kids.arith.items
+
+@describe.total.en core.describe.words
+    of=$describe.total
+    lang=en
+    tverb=$w.en.are_there.kids.arith.total
+    tverb=$w.en.in_total.kids.arith.total
+    tverb=$w.en.altogether.kids.arith.total
+    tverb=$w.en.do_they_have.kids.arith.total
+    tverb=$w.en.do_we_have.kids.arith.total
+    tverb=$w.en.does_everyone_have.kids.arith.total
+    tverb=$w.en.does_everybody_have.kids.arith.total
+    noun=$w.en.total_number_of.kids.arith.total
+    noun=$w.en.total_of.kids.arith.total
+    noun=$w.en.sum_of.kids.arith.total
+    ask=$w.en.how_many.kids.arith.total
+    rest=$w.en.altogether.kids.arith.total
+    rest=$w.en.in_total.kids.arith.total
+    rest=$w.en.in_all.kids.arith.total
+    rest=$w.en.all_together.kids.arith.total
+    rest=$w.en.together.kids.arith.total
+    sample.item=apple
+    example="How many apples are there altogether?"
+
+@describe.total2 core.describe
+    op=kids.arith.total
+    intent=query
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item} where.who1={who1} where.who2={who2}"
+    frames=ask
+    effect="answers the sum of the counts of two named people"
+
+@describe.total2.item core.describe.arg
+    of=$describe.total2
+    name=item
+    class=lex.kids.arith.items
+
+@describe.total2.who1 core.describe.arg
+    of=$describe.total2
+    name=who1
+    class=agent
+
+@describe.total2.who2 core.describe.arg
+    of=$describe.total2
+    name=who2
+    class=agent
+
+@describe.total2.en core.describe.words
+    of=$describe.total2
+    lang=en
+    tverb=$w.en.have.kids.arith.total
+    tverb=$w.en.got.kids.arith.total
+    ask=$w.en.how_many.kids.arith.total
+    rest=$w.en.altogether.kids.arith.total
+    rest=$w.en.together.kids.arith.total
+    rest=$w.en.in_total.kids.arith.total
+    rest=$w.en.in_all.kids.arith.total
+    rest=$w.en.all_together.kids.arith.total
+    prep.who1=$w.en.do.kids.arith.total.who1
+    prep.who1=$w.en.does.kids.arith.total.who1
+    prep.who1=$w.en.did.kids.arith.total.who1
+    prep.who1=$w.en.have.kids.arith.total.who1
+    prep.who1=$w.en.has.kids.arith.total.who1
+    prep.who2=$w.en.and.kids.arith.total.who2
+    sample.item=apple
+    sample.who1=Tom
+    sample.who2=Ana
+    example="How many apples do Tom and Ana have together?"
+
+@describe.leader core.describe
+    op=kids.arith.leader
+    intent=query
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item}"
+    frames=ask
+    effect="answers who has the most of the item"
+
+@describe.leader.item core.describe.arg
+    of=$describe.leader
+    name=item
+    class=lex.kids.arith.items
+
+@describe.leader.en core.describe.words
+    of=$describe.leader
+    lang=en
+    ask=$w.en.who_has.kids.arith.leader
+    ask=$w.en.who_have.kids.arith.leader
+    ask=$w.en.who_had.kids.arith.leader
+    ask=$w.en.who_owns.kids.arith.leader
+    ask=$w.en.who_got.kids.arith.leader
+    ask=$w.en.which_kid_has.kids.arith.leader
+    ask=$w.en.which_friend_has.kids.arith.leader
+    ask=$w.en.which_child_has.kids.arith.leader
+    prep.item=$w.en.more.kids.arith.leader.item
+    prep.item=$w.en.the_most.kids.arith.leader.item
+    prep.item=$w.en.the_largest_number_of.kids.arith.leader.item
+    prep.item=$w.en.the_biggest_number_of.kids.arith.leader.item
+    sample.item=apple
+    example="Who has the most apples?"
+
+@describe.leader2 core.describe
+    op=kids.arith.leader
+    intent=query
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item} where.who1={who1} where.who2={who2}"
+    frames=ask
+    effect="answers who has more of the item between two people"
+
+@describe.leader2.item core.describe.arg
+    of=$describe.leader2
+    name=item
+    class=lex.kids.arith.items
+
+@describe.leader2.who1 core.describe.arg
+    of=$describe.leader2
+    name=who1
+    class=agent
+
+@describe.leader2.who2 core.describe.arg
+    of=$describe.leader2
+    name=who2
+    class=agent
+
+@describe.leader2.en core.describe.words
+    of=$describe.leader2
+    lang=en
+    ask=$w.en.who_has.kids.arith.leader
+    ask=$w.en.who_have.kids.arith.leader
+    ask=$w.en.who_had.kids.arith.leader
+    ask=$w.en.which_of.kids.arith.leader
+    prep.item=$w.en.more.kids.arith.leader.item
+    prep.who1=$w.en.between.kids.arith.leader.who1
+    prep.who1=$w.en.of.kids.arith.leader.who1
+    prep.who1=$w.en.out_of.kids.arith.leader.who1
+    prep.who2=$w.en.and.kids.arith.leader.who2
+    prep.who2=$w.en.or.kids.arith.leader.who2
+    sample.item=apple
+    sample.who1=Tom
+    sample.who2=Ana
+    example="Who has more apples between Tom and Ana?"
+
+@describe.gap core.describe
+    op=kids.arith.gap
+    intent=query
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    frames=ask
+    effect="answers how many more items the first person has than the second"
+
+@describe.gap.item core.describe.arg
+    of=$describe.gap
+    name=item
+    class=lex.kids.arith.items
+
+@describe.gap.who1 core.describe.arg
+    of=$describe.gap
+    name=who1
+    class=agent
+
+@describe.gap.who2 core.describe.arg
+    of=$describe.gap
+    name=who2
+    class=agent
+
+@describe.gap.en core.describe.words
+    of=$describe.gap
+    lang=en
+    tverb=$w.en.have.kids.arith.gap
+    ask=$w.en.how_many_more.kids.arith.gap
+    ask=$w.en.how_many_extra.kids.arith.gap
+    ask=$w.en.how_many_fewer.kids.arith.gap
+    ask=$w.en.how_many_less.kids.arith.gap
+    prep.who1=$w.en.does.kids.arith.gap.who1
+    prep.who1=$w.en.do.kids.arith.gap.who1
+    prep.who1=$w.en.did.kids.arith.gap.who1
+    prep.who2=$w.en.than.kids.arith.gap.who2
+    prep.who2=$w.en.compared_to.kids.arith.gap.who2
+    sample.item=apple
+    sample.who1=Tom
+    sample.who2=Ana
+    example="How many more apples does Tom have than Ana?"
+
+@describe.verdict core.describe
+    op=kids.arith.verdict
+    intent=query
+    emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who1} where.who2={who2}"
+    frames=ask
+    effect="answers yes or no: does the first person have more than the second"
+
+@describe.verdict.who1 core.describe.arg
+    of=$describe.verdict
+    name=who1
+    class=agent
+
+@describe.verdict.item core.describe.arg
+    of=$describe.verdict
+    name=item
+    class=lex.kids.arith.items
+
+@describe.verdict.who2 core.describe.arg
+    of=$describe.verdict
+    name=who2
+    class=agent
+
+@describe.verdict.en core.describe.words
+    of=$describe.verdict
+    lang=en
+    ask=$w.en.does.kids.arith.verdict
+    ask=$w.en.do.kids.arith.verdict
+    ask=$w.en.did.kids.arith.verdict
+    prep.item=$w.en.have_more.kids.arith.verdict.item
+    prep.item=$w.en.has_more.kids.arith.verdict.item
+    prep.item=$w.en.got_more.kids.arith.verdict.item
+    prep.who2=$w.en.than.kids.arith.verdict.who2
+    sample.item=apple
+    sample.who1=Tom
+    sample.who2=Ana
+    example="Does Tom have more apples than Ana?"
+
+@describe.calc.plus core.describe
+    op=kids.arith.calc
+    intent=query
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b}"
+    frames=pred
+    frames=askpred
+    effect="computes plus"
+
+@describe.calc.plus.a core.describe.arg
+    of=$describe.calc.plus
+    name=a
+    class=number
+
+@describe.calc.plus.b core.describe.arg
+    of=$describe.calc.plus
+    name=b
+    class=number
+
+@describe.calc.plus.en core.describe.words
+    of=$describe.calc.plus
+    lang=en
+    nosubject=true
+    verb=$w.en.plus.kids.arith.calc
+    verb=$w.en.added_to.kids.arith.calc
+    verb=$w.en.add.kids.arith.calc
+    verb=$w.en.and.kids.arith.calc
+    verb=$w.en.added_up.kids.arith.calc
+    ask=$w.en.what_is.kids.arith.calc
+    ask=$w.en.whats.kids.arith.calc
+    ask=$w.en.how_much_is.kids.arith.calc
+    ask=$w.en.calculate.kids.arith.calc
+    ask=$w.en.compute.kids.arith.calc
+    sample.a=6
+    sample.b=3
+    example="What is 6 plus 3?"
+
+@describe.calc.minus core.describe
+    op=kids.arith.calc
+    intent=query
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b}"
+    frames=pred
+    frames=askpred
+    effect="computes minus"
+
+@describe.calc.minus.a core.describe.arg
+    of=$describe.calc.minus
+    name=a
+    class=number
+
+@describe.calc.minus.b core.describe.arg
+    of=$describe.calc.minus
+    name=b
+    class=number
+
+@describe.calc.minus.en core.describe.words
+    of=$describe.calc.minus
+    lang=en
+    nosubject=true
+    verb=$w.en.minus.kids.arith.calc
+    verb=$w.en.take_away.kids.arith.calc
+    verb=$w.en.less.kids.arith.calc
+    verb=$w.en.subtract.kids.arith.calc
+    verb=$w.en.without.kids.arith.calc
+    ask=$w.en.what_is.kids.arith.calc
+    ask=$w.en.whats.kids.arith.calc
+    ask=$w.en.how_much_is.kids.arith.calc
+    ask=$w.en.calculate.kids.arith.calc
+    ask=$w.en.compute.kids.arith.calc
+    sample.a=6
+    sample.b=3
+    example="What is 6 minus 3?"
+
+@describe.calc.times core.describe
+    op=kids.arith.calc
+    intent=query
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={b}"
+    frames=pred
+    frames=askpred
+    effect="computes times"
+
+@describe.calc.times.a core.describe.arg
+    of=$describe.calc.times
+    name=a
+    class=number
+
+@describe.calc.times.b core.describe.arg
+    of=$describe.calc.times
+    name=b
+    class=number
+
+@describe.calc.times.en core.describe.words
+    of=$describe.calc.times
+    lang=en
+    nosubject=true
+    verb=$w.en.times.kids.arith.calc
+    verb=$w.en.multiplied_by.kids.arith.calc
+    verb=$w.en.multiply_by.kids.arith.calc
+    verb=$w.en.x.kids.arith.calc
+    verb=$w.en.lots_of.kids.arith.calc
+    ask=$w.en.what_is.kids.arith.calc
+    ask=$w.en.whats.kids.arith.calc
+    ask=$w.en.how_much_is.kids.arith.calc
+    ask=$w.en.calculate.kids.arith.calc
+    ask=$w.en.compute.kids.arith.calc
+    sample.a=6
+    sample.b=3
+    example="What is 6 times 3?"
+
+@describe.calc.div core.describe
+    op=kids.arith.calc
+    intent=query
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b}"
+    frames=pred
+    frames=askpred
+    effect="computes divided_by"
+
+@describe.calc.div.a core.describe.arg
+    of=$describe.calc.div
+    name=a
+    class=number
+
+@describe.calc.div.b core.describe.arg
+    of=$describe.calc.div
+    name=b
+    class=number
+
+@describe.calc.div.en core.describe.words
+    of=$describe.calc.div
+    lang=en
+    nosubject=true
+    verb=$w.en.divided_by.kids.arith.calc
+    verb=$w.en.split_by.kids.arith.calc
+    verb=$w.en.over.kids.arith.calc
+    verb=$w.en.divide_by.kids.arith.calc
+    ask=$w.en.what_is.kids.arith.calc
+    ask=$w.en.whats.kids.arith.calc
+    ask=$w.en.how_much_is.kids.arith.calc
+    ask=$w.en.calculate.kids.arith.calc
+    ask=$w.en.compute.kids.arith.calc
+    sample.a=6
+    sample.b=3
+    example="What is 6 divided by 3?"
+
+@describe.half core.describe
+    op=kids.arith.half
+    intent=query
+    emit="@{_} core.question type=kids.arith.half seek=result where.n={n}"
+    frames=ask
+    frames=qnoun
+    effect="answers half of a number"
+
+@describe.half.n core.describe.arg
+    of=$describe.half
+    name=n
+    class=number
+
+@describe.half.en core.describe.words
+    of=$describe.half
+    lang=en
+    noun=$w.en.half.kids.arith.half
+    ask=$w.en.what_is_half.kids.arith.half
+    ask=$w.en.whats_half.kids.arith.half
+    ask=$w.en.how_much_is_half.kids.arith.half
+    prep.n=$w.en.of.kids.arith.half.n
+    sample.n=10
+    example="What is half of 10?"
+
+@describe.double core.describe
+    op=kids.arith.double
+    intent=query
+    emit="@{_} core.question type=kids.arith.double seek=result where.n={n}"
+    frames=ask
+    frames=qnoun
+    effect="answers double a number"
+
+@describe.double.n core.describe.arg
+    of=$describe.double
+    name=n
+    class=number
+
+@describe.double.en core.describe.words
+    of=$describe.double
+    lang=en
+    noun=$w.en.double.kids.arith.double
+    noun=$w.en.twice.kids.arith.double
+    ask=$w.en.what_is_double.kids.arith.double
+    ask=$w.en.whats_double.kids.arith.double
+    ask=$w.en.what_is_twice.kids.arith.double
+    ask=$w.en.how_much_is_double.kids.arith.double
+    prep.n=$w.en.of.kids.arith.double.n
+    sample.n=10
+    example="What is double 10?"
+
+@w.en.gets.kids.arith.receive core.word lang=en text=gets means=kids.arith.receive
+@w.en.got.kids.arith.receive core.word lang=en text=got means=kids.arith.receive
+@w.en.receives.kids.arith.receive core.word lang=en text=receives means=kids.arith.receive
+@w.en.received.kids.arith.receive core.word lang=en text=received means=kids.arith.receive
+@w.en.find.kids.arith.receive core.word lang=en text=find means=kids.arith.receive
+@w.en.finds.kids.arith.receive core.word lang=en text=finds means=kids.arith.receive
+@w.en.found.kids.arith.receive core.word lang=en text=found means=kids.arith.receive
+@w.en.more.kids.arith.receive.n core.word lang=en text=more means=kids.arith.receive.n
+@w.en.new.kids.arith.receive.n core.word lang=en text=new means=kids.arith.receive.n
+@w.en.eats.kids.arith.eat core.word lang=en text=eats means=kids.arith.eat
+@w.en.ate.kids.arith.eat core.word lang=en text=ate means=kids.arith.eat
+@w.en.eat.kids.arith.eat core.word lang=en text=eat means=kids.arith.eat
+@w.en.loses.kids.arith.lose core.word lang=en text=loses means=kids.arith.lose
+@w.en.lost.kids.arith.lose core.word lang=en text=lost means=kids.arith.lose
+@w.en.lose.kids.arith.lose core.word lang=en text=lose means=kids.arith.lose
+@w.en.buys.kids.arith.buy core.word lang=en text=buys means=kids.arith.buy
+@w.en.bought.kids.arith.buy core.word lang=en text=bought means=kids.arith.buy
+@w.en.buy.kids.arith.buy core.word lang=en text=buy means=kids.arith.buy
+@w.en.more.kids.arith.buy.n core.word lang=en text=more means=kids.arith.buy.n
+@w.en.new.kids.arith.buy.n core.word lang=en text=new means=kids.arith.buy.n
+@w.en.breaks.kids.arith.break core.word lang=en text=breaks means=kids.arith.break
+@w.en.broke.kids.arith.break core.word lang=en text=broke means=kids.arith.break
+@w.en.break.kids.arith.break core.word lang=en text=break means=kids.arith.break
+@w.en.broken.kids.arith.break core.word lang=en text=broken means=kids.arith.break
+@w.en.what_is_left.kids.arith.holding core.word lang=en text="what is left" means=kids.arith.holding
+@w.en.whats_left.kids.arith.holding core.word lang=en text="whats left" means=kids.arith.holding
+@w.en.what_is_remaining.kids.arith.holding core.word lang=en text="what is remaining" means=kids.arith.holding
+@w.en.how_much_is_left.kids.arith.holding core.word lang=en text="how much is left" means=kids.arith.holding
+@w.en.how_many_are_left.kids.arith.holding core.word lang=en text="how many are left" means=kids.arith.holding
+@w.en.what_remains.kids.arith.holding core.word lang=en text="what remains" means=kids.arith.holding
+@w.en.for.kids.arith.holding.who core.word lang=en text=for means=kids.arith.holding.who
+@w.en.with.kids.arith.holding.who core.word lang=en text=with means=kids.arith.holding.who
+@w.en.of.kids.arith.holding.who core.word lang=en text=of means=kids.arith.holding.who
+@w.en.has.kids.arith.holding core.word lang=en text=has means=kids.arith.holding
+@w.en.have.kids.arith.holding core.word lang=en text=have means=kids.arith.holding
+@w.en.had.kids.arith.holding core.word lang=en text=had means=kids.arith.holding
+@w.en.has_got.kids.arith.holding core.word lang=en text="has got" means=kids.arith.holding
+@w.en.have_got.kids.arith.holding core.word lang=en text="have got" means=kids.arith.holding
+@w.en.had_got.kids.arith.holding core.word lang=en text="had got" means=kids.arith.holding
+@w.en.owns.kids.arith.holding core.word lang=en text=owns means=kids.arith.holding
+@w.en.now.kids.arith.holding core.word lang=en text=now means=kids.arith.holding
+@w.en.left.kids.arith.holding core.word lang=en text=left means=kids.arith.holding
+@w.en.today.kids.arith.holding core.word lang=en text=today means=kids.arith.holding
+@w.en.at_first.kids.arith.holding core.word lang=en text="at first" means=kids.arith.holding
+@w.en.at_the_start.kids.arith.holding core.word lang=en text="at the start" means=kids.arith.holding
+@w.en.gives.kids.arith.give core.word lang=en text=gives means=kids.arith.give
+@w.en.gave.kids.arith.give core.word lang=en text=gave means=kids.arith.give
+@w.en.give.kids.arith.give core.word lang=en text=give means=kids.arith.give
+@w.en.to.kids.arith.give.to core.word lang=en text=to means=kids.arith.give.to
+@w.en.eaten.kids.arith.eat core.word lang=en text=eaten means=kids.arith.eat
+@w.en.got.kids.arith.holding core.word lang=en text=got means=kids.arith.holding
+@w.en.number_of.kids.arith.holding core.word lang=en text="number of" means=kids.arith.holding
+@w.en.count_of.kids.arith.holding core.word lang=en text="count of" means=kids.arith.holding
+@w.en.how_many.kids.arith.holding core.word lang=en text="how many" means=kids.arith.holding
+@w.en.how_much.kids.arith.holding core.word lang=en text="how much" means=kids.arith.holding
+@w.en.still.kids.arith.holding core.word lang=en text=still means=kids.arith.holding
+@w.en.do.kids.arith.holding.who core.word lang=en text=do means=kids.arith.holding.who
+@w.en.does.kids.arith.holding.who core.word lang=en text=does means=kids.arith.holding.who
+@w.en.did.kids.arith.holding.who core.word lang=en text=did means=kids.arith.holding.who
+@w.en.will.kids.arith.holding.who core.word lang=en text=will means=kids.arith.holding.who
+@w.en.have.kids.arith.has core.word lang=en text=have means=kids.arith.has
+@w.en.does.kids.arith.has core.word lang=en text=does means=kids.arith.has
+@w.en.do.kids.arith.has core.word lang=en text=do means=kids.arith.has
+@w.en.did.kids.arith.has core.word lang=en text=did means=kids.arith.has
+@w.en.have_any.kids.arith.has.item core.word lang=en text="have any" means=kids.arith.has.item
+@w.en.have_a.kids.arith.has.item core.word lang=en text="have a" means=kids.arith.has.item
+@w.en.have_an.kids.arith.has.item core.word lang=en text="have an" means=kids.arith.has.item
+@w.en.have_some.kids.arith.has.item core.word lang=en text="have some" means=kids.arith.has.item
+@w.en.have.kids.arith.has.item core.word lang=en text=have means=kids.arith.has.item
+@w.en.are_there.kids.arith.total core.word lang=en text="are there" means=kids.arith.total
+@w.en.in_total.kids.arith.total core.word lang=en text="in total" means=kids.arith.total
+@w.en.altogether.kids.arith.total core.word lang=en text=altogether means=kids.arith.total
+@w.en.do_they_have.kids.arith.total core.word lang=en text="do they have" means=kids.arith.total
+@w.en.do_we_have.kids.arith.total core.word lang=en text="do we have" means=kids.arith.total
+@w.en.does_everyone_have.kids.arith.total core.word lang=en text="does everyone have" means=kids.arith.total
+@w.en.does_everybody_have.kids.arith.total core.word lang=en text="does everybody have" means=kids.arith.total
+@w.en.total_number_of.kids.arith.total core.word lang=en text="total number of" means=kids.arith.total
+@w.en.total_of.kids.arith.total core.word lang=en text="total of" means=kids.arith.total
+@w.en.sum_of.kids.arith.total core.word lang=en text="sum of" means=kids.arith.total
+@w.en.how_many.kids.arith.total core.word lang=en text="how many" means=kids.arith.total
+@w.en.in_all.kids.arith.total core.word lang=en text="in all" means=kids.arith.total
+@w.en.all_together.kids.arith.total core.word lang=en text="all together" means=kids.arith.total
+@w.en.together.kids.arith.total core.word lang=en text=together means=kids.arith.total
+@w.en.have.kids.arith.total core.word lang=en text=have means=kids.arith.total
+@w.en.got.kids.arith.total core.word lang=en text=got means=kids.arith.total
+@w.en.do.kids.arith.total.who1 core.word lang=en text=do means=kids.arith.total.who1
+@w.en.does.kids.arith.total.who1 core.word lang=en text=does means=kids.arith.total.who1
+@w.en.did.kids.arith.total.who1 core.word lang=en text=did means=kids.arith.total.who1
+@w.en.have.kids.arith.total.who1 core.word lang=en text=have means=kids.arith.total.who1
+@w.en.has.kids.arith.total.who1 core.word lang=en text=has means=kids.arith.total.who1
+@w.en.and.kids.arith.total.who2 core.word lang=en text=and means=kids.arith.total.who2
+@w.en.who_has.kids.arith.leader core.word lang=en text="who has" means=kids.arith.leader
+@w.en.who_have.kids.arith.leader core.word lang=en text="who have" means=kids.arith.leader
+@w.en.who_had.kids.arith.leader core.word lang=en text="who had" means=kids.arith.leader
+@w.en.who_owns.kids.arith.leader core.word lang=en text="who owns" means=kids.arith.leader
+@w.en.who_got.kids.arith.leader core.word lang=en text="who got" means=kids.arith.leader
+@w.en.which_kid_has.kids.arith.leader core.word lang=en text="which kid has" means=kids.arith.leader
+@w.en.which_friend_has.kids.arith.leader core.word lang=en text="which friend has" means=kids.arith.leader
+@w.en.which_child_has.kids.arith.leader core.word lang=en text="which child has" means=kids.arith.leader
+@w.en.more.kids.arith.leader.item core.word lang=en text=more means=kids.arith.leader.item
+@w.en.the_most.kids.arith.leader.item core.word lang=en text="the most" means=kids.arith.leader.item
+@w.en.the_largest_number_of.kids.arith.leader.item core.word lang=en text="the largest number of" means=kids.arith.leader.item
+@w.en.the_biggest_number_of.kids.arith.leader.item core.word lang=en text="the biggest number of" means=kids.arith.leader.item
+@w.en.which_of.kids.arith.leader core.word lang=en text="which of" means=kids.arith.leader
+@w.en.between.kids.arith.leader.who1 core.word lang=en text=between means=kids.arith.leader.who1
+@w.en.of.kids.arith.leader.who1 core.word lang=en text=of means=kids.arith.leader.who1
+@w.en.out_of.kids.arith.leader.who1 core.word lang=en text="out of" means=kids.arith.leader.who1
+@w.en.and.kids.arith.leader.who2 core.word lang=en text=and means=kids.arith.leader.who2
+@w.en.or.kids.arith.leader.who2 core.word lang=en text=or means=kids.arith.leader.who2
+@w.en.have.kids.arith.gap core.word lang=en text=have means=kids.arith.gap
+@w.en.how_many_more.kids.arith.gap core.word lang=en text="how many more" means=kids.arith.gap
+@w.en.how_many_extra.kids.arith.gap core.word lang=en text="how many extra" means=kids.arith.gap
+@w.en.how_many_fewer.kids.arith.gap core.word lang=en text="how many fewer" means=kids.arith.gap
+@w.en.how_many_less.kids.arith.gap core.word lang=en text="how many less" means=kids.arith.gap
+@w.en.does.kids.arith.gap.who1 core.word lang=en text=does means=kids.arith.gap.who1
+@w.en.do.kids.arith.gap.who1 core.word lang=en text=do means=kids.arith.gap.who1
+@w.en.did.kids.arith.gap.who1 core.word lang=en text=did means=kids.arith.gap.who1
+@w.en.than.kids.arith.gap.who2 core.word lang=en text=than means=kids.arith.gap.who2
+@w.en.compared_to.kids.arith.gap.who2 core.word lang=en text="compared to" means=kids.arith.gap.who2
+@w.en.does.kids.arith.verdict core.word lang=en text=does means=kids.arith.verdict
+@w.en.do.kids.arith.verdict core.word lang=en text=do means=kids.arith.verdict
+@w.en.did.kids.arith.verdict core.word lang=en text=did means=kids.arith.verdict
+@w.en.have_more.kids.arith.verdict.item core.word lang=en text="have more" means=kids.arith.verdict.item
+@w.en.has_more.kids.arith.verdict.item core.word lang=en text="has more" means=kids.arith.verdict.item
+@w.en.got_more.kids.arith.verdict.item core.word lang=en text="got more" means=kids.arith.verdict.item
+@w.en.than.kids.arith.verdict.who2 core.word lang=en text=than means=kids.arith.verdict.who2
+@w.en.plus.kids.arith.calc core.word lang=en text=plus means=kids.arith.calc
+@w.en.added_to.kids.arith.calc core.word lang=en text="added to" means=kids.arith.calc
+@w.en.add.kids.arith.calc core.word lang=en text=add means=kids.arith.calc
+@w.en.and.kids.arith.calc core.word lang=en text=and means=kids.arith.calc
+@w.en.added_up.kids.arith.calc core.word lang=en text="added up" means=kids.arith.calc
+@w.en.what_is.kids.arith.calc core.word lang=en text="what is" means=kids.arith.calc
+@w.en.whats.kids.arith.calc core.word lang=en text=whats means=kids.arith.calc
+@w.en.how_much_is.kids.arith.calc core.word lang=en text="how much is" means=kids.arith.calc
+@w.en.calculate.kids.arith.calc core.word lang=en text=calculate means=kids.arith.calc
+@w.en.compute.kids.arith.calc core.word lang=en text=compute means=kids.arith.calc
+@w.en.minus.kids.arith.calc core.word lang=en text=minus means=kids.arith.calc
+@w.en.take_away.kids.arith.calc core.word lang=en text="take away" means=kids.arith.calc
+@w.en.less.kids.arith.calc core.word lang=en text=less means=kids.arith.calc
+@w.en.subtract.kids.arith.calc core.word lang=en text=subtract means=kids.arith.calc
+@w.en.without.kids.arith.calc core.word lang=en text=without means=kids.arith.calc
+@w.en.times.kids.arith.calc core.word lang=en text=times means=kids.arith.calc
+@w.en.multiplied_by.kids.arith.calc core.word lang=en text="multiplied by" means=kids.arith.calc
+@w.en.multiply_by.kids.arith.calc core.word lang=en text="multiply by" means=kids.arith.calc
+@w.en.x.kids.arith.calc core.word lang=en text=x means=kids.arith.calc
+@w.en.lots_of.kids.arith.calc core.word lang=en text="lots of" means=kids.arith.calc
+@w.en.divided_by.kids.arith.calc core.word lang=en text="divided by" means=kids.arith.calc
+@w.en.split_by.kids.arith.calc core.word lang=en text="split by" means=kids.arith.calc
+@w.en.over.kids.arith.calc core.word lang=en text=over means=kids.arith.calc
+@w.en.divide_by.kids.arith.calc core.word lang=en text="divide by" means=kids.arith.calc
+@w.en.half.kids.arith.half core.word lang=en text=half means=kids.arith.half
+@w.en.what_is_half.kids.arith.half core.word lang=en text="what is half" means=kids.arith.half
+@w.en.whats_half.kids.arith.half core.word lang=en text="whats half" means=kids.arith.half
+@w.en.how_much_is_half.kids.arith.half core.word lang=en text="how much is half" means=kids.arith.half
+@w.en.of.kids.arith.half.n core.word lang=en text=of means=kids.arith.half.n
+@w.en.double.kids.arith.double core.word lang=en text=double means=kids.arith.double
+@w.en.twice.kids.arith.double core.word lang=en text=twice means=kids.arith.double
+@w.en.what_is_double.kids.arith.double core.word lang=en text="what is double" means=kids.arith.double
+@w.en.whats_double.kids.arith.double core.word lang=en text="whats double" means=kids.arith.double
+@w.en.what_is_twice.kids.arith.double core.word lang=en text="what is twice" means=kids.arith.double
+@w.en.how_much_is_double.kids.arith.double core.word lang=en text="how much is double" means=kids.arith.double
+@w.en.of.kids.arith.double.n core.word lang=en text=of means=kids.arith.double.n
