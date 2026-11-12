@@ -5,7 +5,7 @@
  *                `objects[kind=circle]` (first element whose field equals the value) or `objects[last]`.
  *                The world defaults to the case's world. Values compare as strings (numbers numerically for < > <= >=).
  *   relative value `$+N` / `$-N`: the value of the path before the message plus N (`objects.length>=$+1`).
- *   answer item  a substring that must appear (case-insensitive) in the reply text of the message; `forbid_answer` lists substrings that must NOT appear.
+ *   answer item  a substring that must appear (case-insensitive) in the ANSWER part of the reply text of the message (quoted echoes of the user's own words do not count, see answerPart); `forbid_answer` lists substrings that must NOT appear.
  *   effect item  the name of an effect the message must have produced.
  *   status       the status of the last answer ("supported", "unsupported", ...).
  * Pure functions, no imports (browser-safe).
@@ -65,8 +65,24 @@ export function checkState(states, item) {
   return { ok, actual: a };
 }
 
+const norm = (x) => String(x).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+/**
+ * The ANSWER part of a reply: the reply with every quoted echo of the user's own words removed (`I did not understand "I give Ana 10 lei".`),
+ * so an expected value is never found inside the echoed question. A quote counts as an echo when its text is a part of `message`
+ * (letters and digits only, case-insensitive); other quotes (a name, a label the reply made up, an example sentence) stay.
+ */
+export function answerPart(replyText, message) {
+  const m = ` ${norm(message ?? '')} `;
+  if (m.trim() === '') return String(replyText ?? '');
+  return String(replyText ?? '').replace(/"([^"]+)"|\u201c([^\u201d]+)\u201d|\u201e([^\u201d\u201c]+)[\u201d\u201c]/g, (all, a, b, c) => {
+    const q = norm(a ?? b ?? c);
+    return q && m.includes(` ${q} `) ? ' ' : all;
+  });
+}
+
 /** Compare a state item with several path/value pairs at once: `before` and `after` are full state maps. */
-export function evaluateCase(c, { before, after, replyText, effects, statuses, unparsedAll, values = [] }) {
+export function evaluateCase(c, { before, after, replyText: fullReply, message, effects, statuses, unparsedAll, values = [] }) {
+  const replyText = answerPart(fullReply, message ?? c.message);
   const items = [];
   for (const spec of c.expect?.state ?? []) {
     const it = parseStateItem(spec, c.world);

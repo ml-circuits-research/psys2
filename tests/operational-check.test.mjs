@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluateCase, numbersInText, checkState, parseStateItem } from '../scripts/lib/operational-check.mjs';
+import { evaluateCase, answerPart, numbersInText, checkState, parseStateItem } from '../scripts/lib/operational-check.mjs';
 
 const ev = (answer, replyText, values = []) => evaluateCase({ world: 'w', expect: { answer: [answer] } }, { before: {}, after: {}, replyText, effects: [], statuses: ['supported'], unparsedAll: false, values })[0].ok;
 
@@ -42,4 +42,15 @@ test('empty cells: null and "" are the same', () => {
   const ne = parseStateItem('board.4!=null', 'games.tictactoe');
   assert.equal(checkState({ 'games.tictactoe': { board: ['', '', '', '', 'X', '', '', '', ''] } }, ne).ok, true);
   assert.equal(checkState({ 'games.tictactoe': { board: ['', '', '', '', '', '', '', '', ''] } }, ne).ok, false);
+});
+
+test('the answer is matched only in the answer part, never in a quoted echo of the user\'s words (mp#021)', () => {
+  const message = 'I have 20 lei. I give Ana 10 lei.';
+  const reply = 'OK, you have 20 lei. I did not understand "I give Ana 10 lei". For example: "Mom gave me 5 lei." You have 20 lei now.';
+  assert.equal(answerPart(reply, message), 'OK, you have 20 lei. I did not understand  . For example: "Mom gave me 5 lei." You have 20 lei now.');
+  const run = (want) => evaluateCase({ world: 'w', message, expect: { answer: [want] } }, { before: {}, after: {}, replyText: reply, effects: [], statuses: ['supported'], unparsedAll: false })[0].ok;
+  assert.equal(run('10'), false);
+  assert.equal(run('20'), true);
+  assert.equal(run('Mom gave me 5 lei'), true, 'a quote that is not the user\'s words stays');
+  assert.equal(answerPart('He said \u201cthe witch\u201d.', 'And the witch?'), 'He said  .');
 });
