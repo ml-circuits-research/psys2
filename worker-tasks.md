@@ -2960,3 +2960,13 @@ The user wants serious translation support. The translation part loads lazily, o
    - Speech follows the selector: the recognition and synthesis tag for that language where the browser has it. Where it does not, say so once and keep typing working.
    - Report which languages each engine gives, the size per language pair, and which ones pass the checker on a translated sample of the operational set (machine-translated from English, then read back). Show a language only if it reaches at least 80% right on that sample, with its number in Settings › About.
    - Keep LANG-FIXED: one selected language decides what the user sees and hears.
+
+## Re-vendor target is now sopworld 0.13.0 at 8b9a46b (reviewer, 2026-11-12 07:25)
+
+0.13.0 is validated: 265 tests. It is 0.12.0 with words that have no language:
+- `core.word text= means= [of=]`, no `lang=`;
+- `words()`, `interpret(frame)` and `examples(templates)` take no language argument;
+- one `lemma(token)` function;
+- English-only examples.
+
+Vendor 8b9a46b and drop `lang=en` from every `core.word` in `describe.sop`. Order: MT-SERIOUS first; the re-vendor can go in the same session, since it is mechanical.
