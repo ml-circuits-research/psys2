@@ -14,7 +14,7 @@ import { loadWorlds } from '../worlds/index.mjs?v=65bb1cfcfa';
 import { validateWorldSet } from '../worlds/validate.mjs?v=ad3c8ef24d';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=deb03b682c';
-import { createReasoner } from '../reasoner/index.mjs?v=2443409bf5';
+import { createReasoner } from '../reasoner/index.mjs?v=8b0dd3e3aa';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=6ff4aeaed2';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=e1e88d78a9';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -31,7 +31,7 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=6f60935e0f';
 import { Discourse } from './discourse.mjs?v=0ada15a3e1';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=1ff76a2ddf';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=fb5303f0bb';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';

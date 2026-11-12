@@ -454,3 +454,37 @@ Design in spec 15, "Namespaces". Each instance is a World with its own namespace
 **Behaviour.** `dump-turns` before/after over 4,591 turns: replies, statuses and states identical except (a) the turn prefix inside ids in the state (277 turns), (b) the known random turns (a song of media.music, the seed of ui.avatar), (c) 46 `ui.avatar` states whose pending request wire has a `span.end` three characters longer (`t1_`).
 
 **Turn time** (`bench-reasoner.mjs --reps 3`, old and new tree at the same time, p50 ms ops / matrix, gap): all 9.1 / 11.0, +1.9 -> 9.2 / 11.8, +2.7; four +2.1 -> +3.5; kids-other +1.6 -> +2.7; games +2.7 -> +3.8; avatar/shell/editor +1.6 -> +1.7. A namespace costs about 0.5-0.8 ms of p50 per turn: the library adds the namespace to every match once a namespace is used, and the host walks each result once to take it off the ids. This is the price of the isolation; the gap of 0.7.1 (+2.0) is reopened by it.
+
+## Re-vendor sopworld 0.12.0 at 7a49329 (2026-11-12)
+
+Library: version 0.12.0, build `a4ae897bf038`, `docs/sopworld.mjs` 414,544 bytes (116,919 gzip -9), sha256 `e6074ce1...f166a` (full value in `src/vendor/LICENSES.md`); `tools/scan-loops.mjs` copied byte for byte. `npm test` green, `test-world all` clean in both reasoners, `test-webchat-matrix` 186/186, `test:browser` exit 0.
+
+### The facade (`src/reasoner/ns.mjs`): nothing could be dropped
+The 0.10 to 0.12 CHANGELOGs mention none of the six library items filed under "Namespaces" in `worker-log.md`, and a probe on 0.12.0 confirms: (1) `replace('A::x', '@x ...')` still stores `x`; (2) an aggregate's result is still told in the default namespace (docs.editor keeps `NO_NAMESPACE`); (3) `core.schema.map` still ignores `shared=`; (4) a replayed log entry still loses its namespace; (5) a reference to a shared type fact in the default namespace is still `dangling-ref`; (6) not retested. The facade and `replayInto` stay as they are.
+
+### New APIs used or tried
+| Item | Result |
+| --- | --- |
+| art.draw kind tallies | `core.aggregate by=?k groups=<26 kinds> count=?nk`: replaces the calc, the rule, the 26 `art.draw.kindfact` facts and their slot (matrix.sop 35 lines to 3). 562/562 tests, both reasoners; bench: music/draw/map/charts gap 2.44 ms before and after. (`groups=$pattern` makes the group value a wire id, which an atom slot refuses: values are listed.) |
+| `lang/ro/*.entities.sop` | `of=` now names the slot the value belongs to: `kids.shop.price.item` (80), `docs.editor.block.kind` (29), `geo.map.focus.name` (171); the library reads them without an `unknown-word` warning. The 21 ordinal and position words keep `of=lex.docs.editor.ordinals/positions`: the matrix has no slot for them. |
+| E2 `lacks` zeroing (R12.1) | Cannot be dropped yet: 0.12 skips the sought value only for a queried wire that exists and a question given as `{ type, seek }`; the host's question wires about a computed total (`kids.arith.total`) still give `lacks count`. Without the host zero `choose` makes 7 new wrong answers (6 Romanian "how many in total"). Library item filed in `worker-log.md`. |
+| RESTORE-1 on delta snapshots | Not adopted. 40-turn session (14 x buy, draw, recolour): host record 52,091 bytes, serialize 1.3 ms, restore 24 ms; library `toJSON({ timeline: true, since: base })` per instance 836,647 bytes (art.draw 827,256: its 69 marks are not on the way of the log, each is a log of its own), serialize 2.4 ms, `fromJSON({ base })` 109 ms. The host record shares entries across marks and across instances and is 16 times smaller and 4.5 times faster to restore. The restart-undo test stays the gate. |
+| Redo after a rewind | Not adopted. The library's redo is per World; the host's redo restores the session timeline across instances (`turns`, the shared log, the dialogue memory) and the instances together, so `redos` and `isView` stay; the library redo could only replace the per-instance rewind inside it. |
+
+### Bench (`bench-reasoner.mjs --reps 3`, old tree 0.9.0 at f3d150b and new tree at the same time; p50 ms, gap = matrix minus ops)
+| group | old gap | new gap |
+| --- | ---: | ---: |
+| all | 2.31 | 2.27 |
+| four | 2.64 | 2.50 |
+| kids-other | 1.95 | 2.21 |
+| music/draw/map/charts | 2.44 | 2.44 |
+| games | 3.33 | 3.51 |
+| documents | 1.94 | 1.95 |
+| avatar/shell/editor | 1.74 | 1.69 |
+No regression beyond the noise of two runs sharing a loaded machine. The A/B gate (`tests/ab-gate.test.mjs`, 0 "ops better") is part of `npm test` and green.
+
+### Where the time goes in games (`--instrument`, 452 turns, inclusive ms per turn, matrix)
+`rs.resolve` 2.67 (of which `lib.act` 2.41, the library running the game's action and its transaction, the part ops runs as plain code), `rs._state` 0.88 (7.8 derivations per turn: the world's `toState` after each step), `rs.tell` 0.72, `lib.check` 0.28, `rs.syncTo` 0.11, everything else under 0.1. So the games gap (about +3.3) is the action transaction plus about 2 ms of state derivation and telling; no single call is cheap to remove (a state cache across the 7.8 derivations is the candidate, not done: it would change when `toState` runs).
+
+### E2 on 0.12.0
+`training/results/e2-world-aware-2026-11-12b.{json,md}`. Gate met: 0 new wrong in veto and choose, rules and encoder+n1. Judged readings: no more (3135 / 3125 / 3250 as before; the fallback judgement needs `$id` or `type.key` arguments, and the host's arguments are bare names). Library `veto(result)` as a veto kind: rules 57 wrong to not understood against 70 right to not understood, so not in the default set. Split candidates over the E3b `core.word` facts: only kids.shop's words resolve (geo.map 341 and docs.editor 247 `unknown-word`); on 291 kids.shop messages the library answers 11, none of the cases the rules miss.
