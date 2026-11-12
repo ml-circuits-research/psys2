@@ -53,7 +53,7 @@
     "lib/dialog/discourse.mjs": "e11d562ccf4d8324",
     "lib/dialog/dispatch-validate.mjs": "965dfe7431680797",
     "lib/dialog/encoder-dispatch.mjs": "6ecd5f7a1b2eb7b9",
-    "lib/dialog/index.mjs": "bb3b66cc67a6df08",
+    "lib/dialog/index.mjs": "10d25889ffbaf637",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/runtime-config.mjs": "00f7f1673faca90b",
@@ -116,8 +116,8 @@
     "lib/vendor/sopworld/sopworld.mjs": "e6074ce150c788c3",
     "lib/vendor/sopworld/tools/scan-loops.mjs": "c468386b69b7edda",
     "lib/worlds/canonical.mjs": "331dd143a11d8880",
-    "lib/worlds/describe.mjs": "7a2e2cea4853fe27",
-    "lib/worlds/index.mjs": "2372e0ae7cf87144",
+    "lib/worlds/describe.mjs": "b6a4a9e3f2d6fbf1",
+    "lib/worlds/index.mjs": "55f96f19e6515620",
     "lib/worlds/lexicon.mjs": "eacdc3fe6ef44a6e",
     "lib/worlds/validate.mjs": "668392061ee0985b",
     "worlds/art.draw/coverage.md": "e028db6e48c71587",
@@ -171,7 +171,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "16f176dcd3a5d975",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "29b614e788d3eec6",
+    "worlds/index.json": "211ffaa21b3d4077",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -225,5 +225,5 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-12T06:40:23.218Z"
+  "builtAt": "2026-11-12T06:57:23.004Z"
 }
