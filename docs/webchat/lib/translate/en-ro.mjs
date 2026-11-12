@@ -5,7 +5,7 @@ import * as M from './morphology.ro.mjs?v=c18835e9d6';
 import * as L from './lexicon.ro-en.mjs?v=0823d91a10';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
-import { translateReplySentence } from './replies.en-ro.mjs?v=3edf724b51';
+import { translateReplySentence } from './replies.en-ro.mjs?v=1bef2767d1';
 import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
@@ -853,6 +853,15 @@ export function isEnglishWord(key) {
     || !!WH_EN[key] || AUX_ENS.has(key) || DET_EN.has(key) || !!PREP_EN[key] || key in NUM_UNITS;
 }
 
+/** Regular English forms of a lexicon word that the lexicon does not list itself: "biggest", "smaller", "pears", "walking", "quickly" (RO-LEFTOVERS item 1). */
+function isEnglishDerived(k) {
+  if (k.length < 5) return false;
+  const stems = [];
+  const add = (s) => { if (s.length >= 3) { stems.push(s); if (/(.)\1$/.test(s)) stems.push(s.slice(0, -1)); stems.push(`${s}e`); if (s.endsWith('i')) stems.push(`${s.slice(0, -1)}y`); } };
+  for (const suf of ['est', 'er', 'ing', 'ed', 'ly', 'es', 's']) if (k.endsWith(suf) && k.length - suf.length >= 3) add(k.slice(0, -suf.length));
+  return stems.some((s) => nounMap.has(s) || verbMap.has(s) || adjMap.has(s));
+}
+
 /**
  * English words that survived in a Romanian output (a word of the English lexicon that Romanian does not also know). A reply with such a word
  * is mixed, so the caller keeps the whole reply in English instead.
@@ -862,7 +871,7 @@ export function englishLeftovers(text) {
   for (const t of tokenize(String(text ?? ''))) {
     if (t.kind !== 'word') continue;
     const k = t.key;
-    if ((k.length < 3 && !/^(is|it|of|be|my|we|he|if)$/.test(k)) || !isEnglishWord(k)) continue;
+    if ((k.length < 3 && !/^(is|it|of|be|my|we|he|if)$/.test(k)) || !(isEnglishWord(k) || isEnglishDerived(k))) continue;
     if (M.analyze(k).length || M.isKnownName(k) || /^(sau|plus|minus|pot|mai|are|de|la|cu|pe|din|nu|da)$/.test(k)) continue;
     out.push(t.raw);
   }
@@ -923,9 +932,23 @@ function withQuoteGuard(sentence, r) {
  */
 /** Word-by-word grammar turns "what day it is today" into "ce este zi azi"; the question is "ce zi este azi" (RO-TRANSLATE-FALLBACK note a). */
 const DAY_QUESTION = /\b([Cc])e este zi (azi|mâine|ieri)\b/g;
+/** "bar chart" / "line chart" are noun-noun compounds: word by word they read "o bară grafic"; Romanian says "un grafic cu bare" (RO-LEFTOVERS item 4). */
+const CHART_KIND = { 'bară': 'bare', 'bara': 'bare', 'bare': 'bare', 'barele': 'bare', 'linie': 'linii', 'linia': 'linii', 'linii': 'linii', 'liniile': 'linii' };
+function chartCompounds(text) {
+  return text.replace(/\b(O|o|Un|un|Bara|bara|Linia|linia|Bară|bară|Linie|linie|Bare|bare|Linii|linii)(?: (bară|linie|bare|linii))? ?(grafic(?:e|ul)?)\b/gu, (all, a, b, g) => {
+    const word = b ?? a;
+    const kind = CHART_KIND[word.toLowerCase()];
+    if (!kind || (b == null && /^(O|o|Un|un)$/.test(a))) return all;
+    const cap = /^\p{Lu}/u.test(a);
+    const art = b != null && /^(O|o)$/.test(a) ? 'un' : null;
+    if (b == null && /^(Bara|bara|Linia|linia)$/.test(a)) return `${cap ? 'G' : 'g'}raficul cu ${kind}`;
+    if (art) return `${cap ? 'Un' : 'un'} grafic cu ${kind}`;
+    return `${/^\p{Lu}/u.test(a) ? 'G' : 'g'}${g === 'grafice' ? 'rafice' : 'rafic'} cu ${kind}`;
+  });
+}
 export function translateEnRo(original) {
   const r = translateEnRoInner(original);
-  return r.text ? { ...r, text: r.text.replace(DAY_QUESTION, '$1e zi este $2').replace(/"([^"\n]*)"/g, '„$1”') } : r;   // Romanian quotes are „…”
+  return r.text ? { ...r, text: chartCompounds(r.text).replace(DAY_QUESTION, '$1e zi este $2').replace(/"([^"\n]*)"/g, '„$1”') } : r;   // Romanian quotes are „…”
 }
 function translateEnRoInner(original) {
   const source = String(original ?? '');

@@ -98,8 +98,8 @@
     "lib/soplang/index.mjs": "c3ef0aeb95aea0b7",
     "lib/translate/avatar.en-ro.mjs": "78e6b458378d43a3",
     "lib/translate/canonical.en-ro.mjs": "e8ac6d4a2fe6d734",
-    "lib/translate/en-ro.mjs": "ca0e314798dff74a",
-    "lib/translate/index.mjs": "5c7dd4b6bf2fef4f",
+    "lib/translate/en-ro.mjs": "551d6cf083aac857",
+    "lib/translate/index.mjs": "a730574c50139563",
     "lib/translate/inflect.en.mjs": "c54249cec2789d10",
     "lib/translate/language-command.mjs": "87874bf6ddd2e66c",
     "lib/translate/lexicon.ro-en.mjs": "385172ce534192fe",
@@ -108,7 +108,7 @@
     "lib/translate/phrases.commands.ro-en.mjs": "ec6207dada343d04",
     "lib/translate/phrases.ro-en.mjs": "18b35dd89d0e24b5",
     "lib/translate/places.ro-en.mjs": "94650384878ada19",
-    "lib/translate/replies.en-ro.mjs": "194a5e243bd760a3",
+    "lib/translate/replies.en-ro.mjs": "c4549ab6b4073464",
     "lib/translate/ro-en.mjs": "d3ba23e38619448b",
     "lib/vendor/LICENSES.md": "561cd1c16b2aa773",
     "lib/vendor/sopworld/LICENSE": "93611051303e500a",
@@ -224,5 +224,5 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-12T04:29:41.804Z"
+  "builtAt": "2026-11-12T05:03:13.582Z"
 }

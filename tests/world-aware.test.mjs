@@ -32,6 +32,29 @@ test('off: the shipped reply, nothing recorded on the segments', async () => {
   assert.ok(r.segments.every((x) => x.wa === undefined && x.veto === undefined && x.pick === undefined));
 });
 
+// The first veto case (RO-LEFTOVERS item 3): a Romanian reading that leaves out the noun ("părul") must not act.  The rules translator reads "fă părul roșu" without
+// the hair; with worldAware off that reading goes through unchecked (in the webchat it turned the body light red: still wrong with the option off), with
+// worldAware=veto it is not acted on: the reply says there is no "părul" and the avatar does not change.
+test('veto: "fă părul roșu" leaves out "părul": nothing is changed, the reply names the word (off: no veto is recorded)', async () => {
+  const { createTranslator } = await import('../src/translate/index.mjs');
+  const ro = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), translator: createTranslator() });
+  const run = async (worldAware) => {
+    const s = ro.createSession({ language: 'ro', ...(worldAware ? { worldAware } : {}) });
+    s.setWorldState('ui.shell', { activeTab: 'robot' });
+    const colors = () => JSON.stringify(s.state()['ui.avatar']?.robot?.colors);
+    const before = colors();
+    const r = await s.send('fă părul roșu', { language: 'ro' });
+    return { r, same: colors() === before };
+  };
+  const v = await run('veto');
+  assert.equal(v.r.segments[0].veto?.kind, 'no-referent');
+  assert.match(v.r.text, /părul/);
+  assert.deepEqual(v.r.statuses, ['missing']);
+  assert.ok(v.same, 'the avatar is unchanged');
+  const off = await run(null);
+  assert.ok(off.r.segments.every((x) => x.veto === undefined || x.veto === null), 'with the option off the veto never runs');
+});
+
 test('veto: "delete the dragon" says what the picture holds, changes nothing', async () => {
   const s = await session('veto', 'draw', ['draw a house']);
   const before = strip(s.state());

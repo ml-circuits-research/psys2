@@ -14,6 +14,7 @@
 // Entries are matched against the whole trimmed sentence; the order of the table does not matter (exact, most specific first).
 
 import { places as PLACE_LIST } from './places.ro-en.mjs?v=97dc087c2a';
+import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
 import { avatarListRo, avatarOptionsRo, AVATAR_PARTS, AVATAR_CHARACTER_RO, AVATAR_CHARACTER_EN } from './avatar.en-ro.mjs?v=5b0048ab8d';
 const COLOURS = { red: 'roșu', yellow: 'galben', blue: 'albastru', green: 'verde', orange: 'portocaliu', purple: 'mov', violet: 'violet', pink: 'roz', brown: 'maro', black: 'negru', white: 'alb', gray: 'gri', grey: 'gri', turquoise: 'turcoaz', coral: 'coral', beige: 'bej', gold: 'auriu', silver: 'argintiu', tan: 'bronzat' };
 const DAYS = { Monday: 'luni', Tuesday: 'marți', Wednesday: 'miercuri', Thursday: 'joi', Friday: 'vineri', Saturday: 'sâmbătă', Sunday: 'duminică' };
@@ -41,6 +42,18 @@ const PL_GEN = new Map(PLACE_LIST.map((p) => [p.en, p.gen[0] ?? p.nom[0]]));
 const placeRo = (v) => PL_NOM.get(v) ?? PLACES[v] ?? (/^[A-Z]/.test(v) ? v : null);
 const placeGen = (v) => PL_GEN.get(v) ?? PLACES[v] ?? (/^[A-Z]/.test(v) ? v : null);
 
+const exampleRo = (v) => (CANONICAL_RO[`${v}.`] ?? CANONICAL_RO[`${v}?`] ?? CANONICAL_RO[v])?.replace(/[.?!]$/, '') ?? null;   // the quoted example has no final stop
+const ANIMAL_EXTRA = { tortoise: 'țestoasă', donkey: 'măgar', more: 'altele' };
+function animalListRo(v, sub) {
+  const items = v.split(/, | and /);
+  const out = items.map((x) => ANIMAL_EXTRA[x] ?? sub(x));
+  if (out.some((x) => !x)) return null;
+  const more = items.at(-1) === 'more';
+  const head = more ? out.slice(0, -1) : out;
+  const last = head.pop();
+  return head.length ? `${head.join(', ')} și ${last}${more ? ' și altele' : ''}` : `${last}${more ? ' și altele' : ''}`;
+}
+
 // slot type -> [regex source, converter(value, sub) -> string | null]
 const TAB_RO = { Avatar: 'Avatar', Editor: 'Editor', 'Tic-tac-toe': 'X și 0', 'Guess the animal': 'Ghicește animalul', Hangman: 'Spânzurătoarea', Drawing: 'Desen', Diagram: 'Diagramă', Charts: 'Grafice', Map: 'Hartă', Music: 'Muzică', Chess: 'Șah', Documents: 'Documente', Profile: 'Profil' };
 const SLOTS = {
@@ -67,6 +80,13 @@ const SLOTS = {
   t: ['(.+?)', (v, sub) => sub(v)],
   avl: ['(.+?)', (v) => avatarListRo(v)],   // the avatar's own part phrases (avatar.en-ro.mjs)
   chr: ['(a robot|a person|an emoji|a portrait|a cartoon|a kid|a pixel person|a pixel robot|a fun emoji)', (v) => AVATAR_CHARACTER_RO[AVATAR_CHARACTER_EN[v]] ?? null],
+  nk: ['(\\d[\\d,]*(?:\\.\\d+)?)', (v) => v.replace(/,(?=\d{3}\b)/g, '.'), (v) => (Number(String(v).replace(/,/g, '')) >= 20 ? `${String(v).replace(/,(?=\d{3}\b)/g, '.')} de` : v)],   // a number with English thousands commas (1,106 km): Romanian dots
+  tl: ['(.+?)', (v, sub) => { const r = sub(v); return r ? r.replace(/^\p{Lu}/u, (c) => c.toLowerCase()) : r; }],   // free text translated by the grammar, lower case after a colon
+  ex: ['([^"]+?)', (v) => exampleRo(v)],   // an example sentence in quotes, in its authored Romanian (canonical.en-ro.mjs), else the entry does not apply
+  side: ['(white|black)', (v) => ({ white: 'albele', black: 'negrele' })[v]],   // the side of a chess player
+  note: ['([A-G][#b]?)', (v) => v],   // a note name as the music world writes it
+  plist: ['([A-Z][\\p{L}\\-]*(?:(?:, | and )[A-Z][\\p{L}\\-]*)*)', (v) => v.split(/, | and /).map((x) => placeRo(x)).join(', ').replace(/, ([^,]*)$/, ' și $1')],   // a list of places (Bulgaria, Hungary and Ukraine)
+  anl: ['([a-z][a-z ,]*?)', (v, sub) => animalListRo(v, sub)],   // the animals the guessing game still thinks of ("dog, cat and donkey and more")
   q: ['(.+?)', (v) => v],   // the user's own words as stored, copied unchanged
 };
 
@@ -190,7 +210,7 @@ const TABLE = [
   ['There was no water, so I added it to the ground.', 'Nu era apă, așa că am adăugat-o pe pământ.'], ['There was no sand, so I added it to the ground.', 'Nu era nisip, așa că l-am adăugat pe pământ.'], ['There was no snow, so I added it to the ground.', 'Nu era zăpadă, așa că am adăugat-o pe pământ.'], ['There was no grass, so I added it to the ground.', 'Nu era iarbă, așa că am adăugat-o pe pământ.'],
   ['I drew {np} at the bottom.', 'Am desenat {np} în partea de jos.'],
   ['Drew {ids}.', 'Am desenat {ids}.'],
-  ['Here is a fresh sheet of paper!', 'Iată o foaie nouă de hârtie!'], ['Ta-da! It is night now: a dark sky, a moon and lots of stars.', 'Gata! Acum este noapte: un cer întunecat, o lună și o mulțime de stele.'],
+  ['Here is a fresh sheet of paper!', 'Iată o foaie nouă de hârtie!'], ['It is night now: a dark sky, a moon and lots of stars.', 'Acum este noapte: un cer întunecat, o lună și o mulțime de stele.'],
   ['New game of tic-tac-toe.', 'Joc nou de x și 0.'], ['"{q}" has {n} words.', '"{q}" are {n} cuvinte.'],
   ['Where should it go?', 'Unde ar trebui să meargă?'], 
   ['I can not find {np} in your picture.', 'Nu găsesc {np} în desen.'],
@@ -206,11 +226,11 @@ const TABLE = [
   ['OK, I took back your last {n} moves.', 'Bine, am luat înapoi ultimele tale {n} mutări.'], ['OK, I took back your last {n} moves and my reply.', 'Bine, am luat înapoi ultimele tale {n} mutări și răspunsul meu.'], ['OK, I took back the last {n} moves.', 'Bine, am luat înapoi ultimele {n} mutări.'],
   ['Checkmate! You win. Well played!', 'Șah mat! Ai câștigat. Bine jucat!'], ['Stalemate: nobody can move, so the game is a draw.', 'Pat: nimeni nu mai poate muta, deci partida este remiză.'],
   ['Checkmate! I win this time. Good game!', 'Șah mat! De data asta câștig eu. Joc frumos!'], ['Say "new game" to play again.', 'Spune „joc nou” ca să jucăm din nou.'],
-  ['The game is a draw by {t}.', 'Partida este remiză prin {t}.'], ['You are playing {w}, and I play {w2}.', 'Tu joci cu {w}, iar eu cu {w2}.'],
+  ['The game is a draw by {t}.', 'Partida este remiză prin {t}.'], ['You are playing {side}, and I play {side2}.', 'Tu joci cu {side}, iar eu cu {side2}.'],
   // the music world quotes the title of the song: a title stays as it is
   ['Playing "{q}" on the piano at {n} beats per minute.', 'Cânt „{q}” la pian cu {n:de} bătăi pe minut.'],
   ['To show places on a map, you can say, for example: "Show latitude 48.8 longitude 2.3", "Is Paris the capital of France" or "Zoom all the way out".', 'Ca să arăți locuri pe hartă, poți spune, de exemplu: „arată Parisul”, „este Paris capitala Franței” sau „micșorează harta”.'],
-  ['OK, back to the {tab} tab.', 'Bine, înapoi la fila {tab}.'],
+  ['OK, back to the {tab} tab.', 'Bine, înapoi la fila {tab}.'], ['There is no previous tab to go back to.', 'Nu există nicio filă anterioară la care să mă întorc.'],
   ['You play {piece} to {w}.', 'Joci cu {piece} la {w}.'],
   ['I play at level {n} ({lvl}).', 'Joc la nivelul {n} ({lvl}).'], ['OK, I now play at level {n} ({lvl}).', 'Bine, acum joc la nivelul {n} ({lvl}).'],
   ['I play at the {lvl} level.', 'Joc la nivelul {lvl}.'],
@@ -473,6 +493,34 @@ const TABLE = [
   ["Answer with yes, no, I don't know or maybe.", 'Răspunde cu da, nu, nu știu sau poate.'],
   // ---- lists
   ['Hello!', 'Bună!'],
+  // ---- RO-LEFTOVERS: the most frequent replies of the Romanian operational set that ended as the fixed fallback line
+  ['I do not know what "{q}" is.', 'Nu știu ce este „{q}”.'],
+  ['You can say the house, the tree, the sun, it, or everything.', 'Poți spune casa, copacul, soarele, asta sau totul.'],
+  ['You can say the car, the tree, the sky, the grass, or everything.', 'Poți spune mașina, copacul, cerul, iarba sau totul.'],
+  ['I do not know what you mean by "{q}" yet.', 'Încă nu știu ce vrei să spui prin „{q}”.'],
+  ['Draw something first, or say which thing you mean.', 'Desenează mai întâi ceva sau spune la ce te referi.'],
+  ['I did not understand where to put it ("{q}").', 'Nu am înțeles unde să pun asta („{q}”).'],
+  ['You can say, for example: "{ex}", "{ex2}" or "{ex3}".', 'Poți spune, de exemplu: „{ex}”, „{ex2}” sau „{ex3}”.'],
+  ['You can say, for example: "{ex}" or "{ex2}".', 'Poți spune, de exemplu: „{ex}” sau „{ex2}”.'],
+  ['{place} borders {n} countries: {plist}.', '{place} se învecinează cu {n:de} țări: {plist}.'], ['{place} borders {n} country: {plist}.', '{place} se învecinează cu {n} țară: {plist}.'],
+  ['Chess: You play White against me.', 'Șah: joci cu albele împotriva mea.'],
+  ['Say your moves in plain English ("{q}", "{q2}", "{q3}", "{q4}").', 'Spune-ți mutările simplu („calul la f3”, „e2 la e4”, „nebunul ia c6”, „rocadă mică”).'],
+  ['I could not find "{q}" in the document.', 'Nu am găsit „{q}” în document.'],
+  ['I am still thinking of {n} animals: {anl}.', 'Mă gândesc încă la {n:de} animale: {anl}.'], ['I am still thinking of {n} animal: {anl}.', 'Mă gândesc încă la {n} animal: {anl}.'],
+  ['It is night now: a dark sky, a moon and lots of stars.', 'Acum este noapte: un cer întunecat, o lună și o mulțime de stele.'],
+  ['{place} and {place2} are about {nk} km ({nk2} miles) apart, as the crow flies.', '{place} și {place2} sunt la aproximativ {nk:de} km ({nk2:de} mile) distanță, în linie dreaptă.'],
+  ['{place} and {place2} are about {nk} km ({nk2} miles) apart, measured between their centres, as the crow flies.', '{place} și {place2} sunt la aproximativ {nk:de} km ({nk2:de} mile) distanță, măsurat între centrele lor, în linie dreaptă.'],
+  ['You are about {nk} km ({nk2} miles) from {place}, as the crow flies.', 'Ești la aproximativ {nk:de} km ({nk2:de} mile) de {place}, în linie dreaptă.'],
+  ['The major key with {n} sharps is {note} major (its relative minor is {note2} minor).', 'Tonalitatea majoră cu {n} diezi este {note} major (relativa ei minoră este {note2} minor).'],
+  ['The major key with {n} flats is {note} major (its relative minor is {note2} minor).', 'Tonalitatea majoră cu {n} bemoli este {note} major (relativa ei minoră este {note2} minor).'],
+  ['The major key with 1 sharp is {note} major (its relative minor is {note2} minor).', 'Tonalitatea majoră cu 1 diez este {note} major (relativa ei minoră este {note2} minor).'],
+  ['The major key with 1 flat is {note} major (its relative minor is {note2} minor).', 'Tonalitatea majoră cu 1 bemol este {note} major (relativa ei minoră este {note2} minor).'],
+  ['OK, I undid it: the list you added is gone.', 'Bine, am anulat: lista pe care ai adăugat-o a dispărut.'],
+  ['{tl} is the biggest, with {n}.', 'Cel mai mare: {tl}, cu {n}.'], ['{tl} is the smallest, with {n}.', 'Cel mai mic: {tl}, cu {n}.'],
+  ['{tl} are the biggest, with {n}.', 'Cei mai mari: {tl}, cu {n}.'], ['{tl} are the smallest, with {n}.', 'Cei mai mici: {tl}, cu {n}.'],
+  ['I can chat, talk about shapes and colors, shopping, animals and time, draw pictures, charts and diagrams, do sums, keep your lists, edit documents, answer questions about your documents, play chess, guess the animal, hangman, tic-tac-toe and music, show places on a map, change my face, and get to know you and keep your profile.', 'Pot sta de vorbă, pot vorbi despre forme și culori, cumpărături, animale și timp, pot desena imagini, grafice și diagrame, pot face calcule, îți pot ține listele, pot edita documente, pot răspunde la întrebări despre documentele tale, pot juca șah, ghicește animalul, spânzurătoarea, x și 0 și muzică, pot arăta locuri pe hartă, îmi pot schimba fața și pot învăța despre tine și îți pot ține profilul.'],
+  ['I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon, and shapes like a circle, a square, a triangle, a star, a heart, a line or an arrow.', 'Pot desena o casă, un copac, un soare, un nor, o mașină, o floare, o pisică, un câine, un pește, o pasăre, o barcă, un munte, un curcubeu, o persoană, un balon, o rachetă, o lună și forme precum un cerc, un pătrat, un triunghi, o stea, o inimă, o linie sau o săgeată.'],
+
 ];
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
