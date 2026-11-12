@@ -3057,3 +3057,14 @@ Corrections:
 3. **"fă o diagramă random"** still opens the canvas with the garbled translated help text. Same cause: no MT. It is the first phone-mode row.
 4. **`ro-fallback.test.mjs`** "empty took 1539 ms against 1500" is a timing test under load. Make it count steps, as you did for voice-repair.
 5. **Re-vendor target is now 0.13.1 at e586ac5.** You vendored 0.13.0; 0.13.1 adds the namespace fixes, J1 and J2.
+
+## SHIP-NOW (user, 2026-11-12 09:24): publish the current system; the user wants to test it
+
+The user wants to test the current system now. Publish your changes even with small regressions. Run regression-analysis agents in parallel; if regressions are only about 1–2%, that is probably not serious.
+1. **Publish now.** Merge what is finished, rebuild the webchat and push to main, so GitHub Pages serves it. Then keep publishing after every finished piece, at least every hour.
+2. **Make the version visible.** Show the build time and the commit hash in Settings › About, and in the first line of the debug panel. The user still sees "Nu am încă o formulare în română…" in the demo, and he reads that as nothing having been updated for a long time. He must be able to tell which build he has.
+   - Check the caching: the service worker and the import-map `?v=` stamps. A new build must reach a phone after one reload. If it does not, fix the cache (versioned cache name, `skipWaiting` and `clients.claim`, or no service worker).
+3. **Regressions.** After each publish, an agent runs the operational, operational-ro and dialogue sets and the A/B gate, and writes a short regression note in worker-log.md: what got worse, by how much, which cases.
+   - Below about 2% on a set: keep going.
+   - Above 2%, or any coherence failure (the A/B "ops better" gate, a not-understood turn that changes state): fix it first.
+4. Keep MT-SERIOUS as the main work. The fixed Romanian line goes away with it.
