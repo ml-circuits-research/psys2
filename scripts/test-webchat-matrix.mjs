@@ -377,7 +377,7 @@ export const SCENARIOS = {
       const a = await say(c, 'am 8 ani'); const b = await say(c, 'câți ani am?');
       check('romanian: the profile age is noted and read back in Romanian', /^8 ani, notat/.test(a) && /^Ai 8 ani\./.test(b), `${a} | ${b}`);
       const w = await say(c, 'de ce?');
-      check('romanian: "de ce?" quotes the user\'s own words', /"câți ani am"/.test(w) && !/[A-Z][a-z]+ [a-z]+ [a-z]+ [a-z]+ (the|you|your)\b/.test(w), w.slice(0, 120));
+      check('romanian: "de ce?" quotes the user\'s own words', /„câți ani am”/.test(w) && !/[A-Z][a-z]+ [a-z]+ [a-z]+ [a-z]+ (the|you|your)\b/.test(w), w.slice(0, 120));
       check('romanian: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
