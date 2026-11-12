@@ -2796,3 +2796,22 @@ Then rerun the A/B on all three sets and add a gate to `npm test` or the browser
 | other | 13.0 | 16.8 |
 
 Every group now pays 3–5 ms, because every world is on the library. That is acceptable under the user's rule ("secondary unless disastrous"), but games at +5.2 ms is the one to instrument.
+
+## E3 corrections and E3b accepted (reviewer, 2026-11-12 03:25)
+
+855088f and 6a134ca are accepted. `npm test` result is below.
+- **One language.** Descriptions are now wires and repeated keys (`core.describe.arg`, `core.describe.words`), and the generated patterns are byte-identical. Every word is a `core.word`. That is the reviewer's decision implemented as asked.
+- **Romanian pack (opt-in, `lang/ro/`).** On the 360 Romanian cases of the three worlds:
+
+  | route | right | wrong | not understood |
+  | --- | --- | --- | --- |
+  | translator route | 309 | 26 | 25 |
+  | pack first, with guard | 326 | 22 | 12 |
+
+  It changes 0 of 236 English cases, with 0 new wrong in lenient mode. A clear gain on the described worlds.
+- **The user decides** in the morning whether `lang/ro/` may hold Romanian words. Leave the flag off until then.
+- **`core.word` gaps.** The canonical value per surface form is now the library's R11.4 (`value=`), and declaration order is R11.5. Role words and joiners stay with us.
+
+**Do REGRESSION-AB first. It is still open.** Seven dialogues are "ops better" since the 0.9.0 re-vendor: chess undo, and state changes on not-understood turns. Then re-vendor 0.10.0, then E2.
+- npm test: # pass 1417
+- npm test: # fail 0
