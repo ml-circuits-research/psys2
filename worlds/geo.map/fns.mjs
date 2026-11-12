@@ -73,34 +73,31 @@ function wiresOf(s) {
 }
 
 /**
- * The library wires for a state the operations changed: { retract: [ids], tell: 'text', sets: [{ id, key, value }] } (a wire that already says it is left alone).
- * A wire whose single values changed is set in place; a wire that gained or lost a key is told under a new id (`gm.mk_m1.2` after `gm.mk_m1`) and the old
- * one retracted, all in one transaction.
+ * The library wires for a state the operations changed: { retract: [ids], tell: 'text', sets: [{ id, key, value }], replace: [{ id, type, attrs }] } (a wire that already says it is left alone).
+ * A wire whose single values changed is set in place; a wire that gained or lost a key is replaced in place (it keeps its id), all in one transaction.
  */
 export function adopt({ state, find, inPlace = true }) {
   const want = wiresOf(state);
-  const have = new Map();   // base id -> { id, rev, wire } of the newest wire of that base
+  const have = new Map();   // id -> { id, wire }
   for (const t of TYPES) for (const w of find(t)) {
-    const m = /^(.+)\.(\d+)$/.exec(w.id);
-    const base = m ? m[1] : w.id, rev = m ? Number(m[2]) : 0;
-    if (!have.has(base) || have.get(base).rev < rev) have.set(base, { id: w.id, rev, wire: w });
+    have.set(w.id, { id: w.id, wire: w });
   }
-  const retract = [], tell = [], sets = [], same = new Set();
+  const retract = [], tell = [], sets = [], replace = [], same = new Set();
   const keys = (a) => Object.keys(a).filter((k) => !k.startsWith('core.')).sort().join();
   for (const [base, h] of have) {
     const w = want[base];
     if (!w || canon(h.wire.attrs) === canon(w.attrs)) { if (!w) retract.push(h.id); continue; }
     const single = inPlace && h.wire.type === w.type && keys(h.wire.attrs) === keys(w.attrs) && Object.keys(w.attrs).every((k) => w.attrs[k].length === 1 && (h.wire.attrs[k] ?? []).length === 1);
-    if (!single) { retract.push(h.id); continue; }
+    if (!single) { replace.push({ id: h.id, type: w.type, attrs: w.attrs }); continue; }   // the wire keeps its id (library R6.9)
     for (const [k, vs] of Object.entries(w.attrs)) if (h.wire.attrs[k][0] !== vs[0]) sets.push({ id: h.id, key: k, value: vs[0] });
     same.add(base);
   }
   for (const [base, w] of Object.entries(want)) {
     const h = have.get(base);
-    if (h && (same.has(base) || !retract.includes(h.id))) continue;
-    tell.push(`@${base}.${(h?.rev ?? 0) + 1} ${w.type} ${Object.entries(w.attrs).map(([k, vs]) => vs.map((v) => `${k}=${v}`).join(' ')).join(' ')}`);
+    if (h) continue;
+    tell.push(`@${base} ${w.type} ${Object.entries(w.attrs).map(([k, vs]) => vs.map((v) => `${k}=${v}`).join(' ')).join(' ')}`);
   }
-  return { retract, tell: tell.join('\n'), sets };
+  return { retract, tell: tell.join('\n'), sets, replace };
 }
 
 // ---- the claims of the user about places ------------------------------------------------------------------------------------------------------------
@@ -141,6 +138,7 @@ function viaOps(opsFn, claimOf) {
     const r = opsFn({ ...ctx.host.view(ctx), state, request: () => { opened = true; }, effect: () => {} }, args);
     const plan = adopt({ state, find: ctx.find, inPlace: false });
     for (const id of plan.retract) ctx.retract(id);
+    for (const r of plan.replace) ctx.replace(r.id, `@${r.id} ${r.type} ${Object.entries(r.attrs).map(([k, vs]) => vs.map((v) => `${k}=${v}`).join(' ')).join(' ')}`);
     if (plan.tell) ctx.tell(plan.tell);
     const out = { ...r };
     if (opened) out.openTab = 'map';

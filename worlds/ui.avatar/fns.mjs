@@ -102,17 +102,17 @@ export function adopt({ state, find }) {
     if (t !== 'ui.avatar.look') wired.add(first(w, 'ch'));
   }
   const want = wiresOf(state, wired);
-  const retract = [], tell = [], sets = [];
+  const retract = [], tell = [], sets = [], replace = [];
   for (const [id, h] of have) {
     const w = want[id];
     if (!w) { retract.push(id); continue; }
     if (same(h.attrs, w.attrs)) continue;
     const single = keysOf(h.attrs) === keysOf(w.attrs) && Object.keys(w.attrs).every((k) => w.attrs[k].length === 1 && (h.attrs[k] ?? []).length === 1);
-    if (!single) { retract.push(id); tell.push(line(`${id}.r`, w)); continue; }
+    if (!single) { replace.push({ id, type: w.type, attrs: w.attrs }); continue; }   // the wire keeps its id (library R6.9)
     for (const [k, vs] of Object.entries(w.attrs)) if (h.attrs[k][0] !== vs[0]) sets.push({ id, key: k, value: vs[0] });
   }
   for (const [id, w] of Object.entries(want)) if (!have.has(id)) tell.push(line(id, w));
-  return { retract, tell: tell.join('\n'), sets };
+  return { retract, tell: tell.join('\n'), sets, replace };
 }
 
 // ---- guard: does the color, the part that is to be colored exist? (asked to the rules) -------------------------------------------------------------------------

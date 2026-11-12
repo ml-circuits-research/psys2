@@ -47,7 +47,7 @@ test('geo.map: the state of the view is wires, and toState derives the session s
   assert.equal(w.ofType('geo.map.highlight').length, 1);
   assert.equal(w.ofType('geo.map.line').length, 1);
   assert.equal(JSON.stringify(geoState({ find: (t) => w.ofType(t) })), JSON.stringify(s.state()['geo.map']), 'library = session state, key by key and in order');
-  assert.deepEqual(geoAdopt({ state: stateOf(s, 'geo.map'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [] }, 'nothing left to take over');
+  assert.deepEqual(geoAdopt({ state: stateOf(s, 'geo.map'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [], replace: [] }, 'nothing left to take over');
 });
 
 test('geo.map: the counts and the length of the lines are derived by rules and aggregates', async () => {
@@ -121,7 +121,7 @@ test('data.charts: the chart and its numbers are wires, derived back without los
   assert.equal(w.ofType('data.charts.chart').length, 1);
   assert.equal(w.ofType('data.charts.point').length, 4);
   assert.equal(JSON.stringify(chartState({ find: (t) => w.ofType(t) })), JSON.stringify(s.state()['data.charts']), 'library = session state');
-  assert.deepEqual(chartAdopt({ state: stateOf(s, 'data.charts'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [] });
+  assert.deepEqual(chartAdopt({ state: stateOf(s, 'data.charts'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [], replace: [] });
   const lt = Object.fromEntries(w.ofType('data.charts.labeltotal').map((x) => [JSON.parse(x.attrs.label[0]), x.attrs.total[0]]));
   assert.deepEqual(lt, { Apples: '5', Pears: '3', Plums: '8', Bananas: '4' });
   const ct = w.ofType('data.charts.charttotal')[0].attrs;
