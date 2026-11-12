@@ -15,7 +15,7 @@
 @av.k.l.character core.slot of=ui.avatar.look key=character kind=atom required=true
 @av.k.l.name core.slot of=ui.avatar.look key=name kind=string required=true
 @av.k.l.seed core.slot of=ui.avatar.look key=seed kind=string required=true
-@av.k.l.rest core.slot of=ui.avatar.look key=rest kind=string required=true
+@av.k.l.rest core.slot of=ui.avatar.look key=rest kind=blob required=true
 @av.k.l.char core.slot of=ui.avatar.look key=char type=ui.avatar.char required=true
 @av.k.p.ch core.slot of=ui.avatar.part key=ch kind=atom required=true
 @av.k.p.key core.slot of=ui.avatar.part key=key kind=atom required=true

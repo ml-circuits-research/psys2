@@ -49,7 +49,7 @@ test('art.draw: the scene is wires, and toState derives the session state back w
   assert.ok(objs.length > 4);
   assert.equal(w.ofType('art.draw.scene').length, 1);
   assert.equal(JSON.stringify(drawState({ find: (t) => w.ofType(t) })), JSON.stringify(s.state()['art.draw']), 'library = session state, key by key and in order');
-  assert.deepEqual(drawAdopt({ state: stateOf(s, 'art.draw'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [] }, 'nothing left to take over');
+  assert.deepEqual(drawAdopt({ state: stateOf(s, 'art.draw'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [], replace: [] }, 'nothing left to take over');
   assert.equal(stateOf(s, 'art.draw').history, undefined, 'the history is the library\'s, not a key of the state');
 });
 
@@ -151,7 +151,7 @@ test('diagram.sketch: the diagram is wires, and toState derives the session stat
   assert.equal(w.ofType('diagram.sketch.group').length, st.groups.length);
   assert.equal(w.ofType('diagram.sketch.member').length, st.groups.reduce((n, g) => n + g.members.length, 0));
   assert.equal(JSON.stringify(dgState({ find: (t) => w.ofType(t) })), JSON.stringify(s.state()['diagram.sketch']), 'library = session state, key by key and in order');
-  assert.deepEqual(dgAdopt({ state: stateOf(s, 'diagram.sketch'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [] }, 'nothing left to take over');
+  assert.deepEqual(dgAdopt({ state: stateOf(s, 'diagram.sketch'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [], replace: [] }, 'nothing left to take over');
   assert.deepEqual(st.undo, [], 'the engine\'s snapshots are the library\'s timeline now');
 });
 

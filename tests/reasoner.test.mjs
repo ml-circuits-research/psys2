@@ -20,11 +20,11 @@ const ops = await engineWith('ops');
 test('vendor: the library is the pinned file, unmodified, and passes its own loop scan', () => {
   const notes = readFileSync(path.join(ROOT, 'src/vendor/LICENSES.md'), 'utf8');
   const file = readFileSync(path.join(ROOT, 'src/vendor/sopworld/sopworld.mjs'));
-  assert.match(notes, /775dfe7cd468fab8e4a48fb6dd9ca83e3414c576/, 'the commit is named');
-  assert.match(notes, /build `c034e3804d4e`/, 'the build is recorded');
+  assert.match(notes, /f062052/, 'the commit is named');
+  assert.match(notes, /build `807d8bde76f3`/, 'the build is recorded');
   assert.match(notes, new RegExp(`${file.length} bytes`), 'the size is recorded');
   assert.match(notes, new RegExp(createHash('sha256').update(file).digest('hex')), 'the sha256 of the vendored file is recorded');
-  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.6\.1 /);
+  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.9\.0 /);
   assert.equal(scan(path.join(ROOT, 'src/vendor/sopworld')).join('\n'), '', 'the library\'s own scanner finds no unguarded loop in the vendored file');
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });

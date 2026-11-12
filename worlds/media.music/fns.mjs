@@ -63,34 +63,30 @@ function wiresOf(s, prev, find) {
   return want;
 }
 
-/** The logical name of a wire id: a replaced wire keeps its name and gets a new revision (`music.p_1`): the library does not take a retract and a tell of one id together. */
-const logical = (id) => String(id).replace(/_\d+$/, '');
-const revOf = (id) => Number(/_(\d+)$/.exec(String(id))?.[1] ?? 0);
-
-/** What to retract and what to tell so that the library holds the state: only what differs. */
+/** What to retract, replace in place and tell so that the library holds the state: only what differs. */
 function planOf(s, find) {
   const prev = find('music.player')[0];
   const want = wiresOf(s, prev, find);
-  const retract = [], tell = [];
+  const retract = [], replace = [], tell = [];
   const kept = new Set();
-  const rev = new Map();
   for (const type of TYPES) {
     for (const w of find(type)) {
       budget.tick('music.plan');
-      const key = logical(w.id);
-      const d = want.get(key);
-      const same = d && d.type === type && Object.entries(d.attrs).every(([k, v]) => v === undefined || v === null || String(v) === val(w, k)) && !d.attrs.rest === !w.attrs?.rest;
-      if (same) kept.add(key); else { retract.push(w.id); rev.set(key, Math.max(rev.get(key) ?? 0, revOf(w.id) + 1)); }
+      const d = want.get(w.id);
+      if (!d) { retract.push(w.id); continue; }
+      const same = d.type === type && Object.entries(d.attrs).every(([k, v]) => v === undefined || v === null || String(v) === val(w, k)) && !d.attrs.rest === !w.attrs?.rest;
+      kept.add(w.id);
+      if (!same) replace.push({ id: w.id, type: d.type, attrs: Object.fromEntries(Object.entries(d.attrs).filter(([, v]) => v !== undefined && v !== null).map(([k, v]) => [k, [bare(v)]])) });   // the wire keeps its id (library R6.9)
     }
   }
-  for (const [key, d] of want) if (!kept.has(key)) tell.push(line(rev.has(key) ? `${key}_${rev.get(key)}` : key, d.type, d.attrs));
-  return { retract, tell: tell.join('\n') };
+  for (const [key, d] of want) if (!kept.has(key)) tell.push(line(key, d.type, d.attrs));
+  return { retract, replace, tell: tell.join('\n') };
 }
 
 /** The operations of ops.mjs changed the state: the wires that say the same (host: `ReasonerSession.adoptState`). */
 export function adopt({ state, find }) {
   const p = planOf(state, find);
-  return p.retract.length || p.tell ? p : null;
+  return p.retract.length || p.replace.length || p.tell ? p : null;
 }
 
 // ------------------------------------------------------------------ the actions
@@ -105,8 +101,8 @@ const scratch = (ctx, st, effects) => ({
 });
 function commit(ctx, st) {
   const p = planOf(st, ctx.find);
-  if (!p.retract.length && !p.tell) return;
-  const r = ctx.world.applyPatch({ retract: p.retract, wires: p.tell });   // one transaction: the rules settle once
+  if (!p.retract.length && !p.replace.length && !p.tell) return;
+  const r = ctx.world.applyPatch({ retract: p.retract, replace: p.replace, wires: p.tell });   // one transaction: the rules settle once
   if (!r.ok) throw new Error(`the player was refused: ${r.violations?.[0]?.why ?? r.violations?.[0]?.kind}`);
 }
 const envelope = (r, effects) => ({ ...(r.status && r.status !== 'supported' ? { status: r.status, note: r.note } : { value: r.value }), ...(r.pending ? { pending: r.pending } : {}), ...(effects.length ? { effects } : {}), openTab: 'music' });

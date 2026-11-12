@@ -12,7 +12,6 @@
     reasoner=matrix
     undo=chart.undo
     redo=chart.redo
-    kb=lookup
     source="the numbers in your charts"
     language=en
     status=fixture

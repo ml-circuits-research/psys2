@@ -400,3 +400,50 @@ The two worlds cost 1.2 to 1.3 times their ops turn (chess 7.2 vs 9.1 ms, music 
 - All three are `reasoner=matrix`; `test-world all` passes in both modes (ui.shell 64, ui.avatar 327, ui.help 87, every other world unchanged); `npm test` 1332 pass, 0 fail; Chrome `test-webchat-matrix.mjs` 101/101 (scenarios `shell`, `avatar`, `help` added, in `scripts/test-webchat-ui-matrix.mjs`), `test-webchat-language.mjs` 54/54.
 - Turn time, `bench-reasoner --reps 3`, p50 ms, ops / matrix, before (b22cd4b) and after: group "avatar/shell/editor" 9.18 / 10.77 and 8.98 / 11.26; all worlds 9.47 / 10.94 and 9.48 / 11.38; "games" 8.38 / 10.05 and 8.79 / 11.20 (a game session starts with the shell's switch of the tab: one more wire written); session creation p50 1.04 / 1.35 and 1.05 / 1.40. The two runs overlapped in time on a loaded machine (load 6-12): +-0.5 ms. On the worlds' own sessions (9 turns, CPU time, mean per turn) the matrix costs +3.2 ms (shell), +2.7 ms (avatar; +4.7 on a turn that changes the look, 0 on a question: no instance), +1.3 ms (help). It does not reach ops speed: what is paid per turn is the dialog wires told to the instance, the transaction (mark, validation) and the derivation of the state; the first avatar with all the variants and palettes as wires cost +10 ms per turn.
 - ops is unchanged (replies and state, scripted sessions of all three worlds, both modes, in `tests/reasoner-ui.test.mjs`).
+
+## Re-vendor sopworld 0.7.1 and 0.9.0, and the host workarounds removed (2026-11-12)
+
+Commits on top of main: 0.7.1 (93362d7), the workarounds below, then 0.9.0 (f062052, build 807d8bde76f3). Numbers: `bench-reasoner.mjs --reps 3` (12,072 turns), the old tree and the new tree run at the same time on the same loaded machine, so both see the same noise. The machine was not quiet (load 5-20 from other agents): absolute ms vary between runs, the gap and the ratio between modes inside one run are what to read.
+
+### Does the matrix gap close? p50 ms, ops / matrix, gap
+
+| World group | Before (main ef58f35, 0.6.1) | 0.7.1 (run 1, paired with its own "before") | Final (0.9.0 + workarounds removed; paired with a second "before") |
+| --- | --- | --- | --- |
+| four (shop, arith, tasks, tictactoe) | 11.0 / 15.4, +4.5 (x1.41) | 10.8 / 12.8, +2.0 (x1.19) | 9.4 / 11.6, +2.2 (x1.24) (before in that run +3.5, x1.35) |
+| kids-other | 11.2 / 14.5, +3.4 | 10.7 / 12.2, +1.5 | 9.8 / 11.4, +1.6 (before +2.7) |
+| avatar/shell/editor | 10.5 / 13.1, +2.5 | 9.8 / 11.3, +1.5 | 8.8 / 10.4, +1.6 (before +2.2) |
+| music/draw/map/charts | 11.3 / 14.1, +2.9 | 12.0 / 14.0, +2.0 | 9.7 / 11.9, +2.2 (before +2.5) |
+| games | 8.8 / 12.0, +3.2 | 9.7 / 12.7, +3.0 | 8.3 / 11.2, +2.9 (before +2.9) |
+| documents | 11.2 / 13.5, +2.3 | 11.4 / 12.8, +1.4 | 10.5 / 12.1, +1.6 (before +1.8) |
+| other | 10.7 / 14.0, +3.3 | 11.0 / 12.8, +1.8 | 9.6 / 11.7, +2.1 (before +3.3) |
+| all | 10.7 / 13.7, +3.0 (x1.28) | 10.6 / 12.5, +1.9 (x1.18) | 9.2 / 11.2, +2.0 (x1.22) (before in that run +2.6, x1.27) |
+
+**Answer: the gap closes by about a third overall (+3.0 to +1.9-2.0 ms), by half in the four matrix worlds, kids-other and the editor group, and not at all in games.** Moving 0.7.1 to 0.9.0 added about 0.1-0.3 ms (the second "before" run is also quicker than the first: the figures of different runs are not comparable, the paired ones are). Replies and states: `dump-turns.mjs` over 4,591 turns is identical before and after every step except the random ones (a random song, a random avatar seed: they differ between two runs of the same code). A/B outcomes (coherence, dialogues, gold): `training/results/sopworld-ab-before-071.json` and `sopworld-ab-after-090.json`.
+
+### What changed in host code (replaced by library APIs)
+
+| Area | Library API | Lines (host code, net) | Notes |
+| --- | --- | --- | --- |
+| `_mayFill` and the compiled-slot walk | `canComplete()` (P1) | -26 in `src/reasoner` | same decisions, one call |
+| `x.r1`, `chess.g_1`, `gm.mk_m1.2` revisions | `applyPatch({ replace })`, `ctx.replace` (R6.9) | about -4 per `fns.mjs` in 10 worlds (chess, music, docs.editor, docs.reader, geo.map, art.draw, diagram.sketch, data.charts, user.profile, ui.avatar), the `newest()` revision readers gone | the adopt plan has a fourth part, `replace` |
+| `kb=lookup`, `kbView`, `ctx.host.kb`, `core.world.kb` | the kb as wires (P2 copy-on-write); R6.13 providers not needed | -37 in `src/reasoner` + `src/worlds`, -1 key in the core legend | measured: 205 geo.map/data.charts sessions, 928 turns, p50 14.6 ms both ways, p95 49.0 / 47.5, first turn and snapshot size equal; the geo kb now derives 250 `shown` wires (cost included in the numbers) |
+| "has two", "third" post-processing in the two docs guards | filters `ordinal`, `count` (R6.5) | -6 each in docs.editor and docs.reader `fns.mjs`; `ord=` attribute and slot gone | |
+| the editor's six copies of the count rule | `core.aggregate by= / default=` (R6.6) | -21 in `docs.editor/matrix.sop` | |
+| JSON text in `json`, `rest`, `obj` | `kind=blob` (R6.4) | 0 lines, 39 keys | out of the indexes; tests and turns unchanged |
+| kids.animals value mode | `many=true` (R6.1) | the test now expects `supported` | see below: the wording stays |
+
+Totals against ef58f35 (code only, no generated files, no E3): `src/reasoner/index.mjs` +13 -53; the ten `fns.mjs` about +100 -125; `docs.editor/matrix.sop` +10 -31. Small: the workarounds were never more than 3 % of the host layer; the real gain of the move is behaviour and the simpler adopt, not volume.
+
+### Not replaced, and why
+
+- **`redo=` / `isView` / `passive` and the restart timeline (RESTORE-1).** The session timeline is `mark()` / `rewind()` of several instances plus a shared log (one turn can change the conversation, the game and the editor). `world.redo()` follows only `world.undo()` of one world, and `transient=true` is passed over by `undo(n)` but not by `rewind(mark)`. The 0.9.0 timeline in `toJSON({ timeline: true })` was measured on a real session: every log carries the base (geo.map 507 kB per log, session.conversation 235 kB, kids 65 kB) and `World.fromJSON` replays it from empty (geo.map 96 ms per log, one per open mark). Our record shares one base between all marks and replays only the difference. So `world.log` and `_replay` stay in `timelineJSON` / `restoreJSON`; `tests/reasoner-restore.test.mjs` and the Chrome restart-undo scenario pass on 0.9.0. Library items 1 and 2 below.
+- **kids.animals lives / covered / is_a as questions of the matrix.** The answer is now a list in value mode, but the sentence needs a phrase table ("in the sea", "covered in fur") applied to each value: that is our template engine (a `{values:habitat}` filter), not the library. `mode=check` would answer "is a whale a fish?" with the actual value; the templates for `no` with `actual` do not exist yet. Left in ops.
+- **art.draw kind anchors.** `core.aggregate by=` gives no group for a kind with no object, and the tally needs its 0 (library item 3).
+- **`core.rank` for "the 2nd chapter".** The chapter number is a told `sec` attribute that guards and `gone` wires read; deriving it changes what is told. Not attempted.
+- **"I assumed a bar chart" by per-key assumptions (R6.16)** and **adopt through `world.sync` (R6.14).** Not attempted: no matrix-mode host code produces that sentence (data.charts keeps its own note in ops), and `sync` would replace the per-world minimal-diff adopt but needs one list per type; neither is on the critical path.
+
+### Where a world still loses to ops
+
+Games (+2.9 ms p50, x1.35) did not move and the cause is not diagnosed; the instance work per turn (fork, mirror of the conversation, `_state`) is the same for every group, so the games' lower ops time (8.3 ms) makes the same fixed cost visible. `bench-reasoner.mjs --instrument` is the next step. All other groups are within +1.6-2.2 ms.
+
+A/B in one process (`ab-sopworld.mjs --sets coherence,dialogues,gold`, matrix minus ops p50 ms per group, before -> after): four +3.4 -> +2.2, kids-other +2.9 -> +1.9, avatar/shell/editor +2.1 -> +1.6, music/draw/map/charts +2.9 -> +2.2, games +3.1 -> +3.1, documents +1.7 -> +1.0, other +2.8 -> +2.2. Outcomes are identical (dialogues: ops 292 + 1,882 right, matrix 292 + 1,878 right, same wrong and not-understood counts as before); 33 coherence, 470 dialogue and 300 gold sessions differ in the same 33 places as before.

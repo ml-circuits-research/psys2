@@ -73,27 +73,25 @@ function wiresOf(state, force = false) {
 }
 
 const line = (id, w) => `@${id} ${w.type} ${Object.entries(w.attrs).map(([k, vs]) => vs.map((v) => `${k}=${v}`).join(' ')).join(' ')}`;
-/** The newest wire of each base id (`dr.d.x`, then `dr.d.x.r1` ... when a wire had to be replaced rather than set in place): Map(base -> { id, rev, w }). */
+/** The wires of the types by id: Map(id -> { id, w }). */
 function newest(types, find) {
   const have = new Map();
   for (const t of types) for (const w of find(t)) {
     budget.tick('docs.reader.newest');
-    const m = /^(.+)\.r(\d+)$/.exec(w.id);
-    const base = m ? m[1] : w.id, rev = m ? Number(m[2]) : 0;
-    if (!have.has(base) || have.get(base).rev < rev) have.set(base, { id: w.id, rev, w });
+    have.set(w.id, { id: w.id, w });
   }
   return have;
 }
 
 /**
- * The library wires for a state the operations changed: { retract: [ids], tell: 'text', sets: [{ id, key, value }] } (a wire that already says it is left alone).
+ * The library wires for a state the operations changed: { retract: [ids], tell: 'text', sets: [{ id, key, value }], replace: [{ id, type, attrs }] } (a wire that already says it is left alone).
  * A wire whose single values changed (the focus, the search position, the shelf's rest) gets the new values set in place; a wire that gained or lost a key (the
  * shelf with no document open) or is no longer wanted (a document that was closed) is retracted and, if wanted, told again under a new id.
  */
 export function adopt({ state, find }) {
   const want = wiresOf(state, true);
   const have = newest(['docs.reader.shelf', 'docs.reader.open', 'docs.reader.focus', 'docs.reader.search'], find);
-  const retract = [], tell = [], sets = [], kept = new Set();
+  const retract = [], tell = [], sets = [], replace = [], kept = new Set();
   for (const [base, h] of have) {
     budget.tick('docs.reader.adopt');
     const w = want[base];
@@ -101,24 +99,22 @@ export function adopt({ state, find }) {
     kept.add(base);
     if (same(h.w.attrs, w.attrs)) continue;
     const single = keysOf(h.w.attrs) === keysOf(w.attrs) && Object.keys(w.attrs).every((k) => w.attrs[k].length === 1 && (h.w.attrs[k] ?? []).length === 1);
-    if (!single) { retract.push(h.id); tell.push(line(`${base}.r${h.rev + 1}`, w)); continue; }
+    if (!single) { replace.push({ id: h.id, type: w.type, attrs: w.attrs }); continue; }   // the wire keeps its id (library R6.9)
     for (const [k, vs] of Object.entries(w.attrs)) if (h.w.attrs[k][0] !== vs[0]) sets.push({ id: h.id, key: k, value: vs[0] });
   }
   for (const [base, w] of Object.entries(want)) if (!kept.has(base)) tell.push(line(base, w));
-  return { retract, tell: tell.join('\n'), sets };
+  return { retract, tell: tell.join('\n'), sets, replace };
 }
 
 // ---- guard: do the document, the sentence, the paragraph, the section exist? (asked to the rules) ----------------------------------------------------------------
 const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10 };
-const ORD_WORD = Object.fromEntries(Object.entries(ORD).map(([k, v]) => [v, k]));
-const NUM_WORD = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 const NO_DOC_OK = new Set(['docr.loadSample', 'docr.more', 'docr.clearSearch']);   // these work with no document open
 const lc = (a) => String(a ?? '').trim().toLowerCase();
 
 /** What the request names: { kind, n, ord } for a sentence, a paragraph or a section; { kind: 'any' } for a document-wide request; null for "the last one" and the like. */
 function targetOf(action, args) {
   const num = (n, ord) => (n !== undefined && n !== '' ? Number(n) : ord !== undefined ? ORD[lc(ord)] ?? (lc(ord) === 'last' || lc(ord) === 'final' ? -1 : undefined) : undefined);
-  const item = (kind, n, ord) => { const v = num(n, ord); return v === undefined ? { kind: 'any' } : Number.isInteger(v) && v >= 1 ? { kind, n: v, ord: ORD_WORD[v] ?? `${v}th` } : null; };
+  const item = (kind, n, ord) => { const v = num(n, ord); return v === undefined ? { kind: 'any' } : Number.isInteger(v) && v >= 1 ? { kind, n: v } : null; };
   if (action === 'docr.sentence') return item('sentence', args.n);
   if (action === 'docr.part') return args.n !== undefined || args.ord ? item('section', args.n, args.ord) : { kind: 'any' };
   if (action === 'docr.read') {
@@ -137,13 +133,12 @@ export function guard({ action, args, state, check, find }) {
   const tg = targetOf(action, args ?? {});
   if (!tg) return null;
   const facts = find('docs.reader.shelf').length ? '' : Object.entries(wiresOf(state, true)).map(([id, w]) => line(id, w)).join('\n');   // a reader nobody changed has no wires yet: the rules are asked about the state it has
-  const want = `@dr.q docs.reader.want kind=${tg.kind}${tg.n ? ` n=${tg.n} ord=${tg.ord}` : ''}`;
+  const want = `@dr.q docs.reader.want kind=${tg.kind}${tg.n ? ` n=${tg.n}` : ''}`;
   const r = check({ wires: facts ? `${facts}\n${want}` : want });
   if (r.ok) return null;
   const v = (r.violations ?? []).find((x) => x.why);
   if (!v) return null;
-  const why = String(v.why).replace(/has (\d+)\.$/, (_, d) => `has ${NUM_WORD[Number(d)] ?? d}.`);
-  return { status: 'missing', note: why, why };
+  return { status: 'missing', note: v.why, why: v.why };
 }
 
 // ---- undo words ----------------------------------------------------------------------------------------------------------------------------------------------------

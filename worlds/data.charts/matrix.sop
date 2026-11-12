@@ -17,14 +17,14 @@
 @dc.k.c.type core.slot of=data.charts.chart key=type kind=atom enum=bar enum=line enum=pie enum=doughnut enum=radar enum=polarArea enum=scatter combine=intersect
 @dc.k.c.active core.slot of=data.charts.chart key=active kind=boolean required=true
 @dc.k.c.nseries core.slot of=data.charts.chart key=nseries kind=integer required=true
-@dc.k.c.obj core.slot of=data.charts.chart key=obj kind=string required=true
+@dc.k.c.obj core.slot of=data.charts.chart key=obj kind=blob required=true
 @dc.k.p.cid core.slot of=data.charts.point key=cid kind=string required=true
 @dc.k.p.si core.slot of=data.charts.point key=si kind=integer required=true
 @dc.k.p.i core.slot of=data.charts.point key=i kind=integer required=true
 @dc.k.p.label core.slot of=data.charts.point key=label kind=string required=true
 @dc.k.p.series core.slot of=data.charts.point key=series kind=string required=true
 @dc.k.p.value core.slot of=data.charts.point key=value kind=number required=true
-@dc.k.d.rest core.slot of=data.charts.dialog key=rest kind=string required=true
+@dc.k.d.rest core.slot of=data.charts.dialog key=rest kind=blob required=true
 
 # ---- what cannot be: a number of a chart that is not there, two charts active at once, the same label twice in one series
 @dc.pn data.charts.point cid=?c label=?l

@@ -22,18 +22,18 @@
 @dk.k.s.color core.slot of=diagram.sketch.shape key=color kind=string
 @dk.k.s.layer core.slot of=diagram.sketch.shape key=layer kind=atom
 @dk.k.s.label core.slot of=diagram.sketch.shape key=label kind=string
-@dk.k.s.obj core.slot of=diagram.sketch.shape key=obj kind=string required=true
+@dk.k.s.obj core.slot of=diagram.sketch.shape key=obj kind=blob required=true
 @dk.k.e.eid core.slot of=diagram.sketch.edge key=eid kind=string required=true
 @dk.k.e.ord core.slot of=diagram.sketch.edge key=ord kind=integer required=true
 @dk.k.e.from core.slot of=diagram.sketch.edge key=from kind=string required=true
 @dk.k.e.to core.slot of=diagram.sketch.edge key=to kind=string required=true
 @dk.k.e.style core.slot of=diagram.sketch.edge key=style kind=atom enum=solid enum=dashed enum=dotted
 @dk.k.e.arrow core.slot of=diagram.sketch.edge key=arrow kind=atom enum=forward enum=both enum=none
-@dk.k.e.obj core.slot of=diagram.sketch.edge key=obj kind=string required=true
+@dk.k.e.obj core.slot of=diagram.sketch.edge key=obj kind=blob required=true
 @dk.k.g.gname core.slot of=diagram.sketch.group key=gname kind=string required=true
 @dk.k.g.ord core.slot of=diagram.sketch.group key=ord kind=integer required=true
 @dk.k.g.n core.slot of=diagram.sketch.group key=n kind=integer required=true
-@dk.k.g.obj core.slot of=diagram.sketch.group key=obj kind=string required=true
+@dk.k.g.obj core.slot of=diagram.sketch.group key=obj kind=blob required=true
 @dk.k.m.gname core.slot of=diagram.sketch.member key=gname kind=string required=true
 @dk.k.m.member core.slot of=diagram.sketch.member key=member kind=string required=true
 @dk.k.m.ord core.slot of=diagram.sketch.member key=ord kind=integer required=true
@@ -44,7 +44,7 @@
 @dk.k.l.i core.slot of=diagram.sketch.last key=i kind=integer required=true
 @dk.k.sc.ns core.slot of=diagram.sketch.scene key=nshapes kind=integer required=true
 @dk.k.sc.ne core.slot of=diagram.sketch.scene key=nedges kind=integer required=true
-@dk.k.sc.rest core.slot of=diagram.sketch.scene key=rest kind=string required=true
+@dk.k.sc.rest core.slot of=diagram.sketch.scene key=rest kind=blob required=true
 
 # ---- what cannot be: two shapes with one name or one id, two arrows for one pair, an arrow to a shape that is not there, a group member that is not there, a selection
 # or an "it" that is not in the diagram

@@ -20,17 +20,17 @@
 @gm.k.v.bw core.slot of=geo.map.view key=bw kind=number
 @gm.k.v.bn core.slot of=geo.map.view key=bn kind=number
 @gm.k.v.be core.slot of=geo.map.view key=be kind=number
-@gm.k.v.obj core.slot of=geo.map.view key=obj kind=string required=true
+@gm.k.v.obj core.slot of=geo.map.view key=obj kind=blob required=true
 @gm.k.m.i core.slot of=geo.map.marker key=i kind=integer required=true
 @gm.k.m.mid core.slot of=geo.map.marker key=mid kind=string required=true
 @gm.k.m.name core.slot of=geo.map.marker key=name kind=string required=true
 @gm.k.m.lat core.slot of=geo.map.marker key=lat kind=number required=true
 @gm.k.m.lon core.slot of=geo.map.marker key=lon kind=number required=true
-@gm.k.m.obj core.slot of=geo.map.marker key=obj kind=string required=true
+@gm.k.m.obj core.slot of=geo.map.marker key=obj kind=blob required=true
 @gm.k.h.i core.slot of=geo.map.highlight key=i kind=integer required=true
 @gm.k.h.cc core.slot of=geo.map.highlight key=cc kind=atom
 @gm.k.h.name core.slot of=geo.map.highlight key=name kind=string required=true
-@gm.k.h.obj core.slot of=geo.map.highlight key=obj kind=string required=true
+@gm.k.h.obj core.slot of=geo.map.highlight key=obj kind=blob required=true
 @gm.k.l.i core.slot of=geo.map.line key=i kind=integer required=true
 @gm.k.l.lid core.slot of=geo.map.line key=lid kind=string required=true
 @gm.k.l.fname core.slot of=geo.map.line key=fname kind=string required=true
@@ -40,19 +40,19 @@
 @gm.k.l.tlat core.slot of=geo.map.line key=tlat kind=number required=true
 @gm.k.l.tlon core.slot of=geo.map.line key=tlon kind=number required=true
 @gm.k.l.km core.slot of=geo.map.line key=km kind=number required=true
-@gm.k.l.obj core.slot of=geo.map.line key=obj kind=string required=true
+@gm.k.l.obj core.slot of=geo.map.line key=obj kind=blob required=true
 @gm.k.f.name core.slot of=geo.map.focus key=name kind=string required=true
 @gm.k.f.kind core.slot of=geo.map.focus key=kind kind=atom
 @gm.k.f.lat core.slot of=geo.map.focus key=lat kind=number
 @gm.k.f.lon core.slot of=geo.map.focus key=lon kind=number
-@gm.k.f.obj core.slot of=geo.map.focus key=obj kind=string required=true
+@gm.k.f.obj core.slot of=geo.map.focus key=obj kind=blob required=true
 @gm.k.me.lat core.slot of=geo.map.me key=lat kind=number required=true
 @gm.k.me.lon core.slot of=geo.map.me key=lon kind=number required=true
-@gm.k.me.obj core.slot of=geo.map.me key=obj kind=string required=true
+@gm.k.me.obj core.slot of=geo.map.me key=obj kind=blob required=true
 @gm.k.ck.lat core.slot of=geo.map.clicked key=lat kind=number required=true
 @gm.k.ck.lon core.slot of=geo.map.clicked key=lon kind=number required=true
-@gm.k.ck.obj core.slot of=geo.map.clicked key=obj kind=string required=true
-@gm.k.d.rest core.slot of=geo.map.dialog key=rest kind=string required=true
+@gm.k.ck.obj core.slot of=geo.map.clicked key=obj kind=blob required=true
+@gm.k.d.rest core.slot of=geo.map.dialog key=rest kind=blob required=true
 
 # ---- the view looks at a point of the Earth, at a zoom the map has
 @gm.v geo.map.view lat=?lat lon=?lon zoom=?z layer=?ly

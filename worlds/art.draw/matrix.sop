@@ -22,7 +22,7 @@
 @ad.k.o.fill core.slot of=art.draw.object key=fill kind=atom enum=crayon enum=solid enum=outline
 @ad.k.o.tag core.slot of=art.draw.object key=tag kind=atom
 @ad.k.o.flip core.slot of=art.draw.object key=flip kind=boolean
-@ad.k.o.obj core.slot of=art.draw.object key=obj kind=string required=true
+@ad.k.o.obj core.slot of=art.draw.object key=obj kind=blob required=true
 @ad.k.s.oid core.slot of=art.draw.sel key=oid kind=string required=true
 @ad.k.l.oid core.slot of=art.draw.last key=oid kind=string required=true
 @ad.k.l.i core.slot of=art.draw.last key=i kind=integer required=true
@@ -33,7 +33,7 @@
 @ad.k.sc.mood core.slot of=art.draw.scene key=mood kind=atom enum=night enum=day enum=sunset
 @ad.k.sc.next core.slot of=art.draw.scene key=nextid kind=integer required=true
 @ad.k.sc.label core.slot of=art.draw.scene key=label kind=string
-@ad.k.sc.rest core.slot of=art.draw.scene key=rest kind=string required=true
+@ad.k.sc.rest core.slot of=art.draw.scene key=rest kind=blob required=true
 
 # ---- what cannot be: two things with one id, a thing of no size, a selection or a "it" that is not on the canvas, a counter that would give an id twice
 @ad.o1 art.draw.object oid=?i

@@ -7,4 +7,4 @@
 
 @hp.seq core.sequence key=core.seq
 
-@hp.k.rest core.slot of=ui.help.state key=rest kind=string required=true
+@hp.k.rest core.slot of=ui.help.state key=rest kind=blob required=true

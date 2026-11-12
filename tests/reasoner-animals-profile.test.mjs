@@ -19,7 +19,8 @@ test('animals: the library answers several values only in mode=list (a value-mod
   await say(s, 'What do lions eat?');   // creates the kids.animals instance
   const w = s.isession.rs.of('kids.animals');
   const habitats = w.query({ type: 'kids.animals.animal', seek: 'habitat', where: { name: 'dog' } });
-  assert.equal(habitats.status, 'conflicting', 'value mode: several habitats are alternatives, not one answer');
+  assert.equal(habitats.status, 'supported', 'sopworld 0.7.0 (R6.1): a many=true key answers all its values in value mode');
+  assert.ok(habitats.values.length > 1);
   const list = w.query({ type: 'kids.animals.animal', seek: 'habitat', where: { name: 'dog' }, mode: 'list' });
   assert.equal(list.status, 'supported');
   assert.ok(list.values.length > 1);

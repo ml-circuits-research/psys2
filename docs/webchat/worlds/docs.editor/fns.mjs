@@ -81,7 +81,7 @@ const line = (id, w) => `@${id} ${w.type} ${Object.entries(w.attrs).map(([k, vs]
 const keysOf = (a) => Object.keys(a).filter((k) => !k.startsWith('core.')).sort().join();
 
 /**
- * The library wires for a state the operations changed: { retract: [ids], tell: 'text', sets: [{ id, key, value }] } (a wire that already says it is left alone).
+ * The library wires for a state the operations changed: { retract: [ids], tell: 'text', sets: [{ id, key, value }], replace: [{ id, type, attrs }] } (a wire that already says it is left alone).
  * A wire whose single values changed (a block that moved or was edited, the cursor) gets the new values set in place; a wire that is no longer wanted is retracted
  * and, for a block, a docs.editor.gone wire is told (the section that was deleted is remembered, so that a second "delete it" is refused with the reason).
  */
@@ -89,7 +89,7 @@ export function adopt({ state, find }) {
   const want = wiresOf(state);
   const have = newest(['docs.editor.doc', 'docs.editor.block', 'docs.editor.sel'], find);
   const gone = new Set(find('docs.editor.gone').map((w) => first(w, 'bid')));
-  const retract = [], tell = [], sets = [], kept = new Set();
+  const retract = [], tell = [], sets = [], replace = [], kept = new Set();
   for (const [base, h] of have) {
     budget.tick('docs.editor.adopt');
     const w = want[base];
@@ -104,29 +104,24 @@ export function adopt({ state, find }) {
     kept.add(base);
     if (same(h.w.attrs, w.attrs)) continue;
     const single = keysOf(h.w.attrs) === keysOf(w.attrs) && Object.keys(w.attrs).every((k) => w.attrs[k].length === 1 && (h.w.attrs[k] ?? []).length === 1);
-    if (!single) { retract.push(h.id); tell.push(line(`${base}.r${h.rev + 1}`, w)); continue; }
+    if (!single) { replace.push({ id: h.id, type: w.type, attrs: w.attrs }); continue; }   // the wire keeps its id (library R6.9)
     for (const [k, vs] of Object.entries(w.attrs)) if (h.w.attrs[k][0] !== vs[0]) sets.push({ id: h.id, key: k, value: vs[0] });
   }
   for (const [base, w] of Object.entries(want)) if (!kept.has(base)) tell.push(line(base, w));
-  return { retract, tell: tell.join('\n'), sets };
+  return { retract, tell: tell.join('\n'), sets, replace };
 }
-/** The newest wire of each base id (`ed.b.b2`, then `ed.b.b2.r1` ... when a wire had to be replaced rather than set in place): Map(base -> { id, rev, w }). */
+/** The wires of the types by id: Map(id -> { id, w }). */
 function newest(types, find) {
   const have = new Map();
   for (const t of types) for (const w of find(t)) {
     budget.tick('docs.editor.newest');
-    const m = /^(.+)\.r(\d+)$/.exec(w.id);
-    const base = m ? m[1] : w.id, rev = m ? Number(m[2]) : 0;
-    if (!have.has(base) || have.get(base).rev < rev) have.set(base, { id: w.id, rev, w });
+    have.set(w.id, { id: w.id, w });
   }
   return have;
 }
 
 // ---- guard: does the target exist? (asked to the rules) -------------------------------------------------------------------------------------------------------
 const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10 };
-const ORD_WORD = Object.fromEntries(Object.entries(ORD).map(([k, v]) => [v, k]));
-const NUM_WORD = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-const ordOf = (n) => ORD_WORD[n] ?? `${n}th`;
 const BLOCK = { paragraph: 'paragraph', heading: 'heading', list: 'list', quote: 'quote', table: 'table' };
 const GUARDED = new Set(['doc.delete', 'doc.deleteTarget', 'doc.goto', 'doc.read', 'doc.select', 'doc.whatIs', 'doc.copy', 'doc.move']);
 const lc = (a) => String(a ?? '').trim().toLowerCase();
@@ -152,13 +147,12 @@ export function guard({ action, args, state, check }) {
   const tg = targetOf(args ?? {});
   if (!tg || !Number.isInteger(tg.n)) return null;
   if (tg.kind === 'section' && (state?.blocks ?? []).some((b) => b.kind === 'heading' && new RegExp(`^(?:chapter|section|part)\\s+${tg.n}(?!\\d)`, 'i').test(b.text ?? ''))) return null;   // a heading that says "Chapter 3" is chapter 3
-  const r = check({ wires: `@ed.q docs.editor.want kind=${tg.kind} n=${tg.n} ord=${ordOf(tg.n)}` });
+  const r = check({ wires: `@ed.q docs.editor.want kind=${tg.kind} n=${tg.n}` });
   if (r.ok) return null;
   const vs = (r.violations ?? []).filter((x) => x.why);
   const v = vs.find((x) => /already deleted/.test(x.why)) ?? vs[0];
   if (!v) return null;
-  const why = String(v.why).replace(/has (\d+)\./, (_, d) => `has ${NUM_WORD[Number(d)] ?? d}.`);
-  return { status: 'missing', note: why, why };
+  return { status: 'missing', note: v.why, why: v.why };
 }
 
 // ---- undo, redo, words -----------------------------------------------------------------------------------------------------------------------------------------
