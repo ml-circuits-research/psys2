@@ -115,6 +115,9 @@ export function adopt({ state, find }) {
   return { retract, tell: tell.join('\n'), sets, replace };
 }
 
+/** An undo brought back an offer that a confirmation had answered ("say yes to become the emoji"): the offer is closed again, as the operations forget it when it is answered (spec 15). */
+export function closeOffer(state) { state.pending = null; state.inputMode = null; }
+
 // ---- guard: does the color, the part that is to be colored exist? (asked to the rules) -------------------------------------------------------------------------
 const UNKNOWN_NOTE = /\b(i do not (know|have|speak)|unknown)\b/i;
 const atom = (x) => String(x).toLowerCase().replace(/[^\w.-]/g, '_');
