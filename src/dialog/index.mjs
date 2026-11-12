@@ -1455,8 +1455,11 @@ export class DialogSession {
     if (followTab && shown && shown !== followTab && !this.isession.effects.some((e) => e.name === 'ui.openTab')) {
       try { interp.runAction(this.isession, 'ui.openTab', { tab: followTab }); } catch { /* the shell may be absent */ }
     }
-    if (translation?.unknown?.length && segments.some((s) => s.unparsed)) {
-      lines.push([T(`I did not know the word${translation.unknown.length > 1 ? 's' : ''}: `), { text: translation.unknown.map((u) => u.word).join(', '), translate: false, quote: true }, { text: '.', translate: false }]);
+    // A word some reading used (a world-aware veto names it: "I can't find ... “părul”") was known to a reading: never say it was not known.
+    const usedBy = (w) => segments.some((s) => s.veto && `${s.veto.why ?? ''} ${s.veto.say ?? ''}`.toLowerCase().includes(String(w).toLowerCase()));
+    const unknownWords = (translation?.unknown ?? []).filter((u) => !usedBy(u.word));
+    if (unknownWords.length && segments.some((s) => s.unparsed)) {
+      lines.push([T(`I did not know the word${unknownWords.length > 1 ? 's' : ''}: `), { text: unknownWords.map((u) => u.word).join(', '), translate: false, quote: true }, { text: '.', translate: false }]);
     }
     if (tInterp) perf.add('interpret', performance.now() - tInterp);
     let englishParts = [];

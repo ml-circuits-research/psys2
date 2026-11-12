@@ -1183,12 +1183,29 @@ export async function mountPsys2(element, options = {}) {
       speedNote,
     ];
   }
+  /** The build this page runs (stamped into index.html by the build): "<commit> · <build time>". Shown in About and on the first line of the debug panel. */
+  const buildLabel = (b = globalThis.window?.__psys2Build) => (b ? `${b.commit ?? 'unknown'} · ${b.builtAt ?? 'unknown'}` : 'unknown (development)');
+  // Version check at startup: index.html can be served up to ten minutes stale (GitHub Pages max-age=600). build-info.json is fetched with no-store and
+  // compared with the build stamped into this page; a mismatch shows a banner, and one reload fetches the new index.html.
+  async function checkForNewBuild() {
+    const mine = globalThis.window?.__psys2Build;
+    if (!mine) return;
+    try {
+      const r = await fetch(new URL('build-info.json', base), { cache: 'no-store' });
+      const live = r.ok ? await r.json() : null;
+      if (!live?.builtAt || (live.builtAt === mine.builtAt && live.commit === mine.commit)) return;
+      chat.append(h('div', { class: 'p2-update', role: 'status', 'data-live': live.commit ?? '' }, `A new version is available (${live.commit ?? '?'}). `, h('button', { class: 'p2-btn-text', type: 'button', onclick: () => location.reload() }, 'Reload')));
+    } catch { /* offline: nothing to compare */ }
+  }
+  checkForNewBuild();
   function buildInfoLines() {
     if (!buildInfo) return h('p', {}, 'Loading build information…');
     if (buildInfo.error) return h('p', {}, `Build information is not available (${buildInfo.error}).`);
     const files = buildInfo.files ? Object.keys(buildInfo.files).length : null;
     return h('ul', { class: 'p2-buildinfo' },
+      h('li', { 'data-build': '' }, `This page: ${buildLabel()}`),
       h('li', {}, `Built: ${buildInfo.builtAt ?? 'unknown'}`),
+      h('li', {}, `Commit: ${buildInfo.commit ?? 'unknown'}`),
       h('li', {}, `${(buildInfo.worlds ?? []).length} worlds${files ? `, ${files} files` : ''}`),
       h('li', {}, `Dispatcher model: ${dispatcherEnc ? dispatcherLabel : 'none in this build'}`),
       h('li', {}, `Normalizer model: ${normalizerHost ? normalizerHost.label : 'none in this build'}`));

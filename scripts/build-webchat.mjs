@@ -9,13 +9,14 @@
 //                           and src/loaders/bundle-loader.mjs, relative imports preserved
 //   worlds/index.json       { worlds: { <id>: { files: { 'world.sop': text, ... }, opsUrl: 'worlds/<id>/ops.mjs' } } }
 //   worlds/<id>/*.mjs       the world's operation modules
-//   build-info.json         { worlds, files: { path: sha256 }, builtAt }  (no commit ids)
+//   build-info.json         { worlds, files: { path: sha256 }, builtAt, commit }  (commit: short id of HEAD when built, "-dirty" when src/worlds/docs sources differ from it; also stamped into index.html as window.__psys2Build, spec 06 "Build version")
 //   models/dispatcher/      (only with --models [dir], default dir training/runs/export/dispatcher-distilbert) the Encoder formalizer's model:
 //                           model.int8.onnx, vocab.txt, meta.json. Copied only when changed, never removed; meta.json carries a `version` block. --meta-only regenerates meta.json without touching the model.
 //   surprise-pool.json      (CLI: when missing or with --surprise; `surprise: true` in code; takes about 25 minutes) the SURPRISE button's pool: canonical examples validated in fresh sessions and in click walks [{ text, world, tab }]. Left alone otherwise; tests/surprise.test.mjs flags stale entries.
 // Idempotent: lib/, worlds/ and build-info.json are removed and recreated on every run.
 import { readFile, writeFile, readdir, mkdir, rm, cp, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { slotDeclarations } from '../src/worlds/describe.mjs';
@@ -172,7 +173,16 @@ async function moduleVersions(outDir, graph = {}) {
   if (await exists(path.join(outDir, 'worlds/index.json'))) await add('worlds/index.json');
   return out;
 }
-async function writeEarlyLoad({ outDir, tabFiles, ids, graph }) {
+/** Short id of HEAD, with "-dirty" when tracked sources (not the generated docs/webchat output) differ from it; 'unknown' outside a checkout. */
+export function gitCommit(root) {
+  try {
+    const run = (...a) => execFileSync('git', ['-C', root, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    const id = run('rev-parse', '--short', 'HEAD');
+    return run('status', '--porcelain', '--untracked-files=no', '--', '.', ':!docs/webchat') ? `${id}-dirty` : id;
+  } catch { return 'unknown'; }
+}
+
+async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build }) {
   const file = path.join(outDir, 'index.html');
   if (!(await exists(file))) return;
   const html = await readFile(file, 'utf8');
@@ -186,6 +196,7 @@ async function writeEarlyLoad({ outDir, tabFiles, ids, graph }) {
   const imports = Object.fromEntries(Object.entries(ver).filter(([k]) => k.endsWith('.mjs')).map(([k, v]) => [`./${k}`, `./${k}?v=${v}`]));
   const block = [EARLY_BEGIN,
     `<script type="importmap">${JSON.stringify({ imports })}</script>`,
+    `<script>window.__psys2Build = ${JSON.stringify(build)};</script>`,
     `<script>window.__psys2Mod = ${JSON.stringify(ver)};</script>`,
     ...mods.filter((m) => ver[m]).map((m) => `<link rel="modulepreload" href="${m}?v=${ver[m]}">`),
     `<script>window.__psys2Early = { worlds: fetch('worlds/index.json?v=${ver['worlds/index.json']}'), dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).catch(() => null) };</script>`,
@@ -253,7 +264,8 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   // 3a. early loading (PERF round 2): index.html gets modulepreload links for the whole module graph (app, lib, tabs, world ops) so that a
   // high-latency link fetches them in parallel instead of one import round trip at a time, and an early fetch of worlds/index.json and the model meta file.
   const graph = await versionGraph(outDir);   // rewrites the imports of lib/ and worlds/ to versioned URLs
-  await writeEarlyLoad({ outDir, tabFiles, ids, graph });
+  const build = { commit: gitCommit(root), builtAt: new Date().toISOString() };
+  await writeEarlyLoad({ outDir, tabFiles, ids, graph, build });
 
   // 3b. dispatcher model for the Encoder formalizer (optional)
   const modelFiles = models ? await copyDispatcherModel({ root, outDir, exportDir: typeof models === 'string' ? models : DEFAULT_MODEL_EXPORT, metaOnly, log }) : null;
@@ -271,7 +283,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   for (const sub of ['lib', 'worlds']) {
     for (const f of await walk(path.join(outDir, sub))) files[`${sub}/${f}`] = sha(await readFile(path.join(outDir, sub, f)));
   }
-  const info = { worlds: ids, tabs: tabFiles, dispatcherModel: !!modelFiles, files, builtAt: new Date().toISOString() };
+  const info = { worlds: ids, tabs: tabFiles, dispatcherModel: !!modelFiles, files, builtAt: build.builtAt, commit: build.commit };
   await writeFile(path.join(outDir, 'build-info.json'), JSON.stringify(info, null, 2) + '\n');
   log(`webchat: ${ids.length} worlds, ${Object.keys(files).length} files -> ${outDir}`);
   return info;

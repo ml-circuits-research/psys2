@@ -740,3 +740,12 @@ Key numbers (rules mode): English core (operational + dialogues) 131 non-right, 
 - **Q2 item 2 / J2.** `core.describe.arg slot=<type>.<key>` (spec 03, spec 16 section 8); `slotDeclarations` cuts a describe.sop to the declarations (loader and webchat build read/ship only that); the host derives, per declared host-run action, a type named like it with the slot's kind, enum and range; the library judges by its fallback. Declared: `chess.level n`. E2 (`training/results/e2-arg-slots-2026-11-12.md`): +28 readings judged, 0 new wrong in `veto` and `choose`. A declaration is right only when the argument is canonical: `ui.rate value` (the formalizer says 1.5 and 150) made 2 new wrong in `choose` and was removed; the art.draw enums are canonical names while the arguments are the user's words. **NOT done: `checkReferents` is not derived.** The hooks of art.draw and diagram.sketch stay, because their arguments are noun phrases and the whole segment ("connect A to B with a line"); that needs the patterns to emit the names as arguments (a separate task).
 - **Q2 item 6.** `ReasonerSession._toState`: `toState` computed once per instance stamp and redo count, handed out as a copy (the hidden `_titles` of ui.shell is kept; test `tests/regression-ab.test.mjs`). Bench (`bench-reasoner --reps 2`, old and new tree at the same time, loaded machine): games p50 matrix minus ops +4.77 to +4.31 ms, all +2.80 to +2.61 ms (small, noisy).
 - **Q2 item 5.** (a) `closeOffer(state)`, an optional export of fns.mjs (ui.avatar): after an undo that brings an answered offer back, the host closes it as a quiet change; `dlg.avt#011` is a test in both modes. (b) Spec 15 says that tab switches and settings are steps (behaviour kept).
+
+## 2026-11-12 - regression note (8822c29, rules)
+
+- operational: n=1296, right 95.4%, wrong 0.7% (no previous note: baseline)
+- operational-ro: n=2480, right 81.4%, wrong 3.1% (no previous note: baseline)
+- dialogues: n=2241, right 96.7%, wrong 0.8% (no previous note: baseline)
+- A/B gate: 16 dialogues, "ops better": none
+
+- Nothing above the tolerance and no coherence failure: keep going.

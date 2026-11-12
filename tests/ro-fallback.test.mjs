@@ -23,8 +23,10 @@ function weakRules({ ro = true, en = false } = {}) {
     },
   };
 }
+/** Calls that reached a translation model (the backend) since the last reset: how the fallback's bound is checked. */
+let modelCalls = 0;
 function backendOf(translate, { kind = 'translator' } = {}) {
-  return { translatorKind: () => kind, detectorKind: () => null, translate, detect: async () => [], prepare: async () => {}, state: () => 'ready' };
+  return { translatorKind: () => kind, detectorKind: () => null, translate: (...a) => { modelCalls += 1; return translate(...a); }, detect: async () => [], prepare: async () => {}, state: () => 'ready' };
 }
 const okBackend = (calls = []) => backendOf(async (t, f, to) => { calls.push({ t, f, to }); return fake.translate(t, f, to); });
 const mk = (rules, backend, strategy = 'auto') => createSwitchTranslator({ rules, backend, getStrategy: () => strategy });
@@ -76,16 +78,16 @@ test('input: a Translator that is absent, switched off, wrong or late leaves the
     ['empty', mk(weakRules(), backendOf(async () => ''))],
     ['numbers changed', mk(weakRules(), backendOf(async () => 'It is 29 o\'clock.'))],
     ['negation dropped', mk(weakRules(), backendOf(async () => 'Open the tab.'))],
-    ['hangs', mk(weakRules(), createRemoteBackend({ kinds: { translator: 'translator' }, call: () => new Promise(() => {}), deadlineMs: 60 }))],
+    ['hangs', mk(weakRules(), createRemoteBackend({ kinds: { translator: 'translator' }, call: () => { modelCalls += 1; return new Promise(() => {}); }, deadlineMs: 60 }))],
     ['throws', mk(weakRules(), backendOf(async () => { throw new Error('model unavailable'); }))],
   ];
   for (const [name, tr] of cases) {
     const s = await session(tr);
-    const t0 = performance.now();
+    modelCalls = 0;
     const r = await s.send('nu e ora 25', { language: 'ro' });
     assert.equal(r.lang, 'ro', name);
     assert.notEqual(r.trace.via, 'translator-in', name);
-    assert.ok(performance.now() - t0 < 1500, `${name} took ${Math.round(performance.now() - t0)} ms`);
+    assert.ok(modelCalls <= 2, `${name}: ${modelCalls} model calls for one message`);   // bounded by counted calls, not wall-clock time (flaked under load)
   }
 });
 
