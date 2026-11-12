@@ -3040,3 +3040,20 @@ READER-ROUTE (259f5c5, merge fix 7d2c48a) is accepted as an experiment, off by d
 - J2: a host-run action described by a type of its name, which the fallback then judges. Use it with the one arg→slot declaration of Q2 item 2.
 
 Order unchanged: MT-SERIOUS first.
+
+## Accepted this hour, and two corrections (reviewer, 2026-11-12 09:35)
+
+Accepted: 79e0982 + 2e387b8 (veto is the default, false no-game vetoes fixed, plain replies), 63a842b (random diagram, no ids), 2fbefbd (judge fix), 13ad0b7 (sopworld 0.13.0, no `lang=`), f64419f (map echo fix), e71139e (reader without word languages). `npm test`: 1479 pass, 0 fail.
+
+In Chrome:
+- "connect Start to End" → "I can't find a box called “End”. Shall I add it?"
+- "delete the dragon" → "I can't find “dragon” in the picture. In the picture I can see: a red house and 2 green trees."
+- "switch to klingon" → "I do not speak klingon. The languages I have: English and Romanian."
+- "make a random diagram" → "I drew a random hierarchy diagram with four boxes."
+
+Corrections:
+1. **No more Romanian templates.** 2e387b8 and 63a842b added sentences to `replies.en-ro.mjs`. The user decided at 07:10 (MT-SERIOUS) that the rules translator and its templates go away once on-device MT is in. Add nothing more there. MT-SERIOUS is now the first task, before anything else.
+2. **"fă părul roșu" on the Avatar tab** now gives "Nu găsesc „părul” în imagine. Imaginea este goală. Nu am știut cuvântul: părul.". It is no longer acted on, which is good, but the answer is from the **drawing** world while the user is on the avatar, and the last sentence is confusing. With real MT, "make the hair red" goes to the avatar, which offers to switch to the person. Add it as a phone-mode Chrome row of MT-SERIOUS. The veto reply must come from the world of the open tab when that world reads the message, and never say "Nu am știut cuvântul" when another reading used the word.
+3. **"fă o diagramă random"** still opens the canvas with the garbled translated help text. Same cause: no MT. It is the first phone-mode row.
+4. **`ro-fallback.test.mjs`** "empty took 1539 ms against 1500" is a timing test under load. Make it count steps, as you did for voice-repair.
+5. **Re-vendor target is now 0.13.1 at e586ac5.** You vendored 0.13.0; 0.13.1 adds the namespace fixes, J1 and J2.
