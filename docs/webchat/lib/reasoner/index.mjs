@@ -702,6 +702,64 @@ export class ReasonerSession {
     return answered;
   }
 
+  /** The library World of a matrix world for reading only: this session's instance when it has one, else a fork of the base (the same state: nothing was told). Registers nothing, so it is no change of the session. */
+  peek(id) {
+    const key = this.reasoner.instKey(id);
+    return this.insts.get(key)?.world ?? this.reasoner.baseOf(key).fork();
+  }
+
+  /**
+   * World-aware reading (spec 16): judge readings against this session's instances without telling anything. `readings` is a list of
+   * `{ wires, unused }`: the dialogue wires of one reading and the content words of the message that it leaves out. Each is judged by the
+   * library's `score` on the instance of the world that owns its request or question (the session's own instance when it has one, else a fork of
+   * the base: the same state, since nothing was told), and the results are put in the library's order (`rank`, one list over all instances).
+   * Returns `{ results, order, ranked }`; a result is the library's scored candidate plus `world` and `judged` (false when the library cannot judge the
+   * reading: not a request or question of a matrix world, an action the matrix does not declare, undo and redo).
+   */
+  score(readings) {
+    const lib = this.reasoner.lib;
+    const peek = (key) => this.peek(key);
+    const L = this.reasoner.legends;
+    const val = (w, k) => w.entries.find((e) => e.key === k)?.value?.v;
+    const results = readings.map((rd, index) => {
+      const out = { index, judged: false, ok: true, violations: [], referents: [], lacks: [], assumes: [], world: null };
+      const wire = (rd.wires ?? []).find((w) => L.isA(w.type, 'core.request') || L.isA(w.type, 'core.question'));
+      if (!wire) return out;
+      const isQ = L.isA(wire.type, 'core.question');
+      const action = isQ ? null : val(wire, 'core.request.action');
+      const ownerId = this.reasoner.ownerOfWire(wire);
+      if (!ownerId || (!isQ && (this.reasoner.undoOf.has(action) || this.reasoner.redoOf.has(action) || !this.reasoner.declOf(action)))) return out;
+      if (isQ && this.reasoner.opsKeys.has(`${val(wire, 'core.question.type')}.${keyName(val(wire, 'core.question.seek') ?? '')}`)) return out;
+      const key = this.reasoner.instKey(ownerId);
+      const world = peek(key);
+      let cand;
+      if (isQ) cand = { question: this._wire(wire) };
+      else {
+        const args = {};
+        for (const e of wire.entries) if (e.key.startsWith('core.request.arg.')) args[e.key.slice('core.request.arg.'.length)] = String(e.value.v);
+        cand = { action, args };
+      }
+      if (rd.unused?.length) cand.unused = [...rd.unused];
+      let r;
+      this.reasoner.live = null;
+      try { r = world.score([cand], { budget: this._limit() }); } catch { return out; }
+      this._charge(world);
+      const c = r.candidates?.[0];
+      if (!c) return out;
+      // a reading is judged without the entity wires it mentions (they are only committed when it is acted on): a dangling reference is not an inconsistency
+      if (!c.ok && c.violations.length) {
+        const real = c.violations.filter((v) => !(v.kind === 'dangling-ref' || (v.kind === 'domain' && /^\$e\./.test(String(v.value ?? '')))));   // an uncommitted entity ($e.ben) is not a refusal
+        if (!real.length) { c.ok = true; c.violations = []; } else c.violations = real;
+      }
+      return Object.assign(c, { index, judged: true, world: ownerId, kind: isQ ? 'question' : 'request', actionName: action });
+    });
+    // The host's one change to the library's order (spec 16, section 4): a question whose answer is not known yet lacks nothing (its reading is not defective, the world
+    // just has not been told); counted as lacking it would lose to a statement that tells nonsense. `libraryOrder` is the library's own default, kept to report disagreements.
+    const hostRanking = lib.RANKING.map((c) => (c.name === 'lacks' ? { ...c, measure: (r) => (r.kind === 'question' ? 0 : (r.lacks ?? []).length) } : c));
+    const { order, ranked } = lib.rank(results, hostRanking);
+    return { results, order, ranked, libraryOrder: lib.rank(results).order };
+  }
+
   /** An action another world asks for by name and arguments (no wire of the dialogue): its envelope when the library owns the action, else null. */
   request(action, args, session) {
     if (!this.reasoner.ownerOfAction(action) || !this.reasoner.declOf(action)) return null;

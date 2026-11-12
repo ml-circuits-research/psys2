@@ -567,3 +567,21 @@ export function summary(ctx) {
   return `The diagram has ${n} shape${n === 1 ? '' : 's'}${e ? ` and ${e} connection${e === 1 ? '' : 's'}` : ''}: ${listing(s.shapes.slice(0, 6).map((x) => x.name))}${n > 6 ? ' and more' : ''}.`;
 }
 export { _delete as delete };
+
+/**
+ * World-aware hook (spec 16), read-only: the shapes a "connect A to B" names that the diagram does not have, and the sentence that would add them and
+ * connect, so the dialogue can say "There is no shape called End. Shall I add it?" instead of "a connection needs two ends". `undefined` when every name
+ * is a shape (or the request names none: "connect them").
+ */
+export function checkReferents(ctx, { action, args = {} } = {}) {
+  if (action !== 'diagram.connect') return undefined;
+  const m = /^\s*(?:please\s+)?(?:connect|link|join)\s+(.+?)\s+(?:to|with|and)\s+(.+?)\s*[.!?]?\s*$/i.exec(String(args.text ?? ''));
+  if (!m) return undefined;
+  const state = ctx.state ?? {};
+  const names = [m[1], m[2]].map((x) => x.replace(/^["'“]|["'”]$/g, '').replace(/^(?:the|a|an)\s+/i, '').trim());
+  if (names.some((x) => !x || /^(?:them|it|these|those|each other)$/i.test(x))) return undefined;
+  const missing = names.filter((x) => !shapeOf(state, x)).map((name) => ({ name, kind: 'shape' }));
+  if (!missing.length) return undefined;
+  const have = (state.shapes ?? []).filter((x) => !x.layer && !x.template).map((x) => x.name);
+  return { missing, here: have.length ? have.join(', ') : null, where: 'diagram', offer: `${missing.map((x) => `add a rectangle called ${x.name}`).join(' and ')} and connect ${names[0]} to ${names[1]}` };
+}
