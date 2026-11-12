@@ -79,7 +79,7 @@ async function faultCase(o, kind) {
   } finally { await c.close(); }
 }
 
-const openRo = (o, browserApis = {}) => openChat({ ...o, query: '?psys2test=1', browserApis, settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'ro', translation: 'auto', languageDetection: 'auto', timeLimits: { watchdogMs: WATCHDOG_MS } } });
+const openRo = (o, browserApis = {}) => openChat({ ...o, query: '?psys2test=1', browserApis, settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'ro', translation: 'browser-api', languageDetection: 'auto', timeLimits: { watchdogMs: WATCHDOG_MS } } });   // the Translator FIRST: these rows test the bridge (RO-TRANSLATE-FALLBACK keeps this order as an explicit strategy; 'auto' is rules first)
 const usageOf = (c) => c.pg.evaluate(() => JSON.parse(JSON.stringify({ tr: window.psys2.engineClient.usage, det: window.psys2.engineClient.detection })));
 
 export const SCENARIOS = {
@@ -120,6 +120,35 @@ export const SCENARIOS = {
    * froze the page there. Each turn: the echo of the typed message < 100 ms, no gap in the heartbeat, no worker kill, the turn answered. success: the checker ran and accepted
    * (the old trigger "fă o casă verde și una galbenă" is the first row); slow: later than the 700 ms bridge deadline -> the rules; wrong output: the checker rejects it -> the rules.
    */
+  /** RO-TRANSLATE-FALLBACK in the real page: strategy auto = the rules first; a Romanian message they do not understand goes to the on-device Translator over the bridge, and a reply the rules cannot say is Romanian anyway. */
+  async fallback(o) {
+    const open2 = (browserApis) => openChat({ ...o, query: '?psys2test=1', browserApis, settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'ro', translation: 'auto', languageDetection: 'auto', timeLimits: { watchdogMs: WATCHDOG_MS } } });
+    const MSG = 'mi-ar plăcea tare mult să știu câte zile are iunie';
+    let c = await open2({ mode: 'success' });
+    try {
+      const known = await c.say('câte zile are iunie?', { timeout: 30000 });
+      let calls = await c.fake.calls();
+      check('fallback: a message the rules understand never reaches the Translator', known.ok && !calls.some((x) => x.op === 'translate' && x.text === 'câte zile are iunie?'), `${calls.length} calls`);
+      const r = await c.say(MSG, { timeout: 30000 });
+      calls = await c.fake.calls();
+      const u = await usageOf(c);
+      check('fallback: the message the rules do not understand is answered through the Translator', r.ok && /30|treizeci/.test(r.reply) && calls.some((x) => x.op === 'translate' && x.text === MSG), r.reply.slice(0, 80));
+      check('fallback: the route is recorded (translator-in)', u.tr.some((x) => x.via === 'translator-in' && x.strategy === 'browser-api'), JSON.stringify(u.tr.slice(-2)));
+    } finally { await c.close(); }
+    for (const mode of ['hang', 'slow']) {
+      c = await open2({ mode });
+      try {
+        const t = Date.now();
+        const r = await c.say(MSG, { timeout: 30000 });
+        check(`fallback ${mode}: the turn is answered within the bounds, in Romanian, no freeze`, r.ok && /^[^]*$/.test(r.reply) && Date.now() - t < 8000 && !/I did not|You can say/.test(r.reply), `${Date.now() - t} ms ${r.reply.slice(0, 70)}`);
+      } finally { await c.close(); }
+    }
+    c = await open2(false);
+    try {
+      const r = await c.say(MSG, { timeout: 30000 });
+      check('fallback without a Translator: the rules reading stays, Romanian, no error', r.ok && /^Nu am înțeles/.test(r.reply), r.reply.slice(0, 70));
+    } finally { await c.close(); }
+  },
   async ondevice(o) {
     const turn = async (c, label, text, { timeout = 40000 } = {}) => {
       const s0 = await stats(c);

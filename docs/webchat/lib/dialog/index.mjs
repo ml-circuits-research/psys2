@@ -86,18 +86,74 @@ function fitFragment(src, out) {
 }
 
 /**
+ * The words the user typed that the translation turned into another word, from the alignment: English word (lowercase) -> the user's own word ("dragons" -> "dragoni").
+ * A refusal that quotes the word ("There is no dragons tab.") then quotes what the user said, not our English reading of it.
+ */
+export function userWordMap(original, english, alignment) {
+  const map = new Map();
+  for (const a of alignment ?? []) {
+    const src = String(original).slice(a.src[0], a.src[1]).trim(), tgt = String(english).slice(a.tgt[0], a.tgt[1]).trim();
+    if (!src || !tgt || /\s/.test(src) || /\s/.test(tgt) || src.toLowerCase() === tgt.toLowerCase() || !/^\p{L}+$/u.test(src) || !/^\p{L}+$/u.test(tgt)) continue;
+    if (!map.has(tgt.toLowerCase())) map.set(tgt.toLowerCase(), src);
+  }
+  return map;
+}
+/** In a Romanian output „x”: when x is the English word of a word the user typed, quote the user's word. */
+function quoteUserWords(text, userWords) {
+  if (!userWords?.size) return text;
+  return text.replace(/„([^”]*)”/g, (all, x) => (userWords.has(x.toLowerCase()) ? `„${userWords.get(x.toLowerCase())}”` : all));
+}
+
+/** Most Translator calls one turn may make as fallback (each is bounded by the bridge deadline; the turn guard bounds the sum). */
+const MAX_FALLBACK_CALLS = 6;
+/** The last line of a Romanian reply nothing could translate (RO-TRANSLATE-FALLBACK): the session never shows English. */
+const NO_RO_REPLY = 'Nu am încă o formulare în română pentru acest răspuns.';
+
+/**
  * Translate a reply given as parts [{ text, translate, quote? }] (spec 06): consecutive `translate: true` parts are
  * translated together, `translate: false` parts (quoted user text, already translated examples) are kept verbatim.
  * A part with `fallback` is replaced by the translation of the fallback text when the translator reports unknown words.
  */
-export async function translateParts(parts, translator, lang) {
+export async function translateParts(parts, translator, lang, userWords = null) {
   const flat = parts.map((p) => ({ ...p }));
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
+  // RO-TRANSLATE-FALLBACK (spec 06): with a switch translator in 'fallback' mode the rules and templates write first; a run they cannot put into the
+  // reply language goes to the on-device Translator (checked), and a reply nothing could translate becomes a Romanian sentence, never English.
+  const fb = lang === 'ro' && translator.fallbackMode?.() === 'fallback';
+  const prim = fb ? (translator.rules ?? translator) : translator;
+  const routes = [];
+  let fbCalls = 0;
+  const viaBrowser = async (text) => {
+    if (!translator.viaBrowser || fbCalls >= MAX_FALLBACK_CALLS || guard.soft()) return null;
+    fbCalls++;
+    try { return await guard.abortable(translator.viaBrowser(text, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; return null; }
+  };
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
   for (let i = 0; i < flat.length;) {
     budget.tick('index.translateParts');
-    if (!flat[i].translate) { const { join, fallback, incomplete, ...rest } = flat[i]; if (incomplete) complete = false; out.push(rest); i++; continue; }
+    if (!flat[i].translate) {
+      const { join, fallback, incomplete, ...rest } = flat[i];
+      if (rest.reading && lang !== 'en') {   // our own English reading of the user's words ("I took that as: ..."): shown in the reply language, never in English
+        const inner = rest.text.replace(/^"|"$/g, '');
+        let r = null;
+        try { r = await guard.abortable(prim.translate(inner, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; }
+        let tt = textOf(r);
+        if (!tt || r?.unknown?.length || r?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(tt, lang).length)) {
+          tt = null;
+          const b = fb ? await viaBrowser(inner) : null;
+          if (b) { tt = b.text.trim(); routes.push('translator-out'); }
+        }
+        if (tt) { out.push({ ...rest, text: `"${tt}"` }); i++; continue; }
+        if (translator.leftovers) complete = false;
+      }
+      if (incomplete && fb && rest.en) {   // an example the rules could not translate: the Translator tries it on its own
+        const b = await viaBrowser(rest.en.replace(/^"|"$/g, ''));
+        if (b) { out.push({ ...rest, text: `"${b.text.trim()}"`, en: rest.en }); routes.push('translator-out'); i++; continue; }
+      }
+      if (incomplete) complete = false;
+      out.push(rest); i++; continue;
+    }
     let j = i;
     while (j < flat.length && flat[j].translate) { budget.tick('index.translateParts2'); j++; }
     const run = flat.slice(i, j);
@@ -105,18 +161,32 @@ export async function translateParts(parts, translator, lang) {
     const src = run.map((p) => p.text).join('');
     if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
     let res = null;
-    try { res = await guard.abortable(translator.translate(src, { from: 'en', to: lang }), 'translate'); } catch { res = null; }
+    try { res = await guard.abortable(prim.translate(src, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; res = null; }
     if (res?.unknown?.length && run.length === 1 && run[0].fallback) {
-      try { res = await guard.abortable(translator.translate(run[0].fallback, { from: 'en', to: lang }), 'translate'); } catch { res = null; }
+      try { res = await guard.abortable(prim.translate(run[0].fallback, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; res = null; }
     }
     const t = textOf(res);
-    if (!t || res?.unknown?.length || res?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(t, lang).length)) complete = false;
-    out.push({ text: t ? fitFragment(src, t) : src, translate: true, src });
+    if (!t || res?.unknown?.length || res?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(t, lang).length)) {
+      const b = fb ? await viaBrowser(src) : null;
+      if (b) { out.push({ text: fitFragment(src, b.text), translate: true, src }); routes.push('translator-out'); continue; }
+      complete = false;
+    }
+    out.push({ text: t ? fitFragment(src, quoteUserWords(t, userWords)) : src, translate: true, src });
   }
+  let result;
   if (!complete) {   // keep the whole reply in English: translated runs and the examples (which carry their English text in `en`) revert; quoted user text stays as typed
-    return flat.map(({ join, fallback, en, src, incomplete, ...p }) => (join ? { text: p.text, translate: false } : { ...p, text: en ?? p.text }));
+    if (fb) {   // never English in a Romanian session: the quoted words of the user stay, the sentence around them is a fixed Romanian line
+      routes.length = 0; routes.push('ro-generic');
+      const quoted = flat.filter((p) => p.quote && !p.example && !p.reading).map((p) => (/^".*"$/s.test(p.text) ? `„${p.text.slice(1, -1)}”` : p.text));
+      result = [{ text: NO_RO_REPLY + (quoted.length ? ` (${quoted.join(', ')})` : ''), translate: false }];
+    } else result = flat.map(({ join, fallback, en, src, incomplete, ...p }) => (join ? { text: p.text, translate: false } : { ...p, text: en ?? p.text }));
+  } else {
+    if (fb && !routes.length && out.some((p) => p.translate)) routes.push('rules-translate');
+    result = out.map(({ src, en, ...p }) => p);
   }
-  return out.map(({ src, en, ...p }) => p);
+  if (lang === 'ro') result = result.map((p) => (p.quote && /^".*"$/s.test(p.text) ? { ...p, text: `„${p.text.slice(1, -1)}”` } : p));   // Romanian quotes (RO-TRANSLATE-FALLBACK note c); the user's words inside are untouched
+  if (fb) Object.defineProperty(result, 'routes', { value: [...new Set(routes)], enumerable: false });
+  return result;
 }
 
 /** Romanian words the speech recogniser confuses with a word of the open tab's world (RP5): "un sare" on the Drawing tab is "un soare". */
@@ -315,6 +385,24 @@ export class DialogSession {
     Object.assign(st, structuredClone(patch));
     if (worldId === 'ui.shell' && patch.activeTab) this.astra?.onTabChange(patch.activeTab);   // the tab resumes its discussion (spec 13 section 1)
     return structuredClone(st);
+  }
+
+  /**
+   * `observe` for a host that shows the world's reaction to the user: the text (the engine's own chess move, a tab's report) is put into the reply language the
+   * way every reply is (rules and templates first, the on-device Translator as the fallback, a Romanian line when nothing can say it; never English in a Romanian
+   * session). `textEnglish` keeps the English, `via` the routes used (RO-TRANSLATE-FALLBACK).
+   */
+  async observeIn(obs, { language } = {}) {
+    const out = this.observe(obs);
+    const lang = language ?? this.language ?? 'en', tr = this.engine.translator;
+    if (out.text && lang === 'ro' && tr) {
+      try {
+        const parts = await translateParts([{ text: out.text, translate: true }], tr, 'ro');
+        out.textEnglish = out.text; out.text = parts.map((p) => p.text).join('');
+        if (parts.routes?.length) { out.via = [...parts.routes]; for (const v of parts.routes) tr.note?.(v, { direction: 'en->ro', strategy: v === 'translator-out' ? 'browser-api' : 'rules' }); }
+      } catch { /* the English text is shown: a host string must reach the user */ }
+    }
+    return out;
   }
 
   /**
@@ -1037,7 +1125,39 @@ export class DialogSession {
     for (const k of [...this.sources.keys()]) if (!snap.sources.has(k)) this.sources.delete(k);
   }
 
-  async _send(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx } = {}) {
+  /**
+   * RO-TRANSLATE-FALLBACK, input side (spec 06). A Romanian message is read through the rules first. When the reading is poor (a clause not understood, a
+   * part not used, a best-effort "I took that as") and the on-device Translator exists, the message is translated by it, read again with the English rules,
+   * and that second reading replaces the first only when it is better (fewer clauses lost) and the checker accepted the translation. The session goes
+   * back to where it was before the first reading, so a rejected second reading leaves no trace; the first one is then put back unchanged.
+   */
+  async _send(text, opts = {}) {
+    const tr = this.engine.translator;
+    if (!tr || tr.fallbackMode?.() !== 'fallback' || (opts.language ?? this.language) === 'en') return this._sendCore(text, opts);
+    const snap0 = this.snapshot();
+    const first = await this._sendCore(text, opts);
+    // trouble points of a reading: a clause not understood (3), a part not used (1 each), a best-effort "I took that as" (2), and a message the rules left in Romanian (2)
+    const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0)
+      + (String(r.trace?.english ?? '').trim().toLowerCase() === String(text).trim().toLowerCase() && r.translation?.unknown?.length ? 2 : 0);
+    const poor = issues(first);
+    if (first.lang !== 'ro' || !poor || !tr.canTranslate?.('ro', 'en') || guard.soft()) return first;
+    const b = await guard.abortable(tr.viaBrowser(text, { from: 'ro', to: 'en' }), 'translate');
+    if (!b || b.text.trim().toLowerCase() === String(first.trace?.english ?? '').trim().toLowerCase()) return first;
+    const snapFirst = this.snapshot();
+    this.restore(snap0);
+    let second = null;
+    try { second = await this._sendCore(text, opts, { english: b.text, translation: b }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; second = null; }
+    if (second && issues(second) < poor) {
+      second.trace.via = 'translator-in'; second.trace.firstReading = { english: first.trace?.english, issues: poor, reply: first.text };
+      tr.note?.('translator-in', { direction: 'ro->en', strategy: 'browser-api', reason: `the rules reading had ${poor} points of trouble, the Translator's has ${issues(second)}` });
+      return second;
+    }
+    this.restore(snapFirst);
+    tr.note?.('translator-in', { direction: 'ro->en', fallback: true, reason: 'the Translator reading was no better; the rules reading is kept' });
+    return first;
+  }
+
+  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx } = {}, override = null) {
     const { engine } = this;
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
@@ -1064,11 +1184,12 @@ export class DialogSession {
       }
       if (lang !== 'en' && lang !== 'unknown') {
         const heard = lang === 'ro' ? soundAlikes(text, this.context().tabWorld) : text;
-        translation = await perf.time('translate', () => guard.abortable(translator.translate(heard, { from: lang, to: 'en' }), 'translate'));
-        english = textOf(translation) ?? text;
+        const fbMode = translator.fallbackMode?.() === 'fallback';   // rules first; the Translator is asked only by `_send` when the reading is poor
+        translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
+        english = override?.english ?? textOf(translation) ?? text;
         // an engine that returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare") is retried through the rules translator, which covers the app's own verbs and nouns
         const rules = translator.rules;
-        if (rules && rules !== translator && lang === 'ro' && english.trim().toLowerCase() === text.trim().toLowerCase()) {
+        if (!override && rules && rules !== translator && lang === 'ro' && english.trim().toLowerCase() === text.trim().toLowerCase()) {
           try { const again = await guard.abortable(rules.translate(heard, { from: lang, to: 'en' }), 'translate'); if (textOf(again) && textOf(again).trim().toLowerCase() !== text.trim().toLowerCase()) { translation = again; english = textOf(again); } } catch { /* keep the first reading */ }
         }
       } else lang = 'en';
@@ -1151,7 +1272,7 @@ export class DialogSession {
       // a leftover made only of filler words ("also", "and", "please") next to something that was understood is not worth an error
       if (seg.unparsed && (partial ?? this.partial) && fillerOnly(seg.text) && segments.some((x) => !x.unparsed)) continue;
       if (seg.bestEffort) {
-        const line = [T('I took that as: '), { text: `"${seg.bestEffort.took}"`, translate: false, quote: true }];
+        const line = [T('I took that as: '), { text: `"${seg.bestEffort.took}"`, translate: false, quote: true, reading: true }];
         if (seg.bestEffort.ignored?.length) { line.push(T(' (I did not use ')); seg.bestEffort.ignored.forEach((x, k) => { if (k) line.push(T(' and ')); line.push({ text: `"${x}"`, translate: false, quote: true }); }); line.push(T(')')); }
         lines.push(line);
       }
@@ -1175,7 +1296,7 @@ export class DialogSession {
           const done = [];
           for (const e of ex) {
             try {
-              const r = await guard.abortable(translator.translate(e, { from: 'en', to: lang }), 'translate');
+              const r = await guard.abortable((translator.fallbackMode?.() === 'fallback' ? translator.rules ?? translator : translator).translate(e, { from: 'en', to: lang }), 'translate');
               if (textOf(r) && !r.unknown?.length && !r.untranslatable?.length && !(translator.leftovers?.(textOf(r), lang) ?? []).length) done.push(textOf(r).trim());
             } catch { /* this example stays untranslated */ }
           }
@@ -1268,10 +1389,13 @@ export class DialogSession {
     const englishReply = englishParts.map((p) => p.text).join('');
     let parts = englishParts.map(({ join, fallback, ...p }) => (join ? { text: p.text, translate: false } : p));
     let reply = englishReply;
+    let replyRoutes = [];
     if (lang !== 'en' && translator) {
       try {
-        parts = await translateParts(englishParts, translator, lang);
+        parts = await translateParts(englishParts, translator, lang, userWordMap(text, english, translation?.alignment));
         reply = parts.map((p) => p.text).join('');
+        replyRoutes = parts.routes ?? [];
+        for (const via of replyRoutes) translator.note?.(via, { direction: 'en->ro', strategy: via === 'translator-out' ? 'browser-api' : 'rules' });
       } catch { parts = englishParts.map(({ join, fallback, ...p }) => p); reply = englishReply; }
     }
     disc.noteShown(this._msg, reply);
@@ -1296,7 +1420,7 @@ export class DialogSession {
         dispatch: dispatch ?? null,
         discourse: { resolved: pre?.info ?? null, meta: meta?.info ?? null, ...(feedback ? { feedback } : {}), pending: disc.pending ? { type: disc.pending.type, world: disc.pending.world, key: disc.pending.key, expected: disc.pending.expected, question: disc.pending.question } : null, consumed: pend ? { type: pend.type, world: pend.world, question: pend.question } : null, frames: disc.frames.length },
         ...(feedback ? { feedback } : {}),
-        source: sid, language: lang, original: text, english, ...(selfCorrections.corrections.length ? { selfCorrections: selfCorrections.corrections } : {}), replyEnglish: englishReply,
+        source: sid, language: lang, original: text, english, ...(replyRoutes.length ? { replyVia: replyRoutes } : {}), ...(selfCorrections.corrections.length ? { selfCorrections: selfCorrections.corrections } : {}), replyEnglish: englishReply,
         segments: segments.map(plainSegment), router: segments.map((s) => s.worlds),
         routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),
         patterns: segments.filter((s) => s.match).map((s) => s.match.patternId),

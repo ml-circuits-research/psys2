@@ -25,7 +25,7 @@ const fold = (t) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').t
 /** What a small on-device model would say for the sentences of the fallback tests (keys are compared without case, accents and punctuation). */
 export const FAKE_RO_EN = {
   'câți ani am?': 'How old am I?', 'cum mă numesc?': 'What is my name?', 'deschide magazinul': 'Open the shopping list.', 'deschide jocul de ghicit': 'Open the guess the animal tab.',
-  'e ora 25': 'It is 25 o\'clock.', 'câte zile are iunie?': 'How many days does June have?', 'cât face 3 plus 4?': 'What is 3 plus 4?', 'desenează o pisică verde': 'Draw a green cat.',
+  'e ora 25': 'It is 25 o\'clock.', 'câte zile are iunie?': 'How many days does June have?', 'mi-ar plăcea tare mult să știu câte zile are iunie': 'How many days does June have?', 'cât face 3 plus 4?': 'What is 3 plus 4?', 'desenează o pisică verde': 'Draw a green cat.',
 };
 export const FAKE_EN_RO = {
   'Your shopping list is empty.': 'Lista ta de cumpărături este goală.', 'I do not know your age yet.': 'Încă nu știu câți ani ai.', 'You can tell me, and I will remember it.': 'Poți să-mi spui și o să țin minte.',
