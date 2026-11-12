@@ -210,3 +210,8 @@ The wording is fixed in one place per surface and checked by `scripts/test-webch
 
 
 **Tab clicks reach the engine (RP5b).** Opening a tab by hand (click or arrow keys) also sets `ui.shell.activeTab` in the session (`userTab` in `docs/webchat/app.mjs`), so routing (tier 3, the tab's world), tab-bound questions and the surprise pool see the tab the user is looking at; before this only voice commands (`ui.openTab`) changed it.
+
+### Build version and caching (SHIP-NOW)
+- `scripts/build-webchat.mjs` writes `builtAt` and `commit` (short id of the checked-out revision, `-dirty` when sources differ from it) into `build-info.json` and stamps the same pair into `index.html` as `window.__psys2Build`. Settings > About and Developer show "This page: <commit> · <time>"; the first line of the debug panel shows "Build <commit> · <time>". The user can always tell which build runs.
+- There is no service worker. Module URLs carry content-hash `?v=` stamps through the import map, so one `index.html` names one consistent file set; only `index.html` itself can be served stale (GitHub Pages `max-age=600`). A browser reload revalidates it, so one reload brings the new build.
+- At startup the page fetches `build-info.json` with `cache: 'no-store'` and compares it with `window.__psys2Build`; a difference shows "A new version is available (<commit>). Reload" (`.p2-update`). Test: `scripts/test-webchat-version.mjs` (serves build A, swaps to build B, reloads once, asserts B's id is shown).

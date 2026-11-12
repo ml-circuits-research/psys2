@@ -123,8 +123,9 @@ export function createDebug(host) {
   const closeBtn = h('button', { class: 'p2-btn p2-modal-close', type: 'button', 'aria-label': 'Close debug view', title: 'Close debug view' }, '×');
   const titleEl = h('h2', { class: 'p2-modal-title', id: 'p2-dbg-title' }, 'Debug');
   const tabsEl = h('div', { class: 'p2-modal-tabs', role: 'tablist', 'aria-label': 'Debug sections' });
+  const buildEl = h('div', { class: 'p2-dbg-build', 'data-build': '' }, (() => { const b = globalThis.window?.__psys2Build; return b ? `Build ${b.commit ?? 'unknown'} · ${b.builtAt ?? 'unknown'}` : 'Build: development (not stamped)'; })());
   const bodyEl = h('div', { class: 'p2-modal-body p2-dbg-body', role: 'tabpanel', id: 'p2-dbg-panel', tabindex: '0' });
-  const el = h('div', { class: 'p2-modal p2-dbg', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'p2-dbg-title', hidden: true }, h('div', { class: 'p2-modal-head' }, titleEl, closeBtn), tabsEl, bodyEl);
+  const el = h('div', { class: 'p2-modal p2-dbg', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'p2-dbg-title', hidden: true }, h('div', { class: 'p2-modal-head' }, titleEl, closeBtn), buildEl, tabsEl, bodyEl);
   for (const [id, label] of DEBUG_SECTIONS) tabsEl.append(h('button', { class: 'p2-tab p2-modal-tab', role: 'tab', type: 'button', id: `p2-dt-${id}`, 'aria-controls': 'p2-dbg-panel', 'data-section': id, onclick: () => setSection(id) }, label));
   host.modalHost.append(el);
   const isOpen = () => !el.hidden;
