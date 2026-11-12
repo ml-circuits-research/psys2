@@ -111,6 +111,8 @@ function quoteUserWords(text, userWords) {
 const MAX_FALLBACK_CALLS = 6;
 /** The last line of a Romanian reply nothing could translate (RO-TRANSLATE-FALLBACK): the session never shows English. */
 const NO_RO_REPLY = 'Nu am încă o formulare în română pentru acest răspuns.';
+/** The "rules translator" of a language that has none (MT-SERIOUS): it translates nothing, so every run goes to the on-device translation. */
+const NO_RULES = { translate: (text) => ({ text: '', alignment: [], unknown: [String(text ?? '')], untranslatable: [], notes: ['no rules for this language'], confidence: 0 }), supports: () => false };
 
 /**
  * Translate a reply given as parts [{ text, translate, quote? }] (spec 06): consecutive `translate: true` parts are
@@ -122,8 +124,10 @@ export async function translateParts(parts, translator, lang, userWords = null) 
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
   // RO-TRANSLATE-FALLBACK (spec 06): with a switch translator in 'fallback' mode the rules and templates write first; a run they cannot put into the
   // reply language goes to the on-device Translator (checked), and a reply nothing could translate becomes a Romanian sentence, never English.
-  const fb = lang === 'ro' && translator.fallbackMode?.() === 'fallback';
-  const prim = fb ? (translator.rules ?? translator) : translator;
+  const fb = lang !== 'en' && translator.fallbackMode?.() === 'fallback';
+  // MT-SERIOUS: only Romanian has rules; any other language goes straight to the on-device translation (the stub says "not translated" for it)
+  const ownRules = fb && (translator.rules?.supports?.('en', lang) ?? true);
+  const prim = fb ? (ownRules ? (translator.rules ?? translator) : NO_RULES) : translator;
   const routes = [];
   let fbCalls = 0;
   const viaBrowser = async (text) => {
@@ -178,7 +182,7 @@ export async function translateParts(parts, translator, lang, userWords = null) 
   }
   let result;
   if (!complete) {   // keep the whole reply in English: translated runs and the examples (which carry their English text in `en`) revert; quoted user text stays as typed
-    if (fb) {   // never English in a Romanian session: the quoted words of the user stay, the sentence around them is a fixed Romanian line
+    if (fb && lang === 'ro') {   // never English in a Romanian session: the quoted words of the user stay, the sentence around them is a fixed Romanian line
       routes.length = 0; routes.push('ro-generic');
       const quoted = flat.filter((p) => p.quote && !p.example && !p.reading).map((p) => (/^".*"$/s.test(p.text) ? `„${p.text.slice(1, -1)}”` : p.text));
       result = [{ text: NO_RO_REPLY + (quoted.length ? ` (${quoted.join(', ')})` : ''), translate: false }];
@@ -346,7 +350,7 @@ export class DialogSession {
       let english = raw;
       const lang = language ?? this.language;
       const quick = translator?.rules ?? translator;   // the rules translator when there is one: the dry run never waits for a browser translator
-      if (quick && lang === 'ro') { guard.check('dry-translate'); english = textOf(await quick.translate(english, { from: 'ro', to: 'en' })) ?? english; }
+      if (quick && lang !== 'en' && (quick.supports?.(lang, 'en') ?? true)) { guard.check('dry-translate'); english = textOf(await quick.translate(english, { from: lang, to: 'en' })) ?? english; }
       english = splitAnswerList(interp.lang.stripFiller(english) || english);
       guard.check('dry-vocabulary');
       const vocab = spellVocabulary(set);
@@ -402,9 +406,9 @@ export class DialogSession {
   async observeIn(obs, { language } = {}) {
     const out = this.observe(obs);
     const lang = language ?? this.language ?? 'en', tr = this.engine.translator;
-    if (out.text && lang === 'ro' && tr) {
+    if (out.text && lang !== 'en' && tr) {
       try {
-        const parts = await translateParts([{ text: out.text, translate: true }], tr, 'ro');
+        const parts = await translateParts([{ text: out.text, translate: true }], tr, lang);
         out.textEnglish = out.text; out.text = parts.map((p) => p.text).join('');
         if (parts.routes?.length) { out.via = [...parts.routes]; for (const v of parts.routes) tr.note?.(v, { direction: 'en->ro', strategy: v === 'translator-out' ? 'browser-api' : 'rules' }); }
       } catch { /* the English text is shown: a host string must reach the user */ }
@@ -1185,15 +1189,16 @@ export class DialogSession {
    */
   async _send(text, opts = {}) {
     const tr = this.engine.translator;
-    if (!tr || tr.fallbackMode?.() !== 'fallback' || (opts.language ?? this.language) === 'en') return this._sendCore(text, opts);
+    const wantedLang = opts.language ?? this.language;
+    if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || !(tr.rules?.supports?.(wantedLang, 'en') ?? true)) return this._sendCore(text, opts);   // a language without rules is read by the on-device translation in `_sendCore`
     const snap0 = this.snapshot();
     const first = await this._sendCore(text, opts);
     // trouble points of a reading: a clause not understood (3), a part not used (1 each), a best-effort "I took that as" (2), and a message the rules left in Romanian (2)
     const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0)
       + (String(r.trace?.english ?? '').trim().toLowerCase() === String(text).trim().toLowerCase() && r.translation?.unknown?.length ? 2 : 0);
     const poor = issues(first);
-    if (first.lang !== 'ro' || !poor || !tr.canTranslate?.('ro', 'en') || guard.soft()) return first;
-    const b = await guard.abortable(tr.viaBrowser(text, { from: 'ro', to: 'en' }), 'translate');
+    if (first.lang === 'en' || !poor || !tr.canTranslate?.(first.lang, 'en') || guard.soft()) return first;
+    const b = await guard.abortable(tr.viaBrowser(text, { from: first.lang, to: 'en' }), 'translate');
     if (!b || b.text.trim().toLowerCase() === String(first.trace?.english ?? '').trim().toLowerCase()) return first;
     const snapFirst = this.snapshot();
     this.restore(snap0);
@@ -1220,7 +1225,7 @@ export class DialogSession {
     const wanted = language ?? this.language;
     let lang = 'en', translation = null, english = text;
     if (translator) {
-      lang = wanted === 'auto' ? langOf(await perf.time('detect', () => guard.abortable(translator.detectLanguage(text), 'detect'))) : (wanted === 'ro' ? 'ro' : 'en');
+      lang = wanted === 'auto' ? langOf(await perf.time('detect', () => guard.abortable(translator.detectLanguage(text), 'detect'))) : (wanted && wanted !== 'unknown' ? wanted : 'en');
       // LANG-FIXED: an explicit language ('en' or 'ro', what the webchat always passes) is the language of every message: no detection, no override by evidence,
       // no switch of the host's selector. English words in a Romanian message (names, "ok", "stop") go through the Romanian pipeline. Only the CLI/server mode
       // 'auto' detects: RD5 there: the language comes from strong evidence. English with a typo ("eys express fear") is never read as Romanian, and a weak
@@ -1238,7 +1243,11 @@ export class DialogSession {
       if (lang !== 'en' && lang !== 'unknown') {
         const heard = lang === 'ro' ? soundAlikes(text, this.context().tabWorld) : text;
         const fbMode = translator.fallbackMode?.() === 'fallback';   // rules first; the Translator is asked only by `_send` when the reading is poor
-        translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
+        const noRules = fbMode && !(translator.rules?.supports?.(lang, 'en') ?? true);
+        if (noRules && !override) {   // MT-SERIOUS: a language without rules is read by the on-device translation; when it is not ready or fails the message stays as typed (not understood)
+          const b = guard.soft() ? null : await perf.time('translate', () => guard.abortable(translator.viaBrowser?.(text, { from: lang, to: 'en' }) ?? null, 'translate').catch((e) => { if (e instanceof TurnAborted) throw e; return null; }));
+          translation = b ?? { text, alignment: [], unknown: [text], notes: ['the on-device translation did not answer'], confidence: 0 };
+        } else translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = override?.english ?? textOf(translation) ?? text;
         // an engine that returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare") is retried through the rules translator, which covers the app's own verbs and nouns
         const rules = translator.rules;

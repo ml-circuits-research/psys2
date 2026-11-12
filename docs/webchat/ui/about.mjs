@@ -15,6 +15,7 @@ export const CREDITS = [
   ['rough.js', '4.6.6', 'MIT', 'Drawing tab'],
   ['PDF.js, mammoth.js', '6.5.438 / 1.13.0', 'Apache-2.0 / BSD-2', 'Documents tab'],
   ['ONNX Runtime Web (WASM, CPU)', '1.31.1', 'MIT', 'runs the two small models in your browser'],
+  ['bergamot-translator (WASM) and the Mozilla Firefox Translations models (downloaded when a language is selected)', '0.4.9', 'MPL-2.0', 'on-device translation where the browser has no Translator'],
   ['chess.js, tonal (inside the worlds)', 'see worlds/*/vendor', 'BSD-2 / MIT', 'chess and music rules'],
   ['DistilBERT (distilbert-base-uncased), fine-tuned by this project', 'dispatcher', 'Apache-2.0', 'the dispatcher model'],
   ['FLAN-T5 small (google/flan-t5-small), fine-tuned by this project', 'normalizer', 'Apache-2.0', 'the phrasing normalizer'],

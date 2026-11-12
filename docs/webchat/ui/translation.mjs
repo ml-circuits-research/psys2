@@ -37,11 +37,13 @@ export function checkTranslation(src, tgt, { from, to }) {
   if (missing.length) return `numbers not preserved (${missing.join(', ')})`;
   const lostNames = names(src).filter((n) => !fold(tgt).includes(fold(n)));
   if (lostNames.length) return `names not preserved (${lostNames.join(', ')})`;
-  const srcNeg = (from === 'ro' ? NEG_RO : NEG_EN).test(src);
-  const tgtNeg = (to === 'en' ? NEG_EN : NEG_RO).test(tgt);
+  // negation and question words are known for English and Romanian only; for any other language the "?" and the numbers and names are what is checked
+  const negOf = (l) => (l === 'en' ? NEG_EN : l === 'ro' ? NEG_RO : null), whOf = (l) => (l === 'en' ? WH_EN : l === 'ro' ? WH_RO : null);
+  const srcNeg = negOf(from)?.test(src) ?? false;
+  const tgtNeg = negOf(to)?.test(tgt) ?? true;
   if (srcNeg && !tgtNeg) return 'negation not preserved';
-  const srcQ = /\?\s*$/.test(src.trim()) || (from === 'en' ? WH_EN : WH_RO).test(src.trim());
-  const tgtQ = /\?\s*$/.test(tgt.trim()) || (to === 'en' ? WH_EN : WH_RO).test(tgt.trim());
+  const srcQ = /\?\s*$/.test(src.trim()) || (whOf(from)?.test(src.trim()) ?? false);
+  const tgtQ = /\?\s*$/.test(tgt.trim()) || (whOf(to)?.test(tgt.trim()) ?? true);
   if (srcQ && !tgtQ) return 'question form not preserved';
   return null;
 }
@@ -104,7 +106,7 @@ const DEFAULT_LANGS = ['en', 'ro'];
  * runs the turn) has none: it gets a remote backend (`createRemoteBackend`) that asks the page, which owns this one, over a message with a deadline.
  *   { translatorKind(), detectorKind(), translate(text, from, to) -> string, detect(text) -> [{ detectedLanguage, confidence }], prepare(from, to), state(from, to) }
  */
-export function createBrowserBackend() {
+export function createBrowserBackend({ mt = null } = {}) {
   let detectorPromise = null, detectorInstance = null, detectorWait = false;
   /**
    * The detector instance when it is ready, else null. It NEVER waits for `create()`: while the on-device model downloads (which can take minutes, or
@@ -133,7 +135,7 @@ export function createBrowserBackend() {
    * makes the turn use the rules translator at once, and a timed-out translator is not tried again for COOLDOWN_MS.
    */
   const instances = new Map(), pending = new Map(), cooldown = new Map(), waitedOnce = new Set();
-  async function browserTranslate(text, from, to) {
+  async function nativeTranslate(text, from, to) {
     const kind = browserTranslatorKind();
     if (!kind) throw new Error('no browser translator');
     const key = `${from}>${to}`;
@@ -156,6 +158,27 @@ export function createBrowserBackend() {
     }
     try { return await withDeadline(Promise.resolve(inst.translate(text)), TRANSLATE_TIMEOUT_MS, { label: 'browser translation' }); } catch (e) { cooldown.set(key, Date.now() + COOLDOWN_MS); throw e; }
   }
+  /**
+   * MT-SERIOUS, the order of the translation layer: (a) the browser's own Translator for a pair it supports (availability is asked once per pair, bounded),
+   * (b) otherwise the on-device model of ui/mt-host.mjs (`mt`), which only answers when it is READY (it is downloaded when the language is selected, never inside a
+   * turn), (c) nothing else: the call fails and the engine says so. A native translator that is still preparing or failed hands over to the model when that is ready.
+   */
+  const nativePair = new Map();
+  async function nativeSupports(from, to) {
+    if (!browserTranslatorKind()) return false;
+    const key = `${from}>${to}`;
+    if (!nativePair.has(key)) nativePair.set(key, withDeadline(browserTranslatorAvailability(from, to), AVAILABILITY_TIMEOUT_MS, { label: 'translator availability' }).then((a) => a !== 'unavailable' && a !== 'unsupported', () => false));
+    return nativePair.get(key);
+  }
+  async function browserTranslate(text, from, to) {
+    const lang = from === 'en' ? to : from;
+    const model = mt && mt.has(lang);
+    if (await nativeSupports(from, to)) {
+      try { return await nativeTranslate(text, from, to); } catch (e) { if (!(model && mt.state(lang).phase === 'ready')) throw e; }
+    }
+    if (model) return mt.translate(text, from, to);
+    throw new Error('no translator for this language pair');
+  }
   /** Starts the browser translator (ro > en) in the background when it is downloadable or downloading: never awaited by a turn (HANG3). */
   async function prepareTranslator(from = 'ro', to = 'en') {
     const kind = browserTranslatorKind(), key = `${from}>${to}`;
@@ -171,7 +194,7 @@ export function createBrowserBackend() {
   /** What Settings > Language shows: the live state of the browser translator (ro > en), or null when nothing is known beyond availability. */
   function translatorState(from = 'ro', to = 'en') {
     const key = `${from}>${to}`;
-    if (!browserTranslatorKind()) return 'not supported by this browser';
+    if (!browserTranslatorKind()) { const lang = from === 'en' ? to : from, st = mt?.has(lang) ? mt.state(lang) : null; return st ? `on-device model: ${st.phase}` : 'not supported by this browser'; }
     if (instances.has(key)) return 'ready';
     if (pending.has(key)) return 'preparing or downloading; the rules translator is used meanwhile';
     if ((cooldown.get(key) ?? 0) > Date.now()) return 'not answering; the rules translator is used for now';
@@ -182,7 +205,7 @@ export function createBrowserBackend() {
     if (!det) throw new Error('still downloading');
     return await withDeadline(det.detect(String(text)), DETECT_TIMEOUT_MS, { label: 'language detection' });
   }
-  return { translatorKind: browserTranslatorKind, detectorKind: browserDetectorKind, translate: browserTranslate, detect, prepare: prepareTranslator, state: translatorState };
+  return { translatorKind: () => browserTranslatorKind() ?? (mt ? 'mt' : null), nativeKind: browserTranslatorKind, hasModel: !!mt, detectorKind: browserDetectorKind, translate: browserTranslate, detect, prepare: prepareTranslator, state: translatorState };
 }
 
 /** Deadline of a call from the engine worker to the page's browser API: the page itself waits at most 400 ms, this leaves room for the message round trip. */
@@ -193,7 +216,8 @@ export const REMOTE_DEADLINE_MS = 700;
  * request to the page and resolves with its answer. A call that is not answered within REMOTE_DEADLINE_MS rejects, and the switch translator then
  * uses the rules (as it does for a browser API that times out). The page thread is never needed for a turn to finish.
  */
-export function createRemoteBackend({ kinds, call, deadlineMs = REMOTE_DEADLINE_MS }) {
+export const REMOTE_MT_DEADLINE_MS = 3500;   // the on-device model (WASM) answers a sentence in 10-300 ms on a phone; its own call deadline is 2.5 s
+export function createRemoteBackend({ kinds, call, deadlineMs = kinds?.mt ? REMOTE_MT_DEADLINE_MS : REMOTE_DEADLINE_MS }) {
   const bounded = (op, payload, label) => withDeadline(call(op, payload), deadlineMs, { label });
   return {
     translatorKind: () => kinds.translator ?? null,

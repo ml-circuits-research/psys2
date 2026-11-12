@@ -10,7 +10,8 @@ import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, createMicLock, measureSpeed, speechSupport } from './ui/speech.mjs';
-import { createLanguage, hintText, LANG_TAGS, LANG_NAMES } from './ui/language.mjs';
+import { createLanguage, hintText, LANG_TAGS, LANG_NAMES, langName, tagOf } from './ui/language.mjs';
+import { createTranslationLayer, QUALITY_GATE } from './ui/translation-ui.mjs';
 import { classifyVoice } from './ui/voice-noise.mjs';
 import { createSwitchTranslator, createBrowserBackend, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
@@ -135,6 +136,18 @@ export async function mountPsys2(element, options = {}) {
   const dictStop = h('button', { class: 'p2-btn-text p2-dict-stop', type: 'button', 'aria-label': 'Stop dictation', title: 'Stop dictation' }, 'Stop');
   const dictBar = h('div', { class: 'p2-dictbar', role: 'status', hidden: true }, h('i', { class: 'p2-rec', 'aria-hidden': 'true' }), dictText, dictStop);
   const langSel = h('select', { class: 'p2-select', 'aria-label': 'Language' }, h('option', { value: 'en' }, 'English'), h('option', { value: 'ro' }, 'Română'));
+  // MT-SERIOUS: the translation layer (browser Translator, else the on-device model downloaded lazily when a language is selected); the selector lists what it supports
+  const tl = createTranslationLayer({ base, h, note: (t) => note(t), onChange: () => { renderLangSelect(); renderSettings(); } });
+  globalThis.__psys2Tl = tl;   // diagnostics and the phone tests
+  function renderLangSelect() {
+    const cur = language.get(), list = tl.listed();
+    if (!list.some((l) => l.code === cur)) list.push({ code: cur, name: langName(cur, { own: true }) });
+    const sig = list.map((l) => l.code).join(',') + '|' + cur;
+    if (langSel.dataset.sig === sig) return;
+    langSel.dataset.sig = sig;
+    langSel.replaceChildren(...list.map((l) => h('option', { value: l.code }, l.name)));
+    langSel.value = cur;
+  }
   const gearBtn = h('button', { class: 'p2-btn', type: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-label': 'Settings', title: 'Settings' }, icon('gear'));
   // Settings: a full-screen modal over the whole widget (SET). Built once; renderSettings() fills the active tab.
   const setClose = h('button', { class: 'p2-btn p2-modal-close', type: 'button', 'aria-label': 'Close settings', title: 'Close settings' }, icon('close'));
@@ -147,7 +160,7 @@ export async function mountPsys2(element, options = {}) {
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
       h('div', { class: 'p2-tools' }, langSel, gearBtn)),
-    statusEl, log, queueEl, dictBar, form,
+    statusEl, tl.banner, log, queueEl, dictBar, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
@@ -477,6 +490,22 @@ export async function mountPsys2(element, options = {}) {
       try { await Promise.race([engineClient.settled(), stopped]); } catch (e) { if (e instanceof TurnAborted) throw e; throw Object.assign(new Error(e?.message ?? 'the engine is down'), { name: 'EngineDown', reason: e?.reason ?? 'down' }); }
       hostStage('thinking', recId);
       tPress = performance.now(); tn.t0 = tPress; tStart = tPress;
+    }
+    {   // MT-SERIOUS: a message in a language whose on-device translation model is still downloading waits for it (visible, stoppable); the turn clock starts after
+      const wl = language.get();
+      if (wl !== 'en') {
+        await tl.init().catch(() => {});
+        if (tl.needsModel(wl) && tl.host?.state(wl).phase !== 'ready') {
+          const label = () => { const st = tl.host.state(wl); thinkingLabel.textContent = st.phase === 'downloading' ? `downloading the ${langName(wl)} translation model (${Math.max(1, Math.round(st.total / 1e6))} MB)… ${st.total ? Math.round((100 * st.done) / st.total) : 0}%` : `loading the ${langName(wl)} translation model…`; };
+          label();
+          const poll = setInterval(label, 300);
+          let r = null;
+          try { r = await tl.whenReady(wl, { signal: ctl.signal }); } catch (e) { clearInterval(poll); throw new TurnAborted(tn.reason ?? 'stopped', 'download'); }
+          clearInterval(poll);
+          if (r && !r.ok) note(`The ${langName(wl)} translation model is not ready (${r.error}). I answer with what I have.`);
+          tPress = performance.now(); tn.t0 = tPress; tStart = tPress;
+        }
+      }
     }
     ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; }, 100);
     watchdog = setTimeout(() => { tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - (performance.now() - tPress)));
@@ -941,12 +970,26 @@ export async function mountPsys2(element, options = {}) {
   on(micBtn, 'contextmenu', (e) => e.preventDefault());
   on(speakerBtn, 'click', () => setSpeaker(!settings.speaker));
   const setLanguage = (v, reason = 'selector') => language.set(v, reason);
+  // Speech follows the selector: where the browser has no voice for the language this is said once and typing keeps working
+  const voiceSaid = new Set();
+  function voiceNotice(lang) {
+    if (lang === 'en' || voiceSaid.has(lang) || !speechSupport.synthesis) return;
+    const check = () => {
+      const voices = speech?.voices?.() ?? [];
+      if (!voices.length) return false;
+      voiceSaid.add(lang);
+      if (!speech.voiceFor(tagOf(lang))) note(`This device has no ${langName(lang)} voice, so answers are written but not read aloud, and speech recognition may not understand ${langName(lang)}. Typing works as usual.`);
+      return true;
+    };
+    if (!check()) setTimeout(check, 1500);
+  }
   language.onChange(({ lang, reason }) => {
     settings.language = lang; langSel.value = lang;
     speech?.refreshLang(); save(); renderSettings();
     session?.setWorldState?.(SHELL, { language: lang });   // the shell world's state follows the selector, so that "speak Romanian" is a change and not a no-op
+    renderLangSelect(); tl.prepare(lang).then(() => renderSettings(), () => {}); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
     hintEl?.remove(); hintEl = null;
-    if (reason === 'hint') note(lang === 'ro' ? 'Am trecut pe română.' : 'Switched to English.');   // a switch command confirms in its own reply
+    if (reason === 'hint') note(lang === 'ro' ? 'Am trecut pe română.' : lang === 'en' ? 'Switched to English.' : `Switched to ${langName(lang)}.`);   // a switch command confirms in its own reply
   });
   on(langSel, 'change', () => setLanguage(langSel.value, 'selector'));
   // LANG-FIXED: the typed-message hint, the only use of the language detectors: "Pare engleză — schimb limba?" with a button. Never automatic, never for voice.
@@ -1186,10 +1229,19 @@ export async function mountPsys2(element, options = {}) {
       h('div', { class: 'p2-field' }, h('strong', {}, 'Build'), buildInfoLines()),
     ];
   }
+  /** Settings > About: the languages of the translation layer, with the quality number each had to reach (share of the machine-translated operational sample that is read right). */
+  function translationAbout() {
+    const q = tl.quality?.languages ?? {}, reg = tl.registry?.langs ?? {};
+    const rows = Object.keys(reg).filter((c) => typeof q[c]?.right === 'number').sort((a, b) => q[b].right - q[a].right);
+    return h('div', { class: 'p2-field' }, h('strong', {}, 'Translation languages'),
+      h('p', {}, `Languages come from the translation engine: the browser's Translator where it has both directions with English, otherwise an on-device model (bergamot-translator, Mozilla models, downloaded when you select the language). A language is listed only when ${QUALITY_GATE}% or more of a sample of the operational set is read right after machine translation English → language → English (English itself: ${tl.quality?.englishRight ?? '?'}%). Romanian is always listed: it also has its own rules.`),
+      rows.length ? h('ul', { class: 'p2-credits' }, rows.map((c) => h('li', {}, h('b', {}, langName(c, { own: true })), h('small', {}, ` ${q[c].right}% right${q[c].right >= QUALITY_GATE ? '' : ' (below the gate)'} · ${(reg[c].bytes / 1e6).toFixed(0)} MB`)))) : h('p', {}, 'No quality numbers were found in this build.'));
+  }
   function aboutBody() {
     return [
       ...ABOUT_SECTIONS.map(([heading, text]) => h('div', { class: 'p2-field' }, h('strong', {}, heading), h('p', {}, text))),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Measured accuracy'), h('ul', { class: 'p2-credits' }, ACCURACY.map((t) => h('li', {}, t)))),
+      translationAbout(),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Version and build'), buildInfoLines()),
       h('div', { class: 'p2-field p2-about' }, h('strong', {}, 'Licence'),
         h('p', {}, 'AGPL-3.0-only. Anyone who uses this page over a network can get the source code.'),
@@ -1219,9 +1271,24 @@ export async function mountPsys2(element, options = {}) {
       check('Best effort with loose words: when words do not form a sentence, do the most sensible reading and say how I took it (for example “square eyes robot” → “make your eyes square”)', settings.bestEffort !== false, (v) => { settings.bestEffort = v; applyEngineSettings(); save(); }),
     ];
   }
+  function languageOptions() {
+    const list = tl.listed(), cur = language.get();
+    if (!list.some((l) => l.code === cur)) list.push({ code: cur, name: langName(cur, { own: true }) });
+    return list.map((l) => [l.code, l.name + (l.gated ? ` (${l.right == null ? 'not measured' : `${l.right}% right`})` : '')]);
+  }
+  /** Which engine serves the selected language, its size and its state: the browser Translator, the on-device model, or none. */
+  function languageEngineNote() {
+    const code = language.get();
+    if (code === 'en') return 'English needs no translation.';
+    const d = tl.describe(code);
+    if (d.engine === 'translator-api') return `Translation: the browser's own Translator (${translator?.translatorState?.('en', code) ?? 'on this device'}).`;
+    if (d.engine === 'on-device-model') return `Translation: on-device model (bergamot-translator, ${d.size} for both directions, cached in this browser): ${d.state === 'ready' ? 'ready' : d.state === 'error' ? `failed: ${tl.host.state(code).error}` : d.state === 'idle' ? 'not downloaded yet' : `${d.state}…`}.`;
+    return 'No translation engine serves this language in this browser.';
+  }
   function languageBody() {
     return [
-      field('Language', select([['en', 'English'], ['ro', 'Română']], language.get(), (v) => setLanguage(v)), 'The language you talk to me in and I answer in. The same as the selector in the header.'),
+      field('Language', select(languageOptions(), language.get(), (v) => setLanguage(v)), `The language you talk to me in and I answer in. The same as the selector in the header. ${languageEngineNote()}`),
+      check(`Show every language of the translation engine, also those below the quality gate (${QUALITY_GATE}% of a machine-translated sample read right; experimental)`, tl.showAll, (v) => { tl.setShowAll(v); renderSettings(); }),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
         `Used when the language is not English. Browser on-device translator: ${translator?.translatorState?.() ?? (browserAvail === 'downloadable' || browserAvail === 'downloading' ? 'downloading… the rules translator is used meanwhile' : browserAvail)}. Its output is checked and falls back to the rules translator.`),
       field('Language hint', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }),
@@ -1364,7 +1431,7 @@ export async function mountPsys2(element, options = {}) {
     try { [meta, nzMeta] = await Promise.all([findDispatcherModel(base), findNormalizerModel(base)]); } catch (e) { console.warn('Encoder formalizer unavailable', e); }
     encoderChecked = true;
     // Facades of the models that live in the engine worker (the page only needs their labels, status and a way to start loading them)
-    browserBackend = createBrowserBackend();
+    browserBackend = createBrowserBackend({ mt: tl.mtProxy });
     engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getLanguage: () => language.get(), browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: () => view, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
     if (meta) {
       dispatcherEnc = { prepare: () => engineClient.call('prepare', { which: 'dispatcher' }) };
@@ -1376,7 +1443,7 @@ export async function mountPsys2(element, options = {}) {
     translator = { get usage() { return engineClient.usage; }, get detectUsage() { return engineClient.detection; }, resetUsage() { engineClient.resetUsage(); },
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
     const worldsVer = globalThis.__psys2Mod?.['worlds/index.json'];
-    const info = await engineClient.boot({ browser: { translator: browserTranslatorKind(), detector: browserDetectorKind() }, worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
     engine = { worlds: () => info.worlds.map((id) => ({ id })), problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
@@ -1418,6 +1485,9 @@ export async function mountPsys2(element, options = {}) {
   if (!lastShellTab) showTab(view);
   applyEngineSettings();
   setStatus();
+
+  // MT-SERIOUS: the model registry loads after the first paint; a saved non-English language starts its model now
+  setTimeout(() => { tl.init().then(() => { renderLangSelect(); return tl.prepare(language.get()); }).catch((e) => console.warn('translation layer', e)); }, 0);
 
   // optional capabilities, checked once
   if (browserDetectorKind()) browserDetectorAvailability().then((a) => { detectAvail = a; renderSettings(); });
