@@ -84,3 +84,21 @@ Context: 18 of 24 worlds now run on sopworld behind the flag (ops is the baselin
 Blocking: no. Meanwhile the host keeps its workarounds (`kb=lookup`, `redo=`/`isView`/`passive`, generated tables, regex ranking). The per-world numbers are in `sop_world_status.md` ("Per-world comparison"). The next host fix on our side is the undo timeline after a restart, saved with the state (proposal 3, last bullet).
 
 Q1 answered by the reviewer in worker-tasks.md ("Answer to Q1 ... RE-VENDOR 0.7.1 + namespaces", 2026-11-11 23:35). The worker keeps this file append-only, so the reviewer may remove Q1.
+
+## Q2 (FORMALIZE-FROM-WORLDS and E2, 2026-11-12): six proposals from today's results, for review
+
+1. **Descriptions must not become memorization.** DESCRIBE-ALL for tictactoe, hangman and guess reached parity by copying every pattern alternative into a `core.word` wire. The descriptions came out 3 to 24 times longer than the hand-written patterns (guess: 11,939 lines for 500). That is memorization in another notation, not the generalization the user asked for. Proposal:
+   - a description may only reference shared vocabulary: `lang.common` phrase groups, the world's lexicons, and one `core.word` per real word, never per phrase;
+   - a world that reaches parity only by enumerating phrases is reported as a gap;
+   - add a size gate to the DESCRIBE-ALL report: description lines plus words must not exceed the pattern lines.
+
+   Agree? Already applied to the conversation worlds now in progress. `describe.sop` is no longer shipped in the webchat (8dd5d7f).
+2. **The veto scales only with world hooks.** Today only art.draw and diagram.sketch answer "does this thing exist?" (`checkReferents`), and the library's fallback judgement needs arguments mapped to slots, so most readings stay unjudged. Proposal: every world declares, in SOP and English only, an argument-to-slot mapping for its operations (`core.describe.arg of=` already has most of it). The host then derives `checkReferents` and the library's `judgedBy` for every world from that one declaration, with no per-world JS. Agree?
+3. **Joiners per language belong in the translation layer.** E3b showed that "listă cu lapte și ouă" and "titlu A, B și C" mis-split because the clause and list splitters know only English joiners. Since Romanian stays out of the worlds, the fix is the translator: make sure "și", "apoi" and "plus" become "and" and "then" before segmentation, and add a test set of Romanian compounds. Agree that this goes into RO-TRANSLATE-FALLBACK's follow-up?
+4. **About 207 Romanian replies still end as the fixed line** ("Nu am încă o formulare…") without a real Translator. The browser Translator covers them in Chrome. Should the rules translator keep growing templates by frequency, or do we accept the fixed line as the no-API fallback and stop there?
+5. **Two small behaviour choices, both neutral in the A/B:**
+   - (a) "Yes" to an offer, then "Undo that". The library returns to the open offer (`pending`, `inputMode=confirm`), while ops forgets it. Proposal: an undo of a confirmation also closes the offer it answered.
+   - (b) A tab switch or a setting is a timeline step, so a run of "undo" also takes back "let's play tic tac toe". Keep it?
+6. **Games are the slowest group (+3.5 ms at p50).** `lib.act` takes 2.4 ms per turn and `_state` 0.9 ms (7.8 derivations per turn). Proposal: cache `toState` per instance stamp across a turn, which is safe because it is a pure function of the instance. The library item is a cheaper `act` transaction for actions that change one wire. OK to do the host part?
+
+Blocking: no. Meanwhile: (1) is applied; the veto is being made the default (user decision 2026-11-12) with the false `no-game` vetoes fixed first; (2)–(6) wait for the answer.
