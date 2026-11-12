@@ -89,7 +89,7 @@
 
 @core.word core.type
     extends=core.thing
-    doc="A word of one language and the name it means (the library's core.word): lang, text, means (an operation's emit key, an argument as <op>.<name>, or a value of a slot, with of naming the slot)."
+    doc="A word and the name it means (the library's core.word; words have no language, sopworld 0.13): text, means (an operation's emit key, an argument as <op>.<name>, or a value of a slot, with of naming the slot)."
 
 @core.note core.type
     extends=core.thing

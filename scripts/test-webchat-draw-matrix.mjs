@@ -55,6 +55,11 @@ export const drawScenarios = ({ openChat, MATRIX, check, say }) => ({
       check('diagram: a template adds its shapes and arrows to the tab', t.shapes.length > 4 && t.edges.length > 2, JSON.stringify([t.shapes?.length, t.edges?.length]));
       await say(c, 'undo');
       check('diagram: and one undo takes the whole template back', (await st()).shapes.length === 2, String((await st()).shapes?.length));
+      const rd = await say(c, 'make a random diagram');
+      check('diagram: "make a random diagram" draws a sample and says so in plain words, no ids', /^I drew a random \w+ diagram with \w+ \w+\.$/.test(rd) && (await st()).shapes.length > 2, rd.slice(0, 80));
+      await say(c, 'undo');
+      const dc = await say(c, 'draw a star');
+      check('diagram: a plain drawing reply names no id', /^Drew a star\.?$/.test(dc) || !/\b[a-z]\d\b/.test(dc), dc.slice(0, 60));
       check('diagram: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },

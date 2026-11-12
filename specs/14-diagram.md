@@ -6,7 +6,8 @@ World `diagram.sketch`, tab `diagram`. The state and the execution are the engin
 - Every shape has an id by kind: `c` circle, `r` rectangle (box), `s` square, `d` diamond, `e` ellipse, `t` triangle, `h` hexagon, `k` star, `x` text; numbered `c1, c2 ...` from the engine's own per-kind counter (`seq`). Every arrow has `a1, a2 ...` (`edgeSeq`).
 - An unnamed shape is *named* by its id (`name == id`). A shape the user named keeps its name and carries the id in `shape.id`.
 - Aliases: the id, the old long name (`circle1`, `rectangle1`, `box1`) and the name all resolve to the same shape (`shapeOf`). The engine's `find` is patched to resolve them, and the nodes of a request are canonicalised to names before they run.
-- Every reply uses ids: `Connected c1 → r1 (a1).`, `Arrow a1 (c1 → r1) now says “uses”.`
+- Replies never print ids (RO-PHONE 4): a shape the person did not name is "a circle" / "3 triangles" when drawn, "the circle" (the only one) or "circle 2" afterwards: `Drew a circle.`, `Connected the circle → the rectangle.`, `The arrow Start → Done now says “uses”.` Ids stay valid in what the person types.
+- A bare "draw a diagram" / "make a random diagram" draws a sample: one of `RANDOM_DIAGRAMS` (ops.mjs: a template, sample labels, a plain unit) and says `I drew a random cycle diagram with four steps.`
 - The tab draws ids small and grey at the top-left of a shape and on the middle of an arrow; the **Ids** toggle hides them (remembered per browser). Names stay as they are.
 
 ## 2. Arrows as objects

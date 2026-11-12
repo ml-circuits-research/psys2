@@ -20,11 +20,11 @@ const ops = await engineWith('ops');
 test('vendor: the library is the pinned file, unmodified, and passes its own loop scan', () => {
   const notes = readFileSync(path.join(ROOT, 'src/vendor/LICENSES.md'), 'utf8');
   const file = readFileSync(path.join(ROOT, 'src/vendor/sopworld/sopworld.mjs'));
-  assert.match(notes, /f062052/, 'the commit is named');
-  assert.match(notes, /build `807d8bde76f3`/, 'the build is recorded');
+  assert.match(notes, /8b9a46b/, 'the commit is named');
+  assert.match(notes, /build `691f31c95a06`/, 'the build is recorded');
   assert.match(notes, new RegExp(`${file.length} bytes`), 'the size is recorded');
   assert.match(notes, new RegExp(createHash('sha256').update(file).digest('hex')), 'the sha256 of the vendored file is recorded');
-  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.12\.0 /);
+  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.13\.0 /);
   assert.equal(scan(path.join(ROOT, 'src/vendor/sopworld')).join('\n'), '', 'the library\'s own scanner finds no unguarded loop in the vendored file');
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });
@@ -50,7 +50,7 @@ test('matrix mode: the worlds that opt in, the library loads without problems, t
 });
 
 test('parity gate (switch on): kids.shop 160, kids.tasks 241, kids.arith 230, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227, kids.animals 506, user.profile 144 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 160], ['kids.tasks', 241], ['kids.arith', 230], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506], ['user.profile', 144], ['geo.map', 459], ['data.charts', 277], ['art.draw', 562], ['diagram.sketch', 756]]) {
+  for (const [id, n] of [['kids.shop', 160], ['kids.tasks', 241], ['kids.arith', 230], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 506], ['user.profile', 144], ['geo.map', 459], ['data.charts', 277], ['art.draw', 562], ['diagram.sketch', 760]]) {
     const r = await runWorldTests(matrix, id);
     assert.deepEqual(r.failed.map((f) => f.id), [], id); assert.equal(r.total, n);
   }

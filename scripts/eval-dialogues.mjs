@@ -127,7 +127,7 @@ export async function runDialogue(engine, settings, d, { onTurn } = {}) {   // o
     if (!reply) { turns.push({ i, outcome: 'wrong', error, ms }); continue; }
     const after = s.state();
     const unparsedAll = reply.segments.length === 0 || reply.segments.every((x) => x.unparsed);
-    const items = evaluateCase(c, { before, after, replyText: reply.text, effects: reply.effects, statuses: reply.statuses, unparsedAll, values: reply.answers.map((a) => a.value) });
+    const items = evaluateCase(c, { before, after, message: t.message, replyText: reply.text, effects: reply.effects, statuses: reply.statuses, unparsedAll, values: reply.answers.map((a) => a.value) });
     const outcome = classify(c, items, { statuses: reply.statuses, unparsedAll, stateChanged: strip(before) !== strip(after), effects: reply.effects.filter((e) => e.name !== 'chat.suggest') });
     turns.push({
       i, outcome, ms, reply: reply.text.slice(0, 200),

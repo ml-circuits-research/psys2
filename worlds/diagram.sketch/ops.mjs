@@ -107,7 +107,27 @@ function assignIds(s) {
 }
 const edgeOf = (s, id) => s.edges.find((e) => e.id.toLowerCase() === String(id).toLowerCase()) ?? null;
 /** "c1 → r1": the ends of an arrow (a named shape shows its name and its id). */
-const endName = (s, n) => n;
+const endName = (s, n) => plain(s, n);
+/** A shape the person did not name is "the circle" (the only one) or "circle 2", never its id "c2": ids mean nothing to a user. */
+function plain(s, n, many = false) {
+  const m = ID_RE.exec(String(n));
+  const kind = m && KIND_OF_PREFIX[m[1].toLowerCase()];
+  if (!kind || (s.shapes ?? []).some((x) => x.name === n && x.id !== x.name)) return n;
+  const same = (s.shapes ?? []).filter((x) => x.shape === kind && !x.layer);
+  return many || same.length > 1 || !same.some((x) => x.name === n) ? `${kind} ${Number(m[2])}` : `the ${kind}`;
+}
+/** "a circle", "3 triangles": the shapes just drawn, named in plain words. */
+function drawnPhrase(s, names) {
+  const out = [], cnt = new Map();
+  for (const n of names) {
+    const m = ID_RE.exec(n), kind = m && KIND_OF_PREFIX[m[1].toLowerCase()];
+    const x = s.shapes.find((q) => q.name === n);
+    if (kind && x && x.id === x.name) cnt.set(kind, (cnt.get(kind) ?? 0) + 1); else out.push(n);
+  }
+  const plural = (k) => (k === 'star' ? 'stars' : `${k}s`);
+  const kinds = [...cnt].map(([k, c]) => (c === 1 ? `${/^[aeiou]/.test(k) ? 'an' : 'a'} ${k}` : `${c} ${plural(k)}`));
+  return [...kinds, ...out];
+}
 const arrowText = (s, e) => `${endName(s, e.from)} ${e.arrow === 'forward' ? '→' : e.arrow === 'both' ? '↔' : '—'} ${endName(s, e.to)}`;
 
 // ---- the engine bound to a state --------------------------------------------------------------------------------------
@@ -198,11 +218,11 @@ function summarize(result, s) {
     if (st.node.type === 'mention' || st.error || st.skipped) continue;
     if (st.node.args && st.node.args.template && st.answer) { answers.push(st.answer); continue; }
     for (const p of st.patches) {
-      if (p.op === 'add') adds.push(`${p.shape.name}`);
-      else if (p.op === 'link') links.push(`${arrowText(s, p.edge)} (${p.edge.id})`);
-      else if (p.op === 'unlink') unlinks.push(p.edge ? `${p.edge.id} (${arrowText(s, p.edge)})` : p.id);
-      else if (p.op === 'remove') dels.push(p.name);
-      else if (p.op === 'rename') renames.push(`${p.from} to ${p.to}`);
+      if (p.op === 'add') adds.push(p.shape.name);
+      else if (p.op === 'link') links.push(arrowText(s, p.edge));
+      else if (p.op === 'unlink') unlinks.push(p.edge ? arrowText(s, p.edge) : p.id);
+      else if (p.op === 'remove') dels.push(plain(s, p.name, true));
+      else if (p.op === 'rename') renames.push(`${plain(s, p.from, true)} to ${p.to}`);
       else if (p.op === 'rule') rules.push(p.rule);
       else if (p.op === 'forget') said.push('Forgot all default rules.');
       else if (p.op === 'reorder') said.push(p.to === 'front' ? `Brought ${p.name} to the front.` : `Sent ${p.name} to the back.`);
@@ -210,18 +230,18 @@ function summarize(result, s) {
       else if (p.op === 'set') {
         if ('x' in p.props && !moved.includes(p.name)) moved.push(p.name);
         const ch = Object.entries(p.props).filter(([k]) => k !== 'x' && k !== 'y').map(([k, v]) => (k === 'size' ? K.sizeName(v) : k === 'label' ? `labeled “${v}”` : k === 'outline' ? (v ? `${v} outline` : 'no outline') : k === 'shape' ? `a ${v}` : String(v)));
-        if (ch.length) changed.push(`${p.name} is now ${listing(ch)}`);
+        if (ch.length) changed.push(`${plain(s, p.name)} is now ${listing(ch)}`);
       }
     }
     if (st.answer && !ownAnswer) answers.push(st.answer);
     for (const n of st.notes || []) if (/^(reverted|re-applied|there was nothing)|already/.test(n)) said.push(n.charAt(0).toUpperCase() + n.slice(1) + '.');
   }
   const out = [];
-  if (adds.length) out.push(`Drew ${few(adds, 6)}.`);
+  if (adds.length) out.push(`Drew ${few(drawnPhrase(s, adds), 6)}.`);
   if (links.length) out.push(`Connected ${few(links, 4)}.`);
   if (renames.length) out.push(`Renamed ${listing(renames)}.`);
   if (changed.length) out.push(changed.slice(0, 4).join('; ') + (changed.length > 4 ? `; and ${changed.length - 4} more.` : '.'));
-  if (moved.length) out.push(`Moved ${few(moved, 5)}.`);
+  if (moved.length) out.push(`Moved ${few(moved.map((n) => plain(s, n)), 5)}.`);
   out.push(...edgeSentences(edgeSets, s));
   if (unlinks.length) out.push(`Removed the arrow${unlinks.length > 1 ? 's' : ''} ${few(unlinks, 4)}.`);
   if (dels.length) out.push(`Deleted ${few(dels, 6)}.`);
@@ -231,7 +251,7 @@ function summarize(result, s) {
   return out.join(' ') || 'Done.';
 }
 
-/** One sentence per changed arrow: "Arrow a1 (c1 → r1) now says “uses” and is now dashed and thicker (3 px)." */
+/** One sentence per changed arrow: "The arrow circle 1 → rectangle 1 now says “uses” and is now dashed and thicker (3 px)." */
 function edgeSentences(sets, s) {
   const by = new Map();
   for (const p of sets) { const m = by.get(p.edge.id) ?? { edge: p.edge, props: {}, before: {} }; Object.assign(m.props, p.props); for (const k of Object.keys(p.props)) if (!(k in m.before)) m.before[k] = p.before?.[k]; m.edge = p.edge; by.set(p.edge.id, m); }
@@ -251,9 +271,9 @@ function edgeSentences(sets, s) {
   const all = [...by.values()];
   if (all.length > 3) {
     const kinds = [...new Set(all.flatMap((m) => parts(m).map((x) => x.replace(/ \(.*?\)/, ''))))];
-    return [`${all.length} arrows (${few(all.map((m) => m.edge.id), 6)}): ${kinds.join(', ')}.`];
+    return [`${all.length} arrows: ${kinds.join(', ')}.`];
   }
-  for (const m of all) { const q = parts(m); if (q.length) out.push(`Arrow ${m.edge.id} (${arrowText(s, m.edge)}) ${q.join(' and ')}.`); }
+  for (const m of all) { const q = parts(m); if (q.length) out.push(`The arrow ${arrowText(s, m.edge)} ${q.join(' and ')}.`); }
   return out;
 }
 
@@ -391,6 +411,34 @@ function execute(ctx, s, nodes) {
   return ok(`${s.keptNote ? `${s.keptNote} ` : ''}${shortNames(s, summarize(result, s))}`);
 }
 
+/** Sample diagrams for "make a random diagram": a template word the engine reads, sample labels, and what one box is called in plain words. */
+export const RANDOM_DIAGRAMS = [
+  { form: 'cycle', items: ['Plan', 'Do', 'Check', 'Act'], unit: 'step' },
+  { form: 'cycle', items: ['Spring', 'Summer', 'Autumn', 'Winter'], unit: 'season' },
+  { form: 'process', items: ['Idea', 'Draft', 'Review', 'Publish'], unit: 'step' },
+  { form: 'process', items: ['Wash', 'Chop', 'Cook', 'Serve'], unit: 'step' },
+  { form: 'hierarchy', items: ['Team', 'Design', 'Build', 'Test'], unit: 'box', units: 'boxes' },
+  { form: 'pyramid', items: ['Basics', 'Practice', 'Skill', 'Mastery'], unit: 'level' },
+  { form: 'timeline', items: ['Plan', 'Build', 'Launch', 'Learn'], unit: 'stage' },
+  { form: 'funnel', items: ['Visitors', 'Sign-ups', 'Buyers'], unit: 'stage' },
+  { form: 'hub', items: ['School', 'Math', 'Art', 'Music', 'Sport'], unit: 'box', units: 'boxes' },
+  { form: 'list', items: ['Milk', 'Bread', 'Eggs', 'Apples'], unit: 'item' },
+];
+const NUMBER_WORD = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+/** A bare "diagram" request ("draw a diagram", "make a random diagram", "a sample diagram"): no form, no labels. */
+const BARE_DIAGRAM = /^(?:please\s+)?(?:can\s+you\s+|could\s+you\s+)?(?:draw|make|create|build|generate|show|give|sketch)(?:\s+me)?\s+(?:a|an|any|some|one)?\s*(?:(?:random|sample|example|simple|quick|small|little|new|any)\s+)*(?:diagram|chart|flowchart|picture)\s*(?:for\s+me|please)?[.!?]*$/i;
+/** Draws a sample diagram: picks a template, fills it with sample labels and says so in plain words. */
+function randomDiagram(ctx, s, pick = Math.floor(Math.random() * RANDOM_DIAGRAMS.length)) {
+  const r = RANDOM_DIAGRAMS[pick % RANDOM_DIAGRAMS.length];
+  const text = `Draw a ${r.form} of ${r.items.slice(0, -1).join(', ')} and ${r.items[r.items.length - 1]}.`;
+  const f = systemFor(s).formalize(prepareText(text, s), readerCtx(s));
+  const res = f.nodes.length ? execute(ctx, s, f.nodes) : null;
+  if (!res || res.status !== 'supported') return res ?? no('I could not draw a sample diagram.', 'unsupported');
+  const n = r.items.length;
+  const reply = `I drew a random ${r.form} diagram with ${NUMBER_WORD[n] ?? n} ${n === 1 ? r.unit : (r.units ?? r.unit + 's')}.`;
+  return { ...res, value: `${s.keptNote ? `${s.keptNote} ` : ''}${reply}` };
+}
+
 const NOT_READY = () => { loadEngine(); return no('The diagram engine is still loading. Please say that again in a moment.', 'missing'); };
 /** Common entry of every operation: `kind` = { type, name } of the engine wire. */
 const make = (kind) => (ctx, args = {}) => {
@@ -399,6 +447,7 @@ const make = (kind) => (ctx, args = {}) => {
   const text = args.text != null ? String(args.text).trim() : '';
   s.keptNote = s.pending === 'new' ? 'Keeping the current diagram.' : '';   // any other command answers the pending "keep or start empty?" as keep
   s.pending = null;
+  if (text && kind.name === 'create' && BARE_DIAGRAM.test(text)) return randomDiagram(ctx, s, args.pick);
   if (text) {
     const prepared = prepareText(text, s);
     if (typeof process !== 'undefined' && process.env?.DIAG_DEBUG) console.error('[diagram]', JSON.stringify(text), '->', JSON.stringify(prepared));
@@ -433,7 +482,7 @@ function selectCommand(text, s, ctx) {
     s.selected = { shapes, edges };
     s.rev = (s.rev ?? 0) + 1;
     open(ctx);
-    return ok(edges.length ? `Selected ${edges.length === 1 ? `arrow ${edges[0]} (${arrowText(s, s.edges.find((e) => e.id === edges[0]))})` : `${edges.length} arrows (${few(edges, 6)})`}.` : `Selected ${listing(shapes.map((n) => { const x = s.shapes.find((q) => q.name === n); return x.id && x.id !== x.name ? `${x.name} (${x.id})` : n; }))}.`);
+    return ok(edges.length ? `Selected ${edges.length === 1 ? `the arrow ${arrowText(s, s.edges.find((e) => e.id === edges[0]))}` : `${edges.length} arrows`}.` : `Selected ${listing(shapes.map((n) => { const x = s.shapes.find((q) => q.name === n); return x ? plain(s, n) : n; }))}.`);
   })();
 }
 

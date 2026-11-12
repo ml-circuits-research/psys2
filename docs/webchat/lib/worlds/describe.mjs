@@ -8,7 +8,7 @@
  *   core.describe.words  the wording of one language: `of=$<describe>`, `lang`, and the words of each role as repeated keys whose values are `core.word` wires:
  *                        `verb tverb noun ask rest pre mid subject`, and for an argument `prep.<name> det.<name> unit.<name>`; `nosubject=true`;
  *                        `sample.<slot>=value` (example values), `example` (extra example sentences)
- *   core.word            `lang= text= means=`: `means` is the operation's emit key (verbs, nouns, openers, rest, subject words) or `<op>.<argument>` (words that
+ *   core.word            `text= means= [of=]`: `means` is the operation's emit key (verbs, nouns, openers, rest, subject words) or `<op>.<argument>` (words that
  *                        introduce an argument, its determiners, its units). A word is stated once and read by the generator, by the library's `interpret` and by scoring.
  * `describePatterns` generates the ordinary `core.pattern` objects of the request / question / statement forms from a table of FRAMES (the grammar of asking,
  * commanding and stating, written once here for English, in `lang/<lang>/frames.sop` for another language), so a world never spells a sentence. Shapes
@@ -171,12 +171,12 @@ const refId = (v) => (v == null ? v : String(v).replace(/^\$/, ''));
  * Read the `core.describe*` and `core.word` wires of one source (a world's `describe.sop`, or a language pack) into descriptions.
  * A language pack adds wording (`core.describe.words` of another `lang`) and words to the descriptions of the world: pass the result of the first read as `into`.
  * @param {object[]} wires  parsed wires
- * @param {object} [into]   `{ descriptions: Map(wire id -> description), words: Map(wire id -> { id, lang, text, means, of }), errors: [] }`
+ * @param {object} [into]   `{ descriptions: Map(wire id -> description), words: Map(wire id -> { id, text, means, of }), errors: [] }`
  */
 export function readDescriptionWires(wires, into = null) {
   const out = into ?? { descriptions: new Map(), words: new Map(), errors: [] };
   const err = (m) => out.errors.push(m);
-  for (const x of wires) if (x.type === 'core.word') out.words.set(x.id, { id: x.id, lang: val(x, 'lang'), text: val(x, 'text'), means: val(x, 'means'), of: val(x, 'of') ?? null });
+  for (const x of wires) if (x.type === 'core.word') out.words.set(x.id, { id: x.id, text: val(x, 'text'), means: val(x, 'means'), of: val(x, 'of') ?? null });
   for (const x of wires) {
     if (x.type !== 'core.describe') continue;
     out.descriptions.set(x.id, {
@@ -203,7 +203,6 @@ export function readDescriptionWires(wires, into = null) {
     const resolve = (ref, expectMeans, where) => {
       const wd = out.words.get(refId(ref));
       if (!wd) { err(`${x.id}: ${where} refers to ${ref}, which is not a core.word wire`); return null; }
-      if (wd.lang !== lang) err(`${x.id}: ${where} word ${wd.id} is lang=${wd.lang}, not ${lang}`);
       if (wd.means !== expectMeans) err(`${x.id}: ${where} word ${wd.id} means ${wd.means}, expected ${expectMeans}`);
       return wordToken(wd.text);
     };

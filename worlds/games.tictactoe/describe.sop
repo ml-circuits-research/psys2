@@ -1326,910 +1326,910 @@
     sample.r=top
     sample.c=left
 
-@w.en.who_goes_first.ttt.whoFirst core.word lang=en text="who goes first" means=ttt.whoFirst
-@w.en.who_starts.ttt.whoFirst core.word lang=en text="who starts" means=ttt.whoFirst
-@w.en.who_starts_first.ttt.whoFirst core.word lang=en text="who starts first" means=ttt.whoFirst
-@w.en.who_goes_second.ttt.whoFirst core.word lang=en text="who goes second" means=ttt.whoFirst
-@w.en.who_plays_first.ttt.whoFirst core.word lang=en text="who plays first" means=ttt.whoFirst
-@w.en.who_moves_first.ttt.whoFirst core.word lang=en text="who moves first" means=ttt.whoFirst
-@w.en.am_i_x.ttt.whoFirst core.word lang=en text="am i x" means=ttt.whoFirst
-@w.en.am_i_o.ttt.whoFirst core.word lang=en text="am i o" means=ttt.whoFirst
-@w.en.am_i_going_first.ttt.whoFirst core.word lang=en text="am i going first" means=ttt.whoFirst
-@w.en.do_i_go_first.ttt.whoFirst core.word lang=en text="do i go first" means=ttt.whoFirst
-@w.en.do_i_start.ttt.whoFirst core.word lang=en text="do i start" means=ttt.whoFirst
-@w.en.which_one_am_i.ttt.whoFirst core.word lang=en text="which one am i" means=ttt.whoFirst
-@w.en.which_mark_am_i.ttt.whoFirst core.word lang=en text="which mark am i" means=ttt.whoFirst
-@w.en.which_1_am_i.ttt.whoFirst core.word lang=en text="which 1 am i" means=ttt.whoFirst
-@w.en.who_is_first.ttt.whoFirst core.word lang=en text="who is first" means=ttt.whoFirst
-@w.en.who_begins.ttt.whoFirst core.word lang=en text="who begins" means=ttt.whoFirst
-@w.en.am_i_the_x_player.ttt.whoFirst core.word lang=en text="am i the x player" means=ttt.whoFirst
-@w.en.am_i_the_o_player.ttt.whoFirst core.word lang=en text="am i the o player" means=ttt.whoFirst
-@w.en.what_am_i_playing.ttt.whoFirst core.word lang=en text="what am i playing" means=ttt.whoFirst
-@w.en.who_is_x.ttt.whoFirst core.word lang=en text="who is x" means=ttt.whoFirst
-@w.en.who_is_o.ttt.whoFirst core.word lang=en text="who is o" means=ttt.whoFirst
-@w.en.who_is_second.ttt.whoFirst core.word lang=en text="who is second" means=ttt.whoFirst
-@w.en.who_is_going_first.ttt.whoFirst core.word lang=en text="who is going first" means=ttt.whoFirst
-@w.en.who_plays_second.ttt.whoFirst core.word lang=en text="who plays second" means=ttt.whoFirst
-@w.en.whos_up_first.ttt.whoFirst core.word lang=en text="whos up first" means=ttt.whoFirst
-@w.en.who_s_up_first.ttt.whoFirst core.word lang=en text="who s up first" means=ttt.whoFirst
-@w.en.who_is_up_first.ttt.whoFirst core.word lang=en text="who is up first" means=ttt.whoFirst
-@w.en.whos_up.ttt.whoFirst core.word lang=en text="whos up" means=ttt.whoFirst
-@w.en.who_s_up.ttt.whoFirst core.word lang=en text="who s up" means=ttt.whoFirst
-@w.en.who_is_up.ttt.whoFirst core.word lang=en text="who is up" means=ttt.whoFirst
-@w.en.first_to_move.ttt.whoFirst core.word lang=en text="first to move" means=ttt.whoFirst
-@w.en.first_to_go.ttt.whoFirst core.word lang=en text="first to go" means=ttt.whoFirst
-@w.en.first_to_play.ttt.whoFirst core.word lang=en text="first to play" means=ttt.whoFirst
-@w.en.first_to_start.ttt.whoFirst core.word lang=en text="first to start" means=ttt.whoFirst
-@w.en.who_starts_the_game.ttt.whoFirst core.word lang=en text="who starts the game" means=ttt.whoFirst
-@w.en.who_begins_the_game.ttt.whoFirst core.word lang=en text="who begins the game" means=ttt.whoFirst
-@w.en.who_goes_first_here.ttt.whoFirst core.word lang=en text="who goes first here" means=ttt.whoFirst
-@w.en.who_goes_1st.ttt.whoFirst core.word lang=en text="who goes 1st" means=ttt.whoFirst
-@w.en.who_is_to_start.ttt.whoFirst core.word lang=en text="who is to start" means=ttt.whoFirst
-@w.en.who_is_to_move.ttt.whoFirst core.word lang=en text="who is to move" means=ttt.whoFirst
-@w.en.who_is_to_go.ttt.whoFirst core.word lang=en text="who is to go" means=ttt.whoFirst
-@w.en.who_is_to_play.ttt.whoFirst core.word lang=en text="who is to play" means=ttt.whoFirst
-@w.en.who_is_the_first_to_go.ttt.whoFirst core.word lang=en text="who is the first to go" means=ttt.whoFirst
-@w.en.who_is_the_first_to_start.ttt.whoFirst core.word lang=en text="who is the first to start" means=ttt.whoFirst
-@w.en.who_is_the_first_to_move.ttt.whoFirst core.word lang=en text="who is the first to move" means=ttt.whoFirst
-@w.en.who_is_the_first_to_play.ttt.whoFirst core.word lang=en text="who is the first to play" means=ttt.whoFirst
-@w.en.which_one_of_us_goes_first.ttt.whoFirst core.word lang=en text="which one of us goes first" means=ttt.whoFirst
-@w.en.which_of_us_goes_first.ttt.whoFirst core.word lang=en text="which of us goes first" means=ttt.whoFirst
-@w.en.who_of_us_goes_first.ttt.whoFirst core.word lang=en text="who of us goes first" means=ttt.whoFirst
-@w.en.which_one_goes_first.ttt.whoFirst core.word lang=en text="which one goes first" means=ttt.whoFirst
-@w.en.which_player_goes_first.ttt.whoFirst core.word lang=en text="which player goes first" means=ttt.whoFirst
-@w.en.which_one_of_us_starts.ttt.whoFirst core.word lang=en text="which one of us starts" means=ttt.whoFirst
-@w.en.which_of_us_starts.ttt.whoFirst core.word lang=en text="which of us starts" means=ttt.whoFirst
-@w.en.who_gets_to_go_first.ttt.whoFirst core.word lang=en text="who gets to go first" means=ttt.whoFirst
-@w.en.who_gets_to_start.ttt.whoFirst core.word lang=en text="who gets to start" means=ttt.whoFirst
-@w.en.who_is_to_go_first.ttt.whoFirst core.word lang=en text="who is to go first" means=ttt.whoFirst
-@w.en.who_has_the_first_move.ttt.whoFirst core.word lang=en text="who has the first move" means=ttt.whoFirst
-@w.en.who_makes_the_first_move.ttt.whoFirst core.word lang=en text="who makes the first move" means=ttt.whoFirst
-@w.en.who_makes_the_first_turn.ttt.whoFirst core.word lang=en text="who makes the first turn" means=ttt.whoFirst
-@w.en.whose_turn_is_first.ttt.whoFirst core.word lang=en text="whose turn is first" means=ttt.whoFirst
-@w.en.whose_move_is_first.ttt.whoFirst core.word lang=en text="whose move is first" means=ttt.whoFirst
-@w.en.who_will_go_first.ttt.whoFirst core.word lang=en text="who will go first" means=ttt.whoFirst
-@w.en.who_will_start.ttt.whoFirst core.word lang=en text="who will start" means=ttt.whoFirst
-@w.en.who_is_starting.ttt.whoFirst core.word lang=en text="who is starting" means=ttt.whoFirst
-@w.en.who_is_winning.ttt.status core.word lang=en text="who is winning" means=ttt.status
-@w.en.who_is_ahead.ttt.status core.word lang=en text="who is ahead" means=ttt.status
-@w.en.who_is_going_to_win.ttt.status core.word lang=en text="who is going to win" means=ttt.status
-@w.en.who_will_win.ttt.status core.word lang=en text="who will win" means=ttt.status
-@w.en.am_i_winning.ttt.status core.word lang=en text="am i winning" means=ttt.status
-@w.en.are_you_winning.ttt.status core.word lang=en text="are you winning" means=ttt.status
-@w.en.who_is_leading.ttt.status core.word lang=en text="who is leading" means=ttt.status
-@w.en.how_am_i_doing.ttt.status core.word lang=en text="how am i doing" means=ttt.status
-@w.en.who_has_won.ttt.status core.word lang=en text="who has won" means=ttt.status
-@w.en.who_won.ttt.status core.word lang=en text="who won" means=ttt.status
-@w.en.did_i_win.ttt.status core.word lang=en text="did i win" means=ttt.status
-@w.en.did_you_win.ttt.status core.word lang=en text="did you win" means=ttt.status
-@w.en.is_it_a_draw.ttt.status core.word lang=en text="is it a draw" means=ttt.status
-@w.en.who_is_winning_the_game.ttt.status core.word lang=en text="who is winning the game" means=ttt.status
-@w.en.who_is_winning_now.ttt.status core.word lang=en text="who is winning now" means=ttt.status
-@w.en.is_anybody_winning.ttt.status core.word lang=en text="is anybody winning" means=ttt.status
-@w.en.did_anyone_win.ttt.status core.word lang=en text="did anyone win" means=ttt.status
-@w.en.who_is_in_front.ttt.status core.word lang=en text="who is in front" means=ttt.status
-@w.en.is_the_game_over.ttt.status core.word lang=en text="is the game over" means=ttt.status
-@w.en.is_anyone_winning.ttt.status core.word lang=en text="is anyone winning" means=ttt.status
-@w.en.has_anyone_won.ttt.status core.word lang=en text="has anyone won" means=ttt.status
-@w.en.who_is_winning_so_far.ttt.status core.word lang=en text="who is winning so far" means=ttt.status
-@w.en.is_somebody_winning.ttt.status core.word lang=en text="is somebody winning" means=ttt.status
-@w.en.who_is_better.ttt.status core.word lang=en text="who is better" means=ttt.status
-@w.en.winning.ttt.status core.word lang=en text=winning means=ttt.status
-@w.en.winner.ttt.status core.word lang=en text=winner means=ttt.status
-@w.en.score.ttt.status core.word lang=en text=score means=ttt.status
-@w.en.whos_winning.ttt.status core.word lang=en text="whos winning" means=ttt.status
-@w.en.result.ttt.status core.word lang=en text=result means=ttt.status
-@w.en.standings.ttt.status core.word lang=en text=standings means=ttt.status
-@w.en.standing.ttt.status core.word lang=en text=standing means=ttt.status
-@w.en.status.ttt.status core.word lang=en text=status means=ttt.status
-@w.en.game_status.ttt.status core.word lang=en text="game status" means=ttt.status
-@w.en.the_score.ttt.status core.word lang=en text="the score" means=ttt.status
-@w.en.the_status.ttt.status core.word lang=en text="the status" means=ttt.status
-@w.en.the_result.ttt.status core.word lang=en text="the result" means=ttt.status
-@w.en.describe_the_board.ttt.describe core.word lang=en text="describe the board" means=ttt.describe
-@w.en.read_the_board.ttt.describe core.word lang=en text="read the board" means=ttt.describe
-@w.en.show_me_the_board.ttt.describe core.word lang=en text="show me the board" means=ttt.describe
-@w.en.show_the_board.ttt.describe core.word lang=en text="show the board" means=ttt.describe
-@w.en.tell_me_the_board.ttt.describe core.word lang=en text="tell me the board" means=ttt.describe
-@w.en.what_is_on_the_board.ttt.describe core.word lang=en text="what is on the board" means=ttt.describe
-@w.en.what_does_the_board_look_like.ttt.describe core.word lang=en text="what does the board look like" means=ttt.describe
-@w.en.how_does_the_board_look.ttt.describe core.word lang=en text="how does the board look" means=ttt.describe
-@w.en.what_is_the_board_like.ttt.describe core.word lang=en text="what is the board like" means=ttt.describe
-@w.en.read_me_the_board.ttt.describe core.word lang=en text="read me the board" means=ttt.describe
-@w.en.say_the_board.ttt.describe core.word lang=en text="say the board" means=ttt.describe
-@w.en.what_is_the_position.ttt.describe core.word lang=en text="what is the position" means=ttt.describe
-@w.en.describe_the_game.ttt.describe core.word lang=en text="describe the game" means=ttt.describe
-@w.en.what_is_on_the_board_now.ttt.describe core.word lang=en text="what is on the board now" means=ttt.describe
-@w.en.tell_me_what_is_on_the_board.ttt.describe core.word lang=en text="tell me what is on the board" means=ttt.describe
-@w.en.what_is_on_the_grid.ttt.describe core.word lang=en text="what is on the grid" means=ttt.describe
-@w.en.describe_the_position.ttt.describe core.word lang=en text="describe the position" means=ttt.describe
-@w.en.tell_me_what_is_on_the_grid.ttt.describe core.word lang=en text="tell me what is on the grid" means=ttt.describe
-@w.en.what_is_on_the_board_so_far.ttt.describe core.word lang=en text="what is on the board so far" means=ttt.describe
-@w.en.what_does_the_grid_look_like.ttt.describe core.word lang=en text="what does the grid look like" means=ttt.describe
-@w.en.show_me_the_grid.ttt.describe core.word lang=en text="show me the grid" means=ttt.describe
-@w.en.read_the_grid.ttt.describe core.word lang=en text="read the grid" means=ttt.describe
-@w.en.describe_the_grid.ttt.describe core.word lang=en text="describe the grid" means=ttt.describe
-@w.en.what_is_in_the_grid.ttt.describe core.word lang=en text="what is in the grid" means=ttt.describe
-@w.en.what_is_in_the_board.ttt.describe core.word lang=en text="what is in the board" means=ttt.describe
-@w.en.tell_me_the_position.ttt.describe core.word lang=en text="tell me the position" means=ttt.describe
-@w.en.board.ttt.describe core.word lang=en text=board means=ttt.describe
-@w.en.grid.ttt.describe core.word lang=en text=grid means=ttt.describe
-@w.en.the_board.ttt.describe core.word lang=en text="the board" means=ttt.describe
-@w.en.the_grid.ttt.describe core.word lang=en text="the grid" means=ttt.describe
-@w.en.whats_on_it.ttt.describe core.word lang=en text="whats on it" means=ttt.describe
-@w.en.what_is_on_it.ttt.describe core.word lang=en text="what is on it" means=ttt.describe
-@w.en.whats_there.ttt.describe core.word lang=en text="whats there" means=ttt.describe
-@w.en.what_is_there.ttt.describe core.word lang=en text="what is there" means=ttt.describe
-@w.en.where_are_the_x_s_and_o_s.ttt.describe core.word lang=en text="where are the x s and o s" means=ttt.describe
-@w.en.where_are_the_xs_and_os.ttt.describe core.word lang=en text="where are the xs and os" means=ttt.describe
-@w.en.where_are_the_x_and_os.ttt.describe core.word lang=en text="where are the x and os" means=ttt.describe
-@w.en.where_are_the_marks.ttt.describe core.word lang=en text="where are the marks" means=ttt.describe
-@w.en.where_is_everything.ttt.describe core.word lang=en text="where is everything" means=ttt.describe
-@w.en.where_is_everyone.ttt.describe core.word lang=en text="where is everyone" means=ttt.describe
-@w.en.where_is_x_and_o.ttt.describe core.word lang=en text="where is x and o" means=ttt.describe
-@w.en.where_are_x_and_o.ttt.describe core.word lang=en text="where are x and o" means=ttt.describe
-@w.en.where_are_the_x_s_and_the_o_s.ttt.describe core.word lang=en text="where are the x s and the o s" means=ttt.describe
-@w.en.where_are_the_xs_and_the_os.ttt.describe core.word lang=en text="where are the xs and the os" means=ttt.describe
-@w.en.where_are_all_the_marks.ttt.describe core.word lang=en text="where are all the marks" means=ttt.describe
-@w.en.where_is_everything_now.ttt.describe core.word lang=en text="where is everything now" means=ttt.describe
-@w.en.describe_it.ttt.describe core.word lang=en text="describe it" means=ttt.describe
-@w.en.describe_that.ttt.describe core.word lang=en text="describe that" means=ttt.describe
-@w.en.describe_this.ttt.describe core.word lang=en text="describe this" means=ttt.describe
-@w.en.read_it.ttt.describe core.word lang=en text="read it" means=ttt.describe
-@w.en.read_that.ttt.describe core.word lang=en text="read that" means=ttt.describe
-@w.en.read_this.ttt.describe core.word lang=en text="read this" means=ttt.describe
-@w.en.read_it_out.ttt.describe core.word lang=en text="read it out" means=ttt.describe
-@w.en.read_that_out.ttt.describe core.word lang=en text="read that out" means=ttt.describe
-@w.en.read_this_out.ttt.describe core.word lang=en text="read this out" means=ttt.describe
-@w.en.read_it_to_me.ttt.describe core.word lang=en text="read it to me" means=ttt.describe
-@w.en.read_that_to_me.ttt.describe core.word lang=en text="read that to me" means=ttt.describe
-@w.en.read_this_to_me.ttt.describe core.word lang=en text="read this to me" means=ttt.describe
-@w.en.state_of_play.ttt.describe core.word lang=en text="state of play" means=ttt.describe
-@w.en.the_state_of_play.ttt.describe core.word lang=en text="the state of play" means=ttt.describe
-@w.en.situation.ttt.describe core.word lang=en text=situation means=ttt.describe
-@w.en.the_situation.ttt.describe core.word lang=en text="the situation" means=ttt.describe
-@w.en.position.ttt.describe core.word lang=en text=position means=ttt.describe
-@w.en.the_position.ttt.describe core.word lang=en text="the position" means=ttt.describe
-@w.en.the_current_position.ttt.describe core.word lang=en text="the current position" means=ttt.describe
-@w.en.current_position.ttt.describe core.word lang=en text="current position" means=ttt.describe
-@w.en.current_board.ttt.describe core.word lang=en text="current board" means=ttt.describe
-@w.en.the_current_board.ttt.describe core.word lang=en text="the current board" means=ttt.describe
-@w.en.what_should_i_play.ttt.hint core.word lang=en text="what should i play" means=ttt.hint
-@w.en.where_should_i_play.ttt.hint core.word lang=en text="where should i play" means=ttt.hint
-@w.en.where_should_i_go.ttt.hint core.word lang=en text="where should i go" means=ttt.hint
-@w.en.what_is_my_best_move.ttt.hint core.word lang=en text="what is my best move" means=ttt.hint
-@w.en.what_is_a_good_move.ttt.hint core.word lang=en text="what is a good move" means=ttt.hint
-@w.en.what_move_should_i_make.ttt.hint core.word lang=en text="what move should i make" means=ttt.hint
-@w.en.suggest_a_move.ttt.hint core.word lang=en text="suggest a move" means=ttt.hint
-@w.en.what_should_i_do.ttt.hint core.word lang=en text="what should i do" means=ttt.hint
-@w.en.which_move_is_best.ttt.hint core.word lang=en text="which move is best" means=ttt.hint
-@w.en.where_should_i_move.ttt.hint core.word lang=en text="where should i move" means=ttt.hint
-@w.en.give_me_a_tip.ttt.hint core.word lang=en text="give me a tip" means=ttt.hint
-@w.en.what_is_the_best_move.ttt.hint core.word lang=en text="what is the best move" means=ttt.hint
-@w.en.which_square_should_i_take.ttt.hint core.word lang=en text="which square should i take" means=ttt.hint
-@w.en.which_square_should_i_play.ttt.hint core.word lang=en text="which square should i play" means=ttt.hint
-@w.en.which_square_is_best.ttt.hint core.word lang=en text="which square is best" means=ttt.hint
-@w.en.what_is_the_best_square.ttt.hint core.word lang=en text="what is the best square" means=ttt.hint
-@w.en.what_square_should_i_take.ttt.hint core.word lang=en text="what square should i take" means=ttt.hint
-@w.en.which_place_should_i_take.ttt.hint core.word lang=en text="which place should i take" means=ttt.hint
-@w.en.where_should_i_put_my_x.ttt.hint core.word lang=en text="where should i put my x" means=ttt.hint
-@w.en.give_me_a_hint_for_the_move.ttt.hint core.word lang=en text="give me a hint for the move" means=ttt.hint
-@w.en.what_is_a_good_square.ttt.hint core.word lang=en text="what is a good square" means=ttt.hint
-@w.en.what_would_you_play.ttt.hint core.word lang=en text="what would you play" means=ttt.hint
-@w.en.what_would_you_do.ttt.hint core.word lang=en text="what would you do" means=ttt.hint
-@w.en.help_me_choose.ttt.hint core.word lang=en text="help me choose" means=ttt.hint
-@w.en.hint.ttt.hint core.word lang=en text=hint means=ttt.hint
-@w.en.hints.ttt.hint core.word lang=en text=hints means=ttt.hint
-@w.en.any_hints.ttt.hint core.word lang=en text="any hints" means=ttt.hint
-@w.en.a_hint.ttt.hint core.word lang=en text="a hint" means=ttt.hint
-@w.en.any_hint.ttt.hint core.word lang=en text="any hint" means=ttt.hint
-@w.en.give_me_a_hint.ttt.hint core.word lang=en text="give me a hint" means=ttt.hint
-@w.en.clue.ttt.hint core.word lang=en text=clue means=ttt.hint
-@w.en.a_clue.ttt.hint core.word lang=en text="a clue" means=ttt.hint
-@w.en.any_clue.ttt.hint core.word lang=en text="any clue" means=ttt.hint
-@w.en.tip.ttt.hint core.word lang=en text=tip means=ttt.hint
-@w.en.a_tip.ttt.hint core.word lang=en text="a tip" means=ttt.hint
-@w.en.any_tip.ttt.hint core.word lang=en text="any tip" means=ttt.hint
-@w.en.tips.ttt.hint core.word lang=en text=tips means=ttt.hint
-@w.en.suggestion.ttt.hint core.word lang=en text=suggestion means=ttt.hint
-@w.en.suggestions.ttt.hint core.word lang=en text=suggestions means=ttt.hint
-@w.en.a_suggestion.ttt.hint core.word lang=en text="a suggestion" means=ttt.hint
-@w.en.help.ttt.hint core.word lang=en text=help means=ttt.hint
-@w.en.help_me.ttt.hint core.word lang=en text="help me" means=ttt.hint
-@w.en.advice.ttt.hint core.word lang=en text=advice means=ttt.hint
-@w.en.any_advice.ttt.hint core.word lang=en text="any advice" means=ttt.hint
-@w.en.can_you_suggest_where_i_play.ttt.hint core.word lang=en text="can you suggest where i play" means=ttt.hint
-@w.en.can_u_suggest_where_i_play.ttt.hint core.word lang=en text="can u suggest where i play" means=ttt.hint
-@w.en.could_you_suggest_where_i_play.ttt.hint core.word lang=en text="could you suggest where i play" means=ttt.hint
-@w.en.can_you_suggest_where_i_should_play.ttt.hint core.word lang=en text="can you suggest where i should play" means=ttt.hint
-@w.en.can_u_suggest_where_i_should_play.ttt.hint core.word lang=en text="can u suggest where i should play" means=ttt.hint
-@w.en.can_you_suggest_where_to_play.ttt.hint core.word lang=en text="can you suggest where to play" means=ttt.hint
-@w.en.can_u_suggest_where_to_play.ttt.hint core.word lang=en text="can u suggest where to play" means=ttt.hint
-@w.en.can_you_suggest_a_move.ttt.hint core.word lang=en text="can you suggest a move" means=ttt.hint
-@w.en.can_u_suggest_a_move.ttt.hint core.word lang=en text="can u suggest a move" means=ttt.hint
-@w.en.could_you_suggest_a_move.ttt.hint core.word lang=en text="could you suggest a move" means=ttt.hint
-@w.en.can_you_suggest_a_move_for_me.ttt.hint core.word lang=en text="can you suggest a move for me" means=ttt.hint
-@w.en.can_you_suggest_a_square.ttt.hint core.word lang=en text="can you suggest a square" means=ttt.hint
-@w.en.suggest_where_i_play.ttt.hint core.word lang=en text="suggest where i play" means=ttt.hint
-@w.en.suggest_where_i_should_play.ttt.hint core.word lang=en text="suggest where i should play" means=ttt.hint
-@w.en.suggest_where_to_play.ttt.hint core.word lang=en text="suggest where to play" means=ttt.hint
-@w.en.suggest_where_i_could_play.ttt.hint core.word lang=en text="suggest where i could play" means=ttt.hint
-@w.en.suggest_me_a_move.ttt.hint core.word lang=en text="suggest me a move" means=ttt.hint
-@w.en.suggest_my_move.ttt.hint core.word lang=en text="suggest my move" means=ttt.hint
-@w.en.can_you_recommend_a_move.ttt.hint core.word lang=en text="can you recommend a move" means=ttt.hint
-@w.en.can_you_recommend_where_i_play.ttt.hint core.word lang=en text="can you recommend where i play" means=ttt.hint
-@w.en.recommend_a_move.ttt.hint core.word lang=en text="recommend a move" means=ttt.hint
-@w.en.where_would_you_suggest_i_play.ttt.hint core.word lang=en text="where would you suggest i play" means=ttt.hint
-@w.en.where_would_you_play.ttt.hint core.word lang=en text="where would you play" means=ttt.hint
-@w.en.where_would_you_put_it.ttt.hint core.word lang=en text="where would you put it" means=ttt.hint
-@w.en.where_do_you_suggest_i_play.ttt.hint core.word lang=en text="where do you suggest i play" means=ttt.hint
-@w.en.where_do_you_suggest.ttt.hint core.word lang=en text="where do you suggest" means=ttt.hint
-@w.en.where_do_you_think_i_should_play.ttt.hint core.word lang=en text="where do you think i should play" means=ttt.hint
-@w.en.where_can_i_play.ttt.hint core.word lang=en text="where can i play" means=ttt.hint
-@w.en.where_could_i_play.ttt.hint core.word lang=en text="where could i play" means=ttt.hint
-@w.en.where_do_i_play.ttt.hint core.word lang=en text="where do i play" means=ttt.hint
-@w.en.where_to_play.ttt.hint core.word lang=en text="where to play" means=ttt.hint
-@w.en.best_move.ttt.hint core.word lang=en text="best move" means=ttt.hint
-@w.en.best_moves.ttt.hint core.word lang=en text="best moves" means=ttt.hint
-@w.en.best_play.ttt.hint core.word lang=en text="best play" means=ttt.hint
-@w.en.best_square.ttt.hint core.word lang=en text="best square" means=ttt.hint
-@w.en.best_spot.ttt.hint core.word lang=en text="best spot" means=ttt.hint
-@w.en.best_place.ttt.hint core.word lang=en text="best place" means=ttt.hint
-@w.en.best_idea.ttt.hint core.word lang=en text="best idea" means=ttt.hint
-@w.en.good_move.ttt.hint core.word lang=en text="good move" means=ttt.hint
-@w.en.good_moves.ttt.hint core.word lang=en text="good moves" means=ttt.hint
-@w.en.good_play.ttt.hint core.word lang=en text="good play" means=ttt.hint
-@w.en.good_square.ttt.hint core.word lang=en text="good square" means=ttt.hint
-@w.en.good_spot.ttt.hint core.word lang=en text="good spot" means=ttt.hint
-@w.en.good_place.ttt.hint core.word lang=en text="good place" means=ttt.hint
-@w.en.good_idea.ttt.hint core.word lang=en text="good idea" means=ttt.hint
-@w.en.better_move.ttt.hint core.word lang=en text="better move" means=ttt.hint
-@w.en.better_moves.ttt.hint core.word lang=en text="better moves" means=ttt.hint
-@w.en.better_play.ttt.hint core.word lang=en text="better play" means=ttt.hint
-@w.en.better_square.ttt.hint core.word lang=en text="better square" means=ttt.hint
-@w.en.better_spot.ttt.hint core.word lang=en text="better spot" means=ttt.hint
-@w.en.better_place.ttt.hint core.word lang=en text="better place" means=ttt.hint
-@w.en.better_idea.ttt.hint core.word lang=en text="better idea" means=ttt.hint
-@w.en.top_move.ttt.hint core.word lang=en text="top move" means=ttt.hint
-@w.en.top_moves.ttt.hint core.word lang=en text="top moves" means=ttt.hint
-@w.en.top_play.ttt.hint core.word lang=en text="top play" means=ttt.hint
-@w.en.top_square.ttt.hint core.word lang=en text="top square" means=ttt.hint
-@w.en.top_spot.ttt.hint core.word lang=en text="top spot" means=ttt.hint
-@w.en.top_place.ttt.hint core.word lang=en text="top place" means=ttt.hint
-@w.en.top_idea.ttt.hint core.word lang=en text="top idea" means=ttt.hint
-@w.en.winning_move.ttt.hint core.word lang=en text="winning move" means=ttt.hint
-@w.en.winning_moves.ttt.hint core.word lang=en text="winning moves" means=ttt.hint
-@w.en.winning_play.ttt.hint core.word lang=en text="winning play" means=ttt.hint
-@w.en.winning_square.ttt.hint core.word lang=en text="winning square" means=ttt.hint
-@w.en.winning_spot.ttt.hint core.word lang=en text="winning spot" means=ttt.hint
-@w.en.winning_place.ttt.hint core.word lang=en text="winning place" means=ttt.hint
-@w.en.winning_idea.ttt.hint core.word lang=en text="winning idea" means=ttt.hint
-@w.en.decent_move.ttt.hint core.word lang=en text="decent move" means=ttt.hint
-@w.en.decent_moves.ttt.hint core.word lang=en text="decent moves" means=ttt.hint
-@w.en.decent_play.ttt.hint core.word lang=en text="decent play" means=ttt.hint
-@w.en.decent_square.ttt.hint core.word lang=en text="decent square" means=ttt.hint
-@w.en.decent_spot.ttt.hint core.word lang=en text="decent spot" means=ttt.hint
-@w.en.decent_place.ttt.hint core.word lang=en text="decent place" means=ttt.hint
-@w.en.decent_idea.ttt.hint core.word lang=en text="decent idea" means=ttt.hint
-@w.en.safest_move.ttt.hint core.word lang=en text="safest move" means=ttt.hint
-@w.en.safest_moves.ttt.hint core.word lang=en text="safest moves" means=ttt.hint
-@w.en.safest_play.ttt.hint core.word lang=en text="safest play" means=ttt.hint
-@w.en.safest_square.ttt.hint core.word lang=en text="safest square" means=ttt.hint
-@w.en.safest_spot.ttt.hint core.word lang=en text="safest spot" means=ttt.hint
-@w.en.safest_place.ttt.hint core.word lang=en text="safest place" means=ttt.hint
-@w.en.safest_idea.ttt.hint core.word lang=en text="safest idea" means=ttt.hint
-@w.en.smartest_move.ttt.hint core.word lang=en text="smartest move" means=ttt.hint
-@w.en.smartest_moves.ttt.hint core.word lang=en text="smartest moves" means=ttt.hint
-@w.en.smartest_play.ttt.hint core.word lang=en text="smartest play" means=ttt.hint
-@w.en.smartest_square.ttt.hint core.word lang=en text="smartest square" means=ttt.hint
-@w.en.smartest_spot.ttt.hint core.word lang=en text="smartest spot" means=ttt.hint
-@w.en.smartest_place.ttt.hint core.word lang=en text="smartest place" means=ttt.hint
-@w.en.smartest_idea.ttt.hint core.word lang=en text="smartest idea" means=ttt.hint
-@w.en.where_did_you_play.ttt.last core.word lang=en text="where did you play" means=ttt.last
-@w.en.where_did_you_go.ttt.last core.word lang=en text="where did you go" means=ttt.last
-@w.en.what_was_your_move.ttt.last core.word lang=en text="what was your move" means=ttt.last
-@w.en.what_was_your_last_move.ttt.last core.word lang=en text="what was your last move" means=ttt.last
-@w.en.which_square_did_you_take.ttt.last core.word lang=en text="which square did you take" means=ttt.last
-@w.en.what_did_you_play.ttt.last core.word lang=en text="what did you play" means=ttt.last
-@w.en.where_was_your_move.ttt.last core.word lang=en text="where was your move" means=ttt.last
-@w.en.where_was_your_last_move.ttt.last core.word lang=en text="where was your last move" means=ttt.last
-@w.en.what_did_you_just_play.ttt.last core.word lang=en text="what did you just play" means=ttt.last
-@w.en.which_square_did_you_pick.ttt.last core.word lang=en text="which square did you pick" means=ttt.last
-@w.en.which_square_did_you_play.ttt.last core.word lang=en text="which square did you play" means=ttt.last
-@w.en.where_did_you_just_play.ttt.last core.word lang=en text="where did you just play" means=ttt.last
-@w.en.what_was_your_last_play.ttt.last core.word lang=en text="what was your last play" means=ttt.last
-@w.en.which_square_did_you_choose.ttt.last core.word lang=en text="which square did you choose" means=ttt.last
-@w.en.where_did_you_put_your_o.ttt.last core.word lang=en text="where did you put your o" means=ttt.last
-@w.en.what_square_did_you_take.ttt.last core.word lang=en text="what square did you take" means=ttt.last
-@w.en.what_did_you_pick.ttt.last core.word lang=en text="what did you pick" means=ttt.last
-@w.en.where_did_you_move.ttt.last core.word lang=en text="where did you move" means=ttt.last
-@w.en.have_we_made.ttt.count core.word lang=en text="have we made" means=ttt.count
-@w.en.have_we_played.ttt.count core.word lang=en text="have we played" means=ttt.count
-@w.en.have_been_made.ttt.count core.word lang=en text="have been made" means=ttt.count
-@w.en.have_been_played.ttt.count core.word lang=en text="have been played" means=ttt.count
-@w.en.did_we_make.ttt.count core.word lang=en text="did we make" means=ttt.count
-@w.en.did_we_play.ttt.count core.word lang=en text="did we play" means=ttt.count
-@w.en.have_i_made.ttt.count core.word lang=en text="have i made" means=ttt.count
-@w.en.have_i_had.ttt.count core.word lang=en text="have i had" means=ttt.count
-@w.en.have_you_made.ttt.count core.word lang=en text="have you made" means=ttt.count
-@w.en.have_you_played.ttt.count core.word lang=en text="have you played" means=ttt.count
-@w.en.were_made.ttt.count core.word lang=en text="were made" means=ttt.count
-@w.en.were_played.ttt.count core.word lang=en text="were played" means=ttt.count
-@w.en.are_there.ttt.count core.word lang=en text="are there" means=ttt.count
-@w.en.have_we_had.ttt.count core.word lang=en text="have we had" means=ttt.count
-@w.en.have_i_played.ttt.count core.word lang=en text="have i played" means=ttt.count
-@w.en.have_i_taken.ttt.count core.word lang=en text="have i taken" means=ttt.count
-@w.en.have_we_taken.ttt.count core.word lang=en text="have we taken" means=ttt.count
-@w.en.have_i_used.ttt.count core.word lang=en text="have i used" means=ttt.count
-@w.en.have_we_done.ttt.count core.word lang=en text="have we done" means=ttt.count
-@w.en.has_each_player_made.ttt.count core.word lang=en text="has each player made" means=ttt.count
-@w.en.did_i_make.ttt.count core.word lang=en text="did i make" means=ttt.count
-@w.en.did_you_make.ttt.count core.word lang=en text="did you make" means=ttt.count
-@w.en.moves.ttt.count core.word lang=en text=moves means=ttt.count
-@w.en.tries.ttt.count core.word lang=en text=tries means=ttt.count
-@w.en.turns.ttt.count core.word lang=en text=turns means=ttt.count
-@w.en.plays.ttt.count core.word lang=en text=plays means=ttt.count
-@w.en.goes.ttt.count core.word lang=en text=goes means=ttt.count
-@w.en.marks.ttt.count core.word lang=en text=marks means=ttt.count
-@w.en.attempts.ttt.count core.word lang=en text=attempts means=ttt.count
-@w.en.how_many.ttt.count core.word lang=en text="how many" means=ttt.count
-@w.en.so_far.ttt.count core.word lang=en text="so far" means=ttt.count
-@w.en.now.ttt.count core.word lang=en text=now means=ttt.count
-@w.en.already.ttt.count core.word lang=en text=already means=ttt.count
-@w.en.in_total.ttt.count core.word lang=en text="in total" means=ttt.count
-@w.en.altogether.ttt.count core.word lang=en text=altogether means=ttt.count
-@w.en.what_level.ttt.level core.word lang=en text="what level" means=ttt.level
-@w.en.which_level.ttt.level core.word lang=en text="which level" means=ttt.level
-@w.en.how_hard.ttt.level core.word lang=en text="how hard" means=ttt.level
-@w.en.are_you.ttt.level core.word lang=en text="are you" means=ttt.level
-@w.en.is_it.ttt.level core.word lang=en text="is it" means=ttt.level
-@w.en.are_we_playing.ttt.level core.word lang=en text="are we playing" means=ttt.level
-@w.en.is_the_game.ttt.level core.word lang=en text="is the game" means=ttt.level
-@w.en.is_this.ttt.level core.word lang=en text="is this" means=ttt.level
-@w.en.you_took.ttt.last core.word lang=en text="you took" means=ttt.last
-@w.en.you_played.ttt.last core.word lang=en text="you played" means=ttt.last
-@w.en.you_picked.ttt.last core.word lang=en text="you picked" means=ttt.last
-@w.en.you_chose.ttt.last core.word lang=en text="you chose" means=ttt.last
-@w.en.you_made.ttt.last core.word lang=en text="you made" means=ttt.last
-@w.en.you_marked.ttt.last core.word lang=en text="you marked" means=ttt.last
-@w.en.you_used.ttt.last core.word lang=en text="you used" means=ttt.last
-@w.en.the_last_square.ttt.last core.word lang=en text="the last square" means=ttt.last
-@w.en.the_last_move.ttt.last core.word lang=en text="the last move" means=ttt.last
-@w.en.the_last_spot.ttt.last core.word lang=en text="the last spot" means=ttt.last
-@w.en.the_move.ttt.last core.word lang=en text="the move" means=ttt.last
-@w.en.the_square.ttt.last core.word lang=en text="the square" means=ttt.last
-@w.en.the_spot.ttt.last core.word lang=en text="the spot" means=ttt.last
-@w.en.the_play.ttt.last core.word lang=en text="the play" means=ttt.last
-@w.en.the_mark.ttt.last core.word lang=en text="the mark" means=ttt.last
-@w.en.the_pick.ttt.last core.word lang=en text="the pick" means=ttt.last
-@w.en.the_choice.ttt.last core.word lang=en text="the choice" means=ttt.last
-@w.en.the_position.ttt.last core.word lang=en text="the position" means=ttt.last
-@w.en.your_last_square.ttt.last core.word lang=en text="your last square" means=ttt.last
-@w.en.your_last_move.ttt.last core.word lang=en text="your last move" means=ttt.last
-@w.en.your_last_spot.ttt.last core.word lang=en text="your last spot" means=ttt.last
-@w.en.your_move.ttt.last core.word lang=en text="your move" means=ttt.last
-@w.en.your_square.ttt.last core.word lang=en text="your square" means=ttt.last
-@w.en.your_spot.ttt.last core.word lang=en text="your spot" means=ttt.last
-@w.en.your_play.ttt.last core.word lang=en text="your play" means=ttt.last
-@w.en.your_mark.ttt.last core.word lang=en text="your mark" means=ttt.last
-@w.en.your_pick.ttt.last core.word lang=en text="your pick" means=ttt.last
-@w.en.your_choice.ttt.last core.word lang=en text="your choice" means=ttt.last
-@w.en.your_position.ttt.last core.word lang=en text="your position" means=ttt.last
-@w.en.the_last_last_square.ttt.last core.word lang=en text="the last last square" means=ttt.last
-@w.en.the_last_last_move.ttt.last core.word lang=en text="the last last move" means=ttt.last
-@w.en.the_last_last_spot.ttt.last core.word lang=en text="the last last spot" means=ttt.last
-@w.en.the_last_play.ttt.last core.word lang=en text="the last play" means=ttt.last
-@w.en.the_last_mark.ttt.last core.word lang=en text="the last mark" means=ttt.last
-@w.en.the_last_pick.ttt.last core.word lang=en text="the last pick" means=ttt.last
-@w.en.the_last_choice.ttt.last core.word lang=en text="the last choice" means=ttt.last
-@w.en.the_last_position.ttt.last core.word lang=en text="the last position" means=ttt.last
-@w.en.your_last_last_square.ttt.last core.word lang=en text="your last last square" means=ttt.last
-@w.en.your_last_last_move.ttt.last core.word lang=en text="your last last move" means=ttt.last
-@w.en.your_last_last_spot.ttt.last core.word lang=en text="your last last spot" means=ttt.last
-@w.en.your_last_play.ttt.last core.word lang=en text="your last play" means=ttt.last
-@w.en.your_last_mark.ttt.last core.word lang=en text="your last mark" means=ttt.last
-@w.en.your_last_pick.ttt.last core.word lang=en text="your last pick" means=ttt.last
-@w.en.your_last_choice.ttt.last core.word lang=en text="your last choice" means=ttt.last
-@w.en.your_last_position.ttt.last core.word lang=en text="your last position" means=ttt.last
-@w.en.what_is.ttt.last core.word lang=en text="what is" means=ttt.last
-@w.en.whats.ttt.last core.word lang=en text=whats means=ttt.last
-@w.en.what_s.ttt.last core.word lang=en text="what s" means=ttt.last
-@w.en.which_is.ttt.last core.word lang=en text="which is" means=ttt.last
-@w.en.tell_me.ttt.last core.word lang=en text="tell me" means=ttt.last
-@w.en.give.ttt.giveup core.word lang=en text=give means=ttt.giveup
-@w.en.giving.ttt.giveup core.word lang=en text=giving means=ttt.giveup
-@w.en.gave.ttt.giveup core.word lang=en text=gave means=ttt.giveup
-@w.en.quit.ttt.giveup core.word lang=en text=quit means=ttt.giveup
-@w.en.quitting.ttt.giveup core.word lang=en text=quitting means=ttt.giveup
-@w.en.surrender.ttt.giveup core.word lang=en text=surrender means=ttt.giveup
-@w.en.surrendering.ttt.giveup core.word lang=en text=surrendering means=ttt.giveup
-@w.en.forfeit.ttt.giveup core.word lang=en text=forfeit means=ttt.giveup
-@w.en.forfeiting.ttt.giveup core.word lang=en text=forfeiting means=ttt.giveup
-@w.en.resign.ttt.giveup core.word lang=en text=resign means=ttt.giveup
-@w.en.resigning.ttt.giveup core.word lang=en text=resigning means=ttt.giveup
-@w.en.concede.ttt.giveup core.word lang=en text=concede means=ttt.giveup
-@w.en.conceding.ttt.giveup core.word lang=en text=conceding means=ttt.giveup
-@w.en.stop.ttt.giveup core.word lang=en text=stop means=ttt.giveup
-@w.en.stopping.ttt.giveup core.word lang=en text=stopping means=ttt.giveup
-@w.en.abandon.ttt.giveup core.word lang=en text=abandon means=ttt.giveup
-@w.en.abandoning.ttt.giveup core.word lang=en text=abandoning means=ttt.giveup
-@w.en.end.ttt.giveup core.word lang=en text=end means=ttt.giveup
-@w.en.ending.ttt.giveup core.word lang=en text=ending means=ttt.giveup
-@w.en.leave.ttt.giveup core.word lang=en text=leave means=ttt.giveup
-@w.en.leaving.ttt.giveup core.word lang=en text=leaving means=ttt.giveup
-@w.en.abort.ttt.giveup core.word lang=en text=abort means=ttt.giveup
-@w.en.aborting.ttt.giveup core.word lang=en text=aborting means=ttt.giveup
-@w.en.throw_in_the_towel.ttt.giveup core.word lang=en text="throw in the towel" means=ttt.giveup
-@w.en.am_done.ttt.giveup core.word lang=en text="am done" means=ttt.giveup
-@w.en.am_giving.ttt.giveup core.word lang=en text="am giving" means=ttt.giveup
-@w.en.will_give.ttt.giveup core.word lang=en text="will give" means=ttt.giveup
-@w.en.am_quitting.ttt.giveup core.word lang=en text="am quitting" means=ttt.giveup
-@w.en.am_surrendering.ttt.giveup core.word lang=en text="am surrendering" means=ttt.giveup
-@w.en.am_resigning.ttt.giveup core.word lang=en text="am resigning" means=ttt.giveup
-@w.en.am_conceding.ttt.giveup core.word lang=en text="am conceding" means=ttt.giveup
-@w.en.am_stopping.ttt.giveup core.word lang=en text="am stopping" means=ttt.giveup
-@w.en.am_abandoning.ttt.giveup core.word lang=en text="am abandoning" means=ttt.giveup
-@w.en.am_ending.ttt.giveup core.word lang=en text="am ending" means=ttt.giveup
-@w.en.am_leaving.ttt.giveup core.word lang=en text="am leaving" means=ttt.giveup
-@w.en.am_aborting.ttt.giveup core.word lang=en text="am aborting" means=ttt.giveup
-@w.en.give_up.ttt.giveup core.word lang=en text="give up" means=ttt.giveup
-@w.en.gave_up.ttt.giveup core.word lang=en text="gave up" means=ttt.giveup
-@w.en.giving_up.ttt.giveup core.word lang=en text="giving up" means=ttt.giveup
-@w.en.quit_the_game.ttt.giveup core.word lang=en text="quit the game" means=ttt.giveup
-@w.en.resign_the_game.ttt.giveup core.word lang=en text="resign the game" means=ttt.giveup
-@w.en.forfeit_the_game.ttt.giveup core.word lang=en text="forfeit the game" means=ttt.giveup
-@w.en.surrender_the_game.ttt.giveup core.word lang=en text="surrender the game" means=ttt.giveup
-@w.en.concede_the_game.ttt.giveup core.word lang=en text="concede the game" means=ttt.giveup
-@w.en.stop_the_game.ttt.giveup core.word lang=en text="stop the game" means=ttt.giveup
-@w.en.abandon_the_game.ttt.giveup core.word lang=en text="abandon the game" means=ttt.giveup
-@w.en.end_the_game.ttt.giveup core.word lang=en text="end the game" means=ttt.giveup
-@w.en.leave_the_game.ttt.giveup core.word lang=en text="leave the game" means=ttt.giveup
-@w.en.abort_the_game.ttt.giveup core.word lang=en text="abort the game" means=ttt.giveup
-@w.en.i_give_up.ttt.giveup core.word lang=en text="i give up" means=ttt.giveup
-@w.en.i_quit.ttt.giveup core.word lang=en text="i quit" means=ttt.giveup
-@w.en.i_surrender.ttt.giveup core.word lang=en text="i surrender" means=ttt.giveup
-@w.en.i_resign.ttt.giveup core.word lang=en text="i resign" means=ttt.giveup
-@w.en.i_forfeit.ttt.giveup core.word lang=en text="i forfeit" means=ttt.giveup
-@w.en.i_am_done.ttt.giveup core.word lang=en text="i am done" means=ttt.giveup
-@w.en.im_done.ttt.giveup core.word lang=en text="im done" means=ttt.giveup
-@w.en.i_am_out.ttt.giveup core.word lang=en text="i am out" means=ttt.giveup
-@w.en.im_out.ttt.giveup core.word lang=en text="im out" means=ttt.giveup
-@w.en.you_win.ttt.giveup core.word lang=en text="you win" means=ttt.giveup
-@w.en.you_won.ttt.giveup core.word lang=en text="you won" means=ttt.giveup
-@w.en.you_got_me.ttt.giveup core.word lang=en text="you got me" means=ttt.giveup
-@w.en.you_beat_me.ttt.giveup core.word lang=en text="you beat me" means=ttt.giveup
-@w.en.i_lose.ttt.giveup core.word lang=en text="i lose" means=ttt.giveup
-@w.en.i_lost.ttt.giveup core.word lang=en text="i lost" means=ttt.giveup
-@w.en.i_cant_win.ttt.giveup core.word lang=en text="i cant win" means=ttt.giveup
-@w.en.forget_it.ttt.giveup core.word lang=en text="forget it" means=ttt.giveup
-@w.en.enough.ttt.giveup core.word lang=en text=enough means=ttt.giveup
-@w.en.thats_enough.ttt.giveup core.word lang=en text="thats enough" means=ttt.giveup
-@w.en.im_through.ttt.giveup core.word lang=en text="im through" means=ttt.giveup
-@w.en.end_game.ttt.giveup core.word lang=en text="end game" means=ttt.giveup
-@w.en.finish_the_game.ttt.giveup core.word lang=en text="finish the game" means=ttt.giveup
-@w.en.stop_playing.ttt.giveup core.word lang=en text="stop playing" means=ttt.giveup
-@w.en.i_want_to_stop.ttt.giveup core.word lang=en text="i want to stop" means=ttt.giveup
-@w.en.i_wanna_stop.ttt.giveup core.word lang=en text="i wanna stop" means=ttt.giveup
-@w.en.i_want_to_quit.ttt.giveup core.word lang=en text="i want to quit" means=ttt.giveup
-@w.en.i_wanna_quit.ttt.giveup core.word lang=en text="i wanna quit" means=ttt.giveup
-@w.en.call_it_a_day.ttt.giveup core.word lang=en text="call it a day" means=ttt.giveup
-@w.en.time_to_stop.ttt.giveup core.word lang=en text="time to stop" means=ttt.giveup
-@w.en.im_giving_up.ttt.giveup core.word lang=en text="im giving up" means=ttt.giveup
-@w.en.i_am_giving_up.ttt.giveup core.word lang=en text="i am giving up" means=ttt.giveup
-@w.en.im_resigning.ttt.giveup core.word lang=en text="im resigning" means=ttt.giveup
-@w.en.i_concede.ttt.giveup core.word lang=en text="i concede" means=ttt.giveup
-@w.en.i_admit_defeat.ttt.giveup core.word lang=en text="i admit defeat" means=ttt.giveup
-@w.en.uncle.ttt.giveup core.word lang=en text=uncle means=ttt.giveup
-@w.en.mercy.ttt.giveup core.word lang=en text=mercy means=ttt.giveup
-@w.en.i_cant_do_this.ttt.giveup core.word lang=en text="i cant do this" means=ttt.giveup
-@w.en.now.ttt.giveup core.word lang=en text=now means=ttt.giveup
-@w.en.pls.ttt.giveup core.word lang=en text=pls means=ttt.giveup
-@w.en.plz.ttt.giveup core.word lang=en text=plz means=ttt.giveup
-@w.en.the_game.ttt.giveup core.word lang=en text="the game" means=ttt.giveup
-@w.en.this_game.ttt.giveup core.word lang=en text="this game" means=ttt.giveup
-@w.en.the_round.ttt.giveup core.word lang=en text="the round" means=ttt.giveup
-@w.en.this_round.ttt.giveup core.word lang=en text="this round" means=ttt.giveup
-@w.en.it.ttt.giveup core.word lang=en text=it means=ttt.giveup
-@w.en.then.ttt.giveup core.word lang=en text=then means=ttt.giveup
-@w.en.here.ttt.giveup core.word lang=en text=here means=ttt.giveup
-@w.en.rn.ttt.giveup core.word lang=en text=rn means=ttt.giveup
-@w.en.the_match.ttt.giveup core.word lang=en text="the match" means=ttt.giveup
-@w.en.this_match.ttt.giveup core.word lang=en text="this match" means=ttt.giveup
-@w.en.game.ttt.giveup core.word lang=en text=game means=ttt.giveup
-@w.en.round.ttt.giveup core.word lang=en text=round means=ttt.giveup
-@w.en.match.ttt.giveup core.word lang=en text=match means=ttt.giveup
-@w.en.already.ttt.giveup core.word lang=en text=already means=ttt.giveup
-@w.en.for_now.ttt.giveup core.word lang=en text="for now" means=ttt.giveup
-@w.en.for_today.ttt.giveup core.word lang=en text="for today" means=ttt.giveup
-@w.en.undo.ttt.undo core.word lang=en text=undo means=ttt.undo
-@w.en.undo_that.ttt.undo core.word lang=en text="undo that" means=ttt.undo
-@w.en.undo_it.ttt.undo core.word lang=en text="undo it" means=ttt.undo
-@w.en.undo_my_move.ttt.undo core.word lang=en text="undo my move" means=ttt.undo
-@w.en.undo_the_last_move.ttt.undo core.word lang=en text="undo the last move" means=ttt.undo
-@w.en.take_that_back.ttt.undo core.word lang=en text="take that back" means=ttt.undo
-@w.en.take_it_back.ttt.undo core.word lang=en text="take it back" means=ttt.undo
-@w.en.take_back_my_move.ttt.undo core.word lang=en text="take back my move" means=ttt.undo
-@w.en.take_my_move_back.ttt.undo core.word lang=en text="take my move back" means=ttt.undo
-@w.en.revert.ttt.undo core.word lang=en text=revert means=ttt.undo
-@w.en.revert_that.ttt.undo core.word lang=en text="revert that" means=ttt.undo
-@w.en.go_back.ttt.undo core.word lang=en text="go back" means=ttt.undo
-@w.en.step_back.ttt.undo core.word lang=en text="step back" means=ttt.undo
-@w.en.cancel_that.ttt.undo core.word lang=en text="cancel that" means=ttt.undo
-@w.en.cancel_my_move.ttt.undo core.word lang=en text="cancel my move" means=ttt.undo
-@w.en.reverse_that.ttt.undo core.word lang=en text="reverse that" means=ttt.undo
-@w.en.let_me_redo_that.ttt.undo core.word lang=en text="let me redo that" means=ttt.undo
-@w.en.i_want_to_undo.ttt.undo core.word lang=en text="i want to undo" means=ttt.undo
-@w.en.i_changed_my_mind.ttt.undo core.word lang=en text="i changed my mind" means=ttt.undo
-@w.en.can_i_undo.ttt.undo core.word lang=en text="can i undo" means=ttt.undo
-@w.en.can_i_take_that_back.ttt.undo core.word lang=en text="can i take that back" means=ttt.undo
-@w.en.let_me_take_that_back.ttt.undo core.word lang=en text="let me take that back" means=ttt.undo
-@w.en.i_take_it_back.ttt.undo core.word lang=en text="i take it back" means=ttt.undo
-@w.en.back_up.ttt.undo core.word lang=en text="back up" means=ttt.undo
-@w.en.pls.ttt.undo core.word lang=en text=pls means=ttt.undo
-@w.en.plz.ttt.undo core.word lang=en text=plz means=ttt.undo
-@w.en.thanks.ttt.undo core.word lang=en text=thanks means=ttt.undo
-@w.en.now.ttt.undo core.word lang=en text=now means=ttt.undo
-@w.en.one_move.ttt.undo core.word lang=en text="one move" means=ttt.undo
-@w.en.a_move.ttt.undo core.word lang=en text="a move" means=ttt.undo
-@w.en.one_step.ttt.undo core.word lang=en text="one step" means=ttt.undo
-@w.en.take_back.ttt.undo core.word lang=en text="take back" means=ttt.undo
-@w.en.move.ttt.undo core.word lang=en text=move means=ttt.undo
-@w.en.turn.ttt.undo core.word lang=en text=turn means=ttt.undo
-@w.en.go.ttt.undo core.word lang=en text=go means=ttt.undo
-@w.en.mark.ttt.undo core.word lang=en text=mark means=ttt.undo
-@w.en.play.ttt.undo core.word lang=en text=play means=ttt.undo
-@w.en.start.ttt.new core.word lang=en text=start means=ttt.new
-@w.en.begin.ttt.new core.word lang=en text=begin means=ttt.new
-@w.en.play.ttt.new core.word lang=en text=play means=ttt.new
-@w.en.have.ttt.new core.word lang=en text=have means=ttt.new
-@w.en.do.ttt.new core.word lang=en text=do means=ttt.new
-@w.en.try.ttt.new core.word lang=en text=try means=ttt.new
-@w.en.open.ttt.new core.word lang=en text=open means=ttt.new
-@w.en.make.ttt.new core.word lang=en text=make means=ttt.new
-@w.en.set_up.ttt.new core.word lang=en text="set up" means=ttt.new
-@w.en.new_tic_tac_toe_game.ttt.new core.word lang=en text="new tic tac toe game" means=ttt.new
-@w.en.new_tic_tac_toe.ttt.new core.word lang=en text="new tic tac toe" means=ttt.new
-@w.en.another_tic_tac_toe_game.ttt.new core.word lang=en text="another tic tac toe game" means=ttt.new
-@w.en.tic_tac_toe_game.ttt.new core.word lang=en text="tic tac toe game" means=ttt.new
-@w.en.fresh_game.ttt.new core.word lang=en text="fresh game" means=ttt.new
-@w.en.new_game.ttt.new core.word lang=en text="new game" means=ttt.new
-@w.en.fresh_round.ttt.new core.word lang=en text="fresh round" means=ttt.new
-@w.en.new_round.ttt.new core.word lang=en text="new round" means=ttt.new
-@w.en.clean_board.ttt.new core.word lang=en text="clean board" means=ttt.new
-@w.en.new_board.ttt.new core.word lang=en text="new board" means=ttt.new
-@w.en.fresh_board.ttt.new core.word lang=en text="fresh board" means=ttt.new
-@w.en.clear.ttt.new core.word lang=en text=clear means=ttt.new
-@w.en.reset.ttt.new core.word lang=en text=reset means=ttt.new
-@w.en.empty.ttt.new core.word lang=en text=empty means=ttt.new
-@w.en.wipe.ttt.new core.word lang=en text=wipe means=ttt.new
-@w.en.restart.ttt.new core.word lang=en text=restart means=ttt.new
-@w.en.clean.ttt.new core.word lang=en text=clean means=ttt.new
-@w.en.refresh.ttt.new core.word lang=en text=refresh means=ttt.new
-@w.en.redo.ttt.new core.word lang=en text=redo means=ttt.new
-@w.en.board.ttt.new core.word lang=en text=board means=ttt.new
-@w.en.grid.ttt.new core.word lang=en text=grid means=ttt.new
-@w.en.game.ttt.new core.word lang=en text=game means=ttt.new
-@w.en.it.ttt.new core.word lang=en text=it means=ttt.new
-@w.en.everything.ttt.new core.word lang=en text=everything means=ttt.new
-@w.en.the_marks.ttt.new core.word lang=en text="the marks" means=ttt.new
-@w.en.go.ttt.new core.word lang=en text=go means=ttt.new
-@w.en.do_it.ttt.new core.word lang=en text="do it" means=ttt.new
-@w.en.do_that.ttt.new core.word lang=en text="do that" means=ttt.new
-@w.en.have_a_go.ttt.new core.word lang=en text="have a go" means=ttt.new
-@w.en.play_a_game.ttt.new core.word lang=en text="play a game" means=ttt.new
-@w.en.that.ttt.new core.word lang=en text=that means=ttt.new
-@w.en.this.ttt.new core.word lang=en text=this means=ttt.new
-@w.en.another_game.ttt.new core.word lang=en text="another game" means=ttt.new
-@w.en.a_game.ttt.new core.word lang=en text="a game" means=ttt.new
-@w.en.a_new_game.ttt.new core.word lang=en text="a new game" means=ttt.new
-@w.en.a_new_1.ttt.new core.word lang=en text="a new 1" means=ttt.new
-@w.en.n1_more.ttt.new core.word lang=en text="1 more" means=ttt.new
-@w.en.n1_more_time.ttt.new core.word lang=en text="1 more time" means=ttt.new
-@w.en.let_me_go_first.ttt.first core.word lang=en text="let me go first" means=ttt.first
-@w.en.i_want_to_go_first.ttt.first core.word lang=en text="i want to go first" means=ttt.first
-@w.en.i_will_go_first.ttt.first core.word lang=en text="i will go first" means=ttt.first
-@w.en.i_go_first.ttt.first core.word lang=en text="i go first" means=ttt.first
-@w.en.i_want_to_start.ttt.first core.word lang=en text="i want to start" means=ttt.first
-@w.en.i_start.ttt.first core.word lang=en text="i start" means=ttt.first
-@w.en.let_me_start.ttt.first core.word lang=en text="let me start" means=ttt.first
-@w.en.you_go_second.ttt.first core.word lang=en text="you go second" means=ttt.first
-@w.en.i_will_start.ttt.first core.word lang=en text="i will start" means=ttt.first
-@w.en.me_first.ttt.first core.word lang=en text="me first" means=ttt.first
-@w.en.let_me_be_first.ttt.first core.word lang=en text="let me be first" means=ttt.first
-@w.en.i_would_like_to_go_first.ttt.first core.word lang=en text="i would like to go first" means=ttt.first
-@w.en.i_will_play_first.ttt.first core.word lang=en text="i will play first" means=ttt.first
-@w.en.you_can_go_second.ttt.first core.word lang=en text="you can go second" means=ttt.first
-@w.en.i_want_to_be_first.ttt.first core.word lang=en text="i want to be first" means=ttt.first
-@w.en.i_would_like_to_start.ttt.first core.word lang=en text="i would like to start" means=ttt.first
-@w.en.i_play_first.ttt.first core.word lang=en text="i play first" means=ttt.first
-@w.en.you_play_second.ttt.first core.word lang=en text="you play second" means=ttt.first
-@w.en.i_would_like_to_be_first.ttt.first core.word lang=en text="i would like to be first" means=ttt.first
-@w.en.i_will_be_first.ttt.first core.word lang=en text="i will be first" means=ttt.first
-@w.en.first.ttt.first core.word lang=en text=first means=ttt.first
-@w.en.n1st.ttt.first core.word lang=en text=1st means=ttt.first
-@w.en.n1st_move.ttt.first core.word lang=en text="1st move" means=ttt.first
-@w.en.first_move.ttt.first core.word lang=en text="first move" means=ttt.first
-@w.en.my_move_first.ttt.first core.word lang=en text="my move first" means=ttt.first
-@w.en.first_turn.ttt.first core.word lang=en text="first turn" means=ttt.first
-@w.en.first_go.ttt.first core.word lang=en text="first go" means=ttt.first
-@w.en.go_first.ttt.first core.word lang=en text="go first" means=ttt.first
-@w.en.start_first.ttt.first core.word lang=en text="start first" means=ttt.first
-@w.en.play_first.ttt.first core.word lang=en text="play first" means=ttt.first
-@w.en.move_first.ttt.first core.word lang=en text="move first" means=ttt.first
-@w.en.begin_first.ttt.first core.word lang=en text="begin first" means=ttt.first
-@w.en.be_first.ttt.first core.word lang=en text="be first" means=ttt.first
-@w.en.go_1st.ttt.first core.word lang=en text="go 1st" means=ttt.first
-@w.en.start_1st.ttt.first core.word lang=en text="start 1st" means=ttt.first
-@w.en.for_me.ttt.first core.word lang=en text="for me" means=ttt.first
-@w.en.by_me.ttt.first core.word lang=en text="by me" means=ttt.first
-@w.en.to_me.ttt.first core.word lang=en text="to me" means=ttt.first
-@w.en.is_mine.ttt.first core.word lang=en text="is mine" means=ttt.first
-@w.en.please.ttt.first core.word lang=en text=please means=ttt.first
-@w.en.pls.ttt.first core.word lang=en text=pls means=ttt.first
-@w.en.plz.ttt.first core.word lang=en text=plz means=ttt.first
-@w.en.me.ttt.first core.word lang=en text=me means=ttt.first
-@w.en.goes_to_me.ttt.first core.word lang=en text="goes to me" means=ttt.first
-@w.en.my_turn.ttt.first core.word lang=en text="my turn" means=ttt.first
-@w.en.let_me.ttt.first core.word lang=en text="let me" means=ttt.first
-@w.en.is_for_me.ttt.first core.word lang=en text="is for me" means=ttt.first
-@w.en.let_me_go_second.ttt.first core.word lang=en text="let me go second" means=ttt.first
-@w.en.i_want_to_go_second.ttt.first core.word lang=en text="i want to go second" means=ttt.first
-@w.en.i_will_go_second.ttt.first core.word lang=en text="i will go second" means=ttt.first
-@w.en.i_go_second.ttt.first core.word lang=en text="i go second" means=ttt.first
-@w.en.i_want_to_be_second.ttt.first core.word lang=en text="i want to be second" means=ttt.first
-@w.en.you_go_first.ttt.first core.word lang=en text="you go first" means=ttt.first
-@w.en.you_start.ttt.first core.word lang=en text="you start" means=ttt.first
-@w.en.you_can_start.ttt.first core.word lang=en text="you can start" means=ttt.first
-@w.en.you_can_go_first.ttt.first core.word lang=en text="you can go first" means=ttt.first
-@w.en.you_first.ttt.first core.word lang=en text="you first" means=ttt.first
-@w.en.can_you_start.ttt.first core.word lang=en text="can you start" means=ttt.first
-@w.en.you_should_go_first.ttt.first core.word lang=en text="you should go first" means=ttt.first
-@w.en.you_begin.ttt.first core.word lang=en text="you begin" means=ttt.first
-@w.en.let_me_be_second.ttt.first core.word lang=en text="let me be second" means=ttt.first
-@w.en.i_would_like_to_go_second.ttt.first core.word lang=en text="i would like to go second" means=ttt.first
-@w.en.you_play_first.ttt.first core.word lang=en text="you play first" means=ttt.first
-@w.en.you_can_begin.ttt.first core.word lang=en text="you can begin" means=ttt.first
-@w.en.i_want_you_to_start.ttt.first core.word lang=en text="i want you to start" means=ttt.first
-@w.en.i_will_play_second.ttt.first core.word lang=en text="i will play second" means=ttt.first
-@w.en.i_play_second.ttt.first core.word lang=en text="i play second" means=ttt.first
-@w.en.i_would_like_you_to_start.ttt.first core.word lang=en text="i would like you to start" means=ttt.first
-@w.en.i_would_like_to_be_second.ttt.first core.word lang=en text="i would like to be second" means=ttt.first
-@w.en.i_want_you_to_go_first.ttt.first core.word lang=en text="i want you to go first" means=ttt.first
-@w.en.i_want_you_to_begin.ttt.first core.word lang=en text="i want you to begin" means=ttt.first
-@w.en.your_move_first.ttt.first core.word lang=en text="your move first" means=ttt.first
-@w.en.your_turn_first.ttt.first core.word lang=en text="your turn first" means=ttt.first
-@w.en.you_first_pls.ttt.first core.word lang=en text="you first pls" means=ttt.first
-@w.en.you_first_please.ttt.first core.word lang=en text="you first please" means=ttt.first
-@w.en.your_go_first.ttt.first core.word lang=en text="your go first" means=ttt.first
-@w.en.you_move_first.ttt.first core.word lang=en text="you move first" means=ttt.first
-@w.en.computer_first.ttt.first core.word lang=en text="computer first" means=ttt.first
-@w.en.machine_first.ttt.first core.word lang=en text="machine first" means=ttt.first
-@w.en.ai_first.ttt.first core.word lang=en text="ai first" means=ttt.first
-@w.en.cpu_first.ttt.first core.word lang=en text="cpu first" means=ttt.first
-@w.en.you_go_1st.ttt.first core.word lang=en text="you go 1st" means=ttt.first
-@w.en.you_can_go_1st.ttt.first core.word lang=en text="you can go 1st" means=ttt.first
-@w.en.u_go_1st.ttt.first core.word lang=en text="u go 1st" means=ttt.first
-@w.en.u_go_first.ttt.first core.word lang=en text="u go first" means=ttt.first
-@w.en.u_first.ttt.first core.word lang=en text="u first" means=ttt.first
-@w.en.you_start_pls.ttt.first core.word lang=en text="you start pls" means=ttt.first
-@w.en.you_start_please.ttt.first core.word lang=en text="you start please" means=ttt.first
-@w.en.u_start.ttt.first core.word lang=en text="u start" means=ttt.first
-@w.en.u_start_pls.ttt.first core.word lang=en text="u start pls" means=ttt.first
-@w.en.go_first_you.ttt.first core.word lang=en text="go first you" means=ttt.first
-@w.en.you_should_start.ttt.first core.word lang=en text="you should start" means=ttt.first
-@w.en.computer_goes_first.ttt.first core.word lang=en text="computer goes first" means=ttt.first
-@w.en.machine_goes_first.ttt.first core.word lang=en text="machine goes first" means=ttt.first
-@w.en.ai_goes_first.ttt.first core.word lang=en text="ai goes first" means=ttt.first
-@w.en.bot_goes_first.ttt.first core.word lang=en text="bot goes first" means=ttt.first
-@w.en.cpu_goes_first.ttt.first core.word lang=en text="cpu goes first" means=ttt.first
-@w.en.let_the_computer_start.ttt.first core.word lang=en text="let the computer start" means=ttt.first
-@w.en.let_the_machine_start.ttt.first core.word lang=en text="let the machine start" means=ttt.first
-@w.en.let_the_ai_start.ttt.first core.word lang=en text="let the ai start" means=ttt.first
-@w.en.let_the_bot_start.ttt.first core.word lang=en text="let the bot start" means=ttt.first
-@w.en.let_the_computer_go_first.ttt.first core.word lang=en text="let the computer go first" means=ttt.first
-@w.en.let_the_machine_go_first.ttt.first core.word lang=en text="let the machine go first" means=ttt.first
-@w.en.you_move_first_pls.ttt.first core.word lang=en text="you move first pls" means=ttt.first
-@w.en.set.ttt.level core.word lang=en text=set means=ttt.level
-@w.en.change.ttt.level core.word lang=en text=change means=ttt.level
-@w.en.switch.ttt.level core.word lang=en text=switch means=ttt.level
-@w.en.go.ttt.level core.word lang=en text=go means=ttt.level
-@w.en.move.ttt.level core.word lang=en text=move means=ttt.level
-@w.en.turn.ttt.level core.word lang=en text=turn means=ttt.level
-@w.en.play.ttt.level core.word lang=en text=play means=ttt.level
-@w.en.be.ttt.level core.word lang=en text=be means=ttt.level
-@w.en.use.ttt.level core.word lang=en text=use means=ttt.level
-@w.en.try.ttt.level core.word lang=en text=try means=ttt.level
-@w.en.make.ttt.level core.word lang=en text=make means=ttt.level
-@w.en.give_me.ttt.level core.word lang=en text="give me" means=ttt.level
-@w.en.level.ttt.level core.word lang=en text=level means=ttt.level
-@w.en.difficulty.ttt.level core.word lang=en text=difficulty means=ttt.level
-@w.en.mode.ttt.level core.word lang=en text=mode means=ttt.level
-@w.en.to.ttt.level.l core.word lang=en text=to means=ttt.level.l
-@w.en.at.ttt.level.l core.word lang=en text=at means=ttt.level.l
-@w.en.on.ttt.level.l core.word lang=en text=on means=ttt.level.l
-@w.en.the.ttt.level.l core.word lang=en text=the means=ttt.level.l
-@w.en.a.ttt.level.l core.word lang=en text=a means=ttt.level.l
-@w.en.an.ttt.level.l core.word lang=en text=an means=ttt.level.l
-@w.en.level.ttt.level.l core.word lang=en text=level means=ttt.level.l
-@w.en.mode.ttt.level.l core.word lang=en text=mode means=ttt.level.l
-@w.en.difficulty.ttt.level.l core.word lang=en text=difficulty means=ttt.level.l
-@w.en.game.ttt.level.l core.word lang=en text=game means=ttt.level.l
-@w.en.opponent.ttt.level.l core.word lang=en text=opponent means=ttt.level.l
-@w.en.dumb_it_down.ttt.level core.word lang=en text="dumb it down" means=ttt.level
-@w.en.dumb_down.ttt.level core.word lang=en text="dumb down" means=ttt.level
-@w.en.go_easy.ttt.level core.word lang=en text="go easy" means=ttt.level
-@w.en.go_easy_on_me.ttt.level core.word lang=en text="go easy on me" means=ttt.level
-@w.en.go_easier.ttt.level core.word lang=en text="go easier" means=ttt.level
-@w.en.take_it_easy.ttt.level core.word lang=en text="take it easy" means=ttt.level
-@w.en.take_it_easy_on_me.ttt.level core.word lang=en text="take it easy on me" means=ttt.level
-@w.en.be_gentle.ttt.level core.word lang=en text="be gentle" means=ttt.level
-@w.en.be_nice.ttt.level core.word lang=en text="be nice" means=ttt.level
-@w.en.be_nice_to_me.ttt.level core.word lang=en text="be nice to me" means=ttt.level
-@w.en.be_easier.ttt.level core.word lang=en text="be easier" means=ttt.level
-@w.en.be_easy.ttt.level core.word lang=en text="be easy" means=ttt.level
-@w.en.play_dumb.ttt.level core.word lang=en text="play dumb" means=ttt.level
-@w.en.play_easy.ttt.level core.word lang=en text="play easy" means=ttt.level
-@w.en.play_easier.ttt.level core.word lang=en text="play easier" means=ttt.level
-@w.en.play_softer.ttt.level core.word lang=en text="play softer" means=ttt.level
-@w.en.play_weaker.ttt.level core.word lang=en text="play weaker" means=ttt.level
-@w.en.play_worse.ttt.level core.word lang=en text="play worse" means=ttt.level
-@w.en.go_soft.ttt.level core.word lang=en text="go soft" means=ttt.level
-@w.en.go_light.ttt.level core.word lang=en text="go light" means=ttt.level
-@w.en.ease_up.ttt.level core.word lang=en text="ease up" means=ttt.level
-@w.en.ease_off.ttt.level core.word lang=en text="ease off" means=ttt.level
-@w.en.lighten_up.ttt.level core.word lang=en text="lighten up" means=ttt.level
-@w.en.make_it_easier.ttt.level core.word lang=en text="make it easier" means=ttt.level
-@w.en.make_it_simple.ttt.level core.word lang=en text="make it simple" means=ttt.level
-@w.en.make_it_simpler.ttt.level core.word lang=en text="make it simpler" means=ttt.level
-@w.en.dont_be_so_hard.ttt.level core.word lang=en text="dont be so hard" means=ttt.level
-@w.en.dont_be_so_good.ttt.level core.word lang=en text="dont be so good" means=ttt.level
-@w.en.lower_the_difficulty.ttt.level core.word lang=en text="lower the difficulty" means=ttt.level
-@w.en.lower_the_level.ttt.level core.word lang=en text="lower the level" means=ttt.level
-@w.en.lower_difficulty.ttt.level core.word lang=en text="lower difficulty" means=ttt.level
-@w.en.reduce_the_difficulty.ttt.level core.word lang=en text="reduce the difficulty" means=ttt.level
-@w.en.weaken_yourself.ttt.level core.word lang=en text="weaken yourself" means=ttt.level
-@w.en.play_hard.ttt.level core.word lang=en text="play hard" means=ttt.level
-@w.en.play_harder.ttt.level core.word lang=en text="play harder" means=ttt.level
-@w.en.play_smarter.ttt.level core.word lang=en text="play smarter" means=ttt.level
-@w.en.play_better.ttt.level core.word lang=en text="play better" means=ttt.level
-@w.en.play_properly.ttt.level core.word lang=en text="play properly" means=ttt.level
-@w.en.play_for_real.ttt.level core.word lang=en text="play for real" means=ttt.level
-@w.en.play_seriously.ttt.level core.word lang=en text="play seriously" means=ttt.level
-@w.en.play_to_win.ttt.level core.word lang=en text="play to win" means=ttt.level
-@w.en.try_harder.ttt.level core.word lang=en text="try harder" means=ttt.level
-@w.en.try_your_best.ttt.level core.word lang=en text="try your best" means=ttt.level
-@w.en.do_your_best.ttt.level core.word lang=en text="do your best" means=ttt.level
-@w.en.give_it_your_best.ttt.level core.word lang=en text="give it your best" means=ttt.level
-@w.en.stop_going_easy.ttt.level core.word lang=en text="stop going easy" means=ttt.level
-@w.en.stop_being_easy.ttt.level core.word lang=en text="stop being easy" means=ttt.level
-@w.en.dont_go_easy.ttt.level core.word lang=en text="dont go easy" means=ttt.level
-@w.en.dont_go_easy_on_me.ttt.level core.word lang=en text="dont go easy on me" means=ttt.level
-@w.en.do_not_go_easy_on_me.ttt.level core.word lang=en text="do not go easy on me" means=ttt.level
-@w.en.dont_hold_back.ttt.level core.word lang=en text="dont hold back" means=ttt.level
-@w.en.show_no_mercy.ttt.level core.word lang=en text="show no mercy" means=ttt.level
-@w.en.no_mercy.ttt.level core.word lang=en text="no mercy" means=ttt.level
-@w.en.go_hard.ttt.level core.word lang=en text="go hard" means=ttt.level
-@w.en.go_harder.ttt.level core.word lang=en text="go harder" means=ttt.level
-@w.en.go_all_out.ttt.level core.word lang=en text="go all out" means=ttt.level
-@w.en.full_power.ttt.level core.word lang=en text="full power" means=ttt.level
-@w.en.make_it_harder.ttt.level core.word lang=en text="make it harder" means=ttt.level
-@w.en.make_it_tougher.ttt.level core.word lang=en text="make it tougher" means=ttt.level
-@w.en.make_it_hard.ttt.level core.word lang=en text="make it hard" means=ttt.level
-@w.en.make_it_difficult.ttt.level core.word lang=en text="make it difficult" means=ttt.level
-@w.en.make_it_challenging.ttt.level core.word lang=en text="make it challenging" means=ttt.level
-@w.en.raise_the_difficulty.ttt.level core.word lang=en text="raise the difficulty" means=ttt.level
-@w.en.raise_the_level.ttt.level core.word lang=en text="raise the level" means=ttt.level
-@w.en.increase_the_difficulty.ttt.level core.word lang=en text="increase the difficulty" means=ttt.level
-@w.en.increase_the_level.ttt.level core.word lang=en text="increase the level" means=ttt.level
-@w.en.up_the_difficulty.ttt.level core.word lang=en text="up the difficulty" means=ttt.level
-@w.en.up_the_level.ttt.level core.word lang=en text="up the level" means=ttt.level
-@w.en.crank_it_up.ttt.level core.word lang=en text="crank it up" means=ttt.level
-@w.en.bring_it_on.ttt.level core.word lang=en text="bring it on" means=ttt.level
-@w.en.be_serious.ttt.level core.word lang=en text="be serious" means=ttt.level
-@w.en.be_smart.ttt.level core.word lang=en text="be smart" means=ttt.level
-@w.en.be_smarter.ttt.level core.word lang=en text="be smarter" means=ttt.level
-@w.en.be_tough.ttt.level core.word lang=en text="be tough" means=ttt.level
-@w.en.play.ttt.move core.word lang=en text=play means=ttt.move
-@w.en.take.ttt.move core.word lang=en text=take means=ttt.move
-@w.en.mark.ttt.move core.word lang=en text=mark means=ttt.move
-@w.en.place.ttt.move core.word lang=en text=place means=ttt.move
-@w.en.put_it_in.ttt.move core.word lang=en text="put it in" means=ttt.move
-@w.en.go_to.ttt.move core.word lang=en text="go to" means=ttt.move
-@w.en.choose.ttt.move core.word lang=en text=choose means=ttt.move
-@w.en.pick.ttt.move core.word lang=en text=pick means=ttt.move
-@w.en.put.ttt.move core.word lang=en text=put means=ttt.move
-@w.en.drop.ttt.move core.word lang=en text=drop means=ttt.move
-@w.en.set.ttt.move core.word lang=en text=set means=ttt.move
-@w.en.i_go.ttt.move core.word lang=en text="i go" means=ttt.move
-@w.en.i_play.ttt.move core.word lang=en text="i play" means=ttt.move
-@w.en.i_take.ttt.move core.word lang=en text="i take" means=ttt.move
-@w.en.i_pick.ttt.move core.word lang=en text="i pick" means=ttt.move
-@w.en.i_mark.ttt.move core.word lang=en text="i mark" means=ttt.move
-@w.en.i_will_go.ttt.move core.word lang=en text="i will go" means=ttt.move
-@w.en.i_will_play.ttt.move core.word lang=en text="i will play" means=ttt.move
-@w.en.i_will_take.ttt.move core.word lang=en text="i will take" means=ttt.move
-@w.en.i_will_pick.ttt.move core.word lang=en text="i will pick" means=ttt.move
-@w.en.i_will_mark.ttt.move core.word lang=en text="i will mark" means=ttt.move
-@w.en.ill_go.ttt.move core.word lang=en text="ill go" means=ttt.move
-@w.en.ill_play.ttt.move core.word lang=en text="ill play" means=ttt.move
-@w.en.ill_take.ttt.move core.word lang=en text="ill take" means=ttt.move
-@w.en.ill_pick.ttt.move core.word lang=en text="ill pick" means=ttt.move
-@w.en.ill_mark.ttt.move core.word lang=en text="ill mark" means=ttt.move
-@w.en.gonna_go.ttt.move core.word lang=en text="gonna go" means=ttt.move
-@w.en.gonna_play.ttt.move core.word lang=en text="gonna play" means=ttt.move
-@w.en.gonna_take.ttt.move core.word lang=en text="gonna take" means=ttt.move
-@w.en.gonna_pick.ttt.move core.word lang=en text="gonna pick" means=ttt.move
-@w.en.gonna_mark.ttt.move core.word lang=en text="gonna mark" means=ttt.move
-@w.en.let_me_go.ttt.move core.word lang=en text="let me go" means=ttt.move
-@w.en.let_me_play.ttt.move core.word lang=en text="let me play" means=ttt.move
-@w.en.let_me_take.ttt.move core.word lang=en text="let me take" means=ttt.move
-@w.en.let_me_pick.ttt.move core.word lang=en text="let me pick" means=ttt.move
-@w.en.let_me_mark.ttt.move core.word lang=en text="let me mark" means=ttt.move
-@w.en.put_my_x.ttt.move core.word lang=en text="put my x" means=ttt.move
-@w.en.put_an_x.ttt.move core.word lang=en text="put an x" means=ttt.move
-@w.en.put_x.ttt.move core.word lang=en text="put x" means=ttt.move
-@w.en.place_my_x.ttt.move core.word lang=en text="place my x" means=ttt.move
-@w.en.place_an_x.ttt.move core.word lang=en text="place an x" means=ttt.move
-@w.en.place_x.ttt.move core.word lang=en text="place x" means=ttt.move
-@w.en.play_my_x.ttt.move core.word lang=en text="play my x" means=ttt.move
-@w.en.play_an_x.ttt.move core.word lang=en text="play an x" means=ttt.move
-@w.en.play_x.ttt.move core.word lang=en text="play x" means=ttt.move
-@w.en.mark_my_x.ttt.move core.word lang=en text="mark my x" means=ttt.move
-@w.en.mark_an_x.ttt.move core.word lang=en text="mark an x" means=ttt.move
-@w.en.mark_x.ttt.move core.word lang=en text="mark x" means=ttt.move
-@w.en.drop_my_x.ttt.move core.word lang=en text="drop my x" means=ttt.move
-@w.en.drop_an_x.ttt.move core.word lang=en text="drop an x" means=ttt.move
-@w.en.drop_x.ttt.move core.word lang=en text="drop x" means=ttt.move
-@w.en.at.ttt.move.pos core.word lang=en text=at means=ttt.move.pos
-@w.en.in.ttt.move.pos core.word lang=en text=in means=ttt.move.pos
-@w.en.on.ttt.move.pos core.word lang=en text=on means=ttt.move.pos
-@w.en.to.ttt.move.pos core.word lang=en text=to means=ttt.move.pos
-@w.en.the.ttt.move.pos core.word lang=en text=the means=ttt.move.pos
-@w.en.square.ttt.move.pos core.word lang=en text=square means=ttt.move.pos
-@w.en.cell.ttt.move.pos core.word lang=en text=cell means=ttt.move.pos
-@w.en.corner.ttt.move.pos core.word lang=en text=corner means=ttt.move.pos
-@w.en.spot.ttt.move.pos core.word lang=en text=spot means=ttt.move.pos
-@w.en.box.ttt.move.pos core.word lang=en text=box means=ttt.move.pos
-@w.en.tile.ttt.move.pos core.word lang=en text=tile means=ttt.move.pos
-@w.en.position.ttt.move.pos core.word lang=en text=position means=ttt.move.pos
-@w.en.side.ttt.move.pos core.word lang=en text=side means=ttt.move.pos
-@w.en.edge.ttt.move.pos core.word lang=en text=edge means=ttt.move.pos
-@w.en.slot.ttt.move.pos core.word lang=en text=slot means=ttt.move.pos
-@w.en.space.ttt.move.pos core.word lang=en text=space means=ttt.move.pos
-@w.en.go.ttt.move core.word lang=en text=go means=ttt.move
-@w.en.put_it.ttt.move core.word lang=en text="put it" means=ttt.move
-@w.en.at.ttt.move.c core.word lang=en text=at means=ttt.move.c
-@w.en.in.ttt.move.c core.word lang=en text=in means=ttt.move.c
-@w.en.on.ttt.move.c core.word lang=en text=on means=ttt.move.c
-@w.en.to.ttt.move.c core.word lang=en text=to means=ttt.move.c
-@w.en.the.ttt.move.c core.word lang=en text=the means=ttt.move.c
-@w.en.square.ttt.move.c core.word lang=en text=square means=ttt.move.c
-@w.en.cell.ttt.move.c core.word lang=en text=cell means=ttt.move.c
-@w.en.spot.ttt.move.c core.word lang=en text=spot means=ttt.move.c
-@w.en.position.ttt.move.c core.word lang=en text=position means=ttt.move.c
-@w.en.tile.ttt.move.c core.word lang=en text=tile means=ttt.move.c
-@w.en.row.ttt.move.r core.word lang=en text=row means=ttt.move.r
-@w.en.r.ttt.move.r core.word lang=en text=r means=ttt.move.r
-@w.en.the.ttt.move.r core.word lang=en text=the means=ttt.move.r
-@w.en.it.ttt.move.r core.word lang=en text=it means=ttt.move.r
-@w.en.column.ttt.move.c core.word lang=en text=column means=ttt.move.c
-@w.en.col.ttt.move.c core.word lang=en text=col means=ttt.move.c
-@w.en.c.ttt.move.c core.word lang=en text=c means=ttt.move.c
-@w.en.and_column.ttt.move.c core.word lang=en text="and column" means=ttt.move.c
-@w.en.and_col.ttt.move.c core.word lang=en text="and col" means=ttt.move.c
-@w.en.and.ttt.move.c core.word lang=en text=and means=ttt.move.c
-@w.en.then.ttt.move.c core.word lang=en text=then means=ttt.move.c
-@w.en.one.ttt.move.c core.word lang=en text=one means=ttt.move.c
-@w.en.at.ttt.move.r core.word lang=en text=at means=ttt.move.r
-@w.en.in.ttt.move.r core.word lang=en text=in means=ttt.move.r
-@w.en.on.ttt.move.r core.word lang=en text=on means=ttt.move.r
-@w.en.to.ttt.move.r core.word lang=en text=to means=ttt.move.r
-@w.en.corner.ttt.move.r core.word lang=en text=corner means=ttt.move.r
-@w.en.square.ttt.move.r core.word lang=en text=square means=ttt.move.r
-@w.en.cell.ttt.move.r core.word lang=en text=cell means=ttt.move.r
-@w.en.spot.ttt.move.r core.word lang=en text=spot means=ttt.move.r
-@w.en.tile.ttt.move.r core.word lang=en text=tile means=ttt.move.r
-@w.en.side.ttt.move.r core.word lang=en text=side means=ttt.move.r
-@w.en.edge.ttt.move.r core.word lang=en text=edge means=ttt.move.r
-@w.en.line.ttt.move.r core.word lang=en text=line means=ttt.move.r
-@w.en.corner.ttt.move.c core.word lang=en text=corner means=ttt.move.c
+@w.en.who_goes_first.ttt.whoFirst core.word text="who goes first" means=ttt.whoFirst
+@w.en.who_starts.ttt.whoFirst core.word text="who starts" means=ttt.whoFirst
+@w.en.who_starts_first.ttt.whoFirst core.word text="who starts first" means=ttt.whoFirst
+@w.en.who_goes_second.ttt.whoFirst core.word text="who goes second" means=ttt.whoFirst
+@w.en.who_plays_first.ttt.whoFirst core.word text="who plays first" means=ttt.whoFirst
+@w.en.who_moves_first.ttt.whoFirst core.word text="who moves first" means=ttt.whoFirst
+@w.en.am_i_x.ttt.whoFirst core.word text="am i x" means=ttt.whoFirst
+@w.en.am_i_o.ttt.whoFirst core.word text="am i o" means=ttt.whoFirst
+@w.en.am_i_going_first.ttt.whoFirst core.word text="am i going first" means=ttt.whoFirst
+@w.en.do_i_go_first.ttt.whoFirst core.word text="do i go first" means=ttt.whoFirst
+@w.en.do_i_start.ttt.whoFirst core.word text="do i start" means=ttt.whoFirst
+@w.en.which_one_am_i.ttt.whoFirst core.word text="which one am i" means=ttt.whoFirst
+@w.en.which_mark_am_i.ttt.whoFirst core.word text="which mark am i" means=ttt.whoFirst
+@w.en.which_1_am_i.ttt.whoFirst core.word text="which 1 am i" means=ttt.whoFirst
+@w.en.who_is_first.ttt.whoFirst core.word text="who is first" means=ttt.whoFirst
+@w.en.who_begins.ttt.whoFirst core.word text="who begins" means=ttt.whoFirst
+@w.en.am_i_the_x_player.ttt.whoFirst core.word text="am i the x player" means=ttt.whoFirst
+@w.en.am_i_the_o_player.ttt.whoFirst core.word text="am i the o player" means=ttt.whoFirst
+@w.en.what_am_i_playing.ttt.whoFirst core.word text="what am i playing" means=ttt.whoFirst
+@w.en.who_is_x.ttt.whoFirst core.word text="who is x" means=ttt.whoFirst
+@w.en.who_is_o.ttt.whoFirst core.word text="who is o" means=ttt.whoFirst
+@w.en.who_is_second.ttt.whoFirst core.word text="who is second" means=ttt.whoFirst
+@w.en.who_is_going_first.ttt.whoFirst core.word text="who is going first" means=ttt.whoFirst
+@w.en.who_plays_second.ttt.whoFirst core.word text="who plays second" means=ttt.whoFirst
+@w.en.whos_up_first.ttt.whoFirst core.word text="whos up first" means=ttt.whoFirst
+@w.en.who_s_up_first.ttt.whoFirst core.word text="who s up first" means=ttt.whoFirst
+@w.en.who_is_up_first.ttt.whoFirst core.word text="who is up first" means=ttt.whoFirst
+@w.en.whos_up.ttt.whoFirst core.word text="whos up" means=ttt.whoFirst
+@w.en.who_s_up.ttt.whoFirst core.word text="who s up" means=ttt.whoFirst
+@w.en.who_is_up.ttt.whoFirst core.word text="who is up" means=ttt.whoFirst
+@w.en.first_to_move.ttt.whoFirst core.word text="first to move" means=ttt.whoFirst
+@w.en.first_to_go.ttt.whoFirst core.word text="first to go" means=ttt.whoFirst
+@w.en.first_to_play.ttt.whoFirst core.word text="first to play" means=ttt.whoFirst
+@w.en.first_to_start.ttt.whoFirst core.word text="first to start" means=ttt.whoFirst
+@w.en.who_starts_the_game.ttt.whoFirst core.word text="who starts the game" means=ttt.whoFirst
+@w.en.who_begins_the_game.ttt.whoFirst core.word text="who begins the game" means=ttt.whoFirst
+@w.en.who_goes_first_here.ttt.whoFirst core.word text="who goes first here" means=ttt.whoFirst
+@w.en.who_goes_1st.ttt.whoFirst core.word text="who goes 1st" means=ttt.whoFirst
+@w.en.who_is_to_start.ttt.whoFirst core.word text="who is to start" means=ttt.whoFirst
+@w.en.who_is_to_move.ttt.whoFirst core.word text="who is to move" means=ttt.whoFirst
+@w.en.who_is_to_go.ttt.whoFirst core.word text="who is to go" means=ttt.whoFirst
+@w.en.who_is_to_play.ttt.whoFirst core.word text="who is to play" means=ttt.whoFirst
+@w.en.who_is_the_first_to_go.ttt.whoFirst core.word text="who is the first to go" means=ttt.whoFirst
+@w.en.who_is_the_first_to_start.ttt.whoFirst core.word text="who is the first to start" means=ttt.whoFirst
+@w.en.who_is_the_first_to_move.ttt.whoFirst core.word text="who is the first to move" means=ttt.whoFirst
+@w.en.who_is_the_first_to_play.ttt.whoFirst core.word text="who is the first to play" means=ttt.whoFirst
+@w.en.which_one_of_us_goes_first.ttt.whoFirst core.word text="which one of us goes first" means=ttt.whoFirst
+@w.en.which_of_us_goes_first.ttt.whoFirst core.word text="which of us goes first" means=ttt.whoFirst
+@w.en.who_of_us_goes_first.ttt.whoFirst core.word text="who of us goes first" means=ttt.whoFirst
+@w.en.which_one_goes_first.ttt.whoFirst core.word text="which one goes first" means=ttt.whoFirst
+@w.en.which_player_goes_first.ttt.whoFirst core.word text="which player goes first" means=ttt.whoFirst
+@w.en.which_one_of_us_starts.ttt.whoFirst core.word text="which one of us starts" means=ttt.whoFirst
+@w.en.which_of_us_starts.ttt.whoFirst core.word text="which of us starts" means=ttt.whoFirst
+@w.en.who_gets_to_go_first.ttt.whoFirst core.word text="who gets to go first" means=ttt.whoFirst
+@w.en.who_gets_to_start.ttt.whoFirst core.word text="who gets to start" means=ttt.whoFirst
+@w.en.who_is_to_go_first.ttt.whoFirst core.word text="who is to go first" means=ttt.whoFirst
+@w.en.who_has_the_first_move.ttt.whoFirst core.word text="who has the first move" means=ttt.whoFirst
+@w.en.who_makes_the_first_move.ttt.whoFirst core.word text="who makes the first move" means=ttt.whoFirst
+@w.en.who_makes_the_first_turn.ttt.whoFirst core.word text="who makes the first turn" means=ttt.whoFirst
+@w.en.whose_turn_is_first.ttt.whoFirst core.word text="whose turn is first" means=ttt.whoFirst
+@w.en.whose_move_is_first.ttt.whoFirst core.word text="whose move is first" means=ttt.whoFirst
+@w.en.who_will_go_first.ttt.whoFirst core.word text="who will go first" means=ttt.whoFirst
+@w.en.who_will_start.ttt.whoFirst core.word text="who will start" means=ttt.whoFirst
+@w.en.who_is_starting.ttt.whoFirst core.word text="who is starting" means=ttt.whoFirst
+@w.en.who_is_winning.ttt.status core.word text="who is winning" means=ttt.status
+@w.en.who_is_ahead.ttt.status core.word text="who is ahead" means=ttt.status
+@w.en.who_is_going_to_win.ttt.status core.word text="who is going to win" means=ttt.status
+@w.en.who_will_win.ttt.status core.word text="who will win" means=ttt.status
+@w.en.am_i_winning.ttt.status core.word text="am i winning" means=ttt.status
+@w.en.are_you_winning.ttt.status core.word text="are you winning" means=ttt.status
+@w.en.who_is_leading.ttt.status core.word text="who is leading" means=ttt.status
+@w.en.how_am_i_doing.ttt.status core.word text="how am i doing" means=ttt.status
+@w.en.who_has_won.ttt.status core.word text="who has won" means=ttt.status
+@w.en.who_won.ttt.status core.word text="who won" means=ttt.status
+@w.en.did_i_win.ttt.status core.word text="did i win" means=ttt.status
+@w.en.did_you_win.ttt.status core.word text="did you win" means=ttt.status
+@w.en.is_it_a_draw.ttt.status core.word text="is it a draw" means=ttt.status
+@w.en.who_is_winning_the_game.ttt.status core.word text="who is winning the game" means=ttt.status
+@w.en.who_is_winning_now.ttt.status core.word text="who is winning now" means=ttt.status
+@w.en.is_anybody_winning.ttt.status core.word text="is anybody winning" means=ttt.status
+@w.en.did_anyone_win.ttt.status core.word text="did anyone win" means=ttt.status
+@w.en.who_is_in_front.ttt.status core.word text="who is in front" means=ttt.status
+@w.en.is_the_game_over.ttt.status core.word text="is the game over" means=ttt.status
+@w.en.is_anyone_winning.ttt.status core.word text="is anyone winning" means=ttt.status
+@w.en.has_anyone_won.ttt.status core.word text="has anyone won" means=ttt.status
+@w.en.who_is_winning_so_far.ttt.status core.word text="who is winning so far" means=ttt.status
+@w.en.is_somebody_winning.ttt.status core.word text="is somebody winning" means=ttt.status
+@w.en.who_is_better.ttt.status core.word text="who is better" means=ttt.status
+@w.en.winning.ttt.status core.word text=winning means=ttt.status
+@w.en.winner.ttt.status core.word text=winner means=ttt.status
+@w.en.score.ttt.status core.word text=score means=ttt.status
+@w.en.whos_winning.ttt.status core.word text="whos winning" means=ttt.status
+@w.en.result.ttt.status core.word text=result means=ttt.status
+@w.en.standings.ttt.status core.word text=standings means=ttt.status
+@w.en.standing.ttt.status core.word text=standing means=ttt.status
+@w.en.status.ttt.status core.word text=status means=ttt.status
+@w.en.game_status.ttt.status core.word text="game status" means=ttt.status
+@w.en.the_score.ttt.status core.word text="the score" means=ttt.status
+@w.en.the_status.ttt.status core.word text="the status" means=ttt.status
+@w.en.the_result.ttt.status core.word text="the result" means=ttt.status
+@w.en.describe_the_board.ttt.describe core.word text="describe the board" means=ttt.describe
+@w.en.read_the_board.ttt.describe core.word text="read the board" means=ttt.describe
+@w.en.show_me_the_board.ttt.describe core.word text="show me the board" means=ttt.describe
+@w.en.show_the_board.ttt.describe core.word text="show the board" means=ttt.describe
+@w.en.tell_me_the_board.ttt.describe core.word text="tell me the board" means=ttt.describe
+@w.en.what_is_on_the_board.ttt.describe core.word text="what is on the board" means=ttt.describe
+@w.en.what_does_the_board_look_like.ttt.describe core.word text="what does the board look like" means=ttt.describe
+@w.en.how_does_the_board_look.ttt.describe core.word text="how does the board look" means=ttt.describe
+@w.en.what_is_the_board_like.ttt.describe core.word text="what is the board like" means=ttt.describe
+@w.en.read_me_the_board.ttt.describe core.word text="read me the board" means=ttt.describe
+@w.en.say_the_board.ttt.describe core.word text="say the board" means=ttt.describe
+@w.en.what_is_the_position.ttt.describe core.word text="what is the position" means=ttt.describe
+@w.en.describe_the_game.ttt.describe core.word text="describe the game" means=ttt.describe
+@w.en.what_is_on_the_board_now.ttt.describe core.word text="what is on the board now" means=ttt.describe
+@w.en.tell_me_what_is_on_the_board.ttt.describe core.word text="tell me what is on the board" means=ttt.describe
+@w.en.what_is_on_the_grid.ttt.describe core.word text="what is on the grid" means=ttt.describe
+@w.en.describe_the_position.ttt.describe core.word text="describe the position" means=ttt.describe
+@w.en.tell_me_what_is_on_the_grid.ttt.describe core.word text="tell me what is on the grid" means=ttt.describe
+@w.en.what_is_on_the_board_so_far.ttt.describe core.word text="what is on the board so far" means=ttt.describe
+@w.en.what_does_the_grid_look_like.ttt.describe core.word text="what does the grid look like" means=ttt.describe
+@w.en.show_me_the_grid.ttt.describe core.word text="show me the grid" means=ttt.describe
+@w.en.read_the_grid.ttt.describe core.word text="read the grid" means=ttt.describe
+@w.en.describe_the_grid.ttt.describe core.word text="describe the grid" means=ttt.describe
+@w.en.what_is_in_the_grid.ttt.describe core.word text="what is in the grid" means=ttt.describe
+@w.en.what_is_in_the_board.ttt.describe core.word text="what is in the board" means=ttt.describe
+@w.en.tell_me_the_position.ttt.describe core.word text="tell me the position" means=ttt.describe
+@w.en.board.ttt.describe core.word text=board means=ttt.describe
+@w.en.grid.ttt.describe core.word text=grid means=ttt.describe
+@w.en.the_board.ttt.describe core.word text="the board" means=ttt.describe
+@w.en.the_grid.ttt.describe core.word text="the grid" means=ttt.describe
+@w.en.whats_on_it.ttt.describe core.word text="whats on it" means=ttt.describe
+@w.en.what_is_on_it.ttt.describe core.word text="what is on it" means=ttt.describe
+@w.en.whats_there.ttt.describe core.word text="whats there" means=ttt.describe
+@w.en.what_is_there.ttt.describe core.word text="what is there" means=ttt.describe
+@w.en.where_are_the_x_s_and_o_s.ttt.describe core.word text="where are the x s and o s" means=ttt.describe
+@w.en.where_are_the_xs_and_os.ttt.describe core.word text="where are the xs and os" means=ttt.describe
+@w.en.where_are_the_x_and_os.ttt.describe core.word text="where are the x and os" means=ttt.describe
+@w.en.where_are_the_marks.ttt.describe core.word text="where are the marks" means=ttt.describe
+@w.en.where_is_everything.ttt.describe core.word text="where is everything" means=ttt.describe
+@w.en.where_is_everyone.ttt.describe core.word text="where is everyone" means=ttt.describe
+@w.en.where_is_x_and_o.ttt.describe core.word text="where is x and o" means=ttt.describe
+@w.en.where_are_x_and_o.ttt.describe core.word text="where are x and o" means=ttt.describe
+@w.en.where_are_the_x_s_and_the_o_s.ttt.describe core.word text="where are the x s and the o s" means=ttt.describe
+@w.en.where_are_the_xs_and_the_os.ttt.describe core.word text="where are the xs and the os" means=ttt.describe
+@w.en.where_are_all_the_marks.ttt.describe core.word text="where are all the marks" means=ttt.describe
+@w.en.where_is_everything_now.ttt.describe core.word text="where is everything now" means=ttt.describe
+@w.en.describe_it.ttt.describe core.word text="describe it" means=ttt.describe
+@w.en.describe_that.ttt.describe core.word text="describe that" means=ttt.describe
+@w.en.describe_this.ttt.describe core.word text="describe this" means=ttt.describe
+@w.en.read_it.ttt.describe core.word text="read it" means=ttt.describe
+@w.en.read_that.ttt.describe core.word text="read that" means=ttt.describe
+@w.en.read_this.ttt.describe core.word text="read this" means=ttt.describe
+@w.en.read_it_out.ttt.describe core.word text="read it out" means=ttt.describe
+@w.en.read_that_out.ttt.describe core.word text="read that out" means=ttt.describe
+@w.en.read_this_out.ttt.describe core.word text="read this out" means=ttt.describe
+@w.en.read_it_to_me.ttt.describe core.word text="read it to me" means=ttt.describe
+@w.en.read_that_to_me.ttt.describe core.word text="read that to me" means=ttt.describe
+@w.en.read_this_to_me.ttt.describe core.word text="read this to me" means=ttt.describe
+@w.en.state_of_play.ttt.describe core.word text="state of play" means=ttt.describe
+@w.en.the_state_of_play.ttt.describe core.word text="the state of play" means=ttt.describe
+@w.en.situation.ttt.describe core.word text=situation means=ttt.describe
+@w.en.the_situation.ttt.describe core.word text="the situation" means=ttt.describe
+@w.en.position.ttt.describe core.word text=position means=ttt.describe
+@w.en.the_position.ttt.describe core.word text="the position" means=ttt.describe
+@w.en.the_current_position.ttt.describe core.word text="the current position" means=ttt.describe
+@w.en.current_position.ttt.describe core.word text="current position" means=ttt.describe
+@w.en.current_board.ttt.describe core.word text="current board" means=ttt.describe
+@w.en.the_current_board.ttt.describe core.word text="the current board" means=ttt.describe
+@w.en.what_should_i_play.ttt.hint core.word text="what should i play" means=ttt.hint
+@w.en.where_should_i_play.ttt.hint core.word text="where should i play" means=ttt.hint
+@w.en.where_should_i_go.ttt.hint core.word text="where should i go" means=ttt.hint
+@w.en.what_is_my_best_move.ttt.hint core.word text="what is my best move" means=ttt.hint
+@w.en.what_is_a_good_move.ttt.hint core.word text="what is a good move" means=ttt.hint
+@w.en.what_move_should_i_make.ttt.hint core.word text="what move should i make" means=ttt.hint
+@w.en.suggest_a_move.ttt.hint core.word text="suggest a move" means=ttt.hint
+@w.en.what_should_i_do.ttt.hint core.word text="what should i do" means=ttt.hint
+@w.en.which_move_is_best.ttt.hint core.word text="which move is best" means=ttt.hint
+@w.en.where_should_i_move.ttt.hint core.word text="where should i move" means=ttt.hint
+@w.en.give_me_a_tip.ttt.hint core.word text="give me a tip" means=ttt.hint
+@w.en.what_is_the_best_move.ttt.hint core.word text="what is the best move" means=ttt.hint
+@w.en.which_square_should_i_take.ttt.hint core.word text="which square should i take" means=ttt.hint
+@w.en.which_square_should_i_play.ttt.hint core.word text="which square should i play" means=ttt.hint
+@w.en.which_square_is_best.ttt.hint core.word text="which square is best" means=ttt.hint
+@w.en.what_is_the_best_square.ttt.hint core.word text="what is the best square" means=ttt.hint
+@w.en.what_square_should_i_take.ttt.hint core.word text="what square should i take" means=ttt.hint
+@w.en.which_place_should_i_take.ttt.hint core.word text="which place should i take" means=ttt.hint
+@w.en.where_should_i_put_my_x.ttt.hint core.word text="where should i put my x" means=ttt.hint
+@w.en.give_me_a_hint_for_the_move.ttt.hint core.word text="give me a hint for the move" means=ttt.hint
+@w.en.what_is_a_good_square.ttt.hint core.word text="what is a good square" means=ttt.hint
+@w.en.what_would_you_play.ttt.hint core.word text="what would you play" means=ttt.hint
+@w.en.what_would_you_do.ttt.hint core.word text="what would you do" means=ttt.hint
+@w.en.help_me_choose.ttt.hint core.word text="help me choose" means=ttt.hint
+@w.en.hint.ttt.hint core.word text=hint means=ttt.hint
+@w.en.hints.ttt.hint core.word text=hints means=ttt.hint
+@w.en.any_hints.ttt.hint core.word text="any hints" means=ttt.hint
+@w.en.a_hint.ttt.hint core.word text="a hint" means=ttt.hint
+@w.en.any_hint.ttt.hint core.word text="any hint" means=ttt.hint
+@w.en.give_me_a_hint.ttt.hint core.word text="give me a hint" means=ttt.hint
+@w.en.clue.ttt.hint core.word text=clue means=ttt.hint
+@w.en.a_clue.ttt.hint core.word text="a clue" means=ttt.hint
+@w.en.any_clue.ttt.hint core.word text="any clue" means=ttt.hint
+@w.en.tip.ttt.hint core.word text=tip means=ttt.hint
+@w.en.a_tip.ttt.hint core.word text="a tip" means=ttt.hint
+@w.en.any_tip.ttt.hint core.word text="any tip" means=ttt.hint
+@w.en.tips.ttt.hint core.word text=tips means=ttt.hint
+@w.en.suggestion.ttt.hint core.word text=suggestion means=ttt.hint
+@w.en.suggestions.ttt.hint core.word text=suggestions means=ttt.hint
+@w.en.a_suggestion.ttt.hint core.word text="a suggestion" means=ttt.hint
+@w.en.help.ttt.hint core.word text=help means=ttt.hint
+@w.en.help_me.ttt.hint core.word text="help me" means=ttt.hint
+@w.en.advice.ttt.hint core.word text=advice means=ttt.hint
+@w.en.any_advice.ttt.hint core.word text="any advice" means=ttt.hint
+@w.en.can_you_suggest_where_i_play.ttt.hint core.word text="can you suggest where i play" means=ttt.hint
+@w.en.can_u_suggest_where_i_play.ttt.hint core.word text="can u suggest where i play" means=ttt.hint
+@w.en.could_you_suggest_where_i_play.ttt.hint core.word text="could you suggest where i play" means=ttt.hint
+@w.en.can_you_suggest_where_i_should_play.ttt.hint core.word text="can you suggest where i should play" means=ttt.hint
+@w.en.can_u_suggest_where_i_should_play.ttt.hint core.word text="can u suggest where i should play" means=ttt.hint
+@w.en.can_you_suggest_where_to_play.ttt.hint core.word text="can you suggest where to play" means=ttt.hint
+@w.en.can_u_suggest_where_to_play.ttt.hint core.word text="can u suggest where to play" means=ttt.hint
+@w.en.can_you_suggest_a_move.ttt.hint core.word text="can you suggest a move" means=ttt.hint
+@w.en.can_u_suggest_a_move.ttt.hint core.word text="can u suggest a move" means=ttt.hint
+@w.en.could_you_suggest_a_move.ttt.hint core.word text="could you suggest a move" means=ttt.hint
+@w.en.can_you_suggest_a_move_for_me.ttt.hint core.word text="can you suggest a move for me" means=ttt.hint
+@w.en.can_you_suggest_a_square.ttt.hint core.word text="can you suggest a square" means=ttt.hint
+@w.en.suggest_where_i_play.ttt.hint core.word text="suggest where i play" means=ttt.hint
+@w.en.suggest_where_i_should_play.ttt.hint core.word text="suggest where i should play" means=ttt.hint
+@w.en.suggest_where_to_play.ttt.hint core.word text="suggest where to play" means=ttt.hint
+@w.en.suggest_where_i_could_play.ttt.hint core.word text="suggest where i could play" means=ttt.hint
+@w.en.suggest_me_a_move.ttt.hint core.word text="suggest me a move" means=ttt.hint
+@w.en.suggest_my_move.ttt.hint core.word text="suggest my move" means=ttt.hint
+@w.en.can_you_recommend_a_move.ttt.hint core.word text="can you recommend a move" means=ttt.hint
+@w.en.can_you_recommend_where_i_play.ttt.hint core.word text="can you recommend where i play" means=ttt.hint
+@w.en.recommend_a_move.ttt.hint core.word text="recommend a move" means=ttt.hint
+@w.en.where_would_you_suggest_i_play.ttt.hint core.word text="where would you suggest i play" means=ttt.hint
+@w.en.where_would_you_play.ttt.hint core.word text="where would you play" means=ttt.hint
+@w.en.where_would_you_put_it.ttt.hint core.word text="where would you put it" means=ttt.hint
+@w.en.where_do_you_suggest_i_play.ttt.hint core.word text="where do you suggest i play" means=ttt.hint
+@w.en.where_do_you_suggest.ttt.hint core.word text="where do you suggest" means=ttt.hint
+@w.en.where_do_you_think_i_should_play.ttt.hint core.word text="where do you think i should play" means=ttt.hint
+@w.en.where_can_i_play.ttt.hint core.word text="where can i play" means=ttt.hint
+@w.en.where_could_i_play.ttt.hint core.word text="where could i play" means=ttt.hint
+@w.en.where_do_i_play.ttt.hint core.word text="where do i play" means=ttt.hint
+@w.en.where_to_play.ttt.hint core.word text="where to play" means=ttt.hint
+@w.en.best_move.ttt.hint core.word text="best move" means=ttt.hint
+@w.en.best_moves.ttt.hint core.word text="best moves" means=ttt.hint
+@w.en.best_play.ttt.hint core.word text="best play" means=ttt.hint
+@w.en.best_square.ttt.hint core.word text="best square" means=ttt.hint
+@w.en.best_spot.ttt.hint core.word text="best spot" means=ttt.hint
+@w.en.best_place.ttt.hint core.word text="best place" means=ttt.hint
+@w.en.best_idea.ttt.hint core.word text="best idea" means=ttt.hint
+@w.en.good_move.ttt.hint core.word text="good move" means=ttt.hint
+@w.en.good_moves.ttt.hint core.word text="good moves" means=ttt.hint
+@w.en.good_play.ttt.hint core.word text="good play" means=ttt.hint
+@w.en.good_square.ttt.hint core.word text="good square" means=ttt.hint
+@w.en.good_spot.ttt.hint core.word text="good spot" means=ttt.hint
+@w.en.good_place.ttt.hint core.word text="good place" means=ttt.hint
+@w.en.good_idea.ttt.hint core.word text="good idea" means=ttt.hint
+@w.en.better_move.ttt.hint core.word text="better move" means=ttt.hint
+@w.en.better_moves.ttt.hint core.word text="better moves" means=ttt.hint
+@w.en.better_play.ttt.hint core.word text="better play" means=ttt.hint
+@w.en.better_square.ttt.hint core.word text="better square" means=ttt.hint
+@w.en.better_spot.ttt.hint core.word text="better spot" means=ttt.hint
+@w.en.better_place.ttt.hint core.word text="better place" means=ttt.hint
+@w.en.better_idea.ttt.hint core.word text="better idea" means=ttt.hint
+@w.en.top_move.ttt.hint core.word text="top move" means=ttt.hint
+@w.en.top_moves.ttt.hint core.word text="top moves" means=ttt.hint
+@w.en.top_play.ttt.hint core.word text="top play" means=ttt.hint
+@w.en.top_square.ttt.hint core.word text="top square" means=ttt.hint
+@w.en.top_spot.ttt.hint core.word text="top spot" means=ttt.hint
+@w.en.top_place.ttt.hint core.word text="top place" means=ttt.hint
+@w.en.top_idea.ttt.hint core.word text="top idea" means=ttt.hint
+@w.en.winning_move.ttt.hint core.word text="winning move" means=ttt.hint
+@w.en.winning_moves.ttt.hint core.word text="winning moves" means=ttt.hint
+@w.en.winning_play.ttt.hint core.word text="winning play" means=ttt.hint
+@w.en.winning_square.ttt.hint core.word text="winning square" means=ttt.hint
+@w.en.winning_spot.ttt.hint core.word text="winning spot" means=ttt.hint
+@w.en.winning_place.ttt.hint core.word text="winning place" means=ttt.hint
+@w.en.winning_idea.ttt.hint core.word text="winning idea" means=ttt.hint
+@w.en.decent_move.ttt.hint core.word text="decent move" means=ttt.hint
+@w.en.decent_moves.ttt.hint core.word text="decent moves" means=ttt.hint
+@w.en.decent_play.ttt.hint core.word text="decent play" means=ttt.hint
+@w.en.decent_square.ttt.hint core.word text="decent square" means=ttt.hint
+@w.en.decent_spot.ttt.hint core.word text="decent spot" means=ttt.hint
+@w.en.decent_place.ttt.hint core.word text="decent place" means=ttt.hint
+@w.en.decent_idea.ttt.hint core.word text="decent idea" means=ttt.hint
+@w.en.safest_move.ttt.hint core.word text="safest move" means=ttt.hint
+@w.en.safest_moves.ttt.hint core.word text="safest moves" means=ttt.hint
+@w.en.safest_play.ttt.hint core.word text="safest play" means=ttt.hint
+@w.en.safest_square.ttt.hint core.word text="safest square" means=ttt.hint
+@w.en.safest_spot.ttt.hint core.word text="safest spot" means=ttt.hint
+@w.en.safest_place.ttt.hint core.word text="safest place" means=ttt.hint
+@w.en.safest_idea.ttt.hint core.word text="safest idea" means=ttt.hint
+@w.en.smartest_move.ttt.hint core.word text="smartest move" means=ttt.hint
+@w.en.smartest_moves.ttt.hint core.word text="smartest moves" means=ttt.hint
+@w.en.smartest_play.ttt.hint core.word text="smartest play" means=ttt.hint
+@w.en.smartest_square.ttt.hint core.word text="smartest square" means=ttt.hint
+@w.en.smartest_spot.ttt.hint core.word text="smartest spot" means=ttt.hint
+@w.en.smartest_place.ttt.hint core.word text="smartest place" means=ttt.hint
+@w.en.smartest_idea.ttt.hint core.word text="smartest idea" means=ttt.hint
+@w.en.where_did_you_play.ttt.last core.word text="where did you play" means=ttt.last
+@w.en.where_did_you_go.ttt.last core.word text="where did you go" means=ttt.last
+@w.en.what_was_your_move.ttt.last core.word text="what was your move" means=ttt.last
+@w.en.what_was_your_last_move.ttt.last core.word text="what was your last move" means=ttt.last
+@w.en.which_square_did_you_take.ttt.last core.word text="which square did you take" means=ttt.last
+@w.en.what_did_you_play.ttt.last core.word text="what did you play" means=ttt.last
+@w.en.where_was_your_move.ttt.last core.word text="where was your move" means=ttt.last
+@w.en.where_was_your_last_move.ttt.last core.word text="where was your last move" means=ttt.last
+@w.en.what_did_you_just_play.ttt.last core.word text="what did you just play" means=ttt.last
+@w.en.which_square_did_you_pick.ttt.last core.word text="which square did you pick" means=ttt.last
+@w.en.which_square_did_you_play.ttt.last core.word text="which square did you play" means=ttt.last
+@w.en.where_did_you_just_play.ttt.last core.word text="where did you just play" means=ttt.last
+@w.en.what_was_your_last_play.ttt.last core.word text="what was your last play" means=ttt.last
+@w.en.which_square_did_you_choose.ttt.last core.word text="which square did you choose" means=ttt.last
+@w.en.where_did_you_put_your_o.ttt.last core.word text="where did you put your o" means=ttt.last
+@w.en.what_square_did_you_take.ttt.last core.word text="what square did you take" means=ttt.last
+@w.en.what_did_you_pick.ttt.last core.word text="what did you pick" means=ttt.last
+@w.en.where_did_you_move.ttt.last core.word text="where did you move" means=ttt.last
+@w.en.have_we_made.ttt.count core.word text="have we made" means=ttt.count
+@w.en.have_we_played.ttt.count core.word text="have we played" means=ttt.count
+@w.en.have_been_made.ttt.count core.word text="have been made" means=ttt.count
+@w.en.have_been_played.ttt.count core.word text="have been played" means=ttt.count
+@w.en.did_we_make.ttt.count core.word text="did we make" means=ttt.count
+@w.en.did_we_play.ttt.count core.word text="did we play" means=ttt.count
+@w.en.have_i_made.ttt.count core.word text="have i made" means=ttt.count
+@w.en.have_i_had.ttt.count core.word text="have i had" means=ttt.count
+@w.en.have_you_made.ttt.count core.word text="have you made" means=ttt.count
+@w.en.have_you_played.ttt.count core.word text="have you played" means=ttt.count
+@w.en.were_made.ttt.count core.word text="were made" means=ttt.count
+@w.en.were_played.ttt.count core.word text="were played" means=ttt.count
+@w.en.are_there.ttt.count core.word text="are there" means=ttt.count
+@w.en.have_we_had.ttt.count core.word text="have we had" means=ttt.count
+@w.en.have_i_played.ttt.count core.word text="have i played" means=ttt.count
+@w.en.have_i_taken.ttt.count core.word text="have i taken" means=ttt.count
+@w.en.have_we_taken.ttt.count core.word text="have we taken" means=ttt.count
+@w.en.have_i_used.ttt.count core.word text="have i used" means=ttt.count
+@w.en.have_we_done.ttt.count core.word text="have we done" means=ttt.count
+@w.en.has_each_player_made.ttt.count core.word text="has each player made" means=ttt.count
+@w.en.did_i_make.ttt.count core.word text="did i make" means=ttt.count
+@w.en.did_you_make.ttt.count core.word text="did you make" means=ttt.count
+@w.en.moves.ttt.count core.word text=moves means=ttt.count
+@w.en.tries.ttt.count core.word text=tries means=ttt.count
+@w.en.turns.ttt.count core.word text=turns means=ttt.count
+@w.en.plays.ttt.count core.word text=plays means=ttt.count
+@w.en.goes.ttt.count core.word text=goes means=ttt.count
+@w.en.marks.ttt.count core.word text=marks means=ttt.count
+@w.en.attempts.ttt.count core.word text=attempts means=ttt.count
+@w.en.how_many.ttt.count core.word text="how many" means=ttt.count
+@w.en.so_far.ttt.count core.word text="so far" means=ttt.count
+@w.en.now.ttt.count core.word text=now means=ttt.count
+@w.en.already.ttt.count core.word text=already means=ttt.count
+@w.en.in_total.ttt.count core.word text="in total" means=ttt.count
+@w.en.altogether.ttt.count core.word text=altogether means=ttt.count
+@w.en.what_level.ttt.level core.word text="what level" means=ttt.level
+@w.en.which_level.ttt.level core.word text="which level" means=ttt.level
+@w.en.how_hard.ttt.level core.word text="how hard" means=ttt.level
+@w.en.are_you.ttt.level core.word text="are you" means=ttt.level
+@w.en.is_it.ttt.level core.word text="is it" means=ttt.level
+@w.en.are_we_playing.ttt.level core.word text="are we playing" means=ttt.level
+@w.en.is_the_game.ttt.level core.word text="is the game" means=ttt.level
+@w.en.is_this.ttt.level core.word text="is this" means=ttt.level
+@w.en.you_took.ttt.last core.word text="you took" means=ttt.last
+@w.en.you_played.ttt.last core.word text="you played" means=ttt.last
+@w.en.you_picked.ttt.last core.word text="you picked" means=ttt.last
+@w.en.you_chose.ttt.last core.word text="you chose" means=ttt.last
+@w.en.you_made.ttt.last core.word text="you made" means=ttt.last
+@w.en.you_marked.ttt.last core.word text="you marked" means=ttt.last
+@w.en.you_used.ttt.last core.word text="you used" means=ttt.last
+@w.en.the_last_square.ttt.last core.word text="the last square" means=ttt.last
+@w.en.the_last_move.ttt.last core.word text="the last move" means=ttt.last
+@w.en.the_last_spot.ttt.last core.word text="the last spot" means=ttt.last
+@w.en.the_move.ttt.last core.word text="the move" means=ttt.last
+@w.en.the_square.ttt.last core.word text="the square" means=ttt.last
+@w.en.the_spot.ttt.last core.word text="the spot" means=ttt.last
+@w.en.the_play.ttt.last core.word text="the play" means=ttt.last
+@w.en.the_mark.ttt.last core.word text="the mark" means=ttt.last
+@w.en.the_pick.ttt.last core.word text="the pick" means=ttt.last
+@w.en.the_choice.ttt.last core.word text="the choice" means=ttt.last
+@w.en.the_position.ttt.last core.word text="the position" means=ttt.last
+@w.en.your_last_square.ttt.last core.word text="your last square" means=ttt.last
+@w.en.your_last_move.ttt.last core.word text="your last move" means=ttt.last
+@w.en.your_last_spot.ttt.last core.word text="your last spot" means=ttt.last
+@w.en.your_move.ttt.last core.word text="your move" means=ttt.last
+@w.en.your_square.ttt.last core.word text="your square" means=ttt.last
+@w.en.your_spot.ttt.last core.word text="your spot" means=ttt.last
+@w.en.your_play.ttt.last core.word text="your play" means=ttt.last
+@w.en.your_mark.ttt.last core.word text="your mark" means=ttt.last
+@w.en.your_pick.ttt.last core.word text="your pick" means=ttt.last
+@w.en.your_choice.ttt.last core.word text="your choice" means=ttt.last
+@w.en.your_position.ttt.last core.word text="your position" means=ttt.last
+@w.en.the_last_last_square.ttt.last core.word text="the last last square" means=ttt.last
+@w.en.the_last_last_move.ttt.last core.word text="the last last move" means=ttt.last
+@w.en.the_last_last_spot.ttt.last core.word text="the last last spot" means=ttt.last
+@w.en.the_last_play.ttt.last core.word text="the last play" means=ttt.last
+@w.en.the_last_mark.ttt.last core.word text="the last mark" means=ttt.last
+@w.en.the_last_pick.ttt.last core.word text="the last pick" means=ttt.last
+@w.en.the_last_choice.ttt.last core.word text="the last choice" means=ttt.last
+@w.en.the_last_position.ttt.last core.word text="the last position" means=ttt.last
+@w.en.your_last_last_square.ttt.last core.word text="your last last square" means=ttt.last
+@w.en.your_last_last_move.ttt.last core.word text="your last last move" means=ttt.last
+@w.en.your_last_last_spot.ttt.last core.word text="your last last spot" means=ttt.last
+@w.en.your_last_play.ttt.last core.word text="your last play" means=ttt.last
+@w.en.your_last_mark.ttt.last core.word text="your last mark" means=ttt.last
+@w.en.your_last_pick.ttt.last core.word text="your last pick" means=ttt.last
+@w.en.your_last_choice.ttt.last core.word text="your last choice" means=ttt.last
+@w.en.your_last_position.ttt.last core.word text="your last position" means=ttt.last
+@w.en.what_is.ttt.last core.word text="what is" means=ttt.last
+@w.en.whats.ttt.last core.word text=whats means=ttt.last
+@w.en.what_s.ttt.last core.word text="what s" means=ttt.last
+@w.en.which_is.ttt.last core.word text="which is" means=ttt.last
+@w.en.tell_me.ttt.last core.word text="tell me" means=ttt.last
+@w.en.give.ttt.giveup core.word text=give means=ttt.giveup
+@w.en.giving.ttt.giveup core.word text=giving means=ttt.giveup
+@w.en.gave.ttt.giveup core.word text=gave means=ttt.giveup
+@w.en.quit.ttt.giveup core.word text=quit means=ttt.giveup
+@w.en.quitting.ttt.giveup core.word text=quitting means=ttt.giveup
+@w.en.surrender.ttt.giveup core.word text=surrender means=ttt.giveup
+@w.en.surrendering.ttt.giveup core.word text=surrendering means=ttt.giveup
+@w.en.forfeit.ttt.giveup core.word text=forfeit means=ttt.giveup
+@w.en.forfeiting.ttt.giveup core.word text=forfeiting means=ttt.giveup
+@w.en.resign.ttt.giveup core.word text=resign means=ttt.giveup
+@w.en.resigning.ttt.giveup core.word text=resigning means=ttt.giveup
+@w.en.concede.ttt.giveup core.word text=concede means=ttt.giveup
+@w.en.conceding.ttt.giveup core.word text=conceding means=ttt.giveup
+@w.en.stop.ttt.giveup core.word text=stop means=ttt.giveup
+@w.en.stopping.ttt.giveup core.word text=stopping means=ttt.giveup
+@w.en.abandon.ttt.giveup core.word text=abandon means=ttt.giveup
+@w.en.abandoning.ttt.giveup core.word text=abandoning means=ttt.giveup
+@w.en.end.ttt.giveup core.word text=end means=ttt.giveup
+@w.en.ending.ttt.giveup core.word text=ending means=ttt.giveup
+@w.en.leave.ttt.giveup core.word text=leave means=ttt.giveup
+@w.en.leaving.ttt.giveup core.word text=leaving means=ttt.giveup
+@w.en.abort.ttt.giveup core.word text=abort means=ttt.giveup
+@w.en.aborting.ttt.giveup core.word text=aborting means=ttt.giveup
+@w.en.throw_in_the_towel.ttt.giveup core.word text="throw in the towel" means=ttt.giveup
+@w.en.am_done.ttt.giveup core.word text="am done" means=ttt.giveup
+@w.en.am_giving.ttt.giveup core.word text="am giving" means=ttt.giveup
+@w.en.will_give.ttt.giveup core.word text="will give" means=ttt.giveup
+@w.en.am_quitting.ttt.giveup core.word text="am quitting" means=ttt.giveup
+@w.en.am_surrendering.ttt.giveup core.word text="am surrendering" means=ttt.giveup
+@w.en.am_resigning.ttt.giveup core.word text="am resigning" means=ttt.giveup
+@w.en.am_conceding.ttt.giveup core.word text="am conceding" means=ttt.giveup
+@w.en.am_stopping.ttt.giveup core.word text="am stopping" means=ttt.giveup
+@w.en.am_abandoning.ttt.giveup core.word text="am abandoning" means=ttt.giveup
+@w.en.am_ending.ttt.giveup core.word text="am ending" means=ttt.giveup
+@w.en.am_leaving.ttt.giveup core.word text="am leaving" means=ttt.giveup
+@w.en.am_aborting.ttt.giveup core.word text="am aborting" means=ttt.giveup
+@w.en.give_up.ttt.giveup core.word text="give up" means=ttt.giveup
+@w.en.gave_up.ttt.giveup core.word text="gave up" means=ttt.giveup
+@w.en.giving_up.ttt.giveup core.word text="giving up" means=ttt.giveup
+@w.en.quit_the_game.ttt.giveup core.word text="quit the game" means=ttt.giveup
+@w.en.resign_the_game.ttt.giveup core.word text="resign the game" means=ttt.giveup
+@w.en.forfeit_the_game.ttt.giveup core.word text="forfeit the game" means=ttt.giveup
+@w.en.surrender_the_game.ttt.giveup core.word text="surrender the game" means=ttt.giveup
+@w.en.concede_the_game.ttt.giveup core.word text="concede the game" means=ttt.giveup
+@w.en.stop_the_game.ttt.giveup core.word text="stop the game" means=ttt.giveup
+@w.en.abandon_the_game.ttt.giveup core.word text="abandon the game" means=ttt.giveup
+@w.en.end_the_game.ttt.giveup core.word text="end the game" means=ttt.giveup
+@w.en.leave_the_game.ttt.giveup core.word text="leave the game" means=ttt.giveup
+@w.en.abort_the_game.ttt.giveup core.word text="abort the game" means=ttt.giveup
+@w.en.i_give_up.ttt.giveup core.word text="i give up" means=ttt.giveup
+@w.en.i_quit.ttt.giveup core.word text="i quit" means=ttt.giveup
+@w.en.i_surrender.ttt.giveup core.word text="i surrender" means=ttt.giveup
+@w.en.i_resign.ttt.giveup core.word text="i resign" means=ttt.giveup
+@w.en.i_forfeit.ttt.giveup core.word text="i forfeit" means=ttt.giveup
+@w.en.i_am_done.ttt.giveup core.word text="i am done" means=ttt.giveup
+@w.en.im_done.ttt.giveup core.word text="im done" means=ttt.giveup
+@w.en.i_am_out.ttt.giveup core.word text="i am out" means=ttt.giveup
+@w.en.im_out.ttt.giveup core.word text="im out" means=ttt.giveup
+@w.en.you_win.ttt.giveup core.word text="you win" means=ttt.giveup
+@w.en.you_won.ttt.giveup core.word text="you won" means=ttt.giveup
+@w.en.you_got_me.ttt.giveup core.word text="you got me" means=ttt.giveup
+@w.en.you_beat_me.ttt.giveup core.word text="you beat me" means=ttt.giveup
+@w.en.i_lose.ttt.giveup core.word text="i lose" means=ttt.giveup
+@w.en.i_lost.ttt.giveup core.word text="i lost" means=ttt.giveup
+@w.en.i_cant_win.ttt.giveup core.word text="i cant win" means=ttt.giveup
+@w.en.forget_it.ttt.giveup core.word text="forget it" means=ttt.giveup
+@w.en.enough.ttt.giveup core.word text=enough means=ttt.giveup
+@w.en.thats_enough.ttt.giveup core.word text="thats enough" means=ttt.giveup
+@w.en.im_through.ttt.giveup core.word text="im through" means=ttt.giveup
+@w.en.end_game.ttt.giveup core.word text="end game" means=ttt.giveup
+@w.en.finish_the_game.ttt.giveup core.word text="finish the game" means=ttt.giveup
+@w.en.stop_playing.ttt.giveup core.word text="stop playing" means=ttt.giveup
+@w.en.i_want_to_stop.ttt.giveup core.word text="i want to stop" means=ttt.giveup
+@w.en.i_wanna_stop.ttt.giveup core.word text="i wanna stop" means=ttt.giveup
+@w.en.i_want_to_quit.ttt.giveup core.word text="i want to quit" means=ttt.giveup
+@w.en.i_wanna_quit.ttt.giveup core.word text="i wanna quit" means=ttt.giveup
+@w.en.call_it_a_day.ttt.giveup core.word text="call it a day" means=ttt.giveup
+@w.en.time_to_stop.ttt.giveup core.word text="time to stop" means=ttt.giveup
+@w.en.im_giving_up.ttt.giveup core.word text="im giving up" means=ttt.giveup
+@w.en.i_am_giving_up.ttt.giveup core.word text="i am giving up" means=ttt.giveup
+@w.en.im_resigning.ttt.giveup core.word text="im resigning" means=ttt.giveup
+@w.en.i_concede.ttt.giveup core.word text="i concede" means=ttt.giveup
+@w.en.i_admit_defeat.ttt.giveup core.word text="i admit defeat" means=ttt.giveup
+@w.en.uncle.ttt.giveup core.word text=uncle means=ttt.giveup
+@w.en.mercy.ttt.giveup core.word text=mercy means=ttt.giveup
+@w.en.i_cant_do_this.ttt.giveup core.word text="i cant do this" means=ttt.giveup
+@w.en.now.ttt.giveup core.word text=now means=ttt.giveup
+@w.en.pls.ttt.giveup core.word text=pls means=ttt.giveup
+@w.en.plz.ttt.giveup core.word text=plz means=ttt.giveup
+@w.en.the_game.ttt.giveup core.word text="the game" means=ttt.giveup
+@w.en.this_game.ttt.giveup core.word text="this game" means=ttt.giveup
+@w.en.the_round.ttt.giveup core.word text="the round" means=ttt.giveup
+@w.en.this_round.ttt.giveup core.word text="this round" means=ttt.giveup
+@w.en.it.ttt.giveup core.word text=it means=ttt.giveup
+@w.en.then.ttt.giveup core.word text=then means=ttt.giveup
+@w.en.here.ttt.giveup core.word text=here means=ttt.giveup
+@w.en.rn.ttt.giveup core.word text=rn means=ttt.giveup
+@w.en.the_match.ttt.giveup core.word text="the match" means=ttt.giveup
+@w.en.this_match.ttt.giveup core.word text="this match" means=ttt.giveup
+@w.en.game.ttt.giveup core.word text=game means=ttt.giveup
+@w.en.round.ttt.giveup core.word text=round means=ttt.giveup
+@w.en.match.ttt.giveup core.word text=match means=ttt.giveup
+@w.en.already.ttt.giveup core.word text=already means=ttt.giveup
+@w.en.for_now.ttt.giveup core.word text="for now" means=ttt.giveup
+@w.en.for_today.ttt.giveup core.word text="for today" means=ttt.giveup
+@w.en.undo.ttt.undo core.word text=undo means=ttt.undo
+@w.en.undo_that.ttt.undo core.word text="undo that" means=ttt.undo
+@w.en.undo_it.ttt.undo core.word text="undo it" means=ttt.undo
+@w.en.undo_my_move.ttt.undo core.word text="undo my move" means=ttt.undo
+@w.en.undo_the_last_move.ttt.undo core.word text="undo the last move" means=ttt.undo
+@w.en.take_that_back.ttt.undo core.word text="take that back" means=ttt.undo
+@w.en.take_it_back.ttt.undo core.word text="take it back" means=ttt.undo
+@w.en.take_back_my_move.ttt.undo core.word text="take back my move" means=ttt.undo
+@w.en.take_my_move_back.ttt.undo core.word text="take my move back" means=ttt.undo
+@w.en.revert.ttt.undo core.word text=revert means=ttt.undo
+@w.en.revert_that.ttt.undo core.word text="revert that" means=ttt.undo
+@w.en.go_back.ttt.undo core.word text="go back" means=ttt.undo
+@w.en.step_back.ttt.undo core.word text="step back" means=ttt.undo
+@w.en.cancel_that.ttt.undo core.word text="cancel that" means=ttt.undo
+@w.en.cancel_my_move.ttt.undo core.word text="cancel my move" means=ttt.undo
+@w.en.reverse_that.ttt.undo core.word text="reverse that" means=ttt.undo
+@w.en.let_me_redo_that.ttt.undo core.word text="let me redo that" means=ttt.undo
+@w.en.i_want_to_undo.ttt.undo core.word text="i want to undo" means=ttt.undo
+@w.en.i_changed_my_mind.ttt.undo core.word text="i changed my mind" means=ttt.undo
+@w.en.can_i_undo.ttt.undo core.word text="can i undo" means=ttt.undo
+@w.en.can_i_take_that_back.ttt.undo core.word text="can i take that back" means=ttt.undo
+@w.en.let_me_take_that_back.ttt.undo core.word text="let me take that back" means=ttt.undo
+@w.en.i_take_it_back.ttt.undo core.word text="i take it back" means=ttt.undo
+@w.en.back_up.ttt.undo core.word text="back up" means=ttt.undo
+@w.en.pls.ttt.undo core.word text=pls means=ttt.undo
+@w.en.plz.ttt.undo core.word text=plz means=ttt.undo
+@w.en.thanks.ttt.undo core.word text=thanks means=ttt.undo
+@w.en.now.ttt.undo core.word text=now means=ttt.undo
+@w.en.one_move.ttt.undo core.word text="one move" means=ttt.undo
+@w.en.a_move.ttt.undo core.word text="a move" means=ttt.undo
+@w.en.one_step.ttt.undo core.word text="one step" means=ttt.undo
+@w.en.take_back.ttt.undo core.word text="take back" means=ttt.undo
+@w.en.move.ttt.undo core.word text=move means=ttt.undo
+@w.en.turn.ttt.undo core.word text=turn means=ttt.undo
+@w.en.go.ttt.undo core.word text=go means=ttt.undo
+@w.en.mark.ttt.undo core.word text=mark means=ttt.undo
+@w.en.play.ttt.undo core.word text=play means=ttt.undo
+@w.en.start.ttt.new core.word text=start means=ttt.new
+@w.en.begin.ttt.new core.word text=begin means=ttt.new
+@w.en.play.ttt.new core.word text=play means=ttt.new
+@w.en.have.ttt.new core.word text=have means=ttt.new
+@w.en.do.ttt.new core.word text=do means=ttt.new
+@w.en.try.ttt.new core.word text=try means=ttt.new
+@w.en.open.ttt.new core.word text=open means=ttt.new
+@w.en.make.ttt.new core.word text=make means=ttt.new
+@w.en.set_up.ttt.new core.word text="set up" means=ttt.new
+@w.en.new_tic_tac_toe_game.ttt.new core.word text="new tic tac toe game" means=ttt.new
+@w.en.new_tic_tac_toe.ttt.new core.word text="new tic tac toe" means=ttt.new
+@w.en.another_tic_tac_toe_game.ttt.new core.word text="another tic tac toe game" means=ttt.new
+@w.en.tic_tac_toe_game.ttt.new core.word text="tic tac toe game" means=ttt.new
+@w.en.fresh_game.ttt.new core.word text="fresh game" means=ttt.new
+@w.en.new_game.ttt.new core.word text="new game" means=ttt.new
+@w.en.fresh_round.ttt.new core.word text="fresh round" means=ttt.new
+@w.en.new_round.ttt.new core.word text="new round" means=ttt.new
+@w.en.clean_board.ttt.new core.word text="clean board" means=ttt.new
+@w.en.new_board.ttt.new core.word text="new board" means=ttt.new
+@w.en.fresh_board.ttt.new core.word text="fresh board" means=ttt.new
+@w.en.clear.ttt.new core.word text=clear means=ttt.new
+@w.en.reset.ttt.new core.word text=reset means=ttt.new
+@w.en.empty.ttt.new core.word text=empty means=ttt.new
+@w.en.wipe.ttt.new core.word text=wipe means=ttt.new
+@w.en.restart.ttt.new core.word text=restart means=ttt.new
+@w.en.clean.ttt.new core.word text=clean means=ttt.new
+@w.en.refresh.ttt.new core.word text=refresh means=ttt.new
+@w.en.redo.ttt.new core.word text=redo means=ttt.new
+@w.en.board.ttt.new core.word text=board means=ttt.new
+@w.en.grid.ttt.new core.word text=grid means=ttt.new
+@w.en.game.ttt.new core.word text=game means=ttt.new
+@w.en.it.ttt.new core.word text=it means=ttt.new
+@w.en.everything.ttt.new core.word text=everything means=ttt.new
+@w.en.the_marks.ttt.new core.word text="the marks" means=ttt.new
+@w.en.go.ttt.new core.word text=go means=ttt.new
+@w.en.do_it.ttt.new core.word text="do it" means=ttt.new
+@w.en.do_that.ttt.new core.word text="do that" means=ttt.new
+@w.en.have_a_go.ttt.new core.word text="have a go" means=ttt.new
+@w.en.play_a_game.ttt.new core.word text="play a game" means=ttt.new
+@w.en.that.ttt.new core.word text=that means=ttt.new
+@w.en.this.ttt.new core.word text=this means=ttt.new
+@w.en.another_game.ttt.new core.word text="another game" means=ttt.new
+@w.en.a_game.ttt.new core.word text="a game" means=ttt.new
+@w.en.a_new_game.ttt.new core.word text="a new game" means=ttt.new
+@w.en.a_new_1.ttt.new core.word text="a new 1" means=ttt.new
+@w.en.n1_more.ttt.new core.word text="1 more" means=ttt.new
+@w.en.n1_more_time.ttt.new core.word text="1 more time" means=ttt.new
+@w.en.let_me_go_first.ttt.first core.word text="let me go first" means=ttt.first
+@w.en.i_want_to_go_first.ttt.first core.word text="i want to go first" means=ttt.first
+@w.en.i_will_go_first.ttt.first core.word text="i will go first" means=ttt.first
+@w.en.i_go_first.ttt.first core.word text="i go first" means=ttt.first
+@w.en.i_want_to_start.ttt.first core.word text="i want to start" means=ttt.first
+@w.en.i_start.ttt.first core.word text="i start" means=ttt.first
+@w.en.let_me_start.ttt.first core.word text="let me start" means=ttt.first
+@w.en.you_go_second.ttt.first core.word text="you go second" means=ttt.first
+@w.en.i_will_start.ttt.first core.word text="i will start" means=ttt.first
+@w.en.me_first.ttt.first core.word text="me first" means=ttt.first
+@w.en.let_me_be_first.ttt.first core.word text="let me be first" means=ttt.first
+@w.en.i_would_like_to_go_first.ttt.first core.word text="i would like to go first" means=ttt.first
+@w.en.i_will_play_first.ttt.first core.word text="i will play first" means=ttt.first
+@w.en.you_can_go_second.ttt.first core.word text="you can go second" means=ttt.first
+@w.en.i_want_to_be_first.ttt.first core.word text="i want to be first" means=ttt.first
+@w.en.i_would_like_to_start.ttt.first core.word text="i would like to start" means=ttt.first
+@w.en.i_play_first.ttt.first core.word text="i play first" means=ttt.first
+@w.en.you_play_second.ttt.first core.word text="you play second" means=ttt.first
+@w.en.i_would_like_to_be_first.ttt.first core.word text="i would like to be first" means=ttt.first
+@w.en.i_will_be_first.ttt.first core.word text="i will be first" means=ttt.first
+@w.en.first.ttt.first core.word text=first means=ttt.first
+@w.en.n1st.ttt.first core.word text=1st means=ttt.first
+@w.en.n1st_move.ttt.first core.word text="1st move" means=ttt.first
+@w.en.first_move.ttt.first core.word text="first move" means=ttt.first
+@w.en.my_move_first.ttt.first core.word text="my move first" means=ttt.first
+@w.en.first_turn.ttt.first core.word text="first turn" means=ttt.first
+@w.en.first_go.ttt.first core.word text="first go" means=ttt.first
+@w.en.go_first.ttt.first core.word text="go first" means=ttt.first
+@w.en.start_first.ttt.first core.word text="start first" means=ttt.first
+@w.en.play_first.ttt.first core.word text="play first" means=ttt.first
+@w.en.move_first.ttt.first core.word text="move first" means=ttt.first
+@w.en.begin_first.ttt.first core.word text="begin first" means=ttt.first
+@w.en.be_first.ttt.first core.word text="be first" means=ttt.first
+@w.en.go_1st.ttt.first core.word text="go 1st" means=ttt.first
+@w.en.start_1st.ttt.first core.word text="start 1st" means=ttt.first
+@w.en.for_me.ttt.first core.word text="for me" means=ttt.first
+@w.en.by_me.ttt.first core.word text="by me" means=ttt.first
+@w.en.to_me.ttt.first core.word text="to me" means=ttt.first
+@w.en.is_mine.ttt.first core.word text="is mine" means=ttt.first
+@w.en.please.ttt.first core.word text=please means=ttt.first
+@w.en.pls.ttt.first core.word text=pls means=ttt.first
+@w.en.plz.ttt.first core.word text=plz means=ttt.first
+@w.en.me.ttt.first core.word text=me means=ttt.first
+@w.en.goes_to_me.ttt.first core.word text="goes to me" means=ttt.first
+@w.en.my_turn.ttt.first core.word text="my turn" means=ttt.first
+@w.en.let_me.ttt.first core.word text="let me" means=ttt.first
+@w.en.is_for_me.ttt.first core.word text="is for me" means=ttt.first
+@w.en.let_me_go_second.ttt.first core.word text="let me go second" means=ttt.first
+@w.en.i_want_to_go_second.ttt.first core.word text="i want to go second" means=ttt.first
+@w.en.i_will_go_second.ttt.first core.word text="i will go second" means=ttt.first
+@w.en.i_go_second.ttt.first core.word text="i go second" means=ttt.first
+@w.en.i_want_to_be_second.ttt.first core.word text="i want to be second" means=ttt.first
+@w.en.you_go_first.ttt.first core.word text="you go first" means=ttt.first
+@w.en.you_start.ttt.first core.word text="you start" means=ttt.first
+@w.en.you_can_start.ttt.first core.word text="you can start" means=ttt.first
+@w.en.you_can_go_first.ttt.first core.word text="you can go first" means=ttt.first
+@w.en.you_first.ttt.first core.word text="you first" means=ttt.first
+@w.en.can_you_start.ttt.first core.word text="can you start" means=ttt.first
+@w.en.you_should_go_first.ttt.first core.word text="you should go first" means=ttt.first
+@w.en.you_begin.ttt.first core.word text="you begin" means=ttt.first
+@w.en.let_me_be_second.ttt.first core.word text="let me be second" means=ttt.first
+@w.en.i_would_like_to_go_second.ttt.first core.word text="i would like to go second" means=ttt.first
+@w.en.you_play_first.ttt.first core.word text="you play first" means=ttt.first
+@w.en.you_can_begin.ttt.first core.word text="you can begin" means=ttt.first
+@w.en.i_want_you_to_start.ttt.first core.word text="i want you to start" means=ttt.first
+@w.en.i_will_play_second.ttt.first core.word text="i will play second" means=ttt.first
+@w.en.i_play_second.ttt.first core.word text="i play second" means=ttt.first
+@w.en.i_would_like_you_to_start.ttt.first core.word text="i would like you to start" means=ttt.first
+@w.en.i_would_like_to_be_second.ttt.first core.word text="i would like to be second" means=ttt.first
+@w.en.i_want_you_to_go_first.ttt.first core.word text="i want you to go first" means=ttt.first
+@w.en.i_want_you_to_begin.ttt.first core.word text="i want you to begin" means=ttt.first
+@w.en.your_move_first.ttt.first core.word text="your move first" means=ttt.first
+@w.en.your_turn_first.ttt.first core.word text="your turn first" means=ttt.first
+@w.en.you_first_pls.ttt.first core.word text="you first pls" means=ttt.first
+@w.en.you_first_please.ttt.first core.word text="you first please" means=ttt.first
+@w.en.your_go_first.ttt.first core.word text="your go first" means=ttt.first
+@w.en.you_move_first.ttt.first core.word text="you move first" means=ttt.first
+@w.en.computer_first.ttt.first core.word text="computer first" means=ttt.first
+@w.en.machine_first.ttt.first core.word text="machine first" means=ttt.first
+@w.en.ai_first.ttt.first core.word text="ai first" means=ttt.first
+@w.en.cpu_first.ttt.first core.word text="cpu first" means=ttt.first
+@w.en.you_go_1st.ttt.first core.word text="you go 1st" means=ttt.first
+@w.en.you_can_go_1st.ttt.first core.word text="you can go 1st" means=ttt.first
+@w.en.u_go_1st.ttt.first core.word text="u go 1st" means=ttt.first
+@w.en.u_go_first.ttt.first core.word text="u go first" means=ttt.first
+@w.en.u_first.ttt.first core.word text="u first" means=ttt.first
+@w.en.you_start_pls.ttt.first core.word text="you start pls" means=ttt.first
+@w.en.you_start_please.ttt.first core.word text="you start please" means=ttt.first
+@w.en.u_start.ttt.first core.word text="u start" means=ttt.first
+@w.en.u_start_pls.ttt.first core.word text="u start pls" means=ttt.first
+@w.en.go_first_you.ttt.first core.word text="go first you" means=ttt.first
+@w.en.you_should_start.ttt.first core.word text="you should start" means=ttt.first
+@w.en.computer_goes_first.ttt.first core.word text="computer goes first" means=ttt.first
+@w.en.machine_goes_first.ttt.first core.word text="machine goes first" means=ttt.first
+@w.en.ai_goes_first.ttt.first core.word text="ai goes first" means=ttt.first
+@w.en.bot_goes_first.ttt.first core.word text="bot goes first" means=ttt.first
+@w.en.cpu_goes_first.ttt.first core.word text="cpu goes first" means=ttt.first
+@w.en.let_the_computer_start.ttt.first core.word text="let the computer start" means=ttt.first
+@w.en.let_the_machine_start.ttt.first core.word text="let the machine start" means=ttt.first
+@w.en.let_the_ai_start.ttt.first core.word text="let the ai start" means=ttt.first
+@w.en.let_the_bot_start.ttt.first core.word text="let the bot start" means=ttt.first
+@w.en.let_the_computer_go_first.ttt.first core.word text="let the computer go first" means=ttt.first
+@w.en.let_the_machine_go_first.ttt.first core.word text="let the machine go first" means=ttt.first
+@w.en.you_move_first_pls.ttt.first core.word text="you move first pls" means=ttt.first
+@w.en.set.ttt.level core.word text=set means=ttt.level
+@w.en.change.ttt.level core.word text=change means=ttt.level
+@w.en.switch.ttt.level core.word text=switch means=ttt.level
+@w.en.go.ttt.level core.word text=go means=ttt.level
+@w.en.move.ttt.level core.word text=move means=ttt.level
+@w.en.turn.ttt.level core.word text=turn means=ttt.level
+@w.en.play.ttt.level core.word text=play means=ttt.level
+@w.en.be.ttt.level core.word text=be means=ttt.level
+@w.en.use.ttt.level core.word text=use means=ttt.level
+@w.en.try.ttt.level core.word text=try means=ttt.level
+@w.en.make.ttt.level core.word text=make means=ttt.level
+@w.en.give_me.ttt.level core.word text="give me" means=ttt.level
+@w.en.level.ttt.level core.word text=level means=ttt.level
+@w.en.difficulty.ttt.level core.word text=difficulty means=ttt.level
+@w.en.mode.ttt.level core.word text=mode means=ttt.level
+@w.en.to.ttt.level.l core.word text=to means=ttt.level.l
+@w.en.at.ttt.level.l core.word text=at means=ttt.level.l
+@w.en.on.ttt.level.l core.word text=on means=ttt.level.l
+@w.en.the.ttt.level.l core.word text=the means=ttt.level.l
+@w.en.a.ttt.level.l core.word text=a means=ttt.level.l
+@w.en.an.ttt.level.l core.word text=an means=ttt.level.l
+@w.en.level.ttt.level.l core.word text=level means=ttt.level.l
+@w.en.mode.ttt.level.l core.word text=mode means=ttt.level.l
+@w.en.difficulty.ttt.level.l core.word text=difficulty means=ttt.level.l
+@w.en.game.ttt.level.l core.word text=game means=ttt.level.l
+@w.en.opponent.ttt.level.l core.word text=opponent means=ttt.level.l
+@w.en.dumb_it_down.ttt.level core.word text="dumb it down" means=ttt.level
+@w.en.dumb_down.ttt.level core.word text="dumb down" means=ttt.level
+@w.en.go_easy.ttt.level core.word text="go easy" means=ttt.level
+@w.en.go_easy_on_me.ttt.level core.word text="go easy on me" means=ttt.level
+@w.en.go_easier.ttt.level core.word text="go easier" means=ttt.level
+@w.en.take_it_easy.ttt.level core.word text="take it easy" means=ttt.level
+@w.en.take_it_easy_on_me.ttt.level core.word text="take it easy on me" means=ttt.level
+@w.en.be_gentle.ttt.level core.word text="be gentle" means=ttt.level
+@w.en.be_nice.ttt.level core.word text="be nice" means=ttt.level
+@w.en.be_nice_to_me.ttt.level core.word text="be nice to me" means=ttt.level
+@w.en.be_easier.ttt.level core.word text="be easier" means=ttt.level
+@w.en.be_easy.ttt.level core.word text="be easy" means=ttt.level
+@w.en.play_dumb.ttt.level core.word text="play dumb" means=ttt.level
+@w.en.play_easy.ttt.level core.word text="play easy" means=ttt.level
+@w.en.play_easier.ttt.level core.word text="play easier" means=ttt.level
+@w.en.play_softer.ttt.level core.word text="play softer" means=ttt.level
+@w.en.play_weaker.ttt.level core.word text="play weaker" means=ttt.level
+@w.en.play_worse.ttt.level core.word text="play worse" means=ttt.level
+@w.en.go_soft.ttt.level core.word text="go soft" means=ttt.level
+@w.en.go_light.ttt.level core.word text="go light" means=ttt.level
+@w.en.ease_up.ttt.level core.word text="ease up" means=ttt.level
+@w.en.ease_off.ttt.level core.word text="ease off" means=ttt.level
+@w.en.lighten_up.ttt.level core.word text="lighten up" means=ttt.level
+@w.en.make_it_easier.ttt.level core.word text="make it easier" means=ttt.level
+@w.en.make_it_simple.ttt.level core.word text="make it simple" means=ttt.level
+@w.en.make_it_simpler.ttt.level core.word text="make it simpler" means=ttt.level
+@w.en.dont_be_so_hard.ttt.level core.word text="dont be so hard" means=ttt.level
+@w.en.dont_be_so_good.ttt.level core.word text="dont be so good" means=ttt.level
+@w.en.lower_the_difficulty.ttt.level core.word text="lower the difficulty" means=ttt.level
+@w.en.lower_the_level.ttt.level core.word text="lower the level" means=ttt.level
+@w.en.lower_difficulty.ttt.level core.word text="lower difficulty" means=ttt.level
+@w.en.reduce_the_difficulty.ttt.level core.word text="reduce the difficulty" means=ttt.level
+@w.en.weaken_yourself.ttt.level core.word text="weaken yourself" means=ttt.level
+@w.en.play_hard.ttt.level core.word text="play hard" means=ttt.level
+@w.en.play_harder.ttt.level core.word text="play harder" means=ttt.level
+@w.en.play_smarter.ttt.level core.word text="play smarter" means=ttt.level
+@w.en.play_better.ttt.level core.word text="play better" means=ttt.level
+@w.en.play_properly.ttt.level core.word text="play properly" means=ttt.level
+@w.en.play_for_real.ttt.level core.word text="play for real" means=ttt.level
+@w.en.play_seriously.ttt.level core.word text="play seriously" means=ttt.level
+@w.en.play_to_win.ttt.level core.word text="play to win" means=ttt.level
+@w.en.try_harder.ttt.level core.word text="try harder" means=ttt.level
+@w.en.try_your_best.ttt.level core.word text="try your best" means=ttt.level
+@w.en.do_your_best.ttt.level core.word text="do your best" means=ttt.level
+@w.en.give_it_your_best.ttt.level core.word text="give it your best" means=ttt.level
+@w.en.stop_going_easy.ttt.level core.word text="stop going easy" means=ttt.level
+@w.en.stop_being_easy.ttt.level core.word text="stop being easy" means=ttt.level
+@w.en.dont_go_easy.ttt.level core.word text="dont go easy" means=ttt.level
+@w.en.dont_go_easy_on_me.ttt.level core.word text="dont go easy on me" means=ttt.level
+@w.en.do_not_go_easy_on_me.ttt.level core.word text="do not go easy on me" means=ttt.level
+@w.en.dont_hold_back.ttt.level core.word text="dont hold back" means=ttt.level
+@w.en.show_no_mercy.ttt.level core.word text="show no mercy" means=ttt.level
+@w.en.no_mercy.ttt.level core.word text="no mercy" means=ttt.level
+@w.en.go_hard.ttt.level core.word text="go hard" means=ttt.level
+@w.en.go_harder.ttt.level core.word text="go harder" means=ttt.level
+@w.en.go_all_out.ttt.level core.word text="go all out" means=ttt.level
+@w.en.full_power.ttt.level core.word text="full power" means=ttt.level
+@w.en.make_it_harder.ttt.level core.word text="make it harder" means=ttt.level
+@w.en.make_it_tougher.ttt.level core.word text="make it tougher" means=ttt.level
+@w.en.make_it_hard.ttt.level core.word text="make it hard" means=ttt.level
+@w.en.make_it_difficult.ttt.level core.word text="make it difficult" means=ttt.level
+@w.en.make_it_challenging.ttt.level core.word text="make it challenging" means=ttt.level
+@w.en.raise_the_difficulty.ttt.level core.word text="raise the difficulty" means=ttt.level
+@w.en.raise_the_level.ttt.level core.word text="raise the level" means=ttt.level
+@w.en.increase_the_difficulty.ttt.level core.word text="increase the difficulty" means=ttt.level
+@w.en.increase_the_level.ttt.level core.word text="increase the level" means=ttt.level
+@w.en.up_the_difficulty.ttt.level core.word text="up the difficulty" means=ttt.level
+@w.en.up_the_level.ttt.level core.word text="up the level" means=ttt.level
+@w.en.crank_it_up.ttt.level core.word text="crank it up" means=ttt.level
+@w.en.bring_it_on.ttt.level core.word text="bring it on" means=ttt.level
+@w.en.be_serious.ttt.level core.word text="be serious" means=ttt.level
+@w.en.be_smart.ttt.level core.word text="be smart" means=ttt.level
+@w.en.be_smarter.ttt.level core.word text="be smarter" means=ttt.level
+@w.en.be_tough.ttt.level core.word text="be tough" means=ttt.level
+@w.en.play.ttt.move core.word text=play means=ttt.move
+@w.en.take.ttt.move core.word text=take means=ttt.move
+@w.en.mark.ttt.move core.word text=mark means=ttt.move
+@w.en.place.ttt.move core.word text=place means=ttt.move
+@w.en.put_it_in.ttt.move core.word text="put it in" means=ttt.move
+@w.en.go_to.ttt.move core.word text="go to" means=ttt.move
+@w.en.choose.ttt.move core.word text=choose means=ttt.move
+@w.en.pick.ttt.move core.word text=pick means=ttt.move
+@w.en.put.ttt.move core.word text=put means=ttt.move
+@w.en.drop.ttt.move core.word text=drop means=ttt.move
+@w.en.set.ttt.move core.word text=set means=ttt.move
+@w.en.i_go.ttt.move core.word text="i go" means=ttt.move
+@w.en.i_play.ttt.move core.word text="i play" means=ttt.move
+@w.en.i_take.ttt.move core.word text="i take" means=ttt.move
+@w.en.i_pick.ttt.move core.word text="i pick" means=ttt.move
+@w.en.i_mark.ttt.move core.word text="i mark" means=ttt.move
+@w.en.i_will_go.ttt.move core.word text="i will go" means=ttt.move
+@w.en.i_will_play.ttt.move core.word text="i will play" means=ttt.move
+@w.en.i_will_take.ttt.move core.word text="i will take" means=ttt.move
+@w.en.i_will_pick.ttt.move core.word text="i will pick" means=ttt.move
+@w.en.i_will_mark.ttt.move core.word text="i will mark" means=ttt.move
+@w.en.ill_go.ttt.move core.word text="ill go" means=ttt.move
+@w.en.ill_play.ttt.move core.word text="ill play" means=ttt.move
+@w.en.ill_take.ttt.move core.word text="ill take" means=ttt.move
+@w.en.ill_pick.ttt.move core.word text="ill pick" means=ttt.move
+@w.en.ill_mark.ttt.move core.word text="ill mark" means=ttt.move
+@w.en.gonna_go.ttt.move core.word text="gonna go" means=ttt.move
+@w.en.gonna_play.ttt.move core.word text="gonna play" means=ttt.move
+@w.en.gonna_take.ttt.move core.word text="gonna take" means=ttt.move
+@w.en.gonna_pick.ttt.move core.word text="gonna pick" means=ttt.move
+@w.en.gonna_mark.ttt.move core.word text="gonna mark" means=ttt.move
+@w.en.let_me_go.ttt.move core.word text="let me go" means=ttt.move
+@w.en.let_me_play.ttt.move core.word text="let me play" means=ttt.move
+@w.en.let_me_take.ttt.move core.word text="let me take" means=ttt.move
+@w.en.let_me_pick.ttt.move core.word text="let me pick" means=ttt.move
+@w.en.let_me_mark.ttt.move core.word text="let me mark" means=ttt.move
+@w.en.put_my_x.ttt.move core.word text="put my x" means=ttt.move
+@w.en.put_an_x.ttt.move core.word text="put an x" means=ttt.move
+@w.en.put_x.ttt.move core.word text="put x" means=ttt.move
+@w.en.place_my_x.ttt.move core.word text="place my x" means=ttt.move
+@w.en.place_an_x.ttt.move core.word text="place an x" means=ttt.move
+@w.en.place_x.ttt.move core.word text="place x" means=ttt.move
+@w.en.play_my_x.ttt.move core.word text="play my x" means=ttt.move
+@w.en.play_an_x.ttt.move core.word text="play an x" means=ttt.move
+@w.en.play_x.ttt.move core.word text="play x" means=ttt.move
+@w.en.mark_my_x.ttt.move core.word text="mark my x" means=ttt.move
+@w.en.mark_an_x.ttt.move core.word text="mark an x" means=ttt.move
+@w.en.mark_x.ttt.move core.word text="mark x" means=ttt.move
+@w.en.drop_my_x.ttt.move core.word text="drop my x" means=ttt.move
+@w.en.drop_an_x.ttt.move core.word text="drop an x" means=ttt.move
+@w.en.drop_x.ttt.move core.word text="drop x" means=ttt.move
+@w.en.at.ttt.move.pos core.word text=at means=ttt.move.pos
+@w.en.in.ttt.move.pos core.word text=in means=ttt.move.pos
+@w.en.on.ttt.move.pos core.word text=on means=ttt.move.pos
+@w.en.to.ttt.move.pos core.word text=to means=ttt.move.pos
+@w.en.the.ttt.move.pos core.word text=the means=ttt.move.pos
+@w.en.square.ttt.move.pos core.word text=square means=ttt.move.pos
+@w.en.cell.ttt.move.pos core.word text=cell means=ttt.move.pos
+@w.en.corner.ttt.move.pos core.word text=corner means=ttt.move.pos
+@w.en.spot.ttt.move.pos core.word text=spot means=ttt.move.pos
+@w.en.box.ttt.move.pos core.word text=box means=ttt.move.pos
+@w.en.tile.ttt.move.pos core.word text=tile means=ttt.move.pos
+@w.en.position.ttt.move.pos core.word text=position means=ttt.move.pos
+@w.en.side.ttt.move.pos core.word text=side means=ttt.move.pos
+@w.en.edge.ttt.move.pos core.word text=edge means=ttt.move.pos
+@w.en.slot.ttt.move.pos core.word text=slot means=ttt.move.pos
+@w.en.space.ttt.move.pos core.word text=space means=ttt.move.pos
+@w.en.go.ttt.move core.word text=go means=ttt.move
+@w.en.put_it.ttt.move core.word text="put it" means=ttt.move
+@w.en.at.ttt.move.c core.word text=at means=ttt.move.c
+@w.en.in.ttt.move.c core.word text=in means=ttt.move.c
+@w.en.on.ttt.move.c core.word text=on means=ttt.move.c
+@w.en.to.ttt.move.c core.word text=to means=ttt.move.c
+@w.en.the.ttt.move.c core.word text=the means=ttt.move.c
+@w.en.square.ttt.move.c core.word text=square means=ttt.move.c
+@w.en.cell.ttt.move.c core.word text=cell means=ttt.move.c
+@w.en.spot.ttt.move.c core.word text=spot means=ttt.move.c
+@w.en.position.ttt.move.c core.word text=position means=ttt.move.c
+@w.en.tile.ttt.move.c core.word text=tile means=ttt.move.c
+@w.en.row.ttt.move.r core.word text=row means=ttt.move.r
+@w.en.r.ttt.move.r core.word text=r means=ttt.move.r
+@w.en.the.ttt.move.r core.word text=the means=ttt.move.r
+@w.en.it.ttt.move.r core.word text=it means=ttt.move.r
+@w.en.column.ttt.move.c core.word text=column means=ttt.move.c
+@w.en.col.ttt.move.c core.word text=col means=ttt.move.c
+@w.en.c.ttt.move.c core.word text=c means=ttt.move.c
+@w.en.and_column.ttt.move.c core.word text="and column" means=ttt.move.c
+@w.en.and_col.ttt.move.c core.word text="and col" means=ttt.move.c
+@w.en.and.ttt.move.c core.word text=and means=ttt.move.c
+@w.en.then.ttt.move.c core.word text=then means=ttt.move.c
+@w.en.one.ttt.move.c core.word text=one means=ttt.move.c
+@w.en.at.ttt.move.r core.word text=at means=ttt.move.r
+@w.en.in.ttt.move.r core.word text=in means=ttt.move.r
+@w.en.on.ttt.move.r core.word text=on means=ttt.move.r
+@w.en.to.ttt.move.r core.word text=to means=ttt.move.r
+@w.en.corner.ttt.move.r core.word text=corner means=ttt.move.r
+@w.en.square.ttt.move.r core.word text=square means=ttt.move.r
+@w.en.cell.ttt.move.r core.word text=cell means=ttt.move.r
+@w.en.spot.ttt.move.r core.word text=spot means=ttt.move.r
+@w.en.tile.ttt.move.r core.word text=tile means=ttt.move.r
+@w.en.side.ttt.move.r core.word text=side means=ttt.move.r
+@w.en.edge.ttt.move.r core.word text=edge means=ttt.move.r
+@w.en.line.ttt.move.r core.word text=line means=ttt.move.r
+@w.en.corner.ttt.move.c core.word text=corner means=ttt.move.c

@@ -94,7 +94,7 @@ test('RP5b: "diagramă" is the diagram, "în diagramă" names the Diagram world,
     const { r, s } = await run(tab, ['desenează trei cercuri în diagramă']);
     assert.equal(s.state()['ui.shell'].activeTab, 'diagram', tab);
     assert.equal(s.state()['diagram.sketch'].shapes.length, 3, tab);
-    assert.equal(r.text, 'Am desenat c1, c2 și c3.', tab);
+    assert.equal(r.text, 'Am desenat 3 cercuri.', tab);
   }
   const en = await run('draw', ['draw three circles in the diagram'], { lang: 'en' });
   assert.equal(en.s.state()['ui.shell'].activeTab, 'diagram');
@@ -153,7 +153,7 @@ test('RP5b: moving a thing into the water says "în apă" and adds the water whe
 
 test('RP5c: a tab opened by a command is the active tab for the next command', async () => {
   const { r, s } = await run('robot', ['deschide tabul diagramă', 'desenează trei cercuri']);
-  assert.match(r.text, /c1.*c3/s);
+  assert.match(r.text, /3 cercuri/);
   assert.equal(s.state()['ui.shell'].activeTab, 'diagram');
 });
 
@@ -173,7 +173,7 @@ test('RP5c: open the Diagram tab by command after Drawing turns, then "deseneaz�
   for (const m of ['deschide tabul desen', 'desenează un pește mic și albastru', 'șterge peștii', 'deschide tabul diagramă']) await s.send(m);
   assert.equal(s.state('ui.shell').activeTab, 'diagram');
   const r = await s.send('desenează trei cercuri');
-  assert.match(r.text, /c1.*c3/);
+  assert.match(r.text, /3 cercuri/);
   assert.equal(s.state('ui.shell').activeTab, 'diagram');
   assert.equal(s.state('diagram.sketch').shapes.length, 3);
 });
@@ -192,4 +192,14 @@ test('RP5c: the capability dry run awaits the lazy engine of the world it checks
     await s._capabilityRead('Draw 3 circles', res, opts, { spell: true, partial: true, fastPath: true });
     assert.ok(calls >= 1, 'prepare() was awaited before the dry run');
   } finally { Object.defineProperty(world, 'ops', { value: origOps, configurable: true, writable: true }); }
+});
+
+test('RO-PHONE 4: "desenează o diagramă" draws a sample and both the English and the Romanian reply are plain words, no ids', async () => {
+  const ro = await run('diagram', ['desenează o diagramă']);
+  assert.deepEqual(ro.status, ['supported']);
+  assert.match(ro.r.text, /^Am desenat o diagramă aleatorie de tip \S+, cu \S+ \S+\.$/);
+  assert.ok(ro.s.state()['diagram.sketch'].shapes.length >= 3);
+  const en = await run('diagram', ['make a random diagram'], { lang: 'en' });
+  assert.match(en.r.text, /^I drew a random \w+ diagram with \w+ \w+\.$/);
+  assert.doesNotMatch(en.r.text, /\b[a-z]\d\b/);
 });

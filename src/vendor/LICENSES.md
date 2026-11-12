@@ -1,14 +1,14 @@
 # Licences of vendored code in src/
 
-## sopworld 0.12.0 (one file, unmodified)
+## sopworld 0.13.0 (one file, unmodified)
 
 - Source: https://github.com/ml-circuits-research/soplang-words-lib (same owner as this repository)
-- Pinned commit: `7a49329` (its `docs/version.md`: version 0.12.0, build `a4ae897bf038`, built 2026-11-12). The library makes no tags: it is vendored from its `main` at a commit hash.
-- Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (414544 bytes, 116919 bytes gzip -9, sha256 `e6074ce150c788c360466b0e3fc12809b447a3ed75b40357553b8b73e78f166a`), copied byte for byte. Never patch it here: a workaround goes into `src/reasoner/` and a defect into the list of library issues in `worker-log.md`.
+- Pinned commit: `8b9a46b` (its `docs/version.md`: version 0.13.0, build `691f31c95a06`, built 2026-11-12). The library makes no tags: it is vendored from its `main` at a commit hash.
+- Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (414428 bytes, 116917 bytes gzip -9, sha256 `1ce20ef440fba11e19b871431fba50f334d41f13ef4e74bfd5ef77ef7fbf3df7`), copied byte for byte. Never patch it here: a workaround goes into `src/reasoner/` and a defect into the list of library issues in `worker-log.md`.
 - `src/vendor/sopworld/tools/scan-loops.mjs`: the library's own loop scanner (`tools/scan-loops.mjs`), copied byte for byte; `tests/reasoner.test.mjs` runs it on the vendored file.
 - Licence: MIT (below). Compatible with AGPL-3.0-only.
 - Runs offline: nothing is fetched at run time. Loaded lazily (`import('../vendor/sopworld/sopworld.mjs')`) only when the Reasoner setting is `matrix`.
-- Earlier pins: 0.9.0 at `f062052` (build `807d8bde76f3`), 0.7.1 at `93362d7` (build `08e2627de8d4`), 0.6.1 at `775dfe7cd468fab8e4a48fb6dd9ca83e3414c576` (build `c034e3804d4e`), 0.4.0 at `a7a8e1669c8a74fba5225a28186d6d83a14d457a` (SOPWORLD-1 stage 1).
+- Earlier pins: 0.12.0 at `7a49329` (build `a4ae897bf038`), 0.9.0 at `f062052` (build `807d8bde76f3`), 0.7.1 at `93362d7` (build `08e2627de8d4`), 0.6.1 at `775dfe7cd468fab8e4a48fb6dd9ca83e3414c576` (build `c034e3804d4e`), 0.4.0 at `a7a8e1669c8a74fba5225a28186d6d83a14d457a` (SOPWORLD-1 stage 1).
 - To update: copy the new `docs/sopworld.mjs` from a pinned commit, change this entry (commit, version, build, size, sha256), run `npm test`, the parity gates in `worker-log.md` (SOPWORLD-1, SOPWORLD-1b) and `node scripts/build-webchat.mjs`.
 
 ```text

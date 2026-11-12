@@ -54,10 +54,32 @@ function animalListRo(v, sub) {
   return head.length ? `${head.join(', ')} și ${last}${more ? ' și altele' : ''}` : `${last}${more ? ' și altele' : ''}`;
 }
 
+
+const SHAPE_RO = { circle: ['un cerc', 'cercuri'], rectangle: ['un dreptunghi', 'dreptunghiuri'], square: ['un pătrat', 'pătrate'], diamond: ['un romb', 'romburi'], ellipse: ['o elipsă', 'elipse'], triangle: ['un triunghi', 'triunghiuri'], hexagon: ['un hexagon', 'hexagoane'], star: ['o stea', 'stele'], text: ['un text', 'texte'] };
+const DIAGRAM_FORMS = { cycle: 'ciclu', process: 'proces', hierarchy: 'ierarhie', pyramid: 'piramidă', timeline: 'cronologie', funnel: 'pâlnie', hub: 'stea', list: 'listă' };
+const DIAGRAM_UNITS = { step: 'pas', steps: 'pași', season: 'anotimp', seasons: 'anotimpuri', box: 'casetă', boxes: 'casete', level: 'nivel', levels: 'niveluri', stage: 'etapă', stages: 'etape', item: 'element', items: 'elemente' };
+const COUNT_WORDS = { one: 'un', two: 'doi', three: 'trei', four: 'patru', five: 'cinci', six: 'șase', seven: 'șapte', eight: 'opt', nine: 'nouă', ten: 'zece' };
+/** "a circle, 3 triangles and a star" -> "un cerc, 3 triunghiuri și o stea". */
+function shapesRo(v) {
+  const out = v.split(/, | and /).map((x) => {
+    const one = /^an? ([a-z]+)$/.exec(x), many = /^(\d+) ([a-z]+)s$/.exec(x);
+    if (one) return SHAPE_RO[one[1]]?.[0];
+    if (many) return SHAPE_RO[many[2]] ? `${many[1]}${Number(many[1]) >= 20 ? ' de' : ''} ${SHAPE_RO[many[2]][1]}` : null;
+    return null;
+  });
+  if (out.some((x) => !x)) return null;
+  const last = out.pop();
+  return out.length ? `${out.join(', ')} și ${last}` : last;
+}
+
 // slot type -> [regex source, converter(value, sub) -> string | null]
 const TAB_RO = { Avatar: 'Avatar', Editor: 'Editor', 'Tic-tac-toe': 'X și 0', 'Guess the animal': 'Ghicește animalul', Hangman: 'Spânzurătoarea', Drawing: 'Desen', Diagram: 'Diagramă', Charts: 'Grafice', Map: 'Hartă', Music: 'Muzică', Chess: 'Șah', Documents: 'Documente', Profile: 'Profil' };
 const SLOTS = {
   ids: ['([a-z]\\d+(?:, [a-z]\\d+)*(?: and [a-z]\\d+)?)', (v) => v.replace(' and ', ' și ')],   // diagram ids (c1, r2 and a3)
+  shapes: ['((?:an? [a-z]+|\\d+ [a-z]+)(?:, (?:an? [a-z]+|\\d+ [a-z]+))*(?: and (?:an? [a-z]+|\\d+ [a-z]+))?)', shapesRo],   // "a circle", "3 triangles and a star" (diagram replies)
+  dform: ['(cycle|process|hierarchy|pyramid|timeline|funnel|hub|list)', mapper(DIAGRAM_FORMS)],
+  dunit: ['(steps|seasons|boxes|levels|stages|items|step|box|item)', mapper(DIAGRAM_UNITS)],
+  dcount: ['(one|two|three|four|five|six|seven|eight|nine|ten)', mapper(COUNT_WORDS)],
   tab: [`(${Object.keys(TAB_RO).join('|')})`, (v) => TAB_RO[v] ?? null],   // the title of a tab
   ...Object.fromEntries(AVATAR_PARTS.map(([, key], i) => [`opt${String.fromCharCode(97 + i)}`, ['(.+?)', (v) => avatarOptionsRo(key, v)]])),   // the options of one avatar part
   n: ['(-?\\d[\\d,.]*)', (v) => v, (v) => (Number(String(v).replace(/,/g, '')) >= 20 ? `${v} de` : v)],
@@ -210,6 +232,8 @@ const TABLE = [
   ['There was no water, so I added it to the ground.', 'Nu era apă, așa că am adăugat-o pe pământ.'], ['There was no sand, so I added it to the ground.', 'Nu era nisip, așa că l-am adăugat pe pământ.'], ['There was no snow, so I added it to the ground.', 'Nu era zăpadă, așa că am adăugat-o pe pământ.'], ['There was no grass, so I added it to the ground.', 'Nu era iarbă, așa că am adăugat-o pe pământ.'],
   ['I drew {np} at the bottom.', 'Am desenat {np} în partea de jos.'],
   ['Drew {ids}.', 'Am desenat {ids}.'],
+  ['Drew {shapes}.', 'Am desenat {shapes}.'],
+  ['I drew a random {dform} diagram with {dcount} {dunit}.', 'Am desenat o diagramă aleatorie de tip {dform}, cu {dcount} {dunit}.'],
   ['Here is a fresh sheet of paper!', 'Iată o foaie nouă de hârtie!'], ['It is night now: a dark sky, a moon and lots of stars.', 'Acum este noapte: un cer întunecat, o lună și o mulțime de stele.'],
   ['New game of tic-tac-toe.', 'Joc nou de x și 0.'], ['"{q}" has {n} words.', '"{q}" are {n} cuvinte.'],
   ['Where should it go?', 'Unde ar trebui să meargă?'], 

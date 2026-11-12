@@ -440,176 +440,176 @@
     sample.n2=3
     example="How much money do I have left after I buy 2 balls and 3 pencils?"
 
-@w.en.have.kids.shop.money core.word lang=en text=have means=kids.shop.money
-@w.en.have_got.kids.shop.money core.word lang=en text="have got" means=kids.shop.money
-@w.en.got.kids.shop.money core.word lang=en text=got means=kids.shop.money
-@w.en.now.kids.shop.money core.word lang=en text=now means=kids.shop.money
-@w.en.left.kids.shop.money core.word lang=en text=left means=kids.shop.money
-@w.en.today.kids.shop.money core.word lang=en text=today means=kids.shop.money
-@w.en.in_my_wallet.kids.shop.money core.word lang=en text="in my wallet" means=kids.shop.money
-@w.en.in_my_piggy_bank.kids.shop.money core.word lang=en text="in my piggy bank" means=kids.shop.money
-@w.en.with_me.kids.shop.money core.word lang=en text="with me" means=kids.shop.money
-@w.en.to_spend.kids.shop.money core.word lang=en text="to spend" means=kids.shop.money
-@w.en.lei.kids.shop.money.n core.word lang=en text=lei means=kids.shop.money.n
-@w.en.leu.kids.shop.money.n core.word lang=en text=leu means=kids.shop.money.n
-@w.en.get.kids.shop.income core.word lang=en text=get means=kids.shop.income
-@w.en.got.kids.shop.income core.word lang=en text=got means=kids.shop.income
-@w.en.find.kids.shop.income core.word lang=en text=find means=kids.shop.income
-@w.en.found.kids.shop.income core.word lang=en text=found means=kids.shop.income
-@w.en.receive.kids.shop.income core.word lang=en text=receive means=kids.shop.income
-@w.en.received.kids.shop.income core.word lang=en text=received means=kids.shop.income
-@w.en.earn.kids.shop.income core.word lang=en text=earn means=kids.shop.income
-@w.en.earned.kids.shop.income core.word lang=en text=earned means=kids.shop.income
-@w.en.win.kids.shop.income core.word lang=en text=win means=kids.shop.income
-@w.en.won.kids.shop.income core.word lang=en text=won means=kids.shop.income
-@w.en.save.kids.shop.income core.word lang=en text=save means=kids.shop.income
-@w.en.saved.kids.shop.income core.word lang=en text=saved means=kids.shop.income
-@w.en.lei.kids.shop.income.n core.word lang=en text=lei means=kids.shop.income.n
-@w.en.leu.kids.shop.income.n core.word lang=en text=leu means=kids.shop.income.n
-@w.en.spend.kids.shop.expense core.word lang=en text=spend means=kids.shop.expense
-@w.en.spent.kids.shop.expense core.word lang=en text=spent means=kids.shop.expense
-@w.en.lose.kids.shop.expense core.word lang=en text=lose means=kids.shop.expense
-@w.en.lost.kids.shop.expense core.word lang=en text=lost means=kids.shop.expense
-@w.en.pay.kids.shop.expense core.word lang=en text=pay means=kids.shop.expense
-@w.en.paid.kids.shop.expense core.word lang=en text=paid means=kids.shop.expense
-@w.en.give_away.kids.shop.expense core.word lang=en text="give away" means=kids.shop.expense
-@w.en.gave_away.kids.shop.expense core.word lang=en text="gave away" means=kids.shop.expense
-@w.en.lei.kids.shop.expense.n core.word lang=en text=lei means=kids.shop.expense.n
-@w.en.leu.kids.shop.expense.n core.word lang=en text=leu means=kids.shop.expense.n
-@w.en.buy.kids.shop.purchase core.word lang=en text=buy means=kids.shop.purchase
-@w.en.bought.kids.shop.purchase core.word lang=en text=bought means=kids.shop.purchase
-@w.en.take.kids.shop.purchase core.word lang=en text=take means=kids.shop.purchase
-@w.en.took.kids.shop.purchase core.word lang=en text=took means=kids.shop.purchase
-@w.en.get.kids.shop.purchase core.word lang=en text=get means=kids.shop.purchase
-@w.en.got.kids.shop.purchase core.word lang=en text=got means=kids.shop.purchase
-@w.en.purchase.kids.shop.purchase core.word lang=en text=purchase means=kids.shop.purchase
-@w.en.purchased.kids.shop.purchase core.word lang=en text=purchased means=kids.shop.purchase
-@w.en.and.kids.shop.purchase.i2 core.word lang=en text=and means=kids.shop.purchase.i2
-@w.en.plus.kids.shop.purchase.i2 core.word lang=en text=plus means=kids.shop.purchase.i2
-@w.en.costs.kids.shop.price core.word lang=en text=costs means=kids.shop.price
-@w.en.cost.kids.shop.price core.word lang=en text=cost means=kids.shop.price
-@w.en.is.kids.shop.price core.word lang=en text=is means=kids.shop.price
-@w.en.are.kids.shop.price core.word lang=en text=are means=kids.shop.price
-@w.en.a.kids.shop.price.item core.word lang=en text=a means=kids.shop.price.item
-@w.en.an.kids.shop.price.item core.word lang=en text=an means=kids.shop.price.item
-@w.en.the.kids.shop.price.item core.word lang=en text=the means=kids.shop.price.item
-@w.en.one.kids.shop.price.item core.word lang=en text=one means=kids.shop.price.item
-@w.en.lei.kids.shop.price.n core.word lang=en text=lei means=kids.shop.price.n
-@w.en.leu.kids.shop.price.n core.word lang=en text=leu means=kids.shop.price.n
-@w.en.price.kids.shop.price core.word lang=en text=price means=kids.shop.price
-@w.en.how_much.kids.shop.price core.word lang=en text="how much" means=kids.shop.price
-@w.en.of.kids.shop.price.item core.word lang=en text=of means=kids.shop.price.item
-@w.en.for.kids.shop.price.item core.word lang=en text=for means=kids.shop.price.item
-@w.en.cost.kids.shop.total core.word lang=en text=cost means=kids.shop.total
-@w.en.come_to.kids.shop.total core.word lang=en text="come to" means=kids.shop.total
-@w.en.add_up_to.kids.shop.total core.word lang=en text="add up to" means=kids.shop.total
-@w.en.total.kids.shop.total core.word lang=en text=total means=kids.shop.total
-@w.en.price.kids.shop.total core.word lang=en text=price means=kids.shop.total
-@w.en.sum.kids.shop.total core.word lang=en text=sum means=kids.shop.total
-@w.en.bill.kids.shop.total core.word lang=en text=bill means=kids.shop.total
-@w.en.how_much.kids.shop.total core.word lang=en text="how much" means=kids.shop.total
-@w.en.how_much_money.kids.shop.total core.word lang=en text="how much money" means=kids.shop.total
-@w.en.what_does_it_cost_for.kids.shop.total core.word lang=en text="what does it cost for" means=kids.shop.total
-@w.en.altogether.kids.shop.total core.word lang=en text=altogether means=kids.shop.total
-@w.en.in_total.kids.shop.total core.word lang=en text="in total" means=kids.shop.total
-@w.en.all_together.kids.shop.total core.word lang=en text="all together" means=kids.shop.total
-@w.en.together.kids.shop.total core.word lang=en text=together means=kids.shop.total
-@w.en.of.kids.shop.total.i1 core.word lang=en text=of means=kids.shop.total.i1
-@w.en.for.kids.shop.total.i1 core.word lang=en text=for means=kids.shop.total.i1
-@w.en.and.kids.shop.total.i2 core.word lang=en text=and means=kids.shop.total.i2
-@w.en.plus.kids.shop.total.i2 core.word lang=en text=plus means=kids.shop.total.i2
-@w.en.money.kids.shop.balance core.word lang=en text=money means=kids.shop.balance
-@w.en.balance.kids.shop.balance core.word lang=en text=balance means=kids.shop.balance
-@w.en.cash.kids.shop.balance core.word lang=en text=cash means=kids.shop.balance
-@w.en.lei.kids.shop.balance core.word lang=en text=lei means=kids.shop.balance
-@w.en.how_much.kids.shop.balance core.word lang=en text="how much" means=kids.shop.balance
-@w.en.how_much_money.kids.shop.balance core.word lang=en text="how much money" means=kids.shop.balance
-@w.en.how_many_lei.kids.shop.balance core.word lang=en text="how many lei" means=kids.shop.balance
-@w.en.what_is_my.kids.shop.balance core.word lang=en text="what is my" means=kids.shop.balance
-@w.en.what_s_my.kids.shop.balance core.word lang=en text="what's my" means=kids.shop.balance
-@w.en.do_i_have.kids.shop.balance core.word lang=en text="do i have" means=kids.shop.balance
-@w.en.do_i_have_left.kids.shop.balance core.word lang=en text="do i have left" means=kids.shop.balance
-@w.en.is_left.kids.shop.balance core.word lang=en text="is left" means=kids.shop.balance
-@w.en.i_have_left.kids.shop.balance core.word lang=en text="i have left" means=kids.shop.balance
-@w.en.do_i_have_now.kids.shop.balance core.word lang=en text="do i have now" means=kids.shop.balance
-@w.en.is_in_my_wallet.kids.shop.balance core.word lang=en text="is in my wallet" means=kids.shop.balance
-@w.en.after_shopping.kids.shop.balance core.word lang=en text="after shopping" means=kids.shop.balance
-@w.en.after_the_shopping.kids.shop.balance core.word lang=en text="after the shopping" means=kids.shop.balance
-@w.en.after_buying.kids.shop.balance core.word lang=en text="after buying" means=kids.shop.balance
-@w.en.afford.kids.shop.affordability core.word lang=en text=afford means=kids.shop.affordability
-@w.en.buy.kids.shop.affordability core.word lang=en text=buy means=kids.shop.affordability
-@w.en.get.kids.shop.affordability core.word lang=en text=get means=kids.shop.affordability
-@w.en.take.kids.shop.affordability core.word lang=en text=take means=kids.shop.affordability
-@w.en.pay.kids.shop.affordability core.word lang=en text=pay means=kids.shop.affordability
-@w.en.and.kids.shop.affordability.i2 core.word lang=en text=and means=kids.shop.affordability.i2
-@w.en.plus.kids.shop.affordability.i2 core.word lang=en text=plus means=kids.shop.affordability.i2
-@w.en.give.kids.shop.change core.word lang=en text=give means=kids.shop.change
-@w.en.pay.kids.shop.change core.word lang=en text=pay means=kids.shop.change
-@w.en.hand_over.kids.shop.change core.word lang=en text="hand over" means=kids.shop.change
-@w.en.buy.kids.shop.change core.word lang=en text=buy means=kids.shop.change
-@w.en.get.kids.shop.change core.word lang=en text=get means=kids.shop.change
-@w.en.take.kids.shop.change core.word lang=en text=take means=kids.shop.change
-@w.en.do_i_get.kids.shop.change core.word lang=en text="do i get" means=kids.shop.change
-@w.en.will_i_get.kids.shop.change core.word lang=en text="will i get" means=kids.shop.change
-@w.en.do_i_receive.kids.shop.change core.word lang=en text="do i receive" means=kids.shop.change
-@w.en.will_i_receive.kids.shop.change core.word lang=en text="will i receive" means=kids.shop.change
-@w.en.do_i_take.kids.shop.change core.word lang=en text="do i take" means=kids.shop.change
-@w.en.do_i_have_back.kids.shop.change core.word lang=en text="do i have back" means=kids.shop.change
-@w.en.change.kids.shop.change core.word lang=en text=change means=kids.shop.change
-@w.en.back.kids.shop.change core.word lang=en text=back means=kids.shop.change
-@w.en.how_much_change.kids.shop.change core.word lang=en text="how much change" means=kids.shop.change
-@w.en.how_much_back.kids.shop.change core.word lang=en text="how much back" means=kids.shop.change
-@w.en.what_is_the.kids.shop.change core.word lang=en text="what is the" means=kids.shop.change
-@w.en.what_s_the.kids.shop.change core.word lang=en text="what's the" means=kids.shop.change
-@w.en.whats_the.kids.shop.change core.word lang=en text="whats the" means=kids.shop.change
-@w.en.what_is_my.kids.shop.change core.word lang=en text="what is my" means=kids.shop.change
-@w.en.what_s_my.kids.shop.change core.word lang=en text="what's my" means=kids.shop.change
-@w.en.whats_my.kids.shop.change core.word lang=en text="whats my" means=kids.shop.change
-@w.en.what_do_i_get_back.kids.shop.change core.word lang=en text="what do i get back" means=kids.shop.change
-@w.en.what_change_do_i_get.kids.shop.change core.word lang=en text="what change do i get" means=kids.shop.change
-@w.en.i_want.kids.shop.change core.word lang=en text="i want" means=kids.shop.change
-@w.en.i_would_like.kids.shop.change core.word lang=en text="i would like" means=kids.shop.change
-@w.en.i_d_like.kids.shop.change core.word lang=en text="i'd like" means=kids.shop.change
-@w.en.i_will_buy.kids.shop.change core.word lang=en text="i will buy" means=kids.shop.change
-@w.en.i_buy.kids.shop.change core.word lang=en text="i buy" means=kids.shop.change
-@w.en.i_take.kids.shop.change core.word lang=en text="i take" means=kids.shop.change
-@w.en.i_would_like_to_buy.kids.shop.change core.word lang=en text="i would like to buy" means=kids.shop.change
-@w.en.i_want_to_buy.kids.shop.change core.word lang=en text="i want to buy" means=kids.shop.change
-@w.en.and_i_pay.kids.shop.change core.word lang=en text="and i pay" means=kids.shop.change
-@w.en.and_i_give_the_cashier.kids.shop.change core.word lang=en text="and i give the cashier" means=kids.shop.change
-@w.en.and_pay_with.kids.shop.change core.word lang=en text="and pay with" means=kids.shop.change
-@w.en.and_i_hand_over.kids.shop.change core.word lang=en text="and i hand over" means=kids.shop.change
-@w.en.and_i_pay_with.kids.shop.change core.word lang=en text="and i pay with" means=kids.shop.change
-@w.en.and_give.kids.shop.change core.word lang=en text="and give" means=kids.shop.change
-@w.en.and_i_give.kids.shop.change core.word lang=en text="and i give" means=kids.shop.change
-@w.en.from.kids.shop.change.m core.word lang=en text=from means=kids.shop.change.m
-@w.en.out_of.kids.shop.change.m core.word lang=en text="out of" means=kids.shop.change.m
-@w.en.with.kids.shop.change.m core.word lang=en text=with means=kids.shop.change.m
-@w.en.for.kids.shop.change.m core.word lang=en text=for means=kids.shop.change.m
-@w.en.lei.kids.shop.change.m core.word lang=en text=lei means=kids.shop.change.m
-@w.en.leu.kids.shop.change.m core.word lang=en text=leu means=kids.shop.change.m
-@w.en.if_i_buy.kids.shop.change.i1 core.word lang=en text="if i buy" means=kids.shop.change.i1
-@w.en.if_i_get.kids.shop.change.i1 core.word lang=en text="if i get" means=kids.shop.change.i1
-@w.en.if_i_take.kids.shop.change.i1 core.word lang=en text="if i take" means=kids.shop.change.i1
-@w.en.for.kids.shop.change.i1 core.word lang=en text=for means=kids.shop.change.i1
-@w.en.on.kids.shop.change.i1 core.word lang=en text=on means=kids.shop.change.i1
-@w.en.when_i_buy.kids.shop.change.i1 core.word lang=en text="when i buy" means=kids.shop.change.i1
-@w.en.with.kids.shop.change.i1 core.word lang=en text=with means=kids.shop.change.i1
-@w.en.and.kids.shop.change.i2 core.word lang=en text=and means=kids.shop.change.i2
-@w.en.plus.kids.shop.change.i2 core.word lang=en text=plus means=kids.shop.change.i2
-@w.en.buy.kids.shop.leftafter core.word lang=en text=buy means=kids.shop.leftafter
-@w.en.get.kids.shop.leftafter core.word lang=en text=get means=kids.shop.leftafter
-@w.en.take.kids.shop.leftafter core.word lang=en text=take means=kids.shop.leftafter
-@w.en.purchase.kids.shop.leftafter core.word lang=en text=purchase means=kids.shop.leftafter
-@w.en.money_left.kids.shop.leftafter core.word lang=en text="money left" means=kids.shop.leftafter
-@w.en.balance.kids.shop.leftafter core.word lang=en text=balance means=kids.shop.leftafter
-@w.en.change.kids.shop.leftafter core.word lang=en text=change means=kids.shop.leftafter
-@w.en.how_much_money_do_i_have_left.kids.shop.leftafter core.word lang=en text="how much money do i have left" means=kids.shop.leftafter
-@w.en.how_many_lei_do_i_have_left.kids.shop.leftafter core.word lang=en text="how many lei do i have left" means=kids.shop.leftafter
-@w.en.how_much_is_left.kids.shop.leftafter core.word lang=en text="how much is left" means=kids.shop.leftafter
-@w.en.after_i_buy.kids.shop.leftafter.i1 core.word lang=en text="after i buy" means=kids.shop.leftafter.i1
-@w.en.if_i_buy.kids.shop.leftafter.i1 core.word lang=en text="if i buy" means=kids.shop.leftafter.i1
-@w.en.after_buying.kids.shop.leftafter.i1 core.word lang=en text="after buying" means=kids.shop.leftafter.i1
-@w.en.after_i_get.kids.shop.leftafter.i1 core.word lang=en text="after i get" means=kids.shop.leftafter.i1
-@w.en.and.kids.shop.leftafter.i2 core.word lang=en text=and means=kids.shop.leftafter.i2
-@w.en.plus.kids.shop.leftafter.i2 core.word lang=en text=plus means=kids.shop.leftafter.i2
+@w.en.have.kids.shop.money core.word text=have means=kids.shop.money
+@w.en.have_got.kids.shop.money core.word text="have got" means=kids.shop.money
+@w.en.got.kids.shop.money core.word text=got means=kids.shop.money
+@w.en.now.kids.shop.money core.word text=now means=kids.shop.money
+@w.en.left.kids.shop.money core.word text=left means=kids.shop.money
+@w.en.today.kids.shop.money core.word text=today means=kids.shop.money
+@w.en.in_my_wallet.kids.shop.money core.word text="in my wallet" means=kids.shop.money
+@w.en.in_my_piggy_bank.kids.shop.money core.word text="in my piggy bank" means=kids.shop.money
+@w.en.with_me.kids.shop.money core.word text="with me" means=kids.shop.money
+@w.en.to_spend.kids.shop.money core.word text="to spend" means=kids.shop.money
+@w.en.lei.kids.shop.money.n core.word text=lei means=kids.shop.money.n
+@w.en.leu.kids.shop.money.n core.word text=leu means=kids.shop.money.n
+@w.en.get.kids.shop.income core.word text=get means=kids.shop.income
+@w.en.got.kids.shop.income core.word text=got means=kids.shop.income
+@w.en.find.kids.shop.income core.word text=find means=kids.shop.income
+@w.en.found.kids.shop.income core.word text=found means=kids.shop.income
+@w.en.receive.kids.shop.income core.word text=receive means=kids.shop.income
+@w.en.received.kids.shop.income core.word text=received means=kids.shop.income
+@w.en.earn.kids.shop.income core.word text=earn means=kids.shop.income
+@w.en.earned.kids.shop.income core.word text=earned means=kids.shop.income
+@w.en.win.kids.shop.income core.word text=win means=kids.shop.income
+@w.en.won.kids.shop.income core.word text=won means=kids.shop.income
+@w.en.save.kids.shop.income core.word text=save means=kids.shop.income
+@w.en.saved.kids.shop.income core.word text=saved means=kids.shop.income
+@w.en.lei.kids.shop.income.n core.word text=lei means=kids.shop.income.n
+@w.en.leu.kids.shop.income.n core.word text=leu means=kids.shop.income.n
+@w.en.spend.kids.shop.expense core.word text=spend means=kids.shop.expense
+@w.en.spent.kids.shop.expense core.word text=spent means=kids.shop.expense
+@w.en.lose.kids.shop.expense core.word text=lose means=kids.shop.expense
+@w.en.lost.kids.shop.expense core.word text=lost means=kids.shop.expense
+@w.en.pay.kids.shop.expense core.word text=pay means=kids.shop.expense
+@w.en.paid.kids.shop.expense core.word text=paid means=kids.shop.expense
+@w.en.give_away.kids.shop.expense core.word text="give away" means=kids.shop.expense
+@w.en.gave_away.kids.shop.expense core.word text="gave away" means=kids.shop.expense
+@w.en.lei.kids.shop.expense.n core.word text=lei means=kids.shop.expense.n
+@w.en.leu.kids.shop.expense.n core.word text=leu means=kids.shop.expense.n
+@w.en.buy.kids.shop.purchase core.word text=buy means=kids.shop.purchase
+@w.en.bought.kids.shop.purchase core.word text=bought means=kids.shop.purchase
+@w.en.take.kids.shop.purchase core.word text=take means=kids.shop.purchase
+@w.en.took.kids.shop.purchase core.word text=took means=kids.shop.purchase
+@w.en.get.kids.shop.purchase core.word text=get means=kids.shop.purchase
+@w.en.got.kids.shop.purchase core.word text=got means=kids.shop.purchase
+@w.en.purchase.kids.shop.purchase core.word text=purchase means=kids.shop.purchase
+@w.en.purchased.kids.shop.purchase core.word text=purchased means=kids.shop.purchase
+@w.en.and.kids.shop.purchase.i2 core.word text=and means=kids.shop.purchase.i2
+@w.en.plus.kids.shop.purchase.i2 core.word text=plus means=kids.shop.purchase.i2
+@w.en.costs.kids.shop.price core.word text=costs means=kids.shop.price
+@w.en.cost.kids.shop.price core.word text=cost means=kids.shop.price
+@w.en.is.kids.shop.price core.word text=is means=kids.shop.price
+@w.en.are.kids.shop.price core.word text=are means=kids.shop.price
+@w.en.a.kids.shop.price.item core.word text=a means=kids.shop.price.item
+@w.en.an.kids.shop.price.item core.word text=an means=kids.shop.price.item
+@w.en.the.kids.shop.price.item core.word text=the means=kids.shop.price.item
+@w.en.one.kids.shop.price.item core.word text=one means=kids.shop.price.item
+@w.en.lei.kids.shop.price.n core.word text=lei means=kids.shop.price.n
+@w.en.leu.kids.shop.price.n core.word text=leu means=kids.shop.price.n
+@w.en.price.kids.shop.price core.word text=price means=kids.shop.price
+@w.en.how_much.kids.shop.price core.word text="how much" means=kids.shop.price
+@w.en.of.kids.shop.price.item core.word text=of means=kids.shop.price.item
+@w.en.for.kids.shop.price.item core.word text=for means=kids.shop.price.item
+@w.en.cost.kids.shop.total core.word text=cost means=kids.shop.total
+@w.en.come_to.kids.shop.total core.word text="come to" means=kids.shop.total
+@w.en.add_up_to.kids.shop.total core.word text="add up to" means=kids.shop.total
+@w.en.total.kids.shop.total core.word text=total means=kids.shop.total
+@w.en.price.kids.shop.total core.word text=price means=kids.shop.total
+@w.en.sum.kids.shop.total core.word text=sum means=kids.shop.total
+@w.en.bill.kids.shop.total core.word text=bill means=kids.shop.total
+@w.en.how_much.kids.shop.total core.word text="how much" means=kids.shop.total
+@w.en.how_much_money.kids.shop.total core.word text="how much money" means=kids.shop.total
+@w.en.what_does_it_cost_for.kids.shop.total core.word text="what does it cost for" means=kids.shop.total
+@w.en.altogether.kids.shop.total core.word text=altogether means=kids.shop.total
+@w.en.in_total.kids.shop.total core.word text="in total" means=kids.shop.total
+@w.en.all_together.kids.shop.total core.word text="all together" means=kids.shop.total
+@w.en.together.kids.shop.total core.word text=together means=kids.shop.total
+@w.en.of.kids.shop.total.i1 core.word text=of means=kids.shop.total.i1
+@w.en.for.kids.shop.total.i1 core.word text=for means=kids.shop.total.i1
+@w.en.and.kids.shop.total.i2 core.word text=and means=kids.shop.total.i2
+@w.en.plus.kids.shop.total.i2 core.word text=plus means=kids.shop.total.i2
+@w.en.money.kids.shop.balance core.word text=money means=kids.shop.balance
+@w.en.balance.kids.shop.balance core.word text=balance means=kids.shop.balance
+@w.en.cash.kids.shop.balance core.word text=cash means=kids.shop.balance
+@w.en.lei.kids.shop.balance core.word text=lei means=kids.shop.balance
+@w.en.how_much.kids.shop.balance core.word text="how much" means=kids.shop.balance
+@w.en.how_much_money.kids.shop.balance core.word text="how much money" means=kids.shop.balance
+@w.en.how_many_lei.kids.shop.balance core.word text="how many lei" means=kids.shop.balance
+@w.en.what_is_my.kids.shop.balance core.word text="what is my" means=kids.shop.balance
+@w.en.what_s_my.kids.shop.balance core.word text="what's my" means=kids.shop.balance
+@w.en.do_i_have.kids.shop.balance core.word text="do i have" means=kids.shop.balance
+@w.en.do_i_have_left.kids.shop.balance core.word text="do i have left" means=kids.shop.balance
+@w.en.is_left.kids.shop.balance core.word text="is left" means=kids.shop.balance
+@w.en.i_have_left.kids.shop.balance core.word text="i have left" means=kids.shop.balance
+@w.en.do_i_have_now.kids.shop.balance core.word text="do i have now" means=kids.shop.balance
+@w.en.is_in_my_wallet.kids.shop.balance core.word text="is in my wallet" means=kids.shop.balance
+@w.en.after_shopping.kids.shop.balance core.word text="after shopping" means=kids.shop.balance
+@w.en.after_the_shopping.kids.shop.balance core.word text="after the shopping" means=kids.shop.balance
+@w.en.after_buying.kids.shop.balance core.word text="after buying" means=kids.shop.balance
+@w.en.afford.kids.shop.affordability core.word text=afford means=kids.shop.affordability
+@w.en.buy.kids.shop.affordability core.word text=buy means=kids.shop.affordability
+@w.en.get.kids.shop.affordability core.word text=get means=kids.shop.affordability
+@w.en.take.kids.shop.affordability core.word text=take means=kids.shop.affordability
+@w.en.pay.kids.shop.affordability core.word text=pay means=kids.shop.affordability
+@w.en.and.kids.shop.affordability.i2 core.word text=and means=kids.shop.affordability.i2
+@w.en.plus.kids.shop.affordability.i2 core.word text=plus means=kids.shop.affordability.i2
+@w.en.give.kids.shop.change core.word text=give means=kids.shop.change
+@w.en.pay.kids.shop.change core.word text=pay means=kids.shop.change
+@w.en.hand_over.kids.shop.change core.word text="hand over" means=kids.shop.change
+@w.en.buy.kids.shop.change core.word text=buy means=kids.shop.change
+@w.en.get.kids.shop.change core.word text=get means=kids.shop.change
+@w.en.take.kids.shop.change core.word text=take means=kids.shop.change
+@w.en.do_i_get.kids.shop.change core.word text="do i get" means=kids.shop.change
+@w.en.will_i_get.kids.shop.change core.word text="will i get" means=kids.shop.change
+@w.en.do_i_receive.kids.shop.change core.word text="do i receive" means=kids.shop.change
+@w.en.will_i_receive.kids.shop.change core.word text="will i receive" means=kids.shop.change
+@w.en.do_i_take.kids.shop.change core.word text="do i take" means=kids.shop.change
+@w.en.do_i_have_back.kids.shop.change core.word text="do i have back" means=kids.shop.change
+@w.en.change.kids.shop.change core.word text=change means=kids.shop.change
+@w.en.back.kids.shop.change core.word text=back means=kids.shop.change
+@w.en.how_much_change.kids.shop.change core.word text="how much change" means=kids.shop.change
+@w.en.how_much_back.kids.shop.change core.word text="how much back" means=kids.shop.change
+@w.en.what_is_the.kids.shop.change core.word text="what is the" means=kids.shop.change
+@w.en.what_s_the.kids.shop.change core.word text="what's the" means=kids.shop.change
+@w.en.whats_the.kids.shop.change core.word text="whats the" means=kids.shop.change
+@w.en.what_is_my.kids.shop.change core.word text="what is my" means=kids.shop.change
+@w.en.what_s_my.kids.shop.change core.word text="what's my" means=kids.shop.change
+@w.en.whats_my.kids.shop.change core.word text="whats my" means=kids.shop.change
+@w.en.what_do_i_get_back.kids.shop.change core.word text="what do i get back" means=kids.shop.change
+@w.en.what_change_do_i_get.kids.shop.change core.word text="what change do i get" means=kids.shop.change
+@w.en.i_want.kids.shop.change core.word text="i want" means=kids.shop.change
+@w.en.i_would_like.kids.shop.change core.word text="i would like" means=kids.shop.change
+@w.en.i_d_like.kids.shop.change core.word text="i'd like" means=kids.shop.change
+@w.en.i_will_buy.kids.shop.change core.word text="i will buy" means=kids.shop.change
+@w.en.i_buy.kids.shop.change core.word text="i buy" means=kids.shop.change
+@w.en.i_take.kids.shop.change core.word text="i take" means=kids.shop.change
+@w.en.i_would_like_to_buy.kids.shop.change core.word text="i would like to buy" means=kids.shop.change
+@w.en.i_want_to_buy.kids.shop.change core.word text="i want to buy" means=kids.shop.change
+@w.en.and_i_pay.kids.shop.change core.word text="and i pay" means=kids.shop.change
+@w.en.and_i_give_the_cashier.kids.shop.change core.word text="and i give the cashier" means=kids.shop.change
+@w.en.and_pay_with.kids.shop.change core.word text="and pay with" means=kids.shop.change
+@w.en.and_i_hand_over.kids.shop.change core.word text="and i hand over" means=kids.shop.change
+@w.en.and_i_pay_with.kids.shop.change core.word text="and i pay with" means=kids.shop.change
+@w.en.and_give.kids.shop.change core.word text="and give" means=kids.shop.change
+@w.en.and_i_give.kids.shop.change core.word text="and i give" means=kids.shop.change
+@w.en.from.kids.shop.change.m core.word text=from means=kids.shop.change.m
+@w.en.out_of.kids.shop.change.m core.word text="out of" means=kids.shop.change.m
+@w.en.with.kids.shop.change.m core.word text=with means=kids.shop.change.m
+@w.en.for.kids.shop.change.m core.word text=for means=kids.shop.change.m
+@w.en.lei.kids.shop.change.m core.word text=lei means=kids.shop.change.m
+@w.en.leu.kids.shop.change.m core.word text=leu means=kids.shop.change.m
+@w.en.if_i_buy.kids.shop.change.i1 core.word text="if i buy" means=kids.shop.change.i1
+@w.en.if_i_get.kids.shop.change.i1 core.word text="if i get" means=kids.shop.change.i1
+@w.en.if_i_take.kids.shop.change.i1 core.word text="if i take" means=kids.shop.change.i1
+@w.en.for.kids.shop.change.i1 core.word text=for means=kids.shop.change.i1
+@w.en.on.kids.shop.change.i1 core.word text=on means=kids.shop.change.i1
+@w.en.when_i_buy.kids.shop.change.i1 core.word text="when i buy" means=kids.shop.change.i1
+@w.en.with.kids.shop.change.i1 core.word text=with means=kids.shop.change.i1
+@w.en.and.kids.shop.change.i2 core.word text=and means=kids.shop.change.i2
+@w.en.plus.kids.shop.change.i2 core.word text=plus means=kids.shop.change.i2
+@w.en.buy.kids.shop.leftafter core.word text=buy means=kids.shop.leftafter
+@w.en.get.kids.shop.leftafter core.word text=get means=kids.shop.leftafter
+@w.en.take.kids.shop.leftafter core.word text=take means=kids.shop.leftafter
+@w.en.purchase.kids.shop.leftafter core.word text=purchase means=kids.shop.leftafter
+@w.en.money_left.kids.shop.leftafter core.word text="money left" means=kids.shop.leftafter
+@w.en.balance.kids.shop.leftafter core.word text=balance means=kids.shop.leftafter
+@w.en.change.kids.shop.leftafter core.word text=change means=kids.shop.leftafter
+@w.en.how_much_money_do_i_have_left.kids.shop.leftafter core.word text="how much money do i have left" means=kids.shop.leftafter
+@w.en.how_many_lei_do_i_have_left.kids.shop.leftafter core.word text="how many lei do i have left" means=kids.shop.leftafter
+@w.en.how_much_is_left.kids.shop.leftafter core.word text="how much is left" means=kids.shop.leftafter
+@w.en.after_i_buy.kids.shop.leftafter.i1 core.word text="after i buy" means=kids.shop.leftafter.i1
+@w.en.if_i_buy.kids.shop.leftafter.i1 core.word text="if i buy" means=kids.shop.leftafter.i1
+@w.en.after_buying.kids.shop.leftafter.i1 core.word text="after buying" means=kids.shop.leftafter.i1
+@w.en.after_i_get.kids.shop.leftafter.i1 core.word text="after i get" means=kids.shop.leftafter.i1
+@w.en.and.kids.shop.leftafter.i2 core.word text=and means=kids.shop.leftafter.i2
+@w.en.plus.kids.shop.leftafter.i2 core.word text=plus means=kids.shop.leftafter.i2
