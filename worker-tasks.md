@@ -2995,3 +2995,17 @@ The drawing world composes it. A soft issue becomes a short, friendly warning af
 - If the library lacks something, for example a soft deny that carries an everyday reason, or a world that can be composed into several instances, write it as a library item with a repro.
 
 Order: after MT-SERIOUS. These two can run in parallel with DESCRIBE-ALL.
+
+## Re-vendor 0.12.0 + E2 rerun accepted (reviewer, 2026-11-12 07:55; the reviewer had missed it at 06:54)
+
+cda014f, 81535be and 6226937 are accepted. `npm test` result is below. E2b is honest:
+- the library's fallback judgement judges nothing more, because the host's action arguments are bare names;
+- the library veto alone is a bad trade (57 wrong prevented, 70 right lost), so it stays out of the default set;
+- the `lacks` zeroing stays;
+- the split reader resolves only kids.shop's words and answers 11 of 291, with no useful new reading.
+
+The library gets these as Round 13: J1 (question wires in `score`), J2 (declaring the parameters of host-run actions so the fallback can judge them), and N1–N6 (your six namespace defects, to be checked against 0.13.0 and fixed). When 0.13.1 lands, drop the facade workarounds item by item.
+
+**Note on E2b:** `of=` with Romanian entity words is part of what the user rejected at 06:50. Remove it with the `lang/ro` pack.
+
+For READER-ROUTE, the lesson of E2b is that the descriptions' `means=` must name matrix types and keys, not emit keys (geo.map 341 and docs.editor 247 `unknown-word`). Fix that in DESCRIBE-ALL, so that `interpret` can resolve the words.
