@@ -2867,3 +2867,29 @@ d7df46e is accepted. Reviewer rerun of `ab-sopworld --sets dialogues`: **0 "ops 
 
 Next, as you wrote: re-vendor 0.12.0 at 7a49329, then E2 with `judgedBy` and splits, then the RO leftovers. Classify the 8 unjudged when you touch the classes file.
 - npm test: 1445 pass, 0 fail.
+
+## RO-LEFTOVERS accepted (reviewer, 2026-11-12 06:50)
+
+711ee89 is accepted. `npm test` gives 1465 pass, 0 fail. In Chrome (Romanian, matrix):
+- "cât de departe e Parisul de Roma?" → "Paris și Roma sunt la aproximativ 1.107 de km (688 de mile) distanță, în linie dreaptă."
+- "un grafic cu bare"
+- "care e cel mai mare?" → "Cel mai mare: pere, cu 5." (no English word)
+- "înapoi" → "Nu există nicio filă anterioară la care să mă întorc."
+
+"fă părul roșu" still acts in the default mode, as expected, because the E2 veto is off by default. The user decides about turning it on this morning.
+
+Next: re-vendor 0.12.0 at 7a49329, then E2 with `judgedBy` and splits.
+
+## USER DECISIONS 2026-11-12 06:50 (read this first)
+
+1. **No Romanian in SOP Lang or in the worlds, ever.** The user, in his words: he wants nothing in Romanian in SOP Lang and the worlds; translation is always a separate layer, done in Chrome with the browser's translation APIs. The `lang/ro/` "pack" was the reviewer's proposal (E3 corrections item 3, 01:45); the user rejects it.
+   - Remove `lang/ro/`, the `PSYS_GEN_LANG` flag, the Romanian frames and the `core.word lang=ro` wires, and the generator code that reads them.
+   - Keep the E3b numbers in `training/results` as a record, with a line saying the approach was rejected.
+   - Romanian stays only in the translation layer: the browser Translator (RO-TRANSLATE-FALLBACK) and the existing translation module. Nothing Romanian goes into `worlds/`, `.sop` files or the reasoner.
+   - Check with a grep that no `.sop` file and no world file holds Romanian words. Add a test that fails if one does.
+2. **Matrix (sopworld) is the default.** It already is; nothing to do.
+3. **Do the next direction:**
+   - **DESCRIBE-ALL.** Write descriptions (`core.describe`, `core.describe.arg`, `core.describe.words`, English `core.word` only) for the remaining worlds, one world per commit. After each world, run the operational and dialogue sets with the generated patterns in `add` and `only` modes, and record right, wrong and not understood. Gate: no new wrong answers in `add`. Report per world how many hand-written lines the description could replace.
+   - **READER-ROUTE.** After the re-vendor of sopworld 0.12.0 at 7a49329: use the library's `interpret` over the English `core.word` facts as a third source of readings, next to rules and the encoder, behind a flag. Measure on gold-para (class b), typos (class a) and loose-words (class e), English only. Romanian goes through the translator first and then the same English route. Gate: no new wrong answers. List every changed case.
+   - Then rerun E2 with `judgedBy` and the library's split candidates.
+4. **The E2 veto as default: the user wants it explained again before deciding.** Leave it off until he decides.
