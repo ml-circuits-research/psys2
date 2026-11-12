@@ -7,7 +7,7 @@
 // words of the board. Browser-safe; it imports its sibling ops.mjs for the tables (a world is plain files).
 import {
   initialState, parseNP, splitDest, kindOfWord, describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP,
-} from './ops.mjs?v=3625df955c';
+} from './ops.mjs?v=a6e67b22ef';
 
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);

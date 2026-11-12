@@ -131,6 +131,8 @@ export function vetoOf(wa, seg, ref, mode) {
   return null;
 }
 
+const HOLDS = new Set(['no-referent', 'words-partial', 'words-best-effort']);
+
 /**
  * Review the readings of a message (segments as the formalizer or the dispatcher gave them) before anything is executed. Returns the segments, with a
  * vetoed one replaced by an unparsed clause that says why (`veto: { kind, why, say?, offer? }`). Never throws: a failure to judge keeps the reading.
@@ -141,7 +143,9 @@ export function reviewSegments(dialog, segments, { mode }) {
   const reviewed = reviewEach(dialog, segments, mode, rs);
   // Nothing is half done: when a clause of a message is vetoed, the readable clauses are held back too, because a later clause may rest on an earlier one
   // ("Azi este vineri. Mâine ce zi este?" must not tell the first and lose the second). The reply says which clause was not read.
-  if (baseMode(mode) !== 'observe' && reviewed.some((s) => s.veto && s.veto.kind !== 'held')) {
+  // (Only for a clause that could not be read as asked. A move in a game that is not running is the spurious extra reading of a correction ("No, the editor",
+  // "sorry, I meant o"): the other clauses of that message are the real ones and run.)
+  if (baseMode(mode) !== 'observe' && reviewed.some((s) => s.veto && HOLDS.has(s.veto.kind))) {
     return reviewed.map((s) => (s.unparsed || !s.wires?.length ? s
       : { ...s, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [], partial: false, bestEffort: null,
         veto: { kind: 'held', why: 'another clause of the message was not acted on', say: `I did not act on "${s.text}" because I could not read all of your message. Please say it again.`, status: 'missing' }, wa: { ...(s.wa ?? {}), veto: 'held' } }));

@@ -382,7 +382,7 @@ function signature(m) {
  * Formalize `text` (English) into wires.
  * @returns {{ segments: object[], wires: object[] }}
  */
-export function formalize(text, { worlds, session, source = 'input', focus = null, context = null, router = defaultRouter } = {}) {
+export function formalize(text, { worlds, session, source = 'input', focus = null, context = null, router = defaultRouter, pick = null } = {}) {
   guard.check('rules');   // cancellation point (turn guard)
   const ctx = normalizeContext(context ?? (focus ? contextFromFocus(focus) : null));
   const set = worlds;
@@ -401,8 +401,21 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const first = ends[0] ?? tokens[0], last = ends[ends.length - 1] ?? tokens[tokens.length - 1];
     const span = expanded ? expanded.span : [first.start, last.end];
     const segText = expanded ? joinText(tokens) : text.slice(span[0], span[1]);
-    const { matches, worlds: scores, decision } = rankMatches(tokens, isQuestion, set, env, lex, ctx, router);
+    const ranked = rankMatches(tokens, isQuestion, set, env, lex, ctx, router);
+    const { worlds: scores, decision } = ranked;
+    let matches = ranked.matches, pickNote = null;
+    if (pick && matches.length > 1) {   // world-aware choice (spec 16): the host may reorder the readings the rules found, judging each against the world instances
+      const wiresOf = (m) => {   // the dialogue wires a reading would emit, without committing anything (ids are scratch)
+        let n = 0;
+        try {
+          const out = buildWires(m.pattern, { ...m.slots, [SEGMENT_SLOT]: { value: segText, text: segText } }, { fresh: () => `pick${++n}`, nextSeq: () => 0, sourceRef: 'pick', worldId: m.pattern.worldId });
+          return out.map((w) => set.legends.normalizeWire(w)).filter((r) => !r.errors.length).map((r) => r.wire);
+        } catch { return null; }
+      };
+      try { const r = pick(matches, { text: segText, wiresOf }); if (r?.matches?.length) { matches = r.matches; pickNote = r.note ?? null; } } catch { matches = ranked.matches; }
+    }
     const seg = { text: segText, span, isQuestion, worlds: scores, routing: decision, match: null, wires: [], unparsed: true, alternatives: [], errors: [] };
+    if (pickNote) seg.pick = pickNote;
     if (expanded) seg.expanded = expanded.info;
     const sourceRef = `${source}#${span[0]}-${span[1]}`;
     for (const m of matches) {
