@@ -33,7 +33,7 @@ Each reason is recorded on the replaced segment as `veto: { kind, why, say?, off
 
 What the library's `score` adds to the veto: for a reading that is a request or question of a matrix world whose action or question the matrix declares, `score` runs it on the instance (`ok`, `violations`, `lacks`, `action.available`, `answer`). A refusal by the world's rules ("There is nothing to undo", "that does not add up") is already the right answer with a reason, so it is **recorded** (`wa`) and **not vetoed**: vetoing it would turn a correct explanation into "not understood" (measured: 98 right against 7 wrong among the refused readings). Most actions are still the operations' (spec 15: the matrix declares few of them), so `score` cannot judge them (`wa.judged = false`); that is why `no-referent` and `no-game` read the worlds' own state through hooks and the session context.
 
-## 4. The choice (the library's order, one host change)
+## 4. The choice (the library's order, one host criterion)
 
 For one clause, the candidate readings are: the distinct rules readings (`pick` hook of `formalize`, at most four, in the router's order), and the verified candidates of the best-effort reader. Each is scored with `ReasonerSession.score` (the library's `score` on the instance of the world that owns its request or question, or on a fork of the base when the session has none: the same state, `peek`), and ordered with the library's `rank` and its default `RANKING`: **consistent, referents left ambiguous, lacks, words left out, assumptions**, then the order given (the router's). Every place has an explanation (`why`, `on`, `lostTo`), recorded in `seg.pick`.
 
@@ -136,3 +136,22 @@ See `training/results/reader-route-2026-11-12.md` (and `-splits.json`). Rules / 
 - Coverage of `means`: kids.shop 173 of 173 words (0.12: 0 unknown), docs.editor 247 of 247 (0.12: 247 unknown), geo.map 344 of 344 (0.12: 341 unknown); no `unknown-word` warning after the mapping.
 - The reader adds little because only three worlds have a description and it reads only the world the user is in; gold-para (class b) and loose-words (class e) gain nothing (no accepted reading of 14 and 105 messages of described worlds). Its value grows with the descriptions, with no change of code.
 - The library's split candidates are read and judged; a split is taken only when every frame reads. In the measurement of the reader alone (`scripts/e2-splits.mjs`, 1,500 messages of the three worlds) 11 accepted readings are splits of compound messages; none changed an outcome.
+
+## 8. One declaration of what an argument fills (Q2 item 2, J2; sopworld 0.13.1)
+
+A host-run action (one the operations carry out and the matrix does not declare) is declared once, in SOP Lang and English, by `core.describe.arg` with a `slot=<type>.<key>` that names the slot of the world's legend the argument fills:
+
+```
+@describe.chess.level.set.n core.describe.arg
+    of=$describe.chess.level.set
+    name=n
+    class=number
+    slot=chess.game.level
+```
+
+- **Where.** In the world's `describe.sop`, on the `core.describe.arg` wire of the argument (a world that has wording there, like `games.chess`, adds one line to the wire it already has). `slotDeclarations(text)` (`src/worlds/describe.mjs`) cuts a `describe.sop` down to the `core.describe.arg` wires that have a `slot=` and the `core.describe` wires they belong to; the loader reads only that cut when the generator and the reader are off, and `scripts/build-webchat.mjs` ships only that cut (never the wording). A world's `argSlots` is `action -> (argument -> slot)`. A description without wording generates nothing, so a file that only declares slots is allowed.
+- **The library's judgement (J2).** When the reasoner builds an instance it derives, for every declared action the matrix does not declare, a type named like the action whose slots are the arguments, with the kind, enum and range of the slot they name (`createReasoner`, "parameter types"); a slot the legends do not declare is a load problem. The library's `score` then judges a reading of that action by its fallback (a value that does not fit its slot's kind, enum or range makes it inconsistent: `judgedBy` `slots`; all that could run passing: `fallback`). Nothing else changes: no deny of the world is touched, no required parameter is declared (so none lacks).
+- **A declaration is only right when the argument is canonical.** `ui.rate value` was tried against `ui.shell.view.rate` (integer, 50 to 200): the formalizer emits both "150" and "1.5" for a rate, so "Set the speech rate to 1.5" was judged out of range and `choose` made 2 new wrong answers; the declaration was removed. Likewise the enums of `art.draw` (`draw.add kind`, `draw.mood w`, `draw.ground g`) are canonical names while the arguments are the user's words ("puppy", "evening"): not declared. A canonical value needs the formalizer to emit it (an `emit` that says the canonical word), not the library to guess.
+- **What is not derived (and why).** `checkReferents` (section 3) stays a hook of `art.draw` and `diagram.sketch`. Its arguments are noun phrases and a whole segment (`diagram.connect arg.text="connect A to B with a line"`, `draw.remove arg.phrase="the red house"`), which no argument-to-slot declaration can resolve: the names are inside the text, and finding them is the world's reading. It needs the patterns to emit the names as arguments (`arg.from`, `arg.to`), which changes the patterns of the diagram and the drawing and is a separate task. A hook for a referent that is a plain argument (a value outside the enum of its slot is a thing the world does not have) is what the declaration would give; no world has such an argument yet.
+- **Measurement** (`training/results/e2-arg-slots-2026-11-12.md`): with `chess.level n` declared, 28 more readings are judged (`fallback`), none changes outcome, 0 new wrong in `veto` (default) and `choose`.
+

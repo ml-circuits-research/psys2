@@ -9,7 +9,7 @@
 import { parse, get, getAll } from '../soplang/index.mjs';
 import { Legends } from '../legends/index.mjs';
 import { expandShape } from '../formalizer/rules/shapes.mjs';
-import { describePatterns, descriptionFor, readDescriptionWires, emitKey, EN } from './describe.mjs';
+import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs';
 import { checkPattern } from '../formalizer/rules/index.mjs';
 import { lexIndex } from './lexicon.mjs';
 import { budget } from '../dialog/budget.mjs';
@@ -190,7 +190,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
     for (const [base, extra] of Object.entries(MATRIX_EXTRAS)) if (files[extra] != null) files[base] = base === 'templates.sop' ? files[extra] + '\n' + (files[base] ?? '') : (files[base] ?? '') + '\n' + files[extra];
   }
-  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() && !readerOn() ? null : files[f])]));
+  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() && !readerOn() ? slotDeclarations(files[f]) || null : files[f])]));
   w.manifest = wires['world.sop'].find((x) => x.type === 'core.world') ?? null;
   if (!w.manifest) w.errors.push({ message: 'world.sop has no core.world wire' });
   else {
@@ -245,6 +245,8 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
   }));
   const read = readDescriptionWires(wires['describe.sop'] ?? []);
   w.descriptions = [...read.descriptions.values()];   // core.describe wires with their arguments and wording (spec 03 section 2c)
+  w.argSlots = new Map();                              // action (the `op` of a description) -> Map(argument -> `<type>.<key>`): what the arguments of a host-run action fill
+  for (const d of w.descriptions) { const m = new Map(d.args.filter((a) => a.slot).map((a) => [a.name, a.slot])); if (m.size && d.op) w.argSlots.set(d.op, m); }
   w.descReader = read;                                 // { descriptions, words, errors }: a language pack adds to it
   for (const m of read.errors) w.errors.push({ file: 'describe.sop', message: m });
   w.kbRaw = wires['kb.sop'];
@@ -269,7 +271,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   for (const id of ids) {
     const files = {};
     const matrix = reasoner === 'matrix';
-    await Promise.all([...FILES, ...(genMode() || readerOn() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
+    await Promise.all([...FILES, 'describe.sop', ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
     let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, closeOffer = null, problem = null, whyWords = null;
     if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; closeOffer = m?.closeOffer ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }

@@ -125,6 +125,27 @@ export async function createReasoner(set, { lib = null } = {}) {
       if (errors.length) { problems.push(`${what}: ${errors[0].line}:${errors[0].column} ${errors[0].message}`); continue; }
       load(what, wires.map((w) => libWire(lib, w)));
     }
+    // The parameter types of the host-run actions (spec 16 section 8): `core.describe.arg slot=<type>.<key>` says which slot of the legend an argument fills; the library judges an
+    // action it does not declare against the slots of a type named like it (J2, sopworld 0.13.1), so that type is derived here from the slots the arguments name (kind, enum, range).
+    {
+      const c = raw._compiled();
+      const lines = [];
+      for (const m of matrixWorlds(id)) {
+        for (const [action, args] of byId.get(m).argSlots ?? []) {
+          if (c.actions.get(action) || c.slots.get(action)) continue;   // the matrix declares it, or the type exists already
+          const keys = [];
+          for (const [arg, slot] of args) {
+            const at = slot.lastIndexOf('.');
+            const def = at > 0 ? c.slots.get(slot.slice(0, at))?.get(slot.slice(at + 1)) : null;
+            if (!def) { problems.push(`${m}/describe.sop: ${action}.${arg}: slot ${slot} is not declared by the legends`); continue; }
+            const extra = ['kind', 'enum', 'min', 'max', 'step'].flatMap((k) => (def.attrs?.[k] ?? []).map((v) => `${k}=${v}`));
+            keys.push(`@${action}.${arg} core.slot of=${action} key=${arg} ${extra.join(' ')}`.trim());
+          }
+          if (keys.length) lines.push(`@${action} core.type`, ...keys);
+        }
+      }
+      if (lines.length) load('parameter types', lines.join('\n'));
+    }
     return base;
   };
   const owners = worlds.map((w) => w.id).sort((a, b) => b.length - a.length);
