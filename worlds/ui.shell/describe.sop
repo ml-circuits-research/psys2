@@ -1,0 +1,643 @@
+@describe.ui.newGame core.describe
+    op=ui.newGame
+    intent=command
+    emit="@{_} core.request action=ui.newGame"
+    priority=11
+    frames=phr
+
+@describe.ui.newGame.en core.describe.words
+    of=$describe.ui.newGame
+    lang=en
+    phrase=$phrase.lang.intent.newgame
+
+@describe.ui.giveUp core.describe
+    op=ui.giveUp
+    intent=command
+    emit="@{_} core.request action=ui.giveUp"
+    priority=10
+    frames=phr
+
+@describe.ui.giveUp.en core.describe.words
+    of=$describe.ui.giveUp
+    lang=en
+    phrase=$phrase.lang.intent.giveup
+
+@describe.ui.hint core.describe
+    op=ui.hint
+    intent=command
+    emit="@{_} core.request action=ui.hint"
+    priority=10
+    frames=phr
+    frames=imp
+
+@describe.ui.hint.en core.describe.words
+    of=$describe.ui.hint
+    lang=en
+    phrase=$phrase.lang.intent.hint
+    verb=$w.en.give.ui.hint
+    verb=$w.en.tell.ui.hint
+    verb=$w.en.show.ui.hint
+    noun=$w.en.hint.ui.hint
+    noun=$w.en.clue.ui.hint
+
+@describe.ui.back core.describe
+    op=ui.back
+    intent=command
+    emit="@{_} core.request action=ui.back"
+    priority=10
+    frames=phr
+
+@describe.ui.back.en core.describe.words
+    of=$describe.ui.back
+    lang=en
+    phrase=$phrase.lang.intent.goback
+
+@describe.ui.whichTab core.describe
+    op=ui.whichTab
+    intent=command
+    emit="@{_} core.request action=ui.whichTab"
+    priority=10
+    frames=phr
+
+@describe.ui.whichTab.en core.describe.words
+    of=$describe.ui.whichTab
+    lang=en
+    phrase=$phrase.lang.intent.whichtab
+
+@describe.ui.chooseGame core.describe
+    op=ui.chooseGame
+    intent=command
+    emit="@{_} core.request action=ui.chooseGame"
+    priority=11
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+
+@describe.ui.chooseGame.en core.describe.words
+    of=$describe.ui.chooseGame
+    lang=en
+    verb=$w.en.play.ui.chooseGame
+    noun=$w.en.game.ui.chooseGame
+    noun=$w.en.something.ui.chooseGame
+    noun=$w.en.games.ui.chooseGame
+
+@describe.ui.speaker.on core.describe
+    op=ui.speaker
+    intent=command
+    emit="@{_} core.request action=ui.speaker arg.on=true"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.speaker.on.en core.describe.words
+    of=$describe.ui.speaker.on
+    lang=en
+    verb=$w.en.turn_on.ui.speaker
+    verb=$w.en.switch_on.ui.speaker
+    verb=$w.en.enable.ui.speaker
+    verb=$w.en.activate.ui.speaker
+    verb=$w.en.unmute.ui.speaker
+    verb=$w.en.start.ui.speaker
+    verb=$w.en.resume.ui.speaker
+    noun=$w.en.speaker.ui.speaker
+    noun=$w.en.sound.ui.speaker
+    noun=$w.en.voice.ui.speaker
+    noun=$w.en.speech.ui.speaker
+    noun=$w.en.audio.ui.speaker
+
+@describe.ui.speaker.off core.describe
+    op=ui.speaker
+    intent=command
+    emit="@{_} core.request action=ui.speaker arg.on=false"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.speaker.off.en core.describe.words
+    of=$describe.ui.speaker.off
+    lang=en
+    verb=$w.en.turn_off.ui.speaker
+    verb=$w.en.switch_off.ui.speaker
+    verb=$w.en.disable.ui.speaker
+    verb=$w.en.deactivate.ui.speaker
+    verb=$w.en.mute.ui.speaker
+    verb=$w.en.stop.ui.speaker
+    verb=$w.en.pause.ui.speaker
+    noun=$w.en.speaker.ui.speaker
+    noun=$w.en.sound.ui.speaker
+    noun=$w.en.voice.ui.speaker
+    noun=$w.en.speech.ui.speaker
+    noun=$w.en.audio.ui.speaker
+
+@describe.ui.listening.on core.describe
+    op=ui.listening
+    intent=command
+    emit="@{_} core.request action=ui.listening arg.on=true"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.listening.on.en core.describe.words
+    of=$describe.ui.listening.on
+    lang=en
+    verb=$w.en.turn_on.ui.listening
+    verb=$w.en.switch_on.ui.listening
+    verb=$w.en.enable.ui.listening
+    verb=$w.en.activate.ui.listening
+    verb=$w.en.unmute.ui.listening
+    verb=$w.en.start.ui.listening
+    verb=$w.en.resume.ui.listening
+    noun=$w.en.listening.ui.listening
+    noun=$w.en.microphone.ui.listening
+    noun=$w.en.mic.ui.listening
+
+@describe.ui.listening.off core.describe
+    op=ui.listening
+    intent=command
+    emit="@{_} core.request action=ui.listening arg.on=false"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.listening.off.en core.describe.words
+    of=$describe.ui.listening.off
+    lang=en
+    verb=$w.en.turn_off.ui.listening
+    verb=$w.en.switch_off.ui.listening
+    verb=$w.en.disable.ui.listening
+    verb=$w.en.deactivate.ui.listening
+    verb=$w.en.mute.ui.listening
+    verb=$w.en.stop.ui.listening
+    verb=$w.en.pause.ui.listening
+    noun=$w.en.listening.ui.listening
+    noun=$w.en.microphone.ui.listening
+    noun=$w.en.mic.ui.listening
+
+@describe.ui.handsFree.on core.describe
+    op=ui.handsFree
+    intent=command
+    emit="@{_} core.request action=ui.handsFree arg.on=true"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.handsFree.on.en core.describe.words
+    of=$describe.ui.handsFree.on
+    lang=en
+    verb=$w.en.turn_on.ui.handsFree
+    verb=$w.en.switch_on.ui.handsFree
+    verb=$w.en.enable.ui.handsFree
+    verb=$w.en.activate.ui.handsFree
+    verb=$w.en.unmute.ui.handsFree
+    verb=$w.en.start.ui.handsFree
+    verb=$w.en.resume.ui.handsFree
+    noun=$w.en.hands-free_mode.ui.handsFree
+    noun=$w.en.hands-free.ui.handsFree
+    noun=$w.en.handsfree.ui.handsFree
+
+@describe.ui.handsFree.off core.describe
+    op=ui.handsFree
+    intent=command
+    emit="@{_} core.request action=ui.handsFree arg.on=false"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.handsFree.off.en core.describe.words
+    of=$describe.ui.handsFree.off
+    lang=en
+    verb=$w.en.turn_off.ui.handsFree
+    verb=$w.en.switch_off.ui.handsFree
+    verb=$w.en.disable.ui.handsFree
+    verb=$w.en.deactivate.ui.handsFree
+    verb=$w.en.mute.ui.handsFree
+    verb=$w.en.stop.ui.handsFree
+    verb=$w.en.pause.ui.handsFree
+    noun=$w.en.hands-free_mode.ui.handsFree
+    noun=$w.en.hands-free.ui.handsFree
+    noun=$w.en.handsfree.ui.handsFree
+
+@describe.ui.rate.slower core.describe
+    op=ui.rate
+    intent=command
+    emit="@{_} core.request action=ui.rate arg.dir=slower"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.rate.slower.en core.describe.words
+    of=$describe.ui.rate.slower
+    lang=en
+    verb=$w.en.speak.ui.rate
+    verb=$w.en.talk.ui.rate
+    verb=$w.en.read.ui.rate
+    verb=$w.en.go.ui.rate
+    verb=$w.en.say_it.ui.rate
+    verb=$w.en.answer.ui.rate
+    noun=$w.en.slower.ui.rate
+    noun=$w.en.slowly.ui.rate
+    noun=$w.en.slow.ui.rate
+
+@describe.ui.rate.faster core.describe
+    op=ui.rate
+    intent=command
+    emit="@{_} core.request action=ui.rate arg.dir=faster"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.rate.faster.en core.describe.words
+    of=$describe.ui.rate.faster
+    lang=en
+    verb=$w.en.speak.ui.rate
+    verb=$w.en.talk.ui.rate
+    verb=$w.en.read.ui.rate
+    verb=$w.en.go.ui.rate
+    verb=$w.en.say_it.ui.rate
+    verb=$w.en.answer.ui.rate
+    noun=$w.en.faster.ui.rate
+    noun=$w.en.quicker.ui.rate
+    noun=$w.en.quickly.ui.rate
+    noun=$w.en.fast.ui.rate
+
+@describe.ui.rate.value core.describe
+    op=ui.rate
+    intent=command
+    emit="@{_} core.request action=ui.rate arg.value={n}"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.rate.value.n core.describe.arg
+    of=$describe.ui.rate.value
+    name=n
+    class=number
+
+@describe.ui.rate.value.en core.describe.words
+    of=$describe.ui.rate.value
+    lang=en
+    verb=$w.en.set.ui.rate
+    verb=$w.en.change.ui.rate
+    verb=$w.en.make.ui.rate
+    verb=$w.en.put.ui.rate
+    noun=$w.en.rate.ui.rate
+    noun=$w.en.speed.ui.rate
+    prep.n=$w.en.to.ui.rate.n
+    prep.n=$w.en.at.ui.rate.n
+
+@describe.ui.language core.describe
+    op=ui.language
+    intent=command
+    emit="@{_} core.request action=ui.language arg.lang={l}"
+    priority=10
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+    frames=short
+
+@describe.ui.language.l core.describe.arg
+    of=$describe.ui.language
+    name=l
+    class=lex.ui.shell.langs
+
+@describe.ui.language.en core.describe.words
+    of=$describe.ui.language
+    lang=en
+    verb=$w.en.switch.ui.language
+    verb=$w.en.change.ui.language
+    verb=$w.en.go.ui.language
+    verb=$w.en.talk.ui.language
+    verb=$w.en.speak.ui.language
+    verb=$w.en.answer.ui.language
+    verb=$w.en.reply.ui.language
+    verb=$w.en.use.ui.language
+    prep.l=$w.en.to.ui.language.l
+    prep.l=$w.en.in.ui.language.l
+    prep.l=$w.en.into.ui.language.l
+    det.l=$w.en.the.ui.language.l
+
+@describe.ui.openTab core.describe
+    op=ui.openTab
+    intent=command
+    emit="@{_} core.request action=ui.openTab arg.tab={tab}"
+    priority=14
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.openTab.tab core.describe.arg
+    of=$describe.ui.openTab
+    name=tab
+    class=lex.ui.shell.tabs
+
+@describe.ui.openTab.en core.describe.words
+    of=$describe.ui.openTab
+    lang=en
+    verb=$w.en.open.ui.openTab
+    verb=$w.en.show.ui.openTab
+    verb=$w.en.go_to.ui.openTab
+    verb=$w.en.switch_to.ui.openTab
+    verb=$w.en.select.ui.openTab
+    verb=$w.en.take_me_to.ui.openTab
+    det.tab=$w.en.the.ui.openTab.tab
+    det.tab=$w.en.my.ui.openTab.tab
+    det.tab=$w.en.your.ui.openTab.tab
+    unit.tab=$w.en.tab.ui.openTab.tab
+    unit.tab=$w.en.page.ui.openTab.tab
+    unit.tab=$w.en.screen.ui.openTab.tab
+    unit.tab=$w.en.panel.ui.openTab.tab
+    unit.tab=$w.en.window.ui.openTab.tab
+
+@describe.ui.openTab.declared core.describe
+    op=ui.openTab
+    intent=command
+    emit="@{_} core.request action=ui.openTab arg.tab={tab}"
+    priority=14
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.openTab.declared.tab core.describe.arg
+    of=$describe.ui.openTab.declared
+    name=tab
+    class=lex.ui.shell.declaredtabs
+
+@describe.ui.openTab.declared.en core.describe.words
+    of=$describe.ui.openTab.declared
+    lang=en
+    verb=$w.en.open.ui.openTab
+    verb=$w.en.show.ui.openTab
+    verb=$w.en.go_to.ui.openTab
+    verb=$w.en.switch_to.ui.openTab
+    verb=$w.en.select.ui.openTab
+    verb=$w.en.take_me_to.ui.openTab
+    det.tab=$w.en.the.ui.openTab.tab
+    det.tab=$w.en.my.ui.openTab.tab
+    det.tab=$w.en.your.ui.openTab.tab
+    unit.tab=$w.en.tab.ui.openTab.tab
+    unit.tab=$w.en.page.ui.openTab.tab
+    unit.tab=$w.en.screen.ui.openTab.tab
+    unit.tab=$w.en.panel.ui.openTab.tab
+    unit.tab=$w.en.window.ui.openTab.tab
+
+@describe.ui.playGame core.describe
+    op=ui.playGame
+    intent=command
+    emit="@{_} core.request action=ui.playGame arg.tab={tab}"
+    priority=14
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+
+@describe.ui.playGame.tab core.describe.arg
+    of=$describe.ui.playGame
+    name=tab
+    class=lex.ui.shell.playtabs
+
+@describe.ui.playGame.en core.describe.words
+    of=$describe.ui.playGame
+    lang=en
+    verb=$w.en.play.ui.playGame
+    verb=$w.en.start.ui.playGame
+    verb=$w.en.begin.ui.playGame
+    verb=$w.en.launch.ui.playGame
+    verb=$w.en.have.ui.playGame
+    det.tab=$w.en.a.ui.playGame.tab
+    det.tab=$w.en.the.ui.playGame.tab
+    det.tab=$w.en.a_game_of.ui.playGame.tab
+    unit.tab=$w.en.game.ui.playGame.tab
+    unit.tab=$w.en.again.ui.playGame.tab
+
+@describe.ui.phraseLog.show core.describe
+    op=ui.phraseLog
+    intent=command
+    emit="@{_} core.request action=ui.phraseLog arg.what=show"
+    priority=14
+    frames=imp
+    frames=can
+
+@describe.ui.phraseLog.show.en core.describe.words
+    of=$describe.ui.phraseLog.show
+    lang=en
+    verb=$w.en.show.ui.phraseLog
+    verb=$w.en.display.ui.phraseLog
+    verb=$w.en.view.ui.phraseLog
+    verb=$w.en.open.ui.phraseLog
+    noun=$w.en.phrase_log.ui.phraseLog
+    noun=$w.en.phrase_history.ui.phraseLog
+    noun=$w.en.sentence_log.ui.phraseLog
+    rest=$w.en.list.ui.phraseLog
+
+@describe.ui.phraseLog.export core.describe
+    op=ui.phraseLog
+    intent=command
+    emit="@{_} core.request action=ui.phraseLog arg.what=export"
+    priority=14
+    frames=imp
+    frames=can
+
+@describe.ui.phraseLog.export.en core.describe.words
+    of=$describe.ui.phraseLog.export
+    lang=en
+    verb=$w.en.export.ui.phraseLog
+    verb=$w.en.download.ui.phraseLog
+    verb=$w.en.save.ui.phraseLog
+    noun=$w.en.phrase_log.ui.phraseLog
+    noun=$w.en.phrases.ui.phraseLog
+    noun=$w.en.phrase_history.ui.phraseLog
+
+@describe.ui.settings.open core.describe
+    op=ui.settings
+    intent=command
+    emit="@{_} core.request action=ui.settings arg.what=open"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.settings.open.en core.describe.words
+    of=$describe.ui.settings.open
+    lang=en
+    verb=$w.en.open.ui.settings
+    verb=$w.en.show.ui.settings
+    verb=$w.en.go_to.ui.settings
+    noun=$w.en.settings.ui.settings
+    noun=$w.en.options.ui.settings
+    noun=$w.en.preferences.ui.settings
+
+@describe.ui.settings.close core.describe
+    op=ui.settings
+    intent=command
+    emit="@{_} core.request action=ui.settings arg.what=close"
+    priority=10
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ui.settings.close.en core.describe.words
+    of=$describe.ui.settings.close
+    lang=en
+    verb=$w.en.close.ui.settings
+    verb=$w.en.hide.ui.settings
+    verb=$w.en.leave.ui.settings
+    verb=$w.en.exit.ui.settings
+    noun=$w.en.settings.ui.settings
+    noun=$w.en.options.ui.settings
+    noun=$w.en.preferences.ui.settings
+
+@w.en.give.ui.hint core.word text=give means=ui.hint
+@w.en.tell.ui.hint core.word text=tell means=ui.hint
+@w.en.show.ui.hint core.word text=show means=ui.hint
+@w.en.hint.ui.hint core.word text=hint means=ui.hint
+@w.en.clue.ui.hint core.word text=clue means=ui.hint
+@w.en.play.ui.chooseGame core.word text=play means=ui.chooseGame
+@w.en.game.ui.chooseGame core.word text=game means=ui.chooseGame
+@w.en.something.ui.chooseGame core.word text=something means=ui.chooseGame
+@w.en.games.ui.chooseGame core.word text=games means=ui.chooseGame
+@w.en.turn_on.ui.speaker core.word text="turn on" means=ui.speaker
+@w.en.switch_on.ui.speaker core.word text="switch on" means=ui.speaker
+@w.en.enable.ui.speaker core.word text=enable means=ui.speaker
+@w.en.activate.ui.speaker core.word text=activate means=ui.speaker
+@w.en.unmute.ui.speaker core.word text=unmute means=ui.speaker
+@w.en.start.ui.speaker core.word text=start means=ui.speaker
+@w.en.resume.ui.speaker core.word text=resume means=ui.speaker
+@w.en.speaker.ui.speaker core.word text=speaker means=ui.speaker
+@w.en.sound.ui.speaker core.word text=sound means=ui.speaker
+@w.en.voice.ui.speaker core.word text=voice means=ui.speaker
+@w.en.speech.ui.speaker core.word text=speech means=ui.speaker
+@w.en.audio.ui.speaker core.word text=audio means=ui.speaker
+@w.en.turn_off.ui.speaker core.word text="turn off" means=ui.speaker
+@w.en.switch_off.ui.speaker core.word text="switch off" means=ui.speaker
+@w.en.disable.ui.speaker core.word text=disable means=ui.speaker
+@w.en.deactivate.ui.speaker core.word text=deactivate means=ui.speaker
+@w.en.mute.ui.speaker core.word text=mute means=ui.speaker
+@w.en.stop.ui.speaker core.word text=stop means=ui.speaker
+@w.en.pause.ui.speaker core.word text=pause means=ui.speaker
+@w.en.turn_on.ui.listening core.word text="turn on" means=ui.listening
+@w.en.switch_on.ui.listening core.word text="switch on" means=ui.listening
+@w.en.enable.ui.listening core.word text=enable means=ui.listening
+@w.en.activate.ui.listening core.word text=activate means=ui.listening
+@w.en.unmute.ui.listening core.word text=unmute means=ui.listening
+@w.en.start.ui.listening core.word text=start means=ui.listening
+@w.en.resume.ui.listening core.word text=resume means=ui.listening
+@w.en.listening.ui.listening core.word text=listening means=ui.listening
+@w.en.microphone.ui.listening core.word text=microphone means=ui.listening
+@w.en.mic.ui.listening core.word text=mic means=ui.listening
+@w.en.turn_off.ui.listening core.word text="turn off" means=ui.listening
+@w.en.switch_off.ui.listening core.word text="switch off" means=ui.listening
+@w.en.disable.ui.listening core.word text=disable means=ui.listening
+@w.en.deactivate.ui.listening core.word text=deactivate means=ui.listening
+@w.en.mute.ui.listening core.word text=mute means=ui.listening
+@w.en.stop.ui.listening core.word text=stop means=ui.listening
+@w.en.pause.ui.listening core.word text=pause means=ui.listening
+@w.en.turn_on.ui.handsFree core.word text="turn on" means=ui.handsFree
+@w.en.switch_on.ui.handsFree core.word text="switch on" means=ui.handsFree
+@w.en.enable.ui.handsFree core.word text=enable means=ui.handsFree
+@w.en.activate.ui.handsFree core.word text=activate means=ui.handsFree
+@w.en.unmute.ui.handsFree core.word text=unmute means=ui.handsFree
+@w.en.start.ui.handsFree core.word text=start means=ui.handsFree
+@w.en.resume.ui.handsFree core.word text=resume means=ui.handsFree
+@w.en.hands-free_mode.ui.handsFree core.word text="hands-free mode" means=ui.handsFree
+@w.en.hands-free.ui.handsFree core.word text=hands-free means=ui.handsFree
+@w.en.handsfree.ui.handsFree core.word text=handsfree means=ui.handsFree
+@w.en.turn_off.ui.handsFree core.word text="turn off" means=ui.handsFree
+@w.en.switch_off.ui.handsFree core.word text="switch off" means=ui.handsFree
+@w.en.disable.ui.handsFree core.word text=disable means=ui.handsFree
+@w.en.deactivate.ui.handsFree core.word text=deactivate means=ui.handsFree
+@w.en.mute.ui.handsFree core.word text=mute means=ui.handsFree
+@w.en.stop.ui.handsFree core.word text=stop means=ui.handsFree
+@w.en.pause.ui.handsFree core.word text=pause means=ui.handsFree
+@w.en.speak.ui.rate core.word text=speak means=ui.rate
+@w.en.talk.ui.rate core.word text=talk means=ui.rate
+@w.en.read.ui.rate core.word text=read means=ui.rate
+@w.en.go.ui.rate core.word text=go means=ui.rate
+@w.en.say_it.ui.rate core.word text="say it" means=ui.rate
+@w.en.answer.ui.rate core.word text=answer means=ui.rate
+@w.en.slower.ui.rate core.word text=slower means=ui.rate
+@w.en.slowly.ui.rate core.word text=slowly means=ui.rate
+@w.en.slow.ui.rate core.word text=slow means=ui.rate
+@w.en.faster.ui.rate core.word text=faster means=ui.rate
+@w.en.quicker.ui.rate core.word text=quicker means=ui.rate
+@w.en.quickly.ui.rate core.word text=quickly means=ui.rate
+@w.en.fast.ui.rate core.word text=fast means=ui.rate
+@w.en.set.ui.rate core.word text=set means=ui.rate
+@w.en.change.ui.rate core.word text=change means=ui.rate
+@w.en.make.ui.rate core.word text=make means=ui.rate
+@w.en.put.ui.rate core.word text=put means=ui.rate
+@w.en.rate.ui.rate core.word text=rate means=ui.rate
+@w.en.speed.ui.rate core.word text=speed means=ui.rate
+@w.en.to.ui.rate.n core.word text=to means=ui.rate.n
+@w.en.at.ui.rate.n core.word text=at means=ui.rate.n
+@w.en.switch.ui.language core.word text=switch means=ui.language
+@w.en.change.ui.language core.word text=change means=ui.language
+@w.en.go.ui.language core.word text=go means=ui.language
+@w.en.talk.ui.language core.word text=talk means=ui.language
+@w.en.speak.ui.language core.word text=speak means=ui.language
+@w.en.answer.ui.language core.word text=answer means=ui.language
+@w.en.reply.ui.language core.word text=reply means=ui.language
+@w.en.use.ui.language core.word text=use means=ui.language
+@w.en.to.ui.language.l core.word text=to means=ui.language.l
+@w.en.in.ui.language.l core.word text=in means=ui.language.l
+@w.en.into.ui.language.l core.word text=into means=ui.language.l
+@w.en.the.ui.language.l core.word text=the means=ui.language.l
+@w.en.open.ui.openTab core.word text=open means=ui.openTab
+@w.en.show.ui.openTab core.word text=show means=ui.openTab
+@w.en.go_to.ui.openTab core.word text="go to" means=ui.openTab
+@w.en.switch_to.ui.openTab core.word text="switch to" means=ui.openTab
+@w.en.select.ui.openTab core.word text=select means=ui.openTab
+@w.en.take_me_to.ui.openTab core.word text="take me to" means=ui.openTab
+@w.en.the.ui.openTab.tab core.word text=the means=ui.openTab.tab
+@w.en.my.ui.openTab.tab core.word text=my means=ui.openTab.tab
+@w.en.your.ui.openTab.tab core.word text=your means=ui.openTab.tab
+@w.en.tab.ui.openTab.tab core.word text=tab means=ui.openTab.tab
+@w.en.page.ui.openTab.tab core.word text=page means=ui.openTab.tab
+@w.en.screen.ui.openTab.tab core.word text=screen means=ui.openTab.tab
+@w.en.panel.ui.openTab.tab core.word text=panel means=ui.openTab.tab
+@w.en.window.ui.openTab.tab core.word text=window means=ui.openTab.tab
+@w.en.play.ui.playGame core.word text=play means=ui.playGame
+@w.en.start.ui.playGame core.word text=start means=ui.playGame
+@w.en.begin.ui.playGame core.word text=begin means=ui.playGame
+@w.en.launch.ui.playGame core.word text=launch means=ui.playGame
+@w.en.have.ui.playGame core.word text=have means=ui.playGame
+@w.en.a.ui.playGame.tab core.word text=a means=ui.playGame.tab
+@w.en.the.ui.playGame.tab core.word text=the means=ui.playGame.tab
+@w.en.a_game_of.ui.playGame.tab core.word text="a game of" means=ui.playGame.tab
+@w.en.game.ui.playGame.tab core.word text=game means=ui.playGame.tab
+@w.en.again.ui.playGame.tab core.word text=again means=ui.playGame.tab
+@w.en.show.ui.phraseLog core.word text=show means=ui.phraseLog
+@w.en.display.ui.phraseLog core.word text=display means=ui.phraseLog
+@w.en.view.ui.phraseLog core.word text=view means=ui.phraseLog
+@w.en.open.ui.phraseLog core.word text=open means=ui.phraseLog
+@w.en.phrase_log.ui.phraseLog core.word text="phrase log" means=ui.phraseLog
+@w.en.phrase_history.ui.phraseLog core.word text="phrase history" means=ui.phraseLog
+@w.en.sentence_log.ui.phraseLog core.word text="sentence log" means=ui.phraseLog
+@w.en.list.ui.phraseLog core.word text=list means=ui.phraseLog
+@w.en.export.ui.phraseLog core.word text=export means=ui.phraseLog
+@w.en.download.ui.phraseLog core.word text=download means=ui.phraseLog
+@w.en.save.ui.phraseLog core.word text=save means=ui.phraseLog
+@w.en.phrases.ui.phraseLog core.word text=phrases means=ui.phraseLog
+@w.en.open.ui.settings core.word text=open means=ui.settings
+@w.en.show.ui.settings core.word text=show means=ui.settings
+@w.en.go_to.ui.settings core.word text="go to" means=ui.settings
+@w.en.settings.ui.settings core.word text=settings means=ui.settings
+@w.en.options.ui.settings core.word text=options means=ui.settings
+@w.en.preferences.ui.settings core.word text=preferences means=ui.settings
+@w.en.close.ui.settings core.word text=close means=ui.settings
+@w.en.hide.ui.settings core.word text=hide means=ui.settings
+@w.en.leave.ui.settings core.word text=leave means=ui.settings
+@w.en.exit.ui.settings core.word text=exit means=ui.settings

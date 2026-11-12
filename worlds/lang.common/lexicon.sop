@@ -2946,3 +2946,39 @@
     alt=am_i_to_move
     alt=do_i_move_now
     alt=do_i_play_now
+
+@phrase.lang.intent.goback core.phrase
+    doc="Go back to the previous screen or tab."
+    alt=go_back
+    alt=back
+    alt=return
+    alt=go_back_one
+    alt=take_me_back
+    alt=switch_back
+    alt=previous_tab
+    alt=the_previous_tab
+    alt=go_to_the_previous_tab
+    alt=go_back_to_the_previous_tab
+    alt=return_to_the_previous_tab
+    alt=return_to_the_last_tab
+    alt=the_last_tab
+    alt=go_back_to_where_i_was
+    alt=take_me_back_to_where_i_was
+    alt=return_to_where_i_was
+
+@phrase.lang.intent.whichtab core.phrase
+    doc="Ask which tab or screen is open."
+    alt=which_tab_am_i_on
+    alt=what_tab_am_i_on
+    alt=which_tab_is_this
+    alt=what_tab_is_this
+    alt=which_tab_is_open
+    alt=which_page_am_i_on
+    alt=which_screen_am_i_on
+    alt=what_screen_is_this
+    alt=where_am_i
+    alt=what_is_open
+    alt=what_am_i_looking_at
+    alt=what_is_on_the_screen
+    alt=what_is_this_screen
+    alt=what_is_this_page
