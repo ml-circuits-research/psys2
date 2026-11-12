@@ -705,3 +705,12 @@ Key numbers (rules mode): English core (operational + dialogues) 131 non-right, 
 - Item 4 (delete the hacks) was NOT done, as the task rules: model-only reading is 63.5% right against 81.8% for the rules (wrong 211 against 77); rules first and the model for a poor reading is 85.4% (matrix; the ops reasoner gains nothing). Fixed-line replies on the phone: 207, now 25 with the model.
 - Language gate: no language reaches 80% in the round trip (best fr 75.9%), so the selector shows English and Romanian until the gate is lowered or the model improves; decision needed.
 - Open: the Romanian reading gap (18 points) needs the model adapted to the app phrases; the "Drew c1." replies and a random diagram are RO-PHONE item 4 (another agent); spoken switch commands for new languages.
+
+## 2026-11-12 - regression note (8822c29, rules)
+
+- operational: n=1296, right 95.4%, wrong 0.7% (no previous note: baseline)
+- operational-ro: n=2480, right 81.4%, wrong 3.1% (no previous note: baseline)
+- dialogues: n=2241, right 96.7%, wrong 0.8% (no previous note: baseline)
+- A/B gate: 16 dialogues, "ops better": none
+
+- Nothing above the tolerance and no coherence failure: keep going.
