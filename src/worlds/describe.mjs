@@ -59,6 +59,7 @@ export const FRAMES = {
   compound: { tpl: '<L> <PRE> <AI> [and|,]? <MID> <AP> [,]? <Q> <NN?> <R?> <T>', needs: ['Q', 'PRE', 'MID', 'AI', 'AP'] },
   stmt: { tpl: '<SJ> <V> <A> <R?> <T>', needs: ['V'] },
   pred: { tpl: '<L> <A0> <V> <A+> <R?> <T>', needs: ['V', 'A'] },
+  askpred: { tpl: '<L> <Q> <A0> <V> <A+> <R?> <T>', needs: ['Q', 'V', 'A'] },
   about: { tpl: '[my|the] <N> [has|had|is|was|holds|contains] <A> <R?> <T>', needs: ['N', 'A'] },
 };
 

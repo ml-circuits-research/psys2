@@ -1,0 +1,133 @@
+{
+ "date": "2026-11-12",
+ "worlds": {
+  "kids.arith": {
+   "world": "kids.arith",
+   "descriptions": 28,
+   "generatedPatterns": 53,
+   "handWrittenPatterns": 264,
+   "replacedByOnly": 264,
+   "neededHandWritten": 17,
+   "replaceableHandWritten": 247,
+   "add": {
+    "sets": {
+     "operational": {
+      "base": {
+       "n": 145,
+       "right": 143,
+       "wrong": 2,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 145,
+       "right": 143,
+       "wrong": 2,
+       "not_understood": 0,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 117,
+       "right": 113,
+       "wrong": 1,
+       "not_understood": 3,
+       "other": 0
+      },
+      "gen": {
+       "n": 117,
+       "right": 114,
+       "wrong": 1,
+       "not_understood": 2,
+       "other": 0
+      }
+     }
+    },
+    "newWrongAll": [],
+    "changeCounts": {
+     "not_understood->right": 1
+    }
+   },
+   "only": {
+    "sets": {
+     "operational": {
+      "base": {
+       "n": 145,
+       "right": 143,
+       "wrong": 2,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 145,
+       "right": 124,
+       "wrong": 4,
+       "not_understood": 17,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 117,
+       "right": 113,
+       "wrong": 1,
+       "not_understood": 3,
+       "other": 0
+      },
+      "gen": {
+       "n": 117,
+       "right": 108,
+       "wrong": 6,
+       "not_understood": 3,
+       "other": 0
+      }
+     }
+    },
+    "setsVsPrevOnly": {
+     "operational": {
+      "base": {
+       "n": 145,
+       "right": 143,
+       "wrong": 2,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 145,
+       "right": 124,
+       "wrong": 4,
+       "not_understood": 17,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 117,
+       "right": 113,
+       "wrong": 1,
+       "not_understood": 3,
+       "other": 0
+      },
+      "gen": {
+       "n": 117,
+       "right": 108,
+       "wrong": 6,
+       "not_understood": 3,
+       "other": 0
+      }
+     }
+    },
+    "changeCounts": {
+     "right->not_understood": 17,
+     "partly->not_understood": 1,
+     "right->wrong": 8,
+     "not_understood->right": 1
+    }
+   },
+   "describeLines": 1145,
+   "droppedLines": 1320,
+   "gaps": "Description gaps that cost cases in `only` (what the hand-written patterns say and the description cannot):\n\n- **Reversed or non-adjacent operand order**: \"take 7 away from 16\", \"subtract 6 from 20\", \"2 less than 6\" (the description must not claim `less than`: it reverses the operands, an early draft of it gave a new wrong answer in `add` and was removed).\n- **Symbols and chains**: `/`, `-`, `*` are not SOP atoms, so \"8 / 2\", \"14 - 8\", \"3*4\" stay hand-written; chained arithmetic (\"7 plus 5 minus 2\") and \"squared\" have no description.\n- **Two statements in one sentence** (\"Ben has 12 marbles and loses 5\", \"gives away 6\", \"Tom has 2 apples and Ana has 3\", \"gives 3 of his pears\"): needs a multi-wire emit with a second subject; descriptions state one operation per wire.\n- **Hand-written shapes that already cover the phrase** (\"how many pears does Ana have now?\" variants with typos, \"if i add eight and seven what do i get\" through a shape with a lead-in).\n- Added to the description after the first run: the omitted-item forms (\"Tom eats 3\", \"Tom gets 3 more\": item resolved by `recent(...)`, which the class of an argument can carry as it is), \"whats left for Mia\", \"they/we\" totals, the `to` order of give, and the new generic frame `askpred` (\"what is 6 plus 3\": opener, first argument, verb, second argument).\n- Not found in the sets but visible in the generated patterns: optional words (`prep`, `unit`) are always optional, so an operand pair with an optional operator word reads \"6 3\"; the calc description therefore puts the operator words in `verb` (mandatory) and uses `pred` / `askpred`.\n"
+  }
+ }
+}
