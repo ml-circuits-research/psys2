@@ -2,312 +2,1125 @@
     op=doc.addHeading
     intent=command
     emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\""
-    arg="t:rest;prep=saying|called|named|that_says|reading|titled|:"
-    verb="add|insert|create|write|put_in|put|make|new|start|give_me|i_want|i_need|include|append|type|enter"
-    noun="heading|header|subheading|sub_heading|section_heading|chapter_heading"
-    frames=imp,asn
+    frames=imp
+    frames=asn
     priority=11
-    sample="t=Shopping"
-    example="Add a heading Shopping."
     effect="adds a heading block with the text"
+
+@describe.docs.editor.addHeading.t core.describe.arg
+    of=$describe.docs.editor.addHeading
+    name=t
+    class=rest
+
+@describe.docs.editor.addHeading.en core.describe.words
+    of=$describe.docs.editor.addHeading
+    lang=en
+    verb=$w.en.add.doc.addHeading
+    verb=$w.en.insert.doc.addHeading
+    verb=$w.en.create.doc.addHeading
+    verb=$w.en.write.doc.addHeading
+    verb=$w.en.put_in.doc.addHeading
+    verb=$w.en.put.doc.addHeading
+    verb=$w.en.make.doc.addHeading
+    verb=$w.en.new.doc.addHeading
+    verb=$w.en.start.doc.addHeading
+    verb=$w.en.give_me.doc.addHeading
+    verb=$w.en.i_want.doc.addHeading
+    verb=$w.en.i_need.doc.addHeading
+    verb=$w.en.include.doc.addHeading
+    verb=$w.en.append.doc.addHeading
+    verb=$w.en.type.doc.addHeading
+    verb=$w.en.enter.doc.addHeading
+    noun=$w.en.heading.doc.addHeading
+    noun=$w.en.header.doc.addHeading
+    noun=$w.en.subheading.doc.addHeading
+    noun=$w.en.sub_heading.doc.addHeading
+    noun=$w.en.section_heading.doc.addHeading
+    noun=$w.en.chapter_heading.doc.addHeading
+    prep.t=$w.en.saying.doc.addHeading.t
+    prep.t=$w.en.called.doc.addHeading.t
+    prep.t=$w.en.named.doc.addHeading.t
+    prep.t=$w.en.that_says.doc.addHeading.t
+    prep.t=$w.en.reading.doc.addHeading.t
+    prep.t=$w.en.titled.doc.addHeading.t
+    prep.t=$w.en.sym.doc.addHeading.t
+    sample.t=Shopping
+    example="Add a heading Shopping."
 
 @describe.docs.editor.addTitle core.describe
     op=doc.addHeading
     intent=command
     emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\" arg.level=1"
-    arg="t:rest;prep=saying|called|named|that_says|reading|titled|:"
-    verb="add|insert|create|write|put_in|put|place|type|start_with|begin_with"
-    noun="title|headline|big_heading|top_heading|main_title|main_heading"
-    frames=imp,asn
+    frames=imp
+    frames=asn
     priority=12
-    sample="t=My Story"
-    example="Write a title My Story."
     effect="adds a level 1 heading block with the text"
+
+@describe.docs.editor.addTitle.t core.describe.arg
+    of=$describe.docs.editor.addTitle
+    name=t
+    class=rest
+
+@describe.docs.editor.addTitle.en core.describe.words
+    of=$describe.docs.editor.addTitle
+    lang=en
+    verb=$w.en.add.doc.addHeading
+    verb=$w.en.insert.doc.addHeading
+    verb=$w.en.create.doc.addHeading
+    verb=$w.en.write.doc.addHeading
+    verb=$w.en.put_in.doc.addHeading
+    verb=$w.en.put.doc.addHeading
+    verb=$w.en.place.doc.addHeading
+    verb=$w.en.type.doc.addHeading
+    verb=$w.en.start_with.doc.addHeading
+    verb=$w.en.begin_with.doc.addHeading
+    noun=$w.en.title.doc.addHeading
+    noun=$w.en.headline.doc.addHeading
+    noun=$w.en.big_heading.doc.addHeading
+    noun=$w.en.top_heading.doc.addHeading
+    noun=$w.en.main_title.doc.addHeading
+    noun=$w.en.main_heading.doc.addHeading
+    prep.t=$w.en.saying.doc.addHeading.t
+    prep.t=$w.en.called.doc.addHeading.t
+    prep.t=$w.en.named.doc.addHeading.t
+    prep.t=$w.en.that_says.doc.addHeading.t
+    prep.t=$w.en.reading.doc.addHeading.t
+    prep.t=$w.en.titled.doc.addHeading.t
+    prep.t=$w.en.sym.doc.addHeading.t
+    sample.t="My Story"
+    example="Write a title My Story."
 
 @describe.docs.editor.addRole core.describe
     op=doc.addHeading
     intent=command
     emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"{t}\""
-    arg="role:lex.docs.editor.headroles;det=a|another|one_more|the|a_new|a_fresh|new|next|fresh|the_next"
-    arg="t:rest;prep=called|titled|named|saying|:"
-    verb="start|begin|add|insert|create|make|write|open|put_in|new"
     frames=imp
     priority=12
-    sample="role=chapter;t=The Forest"
-    example="Start a new chapter called The Forest."
     effect="adds a heading block of that role (chapter, section, subheading) with the text"
+
+@describe.docs.editor.addRole.role core.describe.arg
+    of=$describe.docs.editor.addRole
+    name=role
+    class=lex.docs.editor.headroles
+
+@describe.docs.editor.addRole.t core.describe.arg
+    of=$describe.docs.editor.addRole
+    name=t
+    class=rest
+
+@describe.docs.editor.addRole.en core.describe.words
+    of=$describe.docs.editor.addRole
+    lang=en
+    verb=$w.en.start.doc.addHeading
+    verb=$w.en.begin.doc.addHeading
+    verb=$w.en.add.doc.addHeading
+    verb=$w.en.insert.doc.addHeading
+    verb=$w.en.create.doc.addHeading
+    verb=$w.en.make.doc.addHeading
+    verb=$w.en.write.doc.addHeading
+    verb=$w.en.open.doc.addHeading
+    verb=$w.en.put_in.doc.addHeading
+    verb=$w.en.new.doc.addHeading
+    det.role=$w.en.a.doc.addHeading.role
+    det.role=$w.en.another.doc.addHeading.role
+    det.role=$w.en.one_more.doc.addHeading.role
+    det.role=$w.en.the.doc.addHeading.role
+    det.role=$w.en.a_new.doc.addHeading.role
+    det.role=$w.en.a_fresh.doc.addHeading.role
+    det.role=$w.en.new.doc.addHeading.role
+    det.role=$w.en.next.doc.addHeading.role
+    det.role=$w.en.fresh.doc.addHeading.role
+    det.role=$w.en.the_next.doc.addHeading.role
+    prep.t=$w.en.called.doc.addHeading.t
+    prep.t=$w.en.titled.doc.addHeading.t
+    prep.t=$w.en.named.doc.addHeading.t
+    prep.t=$w.en.saying.doc.addHeading.t
+    prep.t=$w.en.sym.doc.addHeading.t
+    sample.role=chapter
+    sample.t="The Forest"
+    example="Start a new chapter called The Forest."
 
 @describe.docs.editor.addRoleBare core.describe
     op=doc.addHeading
     intent=command
     emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"\""
-    arg="role:lex.docs.editor.headroles;det=a|another|one_more|the|a_new|a_fresh|new|next|fresh|the_next"
-    verb="start|begin|add|insert|create|make|write|open|put_in|new"
     frames=imp
     priority=12
-    sample="role=chapter"
-    example="Start a new chapter."
     effect="adds an empty heading block of that role"
+
+@describe.docs.editor.addRoleBare.role core.describe.arg
+    of=$describe.docs.editor.addRoleBare
+    name=role
+    class=lex.docs.editor.headroles
+
+@describe.docs.editor.addRoleBare.en core.describe.words
+    of=$describe.docs.editor.addRoleBare
+    lang=en
+    verb=$w.en.start.doc.addHeading
+    verb=$w.en.begin.doc.addHeading
+    verb=$w.en.add.doc.addHeading
+    verb=$w.en.insert.doc.addHeading
+    verb=$w.en.create.doc.addHeading
+    verb=$w.en.make.doc.addHeading
+    verb=$w.en.write.doc.addHeading
+    verb=$w.en.open.doc.addHeading
+    verb=$w.en.put_in.doc.addHeading
+    verb=$w.en.new.doc.addHeading
+    det.role=$w.en.a.doc.addHeading.role
+    det.role=$w.en.another.doc.addHeading.role
+    det.role=$w.en.one_more.doc.addHeading.role
+    det.role=$w.en.the.doc.addHeading.role
+    det.role=$w.en.a_new.doc.addHeading.role
+    det.role=$w.en.a_fresh.doc.addHeading.role
+    det.role=$w.en.new.doc.addHeading.role
+    det.role=$w.en.next.doc.addHeading.role
+    det.role=$w.en.fresh.doc.addHeading.role
+    det.role=$w.en.the_next.doc.addHeading.role
+    sample.role=chapter
+    example="Start a new chapter."
 
 @describe.docs.editor.addParagraph core.describe
     op=doc.addParagraph
     intent=command
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
-    arg="t:rest;prep=saying|that_says|reading|:"
-    verb="add|insert|create|write|put_in|put|type|new|start|i_want|i_need|include|append|enter"
-    noun="paragraph|para|text_block|line_of_text"
-    frames=imp,asn
+    frames=imp
+    frames=asn
     priority=11
-    sample="t=Hello"
-    example="Add a paragraph The cat sat on the mat."
     effect="adds a paragraph block with the text"
+
+@describe.docs.editor.addParagraph.t core.describe.arg
+    of=$describe.docs.editor.addParagraph
+    name=t
+    class=rest
+
+@describe.docs.editor.addParagraph.en core.describe.words
+    of=$describe.docs.editor.addParagraph
+    lang=en
+    verb=$w.en.add.doc.addParagraph
+    verb=$w.en.insert.doc.addParagraph
+    verb=$w.en.create.doc.addParagraph
+    verb=$w.en.write.doc.addParagraph
+    verb=$w.en.put_in.doc.addParagraph
+    verb=$w.en.put.doc.addParagraph
+    verb=$w.en.type.doc.addParagraph
+    verb=$w.en.new.doc.addParagraph
+    verb=$w.en.start.doc.addParagraph
+    verb=$w.en.i_want.doc.addParagraph
+    verb=$w.en.i_need.doc.addParagraph
+    verb=$w.en.include.doc.addParagraph
+    verb=$w.en.append.doc.addParagraph
+    verb=$w.en.enter.doc.addParagraph
+    noun=$w.en.paragraph.doc.addParagraph
+    noun=$w.en.para.doc.addParagraph
+    noun=$w.en.text_block.doc.addParagraph
+    noun=$w.en.line_of_text.doc.addParagraph
+    prep.t=$w.en.saying.doc.addParagraph.t
+    prep.t=$w.en.that_says.doc.addParagraph.t
+    prep.t=$w.en.reading.doc.addParagraph.t
+    prep.t=$w.en.sym.doc.addParagraph.t
+    sample.t=Hello
+    example="Add a paragraph The cat sat on the mat."
 
 @describe.docs.editor.addList core.describe
     op=doc.addList
     intent=command
     emit="@{_} core.request action=doc.addList arg.text=\"{t}\""
-    arg="t:rest;prep=with|containing|of|that_has|having|saying|:"
-    verb="add|insert|create|write|put_in|put|make|new|start|i_want|i_need|include|append"
-    noun="list|bullet_list|numbered_list|task_list|checklist|todo_list"
-    frames=imp,asn
+    frames=imp
+    frames=asn
     priority=11
-    sample="t=milk, eggs and bread"
-    example="Add a list with milk, eggs and bread."
     effect="adds a list block; the items are split at commas and and"
+
+@describe.docs.editor.addList.t core.describe.arg
+    of=$describe.docs.editor.addList
+    name=t
+    class=rest
+
+@describe.docs.editor.addList.en core.describe.words
+    of=$describe.docs.editor.addList
+    lang=en
+    verb=$w.en.add.doc.addList
+    verb=$w.en.insert.doc.addList
+    verb=$w.en.create.doc.addList
+    verb=$w.en.write.doc.addList
+    verb=$w.en.put_in.doc.addList
+    verb=$w.en.put.doc.addList
+    verb=$w.en.make.doc.addList
+    verb=$w.en.new.doc.addList
+    verb=$w.en.start.doc.addList
+    verb=$w.en.i_want.doc.addList
+    verb=$w.en.i_need.doc.addList
+    verb=$w.en.include.doc.addList
+    verb=$w.en.append.doc.addList
+    noun=$w.en.list.doc.addList
+    noun=$w.en.bullet_list.doc.addList
+    noun=$w.en.numbered_list.doc.addList
+    noun=$w.en.task_list.doc.addList
+    noun=$w.en.checklist.doc.addList
+    noun=$w.en.todo_list.doc.addList
+    prep.t=$w.en.with.doc.addList.t
+    prep.t=$w.en.containing.doc.addList.t
+    prep.t=$w.en.of.doc.addList.t
+    prep.t=$w.en.that_has.doc.addList.t
+    prep.t=$w.en.having.doc.addList.t
+    prep.t=$w.en.saying.doc.addList.t
+    prep.t=$w.en.sym.doc.addList.t
+    sample.t=milk
+    example="Add a list with milk, eggs and bread."
 
 @describe.docs.editor.setTitle core.describe
     op=doc.setTitle
     intent=command
     emit="@{_} core.request action=doc.setTitle arg.text=\"{t}\""
-    arg="t:rest;prep=to|as|:"
-    verb="make|set|change|call|name|rename"
-    noun="title|document_title|name_of_the_document|document|doc"
     frames=imp
     priority=11
-    sample="t=Our Trip"
-    example="Make the title Our Trip."
     effect="sets the title of the document"
+
+@describe.docs.editor.setTitle.t core.describe.arg
+    of=$describe.docs.editor.setTitle
+    name=t
+    class=rest
+
+@describe.docs.editor.setTitle.en core.describe.words
+    of=$describe.docs.editor.setTitle
+    lang=en
+    verb=$w.en.make.doc.setTitle
+    verb=$w.en.set.doc.setTitle
+    verb=$w.en.change.doc.setTitle
+    verb=$w.en.call.doc.setTitle
+    verb=$w.en.name.doc.setTitle
+    verb=$w.en.rename.doc.setTitle
+    noun=$w.en.title.doc.setTitle
+    noun=$w.en.document_title.doc.setTitle
+    noun=$w.en.name_of_the_document.doc.setTitle
+    noun=$w.en.document.doc.setTitle
+    noun=$w.en.doc.doc.setTitle
+    prep.t=$w.en.to.doc.setTitle.t
+    prep.t=$w.en.as.doc.setTitle.t
+    prep.t=$w.en.sym.doc.setTitle.t
+    sample.t="Our Trip"
+    example="Make the title Our Trip."
 
 @describe.docs.editor.countTasksDone core.describe
     op=doc.countTasks
     intent=query
     emit="@{_} core.request action=doc.countTasks arg.state=done"
-    ask="how_many_tasks_are|how_many_items_are|how_many_checkboxes_are|how_many_tasks_have_i|number_of_tasks|how_many_of_the_tasks_are"
-    rest="done|checked|completed|finished|ticked|complete"
     frames=ask
     priority=12
-    example="How many tasks are done?"
     effect="counts the checked tasks"
+
+@describe.docs.editor.countTasksDone.en core.describe.words
+    of=$describe.docs.editor.countTasksDone
+    lang=en
+    ask=$w.en.how_many_tasks_are.doc.countTasks
+    ask=$w.en.how_many_items_are.doc.countTasks
+    ask=$w.en.how_many_checkboxes_are.doc.countTasks
+    ask=$w.en.how_many_tasks_have_i.doc.countTasks
+    ask=$w.en.number_of_tasks.doc.countTasks
+    ask=$w.en.how_many_of_the_tasks_are.doc.countTasks
+    rest=$w.en.done.doc.countTasks
+    rest=$w.en.checked.doc.countTasks
+    rest=$w.en.completed.doc.countTasks
+    rest=$w.en.finished.doc.countTasks
+    rest=$w.en.ticked.doc.countTasks
+    rest=$w.en.complete.doc.countTasks
+    example="How many tasks are done?"
 
 @describe.docs.editor.countTasksLeft core.describe
     op=doc.countTasks
     intent=query
     emit="@{_} core.request action=doc.countTasks arg.state=left"
-    ask="how_many_tasks_are|how_many_items_are|how_many_checkboxes_are|how_many_tasks_do_i_have|number_of_tasks|how_many_of_the_tasks_are|how_many_open_tasks|how_many_unfinished_tasks|how_many_tasks_remain|how_many_tasks_not"
-    rest="left|open|remaining|unfinished|not_done|not_finished|unchecked|to_do|undone|pending"
     frames=ask
     priority=12
-    example="How many tasks are left?"
     effect="counts the tasks that are not checked"
+
+@describe.docs.editor.countTasksLeft.en core.describe.words
+    of=$describe.docs.editor.countTasksLeft
+    lang=en
+    ask=$w.en.how_many_tasks_are.doc.countTasks
+    ask=$w.en.how_many_items_are.doc.countTasks
+    ask=$w.en.how_many_checkboxes_are.doc.countTasks
+    ask=$w.en.how_many_tasks_do_i_have.doc.countTasks
+    ask=$w.en.number_of_tasks.doc.countTasks
+    ask=$w.en.how_many_of_the_tasks_are.doc.countTasks
+    ask=$w.en.how_many_open_tasks.doc.countTasks
+    ask=$w.en.how_many_unfinished_tasks.doc.countTasks
+    ask=$w.en.how_many_tasks_remain.doc.countTasks
+    ask=$w.en.how_many_tasks_not.doc.countTasks
+    rest=$w.en.left.doc.countTasks
+    rest=$w.en.open.doc.countTasks
+    rest=$w.en.remaining.doc.countTasks
+    rest=$w.en.unfinished.doc.countTasks
+    rest=$w.en.not_done.doc.countTasks
+    rest=$w.en.not_finished.doc.countTasks
+    rest=$w.en.unchecked.doc.countTasks
+    rest=$w.en.to_do.doc.countTasks
+    rest=$w.en.undone.doc.countTasks
+    rest=$w.en.pending.doc.countTasks
+    example="How many tasks are left?"
 
 @describe.docs.editor.undo core.describe
     op=doc.undo
     intent=command
-    bareVerb=true
     emit="@{_} core.request action=doc.undo"
-    verb="undo|scratch|take_back|revert|cancel|reverse|roll_back"
-    noun="that|it|this|the_last_thing|the_last_change|my_last_change|the_previous_change|the_last_edit|last_change"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Undo that."
+    bareVerb=true
     effect="reverts the last change"
+
+@describe.docs.editor.undo.en core.describe.words
+    of=$describe.docs.editor.undo
+    lang=en
+    verb=$w.en.undo.doc.undo
+    verb=$w.en.scratch.doc.undo
+    verb=$w.en.take_back.doc.undo
+    verb=$w.en.revert.doc.undo
+    verb=$w.en.cancel.doc.undo
+    verb=$w.en.reverse.doc.undo
+    verb=$w.en.roll_back.doc.undo
+    noun=$w.en.that.doc.undo
+    noun=$w.en.it.doc.undo
+    noun=$w.en.this.doc.undo
+    noun=$w.en.the_last_thing.doc.undo
+    noun=$w.en.the_last_change.doc.undo
+    noun=$w.en.my_last_change.doc.undo
+    noun=$w.en.the_previous_change.doc.undo
+    noun=$w.en.the_last_edit.doc.undo
+    noun=$w.en.last_change.doc.undo
+    example="Undo that."
 
 @describe.docs.editor.redo core.describe
     op=doc.redo
     intent=command
-    bareVerb=true
     emit="@{_} core.request action=doc.redo"
-    verb="redo|do_it_again|put_it_back|restore"
-    noun="that|it|this|the_last_change|the_last_undo"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Redo that."
+    bareVerb=true
     effect="applies the change that was undone"
+
+@describe.docs.editor.redo.en core.describe.words
+    of=$describe.docs.editor.redo
+    lang=en
+    verb=$w.en.redo.doc.redo
+    verb=$w.en.do_it_again.doc.redo
+    verb=$w.en.put_it_back.doc.redo
+    verb=$w.en.restore.doc.redo
+    noun=$w.en.that.doc.redo
+    noun=$w.en.it.doc.redo
+    noun=$w.en.this.doc.redo
+    noun=$w.en.the_last_change.doc.redo
+    noun=$w.en.the_last_undo.doc.redo
+    example="Redo that."
 
 @describe.docs.editor.clear core.describe
     op=doc.clear
     intent=command
     emit="@{_} core.request action=doc.clear"
-    verb="clear|empty|wipe|erase|delete|blank"
-    noun="document|doc|everything|the_whole_document|the_page|all|it_all"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=11
-    example="Clear the document."
     effect="removes every block"
+
+@describe.docs.editor.clear.en core.describe.words
+    of=$describe.docs.editor.clear
+    lang=en
+    verb=$w.en.clear.doc.clear
+    verb=$w.en.empty.doc.clear
+    verb=$w.en.wipe.doc.clear
+    verb=$w.en.erase.doc.clear
+    verb=$w.en.delete.doc.clear
+    verb=$w.en.blank.doc.clear
+    noun=$w.en.document.doc.clear
+    noun=$w.en.doc.doc.clear
+    noun=$w.en.everything.doc.clear
+    noun=$w.en.the_whole_document.doc.clear
+    noun=$w.en.the_page.doc.clear
+    noun=$w.en.all.doc.clear
+    noun=$w.en.it_all.doc.clear
+    example="Clear the document."
 
 @describe.docs.editor.stats core.describe
     op=doc.stats
     intent=query
-    bareVerb=true
     emit="@{_} core.request action=doc.stats"
-    ask="how_many_words_are_in|how_long_is|what_is_the_word_count_of|how_many_words_does_have|how_many_words"
-    noun="word_count|wordcount|statistics|stats|number_of_words|length"
-    rest="the_document|the_doc|my_document|it|in_the_document|do_i_have"
-    verb="give_me|tell_me|show_me|count"
-    frames=ask,qnoun,tell,rev
+    frames=ask
+    frames=qnoun
+    frames=tell
+    frames=rev
     priority=12
-    example="Give me the statistics."
+    bareVerb=true
     effect="answers the word, sentence and block counts"
+
+@describe.docs.editor.stats.en core.describe.words
+    of=$describe.docs.editor.stats
+    lang=en
+    verb=$w.en.give_me.doc.stats
+    verb=$w.en.tell_me.doc.stats
+    verb=$w.en.show_me.doc.stats
+    verb=$w.en.count.doc.stats
+    noun=$w.en.word_count.doc.stats
+    noun=$w.en.wordcount.doc.stats
+    noun=$w.en.statistics.doc.stats
+    noun=$w.en.stats.doc.stats
+    noun=$w.en.number_of_words.doc.stats
+    noun=$w.en.length.doc.stats
+    ask=$w.en.how_many_words_are_in.doc.stats
+    ask=$w.en.how_long_is.doc.stats
+    ask=$w.en.what_is_the_word_count_of.doc.stats
+    ask=$w.en.how_many_words_does_have.doc.stats
+    ask=$w.en.how_many_words.doc.stats
+    rest=$w.en.the_document.doc.stats
+    rest=$w.en.the_doc.doc.stats
+    rest=$w.en.my_document.doc.stats
+    rest=$w.en.it.doc.stats
+    rest=$w.en.in_the_document.doc.stats
+    rest=$w.en.do_i_have.doc.stats
+    example="Give me the statistics."
 
 @describe.docs.editor.deleteOrd core.describe
     op=doc.delete
     intent=command
     emit="@{_} core.request action=doc.delete arg.ord={ord} arg.kind={kind}"
-    arg="ord:lex.docs.editor.ordinals;det=the|my"
-    arg="kind:lex.docs.editor.kinds"
-    verb="delete|remove|erase|drop|get_rid_of|cut_out"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    sample="ord=last;kind=paragraph"
-    example="Delete the last paragraph."
     requires=ed.d.over
     effect="removes the block of that kind at that place"
+
+@describe.docs.editor.deleteOrd.ord core.describe.arg
+    of=$describe.docs.editor.deleteOrd
+    name=ord
+    class=lex.docs.editor.ordinals
+
+@describe.docs.editor.deleteOrd.kind core.describe.arg
+    of=$describe.docs.editor.deleteOrd
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.deleteOrd.en core.describe.words
+    of=$describe.docs.editor.deleteOrd
+    lang=en
+    verb=$w.en.delete.doc.delete
+    verb=$w.en.remove.doc.delete
+    verb=$w.en.erase.doc.delete
+    verb=$w.en.drop.doc.delete
+    verb=$w.en.get_rid_of.doc.delete
+    verb=$w.en.cut_out.doc.delete
+    det.ord=$w.en.the.doc.delete.ord
+    det.ord=$w.en.my.doc.delete.ord
+    sample.ord=last
+    sample.kind=paragraph
+    example="Delete the last paragraph."
 
 @describe.docs.editor.deleteNum core.describe
     op=doc.delete
     intent=command
     emit="@{_} core.request action=doc.delete arg.n={n} arg.kind={kind}"
-    arg="kind:lex.docs.editor.kinds;det=the|my"
-    arg="n:number"
-    verb="delete|remove|erase|drop|get_rid_of|cut_out"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    sample="kind=paragraph;n=2"
-    example="Delete paragraph 2."
     requires=ed.d.over
     effect="removes the numbered block of that kind"
+
+@describe.docs.editor.deleteNum.kind core.describe.arg
+    of=$describe.docs.editor.deleteNum
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.deleteNum.n core.describe.arg
+    of=$describe.docs.editor.deleteNum
+    name=n
+    class=number
+
+@describe.docs.editor.deleteNum.en core.describe.words
+    of=$describe.docs.editor.deleteNum
+    lang=en
+    verb=$w.en.delete.doc.delete
+    verb=$w.en.remove.doc.delete
+    verb=$w.en.erase.doc.delete
+    verb=$w.en.drop.doc.delete
+    verb=$w.en.get_rid_of.doc.delete
+    verb=$w.en.cut_out.doc.delete
+    det.kind=$w.en.the.doc.delete.kind
+    det.kind=$w.en.my.doc.delete.kind
+    sample.kind=paragraph
+    sample.n=2
+    example="Delete paragraph 2."
 
 @describe.docs.editor.deleteBare core.describe
     op=doc.delete
     intent=command
     emit="@{_} core.request action=doc.delete arg.ord=first arg.kind={kind}"
-    arg="kind:lex.docs.editor.kinds;det=the|my"
-    verb="delete|remove|erase|drop|get_rid_of|cut_out"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=11
-    sample="kind=paragraph"
-    example="Delete the paragraph."
     requires=ed.d.zero
     effect="removes the first block of that kind"
+
+@describe.docs.editor.deleteBare.kind core.describe.arg
+    of=$describe.docs.editor.deleteBare
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.deleteBare.en core.describe.words
+    of=$describe.docs.editor.deleteBare
+    lang=en
+    verb=$w.en.delete.doc.delete
+    verb=$w.en.remove.doc.delete
+    verb=$w.en.erase.doc.delete
+    verb=$w.en.drop.doc.delete
+    verb=$w.en.get_rid_of.doc.delete
+    verb=$w.en.cut_out.doc.delete
+    det.kind=$w.en.the.doc.delete.kind
+    det.kind=$w.en.my.doc.delete.kind
+    sample.kind=paragraph
+    example="Delete the paragraph."
 
 @describe.docs.editor.deleteSentence core.describe
     op=doc.deleteSentence
     intent=command
     emit="@{_} core.request action=doc.deleteSentence"
-    verb="delete|remove|erase|drop|cut"
-    noun="last_sentence|the_last_sentence|final_sentence"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Delete the last sentence."
     effect="removes the last sentence of the last paragraph"
+
+@describe.docs.editor.deleteSentence.en core.describe.words
+    of=$describe.docs.editor.deleteSentence
+    lang=en
+    verb=$w.en.delete.doc.deleteSentence
+    verb=$w.en.remove.doc.deleteSentence
+    verb=$w.en.erase.doc.deleteSentence
+    verb=$w.en.drop.doc.deleteSentence
+    verb=$w.en.cut.doc.deleteSentence
+    noun=$w.en.last_sentence.doc.deleteSentence
+    noun=$w.en.the_last_sentence.doc.deleteSentence
+    noun=$w.en.final_sentence.doc.deleteSentence
+    example="Delete the last sentence."
 
 @describe.docs.editor.readDoc core.describe
     op=doc.read
     intent=command
     emit="@{_} core.request action=doc.read"
-    verb="read|read_out|read_aloud|speak|say"
-    noun="document|doc|the_document|everything|it_back|whole_document|it"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Read the document."
     effect="reads the whole document aloud"
+
+@describe.docs.editor.readDoc.en core.describe.words
+    of=$describe.docs.editor.readDoc
+    lang=en
+    verb=$w.en.read.doc.read
+    verb=$w.en.read_out.doc.read
+    verb=$w.en.read_aloud.doc.read
+    verb=$w.en.speak.doc.read
+    verb=$w.en.say.doc.read
+    noun=$w.en.document.doc.read
+    noun=$w.en.doc.doc.read
+    noun=$w.en.the_document.doc.read
+    noun=$w.en.everything.doc.read
+    noun=$w.en.it_back.doc.read
+    noun=$w.en.whole_document.doc.read
+    noun=$w.en.it.doc.read
+    example="Read the document."
 
 @describe.docs.editor.readOrd core.describe
     op=doc.read
     intent=command
     emit="@{_} core.request action=doc.read arg.ord={ord} arg.kind={kind}"
-    arg="ord:lex.docs.editor.ordinals;det=the|my"
-    arg="kind:lex.docs.editor.kinds"
-    verb="read|read_out|read_aloud|speak|say"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    sample="ord=last;kind=paragraph"
-    example="Read the last paragraph."
     effect="reads the block aloud"
+
+@describe.docs.editor.readOrd.ord core.describe.arg
+    of=$describe.docs.editor.readOrd
+    name=ord
+    class=lex.docs.editor.ordinals
+
+@describe.docs.editor.readOrd.kind core.describe.arg
+    of=$describe.docs.editor.readOrd
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.readOrd.en core.describe.words
+    of=$describe.docs.editor.readOrd
+    lang=en
+    verb=$w.en.read.doc.read
+    verb=$w.en.read_out.doc.read
+    verb=$w.en.read_aloud.doc.read
+    verb=$w.en.speak.doc.read
+    verb=$w.en.say.doc.read
+    det.ord=$w.en.the.doc.read.ord
+    det.ord=$w.en.my.doc.read.ord
+    sample.ord=last
+    sample.kind=paragraph
+    example="Read the last paragraph."
 
 @describe.docs.editor.readNum core.describe
     op=doc.read
     intent=command
     emit="@{_} core.request action=doc.read arg.n={n} arg.kind={kind}"
-    arg="kind:lex.docs.editor.kinds;det=the|my"
-    arg="n:number"
-    verb="read|read_out|read_aloud|speak|say"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    sample="kind=paragraph;n=2"
-    example="Read paragraph 2."
     effect="reads the numbered block aloud"
+
+@describe.docs.editor.readNum.kind core.describe.arg
+    of=$describe.docs.editor.readNum
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.readNum.n core.describe.arg
+    of=$describe.docs.editor.readNum
+    name=n
+    class=number
+
+@describe.docs.editor.readNum.en core.describe.words
+    of=$describe.docs.editor.readNum
+    lang=en
+    verb=$w.en.read.doc.read
+    verb=$w.en.read_out.doc.read
+    verb=$w.en.read_aloud.doc.read
+    verb=$w.en.speak.doc.read
+    verb=$w.en.say.doc.read
+    det.kind=$w.en.the.doc.read.kind
+    det.kind=$w.en.my.doc.read.kind
+    sample.kind=paragraph
+    sample.n=2
+    example="Read paragraph 2."
 
 @describe.docs.editor.readBare core.describe
     op=doc.read
     intent=command
     emit="@{_} core.request action=doc.read arg.n=1 arg.kind={kind}"
-    arg="kind:lex.docs.editor.kinds;det=the|my"
-    verb="read|read_out|read_aloud|speak|say"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=11
-    sample="kind=paragraph"
-    example="Read the paragraph."
     effect="reads the first block of that kind aloud"
+
+@describe.docs.editor.readBare.kind core.describe.arg
+    of=$describe.docs.editor.readBare
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.readBare.en core.describe.words
+    of=$describe.docs.editor.readBare
+    lang=en
+    verb=$w.en.read.doc.read
+    verb=$w.en.read_out.doc.read
+    verb=$w.en.read_aloud.doc.read
+    verb=$w.en.speak.doc.read
+    verb=$w.en.say.doc.read
+    det.kind=$w.en.the.doc.read.kind
+    det.kind=$w.en.my.doc.read.kind
+    sample.kind=paragraph
+    example="Read the paragraph."
 
 @describe.docs.editor.gotoPos core.describe
     op=doc.goto
     intent=command
     emit="@{_} core.request action=doc.goto arg.where={w}"
-    arg="w:lex.docs.editor.positions;prep=to|at;det=the"
-    verb="go_to|jump_to|scroll_to|navigate_to|move_to|move_the_cursor_to|put_the_cursor_at|take_me_to"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    sample="w=end"
-    example="Go to the end."
     effect="moves the cursor to the place"
+
+@describe.docs.editor.gotoPos.w core.describe.arg
+    of=$describe.docs.editor.gotoPos
+    name=w
+    class=lex.docs.editor.positions
+
+@describe.docs.editor.gotoPos.en core.describe.words
+    of=$describe.docs.editor.gotoPos
+    lang=en
+    verb=$w.en.go_to.doc.goto
+    verb=$w.en.jump_to.doc.goto
+    verb=$w.en.scroll_to.doc.goto
+    verb=$w.en.navigate_to.doc.goto
+    verb=$w.en.move_to.doc.goto
+    verb=$w.en.move_the_cursor_to.doc.goto
+    verb=$w.en.put_the_cursor_at.doc.goto
+    verb=$w.en.take_me_to.doc.goto
+    prep.w=$w.en.to.doc.goto.w
+    prep.w=$w.en.at.doc.goto.w
+    det.w=$w.en.the.doc.goto.w
+    sample.w=end
+    example="Go to the end."
 
 @describe.docs.editor.gotoOrd core.describe
     op=doc.goto
     intent=command
     emit="@{_} core.request action=doc.goto arg.ord={ord} arg.kind={kind}"
-    arg="ord:lex.docs.editor.ordinals;det=the|my"
-    arg="kind:lex.docs.editor.kinds"
-    verb="go_to|jump_to|scroll_to|navigate_to|move_to|take_me_to"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    sample="ord=last;kind=paragraph"
-    example="Go to the last paragraph."
     requires=ed.d.over
     effect="moves the cursor to the block"
+
+@describe.docs.editor.gotoOrd.ord core.describe.arg
+    of=$describe.docs.editor.gotoOrd
+    name=ord
+    class=lex.docs.editor.ordinals
+
+@describe.docs.editor.gotoOrd.kind core.describe.arg
+    of=$describe.docs.editor.gotoOrd
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.gotoOrd.en core.describe.words
+    of=$describe.docs.editor.gotoOrd
+    lang=en
+    verb=$w.en.go_to.doc.goto
+    verb=$w.en.jump_to.doc.goto
+    verb=$w.en.scroll_to.doc.goto
+    verb=$w.en.navigate_to.doc.goto
+    verb=$w.en.move_to.doc.goto
+    verb=$w.en.take_me_to.doc.goto
+    det.ord=$w.en.the.doc.goto.ord
+    det.ord=$w.en.my.doc.goto.ord
+    sample.ord=last
+    sample.kind=paragraph
+    example="Go to the last paragraph."
 
 @describe.docs.editor.gotoNum core.describe
     op=doc.goto
     intent=command
     emit="@{_} core.request action=doc.goto arg.n={n} arg.kind={kind}"
-    arg="kind:lex.docs.editor.kinds;det=the|my"
-    arg="n:number"
-    verb="go_to|jump_to|scroll_to|navigate_to|move_to|take_me_to"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    sample="kind=paragraph;n=2"
-    example="Go to paragraph 2."
     requires=ed.d.over
     effect="moves the cursor to the numbered block"
+
+@describe.docs.editor.gotoNum.kind core.describe.arg
+    of=$describe.docs.editor.gotoNum
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.gotoNum.n core.describe.arg
+    of=$describe.docs.editor.gotoNum
+    name=n
+    class=number
+
+@describe.docs.editor.gotoNum.en core.describe.words
+    of=$describe.docs.editor.gotoNum
+    lang=en
+    verb=$w.en.go_to.doc.goto
+    verb=$w.en.jump_to.doc.goto
+    verb=$w.en.scroll_to.doc.goto
+    verb=$w.en.navigate_to.doc.goto
+    verb=$w.en.move_to.doc.goto
+    verb=$w.en.take_me_to.doc.goto
+    det.kind=$w.en.the.doc.goto.kind
+    det.kind=$w.en.my.doc.goto.kind
+    sample.kind=paragraph
+    sample.n=2
+    example="Go to paragraph 2."
 
 @describe.docs.editor.gotoBare core.describe
     op=doc.goto
     intent=command
     emit="@{_} core.request action=doc.goto arg.ord=first arg.kind={kind}"
-    arg="kind:lex.docs.editor.kinds;det=the|my"
-    verb="go_to|jump_to|scroll_to|navigate_to|move_to|take_me_to"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=11
-    sample="kind=paragraph"
-    example="Go to the paragraph."
     effect="moves the cursor to the first block of that kind"
+
+@describe.docs.editor.gotoBare.kind core.describe.arg
+    of=$describe.docs.editor.gotoBare
+    name=kind
+    class=lex.docs.editor.kinds
+
+@describe.docs.editor.gotoBare.en core.describe.words
+    of=$describe.docs.editor.gotoBare
+    lang=en
+    verb=$w.en.go_to.doc.goto
+    verb=$w.en.jump_to.doc.goto
+    verb=$w.en.scroll_to.doc.goto
+    verb=$w.en.navigate_to.doc.goto
+    verb=$w.en.move_to.doc.goto
+    verb=$w.en.take_me_to.doc.goto
+    det.kind=$w.en.the.doc.goto.kind
+    det.kind=$w.en.my.doc.goto.kind
+    sample.kind=paragraph
+    example="Go to the paragraph."
+
+@w.en.add.doc.addHeading core.word lang=en text=add means=doc.addHeading
+@w.en.insert.doc.addHeading core.word lang=en text=insert means=doc.addHeading
+@w.en.create.doc.addHeading core.word lang=en text=create means=doc.addHeading
+@w.en.write.doc.addHeading core.word lang=en text=write means=doc.addHeading
+@w.en.put_in.doc.addHeading core.word lang=en text="put in" means=doc.addHeading
+@w.en.put.doc.addHeading core.word lang=en text=put means=doc.addHeading
+@w.en.make.doc.addHeading core.word lang=en text=make means=doc.addHeading
+@w.en.new.doc.addHeading core.word lang=en text=new means=doc.addHeading
+@w.en.start.doc.addHeading core.word lang=en text=start means=doc.addHeading
+@w.en.give_me.doc.addHeading core.word lang=en text="give me" means=doc.addHeading
+@w.en.i_want.doc.addHeading core.word lang=en text="i want" means=doc.addHeading
+@w.en.i_need.doc.addHeading core.word lang=en text="i need" means=doc.addHeading
+@w.en.include.doc.addHeading core.word lang=en text=include means=doc.addHeading
+@w.en.append.doc.addHeading core.word lang=en text=append means=doc.addHeading
+@w.en.type.doc.addHeading core.word lang=en text=type means=doc.addHeading
+@w.en.enter.doc.addHeading core.word lang=en text=enter means=doc.addHeading
+@w.en.heading.doc.addHeading core.word lang=en text=heading means=doc.addHeading
+@w.en.header.doc.addHeading core.word lang=en text=header means=doc.addHeading
+@w.en.subheading.doc.addHeading core.word lang=en text=subheading means=doc.addHeading
+@w.en.sub_heading.doc.addHeading core.word lang=en text="sub heading" means=doc.addHeading
+@w.en.section_heading.doc.addHeading core.word lang=en text="section heading" means=doc.addHeading
+@w.en.chapter_heading.doc.addHeading core.word lang=en text="chapter heading" means=doc.addHeading
+@w.en.saying.doc.addHeading.t core.word lang=en text=saying means=doc.addHeading.t
+@w.en.called.doc.addHeading.t core.word lang=en text=called means=doc.addHeading.t
+@w.en.named.doc.addHeading.t core.word lang=en text=named means=doc.addHeading.t
+@w.en.that_says.doc.addHeading.t core.word lang=en text="that says" means=doc.addHeading.t
+@w.en.reading.doc.addHeading.t core.word lang=en text=reading means=doc.addHeading.t
+@w.en.titled.doc.addHeading.t core.word lang=en text=titled means=doc.addHeading.t
+@w.en.sym.doc.addHeading.t core.word lang=en text=":" means=doc.addHeading.t
+@w.en.place.doc.addHeading core.word lang=en text=place means=doc.addHeading
+@w.en.start_with.doc.addHeading core.word lang=en text="start with" means=doc.addHeading
+@w.en.begin_with.doc.addHeading core.word lang=en text="begin with" means=doc.addHeading
+@w.en.title.doc.addHeading core.word lang=en text=title means=doc.addHeading
+@w.en.headline.doc.addHeading core.word lang=en text=headline means=doc.addHeading
+@w.en.big_heading.doc.addHeading core.word lang=en text="big heading" means=doc.addHeading
+@w.en.top_heading.doc.addHeading core.word lang=en text="top heading" means=doc.addHeading
+@w.en.main_title.doc.addHeading core.word lang=en text="main title" means=doc.addHeading
+@w.en.main_heading.doc.addHeading core.word lang=en text="main heading" means=doc.addHeading
+@w.en.begin.doc.addHeading core.word lang=en text=begin means=doc.addHeading
+@w.en.open.doc.addHeading core.word lang=en text=open means=doc.addHeading
+@w.en.a.doc.addHeading.role core.word lang=en text=a means=doc.addHeading.role
+@w.en.another.doc.addHeading.role core.word lang=en text=another means=doc.addHeading.role
+@w.en.one_more.doc.addHeading.role core.word lang=en text="one more" means=doc.addHeading.role
+@w.en.the.doc.addHeading.role core.word lang=en text=the means=doc.addHeading.role
+@w.en.a_new.doc.addHeading.role core.word lang=en text="a new" means=doc.addHeading.role
+@w.en.a_fresh.doc.addHeading.role core.word lang=en text="a fresh" means=doc.addHeading.role
+@w.en.new.doc.addHeading.role core.word lang=en text=new means=doc.addHeading.role
+@w.en.next.doc.addHeading.role core.word lang=en text=next means=doc.addHeading.role
+@w.en.fresh.doc.addHeading.role core.word lang=en text=fresh means=doc.addHeading.role
+@w.en.the_next.doc.addHeading.role core.word lang=en text="the next" means=doc.addHeading.role
+@w.en.add.doc.addParagraph core.word lang=en text=add means=doc.addParagraph
+@w.en.insert.doc.addParagraph core.word lang=en text=insert means=doc.addParagraph
+@w.en.create.doc.addParagraph core.word lang=en text=create means=doc.addParagraph
+@w.en.write.doc.addParagraph core.word lang=en text=write means=doc.addParagraph
+@w.en.put_in.doc.addParagraph core.word lang=en text="put in" means=doc.addParagraph
+@w.en.put.doc.addParagraph core.word lang=en text=put means=doc.addParagraph
+@w.en.type.doc.addParagraph core.word lang=en text=type means=doc.addParagraph
+@w.en.new.doc.addParagraph core.word lang=en text=new means=doc.addParagraph
+@w.en.start.doc.addParagraph core.word lang=en text=start means=doc.addParagraph
+@w.en.i_want.doc.addParagraph core.word lang=en text="i want" means=doc.addParagraph
+@w.en.i_need.doc.addParagraph core.word lang=en text="i need" means=doc.addParagraph
+@w.en.include.doc.addParagraph core.word lang=en text=include means=doc.addParagraph
+@w.en.append.doc.addParagraph core.word lang=en text=append means=doc.addParagraph
+@w.en.enter.doc.addParagraph core.word lang=en text=enter means=doc.addParagraph
+@w.en.paragraph.doc.addParagraph core.word lang=en text=paragraph means=doc.addParagraph
+@w.en.para.doc.addParagraph core.word lang=en text=para means=doc.addParagraph
+@w.en.text_block.doc.addParagraph core.word lang=en text="text block" means=doc.addParagraph
+@w.en.line_of_text.doc.addParagraph core.word lang=en text="line of text" means=doc.addParagraph
+@w.en.saying.doc.addParagraph.t core.word lang=en text=saying means=doc.addParagraph.t
+@w.en.that_says.doc.addParagraph.t core.word lang=en text="that says" means=doc.addParagraph.t
+@w.en.reading.doc.addParagraph.t core.word lang=en text=reading means=doc.addParagraph.t
+@w.en.sym.doc.addParagraph.t core.word lang=en text=":" means=doc.addParagraph.t
+@w.en.add.doc.addList core.word lang=en text=add means=doc.addList
+@w.en.insert.doc.addList core.word lang=en text=insert means=doc.addList
+@w.en.create.doc.addList core.word lang=en text=create means=doc.addList
+@w.en.write.doc.addList core.word lang=en text=write means=doc.addList
+@w.en.put_in.doc.addList core.word lang=en text="put in" means=doc.addList
+@w.en.put.doc.addList core.word lang=en text=put means=doc.addList
+@w.en.make.doc.addList core.word lang=en text=make means=doc.addList
+@w.en.new.doc.addList core.word lang=en text=new means=doc.addList
+@w.en.start.doc.addList core.word lang=en text=start means=doc.addList
+@w.en.i_want.doc.addList core.word lang=en text="i want" means=doc.addList
+@w.en.i_need.doc.addList core.word lang=en text="i need" means=doc.addList
+@w.en.include.doc.addList core.word lang=en text=include means=doc.addList
+@w.en.append.doc.addList core.word lang=en text=append means=doc.addList
+@w.en.list.doc.addList core.word lang=en text=list means=doc.addList
+@w.en.bullet_list.doc.addList core.word lang=en text="bullet list" means=doc.addList
+@w.en.numbered_list.doc.addList core.word lang=en text="numbered list" means=doc.addList
+@w.en.task_list.doc.addList core.word lang=en text="task list" means=doc.addList
+@w.en.checklist.doc.addList core.word lang=en text=checklist means=doc.addList
+@w.en.todo_list.doc.addList core.word lang=en text="todo list" means=doc.addList
+@w.en.with.doc.addList.t core.word lang=en text=with means=doc.addList.t
+@w.en.containing.doc.addList.t core.word lang=en text=containing means=doc.addList.t
+@w.en.of.doc.addList.t core.word lang=en text=of means=doc.addList.t
+@w.en.that_has.doc.addList.t core.word lang=en text="that has" means=doc.addList.t
+@w.en.having.doc.addList.t core.word lang=en text=having means=doc.addList.t
+@w.en.saying.doc.addList.t core.word lang=en text=saying means=doc.addList.t
+@w.en.sym.doc.addList.t core.word lang=en text=":" means=doc.addList.t
+@w.en.make.doc.setTitle core.word lang=en text=make means=doc.setTitle
+@w.en.set.doc.setTitle core.word lang=en text=set means=doc.setTitle
+@w.en.change.doc.setTitle core.word lang=en text=change means=doc.setTitle
+@w.en.call.doc.setTitle core.word lang=en text=call means=doc.setTitle
+@w.en.name.doc.setTitle core.word lang=en text=name means=doc.setTitle
+@w.en.rename.doc.setTitle core.word lang=en text=rename means=doc.setTitle
+@w.en.title.doc.setTitle core.word lang=en text=title means=doc.setTitle
+@w.en.document_title.doc.setTitle core.word lang=en text="document title" means=doc.setTitle
+@w.en.name_of_the_document.doc.setTitle core.word lang=en text="name of the document" means=doc.setTitle
+@w.en.document.doc.setTitle core.word lang=en text=document means=doc.setTitle
+@w.en.doc.doc.setTitle core.word lang=en text=doc means=doc.setTitle
+@w.en.to.doc.setTitle.t core.word lang=en text=to means=doc.setTitle.t
+@w.en.as.doc.setTitle.t core.word lang=en text=as means=doc.setTitle.t
+@w.en.sym.doc.setTitle.t core.word lang=en text=":" means=doc.setTitle.t
+@w.en.how_many_tasks_are.doc.countTasks core.word lang=en text="how many tasks are" means=doc.countTasks
+@w.en.how_many_items_are.doc.countTasks core.word lang=en text="how many items are" means=doc.countTasks
+@w.en.how_many_checkboxes_are.doc.countTasks core.word lang=en text="how many checkboxes are" means=doc.countTasks
+@w.en.how_many_tasks_have_i.doc.countTasks core.word lang=en text="how many tasks have i" means=doc.countTasks
+@w.en.number_of_tasks.doc.countTasks core.word lang=en text="number of tasks" means=doc.countTasks
+@w.en.how_many_of_the_tasks_are.doc.countTasks core.word lang=en text="how many of the tasks are" means=doc.countTasks
+@w.en.done.doc.countTasks core.word lang=en text=done means=doc.countTasks
+@w.en.checked.doc.countTasks core.word lang=en text=checked means=doc.countTasks
+@w.en.completed.doc.countTasks core.word lang=en text=completed means=doc.countTasks
+@w.en.finished.doc.countTasks core.word lang=en text=finished means=doc.countTasks
+@w.en.ticked.doc.countTasks core.word lang=en text=ticked means=doc.countTasks
+@w.en.complete.doc.countTasks core.word lang=en text=complete means=doc.countTasks
+@w.en.how_many_tasks_do_i_have.doc.countTasks core.word lang=en text="how many tasks do i have" means=doc.countTasks
+@w.en.how_many_open_tasks.doc.countTasks core.word lang=en text="how many open tasks" means=doc.countTasks
+@w.en.how_many_unfinished_tasks.doc.countTasks core.word lang=en text="how many unfinished tasks" means=doc.countTasks
+@w.en.how_many_tasks_remain.doc.countTasks core.word lang=en text="how many tasks remain" means=doc.countTasks
+@w.en.how_many_tasks_not.doc.countTasks core.word lang=en text="how many tasks not" means=doc.countTasks
+@w.en.left.doc.countTasks core.word lang=en text=left means=doc.countTasks
+@w.en.open.doc.countTasks core.word lang=en text=open means=doc.countTasks
+@w.en.remaining.doc.countTasks core.word lang=en text=remaining means=doc.countTasks
+@w.en.unfinished.doc.countTasks core.word lang=en text=unfinished means=doc.countTasks
+@w.en.not_done.doc.countTasks core.word lang=en text="not done" means=doc.countTasks
+@w.en.not_finished.doc.countTasks core.word lang=en text="not finished" means=doc.countTasks
+@w.en.unchecked.doc.countTasks core.word lang=en text=unchecked means=doc.countTasks
+@w.en.to_do.doc.countTasks core.word lang=en text="to do" means=doc.countTasks
+@w.en.undone.doc.countTasks core.word lang=en text=undone means=doc.countTasks
+@w.en.pending.doc.countTasks core.word lang=en text=pending means=doc.countTasks
+@w.en.undo.doc.undo core.word lang=en text=undo means=doc.undo
+@w.en.scratch.doc.undo core.word lang=en text=scratch means=doc.undo
+@w.en.take_back.doc.undo core.word lang=en text="take back" means=doc.undo
+@w.en.revert.doc.undo core.word lang=en text=revert means=doc.undo
+@w.en.cancel.doc.undo core.word lang=en text=cancel means=doc.undo
+@w.en.reverse.doc.undo core.word lang=en text=reverse means=doc.undo
+@w.en.roll_back.doc.undo core.word lang=en text="roll back" means=doc.undo
+@w.en.that.doc.undo core.word lang=en text=that means=doc.undo
+@w.en.it.doc.undo core.word lang=en text=it means=doc.undo
+@w.en.this.doc.undo core.word lang=en text=this means=doc.undo
+@w.en.the_last_thing.doc.undo core.word lang=en text="the last thing" means=doc.undo
+@w.en.the_last_change.doc.undo core.word lang=en text="the last change" means=doc.undo
+@w.en.my_last_change.doc.undo core.word lang=en text="my last change" means=doc.undo
+@w.en.the_previous_change.doc.undo core.word lang=en text="the previous change" means=doc.undo
+@w.en.the_last_edit.doc.undo core.word lang=en text="the last edit" means=doc.undo
+@w.en.last_change.doc.undo core.word lang=en text="last change" means=doc.undo
+@w.en.redo.doc.redo core.word lang=en text=redo means=doc.redo
+@w.en.do_it_again.doc.redo core.word lang=en text="do it again" means=doc.redo
+@w.en.put_it_back.doc.redo core.word lang=en text="put it back" means=doc.redo
+@w.en.restore.doc.redo core.word lang=en text=restore means=doc.redo
+@w.en.that.doc.redo core.word lang=en text=that means=doc.redo
+@w.en.it.doc.redo core.word lang=en text=it means=doc.redo
+@w.en.this.doc.redo core.word lang=en text=this means=doc.redo
+@w.en.the_last_change.doc.redo core.word lang=en text="the last change" means=doc.redo
+@w.en.the_last_undo.doc.redo core.word lang=en text="the last undo" means=doc.redo
+@w.en.clear.doc.clear core.word lang=en text=clear means=doc.clear
+@w.en.empty.doc.clear core.word lang=en text=empty means=doc.clear
+@w.en.wipe.doc.clear core.word lang=en text=wipe means=doc.clear
+@w.en.erase.doc.clear core.word lang=en text=erase means=doc.clear
+@w.en.delete.doc.clear core.word lang=en text=delete means=doc.clear
+@w.en.blank.doc.clear core.word lang=en text=blank means=doc.clear
+@w.en.document.doc.clear core.word lang=en text=document means=doc.clear
+@w.en.doc.doc.clear core.word lang=en text=doc means=doc.clear
+@w.en.everything.doc.clear core.word lang=en text=everything means=doc.clear
+@w.en.the_whole_document.doc.clear core.word lang=en text="the whole document" means=doc.clear
+@w.en.the_page.doc.clear core.word lang=en text="the page" means=doc.clear
+@w.en.all.doc.clear core.word lang=en text=all means=doc.clear
+@w.en.it_all.doc.clear core.word lang=en text="it all" means=doc.clear
+@w.en.give_me.doc.stats core.word lang=en text="give me" means=doc.stats
+@w.en.tell_me.doc.stats core.word lang=en text="tell me" means=doc.stats
+@w.en.show_me.doc.stats core.word lang=en text="show me" means=doc.stats
+@w.en.count.doc.stats core.word lang=en text=count means=doc.stats
+@w.en.word_count.doc.stats core.word lang=en text="word count" means=doc.stats
+@w.en.wordcount.doc.stats core.word lang=en text=wordcount means=doc.stats
+@w.en.statistics.doc.stats core.word lang=en text=statistics means=doc.stats
+@w.en.stats.doc.stats core.word lang=en text=stats means=doc.stats
+@w.en.number_of_words.doc.stats core.word lang=en text="number of words" means=doc.stats
+@w.en.length.doc.stats core.word lang=en text=length means=doc.stats
+@w.en.how_many_words_are_in.doc.stats core.word lang=en text="how many words are in" means=doc.stats
+@w.en.how_long_is.doc.stats core.word lang=en text="how long is" means=doc.stats
+@w.en.what_is_the_word_count_of.doc.stats core.word lang=en text="what is the word count of" means=doc.stats
+@w.en.how_many_words_does_have.doc.stats core.word lang=en text="how many words does have" means=doc.stats
+@w.en.how_many_words.doc.stats core.word lang=en text="how many words" means=doc.stats
+@w.en.the_document.doc.stats core.word lang=en text="the document" means=doc.stats
+@w.en.the_doc.doc.stats core.word lang=en text="the doc" means=doc.stats
+@w.en.my_document.doc.stats core.word lang=en text="my document" means=doc.stats
+@w.en.it.doc.stats core.word lang=en text=it means=doc.stats
+@w.en.in_the_document.doc.stats core.word lang=en text="in the document" means=doc.stats
+@w.en.do_i_have.doc.stats core.word lang=en text="do i have" means=doc.stats
+@w.en.delete.doc.delete core.word lang=en text=delete means=doc.delete
+@w.en.remove.doc.delete core.word lang=en text=remove means=doc.delete
+@w.en.erase.doc.delete core.word lang=en text=erase means=doc.delete
+@w.en.drop.doc.delete core.word lang=en text=drop means=doc.delete
+@w.en.get_rid_of.doc.delete core.word lang=en text="get rid of" means=doc.delete
+@w.en.cut_out.doc.delete core.word lang=en text="cut out" means=doc.delete
+@w.en.the.doc.delete.ord core.word lang=en text=the means=doc.delete.ord
+@w.en.my.doc.delete.ord core.word lang=en text=my means=doc.delete.ord
+@w.en.the.doc.delete.kind core.word lang=en text=the means=doc.delete.kind
+@w.en.my.doc.delete.kind core.word lang=en text=my means=doc.delete.kind
+@w.en.delete.doc.deleteSentence core.word lang=en text=delete means=doc.deleteSentence
+@w.en.remove.doc.deleteSentence core.word lang=en text=remove means=doc.deleteSentence
+@w.en.erase.doc.deleteSentence core.word lang=en text=erase means=doc.deleteSentence
+@w.en.drop.doc.deleteSentence core.word lang=en text=drop means=doc.deleteSentence
+@w.en.cut.doc.deleteSentence core.word lang=en text=cut means=doc.deleteSentence
+@w.en.last_sentence.doc.deleteSentence core.word lang=en text="last sentence" means=doc.deleteSentence
+@w.en.the_last_sentence.doc.deleteSentence core.word lang=en text="the last sentence" means=doc.deleteSentence
+@w.en.final_sentence.doc.deleteSentence core.word lang=en text="final sentence" means=doc.deleteSentence
+@w.en.read.doc.read core.word lang=en text=read means=doc.read
+@w.en.read_out.doc.read core.word lang=en text="read out" means=doc.read
+@w.en.read_aloud.doc.read core.word lang=en text="read aloud" means=doc.read
+@w.en.speak.doc.read core.word lang=en text=speak means=doc.read
+@w.en.say.doc.read core.word lang=en text=say means=doc.read
+@w.en.document.doc.read core.word lang=en text=document means=doc.read
+@w.en.doc.doc.read core.word lang=en text=doc means=doc.read
+@w.en.the_document.doc.read core.word lang=en text="the document" means=doc.read
+@w.en.everything.doc.read core.word lang=en text=everything means=doc.read
+@w.en.it_back.doc.read core.word lang=en text="it back" means=doc.read
+@w.en.whole_document.doc.read core.word lang=en text="whole document" means=doc.read
+@w.en.it.doc.read core.word lang=en text=it means=doc.read
+@w.en.the.doc.read.ord core.word lang=en text=the means=doc.read.ord
+@w.en.my.doc.read.ord core.word lang=en text=my means=doc.read.ord
+@w.en.the.doc.read.kind core.word lang=en text=the means=doc.read.kind
+@w.en.my.doc.read.kind core.word lang=en text=my means=doc.read.kind
+@w.en.go_to.doc.goto core.word lang=en text="go to" means=doc.goto
+@w.en.jump_to.doc.goto core.word lang=en text="jump to" means=doc.goto
+@w.en.scroll_to.doc.goto core.word lang=en text="scroll to" means=doc.goto
+@w.en.navigate_to.doc.goto core.word lang=en text="navigate to" means=doc.goto
+@w.en.move_to.doc.goto core.word lang=en text="move to" means=doc.goto
+@w.en.move_the_cursor_to.doc.goto core.word lang=en text="move the cursor to" means=doc.goto
+@w.en.put_the_cursor_at.doc.goto core.word lang=en text="put the cursor at" means=doc.goto
+@w.en.take_me_to.doc.goto core.word lang=en text="take me to" means=doc.goto
+@w.en.to.doc.goto.w core.word lang=en text=to means=doc.goto.w
+@w.en.at.doc.goto.w core.word lang=en text=at means=doc.goto.w
+@w.en.the.doc.goto.w core.word lang=en text=the means=doc.goto.w
+@w.en.the.doc.goto.ord core.word lang=en text=the means=doc.goto.ord
+@w.en.my.doc.goto.ord core.word lang=en text=my means=doc.goto.ord
+@w.en.the.doc.goto.kind core.word lang=en text=the means=doc.goto.kind
+@w.en.my.doc.goto.kind core.word lang=en text=my means=doc.goto.kind

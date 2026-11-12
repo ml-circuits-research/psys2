@@ -1,0 +1,287 @@
+@describe.geo.map.capital.ro core.describe.words
+    of=$describe.geo.map.capital
+    lang=ro
+    frames=qnoun
+    frames=tell
+    frames=rev
+    noun=$w.ro.capitala.geo.capital
+    noun=$w.ro.capitala_tarii.geo.capital
+    noun=$w.ro.capitala_2.geo.capital
+    sample.c=Japan
+    example="Care este capitala Japoniei?"
+
+@describe.geo.map.population.ro core.describe.words
+    of=$describe.geo.map.population
+    lang=ro
+    frames=qnoun
+    frames=tell
+    frames=rev
+    frames=ask
+    noun=$w.ro.populatia.geo.population
+    noun=$w.ro.numarul_de_locuitori.geo.population
+    noun=$w.ro.numarul_de_oameni.geo.population
+    ask=$w.ro.cati_oameni_traiesc_in.geo.population
+    ask=$w.ro.cati_locuitori_are.geo.population
+    sample.p=Brazil
+    example="Care este populația Braziliei?"
+
+@describe.geo.map.where.ro core.describe.words
+    of=$describe.geo.map.where
+    lang=ro
+    frames=ask
+    frames=qnoun
+    frames=rev
+    noun=$w.ro.locatia.geo.where
+    noun=$w.ro.pozitia.geo.where
+    ask=$w.ro.unde_e.geo.where
+    ask=$w.ro.unde_este.geo.where
+    ask=$w.ro.unde_se_afla.geo.where
+    ask=$w.ro.unde_se_gaseste.geo.where
+    ask=$w.ro.unde_vine.geo.where
+    rest=$w.ro.pe_harta.geo.where
+    rest=$w.ro.situat.geo.where
+    rest=$w.ro.situata.geo.where
+    sample.p=Paris
+    example="Unde e Parisul?"
+
+@describe.geo.map.distance.ro core.describe.words
+    of=$describe.geo.map.distance
+    lang=ro
+    frames=ask
+    frames=qnoun
+    frames=tell
+    frames=rev
+    frames=bare
+    frames=imp
+    frames=wish
+    frames=can
+    verb=$w.ro.masoara.geo.distance
+    verb=$w.ro.traseaza.geo.distance
+    verb=$w.ro.uneste.geo.distance
+    noun=$w.ro.distanta.geo.distance
+    noun=$w.ro.lungimea.geo.distance
+    noun=$w.ro.km.geo.distance
+    noun=$w.ro.kilometri.geo.distance
+    ask=$w.ro.cat_de_departe_e.geo.distance
+    ask=$w.ro.cat_de_departe_este.geo.distance
+    ask=$w.ro.cat_de_departe_sunt.geo.distance
+    ask=$w.ro.ce_distanta_e.geo.distance
+    rest=$w.ro.distanta_2.geo.distance
+    rest=$w.ro.departare.geo.distance
+    rest=$w.ro.in_km.geo.distance
+    rest=$w.ro.in_kilometri.geo.distance
+    prep.a=$w.ro.de_la.geo.distance.a
+    prep.a=$w.ro.intre.geo.distance.a
+    prep.a=$w.ro.dintre.geo.distance.a
+    prep.a=$w.ro.din.geo.distance.a
+    prep.a=$w.ro.a.geo.distance.a
+    prep.a=$w.ro.al.geo.distance.a
+    prep.b=$w.ro.la.geo.distance.b
+    prep.b=$w.ro.pana_la.geo.distance.b
+    prep.b=$w.ro.si.geo.distance.b
+    prep.b=$w.ro.spre.geo.distance.b
+    prep.b=$w.ro.catre.geo.distance.b
+    sample.a=Paris
+    sample.b=Rome
+    example="Distanța de la Paris la Roma."
+
+@describe.geo.map.show.ro core.describe.words
+    of=$describe.geo.map.show
+    lang=ro
+    frames=imp
+    frames=wish
+    frames=can
+    frames=short
+    verb=$w.ro.arata_mi.geo.show
+    verb=$w.ro.arata.geo.show
+    verb=$w.ro.afiseaza.geo.show
+    verb=$w.ro.gaseste.geo.show
+    verb=$w.ro.cauta.geo.show
+    verb=$w.ro.vreau_sa_vad.geo.show
+    rest=$w.ro.pe_harta.geo.show
+    rest=$w.ro.pe_harta_2.geo.show
+    prep.a=$w.ro.pe.geo.show.a
+    prep.a=$w.ro.la.geo.show.a
+    prep.a=$w.ro.in.geo.show.a
+    prep.b=$w.ro.si.geo.show.b
+    prep.b=$w.ro.sym.geo.show.b
+    prep.c=$w.ro.si.geo.show.c
+    prep.c=$w.ro.sym.geo.show.c
+    prep.d=$w.ro.si.geo.show.d
+    prep.d=$w.ro.sym.geo.show.d
+    prep.e=$w.ro.si.geo.show.e
+    prep.e=$w.ro.sym.geo.show.e
+    sample.a=Bucharest
+    example="Arată-mi București."
+
+@describe.geo.map.borders.ro core.describe.words
+    of=$describe.geo.map.borders
+    lang=ro
+    frames=ask
+    frames=qnoun
+    frames=tell
+    noun=$w.ro.vecinii.geo.borders
+    noun=$w.ro.granitele.geo.borders
+    noun=$w.ro.tarile_vecine.geo.borders
+    ask=$w.ro.ce_tari_se_invecineaza_cu.geo.borders
+    ask=$w.ro.ce_tari_au_granita_comuna_cu.geo.borders
+    ask=$w.ro.ce_tari_au_granita_comuna_cu_2.geo.borders
+    ask=$w.ro.ce_tari_au_frontiera_comuna_cu.geo.borders
+    ask=$w.ro.cine_se_invecineaza_cu.geo.borders
+    sample.p=Hungary
+    example="Ce țări se învecinează cu Ungaria?"
+
+@describe.geo.map.isIn.ro core.describe.words
+    of=$describe.geo.map.isIn
+    lang=ro
+    frames=ask
+    frames=pred
+    verb=$w.ro.e.geo.isIn
+    verb=$w.ro.este.geo.isIn
+    verb=$w.ro.se_afla.geo.isIn
+    verb=$w.ro.se_gaseste.geo.isIn
+    verb=$w.ro.sta.geo.isIn
+    ask=$w.ro.este.geo.isIn
+    ask=$w.ro.e.geo.isIn
+    ask=$w.ro.sunt.geo.isIn
+    prep.q=$w.ro.in.geo.isIn.q
+    prep.q=$w.ro.pe.geo.isIn.q
+    prep.q=$w.ro.din.geo.isIn.q
+    sample.p=Paris
+    sample.q=France
+    example="Parisul este în Franța?"
+
+@describe.geo.map.zoomIn.ro core.describe.words
+    of=$describe.geo.map.zoomIn
+    lang=ro
+    frames=imp
+    frames=wish
+    frames=can
+    verb=$w.ro.apropie.geo.zoom
+    verb=$w.ro.mareste.geo.zoom
+    verb=$w.ro.da_zoom.geo.zoom
+    verb=$w.ro.zoom.geo.zoom
+    verb=$w.ro.fa_zoom.geo.zoom
+    verb=$w.ro.zoom_in.geo.zoom
+    rest=$w.ro.harta.geo.zoom
+    rest=$w.ro.imaginea.geo.zoom
+    rest=$w.ro.mai_mult.geo.zoom
+    rest=$w.ro.mai_aproape.geo.zoom
+    rest=$w.ro.putin.geo.zoom
+    example="Apropie harta."
+
+@describe.geo.map.zoomOut.ro core.describe.words
+    of=$describe.geo.map.zoomOut
+    lang=ro
+    frames=imp
+    frames=wish
+    frames=can
+    verb=$w.ro.departeaza.geo.zoom
+    verb=$w.ro.micsoreaza.geo.zoom
+    verb=$w.ro.da_zoom_out.geo.zoom
+    verb=$w.ro.zoom_out.geo.zoom
+    verb=$w.ro.indeparteaza.geo.zoom
+    rest=$w.ro.harta.geo.zoom
+    rest=$w.ro.imaginea.geo.zoom
+    rest=$w.ro.mai_mult.geo.zoom
+    rest=$w.ro.mai_departe.geo.zoom
+    rest=$w.ro.putin.geo.zoom
+    example="Depărtează harta."
+
+@w.ro.capitala.geo.capital core.word lang=ro text=capitala means=geo.capital
+@w.ro.capitala_tarii.geo.capital core.word lang=ro text="capitala țării" means=geo.capital
+@w.ro.capitala_2.geo.capital core.word lang=ro text="capitală" means=geo.capital
+@w.ro.populatia.geo.population core.word lang=ro text="populația" means=geo.population
+@w.ro.numarul_de_locuitori.geo.population core.word lang=ro text="numărul de locuitori" means=geo.population
+@w.ro.numarul_de_oameni.geo.population core.word lang=ro text="numărul de oameni" means=geo.population
+@w.ro.cati_oameni_traiesc_in.geo.population core.word lang=ro text="câți oameni trăiesc în" means=geo.population
+@w.ro.cati_locuitori_are.geo.population core.word lang=ro text="câți locuitori are" means=geo.population
+@w.ro.locatia.geo.where core.word lang=ro text="locația" means=geo.where
+@w.ro.pozitia.geo.where core.word lang=ro text="poziția" means=geo.where
+@w.ro.unde_e.geo.where core.word lang=ro text="unde e" means=geo.where
+@w.ro.unde_este.geo.where core.word lang=ro text="unde este" means=geo.where
+@w.ro.unde_se_afla.geo.where core.word lang=ro text="unde se află" means=geo.where
+@w.ro.unde_se_gaseste.geo.where core.word lang=ro text="unde se găsește" means=geo.where
+@w.ro.unde_vine.geo.where core.word lang=ro text="unde vine" means=geo.where
+@w.ro.pe_harta.geo.where core.word lang=ro text="pe hartă" means=geo.where
+@w.ro.situat.geo.where core.word lang=ro text=situat means=geo.where
+@w.ro.situata.geo.where core.word lang=ro text="situată" means=geo.where
+@w.ro.masoara.geo.distance core.word lang=ro text="măsoară" means=geo.distance
+@w.ro.traseaza.geo.distance core.word lang=ro text="trasează" means=geo.distance
+@w.ro.uneste.geo.distance core.word lang=ro text="unește" means=geo.distance
+@w.ro.distanta.geo.distance core.word lang=ro text="distanța" means=geo.distance
+@w.ro.lungimea.geo.distance core.word lang=ro text=lungimea means=geo.distance
+@w.ro.km.geo.distance core.word lang=ro text=km means=geo.distance
+@w.ro.kilometri.geo.distance core.word lang=ro text=kilometri means=geo.distance
+@w.ro.cat_de_departe_e.geo.distance core.word lang=ro text="cât de departe e" means=geo.distance
+@w.ro.cat_de_departe_este.geo.distance core.word lang=ro text="cât de departe este" means=geo.distance
+@w.ro.cat_de_departe_sunt.geo.distance core.word lang=ro text="cât de departe sunt" means=geo.distance
+@w.ro.ce_distanta_e.geo.distance core.word lang=ro text="ce distanță e" means=geo.distance
+@w.ro.distanta_2.geo.distance core.word lang=ro text="distanță" means=geo.distance
+@w.ro.departare.geo.distance core.word lang=ro text="depărtare" means=geo.distance
+@w.ro.in_km.geo.distance core.word lang=ro text="în km" means=geo.distance
+@w.ro.in_kilometri.geo.distance core.word lang=ro text="în kilometri" means=geo.distance
+@w.ro.de_la.geo.distance.a core.word lang=ro text="de la" means=geo.distance.a
+@w.ro.intre.geo.distance.a core.word lang=ro text="între" means=geo.distance.a
+@w.ro.dintre.geo.distance.a core.word lang=ro text=dintre means=geo.distance.a
+@w.ro.din.geo.distance.a core.word lang=ro text=din means=geo.distance.a
+@w.ro.a.geo.distance.a core.word lang=ro text=a means=geo.distance.a
+@w.ro.al.geo.distance.a core.word lang=ro text=al means=geo.distance.a
+@w.ro.la.geo.distance.b core.word lang=ro text=la means=geo.distance.b
+@w.ro.pana_la.geo.distance.b core.word lang=ro text="până la" means=geo.distance.b
+@w.ro.si.geo.distance.b core.word lang=ro text="și" means=geo.distance.b
+@w.ro.spre.geo.distance.b core.word lang=ro text=spre means=geo.distance.b
+@w.ro.catre.geo.distance.b core.word lang=ro text="către" means=geo.distance.b
+@w.ro.arata_mi.geo.show core.word lang=ro text="arată-mi" means=geo.show
+@w.ro.arata.geo.show core.word lang=ro text="arată" means=geo.show
+@w.ro.afiseaza.geo.show core.word lang=ro text="afișează" means=geo.show
+@w.ro.gaseste.geo.show core.word lang=ro text="găsește" means=geo.show
+@w.ro.cauta.geo.show core.word lang=ro text="caută" means=geo.show
+@w.ro.vreau_sa_vad.geo.show core.word lang=ro text="vreau să văd" means=geo.show
+@w.ro.pe_harta.geo.show core.word lang=ro text="pe hartă" means=geo.show
+@w.ro.pe_harta_2.geo.show core.word lang=ro text="pe harta" means=geo.show
+@w.ro.pe.geo.show.a core.word lang=ro text=pe means=geo.show.a
+@w.ro.la.geo.show.a core.word lang=ro text=la means=geo.show.a
+@w.ro.in.geo.show.a core.word lang=ro text="în" means=geo.show.a
+@w.ro.si.geo.show.b core.word lang=ro text="și" means=geo.show.b
+@w.ro.sym.geo.show.b core.word lang=ro text="," means=geo.show.b
+@w.ro.si.geo.show.c core.word lang=ro text="și" means=geo.show.c
+@w.ro.sym.geo.show.c core.word lang=ro text="," means=geo.show.c
+@w.ro.si.geo.show.d core.word lang=ro text="și" means=geo.show.d
+@w.ro.sym.geo.show.d core.word lang=ro text="," means=geo.show.d
+@w.ro.si.geo.show.e core.word lang=ro text="și" means=geo.show.e
+@w.ro.sym.geo.show.e core.word lang=ro text="," means=geo.show.e
+@w.ro.vecinii.geo.borders core.word lang=ro text=vecinii means=geo.borders
+@w.ro.granitele.geo.borders core.word lang=ro text="granițele" means=geo.borders
+@w.ro.tarile_vecine.geo.borders core.word lang=ro text="țările vecine" means=geo.borders
+@w.ro.ce_tari_se_invecineaza_cu.geo.borders core.word lang=ro text="ce țări se învecinează cu" means=geo.borders
+@w.ro.ce_tari_au_granita_comuna_cu.geo.borders core.word lang=ro text="ce țări au graniță comună cu" means=geo.borders
+@w.ro.ce_tari_au_granita_comuna_cu_2.geo.borders core.word lang=ro text="ce țări au granița comună cu" means=geo.borders
+@w.ro.ce_tari_au_frontiera_comuna_cu.geo.borders core.word lang=ro text="ce țări au frontieră comună cu" means=geo.borders
+@w.ro.cine_se_invecineaza_cu.geo.borders core.word lang=ro text="cine se învecinează cu" means=geo.borders
+@w.ro.e.geo.isIn core.word lang=ro text=e means=geo.isIn
+@w.ro.este.geo.isIn core.word lang=ro text=este means=geo.isIn
+@w.ro.se_afla.geo.isIn core.word lang=ro text="se află" means=geo.isIn
+@w.ro.se_gaseste.geo.isIn core.word lang=ro text="se găsește" means=geo.isIn
+@w.ro.sta.geo.isIn core.word lang=ro text="stă" means=geo.isIn
+@w.ro.sunt.geo.isIn core.word lang=ro text=sunt means=geo.isIn
+@w.ro.in.geo.isIn.q core.word lang=ro text="în" means=geo.isIn.q
+@w.ro.pe.geo.isIn.q core.word lang=ro text=pe means=geo.isIn.q
+@w.ro.din.geo.isIn.q core.word lang=ro text=din means=geo.isIn.q
+@w.ro.apropie.geo.zoom core.word lang=ro text=apropie means=geo.zoom
+@w.ro.mareste.geo.zoom core.word lang=ro text="mărește" means=geo.zoom
+@w.ro.da_zoom.geo.zoom core.word lang=ro text="dă zoom" means=geo.zoom
+@w.ro.zoom.geo.zoom core.word lang=ro text=zoom means=geo.zoom
+@w.ro.fa_zoom.geo.zoom core.word lang=ro text="fă zoom" means=geo.zoom
+@w.ro.zoom_in.geo.zoom core.word lang=ro text="zoom in" means=geo.zoom
+@w.ro.harta.geo.zoom core.word lang=ro text=harta means=geo.zoom
+@w.ro.imaginea.geo.zoom core.word lang=ro text=imaginea means=geo.zoom
+@w.ro.mai_mult.geo.zoom core.word lang=ro text="mai mult" means=geo.zoom
+@w.ro.mai_aproape.geo.zoom core.word lang=ro text="mai aproape" means=geo.zoom
+@w.ro.putin.geo.zoom core.word lang=ro text="puțin" means=geo.zoom
+@w.ro.departeaza.geo.zoom core.word lang=ro text="depărtează" means=geo.zoom
+@w.ro.micsoreaza.geo.zoom core.word lang=ro text="micșorează" means=geo.zoom
+@w.ro.da_zoom_out.geo.zoom core.word lang=ro text="dă zoom out" means=geo.zoom
+@w.ro.zoom_out.geo.zoom core.word lang=ro text="zoom out" means=geo.zoom
+@w.ro.indeparteaza.geo.zoom core.word lang=ro text="îndepărtează" means=geo.zoom
+@w.ro.mai_departe.geo.zoom core.word lang=ro text="mai departe" means=geo.zoom

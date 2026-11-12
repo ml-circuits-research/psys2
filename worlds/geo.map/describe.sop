@@ -2,373 +2,1362 @@
     op=geo.capital
     intent=query
     emit="@{_} core.request action=geo.capital arg.c={c}"
-    arg="c:lex.geo.map.places"
-    noun="capital|capital_city"
-    frames=qnoun,tell,poss,rev
+    frames=qnoun
+    frames=tell
+    frames=poss
+    frames=rev
     priority=12
     shortPriority=10
-    sample="c=Japan"
-    example="What is the capital of Japan?"
     effect="answers the capital of a country"
+
+@describe.geo.map.capital.c core.describe.arg
+    of=$describe.geo.map.capital
+    name=c
+    class=lex.geo.map.places
+
+@describe.geo.map.capital.en core.describe.words
+    of=$describe.geo.map.capital
+    lang=en
+    noun=$w.en.capital.geo.capital
+    noun=$w.en.capital_city.geo.capital
+    sample.c=Japan
+    example="What is the capital of Japan?"
 
 @describe.geo.map.population core.describe
     op=geo.population
     intent=query
     emit="@{_} core.request action=geo.population arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="population|number_of_people|number_of_inhabitants"
-    ask="how_many_people_live_in|how_many_people_are_in|how_many_inhabitants_does_have"
-    frames=qnoun,tell,poss,rev,ask
+    frames=qnoun
+    frames=tell
+    frames=poss
+    frames=rev
+    frames=ask
     priority=12
     shortPriority=10
-    sample="p=Brazil"
-    example="What is the population of Brazil?"
     effect="answers the population of a place"
+
+@describe.geo.map.population.p core.describe.arg
+    of=$describe.geo.map.population
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.population.en core.describe.words
+    of=$describe.geo.map.population
+    lang=en
+    noun=$w.en.population.geo.population
+    noun=$w.en.number_of_people.geo.population
+    noun=$w.en.number_of_inhabitants.geo.population
+    ask=$w.en.how_many_people_live_in.geo.population
+    ask=$w.en.how_many_people_are_in.geo.population
+    ask=$w.en.how_many_inhabitants_does_have.geo.population
+    sample.p=Brazil
+    example="What is the population of Brazil?"
 
 @describe.geo.map.currency core.describe
     op=geo.currency
     intent=query
     emit="@{_} core.request action=geo.currency arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="currency|money|currencies"
-    ask="what_do_they_pay_with_in|what_money_do_they_use_in"
-    frames=qnoun,tell,poss,rev,ask
+    frames=qnoun
+    frames=tell
+    frames=poss
+    frames=rev
+    frames=ask
     priority=12
     shortPriority=10
-    sample="p=Japan"
-    example="What is the currency of Japan?"
     effect="answers the currency of a country"
+
+@describe.geo.map.currency.p core.describe.arg
+    of=$describe.geo.map.currency
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.currency.en core.describe.words
+    of=$describe.geo.map.currency
+    lang=en
+    noun=$w.en.currency.geo.currency
+    noun=$w.en.money.geo.currency
+    noun=$w.en.currencies.geo.currency
+    ask=$w.en.what_do_they_pay_with_in.geo.currency
+    ask=$w.en.what_money_do_they_use_in.geo.currency
+    sample.p=Japan
+    example="What is the currency of Japan?"
 
 @describe.geo.map.continent core.describe
     op=geo.continent
     intent=query
     emit="@{_} core.request action=geo.continent arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="continent"
-    ask="which_continent_is|what_continent_is|on_which_continent_is"
-    rest="on|in"
-    frames=qnoun,tell,poss,rev,ask
+    frames=qnoun
+    frames=tell
+    frames=poss
+    frames=rev
+    frames=ask
     priority=12
     shortPriority=10
-    sample="p=Peru"
-    example="Which continent is Peru on?"
     effect="answers the continent of a place"
+
+@describe.geo.map.continent.p core.describe.arg
+    of=$describe.geo.map.continent
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.continent.en core.describe.words
+    of=$describe.geo.map.continent
+    lang=en
+    noun=$w.en.continent.geo.continent
+    ask=$w.en.which_continent_is.geo.continent
+    ask=$w.en.what_continent_is.geo.continent
+    ask=$w.en.on_which_continent_is.geo.continent
+    rest=$w.en.on.geo.continent
+    rest=$w.en.in.geo.continent
+    sample.p=Peru
+    example="Which continent is Peru on?"
 
 @describe.geo.map.country core.describe
     op=geo.country
     intent=query
     emit="@{_} core.request action=geo.country arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="country|nation"
-    ask="which_country_is|what_country_is|in_which_country_is"
-    rest="in"
-    frames=qnoun,tell,poss,rev,ask
+    frames=qnoun
+    frames=tell
+    frames=poss
+    frames=rev
+    frames=ask
     priority=12
     shortPriority=10
-    sample="p=Paris"
-    example="Which country is Paris in?"
     effect="answers the country of a city"
+
+@describe.geo.map.country.p core.describe.arg
+    of=$describe.geo.map.country
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.country.en core.describe.words
+    of=$describe.geo.map.country
+    lang=en
+    noun=$w.en.country.geo.country
+    noun=$w.en.nation.geo.country
+    ask=$w.en.which_country_is.geo.country
+    ask=$w.en.what_country_is.geo.country
+    ask=$w.en.in_which_country_is.geo.country
+    rest=$w.en.in.geo.country
+    sample.p=Paris
+    example="Which country is Paris in?"
 
 @describe.geo.map.area core.describe
     op=geo.area
     intent=query
     emit="@{_} core.request action=geo.area arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="area|size|surface"
-    ask="how_big_is|how_large_is|how_much_land_does_cover"
-    rest="in_km|in_square_kilometres|in_size"
-    frames=qnoun,tell,poss,rev,ask
+    frames=qnoun
+    frames=tell
+    frames=poss
+    frames=rev
+    frames=ask
     priority=12
     shortPriority=10
-    sample="p=France"
-    example="What is the area of France?"
     effect="answers the area of a country"
+
+@describe.geo.map.area.p core.describe.arg
+    of=$describe.geo.map.area
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.area.en core.describe.words
+    of=$describe.geo.map.area
+    lang=en
+    noun=$w.en.area.geo.area
+    noun=$w.en.size.geo.area
+    noun=$w.en.surface.geo.area
+    ask=$w.en.how_big_is.geo.area
+    ask=$w.en.how_large_is.geo.area
+    ask=$w.en.how_much_land_does_cover.geo.area
+    rest=$w.en.in_km.geo.area
+    rest=$w.en.in_square_kilometres.geo.area
+    rest=$w.en.in_size.geo.area
+    sample.p=France
+    example="What is the area of France?"
 
 @describe.geo.map.languages core.describe
     op=geo.languages
     intent=query
     emit="@{_} core.request action=geo.languages arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="language|languages|official_language"
-    ask="what_language_do_they_speak_in|what_languages_are_spoken_in|what_do_they_speak_in|what_do_people_speak_in"
-    frames=qnoun,tell,poss,rev,ask
+    frames=qnoun
+    frames=tell
+    frames=poss
+    frames=rev
+    frames=ask
     priority=12
     shortPriority=10
-    sample="p=Brazil"
-    example="What languages are spoken in Switzerland?"
     effect="answers the languages of a country"
+
+@describe.geo.map.languages.p core.describe.arg
+    of=$describe.geo.map.languages
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.languages.en core.describe.words
+    of=$describe.geo.map.languages
+    lang=en
+    noun=$w.en.language.geo.languages
+    noun=$w.en.languages.geo.languages
+    noun=$w.en.official_language.geo.languages
+    ask=$w.en.what_language_do_they_speak_in.geo.languages
+    ask=$w.en.what_languages_are_spoken_in.geo.languages
+    ask=$w.en.what_do_they_speak_in.geo.languages
+    ask=$w.en.what_do_people_speak_in.geo.languages
+    sample.p=Brazil
+    example="What languages are spoken in Switzerland?"
 
 @describe.geo.map.landlocked core.describe
     op=geo.landlocked
     intent=query
     emit="@{_} core.request action=geo.landlocked arg.p={p}"
-    arg="p:lex.geo.map.places"
-    ask="is|does|can_i_say_that"
-    rest="landlocked|surrounded_by_land|have_a_coast|have_a_sea_border|touch_the_sea|have_no_coast"
-    frames=ask,last
+    frames=ask
+    frames=last
     priority=12
-    sample="p=Hungary"
-    example="Is Hungary landlocked?"
     effect="answers yes or no"
+
+@describe.geo.map.landlocked.p core.describe.arg
+    of=$describe.geo.map.landlocked
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.landlocked.en core.describe.words
+    of=$describe.geo.map.landlocked
+    lang=en
+    ask=$w.en.is.geo.landlocked
+    ask=$w.en.does.geo.landlocked
+    ask=$w.en.can_i_say_that.geo.landlocked
+    rest=$w.en.landlocked.geo.landlocked
+    rest=$w.en.surrounded_by_land.geo.landlocked
+    rest=$w.en.have_a_coast.geo.landlocked
+    rest=$w.en.have_a_sea_border.geo.landlocked
+    rest=$w.en.touch_the_sea.geo.landlocked
+    rest=$w.en.have_no_coast.geo.landlocked
+    sample.p=Hungary
+    example="Is Hungary landlocked?"
 
 @describe.geo.map.neighbourCount core.describe
     op=geo.neighbourCount
     intent=query
     emit="@{_} core.request action=geo.neighbourCount arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="number_of_neighbours|neighbour_count|number_of_countries_bordering"
-    ask="how_many_neighbours_does|how_many_land_neighbours_does|how_many_countries_border|how_many_countries_share_a_border_with"
-    rest="have|has"
-    verb="count"
-    frames=ask,tell,poss,rev,last
+    frames=ask
+    frames=tell
+    frames=poss
+    frames=rev
+    frames=last
     priority=12
     shortPriority=10
-    sample="p=Hungary"
-    example="How many neighbours does Hungary have?"
     effect="answers the number of countries that border a country"
+
+@describe.geo.map.neighbourCount.p core.describe.arg
+    of=$describe.geo.map.neighbourCount
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.neighbourCount.en core.describe.words
+    of=$describe.geo.map.neighbourCount
+    lang=en
+    verb=$w.en.count.geo.neighbourCount
+    noun=$w.en.number_of_neighbours.geo.neighbourCount
+    noun=$w.en.neighbour_count.geo.neighbourCount
+    noun=$w.en.number_of_countries_bordering.geo.neighbourCount
+    ask=$w.en.how_many_neighbours_does.geo.neighbourCount
+    ask=$w.en.how_many_land_neighbours_does.geo.neighbourCount
+    ask=$w.en.how_many_countries_border.geo.neighbourCount
+    ask=$w.en.how_many_countries_share_a_border_with.geo.neighbourCount
+    rest=$w.en.have.geo.neighbourCount
+    rest=$w.en.has.geo.neighbourCount
+    sample.p=Hungary
+    example="How many neighbours does Hungary have?"
 
 @describe.geo.map.borders core.describe
     op=geo.borders
     intent=query
     emit="@{_} core.request action=geo.borders arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="neighbours|neighbors|borders|neighbouring_countries"
-    ask="which_countries_border|what_countries_border|who_borders|what_borders|which_countries_are_next_to|what_countries_are_next_to|countries_bordering|countries_next_to|which_countries_touch|which_countries_share_a_border_with|what_countries_share_a_border_with|which_countries_are_neighbours_of"
-    frames=ask,qnoun,tell,poss,rev
+    frames=ask
+    frames=qnoun
+    frames=tell
+    frames=poss
+    frames=rev
     priority=12
     shortPriority=10
-    sample="p=Hungary"
-    example="Which countries border Hungary?"
     effect="lists the countries that border a country"
+
+@describe.geo.map.borders.p core.describe.arg
+    of=$describe.geo.map.borders
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.borders.en core.describe.words
+    of=$describe.geo.map.borders
+    lang=en
+    noun=$w.en.neighbours.geo.borders
+    noun=$w.en.neighbors.geo.borders
+    noun=$w.en.borders.geo.borders
+    noun=$w.en.neighbouring_countries.geo.borders
+    ask=$w.en.which_countries_border.geo.borders
+    ask=$w.en.what_countries_border.geo.borders
+    ask=$w.en.who_borders.geo.borders
+    ask=$w.en.what_borders.geo.borders
+    ask=$w.en.which_countries_are_next_to.geo.borders
+    ask=$w.en.what_countries_are_next_to.geo.borders
+    ask=$w.en.countries_bordering.geo.borders
+    ask=$w.en.countries_next_to.geo.borders
+    ask=$w.en.which_countries_touch.geo.borders
+    ask=$w.en.which_countries_share_a_border_with.geo.borders
+    ask=$w.en.what_countries_share_a_border_with.geo.borders
+    ask=$w.en.which_countries_are_neighbours_of.geo.borders
+    sample.p=Hungary
+    example="Which countries border Hungary?"
 
 @describe.geo.map.where core.describe
     op=geo.where
     intent=query
     emit="@{_} core.request action=geo.where arg.p={p}"
-    arg="p:lex.geo.map.places"
-    noun="location|position"
-    ask="where_is|where_s|wheres|where_are|where_can_i_find|where_can_i_see"
-    rest="on_the_map|located"
-    frames=ask,qnoun,rev
+    frames=ask
+    frames=qnoun
+    frames=rev
     priority=13
     shortPriority=11
-    sample="p=Paris"
-    example="Where is Paris?"
     effect="shows the place on the map and says where it is"
+
+@describe.geo.map.where.p core.describe.arg
+    of=$describe.geo.map.where
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.where.en core.describe.words
+    of=$describe.geo.map.where
+    lang=en
+    noun=$w.en.location.geo.where
+    noun=$w.en.position.geo.where
+    ask=$w.en.where_is.geo.where
+    ask=$w.en.where_s.geo.where
+    ask=$w.en.wheres.geo.where
+    ask=$w.en.where_are.geo.where
+    ask=$w.en.where_can_i_find.geo.where
+    ask=$w.en.where_can_i_see.geo.where
+    rest=$w.en.on_the_map.geo.where
+    rest=$w.en.located.geo.where
+    sample.p=Paris
+    example="Where is Paris?"
 
 @describe.geo.map.distance core.describe
     op=geo.distance
     intent=query
     emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
-    arg="a:lex.geo.map.places;prep=from|between|of|to"
-    arg="b:lex.geo.map.places;prep=to|and|from|between"
-    noun="distance|length|km|kilometres"
-    ask="how_far_is|how_far_are|how_far_apart_are|how_far_it_is_from|how_many_kilometres_are_there_between|how_many_km_between"
-    verb="measure|draw|trace|connect|link|join"
-    rest="apart|away|in_km"
-    frames=ask,qnoun,tell,rev,bare,imp,wish,ind,can
+    frames=ask
+    frames=qnoun
+    frames=tell
+    frames=rev
+    frames=bare
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
     shortPriority=10
-    sample="a=Paris;b=Rome"
-    example="How far is Paris from Rome?"
     effect="draws a line and answers the distance"
+
+@describe.geo.map.distance.a core.describe.arg
+    of=$describe.geo.map.distance
+    name=a
+    class=lex.geo.map.places
+
+@describe.geo.map.distance.b core.describe.arg
+    of=$describe.geo.map.distance
+    name=b
+    class=lex.geo.map.places
+
+@describe.geo.map.distance.en core.describe.words
+    of=$describe.geo.map.distance
+    lang=en
+    verb=$w.en.measure.geo.distance
+    verb=$w.en.draw.geo.distance
+    verb=$w.en.trace.geo.distance
+    verb=$w.en.connect.geo.distance
+    verb=$w.en.link.geo.distance
+    verb=$w.en.join.geo.distance
+    noun=$w.en.distance.geo.distance
+    noun=$w.en.length.geo.distance
+    noun=$w.en.km.geo.distance
+    noun=$w.en.kilometres.geo.distance
+    ask=$w.en.how_far_is.geo.distance
+    ask=$w.en.how_far_are.geo.distance
+    ask=$w.en.how_far_apart_are.geo.distance
+    ask=$w.en.how_far_it_is_from.geo.distance
+    ask=$w.en.how_many_kilometres_are_there_between.geo.distance
+    ask=$w.en.how_many_km_between.geo.distance
+    rest=$w.en.apart.geo.distance
+    rest=$w.en.away.geo.distance
+    rest=$w.en.in_km.geo.distance
+    prep.a=$w.en.from.geo.distance.a
+    prep.a=$w.en.between.geo.distance.a
+    prep.a=$w.en.of.geo.distance.a
+    prep.a=$w.en.to.geo.distance.a
+    prep.b=$w.en.to.geo.distance.b
+    prep.b=$w.en.and.geo.distance.b
+    prep.b=$w.en.from.geo.distance.b
+    prep.b=$w.en.between.geo.distance.b
+    sample.a=Paris
+    sample.b=Rome
+    example="How far is Paris from Rome?"
 
 @describe.geo.map.compare core.describe
     op=geo.compare
     intent=command
     emit="@{_} core.request action=geo.compare arg.a={a} arg.b={b}"
-    arg="a:lex.geo.map.places;prep=with|between|against"
-    arg="b:lex.geo.map.places;prep=and|with|against|vs|versus|to"
-    verb="compare|match_up|contrast"
-    rest="side_by_side|please"
-    frames=imp,wish,ind,can,short
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+    frames=short
     priority=12
     shortPriority=10
-    sample="a=Spain;b=Italy"
-    example="Compare Spain and Italy."
     effect="compares two places by area, population and borders"
+
+@describe.geo.map.compare.a core.describe.arg
+    of=$describe.geo.map.compare
+    name=a
+    class=lex.geo.map.places
+
+@describe.geo.map.compare.b core.describe.arg
+    of=$describe.geo.map.compare
+    name=b
+    class=lex.geo.map.places
+
+@describe.geo.map.compare.en core.describe.words
+    of=$describe.geo.map.compare
+    lang=en
+    verb=$w.en.compare.geo.compare
+    verb=$w.en.match_up.geo.compare
+    verb=$w.en.contrast.geo.compare
+    rest=$w.en.side_by_side.geo.compare
+    rest=$w.en.please.geo.compare
+    prep.a=$w.en.with.geo.compare.a
+    prep.a=$w.en.between.geo.compare.a
+    prep.a=$w.en.against.geo.compare.a
+    prep.b=$w.en.and.geo.compare.b
+    prep.b=$w.en.with.geo.compare.b
+    prep.b=$w.en.against.geo.compare.b
+    prep.b=$w.en.vs.geo.compare.b
+    prep.b=$w.en.versus.geo.compare.b
+    prep.b=$w.en.to.geo.compare.b
+    sample.a=Spain
+    sample.b=Italy
+    example="Compare Spain and Italy."
 
 @describe.geo.map.show core.describe
     op=geo.show
     intent=command
     emit="@{_} core.request action=geo.show arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
-    arg="a:lex.geo.map.places;prep=of|at|on|to|in"
-    arg="b:lex.geo.map.places?;prep=and|,"
-    arg="c:lex.geo.map.places?;prep=and|,"
-    arg="d:lex.geo.map.places?;prep=and|,"
-    arg="e:lex.geo.map.places?;prep=and|,"
-    verb="show|show_me|display|find|locate|focus_on|look_at|go_to|fly_to|take_me_to|zoom_to|center_on|centre_on|navigate_to|jump_to|open|visit|bring_up|see|view|pull_up|let_me_see|i_want_to_see"
-    rest="on_the_map|on_map|in_the_map|for_me"
-    frames=imp,wish,ind,can,short
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+    frames=short
     priority=14
     shortPriority=6
-    sample="a=Bucharest"
-    example="Show me Bucharest."
     effect="centres the map on the places and fits them"
+
+@describe.geo.map.show.a core.describe.arg
+    of=$describe.geo.map.show
+    name=a
+    class=lex.geo.map.places
+
+@describe.geo.map.show.b core.describe.arg
+    of=$describe.geo.map.show
+    name=b
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.show.c core.describe.arg
+    of=$describe.geo.map.show
+    name=c
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.show.d core.describe.arg
+    of=$describe.geo.map.show
+    name=d
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.show.e core.describe.arg
+    of=$describe.geo.map.show
+    name=e
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.show.en core.describe.words
+    of=$describe.geo.map.show
+    lang=en
+    verb=$w.en.show.geo.show
+    verb=$w.en.show_me.geo.show
+    verb=$w.en.display.geo.show
+    verb=$w.en.find.geo.show
+    verb=$w.en.locate.geo.show
+    verb=$w.en.focus_on.geo.show
+    verb=$w.en.look_at.geo.show
+    verb=$w.en.go_to.geo.show
+    verb=$w.en.fly_to.geo.show
+    verb=$w.en.take_me_to.geo.show
+    verb=$w.en.zoom_to.geo.show
+    verb=$w.en.center_on.geo.show
+    verb=$w.en.centre_on.geo.show
+    verb=$w.en.navigate_to.geo.show
+    verb=$w.en.jump_to.geo.show
+    verb=$w.en.open.geo.show
+    verb=$w.en.visit.geo.show
+    verb=$w.en.bring_up.geo.show
+    verb=$w.en.see.geo.show
+    verb=$w.en.view.geo.show
+    verb=$w.en.pull_up.geo.show
+    verb=$w.en.let_me_see.geo.show
+    verb=$w.en.i_want_to_see.geo.show
+    rest=$w.en.on_the_map.geo.show
+    rest=$w.en.on_map.geo.show
+    rest=$w.en.in_the_map.geo.show
+    rest=$w.en.for_me.geo.show
+    prep.a=$w.en.of.geo.show.a
+    prep.a=$w.en.at.geo.show.a
+    prep.a=$w.en.on.geo.show.a
+    prep.a=$w.en.to.geo.show.a
+    prep.a=$w.en.in.geo.show.a
+    prep.b=$w.en.and.geo.show.b
+    prep.b=$w.en.sym.geo.show.b
+    prep.c=$w.en.and.geo.show.c
+    prep.c=$w.en.sym.geo.show.c
+    prep.d=$w.en.and.geo.show.d
+    prep.d=$w.en.sym.geo.show.d
+    prep.e=$w.en.and.geo.show.e
+    prep.e=$w.en.sym.geo.show.e
+    sample.a=Bucharest
+    example="Show me Bucharest."
 
 @describe.geo.map.highlight core.describe
     op=geo.highlight
     intent=command
     emit="@{_} core.request action=geo.highlight arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
-    arg="a:lex.geo.map.places"
-    arg="b:lex.geo.map.places?;prep=and|,"
-    arg="c:lex.geo.map.places?;prep=and|,"
-    arg="d:lex.geo.map.places?;prep=and|,"
-    arg="e:lex.geo.map.places?;prep=and|,"
-    verb="highlight|hilight|colour|color|light_up|mark_in_color|shade"
-    rest="on_the_map|in_color|in_colour"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=16
-    sample="a=Romania"
-    example="Highlight Romania."
     effect="highlights the countries"
+
+@describe.geo.map.highlight.a core.describe.arg
+    of=$describe.geo.map.highlight
+    name=a
+    class=lex.geo.map.places
+
+@describe.geo.map.highlight.b core.describe.arg
+    of=$describe.geo.map.highlight
+    name=b
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.highlight.c core.describe.arg
+    of=$describe.geo.map.highlight
+    name=c
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.highlight.d core.describe.arg
+    of=$describe.geo.map.highlight
+    name=d
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.highlight.e core.describe.arg
+    of=$describe.geo.map.highlight
+    name=e
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.highlight.en core.describe.words
+    of=$describe.geo.map.highlight
+    lang=en
+    verb=$w.en.highlight.geo.highlight
+    verb=$w.en.hilight.geo.highlight
+    verb=$w.en.colour.geo.highlight
+    verb=$w.en.color.geo.highlight
+    verb=$w.en.light_up.geo.highlight
+    verb=$w.en.mark_in_color.geo.highlight
+    verb=$w.en.shade.geo.highlight
+    rest=$w.en.on_the_map.geo.highlight
+    rest=$w.en.in_color.geo.highlight
+    rest=$w.en.in_colour.geo.highlight
+    prep.b=$w.en.and.geo.highlight.b
+    prep.b=$w.en.sym.geo.highlight.b
+    prep.c=$w.en.and.geo.highlight.c
+    prep.c=$w.en.sym.geo.highlight.c
+    prep.d=$w.en.and.geo.highlight.d
+    prep.d=$w.en.sym.geo.highlight.d
+    prep.e=$w.en.and.geo.highlight.e
+    prep.e=$w.en.sym.geo.highlight.e
+    sample.a=Romania
+    example="Highlight Romania."
 
 @describe.geo.map.mark core.describe
     op=geo.mark
     intent=command
     emit="@{_} core.request action=geo.mark arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
-    arg="a:lex.geo.map.places;prep=on|for|at|in"
-    arg="b:lex.geo.map.places?;prep=and|,"
-    arg="c:lex.geo.map.places?;prep=and|,"
-    arg="d:lex.geo.map.places?;prep=and|,"
-    arg="e:lex.geo.map.places?;prep=and|,"
-    verb="mark|pin|put_a_marker|add_a_marker|drop_a_pin|put_a_pin|place_a_marker|put_a_marker_on|add_a_pin|flag"
-    rest="on_the_map|with_a_marker|with_a_pin"
-    frames=imp,wish,ind,can,short
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+    frames=short
     priority=12
     shortPriority=10
-    sample="a=Cluj"
-    example="Mark Paris and Rome."
     effect="adds a marker for each place"
+
+@describe.geo.map.mark.a core.describe.arg
+    of=$describe.geo.map.mark
+    name=a
+    class=lex.geo.map.places
+
+@describe.geo.map.mark.b core.describe.arg
+    of=$describe.geo.map.mark
+    name=b
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.mark.c core.describe.arg
+    of=$describe.geo.map.mark
+    name=c
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.mark.d core.describe.arg
+    of=$describe.geo.map.mark
+    name=d
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.mark.e core.describe.arg
+    of=$describe.geo.map.mark
+    name=e
+    class=lex.geo.map.places
+    optional=true
+
+@describe.geo.map.mark.en core.describe.words
+    of=$describe.geo.map.mark
+    lang=en
+    verb=$w.en.mark.geo.mark
+    verb=$w.en.pin.geo.mark
+    verb=$w.en.put_a_marker.geo.mark
+    verb=$w.en.add_a_marker.geo.mark
+    verb=$w.en.drop_a_pin.geo.mark
+    verb=$w.en.put_a_pin.geo.mark
+    verb=$w.en.place_a_marker.geo.mark
+    verb=$w.en.put_a_marker_on.geo.mark
+    verb=$w.en.add_a_pin.geo.mark
+    verb=$w.en.flag.geo.mark
+    rest=$w.en.on_the_map.geo.mark
+    rest=$w.en.with_a_marker.geo.mark
+    rest=$w.en.with_a_pin.geo.mark
+    prep.a=$w.en.on.geo.mark.a
+    prep.a=$w.en.for.geo.mark.a
+    prep.a=$w.en.at.geo.mark.a
+    prep.a=$w.en.in.geo.mark.a
+    prep.b=$w.en.and.geo.mark.b
+    prep.b=$w.en.sym.geo.mark.b
+    prep.c=$w.en.and.geo.mark.c
+    prep.c=$w.en.sym.geo.mark.c
+    prep.d=$w.en.and.geo.mark.d
+    prep.d=$w.en.sym.geo.mark.d
+    prep.e=$w.en.and.geo.mark.e
+    prep.e=$w.en.sym.geo.mark.e
+    sample.a=Cluj
+    example="Mark Paris and Rome."
 
 @describe.geo.map.markHere core.describe
     op=geo.markHere
     intent=command
     emit="@{_} core.request action=geo.markHere"
-    verb="put|place|drop|add|mark|pin|stick"
-    noun="marker|pin|flag|spot|this_place"
-    rest="here|right_here|on_the_map"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=13
-    example="Put a marker here."
     effect="adds a marker at the centre of the view"
+
+@describe.geo.map.markHere.en core.describe.words
+    of=$describe.geo.map.markHere
+    lang=en
+    verb=$w.en.put.geo.markHere
+    verb=$w.en.place.geo.markHere
+    verb=$w.en.drop.geo.markHere
+    verb=$w.en.add.geo.markHere
+    verb=$w.en.mark.geo.markHere
+    verb=$w.en.pin.geo.markHere
+    verb=$w.en.stick.geo.markHere
+    noun=$w.en.marker.geo.markHere
+    noun=$w.en.pin.geo.markHere
+    noun=$w.en.flag.geo.markHere
+    noun=$w.en.spot.geo.markHere
+    noun=$w.en.this_place.geo.markHere
+    rest=$w.en.here.geo.markHere
+    rest=$w.en.right_here.geo.markHere
+    rest=$w.en.on_the_map.geo.markHere
+    example="Put a marker here."
 
 @describe.geo.map.clearMarkers core.describe
     op=geo.clearMarkers
     intent=command
     emit="@{_} core.request action=geo.clearMarkers"
-    verb="remove|delete|clear|erase|take_off|get_rid_of|wipe"
-    noun="markers|pins|flags|marker|pin"
-    rest="from_the_map|off_the_map"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=14
-    example="Remove the markers."
     effect="removes every marker"
+
+@describe.geo.map.clearMarkers.en core.describe.words
+    of=$describe.geo.map.clearMarkers
+    lang=en
+    verb=$w.en.remove.geo.clearMarkers
+    verb=$w.en.delete.geo.clearMarkers
+    verb=$w.en.clear.geo.clearMarkers
+    verb=$w.en.erase.geo.clearMarkers
+    verb=$w.en.take_off.geo.clearMarkers
+    verb=$w.en.get_rid_of.geo.clearMarkers
+    verb=$w.en.wipe.geo.clearMarkers
+    noun=$w.en.markers.geo.clearMarkers
+    noun=$w.en.pins.geo.clearMarkers
+    noun=$w.en.flags.geo.clearMarkers
+    noun=$w.en.marker.geo.clearMarkers
+    noun=$w.en.pin.geo.clearMarkers
+    rest=$w.en.from_the_map.geo.clearMarkers
+    rest=$w.en.off_the_map.geo.clearMarkers
+    example="Remove the markers."
 
 @describe.geo.map.zoomIn core.describe
     op=geo.zoom
     intent=command
     emit="@{_} core.request action=geo.zoom arg.dir=in arg.amt={amt}"
-    arg="amt:lex.geo.map.amounts?"
-    verb="zoom_in|go_closer|get_closer|come_closer|move_closer|zoom_closer|magnify|enlarge|make_it_bigger"
-    rest="more|further|closer|again|on_the_map|on_it"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Zoom in."
     effect="zooms the map in by the amount"
+
+@describe.geo.map.zoomIn.amt core.describe.arg
+    of=$describe.geo.map.zoomIn
+    name=amt
+    class=lex.geo.map.amounts
+    optional=true
+
+@describe.geo.map.zoomIn.en core.describe.words
+    of=$describe.geo.map.zoomIn
+    lang=en
+    verb=$w.en.zoom_in.geo.zoom
+    verb=$w.en.go_closer.geo.zoom
+    verb=$w.en.get_closer.geo.zoom
+    verb=$w.en.come_closer.geo.zoom
+    verb=$w.en.move_closer.geo.zoom
+    verb=$w.en.zoom_closer.geo.zoom
+    verb=$w.en.magnify.geo.zoom
+    verb=$w.en.enlarge.geo.zoom
+    verb=$w.en.make_it_bigger.geo.zoom
+    rest=$w.en.more.geo.zoom
+    rest=$w.en.further.geo.zoom
+    rest=$w.en.closer.geo.zoom
+    rest=$w.en.again.geo.zoom
+    rest=$w.en.on_the_map.geo.zoom
+    rest=$w.en.on_it.geo.zoom
+    example="Zoom in."
 
 @describe.geo.map.zoomOut core.describe
     op=geo.zoom
     intent=command
     emit="@{_} core.request action=geo.zoom arg.dir=out arg.amt={amt}"
-    arg="amt:lex.geo.map.amounts?"
-    verb="zoom_out|zoom_away|get_farther|go_farther|move_farther|move_away|farther|further|step_back|move_back|make_it_smaller|shrink"
-    rest="more|further|farther|again|on_the_map|on_it"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Zoom out."
     effect="zooms the map out by the amount"
+
+@describe.geo.map.zoomOut.amt core.describe.arg
+    of=$describe.geo.map.zoomOut
+    name=amt
+    class=lex.geo.map.amounts
+    optional=true
+
+@describe.geo.map.zoomOut.en core.describe.words
+    of=$describe.geo.map.zoomOut
+    lang=en
+    verb=$w.en.zoom_out.geo.zoom
+    verb=$w.en.zoom_away.geo.zoom
+    verb=$w.en.get_farther.geo.zoom
+    verb=$w.en.go_farther.geo.zoom
+    verb=$w.en.move_farther.geo.zoom
+    verb=$w.en.move_away.geo.zoom
+    verb=$w.en.farther.geo.zoom
+    verb=$w.en.further.geo.zoom
+    verb=$w.en.step_back.geo.zoom
+    verb=$w.en.move_back.geo.zoom
+    verb=$w.en.make_it_smaller.geo.zoom
+    verb=$w.en.shrink.geo.zoom
+    rest=$w.en.more.geo.zoom
+    rest=$w.en.further.geo.zoom
+    rest=$w.en.farther.geo.zoom
+    rest=$w.en.again.geo.zoom
+    rest=$w.en.on_the_map.geo.zoom
+    rest=$w.en.on_it.geo.zoom
+    example="Zoom out."
 
 @describe.geo.map.world core.describe
     op=geo.world
     intent=command
     emit="@{_} core.request action=geo.world"
-    verb="show|display|see|view|zoom_out_to|go_to|back_to|fit"
-    noun="whole_world|world|planet|globe|entire_world|global_map|earth|world_map"
-    rest="on_the_map|please"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Show the whole world."
     effect="fits the whole world in the view"
+
+@describe.geo.map.world.en core.describe.words
+    of=$describe.geo.map.world
+    lang=en
+    verb=$w.en.show.geo.world
+    verb=$w.en.display.geo.world
+    verb=$w.en.see.geo.world
+    verb=$w.en.view.geo.world
+    verb=$w.en.zoom_out_to.geo.world
+    verb=$w.en.go_to.geo.world
+    verb=$w.en.back_to.geo.world
+    verb=$w.en.fit.geo.world
+    noun=$w.en.whole_world.geo.world
+    noun=$w.en.world.geo.world
+    noun=$w.en.planet.geo.world
+    noun=$w.en.globe.geo.world
+    noun=$w.en.entire_world.geo.world
+    noun=$w.en.global_map.geo.world
+    noun=$w.en.earth.geo.world
+    noun=$w.en.world_map.geo.world
+    rest=$w.en.on_the_map.geo.world
+    rest=$w.en.please.geo.world
+    example="Show the whole world."
 
 @describe.geo.map.reset core.describe
     op=geo.reset
     intent=command
     emit="@{_} core.request action=geo.reset arg.all=false"
-    verb="reset|restore|recenter|recentre|re_center"
-    noun="view|zoom|map_view|position|camera"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Reset the view."
     effect="puts the view back to the start; markers stay"
+
+@describe.geo.map.reset.en core.describe.words
+    of=$describe.geo.map.reset
+    lang=en
+    verb=$w.en.reset.geo.reset
+    verb=$w.en.restore.geo.reset
+    verb=$w.en.recenter.geo.reset
+    verb=$w.en.recentre.geo.reset
+    verb=$w.en.re_center.geo.reset
+    noun=$w.en.view.geo.reset
+    noun=$w.en.zoom.geo.reset
+    noun=$w.en.map_view.geo.reset
+    noun=$w.en.position.geo.reset
+    noun=$w.en.camera.geo.reset
+    example="Reset the view."
 
 @describe.geo.map.resetAll core.describe
     op=geo.reset
     intent=command
     emit="@{_} core.request action=geo.reset arg.all=true"
-    verb="reset|restart|start_over_with|start_again_with"
-    noun="map|atlas|whole_map"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=12
-    example="Reset the map."
     effect="puts the view back to the start and removes markers, lines and highlights"
+
+@describe.geo.map.resetAll.en core.describe.words
+    of=$describe.geo.map.resetAll
+    lang=en
+    verb=$w.en.reset.geo.reset
+    verb=$w.en.restart.geo.reset
+    verb=$w.en.start_over_with.geo.reset
+    verb=$w.en.start_again_with.geo.reset
+    noun=$w.en.map.geo.reset
+    noun=$w.en.atlas.geo.reset
+    noun=$w.en.whole_map.geo.reset
+    example="Reset the map."
 
 @describe.geo.map.clearAll core.describe
     op=geo.clearAll
     intent=command
     emit="@{_} core.request action=geo.clearAll"
-    verb="clear|wipe|clean|erase|blank|empty"
-    noun="map|everything|it_all|the_whole_thing|all_of_it"
-    rest="off_the_map|on_the_map|from_the_map|please"
-    frames=imp,wish,ind,can
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
     priority=13
-    example="Clear the map."
     effect="removes markers, lines and highlights and resets the view"
+
+@describe.geo.map.clearAll.en core.describe.words
+    of=$describe.geo.map.clearAll
+    lang=en
+    verb=$w.en.clear.geo.clearAll
+    verb=$w.en.wipe.geo.clearAll
+    verb=$w.en.clean.geo.clearAll
+    verb=$w.en.erase.geo.clearAll
+    verb=$w.en.blank.geo.clearAll
+    verb=$w.en.empty.geo.clearAll
+    noun=$w.en.map.geo.clearAll
+    noun=$w.en.everything.geo.clearAll
+    noun=$w.en.it_all.geo.clearAll
+    noun=$w.en.the_whole_thing.geo.clearAll
+    noun=$w.en.all_of_it.geo.clearAll
+    rest=$w.en.off_the_map.geo.clearAll
+    rest=$w.en.on_the_map.geo.clearAll
+    rest=$w.en.from_the_map.geo.clearAll
+    rest=$w.en.please.geo.clearAll
+    example="Clear the map."
 
 @describe.geo.map.here core.describe
     op=geo.here
     intent=query
     emit="@{_} core.request action=geo.here"
-    ask="what_is_here|what_s_here|whats_here|what_am_i_looking_at|what_is_at_this_spot|which_place_am_i_looking_at|what_is_this_place|what_is_around_this_point|what_s_around_me"
-    rest="on_the_map|right_now"
     frames=ask
     priority=12
-    example="What is here?"
     effect="names the place at the centre of the view"
+
+@describe.geo.map.here.en core.describe.words
+    of=$describe.geo.map.here
+    lang=en
+    ask=$w.en.what_is_here.geo.here
+    ask=$w.en.what_s_here.geo.here
+    ask=$w.en.whats_here.geo.here
+    ask=$w.en.what_am_i_looking_at.geo.here
+    ask=$w.en.what_is_at_this_spot.geo.here
+    ask=$w.en.which_place_am_i_looking_at.geo.here
+    ask=$w.en.what_is_this_place.geo.here
+    ask=$w.en.what_is_around_this_point.geo.here
+    ask=$w.en.what_s_around_me.geo.here
+    rest=$w.en.on_the_map.geo.here
+    rest=$w.en.right_now.geo.here
+    example="What is here?"
 
 @describe.geo.map.layer core.describe
     op=geo.layer
     intent=command
     emit="@{_} core.request action=geo.layer arg.l={l}"
-    arg="l:lex.geo.map.layers;prep=to|into"
-    verb="switch_to|use|go_back_to|change_the_map_to|change_to|show_me|give_me|i_want"
-    rest="map|version_of_the_map|style|layer"
-    frames=imp,wish,ind,can,short
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+    frames=short
     priority=12
     shortPriority=10
-    sample="l=street"
-    example="Switch to the street map."
     effect="switches the map layer"
+
+@describe.geo.map.layer.l core.describe.arg
+    of=$describe.geo.map.layer
+    name=l
+    class=lex.geo.map.layers
+
+@describe.geo.map.layer.en core.describe.words
+    of=$describe.geo.map.layer
+    lang=en
+    verb=$w.en.switch_to.geo.layer
+    verb=$w.en.use.geo.layer
+    verb=$w.en.go_back_to.geo.layer
+    verb=$w.en.change_the_map_to.geo.layer
+    verb=$w.en.change_to.geo.layer
+    verb=$w.en.show_me.geo.layer
+    verb=$w.en.give_me.geo.layer
+    verb=$w.en.i_want.geo.layer
+    rest=$w.en.map.geo.layer
+    rest=$w.en.version_of_the_map.geo.layer
+    rest=$w.en.style.geo.layer
+    rest=$w.en.layer.geo.layer
+    prep.l=$w.en.to.geo.layer.l
+    prep.l=$w.en.into.geo.layer.l
+    sample.l=street
+    example="Switch to the street map."
 
 @describe.geo.map.isIn core.describe
     op=geo.isIn
     intent=query
     emit="@{_} core.request action=geo.isIn arg.p={p} arg.q={q}"
-    arg="p:lex.geo.map.places"
-    arg="q:lex.geo.map.places;prep=in|inside|within"
-    ask="is|are|does"
-    frames=ask,last
+    frames=ask
+    frames=last
     priority=12
-    sample="p=Paris;q=France"
-    example="Is Paris in France?"
     effect="answers yes or no: the place is inside the other one"
+
+@describe.geo.map.isIn.p core.describe.arg
+    of=$describe.geo.map.isIn
+    name=p
+    class=lex.geo.map.places
+
+@describe.geo.map.isIn.q core.describe.arg
+    of=$describe.geo.map.isIn
+    name=q
+    class=lex.geo.map.places
+
+@describe.geo.map.isIn.en core.describe.words
+    of=$describe.geo.map.isIn
+    lang=en
+    ask=$w.en.is.geo.isIn
+    ask=$w.en.are.geo.isIn
+    ask=$w.en.does.geo.isIn
+    prep.q=$w.en.in.geo.isIn.q
+    prep.q=$w.en.inside.geo.isIn.q
+    prep.q=$w.en.within.geo.isIn.q
+    sample.p=Paris
+    sample.q=France
+    example="Is Paris in France?"
+
+@w.en.capital.geo.capital core.word lang=en text=capital means=geo.capital
+@w.en.capital_city.geo.capital core.word lang=en text="capital city" means=geo.capital
+@w.en.population.geo.population core.word lang=en text=population means=geo.population
+@w.en.number_of_people.geo.population core.word lang=en text="number of people" means=geo.population
+@w.en.number_of_inhabitants.geo.population core.word lang=en text="number of inhabitants" means=geo.population
+@w.en.how_many_people_live_in.geo.population core.word lang=en text="how many people live in" means=geo.population
+@w.en.how_many_people_are_in.geo.population core.word lang=en text="how many people are in" means=geo.population
+@w.en.how_many_inhabitants_does_have.geo.population core.word lang=en text="how many inhabitants does have" means=geo.population
+@w.en.currency.geo.currency core.word lang=en text=currency means=geo.currency
+@w.en.money.geo.currency core.word lang=en text=money means=geo.currency
+@w.en.currencies.geo.currency core.word lang=en text=currencies means=geo.currency
+@w.en.what_do_they_pay_with_in.geo.currency core.word lang=en text="what do they pay with in" means=geo.currency
+@w.en.what_money_do_they_use_in.geo.currency core.word lang=en text="what money do they use in" means=geo.currency
+@w.en.continent.geo.continent core.word lang=en text=continent means=geo.continent
+@w.en.which_continent_is.geo.continent core.word lang=en text="which continent is" means=geo.continent
+@w.en.what_continent_is.geo.continent core.word lang=en text="what continent is" means=geo.continent
+@w.en.on_which_continent_is.geo.continent core.word lang=en text="on which continent is" means=geo.continent
+@w.en.on.geo.continent core.word lang=en text=on means=geo.continent
+@w.en.in.geo.continent core.word lang=en text=in means=geo.continent
+@w.en.country.geo.country core.word lang=en text=country means=geo.country
+@w.en.nation.geo.country core.word lang=en text=nation means=geo.country
+@w.en.which_country_is.geo.country core.word lang=en text="which country is" means=geo.country
+@w.en.what_country_is.geo.country core.word lang=en text="what country is" means=geo.country
+@w.en.in_which_country_is.geo.country core.word lang=en text="in which country is" means=geo.country
+@w.en.in.geo.country core.word lang=en text=in means=geo.country
+@w.en.area.geo.area core.word lang=en text=area means=geo.area
+@w.en.size.geo.area core.word lang=en text=size means=geo.area
+@w.en.surface.geo.area core.word lang=en text=surface means=geo.area
+@w.en.how_big_is.geo.area core.word lang=en text="how big is" means=geo.area
+@w.en.how_large_is.geo.area core.word lang=en text="how large is" means=geo.area
+@w.en.how_much_land_does_cover.geo.area core.word lang=en text="how much land does cover" means=geo.area
+@w.en.in_km.geo.area core.word lang=en text="in km" means=geo.area
+@w.en.in_square_kilometres.geo.area core.word lang=en text="in square kilometres" means=geo.area
+@w.en.in_size.geo.area core.word lang=en text="in size" means=geo.area
+@w.en.language.geo.languages core.word lang=en text=language means=geo.languages
+@w.en.languages.geo.languages core.word lang=en text=languages means=geo.languages
+@w.en.official_language.geo.languages core.word lang=en text="official language" means=geo.languages
+@w.en.what_language_do_they_speak_in.geo.languages core.word lang=en text="what language do they speak in" means=geo.languages
+@w.en.what_languages_are_spoken_in.geo.languages core.word lang=en text="what languages are spoken in" means=geo.languages
+@w.en.what_do_they_speak_in.geo.languages core.word lang=en text="what do they speak in" means=geo.languages
+@w.en.what_do_people_speak_in.geo.languages core.word lang=en text="what do people speak in" means=geo.languages
+@w.en.is.geo.landlocked core.word lang=en text=is means=geo.landlocked
+@w.en.does.geo.landlocked core.word lang=en text=does means=geo.landlocked
+@w.en.can_i_say_that.geo.landlocked core.word lang=en text="can i say that" means=geo.landlocked
+@w.en.landlocked.geo.landlocked core.word lang=en text=landlocked means=geo.landlocked
+@w.en.surrounded_by_land.geo.landlocked core.word lang=en text="surrounded by land" means=geo.landlocked
+@w.en.have_a_coast.geo.landlocked core.word lang=en text="have a coast" means=geo.landlocked
+@w.en.have_a_sea_border.geo.landlocked core.word lang=en text="have a sea border" means=geo.landlocked
+@w.en.touch_the_sea.geo.landlocked core.word lang=en text="touch the sea" means=geo.landlocked
+@w.en.have_no_coast.geo.landlocked core.word lang=en text="have no coast" means=geo.landlocked
+@w.en.count.geo.neighbourCount core.word lang=en text=count means=geo.neighbourCount
+@w.en.number_of_neighbours.geo.neighbourCount core.word lang=en text="number of neighbours" means=geo.neighbourCount
+@w.en.neighbour_count.geo.neighbourCount core.word lang=en text="neighbour count" means=geo.neighbourCount
+@w.en.number_of_countries_bordering.geo.neighbourCount core.word lang=en text="number of countries bordering" means=geo.neighbourCount
+@w.en.how_many_neighbours_does.geo.neighbourCount core.word lang=en text="how many neighbours does" means=geo.neighbourCount
+@w.en.how_many_land_neighbours_does.geo.neighbourCount core.word lang=en text="how many land neighbours does" means=geo.neighbourCount
+@w.en.how_many_countries_border.geo.neighbourCount core.word lang=en text="how many countries border" means=geo.neighbourCount
+@w.en.how_many_countries_share_a_border_with.geo.neighbourCount core.word lang=en text="how many countries share a border with" means=geo.neighbourCount
+@w.en.have.geo.neighbourCount core.word lang=en text=have means=geo.neighbourCount
+@w.en.has.geo.neighbourCount core.word lang=en text=has means=geo.neighbourCount
+@w.en.neighbours.geo.borders core.word lang=en text=neighbours means=geo.borders
+@w.en.neighbors.geo.borders core.word lang=en text=neighbors means=geo.borders
+@w.en.borders.geo.borders core.word lang=en text=borders means=geo.borders
+@w.en.neighbouring_countries.geo.borders core.word lang=en text="neighbouring countries" means=geo.borders
+@w.en.which_countries_border.geo.borders core.word lang=en text="which countries border" means=geo.borders
+@w.en.what_countries_border.geo.borders core.word lang=en text="what countries border" means=geo.borders
+@w.en.who_borders.geo.borders core.word lang=en text="who borders" means=geo.borders
+@w.en.what_borders.geo.borders core.word lang=en text="what borders" means=geo.borders
+@w.en.which_countries_are_next_to.geo.borders core.word lang=en text="which countries are next to" means=geo.borders
+@w.en.what_countries_are_next_to.geo.borders core.word lang=en text="what countries are next to" means=geo.borders
+@w.en.countries_bordering.geo.borders core.word lang=en text="countries bordering" means=geo.borders
+@w.en.countries_next_to.geo.borders core.word lang=en text="countries next to" means=geo.borders
+@w.en.which_countries_touch.geo.borders core.word lang=en text="which countries touch" means=geo.borders
+@w.en.which_countries_share_a_border_with.geo.borders core.word lang=en text="which countries share a border with" means=geo.borders
+@w.en.what_countries_share_a_border_with.geo.borders core.word lang=en text="what countries share a border with" means=geo.borders
+@w.en.which_countries_are_neighbours_of.geo.borders core.word lang=en text="which countries are neighbours of" means=geo.borders
+@w.en.location.geo.where core.word lang=en text=location means=geo.where
+@w.en.position.geo.where core.word lang=en text=position means=geo.where
+@w.en.where_is.geo.where core.word lang=en text="where is" means=geo.where
+@w.en.where_s.geo.where core.word lang=en text="where s" means=geo.where
+@w.en.wheres.geo.where core.word lang=en text=wheres means=geo.where
+@w.en.where_are.geo.where core.word lang=en text="where are" means=geo.where
+@w.en.where_can_i_find.geo.where core.word lang=en text="where can i find" means=geo.where
+@w.en.where_can_i_see.geo.where core.word lang=en text="where can i see" means=geo.where
+@w.en.on_the_map.geo.where core.word lang=en text="on the map" means=geo.where
+@w.en.located.geo.where core.word lang=en text=located means=geo.where
+@w.en.measure.geo.distance core.word lang=en text=measure means=geo.distance
+@w.en.draw.geo.distance core.word lang=en text=draw means=geo.distance
+@w.en.trace.geo.distance core.word lang=en text=trace means=geo.distance
+@w.en.connect.geo.distance core.word lang=en text=connect means=geo.distance
+@w.en.link.geo.distance core.word lang=en text=link means=geo.distance
+@w.en.join.geo.distance core.word lang=en text=join means=geo.distance
+@w.en.distance.geo.distance core.word lang=en text=distance means=geo.distance
+@w.en.length.geo.distance core.word lang=en text=length means=geo.distance
+@w.en.km.geo.distance core.word lang=en text=km means=geo.distance
+@w.en.kilometres.geo.distance core.word lang=en text=kilometres means=geo.distance
+@w.en.how_far_is.geo.distance core.word lang=en text="how far is" means=geo.distance
+@w.en.how_far_are.geo.distance core.word lang=en text="how far are" means=geo.distance
+@w.en.how_far_apart_are.geo.distance core.word lang=en text="how far apart are" means=geo.distance
+@w.en.how_far_it_is_from.geo.distance core.word lang=en text="how far it is from" means=geo.distance
+@w.en.how_many_kilometres_are_there_between.geo.distance core.word lang=en text="how many kilometres are there between" means=geo.distance
+@w.en.how_many_km_between.geo.distance core.word lang=en text="how many km between" means=geo.distance
+@w.en.apart.geo.distance core.word lang=en text=apart means=geo.distance
+@w.en.away.geo.distance core.word lang=en text=away means=geo.distance
+@w.en.in_km.geo.distance core.word lang=en text="in km" means=geo.distance
+@w.en.from.geo.distance.a core.word lang=en text=from means=geo.distance.a
+@w.en.between.geo.distance.a core.word lang=en text=between means=geo.distance.a
+@w.en.of.geo.distance.a core.word lang=en text=of means=geo.distance.a
+@w.en.to.geo.distance.a core.word lang=en text=to means=geo.distance.a
+@w.en.to.geo.distance.b core.word lang=en text=to means=geo.distance.b
+@w.en.and.geo.distance.b core.word lang=en text=and means=geo.distance.b
+@w.en.from.geo.distance.b core.word lang=en text=from means=geo.distance.b
+@w.en.between.geo.distance.b core.word lang=en text=between means=geo.distance.b
+@w.en.compare.geo.compare core.word lang=en text=compare means=geo.compare
+@w.en.match_up.geo.compare core.word lang=en text="match up" means=geo.compare
+@w.en.contrast.geo.compare core.word lang=en text=contrast means=geo.compare
+@w.en.side_by_side.geo.compare core.word lang=en text="side by side" means=geo.compare
+@w.en.please.geo.compare core.word lang=en text=please means=geo.compare
+@w.en.with.geo.compare.a core.word lang=en text=with means=geo.compare.a
+@w.en.between.geo.compare.a core.word lang=en text=between means=geo.compare.a
+@w.en.against.geo.compare.a core.word lang=en text=against means=geo.compare.a
+@w.en.and.geo.compare.b core.word lang=en text=and means=geo.compare.b
+@w.en.with.geo.compare.b core.word lang=en text=with means=geo.compare.b
+@w.en.against.geo.compare.b core.word lang=en text=against means=geo.compare.b
+@w.en.vs.geo.compare.b core.word lang=en text=vs means=geo.compare.b
+@w.en.versus.geo.compare.b core.word lang=en text=versus means=geo.compare.b
+@w.en.to.geo.compare.b core.word lang=en text=to means=geo.compare.b
+@w.en.show.geo.show core.word lang=en text=show means=geo.show
+@w.en.show_me.geo.show core.word lang=en text="show me" means=geo.show
+@w.en.display.geo.show core.word lang=en text=display means=geo.show
+@w.en.find.geo.show core.word lang=en text=find means=geo.show
+@w.en.locate.geo.show core.word lang=en text=locate means=geo.show
+@w.en.focus_on.geo.show core.word lang=en text="focus on" means=geo.show
+@w.en.look_at.geo.show core.word lang=en text="look at" means=geo.show
+@w.en.go_to.geo.show core.word lang=en text="go to" means=geo.show
+@w.en.fly_to.geo.show core.word lang=en text="fly to" means=geo.show
+@w.en.take_me_to.geo.show core.word lang=en text="take me to" means=geo.show
+@w.en.zoom_to.geo.show core.word lang=en text="zoom to" means=geo.show
+@w.en.center_on.geo.show core.word lang=en text="center on" means=geo.show
+@w.en.centre_on.geo.show core.word lang=en text="centre on" means=geo.show
+@w.en.navigate_to.geo.show core.word lang=en text="navigate to" means=geo.show
+@w.en.jump_to.geo.show core.word lang=en text="jump to" means=geo.show
+@w.en.open.geo.show core.word lang=en text=open means=geo.show
+@w.en.visit.geo.show core.word lang=en text=visit means=geo.show
+@w.en.bring_up.geo.show core.word lang=en text="bring up" means=geo.show
+@w.en.see.geo.show core.word lang=en text=see means=geo.show
+@w.en.view.geo.show core.word lang=en text=view means=geo.show
+@w.en.pull_up.geo.show core.word lang=en text="pull up" means=geo.show
+@w.en.let_me_see.geo.show core.word lang=en text="let me see" means=geo.show
+@w.en.i_want_to_see.geo.show core.word lang=en text="i want to see" means=geo.show
+@w.en.on_the_map.geo.show core.word lang=en text="on the map" means=geo.show
+@w.en.on_map.geo.show core.word lang=en text="on map" means=geo.show
+@w.en.in_the_map.geo.show core.word lang=en text="in the map" means=geo.show
+@w.en.for_me.geo.show core.word lang=en text="for me" means=geo.show
+@w.en.of.geo.show.a core.word lang=en text=of means=geo.show.a
+@w.en.at.geo.show.a core.word lang=en text=at means=geo.show.a
+@w.en.on.geo.show.a core.word lang=en text=on means=geo.show.a
+@w.en.to.geo.show.a core.word lang=en text=to means=geo.show.a
+@w.en.in.geo.show.a core.word lang=en text=in means=geo.show.a
+@w.en.and.geo.show.b core.word lang=en text=and means=geo.show.b
+@w.en.sym.geo.show.b core.word lang=en text="," means=geo.show.b
+@w.en.and.geo.show.c core.word lang=en text=and means=geo.show.c
+@w.en.sym.geo.show.c core.word lang=en text="," means=geo.show.c
+@w.en.and.geo.show.d core.word lang=en text=and means=geo.show.d
+@w.en.sym.geo.show.d core.word lang=en text="," means=geo.show.d
+@w.en.and.geo.show.e core.word lang=en text=and means=geo.show.e
+@w.en.sym.geo.show.e core.word lang=en text="," means=geo.show.e
+@w.en.highlight.geo.highlight core.word lang=en text=highlight means=geo.highlight
+@w.en.hilight.geo.highlight core.word lang=en text=hilight means=geo.highlight
+@w.en.colour.geo.highlight core.word lang=en text=colour means=geo.highlight
+@w.en.color.geo.highlight core.word lang=en text=color means=geo.highlight
+@w.en.light_up.geo.highlight core.word lang=en text="light up" means=geo.highlight
+@w.en.mark_in_color.geo.highlight core.word lang=en text="mark in color" means=geo.highlight
+@w.en.shade.geo.highlight core.word lang=en text=shade means=geo.highlight
+@w.en.on_the_map.geo.highlight core.word lang=en text="on the map" means=geo.highlight
+@w.en.in_color.geo.highlight core.word lang=en text="in color" means=geo.highlight
+@w.en.in_colour.geo.highlight core.word lang=en text="in colour" means=geo.highlight
+@w.en.and.geo.highlight.b core.word lang=en text=and means=geo.highlight.b
+@w.en.sym.geo.highlight.b core.word lang=en text="," means=geo.highlight.b
+@w.en.and.geo.highlight.c core.word lang=en text=and means=geo.highlight.c
+@w.en.sym.geo.highlight.c core.word lang=en text="," means=geo.highlight.c
+@w.en.and.geo.highlight.d core.word lang=en text=and means=geo.highlight.d
+@w.en.sym.geo.highlight.d core.word lang=en text="," means=geo.highlight.d
+@w.en.and.geo.highlight.e core.word lang=en text=and means=geo.highlight.e
+@w.en.sym.geo.highlight.e core.word lang=en text="," means=geo.highlight.e
+@w.en.mark.geo.mark core.word lang=en text=mark means=geo.mark
+@w.en.pin.geo.mark core.word lang=en text=pin means=geo.mark
+@w.en.put_a_marker.geo.mark core.word lang=en text="put a marker" means=geo.mark
+@w.en.add_a_marker.geo.mark core.word lang=en text="add a marker" means=geo.mark
+@w.en.drop_a_pin.geo.mark core.word lang=en text="drop a pin" means=geo.mark
+@w.en.put_a_pin.geo.mark core.word lang=en text="put a pin" means=geo.mark
+@w.en.place_a_marker.geo.mark core.word lang=en text="place a marker" means=geo.mark
+@w.en.put_a_marker_on.geo.mark core.word lang=en text="put a marker on" means=geo.mark
+@w.en.add_a_pin.geo.mark core.word lang=en text="add a pin" means=geo.mark
+@w.en.flag.geo.mark core.word lang=en text=flag means=geo.mark
+@w.en.on_the_map.geo.mark core.word lang=en text="on the map" means=geo.mark
+@w.en.with_a_marker.geo.mark core.word lang=en text="with a marker" means=geo.mark
+@w.en.with_a_pin.geo.mark core.word lang=en text="with a pin" means=geo.mark
+@w.en.on.geo.mark.a core.word lang=en text=on means=geo.mark.a
+@w.en.for.geo.mark.a core.word lang=en text=for means=geo.mark.a
+@w.en.at.geo.mark.a core.word lang=en text=at means=geo.mark.a
+@w.en.in.geo.mark.a core.word lang=en text=in means=geo.mark.a
+@w.en.and.geo.mark.b core.word lang=en text=and means=geo.mark.b
+@w.en.sym.geo.mark.b core.word lang=en text="," means=geo.mark.b
+@w.en.and.geo.mark.c core.word lang=en text=and means=geo.mark.c
+@w.en.sym.geo.mark.c core.word lang=en text="," means=geo.mark.c
+@w.en.and.geo.mark.d core.word lang=en text=and means=geo.mark.d
+@w.en.sym.geo.mark.d core.word lang=en text="," means=geo.mark.d
+@w.en.and.geo.mark.e core.word lang=en text=and means=geo.mark.e
+@w.en.sym.geo.mark.e core.word lang=en text="," means=geo.mark.e
+@w.en.put.geo.markHere core.word lang=en text=put means=geo.markHere
+@w.en.place.geo.markHere core.word lang=en text=place means=geo.markHere
+@w.en.drop.geo.markHere core.word lang=en text=drop means=geo.markHere
+@w.en.add.geo.markHere core.word lang=en text=add means=geo.markHere
+@w.en.mark.geo.markHere core.word lang=en text=mark means=geo.markHere
+@w.en.pin.geo.markHere core.word lang=en text=pin means=geo.markHere
+@w.en.stick.geo.markHere core.word lang=en text=stick means=geo.markHere
+@w.en.marker.geo.markHere core.word lang=en text=marker means=geo.markHere
+@w.en.flag.geo.markHere core.word lang=en text=flag means=geo.markHere
+@w.en.spot.geo.markHere core.word lang=en text=spot means=geo.markHere
+@w.en.this_place.geo.markHere core.word lang=en text="this place" means=geo.markHere
+@w.en.here.geo.markHere core.word lang=en text=here means=geo.markHere
+@w.en.right_here.geo.markHere core.word lang=en text="right here" means=geo.markHere
+@w.en.on_the_map.geo.markHere core.word lang=en text="on the map" means=geo.markHere
+@w.en.remove.geo.clearMarkers core.word lang=en text=remove means=geo.clearMarkers
+@w.en.delete.geo.clearMarkers core.word lang=en text=delete means=geo.clearMarkers
+@w.en.clear.geo.clearMarkers core.word lang=en text=clear means=geo.clearMarkers
+@w.en.erase.geo.clearMarkers core.word lang=en text=erase means=geo.clearMarkers
+@w.en.take_off.geo.clearMarkers core.word lang=en text="take off" means=geo.clearMarkers
+@w.en.get_rid_of.geo.clearMarkers core.word lang=en text="get rid of" means=geo.clearMarkers
+@w.en.wipe.geo.clearMarkers core.word lang=en text=wipe means=geo.clearMarkers
+@w.en.markers.geo.clearMarkers core.word lang=en text=markers means=geo.clearMarkers
+@w.en.pins.geo.clearMarkers core.word lang=en text=pins means=geo.clearMarkers
+@w.en.flags.geo.clearMarkers core.word lang=en text=flags means=geo.clearMarkers
+@w.en.marker.geo.clearMarkers core.word lang=en text=marker means=geo.clearMarkers
+@w.en.pin.geo.clearMarkers core.word lang=en text=pin means=geo.clearMarkers
+@w.en.from_the_map.geo.clearMarkers core.word lang=en text="from the map" means=geo.clearMarkers
+@w.en.off_the_map.geo.clearMarkers core.word lang=en text="off the map" means=geo.clearMarkers
+@w.en.zoom_in.geo.zoom core.word lang=en text="zoom in" means=geo.zoom
+@w.en.go_closer.geo.zoom core.word lang=en text="go closer" means=geo.zoom
+@w.en.get_closer.geo.zoom core.word lang=en text="get closer" means=geo.zoom
+@w.en.come_closer.geo.zoom core.word lang=en text="come closer" means=geo.zoom
+@w.en.move_closer.geo.zoom core.word lang=en text="move closer" means=geo.zoom
+@w.en.zoom_closer.geo.zoom core.word lang=en text="zoom closer" means=geo.zoom
+@w.en.magnify.geo.zoom core.word lang=en text=magnify means=geo.zoom
+@w.en.enlarge.geo.zoom core.word lang=en text=enlarge means=geo.zoom
+@w.en.make_it_bigger.geo.zoom core.word lang=en text="make it bigger" means=geo.zoom
+@w.en.more.geo.zoom core.word lang=en text=more means=geo.zoom
+@w.en.further.geo.zoom core.word lang=en text=further means=geo.zoom
+@w.en.closer.geo.zoom core.word lang=en text=closer means=geo.zoom
+@w.en.again.geo.zoom core.word lang=en text=again means=geo.zoom
+@w.en.on_the_map.geo.zoom core.word lang=en text="on the map" means=geo.zoom
+@w.en.on_it.geo.zoom core.word lang=en text="on it" means=geo.zoom
+@w.en.zoom_out.geo.zoom core.word lang=en text="zoom out" means=geo.zoom
+@w.en.zoom_away.geo.zoom core.word lang=en text="zoom away" means=geo.zoom
+@w.en.get_farther.geo.zoom core.word lang=en text="get farther" means=geo.zoom
+@w.en.go_farther.geo.zoom core.word lang=en text="go farther" means=geo.zoom
+@w.en.move_farther.geo.zoom core.word lang=en text="move farther" means=geo.zoom
+@w.en.move_away.geo.zoom core.word lang=en text="move away" means=geo.zoom
+@w.en.farther.geo.zoom core.word lang=en text=farther means=geo.zoom
+@w.en.step_back.geo.zoom core.word lang=en text="step back" means=geo.zoom
+@w.en.move_back.geo.zoom core.word lang=en text="move back" means=geo.zoom
+@w.en.make_it_smaller.geo.zoom core.word lang=en text="make it smaller" means=geo.zoom
+@w.en.shrink.geo.zoom core.word lang=en text=shrink means=geo.zoom
+@w.en.show.geo.world core.word lang=en text=show means=geo.world
+@w.en.display.geo.world core.word lang=en text=display means=geo.world
+@w.en.see.geo.world core.word lang=en text=see means=geo.world
+@w.en.view.geo.world core.word lang=en text=view means=geo.world
+@w.en.zoom_out_to.geo.world core.word lang=en text="zoom out to" means=geo.world
+@w.en.go_to.geo.world core.word lang=en text="go to" means=geo.world
+@w.en.back_to.geo.world core.word lang=en text="back to" means=geo.world
+@w.en.fit.geo.world core.word lang=en text=fit means=geo.world
+@w.en.whole_world.geo.world core.word lang=en text="whole world" means=geo.world
+@w.en.world.geo.world core.word lang=en text=world means=geo.world
+@w.en.planet.geo.world core.word lang=en text=planet means=geo.world
+@w.en.globe.geo.world core.word lang=en text=globe means=geo.world
+@w.en.entire_world.geo.world core.word lang=en text="entire world" means=geo.world
+@w.en.global_map.geo.world core.word lang=en text="global map" means=geo.world
+@w.en.earth.geo.world core.word lang=en text=earth means=geo.world
+@w.en.world_map.geo.world core.word lang=en text="world map" means=geo.world
+@w.en.on_the_map.geo.world core.word lang=en text="on the map" means=geo.world
+@w.en.please.geo.world core.word lang=en text=please means=geo.world
+@w.en.reset.geo.reset core.word lang=en text=reset means=geo.reset
+@w.en.restore.geo.reset core.word lang=en text=restore means=geo.reset
+@w.en.recenter.geo.reset core.word lang=en text=recenter means=geo.reset
+@w.en.recentre.geo.reset core.word lang=en text=recentre means=geo.reset
+@w.en.re_center.geo.reset core.word lang=en text="re center" means=geo.reset
+@w.en.view.geo.reset core.word lang=en text=view means=geo.reset
+@w.en.zoom.geo.reset core.word lang=en text=zoom means=geo.reset
+@w.en.map_view.geo.reset core.word lang=en text="map view" means=geo.reset
+@w.en.position.geo.reset core.word lang=en text=position means=geo.reset
+@w.en.camera.geo.reset core.word lang=en text=camera means=geo.reset
+@w.en.restart.geo.reset core.word lang=en text=restart means=geo.reset
+@w.en.start_over_with.geo.reset core.word lang=en text="start over with" means=geo.reset
+@w.en.start_again_with.geo.reset core.word lang=en text="start again with" means=geo.reset
+@w.en.map.geo.reset core.word lang=en text=map means=geo.reset
+@w.en.atlas.geo.reset core.word lang=en text=atlas means=geo.reset
+@w.en.whole_map.geo.reset core.word lang=en text="whole map" means=geo.reset
+@w.en.clear.geo.clearAll core.word lang=en text=clear means=geo.clearAll
+@w.en.wipe.geo.clearAll core.word lang=en text=wipe means=geo.clearAll
+@w.en.clean.geo.clearAll core.word lang=en text=clean means=geo.clearAll
+@w.en.erase.geo.clearAll core.word lang=en text=erase means=geo.clearAll
+@w.en.blank.geo.clearAll core.word lang=en text=blank means=geo.clearAll
+@w.en.empty.geo.clearAll core.word lang=en text=empty means=geo.clearAll
+@w.en.map.geo.clearAll core.word lang=en text=map means=geo.clearAll
+@w.en.everything.geo.clearAll core.word lang=en text=everything means=geo.clearAll
+@w.en.it_all.geo.clearAll core.word lang=en text="it all" means=geo.clearAll
+@w.en.the_whole_thing.geo.clearAll core.word lang=en text="the whole thing" means=geo.clearAll
+@w.en.all_of_it.geo.clearAll core.word lang=en text="all of it" means=geo.clearAll
+@w.en.off_the_map.geo.clearAll core.word lang=en text="off the map" means=geo.clearAll
+@w.en.on_the_map.geo.clearAll core.word lang=en text="on the map" means=geo.clearAll
+@w.en.from_the_map.geo.clearAll core.word lang=en text="from the map" means=geo.clearAll
+@w.en.please.geo.clearAll core.word lang=en text=please means=geo.clearAll
+@w.en.what_is_here.geo.here core.word lang=en text="what is here" means=geo.here
+@w.en.what_s_here.geo.here core.word lang=en text="what's here" means=geo.here
+@w.en.whats_here.geo.here core.word lang=en text="whats here" means=geo.here
+@w.en.what_am_i_looking_at.geo.here core.word lang=en text="what am i looking at" means=geo.here
+@w.en.what_is_at_this_spot.geo.here core.word lang=en text="what is at this spot" means=geo.here
+@w.en.which_place_am_i_looking_at.geo.here core.word lang=en text="which place am i looking at" means=geo.here
+@w.en.what_is_this_place.geo.here core.word lang=en text="what is this place" means=geo.here
+@w.en.what_is_around_this_point.geo.here core.word lang=en text="what is around this point" means=geo.here
+@w.en.what_s_around_me.geo.here core.word lang=en text="what's around me" means=geo.here
+@w.en.on_the_map.geo.here core.word lang=en text="on the map" means=geo.here
+@w.en.right_now.geo.here core.word lang=en text="right now" means=geo.here
+@w.en.switch_to.geo.layer core.word lang=en text="switch to" means=geo.layer
+@w.en.use.geo.layer core.word lang=en text=use means=geo.layer
+@w.en.go_back_to.geo.layer core.word lang=en text="go back to" means=geo.layer
+@w.en.change_the_map_to.geo.layer core.word lang=en text="change the map to" means=geo.layer
+@w.en.change_to.geo.layer core.word lang=en text="change to" means=geo.layer
+@w.en.show_me.geo.layer core.word lang=en text="show me" means=geo.layer
+@w.en.give_me.geo.layer core.word lang=en text="give me" means=geo.layer
+@w.en.i_want.geo.layer core.word lang=en text="i want" means=geo.layer
+@w.en.map.geo.layer core.word lang=en text=map means=geo.layer
+@w.en.version_of_the_map.geo.layer core.word lang=en text="version of the map" means=geo.layer
+@w.en.style.geo.layer core.word lang=en text=style means=geo.layer
+@w.en.layer.geo.layer core.word lang=en text=layer means=geo.layer
+@w.en.to.geo.layer.l core.word lang=en text=to means=geo.layer.l
+@w.en.into.geo.layer.l core.word lang=en text=into means=geo.layer.l
+@w.en.is.geo.isIn core.word lang=en text=is means=geo.isIn
+@w.en.are.geo.isIn core.word lang=en text=are means=geo.isIn
+@w.en.does.geo.isIn core.word lang=en text=does means=geo.isIn
+@w.en.in.geo.isIn.q core.word lang=en text=in means=geo.isIn.q
+@w.en.inside.geo.isIn.q core.word lang=en text=inside means=geo.isIn.q
+@w.en.within.geo.isIn.q core.word lang=en text=within means=geo.isIn.q

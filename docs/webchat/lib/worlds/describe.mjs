@@ -1,41 +1,26 @@
 /**
  * Operation descriptions (E3, spec 03 section 2c). Browser-safe, pure: no node imports.
  *
- * A `core.describe` wire states ONE operation once, by roles and words: what the operation emits, which arguments it takes (role name,
- * lexicon class, the words that introduce the argument), the words for the action and for the thing it is about. `describePatterns`
- * generates the ordinary `core.pattern` objects of its request / question / statement forms from a small table of FRAMES (the grammar of
- * asking, commanding and stating, written once here and in the `lang.*` phrase groups of `lang.common`), so a world never spells a
- * sentence. Shapes (`core.shape`, spec 03 section 2b) stay the family-specific generator for single-object operations; a description
- * is the more general form (several arguments, quantified items, optional arguments, statements).
+ * An operation is described by wires, in SOP Lang only (no notation inside a string):
+ *   core.describe        the operation: `op`, `intent`, `emit`, `frames` / `skip` (repeated), `priority`, `shortPriority`, `bareVerb`, `kind`, `requires` (repeated), `effect`
+ *   core.describe.arg    one per argument: `of=$<describe>`, `name`, `class` (a lexicon id, `number`, `rest`, `noun`, `words`), `size` (the maximum of `words`),
+ *                        `optional=true`, `qty=<count slot>` (a quantified item: "2 balls" or "a ball")
+ *   core.describe.words  the wording of one language: `of=$<describe>`, `lang`, and the words of each role as repeated keys whose values are `core.word` wires:
+ *                        `verb tverb noun ask rest pre mid subject`, and for an argument `prep.<name> det.<name> unit.<name>`; `nosubject=true`;
+ *                        `sample.<slot>=value` (example values), `example` (extra example sentences)
+ *   core.word            `lang= text= means=`: `means` is the operation's emit key (verbs, nouns, openers, rest, subject words) or `<op>.<argument>` (words that
+ *                        introduce an argument, its determiners, its units). A word is stated once and read by the generator, by the library's `interpret` and by scoring.
+ * `describePatterns` generates the ordinary `core.pattern` objects of the request / question / statement forms from a table of FRAMES (the grammar of asking,
+ * commanding and stating, written once here for English, in `lang/<lang>/frames.sop` for another language), so a world never spells a sentence. Shapes
+ * (`core.shape`, spec 03 section 2b) stay the family-specific generator for single-object operations; a description is the more general form.
  *
- * Description keys (strings as read from the wire; `arg` is repeated):
- *   op        the operation's emit key: `action=` of a request or `type=` of a question, or the statement type (the first token after `@{_}`)
- *   intent    command | query | statement
- *   emit      emit template ({slot} placeholders; an optional quantified argument that is absent drops the tokens / lines that use it)
- *   arg       `name:class[?][*qty][;prep=a|b][;det=a|b][;unit=a|b]`: one argument role.
- *             `class` is a lexicon id, `number`, `rest`, `words(N)`; `?` marks an optional argument; `*qty` names the count slot of an item
- *             (the item is written `{qty:number} {name:class}` with emit `{qty}`, or `[a|an|the]? {name:class}` with the literal 1; an optional
- *             quantified argument also has the form without it); `prep` the words that introduce it (optional in the sentence); `det` the
- *             determiners before it; `unit` the optional unit words after a number.
- *   verb      verbs of the action (imperative of a command, first-person verb of a statement, verb of a `can I ...` question)
- *   tverb     trailing verbs of a question ("how much do 2 pens COST")
- *   noun      the nouns of the thing asked for ("the PRICE of a pen"), or the thing a statement is about
- *   ask       question openers that stand alone ("how_far", "how_much")
- *   rest      words that complete the sentence after the arguments or the verb ("do_i_have", "the_map"), optional
- *   pre       words that open the first clause of a compound question ("i_want|i_would_like_to_buy"), `mid` the words between its two clauses ("and_i_pay")
- *   subject   subject words of a statement (default `i`)
- *   frames    comma list of frames to generate (default: every frame of the intent)
- *   skip      comma list of frames to leave out
- *   bareVerb  `true`: the verb alone is the command ("undo", "redo"); the noun after it is optional
- *   shortPriority  priority of the `short` frames (default priority - 2)
- *   priority  base priority (default 12); `short` frames get priority - 2
- *   kind      overrides the default kind (query: question, command: request, statement: statement)
- *   sample    example words per slot, `a=Paris;b=Rome`
- *   example   extra examples, put first on the first pattern
- *   requires  (documentation) the matrix deny ids that act as preconditions of the operation
- *   effect    (documentation) the state change or answer the operation produces
+ * Roles: verb (imperative of a command, first-person verb of a statement, verb of a `can I ...` question), tverb (trailing verbs of a question: "how much do 2 pens COST"),
+ * noun (the thing asked for, "the PRICE of a pen"), ask (stand-alone openers: "how much"), rest (words that complete the sentence, optional), pre / mid (the opener of the
+ * first clause of a compound question and the words between its two clauses), subject (default `i`).
+ * Emit templates: `{slot}` placeholders; an optional quantified argument that is absent drops the tokens / lines that use it.
  */
 import { exampleSentences } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
+import { get, getAll } from '../soplang/index.mjs?v=26885599a7';
 
 export const INTENT_FRAMES = {
   command: ['imp', 'wish', 'ind', 'can', 'short'],
@@ -46,7 +31,9 @@ export const SHORT_PENALTY = 2;
 
 const LEAD = '[$lang.lead.filler|pls|plz]? [$lang.lead.polite]?';
 const TAIL = '[$lang.tail.filler]?';
-const grp = (alts, optional) => `[${alts.split('|').map((a) => a.trim()).filter(Boolean).join('|')}]${optional ? '?' : ''}`;
+const grp = (alts, optional) => `[${alts.join('|')}]${optional ? '?' : ''}`;   // alts: an array of words (`_` joins the words of one alternative)
+/** Language settings of the generator: English here; another language supplies its own (`lang/<lang>/frames.sop`, read by the loader). */
+export const EN = { lang: 'en', frames: null, intentFrames: null, lead: null, tail: null, article: 'a|an|the', determiners: 'the|a|an|all|all_the|my', ofPrep: 'of|for|on|in|of_the|of_your' };
 const words = (s) => s.split(/\s+/).filter(Boolean).join(' ');
 
 /** Frame templates. Tokens: <L> <T> <V> <TV> <N> <Q> <R> <S> <A> (the argument sequence), <ANY> (arguments optional too). A frame that needs a token the description lacks is skipped. */
@@ -75,22 +62,14 @@ export const FRAMES = {
   about: { tpl: '[my|the] <N> [has|had|is|was|holds|contains] <A> <R?> <T>', needs: ['N', 'A'] },
 };
 
-/** Parse one `arg` value. */
-export function parseArg(spec) {
-  const [head, ...opts] = spec.split(';').map((s) => s.trim());
-  const m = /^(\w+):([\w.-]+(?:\([^()]*\))?)(\?)?(?:\*(\w+))?$/.exec(head);
-  if (!m) throw new Error(`bad arg '${spec}' (name:class[?][*qty][;prep=..][;det=..][;unit=..])`);
-  const a = { name: m[1], cls: m[2], optional: !!m[3], qty: m[4] ?? null, prep: null, det: null, unit: null };
-  for (const o of opts) {
-    const [k, v] = o.split('=');
-    if (!['prep', 'det', 'unit'].includes(k) || v == null) throw new Error(`bad arg option '${o}' in '${spec}'`);
-    a[k] = v;
-  }
-  return a;
+/** An argument as the generator uses it, from its `core.describe.arg` fields and the words of the language (`prep`, `det`, `unit`: arrays of words). */
+export function makeArg({ name, cls, optional = false, qty = null, size = null }, words = {}) {
+  if (!name || !cls) throw new Error(`argument needs name and class (got ${JSON.stringify({ name, cls })})`);
+  return { name, cls: size && cls === 'words' ? `words(${size})` : cls, optional: !!optional, qty: qty ?? null, prep: words.prep?.length ? words.prep : null, det: words.det?.length ? words.det : null, unit: words.unit?.length ? words.unit : null };
 }
 
 /** The alternatives of one argument: `[{ text: match fragment, subst: {slot: literal}, absent: [slots to drop from the emit] }]`. */
-function argVariants(a, full = false, defaultPrep = null) {
+function argVariants(a, full = false, defaultPrep = null, lg = EN) {
   const pre = (a.prep || defaultPrep ? `${grp(a.prep ?? defaultPrep, !full)} ` : '');   // `full`: the words are mandatory (used to write a natural example sentence)
   const det = (a.det ? `${grp(a.det, !full)} ` : '');
   const unit = a.unit ? ` ${grp(a.unit, !full)}` : '';
@@ -98,7 +77,7 @@ function argVariants(a, full = false, defaultPrep = null) {
   if (!a.qty) return [{ text: `${pre}${det}${slot}${unit}`, subst: {}, absent: [] }];
   const out = [
     { text: `${pre}{${a.qty}:number} ${slot}`, subst: {}, absent: [] },
-    { text: `${pre}[a|an|the]? ${slot}`, subst: { [a.qty]: '1' }, absent: [] },   // an article, or none: "a ball", "puzzle"
+    { text: `${pre}[${lg.article}]? ${slot}`, subst: { [a.qty]: '1' }, absent: [] },   // an article, or none: "a ball", "puzzle"
   ];
   if (a.optional) out.push({ text: '', subst: {}, absent: [a.name, a.qty] });
   return out;
@@ -114,39 +93,43 @@ function applyEmit(emit, subst, absent) {
 
 /**
  * Generate the pattern objects of one description: `[{ id, form, match, emit, kind, priority, example: [] }]`.
- * @param {object} d  { id (without `describe.`), op, intent, emit, args: [parseArg...], verb, tverb, noun, ask, rest, pre, mid, subject, frames, skip, priority, kind, sample, example }
+ * @param {object} d  { id (without `describe.`), op, intent, emit, args: [makeArg(...)], verb, tverb, noun, ask, rest, pre, mid, subject (arrays of words), noSubject, frames, skip (arrays),
+ *                      priority, shortPriority, bareVerb (boolean), kind, sample ({slot: value}), example (array) }
+ * @param {object} [o]  { phrases, lexicons, lg } `lg` are the language settings (`EN` by default; `lg.frames`, `lg.intentFrames`, `lg.lead`, `lg.tail` replace the English tables)
  */
-export function describePatterns(d, { phrases = null, lexicons = null } = {}) {
+export function describePatterns(d, { phrases = null, lexicons = null, lg = EN } = {}) {
   const intent = d.intent;
-  if (!INTENT_FRAMES[intent]) throw new Error(`describe '${d.id}': unknown intent '${intent}' (${Object.keys(INTENT_FRAMES).join(', ')})`);
+  const FR = lg.frames ?? FRAMES, IF = lg.intentFrames ?? INTENT_FRAMES;
+  if (!IF[intent]) throw new Error(`describe '${d.id}': unknown intent '${intent}' (${Object.keys(IF).join(', ')})`);
   if (!d.emit) throw new Error(`describe '${d.id}': no emit`);
-  const args = (d.args ?? []).map(parseArg);
+  const args = d.args ?? [];
   const names = new Set(args.map((a) => a.name));
   for (const t of d.emit.match(/\{(\w+)\}/g) ?? []) {
     const n = t.slice(1, -1);
     if (/^_\d*$/.test(n)) continue;
     if (!names.has(n) && !args.some((a) => a.qty === n)) throw new Error(`describe '${d.id}': emit uses {${n}} which no arg declares`);
   }
-  const want = d.frames ? d.frames.split(',').map((s) => s.trim()).filter(Boolean) : INTENT_FRAMES[intent];
-  const skip = new Set((d.skip ?? '').split(',').map((s) => s.trim()).filter(Boolean));
-  const sample = Object.fromEntries((d.sample ?? '').split(/[;,]/).map((x) => x.trim().split('=')).filter((x) => x.length === 2).map(([k, v]) => [k.trim(), v.trim()]));
+  const want = d.frames?.length ? d.frames : IF[intent];
+  const skip = new Set(d.skip ?? []);
+  const sample = d.sample ?? {};
+  const has = (k) => d[k]?.length > 0;
   const out = [];
   const tokenValue = {
-    V: d.verb ? grp(d.verb) : null, TV: d.tverb ? grp(d.tverb) : null, 'TV?': d.tverb ? grp(d.tverb, true) : '',
-    N: d.noun ? grp(d.noun) : null, 'NN?': d.noun ? grp(d.noun, true) : '', Q: d.ask ? grp(d.ask) : null,
-    'DN?': d.noun && intent === 'command' ? `[the|a|an|all|all_the|my]? ${grp(d.noun, d.bareVerb === 'true')}` : '', PRE: d.pre ? grp(d.pre) : null, MID: d.mid ? grp(d.mid) : null,
-    'R?': d.rest ? grp(d.rest, true) : '', SJ: (d.subject ?? 'i') === '' ? '' : grp(d.subject ?? 'i'), L: LEAD, T: TAIL,
+    V: has('verb') ? grp(d.verb) : null, TV: has('tverb') ? grp(d.tverb) : null, 'TV?': has('tverb') ? grp(d.tverb, true) : '',
+    N: has('noun') ? grp(d.noun) : null, 'NN?': has('noun') ? grp(d.noun, true) : '', Q: has('ask') ? grp(d.ask) : null,
+    'DN?': has('noun') && intent === 'command' ? `[${lg.determiners}]? ${grp(d.noun, !!d.bareVerb)}` : '', PRE: has('pre') ? grp(d.pre) : null, MID: has('mid') ? grp(d.mid) : null,
+    'R?': has('rest') ? grp(d.rest, true) : '', SJ: d.noSubject ? '' : grp(has('subject') ? d.subject : ['i']), L: lg.lead ?? LEAD, T: lg.tail ?? TAIL,
   };
   for (const frameName of want) {
     if (skip.has(frameName)) continue;
     const bases = frameName === 'qnoun' ? ['qnoun', 'qnoun.2'] : frameName === 'tell' ? ['tell', 'tell.tv'] : [frameName];
     for (const fn of bases) {
-      const f = FRAMES[fn];
-      if (!f) throw new Error(`describe '${d.id}': unknown frame '${fn}'`);
+      const f = FR[fn];
+      if (!f) { if (lg !== EN) continue; throw new Error(`describe '${d.id}': unknown frame '${fn}'`); }   // a language may not have every frame of English
       if (f.needs.some((n) => (n === 'A' ? !args.length : n === 'AI' ? !args.some((a) => a.qty) : n === 'AP' ? !args.some((a) => !a.qty) : tokenValue[n] == null))) continue;
-      const dp = (i) => (f.ofprep && i === 0 ? 'of|for|on|in|of_the|of_your' : null);   // the thing asked about: "the capital OF Japan"
-      const variants = cartesian(args.map((a, i) => argVariants(a, false, dp(i))));
-      const fullVariants = cartesian(args.map((a, i) => argVariants(a, true, dp(i))));
+      const dp = (i) => (f.ofprep && i === 0 ? lg.ofPrep.split('|') : null);   // the thing asked about: "the capital OF Japan"
+      const variants = cartesian(args.map((a, i) => argVariants(a, false, dp(i), lg)));
+      const fullVariants = cartesian(args.map((a, i) => argVariants(a, true, dp(i), lg)));
       const render = (v) => {
         let m = f.tpl.replace(/<A>/g, f.mid ? v.text.replace(/:rest\}/g, ':words(25)}') : v.text).replace(/<AI>/g, words(v.parts.filter((_, i) => args[i].qty).join(' '))).replace(/<AP>/g, words(v.parts.filter((_, i) => !args[i].qty).join(' '))).replace(/<A0>/g, v.parts[0] ?? '').replace(/<A\+>/g, words(v.parts.slice(1).join(' ')));
         for (const [k, val] of Object.entries(tokenValue)) m = m.split(`<${k}>`).join(val);
@@ -171,4 +154,116 @@ export function describePatterns(d, { phrases = null, lexicons = null } = {}) {
 export function emitKey(emit) {
   if (!emit) return null;
   return /action=([\w.]+)/.exec(emit)?.[1] ?? /type=([\w.]+)/.exec(emit)?.[1] ?? /^@\{_\d*\}\s+([\w.]+)/.exec(emit)?.[1] ?? null;
+}
+
+// ---- reading the wires --------------------------------------------------------------------------------------------------------------
+
+/** The token of a `core.word` text in a match string: spaces and apostrophes become `_` ("how much" -> how_much). */
+export const wordToken = (text) => String(text).trim().replace(/[\s']+/g, '_');
+/** Diacritics folded away (a language pack's words and the text it reads are both folded: `plătește` = `plateste`). */
+export const foldText = (s) => String(s).normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC');
+const ROLES = ['verb', 'tverb', 'noun', 'ask', 'rest', 'pre', 'mid', 'subject'];
+const val = (x, k) => get(x, k)?.v;
+const refId = (v) => (v == null ? v : String(v).replace(/^\$/, ''));
+
+/**
+ * Read the `core.describe*` and `core.word` wires of one source (a world's `describe.sop`, or a language pack) into descriptions.
+ * A language pack adds wording (`core.describe.words` of another `lang`) and words to the descriptions of the world: pass the result of the first read as `into`.
+ * @param {object[]} wires  parsed wires
+ * @param {object} [into]   `{ descriptions: Map(wire id -> description), words: Map(wire id -> { id, lang, text, means, of }), errors: [] }`
+ */
+export function readDescriptionWires(wires, into = null) {
+  const out = into ?? { descriptions: new Map(), words: new Map(), errors: [] };
+  const err = (m) => out.errors.push(m);
+  for (const x of wires) if (x.type === 'core.word') out.words.set(x.id, { id: x.id, lang: val(x, 'lang'), text: val(x, 'text'), means: val(x, 'means'), of: val(x, 'of') ?? null });
+  for (const x of wires) {
+    if (x.type !== 'core.describe') continue;
+    out.descriptions.set(x.id, {
+      id: x.id.replace(/^describe\./, ''), wireId: x.id, wire: x, op: val(x, 'op'), intent: val(x, 'intent'), emit: val(x, 'emit'),
+      frames: getAll(x, 'frames').map((v) => v.v), skip: getAll(x, 'skip').map((v) => v.v),
+      priority: val(x, 'priority') == null ? undefined : Number(val(x, 'priority')), shortPriority: val(x, 'shortPriority') == null ? undefined : Number(val(x, 'shortPriority')),
+      bareVerb: String(val(x, 'bareVerb')) === 'true', kind: val(x, 'kind'), requires: getAll(x, 'requires').map((v) => v.v), effect: val(x, 'effect'),
+      args: [], words: new Map(),
+    });
+  }
+  for (const x of wires) {
+    if (x.type !== 'core.describe.arg') continue;
+    const d = out.descriptions.get(refId(val(x, 'of')));
+    if (!d) { err(`argument ${x.id}: of=${val(x, 'of')} is not a described operation`); continue; }
+    d.args.push({ name: val(x, 'name'), cls: val(x, 'class'), optional: String(val(x, 'optional')) === 'true', qty: val(x, 'qty') ?? null, size: val(x, 'size') ?? null });
+  }
+  for (const x of wires) {
+    if (x.type !== 'core.describe.words') continue;
+    const d = out.descriptions.get(refId(val(x, 'of')));
+    const lang = val(x, 'lang');
+    if (!d) { err(`words ${x.id}: of=${val(x, 'of')} is not a described operation`); continue; }
+    if (!lang) { err(`words ${x.id}: no lang`); continue; }
+    const w = { lang, wire: x, frames: getAll(x, 'frames').map((v) => v.v), skip: getAll(x, 'skip').map((v) => v.v), noSubject: String(val(x, 'nosubject')) === 'true', sample: {}, example: getAll(x, 'example').map((v) => v.v), roles: {}, argWords: {} };
+    const resolve = (ref, expectMeans, where) => {
+      const wd = out.words.get(refId(ref));
+      if (!wd) { err(`${x.id}: ${where} refers to ${ref}, which is not a core.word wire`); return null; }
+      if (wd.lang !== lang) err(`${x.id}: ${where} word ${wd.id} is lang=${wd.lang}, not ${lang}`);
+      if (wd.means !== expectMeans) err(`${x.id}: ${where} word ${wd.id} means ${wd.means}, expected ${expectMeans}`);
+      return lang === 'en' ? wordToken(wd.text) : foldText(wordToken(wd.text)).toLowerCase();
+    };
+    for (const r of ROLES) w.roles[r] = getAll(x, r).map((v) => resolve(v.v, d.op, r)).filter(Boolean);
+    for (const e of x.entries) {
+      const m = /^(prep|det|unit)\.(\w+)$/.exec(e.key);
+      if (m) { const t = resolve(e.value.v, `${d.op}.${m[2]}`, e.key); if (t != null) ((w.argWords[m[2]] ??= {})[m[1]] ??= []).push(t); }
+      const sm = /^sample\.(\w+)$/.exec(e.key);
+      if (sm) w.sample[sm[1]] = String(e.value.v);
+    }
+    for (const name of Object.keys(w.argWords)) if (!d.args.some((a) => a.name === name)) err(`${x.id}: words for an argument '${name}' that ${d.wireId} does not declare`);
+    d.words.set(lang, w);
+  }
+  return out;
+}
+
+/** The input of `describePatterns` for one description in one language, or null when the description has no wording in it. */
+export function descriptionFor(desc, lang) {
+  const w = desc.words.get(lang);
+  if (!w) return null;
+  return {
+    id: desc.id, op: desc.op, intent: desc.intent, emit: desc.emit, frames: w.frames.length ? w.frames : desc.frames, skip: w.skip.length ? w.skip : desc.skip, priority: desc.priority, shortPriority: desc.shortPriority,
+    bareVerb: desc.bareVerb, kind: desc.kind, args: desc.args.map((a) => makeArg(a, w.argWords[a.name] ?? {})), noSubject: w.noSubject, sample: w.sample, example: w.example,
+    verb: w.roles.verb, tverb: w.roles.tverb, noun: w.roles.noun, ask: w.roles.ask, rest: w.roles.rest, pre: w.roles.pre, mid: w.roles.mid, subject: w.roles.subject,
+  };
+}
+
+/**
+ * The grammar of another language, from the wires of its pack (`lang/<lang>/frames.sop`): one `core.describe.lang` wire (`lang`, `lead`, `tail`, `article`, `determiners`,
+ * `ofPrep`: strings of the match syntax, and `command` / `query` / `statement` as repeated keys listing the default frames of the intent in order) and one
+ * `core.describe.frame` wire per frame (`lang`, `name`, `tpl`, repeated `needs`, `short` / `ofprep` / `mid` = true). Returns the `lg` option of `describePatterns`, or null.
+ */
+export function readFrames(wires, lang) {
+  const frames = {};
+  const intentFrames = { command: [], query: [], statement: [] };
+  let lg = null;
+  for (const x of wires) {
+    if (x.type === 'core.describe.frame' && val(x, 'lang') === lang) {
+      const flag = (k) => (String(val(x, k)) === 'true' ? { [k]: true } : {});
+      frames[val(x, 'name')] = { tpl: val(x, 'tpl'), needs: getAll(x, 'needs').map((v) => v.v), ...flag('short'), ...flag('ofprep'), ...flag('mid') };
+    } else if (x.type === 'core.describe.lang' && val(x, 'lang') === lang) {
+      lg = { lang, frames, intentFrames, lead: val(x, 'lead'), tail: val(x, 'tail'), article: val(x, 'article') ?? EN.article, determiners: val(x, 'determiners') ?? EN.determiners, ofPrep: val(x, 'ofPrep') ?? EN.ofPrep };
+      for (const k of Object.keys(intentFrames)) intentFrames[k] = getAll(x, k).map((v) => v.v);
+    }
+  }
+  return lg;
+}
+
+/**
+ * A reader for the values of slots in another language (`core.word lang= text= means=<canonical value> of=<slot>`): returns `(text) => text` that replaces each such word by its
+ * canonical (English) value, longest word first, on whole words, diacritics and case folded. The patterns of a language pack capture the canonical value; this is the lexicon side
+ * of the pack, until the engine's lexicons carry a surface form per language.
+ */
+export function entityReader(entries) {
+  const map = new Map();
+  for (const e of entries) {
+    const k = foldText(e.text).toLowerCase().trim();
+    if (k && !map.has(k)) map.set(k, String(e.means).replace(/_/g, ' '));
+  }
+  const keys = [...map.keys()].sort((a, b) => b.length - a.length).map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  if (!keys.length) return (t) => t;
+  const re = new RegExp(`(?<![\\p{L}\\p{N}-])(${keys.join('|')})(?![\\p{L}\\p{N}-])`, 'giu');
+  return (text) => foldText(text).replace(re, (m) => map.get(m.toLowerCase()) ?? m);
 }

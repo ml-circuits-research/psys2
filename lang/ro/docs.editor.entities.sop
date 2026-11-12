@@ -1,0 +1,50 @@
+@w.ro.paragraf.paragraph core.word lang=ro text=paragraf means=paragraph of=lex.docs.editor.kinds
+@w.ro.paragraful.paragraph core.word lang=ro text=paragraful means=paragraph of=lex.docs.editor.kinds
+@w.ro.paragrafe.paragraph core.word lang=ro text=paragrafe means=paragraph of=lex.docs.editor.kinds
+@w.ro.paragrafele.paragraph core.word lang=ro text=paragrafele means=paragraph of=lex.docs.editor.kinds
+@w.ro.titlu.heading core.word lang=ro text=titlu means=heading of=lex.docs.editor.kinds
+@w.ro.titlul.heading core.word lang=ro text=titlul means=heading of=lex.docs.editor.kinds
+@w.ro.titluri.heading core.word lang=ro text=titluri means=heading of=lex.docs.editor.kinds
+@w.ro.titlurile.heading core.word lang=ro text=titlurile means=heading of=lex.docs.editor.kinds
+@w.ro.antet.heading core.word lang=ro text=antet means=heading of=lex.docs.editor.kinds
+@w.ro.antetul.heading core.word lang=ro text=antetul means=heading of=lex.docs.editor.kinds
+@w.ro.lista.list core.word lang=ro text="listă" means=list of=lex.docs.editor.kinds
+@w.ro.liste.list core.word lang=ro text=liste means=list of=lex.docs.editor.kinds
+@w.ro.listele.list core.word lang=ro text=listele means=list of=lex.docs.editor.kinds
+@w.ro.titlu.title core.word lang=ro text=titlu means=title of=lex.docs.editor.kinds
+@w.ro.titlul.title core.word lang=ro text=titlul means=title of=lex.docs.editor.kinds
+@w.ro.element.item core.word lang=ro text=element means=item of=lex.docs.editor.kinds
+@w.ro.elementul.item core.word lang=ro text=elementul means=item of=lex.docs.editor.kinds
+@w.ro.elemente.item core.word lang=ro text=elemente means=item of=lex.docs.editor.kinds
+@w.ro.propozitie.sentence core.word lang=ro text="propoziție" means=sentence of=lex.docs.editor.kinds
+@w.ro.propozitia.sentence core.word lang=ro text="propoziția" means=sentence of=lex.docs.editor.kinds
+@w.ro.fraza.sentence core.word lang=ro text=fraza means=sentence of=lex.docs.editor.kinds
+@w.ro.sarcina.task core.word lang=ro text="sarcină" means=task of=lex.docs.editor.kinds
+@w.ro.sarcini.task core.word lang=ro text=sarcini means=task of=lex.docs.editor.kinds
+@w.ro.capitol.chapter core.word lang=ro text=capitol means=chapter of=lex.docs.editor.kinds
+@w.ro.capitolul.chapter core.word lang=ro text=capitolul means=chapter of=lex.docs.editor.kinds
+@w.ro.capitole.chapter core.word lang=ro text=capitole means=chapter of=lex.docs.editor.kinds
+@w.ro.sectiune.section core.word lang=ro text="secțiune" means=section of=lex.docs.editor.kinds
+@w.ro.sectiunea.section core.word lang=ro text="secțiunea" means=section of=lex.docs.editor.kinds
+@w.ro.sectiuni.section core.word lang=ro text="secțiuni" means=section of=lex.docs.editor.kinds
+@w.ro.primul.first core.word lang=ro text=primul means=first of=lex.docs.editor.ordinals
+@w.ro.prima.first core.word lang=ro text=prima means=first of=lex.docs.editor.ordinals
+@w.ro.intaiul.first core.word lang=ro text="întâiul" means=first of=lex.docs.editor.ordinals
+@w.ro.intaia.first core.word lang=ro text="întâia" means=first of=lex.docs.editor.ordinals
+@w.ro.ultimul.last core.word lang=ro text=ultimul means=last of=lex.docs.editor.ordinals
+@w.ro.ultima.last core.word lang=ro text=ultima means=last of=lex.docs.editor.ordinals
+@w.ro.al_doilea.second core.word lang=ro text="al doilea" means=second of=lex.docs.editor.ordinals
+@w.ro.a_doua.second core.word lang=ro text="a doua" means=second of=lex.docs.editor.ordinals
+@w.ro.al_treilea.third core.word lang=ro text="al treilea" means=third of=lex.docs.editor.ordinals
+@w.ro.a_treia.third core.word lang=ro text="a treia" means=third of=lex.docs.editor.ordinals
+@w.ro.sfarsit.end core.word lang=ro text="sfârșit" means=end of=lex.docs.editor.positions
+@w.ro.sfarsitul.end core.word lang=ro text="sfârșitul" means=end of=lex.docs.editor.positions
+@w.ro.final.end core.word lang=ro text=final means=end of=lex.docs.editor.positions
+@w.ro.finalul.end core.word lang=ro text=finalul means=end of=lex.docs.editor.positions
+@w.ro.inceput.beginning core.word lang=ro text="început" means=beginning of=lex.docs.editor.positions
+@w.ro.inceputul.beginning core.word lang=ro text="începutul" means=beginning of=lex.docs.editor.positions
+@w.ro.varf.top core.word lang=ro text="vârf" means=top of=lex.docs.editor.positions
+@w.ro.varful.top core.word lang=ro text="vârful" means=top of=lex.docs.editor.positions
+@w.ro.partea_de_sus.top core.word lang=ro text="partea de sus" means=top of=lex.docs.editor.positions
+@w.ro.fund.bottom core.word lang=ro text=fund means=bottom of=lex.docs.editor.positions
+@w.ro.partea_de_jos.bottom core.word lang=ro text="partea de jos" means=bottom of=lex.docs.editor.positions

@@ -77,7 +77,27 @@
 
 @core.describe core.type
     extends=core.thing
-    doc="An operation description: one operation stated by roles (arguments with their classes and introducing words) and words (verbs, nouns, question openers), from which request, question and statement patterns are generated (spec 03 section 2c). Read only with PSYS_GEN_PATTERNS."
+    doc="An operation description: one operation (op, intent, emit, frames). Its arguments are core.describe.arg wires, its wording one core.describe.words wire per language, its words core.word wires; request, question and statement patterns are generated from them (spec 03 section 2c). Read only with PSYS_GEN_PATTERNS or PSYS_GEN_LANG."
+
+@core.describe.arg core.type
+    extends=core.thing
+    doc="One argument role of an operation description: of (the description), name, class (a lexicon id, number, rest, noun, words), size (the maximum of words), optional=true, qty (the count slot of a quantified item)."
+
+@core.describe.words core.type
+    extends=core.thing
+    doc="The wording of one operation description in one language: of (the description), lang, then repeated keys whose values are core.word wires: verb tverb noun ask rest pre mid subject, and for an argument prep.<name> det.<name> unit.<name>; nosubject=true; sample.<slot>=value; example (sentences)."
+
+@core.describe.frame core.type
+    extends=core.thing
+    doc="One frame of a language pack (lang/<lang>/frames.sop): lang, name, tpl (a template over the tokens of the generator), needs (repeated), short, ofprep, mid (true). Not used by English, whose frames are in src/worlds/describe.mjs."
+
+@core.describe.lang core.type
+    extends=core.thing
+    doc="The settings of a language pack's grammar (lang/<lang>/frames.sop): lang, lead, tail, article, determiners, ofPrep, and command / query / statement as repeated keys listing the default frames of the intent."
+
+@core.word core.type
+    extends=core.thing
+    doc="A word of one language and the name it means (the library's core.word): lang, text, means (an operation's emit key, an argument as <op>.<name>, or a value of a slot, with of naming the slot)."
 
 @core.note core.type
     extends=core.thing
@@ -693,60 +713,15 @@
     card=one
     ask="Which emit template does it produce?"
 
-@core.describe.arg core.key
-    value=string
-    card=many
-    ask="Which argument role (name:class[?][*qty][;prep=..][;det=..][;unit=..])?"
-
-@core.describe.verb core.key
-    value=string
-    card=one
-    ask="Which verbs name the action (alternatives a|b|c; _ joins words)?"
-
-@core.describe.tverb core.key
-    value=string
-    card=one
-    ask="Which trailing verbs close a question about it?"
-
-@core.describe.noun core.key
-    value=string
-    card=one
-    ask="Which nouns name the thing asked for or stated about?"
-
-@core.describe.ask core.key
-    value=string
-    card=one
-    ask="Which question openers stand alone?"
-
-@core.describe.rest core.key
-    value=string
-    card=one
-    ask="Which words complete the sentence (optional)?"
-
-@core.describe.pre core.key
-    value=string
-    card=one
-    ask="Which words open the first clause of a compound question?"
-
-@core.describe.mid core.key
-    value=string
-    card=one
-    ask="Which words join the two clauses of a compound question?"
-
-@core.describe.subject core.key
-    value=string
-    card=one
-    ask="Which subject words begin a statement (default i)?"
-
 @core.describe.frames core.key
     value=string
-    card=one
-    ask="Which frames to generate (comma list; default all of the intent)?"
+    card=many
+    ask="Which frame (repeated key)?"
 
 @core.describe.skip core.key
     value=string
-    card=one
-    ask="Which frames to leave out (comma list)?"
+    card=many
+    ask="Which frame (repeated key)?"
 
 @core.describe.priority core.key
     value=number
@@ -767,16 +742,6 @@
     value=atom
     card=one
     ask="Which pattern kind overrides the default of the intent?"
-
-@core.describe.sample core.key
-    value=string
-    card=one
-    ask="Which example words per slot (a=Paris;b=Rome)?"
-
-@core.describe.example core.key
-    value=string
-    card=many
-    ask="Which extra sentence is an example?"
 
 @core.describe.requires core.key
     value=atom
@@ -977,3 +942,68 @@
     value=string
     card=one
     ask="What did the host report?"
+
+@core.describe.arg.of core.key
+    value=string
+    card=one
+    ask="Which operation description does the argument belong to (a $reference)?"
+
+@core.describe.arg.name core.key
+    value=atom
+    card=one
+    ask="What is the slot called?"
+
+@core.describe.arg.class core.key
+    value=atom
+    card=one
+    ask="Which slot class (a lexicon id, number, rest, noun, words)?"
+
+@core.describe.arg.size core.key
+    value=number
+    card=one
+    ask="How many words at most does a words slot take?"
+
+@core.describe.arg.optional core.key
+    value=atom
+    card=one
+    ask="Can the argument be left out (true)?"
+
+@core.describe.arg.qty core.key
+    value=atom
+    card=one
+    ask="Which slot holds the count of a quantified item?"
+
+@core.describe.words.of core.key
+    value=string
+    card=one
+    ask="Which operation description does the wording belong to (a $reference)?"
+
+@core.describe.words.lang core.key
+    value=atom
+    card=one
+    ask="Which language?"
+
+@core.describe.words.example core.key
+    value=string
+    card=many
+    ask="Which example sentences does the wording add?"
+
+@core.word.lang core.key
+    value=atom
+    card=one
+    ask="Which language?"
+
+@core.word.text core.key
+    value=string
+    card=one
+    ask="What is the word?"
+
+@core.word.means core.key
+    value=atom
+    card=one
+    ask="Which action, type, key or value does it mean?"
+
+@core.word.of core.key
+    value=atom
+    card=one
+    ask="Which slot (type.key or lexicon id) does a value word belong to?"

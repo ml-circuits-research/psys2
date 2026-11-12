@@ -1,0 +1,140 @@
+@describe.lang.ro core.describe.lang
+    lang=ro
+    lead="[o_intrebare_rapida|intrebare_rapida|o_intrebare|vreau_sa_stiu|as_vrea_sa_stiu|spune-mi|zi-mi|hai|deci|ok|bine|atunci]? [:|,]? [te_rog|ma_rog]?"
+    tail="[te_rog|va_rog|acum|imediat]?"
+    article="un|o|niste|unul|una"
+    determiners="un|o|toate|tot|toata|toti|meu|mea"
+    ofPrep="a|al|ai|ale|lui|din|de_la|pentru|pe|in|de"
+    command=imp
+    command=wish
+    command=can
+    command=short
+    command=asn
+    query=qnoun
+    query=tell
+    query=ask
+    query=last
+    query=canq
+    query=canlast
+    query=rev
+    query=bare
+    statement=stmt
+    statement=pred
+
+@describe.frame.ro.imp core.describe.frame
+    lang=ro
+    name=imp
+    tpl="<L> <V> [ma|ne|imi]? <DN?> <A> [,]? <R?> [,]? <T>"
+    needs=V
+
+@describe.frame.ro.wish core.describe.frame
+    lang=ro
+    name=wish
+    tpl="<L> [vreau_sa|as_vrea_sa|as_dori_sa|vrem_sa|vreau] <V> <DN?> <A> [,]? <R?> [,]? <T>"
+    needs=V
+
+@describe.frame.ro.can core.describe.frame
+    lang=ro
+    name=can
+    tpl="<L> [pot|poti|putem|as_putea|ai_putea|puteti] [sa]? <V> <DN?> <A> [,]? <R?> [,]? <T>"
+    needs=V
+
+@describe.frame.ro.short core.describe.frame
+    lang=ro
+    name=short
+    tpl="<L> <A> <T>"
+    needs=A
+    short=true
+
+@describe.frame.ro.qnoun core.describe.frame
+    lang=ro
+    name=qnoun
+    tpl="<L> [care_este|care_e|ce_este|ce_e|care_sunt|ce_sunt|cat_este|cat_e|cat_sunt|cat_masoara] <N> <A> [,]? <R?> [,]? <T>"
+    needs=N
+    ofprep=true
+
+@describe.frame.ro.qnoun.2 core.describe.frame
+    lang=ro
+    name=qnoun.2
+    tpl="<L> [care|ce|cate] <N> [este|e|are|au|sunt|a]? <A> [,]? <R?> [,]? <T>"
+    needs=N
+    ofprep=true
+
+@describe.frame.ro.tell core.describe.frame
+    lang=ro
+    name=tell
+    tpl="<L> [spune-mi|zi-mi|arata-mi|da-mi|dati-mi|vreau_sa_stiu|vreau_sa_aflu|as_vrea_sa_stiu] [care_este|care_e|ce_este|ce_e]? <N> <A> [,]? <R?> [,]? <T>"
+    needs=N
+    ofprep=true
+
+@describe.frame.ro.tell.tv core.describe.frame
+    lang=ro
+    name=tell.tv
+    tpl="<L> [spune-mi|zi-mi|vreau_sa_stiu|vreau_sa_aflu|as_vrea_sa_stiu] [cat|cati|cate]? <A> <TV> [,]? <R?> [,]? <T>"
+    needs=TV
+    needs=A
+
+@describe.frame.ro.ask core.describe.frame
+    lang=ro
+    name=ask
+    tpl="<L> <Q> [este|e|sunt|are|au|a|face|fac|costa|poate|pot|trebuie]? <NN?> <A> <TV?> [,]? <R?> [,]? <T>"
+    needs=Q
+
+@describe.frame.ro.canlast core.describe.frame
+    lang=ro
+    name=canlast
+    tpl="<L> <A> [,]? [pot|poti|putem|as_putea|ai_putea] [sa]? <V> [pentru_ele|le|o|il|asta]? [,]? <R?> [,]? <T>"
+    needs=V
+    needs=A
+
+@describe.frame.ro.canq core.describe.frame
+    lang=ro
+    name=canq
+    tpl="<L> [pot|poti|putem|as_putea|ai_putea|puteti] [sa]? <V> <A> [,]? <R?> [,]? <T>"
+    needs=V
+
+@describe.frame.ro.asn core.describe.frame
+    lang=ro
+    name=asn
+    tpl="<L> <V> <A> [ca|drept|pentru|ca_si]? [un|o|al_meu|a_mea]? <N> <T>"
+    needs=V
+    needs=N
+    needs=A
+    mid=true
+
+@describe.frame.ro.rev core.describe.frame
+    lang=ro
+    name=rev
+    tpl="<L> <A> <N> [,]? <R?> [,]? <T>"
+    needs=N
+    needs=A
+    short=true
+
+@describe.frame.ro.bare core.describe.frame
+    lang=ro
+    name=bare
+    tpl="<L> <N> <A> [,]? <R?> [,]? <T>"
+    needs=N
+    needs=A
+    short=true
+    ofprep=true
+
+@describe.frame.ro.last core.describe.frame
+    lang=ro
+    name=last
+    tpl="<L> <A> <TV?> [,]? <Q> <NN?> [,]? <R?> [,]? <T>"
+    needs=Q
+    needs=A
+
+@describe.frame.ro.stmt core.describe.frame
+    lang=ro
+    name=stmt
+    tpl="<SJ> <V> <A> [,]? <R?> [,]? <T>"
+    needs=V
+
+@describe.frame.ro.pred core.describe.frame
+    lang=ro
+    name=pred
+    tpl="<L> <A0> <V> <A+> [,]? <R?> [,]? <T>"
+    needs=V
+    needs=A
