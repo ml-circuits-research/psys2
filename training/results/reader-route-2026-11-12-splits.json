@@ -1,0 +1,205 @@
+{
+ "worlds": [
+  "kids.shop",
+  "docs.editor",
+  "geo.map"
+ ],
+ "rows": 1500,
+ "bySet": {
+  "operational": {
+   "n": 236,
+   "candidates": 225,
+   "accepted": 43,
+   "ambiguous": 1,
+   "acceptedOnRight": 41,
+   "acceptedOnNotRight": 2,
+   "splits": 2,
+   "rulesRight": 229
+  },
+  "operational-ro": {
+   "n": 360,
+   "candidates": 333,
+   "accepted": 60,
+   "ambiguous": 0,
+   "acceptedOnRight": 60,
+   "acceptedOnNotRight": 0,
+   "splits": 6,
+   "rulesRight": 309
+  },
+  "dialogues": {
+   "n": 350,
+   "candidates": 306,
+   "accepted": 71,
+   "ambiguous": 1,
+   "acceptedOnRight": 71,
+   "acceptedOnNotRight": 0,
+   "splits": 0,
+   "rulesRight": 344
+  },
+  "gold-rules": {
+   "n": 18,
+   "candidates": 18,
+   "accepted": 6,
+   "ambiguous": 0,
+   "acceptedOnRight": 6,
+   "acceptedOnNotRight": 0,
+   "splits": 0,
+   "rulesRight": 18
+  },
+  "gold-para": {
+   "n": 14,
+   "candidates": 14,
+   "accepted": 0,
+   "ambiguous": 0,
+   "acceptedOnRight": 0,
+   "acceptedOnNotRight": 0,
+   "splits": 0,
+   "rulesRight": 3
+  },
+  "gold-real": {
+   "n": 5,
+   "candidates": 5,
+   "accepted": 1,
+   "ambiguous": 0,
+   "acceptedOnRight": 0,
+   "acceptedOnNotRight": 1,
+   "splits": 0,
+   "rulesRight": 2
+  },
+  "loose-words": {
+   "n": 105,
+   "candidates": 103,
+   "accepted": 24,
+   "ambiguous": 8,
+   "acceptedOnRight": 24,
+   "acceptedOnNotRight": 0,
+   "splits": 0,
+   "rulesRight": 68
+  },
+  "typos": {
+   "n": 412,
+   "candidates": 408,
+   "accepted": 112,
+   "ambiguous": 8,
+   "acceptedOnRight": 104,
+   "acceptedOnNotRight": 8,
+   "splits": 3,
+   "rulesRight": 359
+  }
+ },
+ "cases": [
+  {
+   "set": "operational",
+   "world": "geo.map",
+   "text": "shw me Pariss",
+   "rules": "not_understood",
+   "reader": [
+    "geo.map.show"
+   ],
+   "split": false
+  },
+  {
+   "set": "operational",
+   "world": "geo.map",
+   "text": "colour Spain in",
+   "rules": "not_understood",
+   "reader": [
+    "geo.map.highlight"
+   ],
+   "split": false
+  },
+  {
+   "set": "gold-real",
+   "world": "docs.editor",
+   "text": "on the new chapter",
+   "rules": "not_understood",
+   "reader": [
+    "docs.editor.addRoleBare"
+   ],
+   "split": false
+  },
+  {
+   "set": "typos",
+   "world": "geo.map",
+   "text": "Snow me Bucharest.",
+   "rules": "not_understood",
+   "reader": [
+    "geo.map.show"
+   ],
+   "split": false
+  },
+  {
+   "set": "typos",
+   "world": "geo.map",
+   "text": "That continent is Egypt in?",
+   "rules": "wrong",
+   "reader": [
+    "geo.map.continent"
+   ],
+   "split": false
+  },
+  {
+   "set": "typos",
+   "world": "kids.shop",
+   "text": "How much are a ball and a pnecil altogether?",
+   "rules": "wrong",
+   "reader": [
+    "kids.shop.total",
+    "kids.shop.total"
+   ],
+   "split": true
+  },
+  {
+   "set": "typos",
+   "world": "kids.shop",
+   "text": "How much are a hall and a pencil altogether?",
+   "rules": "wrong",
+   "reader": [
+    "kids.shop.total",
+    "kids.shop.total"
+   ],
+   "split": true
+  },
+  {
+   "set": "typos",
+   "world": "kids.shop",
+   "text": "What do 2 balls cot me altogether?",
+   "rules": "not_understood",
+   "reader": [
+    "kids.shop.total"
+   ],
+   "split": false
+  },
+  {
+   "set": "typos",
+   "world": "kids.shop",
+   "text": "I bought 3 pencils and 2 kitse.",
+   "rules": "wrong",
+   "reader": [
+    "kids.shop.purchase",
+    "kids.shop.purchase"
+   ],
+   "split": true
+  },
+  {
+   "set": "typos",
+   "world": "geo.map",
+   "text": "Show me Hyderabadd.",
+   "rules": "not_understood",
+   "reader": [
+    "geo.map.show"
+   ],
+   "split": false
+  },
+  {
+   "set": "typos",
+   "world": "geo.map",
+   "text": "Show me Mins.",
+   "rules": "not_understood",
+   "reader": [
+    "geo.map.show"
+   ],
+   "split": false
+  }
+ ]
+}

@@ -22,6 +22,8 @@ const MATRIX_EXTRAS = { 'patterns.sop': 'matrix.patterns.sop', 'operations.sop':
 // Operation descriptions (E3, spec 03 section 2c): describe.sop is read only when PSYS_GEN_PATTERNS is `add` (generated patterns are appended to the
 // hand-written ones) or `only` (hand-written patterns and shapes of the described operations are dropped first). Default: off, nothing is read.
 const genMode = () => { const m = globalThis.PSYS_GEN_PATTERNS ?? globalThis.process?.env?.PSYS_GEN_PATTERNS; return m === 'add' || m === 'only' ? m : null; };
+/** READER-ROUTE (spec 16 section 7): the reader needs the English words of `describe.sop` (not its generated patterns), so the file is read when the reader is on (`PSYS2_READER` = fill or choose). */
+const readerOn = () => { const m = globalThis.PSYS2_READER ?? globalThis.process?.env?.PSYS2_READER; return m === 'fill' || m === 'choose'; };
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
 const txt = (w, k) => get(w, k)?.v;
 
@@ -186,7 +188,11 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
     for (const [base, extra] of Object.entries(MATRIX_EXTRAS)) if (files[extra] != null) files[base] = base === 'templates.sop' ? files[extra] + '\n' + (files[base] ?? '') : (files[base] ?? '') + '\n' + files[extra];
   }
+<<<<<<< HEAD
   const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() ? null : files[f])]));
+=======
+  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() && !genLang() && !readerOn() ? null : files[f])]));
+>>>>>>> worktree-agent-a11663a517acfe1c6
   w.manifest = wires['world.sop'].find((x) => x.type === 'core.world') ?? null;
   if (!w.manifest) w.errors.push({ message: 'world.sop has no core.world wire' });
   else {
@@ -265,7 +271,11 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   for (const id of ids) {
     const files = {};
     const matrix = reasoner === 'matrix';
+<<<<<<< HEAD
     await Promise.all([...FILES, ...(genMode() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
+=======
+    await Promise.all([...FILES, ...(genMode() || genLang() || readerOn() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
+>>>>>>> worktree-agent-a11663a517acfe1c6
     let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, problem = null, whyWords = null;
     if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }

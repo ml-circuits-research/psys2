@@ -1,59 +1,47 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * E2, step 3: the library's reader core (`interpret` over `core.word` facts, split candidates, `score`, `veto`) on the messages of the E1 sets that belong to a world with
- * words. Measurement only: the library's reading is compared with what the rules did (the rows of `scripts/e1-collect.mjs`), nothing is acted on.
+ * E2, step 3 (READER-ROUTE, spec 16 section 7): the library's reader core (`interpret` over the English `core.word` facts of every described world, split candidates, `score`,
+ * `rank`) on the messages of the E1 sets that belong to a described world. Measurement of the reader alone; what it does inside the dialogue (`fill`, `choose`) is
+ * `scripts/reader-route-report.mjs`.
  *
- *   node scripts/e2-splits.mjs --rows <f-rules-off.json> [--world kids.shop] [--out <file.json>]
+ *   node scripts/e2-splits.mjs --rows <f-rules-off.json> [--world <id>] [--out <file.json>]
  *
- * The words are the world's `describe.sop` `core.word` facts (E3b) plus, for a world whose lexicon lists the values of a slot, one `core.word` per value
- * (`valueWords`). Only words whose `means` the matrix knows are read by the library (kids.shop: all; geo.map and docs.editor: their `means` are emit keys of the
- * descriptions, not names of the matrix, so the library reports `unknown-word` for 341 and 247 of them and reads nothing).
+ * Per set: messages of the world, how many the reader has candidates for, how many it accepts (unambiguous, nothing left out), how many of those the rules read right, how
+ * many are accepted on a message the rules did not get right (the reader's chance), and how many readings are splits of a compound message.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { readText, valueWords } from '../src/dialog/word-reader.mjs';
+import { readerWorlds, readerSegments } from '../src/dialog/reader-route.mjs';
 
+process.env.PSYS2_READER = 'choose';   // the descriptions are read
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
-const WORLD = arg('world', 'kids.shop');
-const rows = JSON.parse(readFileSync(arg('rows'), 'utf8')).rows.filter((r) => r.world === WORLD && r.kind !== 'dialogue-turn');
-
+const only = arg('world');
+const all = JSON.parse(readFileSync(arg('rows'), 'utf8')).rows.filter((r) => r.kind !== 'dialogue-turn' && r.world);
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
 const session = engine.createSession({ language: 'en' });
-const base = session.isession.rs.peek(WORLD);
-const describe = readFileSync(new URL(`../worlds/${WORLD}/describe.sop`, import.meta.url), 'utf8');
-const lexicon = readFileSync(new URL(`../worlds/${WORLD}/lexicon.sop`, import.meta.url), 'utf8');
-const items = [...lexicon.matchAll(/^\s+word=(\w+)$/gm)].map((m) => m[1]);
-const wordWires = describe.split('\n').filter((l) => l.startsWith('@w.') && l.includes('core.word')).join('\n');
-const SLOT = { 'kids.shop': 'kids.shop.price.item' }[WORLD];
-
-const out = { world: WORLD, rows: rows.length, bySet: {}, cases: [] };
-for (const r of rows) {
-  const w = base.fork();
-  w.tell(wordWires);
-  if (SLOT && items.length) w.tell(valueWords(items, SLOT));
+const rws = readerWorlds(session.isession.rs.reasoner.lib, engine.set);
+const worlds = [...rws.keys()].filter((w) => !only || w === only);
+const out = { worlds, rows: 0, bySet: {}, cases: [] };
+for (const r of all.filter((x) => worlds.includes(x.world))) {
   const text = r.english ?? r.message;
-  let read;
-  try { read = readText(w, text); } catch (e) { read = { error: String(e.message).slice(0, 100), candidates: [] }; }
-  const set = (out.bySet[r.set] ??= { n: 0, candidates: 0, judged: 0, answer: 0, split: 0, rightRules: 0, answerOnNonRight: 0, answerOnRight: 0, agreeOnRight: 0 });
-  set.n++;
-  const ok = r.outcome === 'right';
-  if (ok) set.rightRules++;
-  if (read.candidates.length) set.candidates++;
-  const top = read.top;
-  const judged = read.results?.[read.order?.[0]]?.judged;
-  if (judged) set.judged++;
-  if (top?.parts) set.split++;
-  const answer = read.veto?.answer === true;
-  if (answer) { set.answer++; ok ? set.answerOnRight++ : set.answerOnNonRight++; }
-  const op = (r.segments ?? []).map((s) => /pat\.kids\.shop\.(?:[a-z0-9]+\.)*?(total|price|change|purchase|income|expense|leftafter|affordability|balance|money)/.exec(s.pattern ?? '')?.[1]).filter(Boolean);
-  const wires = top ? (top.parts ?? [top]).map((p) => p.wires).join(' + ') : null;
-  const agree = answer && op.length && op.some((o) => wires.includes(`kids.shop.${o}`));
-  if (agree && ok) set.agreeOnRight++;
-  if (!ok || (answer && ok && op.length && !agree)) out.cases.push({ set: r.set, id: r.id, text, rules: r.outcome, rulesOps: op, library: wires, answer, reasons: read.veto?.reasons?.map((x) => x.reason) ?? null, split: !!top?.parts });
+  const set = (out.bySet[r.set] ??= { n: 0, candidates: 0, accepted: 0, ambiguous: 0, acceptedOnRight: 0, acceptedOnNotRight: 0, splits: 0, rulesRight: 0 });
+  out.rows++; set.n++;
+  const right = r.outcome === 'right';
+  if (right) set.rulesRight++;
+  let res;
+  try { res = readerSegments(session, { text, span: [0, text.length] }, { worldOrder: [r.world], allowed: [r.world] }); } catch (e) { res = { info: { error: String(e.message).slice(0, 80) } }; }
+  if (res.info?.candidates) set.candidates++;
+  if (res.info?.accepted && res.ambiguous) set.ambiguous++;
+  if (res.segments && !res.ambiguous) {
+    set.accepted++;
+    right ? set.acceptedOnRight++ : set.acceptedOnNotRight++;
+    if (res.info.top?.split) set.splits++;
+    if (!right) out.cases.push({ set: r.set, world: r.world, text, rules: r.outcome, reader: res.info.top?.ops, split: !!res.info.top?.split });
+  }
 }
 const o = arg('out');
 if (o) writeFileSync(o, JSON.stringify(out, null, 1));
 console.log(JSON.stringify(out.bySet, null, 1));
-console.log('cases listed:', out.cases.length);
+console.log('worlds:', worlds.join(', '), '| rows:', out.rows, '| cases listed (accepted where the rules were not right):', out.cases.length);
