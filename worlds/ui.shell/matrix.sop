@@ -16,7 +16,7 @@
 @sh.k.hands core.slot of=ui.shell.view key=handsfree kind=boolean required=true
 @sh.k.rate core.slot of=ui.shell.view key=rate kind=integer min=50 max=200 required=true
 @sh.k.lang core.slot of=ui.shell.view key=lang kind=atom enum=en enum=ro required=true
-@sh.k.rest core.slot of=ui.shell.view key=rest kind=string required=true
+@sh.k.rest core.slot of=ui.shell.view key=rest kind=blob required=true
 
 
 @sh.k.want.kind core.slot of=ui.shell.want key=kind kind=atom enum=tab enum=play enum=game enum=back enum=lang enum=settab required=true

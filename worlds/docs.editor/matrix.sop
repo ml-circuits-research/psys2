@@ -15,7 +15,7 @@
 @ed.k.dtitle core.slot of=docs.editor.doc key=title kind=string required=true
 @ed.k.dcursor core.slot of=docs.editor.doc key=cursor kind=integer required=true
 @ed.k.dcount core.slot of=docs.editor.doc key=count kind=integer required=true
-@ed.k.drest core.slot of=docs.editor.doc key=rest kind=string required=true
+@ed.k.drest core.slot of=docs.editor.doc key=rest kind=blob required=true
 @ed.k.bid core.slot of=docs.editor.block key=bid kind=atom required=true
 @ed.k.bn core.slot of=docs.editor.block key=n kind=integer required=true
 @ed.k.bkind core.slot of=docs.editor.block key=kind kind=atom enum=heading enum=paragraph enum=quote enum=list enum=table enum=rule required=true
@@ -24,10 +24,10 @@
 @ed.k.bsec core.slot of=docs.editor.block key=sec kind=integer
 @ed.k.bcols core.slot of=docs.editor.block key=cols kind=integer
 @ed.k.bminc core.slot of=docs.editor.block key=minc kind=integer
-@ed.k.bjson core.slot of=docs.editor.block key=json kind=string required=true
+@ed.k.bjson core.slot of=docs.editor.block key=json kind=blob required=true
 @ed.k.stype core.slot of=docs.editor.sel key=type kind=atom enum=blocks enum=range required=true
 @ed.k.sblock core.slot of=docs.editor.sel key=block kind=atom many=true
-@ed.k.sjson core.slot of=docs.editor.sel key=json kind=string required=true
+@ed.k.sjson core.slot of=docs.editor.sel key=json kind=blob required=true
 @ed.k.gbid core.slot of=docs.editor.gone key=bid kind=atom required=true
 @ed.k.gkind core.slot of=docs.editor.gone key=kind kind=atom required=true
 @ed.k.gsec core.slot of=docs.editor.gone key=sec kind=integer

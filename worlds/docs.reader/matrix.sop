@@ -15,7 +15,7 @@
 
 @dr.k.sactive core.slot of=docs.reader.shelf key=active kind=atom
 @dr.k.sopen core.slot of=docs.reader.shelf key=open kind=integer required=true
-@dr.k.srest core.slot of=docs.reader.shelf key=rest kind=string required=true
+@dr.k.srest core.slot of=docs.reader.shelf key=rest kind=blob required=true
 @dr.k.odid core.slot of=docs.reader.open key=did kind=atom required=true
 @dr.k.on core.slot of=docs.reader.open key=n kind=integer required=true
 @dr.k.otitle core.slot of=docs.reader.open key=title kind=string required=true
@@ -23,15 +23,15 @@
 @dr.k.osent core.slot of=docs.reader.open key=sentences kind=integer required=true
 @dr.k.opara core.slot of=docs.reader.open key=paras kind=integer required=true
 @dr.k.osec core.slot of=docs.reader.open key=sections kind=integer required=true
-@dr.k.ojson core.slot of=docs.reader.open key=json kind=string required=true
+@dr.k.ojson core.slot of=docs.reader.open key=json kind=blob required=true
 @dr.k.fdoc core.slot of=docs.reader.focus key=doc kind=atom
 @dr.k.fupto core.slot of=docs.reader.focus key=upto kind=integer required=true
 @dr.k.fcites core.slot of=docs.reader.focus key=cites kind=integer required=true
-@dr.k.fjson core.slot of=docs.reader.focus key=json kind=string required=true
+@dr.k.fjson core.slot of=docs.reader.focus key=json kind=blob required=true
 @dr.k.qdoc core.slot of=docs.reader.search key=doc kind=atom required=true
 @dr.k.qpos core.slot of=docs.reader.search key=pos kind=integer required=true
 @dr.k.qhits core.slot of=docs.reader.search key=hits kind=integer required=true
-@dr.k.qjson core.slot of=docs.reader.search key=json kind=string required=true
+@dr.k.qjson core.slot of=docs.reader.search key=json kind=blob required=true
 @dr.k.wkind core.slot of=docs.reader.want key=kind kind=atom enum=sentence enum=paragraph enum=section enum=any required=true
 @dr.k.wn core.slot of=docs.reader.want key=n kind=integer
 

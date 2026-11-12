@@ -18,8 +18,8 @@
 @pf.k.said core.slot of=user.profile.fact key=said kind=string
 @pf.k.asked core.slot of=user.profile.fact key=asked kind=string
 @pf.k.req core.slot of=user.profile.fact key=req kind=string
-@pf.k.rest core.slot of=user.profile.dialog key=rest kind=string required=true
-@pf.k.plan core.slot of=user.profile.plan key=json kind=string required=true
+@pf.k.rest core.slot of=user.profile.dialog key=rest kind=blob required=true
+@pf.k.plan core.slot of=user.profile.plan key=json kind=blob required=true
 
 # ---- an age is a number of years of a life
 @pf.a user.profile.fact field=age num=?a
