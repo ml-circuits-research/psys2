@@ -624,3 +624,16 @@ Key numbers (rules mode): English core (operational + dialogues) 131 non-right, 
   6. Untested but read in the source: `check(patch, { query })` runs the inner query with `{}` (no `ns`), so a `where` reference in it is not qualified.
 - **Host findings from the warnings.** `unknown-attribute template.item` on `tasks.a.add` (the host reads `template.<key>`, expected) and `card=many` on `gs.k.lt` / `gs.k.lx` of `games.guess` (the library reads `many=true`; the slots are therefore single-valued today; left as it is so that behaviour stays identical; worth a decision).
 - **Not done / honest limits.** `shared=true` for `core.agent` has no effect until item 3 (the instances are single-namespace, so nothing depends on it); `docs.editor` is the one instance in the default namespace (item 2); there is no per-turn namespace: facts of different turns must join (a count over purchases, a fluent over events), and a namespace per turn broke every aggregate and every reference to an agent in a trial (answers: "I don't know how much money you have"); the turn goes in the ids instead.
+
+## 2026-11-12 — status after namespaces
+
+- Merged and pushed:
+  - RO-TRANSLATE-FALLBACK (48ecaab);
+  - E3 and E3b (cacf02d, 86d9cca);
+  - re-vendor sopworld 0.9.0 (04a9f3c);
+  - E2, behind the `worldAware` option, off by default (d2ff98e);
+  - namespaces (99be184);
+  - the voice bound test now counts steps instead of measuring time (2db9ef3).
+- My miss: REGRESSION-AB has been open since 03:00 and I did not pick it up. I picked it up now, before anything else: chess undo groups the engine's late reply into the user's step, plus the four state-view cases and a gate against "ops better" sessions.
+- Next, in the reviewer's order: re-vendor sopworld 0.12.0 at 7a49329 (drop the `lacks` zeroing, `judgedBy`, splits), then rerun E2 with `judgedBy` and splits over the E3b `core.word` facts. After that, the RO-TRANSLATE-FALLBACK leftovers (English words inside Romanian sentences, "înapoi", "o bară grafic", the distance template).
+- Waiting for the user: the E2 veto as default, and the `lang/ro/` pack.
