@@ -563,7 +563,7 @@ export async function mountPsys2(element, options = {}) {
     let reply;
     const sentLang = language.get();   // LANG-FIXED: the language this turn was read in
     try {
-      reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: sentLang, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true, nx: settings.nxStrategy,
+      reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: sentLang, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy,
         signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
       if (e instanceof TurnAborted && engineClient?.stage) e.stage = engineClient.stage;   // the stage the engine worker reported last (the page-side deadline only knows 'turn')
@@ -1175,12 +1175,19 @@ export async function mountPsys2(element, options = {}) {
       renderSettings();
     }), 'Operations: every world answers through its own code, as always. Matrix: kids.shop, kids.arith and kids.tasks answer through the sopworld library (rules, states, aggregates, retract, explain) and gain a few things: a missing item is asked for, “three of them” revises a purchase, “undo that” takes it back, “why?” says what an answer rests on, “what did I pay?” is worked backwards. Changing it restarts the engine; what you said so far in the other worlds is kept, the shop, arithmetic and list facts are not.');
   }
+  /** Settings › Developer › World-aware reading (spec 16): default veto (user decision 2026-11-12). */
+  function worldAwareGroup() {
+    const current = ['off', 'veto', 'choose', 'observe'].includes(settings.worldAware) ? settings.worldAware : 'veto';
+    return field('World-aware reading', select([['veto', 'Veto (default)'], ['choose', 'Veto and choose between readings'], ['observe', 'Observe only (diagnostic)'], ['off', 'Off']], current, (v) => { settings.worldAware = v; save(); renderSettings(); }),
+      'Before acting, a reading is checked against the worlds: a name the world does not have (“delete the dragon”), a move in a game that is not running, or words left out are not acted on; the reply says why. Off: act on every reading, as before.');
+  }
   function developerBody() {
     return [
       check('Show the trace of every answer (which part was read by which rule, model and validator)', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
       check('Developer mode: a Debug button on every tab (commands, last turns with their SOP Lang wires, dry run, state, world, models); records the last 200 turns while on', settings.devMode === true, (v) => { setDevMode(v); }),
       check('Show the per-stage timing overlay of the last message (also with ?perf=1 in the page address)', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
       reasonerGroup(),
+      worldAwareGroup(),
       timeLimitsGroup(),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Microphone clicks'), h('pre', { class: 'p2-miclog', tabindex: '0' }, micLog.length ? micLog.slice(-40).map((e) => `${e.t} ${e.via} ${e.action}: ${JSON.stringify(e.before)} -> ${JSON.stringify(e.after)}`).join('\n') : 'No clicks yet.')),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Build'), buildInfoLines()),

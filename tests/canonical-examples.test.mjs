@@ -48,7 +48,7 @@ test('every canonical example is understood by its own world on its own tab', as
       const s = engine.createSession({ language: 'en' });
       if (tabOf(w)) s.setWorldState('ui.shell', { activeTab: tabOf(w) });
       const r = await s.send(c, { language: 'en' });
-      if (!r.segments.length || r.segments.some((x) => x.unparsed || x.match?.worldId !== w.id)) bad.push(`${w.id}: ${c}`);
+      if (!r.segments.length || r.segments.some((x) => (x.unparsed && x.veto?.kind !== 'no-referent') || (!x.veto && x.match?.worldId !== w.id))) bad.push(`${w.id}: ${c}`);   // a veto for a name the world does not have ("connect Api to Db" on an empty canvas) is the world's answer, with an offer
     }
   }
   assert.deepEqual(bad, []);

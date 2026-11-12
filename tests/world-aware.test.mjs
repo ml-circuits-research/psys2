@@ -9,23 +9,24 @@ import { normalizeWorldAware, baseMode, leftOut, sayMissing } from '../src/dialo
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const session = async (worldAware, tab, setup = []) => {
-  const s = engine.createSession({ language: 'en', ...(worldAware ? { worldAware } : {}) });
+  const s = engine.createSession({ language: 'en', ...(worldAware ? { worldAware } : {}) });   // null: the option is not passed (the default); 'off' turns the layer off
   if (tab) s.setWorldState('ui.shell', { activeTab: tab });
   for (const m of setup) await s.send(m);
   return s;
 };
 const strip = (st) => JSON.stringify({ ...st, 'ui.help': undefined, 'art.draw': { ...st['art.draw'], history: undefined, future: undefined } });   // the turn machinery adds empty undo lists, and ui.help remembers the last unparsed text
 
-test('option: default off, unknown values are off, strict is a variant of the base mode', () => {
-  assert.equal(normalizeWorldAware(undefined), 'off');
-  assert.equal(normalizeWorldAware('nonsense'), 'off');
+test('option: default veto (user decision 2026-11-12), explicit off turns it off, unknown values are the default, strict is a variant of the base mode', () => {
+  assert.equal(normalizeWorldAware(undefined), 'veto');
+  assert.equal(normalizeWorldAware('nonsense'), 'veto');
+  assert.equal(normalizeWorldAware('off'), 'off');
   for (const m of ['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']) assert.equal(normalizeWorldAware(m), m);
   assert.equal(baseMode('veto-strict'), 'veto');
   assert.equal(baseMode('choose'), 'choose');
 });
 
 test('off: the shipped reply, nothing recorded on the segments', async () => {
-  const s = await session(null, 'draw', ['draw a house']);
+  const s = await session('off', 'draw', ['draw a house']);
   assert.equal(s.worldAware, 'off');
   const r = await s.send('delete the dragon');
   assert.match(r.text, /I do not know what "the dragon" is/);
@@ -51,7 +52,7 @@ test('veto: "fă părul roșu" leaves out "părul": nothing is changed, the repl
   assert.match(v.r.text, /părul/);
   assert.deepEqual(v.r.statuses, ['missing']);
   assert.ok(v.same, 'the avatar is unchanged');
-  const off = await run(null);
+  const off = await run('off');
   assert.ok(off.r.segments.every((x) => x.veto === undefined || x.veto === null), 'with the option off the veto never runs');
 });
 
@@ -59,7 +60,7 @@ test('veto: "delete the dragon" says what the picture holds, changes nothing', a
   const s = await session('veto', 'draw', ['draw a house']);
   const before = strip(s.state());
   const r = await s.send('delete the dragon');
-  assert.match(r.text, /^There is no dragon in the picture\. In the picture: .*house/);
+  assert.match(r.text, /^I can't find \u201cdragon\u201d in the picture\. In the picture I can see: .*house/);
   assert.deepEqual(r.statuses, ['missing']);
   assert.equal(r.segments[0].veto.kind, 'no-referent');
   assert.equal(strip(s.state()), before, 'no state change: the hook read a copy');
@@ -68,7 +69,7 @@ test('veto: "delete the dragon" says what the picture holds, changes nothing', a
 test('veto: "connect Start to End" with no End offers to add it, and "yes" does', async () => {
   const s = await session('veto', 'diagram', ['add a rectangle called Start']);
   const r = await s.send('connect Start to End');
-  assert.equal(r.text, 'There is no shape called End. Shall I add it?');
+  assert.equal(r.text, 'I can\'t find a box called \u201cEnd\u201d. Shall I add it?');
   const y = await s.send('yes');
   assert.match(y.text, /Connected Start/);
 });
@@ -77,7 +78,7 @@ test('veto: "switch to klingon" lists the languages the app has, from the ui.she
   const s = await session('veto', 'robot');
   const r = await s.send('switch to klingon');
   assert.equal(r.text, 'I do not speak klingon. The languages I have: English and Romanian.');
-  const off = await (await session(null, 'robot')).send('switch to klingon');
+  const off = await (await session('off', 'robot')).send('switch to klingon');
   assert.match(off.text, /I did not understand/);
   const ok = await s.send('switch to romanian');
   assert.doesNotMatch(ok.text, /I do not speak/);
@@ -87,7 +88,7 @@ test('veto: a game move while no game runs and another tab is open is not played
   const s = await session('veto', 'draw', ['draw a house']);
   const r = await s.send('put it in the top right corner');
   assert.equal(r.segments[0].veto?.kind, 'no-game');
-  assert.match(r.text, /No Tic-tac-toe game is running/);
+  assert.match(r.text, /We are not playing Tic-tac-toe right now/);
   assert.deepEqual(s.state()['games.tictactoe'].board, ['', '', '', '', '', '', '', '', ''], 'no game was started');
   const t = await session('veto', 'tictactoe');
   assert.match((await t.send('put it in the top right corner')).text, /You took top right/, 'on the game tab the move is played');
@@ -105,7 +106,7 @@ test('choose: the reading the open tab can take wins over a move in a game that 
 });
 
 test('observe: records the judgement and the choice, changes the reply of nothing', async () => {
-  const off = await (await session(null, 'draw', ['draw a house'])).send('put it in the top right corner');
+  const off = await (await session('off', 'draw', ['draw a house'])).send('put it in the top right corner');
   const s = await session('observe', 'draw', ['draw a house']);
   const r = await s.send('put it in the top right corner');
   assert.equal(r.text, off.text);
@@ -145,8 +146,8 @@ test('content words: fillers, corrected typos and tiny words are not "left out"'
 });
 
 test('sayMissing: an offer asks, a plain refusal says what the world holds', () => {
-  assert.equal(sayMissing({ missing: [{ name: 'End', kind: 'shape' }], offer: 'x' }).text, 'There is no shape called End. Shall I add it?');
-  assert.equal(sayMissing({ missing: [{ name: 'A', kind: 'shape' }, { name: 'B', kind: 'shape' }], offer: 'x' }).text, 'There is no shape called A or B. Shall I add them?');
-  assert.equal(sayMissing({ missing: [{ name: 'dragon', kind: 'thing' }], here: 'a house', where: 'picture' }).text, 'There is no dragon in the picture. In the picture: a house.');
-  assert.equal(sayMissing({ missing: [{ name: 'dragon', kind: 'thing' }], here: null, where: 'picture' }).text, 'There is no dragon in the picture. The picture is empty.');
+  assert.equal(sayMissing({ missing: [{ name: 'End', kind: 'box' }], offer: 'x' }).text, 'I can\'t find a box called \u201cEnd\u201d. Shall I add it?');
+  assert.equal(sayMissing({ missing: [{ name: 'A', kind: 'circle' }, { name: 'B', kind: 'circle' }], offer: 'x' }).text, 'I can\'t find circles called \u201cA\u201d or \u201cB\u201d. Shall I add them?');
+  assert.equal(sayMissing({ missing: [{ name: 'dragon', kind: 'thing' }], here: 'a house', where: 'picture' }).text, 'I can\'t find \u201cdragon\u201d in the picture. In the picture I can see: a house.');
+  assert.equal(sayMissing({ missing: [{ name: 'dragon', kind: 'thing' }], here: null, where: 'picture' }).text, 'I can\'t find \u201cdragon\u201d in the picture. The picture is empty.');
 });

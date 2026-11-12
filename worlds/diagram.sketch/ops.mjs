@@ -570,7 +570,7 @@ export { _delete as delete };
 
 /**
  * World-aware hook (spec 16), read-only: the shapes a "connect A to B" names that the diagram does not have, and the sentence that would add them and
- * connect, so the dialogue can say "There is no shape called End. Shall I add it?" instead of "a connection needs two ends". `undefined` when every name
+ * connect, so the dialogue can say "I can't find a box called “End”. Shall I add it?" instead of "a connection needs two ends". `undefined` when every name
  * is a shape (or the request names none: "connect them").
  */
 export function checkReferents(ctx, { action, args = {} } = {}) {
@@ -578,9 +578,11 @@ export function checkReferents(ctx, { action, args = {} } = {}) {
   const m = /^\s*(?:please\s+)?(?:connect|link|join)\s+(.+?)\s+(?:to|with|and)\s+(.+?)\s*[.!?]?\s*$/i.exec(String(args.text ?? ''));
   if (!m) return undefined;
   const state = ctx.state ?? {};
-  const names = [m[1], m[2]].map((x) => x.replace(/^["'“]|["'”]$/g, '').replace(/^(?:the|a|an)\s+/i, '').trim());
-  if (names.some((x) => !x || /^(?:them|it|these|those|each other)$/i.test(x))) return undefined;
-  const missing = names.filter((x) => !shapeOf(state, x)).map((name) => ({ name, kind: 'shape' }));
+  // the second name stops before a how-phrase ("with a line", "using a dotted line", "by an arrow"); a quantified or relative name ("each square", "the next one") is not a name
+  const names = [m[1], m[2].replace(/\s+(?:with|using|via|by|through|in|as)\s+.*$/i, '')].map((x) => x.replace(/^["'“]|["'”]$/g, '').replace(/^(?:the|a|an)\s+/i, '').trim());
+  if (names.some((x) => !x || /,|\band\b/i.test(x) || /^(?:them|it|these|those|each other)$/i.test(x) || /\b(?:each|every|all|next|previous|last|first|other|another|one|ones)\b/i.test(x))) return undefined;
+  const noun = (/\b(box|circle|rectangle|square|oval|ellipse|triangle|diamond)\b/i.exec(String(args.text ?? '').replace(m[1], '').replace(m[2], '')) ?? [, 'box'])[1].toLowerCase();   // the user's own noun, else the everyday one
+  const missing = names.filter((x) => !shapeOf(state, x)).map((name) => ({ name, kind: noun }));
   if (!missing.length) return undefined;
   const have = (state.shapes ?? []).filter((x) => !x.layer && !x.template).map((x) => x.name);
   return { missing, here: have.length ? have.join(', ') : null, where: 'diagram', offer: `${missing.map((x) => `add a rectangle called ${x.name}`).join(' and ')} and connect ${names[0]} to ${names[1]}` };

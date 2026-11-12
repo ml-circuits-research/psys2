@@ -1,6 +1,6 @@
 # 16. World-aware reading (FORMALIZE-FROM-WORLDS, E2)
 
-Status: experiment, behind an option, **off by default** (user decision pending). Code: `src/dialog/world-aware.mjs`, `ReasonerSession.score` / `peek` in `src/reasoner/index.mjs`, the `pick` hook in `src/formalizer/rules/index.mjs`, the `checkReferents` hooks of `worlds/art.draw/ops.mjs` and `worlds/diagram.sketch/ops.mjs`. Measurement: `scripts/e2-world-aware.mjs`, results in `training/results/e2-world-aware-2026-11-12.{json,md}`.
+Status: **on by default as `veto`** (user decision 2026-11-12; `worldAware: 'off'` or `PSYS2_WORLD_AWARE=off` turns it off; the constant is `DEFAULT_WORLD_AWARE` in `world-aware.mjs`). Code: `src/dialog/world-aware.mjs`, `ReasonerSession.score` / `peek` in `src/reasoner/index.mjs`, the `pick` hook in `src/formalizer/rules/index.mjs`, the `checkReferents` hooks of `worlds/art.draw/ops.mjs` and `worlds/diagram.sketch/ops.mjs`. Measurement: `scripts/e2-world-aware.mjs`, results in `training/results/e2-world-aware-2026-11-12.{json,md}`.
 
 ## 1. What it is for
 
@@ -8,7 +8,7 @@ The formalizer reads a message into wires without looking at the state of any wo
 
 ## 2. The option
 
-`worldAware` is a session option of `engine.createSession` (`'off' | 'veto' | 'choose' | 'observe' | 'veto-strict' | 'choose-strict'`, default `'off'`; a per-message option of `send` overrides it). The environment variable `PSYS2_WORLD_AWARE` sets the default of command-line tools; `scripts/e1-collect.mjs --world-aware <mode>` passes it to the evaluation. With `off` nothing in this spec runs: the turn is byte for byte the shipped one.
+`worldAware` is a session option of `engine.createSession` (`'off' | 'veto' | 'choose' | 'observe' | 'veto-strict' | 'choose-strict'`, default `'veto'`; a per-message option of `send` overrides it). The environment variable `PSYS2_WORLD_AWARE` sets the default of command-line tools; `scripts/e1-collect.mjs --world-aware <mode>` passes it to the evaluation. With `off` nothing in this spec runs: the turn is byte for byte the shipped one.
 
 | mode | what it does |
 | --- | --- |
@@ -22,10 +22,10 @@ The formalizer reads a message into wires without looking at the state of any wo
 Each reason is recorded on the replaced segment as `veto: { kind, why, say?, offer? }` and in the trace.
 
 1. **`no-referent`**: the reading names something the world does not have. The world says so through an optional read-only hook `checkReferents(ctx, { action, args })` in its `ops.mjs` (the same kind of hook as `referents`, `summary`: spec 11). It returns `{ missing: [{ name, kind }], here, where, offer? }`. The host composes the reply, nothing else:
-   - with `offer`: "There is no shape called End. Shall I add it?" and a pending offer whose "yes" runs `offer` (the diagram: `add a rectangle called End and connect Start to End`);
-   - without: "There is no dragon in the picture. In the picture: a yellow house." (or "The picture is empty.").
+   - with `offer`: "I can't find a box called “End”. Shall I add it?" (the user's label in quotes, the user's noun, else the world's everyday word, never "shape") and a pending offer whose "yes" runs `offer` (the diagram: `add a rectangle called End and connect Start to End`);
+   - without: "I can't find “dragon” in the picture. In the picture I can see: a yellow house." (or "The picture is empty.").
    Today `art.draw` (`draw.remove`, and the noun phrases `t` and `o` of the others) and `diagram.sketch` (`diagram.connect`) have the hook. A world that has none is not checked. The hook may not change state: the host removes the empty state key that the hook's context creates for a world that has none.
-2. **`no-game`**: the reading is a move in a game (`tabKind=game` in the manifest, or a `games.*` world), the game is not running in this session, its tab is not the open one, and the action is not the one that starts a game (`gameControls.new`). "Put it in the top right corner" on the Drawing tab is not a tic-tac-toe move. The reply says no game is running.
+2. **`no-game`**: (veto only when acting would be wrong) the reading is a move in a game (`tabKind=game` in the manifest, or a `games.*` world), the game is not running in this session, its tab is not the open one, and the action is not the one that starts a game (`gameControls.new`). "Put it in the top right corner" on the Drawing tab is not a tic-tac-toe move. It also requires that the open tab's own world reads the message completely (a move the router alone can read is how a game starts and its tab opens, as the world tests define: "Top right" from the Robot tab is played); the check runs the tab world's rules after the router's decision. The reply: "We are not playing Tic-tac-toe right now. Tell me you want to play it, then say your move."
 3. **`words-best-effort`**: the best-effort reader (spec 03 section 7.15) executes a guess of loose words and says "I did not use ...". With the option on, a first candidate that leaves out content words is not executed: the reply is "Did you mean ...?" with the candidates (`suggestions`). A word is **content** unless it is a filler (`FILLER` in the module: please, now, just, hesitations and chat abbreviations), a word of two letters or fewer, a Romanian word of three letters or fewer (a function word the translator left), or a word that the reading spells another way (edit distance 1, or 2 from six letters: "lie" for "like", "abort" for "about", a corrected typo is not a word left out).
 4. **`words-partial`** (`-strict` modes only): the same test for the readings of the partial-understanding window (spec 03 section 7.10).
 

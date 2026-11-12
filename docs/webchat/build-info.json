@@ -53,7 +53,7 @@
     "lib/dialog/discourse.mjs": "e11d562ccf4d8324",
     "lib/dialog/dispatch-validate.mjs": "965dfe7431680797",
     "lib/dialog/encoder-dispatch.mjs": "6ecd5f7a1b2eb7b9",
-    "lib/dialog/index.mjs": "bb3b66cc67a6df08",
+    "lib/dialog/index.mjs": "521e7b8b8b570467",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/runtime-config.mjs": "00f7f1673faca90b",
@@ -62,7 +62,7 @@
     "lib/dialog/time-limits.mjs": "b15ac0ef11c2093c",
     "lib/dialog/value-check.mjs": "75dca59e82967ab5",
     "lib/dialog/word-reader.mjs": "f4b658d5886cfbe9",
-    "lib/dialog/world-aware.mjs": "56d7f78b6b11584e",
+    "lib/dialog/world-aware.mjs": "b012a3c9cfebe8b7",
     "lib/formalizer/best-effort.mjs": "56ffb5ff36996908",
     "lib/formalizer/dispatcher-runtime.mjs": "719a9533c12c2dbc",
     "lib/formalizer/edit-tags.mjs": "14423e3fc078f85c",
@@ -133,8 +133,8 @@
     "worlds/diagram.sketch/engine/auto-layout.mjs": "46f97a4739eb8339",
     "worlds/diagram.sketch/engine/logic.mjs": "09664b189e5d152c",
     "worlds/diagram.sketch/engine/templates.mjs": "625a2dc2ee86f062",
-    "worlds/diagram.sketch/fns.mjs": "e853e4bd3021de5c",
-    "worlds/diagram.sketch/ops.mjs": "2f82d6c8be77d9fa",
+    "worlds/diagram.sketch/fns.mjs": "c1e492ca7e03ed30",
+    "worlds/diagram.sketch/ops.mjs": "a035be64591df004",
     "worlds/diagram.sketch/refs.mjs": "5d7c74441762a25e",
     "worlds/docs.editor/coverage.md": "532dde81b41608d7",
     "worlds/docs.editor/datagen.mjs": "5e2eb5732fc989b1",
@@ -225,5 +225,5 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-12T06:40:23.218Z"
+  "builtAt": "2026-11-12T07:14:07.609Z"
 }

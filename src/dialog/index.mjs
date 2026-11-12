@@ -1271,7 +1271,7 @@ export class DialogSession {
     }
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
-    const segments = !icpt && !pre && !meta && waMode !== 'off' ? reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    const segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });

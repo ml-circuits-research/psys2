@@ -31,7 +31,7 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=6f60935e0f';
 import { Discourse } from './discourse.mjs?v=0ada15a3e1';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=fb5303f0bb';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=5611588f0f';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -1271,7 +1271,7 @@ export class DialogSession {
     }
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
-    const segments = !icpt && !pre && !meta && waMode !== 'off' ? reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    const segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
