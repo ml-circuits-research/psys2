@@ -24,8 +24,13 @@ const keyName = (k) => String(k).split('.').pop();
 const bare = (v) => String(v).replace(/^\$/, '');
 const unquote = (v) => { const s = String(v); if (!(s.length > 1 && s.startsWith('"') && s.endsWith('"'))) return s; try { return JSON.parse(s); } catch { return s.slice(1, -1); } };   // a string value is its text (the escapes of a quote or a line end undone)
 const first = (a) => (Array.isArray(a) ? a[0] : a);
-/** slots map of the library's compiled matrix -> the keys a completing could fill (required or with a default); see `ReasonerSession._mayFill`. */
-const FILLABLE = new WeakMap();
+/** Words a reason may write a value in (`?n:ordinal`, `?c:count`; library R6.5): "third", "two". The numbers the library gives are digits. */
+const ORDINALS = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
+const COUNTS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const FILTERS = {
+  ordinal: (v) => { const n = Number(unquote(v)); return Number.isInteger(n) && ORDINALS[n] ? ORDINALS[n] : `${unquote(v)}th`; },
+  count: (v) => { const n = Number(unquote(v)); return Number.isInteger(n) && COUNTS[n] ? COUNTS[n] : String(unquote(v)); },
+};
 
 /** An attribute map of the library ({ key: [values] }) as a flat object (first value of each key, quotes and `$` removed), without the library's bookkeeping keys. */
 function flat(attrs) {
@@ -50,37 +55,11 @@ function libWire(lib, w) {
 export async function createReasoner(set, { lib = null } = {}) {
   const worlds = set.list().filter((w) => w.reasoner === 'matrix' && w.raw.matrix != null);
   if (!worlds.length) return null;
-  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=49deba39db');
+  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=9318c97a73');
   const legends = set.legends;
   const lexicon = (id) => { const l = set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; };
   /** What the host gives an action function besides the library's own context (`ctx.host`, spec 15): the lexicons, and `view(ctx)`, an ops-shaped read-only context (find, val, vals, lexicon) over the library, so the tables of a world's ops.mjs can be shared. */
-  const kbViews = new Map();
-  /** `kb=lookup` worlds: the world's knowledge base as a static, read-only, ops-shaped context (find, val, vals), parsed once per engine; wires are { id, type, attrs: { key: [token] } }. */
-  const kbView = (id) => {
-    let v = kbViews.get(id);
-    if (v) return v;
-    const wires = Object.values(lib.parse(set.get(id)?.raw.kb ?? '')).filter((w) => w && typeof w.id === 'string' && w.type);
-    const byType = new Map();
-    const keys = new Map();
-    const key = (w, k) => {
-      const kid = `${w.type}\u0001${k}`;
-      let r = keys.get(kid);
-      if (r === undefined) { r = legends.tryResolveKey(w.type, k); if (r.error) r = null; keys.set(kid, r); }
-      return r;
-    };
-    const decode = (r, t) => legends.decode(r.info, lib.readValue(t));
-    v = {
-      lexicon,
-      wires,
-      find: (type) => { let l = byType.get(type); if (!l) { l = wires.filter((w) => w.type === type || legends.isA(w.type, type)); byType.set(type, l); } return l; },
-      val: (w, k) => { const r = key(w, k); const t = r && w.attrs[keyName(r.key)]?.[0]; return t === undefined ? undefined : decode(r, t); },
-      vals: (w, k) => { const r = key(w, k); return r ? (w.attrs[keyName(r.key)] ?? []).map((t) => decode(r, t)) : []; },
-    };
-    kbViews.set(id, v);
-    return v;
-  };
   const host = {
-    kb: kbView,
     lexicon,
     view: (c) => {
       const keys = new Map();   // (type, key) -> the resolved key (a world's tables ask for the same few thousands of times per turn)
@@ -127,12 +106,12 @@ export async function createReasoner(set, { lib = null } = {}) {
   const buildBase = (id) => {
     const fns = {};   // the world's action functions (the library keeps them apart from its own arithmetic)
     for (const m of matrixWorlds(id)) for (const [name, f] of Object.entries(byId.get(m).fns ?? {})) fns[name] = (c, args) => f({ ...c, host, live: reasoner.live }, args);
-    const base = new lib.World({ actions: fns, vocabulary: { status: 'core.status' } });
+    const base = new lib.World({ actions: fns, filters: FILTERS, vocabulary: { status: 'core.status' } });
     const load = (what, text) => { if (text == null) return; const r = base.load(text); if (!r.ok) problems.push(`${what}: ${r.violations?.[0]?.kind ?? 'refused'} ${r.violations?.[0]?.why ?? r.violations?.[0]?.key ?? ''}`.trim()); };
     const ordered = schemaWorlds(id).map((x) => set.get(x));
     load('mapping', set.list().map((w) => w.raw.mapping).find((t) => t != null));
     for (const w of ordered) load(`${w.id}/legend.sop`, w.raw.legend);
-    if (!byId.get(id)?.kbLookup) for (const w of ordered) load(`${w.id}/kb.sop`, w.raw.kb);   // the knowledge bases of the world and of what it imports (games.guess reads kids.animals): each instance has its own
+    for (const w of ordered) load(`${w.id}/kb.sop`, w.raw.kb);   // the knowledge bases of the world and of what it imports (games.guess reads kids.animals): each instance has its own
     load('user', '@e.user core.agent');   // the user is a built-in agent of every instance
     // one SOP Lang parser in the product: our parser reads the matrices and the library is handed their wires
     for (const m of matrixWorlds(id)) {
@@ -463,32 +442,12 @@ export class ReasonerSession {
     for (const inst of this.insts.values()) {
       const world = inst.world;
       if (world.stamp === inst.completedAt) continue;   // nothing changed since the last completing: it would find nothing to do
-      if (!this._mayFill(inst)) { inst.completedAt = world.stamp; continue; }   // no cell is open and no default is missing: `complete` would only walk the world to find that
+      if (!world.canComplete()) { inst.completedAt = world.stamp; continue; }   // no slot is open that completing could fill (library P1: one cheap pass)
       let done = true;
       try { const r = world.complete({ defaults: true, budget: this._limit() }); if (r?.budget) done = false; } catch { done = false; /* a default that cannot be applied stays open */ }
       this._charge(world);
       inst.completedAt = done ? world.stamp : null;   // an incomplete completing is tried again with the next budget
     }
-  }
-
-  /**
-   * Can `complete({ defaults: true })` fill anything? Only a wire with a slot that has no value and a candidate to fill it with (a default, or for a required
-   * slot an enum, a type or a range: the library's `_next`; a required slot without any is only a question) gives it work; the library's completing walks every cell of the world (`assumptions()`) before it finds that out
-   * (0.8-1.3 ms in a world with the game's wires). This is the same test in one pass over the wires, so an answer, a question or a statement that leaves
-   * nothing open costs no completing. When the compiled matrix cannot be read, the answer is yes (the completing runs as before).
-   */
-  _mayFill(inst) {
-    let c;
-    try { c = inst.world._compiled?.(); } catch { return true; }
-    if (!c?.slots?.get) return true;
-    for (const w of inst.world.wires.values()) {
-      const slots = c.slots.get(w.type);
-      if (!slots) continue;
-      let need = FILLABLE.get(slots);
-      if (need === undefined) { need = [...slots.values()].filter((s) => !s.prefix && (s.default !== undefined || (s.required && (s.enum || s.type || s.range)))).map((s) => s.key); FILLABLE.set(slots, need); }
-      for (const k of need) if (!w.attrs[k]) return true;
-    }
-    return false;
   }
 
   // ---- turns, undo, rewind ---------------------------------------------------------------------------------------------------------
@@ -771,12 +730,13 @@ export class ReasonerSession {
       const mark = inst.world.mark();
       const seen = new Set(this._issues(inst).map((i) => i.key));
       let bad = null;
-      if (plan && (plan.retract?.length || plan.tell || plan.sets?.length)) {
+      if (plan && (plan.retract?.length || plan.tell || plan.sets?.length || plan.replace?.length)) {
         // one transaction: the wires that changed are retracted and told together (a retract and a tell of their own cost a pass of the rules each)
         let r;
         const patch = { retract: (plan.retract ?? []).filter((rid) => inst.world.has(rid)) };
         if (plan.tell) patch.wires = plan.tell;
         if (plan.sets?.length) patch.sets = plan.sets;
+        if (plan.replace?.length) patch.replace = plan.replace;   // a wire that changed keeps its id (library R6.9)
         try { r = inst.world.applyPatch(patch, { budget: this._limit() }); } catch (e) { r = { ok: false, violations: [{ kind: 'error', why: String(e?.message ?? e) }] }; }
         this._charge(inst.world);
         if (!r.ok) bad = r.violations?.[0]?.why ?? 'that cannot be true';
@@ -788,7 +748,7 @@ export class ReasonerSession {
         if (clean && e) e.stamp = inst.world.stamp;   // nothing else changed the library in this turn: the turn is no action to take back
         refused = { world: id, why: bad };
       }
-      if (!bad && this.cur?.owners && (plan?.retract?.length || plan?.tell || plan?.sets?.length) && (!this.reasoner.passive.has(id) || id === ownId)) this.cur.owners.add(id);
+      if (!bad && this.cur?.owners && (plan?.retract?.length || plan?.tell || plan?.sets?.length || plan?.replace?.length) && (!this.reasoner.passive.has(id) || id === ownId)) this.cur.owners.add(id);
       this.written.set(id, json);   // the state is the library's to say again: derived and written back (the refused one is replaced by the one before)
       this._state(session, id);
     }

@@ -10,11 +10,11 @@
  * Without it all input is treated as English.
  */
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=46116712b1';
-import { loadWorlds } from '../worlds/index.mjs?v=2defa0d5c3';
+import { loadWorlds } from '../worlds/index.mjs?v=c3957c91f1';
 import { validateWorldSet } from '../worlds/validate.mjs?v=1eb2f0538f';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=5efba9b13a';
-import { createReasoner } from '../reasoner/index.mjs?v=e6b3ca0219';
+import { createReasoner } from '../reasoner/index.mjs?v=e64260daa6';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=14798d6e5b';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=13d688a978';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
