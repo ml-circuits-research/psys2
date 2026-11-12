@@ -38,7 +38,7 @@ function make(holder, host) {
   holder.append(root);
 
   let L = null, map = null, places = null, countries = null, labels = null, tiles = null, osmReady = false, note = null;
-  let state = { ...DEFAULT_STATE }, lastKey = null, pendingState = null, destroyed = false, flying = 0, reportTimer = 0, tilesLoaded = false, tileErrors = 0;
+  let state = { ...DEFAULT_STATE }, lastKey = null, pendingState = null, destroyed = false, flying = 0, programmatic = 0, progTimer = 0, reportTimer = 0, tilesLoaded = false, tileErrors = 0;
   let countryLayers = new Map(), markerLayer = null, lineLayer = null, focusLayer = null, ro = null, focusKey = null;
 
   const key = (s) => JSON.stringify(s.bounds ?? [s.center, s.zoom]);
@@ -90,7 +90,7 @@ function make(holder, host) {
 
     labels = createLabels(map, root, () => ({ places, state, osm: state.layer === 'osm' && osmReady }));
     map.on('click', (ev) => onMapClick(ev.latlng));
-    map.on('moveend', () => { scheduleReport(); updateStatus(); });
+    map.on('moveend', () => { if (!programmatic) scheduleReport(); updateStatus(); });
     map.on('zoom', updateStatus);
 
     ro = new ResizeObserver(() => { if (map && sizeOk()) { map.invalidateSize({ animate: false }); labels.resize(); labels.redraw(); if (pendingState) { const s = pendingState; pendingState = null; apply(s, true); } } });
@@ -107,12 +107,27 @@ function make(holder, host) {
     const c = map.getCenter();
     statusEl.textContent = `zoom ${Math.round(map.getZoom() * 4) / 4} · ${Math.abs(c.lat).toFixed(2)}°${c.lat >= 0 ? 'N' : 'S'} ${Math.abs(((c.lng + 540) % 360) - 180).toFixed(2)}°${((c.lng + 540) % 360) - 180 >= 0 ? 'E' : 'W'}`;
   }
+  // A view change that the world itself asked for (apply: layer clamp, fly) is not a user move: its intermediate
+  // (animated) views must never be reported back, or the host would overwrite the state the world just set (a clamp by the
+  // library, an undo/redo). The guard ends when the animation ends, with a timeout as a safety net.
+  function beginProgrammatic(ms) {
+    programmatic++; clearTimeout(reportTimer);
+    const done = () => { programmatic = Math.max(0, programmatic - 1); clearTimeout(reportTimer); };
+    let over = false;
+    const end = () => { if (over) return; over = true; clearTimeout(t); done(); };
+    const t = setTimeout(end, ms);
+    return end;
+  }
   function scheduleReport() {
     clearTimeout(reportTimer);
     reportTimer = setTimeout(() => {
-      if (!map || destroyed) return;
+      if (!map || destroyed || programmatic) return;
       const c = map.getCenter(), lon = ((c.lng + 540) % 360) - 180;
       const patch = { center: { lat: Number(c.lat.toFixed(4)), lon: Number(lon.toFixed(4)) }, zoom: Math.round(map.getZoom() * 4) / 4, bounds: null };
+      // An echo of the state the world itself set (same zoom, same center, no bounds to fit) is no user move: adopting it would make the library
+      // take a "change" over (a turn that clears the redo steps, a new undo step) and the clamp or undo of the library would be overwritten.
+      const same = state.bounds == null && Math.abs(patch.zoom - state.zoom) < 0.01 && Math.abs(patch.center.lat - state.center.lat) < 0.01 && Math.abs(patch.center.lon - state.center.lon) < 0.01;
+      if (same) return;
       state = { ...state, ...patch };
       lastKey = key(state);
       host.setWorldState?.(WORLD, patch);
@@ -124,6 +139,8 @@ function make(holder, host) {
     const prevLayer = state.layer;
     state = { ...DEFAULT_STATE, ...s };
     if (!sizeOk()) { pendingState = s; return; }
+    clearTimeout(reportTimer);
+    beginProgrammatic(450);   // ends by its own timeout: a clamp by setMaxZoom animates and ends later than this call
     setLayer(state.layer);
     drawCountries();
     drawMarkers();
@@ -143,7 +160,8 @@ function make(holder, host) {
     const opts = { animate: !instant, duration: dur, easeLinearity: 0.25 };
     const b = state.bounds;
     flying++;
-    map.once('moveend', () => { flying = Math.max(0, flying - 1); });
+    const endProg = beginProgrammatic(dur * 1000 + 500);
+    map.once('moveend', () => { flying = Math.max(0, flying - 1); setTimeout(endProg, 0); });
     if (b) {
       const bounds = L.latLngBounds(b[0], b[1]);
       if (instant) map.fitBounds(bounds, { animate: false, padding: [24, 24], maxZoom: 10 });
