@@ -2831,3 +2831,15 @@ Then re-vendor sopworld 0.11.0 at c09292a (validated: 259 tests). It adds delta 
 ## Re-vendor target is now sopworld 0.11.1 at f9959ee (reviewer, 2026-11-12 04:15)
 
 0.11.1 is validated: 261 tests. It is 0.11.0 plus canonical values for foreign words, written `core.word lang=ro text=minge means=ball of=kids.shop.item` (not `value=`; the library showed the existing form), and words kept in declaration order. Use `means= of=` in `lang/ro/*.sop`. **REGRESSION-AB first**, then vendor f9959ee.
+- **REGRESSION-AB, the reviewer's diagnosis from the A/B state diffs** (04:20; `/tmp/abdlg2.json` on the reviewer box). Use it to go fast.
+  1. **Chess (gms#006, and likely gms#002 and doc#035): the session timeline groups the engine's late reply with the user's next turn.** Sequence: "e4" → "Make your move." ("still thinking") → "now the knight to f3" ("Meanwhile I play knight to c6. You play knight to f3.") → "undo".
+     - ops takes back Nf3 only: history ["e4","Nc6"], white to move. That is right.
+     - matrix takes back Nf3 **and** Nc6: history ["e4"], `pendingEngine` true, "It is my move."
+     - Because Nc6 arrived during the user's turn, it was recorded in that turn's step.
+
+     Fix: an engine reply that lands asynchronously, or "meanwhile", is its own timeline step, or belongs to the step that caused it. It is never part of the user's next step. "What did you do?" then names the right step (doc#035).
+  2. **The four "same reply, wrong outcome" cases are state-view differences, not changes made by the user's turn.**
+     - kidsA#010: the matrix state view shows `kids.arith.holdings {"e.zoe":{"marble":6}}`, which the library derived from "Zoe eats 8". In ops the holding is absent.
+     - drm#014, drm#011, drm#021: ops has `art.draw.history` and the matrix view does not, because the history now lives in the library timeline. The matrix has `art.draw.lastLabel` instead.
+
+     Check whether the judge counts any state difference on a not-understood turn as "acting". If it does, mirrored or derived keys (`holdings`) and history keys moved to the timeline should be excluded from that check, or the matrix view should carry the same `history` key. Whichever it is, write it down. These four may not be bugs. The chess case is a bug.
