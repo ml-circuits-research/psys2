@@ -141,6 +141,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const viewOf = new Map(worlds.filter((w) => typeof w.isView === 'function').map((w) => [w.id, w]));   // world id -> the world that says which library steps only moved what the user looks at
   const wordsOf = new Map(worlds.filter((w) => typeof w.undoWords === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world that says what a generic "undo that" took back (undoWords over its toState)
   const adoptOf = new Map(worlds.filter((w) => typeof w.adopt === 'function' && typeof w.toState === 'function').map((w) => [w.id, w]));   // world id -> the world whose operations change its state and hand it back to the library (`adopt`)
+  const offerOf = new Map(worlds.filter((w) => typeof w.closeOffer === 'function' && typeof w.adopt === 'function').map((w) => [w.id, w.closeOffer]));   // world id -> `closeOffer(state)`: an undo that brings an answered offer back closes it
   const problemOf = new Map(worlds.filter((w) => typeof w.problem === 'function').map((w) => [w.id, w.problem]));
   const whyOf = new Map(worlds.filter((w) => typeof w.whyWords === 'function').map((w) => [w.id, w.whyWords]));
   const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
@@ -151,7 +152,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const declared = new Map();   // world id -> Map(action name -> attrs of the matrix's `core.action`): what a missing argument asks and how the answer completes the sentence
   const routes = new Map();
   const reasoner = {
-    lib, voices, assumedBy, instKey, composites: new Set(homes.values()), problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, passive, untold, wordsOf, adoptOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
+    lib, voices, assumedBy, instKey, composites: new Set(homes.values()), problemOf, whyOf, undoOf, redoOf, guardOf, viewOf, keyOf, passive, untold, wordsOf, adoptOf, offerOf, opsKeys, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends, mirrorTypes, schemaWorlds, matrixWorlds,
     /** The base World of a matrix world (built on first use, once per engine). */
     baseOf: (id) => { id = instKey(id); let b = bases.get(id); if (!b) { b = buildBase(id); bases.set(id, b); } return b; },
     /** Builds every base and returns the problems found (tests, `test-world`). */
@@ -610,6 +611,26 @@ export class ReasonerSession {
   canUndo(turn) { const t = this.turns.at(-1); return !!t && (this.undone > 0 || turn - t.turn <= 6); }   // in a run of undos (one per message) the history is walked back whatever its age
   /** "Undo that": the instances go back to before the last turn that changed the library (everything that followed from it goes too). Returns the turn's number or null. */
   undo(session, redos = null) {
+    const modes = new Map([...this.reasoner.offerOf.keys()].map((id) => [id, session.state[id]?.inputMode ?? null]));
+    const done = this._undo(session, redos);
+    if (done != null) this._closeOffers(session, modes);
+    return done;
+  }
+  /**
+   * An undo of a confirmation (the state before the rewind had no open offer, the state after it has one) goes back to the library as it was when the offer was made,
+   * so the offer it answered is open again. The world closes it (`closeOffer`), the instance takes the closed state over, and the turn is no step: "yes" afterwards
+   * answers "Yes to what?" in both strategies (Q2 item 5a; dlg.avt#011).
+   */
+  _closeOffers(session, modes) {
+    for (const [id, close] of this.reasoner.offerOf) {
+      const st = session.state[id];
+      if (modes.get(id) || !st || st.inputMode !== 'confirm') continue;
+      try { close(st); } catch { continue; }
+      this.adoptState(session, id);
+      this._restart();   // the closing is bookkeeping: the undo turn starts from the library as it is now
+    }
+  }
+  _undo(session, redos = null) {
     if (this.cur && !this._clean()) {   // "make it a pie chart then undo": what the same message changed before the undo goes back first, not the turn before
       const marks = new Map();
       for (const [id, e] of this.cur.marks) if (this.insts.get(id) && this.insts.get(id).world.stamp !== e.stamp) marks.set(id, e);

@@ -62,3 +62,41 @@ test('the engine reply that arrives as an observation is no step of the next tur
   assert.deepEqual(chess().history, ['e4', 'Nc6']);
   assert.equal(chess().pendingEngine, false);
 });
+
+// Q2 item 6: `toState` is cached per instance stamp; a reader gets a copy, so changing it changes nothing, and a change of the instance is seen at once.
+test('toState is computed once per instance state and handed out as a copy', async () => {
+  const s = engines.matrix.createSession(sessionOptions(settingsForMode('rules'), { language: 'en' }));
+  await s.send('I have 20 lei', {});
+  const rs = s.isession.rs;
+  const a = rs.stateOfWorld('kids.shop');
+  const hits = rs.stateHits;
+  const b = rs.stateOfWorld('kids.shop');
+  assert.equal(rs.stateHits, hits + 1, 'the second reading came from the cache');
+  assert.deepEqual(a, b);
+  assert.notEqual(a, b);
+  b.money = 999;
+  assert.deepEqual(rs.stateOfWorld('kids.shop'), a, 'a reader that changed its copy did not change the cache');
+  const shell1 = rs.stateOfWorld('ui.shell'), shell2 = rs.stateOfWorld('ui.shell');
+  assert.ok(Object.keys(shell1._titles ?? {}).length > 0 && Object.keys(shell2._titles ?? {}).length > 0, 'the hidden property of the state (ui.shell _titles) survives the copy');
+  await s.send('I buy a ball', {});
+  assert.notDeepEqual(rs.stateOfWorld('kids.shop'), a, 'a change of the instance is a new stamp');
+});
+
+// Q2 item 5a: an undo of a confirmation also closes the offer it answered (dlg.avt#011): "yes" afterwards is not an answer to anything, in both strategies.
+for (const mode of ['ops', 'matrix']) {
+  test(`dlg.avt#011 (${mode}): undoing the confirmation closes the offer`, async () => {
+    const s = engines[mode].createSession(sessionOptions(settingsForMode('rules'), { language: 'en' }));
+    const out = [];
+    for (const l of ['open the robot tab', 'Give yourself sparkle eyes.', 'Yes.', 'Undo that.', 'Yes.']) out.push((await s.send(l, {})).text);
+    const av = () => s.state()['ui.avatar'];
+    assert.match(out[1], /Say "yes" to become the emoji/);
+    assert.match(out[2], /Now I am an emoji/);
+    assert.match(out[3], /I am a robot again/);
+    assert.match(out[4], /Yes to what\?/, 'the offer was closed by the undo');
+    assert.equal(av().character, 'robot');
+    assert.ok(!av().pending && !av().inputMode);
+    // a second offer still works after the undo
+    assert.match((await s.send('Give yourself sparkle eyes.', {})).text, /Say "yes"/);
+    assert.match((await s.send('yes', {})).text, /Now I am an emoji/);
+  });
+}

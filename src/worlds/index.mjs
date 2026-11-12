@@ -57,6 +57,7 @@ export class World {
     this.stateKey = null;   // `stateKey(state)` of fns.mjs: a cheap text that changes when the state does (the host compares it instead of stringifying a big state), or null
     this.guard = null;   // `guard({ action, args, state, check })` of fns.mjs: refuses a request whose target does not exist, with the reason (the rules say it), or null
     this.isView = null;  // `isView({ before, after })` of fns.mjs: true when a library step changed only what the user looks at (selection, cursor), so "undo" skips it, or null
+    this.closeOffer = null;   // `closeOffer(state)` of fns.mjs: closes the offer a confirmation answered when an undo brought it back (spec 15, "Undoing a confirmation")
     this.undoWords = null;   // `undoWords({ before, after })` of fns.mjs: what "undo" says once the library went back, or null
     this.assumed = null;   // `assumed(cell)` of fns.mjs (the words for a default or guessed value an answer rests on), or null
     this.voice = null;   // `voice(ctx)` of fns.mjs (reply facts for the templates), or null
@@ -169,7 +170,7 @@ function readEntries(world, file, text) {
   return wires;
 }
 
-function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, problem = null, whyWords = null, matrix = false } = {}) {
+function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, closeOffer = null, problem = null, whyWords = null, matrix = false } = {}) {
   const w = new World(id);
   w.problem = problem;
   w.whyWords = whyWords;
@@ -178,6 +179,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
   w.voice = voice;
   w.assumed = assumed;
   w.undoWords = undoWords;
+  w.closeOffer = closeOffer;
   w.toState = toState;
   w.adopt = adopt;
   w.guard = guard;
@@ -268,10 +270,10 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
     const files = {};
     const matrix = reasoner === 'matrix';
     await Promise.all([...FILES, ...(genMode() || readerOn() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
-    let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, problem = null, whyWords = null;
-    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
+    let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, closeOffer = null, problem = null, whyWords = null;
+    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; closeOffer = m?.closeOffer ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }
-    const w = buildWorld(id, files, ops, { fns, voice, toState, adopt, guard, isView, stateKey, assumed, undoWords, problem, whyWords, matrix });
+    const w = buildWorld(id, files, ops, { fns, voice, toState, adopt, guard, isView, stateKey, assumed, undoWords, closeOffer, problem, whyWords, matrix });
     if (built.has(id + ':fnsError')) w.errors.push({ message: `fns.mjs failed to load: ${built.get(id + ':fnsError').message}` });
     if (built.has(id + ':opsError')) w.errors.push({ message: `ops.mjs failed to load: ${built.get(id + ':opsError').message}` });
     built.set(id, w);
