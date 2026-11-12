@@ -3,7 +3,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { loadWorlds } from '../src/worlds/index.mjs';
-import { describePatterns, parseArg, emitKey } from '../src/worlds/describe.mjs';
+import { parse } from '../src/soplang/index.mjs';
+import { describePatterns, makeArg, emitKey, readDescriptionWires, descriptionFor, wordToken } from '../src/worlds/describe.mjs';
 
 const load = async (mode) => {
   if (mode) globalThis.PSYS_GEN_PATTERNS = mode; else delete globalThis.PSYS_GEN_PATTERNS;
@@ -11,16 +12,29 @@ const load = async (mode) => {
 };
 const WORLDS = ['kids.shop', 'geo.map', 'docs.editor'];
 
-test('parseArg reads role, class, optionality, quantity and options', () => {
-  assert.deepEqual(parseArg('i2:lex.kids.shop.items?*n2;prep=and|plus'), { name: 'i2', cls: 'lex.kids.shop.items', optional: true, qty: 'n2', prep: 'and|plus', det: null, unit: null });
-  assert.throws(() => parseArg('nonsense'));
+test('an argument is built from wires and keys, with no notation inside a value', () => {
+  assert.deepEqual(makeArg({ name: 'i2', cls: 'lex.kids.shop.items', optional: true, qty: 'n2' }, { prep: ['and', 'plus'] }), { name: 'i2', cls: 'lex.kids.shop.items', optional: true, qty: 'n2', prep: ['and', 'plus'], det: null, unit: null });
+  assert.throws(() => makeArg({ name: 'x' }));
+  assert.equal(wordToken('how much'), 'how_much');
+  assert.equal(wordToken("what's my"), 'what_s_my');
   assert.equal(emitKey('@{_} core.request action=geo.zoom arg.dir=in'), 'geo.zoom');
   assert.equal(emitKey('@{_} core.question type=kids.shop.total seek=total'), 'kids.shop.total');
   assert.equal(emitKey('@{_} kids.shop.money count={n}'), 'kids.shop.money');
 });
 
+test('describe wires read into descriptions; a word that means something else is an error', () => {
+  const src = `@describe.x.buy core.describe\n    op=x.buy\n    intent=statement\n    emit="@{_} x.buy item={i1} count={n1}"\n@describe.x.buy.i1 core.describe.arg\n    of=$describe.x.buy\n    name=i1\n    class=number\n    qty=n1\n@describe.x.buy.en core.describe.words\n    of=$describe.x.buy\n    lang=en\n    verb=$w.buy\n    verb=$w.bad\n@w.buy core.word lang=en text=buy means=x.buy\n@w.bad core.word lang=en text=wrong means=x.other\n`;
+  const r = readDescriptionWires(parse(src).wires);
+  assert.equal(r.descriptions.size, 1);
+  assert.equal(r.errors.length, 1);
+  assert.match(r.errors[0], /means x\.other, expected x\.buy/);
+  const d = descriptionFor([...r.descriptions.values()][0], 'en');
+  assert.deepEqual(d.verb, ['buy', 'wrong']);
+  assert.equal(descriptionFor([...r.descriptions.values()][0], 'ro'), null);
+});
+
 test('a quantified optional item expands to every count form and drops the absent slots from the emit', () => {
-  const list = describePatterns({ id: 'x', op: 'x.buy', intent: 'statement', emit: '@{_} x.buy item={i1} count={n1}\n@{_1} x.buy item={i2} count={n2}', args: ['i1:number*n1', 'i2:number?*n2;prep=and'], verb: 'buy', frames: 'stmt' });
+  const list = describePatterns({ id: 'x', op: 'x.buy', intent: 'statement', emit: '@{_} x.buy item={i1} count={n1}\n@{_1} x.buy item={i2} count={n2}', args: [makeArg({ name: 'i1', cls: 'number', qty: 'n1' }), makeArg({ name: 'i2', cls: 'number', optional: true, qty: 'n2' }, { prep: ['and'] })], verb: ['buy'], frames: ['stmt'] });
   assert.equal(list.length, 6);   // 2 forms of the first item x 3 of the optional second (number, article, absent)
   const absent = list.filter((p) => !p.emit.includes('@{_1}'));
   assert.equal(absent.length, 2);

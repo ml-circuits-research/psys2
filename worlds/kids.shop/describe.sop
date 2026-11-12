@@ -2,136 +2,614 @@
     op=kids.shop.money
     intent=statement
     emit="@{_} kids.shop.money count={n} unit=leu"
-    arg="n:number;unit=lei|leu"
-    verb="have|have_got|got"
-    rest="now|left|today|in_my_wallet|in_my_piggy_bank|with_me|to_spend"
-    sample="n=20"
-    example="I have 20 lei."
     effect="sets the amount of money the user has"
+
+@describe.kids.shop.money.n core.describe.arg
+    of=$describe.kids.shop.money
+    name=n
+    class=number
+
+@describe.kids.shop.money.en core.describe.words
+    of=$describe.kids.shop.money
+    lang=en
+    verb=$w.en.have.kids.shop.money
+    verb=$w.en.have_got.kids.shop.money
+    verb=$w.en.got.kids.shop.money
+    rest=$w.en.now.kids.shop.money
+    rest=$w.en.left.kids.shop.money
+    rest=$w.en.today.kids.shop.money
+    rest=$w.en.in_my_wallet.kids.shop.money
+    rest=$w.en.in_my_piggy_bank.kids.shop.money
+    rest=$w.en.with_me.kids.shop.money
+    rest=$w.en.to_spend.kids.shop.money
+    unit.n=$w.en.lei.kids.shop.money.n
+    unit.n=$w.en.leu.kids.shop.money.n
+    sample.n=20
+    example="I have 20 lei."
 
 @describe.kids.shop.income core.describe
     op=kids.shop.income
     intent=statement
     emit="@{_} kids.shop.income count={n} unit=leu"
-    arg="n:number;unit=lei|leu"
-    verb="get|got|find|found|receive|received|earn|earned|win|won|save|saved"
-    sample="n=5"
-    example="I found 5 lei."
     effect="adds to the money the user has"
+
+@describe.kids.shop.income.n core.describe.arg
+    of=$describe.kids.shop.income
+    name=n
+    class=number
+
+@describe.kids.shop.income.en core.describe.words
+    of=$describe.kids.shop.income
+    lang=en
+    verb=$w.en.get.kids.shop.income
+    verb=$w.en.got.kids.shop.income
+    verb=$w.en.find.kids.shop.income
+    verb=$w.en.found.kids.shop.income
+    verb=$w.en.receive.kids.shop.income
+    verb=$w.en.received.kids.shop.income
+    verb=$w.en.earn.kids.shop.income
+    verb=$w.en.earned.kids.shop.income
+    verb=$w.en.win.kids.shop.income
+    verb=$w.en.won.kids.shop.income
+    verb=$w.en.save.kids.shop.income
+    verb=$w.en.saved.kids.shop.income
+    unit.n=$w.en.lei.kids.shop.income.n
+    unit.n=$w.en.leu.kids.shop.income.n
+    sample.n=5
+    example="I found 5 lei."
 
 @describe.kids.shop.expense core.describe
     op=kids.shop.expense
     intent=statement
     emit="@{_} kids.shop.expense count={n} unit=leu"
-    arg="n:number;unit=lei|leu"
-    verb="spend|spent|lose|lost|pay|paid|give_away|gave_away"
-    sample="n=5"
-    example="I spent 5 lei."
     effect="takes from the money the user has"
+
+@describe.kids.shop.expense.n core.describe.arg
+    of=$describe.kids.shop.expense
+    name=n
+    class=number
+
+@describe.kids.shop.expense.en core.describe.words
+    of=$describe.kids.shop.expense
+    lang=en
+    verb=$w.en.spend.kids.shop.expense
+    verb=$w.en.spent.kids.shop.expense
+    verb=$w.en.lose.kids.shop.expense
+    verb=$w.en.lost.kids.shop.expense
+    verb=$w.en.pay.kids.shop.expense
+    verb=$w.en.paid.kids.shop.expense
+    verb=$w.en.give_away.kids.shop.expense
+    verb=$w.en.gave_away.kids.shop.expense
+    unit.n=$w.en.lei.kids.shop.expense.n
+    unit.n=$w.en.leu.kids.shop.expense.n
+    sample.n=5
+    example="I spent 5 lei."
 
 @describe.kids.shop.purchase core.describe
     op=kids.shop.purchase
     intent=statement
     emit="@{_} kids.shop.purchase item={i1} count={n1}\n@{_1} kids.shop.purchase item={i2} count={n2}"
-    arg="i1:lex.kids.shop.items*n1"
-    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
-    verb="buy|bought|take|took|get|got|purchase|purchased"
-    sample="i1=ball;i2=pencil;n1=2;n2=3"
-    example="I buy 2 balls and 3 pencils."
     requires=shop.d.debt
     effect="takes the cost of the basket from the money; each part is priced by the price in force"
+
+@describe.kids.shop.purchase.i1 core.describe.arg
+    of=$describe.kids.shop.purchase
+    name=i1
+    class=lex.kids.shop.items
+    qty=n1
+
+@describe.kids.shop.purchase.i2 core.describe.arg
+    of=$describe.kids.shop.purchase
+    name=i2
+    class=lex.kids.shop.items
+    optional=true
+    qty=n2
+
+@describe.kids.shop.purchase.en core.describe.words
+    of=$describe.kids.shop.purchase
+    lang=en
+    verb=$w.en.buy.kids.shop.purchase
+    verb=$w.en.bought.kids.shop.purchase
+    verb=$w.en.take.kids.shop.purchase
+    verb=$w.en.took.kids.shop.purchase
+    verb=$w.en.get.kids.shop.purchase
+    verb=$w.en.got.kids.shop.purchase
+    verb=$w.en.purchase.kids.shop.purchase
+    verb=$w.en.purchased.kids.shop.purchase
+    prep.i2=$w.en.and.kids.shop.purchase.i2
+    prep.i2=$w.en.plus.kids.shop.purchase.i2
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="I buy 2 balls and 3 pencils."
 
 @describe.kids.shop.price.set core.describe
     op=kids.shop.price
     intent=statement
     emit="@{_} kids.shop.price item={item} cost={n}"
-    arg="item:noun;det=a|an|the|one"
-    arg="n:number;unit=lei|leu"
-    verb="costs|cost|is|are"
-    subject=""
     frames=pred
-    sample="item=ball;n=7"
-    example="A ball costs 7 lei."
     effect="a price stated in the dialog overrides the price list for the session"
+
+@describe.kids.shop.price.set.item core.describe.arg
+    of=$describe.kids.shop.price.set
+    name=item
+    class=noun
+
+@describe.kids.shop.price.set.n core.describe.arg
+    of=$describe.kids.shop.price.set
+    name=n
+    class=number
+
+@describe.kids.shop.price.set.en core.describe.words
+    of=$describe.kids.shop.price.set
+    lang=en
+    nosubject=true
+    verb=$w.en.costs.kids.shop.price
+    verb=$w.en.cost.kids.shop.price
+    verb=$w.en.is.kids.shop.price
+    verb=$w.en.are.kids.shop.price
+    det.item=$w.en.a.kids.shop.price.item
+    det.item=$w.en.an.kids.shop.price.item
+    det.item=$w.en.the.kids.shop.price.item
+    det.item=$w.en.one.kids.shop.price.item
+    unit.n=$w.en.lei.kids.shop.price.n
+    unit.n=$w.en.leu.kids.shop.price.n
+    sample.item=ball
+    sample.n=7
+    example="A ball costs 7 lei."
 
 @describe.kids.shop.price.ask core.describe
     op=kids.shop.price
     intent=query
     emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
-    arg="item:noun;prep=of|for;det=a|an|the|one"
-    noun="price|cost"
-    ask="how_much"
-    tverb="cost|costs"
-    sample="item=pen"
-    example="What is the price of a pen?"
     effect="answers the price of one item"
+
+@describe.kids.shop.price.ask.item core.describe.arg
+    of=$describe.kids.shop.price.ask
+    name=item
+    class=noun
+
+@describe.kids.shop.price.ask.en core.describe.words
+    of=$describe.kids.shop.price.ask
+    lang=en
+    tverb=$w.en.cost.kids.shop.price
+    tverb=$w.en.costs.kids.shop.price
+    noun=$w.en.price.kids.shop.price
+    noun=$w.en.cost.kids.shop.price
+    ask=$w.en.how_much.kids.shop.price
+    prep.item=$w.en.of.kids.shop.price.item
+    prep.item=$w.en.for.kids.shop.price.item
+    det.item=$w.en.a.kids.shop.price.item
+    det.item=$w.en.an.kids.shop.price.item
+    det.item=$w.en.the.kids.shop.price.item
+    det.item=$w.en.one.kids.shop.price.item
+    sample.item=pen
+    example="What is the price of a pen?"
 
 @describe.kids.shop.total core.describe
     op=kids.shop.total
     intent=query
     emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
-    arg="i1:lex.kids.shop.items*n1;prep=of|for"
-    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
-    noun="total|price|cost|sum|bill"
-    ask="how_much|how_much_money|what_does_it_cost_for"
-    tverb="cost|come_to|add_up_to|total"
-    rest="altogether|in_total|all_together|together"
-    sample="i1=ball;i2=pencil;n1=2;n2=3"
-    example="How much do 2 balls and 3 pencils cost?"
     effect="answers the sum of the lines of the basket"
+
+@describe.kids.shop.total.i1 core.describe.arg
+    of=$describe.kids.shop.total
+    name=i1
+    class=lex.kids.shop.items
+    qty=n1
+
+@describe.kids.shop.total.i2 core.describe.arg
+    of=$describe.kids.shop.total
+    name=i2
+    class=lex.kids.shop.items
+    optional=true
+    qty=n2
+
+@describe.kids.shop.total.en core.describe.words
+    of=$describe.kids.shop.total
+    lang=en
+    tverb=$w.en.cost.kids.shop.total
+    tverb=$w.en.come_to.kids.shop.total
+    tverb=$w.en.add_up_to.kids.shop.total
+    tverb=$w.en.total.kids.shop.total
+    noun=$w.en.total.kids.shop.total
+    noun=$w.en.price.kids.shop.total
+    noun=$w.en.cost.kids.shop.total
+    noun=$w.en.sum.kids.shop.total
+    noun=$w.en.bill.kids.shop.total
+    ask=$w.en.how_much.kids.shop.total
+    ask=$w.en.how_much_money.kids.shop.total
+    ask=$w.en.what_does_it_cost_for.kids.shop.total
+    rest=$w.en.altogether.kids.shop.total
+    rest=$w.en.in_total.kids.shop.total
+    rest=$w.en.all_together.kids.shop.total
+    rest=$w.en.together.kids.shop.total
+    prep.i1=$w.en.of.kids.shop.total.i1
+    prep.i1=$w.en.for.kids.shop.total.i1
+    prep.i2=$w.en.and.kids.shop.total.i2
+    prep.i2=$w.en.plus.kids.shop.total.i2
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="How much do 2 balls and 3 pencils cost?"
 
 @describe.kids.shop.balance core.describe
     op=kids.shop.balance
     intent=query
     emit="@{_} core.question type=kids.shop.balance seek=amount"
-    noun="money|balance|cash|lei"
-    ask="how_much|how_much_money|how_many_lei|what_is_my|what_s_my"
-    rest="do_i_have|do_i_have_left|is_left|i_have_left|do_i_have_now|is_in_my_wallet|after_shopping|after_the_shopping|after_buying"
     frames=ask
-    example="How much money do I have left?"
     effect="answers the money after replaying every statement of money, income, expense and purchase"
+
+@describe.kids.shop.balance.en core.describe.words
+    of=$describe.kids.shop.balance
+    lang=en
+    noun=$w.en.money.kids.shop.balance
+    noun=$w.en.balance.kids.shop.balance
+    noun=$w.en.cash.kids.shop.balance
+    noun=$w.en.lei.kids.shop.balance
+    ask=$w.en.how_much.kids.shop.balance
+    ask=$w.en.how_much_money.kids.shop.balance
+    ask=$w.en.how_many_lei.kids.shop.balance
+    ask=$w.en.what_is_my.kids.shop.balance
+    ask=$w.en.what_s_my.kids.shop.balance
+    rest=$w.en.do_i_have.kids.shop.balance
+    rest=$w.en.do_i_have_left.kids.shop.balance
+    rest=$w.en.is_left.kids.shop.balance
+    rest=$w.en.i_have_left.kids.shop.balance
+    rest=$w.en.do_i_have_now.kids.shop.balance
+    rest=$w.en.is_in_my_wallet.kids.shop.balance
+    rest=$w.en.after_shopping.kids.shop.balance
+    rest=$w.en.after_the_shopping.kids.shop.balance
+    rest=$w.en.after_buying.kids.shop.balance
+    example="How much money do I have left?"
 
 @describe.kids.shop.affordable core.describe
     op=kids.shop.affordability
     intent=query
     emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
-    arg="i1:lex.kids.shop.items*n1"
-    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
-    verb="afford|buy|get|take|pay"
-    frames=canq,canlast
-    sample="i1=ball;i2=pencil;n1=2;n2=3"
-    example="Can I afford 2 balls and 3 pencils?"
+    frames=canq
+    frames=canlast
     effect="answers yes or no: the money against the cost of the basket"
+
+@describe.kids.shop.affordable.i1 core.describe.arg
+    of=$describe.kids.shop.affordable
+    name=i1
+    class=lex.kids.shop.items
+    qty=n1
+
+@describe.kids.shop.affordable.i2 core.describe.arg
+    of=$describe.kids.shop.affordable
+    name=i2
+    class=lex.kids.shop.items
+    optional=true
+    qty=n2
+
+@describe.kids.shop.affordable.en core.describe.words
+    of=$describe.kids.shop.affordable
+    lang=en
+    verb=$w.en.afford.kids.shop.affordability
+    verb=$w.en.buy.kids.shop.affordability
+    verb=$w.en.get.kids.shop.affordability
+    verb=$w.en.take.kids.shop.affordability
+    verb=$w.en.pay.kids.shop.affordability
+    prep.i2=$w.en.and.kids.shop.affordability.i2
+    prep.i2=$w.en.plus.kids.shop.affordability.i2
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="Can I afford 2 balls and 3 pencils?"
 
 @describe.kids.shop.change core.describe
     op=kids.shop.change
     intent=query
     emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
-    arg="m:number;prep=from|out_of|with|for;unit=lei|leu"
-    arg="i1:lex.kids.shop.items*n1;prep=if_i_buy|if_i_get|if_i_take|for|on|when_i_buy|with"
-    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
-    noun="change|back"
-    ask="how_much_change|how_much_back|what_is_the|what_s_the|whats_the|what_is_my|what_s_my|whats_my|what_do_i_get_back|what_change_do_i_get"
-    tverb="do_i_get|will_i_get|do_i_receive|will_i_receive|do_i_take|do_i_have_back"
-    verb="give|pay|hand_over|buy|get|take"
-    pre="i_want|i_would_like|i_d_like|i_will_buy|i_buy|i_take|i_would_like_to_buy|i_want_to_buy"
-    mid="and_i_pay|and_i_give_the_cashier|and_pay_with|and_i_hand_over|and_i_pay_with|and_give|and_i_give"
-    sample="m=50;i1=ball;i2=pencil;n1=2;n2=3"
-    example="What is the change from 50 lei if I buy 2 balls and 3 pencils?"
     requires=shop.d.short
     effect="answers what was paid minus the cost of the basket"
+
+@describe.kids.shop.change.m core.describe.arg
+    of=$describe.kids.shop.change
+    name=m
+    class=number
+
+@describe.kids.shop.change.i1 core.describe.arg
+    of=$describe.kids.shop.change
+    name=i1
+    class=lex.kids.shop.items
+    qty=n1
+
+@describe.kids.shop.change.i2 core.describe.arg
+    of=$describe.kids.shop.change
+    name=i2
+    class=lex.kids.shop.items
+    optional=true
+    qty=n2
+
+@describe.kids.shop.change.en core.describe.words
+    of=$describe.kids.shop.change
+    lang=en
+    verb=$w.en.give.kids.shop.change
+    verb=$w.en.pay.kids.shop.change
+    verb=$w.en.hand_over.kids.shop.change
+    verb=$w.en.buy.kids.shop.change
+    verb=$w.en.get.kids.shop.change
+    verb=$w.en.take.kids.shop.change
+    tverb=$w.en.do_i_get.kids.shop.change
+    tverb=$w.en.will_i_get.kids.shop.change
+    tverb=$w.en.do_i_receive.kids.shop.change
+    tverb=$w.en.will_i_receive.kids.shop.change
+    tverb=$w.en.do_i_take.kids.shop.change
+    tverb=$w.en.do_i_have_back.kids.shop.change
+    noun=$w.en.change.kids.shop.change
+    noun=$w.en.back.kids.shop.change
+    ask=$w.en.how_much_change.kids.shop.change
+    ask=$w.en.how_much_back.kids.shop.change
+    ask=$w.en.what_is_the.kids.shop.change
+    ask=$w.en.what_s_the.kids.shop.change
+    ask=$w.en.whats_the.kids.shop.change
+    ask=$w.en.what_is_my.kids.shop.change
+    ask=$w.en.what_s_my.kids.shop.change
+    ask=$w.en.whats_my.kids.shop.change
+    ask=$w.en.what_do_i_get_back.kids.shop.change
+    ask=$w.en.what_change_do_i_get.kids.shop.change
+    pre=$w.en.i_want.kids.shop.change
+    pre=$w.en.i_would_like.kids.shop.change
+    pre=$w.en.i_d_like.kids.shop.change
+    pre=$w.en.i_will_buy.kids.shop.change
+    pre=$w.en.i_buy.kids.shop.change
+    pre=$w.en.i_take.kids.shop.change
+    pre=$w.en.i_would_like_to_buy.kids.shop.change
+    pre=$w.en.i_want_to_buy.kids.shop.change
+    mid=$w.en.and_i_pay.kids.shop.change
+    mid=$w.en.and_i_give_the_cashier.kids.shop.change
+    mid=$w.en.and_pay_with.kids.shop.change
+    mid=$w.en.and_i_hand_over.kids.shop.change
+    mid=$w.en.and_i_pay_with.kids.shop.change
+    mid=$w.en.and_give.kids.shop.change
+    mid=$w.en.and_i_give.kids.shop.change
+    prep.m=$w.en.from.kids.shop.change.m
+    prep.m=$w.en.out_of.kids.shop.change.m
+    prep.m=$w.en.with.kids.shop.change.m
+    prep.m=$w.en.for.kids.shop.change.m
+    unit.m=$w.en.lei.kids.shop.change.m
+    unit.m=$w.en.leu.kids.shop.change.m
+    prep.i1=$w.en.if_i_buy.kids.shop.change.i1
+    prep.i1=$w.en.if_i_get.kids.shop.change.i1
+    prep.i1=$w.en.if_i_take.kids.shop.change.i1
+    prep.i1=$w.en.for.kids.shop.change.i1
+    prep.i1=$w.en.on.kids.shop.change.i1
+    prep.i1=$w.en.when_i_buy.kids.shop.change.i1
+    prep.i1=$w.en.with.kids.shop.change.i1
+    prep.i2=$w.en.and.kids.shop.change.i2
+    prep.i2=$w.en.plus.kids.shop.change.i2
+    sample.m=50
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="What is the change from 50 lei if I buy 2 balls and 3 pencils?"
 
 @describe.kids.shop.leftafter core.describe
     op=kids.shop.leftafter
     intent=query
     emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
-    arg="i1:lex.kids.shop.items*n1;prep=after_i_buy|if_i_buy|after_buying|after_i_get"
-    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
-    noun="money_left|balance|change"
-    ask="how_much_money_do_i_have_left|how_many_lei_do_i_have_left|how_much_is_left"
-    verb="buy|get|take|purchase"
-    frames=ask,qnoun,last,cond
-    sample="i1=ball;i2=pencil;n1=2;n2=3"
-    example="How much money do I have left after I buy 2 balls and 3 pencils?"
+    frames=ask
+    frames=qnoun
+    frames=last
+    frames=cond
     requires=shop.d.left
     effect="answers the current money minus the cost of the basket; nothing is recorded"
+
+@describe.kids.shop.leftafter.i1 core.describe.arg
+    of=$describe.kids.shop.leftafter
+    name=i1
+    class=lex.kids.shop.items
+    qty=n1
+
+@describe.kids.shop.leftafter.i2 core.describe.arg
+    of=$describe.kids.shop.leftafter
+    name=i2
+    class=lex.kids.shop.items
+    optional=true
+    qty=n2
+
+@describe.kids.shop.leftafter.en core.describe.words
+    of=$describe.kids.shop.leftafter
+    lang=en
+    verb=$w.en.buy.kids.shop.leftafter
+    verb=$w.en.get.kids.shop.leftafter
+    verb=$w.en.take.kids.shop.leftafter
+    verb=$w.en.purchase.kids.shop.leftafter
+    noun=$w.en.money_left.kids.shop.leftafter
+    noun=$w.en.balance.kids.shop.leftafter
+    noun=$w.en.change.kids.shop.leftafter
+    ask=$w.en.how_much_money_do_i_have_left.kids.shop.leftafter
+    ask=$w.en.how_many_lei_do_i_have_left.kids.shop.leftafter
+    ask=$w.en.how_much_is_left.kids.shop.leftafter
+    prep.i1=$w.en.after_i_buy.kids.shop.leftafter.i1
+    prep.i1=$w.en.if_i_buy.kids.shop.leftafter.i1
+    prep.i1=$w.en.after_buying.kids.shop.leftafter.i1
+    prep.i1=$w.en.after_i_get.kids.shop.leftafter.i1
+    prep.i2=$w.en.and.kids.shop.leftafter.i2
+    prep.i2=$w.en.plus.kids.shop.leftafter.i2
+    sample.i1=ball
+    sample.i2=pencil
+    sample.n1=2
+    sample.n2=3
+    example="How much money do I have left after I buy 2 balls and 3 pencils?"
+
+@w.en.have.kids.shop.money core.word lang=en text=have means=kids.shop.money
+@w.en.have_got.kids.shop.money core.word lang=en text="have got" means=kids.shop.money
+@w.en.got.kids.shop.money core.word lang=en text=got means=kids.shop.money
+@w.en.now.kids.shop.money core.word lang=en text=now means=kids.shop.money
+@w.en.left.kids.shop.money core.word lang=en text=left means=kids.shop.money
+@w.en.today.kids.shop.money core.word lang=en text=today means=kids.shop.money
+@w.en.in_my_wallet.kids.shop.money core.word lang=en text="in my wallet" means=kids.shop.money
+@w.en.in_my_piggy_bank.kids.shop.money core.word lang=en text="in my piggy bank" means=kids.shop.money
+@w.en.with_me.kids.shop.money core.word lang=en text="with me" means=kids.shop.money
+@w.en.to_spend.kids.shop.money core.word lang=en text="to spend" means=kids.shop.money
+@w.en.lei.kids.shop.money.n core.word lang=en text=lei means=kids.shop.money.n
+@w.en.leu.kids.shop.money.n core.word lang=en text=leu means=kids.shop.money.n
+@w.en.get.kids.shop.income core.word lang=en text=get means=kids.shop.income
+@w.en.got.kids.shop.income core.word lang=en text=got means=kids.shop.income
+@w.en.find.kids.shop.income core.word lang=en text=find means=kids.shop.income
+@w.en.found.kids.shop.income core.word lang=en text=found means=kids.shop.income
+@w.en.receive.kids.shop.income core.word lang=en text=receive means=kids.shop.income
+@w.en.received.kids.shop.income core.word lang=en text=received means=kids.shop.income
+@w.en.earn.kids.shop.income core.word lang=en text=earn means=kids.shop.income
+@w.en.earned.kids.shop.income core.word lang=en text=earned means=kids.shop.income
+@w.en.win.kids.shop.income core.word lang=en text=win means=kids.shop.income
+@w.en.won.kids.shop.income core.word lang=en text=won means=kids.shop.income
+@w.en.save.kids.shop.income core.word lang=en text=save means=kids.shop.income
+@w.en.saved.kids.shop.income core.word lang=en text=saved means=kids.shop.income
+@w.en.lei.kids.shop.income.n core.word lang=en text=lei means=kids.shop.income.n
+@w.en.leu.kids.shop.income.n core.word lang=en text=leu means=kids.shop.income.n
+@w.en.spend.kids.shop.expense core.word lang=en text=spend means=kids.shop.expense
+@w.en.spent.kids.shop.expense core.word lang=en text=spent means=kids.shop.expense
+@w.en.lose.kids.shop.expense core.word lang=en text=lose means=kids.shop.expense
+@w.en.lost.kids.shop.expense core.word lang=en text=lost means=kids.shop.expense
+@w.en.pay.kids.shop.expense core.word lang=en text=pay means=kids.shop.expense
+@w.en.paid.kids.shop.expense core.word lang=en text=paid means=kids.shop.expense
+@w.en.give_away.kids.shop.expense core.word lang=en text="give away" means=kids.shop.expense
+@w.en.gave_away.kids.shop.expense core.word lang=en text="gave away" means=kids.shop.expense
+@w.en.lei.kids.shop.expense.n core.word lang=en text=lei means=kids.shop.expense.n
+@w.en.leu.kids.shop.expense.n core.word lang=en text=leu means=kids.shop.expense.n
+@w.en.buy.kids.shop.purchase core.word lang=en text=buy means=kids.shop.purchase
+@w.en.bought.kids.shop.purchase core.word lang=en text=bought means=kids.shop.purchase
+@w.en.take.kids.shop.purchase core.word lang=en text=take means=kids.shop.purchase
+@w.en.took.kids.shop.purchase core.word lang=en text=took means=kids.shop.purchase
+@w.en.get.kids.shop.purchase core.word lang=en text=get means=kids.shop.purchase
+@w.en.got.kids.shop.purchase core.word lang=en text=got means=kids.shop.purchase
+@w.en.purchase.kids.shop.purchase core.word lang=en text=purchase means=kids.shop.purchase
+@w.en.purchased.kids.shop.purchase core.word lang=en text=purchased means=kids.shop.purchase
+@w.en.and.kids.shop.purchase.i2 core.word lang=en text=and means=kids.shop.purchase.i2
+@w.en.plus.kids.shop.purchase.i2 core.word lang=en text=plus means=kids.shop.purchase.i2
+@w.en.costs.kids.shop.price core.word lang=en text=costs means=kids.shop.price
+@w.en.cost.kids.shop.price core.word lang=en text=cost means=kids.shop.price
+@w.en.is.kids.shop.price core.word lang=en text=is means=kids.shop.price
+@w.en.are.kids.shop.price core.word lang=en text=are means=kids.shop.price
+@w.en.a.kids.shop.price.item core.word lang=en text=a means=kids.shop.price.item
+@w.en.an.kids.shop.price.item core.word lang=en text=an means=kids.shop.price.item
+@w.en.the.kids.shop.price.item core.word lang=en text=the means=kids.shop.price.item
+@w.en.one.kids.shop.price.item core.word lang=en text=one means=kids.shop.price.item
+@w.en.lei.kids.shop.price.n core.word lang=en text=lei means=kids.shop.price.n
+@w.en.leu.kids.shop.price.n core.word lang=en text=leu means=kids.shop.price.n
+@w.en.price.kids.shop.price core.word lang=en text=price means=kids.shop.price
+@w.en.how_much.kids.shop.price core.word lang=en text="how much" means=kids.shop.price
+@w.en.of.kids.shop.price.item core.word lang=en text=of means=kids.shop.price.item
+@w.en.for.kids.shop.price.item core.word lang=en text=for means=kids.shop.price.item
+@w.en.cost.kids.shop.total core.word lang=en text=cost means=kids.shop.total
+@w.en.come_to.kids.shop.total core.word lang=en text="come to" means=kids.shop.total
+@w.en.add_up_to.kids.shop.total core.word lang=en text="add up to" means=kids.shop.total
+@w.en.total.kids.shop.total core.word lang=en text=total means=kids.shop.total
+@w.en.price.kids.shop.total core.word lang=en text=price means=kids.shop.total
+@w.en.sum.kids.shop.total core.word lang=en text=sum means=kids.shop.total
+@w.en.bill.kids.shop.total core.word lang=en text=bill means=kids.shop.total
+@w.en.how_much.kids.shop.total core.word lang=en text="how much" means=kids.shop.total
+@w.en.how_much_money.kids.shop.total core.word lang=en text="how much money" means=kids.shop.total
+@w.en.what_does_it_cost_for.kids.shop.total core.word lang=en text="what does it cost for" means=kids.shop.total
+@w.en.altogether.kids.shop.total core.word lang=en text=altogether means=kids.shop.total
+@w.en.in_total.kids.shop.total core.word lang=en text="in total" means=kids.shop.total
+@w.en.all_together.kids.shop.total core.word lang=en text="all together" means=kids.shop.total
+@w.en.together.kids.shop.total core.word lang=en text=together means=kids.shop.total
+@w.en.of.kids.shop.total.i1 core.word lang=en text=of means=kids.shop.total.i1
+@w.en.for.kids.shop.total.i1 core.word lang=en text=for means=kids.shop.total.i1
+@w.en.and.kids.shop.total.i2 core.word lang=en text=and means=kids.shop.total.i2
+@w.en.plus.kids.shop.total.i2 core.word lang=en text=plus means=kids.shop.total.i2
+@w.en.money.kids.shop.balance core.word lang=en text=money means=kids.shop.balance
+@w.en.balance.kids.shop.balance core.word lang=en text=balance means=kids.shop.balance
+@w.en.cash.kids.shop.balance core.word lang=en text=cash means=kids.shop.balance
+@w.en.lei.kids.shop.balance core.word lang=en text=lei means=kids.shop.balance
+@w.en.how_much.kids.shop.balance core.word lang=en text="how much" means=kids.shop.balance
+@w.en.how_much_money.kids.shop.balance core.word lang=en text="how much money" means=kids.shop.balance
+@w.en.how_many_lei.kids.shop.balance core.word lang=en text="how many lei" means=kids.shop.balance
+@w.en.what_is_my.kids.shop.balance core.word lang=en text="what is my" means=kids.shop.balance
+@w.en.what_s_my.kids.shop.balance core.word lang=en text="what's my" means=kids.shop.balance
+@w.en.do_i_have.kids.shop.balance core.word lang=en text="do i have" means=kids.shop.balance
+@w.en.do_i_have_left.kids.shop.balance core.word lang=en text="do i have left" means=kids.shop.balance
+@w.en.is_left.kids.shop.balance core.word lang=en text="is left" means=kids.shop.balance
+@w.en.i_have_left.kids.shop.balance core.word lang=en text="i have left" means=kids.shop.balance
+@w.en.do_i_have_now.kids.shop.balance core.word lang=en text="do i have now" means=kids.shop.balance
+@w.en.is_in_my_wallet.kids.shop.balance core.word lang=en text="is in my wallet" means=kids.shop.balance
+@w.en.after_shopping.kids.shop.balance core.word lang=en text="after shopping" means=kids.shop.balance
+@w.en.after_the_shopping.kids.shop.balance core.word lang=en text="after the shopping" means=kids.shop.balance
+@w.en.after_buying.kids.shop.balance core.word lang=en text="after buying" means=kids.shop.balance
+@w.en.afford.kids.shop.affordability core.word lang=en text=afford means=kids.shop.affordability
+@w.en.buy.kids.shop.affordability core.word lang=en text=buy means=kids.shop.affordability
+@w.en.get.kids.shop.affordability core.word lang=en text=get means=kids.shop.affordability
+@w.en.take.kids.shop.affordability core.word lang=en text=take means=kids.shop.affordability
+@w.en.pay.kids.shop.affordability core.word lang=en text=pay means=kids.shop.affordability
+@w.en.and.kids.shop.affordability.i2 core.word lang=en text=and means=kids.shop.affordability.i2
+@w.en.plus.kids.shop.affordability.i2 core.word lang=en text=plus means=kids.shop.affordability.i2
+@w.en.give.kids.shop.change core.word lang=en text=give means=kids.shop.change
+@w.en.pay.kids.shop.change core.word lang=en text=pay means=kids.shop.change
+@w.en.hand_over.kids.shop.change core.word lang=en text="hand over" means=kids.shop.change
+@w.en.buy.kids.shop.change core.word lang=en text=buy means=kids.shop.change
+@w.en.get.kids.shop.change core.word lang=en text=get means=kids.shop.change
+@w.en.take.kids.shop.change core.word lang=en text=take means=kids.shop.change
+@w.en.do_i_get.kids.shop.change core.word lang=en text="do i get" means=kids.shop.change
+@w.en.will_i_get.kids.shop.change core.word lang=en text="will i get" means=kids.shop.change
+@w.en.do_i_receive.kids.shop.change core.word lang=en text="do i receive" means=kids.shop.change
+@w.en.will_i_receive.kids.shop.change core.word lang=en text="will i receive" means=kids.shop.change
+@w.en.do_i_take.kids.shop.change core.word lang=en text="do i take" means=kids.shop.change
+@w.en.do_i_have_back.kids.shop.change core.word lang=en text="do i have back" means=kids.shop.change
+@w.en.change.kids.shop.change core.word lang=en text=change means=kids.shop.change
+@w.en.back.kids.shop.change core.word lang=en text=back means=kids.shop.change
+@w.en.how_much_change.kids.shop.change core.word lang=en text="how much change" means=kids.shop.change
+@w.en.how_much_back.kids.shop.change core.word lang=en text="how much back" means=kids.shop.change
+@w.en.what_is_the.kids.shop.change core.word lang=en text="what is the" means=kids.shop.change
+@w.en.what_s_the.kids.shop.change core.word lang=en text="what's the" means=kids.shop.change
+@w.en.whats_the.kids.shop.change core.word lang=en text="whats the" means=kids.shop.change
+@w.en.what_is_my.kids.shop.change core.word lang=en text="what is my" means=kids.shop.change
+@w.en.what_s_my.kids.shop.change core.word lang=en text="what's my" means=kids.shop.change
+@w.en.whats_my.kids.shop.change core.word lang=en text="whats my" means=kids.shop.change
+@w.en.what_do_i_get_back.kids.shop.change core.word lang=en text="what do i get back" means=kids.shop.change
+@w.en.what_change_do_i_get.kids.shop.change core.word lang=en text="what change do i get" means=kids.shop.change
+@w.en.i_want.kids.shop.change core.word lang=en text="i want" means=kids.shop.change
+@w.en.i_would_like.kids.shop.change core.word lang=en text="i would like" means=kids.shop.change
+@w.en.i_d_like.kids.shop.change core.word lang=en text="i'd like" means=kids.shop.change
+@w.en.i_will_buy.kids.shop.change core.word lang=en text="i will buy" means=kids.shop.change
+@w.en.i_buy.kids.shop.change core.word lang=en text="i buy" means=kids.shop.change
+@w.en.i_take.kids.shop.change core.word lang=en text="i take" means=kids.shop.change
+@w.en.i_would_like_to_buy.kids.shop.change core.word lang=en text="i would like to buy" means=kids.shop.change
+@w.en.i_want_to_buy.kids.shop.change core.word lang=en text="i want to buy" means=kids.shop.change
+@w.en.and_i_pay.kids.shop.change core.word lang=en text="and i pay" means=kids.shop.change
+@w.en.and_i_give_the_cashier.kids.shop.change core.word lang=en text="and i give the cashier" means=kids.shop.change
+@w.en.and_pay_with.kids.shop.change core.word lang=en text="and pay with" means=kids.shop.change
+@w.en.and_i_hand_over.kids.shop.change core.word lang=en text="and i hand over" means=kids.shop.change
+@w.en.and_i_pay_with.kids.shop.change core.word lang=en text="and i pay with" means=kids.shop.change
+@w.en.and_give.kids.shop.change core.word lang=en text="and give" means=kids.shop.change
+@w.en.and_i_give.kids.shop.change core.word lang=en text="and i give" means=kids.shop.change
+@w.en.from.kids.shop.change.m core.word lang=en text=from means=kids.shop.change.m
+@w.en.out_of.kids.shop.change.m core.word lang=en text="out of" means=kids.shop.change.m
+@w.en.with.kids.shop.change.m core.word lang=en text=with means=kids.shop.change.m
+@w.en.for.kids.shop.change.m core.word lang=en text=for means=kids.shop.change.m
+@w.en.lei.kids.shop.change.m core.word lang=en text=lei means=kids.shop.change.m
+@w.en.leu.kids.shop.change.m core.word lang=en text=leu means=kids.shop.change.m
+@w.en.if_i_buy.kids.shop.change.i1 core.word lang=en text="if i buy" means=kids.shop.change.i1
+@w.en.if_i_get.kids.shop.change.i1 core.word lang=en text="if i get" means=kids.shop.change.i1
+@w.en.if_i_take.kids.shop.change.i1 core.word lang=en text="if i take" means=kids.shop.change.i1
+@w.en.for.kids.shop.change.i1 core.word lang=en text=for means=kids.shop.change.i1
+@w.en.on.kids.shop.change.i1 core.word lang=en text=on means=kids.shop.change.i1
+@w.en.when_i_buy.kids.shop.change.i1 core.word lang=en text="when i buy" means=kids.shop.change.i1
+@w.en.with.kids.shop.change.i1 core.word lang=en text=with means=kids.shop.change.i1
+@w.en.and.kids.shop.change.i2 core.word lang=en text=and means=kids.shop.change.i2
+@w.en.plus.kids.shop.change.i2 core.word lang=en text=plus means=kids.shop.change.i2
+@w.en.buy.kids.shop.leftafter core.word lang=en text=buy means=kids.shop.leftafter
+@w.en.get.kids.shop.leftafter core.word lang=en text=get means=kids.shop.leftafter
+@w.en.take.kids.shop.leftafter core.word lang=en text=take means=kids.shop.leftafter
+@w.en.purchase.kids.shop.leftafter core.word lang=en text=purchase means=kids.shop.leftafter
+@w.en.money_left.kids.shop.leftafter core.word lang=en text="money left" means=kids.shop.leftafter
+@w.en.balance.kids.shop.leftafter core.word lang=en text=balance means=kids.shop.leftafter
+@w.en.change.kids.shop.leftafter core.word lang=en text=change means=kids.shop.leftafter
+@w.en.how_much_money_do_i_have_left.kids.shop.leftafter core.word lang=en text="how much money do i have left" means=kids.shop.leftafter
+@w.en.how_many_lei_do_i_have_left.kids.shop.leftafter core.word lang=en text="how many lei do i have left" means=kids.shop.leftafter
+@w.en.how_much_is_left.kids.shop.leftafter core.word lang=en text="how much is left" means=kids.shop.leftafter
+@w.en.after_i_buy.kids.shop.leftafter.i1 core.word lang=en text="after i buy" means=kids.shop.leftafter.i1
+@w.en.if_i_buy.kids.shop.leftafter.i1 core.word lang=en text="if i buy" means=kids.shop.leftafter.i1
+@w.en.after_buying.kids.shop.leftafter.i1 core.word lang=en text="after buying" means=kids.shop.leftafter.i1
+@w.en.after_i_get.kids.shop.leftafter.i1 core.word lang=en text="after i get" means=kids.shop.leftafter.i1
+@w.en.and.kids.shop.leftafter.i2 core.word lang=en text=and means=kids.shop.leftafter.i2
+@w.en.plus.kids.shop.leftafter.i2 core.word lang=en text=plus means=kids.shop.leftafter.i2
