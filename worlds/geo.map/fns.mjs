@@ -105,7 +105,7 @@ export function adopt({ state, find, inPlace = true }) {
 
 // ---- the claims of the user about places ------------------------------------------------------------------------------------------------------------
 // "Is Paris in Germany?", "Berlin is the capital of France.", "Does Spain border Germany?": the operations (ops.mjs) answer and show the places on the map; here the
-// state they change is the library's wires, and the verdict of a "No" (the reason) is the library's: the knowledge base (kb.sop, a static index: `kb=lookup`) supplies the
+// state they change is the library's wires, and the verdict of a "No" (the reason) is the library's: the knowledge base (kb.sop, wires of the instance) supplies the
 // few wires the claim needs, and the denies of matrix.sop refuse it with "Paris is not in Germany; it is in France." Anything the rules do not cover (a group such as the
 // EU, a place the knowledge base names twice, several capitals) is answered by the operations alone.
 const ofKey = (kb, type, k) => kb.find(type).filter((w) => tok(w, 'key').includes(k));
@@ -138,17 +138,16 @@ function viaOps(opsFn, claimOf) {
     const args = Object.fromEntries(Object.entries(raw ?? {}).map(([k, v]) => [k, un(v)]));
     const state = toState({ find: ctx.find });
     let opened = false;
-    const r = opsFn({ ...ctx.host.kb('geo.map'), state, request: () => { opened = true; }, effect: () => {} }, args);
+    const r = opsFn({ ...ctx.host.view(ctx), state, request: () => { opened = true; }, effect: () => {} }, args);
     const plan = adopt({ state, find: ctx.find, inPlace: false });
     for (const id of plan.retract) ctx.retract(id);
     if (plan.tell) ctx.tell(plan.tell);
     const out = { ...r };
     if (opened) out.openTab = 'map';
-    const kb = ctx.host.kb('geo.map');
+    const kb = ctx.host.view(ctx);
     const c = r.status === 'supported' && typeof r.value === 'string' ? claimOf(kb, args) : null;
     if (c) {
-      const byId = new Map(kb.wires.map((w) => [w.id, w]));
-      const facts = c.evidence.map((id) => sopText(byId.get(id))).join('\n');
+      const facts = c.evidence.map((id) => sopText(ctx.world.get(id))).join('\n');
       const check = ctx.world.check({ wires: `${facts}\n@gm.claim geo.map.claim kind=${c.kind} a=${c.a} b=${c.b}` });
       const said = r.value.startsWith('No, ');
       if (!check.ok && said) { const v = (check.violations ?? []).find((x) => x.why); if (v) out.value = `No, ${v.why}`; }

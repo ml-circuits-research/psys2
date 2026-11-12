@@ -59,33 +59,7 @@ export async function createReasoner(set, { lib = null } = {}) {
   const legends = set.legends;
   const lexicon = (id) => { const l = set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; };
   /** What the host gives an action function besides the library's own context (`ctx.host`, spec 15): the lexicons, and `view(ctx)`, an ops-shaped read-only context (find, val, vals, lexicon) over the library, so the tables of a world's ops.mjs can be shared. */
-  const kbViews = new Map();
-  /** `kb=lookup` worlds: the world's knowledge base as a static, read-only, ops-shaped context (find, val, vals), parsed once per engine; wires are { id, type, attrs: { key: [token] } }. */
-  const kbView = (id) => {
-    let v = kbViews.get(id);
-    if (v) return v;
-    const wires = Object.values(lib.parse(set.get(id)?.raw.kb ?? '')).filter((w) => w && typeof w.id === 'string' && w.type);
-    const byType = new Map();
-    const keys = new Map();
-    const key = (w, k) => {
-      const kid = `${w.type}\u0001${k}`;
-      let r = keys.get(kid);
-      if (r === undefined) { r = legends.tryResolveKey(w.type, k); if (r.error) r = null; keys.set(kid, r); }
-      return r;
-    };
-    const decode = (r, t) => legends.decode(r.info, lib.readValue(t));
-    v = {
-      lexicon,
-      wires,
-      find: (type) => { let l = byType.get(type); if (!l) { l = wires.filter((w) => w.type === type || legends.isA(w.type, type)); byType.set(type, l); } return l; },
-      val: (w, k) => { const r = key(w, k); const t = r && w.attrs[keyName(r.key)]?.[0]; return t === undefined ? undefined : decode(r, t); },
-      vals: (w, k) => { const r = key(w, k); return r ? (w.attrs[keyName(r.key)] ?? []).map((t) => decode(r, t)) : []; },
-    };
-    kbViews.set(id, v);
-    return v;
-  };
   const host = {
-    kb: kbView,
     lexicon,
     view: (c) => {
       const keys = new Map();   // (type, key) -> the resolved key (a world's tables ask for the same few thousands of times per turn)
@@ -137,7 +111,7 @@ export async function createReasoner(set, { lib = null } = {}) {
     const ordered = schemaWorlds(id).map((x) => set.get(x));
     load('mapping', set.list().map((w) => w.raw.mapping).find((t) => t != null));
     for (const w of ordered) load(`${w.id}/legend.sop`, w.raw.legend);
-    if (!byId.get(id)?.kbLookup) for (const w of ordered) load(`${w.id}/kb.sop`, w.raw.kb);   // the knowledge bases of the world and of what it imports (games.guess reads kids.animals): each instance has its own
+    for (const w of ordered) load(`${w.id}/kb.sop`, w.raw.kb);   // the knowledge bases of the world and of what it imports (games.guess reads kids.animals): each instance has its own
     load('user', '@e.user core.agent');   // the user is a built-in agent of every instance
     // one SOP Lang parser in the product: our parser reads the matrices and the library is handed their wires
     for (const m of matrixWorlds(id)) {

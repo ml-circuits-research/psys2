@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // geo.map and data.charts on the matrix reasoner (spec 15, "geo.map and data.charts on the matrix"): the state is wires of the library (derived back without loss),
-// the rules refuse what cannot be, the knowledge base of geo.map is a static index (`kb=lookup`) and not wires of the instance, the derived numbers of a chart are
+// the rules refuse what cannot be, the knowledge base of geo.map is wires of the instance (kb=lookup is gone: with the library's copy-on-write layers the turn costs the same), the derived numbers of a chart are
 // rules and aggregates, and the replies are the operations' with the switch on and off.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -24,7 +24,6 @@ test('both worlds opt in, say so in world.sop, and the matrices load without a p
     const w = matrix.set.get(id);
     assert.equal(w.reasoner, 'matrix', id);
     assert.ok(w.undoAction && w.redoAction, `${id} undoes and redoes through the library`);
-    assert.equal(w.kbLookup, true, `${id} keeps its knowledge base out of the instance`);
     assert.ok(w.sourcePhrase, `${id} names its source for "why?"`);
   }
   assert.deepEqual(matrix.reasoner.buildAll(), []);
@@ -32,13 +31,12 @@ test('both worlds opt in, say so in world.sop, and the matrices load without a p
   assert.equal(ops.set.get('geo.map').reasoner, 'matrix', 'the opt-in is the same file in both modes: ops mode simply does not load the library');
 });
 
-test('kb=lookup: the 1,250 places are not wires of the instance, only the static index has them', async () => {
+test('the 1,250 places are wires of the instance (sopworld 0.6.2 P2: a fork does not copy them)', async () => {
   const { s } = await run(matrix, 'map', ['mark Paris']);
   const w = inst(s, 'geo.map');
-  assert.equal(w.ofType('geo.map.city').length, 0);
-  assert.equal(w.ofType('geo.map.country').length, 0);
+  assert.ok(w.ofType('geo.map.city').length > 1000);
+  assert.ok(w.ofType('geo.map.country').length > 100);
   assert.equal(w.ofType('geo.map.marker').length, 1);
-  assert.equal(inst(s, 'geo.map').ofType('geo.map.shown').length, 0, 'nothing is derived from places that were not told');
 });
 
 test('geo.map: the state of the view is wires, and toState derives the session state back without loss', async () => {
