@@ -13,6 +13,7 @@ Each library is bundled into one file (or one folder for multi-file assets) with
 | `draw/` | rough.js | 4.6.6 | MIT | Drawing tab |
 | `documents/` | PDF.js (`pdf.mjs` + its worker `pdf.worker.mjs`, two files), mammoth.js (`mammoth.mjs`) | 6.5.438 / 1.13.0 | Apache-2.0 / BSD-2 | Documents tab (lazy: only for .pdf and .docx) |
 | `onnxruntime/` | ONNX Runtime Web (`ort.wasm.bundle.min.mjs` + its loader `ort-wasm-simd-threaded.mjs` + `ort-wasm-simd-threaded.wasm`, WASM CPU backend) | 1.31.1 | MIT | Encoder formalizer: the dispatcher model (lazy: only when `Encoder` is selected) |
+| `bergamot/` | bergamot-translator (`bergamot-translator-worker.js`, `bergamot-translator-worker.wasm`, `translator-worker.js`; the Mozilla translation models are NOT vendored: downloaded lazily from Mozilla's public bucket, listed in `registry.json` built by `scripts/build-mt-registry.mjs`; `quality.json` = `scripts/mt-quality.mjs` result) | 0.4.9 | MPL-2.0 (engine and models) | On-device translation when the browser has no Translator API (lazy: only when a non-English language is selected) |
 
 Rule libraries vendored inside worlds (so C2 reasoning stays deterministic and testable): `worlds/games.chess/vendor/chess.mjs` (chess.js, BSD-2), `worlds/media.music/vendor/tonal.mjs` (tonal, MIT). World data: `worlds/geo.map` (GeoNames CC BY 4.0, world-countries ODbL, country-json MIT; see its data README).
 

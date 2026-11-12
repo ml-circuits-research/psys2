@@ -5,7 +5,7 @@ const Recognition = typeof window !== 'undefined' ? window.SpeechRecognition || 
 const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined;
 
 export const speechSupport = { recognition: !!Recognition, synthesis: !!synth && typeof SpeechSynthesisUtterance !== 'undefined' };
-import { LANG_TAGS } from './language.mjs';
+import { LANG_TAGS, langTag } from './language.mjs';
 
 /** Words after which a sentence is clearly not finished (connectors and prepositions, English and Romanian). */
 const OPEN_ENDINGS = new Set(['and', 'then', 'to', 'with', 'or', 'but', 'a', 'an', 'the', 'of', 'in', 'on', 'at', 'for', 'from', 'by', 'next', 'also', 'plus', 'into', 'onto', 'near', 'behind', 'under', 'over', 'between', 'than', 'that', 'which', 'if', 'because', 'while', 'so',
@@ -505,7 +505,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     if (!speechSupport.synthesis || !String(text).trim() || hidden) return Promise.resolve(false);
     // recognition must not hear the speaker
     if (rec) { wantRestart = handsFree; abortRec(); }
-    const tag = LANG_TAGS[lang] ?? lang ?? getLang();   // 'en' | 'ro' | a BCP-47 tag; the default is the tag of the selected language (ui/language.mjs)
+    const tag = lang ? langTag(lang) : getLang();   // 'en' | 'ro' | a BCP-47 tag; the default is the tag of the selected language (ui/language.mjs)
     return new Promise((resolve) => {
       const parts = sentences(text);
       let left = parts.length;

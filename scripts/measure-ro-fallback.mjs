@@ -48,7 +48,8 @@ async function run(label, translator) {
 
 const plain = await run('before: rules only', createTranslator());
 const fake = createFakeTranslation({ extra: oracle });
-const backend = { translatorKind: () => 'translator', detectorKind: () => null, translate: async (t, f, to) => fake.translate(t, f, to), detect: async () => [], prepare: async () => {}, state: () => 'ready' };
+const phone = flag('phone');   // phone mode: no browser Translator at all (Chrome on Android); the route ends in the fixed line today
+const backend = { translatorKind: () => (phone ? null : 'translator'), detectorKind: () => null, translate: async (t, f, to) => fake.translate(t, f, to), detect: async () => [], prepare: async () => {}, state: () => 'ready' };
 const switchTr = createSwitchTranslator({ rules: createTranslator(), backend, getStrategy: () => 'auto' });
 const after = await run('after: rules, then the on-device Translator', switchTr);
 
