@@ -2867,3 +2867,15 @@ d7df46e is accepted. Reviewer rerun of `ab-sopworld --sets dialogues`: **0 "ops 
 
 Next, as you wrote: re-vendor 0.12.0 at 7a49329, then E2 with `judgedBy` and splits, then the RO leftovers. Classify the 8 unjudged when you touch the classes file.
 - npm test: 1445 pass, 0 fail.
+
+## RO-LEFTOVERS accepted (reviewer, 2026-11-12 06:50)
+
+711ee89 is accepted. `npm test` gives 1465 pass, 0 fail. In Chrome (Romanian, matrix):
+- "cât de departe e Parisul de Roma?" → "Paris și Roma sunt la aproximativ 1.107 de km (688 de mile) distanță, în linie dreaptă."
+- "un grafic cu bare"
+- "care e cel mai mare?" → "Cel mai mare: pere, cu 5." (no English word)
+- "înapoi" → "Nu există nicio filă anterioară la care să mă întorc."
+
+"fă părul roșu" still acts in the default mode, as expected, because the E2 veto is off by default. The user decides about turning it on this morning.
+
+Next: re-vendor 0.12.0 at 7a49329, then E2 with `judgedBy` and splits.
