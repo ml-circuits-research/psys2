@@ -1126,7 +1126,6 @@
     expect="Tom has more than 5 apples"
     doc="why? after a statement: what is known about the last count, from the facts told"
 
-# ---- MINIMAL-PAIRS (2026-11-12): comparisons and negated statements, each with its swapped twin
 @t.arith.mp1 core.test
     session=mp1
     input="Ion has 4 apples. Ana has 3 more apples than Ion. How many apples does Ana have?"

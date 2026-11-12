@@ -2147,7 +2147,6 @@
     alt=that_one
     alt=there
 
-# ---- MINIMAL-PAIRS block (2026-11-12): comparison and negation phrasing shared by every world that says "more than", "twice as many as", "does not ..."
 @phrase.lang.neg.aux core.phrase
     frame=false
     doc="The negation of a plain verb in a statement (Ana does not give, they did not eat, I do not buy): auxiliary and not, with and without the contraction."
@@ -2196,3 +2195,12 @@
     alt=double
     alt=doubly
     alt=twofold
+
+@phrase.lang.neg.present core.phrase
+    frame=false
+    doc="The negation of a plain verb in the present only (I do not buy, she does not give, I don't spend): for a world whose past tense belongs to another world (kids.tasks reports what was done)."
+    alt=does_not
+    alt=do_not
+    alt=doesnt
+    alt=dont
+    alt=never

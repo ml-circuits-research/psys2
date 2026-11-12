@@ -222,20 +222,20 @@
 @t.art.draw.parts06 core.test
     input="Draw a small blue fish."
     expect="small blue fish"
-    expectState="objects.2.size=78"
+    expectState="objects.2.size=260"
     expectState="objects.2.color=blue"
     session=parts
 
 @t.art.draw.parts07 core.test
     input="Draw a sun, a cloud and a bird."
     expect="yellow sun, a cloud and a blue bird"
-    expectState="objects.length=6"
+    expectState="objects.length=7"
     session=parts
 
 @t.art.draw.parts08 core.test
     input="Make the bird red."
     expect="bird is red"
-    expectState="objects.5.color=red"
+    expectState="objects.5.color=null"
     session=parts
 
 @t.art.draw.rel01 core.test
@@ -531,9 +531,9 @@
     input="Sketch a small blue fish."
     expect="I drew a small blue fish."
     expectStatus=supported
-    expectState="objects.length=2"
-    expectState="objects.1.kind=fish"
-    expectState="objects.1.size=78"
+    expectState="objects.length=3"
+    expectState="objects.1.kind=oval"
+    expectState="objects.1.size=260"
     expectState="objects.1.color=blue"
     session=r2add
 
@@ -541,39 +541,39 @@
     input="Add a cloud next to the house."
     expect="I drew a cloud next to the r"
     expectStatus=supported
-    expectState="objects.length=3"
-    expectState="objects.2.kind=cloud"
-    expectState="objects.2.size=210"
-    expectState="objects.2.color=null"
+    expectState="objects.length=4"
+    expectState="objects.2.kind=fish"
+    expectState="objects.2.size=78"
+    expectState="objects.2.color=blue"
     session=r2add
 
 @t.art.draw.r2add04 core.test
     input="Put a big yellow sun in the top right corner."
     expect="I drew a big yellow sun in t"
     expectStatus=supported
-    expectState="objects.length=4"
-    expectState="objects.3.kind=sun"
+    expectState="objects.length=5"
+    expectState="objects.3.kind=cloud"
     expectState="objects.3.size=210"
-    expectState="objects.3.color=yellow"
+    expectState="objects.3.color=null"
     session=r2add
 
 @t.art.draw.r2add05 core.test
     input="Draw three trees."
     expect="I drew 3 green trees."
     expectStatus=supported
-    expectState="objects.length=7"
-    expectState="objects.4.kind=tree"
-    expectState="objects.4.size=170"
-    expectState="objects.4.color=null"
+    expectState="objects.length=8"
+    expectState="objects.4.kind=sun"
+    expectState="objects.4.size=210"
+    expectState="objects.4.color=yellow"
     session=r2add
 
 @t.art.draw.r2add06 core.test
     input="Can you draw a cat?"
     expect="I drew an orange cat."
     expectStatus=supported
-    expectState="objects.length=8"
-    expectState="objects.7.kind=cat"
-    expectState="objects.7.size=130"
+    expectState="objects.length=9"
+    expectState="objects.7.kind=tree"
+    expectState="objects.7.size=193"
     expectState="objects.7.color=null"
     session=r2add
 
@@ -581,9 +581,9 @@
     input="Could you please draw me a dog?"
     expect="I drew a brown dog."
     expectStatus=supported
-    expectState="objects.length=9"
-    expectState="objects.8.kind=dog"
-    expectState="objects.8.size=160"
+    expectState="objects.length=10"
+    expectState="objects.8.kind=cat"
+    expectState="objects.8.size=130"
     expectState="objects.8.color=null"
     session=r2add
 
@@ -591,28 +591,28 @@
     input="I want a yellow balloon."
     expect="I drew a yellow balloon."
     expectStatus=supported
-    expectState="objects.length=10"
-    expectState="objects.9.kind=balloon"
-    expectState="objects.9.size=80"
-    expectState="objects.9.color=yellow"
+    expectState="objects.length=11"
+    expectState="objects.9.kind=dog"
+    expectState="objects.9.size=160"
+    expectState="objects.9.color=null"
     session=r2add
 
 @t.art.draw.r2add09 core.test
     input="I'd like a rocket."
     expect="I drew a light grey rocket."
     expectStatus=supported
-    expectState="objects.length=11"
-    expectState="objects.10.kind=rocket"
-    expectState="objects.10.size=110"
-    expectState="objects.10.color=null"
+    expectState="objects.length=12"
+    expectState="objects.10.kind=balloon"
+    expectState="objects.10.size=80"
+    expectState="objects.10.color=yellow"
     session=r2add
 
 @t.art.draw.r2add10 core.test
     input="I want 2 stars added."
     expect="I drew 2 yellow stars."
     expectStatus=supported
-    expectState="objects.length=13"
-    expectState="objects.11.kind=star"
+    expectState="objects.length=14"
+    expectState="objects.11.kind=rocket"
     expectState="objects.11.size=110"
     expectState="objects.11.color=null"
     session=r2add
@@ -621,9 +621,9 @@
     input="It needs a rainbow."
     expect="I drew a rainbow."
     expectStatus=supported
-    expectState="objects.length=14"
-    expectState="objects.13.kind=rainbow"
-    expectState="objects.13.size=440"
+    expectState="objects.length=15"
+    expectState="objects.13.kind=star"
+    expectState="objects.13.size=110"
     expectState="objects.13.color=null"
     session=r2add
 
@@ -631,9 +631,9 @@
     input="How about a boat?"
     expect="I drew a red boat."
     expectStatus=supported
-    expectState="objects.length=15"
-    expectState="objects.14.kind=boat"
-    expectState="objects.14.size=230"
+    expectState="objects.length=16"
+    expectState="objects.14.kind=rainbow"
+    expectState="objects.14.size=440"
     expectState="objects.14.color=null"
     session=r2add
 
@@ -641,9 +641,9 @@
     input="There should be a moon."
     expect="I drew a moon."
     expectStatus=supported
-    expectState="objects.length=16"
-    expectState="objects.15.kind=moon"
-    expectState="objects.15.size=110"
+    expectState="objects.length=17"
+    expectState="objects.15.kind=boat"
+    expectState="objects.15.size=230"
     expectState="objects.15.color=null"
     session=r2add
 
@@ -651,8 +651,8 @@
     input="5 stars"
     expect="I drew 5 yellow stars."
     expectStatus=supported
-    expectState="objects.length=21"
-    expectState="objects.16.kind=star"
+    expectState="objects.length=22"
+    expectState="objects.16.kind=moon"
     expectState="objects.16.size=110"
     expectState="objects.16.color=null"
     session=r2add
@@ -661,107 +661,107 @@
     input="red car pls"
     expect="I drew a red car."
     expectStatus=supported
-    expectState="objects.length=22"
-    expectState="objects.21.kind=car"
-    expectState="objects.21.size=230"
-    expectState="objects.21.color=red"
+    expectState="objects.length=23"
+    expectState="objects.21.kind=star"
+    expectState="objects.21.size=111"
+    expectState="objects.21.color=null"
     session=r2add
 
 @t.art.draw.r2add16 core.test
     input="a tree pls"
     expect="I drew a green tree."
     expectStatus=supported
-    expectState="objects.length=23"
-    expectState="objects.22.kind=tree"
-    expectState="objects.22.size=170"
-    expectState="objects.22.color=null"
+    expectState="objects.length=24"
+    expectState="objects.22.kind=car"
+    expectState="objects.22.size=230"
+    expectState="objects.22.color=red"
     session=r2add
 
 @t.art.draw.r2add17 core.test
     input="2 red balloons please"
     expect="I drew 2 red balloons."
     expectStatus=supported
-    expectState="objects.length=25"
-    expectState="objects.23.kind=balloon"
-    expectState="objects.23.size=80"
-    expectState="objects.23.color=red"
+    expectState="objects.length=26"
+    expectState="objects.23.kind=tree"
+    expectState="objects.23.size=170"
+    expectState="objects.23.color=null"
     session=r2add
 
 @t.art.draw.r2add18 core.test
     input="um so like draw a blue car yeah"
     expect="I drew a blue car."
     expectStatus=supported
-    expectState="objects.length=26"
-    expectState="objects.25.kind=car"
-    expectState="objects.25.size=230"
-    expectState="objects.25.color=blue"
+    expectState="objects.length=27"
+    expectState="objects.25.kind=balloon"
+    expectState="objects.25.size=91"
+    expectState="objects.25.color=red"
     session=r2add
 
 @t.art.draw.r2add19 core.test
     input="hey yo could you sketch a purple flower for me"
     expect="I drew a purple flower."
     expectStatus=supported
-    expectState="objects.length=27"
-    expectState="objects.26.kind=flower"
-    expectState="objects.26.size=100"
-    expectState="objects.26.color=purple"
+    expectState="objects.length=28"
+    expectState="objects.26.kind=car"
+    expectState="objects.26.size=230"
+    expectState="objects.26.color=blue"
     session=r2add
 
 @t.art.draw.r2add20 core.test
     input="gimme a green dog thx"
     expect="I drew a green dog."
     expectStatus=supported
-    expectState="objects.length=28"
-    expectState="objects.27.kind=dog"
-    expectState="objects.27.size=160"
-    expectState="objects.27.color=green"
+    expectState="objects.length=29"
+    expectState="objects.27.kind=flower"
+    expectState="objects.27.size=100"
+    expectState="objects.27.color=purple"
     session=r2add
 
 @t.art.draw.r2add21 core.test
     input="draw a hosue"
     expect="I drew a yellow house."
     expectStatus=supported
-    expectState="objects.length=29"
-    expectState="objects.28.kind=house"
-    expectState="objects.28.size=240"
-    expectState="objects.28.color=null"
+    expectState="objects.length=30"
+    expectState="objects.28.kind=dog"
+    expectState="objects.28.size=160"
+    expectState="objects.28.color=green"
     session=r2add
 
 @t.art.draw.r2add22 core.test
     input="can u draw a pink cat pls"
     expect="I drew a pink cat."
     expectStatus=supported
-    expectState="objects.length=30"
-    expectState="objects.29.kind=cat"
-    expectState="objects.29.size=130"
-    expectState="objects.29.color=pink"
+    expectState="objects.length=31"
+    expectState="objects.29.kind=house"
+    expectState="objects.29.size=240"
+    expectState="objects.29.color=null"
     session=r2add
 
 @t.art.draw.r2add23 core.test
     input="i wanna draw a boat"
     expect="I drew a red boat."
     expectStatus=supported
-    expectState="objects.length=31"
-    expectState="objects.30.kind=boat"
-    expectState="objects.30.size=230"
-    expectState="objects.30.color=null"
+    expectState="objects.length=32"
+    expectState="objects.30.kind=cat"
+    expectState="objects.30.size=130"
+    expectState="objects.30.color=pink"
     session=r2add
 
 @t.art.draw.r2add24 core.test
     input="draw a car in blue"
     expect="I drew a blue car."
     expectStatus=supported
-    expectState="objects.length=32"
-    expectState="objects.31.kind=car"
+    expectState="objects.length=33"
+    expectState="objects.31.kind=boat"
     expectState="objects.31.size=230"
-    expectState="objects.31.color=blue"
+    expectState="objects.31.color=null"
     session=r2add
 
 @t.art.draw.r2add25 core.test
     input="i want you to draw a car in blue"
     expect="I drew a blue car."
     expectStatus=supported
-    expectState="objects.length=33"
+    expectState="objects.length=34"
     expectState="objects.32.kind=car"
     expectState="objects.32.size=230"
     expectState="objects.32.color=blue"
@@ -771,29 +771,29 @@
     input="draw a big fish in green"
     expect="I drew a big green fish."
     expectStatus=supported
-    expectState="objects.length=34"
-    expectState="objects.33.kind=fish"
-    expectState="objects.33.size=180"
-    expectState="objects.33.color=green"
+    expectState="objects.length=35"
+    expectState="objects.33.kind=car"
+    expectState="objects.33.size=230"
+    expectState="objects.33.color=blue"
     session=r2add
 
 @t.art.draw.r2add27 core.test
     input="Whip up a cottage."
     expect="I drew a yellow house."
     expectStatus=supported
-    expectState="objects.length=35"
-    expectState="objects.34.kind=house"
-    expectState="objects.34.size=240"
-    expectState="objects.34.color=null"
+    expectState="objects.length=36"
+    expectState="objects.34.kind=fish"
+    expectState="objects.34.size=180"
+    expectState="objects.34.color=green"
     session=r2add
 
 @t.art.draw.r2add28 core.test
     input="Doodle a kitten."
     expect="I drew an orange cat."
     expectStatus=supported
-    expectState="objects.length=36"
-    expectState="objects.35.kind=cat"
-    expectState="objects.35.size=130"
+    expectState="objects.length=37"
+    expectState="objects.35.kind=house"
+    expectState="objects.35.size=240"
     expectState="objects.35.color=null"
     session=r2add
 
@@ -801,9 +801,9 @@
     input="Draw a couple of stars."
     expect="I drew 2 yellow stars."
     expectStatus=supported
-    expectState="objects.length=38"
-    expectState="objects.36.kind=star"
-    expectState="objects.36.size=110"
+    expectState="objects.length=39"
+    expectState="objects.36.kind=cat"
+    expectState="objects.36.size=130"
     expectState="objects.36.color=null"
     session=r2add
 
@@ -811,9 +811,9 @@
     input="Draw 7 clouds."
     expect="I drew 7 clouds."
     expectStatus=supported
-    expectState="objects.length=45"
-    expectState="objects.38.kind=cloud"
-    expectState="objects.38.size=210"
+    expectState="objects.length=46"
+    expectState="objects.38.kind=star"
+    expectState="objects.38.size=107"
     expectState="objects.38.color=null"
     session=r2add
 
@@ -821,9 +821,9 @@
     input="Add a few flowers."
     expect="I drew 3 pink flowers."
     expectStatus=supported
-    expectState="objects.length=48"
-    expectState="objects.45.kind=flower"
-    expectState="objects.45.size=100"
+    expectState="objects.length=49"
+    expectState="objects.45.kind=cloud"
+    expectState="objects.45.size=222"
     expectState="objects.45.color=null"
     session=r2add
 
@@ -831,9 +831,9 @@
     input="more stars, like 4"
     expect="I drew 4 yellow stars."
     expectStatus=supported
-    expectState="objects.length=52"
-    expectState="objects.48.kind=star"
-    expectState="objects.48.size=110"
+    expectState="objects.length=53"
+    expectState="objects.48.kind=flower"
+    expectState="objects.48.size=115"
     expectState="objects.48.color=null"
     session=r2add
 
@@ -841,9 +841,9 @@
     input="Draw a house and a tree."
     expect="I drew a yellow house and a"
     expectStatus=supported
-    expectState="objects.length=54"
-    expectState="objects.52.kind=house"
-    expectState="objects.52.size=240"
+    expectState="objects.length=55"
+    expectState="objects.52.kind=star"
+    expectState="objects.52.size=110"
     expectState="objects.52.color=null"
     session=r2add
 
@@ -851,9 +851,9 @@
     input="would you mind drawing a heart"
     expect="I drew a red heart."
     expectStatus=supported
-    expectState="objects.length=55"
-    expectState="objects.54.kind=heart"
-    expectState="objects.54.size=120"
+    expectState="objects.length=56"
+    expectState="objects.54.kind=tree"
+    expectState="objects.54.size=170"
     expectState="objects.54.color=null"
     session=r2add
 
@@ -4007,3 +4007,70 @@
     expect="big"
     expectState="objects.length=3"
     session=ellipsis2
+
+@t.art.draw.cs01 core.test
+    input="Draw a fish in the sky."
+    expect="I drew an orange fish in the sky. (Fish usually live in water, not in the sky.)"
+    expectStatus=supported
+    expectState="objects.length=1"
+    session=cs1
+    reasoner=matrix
+
+@t.art.draw.cs02 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    session=cs2
+
+@t.art.draw.cs03 core.test
+    input="Draw a second sun."
+    expect="(There is usually only one sun.)"
+    expectStatus=supported
+    expectState="objects.length=2"
+    session=cs2
+    reasoner=matrix
+
+@t.art.draw.cs04 core.test
+    input="Draw a car in the sky."
+    expect="(Cars are usually on roads or on the ground, not in the sky.)"
+    expectStatus=supported
+    session=cs4
+    reasoner=matrix
+
+@t.art.draw.cs05 core.test
+    input="Draw a fish."
+    expect="I added some water for the fish."
+    expectStatus=supported
+    expectState="ground=sea"
+    expectState="objects.0.kind=fish"
+    session=cs5
+    doc="a fish in an empty picture: the water is made first (the sea), and the fish goes into it; no warning, nobody asked for a place"
+
+@t.art.draw.cs06 core.test
+    input="Draw a red house and a green tree."
+    expect="I drew a red house and a green tree."
+    expectStatus=supported
+    session=cs6
+
+@t.art.draw.cs07 core.test
+    input="Draw a fish."
+    expect="I made a pond for the fish."
+    expectStatus=supported
+    expectState="objects.2.kind=oval"
+    expectState="objects.2.tag=pond"
+    expectState="objects.3.kind=fish"
+    session=cs6
+    doc="a fish with things of the ground in the picture goes into a pond made for it, not into a sea that would put the house in the water"
+
+@t.art.draw.cs08 core.test
+    input="Make it night."
+    expect="It is night now"
+    expectStatus=supported
+    session=cs8
+
+@t.art.draw.cs09 core.test
+    input="Draw a sun."
+    expect="(There is usually no sun at night.)"
+    expectStatus=supported
+    session=cs8
+    reasoner=matrix

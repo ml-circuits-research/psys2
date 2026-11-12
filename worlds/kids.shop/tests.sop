@@ -788,7 +788,6 @@
     doc="three of them is told: the assumption is gone and nothing is said about assuming"
     reasoner=matrix
 
-# ---- MINIMAL-PAIRS (2026-11-12): negated statements and giving money, each with its twin
 @t.shop.mp1 core.test
     session=mp1
     input="I have 20 lei. I do not buy the ball."

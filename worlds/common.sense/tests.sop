@@ -1,0 +1,4 @@
+@t.common.sense.n1 core.test
+    input="Hello there"
+    expect="Hello"
+    doc="common.sense has no patterns of its own: it never answers by itself (greetings belong to kids.common). Its soft rules are tested through the worlds that compose it (art.draw)."

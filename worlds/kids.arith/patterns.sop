@@ -1905,7 +1905,6 @@
     example="Who has more apples?"
     doc="Who has more of a kind, over everybody; equal counts are said as a tie."
 
-# ---- MINIMAL-PAIRS block (2026-11-12): comparisons told as statements, and negated statements (understood, nothing changes). The words are lang.common groups (lang.cmp.*, lang.neg.*).
 
 @pat.kids.arith.rel.more core.pattern
     canonical="Ana has 3 more apples than Ion."
@@ -2072,6 +2071,7 @@
     example="Ana does not give Ion an apple."
 
 @pat.kids.arith.neg.give.any core.pattern
+    canonical="Ana does not give Ion any apples."
     match="{who:agent} [$lang.neg.aux] give {to:agent} [$lang.neg.any] {item:lex.kids.arith.items}"
     emit="@{_} kids.arith.negated verb=give who={who} to={to} item={item}"
     kind=statement

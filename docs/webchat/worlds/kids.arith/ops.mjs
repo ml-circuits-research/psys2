@@ -47,12 +47,32 @@ function replay(ctx, item) {
   const events = [
     ...ctx.find(K('holding'), { item }).map((w) => ({ w, holding: true })),
     ...ctx.find(K('change'), { item }).map((w) => ({ w, holding: false })),
+    ...ctx.find(K('relation'), { item }).map((w) => ({ w, relation: true })),
     ...shopped,
   ].sort((a, b) => seqOf(ctx, a.w) - seqOf(ctx, b.w));
   const people = new Map();
   const who = (id) => { if (!people.has(id)) people.set(id, { n: undefined, from: [], delta: 0, fuzzy: false }); return people.get(id); };
   const plain = (kind) => ({ eat: 'eat', lose: 'lose', break: 'break' })[kind];
-  for (const { w, holding, shop } of events) {
+  for (const { w, holding, shop, relation } of events) {
+    if (relation) {
+      // "Ana has 3 more apples than Ion": fixes whichever of the two is not known from the one that is (a count that is known is not overwritten)
+      const kind = ctx.val(w, 'kind');
+      const k = num(ctx.val(w, 'count'));
+      const a = who(ctx.val(w, 'who'));
+      const b = who(ctx.val(w, 'ref'));
+      const fwd = { more: (x) => x + k, fewer: (x) => x - k, times: (x) => x * k }[kind];
+      const back = { more: (x) => x - k, fewer: (x) => x + k, times: (x) => (k === 0 ? undefined : x / k) }[kind];
+      const set = (p, v, id) => {
+        if (v === undefined) return;
+        if (v < 0) { p.conflict = `${cap(subject(ctx, id))} cannot have fewer than none ${plural(item, 2)}.`; return; }
+        if (p.start === undefined && !p.fuzzy && v - p.delta >= 0) p.start = v - p.delta;
+        p.n = v; p.conflict = undefined; p.fuzzy = false; p.floor = undefined; p.ceil = undefined; p.recv = undefined; p.donors = undefined; p.delta = 0;
+      };
+      a.from.push(w.id); b.from.push(w.id);
+      if (fwd && b.n !== undefined && a.n === undefined) set(a, round10(fwd(b.n)), ctx.val(w, 'who'));
+      else if (back && a.n !== undefined && b.n === undefined) set(b, round10(back(a.n)), ctx.val(w, 'ref'));
+      continue;
+    }
     if (holding) {
       const p = who(ctx.val(w, 'owner'));
       const c = ctx.val(w, 'count');
@@ -145,7 +165,7 @@ export function checkStatement(ctx, { ids }) {
     const w = ctx.get(id);
     if (!w) continue;
     items.add(ctx.val(w, 'item'));
-    for (const k of ['owner', 'who', 'to']) { const v = ctx.val(w, k); if (v) people.add(v); }
+    for (const k of ['owner', 'who', 'to', 'ref']) { const v = ctx.val(w, k); if (v) people.add(v); }
   }
   for (const item of items) {
     if (!item) continue;

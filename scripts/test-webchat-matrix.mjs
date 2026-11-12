@@ -36,7 +36,7 @@
  *
  *   draw, diagram   matrix (art.draw, diagram.sketch): see scripts/test-webchat-draw-matrix.mjs.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,chess-late,music,draw,diagram,editor,reader,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,chess-late,music,draw,commonsense,diagram,editor,reader,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */

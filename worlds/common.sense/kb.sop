@@ -1,0 +1,201 @@
+@kb.cs.fish.water common.sense.livesin
+    kind=fish
+    place=water
+    usual=yes
+    must=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.sun.sky common.sense.livesin
+    kind=sun
+    place=sky
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.moon.sky common.sense.livesin
+    kind=moon
+    place=sky
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.star.sky common.sense.livesin
+    kind=star
+    place=sky
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.cloud.sky common.sense.livesin
+    kind=cloud
+    place=sky
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.tree.ground common.sense.livesin
+    kind=tree
+    place=ground
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.house.ground common.sense.livesin
+    kind=house
+    place=ground
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.flower.ground common.sense.livesin
+    kind=flower
+    place=ground
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.mountain.ground common.sense.livesin
+    kind=mountain
+    place=ground
+    usual=yes
+    where=horizon
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.bird.sky common.sense.livesin
+    kind=bird
+    place=sky
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.car.ground common.sense.livesin
+    kind=car
+    place=ground
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.boat.water common.sense.livesin
+    kind=boat
+    place=water
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.bird.ground common.sense.livesin
+    kind=bird
+    place=ground
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.fish common.sense.rule
+    kind=fish
+    say="Fish usually live in water"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.sun common.sense.rule
+    kind=sun
+    say="The sun is usually in the sky"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.moon common.sense.rule
+    kind=moon
+    say="The moon is usually in the sky"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.star common.sense.rule
+    kind=star
+    say="Stars are usually in the sky"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.cloud common.sense.rule
+    kind=cloud
+    say="Clouds are usually in the sky"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.tree common.sense.rule
+    kind=tree
+    say="Trees usually stand on the ground"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.house common.sense.rule
+    kind=house
+    say="Houses usually stand on the ground"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.flower common.sense.rule
+    kind=flower
+    say="Flowers usually grow on the ground"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.mountain common.sense.rule
+    kind=mountain
+    say="Mountains usually stand on the ground"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.bird common.sense.rule
+    kind=bird
+    say="Birds usually fly in the sky or sit on the ground"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rule.car common.sense.rule
+    kind=car
+    say="Cars are usually on roads or on the ground"
+    core.source="fixture:common.sense/facts"
+
+
+@kb.cs.cat.ground common.sense.livesin
+    kind=cat
+    place=ground
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.dog.ground common.sense.livesin
+    kind=dog
+    place=ground
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.person.ground common.sense.livesin
+    kind=person
+    place=ground
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rainbow.sky common.sense.livesin
+    kind=rainbow
+    place=sky
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.rocket.sky common.sense.livesin
+    kind=rocket
+    place=sky
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.balloon.sky common.sense.livesin
+    kind=balloon
+    place=sky
+    usual=yes
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.place.sky common.sense.place
+    name=sky
+    phrase="in the sky"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.place.ground common.sense.place
+    name=ground
+    phrase="on the ground"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.place.water common.sense.place
+    name=water
+    phrase="in the water"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.single.sun common.sense.single
+    kind=sun
+    say="There is usually only one sun"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.single.moon common.sense.single
+    kind=moon
+    say="There is usually only one moon"
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.absent.sun common.sense.absent
+    kind=sun
+    phase=night
+    say="There is usually no sun at night"
+    core.source="fixture:common.sense/facts"
