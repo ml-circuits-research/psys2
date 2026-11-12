@@ -76,7 +76,7 @@ test('Romanian replies are never mixed (sample of the Romanian operational set)'
     for (const m of c.setup ?? []) await s.send(m, { language: 'en' });
     const r = await s.send(c.message, { language: 'auto' });
     if (r.lang !== 'ro') continue;
-    const unquote = (t) => t.replace(/"[^"]*"/g, '');   // the user's own quoted words stay as typed
+    const unquote = (t) => t.replace(/"[^"]*"|„[^”]*”/g, '');   // the user's own quoted words stay as typed
     const body = unquote(r.text);
     if (body === unquote(r.trace.replyEnglish)) continue;   // left in English as a whole: allowed
     if (/\b(the|you|your|is|my|I|did|could|can|what|how|and|with|have|has)\b/.test(body)) mixed.push(`${c.message} -> ${r.text}`);

@@ -16,7 +16,8 @@ const NEG_SRC = /\b(nu|nici|niciun|nicio|fara|fără|nimic|niciodata|niciodată|
 const NEG_EN = /\b(not|no|never|none|nothing|nobody|without|neither|nor|cannot)\b|n't\b/i;
 const NEG_RO = /\b(nu|nici|niciun|nicio|fara|fără|nimic|niciodată|niciodata)\b/i;
 const WH_EN = /^(what|who|whom|whose|where|when|why|how|which|do|does|did|is|are|am|was|were|can|could|will|would|have|has)\b/i;
-const WH_RO = /^(ce|cine|unde|când|cand|de ce|cum|care|câte|cate|câți|cați|cât|cat|este|are|au|poți|poti|ai|sunt|e)\b/i;
+// only true question words: "e ora 25" / "are 3 mere" / "ai dreptate" are statements unless they end in "?"
+const WH_RO = /^(ce|cine|unde|când|cand|de ce|cum|care|câte|cate|câți|cați|cât|cat)\b/i;
 const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 const numbers = (s) => (String(s).match(/\d+(?:[.,]\d+)?/g) ?? []).map((n) => n.replace(',', '.'));
@@ -200,6 +201,7 @@ export function createRemoteBackend({ kinds, call, deadlineMs = REMOTE_DEADLINE_
     translate: async (text, from, to) => { if (!kinds.translator) throw new Error('no browser translator'); return bounded('translate', { text, from, to }, 'page translation'); },
     detect: async (text) => { if (!kinds.detector) throw new Error('no browser language detector'); return bounded('detect', { text }, 'page language detection'); },
     prepare: async () => {},
+    supports: (from, to) => !kinds.pairs || kinds.pairs.includes(`${from}>${to}`),
     state: () => (kinds.translator ? kinds.state ?? 'in the page' : 'not supported by this browser'),
   };
 }
@@ -243,6 +245,35 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
     evidence: (text) => rules.evidence?.(text) ?? null,
     leftovers: (text, lang) => rules.leftovers?.(text, lang) ?? [],
     supports: (f, t) => rules.supports?.(f, t) ?? true,
+    /**
+     * RO-TRANSLATE-FALLBACK. 'auto' (the default) means: the rules read and write first; the on-device Translator is the safety net for what they could not do
+     * (the dialog engine asks `viaBrowser` for a Romanian message that was not understood, or for an English reply the rules could not put into Romanian).
+     * 'browser-api' keeps the old order (the Translator first, the rules when it fails); 'rules' never uses the Translator. Returns 'fallback' | 'primary' | 'off'.
+     */
+    fallbackMode() { const pref = getStrategy(); return pref === 'rules' ? 'off' : pref === 'browser-api' ? 'primary' : 'fallback'; },
+    /** True when a Translator for this pair exists in this window (or the page behind the worker bridge), whatever its model state. */
+    canTranslate(from, to) { return getStrategy() !== 'rules' && !!backend.translatorKind() && (backend.supports?.(from, to) ?? true); },
+    /** Records the route of a turn in `usage` (trace and phrase log): `via` is 'translator-in' | 'translator-out' | 'rules-translate' | 'ro-generic'. */
+    note(via, detail = {}) { usage.push({ direction: detail.direction ?? null, requested: getStrategy(), strategy: detail.strategy ?? 'rules', fallback: !!detail.fallback, reason: detail.reason ?? null, via }); },
+    /**
+     * The fallback translation: the on-device Translator only, bounded by the backend's deadline (HANG3), the checker (numbers, names, negation, question form)
+     * and, for English to Romanian, no English words left. Returns the usual translation record, or null when the Translator is absent, late or fails the checker
+     * (the reason is in `usage`). It never throws and never waits beyond the backend deadline.
+     */
+    async viaBrowser(text, { from, to }) {
+      const via = to === 'en' ? 'translator-in' : 'translator-out';
+      const entry = { direction: `${from}->${to}`, requested: getStrategy(), strategy: 'rules', fallback: true, reason: null, via };
+      usage.push(entry);
+      if (getStrategy() === 'rules') { entry.reason = 'the browser Translator is switched off'; return null; }
+      if (!backend.translatorKind() || !(backend.supports?.(from, to) ?? true)) { entry.reason = 'browser API not available'; return null; }
+      try {
+        const out = await backend.translate(text, from, to);
+        const bad = checkTranslation(text, out, { from, to }) ?? (to === 'ro' && rules.leftovers?.(out, 'ro')?.length ? `English words left (${rules.leftovers(out, 'ro').slice(0, 3).join(', ')})` : null);
+        if (bad) { entry.reason = `checker failed: ${bad}`; return null; }
+        entry.strategy = 'browser-api'; entry.fallback = false;
+        return { text: out, alignment: text ? [{ src: [0, text.length], tgt: [0, out.length] }] : [], unknown: [], notes: [`translated by the browser on-device Translator API (${via})`], confidence: 1, strategy: 'browser-api', via };
+      } catch (e) { entry.reason = `browser API error: ${e?.message ?? e}`; return null; }
+    },
     async translate(text, opts) {
       const { from, to } = opts;
       const pref = getStrategy();

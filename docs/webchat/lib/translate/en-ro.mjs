@@ -5,7 +5,7 @@ import * as M from './morphology.ro.mjs?v=c18835e9d6';
 import * as L from './lexicon.ro-en.mjs?v=0823d91a10';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
-import { translateReplySentence } from './replies.en-ro.mjs?v=3ccd99b7e5';
+import { translateReplySentence } from './replies.en-ro.mjs?v=3edf724b51';
 import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
@@ -921,7 +921,13 @@ function withQuoteGuard(sentence, r) {
  * English -> Romanian: canonical examples (authored Romanian), then the reply phrase table sentence by sentence, then the grammar.
  * Sentences the table does not know go to the grammar; the caller keeps the whole reply in English if any piece fails (RD5).
  */
+/** Word-by-word grammar turns "what day it is today" into "ce este zi azi"; the question is "ce zi este azi" (RO-TRANSLATE-FALLBACK note a). */
+const DAY_QUESTION = /\b([Cc])e este zi (azi|mâine|ieri)\b/g;
 export function translateEnRo(original) {
+  const r = translateEnRoInner(original);
+  return r.text ? { ...r, text: r.text.replace(DAY_QUESTION, '$1e zi este $2').replace(/"([^"\n]*)"/g, '„$1”') } : r;   // Romanian quotes are „…”
+}
+function translateEnRoInner(original) {
   const source = String(original ?? '');
   const t = source.trim();
   if (CANONICAL_RO[t]) return { text: source.replace(t, CANONICAL_RO[t]), alignment: [], unknown: [], notes: ['canonical example'], confidence: 1 };

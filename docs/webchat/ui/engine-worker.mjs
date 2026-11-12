@@ -51,10 +51,11 @@ function installFaults() {
   const rules = engine.formalizers?.rules;
   if (rules?.formalize) { const f = rules.formalize.bind(rules); rules.formalize = (...a) => { if (faultNow === 'matcher') spin(); return f(...a); }; }
   const tr = engine.translator;
-  for (const k of ['translate', 'detectLanguage', 'evidence']) {
-    if (typeof tr?.[k] !== 'function') continue;
-    const f = tr[k].bind(tr);
-    tr[k] = (...a) => { if (faultNow === 'translator') spin(); return f(...a); };
+  // the engine reads with `translator.rules` first (RO-TRANSLATE-FALLBACK), so the rules translator carries the fault hook too
+  for (const owner of [tr, tr?.rules]) for (const k of ['translate', 'detectLanguage', 'evidence']) {
+    if (typeof owner?.[k] !== 'function') continue;
+    const f = owner[k].bind(owner);
+    owner[k] = (...a) => { if (faultNow === 'translator') spin(); return f(...a); };
   }
 }
 
@@ -210,7 +211,7 @@ const handlers = {
     return mods.lang.suggestSwitch(m.text, mods.lang.normalize(m.selected), { detect: (x) => t.detectLanguage(x), evidence: (x) => t.evidence(x) });
   },
   async observe(m) {
-    const out = await session.observe(m.obs);
+    const out = await session.observeIn(m.obs, { language: mods.lang.normalize(settings.language) });   // the reaction (the engine's chess move) is shown in the selected language
     annotateWires(out);
     return { follow: out, state: stateOf() };
   },

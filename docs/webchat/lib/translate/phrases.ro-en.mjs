@@ -47,6 +47,7 @@ const BASE_FRAMES = [
   { p: 'nu se poate', out: 'it is not possible' },
   { p: 'se poate', out: 'it is possible' },
   { p: 'ce zi e|este azi|astăzi', out: 'what day is it today' },
+  { p: 'ce e|este zi azi|astăzi', out: 'what day is it today' },   // word order of speech ("ce este zi azi")
   { p: 'ce zi e|este mâine', out: 'what day is it tomorrow' },
   { p: 'ora e|este {num}', out: 'it is {num} o\'clock', start: true },
   { p: 'ce formă are {np}', out: 'what shape is {np}' },

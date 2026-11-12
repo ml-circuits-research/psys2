@@ -177,9 +177,9 @@ test('unparsed Romanian input: the user sentence is quoted verbatim, examples ar
   assert.ok(r.statuses.includes('unparsed'));
   assert.ok(Array.isArray(r.parts) && r.parts.length > 1);
   const quote = r.parts.find((p) => p.quote && !p.example);
-  assert.deepEqual({ text: quote.text, translate: quote.translate }, { text: '"Zorbul flimbează repede"', translate: false });
+  assert.deepEqual({ text: quote.text, translate: quote.translate }, { text: '„Zorbul flimbează repede”', translate: false });
   assert.equal(r.parts.map((p) => p.text).join(''), r.text);
-  assert.match(r.text, /^Nu am înțeles "Zorbul flimbează repede"\./);
+  assert.match(r.text, /^Nu am înțeles „Zorbul flimbează repede”\./);
   const examples = r.parts.filter((p) => p.example);
   const tr = createTranslator();
   for (const ex of examples) {
@@ -202,7 +202,7 @@ test('unparsed English input keeps the plain reply and exposes parts', async () 
 test('a multi-sentence Romanian message quotes only the sentence that failed', async () => {
   const r = await say(['Tom are cinci mere. Zorbul flimbează repede.'], 'ro');
   const quote = r.parts.find((p) => p.quote && !p.example);
-  assert.equal(quote.text, '"Zorbul flimbează repede"');
+  assert.equal(quote.text, '„Zorbul flimbează repede”');
 });
 
 // ---- 9. capabilities ------------------------------------------------------------------------------

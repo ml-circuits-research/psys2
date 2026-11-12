@@ -3,14 +3,14 @@
     "turns": [
       ["am 20 de lei", "20 de lei"],
       ["cumpăr o minge", "minge"],
-      ["anulează", "^Am anulat: \"cumpăr o minge\"\\.$"],
-      ["anulează", "^Am anulat: \"am 20 de lei\"\\.$"],
+      ["anulează", "^Am anulat: „cumpăr o minge”\\.$"],
+      ["anulează", "^Am anulat: „am 20 de lei”\\.$"],
       ["anulează", "^Nu (mai )?am ce anula\\."]
     ] },
   { "id": "why-own-words", "doc": "why / what did you do: the told fact is quoted as the user typed it",
     "turns": [
       ["am 20 de lei", "20 de lei"],
-      ["de ce?", "Ai avut 20 de lei, deci au rămas 20 de lei\\..*\"am 20 de lei\""]
+      ["de ce?", "Ai avut 20 de lei, deci au rămas 20 de lei\\..*„am 20 de lei”"]
     ] },
   { "id": "bare-yes-no", "doc": "RO-MATRIX 2a: a bare yes or no that answers nothing",
     "turns": [
@@ -39,7 +39,7 @@
     "turns": [
       ["am 20 de lei", "20 de lei"],
       ["începe jocul de ghicit", "Întrebarea 1"],
-      ["de ce?", "^Am întrebat \"[^\"]+\" pentru că împarte cele \\d+ (de )?animale"]
+      ["de ce?", "^Am întrebat „[^”]+” pentru că împarte cele \\d+ (de )?animale"]
     ] },
   { "id": "profile-deny-age", "doc": "stage 2 finding 2: an impossible age is refused with the reason",
     "turns": [

@@ -135,9 +135,9 @@ test('RP5b: tic-tac-toe start, missing-place prompt and chart help are Romanian'
   const ttt = await run('tictactoe', ['pornește x și zero']);
   assert.match(ttt.r.text, /^Bine, hai să jucăm x și 0! Ești X și începi tu\. Joc la nivelul ușor\. Spune un loc/);
   const where = await run('draw', ['desenează pește', 'mută peștele']);
-  assert.match(where.r.text, /^Unde ar trebui să meargă\? Poți spune, de exemplu, "mută copacul la stânga"/);
+  assert.match(where.r.text, /^Unde ar trebui să meargă\? Poți spune, de exemplu, „mută copacul la stânga”/);
   const chart = await rules.translate('I could not find numbers in "x". Say it like this: "make a chart: apples 5, pears 3, plums 8".', { from: 'en', to: 'ro' });
-  assert.equal(chart.text, 'Nu am găsit numere în "x". Spune-o așa: "fă un grafic: mere 5, pere 3, prune 8".');
+  assert.equal(chart.text, 'Nu am găsit numere în „x”. Spune-o așa: „fă un grafic: mere 5, pere 3, prune 8”.');
 });
 
 test('RP5b: moving a thing into the water says "în apă" and adds the water when there is none', async () => {
