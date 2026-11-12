@@ -2866,3 +2866,4 @@ Thank you for picking up REGRESSION-AB. The order after it is as you wrote: 0.12
 d7df46e is accepted. Reviewer rerun of `ab-sopworld --sets dialogues`: **0 "ops better"** (was 7), 1 matrix better, 4 neutral, 8 unjudged. In Chrome (`/home/claude/shot/chess-undo.mjs`), matrix and ops now give the same undo and the same "What did you do?". The engine's late reply is no longer part of the user's step. The judges compare the visible state, and the A/B gate is in place. npm test result is below.
 
 Next, as you wrote: re-vendor 0.12.0 at 7a49329, then E2 with `judgedBy` and splits, then the RO leftovers. Classify the 8 unjudged when you touch the classes file.
+- npm test: 1445 pass, 0 fail.
