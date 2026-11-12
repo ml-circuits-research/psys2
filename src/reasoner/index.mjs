@@ -813,13 +813,10 @@ export class ReasonerSession {
       try { veto = world.veto(r); } catch { /* the library's own answer is optional */ }
       return Object.assign(c, { index, world: ownerId, kind: isQ ? 'question' : 'request', actionName: action, libVeto: veto && { answer: veto.answer, reasons: veto.reasons.map((x) => x.reason) } });
     });
-    // The host's one change to the library's order (spec 16, section 4). sopworld 0.12 no longer counts the value a question asks for as a lack, but only when the wire the
-    // question is about exists (`m.id`) and the question is given as `{ type, seek }`; the host's questions are wires (`seek` in `attrs`) about a computed answer that does not
-    // exist yet (a total), so the library still reports `lacks count` for them (library item in worker-log.md). A question reading therefore lacks nothing here;
-    // `libraryOrder` is the library's own default, kept to report disagreements.
-    const hostRanking = lib.RANKING.map((c) => (c.name === 'lacks' ? { ...c, measure: (r) => (r.kind === 'question' ? 0 : (r.lacks ?? []).length) } : c));
-    const { order, ranked } = lib.rank(results, hostRanking);
-    return { results, order, ranked, libraryOrder: lib.rank(results).order };
+    // The order is the library's own (`rank`, RANKING). Since sopworld 0.13.1 (J1) a question given as a wire is understood by `score`, and a computed answer that does not
+    // exist yet (a total) is not a lack, so the host no longer zeroes the `lacks` of a question reading. `libraryOrder` stays for the reports of disagreements (now the same).
+    const { order, ranked } = lib.rank(results);
+    return { results, order, ranked, libraryOrder: order };
   }
 
   /** An action another world asks for by name and arguments (no wire of the dialogue): its envelope when the library owns the action, else null. */
