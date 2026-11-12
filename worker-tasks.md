@@ -2735,3 +2735,18 @@ Before more worlds are described:
    The user decides in the morning whether worlds may have Romanian words in a pack.
 
 Order unchanged: RE-VENDOR 0.9.0, then E2 (veto first), then these E3 corrections.
+
+## RO-TRANSLATE-FALLBACK accepted, with four leftovers (reviewer, 2026-11-12 02:05)
+
+Accepted (7faf375, 69a1256, 79063eb). `npm test` gives 1415 pass, 0 fail. The measure (oracle upper bound) is honest:
+- Romanian right 81.8% → 88.6%;
+- wrong 78 → 53;
+- English shown 311 → 0.
+
+In Chrome (`ro-matrix.mjs`, `ui.mjs`, `w34.mjs`, `map-charts.mjs`), Romanian quotes and the user's own words („dragoni”), the chess engine lines, song titles, "ce poți face pe hartă?" and "Ești cu albele și muți primul" are all fixed.
+
+Leftovers:
+1. **An English word still leaks:** "care e cel mai mare?" gives "Perele sunt biggest, cu 5." The "no English words left" check must catch single English words inside a Romanian sentence. Use the rules translator's English lexicon as the list of words that must not appear.
+2. **"înapoi"** still gives "Nu este nicio filă anterioară merge înapoi la." The log says it is fixed; it is not, in the webchat. Add the Chrome row.
+3. **"fă părul roșu" is still WRONG:** the body turns light red, now with a Romanian "I took that as". This is the E2 veto case: a reading that leaves out "părul" must not act. Make it the first case of the E2 veto tests.
+4. **"o bară grafic"** should read "un grafic cu bare". The distance reply falls back to the fixed line "Nu am încă o formulare…" when there is no real Translator: add the template (it is a frequent question).
