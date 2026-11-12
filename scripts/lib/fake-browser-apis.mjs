@@ -13,7 +13,7 @@
  *   hang     a promise that never settles
  *   wrong    a wrong translation, `wrong` picks how: empty | garbage (a statement for a question) | numbers (digits changed) | names (capitalised
  *            names dropped) | negation (the "not" dropped) | punct (starts with punctuation, the shape that triggered the old regex loop)
- * Shapes: 'current' (window.Translator / window.LanguageDetector), 'ai' (the older window.ai.translator / window.ai.languageDetector), 'both'.
+ * Shapes: 'none' (phone mode, `browserApis: { translator: false }`: neither API exists), 'current' (window.Translator / window.LanguageDetector), 'ai' (the older window.ai.translator / window.ai.languageDetector), 'both'.
  * Pairs: ro -> en and en -> ro (RO-TRANSLATE-FALLBACK). Both answer from a small deterministic table (FAKE_RO_EN, FAKE_EN_RO: the sentences the fallback tests need), then from
  * the rules translator. `pairs: ['ro>en']` makes en -> ro 'unavailable' again (a Chrome with only one model).
  * The page records every call in `window.__psys2Fake.calls` ({ op, text, mode }).
@@ -100,7 +100,8 @@ export const fakeScript = (opts) => `(() => {
 })();`;
 
 /** Installs the fakes on a puppeteer page (before navigation). Returns { set(patch), calls(), st() }. */
-export async function installFakeBrowserApis(pg, { mode = 'success', wrong = 'garbage', shape = 'current', slowMs = 1500, pairs = ['ro>en', 'en>ro'] } = {}) {
+export async function installFakeBrowserApis(pg, { mode = 'success', wrong = 'garbage', shape = 'current', slowMs = 1500, pairs = ['ro>en', 'en>ro'], translator = true } = {}) {
+  if (translator === false) shape = 'none';   // phone mode: no Translator, no LanguageDetector, no window.ai (Chrome on Android)
   const rules = createTranslator();
   const fake = createFakeTranslation({ rules });
   await pg.exposeFunction('__psys2FakeRules', (op, text, from = 'ro', to = 'en') => {
