@@ -707,6 +707,7 @@ arăta|show|arăt arăți arată arătăm arătați arată|arătat|d imp
 compara|compare|a:compar|comparat|t imp
 alege|choose/chose/chosen|aleg alegi alege alegem alegeți aleg|ales|t imp
 desena|draw/drew/drawn|az:desen|desenat|t imp
+conecta|connect|az:conect|conectat|t imp
 picta|paint|az:pict|pictat|t imp
 colora|color|az:color|colorat|t imp
 vopsi|paint|is:vops|vopsit|t imp

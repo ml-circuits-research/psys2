@@ -7,7 +7,7 @@ import { looseCandidates } from '../src/formalizer/best-effort.mjs';
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
 const ask = async (tab, text, bestEffort) => {
-  const s = engine.createSession({ language: 'en', formalizer: 'rules', ...(bestEffort === undefined ? {} : { bestEffort }) });
+  const s = engine.createSession({ language: 'en', formalizer: 'rules', ...(bestEffort === undefined ? {} : { bestEffort }), worldAware: 'off' });   // the mechanism is tested with the world-aware veto off (it is on by default, spec 16: it turns a guess that leaves out a word into "Did you mean"; tested below)
   if (tab) s.setWorldState('ui.shell', { activeTab: tab });
   return s.send(text);
 };
@@ -17,6 +17,13 @@ test('loose words are read as the most sensible sentence and the reply says so',
   assert.match(r.text, /I took that as: "[^"]*eyes[^"]*square|I took that as: "[^"]*square[^"]*eyes/);
   assert.ok(!r.segments.some((x) => x.unparsed));
   assert.match(r.text, /I did not use "robot"/);
+});
+
+test('with the default world-aware veto, a guess that leaves out "robot" is offered, not executed', async () => {
+  const s = engine.createSession({ language: 'en', formalizer: 'rules', bestEffort: true });
+  s.setWorldState('ui.shell', { activeTab: 'robot' });
+  const r = await s.send('square eyes robot pls');
+  assert.match(r.text, /Did you mean/);
 });
 
 test('switched off, loose words stay "not understood"', async () => {

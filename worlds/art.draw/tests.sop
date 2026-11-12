@@ -1777,14 +1777,14 @@
 
 @t.art.draw.r2move20 core.test
     input="Move it to the bottom left."
-    expect="You took bottom left. I took"
-    expectStatus=supported
+    expect="We are not playing Tic-tac-toe right now"
+    expectStatus=missing
     session=r2move
 
 @t.art.draw.r2move21 core.test
     input="put it in the top right corner"
-    expect="You took top right. I took m"
-    expectStatus=supported
+    expect="We are not playing Tic-tac-toe right now"
+    expectStatus=missing
     session=r2move
 
 @t.art.draw.r2move22 core.test

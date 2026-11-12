@@ -16,10 +16,13 @@
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
 import { budget } from './budget.mjs';
+import { restrictedSet } from '../formalizer/spell.mjs';
 import { editDistance } from '../formalizer/rules/normalize.mjs';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
-export const normalizeWorldAware = (v) => (WORLD_AWARE_MODES.includes(v) ? v : 'off');
+/** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */
+export const DEFAULT_WORLD_AWARE = 'veto';
+export const normalizeWorldAware = (v) => (WORLD_AWARE_MODES.includes(v) ? v : DEFAULT_WORLD_AWARE);
 /** `veto-strict` and `choose-strict` are `veto` and `choose` that also veto a partial reading (words of the message left out by the partial-understanding window). */
 export const baseMode = (m) => String(m ?? 'off').replace(/-strict$/, '');
 
@@ -88,8 +91,27 @@ function idleGame(dialog, seg) {
   if (!(w?.tab?.kind === 'game' || String(rq.world).startsWith('games.'))) return null;   // the manifest says tabKind=game; the built-in game tabs (tic-tac-toe, guess, hangman) have no manifest tab, only the games. id prefix
   const ctx = dialog.context();
   if (ctx.tabWorld === rq.world || ctx.gameWorld === rq.world || ctx.modalWorld === rq.world) return null;
+  // With no tab open a move the router takes into the game is how a game starts ("Top right" opens tic-tac-toe, as the world tests define): acting is not wrong.
+  if (!ctx.tabWorld) return null;
+  // A message that names the game ("Can u rotate the chess board?") is for that game, whatever tab is open.
+  try { if (seg.text && dialog._worldsNamedIn(seg.text).has(rq.world)) return null; } catch { /* keep going */ }
   if (rq.action === w.gameControls?.new) return null;
   return { world: rq.world, title: String(w.title ?? rq.world).replace(/\s*\(.*\)\s*$/, ''), action: rq.action };
+}
+
+/**
+ * Whether the open tab's own world reads the message completely (the rules of that world alone). The `no-game` veto needs it: a game move from another tab is
+ * only wrong when the open tab has a reading of its own ("put it in the top right corner" on the Drawing tab); when it has none, the router's reading is the
+ * only one, and taking the move into the game (opening its tab, starting it) is what the world tests define. Never throws; false when it cannot tell.
+ */
+async function tabReads(dialog, seg) {
+  try {
+    const ctx = dialog.context();
+    const w = dialog.engine.set.get(ctx.tabWorld);
+    if (!w?.patterns?.length) return false;
+    const res = await dialog.engine.formalizers.rules.formalize(seg.text, { worlds: restrictedSet(dialog.engine.set, [ctx.tabWorld]), session: dialog.isession, source: 'wa', context: ctx, router: dialog.engine.router });
+    return !!res.segments.length && res.segments.every((x) => !x.unparsed && !x.ignored?.length && !x.partial && !x.bestEffort);
+  } catch { return false; }
 }
 
 /** What the world instances say about one reading: the library's scored candidate, reduced to what the layer uses. */
@@ -109,20 +131,28 @@ const summary = (j, seg) => ({
   left: j.left, how: seg.bestEffort ? 'best-effort' : seg.partial || seg.ignored?.length ? 'partial' : seg.corrections?.length ? 'spelled' : 'exact',
 });
 
-/** The sentence for a reading that names what the world does not have: the missing names, then what the world does have (or the offer to add). */
+const plural = (n) => (/(?:s|x|ch|sh)$/.test(n) ? `${n}es` : /[^aeiou]y$/.test(n) ? `${n.slice(0, -1)}ies` : `${n}s`);
+const quoted = (n) => `\u201c${n}\u201d`;
+const orList = (xs, w = 'or') => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${w} ${xs.at(-1)}`);
+/**
+ * The sentence for a reading that names what the world does not have, in plain words: the user's label in quotes, the noun the user (or the world, in its
+ * everyday word: "box", never "shape") used, then one short question (the offer to add it) or what the world does have.
+ */
 export function sayMissing(ref) {
-  const names = ref.missing.map((m) => m.name);
-  const kind = ref.missing[0].kind;
-  const list = names.length < 2 ? names.join('') : `${names.slice(0, -1).join(', ')} or ${names.at(-1)}`;
-  if (ref.offer) return { text: `There is no ${kind} called ${list}. Shall I add ${names.length > 1 ? 'them' : 'it'}?`, question: `Shall I add ${names.length > 1 ? 'them' : 'it'}?` };
+  const names = ref.missing.map((m) => quoted(m.name));
+  const noun = ref.missing[0].kind || 'thing';
+  if (ref.offer) {
+    const many = names.length > 1;
+    return { text: `I can't find ${many ? plural(noun) : `a ${noun}`} called ${orList(names)}. Shall I add ${many ? 'them' : 'it'}?`, question: `Shall I add ${many ? 'them' : 'it'}?` };
+  }
   const where = ref.where ?? 'world';
-  return { text: `There is no ${list} in the ${where}. ${ref.here ? `In the ${where}: ${ref.here}.` : `The ${where} is empty.`}` };
+  return { text: `I can't find ${orList(names)} in the ${where}. ${ref.here ? `In the ${where} I can see: ${ref.here}.` : `The ${where} is empty.`}` };
 }
 
 /** The reason a reading must not be acted on, from what the world says of it; null when it may stand. */
 export function vetoOf(wa, seg, ref, mode) {
   const k = kinds(mode);
-  if (wa.idle && k.has('no-game')) return { kind: 'no-game', why: `no ${wa.idle.title} game is running and its tab is not open`, say: `No ${wa.idle.title} game is running, so there is nothing to do there. Open the ${wa.idle.title} tab or tell me you want to play it, then say it again.`, status: 'missing' };
+  if (wa.idle && k.has('no-game')) return { kind: 'no-game', why: `no ${wa.idle.title} game is running and its tab is not open`, say: `We are not playing ${wa.idle.title} right now. Tell me you want to play it, then say your move.`, status: 'missing' };
   if (ref && k.has('no-referent')) {
     const s = sayMissing(ref);
     return { kind: 'no-referent', why: `the world has no ${ref.missing.map((m) => m.name).join(' or ')}`, say: s.text, status: 'missing', ...(ref.offer ? { offer: { rewrite: ref.offer, world: ref.world, question: s.question } } : {}) };
@@ -141,10 +171,10 @@ const HOLDS = new Set(['no-referent', 'words-partial', 'words-best-effort', 'lib
  * Review the readings of a message (segments as the formalizer or the dispatcher gave them) before anything is executed. Returns the segments, with a
  * vetoed one replaced by an unparsed clause that says why (`veto: { kind, why, say?, offer? }`). Never throws: a failure to judge keeps the reading.
  */
-export function reviewSegments(dialog, segments, { mode }) {
+export async function reviewSegments(dialog, segments, { mode }) {
   const rs = dialog.isession?.rs;
   if (mode === 'off') return segments;
-  const reviewed = reviewEach(dialog, segments, mode, rs);
+  const reviewed = await reviewEach(dialog, segments, mode, rs);
   // Nothing is half done: when a clause of a message is vetoed, the readable clauses are held back too, because a later clause may rest on an earlier one
   // ("Azi este vineri. Mâine ce zi este?" must not tell the first and lose the second). The reply says which clause was not read.
   // (Only for a clause that could not be read as asked. A move in a game that is not running is the spurious extra reading of a correction ("No, the editor",
@@ -157,8 +187,14 @@ export function reviewSegments(dialog, segments, { mode }) {
   return reviewed;
 }
 
-function reviewEach(dialog, segments, mode, rs) {
-  return segments.map((seg) => {
+async function reviewEach(dialog, segments, mode, rs) {
+  const out = [];
+  for (const seg of segments) out.push(await reviewOne(dialog, seg, mode, rs, segments.slice(0, out.length)));
+  return out;
+}
+
+async function reviewOne(dialog, seg, mode, rs, before = []) {
+  {
     if (seg.unparsed || !seg.wires?.length) return seg;
     budget.tick('world-aware.segment');
     let wa, ref = null;
@@ -166,16 +202,22 @@ function reviewEach(dialog, segments, mode, rs) {
     try {
       wa = rs ? summary(judgeOne(rs, seg, foreign), seg) : { judged: false, ok: true, isQuestion: !!seg.isQuestion, reading: readingKind(seg), left: leftOut(seg, foreign), lacks: [], violations: [], how: seg.bestEffort ? 'best-effort' : seg.ignored?.length ? 'partial' : 'exact' };
       ref = referentsOf(dialog, seg);
+      // the worlds' state is the state before the message: a name that an earlier clause of the same message mentions ("Add a box called Home. Connect Valid to Home") may be made by it
+      if (ref && before.length) {
+        const said = before.map((b) => String(b.text ?? '').toLowerCase()).join(' ');
+        const missing = ref.missing.filter((m) => !said.includes(String(m.name).toLowerCase()));
+        ref = missing.length ? { ...ref, missing } : null;
+      }
     } catch { return seg; }
     if (ref) wa.missing = ref.missing.map((m) => m.name);
-    try { const idle = idleGame(dialog, seg); if (idle) wa.idle = idle; } catch { /* keep the reading */ }
+    try { const idle = idleGame(dialog, seg); if (idle && await tabReads(dialog, seg)) wa.idle = idle; } catch { /* keep the reading */ }
     wa.foreign = foreign;
     seg.wa = wa;
     if (baseMode(mode) === 'observe') return seg;
     const veto = vetoOf(wa, seg, ref, mode);
     if (!veto) return seg;
     return { ...seg, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [], partial: false, bestEffort: null, veto, wa: { ...wa, veto: veto.kind } };
-  });
+  }
 }
 
 const MAX_READINGS = 4;
