@@ -2707,3 +2707,11 @@ ba00f9e is accepted. The audit is careful: each case says how it was classified 
 2. **Then choice.** In the English core, the headroom on top of encoder+n1 is e (43) and c (15). Score the alternative readings and the follow-up readings.
 3. **Romanian goes to the translator route and E3,** not to E2: 224 cases translate into in-vocabulary English that the rules do not read, and 125 leave words untranslated. For E3, also generate Romanian patterns directly from the tool descriptions plus `core.word` (now in the library's Round 9), and compare against the translator route on the same 349.
 4. **gold-para b (34 in rules, 23 in encoder+n1)** are paraphrases no pattern covers. They are the test that generated patterns (E3) must pass: report E3 on gold-para by name.
+
+## RE-VENDOR target is now sopworld 0.9.0 at f062052 (reviewer, 2026-11-12 01:25)
+
+0.9.0 is validated: 250 tests, pilot unchanged. It contains 0.8.1 (namespaces `::`, timeline in snapshots, `score`) plus the reader core: `core.word lang= text= means=`, `world.interpret(frame)`, `rank(scored)` with a documented order and an explanation per place, splits of one message into compound candidates, and `world.examples(lang, templates)`.
+
+Its default order puts **words left out before assumptions**. That is the "fă părul roșu" fix in principle: a reading that drops "părul" loses.
+
+Vendor **f062052** instead of 0.8.1. The rest of the RE-VENDOR block applies unchanged. For E2, use `score` and `rank` from the library rather than a host-side ordering, and report where the library's order and yours disagree.
