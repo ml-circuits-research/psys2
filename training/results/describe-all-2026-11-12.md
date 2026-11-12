@@ -106,3 +106,29 @@ Description gaps that cost cases in `only` (9 distinct hand-written patterns car
 - **Plural / singular of the animal name**: `x.legs.walks`, `desc.f1` read "dolphins" through the `noun` class and its plural handling, which the lexicon class does not apply.
 - The question types `kids.animals.animal` and `kids.animals.pet` have no statement operations, so no statement descriptions were needed.
 
+
+## kids.shapes
+
+- Descriptions: 16; generated patterns (add): 16.
+- Hand-written patterns of the described operations: 153 (pattern wires; shapes are separate). `only` drops 153.
+- Hand-written patterns dropped by `only`: 153, replaced by 16 generated ones. Of the dropped, 6 were the reading of at least one set case that got worse (the description misses what they said); the other 147 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 601, dropped patterns about 765.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 56/5/1 of 62 | 56/5/1 of 62 | 43/2/0 of 45 | 43/2/0 of 45 |
+| only | 56/5/1 of 62 | 48/5/9 of 62 | 43/2/0 of 45 | 40/2/3 of 45 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"right->not_understood":12}.
+
+Description gaps that cost cases in `only` (6 distinct hand-written patterns carried a lost case):
+
+- **Subject-first and verb-last phrasing**: "mixing yellow and blue gives what colour", "tell me what a rectangle is" (an embedded question), "name something that looks like a rectangle". The `ask` frame puts the opener first; the generator has no frame that closes with a question word.
+- **Adjective forms without a kind word** ("is a circle round": the hand pattern reads `round` as the kind `round_shape`), "how is a circle different from other shapes" (a comparison operation with no argument).
+- **Noun variants of a modifier** ("how do i make orange paint": a trailing noun after the color).
+- **Closed lexicons carry the whole load**: every description anchors its free slots with a `lex.kids.shapes.*` class (shapes, things, colors, parts, kinds, colorkinds), as the hand-written patterns do for the same reason; there are no `noun` slots, so nothing steals a sentence from another world (add: 0 new wrong, 0 not-understood).
+- No `short`, `rev` or `bare` frames (a bare "circle sides" is the most ambiguous input across worlds).
+
