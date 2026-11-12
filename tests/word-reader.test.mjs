@@ -10,9 +10,9 @@ const shop = () => {
 @k_line_item core.slot of=line key=item kind=ref to=item required=true
 @k_line_qty core.slot of=line key=qty kind=integer min=1 default=1`);
   w.tell(`@pen item name=pen  @ink item name=ink
-@w_buy core.word lang=en text=buy means=line
-@w_two core.word lang=en text=two means=2 of=line.qty
-@w_one core.word lang=en text=one means=1 of=line.qty`);
+@w_buy core.word text=buy means=line
+@w_two core.word text=two means=2 of=line.qty
+@w_one core.word text=one means=1 of=line.qty`);
   w.tell(valueWords(['pen', 'ink'], 'item.name'));
   return w;
 };
@@ -24,9 +24,9 @@ test('clauses: a message is split at the clause breaks', () => {
 test('frames: the verb word, digits as numbers, function words dropped, a clause with no verb word gives loose words or arguments', () => {
   const w = shop();
   const words = w.words('en');
-  assert.deepEqual(frameOf(['buy', 'the', '2', 'pens'], words), { lang: 'en', verb: 'buy', args: ['pens'], numbers: [2] });
-  assert.deepEqual(frameOf(['pens', 'two'], words), { lang: 'en', words: ['pens', 'two'], numbers: [] });
-  assert.deepEqual(frameOf(['one', 'ink'], words, 'en', { first: false }), { lang: 'en', args: ['one', 'ink'], numbers: [] });
+  assert.deepEqual(frameOf(['buy', 'the', '2', 'pens'], words), { verb: 'buy', args: ['pens'], numbers: [2] });
+  assert.deepEqual(frameOf(['pens', 'two'], words), { words: ['pens', 'two'], numbers: [] });
+  assert.deepEqual(frameOf(['one', 'ink'], words, { first: false }), { args: ['one', 'ink'], numbers: [] });
 });
 
 test('the second clause takes the verb of the first (a split), the reading is scored and may be answered', () => {

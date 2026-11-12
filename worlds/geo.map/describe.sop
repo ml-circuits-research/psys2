@@ -1017,347 +1017,347 @@
     sample.q=France
     example="Is Paris in France?"
 
-@w.en.capital.geo.capital core.word lang=en text=capital means=geo.capital
-@w.en.capital_city.geo.capital core.word lang=en text="capital city" means=geo.capital
-@w.en.population.geo.population core.word lang=en text=population means=geo.population
-@w.en.number_of_people.geo.population core.word lang=en text="number of people" means=geo.population
-@w.en.number_of_inhabitants.geo.population core.word lang=en text="number of inhabitants" means=geo.population
-@w.en.how_many_people_live_in.geo.population core.word lang=en text="how many people live in" means=geo.population
-@w.en.how_many_people_are_in.geo.population core.word lang=en text="how many people are in" means=geo.population
-@w.en.how_many_inhabitants_does_have.geo.population core.word lang=en text="how many inhabitants does have" means=geo.population
-@w.en.currency.geo.currency core.word lang=en text=currency means=geo.currency
-@w.en.money.geo.currency core.word lang=en text=money means=geo.currency
-@w.en.currencies.geo.currency core.word lang=en text=currencies means=geo.currency
-@w.en.what_do_they_pay_with_in.geo.currency core.word lang=en text="what do they pay with in" means=geo.currency
-@w.en.what_money_do_they_use_in.geo.currency core.word lang=en text="what money do they use in" means=geo.currency
-@w.en.continent.geo.continent core.word lang=en text=continent means=geo.continent
-@w.en.which_continent_is.geo.continent core.word lang=en text="which continent is" means=geo.continent
-@w.en.what_continent_is.geo.continent core.word lang=en text="what continent is" means=geo.continent
-@w.en.on_which_continent_is.geo.continent core.word lang=en text="on which continent is" means=geo.continent
-@w.en.on.geo.continent core.word lang=en text=on means=geo.continent
-@w.en.in.geo.continent core.word lang=en text=in means=geo.continent
-@w.en.country.geo.country core.word lang=en text=country means=geo.country
-@w.en.nation.geo.country core.word lang=en text=nation means=geo.country
-@w.en.which_country_is.geo.country core.word lang=en text="which country is" means=geo.country
-@w.en.what_country_is.geo.country core.word lang=en text="what country is" means=geo.country
-@w.en.in_which_country_is.geo.country core.word lang=en text="in which country is" means=geo.country
-@w.en.in.geo.country core.word lang=en text=in means=geo.country
-@w.en.area.geo.area core.word lang=en text=area means=geo.area
-@w.en.size.geo.area core.word lang=en text=size means=geo.area
-@w.en.surface.geo.area core.word lang=en text=surface means=geo.area
-@w.en.how_big_is.geo.area core.word lang=en text="how big is" means=geo.area
-@w.en.how_large_is.geo.area core.word lang=en text="how large is" means=geo.area
-@w.en.how_much_land_does_cover.geo.area core.word lang=en text="how much land does cover" means=geo.area
-@w.en.in_km.geo.area core.word lang=en text="in km" means=geo.area
-@w.en.in_square_kilometres.geo.area core.word lang=en text="in square kilometres" means=geo.area
-@w.en.in_size.geo.area core.word lang=en text="in size" means=geo.area
-@w.en.language.geo.languages core.word lang=en text=language means=geo.languages
-@w.en.languages.geo.languages core.word lang=en text=languages means=geo.languages
-@w.en.official_language.geo.languages core.word lang=en text="official language" means=geo.languages
-@w.en.what_language_do_they_speak_in.geo.languages core.word lang=en text="what language do they speak in" means=geo.languages
-@w.en.what_languages_are_spoken_in.geo.languages core.word lang=en text="what languages are spoken in" means=geo.languages
-@w.en.what_do_they_speak_in.geo.languages core.word lang=en text="what do they speak in" means=geo.languages
-@w.en.what_do_people_speak_in.geo.languages core.word lang=en text="what do people speak in" means=geo.languages
-@w.en.is.geo.landlocked core.word lang=en text=is means=geo.landlocked
-@w.en.does.geo.landlocked core.word lang=en text=does means=geo.landlocked
-@w.en.can_i_say_that.geo.landlocked core.word lang=en text="can i say that" means=geo.landlocked
-@w.en.landlocked.geo.landlocked core.word lang=en text=landlocked means=geo.landlocked
-@w.en.surrounded_by_land.geo.landlocked core.word lang=en text="surrounded by land" means=geo.landlocked
-@w.en.have_a_coast.geo.landlocked core.word lang=en text="have a coast" means=geo.landlocked
-@w.en.have_a_sea_border.geo.landlocked core.word lang=en text="have a sea border" means=geo.landlocked
-@w.en.touch_the_sea.geo.landlocked core.word lang=en text="touch the sea" means=geo.landlocked
-@w.en.have_no_coast.geo.landlocked core.word lang=en text="have no coast" means=geo.landlocked
-@w.en.count.geo.neighbourCount core.word lang=en text=count means=geo.neighbourCount
-@w.en.number_of_neighbours.geo.neighbourCount core.word lang=en text="number of neighbours" means=geo.neighbourCount
-@w.en.neighbour_count.geo.neighbourCount core.word lang=en text="neighbour count" means=geo.neighbourCount
-@w.en.number_of_countries_bordering.geo.neighbourCount core.word lang=en text="number of countries bordering" means=geo.neighbourCount
-@w.en.how_many_neighbours_does.geo.neighbourCount core.word lang=en text="how many neighbours does" means=geo.neighbourCount
-@w.en.how_many_land_neighbours_does.geo.neighbourCount core.word lang=en text="how many land neighbours does" means=geo.neighbourCount
-@w.en.how_many_countries_border.geo.neighbourCount core.word lang=en text="how many countries border" means=geo.neighbourCount
-@w.en.how_many_countries_share_a_border_with.geo.neighbourCount core.word lang=en text="how many countries share a border with" means=geo.neighbourCount
-@w.en.have.geo.neighbourCount core.word lang=en text=have means=geo.neighbourCount
-@w.en.has.geo.neighbourCount core.word lang=en text=has means=geo.neighbourCount
-@w.en.neighbours.geo.borders core.word lang=en text=neighbours means=geo.borders
-@w.en.neighbors.geo.borders core.word lang=en text=neighbors means=geo.borders
-@w.en.borders.geo.borders core.word lang=en text=borders means=geo.borders
-@w.en.neighbouring_countries.geo.borders core.word lang=en text="neighbouring countries" means=geo.borders
-@w.en.which_countries_border.geo.borders core.word lang=en text="which countries border" means=geo.borders
-@w.en.what_countries_border.geo.borders core.word lang=en text="what countries border" means=geo.borders
-@w.en.who_borders.geo.borders core.word lang=en text="who borders" means=geo.borders
-@w.en.what_borders.geo.borders core.word lang=en text="what borders" means=geo.borders
-@w.en.which_countries_are_next_to.geo.borders core.word lang=en text="which countries are next to" means=geo.borders
-@w.en.what_countries_are_next_to.geo.borders core.word lang=en text="what countries are next to" means=geo.borders
-@w.en.countries_bordering.geo.borders core.word lang=en text="countries bordering" means=geo.borders
-@w.en.countries_next_to.geo.borders core.word lang=en text="countries next to" means=geo.borders
-@w.en.which_countries_touch.geo.borders core.word lang=en text="which countries touch" means=geo.borders
-@w.en.which_countries_share_a_border_with.geo.borders core.word lang=en text="which countries share a border with" means=geo.borders
-@w.en.what_countries_share_a_border_with.geo.borders core.word lang=en text="what countries share a border with" means=geo.borders
-@w.en.which_countries_are_neighbours_of.geo.borders core.word lang=en text="which countries are neighbours of" means=geo.borders
-@w.en.location.geo.where core.word lang=en text=location means=geo.where
-@w.en.position.geo.where core.word lang=en text=position means=geo.where
-@w.en.where_is.geo.where core.word lang=en text="where is" means=geo.where
-@w.en.where_s.geo.where core.word lang=en text="where s" means=geo.where
-@w.en.wheres.geo.where core.word lang=en text=wheres means=geo.where
-@w.en.where_are.geo.where core.word lang=en text="where are" means=geo.where
-@w.en.where_can_i_find.geo.where core.word lang=en text="where can i find" means=geo.where
-@w.en.where_can_i_see.geo.where core.word lang=en text="where can i see" means=geo.where
-@w.en.on_the_map.geo.where core.word lang=en text="on the map" means=geo.where
-@w.en.located.geo.where core.word lang=en text=located means=geo.where
-@w.en.measure.geo.distance core.word lang=en text=measure means=geo.distance
-@w.en.draw.geo.distance core.word lang=en text=draw means=geo.distance
-@w.en.trace.geo.distance core.word lang=en text=trace means=geo.distance
-@w.en.connect.geo.distance core.word lang=en text=connect means=geo.distance
-@w.en.link.geo.distance core.word lang=en text=link means=geo.distance
-@w.en.join.geo.distance core.word lang=en text=join means=geo.distance
-@w.en.distance.geo.distance core.word lang=en text=distance means=geo.distance
-@w.en.length.geo.distance core.word lang=en text=length means=geo.distance
-@w.en.km.geo.distance core.word lang=en text=km means=geo.distance
-@w.en.kilometres.geo.distance core.word lang=en text=kilometres means=geo.distance
-@w.en.how_far_is.geo.distance core.word lang=en text="how far is" means=geo.distance
-@w.en.how_far_are.geo.distance core.word lang=en text="how far are" means=geo.distance
-@w.en.how_far_apart_are.geo.distance core.word lang=en text="how far apart are" means=geo.distance
-@w.en.how_far_it_is_from.geo.distance core.word lang=en text="how far it is from" means=geo.distance
-@w.en.how_many_kilometres_are_there_between.geo.distance core.word lang=en text="how many kilometres are there between" means=geo.distance
-@w.en.how_many_km_between.geo.distance core.word lang=en text="how many km between" means=geo.distance
-@w.en.apart.geo.distance core.word lang=en text=apart means=geo.distance
-@w.en.away.geo.distance core.word lang=en text=away means=geo.distance
-@w.en.in_km.geo.distance core.word lang=en text="in km" means=geo.distance
-@w.en.from.geo.distance.a core.word lang=en text=from means=geo.distance.a
-@w.en.between.geo.distance.a core.word lang=en text=between means=geo.distance.a
-@w.en.of.geo.distance.a core.word lang=en text=of means=geo.distance.a
-@w.en.to.geo.distance.a core.word lang=en text=to means=geo.distance.a
-@w.en.to.geo.distance.b core.word lang=en text=to means=geo.distance.b
-@w.en.and.geo.distance.b core.word lang=en text=and means=geo.distance.b
-@w.en.from.geo.distance.b core.word lang=en text=from means=geo.distance.b
-@w.en.between.geo.distance.b core.word lang=en text=between means=geo.distance.b
-@w.en.compare.geo.compare core.word lang=en text=compare means=geo.compare
-@w.en.match_up.geo.compare core.word lang=en text="match up" means=geo.compare
-@w.en.contrast.geo.compare core.word lang=en text=contrast means=geo.compare
-@w.en.side_by_side.geo.compare core.word lang=en text="side by side" means=geo.compare
-@w.en.please.geo.compare core.word lang=en text=please means=geo.compare
-@w.en.with.geo.compare.a core.word lang=en text=with means=geo.compare.a
-@w.en.between.geo.compare.a core.word lang=en text=between means=geo.compare.a
-@w.en.against.geo.compare.a core.word lang=en text=against means=geo.compare.a
-@w.en.and.geo.compare.b core.word lang=en text=and means=geo.compare.b
-@w.en.with.geo.compare.b core.word lang=en text=with means=geo.compare.b
-@w.en.against.geo.compare.b core.word lang=en text=against means=geo.compare.b
-@w.en.vs.geo.compare.b core.word lang=en text=vs means=geo.compare.b
-@w.en.versus.geo.compare.b core.word lang=en text=versus means=geo.compare.b
-@w.en.to.geo.compare.b core.word lang=en text=to means=geo.compare.b
-@w.en.show.geo.show core.word lang=en text=show means=geo.show
-@w.en.show_me.geo.show core.word lang=en text="show me" means=geo.show
-@w.en.display.geo.show core.word lang=en text=display means=geo.show
-@w.en.find.geo.show core.word lang=en text=find means=geo.show
-@w.en.locate.geo.show core.word lang=en text=locate means=geo.show
-@w.en.focus_on.geo.show core.word lang=en text="focus on" means=geo.show
-@w.en.look_at.geo.show core.word lang=en text="look at" means=geo.show
-@w.en.go_to.geo.show core.word lang=en text="go to" means=geo.show
-@w.en.fly_to.geo.show core.word lang=en text="fly to" means=geo.show
-@w.en.take_me_to.geo.show core.word lang=en text="take me to" means=geo.show
-@w.en.zoom_to.geo.show core.word lang=en text="zoom to" means=geo.show
-@w.en.center_on.geo.show core.word lang=en text="center on" means=geo.show
-@w.en.centre_on.geo.show core.word lang=en text="centre on" means=geo.show
-@w.en.navigate_to.geo.show core.word lang=en text="navigate to" means=geo.show
-@w.en.jump_to.geo.show core.word lang=en text="jump to" means=geo.show
-@w.en.open.geo.show core.word lang=en text=open means=geo.show
-@w.en.visit.geo.show core.word lang=en text=visit means=geo.show
-@w.en.bring_up.geo.show core.word lang=en text="bring up" means=geo.show
-@w.en.see.geo.show core.word lang=en text=see means=geo.show
-@w.en.view.geo.show core.word lang=en text=view means=geo.show
-@w.en.pull_up.geo.show core.word lang=en text="pull up" means=geo.show
-@w.en.let_me_see.geo.show core.word lang=en text="let me see" means=geo.show
-@w.en.i_want_to_see.geo.show core.word lang=en text="i want to see" means=geo.show
-@w.en.on_the_map.geo.show core.word lang=en text="on the map" means=geo.show
-@w.en.on_map.geo.show core.word lang=en text="on map" means=geo.show
-@w.en.in_the_map.geo.show core.word lang=en text="in the map" means=geo.show
-@w.en.for_me.geo.show core.word lang=en text="for me" means=geo.show
-@w.en.of.geo.show.a core.word lang=en text=of means=geo.show.a
-@w.en.at.geo.show.a core.word lang=en text=at means=geo.show.a
-@w.en.on.geo.show.a core.word lang=en text=on means=geo.show.a
-@w.en.to.geo.show.a core.word lang=en text=to means=geo.show.a
-@w.en.in.geo.show.a core.word lang=en text=in means=geo.show.a
-@w.en.and.geo.show.b core.word lang=en text=and means=geo.show.b
-@w.en.sym.geo.show.b core.word lang=en text="," means=geo.show.b
-@w.en.and.geo.show.c core.word lang=en text=and means=geo.show.c
-@w.en.sym.geo.show.c core.word lang=en text="," means=geo.show.c
-@w.en.and.geo.show.d core.word lang=en text=and means=geo.show.d
-@w.en.sym.geo.show.d core.word lang=en text="," means=geo.show.d
-@w.en.and.geo.show.e core.word lang=en text=and means=geo.show.e
-@w.en.sym.geo.show.e core.word lang=en text="," means=geo.show.e
-@w.en.highlight.geo.highlight core.word lang=en text=highlight means=geo.highlight
-@w.en.hilight.geo.highlight core.word lang=en text=hilight means=geo.highlight
-@w.en.colour.geo.highlight core.word lang=en text=colour means=geo.highlight
-@w.en.color.geo.highlight core.word lang=en text=color means=geo.highlight
-@w.en.light_up.geo.highlight core.word lang=en text="light up" means=geo.highlight
-@w.en.mark_in_color.geo.highlight core.word lang=en text="mark in color" means=geo.highlight
-@w.en.shade.geo.highlight core.word lang=en text=shade means=geo.highlight
-@w.en.on_the_map.geo.highlight core.word lang=en text="on the map" means=geo.highlight
-@w.en.in_color.geo.highlight core.word lang=en text="in color" means=geo.highlight
-@w.en.in_colour.geo.highlight core.word lang=en text="in colour" means=geo.highlight
-@w.en.and.geo.highlight.b core.word lang=en text=and means=geo.highlight.b
-@w.en.sym.geo.highlight.b core.word lang=en text="," means=geo.highlight.b
-@w.en.and.geo.highlight.c core.word lang=en text=and means=geo.highlight.c
-@w.en.sym.geo.highlight.c core.word lang=en text="," means=geo.highlight.c
-@w.en.and.geo.highlight.d core.word lang=en text=and means=geo.highlight.d
-@w.en.sym.geo.highlight.d core.word lang=en text="," means=geo.highlight.d
-@w.en.and.geo.highlight.e core.word lang=en text=and means=geo.highlight.e
-@w.en.sym.geo.highlight.e core.word lang=en text="," means=geo.highlight.e
-@w.en.mark.geo.mark core.word lang=en text=mark means=geo.mark
-@w.en.pin.geo.mark core.word lang=en text=pin means=geo.mark
-@w.en.put_a_marker.geo.mark core.word lang=en text="put a marker" means=geo.mark
-@w.en.add_a_marker.geo.mark core.word lang=en text="add a marker" means=geo.mark
-@w.en.drop_a_pin.geo.mark core.word lang=en text="drop a pin" means=geo.mark
-@w.en.put_a_pin.geo.mark core.word lang=en text="put a pin" means=geo.mark
-@w.en.place_a_marker.geo.mark core.word lang=en text="place a marker" means=geo.mark
-@w.en.put_a_marker_on.geo.mark core.word lang=en text="put a marker on" means=geo.mark
-@w.en.add_a_pin.geo.mark core.word lang=en text="add a pin" means=geo.mark
-@w.en.flag.geo.mark core.word lang=en text=flag means=geo.mark
-@w.en.on_the_map.geo.mark core.word lang=en text="on the map" means=geo.mark
-@w.en.with_a_marker.geo.mark core.word lang=en text="with a marker" means=geo.mark
-@w.en.with_a_pin.geo.mark core.word lang=en text="with a pin" means=geo.mark
-@w.en.on.geo.mark.a core.word lang=en text=on means=geo.mark.a
-@w.en.for.geo.mark.a core.word lang=en text=for means=geo.mark.a
-@w.en.at.geo.mark.a core.word lang=en text=at means=geo.mark.a
-@w.en.in.geo.mark.a core.word lang=en text=in means=geo.mark.a
-@w.en.and.geo.mark.b core.word lang=en text=and means=geo.mark.b
-@w.en.sym.geo.mark.b core.word lang=en text="," means=geo.mark.b
-@w.en.and.geo.mark.c core.word lang=en text=and means=geo.mark.c
-@w.en.sym.geo.mark.c core.word lang=en text="," means=geo.mark.c
-@w.en.and.geo.mark.d core.word lang=en text=and means=geo.mark.d
-@w.en.sym.geo.mark.d core.word lang=en text="," means=geo.mark.d
-@w.en.and.geo.mark.e core.word lang=en text=and means=geo.mark.e
-@w.en.sym.geo.mark.e core.word lang=en text="," means=geo.mark.e
-@w.en.put.geo.markHere core.word lang=en text=put means=geo.markHere
-@w.en.place.geo.markHere core.word lang=en text=place means=geo.markHere
-@w.en.drop.geo.markHere core.word lang=en text=drop means=geo.markHere
-@w.en.add.geo.markHere core.word lang=en text=add means=geo.markHere
-@w.en.mark.geo.markHere core.word lang=en text=mark means=geo.markHere
-@w.en.pin.geo.markHere core.word lang=en text=pin means=geo.markHere
-@w.en.stick.geo.markHere core.word lang=en text=stick means=geo.markHere
-@w.en.marker.geo.markHere core.word lang=en text=marker means=geo.markHere
-@w.en.flag.geo.markHere core.word lang=en text=flag means=geo.markHere
-@w.en.spot.geo.markHere core.word lang=en text=spot means=geo.markHere
-@w.en.this_place.geo.markHere core.word lang=en text="this place" means=geo.markHere
-@w.en.here.geo.markHere core.word lang=en text=here means=geo.markHere
-@w.en.right_here.geo.markHere core.word lang=en text="right here" means=geo.markHere
-@w.en.on_the_map.geo.markHere core.word lang=en text="on the map" means=geo.markHere
-@w.en.remove.geo.clearMarkers core.word lang=en text=remove means=geo.clearMarkers
-@w.en.delete.geo.clearMarkers core.word lang=en text=delete means=geo.clearMarkers
-@w.en.clear.geo.clearMarkers core.word lang=en text=clear means=geo.clearMarkers
-@w.en.erase.geo.clearMarkers core.word lang=en text=erase means=geo.clearMarkers
-@w.en.take_off.geo.clearMarkers core.word lang=en text="take off" means=geo.clearMarkers
-@w.en.get_rid_of.geo.clearMarkers core.word lang=en text="get rid of" means=geo.clearMarkers
-@w.en.wipe.geo.clearMarkers core.word lang=en text=wipe means=geo.clearMarkers
-@w.en.markers.geo.clearMarkers core.word lang=en text=markers means=geo.clearMarkers
-@w.en.pins.geo.clearMarkers core.word lang=en text=pins means=geo.clearMarkers
-@w.en.flags.geo.clearMarkers core.word lang=en text=flags means=geo.clearMarkers
-@w.en.marker.geo.clearMarkers core.word lang=en text=marker means=geo.clearMarkers
-@w.en.pin.geo.clearMarkers core.word lang=en text=pin means=geo.clearMarkers
-@w.en.from_the_map.geo.clearMarkers core.word lang=en text="from the map" means=geo.clearMarkers
-@w.en.off_the_map.geo.clearMarkers core.word lang=en text="off the map" means=geo.clearMarkers
-@w.en.zoom_in.geo.zoom core.word lang=en text="zoom in" means=geo.zoom
-@w.en.go_closer.geo.zoom core.word lang=en text="go closer" means=geo.zoom
-@w.en.get_closer.geo.zoom core.word lang=en text="get closer" means=geo.zoom
-@w.en.come_closer.geo.zoom core.word lang=en text="come closer" means=geo.zoom
-@w.en.move_closer.geo.zoom core.word lang=en text="move closer" means=geo.zoom
-@w.en.zoom_closer.geo.zoom core.word lang=en text="zoom closer" means=geo.zoom
-@w.en.magnify.geo.zoom core.word lang=en text=magnify means=geo.zoom
-@w.en.enlarge.geo.zoom core.word lang=en text=enlarge means=geo.zoom
-@w.en.make_it_bigger.geo.zoom core.word lang=en text="make it bigger" means=geo.zoom
-@w.en.more.geo.zoom core.word lang=en text=more means=geo.zoom
-@w.en.further.geo.zoom core.word lang=en text=further means=geo.zoom
-@w.en.closer.geo.zoom core.word lang=en text=closer means=geo.zoom
-@w.en.again.geo.zoom core.word lang=en text=again means=geo.zoom
-@w.en.on_the_map.geo.zoom core.word lang=en text="on the map" means=geo.zoom
-@w.en.on_it.geo.zoom core.word lang=en text="on it" means=geo.zoom
-@w.en.zoom_out.geo.zoom core.word lang=en text="zoom out" means=geo.zoom
-@w.en.zoom_away.geo.zoom core.word lang=en text="zoom away" means=geo.zoom
-@w.en.get_farther.geo.zoom core.word lang=en text="get farther" means=geo.zoom
-@w.en.go_farther.geo.zoom core.word lang=en text="go farther" means=geo.zoom
-@w.en.move_farther.geo.zoom core.word lang=en text="move farther" means=geo.zoom
-@w.en.move_away.geo.zoom core.word lang=en text="move away" means=geo.zoom
-@w.en.farther.geo.zoom core.word lang=en text=farther means=geo.zoom
-@w.en.step_back.geo.zoom core.word lang=en text="step back" means=geo.zoom
-@w.en.move_back.geo.zoom core.word lang=en text="move back" means=geo.zoom
-@w.en.make_it_smaller.geo.zoom core.word lang=en text="make it smaller" means=geo.zoom
-@w.en.shrink.geo.zoom core.word lang=en text=shrink means=geo.zoom
-@w.en.show.geo.world core.word lang=en text=show means=geo.world
-@w.en.display.geo.world core.word lang=en text=display means=geo.world
-@w.en.see.geo.world core.word lang=en text=see means=geo.world
-@w.en.view.geo.world core.word lang=en text=view means=geo.world
-@w.en.zoom_out_to.geo.world core.word lang=en text="zoom out to" means=geo.world
-@w.en.go_to.geo.world core.word lang=en text="go to" means=geo.world
-@w.en.back_to.geo.world core.word lang=en text="back to" means=geo.world
-@w.en.fit.geo.world core.word lang=en text=fit means=geo.world
-@w.en.whole_world.geo.world core.word lang=en text="whole world" means=geo.world
-@w.en.world.geo.world core.word lang=en text=world means=geo.world
-@w.en.planet.geo.world core.word lang=en text=planet means=geo.world
-@w.en.globe.geo.world core.word lang=en text=globe means=geo.world
-@w.en.entire_world.geo.world core.word lang=en text="entire world" means=geo.world
-@w.en.global_map.geo.world core.word lang=en text="global map" means=geo.world
-@w.en.earth.geo.world core.word lang=en text=earth means=geo.world
-@w.en.world_map.geo.world core.word lang=en text="world map" means=geo.world
-@w.en.on_the_map.geo.world core.word lang=en text="on the map" means=geo.world
-@w.en.please.geo.world core.word lang=en text=please means=geo.world
-@w.en.reset.geo.reset core.word lang=en text=reset means=geo.reset
-@w.en.restore.geo.reset core.word lang=en text=restore means=geo.reset
-@w.en.recenter.geo.reset core.word lang=en text=recenter means=geo.reset
-@w.en.recentre.geo.reset core.word lang=en text=recentre means=geo.reset
-@w.en.re_center.geo.reset core.word lang=en text="re center" means=geo.reset
-@w.en.view.geo.reset core.word lang=en text=view means=geo.reset
-@w.en.zoom.geo.reset core.word lang=en text=zoom means=geo.reset
-@w.en.map_view.geo.reset core.word lang=en text="map view" means=geo.reset
-@w.en.position.geo.reset core.word lang=en text=position means=geo.reset
-@w.en.camera.geo.reset core.word lang=en text=camera means=geo.reset
-@w.en.restart.geo.reset core.word lang=en text=restart means=geo.reset
-@w.en.start_over_with.geo.reset core.word lang=en text="start over with" means=geo.reset
-@w.en.start_again_with.geo.reset core.word lang=en text="start again with" means=geo.reset
-@w.en.map.geo.reset core.word lang=en text=map means=geo.reset
-@w.en.atlas.geo.reset core.word lang=en text=atlas means=geo.reset
-@w.en.whole_map.geo.reset core.word lang=en text="whole map" means=geo.reset
-@w.en.clear.geo.clearAll core.word lang=en text=clear means=geo.clearAll
-@w.en.wipe.geo.clearAll core.word lang=en text=wipe means=geo.clearAll
-@w.en.clean.geo.clearAll core.word lang=en text=clean means=geo.clearAll
-@w.en.erase.geo.clearAll core.word lang=en text=erase means=geo.clearAll
-@w.en.blank.geo.clearAll core.word lang=en text=blank means=geo.clearAll
-@w.en.empty.geo.clearAll core.word lang=en text=empty means=geo.clearAll
-@w.en.map.geo.clearAll core.word lang=en text=map means=geo.clearAll
-@w.en.everything.geo.clearAll core.word lang=en text=everything means=geo.clearAll
-@w.en.it_all.geo.clearAll core.word lang=en text="it all" means=geo.clearAll
-@w.en.the_whole_thing.geo.clearAll core.word lang=en text="the whole thing" means=geo.clearAll
-@w.en.all_of_it.geo.clearAll core.word lang=en text="all of it" means=geo.clearAll
-@w.en.off_the_map.geo.clearAll core.word lang=en text="off the map" means=geo.clearAll
-@w.en.on_the_map.geo.clearAll core.word lang=en text="on the map" means=geo.clearAll
-@w.en.from_the_map.geo.clearAll core.word lang=en text="from the map" means=geo.clearAll
-@w.en.please.geo.clearAll core.word lang=en text=please means=geo.clearAll
-@w.en.what_is_here.geo.here core.word lang=en text="what is here" means=geo.here
-@w.en.what_s_here.geo.here core.word lang=en text="what's here" means=geo.here
-@w.en.whats_here.geo.here core.word lang=en text="whats here" means=geo.here
-@w.en.what_am_i_looking_at.geo.here core.word lang=en text="what am i looking at" means=geo.here
-@w.en.what_is_at_this_spot.geo.here core.word lang=en text="what is at this spot" means=geo.here
-@w.en.which_place_am_i_looking_at.geo.here core.word lang=en text="which place am i looking at" means=geo.here
-@w.en.what_is_this_place.geo.here core.word lang=en text="what is this place" means=geo.here
-@w.en.what_is_around_this_point.geo.here core.word lang=en text="what is around this point" means=geo.here
-@w.en.what_s_around_me.geo.here core.word lang=en text="what's around me" means=geo.here
-@w.en.on_the_map.geo.here core.word lang=en text="on the map" means=geo.here
-@w.en.right_now.geo.here core.word lang=en text="right now" means=geo.here
-@w.en.switch_to.geo.layer core.word lang=en text="switch to" means=geo.layer
-@w.en.use.geo.layer core.word lang=en text=use means=geo.layer
-@w.en.go_back_to.geo.layer core.word lang=en text="go back to" means=geo.layer
-@w.en.change_the_map_to.geo.layer core.word lang=en text="change the map to" means=geo.layer
-@w.en.change_to.geo.layer core.word lang=en text="change to" means=geo.layer
-@w.en.show_me.geo.layer core.word lang=en text="show me" means=geo.layer
-@w.en.give_me.geo.layer core.word lang=en text="give me" means=geo.layer
-@w.en.i_want.geo.layer core.word lang=en text="i want" means=geo.layer
-@w.en.map.geo.layer core.word lang=en text=map means=geo.layer
-@w.en.version_of_the_map.geo.layer core.word lang=en text="version of the map" means=geo.layer
-@w.en.style.geo.layer core.word lang=en text=style means=geo.layer
-@w.en.layer.geo.layer core.word lang=en text=layer means=geo.layer
-@w.en.to.geo.layer.l core.word lang=en text=to means=geo.layer.l
-@w.en.into.geo.layer.l core.word lang=en text=into means=geo.layer.l
-@w.en.is.geo.isIn core.word lang=en text=is means=geo.isIn
-@w.en.are.geo.isIn core.word lang=en text=are means=geo.isIn
-@w.en.does.geo.isIn core.word lang=en text=does means=geo.isIn
-@w.en.in.geo.isIn.q core.word lang=en text=in means=geo.isIn.q
-@w.en.inside.geo.isIn.q core.word lang=en text=inside means=geo.isIn.q
-@w.en.within.geo.isIn.q core.word lang=en text=within means=geo.isIn.q
+@w.en.capital.geo.capital core.word text=capital means=geo.capital
+@w.en.capital_city.geo.capital core.word text="capital city" means=geo.capital
+@w.en.population.geo.population core.word text=population means=geo.population
+@w.en.number_of_people.geo.population core.word text="number of people" means=geo.population
+@w.en.number_of_inhabitants.geo.population core.word text="number of inhabitants" means=geo.population
+@w.en.how_many_people_live_in.geo.population core.word text="how many people live in" means=geo.population
+@w.en.how_many_people_are_in.geo.population core.word text="how many people are in" means=geo.population
+@w.en.how_many_inhabitants_does_have.geo.population core.word text="how many inhabitants does have" means=geo.population
+@w.en.currency.geo.currency core.word text=currency means=geo.currency
+@w.en.money.geo.currency core.word text=money means=geo.currency
+@w.en.currencies.geo.currency core.word text=currencies means=geo.currency
+@w.en.what_do_they_pay_with_in.geo.currency core.word text="what do they pay with in" means=geo.currency
+@w.en.what_money_do_they_use_in.geo.currency core.word text="what money do they use in" means=geo.currency
+@w.en.continent.geo.continent core.word text=continent means=geo.continent
+@w.en.which_continent_is.geo.continent core.word text="which continent is" means=geo.continent
+@w.en.what_continent_is.geo.continent core.word text="what continent is" means=geo.continent
+@w.en.on_which_continent_is.geo.continent core.word text="on which continent is" means=geo.continent
+@w.en.on.geo.continent core.word text=on means=geo.continent
+@w.en.in.geo.continent core.word text=in means=geo.continent
+@w.en.country.geo.country core.word text=country means=geo.country
+@w.en.nation.geo.country core.word text=nation means=geo.country
+@w.en.which_country_is.geo.country core.word text="which country is" means=geo.country
+@w.en.what_country_is.geo.country core.word text="what country is" means=geo.country
+@w.en.in_which_country_is.geo.country core.word text="in which country is" means=geo.country
+@w.en.in.geo.country core.word text=in means=geo.country
+@w.en.area.geo.area core.word text=area means=geo.area
+@w.en.size.geo.area core.word text=size means=geo.area
+@w.en.surface.geo.area core.word text=surface means=geo.area
+@w.en.how_big_is.geo.area core.word text="how big is" means=geo.area
+@w.en.how_large_is.geo.area core.word text="how large is" means=geo.area
+@w.en.how_much_land_does_cover.geo.area core.word text="how much land does cover" means=geo.area
+@w.en.in_km.geo.area core.word text="in km" means=geo.area
+@w.en.in_square_kilometres.geo.area core.word text="in square kilometres" means=geo.area
+@w.en.in_size.geo.area core.word text="in size" means=geo.area
+@w.en.language.geo.languages core.word text=language means=geo.languages
+@w.en.languages.geo.languages core.word text=languages means=geo.languages
+@w.en.official_language.geo.languages core.word text="official language" means=geo.languages
+@w.en.what_language_do_they_speak_in.geo.languages core.word text="what language do they speak in" means=geo.languages
+@w.en.what_languages_are_spoken_in.geo.languages core.word text="what languages are spoken in" means=geo.languages
+@w.en.what_do_they_speak_in.geo.languages core.word text="what do they speak in" means=geo.languages
+@w.en.what_do_people_speak_in.geo.languages core.word text="what do people speak in" means=geo.languages
+@w.en.is.geo.landlocked core.word text=is means=geo.landlocked
+@w.en.does.geo.landlocked core.word text=does means=geo.landlocked
+@w.en.can_i_say_that.geo.landlocked core.word text="can i say that" means=geo.landlocked
+@w.en.landlocked.geo.landlocked core.word text=landlocked means=geo.landlocked
+@w.en.surrounded_by_land.geo.landlocked core.word text="surrounded by land" means=geo.landlocked
+@w.en.have_a_coast.geo.landlocked core.word text="have a coast" means=geo.landlocked
+@w.en.have_a_sea_border.geo.landlocked core.word text="have a sea border" means=geo.landlocked
+@w.en.touch_the_sea.geo.landlocked core.word text="touch the sea" means=geo.landlocked
+@w.en.have_no_coast.geo.landlocked core.word text="have no coast" means=geo.landlocked
+@w.en.count.geo.neighbourCount core.word text=count means=geo.neighbourCount
+@w.en.number_of_neighbours.geo.neighbourCount core.word text="number of neighbours" means=geo.neighbourCount
+@w.en.neighbour_count.geo.neighbourCount core.word text="neighbour count" means=geo.neighbourCount
+@w.en.number_of_countries_bordering.geo.neighbourCount core.word text="number of countries bordering" means=geo.neighbourCount
+@w.en.how_many_neighbours_does.geo.neighbourCount core.word text="how many neighbours does" means=geo.neighbourCount
+@w.en.how_many_land_neighbours_does.geo.neighbourCount core.word text="how many land neighbours does" means=geo.neighbourCount
+@w.en.how_many_countries_border.geo.neighbourCount core.word text="how many countries border" means=geo.neighbourCount
+@w.en.how_many_countries_share_a_border_with.geo.neighbourCount core.word text="how many countries share a border with" means=geo.neighbourCount
+@w.en.have.geo.neighbourCount core.word text=have means=geo.neighbourCount
+@w.en.has.geo.neighbourCount core.word text=has means=geo.neighbourCount
+@w.en.neighbours.geo.borders core.word text=neighbours means=geo.borders
+@w.en.neighbors.geo.borders core.word text=neighbors means=geo.borders
+@w.en.borders.geo.borders core.word text=borders means=geo.borders
+@w.en.neighbouring_countries.geo.borders core.word text="neighbouring countries" means=geo.borders
+@w.en.which_countries_border.geo.borders core.word text="which countries border" means=geo.borders
+@w.en.what_countries_border.geo.borders core.word text="what countries border" means=geo.borders
+@w.en.who_borders.geo.borders core.word text="who borders" means=geo.borders
+@w.en.what_borders.geo.borders core.word text="what borders" means=geo.borders
+@w.en.which_countries_are_next_to.geo.borders core.word text="which countries are next to" means=geo.borders
+@w.en.what_countries_are_next_to.geo.borders core.word text="what countries are next to" means=geo.borders
+@w.en.countries_bordering.geo.borders core.word text="countries bordering" means=geo.borders
+@w.en.countries_next_to.geo.borders core.word text="countries next to" means=geo.borders
+@w.en.which_countries_touch.geo.borders core.word text="which countries touch" means=geo.borders
+@w.en.which_countries_share_a_border_with.geo.borders core.word text="which countries share a border with" means=geo.borders
+@w.en.what_countries_share_a_border_with.geo.borders core.word text="what countries share a border with" means=geo.borders
+@w.en.which_countries_are_neighbours_of.geo.borders core.word text="which countries are neighbours of" means=geo.borders
+@w.en.location.geo.where core.word text=location means=geo.where
+@w.en.position.geo.where core.word text=position means=geo.where
+@w.en.where_is.geo.where core.word text="where is" means=geo.where
+@w.en.where_s.geo.where core.word text="where s" means=geo.where
+@w.en.wheres.geo.where core.word text=wheres means=geo.where
+@w.en.where_are.geo.where core.word text="where are" means=geo.where
+@w.en.where_can_i_find.geo.where core.word text="where can i find" means=geo.where
+@w.en.where_can_i_see.geo.where core.word text="where can i see" means=geo.where
+@w.en.on_the_map.geo.where core.word text="on the map" means=geo.where
+@w.en.located.geo.where core.word text=located means=geo.where
+@w.en.measure.geo.distance core.word text=measure means=geo.distance
+@w.en.draw.geo.distance core.word text=draw means=geo.distance
+@w.en.trace.geo.distance core.word text=trace means=geo.distance
+@w.en.connect.geo.distance core.word text=connect means=geo.distance
+@w.en.link.geo.distance core.word text=link means=geo.distance
+@w.en.join.geo.distance core.word text=join means=geo.distance
+@w.en.distance.geo.distance core.word text=distance means=geo.distance
+@w.en.length.geo.distance core.word text=length means=geo.distance
+@w.en.km.geo.distance core.word text=km means=geo.distance
+@w.en.kilometres.geo.distance core.word text=kilometres means=geo.distance
+@w.en.how_far_is.geo.distance core.word text="how far is" means=geo.distance
+@w.en.how_far_are.geo.distance core.word text="how far are" means=geo.distance
+@w.en.how_far_apart_are.geo.distance core.word text="how far apart are" means=geo.distance
+@w.en.how_far_it_is_from.geo.distance core.word text="how far it is from" means=geo.distance
+@w.en.how_many_kilometres_are_there_between.geo.distance core.word text="how many kilometres are there between" means=geo.distance
+@w.en.how_many_km_between.geo.distance core.word text="how many km between" means=geo.distance
+@w.en.apart.geo.distance core.word text=apart means=geo.distance
+@w.en.away.geo.distance core.word text=away means=geo.distance
+@w.en.in_km.geo.distance core.word text="in km" means=geo.distance
+@w.en.from.geo.distance.a core.word text=from means=geo.distance.a
+@w.en.between.geo.distance.a core.word text=between means=geo.distance.a
+@w.en.of.geo.distance.a core.word text=of means=geo.distance.a
+@w.en.to.geo.distance.a core.word text=to means=geo.distance.a
+@w.en.to.geo.distance.b core.word text=to means=geo.distance.b
+@w.en.and.geo.distance.b core.word text=and means=geo.distance.b
+@w.en.from.geo.distance.b core.word text=from means=geo.distance.b
+@w.en.between.geo.distance.b core.word text=between means=geo.distance.b
+@w.en.compare.geo.compare core.word text=compare means=geo.compare
+@w.en.match_up.geo.compare core.word text="match up" means=geo.compare
+@w.en.contrast.geo.compare core.word text=contrast means=geo.compare
+@w.en.side_by_side.geo.compare core.word text="side by side" means=geo.compare
+@w.en.please.geo.compare core.word text=please means=geo.compare
+@w.en.with.geo.compare.a core.word text=with means=geo.compare.a
+@w.en.between.geo.compare.a core.word text=between means=geo.compare.a
+@w.en.against.geo.compare.a core.word text=against means=geo.compare.a
+@w.en.and.geo.compare.b core.word text=and means=geo.compare.b
+@w.en.with.geo.compare.b core.word text=with means=geo.compare.b
+@w.en.against.geo.compare.b core.word text=against means=geo.compare.b
+@w.en.vs.geo.compare.b core.word text=vs means=geo.compare.b
+@w.en.versus.geo.compare.b core.word text=versus means=geo.compare.b
+@w.en.to.geo.compare.b core.word text=to means=geo.compare.b
+@w.en.show.geo.show core.word text=show means=geo.show
+@w.en.show_me.geo.show core.word text="show me" means=geo.show
+@w.en.display.geo.show core.word text=display means=geo.show
+@w.en.find.geo.show core.word text=find means=geo.show
+@w.en.locate.geo.show core.word text=locate means=geo.show
+@w.en.focus_on.geo.show core.word text="focus on" means=geo.show
+@w.en.look_at.geo.show core.word text="look at" means=geo.show
+@w.en.go_to.geo.show core.word text="go to" means=geo.show
+@w.en.fly_to.geo.show core.word text="fly to" means=geo.show
+@w.en.take_me_to.geo.show core.word text="take me to" means=geo.show
+@w.en.zoom_to.geo.show core.word text="zoom to" means=geo.show
+@w.en.center_on.geo.show core.word text="center on" means=geo.show
+@w.en.centre_on.geo.show core.word text="centre on" means=geo.show
+@w.en.navigate_to.geo.show core.word text="navigate to" means=geo.show
+@w.en.jump_to.geo.show core.word text="jump to" means=geo.show
+@w.en.open.geo.show core.word text=open means=geo.show
+@w.en.visit.geo.show core.word text=visit means=geo.show
+@w.en.bring_up.geo.show core.word text="bring up" means=geo.show
+@w.en.see.geo.show core.word text=see means=geo.show
+@w.en.view.geo.show core.word text=view means=geo.show
+@w.en.pull_up.geo.show core.word text="pull up" means=geo.show
+@w.en.let_me_see.geo.show core.word text="let me see" means=geo.show
+@w.en.i_want_to_see.geo.show core.word text="i want to see" means=geo.show
+@w.en.on_the_map.geo.show core.word text="on the map" means=geo.show
+@w.en.on_map.geo.show core.word text="on map" means=geo.show
+@w.en.in_the_map.geo.show core.word text="in the map" means=geo.show
+@w.en.for_me.geo.show core.word text="for me" means=geo.show
+@w.en.of.geo.show.a core.word text=of means=geo.show.a
+@w.en.at.geo.show.a core.word text=at means=geo.show.a
+@w.en.on.geo.show.a core.word text=on means=geo.show.a
+@w.en.to.geo.show.a core.word text=to means=geo.show.a
+@w.en.in.geo.show.a core.word text=in means=geo.show.a
+@w.en.and.geo.show.b core.word text=and means=geo.show.b
+@w.en.sym.geo.show.b core.word text="," means=geo.show.b
+@w.en.and.geo.show.c core.word text=and means=geo.show.c
+@w.en.sym.geo.show.c core.word text="," means=geo.show.c
+@w.en.and.geo.show.d core.word text=and means=geo.show.d
+@w.en.sym.geo.show.d core.word text="," means=geo.show.d
+@w.en.and.geo.show.e core.word text=and means=geo.show.e
+@w.en.sym.geo.show.e core.word text="," means=geo.show.e
+@w.en.highlight.geo.highlight core.word text=highlight means=geo.highlight
+@w.en.hilight.geo.highlight core.word text=hilight means=geo.highlight
+@w.en.colour.geo.highlight core.word text=colour means=geo.highlight
+@w.en.color.geo.highlight core.word text=color means=geo.highlight
+@w.en.light_up.geo.highlight core.word text="light up" means=geo.highlight
+@w.en.mark_in_color.geo.highlight core.word text="mark in color" means=geo.highlight
+@w.en.shade.geo.highlight core.word text=shade means=geo.highlight
+@w.en.on_the_map.geo.highlight core.word text="on the map" means=geo.highlight
+@w.en.in_color.geo.highlight core.word text="in color" means=geo.highlight
+@w.en.in_colour.geo.highlight core.word text="in colour" means=geo.highlight
+@w.en.and.geo.highlight.b core.word text=and means=geo.highlight.b
+@w.en.sym.geo.highlight.b core.word text="," means=geo.highlight.b
+@w.en.and.geo.highlight.c core.word text=and means=geo.highlight.c
+@w.en.sym.geo.highlight.c core.word text="," means=geo.highlight.c
+@w.en.and.geo.highlight.d core.word text=and means=geo.highlight.d
+@w.en.sym.geo.highlight.d core.word text="," means=geo.highlight.d
+@w.en.and.geo.highlight.e core.word text=and means=geo.highlight.e
+@w.en.sym.geo.highlight.e core.word text="," means=geo.highlight.e
+@w.en.mark.geo.mark core.word text=mark means=geo.mark
+@w.en.pin.geo.mark core.word text=pin means=geo.mark
+@w.en.put_a_marker.geo.mark core.word text="put a marker" means=geo.mark
+@w.en.add_a_marker.geo.mark core.word text="add a marker" means=geo.mark
+@w.en.drop_a_pin.geo.mark core.word text="drop a pin" means=geo.mark
+@w.en.put_a_pin.geo.mark core.word text="put a pin" means=geo.mark
+@w.en.place_a_marker.geo.mark core.word text="place a marker" means=geo.mark
+@w.en.put_a_marker_on.geo.mark core.word text="put a marker on" means=geo.mark
+@w.en.add_a_pin.geo.mark core.word text="add a pin" means=geo.mark
+@w.en.flag.geo.mark core.word text=flag means=geo.mark
+@w.en.on_the_map.geo.mark core.word text="on the map" means=geo.mark
+@w.en.with_a_marker.geo.mark core.word text="with a marker" means=geo.mark
+@w.en.with_a_pin.geo.mark core.word text="with a pin" means=geo.mark
+@w.en.on.geo.mark.a core.word text=on means=geo.mark.a
+@w.en.for.geo.mark.a core.word text=for means=geo.mark.a
+@w.en.at.geo.mark.a core.word text=at means=geo.mark.a
+@w.en.in.geo.mark.a core.word text=in means=geo.mark.a
+@w.en.and.geo.mark.b core.word text=and means=geo.mark.b
+@w.en.sym.geo.mark.b core.word text="," means=geo.mark.b
+@w.en.and.geo.mark.c core.word text=and means=geo.mark.c
+@w.en.sym.geo.mark.c core.word text="," means=geo.mark.c
+@w.en.and.geo.mark.d core.word text=and means=geo.mark.d
+@w.en.sym.geo.mark.d core.word text="," means=geo.mark.d
+@w.en.and.geo.mark.e core.word text=and means=geo.mark.e
+@w.en.sym.geo.mark.e core.word text="," means=geo.mark.e
+@w.en.put.geo.markHere core.word text=put means=geo.markHere
+@w.en.place.geo.markHere core.word text=place means=geo.markHere
+@w.en.drop.geo.markHere core.word text=drop means=geo.markHere
+@w.en.add.geo.markHere core.word text=add means=geo.markHere
+@w.en.mark.geo.markHere core.word text=mark means=geo.markHere
+@w.en.pin.geo.markHere core.word text=pin means=geo.markHere
+@w.en.stick.geo.markHere core.word text=stick means=geo.markHere
+@w.en.marker.geo.markHere core.word text=marker means=geo.markHere
+@w.en.flag.geo.markHere core.word text=flag means=geo.markHere
+@w.en.spot.geo.markHere core.word text=spot means=geo.markHere
+@w.en.this_place.geo.markHere core.word text="this place" means=geo.markHere
+@w.en.here.geo.markHere core.word text=here means=geo.markHere
+@w.en.right_here.geo.markHere core.word text="right here" means=geo.markHere
+@w.en.on_the_map.geo.markHere core.word text="on the map" means=geo.markHere
+@w.en.remove.geo.clearMarkers core.word text=remove means=geo.clearMarkers
+@w.en.delete.geo.clearMarkers core.word text=delete means=geo.clearMarkers
+@w.en.clear.geo.clearMarkers core.word text=clear means=geo.clearMarkers
+@w.en.erase.geo.clearMarkers core.word text=erase means=geo.clearMarkers
+@w.en.take_off.geo.clearMarkers core.word text="take off" means=geo.clearMarkers
+@w.en.get_rid_of.geo.clearMarkers core.word text="get rid of" means=geo.clearMarkers
+@w.en.wipe.geo.clearMarkers core.word text=wipe means=geo.clearMarkers
+@w.en.markers.geo.clearMarkers core.word text=markers means=geo.clearMarkers
+@w.en.pins.geo.clearMarkers core.word text=pins means=geo.clearMarkers
+@w.en.flags.geo.clearMarkers core.word text=flags means=geo.clearMarkers
+@w.en.marker.geo.clearMarkers core.word text=marker means=geo.clearMarkers
+@w.en.pin.geo.clearMarkers core.word text=pin means=geo.clearMarkers
+@w.en.from_the_map.geo.clearMarkers core.word text="from the map" means=geo.clearMarkers
+@w.en.off_the_map.geo.clearMarkers core.word text="off the map" means=geo.clearMarkers
+@w.en.zoom_in.geo.zoom core.word text="zoom in" means=geo.zoom
+@w.en.go_closer.geo.zoom core.word text="go closer" means=geo.zoom
+@w.en.get_closer.geo.zoom core.word text="get closer" means=geo.zoom
+@w.en.come_closer.geo.zoom core.word text="come closer" means=geo.zoom
+@w.en.move_closer.geo.zoom core.word text="move closer" means=geo.zoom
+@w.en.zoom_closer.geo.zoom core.word text="zoom closer" means=geo.zoom
+@w.en.magnify.geo.zoom core.word text=magnify means=geo.zoom
+@w.en.enlarge.geo.zoom core.word text=enlarge means=geo.zoom
+@w.en.make_it_bigger.geo.zoom core.word text="make it bigger" means=geo.zoom
+@w.en.more.geo.zoom core.word text=more means=geo.zoom
+@w.en.further.geo.zoom core.word text=further means=geo.zoom
+@w.en.closer.geo.zoom core.word text=closer means=geo.zoom
+@w.en.again.geo.zoom core.word text=again means=geo.zoom
+@w.en.on_the_map.geo.zoom core.word text="on the map" means=geo.zoom
+@w.en.on_it.geo.zoom core.word text="on it" means=geo.zoom
+@w.en.zoom_out.geo.zoom core.word text="zoom out" means=geo.zoom
+@w.en.zoom_away.geo.zoom core.word text="zoom away" means=geo.zoom
+@w.en.get_farther.geo.zoom core.word text="get farther" means=geo.zoom
+@w.en.go_farther.geo.zoom core.word text="go farther" means=geo.zoom
+@w.en.move_farther.geo.zoom core.word text="move farther" means=geo.zoom
+@w.en.move_away.geo.zoom core.word text="move away" means=geo.zoom
+@w.en.farther.geo.zoom core.word text=farther means=geo.zoom
+@w.en.step_back.geo.zoom core.word text="step back" means=geo.zoom
+@w.en.move_back.geo.zoom core.word text="move back" means=geo.zoom
+@w.en.make_it_smaller.geo.zoom core.word text="make it smaller" means=geo.zoom
+@w.en.shrink.geo.zoom core.word text=shrink means=geo.zoom
+@w.en.show.geo.world core.word text=show means=geo.world
+@w.en.display.geo.world core.word text=display means=geo.world
+@w.en.see.geo.world core.word text=see means=geo.world
+@w.en.view.geo.world core.word text=view means=geo.world
+@w.en.zoom_out_to.geo.world core.word text="zoom out to" means=geo.world
+@w.en.go_to.geo.world core.word text="go to" means=geo.world
+@w.en.back_to.geo.world core.word text="back to" means=geo.world
+@w.en.fit.geo.world core.word text=fit means=geo.world
+@w.en.whole_world.geo.world core.word text="whole world" means=geo.world
+@w.en.world.geo.world core.word text=world means=geo.world
+@w.en.planet.geo.world core.word text=planet means=geo.world
+@w.en.globe.geo.world core.word text=globe means=geo.world
+@w.en.entire_world.geo.world core.word text="entire world" means=geo.world
+@w.en.global_map.geo.world core.word text="global map" means=geo.world
+@w.en.earth.geo.world core.word text=earth means=geo.world
+@w.en.world_map.geo.world core.word text="world map" means=geo.world
+@w.en.on_the_map.geo.world core.word text="on the map" means=geo.world
+@w.en.please.geo.world core.word text=please means=geo.world
+@w.en.reset.geo.reset core.word text=reset means=geo.reset
+@w.en.restore.geo.reset core.word text=restore means=geo.reset
+@w.en.recenter.geo.reset core.word text=recenter means=geo.reset
+@w.en.recentre.geo.reset core.word text=recentre means=geo.reset
+@w.en.re_center.geo.reset core.word text="re center" means=geo.reset
+@w.en.view.geo.reset core.word text=view means=geo.reset
+@w.en.zoom.geo.reset core.word text=zoom means=geo.reset
+@w.en.map_view.geo.reset core.word text="map view" means=geo.reset
+@w.en.position.geo.reset core.word text=position means=geo.reset
+@w.en.camera.geo.reset core.word text=camera means=geo.reset
+@w.en.restart.geo.reset core.word text=restart means=geo.reset
+@w.en.start_over_with.geo.reset core.word text="start over with" means=geo.reset
+@w.en.start_again_with.geo.reset core.word text="start again with" means=geo.reset
+@w.en.map.geo.reset core.word text=map means=geo.reset
+@w.en.atlas.geo.reset core.word text=atlas means=geo.reset
+@w.en.whole_map.geo.reset core.word text="whole map" means=geo.reset
+@w.en.clear.geo.clearAll core.word text=clear means=geo.clearAll
+@w.en.wipe.geo.clearAll core.word text=wipe means=geo.clearAll
+@w.en.clean.geo.clearAll core.word text=clean means=geo.clearAll
+@w.en.erase.geo.clearAll core.word text=erase means=geo.clearAll
+@w.en.blank.geo.clearAll core.word text=blank means=geo.clearAll
+@w.en.empty.geo.clearAll core.word text=empty means=geo.clearAll
+@w.en.map.geo.clearAll core.word text=map means=geo.clearAll
+@w.en.everything.geo.clearAll core.word text=everything means=geo.clearAll
+@w.en.it_all.geo.clearAll core.word text="it all" means=geo.clearAll
+@w.en.the_whole_thing.geo.clearAll core.word text="the whole thing" means=geo.clearAll
+@w.en.all_of_it.geo.clearAll core.word text="all of it" means=geo.clearAll
+@w.en.off_the_map.geo.clearAll core.word text="off the map" means=geo.clearAll
+@w.en.on_the_map.geo.clearAll core.word text="on the map" means=geo.clearAll
+@w.en.from_the_map.geo.clearAll core.word text="from the map" means=geo.clearAll
+@w.en.please.geo.clearAll core.word text=please means=geo.clearAll
+@w.en.what_is_here.geo.here core.word text="what is here" means=geo.here
+@w.en.what_s_here.geo.here core.word text="what's here" means=geo.here
+@w.en.whats_here.geo.here core.word text="whats here" means=geo.here
+@w.en.what_am_i_looking_at.geo.here core.word text="what am i looking at" means=geo.here
+@w.en.what_is_at_this_spot.geo.here core.word text="what is at this spot" means=geo.here
+@w.en.which_place_am_i_looking_at.geo.here core.word text="which place am i looking at" means=geo.here
+@w.en.what_is_this_place.geo.here core.word text="what is this place" means=geo.here
+@w.en.what_is_around_this_point.geo.here core.word text="what is around this point" means=geo.here
+@w.en.what_s_around_me.geo.here core.word text="what's around me" means=geo.here
+@w.en.on_the_map.geo.here core.word text="on the map" means=geo.here
+@w.en.right_now.geo.here core.word text="right now" means=geo.here
+@w.en.switch_to.geo.layer core.word text="switch to" means=geo.layer
+@w.en.use.geo.layer core.word text=use means=geo.layer
+@w.en.go_back_to.geo.layer core.word text="go back to" means=geo.layer
+@w.en.change_the_map_to.geo.layer core.word text="change the map to" means=geo.layer
+@w.en.change_to.geo.layer core.word text="change to" means=geo.layer
+@w.en.show_me.geo.layer core.word text="show me" means=geo.layer
+@w.en.give_me.geo.layer core.word text="give me" means=geo.layer
+@w.en.i_want.geo.layer core.word text="i want" means=geo.layer
+@w.en.map.geo.layer core.word text=map means=geo.layer
+@w.en.version_of_the_map.geo.layer core.word text="version of the map" means=geo.layer
+@w.en.style.geo.layer core.word text=style means=geo.layer
+@w.en.layer.geo.layer core.word text=layer means=geo.layer
+@w.en.to.geo.layer.l core.word text=to means=geo.layer.l
+@w.en.into.geo.layer.l core.word text=into means=geo.layer.l
+@w.en.is.geo.isIn core.word text=is means=geo.isIn
+@w.en.are.geo.isIn core.word text=are means=geo.isIn
+@w.en.does.geo.isIn core.word text=does means=geo.isIn
+@w.en.in.geo.isIn.q core.word text=in means=geo.isIn.q
+@w.en.inside.geo.isIn.q core.word text=inside means=geo.isIn.q
+@w.en.within.geo.isIn.q core.word text=within means=geo.isIn.q

@@ -634,133 +634,133 @@
     sample.n=Rex
     example="Who is Rex?"
 
-@w.en.say.kids.animals.animal core.word lang=en text=say means=kids.animals.animal
-@w.en.sound_like.kids.animals.animal core.word lang=en text="sound like" means=kids.animals.animal
-@w.en.sound.kids.animals.animal core.word lang=en text=sound means=kids.animals.animal
-@w.en.make.kids.animals.animal core.word lang=en text=make means=kids.animals.animal
-@w.en.what_does.kids.animals.animal core.word lang=en text="what does" means=kids.animals.animal
-@w.en.what_do.kids.animals.animal core.word lang=en text="what do" means=kids.animals.animal
-@w.en.how_does.kids.animals.animal core.word lang=en text="how does" means=kids.animals.animal
-@w.en.how_do.kids.animals.animal core.word lang=en text="how do" means=kids.animals.animal
-@w.en.what_noise_does.kids.animals.animal core.word lang=en text="what noise does" means=kids.animals.animal
-@w.en.what_sound_does.kids.animals.animal core.word lang=en text="what sound does" means=kids.animals.animal
-@w.en.a.kids.animals.animal.a core.word lang=en text=a means=kids.animals.animal.a
-@w.en.an.kids.animals.animal.a core.word lang=en text=an means=kids.animals.animal.a
-@w.en.the.kids.animals.animal.a core.word lang=en text=the means=kids.animals.animal.a
-@w.en.live.kids.animals.animal core.word lang=en text=live means=kids.animals.animal
-@w.en.found.kids.animals.animal core.word lang=en text=found means=kids.animals.animal
-@w.en.stay.kids.animals.animal core.word lang=en text=stay means=kids.animals.animal
-@w.en.where_does.kids.animals.animal core.word lang=en text="where does" means=kids.animals.animal
-@w.en.where_do.kids.animals.animal core.word lang=en text="where do" means=kids.animals.animal
-@w.en.where_can_i_find.kids.animals.animal core.word lang=en text="where can i find" means=kids.animals.animal
-@w.en.where_can_we_find.kids.animals.animal core.word lang=en text="where can we find" means=kids.animals.animal
-@w.en.where_is.kids.animals.animal core.word lang=en text="where is" means=kids.animals.animal
-@w.en.where_are.kids.animals.animal core.word lang=en text="where are" means=kids.animals.animal
-@w.en.have.kids.animals.animal core.word lang=en text=have means=kids.animals.animal
-@w.en.covered_in.kids.animals.animal core.word lang=en text="covered in" means=kids.animals.animal
-@w.en.covered_with.kids.animals.animal core.word lang=en text="covered with" means=kids.animals.animal
-@w.en.covered_by.kids.animals.animal core.word lang=en text="covered by" means=kids.animals.animal
-@w.en.what_covering_does.kids.animals.animal core.word lang=en text="what covering does" means=kids.animals.animal
-@w.en.what_covering_do.kids.animals.animal core.word lang=en text="what covering do" means=kids.animals.animal
-@w.en.like.kids.animals.animal core.word lang=en text=like means=kids.animals.animal
-@w.en.what_is.kids.animals.animal core.word lang=en text="what is" means=kids.animals.animal
-@w.en.what_are.kids.animals.animal core.word lang=en text="what are" means=kids.animals.animal
-@w.en.tell_me_about.kids.animals.animal core.word lang=en text="tell me about" means=kids.animals.animal
-@w.en.describe.kids.animals.animal core.word lang=en text=describe means=kids.animals.animal
-@w.en.what_can_you_tell_me_about.kids.animals.animal core.word lang=en text="what can you tell me about" means=kids.animals.animal
-@w.en.tell_me_something_about.kids.animals.animal core.word lang=en text="tell me something about" means=kids.animals.animal
-@w.en.got.kids.animals.animal core.word lang=en text=got means=kids.animals.animal
-@w.en.how_many_legs_does.kids.animals.animal core.word lang=en text="how many legs does" means=kids.animals.animal
-@w.en.how_many_legs_do.kids.animals.animal core.word lang=en text="how many legs do" means=kids.animals.animal
-@w.en.how_many_feet_does.kids.animals.animal core.word lang=en text="how many feet does" means=kids.animals.animal
-@w.en.how_many_feet_do.kids.animals.animal core.word lang=en text="how many feet do" means=kids.animals.animal
-@w.en.does.kids.animals.animal core.word lang=en text=does means=kids.animals.animal
-@w.en.do.kids.animals.animal core.word lang=en text=do means=kids.animals.animal
-@w.en.did.kids.animals.animal core.word lang=en text=did means=kids.animals.animal
-@w.en.have.kids.animals.animal.n core.word lang=en text=have means=kids.animals.animal.n
-@w.en.has.kids.animals.animal.n core.word lang=en text=has means=kids.animals.animal.n
-@w.en.got.kids.animals.animal.n core.word lang=en text=got means=kids.animals.animal.n
-@w.en.legs.kids.animals.animal.n core.word lang=en text=legs means=kids.animals.animal.n
-@w.en.leg.kids.animals.animal.n core.word lang=en text=leg means=kids.animals.animal.n
-@w.en.feet.kids.animals.animal.n core.word lang=en text=feet means=kids.animals.animal.n
-@w.en.is.kids.animals.animal core.word lang=en text=is means=kids.animals.animal
-@w.en.are.kids.animals.animal core.word lang=en text=are means=kids.animals.animal
-@w.en.a.kids.animals.animal.k core.word lang=en text=a means=kids.animals.animal.k
-@w.en.an.kids.animals.animal.k core.word lang=en text=an means=kids.animals.animal.k
-@w.en.kind_of.kids.animals.animal.k core.word lang=en text="kind of" means=kids.animals.animal.k
-@w.en.type_of.kids.animals.animal.k core.word lang=en text="type of" means=kids.animals.animal.k
-@w.en.can.kids.animals.animal core.word lang=en text=can means=kids.animals.animal
-@w.en.could.kids.animals.animal core.word lang=en text=could means=kids.animals.animal
-@w.en.called.kids.animals.animal core.word lang=en text=called means=kids.animals.animal
-@w.en.what_is_the_baby.kids.animals.animal core.word lang=en text="what is the baby" means=kids.animals.animal
-@w.en.what_is_a_baby.kids.animals.animal core.word lang=en text="what is a baby" means=kids.animals.animal
-@w.en.what_do_you_call_a_baby.kids.animals.animal core.word lang=en text="what do you call a baby" means=kids.animals.animal
-@w.en.what_is_the_name_of_a_baby.kids.animals.animal core.word lang=en text="what is the name of a baby" means=kids.animals.animal
-@w.en.what_are_the_babies.kids.animals.animal core.word lang=en text="what are the babies" means=kids.animals.animal
-@w.en.of.kids.animals.animal.a core.word lang=en text=of means=kids.animals.animal.a
-@w.en.which_animal_has_a_baby_called.kids.animals.animal core.word lang=en text="which animal has a baby called" means=kids.animals.animal
-@w.en.which_animals_have_a_baby_called.kids.animals.animal core.word lang=en text="which animals have a baby called" means=kids.animals.animal
-@w.en.a.kids.animals.animal.b core.word lang=en text=a means=kids.animals.animal.b
-@w.en.an.kids.animals.animal.b core.word lang=en text=an means=kids.animals.animal.b
-@w.en.the.kids.animals.animal.b core.word lang=en text=the means=kids.animals.animal.b
-@w.en.eat.kids.animals.animal core.word lang=en text=eat means=kids.animals.animal
-@w.en.like_to_eat.kids.animals.animal core.word lang=en text="like to eat" means=kids.animals.animal
-@w.en.need.kids.animals.animal core.word lang=en text=need means=kids.animals.animal
-@w.en.what_food_does.kids.animals.animal core.word lang=en text="what food does" means=kids.animals.animal
-@w.en.what_food_do.kids.animals.animal core.word lang=en text="what food do" means=kids.animals.animal
-@w.en.what_kind_of_animal_is.kids.animals.animal core.word lang=en text="what kind of animal is" means=kids.animals.animal
-@w.en.what_type_of_animal_is.kids.animals.animal core.word lang=en text="what type of animal is" means=kids.animals.animal
-@w.en.what_sort_of_animal_is.kids.animals.animal core.word lang=en text="what sort of animal is" means=kids.animals.animal
-@w.en.what_class_of_animal_is.kids.animals.animal core.word lang=en text="what class of animal is" means=kids.animals.animal
-@w.en.what_kind_of_animal_are.kids.animals.animal core.word lang=en text="what kind of animal are" means=kids.animals.animal
-@w.en.which_animals_live_in.kids.animals.animal core.word lang=en text="which animals live in" means=kids.animals.animal
-@w.en.what_animals_live_in.kids.animals.animal core.word lang=en text="what animals live in" means=kids.animals.animal
-@w.en.which_animal_lives_in.kids.animals.animal core.word lang=en text="which animal lives in" means=kids.animals.animal
-@w.en.what_animal_lives_in.kids.animals.animal core.word lang=en text="what animal lives in" means=kids.animals.animal
-@w.en.which_animals_live_on.kids.animals.animal core.word lang=en text="which animals live on" means=kids.animals.animal
-@w.en.which_animals_live_near.kids.animals.animal core.word lang=en text="which animals live near" means=kids.animals.animal
-@w.en.name_an_animal_that_lives_in.kids.animals.animal core.word lang=en text="name an animal that lives in" means=kids.animals.animal
-@w.en.name_animals_that_live_in.kids.animals.animal core.word lang=en text="name animals that live in" means=kids.animals.animal
-@w.en.which_animals_can_be_found_in.kids.animals.animal core.word lang=en text="which animals can be found in" means=kids.animals.animal
-@w.en.the.kids.animals.animal.h core.word lang=en text=the means=kids.animals.animal.h
-@w.en.a.kids.animals.animal.h core.word lang=en text=a means=kids.animals.animal.h
-@w.en.which_animals_have.kids.animals.animal core.word lang=en text="which animals have" means=kids.animals.animal
-@w.en.what_animals_have.kids.animals.animal core.word lang=en text="what animals have" means=kids.animals.animal
-@w.en.which_animal_has.kids.animals.animal core.word lang=en text="which animal has" means=kids.animals.animal
-@w.en.what_animal_has.kids.animals.animal core.word lang=en text="what animal has" means=kids.animals.animal
-@w.en.name_an_animal_with.kids.animals.animal core.word lang=en text="name an animal with" means=kids.animals.animal
-@w.en.name_animals_with.kids.animals.animal core.word lang=en text="name animals with" means=kids.animals.animal
-@w.en.which.kids.animals.animal core.word lang=en text=which means=kids.animals.animal
-@w.en.what.kids.animals.animal core.word lang=en text=what means=kids.animals.animal
-@w.en.name_a.kids.animals.animal core.word lang=en text="name a" means=kids.animals.animal
-@w.en.name_some.kids.animals.animal core.word lang=en text="name some" means=kids.animals.animal
-@w.en.can.kids.animals.animal.ab core.word lang=en text=can means=kids.animals.animal.ab
-@w.en.that_can.kids.animals.animal.ab core.word lang=en text="that can" means=kids.animals.animal.ab
-@w.en.which_animals_can.kids.animals.animal core.word lang=en text="which animals can" means=kids.animals.animal
-@w.en.what_animals_can.kids.animals.animal core.word lang=en text="what animals can" means=kids.animals.animal
-@w.en.which_animal_can.kids.animals.animal core.word lang=en text="which animal can" means=kids.animals.animal
-@w.en.name_an_animal_that_can.kids.animals.animal core.word lang=en text="name an animal that can" means=kids.animals.animal
-@w.en.name_animals_that_can.kids.animals.animal core.word lang=en text="name animals that can" means=kids.animals.animal
-@w.en.which_animals_cannot.kids.animals.animal core.word lang=en text="which animals cannot" means=kids.animals.animal
-@w.en.what_animals_cannot.kids.animals.animal core.word lang=en text="what animals cannot" means=kids.animals.animal
-@w.en.which_animals_can_not.kids.animals.animal core.word lang=en text="which animals can not" means=kids.animals.animal
-@w.en.which_animals_cant.kids.animals.animal core.word lang=en text="which animals cant" means=kids.animals.animal
-@w.en.name_an_animal_that_cannot.kids.animals.animal core.word lang=en text="name an animal that cannot" means=kids.animals.animal
-@w.en.which_animals_are.kids.animals.animal core.word lang=en text="which animals are" means=kids.animals.animal
-@w.en.what_animals_are.kids.animals.animal core.word lang=en text="what animals are" means=kids.animals.animal
-@w.en.which_animal_is.kids.animals.animal core.word lang=en text="which animal is" means=kids.animals.animal
-@w.en.name_an.kids.animals.animal core.word lang=en text="name an" means=kids.animals.animal
-@w.en.a.kids.animals.animal.c core.word lang=en text=a means=kids.animals.animal.c
-@w.en.an.kids.animals.animal.c core.word lang=en text=an means=kids.animals.animal.c
-@w.en.a.kids.animals.animal.d core.word lang=en text=a means=kids.animals.animal.d
-@w.en.an.kids.animals.animal.d core.word lang=en text=an means=kids.animals.animal.d
-@w.en.called.kids.animals.pet core.word lang=en text=called means=kids.animals.pet
-@w.en.what_is_my.kids.animals.pet core.word lang=en text="what is my" means=kids.animals.pet
-@w.en.what_are_my.kids.animals.pet core.word lang=en text="what are my" means=kids.animals.pet
-@w.en.what_is_the_name_of_my.kids.animals.pet core.word lang=en text="what is the name of my" means=kids.animals.pet
-@w.en.what_pets_do_i_have.kids.animals.pet core.word lang=en text="what pets do i have" means=kids.animals.pet
-@w.en.which_pets_do_i_have.kids.animals.pet core.word lang=en text="which pets do i have" means=kids.animals.pet
-@w.en.what_are_my_pets_called.kids.animals.pet core.word lang=en text="what are my pets called" means=kids.animals.pet
-@w.en.what_is_my_pet_called.kids.animals.pet core.word lang=en text="what is my pet called" means=kids.animals.pet
-@w.en.what_are_my_pets.kids.animals.pet core.word lang=en text="what are my pets" means=kids.animals.pet
-@w.en.who_is.kids.animals.pet core.word lang=en text="who is" means=kids.animals.pet
+@w.en.say.kids.animals.animal core.word text=say means=kids.animals.animal
+@w.en.sound_like.kids.animals.animal core.word text="sound like" means=kids.animals.animal
+@w.en.sound.kids.animals.animal core.word text=sound means=kids.animals.animal
+@w.en.make.kids.animals.animal core.word text=make means=kids.animals.animal
+@w.en.what_does.kids.animals.animal core.word text="what does" means=kids.animals.animal
+@w.en.what_do.kids.animals.animal core.word text="what do" means=kids.animals.animal
+@w.en.how_does.kids.animals.animal core.word text="how does" means=kids.animals.animal
+@w.en.how_do.kids.animals.animal core.word text="how do" means=kids.animals.animal
+@w.en.what_noise_does.kids.animals.animal core.word text="what noise does" means=kids.animals.animal
+@w.en.what_sound_does.kids.animals.animal core.word text="what sound does" means=kids.animals.animal
+@w.en.a.kids.animals.animal.a core.word text=a means=kids.animals.animal.a
+@w.en.an.kids.animals.animal.a core.word text=an means=kids.animals.animal.a
+@w.en.the.kids.animals.animal.a core.word text=the means=kids.animals.animal.a
+@w.en.live.kids.animals.animal core.word text=live means=kids.animals.animal
+@w.en.found.kids.animals.animal core.word text=found means=kids.animals.animal
+@w.en.stay.kids.animals.animal core.word text=stay means=kids.animals.animal
+@w.en.where_does.kids.animals.animal core.word text="where does" means=kids.animals.animal
+@w.en.where_do.kids.animals.animal core.word text="where do" means=kids.animals.animal
+@w.en.where_can_i_find.kids.animals.animal core.word text="where can i find" means=kids.animals.animal
+@w.en.where_can_we_find.kids.animals.animal core.word text="where can we find" means=kids.animals.animal
+@w.en.where_is.kids.animals.animal core.word text="where is" means=kids.animals.animal
+@w.en.where_are.kids.animals.animal core.word text="where are" means=kids.animals.animal
+@w.en.have.kids.animals.animal core.word text=have means=kids.animals.animal
+@w.en.covered_in.kids.animals.animal core.word text="covered in" means=kids.animals.animal
+@w.en.covered_with.kids.animals.animal core.word text="covered with" means=kids.animals.animal
+@w.en.covered_by.kids.animals.animal core.word text="covered by" means=kids.animals.animal
+@w.en.what_covering_does.kids.animals.animal core.word text="what covering does" means=kids.animals.animal
+@w.en.what_covering_do.kids.animals.animal core.word text="what covering do" means=kids.animals.animal
+@w.en.like.kids.animals.animal core.word text=like means=kids.animals.animal
+@w.en.what_is.kids.animals.animal core.word text="what is" means=kids.animals.animal
+@w.en.what_are.kids.animals.animal core.word text="what are" means=kids.animals.animal
+@w.en.tell_me_about.kids.animals.animal core.word text="tell me about" means=kids.animals.animal
+@w.en.describe.kids.animals.animal core.word text=describe means=kids.animals.animal
+@w.en.what_can_you_tell_me_about.kids.animals.animal core.word text="what can you tell me about" means=kids.animals.animal
+@w.en.tell_me_something_about.kids.animals.animal core.word text="tell me something about" means=kids.animals.animal
+@w.en.got.kids.animals.animal core.word text=got means=kids.animals.animal
+@w.en.how_many_legs_does.kids.animals.animal core.word text="how many legs does" means=kids.animals.animal
+@w.en.how_many_legs_do.kids.animals.animal core.word text="how many legs do" means=kids.animals.animal
+@w.en.how_many_feet_does.kids.animals.animal core.word text="how many feet does" means=kids.animals.animal
+@w.en.how_many_feet_do.kids.animals.animal core.word text="how many feet do" means=kids.animals.animal
+@w.en.does.kids.animals.animal core.word text=does means=kids.animals.animal
+@w.en.do.kids.animals.animal core.word text=do means=kids.animals.animal
+@w.en.did.kids.animals.animal core.word text=did means=kids.animals.animal
+@w.en.have.kids.animals.animal.n core.word text=have means=kids.animals.animal.n
+@w.en.has.kids.animals.animal.n core.word text=has means=kids.animals.animal.n
+@w.en.got.kids.animals.animal.n core.word text=got means=kids.animals.animal.n
+@w.en.legs.kids.animals.animal.n core.word text=legs means=kids.animals.animal.n
+@w.en.leg.kids.animals.animal.n core.word text=leg means=kids.animals.animal.n
+@w.en.feet.kids.animals.animal.n core.word text=feet means=kids.animals.animal.n
+@w.en.is.kids.animals.animal core.word text=is means=kids.animals.animal
+@w.en.are.kids.animals.animal core.word text=are means=kids.animals.animal
+@w.en.a.kids.animals.animal.k core.word text=a means=kids.animals.animal.k
+@w.en.an.kids.animals.animal.k core.word text=an means=kids.animals.animal.k
+@w.en.kind_of.kids.animals.animal.k core.word text="kind of" means=kids.animals.animal.k
+@w.en.type_of.kids.animals.animal.k core.word text="type of" means=kids.animals.animal.k
+@w.en.can.kids.animals.animal core.word text=can means=kids.animals.animal
+@w.en.could.kids.animals.animal core.word text=could means=kids.animals.animal
+@w.en.called.kids.animals.animal core.word text=called means=kids.animals.animal
+@w.en.what_is_the_baby.kids.animals.animal core.word text="what is the baby" means=kids.animals.animal
+@w.en.what_is_a_baby.kids.animals.animal core.word text="what is a baby" means=kids.animals.animal
+@w.en.what_do_you_call_a_baby.kids.animals.animal core.word text="what do you call a baby" means=kids.animals.animal
+@w.en.what_is_the_name_of_a_baby.kids.animals.animal core.word text="what is the name of a baby" means=kids.animals.animal
+@w.en.what_are_the_babies.kids.animals.animal core.word text="what are the babies" means=kids.animals.animal
+@w.en.of.kids.animals.animal.a core.word text=of means=kids.animals.animal.a
+@w.en.which_animal_has_a_baby_called.kids.animals.animal core.word text="which animal has a baby called" means=kids.animals.animal
+@w.en.which_animals_have_a_baby_called.kids.animals.animal core.word text="which animals have a baby called" means=kids.animals.animal
+@w.en.a.kids.animals.animal.b core.word text=a means=kids.animals.animal.b
+@w.en.an.kids.animals.animal.b core.word text=an means=kids.animals.animal.b
+@w.en.the.kids.animals.animal.b core.word text=the means=kids.animals.animal.b
+@w.en.eat.kids.animals.animal core.word text=eat means=kids.animals.animal
+@w.en.like_to_eat.kids.animals.animal core.word text="like to eat" means=kids.animals.animal
+@w.en.need.kids.animals.animal core.word text=need means=kids.animals.animal
+@w.en.what_food_does.kids.animals.animal core.word text="what food does" means=kids.animals.animal
+@w.en.what_food_do.kids.animals.animal core.word text="what food do" means=kids.animals.animal
+@w.en.what_kind_of_animal_is.kids.animals.animal core.word text="what kind of animal is" means=kids.animals.animal
+@w.en.what_type_of_animal_is.kids.animals.animal core.word text="what type of animal is" means=kids.animals.animal
+@w.en.what_sort_of_animal_is.kids.animals.animal core.word text="what sort of animal is" means=kids.animals.animal
+@w.en.what_class_of_animal_is.kids.animals.animal core.word text="what class of animal is" means=kids.animals.animal
+@w.en.what_kind_of_animal_are.kids.animals.animal core.word text="what kind of animal are" means=kids.animals.animal
+@w.en.which_animals_live_in.kids.animals.animal core.word text="which animals live in" means=kids.animals.animal
+@w.en.what_animals_live_in.kids.animals.animal core.word text="what animals live in" means=kids.animals.animal
+@w.en.which_animal_lives_in.kids.animals.animal core.word text="which animal lives in" means=kids.animals.animal
+@w.en.what_animal_lives_in.kids.animals.animal core.word text="what animal lives in" means=kids.animals.animal
+@w.en.which_animals_live_on.kids.animals.animal core.word text="which animals live on" means=kids.animals.animal
+@w.en.which_animals_live_near.kids.animals.animal core.word text="which animals live near" means=kids.animals.animal
+@w.en.name_an_animal_that_lives_in.kids.animals.animal core.word text="name an animal that lives in" means=kids.animals.animal
+@w.en.name_animals_that_live_in.kids.animals.animal core.word text="name animals that live in" means=kids.animals.animal
+@w.en.which_animals_can_be_found_in.kids.animals.animal core.word text="which animals can be found in" means=kids.animals.animal
+@w.en.the.kids.animals.animal.h core.word text=the means=kids.animals.animal.h
+@w.en.a.kids.animals.animal.h core.word text=a means=kids.animals.animal.h
+@w.en.which_animals_have.kids.animals.animal core.word text="which animals have" means=kids.animals.animal
+@w.en.what_animals_have.kids.animals.animal core.word text="what animals have" means=kids.animals.animal
+@w.en.which_animal_has.kids.animals.animal core.word text="which animal has" means=kids.animals.animal
+@w.en.what_animal_has.kids.animals.animal core.word text="what animal has" means=kids.animals.animal
+@w.en.name_an_animal_with.kids.animals.animal core.word text="name an animal with" means=kids.animals.animal
+@w.en.name_animals_with.kids.animals.animal core.word text="name animals with" means=kids.animals.animal
+@w.en.which.kids.animals.animal core.word text=which means=kids.animals.animal
+@w.en.what.kids.animals.animal core.word text=what means=kids.animals.animal
+@w.en.name_a.kids.animals.animal core.word text="name a" means=kids.animals.animal
+@w.en.name_some.kids.animals.animal core.word text="name some" means=kids.animals.animal
+@w.en.can.kids.animals.animal.ab core.word text=can means=kids.animals.animal.ab
+@w.en.that_can.kids.animals.animal.ab core.word text="that can" means=kids.animals.animal.ab
+@w.en.which_animals_can.kids.animals.animal core.word text="which animals can" means=kids.animals.animal
+@w.en.what_animals_can.kids.animals.animal core.word text="what animals can" means=kids.animals.animal
+@w.en.which_animal_can.kids.animals.animal core.word text="which animal can" means=kids.animals.animal
+@w.en.name_an_animal_that_can.kids.animals.animal core.word text="name an animal that can" means=kids.animals.animal
+@w.en.name_animals_that_can.kids.animals.animal core.word text="name animals that can" means=kids.animals.animal
+@w.en.which_animals_cannot.kids.animals.animal core.word text="which animals cannot" means=kids.animals.animal
+@w.en.what_animals_cannot.kids.animals.animal core.word text="what animals cannot" means=kids.animals.animal
+@w.en.which_animals_can_not.kids.animals.animal core.word text="which animals can not" means=kids.animals.animal
+@w.en.which_animals_cant.kids.animals.animal core.word text="which animals cant" means=kids.animals.animal
+@w.en.name_an_animal_that_cannot.kids.animals.animal core.word text="name an animal that cannot" means=kids.animals.animal
+@w.en.which_animals_are.kids.animals.animal core.word text="which animals are" means=kids.animals.animal
+@w.en.what_animals_are.kids.animals.animal core.word text="what animals are" means=kids.animals.animal
+@w.en.which_animal_is.kids.animals.animal core.word text="which animal is" means=kids.animals.animal
+@w.en.name_an.kids.animals.animal core.word text="name an" means=kids.animals.animal
+@w.en.a.kids.animals.animal.c core.word text=a means=kids.animals.animal.c
+@w.en.an.kids.animals.animal.c core.word text=an means=kids.animals.animal.c
+@w.en.a.kids.animals.animal.d core.word text=a means=kids.animals.animal.d
+@w.en.an.kids.animals.animal.d core.word text=an means=kids.animals.animal.d
+@w.en.called.kids.animals.pet core.word text=called means=kids.animals.pet
+@w.en.what_is_my.kids.animals.pet core.word text="what is my" means=kids.animals.pet
+@w.en.what_are_my.kids.animals.pet core.word text="what are my" means=kids.animals.pet
+@w.en.what_is_the_name_of_my.kids.animals.pet core.word text="what is the name of my" means=kids.animals.pet
+@w.en.what_pets_do_i_have.kids.animals.pet core.word text="what pets do i have" means=kids.animals.pet
+@w.en.which_pets_do_i_have.kids.animals.pet core.word text="which pets do i have" means=kids.animals.pet
+@w.en.what_are_my_pets_called.kids.animals.pet core.word text="what are my pets called" means=kids.animals.pet
+@w.en.what_is_my_pet_called.kids.animals.pet core.word text="what is my pet called" means=kids.animals.pet
+@w.en.what_are_my_pets.kids.animals.pet core.word text="what are my pets" means=kids.animals.pet
+@w.en.who_is.kids.animals.pet core.word text="who is" means=kids.animals.pet

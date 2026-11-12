@@ -18,26 +18,26 @@ const WH = new Set(['how', 'what', 'which', 'who', 'where', 'when', 'why']);
 export const clausesOf = (text) => String(text ?? '').split(CLAUSE_SPLIT).map(tokens).filter((c) => c.length);
 
 /** The tokens of a clause as a frame: the first word that means an action or a type is the verb, digits are numbers, the rest are arguments; no verb word: loose words. */
-export function frameOf(clause, words, lang = 'en', { first = true } = {}) {
+export function frameOf(clause, words, { first = true } = {}) {
   const numbers = clause.filter((t) => /^\d+(\.\d+)?$/.test(t)).map(Number);
   const question = clause.some((t) => WH.has(t));
   const rest = clause.filter((t) => !/^\d+(\.\d+)?$/.test(t) && !FUNCTION.has(t));
   const isVerb = (t) => (words.get(t) ?? []).some((e) => e.meanings?.some((m) => m.kind === 'action' || m.kind === 'type'));
   const v = rest.findIndex(isVerb);
-  if (v < 0) return first ? { lang, words: rest, numbers, ...(question ? { question } : {}) } : { lang, args: rest, numbers, ...(question ? { question } : {}) };
-  return { lang, verb: rest[v], args: rest.filter((_, i) => i !== v), numbers, ...(question ? { question } : {}) };
+  if (v < 0) return first ? { words: rest, numbers, ...(question ? { question } : {}) } : { args: rest, numbers, ...(question ? { question } : {}) };
+  return { verb: rest[v], args: rest.filter((_, i) => i !== v), numbers, ...(question ? { question } : {}) };
 }
 
 /**
- * Reads `text` on `world` (a library World that holds the `core.word` facts of `lang`): returns `{ frames, candidates, results, order, top, veto }`.
+ * Reads `text` on `world` (a library World that holds `core.word` facts: words have no language since sopworld 0.13): returns `{ frames, candidates, results, order, top, veto }`.
  * Alternative splits: the message split at every clause break, and as one clause.
  */
-export function readText(world, text, { lang = 'en', limit = 12 } = {}) {
-  const words = world.words(lang);
+export function readText(world, text, { limit = 12 } = {}) {
+  const words = world.words();
   const cl = clausesOf(text);
   if (!cl.length) return { frames: [], candidates: [], results: [], order: [], top: null, veto: null };
-  const split = cl.map((c, i) => frameOf(c, words, lang, { first: i === 0 }));
-  const whole = cl.length > 1 ? [frameOf(cl.flat(), words, lang)] : null;
+  const split = cl.map((c, i) => frameOf(c, words, { first: i === 0 }));
+  const whole = cl.length > 1 ? [frameOf(cl.flat(), words)] : null;
   const r = world.interpret(whole ? [split, whole] : split, { limit });
   if (!r.candidates?.length) return { frames: split, candidates: [], results: [], order: [], top: null, veto: null };
   const s = world.score(r.candidates);
@@ -46,6 +46,6 @@ export function readText(world, text, { lang = 'en', limit = 12 } = {}) {
 }
 
 /** The words for the values of a slot (`core.word` wires, English, the singular and the plural), for a world whose lexicon lists them. */
-export function valueWords(values, slot, lang = 'en') {
-  return values.map((v) => `@w.${lang}.${v}.v core.word lang=${lang} text=${v} text=${v}s means=${v} of=${slot}`).join('\n');
+export function valueWords(values, slot) {
+  return values.map((v) => `@w.en.${v}.v core.word text=${v} text=${v}s means=${v} of=${slot}`).join('\n');
 }

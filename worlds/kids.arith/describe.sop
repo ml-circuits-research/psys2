@@ -980,165 +980,165 @@
     sample.n=10
     example="What is double 10?"
 
-@w.en.gets.kids.arith.receive core.word lang=en text=gets means=kids.arith.receive
-@w.en.got.kids.arith.receive core.word lang=en text=got means=kids.arith.receive
-@w.en.receives.kids.arith.receive core.word lang=en text=receives means=kids.arith.receive
-@w.en.received.kids.arith.receive core.word lang=en text=received means=kids.arith.receive
-@w.en.find.kids.arith.receive core.word lang=en text=find means=kids.arith.receive
-@w.en.finds.kids.arith.receive core.word lang=en text=finds means=kids.arith.receive
-@w.en.found.kids.arith.receive core.word lang=en text=found means=kids.arith.receive
-@w.en.more.kids.arith.receive.n core.word lang=en text=more means=kids.arith.receive.n
-@w.en.new.kids.arith.receive.n core.word lang=en text=new means=kids.arith.receive.n
-@w.en.eats.kids.arith.eat core.word lang=en text=eats means=kids.arith.eat
-@w.en.ate.kids.arith.eat core.word lang=en text=ate means=kids.arith.eat
-@w.en.eat.kids.arith.eat core.word lang=en text=eat means=kids.arith.eat
-@w.en.loses.kids.arith.lose core.word lang=en text=loses means=kids.arith.lose
-@w.en.lost.kids.arith.lose core.word lang=en text=lost means=kids.arith.lose
-@w.en.lose.kids.arith.lose core.word lang=en text=lose means=kids.arith.lose
-@w.en.buys.kids.arith.buy core.word lang=en text=buys means=kids.arith.buy
-@w.en.bought.kids.arith.buy core.word lang=en text=bought means=kids.arith.buy
-@w.en.buy.kids.arith.buy core.word lang=en text=buy means=kids.arith.buy
-@w.en.more.kids.arith.buy.n core.word lang=en text=more means=kids.arith.buy.n
-@w.en.new.kids.arith.buy.n core.word lang=en text=new means=kids.arith.buy.n
-@w.en.breaks.kids.arith.break core.word lang=en text=breaks means=kids.arith.break
-@w.en.broke.kids.arith.break core.word lang=en text=broke means=kids.arith.break
-@w.en.break.kids.arith.break core.word lang=en text=break means=kids.arith.break
-@w.en.broken.kids.arith.break core.word lang=en text=broken means=kids.arith.break
-@w.en.what_is_left.kids.arith.holding core.word lang=en text="what is left" means=kids.arith.holding
-@w.en.whats_left.kids.arith.holding core.word lang=en text="whats left" means=kids.arith.holding
-@w.en.what_is_remaining.kids.arith.holding core.word lang=en text="what is remaining" means=kids.arith.holding
-@w.en.how_much_is_left.kids.arith.holding core.word lang=en text="how much is left" means=kids.arith.holding
-@w.en.how_many_are_left.kids.arith.holding core.word lang=en text="how many are left" means=kids.arith.holding
-@w.en.what_remains.kids.arith.holding core.word lang=en text="what remains" means=kids.arith.holding
-@w.en.for.kids.arith.holding.who core.word lang=en text=for means=kids.arith.holding.who
-@w.en.with.kids.arith.holding.who core.word lang=en text=with means=kids.arith.holding.who
-@w.en.of.kids.arith.holding.who core.word lang=en text=of means=kids.arith.holding.who
-@w.en.has.kids.arith.holding core.word lang=en text=has means=kids.arith.holding
-@w.en.have.kids.arith.holding core.word lang=en text=have means=kids.arith.holding
-@w.en.had.kids.arith.holding core.word lang=en text=had means=kids.arith.holding
-@w.en.has_got.kids.arith.holding core.word lang=en text="has got" means=kids.arith.holding
-@w.en.have_got.kids.arith.holding core.word lang=en text="have got" means=kids.arith.holding
-@w.en.had_got.kids.arith.holding core.word lang=en text="had got" means=kids.arith.holding
-@w.en.owns.kids.arith.holding core.word lang=en text=owns means=kids.arith.holding
-@w.en.now.kids.arith.holding core.word lang=en text=now means=kids.arith.holding
-@w.en.left.kids.arith.holding core.word lang=en text=left means=kids.arith.holding
-@w.en.today.kids.arith.holding core.word lang=en text=today means=kids.arith.holding
-@w.en.at_first.kids.arith.holding core.word lang=en text="at first" means=kids.arith.holding
-@w.en.at_the_start.kids.arith.holding core.word lang=en text="at the start" means=kids.arith.holding
-@w.en.gives.kids.arith.give core.word lang=en text=gives means=kids.arith.give
-@w.en.gave.kids.arith.give core.word lang=en text=gave means=kids.arith.give
-@w.en.give.kids.arith.give core.word lang=en text=give means=kids.arith.give
-@w.en.to.kids.arith.give.to core.word lang=en text=to means=kids.arith.give.to
-@w.en.eaten.kids.arith.eat core.word lang=en text=eaten means=kids.arith.eat
-@w.en.got.kids.arith.holding core.word lang=en text=got means=kids.arith.holding
-@w.en.number_of.kids.arith.holding core.word lang=en text="number of" means=kids.arith.holding
-@w.en.count_of.kids.arith.holding core.word lang=en text="count of" means=kids.arith.holding
-@w.en.how_many.kids.arith.holding core.word lang=en text="how many" means=kids.arith.holding
-@w.en.how_much.kids.arith.holding core.word lang=en text="how much" means=kids.arith.holding
-@w.en.still.kids.arith.holding core.word lang=en text=still means=kids.arith.holding
-@w.en.do.kids.arith.holding.who core.word lang=en text=do means=kids.arith.holding.who
-@w.en.does.kids.arith.holding.who core.word lang=en text=does means=kids.arith.holding.who
-@w.en.did.kids.arith.holding.who core.word lang=en text=did means=kids.arith.holding.who
-@w.en.will.kids.arith.holding.who core.word lang=en text=will means=kids.arith.holding.who
-@w.en.have.kids.arith.has core.word lang=en text=have means=kids.arith.has
-@w.en.does.kids.arith.has core.word lang=en text=does means=kids.arith.has
-@w.en.do.kids.arith.has core.word lang=en text=do means=kids.arith.has
-@w.en.did.kids.arith.has core.word lang=en text=did means=kids.arith.has
-@w.en.have_any.kids.arith.has.item core.word lang=en text="have any" means=kids.arith.has.item
-@w.en.have_a.kids.arith.has.item core.word lang=en text="have a" means=kids.arith.has.item
-@w.en.have_an.kids.arith.has.item core.word lang=en text="have an" means=kids.arith.has.item
-@w.en.have_some.kids.arith.has.item core.word lang=en text="have some" means=kids.arith.has.item
-@w.en.have.kids.arith.has.item core.word lang=en text=have means=kids.arith.has.item
-@w.en.are_there.kids.arith.total core.word lang=en text="are there" means=kids.arith.total
-@w.en.in_total.kids.arith.total core.word lang=en text="in total" means=kids.arith.total
-@w.en.altogether.kids.arith.total core.word lang=en text=altogether means=kids.arith.total
-@w.en.do_they_have.kids.arith.total core.word lang=en text="do they have" means=kids.arith.total
-@w.en.do_we_have.kids.arith.total core.word lang=en text="do we have" means=kids.arith.total
-@w.en.does_everyone_have.kids.arith.total core.word lang=en text="does everyone have" means=kids.arith.total
-@w.en.does_everybody_have.kids.arith.total core.word lang=en text="does everybody have" means=kids.arith.total
-@w.en.total_number_of.kids.arith.total core.word lang=en text="total number of" means=kids.arith.total
-@w.en.total_of.kids.arith.total core.word lang=en text="total of" means=kids.arith.total
-@w.en.sum_of.kids.arith.total core.word lang=en text="sum of" means=kids.arith.total
-@w.en.how_many.kids.arith.total core.word lang=en text="how many" means=kids.arith.total
-@w.en.in_all.kids.arith.total core.word lang=en text="in all" means=kids.arith.total
-@w.en.all_together.kids.arith.total core.word lang=en text="all together" means=kids.arith.total
-@w.en.together.kids.arith.total core.word lang=en text=together means=kids.arith.total
-@w.en.have.kids.arith.total core.word lang=en text=have means=kids.arith.total
-@w.en.got.kids.arith.total core.word lang=en text=got means=kids.arith.total
-@w.en.do.kids.arith.total.who1 core.word lang=en text=do means=kids.arith.total.who1
-@w.en.does.kids.arith.total.who1 core.word lang=en text=does means=kids.arith.total.who1
-@w.en.did.kids.arith.total.who1 core.word lang=en text=did means=kids.arith.total.who1
-@w.en.have.kids.arith.total.who1 core.word lang=en text=have means=kids.arith.total.who1
-@w.en.has.kids.arith.total.who1 core.word lang=en text=has means=kids.arith.total.who1
-@w.en.and.kids.arith.total.who2 core.word lang=en text=and means=kids.arith.total.who2
-@w.en.who_has.kids.arith.leader core.word lang=en text="who has" means=kids.arith.leader
-@w.en.who_have.kids.arith.leader core.word lang=en text="who have" means=kids.arith.leader
-@w.en.who_had.kids.arith.leader core.word lang=en text="who had" means=kids.arith.leader
-@w.en.who_owns.kids.arith.leader core.word lang=en text="who owns" means=kids.arith.leader
-@w.en.who_got.kids.arith.leader core.word lang=en text="who got" means=kids.arith.leader
-@w.en.which_kid_has.kids.arith.leader core.word lang=en text="which kid has" means=kids.arith.leader
-@w.en.which_friend_has.kids.arith.leader core.word lang=en text="which friend has" means=kids.arith.leader
-@w.en.which_child_has.kids.arith.leader core.word lang=en text="which child has" means=kids.arith.leader
-@w.en.more.kids.arith.leader.item core.word lang=en text=more means=kids.arith.leader.item
-@w.en.the_most.kids.arith.leader.item core.word lang=en text="the most" means=kids.arith.leader.item
-@w.en.the_largest_number_of.kids.arith.leader.item core.word lang=en text="the largest number of" means=kids.arith.leader.item
-@w.en.the_biggest_number_of.kids.arith.leader.item core.word lang=en text="the biggest number of" means=kids.arith.leader.item
-@w.en.which_of.kids.arith.leader core.word lang=en text="which of" means=kids.arith.leader
-@w.en.between.kids.arith.leader.who1 core.word lang=en text=between means=kids.arith.leader.who1
-@w.en.of.kids.arith.leader.who1 core.word lang=en text=of means=kids.arith.leader.who1
-@w.en.out_of.kids.arith.leader.who1 core.word lang=en text="out of" means=kids.arith.leader.who1
-@w.en.and.kids.arith.leader.who2 core.word lang=en text=and means=kids.arith.leader.who2
-@w.en.or.kids.arith.leader.who2 core.word lang=en text=or means=kids.arith.leader.who2
-@w.en.have.kids.arith.gap core.word lang=en text=have means=kids.arith.gap
-@w.en.how_many_more.kids.arith.gap core.word lang=en text="how many more" means=kids.arith.gap
-@w.en.how_many_extra.kids.arith.gap core.word lang=en text="how many extra" means=kids.arith.gap
-@w.en.how_many_fewer.kids.arith.gap core.word lang=en text="how many fewer" means=kids.arith.gap
-@w.en.how_many_less.kids.arith.gap core.word lang=en text="how many less" means=kids.arith.gap
-@w.en.does.kids.arith.gap.who1 core.word lang=en text=does means=kids.arith.gap.who1
-@w.en.do.kids.arith.gap.who1 core.word lang=en text=do means=kids.arith.gap.who1
-@w.en.did.kids.arith.gap.who1 core.word lang=en text=did means=kids.arith.gap.who1
-@w.en.than.kids.arith.gap.who2 core.word lang=en text=than means=kids.arith.gap.who2
-@w.en.compared_to.kids.arith.gap.who2 core.word lang=en text="compared to" means=kids.arith.gap.who2
-@w.en.does.kids.arith.verdict core.word lang=en text=does means=kids.arith.verdict
-@w.en.do.kids.arith.verdict core.word lang=en text=do means=kids.arith.verdict
-@w.en.did.kids.arith.verdict core.word lang=en text=did means=kids.arith.verdict
-@w.en.have_more.kids.arith.verdict.item core.word lang=en text="have more" means=kids.arith.verdict.item
-@w.en.has_more.kids.arith.verdict.item core.word lang=en text="has more" means=kids.arith.verdict.item
-@w.en.got_more.kids.arith.verdict.item core.word lang=en text="got more" means=kids.arith.verdict.item
-@w.en.than.kids.arith.verdict.who2 core.word lang=en text=than means=kids.arith.verdict.who2
-@w.en.plus.kids.arith.calc core.word lang=en text=plus means=kids.arith.calc
-@w.en.added_to.kids.arith.calc core.word lang=en text="added to" means=kids.arith.calc
-@w.en.add.kids.arith.calc core.word lang=en text=add means=kids.arith.calc
-@w.en.and.kids.arith.calc core.word lang=en text=and means=kids.arith.calc
-@w.en.added_up.kids.arith.calc core.word lang=en text="added up" means=kids.arith.calc
-@w.en.what_is.kids.arith.calc core.word lang=en text="what is" means=kids.arith.calc
-@w.en.whats.kids.arith.calc core.word lang=en text=whats means=kids.arith.calc
-@w.en.how_much_is.kids.arith.calc core.word lang=en text="how much is" means=kids.arith.calc
-@w.en.calculate.kids.arith.calc core.word lang=en text=calculate means=kids.arith.calc
-@w.en.compute.kids.arith.calc core.word lang=en text=compute means=kids.arith.calc
-@w.en.minus.kids.arith.calc core.word lang=en text=minus means=kids.arith.calc
-@w.en.take_away.kids.arith.calc core.word lang=en text="take away" means=kids.arith.calc
-@w.en.less.kids.arith.calc core.word lang=en text=less means=kids.arith.calc
-@w.en.subtract.kids.arith.calc core.word lang=en text=subtract means=kids.arith.calc
-@w.en.without.kids.arith.calc core.word lang=en text=without means=kids.arith.calc
-@w.en.times.kids.arith.calc core.word lang=en text=times means=kids.arith.calc
-@w.en.multiplied_by.kids.arith.calc core.word lang=en text="multiplied by" means=kids.arith.calc
-@w.en.multiply_by.kids.arith.calc core.word lang=en text="multiply by" means=kids.arith.calc
-@w.en.x.kids.arith.calc core.word lang=en text=x means=kids.arith.calc
-@w.en.lots_of.kids.arith.calc core.word lang=en text="lots of" means=kids.arith.calc
-@w.en.divided_by.kids.arith.calc core.word lang=en text="divided by" means=kids.arith.calc
-@w.en.split_by.kids.arith.calc core.word lang=en text="split by" means=kids.arith.calc
-@w.en.over.kids.arith.calc core.word lang=en text=over means=kids.arith.calc
-@w.en.divide_by.kids.arith.calc core.word lang=en text="divide by" means=kids.arith.calc
-@w.en.half.kids.arith.half core.word lang=en text=half means=kids.arith.half
-@w.en.what_is_half.kids.arith.half core.word lang=en text="what is half" means=kids.arith.half
-@w.en.whats_half.kids.arith.half core.word lang=en text="whats half" means=kids.arith.half
-@w.en.how_much_is_half.kids.arith.half core.word lang=en text="how much is half" means=kids.arith.half
-@w.en.of.kids.arith.half.n core.word lang=en text=of means=kids.arith.half.n
-@w.en.double.kids.arith.double core.word lang=en text=double means=kids.arith.double
-@w.en.twice.kids.arith.double core.word lang=en text=twice means=kids.arith.double
-@w.en.what_is_double.kids.arith.double core.word lang=en text="what is double" means=kids.arith.double
-@w.en.whats_double.kids.arith.double core.word lang=en text="whats double" means=kids.arith.double
-@w.en.what_is_twice.kids.arith.double core.word lang=en text="what is twice" means=kids.arith.double
-@w.en.how_much_is_double.kids.arith.double core.word lang=en text="how much is double" means=kids.arith.double
-@w.en.of.kids.arith.double.n core.word lang=en text=of means=kids.arith.double.n
+@w.en.gets.kids.arith.receive core.word text=gets means=kids.arith.receive
+@w.en.got.kids.arith.receive core.word text=got means=kids.arith.receive
+@w.en.receives.kids.arith.receive core.word text=receives means=kids.arith.receive
+@w.en.received.kids.arith.receive core.word text=received means=kids.arith.receive
+@w.en.find.kids.arith.receive core.word text=find means=kids.arith.receive
+@w.en.finds.kids.arith.receive core.word text=finds means=kids.arith.receive
+@w.en.found.kids.arith.receive core.word text=found means=kids.arith.receive
+@w.en.more.kids.arith.receive.n core.word text=more means=kids.arith.receive.n
+@w.en.new.kids.arith.receive.n core.word text=new means=kids.arith.receive.n
+@w.en.eats.kids.arith.eat core.word text=eats means=kids.arith.eat
+@w.en.ate.kids.arith.eat core.word text=ate means=kids.arith.eat
+@w.en.eat.kids.arith.eat core.word text=eat means=kids.arith.eat
+@w.en.loses.kids.arith.lose core.word text=loses means=kids.arith.lose
+@w.en.lost.kids.arith.lose core.word text=lost means=kids.arith.lose
+@w.en.lose.kids.arith.lose core.word text=lose means=kids.arith.lose
+@w.en.buys.kids.arith.buy core.word text=buys means=kids.arith.buy
+@w.en.bought.kids.arith.buy core.word text=bought means=kids.arith.buy
+@w.en.buy.kids.arith.buy core.word text=buy means=kids.arith.buy
+@w.en.more.kids.arith.buy.n core.word text=more means=kids.arith.buy.n
+@w.en.new.kids.arith.buy.n core.word text=new means=kids.arith.buy.n
+@w.en.breaks.kids.arith.break core.word text=breaks means=kids.arith.break
+@w.en.broke.kids.arith.break core.word text=broke means=kids.arith.break
+@w.en.break.kids.arith.break core.word text=break means=kids.arith.break
+@w.en.broken.kids.arith.break core.word text=broken means=kids.arith.break
+@w.en.what_is_left.kids.arith.holding core.word text="what is left" means=kids.arith.holding
+@w.en.whats_left.kids.arith.holding core.word text="whats left" means=kids.arith.holding
+@w.en.what_is_remaining.kids.arith.holding core.word text="what is remaining" means=kids.arith.holding
+@w.en.how_much_is_left.kids.arith.holding core.word text="how much is left" means=kids.arith.holding
+@w.en.how_many_are_left.kids.arith.holding core.word text="how many are left" means=kids.arith.holding
+@w.en.what_remains.kids.arith.holding core.word text="what remains" means=kids.arith.holding
+@w.en.for.kids.arith.holding.who core.word text=for means=kids.arith.holding.who
+@w.en.with.kids.arith.holding.who core.word text=with means=kids.arith.holding.who
+@w.en.of.kids.arith.holding.who core.word text=of means=kids.arith.holding.who
+@w.en.has.kids.arith.holding core.word text=has means=kids.arith.holding
+@w.en.have.kids.arith.holding core.word text=have means=kids.arith.holding
+@w.en.had.kids.arith.holding core.word text=had means=kids.arith.holding
+@w.en.has_got.kids.arith.holding core.word text="has got" means=kids.arith.holding
+@w.en.have_got.kids.arith.holding core.word text="have got" means=kids.arith.holding
+@w.en.had_got.kids.arith.holding core.word text="had got" means=kids.arith.holding
+@w.en.owns.kids.arith.holding core.word text=owns means=kids.arith.holding
+@w.en.now.kids.arith.holding core.word text=now means=kids.arith.holding
+@w.en.left.kids.arith.holding core.word text=left means=kids.arith.holding
+@w.en.today.kids.arith.holding core.word text=today means=kids.arith.holding
+@w.en.at_first.kids.arith.holding core.word text="at first" means=kids.arith.holding
+@w.en.at_the_start.kids.arith.holding core.word text="at the start" means=kids.arith.holding
+@w.en.gives.kids.arith.give core.word text=gives means=kids.arith.give
+@w.en.gave.kids.arith.give core.word text=gave means=kids.arith.give
+@w.en.give.kids.arith.give core.word text=give means=kids.arith.give
+@w.en.to.kids.arith.give.to core.word text=to means=kids.arith.give.to
+@w.en.eaten.kids.arith.eat core.word text=eaten means=kids.arith.eat
+@w.en.got.kids.arith.holding core.word text=got means=kids.arith.holding
+@w.en.number_of.kids.arith.holding core.word text="number of" means=kids.arith.holding
+@w.en.count_of.kids.arith.holding core.word text="count of" means=kids.arith.holding
+@w.en.how_many.kids.arith.holding core.word text="how many" means=kids.arith.holding
+@w.en.how_much.kids.arith.holding core.word text="how much" means=kids.arith.holding
+@w.en.still.kids.arith.holding core.word text=still means=kids.arith.holding
+@w.en.do.kids.arith.holding.who core.word text=do means=kids.arith.holding.who
+@w.en.does.kids.arith.holding.who core.word text=does means=kids.arith.holding.who
+@w.en.did.kids.arith.holding.who core.word text=did means=kids.arith.holding.who
+@w.en.will.kids.arith.holding.who core.word text=will means=kids.arith.holding.who
+@w.en.have.kids.arith.has core.word text=have means=kids.arith.has
+@w.en.does.kids.arith.has core.word text=does means=kids.arith.has
+@w.en.do.kids.arith.has core.word text=do means=kids.arith.has
+@w.en.did.kids.arith.has core.word text=did means=kids.arith.has
+@w.en.have_any.kids.arith.has.item core.word text="have any" means=kids.arith.has.item
+@w.en.have_a.kids.arith.has.item core.word text="have a" means=kids.arith.has.item
+@w.en.have_an.kids.arith.has.item core.word text="have an" means=kids.arith.has.item
+@w.en.have_some.kids.arith.has.item core.word text="have some" means=kids.arith.has.item
+@w.en.have.kids.arith.has.item core.word text=have means=kids.arith.has.item
+@w.en.are_there.kids.arith.total core.word text="are there" means=kids.arith.total
+@w.en.in_total.kids.arith.total core.word text="in total" means=kids.arith.total
+@w.en.altogether.kids.arith.total core.word text=altogether means=kids.arith.total
+@w.en.do_they_have.kids.arith.total core.word text="do they have" means=kids.arith.total
+@w.en.do_we_have.kids.arith.total core.word text="do we have" means=kids.arith.total
+@w.en.does_everyone_have.kids.arith.total core.word text="does everyone have" means=kids.arith.total
+@w.en.does_everybody_have.kids.arith.total core.word text="does everybody have" means=kids.arith.total
+@w.en.total_number_of.kids.arith.total core.word text="total number of" means=kids.arith.total
+@w.en.total_of.kids.arith.total core.word text="total of" means=kids.arith.total
+@w.en.sum_of.kids.arith.total core.word text="sum of" means=kids.arith.total
+@w.en.how_many.kids.arith.total core.word text="how many" means=kids.arith.total
+@w.en.in_all.kids.arith.total core.word text="in all" means=kids.arith.total
+@w.en.all_together.kids.arith.total core.word text="all together" means=kids.arith.total
+@w.en.together.kids.arith.total core.word text=together means=kids.arith.total
+@w.en.have.kids.arith.total core.word text=have means=kids.arith.total
+@w.en.got.kids.arith.total core.word text=got means=kids.arith.total
+@w.en.do.kids.arith.total.who1 core.word text=do means=kids.arith.total.who1
+@w.en.does.kids.arith.total.who1 core.word text=does means=kids.arith.total.who1
+@w.en.did.kids.arith.total.who1 core.word text=did means=kids.arith.total.who1
+@w.en.have.kids.arith.total.who1 core.word text=have means=kids.arith.total.who1
+@w.en.has.kids.arith.total.who1 core.word text=has means=kids.arith.total.who1
+@w.en.and.kids.arith.total.who2 core.word text=and means=kids.arith.total.who2
+@w.en.who_has.kids.arith.leader core.word text="who has" means=kids.arith.leader
+@w.en.who_have.kids.arith.leader core.word text="who have" means=kids.arith.leader
+@w.en.who_had.kids.arith.leader core.word text="who had" means=kids.arith.leader
+@w.en.who_owns.kids.arith.leader core.word text="who owns" means=kids.arith.leader
+@w.en.who_got.kids.arith.leader core.word text="who got" means=kids.arith.leader
+@w.en.which_kid_has.kids.arith.leader core.word text="which kid has" means=kids.arith.leader
+@w.en.which_friend_has.kids.arith.leader core.word text="which friend has" means=kids.arith.leader
+@w.en.which_child_has.kids.arith.leader core.word text="which child has" means=kids.arith.leader
+@w.en.more.kids.arith.leader.item core.word text=more means=kids.arith.leader.item
+@w.en.the_most.kids.arith.leader.item core.word text="the most" means=kids.arith.leader.item
+@w.en.the_largest_number_of.kids.arith.leader.item core.word text="the largest number of" means=kids.arith.leader.item
+@w.en.the_biggest_number_of.kids.arith.leader.item core.word text="the biggest number of" means=kids.arith.leader.item
+@w.en.which_of.kids.arith.leader core.word text="which of" means=kids.arith.leader
+@w.en.between.kids.arith.leader.who1 core.word text=between means=kids.arith.leader.who1
+@w.en.of.kids.arith.leader.who1 core.word text=of means=kids.arith.leader.who1
+@w.en.out_of.kids.arith.leader.who1 core.word text="out of" means=kids.arith.leader.who1
+@w.en.and.kids.arith.leader.who2 core.word text=and means=kids.arith.leader.who2
+@w.en.or.kids.arith.leader.who2 core.word text=or means=kids.arith.leader.who2
+@w.en.have.kids.arith.gap core.word text=have means=kids.arith.gap
+@w.en.how_many_more.kids.arith.gap core.word text="how many more" means=kids.arith.gap
+@w.en.how_many_extra.kids.arith.gap core.word text="how many extra" means=kids.arith.gap
+@w.en.how_many_fewer.kids.arith.gap core.word text="how many fewer" means=kids.arith.gap
+@w.en.how_many_less.kids.arith.gap core.word text="how many less" means=kids.arith.gap
+@w.en.does.kids.arith.gap.who1 core.word text=does means=kids.arith.gap.who1
+@w.en.do.kids.arith.gap.who1 core.word text=do means=kids.arith.gap.who1
+@w.en.did.kids.arith.gap.who1 core.word text=did means=kids.arith.gap.who1
+@w.en.than.kids.arith.gap.who2 core.word text=than means=kids.arith.gap.who2
+@w.en.compared_to.kids.arith.gap.who2 core.word text="compared to" means=kids.arith.gap.who2
+@w.en.does.kids.arith.verdict core.word text=does means=kids.arith.verdict
+@w.en.do.kids.arith.verdict core.word text=do means=kids.arith.verdict
+@w.en.did.kids.arith.verdict core.word text=did means=kids.arith.verdict
+@w.en.have_more.kids.arith.verdict.item core.word text="have more" means=kids.arith.verdict.item
+@w.en.has_more.kids.arith.verdict.item core.word text="has more" means=kids.arith.verdict.item
+@w.en.got_more.kids.arith.verdict.item core.word text="got more" means=kids.arith.verdict.item
+@w.en.than.kids.arith.verdict.who2 core.word text=than means=kids.arith.verdict.who2
+@w.en.plus.kids.arith.calc core.word text=plus means=kids.arith.calc
+@w.en.added_to.kids.arith.calc core.word text="added to" means=kids.arith.calc
+@w.en.add.kids.arith.calc core.word text=add means=kids.arith.calc
+@w.en.and.kids.arith.calc core.word text=and means=kids.arith.calc
+@w.en.added_up.kids.arith.calc core.word text="added up" means=kids.arith.calc
+@w.en.what_is.kids.arith.calc core.word text="what is" means=kids.arith.calc
+@w.en.whats.kids.arith.calc core.word text=whats means=kids.arith.calc
+@w.en.how_much_is.kids.arith.calc core.word text="how much is" means=kids.arith.calc
+@w.en.calculate.kids.arith.calc core.word text=calculate means=kids.arith.calc
+@w.en.compute.kids.arith.calc core.word text=compute means=kids.arith.calc
+@w.en.minus.kids.arith.calc core.word text=minus means=kids.arith.calc
+@w.en.take_away.kids.arith.calc core.word text="take away" means=kids.arith.calc
+@w.en.less.kids.arith.calc core.word text=less means=kids.arith.calc
+@w.en.subtract.kids.arith.calc core.word text=subtract means=kids.arith.calc
+@w.en.without.kids.arith.calc core.word text=without means=kids.arith.calc
+@w.en.times.kids.arith.calc core.word text=times means=kids.arith.calc
+@w.en.multiplied_by.kids.arith.calc core.word text="multiplied by" means=kids.arith.calc
+@w.en.multiply_by.kids.arith.calc core.word text="multiply by" means=kids.arith.calc
+@w.en.x.kids.arith.calc core.word text=x means=kids.arith.calc
+@w.en.lots_of.kids.arith.calc core.word text="lots of" means=kids.arith.calc
+@w.en.divided_by.kids.arith.calc core.word text="divided by" means=kids.arith.calc
+@w.en.split_by.kids.arith.calc core.word text="split by" means=kids.arith.calc
+@w.en.over.kids.arith.calc core.word text=over means=kids.arith.calc
+@w.en.divide_by.kids.arith.calc core.word text="divide by" means=kids.arith.calc
+@w.en.half.kids.arith.half core.word text=half means=kids.arith.half
+@w.en.what_is_half.kids.arith.half core.word text="what is half" means=kids.arith.half
+@w.en.whats_half.kids.arith.half core.word text="whats half" means=kids.arith.half
+@w.en.how_much_is_half.kids.arith.half core.word text="how much is half" means=kids.arith.half
+@w.en.of.kids.arith.half.n core.word text=of means=kids.arith.half.n
+@w.en.double.kids.arith.double core.word text=double means=kids.arith.double
+@w.en.twice.kids.arith.double core.word text=twice means=kids.arith.double
+@w.en.what_is_double.kids.arith.double core.word text="what is double" means=kids.arith.double
+@w.en.whats_double.kids.arith.double core.word text="whats double" means=kids.arith.double
+@w.en.what_is_twice.kids.arith.double core.word text="what is twice" means=kids.arith.double
+@w.en.how_much_is_double.kids.arith.double core.word text="how much is double" means=kids.arith.double
+@w.en.of.kids.arith.double.n core.word text=of means=kids.arith.double.n
