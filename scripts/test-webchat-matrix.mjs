@@ -366,6 +366,8 @@ export const SCENARIOS = {
     // RO-MATRIX: a Romanian session on the matrix answers in Romanian, also what the dialogue layer writes itself, and quotes the user's own words
     const c = await openChat({ ...o, settings: { ...MATRIX, language: 'ro' } });
     try {
+      const back = await say(c, 'înapoi');   // RO-LEFTOVERS: no previous tab: a Romanian sentence, not "Nu este nicio filă anterioară merge înapoi la."
+      check('romanian: "înapoi" with no previous tab is one Romanian sentence', /^Nu există nicio filă anterioară la care să mă întorc\.$/.test(back), back);
       await say(c, 'am 20 de lei'); await say(c, 'cumpăr o minge');
       const u = await say(c, 'anulează');
       check('romanian: undo says what it took back in Romanian, with the user\'s own words', /^Am anulat: .cumpăr o minge.\.$/.test(u), u);
@@ -381,6 +383,17 @@ export const SCENARIOS = {
       check('romanian: "de ce?" quotes the user\'s own words', /„câți ani am”/.test(w) && !/[A-Z][a-z]+ [a-z]+ [a-z]+ [a-z]+ (the|you|your)\b/.test(w), w.slice(0, 120));
       check('romanian: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
+    // RO-LEFTOVERS: the distance reply and the chart answers have Romanian templates (no English word, no fixed fallback line)
+    const d = await openChat({ ...o, settings: { ...MATRIX, language: 'ro' } });
+    try {
+      const dist = await say(d, 'cât de departe este Madridul de Roma?');
+      check('romanian: the distance reply is a Romanian template', /^Madrid și Roma sunt la aproximativ [\d.]+ de km \([\d.]+ de mile\) distanță/.test(dist), dist);
+      const g = await say(d, 'fă un grafic: mere 5, pere 3, prune 8');
+      check('romanian: a chart is made in Romanian and read as a bar chart ("un grafic cu bare")', /grafic cu bare/.test(g) && !/\bbară\b/.test(g), g.slice(0, 100));
+      const big = await say(d, 'care e cel mai mare?');
+      check('romanian: "care e cel mai mare?" leaves no English word and no fallback line', !/\b(biggest|smallest)\b/.test(big) && !/Nu am încă o formulare/.test(big), big);
+      check('romanian: distance/chart session has no page errors', d.errors.length === 0, d.errors[0] ?? '');
+    } finally { await d.close(); }
   },
 
   // ---- stage 2, one instance per world: geo.map and data.charts (a separate block) -----------------------------------------------------------------------------------------
