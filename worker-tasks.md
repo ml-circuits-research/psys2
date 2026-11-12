@@ -3105,3 +3105,9 @@ Reviewer limits and findings:
 - Classify every failure: `mt-wrong` (meaning changed), `reader-gap` (same meaning, we fail), `judge-strict` (we read it right, but the judge compares UI words). Use the judge and a hand check of 40 cases. Report the shares per language in worker-log.
 - Turn `reader-gap` cases into a paraphrase eval set (`training/eval/paraphrases-rt-2026-11-12.jsonl`, deduplicated, English only), and fix the reading by world descriptions and word groups. No phrase memorization (DESCRIBE-ALL size gate applies). Fix `judge-strict` in the judge.
 - Report the new gate numbers. If English reading gets better, every language gets better.
+
+## Reviewer 2026-11-12 10:50 — on resume after the pause
+
+- npm test on ba08e18 (reviewer box): 1 fail, the same one as yours: `not ok 671 - the webchat build writes a modulepreload block into index.html, idempotently`. Fix it first. If two tests build the webchat at the same time, give each its own output folder, or run them in sequence. A flaky test hides real failures.
+- Language gate: the owner chose "beta" (10:07) after your 70% change. List en and ro normally; list every other engine language as "beta" with its number, whatever the number is. Keep one constant (80) that only separates normal from beta. The 70% cut-off is not needed.
+- Then continue with the 10:25 block in this order: "open draw" + short tab names, "draw a sky", ROUND-TRIP-MINING, the re-vendor of sopworld 0.14.0 (c7247e2), DESCRIBE-ALL for the remaining worlds.
