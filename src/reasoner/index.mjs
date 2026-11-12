@@ -223,7 +223,7 @@ export class ReasonerSession {
     this.last = null;    // the last library result, for explain / why: { wire, result, inst }
     this.known = new Map();
     this.written = new Map();    // world id -> JSON of the state as the library last said it (a world with `adopt`: a state that differs was changed by its operations since)
-    this.derived = new Map();    // world id -> { stamp, json }: what toState said of the instance as it was at that stamp
+    this.derived = new Map(); this.stateCache = new Map(); this.stateHits = 0;    // world id -> { stamp, json }: what toState said of the instance as it was at that stamp
     this.said = new Set();       // assumed cells already said to the user (an assumption is said once)
     this.advised = new Set();    // keys of the advice (issues of common sense) already said while they stand
     this.advice = [];            // advice collected and not yet taken by the turn
@@ -347,7 +347,7 @@ export class ReasonerSession {
       this.insts = insts; this.turns = turns; this.ops = rec.ops ?? 0;
       this.sharedLog = (rec.sharedLog ?? []).map((x) => ({ ...x })); this._rebuildShared();
       this.told = [...(rec.told ?? [])]; this.said = new Set(rec.said ?? []); this.undone = rec.undone ?? 0; this.undoneAt = rec.undoneAt ?? 0;
-      this.redos = []; this.cur = null; this.seg = null; this.refused = []; this.last = null; this.mirrored = new Map(); this.derived = new Map(); this.written = new Map();
+      this.redos = []; this.cur = null; this.seg = null; this.refused = []; this.last = null; this.mirrored = new Map(); this.derived = new Map(); this.stateCache = new Map(); this.written = new Map();
       if (session) {
         for (const id of this.reasoner.stateOf.keys()) if (session.state[id]) this.written.set(id, this.reasoner.json(id, session.state[id]));   // the state is what the library said
         this.syncTo(session);
@@ -905,13 +905,29 @@ export class ReasonerSession {
 
   /** What a world's `toState` says of its instance now (null for a world without one). */
   stateOfWorld(id) {
-    const toState = this.reasoner.stateOf.get(id);
-    if (!toState) return null;
+    if (!this.reasoner.stateOf.has(id)) return null;
     const inst = this._inst(id);
-    return toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), redo: this._redoCount(id) });
+    return this._toState(id, inst, this._redoCount(id));
   }
   /** How many undos of a world can be taken back (a world's `toState` may show it, the editor's redo button). */
   _redoCount(id) { let n = 0; for (const r of this.redos) if (r.world === id) n++; return n; }
+  /**
+   * What a world's `toState` says of its instance: a pure function of the instance, so it is computed once per instance state (`stamp`; the library gives a
+   * state one stamp) and redo count, and every later reader gets a copy of that (Q2 item 6). `redo` is passed as the callers did: undefined where they gave none.
+   */
+  _toState(id, inst, redo) {
+    const toState = this.reasoner.stateOf.get(id);
+    const c = this.stateCache.get(id);
+    // a copy keeps the hidden (non-enumerable) properties of the state, which a structured clone drops (ui.shell's `_titles`); they are read only, so they are shared
+    const copy = (c) => { const x = structuredClone(c.state); for (const [k, v] of c.hidden) Object.defineProperty(x, k, { value: v, enumerable: false }); return x; };
+    if (c && c.world === inst.world && c.stamp === inst.world.stamp && c.redo === redo) { this.stateHits++; return copy(c); }
+    const state = toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), redo });
+    let keep;
+    try { keep = structuredClone(state); } catch { this.stateCache.delete(id); return state; }   // not plain data: not cached
+    const hidden = Object.getOwnPropertyNames(state).filter((k) => !Object.prototype.propertyIsEnumerable.call(state, k)).map((k) => [k, state[k]]);
+    this.stateCache.set(id, { world: inst.world, stamp: inst.world.stamp, redo, state: keep, hidden });
+    return state;
+  }
   /**
    * The words of a generic "undo that" in a world's own voice (`undoWords` of its fns.mjs, over the states before and after): null when the world has none or
    * the words say nothing. `said` is the sentence the user had said.
@@ -947,9 +963,8 @@ export class ReasonerSession {
    */
   undoAction(world, session, n = 1) {
     if (!world.isView && n <= 1) return this._undoOne(world, session);   // a world without views or counted undos: the session timeline names what it took back
-    const toState = this.reasoner.stateOf.get(world.id);
     const inst = this._inst(world.id);
-    const stateNow = () => toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q) });
+    const stateNow = () => this._toState(world.id, inst, undefined);
     const mine = (t) => t.worlds?.includes(world.id);   // a turn that changed this world (a tab switch of the shell or a turn of another world is not one of its steps)
     const before = this.turns.some(mine) ? stateNow() : null;
     let turn = null, steps = 0;
@@ -978,9 +993,8 @@ export class ReasonerSession {
   }
   /** A world's own "redo" action: puts back what the last undo took out (the library as it was before it, with the turns), and says what that was. */
   redoAction(world, session) {
-    const toState = this.reasoner.stateOf.get(world.id);
     const inst = this._inst(world.id);
-    const stateNow = () => toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q) });
+    const stateNow = () => this._toState(world.id, inst, undefined);
     const r = this.redos.at(-1)?.world === world.id ? this.redos.pop() : null;
     const before = stateNow();
     if (r) for (const f of [...r.undo].reverse()) f();
@@ -1161,7 +1175,7 @@ export class ReasonerSession {
    * it. A world's state is derived from its own instance only; a world with no instance has the empty state.
    */
   _state(session, touched = null) {
-    for (const [id, toState] of this.reasoner.stateOf) {
+    for (const [id] of this.reasoner.stateOf) {
       try {
         const inst = this.insts.get(this.reasoner.instKey(id));
         let cur = session.state[id];
@@ -1173,7 +1187,7 @@ export class ReasonerSession {
         if (cur && this.reasoner.adoptOf.has(id) && this.reasoner.json(id, cur) !== (this.written.get(id) ?? this.reasoner.emptyState(id).json)) continue;   // the operations changed it since the library said it: `adoptState` takes it over first
         if (cur && d.json !== undefined && d.json === this.reasoner.json(id, cur)) { this.written.set(id, d.json); continue; }   // the state already is what the library says
         let next, json;
-        if (inst) { next = toState({ find: (t) => inst.world.ofType(t), query: (q) => inst.world.query(q), redo: rc }); json = this.reasoner.json(id, next); }
+        if (inst) { next = this._toState(id, inst, rc); json = this.reasoner.json(id, next); }
         else { const e = this.reasoner.emptyState(id); if (e.json === '') continue; next = structuredClone(e.obj); json = e.json; }
         d.json = json;
         if (!cur) {
