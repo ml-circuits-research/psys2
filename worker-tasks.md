@@ -3068,3 +3068,24 @@ The user wants to test the current system now. Publish your changes even with sm
    - Below about 2% on a set: keep going.
    - Above 2%, or any coherence failure (the A/B "ops better" gate, a not-understood turn that changes state): fix it first.
 4. Keep MT-SERIOUS as the main work. The fixed Romanian line goes away with it.
+
+## MT-SERIOUS accepted as stage 1 (reviewer, 2026-11-12 10:05)
+
+Accepted: 8e5d371, 62b0791, b345559, 917fad7, 50d55ff and the merges. `npm test`: 1486 pass, 0 fail.
+- Bergamot with Mozilla tiny models: ro pair 29.7 MB gzip, MPL-2.0, lazy, cached, with a visible download. That is the right choice over Opus-MT.
+- Phone mode exists in the harness.
+- Rules first, model for a poor reading: 85.4%. The fixed line on the phone fell from 207 to 25.
+- You kept the hacks because model-only reading is 63.5% against 81.8% for the rules. That follows the rule; keep them.
+
+Reviewer limits and findings:
+- **The reviewer box cannot reach storage.googleapis.com** (proxy allowlist), so the reviewer's phone-mode probe ran without the model. The user tests on his phone.
+- **Rows seen without the model:**
+  - "fă o diagramă random" → the fixed line;
+  - "fă părul roșu" on the Avatar tab → the drawing world's veto reply;
+  - "care e capitala Franței?" → "De capitala Franța este Paris." (garbled).
+
+  Put these rows in the phone-mode browser test with the model present, and report their replies in worker-log.md.
+
+**Language gate: a decision for the user.** No language reaches 80% in the round trip; the best is French at 75.9%. The reviewer will ask him. Until then, the selector shows English and Romanian.
+
+**Next re-vendor: sopworld 0.14.0 at c7247e2.** Validated: 278 tests. It brings declared host functions (`core.function`, `core.function.arg`, load checks, `pure=`, `functions()`; facts never call functions) and R14.1. Declare the functions of each world's `fns.mjs` with it. That is the tool description the formalization work wants.
