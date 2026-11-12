@@ -2970,3 +2970,28 @@ The user wants serious translation support. The translation part loads lazily, o
 - English-only examples.
 
 Vendor 8b9a46b and drop `lang=en` from every `core.word` in `describe.sop`. Order: MT-SERIOUS first; the re-vendor can go in the same session, since it is mechanical.
+
+## MINIMAL-PAIRS and COMMON-SENSE (user, 2026-11-12 07:19)
+
+The user asked whether we test cases where order and nuance change the meaning ("Ana gives Ion X" against "Ion gives Ana X"), negations, and general rules. He also wants warnings, not refusals, in the drawing world: fish in the sky or the grass, several suns, and similar. As an exercise, he wants a **common-sense world that can be mixed into other worlds**, so that common sense is not written a thousand times.
+
+**1. Minimal pairs.** The reviewer added `training/eval/minimal-pairs-2026-11-12.jsonl`: 22 cases (role order: gives / gives to / gets from / takes from, both directions; negation; comparison; the shop's "I give Ana 10 lei"). Reviewer run, rules mode:
+- **Role order is read right in all 11 arithmetic cases.**
+- **"more than", "fewer than" and "twice as many as" are never understood** (5 cases, not understood).
+- **Negated statements are not understood** ("Ana does not give Ion any apples", "I do not buy the ball"). That is safe, but they should be understood: nothing changes, and the reply says so.
+- **The judge is too lax.** mp#021 "I have 20 lei. I give Ana 10 lei." is answered "You have 20 lei now", which is wrong, but it is judged right because "10" appears inside the echoed not-understood text. The same happens with mp#012 and mp#022. **Fix the judge:** match the answer only in the answer part of the reply, never inside a quoted echo of the user's words. Then rerun the operational and dialogue sets and report how many "right" cases change.
+- **Tasks.** Make the comparison forms and the negated statements work in kids.arith and kids.shop, preferably through E3 descriptions and rules rather than new patterns. Grow the set to about 100 pairs over worlds where order matters: draw ("put the cat on the box" / "put the box on the cat"), map ("from Paris to Rome" / "from Rome to Paris"), chess ("knight takes pawn" / "pawn takes knight"), editor ("move chapter 2 before chapter 3"). **Every case gets its swapped twin.**
+
+**2. Common-sense world, `world.commonsense`.** A world of plain general facts and **soft rules**: `core.deny … soft=true`, which the library records as an issue and does not refuse. It holds no host logic and is mixed into other worlds by declaration (`compose=` or `reads=`), never copied. First content, for the drawing world:
+- fish live in water;
+- the sun and the moon are in the sky, and there is usually one sun;
+- trees and houses stand on the ground;
+- birds fly in the sky, cars are on roads or on the ground;
+- day and night: no sun at night.
+
+The drawing world composes it. A soft issue becomes a short, friendly warning after doing what was asked: "Done! (Fish usually live in water, not in the sky.)" The action is still done. Write the facts as types and relations general enough for other worlds to reuse (map, kids.animals, diagram).
+- Measure: the existing tests stay identical, apart from the new warnings, which are listed.
+- Add Chrome rows: a fish in the sky, a second sun, a car in the sky. Check that each warning is said once and is never a refusal.
+- If the library lacks something, for example a soft deny that carries an everyday reason, or a world that can be composed into several instances, write it as a library item with a repro.
+
+Order: after MT-SERIOUS. These two can run in parallel with DESCRIBE-ALL.
