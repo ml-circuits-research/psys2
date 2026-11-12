@@ -10,7 +10,7 @@
  * Without it all input is treated as English.
  */
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=85b9949394';
-import { loadWorlds } from '../worlds/index.mjs?v=69d6cdf5ff';
+import { loadWorlds } from '../worlds/index.mjs?v=ad621f13ad';
 import { validateWorldSet } from '../worlds/validate.mjs?v=ad3c8ef24d';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=deb03b682c';
@@ -31,6 +31,7 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=6f60935e0f';
 import { Discourse } from './discourse.mjs?v=0ada15a3e1';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=c108731866';
 import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=fb5303f0bb';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
@@ -44,6 +45,7 @@ const plainSegment = (s) => ({
   unparsed: s.unparsed, discourse: s.discourse ?? null, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, reading: s.strategy === 'model' ? 'model' : 'rules', corrections: s.corrections ?? [], ignored: s.ignored ?? [], dispatch: s.dispatch ?? null,
   ...(s.nx ? { nx: { op: s.nx.op, world: s.nx.world, pattern: s.nx.pattern, p: s.nx.p, spans: s.nx.spans } } : {}),
   wires: s.wires.map((w) => w.id),
+  ...(s.reader ? { reader: s.reader } : {}),
 });
 
 /** Up to two example sentences from the closest world (or any world as a fallback). */
@@ -260,10 +262,12 @@ function tooComplexReply(session, text, e, b) {
 }
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader } = {}) {
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
     this.worldAware = normalizeWorldAware(worldAware ?? globalThis.process?.env?.PSYS2_WORLD_AWARE);
+    /** READER-ROUTE (spec 16 section 7): the library's reader over the `core.word` facts as a third source of readings: 'off' (default) | 'fill' (readings for clauses nobody read) | 'choose' (and a reading that beats one that leaves words out). */
+    this.reader = normalizeReader(reader ?? globalThis.process?.env?.PSYS2_READER);
     /** NX reading strategy (ADR-009): 'hybrid' (default) | 'neural' | 'rules'. Only used with the encoder formalizer and when `engine.formalizers.nx` is ready; otherwise the rules path answers. */
     this.nx = normalizeNxStrategy(nx);
     /** Best effort with loose words (spec 03 section 7.15): after everything else failed, execute the most sensible reading of the content words (off in the library, on in the shipped settings). */
@@ -679,6 +683,42 @@ export class DialogSession {
     const real = await formalizers.rules.formalize(best.c.text, { ...opts, worlds: restrictedSet(set, [best.c.world]) });
     const segments = real.segments.map((x, k) => ({ ...x, span: seg.span, strategy: 'rules', corrections: [], ignored: [], ...(k === 0 ? { bestEffort: { took: best.c.text, ignored: best.c.ignored, world: best.c.world }, ...(waPick ? { pick: waPick } : {}) } : {}) }));
     return { segments };
+  }
+
+  /**
+   * READER-ROUTE (spec 16 section 7): for each clause the library's reader (`interpret` over the English `core.word` facts) is asked for a reading. A clause nobody read
+   * takes the reader's reading when it is unambiguous and leaves nothing out; in `choose` mode a clause that was read but leaves words out, or that the world refuses,
+   * takes it when the library's `rank` puts it first. Every decision is on the segment (`reader`). Never throws: a failure keeps the reading.
+   */
+  async _withReader(formal, mode) {
+    const ctx = this.context();
+    const worldOrder = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld, ...(ctx.recentWorlds ?? [])].filter((w, i, a) => w && a.indexOf(w) === i);
+    const inWorlds = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld].filter(Boolean);   // the worlds the user is in: the reader reads only these
+    const segments = [];
+    for (const seg of formal.segments) {
+      budget.tick('dialog.reader');
+      let out = null;
+      try {
+        if (seg.unparsed) {
+          const r = readerSegments(this, seg, { worldOrder, allowed: inWorlds, freeWorlds: inWorlds });
+          out = r.segments && !r.ambiguous ? r.segments : null;
+          if (out && this.isession?.rs) {   // the reading must be one the world instance can take (the library's `score`): a refusal by the rules is an answer, not a reason to drop it
+            const sc = this.isession.rs.score(out.map((x) => ({ wires: x.wires })));
+            if (sc.results.some((c) => c.judged && c.ok === false && !(c.violations ?? []).length)) out = null;
+          }
+          if (!out) { segments.push(r.info?.accepted ? { ...seg, reader: { ...r.info, used: false, ambiguous: !!r.ambiguous } } : seg); continue; }
+          segments.push(...out.map((x) => ({ ...x, reader: { ...x.reader, used: true, from: 'unparsed' } })));
+          continue;
+        }
+        if (mode === 'choose' && seg.wires?.length) {
+          const r = chooseReader(this, seg, { worldOrder, freeWorlds: inWorlds });
+          if (r?.segments) { segments.push(...r.segments); continue; }
+          if (r?.note) { segments.push({ ...seg, reader: r.note }); continue; }
+        }
+      } catch { /* keep the reading */ }
+      segments.push(seg);
+    }
+    return { ...formal, segments, wires: segments.flatMap((x) => x.wires ?? []) };
   }
 
   async _withBestEffort(formal, opts) {
@@ -1169,7 +1209,7 @@ export class DialogSession {
     return first;
   }
 
-  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware } = {}, override = null) {
+  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader } = {}, override = null) {
     const { engine } = this;
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
@@ -1269,6 +1309,7 @@ export class DialogSession {
     if (!icpt && !pre && !meta && (bestEffort ?? this.bestEffort) && formal.segments.length === 1 && formal.segments[0].unparsed) {   // one unparsed clause: a fragment of a longer message is never guessed
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router });
     }
+    { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
     const segments = !icpt && !pre && !meta && waMode !== 'off' ? reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
