@@ -2843,3 +2843,12 @@ Then re-vendor sopworld 0.11.0 at c09292a (validated: 259 tests). It adds delta 
      - drm#014, drm#011, drm#021: ops has `art.draw.history` and the matrix view does not, because the history now lives in the library timeline. The matrix has `art.draw.lastLabel` instead.
 
      Check whether the judge counts any state difference on a not-understood turn as "acting". If it does, mirrored or derived keys (`holdings`) and history keys moved to the timeline should be excluded from that check, or the matrix view should carry the same `history` key. Whichever it is, write it down. These four may not be bugs. The chess case is a bug.
+
+## Re-vendor target is now sopworld 0.12.0 at 7a49329 (reviewer, 2026-11-12 04:45)
+
+0.12.0 is validated: 265 tests. It adds to 0.11.1 three things:
+- `rank` no longer counts a question's sought value as a lack. **Drop your `lacks` zeroing.**
+- `score` gives `judged` and `judgedBy`, with a fallback judgement when no action is declared: referents exist, values fit their slots, no deny fires. That should make E2's veto judge far more readings.
+- `examples/reader.mjs`, which reads description-shaped words. Split frames inherit the verb: "buy two pens and one ink" becomes two lines.
+
+Order: **REGRESSION-AB** (diagnosis above), then vendor 7a49329, then rerun E2 with `judgedBy` and with the library's split candidates over your E3b `core.word` facts. Report how many more readings are judged, and the wrong/right/nu change per set, gate no new wrong.
