@@ -84,6 +84,7 @@ export function createTranslationLayer({ base, h, note = () => {}, onChange = ()
     initPromise = (async () => {
       const get = (p) => fetch(new URL(p, base)).then((r) => (r.ok ? r.json() : null)).catch(() => null);
       [registry, quality] = await Promise.all([get('vendor/bergamot/registry.json'), get('vendor/bergamot/quality.json')]);
+      if (globalThis.__psys2MtOff) registry = null;   // tests of the desktop rows (fake browser Translator): the on-device model is not used, nothing is downloaded
       if (registry) {
         host = createMtHost({
           registry, fetchFile: fetchFile ?? createCachedFetch(), onState: (lang, s) => stateChanged(lang, s),

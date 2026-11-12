@@ -1,0 +1,1954 @@
+{
+ "date": "2026-11-12",
+ "task": "MT-SERIOUS",
+ "baselinePhone": {
+  "note": "no Translator API, no model: the route ends in the fixed line (check-ro-replies --phone, measure-ro-fallback --phone)",
+  "fixedLineOf2480": 207,
+  "measure": {
+   "matrix": {
+    "before": {
+     "right": 2029,
+     "right_pct": 81.8,
+     "partly": 48,
+     "wrong": 77,
+     "not_understood": 326
+    },
+    "after": {
+     "right": 2029,
+     "right_pct": 81.8,
+     "partly": 48,
+     "wrong": 77,
+     "not_understood": 326
+    },
+    "routes": {
+     "rules-translate": 2116,
+     "ro-generic": 207
+    }
+   },
+   "ops": {
+    "before": {
+     "right": 2037,
+     "right_pct": 82.1,
+     "partly": 48,
+     "wrong": 60,
+     "not_understood": 335
+    },
+    "after": {
+     "right": 2037,
+     "right_pct": 82.1,
+     "partly": 48,
+     "wrong": 60,
+     "not_understood": 335
+    },
+    "routes": {
+     "rules-translate": 2118,
+     "ro-generic": 205
+    }
+   }
+  }
+ },
+ "baselineDesktop": {
+  "note": "Translator API present (fake in the harness, ORACLE ro to en: an upper bound), measure-ro-fallback",
+  "measure": {
+   "matrix": {
+    "before": {
+     "right": 2029,
+     "right_pct": 81.8,
+     "partly": 48,
+     "wrong": 77,
+     "not_understood": 326
+    },
+    "after": {
+     "right": 2198,
+     "right_pct": 88.6,
+     "partly": 38,
+     "wrong": 52,
+     "not_understood": 192
+    },
+    "routes": {
+     "rules-translate": 2095,
+     "translator-in": 297,
+     "translator-out": 142,
+     "ro-generic": 86
+    }
+   },
+   "ops": {
+    "before": {
+     "right": 2037,
+     "right_pct": 82.1,
+     "partly": 48,
+     "wrong": 60,
+     "not_understood": 335
+    },
+    "after": {
+     "right": 2206,
+     "right_pct": 89,
+     "partly": 38,
+     "wrong": 39,
+     "not_understood": 197
+    },
+    "routes": {
+     "rules-translate": 2097,
+     "translator-in": 297,
+     "translator-out": 142,
+     "ro-generic": 84
+    }
+   }
+  }
+ },
+ "engines": {
+  "bergamot": {
+   "engine": "bergamot-translator 0.4.9 (WASM) + Mozilla Firefox Translations tiny models",
+   "licence": "MPL-2.0 (engine and models)",
+   "downloadMB": {
+    "roPairGzip": 29.7,
+    "wasm": 5.2,
+    "glue": 0.08
+   },
+   "nodeMs": {
+    "roToEn": {
+     "p50": 25,
+     "p95": 73
+    },
+    "enToRo": {
+     "p50": 50,
+     "p95": 244
+    }
+   },
+   "chrome4x": {
+    "loadMs": 11159,
+    "toEn": {
+     "p50": 55,
+     "p95": 233
+    },
+    "fromEn": {
+     "p50": 99,
+     "p95": 144
+    }
+   },
+   "chrome1x": {
+    "loadMs": 5331,
+    "toEn": {
+     "p50": 39,
+     "p95": 170
+    },
+    "fromEn": {
+     "p50": 46,
+     "p95": 107
+    }
+   },
+   "readingMatrix": {
+    "rules": {
+     "right": 2029,
+     "right_pct": 81.8,
+     "partly": 48,
+     "wrong": 77,
+     "not_understood": 326,
+     "p50": 66,
+     "p95": 352
+    },
+    "mt": {
+     "right": 1576,
+     "right_pct": 63.5,
+     "partly": 101,
+     "wrong": 211,
+     "not_understood": 592,
+     "p50": 53,
+     "p95": 485
+    },
+    "hybrid": {
+     "right": 2117,
+     "right_pct": 85.4,
+     "partly": 36,
+     "wrong": 85,
+     "not_understood": 242,
+     "p50": 35,
+     "p95": 289
+    }
+   },
+   "readingOps": {
+    "rules": {
+     "right": 2037,
+     "right_pct": 82.1,
+     "partly": 48,
+     "wrong": 60,
+     "not_understood": 335,
+     "p50": 18,
+     "p95": 113
+    },
+    "mt": {
+     "right": 1593,
+     "right_pct": 64.2,
+     "partly": 102,
+     "wrong": 201,
+     "not_understood": 584,
+     "p50": 34,
+     "p95": 328
+    },
+    "hybrid": {
+     "right": 2037,
+     "right_pct": 82.1,
+     "partly": 48,
+     "wrong": 60,
+     "not_understood": 335,
+     "p50": 22,
+     "p95": 173
+    }
+   },
+   "replyChecker80": {
+    "checkerPass": 80,
+    "p50": 50,
+    "p95": 244
+   }
+  },
+  "opus": {
+   "engine": "Opus-MT quantized ONNX through transformers.js (onnxruntime-node here; opus-mt-en-ro for en to ro, opus-mt-ROMANCE-en for ro to en: Xenova/opus-mt-ro-en does not exist)",
+   "licence": "CC-BY-4.0 (Helsinki-NLP; AGPL-compatible)",
+   "downloadMB": {
+    "enRo": 107.5,
+    "romanceEn": 112.7,
+    "total": 220
+   },
+   "nodeMs": {
+    "roToEn": {
+     "p50": 185,
+     "p95": 513
+    },
+    "enToRo": {
+     "p50": 402,
+     "p95": 3640
+    }
+   },
+   "chrome4x": "not measured: no browser build; our onnxruntime-web would need our own decode loop and SentencePiece port; WASM is 2 to 4 times slower than the native onnxruntime-node numbers",
+   "readingMatrix": {
+    "rules": {
+     "right": 2029,
+     "right_pct": 81.8,
+     "partly": 48,
+     "wrong": 77,
+     "not_understood": 326,
+     "p50": 28,
+     "p95": 138
+    },
+    "mt": {
+     "right": 1385,
+     "right_pct": 55.8,
+     "partly": 92,
+     "wrong": 248,
+     "not_understood": 755,
+     "p50": 46,
+     "p95": 416
+    },
+    "hybrid": {
+     "right": 2029,
+     "right_pct": 81.8,
+     "partly": 48,
+     "wrong": 77,
+     "not_understood": 326,
+     "p50": 23,
+     "p95": 128
+    }
+   },
+   "replyChecker80": {
+    "checkerPass": 66
+   }
+  }
+ },
+ "chosen": "bergamot",
+ "afterPhoneWithModel": {
+  "readingMatrix": {
+   "rules": {
+    "right": 2029,
+    "right_pct": 81.8,
+    "partly": 48,
+    "wrong": 77,
+    "not_understood": 326,
+    "p50": 66,
+    "p95": 352
+   },
+   "mt": {
+    "right": 1576,
+    "right_pct": 63.5,
+    "partly": 101,
+    "wrong": 211,
+    "not_understood": 592,
+    "p50": 53,
+    "p95": 485
+   },
+   "hybrid": {
+    "right": 2117,
+    "right_pct": 85.4,
+    "partly": 36,
+    "wrong": 85,
+    "not_understood": 242,
+    "p50": 35,
+    "p95": 289
+   }
+  },
+  "readingOps": {
+   "rules": {
+    "right": 2037,
+    "right_pct": 82.1,
+    "partly": 48,
+    "wrong": 60,
+    "not_understood": 335,
+    "p50": 18,
+    "p95": 113
+   },
+   "mt": {
+    "right": 1593,
+    "right_pct": 64.2,
+    "partly": 102,
+    "wrong": 201,
+    "not_understood": 584,
+    "p50": 34,
+    "p95": 328
+   },
+   "hybrid": {
+    "right": 2037,
+    "right_pct": 82.1,
+    "partly": 48,
+    "wrong": 60,
+    "not_understood": 335,
+    "p50": 22,
+    "p95": 173
+   }
+  },
+  "replies": {
+   "hybrid": {
+    "romanian": 2323,
+    "english": 0,
+    "mixed": 0,
+    "broken-quote": 0,
+    "skipped": 157,
+    "fixedLine": 25
+   },
+   "mtOnly": {
+    "romanian": 2323,
+    "english": 0,
+    "mixed": 0,
+    "broken-quote": 0,
+    "skipped": 157,
+    "fixedLine": 175
+   }
+  }
+ },
+ "languageGate": {
+  "gatePct": 80,
+  "sample": 216,
+  "englishRight": 95.8,
+  "listed": [],
+  "languages": [
+   {
+    "lang": "fr",
+    "right": 75.9,
+    "wrong": 6.9,
+    "notUnderstood": 14.8,
+    "checkerRejects": 5.1,
+    "msPerSentence": 55,
+    "downloadMB": 52
+   },
+   {
+    "lang": "it",
+    "right": 74.5,
+    "wrong": 5.6,
+    "notUnderstood": 16.7,
+    "checkerRejects": 8.8,
+    "msPerSentence": 56,
+    "downloadMB": 52.8
+   },
+   {
+    "lang": "nb",
+    "right": 73.1,
+    "wrong": 5.1,
+    "notUnderstood": 17.1,
+    "checkerRejects": 5.6,
+    "msPerSentence": 31,
+    "downloadMB": 31.2
+   },
+   {
+    "lang": "no",
+    "right": 73.1,
+    "wrong": 5.1,
+    "notUnderstood": 17.1,
+    "checkerRejects": 5.6,
+    "msPerSentence": 28,
+    "downloadMB": 31.2
+   },
+   {
+    "lang": "de",
+    "right": 72.7,
+    "wrong": 4.2,
+    "notUnderstood": 17.6,
+    "checkerRejects": 79.6,
+    "msPerSentence": 56,
+    "downloadMB": 51.2
+   },
+   {
+    "lang": "nl",
+    "right": 72.2,
+    "wrong": 7.9,
+    "notUnderstood": 13.4,
+    "checkerRejects": 6.9,
+    "msPerSentence": 44,
+    "downloadMB": 51.6
+   },
+   {
+    "lang": "is",
+    "right": 71.8,
+    "wrong": 6,
+    "notUnderstood": 16.7,
+    "checkerRejects": 6,
+    "msPerSentence": 65,
+    "downloadMB": 50.6
+   },
+   {
+    "lang": "bg",
+    "right": 71.3,
+    "wrong": 7.4,
+    "notUnderstood": 18.5,
+    "checkerRejects": 13.9,
+    "msPerSentence": 31,
+    "downloadMB": 50.4
+   },
+   {
+    "lang": "es",
+    "right": 71.3,
+    "wrong": 6.5,
+    "notUnderstood": 19,
+    "checkerRejects": 42.1,
+    "msPerSentence": 46,
+    "downloadMB": 51.6
+   },
+   {
+    "lang": "tl",
+    "right": 70.8,
+    "wrong": 4.2,
+    "notUnderstood": 20.4,
+    "checkerRejects": 10.2,
+    "msPerSentence": 86,
+    "downloadMB": 51.4
+   },
+   {
+    "lang": "pt",
+    "right": 70.4,
+    "wrong": 9.3,
+    "notUnderstood": 16.2,
+    "checkerRejects": 11.1,
+    "msPerSentence": 86,
+    "downloadMB": 51.5
+   },
+   {
+    "lang": "af",
+    "right": 69.9,
+    "wrong": 6,
+    "notUnderstood": 19,
+    "checkerRejects": 15.3,
+    "msPerSentence": 32,
+    "downloadMB": 51.7
+   },
+   {
+    "lang": "da",
+    "right": 69.9,
+    "wrong": 6.5,
+    "notUnderstood": 19.9,
+    "checkerRejects": 4.6,
+    "msPerSentence": 25,
+    "downloadMB": 29.8
+   },
+   {
+    "lang": "ca",
+    "right": 69.9,
+    "wrong": 4.6,
+    "notUnderstood": 22.2,
+    "checkerRejects": 6.5,
+    "msPerSentence": 32,
+    "downloadMB": 51.1
+   },
+   {
+    "lang": "et",
+    "right": 69.9,
+    "wrong": 7.9,
+    "notUnderstood": 18.1,
+    "checkerRejects": 8.8,
+    "msPerSentence": 51,
+    "downloadMB": 50.8
+   },
+   {
+    "lang": "cs",
+    "right": 69.4,
+    "wrong": 6.9,
+    "notUnderstood": 18.5,
+    "checkerRejects": 9.7,
+    "msPerSentence": 48,
+    "downloadMB": 51.2
+   },
+   {
+    "lang": "fi",
+    "right": 67.6,
+    "wrong": 6.9,
+    "notUnderstood": 20.8,
+    "checkerRejects": 11.6,
+    "msPerSentence": 57,
+    "downloadMB": 50.8
+   },
+   {
+    "lang": "lv",
+    "right": 67.1,
+    "wrong": 6.9,
+    "notUnderstood": 19.9,
+    "checkerRejects": 10.6,
+    "msPerSentence": 43,
+    "downloadMB": 41.1
+   },
+   {
+    "lang": "ur",
+    "right": 66.7,
+    "wrong": 8.3,
+    "notUnderstood": 19,
+    "checkerRejects": 0,
+    "msPerSentence": 48,
+    "downloadMB": 49.7
+   },
+   {
+    "lang": "vi",
+    "right": 66.7,
+    "wrong": 6.5,
+    "notUnderstood": 20.4,
+    "checkerRejects": 10.2,
+    "msPerSentence": 52,
+    "downloadMB": 42.1
+   },
+   {
+    "lang": "pl",
+    "right": 66.7,
+    "wrong": 9.3,
+    "notUnderstood": 19.9,
+    "checkerRejects": 7.9,
+    "msPerSentence": 48,
+    "downloadMB": 50.4
+   },
+   {
+    "lang": "hi",
+    "right": 66.2,
+    "wrong": 10.6,
+    "notUnderstood": 18.5,
+    "checkerRejects": 2.8,
+    "msPerSentence": 40,
+    "downloadMB": 30.4
+   },
+   {
+    "lang": "gl",
+    "right": 66.2,
+    "wrong": 7.4,
+    "notUnderstood": 21.3,
+    "checkerRejects": 9.7,
+    "msPerSentence": 40,
+    "downloadMB": 51.1
+   },
+   {
+    "lang": "sv",
+    "right": 65.7,
+    "wrong": 6,
+    "notUnderstood": 22.7,
+    "checkerRejects": 5.1,
+    "msPerSentence": 41,
+    "downloadMB": 30.5
+   },
+   {
+    "lang": "tr",
+    "right": 65.7,
+    "wrong": 10.6,
+    "notUnderstood": 19.9,
+    "checkerRejects": 12.5,
+    "msPerSentence": 50,
+    "downloadMB": 30.3
+   },
+   {
+    "lang": "ms",
+    "right": 65.3,
+    "wrong": 6.9,
+    "notUnderstood": 22.7,
+    "checkerRejects": 12.5,
+    "msPerSentence": 29,
+    "downloadMB": 30.6
+   },
+   {
+    "lang": "hu",
+    "right": 64.4,
+    "wrong": 6.5,
+    "notUnderstood": 24.5,
+    "checkerRejects": 9.7,
+    "msPerSentence": 47,
+    "downloadMB": 41.5
+   },
+   {
+    "lang": "sk",
+    "right": 64.4,
+    "wrong": 7.9,
+    "notUnderstood": 23.1,
+    "checkerRejects": 8.8,
+    "msPerSentence": 44,
+    "downloadMB": 40.6
+   },
+   {
+    "lang": "he",
+    "right": 63.9,
+    "wrong": 10.2,
+    "notUnderstood": 20.4,
+    "checkerRejects": 0,
+    "msPerSentence": 32,
+    "downloadMB": 30.6
+   },
+   {
+    "lang": "uk",
+    "right": 63.4,
+    "wrong": 12,
+    "notUnderstood": 19.9,
+    "checkerRejects": 13.4,
+    "msPerSentence": 47,
+    "downloadMB": 39.7
+   },
+   {
+    "lang": "id",
+    "right": 63.4,
+    "wrong": 6.5,
+    "notUnderstood": 24.5,
+    "checkerRejects": 17.1,
+    "msPerSentence": 32,
+    "downloadMB": 29.8
+   },
+   {
+    "lang": "ar",
+    "right": 63,
+    "wrong": 8.3,
+    "notUnderstood": 25,
+    "checkerRejects": 0,
+    "msPerSentence": 34,
+    "downloadMB": 50.8
+   },
+   {
+    "lang": "sq",
+    "right": 63,
+    "wrong": 7.4,
+    "notUnderstood": 25,
+    "checkerRejects": 7.9,
+    "msPerSentence": 39,
+    "downloadMB": 30.5
+   },
+   {
+    "lang": "eu",
+    "right": 62.5,
+    "wrong": 9.7,
+    "notUnderstood": 22.2,
+    "checkerRejects": 7.4,
+    "msPerSentence": 49,
+    "downloadMB": 50.7
+   },
+   {
+    "lang": "th",
+    "right": 62,
+    "wrong": 10.2,
+    "notUnderstood": 22.2,
+    "checkerRejects": 0.9,
+    "msPerSentence": 82,
+    "downloadMB": 50.7
+   },
+   {
+    "lang": "ko",
+    "right": 61.6,
+    "wrong": 8.8,
+    "notUnderstood": 25.5,
+    "checkerRejects": 8.8,
+    "msPerSentence": 54,
+    "downloadMB": 75.3
+   },
+   {
+    "lang": "lt",
+    "right": 61.6,
+    "wrong": 6.5,
+    "notUnderstood": 27.8,
+    "checkerRejects": 10.2,
+    "msPerSentence": 43,
+    "downloadMB": 40.3
+   },
+   {
+    "lang": "ro",
+    "right": 61.1,
+    "wrong": 9.7,
+    "notUnderstood": 24.1,
+    "checkerRejects": 7.4,
+    "msPerSentence": 36,
+    "downloadMB": 29.7
+   },
+   {
+    "lang": "sl",
+    "right": 61.1,
+    "wrong": 9.3,
+    "notUnderstood": 24.1,
+    "checkerRejects": 8.3,
+    "msPerSentence": 64,
+    "downloadMB": 51.1
+   },
+   {
+    "lang": "gu",
+    "right": 61.1,
+    "wrong": 9.7,
+    "notUnderstood": 25,
+    "checkerRejects": 0.5,
+    "msPerSentence": 28,
+    "downloadMB": 30
+   },
+   {
+    "lang": "bn",
+    "right": 60.2,
+    "wrong": 14.4,
+    "notUnderstood": 21.3,
+    "checkerRejects": 0.9,
+    "msPerSentence": 20,
+    "downloadMB": 30.2
+   },
+   {
+    "lang": "fa",
+    "right": 59.7,
+    "wrong": 11.1,
+    "notUnderstood": 24.5,
+    "checkerRejects": 0,
+    "msPerSentence": 23,
+    "downloadMB": 30.6
+   },
+   {
+    "lang": "ta",
+    "right": 59.3,
+    "wrong": 13.4,
+    "notUnderstood": 22.2,
+    "checkerRejects": 0,
+    "msPerSentence": 73,
+    "downloadMB": 40.9
+   },
+   {
+    "lang": "ru",
+    "right": 59.3,
+    "wrong": 9.3,
+    "notUnderstood": 27.3,
+    "checkerRejects": 13.9,
+    "msPerSentence": 67,
+    "downloadMB": 38.8
+   },
+   {
+    "lang": "be",
+    "right": 58.8,
+    "wrong": 10.2,
+    "notUnderstood": 26.4,
+    "checkerRejects": 12.5,
+    "msPerSentence": 42,
+    "downloadMB": 49.9
+   },
+   {
+    "lang": "te",
+    "right": 58.3,
+    "wrong": 9.3,
+    "notUnderstood": 26.4,
+    "checkerRejects": 0.9,
+    "msPerSentence": 35,
+    "downloadMB": 30.3
+   },
+   {
+    "lang": "mr",
+    "right": 57.4,
+    "wrong": 10.2,
+    "notUnderstood": 27.3,
+    "checkerRejects": 0.9,
+    "msPerSentence": 60,
+    "downloadMB": 49.8
+   },
+   {
+    "lang": "el",
+    "right": 56,
+    "wrong": 10.6,
+    "notUnderstood": 27.3,
+    "checkerRejects": 16.2,
+    "msPerSentence": 31,
+    "downloadMB": 29.5
+   },
+   {
+    "lang": "kn",
+    "right": 55.6,
+    "wrong": 12,
+    "notUnderstood": 25.9,
+    "checkerRejects": 0,
+    "msPerSentence": 28,
+    "downloadMB": 30.5
+   },
+   {
+    "lang": "ja",
+    "right": 53.2,
+    "wrong": 8.3,
+    "notUnderstood": 34.3,
+    "checkerRejects": 21.3,
+    "msPerSentence": 58,
+    "downloadMB": 74.4
+   },
+   {
+    "lang": "zh",
+    "right": 51.9,
+    "wrong": 13.4,
+    "notUnderstood": 28.7,
+    "checkerRejects": 5.6,
+    "msPerSentence": 57,
+    "downloadMB": 75
+   },
+   {
+    "lang": "zh_hant",
+    "right": 50.9,
+    "wrong": 11.1,
+    "notUnderstood": 32.9,
+    "checkerRejects": 2.8,
+    "msPerSentence": 61,
+    "downloadMB": 74.2
+   },
+   {
+    "lang": "ml",
+    "right": 50,
+    "wrong": 12,
+    "notUnderstood": 31,
+    "checkerRejects": 0,
+    "msPerSentence": 27,
+    "downloadMB": 29.8
+   },
+   {
+    "lang": "ug",
+    "right": 38.4,
+    "wrong": 16.2,
+    "notUnderstood": 39.4,
+    "checkerRejects": 0,
+    "msPerSentence": 46,
+    "downloadMB": 51.3
+   }
+  ]
+ },
+ "repliesSample": [
+  {
+   "id": "kids.arith#001.ro",
+   "user": "Adună 4 cu 8.",
+   "reply_en": "4 plus 8 is 12.",
+   "reply_ro": "4 plus 8 este 12."
+  },
+  {
+   "id": "kids.arith#016.ro",
+   "user": "Cât fac 10 împărțit la 5, te rog?",
+   "reply_en": "10 divided by 5 is 2.",
+   "reply_ro": "10 împărțit la 5 este 2."
+  },
+  {
+   "id": "kids.arith#031.ro",
+   "user": "Cât fac 5 ori 8?",
+   "reply_en": "5 times 8 is 40.",
+   "reply_ro": "De 5 ori 8 este 40."
+  },
+  {
+   "id": "kids.arith#044.ro",
+   "user": "Cât fac 45.5 plus 2?",
+   "reply_en": "45.5 plus 2 is 47.5.",
+   "reply_ro": "45,5 plus 2 este de 47.5."
+  },
+  {
+   "id": "kids.arith#057.ro",
+   "user": "Cât fac 9 minus 4 și cât fac 3 ori 3?",
+   "reply_en": "9 minus 4 is 5. 3 times 3 is 9.",
+   "reply_ro": "9 minus 4 este 5. 3 ori 3 este 9."
+  },
+  {
+   "id": "kids.arith#070.ro",
+   "user": "Sam are 9 mere. Sam mai cumpără 7. Câte mere are Sam?",
+   "reply_en": "OK, Sam has 9 apples. OK, Sam bought 7 apples. Sam has 16 apples.",
+   "reply_ro": "Bine, Sam are 9 mere. Bine, Sam a cumpărat 7 mere. Sam are 16 mere."
+  },
+  {
+   "id": "kids.arith#084.ro",
+   "user": "Tom are 11 mere. Mia are 1 măr. Cine are mai multe mere?",
+   "reply_en": "OK, Tom has 11 apples. OK, Mia has 1 apple. Tom has the most apples: 11.",
+   "reply_ro": "Bine, Tom are 11 mere. OK, Mia are 1 măr. Tom are cele mai multe mere: 11."
+  },
+  {
+   "id": "kids.arith#098.ro",
+   "user": "Ben are 4 abțibilduri. Zoe are 1 abțibild. Câte abțibilduri au ei împreună?",
+   "reply_en": "OK, Ben has 4 stickers. OK, Zoe has 1 sticker. There are 5 stickers altogether.",
+   "reply_ro": "Bine, Ben are 4 autocolante. Bine, Zoe are 1 autocolant. Există 5 autocolante cu totul."
+  },
+  {
+   "id": "kids.arith#109.ro",
+   "user": "Ce vreme este azi?",
+   "reply_en": "I did not understand \"Ce vreme este azi\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+   "reply_ro": "Nu am înţeles „Ce vreme este azi”. De exemplu: „Încearcă următoarea gură.” sau „Ce caracter are pe ecran?”"
+  },
+  {
+   "id": "ui.avatar#012.roc",
+   "user": "sirena deasupra",
+   "reply_en": "I did not understand \"sirena deasupra\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+   "reply_ro": "Nu am înţeles „sirena deasupra”. De exemplu: „Încearcă următoarea gură.” sau „Ce caracter are pe ecran?”"
+  },
+  {
+   "id": "ui.avatar#026.ro",
+   "user": "Fă-ți corpul verde.",
+   "reply_en": "Okay! My body is light green now. I do not have green for that; light green is the closest.",
+   "reply_ro": "Bine! Corpul meu este verde deschis acum. Nu am verde pentru asta; verdele deschis este cel mai apropiat."
+  },
+  {
+   "id": "ui.avatar#043.roc",
+   "user": "poti fi o fata?",
+   "reply_en": "I took that as: \"can u count my girl\" There are no people in your picture.",
+   "reply_ro": "Am luat asta ca: „Poţi să-mi numări fata” Nu există oameni în poza ta."
+  },
+  {
+   "id": "ui.avatar#057.ro",
+   "user": "De acum încolo numele tău este Zed.",
+   "reply_en": "Nice! From now on my name is Zed.",
+   "reply_ro": "Frumos! De acum în nume este Zed."
+  },
+  {
+   "id": "ui.avatar#072.ro",
+   "user": "Fă-i ochii mai mari și buzele roșii.",
+   "reply_en": "I do not know eyes like \"bigger and buzele tomatoes\". My eyes can be pupils, big pupils, sparkle, small, uneven, tall pupils, look side, look down, look up, happy, closed or wink and 4 more.",
+   "reply_ro": "Nu cunosc ochi ca \"roșii mai mari și gâscui\". Ochii mei pot fi elevi, elevi mari, scântei, mici, neuniformi, elevi înalți, priviți pe partea de jos, priviți în sus, fericiți, închiși sau cu ochiul și încă 4."
+  },
+  {
+   "id": "ui.avatar#084.ro",
+   "user": "Fii un om, apoi numește-te Anna.",
+   "reply_en": "Okay! Now I am a person. I have a smile expression and short side-parted hair. Nice! From now on my name is Anna.",
+   "reply_ro": "Bine! Acum sunt o persoană. Am o expresie de zâmbet și un păr scurt cu partea laterală. Frumos! De acum în numele meu este Anna."
+  },
+  {
+   "id": "kids.animals#012.ro",
+   "user": "Pot zbura pinguinii?",
+   "reply_en": "No, a penguin cannot fly.",
+   "reply_ro": "Nu, un pinguin nu poate zbura."
+  },
+  {
+   "id": "geo.map#005.roc",
+   "user": "o intrebare rapida: care e capitala japoniei",
+   "reply_en": "I did not understand \"o intrebare rapida: care e capitala japoniei\". Did you mean \"What was the question?\" or \"What question number is this?\"?",
+   "reply_ro": "Nu am înţeles „o intrebare rapida: care e capitala japoniei”. Ai vrut să spui „Care a fost întrebarea?” sau „Ce întrebare este acesta?”?"
+  },
+  {
+   "id": "kids.time#016.roc",
+   "user": "cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog",
+   "reply_en": "There are 7 days in a week. I did not understand \"cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog\". Did you mean \"What do red and yellow make?\"? I did not understand \"cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog\". Did you mean \"What do red and yellow make?\" or \"What color do blue and yellow make?\"?",
+   "reply_ro": "Nu am încă o formulare în română pentru acest răspuns. („cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog”, „cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog”)"
+  },
+  {
+   "id": "kids.arith#128.ro",
+   "user": "Cât fac 9 ori 3, și câte picioare are un păianjen?",
+   "reply_en": "9 times 3 is 27. A spider has 8 legs.",
+   "reply_ro": "9 ori 3 este 27. Un păianjen are 8 picioare."
+  },
+  {
+   "id": "geo.map#018.ro",
+   "user": "Hmm, Egiptul e în Africa, și apoi care este capitala Japoniei?",
+   "reply_en": "Yes, Egypt is in Africa. The capital of Japan is Tokyo.",
+   "reply_ro": "Da, Egiptul este în Africa. Capitala Japoniei este Tokyo."
+  },
+  {
+   "id": "kids.animals#024.roc",
+   "user": "hm pot zbura pinguinii, apoi ce obtii din rosu si galben?",
+   "reply_en": "No, a penguin cannot fly. I did not understand \"hm pot zbura pinguinii, apoi ce obtii din rosu si galben\". Did you mean \"What do red and yellow make?\"? I did not understand \"hm pot zbura pinguinii, apoi ce obtii din rosu si galben\". Did you mean \"What do red and yellow make?\" or \"What color do blue and yellow make?\"?",
+   "reply_ro": "Nu am încă o formulare în română pentru acest răspuns. („hm pot zbura pinguinii, apoi ce obtii din rosu si galben”, „hm pot zbura pinguinii, apoi ce obtii din rosu si galben”)"
+  },
+  {
+   "id": "kids.animals#027.ro",
+   "user": "Hm, ce sunet face o vacă și cât fac 9 ori 3, ce zi vine după luni?",
+   "reply_en": "A cow goes moo. 9 times 3 is 27. The day after Monday is Tuesday.",
+   "reply_ro": "Nu am încă o formulare în română pentru acest răspuns."
+  },
+  {
+   "id": "geo.map#024.roc",
+   "user": "egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog",
+   "reply_en": "Yes, Egypt is in Africa. The season after winter is spring. I did not understand \"egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog\". Did you mean \"What do red and yellow make?\"? I did not understand \"egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog\". Did you mean \"What do red and yellow make?\" or \"What color do blue and yellow make?\"?",
+   "reply_ro": "Nu am încă o formulare în română pentru acest răspuns. („egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog”, „egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog”)"
+  },
+  {
+   "id": "art.draw#001.roc",
+   "user": "deseneaza o casa rosie, si ce obtii cand amesteci rosu cu galben?",
+   "reply_en": "I did not understand \"deseneaza o casa rosie, si ce obtii cand amesteci rosu cu galben\". Did you mean \"Draw a red house.\" or \"What do red and yellow make?\"?",
+   "reply_ro": "Nu am înţeles „deseneaza o casa rosie, si ce obtii cand amesteci rosu cu galben”. Ai vrut să spui „Desenează o casă roşie.” sau „Ce fac roșul și galben?”?"
+  },
+  {
+   "id": "media.music#005.ro",
+   "user": "schimbă instrumentul în flaut și cât fac 9 ori 3?",
+   "reply_en": "OK, I will play on the flute. 9 times 3 is 27.",
+   "reply_ro": "Bine, voi juca pe flaut. 9 ori 3 este 27."
+  },
+  {
+   "id": "data.charts#002.ro",
+   "user": "fă un grafic: mere 5, pere 3 și, de asemenea, care este capitala Japoniei",
+   "reply_en": "OK, here is a bar chart with 2 items: apples 5 and pears 3. I skipped \"also\", \"what is the capital of Japan\" because I found no number.",
+   "reply_ro": "Nu am încă o formulare în română pentru acest răspuns."
+  },
+  {
+   "id": "geo.map#033.ro",
+   "user": "Mărește harta.",
+   "reply_en": "Zoomed in to zoom 3.",
+   "reply_ro": "Nu am încă o formulare în română pentru acest răspuns."
+  },
+  {
+   "id": "ui.shell#002.ro",
+   "user": "vorbește mai rar",
+   "reply_en": "OK, my speech rate is slower: 0.75.",
+   "reply_ro": "OK, rata mea de vorbire este mai lentă: 0.75."
+  },
+  {
+   "id": "games.chess#016.ro",
+   "user": "Fă computerul mai ușor.",
+   "reply_en": "OK, I now play at level 2 (easy). I will go easier on you.",
+   "reply_ro": "OK, acum joc la nivelul 2 (ușoară). O să-ţi fac mai uşor."
+  },
+  {
+   "id": "games.chess#036.ro",
+   "user": "Care este cea mai bună mutare?",
+   "reply_en": "Let me think about your best move.",
+   "reply_ro": "Lasă-mă să mă gândesc la cea mai bună mişcare a ta."
+  },
+  {
+   "id": "games.tictactoe#012.ro",
+   "user": "În mijloc, la dreapta.",
+   "reply_en": "You took middle right. I took the center. Your move.",
+   "reply_ro": "Ai luat dreapta mijlocie. Am luat centrul. Mișcarea ta."
+  },
+  {
+   "id": "games.tictactoe#031.ro",
+   "user": "Anulează.",
+   "reply_en": "OK, I took back your last move and my answer. It is your move again.",
+   "reply_ro": "OK, am luat înapoi ultima mișcare și răspunsul meu. Este din nou mutarea ta."
+  },
+  {
+   "id": "games.hangman#008.ro",
+   "user": "Încerc litera z.",
+   "reply_en": "No, there is no Z. 5 wrong guesses left. - - - -",
+   "reply_ro": "Nu, nu există niciun Z. 5 presupuneri greșite rămase. - - - -"
+  },
+  {
+   "id": "games.hangman#027.ro",
+   "user": "Ce litere am încercat?",
+   "reply_en": "- - - - (4 letters). 5 wrong guesses left. Letters tried: z.",
+   "reply_ro": "- - - (4 litere). 5 presupuneri greșite rămase. Scrisori încercate: z."
+  },
+  {
+   "id": "games.guess#021.ro",
+   "user": "Da, nu, stai, nu.",
+   "reply_en": "Good. Question 2: Does it eat only plants? OK. Question 3: Can it swim? I did not understand \"Da, nu, stai, nu\". Did you mean \"Wait, I meant yes.\" or \"I want sunset.\"? OK. Question 4: Does it live in the forest?",
+   "reply_ro": "E bine. Întrebarea 2: Mănâncă doar plante? OK. Întrebarea 3: Poate înota? Nu am înţeles „Da, nu, stai, nu”. Ai vrut să spui „Stai, am vrut să spun da.” sau „Vreau apus de soare.”? OK. Întrebarea 4: Locuiește în pădure?"
+  },
+  {
+   "id": "kids.shop#004.ro",
+   "user": "Un puzzle costă 11 lei. Cât costă 3 puzzle-uri?",
+   "reply_en": "OK, one puzzle costs 11 lei. 3 puzzles cost 33 lei.",
+   "reply_ro": "OK, un puzzle costă 11 lei. 3 puzzle-uri costă 33 lei."
+  },
+  {
+   "id": "kids.shop#019.ro",
+   "user": "Am 17 lei. Un zmeu costă 4 lei. Câți bani îmi rămân după ce cumpăr 2 zmeie?",
+   "reply_en": "OK, you have 17 lei. OK, one kite costs 4 lei. You would have 9 lei left.",
+   "reply_ro": "OK, ai 17 lei. OK, un zmeu costă 4 lei. Ai avea 9 lei rămase."
+  },
+  {
+   "id": "kids.shop#033.ro",
+   "user": "Am 20 lei. Un zmeu costă 4 lei. Un puzzle costă 11 lei. Pot plăti un puzzle și 2 zmeie?",
+   "reply_en": "OK, you have 20 lei. OK, one kite costs 4 lei. OK, one puzzle costs 11 lei. I did not understand \"Pot plăti un puzzle și 2 zmeie\". Did you mean \"Change from thirty lei, puzzle and 2 kites.\"?",
+   "reply_ro": "OK, ai 20 de lei. OK, un zmeu costă 4 lei. OK, un puzzle costă 11 lei. Nu am înţeles „Pot plăti un puzzle și 2 zmeie”. Ai vrut să spui „Schimbare de la treizeci de lei, puzzle și 2 zmee.”?"
+  },
+  {
+   "id": "kids.time#043.ro",
+   "user": "ce zi e peste 5 zile de vineri?",
+   "reply_en": "5 days after Friday is Wednesday.",
+   "reply_ro": "5 zile după ziua de vineri este miercuri."
+  },
+  {
+   "id": "kids.time#058.ro",
+   "user": "poți să-mi spui ce zi era înainte de luni?",
+   "reply_en": "The day before Monday is Sunday.",
+   "reply_ro": "Ziua dinaintea zilei de luni este duminică."
+  },
+  {
+   "id": "kids.time#072.ro",
+   "user": "Vreau să știu câte zile are aprilie.",
+   "reply_en": "There are 30 days in April.",
+   "reply_ro": "Sunt 30 de zile în luna aprilie."
+  },
+  {
+   "id": "kids.time#086.ro",
+   "user": "Câte zile sunt în 3 săptămâni?",
+   "reply_en": "There are 21 days in 3 weeks.",
+   "reply_ro": "Sunt 21 de zile în 3 săptămâni."
+  },
+  {
+   "id": "kids.shapes#024.ro",
+   "user": "Câte laturi are un pentagon, te rog?",
+   "reply_en": "A pentagon has 5 sides.",
+   "reply_ro": "Un pentagon are 5 laturi."
+  },
+  {
+   "id": "kids.shapes#040.ro",
+   "user": "Este roșul o culoare secundară?",
+   "reply_en": "No, red is not a secondary color. It is a primary color.",
+   "reply_ro": "Nu, roşul nu este o culoare secundară. Este o culoare principală."
+  },
+  {
+   "id": "kids.shapes#054.ro",
+   "user": "Ce formă are o minge?",
+   "reply_en": "A ball is a sphere.",
+   "reply_ro": "O minge este o sferă."
+  },
+  {
+   "id": "kids.animals#046.ro",
+   "user": "Salut, ce sunet face un porc?",
+   "reply_en": "A pig goes oink.",
+   "reply_ro": "Un porc se înspăi."
+  },
+  {
+   "id": "kids.animals#062.ro",
+   "user": "Ce mănâncă elefanții?",
+   "reply_en": "Elephants eat grass, leaves and fruit.",
+   "reply_ro": "Elefanții mănâncă iarbă, frunze și fructe."
+  },
+  {
+   "id": "kids.animals#075.ro",
+   "user": "Îmi plac foarte mult broaștele țestoase.",
+   "reply_en": "I did not understand \"Îmi plac foarte mult broaștele țestoase\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+   "reply_ro": "Nu am înţeles „Îmi plac foarte mult broaștele țestoase”. De exemplu: „Încearcă următoarea gură.” sau „Ce caracter are pe ecran?”"
+  },
+  {
+   "id": "kids.tasks#013.ro",
+   "user": "ce este scris pe lista mea de cumpărături?",
+   "reply_en": "I did not understand \"ce este scris pe lista mea de cumpărături\". Did you mean \"What lists do I have?\" or \"Clear my shopping list.\"?",
+   "reply_ro": "Nu am înţeles „ce este scris pe lista mea de cumpărături”. Ai vrut să spui „Ce liste am?” sau „Clar lista mea de cumpărături.”?"
+  },
+  {
+   "id": "kids.tasks#021.ro",
+   "user": "Am terminat tema pentru acasă?",
+   "reply_en": "I did not understand \"Am terminat tema pentru acasă\". Did you mean \"Did I finish my homework?\" or \"Have I finished my homework?\"?",
+   "reply_ro": "Nu am înţeles „Am terminat tema pentru acasă”. Ai vrut să spui „Mi-am terminat temea?” sau „Mi-am terminat temea?”?"
+  },
+  {
+   "id": "kids.tasks#029.roc",
+   "user": "adauga lapte pe lista mea de cumparaturi si paine pe lista de gradina",
+   "reply_en": "Done! I added milk to your shopping list. I did not understand \"adauga lapte pe lista mea de cumparaturi si paine pe lista de gradina\". Did you mean \"Put bread on my list.\"?",
+   "reply_ro": "Făcut! Am adăugat lapte pe lista de cumpărături. Nu am înţeles „adauga lapte pe lista mea de cumparaturi si paine pe lista de gradina”. Ai vrut să spui „Pune pâine pe lista mea.”?"
+  },
+  {
+   "id": "kids.common#013.ro",
+   "user": "Mulțumesc!",
+   "reply_en": "You are welcome.",
+   "reply_ro": "Tu eşti binevenită."
+  },
+  {
+   "id": "kids.common#024.roc",
+   "user": "care e numele meu deci",
+   "reply_en": "I did not understand \"care e numele meu deci\". Did you mean \"What is my name?\" or \"What name do you go by?\"?",
+   "reply_ro": "Nu am înţeles „care e numele meu deci”. Ai vrut să spui „Care este numele meu?” sau „Prin ce nume treci?”?"
+  },
+  {
+   "id": "art.draw#014.ro",
+   "user": "Pictează o pisică portocalie.",
+   "reply_en": "Ta-da! I drew an orange cat.",
+   "reply_ro": "Ta-da! Am desenat o pisică portocalie."
+  },
+  {
+   "id": "art.draw#030.ro",
+   "user": "Desenează un cerc.",
+   "reply_en": "Ta-da! I drew a red circle.",
+   "reply_ro": "Ta-da! Am desenat un cerc roşu."
+  },
+  {
+   "id": "art.draw#042.ro",
+   "user": "Pune norul deasupra casei.",
+   "reply_en": "There! I moved the cloud above the red house.",
+   "reply_ro": "Acolo! Am mutat norul deasupra casei roşii."
+  },
+  {
+   "id": "art.draw#056.ro",
+   "user": "Anulează.",
+   "reply_en": "OK, I undid it (drew a red house).",
+   "reply_ro": "OK, am desfăcut-o (a făcut o casă roșie)."
+  },
+  {
+   "id": "art.draw#070.ro",
+   "user": "Fă casa și mașina roșii.",
+   "reply_en": "There! The house is red now. Done! The car is red now.",
+   "reply_ro": "Acolo! Casa este roşie acum. Făcut! Maşina este roşie acum."
+  },
+  {
+   "id": "art.draw#084.ro",
+   "user": "Fă cerul roșu și pământul nisipiu.",
+   "reply_en": "Ta-da! The sky is red now. I did not understand \"Fă cerul roșu și pământul nisipiu\". For example: \"Draw a red house.\" or \"Draw a small blue fish.\" I did not know the word: nisipiu.",
+   "reply_ro": "Ta-da! Cerul este roşu acum. Nu am înţeles „Fă cerul roșu și pământul nisipiu”. De exemplu: „Desenează o casă roşie.” sau „Desenează un pește mic albastru.” Nu am ştiut cuvântul: nisipiu."
+  },
+  {
+   "id": "geo.map#043.ro",
+   "user": "Unde este Clujul?",
+   "reply_en": "Cluj-Napoca is a city in Romania, in Europe (46.77 N, 23.60 E), with about 317,000 people.",
+   "reply_ro": "Cluj-Napoca este un oraș în România, în Europa (46,77 N, 23.60 E), cu aproximativ 317.000 de persoane."
+  },
+  {
+   "id": "geo.map#059.roc",
+   "user": "distanta de la paris la roma, in km, te rog",
+   "reply_en": "I did not understand \"distanta de la paris la roma, in km, te rog\". Did you mean \"How far is Paris from Rome?\"? I did not know the word: km.",
+   "reply_ro": "Nu am înţeles „distanta de la paris la roma, in km, te rog”. Ai vrut să spui „Cât de departe este Parisul de Roma?”? Nu am ştiut cuvântul: km."
+  },
+  {
+   "id": "geo.map#076.ro",
+   "user": "Arată-mi Parisul și mărește zoomul.",
+   "reply_en": "Here is Paris: capital of France · 2.1 million people. Zoomed in to zoom 10.",
+   "reply_ro": "Aici este Paris: capitala Franței · 2,1 milioane de oameni. Zoom în zoom 10."
+  },
+  {
+   "id": "data.charts#014.ro",
+   "user": "fă-l un grafic cu linii",
+   "reply_en": "OK, it is a line chart now.",
+   "reply_ro": "OK, este o diagramă de linie acum."
+  },
+  {
+   "id": "data.charts#031.ro",
+   "user": "dublează merele",
+   "reply_en": "OK, apples went from 5 to 10.",
+   "reply_ro": "OK, merele au trecut de la 5 la 10."
+  },
+  {
+   "id": "data.charts#047.ro",
+   "user": "Câte elemente sunt în grafic?",
+   "reply_en": "There are 3 bars in the chart.",
+   "reply_ro": "Există 3 baruri în grafic."
+  },
+  {
+   "id": "media.music#018.ro",
+   "user": "ce tonalitate majoră are 3 bemoli?",
+   "reply_en": "The major key with 3 flats is Eb major.",
+   "reply_ro": "Cheia majoră cu 3 apartamente este Eb major."
+  },
+  {
+   "id": "media.music#030.ro",
+   "user": "ce note are un acord de A minor?",
+   "reply_en": "The A minor chord has the notes A C E.",
+   "reply_ro": "A are notele A C."
+  },
+  {
+   "id": "media.music#046.ro",
+   "user": "folosește pianul",
+   "reply_en": "OK, I will play on the piano.",
+   "reply_ro": "Bine, voi cânta la pian."
+  },
+  {
+   "id": "media.music#063.roc",
+   "user": "schimba instrumentul in flaut nu pian",
+   "reply_en": "I did not understand \"schimba instrumentul in flaut nu pian\". For example: \"Play the note B 2.\" or \"How many sharps in E major?\"",
+   "reply_ro": "Nu am înţeles „schimba instrumentul in flaut nu pian”. De exemplu: „Joacă nota B 2.” sau „Câte ascuțite în E major?”"
+  },
+  {
+   "id": "ui.avatar#109.roc",
+   "user": "as vrea sa porti o antena parabolica pe cap",
+   "reply_en": "I did not understand \"as vrea sa porti o antena parabolica pe cap\". For example: \"Try the next mouth.\" or \"What character is on screen?\" I did not know the word: porti.",
+   "reply_ro": "Nu am înţeles „as vrea sa porti o antena parabolica pe cap”. De exemplu: „Încearcă următoarea gură.” sau „Ce caracter are pe ecran?” Nu am ştiut cuvântul: porti."
+  },
+  {
+   "id": "ui.avatar#121.ro",
+   "user": "De acum încolo te numești Luna.",
+   "reply_en": "A rule needs something to apply, such as a color, size or outline. (I read \"call\" as \"ball\")",
+   "reply_ro": "O regulă are nevoie de ceva pentru a se aplica, cum ar fi o culoare, dimensiune sau contur. (Am citit „call” ca măsură în „ball”)"
+  },
+  {
+   "id": "media.music#074.roc",
+   "user": "as vrea sa aud gama de G major",
+   "reply_en": "I did not understand \"as vrea sa aud gama de G major\". Did you mean \"Do a G major scale.\" or \"Show me the G major scale.\"?",
+   "reply_ro": "Nu am înţeles „as vrea sa aud gama de G major”. Ai vrut să spui „Fă o scară majoră G.” sau „Arată-mi scara G majoră.”?"
+  },
+  {
+   "id": "kids.arith#141.ro",
+   "user": "Dacă adun opt cu șapte, ce obțin?",
+   "reply_en": "I did not understand \"Dacă adun opt cu șapte, ce obțin\". Did you mean \"What is 7 plus 5?\" or \"What do I get doubling 13?\"?",
+   "reply_ro": "Nu am înţeles „Dacă adun opt cu șapte, ce obțin”. Ai vrut să spui „Ce este 7 plus 5?” sau „Ce primesc dubul 13?”?"
+  },
+  {
+   "id": "kids.animals#080.roc",
+   "user": "de unde vine camila?",
+   "reply_en": "I did not understand \"de unde vine camila\". Did you mean \"Where does a camel live?\" or \"Where can I find a camel?\"?",
+   "reply_ro": "Nu am înţeles „de unde vine camila”. Ai vrut să spui „Unde locuieşte o cămilă?” sau „Unde pot găsi o cămilă?”?"
+  },
+  {
+   "id": "kids.tasks#038.roc",
+   "user": "aminteste-mi sa o sun pe bunica",
+   "reply_en": "I did not understand \"aminteste-mi sa o sun pe bunica\". Did you mean \"remind me to call the grandmother\" or \"remind me about my call grandmother\"?",
+   "reply_ro": "Nu am înţeles „aminteste-mi sa o sun pe bunica”. Ai vrut să spui „Îmi amintesc să o sun pe bunica” sau „Amint-mi aminteste de bunica mea de sunat”?"
+  },
+  {
+   "id": "games.chess#041.ro",
+   "user": "Scade dificultatea la 2.",
+   "reply_en": "I did not understand \"Scade dificultatea la 2\". For example: \"Can I capture on e5?\" or \"Am I allowed to castle?\"",
+   "reply_ro": "Nu am înţeles „Scade dificultatea la 2”. De exemplu: „Pot captura pe e5?” sau „Am voie să castel?”"
+  },
+  {
+   "id": "ui.shell#008.ro",
+   "user": "schimbă limba în engleză",
+   "reply_en": "OK, I switched to English.",
+   "reply_ro": "Bine, am trecut la engleză."
+  },
+  {
+   "id": "docs.editor#024.ro",
+   "user": "fă primul paragraf îngroșat",
+   "reply_en": "I could not find \"first bold\" in the document.",
+   "reply_ro": "Nu am putut găsi \"primul îndrăzneț\" în document."
+  },
+  {
+   "id": "docs.editor#038.roc",
+   "user": "Cate liste sunt?",
+   "reply_en": "I did not understand \"Cate liste sunt\". For example: \"Add a heading Shopping.\" or \"Add a paragraph The cat sat on the mat.\"",
+   "reply_ro": "Nu am înţeles „Cate liste sunt”. De exemplu: „Adăugați o îndreptare de cumpărături.” sau „Adaugă un paragraf Pisica așezată pe covoraș.”"
+  },
+  {
+   "id": "docs.reader#009.ro",
+   "user": "Pe cine a închis vrăjitoarea în cușcă?",
+   "reply_en": "I did not understand \"Pe cine a închis vrăjitoarea în cușcă\". For example: \"What is the story about?\" or \"Show me the keywords.\"",
+   "reply_ro": "Nu am înţeles „Pe cine a închis vrăjitoarea în cușcă”. De exemplu: „Despre ce este povestea?” sau „Arată-mi cuvintele cheie.”"
+  }
+ ],
+ "opusVsBergamotReplies": [
+  {
+   "en": "4 plus 8 is 12.",
+   "bergamot_pipeline_ro": "4 plus 8 este 12.",
+   "opus_ro": "4 plus 8 este 12.",
+   "opus_checker": null,
+   "bergamot_ro": "4 plus 8 este 12.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "10 divided by 5 is 2.",
+   "bergamot_pipeline_ro": "10 împărțit la 5 este 2.",
+   "opus_ro": "10 împărţit la 5 este 2.",
+   "opus_checker": null,
+   "bergamot_ro": "10 împărțit la 5 este 2.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "5 times 8 is 40.",
+   "bergamot_pipeline_ro": "De 5 ori 8 este 40.",
+   "opus_ro": "5 ori 8 este 40.",
+   "opus_checker": null,
+   "bergamot_ro": "De 5 ori 8 este 40.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "45.5 plus 2 is 47.5.",
+   "bergamot_pipeline_ro": "45,5 plus 2 este de 47.5.",
+   "opus_ro": "45,5 plus 2 este 47.5.",
+   "opus_checker": null,
+   "bergamot_ro": "45,5 plus 2 este de 47.5.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "9 minus 4 is 5. 3 times 3 is 9.",
+   "bergamot_pipeline_ro": "9 minus 4 este 5. 3 ori 3 este 9.",
+   "opus_ro": "9 minus 4 este 5. 3 ori 3 este 9.",
+   "opus_checker": null,
+   "bergamot_ro": "9 minus 4 este 5. 3 ori 3 este 9.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, Sam has 9 apples. OK, Sam bought 7 apples. Sam has 16 apples.",
+   "bergamot_pipeline_ro": "Bine, Sam are 9 mere. Bine, Sam a cumpărat 7 mere. Sam are 16 mere.",
+   "opus_ro": "Sam a cumpărat 7 mere, Sam are 16 mere.",
+   "opus_checker": "numbers not preserved (9)",
+   "bergamot_ro": "Bine, Sam are 9 mere. Bine, Sam a cumpărat 7 mere. Sam are 16 mere.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, Tom has 11 apples. OK, Mia has 1 apple. Tom has the most apples: 11.",
+   "bergamot_pipeline_ro": "Bine, Tom are 11 mere. OK, Mia are 1 măr. Tom are cele mai multe mere: 11.",
+   "opus_ro": "Tom are 11 mere.",
+   "opus_checker": "numbers not preserved (1)",
+   "bergamot_ro": "Bine, Tom are 11 mere. OK, Mia are 1 măr. Tom are cele mai multe mere: 11.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, Ben has 4 stickers. OK, Zoe has 1 sticker. There are 5 stickers altogether.",
+   "bergamot_pipeline_ro": "Bine, Ben are 4 autocolante. Bine, Zoe are 1 autocolant. Există 5 autocolante cu totul.",
+   "opus_ro": "Bine, Ben are 4 autocolante.",
+   "opus_checker": "numbers not preserved (1, 5)",
+   "bergamot_ro": "Bine, Ben are 4 autocolante. Bine, Zoe are 1 autocolant. Există 5 autocolante cu totul.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"Ce vreme este azi\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Ce vreme este azi”)",
+   "opus_ro": "Nu am înţeles \"CE vreme e azi.\" De exemplu: \"Încearcă următoarea gură.\" sau \"Ce personaj este pe ecran?\"",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înţeles \"Zecină-ţişul\" lui \"Ce este\". De exemplu: \"Înceare următoarea gură\". sau \"Ce personaj este pe ecran?\"",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"sirena deasupra\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („sirena deasupra”)",
+   "opus_ro": "Nu am înţeles \"sirena deasupra.\" De exemplu: \"Încearcă următoarea gură.\" sau \"Ce personaj este pe ecran?\"",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înţeles „sirenana”. De exemplu: \"Înceare următoarea gură\". sau \"Ce personaj este pe ecran?\"",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Okay! My body is light green now. I do not have green for that; light green is the closest.",
+   "bergamot_pipeline_ro": "Bine! Corpul meu este verde deschis acum. Nu am verde pentru asta; verdele deschis este cel mai apropiat.",
+   "opus_ro": "Corpul meu e verde deschis acum, nu am verde pentru asta, verde deschis e cel mai apropiat.",
+   "opus_checker": null,
+   "bergamot_ro": "Bine! Corpul meu este verde deschis acum. Nu am verde pentru asta; verdele deschis este cel mai apropiat.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I took that as: \"can u count my girl\" There are no people in your picture.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns.",
+   "opus_ro": "Am luat asta ca: \"Pot să-mi număr fata\" Nu sunt oameni în poza ta.",
+   "opus_checker": null,
+   "bergamot_ro": "Am luat asta ca: \"să-mi nu-mi socotești fata\" Nu există oameni în poza ta.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Nice! From now on my name is Zed.",
+   "bergamot_pipeline_ro": "Frumos! De acum în nume este Zed.",
+   "opus_ro": "De acum încolo numele meu este Zed.",
+   "opus_checker": null,
+   "bergamot_ro": "Frumos! De acum în nume este Zed.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I do not know eyes like \"bigger and buzele tomatoes\". My eyes can be pupils, big pupils, sparkle, small, uneven, tall pupils, look side, look down, look up, happy, closed or wink and 4 more.",
+   "bergamot_pipeline_ro": "Nu cunosc ochi ca \"roșii mai mari și gâscui\". Ochii mei pot fi elevi, elevi mari, scântei, mici, neuniformi, elevi înalți, priviți pe partea de jos, priviți în sus, fericiți, închiși sau cu ochiul și încă 4.",
+   "opus_ro": "Nu cunosc ochi ca \"mai mari şi mai mari cu cele de la 122 de roşii.\" Ochii mei pot fi pupile, pupile mari, sclipici, pupile mici, inegale, înalte, privi în lateral, privi în jos, privi în sus, fericit, închis sau cu ochiul deschis şi încă 4 altele.",
+   "opus_checker": null,
+   "bergamot_ro": "Nu cunosc ochi ca \"roșii mai mari și gâscui\". Ochii mei pot fi elevi, elevi mari, scântei, mici, neuniformi, elevi înalți, priviți pe partea de jos, priviți în sus, fericiți, închiși sau cu ochiul și încă 4.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Okay! Now I am a person. I have a smile expression and short side-parted hair. Nice! From now on my name is Anna.",
+   "bergamot_pipeline_ro": "Bine! Acum sunt o persoană. Am o expresie de zâmbet și un păr scurt cu partea laterală. Frumos! De acum în numele meu este Anna.",
+   "opus_ro": "Acum sunt o persoană, am o expresie de zâmbet şi părul scurt, de acum încolo numele meu este Anna.",
+   "opus_checker": null,
+   "bergamot_ro": "Bine! Acum sunt o persoană. Am o expresie de zâmbet și un păr scurt cu partea laterală. Frumos! De acum în numele meu este Anna.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "No, a penguin cannot fly.",
+   "bergamot_pipeline_ro": "Nu, un pinguin nu poate zbura.",
+   "opus_ro": "Nu, un pinguin nu poate zbura.",
+   "opus_checker": null,
+   "bergamot_ro": "Nu, un pinguin nu poate zbura.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"o intrebare rapida: care e capitala japoniei\". Did you mean \"What was the question?\" or \"What question number is this?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („o intrebare rapida: care e capitala japoniei”)",
+   "opus_ro": "Nu am înţeles \"o i Glaxones rapida: care e capitala japoniei.\" Aţi vrut să spuneţi \"Care era întrebarea?\" sau \"Ce număr de întrebare este aceasta?\"",
+   "opus_checker": "question form not preserved",
+   "bergamot_ro": "Nu am înțeles \"o rapida: grijă înjauă\". Ai vrut să spui \"Care a fost întrebarea?\" sau \"Ce întrebare este acest lucru?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "There are 7 days in a week. I did not understand \"cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog\". Did you mean \"What do red and yellow make?\"? I did not understand \"cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog\". Did you mean \"What do red and yellow make?\" or \"What color do blue and yellow make?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog”, „cate zile are o saptamana si ce culoare obtii amestecand rosu cu galben, te rog”)",
+   "opus_ro": "Sunt 7 zile într-o săptămână. Nu am înțeles \"cate ZZ este o saptamana si ce culoare obtii18and rosu cu galben, te rog.\" Ați vrut să spuneți \"Ce roșu și galben face?\"? Nu am înțeles \"cate Z este o saptamana si ce culoare obtii18and Rosu cu galben și galben face?\" Ați vrut să spuneți \"Ce culoare face albastru și galben?\"??\"",
+   "opus_checker": "question form not preserved",
+   "bergamot_ro": "Sunt 7 zile într-o săptămână. Nu am înțeles \"catezile sunt zi de zi o. Ai vrut să spui \"Ce fac roșul și galbenul?\"? Nu am înțeles \"catezile sunt zi de zi o. Ai vrut să spui \"Ce fac roșul și galben?\" sau \"Ce culoare fac albastru și galben?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "9 times 3 is 27. A spider has 8 legs.",
+   "bergamot_pipeline_ro": "9 ori 3 este 27. Un păianjen are 8 picioare.",
+   "opus_ro": "Un păianjen are 8 picioare.",
+   "opus_checker": "numbers not preserved (9, 3, 27)",
+   "bergamot_ro": "9 ori 3 este 27. Un păianjen are 8 picioare.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Yes, Egypt is in Africa. The capital of Japan is Tokyo.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns.",
+   "opus_ro": "Da, Egiptul este în Africa, capitala Japoniei este Tokyo.",
+   "opus_checker": null,
+   "bergamot_ro": "Da, Egiptul este în Africa. Capitala Japoniei este Tokyo.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "No, a penguin cannot fly. I did not understand \"hm pot zbura pinguinii, apoi ce obtii din rosu si galben\". Did you mean \"What do red and yellow make?\"? I did not understand \"hm pot zbura pinguinii, apoi ce obtii din rosu si galben\". Did you mean \"What do red and yellow make?\" or \"What color do blue and yellow make?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („hm pot zbura pinguinii, apoi ce obtii din rosu si galben”, „hm pot zbura pinguinii, apoi ce obtii din rosu si galben”)",
+   "opus_ro": "Nu, un pinguin nu poate zbura. Nu am înțeles \"hm pot zbura zbura zburand zburand zburator:, hm pot zbura cu, ci ce obtii de rosu si galben.\" Ai vrut sa spui \"Ce culoare face rosu si galben? \"? Nu am înțeles \"hm pot zbura cu poți zbura, ci ce obtii de rosu si galben? \" sau \"Ce culoare face albastru si galben? \"? \"",
+   "opus_checker": "question form not preserved",
+   "bergamot_ro": "Nu, un pinguin nu poate zbura. Nu am înțeles \"hm muză pinguinii, ce obtii din rosu si\". Ai vrut să spui \"Ce fac roșul și galbenul?\"? Nu am înțeles \"hm muză pinguinii, ce obtii din rosu si\". Ai vrut să spui \"Ce fac roșul și galben?\" sau \"Ce culoare fac albastru și galben?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "A cow goes moo. 9 times 3 is 27. The day after Monday is Tuesday.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns.",
+   "opus_ro": "O vacă face muu. 9 ori 3 este 27. A doua zi după luni este marţi.",
+   "opus_checker": null,
+   "bergamot_ro": "O vacă merge moo. 9 ori 3 este 27. Ziua de după ziua de luni este marți.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Yes, Egypt is in Africa. The season after winter is spring. I did not understand \"egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog\". Did you mean \"What do red and yellow make?\"? I did not understand \"egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog\". Did you mean \"What do red and yellow make?\" or \"What color do blue and yellow make?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog”, „egiptul e in africa, apoi ce anotimp vine dupa iarna si ce culoare iese din rosu si galben, te rog”)",
+   "opus_ro": "Da, Egiptul este în Africa. Sezonul de după iarnă este primavara. Nu am înțeles \"egiptul e în africa, ci 1 1 1 1 vin canta Wine si ce culoare 39 si ce culoare 39, 3 si 3 si 3 si te rog.\" Vroiai sa spui \"Ce face rosu si galben?\" sau \"Ce culoare face albastru si galben?\"?",
+   "opus_checker": null,
+   "bergamot_ro": "Da, Egiptul este în Africa. Sezonul după iarnă este primăvara. Nu am înțeles \"egitul în africa, ce iarna vin după si ce si ce iede indecontexie indevănțit de la rosu si, te te rog\". Ai vrut să spui \"Ce fac roșul și galbenul?\"? Nu am înțeles \"egitul în africa, ce iarna vin după si ce si ce iede indecontexie indevănțit de la rosu si, te te rog\". Ai vrut să spui \"Ce fac roșul și galben?\" sau \"Ce culoare fac albastru și galben?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"deseneaza o casa rosie, si ce obtii cand amesteci rosu cu galben\". Did you mean \"Draw a red house.\" or \"What do red and yellow make?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („deseneaza o casa rosie, si ce obtii cand amesteci rosu cu galben”)",
+   "opus_ro": "Nu am înţeles \"deseneaza o casa rosie, şi ce obtii sas amesteci rosu cu galben.\" Te-ai referit la \"Deseneaza o casa rosie\" sau \"Ce fac rosu si galben\"?",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"deseneaza o casaa rosie, si ce obiecti candnis rosu cu\". Ai vrut să spui \"Desena o casă roşie.\" sau \"Ce fac roşul şi galben?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, I will play on the flute. 9 times 3 is 27.",
+   "bergamot_pipeline_ro": "Bine, voi juca pe flaut. 9 ori 3 este 27.",
+   "opus_ro": "Bine, voi cânta la flaut. 9 ori 3 este 27.",
+   "opus_checker": null,
+   "bergamot_ro": "Bine, voi juca pe flaut. 9 ori 3 este 27.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, here is a bar chart with 2 items: apples 5 and pears 3. I skipped \"also\", \"what is the capital of Japan\" because I found no number.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns.",
+   "opus_ro": "OK, aici este un grafic bar cu 2 articole: mere 5 și pere 3. Am sărit \"de asemenea,\" \"care este capitala Japoniei\" pentru că am găsit nici un număr.",
+   "opus_checker": null,
+   "bergamot_ro": "OK, aici este o diagramă de bar cu 2 elemente: mere 5 și pere 3. Am sărit \"de asemenea\", \"ce este capitala Japoniei\" pentru că nu am găsit niciun număr.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Zoomed in to zoom 3.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns.",
+   "opus_ro": "Zoomed in to zoom 3.",
+   "opus_checker": null,
+   "bergamot_ro": "Zoomed in pentru zoom 3.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, my speech rate is slower: 0.75.",
+   "bergamot_pipeline_ro": "OK, rata mea de vorbire este mai lentă: 0.75.",
+   "opus_ro": "Bine, ritmul meu de vorbire este mai lent: 0.75.",
+   "opus_checker": null,
+   "bergamot_ro": "OK, rata mea de vorbire este mai lentă: 0.75.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, I now play at level 2 (easy). I will go easier on you.",
+   "bergamot_pipeline_ro": "OK, acum joc la nivelul 2 (ușoară). O să-ţi fac mai uşor.",
+   "opus_ro": "OK, acum joc la nivelul 2 (usor). Voi merge mai usor pe tine.",
+   "opus_checker": null,
+   "bergamot_ro": "OK, acum joc la nivelul 2 (ușoară). O să-ţi fac mai uşor.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Let me think about your best move.",
+   "bergamot_pipeline_ro": "Lasă-mă să mă gândesc la cea mai bună mişcare a ta.",
+   "opus_ro": "Lasă-mă să mă gândesc la cea mai bună mutare a ta.",
+   "opus_checker": null,
+   "bergamot_ro": "Lasă-mă să mă gândesc la cea mai bună mişcare a ta.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "You took middle right. I took the center. Your move.",
+   "bergamot_pipeline_ro": "Ai luat dreapta mijlocie. Am luat centrul. Mișcarea ta.",
+   "opus_ro": "Tu ai luat-o pe mijloc la dreapta, eu am luat centrul, tu ai făcut-o.",
+   "opus_checker": null,
+   "bergamot_ro": "Ai luat dreapta mijlocie. Am luat centrul. Mișcarea ta.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, I took back your last move and my answer. It is your move again.",
+   "bergamot_pipeline_ro": "OK, am luat înapoi ultima mișcare și răspunsul meu. Este din nou mutarea ta.",
+   "opus_ro": "Ţi-am luat înapoi ultima mişcare şi răspunsul meu.",
+   "opus_checker": null,
+   "bergamot_ro": "OK, am luat înapoi ultima mișcare și răspunsul meu. Este din nou mutarea ta.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "No, there is no Z. 5 wrong guesses left. - - - -",
+   "bergamot_pipeline_ro": "Nu, nu există niciun Z. 5 presupuneri greșite rămase. - - - -",
+   "opus_ro": "Nu, nu mai sunt cinci încercări greşite.",
+   "opus_checker": "numbers not preserved (5)",
+   "bergamot_ro": "Nu, nu există niciun Z. 5 presupuneri greșite rămase. - - - -",
+   "bergamot_checker": null
+  },
+  {
+   "en": "- - - - (4 letters). 5 wrong guesses left. Letters tried: z.",
+   "bergamot_pipeline_ro": "- - - (4 litere). 5 presupuneri greșite rămase. Scrisori încercate: z.",
+   "opus_ro": "- Au mai rămas 5 încercări greşite.",
+   "opus_checker": "numbers not preserved (4)",
+   "bergamot_ro": "- - - (4 litere). 5 presupuneri greșite rămase. Scrisori încercate: z.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Good. Question 2: Does it eat only plants? OK. Question 3: Can it swim? I did not understand \"Da, nu, stai, nu\". Did you mean \"Wait, I meant yes.\" or \"I want sunset.\"? OK. Question 4: Does it live in the forest?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Da, nu, stai, nu”)",
+   "opus_ro": "Întrebarea 2: Nu mănâncă decât plante? OK. Întrebare 3: Poate înota? Nu am înțeles \"Da, nu, cio, nu.\" Adică \"Așteaptă, am vrut să spun da.\" sau \"Vreau apus de soare.\" OK. Întrebare 4: Trăiește în pădure?",
+   "opus_checker": null,
+   "bergamot_ro": "E bine. Întrebarea 2: Mănâncă doar plante? OK. Întrebarea 3: Poate înota? Nu am înţeles \"Da, nu, sta, nu\". Ai vrut să spui \"Stai, am vrut să spun da.\" sau \"Vreau apus de soare.\"? OK. Întrebarea 4: Locuiește în pădure?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, one puzzle costs 11 lei. 3 puzzles cost 33 lei.",
+   "bergamot_pipeline_ro": "OK, un puzzle costă 11 lei. 3 puzzle-uri costă 33 lei.",
+   "opus_ro": "OK, un puzzle costa 11 lei. 3 puzzle-uri costa 33 lei.",
+   "opus_checker": null,
+   "bergamot_ro": "OK, un puzzle costă 11 lei. 3 puzzle-uri costă 33 lei.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, you have 17 lei. OK, one kite costs 4 lei. You would have 9 lei left.",
+   "bergamot_pipeline_ro": "OK, ai 17 lei. OK, un zmeu costă 4 lei. Ai avea 9 lei rămase.",
+   "opus_ro": "Bine, ai 17 lei.",
+   "opus_checker": "numbers not preserved (4, 9)",
+   "bergamot_ro": "OK, ai 17 lei. OK, un zmeu costă 4 lei. Ai avea 9 lei rămase.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, you have 20 lei. OK, one kite costs 4 lei. OK, one puzzle costs 11 lei. I did not understand \"Pot plăti un puzzle și 2 zmeie\". Did you mean \"Change from thirty lei, puzzle and 2 kites.\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Pot plăti un puzzle și 2 zmeie”)",
+   "opus_ro": "OK, ai 20 lei. OK, un zmeu costa 4 lei. OK, un puzzle costa 11 lei. Nu am inteles \"Pot IANU puzzle. 2 zmee.\" Te-ai referit la \"Chage de la 30 lei, puzzle si 2 zmee.\"?",
+   "opus_checker": null,
+   "bergamot_ro": "OK, ai 20 de lei. OK, un zmeu costă 4 lei. OK, un puzzle costă 11 lei. Nu am înțeles \"Pot plăti nedu-te puzzle și 2 zmeie\". Ai vrut să spui \"Schimbează-te de treizeci de lei, puzzle şi 2 zmeie.\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "5 days after Friday is Wednesday.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns.",
+   "opus_ro": "5 zile după vineri este miercuri.",
+   "opus_checker": null,
+   "bergamot_ro": "5 zile după ziua de vineri este miercuri.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "The day before Monday is Sunday.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns.",
+   "opus_ro": "A doua zi înainte de luni este duminică.",
+   "opus_checker": null,
+   "bergamot_ro": "Ziua dinaintea zilei de luni este duminică.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "There are 30 days in April.",
+   "bergamot_pipeline_ro": "Sunt 30 de zile în luna aprilie.",
+   "opus_ro": "Sunt 30 de zile în aprilie.",
+   "opus_checker": null,
+   "bergamot_ro": "Sunt 30 de zile în luna aprilie.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "There are 21 days in 3 weeks.",
+   "bergamot_pipeline_ro": "Sunt 21 de zile în 3 săptămâni.",
+   "opus_ro": "Sunt 21 de zile în 3 săptămâni.",
+   "opus_checker": null,
+   "bergamot_ro": "Sunt 21 de zile în 3 săptămâni.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "A pentagon has 5 sides.",
+   "bergamot_pipeline_ro": "Un pentagon are 5 laturi.",
+   "opus_ro": "Un pentagon are 5 laturi.",
+   "opus_checker": null,
+   "bergamot_ro": "Un pentagon are 5 laturi.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "No, red is not a secondary color. It is a primary color.",
+   "bergamot_pipeline_ro": "Nu, roşul nu este o culoare secundară. Este o culoare principală.",
+   "opus_ro": "Nu, roşu nu este o culoare secundară. Este o culoare primară.",
+   "opus_checker": null,
+   "bergamot_ro": "Nu, roşul nu este o culoare secundară. Este o culoare principală.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "A ball is a sphere.",
+   "bergamot_pipeline_ro": "O minge este o sferă.",
+   "opus_ro": "O minge este o sferă.",
+   "opus_checker": null,
+   "bergamot_ro": "O minge este o sferă.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "A pig goes oink.",
+   "bergamot_pipeline_ro": "Un porc se înspăi.",
+   "opus_ro": "Un porc face pe nebunul.",
+   "opus_checker": null,
+   "bergamot_ro": "Un porc se înspăi.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Elephants eat grass, leaves and fruit.",
+   "bergamot_pipeline_ro": "Elefanții mănâncă iarbă, frunze și fructe.",
+   "opus_ro": "Elefanţii mănâncă iarbă, frunze şi fructe.",
+   "opus_checker": null,
+   "bergamot_ro": "Elefanții mănâncă iarbă, frunze și fructe.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"Îmi plac foarte mult broaștele țestoase\". For example: \"Try the next mouth.\" or \"What character is on screen?\"",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Îmi plac foarte mult broaștele țestoase”)",
+   "opus_ro": "Nu am înţeles \"Pii plact ne neys broastele țestoase.\" De exemplu: \"Încearcă următoarea gură.\" sau \"Ce personaj este pe ecran?\"",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"sătul de mult broș broaștestes\". De exemplu: \"Înceare următoarea gură\". sau \"Ce personaj este pe ecran?\"",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"ce este scris pe lista mea de cumpărături\". Did you mean \"What lists do I have?\" or \"Clear my shopping list.\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („ce este scris pe lista mea de cumpărături”)",
+   "opus_ro": "Nu am înţeles \"ce se va întâmpla cu mine în anul 2087.\" Aţi vrut să spuneţi \"Ce liste am?\" sau \"Clear lista mea de cumpărături.\"?",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"ce este pe pe scris măsor me de cumpărături\". Ai vrut să spui \"Ce liste am?\" sau \"Curră-mi lista de cumpărături\".?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"Am terminat tema pentru acasă\". Did you mean \"Did I finish my homework?\" or \"Have I finished my homework?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Am terminat tema pentru acasă”)",
+   "opus_ro": "Nu am înţeles \"Am 14\" \"Ezorezo.\" Aţi vrut să spuneţi \"Mi-am terminat temele?\" sau \"Mi-am terminat temele?\"?",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înţeles \"Am terminat-o pe acasă\". Ai vrut să spui \"Mi-am terminat temele?\" sau \"Mi-am terminat temele?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Done! I added milk to your shopping list. I did not understand \"adauga lapte pe lista mea de cumparaturi si paine pe lista de gradina\". Did you mean \"Put bread on my list.\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („adauga lapte pe lista mea de cumparaturi si paine pe lista de gradina”)",
+   "opus_ro": "Am adăugat lapte la lista ta de cumpărături. Nu am înţeles \"adauga lapte pe e-mailul meu de cumparaturi si dureri pe aviaţia de gradina.\" Ai vrut să spui \"Pâinea de pe lista mea\"?",
+   "opus_checker": null,
+   "bergamot_ro": "Făcut! Am adăugat lapte pe lista de cumpărături. Nu am înțeles \"adauga lapte pe lista de si a durerii pe de la deDurac\". Ai vrut să spui \"Pune pâine pe lista mea.\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "You are welcome.",
+   "bergamot_pipeline_ro": "Tu eşti binevenită.",
+   "opus_ro": "Cu plăcere.",
+   "opus_checker": null,
+   "bergamot_ro": "Tu eşti binevenită.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"care e numele meu deci\". Did you mean \"What is my name?\" or \"What name do you go by?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („care e numele meu deci”)",
+   "opus_ro": "Nu am înţeles \"care eloi mea deci.\" Aţi vrut să spuneţi \"Cum mă cheamă?\" sau \"Cu ce nume te duci?\"",
+   "opus_checker": "question form not preserved",
+   "bergamot_ro": "Nu am înțeles \"care e mea name\". Ai vrut să spui \"Care este numele meu?\" sau \"De ce nume treci?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Ta-da! I drew an orange cat.",
+   "bergamot_pipeline_ro": "Ta-da! Am desenat o pisică portocalie.",
+   "opus_ro": "Am desenat o pisică portocalie.",
+   "opus_checker": null,
+   "bergamot_ro": "Ta-da! Am desenat o pisică portocalie.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Ta-da! I drew a red circle.",
+   "bergamot_pipeline_ro": "Ta-da! Am desenat un cerc roşu.",
+   "opus_ro": "Am desenat un cerc roşu.",
+   "opus_checker": null,
+   "bergamot_ro": "Ta-da! Am desenat un cerc roşu.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "There! I moved the cloud above the red house.",
+   "bergamot_pipeline_ro": "Acolo! Am mutat norul deasupra casei roşii.",
+   "opus_ro": "Am mutat norul deasupra casei roşii.",
+   "opus_checker": null,
+   "bergamot_ro": "Acolo! Am mutat norul deasupra casei roşii.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, I undid it (drew a red house).",
+   "bergamot_pipeline_ro": "OK, am desfăcut-o (a făcut o casă roșie).",
+   "opus_ro": "OK, am desfăcut-o (a făcut o casă roșie).",
+   "opus_checker": null,
+   "bergamot_ro": "OK, am desfăcut-o (a făcut o casă roșie).",
+   "bergamot_checker": null
+  },
+  {
+   "en": "There! The house is red now. Done! The car is red now.",
+   "bergamot_pipeline_ro": "Acolo! Casa este roşie acum. Făcut! Maşina este roşie acum.",
+   "opus_ro": "Casa e roşie acum.",
+   "opus_checker": null,
+   "bergamot_ro": "Acolo! Casa este roşie acum. Făcut! Maşina este roşie acum.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Ta-da! The sky is red now. I did not understand \"Fă cerul roșu și pământul nisipiu\". For example: \"Draw a red house.\" or \"Draw a small blue fish.\" I did not know the word: nisipiu.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Fă cerul roșu și pământul nisipiu”, nisipiu)",
+   "opus_ro": "Ta-da! Cerul este rosu acum. Nu am inteles \"Făretic roșu. [9]61iu.\" De exemplu: \"Treacă o casă roșie.\" sau \"Trage un pește mic albastru.\" Nu știam cuvântul: 6.6.iu.",
+   "opus_checker": null,
+   "bergamot_ro": "Ta-da! Cerul este roşu acum. Nu am înţeles „Fă Românesc cerul şi nici n.s. De exemplu: \"Desenați o casă roșie\". sau \"Adevărășați un pește mic albastru\". Eu nu ştiam cuvântul: nici n.nu.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Cluj-Napoca is a city in Romania, in Europe (46.77 N, 23.60 E), with about 317,000 people.",
+   "bergamot_pipeline_ro": "Cluj-Napoca este un oraș în România, în Europa (46,77 N, 23.60 E), cu aproximativ 317.000 de persoane.",
+   "opus_ro": "Cluj-Napoca este un oraș în România, în Europa (46.77 N, 23.60 E), cu aproximativ 317.000 de locuitori.",
+   "opus_checker": null,
+   "bergamot_ro": "Cluj-Napoca este un oraș în România, în Europa (46,77 N, 23.60 E), cu aproximativ 317.000 de persoane.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"distanta de la paris la roma, in km, te rog\". Did you mean \"How far is Paris from Rome?\"? I did not know the word: km.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („distanta de la paris la roma, in km, te rog”, km)",
+   "opus_ro": "Nu am înţeles \"distanta de lavis la Roma, în km, te rog.\" Te-ai referit la \"Cât de departe este Parisul de Roma?\"? Nu ştiam cuvântul: km.",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"distanta de la Paris la roma, în km, te rog\". Ai vrut să spui \"Cât de departe este Parisul de Roma?\"? Nu ştiam cuvântul: km.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "Here is Paris: capital of France · 2.1 million people. Zoomed in to zoom 10.",
+   "bergamot_pipeline_ro": "Aici este Paris: capitala Franței · 2,1 milioane de oameni. Zoom în zoom 10.",
+   "opus_ro": "Aici este Paris: capitala Franţei · 2,1 milioane de oameni. Zoomed în la zoom 10.",
+   "opus_checker": null,
+   "bergamot_ro": "Aici este Paris: capitala Franței · 2,1 milioane de oameni. Zoom în zoom 10.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, it is a line chart now.",
+   "bergamot_pipeline_ro": "OK, este o diagramă de linie acum.",
+   "opus_ro": "OK, este o diagramă linie acum.",
+   "opus_checker": null,
+   "bergamot_ro": "OK, este o diagramă de linie acum.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, apples went from 5 to 10.",
+   "bergamot_pipeline_ro": "OK, merele au trecut de la 5 la 10.",
+   "opus_ro": "Bine, merele au trecut de la 5 la 10.",
+   "opus_checker": null,
+   "bergamot_ro": "OK, merele au trecut de la 5 la 10.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "There are 3 bars in the chart.",
+   "bergamot_pipeline_ro": "Există 3 baruri în grafic.",
+   "opus_ro": "Sunt 3 bare în grafic.",
+   "opus_checker": null,
+   "bergamot_ro": "Există 3 baruri în grafic.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "The major key with 3 flats is Eb major.",
+   "bergamot_pipeline_ro": "Cheia majoră cu 3 apartamente este Eb major.",
+   "opus_ro": "Cheia principală cu 3 apartamente este Eb major.",
+   "opus_checker": null,
+   "bergamot_ro": "Cheia majoră cu 3 apartamente este Eb major.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "The A minor chord has the notes A C E.",
+   "bergamot_pipeline_ro": "A are notele A C.",
+   "opus_ro": "Coarda A minora are notele A C E.",
+   "opus_checker": null,
+   "bergamot_ro": "A are notele A C.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, I will play on the piano.",
+   "bergamot_pipeline_ro": "Bine, voi cânta la pian.",
+   "opus_ro": "Bine, voi cânta la pian.",
+   "opus_checker": null,
+   "bergamot_ro": "Bine, voi cânta la pian.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"schimba instrumentul in flaut nu pian\". For example: \"Play the note B 2.\" or \"How many sharps in E major?\"",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („schimba instrumentul in flaut nu pian”)",
+   "opus_ro": "Nu am înţeles \"850a Firma de Piaţă.\" De exemplu: \"Pune nota B 2\" sau \"Cât de multe obiecte ascuţite în E major?\"",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"idevin în flaut nu pian\". De exemplu: \"Joacă nota B 2.\" sau \"Câți ascuțituri în E major?\"",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"as vrea sa porti o antena parabolica pe cap\". For example: \"Try the next mouth.\" or \"What character is on screen?\" I did not know the word: porti.",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („as vrea sa porti o antena parabolica pe cap”, porti)",
+   "opus_ro": "Nu am înţeles \"assiv sa porti o antena parabolica pe cap.\" De exemplu: \"Încercaţi următoarea gură.\" sau \"Ce personaj este pe ecran?\" Nu am ştiut cuvântul: porti.",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"ca si sa fel de porti de la antena parabolica pe cap\". De exemplu: \"Încearcă următoarea gură\". sau \"Ce personaj este pe ecran?\" Nu știam cuvântul: porti.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "A rule needs something to apply, such as a color, size or outline. (I read \"call\" as \"ball\")",
+   "bergamot_pipeline_ro": "O regulă are nevoie de ceva pentru a se aplica, cum ar fi o culoare, dimensiune sau contur. (Am citit „call” ca măsură în „ball”)",
+   "opus_ro": "O regulă trebuie să se aplice ceva, cum ar fi o culoare, dimensiune sau contur. (Am citit \"call\" ca \"ball\")",
+   "opus_checker": null,
+   "bergamot_ro": "O regulă are nevoie de ceva pentru a se aplica, cum ar fi o culoare, dimensiune sau contur. (Am citit \"call\" ca \"minge\")",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"as vrea sa aud gama de G major\". Did you mean \"Do a G major scale.\" or \"Show me the G major scale.\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („as vrea sa aud gama de G major”)",
+   "opus_ro": "Nu am înţeles \"assivos sa prostata\" de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr. de la nr",
+   "opus_checker": "question form not preserved",
+   "bergamot_ro": "Nu am înțeles \"ca fel de fel de saudi în gama de G major\". Vrei să spui \"Faceți o scară majoră G.\" sau \"Arată-mi scara majoră G.\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"Dacă adun opt cu șapte, ce obțin\". Did you mean \"What is 7 plus 5?\" or \"What do I get doubling 13?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Dacă adun opt cu șapte, ce obțin”)",
+   "opus_ro": "Nu am înţeles \"Jigt adun opt cu 7,\" cetron.",
+   "opus_checker": "numbers not preserved (5, 13)",
+   "bergamot_ro": "Nu am înțeles \"Dun opt cu, getc. Ai vrut să spui \"Ce este 7 plus 5?\" sau \"Ce fac să dublez 13?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"de unde vine camila\". Did you mean \"Where does a camel live?\" or \"Where can I find a camel?\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („de unde vine camila”)",
+   "opus_ro": "Nu am înţeles \"de unde vine camila.\" Te referi la \"Unde locuieşte o cămilă?\" sau \"Unde pot găsi o cămilă?\"?",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"de de vine camila\". Ai vrut să spui \"Unde locuieşte o cămilă?\" sau \"Unde pot găsi o cămilă?\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"aminteste-mi sa o sun pe bunica\". Did you mean \"remind me to call the grandmother\" or \"remind me about my call grandmother\"?",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („aminteste-mi sa o sun pe bunica”)",
+   "opus_ro": "Nu am înţeles \"aminteste-mi să sun pe bunica.\"",
+   "opus_checker": "question form not preserved",
+   "bergamot_ro": "Nu am înţeles \"amenitule-mi ca un soare pe bunica\". Ai vrut să spui \"aminteşte-mi să-mi sun bunica\" sau \"aminteşte-mi de bunica mea de sunată\"?",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"Scade dificultatea la 2\". For example: \"Can I capture on e5?\" or \"Am I allowed to castle?\"",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Scade dificultatea la 2”)",
+   "opus_ro": "Nu am înţeles \"Scade (Scade) 3 la 2.\" De exemplu: \"Pot să captez pe E5?\" sau \"Am voie să castelez?\"",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"Scade în dificultate la 2\". De exemplu: \"Pot captura pe e5?\" sau \"Am voie să castel?\"",
+   "bergamot_checker": null
+  },
+  {
+   "en": "OK, I switched to English.",
+   "bergamot_pipeline_ro": "Bine, am trecut la engleză.",
+   "opus_ro": "OK, am trecut la limba engleză.",
+   "opus_checker": null,
+   "bergamot_ro": "Bine, am trecut la engleză.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I could not find \"first bold\" in the document.",
+   "bergamot_pipeline_ro": "Nu am putut găsi \"primul îndrăzneț\" în document.",
+   "opus_ro": "Nu am putut găsi \"primul curajos\" în document.",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am putut găsi \"primul îndrăzneț\" în document.",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"Cate liste sunt\". For example: \"Add a heading Shopping.\" or \"Add a paragraph The cat sat on the mat.\"",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Cate liste sunt”)",
+   "opus_ro": "Nu am înţeles \"Cate 160 e. \" De exemplu: \"Adăugaţi un titlu Shopping.\" sau \"Adăugaţi un paragraf Pisica aşezat pe covor.\"",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înțeles \"Cate list sunt\". De exemplu: \"Adăugați o îndreptare Shopping\". sau \"Adăugați un paragraf Pisica așezată pe covoraș.\"",
+   "bergamot_checker": null
+  },
+  {
+   "en": "I did not understand \"Pe cine a închis vrăjitoarea în cușcă\". For example: \"What is the story about?\" or \"Show me the keywords.\"",
+   "bergamot_pipeline_ro": "Nu am încă o formulare în română pentru acest răspuns. („Pe cine a închis vrăjitoarea în cușcă”)",
+   "opus_ro": "Nu am înţeles \"Pe cine a Critic\" (Chestiunea) nr.",
+   "opus_checker": null,
+   "bergamot_ro": "Nu am înţeles \"Pe cine a închis-ul descursă de cușcă\". De exemplu: \"Despre ce este povestea?\" sau \"Arată-mi cuvintele cheie.\"",
+   "bergamot_checker": null
+  }
+ ]
+}

@@ -33,6 +33,8 @@ function names(s) {
 /** Returns null when the translation is acceptable, else the reason it is not. */
 export function checkTranslation(src, tgt, { from, to }) {
   if (!tgt || !String(tgt).trim()) return 'empty translation';
+  // the model may mangle a quote ("at' încă"): a source whose quotes are balanced must give a target whose quotes are balanced
+  if ((String(src).match(/"/g) ?? []).length % 2 === 0 && (String(tgt).match(/["„”«»]/g) ?? []).length % 2 !== 0) return 'quotes not balanced';
   const missing = numbers(src).filter((n) => !numbers(tgt).includes(n));
   if (missing.length) return `numbers not preserved (${missing.join(', ')})`;
   // a name is kept when the target has it, or a word that starts like it ("Japan" / "Japón", "July" / "julio"); German capitalises every noun and a non-Latin target
@@ -40,14 +42,17 @@ export function checkTranslation(src, tgt, { from, to }) {
   const latin = (String(tgt).match(/\p{Script=Latin}/gu) ?? []).length >= (String(tgt).match(/\p{L}/gu) ?? []).length / 2;
   const tgtWords = fold(tgt).match(/[a-z0-9]+/g) ?? [];
   const keeps = (n) => { const f = fold(n); return fold(tgt).includes(f) || tgtWords.some((w) => w.slice(0, Math.min(4, f.length)) === f.slice(0, Math.min(4, f.length))); };
-  const lostNames = from === 'de' || !latin ? [] : names(src).filter((n) => !keeps(n));
+  // Reply direction (to is not English): the source is our own English reply, the user's names and words are quoted verbatim (never translated), and the app's own
+  // capitalised words ("Japan", "Eastern", a song title) are translated or transliterated by the model: only the reading direction checks names
+  const reply = to !== 'en';
+  const lostNames = reply || from === 'de' || !latin ? [] : names(src).filter((n) => !keeps(n));
   if (lostNames.length) return `names not preserved (${lostNames.join(', ')})`;
   // negation and question words are known for English and Romanian only; for any other language the "?" and the numbers and names are what is checked
   const negOf = (l) => (l === 'en' ? NEG_EN : l === 'ro' ? NEG_RO : null), whOf = (l) => (l === 'en' ? WH_EN : l === 'ro' ? WH_RO : null);
   const srcNeg = negOf(from)?.test(src) ?? false;
   const tgtNeg = negOf(to)?.test(tgt) ?? true;
   if (srcNeg && !tgtNeg) return 'negation not preserved';
-  const srcQ = /\?\s*$/.test(src.trim()) || (whOf(from)?.test(src.trim()) ?? false);
+  const srcQ = /\?\s*$/.test(src.trim()) || (!reply && (whOf(from)?.test(src.trim()) ?? false));   // our own replies mark a question with "?" ("would like a speaker" is a statement)
   const tgtQ = /\?\s*$/.test(tgt.trim()) || (whOf(to)?.test(tgt.trim()) ?? true);
   if (srcQ && !tgtQ) return 'question form not preserved';
   return null;

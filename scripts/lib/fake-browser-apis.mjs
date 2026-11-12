@@ -54,6 +54,7 @@ export function createFakeTranslation({ roEn = FAKE_RO_EN, enRo = FAKE_EN_RO, ex
 
 /** Page-side script (a string for evaluateOnNewDocument). */
 export const fakeScript = (opts) => `(() => {
+  if (${JSON.stringify(opts.shape)} !== 'none') window.__psys2MtOff = true;   // desktop rows: the on-device translation model stays off (phone mode, shape 'none', is the one that loads it)
   const st = window.__psys2Fake = Object.assign({ mode: 'success', wrong: 'garbage', slowMs: 1500, pairs: ['ro>en', 'en>ro'], calls: [] }, ${JSON.stringify(opts)});
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const ro = (op, text, from, to) => window.__psys2FakeRules(op, text, from, to);
