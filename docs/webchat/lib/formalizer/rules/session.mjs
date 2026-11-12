@@ -19,6 +19,7 @@ export class FormSession {
   constructor() {
     this._seq = 0;
     this._ids = 0;
+    this.turn = null;        // the dialogue turn that is being read: the ids made in it carry it (`t12_w3`), so two requests never make the same id (spec 15, "Namespaces")
     this.agents = new Map(); // id -> { id, name, gender, special }
     this.recent = [];        // agent ids, most recent last
     this.items = new Map();  // `${lexiconId}\u0000${agentId | '*'}` -> most recently mentioned item (ellipsis, spec 03)
@@ -35,19 +36,20 @@ export class FormSession {
   }
 
   /** Copy of the mutable state, for trial readings (spec 03 section 1c). */
-  snapshot() { return { seq: this._seq, ids: this._ids, agents: new Map(this.agents), recent: [...this.recent], items: new Map(this.items) }; }
-  restore(s) { this._seq = s.seq; this._ids = s.ids; this.agents = new Map(s.agents); this.recent = [...s.recent]; this.items = new Map(s.items); }
+  snapshot() { return { seq: this._seq, ids: this._ids, turn: this.turn, agents: new Map(this.agents), recent: [...this.recent], items: new Map(this.items) }; }
+  restore(s) { this._seq = s.seq; this._ids = s.ids; this.turn = s.turn ?? null; this.agents = new Map(s.agents); this.recent = [...s.recent]; this.items = new Map(s.items); }
 
   /** Independent copy (agent records are copied too). */
   clone() {
     const f = new FormSession();
-    f._seq = this._seq; f._ids = this._ids; f.recent = [...this.recent]; f.items = new Map(this.items);
+    f._seq = this._seq; f._ids = this._ids; f.turn = this.turn; f.recent = [...this.recent]; f.items = new Map(this.items);
     f.agents = new Map([...this.agents].map(([k, v]) => [k, { ...v }]));
     return f;
   }
 
   nextSeq() { return ++this._seq; }
-  freshId(prefix = 'w') { return prefix + (++this._ids); }
+  /** A new wire id: `w7`, or `t12_w7` while turn 12 is being read (the counter is the session's, so an id is never made twice either way). */
+  freshId(prefix = 'w') { const n = ++this._ids; return this.turn == null ? prefix + n : `t${this.turn}_${prefix}${n}`; }
 
   /** Register the built-in agents e.user and e.assistant; returns their wires. */
   initDefaults({ userName = 'User', assistantName = 'PSys2' } = {}) {
