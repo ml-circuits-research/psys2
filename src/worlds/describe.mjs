@@ -23,9 +23,9 @@ import { exampleSentences } from '../formalizer/rules/shapes.mjs';
 import { get, getAll } from '../soplang/index.mjs';
 
 export const INTENT_FRAMES = {
-  command: ['imp', 'wish', 'ind', 'can', 'short'],
-  query: ['qnoun', 'tell', 'ask', 'poss', 'last', 'cond', 'compound', 'canq', 'canlast', 'rev', 'bare'],
-  statement: ['stmt', 'about'],   // `pred` ("a ball COSTS 7 lei": first argument, verb, the other arguments) only when listed in `frames`
+  command: ['imp', 'wish', 'ind', 'can', 'short', 'phr'],
+  query: ['qnoun', 'tell', 'ask', 'poss', 'last', 'cond', 'compound', 'canq', 'canlast', 'rev', 'bare', 'phr'],
+  statement: ['stmt', 'about', 'phr'],   // `pred` ("a ball COSTS 7 lei": first argument, verb, the other arguments) only when listed in `frames`
 };
 export const SHORT_PENALTY = 2;
 
@@ -57,6 +57,7 @@ export const FRAMES = {
   last: { tpl: '<L> <A> <TV?> [,]? <Q> <NN?> <R?> <T>', needs: ['Q', 'A'] },
   cond: { tpl: '<L> [if|when|after|once|suppose] <SJ> <V> <A> [,|then]? <Q> <NN?> <TV?> <R?> <T>', needs: ['Q', 'V', 'A'] },
   compound: { tpl: '<L> <PRE> <AI> [and|,]? <MID> <AP> [,]? <Q> <NN?> <R?> <T>', needs: ['Q', 'PRE', 'MID', 'AI', 'AP'] },
+  phr: { tpl: '<L> <P> <A> <R?> <T>', needs: ['P'] },   // a shared intent group of lang.common ("new game", "give up") followed by the arguments
   stmt: { tpl: '<SJ> <V> <A> <R?> <T>', needs: ['V'] },
   pred: { tpl: '<L> <A0> <V> <A+> <R?> <T>', needs: ['V', 'A'] },
   askpred: { tpl: '<L> <Q> <A0> <V> <A+> <R?> <T>', needs: ['Q', 'V', 'A'] },
@@ -119,6 +120,7 @@ export function describePatterns(d, { phrases = null, lexicons = null, lg = EN }
     V: has('verb') ? grp(d.verb) : null, TV: has('tverb') ? grp(d.tverb) : null, 'TV?': has('tverb') ? grp(d.tverb, true) : '',
     N: has('noun') ? grp(d.noun) : null, 'NN?': has('noun') ? grp(d.noun, true) : '', Q: has('ask') ? grp(d.ask) : null,
     'DN?': has('noun') && intent === 'command' ? `[${lg.determiners}]? ${grp(d.noun, !!d.bareVerb)}` : '', PRE: has('pre') ? grp(d.pre) : null, MID: has('mid') ? grp(d.mid) : null,
+    P: has('phrase') ? `[${d.phrase.join('|')}]` : null,
     'R?': has('rest') ? grp(d.rest, true) : '', SJ: d.noSubject ? '' : grp(has('subject') ? d.subject : ['i']), L: lg.lead ?? LEAD, T: lg.tail ?? TAIL,
   };
   for (const frameName of want) {
@@ -164,6 +166,8 @@ export const wordToken = (text) => String(text).trim().replace(/[\s']+/g, '_');
 /** Diacritics folded away (a language pack's words and the text it reads are both folded: `plătește` = `plateste`). */
 export const foldText = (s) => String(s).normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC');
 const ROLES = ['verb', 'tverb', 'noun', 'ask', 'rest', 'pre', 'mid', 'subject'];
+/** A shared intent group: `phrase=$phrase.lang.intent.newgame` is the group token `$lang.intent.newgame` of the match language. */
+const phraseToken = (ref) => `$${refId(ref).replace(/^phrase\./, '')}`;
 const val = (x, k) => get(x, k)?.v;
 const refId = (v) => (v == null ? v : String(v).replace(/^\$/, ''));
 
@@ -206,6 +210,7 @@ export function readDescriptionWires(wires, into = null) {
       if (wd.means !== expectMeans) err(`${x.id}: ${where} word ${wd.id} means ${wd.means}, expected ${expectMeans}`);
       return wordToken(wd.text);
     };
+    w.roles.phrase = getAll(x, 'phrase').map((v) => phraseToken(v.v));
     for (const r of ROLES) w.roles[r] = getAll(x, r).map((v) => resolve(v.v, d.op, r)).filter(Boolean);
     for (const e of x.entries) {
       const m = /^(prep|det|unit)\.(\w+)$/.exec(e.key);
@@ -226,6 +231,6 @@ export function descriptionFor(desc, lang) {
   return {
     id: desc.id, op: desc.op, intent: desc.intent, emit: desc.emit, frames: w.frames.length ? w.frames : desc.frames, skip: w.skip.length ? w.skip : desc.skip, priority: desc.priority, shortPriority: desc.shortPriority,
     bareVerb: desc.bareVerb, kind: desc.kind, args: desc.args.map((a) => makeArg(a, w.argWords[a.name] ?? {})), noSubject: w.noSubject, sample: w.sample, example: w.example,
-    verb: w.roles.verb, tverb: w.roles.tverb, noun: w.roles.noun, ask: w.roles.ask, rest: w.roles.rest, pre: w.roles.pre, mid: w.roles.mid, subject: w.roles.subject,
+    verb: w.roles.verb, tverb: w.roles.tverb, noun: w.roles.noun, ask: w.roles.ask, rest: w.roles.rest, pre: w.roles.pre, mid: w.roles.mid, subject: w.roles.subject, phrase: w.roles.phrase,
   };
 }
