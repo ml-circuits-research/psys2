@@ -2953,3 +2953,10 @@ The user wants serious translation support. The translation part loads lazily, o
    - Report the Romanian numbers before and after, in desktop mode (Translator API) and phone mode (no Translator API).
 4. **Tests:** the harness gets a "phone" mode (no Translator API, MT model loaded) for the Romanian sets and the Chrome rows. The fake Translator stays only for unit tests of the layer's order and deadlines.
 5. **Supersedes RO-PHONE items 1–3.** Item 4 stays: "a random diagram" should really draw one, described in plain words without ids. Do MT-SERIOUS before DESCRIBE-ALL and READER-ROUTE.
+6. **Every language the translation layer supports goes into the interface (user, 07:12).** If the chosen engine supports more languages, the language selector offers all of them, not only English and Romanian: "if we pay the price anyway, we want the feature".
+   - The language list comes from the engine: for the browser Translator, `Translator.availability()` per pair with English; for the on-device engine, the model registry, both directions with English.
+   - A language appears only when both directions with English exist, because the worlds are English.
+   - Each model downloads lazily, only when that language is first selected.
+   - Speech follows the selector: the recognition and synthesis tag for that language where the browser has it. Where it does not, say so once and keep typing working.
+   - Report which languages each engine gives, the size per language pair, and which ones pass the checker on a translated sample of the operational set (machine-translated from English, then read back). Show a language only if it reaches at least 80% right on that sample, with its number in Settings › About.
+   - Keep LANG-FIXED: one selected language decides what the user sees and hears.
