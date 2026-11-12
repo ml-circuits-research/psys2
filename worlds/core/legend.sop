@@ -75,6 +75,10 @@
     extends=core.thing
     doc="A request shape: one operation (family, verbs, object, value, emit) from which the request forms are generated as patterns at load (spec 03 section 2b)."
 
+@core.describe core.type
+    extends=core.thing
+    doc="An operation description: one operation stated by roles (arguments with their classes and introducing words) and words (verbs, nouns, question openers), from which request, question and statement patterns are generated (spec 03 section 2c). Read only with PSYS_GEN_PATTERNS."
+
 @core.note core.type
     extends=core.thing
     doc="A free-text note (SOP Lang v1 has no comments)."
@@ -676,6 +680,121 @@
     ask="Which generated sentence is canonical (offered by help)? Explicit shape examples are canonical too."
 
 @core.shape.doc core.key
+    value=string
+    card=one
+    ask="What is it?"
+
+@core.describe.op core.key
+    value=atom
+    card=one
+    ask="Which emit key (the action of a request, the type of a question or statement) does the operation produce?"
+
+@core.describe.intent core.key
+    value=atom
+    card=one
+    ask="Is it a command, a query or a statement?"
+
+@core.describe.emit core.key
+    value=string
+    card=one
+    ask="Which emit template does it produce?"
+
+@core.describe.arg core.key
+    value=string
+    card=many
+    ask="Which argument role (name:class[?][*qty][;prep=..][;det=..][;unit=..])?"
+
+@core.describe.verb core.key
+    value=string
+    card=one
+    ask="Which verbs name the action (alternatives a|b|c; _ joins words)?"
+
+@core.describe.tverb core.key
+    value=string
+    card=one
+    ask="Which trailing verbs close a question about it?"
+
+@core.describe.noun core.key
+    value=string
+    card=one
+    ask="Which nouns name the thing asked for or stated about?"
+
+@core.describe.ask core.key
+    value=string
+    card=one
+    ask="Which question openers stand alone?"
+
+@core.describe.rest core.key
+    value=string
+    card=one
+    ask="Which words complete the sentence (optional)?"
+
+@core.describe.pre core.key
+    value=string
+    card=one
+    ask="Which words open the first clause of a compound question?"
+
+@core.describe.mid core.key
+    value=string
+    card=one
+    ask="Which words join the two clauses of a compound question?"
+
+@core.describe.subject core.key
+    value=string
+    card=one
+    ask="Which subject words begin a statement (default i)?"
+
+@core.describe.frames core.key
+    value=string
+    card=one
+    ask="Which frames to generate (comma list; default all of the intent)?"
+
+@core.describe.skip core.key
+    value=string
+    card=one
+    ask="Which frames to leave out (comma list)?"
+
+@core.describe.priority core.key
+    value=number
+    card=one
+    ask="Which base priority do the generated patterns get?"
+
+@core.describe.bareVerb core.key
+    value=atom
+    card=one
+    ask="Is the verb alone the command (true)?"
+
+@core.describe.shortPriority core.key
+    value=number
+    card=one
+    ask="Which priority do the short forms get (default: priority minus 2)?"
+
+@core.describe.kind core.key
+    value=atom
+    card=one
+    ask="Which pattern kind overrides the default of the intent?"
+
+@core.describe.sample core.key
+    value=string
+    card=one
+    ask="Which example words per slot (a=Paris;b=Rome)?"
+
+@core.describe.example core.key
+    value=string
+    card=many
+    ask="Which extra sentence is an example?"
+
+@core.describe.requires core.key
+    value=atom
+    card=many
+    ask="Which matrix deny is a precondition of the operation (documentation)?"
+
+@core.describe.effect core.key
+    value=string
+    card=one
+    ask="Which state change or answer does the operation produce (documentation)?"
+
+@core.describe.doc core.key
     value=string
     card=one
     ask="What is it?"

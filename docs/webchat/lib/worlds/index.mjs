@@ -9,6 +9,7 @@
 import { parse, get, getAll } from '../soplang/index.mjs?v=26885599a7';
 import { Legends } from '../legends/index.mjs?v=48b634e4da';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
+import { describePatterns, parseArg, emitKey } from './describe.mjs?v=ee1f4a162b';
 import { checkPattern } from '../formalizer/rules/index.mjs?v=46116712b1';
 import { lexIndex } from './lexicon.mjs?v=e3316469a7';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
@@ -18,6 +19,9 @@ const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operat
 // patterns, operations and templates only when the engine runs with reasoner=matrix and the world says reasoner=matrix (the `ops` fallback loads none of them).
 const MATRIX_FILES = ['matrix.sop', 'mapping.sop'];
 const MATRIX_EXTRAS = { 'patterns.sop': 'matrix.patterns.sop', 'operations.sop': 'matrix.operations.sop', 'templates.sop': 'matrix.templates.sop' };
+// Operation descriptions (E3, spec 03 section 2c): describe.sop is read only when PSYS_GEN_PATTERNS is `add` (generated patterns are appended to the
+// hand-written ones) or `only` (hand-written patterns and shapes of the described operations are dropped first). Default: off, nothing is read.
+const genMode = () => { const m = globalThis.PSYS_GEN_PATTERNS ?? globalThis.process?.env?.PSYS_GEN_PATTERNS; return m === 'add' || m === 'only' ? m : null; };
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
 const txt = (w, k) => get(w, k)?.v;
 
@@ -32,6 +36,8 @@ export class World {
     this.lexicons = [];
     this.phrases = [];   // core.phrase macros (spec 03 section 2.5)
     this.patterns = [];
+    this.descriptions = [];   // core.describe declarations (spec 03 section 2c), read only with PSYS_GEN_PATTERNS
+    this.generated = null;
     this.shapes = [];    // core.shape declarations (spec 03 section 2b); their patterns are generated at load and appended to `patterns`
     this.operations = [];
     this.kbRaw = [];
@@ -182,7 +188,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
     for (const [base, extra] of Object.entries(MATRIX_EXTRAS)) if (files[extra] != null) files[base] = base === 'templates.sop' ? files[extra] + '\n' + (files[base] ?? '') : (files[base] ?? '') + '\n' + files[extra];
   }
-  const wires = Object.fromEntries(FILES.map((f) => [f, readEntries(w, f, files[f])]));
+  const wires = Object.fromEntries([...FILES, 'describe.sop'].map((f) => [f, readEntries(w, f, f === 'describe.sop' && !genMode() ? null : files[f])]));
   w.manifest = wires['world.sop'].find((x) => x.type === 'core.world') ?? null;
   if (!w.manifest) w.errors.push({ message: 'world.sop has no core.world wire' });
   else {
@@ -235,6 +241,10 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     action: txt(x, 'action'), outputs: getAll(x, 'outputs').map((v) => v.v), inputs: getAll(x, 'inputs').map((v) => v.v),
     doc: txt(x, 'doc'),
   }));
+  w.descriptions = (wires['describe.sop'] ?? []).filter((x) => x.type === 'core.describe').map((x) => {
+    const t = (k) => txt(x, k);
+    return { id: x.id.replace(/^describe\./, ''), wireId: x.id, wire: x, worldId: id, op: t('op'), intent: t('intent'), emit: t('emit'), args: getAll(x, 'arg').map((v) => v.v), verb: t('verb'), tverb: t('tverb'), noun: t('noun'), ask: t('ask'), rest: t('rest'), pre: t('pre'), mid: t('mid'), subject: t('subject'), frames: t('frames'), skip: t('skip'), priority: t('priority') == null ? undefined : Number(t('priority')), bareVerb: t('bareVerb'), shortPriority: t('shortPriority') == null ? undefined : Number(t('shortPriority')), kind: t('kind'), sample: t('sample'), example: getAll(x, 'example').map((v) => v.v), requires: getAll(x, 'requires').map((v) => v.v), effect: t('effect') };
+  });
   w.kbRaw = wires['kb.sop'];
   w.templates = wires['templates.sop'].filter((x) => x.type === 'core.template').map((x) => ({
     id: x.id, wire: x, worldId: id, for: txt(x, 'for'), status: txt(x, 'status') ?? 'supported',
@@ -257,7 +267,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   for (const id of ids) {
     const files = {};
     const matrix = reasoner === 'matrix';
-    await Promise.all([...FILES, ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
+    await Promise.all([...FILES, ...(genMode() ? ['describe.sop'] : []), ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
     let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, problem = null, whyWords = null;
     if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }
@@ -290,6 +300,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   }
   resolveLexiconExtends(set);
   expandShapes(set);
+  expandDescriptions(set);
   for (const w of set.list()) {
     w.kb = [];
     for (const raw of w.kbRaw) {
@@ -355,6 +366,36 @@ function expandShapes(set) {
         for (const e of p.canonical) if (!p.examples.includes(e)) p.examples = [...p.examples, e];
         for (const problem of checkPattern(p, set)) w.errors.push({ file: 'patterns.sop', message: `shape ${shape.id}: ${problem}` });
         w.patterns.push(p);
+      }
+    }
+  }
+}
+
+/** Generate the patterns of every `core.describe` wire (spec 03 section 2c); `only` first drops the hand-written patterns of the described operations. */
+function expandDescriptions(set) {
+  const mode = genMode();
+  if (!mode || !set.list().some((w) => w.descriptions.length)) return;
+  const lex = lexIndex(set);
+  for (const w of set.list()) {
+    if (!w.descriptions.length) continue;
+    const keys = new Set(w.descriptions.map((d) => d.op));
+    w.generated = { mode, replaced: [], patterns: [] };
+    if (mode === 'only') {
+      w.generated.replaced = w.patterns.filter((p) => keys.has(emitKey(p.emit))).map((p) => p.id);
+      w.patterns = w.patterns.filter((p) => !keys.has(emitKey(p.emit)));
+    }
+    for (const d of w.descriptions) {
+      let list;
+      try { list = describePatterns({ ...d, args: d.args }, { phrases: lex.phrases, lexicons: lex.lexicons }); } catch (e) { w.errors.push({ file: 'describe.sop', message: e.message }); continue; }
+      if (emitKey(d.emit) !== d.op) w.errors.push({ file: 'describe.sop', message: `describe ${d.id}: op '${d.op}' differs from the key of its emit ('${emitKey(d.emit)}')` });
+      for (const g of list) {
+        const p = {
+          id: `pat.${g.id}`, wire: null, worldId: w.id, match: g.match, emit: g.emit, kind: g.kind, priority: g.priority,
+          tabOnly: false, tabPriority: null, yieldsTo: [], needsState: null, tabFollow: false, signal: false, whole: false, examples: g.example, form: g.form, shape: null, generatedFrom: d.wireId, canonical: [],
+        };
+        for (const problem of checkPattern(p, set)) w.errors.push({ file: 'describe.sop', message: `describe ${d.id}: ${problem}` });
+        w.patterns.push(p);
+        w.generated.patterns.push(p.id);
       }
     }
   }

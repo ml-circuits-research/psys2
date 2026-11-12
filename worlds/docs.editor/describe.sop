@@ -1,0 +1,313 @@
+@describe.docs.editor.addHeading core.describe
+    op=doc.addHeading
+    intent=command
+    emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\""
+    arg="t:rest;prep=saying|called|named|that_says|reading|titled|:"
+    verb="add|insert|create|write|put_in|put|make|new|start|give_me|i_want|i_need|include|append|type|enter"
+    noun="heading|header|subheading|sub_heading|section_heading|chapter_heading"
+    frames=imp,asn
+    priority=11
+    sample="t=Shopping"
+    example="Add a heading Shopping."
+    effect="adds a heading block with the text"
+
+@describe.docs.editor.addTitle core.describe
+    op=doc.addHeading
+    intent=command
+    emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\" arg.level=1"
+    arg="t:rest;prep=saying|called|named|that_says|reading|titled|:"
+    verb="add|insert|create|write|put_in|put|place|type|start_with|begin_with"
+    noun="title|headline|big_heading|top_heading|main_title|main_heading"
+    frames=imp,asn
+    priority=12
+    sample="t=My Story"
+    example="Write a title My Story."
+    effect="adds a level 1 heading block with the text"
+
+@describe.docs.editor.addRole core.describe
+    op=doc.addHeading
+    intent=command
+    emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"{t}\""
+    arg="role:lex.docs.editor.headroles;det=a|another|one_more|the|a_new|a_fresh|new|next|fresh|the_next"
+    arg="t:rest;prep=called|titled|named|saying|:"
+    verb="start|begin|add|insert|create|make|write|open|put_in|new"
+    frames=imp
+    priority=12
+    sample="role=chapter;t=The Forest"
+    example="Start a new chapter called The Forest."
+    effect="adds a heading block of that role (chapter, section, subheading) with the text"
+
+@describe.docs.editor.addRoleBare core.describe
+    op=doc.addHeading
+    intent=command
+    emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"\""
+    arg="role:lex.docs.editor.headroles;det=a|another|one_more|the|a_new|a_fresh|new|next|fresh|the_next"
+    verb="start|begin|add|insert|create|make|write|open|put_in|new"
+    frames=imp
+    priority=12
+    sample="role=chapter"
+    example="Start a new chapter."
+    effect="adds an empty heading block of that role"
+
+@describe.docs.editor.addParagraph core.describe
+    op=doc.addParagraph
+    intent=command
+    emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
+    arg="t:rest;prep=saying|that_says|reading|:"
+    verb="add|insert|create|write|put_in|put|type|new|start|i_want|i_need|include|append|enter"
+    noun="paragraph|para|text_block|line_of_text"
+    frames=imp,asn
+    priority=11
+    sample="t=Hello"
+    example="Add a paragraph The cat sat on the mat."
+    effect="adds a paragraph block with the text"
+
+@describe.docs.editor.addList core.describe
+    op=doc.addList
+    intent=command
+    emit="@{_} core.request action=doc.addList arg.text=\"{t}\""
+    arg="t:rest;prep=with|containing|of|that_has|having|saying|:"
+    verb="add|insert|create|write|put_in|put|make|new|start|i_want|i_need|include|append"
+    noun="list|bullet_list|numbered_list|task_list|checklist|todo_list"
+    frames=imp,asn
+    priority=11
+    sample="t=milk, eggs and bread"
+    example="Add a list with milk, eggs and bread."
+    effect="adds a list block; the items are split at commas and and"
+
+@describe.docs.editor.setTitle core.describe
+    op=doc.setTitle
+    intent=command
+    emit="@{_} core.request action=doc.setTitle arg.text=\"{t}\""
+    arg="t:rest;prep=to|as|:"
+    verb="make|set|change|call|name|rename"
+    noun="title|document_title|name_of_the_document|document|doc"
+    frames=imp
+    priority=11
+    sample="t=Our Trip"
+    example="Make the title Our Trip."
+    effect="sets the title of the document"
+
+@describe.docs.editor.countTasksDone core.describe
+    op=doc.countTasks
+    intent=query
+    emit="@{_} core.request action=doc.countTasks arg.state=done"
+    ask="how_many_tasks_are|how_many_items_are|how_many_checkboxes_are|how_many_tasks_have_i|number_of_tasks|how_many_of_the_tasks_are"
+    rest="done|checked|completed|finished|ticked|complete"
+    frames=ask
+    priority=12
+    example="How many tasks are done?"
+    effect="counts the checked tasks"
+
+@describe.docs.editor.countTasksLeft core.describe
+    op=doc.countTasks
+    intent=query
+    emit="@{_} core.request action=doc.countTasks arg.state=left"
+    ask="how_many_tasks_are|how_many_items_are|how_many_checkboxes_are|how_many_tasks_do_i_have|number_of_tasks|how_many_of_the_tasks_are|how_many_open_tasks|how_many_unfinished_tasks|how_many_tasks_remain|how_many_tasks_not"
+    rest="left|open|remaining|unfinished|not_done|not_finished|unchecked|to_do|undone|pending"
+    frames=ask
+    priority=12
+    example="How many tasks are left?"
+    effect="counts the tasks that are not checked"
+
+@describe.docs.editor.undo core.describe
+    op=doc.undo
+    intent=command
+    bareVerb=true
+    emit="@{_} core.request action=doc.undo"
+    verb="undo|scratch|take_back|revert|cancel|reverse|roll_back"
+    noun="that|it|this|the_last_thing|the_last_change|my_last_change|the_previous_change|the_last_edit|last_change"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Undo that."
+    effect="reverts the last change"
+
+@describe.docs.editor.redo core.describe
+    op=doc.redo
+    intent=command
+    bareVerb=true
+    emit="@{_} core.request action=doc.redo"
+    verb="redo|do_it_again|put_it_back|restore"
+    noun="that|it|this|the_last_change|the_last_undo"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Redo that."
+    effect="applies the change that was undone"
+
+@describe.docs.editor.clear core.describe
+    op=doc.clear
+    intent=command
+    emit="@{_} core.request action=doc.clear"
+    verb="clear|empty|wipe|erase|delete|blank"
+    noun="document|doc|everything|the_whole_document|the_page|all|it_all"
+    frames=imp,wish,ind,can
+    priority=11
+    example="Clear the document."
+    effect="removes every block"
+
+@describe.docs.editor.stats core.describe
+    op=doc.stats
+    intent=query
+    bareVerb=true
+    emit="@{_} core.request action=doc.stats"
+    ask="how_many_words_are_in|how_long_is|what_is_the_word_count_of|how_many_words_does_have|how_many_words"
+    noun="word_count|wordcount|statistics|stats|number_of_words|length"
+    rest="the_document|the_doc|my_document|it|in_the_document|do_i_have"
+    verb="give_me|tell_me|show_me|count"
+    frames=ask,qnoun,tell,rev
+    priority=12
+    example="Give me the statistics."
+    effect="answers the word, sentence and block counts"
+
+@describe.docs.editor.deleteOrd core.describe
+    op=doc.delete
+    intent=command
+    emit="@{_} core.request action=doc.delete arg.ord={ord} arg.kind={kind}"
+    arg="ord:lex.docs.editor.ordinals;det=the|my"
+    arg="kind:lex.docs.editor.kinds"
+    verb="delete|remove|erase|drop|get_rid_of|cut_out"
+    frames=imp,wish,ind,can
+    priority=12
+    sample="ord=last;kind=paragraph"
+    example="Delete the last paragraph."
+    requires=ed.d.over
+    effect="removes the block of that kind at that place"
+
+@describe.docs.editor.deleteNum core.describe
+    op=doc.delete
+    intent=command
+    emit="@{_} core.request action=doc.delete arg.n={n} arg.kind={kind}"
+    arg="kind:lex.docs.editor.kinds;det=the|my"
+    arg="n:number"
+    verb="delete|remove|erase|drop|get_rid_of|cut_out"
+    frames=imp,wish,ind,can
+    priority=12
+    sample="kind=paragraph;n=2"
+    example="Delete paragraph 2."
+    requires=ed.d.over
+    effect="removes the numbered block of that kind"
+
+@describe.docs.editor.deleteBare core.describe
+    op=doc.delete
+    intent=command
+    emit="@{_} core.request action=doc.delete arg.ord=first arg.kind={kind}"
+    arg="kind:lex.docs.editor.kinds;det=the|my"
+    verb="delete|remove|erase|drop|get_rid_of|cut_out"
+    frames=imp,wish,ind,can
+    priority=11
+    sample="kind=paragraph"
+    example="Delete the paragraph."
+    requires=ed.d.zero
+    effect="removes the first block of that kind"
+
+@describe.docs.editor.deleteSentence core.describe
+    op=doc.deleteSentence
+    intent=command
+    emit="@{_} core.request action=doc.deleteSentence"
+    verb="delete|remove|erase|drop|cut"
+    noun="last_sentence|the_last_sentence|final_sentence"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Delete the last sentence."
+    effect="removes the last sentence of the last paragraph"
+
+@describe.docs.editor.readDoc core.describe
+    op=doc.read
+    intent=command
+    emit="@{_} core.request action=doc.read"
+    verb="read|read_out|read_aloud|speak|say"
+    noun="document|doc|the_document|everything|it_back|whole_document|it"
+    frames=imp,wish,ind,can
+    priority=12
+    example="Read the document."
+    effect="reads the whole document aloud"
+
+@describe.docs.editor.readOrd core.describe
+    op=doc.read
+    intent=command
+    emit="@{_} core.request action=doc.read arg.ord={ord} arg.kind={kind}"
+    arg="ord:lex.docs.editor.ordinals;det=the|my"
+    arg="kind:lex.docs.editor.kinds"
+    verb="read|read_out|read_aloud|speak|say"
+    frames=imp,wish,ind,can
+    priority=12
+    sample="ord=last;kind=paragraph"
+    example="Read the last paragraph."
+    effect="reads the block aloud"
+
+@describe.docs.editor.readNum core.describe
+    op=doc.read
+    intent=command
+    emit="@{_} core.request action=doc.read arg.n={n} arg.kind={kind}"
+    arg="kind:lex.docs.editor.kinds;det=the|my"
+    arg="n:number"
+    verb="read|read_out|read_aloud|speak|say"
+    frames=imp,wish,ind,can
+    priority=12
+    sample="kind=paragraph;n=2"
+    example="Read paragraph 2."
+    effect="reads the numbered block aloud"
+
+@describe.docs.editor.readBare core.describe
+    op=doc.read
+    intent=command
+    emit="@{_} core.request action=doc.read arg.n=1 arg.kind={kind}"
+    arg="kind:lex.docs.editor.kinds;det=the|my"
+    verb="read|read_out|read_aloud|speak|say"
+    frames=imp,wish,ind,can
+    priority=11
+    sample="kind=paragraph"
+    example="Read the paragraph."
+    effect="reads the first block of that kind aloud"
+
+@describe.docs.editor.gotoPos core.describe
+    op=doc.goto
+    intent=command
+    emit="@{_} core.request action=doc.goto arg.where={w}"
+    arg="w:lex.docs.editor.positions;prep=to|at;det=the"
+    verb="go_to|jump_to|scroll_to|navigate_to|move_to|move_the_cursor_to|put_the_cursor_at|take_me_to"
+    frames=imp,wish,ind,can
+    priority=12
+    sample="w=end"
+    example="Go to the end."
+    effect="moves the cursor to the place"
+
+@describe.docs.editor.gotoOrd core.describe
+    op=doc.goto
+    intent=command
+    emit="@{_} core.request action=doc.goto arg.ord={ord} arg.kind={kind}"
+    arg="ord:lex.docs.editor.ordinals;det=the|my"
+    arg="kind:lex.docs.editor.kinds"
+    verb="go_to|jump_to|scroll_to|navigate_to|move_to|take_me_to"
+    frames=imp,wish,ind,can
+    priority=12
+    sample="ord=last;kind=paragraph"
+    example="Go to the last paragraph."
+    requires=ed.d.over
+    effect="moves the cursor to the block"
+
+@describe.docs.editor.gotoNum core.describe
+    op=doc.goto
+    intent=command
+    emit="@{_} core.request action=doc.goto arg.n={n} arg.kind={kind}"
+    arg="kind:lex.docs.editor.kinds;det=the|my"
+    arg="n:number"
+    verb="go_to|jump_to|scroll_to|navigate_to|move_to|take_me_to"
+    frames=imp,wish,ind,can
+    priority=12
+    sample="kind=paragraph;n=2"
+    example="Go to paragraph 2."
+    requires=ed.d.over
+    effect="moves the cursor to the numbered block"
+
+@describe.docs.editor.gotoBare core.describe
+    op=doc.goto
+    intent=command
+    emit="@{_} core.request action=doc.goto arg.ord=first arg.kind={kind}"
+    arg="kind:lex.docs.editor.kinds;det=the|my"
+    verb="go_to|jump_to|scroll_to|navigate_to|move_to|take_me_to"
+    frames=imp,wish,ind,can
+    priority=11
+    sample="kind=paragraph"
+    example="Go to the paragraph."
+    effect="moves the cursor to the first block of that kind"

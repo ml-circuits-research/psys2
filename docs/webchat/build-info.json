@@ -53,7 +53,7 @@
     "lib/dialog/discourse.mjs": "14b451d92ae1e348",
     "lib/dialog/dispatch-validate.mjs": "b369d02cd6b09083",
     "lib/dialog/encoder-dispatch.mjs": "b637a5f544a1e2c8",
-    "lib/dialog/index.mjs": "d233ad2b9cf1cef6",
+    "lib/dialog/index.mjs": "1877c534111277a2",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/runtime-config.mjs": "3d5891ad1ab337e5",
@@ -113,7 +113,8 @@
     "lib/vendor/sopworld/sopworld.mjs": "ff7ef552a22e6713",
     "lib/vendor/sopworld/tools/scan-loops.mjs": "c468386b69b7edda",
     "lib/worlds/canonical.mjs": "331dd143a11d8880",
-    "lib/worlds/index.mjs": "22380179f3df5d77",
+    "lib/worlds/describe.mjs": "fba28b8ed942645e",
+    "lib/worlds/index.mjs": "a1b09446ec9c56d3",
     "lib/worlds/lexicon.mjs": "eacdc3fe6ef44a6e",
     "lib/worlds/validate.mjs": "e992a81a45fe3cd5",
     "worlds/art.draw/coverage.md": "e028db6e48c71587",
@@ -167,7 +168,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "0b7b04b24b1338e2",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "6ed1e663c10e6138",
+    "worlds/index.json": "2427b527b4aa506a",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -221,5 +222,5 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-11T23:16:25.972Z"
+  "builtAt": "2026-11-12T00:06:54.361Z"
 }

@@ -1,0 +1,137 @@
+@describe.kids.shop.money core.describe
+    op=kids.shop.money
+    intent=statement
+    emit="@{_} kids.shop.money count={n} unit=leu"
+    arg="n:number;unit=lei|leu"
+    verb="have|have_got|got"
+    rest="now|left|today|in_my_wallet|in_my_piggy_bank|with_me|to_spend"
+    sample="n=20"
+    example="I have 20 lei."
+    effect="sets the amount of money the user has"
+
+@describe.kids.shop.income core.describe
+    op=kids.shop.income
+    intent=statement
+    emit="@{_} kids.shop.income count={n} unit=leu"
+    arg="n:number;unit=lei|leu"
+    verb="get|got|find|found|receive|received|earn|earned|win|won|save|saved"
+    sample="n=5"
+    example="I found 5 lei."
+    effect="adds to the money the user has"
+
+@describe.kids.shop.expense core.describe
+    op=kids.shop.expense
+    intent=statement
+    emit="@{_} kids.shop.expense count={n} unit=leu"
+    arg="n:number;unit=lei|leu"
+    verb="spend|spent|lose|lost|pay|paid|give_away|gave_away"
+    sample="n=5"
+    example="I spent 5 lei."
+    effect="takes from the money the user has"
+
+@describe.kids.shop.purchase core.describe
+    op=kids.shop.purchase
+    intent=statement
+    emit="@{_} kids.shop.purchase item={i1} count={n1}\n@{_1} kids.shop.purchase item={i2} count={n2}"
+    arg="i1:lex.kids.shop.items*n1"
+    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
+    verb="buy|bought|take|took|get|got|purchase|purchased"
+    sample="i1=ball;i2=pencil;n1=2;n2=3"
+    example="I buy 2 balls and 3 pencils."
+    requires=shop.d.debt
+    effect="takes the cost of the basket from the money; each part is priced by the price in force"
+
+@describe.kids.shop.price.set core.describe
+    op=kids.shop.price
+    intent=statement
+    emit="@{_} kids.shop.price item={item} cost={n}"
+    arg="item:noun;det=a|an|the|one"
+    arg="n:number;unit=lei|leu"
+    verb="costs|cost|is|are"
+    subject=""
+    frames=pred
+    sample="item=ball;n=7"
+    example="A ball costs 7 lei."
+    effect="a price stated in the dialog overrides the price list for the session"
+
+@describe.kids.shop.price.ask core.describe
+    op=kids.shop.price
+    intent=query
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    arg="item:noun;prep=of|for;det=a|an|the|one"
+    noun="price|cost"
+    ask="how_much"
+    tverb="cost|costs"
+    sample="item=pen"
+    example="What is the price of a pen?"
+    effect="answers the price of one item"
+
+@describe.kids.shop.total core.describe
+    op=kids.shop.total
+    intent=query
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    arg="i1:lex.kids.shop.items*n1;prep=of|for"
+    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
+    noun="total|price|cost|sum|bill"
+    ask="how_much|how_much_money|what_does_it_cost_for"
+    tverb="cost|come_to|add_up_to|total"
+    rest="altogether|in_total|all_together|together"
+    sample="i1=ball;i2=pencil;n1=2;n2=3"
+    example="How much do 2 balls and 3 pencils cost?"
+    effect="answers the sum of the lines of the basket"
+
+@describe.kids.shop.balance core.describe
+    op=kids.shop.balance
+    intent=query
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    noun="money|balance|cash|lei"
+    ask="how_much|how_much_money|how_many_lei|what_is_my|what_s_my"
+    rest="do_i_have|do_i_have_left|is_left|i_have_left|do_i_have_now|is_in_my_wallet|after_shopping|after_the_shopping|after_buying"
+    frames=ask
+    example="How much money do I have left?"
+    effect="answers the money after replaying every statement of money, income, expense and purchase"
+
+@describe.kids.shop.affordable core.describe
+    op=kids.shop.affordability
+    intent=query
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    arg="i1:lex.kids.shop.items*n1"
+    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
+    verb="afford|buy|get|take|pay"
+    frames=canq,canlast
+    sample="i1=ball;i2=pencil;n1=2;n2=3"
+    example="Can I afford 2 balls and 3 pencils?"
+    effect="answers yes or no: the money against the cost of the basket"
+
+@describe.kids.shop.change core.describe
+    op=kids.shop.change
+    intent=query
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    arg="m:number;prep=from|out_of|with|for;unit=lei|leu"
+    arg="i1:lex.kids.shop.items*n1;prep=if_i_buy|if_i_get|if_i_take|for|on|when_i_buy|with"
+    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
+    noun="change|back"
+    ask="how_much_change|how_much_back|what_is_the|what_s_the|whats_the|what_is_my|what_s_my|whats_my|what_do_i_get_back|what_change_do_i_get"
+    tverb="do_i_get|will_i_get|do_i_receive|will_i_receive|do_i_take|do_i_have_back"
+    verb="give|pay|hand_over|buy|get|take"
+    pre="i_want|i_would_like|i_d_like|i_will_buy|i_buy|i_take|i_would_like_to_buy|i_want_to_buy"
+    mid="and_i_pay|and_i_give_the_cashier|and_pay_with|and_i_hand_over|and_i_pay_with|and_give|and_i_give"
+    sample="m=50;i1=ball;i2=pencil;n1=2;n2=3"
+    example="What is the change from 50 lei if I buy 2 balls and 3 pencils?"
+    requires=shop.d.short
+    effect="answers what was paid minus the cost of the basket"
+
+@describe.kids.shop.leftafter core.describe
+    op=kids.shop.leftafter
+    intent=query
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    arg="i1:lex.kids.shop.items*n1;prep=after_i_buy|if_i_buy|after_buying|after_i_get"
+    arg="i2:lex.kids.shop.items?*n2;prep=and|plus"
+    noun="money_left|balance|change"
+    ask="how_much_money_do_i_have_left|how_many_lei_do_i_have_left|how_much_is_left"
+    verb="buy|get|take|purchase"
+    frames=ask,qnoun,last,cond
+    sample="i1=ball;i2=pencil;n1=2;n2=3"
+    example="How much money do I have left after I buy 2 balls and 3 pencils?"
+    requires=shop.d.left
+    effect="answers the current money minus the cost of the basket; nothing is recorded"
