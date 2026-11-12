@@ -54,7 +54,7 @@
     "lib/dialog/discourse.mjs": "e11d562ccf4d8324",
     "lib/dialog/dispatch-validate.mjs": "965dfe7431680797",
     "lib/dialog/encoder-dispatch.mjs": "6ecd5f7a1b2eb7b9",
-    "lib/dialog/index.mjs": "49864209190c323e",
+    "lib/dialog/index.mjs": "15c33369361fb47d",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/reader-route.mjs": "81fe8c70e70f8a3d",
@@ -173,7 +173,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "16f176dcd3a5d975",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "8da598d6bdbf50c6",
+    "worlds/index.json": "ee8d9dfb37262db1",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -227,5 +227,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-12T09:07:30.837Z"
+  "builtAt": "2026-11-12T09:23:22.249Z",
+  "commit": "0305e61"
 }
