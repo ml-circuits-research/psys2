@@ -25,6 +25,8 @@ const keyName = (k) => String(k).split('.').pop();
 const bare = (v) => String(v).replace(/^\$/, '');
 const unquote = (v) => { const s = String(v); if (!(s.length > 1 && s.startsWith('"') && s.endsWith('"'))) return s; try { return JSON.parse(s); } catch { return s.slice(1, -1); } };   // a string value is its text (the escapes of a quote or a line end undone)
 const first = (a) => (Array.isArray(a) ? a[0] : a);
+/** An issue of a soft rule of common sense (rule id `cs.d.*`): advice to say once, never a refusal. */
+const isAdvice = (i) => /(?:^|[$:])cs\.d\./.test(String(first(i.w.attrs.rule) ?? ''));
 /** Words a reason may write a value in (`?n:ordinal`, `?c:count`; library R6.5): "third", "two". The numbers the library gives are digits. */
 const ORDINALS = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 const COUNTS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
@@ -225,6 +227,8 @@ export class ReasonerSession {
     this.written = new Map();    // world id -> JSON of the state as the library last said it (a world with `adopt`: a state that differs was changed by its operations since)
     this.derived = new Map();    // world id -> { stamp, json }: what toState said of the instance as it was at that stamp
     this.said = new Set();       // assumed cells already said to the user (an assumption is said once)
+    this.advised = new Set();    // keys of the advice (issues of common sense) already said while they stand
+    this.advice = [];            // advice collected and not yet taken by the turn
     this.warned = new Set();     // library warnings already reported in the trace (a warning is reported once per session)
     this.mirrored = new Map();   // id -> { text, type } of the wire last copied to the session memory
     this.told = [];              // ids of the dialogue wires the library holds, oldest first (a rewind retracts the ones that are gone from the session memory)
@@ -469,6 +473,23 @@ export class ReasonerSession {
   }
   /** Start of a dialogue turn: the instances as they are now are what the turn can be taken back to. */
   beginTurn(turn) { this.cur = { turn, marks: this._marks(), ops: this.ops, owners: new Set() }; this.seg = null; this.issueSeen = new Set(this._issues().map((i) => i.key)); }
+  /**
+   * Advice (spec 15): the standing issues of soft rules of common sense (`cs.d.*`) that have not been said yet, as short sentences. An issue is said once while it stands
+   * (it is said again only after it went away and came back); the state is never refused for it. Called after the library took a state over.
+   */
+  _collectAdvice() {
+    const now = this._issues().filter(isAdvice);
+    const keys = new Set(now.map((i) => i.key));
+    for (const k of [...this.advised]) if (!keys.has(k)) this.advised.delete(k);
+    for (const i of now) {
+      if (this.advised.has(i.key)) continue;
+      this.advised.add(i.key);
+      const t = unquote(first(i.w.attrs.why) ?? '').trim();
+      if (t && !this.advice.includes(t)) this.advice.push(t);
+    }
+  }
+  /** The advice collected since the last call (each sentence once), as an array of sentences. */
+  takeAdvice() { const a = this.advice; this.advice = []; return a; }
   /** The standing issues of the instances (or of one): [{ key, w, inst }]; an issue is identified by instance and id. */
   _issues(only = null) {
     const out = [];
@@ -490,7 +511,7 @@ export class ReasonerSession {
     if (!seg) return null;
     const ids = new Set(seg.ids);
     const refused = this.refused.find((r) => ids.has(r.id));
-    const added = refused ? null : this._issues().find((i) => !this.issueSeen.has(i.key));
+    const added = refused ? null : this._issues().find((i) => !this.issueSeen.has(i.key) && !isAdvice(i));
     if (!refused && !added) { for (const i of this._issues()) this.issueSeen.add(i.key); return null; }
     let why = refused ? refused.violations?.[0]?.why : unquote(first(added.w.attrs.why) ?? '');
     this.refused = this.refused.filter((r) => !ids.has(r.id));
@@ -841,7 +862,13 @@ export class ReasonerSession {
         try { r = inst.world.applyPatch(patch, { budget: this._limit() }); } catch (e) { r = { ok: false, violations: [{ kind: 'error', why: String(e?.message ?? e) }] }; }
         this._charge(inst.world);
         if (!r.ok) bad = r.violations?.[0]?.why ?? 'that cannot be true';
-        if (!bad) { const added = this._issues(inst).find((i) => !seen.has(i.key)); if (added) bad = unquote(first(added.w.attrs.why) ?? '') || 'that cannot be true'; }
+        if (!bad) {
+          // a new standing issue is a refusal, except the advice of a soft rule of common sense (its rule id starts with `cs.d.`, spec 15 "Advice"): the state is kept and the
+          // warning is said once, after what was done (`takeAdvice`)
+          const added = this._issues(inst).filter((i) => !seen.has(i.key));
+          const hard = added.find((i) => !isAdvice(i));
+          if (hard) bad = unquote(first(hard.w.attrs.why) ?? '') || 'that cannot be true';
+        }
       }
       if (bad) {
         inst.world.rewind(mark);
@@ -854,6 +881,7 @@ export class ReasonerSession {
       this.written.set(id, json);   // the state is the library's to say again: derived and written back (the refused one is replaced by the one before)
       this._state(session, id);
     }
+    if (!refused) this._collectAdvice();
     if (refused) {
       const t = String(refused.why).trim();   // a reason that ends in a question ("Which one is right?") keeps it
       refused.why = `${t.charAt(0).toUpperCase()}${t.slice(1)}${/[.!?]$/.test(t) ? '' : '.'}`;

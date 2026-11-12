@@ -24,6 +24,27 @@
 @arith.shop.buy kids.arith.buy who=$e.user item=?i count=?n core.seq=?at
 @arith.r.shop core.rule when=$arith.shop then=$arith.shop.buy
 
+# ---- a comparison told as a statement ("Ana has 3 more apples than Ion", "Ion has twice as many as Ana"): the count of whichever of the two is not known
+#      follows from the one that is. Both directions are rules, so a count told later fills in the other. (Counts changed by events AFTER the comparison are not
+#      carried to the other person: the comparison fixes the pair when it is told.)
+@arith.rl.more kids.arith.relation kind=more who=?w ref=?r item=?i count=?n core.seq=?at
+@arith.rl.fewer kids.arith.relation kind=fewer who=?w ref=?r item=?i count=?n core.seq=?at
+@arith.rl.times kids.arith.relation kind=times who=?w ref=?r item=?i count=?n core.seq=?at
+@arith.rl.h.ref kids.arith.holding owner=?r item=?i count=?c
+@arith.rl.h.who kids.arith.holding owner=?w item=?i count=?c
+@arith.rl.c.add core.calc out=?v fn=add args=?c args=?n
+@arith.rl.c.sub core.calc out=?v fn=sub args=?c args=?n
+@arith.rl.c.mul core.calc out=?v fn=mul args=?c args=?n
+@arith.rl.c.div core.calc out=?v fn=div args=?c args=?n
+@arith.rl.o.who kids.arith.holding owner=?w item=?i count=?v core.seq=?at
+@arith.rl.o.ref kids.arith.holding owner=?r item=?i count=?v core.seq=?at
+@arith.r.rl.more.f core.rule when=$arith.rl.more when=$arith.rl.h.ref with=$arith.rl.c.add then=$arith.rl.o.who
+@arith.r.rl.more.b core.rule when=$arith.rl.more when=$arith.rl.h.who with=$arith.rl.c.sub then=$arith.rl.o.ref
+@arith.r.rl.fewer.f core.rule when=$arith.rl.fewer when=$arith.rl.h.ref with=$arith.rl.c.sub then=$arith.rl.o.who
+@arith.r.rl.fewer.b core.rule when=$arith.rl.fewer when=$arith.rl.h.who with=$arith.rl.c.add then=$arith.rl.o.ref
+@arith.r.rl.times.f core.rule when=$arith.rl.times when=$arith.rl.h.ref with=$arith.rl.c.mul then=$arith.rl.o.who
+@arith.r.rl.times.b core.rule when=$arith.rl.times when=$arith.rl.h.who with=$arith.rl.c.div then=$arith.rl.o.ref
+
 # ---- does someone have any
 @arith.q.has kids.arith.has owner=?o item=?i
 @arith.h kids.arith.holding owner=?o item=?i count=?c

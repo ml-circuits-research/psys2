@@ -6,7 +6,7 @@
 // cannot be (a selected thing that is not there, two things with one id, a kind the board cannot draw), derive what is in the picture (the number of things and of each kind) and refuse a request whose target is not there ("I can not find a green circle in your picture."). Undo and redo are the session timeline's, in the
 // words of the board. Browser-safe; it imports its sibling ops.mjs for the tables (a world is plain files).
 import {
-  initialState, parseNP, splitDest, kindOfWord, describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP,
+  initialState, parseNP, splitDest, kindOfWord, describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP, bbox, HORIZON,
 } from './ops.mjs';
 
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
@@ -17,7 +17,7 @@ const num = (n) => String(Number(n));
 const isNum = (n) => typeof n === 'number' && Number.isFinite(n);
 const atomOk = (v) => typeof v === 'string' && /^[A-Za-z0-9_]+$/.test(v);
 const wid = (s) => String(s).replace(/[^A-Za-z0-9_]/g, '_');
-const TYPES = ['art.draw.object', 'art.draw.sel', 'art.draw.last', 'art.draw.scene'];
+const TYPES = ['art.draw.object', 'art.draw.sel', 'art.draw.last', 'art.draw.scene', 'common.sense.thing', 'common.sense.at', 'common.sense.moment'];   // the last three are what this world tells common.sense about the picture
 const HANDLED = new Set(['objects', 'selected', 'last', 'history', 'future', 'background', 'sky', 'ground', 'groundColor', 'mood', 'nextId', 'lastLabel']);   // the rest is in `art.draw.scene`'s `rest`
 
 const objOf = (w) => JSON.parse(dec(w.attrs.obj[0]));
@@ -46,7 +46,32 @@ export function toState({ find }) {
 const canon = (attrs) => JSON.stringify(Object.keys(attrs ?? {}).filter((k) => !k.startsWith('core.')).sort().map((k) => [k, attrs[k]]));
 
 /** The wires a state asks for: { id: { type, attrs: { key: [token] } } }. */
-function wiresOf(s) {
+/** kind -> its usual place, from the facts of common.sense (the instance holds them; the same rows ops.mjs reads for defaults). */
+function usualOf(find) {
+  const m = new Map();
+  for (const w of find('common.sense.livesin')) if (tok(w, 'usual')[0] === 'yes') m.set(tok(w, 'kind')[0], tok(w, 'where')[0] === 'horizon' ? 'horizon' : tok(w, 'place')[0]);
+  return m;
+}
+/**
+ * Where a thing is, as a place of the common.sense facts (sky, ground, water), or null when the picture says nothing about places. Things of the ground and of the
+ * water are judged by their feet, the others by their middle. With no ground, no sky and no mood (blank paper) only a place the user named counts (`zone`, kept while
+ * the thing is still where that place is).
+ */
+function placeOf(o, s, usual) {
+  const a = usual.get(o.kind);
+  if (!a) return null;
+  const b = bbox(o);
+  const feet = a === 'ground' || a === 'horizon' || a === 'water';
+  const low = (feet ? b.y1 : o.y) > HORIZON;
+  const zoneOk = (o.zone === 'sky' && !low) || (o.zone === 'ground' && low);
+  if (!(s.ground || s.sky || s.mood) && !zoneOk) return null;
+  if (!low) return 'sky';
+  if (s.ground === 'sea') return 'water';
+  const inPond = (s.objects ?? []).some((p) => p.tag === 'pond' && Math.abs(p.x - o.x) < p.size / 2 && Math.abs(p.y - o.y) < p.size * 0.3);
+  return inPond ? 'water' : 'ground';
+}
+
+function wiresOf(s, usual = new Map()) {
   const out = {}, used = new Set();   // a wire is the thing's id; a second thing with the same id gets its place in the name (and the rules refuse the state)
   (s.objects ?? []).forEach((o, ord) => {
     const a = { oid: [str(o.id)], ord: [String(ord)], kind: [atomOk(o.kind) ? o.kind : 'unknown'], color: [str(effectiveColor(o) ?? 'none')], obj: [str(JSON.stringify(o))] };
@@ -58,7 +83,13 @@ function wiresOf(s) {
     if (used.has(id)) id = `${id}_${ord}`;
     used.add(id);
     out[id] = { type: 'art.draw.object', attrs: a };
+    if (atomOk(o.kind)) {
+      out[`cs.t_${wid(o.id)}`] = { type: 'common.sense.thing', attrs: { thing: [str(o.id)], kind: [o.kind] } };
+      const where = placeOf(o, s, usual);
+      if (where) out[`cs.at_${wid(o.id)}`] = { type: 'common.sense.at', attrs: { thing: [str(o.id)], place: [where] } };
+    }
   });
+  if (s.mood === 'night' || s.mood === 'day') out['cs.moment'] = { type: 'common.sense.moment', attrs: { phase: [s.mood] } };
   if (s.selected) out['ad.sel'] = { type: 'art.draw.sel', attrs: { oid: [str(s.selected)] } };
   (s.last ?? []).forEach((id, i) => { out[`ad.ls_${wid(id)}`] = { type: 'art.draw.last', attrs: { oid: [str(id)], i: [String(i)] } }; });
   const label = s.history?.length ? s.history.at(-1).label ?? '' : s.lastLabel ?? '';   // the words of the step the operations just took (what "undo" names)
@@ -79,7 +110,7 @@ function wiresOf(s) {
  * A wire whose single values changed is set in place (a thing that moved: x and y); a wire that gained or lost a key is replaced in place (it keeps its id).
  */
 export function adopt({ state, find, inPlace = true }) {
-  const want = wiresOf(state);
+  const want = wiresOf(state, usualOf(find));
   const have = new Map();
   for (const t of TYPES) for (const w of find(t)) {
     have.set(w.id, { id: w.id, wire: w });

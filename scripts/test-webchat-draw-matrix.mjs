@@ -34,6 +34,27 @@ export const drawScenarios = ({ openChat, MATRIX, check, say }) => ({
       check('draw: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
+  async commonsense(o) {
+    // COMMON-SENSE (spec 15, "Common sense, advice and defaults"): the action is done, a short friendly warning follows it, said once, never a refusal
+    const c = await openChat({ ...o, settings: MATRIX });
+    const st = async () => JSON.parse(await c.state())['art.draw'] ?? {};
+    try {
+      const f = await say(c, 'draw a fish in the sky');
+      check('commonsense: a fish in the sky is drawn and warned about, in one sentence in brackets', /I drew an orange fish in the sky\. \(Fish usually live in water, not in the sky\.\)$/.test(f), f);
+      const h = await say(c, 'draw a red house');
+      check('commonsense: the warning is said once (the next command does not repeat it)', !/usually/.test(h), h);
+      await say(c, 'draw a sun');
+      const s2 = await say(c, 'draw a second sun');
+      check('commonsense: a second sun is drawn and warned about', /\(There is usually only one sun\.\)$/.test(s2), s2);
+      const k = await say(c, 'draw a car in the sky');
+      check('commonsense: a car in the sky is drawn and warned about', /\(Cars are usually on roads or on the ground, not in the sky\.\)$/.test(k), k);
+      const a = await st();
+      check('commonsense: nothing was refused, the things are on the tab', a.objects?.filter((x) => x.kind === 'sun').length === 2 && a.objects.some((x) => x.kind === 'car') && a.objects.some((x) => x.kind === 'fish'), JSON.stringify(a.objects?.map((x) => x.kind)));
+      const p = await say(c, 'draw a fish');
+      check('commonsense: a fish with nobody saying where goes into water made for it, with no warning', /I made a pond for the fish\.$/.test(p) && !/usually/.test(p), p);
+      check('commonsense: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
   async veto(o) {
     // world-aware veto is the default (spec 16): plain-language replies, the user's label in quotes, one short question; English and Romanian (through the translator)
     for (const [lang, connect, remove] of [['en', 'connect Start to End', 'delete the dragon'], ['ro', 'conectează c1 cu End', 'șterge dragonul']]) {

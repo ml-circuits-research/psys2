@@ -141,14 +141,14 @@ test('RP5b: tic-tac-toe start, missing-place prompt and chart help are Romanian'
 });
 
 test('RP5b: moving a thing into the water says "în apă" and adds the water when there is none', async () => {
-  const { r, s } = await run('draw', ['desenează pește', 'mută peștele în apă']);
-  assert.match(r.text, /Am mutat peștele în apă\./);
+  const { r, s } = await run('draw', ['desenează pisică', 'mută pisica în apă']);   // a cat, not a fish: a fish makes its water itself (common.sense)
+  assert.match(r.text, /Am mutat pisica în apă\./);
   assert.match(r.text, /Nu era apă, așa că am adăugat-o pe pământ\./);
   assert.equal(s.state()['art.draw'].ground, 'sea');
-  const again = await run('draw', ['desenează apă', 'desenează pește', 'mută peștele în apă']);
+  const again = await run('draw', ['desenează apă', 'desenează pisică', 'mută pisica în apă']);
   assert.doesNotMatch(again.r.text, /Nu era apă/);
-  const en = await run('draw', ['draw a fish', 'move the fish into the water'], { lang: 'en' });
-  assert.match(en.r.text, /I moved the fish into the water\. There was no water, so I added it to the ground\./);
+  const en = await run('draw', ['draw a cat', 'move the cat into the water'], { lang: 'en' });
+  assert.match(en.r.text, /I moved the cat into the water\. There was no water, so I added it to the ground\./);
 });
 
 test('RP5c: a tab opened by a command is the active tab for the next command', async () => {

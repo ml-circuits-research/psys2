@@ -132,7 +132,7 @@ function crescentPts() {
 }
 
 // ---- kinds --------------------------------------------------------------------------------------------------------
-// size: default width in logical pixels; aspect: height / width; anchor: where it lives by default ('ground', 'sky', 'any');
+// size: default width in logical pixels; aspect: height / width. Where a kind lives by default (sky, ground, water) is NOT here: it is the facts of common.sense.
 // faces: 'right' when the picture looks to the right (flip mirrors it); names: part name -> spoken synonyms.
 const tri = fit([[0, -0.5], [0.5, 0.4], [-0.5, 0.4]]);
 const star = fit(starPts());
@@ -141,20 +141,20 @@ const moon = crescentPts();
 
 export const KINDS = {
   // ---- primitives
-  circle: { prim: 1, size: 130, aspect: 1, anchor: 'any', color: 'red', build: () => [E('body', 0, 0, 1, 1, 'red', { m: 1 })] },
-  oval: { prim: 1, size: 160, aspect: 0.6, anchor: 'any', color: 'purple', build: () => [E('body', 0, 0, 1, 0.6, 'purple', { m: 1 })] },
-  square: { prim: 1, size: 130, aspect: 1, anchor: 'any', color: 'blue', build: () => [R('body', 0, 0, 1, 1, 'blue', { m: 1 })] },
-  rectangle: { prim: 1, size: 180, aspect: 0.6, anchor: 'any', color: 'green', build: () => [R('body', 0, 0, 1, 0.6, 'green', { m: 1 })] },
-  triangle: { prim: 1, size: 140, aspect: tri.aspect, anchor: 'any', color: 'orange', build: () => [P('body', tri.pts, 'orange', { m: 1 })] },
-  star: { prim: 1, size: 110, aspect: star.aspect, anchor: 'sky', color: 'yellow', build: () => [P('body', star.pts, 'yellow', { m: 1 })] },
-  heart: { prim: 1, size: 120, aspect: heart.aspect, anchor: 'any', color: 'red', build: () => [P('body', rpts(heart.pts), 'red', { m: 1 })] },
-  line: { prim: 1, size: 260, aspect: 0.06, anchor: 'any', color: 'black', build: () => [L('body', [[-0.5, 0], [0.5, 0]], 'black', { m: 1, t: 0.02 })] },
-  arrow: { prim: 1, size: 220, aspect: 0.3, anchor: 'any', color: 'black', build: () => [
+  circle: { prim: 1, size: 130, aspect: 1, color: 'red', build: () => [E('body', 0, 0, 1, 1, 'red', { m: 1 })] },
+  oval: { prim: 1, size: 160, aspect: 0.6, color: 'purple', build: () => [E('body', 0, 0, 1, 0.6, 'purple', { m: 1 })] },
+  square: { prim: 1, size: 130, aspect: 1, color: 'blue', build: () => [R('body', 0, 0, 1, 1, 'blue', { m: 1 })] },
+  rectangle: { prim: 1, size: 180, aspect: 0.6, color: 'green', build: () => [R('body', 0, 0, 1, 0.6, 'green', { m: 1 })] },
+  triangle: { prim: 1, size: 140, aspect: tri.aspect, color: 'orange', build: () => [P('body', tri.pts, 'orange', { m: 1 })] },
+  star: { prim: 1, size: 110, aspect: star.aspect, color: 'yellow', build: () => [P('body', star.pts, 'yellow', { m: 1 })] },
+  heart: { prim: 1, size: 120, aspect: heart.aspect, color: 'red', build: () => [P('body', rpts(heart.pts), 'red', { m: 1 })] },
+  line: { prim: 1, size: 260, aspect: 0.06, color: 'black', build: () => [L('body', [[-0.5, 0], [0.5, 0]], 'black', { m: 1, t: 0.02 })] },
+  arrow: { prim: 1, size: 220, aspect: 0.3, color: 'black', build: () => [
     L('body', [[-0.5, 0], [0.38, 0]], 'black', { m: 1, t: 0.03 }), P('head', [[0.3, -0.1], [0.5, 0], [0.3, 0.1]], 'black', { m: 1, f: 'solid' })] },
 
   // ---- composites
   house: {
-    size: 240, aspect: 0.82, anchor: 'ground', color: 'yellow',
+    size: 240, aspect: 0.82, color: 'yellow',
     names: { walls: ['wall', 'walls', 'body', 'house'], roof: ['roof'], door: ['door'], windows: ['window', 'windows'], chimney: ['chimney'], knob: ['knob', 'handle', 'doorknob'] },
     build: () => [
       R('chimney', 0.24, -0.25, 0.1, 0.26, 'grey'),
@@ -167,7 +167,7 @@ export const KINDS = {
     ],
   },
   tree: {
-    size: 170, aspect: 1.3, anchor: 'ground', color: 'green',
+    size: 170, aspect: 1.3, color: 'green',
     names: { trunk: ['trunk', 'stem', 'wood'], crown: ['crown', 'leaves', 'leaf', 'top', 'foliage', 'branches'], apples: ['apples', 'apple', 'fruit'] },
     build: () => [
       R('trunk', 0, 0.38, 0.15, 0.55, 'brown'), L('bark', [[-0.02, 0.22], [-0.02, 0.4]], 'dark brown', { t: 0.01 }),
@@ -176,7 +176,7 @@ export const KINDS = {
     ],
   },
   sun: {
-    size: 140, aspect: 1, anchor: 'sky', color: 'yellow',
+    size: 140, aspect: 1, color: 'yellow',
     names: { rays: ['ray', 'rays', 'beams'], disc: ['disc', 'body', 'sun', 'circle', 'face'], cheeks: ['cheek', 'cheeks'], eyes: ['eye', 'eyes'], smile: ['smile', 'mouth'] },
     build: () => {
       const rays = [];
@@ -191,13 +191,13 @@ export const KINDS = {
     },
   },
   cloud: {
-    size: 210, aspect: 0.55, anchor: 'sky', color: 'white', fill: 'solid',
+    size: 210, aspect: 0.55, color: 'white', fill: 'solid',
     names: { puffs: ['puff', 'puffs', 'body', 'cloud'] },
     build: () => [E('puffs', -0.28, 0.1, 0.44, 0.34, 'white', { m: 1, mg: 1 }), E('puffs', 0.28, 0.1, 0.44, 0.34, 'white', { m: 1, mg: 1 }),
       E('puffs', -0.1, -0.08, 0.5, 0.46, 'white', { m: 1, mg: 1 }), E('puffs', 0.17, -0.02, 0.44, 0.4, 'white', { m: 1, mg: 1 }), E('puffs', 0, 0.12, 0.62, 0.36, 'white', { m: 1, mg: 1 })],
   },
   car: {
-    size: 230, aspect: 0.58, anchor: 'ground', faces: 'right', color: 'red',
+    size: 230, aspect: 0.58, faces: 'right', color: 'red',
     names: { body: ['body', 'car'], windows: ['window', 'windows', 'windscreen'], wheels: ['wheel', 'wheels', 'tyre', 'tyres', 'tire', 'tires'], hubcaps: ['hubcap', 'hubcaps'], lights: ['light', 'lights', 'headlight', 'headlights'] },
     build: () => [
       P('body', [[-0.3, -0.04], [-0.2, -0.26], [0.16, -0.26], [0.3, -0.04]], 'red', { m: 1 }),
@@ -210,7 +210,7 @@ export const KINDS = {
     ],
   },
   flower: {
-    size: 100, aspect: 1.5, anchor: 'ground', color: 'pink',
+    size: 100, aspect: 1.5, color: 'pink',
     names: { petals: ['petal', 'petals', 'flower', 'blossom'], center: ['center', 'middle', 'centre'], stem: ['stem', 'stalk'], leaves: ['leaf', 'leaves'] },
     build: () => {
       const petals = [];
@@ -224,7 +224,7 @@ export const KINDS = {
     },
   },
   cat: {
-    size: 130, aspect: 1.0, anchor: 'ground', color: 'orange',
+    size: 130, aspect: 1.0, color: 'orange',
     names: { body: ['body', 'fur', 'cat'], head: ['head', 'face'], ears: ['ear', 'ears'], eyes: ['eye', 'eyes'], nose: ['nose'], tail: ['tail'], whiskers: ['whisker', 'whiskers'], stripes: ['stripe', 'stripes'] },
     build: () => [
       K('tail', [[0.2, 0.35], [0.45, 0.3], [0.5, 0.1], [0.4, -0.05]], 'orange', { m: 1, t: 0.07 }),
@@ -243,7 +243,7 @@ export const KINDS = {
     ],
   },
   dog: {
-    size: 160, aspect: 0.85, anchor: 'ground', faces: 'right', color: 'brown',
+    size: 160, aspect: 0.85, faces: 'right', color: 'brown',
     names: { body: ['body', 'fur', 'dog'], head: ['head', 'face'], ears: ['ear', 'ears'], nose: ['nose'], tail: ['tail'], legs: ['leg', 'legs', 'paws'], collar: ['collar'], tongue: ['tongue'], snout: ['snout', 'muzzle'] },
     build: () => [
       K('tail', [[-0.33, -0.03], [-0.42, -0.14], [-0.48, -0.26]], 'brown', { m: 1, t: 0.06 }),
@@ -259,7 +259,7 @@ export const KINDS = {
     ],
   },
   fish: {
-    size: 120, aspect: 0.6, anchor: 'any', faces: 'right', color: 'orange',
+    size: 120, aspect: 0.6, faces: 'right', color: 'orange',
     names: { body: ['body', 'fish'], tail: ['tail'], fin: ['fin', 'fins'], eye: ['eye'], scales: ['scale', 'scales', 'stripes'] },
     build: () => [
       P('tail', [[-0.28, 0], [-0.5, -0.24], [-0.46, 0], [-0.5, 0.24]], 'orange', { m: 1 }),
@@ -272,7 +272,7 @@ export const KINDS = {
     ],
   },
   bird: {
-    size: 100, aspect: 0.78, anchor: 'sky', faces: 'right', color: 'blue',
+    size: 100, aspect: 0.78, faces: 'right', color: 'blue',
     names: { body: ['body', 'bird', 'feathers'], head: ['head'], wing: ['wing', 'wings'], beak: ['beak', 'bill'], tail: ['tail'], eye: ['eye'], legs: ['leg', 'legs', 'feet'] },
     build: () => [
       P('tail', [[-0.28, 0.08], [-0.5, -0.05], [-0.5, 0.2], [-0.3, 0.18]], 'blue', { m: 1, sh: -0.1 }),
@@ -283,7 +283,7 @@ export const KINDS = {
     ],
   },
   boat: {
-    size: 230, aspect: 0.95, anchor: 'ground', faces: 'right', color: 'red',
+    size: 230, aspect: 0.95, faces: 'right', color: 'red',
     names: { hull: ['hull', 'body', 'boat', 'ship'], sail: ['sail', 'sails'], mast: ['mast', 'pole'], flag: ['flag'], waves: ['wave', 'waves', 'water', 'sea'], porthole: ['window', 'porthole'] },
     build: () => [
       L('mast', [[0, 0.12], [0, -0.46]], 'brown', { t: 0.02 }),
@@ -296,7 +296,7 @@ export const KINDS = {
     ],
   },
   mountain: {
-    size: 380, aspect: 0.75, anchor: 'horizon', color: 'grey',
+    size: 380, aspect: 0.75, color: 'grey',
     names: { rock: ['rock', 'rocks', 'body', 'mountain', 'stone'], snow: ['snow', 'cap', 'peak', 'top'] },
     build: () => [
       P('rock', [[-0.5, 0.375], [-0.27, -0.05], [0.02, 0.375]], 'grey', { m: 1, sh: -0.12 }),
@@ -306,7 +306,7 @@ export const KINDS = {
     ],
   },
   rainbow: {
-    size: 440, aspect: 0.56, anchor: 'sky', color: null,
+    size: 440, aspect: 0.56, color: null,
     names: { bands: ['band', 'bands', 'stripe', 'stripes', 'colors', 'rainbow'], clouds: ['cloud', 'clouds'] },
     build: () => {
       const cols = ['red', 'orange', 'yellow', 'green', 'light blue', 'blue', 'purple'];
@@ -316,7 +316,7 @@ export const KINDS = {
     },
   },
   person: {
-    size: 90, aspect: 2.2, anchor: 'ground', color: 'blue',
+    size: 90, aspect: 2.2, color: 'blue',
     names: { shirt: ['shirt', 'body', 'top', 'clothes', 'jumper', 'sweater', 'dress'], head: ['head', 'face', 'skin'], hair: ['hair'], pants: ['pants', 'trousers', 'legs', 'leg', 'jeans'], arms: ['arm', 'arms'], shoes: ['shoe', 'shoes', 'boots'], eyes: ['eye', 'eyes'], smile: ['smile', 'mouth'] },
     build: () => [
       L('arms', [[-0.28, -0.55], [-0.5, -0.1]], 'skin', { t: 0.08 }), L('arms', [[0.28, -0.55], [0.5, -0.1]], 'skin', { t: 0.08 }),
@@ -329,7 +329,7 @@ export const KINDS = {
     ],
   },
   balloon: {
-    size: 80, aspect: 1.45, anchor: 'sky', color: 'red',
+    size: 80, aspect: 1.45, color: 'red',
     names: { balloon: ['balloon', 'body'], string: ['string', 'rope', 'ribbon'], knot: ['knot'], shine: ['shine', 'highlight'] },
     build: () => [
       K('string', [[0, 0.36], [-0.12, 0.5], [0.12, 0.6], [0, 0.72]], 'dark grey', { t: 0.012 }),
@@ -339,7 +339,7 @@ export const KINDS = {
     ],
   },
   rocket: {
-    size: 110, aspect: 2.2, anchor: 'sky', color: 'light grey',
+    size: 110, aspect: 2.2, color: 'light grey',
     names: { body: ['body', 'rocket'], nose: ['nose', 'cone', 'top'], window: ['window', 'porthole'], fins: ['fin', 'fins', 'wings'], flame: ['flame', 'fire', 'flames'] },
     build: () => [
       P('flame', [[-0.2, 0.5], [0, 1.08], [0.2, 0.5]], 'orange', { f: 'solid' }), P('flame', [[-0.1, 0.5], [0, 0.82], [0.1, 0.5]], 'yellow', { f: 'solid' }),
@@ -350,7 +350,7 @@ export const KINDS = {
     ],
   },
   moon: {
-    size: 110, aspect: moon.aspect, anchor: 'sky', color: 'light yellow',
+    size: 110, aspect: moon.aspect, color: 'light yellow',
     names: { moon: ['moon', 'body', 'crescent'] },
     build: () => [P('moon', rpts(moon.pts), 'light yellow', { m: 1 })],
   },

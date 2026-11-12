@@ -488,6 +488,11 @@ export class Interpreter {
       // a world whose operations keep their own state (spec 15, `adopt`): the library takes over what they did, or refuses it with the reason
       const refused = session.rs?.adoptState(session, op.worldId);
       if (refused) envelope = { status: 'conflicting', reason: 'precondition_failed', why: refused.why, note: `That does not add up. ${refused.why}`, from: [] };
+      else if (envelope.status === 'supported' && typeof envelope.value === 'string') {
+        // common sense (spec 15 "Advice"): the action was done; what the soft rules find odd is said once, short and friendly, after it
+        const advice = session.rs?.takeAdvice?.() ?? [];
+        if (advice.length) envelope = { ...envelope, value: `${envelope.value} (${advice.join(' ')})` };
+      }
     }
     spec.op = op;
     const answer = this._writeAnswer(session, wire, envelope, spec);

@@ -122,8 +122,30 @@ function colorFrom(words, fallback = null) {
 function ensure(ctx) {
   const s = ctx.state, d = initialState();
   for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
+  loadUsualPlaces(ctx);
+  placeNote = null;
+  curScene = s;
   return s;
 }
+
+// ---- where things usually are: the facts of common.sense (worlds/common.sense/kb.sop), read from the session through the world's imports; no table of kinds here
+let USUAL = new Map();
+const NEEDS = new Set();   // kinds that cannot be anywhere else than their place (a fish): the place is made when the picture has none   // kind -> 'sky' | 'ground' | 'water' | 'horizon' (the far edge of the ground); a kind with no row is placed anywhere ('any')
+let curScene = null;        // the picture the running operation works on (for the words that depend on whether there is water)
+let placeNote = null;    // what the last placing did that the user did not ask for ("I put the fish in the pond."), said once after the drawing
+function loadUsualPlaces(ctx) {
+  let rows = [];
+  try { rows = ctx.find('common.sense.livesin'); } catch { rows = []; }
+  const m = new Map();
+  for (const w of rows) {
+    if (ctx.val(w, 'usual') !== 'yes') continue;
+    m.set(ctx.val(w, 'kind'), ctx.val(w, 'where') === 'horizon' ? 'horizon' : ctx.val(w, 'place'));
+    if (ctx.val(w, 'must') === 'yes') NEEDS.add(ctx.val(w, 'kind'));
+  }
+  if (m.size) USUAL = m;
+}
+const anchorOf = (kind) => USUAL.get(kind) ?? 'any';
+const onGround = (kind) => ['ground', 'horizon'].includes(anchorOf(kind));
 const byId = (s, id) => s.objects.find((o) => o.id === id);
 const effectiveColor = (o) => o.color ?? defaultColor(o.kind);
 const sameKind = (s, kind) => s.objects.filter((o) => o.kind === kind);
@@ -215,10 +237,16 @@ const REGION_PHRASE = {
   'bottom left': 'in the bottom left corner', bottom: 'at the bottom', 'bottom right': 'in the bottom right corner',
 };
 const placePhrase = (o) => {
-  const anchor = KINDS[o.kind]?.anchor;
+  const anchor = anchorOf(o.kind);
   if (anchor === 'ground' || anchor === 'horizon') {
     const col = o.x < W / 3 ? 'on the left' : o.x > (2 * W) / 3 ? 'on the right' : 'in the middle';
     return `on the ground ${col}`;
+  }
+  if (anchor === 'water') {
+    const wet = curScene?.ground === 'sea' || (curScene?.objects ?? []).some((p) => p.tag === 'pond' && Math.abs(p.x - o.x) < p.size / 2 && Math.abs(p.y - o.y) < p.size * 0.3);
+    const col = o.x < W / 3 ? 'on the left' : o.x > (2 * W) / 3 ? 'on the right' : 'in the middle';
+    if (wet) return `${o.kind === 'boat' ? 'on' : 'in'} the water ${col}`;
+    if (bbox(o).y1 > HORIZON) return `on the ground ${col}`;
   }
   return REGION_PHRASE[regionOf(o.x, o.y)] ?? 'here';
 };
@@ -468,9 +496,9 @@ function overlapRatio(a, b) {
   return (x * y) / Math.max(1, Math.min(a.w * a.h, b.w * b.h));
 }
 const sameLayer = (a, b) => {
-  const la = KINDS[a.kind]?.anchor ?? 'any', lb = KINDS[b.kind]?.anchor ?? 'any';
+  const la = anchorOf(a.kind), lb = anchorOf(b.kind);
   if (la === 'any' || lb === 'any') return true;
-  const g = (x) => (x === 'horizon' ? 'ground' : x);
+  const g = (x) => (x === 'horizon' || x === 'water' ? 'ground' : x);
   return g(la) === g(lb);
 };
 const crowd = (s, o, ignore) => (budget.tick('art.place', s.objects.length + 1), s.objects).filter((x) => x !== o && x.id !== ignore && sameLayer(x, o)).reduce((m, x) => Math.max(m, overlapRatio(bbox(o), bbox(x))), 0);
@@ -484,9 +512,33 @@ function clampIn(o, margin = 4) {
 
 const GROUND_X = [500, 250, 750, 130, 870, 375, 625, 60, 940];
 const SKY_X = [850, 150, 500, 330, 690, 60, 940, 230, 780];
+/**
+ * Where a thing of the water goes when nobody said where: into a pond that is in the picture, else into the sea when the ground is the sea (the ground band), else
+ * the water is made: the sea when there is no ground yet, a pond on the ground otherwise. Returns the spot in a pond, or null for the ground band.
+ */
+function waterSpot(s, o) {
+  const pond = s.objects.find((x) => x.tag === 'pond');
+  if (!pond && s.ground !== 'sea' && !NEEDS.has(o.kind)) return null;   // no water and the thing can do without: it stands where things of the ground stand
+  if (pond) { placeNote = `I put the ${o.kind} in the pond.`; return { x: pond.x, y: pond.y }; }
+  if (s.ground === 'sea') { placeNote = `I put the ${o.kind} in the water.`; return null; }
+  if (!s.ground && !s.objects.some((x) => onGround(x.kind))) { s.ground = 'sea'; s.groundColor = 'blue'; placeNote = `I added some water for the ${o.kind}.`; return null; }
+  const p = makeObject(s, 'oval', { color: 'blue', tag: 'pond' });
+  p.size = 260; p.z = o.z - 1;
+  defaultSpotOn(s, p, 'ground');
+  s.objects.push(p);
+  placeNote = `I made a pond for the ${o.kind}.`;
+  return { x: p.x, y: p.y };
+}
+
 /** Free spot for a new object by the default rules of its kind. */
 function defaultSpot(s, o) {
-  const k = KINDS[o.kind], b0 = bbox(o), anchor = k.anchor;
+  const b0 = bbox(o);
+  let anchor = anchorOf(o.kind);
+  if (anchor === 'water') {   // a thing of the water goes into the water that is in the picture, else the water is made first (common.sense: fish live in water)
+    const spot = waterSpot(s, o);
+    if (spot) { o.x = spot.x; o.y = spot.y; clampIn(o); return; }
+    anchor = 'ground';
+  }
   const cand = [];
   if (anchor === 'ground') {
     for (const x of GROUND_X) for (const dy of [0, 36, -20]) cand.push([x, GROUND_BASE + dy - b0.h / 2]);
@@ -512,9 +564,10 @@ function defaultSpot(s, o) {
 
 /** Place `o` by a named region. */
 function placeRegion(s, o, region) {
-  const k = KINDS[o.kind], b = bbox(o);
-  const spot = placeInRegion(region, b.w, b.h, k.anchor);
+  const b = bbox(o);
+  const spot = placeInRegion(region, b.w, b.h, anchorOf(o.kind));
   o.x = spot.x; o.y = spot.y;
+  if (region === 'sky' || region === 'ground') o.zone = region;   // the user named the sky or the ground: common.sense may say it when that is not where such a thing usually is
   if (region === 'ground') { // a free spot on the ground band
     const keep = o.y; defaultSpotOn(s, o, 'ground'); if (!Number.isFinite(o.y)) o.y = keep;
   }
@@ -523,7 +576,7 @@ function placeRegion(s, o, region) {
   for (let i = 0; i < 6 && crowd(s, o) > 0.45; i++) { o.x += (o.x < W / 2 ? 1 : -1) * Math.max(40, b.w * 0.8); clampIn(o); }
 }
 function defaultSpotOn(s, o, anchor) {
-  const saved = KINDS[o.kind].anchor;
+  const saved = anchorOf(o.kind);
   const b0 = bbox(o);
   let best = null, bestScore = Infinity;
   for (const x of GROUND_X) {
@@ -540,8 +593,8 @@ function defaultSpotOn(s, o, anchor) {
 function placeRelative(s, o, rel, refs) {
   const gap = 24, b = bbox(o), k = KINDS[o.kind];
   const R0 = bbox(refs[0]);
-  const ground = k.anchor === 'ground' || k.anchor === 'horizon';
-  const alignY = (r) => (ground && (KINDS[refs[0].kind].anchor === 'ground') ? r.y1 - b.h / 2 : r.cy);
+  const ground = onGround(o.kind) || anchorOf(o.kind) === 'water';
+  const alignY = (r) => (ground && (anchorOf(refs[0].kind) === 'ground') ? r.y1 - b.h / 2 : r.cy);
   const place = { x: o.x, y: o.y };
   const sideX = (dir, r) => (dir > 0 ? r.x1 + gap + b.w / 2 : r.x0 - gap - b.w / 2);
   switch (rel) {
@@ -695,8 +748,8 @@ function addThing(s, spec, ctxInfo) {
       if (i > 0) { const prev = group[i - 1], pb = bbox(prev), ob = bbox(o); o.x = prev.x + (pb.w + ob.w) / 2 + 16; clampIn(o); if (o.x - ob.w / 2 < prev.x + pb.w / 2) o.y += ob.h * 0.35; clampIn(o); }
       s.objects.push(o);
     });
-  } else if (group.length > 1 && KINDS[kind].anchor !== 'any') {
-    const anchor = KINDS[kind].anchor;
+  } else if (group.length > 1 && anchorOf(kind) !== 'any') {
+    const anchor = anchorOf(kind) === 'water' ? 'ground' : anchorOf(kind);
     const n = group.length, lo = 90, hi = W - 90;
     const rows = anchor === 'sky' && n > 5 ? 2 : 1;
     group.forEach((o, i) => {
@@ -820,7 +873,9 @@ export const add = guard((ctx, args, s) => {
   const where = made.length && extras.length === 0 ? describePlacing(made[0], place, refs) : '';
   const capNote = (capped ? ` (${cap} is plenty!)` : '') + fracNote + compNote;
   const partNote = '';
-  return ok(`${opener(s)} I drew ${phrase}${partNote}${where}${capNote}.`, { data: { made: s.last.slice() } });
+  const placed = placeNote ? ` ${placeNote}` : '';
+  placeNote = null;
+  return ok(`${opener(s)} I drew ${phrase}${partNote}${where}${capNote}.${placed}`, { data: { made: s.last.slice() } });
 });
 const describePlacing = (o, place, refs) => {
   if (!o && !place.region) return '';
@@ -954,7 +1009,6 @@ export const resize = guard((ctx, args, s) => {
     if (next > max || next < min) capped = true;
     o.size = Math.min(max, Math.max(min, next));
     // a thing standing on the ground keeps its feet where they were
-    if (k.anchor === 'ground' || k.anchor === 'horizon') { const b = bbox(o); void b; }
     clampIn(o);
   }
   s.last = r.objs.map((o) => o.id);
@@ -1000,7 +1054,7 @@ export const setSize = guard((ctx, args, s) => {
   for (const o of r.objs) {
     const k = KINDS[o.kind];
     o.size = Math.round(k.size * factor);
-    if (k.anchor === 'ground' || k.anchor === 'horizon') clampIn(o);
+    if (onGround(o.kind)) clampIn(o);
   }
   s.last = r.objs.map((o) => o.id);
   open(ctx);

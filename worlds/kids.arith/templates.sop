@@ -198,3 +198,38 @@
 @tpl.kids.arith.ack.eat.some core.template
     for=ack.kids.arith.eat
     text="OK, {who} ate some {item:plural}. I don't know how many."
+
+@tpl.kids.arith.ack.relation.more core.template
+    for=ack.kids.arith.relation
+    when="kind=more"
+    text="OK, {who} has {count} more {item:plural} than {ref}."
+
+@tpl.kids.arith.ack.relation.fewer core.template
+    for=ack.kids.arith.relation
+    when="kind=fewer"
+    text="OK, {who} has {count} fewer {item:plural} than {ref}."
+
+@tpl.kids.arith.ack.relation.times core.template
+    for=ack.kids.arith.relation
+    when="kind=times"
+    text="OK, {who} has {count} times as many {item:plural} as {ref}."
+
+@tpl.kids.arith.ack.negated.give.n core.template
+    for=ack.kids.arith.negated
+    when="verb=give"
+    when="count!=none"
+    text="OK, {who} did not give {to} {count} {item:plural}. Nothing changes."
+
+@tpl.kids.arith.ack.negated.n core.template
+    for=ack.kids.arith.negated
+    when="count!=none"
+    text="OK, {who} did not {verb} {count} {item:plural}. Nothing changes."
+
+@tpl.kids.arith.ack.negated.give core.template
+    for=ack.kids.arith.negated
+    when="verb=give"
+    text="OK, {who} did not give {to} any {item:plural}. Nothing changes."
+
+@tpl.kids.arith.ack.negated core.template
+    for=ack.kids.arith.negated
+    text="OK, {who} did not {verb} any {item:plural}. Nothing changes."

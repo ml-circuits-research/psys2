@@ -226,3 +226,24 @@
     card=one
     ask="How many lei would the user have left?"
     compute=true
+
+@kids.shop.negated core.type
+    extends=core.state
+    doc="The user did not buy, spend, get or give something. It is understood and said back, and nothing changes: the money and the purchases are not touched."
+    example="I do not buy the ball."
+    negative="I buy the ball."
+
+@kids.shop.negated.verb core.key
+    value=atom
+    card=one
+    ask="What did not happen (buy, spend, get, give)?"
+
+@kids.shop.negated.item core.key
+    value=atom
+    card=one
+    ask="What would have been bought?"
+
+@kids.shop.negated.count core.key
+    value=number
+    card=one
+    ask="How many items or lei (when a number was said)?"

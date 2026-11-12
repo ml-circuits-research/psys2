@@ -5,6 +5,8 @@
     imports=world.core
     imports=world.kids.common
     imports=world.kids.shapes
+    imports=world.common.sense
+    compose=world.common.sense
     formalization=rules
     reasoner=matrix
     undo=draw.undo
