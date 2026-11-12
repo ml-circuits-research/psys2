@@ -34,7 +34,6 @@
 @dr.k.qjson core.slot of=docs.reader.search key=json kind=string required=true
 @dr.k.wkind core.slot of=docs.reader.want key=kind kind=atom enum=sentence enum=paragraph enum=section enum=any required=true
 @dr.k.wn core.slot of=docs.reader.want key=n kind=integer
-@dr.k.word core.slot of=docs.reader.want key=ord kind=atom
 
 # ---- what the state may be: the open document is on the shelf, a cited sentence is in the document, the search is at one of its hits
 @dr.ia docs.reader.shelf active=?a
@@ -59,11 +58,11 @@
 @dr.wso docs.reader.open did=?a sentences=?c
 @dr.t.over core.check fn=gt args=?n args=?c
 @dr.d.sentence core.deny when=$dr.ws when=$dr.wsa when=$dr.wso if=$dr.t.over why="There is no sentence ?n; the document has ?c sentences."
-@dr.wp docs.reader.want kind=paragraph n=?n ord=?o
+@dr.wp docs.reader.want kind=paragraph n=?n
 @dr.wpa docs.reader.shelf active=?a
 @dr.wpo docs.reader.open did=?a paras=?c
-@dr.d.para core.deny when=$dr.wp when=$dr.wpa when=$dr.wpo if=$dr.t.over why="There is no ?o paragraph; the document has ?c."
-@dr.wc docs.reader.want kind=section n=?n ord=?o
+@dr.d.para core.deny when=$dr.wp when=$dr.wpa when=$dr.wpo if=$dr.t.over why="There is no ?n:ordinal paragraph; the document has ?c:count."
+@dr.wc docs.reader.want kind=section n=?n
 @dr.wca docs.reader.shelf active=?a
 @dr.wco docs.reader.open did=?a sections=?c
-@dr.d.section core.deny when=$dr.wc when=$dr.wca when=$dr.wco if=$dr.t.over why="There is no ?o section; the document has ?c."
+@dr.d.section core.deny when=$dr.wc when=$dr.wca when=$dr.wco if=$dr.t.over why="There is no ?n:ordinal section; the document has ?c:count."

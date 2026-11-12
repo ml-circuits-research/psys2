@@ -33,37 +33,16 @@
 @ed.k.gsec core.slot of=docs.editor.gone key=sec kind=integer
 @ed.k.wkind core.slot of=docs.editor.want key=kind kind=atom required=true
 @ed.k.wn core.slot of=docs.editor.want key=n kind=integer
-@ed.k.word core.slot of=docs.editor.want key=ord kind=atom
 @ed.k.hkind core.slot of=docs.editor.have key=kind kind=atom required=true
 @ed.k.hcount core.slot of=docs.editor.have key=count kind=integer required=true
 
-# ---- how many blocks of each kind the document has (derived; the rules hang on the document wire, which exists as soon as the document is not empty)
-@ed.dd docs.editor.doc
-@ed.bh docs.editor.block kind=heading
-@ed.ch core.calc out=?c fn=count over=$ed.bh
-@ed.hh docs.editor.have kind=heading count=?c
-@ed.r.hh core.rule when=$ed.dd with=$ed.ch then=$ed.hh
-@ed.bp docs.editor.block kind=paragraph
-@ed.cp core.calc out=?c fn=count over=$ed.bp
-@ed.hp docs.editor.have kind=paragraph count=?c
-@ed.r.hp core.rule when=$ed.dd with=$ed.cp then=$ed.hp
-@ed.bq docs.editor.block kind=quote
-@ed.cq core.calc out=?c fn=count over=$ed.bq
-@ed.hq docs.editor.have kind=quote count=?c
-@ed.r.hq core.rule when=$ed.dd with=$ed.cq then=$ed.hq
-@ed.bl docs.editor.block kind=list
-@ed.cl core.calc out=?c fn=count over=$ed.bl
-@ed.hl docs.editor.have kind=list count=?c
-@ed.r.hl core.rule when=$ed.dd with=$ed.cl then=$ed.hl
-@ed.bt docs.editor.block kind=table
-@ed.ct core.calc out=?c fn=count over=$ed.bt
-@ed.ht docs.editor.have kind=table count=?c
-@ed.r.ht core.rule when=$ed.dd with=$ed.ct then=$ed.ht
-
+# ---- how many blocks of each kind the document has (core.aggregate by kind, and the chapters with default=0: no copy of the count rule per kind; a kind with no block has no wire, which the deny of an absent kind says)
+@ed.bk docs.editor.block kind=?k
+@ed.ak core.aggregate over=$ed.bk by=?k count=?c then=$ed.hk
+@ed.hk docs.editor.have kind=?k count=?c
 @ed.bs docs.editor.block kind=heading chap=true
-@ed.cs core.calc out=?c fn=count over=$ed.bs
+@ed.as core.aggregate over=$ed.bs default=0 count=?c then=$ed.hs
 @ed.hs docs.editor.have kind=section count=?c
-@ed.r.hs core.rule when=$ed.dd with=$ed.cs then=$ed.hs
 
 # ---- what the document may be: a heading has a level from 1 to 3, two blocks never share a place, the cursor and the selection are in the document, a table has
 # ---- rows of one length
@@ -87,12 +66,12 @@
 @ed.d.table core.deny when=$ed.tb if=$ed.t.rag why="The rows of a table must all have the same length (?m and ?c cells)."
 
 # ---- what an operation may target (asked by `guard` in fns.mjs before the operation runs, as a docs.editor.want wire that is never kept)
-@ed.w docs.editor.want kind=?k n=?n ord=?o
+@ed.w docs.editor.want kind=?k n=?n
 @ed.wh docs.editor.have kind=?k count=?c
 @ed.t.over core.check fn=gt args=?n args=?c
 @ed.t.pos core.check fn=gt args=?c args=0
 @ed.t.zero core.check fn=eq args=?c args=0
-@ed.d.over core.deny when=$ed.w when=$ed.wh if=$ed.t.over if=$ed.t.pos why="There is no ?o ?k; the document has ?c."
+@ed.d.over core.deny when=$ed.w when=$ed.wh if=$ed.t.over if=$ed.t.pos why="There is no ?n:ordinal ?k; the document has ?c:count."
 @ed.w3 docs.editor.want kind=?k n=?n
 @ed.wh3 docs.editor.have kind=?k count=?c
 @ed.d.zero core.deny when=$ed.w3 when=$ed.wh3 if=$ed.t.zero why="There is no ?k in the document."

@@ -133,7 +133,7 @@ test('chess: adopt is the inverse of toState (the state ops.mjs keeps goes into 
   const s = { ...p.stateNow(), history: c.history(), fen: c.fen(), pendingEngine: true, pendingTries: 1, highlights: [{ kind: 'squares', squares: ['e4'] }], hint: { from: 'e2', to: 'e4', san: 'e4' }, pending: { kind: 'promotion', from: 'a7', to: 'a8' }, level: 6, orientation: 'black', engine: 'builtin', seed: 5 };
   chessOps.refresh(s, chessOps.load(s));
   const plan = chessFns.adopt({ state: s, find: (t) => p.w.ofType(t) });
-  const r = p.w.applyPatch({ retract: plan.retract, wires: plan.tell });
+  const r = p.w.applyPatch({ retract: plan.retract, replace: plan.replace, wires: plan.tell });
   assert.ok(r.ok, JSON.stringify(r.violations));
   assert.deepEqual(p.stateNow(), s, 'what the library says is what the state was');
   assert.equal(chessFns.adopt({ state: s, find: (t) => p.w.ofType(t) }), null, 'nothing differs: no change');
@@ -144,8 +144,9 @@ test('chess: adopt is the inverse of toState (the state ops.mjs keeps goes into 
   const s2 = { ...s, history: c2.history(), fen: c2.fen() };
   chessOps.refresh(s2, chessOps.load(s2));
   const next = chessFns.adopt({ state: s2, find: (t) => p.w.ofType(t) });
-  assert.deepEqual(next.retract.map((id) => id.replace(/_\d+$/, '')).sort(), ['chess.g', 'chess.lg', 'chess.p.a7'].sort(), JSON.stringify(next.retract));
-  assert.ok(next.retract.length <= 5 && next.tell.split('\n').length <= 6, `${next.retract.length} retracted, ${next.tell.split('\n').length} told: ${mv.san}`);
+  assert.deepEqual([...next.retract, ...next.replace.map((x) => x.id)].sort(), ['chess.g', 'chess.lg', 'chess.p.a7'].sort(), JSON.stringify(next));   // sopworld 0.7.0 (R6.9): a changed wire is replaced in place, with its id
+  assert.deepEqual(next.replace.map((x) => x.id).sort(), ['chess.g', 'chess.lg'], 'the game and the legal count keep their ids');
+  assert.ok(next.retract.length + next.replace.length <= 5 && next.tell.split('\n').length <= 6, `${next.retract.length} retracted, ${next.replace.length} replaced, ${next.tell.split('\n').length} told: ${mv.san}`);
 });
 
 test('chess: the computer\'s moves say why; the reason is on the move wire; "why?" after a move answers from it', async () => {
