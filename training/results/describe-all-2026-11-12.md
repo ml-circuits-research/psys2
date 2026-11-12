@@ -174,3 +174,18 @@ Description gaps that cost cases in `only` (13 distinct hand-written patterns ca
 - **Trailing qualifiers** ("I studied physics at Cluj": the organisation argument), "I work for myself", `my age is N`, "coming back to knowing me ...".
 - Not described: `likes`, `learn`, `lang`, `interests`, `tools`, `field`, `pref`, `previous`, `rolefield`, `sensitive` and the "fix" variants (corrections with `arg.fix=true`), because each needs a free-text slot or a conjunction (see above); the 17 descriptions cover start, know, delete, progress, pause, export (md, json), fieldOf (location, age), forget, mention, and the name, age, years, location, role and edu statements.
 
+
+## Size ratio (coordinator's request: compactness, not memorization)
+
+Lines of `describe.sop` (core.word wires in brackets) against lines of the hand-written `patterns.sop` (already macro-compressed by `migrate-macros`, so the ratio understates the saving against raw pattern text).
+
+| world | describe.sop lines | core.word wires | patterns.sop lines | ratio |
+|---|---:|---:|---:|---:|
+| kids.arith | 1144 | 162 | 1906 | 0.60 |
+| kids.tasks | 676 | 142 | 1665 | 0.41 |
+| kids.time | 931 | 129 | 2623 | 0.35 |
+| kids.animals | 766 | 130 | 1919 | 0.40 |
+| kids.shapes | 600 | 109 | 1120 | 0.54 |
+| user.profile | 552 | 119 | 547 | 1.01 |
+
+Five worlds are well under parity and the free slots reference the world's lexicons (`lex.kids.*`) and the generator's frames, not enumerated sentences. The compact form still repeats a word once per operation (a `core.word` wire is per op: `means` names the op), so a verb shared by seven statements is seven wires; the library cannot yet share a word across ops. user.profile reaches parity only by listing whole phrases ("what do you know about me", "delete my profile"), which is memorization in another form: those multi-word openers are the gap to report, not to grow; the sound fix is a shared phrase group in `lang.common` per intent (profile questions, export, interview) referenced by the description instead of a `core.word` per phrase.

@@ -532,7 +532,6 @@
     det.whole=$w.en.an.kids.time.length.whole
     det.whole=$w.en.one.kids.time.length.whole
     det.whole=$w.en.the.kids.time.length.whole
-    det.whole=$w.en.1.kids.time.length.whole
     sample.part=day
     sample.whole=week
     example="How many days are in a week?"
@@ -869,7 +868,6 @@
 @w.en.an.kids.time.length.whole core.word lang=en text=an means=kids.time.length.whole
 @w.en.one.kids.time.length.whole core.word lang=en text=one means=kids.time.length.whole
 @w.en.the.kids.time.length.whole core.word lang=en text=the means=kids.time.length.whole
-@w.en.1.kids.time.length.whole core.word lang=en text=1 means=kids.time.length.whole
 @w.en.in.kids.time.length.k core.word lang=en text=in means=kids.time.length.k
 @w.en.are_in.kids.time.length.k core.word lang=en text="are in" means=kids.time.length.k
 @w.en.have.kids.time.monthinfo core.word lang=en text=have means=kids.time.monthinfo
