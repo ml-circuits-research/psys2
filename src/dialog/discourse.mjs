@@ -680,12 +680,15 @@ export class Discourse {
       // one timeline across the worlds' instances (spec 15): the newest turn that changed anything goes back, whichever world it belonged to, and the reply says
       // what it was, in the words of that world (a game's "took back your last guess") or by quoting what the user said (their own words, never the English reading)
       const turn0 = rs.turns.at(-1).turn;
+      const undoWorld = rs.turns.at(-1).worlds?.[0] ?? null;
+      const noted = (reply) => { if (undoWorld && reply) this.noteWorld(undoWorld, text, reply, d._msg); };   // "What did you do?" afterwards names the undo, as it does when the world undoes by itself
       const act0 = this.actions.find((a) => a.turn === turn0);
       const r = rs.undoLast(d.isession, act0?.text ?? d.sources.get(`msg${turn0}`)?.english ?? null);
       const turn = r.turn;
       rs.undoneAt = d._msg;
       if (act0) this._setState(Object.fromEntries(act0.worlds.filter((w) => !rs.reasoner.stateOf.has(w)).map((w) => [w, act0.before[w]])));   // worlds whose state is not derived from the library
       this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn);
+      noted(r.value);
       if (r.quote) return this._say([{ text: 'OK, I took that back: ', translate: true }, this._quoted(turn, r.quote), { text: '.', translate: false }], { kind: 'undo', of: r.quote, via: 'core.matrix' });
       return { reply: r.value, info: { kind: 'undo', of: act0?.text ?? null, via: 'core.matrix' } };
     }

@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
+import { visibleState } from './lib/visible-state.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
@@ -26,7 +27,7 @@ if (!existsSync(dir)) { console.error(`no ${dir}`); process.exit(1); }
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
 const settings = settingsForMode('rules');
-const strip = (st) => { const { 'ui.help': _h, ...rest } = st; return JSON.stringify(rest); };
+const strip = (st) => JSON.stringify(visibleState(st));
 
 async function read(text, tab) {
   const s = engine.createSession(sessionOptions(settings, { language: 'en' }));

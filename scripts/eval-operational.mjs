@@ -36,6 +36,7 @@ import { groupOf, GROUP_ORDER } from './lib/world-groups.mjs';
 import { evaluateCase, classify } from './lib/operational-check.mjs';
 
 import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
+import { visibleState } from './lib/visible-state.mjs';
 applyReasonerFlag();   // --reasoner ops|matrix (spec 15)
 const SELF = fileURLToPath(import.meta.url);
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -73,7 +74,7 @@ export async function runCase(engine, settings, c, { onTurn } = {}) {   // onTur
   await onTurn?.(s);
   if (!reply) return { id: c.id, world: c.world, outcome: 'wrong', error, ms };
   const after = s.state();
-  const strip = (s) => { const { 'ui.help': _h, ...rest } = s; return JSON.stringify(rest); };   // ui.help only remembers the last unparsed text
+  const strip = (s) => JSON.stringify(visibleState(s));
   const stateChanged = strip(before) !== strip(after);
   const last = reply.answers.at(-1);
   const replyText = ro ? (reply.trace?.replyEnglish ?? reply.text) : reply.text;

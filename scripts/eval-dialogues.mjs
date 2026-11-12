@@ -28,6 +28,7 @@ import { groupOf, GROUP_ORDER } from './lib/world-groups.mjs';
 import { evaluateCase, classify, parseStateItem, statePath } from './lib/operational-check.mjs';
 
 import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
+import { visibleState } from './lib/visible-state.mjs';
 applyReasonerFlag();   // --reasoner ops|matrix (spec 15)
 const SELF = fileURLToPath(import.meta.url);
 const REPO = resolve(dirname(SELF), '..');
@@ -109,7 +110,7 @@ function newSession(engine, settings, d) {
   return s;
 }
 
-const strip = (st) => { const { 'ui.help': _h, ...rest } = st; return JSON.stringify(rest); };
+const strip = (st) => JSON.stringify(visibleState(st));
 
 export async function runDialogue(engine, settings, d, { onTurn } = {}) {   // onTurn(session): called after every turn (SOPWORLD-1 consistency audit)
   const s = newSession(engine, settings, d);

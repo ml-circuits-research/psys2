@@ -43,6 +43,7 @@ import { parse } from '../src/soplang/index.mjs';
 import { normalizedSop, firmNumbersIn } from './collect-paraphrases.mjs';
 import { segmentationMatches, segmentTarget } from './lib/dispatch-gold.mjs';
 import { evaluateCase, classify } from './lib/operational-check.mjs';
+import { visibleState } from './lib/visible-state.mjs';
 
 const POP = {};
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -325,7 +326,7 @@ async function runOperationalItem(env, c) {
   try { reply = await s.send(c.message); } catch (e) { error = e.message; }
   const row = { id: c.id, set: 'operational', world: c.world, families: c.families ?? [], text: c.message, textLen: c.message.length };
   if (!reply) return { ...row, outcome: 'wrong', phase: 'P6', reason: 'exception', error, tags: [] };
-  const strip = (st) => { const { 'ui.help': _h, ...rest } = st; return JSON.stringify(rest); };
+  const strip = (st) => JSON.stringify(visibleState(st));
   const after = s.state();
   const unparsedAll = reply.segments.length === 0 || reply.segments.every((x) => x.unparsed);
   const items = evaluateCase(c, { before, after, replyText: reply.text, effects: reply.effects, statuses: reply.statuses, unparsedAll, values: reply.answers.map((a) => a.value) });

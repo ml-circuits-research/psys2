@@ -290,6 +290,8 @@ export class Interpreter {
     };
     const seqOf = (w) => { const e = w.entries.find((x) => x.key === 'core.seq'); return e ? Number(e.value.v) : -Infinity; };
     const ctx = {
+      /** The operation says something happened by itself in the middle of the user's turn (the engine's late reply): the library takes the state over now and the user's step begins after it (matrix reasoner timeline). */
+      checkpoint: session.rs ? () => {  session.rs.adoptState(session); session.rs.checkpoint(); } : undefined,
       find: (type, where) => { check(); const r = mem.find(type, resolveWhere(type, where)); this._charge(st, r.length); return r; },
       ordered: (type, where) => {
         const r = ctx.find(type, where);
@@ -340,7 +342,7 @@ export class Interpreter {
         if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
         const target = this._actionOp(action);
         if (!target) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
-        if (session.rs) session.rs.live = { request: (a, args2) => this.runAction(session, a, args2), batch: session.batch ?? null };
+        if (session.rs) session.rs.live = { request: (a, args2) => this.runAction(session, a, args2), batch: session.batch ?? null, checkpoint: (prefix) => session.rs.checkpoint(prefix) };
         const viaLibrary = session.rs?.request(action, args, session);   // an action the matrix reasoner answers (spec 15) is answered by it whoever asks
         if (viaLibrary) { session.rs.syncTo(session); this._libraryExtras(session, viaLibrary, action); return viaLibrary; }
         st.depth++;
@@ -472,7 +474,7 @@ export class Interpreter {
     const st = { depth: 0, visited: 0, ops: [] };
     const op = this.set.list().flatMap((w) => w.operations).find((o) => o.semantics === 'action' && (o.id === action || o.action === action));
     const spec = { wire, action, args, where: {}, mode: 'value' };
-    if (session.rs) session.rs.live = { request: (a, args) => this.runAction(session, a, args), batch: session.batch ?? null };   // offered to the library's actions while they run
+    if (session.rs) session.rs.live = { request: (a, args) => this.runAction(session, a, args), batch: session.batch ?? null, checkpoint: (prefix) => session.rs.checkpoint(prefix) };   // offered to the library's actions while they run
     let envelope = session.rs?.owns(wire) ? session.rs.resolve(wire, session) : null;
     if (envelope) {
       session.rs.syncTo(session);   // answered by the library (spec 15); what its actions wrote is copied to the session memory

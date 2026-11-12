@@ -36,7 +36,7 @@ export function toState({ find }) {
   s.nextId = Number(tok(sc, 'nextid')[0]);
   Object.assign(s, JSON.parse(tok(sc, 'rest')[0]));
   if (tok(sc, 'label')[0]) s.lastLabel = tok(sc, 'label')[0];
-  delete s.history; delete s.future;
+  s.history = []; s.future = [];   // the undo history is the library's; the keys stay (what ops.mjs leaves after a turn that changed nothing), so the view does not change shape between turns
   const ordered = {};
   for (const k of Object.keys(initialState())) if (k in s) ordered[k] = s[k];
   for (const k of Object.keys(s)) if (!(k in ordered)) ordered[k] = s[k];

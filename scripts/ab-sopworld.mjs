@@ -3,7 +3,7 @@
 /**
  * SOPWORLD-1b item 6: the full A/B experiment, ops against matrix (spec 15), in ONE process with two engines (an explicit `options.reasoner` wins over the flag).
  *
- *   node scripts/ab-sopworld.mjs [--limit N] [--sets a,b,c] [--out training/results/sopworld-ab-<date>.json] [--classes <file.json>] [--no-write]
+ *   node scripts/ab-sopworld.mjs [--limit N] [--ids id1,id2] [--sets a,b,c] [--out training/results/sopworld-ab-<date>.json] [--classes <file.json>] [--no-write]
  *
  * Every set is turned into sessions (setup + messages, tab, initial state). Each session runs in both engines, alternating which goes first, and every turn keeps the
  * reply text, the statuses, the state (ui.help dropped) and the time. Sets that carry expectations (operational, operational-long, operational-ro, dialogues) also go
@@ -25,11 +25,13 @@ import { runCase } from './eval-operational.mjs';
 import { runDialogue } from './eval-dialogues.mjs';
 import { groupOf } from './lib/world-groups.mjs';
 import { loadLogRecords, sessionsOf } from './lib/learn-logs.mjs';
+import { visibleState } from './lib/visible-state.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);
 const LIMIT = Number(arg('limit', 0)) || 0;
+const IDS = arg('ids') ? new Set(arg('ids').split(',')) : null;   // only these sessions of the expectation sets (a fixed sample, the regression gate of tests/ab-gate.test.mjs)
 const DATE = new Date().toISOString().slice(0, 10);
 const jsonl = (f) => readFileSync(f, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
 const E = (f) => join(REPO, 'training/eval', f);
@@ -49,7 +51,7 @@ function addCases(set, file, ro = false) {
   for (const c of rows) ss.push({ set, id: c.id, world: c.world, lang: ro ? 'ro' : 'en', tab: c.tab, init: c.init, turns: [...(c.setup ?? []).map(step), step(c.message)], exp: 'case', src: c });
 }
 function addDialogues() {
-  let rows = jsonl(E('dialogues.jsonl')); if (LIMIT) rows = rows.slice(0, LIMIT);
+  let rows = jsonl(E('dialogues.jsonl')); if (IDS) rows = rows.filter((d) => IDS.has(d.id)); if (LIMIT) rows = rows.slice(0, LIMIT);
   for (const d of rows) ss.push({ set: 'dialogues', id: d.id, world: d.world, lang: 'en', tab: d.tab, init: d.init, turns: d.turns.map((t) => ({ message: t.message, tab: t.tab, mode: t.mode })), exp: 'dialogue', src: d });
 }
 function addSingles(set, rows, mapper) { for (const r of (LIMIT ? rows.slice(0, LIMIT) : rows)) ss.push({ set, ...mapper(r) }); }
@@ -80,7 +82,7 @@ if (want.includes('gold')) {
 if (want.includes('coherence')) addSingles('coherence', jsonl(E('coherence-2026-11-10.jsonl')), (c) => ({ id: c.id, world: c.world, lang: 'en', tab: c.tab, turns: c.turns.map(step), kind: c.kind }));
 
 // ---- running ---------------------------------------------------------------------------------------------------------------------
-const strip = (st) => { const { 'ui.help': _h, ...rest } = st; return rest; };
+const strip = (st) => visibleState(st);
 function newSession(engine, x) {
   const s = engine.createSession(sessionOptions(settings, { language: 'en' }));
   if (x.tab) s.setWorldState('ui.shell', { activeTab: x.tab });
@@ -189,4 +191,4 @@ const byClass = {};
 for (const d of diffs) (byClass[d.class] ??= {})[d.set] = (byClass[d.class][d.set] ?? 0) + 1;
 const result = { date: DATE, limit: LIMIT || null, sessions: ss.length, elapsed_s: Math.round((performance.now() - t0) / 1000), counts, outcomes, timing, bundle, by_class: byClass, differing: diffs.length, differences_in_other_worlds: diffs.filter((d) => !d.four).map((d) => `${d.key} (${d.world})`), diffs };
 if (!flag('no-write')) writeFileSync(join(REPO, arg('out', `training/results/sopworld-ab-${DATE}.json`)), `${JSON.stringify(result, null, 1)}\n`);
-console.log(JSON.stringify({ sessions: ss.length, differing: diffs.length, by_class: byClass, other_world_diffs: result.differences_in_other_worlds.length, counts, timing, bundle, elapsed_s: result.elapsed_s }, null, 1));
+console.log(JSON.stringify({ sessions: ss.length, differing: diffs.length, by_class: byClass, ops_better: diffs.filter((d) => d.class === 'ops better').map((d) => d.key), other_world_diffs: result.differences_in_other_worlds.length, counts, timing, bundle, elapsed_s: result.elapsed_s }, null, 1));
