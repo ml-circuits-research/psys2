@@ -2901,3 +2901,22 @@ Next: re-vendor 0.12.0 at 7a49329, then E2 with `judgedBy` and splits.
   - For a missing box in the diagram, say: "I can't find a box called “End”. Shall I add it?" Use the user's own noun ("box", "circle") when they said one; otherwise use the world's everyday name for the thing, never "shape".
   - Review every reply the E2 veto and the no-referent hooks produce with the same eye: plain words, the user's label in quotes, one short question.
   - Add Chrome rows for "connect Start to End" and "delete the dragon", EN and RO through the translator.
+
+## URGENT RO-PHONE (user, 2026-11-12 07:01): Romanian replies on the phone are broken
+
+The user, on his phone, Romanian selected: "fă o diagramă random" → "Nu am încă o formulare în română pentru acest răspuns." He calls the translation strange.
+
+Reviewer repro in Chrome (`/home/claude/shot/diag-ro.mjs`, mobile viewport):
+- **With the harness's fake Translator,** "fă o diagramă random", "fa o diagrama random" and "deschide diagrama" all give word-by-word garbage: "Un curăță canvas. Ce desenează shall? Templates: process, cycle, hierarchy, …, wave, copac, drum… Îi spune exemplului pentru„ face un copac” sau just pornește…". English words are left in, the grammar is broken, and the English template names are listed. The "no English left" check let it through.
+- **On the phone the real Translator is not there.** The browser Translator API is most likely desktop-only, not available in Chrome on Android. So the route ends in the fixed line: the user gets nothing at all.
+- **The English side is weak too.** "make a random diagram" → "Drew c1.", and "desenează o diagramă" → "Am desenat c1.". "c1" means nothing to a user, and nothing random was made.
+
+Do, in this order:
+1. **Never send the fixed line as the whole reply.** It hides what happened. Every world needs Romanian reply templates for its frequent replies; the reply table is the translation layer and stays outside the worlds. Start with the replies the user sees most: the opening and help text of each tab (diagram, draw, map, charts, music, chess, editor, reader, avatar), "Drew …", the refusals.
+   - Rank the families by frequency over the phrase logs and the eval sets, then do the top 50 first.
+   - Where no template exists, say in Romanian what happened, built from the state (for example "Am deschis diagrama. Spune ce să desenez, de exemplu „un copac”."), plus the user's words. Never a dead end.
+2. **The "no English left" check must reject mixed output** like the above. Measure it on all Romanian replies of the eval sets with the real fallback path, meaning **no Translator API present**, which is the phone case. Report how many replies end in the fixed line or are rejected. Target: 0 fixed lines on the top 50 families.
+3. **Test as the phone does:** add a "no Translator API" mode to the harness (`browserApis: { translator: false }`) and to `check-ro-replies`, and run the Romanian sets that way. The fake Translator hides exactly this case.
+4. **"a random diagram"** should make one: pick a template, fill it with sample labels, and say so in plain words ("I drew a random cycle diagram with four steps."). Never answer with ids like "c1"; use the box label or "a circle".
+
+This comes before DESCRIBE-ALL and READER-ROUTE. The user is testing on the phone now.
