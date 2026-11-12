@@ -2768,3 +2768,31 @@ Your three library items are now Round 11 in soplang-words-lib: delta snapshots 
 - `veto(result)`, which says whether to answer or not and why.
 
 **`veto` is what E2 needs.** Vendor 0.10.0, then run E2 with the library's `score`, `rank` and `veto`, gate no new wrong. The first test: "fă părul roșu" is not acted on.
+
+## REGRESSION-AB (reviewer, 2026-11-12 03:00): matrix is now worse than ops in 7 dialogues. Fix before E2.
+
+The reviewer reran `ab-sopworld --sets dialogues` on main (0.9.0 vendored; output in `/tmp/abdlg.json` on the reviewer box, reproduce with `--sets dialogues`). It shows 18 differing sessions: **7 "ops better"**, 1 "matrix better", 8 unjudged, 2 neutral. On 2026-11-11 there were 0 "ops better".
+1. **Chess undo (dlg.gms#002, dlg.gms#006, dlg.doc#035): real regressions.**
+   - gms#002: "Undo." in matrix gives "OK, I took back my last move. It is my move." (ops: "…your last move and my reply. We are back at the start. It is your move."). The next "Knight to c3." gets "Meanwhile I play knight to c6. You play knight to c3."
+   - gms#006: "undo" gives "…your last move and my reply. It is my move." (ops: "your last move. It is your move.").
+   - doc#035: "What did you do?" after an undo answers about "What is on the board" instead of the undo.
+
+   Undo in chess takes back the wrong number of plies, or the engine's reply races the timeline. "What did you do?" then points to the wrong turn. Likely causes: the session timeline (UNDO-1 / RESTORE-1), or the 0.9.0 `transient`/redo change. Add the three as Chrome rows.
+2. **Same reply, worse outcome (dlg.kidsA#010, dlg.drm#011, dlg.drm#014, dlg.drm#021).** The reply text is identical in both modes, but matrix is judged "wrong" where ops is "not understood". So the matrix **state** changed on a turn that was not understood: something was told or adopted although the reply says it was not understood. Find what changes in the state view on those turns. A turn that is not understood must not change anything.
+3. **The 8 unjudged:** classify them in the classes file.
+
+Then rerun the A/B on all three sets and add a gate to `npm test` or the browser suite: no "ops better" session in `ab-sopworld --sets dialogues --limit` on a fixed sample.
+
+**Timing for the record** (reviewer, after the 0.9.0 re-vendor; this box is slower than the DGX). p50 ops/matrix:
+
+| group | ops | matrix |
+| --- | --- | --- |
+| four matrix worlds | 12.8 | 16.8 |
+| kids-other | 11.8 | 15.0 |
+| avatar/shell/editor | 12.5 | 15.6 |
+| music/draw/map/charts | 12.7 | 16.3 |
+| games | 12.0 | 17.2 |
+| documents | 14.6 | 17.8 |
+| other | 13.0 | 16.8 |
+
+Every group now pays 3–5 ms, because every world is on the library. That is acceptable under the user's rule ("secondary unless disastrous"), but games at +5.2 ms is the one to instrument.
