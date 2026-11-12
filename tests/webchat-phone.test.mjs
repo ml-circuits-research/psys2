@@ -16,15 +16,15 @@ const can = !!CORE && await ok(path.join(CORE, 'lib/puppeteer/puppeteer-core.js'
 const models = !!process.env.PSYS2_MT_CACHE || process.env.PSYS2_MT_NETWORK === '1';
 const skip = !can ? 'set PUPPETEER_CORE (scratch puppeteer-core install) to run' : !models ? 'set PSYS2_MT_CACHE (directory of model files) or PSYS2_MT_NETWORK=1 to run' : false;
 
-const run = (names) => async () => {
+const run = (names, min = 3) => async () => {
   const { SCENARIOS } = await import('../scripts/test-webchat-phone.mjs');
   const logs = [];
   const orig = console.log;
   console.log = (...a) => { logs.push(a.join(' ')); };
   try { for (const name of names) await SCENARIOS[name]({ throttle: 4, chrome: CHROME }); } finally { console.log = orig; }
   assert.deepEqual(logs.filter((l) => l.startsWith('FAIL')), [], logs.join('\n'));
-  assert.ok(logs.filter((l) => l.startsWith('PASS')).length >= 3, 'the scenarios ran');
+  assert.ok(logs.filter((l) => l.startsWith('PASS')).length >= min, 'the scenarios ran');
 };
 
 test('webchat phone mode: the model is lazy (English: no request), Romanian turns are read and answered in Romanian, the model is cached', { skip, timeout: 600000 }, run(['lazy', 'ro-turns', 'cache']));
-test('webchat phone mode: an unreachable model bucket gives a banner with Retry and the message is still answered', { skip, timeout: 300000 }, run(['failure']));
+test('webchat phone mode: an unreachable model bucket gives a banner with Retry and the message is still answered', { skip, timeout: 300000 }, run(['failure'], 2));

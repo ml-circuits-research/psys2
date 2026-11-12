@@ -16,7 +16,7 @@ export const DEFAULT_SETTINGS = {
   timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
   reasoner: 'matrix',             // Settings › Developer › Reasoner (spec 15): 'matrix' (default; the worlds that ship a matrix answer through the sopworld library) | 'ops' (the fallback); read when the engine starts
   fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
-  translation: 'auto', languageDetection: 'auto', englishVariant: 'en-US', voice: '', rate: 1, handsFree: false, keepListening: true, wakeWord: false, speaker: false, showTrace: false, showPerf: false, devMode: false, logPhrases: true, exportButtons: false,
+  translation: 'auto', languageDetection: 'auto', showAllLanguages: false, englishVariant: 'en-US', voice: '', rate: 1, handsFree: false, keepListening: true, wakeWord: false, speaker: false, showTrace: false, showPerf: false, devMode: false, logPhrases: true, exportButtons: false,
 };
 
 /**
