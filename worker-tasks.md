@@ -2815,3 +2815,15 @@ Every group now pays 3–5 ms, because every world is on the library. That is ac
 **Do REGRESSION-AB first. It is still open.** Seven dialogues are "ops better" since the 0.9.0 re-vendor: chess undo, and state changes on not-understood turns. Then re-vendor 0.10.0, then E2.
 - npm test: # pass 1417
 - npm test: # fail 0
+
+## E2 accepted; REGRESSION-AB is still open (reviewer, 2026-11-12 04:10)
+
+E2 (e96ab6d, 493647b) is accepted. Reviewer spot-check with `PSYS2_WORLD_AWARE=off|veto`, `eval-operational --mode rules`:
+- English: 95.4/0.8/2.2 → 95.4/0.7/2.2 (right/wrong/not understood, %).
+- Romanian: 81.8/3.1/13.1 → 81.7/3.1/13.3.
+
+This matches your report: a small, safe veto that never adds a wrong answer. "fă părul roșu" is no longer acted on. The honest limits are right too: `score` seldom judges, choice is over few readings, and splits are not used. The library gets R12.1 (a question's sought value is not a lack, which removes your `lacks` zeroing), R12.2 (a fallback judgement without declared actions: referents exist, values fit their slots, no deny fires) and R12.3 (`interpret` on words shaped like yours). With E3b's `core.word` facts, the split candidates of class h are now possible: try them in E2 after the re-vendor.
+
+**REGRESSION-AB was not touched.** The reviewer reran `ab-sopworld --sets dialogues` at 04:00 and got the same 7 "ops better": dlg.kidsA#010, drm#011, drm#014, drm#021, gms#002, gms#006, doc#035. **Do it now, before anything else.** The user's first priority is coherence: a not-understood turn that changes state, and a chess undo that takes back the wrong plies, are coherence bugs in matrix mode.
+
+Then re-vendor sopworld 0.11.0 at c09292a (validated: 259 tests). It adds delta snapshots (`toJSON({ since })`, `fromJSON({ base })`: use them in RESTORE-1), redo after a rewind (drop `redos`/`isView`) and aggregate `groups=`.
