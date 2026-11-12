@@ -222,3 +222,41 @@
     word=amphibian
     word=insect
     word=arachnid
+
+@lex.games.guess.say.yes core.lexicon
+    class=noun
+    doc="Words that say yes, for a corrected answer (\"I meant yes\")."
+    word=yes
+    word=yeah
+    word=yep
+    word=yup
+    word=sure
+    word=correct
+    word=true
+
+@lex.games.guess.say.no core.lexicon
+    class=noun
+    doc="Words that say no, for a corrected answer."
+    word=no
+    word=nope
+    word=nah
+    word=false
+    word=incorrect
+    word=never
+
+@lex.games.guess.say.maybe core.lexicon
+    class=noun
+    doc="Words that say maybe, for a corrected answer."
+    word=maybe
+    word=perhaps
+    word=possibly
+    word=sometimes
+
+@lex.games.guess.say.dontknow core.lexicon
+    class=noun
+    doc="Words that say I do not know, for a corrected answer."
+    word=dunno
+    word=idk
+    word=unsure
+    word=skip
+    word=pass

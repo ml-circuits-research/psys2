@@ -1,718 +1,521 @@
 {
  "date": "2026-11-12",
- "worlds": {
+ "gate": "description lines (non-blank, words included) <= non-blank lines of patterns.sop",
+ "rows": {
   "kids.arith": {
    "world": "kids.arith",
-   "descriptions": 28,
-   "generatedPatterns": 53,
-   "handWrittenPatterns": 264,
-   "replacedByOnly": 264,
-   "neededHandWritten": 17,
-   "replaceableHandWritten": 247,
+   "patternLines": 1647,
+   "describeLines": 1025,
+   "words": 162,
+   "base": {
+    "n": 262,
+    "right": 256,
+    "wrong": 3,
+    "nu": 3,
+    "other": 0
+   },
    "add": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 145,
-       "right": 143,
-       "wrong": 2,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 145,
-       "right": 143,
-       "wrong": 2,
-       "not_understood": 0,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 117,
-       "right": 113,
-       "wrong": 1,
-       "not_understood": 3,
-       "other": 0
-      },
-      "gen": {
-       "n": 117,
-       "right": 114,
-       "wrong": 1,
-       "not_understood": 2,
-       "other": 0
-      }
-     }
-    },
-    "newWrongAll": [],
-    "changeCounts": {
-     "not_understood->right": 1
-    }
+    "n": 262,
+    "right": 257,
+    "wrong": 3,
+    "nu": 2,
+    "other": 0
    },
    "only": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 145,
-       "right": 143,
-       "wrong": 2,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 145,
-       "right": 124,
-       "wrong": 4,
-       "not_understood": 17,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 117,
-       "right": 113,
-       "wrong": 1,
-       "not_understood": 3,
-       "other": 0
-      },
-      "gen": {
-       "n": 117,
-       "right": 108,
-       "wrong": 6,
-       "not_understood": 3,
-       "other": 0
-      }
-     }
-    },
-    "setsVsPrevOnly": {
-     "operational": {
-      "base": {
-       "n": 145,
-       "right": 143,
-       "wrong": 2,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 145,
-       "right": 124,
-       "wrong": 4,
-       "not_understood": 17,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 117,
-       "right": 113,
-       "wrong": 1,
-       "not_understood": 3,
-       "other": 0
-      },
-      "gen": {
-       "n": 117,
-       "right": 108,
-       "wrong": 6,
-       "not_understood": 3,
-       "other": 0
-      }
-     }
-    },
-    "changeCounts": {
-     "right->not_understood": 17,
-     "partly->not_understood": 1,
-     "right->wrong": 8,
-     "not_understood->right": 1
-    }
+    "n": 262,
+    "right": 230,
+    "wrong": 12,
+    "nu": 20,
+    "other": 0
    },
-   "describeLines": 1145,
-   "droppedLines": 1320,
-   "gaps": "Description gaps that cost cases in `only` (what the hand-written patterns say and the description cannot):\n\n- **Reversed or non-adjacent operand order**: \"take 7 away from 16\", \"subtract 6 from 20\", \"2 less than 6\" (the description must not claim `less than`: it reverses the operands, an early draft of it gave a new wrong answer in `add` and was removed).\n- **Symbols and chains**: `/`, `-`, `*` are not SOP atoms, so \"8 / 2\", \"14 - 8\", \"3*4\" stay hand-written; chained arithmetic (\"7 plus 5 minus 2\") and \"squared\" have no description.\n- **Two statements in one sentence** (\"Ben has 12 marbles and loses 5\", \"gives away 6\", \"Tom has 2 apples and Ana has 3\", \"gives 3 of his pears\"): needs a multi-wire emit with a second subject; descriptions state one operation per wire.\n- **Hand-written shapes that already cover the phrase** (\"how many pears does Ana have now?\" variants with typos, \"if i add eight and seven what do i get\" through a shape with a lead-in).\n- Added to the description after the first run: the omitted-item forms (\"Tom eats 3\", \"Tom gets 3 more\": item resolved by `recent(...)`, which the class of an argument can carry as it is), \"whats left for Mia\", \"they/we\" totals, the `to` order of give, and the new generic frame `askpred` (\"what is 6 plus 3\": opener, first argument, verb, second argument).\n- Not found in the sets but visible in the generated patterns: optional words (`prep`, `unit`) are always optional, so an operand pair with an optional operator word reads \"6 3\"; the calc description therefore puts the operator words in `verb` (mandatory) and uses `pred` / `askpred`.\n"
+   "ratio": 0.62,
+   "testsDefault": "kids.arith: 230/230 passed",
+   "testsOnly": "kids.arith: 92/230 passed"
   },
   "kids.tasks": {
    "world": "kids.tasks",
-   "descriptions": 18,
-   "generatedPatterns": 42,
-   "handWrittenPatterns": 231,
-   "replacedByOnly": 228,
-   "neededHandWritten": 11,
-   "replaceableHandWritten": 217,
+   "patternLines": 1441,
+   "describeLines": 620,
+   "words": 142,
+   "base": {
+    "n": 89,
+    "right": 82,
+    "wrong": 5,
+    "nu": 2,
+    "other": 0
+   },
    "add": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 38,
-       "right": 34,
-       "wrong": 3,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 38,
-       "right": 34,
-       "wrong": 3,
-       "not_understood": 1,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 51,
-       "right": 48,
-       "wrong": 2,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 51,
-       "right": 48,
-       "wrong": 2,
-       "not_understood": 1,
-       "other": 0
-      }
-     }
-    },
-    "newWrongAll": [],
-    "changeCounts": {
-     "not_understood->right": 1
-    }
+    "n": 89,
+    "right": 82,
+    "wrong": 5,
+    "nu": 2,
+    "other": 0
    },
    "only": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 38,
-       "right": 34,
-       "wrong": 3,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 38,
-       "right": 25,
-       "wrong": 5,
-       "not_understood": 8,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 51,
-       "right": 48,
-       "wrong": 2,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 51,
-       "right": 40,
-       "wrong": 5,
-       "not_understood": 6,
-       "other": 0
-      }
-     }
-    },
-    "setsVsPrevOnly": {
-     "operational": {
-      "base": {
-       "n": 38,
-       "right": 34,
-       "wrong": 3,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 38,
-       "right": 25,
-       "wrong": 5,
-       "not_understood": 8,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 51,
-       "right": 48,
-       "wrong": 2,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 51,
-       "right": 40,
-       "wrong": 5,
-       "not_understood": 6,
-       "other": 0
-      }
-     }
-    },
-    "changeCounts": {
-     "wrong->right": 2,
-     "right->wrong": 8,
-     "right->not_understood": 13,
-     "wrong->not_understood": 1
-    }
+    "n": 89,
+    "right": 62,
+    "wrong": 11,
+    "nu": 16,
+    "other": 0
    },
-   "describeLines": 677,
-   "droppedLines": 1140,
-   "gaps": "Description gaps that cost cases in `only`:\n\n- **Optional completing words cannot be made mandatory.** `rest`, `prep`, `unit` and `tverb` are always optional in the generated pattern, so a form whose only anchor is a trailing word (\"why is X done\", \"is X done\", \"is X on my list\" without a list name, \"add X to my list\") would match any sentence with a free-text argument. Those forms stay hand-written. The first draft had a bare \"add X\" and `short` frames for the free-text commands; they stole sentences from other worlds in `add` (\"add bananas 4 then remove pears\", \"ok thanks\" as a reminder, \"What is 7 times 8?\" as a reminder), so every description here has `skip=short` and the bare form is not described.\n- **The default list (no name given).** The hand-written patterns emit `arg.list=to-do` (or none, or `assumed=true`) depending on the form; a description states one emit per wire and every form of \"add X\" would share it, so only the forms with a named list (a lexicon of list names, `lex.kids.tasks.listnames`) are described.\n- **Free-text list names** (\"my birthday party list\") need `{list:words}` followed by the mandatory word \"list\"; the generator has no mandatory trailing word, so only the lexicon of list names is used.\n- **Discourse forms**: \"cross milk off\", \"what is still on it?\", \"any reminders for me?\", pronoun and ellipsis follow-ups, which the hand-written patterns express with `recent(...)` and context slots.\n- Added after the first run: the two question forms of show and pending (\"what is on my shopping list\", \"what is still on my shopping list\") and the `asn` frame for \"mark X as done\".\n"
+   "ratio": 0.43,
+   "testsDefault": "kids.tasks: 241/241 passed",
+   "testsOnly": "kids.tasks: 72/241 passed"
   },
   "kids.time": {
    "world": "kids.time",
-   "descriptions": 27,
-   "generatedPatterns": 27,
-   "handWrittenPatterns": 401,
-   "replacedByOnly": 388,
-   "neededHandWritten": 12,
-   "replaceableHandWritten": 377,
+   "patternLines": 2260,
+   "describeLines": 837,
+   "words": 128,
+   "base": {
+    "n": 154,
+    "right": 148,
+    "wrong": 3,
+    "nu": 3,
+    "other": 0
+   },
    "add": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 97,
-       "right": 93,
-       "wrong": 3,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 97,
-       "right": 93,
-       "wrong": 3,
-       "not_understood": 1,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 57,
-       "right": 55,
-       "wrong": 0,
-       "not_understood": 2,
-       "other": 0
-      },
-      "gen": {
-       "n": 57,
-       "right": 55,
-       "wrong": 0,
-       "not_understood": 2,
-       "other": 0
-      }
-     }
-    },
-    "newWrongAll": [],
-    "changeCounts": {
-     "right->not_understood": 1,
-     "not_understood->right": 1
-    }
+    "n": 154,
+    "right": 148,
+    "wrong": 3,
+    "nu": 3,
+    "other": 0
    },
    "only": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 97,
-       "right": 93,
-       "wrong": 3,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 97,
-       "right": 78,
-       "wrong": 6,
-       "not_understood": 13,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 57,
-       "right": 55,
-       "wrong": 0,
-       "not_understood": 2,
-       "other": 0
-      },
-      "gen": {
-       "n": 57,
-       "right": 48,
-       "wrong": 0,
-       "not_understood": 9,
-       "other": 0
-      }
-     }
-    },
-    "setsVsPrevOnly": {
-     "operational": {
-      "base": {
-       "n": 97,
-       "right": 93,
-       "wrong": 3,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 97,
-       "right": 78,
-       "wrong": 6,
-       "not_understood": 13,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 57,
-       "right": 55,
-       "wrong": 0,
-       "not_understood": 2,
-       "other": 0
-      },
-      "gen": {
-       "n": 57,
-       "right": 48,
-       "wrong": 0,
-       "not_understood": 9,
-       "other": 0
-      }
-     }
-    },
-    "changeCounts": {
-     "right->not_understood": 20,
-     "right->wrong": 3
-    }
+    "n": 154,
+    "right": 126,
+    "wrong": 7,
+    "nu": 21,
+    "other": 0
    },
-   "describeLines": 932,
-   "droppedLines": 1940,
-   "gaps": "Description gaps that cost cases in `only`:\n\n- **Discourse and ellipsis** (the largest loss): \"and the day after that\", \"and 5 days before Wednesday?\", \"and before March?\", \"and minutes in an hour?\", \"ok what day was the day before Wednesday\" (a filler lead plus a context slot). The hand-written patterns take their anchor from the previous turn (`recent(...)`, the `sw.*` short-word forms); a description states a complete sentence of one operation.\n- **Conditional forms** (\"If it is 3 o'clock, what time will it be in 2 hours?\", \"what is the day after tomorrow if today is Monday\", \"how many days till Sunday if its Thursday\"): the `cond` frame needs a verb and an argument order the clock and gap operations do not use; they are not described.\n- **Words that stand for a value**: \"tomorrow\", \"today\", \"this month\" map to literal emit values (`where.from=today`), one emit per wire, so each would be its own description; only the weekday / month / season lexicons and the numbers are described.\n- Some phrasings need a part-specific `has` verb (\"how many hours does a day have\"): the generated `length` forms put `have` nowhere because a trailing verb is optional and sits after the arguments.\n- Noise: the add runs show one right to not-understood and one not-understood to right on both sides of the comparison that does not involve this world's patterns (cases of other worlds); they are timing-dependent in the baseline too.\n"
+   "ratio": 0.37,
+   "testsDefault": "kids.time: 227/227 passed",
+   "testsOnly": "kids.time: 56/227 passed"
   },
   "kids.animals": {
    "world": "kids.animals",
-   "descriptions": 22,
-   "generatedPatterns": 22,
-   "handWrittenPatterns": 265,
-   "replacedByOnly": 261,
-   "neededHandWritten": 9,
-   "replaceableHandWritten": 252,
+   "patternLines": 1663,
+   "describeLines": 697,
+   "words": 130,
+   "base": {
+    "n": 139,
+    "right": 136,
+    "wrong": 3,
+    "nu": 0,
+    "other": 0
+   },
    "add": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 80,
-       "right": 77,
-       "wrong": 3,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 80,
-       "right": 77,
-       "wrong": 3,
-       "not_understood": 0,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 59,
-       "right": 59,
-       "wrong": 0,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 59,
-       "right": 59,
-       "wrong": 0,
-       "not_understood": 0,
-       "other": 0
-      }
-     }
-    },
-    "newWrongAll": [],
-    "changeCounts": {
-     "not_understood->right": 1
-    }
+    "n": 139,
+    "right": 136,
+    "wrong": 3,
+    "nu": 0,
+    "other": 0
    },
    "only": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 80,
-       "right": 77,
-       "wrong": 3,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 80,
-       "right": 68,
-       "wrong": 5,
-       "not_understood": 7,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 59,
-       "right": 59,
-       "wrong": 0,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 59,
-       "right": 59,
-       "wrong": 0,
-       "not_understood": 0,
-       "other": 0
-      }
-     }
-    },
-    "setsVsPrevOnly": {
-     "operational": {
-      "base": {
-       "n": 80,
-       "right": 77,
-       "wrong": 3,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 80,
-       "right": 68,
-       "wrong": 5,
-       "not_understood": 7,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 59,
-       "right": 59,
-       "wrong": 0,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 59,
-       "right": 59,
-       "wrong": 0,
-       "not_understood": 0,
-       "other": 0
-      }
-     }
-    },
-    "changeCounts": {
-     "right->wrong": 4,
-     "right->not_understood": 7
-    }
+    "n": 139,
+    "right": 127,
+    "wrong": 5,
+    "nu": 7,
+    "other": 0
    },
-   "describeLines": 767,
-   "droppedLines": 1305,
-   "gaps": "Description gaps that cost cases in `only` (9 distinct hand-written patterns carried a lost case):\n\n- **Free-text slots must be anchored by a closed word list.** An open `noun` slot with only optional trailing words matches any sentence (\"what is my name\" became a pet question, \"what is the weather today\" a covering question in an early draft; both stole sentences in `add`). The descriptions therefore use the lexicons (`lex.kids.animals.names`, `kinds`, `classes`, `abilities`, `babies`, `diets`) wherever the hand-written pattern had a bare `noun`, and drop the open forms (\"what is X covered in\" without the verb).\n- **Verb variants and typos** the lexicon of verbs does not list: \"how many legs has a spider\", \"where does a camel come from\", \"how is my pet called\", \"info on dolphins pls\", \"swimming bird please\" (a participle before a class noun), \"do dolphins breathe air or are they fish\" (a two-option question).\n- **Reversed forms** (\"a spider, how many legs?\") and the stand-alone noun phrase forms (the `short` / `rev` / `bare` frames are skipped on purpose: a lone noun phrase is the most ambiguous input across the worlds).\n- **Plural / singular of the animal name**: `x.legs.walks`, `desc.f1` read \"dolphins\" through the `noun` class and its plural handling, which the lexicon class does not apply.\n- The question types `kids.animals.animal` and `kids.animals.pet` have no statement operations, so no statement descriptions were needed.\n"
+   "ratio": 0.42,
+   "testsDefault": "kids.animals: 506/506 passed",
+   "testsOnly": "kids.animals: 173/506 passed"
   },
   "kids.shapes": {
    "world": "kids.shapes",
-   "descriptions": 16,
-   "generatedPatterns": 16,
-   "handWrittenPatterns": 153,
-   "replacedByOnly": 153,
-   "neededHandWritten": 6,
-   "replaceableHandWritten": 147,
+   "patternLines": 975,
+   "describeLines": 544,
+   "words": 109,
+   "base": {
+    "n": 107,
+    "right": 99,
+    "wrong": 7,
+    "nu": 1,
+    "other": 0
+   },
    "add": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 62,
-       "right": 56,
-       "wrong": 5,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 62,
-       "right": 56,
-       "wrong": 5,
-       "not_understood": 1,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 45,
-       "right": 43,
-       "wrong": 2,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 45,
-       "right": 43,
-       "wrong": 2,
-       "not_understood": 0,
-       "other": 0
-      }
-     }
-    },
-    "newWrongAll": [],
-    "changeCounts": {
-     "not_understood->right": 1
-    }
+    "n": 107,
+    "right": 99,
+    "wrong": 7,
+    "nu": 1,
+    "other": 0
    },
    "only": {
-    "sets": {
-     "operational": {
-      "base": {
-       "n": 62,
-       "right": 56,
-       "wrong": 5,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 62,
-       "right": 48,
-       "wrong": 5,
-       "not_understood": 9,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 45,
-       "right": 43,
-       "wrong": 2,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 45,
-       "right": 40,
-       "wrong": 2,
-       "not_understood": 3,
-       "other": 0
-      }
-     }
-    },
-    "setsVsPrevOnly": {
-     "operational": {
-      "base": {
-       "n": 62,
-       "right": 56,
-       "wrong": 5,
-       "not_understood": 1,
-       "other": 0
-      },
-      "gen": {
-       "n": 62,
-       "right": 48,
-       "wrong": 5,
-       "not_understood": 9,
-       "other": 0
-      }
-     },
-     "dialogues": {
-      "base": {
-       "n": 45,
-       "right": 43,
-       "wrong": 2,
-       "not_understood": 0,
-       "other": 0
-      },
-      "gen": {
-       "n": 45,
-       "right": 40,
-       "wrong": 2,
-       "not_understood": 3,
-       "other": 0
-      }
-     }
-    },
-    "changeCounts": {
-     "right->not_understood": 12
-    }
+    "n": 107,
+    "right": 88,
+    "wrong": 7,
+    "nu": 12,
+    "other": 0
    },
-   "describeLines": 601,
-   "droppedLines": 765,
-   "gaps": "Description gaps that cost cases in `only` (6 distinct hand-written patterns carried a lost case):\n\n- **Subject-first and verb-last phrasing**: \"mixing yellow and blue gives what colour\", \"tell me what a rectangle is\" (an embedded question), \"name something that looks like a rectangle\". The `ask` frame puts the opener first; the generator has no frame that closes with a question word.\n- **Adjective forms without a kind word** (\"is a circle round\": the hand pattern reads `round` as the kind `round_shape`), \"how is a circle different from other shapes\" (a comparison operation with no argument).\n- **Noun variants of a modifier** (\"how do i make orange paint\": a trailing noun after the color).\n- **Closed lexicons carry the whole load**: every description anchors its free slots with a `lex.kids.shapes.*` class (shapes, things, colors, parts, kinds, colorkinds), as the hand-written patterns do for the same reason; there are no `noun` slots, so nothing steals a sentence from another world (add: 0 new wrong, 0 not-understood).\n- No `short`, `rev` or `bare` frames (a bare \"circle sides\" is the most ambiguous input across worlds).\n"
+   "ratio": 0.56,
+   "testsDefault": "kids.shapes: 484/484 passed",
+   "testsOnly": "kids.shapes: 117/484 passed"
+  },
+  "kids.shop": {
+   "world": "kids.shop",
+   "patternLines": 2944,
+   "describeLines": 576,
+   "words": 173,
+   "base": {
+    "n": 107,
+    "right": 102,
+    "wrong": 0,
+    "nu": 5,
+    "other": 0
+   },
+   "add": {
+    "n": 107,
+    "right": 102,
+    "wrong": 0,
+    "nu": 5,
+    "other": 0
+   },
+   "only": {
+    "n": 107,
+    "right": 102,
+    "wrong": 0,
+    "nu": 5,
+    "other": 0
+   },
+   "ratio": 0.2,
+   "testsDefault": "kids.shop: 160/160 passed",
+   "testsOnly": "kids.shop: 77/160 passed"
+  },
+  "geo.map": {
+   "world": "geo.map",
+   "patternLines": 2297,
+   "describeLines": 1274,
+   "words": 344,
+   "base": {
+    "n": 228,
+    "right": 222,
+    "wrong": 4,
+    "nu": 2,
+    "other": 0
+   },
+   "add": {
+    "n": 228,
+    "right": 222,
+    "wrong": 4,
+    "nu": 2,
+    "other": 0
+   },
+   "only": {
+    "n": 228,
+    "right": 220,
+    "wrong": 3,
+    "nu": 5,
+    "other": 0
+   },
+   "ratio": 0.55,
+   "testsDefault": "geo.map: 459/459 passed",
+   "testsOnly": "geo.map: 326/459 passed"
+  },
+  "docs.editor": {
+   "world": "docs.editor",
+   "patternLines": 2741,
+   "describeLines": 1052,
+   "words": 247,
+   "base": {
+    "n": 251,
+    "right": 249,
+    "wrong": 1,
+    "nu": 1,
+    "other": 0
+   },
+   "add": {
+    "n": 251,
+    "right": 249,
+    "wrong": 1,
+    "nu": 1,
+    "other": 0
+   },
+   "only": {
+    "n": 251,
+    "right": 226,
+    "wrong": 11,
+    "nu": 14,
+    "other": 0
+   },
+   "ratio": 0.38,
+   "testsDefault": "docs.editor: 221/221 passed",
+   "testsOnly": "docs.editor: 205/221 passed"
+  },
+  "games.tictactoe": {
+   "world": "games.tictactoe",
+   "patternLines": 705,
+   "describeLines": 469,
+   "words": 73,
+   "base": {
+    "n": 115,
+    "right": 112,
+    "wrong": 0,
+    "nu": 3,
+    "other": 0
+   },
+   "add": {
+    "n": 115,
+    "right": 113,
+    "wrong": 0,
+    "nu": 2,
+    "other": 0
+   },
+   "only": {
+    "n": 115,
+    "right": 87,
+    "wrong": 16,
+    "nu": 12,
+    "other": 0
+   },
+   "ratio": 0.67,
+   "testsDefault": "games.tictactoe: 173/173 passed",
+   "testsOnly": "games.tictactoe: 33/173 passed"
+  },
+  "games.hangman": {
+   "world": "games.hangman",
+   "patternLines": 638,
+   "describeLines": 338,
+   "words": 64,
+   "base": {
+    "n": 92,
+    "right": 91,
+    "wrong": 1,
+    "nu": 0,
+    "other": 0
+   },
+   "add": {
+    "n": 92,
+    "right": 91,
+    "wrong": 1,
+    "nu": 0,
+    "other": 0
+   },
+   "only": {
+    "n": 92,
+    "right": 86,
+    "wrong": 2,
+    "nu": 4,
+    "other": 0
+   },
+   "ratio": 0.53,
+   "testsDefault": "games.hangman: 154/154 passed",
+   "testsOnly": "games.hangman: 111/154 passed"
+  },
+  "games.guess": {
+   "world": "games.guess",
+   "patternLines": 500,
+   "describeLines": 465,
+   "words": 54,
+   "base": {
+    "n": 101,
+    "right": 101,
+    "wrong": 0,
+    "nu": 0,
+    "other": 0
+   },
+   "add": {
+    "n": 101,
+    "right": 101,
+    "wrong": 0,
+    "nu": 0,
+    "other": 0
+   },
+   "only": {
+    "n": 101,
+    "right": 92,
+    "wrong": 3,
+    "nu": 6,
+    "other": 0
+   },
+   "ratio": 0.93,
+   "testsDefault": "games.guess: 130/130 passed",
+   "testsOnly": "games.guess: 97/130 passed"
+  },
+  "games.chess": {
+   "world": "games.chess",
+   "patternLines": 1760,
+   "describeLines": 1250,
+   "words": 244,
+   "base": {
+    "n": 152,
+    "right": 148,
+    "wrong": 3,
+    "nu": 1,
+    "other": 0
+   },
+   "add": {
+    "n": 152,
+    "right": 148,
+    "wrong": 3,
+    "nu": 1,
+    "other": 0
+   },
+   "only": {
+    "n": 152,
+    "right": 124,
+    "wrong": 14,
+    "nu": 14,
+    "other": 0
+   },
+   "ratio": 0.71,
+   "testsDefault": "games.chess: 269/269 passed",
+   "testsOnly": "games.chess: 133/269 passed"
   },
   "user.profile": {
    "world": "user.profile",
-   "descriptions": 17,
-   "generatedPatterns": 17,
-   "handWrittenPatterns": 71,
-   "replacedByOnly": 60,
-   "neededHandWritten": 13,
-   "replaceableHandWritten": 48,
+   "patternLines": 477,
+   "describeLines": 465,
+   "words": 70,
+   "base": {
+    "n": 230,
+    "right": 218,
+    "wrong": 7,
+    "nu": 5,
+    "other": 0
+   },
    "add": {
-    "sets": {
-     "dialogues": {
-      "base": {
-       "n": 230,
-       "right": 218,
-       "wrong": 7,
-       "not_understood": 5,
-       "other": 0
-      },
-      "gen": {
-       "n": 230,
-       "right": 218,
-       "wrong": 7,
-       "not_understood": 5,
-       "other": 0
-      }
-     }
-    },
-    "newWrongAll": [],
-    "changeCounts": {
-     "not_understood->right": 1
-    }
+    "n": 230,
+    "right": 218,
+    "wrong": 7,
+    "nu": 5,
+    "other": 0
    },
    "only": {
-    "sets": {
-     "dialogues": {
-      "base": {
-       "n": 230,
-       "right": 218,
-       "wrong": 7,
-       "not_understood": 5,
-       "other": 0
-      },
-      "gen": {
-       "n": 230,
-       "right": 193,
-       "wrong": 23,
-       "not_understood": 14,
-       "other": 0
-      }
-     }
-    },
-    "setsVsPrevOnly": {
-     "dialogues": {
-      "base": {
-       "n": 230,
-       "right": 218,
-       "wrong": 7,
-       "not_understood": 5,
-       "other": 0
-      },
-      "gen": {
-       "n": 230,
-       "right": 193,
-       "wrong": 23,
-       "not_understood": 14,
-       "other": 0
-      }
-     }
-    },
-    "changeCounts": {
-     "partly->not_understood": 1,
-     "right->wrong": 18,
-     "right->not_understood": 9
-    }
+    "n": 230,
+    "right": 203,
+    "wrong": 14,
+    "nu": 13,
+    "other": 0
    },
-   "describeLines": 553,
-   "droppedLines": 300,
-   "gaps": "Notes on this world: the operational set has no user.profile case (the audited rows are the dialogue set only, 230 turns); most of the world is `prof.tell` statements whose arguments are free text or whose phrases the hand-written patterns build from the shared `lang.self.*` groups.\n\nDescription gaps that cost cases in `only` (13 distinct hand-written patterns carried a lost case):\n\n- **The `know` question, the largest loss** (\"What do you know about me?\", 6 cases): the generated `ask` pattern is read, but the hand-written one carries `priority=14` and the generated patterns a lower default; with the hand pattern gone, shared patterns of other worlds (`kids.common` \"what is my name\" style) win. Descriptions cannot yet say that a pattern must outrank a neighbour's, only give it a number.\n- **Statements about the user that other worlds also read**: \"Forget my name\" (a `kids.common` pattern wins), \"where do I live\" (`geo.map.locate`), \"I use pyhton and SQL\" (a hangman pattern), \"I have two kids\" (an art.draw pattern). The hand patterns win only by priority; a statement of fact with an optional unit word has no anchor of its own.\n- **Optional unit words**: \"I am 40\", \"I have 2\" would match without \"years old\" / \"kids\" (a unit is an optional word), so `age`, `years` and `children` are described only with their anchor verbs (\"i have worked for N\", \"i am N years old\") and the bare forms stay hand-written. The first draft had \"I have been teaching for N years\" without the verb argument the hand pattern keeps (`arg.v`), which gave a new wrong answer in `add` and was removed.\n- **Lists and conjunctions** (\"I love hiking and jazz\", \"I use Python and SQL\", \"I use A, B and C\"): a description has one wire per argument count and a free-text list element; not described.\n- **Trailing qualifiers** (\"I studied physics at Cluj\": the organisation argument), \"I work for myself\", `my age is N`, \"coming back to knowing me ...\".\n- Not described: `likes`, `learn`, `lang`, `interests`, `tools`, `field`, `pref`, `previous`, `rolefield`, `sensitive` and the \"fix\" variants (corrections with `arg.fix=true`), because each needs a free-text slot or a conjunction (see above); the 17 descriptions cover start, know, delete, progress, pause, export (md, json), fieldOf (location, age), forget, mention, and the name, age, years, location, role and edu statements.\n"
+   "ratio": 0.97,
+   "testsDefault": "user.profile: 144/144 passed",
+   "testsOnly": "user.profile: 121/144 passed"
+  },
+  "ui.shell": {
+   "world": "ui.shell",
+   "patternLines": 778,
+   "describeLines": 592,
+   "words": 141,
+   "base": {
+    "n": 90,
+    "right": 88,
+    "wrong": 2,
+    "nu": 0,
+    "other": 0
+   },
+   "add": {
+    "n": 90,
+    "right": 88,
+    "wrong": 2,
+    "nu": 0,
+    "other": 0
+   },
+   "only": {
+    "n": 90,
+    "right": 59,
+    "wrong": 16,
+    "nu": 15,
+    "other": 0
+   },
+   "ratio": 0.76,
+   "testsDefault": "ui.shell: 64/64 passed",
+   "testsOnly": "ui.shell: 33/64 passed"
   }
- }
+ },
+ "readerCoverage": {
+  "kids.shapes": {
+   "words": 109,
+   "mapped": 109,
+   "warnings": 0,
+   "asIs": 0
+  },
+  "kids.arith": {
+   "words": 162,
+   "mapped": 162,
+   "warnings": 0,
+   "asIs": 0
+  },
+  "kids.shop": {
+   "words": 173,
+   "mapped": 173,
+   "warnings": 0,
+   "asIs": 0
+  },
+  "kids.tasks": {
+   "words": 142,
+   "mapped": 142,
+   "warnings": 0,
+   "asIs": 53
+  },
+  "kids.animals": {
+   "words": 130,
+   "mapped": 130,
+   "warnings": 0,
+   "asIs": 0
+  },
+  "docs.editor": {
+   "words": 247,
+   "mapped": 247,
+   "warnings": 0,
+   "asIs": 247
+  },
+  "games.chess": {
+   "words": 244,
+   "mapped": 244,
+   "warnings": 0,
+   "asIs": 179
+  },
+  "games.guess": {
+   "words": 54,
+   "mapped": 54,
+   "warnings": 0,
+   "asIs": 15
+  },
+  "games.hangman": {
+   "words": 64,
+   "mapped": 64,
+   "warnings": 0,
+   "asIs": 16
+  },
+  "games.tictactoe": {
+   "words": 73,
+   "mapped": 73,
+   "warnings": 0,
+   "asIs": 15
+  },
+  "geo.map": {
+   "words": 344,
+   "mapped": 344,
+   "warnings": 0,
+   "asIs": 341
+  },
+  "kids.time": {
+   "words": 128,
+   "mapped": 128,
+   "warnings": 0,
+   "asIs": 0
+  },
+  "ui.shell": {
+   "words": 141,
+   "mapped": 141,
+   "warnings": 0,
+   "asIs": 141
+  },
+  "user.profile": {
+   "words": 70,
+   "mapped": 70,
+   "warnings": 0,
+   "asIs": 70
+  }
+ },
+ "notDone": [
+  "media.music",
+  "data.charts",
+  "docs.reader",
+  "ui.avatar",
+  "ui.help",
+  "art.draw",
+  "diagram.sketch"
+ ]
 }
