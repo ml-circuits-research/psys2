@@ -10,7 +10,7 @@ const load = async (mode) => {
   if (mode) globalThis.PSYS_GEN_PATTERNS = mode; else delete globalThis.PSYS_GEN_PATTERNS;
   try { return await loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] })); } finally { delete globalThis.PSYS_GEN_PATTERNS; }
 };
-const WORLDS = ['kids.shop', 'geo.map', 'docs.editor', 'kids.arith', 'kids.tasks', 'kids.time'];
+const WORLDS = ['kids.shop', 'geo.map', 'docs.editor', 'kids.arith', 'kids.tasks', 'kids.time', 'kids.animals'];
 
 test('an argument is built from wires and keys, with no notation inside a value', () => {
   assert.deepEqual(makeArg({ name: 'i2', cls: 'lex.kids.shop.items', optional: true, qty: 'n2' }, { prep: ['and', 'plus'] }), { name: 'i2', cls: 'lex.kids.shop.items', optional: true, qty: 'n2', prep: ['and', 'plus'], det: null, unit: null });

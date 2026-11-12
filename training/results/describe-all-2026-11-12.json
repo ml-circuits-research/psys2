@@ -383,6 +383,132 @@
    "describeLines": 932,
    "droppedLines": 1940,
    "gaps": "Description gaps that cost cases in `only`:\n\n- **Discourse and ellipsis** (the largest loss): \"and the day after that\", \"and 5 days before Wednesday?\", \"and before March?\", \"and minutes in an hour?\", \"ok what day was the day before Wednesday\" (a filler lead plus a context slot). The hand-written patterns take their anchor from the previous turn (`recent(...)`, the `sw.*` short-word forms); a description states a complete sentence of one operation.\n- **Conditional forms** (\"If it is 3 o'clock, what time will it be in 2 hours?\", \"what is the day after tomorrow if today is Monday\", \"how many days till Sunday if its Thursday\"): the `cond` frame needs a verb and an argument order the clock and gap operations do not use; they are not described.\n- **Words that stand for a value**: \"tomorrow\", \"today\", \"this month\" map to literal emit values (`where.from=today`), one emit per wire, so each would be its own description; only the weekday / month / season lexicons and the numbers are described.\n- Some phrasings need a part-specific `has` verb (\"how many hours does a day have\"): the generated `length` forms put `have` nowhere because a trailing verb is optional and sits after the arguments.\n- Noise: the add runs show one right to not-understood and one not-understood to right on both sides of the comparison that does not involve this world's patterns (cases of other worlds); they are timing-dependent in the baseline too.\n"
+  },
+  "kids.animals": {
+   "world": "kids.animals",
+   "descriptions": 22,
+   "generatedPatterns": 22,
+   "handWrittenPatterns": 265,
+   "replacedByOnly": 261,
+   "neededHandWritten": 9,
+   "replaceableHandWritten": 252,
+   "add": {
+    "sets": {
+     "operational": {
+      "base": {
+       "n": 80,
+       "right": 77,
+       "wrong": 3,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 80,
+       "right": 77,
+       "wrong": 3,
+       "not_understood": 0,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 59,
+       "right": 59,
+       "wrong": 0,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 59,
+       "right": 59,
+       "wrong": 0,
+       "not_understood": 0,
+       "other": 0
+      }
+     }
+    },
+    "newWrongAll": [],
+    "changeCounts": {
+     "not_understood->right": 1
+    }
+   },
+   "only": {
+    "sets": {
+     "operational": {
+      "base": {
+       "n": 80,
+       "right": 77,
+       "wrong": 3,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 80,
+       "right": 68,
+       "wrong": 5,
+       "not_understood": 7,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 59,
+       "right": 59,
+       "wrong": 0,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 59,
+       "right": 59,
+       "wrong": 0,
+       "not_understood": 0,
+       "other": 0
+      }
+     }
+    },
+    "setsVsPrevOnly": {
+     "operational": {
+      "base": {
+       "n": 80,
+       "right": 77,
+       "wrong": 3,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 80,
+       "right": 68,
+       "wrong": 5,
+       "not_understood": 7,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 59,
+       "right": 59,
+       "wrong": 0,
+       "not_understood": 0,
+       "other": 0
+      },
+      "gen": {
+       "n": 59,
+       "right": 59,
+       "wrong": 0,
+       "not_understood": 0,
+       "other": 0
+      }
+     }
+    },
+    "changeCounts": {
+     "right->wrong": 4,
+     "right->not_understood": 7
+    }
+   },
+   "describeLines": 767,
+   "droppedLines": 1305,
+   "gaps": "Description gaps that cost cases in `only` (9 distinct hand-written patterns carried a lost case):\n\n- **Free-text slots must be anchored by a closed word list.** An open `noun` slot with only optional trailing words matches any sentence (\"what is my name\" became a pet question, \"what is the weather today\" a covering question in an early draft; both stole sentences in `add`). The descriptions therefore use the lexicons (`lex.kids.animals.names`, `kinds`, `classes`, `abilities`, `babies`, `diets`) wherever the hand-written pattern had a bare `noun`, and drop the open forms (\"what is X covered in\" without the verb).\n- **Verb variants and typos** the lexicon of verbs does not list: \"how many legs has a spider\", \"where does a camel come from\", \"how is my pet called\", \"info on dolphins pls\", \"swimming bird please\" (a participle before a class noun), \"do dolphins breathe air or are they fish\" (a two-option question).\n- **Reversed forms** (\"a spider, how many legs?\") and the stand-alone noun phrase forms (the `short` / `rev` / `bare` frames are skipped on purpose: a lone noun phrase is the most ambiguous input across the worlds).\n- **Plural / singular of the animal name**: `x.legs.walks`, `desc.f1` read \"dolphins\" through the `noun` class and its plural handling, which the lexicon class does not apply.\n- The question types `kids.animals.animal` and `kids.animals.pet` have no statement operations, so no statement descriptions were needed.\n"
   }
  }
 }

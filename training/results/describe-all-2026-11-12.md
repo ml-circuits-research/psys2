@@ -80,3 +80,29 @@ Description gaps that cost cases in `only`:
 - Some phrasings need a part-specific `has` verb ("how many hours does a day have"): the generated `length` forms put `have` nowhere because a trailing verb is optional and sits after the arguments.
 - Noise: the add runs show one right to not-understood and one not-understood to right on both sides of the comparison that does not involve this world's patterns (cases of other worlds); they are timing-dependent in the baseline too.
 
+
+## kids.animals
+
+- Descriptions: 22; generated patterns (add): 22.
+- Hand-written patterns of the described operations: 265 (pattern wires; shapes are separate). `only` drops 261.
+- Hand-written patterns dropped by `only`: 261, replaced by 22 generated ones. Of the dropped, 9 were the reading of at least one set case that got worse (the description misses what they said); the other 252 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 767, dropped patterns about 1305.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 77/3/0 of 80 | 77/3/0 of 80 | 59/0/0 of 59 | 59/0/0 of 59 |
+| only | 77/3/0 of 80 | 68/5/7 of 80 | 59/0/0 of 59 | 59/0/0 of 59 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"right->wrong":4,"right->not_understood":7}.
+
+Description gaps that cost cases in `only` (9 distinct hand-written patterns carried a lost case):
+
+- **Free-text slots must be anchored by a closed word list.** An open `noun` slot with only optional trailing words matches any sentence ("what is my name" became a pet question, "what is the weather today" a covering question in an early draft; both stole sentences in `add`). The descriptions therefore use the lexicons (`lex.kids.animals.names`, `kinds`, `classes`, `abilities`, `babies`, `diets`) wherever the hand-written pattern had a bare `noun`, and drop the open forms ("what is X covered in" without the verb).
+- **Verb variants and typos** the lexicon of verbs does not list: "how many legs has a spider", "where does a camel come from", "how is my pet called", "info on dolphins pls", "swimming bird please" (a participle before a class noun), "do dolphins breathe air or are they fish" (a two-option question).
+- **Reversed forms** ("a spider, how many legs?") and the stand-alone noun phrase forms (the `short` / `rev` / `bare` frames are skipped on purpose: a lone noun phrase is the most ambiguous input across the worlds).
+- **Plural / singular of the animal name**: `x.legs.walks`, `desc.f1` read "dolphins" through the `noun` class and its plural handling, which the lexicon class does not apply.
+- The question types `kids.animals.animal` and `kids.animals.pet` have no statement operations, so no statement descriptions were needed.
+
