@@ -53,7 +53,7 @@
     "lib/dialog/discourse.mjs": "e11d562ccf4d8324",
     "lib/dialog/dispatch-validate.mjs": "965dfe7431680797",
     "lib/dialog/encoder-dispatch.mjs": "6ecd5f7a1b2eb7b9",
-    "lib/dialog/index.mjs": "5f60f2414a669496",
+    "lib/dialog/index.mjs": "b888de029b4b688d",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/reader-route.mjs": "81fe8c70e70f8a3d",
@@ -226,5 +226,5 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-12T07:52:48.076Z"
+  "builtAt": "2026-11-12T08:24:52.052Z"
 }
