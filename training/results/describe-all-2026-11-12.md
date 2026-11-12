@@ -2,6 +2,19 @@
 
 One section per world, appended as each description lands. Method: `PSYS_GEN_PATTERNS=add|only`, `scripts/e1-collect.mjs --mode rules --sets operational,dialogues`, compared with `scripts/e3-compare.mjs`; base is the default (hand-written only) run. Gate: no new wrong answer in `add`. In `only` the baseline for "all worlds" is an `only` run without the world's description.
 
+## Summary (audited world rows of the operational and dialogue sets together, rules mode)
+
+| world | descriptions | generated (add) | hand-written dropped by only | needed by a lost case | add: new wrong | only: right (base to gen) | only: wrong (base to gen) |
+|---|---:|---:|---:|---:|---:|---|---|
+| kids.arith | 28 | 53 | 264 | 17 | 0 | 256 to 232 | 3 to 10 |
+| kids.tasks | 18 | 42 | 228 | 11 | 0 | 82 to 65 | 5 to 10 |
+| kids.time | 27 | 27 | 388 | 12 | 0 | 148 to 126 | 3 to 6 |
+| kids.animals | 22 | 22 | 261 | 9 | 0 | 136 to 127 | 3 to 5 |
+| kids.shapes | 16 | 16 | 153 | 6 | 0 | 99 to 88 | 7 to 7 |
+| user.profile | 17 | 17 | 60 | 13 | 0 | 218 to 193 | 7 to 23 |
+
+The gate (no new wrong answer in `add`) holds for all six worlds after the fixes noted in each section. In `only` every hand-written pattern of a described operation is dropped, so the loss column measures how much of the hand-written coverage the description does not yet state; the per-world sections list the gaps. Descriptions are most useful where the hand-written patterns are many near-copies of one phrase family (arithmetic statements and questions, animals and shapes question families) and least where a free-text slot or discourse context carries the meaning (tasks, profile).
+
 ## kids.arith
 
 - Descriptions: 28; generated patterns (add): 53.
@@ -131,4 +144,33 @@ Description gaps that cost cases in `only` (6 distinct hand-written patterns car
 - **Noun variants of a modifier** ("how do i make orange paint": a trailing noun after the color).
 - **Closed lexicons carry the whole load**: every description anchors its free slots with a `lex.kids.shapes.*` class (shapes, things, colors, parts, kinds, colorkinds), as the hand-written patterns do for the same reason; there are no `noun` slots, so nothing steals a sentence from another world (add: 0 new wrong, 0 not-understood).
 - No `short`, `rev` or `bare` frames (a bare "circle sides" is the most ambiguous input across worlds).
+
+
+## user.profile
+
+- Descriptions: 17; generated patterns (add): 17.
+- Hand-written patterns of the described operations: 71 (pattern wires; shapes are separate). `only` drops 60.
+- Hand-written patterns dropped by `only`: 60, replaced by 17 generated ones. Of the dropped, 13 were the reading of at least one set case that got worse (the description misses what they said); the other 48 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 553, dropped patterns about 300.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | no cases | no cases | 218/7/5 of 230 | 218/7/5 of 230 |
+| only | no cases | no cases | 218/7/5 of 230 | 193/23/14 of 230 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"partly->not_understood":1,"right->wrong":18,"right->not_understood":9}.
+
+Notes on this world: the operational set has no user.profile case (the audited rows are the dialogue set only, 230 turns); most of the world is `prof.tell` statements whose arguments are free text or whose phrases the hand-written patterns build from the shared `lang.self.*` groups.
+
+Description gaps that cost cases in `only` (13 distinct hand-written patterns carried a lost case):
+
+- **The `know` question, the largest loss** ("What do you know about me?", 6 cases): the generated `ask` pattern is read, but the hand-written one carries `priority=14` and the generated patterns a lower default; with the hand pattern gone, shared patterns of other worlds (`kids.common` "what is my name" style) win. Descriptions cannot yet say that a pattern must outrank a neighbour's, only give it a number.
+- **Statements about the user that other worlds also read**: "Forget my name" (a `kids.common` pattern wins), "where do I live" (`geo.map.locate`), "I use pyhton and SQL" (a hangman pattern), "I have two kids" (an art.draw pattern). The hand patterns win only by priority; a statement of fact with an optional unit word has no anchor of its own.
+- **Optional unit words**: "I am 40", "I have 2" would match without "years old" / "kids" (a unit is an optional word), so `age`, `years` and `children` are described only with their anchor verbs ("i have worked for N", "i am N years old") and the bare forms stay hand-written. The first draft had "I have been teaching for N years" without the verb argument the hand pattern keeps (`arg.v`), which gave a new wrong answer in `add` and was removed.
+- **Lists and conjunctions** ("I love hiking and jazz", "I use Python and SQL", "I use A, B and C"): a description has one wire per argument count and a free-text list element; not described.
+- **Trailing qualifiers** ("I studied physics at Cluj": the organisation argument), "I work for myself", `my age is N`, "coming back to knowing me ...".
+- Not described: `likes`, `learn`, `lang`, `interests`, `tools`, `field`, `pref`, `previous`, `rolefield`, `sensitive` and the "fix" variants (corrections with `arg.fix=true`), because each needs a free-text slot or a conjunction (see above); the 17 descriptions cover start, know, delete, progress, pause, export (md, json), fieldOf (location, age), forget, mention, and the name, age, years, location, role and edu statements.
 

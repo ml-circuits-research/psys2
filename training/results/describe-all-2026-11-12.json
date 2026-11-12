@@ -634,6 +634,85 @@
    "describeLines": 601,
    "droppedLines": 765,
    "gaps": "Description gaps that cost cases in `only` (6 distinct hand-written patterns carried a lost case):\n\n- **Subject-first and verb-last phrasing**: \"mixing yellow and blue gives what colour\", \"tell me what a rectangle is\" (an embedded question), \"name something that looks like a rectangle\". The `ask` frame puts the opener first; the generator has no frame that closes with a question word.\n- **Adjective forms without a kind word** (\"is a circle round\": the hand pattern reads `round` as the kind `round_shape`), \"how is a circle different from other shapes\" (a comparison operation with no argument).\n- **Noun variants of a modifier** (\"how do i make orange paint\": a trailing noun after the color).\n- **Closed lexicons carry the whole load**: every description anchors its free slots with a `lex.kids.shapes.*` class (shapes, things, colors, parts, kinds, colorkinds), as the hand-written patterns do for the same reason; there are no `noun` slots, so nothing steals a sentence from another world (add: 0 new wrong, 0 not-understood).\n- No `short`, `rev` or `bare` frames (a bare \"circle sides\" is the most ambiguous input across worlds).\n"
+  },
+  "user.profile": {
+   "world": "user.profile",
+   "descriptions": 17,
+   "generatedPatterns": 17,
+   "handWrittenPatterns": 71,
+   "replacedByOnly": 60,
+   "neededHandWritten": 13,
+   "replaceableHandWritten": 48,
+   "add": {
+    "sets": {
+     "dialogues": {
+      "base": {
+       "n": 230,
+       "right": 218,
+       "wrong": 7,
+       "not_understood": 5,
+       "other": 0
+      },
+      "gen": {
+       "n": 230,
+       "right": 218,
+       "wrong": 7,
+       "not_understood": 5,
+       "other": 0
+      }
+     }
+    },
+    "newWrongAll": [],
+    "changeCounts": {
+     "not_understood->right": 1
+    }
+   },
+   "only": {
+    "sets": {
+     "dialogues": {
+      "base": {
+       "n": 230,
+       "right": 218,
+       "wrong": 7,
+       "not_understood": 5,
+       "other": 0
+      },
+      "gen": {
+       "n": 230,
+       "right": 193,
+       "wrong": 23,
+       "not_understood": 14,
+       "other": 0
+      }
+     }
+    },
+    "setsVsPrevOnly": {
+     "dialogues": {
+      "base": {
+       "n": 230,
+       "right": 218,
+       "wrong": 7,
+       "not_understood": 5,
+       "other": 0
+      },
+      "gen": {
+       "n": 230,
+       "right": 193,
+       "wrong": 23,
+       "not_understood": 14,
+       "other": 0
+      }
+     }
+    },
+    "changeCounts": {
+     "partly->not_understood": 1,
+     "right->wrong": 18,
+     "right->not_understood": 9
+    }
+   },
+   "describeLines": 553,
+   "droppedLines": 300,
+   "gaps": "Notes on this world: the operational set has no user.profile case (the audited rows are the dialogue set only, 230 turns); most of the world is `prof.tell` statements whose arguments are free text or whose phrases the hand-written patterns build from the shared `lang.self.*` groups.\n\nDescription gaps that cost cases in `only` (13 distinct hand-written patterns carried a lost case):\n\n- **The `know` question, the largest loss** (\"What do you know about me?\", 6 cases): the generated `ask` pattern is read, but the hand-written one carries `priority=14` and the generated patterns a lower default; with the hand pattern gone, shared patterns of other worlds (`kids.common` \"what is my name\" style) win. Descriptions cannot yet say that a pattern must outrank a neighbour's, only give it a number.\n- **Statements about the user that other worlds also read**: \"Forget my name\" (a `kids.common` pattern wins), \"where do I live\" (`geo.map.locate`), \"I use pyhton and SQL\" (a hangman pattern), \"I have two kids\" (an art.draw pattern). The hand patterns win only by priority; a statement of fact with an optional unit word has no anchor of its own.\n- **Optional unit words**: \"I am 40\", \"I have 2\" would match without \"years old\" / \"kids\" (a unit is an optional word), so `age`, `years` and `children` are described only with their anchor verbs (\"i have worked for N\", \"i am N years old\") and the bare forms stay hand-written. The first draft had \"I have been teaching for N years\" without the verb argument the hand pattern keeps (`arg.v`), which gave a new wrong answer in `add` and was removed.\n- **Lists and conjunctions** (\"I love hiking and jazz\", \"I use Python and SQL\", \"I use A, B and C\"): a description has one wire per argument count and a free-text list element; not described.\n- **Trailing qualifiers** (\"I studied physics at Cluj\": the organisation argument), \"I work for myself\", `my age is N`, \"coming back to knowing me ...\".\n- Not described: `likes`, `learn`, `lang`, `interests`, `tools`, `field`, `pref`, `previous`, `rolefield`, `sensitive` and the \"fix\" variants (corrections with `arg.fix=true`), because each needs a free-text slot or a conjunction (see above); the 17 descriptions cover start, know, delete, progress, pause, export (md, json), fieldOf (location, age), forget, mention, and the name, age, years, location, role and edu statements.\n"
   }
  }
 }
