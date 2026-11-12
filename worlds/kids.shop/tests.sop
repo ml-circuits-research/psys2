@@ -787,3 +787,39 @@
     expect="You have 5 lei left."
     doc="three of them is told: the assumption is gone and nothing is said about assuming"
     reasoner=matrix
+
+# ---- MINIMAL-PAIRS (2026-11-12): negated statements and giving money, each with its twin
+@t.shop.mp1 core.test
+    session=mp1
+    input="I have 20 lei. I do not buy the ball."
+    expect="OK, you did not buy the ball. Nothing changes."
+
+@t.shop.mp1b core.test
+    session=mp1
+    input="How much money do I have?"
+    expect="You have 20 lei now."
+
+@t.shop.mp2 core.test
+    session=mp2
+    input="I have 20 lei. I buy a ball. How much money do I have?"
+    expect="You have 15 lei left."
+
+@t.shop.mp3 core.test
+    session=mp3
+    input="I have 20 lei. I give Ana 10 lei. How much money do I have?"
+    expect="You have 10 lei left."
+
+@t.shop.mp4 core.test
+    session=mp4
+    input="I have 20 lei. Ana gives me 10 lei. How much money do I have?"
+    expect="You have 30 lei now."
+
+@t.shop.mp5 core.test
+    session=mp5
+    input="I have 20 lei. Ana does not give me 10 lei. How much money do I have?"
+    expect="You have 20 lei now."
+
+@t.shop.mp6 core.test
+    session=mp6
+    input="I have 10 lei. I don't spend 4 lei."
+    expect="OK, you did not spend 4 lei. Nothing changes."

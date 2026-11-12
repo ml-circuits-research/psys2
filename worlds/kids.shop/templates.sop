@@ -75,3 +75,27 @@
     for=action.shop.reviseLast
     status=missing
     text="I have no purchase to change yet."
+
+@tpl.kids.shop.ack.negated.spend core.template
+    for=ack.kids.shop.negated
+    when="verb=spend"
+    text="OK, you did not spend {count} lei. Nothing changes."
+
+@tpl.kids.shop.ack.negated.get core.template
+    for=ack.kids.shop.negated
+    when="verb=get"
+    text="OK, you did not get {count} lei. Nothing changes."
+
+@tpl.kids.shop.ack.negated.give core.template
+    for=ack.kids.shop.negated
+    when="verb=give"
+    text="OK, you did not give {count} lei. Nothing changes."
+
+@tpl.kids.shop.ack.negated.n core.template
+    for=ack.kids.shop.negated
+    when="count!=none"
+    text="OK, you did not {verb} {count} {item:plural}. Nothing changes."
+
+@tpl.kids.shop.ack.negated core.template
+    for=ack.kids.shop.negated
+    text="OK, you did not {verb} the {item}. Nothing changes."

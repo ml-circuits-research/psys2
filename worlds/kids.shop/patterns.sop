@@ -3425,3 +3425,62 @@
     priority=12
     example="I buy something."
     doc="The item is not said: ask for it (a question back), buy nothing and guess nothing."
+
+# ---- MINIMAL-PAIRS block (2026-11-12): giving money to somebody, and negated statements (understood, nothing changes). The words are lang.common groups (lang.neg.*).
+@pat.kids.shop.expense.to core.pattern
+    canonical="I give Ana 10 lei."
+    match="i [give|gave] {g:agent} {n:number} [lei|leu]"
+    emit="@{_} kids.shop.expense count={n} unit=leu"
+    kind=statement
+    priority=11
+    example="I give Ana 10 lei."
+
+@pat.kids.shop.expense.to.b core.pattern
+    match="i [give|gave] {n:number} [lei|leu] to {g:agent}"
+    emit="@{_} kids.shop.expense count={n} unit=leu"
+    kind=statement
+    priority=11
+    example="I give 10 lei to Ana."
+
+@pat.kids.shop.neg.buy.n core.pattern
+    match="i [$lang.neg.aux] [buy|purchase] {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} kids.shop.negated verb=buy item={i1} count={n1}"
+    kind=statement
+    priority=12
+    example="I do not buy 3 pencils."
+
+@pat.kids.shop.neg.buy core.pattern
+    canonical="I do not buy the ball."
+    match="i [$lang.neg.aux] [buy|purchase] [a|an|the|$lang.neg.any]? {i1:lex.kids.shop.items}"
+    emit="@{_} kids.shop.negated verb=buy item={i1}"
+    kind=statement
+    priority=12
+    example="I do not buy the ball."
+
+@pat.kids.shop.neg.spend core.pattern
+    match="i [$lang.neg.aux] [spend|pay|lose|give_away] {n:number} [lei|leu]"
+    emit="@{_} kids.shop.negated verb=spend count={n}"
+    kind=statement
+    priority=12
+    example="I do not spend 4 lei."
+
+@pat.kids.shop.neg.get core.pattern
+    match="i [$lang.neg.aux] [get|receive|find|earn|win|save] {n:number} [more]? [lei|leu]"
+    emit="@{_} kids.shop.negated verb=get count={n}"
+    kind=statement
+    priority=12
+    example="I do not get 5 lei."
+
+@pat.kids.shop.neg.get.from core.pattern
+    match="[my]? [mom|mum|dad|mother|father|grandma|grandpa|grandmother|grandfather|aunt|uncle|friend|teacher|sister|brother]? {g:agent?} [$lang.neg.aux] give me {n:number} [more]? [lei|leu]"
+    emit="@{_} kids.shop.negated verb=get count={n}"
+    kind=statement
+    priority=12
+    example="Ana does not give me 5 lei."
+
+@pat.kids.shop.neg.give core.pattern
+    match="i [$lang.neg.aux] give {g:agent} {n:number} [lei|leu]"
+    emit="@{_} kids.shop.negated verb=give count={n}"
+    kind=statement
+    priority=12
+    example="I do not give Ana 5 lei."
