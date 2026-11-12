@@ -1,0 +1,1371 @@
+@describe.chess.move.to core.describe
+    op=chess.move
+    intent=command
+    emit="@{_} core.request action=chess.move arg.piece={p} arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    priority=13
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+    frames=short
+
+@describe.chess.move.to.p core.describe.arg
+    of=$describe.chess.move.to
+    name=p
+    class=lex.games.chess.pieces
+    optional=true
+
+@describe.chess.move.to.tf core.describe.arg
+    of=$describe.chess.move.to
+    name=tf
+    class=lex.games.chess.files
+
+@describe.chess.move.to.tr core.describe.arg
+    of=$describe.chess.move.to
+    name=tr
+    class=number
+
+@describe.chess.move.to.pr core.describe.arg
+    of=$describe.chess.move.to
+    name=pr
+    class=lex.games.chess.promos
+    optional=true
+
+@describe.chess.move.to.en core.describe.words
+    of=$describe.chess.move.to
+    lang=en
+    verb=$w.en.move.chess.move
+    verb=$w.en.play.chess.move
+    verb=$w.en.go.chess.move
+    verb=$w.en.put.chess.move
+    verb=$w.en.push.chess.move
+    verb=$w.en.advance.chess.move
+    verb=$w.en.bring.chess.move
+    verb=$w.en.send.chess.move
+    verb=$w.en.jump.chess.move
+    verb=$w.en.slide.chess.move
+    verb=$w.en.place.chess.move
+    det.p=$w.en.white.chess.move.p
+    det.p=$w.en.black.chess.move.p
+    det.p=$w.en.the.chess.move.p
+    det.p=$w.en.my.chess.move.p
+    det.p=$w.en.our.chess.move.p
+    det.p=$w.en.that.chess.move.p
+    det.p=$w.en.this.chess.move.p
+    det.p=$w.en.a.chess.move.p
+    det.p=$w.en.an.chess.move.p
+    det.p=$w.en.your.chess.move.p
+    prep.tf=$w.en.to.chess.move.tf
+    prep.tf=$w.en.on.chess.move.tf
+    prep.tf=$w.en.at.chess.move.tf
+    prep.tf=$w.en.onto.chess.move.tf
+    prep.tf=$w.en.into.chess.move.tf
+    prep.tf=$w.en.square.chess.move.tf
+    prep.pr=$w.en.promote.chess.move.pr
+    prep.pr=$w.en.promoting.chess.move.pr
+    prep.pr=$w.en.to.chess.move.pr
+    prep.pr=$w.en.into.chess.move.pr
+    prep.pr=$w.en.as.chess.move.pr
+    prep.pr=$w.en.and.chess.move.pr
+    det.pr=$w.en.a.chess.move.pr
+    det.pr=$w.en.an.chess.move.pr
+    det.pr=$w.en.the.chess.move.pr
+
+@describe.chess.move.fromto core.describe
+    op=chess.move
+    intent=command
+    emit="@{_} core.request action=chess.move arg.piece={p} arg.ff={ff} arg.fr={fr} arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    priority=13
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+    frames=short
+
+@describe.chess.move.fromto.p core.describe.arg
+    of=$describe.chess.move.fromto
+    name=p
+    class=lex.games.chess.pieces
+    optional=true
+
+@describe.chess.move.fromto.ff core.describe.arg
+    of=$describe.chess.move.fromto
+    name=ff
+    class=lex.games.chess.files
+
+@describe.chess.move.fromto.fr core.describe.arg
+    of=$describe.chess.move.fromto
+    name=fr
+    class=number
+
+@describe.chess.move.fromto.tf core.describe.arg
+    of=$describe.chess.move.fromto
+    name=tf
+    class=lex.games.chess.files
+
+@describe.chess.move.fromto.tr core.describe.arg
+    of=$describe.chess.move.fromto
+    name=tr
+    class=number
+
+@describe.chess.move.fromto.pr core.describe.arg
+    of=$describe.chess.move.fromto
+    name=pr
+    class=lex.games.chess.promos
+    optional=true
+
+@describe.chess.move.fromto.en core.describe.words
+    of=$describe.chess.move.fromto
+    lang=en
+    verb=$w.en.move.chess.move
+    verb=$w.en.play.chess.move
+    verb=$w.en.go.chess.move
+    verb=$w.en.put.chess.move
+    verb=$w.en.push.chess.move
+    verb=$w.en.advance.chess.move
+    verb=$w.en.bring.chess.move
+    verb=$w.en.send.chess.move
+    verb=$w.en.jump.chess.move
+    verb=$w.en.slide.chess.move
+    verb=$w.en.place.chess.move
+    det.p=$w.en.white.chess.move.p
+    det.p=$w.en.black.chess.move.p
+    det.p=$w.en.the.chess.move.p
+    det.p=$w.en.my.chess.move.p
+    det.p=$w.en.our.chess.move.p
+    det.p=$w.en.that.chess.move.p
+    det.p=$w.en.this.chess.move.p
+    det.p=$w.en.a.chess.move.p
+    det.p=$w.en.an.chess.move.p
+    det.p=$w.en.your.chess.move.p
+    prep.ff=$w.en.from.chess.move.ff
+    prep.ff=$w.en.on.chess.move.ff
+    prep.ff=$w.en.at.chess.move.ff
+    prep.ff=$w.en.square.chess.move.ff
+    prep.tf=$w.en.to.chess.move.tf
+    prep.tf=$w.en.onto.chess.move.tf
+    prep.tf=$w.en.into.chess.move.tf
+    prep.tf=$w.en.square.chess.move.tf
+    prep.pr=$w.en.promote.chess.move.pr
+    prep.pr=$w.en.promoting.chess.move.pr
+    prep.pr=$w.en.to.chess.move.pr
+    prep.pr=$w.en.into.chess.move.pr
+    prep.pr=$w.en.as.chess.move.pr
+    prep.pr=$w.en.and.chess.move.pr
+    det.pr=$w.en.a.chess.move.pr
+    det.pr=$w.en.an.chess.move.pr
+    det.pr=$w.en.the.chess.move.pr
+
+@describe.chess.move.san core.describe
+    op=chess.move
+    intent=command
+    emit="@{_} core.request action=chess.move arg.san=\"{s}\" arg.tr={tr} arg.promo={pr}"
+    priority=13
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+    frames=short
+
+@describe.chess.move.san.s core.describe.arg
+    of=$describe.chess.move.san
+    name=s
+    class=lex.games.chess.san
+
+@describe.chess.move.san.tr core.describe.arg
+    of=$describe.chess.move.san
+    name=tr
+    class=number
+
+@describe.chess.move.san.pr core.describe.arg
+    of=$describe.chess.move.san
+    name=pr
+    class=lex.games.chess.promos
+    optional=true
+
+@describe.chess.move.san.en core.describe.words
+    of=$describe.chess.move.san
+    lang=en
+    verb=$w.en.move.chess.move
+    verb=$w.en.play.chess.move
+    verb=$w.en.go.chess.move
+    verb=$w.en.put.chess.move
+    verb=$w.en.push.chess.move
+    verb=$w.en.advance.chess.move
+    verb=$w.en.bring.chess.move
+    verb=$w.en.send.chess.move
+    verb=$w.en.jump.chess.move
+    verb=$w.en.slide.chess.move
+    verb=$w.en.place.chess.move
+    prep.pr=$w.en.promote.chess.move.pr
+    prep.pr=$w.en.promoting.chess.move.pr
+    prep.pr=$w.en.to.chess.move.pr
+    prep.pr=$w.en.into.chess.move.pr
+    prep.pr=$w.en.as.chess.move.pr
+    prep.pr=$w.en.and.chess.move.pr
+    det.pr=$w.en.a.chess.move.pr
+    det.pr=$w.en.an.chess.move.pr
+    det.pr=$w.en.the.chess.move.pr
+
+@describe.chess.move.cap core.describe
+    op=chess.move
+    intent=command
+    emit="@{_} core.request action=chess.move arg.piece={p} arg.cap=true arg.tp={tp} arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    priority=13
+    bareVerb=true
+    frames=imp
+    frames=pred
+    frames=can
+
+@describe.chess.move.cap.p core.describe.arg
+    of=$describe.chess.move.cap
+    name=p
+    class=lex.games.chess.pieces
+    optional=true
+
+@describe.chess.move.cap.tp core.describe.arg
+    of=$describe.chess.move.cap
+    name=tp
+    class=lex.games.chess.pieces
+    optional=true
+
+@describe.chess.move.cap.tf core.describe.arg
+    of=$describe.chess.move.cap
+    name=tf
+    class=lex.games.chess.files
+
+@describe.chess.move.cap.tr core.describe.arg
+    of=$describe.chess.move.cap
+    name=tr
+    class=number
+
+@describe.chess.move.cap.pr core.describe.arg
+    of=$describe.chess.move.cap
+    name=pr
+    class=lex.games.chess.promos
+    optional=true
+
+@describe.chess.move.cap.en core.describe.words
+    of=$describe.chess.move.cap
+    lang=en
+    verb=$w.en.take.chess.move
+    verb=$w.en.takes.chess.move
+    verb=$w.en.capture.chess.move
+    verb=$w.en.captures.chess.move
+    verb=$w.en.x.chess.move
+    det.p=$w.en.white.chess.move.p
+    det.p=$w.en.black.chess.move.p
+    det.p=$w.en.the.chess.move.p
+    det.p=$w.en.my.chess.move.p
+    det.p=$w.en.our.chess.move.p
+    det.p=$w.en.that.chess.move.p
+    det.p=$w.en.this.chess.move.p
+    det.p=$w.en.a.chess.move.p
+    det.p=$w.en.an.chess.move.p
+    det.p=$w.en.your.chess.move.p
+    det.tp=$w.en.the.chess.move.tp
+    det.tp=$w.en.white.chess.move.tp
+    det.tp=$w.en.black.chess.move.tp
+    prep.tf=$w.en.on.chess.move.tf
+    prep.tf=$w.en.at.chess.move.tf
+    prep.tf=$w.en.square.chess.move.tf
+    prep.pr=$w.en.promote.chess.move.pr
+    prep.pr=$w.en.promoting.chess.move.pr
+    prep.pr=$w.en.to.chess.move.pr
+    prep.pr=$w.en.into.chess.move.pr
+    prep.pr=$w.en.as.chess.move.pr
+    prep.pr=$w.en.and.chess.move.pr
+    det.pr=$w.en.a.chess.move.pr
+    det.pr=$w.en.an.chess.move.pr
+    det.pr=$w.en.the.chess.move.pr
+
+@describe.chess.move.castle.k core.describe
+    op=chess.move
+    intent=command
+    emit="@{_} core.request action=chess.move arg.castle=k"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+
+@describe.chess.move.castle.k.en core.describe.words
+    of=$describe.chess.move.castle.k
+    lang=en
+    verb=$w.en.castle.chess.move
+    verb=$w.en.castling.chess.move
+    noun=$w.en.kingside.chess.move
+    noun=$w.en.short.chess.move
+
+@describe.chess.move.castle.q core.describe
+    op=chess.move
+    intent=command
+    emit="@{_} core.request action=chess.move arg.castle=q"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+
+@describe.chess.move.castle.q.en core.describe.words
+    of=$describe.chess.move.castle.q
+    lang=en
+    verb=$w.en.castle.chess.move
+    verb=$w.en.castling.chess.move
+    noun=$w.en.queenside.chess.move
+    noun=$w.en.long.chess.move
+
+@describe.chess.move.castle core.describe
+    op=chess.move
+    intent=command
+    emit="@{_} core.request action=chess.move arg.castle=any"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+
+@describe.chess.move.castle.en core.describe.words
+    of=$describe.chess.move.castle
+    lang=en
+    verb=$w.en.castle.chess.move
+    verb=$w.en.castling.chess.move
+
+@describe.chess.can.move core.describe
+    op=chess.can
+    intent=query
+    emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    bareVerb=true
+    frames=canq
+    frames=canlast
+
+@describe.chess.can.move.p core.describe.arg
+    of=$describe.chess.can.move
+    name=p
+    class=lex.games.chess.pieces
+    optional=true
+
+@describe.chess.can.move.tf core.describe.arg
+    of=$describe.chess.can.move
+    name=tf
+    class=lex.games.chess.files
+
+@describe.chess.can.move.tr core.describe.arg
+    of=$describe.chess.can.move
+    name=tr
+    class=number
+
+@describe.chess.can.move.en core.describe.words
+    of=$describe.chess.can.move
+    lang=en
+    verb=$w.en.move.chess.can
+    verb=$w.en.play.chess.can
+    verb=$w.en.go.chess.can
+    verb=$w.en.put.chess.can
+    verb=$w.en.push.chess.can
+    verb=$w.en.advance.chess.can
+    verb=$w.en.bring.chess.can
+    verb=$w.en.send.chess.can
+    verb=$w.en.jump.chess.can
+    verb=$w.en.slide.chess.can
+    verb=$w.en.place.chess.can
+    det.p=$w.en.white.chess.can.p
+    det.p=$w.en.black.chess.can.p
+    det.p=$w.en.the.chess.can.p
+    det.p=$w.en.my.chess.can.p
+    det.p=$w.en.our.chess.can.p
+    det.p=$w.en.that.chess.can.p
+    det.p=$w.en.this.chess.can.p
+    det.p=$w.en.a.chess.can.p
+    det.p=$w.en.an.chess.can.p
+    det.p=$w.en.your.chess.can.p
+    prep.tf=$w.en.to.chess.can.tf
+    prep.tf=$w.en.on.chess.can.tf
+    prep.tf=$w.en.at.chess.can.tf
+    prep.tf=$w.en.onto.chess.can.tf
+    prep.tf=$w.en.square.chess.can.tf
+
+@describe.chess.can.fromto core.describe
+    op=chess.can
+    intent=query
+    emit="@{_} core.request action=chess.can arg.piece={p} arg.ff={ff} arg.fr={fr} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    frames=canq
+
+@describe.chess.can.fromto.p core.describe.arg
+    of=$describe.chess.can.fromto
+    name=p
+    class=lex.games.chess.pieces
+    optional=true
+
+@describe.chess.can.fromto.ff core.describe.arg
+    of=$describe.chess.can.fromto
+    name=ff
+    class=lex.games.chess.files
+
+@describe.chess.can.fromto.fr core.describe.arg
+    of=$describe.chess.can.fromto
+    name=fr
+    class=number
+
+@describe.chess.can.fromto.tf core.describe.arg
+    of=$describe.chess.can.fromto
+    name=tf
+    class=lex.games.chess.files
+
+@describe.chess.can.fromto.tr core.describe.arg
+    of=$describe.chess.can.fromto
+    name=tr
+    class=number
+
+@describe.chess.can.fromto.en core.describe.words
+    of=$describe.chess.can.fromto
+    lang=en
+    verb=$w.en.move.chess.can
+    verb=$w.en.play.chess.can
+    verb=$w.en.go.chess.can
+    verb=$w.en.put.chess.can
+    verb=$w.en.push.chess.can
+    verb=$w.en.advance.chess.can
+    verb=$w.en.bring.chess.can
+    verb=$w.en.send.chess.can
+    verb=$w.en.jump.chess.can
+    verb=$w.en.slide.chess.can
+    verb=$w.en.place.chess.can
+    det.p=$w.en.white.chess.can.p
+    det.p=$w.en.black.chess.can.p
+    det.p=$w.en.the.chess.can.p
+    det.p=$w.en.my.chess.can.p
+    det.p=$w.en.our.chess.can.p
+    det.p=$w.en.that.chess.can.p
+    det.p=$w.en.this.chess.can.p
+    det.p=$w.en.a.chess.can.p
+    det.p=$w.en.an.chess.can.p
+    det.p=$w.en.your.chess.can.p
+    prep.ff=$w.en.from.chess.can.ff
+    prep.ff=$w.en.on.chess.can.ff
+    prep.ff=$w.en.at.chess.can.ff
+    prep.ff=$w.en.square.chess.can.ff
+    prep.tf=$w.en.to.chess.can.tf
+    prep.tf=$w.en.onto.chess.can.tf
+    prep.tf=$w.en.square.chess.can.tf
+
+@describe.chess.pick.piece core.describe
+    op=chess.pick
+    intent=command
+    emit="@{_} core.request action=chess.pick arg.piece={p} arg.ff={ff} arg.fr={fr}"
+    priority=13
+    bareVerb=true
+    frames=imp
+    frames=short
+
+@describe.chess.pick.piece.p core.describe.arg
+    of=$describe.chess.pick.piece
+    name=p
+    class=lex.games.chess.pieces
+    optional=true
+
+@describe.chess.pick.piece.ff core.describe.arg
+    of=$describe.chess.pick.piece
+    name=ff
+    class=lex.games.chess.files
+
+@describe.chess.pick.piece.fr core.describe.arg
+    of=$describe.chess.pick.piece
+    name=fr
+    class=number
+
+@describe.chess.pick.piece.en core.describe.words
+    of=$describe.chess.pick.piece
+    lang=en
+    verb=$w.en.use.chess.pick
+    verb=$w.en.take.chess.pick
+    verb=$w.en.play.chess.pick
+    verb=$w.en.move.chess.pick
+    verb=$w.en.choose.chess.pick
+    verb=$w.en.pick.chess.pick
+    verb=$w.en.select.chess.pick
+    verb=$w.en.meant.chess.pick
+    det.p=$w.en.the.chess.pick.p
+    det.p=$w.en.that.chess.pick.p
+    det.p=$w.en.this.chess.pick.p
+    det.p=$w.en.one.chess.pick.p
+    det.p=$w.en.piece.chess.pick.p
+    prep.ff=$w.en.on.chess.pick.ff
+    prep.ff=$w.en.from.chess.pick.ff
+    prep.ff=$w.en.at.chess.pick.ff
+    prep.ff=$w.en.in.chess.pick.ff
+    prep.ff=$w.en.square.chess.pick.ff
+
+@describe.chess.pick.ordinal core.describe
+    op=chess.pick
+    intent=command
+    emit="@{_} core.request action=chess.pick arg.ord={o}"
+    priority=13
+    bareVerb=true
+    frames=imp
+    frames=short
+
+@describe.chess.pick.ordinal.o core.describe.arg
+    of=$describe.chess.pick.ordinal
+    name=o
+    class=lex.games.chess.ordinals
+
+@describe.chess.pick.ordinal.en core.describe.words
+    of=$describe.chess.pick.ordinal
+    lang=en
+    verb=$w.en.use.chess.pick
+    verb=$w.en.take.chess.pick
+    verb=$w.en.play.chess.pick
+    verb=$w.en.move.chess.pick
+    verb=$w.en.choose.chess.pick
+    verb=$w.en.pick.chess.pick
+    verb=$w.en.select.chess.pick
+    verb=$w.en.meant.chess.pick
+    det.o=$w.en.the.chess.pick.o
+    unit.o=$w.en.one.chess.pick.o
+    unit.o=$w.en.piece.chess.pick.o
+    unit.o=$w.en.option.chess.pick.o
+
+@describe.chess.promote core.describe
+    op=chess.promote
+    intent=command
+    emit="@{_} core.request action=chess.promote arg.piece={pr}"
+    priority=13
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+    frames=short
+
+@describe.chess.promote.pr core.describe.arg
+    of=$describe.chess.promote
+    name=pr
+    class=lex.games.chess.promos
+
+@describe.chess.promote.en core.describe.words
+    of=$describe.chess.promote
+    lang=en
+    verb=$w.en.promote.chess.promote
+    verb=$w.en.make.chess.promote
+    verb=$w.en.turn.chess.promote
+    verb=$w.en.change.chess.promote
+    verb=$w.en.upgrade.chess.promote
+    verb=$w.en.choose.chess.promote
+    verb=$w.en.pick.chess.promote
+    verb=$w.en.take.chess.promote
+    verb=$w.en.underpromote.chess.promote
+    prep.pr=$w.en.to.chess.promote.pr
+    prep.pr=$w.en.into.chess.promote.pr
+    prep.pr=$w.en.as.chess.promote.pr
+    prep.pr=$w.en.for.chess.promote.pr
+    prep.pr=$w.en.with.chess.promote.pr
+    det.pr=$w.en.a.chess.promote.pr
+    det.pr=$w.en.an.chess.promote.pr
+    det.pr=$w.en.the.chess.promote.pr
+    det.pr=$w.en.it.chess.promote.pr
+
+@describe.chess.new core.describe
+    op=chess.new
+    intent=command
+    emit="@{_} core.request action=chess.new"
+    priority=13
+    frames=phr
+    frames=imp
+
+@describe.chess.new.en core.describe.words
+    of=$describe.chess.new
+    lang=en
+    phrase=$phrase.lang.intent.newgame
+    verb=$w.en.start.chess.new
+    verb=$w.en.play.chess.new
+    verb=$w.en.begin.chess.new
+    verb=$w.en.restart.chess.new
+    verb=$w.en.reset.chess.new
+    noun=$w.en.chess.chess.new
+    noun=$w.en.game.chess.new
+
+@describe.chess.hint core.describe
+    op=chess.hint
+    intent=query
+    emit="@{_} core.request action=chess.hint"
+    kind=request
+    priority=13
+    frames=phr
+
+@describe.chess.hint.en core.describe.words
+    of=$describe.chess.hint
+    lang=en
+    phrase=$phrase.lang.intent.hint
+    phrase=$phrase.lang.intent.bestmove
+    phrase=$phrase.lang.q.suggest_move
+
+@describe.chess.resign core.describe
+    op=chess.resign
+    intent=command
+    emit="@{_} core.request action=chess.resign"
+    priority=13
+    frames=phr
+
+@describe.chess.resign.en core.describe.words
+    of=$describe.chess.resign
+    lang=en
+    phrase=$phrase.lang.intent.giveup
+
+@describe.chess.undo core.describe
+    op=chess.undo
+    intent=command
+    emit="@{_} core.request action=chess.undo"
+    priority=13
+    frames=phr
+
+@describe.chess.undo.en core.describe.words
+    of=$describe.chess.undo
+    lang=en
+    phrase=$phrase.lang.intent.undo
+
+@describe.chess.last core.describe
+    op=chess.last
+    intent=query
+    emit="@{_} core.request action=chess.last"
+    kind=request
+    priority=13
+    frames=phr
+
+@describe.chess.last.en core.describe.words
+    of=$describe.chess.last
+    lang=en
+    phrase=$phrase.lang.intent.lastmove
+
+@describe.chess.status core.describe
+    op=chess.status
+    intent=query
+    emit="@{_} core.request action=chess.status"
+    kind=request
+    priority=13
+    frames=phr
+
+@describe.chess.status.en core.describe.words
+    of=$describe.chess.status
+    lang=en
+    phrase=$phrase.lang.intent.status
+
+@describe.chess.turn core.describe
+    op=chess.turn
+    intent=query
+    emit="@{_} core.request action=chess.turn"
+    kind=request
+    priority=13
+    frames=phr
+
+@describe.chess.turn.en core.describe.words
+    of=$describe.chess.turn
+    lang=en
+    phrase=$phrase.lang.intent.whoseturn
+
+@describe.chess.count.moves core.describe
+    op=chess.history
+    intent=query
+    emit="@{_} core.request action=chess.history arg.count=true"
+    kind=request
+    priority=13
+    frames=phr
+
+@describe.chess.count.moves.en core.describe.words
+    of=$describe.chess.count.moves
+    lang=en
+    phrase=$phrase.lang.intent.howmanymoves
+
+@describe.chess.engineMove core.describe
+    op=chess.engineMove
+    intent=command
+    emit="@{_} core.request action=chess.engineMove"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.chess.engineMove.en core.describe.words
+    of=$describe.chess.engineMove
+    lang=en
+    verb=$w.en.make.chess.engineMove
+    verb=$w.en.play.chess.engineMove
+    verb=$w.en.take.chess.engineMove
+    verb=$w.en.do.chess.engineMove
+    noun=$w.en.move.chess.engineMove
+    noun=$w.en.turn.chess.engineMove
+    subject=$w.en.you.chess.engineMove
+
+@describe.chess.draw core.describe
+    op=chess.draw
+    intent=command
+    emit="@{_} core.request action=chess.draw"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+
+@describe.chess.draw.en core.describe.words
+    of=$describe.chess.draw
+    lang=en
+    verb=$w.en.offer.chess.draw
+    verb=$w.en.propose.chess.draw
+    verb=$w.en.claim.chess.draw
+    verb=$w.en.accept.chess.draw
+    verb=$w.en.take.chess.draw
+    noun=$w.en.draw.chess.draw
+    noun=$w.en.tie.chess.draw
+
+@describe.chess.flip core.describe
+    op=chess.flip
+    intent=command
+    emit="@{_} core.request action=chess.flip"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.chess.flip.en core.describe.words
+    of=$describe.chess.flip
+    lang=en
+    verb=$w.en.flip.chess.flip
+    verb=$w.en.rotate.chess.flip
+    verb=$w.en.turn.chess.flip
+    verb=$w.en.reverse.chess.flip
+    verb=$w.en.swap.chess.flip
+    noun=$w.en.board.chess.flip
+
+@describe.chess.fen core.describe
+    op=chess.fen
+    intent=query
+    emit="@{_} core.request action=chess.fen"
+    kind=request
+    priority=13
+    frames=qnoun
+    frames=tell
+    frames=bare
+
+@describe.chess.fen.en core.describe.words
+    of=$describe.chess.fen
+    lang=en
+    noun=$w.en.fen.chess.fen
+
+@describe.chess.side.color core.describe
+    op=chess.side
+    intent=command
+    emit="@{_} core.request action=chess.side arg.color={c}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+
+@describe.chess.side.color.c core.describe.arg
+    of=$describe.chess.side.color
+    name=c
+    class=lex.games.chess.colors
+
+@describe.chess.side.color.en core.describe.words
+    of=$describe.chess.side.color
+    lang=en
+    verb=$w.en.play.chess.side
+    verb=$w.en.be.chess.side
+    verb=$w.en.take.chess.side
+    verb=$w.en.choose.chess.side
+    verb=$w.en.pick.chess.side
+    subject=$w.en.i.chess.side
+    subject=$w.en.we.chess.side
+    prep.c=$w.en.as.chess.side.c
+    prep.c=$w.en.with.chess.side.c
+    det.c=$w.en.the.chess.side.c
+
+@describe.chess.side.swap core.describe
+    op=chess.side
+    intent=command
+    emit="@{_} core.request action=chess.side arg.swap=true"
+    priority=13
+    frames=imp
+    frames=can
+
+@describe.chess.side.swap.en core.describe.words
+    of=$describe.chess.side.swap
+    lang=en
+    verb=$w.en.switch.chess.side
+    verb=$w.en.swap.chess.side
+    verb=$w.en.change.chess.side
+    noun=$w.en.sides.chess.side
+    noun=$w.en.colors.chess.side
+    noun=$w.en.colours.chess.side
+
+@describe.chess.level.set core.describe
+    op=chess.level
+    intent=command
+    emit="@{_} core.request action=chess.level arg.n={n}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.chess.level.set.n core.describe.arg
+    of=$describe.chess.level.set
+    name=n
+    class=number
+
+@describe.chess.level.set.en core.describe.words
+    of=$describe.chess.level.set
+    lang=en
+    verb=$w.en.set.chess.level
+    verb=$w.en.change.chess.level
+    verb=$w.en.switch.chess.level
+    verb=$w.en.make.chess.level
+    verb=$w.en.use.chess.level
+    noun=$w.en.level.chess.level
+    noun=$w.en.strength.chess.level
+    noun=$w.en.difficulty.chess.level
+    prep.n=$w.en.to.chess.level.n
+    prep.n=$w.en.at.chess.level.n
+
+@describe.chess.level.name core.describe
+    op=chess.level
+    intent=command
+    emit="@{_} core.request action=chess.level arg.name={l}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.chess.level.name.l core.describe.arg
+    of=$describe.chess.level.name
+    name=l
+    class=lex.games.chess.strengths
+
+@describe.chess.level.name.en core.describe.words
+    of=$describe.chess.level.name
+    lang=en
+    verb=$w.en.set.chess.level
+    verb=$w.en.change.chess.level
+    verb=$w.en.switch.chess.level
+    verb=$w.en.make.chess.level
+    verb=$w.en.play.chess.level
+    verb=$w.en.go.chess.level
+    verb=$w.en.use.chess.level
+    noun=$w.en.level.chess.level
+    noun=$w.en.strength.chess.level
+    noun=$w.en.difficulty.chess.level
+    noun=$w.en.it.chess.level
+    prep.l=$w.en.to.chess.level.l
+    prep.l=$w.en.at.chess.level.l
+    det.l=$w.en.the.chess.level.l
+
+@describe.chess.level.ask core.describe
+    op=chess.level
+    intent=query
+    emit="@{_} core.request action=chess.level"
+    kind=request
+    priority=13
+    frames=qnoun
+    frames=tell
+    frames=ask
+
+@describe.chess.level.ask.en core.describe.words
+    of=$describe.chess.level.ask
+    lang=en
+    noun=$w.en.level.chess.level
+    noun=$w.en.strength.chess.level
+    noun=$w.en.difficulty.chess.level
+    ask=$w.en.what.chess.level
+    ask=$w.en.which.chess.level
+
+@describe.chess.level.easier core.describe
+    op=chess.level
+    intent=command
+    emit="@{_} core.request action=chess.level arg.name=easier"
+    priority=13
+    frames=phr
+
+@describe.chess.level.easier.en core.describe.words
+    of=$describe.chess.level.easier
+    lang=en
+    phrase=$phrase.lang.intent.easier
+
+@describe.chess.level.harder core.describe
+    op=chess.level
+    intent=command
+    emit="@{_} core.request action=chess.level arg.name=harder"
+    priority=13
+    frames=phr
+
+@describe.chess.level.harder.en core.describe.words
+    of=$describe.chess.level.harder
+    lang=en
+    phrase=$phrase.lang.intent.harder
+
+@describe.chess.describe core.describe
+    op=chess.describe
+    intent=query
+    emit="@{_} core.request action=chess.describe"
+    kind=request
+    priority=13
+    frames=qnoun
+    frames=tell
+    frames=imp
+    frames=bare
+
+@describe.chess.describe.en core.describe.words
+    of=$describe.chess.describe
+    lang=en
+    verb=$w.en.describe.chess.describe
+    verb=$w.en.read.chess.describe
+    verb=$w.en.show.chess.describe
+    verb=$w.en.display.chess.describe
+    verb=$w.en.list.chess.describe
+    verb=$w.en.narrate.chess.describe
+    noun=$w.en.board.chess.describe
+    noun=$w.en.position.chess.describe
+
+@describe.chess.square core.describe
+    op=chess.square
+    intent=query
+    emit="@{_} core.request action=chess.square arg.ff={ff} arg.fr={fr}"
+    kind=request
+    priority=13
+    frames=qnoun
+    frames=tell
+    frames=ask
+
+@describe.chess.square.ff core.describe.arg
+    of=$describe.chess.square
+    name=ff
+    class=lex.games.chess.files
+
+@describe.chess.square.fr core.describe.arg
+    of=$describe.chess.square
+    name=fr
+    class=number
+
+@describe.chess.square.en core.describe.words
+    of=$describe.chess.square
+    lang=en
+    noun=$w.en.piece.chess.square
+    ask=$w.en.what.chess.square
+    ask=$w.en.which.chess.square
+    prep.ff=$w.en.on.chess.square.ff
+    prep.ff=$w.en.at.chess.square.ff
+    prep.ff=$w.en.in.chess.square.ff
+    prep.ff=$w.en.square.chess.square.ff
+
+@describe.chess.moves.piece core.describe
+    op=chess.moves
+    intent=query
+    emit="@{_} core.request action=chess.moves arg.piece={p}"
+    kind=request
+    priority=13
+    frames=qnoun
+    frames=tell
+    frames=imp
+
+@describe.chess.moves.piece.p core.describe.arg
+    of=$describe.chess.moves.piece
+    name=p
+    class=lex.games.chess.pieces
+
+@describe.chess.moves.piece.en core.describe.words
+    of=$describe.chess.moves.piece
+    lang=en
+    verb=$w.en.show.chess.moves
+    verb=$w.en.list.chess.moves
+    verb=$w.en.give.chess.moves
+    verb=$w.en.tell.chess.moves
+    noun=$w.en.moves.chess.moves
+    noun=$w.en.options.chess.moves
+    prep.p=$w.en.for.chess.moves.p
+    prep.p=$w.en.of.chess.moves.p
+    prep.p=$w.en.with.chess.moves.p
+    det.p=$w.en.white.chess.moves.p
+    det.p=$w.en.black.chess.moves.p
+    det.p=$w.en.the.chess.moves.p
+    det.p=$w.en.my.chess.moves.p
+    det.p=$w.en.our.chess.moves.p
+    det.p=$w.en.that.chess.moves.p
+    det.p=$w.en.this.chess.moves.p
+    det.p=$w.en.a.chess.moves.p
+    det.p=$w.en.an.chess.moves.p
+    det.p=$w.en.your.chess.moves.p
+
+@describe.chess.moves.all core.describe
+    op=chess.moves
+    intent=query
+    emit="@{_} core.request action=chess.moves arg.all=true"
+    kind=request
+    priority=13
+    frames=qnoun
+    frames=tell
+    frames=imp
+
+@describe.chess.moves.all.en core.describe.words
+    of=$describe.chess.moves.all
+    lang=en
+    verb=$w.en.show.chess.moves
+    verb=$w.en.list.chess.moves
+    verb=$w.en.give.chess.moves
+    verb=$w.en.tell.chess.moves
+    noun=$w.en.moves.chess.moves
+    noun=$w.en.options.chess.moves
+    rest=$w.en.legal.chess.moves
+    rest=$w.en.possible.chess.moves
+    rest=$w.en.available.chess.moves
+
+@describe.chess.where core.describe
+    op=chess.where
+    intent=query
+    emit="@{_} core.request action=chess.where arg.o={o} arg.piece={p}"
+    kind=request
+    priority=13
+    frames=ask
+    frames=imp
+
+@describe.chess.where.o core.describe.arg
+    of=$describe.chess.where
+    name=o
+    class=lex.games.chess.owners
+    optional=true
+
+@describe.chess.where.p core.describe.arg
+    of=$describe.chess.where
+    name=p
+    class=lex.games.chess.pieces
+
+@describe.chess.where.en core.describe.words
+    of=$describe.chess.where
+    lang=en
+    verb=$w.en.show.chess.where
+    verb=$w.en.find.chess.where
+    verb=$w.en.locate.chess.where
+    verb=$w.en.highlight.chess.where
+    ask=$w.en.where_is.chess.where
+    ask=$w.en.where_are.chess.where
+
+@describe.chess.count.pieces core.describe
+    op=chess.count
+    intent=query
+    emit="@{_} core.request action=chess.count arg.piece={p} arg.who={w}"
+    kind=request
+    priority=13
+    frames=ask
+    frames=imp
+
+@describe.chess.count.pieces.p core.describe.arg
+    of=$describe.chess.count.pieces
+    name=p
+    class=lex.games.chess.pieces
+
+@describe.chess.count.pieces.w core.describe.arg
+    of=$describe.chess.count.pieces
+    name=w
+    class=lex.games.chess.subjects
+    optional=true
+
+@describe.chess.count.pieces.en core.describe.words
+    of=$describe.chess.count.pieces
+    lang=en
+    verb=$w.en.count.chess.count
+    verb=$w.en.tally.chess.count
+    ask=$w.en.how_many.chess.count
+
+@describe.chess.lost core.describe
+    op=chess.lost
+    intent=query
+    emit="@{_} core.request action=chess.lost arg.who={w}"
+    kind=request
+    priority=13
+    frames=ask
+
+@describe.chess.lost.w core.describe.arg
+    of=$describe.chess.lost
+    name=w
+    class=lex.games.chess.subjects
+
+@describe.chess.lost.en core.describe.words
+    of=$describe.chess.lost
+    lang=en
+    tverb=$w.en.lose.chess.lost
+    tverb=$w.en.capture.chess.lost
+    ask=$w.en.which_pieces_did.chess.lost
+    ask=$w.en.what_did.chess.lost
+
+@describe.chess.check core.describe
+    op=chess.check
+    intent=query
+    emit="@{_} core.request action=chess.check arg.k={k}"
+    kind=request
+    priority=13
+    frames=ask
+
+@describe.chess.check.k core.describe.arg
+    of=$describe.chess.check
+    name=k
+    class=lex.games.chess.checkwords
+
+@describe.chess.check.en core.describe.words
+    of=$describe.chess.check
+    lang=en
+    noun=$w.en.king.chess.check
+    ask=$w.en.is.chess.check
+    ask=$w.en.am.chess.check
+    ask=$w.en.are.chess.check
+    ask=$w.en.who_is.chess.check
+    prep.k=$w.en.in.chess.check.k
+    prep.k=$w.en.under.chess.check.k
+    prep.k=$w.en.giving.chess.check.k
+
+@w.en.move.chess.move core.word text=move means=chess.move
+@w.en.play.chess.move core.word text=play means=chess.move
+@w.en.go.chess.move core.word text=go means=chess.move
+@w.en.put.chess.move core.word text=put means=chess.move
+@w.en.push.chess.move core.word text=push means=chess.move
+@w.en.advance.chess.move core.word text=advance means=chess.move
+@w.en.bring.chess.move core.word text=bring means=chess.move
+@w.en.send.chess.move core.word text=send means=chess.move
+@w.en.jump.chess.move core.word text=jump means=chess.move
+@w.en.slide.chess.move core.word text=slide means=chess.move
+@w.en.place.chess.move core.word text=place means=chess.move
+@w.en.white.chess.move.p core.word text=white means=chess.move.p
+@w.en.black.chess.move.p core.word text=black means=chess.move.p
+@w.en.the.chess.move.p core.word text=the means=chess.move.p
+@w.en.my.chess.move.p core.word text=my means=chess.move.p
+@w.en.our.chess.move.p core.word text=our means=chess.move.p
+@w.en.that.chess.move.p core.word text=that means=chess.move.p
+@w.en.this.chess.move.p core.word text=this means=chess.move.p
+@w.en.a.chess.move.p core.word text=a means=chess.move.p
+@w.en.an.chess.move.p core.word text=an means=chess.move.p
+@w.en.your.chess.move.p core.word text=your means=chess.move.p
+@w.en.to.chess.move.tf core.word text=to means=chess.move.tf
+@w.en.on.chess.move.tf core.word text=on means=chess.move.tf
+@w.en.at.chess.move.tf core.word text=at means=chess.move.tf
+@w.en.onto.chess.move.tf core.word text=onto means=chess.move.tf
+@w.en.into.chess.move.tf core.word text=into means=chess.move.tf
+@w.en.square.chess.move.tf core.word text=square means=chess.move.tf
+@w.en.promote.chess.move.pr core.word text=promote means=chess.move.pr
+@w.en.promoting.chess.move.pr core.word text=promoting means=chess.move.pr
+@w.en.to.chess.move.pr core.word text=to means=chess.move.pr
+@w.en.into.chess.move.pr core.word text=into means=chess.move.pr
+@w.en.as.chess.move.pr core.word text=as means=chess.move.pr
+@w.en.and.chess.move.pr core.word text=and means=chess.move.pr
+@w.en.a.chess.move.pr core.word text=a means=chess.move.pr
+@w.en.an.chess.move.pr core.word text=an means=chess.move.pr
+@w.en.the.chess.move.pr core.word text=the means=chess.move.pr
+@w.en.from.chess.move.ff core.word text=from means=chess.move.ff
+@w.en.on.chess.move.ff core.word text=on means=chess.move.ff
+@w.en.at.chess.move.ff core.word text=at means=chess.move.ff
+@w.en.square.chess.move.ff core.word text=square means=chess.move.ff
+@w.en.take.chess.move core.word text=take means=chess.move
+@w.en.takes.chess.move core.word text=takes means=chess.move
+@w.en.capture.chess.move core.word text=capture means=chess.move
+@w.en.captures.chess.move core.word text=captures means=chess.move
+@w.en.x.chess.move core.word text=x means=chess.move
+@w.en.the.chess.move.tp core.word text=the means=chess.move.tp
+@w.en.white.chess.move.tp core.word text=white means=chess.move.tp
+@w.en.black.chess.move.tp core.word text=black means=chess.move.tp
+@w.en.castle.chess.move core.word text=castle means=chess.move
+@w.en.castling.chess.move core.word text=castling means=chess.move
+@w.en.kingside.chess.move core.word text=kingside means=chess.move
+@w.en.short.chess.move core.word text=short means=chess.move
+@w.en.queenside.chess.move core.word text=queenside means=chess.move
+@w.en.long.chess.move core.word text=long means=chess.move
+@w.en.move.chess.can core.word text=move means=chess.can
+@w.en.play.chess.can core.word text=play means=chess.can
+@w.en.go.chess.can core.word text=go means=chess.can
+@w.en.put.chess.can core.word text=put means=chess.can
+@w.en.push.chess.can core.word text=push means=chess.can
+@w.en.advance.chess.can core.word text=advance means=chess.can
+@w.en.bring.chess.can core.word text=bring means=chess.can
+@w.en.send.chess.can core.word text=send means=chess.can
+@w.en.jump.chess.can core.word text=jump means=chess.can
+@w.en.slide.chess.can core.word text=slide means=chess.can
+@w.en.place.chess.can core.word text=place means=chess.can
+@w.en.white.chess.can.p core.word text=white means=chess.can.p
+@w.en.black.chess.can.p core.word text=black means=chess.can.p
+@w.en.the.chess.can.p core.word text=the means=chess.can.p
+@w.en.my.chess.can.p core.word text=my means=chess.can.p
+@w.en.our.chess.can.p core.word text=our means=chess.can.p
+@w.en.that.chess.can.p core.word text=that means=chess.can.p
+@w.en.this.chess.can.p core.word text=this means=chess.can.p
+@w.en.a.chess.can.p core.word text=a means=chess.can.p
+@w.en.an.chess.can.p core.word text=an means=chess.can.p
+@w.en.your.chess.can.p core.word text=your means=chess.can.p
+@w.en.to.chess.can.tf core.word text=to means=chess.can.tf
+@w.en.on.chess.can.tf core.word text=on means=chess.can.tf
+@w.en.at.chess.can.tf core.word text=at means=chess.can.tf
+@w.en.onto.chess.can.tf core.word text=onto means=chess.can.tf
+@w.en.square.chess.can.tf core.word text=square means=chess.can.tf
+@w.en.from.chess.can.ff core.word text=from means=chess.can.ff
+@w.en.on.chess.can.ff core.word text=on means=chess.can.ff
+@w.en.at.chess.can.ff core.word text=at means=chess.can.ff
+@w.en.square.chess.can.ff core.word text=square means=chess.can.ff
+@w.en.use.chess.pick core.word text=use means=chess.pick
+@w.en.take.chess.pick core.word text=take means=chess.pick
+@w.en.play.chess.pick core.word text=play means=chess.pick
+@w.en.move.chess.pick core.word text=move means=chess.pick
+@w.en.choose.chess.pick core.word text=choose means=chess.pick
+@w.en.pick.chess.pick core.word text=pick means=chess.pick
+@w.en.select.chess.pick core.word text=select means=chess.pick
+@w.en.meant.chess.pick core.word text=meant means=chess.pick
+@w.en.the.chess.pick.p core.word text=the means=chess.pick.p
+@w.en.that.chess.pick.p core.word text=that means=chess.pick.p
+@w.en.this.chess.pick.p core.word text=this means=chess.pick.p
+@w.en.one.chess.pick.p core.word text=one means=chess.pick.p
+@w.en.piece.chess.pick.p core.word text=piece means=chess.pick.p
+@w.en.on.chess.pick.ff core.word text=on means=chess.pick.ff
+@w.en.from.chess.pick.ff core.word text=from means=chess.pick.ff
+@w.en.at.chess.pick.ff core.word text=at means=chess.pick.ff
+@w.en.in.chess.pick.ff core.word text=in means=chess.pick.ff
+@w.en.square.chess.pick.ff core.word text=square means=chess.pick.ff
+@w.en.the.chess.pick.o core.word text=the means=chess.pick.o
+@w.en.one.chess.pick.o core.word text=one means=chess.pick.o
+@w.en.piece.chess.pick.o core.word text=piece means=chess.pick.o
+@w.en.option.chess.pick.o core.word text=option means=chess.pick.o
+@w.en.promote.chess.promote core.word text=promote means=chess.promote
+@w.en.make.chess.promote core.word text=make means=chess.promote
+@w.en.turn.chess.promote core.word text=turn means=chess.promote
+@w.en.change.chess.promote core.word text=change means=chess.promote
+@w.en.upgrade.chess.promote core.word text=upgrade means=chess.promote
+@w.en.choose.chess.promote core.word text=choose means=chess.promote
+@w.en.pick.chess.promote core.word text=pick means=chess.promote
+@w.en.take.chess.promote core.word text=take means=chess.promote
+@w.en.underpromote.chess.promote core.word text=underpromote means=chess.promote
+@w.en.to.chess.promote.pr core.word text=to means=chess.promote.pr
+@w.en.into.chess.promote.pr core.word text=into means=chess.promote.pr
+@w.en.as.chess.promote.pr core.word text=as means=chess.promote.pr
+@w.en.for.chess.promote.pr core.word text=for means=chess.promote.pr
+@w.en.with.chess.promote.pr core.word text=with means=chess.promote.pr
+@w.en.a.chess.promote.pr core.word text=a means=chess.promote.pr
+@w.en.an.chess.promote.pr core.word text=an means=chess.promote.pr
+@w.en.the.chess.promote.pr core.word text=the means=chess.promote.pr
+@w.en.it.chess.promote.pr core.word text=it means=chess.promote.pr
+@w.en.start.chess.new core.word text=start means=chess.new
+@w.en.play.chess.new core.word text=play means=chess.new
+@w.en.begin.chess.new core.word text=begin means=chess.new
+@w.en.restart.chess.new core.word text=restart means=chess.new
+@w.en.reset.chess.new core.word text=reset means=chess.new
+@w.en.chess.chess.new core.word text=chess means=chess.new
+@w.en.game.chess.new core.word text=game means=chess.new
+@w.en.make.chess.engineMove core.word text=make means=chess.engineMove
+@w.en.play.chess.engineMove core.word text=play means=chess.engineMove
+@w.en.take.chess.engineMove core.word text=take means=chess.engineMove
+@w.en.do.chess.engineMove core.word text=do means=chess.engineMove
+@w.en.move.chess.engineMove core.word text=move means=chess.engineMove
+@w.en.turn.chess.engineMove core.word text=turn means=chess.engineMove
+@w.en.you.chess.engineMove core.word text=you means=chess.engineMove
+@w.en.offer.chess.draw core.word text=offer means=chess.draw
+@w.en.propose.chess.draw core.word text=propose means=chess.draw
+@w.en.claim.chess.draw core.word text=claim means=chess.draw
+@w.en.accept.chess.draw core.word text=accept means=chess.draw
+@w.en.take.chess.draw core.word text=take means=chess.draw
+@w.en.draw.chess.draw core.word text=draw means=chess.draw
+@w.en.tie.chess.draw core.word text=tie means=chess.draw
+@w.en.flip.chess.flip core.word text=flip means=chess.flip
+@w.en.rotate.chess.flip core.word text=rotate means=chess.flip
+@w.en.turn.chess.flip core.word text=turn means=chess.flip
+@w.en.reverse.chess.flip core.word text=reverse means=chess.flip
+@w.en.swap.chess.flip core.word text=swap means=chess.flip
+@w.en.board.chess.flip core.word text=board means=chess.flip
+@w.en.fen.chess.fen core.word text=fen means=chess.fen
+@w.en.play.chess.side core.word text=play means=chess.side
+@w.en.be.chess.side core.word text=be means=chess.side
+@w.en.take.chess.side core.word text=take means=chess.side
+@w.en.choose.chess.side core.word text=choose means=chess.side
+@w.en.pick.chess.side core.word text=pick means=chess.side
+@w.en.i.chess.side core.word text=i means=chess.side
+@w.en.we.chess.side core.word text=we means=chess.side
+@w.en.as.chess.side.c core.word text=as means=chess.side.c
+@w.en.with.chess.side.c core.word text=with means=chess.side.c
+@w.en.the.chess.side.c core.word text=the means=chess.side.c
+@w.en.switch.chess.side core.word text=switch means=chess.side
+@w.en.swap.chess.side core.word text=swap means=chess.side
+@w.en.change.chess.side core.word text=change means=chess.side
+@w.en.sides.chess.side core.word text=sides means=chess.side
+@w.en.colors.chess.side core.word text=colors means=chess.side
+@w.en.colours.chess.side core.word text=colours means=chess.side
+@w.en.set.chess.level core.word text=set means=chess.level
+@w.en.change.chess.level core.word text=change means=chess.level
+@w.en.switch.chess.level core.word text=switch means=chess.level
+@w.en.make.chess.level core.word text=make means=chess.level
+@w.en.use.chess.level core.word text=use means=chess.level
+@w.en.level.chess.level core.word text=level means=chess.level
+@w.en.strength.chess.level core.word text=strength means=chess.level
+@w.en.difficulty.chess.level core.word text=difficulty means=chess.level
+@w.en.to.chess.level.n core.word text=to means=chess.level.n
+@w.en.at.chess.level.n core.word text=at means=chess.level.n
+@w.en.play.chess.level core.word text=play means=chess.level
+@w.en.go.chess.level core.word text=go means=chess.level
+@w.en.it.chess.level core.word text=it means=chess.level
+@w.en.to.chess.level.l core.word text=to means=chess.level.l
+@w.en.at.chess.level.l core.word text=at means=chess.level.l
+@w.en.the.chess.level.l core.word text=the means=chess.level.l
+@w.en.what.chess.level core.word text=what means=chess.level
+@w.en.which.chess.level core.word text=which means=chess.level
+@w.en.describe.chess.describe core.word text=describe means=chess.describe
+@w.en.read.chess.describe core.word text=read means=chess.describe
+@w.en.show.chess.describe core.word text=show means=chess.describe
+@w.en.display.chess.describe core.word text=display means=chess.describe
+@w.en.list.chess.describe core.word text=list means=chess.describe
+@w.en.narrate.chess.describe core.word text=narrate means=chess.describe
+@w.en.board.chess.describe core.word text=board means=chess.describe
+@w.en.position.chess.describe core.word text=position means=chess.describe
+@w.en.piece.chess.square core.word text=piece means=chess.square
+@w.en.what.chess.square core.word text=what means=chess.square
+@w.en.which.chess.square core.word text=which means=chess.square
+@w.en.on.chess.square.ff core.word text=on means=chess.square.ff
+@w.en.at.chess.square.ff core.word text=at means=chess.square.ff
+@w.en.in.chess.square.ff core.word text=in means=chess.square.ff
+@w.en.square.chess.square.ff core.word text=square means=chess.square.ff
+@w.en.show.chess.moves core.word text=show means=chess.moves
+@w.en.list.chess.moves core.word text=list means=chess.moves
+@w.en.give.chess.moves core.word text=give means=chess.moves
+@w.en.tell.chess.moves core.word text=tell means=chess.moves
+@w.en.moves.chess.moves core.word text=moves means=chess.moves
+@w.en.options.chess.moves core.word text=options means=chess.moves
+@w.en.for.chess.moves.p core.word text=for means=chess.moves.p
+@w.en.of.chess.moves.p core.word text=of means=chess.moves.p
+@w.en.with.chess.moves.p core.word text=with means=chess.moves.p
+@w.en.white.chess.moves.p core.word text=white means=chess.moves.p
+@w.en.black.chess.moves.p core.word text=black means=chess.moves.p
+@w.en.the.chess.moves.p core.word text=the means=chess.moves.p
+@w.en.my.chess.moves.p core.word text=my means=chess.moves.p
+@w.en.our.chess.moves.p core.word text=our means=chess.moves.p
+@w.en.that.chess.moves.p core.word text=that means=chess.moves.p
+@w.en.this.chess.moves.p core.word text=this means=chess.moves.p
+@w.en.a.chess.moves.p core.word text=a means=chess.moves.p
+@w.en.an.chess.moves.p core.word text=an means=chess.moves.p
+@w.en.your.chess.moves.p core.word text=your means=chess.moves.p
+@w.en.legal.chess.moves core.word text=legal means=chess.moves
+@w.en.possible.chess.moves core.word text=possible means=chess.moves
+@w.en.available.chess.moves core.word text=available means=chess.moves
+@w.en.show.chess.where core.word text=show means=chess.where
+@w.en.find.chess.where core.word text=find means=chess.where
+@w.en.locate.chess.where core.word text=locate means=chess.where
+@w.en.highlight.chess.where core.word text=highlight means=chess.where
+@w.en.where_is.chess.where core.word text="where is" means=chess.where
+@w.en.where_are.chess.where core.word text="where are" means=chess.where
+@w.en.count.chess.count core.word text=count means=chess.count
+@w.en.tally.chess.count core.word text=tally means=chess.count
+@w.en.how_many.chess.count core.word text="how many" means=chess.count
+@w.en.lose.chess.lost core.word text=lose means=chess.lost
+@w.en.capture.chess.lost core.word text=capture means=chess.lost
+@w.en.which_pieces_did.chess.lost core.word text="which pieces did" means=chess.lost
+@w.en.what_did.chess.lost core.word text="what did" means=chess.lost
+@w.en.king.chess.check core.word text=king means=chess.check
+@w.en.is.chess.check core.word text=is means=chess.check
+@w.en.am.chess.check core.word text=am means=chess.check
+@w.en.are.chess.check core.word text=are means=chess.check
+@w.en.who_is.chess.check core.word text="who is" means=chess.check
+@w.en.in.chess.check.k core.word text=in means=chess.check.k
+@w.en.under.chess.check.k core.word text=under means=chess.check.k
+@w.en.giving.chess.check.k core.word text=giving means=chess.check.k

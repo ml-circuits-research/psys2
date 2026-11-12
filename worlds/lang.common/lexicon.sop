@@ -2267,12 +2267,6 @@
     alt=any_advice
     alt=some_advice
     alt=give_me_some_advice
-    alt=help_me
-    alt=help_me_out
-    alt=i_need_help
-    alt=some_help
-    alt=a_little_help
-    alt=can_you_help_me
     alt=i_am_stuck
     alt=im_stuck
     alt=i_am_lost
@@ -2928,3 +2922,27 @@
     alt=what_age_am_i
     alt=do_you_know_how_old_i_am
     alt=how_old_do_you_think_i_am
+
+@phrase.lang.intent.whoseturn core.phrase
+    doc="Ask whose turn it is in a game."
+    alt=whose_turn_is_it
+    alt=whose_turn
+    alt=whose_move_is_it
+    alt=whose_move
+    alt=whose_go_is_it
+    alt=who_is_next
+    alt=whos_next
+    alt=who_s_next
+    alt=who_moves_next
+    alt=who_plays_next
+    alt=who_plays_now
+    alt=who_is_to_move
+    alt=who_to_move
+    alt=whos_up_now
+    alt=is_it_my_turn
+    alt=is_it_your_turn
+    alt=my_turn
+    alt=your_turn
+    alt=am_i_to_move
+    alt=do_i_move_now
+    alt=do_i_play_now
