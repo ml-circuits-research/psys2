@@ -66,7 +66,7 @@ const segInfo = (x) => ({
   candidates: (x.worlds ?? []).map((w) => `${w.id}:${w.score}`), contested: !!x.routing?.contested, tier: x.routing?.tierName ?? null,
   winner: x.routing?.winner?.worldId ?? null, runnerUp: x.routing?.runnerUp?.worldId ?? null, tabWorld: x.routing?.context?.tabWorld ?? null,
   activeTab: x.routing?.context?.activeTab ?? null, errors: (x.errors ?? []).slice(0, 2).map((e) => String(e).slice(0, 120)),
-  alts: (x.alternatives ?? []).length, partial: !!x.partial, nxFrom: x.nxFrom ?? null,
+  alts: (x.alternatives ?? []).length, partial: !!x.partial, nxFrom: x.nxFrom ?? null, wa: x.wa ?? null, veto: x.veto ?? null, pick: x.pick ?? null,
 });
 
 function newSession(env, c) {
@@ -202,6 +202,7 @@ if (!isMainThread) {
   });
 } else if (process.argv[1] && resolve(process.argv[1]) === SELF) {
   const mode = arg('mode', 'rules');
+  if (arg('world-aware')) process.env.PSYS2_WORLD_AWARE = arg('world-aware');   // E2: off | veto | choose | observe (worker threads inherit the environment)
   const sets = arg('sets', 'operational,operational-ro,dialogues,gold,loose,typos,real,mobile').split(',');
   const items = buildItems(sets, arg('limit') ? Number(arg('limit')) : 0);
   const t0 = Date.now();

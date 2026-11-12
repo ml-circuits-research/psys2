@@ -1567,6 +1567,22 @@ export function referents(ctx) {
     salient: salient.has(o.id), sig: JSON.stringify([o.kind, o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.parts]),
   }));
 }
+/**
+ * World-aware hook (spec 16), read-only: the things a request names that the picture cannot have ("delete the dragon": no such kind of thing), with what
+ * IS in the picture, so that the reply says what the world holds instead of listing what could be drawn. `undefined` when every noun phrase is one the
+ * world knows (an object that is merely absent is answered by the operation itself).
+ */
+export function checkReferents(ctx, { action, args = {} } = {}) {
+  const s = ensure(ctx);
+  const texts = action === 'draw.remove' ? splitList(args.phrase ?? '') : [args.t, args.o].filter((x) => typeof x === 'string' && x);
+  const missing = [];
+  for (const text of texts) {
+    const np = parseNP(text);
+    if (!np.known && !np.kind && !np.special && !np.pron && !np.part) missing.push({ name: String(text).replace(/^(?:the|a|an|my)\s+/i, '').trim(), kind: 'thing' });
+  }
+  if (!missing.length) return undefined;
+  return { missing, here: andList(groupPhrase(s.objects.filter((o) => !o.tag))) || null, where: 'picture' };
+}
 /** One sentence about the picture, for "where were we?". */
 export function summary(ctx) {
   const r = describe(ctx, {});
