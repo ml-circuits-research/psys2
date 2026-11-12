@@ -1,0 +1,931 @@
+@describe.shift.day.after core.describe
+    op=kids.time.shift
+    intent=query
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={x} where.by={k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the day a number of days from a given one"
+
+@describe.shift.day.after.k core.describe.arg
+    of=$describe.shift.day.after
+    name=k
+    class=number
+
+@describe.shift.day.after.x core.describe.arg
+    of=$describe.shift.day.after
+    name=x
+    class=lex.kids.time.days
+
+@describe.shift.day.after.en core.describe.words
+    of=$describe.shift.day.after
+    lang=en
+    ask=$w.en.what_day_is.kids.time.shift
+    ask=$w.en.what_day_comes.kids.time.shift
+    ask=$w.en.which_day_is.kids.time.shift
+    ask=$w.en.what_day_will_it_be.kids.time.shift
+    ask=$w.en.what_day_was.kids.time.shift
+    ask=$w.en.what_day_is_it.kids.time.shift
+    unit.k=$w.en.day.kids.time.shift.k
+    unit.k=$w.en.days.kids.time.shift.k
+    prep.x=$w.en.after.kids.time.shift.x
+    prep.x=$w.en.from.kids.time.shift.x
+    prep.x=$w.en.past.kids.time.shift.x
+    sample.k=3
+    sample.x=monday
+    example="What day is 3 days after Monday?"
+
+@describe.shift.day.before core.describe
+    op=kids.time.shift
+    intent=query
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={x} where.by=-{k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the day a number of days from a given one"
+
+@describe.shift.day.before.k core.describe.arg
+    of=$describe.shift.day.before
+    name=k
+    class=number
+
+@describe.shift.day.before.x core.describe.arg
+    of=$describe.shift.day.before
+    name=x
+    class=lex.kids.time.days
+
+@describe.shift.day.before.en core.describe.words
+    of=$describe.shift.day.before
+    lang=en
+    ask=$w.en.what_day_is.kids.time.shift
+    ask=$w.en.what_day_comes.kids.time.shift
+    ask=$w.en.which_day_is.kids.time.shift
+    ask=$w.en.what_day_will_it_be.kids.time.shift
+    ask=$w.en.what_day_was.kids.time.shift
+    ask=$w.en.what_day_is_it.kids.time.shift
+    unit.k=$w.en.day.kids.time.shift.k
+    unit.k=$w.en.days.kids.time.shift.k
+    prep.x=$w.en.before.kids.time.shift.x
+    prep.x=$w.en.ahead_of.kids.time.shift.x
+    sample.k=3
+    sample.x=friday
+    example="What day is 3 days before Friday?"
+
+@describe.shift.day.next core.describe
+    op=kids.time.shift
+    intent=query
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={x} where.by=1"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the day a number of days from a given one"
+
+@describe.shift.day.next.x core.describe.arg
+    of=$describe.shift.day.next
+    name=x
+    class=lex.kids.time.days
+
+@describe.shift.day.next.en core.describe.words
+    of=$describe.shift.day.next
+    lang=en
+    ask=$w.en.what_day_comes.kids.time.shift
+    ask=$w.en.what_day_is.kids.time.shift
+    ask=$w.en.which_day_comes.kids.time.shift
+    ask=$w.en.what_day_follows.kids.time.shift
+    ask=$w.en.what_is_the_day.kids.time.shift
+    prep.x=$w.en.after.kids.time.shift.x
+    prep.x=$w.en.following.kids.time.shift.x
+    sample.x=monday
+    example="What day comes after Monday?"
+
+@describe.shift.day.prev core.describe
+    op=kids.time.shift
+    intent=query
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={x} where.by=-1"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the day a number of days from a given one"
+
+@describe.shift.day.prev.x core.describe.arg
+    of=$describe.shift.day.prev
+    name=x
+    class=lex.kids.time.days
+
+@describe.shift.day.prev.en core.describe.words
+    of=$describe.shift.day.prev
+    lang=en
+    ask=$w.en.what_day_comes.kids.time.shift
+    ask=$w.en.what_day_is.kids.time.shift
+    ask=$w.en.which_day_comes.kids.time.shift
+    ask=$w.en.what_is_the_day.kids.time.shift
+    prep.x=$w.en.before.kids.time.shift.x
+    prep.x=$w.en.preceding.kids.time.shift.x
+    sample.x=monday
+    example="What day comes before Monday?"
+
+@describe.shift.month.after core.describe
+    op=kids.time.shift
+    intent=query
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={x} where.by={k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the month a number of months from a given one"
+
+@describe.shift.month.after.k core.describe.arg
+    of=$describe.shift.month.after
+    name=k
+    class=number
+
+@describe.shift.month.after.x core.describe.arg
+    of=$describe.shift.month.after
+    name=x
+    class=lex.kids.time.months
+
+@describe.shift.month.after.en core.describe.words
+    of=$describe.shift.month.after
+    lang=en
+    ask=$w.en.what_month_is.kids.time.shift
+    ask=$w.en.what_month_comes.kids.time.shift
+    ask=$w.en.which_month_is.kids.time.shift
+    ask=$w.en.what_month_will_it_be.kids.time.shift
+    ask=$w.en.what_month_was.kids.time.shift
+    unit.k=$w.en.month.kids.time.shift.k
+    unit.k=$w.en.months.kids.time.shift.k
+    prep.x=$w.en.after.kids.time.shift.x
+    prep.x=$w.en.from.kids.time.shift.x
+    prep.x=$w.en.past.kids.time.shift.x
+    sample.k=3
+    sample.x=march
+    example="What month is 3 months after March?"
+
+@describe.shift.month.before core.describe
+    op=kids.time.shift
+    intent=query
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={x} where.by=-{k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the month a number of months from a given one"
+
+@describe.shift.month.before.k core.describe.arg
+    of=$describe.shift.month.before
+    name=k
+    class=number
+
+@describe.shift.month.before.x core.describe.arg
+    of=$describe.shift.month.before
+    name=x
+    class=lex.kids.time.months
+
+@describe.shift.month.before.en core.describe.words
+    of=$describe.shift.month.before
+    lang=en
+    ask=$w.en.what_month_is.kids.time.shift
+    ask=$w.en.what_month_comes.kids.time.shift
+    ask=$w.en.which_month_is.kids.time.shift
+    ask=$w.en.what_month_will_it_be.kids.time.shift
+    ask=$w.en.what_month_was.kids.time.shift
+    unit.k=$w.en.month.kids.time.shift.k
+    unit.k=$w.en.months.kids.time.shift.k
+    prep.x=$w.en.before.kids.time.shift.x
+    prep.x=$w.en.ahead_of.kids.time.shift.x
+    sample.k=3
+    sample.x=june
+    example="What month is 3 months before June?"
+
+@describe.shift.month.next core.describe
+    op=kids.time.shift
+    intent=query
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={x} where.by=1"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the month a number of months from a given one"
+
+@describe.shift.month.next.x core.describe.arg
+    of=$describe.shift.month.next
+    name=x
+    class=lex.kids.time.months
+
+@describe.shift.month.next.en core.describe.words
+    of=$describe.shift.month.next
+    lang=en
+    ask=$w.en.what_month_comes.kids.time.shift
+    ask=$w.en.which_month_comes.kids.time.shift
+    ask=$w.en.what_month_follows.kids.time.shift
+    ask=$w.en.what_is_the_month.kids.time.shift
+    prep.x=$w.en.after.kids.time.shift.x
+    prep.x=$w.en.following.kids.time.shift.x
+    sample.x=march
+    example="What month comes after March?"
+
+@describe.shift.month.prev core.describe
+    op=kids.time.shift
+    intent=query
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={x} where.by=-1"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the month a number of months from a given one"
+
+@describe.shift.month.prev.x core.describe.arg
+    of=$describe.shift.month.prev
+    name=x
+    class=lex.kids.time.months
+
+@describe.shift.month.prev.en core.describe.words
+    of=$describe.shift.month.prev
+    lang=en
+    ask=$w.en.what_month_comes.kids.time.shift
+    ask=$w.en.which_month_comes.kids.time.shift
+    ask=$w.en.what_is_the_month.kids.time.shift
+    prep.x=$w.en.before.kids.time.shift.x
+    prep.x=$w.en.preceding.kids.time.shift.x
+    sample.x=march
+    example="What month comes before March?"
+
+@describe.season.next core.describe
+    op=kids.time.seasonshift
+    intent=query
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=1"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the season after a given one"
+
+@describe.season.next.s core.describe.arg
+    of=$describe.season.next
+    name=s
+    class=lex.kids.time.seasons
+
+@describe.season.next.en core.describe.words
+    of=$describe.season.next
+    lang=en
+    ask=$w.en.what_comes_after.kids.time.seasonshift
+    ask=$w.en.what_season_comes_after.kids.time.seasonshift
+    ask=$w.en.which_season_comes_after.kids.time.seasonshift
+    ask=$w.en.what_season_follows.kids.time.seasonshift
+    ask=$w.en.what_is_the_season_after.kids.time.seasonshift
+    ask=$w.en.what_is_the_season_following.kids.time.seasonshift
+    sample.s=summer
+    example="What comes after summer?"
+
+@describe.season.prev core.describe
+    op=kids.time.seasonshift
+    intent=query
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=-1"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the season before a given one"
+
+@describe.season.prev.s core.describe.arg
+    of=$describe.season.prev
+    name=s
+    class=lex.kids.time.seasons
+
+@describe.season.prev.en core.describe.words
+    of=$describe.season.prev
+    lang=en
+    ask=$w.en.what_comes_before.kids.time.seasonshift
+    ask=$w.en.what_season_comes_before.kids.time.seasonshift
+    ask=$w.en.which_season_comes_before.kids.time.seasonshift
+    ask=$w.en.what_is_the_season_before.kids.time.seasonshift
+    ask=$w.en.what_is_the_season_preceding.kids.time.seasonshift
+    sample.s=summer
+    example="What comes before summer?"
+
+@describe.season.after core.describe
+    op=kids.time.seasonshift
+    intent=query
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by={k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the season a number of seasons after a given one"
+
+@describe.season.after.k core.describe.arg
+    of=$describe.season.after
+    name=k
+    class=number
+
+@describe.season.after.s core.describe.arg
+    of=$describe.season.after
+    name=s
+    class=lex.kids.time.seasons
+
+@describe.season.after.en core.describe.words
+    of=$describe.season.after
+    lang=en
+    ask=$w.en.what_season_is.kids.time.seasonshift
+    ask=$w.en.which_season_is.kids.time.seasonshift
+    ask=$w.en.what_season_comes.kids.time.seasonshift
+    unit.k=$w.en.season.kids.time.seasonshift.k
+    unit.k=$w.en.seasons.kids.time.seasonshift.k
+    prep.s=$w.en.after.kids.time.seasonshift.s
+    prep.s=$w.en.from.kids.time.seasonshift.s
+    sample.k=2
+    sample.s=winter
+    example="What season is 2 seasons after winter?"
+
+@describe.season.before core.describe
+    op=kids.time.seasonshift
+    intent=query
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=-{k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the season a number of seasons before a given one"
+
+@describe.season.before.k core.describe.arg
+    of=$describe.season.before
+    name=k
+    class=number
+
+@describe.season.before.s core.describe.arg
+    of=$describe.season.before
+    name=s
+    class=lex.kids.time.seasons
+
+@describe.season.before.en core.describe.words
+    of=$describe.season.before
+    lang=en
+    ask=$w.en.what_season_is.kids.time.seasonshift
+    ask=$w.en.which_season_is.kids.time.seasonshift
+    ask=$w.en.what_season_comes.kids.time.seasonshift
+    unit.k=$w.en.season.kids.time.seasonshift.k
+    unit.k=$w.en.seasons.kids.time.seasonshift.k
+    prep.s=$w.en.before.kids.time.seasonshift.s
+    sample.k=2
+    sample.s=winter
+    example="What season is 2 seasons before winter?"
+
+@describe.clock.hours.after core.describe
+    op=kids.time.clock
+    intent=query
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift={k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the time a number of hours after a given hour"
+
+@describe.clock.hours.after.k core.describe.arg
+    of=$describe.clock.hours.after
+    name=k
+    class=number
+
+@describe.clock.hours.after.h core.describe.arg
+    of=$describe.clock.hours.after
+    name=h
+    class=number
+
+@describe.clock.hours.after.en core.describe.words
+    of=$describe.clock.hours.after
+    lang=en
+    ask=$w.en.what_time_is.kids.time.clock
+    ask=$w.en.what_time_will_it_be.kids.time.clock
+    ask=$w.en.what_time_was.kids.time.clock
+    unit.k=$w.en.hour.kids.time.clock.k
+    unit.k=$w.en.hours.kids.time.clock.k
+    prep.h=$w.en.after.kids.time.clock.h
+    unit.h=$w.en.oclock.kids.time.clock.h
+    unit.h=$w.en.oclock.kids.time.clock.h
+    sample.k=3
+    sample.h=5
+    example="What time is 3 hours after 5 o'clock?"
+
+@describe.clock.hours.before core.describe
+    op=kids.time.clock
+    intent=query
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift=-{k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the time a number of hours before a given hour"
+
+@describe.clock.hours.before.k core.describe.arg
+    of=$describe.clock.hours.before
+    name=k
+    class=number
+
+@describe.clock.hours.before.h core.describe.arg
+    of=$describe.clock.hours.before
+    name=h
+    class=number
+
+@describe.clock.hours.before.en core.describe.words
+    of=$describe.clock.hours.before
+    lang=en
+    ask=$w.en.what_time_is.kids.time.clock
+    ask=$w.en.what_time_was.kids.time.clock
+    ask=$w.en.what_time_will_it_be.kids.time.clock
+    unit.k=$w.en.hour.kids.time.clock.k
+    unit.k=$w.en.hours.kids.time.clock.k
+    prep.h=$w.en.before.kids.time.clock.h
+    unit.h=$w.en.oclock.kids.time.clock.h
+    unit.h=$w.en.oclock.kids.time.clock.h
+    sample.k=3
+    sample.h=5
+    example="What time is 3 hours before 5 o'clock?"
+
+@describe.clock.minutes.after core.describe
+    op=kids.time.clock
+    intent=query
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes={k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the time a number of minutes after a given hour"
+
+@describe.clock.minutes.after.k core.describe.arg
+    of=$describe.clock.minutes.after
+    name=k
+    class=number
+
+@describe.clock.minutes.after.h core.describe.arg
+    of=$describe.clock.minutes.after
+    name=h
+    class=number
+
+@describe.clock.minutes.after.en core.describe.words
+    of=$describe.clock.minutes.after
+    lang=en
+    ask=$w.en.what_time_is.kids.time.clock
+    ask=$w.en.what_time_will_it_be.kids.time.clock
+    ask=$w.en.what_time_was.kids.time.clock
+    unit.k=$w.en.minute.kids.time.clock.k
+    unit.k=$w.en.minutes.kids.time.clock.k
+    prep.h=$w.en.after.kids.time.clock.h
+    unit.h=$w.en.oclock.kids.time.clock.h
+    unit.h=$w.en.oclock.kids.time.clock.h
+    sample.k=20
+    sample.h=5
+    example="What time is 20 minutes after 5 o'clock?"
+
+@describe.clock.minutes.before core.describe
+    op=kids.time.clock
+    intent=query
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-{k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the time a number of minutes before a given hour"
+
+@describe.clock.minutes.before.k core.describe.arg
+    of=$describe.clock.minutes.before
+    name=k
+    class=number
+
+@describe.clock.minutes.before.h core.describe.arg
+    of=$describe.clock.minutes.before
+    name=h
+    class=number
+
+@describe.clock.minutes.before.en core.describe.words
+    of=$describe.clock.minutes.before
+    lang=en
+    ask=$w.en.what_time_is.kids.time.clock
+    ask=$w.en.what_time_was.kids.time.clock
+    ask=$w.en.what_time_will_it_be.kids.time.clock
+    unit.k=$w.en.minute.kids.time.clock.k
+    unit.k=$w.en.minutes.kids.time.clock.k
+    prep.h=$w.en.before.kids.time.clock.h
+    unit.h=$w.en.oclock.kids.time.clock.h
+    unit.h=$w.en.oclock.kids.time.clock.h
+    sample.k=20
+    sample.h=5
+    example="What time is 20 minutes before 5 o'clock?"
+
+@describe.length core.describe
+    op=kids.time.length
+    intent=query
+    emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers how many of a smaller span are in a larger one"
+
+@describe.length.part core.describe.arg
+    of=$describe.length
+    name=part
+    class=lex.kids.time.parts
+
+@describe.length.whole core.describe.arg
+    of=$describe.length
+    name=whole
+    class=lex.kids.time.wholes
+
+@describe.length.en core.describe.words
+    of=$describe.length
+    lang=en
+    ask=$w.en.how_many.kids.time.length
+    prep.whole=$w.en.in.kids.time.length.whole
+    prep.whole=$w.en.per.kids.time.length.whole
+    prep.whole=$w.en.are_in.kids.time.length.whole
+    prep.whole=$w.en.are_there_in.kids.time.length.whole
+    prep.whole=$w.en.is_there_in.kids.time.length.whole
+    prep.whole=$w.en.fit_in.kids.time.length.whole
+    prep.whole=$w.en.go_in.kids.time.length.whole
+    det.whole=$w.en.a.kids.time.length.whole
+    det.whole=$w.en.an.kids.time.length.whole
+    det.whole=$w.en.one.kids.time.length.whole
+    det.whole=$w.en.the.kids.time.length.whole
+    det.whole=$w.en.1.kids.time.length.whole
+    sample.part=day
+    sample.whole=week
+    example="How many days are in a week?"
+
+@describe.length.times core.describe
+    op=kids.time.length
+    intent=query
+    emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part} where.times={k}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers how many of a smaller span are in several of a larger one"
+
+@describe.length.times.part core.describe.arg
+    of=$describe.length.times
+    name=part
+    class=lex.kids.time.parts
+
+@describe.length.times.k core.describe.arg
+    of=$describe.length.times
+    name=k
+    class=number
+
+@describe.length.times.whole core.describe.arg
+    of=$describe.length.times
+    name=whole
+    class=lex.kids.time.wholes
+
+@describe.length.times.en core.describe.words
+    of=$describe.length.times
+    lang=en
+    ask=$w.en.how_many.kids.time.length
+    prep.k=$w.en.in.kids.time.length.k
+    prep.k=$w.en.are_in.kids.time.length.k
+    sample.part=day
+    sample.k=2
+    sample.whole=week
+    example="How many days are in 2 weeks?"
+
+@describe.monthdays core.describe
+    op=kids.time.monthinfo
+    intent=query
+    emit="@{_} core.question type=kids.time.monthinfo seek=days where.name={m}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers how many days a month has"
+
+@describe.monthdays.m core.describe.arg
+    of=$describe.monthdays
+    name=m
+    class=lex.kids.time.months
+
+@describe.monthdays.en core.describe.words
+    of=$describe.monthdays
+    lang=en
+    tverb=$w.en.have.kids.time.monthinfo
+    ask=$w.en.how_many_days_are.kids.time.monthinfo
+    ask=$w.en.how_many_days_is.kids.time.monthinfo
+    ask=$w.en.how_many_days.kids.time.monthinfo
+    ask=$w.en.how_many_days_are_there.kids.time.monthinfo
+    prep.m=$w.en.in.kids.time.monthinfo.m
+    prep.m=$w.en.does.kids.time.monthinfo.m
+    prep.m=$w.en.do.kids.time.monthinfo.m
+    sample.m=march
+    example="How many days are in March?"
+
+@describe.monthseason core.describe
+    op=kids.time.monthinfo
+    intent=query
+    emit="@{_} core.question type=kids.time.monthinfo seek=season where.name={m}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers which season a month is in"
+
+@describe.monthseason.m core.describe.arg
+    of=$describe.monthseason
+    name=m
+    class=lex.kids.time.months
+
+@describe.monthseason.en core.describe.words
+    of=$describe.monthseason
+    lang=en
+    ask=$w.en.in_which_season_is.kids.time.monthinfo
+    ask=$w.en.in_what_season_is.kids.time.monthinfo
+    ask=$w.en.which_season_is.kids.time.monthinfo
+    ask=$w.en.what_season_is.kids.time.monthinfo
+    rest=$w.en.in.kids.time.monthinfo
+    sample.m=march
+    example="In which season is March?"
+
+@describe.gap.between core.describe
+    op=kids.time.gap
+    intent=query
+    emit="@{_} core.question type=kids.time.gap seek=count where.from={from} where.to={to}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers how many days from one weekday to another"
+
+@describe.gap.between.from core.describe.arg
+    of=$describe.gap.between
+    name=from
+    class=lex.kids.time.days
+
+@describe.gap.between.to core.describe.arg
+    of=$describe.gap.between
+    name=to
+    class=lex.kids.time.days
+
+@describe.gap.between.en core.describe.words
+    of=$describe.gap.between
+    lang=en
+    ask=$w.en.how_many_days_are_there.kids.time.gap
+    ask=$w.en.how_many_days_is_it.kids.time.gap
+    ask=$w.en.how_many_days_are.kids.time.gap
+    ask=$w.en.how_many_days.kids.time.gap
+    prep.from=$w.en.from.kids.time.gap.from
+    prep.from=$w.en.between.kids.time.gap.from
+    prep.to=$w.en.to.kids.time.gap.to
+    prep.to=$w.en.and.kids.time.gap.to
+    prep.to=$w.en.till.kids.time.gap.to
+    prep.to=$w.en.until.kids.time.gap.to
+    sample.from=monday
+    sample.to=friday
+    example="How many days from Monday to Friday?"
+
+@describe.gap.until core.describe
+    op=kids.time.gap
+    intent=query
+    emit="@{_} core.question type=kids.time.gap seek=count where.from=today where.to={to}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers how many days from today until a weekday"
+
+@describe.gap.until.to core.describe.arg
+    of=$describe.gap.until
+    name=to
+    class=lex.kids.time.days
+
+@describe.gap.until.en core.describe.words
+    of=$describe.gap.until
+    lang=en
+    ask=$w.en.how_many_days_are_there.kids.time.gap
+    ask=$w.en.how_many_days_is_it.kids.time.gap
+    ask=$w.en.how_many_days_are.kids.time.gap
+    ask=$w.en.how_many_days.kids.time.gap
+    ask=$w.en.how_many_more_days.kids.time.gap
+    prep.to=$w.en.until.kids.time.gap.to
+    prep.to=$w.en.till.kids.time.gap.to
+    prep.to=$w.en.to.kids.time.gap.to
+    prep.to=$w.en.before.kids.time.gap.to
+    sample.to=friday
+    example="How many days until Friday?"
+
+@describe.hoursgap core.describe
+    op=kids.time.hoursgap
+    intent=query
+    emit="@{_} core.question type=kids.time.hoursgap seek=count where.from={a} where.to={b}"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers how many hours from one hour to another"
+
+@describe.hoursgap.a core.describe.arg
+    of=$describe.hoursgap
+    name=a
+    class=number
+
+@describe.hoursgap.b core.describe.arg
+    of=$describe.hoursgap
+    name=b
+    class=number
+
+@describe.hoursgap.en core.describe.words
+    of=$describe.hoursgap
+    lang=en
+    ask=$w.en.how_many_hours_are_there.kids.time.hoursgap
+    ask=$w.en.how_many_hours_is_it.kids.time.hoursgap
+    ask=$w.en.how_many_hours_are.kids.time.hoursgap
+    ask=$w.en.how_many_hours.kids.time.hoursgap
+    prep.a=$w.en.from.kids.time.hoursgap.a
+    prep.a=$w.en.between.kids.time.hoursgap.a
+    unit.a=$w.en.oclock.kids.time.hoursgap.a
+    prep.b=$w.en.to.kids.time.hoursgap.b
+    prep.b=$w.en.and.kids.time.hoursgap.b
+    prep.b=$w.en.till.kids.time.hoursgap.b
+    prep.b=$w.en.until.kids.time.hoursgap.b
+    unit.b=$w.en.oclock.kids.time.hoursgap.b
+    sample.a=3
+    sample.b=7
+    example="How many hours from 3 o'clock to 7 o'clock?"
+
+@describe.reading core.describe
+    op=kids.time.reading
+    intent=query
+    emit="@{_} core.question type=kids.time.reading seek=time"
+    frames=ask
+    skip=short
+    priority=10
+    effect="answers the current time"
+
+@describe.reading.en core.describe.words
+    of=$describe.reading
+    lang=en
+    ask=$w.en.what_time_is_it.kids.time.reading
+    ask=$w.en.what_is_the_time.kids.time.reading
+    ask=$w.en.what_time_is_it_now.kids.time.reading
+    ask=$w.en.what_is_the_time_now.kids.time.reading
+    ask=$w.en.what_time_is_it_right_now.kids.time.reading
+    ask=$w.en.tell_me_the_time.kids.time.reading
+    ask=$w.en.do_you_know_what_time_it_is.kids.time.reading
+
+@describe.dayinfo.list core.describe
+    op=kids.time.dayinfo
+    intent=query
+    emit="@{_} core.question type=kids.time.dayinfo seek=name mode=list"
+    frames=ask
+    skip=short
+    priority=10
+    effect="lists the days of the week"
+
+@describe.dayinfo.list.en core.describe.words
+    of=$describe.dayinfo.list
+    lang=en
+    ask=$w.en.what_are_the_days_of_the_week.kids.time.dayinfo
+    ask=$w.en.which_are_the_days_of_the_week.kids.time.dayinfo
+    ask=$w.en.name_the_days_of_the_week.kids.time.dayinfo
+    ask=$w.en.list_the_days_of_the_week.kids.time.dayinfo
+
+@describe.monthinfo.list core.describe
+    op=kids.time.monthinfo
+    intent=query
+    emit="@{_} core.question type=kids.time.monthinfo seek=name mode=list"
+    frames=ask
+    skip=short
+    priority=10
+    effect="lists the months of the year"
+
+@describe.monthinfo.list.en core.describe.words
+    of=$describe.monthinfo.list
+    lang=en
+    ask=$w.en.what_are_the_months_of_the_year.kids.time.monthinfo
+    ask=$w.en.which_are_the_months_of_the_year.kids.time.monthinfo
+    ask=$w.en.name_the_months_of_the_year.kids.time.monthinfo
+    ask=$w.en.list_the_months_of_the_year.kids.time.monthinfo
+
+@describe.seasoninfo.list core.describe
+    op=kids.time.seasoninfo
+    intent=query
+    emit="@{_} core.question type=kids.time.seasoninfo seek=name mode=list"
+    frames=ask
+    skip=short
+    priority=10
+    effect="lists the seasons"
+
+@describe.seasoninfo.list.en core.describe.words
+    of=$describe.seasoninfo.list
+    lang=en
+    ask=$w.en.what_are_the_seasons.kids.time.seasoninfo
+    ask=$w.en.which_are_the_seasons.kids.time.seasoninfo
+    ask=$w.en.what_are_the_seasons_of_the_year.kids.time.seasoninfo
+    ask=$w.en.name_the_seasons.kids.time.seasoninfo
+    ask=$w.en.list_the_seasons.kids.time.seasoninfo
+
+@w.en.what_day_is.kids.time.shift core.word lang=en text="what day is" means=kids.time.shift
+@w.en.what_day_comes.kids.time.shift core.word lang=en text="what day comes" means=kids.time.shift
+@w.en.which_day_is.kids.time.shift core.word lang=en text="which day is" means=kids.time.shift
+@w.en.what_day_will_it_be.kids.time.shift core.word lang=en text="what day will it be" means=kids.time.shift
+@w.en.what_day_was.kids.time.shift core.word lang=en text="what day was" means=kids.time.shift
+@w.en.what_day_is_it.kids.time.shift core.word lang=en text="what day is it" means=kids.time.shift
+@w.en.day.kids.time.shift.k core.word lang=en text=day means=kids.time.shift.k
+@w.en.days.kids.time.shift.k core.word lang=en text=days means=kids.time.shift.k
+@w.en.after.kids.time.shift.x core.word lang=en text=after means=kids.time.shift.x
+@w.en.from.kids.time.shift.x core.word lang=en text=from means=kids.time.shift.x
+@w.en.past.kids.time.shift.x core.word lang=en text=past means=kids.time.shift.x
+@w.en.before.kids.time.shift.x core.word lang=en text=before means=kids.time.shift.x
+@w.en.ahead_of.kids.time.shift.x core.word lang=en text="ahead of" means=kids.time.shift.x
+@w.en.which_day_comes.kids.time.shift core.word lang=en text="which day comes" means=kids.time.shift
+@w.en.what_day_follows.kids.time.shift core.word lang=en text="what day follows" means=kids.time.shift
+@w.en.what_is_the_day.kids.time.shift core.word lang=en text="what is the day" means=kids.time.shift
+@w.en.following.kids.time.shift.x core.word lang=en text=following means=kids.time.shift.x
+@w.en.preceding.kids.time.shift.x core.word lang=en text=preceding means=kids.time.shift.x
+@w.en.what_month_is.kids.time.shift core.word lang=en text="what month is" means=kids.time.shift
+@w.en.what_month_comes.kids.time.shift core.word lang=en text="what month comes" means=kids.time.shift
+@w.en.which_month_is.kids.time.shift core.word lang=en text="which month is" means=kids.time.shift
+@w.en.what_month_will_it_be.kids.time.shift core.word lang=en text="what month will it be" means=kids.time.shift
+@w.en.what_month_was.kids.time.shift core.word lang=en text="what month was" means=kids.time.shift
+@w.en.month.kids.time.shift.k core.word lang=en text=month means=kids.time.shift.k
+@w.en.months.kids.time.shift.k core.word lang=en text=months means=kids.time.shift.k
+@w.en.which_month_comes.kids.time.shift core.word lang=en text="which month comes" means=kids.time.shift
+@w.en.what_month_follows.kids.time.shift core.word lang=en text="what month follows" means=kids.time.shift
+@w.en.what_is_the_month.kids.time.shift core.word lang=en text="what is the month" means=kids.time.shift
+@w.en.what_comes_after.kids.time.seasonshift core.word lang=en text="what comes after" means=kids.time.seasonshift
+@w.en.what_season_comes_after.kids.time.seasonshift core.word lang=en text="what season comes after" means=kids.time.seasonshift
+@w.en.which_season_comes_after.kids.time.seasonshift core.word lang=en text="which season comes after" means=kids.time.seasonshift
+@w.en.what_season_follows.kids.time.seasonshift core.word lang=en text="what season follows" means=kids.time.seasonshift
+@w.en.what_is_the_season_after.kids.time.seasonshift core.word lang=en text="what is the season after" means=kids.time.seasonshift
+@w.en.what_is_the_season_following.kids.time.seasonshift core.word lang=en text="what is the season following" means=kids.time.seasonshift
+@w.en.what_comes_before.kids.time.seasonshift core.word lang=en text="what comes before" means=kids.time.seasonshift
+@w.en.what_season_comes_before.kids.time.seasonshift core.word lang=en text="what season comes before" means=kids.time.seasonshift
+@w.en.which_season_comes_before.kids.time.seasonshift core.word lang=en text="which season comes before" means=kids.time.seasonshift
+@w.en.what_is_the_season_before.kids.time.seasonshift core.word lang=en text="what is the season before" means=kids.time.seasonshift
+@w.en.what_is_the_season_preceding.kids.time.seasonshift core.word lang=en text="what is the season preceding" means=kids.time.seasonshift
+@w.en.what_season_is.kids.time.seasonshift core.word lang=en text="what season is" means=kids.time.seasonshift
+@w.en.which_season_is.kids.time.seasonshift core.word lang=en text="which season is" means=kids.time.seasonshift
+@w.en.what_season_comes.kids.time.seasonshift core.word lang=en text="what season comes" means=kids.time.seasonshift
+@w.en.season.kids.time.seasonshift.k core.word lang=en text=season means=kids.time.seasonshift.k
+@w.en.seasons.kids.time.seasonshift.k core.word lang=en text=seasons means=kids.time.seasonshift.k
+@w.en.after.kids.time.seasonshift.s core.word lang=en text=after means=kids.time.seasonshift.s
+@w.en.from.kids.time.seasonshift.s core.word lang=en text=from means=kids.time.seasonshift.s
+@w.en.before.kids.time.seasonshift.s core.word lang=en text=before means=kids.time.seasonshift.s
+@w.en.what_time_is.kids.time.clock core.word lang=en text="what time is" means=kids.time.clock
+@w.en.what_time_will_it_be.kids.time.clock core.word lang=en text="what time will it be" means=kids.time.clock
+@w.en.what_time_was.kids.time.clock core.word lang=en text="what time was" means=kids.time.clock
+@w.en.hour.kids.time.clock.k core.word lang=en text=hour means=kids.time.clock.k
+@w.en.hours.kids.time.clock.k core.word lang=en text=hours means=kids.time.clock.k
+@w.en.after.kids.time.clock.h core.word lang=en text=after means=kids.time.clock.h
+@w.en.oclock.kids.time.clock.h core.word lang=en text="o'clock" means=kids.time.clock.h
+@w.en.before.kids.time.clock.h core.word lang=en text=before means=kids.time.clock.h
+@w.en.minute.kids.time.clock.k core.word lang=en text=minute means=kids.time.clock.k
+@w.en.minutes.kids.time.clock.k core.word lang=en text=minutes means=kids.time.clock.k
+@w.en.how_many.kids.time.length core.word lang=en text="how many" means=kids.time.length
+@w.en.in.kids.time.length.whole core.word lang=en text=in means=kids.time.length.whole
+@w.en.per.kids.time.length.whole core.word lang=en text=per means=kids.time.length.whole
+@w.en.are_in.kids.time.length.whole core.word lang=en text="are in" means=kids.time.length.whole
+@w.en.are_there_in.kids.time.length.whole core.word lang=en text="are there in" means=kids.time.length.whole
+@w.en.is_there_in.kids.time.length.whole core.word lang=en text="is there in" means=kids.time.length.whole
+@w.en.fit_in.kids.time.length.whole core.word lang=en text="fit in" means=kids.time.length.whole
+@w.en.go_in.kids.time.length.whole core.word lang=en text="go in" means=kids.time.length.whole
+@w.en.a.kids.time.length.whole core.word lang=en text=a means=kids.time.length.whole
+@w.en.an.kids.time.length.whole core.word lang=en text=an means=kids.time.length.whole
+@w.en.one.kids.time.length.whole core.word lang=en text=one means=kids.time.length.whole
+@w.en.the.kids.time.length.whole core.word lang=en text=the means=kids.time.length.whole
+@w.en.1.kids.time.length.whole core.word lang=en text=1 means=kids.time.length.whole
+@w.en.in.kids.time.length.k core.word lang=en text=in means=kids.time.length.k
+@w.en.are_in.kids.time.length.k core.word lang=en text="are in" means=kids.time.length.k
+@w.en.have.kids.time.monthinfo core.word lang=en text=have means=kids.time.monthinfo
+@w.en.how_many_days_are.kids.time.monthinfo core.word lang=en text="how many days are" means=kids.time.monthinfo
+@w.en.how_many_days_is.kids.time.monthinfo core.word lang=en text="how many days is" means=kids.time.monthinfo
+@w.en.how_many_days.kids.time.monthinfo core.word lang=en text="how many days" means=kids.time.monthinfo
+@w.en.how_many_days_are_there.kids.time.monthinfo core.word lang=en text="how many days are there" means=kids.time.monthinfo
+@w.en.in.kids.time.monthinfo.m core.word lang=en text=in means=kids.time.monthinfo.m
+@w.en.does.kids.time.monthinfo.m core.word lang=en text=does means=kids.time.monthinfo.m
+@w.en.do.kids.time.monthinfo.m core.word lang=en text=do means=kids.time.monthinfo.m
+@w.en.in_which_season_is.kids.time.monthinfo core.word lang=en text="in which season is" means=kids.time.monthinfo
+@w.en.in_what_season_is.kids.time.monthinfo core.word lang=en text="in what season is" means=kids.time.monthinfo
+@w.en.which_season_is.kids.time.monthinfo core.word lang=en text="which season is" means=kids.time.monthinfo
+@w.en.what_season_is.kids.time.monthinfo core.word lang=en text="what season is" means=kids.time.monthinfo
+@w.en.in.kids.time.monthinfo core.word lang=en text=in means=kids.time.monthinfo
+@w.en.how_many_days_are_there.kids.time.gap core.word lang=en text="how many days are there" means=kids.time.gap
+@w.en.how_many_days_is_it.kids.time.gap core.word lang=en text="how many days is it" means=kids.time.gap
+@w.en.how_many_days_are.kids.time.gap core.word lang=en text="how many days are" means=kids.time.gap
+@w.en.how_many_days.kids.time.gap core.word lang=en text="how many days" means=kids.time.gap
+@w.en.from.kids.time.gap.from core.word lang=en text=from means=kids.time.gap.from
+@w.en.between.kids.time.gap.from core.word lang=en text=between means=kids.time.gap.from
+@w.en.to.kids.time.gap.to core.word lang=en text=to means=kids.time.gap.to
+@w.en.and.kids.time.gap.to core.word lang=en text=and means=kids.time.gap.to
+@w.en.till.kids.time.gap.to core.word lang=en text=till means=kids.time.gap.to
+@w.en.until.kids.time.gap.to core.word lang=en text=until means=kids.time.gap.to
+@w.en.how_many_more_days.kids.time.gap core.word lang=en text="how many more days" means=kids.time.gap
+@w.en.before.kids.time.gap.to core.word lang=en text=before means=kids.time.gap.to
+@w.en.how_many_hours_are_there.kids.time.hoursgap core.word lang=en text="how many hours are there" means=kids.time.hoursgap
+@w.en.how_many_hours_is_it.kids.time.hoursgap core.word lang=en text="how many hours is it" means=kids.time.hoursgap
+@w.en.how_many_hours_are.kids.time.hoursgap core.word lang=en text="how many hours are" means=kids.time.hoursgap
+@w.en.how_many_hours.kids.time.hoursgap core.word lang=en text="how many hours" means=kids.time.hoursgap
+@w.en.from.kids.time.hoursgap.a core.word lang=en text=from means=kids.time.hoursgap.a
+@w.en.between.kids.time.hoursgap.a core.word lang=en text=between means=kids.time.hoursgap.a
+@w.en.oclock.kids.time.hoursgap.a core.word lang=en text="o'clock" means=kids.time.hoursgap.a
+@w.en.to.kids.time.hoursgap.b core.word lang=en text=to means=kids.time.hoursgap.b
+@w.en.and.kids.time.hoursgap.b core.word lang=en text=and means=kids.time.hoursgap.b
+@w.en.till.kids.time.hoursgap.b core.word lang=en text=till means=kids.time.hoursgap.b
+@w.en.until.kids.time.hoursgap.b core.word lang=en text=until means=kids.time.hoursgap.b
+@w.en.oclock.kids.time.hoursgap.b core.word lang=en text="o'clock" means=kids.time.hoursgap.b
+@w.en.what_time_is_it.kids.time.reading core.word lang=en text="what time is it" means=kids.time.reading
+@w.en.what_is_the_time.kids.time.reading core.word lang=en text="what is the time" means=kids.time.reading
+@w.en.what_time_is_it_now.kids.time.reading core.word lang=en text="what time is it now" means=kids.time.reading
+@w.en.what_is_the_time_now.kids.time.reading core.word lang=en text="what is the time now" means=kids.time.reading
+@w.en.what_time_is_it_right_now.kids.time.reading core.word lang=en text="what time is it right now" means=kids.time.reading
+@w.en.tell_me_the_time.kids.time.reading core.word lang=en text="tell me the time" means=kids.time.reading
+@w.en.do_you_know_what_time_it_is.kids.time.reading core.word lang=en text="do you know what time it is" means=kids.time.reading
+@w.en.what_are_the_days_of_the_week.kids.time.dayinfo core.word lang=en text="what are the days of the week" means=kids.time.dayinfo
+@w.en.which_are_the_days_of_the_week.kids.time.dayinfo core.word lang=en text="which are the days of the week" means=kids.time.dayinfo
+@w.en.name_the_days_of_the_week.kids.time.dayinfo core.word lang=en text="name the days of the week" means=kids.time.dayinfo
+@w.en.list_the_days_of_the_week.kids.time.dayinfo core.word lang=en text="list the days of the week" means=kids.time.dayinfo
+@w.en.what_are_the_months_of_the_year.kids.time.monthinfo core.word lang=en text="what are the months of the year" means=kids.time.monthinfo
+@w.en.which_are_the_months_of_the_year.kids.time.monthinfo core.word lang=en text="which are the months of the year" means=kids.time.monthinfo
+@w.en.name_the_months_of_the_year.kids.time.monthinfo core.word lang=en text="name the months of the year" means=kids.time.monthinfo
+@w.en.list_the_months_of_the_year.kids.time.monthinfo core.word lang=en text="list the months of the year" means=kids.time.monthinfo
+@w.en.what_are_the_seasons.kids.time.seasoninfo core.word lang=en text="what are the seasons" means=kids.time.seasoninfo
+@w.en.which_are_the_seasons.kids.time.seasoninfo core.word lang=en text="which are the seasons" means=kids.time.seasoninfo
+@w.en.what_are_the_seasons_of_the_year.kids.time.seasoninfo core.word lang=en text="what are the seasons of the year" means=kids.time.seasoninfo
+@w.en.name_the_seasons.kids.time.seasoninfo core.word lang=en text="name the seasons" means=kids.time.seasoninfo
+@w.en.list_the_seasons.kids.time.seasoninfo core.word lang=en text="list the seasons" means=kids.time.seasoninfo

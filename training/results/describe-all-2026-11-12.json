@@ -256,6 +256,133 @@
    "describeLines": 677,
    "droppedLines": 1140,
    "gaps": "Description gaps that cost cases in `only`:\n\n- **Optional completing words cannot be made mandatory.** `rest`, `prep`, `unit` and `tverb` are always optional in the generated pattern, so a form whose only anchor is a trailing word (\"why is X done\", \"is X done\", \"is X on my list\" without a list name, \"add X to my list\") would match any sentence with a free-text argument. Those forms stay hand-written. The first draft had a bare \"add X\" and `short` frames for the free-text commands; they stole sentences from other worlds in `add` (\"add bananas 4 then remove pears\", \"ok thanks\" as a reminder, \"What is 7 times 8?\" as a reminder), so every description here has `skip=short` and the bare form is not described.\n- **The default list (no name given).** The hand-written patterns emit `arg.list=to-do` (or none, or `assumed=true`) depending on the form; a description states one emit per wire and every form of \"add X\" would share it, so only the forms with a named list (a lexicon of list names, `lex.kids.tasks.listnames`) are described.\n- **Free-text list names** (\"my birthday party list\") need `{list:words}` followed by the mandatory word \"list\"; the generator has no mandatory trailing word, so only the lexicon of list names is used.\n- **Discourse forms**: \"cross milk off\", \"what is still on it?\", \"any reminders for me?\", pronoun and ellipsis follow-ups, which the hand-written patterns express with `recent(...)` and context slots.\n- Added after the first run: the two question forms of show and pending (\"what is on my shopping list\", \"what is still on my shopping list\") and the `asn` frame for \"mark X as done\".\n"
+  },
+  "kids.time": {
+   "world": "kids.time",
+   "descriptions": 27,
+   "generatedPatterns": 27,
+   "handWrittenPatterns": 401,
+   "replacedByOnly": 388,
+   "neededHandWritten": 12,
+   "replaceableHandWritten": 377,
+   "add": {
+    "sets": {
+     "operational": {
+      "base": {
+       "n": 97,
+       "right": 93,
+       "wrong": 3,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 97,
+       "right": 93,
+       "wrong": 3,
+       "not_understood": 1,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 57,
+       "right": 55,
+       "wrong": 0,
+       "not_understood": 2,
+       "other": 0
+      },
+      "gen": {
+       "n": 57,
+       "right": 55,
+       "wrong": 0,
+       "not_understood": 2,
+       "other": 0
+      }
+     }
+    },
+    "newWrongAll": [],
+    "changeCounts": {
+     "right->not_understood": 1,
+     "not_understood->right": 1
+    }
+   },
+   "only": {
+    "sets": {
+     "operational": {
+      "base": {
+       "n": 97,
+       "right": 93,
+       "wrong": 3,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 97,
+       "right": 78,
+       "wrong": 6,
+       "not_understood": 13,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 57,
+       "right": 55,
+       "wrong": 0,
+       "not_understood": 2,
+       "other": 0
+      },
+      "gen": {
+       "n": 57,
+       "right": 48,
+       "wrong": 0,
+       "not_understood": 9,
+       "other": 0
+      }
+     }
+    },
+    "setsVsPrevOnly": {
+     "operational": {
+      "base": {
+       "n": 97,
+       "right": 93,
+       "wrong": 3,
+       "not_understood": 1,
+       "other": 0
+      },
+      "gen": {
+       "n": 97,
+       "right": 78,
+       "wrong": 6,
+       "not_understood": 13,
+       "other": 0
+      }
+     },
+     "dialogues": {
+      "base": {
+       "n": 57,
+       "right": 55,
+       "wrong": 0,
+       "not_understood": 2,
+       "other": 0
+      },
+      "gen": {
+       "n": 57,
+       "right": 48,
+       "wrong": 0,
+       "not_understood": 9,
+       "other": 0
+      }
+     }
+    },
+    "changeCounts": {
+     "right->not_understood": 20,
+     "right->wrong": 3
+    }
+   },
+   "describeLines": 932,
+   "droppedLines": 1940,
+   "gaps": "Description gaps that cost cases in `only`:\n\n- **Discourse and ellipsis** (the largest loss): \"and the day after that\", \"and 5 days before Wednesday?\", \"and before March?\", \"and minutes in an hour?\", \"ok what day was the day before Wednesday\" (a filler lead plus a context slot). The hand-written patterns take their anchor from the previous turn (`recent(...)`, the `sw.*` short-word forms); a description states a complete sentence of one operation.\n- **Conditional forms** (\"If it is 3 o'clock, what time will it be in 2 hours?\", \"what is the day after tomorrow if today is Monday\", \"how many days till Sunday if its Thursday\"): the `cond` frame needs a verb and an argument order the clock and gap operations do not use; they are not described.\n- **Words that stand for a value**: \"tomorrow\", \"today\", \"this month\" map to literal emit values (`where.from=today`), one emit per wire, so each would be its own description; only the weekday / month / season lexicons and the numbers are described.\n- Some phrasings need a part-specific `has` verb (\"how many hours does a day have\"): the generated `length` forms put `have` nowhere because a trailing verb is optional and sits after the arguments.\n- Noise: the add runs show one right to not-understood and one not-understood to right on both sides of the comparison that does not involve this world's patterns (cases of other worlds); they are timing-dependent in the baseline too.\n"
   }
  }
 }

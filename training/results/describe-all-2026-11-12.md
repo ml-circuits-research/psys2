@@ -54,3 +54,29 @@ Description gaps that cost cases in `only`:
 - **Discourse forms**: "cross milk off", "what is still on it?", "any reminders for me?", pronoun and ellipsis follow-ups, which the hand-written patterns express with `recent(...)` and context slots.
 - Added after the first run: the two question forms of show and pending ("what is on my shopping list", "what is still on my shopping list") and the `asn` frame for "mark X as done".
 
+
+## kids.time
+
+- Descriptions: 27; generated patterns (add): 27.
+- Hand-written patterns of the described operations: 401 (pattern wires; shapes are separate). `only` drops 388.
+- Hand-written patterns dropped by `only`: 388, replaced by 27 generated ones. Of the dropped, 12 were the reading of at least one set case that got worse (the description misses what they said); the other 377 were not the winning reading of any lost case in these sets (an upper bound on what the description could replace: the sets do not exercise every pattern). Lines: describe.sop 932, dropped patterns about 1940.
+
+Audited world only, right/wrong/not understood (operational and dialogue sets, rules mode). Base = hand-written only.
+
+| mode | operational base | operational gen | dialogues base | dialogues gen |
+|---|---|---|---|---|
+| add | 93/3/1 of 97 | 93/3/1 of 97 | 55/0/2 of 57 | 55/0/2 of 57 |
+| only | 93/3/1 of 97 | 78/6/13 of 97 | 55/0/2 of 57 | 48/0/9 of 57 |
+
+Gate (add): new wrong answers in any world: 0. Changes vs base (all worlds): {"right->not_understood":1,"not_understood->right":1}.
+
+`only` changes vs the previous `only` run without this description (all worlds): {"right->not_understood":20,"right->wrong":3}.
+
+Description gaps that cost cases in `only`:
+
+- **Discourse and ellipsis** (the largest loss): "and the day after that", "and 5 days before Wednesday?", "and before March?", "and minutes in an hour?", "ok what day was the day before Wednesday" (a filler lead plus a context slot). The hand-written patterns take their anchor from the previous turn (`recent(...)`, the `sw.*` short-word forms); a description states a complete sentence of one operation.
+- **Conditional forms** ("If it is 3 o'clock, what time will it be in 2 hours?", "what is the day after tomorrow if today is Monday", "how many days till Sunday if its Thursday"): the `cond` frame needs a verb and an argument order the clock and gap operations do not use; they are not described.
+- **Words that stand for a value**: "tomorrow", "today", "this month" map to literal emit values (`where.from=today`), one emit per wire, so each would be its own description; only the weekday / month / season lexicons and the numbers are described.
+- Some phrasings need a part-specific `has` verb ("how many hours does a day have"): the generated `length` forms put `have` nowhere because a trailing verb is optional and sits after the arguments.
+- Noise: the add runs show one right to not-understood and one not-understood to right on both sides of the comparison that does not involve this world's patterns (cases of other worlds); they are timing-dependent in the baseline too.
+
