@@ -20,7 +20,7 @@ import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=fdb7350267';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=b9d3145ef5';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=1b89579ace';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=55bbbd43d9';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=fd62b893eb';

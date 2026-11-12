@@ -86,7 +86,7 @@ export function skeleton(w) {
 
 // Bounds are counts of work, never wall-clock time: a time budget made the result depend on the machine's load (a slow run cut the search short and the test of
 // "mcdavatara human" failed under load). STEP_BUDGET counts the piece lookups of one call, MAX_WEAK_WORDS the words of weakSoundAlikes.
-const STEP_BUDGET = 3000, MAX_WEAK_WORDS = 8;
+export const STEP_BUDGET = 3000, MAX_WEAK_WORDS = 8;
 const MAX_UNKNOWN = 3, MAX_TOKEN = 24, MAX_PIECES = 4, MAX_COST = 2;
 
 /**
@@ -95,7 +95,7 @@ const MAX_UNKNOWN = 3, MAX_TOKEN = 24, MAX_PIECES = 4, MAX_COST = 2;
  * sound-alike piece); the caller executes cost <= 1 and asks for more. Bounded by counts (deterministic): at most 3 unknown words of at most 24 letters, 4 pieces, STEP_BUDGET piece lookups.
  * @returns {{ text: string, cost: number, corrections: { from: string, to: string, span: [number, number], kind: 'voice' }[] }[]}
  */
-export function garbleCandidates(text, { vocab, known = () => false, functionWords = new Set(), maxTexts = 4 } = {}) {
+export function garbleCandidates(text, { vocab, known = () => false, functionWords = new Set(), maxTexts = 4, stats = null } = {}) {
   let steps = 0;
   const toks = [...text.matchAll(WORD)];
   if (!toks.length || toks.length > MAX_WORDS) return [];
@@ -161,6 +161,7 @@ export function garbleCandidates(text, { vocab, known = () => false, functionWor
     const rep = r[1].join(' ');
     out.push({ text: text.slice(0, start) + rep + text.slice(end), cost: r[0] + (r[1].length > 1 ? 0 : 0), corrections: [{ from: t[0], to: rep, span: [start, end], kind: 'voice' }] });
   }
+  if (stats) stats.steps = steps; // the work done, for tests that check the bound by counts, not by the clock
   // two adjacent words run together by the recogniser's pause ("avat ar"): the join is a word of the vocabulary
   for (let i = 0; i + 1 < toks.length && out.length < maxTexts * 2; i++) {
     const a = toks[i][0].toLowerCase(), b = toks[i + 1][0].toLowerCase();

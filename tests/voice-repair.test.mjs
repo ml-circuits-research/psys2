@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
-import { cleanVoice, garbleCandidates, weakSoundAlikes, skeleton } from '../src/formalizer/voice.mjs';
+import { cleanVoice, garbleCandidates, weakSoundAlikes, skeleton, STEP_BUDGET } from '../src/formalizer/voice.mjs';
 import { worldVocabulary, FUNCTION_WORDS } from '../src/formalizer/spell.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
@@ -52,11 +52,12 @@ test('garbleCandidates: "mcdavatara human" splits into words of the active world
   assert.equal(c[0].cost, 1);
 });
 
-test('garbleCandidates is bounded: a long garbled word and many unknown words finish quickly', () => {
+test('garbleCandidates is bounded by counts: a long garbled word and many unknown words stay within the step budget', () => {
+  // Checked by counted work, not by the clock: a wall-clock limit flaked under machine load (575 ms at load 27).
   const vocab = worldVocabulary(engine.set, 'ui.avatar');
-  const t0 = Date.now();
-  garbleCandidates('qzxqzxqzxqzxqzxqzxqzxqzx zzzzzzzzzzzzzzzzzzzz wwwwwwwwwwwwwwwwwwwwwwww vvvvvvvvvvvvvvvvvvvvv', { vocab, functionWords: FUNCTION_WORDS });
-  assert.ok(Date.now() - t0 < 500, `took ${Date.now() - t0} ms`);
+  const stats = {};
+  garbleCandidates('qzxqzxqzxqzxqzxqzxqzxqzx zzzzzzzzzzzzzzzzzzzz wwwwwwwwwwwwwwwwwwwwwwww vvvvvvvvvvvvvvvvvvvvv', { vocab, functionWords: FUNCTION_WORDS, stats });
+  assert.ok(Number.isFinite(stats.steps) && stats.steps <= STEP_BUDGET * 2 + 64, `steps ${stats.steps}`);
 });
 
 test('weakSoundAlikes: "Chester" is near the editor word "chapter", never executed', () => {

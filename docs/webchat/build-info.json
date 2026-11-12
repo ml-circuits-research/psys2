@@ -53,7 +53,7 @@
     "lib/dialog/discourse.mjs": "11cc42ca5b0ea3cb",
     "lib/dialog/dispatch-validate.mjs": "df882f6657df9f88",
     "lib/dialog/encoder-dispatch.mjs": "15f5c46a75f67b3d",
-    "lib/dialog/index.mjs": "e5ce7dcf23258d50",
+    "lib/dialog/index.mjs": "c654bf139582287b",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/runtime-config.mjs": "91d5063dbd9ba33b",
@@ -85,7 +85,7 @@
     "lib/formalizer/rules/shapes.mjs": "0e474484b534c896",
     "lib/formalizer/spell.mjs": "4eb591026f2bacb7",
     "lib/formalizer/strategy.mjs": "8cb1113b1a97e98b",
-    "lib/formalizer/voice.mjs": "86b50d0bb194525a",
+    "lib/formalizer/voice.mjs": "065e586492a71b0d",
     "lib/formalizer/wordpiece.mjs": "0dfeb8fa5444e2df",
     "lib/interpreter/index.mjs": "848412d2a2e33c53",
     "lib/interpreter/lang.mjs": "c426f1ad58dead53",
@@ -223,5 +223,5 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-12T02:15:39.473Z"
+  "builtAt": "2026-11-12T02:21:38.318Z"
 }
