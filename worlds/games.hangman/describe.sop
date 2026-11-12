@@ -1,0 +1,3463 @@
+@describe.hm.letter.guess core.describe
+    op=hm.letter
+    intent=command
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    priority=12
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+    frames=short
+    effect="guesses a letter of the hidden word"
+
+@describe.hm.letter.guess.l core.describe.arg
+    of=$describe.hm.letter.guess
+    name=l
+    class=lex.games.hangman.letters
+
+@describe.hm.letter.guess.en core.describe.words
+    of=$describe.hm.letter.guess
+    lang=en
+    verb=$w.en.guess.hm.letter
+    verb=$w.en.try.hm.letter
+    verb=$w.en.pick.hm.letter
+    verb=$w.en.choose.hm.letter
+    verb=$w.en.say.hm.letter
+    verb=$w.en.go_with.hm.letter
+    verb=$w.en.call.hm.letter
+    verb=$w.en.the_letter.hm.letter
+    verb=$w.en.letter.hm.letter
+    verb=$w.en.trying.hm.letter
+    verb=$w.en.i_guess.hm.letter
+    verb=$w.en.i_try.hm.letter
+    verb=$w.en.how_about.hm.letter
+    verb=$w.en.what_about.hm.letter
+    verb=$w.en.guess_the_letter.hm.letter
+    verb=$w.en.try_the_letter.hm.letter
+    verb=$w.en.i_guess_the_letter.hm.letter
+    verb=$w.en.let_me_try.hm.letter
+    verb=$w.en.let_us_try.hm.letter
+    verb=$w.en.how_about_the_letter.hm.letter
+    verb=$w.en.what_about_the_letter.hm.letter
+    verb=$w.en.is_it_the_letter.hm.letter
+    verb=$w.en.i_pick.hm.letter
+    verb=$w.en.i_choose.hm.letter
+    verb=$w.en.take.hm.letter
+    verb=$w.en.i_take.hm.letter
+    verb=$w.en.i_will_try.hm.letter
+    verb=$w.en.i_will_guess.hm.letter
+    verb=$w.en.i_will_pick.hm.letter
+    verb=$w.en.i_will_take.hm.letter
+    verb=$w.en.i_will_go_with.hm.letter
+    verb=$w.en.i_say.hm.letter
+    verb=$w.en.use.hm.letter
+    verb=$w.en.my_guess_is.hm.letter
+    verb=$w.en.my_pick_is.hm.letter
+    verb=$w.en.my_letter_is.hm.letter
+    verb=$w.en.my_choice_is.hm.letter
+    verb=$w.en.i_will_say.hm.letter
+    verb=$w.en.how_about_an.hm.letter
+    verb=$w.en.let_me_guess.hm.letter
+    verb=$w.en.let_me_pick.hm.letter
+    verb=$w.en.give_me.hm.letter
+    verb=$w.en.i_would_like.hm.letter
+    verb=$w.en.i_want.hm.letter
+    verb=$w.en.i_would_try.hm.letter
+    verb=$w.en.can_i_try.hm.letter
+    verb=$w.en.can_i_guess.hm.letter
+    verb=$w.en.can_i_have.hm.letter
+    verb=$w.en.may_i_try.hm.letter
+    verb=$w.en.may_i_guess.hm.letter
+    verb=$w.en.let_me_have.hm.letter
+    verb=$w.en.ill_try.hm.letter
+    verb=$w.en.try_with.hm.letter
+    verb=$w.en.guess_with.hm.letter
+    verb=$w.en.go_for.hm.letter
+    verb=$w.en.i_go_for.hm.letter
+    verb=$w.en.i_d_like.hm.letter
+    verb=$w.en.id_like.hm.letter
+    verb=$w.en.i_need.hm.letter
+    verb=$w.en.i_wish.hm.letter
+    verb=$w.en.may_i_have.hm.letter
+    verb=$w.en.can_i_get.hm.letter
+    verb=$w.en.could_i_get.hm.letter
+    verb=$w.en.could_i_have.hm.letter
+    verb=$w.en.gimme.hm.letter
+    verb=$w.en.get_me.hm.letter
+    verb=$w.en.let_me_get.hm.letter
+    verb=$w.en.i_ll_have.hm.letter
+    verb=$w.en.ill_have.hm.letter
+    verb=$w.en.ill_take.hm.letter
+    verb=$w.en.i_ll_take.hm.letter
+    verb=$w.en.i_ll_try.hm.letter
+    verb=$w.en.ill_go_with.hm.letter
+    verb=$w.en.i_ll_go_with.hm.letter
+    verb=$w.en.ill_pick.hm.letter
+    verb=$w.en.ill_choose.hm.letter
+    verb=$w.en.lets_try.hm.letter
+    verb=$w.en.lets_go_with.hm.letter
+    verb=$w.en.let_us_go_with.hm.letter
+    verb=$w.en.lets_pick.hm.letter
+    verb=$w.en.lets_choose.hm.letter
+    verb=$w.en.lets_guess.hm.letter
+    verb=$w.en.guessing.hm.letter
+    verb=$w.en.picking.hm.letter
+    verb=$w.en.choosing.hm.letter
+    verb=$w.en.going_with.hm.letter
+    verb=$w.en.going_for.hm.letter
+    verb=$w.en.saying.hm.letter
+    verb=$w.en.betting_on.hm.letter
+    verb=$w.en.betting.hm.letter
+    verb=$w.en.voting_for.hm.letter
+    verb=$w.en.voting.hm.letter
+    verb=$w.en.selecting.hm.letter
+    verb=$w.en.taking.hm.letter
+    verb=$w.en.using.hm.letter
+    verb=$w.en.testing.hm.letter
+    verb=$w.en.checking.hm.letter
+    verb=$w.en.asking_about.hm.letter
+    verb=$w.en.asking_for.hm.letter
+    verb=$w.en.asking.hm.letter
+    verb=$w.en.looking_for.hm.letter
+    verb=$w.en.looking_at.hm.letter
+    verb=$w.en.looking.hm.letter
+    verb=$w.en.searching_for.hm.letter
+    verb=$w.en.searching.hm.letter
+    verb=$w.en.hunting_for.hm.letter
+    verb=$w.en.hunting.hm.letter
+    verb=$w.en.seeking.hm.letter
+    verb=$w.en.chasing.hm.letter
+    verb=$w.en.aiming_for.hm.letter
+    verb=$w.en.aiming_at.hm.letter
+    verb=$w.en.aiming.hm.letter
+    verb=$w.en.shooting_for.hm.letter
+    verb=$w.en.shooting_at.hm.letter
+    verb=$w.en.shooting.hm.letter
+    verb=$w.en.going.hm.letter
+    verb=$w.en.next_letter.hm.letter
+    verb=$w.en.the_next_letter.hm.letter
+    verb=$w.en.next_1.hm.letter
+    verb=$w.en.the_next_1.hm.letter
+    verb=$w.en.next_try.hm.letter
+    verb=$w.en.next_guess.hm.letter
+    verb=$w.en.next_pick.hm.letter
+    verb=$w.en.another_letter.hm.letter
+    verb=$w.en.another_1.hm.letter
+    verb=$w.en.another_try.hm.letter
+    verb=$w.en.another_guess.hm.letter
+    verb=$w.en.my_next_guess.hm.letter
+    verb=$w.en.my_next_letter.hm.letter
+    verb=$w.en.my_next_pick.hm.letter
+    verb=$w.en.my_next_try.hm.letter
+    verb=$w.en.my_next_1.hm.letter
+    verb=$w.en.one_more.hm.letter
+    verb=$w.en.n1_more.hm.letter
+    verb=$w.en.another.hm.letter
+    verb=$w.en.then.hm.letter
+    verb=$w.en.now.hm.letter
+    verb=$w.en.and_now.hm.letter
+    verb=$w.en.ok_now.hm.letter
+    verb=$w.en.and.hm.letter
+    det.l=$w.en.the.hm.letter.l
+    det.l=$w.en.a.hm.letter.l
+    det.l=$w.en.an.hm.letter.l
+    det.l=$w.en.any.hm.letter.l
+    det.l=$w.en.my.hm.letter.l
+    det.l=$w.en.letter.hm.letter.l
+    det.l=$w.en.the_letter.hm.letter.l
+    det.l=$w.en.a_letter.hm.letter.l
+    sample.l=e
+
+@describe.hm.letter.ask core.describe
+    op=hm.letter
+    intent=query
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    kind=request
+    priority=12
+    frames=ask
+
+@describe.hm.letter.ask.l core.describe.arg
+    of=$describe.hm.letter.ask
+    name=l
+    class=lex.games.hangman.letters
+
+@describe.hm.letter.ask.en core.describe.words
+    of=$describe.hm.letter.ask
+    lang=en
+    ask=$w.en.is_there.hm.letter
+    ask=$w.en.was_there.hm.letter
+    ask=$w.en.any.hm.letter
+    ask=$w.en.got.hm.letter
+    ask=$w.en.got_any.hm.letter
+    ask=$w.en.do_you_have.hm.letter
+    ask=$w.en.have_you_got.hm.letter
+    ask=$w.en.is.hm.letter
+    ask=$w.en.are_there.hm.letter
+    ask=$w.en.does_it_have.hm.letter
+    ask=$w.en.does_the_word_have.hm.letter
+    ask=$w.en.does_the_word_contain.hm.letter
+    ask=$w.en.does_it_contain.hm.letter
+    ask=$w.en.do_you_see.hm.letter
+    ask=$w.en.there_is.hm.letter
+    ask=$w.en.does_it_include.hm.letter
+    ask=$w.en.does_the_animal_have.hm.letter
+    ask=$w.en.is_it.hm.letter
+    ask=$w.en.its.hm.letter
+    ask=$w.en.could_it_be.hm.letter
+    ask=$w.en.can_it_be.hm.letter
+    ask=$w.en.might_it_be.hm.letter
+    ask=$w.en.is_the_letter.hm.letter
+    ask=$w.en.is_the_answer.hm.letter
+    ask=$w.en.is_the_next_letter.hm.letter
+    ask=$w.en.do_you_have_any.hm.letter
+    ask=$w.en.is_there_any.hm.letter
+    ask=$w.en.are_there_any.hm.letter
+    ask=$w.en.how_many.hm.letter
+    det.l=$w.en.a.hm.letter.l
+    det.l=$w.en.an.hm.letter.l
+    det.l=$w.en.any.hm.letter.l
+    det.l=$w.en.the.hm.letter.l
+    det.l=$w.en.letter.hm.letter.l
+    det.l=$w.en.the_letter.hm.letter.l
+    det.l=$w.en.a_letter.hm.letter.l
+    det.l=$w.en.an_letter.hm.letter.l
+    det.l=$w.en.any_letter.hm.letter.l
+    unit.l=$w.en.in_it.hm.letter.l
+    unit.l=$w.en.in_the_word.hm.letter.l
+    unit.l=$w.en.in_there.hm.letter.l
+    unit.l=$w.en.in_that.hm.letter.l
+    unit.l=$w.en.in_this.hm.letter.l
+    unit.l=$w.en.there.hm.letter.l
+    unit.l=$w.en.in_this_word.hm.letter.l
+    sample.l=e
+
+@describe.hm.letter.after core.describe
+    op=hm.letter
+    intent=query
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    kind=request
+    priority=10
+    frames=last
+
+@describe.hm.letter.after.l core.describe.arg
+    of=$describe.hm.letter.after
+    name=l
+    class=lex.games.hangman.letters
+
+@describe.hm.letter.after.en core.describe.words
+    of=$describe.hm.letter.after
+    lang=en
+    ask=$w.en.is_my_guess.hm.letter
+    ask=$w.en.is_the_letter.hm.letter
+    ask=$w.en.is_my_letter.hm.letter
+    ask=$w.en.is_my_pick.hm.letter
+    ask=$w.en.is_my_choice.hm.letter
+    ask=$w.en.it_is.hm.letter
+    ask=$w.en.is_it.hm.letter
+    ask=$w.en.is_the_1.hm.letter
+    ask=$w.en.is_my_answer.hm.letter
+    ask=$w.en.for_me.hm.letter
+    ask=$w.en.then.hm.letter
+    ask=$w.en.please.hm.letter
+    ask=$w.en.pls.hm.letter
+    ask=$w.en.plz.hm.letter
+    ask=$w.en.ok.hm.letter
+    ask=$w.en.lol.hm.letter
+    ask=$w.en.is_my_try.hm.letter
+    ask=$w.en.is_my_move.hm.letter
+    ask=$w.en.is_there.hm.letter
+    ask=$w.en.is_it_there.hm.letter
+    ask=$w.en.is_it_in_there.hm.letter
+    ask=$w.en.is_it_in_it.hm.letter
+    ask=$w.en.appear.hm.letter
+    ask=$w.en.appears.hm.letter
+    ask=$w.en.show_up.hm.letter
+    ask=$w.en.shows_up.hm.letter
+    ask=$w.en.exist.hm.letter
+    ask=$w.en.exists.hm.letter
+    ask=$w.en.occur.hm.letter
+    ask=$w.en.occurs.hm.letter
+    ask=$w.en.is_in_it.hm.letter
+    ask=$w.en.is_in_the_word.hm.letter
+    ask=$w.en.is_in_there.hm.letter
+    ask=$w.en.is_present.hm.letter
+    ask=$w.en.is_there_in_it.hm.letter
+    ask=$w.en.in_there.hm.letter
+    ask=$w.en.in_it.hm.letter
+    ask=$w.en.in_the_word.hm.letter
+    ask=$w.en.anywhere.hm.letter
+    ask=$w.en.at_all.hm.letter
+    ask=$w.en.too.hm.letter
+    ask=$w.en.also.hm.letter
+    ask=$w.en.as_well.hm.letter
+    ask=$w.en.any_good.hm.letter
+    ask=$w.en.any_use.hm.letter
+    det.l=$w.en.the.hm.letter.l
+    det.l=$w.en.a.hm.letter.l
+    det.l=$w.en.an.hm.letter.l
+    sample.l=e
+
+@describe.hm.letter.appear core.describe
+    op=hm.letter
+    intent=query
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    kind=request
+    priority=12
+    frames=last
+
+@describe.hm.letter.appear.l core.describe.arg
+    of=$describe.hm.letter.appear
+    name=l
+    class=lex.games.hangman.letters
+
+@describe.hm.letter.appear.en core.describe.words
+    of=$describe.hm.letter.appear
+    lang=en
+    ask=$w.en.appear.hm.letter
+    ask=$w.en.appears.hm.letter
+    ask=$w.en.show_up.hm.letter
+    ask=$w.en.shows_up.hm.letter
+    ask=$w.en.exist.hm.letter
+    ask=$w.en.exists.hm.letter
+    ask=$w.en.occur.hm.letter
+    ask=$w.en.occurs.hm.letter
+    ask=$w.en.feature.hm.letter
+    ask=$w.en.features.hm.letter
+    ask=$w.en.come_up.hm.letter
+    ask=$w.en.comes_up.hm.letter
+    ask=$w.en.turn_up.hm.letter
+    ask=$w.en.turns_up.hm.letter
+    ask=$w.en.figure.hm.letter
+    ask=$w.en.figures.hm.letter
+    ask=$w.en.count.hm.letter
+    ask=$w.en.counts.hm.letter
+    ask=$w.en.belong.hm.letter
+    ask=$w.en.belongs.hm.letter
+    ask=$w.en.fit.hm.letter
+    ask=$w.en.fits.hm.letter
+    ask=$w.en.work.hm.letter
+    ask=$w.en.works.hm.letter
+    ask=$w.en.go_in.hm.letter
+    ask=$w.en.goes_in.hm.letter
+    ask=$w.en.get_in.hm.letter
+    ask=$w.en.gets_in.hm.letter
+    ask=$w.en.exist_in_it.hm.letter
+    ask=$w.en.appear_in_it.hm.letter
+    ask=$w.en.appear_in_the_word.hm.letter
+    ask=$w.en.appear_in_there.hm.letter
+    ask=$w.en.occur_in_it.hm.letter
+    ask=$w.en.occur_in_the_word.hm.letter
+    ask=$w.en.be_there.hm.letter
+    ask=$w.en.be_in_it.hm.letter
+    ask=$w.en.be_in_the_word.hm.letter
+    ask=$w.en.be_in_there.hm.letter
+    ask=$w.en.be_present.hm.letter
+    ask=$w.en.be_used.hm.letter
+    ask=$w.en.be_included.hm.letter
+    ask=$w.en.be_part_of_it.hm.letter
+    det.l=$w.en.does.hm.letter.l
+    det.l=$w.en.do.hm.letter.l
+    det.l=$w.en.will.hm.letter.l
+    det.l=$w.en.can.hm.letter.l
+    det.l=$w.en.is.hm.letter.l
+    det.l=$w.en.does_the_letter.hm.letter.l
+    det.l=$w.en.does_the_word.hm.letter.l
+    det.l=$w.en.does_it.hm.letter.l
+    det.l=$w.en.is_the_letter.hm.letter.l
+    det.l=$w.en.is_there_a.hm.letter.l
+    sample.l=e
+
+@describe.hm.letter.has core.describe
+    op=hm.letter
+    intent=statement
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    kind=request
+    priority=12
+    frames=about
+
+@describe.hm.letter.has.l core.describe.arg
+    of=$describe.hm.letter.has
+    name=l
+    class=lex.games.hangman.letters
+
+@describe.hm.letter.has.en core.describe.words
+    of=$describe.hm.letter.has
+    lang=en
+    noun=$w.en.word.hm.letter
+    noun=$w.en.answer.hm.letter
+    noun=$w.en.animal.hm.letter
+    det.l=$w.en.a.hm.letter.l
+    det.l=$w.en.an.hm.letter.l
+    det.l=$w.en.any.hm.letter.l
+    det.l=$w.en.the.hm.letter.l
+    det.l=$w.en.letter.hm.letter.l
+    det.l=$w.en.the_letter.hm.letter.l
+    det.l=$w.en.a_letter.hm.letter.l
+    det.l=$w.en.an_letter.hm.letter.l
+    det.l=$w.en.any_letter.hm.letter.l
+    sample.l=e
+
+@describe.hm.word.ask core.describe
+    op=hm.word
+    intent=query
+    emit="@{_} core.request action=hm.word arg.word={w}"
+    kind=request
+    priority=11
+    frames=ask
+    effect="guesses the whole hidden word"
+
+@describe.hm.word.ask.w core.describe.arg
+    of=$describe.hm.word.ask
+    name=w
+    class=word
+
+@describe.hm.word.ask.en core.describe.words
+    of=$describe.hm.word.ask
+    lang=en
+    ask=$w.en.is_it.hm.word
+    ask=$w.en.could_it_be.hm.word
+    ask=$w.en.can_it_be.hm.word
+    ask=$w.en.might_it_be.hm.word
+    ask=$w.en.may_it_be.hm.word
+    ask=$w.en.was_it.hm.word
+    ask=$w.en.is_the_word.hm.word
+    ask=$w.en.is_the_answer.hm.word
+    ask=$w.en.is_that.hm.word
+    ask=$w.en.is_this.hm.word
+    ask=$w.en.is_the_animal.hm.word
+    ask=$w.en.could_the_word_be.hm.word
+    ask=$w.en.could_the_answer_be.hm.word
+    ask=$w.en.might_the_word_be.hm.word
+    ask=$w.en.could_be.hm.word
+    ask=$w.en.it_might_be.hm.word
+    ask=$w.en.maybe_it_is.hm.word
+    ask=$w.en.is.hm.word
+    ask=$w.en.could_it_be_a.hm.word
+    ask=$w.en.its.hm.word
+    ask=$w.en.it_is.hm.word
+    det.w=$w.en.a.hm.word.w
+    det.w=$w.en.an.hm.word.w
+    det.w=$w.en.the.hm.word.w
+    sample.w=cat
+
+@describe.hm.word.say core.describe
+    op=hm.word
+    intent=command
+    emit="@{_} core.request action=hm.word arg.word={w}"
+    priority=10
+    bareVerb=true
+    frames=imp
+
+@describe.hm.word.say.w core.describe.arg
+    of=$describe.hm.word.say
+    name=w
+    class=word
+
+@describe.hm.word.say.en core.describe.words
+    of=$describe.hm.word.say
+    lang=en
+    verb=$w.en.the_word_is.hm.word
+    verb=$w.en.my_guess_is.hm.word
+    verb=$w.en.i_guess_it_is.hm.word
+    verb=$w.en.i_think_it_is.hm.word
+    verb=$w.en.i_think_the_word_is.hm.word
+    verb=$w.en.it_might_be.hm.word
+    verb=$w.en.maybe_it_is.hm.word
+    verb=$w.en.the_word_might_be.hm.word
+    verb=$w.en.i_think.hm.word
+    verb=$w.en.i_say.hm.word
+    verb=$w.en.i_would_say.hm.word
+    verb=$w.en.i_guess.hm.word
+    verb=$w.en.i_bet_it_is.hm.word
+    verb=$w.en.i_bet.hm.word
+    verb=$w.en.maybe.hm.word
+    verb=$w.en.perhaps.hm.word
+    verb=$w.en.probably.hm.word
+    verb=$w.en.guess.hm.word
+    verb=$w.en.my_answer_is.hm.word
+    verb=$w.en.word_is.hm.word
+    verb=$w.en.word_could_be.hm.word
+    verb=$w.en.the_word_could_be.hm.word
+    verb=$w.en.word_may_be.hm.word
+    verb=$w.en.it_could_be.hm.word
+    verb=$w.en.could_be.hm.word
+    verb=$w.en.its_probably.hm.word
+    verb=$w.en.it_is_probably.hm.word
+    verb=$w.en.its.hm.word
+    verb=$w.en.it_is.hm.word
+    verb=$w.en.i_think_its.hm.word
+    verb=$w.en.i_think_it_might_be.hm.word
+    verb=$w.en.maybe_its.hm.word
+    verb=$w.en.maybe_it_could_be.hm.word
+    verb=$w.en.i_would_guess.hm.word
+    verb=$w.en.i_will_say.hm.word
+    verb=$w.en.i_will_guess.hm.word
+    verb=$w.en.i_choose.hm.word
+    verb=$w.en.my_final_answer_is.hm.word
+    verb=$w.en.is_the_word.hm.word
+    verb=$w.en.is_the_answer.hm.word
+    verb=$w.en.i_have_it_it_is.hm.word
+    verb=$w.en.i_think_the_answer_is.hm.word
+    verb=$w.en.final_answer.hm.word
+    verb=$w.en.the_answer_is.hm.word
+    verb=$w.en.it_must_be.hm.word
+    verb=$w.en.it_has_to_be.hm.word
+    verb=$w.en.it_has_got_to_be.hm.word
+    verb=$w.en.must_be.hm.word
+    verb=$w.en.has_to_be.hm.word
+    verb=$w.en.got_to_be.hm.word
+    verb=$w.en.perhaps_its.hm.word
+    verb=$w.en.surely_its.hm.word
+    verb=$w.en.surely_it_is.hm.word
+    verb=$w.en.gotta_be.hm.word
+    verb=$w.en.has_gotta_be.hm.word
+    verb=$w.en.guess_the_word.hm.word
+    verb=$w.en.guess_the_animal.hm.word
+    verb=$w.en.the_animal_is.hm.word
+    verb=$w.en.the_animal_must_be.hm.word
+    verb=$w.en.is_the_animal.hm.word
+    verb=$w.en.is_it_the.hm.word
+    verb=$w.en.how_about_the.hm.word
+    verb=$w.en.what_about_the.hm.word
+    verb=$w.en.how_about.hm.word
+    verb=$w.en.what_about.hm.word
+    verb=$w.en.lets_say.hm.word
+    verb=$w.en.let_us_say.hm.word
+    verb=$w.en.ill_say.hm.word
+    verb=$w.en.ill_guess.hm.word
+    verb=$w.en.ill_go_with.hm.word
+    verb=$w.en.ill_try.hm.word
+    verb=$w.en.ill_take.hm.word
+    verb=$w.en.ill_pick.hm.word
+    verb=$w.en.ill_choose.hm.word
+    verb=$w.en.go_with.hm.word
+    verb=$w.en.try.hm.word
+    verb=$w.en.pick.hm.word
+    verb=$w.en.choose.hm.word
+    verb=$w.en.take.hm.word
+    verb=$w.en.say.hm.word
+    verb=$w.en.answer.hm.word
+    verb=$w.en.answering.hm.word
+    verb=$w.en.final.hm.word
+    verb=$w.en.solve.hm.word
+    verb=$w.en.solving.hm.word
+    verb=$w.en.solution.hm.word
+    verb=$w.en.the_solution_is.hm.word
+    det.w=$w.en.a.hm.word.w
+    det.w=$w.en.an.hm.word.w
+    det.w=$w.en.the.hm.word.w
+    sample.w=cat
+
+@describe.hm.word.bare core.describe
+    op=hm.word
+    intent=command
+    emit="@{_} core.request action=hm.word arg.word={w}"
+    priority=11
+    shortPriority=9
+    frames=short
+
+@describe.hm.word.bare.w core.describe.arg
+    of=$describe.hm.word.bare
+    name=w
+    class=lex.kids.animals.names
+
+@describe.hm.word.bare.en core.describe.words
+    of=$describe.hm.word.bare
+    lang=en
+    sample.w=cat
+
+@describe.hm.new.start core.describe
+    op=hm.new
+    intent=command
+    emit="@{_} core.request action=hm.new"
+    priority=12
+    frames=imp
+    effect="starts a new round with a random word"
+
+@describe.hm.new.start.en core.describe.words
+    of=$describe.hm.new.start
+    lang=en
+    verb=$w.en.start.hm.new
+    verb=$w.en.play.hm.new
+    verb=$w.en.begin.hm.new
+    verb=$w.en.have.hm.new
+    verb=$w.en.do.hm.new
+    verb=$w.en.restart.hm.new
+    verb=$w.en.reset.hm.new
+    verb=$w.en.try.hm.new
+    verb=$w.en.go_for.hm.new
+    verb=$w.en.another.hm.new
+    verb=$w.en.new.hm.new
+    verb=$w.en.fresh.hm.new
+    verb=$w.en.next.hm.new
+    verb=$w.en.fresh_start.hm.new
+    verb=$w.en.a_new.hm.new
+    verb=$w.en.a_fresh.hm.new
+    verb=$w.en.n1_more.hm.new
+    verb=$w.en.one_more.hm.new
+    verb=$w.en.make.hm.new
+    verb=$w.en.set_up.hm.new
+    verb=$w.en.create.hm.new
+    verb=$w.en.open.hm.new
+    verb=$w.en.run.hm.new
+    verb=$w.en.launch.hm.new
+    noun=$w.en.hangman.hm.new
+    noun=$w.en.hangman_game.hm.new
+    noun=$w.en.new_hangman.hm.new
+    noun=$w.en.new_hangman_game.hm.new
+    noun=$w.en.fresh_hangman_game.hm.new
+    noun=$w.en.another_hangman_game.hm.new
+    noun=$w.en.new_round_of_hangman.hm.new
+    noun=$w.en.round_of_hangman.hm.new
+    noun=$w.en.game_of_hangman.hm.new
+    noun=$w.en.new_game_of_hangman.hm.new
+    noun=$w.en.another_round.hm.new
+    noun=$w.en.another_game.hm.new
+    noun=$w.en.new_round.hm.new
+    noun=$w.en.fresh_round.hm.new
+    noun=$w.en.new_game.hm.new
+    noun=$w.en.next_round.hm.new
+    noun=$w.en.new_word.hm.new
+    noun=$w.en.another_word.hm.new
+    noun=$w.en.fresh_word.hm.new
+    noun=$w.en.new_animal.hm.new
+    noun=$w.en.next_animal.hm.new
+    noun=$w.en.another_animal.hm.new
+
+@describe.hm.new.after core.describe
+    op=hm.new
+    intent=command
+    emit="@{_} core.request action=hm.new"
+    priority=12
+    bareVerb=true
+    frames=imp
+
+@describe.hm.new.after.en core.describe.words
+    of=$describe.hm.new.after
+    lang=en
+    verb=$w.en.hangman_new_game.hm.new
+    verb=$w.en.hangman_new.hm.new
+    verb=$w.en.hangman_new_round.hm.new
+    verb=$w.en.hangman_fresh.hm.new
+    verb=$w.en.hangman_again.hm.new
+    verb=$w.en.hangman_next.hm.new
+    verb=$w.en.hangman_another.hm.new
+
+@describe.hm.new.again core.describe
+    op=hm.new
+    intent=command
+    emit="@{_} core.request action=hm.new"
+    priority=12
+    frames=imp
+
+@describe.hm.new.again.en core.describe.words
+    of=$describe.hm.new.again
+    lang=en
+    verb=$w.en.play.hm.new
+    verb=$w.en.start.hm.new
+    verb=$w.en.go.hm.new
+    verb=$w.en.do.hm.new
+    verb=$w.en.begin.hm.new
+    verb=$w.en.try.hm.new
+    verb=$w.en.have.hm.new
+    verb=$w.en.run.hm.new
+    verb=$w.en.restart.hm.new
+    verb=$w.en.redo.hm.new
+    verb=$w.en.replay.hm.new
+    verb=$w.en.reset.hm.new
+    noun=$w.en.it.hm.new
+    noun=$w.en.hangman.hm.new
+    noun=$w.en.that.hm.new
+    noun=$w.en.the_game.hm.new
+    noun=$w.en.another_game.hm.new
+    noun=$w.en.a_new_game.hm.new
+    noun=$w.en.again.hm.new
+    noun=$w.en.another_round.hm.new
+    noun=$w.en.a_game.hm.new
+    rest=$w.en.again.hm.new
+    rest=$w.en.over.hm.new
+    rest=$w.en.anew.hm.new
+    rest=$w.en.once_more.hm.new
+    rest=$w.en.n1_more_time.hm.new
+    rest=$w.en.from_scratch.hm.new
+    rest=$w.en.from_the_start.hm.new
+    rest=$w.en.new_round.hm.new
+    rest=$w.en.another_round.hm.new
+    rest=$w.en.next_round.hm.new
+
+@describe.hm.new.word core.describe
+    op=hm.new
+    intent=command
+    emit="@{_} core.request action=hm.new arg.word={w}"
+    priority=11
+    frames=imp
+    effect="starts a round with a given hidden word"
+
+@describe.hm.new.word.w core.describe.arg
+    of=$describe.hm.new.word
+    name=w
+    class=word
+
+@describe.hm.new.word.en core.describe.words
+    of=$describe.hm.new.word
+    lang=en
+    verb=$w.en.start.hm.new
+    verb=$w.en.play.hm.new
+    verb=$w.en.begin.hm.new
+    verb=$w.en.new.hm.new
+    verb=$w.en.a_new.hm.new
+    verb=$w.en.let_us_play.hm.new
+    verb=$w.en.play_a.hm.new
+    verb=$w.en.lets_play.hm.new
+    verb=$w.en.do.hm.new
+    noun=$w.en.hangman.hm.new
+    noun=$w.en.hangman_game.hm.new
+    noun=$w.en.hangman_round.hm.new
+    noun=$w.en.hangman_match.hm.new
+    noun=$w.en.a_hangman.hm.new
+    noun=$w.en.a_hangman_game.hm.new
+    noun=$w.en.a_hangman_round.hm.new
+    noun=$w.en.a_hangman_match.hm.new
+    noun=$w.en.a_new_hangman.hm.new
+    noun=$w.en.a_new_hangman_game.hm.new
+    noun=$w.en.a_new_hangman_round.hm.new
+    noun=$w.en.a_new_hangman_match.hm.new
+    noun=$w.en.new_hangman.hm.new
+    noun=$w.en.new_hangman_game.hm.new
+    noun=$w.en.new_hangman_round.hm.new
+    noun=$w.en.new_hangman_match.hm.new
+    noun=$w.en.another_hangman.hm.new
+    noun=$w.en.another_hangman_game.hm.new
+    noun=$w.en.another_hangman_round.hm.new
+    noun=$w.en.another_hangman_match.hm.new
+    noun=$w.en.the_hangman.hm.new
+    noun=$w.en.the_hangman_game.hm.new
+    noun=$w.en.the_hangman_round.hm.new
+    noun=$w.en.the_hangman_match.hm.new
+    prep.w=$w.en.with.hm.new.w
+    prep.w=$w.en.using.hm.new.w
+    prep.w=$w.en.and_use.hm.new.w
+    prep.w=$w.en.and_pick.hm.new.w
+    prep.w=$w.en.and_choose.hm.new.w
+    prep.w=$w.en.where_the_word_is.hm.new.w
+    prep.w=$w.en.the_word_is.hm.new.w
+    prep.w=$w.en.and_the_word_is.hm.new.w
+    prep.w=$w.en.its.hm.new.w
+    prep.w=$w.en.it_is.hm.new.w
+    prep.w=$w.en.and_its.hm.new.w
+    det.w=$w.en.the.hm.new.w
+    det.w=$w.en.a.hm.new.w
+    det.w=$w.en.hidden_word.hm.new.w
+    det.w=$w.en.secret_word.hm.new.w
+    det.w=$w.en.word.hm.new.w
+    det.w=$w.en.hidden.hm.new.w
+    det.w=$w.en.secret.hm.new.w
+    det.w=$w.en.the_word.hm.new.w
+    det.w=$w.en.the_hidden_word.hm.new.w
+    sample.w=cat
+
+@describe.hm.new.use core.describe
+    op=hm.new
+    intent=command
+    emit="@{_} core.request action=hm.new arg.word={w}"
+    priority=11
+    frames=imp
+
+@describe.hm.new.use.w core.describe.arg
+    of=$describe.hm.new.use
+    name=w
+    class=word
+
+@describe.hm.new.use.en core.describe.words
+    of=$describe.hm.new.use
+    lang=en
+    verb=$w.en.use.hm.new
+    verb=$w.en.make.hm.new
+    verb=$w.en.pick.hm.new
+    verb=$w.en.choose.hm.new
+    verb=$w.en.set.hm.new
+    verb=$w.en.take.hm.new
+    verb=$w.en.select.hm.new
+    verb=$w.en.let_us_use.hm.new
+    verb=$w.en.go_with.hm.new
+    verb=$w.en.try.hm.new
+    verb=$w.en.let_us_make.hm.new
+    verb=$w.en.let_us_set.hm.new
+    noun=$w.en.hidden_word.hm.new
+    noun=$w.en.secret_word.hm.new
+    noun=$w.en.word.hm.new
+    noun=$w.en.answer.hm.new
+    noun=$w.en.the_hidden_word.hm.new
+    prep.w=$w.en.be.hm.new.w
+    prep.w=$w.en.to_be.hm.new.w
+    prep.w=$w.en.to.hm.new.w
+    unit.w=$w.en.as_the_word.hm.new.w
+    unit.w=$w.en.as_the_hidden_word.hm.new.w
+    unit.w=$w.en.for_the_word.hm.new.w
+    unit.w=$w.en.as_the_answer.hm.new.w
+    unit.w=$w.en.as_the_secret_word.hm.new.w
+    unit.w=$w.en.to_be_the_word.hm.new.w
+    unit.w=$w.en.as_the_secret.hm.new.w
+    sample.w=cat
+
+@describe.hm.new.is core.describe
+    op=hm.new
+    intent=command
+    emit="@{_} core.request action=hm.new arg.word={w}"
+    priority=9
+    bareVerb=true
+    frames=imp
+
+@describe.hm.new.is.w core.describe.arg
+    of=$describe.hm.new.is
+    name=w
+    class=word
+
+@describe.hm.new.is.en core.describe.words
+    of=$describe.hm.new.is
+    lang=en
+    verb=$w.en.the_word_is.hm.new
+    verb=$w.en.the_hidden_word_is.hm.new
+    verb=$w.en.the_secret_word_is.hm.new
+    verb=$w.en.the_answer_is.hm.new
+    verb=$w.en.the_word_will_be.hm.new
+    verb=$w.en.the_answer_will_be.hm.new
+    verb=$w.en.the_word_should_be.hm.new
+    verb=$w.en.hidden_word.hm.new
+    verb=$w.en.secret_word.hm.new
+    verb=$w.en.let_us_use.hm.new
+    verb=$w.en.lets_use.hm.new
+    verb=$w.en.use.hm.new
+    verb=$w.en.hangman.hm.new
+    sample.w=cat
+
+@describe.hm.giveup core.describe
+    op=hm.giveup
+    intent=command
+    emit="@{_} core.request action=hm.giveup"
+    priority=8
+    frames=imp
+    effect="ends the round and tells the word"
+
+@describe.hm.giveup.en core.describe.words
+    of=$describe.hm.giveup
+    lang=en
+    verb=$w.en.give.hm.giveup
+    verb=$w.en.giving.hm.giveup
+    verb=$w.en.gave.hm.giveup
+    verb=$w.en.quit.hm.giveup
+    verb=$w.en.quitting.hm.giveup
+    verb=$w.en.surrender.hm.giveup
+    verb=$w.en.surrendering.hm.giveup
+    verb=$w.en.forfeit.hm.giveup
+    verb=$w.en.forfeiting.hm.giveup
+    verb=$w.en.am_done.hm.giveup
+    verb=$w.en.am_giving.hm.giveup
+    verb=$w.en.will_give.hm.giveup
+    verb=$w.en.am_quitting.hm.giveup
+    verb=$w.en.give_up.hm.giveup
+    verb=$w.en.i_give_up.hm.giveup
+    verb=$w.en.we_give_up.hm.giveup
+    verb=$w.en.i_quit.hm.giveup
+    verb=$w.en.i_surrender.hm.giveup
+    rest=$w.en.now.hm.giveup
+    rest=$w.en.pls.hm.giveup
+    rest=$w.en.plz.hm.giveup
+    rest=$w.en.the_word.hm.giveup
+    rest=$w.en.the_round.hm.giveup
+    rest=$w.en.this_round.hm.giveup
+    rest=$w.en.this_word.hm.giveup
+    rest=$w.en.this_game.hm.giveup
+    rest=$w.en.the_game.hm.giveup
+    rest=$w.en.it.hm.giveup
+    rest=$w.en.then.hm.giveup
+
+@describe.hm.giveup.end core.describe
+    op=hm.giveup
+    intent=command
+    emit="@{_} core.request action=hm.giveup"
+    priority=6
+    frames=imp
+
+@describe.hm.giveup.end.en core.describe.words
+    of=$describe.hm.giveup.end
+    lang=en
+    verb=$w.en.end.hm.giveup
+    verb=$w.en.stop.hm.giveup
+    verb=$w.en.finish.hm.giveup
+    verb=$w.en.close.hm.giveup
+    verb=$w.en.quit.hm.giveup
+    verb=$w.en.leave.hm.giveup
+    verb=$w.en.abort.hm.giveup
+    verb=$w.en.cancel.hm.giveup
+    verb=$w.en.terminate.hm.giveup
+    verb=$w.en.exit.hm.giveup
+    noun=$w.en.game.hm.giveup
+    noun=$w.en.round.hm.giveup
+    noun=$w.en.word.hm.giveup
+    noun=$w.en.hangman.hm.giveup
+    noun=$w.en.match.hm.giveup
+    noun=$w.en.session.hm.giveup
+    noun=$w.en.thing.hm.giveup
+    noun=$w.en.it.hm.giveup
+    rest=$w.en.pls.hm.giveup
+    rest=$w.en.plz.hm.giveup
+    rest=$w.en.now.hm.giveup
+    rest=$w.en.here.hm.giveup
+    rest=$w.en.already.hm.giveup
+    rest=$w.en.then.hm.giveup
+    rest=$w.en.for_me.hm.giveup
+
+@describe.hm.hint core.describe
+    op=hm.hint
+    intent=query
+    emit="@{_} core.request action=hm.hint"
+    kind=request
+    priority=12
+    frames=ask
+    effect="tells a fact about the hidden animal"
+
+@describe.hm.hint.en core.describe.words
+    of=$describe.hm.hint
+    lang=en
+    ask=$w.en.tell_me_something_about_it.hm.hint
+    ask=$w.en.what_kind_of_animal_is_it.hm.hint
+    ask=$w.en.give_me_a_clue.hm.hint
+    ask=$w.en.what_is_it_like.hm.hint
+    ask=$w.en.tell_me_more.hm.hint
+    ask=$w.en.tell_me_more_about_it.hm.hint
+    ask=$w.en.help_me_with_a_clue.hm.hint
+    ask=$w.en.help_me_with_a_hint.hm.hint
+    ask=$w.en.help_me_out.hm.hint
+    ask=$w.en.give_me_something_to_go_on.hm.hint
+    ask=$w.en.what_can_you_tell_me_about_it.hm.hint
+    ask=$w.en.what_can_you_tell_me.hm.hint
+    ask=$w.en.anything_about_the_word.hm.hint
+    ask=$w.en.anything_about_it.hm.hint
+    ask=$w.en.fact.hm.hint
+    ask=$w.en.facts.hm.hint
+    ask=$w.en.trivia.hm.hint
+    ask=$w.en.info.hm.hint
+    ask=$w.en.fun_fact.hm.hint
+    ask=$w.en.a_fact.hm.hint
+    ask=$w.en.any_fact.hm.hint
+    ask=$w.en.a_fun_fact.hm.hint
+    ask=$w.en.something_about_it.hm.hint
+    ask=$w.en.something_about_the_animal.hm.hint
+    ask=$w.en.something_about_the_word.hm.hint
+    ask=$w.en.a_fact_about_it.hm.hint
+    ask=$w.en.fact_about_it.hm.hint
+    ask=$w.en.fact_about_the_word.hm.hint
+    ask=$w.en.fact_about_the_animal.hm.hint
+    ask=$w.en.something_about_the_animal_pls.hm.hint
+    ask=$w.en.anything_about_the_animal.hm.hint
+    rest=$w.en.pls.hm.hint
+    rest=$w.en.plz.hm.hint
+    rest=$w.en.now.hm.hint
+    rest=$w.en.then.hm.hint
+    rest=$w.en.about_it.hm.hint
+    rest=$w.en.about_the_word.hm.hint
+    rest=$w.en.about_the_animal.hm.hint
+    rest=$w.en.about_this_animal.hm.hint
+    rest=$w.en.first.hm.hint
+    rest=$w.en.next.hm.hint
+    rest=$w.en.again.hm.hint
+    rest=$w.en.for_me.hm.hint
+    rest=$w.en.about_this.hm.hint
+    rest=$w.en.about_that.hm.hint
+
+@describe.hm.hint.give core.describe
+    op=hm.hint
+    intent=command
+    emit="@{_} core.request action=hm.hint"
+    priority=11
+    frames=imp
+
+@describe.hm.hint.give.en core.describe.words
+    of=$describe.hm.hint.give
+    lang=en
+    verb=$w.en.give_me.hm.hint
+    verb=$w.en.give.hm.hint
+    verb=$w.en.gimme.hm.hint
+    verb=$w.en.get.hm.hint
+    verb=$w.en.have.hm.hint
+    verb=$w.en.show_me.hm.hint
+    verb=$w.en.tell_me.hm.hint
+    verb=$w.en.how_about.hm.hint
+    verb=$w.en.whats.hm.hint
+    verb=$w.en.what_is.hm.hint
+    verb=$w.en.any.hm.hint
+    verb=$w.en.got_any.hm.hint
+    verb=$w.en.have_you_got_any.hm.hint
+    verb=$w.en.help_me_with.hm.hint
+    verb=$w.en.help_me_out_with.hm.hint
+    verb=$w.en.say.hm.hint
+    noun=$w.en.hint.hm.hint
+    noun=$w.en.hints.hm.hint
+    noun=$w.en.clue.hm.hint
+    noun=$w.en.clues.hm.hint
+    noun=$w.en.tip.hm.hint
+    noun=$w.en.tips.hm.hint
+    noun=$w.en.something.hm.hint
+    noun=$w.en.sth.hm.hint
+    noun=$w.en.anything.hm.hint
+    noun=$w.en.info.hm.hint
+    noun=$w.en.more.hm.hint
+    noun=$w.en.something_to_go_on.hm.hint
+    noun=$w.en.more_info.hm.hint
+    noun=$w.en.something_about_it.hm.hint
+    noun=$w.en.sth_about_it.hm.hint
+    noun=$w.en.anything_about_it.hm.hint
+    noun=$w.en.anything_about_the_word.hm.hint
+    noun=$w.en.something_about_the_word.hm.hint
+    noun=$w.en.a_clue.hm.hint
+    noun=$w.en.a_hint.hm.hint
+    noun=$w.en.little_hint.hm.hint
+    noun=$w.en.little_hints.hm.hint
+    noun=$w.en.little_clue.hm.hint
+    noun=$w.en.little_clues.hm.hint
+    noun=$w.en.little_tip.hm.hint
+    noun=$w.en.little_tips.hm.hint
+    noun=$w.en.little_something.hm.hint
+    noun=$w.en.little_sth.hm.hint
+    noun=$w.en.little_anything.hm.hint
+    noun=$w.en.little_info.hm.hint
+    noun=$w.en.little_more.hm.hint
+    noun=$w.en.little_something_to_go_on.hm.hint
+    noun=$w.en.little_more_info.hm.hint
+    noun=$w.en.little_something_about_it.hm.hint
+    noun=$w.en.little_sth_about_it.hm.hint
+    noun=$w.en.little_anything_about_it.hm.hint
+    noun=$w.en.little_anything_about_the_word.hm.hint
+    noun=$w.en.little_something_about_the_word.hm.hint
+    noun=$w.en.little_a_clue.hm.hint
+    noun=$w.en.little_a_hint.hm.hint
+    noun=$w.en.small_hint.hm.hint
+    noun=$w.en.small_hints.hm.hint
+    noun=$w.en.small_clue.hm.hint
+    noun=$w.en.small_clues.hm.hint
+    noun=$w.en.small_tip.hm.hint
+    noun=$w.en.small_tips.hm.hint
+    noun=$w.en.small_something.hm.hint
+    noun=$w.en.small_sth.hm.hint
+    noun=$w.en.small_anything.hm.hint
+    noun=$w.en.small_info.hm.hint
+    noun=$w.en.small_more.hm.hint
+    noun=$w.en.small_something_to_go_on.hm.hint
+    noun=$w.en.small_more_info.hm.hint
+    noun=$w.en.small_something_about_it.hm.hint
+    noun=$w.en.small_sth_about_it.hm.hint
+    noun=$w.en.small_anything_about_it.hm.hint
+    noun=$w.en.small_anything_about_the_word.hm.hint
+    noun=$w.en.small_something_about_the_word.hm.hint
+    noun=$w.en.small_a_clue.hm.hint
+    noun=$w.en.small_a_hint.hm.hint
+    noun=$w.en.quick_hint.hm.hint
+    noun=$w.en.quick_hints.hm.hint
+    noun=$w.en.quick_clue.hm.hint
+    noun=$w.en.quick_clues.hm.hint
+    noun=$w.en.quick_tip.hm.hint
+    noun=$w.en.quick_tips.hm.hint
+    noun=$w.en.quick_something.hm.hint
+    noun=$w.en.quick_sth.hm.hint
+    noun=$w.en.quick_anything.hm.hint
+    noun=$w.en.quick_info.hm.hint
+    noun=$w.en.quick_more.hm.hint
+    noun=$w.en.quick_something_to_go_on.hm.hint
+    noun=$w.en.quick_more_info.hm.hint
+    noun=$w.en.quick_something_about_it.hm.hint
+    noun=$w.en.quick_sth_about_it.hm.hint
+    noun=$w.en.quick_anything_about_it.hm.hint
+    noun=$w.en.quick_anything_about_the_word.hm.hint
+    noun=$w.en.quick_something_about_the_word.hm.hint
+    noun=$w.en.quick_a_clue.hm.hint
+    noun=$w.en.quick_a_hint.hm.hint
+    noun=$w.en.tiny_hint.hm.hint
+    noun=$w.en.tiny_hints.hm.hint
+    noun=$w.en.tiny_clue.hm.hint
+    noun=$w.en.tiny_clues.hm.hint
+    noun=$w.en.tiny_tip.hm.hint
+    noun=$w.en.tiny_tips.hm.hint
+    noun=$w.en.tiny_something.hm.hint
+    noun=$w.en.tiny_sth.hm.hint
+    noun=$w.en.tiny_anything.hm.hint
+    noun=$w.en.tiny_info.hm.hint
+    noun=$w.en.tiny_more.hm.hint
+    noun=$w.en.tiny_something_to_go_on.hm.hint
+    noun=$w.en.tiny_more_info.hm.hint
+    noun=$w.en.tiny_something_about_it.hm.hint
+    noun=$w.en.tiny_sth_about_it.hm.hint
+    noun=$w.en.tiny_anything_about_it.hm.hint
+    noun=$w.en.tiny_anything_about_the_word.hm.hint
+    noun=$w.en.tiny_something_about_the_word.hm.hint
+    noun=$w.en.tiny_a_clue.hm.hint
+    noun=$w.en.tiny_a_hint.hm.hint
+    rest=$w.en.at_all.hm.hint
+    rest=$w.en.about_it.hm.hint
+    rest=$w.en.about_the_word.hm.hint
+    rest=$w.en.to_go_on.hm.hint
+    rest=$w.en.pls.hm.hint
+    rest=$w.en.plz.hm.hint
+    rest=$w.en.please.hm.hint
+    rest=$w.en.now.hm.hint
+    rest=$w.en.then.hm.hint
+
+@describe.hm.hint.noun core.describe
+    op=hm.hint
+    intent=query
+    emit="@{_} core.request action=hm.hint"
+    kind=request
+    priority=11
+    frames=ask
+
+@describe.hm.hint.noun.en core.describe.words
+    of=$describe.hm.hint.noun
+    lang=en
+    ask=$w.en.hint.hm.hint
+    ask=$w.en.hints.hm.hint
+    ask=$w.en.clue.hm.hint
+    ask=$w.en.clues.hm.hint
+    ask=$w.en.tip.hm.hint
+    ask=$w.en.tips.hm.hint
+    ask=$w.en.something.hm.hint
+    ask=$w.en.sth.hm.hint
+    ask=$w.en.anything.hm.hint
+    ask=$w.en.info.hm.hint
+    ask=$w.en.more.hm.hint
+    ask=$w.en.something_to_go_on.hm.hint
+    ask=$w.en.more_info.hm.hint
+    ask=$w.en.something_about_it.hm.hint
+    ask=$w.en.sth_about_it.hm.hint
+    ask=$w.en.anything_about_it.hm.hint
+    ask=$w.en.anything_about_the_word.hm.hint
+    ask=$w.en.something_about_the_word.hm.hint
+    ask=$w.en.a_clue.hm.hint
+    ask=$w.en.a_hint.hm.hint
+    rest=$w.en.at_all.hm.hint
+    rest=$w.en.about_it.hm.hint
+    rest=$w.en.about_the_word.hm.hint
+    rest=$w.en.to_go_on.hm.hint
+    rest=$w.en.pls.hm.hint
+    rest=$w.en.plz.hm.hint
+    rest=$w.en.please.hm.hint
+    rest=$w.en.now.hm.hint
+    rest=$w.en.then.hm.hint
+
+@describe.hm.hint.fact core.describe
+    op=hm.hint
+    intent=command
+    emit="@{_} core.request action=hm.hint"
+    priority=11
+    frames=imp
+
+@describe.hm.hint.fact.en core.describe.words
+    of=$describe.hm.hint.fact
+    lang=en
+    verb=$w.en.tell_me.hm.hint
+    verb=$w.en.give_me.hm.hint
+    verb=$w.en.gimme.hm.hint
+    verb=$w.en.say.hm.hint
+    verb=$w.en.share.hm.hint
+    verb=$w.en.show_me.hm.hint
+    verb=$w.en.i_want.hm.hint
+    verb=$w.en.i_need.hm.hint
+    verb=$w.en.i_d_like.hm.hint
+    verb=$w.en.id_like.hm.hint
+    verb=$w.en.whats.hm.hint
+    verb=$w.en.what_is.hm.hint
+    verb=$w.en.what_s.hm.hint
+    verb=$w.en.got.hm.hint
+    verb=$w.en.any.hm.hint
+    verb=$w.en.have_you_got.hm.hint
+    verb=$w.en.do_you_have.hm.hint
+    verb=$w.en.how_about.hm.hint
+    verb=$w.en.can_i_have.hm.hint
+    verb=$w.en.can_i_get.hm.hint
+    verb=$w.en.let_me_have.hm.hint
+    verb=$w.en.n1.hm.hint
+    noun=$w.en.fact.hm.hint
+    noun=$w.en.facts.hm.hint
+    noun=$w.en.detail.hm.hint
+    noun=$w.en.details.hm.hint
+    noun=$w.en.info.hm.hint
+    noun=$w.en.information.hm.hint
+    noun=$w.en.thing.hm.hint
+    noun=$w.en.something.hm.hint
+    noun=$w.en.anything.hm.hint
+    noun=$w.en.trivia.hm.hint
+    noun=$w.en.description.hm.hint
+    noun=$w.en.characteristic.hm.hint
+    noun=$w.en.feature.hm.hint
+    noun=$w.en.property.hm.hint
+    noun=$w.en.trait.hm.hint
+    noun=$w.en.idea.hm.hint
+    noun=$w.en.snippet.hm.hint
+    noun=$w.en.bit.hm.hint
+    noun=$w.en.little_fact.hm.hint
+    noun=$w.en.little_facts.hm.hint
+    noun=$w.en.little_detail.hm.hint
+    noun=$w.en.little_details.hm.hint
+    noun=$w.en.little_info.hm.hint
+    noun=$w.en.little_information.hm.hint
+    noun=$w.en.little_thing.hm.hint
+    noun=$w.en.little_something.hm.hint
+    noun=$w.en.little_anything.hm.hint
+    noun=$w.en.little_trivia.hm.hint
+    noun=$w.en.little_description.hm.hint
+    noun=$w.en.little_characteristic.hm.hint
+    noun=$w.en.little_feature.hm.hint
+    noun=$w.en.little_property.hm.hint
+    noun=$w.en.little_trait.hm.hint
+    noun=$w.en.little_idea.hm.hint
+    noun=$w.en.little_snippet.hm.hint
+    noun=$w.en.little_bit.hm.hint
+    noun=$w.en.small_fact.hm.hint
+    noun=$w.en.small_facts.hm.hint
+    noun=$w.en.small_detail.hm.hint
+    noun=$w.en.small_details.hm.hint
+    noun=$w.en.small_info.hm.hint
+    noun=$w.en.small_information.hm.hint
+    noun=$w.en.small_thing.hm.hint
+    noun=$w.en.small_something.hm.hint
+    noun=$w.en.small_anything.hm.hint
+    noun=$w.en.small_trivia.hm.hint
+    noun=$w.en.small_description.hm.hint
+    noun=$w.en.small_characteristic.hm.hint
+    noun=$w.en.small_feature.hm.hint
+    noun=$w.en.small_property.hm.hint
+    noun=$w.en.small_trait.hm.hint
+    noun=$w.en.small_idea.hm.hint
+    noun=$w.en.small_snippet.hm.hint
+    noun=$w.en.small_bit.hm.hint
+    noun=$w.en.quick_fact.hm.hint
+    noun=$w.en.quick_facts.hm.hint
+    noun=$w.en.quick_detail.hm.hint
+    noun=$w.en.quick_details.hm.hint
+    noun=$w.en.quick_info.hm.hint
+    noun=$w.en.quick_information.hm.hint
+    noun=$w.en.quick_thing.hm.hint
+    noun=$w.en.quick_something.hm.hint
+    noun=$w.en.quick_anything.hm.hint
+    noun=$w.en.quick_trivia.hm.hint
+    noun=$w.en.quick_description.hm.hint
+    noun=$w.en.quick_characteristic.hm.hint
+    noun=$w.en.quick_feature.hm.hint
+    noun=$w.en.quick_property.hm.hint
+    noun=$w.en.quick_trait.hm.hint
+    noun=$w.en.quick_idea.hm.hint
+    noun=$w.en.quick_snippet.hm.hint
+    noun=$w.en.quick_bit.hm.hint
+    noun=$w.en.fun_fact.hm.hint
+    noun=$w.en.fun_facts.hm.hint
+    noun=$w.en.fun_detail.hm.hint
+    noun=$w.en.fun_details.hm.hint
+    noun=$w.en.fun_info.hm.hint
+    noun=$w.en.fun_information.hm.hint
+    noun=$w.en.fun_thing.hm.hint
+    noun=$w.en.fun_something.hm.hint
+    noun=$w.en.fun_anything.hm.hint
+    noun=$w.en.fun_trivia.hm.hint
+    noun=$w.en.fun_description.hm.hint
+    noun=$w.en.fun_characteristic.hm.hint
+    noun=$w.en.fun_feature.hm.hint
+    noun=$w.en.fun_property.hm.hint
+    noun=$w.en.fun_trait.hm.hint
+    noun=$w.en.fun_idea.hm.hint
+    noun=$w.en.fun_snippet.hm.hint
+    noun=$w.en.fun_bit.hm.hint
+    noun=$w.en.cool_fact.hm.hint
+    noun=$w.en.cool_facts.hm.hint
+    noun=$w.en.cool_detail.hm.hint
+    noun=$w.en.cool_details.hm.hint
+    noun=$w.en.cool_info.hm.hint
+    noun=$w.en.cool_information.hm.hint
+    noun=$w.en.cool_thing.hm.hint
+    noun=$w.en.cool_something.hm.hint
+    noun=$w.en.cool_anything.hm.hint
+    noun=$w.en.cool_trivia.hm.hint
+    noun=$w.en.cool_description.hm.hint
+    noun=$w.en.cool_characteristic.hm.hint
+    noun=$w.en.cool_feature.hm.hint
+    noun=$w.en.cool_property.hm.hint
+    noun=$w.en.cool_trait.hm.hint
+    noun=$w.en.cool_idea.hm.hint
+    noun=$w.en.cool_snippet.hm.hint
+    noun=$w.en.cool_bit.hm.hint
+    noun=$w.en.interesting_fact.hm.hint
+    noun=$w.en.interesting_facts.hm.hint
+    noun=$w.en.interesting_detail.hm.hint
+    noun=$w.en.interesting_details.hm.hint
+    noun=$w.en.interesting_info.hm.hint
+    noun=$w.en.interesting_information.hm.hint
+    noun=$w.en.interesting_thing.hm.hint
+    noun=$w.en.interesting_something.hm.hint
+    noun=$w.en.interesting_anything.hm.hint
+    noun=$w.en.interesting_trivia.hm.hint
+    noun=$w.en.interesting_description.hm.hint
+    noun=$w.en.interesting_characteristic.hm.hint
+    noun=$w.en.interesting_feature.hm.hint
+    noun=$w.en.interesting_property.hm.hint
+    noun=$w.en.interesting_trait.hm.hint
+    noun=$w.en.interesting_idea.hm.hint
+    noun=$w.en.interesting_snippet.hm.hint
+    noun=$w.en.interesting_bit.hm.hint
+    noun=$w.en.random_fact.hm.hint
+    noun=$w.en.random_facts.hm.hint
+    noun=$w.en.random_detail.hm.hint
+    noun=$w.en.random_details.hm.hint
+    noun=$w.en.random_info.hm.hint
+    noun=$w.en.random_information.hm.hint
+    noun=$w.en.random_thing.hm.hint
+    noun=$w.en.random_something.hm.hint
+    noun=$w.en.random_anything.hm.hint
+    noun=$w.en.random_trivia.hm.hint
+    noun=$w.en.random_description.hm.hint
+    noun=$w.en.random_characteristic.hm.hint
+    noun=$w.en.random_feature.hm.hint
+    noun=$w.en.random_property.hm.hint
+    noun=$w.en.random_trait.hm.hint
+    noun=$w.en.random_idea.hm.hint
+    noun=$w.en.random_snippet.hm.hint
+    noun=$w.en.random_bit.hm.hint
+    noun=$w.en.good_fact.hm.hint
+    noun=$w.en.good_facts.hm.hint
+    noun=$w.en.good_detail.hm.hint
+    noun=$w.en.good_details.hm.hint
+    noun=$w.en.good_info.hm.hint
+    noun=$w.en.good_information.hm.hint
+    noun=$w.en.good_thing.hm.hint
+    noun=$w.en.good_something.hm.hint
+    noun=$w.en.good_anything.hm.hint
+    noun=$w.en.good_trivia.hm.hint
+    noun=$w.en.good_description.hm.hint
+    noun=$w.en.good_characteristic.hm.hint
+    noun=$w.en.good_feature.hm.hint
+    noun=$w.en.good_property.hm.hint
+    noun=$w.en.good_trait.hm.hint
+    noun=$w.en.good_idea.hm.hint
+    noun=$w.en.good_snippet.hm.hint
+    noun=$w.en.good_bit.hm.hint
+    noun=$w.en.useful_fact.hm.hint
+    noun=$w.en.useful_facts.hm.hint
+    noun=$w.en.useful_detail.hm.hint
+    noun=$w.en.useful_details.hm.hint
+    noun=$w.en.useful_info.hm.hint
+    noun=$w.en.useful_information.hm.hint
+    noun=$w.en.useful_thing.hm.hint
+    noun=$w.en.useful_something.hm.hint
+    noun=$w.en.useful_anything.hm.hint
+    noun=$w.en.useful_trivia.hm.hint
+    noun=$w.en.useful_description.hm.hint
+    noun=$w.en.useful_characteristic.hm.hint
+    noun=$w.en.useful_feature.hm.hint
+    noun=$w.en.useful_property.hm.hint
+    noun=$w.en.useful_trait.hm.hint
+    noun=$w.en.useful_idea.hm.hint
+    noun=$w.en.useful_snippet.hm.hint
+    noun=$w.en.useful_bit.hm.hint
+    rest=$w.en.it.hm.hint
+    rest=$w.en.the_word.hm.hint
+    rest=$w.en.the_animal.hm.hint
+    rest=$w.en.the_mystery_animal.hm.hint
+    rest=$w.en.this_animal.hm.hint
+    rest=$w.en.that_animal.hm.hint
+    rest=$w.en.this.hm.hint
+    rest=$w.en.that.hm.hint
+    rest=$w.en.the_answer.hm.hint
+    rest=$w.en.the_mystery.hm.hint
+    rest=$w.en.the_mystery_word.hm.hint
+    rest=$w.en.this_word.hm.hint
+    rest=$w.en.the_hidden_word.hm.hint
+    rest=$w.en.the_secret_word.hm.hint
+    rest=$w.en.the_secret.hm.hint
+    rest=$w.en.the_creature.hm.hint
+    rest=$w.en.this_creature.hm.hint
+    rest=$w.en.the_hidden_animal.hm.hint
+    rest=$w.en.the_secret_animal.hm.hint
+    rest=$w.en.the_unknown_animal.hm.hint
+    rest=$w.en.the_mystery_creature.hm.hint
+    rest=$w.en.about_it.hm.hint
+    rest=$w.en.about_the_word.hm.hint
+    rest=$w.en.about_the_animal.hm.hint
+    rest=$w.en.about_the_mystery_animal.hm.hint
+    rest=$w.en.about_this_animal.hm.hint
+    rest=$w.en.about_that_animal.hm.hint
+    rest=$w.en.about_this.hm.hint
+    rest=$w.en.about_that.hm.hint
+    rest=$w.en.about_the_answer.hm.hint
+    rest=$w.en.about_the_mystery.hm.hint
+    rest=$w.en.about_the_mystery_word.hm.hint
+    rest=$w.en.about_this_word.hm.hint
+    rest=$w.en.about_the_hidden_word.hm.hint
+    rest=$w.en.about_the_secret_word.hm.hint
+    rest=$w.en.about_the_secret.hm.hint
+    rest=$w.en.about_the_creature.hm.hint
+    rest=$w.en.about_this_creature.hm.hint
+    rest=$w.en.about_the_hidden_animal.hm.hint
+    rest=$w.en.about_the_secret_animal.hm.hint
+    rest=$w.en.about_the_unknown_animal.hm.hint
+    rest=$w.en.about_the_mystery_creature.hm.hint
+    rest=$w.en.on_it.hm.hint
+    rest=$w.en.on_the_word.hm.hint
+    rest=$w.en.on_the_animal.hm.hint
+    rest=$w.en.on_the_mystery_animal.hm.hint
+    rest=$w.en.on_this_animal.hm.hint
+    rest=$w.en.on_that_animal.hm.hint
+    rest=$w.en.on_this.hm.hint
+    rest=$w.en.on_that.hm.hint
+    rest=$w.en.on_the_answer.hm.hint
+    rest=$w.en.on_the_mystery.hm.hint
+    rest=$w.en.on_the_mystery_word.hm.hint
+    rest=$w.en.on_this_word.hm.hint
+    rest=$w.en.on_the_hidden_word.hm.hint
+    rest=$w.en.on_the_secret_word.hm.hint
+    rest=$w.en.on_the_secret.hm.hint
+    rest=$w.en.on_the_creature.hm.hint
+    rest=$w.en.on_this_creature.hm.hint
+    rest=$w.en.on_the_hidden_animal.hm.hint
+    rest=$w.en.on_the_secret_animal.hm.hint
+    rest=$w.en.on_the_unknown_animal.hm.hint
+    rest=$w.en.on_the_mystery_creature.hm.hint
+    rest=$w.en.of_it.hm.hint
+    rest=$w.en.of_the_word.hm.hint
+    rest=$w.en.of_the_animal.hm.hint
+    rest=$w.en.of_the_mystery_animal.hm.hint
+    rest=$w.en.of_this_animal.hm.hint
+    rest=$w.en.of_that_animal.hm.hint
+    rest=$w.en.of_this.hm.hint
+    rest=$w.en.of_that.hm.hint
+    rest=$w.en.of_the_answer.hm.hint
+    rest=$w.en.of_the_mystery.hm.hint
+    rest=$w.en.of_the_mystery_word.hm.hint
+    rest=$w.en.of_this_word.hm.hint
+    rest=$w.en.of_the_hidden_word.hm.hint
+    rest=$w.en.of_the_secret_word.hm.hint
+    rest=$w.en.of_the_secret.hm.hint
+    rest=$w.en.of_the_creature.hm.hint
+    rest=$w.en.of_this_creature.hm.hint
+    rest=$w.en.of_the_hidden_animal.hm.hint
+    rest=$w.en.of_the_secret_animal.hm.hint
+    rest=$w.en.of_the_unknown_animal.hm.hint
+    rest=$w.en.of_the_mystery_creature.hm.hint
+
+@describe.hm.hint.known core.describe
+    op=hm.hint
+    intent=query
+    emit="@{_} core.request action=hm.hint"
+    kind=request
+    priority=11
+    frames=ask
+
+@describe.hm.hint.known.en core.describe.words
+    of=$describe.hm.hint.known
+    lang=en
+    noun=$w.en.it.hm.hint
+    noun=$w.en.the_animal.hm.hint
+    noun=$w.en.this_animal.hm.hint
+    noun=$w.en.the_word.hm.hint
+    noun=$w.en.that.hm.hint
+    noun=$w.en.the_creature.hm.hint
+    noun=$w.en.the_answer.hm.hint
+    noun=$w.en.this.hm.hint
+    ask=$w.en.what.hm.hint
+    ask=$w.en.what_is.hm.hint
+    ask=$w.en.whats.hm.hint
+    ask=$w.en.what_s.hm.hint
+    ask=$w.en.what_does.hm.hint
+    ask=$w.en.what_do.hm.hint
+    ask=$w.en.how_is.hm.hint
+    ask=$w.en.how_s.hm.hint
+    ask=$w.en.hows.hm.hint
+    rest=$w.en.known_for.hm.hint
+    rest=$w.en.famous_for.hm.hint
+    rest=$w.en.special.hm.hint
+    rest=$w.en.unique.hm.hint
+    rest=$w.en.interesting.hm.hint
+    rest=$w.en.notable.hm.hint
+    rest=$w.en.remarkable.hm.hint
+    rest=$w.en.distinctive.hm.hint
+    rest=$w.en.peculiar.hm.hint
+    rest=$w.en.characteristic.hm.hint
+    rest=$w.en.typical.hm.hint
+    rest=$w.en.good_at.hm.hint
+    rest=$w.en.used_for.hm.hint
+    rest=$w.en.useful_for.hm.hint
+    rest=$w.en.special_about.hm.hint
+    rest=$w.en.unique_about.hm.hint
+    rest=$w.en.interesting_about.hm.hint
+    rest=$w.en.known_as.hm.hint
+    rest=$w.en.called.hm.hint
+    rest=$w.en.famous.hm.hint
+    rest=$w.en.known.hm.hint
+
+@describe.hm.hint.piece core.describe
+    op=hm.hint
+    intent=command
+    emit="@{_} core.request action=hm.hint"
+    priority=11
+    frames=imp
+
+@describe.hm.hint.piece.en core.describe.words
+    of=$describe.hm.hint.piece
+    lang=en
+    verb=$w.en.tell_me.hm.hint
+    verb=$w.en.give_me.hm.hint
+    verb=$w.en.gimme.hm.hint
+    verb=$w.en.say.hm.hint
+    verb=$w.en.share.hm.hint
+    verb=$w.en.show_me.hm.hint
+    verb=$w.en.i_want.hm.hint
+    verb=$w.en.i_need.hm.hint
+    verb=$w.en.whats.hm.hint
+    verb=$w.en.what_is.hm.hint
+    verb=$w.en.got.hm.hint
+    verb=$w.en.any.hm.hint
+    verb=$w.en.how_about.hm.hint
+    verb=$w.en.n1.hm.hint
+    verb=$w.en.a.hm.hint
+    verb=$w.en.an.hm.hint
+    verb=$w.en.some.hm.hint
+    noun=$w.en.n1.hm.hint
+    noun=$w.en.one_thing.hm.hint
+    noun=$w.en.n1_thing.hm.hint
+    noun=$w.en.a_thing.hm.hint
+    noun=$w.en.some_thing.hm.hint
+    noun=$w.en.a_detail.hm.hint
+    noun=$w.en.a_clue.hm.hint
+    noun=$w.en.a_hint.hm.hint
+    noun=$w.en.a_fact.hm.hint
+    noun=$w.en.a_piece_of_info.hm.hint
+    noun=$w.en.a_bit_of_info.hm.hint
+    noun=$w.en.a_bit_of_information.hm.hint
+    noun=$w.en.a_piece_of_information.hm.hint
+    rest=$w.en.about_it.hm.hint
+    rest=$w.en.about_the_word.hm.hint
+    rest=$w.en.about_the_animal.hm.hint
+    rest=$w.en.about_the_mystery_animal.hm.hint
+    rest=$w.en.about_this_animal.hm.hint
+    rest=$w.en.about_that_animal.hm.hint
+    rest=$w.en.about_this.hm.hint
+    rest=$w.en.about_that.hm.hint
+    rest=$w.en.about_the_answer.hm.hint
+    rest=$w.en.about_the_mystery.hm.hint
+    rest=$w.en.about_the_hidden_word.hm.hint
+    rest=$w.en.about_the_secret_word.hm.hint
+    rest=$w.en.about_the_creature.hm.hint
+    rest=$w.en.about_this_creature.hm.hint
+    rest=$w.en.on_it.hm.hint
+    rest=$w.en.on_the_word.hm.hint
+    rest=$w.en.on_the_animal.hm.hint
+    rest=$w.en.on_the_mystery_animal.hm.hint
+    rest=$w.en.on_this_animal.hm.hint
+    rest=$w.en.on_that_animal.hm.hint
+    rest=$w.en.on_this.hm.hint
+    rest=$w.en.on_that.hm.hint
+    rest=$w.en.on_the_answer.hm.hint
+    rest=$w.en.on_the_mystery.hm.hint
+    rest=$w.en.on_the_hidden_word.hm.hint
+    rest=$w.en.on_the_secret_word.hm.hint
+    rest=$w.en.on_the_creature.hm.hint
+    rest=$w.en.on_this_creature.hm.hint
+    rest=$w.en.of_it.hm.hint
+    rest=$w.en.of_the_word.hm.hint
+    rest=$w.en.of_the_animal.hm.hint
+    rest=$w.en.of_the_mystery_animal.hm.hint
+    rest=$w.en.of_this_animal.hm.hint
+    rest=$w.en.of_that_animal.hm.hint
+    rest=$w.en.of_this.hm.hint
+    rest=$w.en.of_that.hm.hint
+    rest=$w.en.of_the_answer.hm.hint
+    rest=$w.en.of_the_mystery.hm.hint
+    rest=$w.en.of_the_hidden_word.hm.hint
+    rest=$w.en.of_the_secret_word.hm.hint
+    rest=$w.en.of_the_creature.hm.hint
+    rest=$w.en.of_this_creature.hm.hint
+
+@describe.hm.status core.describe
+    op=hm.status
+    intent=query
+    emit="@{_} core.request action=hm.status"
+    kind=request
+    priority=12
+    frames=ask
+    effect="tells the masked word, the wrong guesses left and the letters tried"
+
+@describe.hm.status.en core.describe.words
+    of=$describe.hm.status
+    lang=en
+    ask=$w.en.how_many_guesses_are_left.hm.status
+    ask=$w.en.how_many_guesses_do_i_have_left.hm.status
+    ask=$w.en.how_many_lives_do_i_have.hm.status
+    ask=$w.en.what_letters_have_i_tried.hm.status
+    ask=$w.en.which_letters_have_i_guessed.hm.status
+    ask=$w.en.what_does_the_word_look_like.hm.status
+    ask=$w.en.show_me_the_word.hm.status
+    ask=$w.en.show_the_word.hm.status
+    ask=$w.en.what_is_the_word_so_far.hm.status
+    ask=$w.en.how_many_letters_does_it_have.hm.status
+    ask=$w.en.how_many_letters_are_there.hm.status
+    ask=$w.en.how_long_is_the_word.hm.status
+    ask=$w.en.how_many_wrong_guesses_are_left.hm.status
+    ask=$w.en.how_many_tries_are_left.hm.status
+    ask=$w.en.current_word.hm.status
+    ask=$w.en.the_current_word.hm.status
+    ask=$w.en.my_progress.hm.status
+    ask=$w.en.the_blanks.hm.status
+    ask=$w.en.my_status.hm.status
+    ask=$w.en.current_state.hm.status
+    ask=$w.en.how_far_am_i.hm.status
+    ask=$w.en.how_am_i_doing.hm.status
+    ask=$w.en.how_am_i_doing_so_far.hm.status
+    ask=$w.en.how_much_of_the_word_is_solved.hm.status
+    ask=$w.en.how_much_of_the_word_have_i_got.hm.status
+    ask=$w.en.how_much_of_the_word_is_done.hm.status
+    ask=$w.en.how_much_is_solved.hm.status
+    ask=$w.en.how_much_of_the_word_is_revealed.hm.status
+    ask=$w.en.what_does_it_look_like.hm.status
+    ask=$w.en.what_do_the_dashes_look_like.hm.status
+    ask=$w.en.how_does_the_word_look.hm.status
+    ask=$w.en.how_does_it_look.hm.status
+    ask=$w.en.how_does_the_word_look_like.hm.status
+    ask=$w.en.what_is_the_word_now.hm.status
+    ask=$w.en.whats_the_word_now.hm.status
+    ask=$w.en.where_am_i.hm.status
+    ask=$w.en.where_are_we.hm.status
+    ask=$w.en.whats_the_situation.hm.status
+    ask=$w.en.what_is_the_situation.hm.status
+    ask=$w.en.how_is_it_going.hm.status
+    ask=$w.en.hows_it_going.hm.status
+    ask=$w.en.how_are_we_doing.hm.status
+    ask=$w.en.how_s_it_going.hm.status
+    ask=$w.en.what_s_the_state.hm.status
+    ask=$w.en.whats_the_state.hm.status
+    ask=$w.en.what_is_the_state.hm.status
+    ask=$w.en.state_of_the_game.hm.status
+    ask=$w.en.game_status.hm.status
+    ask=$w.en.the_game_status.hm.status
+    ask=$w.en.the_status.hm.status
+    ask=$w.en.status.hm.status
+    ask=$w.en.hidden_word_view.hm.status
+    ask=$w.en.word_view.hm.status
+    ask=$w.en.the_mask.hm.status
+    ask=$w.en.the_dashes.hm.status
+    ask=$w.en.the_underscores.hm.status
+    ask=$w.en.the_masked_word.hm.status
+    ask=$w.en.the_hidden_word.hm.status
+    ask=$w.en.the_progress.hm.status
+    ask=$w.en.progress.hm.status
+    ask=$w.en.letters_still_missing.hm.status
+    ask=$w.en.letters_missing.hm.status
+    ask=$w.en.letters_hidden.hm.status
+    ask=$w.en.letters_left.hm.status
+    ask=$w.en.letters_remaining.hm.status
+    ask=$w.en.how_many_spaces_left_in_the_word.hm.status
+    ask=$w.en.how_many_spaces_are_left.hm.status
+    ask=$w.en.how_many_blanks_left.hm.status
+    ask=$w.en.how_many_dashes_left.hm.status
+    ask=$w.en.how_many_letters_left.hm.status
+    ask=$w.en.how_many_letters_remain.hm.status
+    ask=$w.en.how_many_left.hm.status
+
+@describe.hm.status.left core.describe
+    op=hm.status
+    intent=query
+    emit="@{_} core.request action=hm.status"
+    kind=request
+    priority=12
+    frames=ask
+
+@describe.hm.status.left.en core.describe.words
+    of=$describe.hm.status.left
+    lang=en
+    tverb=$w.en.do_i_have.hm.status
+    tverb=$w.en.did_i_have.hm.status
+    tverb=$w.en.have_i_got.hm.status
+    tverb=$w.en.i_have.hm.status
+    tverb=$w.en.can_i_make.hm.status
+    tverb=$w.en.can_i_still_make.hm.status
+    tverb=$w.en.can_i_get.hm.status
+    tverb=$w.en.can_i_miss.hm.status
+    tverb=$w.en.are_left.hm.status
+    tverb=$w.en.are_there.hm.status
+    tverb=$w.en.are_allowed.hm.status
+    tverb=$w.en.do_i_still_have.hm.status
+    tverb=$w.en.remain.hm.status
+    tverb=$w.en.remaining.hm.status
+    tverb=$w.en.left.hm.status
+    tverb=$w.en.are_remaining.hm.status
+    tverb=$w.en.are_still_left.hm.status
+    tverb=$w.en.do_i_have_left.hm.status
+    tverb=$w.en.can_i_still_get.hm.status
+    tverb=$w.en.allowed.hm.status
+    tverb=$w.en.more_allowed.hm.status
+    tverb=$w.en.am_i_allowed.hm.status
+    tverb=$w.en.have_i_left.hm.status
+    tverb=$w.en.do_i_get.hm.status
+    tverb=$w.en.do_i_still_get.hm.status
+    tverb=$w.en.i_still_have.hm.status
+    tverb=$w.en.are_still_allowed.hm.status
+    tverb=$w.en.can_i_still_miss.hm.status
+    noun=$w.en.guesses.hm.status
+    noun=$w.en.tries.hm.status
+    noun=$w.en.misses.hm.status
+    noun=$w.en.lives.hm.status
+    noun=$w.en.chances.hm.status
+    noun=$w.en.attempts.hm.status
+    noun=$w.en.mistakes.hm.status
+    noun=$w.en.life.hm.status
+    noun=$w.en.errors.hm.status
+    noun=$w.en.goes.hm.status
+    noun=$w.en.turns.hm.status
+    noun=$w.en.strikes.hm.status
+    noun=$w.en.wrong_guesses.hm.status
+    noun=$w.en.wrong_tries.hm.status
+    noun=$w.en.wrong_misses.hm.status
+    noun=$w.en.wrong_lives.hm.status
+    noun=$w.en.wrong_chances.hm.status
+    noun=$w.en.wrong_attempts.hm.status
+    noun=$w.en.wrong_mistakes.hm.status
+    noun=$w.en.wrong_life.hm.status
+    noun=$w.en.wrong_errors.hm.status
+    noun=$w.en.wrong_goes.hm.status
+    noun=$w.en.wrong_turns.hm.status
+    noun=$w.en.wrong_strikes.hm.status
+    noun=$w.en.incorrect_guesses.hm.status
+    noun=$w.en.incorrect_tries.hm.status
+    noun=$w.en.incorrect_misses.hm.status
+    noun=$w.en.incorrect_lives.hm.status
+    noun=$w.en.incorrect_chances.hm.status
+    noun=$w.en.incorrect_attempts.hm.status
+    noun=$w.en.incorrect_mistakes.hm.status
+    noun=$w.en.incorrect_life.hm.status
+    noun=$w.en.incorrect_errors.hm.status
+    noun=$w.en.incorrect_goes.hm.status
+    noun=$w.en.incorrect_turns.hm.status
+    noun=$w.en.incorrect_strikes.hm.status
+    noun=$w.en.bad_guesses.hm.status
+    noun=$w.en.bad_tries.hm.status
+    noun=$w.en.bad_misses.hm.status
+    noun=$w.en.bad_lives.hm.status
+    noun=$w.en.bad_chances.hm.status
+    noun=$w.en.bad_attempts.hm.status
+    noun=$w.en.bad_mistakes.hm.status
+    noun=$w.en.bad_life.hm.status
+    noun=$w.en.bad_errors.hm.status
+    noun=$w.en.bad_goes.hm.status
+    noun=$w.en.bad_turns.hm.status
+    noun=$w.en.bad_strikes.hm.status
+    ask=$w.en.how_many.hm.status
+    ask=$w.en.how_much.hm.status
+    rest=$w.en.left.hm.status
+    rest=$w.en.remaining.hm.status
+    rest=$w.en.still.hm.status
+    rest=$w.en.more.hm.status
+    rest=$w.en.allowed.hm.status
+    rest=$w.en.to_go.hm.status
+    rest=$w.en.now.hm.status
+    rest=$w.en.so_far.hm.status
+    rest=$w.en.pls.hm.status
+    rest=$w.en.plz.hm.status
+
+@describe.hm.status.left2 core.describe
+    op=hm.status
+    intent=query
+    emit="@{_} core.request action=hm.status"
+    kind=request
+    priority=11
+    frames=ask
+
+@describe.hm.status.left2.en core.describe.words
+    of=$describe.hm.status.left2
+    lang=en
+    ask=$w.en.wrong_guess.hm.status
+    ask=$w.en.wrong_guesses.hm.status
+    ask=$w.en.wrong_tries.hm.status
+    ask=$w.en.wrong_misses.hm.status
+    ask=$w.en.wrong_lives.hm.status
+    ask=$w.en.wrong_chances.hm.status
+    ask=$w.en.wrong_attempts.hm.status
+    ask=$w.en.wrong_mistakes.hm.status
+    ask=$w.en.wrong_errors.hm.status
+    ask=$w.en.wrong_life.hm.status
+    ask=$w.en.wrong_guess_count.hm.status
+    ask=$w.en.wrong_try_count.hm.status
+    ask=$w.en.wrong_miss_count.hm.status
+    ask=$w.en.incorrect_guess.hm.status
+    ask=$w.en.incorrect_guesses.hm.status
+    ask=$w.en.incorrect_tries.hm.status
+    ask=$w.en.incorrect_misses.hm.status
+    ask=$w.en.incorrect_lives.hm.status
+    ask=$w.en.incorrect_chances.hm.status
+    ask=$w.en.incorrect_attempts.hm.status
+    ask=$w.en.incorrect_mistakes.hm.status
+    ask=$w.en.incorrect_errors.hm.status
+    ask=$w.en.incorrect_life.hm.status
+    ask=$w.en.incorrect_guess_count.hm.status
+    ask=$w.en.incorrect_try_count.hm.status
+    ask=$w.en.incorrect_miss_count.hm.status
+    ask=$w.en.bad_guess.hm.status
+    ask=$w.en.bad_guesses.hm.status
+    ask=$w.en.bad_tries.hm.status
+    ask=$w.en.bad_misses.hm.status
+    ask=$w.en.bad_lives.hm.status
+    ask=$w.en.bad_chances.hm.status
+    ask=$w.en.bad_attempts.hm.status
+    ask=$w.en.bad_mistakes.hm.status
+    ask=$w.en.bad_errors.hm.status
+    ask=$w.en.bad_life.hm.status
+    ask=$w.en.bad_guess_count.hm.status
+    ask=$w.en.bad_try_count.hm.status
+    ask=$w.en.bad_miss_count.hm.status
+    ask=$w.en.guess.hm.status
+    ask=$w.en.guesses.hm.status
+    ask=$w.en.tries.hm.status
+    ask=$w.en.misses.hm.status
+    ask=$w.en.lives.hm.status
+    ask=$w.en.chances.hm.status
+    ask=$w.en.attempts.hm.status
+    ask=$w.en.mistakes.hm.status
+    ask=$w.en.errors.hm.status
+    ask=$w.en.life.hm.status
+    ask=$w.en.guess_count.hm.status
+    ask=$w.en.try_count.hm.status
+    ask=$w.en.miss_count.hm.status
+    rest=$w.en.left.hm.status
+    rest=$w.en.remaining.hm.status
+    rest=$w.en.remain.hm.status
+    rest=$w.en.still_left.hm.status
+    rest=$w.en.to_go.hm.status
+    rest=$w.en.count.hm.status
+
+@describe.hm.status.word core.describe
+    op=hm.status
+    intent=command
+    emit="@{_} core.request action=hm.status"
+    priority=12
+    frames=imp
+
+@describe.hm.status.word.en core.describe.words
+    of=$describe.hm.status.word
+    lang=en
+    verb=$w.en.show.hm.status
+    verb=$w.en.display.hm.status
+    verb=$w.en.see.hm.status
+    verb=$w.en.give.hm.status
+    verb=$w.en.tell.hm.status
+    verb=$w.en.read.hm.status
+    verb=$w.en.print.hm.status
+    verb=$w.en.let_me_see.hm.status
+    verb=$w.en.show_me.hm.status
+    verb=$w.en.give_me.hm.status
+    verb=$w.en.tell_me.hm.status
+    verb=$w.en.say.hm.status
+    verb=$w.en.what_is.hm.status
+    verb=$w.en.whats.hm.status
+    verb=$w.en.how_is.hm.status
+    verb=$w.en.read_me.hm.status
+    verb=$w.en.display_me.hm.status
+    verb=$w.en.let_me_see.hm.status
+    noun=$w.en.word.hm.status
+    noun=$w.en.progress.hm.status
+    noun=$w.en.blanks.hm.status
+    noun=$w.en.letters.hm.status
+    noun=$w.en.masked_word.hm.status
+    noun=$w.en.hidden_word.hm.status
+    noun=$w.en.word_so_far.hm.status
+    noun=$w.en.status.hm.status
+    noun=$w.en.current_word.hm.status
+    noun=$w.en.current_progress.hm.status
+    noun=$w.en.current_blanks.hm.status
+    noun=$w.en.current_letters.hm.status
+    noun=$w.en.current_masked_word.hm.status
+    noun=$w.en.current_hidden_word.hm.status
+    noun=$w.en.current_word_so_far.hm.status
+    noun=$w.en.current_status.hm.status
+    noun=$w.en.hidden_progress.hm.status
+    noun=$w.en.hidden_blanks.hm.status
+    noun=$w.en.hidden_letters.hm.status
+    noun=$w.en.hidden_masked_word.hm.status
+    noun=$w.en.hidden_hidden_word.hm.status
+    noun=$w.en.hidden_word_so_far.hm.status
+    noun=$w.en.hidden_status.hm.status
+    noun=$w.en.masked_progress.hm.status
+    noun=$w.en.masked_blanks.hm.status
+    noun=$w.en.masked_letters.hm.status
+    noun=$w.en.masked_masked_word.hm.status
+    noun=$w.en.masked_hidden_word.hm.status
+    noun=$w.en.masked_word_so_far.hm.status
+    noun=$w.en.masked_status.hm.status
+    rest=$w.en.so_far.hm.status
+    rest=$w.en.now.hm.status
+    rest=$w.en.currently.hm.status
+    rest=$w.en.again.hm.status
+    rest=$w.en.pls.hm.status
+    rest=$w.en.plz.hm.status
+    rest=$w.en.is_solved.hm.status
+    rest=$w.en.solved.hm.status
+
+@describe.hm.status.word2 core.describe
+    op=hm.status
+    intent=query
+    emit="@{_} core.request action=hm.status"
+    kind=request
+    priority=11
+    frames=ask
+
+@describe.hm.status.word2.en core.describe.words
+    of=$describe.hm.status.word2
+    lang=en
+    ask=$w.en.word.hm.status
+    ask=$w.en.the_word.hm.status
+    ask=$w.en.current_word.hm.status
+    ask=$w.en.the_current_word.hm.status
+    ask=$w.en.hidden_word.hm.status
+    ask=$w.en.masked_word.hm.status
+    ask=$w.en.progress.hm.status
+    ask=$w.en.blanks.hm.status
+    ask=$w.en.status.hm.status
+    ask=$w.en.the_status.hm.status
+    rest=$w.en.so_far.hm.status
+    rest=$w.en.now.hm.status
+    rest=$w.en.currently.hm.status
+    rest=$w.en.status.hm.status
+    rest=$w.en.state.hm.status
+    rest=$w.en.pls.hm.status
+    rest=$w.en.plz.hm.status
+    rest=$w.en.please.hm.status
+
+@describe.hm.status.look core.describe
+    op=hm.status
+    intent=command
+    emit="@{_} core.request action=hm.status"
+    priority=11
+    frames=imp
+
+@describe.hm.status.look.en core.describe.words
+    of=$describe.hm.status.look
+    lang=en
+    verb=$w.en.how_many.hm.status
+    verb=$w.en.what.hm.status
+    verb=$w.en.which.hm.status
+    verb=$w.en.show.hm.status
+    verb=$w.en.show_me.hm.status
+    verb=$w.en.display.hm.status
+    verb=$w.en.tell_me.hm.status
+    verb=$w.en.give_me.hm.status
+    verb=$w.en.let_me_see.hm.status
+    verb=$w.en.read.hm.status
+    verb=$w.en.say.hm.status
+    verb=$w.en.list.hm.status
+    verb=$w.en.print.hm.status
+    verb=$w.en.whats.hm.status
+    verb=$w.en.what_is.hm.status
+    verb=$w.en.what_s.hm.status
+    verb=$w.en.view.hm.status
+    verb=$w.en.check.hm.status
+    verb=$w.en.count.hm.status
+    verb=$w.en.reveal.hm.status
+    noun=$w.en.letters.hm.status
+    noun=$w.en.spaces.hm.status
+    noun=$w.en.blanks.hm.status
+    noun=$w.en.dashes.hm.status
+    noun=$w.en.underscores.hm.status
+    noun=$w.en.slots.hm.status
+    noun=$w.en.boxes.hm.status
+    noun=$w.en.gaps.hm.status
+    noun=$w.en.mask.hm.status
+    noun=$w.en.masked_word.hm.status
+    noun=$w.en.hidden_word.hm.status
+    noun=$w.en.word_view.hm.status
+    noun=$w.en.hidden_letters.hm.status
+    noun=$w.en.missing_letters.hm.status
+    noun=$w.en.unknown_letters.hm.status
+    noun=$w.en.remaining_letters.hm.status
+    noun=$w.en.guessed_letters.hm.status
+    noun=$w.en.used_letters.hm.status
+    noun=$w.en.tried_letters.hm.status
+    noun=$w.en.wrong_letters.hm.status
+    noun=$w.en.letters_left.hm.status
+    noun=$w.en.progress.hm.status
+    noun=$w.en.board.hm.status
+    noun=$w.en.display.hm.status
+    noun=$w.en.status.hm.status
+    noun=$w.en.view.hm.status
+    noun=$w.en.word.hm.status
+    rest=$w.en.are.hm.status
+    rest=$w.en.is.hm.status
+    rest=$w.en.do.hm.status
+    rest=$w.en.does.hm.status
+    rest=$w.en.have.hm.status
+    rest=$w.en.has.hm.status
+    rest=$w.en.still.hm.status
+    rest=$w.en.there.hm.status
+    rest=$w.en.left.hm.status
+    rest=$w.en.remaining.hm.status
+    rest=$w.en.missing.hm.status
+    rest=$w.en.hidden.hm.status
+    rest=$w.en.unknown.hm.status
+    rest=$w.en.so_far.hm.status
+    rest=$w.en.now.hm.status
+    rest=$w.en.look_like.hm.status
+    rest=$w.en.looks_like.hm.status
+    rest=$w.en.in_the_word.hm.status
+    rest=$w.en.are_hidden.hm.status
+    rest=$w.en.are_missing.hm.status
+    rest=$w.en.are_left.hm.status
+    rest=$w.en.are_still_hidden.hm.status
+    rest=$w.en.are_still_missing.hm.status
+    rest=$w.en.are_still_left.hm.status
+    rest=$w.en.still_missing.hm.status
+    rest=$w.en.still_hidden.hm.status
+    rest=$w.en.have_i_guessed.hm.status
+    rest=$w.en.have_i_tried.hm.status
+    rest=$w.en.did_i_guess.hm.status
+    rest=$w.en.did_i_try.hm.status
+    rest=$w.en.in_it.hm.status
+    rest=$w.en.in_there.hm.status
+    rest=$w.en.are_there.hm.status
+    rest=$w.en.there_are.hm.status
+    rest=$w.en.are_in_the_word.hm.status
+    rest=$w.en.are_in_it.hm.status
+    rest=$w.en.currently.hm.status
+    rest=$w.en.yet.hm.status
+    rest=$w.en.right_now.hm.status
+    rest=$w.en.pls.hm.status
+    rest=$w.en.plz.hm.status
+    rest=$w.en.again.hm.status
+    rest=$w.en.for_me.hm.status
+    rest=$w.en.thanks.hm.status
+    rest=$w.en.view.hm.status
+    rest=$w.en.look_like_now.hm.status
+
+@describe.hm.status.length core.describe
+    op=hm.status
+    intent=query
+    emit="@{_} core.request action=hm.status"
+    kind=request
+    priority=11
+    frames=ask
+
+@describe.hm.status.length.en core.describe.words
+    of=$describe.hm.status.length
+    lang=en
+    noun=$w.en.word.hm.status
+    noun=$w.en.secret_word.hm.status
+    noun=$w.en.secret.hm.status
+    noun=$w.en.answer.hm.status
+    noun=$w.en.puzzle.hm.status
+    noun=$w.en.it.hm.status
+    noun=$w.en.there.hm.status
+    noun=$w.en.hidden_word.hm.status
+    noun=$w.en.the_word.hm.status
+    noun=$w.en.the_secret_word.hm.status
+    noun=$w.en.the_secret.hm.status
+    noun=$w.en.the_answer.hm.status
+    noun=$w.en.the_puzzle.hm.status
+    noun=$w.en.the_it.hm.status
+    noun=$w.en.the_there.hm.status
+    noun=$w.en.the_hidden_word.hm.status
+    noun=$w.en.this_word.hm.status
+    noun=$w.en.this_secret_word.hm.status
+    noun=$w.en.this_secret.hm.status
+    noun=$w.en.this_answer.hm.status
+    noun=$w.en.this_puzzle.hm.status
+    noun=$w.en.this_it.hm.status
+    noun=$w.en.this_there.hm.status
+    noun=$w.en.this_hidden_word.hm.status
+    noun=$w.en.my_word.hm.status
+    noun=$w.en.my_secret_word.hm.status
+    noun=$w.en.my_secret.hm.status
+    noun=$w.en.my_answer.hm.status
+    noun=$w.en.my_puzzle.hm.status
+    noun=$w.en.my_it.hm.status
+    noun=$w.en.my_there.hm.status
+    noun=$w.en.my_hidden_word.hm.status
+    noun=$w.en.your_word.hm.status
+    noun=$w.en.your_secret_word.hm.status
+    noun=$w.en.your_secret.hm.status
+    noun=$w.en.your_answer.hm.status
+    noun=$w.en.your_puzzle.hm.status
+    noun=$w.en.your_it.hm.status
+    noun=$w.en.your_there.hm.status
+    noun=$w.en.your_hidden_word.hm.status
+    ask=$w.en.how_many_letters.hm.status
+    ask=$w.en.how_many_letters_are_there.hm.status
+    ask=$w.en.how_many_letters_in_it.hm.status
+    ask=$w.en.how_long_is.hm.status
+    ask=$w.en.how_long_is_the_word.hm.status
+    ask=$w.en.how_long_is_it.hm.status
+    ask=$w.en.how_long.hm.status
+    ask=$w.en.what_is_the_length_of.hm.status
+    ask=$w.en.whats_the_length_of.hm.status
+    ask=$w.en.the_length_of.hm.status
+    ask=$w.en.word_length.hm.status
+    ask=$w.en.letter_count.hm.status
+    ask=$w.en.number_of_letters.hm.status
+    ask=$w.en.how_many_characters.hm.status
+    ask=$w.en.how_many_characters_in.hm.status
+    rest=$w.en.have.hm.status
+    rest=$w.en.has.hm.status
+    rest=$w.en.contain.hm.status
+    rest=$w.en.contains.hm.status
+    rest=$w.en.include.hm.status
+    rest=$w.en.in_it.hm.status
+    rest=$w.en.in_total.hm.status
+    rest=$w.en.long.hm.status
+    rest=$w.en.there.hm.status
+    rest=$w.en.hidden.hm.status
+
+@w.en.guess.hm.letter core.word lang=en text=guess means=hm.letter
+@w.en.try.hm.letter core.word lang=en text=try means=hm.letter
+@w.en.pick.hm.letter core.word lang=en text=pick means=hm.letter
+@w.en.choose.hm.letter core.word lang=en text=choose means=hm.letter
+@w.en.say.hm.letter core.word lang=en text=say means=hm.letter
+@w.en.go_with.hm.letter core.word lang=en text="go with" means=hm.letter
+@w.en.call.hm.letter core.word lang=en text=call means=hm.letter
+@w.en.the_letter.hm.letter core.word lang=en text="the letter" means=hm.letter
+@w.en.letter.hm.letter core.word lang=en text=letter means=hm.letter
+@w.en.trying.hm.letter core.word lang=en text=trying means=hm.letter
+@w.en.i_guess.hm.letter core.word lang=en text="i guess" means=hm.letter
+@w.en.i_try.hm.letter core.word lang=en text="i try" means=hm.letter
+@w.en.how_about.hm.letter core.word lang=en text="how about" means=hm.letter
+@w.en.what_about.hm.letter core.word lang=en text="what about" means=hm.letter
+@w.en.guess_the_letter.hm.letter core.word lang=en text="guess the letter" means=hm.letter
+@w.en.try_the_letter.hm.letter core.word lang=en text="try the letter" means=hm.letter
+@w.en.i_guess_the_letter.hm.letter core.word lang=en text="i guess the letter" means=hm.letter
+@w.en.let_me_try.hm.letter core.word lang=en text="let me try" means=hm.letter
+@w.en.let_us_try.hm.letter core.word lang=en text="let us try" means=hm.letter
+@w.en.how_about_the_letter.hm.letter core.word lang=en text="how about the letter" means=hm.letter
+@w.en.what_about_the_letter.hm.letter core.word lang=en text="what about the letter" means=hm.letter
+@w.en.is_it_the_letter.hm.letter core.word lang=en text="is it the letter" means=hm.letter
+@w.en.i_pick.hm.letter core.word lang=en text="i pick" means=hm.letter
+@w.en.i_choose.hm.letter core.word lang=en text="i choose" means=hm.letter
+@w.en.take.hm.letter core.word lang=en text=take means=hm.letter
+@w.en.i_take.hm.letter core.word lang=en text="i take" means=hm.letter
+@w.en.i_will_try.hm.letter core.word lang=en text="i will try" means=hm.letter
+@w.en.i_will_guess.hm.letter core.word lang=en text="i will guess" means=hm.letter
+@w.en.i_will_pick.hm.letter core.word lang=en text="i will pick" means=hm.letter
+@w.en.i_will_take.hm.letter core.word lang=en text="i will take" means=hm.letter
+@w.en.i_will_go_with.hm.letter core.word lang=en text="i will go with" means=hm.letter
+@w.en.i_say.hm.letter core.word lang=en text="i say" means=hm.letter
+@w.en.use.hm.letter core.word lang=en text=use means=hm.letter
+@w.en.my_guess_is.hm.letter core.word lang=en text="my guess is" means=hm.letter
+@w.en.my_pick_is.hm.letter core.word lang=en text="my pick is" means=hm.letter
+@w.en.my_letter_is.hm.letter core.word lang=en text="my letter is" means=hm.letter
+@w.en.my_choice_is.hm.letter core.word lang=en text="my choice is" means=hm.letter
+@w.en.i_will_say.hm.letter core.word lang=en text="i will say" means=hm.letter
+@w.en.how_about_an.hm.letter core.word lang=en text="how about an" means=hm.letter
+@w.en.let_me_guess.hm.letter core.word lang=en text="let me guess" means=hm.letter
+@w.en.let_me_pick.hm.letter core.word lang=en text="let me pick" means=hm.letter
+@w.en.give_me.hm.letter core.word lang=en text="give me" means=hm.letter
+@w.en.i_would_like.hm.letter core.word lang=en text="i would like" means=hm.letter
+@w.en.i_want.hm.letter core.word lang=en text="i want" means=hm.letter
+@w.en.i_would_try.hm.letter core.word lang=en text="i would try" means=hm.letter
+@w.en.can_i_try.hm.letter core.word lang=en text="can i try" means=hm.letter
+@w.en.can_i_guess.hm.letter core.word lang=en text="can i guess" means=hm.letter
+@w.en.can_i_have.hm.letter core.word lang=en text="can i have" means=hm.letter
+@w.en.may_i_try.hm.letter core.word lang=en text="may i try" means=hm.letter
+@w.en.may_i_guess.hm.letter core.word lang=en text="may i guess" means=hm.letter
+@w.en.let_me_have.hm.letter core.word lang=en text="let me have" means=hm.letter
+@w.en.ill_try.hm.letter core.word lang=en text="ill try" means=hm.letter
+@w.en.try_with.hm.letter core.word lang=en text="try with" means=hm.letter
+@w.en.guess_with.hm.letter core.word lang=en text="guess with" means=hm.letter
+@w.en.go_for.hm.letter core.word lang=en text="go for" means=hm.letter
+@w.en.i_go_for.hm.letter core.word lang=en text="i go for" means=hm.letter
+@w.en.i_d_like.hm.letter core.word lang=en text="i d like" means=hm.letter
+@w.en.id_like.hm.letter core.word lang=en text="id like" means=hm.letter
+@w.en.i_need.hm.letter core.word lang=en text="i need" means=hm.letter
+@w.en.i_wish.hm.letter core.word lang=en text="i wish" means=hm.letter
+@w.en.may_i_have.hm.letter core.word lang=en text="may i have" means=hm.letter
+@w.en.can_i_get.hm.letter core.word lang=en text="can i get" means=hm.letter
+@w.en.could_i_get.hm.letter core.word lang=en text="could i get" means=hm.letter
+@w.en.could_i_have.hm.letter core.word lang=en text="could i have" means=hm.letter
+@w.en.gimme.hm.letter core.word lang=en text=gimme means=hm.letter
+@w.en.get_me.hm.letter core.word lang=en text="get me" means=hm.letter
+@w.en.let_me_get.hm.letter core.word lang=en text="let me get" means=hm.letter
+@w.en.i_ll_have.hm.letter core.word lang=en text="i ll have" means=hm.letter
+@w.en.ill_have.hm.letter core.word lang=en text="ill have" means=hm.letter
+@w.en.ill_take.hm.letter core.word lang=en text="ill take" means=hm.letter
+@w.en.i_ll_take.hm.letter core.word lang=en text="i ll take" means=hm.letter
+@w.en.i_ll_try.hm.letter core.word lang=en text="i ll try" means=hm.letter
+@w.en.ill_go_with.hm.letter core.word lang=en text="ill go with" means=hm.letter
+@w.en.i_ll_go_with.hm.letter core.word lang=en text="i ll go with" means=hm.letter
+@w.en.ill_pick.hm.letter core.word lang=en text="ill pick" means=hm.letter
+@w.en.ill_choose.hm.letter core.word lang=en text="ill choose" means=hm.letter
+@w.en.lets_try.hm.letter core.word lang=en text="lets try" means=hm.letter
+@w.en.lets_go_with.hm.letter core.word lang=en text="lets go with" means=hm.letter
+@w.en.let_us_go_with.hm.letter core.word lang=en text="let us go with" means=hm.letter
+@w.en.lets_pick.hm.letter core.word lang=en text="lets pick" means=hm.letter
+@w.en.lets_choose.hm.letter core.word lang=en text="lets choose" means=hm.letter
+@w.en.lets_guess.hm.letter core.word lang=en text="lets guess" means=hm.letter
+@w.en.guessing.hm.letter core.word lang=en text=guessing means=hm.letter
+@w.en.picking.hm.letter core.word lang=en text=picking means=hm.letter
+@w.en.choosing.hm.letter core.word lang=en text=choosing means=hm.letter
+@w.en.going_with.hm.letter core.word lang=en text="going with" means=hm.letter
+@w.en.going_for.hm.letter core.word lang=en text="going for" means=hm.letter
+@w.en.saying.hm.letter core.word lang=en text=saying means=hm.letter
+@w.en.betting_on.hm.letter core.word lang=en text="betting on" means=hm.letter
+@w.en.betting.hm.letter core.word lang=en text=betting means=hm.letter
+@w.en.voting_for.hm.letter core.word lang=en text="voting for" means=hm.letter
+@w.en.voting.hm.letter core.word lang=en text=voting means=hm.letter
+@w.en.selecting.hm.letter core.word lang=en text=selecting means=hm.letter
+@w.en.taking.hm.letter core.word lang=en text=taking means=hm.letter
+@w.en.using.hm.letter core.word lang=en text=using means=hm.letter
+@w.en.testing.hm.letter core.word lang=en text=testing means=hm.letter
+@w.en.checking.hm.letter core.word lang=en text=checking means=hm.letter
+@w.en.asking_about.hm.letter core.word lang=en text="asking about" means=hm.letter
+@w.en.asking_for.hm.letter core.word lang=en text="asking for" means=hm.letter
+@w.en.asking.hm.letter core.word lang=en text=asking means=hm.letter
+@w.en.looking_for.hm.letter core.word lang=en text="looking for" means=hm.letter
+@w.en.looking_at.hm.letter core.word lang=en text="looking at" means=hm.letter
+@w.en.looking.hm.letter core.word lang=en text=looking means=hm.letter
+@w.en.searching_for.hm.letter core.word lang=en text="searching for" means=hm.letter
+@w.en.searching.hm.letter core.word lang=en text=searching means=hm.letter
+@w.en.hunting_for.hm.letter core.word lang=en text="hunting for" means=hm.letter
+@w.en.hunting.hm.letter core.word lang=en text=hunting means=hm.letter
+@w.en.seeking.hm.letter core.word lang=en text=seeking means=hm.letter
+@w.en.chasing.hm.letter core.word lang=en text=chasing means=hm.letter
+@w.en.aiming_for.hm.letter core.word lang=en text="aiming for" means=hm.letter
+@w.en.aiming_at.hm.letter core.word lang=en text="aiming at" means=hm.letter
+@w.en.aiming.hm.letter core.word lang=en text=aiming means=hm.letter
+@w.en.shooting_for.hm.letter core.word lang=en text="shooting for" means=hm.letter
+@w.en.shooting_at.hm.letter core.word lang=en text="shooting at" means=hm.letter
+@w.en.shooting.hm.letter core.word lang=en text=shooting means=hm.letter
+@w.en.going.hm.letter core.word lang=en text=going means=hm.letter
+@w.en.next_letter.hm.letter core.word lang=en text="next letter" means=hm.letter
+@w.en.the_next_letter.hm.letter core.word lang=en text="the next letter" means=hm.letter
+@w.en.next_1.hm.letter core.word lang=en text="next 1" means=hm.letter
+@w.en.the_next_1.hm.letter core.word lang=en text="the next 1" means=hm.letter
+@w.en.next_try.hm.letter core.word lang=en text="next try" means=hm.letter
+@w.en.next_guess.hm.letter core.word lang=en text="next guess" means=hm.letter
+@w.en.next_pick.hm.letter core.word lang=en text="next pick" means=hm.letter
+@w.en.another_letter.hm.letter core.word lang=en text="another letter" means=hm.letter
+@w.en.another_1.hm.letter core.word lang=en text="another 1" means=hm.letter
+@w.en.another_try.hm.letter core.word lang=en text="another try" means=hm.letter
+@w.en.another_guess.hm.letter core.word lang=en text="another guess" means=hm.letter
+@w.en.my_next_guess.hm.letter core.word lang=en text="my next guess" means=hm.letter
+@w.en.my_next_letter.hm.letter core.word lang=en text="my next letter" means=hm.letter
+@w.en.my_next_pick.hm.letter core.word lang=en text="my next pick" means=hm.letter
+@w.en.my_next_try.hm.letter core.word lang=en text="my next try" means=hm.letter
+@w.en.my_next_1.hm.letter core.word lang=en text="my next 1" means=hm.letter
+@w.en.one_more.hm.letter core.word lang=en text="one more" means=hm.letter
+@w.en.n1_more.hm.letter core.word lang=en text="1 more" means=hm.letter
+@w.en.another.hm.letter core.word lang=en text=another means=hm.letter
+@w.en.then.hm.letter core.word lang=en text=then means=hm.letter
+@w.en.now.hm.letter core.word lang=en text=now means=hm.letter
+@w.en.and_now.hm.letter core.word lang=en text="and now" means=hm.letter
+@w.en.ok_now.hm.letter core.word lang=en text="ok now" means=hm.letter
+@w.en.and.hm.letter core.word lang=en text=and means=hm.letter
+@w.en.the.hm.letter.l core.word lang=en text=the means=hm.letter.l
+@w.en.a.hm.letter.l core.word lang=en text=a means=hm.letter.l
+@w.en.an.hm.letter.l core.word lang=en text=an means=hm.letter.l
+@w.en.any.hm.letter.l core.word lang=en text=any means=hm.letter.l
+@w.en.my.hm.letter.l core.word lang=en text=my means=hm.letter.l
+@w.en.letter.hm.letter.l core.word lang=en text=letter means=hm.letter.l
+@w.en.the_letter.hm.letter.l core.word lang=en text="the letter" means=hm.letter.l
+@w.en.a_letter.hm.letter.l core.word lang=en text="a letter" means=hm.letter.l
+@w.en.is_there.hm.letter core.word lang=en text="is there" means=hm.letter
+@w.en.was_there.hm.letter core.word lang=en text="was there" means=hm.letter
+@w.en.any.hm.letter core.word lang=en text=any means=hm.letter
+@w.en.got.hm.letter core.word lang=en text=got means=hm.letter
+@w.en.got_any.hm.letter core.word lang=en text="got any" means=hm.letter
+@w.en.do_you_have.hm.letter core.word lang=en text="do you have" means=hm.letter
+@w.en.have_you_got.hm.letter core.word lang=en text="have you got" means=hm.letter
+@w.en.is.hm.letter core.word lang=en text=is means=hm.letter
+@w.en.are_there.hm.letter core.word lang=en text="are there" means=hm.letter
+@w.en.does_it_have.hm.letter core.word lang=en text="does it have" means=hm.letter
+@w.en.does_the_word_have.hm.letter core.word lang=en text="does the word have" means=hm.letter
+@w.en.does_the_word_contain.hm.letter core.word lang=en text="does the word contain" means=hm.letter
+@w.en.does_it_contain.hm.letter core.word lang=en text="does it contain" means=hm.letter
+@w.en.do_you_see.hm.letter core.word lang=en text="do you see" means=hm.letter
+@w.en.there_is.hm.letter core.word lang=en text="there is" means=hm.letter
+@w.en.does_it_include.hm.letter core.word lang=en text="does it include" means=hm.letter
+@w.en.does_the_animal_have.hm.letter core.word lang=en text="does the animal have" means=hm.letter
+@w.en.is_it.hm.letter core.word lang=en text="is it" means=hm.letter
+@w.en.its.hm.letter core.word lang=en text=its means=hm.letter
+@w.en.could_it_be.hm.letter core.word lang=en text="could it be" means=hm.letter
+@w.en.can_it_be.hm.letter core.word lang=en text="can it be" means=hm.letter
+@w.en.might_it_be.hm.letter core.word lang=en text="might it be" means=hm.letter
+@w.en.is_the_letter.hm.letter core.word lang=en text="is the letter" means=hm.letter
+@w.en.is_the_answer.hm.letter core.word lang=en text="is the answer" means=hm.letter
+@w.en.is_the_next_letter.hm.letter core.word lang=en text="is the next letter" means=hm.letter
+@w.en.do_you_have_any.hm.letter core.word lang=en text="do you have any" means=hm.letter
+@w.en.is_there_any.hm.letter core.word lang=en text="is there any" means=hm.letter
+@w.en.are_there_any.hm.letter core.word lang=en text="are there any" means=hm.letter
+@w.en.how_many.hm.letter core.word lang=en text="how many" means=hm.letter
+@w.en.an_letter.hm.letter.l core.word lang=en text="an letter" means=hm.letter.l
+@w.en.any_letter.hm.letter.l core.word lang=en text="any letter" means=hm.letter.l
+@w.en.in_it.hm.letter.l core.word lang=en text="in it" means=hm.letter.l
+@w.en.in_the_word.hm.letter.l core.word lang=en text="in the word" means=hm.letter.l
+@w.en.in_there.hm.letter.l core.word lang=en text="in there" means=hm.letter.l
+@w.en.in_that.hm.letter.l core.word lang=en text="in that" means=hm.letter.l
+@w.en.in_this.hm.letter.l core.word lang=en text="in this" means=hm.letter.l
+@w.en.there.hm.letter.l core.word lang=en text=there means=hm.letter.l
+@w.en.in_this_word.hm.letter.l core.word lang=en text="in this word" means=hm.letter.l
+@w.en.is_my_guess.hm.letter core.word lang=en text="is my guess" means=hm.letter
+@w.en.is_my_letter.hm.letter core.word lang=en text="is my letter" means=hm.letter
+@w.en.is_my_pick.hm.letter core.word lang=en text="is my pick" means=hm.letter
+@w.en.is_my_choice.hm.letter core.word lang=en text="is my choice" means=hm.letter
+@w.en.it_is.hm.letter core.word lang=en text="it is" means=hm.letter
+@w.en.is_the_1.hm.letter core.word lang=en text="is the 1" means=hm.letter
+@w.en.is_my_answer.hm.letter core.word lang=en text="is my answer" means=hm.letter
+@w.en.for_me.hm.letter core.word lang=en text="for me" means=hm.letter
+@w.en.please.hm.letter core.word lang=en text=please means=hm.letter
+@w.en.pls.hm.letter core.word lang=en text=pls means=hm.letter
+@w.en.plz.hm.letter core.word lang=en text=plz means=hm.letter
+@w.en.ok.hm.letter core.word lang=en text=ok means=hm.letter
+@w.en.lol.hm.letter core.word lang=en text=lol means=hm.letter
+@w.en.is_my_try.hm.letter core.word lang=en text="is my try" means=hm.letter
+@w.en.is_my_move.hm.letter core.word lang=en text="is my move" means=hm.letter
+@w.en.is_it_there.hm.letter core.word lang=en text="is it there" means=hm.letter
+@w.en.is_it_in_there.hm.letter core.word lang=en text="is it in there" means=hm.letter
+@w.en.is_it_in_it.hm.letter core.word lang=en text="is it in it" means=hm.letter
+@w.en.appear.hm.letter core.word lang=en text=appear means=hm.letter
+@w.en.appears.hm.letter core.word lang=en text=appears means=hm.letter
+@w.en.show_up.hm.letter core.word lang=en text="show up" means=hm.letter
+@w.en.shows_up.hm.letter core.word lang=en text="shows up" means=hm.letter
+@w.en.exist.hm.letter core.word lang=en text=exist means=hm.letter
+@w.en.exists.hm.letter core.word lang=en text=exists means=hm.letter
+@w.en.occur.hm.letter core.word lang=en text=occur means=hm.letter
+@w.en.occurs.hm.letter core.word lang=en text=occurs means=hm.letter
+@w.en.is_in_it.hm.letter core.word lang=en text="is in it" means=hm.letter
+@w.en.is_in_the_word.hm.letter core.word lang=en text="is in the word" means=hm.letter
+@w.en.is_in_there.hm.letter core.word lang=en text="is in there" means=hm.letter
+@w.en.is_present.hm.letter core.word lang=en text="is present" means=hm.letter
+@w.en.is_there_in_it.hm.letter core.word lang=en text="is there in it" means=hm.letter
+@w.en.in_there.hm.letter core.word lang=en text="in there" means=hm.letter
+@w.en.in_it.hm.letter core.word lang=en text="in it" means=hm.letter
+@w.en.in_the_word.hm.letter core.word lang=en text="in the word" means=hm.letter
+@w.en.anywhere.hm.letter core.word lang=en text=anywhere means=hm.letter
+@w.en.at_all.hm.letter core.word lang=en text="at all" means=hm.letter
+@w.en.too.hm.letter core.word lang=en text=too means=hm.letter
+@w.en.also.hm.letter core.word lang=en text=also means=hm.letter
+@w.en.as_well.hm.letter core.word lang=en text="as well" means=hm.letter
+@w.en.any_good.hm.letter core.word lang=en text="any good" means=hm.letter
+@w.en.any_use.hm.letter core.word lang=en text="any use" means=hm.letter
+@w.en.feature.hm.letter core.word lang=en text=feature means=hm.letter
+@w.en.features.hm.letter core.word lang=en text=features means=hm.letter
+@w.en.come_up.hm.letter core.word lang=en text="come up" means=hm.letter
+@w.en.comes_up.hm.letter core.word lang=en text="comes up" means=hm.letter
+@w.en.turn_up.hm.letter core.word lang=en text="turn up" means=hm.letter
+@w.en.turns_up.hm.letter core.word lang=en text="turns up" means=hm.letter
+@w.en.figure.hm.letter core.word lang=en text=figure means=hm.letter
+@w.en.figures.hm.letter core.word lang=en text=figures means=hm.letter
+@w.en.count.hm.letter core.word lang=en text=count means=hm.letter
+@w.en.counts.hm.letter core.word lang=en text=counts means=hm.letter
+@w.en.belong.hm.letter core.word lang=en text=belong means=hm.letter
+@w.en.belongs.hm.letter core.word lang=en text=belongs means=hm.letter
+@w.en.fit.hm.letter core.word lang=en text=fit means=hm.letter
+@w.en.fits.hm.letter core.word lang=en text=fits means=hm.letter
+@w.en.work.hm.letter core.word lang=en text=work means=hm.letter
+@w.en.works.hm.letter core.word lang=en text=works means=hm.letter
+@w.en.go_in.hm.letter core.word lang=en text="go in" means=hm.letter
+@w.en.goes_in.hm.letter core.word lang=en text="goes in" means=hm.letter
+@w.en.get_in.hm.letter core.word lang=en text="get in" means=hm.letter
+@w.en.gets_in.hm.letter core.word lang=en text="gets in" means=hm.letter
+@w.en.exist_in_it.hm.letter core.word lang=en text="exist in it" means=hm.letter
+@w.en.appear_in_it.hm.letter core.word lang=en text="appear in it" means=hm.letter
+@w.en.appear_in_the_word.hm.letter core.word lang=en text="appear in the word" means=hm.letter
+@w.en.appear_in_there.hm.letter core.word lang=en text="appear in there" means=hm.letter
+@w.en.occur_in_it.hm.letter core.word lang=en text="occur in it" means=hm.letter
+@w.en.occur_in_the_word.hm.letter core.word lang=en text="occur in the word" means=hm.letter
+@w.en.be_there.hm.letter core.word lang=en text="be there" means=hm.letter
+@w.en.be_in_it.hm.letter core.word lang=en text="be in it" means=hm.letter
+@w.en.be_in_the_word.hm.letter core.word lang=en text="be in the word" means=hm.letter
+@w.en.be_in_there.hm.letter core.word lang=en text="be in there" means=hm.letter
+@w.en.be_present.hm.letter core.word lang=en text="be present" means=hm.letter
+@w.en.be_used.hm.letter core.word lang=en text="be used" means=hm.letter
+@w.en.be_included.hm.letter core.word lang=en text="be included" means=hm.letter
+@w.en.be_part_of_it.hm.letter core.word lang=en text="be part of it" means=hm.letter
+@w.en.does.hm.letter.l core.word lang=en text=does means=hm.letter.l
+@w.en.do.hm.letter.l core.word lang=en text=do means=hm.letter.l
+@w.en.will.hm.letter.l core.word lang=en text=will means=hm.letter.l
+@w.en.can.hm.letter.l core.word lang=en text=can means=hm.letter.l
+@w.en.is.hm.letter.l core.word lang=en text=is means=hm.letter.l
+@w.en.does_the_letter.hm.letter.l core.word lang=en text="does the letter" means=hm.letter.l
+@w.en.does_the_word.hm.letter.l core.word lang=en text="does the word" means=hm.letter.l
+@w.en.does_it.hm.letter.l core.word lang=en text="does it" means=hm.letter.l
+@w.en.is_the_letter.hm.letter.l core.word lang=en text="is the letter" means=hm.letter.l
+@w.en.is_there_a.hm.letter.l core.word lang=en text="is there a" means=hm.letter.l
+@w.en.word.hm.letter core.word lang=en text=word means=hm.letter
+@w.en.answer.hm.letter core.word lang=en text=answer means=hm.letter
+@w.en.animal.hm.letter core.word lang=en text=animal means=hm.letter
+@w.en.is_it.hm.word core.word lang=en text="is it" means=hm.word
+@w.en.could_it_be.hm.word core.word lang=en text="could it be" means=hm.word
+@w.en.can_it_be.hm.word core.word lang=en text="can it be" means=hm.word
+@w.en.might_it_be.hm.word core.word lang=en text="might it be" means=hm.word
+@w.en.may_it_be.hm.word core.word lang=en text="may it be" means=hm.word
+@w.en.was_it.hm.word core.word lang=en text="was it" means=hm.word
+@w.en.is_the_word.hm.word core.word lang=en text="is the word" means=hm.word
+@w.en.is_the_answer.hm.word core.word lang=en text="is the answer" means=hm.word
+@w.en.is_that.hm.word core.word lang=en text="is that" means=hm.word
+@w.en.is_this.hm.word core.word lang=en text="is this" means=hm.word
+@w.en.is_the_animal.hm.word core.word lang=en text="is the animal" means=hm.word
+@w.en.could_the_word_be.hm.word core.word lang=en text="could the word be" means=hm.word
+@w.en.could_the_answer_be.hm.word core.word lang=en text="could the answer be" means=hm.word
+@w.en.might_the_word_be.hm.word core.word lang=en text="might the word be" means=hm.word
+@w.en.could_be.hm.word core.word lang=en text="could be" means=hm.word
+@w.en.it_might_be.hm.word core.word lang=en text="it might be" means=hm.word
+@w.en.maybe_it_is.hm.word core.word lang=en text="maybe it is" means=hm.word
+@w.en.is.hm.word core.word lang=en text=is means=hm.word
+@w.en.could_it_be_a.hm.word core.word lang=en text="could it be a" means=hm.word
+@w.en.its.hm.word core.word lang=en text=its means=hm.word
+@w.en.it_is.hm.word core.word lang=en text="it is" means=hm.word
+@w.en.a.hm.word.w core.word lang=en text=a means=hm.word.w
+@w.en.an.hm.word.w core.word lang=en text=an means=hm.word.w
+@w.en.the.hm.word.w core.word lang=en text=the means=hm.word.w
+@w.en.the_word_is.hm.word core.word lang=en text="the word is" means=hm.word
+@w.en.my_guess_is.hm.word core.word lang=en text="my guess is" means=hm.word
+@w.en.i_guess_it_is.hm.word core.word lang=en text="i guess it is" means=hm.word
+@w.en.i_think_it_is.hm.word core.word lang=en text="i think it is" means=hm.word
+@w.en.i_think_the_word_is.hm.word core.word lang=en text="i think the word is" means=hm.word
+@w.en.the_word_might_be.hm.word core.word lang=en text="the word might be" means=hm.word
+@w.en.i_think.hm.word core.word lang=en text="i think" means=hm.word
+@w.en.i_say.hm.word core.word lang=en text="i say" means=hm.word
+@w.en.i_would_say.hm.word core.word lang=en text="i would say" means=hm.word
+@w.en.i_guess.hm.word core.word lang=en text="i guess" means=hm.word
+@w.en.i_bet_it_is.hm.word core.word lang=en text="i bet it is" means=hm.word
+@w.en.i_bet.hm.word core.word lang=en text="i bet" means=hm.word
+@w.en.maybe.hm.word core.word lang=en text=maybe means=hm.word
+@w.en.perhaps.hm.word core.word lang=en text=perhaps means=hm.word
+@w.en.probably.hm.word core.word lang=en text=probably means=hm.word
+@w.en.guess.hm.word core.word lang=en text=guess means=hm.word
+@w.en.my_answer_is.hm.word core.word lang=en text="my answer is" means=hm.word
+@w.en.word_is.hm.word core.word lang=en text="word is" means=hm.word
+@w.en.word_could_be.hm.word core.word lang=en text="word could be" means=hm.word
+@w.en.the_word_could_be.hm.word core.word lang=en text="the word could be" means=hm.word
+@w.en.word_may_be.hm.word core.word lang=en text="word may be" means=hm.word
+@w.en.it_could_be.hm.word core.word lang=en text="it could be" means=hm.word
+@w.en.its_probably.hm.word core.word lang=en text="its probably" means=hm.word
+@w.en.it_is_probably.hm.word core.word lang=en text="it is probably" means=hm.word
+@w.en.i_think_its.hm.word core.word lang=en text="i think its" means=hm.word
+@w.en.i_think_it_might_be.hm.word core.word lang=en text="i think it might be" means=hm.word
+@w.en.maybe_its.hm.word core.word lang=en text="maybe its" means=hm.word
+@w.en.maybe_it_could_be.hm.word core.word lang=en text="maybe it could be" means=hm.word
+@w.en.i_would_guess.hm.word core.word lang=en text="i would guess" means=hm.word
+@w.en.i_will_say.hm.word core.word lang=en text="i will say" means=hm.word
+@w.en.i_will_guess.hm.word core.word lang=en text="i will guess" means=hm.word
+@w.en.i_choose.hm.word core.word lang=en text="i choose" means=hm.word
+@w.en.my_final_answer_is.hm.word core.word lang=en text="my final answer is" means=hm.word
+@w.en.i_have_it_it_is.hm.word core.word lang=en text="i have it it is" means=hm.word
+@w.en.i_think_the_answer_is.hm.word core.word lang=en text="i think the answer is" means=hm.word
+@w.en.final_answer.hm.word core.word lang=en text="final answer" means=hm.word
+@w.en.the_answer_is.hm.word core.word lang=en text="the answer is" means=hm.word
+@w.en.it_must_be.hm.word core.word lang=en text="it must be" means=hm.word
+@w.en.it_has_to_be.hm.word core.word lang=en text="it has to be" means=hm.word
+@w.en.it_has_got_to_be.hm.word core.word lang=en text="it has got to be" means=hm.word
+@w.en.must_be.hm.word core.word lang=en text="must be" means=hm.word
+@w.en.has_to_be.hm.word core.word lang=en text="has to be" means=hm.word
+@w.en.got_to_be.hm.word core.word lang=en text="got to be" means=hm.word
+@w.en.perhaps_its.hm.word core.word lang=en text="perhaps its" means=hm.word
+@w.en.surely_its.hm.word core.word lang=en text="surely its" means=hm.word
+@w.en.surely_it_is.hm.word core.word lang=en text="surely it is" means=hm.word
+@w.en.gotta_be.hm.word core.word lang=en text="gotta be" means=hm.word
+@w.en.has_gotta_be.hm.word core.word lang=en text="has gotta be" means=hm.word
+@w.en.guess_the_word.hm.word core.word lang=en text="guess the word" means=hm.word
+@w.en.guess_the_animal.hm.word core.word lang=en text="guess the animal" means=hm.word
+@w.en.the_animal_is.hm.word core.word lang=en text="the animal is" means=hm.word
+@w.en.the_animal_must_be.hm.word core.word lang=en text="the animal must be" means=hm.word
+@w.en.is_it_the.hm.word core.word lang=en text="is it the" means=hm.word
+@w.en.how_about_the.hm.word core.word lang=en text="how about the" means=hm.word
+@w.en.what_about_the.hm.word core.word lang=en text="what about the" means=hm.word
+@w.en.how_about.hm.word core.word lang=en text="how about" means=hm.word
+@w.en.what_about.hm.word core.word lang=en text="what about" means=hm.word
+@w.en.lets_say.hm.word core.word lang=en text="lets say" means=hm.word
+@w.en.let_us_say.hm.word core.word lang=en text="let us say" means=hm.word
+@w.en.ill_say.hm.word core.word lang=en text="ill say" means=hm.word
+@w.en.ill_guess.hm.word core.word lang=en text="ill guess" means=hm.word
+@w.en.ill_go_with.hm.word core.word lang=en text="ill go with" means=hm.word
+@w.en.ill_try.hm.word core.word lang=en text="ill try" means=hm.word
+@w.en.ill_take.hm.word core.word lang=en text="ill take" means=hm.word
+@w.en.ill_pick.hm.word core.word lang=en text="ill pick" means=hm.word
+@w.en.ill_choose.hm.word core.word lang=en text="ill choose" means=hm.word
+@w.en.go_with.hm.word core.word lang=en text="go with" means=hm.word
+@w.en.try.hm.word core.word lang=en text=try means=hm.word
+@w.en.pick.hm.word core.word lang=en text=pick means=hm.word
+@w.en.choose.hm.word core.word lang=en text=choose means=hm.word
+@w.en.take.hm.word core.word lang=en text=take means=hm.word
+@w.en.say.hm.word core.word lang=en text=say means=hm.word
+@w.en.answer.hm.word core.word lang=en text=answer means=hm.word
+@w.en.answering.hm.word core.word lang=en text=answering means=hm.word
+@w.en.final.hm.word core.word lang=en text=final means=hm.word
+@w.en.solve.hm.word core.word lang=en text=solve means=hm.word
+@w.en.solving.hm.word core.word lang=en text=solving means=hm.word
+@w.en.solution.hm.word core.word lang=en text=solution means=hm.word
+@w.en.the_solution_is.hm.word core.word lang=en text="the solution is" means=hm.word
+@w.en.start.hm.new core.word lang=en text=start means=hm.new
+@w.en.play.hm.new core.word lang=en text=play means=hm.new
+@w.en.begin.hm.new core.word lang=en text=begin means=hm.new
+@w.en.have.hm.new core.word lang=en text=have means=hm.new
+@w.en.do.hm.new core.word lang=en text=do means=hm.new
+@w.en.restart.hm.new core.word lang=en text=restart means=hm.new
+@w.en.reset.hm.new core.word lang=en text=reset means=hm.new
+@w.en.try.hm.new core.word lang=en text=try means=hm.new
+@w.en.go_for.hm.new core.word lang=en text="go for" means=hm.new
+@w.en.another.hm.new core.word lang=en text=another means=hm.new
+@w.en.new.hm.new core.word lang=en text=new means=hm.new
+@w.en.fresh.hm.new core.word lang=en text=fresh means=hm.new
+@w.en.next.hm.new core.word lang=en text=next means=hm.new
+@w.en.fresh_start.hm.new core.word lang=en text="fresh start" means=hm.new
+@w.en.a_new.hm.new core.word lang=en text="a new" means=hm.new
+@w.en.a_fresh.hm.new core.word lang=en text="a fresh" means=hm.new
+@w.en.n1_more.hm.new core.word lang=en text="1 more" means=hm.new
+@w.en.one_more.hm.new core.word lang=en text="one more" means=hm.new
+@w.en.make.hm.new core.word lang=en text=make means=hm.new
+@w.en.set_up.hm.new core.word lang=en text="set up" means=hm.new
+@w.en.create.hm.new core.word lang=en text=create means=hm.new
+@w.en.open.hm.new core.word lang=en text=open means=hm.new
+@w.en.run.hm.new core.word lang=en text=run means=hm.new
+@w.en.launch.hm.new core.word lang=en text=launch means=hm.new
+@w.en.hangman.hm.new core.word lang=en text=hangman means=hm.new
+@w.en.hangman_game.hm.new core.word lang=en text="hangman game" means=hm.new
+@w.en.new_hangman.hm.new core.word lang=en text="new hangman" means=hm.new
+@w.en.new_hangman_game.hm.new core.word lang=en text="new hangman game" means=hm.new
+@w.en.fresh_hangman_game.hm.new core.word lang=en text="fresh hangman game" means=hm.new
+@w.en.another_hangman_game.hm.new core.word lang=en text="another hangman game" means=hm.new
+@w.en.new_round_of_hangman.hm.new core.word lang=en text="new round of hangman" means=hm.new
+@w.en.round_of_hangman.hm.new core.word lang=en text="round of hangman" means=hm.new
+@w.en.game_of_hangman.hm.new core.word lang=en text="game of hangman" means=hm.new
+@w.en.new_game_of_hangman.hm.new core.word lang=en text="new game of hangman" means=hm.new
+@w.en.another_round.hm.new core.word lang=en text="another round" means=hm.new
+@w.en.another_game.hm.new core.word lang=en text="another game" means=hm.new
+@w.en.new_round.hm.new core.word lang=en text="new round" means=hm.new
+@w.en.fresh_round.hm.new core.word lang=en text="fresh round" means=hm.new
+@w.en.new_game.hm.new core.word lang=en text="new game" means=hm.new
+@w.en.next_round.hm.new core.word lang=en text="next round" means=hm.new
+@w.en.new_word.hm.new core.word lang=en text="new word" means=hm.new
+@w.en.another_word.hm.new core.word lang=en text="another word" means=hm.new
+@w.en.fresh_word.hm.new core.word lang=en text="fresh word" means=hm.new
+@w.en.new_animal.hm.new core.word lang=en text="new animal" means=hm.new
+@w.en.next_animal.hm.new core.word lang=en text="next animal" means=hm.new
+@w.en.another_animal.hm.new core.word lang=en text="another animal" means=hm.new
+@w.en.hangman_new_game.hm.new core.word lang=en text="hangman new game" means=hm.new
+@w.en.hangman_new.hm.new core.word lang=en text="hangman new" means=hm.new
+@w.en.hangman_new_round.hm.new core.word lang=en text="hangman new round" means=hm.new
+@w.en.hangman_fresh.hm.new core.word lang=en text="hangman fresh" means=hm.new
+@w.en.hangman_again.hm.new core.word lang=en text="hangman again" means=hm.new
+@w.en.hangman_next.hm.new core.word lang=en text="hangman next" means=hm.new
+@w.en.hangman_another.hm.new core.word lang=en text="hangman another" means=hm.new
+@w.en.go.hm.new core.word lang=en text=go means=hm.new
+@w.en.redo.hm.new core.word lang=en text=redo means=hm.new
+@w.en.replay.hm.new core.word lang=en text=replay means=hm.new
+@w.en.it.hm.new core.word lang=en text=it means=hm.new
+@w.en.that.hm.new core.word lang=en text=that means=hm.new
+@w.en.the_game.hm.new core.word lang=en text="the game" means=hm.new
+@w.en.a_new_game.hm.new core.word lang=en text="a new game" means=hm.new
+@w.en.again.hm.new core.word lang=en text=again means=hm.new
+@w.en.a_game.hm.new core.word lang=en text="a game" means=hm.new
+@w.en.over.hm.new core.word lang=en text=over means=hm.new
+@w.en.anew.hm.new core.word lang=en text=anew means=hm.new
+@w.en.once_more.hm.new core.word lang=en text="once more" means=hm.new
+@w.en.n1_more_time.hm.new core.word lang=en text="1 more time" means=hm.new
+@w.en.from_scratch.hm.new core.word lang=en text="from scratch" means=hm.new
+@w.en.from_the_start.hm.new core.word lang=en text="from the start" means=hm.new
+@w.en.let_us_play.hm.new core.word lang=en text="let us play" means=hm.new
+@w.en.play_a.hm.new core.word lang=en text="play a" means=hm.new
+@w.en.lets_play.hm.new core.word lang=en text="lets play" means=hm.new
+@w.en.hangman_round.hm.new core.word lang=en text="hangman round" means=hm.new
+@w.en.hangman_match.hm.new core.word lang=en text="hangman match" means=hm.new
+@w.en.a_hangman.hm.new core.word lang=en text="a hangman" means=hm.new
+@w.en.a_hangman_game.hm.new core.word lang=en text="a hangman game" means=hm.new
+@w.en.a_hangman_round.hm.new core.word lang=en text="a hangman round" means=hm.new
+@w.en.a_hangman_match.hm.new core.word lang=en text="a hangman match" means=hm.new
+@w.en.a_new_hangman.hm.new core.word lang=en text="a new hangman" means=hm.new
+@w.en.a_new_hangman_game.hm.new core.word lang=en text="a new hangman game" means=hm.new
+@w.en.a_new_hangman_round.hm.new core.word lang=en text="a new hangman round" means=hm.new
+@w.en.a_new_hangman_match.hm.new core.word lang=en text="a new hangman match" means=hm.new
+@w.en.new_hangman_round.hm.new core.word lang=en text="new hangman round" means=hm.new
+@w.en.new_hangman_match.hm.new core.word lang=en text="new hangman match" means=hm.new
+@w.en.another_hangman.hm.new core.word lang=en text="another hangman" means=hm.new
+@w.en.another_hangman_round.hm.new core.word lang=en text="another hangman round" means=hm.new
+@w.en.another_hangman_match.hm.new core.word lang=en text="another hangman match" means=hm.new
+@w.en.the_hangman.hm.new core.word lang=en text="the hangman" means=hm.new
+@w.en.the_hangman_game.hm.new core.word lang=en text="the hangman game" means=hm.new
+@w.en.the_hangman_round.hm.new core.word lang=en text="the hangman round" means=hm.new
+@w.en.the_hangman_match.hm.new core.word lang=en text="the hangman match" means=hm.new
+@w.en.with.hm.new.w core.word lang=en text=with means=hm.new.w
+@w.en.using.hm.new.w core.word lang=en text=using means=hm.new.w
+@w.en.and_use.hm.new.w core.word lang=en text="and use" means=hm.new.w
+@w.en.and_pick.hm.new.w core.word lang=en text="and pick" means=hm.new.w
+@w.en.and_choose.hm.new.w core.word lang=en text="and choose" means=hm.new.w
+@w.en.where_the_word_is.hm.new.w core.word lang=en text="where the word is" means=hm.new.w
+@w.en.the_word_is.hm.new.w core.word lang=en text="the word is" means=hm.new.w
+@w.en.and_the_word_is.hm.new.w core.word lang=en text="and the word is" means=hm.new.w
+@w.en.its.hm.new.w core.word lang=en text=its means=hm.new.w
+@w.en.it_is.hm.new.w core.word lang=en text="it is" means=hm.new.w
+@w.en.and_its.hm.new.w core.word lang=en text="and its" means=hm.new.w
+@w.en.the.hm.new.w core.word lang=en text=the means=hm.new.w
+@w.en.a.hm.new.w core.word lang=en text=a means=hm.new.w
+@w.en.hidden_word.hm.new.w core.word lang=en text="hidden word" means=hm.new.w
+@w.en.secret_word.hm.new.w core.word lang=en text="secret word" means=hm.new.w
+@w.en.word.hm.new.w core.word lang=en text=word means=hm.new.w
+@w.en.hidden.hm.new.w core.word lang=en text=hidden means=hm.new.w
+@w.en.secret.hm.new.w core.word lang=en text=secret means=hm.new.w
+@w.en.the_word.hm.new.w core.word lang=en text="the word" means=hm.new.w
+@w.en.the_hidden_word.hm.new.w core.word lang=en text="the hidden word" means=hm.new.w
+@w.en.use.hm.new core.word lang=en text=use means=hm.new
+@w.en.pick.hm.new core.word lang=en text=pick means=hm.new
+@w.en.choose.hm.new core.word lang=en text=choose means=hm.new
+@w.en.set.hm.new core.word lang=en text=set means=hm.new
+@w.en.take.hm.new core.word lang=en text=take means=hm.new
+@w.en.select.hm.new core.word lang=en text=select means=hm.new
+@w.en.let_us_use.hm.new core.word lang=en text="let us use" means=hm.new
+@w.en.go_with.hm.new core.word lang=en text="go with" means=hm.new
+@w.en.let_us_make.hm.new core.word lang=en text="let us make" means=hm.new
+@w.en.let_us_set.hm.new core.word lang=en text="let us set" means=hm.new
+@w.en.hidden_word.hm.new core.word lang=en text="hidden word" means=hm.new
+@w.en.secret_word.hm.new core.word lang=en text="secret word" means=hm.new
+@w.en.word.hm.new core.word lang=en text=word means=hm.new
+@w.en.answer.hm.new core.word lang=en text=answer means=hm.new
+@w.en.the_hidden_word.hm.new core.word lang=en text="the hidden word" means=hm.new
+@w.en.be.hm.new.w core.word lang=en text=be means=hm.new.w
+@w.en.to_be.hm.new.w core.word lang=en text="to be" means=hm.new.w
+@w.en.to.hm.new.w core.word lang=en text=to means=hm.new.w
+@w.en.as_the_word.hm.new.w core.word lang=en text="as the word" means=hm.new.w
+@w.en.as_the_hidden_word.hm.new.w core.word lang=en text="as the hidden word" means=hm.new.w
+@w.en.for_the_word.hm.new.w core.word lang=en text="for the word" means=hm.new.w
+@w.en.as_the_answer.hm.new.w core.word lang=en text="as the answer" means=hm.new.w
+@w.en.as_the_secret_word.hm.new.w core.word lang=en text="as the secret word" means=hm.new.w
+@w.en.to_be_the_word.hm.new.w core.word lang=en text="to be the word" means=hm.new.w
+@w.en.as_the_secret.hm.new.w core.word lang=en text="as the secret" means=hm.new.w
+@w.en.the_word_is.hm.new core.word lang=en text="the word is" means=hm.new
+@w.en.the_hidden_word_is.hm.new core.word lang=en text="the hidden word is" means=hm.new
+@w.en.the_secret_word_is.hm.new core.word lang=en text="the secret word is" means=hm.new
+@w.en.the_answer_is.hm.new core.word lang=en text="the answer is" means=hm.new
+@w.en.the_word_will_be.hm.new core.word lang=en text="the word will be" means=hm.new
+@w.en.the_answer_will_be.hm.new core.word lang=en text="the answer will be" means=hm.new
+@w.en.the_word_should_be.hm.new core.word lang=en text="the word should be" means=hm.new
+@w.en.lets_use.hm.new core.word lang=en text="lets use" means=hm.new
+@w.en.give.hm.giveup core.word lang=en text=give means=hm.giveup
+@w.en.giving.hm.giveup core.word lang=en text=giving means=hm.giveup
+@w.en.gave.hm.giveup core.word lang=en text=gave means=hm.giveup
+@w.en.quit.hm.giveup core.word lang=en text=quit means=hm.giveup
+@w.en.quitting.hm.giveup core.word lang=en text=quitting means=hm.giveup
+@w.en.surrender.hm.giveup core.word lang=en text=surrender means=hm.giveup
+@w.en.surrendering.hm.giveup core.word lang=en text=surrendering means=hm.giveup
+@w.en.forfeit.hm.giveup core.word lang=en text=forfeit means=hm.giveup
+@w.en.forfeiting.hm.giveup core.word lang=en text=forfeiting means=hm.giveup
+@w.en.am_done.hm.giveup core.word lang=en text="am done" means=hm.giveup
+@w.en.am_giving.hm.giveup core.word lang=en text="am giving" means=hm.giveup
+@w.en.will_give.hm.giveup core.word lang=en text="will give" means=hm.giveup
+@w.en.am_quitting.hm.giveup core.word lang=en text="am quitting" means=hm.giveup
+@w.en.give_up.hm.giveup core.word lang=en text="give up" means=hm.giveup
+@w.en.i_give_up.hm.giveup core.word lang=en text="i give up" means=hm.giveup
+@w.en.we_give_up.hm.giveup core.word lang=en text="we give up" means=hm.giveup
+@w.en.i_quit.hm.giveup core.word lang=en text="i quit" means=hm.giveup
+@w.en.i_surrender.hm.giveup core.word lang=en text="i surrender" means=hm.giveup
+@w.en.now.hm.giveup core.word lang=en text=now means=hm.giveup
+@w.en.pls.hm.giveup core.word lang=en text=pls means=hm.giveup
+@w.en.plz.hm.giveup core.word lang=en text=plz means=hm.giveup
+@w.en.the_word.hm.giveup core.word lang=en text="the word" means=hm.giveup
+@w.en.the_round.hm.giveup core.word lang=en text="the round" means=hm.giveup
+@w.en.this_round.hm.giveup core.word lang=en text="this round" means=hm.giveup
+@w.en.this_word.hm.giveup core.word lang=en text="this word" means=hm.giveup
+@w.en.this_game.hm.giveup core.word lang=en text="this game" means=hm.giveup
+@w.en.the_game.hm.giveup core.word lang=en text="the game" means=hm.giveup
+@w.en.it.hm.giveup core.word lang=en text=it means=hm.giveup
+@w.en.then.hm.giveup core.word lang=en text=then means=hm.giveup
+@w.en.end.hm.giveup core.word lang=en text=end means=hm.giveup
+@w.en.stop.hm.giveup core.word lang=en text=stop means=hm.giveup
+@w.en.finish.hm.giveup core.word lang=en text=finish means=hm.giveup
+@w.en.close.hm.giveup core.word lang=en text=close means=hm.giveup
+@w.en.leave.hm.giveup core.word lang=en text=leave means=hm.giveup
+@w.en.abort.hm.giveup core.word lang=en text=abort means=hm.giveup
+@w.en.cancel.hm.giveup core.word lang=en text=cancel means=hm.giveup
+@w.en.terminate.hm.giveup core.word lang=en text=terminate means=hm.giveup
+@w.en.exit.hm.giveup core.word lang=en text=exit means=hm.giveup
+@w.en.game.hm.giveup core.word lang=en text=game means=hm.giveup
+@w.en.round.hm.giveup core.word lang=en text=round means=hm.giveup
+@w.en.word.hm.giveup core.word lang=en text=word means=hm.giveup
+@w.en.hangman.hm.giveup core.word lang=en text=hangman means=hm.giveup
+@w.en.match.hm.giveup core.word lang=en text=match means=hm.giveup
+@w.en.session.hm.giveup core.word lang=en text=session means=hm.giveup
+@w.en.thing.hm.giveup core.word lang=en text=thing means=hm.giveup
+@w.en.here.hm.giveup core.word lang=en text=here means=hm.giveup
+@w.en.already.hm.giveup core.word lang=en text=already means=hm.giveup
+@w.en.for_me.hm.giveup core.word lang=en text="for me" means=hm.giveup
+@w.en.tell_me_something_about_it.hm.hint core.word lang=en text="tell me something about it" means=hm.hint
+@w.en.what_kind_of_animal_is_it.hm.hint core.word lang=en text="what kind of animal is it" means=hm.hint
+@w.en.give_me_a_clue.hm.hint core.word lang=en text="give me a clue" means=hm.hint
+@w.en.what_is_it_like.hm.hint core.word lang=en text="what is it like" means=hm.hint
+@w.en.tell_me_more.hm.hint core.word lang=en text="tell me more" means=hm.hint
+@w.en.tell_me_more_about_it.hm.hint core.word lang=en text="tell me more about it" means=hm.hint
+@w.en.help_me_with_a_clue.hm.hint core.word lang=en text="help me with a clue" means=hm.hint
+@w.en.help_me_with_a_hint.hm.hint core.word lang=en text="help me with a hint" means=hm.hint
+@w.en.help_me_out.hm.hint core.word lang=en text="help me out" means=hm.hint
+@w.en.give_me_something_to_go_on.hm.hint core.word lang=en text="give me something to go on" means=hm.hint
+@w.en.what_can_you_tell_me_about_it.hm.hint core.word lang=en text="what can you tell me about it" means=hm.hint
+@w.en.what_can_you_tell_me.hm.hint core.word lang=en text="what can you tell me" means=hm.hint
+@w.en.anything_about_the_word.hm.hint core.word lang=en text="anything about the word" means=hm.hint
+@w.en.anything_about_it.hm.hint core.word lang=en text="anything about it" means=hm.hint
+@w.en.fact.hm.hint core.word lang=en text=fact means=hm.hint
+@w.en.facts.hm.hint core.word lang=en text=facts means=hm.hint
+@w.en.trivia.hm.hint core.word lang=en text=trivia means=hm.hint
+@w.en.info.hm.hint core.word lang=en text=info means=hm.hint
+@w.en.fun_fact.hm.hint core.word lang=en text="fun fact" means=hm.hint
+@w.en.a_fact.hm.hint core.word lang=en text="a fact" means=hm.hint
+@w.en.any_fact.hm.hint core.word lang=en text="any fact" means=hm.hint
+@w.en.a_fun_fact.hm.hint core.word lang=en text="a fun fact" means=hm.hint
+@w.en.something_about_it.hm.hint core.word lang=en text="something about it" means=hm.hint
+@w.en.something_about_the_animal.hm.hint core.word lang=en text="something about the animal" means=hm.hint
+@w.en.something_about_the_word.hm.hint core.word lang=en text="something about the word" means=hm.hint
+@w.en.a_fact_about_it.hm.hint core.word lang=en text="a fact about it" means=hm.hint
+@w.en.fact_about_it.hm.hint core.word lang=en text="fact about it" means=hm.hint
+@w.en.fact_about_the_word.hm.hint core.word lang=en text="fact about the word" means=hm.hint
+@w.en.fact_about_the_animal.hm.hint core.word lang=en text="fact about the animal" means=hm.hint
+@w.en.something_about_the_animal_pls.hm.hint core.word lang=en text="something about the animal pls" means=hm.hint
+@w.en.anything_about_the_animal.hm.hint core.word lang=en text="anything about the animal" means=hm.hint
+@w.en.pls.hm.hint core.word lang=en text=pls means=hm.hint
+@w.en.plz.hm.hint core.word lang=en text=plz means=hm.hint
+@w.en.now.hm.hint core.word lang=en text=now means=hm.hint
+@w.en.then.hm.hint core.word lang=en text=then means=hm.hint
+@w.en.about_it.hm.hint core.word lang=en text="about it" means=hm.hint
+@w.en.about_the_word.hm.hint core.word lang=en text="about the word" means=hm.hint
+@w.en.about_the_animal.hm.hint core.word lang=en text="about the animal" means=hm.hint
+@w.en.about_this_animal.hm.hint core.word lang=en text="about this animal" means=hm.hint
+@w.en.first.hm.hint core.word lang=en text=first means=hm.hint
+@w.en.next.hm.hint core.word lang=en text=next means=hm.hint
+@w.en.again.hm.hint core.word lang=en text=again means=hm.hint
+@w.en.for_me.hm.hint core.word lang=en text="for me" means=hm.hint
+@w.en.about_this.hm.hint core.word lang=en text="about this" means=hm.hint
+@w.en.about_that.hm.hint core.word lang=en text="about that" means=hm.hint
+@w.en.give_me.hm.hint core.word lang=en text="give me" means=hm.hint
+@w.en.give.hm.hint core.word lang=en text=give means=hm.hint
+@w.en.gimme.hm.hint core.word lang=en text=gimme means=hm.hint
+@w.en.get.hm.hint core.word lang=en text=get means=hm.hint
+@w.en.have.hm.hint core.word lang=en text=have means=hm.hint
+@w.en.show_me.hm.hint core.word lang=en text="show me" means=hm.hint
+@w.en.tell_me.hm.hint core.word lang=en text="tell me" means=hm.hint
+@w.en.how_about.hm.hint core.word lang=en text="how about" means=hm.hint
+@w.en.whats.hm.hint core.word lang=en text=whats means=hm.hint
+@w.en.what_is.hm.hint core.word lang=en text="what is" means=hm.hint
+@w.en.any.hm.hint core.word lang=en text=any means=hm.hint
+@w.en.got_any.hm.hint core.word lang=en text="got any" means=hm.hint
+@w.en.have_you_got_any.hm.hint core.word lang=en text="have you got any" means=hm.hint
+@w.en.help_me_with.hm.hint core.word lang=en text="help me with" means=hm.hint
+@w.en.help_me_out_with.hm.hint core.word lang=en text="help me out with" means=hm.hint
+@w.en.say.hm.hint core.word lang=en text=say means=hm.hint
+@w.en.hint.hm.hint core.word lang=en text=hint means=hm.hint
+@w.en.hints.hm.hint core.word lang=en text=hints means=hm.hint
+@w.en.clue.hm.hint core.word lang=en text=clue means=hm.hint
+@w.en.clues.hm.hint core.word lang=en text=clues means=hm.hint
+@w.en.tip.hm.hint core.word lang=en text=tip means=hm.hint
+@w.en.tips.hm.hint core.word lang=en text=tips means=hm.hint
+@w.en.something.hm.hint core.word lang=en text=something means=hm.hint
+@w.en.sth.hm.hint core.word lang=en text=sth means=hm.hint
+@w.en.anything.hm.hint core.word lang=en text=anything means=hm.hint
+@w.en.more.hm.hint core.word lang=en text=more means=hm.hint
+@w.en.something_to_go_on.hm.hint core.word lang=en text="something to go on" means=hm.hint
+@w.en.more_info.hm.hint core.word lang=en text="more info" means=hm.hint
+@w.en.sth_about_it.hm.hint core.word lang=en text="sth about it" means=hm.hint
+@w.en.a_clue.hm.hint core.word lang=en text="a clue" means=hm.hint
+@w.en.a_hint.hm.hint core.word lang=en text="a hint" means=hm.hint
+@w.en.little_hint.hm.hint core.word lang=en text="little hint" means=hm.hint
+@w.en.little_hints.hm.hint core.word lang=en text="little hints" means=hm.hint
+@w.en.little_clue.hm.hint core.word lang=en text="little clue" means=hm.hint
+@w.en.little_clues.hm.hint core.word lang=en text="little clues" means=hm.hint
+@w.en.little_tip.hm.hint core.word lang=en text="little tip" means=hm.hint
+@w.en.little_tips.hm.hint core.word lang=en text="little tips" means=hm.hint
+@w.en.little_something.hm.hint core.word lang=en text="little something" means=hm.hint
+@w.en.little_sth.hm.hint core.word lang=en text="little sth" means=hm.hint
+@w.en.little_anything.hm.hint core.word lang=en text="little anything" means=hm.hint
+@w.en.little_info.hm.hint core.word lang=en text="little info" means=hm.hint
+@w.en.little_more.hm.hint core.word lang=en text="little more" means=hm.hint
+@w.en.little_something_to_go_on.hm.hint core.word lang=en text="little something to go on" means=hm.hint
+@w.en.little_more_info.hm.hint core.word lang=en text="little more info" means=hm.hint
+@w.en.little_something_about_it.hm.hint core.word lang=en text="little something about it" means=hm.hint
+@w.en.little_sth_about_it.hm.hint core.word lang=en text="little sth about it" means=hm.hint
+@w.en.little_anything_about_it.hm.hint core.word lang=en text="little anything about it" means=hm.hint
+@w.en.little_anything_about_the_word.hm.hint core.word lang=en text="little anything about the word" means=hm.hint
+@w.en.little_something_about_the_word.hm.hint core.word lang=en text="little something about the word" means=hm.hint
+@w.en.little_a_clue.hm.hint core.word lang=en text="little a clue" means=hm.hint
+@w.en.little_a_hint.hm.hint core.word lang=en text="little a hint" means=hm.hint
+@w.en.small_hint.hm.hint core.word lang=en text="small hint" means=hm.hint
+@w.en.small_hints.hm.hint core.word lang=en text="small hints" means=hm.hint
+@w.en.small_clue.hm.hint core.word lang=en text="small clue" means=hm.hint
+@w.en.small_clues.hm.hint core.word lang=en text="small clues" means=hm.hint
+@w.en.small_tip.hm.hint core.word lang=en text="small tip" means=hm.hint
+@w.en.small_tips.hm.hint core.word lang=en text="small tips" means=hm.hint
+@w.en.small_something.hm.hint core.word lang=en text="small something" means=hm.hint
+@w.en.small_sth.hm.hint core.word lang=en text="small sth" means=hm.hint
+@w.en.small_anything.hm.hint core.word lang=en text="small anything" means=hm.hint
+@w.en.small_info.hm.hint core.word lang=en text="small info" means=hm.hint
+@w.en.small_more.hm.hint core.word lang=en text="small more" means=hm.hint
+@w.en.small_something_to_go_on.hm.hint core.word lang=en text="small something to go on" means=hm.hint
+@w.en.small_more_info.hm.hint core.word lang=en text="small more info" means=hm.hint
+@w.en.small_something_about_it.hm.hint core.word lang=en text="small something about it" means=hm.hint
+@w.en.small_sth_about_it.hm.hint core.word lang=en text="small sth about it" means=hm.hint
+@w.en.small_anything_about_it.hm.hint core.word lang=en text="small anything about it" means=hm.hint
+@w.en.small_anything_about_the_word.hm.hint core.word lang=en text="small anything about the word" means=hm.hint
+@w.en.small_something_about_the_word.hm.hint core.word lang=en text="small something about the word" means=hm.hint
+@w.en.small_a_clue.hm.hint core.word lang=en text="small a clue" means=hm.hint
+@w.en.small_a_hint.hm.hint core.word lang=en text="small a hint" means=hm.hint
+@w.en.quick_hint.hm.hint core.word lang=en text="quick hint" means=hm.hint
+@w.en.quick_hints.hm.hint core.word lang=en text="quick hints" means=hm.hint
+@w.en.quick_clue.hm.hint core.word lang=en text="quick clue" means=hm.hint
+@w.en.quick_clues.hm.hint core.word lang=en text="quick clues" means=hm.hint
+@w.en.quick_tip.hm.hint core.word lang=en text="quick tip" means=hm.hint
+@w.en.quick_tips.hm.hint core.word lang=en text="quick tips" means=hm.hint
+@w.en.quick_something.hm.hint core.word lang=en text="quick something" means=hm.hint
+@w.en.quick_sth.hm.hint core.word lang=en text="quick sth" means=hm.hint
+@w.en.quick_anything.hm.hint core.word lang=en text="quick anything" means=hm.hint
+@w.en.quick_info.hm.hint core.word lang=en text="quick info" means=hm.hint
+@w.en.quick_more.hm.hint core.word lang=en text="quick more" means=hm.hint
+@w.en.quick_something_to_go_on.hm.hint core.word lang=en text="quick something to go on" means=hm.hint
+@w.en.quick_more_info.hm.hint core.word lang=en text="quick more info" means=hm.hint
+@w.en.quick_something_about_it.hm.hint core.word lang=en text="quick something about it" means=hm.hint
+@w.en.quick_sth_about_it.hm.hint core.word lang=en text="quick sth about it" means=hm.hint
+@w.en.quick_anything_about_it.hm.hint core.word lang=en text="quick anything about it" means=hm.hint
+@w.en.quick_anything_about_the_word.hm.hint core.word lang=en text="quick anything about the word" means=hm.hint
+@w.en.quick_something_about_the_word.hm.hint core.word lang=en text="quick something about the word" means=hm.hint
+@w.en.quick_a_clue.hm.hint core.word lang=en text="quick a clue" means=hm.hint
+@w.en.quick_a_hint.hm.hint core.word lang=en text="quick a hint" means=hm.hint
+@w.en.tiny_hint.hm.hint core.word lang=en text="tiny hint" means=hm.hint
+@w.en.tiny_hints.hm.hint core.word lang=en text="tiny hints" means=hm.hint
+@w.en.tiny_clue.hm.hint core.word lang=en text="tiny clue" means=hm.hint
+@w.en.tiny_clues.hm.hint core.word lang=en text="tiny clues" means=hm.hint
+@w.en.tiny_tip.hm.hint core.word lang=en text="tiny tip" means=hm.hint
+@w.en.tiny_tips.hm.hint core.word lang=en text="tiny tips" means=hm.hint
+@w.en.tiny_something.hm.hint core.word lang=en text="tiny something" means=hm.hint
+@w.en.tiny_sth.hm.hint core.word lang=en text="tiny sth" means=hm.hint
+@w.en.tiny_anything.hm.hint core.word lang=en text="tiny anything" means=hm.hint
+@w.en.tiny_info.hm.hint core.word lang=en text="tiny info" means=hm.hint
+@w.en.tiny_more.hm.hint core.word lang=en text="tiny more" means=hm.hint
+@w.en.tiny_something_to_go_on.hm.hint core.word lang=en text="tiny something to go on" means=hm.hint
+@w.en.tiny_more_info.hm.hint core.word lang=en text="tiny more info" means=hm.hint
+@w.en.tiny_something_about_it.hm.hint core.word lang=en text="tiny something about it" means=hm.hint
+@w.en.tiny_sth_about_it.hm.hint core.word lang=en text="tiny sth about it" means=hm.hint
+@w.en.tiny_anything_about_it.hm.hint core.word lang=en text="tiny anything about it" means=hm.hint
+@w.en.tiny_anything_about_the_word.hm.hint core.word lang=en text="tiny anything about the word" means=hm.hint
+@w.en.tiny_something_about_the_word.hm.hint core.word lang=en text="tiny something about the word" means=hm.hint
+@w.en.tiny_a_clue.hm.hint core.word lang=en text="tiny a clue" means=hm.hint
+@w.en.tiny_a_hint.hm.hint core.word lang=en text="tiny a hint" means=hm.hint
+@w.en.at_all.hm.hint core.word lang=en text="at all" means=hm.hint
+@w.en.to_go_on.hm.hint core.word lang=en text="to go on" means=hm.hint
+@w.en.please.hm.hint core.word lang=en text=please means=hm.hint
+@w.en.share.hm.hint core.word lang=en text=share means=hm.hint
+@w.en.i_want.hm.hint core.word lang=en text="i want" means=hm.hint
+@w.en.i_need.hm.hint core.word lang=en text="i need" means=hm.hint
+@w.en.i_d_like.hm.hint core.word lang=en text="i d like" means=hm.hint
+@w.en.id_like.hm.hint core.word lang=en text="id like" means=hm.hint
+@w.en.what_s.hm.hint core.word lang=en text="what s" means=hm.hint
+@w.en.got.hm.hint core.word lang=en text=got means=hm.hint
+@w.en.have_you_got.hm.hint core.word lang=en text="have you got" means=hm.hint
+@w.en.do_you_have.hm.hint core.word lang=en text="do you have" means=hm.hint
+@w.en.can_i_have.hm.hint core.word lang=en text="can i have" means=hm.hint
+@w.en.can_i_get.hm.hint core.word lang=en text="can i get" means=hm.hint
+@w.en.let_me_have.hm.hint core.word lang=en text="let me have" means=hm.hint
+@w.en.n1.hm.hint core.word lang=en text=1 means=hm.hint
+@w.en.detail.hm.hint core.word lang=en text=detail means=hm.hint
+@w.en.details.hm.hint core.word lang=en text=details means=hm.hint
+@w.en.information.hm.hint core.word lang=en text=information means=hm.hint
+@w.en.thing.hm.hint core.word lang=en text=thing means=hm.hint
+@w.en.description.hm.hint core.word lang=en text=description means=hm.hint
+@w.en.characteristic.hm.hint core.word lang=en text=characteristic means=hm.hint
+@w.en.feature.hm.hint core.word lang=en text=feature means=hm.hint
+@w.en.property.hm.hint core.word lang=en text=property means=hm.hint
+@w.en.trait.hm.hint core.word lang=en text=trait means=hm.hint
+@w.en.idea.hm.hint core.word lang=en text=idea means=hm.hint
+@w.en.snippet.hm.hint core.word lang=en text=snippet means=hm.hint
+@w.en.bit.hm.hint core.word lang=en text=bit means=hm.hint
+@w.en.little_fact.hm.hint core.word lang=en text="little fact" means=hm.hint
+@w.en.little_facts.hm.hint core.word lang=en text="little facts" means=hm.hint
+@w.en.little_detail.hm.hint core.word lang=en text="little detail" means=hm.hint
+@w.en.little_details.hm.hint core.word lang=en text="little details" means=hm.hint
+@w.en.little_information.hm.hint core.word lang=en text="little information" means=hm.hint
+@w.en.little_thing.hm.hint core.word lang=en text="little thing" means=hm.hint
+@w.en.little_trivia.hm.hint core.word lang=en text="little trivia" means=hm.hint
+@w.en.little_description.hm.hint core.word lang=en text="little description" means=hm.hint
+@w.en.little_characteristic.hm.hint core.word lang=en text="little characteristic" means=hm.hint
+@w.en.little_feature.hm.hint core.word lang=en text="little feature" means=hm.hint
+@w.en.little_property.hm.hint core.word lang=en text="little property" means=hm.hint
+@w.en.little_trait.hm.hint core.word lang=en text="little trait" means=hm.hint
+@w.en.little_idea.hm.hint core.word lang=en text="little idea" means=hm.hint
+@w.en.little_snippet.hm.hint core.word lang=en text="little snippet" means=hm.hint
+@w.en.little_bit.hm.hint core.word lang=en text="little bit" means=hm.hint
+@w.en.small_fact.hm.hint core.word lang=en text="small fact" means=hm.hint
+@w.en.small_facts.hm.hint core.word lang=en text="small facts" means=hm.hint
+@w.en.small_detail.hm.hint core.word lang=en text="small detail" means=hm.hint
+@w.en.small_details.hm.hint core.word lang=en text="small details" means=hm.hint
+@w.en.small_information.hm.hint core.word lang=en text="small information" means=hm.hint
+@w.en.small_thing.hm.hint core.word lang=en text="small thing" means=hm.hint
+@w.en.small_trivia.hm.hint core.word lang=en text="small trivia" means=hm.hint
+@w.en.small_description.hm.hint core.word lang=en text="small description" means=hm.hint
+@w.en.small_characteristic.hm.hint core.word lang=en text="small characteristic" means=hm.hint
+@w.en.small_feature.hm.hint core.word lang=en text="small feature" means=hm.hint
+@w.en.small_property.hm.hint core.word lang=en text="small property" means=hm.hint
+@w.en.small_trait.hm.hint core.word lang=en text="small trait" means=hm.hint
+@w.en.small_idea.hm.hint core.word lang=en text="small idea" means=hm.hint
+@w.en.small_snippet.hm.hint core.word lang=en text="small snippet" means=hm.hint
+@w.en.small_bit.hm.hint core.word lang=en text="small bit" means=hm.hint
+@w.en.quick_fact.hm.hint core.word lang=en text="quick fact" means=hm.hint
+@w.en.quick_facts.hm.hint core.word lang=en text="quick facts" means=hm.hint
+@w.en.quick_detail.hm.hint core.word lang=en text="quick detail" means=hm.hint
+@w.en.quick_details.hm.hint core.word lang=en text="quick details" means=hm.hint
+@w.en.quick_information.hm.hint core.word lang=en text="quick information" means=hm.hint
+@w.en.quick_thing.hm.hint core.word lang=en text="quick thing" means=hm.hint
+@w.en.quick_trivia.hm.hint core.word lang=en text="quick trivia" means=hm.hint
+@w.en.quick_description.hm.hint core.word lang=en text="quick description" means=hm.hint
+@w.en.quick_characteristic.hm.hint core.word lang=en text="quick characteristic" means=hm.hint
+@w.en.quick_feature.hm.hint core.word lang=en text="quick feature" means=hm.hint
+@w.en.quick_property.hm.hint core.word lang=en text="quick property" means=hm.hint
+@w.en.quick_trait.hm.hint core.word lang=en text="quick trait" means=hm.hint
+@w.en.quick_idea.hm.hint core.word lang=en text="quick idea" means=hm.hint
+@w.en.quick_snippet.hm.hint core.word lang=en text="quick snippet" means=hm.hint
+@w.en.quick_bit.hm.hint core.word lang=en text="quick bit" means=hm.hint
+@w.en.fun_facts.hm.hint core.word lang=en text="fun facts" means=hm.hint
+@w.en.fun_detail.hm.hint core.word lang=en text="fun detail" means=hm.hint
+@w.en.fun_details.hm.hint core.word lang=en text="fun details" means=hm.hint
+@w.en.fun_info.hm.hint core.word lang=en text="fun info" means=hm.hint
+@w.en.fun_information.hm.hint core.word lang=en text="fun information" means=hm.hint
+@w.en.fun_thing.hm.hint core.word lang=en text="fun thing" means=hm.hint
+@w.en.fun_something.hm.hint core.word lang=en text="fun something" means=hm.hint
+@w.en.fun_anything.hm.hint core.word lang=en text="fun anything" means=hm.hint
+@w.en.fun_trivia.hm.hint core.word lang=en text="fun trivia" means=hm.hint
+@w.en.fun_description.hm.hint core.word lang=en text="fun description" means=hm.hint
+@w.en.fun_characteristic.hm.hint core.word lang=en text="fun characteristic" means=hm.hint
+@w.en.fun_feature.hm.hint core.word lang=en text="fun feature" means=hm.hint
+@w.en.fun_property.hm.hint core.word lang=en text="fun property" means=hm.hint
+@w.en.fun_trait.hm.hint core.word lang=en text="fun trait" means=hm.hint
+@w.en.fun_idea.hm.hint core.word lang=en text="fun idea" means=hm.hint
+@w.en.fun_snippet.hm.hint core.word lang=en text="fun snippet" means=hm.hint
+@w.en.fun_bit.hm.hint core.word lang=en text="fun bit" means=hm.hint
+@w.en.cool_fact.hm.hint core.word lang=en text="cool fact" means=hm.hint
+@w.en.cool_facts.hm.hint core.word lang=en text="cool facts" means=hm.hint
+@w.en.cool_detail.hm.hint core.word lang=en text="cool detail" means=hm.hint
+@w.en.cool_details.hm.hint core.word lang=en text="cool details" means=hm.hint
+@w.en.cool_info.hm.hint core.word lang=en text="cool info" means=hm.hint
+@w.en.cool_information.hm.hint core.word lang=en text="cool information" means=hm.hint
+@w.en.cool_thing.hm.hint core.word lang=en text="cool thing" means=hm.hint
+@w.en.cool_something.hm.hint core.word lang=en text="cool something" means=hm.hint
+@w.en.cool_anything.hm.hint core.word lang=en text="cool anything" means=hm.hint
+@w.en.cool_trivia.hm.hint core.word lang=en text="cool trivia" means=hm.hint
+@w.en.cool_description.hm.hint core.word lang=en text="cool description" means=hm.hint
+@w.en.cool_characteristic.hm.hint core.word lang=en text="cool characteristic" means=hm.hint
+@w.en.cool_feature.hm.hint core.word lang=en text="cool feature" means=hm.hint
+@w.en.cool_property.hm.hint core.word lang=en text="cool property" means=hm.hint
+@w.en.cool_trait.hm.hint core.word lang=en text="cool trait" means=hm.hint
+@w.en.cool_idea.hm.hint core.word lang=en text="cool idea" means=hm.hint
+@w.en.cool_snippet.hm.hint core.word lang=en text="cool snippet" means=hm.hint
+@w.en.cool_bit.hm.hint core.word lang=en text="cool bit" means=hm.hint
+@w.en.interesting_fact.hm.hint core.word lang=en text="interesting fact" means=hm.hint
+@w.en.interesting_facts.hm.hint core.word lang=en text="interesting facts" means=hm.hint
+@w.en.interesting_detail.hm.hint core.word lang=en text="interesting detail" means=hm.hint
+@w.en.interesting_details.hm.hint core.word lang=en text="interesting details" means=hm.hint
+@w.en.interesting_info.hm.hint core.word lang=en text="interesting info" means=hm.hint
+@w.en.interesting_information.hm.hint core.word lang=en text="interesting information" means=hm.hint
+@w.en.interesting_thing.hm.hint core.word lang=en text="interesting thing" means=hm.hint
+@w.en.interesting_something.hm.hint core.word lang=en text="interesting something" means=hm.hint
+@w.en.interesting_anything.hm.hint core.word lang=en text="interesting anything" means=hm.hint
+@w.en.interesting_trivia.hm.hint core.word lang=en text="interesting trivia" means=hm.hint
+@w.en.interesting_description.hm.hint core.word lang=en text="interesting description" means=hm.hint
+@w.en.interesting_characteristic.hm.hint core.word lang=en text="interesting characteristic" means=hm.hint
+@w.en.interesting_feature.hm.hint core.word lang=en text="interesting feature" means=hm.hint
+@w.en.interesting_property.hm.hint core.word lang=en text="interesting property" means=hm.hint
+@w.en.interesting_trait.hm.hint core.word lang=en text="interesting trait" means=hm.hint
+@w.en.interesting_idea.hm.hint core.word lang=en text="interesting idea" means=hm.hint
+@w.en.interesting_snippet.hm.hint core.word lang=en text="interesting snippet" means=hm.hint
+@w.en.interesting_bit.hm.hint core.word lang=en text="interesting bit" means=hm.hint
+@w.en.random_fact.hm.hint core.word lang=en text="random fact" means=hm.hint
+@w.en.random_facts.hm.hint core.word lang=en text="random facts" means=hm.hint
+@w.en.random_detail.hm.hint core.word lang=en text="random detail" means=hm.hint
+@w.en.random_details.hm.hint core.word lang=en text="random details" means=hm.hint
+@w.en.random_info.hm.hint core.word lang=en text="random info" means=hm.hint
+@w.en.random_information.hm.hint core.word lang=en text="random information" means=hm.hint
+@w.en.random_thing.hm.hint core.word lang=en text="random thing" means=hm.hint
+@w.en.random_something.hm.hint core.word lang=en text="random something" means=hm.hint
+@w.en.random_anything.hm.hint core.word lang=en text="random anything" means=hm.hint
+@w.en.random_trivia.hm.hint core.word lang=en text="random trivia" means=hm.hint
+@w.en.random_description.hm.hint core.word lang=en text="random description" means=hm.hint
+@w.en.random_characteristic.hm.hint core.word lang=en text="random characteristic" means=hm.hint
+@w.en.random_feature.hm.hint core.word lang=en text="random feature" means=hm.hint
+@w.en.random_property.hm.hint core.word lang=en text="random property" means=hm.hint
+@w.en.random_trait.hm.hint core.word lang=en text="random trait" means=hm.hint
+@w.en.random_idea.hm.hint core.word lang=en text="random idea" means=hm.hint
+@w.en.random_snippet.hm.hint core.word lang=en text="random snippet" means=hm.hint
+@w.en.random_bit.hm.hint core.word lang=en text="random bit" means=hm.hint
+@w.en.good_fact.hm.hint core.word lang=en text="good fact" means=hm.hint
+@w.en.good_facts.hm.hint core.word lang=en text="good facts" means=hm.hint
+@w.en.good_detail.hm.hint core.word lang=en text="good detail" means=hm.hint
+@w.en.good_details.hm.hint core.word lang=en text="good details" means=hm.hint
+@w.en.good_info.hm.hint core.word lang=en text="good info" means=hm.hint
+@w.en.good_information.hm.hint core.word lang=en text="good information" means=hm.hint
+@w.en.good_thing.hm.hint core.word lang=en text="good thing" means=hm.hint
+@w.en.good_something.hm.hint core.word lang=en text="good something" means=hm.hint
+@w.en.good_anything.hm.hint core.word lang=en text="good anything" means=hm.hint
+@w.en.good_trivia.hm.hint core.word lang=en text="good trivia" means=hm.hint
+@w.en.good_description.hm.hint core.word lang=en text="good description" means=hm.hint
+@w.en.good_characteristic.hm.hint core.word lang=en text="good characteristic" means=hm.hint
+@w.en.good_feature.hm.hint core.word lang=en text="good feature" means=hm.hint
+@w.en.good_property.hm.hint core.word lang=en text="good property" means=hm.hint
+@w.en.good_trait.hm.hint core.word lang=en text="good trait" means=hm.hint
+@w.en.good_idea.hm.hint core.word lang=en text="good idea" means=hm.hint
+@w.en.good_snippet.hm.hint core.word lang=en text="good snippet" means=hm.hint
+@w.en.good_bit.hm.hint core.word lang=en text="good bit" means=hm.hint
+@w.en.useful_fact.hm.hint core.word lang=en text="useful fact" means=hm.hint
+@w.en.useful_facts.hm.hint core.word lang=en text="useful facts" means=hm.hint
+@w.en.useful_detail.hm.hint core.word lang=en text="useful detail" means=hm.hint
+@w.en.useful_details.hm.hint core.word lang=en text="useful details" means=hm.hint
+@w.en.useful_info.hm.hint core.word lang=en text="useful info" means=hm.hint
+@w.en.useful_information.hm.hint core.word lang=en text="useful information" means=hm.hint
+@w.en.useful_thing.hm.hint core.word lang=en text="useful thing" means=hm.hint
+@w.en.useful_something.hm.hint core.word lang=en text="useful something" means=hm.hint
+@w.en.useful_anything.hm.hint core.word lang=en text="useful anything" means=hm.hint
+@w.en.useful_trivia.hm.hint core.word lang=en text="useful trivia" means=hm.hint
+@w.en.useful_description.hm.hint core.word lang=en text="useful description" means=hm.hint
+@w.en.useful_characteristic.hm.hint core.word lang=en text="useful characteristic" means=hm.hint
+@w.en.useful_feature.hm.hint core.word lang=en text="useful feature" means=hm.hint
+@w.en.useful_property.hm.hint core.word lang=en text="useful property" means=hm.hint
+@w.en.useful_trait.hm.hint core.word lang=en text="useful trait" means=hm.hint
+@w.en.useful_idea.hm.hint core.word lang=en text="useful idea" means=hm.hint
+@w.en.useful_snippet.hm.hint core.word lang=en text="useful snippet" means=hm.hint
+@w.en.useful_bit.hm.hint core.word lang=en text="useful bit" means=hm.hint
+@w.en.it.hm.hint core.word lang=en text=it means=hm.hint
+@w.en.the_word.hm.hint core.word lang=en text="the word" means=hm.hint
+@w.en.the_animal.hm.hint core.word lang=en text="the animal" means=hm.hint
+@w.en.the_mystery_animal.hm.hint core.word lang=en text="the mystery animal" means=hm.hint
+@w.en.this_animal.hm.hint core.word lang=en text="this animal" means=hm.hint
+@w.en.that_animal.hm.hint core.word lang=en text="that animal" means=hm.hint
+@w.en.this.hm.hint core.word lang=en text=this means=hm.hint
+@w.en.that.hm.hint core.word lang=en text=that means=hm.hint
+@w.en.the_answer.hm.hint core.word lang=en text="the answer" means=hm.hint
+@w.en.the_mystery.hm.hint core.word lang=en text="the mystery" means=hm.hint
+@w.en.the_mystery_word.hm.hint core.word lang=en text="the mystery word" means=hm.hint
+@w.en.this_word.hm.hint core.word lang=en text="this word" means=hm.hint
+@w.en.the_hidden_word.hm.hint core.word lang=en text="the hidden word" means=hm.hint
+@w.en.the_secret_word.hm.hint core.word lang=en text="the secret word" means=hm.hint
+@w.en.the_secret.hm.hint core.word lang=en text="the secret" means=hm.hint
+@w.en.the_creature.hm.hint core.word lang=en text="the creature" means=hm.hint
+@w.en.this_creature.hm.hint core.word lang=en text="this creature" means=hm.hint
+@w.en.the_hidden_animal.hm.hint core.word lang=en text="the hidden animal" means=hm.hint
+@w.en.the_secret_animal.hm.hint core.word lang=en text="the secret animal" means=hm.hint
+@w.en.the_unknown_animal.hm.hint core.word lang=en text="the unknown animal" means=hm.hint
+@w.en.the_mystery_creature.hm.hint core.word lang=en text="the mystery creature" means=hm.hint
+@w.en.about_the_mystery_animal.hm.hint core.word lang=en text="about the mystery animal" means=hm.hint
+@w.en.about_that_animal.hm.hint core.word lang=en text="about that animal" means=hm.hint
+@w.en.about_the_answer.hm.hint core.word lang=en text="about the answer" means=hm.hint
+@w.en.about_the_mystery.hm.hint core.word lang=en text="about the mystery" means=hm.hint
+@w.en.about_the_mystery_word.hm.hint core.word lang=en text="about the mystery word" means=hm.hint
+@w.en.about_this_word.hm.hint core.word lang=en text="about this word" means=hm.hint
+@w.en.about_the_hidden_word.hm.hint core.word lang=en text="about the hidden word" means=hm.hint
+@w.en.about_the_secret_word.hm.hint core.word lang=en text="about the secret word" means=hm.hint
+@w.en.about_the_secret.hm.hint core.word lang=en text="about the secret" means=hm.hint
+@w.en.about_the_creature.hm.hint core.word lang=en text="about the creature" means=hm.hint
+@w.en.about_this_creature.hm.hint core.word lang=en text="about this creature" means=hm.hint
+@w.en.about_the_hidden_animal.hm.hint core.word lang=en text="about the hidden animal" means=hm.hint
+@w.en.about_the_secret_animal.hm.hint core.word lang=en text="about the secret animal" means=hm.hint
+@w.en.about_the_unknown_animal.hm.hint core.word lang=en text="about the unknown animal" means=hm.hint
+@w.en.about_the_mystery_creature.hm.hint core.word lang=en text="about the mystery creature" means=hm.hint
+@w.en.on_it.hm.hint core.word lang=en text="on it" means=hm.hint
+@w.en.on_the_word.hm.hint core.word lang=en text="on the word" means=hm.hint
+@w.en.on_the_animal.hm.hint core.word lang=en text="on the animal" means=hm.hint
+@w.en.on_the_mystery_animal.hm.hint core.word lang=en text="on the mystery animal" means=hm.hint
+@w.en.on_this_animal.hm.hint core.word lang=en text="on this animal" means=hm.hint
+@w.en.on_that_animal.hm.hint core.word lang=en text="on that animal" means=hm.hint
+@w.en.on_this.hm.hint core.word lang=en text="on this" means=hm.hint
+@w.en.on_that.hm.hint core.word lang=en text="on that" means=hm.hint
+@w.en.on_the_answer.hm.hint core.word lang=en text="on the answer" means=hm.hint
+@w.en.on_the_mystery.hm.hint core.word lang=en text="on the mystery" means=hm.hint
+@w.en.on_the_mystery_word.hm.hint core.word lang=en text="on the mystery word" means=hm.hint
+@w.en.on_this_word.hm.hint core.word lang=en text="on this word" means=hm.hint
+@w.en.on_the_hidden_word.hm.hint core.word lang=en text="on the hidden word" means=hm.hint
+@w.en.on_the_secret_word.hm.hint core.word lang=en text="on the secret word" means=hm.hint
+@w.en.on_the_secret.hm.hint core.word lang=en text="on the secret" means=hm.hint
+@w.en.on_the_creature.hm.hint core.word lang=en text="on the creature" means=hm.hint
+@w.en.on_this_creature.hm.hint core.word lang=en text="on this creature" means=hm.hint
+@w.en.on_the_hidden_animal.hm.hint core.word lang=en text="on the hidden animal" means=hm.hint
+@w.en.on_the_secret_animal.hm.hint core.word lang=en text="on the secret animal" means=hm.hint
+@w.en.on_the_unknown_animal.hm.hint core.word lang=en text="on the unknown animal" means=hm.hint
+@w.en.on_the_mystery_creature.hm.hint core.word lang=en text="on the mystery creature" means=hm.hint
+@w.en.of_it.hm.hint core.word lang=en text="of it" means=hm.hint
+@w.en.of_the_word.hm.hint core.word lang=en text="of the word" means=hm.hint
+@w.en.of_the_animal.hm.hint core.word lang=en text="of the animal" means=hm.hint
+@w.en.of_the_mystery_animal.hm.hint core.word lang=en text="of the mystery animal" means=hm.hint
+@w.en.of_this_animal.hm.hint core.word lang=en text="of this animal" means=hm.hint
+@w.en.of_that_animal.hm.hint core.word lang=en text="of that animal" means=hm.hint
+@w.en.of_this.hm.hint core.word lang=en text="of this" means=hm.hint
+@w.en.of_that.hm.hint core.word lang=en text="of that" means=hm.hint
+@w.en.of_the_answer.hm.hint core.word lang=en text="of the answer" means=hm.hint
+@w.en.of_the_mystery.hm.hint core.word lang=en text="of the mystery" means=hm.hint
+@w.en.of_the_mystery_word.hm.hint core.word lang=en text="of the mystery word" means=hm.hint
+@w.en.of_this_word.hm.hint core.word lang=en text="of this word" means=hm.hint
+@w.en.of_the_hidden_word.hm.hint core.word lang=en text="of the hidden word" means=hm.hint
+@w.en.of_the_secret_word.hm.hint core.word lang=en text="of the secret word" means=hm.hint
+@w.en.of_the_secret.hm.hint core.word lang=en text="of the secret" means=hm.hint
+@w.en.of_the_creature.hm.hint core.word lang=en text="of the creature" means=hm.hint
+@w.en.of_this_creature.hm.hint core.word lang=en text="of this creature" means=hm.hint
+@w.en.of_the_hidden_animal.hm.hint core.word lang=en text="of the hidden animal" means=hm.hint
+@w.en.of_the_secret_animal.hm.hint core.word lang=en text="of the secret animal" means=hm.hint
+@w.en.of_the_unknown_animal.hm.hint core.word lang=en text="of the unknown animal" means=hm.hint
+@w.en.of_the_mystery_creature.hm.hint core.word lang=en text="of the mystery creature" means=hm.hint
+@w.en.what.hm.hint core.word lang=en text=what means=hm.hint
+@w.en.what_does.hm.hint core.word lang=en text="what does" means=hm.hint
+@w.en.what_do.hm.hint core.word lang=en text="what do" means=hm.hint
+@w.en.how_is.hm.hint core.word lang=en text="how is" means=hm.hint
+@w.en.how_s.hm.hint core.word lang=en text="how s" means=hm.hint
+@w.en.hows.hm.hint core.word lang=en text=hows means=hm.hint
+@w.en.known_for.hm.hint core.word lang=en text="known for" means=hm.hint
+@w.en.famous_for.hm.hint core.word lang=en text="famous for" means=hm.hint
+@w.en.special.hm.hint core.word lang=en text=special means=hm.hint
+@w.en.unique.hm.hint core.word lang=en text=unique means=hm.hint
+@w.en.interesting.hm.hint core.word lang=en text=interesting means=hm.hint
+@w.en.notable.hm.hint core.word lang=en text=notable means=hm.hint
+@w.en.remarkable.hm.hint core.word lang=en text=remarkable means=hm.hint
+@w.en.distinctive.hm.hint core.word lang=en text=distinctive means=hm.hint
+@w.en.peculiar.hm.hint core.word lang=en text=peculiar means=hm.hint
+@w.en.typical.hm.hint core.word lang=en text=typical means=hm.hint
+@w.en.good_at.hm.hint core.word lang=en text="good at" means=hm.hint
+@w.en.used_for.hm.hint core.word lang=en text="used for" means=hm.hint
+@w.en.useful_for.hm.hint core.word lang=en text="useful for" means=hm.hint
+@w.en.special_about.hm.hint core.word lang=en text="special about" means=hm.hint
+@w.en.unique_about.hm.hint core.word lang=en text="unique about" means=hm.hint
+@w.en.interesting_about.hm.hint core.word lang=en text="interesting about" means=hm.hint
+@w.en.known_as.hm.hint core.word lang=en text="known as" means=hm.hint
+@w.en.called.hm.hint core.word lang=en text=called means=hm.hint
+@w.en.famous.hm.hint core.word lang=en text=famous means=hm.hint
+@w.en.known.hm.hint core.word lang=en text=known means=hm.hint
+@w.en.a.hm.hint core.word lang=en text=a means=hm.hint
+@w.en.an.hm.hint core.word lang=en text=an means=hm.hint
+@w.en.some.hm.hint core.word lang=en text=some means=hm.hint
+@w.en.one_thing.hm.hint core.word lang=en text="one thing" means=hm.hint
+@w.en.n1_thing.hm.hint core.word lang=en text="1 thing" means=hm.hint
+@w.en.a_thing.hm.hint core.word lang=en text="a thing" means=hm.hint
+@w.en.some_thing.hm.hint core.word lang=en text="some thing" means=hm.hint
+@w.en.a_detail.hm.hint core.word lang=en text="a detail" means=hm.hint
+@w.en.a_piece_of_info.hm.hint core.word lang=en text="a piece of info" means=hm.hint
+@w.en.a_bit_of_info.hm.hint core.word lang=en text="a bit of info" means=hm.hint
+@w.en.a_bit_of_information.hm.hint core.word lang=en text="a bit of information" means=hm.hint
+@w.en.a_piece_of_information.hm.hint core.word lang=en text="a piece of information" means=hm.hint
+@w.en.how_many_guesses_are_left.hm.status core.word lang=en text="how many guesses are left" means=hm.status
+@w.en.how_many_guesses_do_i_have_left.hm.status core.word lang=en text="how many guesses do i have left" means=hm.status
+@w.en.how_many_lives_do_i_have.hm.status core.word lang=en text="how many lives do i have" means=hm.status
+@w.en.what_letters_have_i_tried.hm.status core.word lang=en text="what letters have i tried" means=hm.status
+@w.en.which_letters_have_i_guessed.hm.status core.word lang=en text="which letters have i guessed" means=hm.status
+@w.en.what_does_the_word_look_like.hm.status core.word lang=en text="what does the word look like" means=hm.status
+@w.en.show_me_the_word.hm.status core.word lang=en text="show me the word" means=hm.status
+@w.en.show_the_word.hm.status core.word lang=en text="show the word" means=hm.status
+@w.en.what_is_the_word_so_far.hm.status core.word lang=en text="what is the word so far" means=hm.status
+@w.en.how_many_letters_does_it_have.hm.status core.word lang=en text="how many letters does it have" means=hm.status
+@w.en.how_many_letters_are_there.hm.status core.word lang=en text="how many letters are there" means=hm.status
+@w.en.how_long_is_the_word.hm.status core.word lang=en text="how long is the word" means=hm.status
+@w.en.how_many_wrong_guesses_are_left.hm.status core.word lang=en text="how many wrong guesses are left" means=hm.status
+@w.en.how_many_tries_are_left.hm.status core.word lang=en text="how many tries are left" means=hm.status
+@w.en.current_word.hm.status core.word lang=en text="current word" means=hm.status
+@w.en.the_current_word.hm.status core.word lang=en text="the current word" means=hm.status
+@w.en.my_progress.hm.status core.word lang=en text="my progress" means=hm.status
+@w.en.the_blanks.hm.status core.word lang=en text="the blanks" means=hm.status
+@w.en.my_status.hm.status core.word lang=en text="my status" means=hm.status
+@w.en.current_state.hm.status core.word lang=en text="current state" means=hm.status
+@w.en.how_far_am_i.hm.status core.word lang=en text="how far am i" means=hm.status
+@w.en.how_am_i_doing.hm.status core.word lang=en text="how am i doing" means=hm.status
+@w.en.how_am_i_doing_so_far.hm.status core.word lang=en text="how am i doing so far" means=hm.status
+@w.en.how_much_of_the_word_is_solved.hm.status core.word lang=en text="how much of the word is solved" means=hm.status
+@w.en.how_much_of_the_word_have_i_got.hm.status core.word lang=en text="how much of the word have i got" means=hm.status
+@w.en.how_much_of_the_word_is_done.hm.status core.word lang=en text="how much of the word is done" means=hm.status
+@w.en.how_much_is_solved.hm.status core.word lang=en text="how much is solved" means=hm.status
+@w.en.how_much_of_the_word_is_revealed.hm.status core.word lang=en text="how much of the word is revealed" means=hm.status
+@w.en.what_does_it_look_like.hm.status core.word lang=en text="what does it look like" means=hm.status
+@w.en.what_do_the_dashes_look_like.hm.status core.word lang=en text="what do the dashes look like" means=hm.status
+@w.en.how_does_the_word_look.hm.status core.word lang=en text="how does the word look" means=hm.status
+@w.en.how_does_it_look.hm.status core.word lang=en text="how does it look" means=hm.status
+@w.en.how_does_the_word_look_like.hm.status core.word lang=en text="how does the word look like" means=hm.status
+@w.en.what_is_the_word_now.hm.status core.word lang=en text="what is the word now" means=hm.status
+@w.en.whats_the_word_now.hm.status core.word lang=en text="whats the word now" means=hm.status
+@w.en.where_am_i.hm.status core.word lang=en text="where am i" means=hm.status
+@w.en.where_are_we.hm.status core.word lang=en text="where are we" means=hm.status
+@w.en.whats_the_situation.hm.status core.word lang=en text="whats the situation" means=hm.status
+@w.en.what_is_the_situation.hm.status core.word lang=en text="what is the situation" means=hm.status
+@w.en.how_is_it_going.hm.status core.word lang=en text="how is it going" means=hm.status
+@w.en.hows_it_going.hm.status core.word lang=en text="hows it going" means=hm.status
+@w.en.how_are_we_doing.hm.status core.word lang=en text="how are we doing" means=hm.status
+@w.en.how_s_it_going.hm.status core.word lang=en text="how s it going" means=hm.status
+@w.en.what_s_the_state.hm.status core.word lang=en text="what s the state" means=hm.status
+@w.en.whats_the_state.hm.status core.word lang=en text="whats the state" means=hm.status
+@w.en.what_is_the_state.hm.status core.word lang=en text="what is the state" means=hm.status
+@w.en.state_of_the_game.hm.status core.word lang=en text="state of the game" means=hm.status
+@w.en.game_status.hm.status core.word lang=en text="game status" means=hm.status
+@w.en.the_game_status.hm.status core.word lang=en text="the game status" means=hm.status
+@w.en.the_status.hm.status core.word lang=en text="the status" means=hm.status
+@w.en.status.hm.status core.word lang=en text=status means=hm.status
+@w.en.hidden_word_view.hm.status core.word lang=en text="hidden word view" means=hm.status
+@w.en.word_view.hm.status core.word lang=en text="word view" means=hm.status
+@w.en.the_mask.hm.status core.word lang=en text="the mask" means=hm.status
+@w.en.the_dashes.hm.status core.word lang=en text="the dashes" means=hm.status
+@w.en.the_underscores.hm.status core.word lang=en text="the underscores" means=hm.status
+@w.en.the_masked_word.hm.status core.word lang=en text="the masked word" means=hm.status
+@w.en.the_hidden_word.hm.status core.word lang=en text="the hidden word" means=hm.status
+@w.en.the_progress.hm.status core.word lang=en text="the progress" means=hm.status
+@w.en.progress.hm.status core.word lang=en text=progress means=hm.status
+@w.en.letters_still_missing.hm.status core.word lang=en text="letters still missing" means=hm.status
+@w.en.letters_missing.hm.status core.word lang=en text="letters missing" means=hm.status
+@w.en.letters_hidden.hm.status core.word lang=en text="letters hidden" means=hm.status
+@w.en.letters_left.hm.status core.word lang=en text="letters left" means=hm.status
+@w.en.letters_remaining.hm.status core.word lang=en text="letters remaining" means=hm.status
+@w.en.how_many_spaces_left_in_the_word.hm.status core.word lang=en text="how many spaces left in the word" means=hm.status
+@w.en.how_many_spaces_are_left.hm.status core.word lang=en text="how many spaces are left" means=hm.status
+@w.en.how_many_blanks_left.hm.status core.word lang=en text="how many blanks left" means=hm.status
+@w.en.how_many_dashes_left.hm.status core.word lang=en text="how many dashes left" means=hm.status
+@w.en.how_many_letters_left.hm.status core.word lang=en text="how many letters left" means=hm.status
+@w.en.how_many_letters_remain.hm.status core.word lang=en text="how many letters remain" means=hm.status
+@w.en.how_many_left.hm.status core.word lang=en text="how many left" means=hm.status
+@w.en.do_i_have.hm.status core.word lang=en text="do i have" means=hm.status
+@w.en.did_i_have.hm.status core.word lang=en text="did i have" means=hm.status
+@w.en.have_i_got.hm.status core.word lang=en text="have i got" means=hm.status
+@w.en.i_have.hm.status core.word lang=en text="i have" means=hm.status
+@w.en.can_i_make.hm.status core.word lang=en text="can i make" means=hm.status
+@w.en.can_i_still_make.hm.status core.word lang=en text="can i still make" means=hm.status
+@w.en.can_i_get.hm.status core.word lang=en text="can i get" means=hm.status
+@w.en.can_i_miss.hm.status core.word lang=en text="can i miss" means=hm.status
+@w.en.are_left.hm.status core.word lang=en text="are left" means=hm.status
+@w.en.are_there.hm.status core.word lang=en text="are there" means=hm.status
+@w.en.are_allowed.hm.status core.word lang=en text="are allowed" means=hm.status
+@w.en.do_i_still_have.hm.status core.word lang=en text="do i still have" means=hm.status
+@w.en.remain.hm.status core.word lang=en text=remain means=hm.status
+@w.en.remaining.hm.status core.word lang=en text=remaining means=hm.status
+@w.en.left.hm.status core.word lang=en text=left means=hm.status
+@w.en.are_remaining.hm.status core.word lang=en text="are remaining" means=hm.status
+@w.en.are_still_left.hm.status core.word lang=en text="are still left" means=hm.status
+@w.en.do_i_have_left.hm.status core.word lang=en text="do i have left" means=hm.status
+@w.en.can_i_still_get.hm.status core.word lang=en text="can i still get" means=hm.status
+@w.en.allowed.hm.status core.word lang=en text=allowed means=hm.status
+@w.en.more_allowed.hm.status core.word lang=en text="more allowed" means=hm.status
+@w.en.am_i_allowed.hm.status core.word lang=en text="am i allowed" means=hm.status
+@w.en.have_i_left.hm.status core.word lang=en text="have i left" means=hm.status
+@w.en.do_i_get.hm.status core.word lang=en text="do i get" means=hm.status
+@w.en.do_i_still_get.hm.status core.word lang=en text="do i still get" means=hm.status
+@w.en.i_still_have.hm.status core.word lang=en text="i still have" means=hm.status
+@w.en.are_still_allowed.hm.status core.word lang=en text="are still allowed" means=hm.status
+@w.en.can_i_still_miss.hm.status core.word lang=en text="can i still miss" means=hm.status
+@w.en.guesses.hm.status core.word lang=en text=guesses means=hm.status
+@w.en.tries.hm.status core.word lang=en text=tries means=hm.status
+@w.en.misses.hm.status core.word lang=en text=misses means=hm.status
+@w.en.lives.hm.status core.word lang=en text=lives means=hm.status
+@w.en.chances.hm.status core.word lang=en text=chances means=hm.status
+@w.en.attempts.hm.status core.word lang=en text=attempts means=hm.status
+@w.en.mistakes.hm.status core.word lang=en text=mistakes means=hm.status
+@w.en.life.hm.status core.word lang=en text=life means=hm.status
+@w.en.errors.hm.status core.word lang=en text=errors means=hm.status
+@w.en.goes.hm.status core.word lang=en text=goes means=hm.status
+@w.en.turns.hm.status core.word lang=en text=turns means=hm.status
+@w.en.strikes.hm.status core.word lang=en text=strikes means=hm.status
+@w.en.wrong_guesses.hm.status core.word lang=en text="wrong guesses" means=hm.status
+@w.en.wrong_tries.hm.status core.word lang=en text="wrong tries" means=hm.status
+@w.en.wrong_misses.hm.status core.word lang=en text="wrong misses" means=hm.status
+@w.en.wrong_lives.hm.status core.word lang=en text="wrong lives" means=hm.status
+@w.en.wrong_chances.hm.status core.word lang=en text="wrong chances" means=hm.status
+@w.en.wrong_attempts.hm.status core.word lang=en text="wrong attempts" means=hm.status
+@w.en.wrong_mistakes.hm.status core.word lang=en text="wrong mistakes" means=hm.status
+@w.en.wrong_life.hm.status core.word lang=en text="wrong life" means=hm.status
+@w.en.wrong_errors.hm.status core.word lang=en text="wrong errors" means=hm.status
+@w.en.wrong_goes.hm.status core.word lang=en text="wrong goes" means=hm.status
+@w.en.wrong_turns.hm.status core.word lang=en text="wrong turns" means=hm.status
+@w.en.wrong_strikes.hm.status core.word lang=en text="wrong strikes" means=hm.status
+@w.en.incorrect_guesses.hm.status core.word lang=en text="incorrect guesses" means=hm.status
+@w.en.incorrect_tries.hm.status core.word lang=en text="incorrect tries" means=hm.status
+@w.en.incorrect_misses.hm.status core.word lang=en text="incorrect misses" means=hm.status
+@w.en.incorrect_lives.hm.status core.word lang=en text="incorrect lives" means=hm.status
+@w.en.incorrect_chances.hm.status core.word lang=en text="incorrect chances" means=hm.status
+@w.en.incorrect_attempts.hm.status core.word lang=en text="incorrect attempts" means=hm.status
+@w.en.incorrect_mistakes.hm.status core.word lang=en text="incorrect mistakes" means=hm.status
+@w.en.incorrect_life.hm.status core.word lang=en text="incorrect life" means=hm.status
+@w.en.incorrect_errors.hm.status core.word lang=en text="incorrect errors" means=hm.status
+@w.en.incorrect_goes.hm.status core.word lang=en text="incorrect goes" means=hm.status
+@w.en.incorrect_turns.hm.status core.word lang=en text="incorrect turns" means=hm.status
+@w.en.incorrect_strikes.hm.status core.word lang=en text="incorrect strikes" means=hm.status
+@w.en.bad_guesses.hm.status core.word lang=en text="bad guesses" means=hm.status
+@w.en.bad_tries.hm.status core.word lang=en text="bad tries" means=hm.status
+@w.en.bad_misses.hm.status core.word lang=en text="bad misses" means=hm.status
+@w.en.bad_lives.hm.status core.word lang=en text="bad lives" means=hm.status
+@w.en.bad_chances.hm.status core.word lang=en text="bad chances" means=hm.status
+@w.en.bad_attempts.hm.status core.word lang=en text="bad attempts" means=hm.status
+@w.en.bad_mistakes.hm.status core.word lang=en text="bad mistakes" means=hm.status
+@w.en.bad_life.hm.status core.word lang=en text="bad life" means=hm.status
+@w.en.bad_errors.hm.status core.word lang=en text="bad errors" means=hm.status
+@w.en.bad_goes.hm.status core.word lang=en text="bad goes" means=hm.status
+@w.en.bad_turns.hm.status core.word lang=en text="bad turns" means=hm.status
+@w.en.bad_strikes.hm.status core.word lang=en text="bad strikes" means=hm.status
+@w.en.how_many.hm.status core.word lang=en text="how many" means=hm.status
+@w.en.how_much.hm.status core.word lang=en text="how much" means=hm.status
+@w.en.still.hm.status core.word lang=en text=still means=hm.status
+@w.en.more.hm.status core.word lang=en text=more means=hm.status
+@w.en.to_go.hm.status core.word lang=en text="to go" means=hm.status
+@w.en.now.hm.status core.word lang=en text=now means=hm.status
+@w.en.so_far.hm.status core.word lang=en text="so far" means=hm.status
+@w.en.pls.hm.status core.word lang=en text=pls means=hm.status
+@w.en.plz.hm.status core.word lang=en text=plz means=hm.status
+@w.en.wrong_guess.hm.status core.word lang=en text="wrong guess" means=hm.status
+@w.en.wrong_guess_count.hm.status core.word lang=en text="wrong guess count" means=hm.status
+@w.en.wrong_try_count.hm.status core.word lang=en text="wrong try count" means=hm.status
+@w.en.wrong_miss_count.hm.status core.word lang=en text="wrong miss count" means=hm.status
+@w.en.incorrect_guess.hm.status core.word lang=en text="incorrect guess" means=hm.status
+@w.en.incorrect_guess_count.hm.status core.word lang=en text="incorrect guess count" means=hm.status
+@w.en.incorrect_try_count.hm.status core.word lang=en text="incorrect try count" means=hm.status
+@w.en.incorrect_miss_count.hm.status core.word lang=en text="incorrect miss count" means=hm.status
+@w.en.bad_guess.hm.status core.word lang=en text="bad guess" means=hm.status
+@w.en.bad_guess_count.hm.status core.word lang=en text="bad guess count" means=hm.status
+@w.en.bad_try_count.hm.status core.word lang=en text="bad try count" means=hm.status
+@w.en.bad_miss_count.hm.status core.word lang=en text="bad miss count" means=hm.status
+@w.en.guess.hm.status core.word lang=en text=guess means=hm.status
+@w.en.guess_count.hm.status core.word lang=en text="guess count" means=hm.status
+@w.en.try_count.hm.status core.word lang=en text="try count" means=hm.status
+@w.en.miss_count.hm.status core.word lang=en text="miss count" means=hm.status
+@w.en.still_left.hm.status core.word lang=en text="still left" means=hm.status
+@w.en.count.hm.status core.word lang=en text=count means=hm.status
+@w.en.show.hm.status core.word lang=en text=show means=hm.status
+@w.en.display.hm.status core.word lang=en text=display means=hm.status
+@w.en.see.hm.status core.word lang=en text=see means=hm.status
+@w.en.give.hm.status core.word lang=en text=give means=hm.status
+@w.en.tell.hm.status core.word lang=en text=tell means=hm.status
+@w.en.read.hm.status core.word lang=en text=read means=hm.status
+@w.en.print.hm.status core.word lang=en text=print means=hm.status
+@w.en.let_me_see.hm.status core.word lang=en text="let me see" means=hm.status
+@w.en.show_me.hm.status core.word lang=en text="show me" means=hm.status
+@w.en.give_me.hm.status core.word lang=en text="give me" means=hm.status
+@w.en.tell_me.hm.status core.word lang=en text="tell me" means=hm.status
+@w.en.say.hm.status core.word lang=en text=say means=hm.status
+@w.en.what_is.hm.status core.word lang=en text="what is" means=hm.status
+@w.en.whats.hm.status core.word lang=en text=whats means=hm.status
+@w.en.how_is.hm.status core.word lang=en text="how is" means=hm.status
+@w.en.read_me.hm.status core.word lang=en text="read me" means=hm.status
+@w.en.display_me.hm.status core.word lang=en text="display me" means=hm.status
+@w.en.word.hm.status core.word lang=en text=word means=hm.status
+@w.en.blanks.hm.status core.word lang=en text=blanks means=hm.status
+@w.en.letters.hm.status core.word lang=en text=letters means=hm.status
+@w.en.masked_word.hm.status core.word lang=en text="masked word" means=hm.status
+@w.en.hidden_word.hm.status core.word lang=en text="hidden word" means=hm.status
+@w.en.word_so_far.hm.status core.word lang=en text="word so far" means=hm.status
+@w.en.current_progress.hm.status core.word lang=en text="current progress" means=hm.status
+@w.en.current_blanks.hm.status core.word lang=en text="current blanks" means=hm.status
+@w.en.current_letters.hm.status core.word lang=en text="current letters" means=hm.status
+@w.en.current_masked_word.hm.status core.word lang=en text="current masked word" means=hm.status
+@w.en.current_hidden_word.hm.status core.word lang=en text="current hidden word" means=hm.status
+@w.en.current_word_so_far.hm.status core.word lang=en text="current word so far" means=hm.status
+@w.en.current_status.hm.status core.word lang=en text="current status" means=hm.status
+@w.en.hidden_progress.hm.status core.word lang=en text="hidden progress" means=hm.status
+@w.en.hidden_blanks.hm.status core.word lang=en text="hidden blanks" means=hm.status
+@w.en.hidden_letters.hm.status core.word lang=en text="hidden letters" means=hm.status
+@w.en.hidden_masked_word.hm.status core.word lang=en text="hidden masked word" means=hm.status
+@w.en.hidden_hidden_word.hm.status core.word lang=en text="hidden hidden word" means=hm.status
+@w.en.hidden_word_so_far.hm.status core.word lang=en text="hidden word so far" means=hm.status
+@w.en.hidden_status.hm.status core.word lang=en text="hidden status" means=hm.status
+@w.en.masked_progress.hm.status core.word lang=en text="masked progress" means=hm.status
+@w.en.masked_blanks.hm.status core.word lang=en text="masked blanks" means=hm.status
+@w.en.masked_letters.hm.status core.word lang=en text="masked letters" means=hm.status
+@w.en.masked_masked_word.hm.status core.word lang=en text="masked masked word" means=hm.status
+@w.en.masked_hidden_word.hm.status core.word lang=en text="masked hidden word" means=hm.status
+@w.en.masked_word_so_far.hm.status core.word lang=en text="masked word so far" means=hm.status
+@w.en.masked_status.hm.status core.word lang=en text="masked status" means=hm.status
+@w.en.currently.hm.status core.word lang=en text=currently means=hm.status
+@w.en.again.hm.status core.word lang=en text=again means=hm.status
+@w.en.is_solved.hm.status core.word lang=en text="is solved" means=hm.status
+@w.en.solved.hm.status core.word lang=en text=solved means=hm.status
+@w.en.the_word.hm.status core.word lang=en text="the word" means=hm.status
+@w.en.state.hm.status core.word lang=en text=state means=hm.status
+@w.en.please.hm.status core.word lang=en text=please means=hm.status
+@w.en.what.hm.status core.word lang=en text=what means=hm.status
+@w.en.which.hm.status core.word lang=en text=which means=hm.status
+@w.en.list.hm.status core.word lang=en text=list means=hm.status
+@w.en.what_s.hm.status core.word lang=en text="what s" means=hm.status
+@w.en.view.hm.status core.word lang=en text=view means=hm.status
+@w.en.check.hm.status core.word lang=en text=check means=hm.status
+@w.en.reveal.hm.status core.word lang=en text=reveal means=hm.status
+@w.en.spaces.hm.status core.word lang=en text=spaces means=hm.status
+@w.en.dashes.hm.status core.word lang=en text=dashes means=hm.status
+@w.en.underscores.hm.status core.word lang=en text=underscores means=hm.status
+@w.en.slots.hm.status core.word lang=en text=slots means=hm.status
+@w.en.boxes.hm.status core.word lang=en text=boxes means=hm.status
+@w.en.gaps.hm.status core.word lang=en text=gaps means=hm.status
+@w.en.mask.hm.status core.word lang=en text=mask means=hm.status
+@w.en.missing_letters.hm.status core.word lang=en text="missing letters" means=hm.status
+@w.en.unknown_letters.hm.status core.word lang=en text="unknown letters" means=hm.status
+@w.en.remaining_letters.hm.status core.word lang=en text="remaining letters" means=hm.status
+@w.en.guessed_letters.hm.status core.word lang=en text="guessed letters" means=hm.status
+@w.en.used_letters.hm.status core.word lang=en text="used letters" means=hm.status
+@w.en.tried_letters.hm.status core.word lang=en text="tried letters" means=hm.status
+@w.en.wrong_letters.hm.status core.word lang=en text="wrong letters" means=hm.status
+@w.en.board.hm.status core.word lang=en text=board means=hm.status
+@w.en.are.hm.status core.word lang=en text=are means=hm.status
+@w.en.is.hm.status core.word lang=en text=is means=hm.status
+@w.en.do.hm.status core.word lang=en text=do means=hm.status
+@w.en.does.hm.status core.word lang=en text=does means=hm.status
+@w.en.have.hm.status core.word lang=en text=have means=hm.status
+@w.en.has.hm.status core.word lang=en text=has means=hm.status
+@w.en.there.hm.status core.word lang=en text=there means=hm.status
+@w.en.missing.hm.status core.word lang=en text=missing means=hm.status
+@w.en.hidden.hm.status core.word lang=en text=hidden means=hm.status
+@w.en.unknown.hm.status core.word lang=en text=unknown means=hm.status
+@w.en.look_like.hm.status core.word lang=en text="look like" means=hm.status
+@w.en.looks_like.hm.status core.word lang=en text="looks like" means=hm.status
+@w.en.in_the_word.hm.status core.word lang=en text="in the word" means=hm.status
+@w.en.are_hidden.hm.status core.word lang=en text="are hidden" means=hm.status
+@w.en.are_missing.hm.status core.word lang=en text="are missing" means=hm.status
+@w.en.are_still_hidden.hm.status core.word lang=en text="are still hidden" means=hm.status
+@w.en.are_still_missing.hm.status core.word lang=en text="are still missing" means=hm.status
+@w.en.still_missing.hm.status core.word lang=en text="still missing" means=hm.status
+@w.en.still_hidden.hm.status core.word lang=en text="still hidden" means=hm.status
+@w.en.have_i_guessed.hm.status core.word lang=en text="have i guessed" means=hm.status
+@w.en.have_i_tried.hm.status core.word lang=en text="have i tried" means=hm.status
+@w.en.did_i_guess.hm.status core.word lang=en text="did i guess" means=hm.status
+@w.en.did_i_try.hm.status core.word lang=en text="did i try" means=hm.status
+@w.en.in_it.hm.status core.word lang=en text="in it" means=hm.status
+@w.en.in_there.hm.status core.word lang=en text="in there" means=hm.status
+@w.en.there_are.hm.status core.word lang=en text="there are" means=hm.status
+@w.en.are_in_the_word.hm.status core.word lang=en text="are in the word" means=hm.status
+@w.en.are_in_it.hm.status core.word lang=en text="are in it" means=hm.status
+@w.en.yet.hm.status core.word lang=en text=yet means=hm.status
+@w.en.right_now.hm.status core.word lang=en text="right now" means=hm.status
+@w.en.for_me.hm.status core.word lang=en text="for me" means=hm.status
+@w.en.thanks.hm.status core.word lang=en text=thanks means=hm.status
+@w.en.look_like_now.hm.status core.word lang=en text="look like now" means=hm.status
+@w.en.secret_word.hm.status core.word lang=en text="secret word" means=hm.status
+@w.en.secret.hm.status core.word lang=en text=secret means=hm.status
+@w.en.answer.hm.status core.word lang=en text=answer means=hm.status
+@w.en.puzzle.hm.status core.word lang=en text=puzzle means=hm.status
+@w.en.it.hm.status core.word lang=en text=it means=hm.status
+@w.en.the_secret_word.hm.status core.word lang=en text="the secret word" means=hm.status
+@w.en.the_secret.hm.status core.word lang=en text="the secret" means=hm.status
+@w.en.the_answer.hm.status core.word lang=en text="the answer" means=hm.status
+@w.en.the_puzzle.hm.status core.word lang=en text="the puzzle" means=hm.status
+@w.en.the_it.hm.status core.word lang=en text="the it" means=hm.status
+@w.en.the_there.hm.status core.word lang=en text="the there" means=hm.status
+@w.en.this_word.hm.status core.word lang=en text="this word" means=hm.status
+@w.en.this_secret_word.hm.status core.word lang=en text="this secret word" means=hm.status
+@w.en.this_secret.hm.status core.word lang=en text="this secret" means=hm.status
+@w.en.this_answer.hm.status core.word lang=en text="this answer" means=hm.status
+@w.en.this_puzzle.hm.status core.word lang=en text="this puzzle" means=hm.status
+@w.en.this_it.hm.status core.word lang=en text="this it" means=hm.status
+@w.en.this_there.hm.status core.word lang=en text="this there" means=hm.status
+@w.en.this_hidden_word.hm.status core.word lang=en text="this hidden word" means=hm.status
+@w.en.my_word.hm.status core.word lang=en text="my word" means=hm.status
+@w.en.my_secret_word.hm.status core.word lang=en text="my secret word" means=hm.status
+@w.en.my_secret.hm.status core.word lang=en text="my secret" means=hm.status
+@w.en.my_answer.hm.status core.word lang=en text="my answer" means=hm.status
+@w.en.my_puzzle.hm.status core.word lang=en text="my puzzle" means=hm.status
+@w.en.my_it.hm.status core.word lang=en text="my it" means=hm.status
+@w.en.my_there.hm.status core.word lang=en text="my there" means=hm.status
+@w.en.my_hidden_word.hm.status core.word lang=en text="my hidden word" means=hm.status
+@w.en.your_word.hm.status core.word lang=en text="your word" means=hm.status
+@w.en.your_secret_word.hm.status core.word lang=en text="your secret word" means=hm.status
+@w.en.your_secret.hm.status core.word lang=en text="your secret" means=hm.status
+@w.en.your_answer.hm.status core.word lang=en text="your answer" means=hm.status
+@w.en.your_puzzle.hm.status core.word lang=en text="your puzzle" means=hm.status
+@w.en.your_it.hm.status core.word lang=en text="your it" means=hm.status
+@w.en.your_there.hm.status core.word lang=en text="your there" means=hm.status
+@w.en.your_hidden_word.hm.status core.word lang=en text="your hidden word" means=hm.status
+@w.en.how_many_letters.hm.status core.word lang=en text="how many letters" means=hm.status
+@w.en.how_many_letters_in_it.hm.status core.word lang=en text="how many letters in it" means=hm.status
+@w.en.how_long_is.hm.status core.word lang=en text="how long is" means=hm.status
+@w.en.how_long_is_it.hm.status core.word lang=en text="how long is it" means=hm.status
+@w.en.how_long.hm.status core.word lang=en text="how long" means=hm.status
+@w.en.what_is_the_length_of.hm.status core.word lang=en text="what is the length of" means=hm.status
+@w.en.whats_the_length_of.hm.status core.word lang=en text="whats the length of" means=hm.status
+@w.en.the_length_of.hm.status core.word lang=en text="the length of" means=hm.status
+@w.en.word_length.hm.status core.word lang=en text="word length" means=hm.status
+@w.en.letter_count.hm.status core.word lang=en text="letter count" means=hm.status
+@w.en.number_of_letters.hm.status core.word lang=en text="number of letters" means=hm.status
+@w.en.how_many_characters.hm.status core.word lang=en text="how many characters" means=hm.status
+@w.en.how_many_characters_in.hm.status core.word lang=en text="how many characters in" means=hm.status
+@w.en.contain.hm.status core.word lang=en text=contain means=hm.status
+@w.en.contains.hm.status core.word lang=en text=contains means=hm.status
+@w.en.include.hm.status core.word lang=en text=include means=hm.status
+@w.en.in_total.hm.status core.word lang=en text="in total" means=hm.status
+@w.en.long.hm.status core.word lang=en text=long means=hm.status
