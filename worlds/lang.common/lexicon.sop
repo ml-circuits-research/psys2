@@ -4517,3 +4517,76 @@
     alt=my_documents
     alt=my_files
     alt=my_docs
+
+@phrase.lang.know.define core.phrase
+    doc="Lead-ins of a question about what a thing is: the rest of the message is the thing."
+    alt=what_do_you_know_about
+    alt=what_can_you_tell_me_about
+    alt=what_is_meant_by
+    alt=tell_me_about
+    alt=tell_me_what_is
+    alt=what_are
+    alt=what_is
+    alt=what_s
+    alt=whats
+    alt=who_is
+    alt=who_are
+    alt=describe
+    alt=explain
+    alt=define
+
+@phrase.lang.know.det core.phrase
+    doc="Determiners between a knowledge frame and its thing."
+    alt=a
+    alt=an
+    alt=the
+    alt=some
+    alt=these
+    alt=those
+
+@phrase.lang.know.count core.phrase
+    doc="Lead-in of a question that counts a part of a thing (how many legs does a spider have)."
+    alt=how_many
+
+@phrase.lang.know.aux core.phrase
+    doc="Auxiliary between a counting lead-in and the thing."
+    alt=does
+    alt=do
+    alt=did
+    alt=can
+    alt=will
+
+@phrase.lang.know.have core.phrase
+    doc="Closing verb of a counting question; with a thing before it."
+    alt=have
+    alt=has
+
+@phrase.lang.know.made core.phrase
+    doc="Closing words of a question about what a thing is made of."
+    alt=made_of
+    alt=made_from
+    alt=made_out_of
+
+@phrase.lang.know.where core.phrase
+    doc="Lead-ins of a question about where a thing is found."
+    alt=where_can_you_find
+    alt=where_can_i_find
+    alt=where_do_you_find
+    alt=where_does
+    alt=where_do
+
+@phrase.lang.know.live core.phrase
+    doc="Closing words of a where question (they are dropped from the thing)."
+    alt=be_found
+    alt=live
+    alt=lives
+    alt=grow
+    alt=grows
+    alt=sleep
+    alt=stay
+
+@phrase.lang.know.can core.phrase
+    doc="Lead-in of a question about what a thing can do; the closing word is `do`."
+    alt=what_can
+    alt=what_does
+    alt=what_do
