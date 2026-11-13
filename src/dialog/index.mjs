@@ -33,6 +33,7 @@ import { Discourse } from './discourse.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
+import { foreignFragment } from './continuation.mjs';
 import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs';
 import { recognize } from '../astra/moves.mjs';
 import { panel } from '../astra/where.mjs';
@@ -1313,6 +1314,12 @@ export class DialogSession {
     }
     let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial, fastPath: fastPath ?? this.fastPath, nx: nx ?? this.nx }));
     if (meta?.rewrite && !pre) for (const sg of formal.segments) sg.discourse = meta.info;
+    // SCENE-NATURAL P1: a piece without a verb of its own that only another world (not the open tab, nothing running) reads continues the conversation of the open
+    // tab: it is tried as the missing piece of the last turn there (below, as for any unreadable single clause); the world-aware veto holds it back otherwise
+    if (!icpt && !pre && !meta && formal.segments.length === 1 && ['veto', 'choose'].includes(baseMode(normalizeWorldAware(worldAware ?? this.worldAware))) && foreignFragment(this, formal.segments[0])) {
+      const sg = formal.segments[0];
+      formal = { ...formal, segments: [{ ...sg, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [], partial: false, bestEffort: null, wa: { ...(sg.wa ?? {}), fragment: true } }] };
+    }
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
       if (pre) formal = { ...pre.res, dispatch: null };

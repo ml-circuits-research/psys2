@@ -31,9 +31,10 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=9392f9d951';
 import { Discourse } from './discourse.mjs?v=2d3be3453c';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=0391d4a9dc';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=43ef077175';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=35026f1769';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=b4b5aacc88';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=58d4badd1b';
+import { foreignFragment } from './continuation.mjs?v=00663052c7';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=0c9ee4463b';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -1313,6 +1314,12 @@ export class DialogSession {
     }
     let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial, fastPath: fastPath ?? this.fastPath, nx: nx ?? this.nx }));
     if (meta?.rewrite && !pre) for (const sg of formal.segments) sg.discourse = meta.info;
+    // SCENE-NATURAL P1: a piece without a verb of its own that only another world (not the open tab, nothing running) reads continues the conversation of the open
+    // tab: it is tried as the missing piece of the last turn there (below, as for any unreadable single clause); the world-aware veto holds it back otherwise
+    if (!icpt && !pre && !meta && formal.segments.length === 1 && ['veto', 'choose'].includes(baseMode(normalizeWorldAware(worldAware ?? this.worldAware))) && foreignFragment(this, formal.segments[0])) {
+      const sg = formal.segments[0];
+      formal = { ...formal, segments: [{ ...sg, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [], partial: false, bestEffort: null, wa: { ...(sg.wa ?? {}), fragment: true } }] };
+    }
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
       if (pre) formal = { ...pre.res, dispatch: null };

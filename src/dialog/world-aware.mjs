@@ -18,6 +18,7 @@
 import { budget } from './budget.mjs';
 import { restrictedSet } from '../formalizer/spell.mjs';
 import { editDistance } from '../formalizer/rules/normalize.mjs';
+import { foreignFragment } from './continuation.mjs';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */
@@ -27,7 +28,7 @@ export const normalizeWorldAware = (v) => (WORLD_AWARE_MODES.includes(v) ? v : D
 export const baseMode = (m) => String(m ?? 'off').replace(/-strict$/, '');
 
 /** The reasons a reading can be vetoed. The default set is the one the measurements support (spec 16, section 6); `-strict` adds `words-partial`; `PSYS2_WA_KINDS` (a comma list) overrides for experiments. */
-export const VETO_KINDS = Object.freeze(['no-referent', 'no-game', 'words-best-effort']);
+export const VETO_KINDS = Object.freeze(['no-referent', 'no-game', 'no-continuation', 'words-best-effort']);
 /** `library`: the library's own `veto(result)` on the reading (its reasons except `inconsistent` (the world's refusal, answered), `nothing` and `action-unavailable` (an action the operations carry out)). Not in the default set: opt in with `PSYS2_WA_KINDS`. */
 const kinds = (mode) => {
   const e = globalThis.process?.env?.PSYS2_WA_KINDS;
@@ -153,6 +154,7 @@ export function sayMissing(ref) {
 export function vetoOf(wa, seg, ref, mode) {
   const k = kinds(mode);
   if (wa.idle && k.has('no-game')) return { kind: 'no-game', why: `no ${wa.idle.title} game is running and its tab is not open`, say: `We are not playing ${wa.idle.title} right now. Tell me you want to play it, then say your move.`, status: 'missing' };
+  if (wa.fragment && k.has('no-continuation')) return { kind: 'no-continuation', why: `a piece without a verb of its own, read by ${wa.fragment.world}, which has nothing running and is not the open tab`, say: `I am not sure how “${seg.text}” fits what we were doing. Please say the whole request.`, status: 'missing' };
   if (ref && k.has('no-referent')) {
     const s = sayMissing(ref);
     return { kind: 'no-referent', why: `the world has no ${ref.missing.map((m) => m.name).join(' or ')}`, say: s.text, status: 'missing', ...(ref.offer ? { offer: { rewrite: ref.offer, world: ref.world, question: s.question } } : {}) };
@@ -211,6 +213,7 @@ async function reviewOne(dialog, seg, mode, rs, before = []) {
     } catch { return seg; }
     if (ref) wa.missing = ref.missing.map((m) => m.name);
     try { const idle = idleGame(dialog, seg); if (idle && await tabReads(dialog, seg)) wa.idle = idle; } catch { /* keep the reading */ }
+    try { const fr = foreignFragment(dialog, seg); if (fr) wa.fragment = fr; } catch { /* keep the reading */ }
     wa.foreign = foreign;
     seg.wa = wa;
     if (baseMode(mode) === 'observe') return seg;
