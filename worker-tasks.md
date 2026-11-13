@@ -3780,3 +3780,18 @@ Remeasure art.draw after 1–5; switch when within 5% on its tests and not worse
 **T2 (taught facts) is weak (5 right of 40):** a taught fact must enter at the knowledge tier for every view through the same lookup the catalog uses (session.learned overlay exists): find why 7 of 20 fail even in the view where they were taught; report causes.
 
 **Order now:** std.acts as executor (with act groups) → open classes by lookup → parts as kinds → k.actions phrases → remeasure avatar, diagram, draw → KNOWLEDGE-OUT steps 1–4 → P3 (a–c). Publish (SHIP-NOW) after the avatar switch.
+
+## Reviewer 2026-11-13 23:55 — Q9 (model ablation): reviewer's decisions; two items wait for the owner. sopworld 0.23.0.
+
+The ablation is exactly the measurement that was missing; accepted. Headline as reported: rules + M1 + symbolic routing 81.7% right; everything learned on top 83.2% (+95 of 6,099) for 165 MB, 165 s cold load at 1 MB/s and 4.8 times the time per message; wrong answers do not go down. Caveat you state yourself: most sets were written with the rules in mind; the models' room is on typos (+53), loose words and paraphrases.
+1. **NX hybrid reader default → waits for the owner** (he decided "the default reader must be Hybrid"; your numbers say it rescues 6 and breaks 9). Do not change the default until he answers.
+2. **Card-driven clause cutter → yes**, one task, then re-measure the segmentation model against it.
+3. **Routing: C with the encoder, B without → yes**; document B as the fallback while the model loads (and say it in PROGRESS).
+4. **T5 normalizer as an optional, user-triggered download → waits for the owner** (it is a default he sees: 97 MB for +0.5 point).
+5. **Suspect-word leniency and "also" as a joiner → switch on** (+21 right, −14 wrong, no regression): passed, and the owner's rule is that accepted experiments are on by default. READER-ROUTE `fill`: on as well if its "no regression above 1" holds on the dialogue set.
+6. **Act tagger: do not drop, do not wire.** The ablation says a learned reader has little to add where rules exist; its possible value is a world nobody wrote rules for. Keep one cheap experiment (P3 a–c with real data) and decide on that table; no runtime work.
+7. **F1 unbounded `facts.thing`**: you fixed the walk (536f3c06); add the step budget and the cap per lemma as an invariant test against the online catalog.
+8. Translation: no change.
+**What this means for the plan:** the gain is not in bigger models but in the general mechanisms (acts, dialogue, knowledge by lookup). Robustness (typos, loose words, paraphrases: 835/987, 338/643, 22/146 with rules) is the weak side: send those three sets' failures to the ledger by cause; paraphrases-rt at 22–36 of 146 is the largest hole of all and is mostly words: measure it again once act phrases and kinds come from `k.actions` / the catalog by lookup.
+
+**sopworld 0.23.0 is validated** (343 tests): shared things, aspects, views, `show`, `teach` / `forget` with a `taught` tier, `createCatalog` / `bundleReader` / `tools/build-bundle.mjs` (your knowledge loader, taken over: delete yours when vendored), the reuse detector. Its report on your worlds (`docs/reuse-reports/psys2.md` in the library) gives a reuse number of 0 for most worlds; its believed candidates: the selection / last-thing rules repeated in art.draw, diagram.sketch, docs.editor, docs.reader; the lookup actions of the kids.* worlds; game / move of chess and tic-tac-toe. They will come back as `std.*` modules.
