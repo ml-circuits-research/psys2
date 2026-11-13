@@ -3155,3 +3155,8 @@ Order: after the 2026-11-12 10:25 and 10:50 blocks; DRAW-FROM-FACTS and KNOWLEDG
 3. For the model share, try the cheap option first: a keep-list of app words that the translator must not change (currency "lei", tab names, proper names of the worlds), applied as placeholders around the translation. Measure the gate again. A fine-tune of the Marian student is a later, separate decision for the owner.
 
 **Order now:** KNOWLEDGE-BY-LOOKUP and DRAW-FROM-FACTS (2026-11-13 blocks) come first: sop-knowledge-worlds has `k.commonsense` and `k.objects` live (30 hand-written objects with named, drawable parts; a bulk import of over a thousand objects is in progress), catalog at `docs/worlds/index.json` + `vocab.json` of that repository (GitHub Pages). Then the re-vendor of sopworld (wait for its Round 16 release, which fixes a bug the knowledge worlds hit), then items 2 and 3 above, then DESCRIBE-ALL for the remaining worlds.
+
+## Reviewer 2026-11-13 09:35 — sopworld 0.15.0 and the knowledge catalog are ready
+
+- **Re-vendor sopworld at 782cd0c (0.15.0)**, not c7247e2: it includes 0.14.0 (host functions declared in SOP Lang) and Round 16 (a soft issue no longer makes the knowledge it read "conflicting"; order-independent merge across modules; `core.module version=`). The common.sense advice depends on the first fix.
+- **Knowledge catalog now:** `k.objects` has 841 drawable objects (30 hand-written with named parts; 811 imported from Noto Emoji, about 20% of their parts named by a model and marked `named=model`), `k.commonsense`, `k.words` (WordNet, 318 shards). Use the real catalog for KNOWLEDGE-BY-LOOKUP and DRAW-FROM-FACTS; no stub. Imported objects have many polygon parts (12 on average, up to 40 points each): measure draw time on the phone profile.
