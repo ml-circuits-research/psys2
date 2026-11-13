@@ -11,6 +11,7 @@
     acts=redo
     acts=save
     acts=load
+    acts=send
     own=animate:avatar.animate
     own=setName:avatar.setName
     own=askName:avatar.askName
@@ -25,6 +26,13 @@
     name=yes
     limit.items=40
     limit.history=40
+
+@face.view acts.view
+    aspects=visual
+    aspects=spatial
+    word=avatar
+    word=face
+    word=robot
 
 @face.hair_back acts.kind
     plural=hair_backs

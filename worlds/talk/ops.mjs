@@ -99,6 +99,7 @@ function topicFor(ctx, name, hint = {}) {
     const fromPart = lastCard?.data?.parts?.some((p) => clean(p.name) === key || singular(clean(p.name)) === singular(key));
     t = { id: `t${s.topics.length + 1}`, name: key, parent: hint.parent ?? (cur && fromPart ? cur.id : null), say: '', card: null, at: s.n };
     s.topics.push(t);
+    try { publish(ctx); } catch (e) { if (/Budget|Aborted/.test(e?.name ?? '')) throw e; /* the session store is optional */ }   // a topic is a thing of the session even when the answer has no card
   }
   s.current = t.id;
   return t;
@@ -110,6 +111,7 @@ function addCard(ctx, topic, card, sentence) {
   if (s.cards.length > MAX_CARDS) { const old = s.cards.shift(); if (old) for (const t of s.topics) if (t.card === old.id) t.card = null; }
   if (topic) { if (!topic.say) topic.say = brief(sentence); if (c.kind !== 'how') topic.card = c.id; }
   ctx.effect('talk.card', { id: c.id });
+  publish(ctx);
   return c;
 }
 const sources = (r) => r.shards.map((id) => {
@@ -131,6 +133,9 @@ function whatSentence(r, ctx) {
   else { const ns = partNames(r.parts).map((p) => (p.n > 1 ? `${p.n} ${p.name}s` : an(p.name))); t = ns.length ? `I know what ${an(name)} looks like. It has ${list(ns.slice(0, 6))}.` : `I know what ${an(name)} looks like.`; }
   if (own && sense) t += ` ${own}`;
   if (cs?.can?.length) t += ` It can ${list(cs.can)}.`;
+  if (cs?.cannot?.length) t += ` It cannot ${list(cs.cannot)}.`;
+  if (cs?.made_of?.length) t += ` It is made of ${list(cs.made_of)}.`;
+  if (cs?.at?.length && th?.learned) t += ` You find it ${/^(?:in|on|at|under|near)\b/.test(cs.at[0]) ? '' : 'in '}${list(cs.at)}.`;   // what the user taught about where it lives
   return t;
 }
 
@@ -527,6 +532,48 @@ export function change(ctx, { c, size, x } = {}) {
   return no('missing', 'What shall I change? You can say "make it red", "bigger" or "show the moon too".');
 }
 
+// ---------------------------------------------------------------- Talk as a VIEW of the session things (spec 23): any aspect, shown as a card
+const ASPECTS_ALL = ['visual', 'spatial', 'relational', 'numeric', 'textual', 'geographic', 'temporal', 'social'];
+/** The declaration of this world as a view: it shows every aspect (a card for each kind of thing). */
+export const view = () => ok({ id: 'talk', noun: 'conversation', words: ['talk', 'chat', 'conversation'], aspects: ASPECTS_ALL, kinds: null });
+const tintOf = (card) => (card?.data?.tint && TINTS.has(card.data.tint) ? card.data.tint : null);
+/** The topics of the conversation are things of the session: published after every card, each keeping the id the store gave it. */
+function publish(ctx) {
+  const s = ensure(ctx);
+  const items = s.topics.map((t) => {
+    const card = s.cards.find((c) => c.id === t.card);
+    const r = t.kind ? null : lookup(ctx, t.name);
+    const proper = r && /^[A-Z]/.test(r.name ?? '') ? r.name : null;
+    const isA = proper ? String(r.th?.senses?.[0]?.isA?.[0] ?? 'thing').replace(/_/g, ' ') : null;
+    return {
+      key: t.id, thingId: t.thingId, kind: t.kind ?? isA ?? t.name, name: t.thingName ?? proper ?? null,
+      attrs: { ...(t.attrs ?? {}), ...(tintOf(card) ? { colour: card.data.tint } : {}) },
+      ...(card?.kind === 'drawing' && card.data?.parts?.length ? { parts: card.data.parts } : {}),
+    };
+  });
+  const r = ctx.request('things.sync', { view: 'talk', items });
+  const ids = r?.status === 'supported' ? r.value?.ids ?? r.ids : null;
+  if (ids) for (const t of s.topics) if (ids[t.id]) t.thingId = ids[t.id];
+}
+/** Take a thing of the store into the conversation: the topic is the thing, its card is a picture when it has a look (its parts, or the catalog's) and a list of what is known of it otherwise. */
+export function adopt(ctx, { thing } = {}) {
+  if (!thing?.kind) return no('unsupported', 'I was given nothing to talk about.');
+  const label = thing.name ?? thing.label ?? thing.kind, kindWord = clean(String(thing.kind).replace(/_/g, ' '));
+  const topic = topicFor(ctx, label);
+  Object.assign(topic, { thingId: thing.id, kind: thing.kind, thingName: thing.name ?? null, attrs: { ...(thing.attrs ?? {}) } });
+  const r = lookup(ctx, thing.name ?? thing.kind) ?? lookup(ctx, kindWord);
+  const parts = thing.parts?.length ? thing.parts.slice(0, MAX_PARTS) : r?.parts ?? [];
+  const from = thing.originNoun ? `the ${thing.originNoun}` : thing.origin === 'learned' ? 'what you told me' : 'another view';
+  const tint = thing.attrs?.colour && TINTS.has(String(thing.attrs.colour)) ? String(thing.attrs.colour) : null;
+  const rows = [{ k: 'kind', v: String(thing.kind).replace(/_/g, ' ') }, ...(thing.name ? [{ k: 'name', v: thing.name }] : []), ...Object.entries(thing.attrs ?? {}).filter(([, v]) => v != null && v !== '').map(([k, v]) => ({ k: k.replace(/_/g, ' '), v: String(v) }))].slice(0, 10);
+  const know = r?.th && (!thing.origin || thing.origin === 'learned') ? whatSentence(r, ctx) : '';   // what the catalog says belongs to a thing of the knowledge, not to one made in another view
+  const text = `Here is ${thing.name ?? thing.label ?? an(kindWord)} from ${from}.${know ? ` ${know}` : ''}`;
+  const how = howOf({ frame: `a thing from ${from}`, words: label, things: [label], sources: [{ what: from, part: '' }], card: parts.length ? 'a picture of it from its parts' : 'a list of what is known about it' });
+  if (parts.length) addCard(ctx, topic, { kind: 'drawing', thing: label, title: cap(label), data: { parts: trimParts(parts), ...(tint ? { tint } : {}) }, how }, text);
+  else addCard(ctx, topic, { kind: 'facts', thing: label, title: cap(label), data: { rows, unit: `from ${from}` }, how }, text);
+  return ok(text, { values: [label] });
+}
+
 // ---------------------------------------------------------------- cards that travel to other tabs
 /** One transfer of the card (or the topic) to another tab: the other world's own operations do the work, so one undo takes it back. */
 export function send(ctx, { to } = {}) {
@@ -535,6 +582,11 @@ export function send(ctx, { to } = {}) {
   if (!topic) return no('missing', 'There is nothing to send yet. Ask me about something first, for example "What does a lighthouse look like?".');
   const card = activeCard(ctx);
   const name = topic.name;
+  if (!['draw', 'diagram', 'map'].includes(to)) {   // every other place is a view of the session things: the store decides what it can take (draw, diagram and map are not views yet)
+    if (!topic.thingId) return no('missing', `I have not put the ${name} in the session yet. Ask me about it first.`);
+    const r = ctx.request('things.show', { ids: [topic.thingId], to, from: 'talk' });
+    return r?.status === 'supported' ? ok(String(r.value), { values: [name, to] }) : no(r?.status ?? 'unsupported', String(r?.note ?? `I cannot show the ${name} there.`));
+  }
   if (to === 'draw') {
     const args = { n: 1, kind: name, kt: name, where: '', ...(card?.data?.tint ? { m1: card.data.tint } : {}) };
     const r = ctx.request('draw.add', args);

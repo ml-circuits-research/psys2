@@ -13,6 +13,10 @@
     for=action.ui.avatar.change
     text="{note}"
 
+@tpl.ui.avatar.send core.template
+    for=action.ui.avatar.send
+    text="{note}"
+
 @tpl.ui.avatar.ask core.template
     for=action.ui.avatar.ask
     text="{note}"

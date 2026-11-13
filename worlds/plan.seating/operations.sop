@@ -1,6 +1,18 @@
 @gen.plan.seating.note core.note
     text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
+@op.plan.seating.view core.operation
+    impl=view
+    semantics=action
+    action=plan.seating.view
+    doc="The declaration of this world as a view of the session things (spec 23): its aspects and words."
+
+@op.plan.seating.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=plan.seating.adopt
+    doc="Takes a thing of the session store into this world: the act make, then change for each attribute (spec 23)."
+
 @op.plan.seating.make core.operation
     impl=make
     semantics=action

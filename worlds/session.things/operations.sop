@@ -1,0 +1,23 @@
+@op.session.things.learn core.operation
+    impl=learn
+    semantics=action
+    action=things.learn
+    doc="The user teaches a fact in any view (is a kind of, called, can / cannot, lives in, made of): stored as a wire of the knowledge format in the session and read by every view at the knowledge tier."
+
+@op.session.things.sync core.operation
+    impl=sync
+    semantics=action
+    action=things.sync
+    doc="A view publishes its things (the whole list) to the session store; the store keeps the identity of each thing across views."
+
+@op.session.things.show core.operation
+    impl=show
+    semantics=action
+    action=things.show
+    doc="Select things into a view: the view takes what it has an aspect for and a kind for, and says plainly why it cannot take the rest."
+
+@op.session.things.list core.operation
+    impl=list
+    semantics=action
+    action=things.list
+    doc="The things of the session and the views that show them."
