@@ -762,3 +762,11 @@ Key numbers (rules mode): English core (operational + dialogues) 131 non-right, 
   - DESCRIBE-ALL for media.music, data.charts, docs.reader, ui.avatar, art.draw, diagram.sketch;
   - the SHIP-NOW cache check on a real phone and a first regression note;
   - the remaining reviewer items (knowledge worlds, when the task arrives).
+
+## 2026-11-13 — resume fixes (flake, beta gate, open draw, sky, phone rows)
+
+- **Flake** (`perf-round2` "modulepreload ... idempotently", not a concurrency problem: it failed alone too): `build-webchat` stamps `builtAt` into index.html, so a second build always differed. Now the early-load block keeps the previous block (and time) when only `builtAt` would change. 8267b48.
+- **Language gate = beta**: `QUALITY_GATE = 80` only separates normal from beta; every engine language is listed (en, ro first; the rest "(beta, N% right)"); the "show every language" setting is gone; About keeps the numbers; spec 06 and the language Chrome test updated.
+- **open draw**: "draw" is a verb, so it was not a tab noun. New `lex.ui.shell.verbtabs` (usable only after an explicit open verb; a bare "draw" stays the drawing command, test d12). `tests/tab-short-names.test.mjs` opens every manifest tab by id and title with open/show/go to; tests.sop rows `short1..9` in ui.shell. Note: "open documents" lands on the Editor tab (the word "document" belongs to the editor); not changed, open question for the reviewer.
+- **draw a sky**: `lex.art.draw.backdrop` (sky, ground, floor) + pattern `x.backdrop` -> `draw.ground`; sky becomes a light blue band, ground gets grass, no object, no "where should it go". Spec 07 notes the list should later come from a knowledge world. 6 tests (bd01..bd06); parity count of art.draw 571 -> 577.
+- **Phone mode with the on-device model** (PSYS2_MT_NETWORK=1, 4x CPU), replies in the test now: "cât face 3 plus 4?" -> "3 plus 4 face 7."; "fă o diagramă random" -> "O pânză curată. Ce să desenăm? Șabloane: proces, ciclu, ierarhie, ..." (no fixed line); "fă părul roșu" on the Avatar tab -> "Nu găsesc un fir de păr în poza ta." (the drawing world answers, not the avatar: the avatar reading of "hair" is not reached from Romanian; open); "care e capitala Franței?" -> "De capitala Franța este Paris." (still garbled by the model on the way back; correct fact). German message -> "3 plus 4 ist 7.". 20/20 checks.

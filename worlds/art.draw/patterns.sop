@@ -466,6 +466,17 @@
     priority=13
     example="I want 5 stars added."
 
+@pat.art.draw.x.backdrop core.pattern
+    canonical="Draw the sky."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [add|put|draw|make|paint|give_me|show_me|i_want|i_need|i_d_like|create] [me]? [some|the|a|an|my]? {g:lex.art.draw.backdrop} [pls|plz|please|thanks]?"
+    emit="@{_} core.request action=draw.ground arg.g={g}"
+    kind=request
+    priority=13
+    example="Draw a sky."
+    example="Draw the sky."
+    example="Paint the ground."
+    example="Add a sky."
+
 @pat.art.draw.x.ground.on core.pattern
     canonical="Put some sand down."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [add|put|draw|make|give_me|throw|sprinkle|spread|lay|paint|pour|scatter|i_want|i_need|get|show_me|i_d_like]? [me]? [some|sum|the|a_bit_of|a_little|a_little_bit_of|more|a|a_lot_of|lots_of|plenty_of]? {g:lex.art.draw.ground} [on|to|onto|for|under|over|at|in|across|along|down|below|beneath|all_over] [the|my|all|every|everything|it]? [ground|floor|bottom|everything|picture|drawing|canvas|earth|land|scene|there|it|here|everywhere|below|part]? [of_the_picture|of_the_page|of_the_canvas|of_the_drawing|of_it|of_everything|of_the_scene|of_my_picture|of_my_drawing]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"

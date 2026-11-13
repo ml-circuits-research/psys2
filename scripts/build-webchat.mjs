@@ -194,14 +194,20 @@ async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build }) {
   // consistent set of files, unchanged files stay cached across deploys, and the ORT worker and worlds/index.json take their versions from window.__psys2Mod.
   const ver = await moduleVersions(outDir, graph);
   const imports = Object.fromEntries(Object.entries(ver).filter(([k]) => k.endsWith('.mjs')).map(([k, v]) => [`./${k}`, `./${k}?v=${v}`]));
-  const block = [EARLY_BEGIN,
+  const makeBlock = (b) => [EARLY_BEGIN,
     `<script type="importmap">${JSON.stringify({ imports })}</script>`,
-    `<script>window.__psys2Build = ${JSON.stringify(build)};</script>`,
+    `<script>window.__psys2Build = ${JSON.stringify(b)};</script>`,
     `<script>window.__psys2Mod = ${JSON.stringify(ver)};</script>`,
     ...mods.filter((m) => ver[m]).map((m) => `<link rel="modulepreload" href="${m}?v=${ver[m]}">`),
     `<script>window.__psys2Early = { worlds: fetch('worlds/index.json?v=${ver['worlds/index.json']}'), dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).catch(() => null) };</script>`,
     EARLY_END].join('\n  ');
   const a = html.indexOf(EARLY_BEGIN), b = html.indexOf(EARLY_END);
+  // idempotent: when only the build time would change (same commit, same files), keep the previous block and its time
+  const prev = a >= 0 && b > a ? /window\.__psys2Build = (\{[^;]*\});/.exec(html.slice(a, b)) : null;
+  let prevBuild = null;
+  try { prevBuild = prev ? JSON.parse(prev[1]) : null; } catch { /* old block */ }
+  let block = makeBlock(build);
+  if (prevBuild && prevBuild.commit === build.commit && makeBlock({ ...build, builtAt: prevBuild.builtAt }) === html.slice(a, b + EARLY_END.length)) block = makeBlock({ ...build, builtAt: prevBuild.builtAt });
   const next = a >= 0 && b > a ? html.slice(0, a) + block + html.slice(b + EARLY_END.length) : html.replace('</head>', () => `  ${block}\n</head>`);
   if (next !== html) await writeFile(file, next);
 }

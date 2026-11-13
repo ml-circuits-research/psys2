@@ -69,6 +69,9 @@ export const SCENARIOS = {
     const c = await open(o);
     try {
       await c.pg.click('button.p2-mic'); await waitRec(c);
+      // language gate = beta: English and Romanian first, then every engine language; a language under the gate says "beta" (with its number), none is hidden
+      const opts = await c.pg.$$eval('select.p2-select option', (os) => os.map((o) => ({ v: o.value, t: o.textContent })));
+      check('languages: en and ro first, then the engine languages; the gated ones say beta, none says "not measured"', opts[0]?.v === 'en' && opts[1]?.v === 'ro' && opts.slice(2).every((o) => !/not measured/.test(o.t) && (!/% right/.test(o.t) || /beta/.test(o.t))), JSON.stringify(opts.slice(0, 5)));
       check('ro30: the selector shows Română and the first start is ro-RO', (await selector(c)) === 'ro' && (await langs(c))[0] === 'ro-RO');
       const ld0 = await ld(c);
       let k = 0;

@@ -5,7 +5,7 @@
 // Pure (no DOM, no node:*): runs in the page and in the engine worker.
 
 export const LANGS = ['en', 'ro'];
-/** MT-SERIOUS: every language of the translation engine (ui/mt-host.mjs registry, browser Translator) that passed the quality gate is registered here by the page; the engine worker accepts any language code. */
+/** MT-SERIOUS: every language of the translation engine (ui/mt-host.mjs registry, browser Translator) is registered here by the page; the engine worker accepts any language code. */
 const known = new Set(LANGS);
 export const registerLanguages = (codes) => { for (const c of codes) if (isCode(c)) known.add(c); return [...known]; };
 export const knownLanguages = () => [...known];

@@ -4074,3 +4074,37 @@
     expectStatus=supported
     session=cs8
     reasoner=matrix
+
+@t.art.draw.bd01 core.test
+    input="Draw a sky."
+    expect="light blue sky behind everything"
+    expectState="sky=light blue"
+    expectState="objects.length=0"
+    session=bd1
+
+@t.art.draw.bd02 core.test
+    input="Paint the ground."
+    expect="grass"
+    expectState="ground=grass"
+    expectState="objects.length=0"
+    session=bd2
+
+@t.art.draw.bd03 core.test
+    input="Can you add the sky please?"
+    expectState="sky=light blue"
+    session=bd3
+
+@t.art.draw.bd04 core.test
+    input="Draw a sea."
+    expectState="ground=sea"
+    session=bd4
+
+@t.art.draw.bd05 core.test
+    input="Draw a sky."
+    expectState="sky=light blue"
+    session=bd5
+
+@t.art.draw.bd06 core.test
+    input="Make the sky red."
+    expectState="sky=red"
+    session=bd5

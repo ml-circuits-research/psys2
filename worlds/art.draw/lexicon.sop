@@ -92,6 +92,13 @@
 
     word=bit
     word=piece
+@lex.art.draw.backdrop core.lexicon
+    class=thing
+    doc="Backgrounds, not objects: the sky and the ground are drawn as bands behind everything. Small list for now; drawable things should later come from a knowledge world (spec 07, art.draw)."
+    word=sky
+    word=ground
+    word=floor
+
 @lex.art.draw.ground core.lexicon
     class=thing
     doc="Ground covers: add grass, sand, snow or water"

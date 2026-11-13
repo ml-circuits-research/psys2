@@ -396,6 +396,14 @@
     example="Select my document tab."
     example="Go to the editor page."
 
+@pat.ui.shell.open.verbtab core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [$ui.shell.g11_open] [me]? [the|my|your|ur]? {tab:lex.ui.shell.verbtabs} [tab|page|screen|panel|window]? [$ui.shell.g4_pls]?"
+    emit="@{_} core.request action=ui.openTab arg.tab=\"{tab}\""
+    kind=request
+    priority=14
+    example="Open draw."
+    example="Could you show draw please?"
+
 @pat.ui.shell.open.declaredtab core.pattern
     match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [$ui.shell.g11_open] [me]? [the|my|your|ur]? {tab:lex.ui.shell.declaredtabs} [tab|page|screen|panel|window]? [$ui.shell.g4_pls]?"
     emit="@{_} core.request action=ui.openTab arg.tab=\"{tab}\""

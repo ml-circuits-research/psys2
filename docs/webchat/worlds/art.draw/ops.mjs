@@ -905,6 +905,15 @@ function parseMoreSpec(words) {
 
 /** "add grass", "add some sand": the ground cover. */
 export const ground = guard((ctx, args, s) => {
+  // the sky and the ground are backgrounds, not objects: a band behind everything (a small list here; drawable things should later come from a knowledge world)
+  const bg = String(args.g ?? '').toLowerCase();
+  if (bg === 'sky') {
+    remember(s, 'added the sky');
+    const had = !!s.sky;
+    if (!s.sky) { s.sky = 'light blue'; s.mood = null; }
+    open(ctx);
+    return ok(had ? `${opener(s)} The sky is already there: it is ${s.sky}. You can change its color.` : `${opener(s)} I drew a light blue sky behind everything.`);
+  }
   const g = GROUND_WORDS[String(args.g ?? '').toLowerCase()] ?? 'grass';
   remember(s, `added ${GROUND_NAME[g]}`);
   s.ground = g; s.groundColor = GROUND_COLOR[g];
