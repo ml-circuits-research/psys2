@@ -1,0 +1,782 @@
+@describe.describe core.describe
+    op=docr.describe
+    intent=command
+    emit="@{_} core.request action=docr.describe"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.describe.en core.describe.words
+    of=$describe.describe
+    lang=en
+    verb=$w.en.describe.docr.describe
+    verb=$w.en.analyze.docr.describe
+    verb=$w.en.analyse.docr.describe
+    verb=$w.en.inspect.docr.describe
+    verb=$w.en.scan.docr.describe
+    noun=$w.en.story.docr.describe
+    noun=$w.en.file.docr.describe
+    noun=$w.en.document.docr.describe
+    noun=$w.en.text.docr.describe
+    noun=$w.en.tale.docr.describe
+
+@describe.summary core.describe
+    op=docr.summary
+    intent=query
+    emit="@{_} core.request action=docr.summary"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.summary.en core.describe.words
+    of=$describe.summary
+    lang=en
+    phrase=$phrase.lang.intent.whatisitabout
+
+@describe.summarize core.describe
+    op=docr.summary
+    intent=command
+    emit="@{_} core.request action=docr.summary"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.summarize.en core.describe.words
+    of=$describe.summarize
+    lang=en
+    verb=$w.en.summarize.docr.summary
+    verb=$w.en.summarise.docr.summary
+    noun=$w.en.story.docr.summary
+    noun=$w.en.file.docr.summary
+    noun=$w.en.document.docr.summary
+    noun=$w.en.text.docr.summary
+    noun=$w.en.tale.docr.summary
+
+@describe.characters core.describe
+    op=docr.characters
+    intent=query
+    emit="@{_} core.request action=docr.characters"
+    priority=12
+    kind=question
+    frames=ask
+    frames=imp
+    frames=can
+
+@describe.characters.en core.describe.words
+    of=$describe.characters
+    lang=en
+    verb=$w.en.list.docr.characters
+    verb=$w.en.show.docr.characters
+    verb=$w.en.name.docr.characters
+    noun=$w.en.characters.docr.characters
+    noun=$w.en.people.docr.characters
+    ask=$w.en.who.docr.characters
+
+@describe.mainchar core.describe
+    op=docr.mainCharacter
+    intent=query
+    emit="@{_} core.request action=docr.mainCharacter"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.mainchar.en core.describe.words
+    of=$describe.mainchar
+    lang=en
+    phrase=$phrase.lang.intent.whoismain
+
+@describe.places core.describe
+    op=docr.places
+    intent=query
+    emit="@{_} core.request action=docr.places"
+    priority=12
+    kind=question
+    frames=ask
+    frames=imp
+    frames=can
+
+@describe.places.en core.describe.words
+    of=$describe.places
+    lang=en
+    verb=$w.en.list.docr.places
+    verb=$w.en.show.docr.places
+    verb=$w.en.name.docr.places
+    tverb=$w.en.mentioned.docr.places
+    tverb=$w.en.appear.docr.places
+    noun=$w.en.places.docr.places
+    noun=$w.en.towns.docr.places
+    noun=$w.en.locations.docr.places
+    ask=$w.en.which.docr.places
+    ask=$w.en.what.docr.places
+
+@describe.keywords core.describe
+    op=docr.keywords
+    intent=command
+    emit="@{_} core.request action=docr.keywords"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.keywords.en core.describe.words
+    of=$describe.keywords
+    lang=en
+    verb=$w.en.show.docr.keywords
+    verb=$w.en.list.docr.keywords
+    verb=$w.en.give.docr.keywords
+    verb=$w.en.find.docr.keywords
+    verb=$w.en.extract.docr.keywords
+    noun=$w.en.keywords.docr.keywords
+    noun=$w.en.topics.docr.keywords
+    noun=$w.en.themes.docr.keywords
+
+@describe.outline core.describe
+    op=docr.outline
+    intent=command
+    emit="@{_} core.request action=docr.outline"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.outline.en core.describe.words
+    of=$describe.outline
+    lang=en
+    verb=$w.en.show.docr.outline
+    verb=$w.en.list.docr.outline
+    verb=$w.en.give.docr.outline
+    verb=$w.en.display.docr.outline
+    noun=$w.en.outline.docr.outline
+    noun=$w.en.sections.docr.outline
+    noun=$w.en.chapters.docr.outline
+    noun=$w.en.structure.docr.outline
+    noun=$w.en.contents.docr.outline
+
+@describe.stats core.describe
+    op=docr.stats
+    intent=query
+    emit="@{_} core.request action=docr.stats"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.stats.en core.describe.words
+    of=$describe.stats
+    lang=en
+    phrase=$phrase.lang.intent.docstats
+
+@describe.who core.describe
+    op=docr.who
+    intent=query
+    emit="@{_} core.request action=docr.who arg.x=\"{x}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.who.x core.describe.arg
+    of=$describe.who
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.who.en core.describe.words
+    of=$describe.who
+    lang=en
+    ask=$w.en.who.docr.who
+    det.x=$w.en.the.docr.who.x
+
+@describe.tellabout core.describe
+    op=docr.who
+    intent=command
+    emit="@{_} core.request action=docr.who arg.x=\"{x}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.tellabout.x core.describe.arg
+    of=$describe.tellabout
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.tellabout.en core.describe.words
+    of=$describe.tellabout
+    lang=en
+    verb=$w.en.tell.docr.who
+    verb=$w.en.describe.docr.who
+    prep.x=$w.en.about.docr.who.x
+    det.x=$w.en.the.docr.who.x
+
+@describe.did core.describe
+    op=docr.did
+    intent=query
+    emit="@{_} core.request action=docr.did arg.x=\"{x}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.did.x core.describe.arg
+    of=$describe.did
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.did.en core.describe.words
+    of=$describe.did
+    lang=en
+    tverb=$w.en.do.docr.did
+    tverb=$w.en.done.docr.did
+    ask=$w.en.what.docr.did
+    det.x=$w.en.the.docr.did.x
+
+@describe.happened core.describe
+    op=docr.happened
+    intent=query
+    emit="@{_} core.request action=docr.happened arg.x=\"{x}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.happened.x core.describe.arg
+    of=$describe.happened
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.happened.en core.describe.words
+    of=$describe.happened
+    lang=en
+    noun=$w.en.happened.docr.happened
+    ask=$w.en.what.docr.happened
+    prep.x=$w.en.to.docr.happened.x
+    det.x=$w.en.the.docr.happened.x
+
+@describe.wherelive core.describe
+    op=docr.where
+    intent=query
+    emit="@{_} core.request action=docr.where arg.x=\"{x}\" arg.mode=live"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.wherelive.x core.describe.arg
+    of=$describe.wherelive
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.wherelive.en core.describe.words
+    of=$describe.wherelive
+    lang=en
+    tverb=$w.en.live.docr.where
+    tverb=$w.en.lives.docr.where
+    ask=$w.en.where.docr.where
+    det.x=$w.en.the.docr.where.x
+
+@describe.wherego core.describe
+    op=docr.where
+    intent=query
+    emit="@{_} core.request action=docr.where arg.x=\"{x}\" arg.mode=go"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.wherego.x core.describe.arg
+    of=$describe.wherego
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.wherego.en core.describe.words
+    of=$describe.wherego
+    lang=en
+    tverb=$w.en.go.docr.where
+    tverb=$w.en.went.docr.where
+    ask=$w.en.where.docr.where
+    det.x=$w.en.the.docr.where.x
+
+@describe.saying core.describe
+    op=docr.saying
+    intent=query
+    emit="@{_} core.request action=docr.saying arg.x=\"{x}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.saying.x core.describe.arg
+    of=$describe.saying
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.saying.en core.describe.words
+    of=$describe.saying
+    lang=en
+    tverb=$w.en.say.docr.saying
+    tverb=$w.en.said.docr.saying
+    ask=$w.en.what.docr.saying
+    det.x=$w.en.the.docr.saying.x
+
+@describe.whov core.describe
+    op=docr.whoV
+    intent=query
+    emit="@{_} core.request action=docr.whoV arg.v={v} arg.x=\"{x}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.whov.v core.describe.arg
+    of=$describe.whov
+    name=v
+    class=lex.docs.reader.verbs
+
+@describe.whov.x core.describe.arg
+    of=$describe.whov
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.whov.en core.describe.words
+    of=$describe.whov
+    lang=en
+    ask=$w.en.who.docr.whoV
+    det.x=$w.en.the.docr.whoV.x
+
+@describe.didv core.describe
+    op=docr.didV
+    intent=query
+    emit="@{_} core.request action=docr.didV arg.x=\"{x}\" arg.v={v}"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.didv.x core.describe.arg
+    of=$describe.didv
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.didv.v core.describe.arg
+    of=$describe.didv
+    name=v
+    class=lex.docs.reader.verbs
+
+@describe.didv.en core.describe.words
+    of=$describe.didv
+    lang=en
+    ask=$w.en.who.docr.didV
+    ask=$w.en.whom.docr.didV
+    det.x=$w.en.the.docr.didV.x
+
+@describe.sentence core.describe
+    op=docr.sentence
+    intent=command
+    emit="@{_} core.request action=docr.sentence arg.n={n}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.sentence.n core.describe.arg
+    of=$describe.sentence
+    name=n
+    class=number
+
+@describe.sentence.en core.describe.words
+    of=$describe.sentence
+    lang=en
+    verb=$w.en.show.docr.sentence
+    verb=$w.en.read.docr.sentence
+    verb=$w.en.give.docr.sentence
+    det.n=$w.en.sentence.docr.sentence.n
+
+@describe.search core.describe
+    op=docr.search
+    intent=command
+    emit="@{_} core.request action=docr.search arg.q=\"{q}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.search.q core.describe.arg
+    of=$describe.search
+    name=q
+    class=words
+    size=6
+
+@describe.search.en core.describe.words
+    of=$describe.search
+    lang=en
+    verb=$w.en.search.docr.search
+    verb=$w.en.look.docr.search
+    prep.q=$w.en.for.docr.search.q
+    det.q=$w.en.the.docr.search.q
+
+@describe.next core.describe
+    op=docr.searchStep
+    intent=command
+    emit="@{_} core.request action=docr.searchStep arg.dir=next"
+    priority=12
+    frames=phr
+
+@describe.next.en core.describe.words
+    of=$describe.next
+    lang=en
+    phrase=$phrase.lang.intent.nextresult
+
+@describe.prev core.describe
+    op=docr.searchStep
+    intent=command
+    emit="@{_} core.request action=docr.searchStep arg.dir=prev"
+    priority=12
+    frames=phr
+
+@describe.prev.en core.describe.words
+    of=$describe.prev
+    lang=en
+    phrase=$phrase.lang.intent.previousresult
+
+@describe.clearsearch core.describe
+    op=docr.clearSearch
+    intent=command
+    emit="@{_} core.request action=docr.clearSearch"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.clearsearch.en core.describe.words
+    of=$describe.clearsearch
+    lang=en
+    verb=$w.en.clear.docr.clearSearch
+    verb=$w.en.remove.docr.clearSearch
+    verb=$w.en.stop.docr.clearSearch
+    verb=$w.en.hide.docr.clearSearch
+    noun=$w.en.search.docr.clearSearch
+    noun=$w.en.highlighting.docr.clearSearch
+    noun=$w.en.highlights.docr.clearSearch
+
+@describe.across core.describe
+    op=docr.across
+    intent=query
+    emit="@{_} core.request action=docr.across arg.q=\"{q}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.across.q core.describe.arg
+    of=$describe.across
+    name=q
+    class=words
+    size=6
+
+@describe.across.en core.describe.words
+    of=$describe.across
+    lang=en
+    noun=$w.en.documents.docr.across
+    noun=$w.en.files.docr.across
+    noun=$w.en.stories.docr.across
+    ask=$w.en.which.docr.across
+    prep.q=$w.en.mention.docr.across.q
+    prep.q=$w.en.mentions.docr.across.q
+    det.q=$w.en.the.docr.across.q
+
+@describe.relation core.describe
+    op=docr.relation
+    intent=query
+    emit="@{_} core.request action=docr.relation arg.x=\"{x}\" arg.r={r}"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.relation.x core.describe.arg
+    of=$describe.relation
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.relation.r core.describe.arg
+    of=$describe.relation
+    name=r
+    class=lex.docs.reader.kin
+
+@describe.relation.en core.describe.words
+    of=$describe.relation
+    lang=en
+    ask=$w.en.who.docr.relation
+    det.x=$w.en.the.docr.relation.x
+
+@describe.relation2 core.describe
+    op=docr.relation
+    intent=query
+    emit="@{_} core.request action=docr.relation arg.x=\"{x}\" arg.r={r}"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.relation2.r core.describe.arg
+    of=$describe.relation2
+    name=r
+    class=lex.docs.reader.kin
+
+@describe.relation2.x core.describe.arg
+    of=$describe.relation2
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.relation2.en core.describe.words
+    of=$describe.relation2
+    lang=en
+    ask=$w.en.who.docr.relation
+    det.r=$w.en.the.docr.relation.r
+    prep.x=$w.en.of.docr.relation.x
+    det.x=$w.en.the.docr.relation.x
+
+@describe.isrelated core.describe
+    op=docr.isRelated
+    intent=query
+    emit="@{_} core.request action=docr.isRelated arg.x=\"{x}\" arg.y=\"{y}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.isrelated.x core.describe.arg
+    of=$describe.isrelated
+    name=x
+    class=lex.docs.reader.cast
+
+@describe.isrelated.y core.describe.arg
+    of=$describe.isrelated
+    name=y
+    class=lex.docs.reader.cast
+
+@describe.isrelated.en core.describe.words
+    of=$describe.isrelated
+    lang=en
+    tverb=$w.en.related.docr.isRelated
+    ask=$w.en.how.docr.isRelated
+    det.x=$w.en.the.docr.isRelated.x
+    prep.y=$w.en.and.docr.isRelated.y
+
+@describe.read core.describe
+    op=docr.read
+    intent=command
+    emit="@{_} core.request action=docr.read arg.all=true"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.read.en core.describe.words
+    of=$describe.read
+    lang=en
+    verb=$w.en.read.docr.read
+    verb=$w.en.say.docr.read
+    verb=$w.en.speak.docr.read
+    noun=$w.en.story.docr.read
+    noun=$w.en.file.docr.read
+    noun=$w.en.document.docr.read
+    noun=$w.en.text.docr.read
+    noun=$w.en.tale.docr.read
+    rest=$w.en.aloud.docr.read
+
+@describe.list core.describe
+    op=docr.list
+    intent=query
+    emit="@{_} core.request action=docr.list"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.list.en core.describe.words
+    of=$describe.list
+    lang=en
+    phrase=$phrase.lang.intent.listdocs
+
+@describe.open core.describe
+    op=docr.open
+    intent=command
+    emit="@{_} core.request action=docr.open arg.t=\"{t}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.open.t core.describe.arg
+    of=$describe.open
+    name=t
+    class=words
+    size=8
+
+@describe.open.en core.describe.words
+    of=$describe.open
+    lang=en
+    verb=$w.en.open.docr.open
+    verb=$w.en.switch.docr.open
+    prep.t=$w.en.to.docr.open.t
+    det.t=$w.en.the.docr.open.t
+
+@describe.close core.describe
+    op=docr.close
+    intent=command
+    emit="@{_} core.request action=docr.close"
+    priority=12
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.close.en core.describe.words
+    of=$describe.close
+    lang=en
+    verb=$w.en.close.docr.close
+    noun=$w.en.file.docr.close
+    noun=$w.en.document.docr.close
+    noun=$w.en.story.docr.close
+    noun=$w.en.text.docr.close
+
+@describe.loadsample core.describe
+    op=docr.loadSample
+    intent=command
+    emit="@{_} core.request action=docr.loadSample"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.loadsample.en core.describe.words
+    of=$describe.loadsample
+    lang=en
+    verb=$w.en.load.docr.loadSample
+    verb=$w.en.open.docr.loadSample
+    verb=$w.en.show.docr.loadSample
+    noun=$w.en.sample.docr.loadSample
+    noun=$w.en.example.docr.loadSample
+    noun=$w.en.demo.docr.loadSample
+
+@w.en.describe.docr.describe core.word text=describe means=docr.describe
+@w.en.analyze.docr.describe core.word text=analyze means=docr.describe
+@w.en.analyse.docr.describe core.word text=analyse means=docr.describe
+@w.en.inspect.docr.describe core.word text=inspect means=docr.describe
+@w.en.scan.docr.describe core.word text=scan means=docr.describe
+@w.en.story.docr.describe core.word text=story means=docr.describe
+@w.en.file.docr.describe core.word text=file means=docr.describe
+@w.en.document.docr.describe core.word text=document means=docr.describe
+@w.en.text.docr.describe core.word text=text means=docr.describe
+@w.en.tale.docr.describe core.word text=tale means=docr.describe
+@w.en.summarize.docr.summary core.word text=summarize means=docr.summary
+@w.en.summarise.docr.summary core.word text=summarise means=docr.summary
+@w.en.story.docr.summary core.word text=story means=docr.summary
+@w.en.file.docr.summary core.word text=file means=docr.summary
+@w.en.document.docr.summary core.word text=document means=docr.summary
+@w.en.text.docr.summary core.word text=text means=docr.summary
+@w.en.tale.docr.summary core.word text=tale means=docr.summary
+@w.en.list.docr.characters core.word text=list means=docr.characters
+@w.en.show.docr.characters core.word text=show means=docr.characters
+@w.en.name.docr.characters core.word text=name means=docr.characters
+@w.en.characters.docr.characters core.word text=characters means=docr.characters
+@w.en.people.docr.characters core.word text=people means=docr.characters
+@w.en.who.docr.characters core.word text=who means=docr.characters
+@w.en.list.docr.places core.word text=list means=docr.places
+@w.en.show.docr.places core.word text=show means=docr.places
+@w.en.name.docr.places core.word text=name means=docr.places
+@w.en.mentioned.docr.places core.word text=mentioned means=docr.places
+@w.en.appear.docr.places core.word text=appear means=docr.places
+@w.en.places.docr.places core.word text=places means=docr.places
+@w.en.towns.docr.places core.word text=towns means=docr.places
+@w.en.locations.docr.places core.word text=locations means=docr.places
+@w.en.which.docr.places core.word text=which means=docr.places
+@w.en.what.docr.places core.word text=what means=docr.places
+@w.en.show.docr.keywords core.word text=show means=docr.keywords
+@w.en.list.docr.keywords core.word text=list means=docr.keywords
+@w.en.give.docr.keywords core.word text=give means=docr.keywords
+@w.en.find.docr.keywords core.word text=find means=docr.keywords
+@w.en.extract.docr.keywords core.word text=extract means=docr.keywords
+@w.en.keywords.docr.keywords core.word text=keywords means=docr.keywords
+@w.en.topics.docr.keywords core.word text=topics means=docr.keywords
+@w.en.themes.docr.keywords core.word text=themes means=docr.keywords
+@w.en.show.docr.outline core.word text=show means=docr.outline
+@w.en.list.docr.outline core.word text=list means=docr.outline
+@w.en.give.docr.outline core.word text=give means=docr.outline
+@w.en.display.docr.outline core.word text=display means=docr.outline
+@w.en.outline.docr.outline core.word text=outline means=docr.outline
+@w.en.sections.docr.outline core.word text=sections means=docr.outline
+@w.en.chapters.docr.outline core.word text=chapters means=docr.outline
+@w.en.structure.docr.outline core.word text=structure means=docr.outline
+@w.en.contents.docr.outline core.word text=contents means=docr.outline
+@w.en.who.docr.who core.word text=who means=docr.who
+@w.en.the.docr.who.x core.word text=the means=docr.who.x
+@w.en.tell.docr.who core.word text=tell means=docr.who
+@w.en.describe.docr.who core.word text=describe means=docr.who
+@w.en.about.docr.who.x core.word text=about means=docr.who.x
+@w.en.do.docr.did core.word text=do means=docr.did
+@w.en.done.docr.did core.word text=done means=docr.did
+@w.en.what.docr.did core.word text=what means=docr.did
+@w.en.the.docr.did.x core.word text=the means=docr.did.x
+@w.en.happened.docr.happened core.word text=happened means=docr.happened
+@w.en.what.docr.happened core.word text=what means=docr.happened
+@w.en.to.docr.happened.x core.word text=to means=docr.happened.x
+@w.en.the.docr.happened.x core.word text=the means=docr.happened.x
+@w.en.live.docr.where core.word text=live means=docr.where
+@w.en.lives.docr.where core.word text=lives means=docr.where
+@w.en.where.docr.where core.word text=where means=docr.where
+@w.en.the.docr.where.x core.word text=the means=docr.where.x
+@w.en.go.docr.where core.word text=go means=docr.where
+@w.en.went.docr.where core.word text=went means=docr.where
+@w.en.say.docr.saying core.word text=say means=docr.saying
+@w.en.said.docr.saying core.word text=said means=docr.saying
+@w.en.what.docr.saying core.word text=what means=docr.saying
+@w.en.the.docr.saying.x core.word text=the means=docr.saying.x
+@w.en.who.docr.whoV core.word text=who means=docr.whoV
+@w.en.the.docr.whoV.x core.word text=the means=docr.whoV.x
+@w.en.who.docr.didV core.word text=who means=docr.didV
+@w.en.whom.docr.didV core.word text=whom means=docr.didV
+@w.en.the.docr.didV.x core.word text=the means=docr.didV.x
+@w.en.show.docr.sentence core.word text=show means=docr.sentence
+@w.en.read.docr.sentence core.word text=read means=docr.sentence
+@w.en.give.docr.sentence core.word text=give means=docr.sentence
+@w.en.sentence.docr.sentence.n core.word text=sentence means=docr.sentence.n
+@w.en.search.docr.search core.word text=search means=docr.search
+@w.en.look.docr.search core.word text=look means=docr.search
+@w.en.for.docr.search.q core.word text=for means=docr.search.q
+@w.en.the.docr.search.q core.word text=the means=docr.search.q
+@w.en.clear.docr.clearSearch core.word text=clear means=docr.clearSearch
+@w.en.remove.docr.clearSearch core.word text=remove means=docr.clearSearch
+@w.en.stop.docr.clearSearch core.word text=stop means=docr.clearSearch
+@w.en.hide.docr.clearSearch core.word text=hide means=docr.clearSearch
+@w.en.search.docr.clearSearch core.word text=search means=docr.clearSearch
+@w.en.highlighting.docr.clearSearch core.word text=highlighting means=docr.clearSearch
+@w.en.highlights.docr.clearSearch core.word text=highlights means=docr.clearSearch
+@w.en.documents.docr.across core.word text=documents means=docr.across
+@w.en.files.docr.across core.word text=files means=docr.across
+@w.en.stories.docr.across core.word text=stories means=docr.across
+@w.en.which.docr.across core.word text=which means=docr.across
+@w.en.mention.docr.across.q core.word text=mention means=docr.across.q
+@w.en.mentions.docr.across.q core.word text=mentions means=docr.across.q
+@w.en.the.docr.across.q core.word text=the means=docr.across.q
+@w.en.who.docr.relation core.word text=who means=docr.relation
+@w.en.the.docr.relation.x core.word text=the means=docr.relation.x
+@w.en.the.docr.relation.r core.word text=the means=docr.relation.r
+@w.en.of.docr.relation.x core.word text=of means=docr.relation.x
+@w.en.related.docr.isRelated core.word text=related means=docr.isRelated
+@w.en.how.docr.isRelated core.word text=how means=docr.isRelated
+@w.en.the.docr.isRelated.x core.word text=the means=docr.isRelated.x
+@w.en.and.docr.isRelated.y core.word text=and means=docr.isRelated.y
+@w.en.read.docr.read core.word text=read means=docr.read
+@w.en.say.docr.read core.word text=say means=docr.read
+@w.en.speak.docr.read core.word text=speak means=docr.read
+@w.en.story.docr.read core.word text=story means=docr.read
+@w.en.file.docr.read core.word text=file means=docr.read
+@w.en.document.docr.read core.word text=document means=docr.read
+@w.en.text.docr.read core.word text=text means=docr.read
+@w.en.tale.docr.read core.word text=tale means=docr.read
+@w.en.aloud.docr.read core.word text=aloud means=docr.read
+@w.en.open.docr.open core.word text=open means=docr.open
+@w.en.switch.docr.open core.word text=switch means=docr.open
+@w.en.to.docr.open.t core.word text=to means=docr.open.t
+@w.en.the.docr.open.t core.word text=the means=docr.open.t
+@w.en.close.docr.close core.word text=close means=docr.close
+@w.en.file.docr.close core.word text=file means=docr.close
+@w.en.document.docr.close core.word text=document means=docr.close
+@w.en.story.docr.close core.word text=story means=docr.close
+@w.en.text.docr.close core.word text=text means=docr.close
+@w.en.load.docr.loadSample core.word text=load means=docr.loadSample
+@w.en.open.docr.loadSample core.word text=open means=docr.loadSample
+@w.en.show.docr.loadSample core.word text=show means=docr.loadSample
+@w.en.sample.docr.loadSample core.word text=sample means=docr.loadSample
+@w.en.example.docr.loadSample core.word text=example means=docr.loadSample
+@w.en.demo.docr.loadSample core.word text=demo means=docr.loadSample
