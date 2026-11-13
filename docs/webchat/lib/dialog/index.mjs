@@ -13,15 +13,14 @@ import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=b
 import { loadWorlds } from '../worlds/index.mjs?v=cdba90e914';
 import { validateWorldSet } from '../worlds/validate.mjs?v=7f69f4ee91';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=146123c4fe';
-import { createReasoner } from '../reasoner/index.mjs?v=601e6467e8';
+import { createInterpreter } from '../interpreter/index.mjs?v=4ce9998cb1';
+import { createReasoner } from '../reasoner/index.mjs?v=7438bf1b67';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=e3e7c6c8ea';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=136a73b8b2';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=baca68c7ad';
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=bd62044808';
-import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=1a42d60ef7';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=94e1022aec';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
@@ -30,14 +29,14 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=90ece0d788';
 import { checkValues } from './value-check.mjs?v=506216f967';
-import { Discourse } from './discourse.mjs?v=74a997b12b';
+import { Discourse } from './discourse.mjs?v=a408919143';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=c14af18283';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=d1954217c7';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=cd93f6fc29';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=30b1cb9ab7';
 import { repairFromScene } from './scene-referents.mjs?v=adc8f57abc';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=fe93f8510c';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ff9c014f42';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=662a9b84fa';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=7ab9389d6d';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=84d3d73c01';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=61fcceb427';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -116,13 +115,6 @@ function quoteUserWords(text, userWords) {
 const MAX_FALLBACK_CALLS = 6;
 /** The last line of a Romanian reply nothing could translate (RO-TRANSLATE-FALLBACK): the session never shows English. */
 const NO_RO_REPLY = 'Nu am încă o formulare în română pentru acest răspuns.';
-/** A clause whose wire asks to remove, clear, reset or replace something (the action's last name part: draw.clearAll, draw.remove, geo.clearAll ...). */
-const DESTRUCTIVE_ACTION = /^(clear|remove|delete|erase|reset|restart|wipe|discard|forget|empty|drop|replace|undo|redo|destroy)/i;
-function isDestructive(seg) {
-  for (const w of seg.wires ?? []) for (const e of w.entries ?? []) if (e.key === 'core.request.action' && DESTRUCTIVE_ACTION.test(String(e.value?.v ?? '').split('.').pop())) return true;
-  return false;
-}
-
 /** The "rules translator" of a language that has none (MT-SERIOUS): it translates nothing, so every run goes to the on-device translation. */
 const NO_RULES = { translate: (text) => ({ text: '', alignment: [], unknown: [String(text ?? '')], untranslatable: [], notes: ['no rules for this language'], confidence: 0 }), supports: () => false };
 
@@ -288,7 +280,7 @@ export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTi
 
 export class DialogSession {
   constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing } = {}) {
-    this.routing = routing;   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
+    this._routing = normalizeRouting(routing);   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
     this.worldAware = normalizeWorldAware(worldAware ?? globalThis.process?.env?.PSYS2_WORLD_AWARE);
@@ -491,9 +483,6 @@ export class DialogSession {
    * world or the built-in tabs; `gameWorld` is `ui.shell` state `activeGame` (set by the host); `modalWorld` is the
    * world whose state has an open `inputMode`.
    */
-  get routing() { return this._routing; }
-  set routing(v) { this._routing = normalizeRouting(v); }
-
   /** The router of this session: the engine's policy router, or (routing=symbolic*, meta.worlds prepared) the same ordered by meta.worlds. */
   get _router() {
     if (!isSymbolic(this._routing) || !this.engine.meta) return this.engine.router;
@@ -1168,11 +1157,6 @@ export class DialogSession {
     const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
     try {
       const reply = await this._send(text, opts);
-      // INVARIANT (every turn gets a reply): a message that produced no words at all (bare punctuation, an empty reading) is answered, quoting what was typed
-      if (reply && typeof reply === 'object' && !String(reply.text ?? '').trim() && String(text ?? '').trim() && !opts.silent) {
-        const said = `I did not understand "${String(text).trim().slice(0, 80)}".`;
-        reply.text = said; reply.parts = [{ text: said, translate: false }]; if (reply.trace) reply.trace.replyEnglish = said; if (Array.isArray(reply.statuses) && !reply.statuses.length) reply.statuses.push('unparsed');
-      }
       if (g) guard.check('end');   // (checks the shared guard)   // a stage that swallowed the abort must not let a half-done turn through
       if (bt && tb.exceeded) throw tb.exceeded;   // a stage that swallowed BudgetExceeded must not let a half-done turn through
       if (own && reply && typeof reply === 'object') reply.perf = perf.end();
@@ -1235,58 +1219,62 @@ export class DialogSession {
   }
 
   /**
-   * Input side of a foreign-language message (spec 06, M4): with the translators on ('fallback' mode) the English is chosen among candidates by `_sendByCandidates`;
-   * with them off, English input, or past the soft time limit, the core reads it as it is (rules translation).
+   * RO-TRANSLATE-FALLBACK, input side (spec 06). A Romanian message is read through the rules first. When the reading is poor (a clause not understood, a
+   * part not used, a best-effort "I took that as") and the on-device Translator exists, the message is translated by it, read again with the English rules,
+   * and that second reading replaces the first only when it is better (fewer clauses lost) and the checker accepted the translation. The session goes
+   * back to where it was before the first reading, so a rejected second reading leaves no trace; the first one is then put back unchanged.
    */
   async _send(text, opts = {}) {
     const tr = this.engine.translator;
     const wantedLang = opts.language ?? this.language;
-    if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || guard.soft()) return this._sendCore(text, opts);
-    return this._sendByCandidates(text, opts);
-  }
-
-  /** Points of trouble of a reading of one candidate English in the active tab: 0 = the reader understands all of it (nothing unparsed, ignored or partial; every wire supported; no other world's reading). */
-  async _understands(english) {
-    const { set, formalizers, interp } = this.engine;
-    const f = this.forkForValidation();
-    const ctx = f.context();
-    const res = await formalizers.rules.formalize(splitAnswerList(interp.lang.stripFiller(english) || english), { worlds: set, session: f.isession, source: 'candidate', context: ctx, router: this._router });
-    const segs = res.segments ?? [];
-    if (!segs.length) return { issues: 9 };
-    const HOME = /^(ui|session|user|meta|common|lang|core)\b|^talk$/;
-    let issues = 0;
-    for (const sg of segs) {
-      budget.tick('index.understands');
-      issues += (sg.unparsed ? 3 : 0) + (sg.ignored?.length ?? 0) + (sg.partial ? 2 : 0) + (sg.bestEffort ? 2 : 0);
-      const w = sg.match?.worldId;
-      if (w && ctx.tabWorld && w !== ctx.tabWorld && !HOME.test(w)) issues += 2;   // a reading in another world than the open tab is not an understanding in it
-      if (sg.unparsed) continue;
-      f.isession.add(sg.wires);
-      for (const wire of sg.wires) { const r = interp.resolve(f.isession, wire); if (r?.status && r.status !== 'supported') issues += r.status === 'unsupported' || r.status === 'error' ? 2 : 1; }
+    if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || !(tr.rules?.supports?.(wantedLang, 'en') ?? true)) return this._sendCore(text, opts);   // a language without rules is read by the on-device translation in `_sendCore`
+    const snap0 = this.snapshot();
+    if (tr.translatorFirst?.() && tr.canTranslate?.(wantedLang, 'en') && !guard.soft()) return this._sendTranslatorFirst(text, opts, snap0);
+    const first = await this._sendCore(text, opts);
+    // trouble points of a reading: a clause not understood (3), a part not used (1 each), a best-effort "I took that as" (2), and a message the rules left in Romanian (2)
+    const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0)
+      + (String(r.trace?.english ?? '').trim().toLowerCase() === String(text).trim().toLowerCase() && r.translation?.unknown?.length ? 2 : 0);
+    const poor = issues(first);
+    if (first.lang === 'en' || !poor || !tr.canTranslate?.(first.lang, 'en') || guard.soft()) return first;
+    const b = await guard.abortable(tr.viaBrowser(text, { from: first.lang, to: 'en' }), 'translate');
+    if (!b || b.text.trim().toLowerCase() === String(first.trace?.english ?? '').trim().toLowerCase()) return first;
+    const snapFirst = this.snapshot();
+    this.restore(snap0);
+    let second = null;
+    try { second = await this._sendCore(text, opts, { english: b.text, translation: b }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; second = null; }
+    if (second && issues(second) < poor) {
+      second.trace.via = 'translator-in'; second.trace.firstReading = { english: first.trace?.english, issues: poor, reply: first.text };
+      tr.note?.('translator-in', { direction: 'ro->en', strategy: 'browser-api', reason: `the rules reading had ${poor} points of trouble, the Translator's has ${issues(second)}` });
+      return second;
     }
-    return { issues };
+    this.restore(snapFirst);
+    tr.note?.('translator-in', { direction: 'ro->en', fallback: true, reason: 'the Translator reading was no better; the rules reading is kept' });
+    return first;
   }
 
   /**
-   * M4 (WORLDS-AS-MODULES), input side, all languages: the English comes from the candidates of every available translator plus one after source-side spelling repair;
-   * a candidate that keeps a source word is rejected; among the rest the reader's dry reading in the active tab picks the one it understands completely (ties: the
-   * browser Translator first). All candidates are kept in `trace.candidates` (phrase export). The step budget bounds the loop; nothing here is per language.
+   * P7, input side with the Translator as the first choice (owner rule 2026-11-12): the Translator's English is read first. The rules read only when it is missing, late or
+   * rejected by the checker, or when its reading is poor and the rules' reading is better (a garbled translation of an app command: the safety net, never the first choice).
    */
-  async _sendByCandidates(text, opts) {
+  async _sendTranslatorFirst(text, opts, snap0) {
     const tr = this.engine.translator, lang = opts.language ?? this.language;
-    const { set } = this.engine;
-    const vocab = spellVocabulary(set);
-    const isEnglish = englishTest((w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!tr.rules?.knownEnglish?.(w));
-    const cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage) });
-    if (!cands.length) return this._sendCore(text, opts);   // nothing translated it: the core says so (MT-SERIOUS)
-    const pick = await chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft() });
-    if (!pick.chosen) return this._sendCore(text, opts);
-    const c = pick.chosen, machine = c.source === 'browser' || c.source === 'model' || /^repaired-(browser|model)$/.test(c.source);
-    const r = await this._sendCore(text, opts, { english: c.text, translation: c.translation });
-    r.trace.candidates = pick.log;
-    r.trace.via = machine ? 'translator-in' : 'rules-translate';
-    tr.note?.(machine ? 'translator-in' : 'rules-translate', { direction: `${lang}->en`, strategy: machine ? 'browser-api' : 'rules', reason: `candidate ${c.source} chosen among ${cands.length}` });
-    return r;
+    const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0);
+    const b = await guard.abortable(tr.viaBrowser(text, { from: lang, to: 'en' }), 'translate');
+    if (!b) return this._sendCore(text, opts);   // missing, late or failed: the rules (the reason is in the translator usage)
+    let first = null;
+    try { first = await this._sendCore(text, opts, { english: b.text, translation: b }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; }
+    if (!first) { this.restore(snap0); return this._sendCore(text, opts); }
+    first.trace.via = 'translator-in';
+    tr.note?.('translator-in', { direction: `${lang}->en`, strategy: 'browser-api', reason: 'the Translator is the first choice' });
+    const poor = issues(first);
+    if (!poor || guard.soft()) return first;
+    const snapFirst = this.snapshot();
+    this.restore(snap0);
+    let second = null;
+    try { second = await this._sendCore(text, opts); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; }
+    if (second && issues(second) < poor) { tr.note?.('rules-translate', { direction: `${lang}->en`, fallback: true, reason: `the Translator reading had ${poor} points of trouble, the rules' has ${issues(second)}` }); return second; }
+    this.restore(snapFirst);
+    return first;
   }
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader } = {}, override = null) {
@@ -1325,8 +1313,6 @@ export class DialogSession {
           translation = b ?? { text, alignment: [], unknown: [text], notes: ['the on-device translation did not answer'], confidence: 0 };
         } else translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = override?.english ?? textOf(translation) ?? text;
-        // INVARIANT (every turn gets a reply): a translator that cannot map a sentence ("negation could not be mapped") returns an empty text; the message then stays as typed, so that the reading is poor and says so (or the browser Translator is asked)
-        if (!english.trim() && text.trim()) { english = text; translation = { ...(translation ?? {}), text, alignment: [], unknown: [], notes: [...(translation?.notes ?? []), 'the rules translation was empty'], confidence: 0 }; }
         // an engine that returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare") is retried through the rules translator, which covers the app's own verbs and nouns
         const rules = translator.rules;
         if (!override && rules && rules !== translator && lang === 'ro' && english.trim().toLowerCase() === text.trim().toLowerCase()) {
@@ -1429,26 +1415,10 @@ export class DialogSession {
     const statuses = icpt || meta?.reply != null ? [meta?.status ?? 'supported'] : [];
     const ops = [];
     const answerWires = [];
-    let followSeg = null;
     let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)
     const fillerOnly = (t) => { const w = t.toLowerCase().match(/[\p{L}']+/gu) ?? []; return w.length > 0 && w.every((x) => FUNCTION_WORDS.has(x)); };
     let segNo = 0;
-    this.isession.noTabFollow = false;
-    // INVARIANT (nothing destructive on a partly understood sentence): when a clause of the message is not understood, a clause that would remove, clear or replace something does not run;
-    // the reply names the understood part and what was not understood. Decided from the wires' action names (clearAll, remove, delete, reset ...), for every world alike.
-    const heldDestructive = new Set();
-    if (!icpt && !pre && !meta) {
-      const open = segments.filter((x) => x.unparsed && !fillerOnly(x.text) && !x.veto?.say);
-      if (open.length) for (const x of segments) if (!x.unparsed && (isDestructive(x) || x.ignored?.length || x.partial || x.bestEffort)) heldDestructive.add(x);   // a clause read only in part (words ignored) next to one not read at all is held too: "You should change this voila ... ta-da ..." must not start a chess game
-    }
     for (const seg of segments) {
-      if (heldDestructive.has(seg)) {
-        const open = segments.find((x) => x.unparsed && !fillerOnly(x.text));
-        const q = (t) => lang === 'en' ? t : originalSentence(text, { text: t, span: segments.find((y) => y.text === t)?.span }, translation?.alignment);
-        lines.push([T('I understood '), { text: `"${q(seg.text)}"`, translate: false, quote: true }, T(' but I did not do it, because I did not understand '), { text: `"${q(open.text)}"`, translate: false, quote: true }, T('. Say the first part on its own and I will do it.')]);
-        statuses.push('missing');
-        continue;
-      }
       // a leftover made only of filler words ("also", "and", "please") next to something that was understood is not worth an error
       if (seg.unparsed && (partial ?? this.partial) && fillerOnly(seg.text) && segments.some((x) => !x.unparsed)) continue;
       if (seg.bestEffort) {
@@ -1516,7 +1486,6 @@ export class DialogSession {
       // a world with a lazily loaded engine (ops `prepare()`, async, idempotent: spec 04) is made ready before its operations run
       { const prep = this.engine.set.get(seg.match?.worldId)?.ops?.prepare; if (typeof prep === 'function') { try { await prep(); } catch { /* the operation then says it is not ready */ } } }
       { const rs = this.isession.rs; if (rs && segments.length > 1) rs.beginStep(seg.text, rs.snapOwn(this.isession), lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment)); }   // one step per request of the message: "undo" takes back the last one (spec 15, UNDO-REDO)
-      this.isession.noTabFollow = !!(seg.corrections?.length || seg.ignored?.length || seg.bestEffort || seg.partial) && !this._worldsNamedIn(english).has(seg.match?.worldId);
       this.isession.add(seg.wires);
       this.isession.batch = { index: segNo++, count: segments.length };   // ops see their place in the message (a game's host cannot answer between two commands of one message)
       const statements = [];
@@ -1528,7 +1497,7 @@ export class DialogSession {
         const idleTab = seg.match?.worldId === 'ui.shell' && /\.bare/.test(seg.match.patternId ?? '') && /^You are already on the .+ tab\.$/.test(rendered) && segments.some((x) => x !== seg && !x.unparsed && x.match?.worldId && x.match.worldId !== 'ui.shell');
         if (!idleTab) lines.push([T(rendered)]);
         statuses.push(r.status);
-        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) { followTab = t; followSeg = seg; } }   // an explicit navigation later in the message wins over the tab of an earlier segment
+        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
         if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.from?.length) fr.from = r.envelope.from; else if (r.envelope?.fromLater) fr.fromLater = r.envelope.fromLater; } }
@@ -1562,7 +1531,6 @@ export class DialogSession {
       try { const kf = await perf.time('knowledge', () => knowledgeFallback(this, english, segments, statuses)); if (kf) { lines.length = 0; lines.push([T(kf.reply)]); statuses[0] = kf.status; segments[0].ignored = []; segments[0].knowledge = kf.info; } } catch { /* the world's own reply stands */ }
     }
     this.isession.batch = null;
-    this.isession.noTabFollow = false;
     for (const seg of segments) {
       if (!seg.corrections?.length || seg.unparsed) continue;
       const line = [T('(I read ')];
@@ -1582,8 +1550,6 @@ export class DialogSession {
     }
     // Tab follow: a world with a tab answered, but its tab is hidden: bring it forward (the existing ui.openTab action).
     const shown = this.isession.state['ui.shell']?.activeTab;
-    // INVARIANT (no tab change without a named tab): a reading that needed a spelling correction, ignored words or a best effort does not bring its world's tab forward unless the message names that world
-    if (followTab && followSeg && (followSeg.corrections?.length || followSeg.ignored?.length || followSeg.bestEffort || followSeg.partial) && !this._worldsNamedIn(english).has(followSeg.match?.worldId)) followTab = null;
     if (followTab && shown && shown !== followTab && !this.isession.effects.some((e) => e.name === 'ui.openTab')) {
       try { interp.runAction(this.isession, 'ui.openTab', { tab: followTab }); } catch { /* the shell may be absent */ }
     }

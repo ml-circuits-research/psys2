@@ -1,0 +1,611 @@
+{
+ "version": "fixture",
+ "sopworld": "1e18f1d",
+ "worlds": [
+  {
+   "id": "k.faces",
+   "version": "1",
+   "schema": "k.faces/schema.sop",
+   "exports": [
+    "k.faces.colour",
+    "k.faces.expression",
+    "k.faces.part",
+    "k.faces.point",
+    "k.faces.preset",
+    "k.faces.slot",
+    "k.faces.variant"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.faces/shards/colours",
+     "path": "k.faces/shards/colours.sop",
+     "wires": 45,
+     "bytes": 6273,
+     "keys": [
+      "amber",
+      "auburn",
+      "black",
+      "blond",
+      "blue",
+      "brown",
+      "clothes",
+      "dark brown",
+      "eyes",
+      "green",
+      "grey",
+      "hair",
+      "hazel",
+      "light",
+      "metal grey",
+      "olive",
+      "orange",
+      "pale",
+      "pink",
+      "purple",
+      "red",
+      "skin",
+      "tan",
+      "white",
+      "yellow"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-beard",
+     "path": "k.faces/shards/plain-beard.sop",
+     "wires": 42,
+     "bytes": 5930,
+     "keys": [
+      "beard",
+      "full",
+      "short",
+      "stubble"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-cheeks",
+     "path": "k.faces/shards/plain-cheeks.sop",
+     "wires": 16,
+     "bytes": 3021,
+     "keys": [
+      "blush",
+      "cheeks",
+      "freckles",
+      "round blush",
+      "wrinkles"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-earrings",
+     "path": "k.faces/shards/plain-earrings.sop",
+     "wires": 43,
+     "bytes": 6497,
+     "keys": [
+      "bolt",
+      "drop",
+      "earrings",
+      "hoop",
+      "large hoop",
+      "pearl",
+      "stud"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-ears",
+     "path": "k.faces/shards/plain-ears.sop",
+     "wires": 17,
+     "bytes": 2806,
+     "keys": [
+      "ears",
+      "large",
+      "pointed",
+      "round",
+      "small",
+      "square"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-eyebrows",
+     "path": "k.faces/shards/plain-eyebrows.sop",
+     "wires": 44,
+     "bytes": 6752,
+     "keys": [
+      "arched",
+      "bushy",
+      "eyebrows",
+      "raised",
+      "short",
+      "straight",
+      "thick",
+      "thick arched"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-eyes",
+     "path": "k.faces/shards/plain-eyes.sop",
+     "wires": 45,
+     "bytes": 7244,
+     "keys": [
+      "dot",
+      "eyes",
+      "large",
+      "lashes",
+      "narrow",
+      "oval",
+      "round",
+      "square",
+      "surprised"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-glasses",
+     "path": "k.faces/shards/plain-glasses.sop",
+     "wires": 106,
+     "bytes": 16324,
+     "keys": [
+      "glasses",
+      "round",
+      "small round",
+      "square"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-hair-back",
+     "path": "k.faces/shards/plain-hair-back.sop",
+     "wires": 61,
+     "bytes": 10265,
+     "keys": [
+      "afro",
+      "bun",
+      "hair_back",
+      "long curly",
+      "long straight",
+      "long wavy",
+      "pigtails"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-hair-front",
+     "path": "k.faces/shards/plain-hair-front.sop",
+     "wires": 197,
+     "bytes": 30053,
+     "keys": [
+      "bald on top",
+      "centre parting",
+      "curly",
+      "fringe",
+      "hair_front",
+      "long sides",
+      "short",
+      "side parting",
+      "spikes",
+      "tuft",
+      "wavy"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-hat",
+     "path": "k.faces/shards/plain-hat.sop",
+     "wires": 64,
+     "bytes": 9129,
+     "keys": [
+      "antenna",
+      "beanie",
+      "bow",
+      "cap",
+      "crown",
+      "hat",
+      "party hat"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-head",
+     "path": "k.faces/shards/plain-head.sop",
+     "wires": 42,
+     "bytes": 5949,
+     "keys": [
+      "box",
+      "head",
+      "heart",
+      "long",
+      "oval",
+      "round",
+      "square",
+      "wide"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-moustache",
+     "path": "k.faces/shards/plain-moustache.sop",
+     "wires": 23,
+     "bytes": 3779,
+     "keys": [
+      "moustache",
+      "thick",
+      "thin",
+      "walrus"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-mouth",
+     "path": "k.faces/shards/plain-mouth.sop",
+     "wires": 70,
+     "bytes": 10417,
+     "keys": [
+      "big smile",
+      "full lips",
+      "grille",
+      "grin",
+      "mouth",
+      "neutral",
+      "small",
+      "smile",
+      "smirk"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-neck",
+     "path": "k.faces/shards/plain-neck.sop",
+     "wires": 18,
+     "bytes": 2984,
+     "keys": [
+      "medium",
+      "neck",
+      "necklace",
+      "pipe",
+      "thick",
+      "thin"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-nose",
+     "path": "k.faces/shards/plain-nose.sop",
+     "wires": 24,
+     "bytes": 3767,
+     "keys": [
+      "bolt",
+      "button",
+      "long",
+      "medium",
+      "nose",
+      "pointed",
+      "round",
+      "small",
+      "wide"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/plain-shoulders",
+     "path": "k.faces/shards/plain-shoulders.sop",
+     "wires": 121,
+     "bytes": 18417,
+     "keys": [
+      "hoodie",
+      "metal plate",
+      "shirt",
+      "shoulders",
+      "small",
+      "suit",
+      "t-shirt",
+      "tank top",
+      "v-neck"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/presets",
+     "path": "k.faces/shards/presets.sop",
+     "wires": 21,
+     "bytes": 5549,
+     "keys": [
+      "alien",
+      "angry",
+      "baby",
+      "bearded man",
+      "boy",
+      "child",
+      "clown",
+      "girl",
+      "happy",
+      "man",
+      "old man",
+      "old woman",
+      "queen",
+      "robot",
+      "sad",
+      "sleepy",
+      "surprised",
+      "talking",
+      "wink",
+      "woman",
+      "woman with curly hair"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.faces/shards/slots",
+     "path": "k.faces/shards/slots.sop",
+     "wires": 16,
+     "bytes": 2357,
+     "keys": [
+      "beard",
+      "cheeks",
+      "earrings",
+      "ears",
+      "eyebrows",
+      "eyes",
+      "glasses",
+      "hair_back",
+      "hair_front",
+      "hat",
+      "head",
+      "moustache",
+      "mouth",
+      "neck",
+      "nose",
+      "plain",
+      "shoulders"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.objects",
+   "version": "3",
+   "schema": "k.objects/schema.sop",
+   "exports": [
+    "k.objects.object",
+    "k.objects.part",
+    "k.objects.stand_in"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.objects/shards/buildings",
+     "path": "k.objects/shards/buildings.sop",
+     "wires": 3,
+     "bytes": 332,
+     "keys": [
+      "house",
+      "body",
+      "roof"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.objects/shards/stand-ins-hand",
+     "path": "k.objects/shards/stand-ins-hand.sop",
+     "wires": 1,
+     "bytes": 95,
+     "keys": [
+      "villa"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.words",
+   "version": "1",
+   "schema": "k.words/schema.sop",
+   "exports": [
+    "k.words.sense"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.words/shards/ma",
+     "path": "k.words/shards/ma.sop",
+     "wires": 1,
+     "bytes": 133,
+     "keys": [
+      "mansion"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/gl",
+     "path": "k.words/shards/gl.sop",
+     "wires": 1,
+     "bytes": 208,
+     "keys": [
+      "glasses"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sp",
+     "path": "k.words/shards/sp.sop",
+     "wires": 1,
+     "bytes": 156,
+     "keys": [
+      "spectacles"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.layouts",
+   "version": "1",
+   "schema": "k.layouts/schema.sop",
+   "exports": [
+    "k.layouts.layout",
+    "k.layouts.slot"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.layouts/shards/layouts",
+     "path": "k.layouts/shards/layouts.sop",
+     "wires": 41,
+     "bytes": 5998,
+     "keys": [
+      "face",
+      "face",
+      "hair_back",
+      "shoulders",
+      "neck",
+      "ears",
+      "head",
+      "cheeks",
+      "beard",
+      "mouth",
+      "moustache",
+      "nose",
+      "eyes",
+      "eyebrows",
+      "glasses",
+      "hair_front",
+      "earrings",
+      "hat"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.demo",
+   "version": "1",
+   "schema": "k.demo/schema.sop",
+   "exports": [
+    "k.demo.fruit"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.demo/shards/fruits",
+     "path": "k.demo/shards/fruits.sop",
+     "wires": 2,
+     "bytes": 172,
+     "keys": [
+      "apple",
+      "lemon"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  }
+ ]
+}

@@ -15,6 +15,9 @@ import { fileURLToPath } from 'node:url';
 import { isMainThread } from 'node:worker_threads';
 import { parseJobs, runSharded, serveShard } from '../scripts/lib/shard.mjs';
 import { budget } from './dialog/budget.mjs';
+import { createFacts } from './knowledge/facts.mjs';
+import { createKnowledgeSource } from './loaders/knowledge-source.mjs';
+import path from 'node:path';
 
 import { applyReasonerFlag } from '../scripts/lib/reasoner-flag.mjs';
 applyReasonerFlag();   // --reasoner ops|matrix (spec 15)
@@ -53,7 +56,11 @@ const SELF = fileURLToPath(import.meta.url);
 
 async function testOne(eng, id) {
   if (!eng.set.get(id)) return { lines: [`${id}: unknown world`], bad: 1 };
-  const r = await runWorldTests(eng, id);
+  // a world that needs catalog models (its `needs` hook: the avatar's faces) is tested against the local fixture of the catalog (tests/fixtures/catalog), never the network
+  const needsCatalog = typeof eng.set.get(id).ops?.needs === 'function' && !eng.knowledge;
+  if (needsCatalog) eng.setKnowledge(createFacts({ source: createKnowledgeSource(path.join(DEFAULT_ROOT, '../tests/fixtures/catalog')) }));
+  let r;
+  try { r = await runWorldTests(eng, id); } finally { if (needsCatalog) eng.setKnowledge(null); }
   const note = r.skipped.length ? `, ${r.skipped.length} skipped (${r.skipped[0].reason})` : '';
   return { lines: [`${id}: ${r.passed}/${r.total - r.skipped.length} passed${note}`, ...r.failed.map((f) => `  FAIL ${f.id}: ${f.message}`)], bad: r.failed.length };
 }

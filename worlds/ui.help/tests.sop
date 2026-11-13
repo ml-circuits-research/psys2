@@ -75,13 +75,6 @@
     expect="what can I say here?"
     session=a
 
-@t.ui.help.n12 core.test
-    input="How do I change the eyes?"
-    expect="You can try"
-    expect="eye"
-    expectEffect=chat.suggest
-    session=a
-
 @t.ui.help.n13 core.test
     input="How do I add a table?"
     expect="table"
@@ -91,11 +84,6 @@
 @t.ui.help.n14 core.test
     input="How to draw a circle?"
     expect="circle"
-    session=a
-
-@t.ui.help.n15 core.test
-    input="What do I say to change the eyes?"
-    expect="eye"
     session=a
 
 @t.ui.help.n16 core.test
@@ -174,11 +162,6 @@
 @t.ui.help.n28 core.test
     input="Help me"
     expect="The Editor tab lets you edit documents"
-    session=b
-
-@t.ui.help.n29 core.test
-    input="How do I change the eyes?"
-    expect="eye"
     session=b
 
 @t.ui.help.n30 core.test

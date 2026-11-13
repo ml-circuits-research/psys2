@@ -60,9 +60,9 @@ function union(sources, own = []) {
 }
 const LEX = [
   ['colour', 'noun', 'Colour names (union of the colour lexicons of the draw, editor, charts, shapes and avatar worlds).',
-    ['art.draw:lexicon.sop:lex.art.draw.colors', 'docs.editor:lexicon.sop:lex.docs.editor.colors', 'data.charts:lexicon.sop:lex.data.charts.colors', 'kids.shapes:lexicon.sop:lex.kids.shapes.colors', 'ui.avatar:lexicon.sop:lex.ui.avatar.colors']],
+    ['art.draw:lexicon.sop:lex.art.draw.colors', 'docs.editor:lexicon.sop:lex.docs.editor.colors', 'data.charts:lexicon.sop:lex.data.charts.colors', 'kids.shapes:lexicon.sop:lex.kids.shapes.colors']],
   ['ordinal', 'noun', 'Ordinal words (first ... tenth, last).', ['art.draw:lexicon.sop:lex.art.draw.ordinals', 'docs.editor:lexicon.sop:lex.docs.editor.ordinals', 'data.charts:lexicon.sop:lex.data.charts.ordinals', 'docs.reader:lexicon.sop:lex.docs.reader.ordinals']],
-  ['size', 'noun', 'Size words and comparatives.', ['art.draw:lexicon.sop:lex.art.draw.sizes', 'docs.editor:lexicon.sop:lex.docs.editor.sizes', 'ui.avatar:lexicon.extra.sop:lex.ui.avatar.size']],
+  ['size', 'noun', 'Size words and comparatives.', ['art.draw:lexicon.sop:lex.art.draw.sizes', 'docs.editor:lexicon.sop:lex.docs.editor.sizes']],
   ['degree', 'degree', 'Degree adverbs ("a bit", "a lot", "slightly").', ['media.music:lexicon.sop:lex.media.music.degrees']],
   ['direction', 'direction', 'Directions: compass, vertical and horizontal.', ['media.music:lexicon.sop:lex.media.music.directions', 'geo.map:lexicon.sop:lex.geo.map.directions']],
   ['position', 'noun', 'Positions in a text, a list or on a board.', ['docs.editor:lexicon.sop:lex.docs.editor.positions', 'games.tictactoe:lexicon.sop:lex.games.tictactoe.positions']],

@@ -437,6 +437,7 @@ export async function mountPsys2(element, options = {}) {
     state: (worldId) => states[worldId],
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
     asset: (path) => new URL(path, base).href,
+    knowledgeUrl: () => settings.knowledgeUrl || '',   // the catalog the engine reads (the avatar tab reads its faces from the same one)
     /** Put an element inside the answer being shown (the Talk tab's cards); false when there is no answer to put it in. */
     attach: (node) => { if (!currentBot || !node) return false; currentBot.bubble.append(node); return true; },
     /** Report a later outcome (playback finished, position found) to the world that owns the tab. */
@@ -517,7 +518,7 @@ export async function mountPsys2(element, options = {}) {
    * button, AbortSignal through the whole pipeline) or the watchdog answer (hard limit from Enter). Stop and the watchdog put the session back to
    * the snapshot taken before the message, so the message leaves no trace in the worlds.
    */
-  /** The avatar's idle SVG animations (DiceBear styles animate inner SVG nodes: main-thread repaint every frame, ~60 ms/s at 4x CPU) rest while a turn runs and 3 s after it. */
+  /** The avatar's animations rest while a turn runs and 3 s after it. */
   let restTimer = 0;
   function restAvatar(on) { clearTimeout(restTimer); if (on) root.classList.add('p2-rest'); else restTimer = setTimeout(() => root.classList.remove('p2-rest'), 3000); }
   async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {

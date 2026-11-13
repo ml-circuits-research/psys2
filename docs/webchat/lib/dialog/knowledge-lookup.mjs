@@ -9,7 +9,7 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=662a9b84fa';
+import { leftOut, requestOf } from './world-aware.mjs?v=61fcceb427';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -142,7 +142,7 @@ async function noticeIfSlow(dialog, lookup, name) {
 export async function preloadThings(dialog, segments) {
   const cat = knowledgeOf(dialog);
   if (!cat) return [];
-  const names = new Set(), drawNames = new Set();
+  const names = new Set(), drawNames = new Set(), needs = new Set();
   const foreign = !!dialog._waLang && dialog._waLang !== 'en';
   for (const seg of segments ?? []) {
     if (seg.unparsed) continue;
@@ -150,6 +150,8 @@ export async function preloadThings(dialog, segments) {
       const rq = requestOf(seg);
       // the reading's world says which slots of its action are open (a thing it has no picture of); `thing` is the generic argument of the same idea
       if (rq?.world) {
+        const need = dialog.engine.interp.hook(dialog.isession, rq.world, 'needs', {}, { state: dialog.isession.state[rq.world] ?? {} });   // catalog models the world reads synchronously (the avatar's faces)
+        for (const n of Array.isArray(need) ? need : []) if (n === 'faces') needs.add(n);
         const slots = dialog.engine.interp.hook(dialog.isession, rq.world, 'openSlots', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
         for (const n of Array.isArray(slots) ? slots : []) if (n && String(n).split(/\s+/).length <= 3) { names.add(String(n)); drawNames.add(String(n)); }
         if (rq.args.thing) names.add(String(rq.args.thing).toLowerCase());
@@ -159,6 +161,7 @@ export async function preloadThings(dialog, segments) {
   }
   const done = [];
   const all = (async () => {
+    for (const n of needs) { try { await cat[n]?.(); } catch { /* no model is no change */ } }
     for (const n of [...names].slice(0, 6)) {
       try {
         const p = cat.thing(n);

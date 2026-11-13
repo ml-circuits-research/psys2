@@ -7,7 +7,6 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { classicAvatar } from './helpers.mjs';
 import { editDistance, correctTokens, tokenize } from '../src/formalizer/rules/index.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
@@ -41,12 +40,12 @@ test('correctTokens: a tie between two candidates is not corrected', () => {
 });
 
 test('the formalizer retries once with corrected words and records them in the segment and the trace', async () => {
-  const s = classicAvatar(engine.createSession());
-  const r = await s.send('look suprised');
-  assert.equal(s.state('ui.avatar').person.expression === 'awe' || s.state('ui.avatar').robot.mouth === 'speaker', true);
-  assert.deepEqual(r.segments[0].corrections.map((c) => [c.from, c.to]), [['suprised', 'surprised']]);
-  assert.deepEqual(r.trace.segments[0].corrections.map((c) => c.to), ['surprised']);
-  assert.match(r.text, /\(I read "suprised" as "surprised"\)/);
+  const s = engine.createSession();
+  const r = await s.send('weer a hat');
+  assert.notEqual(s.state('ui.avatar').face.slots.hat, undefined);
+  assert.deepEqual(r.segments[0].corrections.map((c) => [c.from, c.to]), [['weer', 'wear']]);
+  assert.deepEqual(r.trace.segments[0].corrections.map((c) => c.to), ['wear']);
+  assert.match(r.text, /\(I read "weer" as "wear"\)/);
   const t = await s.send('give tourself a random look');
   assert.match(t.text, /\(I read "tourself" as "yourself"\)/);
   assert.equal((await s.send('look surprised')).segments[0].corrections ?? undefined, undefined);   // no typo, no note
@@ -59,39 +58,14 @@ test('typo tolerance does not invent readings for nonsense', async () => {
   assert.doesNotMatch(r.text, /I read/);
 });
 
-test('avatar: no silent switch; an offer is answered by yes (repeats the command) or no', async () => {
+test('avatar: undo walks back through the changes of the face, with nothing to undo it says so', async () => {
   const s = engine.createSession();
-  await s.send('I want a human as avatar');
-  assert.equal(s.state('ui.avatar').character, 'person');
-  const r = await s.send('use the cyclops eye');
-  assert.match(r.text, /has no cyclops eyes, but the robot does\. Say "yes" to become the robot/);
-  assert.equal(s.state('ui.avatar').character, 'person');
-  const y = await s.send('yes');
-  assert.equal(s.state('ui.avatar').character, 'robot');
-  assert.equal(s.state('ui.avatar').robot.eyes, 'cyclops');
-  assert.match(y.text, /Now I am a robot/);
-  const why = await s.send('why you turned it in a robot, this ia wrong');
-  assert.match(why.text, /sorry/i);
-  assert.match(why.text, /become a person/);
-  await s.send('undo');
-  assert.equal(s.state('ui.avatar').character, 'person');
-  await s.send('make blue eyes');
-  assert.match((await s.send('no')).text, /stay a person/);
-  assert.equal(s.state('ui.avatar').character, 'person');
-  // anything else cancels the offer and is read normally
-  await s.send('make blue eyes');
-  await s.send('look happy');
-  assert.equal((await s.send('yes')).segments.some((x) => x.match?.worldId === 'ui.avatar'), false);
-  assert.equal(s.state('ui.avatar').character, 'person');
-});
-
-test('avatar: undo walks back through the changes, including a character change', async () => {
-  const s = classicAvatar(engine.createSession());
   assert.match((await s.send('undo')).text, /nothing to undo/);
-  await s.send('make your eyes round'); await s.send('become an emoji'); await s.send('go back to how you were');
-  assert.equal(s.state('ui.avatar').character, 'robot');
-  assert.match((await s.send('can you be a girl')).text, /person/);
-  assert.equal(s.state('ui.avatar').character, 'person');
+  await s.send('take off the hat');
+  const hat = s.state('ui.avatar').face.slots.hat;
+  assert.equal(hat, 'none');
+  await s.send('undo');
+  assert.notEqual(s.state('ui.avatar').face.slots.hat, 'none');
 });
 
 test('tab follow: a world with a tab answers while another tab is shown -> its tab opens (not for clarifications or tabless worlds)', async () => {
@@ -117,11 +91,11 @@ test('tab follow: a world with a tab answers while another tab is shown -> its t
     assert.equal(s.state('ui.shell').activeTab, 'robot', 'an unsupported answer does not switch');
     await s.send('Ping the tabby.');
     assert.equal(s.state('ui.shell').activeTab, 'tabby');
-    await s.send('Become a person.');   // the avatar brings its own tab forward
+    await s.send('Give yourself a hat.');   // the avatar brings its own tab forward
     assert.equal(s.state('ui.shell').activeTab, 'robot');
     await s.send('Open the editor.');   // ui.shell has no tab of its own: it does what it says
     assert.equal(s.state('ui.shell').activeTab, 'editor');
-    assert.match((await s.send('Become a person.')).text, /already/);   // nothing changed, but the avatar answered: its tab follows
+    await s.send('Give yourself a hat.');   // the avatar answered again: its tab follows
     assert.equal(s.state('ui.shell').activeTab, 'robot');
   } finally { await rm(dir, { recursive: true, force: true }); }
 });

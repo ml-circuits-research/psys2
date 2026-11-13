@@ -1,0 +1,2 @@
+@k.demo.apple k.demo.fruit name=apple colour=red taste=sweet core.source="fixture 1"
+@k.demo.lemon k.demo.fruit name=lemon colour=yellow taste=sour core.source="fixture 1"
