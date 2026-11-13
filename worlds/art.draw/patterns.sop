@@ -1552,3 +1552,33 @@
     kind=request
     priority=13
     example="The sun down, not above the clouds."
+
+@pat.art.draw.x.add.open core.pattern
+    canonical="Draw a lighthouse."
+    canonical="Add a third window."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [draw|sketch|paint|add|create|draw_me|paint_me|sketch_me] [a|an|another] {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.add arg.open=\"{o}\" arg.kt=\"{o}\""
+    kind=request
+    priority=4
+    example="Draw a red lighthouse."
+    example="Sketch a castle."
+    example="Add a third window."
+    doc="DRAW-FROM-FACTS: the thing to draw is an open slot. After the reading the operation looks the noun up in the catalog of drawable things (knowledge/k.objects, as things.catalog.mjs): a hit draws the thing from its parts; a part word of a thing in the picture adds one more of that part; nothing else is answered plainly (I don't know how to draw a blorp yet), never with a random shape."
+
+@pat.art.draw.x.count.open core.pattern
+    canonical="How many lighthouses are there?"
+    match="how_many {k:words(2,noun)} [are_there|are_in_my_picture|are_in_my_drawing|are_in_the_picture|are_in_the_drawing|do_i_have|have_i_drawn|did_i_draw]"
+    emit="@{_} core.request action=draw.count arg.kind=\"{k}\" arg.kt=\"{k}\""
+    kind=request
+    priority=4
+    example="How many lighthouses are there?"
+    doc="DRAW-FROM-FACTS: counts a thing of the catalog (a composite) as one object each; the noun is looked up after the reading, a word that is no thing is answered plainly."
+
+@pat.art.draw.x.add.open.n core.pattern
+    canonical="Draw two blue castles."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [draw|sketch|paint|add|create|draw_me|paint_me|sketch_me] {n:number} {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.add arg.n={n} arg.open=\"{o}\" arg.kt=\"{o}\""
+    kind=request
+    priority=4
+    example="Draw two blue castles."
+    doc="DRAW-FROM-FACTS: the same open slot with a number (draw two blue castles)."

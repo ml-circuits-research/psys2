@@ -16,10 +16,10 @@
 // Drawing tab forward: ctx.request('ui.openTab', { tab: 'draw' }).
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
-  canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind,
+  canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
 } from './scene.mjs';
 
-export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON } from './scene.mjs';
+export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs';
 
 // The turn's step budget (a no-op outside a turn): placement and name resolution are searches whose cost grows with the picture.
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -92,7 +92,7 @@ const andList = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join('
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
 const no = (note, status = 'unsupported') => ({ status, note });
 const lastOf = (a) => a[a.length - 1];
-const pluralOfKind = (kind, n = 2) => (n === 1 ? kind : PLURALS[kind] ?? (/(s|x|ch|sh)$/.test(kind) ? `${kind}es` : `${kind}s`));
+const pluralOfKind = (kind0, n = 2) => { const kind = kindName(kind0); return n === 1 ? kind : PLURALS[kind] ?? (/(s|x|ch|sh)$/.test(kind) ? `${kind}es` : `${kind}s`); };
 
 /** Kind of a spoken word ("trees" -> { kind: 'tree', plural: true }); null if it is not a kind word. */
 export function kindOfWord(word) {
@@ -105,8 +105,13 @@ export function kindOfWord(word) {
   if (w.endsWith('es') && (k = tryOne(w.slice(0, -2)))) return hit(k, true);
   if (w.endsWith('s') && (k = tryOne(w.slice(0, -1)))) return hit(k, true);
   if (w === 'fish') return hit('fish', false);
+  // a thing of the catalog (knowledge/k.objects): looked up by its word, after the built-in kinds
+  const thing = thingOfWord(w);
+  if (thing) return hit(COMPOSITE + thing, w !== thing && thingOfWord(w) === thing && THING_PLURAL(w, thing));
   return null;
 }
+/** Is the spoken word the plural of the thing it names? */
+const THING_PLURAL = (w, thing) => w !== thing && /s$/.test(w) && thingOfWord(w.slice(0, -1)) === thing || w === `${thing}es` || w === `${thing.slice(0, -1)}ies`;
 const isColorWord = (w) => !!canonColor([w]);
 const isShade = (w) => Object.hasOwn(SHADES, w);
 
@@ -147,8 +152,8 @@ function loadUsualPlaces(ctx) {
 const anchorOf = (kind) => USUAL.get(kind) ?? 'any';
 const onGround = (kind) => ['ground', 'horizon'].includes(anchorOf(kind));
 const byId = (s, id) => s.objects.find((o) => o.id === id);
-const effectiveColor = (o) => o.color ?? defaultColor(o.kind);
-const sameKind = (s, kind) => s.objects.filter((o) => o.kind === kind);
+const effectiveColor = (o) => o.color ?? defaultColor(kindKey(o));
+const sameKind = (s, kind) => s.objects.filter((o) => kindKey(o) === kind);
 
 /** Compact copy of the picture for undo. */
 function snapshot(s, label) {
@@ -218,7 +223,7 @@ const guard = (fn) => (ctx, args = {}) => {
 
 // ---- describing things ------------------------------------------------------------------------------------------------
 const sizeWord = (o) => {
-  const f = o.size / (KINDS[o.kind]?.size ?? o.size);
+  const f = o.size / (KINDS[kindKey(o)]?.size ?? o.size);
   return f >= 2 ? 'huge' : f >= 1.35 ? 'big' : f <= 0.45 ? 'tiny' : f <= 0.78 ? 'small' : '';
 };
 /** "a big red house" (or "the red house" with article 'the'). */
@@ -227,8 +232,8 @@ export function describeObject(o, { article = 'a', size = true, color = true } =
   if (size && sizeWord(o)) words.push(sizeWord(o));
   const c = effectiveColor(o);
   if (o.mood) words.push(o.mood);
-  if (color && c && !(o.kind === 'cloud' && c === 'white' && !o.color) && !(o.kind === 'moon' && !o.color) && !(o.who && !o.color)) words.push(o.color ?? c);
-  words.push(o.who ?? o.kind);
+  if (color && c && !(kindKey(o) === 'cloud' && c === 'white' && !o.color) && !(kindKey(o) === 'moon' && !o.color) && !(o.who && !o.color)) words.push(o.color ?? c);
+  words.push(o.who ?? kindName(kindKey(o)));
   const text = words.join(' ');
   return article === 'the' ? `the ${text}` : article === 'none' ? text : `${a_(text)} ${text}`;
 }
@@ -237,7 +242,7 @@ const REGION_PHRASE = {
   'bottom left': 'in the bottom left corner', bottom: 'at the bottom', 'bottom right': 'in the bottom right corner',
 };
 const placePhrase = (o) => {
-  const anchor = anchorOf(o.kind);
+  const anchor = anchorOf(kindKey(o));
   if (anchor === 'ground' || anchor === 'horizon') {
     const col = o.x < W / 3 ? 'on the left' : o.x > (2 * W) / 3 ? 'on the right' : 'in the middle';
     return `on the ground ${col}`;
@@ -245,7 +250,7 @@ const placePhrase = (o) => {
   if (anchor === 'water') {
     const wet = curScene?.ground === 'sea' || (curScene?.objects ?? []).some((p) => p.tag === 'pond' && Math.abs(p.x - o.x) < p.size / 2 && Math.abs(p.y - o.y) < p.size * 0.3);
     const col = o.x < W / 3 ? 'on the left' : o.x > (2 * W) / 3 ? 'on the right' : 'in the middle';
-    if (wet) return `${o.kind === 'boat' ? 'on' : 'in'} the water ${col}`;
+    if (wet) return `${kindKey(o) === 'boat' ? 'on' : 'in'} the water ${col}`;
     if (bbox(o).y1 > HORIZON) return `on the ground ${col}`;
   }
   return REGION_PHRASE[regionOf(o.x, o.y)] ?? 'here';
@@ -254,7 +259,7 @@ const placePhrase = (o) => {
 function groupPhrase(objs, { positions = false } = {}) {
   const groups = new Map();
   for (const o of objs) {
-    const key = `${o.kind}|${o.who ?? ''}|${o.mood ?? ''}|${effectiveColor(o) ?? ''}|${sizeWord(o)}`;
+    const key = `${kindKey(o)}|${o.who ?? ''}|${o.mood ?? ''}|${effectiveColor(o) ?? ''}|${sizeWord(o)}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(o);
   }
@@ -264,8 +269,8 @@ function groupPhrase(objs, { positions = false } = {}) {
     if (sizeWord(o)) words.push(sizeWord(o));
     const c = effectiveColor(o);
     if (o.mood) words.push(o.mood);
-    if (c && !(o.kind === 'cloud' && !o.color) && !(o.who && !o.color)) words.push(o.color ?? c);
-    words.push(o.who ? WHO_PRESET[o.who].plural : pluralOfKind(o.kind, g.length));
+    if (c && !(kindKey(o) === 'cloud' && !o.color) && !(o.who && !o.color)) words.push(o.color ?? c);
+    words.push(o.who ? WHO_PRESET[o.who].plural : pluralOfKind(kindKey(o), g.length));
     return `${g.length} ${words.join(' ')}`;
   });
 }
@@ -327,15 +332,16 @@ export function parseNP(text) {
 /** A spoken part word without a kind ("roof"): { word, kinds } over every kind that has such a part. */
 function findPartWord(w) {
   const base = w.replace(/s$/, '');
-  const kinds = Object.keys(KINDS).filter((k) => KINDS[k].names && (partOfWord(k, w) || partOfWord(k, base)));
+  const here = [...new Set((curScene?.objects ?? []).map(kindKey).filter((k) => k.startsWith(COMPOSITE)))];   // the parts of the catalog things that are in the picture
+  const kinds = [...Object.keys(KINDS), ...here].filter((k) => KINDS[k]?.names && (partOfWord(k, w) || partOfWord(k, base)));
   return kinds.length ? { word: w, kinds } : null;
 }
 
 /** Objects that match a parsed noun phrase, with what to do about several matches. */
 function matches(s, np) {
   let list = s.objects.slice();
-  if (np.kind && np.kind !== '*') list = list.filter((o) => o.kind === np.kind);
-  if (np.part && np.partKinds) list = list.filter((o) => np.partKinds.includes(o.kind));
+  if (np.kind && np.kind !== '*') list = list.filter((o) => kindKey(o) === np.kind);
+  if (np.part && np.partKinds) list = list.filter((o) => np.partKinds.includes(kindKey(o)));
   if (np.color) list = list.filter((o) => sameColorName(effectiveColor(o), np.color) || sameColorName(partColor(o, np.part), np.color));
   return list;
 }
@@ -375,8 +381,8 @@ export function resolveNP(s, np, { many = false } = {}) {
   if (!list.length) {
     let hint = s.objects.length ? '' : ' Your picture is empty. Try "draw a red house".';
     if (np.color && np.kind && np.kind !== '*') {
-      const other = s.objects.filter((o) => o.kind === np.kind);
-      if (other.length) hint = ` But there ${other.length === 1 ? 'is' : 'are'} ${andList(groupPhrase(other))}, so you can say "the ${np.kind}".`;
+      const other = s.objects.filter((o) => kindKey(o) === np.kind);
+      if (other.length) hint = ` But there ${other.length === 1 ? 'is' : 'are'} ${andList(groupPhrase(other))}, so you can say "the ${kindName(np.kind)}".`;
     }
     return { ...out, error: `I can not find ${label} in your picture.${hint}`, missing: true };
   }
@@ -386,7 +392,7 @@ export function resolveNP(s, np, { many = false } = {}) {
     const pool = np.kind && np.kind !== '*' && !np.color ? list.slice() : list;
     pool.sort((a, b) => idNum(a) - idNum(b));
     const idx = np.ordinal === -1 ? pool.length - 1 : np.ordinal - 1;
-    if (!pool[idx]) return { ...out, error: `There ${pool.length === 1 ? 'is only 1' : `are only ${pool.length}`} ${pool.length === 1 ? np.kind ?? 'one' : pluralOfKind(np.kind ?? 'thing')} in your picture, so there is no ${ORDINAL_WORD[np.ordinal] ?? 'last'} one.`, missing: true };
+    if (!pool[idx]) return { ...out, error: `There ${pool.length === 1 ? 'is only 1' : `are only ${pool.length}`} ${pool.length === 1 ? (np.kind && kindName(np.kind)) ?? 'one' : pluralOfKind(np.kind ?? 'thing')} in your picture, so there is no ${ORDINAL_WORD[np.ordinal] ?? 'last'} one.`, missing: true };
     out.objs = [pool[idx]]; return out;
   }
   if (np.size && list.length > 1) {
@@ -402,13 +408,13 @@ export function resolveNP(s, np, { many = false } = {}) {
   const pick = sel ?? recent ?? newest;
   const order = sameKindOrder(s, pick);
   out.objs = [pick];
-  out.note = `There are ${list.length} ${pluralOfKind(pick.kind, list.length)}, so I took the ${order} one. You can say "the first ${pick.kind}" or "all the ${pluralOfKind(pick.kind)}".`;
+  out.note = `There are ${list.length} ${pluralOfKind(kindKey(pick), list.length)}, so I took the ${order} one. You can say "the first ${kindName(kindKey(pick))}" or "all the ${pluralOfKind(kindKey(pick))}".`;
   out.ambiguous = list.length;
   return out;
 }
 const idNum = (o) => Number(String(o.id).replace(/\D/g, '')) || 0;
 const sameKindOrder = (s, o) => {
-  const list = sameKind(s, o.kind).sort((a, b) => idNum(a) - idNum(b));
+  const list = sameKind(s, kindKey(o)).sort((a, b) => idNum(a) - idNum(b));
   const i = list.findIndex((x) => x.id === o.id);
   return i === list.length - 1 && list.length > 1 ? 'last' : ORDINAL_WORD[i + 1] ?? `${i + 1}th`;
 };
@@ -417,7 +423,7 @@ function describeWanted(np) {
   if (np.size) bits.push(np.size === 'big' ? 'big' : 'small');
   if (np.color) bits.push(np.color);
   const many = np.plural || np.all;
-  if (np.kind && np.kind !== '*') bits.push(many ? pluralOfKind(np.kind) : np.kind); else if (np.part) bits.push(np.part.replace(/s$/, '')); else bits.push('thing');
+  if (np.kind && np.kind !== '*') bits.push(many ? pluralOfKind(np.kind) : kindName(np.kind)); else if (np.part) bits.push(np.part.replace(/s$/, '')); else bits.push('thing');
   const t = bits.join(' ');
   return many ? t : `${a_(t)} ${t}`;   // RP5c: "red circles" (plural, no "any"), so the Romanian reply agrees
 }
@@ -496,7 +502,7 @@ function overlapRatio(a, b) {
   return (x * y) / Math.max(1, Math.min(a.w * a.h, b.w * b.h));
 }
 const sameLayer = (a, b) => {
-  const la = anchorOf(a.kind), lb = anchorOf(b.kind);
+  const la = anchorOf(kindKey(a)), lb = anchorOf(kindKey(b));
   if (la === 'any' || lb === 'any') return true;
   const g = (x) => (x === 'horizon' || x === 'water' ? 'ground' : x);
   return g(la) === g(lb);
@@ -518,22 +524,22 @@ const SKY_X = [850, 150, 500, 330, 690, 60, 940, 230, 780];
  */
 function waterSpot(s, o) {
   const pond = s.objects.find((x) => x.tag === 'pond');
-  if (!pond && s.ground !== 'sea' && !NEEDS.has(o.kind)) return null;   // no water and the thing can do without: it stands where things of the ground stand
-  if (pond) { placeNote = `I put the ${o.kind} in the pond.`; return { x: pond.x, y: pond.y }; }
-  if (s.ground === 'sea') { placeNote = `I put the ${o.kind} in the water.`; return null; }
-  if (!s.ground && !s.objects.some((x) => onGround(x.kind))) { s.ground = 'sea'; s.groundColor = 'blue'; placeNote = `I added some water for the ${o.kind}.`; return null; }
+  if (!pond && s.ground !== 'sea' && !NEEDS.has(kindKey(o))) return null;   // no water and the thing can do without: it stands where things of the ground stand
+  if (pond) { placeNote = `I put the ${kindName(kindKey(o))} in the pond.`; return { x: pond.x, y: pond.y }; }
+  if (s.ground === 'sea') { placeNote = `I put the ${kindName(kindKey(o))} in the water.`; return null; }
+  if (!s.ground && !s.objects.some((x) => onGround(kindKey(x)))) { s.ground = 'sea'; s.groundColor = 'blue'; placeNote = `I added some water for the ${kindName(kindKey(o))}.`; return null; }
   const p = makeObject(s, 'oval', { color: 'blue', tag: 'pond' });
   p.size = 260; p.z = o.z - 1;
   defaultSpotOn(s, p, 'ground');
   s.objects.push(p);
-  placeNote = `I made a pond for the ${o.kind}.`;
+  placeNote = `I made a pond for the ${kindName(kindKey(o))}.`;
   return { x: p.x, y: p.y };
 }
 
 /** Free spot for a new object by the default rules of its kind. */
 function defaultSpot(s, o) {
   const b0 = bbox(o);
-  let anchor = anchorOf(o.kind);
+  let anchor = anchorOf(kindKey(o));
   if (anchor === 'water') {   // a thing of the water goes into the water that is in the picture, else the water is made first (common.sense: fish live in water)
     const spot = waterSpot(s, o);
     if (spot) { o.x = spot.x; o.y = spot.y; clampIn(o); return; }
@@ -545,10 +551,10 @@ function defaultSpot(s, o) {
   } else if (anchor === 'horizon') {
     for (const x of [680, 300, 500, 130, 880]) cand.push([x, HORIZON + 28 - b0.h / 2]);
   } else if (anchor === 'sky') {
-    const pref = o.kind === 'sun' || o.kind === 'moon' ? [[850, 120], [150, 120], [500, 100]] : o.kind === 'rainbow' ? [[500, 240], [380, 250], [620, 250]] : [];
+    const pref = kindKey(o) === 'sun' || kindKey(o) === 'moon' ? [[850, 120], [150, 120], [500, 100]] : kindKey(o) === 'rainbow' ? [[500, 240], [380, 250], [620, 250]] : [];
     cand.push(...pref);
     for (const y of [120, 230, 330, 70, 400]) for (const x of SKY_X) cand.push([x, y]);
-    for (const c of cand) c[1] = Math.min(c[1], HORIZON - 30 - b0.h / 2 + (o.kind === 'rainbow' ? 120 : 0));
+    for (const c of cand) c[1] = Math.min(c[1], HORIZON - 30 - b0.h / 2 + (kindKey(o) === 'rainbow' ? 120 : 0));
   } else {
     for (const [x, y] of [[500, 330], [250, 250], [750, 250], [250, 450], [750, 450], [500, 150], [500, 520], [120, 330], [880, 330]]) cand.push([x, y]);
   }
@@ -565,7 +571,7 @@ function defaultSpot(s, o) {
 /** Place `o` by a named region. */
 function placeRegion(s, o, region) {
   const b = bbox(o);
-  const spot = placeInRegion(region, b.w, b.h, anchorOf(o.kind));
+  const spot = placeInRegion(region, b.w, b.h, anchorOf(kindKey(o)));
   o.x = spot.x; o.y = spot.y;
   if (region === 'sky' || region === 'ground') o.zone = region;   // the user named the sky or the ground: common.sense may say it when that is not where such a thing usually is
   if (region === 'ground') { // a free spot on the ground band
@@ -576,7 +582,7 @@ function placeRegion(s, o, region) {
   for (let i = 0; i < 6 && crowd(s, o) > 0.45; i++) { o.x += (o.x < W / 2 ? 1 : -1) * Math.max(40, b.w * 0.8); clampIn(o); }
 }
 function defaultSpotOn(s, o, anchor) {
-  const saved = anchorOf(o.kind);
+  const saved = anchorOf(kindKey(o));
   const b0 = bbox(o);
   let best = null, bestScore = Infinity;
   for (const x of GROUND_X) {
@@ -591,10 +597,10 @@ function defaultSpotOn(s, o, anchor) {
 
 /** Place `o` relative to other objects (already resolved). `side` is used only by next/leftof/rightof. */
 function placeRelative(s, o, rel, refs) {
-  const gap = 24, b = bbox(o), k = KINDS[o.kind];
+  const gap = 24, b = bbox(o), k = KINDS[kindKey(o)];
   const R0 = bbox(refs[0]);
-  const ground = onGround(o.kind) || anchorOf(o.kind) === 'water';
-  const alignY = (r) => (ground && (anchorOf(refs[0].kind) === 'ground') ? r.y1 - b.h / 2 : r.cy);
+  const ground = onGround(kindKey(o)) || anchorOf(kindKey(o)) === 'water';
+  const alignY = (r) => (ground && (anchorOf(kindKey(refs[0])) === 'ground') ? r.y1 - b.h / 2 : r.cy);
   const place = { x: o.x, y: o.y };
   const sideX = (dir, r) => (dir > 0 ? r.x1 + gap + b.w / 2 : r.x0 - gap - b.w / 2);
   switch (rel) {
@@ -637,7 +643,7 @@ const Z_LAYER = { mountain: -3000, rainbow: -2000, sun: -1000, moon: -1000, clou
 function makeObject(s, kind, { color = null, factor = 1, fill = null, tag = null } = {}) {
   const k = KINDS[kind];
   const o = {
-    id: `o${s.nextId++}`, kind, x: W / 2, y: H / 2, size: Math.round(k.size * factor), color: color ? canonColor(color) : null,
+    id: `o${s.nextId++}`, kind: kind.startsWith(COMPOSITE) ? 'composite' : kind, ...(kind.startsWith(COMPOSITE) ? { thing: kindName(kind) } : {}), x: W / 2, y: H / 2, size: Math.round(k.size * factor), color: color ? canonColor(color) : null,
     fill: fill ?? k.fill ?? 'crayon', rotation: 0, flip: false, z: (Z_LAYER[kind] ?? 0) + s.nextId, parts: {},
   };
   if (tag) o.tag = tag;
@@ -711,7 +717,7 @@ function resolveRefs(s, refTexts) {
       defaultSpot(s, o); s.objects.push(o); refs.push(o); drawn.push(o);
       continue;
     }
-    return { refs, drawn, error: r.error ?? `I can not find "${text}" in your picture.`, missing: true, missingKind: np.kind && np.kind !== '*' ? np.kind : null };
+    return { refs, drawn, error: r.error ?? `I can not find "${text}" in your picture.`, missing: true, missingKind: np.kind && np.kind !== '*' ? kindName(np.kind) : null };
   }
   return { refs, drawn };
 }
@@ -803,7 +809,59 @@ function readSpec(args, tailWords) {
   return { kind, count, color, factor, comp, who, mood, tail: tailWords, mods, plural, explicit: explicitN !== null };
 }
 
+// ---- "draw a lighthouse", "add a third window": the noun is an open slot, looked up after the reading (spec 07 section 7) ------------------------------------------
+/** The words of the open slot: size and colour words, an ordinal, and the noun (the last word). */
+function readOpen(text) {
+  const words = toks(text), noun = words.at(-1) ?? '', lead = words.slice(0, -1);
+  const ord = lead.map((w) => ORDINALS[w]).find((n) => n > 0) ?? null;
+  const mods = lead.filter((w) => isShade(w) || isColorWord(w) || Object.hasOwn(SIZE_WORDS, w) || Object.hasOwn(COMPARATIVES, w) || Object.hasOwn(MOOD_WORDS, w));
+  return { noun, mods, ord };
+}
+/** "add a third window": one more instance of a part of a thing in the picture (or the part put back after it was taken away). */
+function addPartTo(ctx, s, { noun, ord, mods }) {
+  const hasPart = (o) => partOfWord(kindKey(o), noun) ?? partOfWord(kindKey(o), noun.replace(/s$/, ''));
+  const owners = s.objects.filter((o) => hasPart(o));
+  if (!owners.length) return null;
+  const sel = owners.find((o) => o.id === s.selected), recent = owners.filter((o) => s.last.includes(o.id)).sort((a, b) => idNum(b) - idNum(a))[0];
+  const o = sel ?? recent ?? owners.sort((a, b) => idNum(b) - idNum(a))[0];
+  const key = hasPart(o);
+  const label = partLabel(key), one = label.replace(/s$/, '');
+  const hidden = (o.hide ?? []).includes(key);
+  const have = hidden ? 0 : partCount(o, key);
+  remember(s, `added ${a_(one)} ${one}`);
+  let said;
+  if (hidden) {
+    o.hide = o.hide.filter((k) => k !== key);
+    said = `I put the ${one} back on ${sayObj(o)}.`;
+  } else {
+    const want = ord ?? have + 1;
+    if (want <= have) { s.history.pop(); return no(`${cap1(sayObj(o))} already has ${have === 1 ? `1 ${one}` : `${have} ${label}`}, so there is already ${ord ? `a ${ORDINAL_WORD[ord] ?? `${ord}th`}` : 'one'}.`, 'unsupported'); }
+    if (want > 12) { s.history.pop(); return no('That is a lot of them. I can put up to 12 of one part on a thing.', 'unsupported'); }
+    o.extra = { ...(o.extra ?? {}), [key]: want - (have - (o.extra?.[key] ?? 0)) };
+    said = `I added ${ord ? `a ${ORDINAL_WORD[ord]} ` : 'another '}${one} to ${sayObj(o)}. It has ${want} now.`;
+  }
+  if (mods.length) { const c = colorFrom(mods.filter((m) => isShade(m) || isColorWord(m))); if (c) { o.parts = { ...o.parts, [key]: c }; said += ` The ${label} ${/s$/.test(label) ? 'are' : 'is'} ${c}.`; } }
+  s.last = [o.id];
+  open(ctx);
+  return ok(`${opener(s)} ${said}`, { data: { made: [o.id] } });
+}
+/** Resolves the open slot of `draw.add`: a thing to draw (args are rewritten with its word as the kind), a part to add, or the plain "I don't know how to draw ..." reply. */
+function openAdd(ctx, s, args) {
+  const { noun, mods, ord } = readOpen(args.open);
+  if (!noun) return { done: no('What should I draw?', 'missing') };
+  const k = kindOfWord(noun);
+  if (k && k.kind !== '*') {
+    const m = Object.fromEntries(mods.slice(0, 3).map((w, i) => [`m${i + 1}`, w]));
+    return { args: { ...args, ...m, kind: noun, kt: noun, open: undefined } };
+  }
+  const part = addPartTo(ctx, s, { noun, ord, mods });
+  if (part) return { done: part };
+  const plural = /s$/.test(noun) && noun.length > 3;
+  return { done: no(`I don't know how to draw ${plural ? noun : `${a_(noun)} ${noun}`} yet.`, 'unsupported') };
+}
+
 export const add = guard((ctx, args, s) => {
+  if (args.open !== undefined) { const r = openAdd(ctx, s, args); if (r.done) return r.done; args = r.args; }
   const words0 = toks(args.where ?? '');
   const spec0 = readSpec({ ...args, have: sameKind(s, kindOfWord(args.kind)?.kind).length });
   const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
@@ -861,7 +919,7 @@ export const add = guard((ctx, args, s) => {
     // "a bigger house": relative to the existing house (the newest one); without one, a plain big or small one
     const ref = sameKind(s, spec0.kind).at(-1);
     const base = KINDS[spec0.kind].size * (spec0.who ? WHO_PRESET[spec0.who].factor : 1);
-    if (ref) { factor = (ref.size / base) * (spec0.comp > 0 ? COMPARATIVE_STEP : 1 / COMPARATIVE_STEP); sized = true; compNote = ` (${spec0.comp > 0 ? 'bigger' : 'smaller'} than the ${ref.who ?? ref.kind} I had)`; }
+    if (ref) { factor = (ref.size / base) * (spec0.comp > 0 ? COMPARATIVE_STEP : 1 / COMPARATIVE_STEP); sized = true; compNote = ` (${spec0.comp > 0 ? 'bigger' : 'smaller'} than the ${ref.who ?? kindKey(ref)} I had)`; }
     else { factor = spec0.comp > 0 ? 1.5 : 0.65; compNote = ` (there was no ${spec0.kind} to compare with, so I made it ${spec0.comp > 0 ? 'big' : 'small'})`; }
   }
   const made = addThing(s, { kind: spec0.kind, who: spec0.who, mood: spec0.mood, sized, count, color: spec0.who ? null : color, dress: color, factor, parts: withParts.parts, place: place.rel ? { rel: place.rel } : place.region ? { region: place.region } : null, refs }, null);
@@ -873,7 +931,7 @@ export const add = guard((ctx, args, s) => {
     if (sub) { const r = add(ctx, sub); if (r.status === 'supported') { extra = r.data?.made ?? []; s.history.splice(-2, 1); } else if (r.status !== 'supported') { s.last = made.map((o) => o.id); return ok(`${opener(s)} I drew ${groupPhrase(made).join(' and ')}. But ${r.note.charAt(0).toLowerCase()}${r.note.slice(1)}`, { data: { made: all.map((o) => o.id) } }); } }
   }
   s.last = [...made, ...extra.map((id) => byId(s, id)).filter(Boolean)].map((o) => o.id);
-  s.mood = s.mood === 'night' && made.some((o) => o.kind === 'sun') ? s.mood : s.mood;
+  s.mood = s.mood === 'night' && made.some((o) => kindKey(o) === 'sun') ? s.mood : s.mood;
   open(ctx);
   const extras = extra.map((id) => byId(s, id)).filter(Boolean);
   const unique = [...new Set([...all, ...extras])];
@@ -976,14 +1034,14 @@ export const recolor = guard((ctx, args, s) => {
   if (part) {
     const done = [];
     for (const o of objs) {
-      const key = partOfWord(o.kind, part) ?? partOfWord(o.kind, part.replace(/s$/, ''));
+      const key = partOfWord(kindKey(o), part) ?? partOfWord(kindKey(o), part.replace(/s$/, ''));
       if (key) { o.parts[key] = color; done.push(o); }
     }
     if (!done.length) { s.history.pop(); const k = objs[0]?.kind; return no(`${k ? `A ${k} has no ${part.replace(/s$/, '')}. ` : ''}${k ? `You can color its ${andList(partNames(k).map(partLabel))}.` : 'I can not find that part.'}`, 'unsupported'); }
     s.last = done.map((o) => o.id);
     open(ctx);
-    const key0 = partOfWord(done[0].kind, part) ?? part;
-    return ok(withNote(`${opener(s)} The ${partLabel(key0)} of ${done.length > 1 ? 'the ' + pluralOfKind(done[0].kind) : sayObj(done[0])} ${/s$/.test(partLabel(key0)) && key0 !== 'crown' ? 'are' : 'is'} ${color} now.`, r));
+    const key0 = partOfWord(kindKey(done[0]), part) ?? part;
+    return ok(withNote(`${opener(s)} The ${partLabel(key0)} of ${done.length > 1 ? 'the ' + pluralOfKind(kindKey(done[0])) : sayObj(done[0])} ${/s$/.test(partLabel(key0)) && key0 !== 'crown' ? 'are' : 'is'} ${color} now.`, r));
   }
   for (const o of objs) {
     o.color = color;
@@ -991,8 +1049,8 @@ export const recolor = guard((ctx, args, s) => {
   }
   s.last = objs.map((o) => o.id);
   open(ctx);
-  const name = objs.length === 1 ? sayObj(objs[0]) : `the ${pluralOfKind(objs[0].kind, objs.length)}`;
-  const sameKinds = new Set(objs.map((o) => o.kind)).size === 1;
+  const name = objs.length === 1 ? sayObj(objs[0]) : `the ${pluralOfKind(kindKey(objs[0]), objs.length)}`;
+  const sameKinds = new Set(objs.map((o) => kindKey(o))).size === 1;
   return ok(withNote(`${opener(s)} ${cap1(sameKinds || objs.length === 1 ? name : `${objs.length} things`)} ${objs.length > 1 ? 'are' : 'is'} ${color} now.`, r));
 });
 const cap1 = (t) => t.charAt(0).toUpperCase() + t.slice(1);
@@ -1024,7 +1082,7 @@ export const resize = guard((ctx, args, s) => {
   remember(s, up ? 'made it bigger' : 'made it smaller');
   let capped = false;
   for (const o of r.objs) {
-    const k = KINDS[o.kind], min = Math.max(24, k.size * 0.2), max = Math.min(1100, k.size * 6);
+    const k = KINDS[kindKey(o)], min = Math.max(24, k.size * 0.2), max = Math.min(1100, k.size * 6);
     const next = Math.round(o.size * factor);
     if (next > max || next < min) capped = true;
     o.size = Math.min(max, Math.max(min, next));
@@ -1033,7 +1091,7 @@ export const resize = guard((ctx, args, s) => {
   }
   s.last = r.objs.map((o) => o.id);
   open(ctx);
-  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(r.objs[0].kind, r.objs.length)}`;
+  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
   return ok(withNote(`${opener(s)} I made ${r.everything ? 'everything' : name} ${up ? 'bigger' : 'smaller'}${capped ? ' (that is as far as it goes!)' : ''}.`, r));
 });
 
@@ -1050,13 +1108,13 @@ export const matchSize = guard((ctx, args, s) => {
   remember(s, 'matched a size');
   for (const o of r.objs) {
     if (o.id === r0.id) continue;
-    const k = KINDS[o.kind];
+    const k = KINDS[kindKey(o)];
     o.size = Math.min(1100, Math.max(Math.max(24, k.size * 0.2), r0.size));
     clampIn(o);
   }
   s.last = r.objs.map((o) => o.id);
   open(ctx);
-  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(r.objs[0].kind, r.objs.length)}`;
+  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
   return ok(`${opener(s)} ${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} now the same size as ${sayObj(r0)}.`);
 });
 
@@ -1072,13 +1130,13 @@ export const setSize = guard((ctx, args, s) => {
   if (r.special) return no('I can only change the size of things you drew. The sky and the ground fill the whole page.');
   remember(s, `made it ${word}`);
   for (const o of r.objs) {
-    const k = KINDS[o.kind];
+    const k = KINDS[kindKey(o)];
     o.size = Math.round(k.size * factor);
-    if (onGround(o.kind)) clampIn(o);
+    if (onGround(kindKey(o))) clampIn(o);
   }
   s.last = r.objs.map((o) => o.id);
   open(ctx);
-  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(r.objs[0].kind, r.objs.length)}`;
+  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
   return ok(withNote(`${opener(s)} ${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} ${word} now.`, r));
 });
 
@@ -1206,7 +1264,7 @@ export const move = guard((ctx, args, s) => {
   if (res.error) { s.history.pop(); return no(res.error, 'missing'); }
   s.last = r.objs.map((o) => o.id);
   open(ctx);
-  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(r.objs[0].kind, r.objs.length)}`;
+  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
   const where = d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'region' ? ` ${describePlacing(null, { region: d.region }, [])}`.replace(/\s+/g, ' ') : d.kind === 'z' ? ` to the ${d.dir}` : '';
   const relText = d.kind === 'rel' ? describePlacing(r.objs[0], { rel: d.rel }, d.refs.map((x) => resolveNP(s, parseNP(x)).objs[0] ?? r.objs[0])) : '';
   const regionText = d.kind === 'region' ? describePlacing(null, { region: d.region }, []) : '';
@@ -1258,7 +1316,7 @@ export const turn = guard((ctx, args, s) => {
   remember(s, 'turned something');
   let say = 'around';
   for (const o of r.objs) {
-    const k = KINDS[o.kind];
+    const k = KINDS[kindKey(o)];
     if (action === 'flip') { o.flip = !o.flip; }
     else if (action === 'face') {
       const want = dirWord ?? 'right';
@@ -1272,7 +1330,7 @@ export const turn = guard((ctx, args, s) => {
   }
   s.last = r.objs.map((o) => o.id);
   open(ctx);
-  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(r.objs[0].kind, r.objs.length)}`;
+  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
   return ok(withNote(`${opener(s)} I turned ${name} ${say}.`, r));
 });
 
@@ -1312,6 +1370,18 @@ export const remove = guard((ctx, args, s) => {
     if (!np.known && !np.kind && !np.special && !np.pron) return no(`I do not know what "${text}" is. You can say the car, the tree, the sky, the grass, or everything.`);
     const r = resolveNP(s, np, { many: true });
     if (r.error) return no(r.error, 'missing');
+    // "remove the chimney": a part of a thing goes, not the thing (the part comes back with "add a chimney")
+    const pw = r.part ?? np.part;
+    const partKey = (o) => pw && (partOfWord(kindKey(o), pw) ?? partOfWord(kindKey(o), String(pw).replace(/s$/, '')));
+    if (pw && !r.special && r.objs.length && r.objs.every((o) => partKey(o))) {
+      remember(s, 'removed a part');
+      const gone = [];
+      for (const o of r.objs) { const key = partKey(o); if (!(o.hide ?? []).includes(key)) { o.hide = [...(o.hide ?? []), key]; gone.push(`the ${partLabel(key)} of ${sayObj(o)}`); } }
+      if (!gone.length) { s.history.pop(); return no('That part is already gone.', 'missing'); }
+      s.last = r.objs.map((o) => o.id);
+      open(ctx);
+      return ok(`${opener(s)} I took away ${andList(gone)}.`);
+    }
     plan.push(r);
   }
   remember(s, 'removed something');
@@ -1383,7 +1453,7 @@ export const fillMode = guard((ctx, args, s) => {
   for (const o of r.objs) o.fill = mode;
   s.last = r.objs.map((o) => o.id);
   open(ctx);
-  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(r.objs[0].kind, r.objs.length)}`;
+  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
   return ok(withNote(`${opener(s)} ${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} ${mode === 'outline' ? 'just an outline' : mode === 'solid' ? 'filled in' : 'colored in with crayon'} now.`, r));
 });
 
@@ -1397,8 +1467,9 @@ export const duplicate = guard((ctx, args, s) => {
   const copies = [];
   for (const src of r.objs.slice(0, 1)) {
     for (let i = 0; i < n; i++) {
-      const o = makeObject(s, src.kind, { color: src.color, factor: src.size / KINDS[src.kind].size, fill: src.fill });
+      const o = makeObject(s, kindKey(src), { color: src.color, factor: src.size / KINDS[kindKey(src)].size, fill: src.fill });
       o.parts = { ...src.parts }; o.flip = src.flip; o.rotation = src.rotation;
+      if (src.thing) o.thing = src.thing; if (src.extra) o.extra = { ...src.extra }; if (src.hide) o.hide = [...src.hide];
       defaultSpot(s, o);
       if (crowd(s, o) > 0.3) { const b = bbox(o); o.x = Math.min(W - b.w / 2 - 10, src.x + b.w + 20); o.y = src.y; clampIn(o); }
       s.objects.push(o); copies.push(o);
@@ -1423,8 +1494,8 @@ export const setMood = guard((ctx, args, s) => {
   let line;
   if (mood === 'night') {
     // the sun goes to sleep (kept, so that "make it day" can bring it back)
-    const suns = s.objects.filter((o) => o.kind === 'sun');
-    if (suns.length) { s.sunStash = suns.map((o) => ({ ...o, parts: { ...o.parts } })); s.objects = s.objects.filter((o) => o.kind !== 'sun'); }
+    const suns = s.objects.filter((o) => kindKey(o) === 'sun');
+    if (suns.length) { s.sunStash = suns.map((o) => ({ ...o, parts: { ...o.parts } })); s.objects = s.objects.filter((o) => kindKey(o) !== 'sun'); }
     s.sky = 'navy'; s.mood = 'night';
     const moon = makeObject(s, 'moon', { tag: 'night' });
     moon.x = 830; moon.y = 120; moon.z = Z_LAYER.moon + s.nextId;
@@ -1440,7 +1511,7 @@ export const setMood = guard((ctx, args, s) => {
     line = 'It is night now: a dark sky, a moon and lots of stars.';
   } else if (mood === 'day') {
     s.sky = 'light blue'; s.mood = 'day';
-    const hasSun = s.objects.some((o) => o.kind === 'sun');
+    const hasSun = s.objects.some((o) => kindKey(o) === 'sun');
     if (!hasSun) {
       const stash = s.sunStash?.[0];
       const sun = stash ? { ...stash, id: `o${s.nextId++}`, parts: { ...stash.parts } } : makeObject(s, 'sun');
@@ -1448,13 +1519,13 @@ export const setMood = guard((ctx, args, s) => {
       s.objects.push(sun);
     }
     s.sunStash = [];
-    const sunNow = s.objects.find((o) => o.kind === 'sun');
+    const sunNow = s.objects.find((o) => kindKey(o) === 'sun');
     if (sunNow && s.sunPose) { Object.assign(sunNow, s.sunPose); s.sunPose = null; }
     s.last = [];
     line = 'It is a bright sunny day!';
   } else {
     s.sky = 'orange'; s.mood = 'sunset';
-    const sun = s.objects.find((o) => o.kind === 'sun') ?? (() => { const o = makeObject(s, 'sun'); defaultSpot(s, o); s.objects.push(o); return o; })();
+    const sun = s.objects.find((o) => kindKey(o) === 'sun') ?? (() => { const o = makeObject(s, 'sun'); defaultSpot(s, o); s.objects.push(o); return o; })();
     s.sunPose = { x: sun.x, y: sun.y, size: sun.size, color: sun.color };
     sun.x = 500; sun.y = HORIZON - 40; sun.color = 'orange'; sun.size = Math.round(KINDS.sun.size * 1.8);
     s.last = [sun.id];
@@ -1498,7 +1569,7 @@ export const describe = guard((ctx, args, s) => {
     // things that appear once are placed; groups are counted
     const singles = [], groups = new Map();
     for (const o of sorted) {
-      const key = `${o.kind}|${effectiveColor(o)}|${sizeWord(o)}`;
+      const key = `${kindKey(o)}|${effectiveColor(o)}|${sizeWord(o)}`;
       groups.set(key, [...(groups.get(key) ?? []), o]);
     }
     for (const g of groups.values()) singles.push(g.length === 1 ? `${describeObject(g[0])} ${placePhrase(g[0])}` : groupPhrase(g)[0] + (new Set(g.map((o) => regionOf(o.x, o.y))).size === 1 ? ` ${placePhrase(g[0])}` : ''));
@@ -1518,7 +1589,7 @@ export const count = guard((ctx, args, s) => {
   if (!k) return no(`I do not know what "${args.kind}" is.`);
   const color = colorFrom(mods.filter((m) => isShade(m) || isColorWord(m)));
   let list = s.objects;
-  if (k.kind !== '*') list = list.filter((o) => o.kind === k.kind);
+  if (k.kind !== '*') list = list.filter((o) => kindKey(o) === k.kind);
   if (color) list = list.filter((o) => sameColorName(effectiveColor(o), color));
   const label = k.kind === '*' ? 'things' : pluralOfKind(k.kind, 2);
   const desc = `${color ? `${color} ` : ''}${label}`;
@@ -1532,7 +1603,7 @@ export const exists = guard((ctx, args, s) => {
   const k = kindOfWord(args.kind);
   if (!k) return no(`I do not know what "${args.kind}" is.`);
   const color = colorFrom(mods.filter((m) => isShade(m) || isColorWord(m)));
-  let list = s.objects.filter((o) => k.kind === '*' || o.kind === k.kind);
+  let list = s.objects.filter((o) => k.kind === '*' || kindKey(o) === k.kind);
   if (color) list = list.filter((o) => sameColorName(effectiveColor(o), color));
   const name = `${color ? `${color} ` : ''}${k.kind === '*' ? 'thing' : k.kind}`;
   if (!list.length) return ok(`No, there is no ${name} in your picture yet.`);
@@ -1555,7 +1626,7 @@ export const whereIs = guard((ctx, args, s) => {
     return ok(withNote(`${cap1(sayObj(o))} is ${placePhrase(o)}.${nearText}`, r));
   }
   const places = objs.map((o) => placePhrase(o));
-  return ok(`There are ${objs.length} ${pluralOfKind(objs[0].kind, objs.length)}: ${andList(places)}.`);
+  return ok(`There are ${objs.length} ${pluralOfKind(kindKey(objs[0]), objs.length)}: ${andList(places)}.`);
 });
 
 export const whatsNear = guard((ctx, args, s) => {
@@ -1578,8 +1649,8 @@ export const colorOfThing = guard((ctx, args, s) => {
   if (r.special === 'ground') return ok(s.ground ? `The ${GROUND_NAME[s.ground]} is ${s.groundColor}.` : 'There is no ground yet. You can say "add grass".');
   if (r.special === 'background') return ok(`The paper is ${s.background === 'white' ? 'white' : s.background}.`);
   const o = r.objs[0];
-  const part = np.part ? partOfWord(o.kind, np.part) : null;
-  if (part) { const c = o.parts?.[part] ?? KINDS[o.kind].build?.().find((p) => p.n === part)?.c; return ok(`The ${partLabel(part)} of ${sayObj(o)} ${/s$/.test(partLabel(part)) ? 'are' : 'is'} ${c}.`); }
+  const part = np.part ? partOfWord(kindKey(o), np.part) : null;
+  if (part) { const c = o.parts?.[part] ?? KINDS[kindKey(o)].build?.().find((p) => p.n === part)?.c; return ok(`The ${partLabel(part)} of ${sayObj(o)} ${/s$/.test(partLabel(part)) ? 'are' : 'is'} ${c}.`); }
   const c = effectiveColor(o);
   return ok(withNote(c ? `${cap1(sayObj(o))} is ${c}.` : `${cap1(sayObj(o))} has many colors.`, r));
 });
@@ -1608,7 +1679,7 @@ export const scene = guard((ctx, args, s) => {
   const palette = ['red', 'orange', 'yellow', 'pink', 'purple', 'blue'];
   const pick = () => palette[Math.floor(rnd(s) * palette.length)];
   const made = [];
-  if (!s.objects.some((o) => o.kind === 'sun')) made.push(make('sun'));
+  if (!s.objects.some((o) => kindKey(o) === 'sun')) made.push(make('sun'));
   made.push(make('cloud'), make('cloud', { factor: 0.8 }));
   if (rnd(s) < 0.6) made.push(make('mountain'));
   made.push(make('house', { color: pick() }), make('tree'), make('tree', { factor: 0.8 }));
@@ -1637,8 +1708,8 @@ export function referents(ctx) {
   const salient = new Set([...(s.last ?? []), ...(s.selected ? [s.selected] : [])]);
   const wordsOfKind = (k) => Object.entries(KIND_WORDS).filter(([, v]) => v === k).map(([w]) => w);
   return s.objects.filter((o) => !o.tag).map((o) => ({
-    id: o.id, kind: o.kind, noun: o.kind, words: wordsOfKind(o.kind), attrs: { color: effectiveColor(o), size: o.size, x: o.x, y: o.y },
-    salient: salient.has(o.id), sig: JSON.stringify([o.kind, o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.parts]),
+    id: o.id, kind: kindKey(o), noun: kindName(kindKey(o)), words: wordsOfKind(kindKey(o)), attrs: { color: effectiveColor(o), size: o.size, x: o.x, y: o.y },
+    salient: salient.has(o.id), sig: JSON.stringify([kindKey(o), o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.parts]),
   }));
 }
 /**

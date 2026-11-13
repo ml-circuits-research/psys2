@@ -7,6 +7,8 @@
 // object color, sh: lightness shift, f: fill override, t: stroke thickness in units, r: rotation in degrees }:
 //   rect/ellipse {x,y,w,h}   poly/line/curve {pts:[[x,y]...]}   arc {x,y,w,h,a0,a1} (radians, top half = PI..2*PI)
 
+import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs?v=4cd417b561';
+
 export const W = 1000, H = 700;
 export const HORIZON = 470;           // the sky ends and the ground begins here
 export const GROUND_BASE = 590;       // default baseline of things standing on the ground
@@ -139,7 +141,7 @@ const star = fit(starPts());
 const heart = fit(heartPts());
 const moon = crescentPts();
 
-export const KINDS = {
+const BUILTIN = {
   // ---- primitives
   circle: { prim: 1, size: 130, aspect: 1, color: 'red', build: () => [E('body', 0, 0, 1, 1, 'red', { m: 1 })] },
   oval: { prim: 1, size: 160, aspect: 0.6, color: 'purple', build: () => [E('body', 0, 0, 1, 0.6, 'purple', { m: 1 })] },
@@ -356,23 +358,181 @@ export const KINDS = {
   },
 };
 // aspect of kinds that were given by builders is fixed above; make sure each has one
-for (const k of Object.values(KINDS)) k.aspect ??= 1;
+for (const k of Object.values(BUILTIN)) k.aspect ??= 1;
+
+// ---- composite things drawn from facts (spec 07 section 7) --------------------------------------------------------------------------------------------------
+// An object of the catalog (knowledge/k.objects: parts with a primitive shape, a box x y w h in a 0-100 frame, a draw order, colours, points) is a kind like the
+// built-in ones: the key of its kind is `composite:<name>`, an object on the canvas says `kind: 'composite', thing: '<name>'`, and the same renderer draws its parts.
+export const COMPOSITE = 'composite:';
+// The built-in kinds whose facts (knowledge/art.draw.kinds, written by scripts/kinds-to-objects.mjs) draw the same picture as the hand-coded builder: they are drawn from
+// their facts, through thingBuild like every catalog thing. The others keep their hand-coded parts: the facts cannot say a line's thickness, a merged silhouette, a
+// lightness shift, a fill override or a second part that follows the object colour (the list is in spec 07 and in worker-log).
+export const KINDS_FROM_FACTS = ['circle', 'oval', 'square', 'rectangle', 'triangle', 'star', 'heart', 'moon'];
+const BASE_NAMES = new Set(Object.keys(BASE_COLORS));
+/** The catalog object a spoken word means ("lighthouse", "home" -> house, "robots" -> robot), or null. */
+export function thingOfWord(word) {
+  const w = String(word ?? '').toLowerCase();
+  if (Object.hasOwn(THING_WORDS, w)) return THING_WORDS[w];
+  for (const base of [w.endsWith('ies') ? `${w.slice(0, -3)}y` : null, w.endsWith('es') ? w.slice(0, -2) : null, w.endsWith('s') ? w.slice(0, -1) : null]) {
+    if (base && Object.hasOwn(THING_WORDS, base)) return THING_WORDS[base];
+  }
+  return null;
+}
+export const isThing = (name) => Object.hasOwn(THINGS, name);
+/** The key of an object's kind: its kind, or `composite:<thing>`. */
+export const kindKey = (o) => (o?.kind === 'composite' && o.thing ? COMPOSITE + o.thing : o?.kind);
+/** The spoken name of a kind key ("composite:castle" -> "castle"). */
+export const kindName = (key) => (String(key).startsWith(COMPOSITE) ? String(key).slice(COMPOSITE.length) : key);
+
+const plural1 = (n) => (/(s|x|ch|sh)$/.test(n) ? `${n}es` : /[^aeiou]y$/.test(n) ? `${n.slice(0, -1)}ies` : `${n}s`);
+const hexOfPart = (p) => p.rgb ?? (BASE_NAMES.has(p.colour[0]) ? p.colour[0] : 'grey');
+const trianglePts = ({ x, y, w, h, pointing = 'up' }) => ({
+  up: [[x + w / 2, y], [x + w, y + h], [x, y + h]], down: [[x, y], [x + w, y], [x + w / 2, y + h]],
+  left: [[x, y + h / 2], [x + w, y], [x + w, y + h]], right: [[x + w, y + h / 2], [x, y], [x, y + h]],
+})[pointing] ?? [[x + w / 2, y], [x + w, y + h], [x, y + h]];
+
+/** The groups of a thing's parts: `key` (a part kind such as window, else the part name; plural when several), the member part names, the spoken words. */
+export function thingGroups(name, src = THINGS) {
+  const groups = new Map();
+  for (const p of src[name] ?? []) {
+    const base = p.kind ?? p.name.replace(/^(?:left|right|front|back|top|bottom|middle|upper|lower|inner|outer)_/, '');   // left_tower and right_tower are two towers
+    if (!groups.has(base)) groups.set(base, []);
+    groups.get(base).push(p);
+  }
+  const out = [];
+  for (const [base, members] of groups) {
+    const key = members.length > 1 ? plural1(base) : base;
+    const words = new Set([key, base, plural1(base), ...members.map((m) => m.name.replace(/_/g, ' '))]);
+    out.push({ key, base, members, words: [...words] });
+  }
+  return out;
+}
+const unitOf = (name, src = THINGS) => {
+  const ps = src[name] ?? [];
+  const xs = ps.flatMap((p) => [p.x, p.x + p.w]), ys = ps.flatMap((p) => [p.y, p.y + p.h]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), bw = Math.max(x1 - x0, 1), bh = Math.max(y1 - y0, 1);
+  return { x0, y0, bw, bh, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2 };
+};
+/** Local-space parts (the format of the built-in kinds) of a catalog object: scaled to the width of its content, centred. */
+export function thingBuild(name, src = THINGS) {
+  const u = unitOf(name, src), groups = thingGroups(name, src);
+  const list = [];
+  groups.forEach((g, gi) => {
+    g.members.forEach((p, mi) => list.push({ g, p, z: p.z, order: gi * 1000 + mi }));
+  });
+  list.sort((a, b) => a.z - b.z || a.order - b.order);
+  const fx = (v) => round((v - u.cx) / u.bw), fy = (v) => round((v - u.cy) / u.bw);
+  const area = (p) => (p.shape === 'line' || p.shape === 'arc' ? 0 : p.w * p.h);
+  const main = [...(src[name] ?? [])].sort((a, b) => area(b) - area(a))[0];
+  return list.map(({ g, p }) => {
+    const c = hexOfPart(p), cx = p.x + p.w / 2, cy = p.y + p.h / 2, o = { c: p.rgb ?? c };
+    if (p === main || (main && p.name === main.name)) o.m = 1;
+    const sw = round(p.w / u.bw), sh = round(p.h / u.bw);
+    switch (p.shape) {
+      case 'rectangle': case 'square': return R(g.key, fx(cx), fy(cy), sw, sh, o.c, o);
+      case 'circle': case 'oval': return E(g.key, fx(cx), fy(cy), sw, sh, o.c, o);
+      case 'triangle': return P(g.key, trianglePts(p).map(([x, y]) => [fx(x), fy(y)]), o.c, o);
+      case 'polygon': return P(g.key, (p.points ?? trianglePts(p)).map(([x, y]) => [fx(x), fy(y)]), o.c, o);
+      case 'line': return L(g.key, (p.points ?? [[p.x, p.y], [p.x + p.w, p.y + p.h]]).map(([x, y]) => [fx(x), fy(y)]), o.c, { ...o, t: 0.02 });
+      case 'arc': {
+        const up = (p.opens ?? 'up') === 'up', down = p.opens === 'down', left = p.opens === 'left';
+        if (up || down) return A(g.key, fx(cx), fy(up ? p.y : p.y + p.h), sw, round((2 * p.h) / u.bw), up ? 0 : Math.PI, up ? Math.PI : Math.PI * 2, o.c, { ...o, t: 0.02 });
+        return A(g.key, fx(left ? p.x : p.x + p.w), fy(cy), round((2 * p.w) / u.bw), sh, left ? -Math.PI / 2 : Math.PI / 2, left ? Math.PI / 2 : (3 * Math.PI) / 2, o.c, { ...o, t: 0.02 });
+      }
+      default: return E(g.key, fx(cx), fy(cy), sw, sh, o.c, o);
+    }
+  });
+}
+const thingDefs = new Map();
+/** The kind definition of a catalog object (size, aspect, default colour, spoken part names, build), or undefined. */
+export function thingDef(name) {
+  if (!isThing(name)) return undefined;
+  if (thingDefs.has(name)) return thingDefs.get(name);
+  const u = unitOf(name), aspect = round(u.bh / u.bw), ps = THINGS[name];
+  const main = [...ps].sort((a, b) => b.w * b.h - a.w * a.h)[0];
+  const names = Object.fromEntries(thingGroups(name).map((g) => [g.key, g.words]));
+  const def = { size: Math.round(200 / Math.max(1, aspect)), aspect, color: main && BASE_NAMES.has(main.colour[0]) && !main.rgb ? main.colour[0] : null, names, thing: name, composite: true, build: () => thingBuild(name) };
+  thingDefs.set(name, def);
+  return def;
+}
+const HAND_BUILD = Object.fromEntries(KINDS_FROM_FACTS.map((k) => [k, BUILTIN[k].build]));
+for (const k of KINDS_FROM_FACTS) if (KIND_THINGS[k]) BUILTIN[k].build = () => thingBuild(k, KIND_THINGS);
+/** The parts of an object drawn from the facts of its kind (knowledge/art.draw.kinds), whatever the board draws it from: for the side-by-side pictures. */
+export const partsOfFacts = (obj) => partsOf(obj, (k) => thingBuild(k, KIND_THINGS));
+/** The parts of an object drawn from the hand-coded builder of its kind. */
+export const partsOfHand = (obj) => partsOf(obj, (k) => handCodedParts(k));
+/** The hand-coded parts of a built-in kind (what the facts of knowledge/art.draw.kinds are written from, and what the side-by-side pictures compare with). */
+export const handCodedParts = (kind) => (HAND_BUILD[kind] ?? BUILTIN[kind].build)();
+/** The kinds of the board: the built-in ones, and `composite:<thing>` for every object of the catalog. */
+export const KINDS = new Proxy(BUILTIN, {
+  get: (t, k) => (typeof k === 'string' && k.startsWith(COMPOSITE) ? thingDef(k.slice(COMPOSITE.length)) : t[k]),
+  has: (t, k) => (typeof k === 'string' && k.startsWith(COMPOSITE) ? isThing(k.slice(COMPOSITE.length)) : k in t),
+});
 
 /** Plural forms that are not formed with -s (lexicon plural= entries mirror these). */
 export const PLURALS = { person: 'people', fish: 'fish' };
 export const KIND_ORDER = ['house', 'tree', 'sun', 'cloud', 'car', 'flower', 'cat', 'dog', 'fish', 'bird', 'boat', 'mountain', 'rainbow', 'person', 'balloon', 'rocket', 'moon',
   'circle', 'square', 'rectangle', 'triangle', 'star', 'heart', 'line', 'arrow', 'oval'];
-export const isKind = (k) => Object.hasOwn(KINDS, k);
+export const isKind = (k) => Object.hasOwn(BUILTIN, k) || (typeof k === 'string' && k.startsWith(COMPOSITE) && isThing(k.slice(COMPOSITE.length)));
 
 /** Default color word of a kind (what the object is when nobody said a color). */
 export const defaultColor = (kind) => KINDS[kind]?.color ?? null;
 
+const thingCache = new Map();
+/** Local-space parts of a catalog object (cached, do not modify). */
+const thingParts = (name) => { if (!thingCache.has(name)) thingCache.set(name, thingBuild(name)); return thingCache.get(name); };
 const partCache = new Map();
 /** Local-space parts of a kind (cached, do not modify). */
 export function kindParts(kind) {
   if (!partCache.has(kind)) partCache.set(kind, isKind(kind) ? KINDS[kind].build() : []);
   return partCache.get(kind);
 }
+// ---- more instances of a part ("add a third window") ------------------------------------------------------------------------------------------------------
+const boxOf = (p) => {
+  if (p.pts) { const xs = p.pts.map((q) => q[0]), ys = p.pts.map((q) => q[1]); return { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) }; }
+  return { x0: p.x - p.w / 2, x1: p.x + p.w / 2, y0: p.y - p.h / 2, y1: p.y + p.h / 2 };
+};
+const hits = (a, b) => a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
+const shifted = (p, dx, dy) => (p.pts ? { ...p, pts: p.pts.map(([x, y]) => [round(x + dx), round(y + dy)]) } : { ...p, x: round(p.x + dx), y: round(p.y + dy) });
+/**
+ * The parts with `extra` = { <part key>: n } more instances of a part: each is a copy of the last part of its key, put where it fits: inside the part it sits in (the wall
+ * for a window), not on anything drawn above it, nearest to the middle of its siblings. A part that fits nowhere goes after the last one.
+ */
+export function withExtras(parts, extra) {
+  const keys = Object.entries(extra ?? {}).filter(([, n]) => n > 0);
+  if (!keys.length) return parts;
+  let out = parts.slice();
+  for (const [key, n] of keys) {
+    for (let i = 0; i < n; i++) {
+      const idx = out.map((p) => p.n).lastIndexOf(key);
+      if (idx < 0) break;
+      const tpl = out[idx], tb = boxOf(tpl), w = tb.x1 - tb.x0, h = tb.y1 - tb.y0;
+      const sib = out.filter((p) => p.n === key).map(boxOf);
+      const mx = (Math.min(...sib.map((b) => b.x0)) + Math.max(...sib.map((b) => b.x1))) / 2, my = (Math.min(...sib.map((b) => b.y0)) + Math.max(...sib.map((b) => b.y1))) / 2;
+      const host = out.slice(0, idx).map((p) => ({ p, b: boxOf(p) })).filter(({ b }) => b.x0 <= tb.x0 && b.x1 >= tb.x1 && b.y0 <= tb.y0 && b.y1 >= tb.y1 && (b.x1 - b.x0) * (b.y1 - b.y0) > w * h * 1.5).sort((a, b) => (a.b.x1 - a.b.x0) * (a.b.y1 - a.b.y0) - (b.b.x1 - b.b.x0) * (b.b.y1 - b.b.y0))[0]?.b;
+      const above = out.filter((p) => p.n !== key).map(boxOf).filter((b) => !(b.x0 <= tb.x0 && b.x1 >= tb.x1 && b.y0 <= tb.y0 && b.y1 >= tb.y1)).concat(sib);   // everything it must not cover: what does not hold it
+      let best = null;
+      const step = Math.max(w, h) / 6, bx0 = host ? host.x0 : tb.x0 - 3 * w, bx1 = host ? host.x1 : tb.x1 + 3 * w, by0 = host ? host.y0 : tb.y0 - h, by1 = host ? host.y1 : tb.y1 + h;
+      for (let cy = by0 + h / 2; cy <= by1 - h / 2 + 1e-9; cy += step) for (let cx = bx0 + w / 2; cx <= bx1 - w / 2 + 1e-9; cx += step) {
+        const c = { x0: cx - w / 2, x1: cx + w / 2, y0: cy - h / 2, y1: cy + h / 2 };
+        if (above.some((b) => hits(c, b))) continue;
+        const d = Math.hypot(cx - mx, cy - my) + Math.abs(cy - (tb.y0 + tb.y1) / 2) * 0.5;
+        if (!best || d < best.d) best = { d, cx, cy };
+      }
+      const at = best ?? { cx: Math.max(...sib.map((b) => b.x1)) + w * 0.7, cy: (tb.y0 + tb.y1) / 2 };
+      const copy = shifted(tpl, at.cx - (tb.x0 + tb.x1) / 2, at.cy - (tb.y0 + tb.y1) / 2);
+      out = [...out.slice(0, idx + 1), copy, ...out.slice(idx + 1)];
+    }
+  }
+  return out;
+}
+/** How many parts of a key an object has (what the kind builds, and its extra instances), 0 when it has no such part. */
+export function partCount(obj, key) {
+  const base = kindKey(obj)?.startsWith(COMPOSITE) ? thingParts(obj.thing) : kindParts(kindKey(obj));
+  const n = base.filter((p) => p.n === key).length;
+  return n ? n + (obj.extra?.[key] ?? 0) : 0;
+}
+
 /** Names of the colorable parts of a kind (distinct, in drawing order). */
 export function partNames(kind) {
   return [...new Set(kindParts(kind).map((p) => p.n))].filter((n) => KINDS[kind].names && Object.hasOwn(KINDS[kind].names, n));
@@ -392,11 +552,13 @@ export const partLabel = (key) => ({ windows: 'windows', wheels: 'wheels', walls
  * Color of a part: the object's own override (obj.parts[name]), else the object color for parts that follow it
  * (m), else the part default. `sh` shifts the lightness, `alt` replaces a default that would equal the object color.
  */
-export function partsOf(obj) {
-  const kind = obj?.kind;
+export function partsOf(obj, build = null) {
+  const kind = kindKey(obj);
   if (!isKind(kind)) return [];
   const override = obj.parts ?? {};
-  return kindParts(kind).map((p) => {
+  const hidden = new Set(obj.hide ?? []);
+  const base = withExtras(build ? build(kind) : kind.startsWith(COMPOSITE) ? thingParts(obj.thing) : kindParts(kind), obj.extra);   // `build`: another source of the parts (the side-by-side pictures)
+  return base.filter((p) => !hidden.has(p.n)).map((p) => {
     let color = p.c;
     if (Object.hasOwn(override, p.n)) color = override[p.n];
     else if (p.m && obj.color) color = obj.color;
@@ -416,7 +578,7 @@ export function partsOf(obj) {
 // ---- geometry of objects --------------------------------------------------------------------------------------------
 /** Bounding box of an object in canvas pixels (rotation is taken into account for the box only). */
 export function bbox(obj) {
-  const k = KINDS[obj.kind];
+  const k = KINDS[kindKey(obj)];
   const w0 = obj.size, h0 = obj.size * (k?.aspect ?? 1);
   const a = ((obj.rotation ?? 0) * Math.PI) / 180, c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a));
   const w = w0 * c + h0 * s, h = w0 * s + h0 * c;

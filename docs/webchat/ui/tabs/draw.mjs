@@ -84,7 +84,7 @@ export function captionOf(state) {
   const objs = state?.objects ?? [];
   if (!objs.length && !state?.sky && !state?.ground) return 'An empty page. Say what to draw!';
   const counts = new Map();
-  for (const o of objs) counts.set(o.kind, (counts.get(o.kind) ?? 0) + 1);
+  for (const o of objs) counts.set(o.thing ?? o.kind, (counts.get(o.thing ?? o.kind) ?? 0) + 1);
   const bits = [...counts].map(([k, n]) => (n === 1 ? `a ${k}` : `${n} ${plural(k, n)}`));
   if (state?.sky) bits.push(`${state.sky} sky`);
   if (state?.ground) bits.push(state.ground);
@@ -203,8 +203,8 @@ function make(holder, host) {
     renderer.drawScene(ctx, rc, scn, { selected: state.selected ?? null, poses, labelOf });
   }
   const labelOf = (o) => {
-    const same = (state.objects ?? []).filter((x) => x.kind === o.kind);
-    return same.length > 1 ? `${ordinal(same.findIndex((x) => x.id === o.id) + 1)} ${o.kind}` : `the ${o.kind}`;
+    const name = o.thing ?? o.kind, same = (state.objects ?? []).filter((x) => (x.thing ?? x.kind) === name);
+    return same.length > 1 ? `${ordinal(same.findIndex((x) => x.id === o.id) + 1)} ${name}` : `the ${name}`;
   };
   const ordinal = (n) => ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'][n] ?? `${n}th`;
   function schedule() { if (!raf && renderer && !destroyed) raf = requestAnimationFrame(frame); }
@@ -227,8 +227,8 @@ function make(holder, host) {
   canvas.addEventListener('click', (e) => {
     const o = objectAt(...toLogical(e));
     if (o) {
-      const same = (state.objects ?? []).filter((x) => x.kind === o.kind);
-      send(same.length > 1 ? `select the ${ordinal(same.findIndex((x) => x.id === o.id) + 1)} ${o.kind}` : `select the ${o.kind}`);
+      const name = o.thing ?? o.kind, same = (state.objects ?? []).filter((x) => (x.thing ?? x.kind) === name);
+      send(same.length > 1 ? `select the ${ordinal(same.findIndex((x) => x.id === o.id) + 1)} ${name}` : `select the ${name}`);
     } else if (state.selected) send('deselect everything');
   });
 

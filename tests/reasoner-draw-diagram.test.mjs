@@ -38,7 +38,7 @@ test('both worlds opt in, say so in world.sop, and the matrices load without a p
 test('art.draw: the kinds of the matrix are the kinds of the board (a test keeps them in step)', () => {
   const sop = matrix.set.get('art.draw').raw.matrix;
   const enumKinds = [...sop.match(/@ad\.k\.o\.kind [^\n]+/)[0].matchAll(/enum=(\w+)/g)].map((m) => m[1]).sort();
-  assert.deepEqual(enumKinds, Object.keys(KINDS).sort());
+  assert.deepEqual(enumKinds, [...Object.keys(KINDS), 'composite'].sort());   // 'composite': a thing of the catalog (its name is in `thing`)
 });
 
 test('art.draw: the scene is wires, and toState derives the session state back without loss', async () => {

@@ -12,7 +12,7 @@ export function createRenderer(rough, scene) {
   const gen = rough.generator();
   const cache = new Map();   // object signature -> [{ drawable, alpha, tx, ty, rot }]
 
-  const keyOf = (o) => `${o.kind}|${Math.round(o.size)}|${o.color}|${o.fill}|${JSON.stringify(o.parts ?? {})}|${o.id}`;
+  const keyOf = (o) => `${o.kind}|${o.thing ?? ''}|${Math.round(o.size)}|${o.color}|${o.fill}|${JSON.stringify(o.parts ?? {})}|${JSON.stringify(o.hide ?? [])}|${JSON.stringify(o.extra ?? {})}|${o.id}`;
 
   /** Rough drawables of one object, in local pixel space (origin = object center). Cached per signature. */
   function drawablesOf(obj) {
@@ -145,7 +145,7 @@ export function createRenderer(rough, scene) {
 
   /** Draw one object with its animated pose { x, y, size, rotation, flipX (-1..1), scale, alpha }. */
   function drawObject(ctx, rc, obj, pose = {}) {
-    const k = scene.KINDS[obj.kind];
+    const k = scene.KINDS[scene.kindKey(obj)];   // a thing of the catalog is kind 'composite' with its name in `thing`
     if (!k) return;
     const size = pose.size ?? obj.size, sc = pose.scale ?? 1;
     // drawables are built at the target size; scaling the canvas gives the size animation for free
@@ -218,7 +218,7 @@ export function createRenderer(rough, scene) {
     for (const o of [...(scn.objects ?? [])].sort((a, b) => (a.z ?? 0) - (b.z ?? 0))) {
       const g = doc.createElementNS(NS, 'g');
       g.setAttribute('transform', `translate(${o.x} ${o.y}) rotate(${o.rotation ?? 0}) scale(${o.flip ? -1 : 1} 1)`);
-      g.setAttribute('data-id', o.id); g.setAttribute('data-kind', o.kind);
+      g.setAttribute('data-id', o.id); g.setAttribute('data-kind', o.thing ?? o.kind);
       for (const item of drawablesOf(o)) {
         const n = rs.draw(item.drawable);
         const wrap = doc.createElementNS(NS, 'g');
