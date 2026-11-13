@@ -115,6 +115,13 @@ function quoteUserWords(text, userWords) {
 const MAX_FALLBACK_CALLS = 6;
 /** The last line of a Romanian reply nothing could translate (RO-TRANSLATE-FALLBACK): the session never shows English. */
 const NO_RO_REPLY = 'Nu am încă o formulare în română pentru acest răspuns.';
+/** A clause whose wire asks to remove, clear, reset or replace something (the action's last name part: draw.clearAll, draw.remove, geo.clearAll ...). */
+const DESTRUCTIVE_ACTION = /^(clear|remove|delete|erase|reset|restart|wipe|discard|forget|empty|drop|replace|undo|redo|destroy)/i;
+function isDestructive(seg) {
+  for (const w of seg.wires ?? []) for (const e of w.entries ?? []) if (e.key === 'core.request.action' && DESTRUCTIVE_ACTION.test(String(e.value?.v ?? '').split('.').pop())) return true;
+  return false;
+}
+
 /** The "rules translator" of a language that has none (MT-SERIOUS): it translates nothing, so every run goes to the on-device translation. */
 const NO_RULES = { translate: (text) => ({ text: '', alignment: [], unknown: [String(text ?? '')], untranslatable: [], notes: ['no rules for this language'], confidence: 0 }), supports: () => false };
 
@@ -1157,6 +1164,11 @@ export class DialogSession {
     const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
     try {
       const reply = await this._send(text, opts);
+      // INVARIANT (every turn gets a reply): a message that produced no words at all (bare punctuation, an empty reading) is answered, quoting what was typed
+      if (reply && typeof reply === 'object' && !String(reply.text ?? '').trim() && String(text ?? '').trim() && !opts.silent) {
+        const said = `I did not understand "${String(text).trim().slice(0, 80)}".`;
+        reply.text = said; reply.parts = [{ text: said, translate: false }]; if (reply.trace) reply.trace.replyEnglish = said; if (Array.isArray(reply.statuses) && !reply.statuses.length) reply.statuses.push('unparsed');
+      }
       if (g) guard.check('end');   // (checks the shared guard)   // a stage that swallowed the abort must not let a half-done turn through
       if (bt && tb.exceeded) throw tb.exceeded;   // a stage that swallowed BudgetExceeded must not let a half-done turn through
       if (own && reply && typeof reply === 'object') reply.perf = perf.end();
@@ -1313,6 +1325,8 @@ export class DialogSession {
           translation = b ?? { text, alignment: [], unknown: [text], notes: ['the on-device translation did not answer'], confidence: 0 };
         } else translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = override?.english ?? textOf(translation) ?? text;
+        // INVARIANT (every turn gets a reply): a translator that cannot map a sentence ("negation could not be mapped") returns an empty text; the message then stays as typed, so that the reading is poor and says so (or the browser Translator is asked)
+        if (!english.trim() && text.trim()) { english = text; translation = { ...(translation ?? {}), text, alignment: [], unknown: [], notes: [...(translation?.notes ?? []), 'the rules translation was empty'], confidence: 0 }; }
         // an engine that returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare") is retried through the rules translator, which covers the app's own verbs and nouns
         const rules = translator.rules;
         if (!override && rules && rules !== translator && lang === 'ro' && english.trim().toLowerCase() === text.trim().toLowerCase()) {
@@ -1415,10 +1429,26 @@ export class DialogSession {
     const statuses = icpt || meta?.reply != null ? [meta?.status ?? 'supported'] : [];
     const ops = [];
     const answerWires = [];
+    let followSeg = null;
     let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)
     const fillerOnly = (t) => { const w = t.toLowerCase().match(/[\p{L}']+/gu) ?? []; return w.length > 0 && w.every((x) => FUNCTION_WORDS.has(x)); };
     let segNo = 0;
+    this.isession.noTabFollow = false;
+    // INVARIANT (nothing destructive on a partly understood sentence): when a clause of the message is not understood, a clause that would remove, clear or replace something does not run;
+    // the reply names the understood part and what was not understood. Decided from the wires' action names (clearAll, remove, delete, reset ...), for every world alike.
+    const heldDestructive = new Set();
+    if (!icpt && !pre && !meta) {
+      const open = segments.filter((x) => x.unparsed && !fillerOnly(x.text) && !x.veto?.say);
+      if (open.length) for (const x of segments) if (!x.unparsed && (isDestructive(x) || x.ignored?.length || x.partial || x.bestEffort)) heldDestructive.add(x);   // a clause read only in part (words ignored) next to one not read at all is held too: "You should change this voila ... ta-da ..." must not start a chess game
+    }
     for (const seg of segments) {
+      if (heldDestructive.has(seg)) {
+        const open = segments.find((x) => x.unparsed && !fillerOnly(x.text));
+        const q = (t) => lang === 'en' ? t : originalSentence(text, { text: t, span: segments.find((y) => y.text === t)?.span }, translation?.alignment);
+        lines.push([T('I understood '), { text: `"${q(seg.text)}"`, translate: false, quote: true }, T(' but I did not do it, because I did not understand '), { text: `"${q(open.text)}"`, translate: false, quote: true }, T('. Say the first part on its own and I will do it.')]);
+        statuses.push('missing');
+        continue;
+      }
       // a leftover made only of filler words ("also", "and", "please") next to something that was understood is not worth an error
       if (seg.unparsed && (partial ?? this.partial) && fillerOnly(seg.text) && segments.some((x) => !x.unparsed)) continue;
       if (seg.bestEffort) {
@@ -1486,6 +1516,7 @@ export class DialogSession {
       // a world with a lazily loaded engine (ops `prepare()`, async, idempotent: spec 04) is made ready before its operations run
       { const prep = this.engine.set.get(seg.match?.worldId)?.ops?.prepare; if (typeof prep === 'function') { try { await prep(); } catch { /* the operation then says it is not ready */ } } }
       { const rs = this.isession.rs; if (rs && segments.length > 1) rs.beginStep(seg.text, rs.snapOwn(this.isession), lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment)); }   // one step per request of the message: "undo" takes back the last one (spec 15, UNDO-REDO)
+      this.isession.noTabFollow = !!(seg.corrections?.length || seg.ignored?.length || seg.bestEffort || seg.partial) && !this._worldsNamedIn(english).has(seg.match?.worldId);
       this.isession.add(seg.wires);
       this.isession.batch = { index: segNo++, count: segments.length };   // ops see their place in the message (a game's host cannot answer between two commands of one message)
       const statements = [];
@@ -1497,7 +1528,7 @@ export class DialogSession {
         const idleTab = seg.match?.worldId === 'ui.shell' && /\.bare/.test(seg.match.patternId ?? '') && /^You are already on the .+ tab\.$/.test(rendered) && segments.some((x) => x !== seg && !x.unparsed && x.match?.worldId && x.match.worldId !== 'ui.shell');
         if (!idleTab) lines.push([T(rendered)]);
         statuses.push(r.status);
-        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
+        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) { followTab = t; followSeg = seg; } }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
         if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.from?.length) fr.from = r.envelope.from; else if (r.envelope?.fromLater) fr.fromLater = r.envelope.fromLater; } }
@@ -1531,6 +1562,7 @@ export class DialogSession {
       try { const kf = await perf.time('knowledge', () => knowledgeFallback(this, english, segments, statuses)); if (kf) { lines.length = 0; lines.push([T(kf.reply)]); statuses[0] = kf.status; segments[0].ignored = []; segments[0].knowledge = kf.info; } } catch { /* the world's own reply stands */ }
     }
     this.isession.batch = null;
+    this.isession.noTabFollow = false;
     for (const seg of segments) {
       if (!seg.corrections?.length || seg.unparsed) continue;
       const line = [T('(I read ')];
@@ -1550,6 +1582,8 @@ export class DialogSession {
     }
     // Tab follow: a world with a tab answered, but its tab is hidden: bring it forward (the existing ui.openTab action).
     const shown = this.isession.state['ui.shell']?.activeTab;
+    // INVARIANT (no tab change without a named tab): a reading that needed a spelling correction, ignored words or a best effort does not bring its world's tab forward unless the message names that world
+    if (followTab && followSeg && (followSeg.corrections?.length || followSeg.ignored?.length || followSeg.bestEffort || followSeg.partial) && !this._worldsNamedIn(english).has(followSeg.match?.worldId)) followTab = null;
     if (followTab && shown && shown !== followTab && !this.isession.effects.some((e) => e.name === 'ui.openTab')) {
       try { interp.runAction(this.isession, 'ui.openTab', { tab: followTab }); } catch { /* the shell may be absent */ }
     }
