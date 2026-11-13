@@ -91,6 +91,7 @@ function applySettings(s, extra) {
   if (extra?.prepare && settings.formalizer === 'encoder' && dispatcherEnc) dispatcherEnc.prepare().catch(() => {});
 }
 
+const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds', KNOWLEDGE_FETCH_MS = 6000;
 // ---------- boot ----------
 async function init(m) {
   Object.assign(ver, m.versions ?? {});
@@ -122,8 +123,16 @@ async function init(m) {
   const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
   engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
+  // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
+  // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
+  // Offline, the 30 hand-written objects vendored in the world (things.catalog.mjs) still draw; lookups of other things then answer as unknown.
+  try {
+    const [{ createFacts }, { createKnowledgeSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs')]);
+    const src = createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL);
+    engine.setKnowledge(createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]) } }));
+  } catch (e) { console.warn('knowledge catalog not attached', e); }
   if (testHooks) installFaults();
-  const rules = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
+  const rules =(engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
   rules.catch(() => {});
   // the ORT workers belong to the page: this worker asks for one through a MessagePort per lane
   globalThis.__psys2OrtSpawn = (lane) => {

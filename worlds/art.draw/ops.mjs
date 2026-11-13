@@ -14,10 +14,10 @@
 //     nextId, seq, seed }
 // Effects: draw.download { format: 'png' | 'svg', filename }. Every command that changes the picture brings the
 // Drawing tab forward: ctx.request('ui.openTab', { tab: 'draw' }).
-import { THINGS, THING_WORDS } from './things.catalog.mjs';
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
+  registerThings, partGuessed,
 } from './scene.mjs';
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs';
@@ -855,7 +855,7 @@ function registerKnown(ctx, noun) {
   try {
     const th = ctx.knowledge?.peek(noun);
     const parts = th?.objects?.[0]?.parts;
-    if (parts?.length) { if (!Object.hasOwn(THINGS, th.name)) { THINGS[th.name] = parts; THING_WORDS[th.name] = th.name; } return th.name; }
+    if (parts?.length) { registerThings(new Map([[th.name, parts]])); return th.name; }
   } catch { /* the plain refusal follows */ }
   return null;
 }
@@ -1046,7 +1046,11 @@ export const recolor = guard((ctx, args, s) => {
     s.last = done.map((o) => o.id);
     open(ctx);
     const key0 = partOfWord(kindKey(done[0]), part) ?? part;
-    return ok(withNote(`${opener(s)} The ${partLabel(key0)} of ${done.length > 1 ? 'the ' + pluralOfKind(kindKey(done[0])) : sayObj(done[0])} ${/s$/.test(partLabel(key0)) && key0 !== 'crown' ? 'are' : 'is'} ${color} now.`, r));
+    // the names of about a fifth of the imported parts were guessed by a model: say so once for each such thing, so a wrong part is not a surprise
+    const guessed = done.map(kindKey).filter((k, i, a) => a.indexOf(k) === i && partGuessed(k, key0) && !(s.guessSaid ??= []).includes(k));
+    let rn = r;
+    if (guessed.length) { s.guessSaid.push(...guessed); rn = { ...r, note: `${r.note ? `${r.note} ` : ''}(The part names of this picture are guesses, so tell me if I colored the wrong one.)` }; }
+    return ok(withNote(`${opener(s)} The ${partLabel(key0)} of ${done.length > 1 ? 'the ' + pluralOfKind(kindKey(done[0])) : sayObj(done[0])} ${/s$/.test(partLabel(key0)) && key0 !== 'crown' ? 'are' : 'is'} ${color} now.`, rn));
   }
   for (const o of objs) {
     o.color = color;

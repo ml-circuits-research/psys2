@@ -15,7 +15,6 @@
  * The order is the library's (`rank`, RANKING): consistent, referents left ambiguous, lacks, words left out, assumptions, then the given order. Nothing
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
-import { missingText } from './knowledge-lookup.mjs?v=a654c07905';
 import { budget } from './budget.mjs?v=123c3e1329';
 import { restrictedSet } from '../formalizer/spell.mjs?v=e9d7996804';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=5de885797a';
@@ -217,9 +216,6 @@ async function reviewOne(dialog, seg, mode, rs, before = []) {
     if (baseMode(mode) === 'observe') return seg;
     const veto = vetoOf(wa, seg, ref, mode);
     if (!veto) return seg;
-    if (veto.kind === 'no-referent' && ref) {   // spec 17: the catalog is asked before "I can't find ..."; the plain refusal only when there is no hit
-      try { const k = await missingText(dialog, ref); if (k) { veto.say = k.text; veto.knowledge = true; if (veto.offer && k.question) veto.offer.question = k.question; } } catch { /* keep the plain refusal */ }
-    }
     return { ...seg, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [], partial: false, bestEffort: null, veto, wa: { ...wa, veto: veto.kind } };
   }
 }
