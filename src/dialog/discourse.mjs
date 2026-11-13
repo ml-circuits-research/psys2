@@ -698,7 +698,9 @@ export class Discourse {
     if (WHY_FACT.test(t)) { const wf = this._whyFact(t); if (wf) return wf; }
     // chat spellings of short words ("bk to the doc", "nxt") are read as the word for the recognizers; the sentence itself is passed on unchanged
     const spelled = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);
-    const c = classify(spelled, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
+    const c0 = classify(spelled, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
+    // a world on the open tab may own a question of the "explain" kind (the Talk tab answers "how do you know?" with its own card): `ownsExplain(ctx, { text })` returns true
+    const c = c0?.intent === 'explain' && this._tabOwns('ownsExplain', t) ? null : c0;
     // a lone "lol" / "hmm" / "ok" is not a command and not a list item: nothing happens (no world gets to read it as a name, an item or a word)
     if (c?.intent === 'backchannel' && !pend && !this._gameAsksYesNo()) return { reply: 'Mm-hm. Tell me what you would like to do, or say "help".', status: 'unparsed', info: { kind: 'backchannel' } };
     // 2. list-entry mode: every plain item is added to the list until "that's all"
@@ -790,6 +792,12 @@ export class Discourse {
     const last = this.lastAnswer;
     if (!last) return null;
     return { reply: last.text, info: { kind: 'repeat', of: last.turn } };
+  }
+
+  /** True when the world of the open tab exports the hook `name` and it says yes to this message (a read-only host hook, spec 07). */
+  _tabOwns(name, t) {
+    const tw = this.dialog.context().tabWorld;
+    return !!tw && this.dialog.engine.interp.hook(this.dialog.isession, tw, name, { text: t }) === true;
   }
 
   _explain(t = '') {

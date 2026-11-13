@@ -29,7 +29,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=636998352c';
 import { checkValues } from './value-check.mjs?v=9392f9d951';
-import { Discourse } from './discourse.mjs?v=2d3be3453c';
+import { Discourse } from './discourse.mjs?v=c33ea85ff1';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=0391d4a9dc';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=43ef077175';
@@ -1374,6 +1374,17 @@ export class DialogSession {
         statuses.push(seg.veto.status ?? 'missing');
         if (seg.veto.offer) disc.pending = { type: 'offer', accept: 'rewrite', rewrite: seg.veto.offer.rewrite, world: seg.veto.offer.world, expected: 'yes/no', question: seg.veto.offer.question, turn: this._msg };
         continue;
+      }
+      // honest scope: the world of the open tab may refuse a message it cannot talk about, in its own words, with the nearest things it can (hook `outOfScope`, the Talk tab)
+      if (seg.unparsed) {
+        const tw = this.context().tabWorld;
+        const oos = tw ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
+        if (typeof oos?.say === 'string' && oos.say) {
+          lines.push([T(oos.say)]);
+          if (oos.suggest?.length) this.isession.effects.push({ name: 'chat.suggest', args: { items: oos.suggest }, world: tw });
+          statuses.push('unsupported');
+          continue;
+        }
       }
       const waSay = seg.unparsed && waMode !== 'off' && waMode !== 'observe' ? explainUnparsed(this, seg.text) : null;
       if (waSay) { lines.push([T(waSay)]); statuses.push('unsupported'); continue; }

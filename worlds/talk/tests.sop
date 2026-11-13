@@ -1,0 +1,86 @@
+@t.talk.n01 core.test
+    input="Open the talk tab."
+    expectState="ui.shell:activeTab=talk"
+    session=a
+
+@t.talk.n02 core.test
+    input="What does a bicycle look like?"
+    expect="I know what a bicycle looks like."
+    expect="a back wheel"
+    expectEffect=talk.card
+    expectState="cards.0.kind=drawing"
+    expectState="topics.0.name=bicycle"
+    session=a
+
+@t.talk.n03 core.test
+    input="What are the parts of a bicycle?"
+    expect="A bicycle has"
+    expect="a frame"
+    expectState="cards.1.kind=parts"
+    session=a
+
+@t.talk.n04 core.test
+    input="How many wheels does a bicycle have?"
+    expect="2 wheels"
+    expectState="cards.2.kind=icons"
+    expectState="cards.2.data.n=2"
+    session=a
+
+@t.talk.n05 core.test
+    input="What are the planets in order?"
+    expect="Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune"
+    expectState="cards.3.kind=line"
+    session=a
+
+@t.talk.n06 core.test
+    input="What comes after March?"
+    expect="April comes after March."
+    expectState="cards.4.data.mark=3"
+    session=a
+
+@t.talk.n07 core.test
+    input="What is the third planet from the sun?"
+    expect="The third planet from the sun is Earth."
+    session=a
+
+@t.talk.n08 core.test
+    input="Which is bigger, Jupiter or Mars?"
+    expect="Jupiter is bigger than Mars"
+    expectState="cards.6.kind=bars"
+    session=a
+
+@t.talk.n09 core.test
+    input="What did we talk about?"
+    expect="We talked about"
+    expect="bicycle"
+    expectEffect=talk.board
+    session=a
+
+@t.talk.n10 core.test
+    input="How do you know?"
+    expect="I read your question as"
+    expect="Then I made"
+    expectState="cards.7.kind=how"
+    session=a
+
+@t.talk.n11 core.test
+    input="What is a blorp?"
+    expect="I don't know that yet."
+    expectStatus=missing
+    session=a
+
+@t.talk.n12 core.test
+    input="What can we talk about?"
+    expect="I can talk about"
+    expectEffect=chat.suggest
+    session=a
+
+@t.talk.n13 core.test
+    input="Which month comes before January?"
+    expect="Before January comes December"
+    session=a
+
+@t.talk.n14 core.test
+    input="Which planet is after Neptune?"
+    expect="Neptune is the farthest from the sun, so no planet comes after it."
+    session=a

@@ -1,0 +1,12 @@
+@lex.talk.sequences core.lexicon
+    class=sequence
+    doc="Things that come in a fixed order and can be shown on a line"
+    word=months
+    word=month
+    word=seasons
+    word=season
+    word=days
+    word=day
+    word=weekdays
+    word=planets
+    word=planet

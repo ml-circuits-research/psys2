@@ -24,4 +24,6 @@ PSys2 is a neurosymbolic assistant that runs entirely in the browser, with no se
 | [decisions/ADR-008](decisions/ADR-008-astra-discussions.md) | ASTRA as a core library with a compatibility layer over per-world state |
 | [15-reasoner.md](15-reasoner.md) | The reasoner host layer: the vendored sopworld library, per-world matrices, the ops / matrix switch, budget and mirrors (stage 1) |
 | [16-world-aware-reading.md](16-world-aware-reading.md) | World-aware reading (E2, an option, off by default): veto of readings the world cannot take, the library's order for the choice among readings, the explanations |
+| [17-knowledge-lookup.md](17-knowledge-lookup.md) | Knowledge by lookup: the catalog, question frames, who uses a hit |
+| [18-talk-tab.md](18-talk-tab.md) | The Talk tab: question frames, answer cards, the topic board, how do you know, honest scope |
 | [decisions/ADR-009](decisions/ADR-009-nx-encoder-formalizer-in-the-webchat.md) | The NX encoder formalizer in the webchat: strategy setting (hybrid default, neural, rules), one encoder pass |

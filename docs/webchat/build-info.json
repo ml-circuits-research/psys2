@@ -22,6 +22,7 @@
     "lang.common",
     "media.music",
     "session.conversation",
+    "talk",
     "ui.avatar",
     "ui.help",
     "ui.shell",
@@ -36,7 +37,8 @@
     "editor.mjs",
     "map.mjs",
     "music.mjs",
-    "profile.mjs"
+    "profile.mjs",
+    "talk.mjs"
   ],
   "dispatcherModel": false,
   "files": {
@@ -51,10 +53,10 @@
     "lib/astra/where.mjs": "9573ed8c2f8b1345",
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "b5d3c84d4136c146",
-    "lib/dialog/discourse.mjs": "d84aae958b7ddb1a",
+    "lib/dialog/discourse.mjs": "ff85484ddcb78792",
     "lib/dialog/dispatch-validate.mjs": "9d1075fc2347a99e",
     "lib/dialog/encoder-dispatch.mjs": "848c16b7b1748a1e",
-    "lib/dialog/index.mjs": "d79098deecbf8146",
+    "lib/dialog/index.mjs": "7ddb5bfb7dbb18cb",
     "lib/dialog/knowledge-lookup.mjs": "deab5ca461b3931f",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
@@ -181,7 +183,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "16f176dcd3a5d975",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "eb3ac4f3a7a350fd",
+    "worlds/index.json": "0444fb82cb05f421",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -216,6 +218,8 @@
     "worlds/media.music/ops.mjs": "52dbd6ce7d8ac70d",
     "worlds/media.music/theory.mjs": "22f906418690fd78",
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
+    "worlds/talk/cards.mjs": "03d42feb1817ba27",
+    "worlds/talk/ops.mjs": "841e05143d60a7c9",
     "worlds/ui.avatar/coverage.md": "7f8a2b93f4fd3dea",
     "worlds/ui.avatar/datagen.mjs": "7b6d8141609ea71b",
     "worlds/ui.avatar/fns.mjs": "8e48f854d1345b53",
@@ -235,6 +239,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T11:48:49.961Z",
-  "commit": "265573e"
+  "builtAt": "2026-11-13T12:53:48.447Z",
+  "commit": "532324d-dirty"
 }

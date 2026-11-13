@@ -1,0 +1,16 @@
+@legend.talk core.legend
+    namespace=talk
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="The conversation about things: the cards that answers come with and the topics that were talked about"
+
+@talk.chat core.type
+    extends=core.state
+    doc="The talk. The world state holds cards (id, kind, title, thing, sentence, data, how), topics (id, name, parent, card, summary) and the current topic."
+    example="What does a lighthouse look like?"
+
+@talk.chat.topic core.key
+    value=string
+    card=one
+    ask="What shall we talk about?"
