@@ -345,3 +345,43 @@
     input="that's all"
     expectState="listening=false"
     session=s2
+
+@t.ui.shell.short1 core.test
+    session=tabshort1
+    input="open draw"
+    expectState="activeTab=draw"
+
+@t.ui.shell.short2 core.test
+    session=tabshort2
+    input="open chess"
+    expectState="activeTab=chess"
+
+@t.ui.shell.short3 core.test
+    session=tabshort3
+    input="open map"
+    expectState="activeTab=map"
+
+@t.ui.shell.short4 core.test
+    session=tabshort4
+    input="open charts"
+    expectState="activeTab=charts"
+
+@t.ui.shell.short5 core.test
+    session=tabshort5
+    input="open music"
+    expectState="activeTab=music"
+
+@t.ui.shell.short6 core.test
+    session=tabshort6
+    input="open editor"
+    expectState="activeTab=editor"
+
+@t.ui.shell.short7 core.test
+    session=tabshort7
+    input="open profile"
+    expectState="activeTab=profile"
+
+@t.ui.shell.short9 core.test
+    session=tabshort9
+    input="open drawing"
+    expectState="activeTab=draw"
