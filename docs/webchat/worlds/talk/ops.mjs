@@ -10,7 +10,7 @@
 // the host through `openSlots`, spec 17), or from the basic things shipped with the drawing world. No fact: the plain "I don't know that yet" and no card.
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=4cd417b561';
-import * as space from '../space/space.mjs?v=c917d7caac';   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import * as space from '../space/space.mjs?v=27b9e9b571';   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;

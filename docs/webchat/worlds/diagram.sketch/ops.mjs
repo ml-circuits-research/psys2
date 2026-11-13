@@ -18,7 +18,7 @@
 
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=18f06ec836';
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
-import * as space from '../space/space.mjs?v=c917d7caac';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
+import * as space from '../space/space.mjs?v=27b9e9b571';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=4cd417b561';   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
@@ -455,7 +455,8 @@ function spaceItems(s) {
   const fr = s.frame ?? { x: 0, y: 0 };
   return s.shapes.filter((x) => !x.layer && !x.template).map((x) => {
     const k = x.size, w = x.w ?? (x.shape === 'rectangle' ? Math.round(k * 1.6) : x.shape === 'ellipse' ? Math.round(k * 1.45) : k), h = x.h ?? k;
-    return { id: x.name, kind: x.shape, name: x.shape, x: x.x - fr.x, y: x.y - fr.y, w, h };
+    const shape = space.outlineOf(x.shape, w, h);   // the real outline of a triangle, a diamond ...: overlap and joining use the surface, not the box
+    return { id: x.name, kind: x.shape, name: x.shape, x: x.x - fr.x, y: x.y - fr.y, w, h, ...(shape ? { shape } : {}) };
   });
 }
 /** A moving or arranging sentence the module reads (the middle box, a bit more to the left, further, in a row, tidy up ...), or null to leave it to the engine. */

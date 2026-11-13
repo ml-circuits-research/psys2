@@ -17,10 +17,10 @@
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
-  registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey,
+  registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey, partsOf,
 } from './scene.mjs?v=3549ba4382';
 
-import * as space from '../space/space.mjs?v=c917d7caac';   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+import * as space from '../space/space.mjs?v=27b9e9b571';   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=3549ba4382';
 
@@ -442,7 +442,19 @@ export function resolveNP(s, np, { many = false, ask = false } = {}) {
 }
 const FRAME = { w: W, h: H, step: 110 };
 /** The objects as the module sees them: one box each (centre, size) and the stacking order. */
-const projectAll = (list) => list.map((o) => { const b = bbox(o); return { id: o.id, kind: kindKey(o), name: kindName(kindKey(o)), x: o.x, y: o.y, w: b.w, h: b.h, z: o.z }; });
+/** The real outline of a composite / catalog thing for the module `space`: its solid parts (boxes, polygons, ellipses) as offsets from the centre, turned and mirrored like the drawing. */
+function outlineOfObj(o) {
+  if (!String(kindKey(o)).startsWith(COMPOSITE)) return null;
+  const a = ((o.rotation ?? 0) * Math.PI) / 180, c = Math.cos(a), sn = Math.sin(a), k = o.size, fl = o.flip ? -1 : 1, polys = [];
+  const put = (pts) => polys.push(pts.map(([x, y]) => { const px = x * fl * k, py = y * k; return [Math.round((px * c - py * sn) * 10) / 10, Math.round((px * sn + py * c) * 10) / 10]; }));
+  for (const p of partsOf(o)) {
+    if (polys.length >= 14) break;
+    if (p.s === 'poly' && p.pts?.length > 2) put(p.pts);
+    else if ((p.s === 'rect' || p.s === 'ellipse' || p.s === 'circle') && p.w >= 0.06 && p.h >= 0.06) { const w = p.w / 2, h = p.h / 2; put([[p.x - w, p.y - h], [p.x + w, p.y - h], [p.x + w, p.y + h], [p.x - w, p.y + h]]); }
+  }
+  return polys.length ? polys : null;
+}
+const projectAll = (list) => list.map((o) => { const b = bbox(o), shape = outlineOfObj(o); return { id: o.id, kind: kindKey(o), name: kindName(kindKey(o)), x: o.x, y: o.y, w: b.w, h: b.h, z: o.z, ...(shape ? { shape } : {}) }; });
 /** The selection a noun phrase asks for, as the module's spec (null when it asks for nothing by place or order). */
 function specOf(np, list, many) {
   const spec = { ord: np.ordinal, pos: np.pos, size: null, other: np.other, count: np.count, all: np.all, plural: np.plural && many, next: null, between: null };
@@ -1389,6 +1401,8 @@ export const move = guard((ctx, args, s) => {
   if (adj) phrase = /^the /i.test(phrase) ? phrase.replace(/^the /i, `the ${adj} `) : `${adj} ${phrase}`;
   // "slide the house over to the right": "over to" is a direction, not the relation "over"
   phrase = phrase.replace(/\b(?:over|across|along) (to|towards|toward)\b/gi, '$1');
+  const wish = space.contactWish(phrase);   // "touching", "don't join them", "leave a gap"
+  if (wish.apart || wish.touch) phrase = space.stripWish(toks(phrase)).join(' ');
   let { target: tt, dest } = splitDest(phrase);
   if (!toks(tt.replace(AMOUNT_RE, ' ')).filter((x) => !['a', 'the', 'more', 'even', 'and', 'also', 'then', 'so', 'please'].includes(x)).length) { dest = `${tt} ${dest}`.trim(); tt = ''; }   // "and a bit lower": only an amount before the direction, so it is the same thing
   if (args.verb === 'put') { const am = addMissing(ctx, s, tt, dest); if (am) return am; }   // a placing verb with a thing that is not in the picture adds it
@@ -1413,6 +1427,13 @@ export const move = guard((ctx, args, s) => {
   const before = r.objs.map((o) => ({ id: o.id, x: o.x, y: o.y, z: o.z }));
   const res = applyDest(s, r.objs, d);
   if (res.error) { s.history.pop(); return no(res.error, 'missing'); }
+  let joinSay = '';
+  if (d.kind === 'step' || d.kind === 'rel') {   // natural joining: a roof set near walls touches them; "apart" keeps a gap
+    const all = projectAll(s.objects), moved = Object.fromEntries(res.done.map((o) => [o.id, { x: o.x, y: o.y }]));
+    const jr = wish.apart ? { boxes: space.apartAfter(all, moved, FRAME), joined: [] } : space.joinAfter(all, moved, FRAME, wish);
+    for (const [id, b] of Object.entries(jr.boxes)) { const o = byId(s, id); if (o && (o.x !== b.x || o.y !== b.y)) { o.x = b.x; o.y = b.y; clampIn(o); } }
+    joinSay = space.sayJoined(jr.joined, all, '');
+  }
   s.lastMove = d.kind === 'step' ? d.memory : null;   // what "further" repeats
   s.lastMoveInfo = { dest, kind: kindKey(r.objs[0]), before };   // what "no, the middle one" corrects
   s.last = r.objs.map((o) => o.id);
@@ -1422,6 +1443,7 @@ export const move = guard((ctx, args, s) => {
   const relText = d.kind === 'rel' ? describePlacing(r.objs[0], { rel: d.rel }, d.refs.map((x) => resolveNP(s, parseNP(x)).objs[0] ?? r.objs[0])) : '';
   const regionText = d.kind === 'region' ? describePlacing(null, { region: d.region }, []) : '';
   if (wantGround) return ok(withNote(`${opener(s)} I moved ${name} ${wantGround === 'sea' ? 'into the water' : wantGround === 'snow' ? 'onto the snow' : `onto the ${GROUND_NAME[wantGround]}`}.${addedGround ? ` There was no ${GROUND_NAME[wantGround]}, so I added it to the ground.` : ''}`, r));
+  if (joinSay) return ok(withNote(`${opener(s)} ${joinSay}`, r));
   return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : ''}.`, r));
 });
 void 0;
@@ -1445,6 +1467,7 @@ export const spatial = guard((ctx, args, s) => {
   const items = projectAll(s.objects);
   if (!items.length) return no('Your picture is empty. Try "draw a red house".', 'missing');
   const r = space.interpret(String(args.text ?? ''), { items, frame: FRAME, kindOf: (w) => kindOfWord(w) ?? null, last: s.last, lastMove: s.lastMove });
+  if (!r && /\baround\b/i.test(String(args.text ?? ''))) { const m = /^\s*(?:put|place|set|arrange|lay)\s+(.*)$/i.exec(String(args.text)); if (m) return move(ctx, { phrase: m[1], verb: 'put' }); }   // one thing around another is a move (it wraps it), not a layout
   if (!r) return no('I did not understand where things should go. Try "put the houses in a row" or "what is next to the sun?".', 'unsupported');
   if (r.type === 'ask') return no(r.say, 'missing');
   if (r.type === 'error') return no(r.say, 'missing');

@@ -15,7 +15,7 @@
 // Effects: avatar.animate { name: wink|nod|dance|wave|spin|jump|bounce|wiggle|blink|shake } (a moment, not stored state).
 // Every command that changes the avatar brings its tab forward: ctx.request('ui.openTab', { tab: 'robot' }).
 // AVATAR-FROM-PARTS: a drawn face (faceops.mjs, facedata.mjs, facedraw.mjs) lives in state.face; while state.face.active, the operations below that change or ask about a part hand over to it.
-import * as Face from './faceops.mjs?v=7f347f3f3a';
+import * as Face from './faceops.mjs?v=1c80716990';
 
 /** The three original characters: only they are reached from another character ("only the person has glasses: say yes to become one"). */
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)

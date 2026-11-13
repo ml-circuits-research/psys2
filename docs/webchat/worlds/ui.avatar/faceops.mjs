@@ -8,7 +8,7 @@
 // kinds of avatar, in both reasoners. Every reply is plain words. Browser-safe: imports only its siblings and the shared space module.
 import { getFaces } from './facedata.mjs?v=021cfd1d17';
 import { shadeHex, COLOUR_ROLES } from './facedraw.mjs?v=4d738f00ed';
-import * as space from '../space/space.mjs?v=c917d7caac';
+import * as space from '../space/space.mjs?v=27b9e9b571';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const ok = (value) => ({ status: 'supported', value });
@@ -345,7 +345,7 @@ export function faceMove(ctx, { part, words: w, text } = {}) {
   if (sl.pair && (closer || apart) && !flat.some((x) => ['left', 'right'].includes(x))) flat.push(closer ? 'right' : 'left');
   const mv = space.parseMove(flat.join(' '));
   if (!mv) return no(`Tell me which way: for example "raise the ${nounOf(slot)}" or "move the ${nounOf(slot)} down a bit".`);
-  const cur = boxFor(f, sl), item = { id: slot, x: cur.x, y: cur.y, w: sl.w, h: sl.h };
+  const cur = boxFor(f, sl), item = { id: slot, kind: slot, x: cur.x, y: cur.y, w: sl.w, h: sl.h, parts: [{ x: 0, y: 0, w: sl.w, h: sl.h }] };   // the slot's anchor box is its surface
   const r = space.planMove([item], FRAME(data), mv, null);
   if (r.error) return no('Tell me which way to move it.');
   const lim = LIMITS[slot] ?? { dx: [-4, 4], dy: [-4, 4] };
