@@ -183,7 +183,7 @@
     doc="Follow-up without a subject: what the current topic looks like."
 
 @pat.talk.it.parts core.pattern
-    canonical="And its parts?"
+    canonical="What are its parts?"
     match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.itparts] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.parts"
     kind=request
@@ -229,7 +229,7 @@
     doc="Change the colour of the card the conversation is on."
 
 @pat.talk.change.bigger core.pattern
-    canonical="Bigger."
+    canonical="Make it bigger."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.bigger] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.change arg.size=up"
     kind=request
@@ -240,7 +240,7 @@
     doc="Make the card the conversation is on bigger."
 
 @pat.talk.change.smaller core.pattern
-    canonical="Smaller."
+    canonical="Make it smaller."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.smaller] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.change arg.size=down"
     kind=request
@@ -281,6 +281,7 @@
     tabClaim=true
     priority=14
     example="Turn it into a diagram."
+    example="Make a diagram of this."
     doc="Send the card to the Diagram tab: the parts become boxes linked to the thing."
 
 @pat.talk.send.map core.pattern

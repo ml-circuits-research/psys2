@@ -1893,6 +1893,7 @@
     doc="Repeats the last move."
 
 @pat.diagram.sketch.reselect core.pattern
+    canonical="Not the left one, the right one."
     match="[no|nope|oh_no]? not [the]? {a:words(2)} [one]? [the|but|i_meant|i_mean|the_one]? {p:words(4)}"
     emit="@{_} core.request action=diagram.reselect arg.text=\"{p}\""
     kind=request
@@ -1914,6 +1915,7 @@
     doc="Is A above, under, left of, right of or next to B: handed to the module space."
 
 @pat.diagram.sketch.space.which core.pattern
+    canonical="Which box is in the middle?"
     match="which {r:words(3)} [is|are] [in_the_middle|in_the_centre|in_the_center] {c:rest?}"
     emit="@{_} core.request action=diagram.spatial arg.text=\"{segment}\""
     kind=question

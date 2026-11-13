@@ -4,6 +4,7 @@
     expectState="robot.eyes=visor"
     expectState="character=robot"
     session=a
+    given="face.active=false"
 
 @t.ui.avatar.n02 core.test
     input="Use the cyclops eye."
@@ -65,6 +66,7 @@
     input="Next eyes."
     expectState="robot.eyes=square"
     session=b
+    given="face.active=false"
 
 @t.ui.avatar.n13 core.test
     input="Next eyes."
@@ -128,6 +130,7 @@
     expect="My body is"
     expectState="robot.colors.body=74c0fc"
     session=c
+    given="face.active=false"
 
 @t.ui.avatar.n25 core.test
     input="Make your glow pink."
@@ -187,6 +190,7 @@
     expect="a person"
     expectState="character=person"
     session=d
+    given="face.active=false"
 
 @t.ui.avatar.n36 core.test
     input="Wear a medical mask."
@@ -308,6 +312,7 @@
     input="Turn into an emoji."
     expectState="character=emoji"
     session=e
+    given="face.active=false"
 
 @t.ui.avatar.n60 core.test
     input="Make your mouth a big smile."
@@ -361,6 +366,7 @@
     input="What can I change?"
     expect="You can change my chest"
     session=f
+    given="face.active=false"
 
 @t.ui.avatar.n70 core.test
     input="What eyes can you have?"
@@ -449,6 +455,7 @@
     expect="banana"
     expectState="seed=banana"
     session=g
+    given="face.active=false"
 
 @t.ui.avatar.n87 core.test
     input="What is your seed?"
@@ -490,10 +497,10 @@
 
 @t.ui.avatar.n94 core.test
     input="Make your eyes bigger."
-    expect="I cannot scale my eyes"
-    expect="For bigger eyes try square, visor or cyclops"
-    expectState="robot.eyes=round"
+    expect="I made my eyes bigger"
+    expectState="face.adj.eyes.s=1.15"
     session=g
+    doc="after Start over the avatar is the drawn face again (the default), so the eyes scale"
 
 @t.ui.avatar.n95 core.test
     input="Become a person."
@@ -676,6 +683,7 @@
 @t.ui.avatar.charchange2 core.test
     input="I want an emoji avatar"
     expect="Now I am an emoji"
+    given="face.active=false"
 
 @t.ui.avatar.u01 core.test
     input="I want a human as avatar"
@@ -810,6 +818,7 @@
     expect="Say \"yes\" to become the person"
     expectState="character=robot"
     session=w
+    given="face.active=false"
 
 @t.ui.avatar.w02 core.test
     input="no"
@@ -865,6 +874,7 @@
     expect="Now I look surprised"
     expectState="robot.mouth=speaker"
     session=x
+    given="face.active=false"
 
 @t.ui.avatar.x02 core.test
     input="Become a persan."
@@ -881,6 +891,7 @@
     input="Give yourself visor eyes."
     expectState="robot.eyes=visor"
     session=ywhy
+    given="face.active=false"
 
 @t.ui.avatar.y02 core.test
     input="why did you change it?"
@@ -909,16 +920,19 @@
     input="Red body colour."
     expectState="robot.colors.body=ff9d9d"
     session=t1
+    given="face.active=false"
 
 @t.ui.avatar.t02 core.test
     input="body color should be red"
     expectState="robot.colors.body=ff9d9d"
     session=t2
+    given="face.active=false"
 
 @t.ui.avatar.t03 core.test
     input="Paint the body red."
     expectState="robot.colors.body=ff9d9d"
     session=t3
+    given="face.active=false"
 
 @t.ui.avatar.t04 core.test
     input="I want the body to be blue."
@@ -934,6 +948,7 @@
     input="Your background must be yellow."
     expectState="robot.colors.background=ffdfbf"
     session=t6
+    given="face.active=false"
 
 @t.ui.avatar.t07 core.test
     input="Make it blue."
@@ -954,41 +969,49 @@
     input="I want to be an emoji."
     expectState="character=emoji"
     session=t10
+    given="face.active=false"
 
 @t.ui.avatar.t11 core.test
     input="Make the eyes bigger and the lips red."
     expect="lip color"
     session=t11
+    given="face.active=false"
 
 @t.ui.avatar.t12 core.test
     input="make bigger yes and red lips"
     expect="lip color"
     session=t12
+    given="face.active=false"
 
 @t.ui.avatar.t13 core.test
     input="Bigger eyes please."
     expect="scale my eyes"
     session=t13
+    given="face.active=false"
 
 @t.ui.avatar.t14 core.test
     input="The eyes should be smaller."
     expect="scale my eyes"
     session=t14
+    given="face.active=false"
 
 @t.ui.avatar.t15 core.test
     input="Make yes bigger."
     expect="scale my eyes"
     session=t15
+    given="face.active=false"
 
 @t.ui.avatar.t16 core.test
     input="Make the eyes huge."
     expect="scale my eyes"
     session=t16
+    given="face.active=false"
 
 @t.ui.avatar.t17 core.test
     input="Give me bigger eyes."
     expect="scale my eyes"
     session=t17
+    given="face.active=false"
 
 @t.ui.avatar.t18 core.test
     input="Make the eyes round and the body blue."
@@ -1000,16 +1023,19 @@
     input="Mouth grill please."
     expectState="robot.mouth=grill"
     session=t19
+    given="face.active=false"
 
 @t.ui.avatar.t20 core.test
     input="Dish on top pls."
     expectState="robot.top=dish"
     session=t20
+    given="face.active=false"
 
 @t.ui.avatar.t21 core.test
     input="Put a dish up top."
     expectState="robot.top=dish"
     session=t21
+    given="face.active=false"
 
 @t.ui.avatar.t22 core.test
     input="Make the eyes round, the body blue."
@@ -1026,6 +1052,7 @@
     input="Put a dish up top."
     expectState="robot.top=dish"
     session=ra2
+    given="face.active=false"
 
 @t.ui.avatar.r03 core.test
     input="Would like a dish on the top"
@@ -1036,6 +1063,7 @@
     input="Mouth to default please"
     expect="mouth again"
     session=ra3
+    given="face.active=false"
 
 @t.ui.avatar.r05 core.test
     input="What hair u got"
@@ -1082,6 +1110,7 @@
     expectState="robot.colors.body=ff9d9d"
     expectState="robot.colors.glow=ff6b6b"
     session=f4r
+    given="face.active=false"
 
 @t.ui.avatar.f4r02 core.test
     input="Make your eyes green, no, blue."
@@ -1108,6 +1137,7 @@
     input="Open the robot tab."
     expectStatus=supported
     session=disc_avatar
+    given="face.active=false"
 
 @t.ui.avatar.d02 core.test
     input="Give yourself round glasses and a beard."
@@ -1152,36 +1182,43 @@
     session=av1
     input="add vents to your chest"
     expectState="robot.chest=vents"
+    given="face.active=false"
 
 @t.ui.avatar.x202 core.test
     session=av2
     input="stick a heart on your chest"
     expectState="robot.chest=heart"
+    given="face.active=false"
 
 @t.ui.avatar.x203 core.test
     session=av3
     input="give me plus shaped eyes"
     expectState="robot.eyes=plus"
+    given="face.active=false"
 
 @t.ui.avatar.x204 core.test
     session=av4
     input="can you give yourself a pair of visor eyes"
     expectState="robot.eyes=visor"
+    given="face.active=false"
 
 @t.ui.avatar.x205 core.test
     session=av5
     input="remove the thing on your chest"
     expectState="robot.chest=none"
+    given="face.active=false"
 
 @t.ui.avatar.x206 core.test
     session=av6
     input="turn your whole body green"
     expectState="robot.colors.body=69db7c"
+    given="face.active=false"
 
 @t.ui.avatar.x207 core.test
     session=av7
     input="i prefer you in yellow"
     expectState="robot.colors.body=ffd43b"
+    given="face.active=false"
 
 @t.ui.avatar.x208 core.test
     session=av8
@@ -1192,31 +1229,37 @@
     session=av9
     input="put a dish on your head"
     expectState="robot.top=dish"
+    given="face.active=false"
 
 @t.ui.avatar.x210 core.test
     session=av10
     input="i would like you to wear a dish on top of your head"
     expectState="robot.top=dish"
+    given="face.active=false"
 
 @t.ui.avatar.x211 core.test
     session=av11
     input="what mouths are there"
     expect="zigzag"
+    given="face.active=false"
 
 @t.ui.avatar.x212 core.test
     session=av12
     input="swap your eyes for cyclops ones"
     expectState="robot.eyes=cyclops"
+    given="face.active=false"
 
 @t.ui.avatar.x213 core.test
     session=av13
     input="your mouth could be a zigzag"
     expectState="robot.mouth=zigzag"
+    given="face.active=false"
 
 @t.ui.avatar.x214 core.test
     session=av14
     input="i think you would look better with square eyes"
     expectState="robot.eyes=square"
+    given="face.active=false"
 
 @t.ui.avatar.x215 core.test
     session=av15
@@ -1227,6 +1270,7 @@
     session=av16
     input="give yourself visor eyes"
     expectState="robot.eyes=visor"
+    given="face.active=false"
 
 @t.ui.avatar.x217 core.test
     session=av16
@@ -1237,6 +1281,7 @@
     session=pb1
     input="Give yourself visor eyes."
     expectState="robot.eyes=visor"
+    given="face.active=false"
 
 @t.ui.avatar.x2b2 core.test
     session=pb1
@@ -1262,16 +1307,19 @@
     input="i want your body to be green"
     expectState="robot.colors.body=69db7c"
     session=sh02
+    given="face.active=false"
 
 @t.ui.avatar.sh03 core.test
     input="could you maybe paint your body red"
     expectState="robot.colors.body=ff9d9d"
     session=sh03
+    given="face.active=false"
 
 @t.ui.avatar.sh04 core.test
     input="can your body be green"
     expectState="robot.colors.body=69db7c"
     session=sh04
+    given="face.active=false"
 
 @t.ui.avatar.sh05 core.test
     input="give me a blue body"
@@ -1282,36 +1330,43 @@
     input="tell me the colour of your body"
     expect="My body is"
     session=sh06
+    given="face.active=false"
 
 @t.ui.avatar.sh07 core.test
     input="i wonder what colour your body is"
     expect="My body is"
     session=sh07
+    given="face.active=false"
 
 @t.ui.avatar.sh08 core.test
     input="do you know the shade of your body"
     expect="My body is"
     session=sh08
+    given="face.active=false"
 
 @t.ui.avatar.sh09 core.test
     input="the shade of your body"
     expect="My body is"
     session=sh09
+    given="face.active=false"
 
 @t.ui.avatar.sh10 core.test
     input="get your eyes a bit smaller"
     expect="smaller eyes"
     session=sh10
+    given="face.active=false"
 
 @t.ui.avatar.sh11 core.test
     input="swap your mouth to a grill"
     expectState="robot.mouth=grill"
     session=sh11
+    given="face.active=false"
 
 @t.ui.avatar.sh12 core.test
     input="i want your mouth as a grill"
     expectState="robot.mouth=grill"
     session=sh12
+    given="face.active=false"
 
 @t.ui.avatar.sh13 core.test
     input="is it possible to wear sunglasses on your face"
@@ -1416,16 +1471,19 @@
     input="i want to know if you have a beard"
     expect="No, I do not have a beard right now."
     session=sh14
+    given="face.active=false"
 
 @t.ui.avatar.sh15 core.test
     input="could you maybe reset your eyes"
     expect="I have round eyes again."
     session=sh15
+    given="face.active=false"
 
 @t.ui.avatar.sh16 core.test
     input="tell me if you have glasses"
     expect="I do not have a glass right now."
     session=sh16
+    given="face.active=false"
 
 @t.ui.avatar.av01 core.test
     input="Become a portrait."
@@ -1512,6 +1570,7 @@
     expectState="character=person"
     expectState="person.head=long"
     session=avm2
+    given="face.active=false"
 
 @t.ui.avatar.av15 core.test
     input="Become a little girl."
@@ -1608,6 +1667,7 @@
     expectState="character=pixel"
     expectState="pixel.hair=long03"
     session=avm4
+    given="face.active=false"
 
 @t.ui.avatar.av31 core.test
     input="Make me a happy cartoon man."
@@ -1682,6 +1742,7 @@
     expect="I am a robot already"
     expectState="character=robot"
     session=avm5
+    given="face.active=false"
 
 @t.ui.avatar.av43 core.test
     input="Give yourself glasses."
@@ -1754,6 +1815,7 @@
     input="Make a big smile."
     expect="a big smile"
     session=rp3av
+    given="face.active=false"
 
 @t.ui.avatar.rp3b core.test
     input="Big smile."
@@ -1779,6 +1841,7 @@
     input="whats on u"
     expect="do not wear clothes"
     doc="GAPS-1"
+    given="face.active=false"
 
 @t.ui.avatar.gaps2 core.test
     input="would you say you are happy"
@@ -1819,11 +1882,66 @@
     session=face
 
 @t.ui.avatar.f07 core.test
-    input="Be a robot."
+    input="Be a cartoon."
     expectState="face.active=false"
     session=face
+    doc="a classic character (DiceBear) replaces the drawn face; the robot and the emoji are looks of the drawn face"
 
 @t.ui.avatar.f08 core.test
     input="Raise the eyebrows."
     expect="only my drawn face can do that"
     session=face
+
+# ---- the drawn face is the avatar at the start (owner decision 2026-11-13): hat, earrings, shirt, background, robot and emoji looks -----------------------------
+
+@t.ui.avatar.df01 core.test
+    input="Give it a hat."
+    expectState="face.slots.hat=cap"
+    expectState="face.active=true"
+    session=dflt
+    doc="no setup: the avatar starts as a drawn face"
+
+@t.ui.avatar.df02 core.test
+    input="Make the hat blue."
+    expect="blue cap"
+    session=dflt
+
+@t.ui.avatar.df03 core.test
+    input="Red earrings."
+    expectState="face.slots.earrings=stud"
+    session=dflt
+
+@t.ui.avatar.df04 core.test
+    input="Change the shirt colour to green."
+    expect="My shirt is green"
+    session=dflt
+
+@t.ui.avatar.df05 core.test
+    input="Make the background yellow."
+    expect="The background is yellow"
+    expectState="face.colours.background=fbeeb0"
+    session=dflt
+
+@t.ui.avatar.df06 core.test
+    input="Become a robot."
+    expectState="face.base=robot"
+    expectState="face.slots.eyes=led"
+    expect="screen face"
+    session=dflt
+
+@t.ui.avatar.df07 core.test
+    input="Become an emoji."
+    expectState="face.slots.face=emoji"
+    session=dflt
+
+@t.ui.avatar.df08 core.test
+    input="Remove the hat."
+    expect="no hat"
+    session=dflt
+
+@t.ui.avatar.df09 core.test
+    input="Be a cartoon."
+    expectState="face.active=false"
+    expectState="character=cartoon"
+    session=dflt
+    doc="the DiceBear characters stay selectable (classic)"

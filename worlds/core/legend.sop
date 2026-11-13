@@ -561,6 +561,11 @@
     card=one
     ask="Which state path of its world must be non-empty for the pattern to apply (unless the world's tab is active)?"
 
+@core.pattern.onlyWhile core.key
+    value=atom
+    card=one
+    ask="Which state path of its world must be truthy for the pattern to apply, also on the world's own tab?"
+
 @core.pattern.example core.key
     value=string
     card=many
@@ -844,6 +849,11 @@
     value=string
     card=many
     ask="Which state value must hold after the input (<dot.path>=<value>, optionally <worldId>:<dot.path>=<value>)?"
+
+@core.test.given core.key
+    value=string
+    card=many
+    ask="Which state value is set when the test's session starts (<dot.path>=<value>, optionally <worldId>:<dot.path>=<value>; true, false and numbers are read as such)?"
 
 @core.test.reasoner core.key
     value=atom

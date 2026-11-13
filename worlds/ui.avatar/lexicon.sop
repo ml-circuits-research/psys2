@@ -2358,6 +2358,8 @@
     word=eyebrow
     word=brow
     word=nose
+    word=hat
+    word=earring
 
 @lex.ui.avatar.colorparts core.lexicon
     class=noun
@@ -2388,6 +2390,8 @@
     word=hair
     word=face
     word=head
+    word=hat
+    word=earring
     word=lip
     word=mouth
 
@@ -2697,6 +2701,14 @@
     alt=gimme
     alt=i_wanna
     alt=i_wana
+    alt=give_it
+    alt=give_her
+    alt=give_him
+    alt=give_them
+    alt=give_the_robot
+    alt=give_the_avatar
+    alt=give_the_face
+    alt=add_to_it
 
 @phrase.ui.avatar.g8_do_you_have core.phrase
     frame=false
@@ -2941,6 +2953,24 @@
     word=different
     word=other
     word=prior
+
+@lex.ui.avatar.faceparts core.lexicon
+    class=noun
+    plural=eye:yes
+    doc="The parts of the drawn face that can be moved or resized (faceops.mjs slots): the face patterns read only these, so a word of another character (top, chest, antenna) or of another world (top right on a board) is not a part of the face."
+    word=eye
+    word=eyebrow
+    word=brow
+    word=nose
+    word=mouth
+    word=lip
+    word=hair
+    word=beard
+    word=moustache
+    word=glasses
+    word=hat
+    word=earring
+    word=face
 
 @lex.ui.avatar.facemoves core.lexicon
     class=noun

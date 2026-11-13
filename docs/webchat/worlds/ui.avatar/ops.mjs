@@ -15,7 +15,7 @@
 // Effects: avatar.animate { name: wink|nod|dance|wave|spin|jump|bounce|wiggle|blink|shake } (a moment, not stored state).
 // Every command that changes the avatar brings its tab forward: ctx.request('ui.openTab', { tab: 'robot' }).
 // AVATAR-FROM-PARTS: a drawn face (faceops.mjs, facedata.mjs, facedraw.mjs) lives in state.face; while state.face.active, the operations below that change or ask about a part hand over to it.
-import * as Face from './faceops.mjs?v=1c80716990';
+import * as Face from './faceops.mjs?v=18be2b4769';
 
 /** The three original characters: only they are reached from another character ("only the person has glasses: say yes to become one"). */
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
@@ -31,6 +31,7 @@ export function initialState() {
     person: { head: 'short1', expression: 'smile', accessories: 'none', facialHair: 'none', mask: 'none', colors: { skin: 'edb98a', clothing: '8fa7df', headContrast: '2c1b18' } },
     emoji: { face: 'circle', eyes: 'pupils', mouth: 'smile', cheeks: 'blush', colors: { face: 'fcd34d', background: '1d4ed8' } },
     chips: chips('robot'),
+    face: Face.newFace(),   // the drawn face is the avatar at the start; the DiceBear characters (the "classic" ones) are one "be a cartoon" away
   };
 }
 
@@ -556,6 +557,7 @@ function takeOff(ctx, s, ch, key) {
 }
 function _removePart(ctx, { part, value, text }) {
   const s = ensure(ctx);
+  if ((part === 'hat' || part === 'earring') && !value) { value = part; text ??= part; part = undefined; }   // a hat is an option of a classic character, a part of the drawn face
   let ch, key, id;
   if (value) {
     const r = resolveVariant(ctx, s, { part, value, text });
@@ -605,6 +607,7 @@ const colorSentence = (ctx, key, part, name) => {
 };
 function _setColor(ctx, { part, color }) {
   const s = ensure(ctx);
+  if (part === 'hat' || part === 'earring') return _setPartColored(ctx, { value: part, color, text: part });   // "a red hat": a part of the drawn face, or an option of a classic character (with the offer to become it)
   const target = hexOfName(ctx, color);
   if (!target) return no(`I do not know the color ${String(color).replace(/_/g, ' ')}.`);
   const cs = colorSlot(s, ctx, part);
@@ -832,7 +835,7 @@ function _reset(ctx, { scope }) {
     for (const k of Object.keys(s)) delete s[k];
     Object.assign(s, d, { name: keep });
     if (undo) s.undo = undo;
-    return done(ctx, 'resetall', 'I started over as the robot.');
+    return done(ctx, 'resetall', 'I started over with the drawn face.');
   }
   const ch = s.character;
   s[ch] = d[ch] ?? defaultLook(ctx, ch);
@@ -952,7 +955,7 @@ const W = (fn, name) => (ctx, args = {}) => {
   const s = ensure(ctx), pre = snap(s), prev = CURRENT;
   CURRENT = { fn: name, args };
   try {
-    const mine = s.face?.active ? Face.FACE_DELEGATES[name] : null;   // the drawn face answers the requests about its parts
+    const mine = s.face?.active ? Face.FACE_DELEGATES[name] : null;   // the drawn face answers the requests about its parts; "become a robot" is its robot look (a classic character stays classic until "draw a face")
     if (mine) { const r = mine(ctx, args); if (r !== undefined) return r; }
     const out = fn(ctx, args);
     if (s.face && !s.face.active && pre.face?.active && out?.status === 'supported' && /already/.test(out.value ?? '')) return done(ctx, 'leave', `Now I am ${spoken(s.character)}.`);   // "be a robot" from the drawn face

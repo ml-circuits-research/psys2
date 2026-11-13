@@ -5,11 +5,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { classicAvatar } from './helpers.mjs';
 import { normalizeWorldAware, baseMode, leftOut, sayMissing, vetoOf } from '../src/dialog/world-aware.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const session = async (worldAware, tab, setup = []) => {
-  const s = engine.createSession({ language: 'en', ...(worldAware ? { worldAware } : {}) });   // null: the option is not passed (the default); 'off' turns the layer off
+  const s = classicAvatar(engine.createSession({ language: 'en', ...(worldAware ? { worldAware } : {}) }));   // null: the option is not passed (the default); 'off' turns the layer off
   if (tab) s.setWorldState('ui.shell', { activeTab: tab });
   for (const m of setup) await s.send(m);
   return s;

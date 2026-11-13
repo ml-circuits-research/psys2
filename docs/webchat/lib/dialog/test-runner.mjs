@@ -9,6 +9,21 @@ function statePath(state, path) {
   return v;
 }
 
+/** `given` of a test: sets "[world:]dot.path=value" in the state of a fresh session (a world whose start state is not the one its tests assume). */
+function applyGiven(s, t) {
+  for (const spec of t.given ?? []) {
+    const m = String(spec).match(/^(?:([\w.]+):)?([^=]+)=(.*)$/);
+    if (!m) continue;
+    const id = m[1] ?? t.worldId, keys = m[2].trim().split('.'), raw = m[3];
+    const value = raw === 'true' ? true : raw === 'false' ? false : raw !== '' && !Number.isNaN(Number(raw)) ? Number(raw) : raw;
+    const st = structuredClone(s.state(id) ?? {});
+    let o = st;
+    for (const k of keys.slice(0, -1)) o = (o[k] ??= {});
+    o[keys.at(-1)] = value;
+    s.setWorldState(id, { [keys[0]]: st[keys[0]] });
+  }
+}
+
 /**
  * @returns {Promise<{ worldId, total, passed, failed: {id, message}[], skipped: {id, reason}[] }>}
  */
@@ -22,7 +37,7 @@ export async function runWorldTests(engine, worldId) {
     result.total++;
     if (t.language !== 'en' && !engine.translator) { result.skipped.push({ id: t.id, reason: 'no translator available' }); continue; }
     let s = t.session ? sessions.get(t.session) : null;
-    if (!s) { s = engine.createSession({ language: 'en' }); if (t.session) sessions.set(t.session, s); }
+    if (!s) { s = engine.createSession({ language: 'en' }); if (t.session) sessions.set(t.session, s); applyGiven(s, t); }
     try {
       const reply = await s.send(t.input, { language: t.language });
       const last = reply.answers.at(-1);

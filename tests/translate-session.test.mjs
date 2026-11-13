@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine, translateParts } from '../src/dialog/index.mjs';
 import { createTranslator, languageEvidence } from '../src/translate/index.mjs';
-import { sampled } from './helpers.mjs';
+import { sampled, classicAvatar } from './helpers.mjs';
 
 const rules = createTranslator();
 const engineWith = (detect) => createEngine({ loader: createFsLoader(), translator: { ...rules, detectLanguage: detect ?? rules.detectLanguage } });
@@ -44,7 +44,7 @@ test('LANG-FIXED: a session set to Romanian reads every message as Romanian, eve
 
 test('avatar refusals are answered in Romanian, and "dreamy" eyes map to the closest robot eyes (sleepy)', async () => {
   const e = await engineWith();
-  const s = e.createSession({ language: 'auto' });
+  const s = classicAvatar(e.createSession({ language: 'auto' }));
   s.setWorldState('ui.shell', { activeTab: 'avatar' });
   await s.send('fa-i ochii mari');   // strong Romanian: the session switches
   const refusal = await s.send('fa ochi cubici');

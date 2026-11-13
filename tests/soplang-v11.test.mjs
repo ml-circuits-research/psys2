@@ -58,7 +58,7 @@ test('every worlds/**/*.sop parses exactly as the v1 parser did (except the new 
     } else {
       // only files that use the new features (comments, variables) were rejected before; they parse now
       assert.deepEqual(cur.errors, [], `${f}: ${JSON.stringify(cur.errors[0])}`);
-      assert.match(f, /(matrix|mapping)\.sop$/, `${f} failed in v1 for a reason other than comments`);
+      assert.match(text, /^\s*#|\?[a-z]/m, `${f} failed in v1 for a reason other than comments or variables`);
     }
   }
   assert.ok(same > 100);

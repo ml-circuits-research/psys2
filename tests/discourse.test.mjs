@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { splitFragment } from '../src/dialog/discourse.mjs';
+import { classicAvatar } from './helpers.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const say = async (s, ...texts) => { let r; for (const t of texts) r = await s.send(t); return r; };
@@ -98,7 +99,7 @@ test('bare "Draw": the drawing tab keeps it, elsewhere it stays the chess draw o
 });
 
 test('yes/no offers are recorded as a confirm expectation and expire after one turn', async () => {
-  const s = engine.createSession({ language: 'en' });
+  const s = classicAvatar(engine.createSession({ language: 'en' }));
   await s.send('open the robot tab');
   const r = await s.send('Give yourself a beard');
   assert.equal(r.trace.discourse.pending?.type, 'confirm');

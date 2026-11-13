@@ -138,7 +138,7 @@ export function guard({ action, args, state, check, find }) {
     const r = check({ wires: `@av.q ui.avatar.want kind=colorname name=${atom(args.color)} word=${str(spaced(args.color))}` });
     if (!r.ok) return reason(r);
   }
-  if (action !== 'avatar.setPartColored' && args?.part !== undefined) {
+  if (action !== 'avatar.setPartColored' && args?.part !== undefined && !state?.face?.active && !['hat', 'earring'].includes(args.part)) {   // a drawn face answers for its own parts (faceops.mjs)
     const part = atom(args.part), ch = state?.character ?? 'robot';
     const key = (PART_KEYS[args.part] ?? []).find((k) => find('ui.avatar.slot').some((w) => first(w, 'ch') === ch && first(w, 'key') === k));
     const r = check({ wires: `@av.q ui.avatar.want kind=${key ? 'paintlist' : 'paint'} ch=${ch} part=${part} word=${str(spaced(args.part))}${key ? ` key=${key}` : ''}` });

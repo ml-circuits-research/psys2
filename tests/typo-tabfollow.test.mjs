@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { classicAvatar } from './helpers.mjs';
 import { editDistance, correctTokens, tokenize } from '../src/formalizer/rules/index.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
@@ -40,7 +41,7 @@ test('correctTokens: a tie between two candidates is not corrected', () => {
 });
 
 test('the formalizer retries once with corrected words and records them in the segment and the trace', async () => {
-  const s = engine.createSession();
+  const s = classicAvatar(engine.createSession());
   const r = await s.send('look suprised');
   assert.equal(s.state('ui.avatar').person.expression === 'awe' || s.state('ui.avatar').robot.mouth === 'speaker', true);
   assert.deepEqual(r.segments[0].corrections.map((c) => [c.from, c.to]), [['suprised', 'surprised']]);
@@ -85,7 +86,7 @@ test('avatar: no silent switch; an offer is answered by yes (repeats the command
 });
 
 test('avatar: undo walks back through the changes, including a character change', async () => {
-  const s = engine.createSession();
+  const s = classicAvatar(engine.createSession());
   assert.match((await s.send('undo')).text, /nothing to undo/);
   await s.send('make your eyes round'); await s.send('become an emoji'); await s.send('go back to how you were');
   assert.equal(s.state('ui.avatar').character, 'robot');

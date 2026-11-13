@@ -78,6 +78,8 @@ const SLOTS = [
   ['beard', 50, 90, 56, 50, 25, 'no', 'yes', ['beard', 'moustache', 'mustache', 'goatee']],
   ['mouth', 50, 90, 28, 14, 26, 'no', 'no', ['mouth', 'lips', 'lip', 'smile']],
   ['glasses', 50, 58, 72, 26, 30, 'no', 'yes', ['glasses', 'glass', 'spectacles', 'spectacle', 'sunglasses', 'sunglass', 'shades', 'shade']],
+  ['earrings', 19, 73, 10, 18, 24, 'yes', 'yes', ['earring', 'earrings']],
+  ['hat', 50, 24, 84, 50, 35, 'no', 'yes', ['hat', 'hats', 'cap', 'caps', 'beanie', 'beanies']],
 ];
 const NECK = F('M30 98 L30 132 L70 132 L70 98 Z', 'skin', { shade: -0.15, layer: 'back' });
 const SHIRT = F('M-40 160 Q-30 126 30 124 L70 124 Q130 126 140 160 L140 175 L-40 175 Z', 'shirt', { layer: 'back' });
@@ -117,24 +119,49 @@ const VARIANTS = [
   V('glasses', 'square', ['square', 'rectangular', 'boxy', 'strong'], [{ shape: 'rect', x: 10, y: 4, w: 40, h: 30, rx: 6, role: 'none', stroke: 'glass', sw: 4 }, { shape: 'rect', x: 50, y: 4, w: 40, h: 30, rx: 6, role: 'none', stroke: 'glass', sw: 4 }, L('M48 14 L52 14', 'glass', 4), L('M10 12 L0 8', 'glass', 4), L('M90 12 L100 8', 'glass', 4)]),
   V('glasses', 'sun', ['sun', 'dark', 'shades', 'sunglasses', 'black'], [{ shape: 'rect', x: 10, y: 4, w: 40, h: 30, rx: 8, role: 'glass', op: 0.88 }, { shape: 'rect', x: 50, y: 4, w: 40, h: 30, rx: 8, role: 'glass', op: 0.88 }, L('M48 14 L52 14', 'glass', 4), L('M10 12 L0 8', 'glass', 4), L('M90 12 L100 8', 'glass', 4)]),
   V('glasses', 'none', ['none'], [], 'pick=no'),
+  // looks of a robot (screen face, glowing eyes, antenna, speaker mouth) and of an emoji (round face, dot eyes): variants only the presets pick (pick=no)
+  V('face', 'robot', ['robot', 'metal'], [NECK, SHIRT, { shape: 'rect', x: 2, y: 4, w: 96, h: 112, rx: 16, role: 'skin', stroke: 'line', sw: 2 }, { shape: 'rect', x: 13, y: 14, w: 74, h: 74, rx: 9, role: 'screen', stroke: 'line', sw: 2 }], 'pick=no'),
+  V('face', 'emoji', ['emoji', 'round', 'smiley'], [E(-14, -6, 128, 130, 'skin', { stroke: 'line', sw: 2 })], 'pick=no'),
+  V('hair', 'antenna', ['antenna'], [L('M50 24 L50 8', 'line', 3), E(43, 0, 14, 14, 'iris', { stroke: 'line', sw: 2 })], 'pick=no'),
+  V('eyes', 'led', ['led', 'glowing', 'robot'], [E(10, 6, 80, 50, 'iris', { stroke: 'line', sw: 2 }), E(30, 16, 30, 24, 'white', { op: 0.55 })], 'pick=no'),
+  V('eyes', 'dot', ['dot', 'dots', 'emoji'], [E(22, 2, 56, 58, 'pupil')], 'pick=no'),
+  V('eyebrows', 'none', ['none'], [], 'pick=no'),
+  V('nose', 'none', ['none'], [], 'pick=no'),
+  V('mouth', 'grille', ['grille', 'speaker', 'robot'], [{ shape: 'rect', x: 8, y: 0, w: 84, h: 44, rx: 8, role: 'none', stroke: 'line', sw: 5 }, L('M22 12 L78 12', 'line', 4), L('M22 22 L78 22', 'line', 4), L('M22 32 L78 32', 'line', 4)], 'pick=no'),
+  V('hat', 'cap', ['cap', 'baseball', 'sports'], [F('M6 34 Q4 2 50 0 Q96 2 94 34 Z', 'hat', { stroke: 'line', sw: 2 }), F('M0 34 L100 34 Q108 42 98 44 L6 44 Q-6 42 0 34 Z', 'hat', { stroke: 'line', sw: 2, shade: -0.2 })]),
+  V('hat', 'beanie', ['beanie', 'woolly', 'wool', 'warm', 'winter'], [F('M5 40 Q4 6 50 4 Q96 6 95 40 Z', 'hat', { stroke: 'line', sw: 2 }), F('M2 38 L98 38 L98 52 L2 52 Z', 'hat', { stroke: 'line', sw: 2, shade: -0.2 }), E(40, -10, 20, 20, 'hat', { stroke: 'line', sw: 2, shade: 0.2 })]),
+  V('hat', 'tophat', ['tophat', 'top', 'tall', 'formal', 'fancy'], [F('M26 4 L74 4 L72 36 L28 36 Z', 'hat', { stroke: 'line', sw: 2 }), F('M26 28 L74 28 L73 36 L27 36 Z', 'line'), E(4, 32, 92, 16, 'hat', { stroke: 'line', sw: 2, shade: -0.2 })]),
+  V('hat', 'none', ['none'], [], 'pick=no'),
+  V('earrings', 'stud', ['stud', 'small', 'tiny', 'button'], [E(10, 0, 80, 56, 'jewel', { stroke: 'line', sw: 5 })]),
+  V('earrings', 'hoop', ['hoop', 'ring', 'round', 'big', 'large'], [E(8, 0, 84, 120, 'none', { stroke: 'jewel', sw: 14 })]),
+  V('earrings', 'drop', ['drop', 'dangling', 'long', 'hanging', 'pendant'], [L('M50 0 L50 50', 'jewel', 8), E(12, 46, 76, 120, 'jewel', { stroke: 'line', sw: 4 })]),
+  V('earrings', 'none', ['none'], [], 'pick=no'),
 ];
 const COL = {
-  skin: { pale: 'f8dcc4', light: 'f1c9a5', tan: 'd9a066', brown: 'a8693f', dark: '6b4226' },
+  skin: { yellow: 'fcd34d', silver: 'b8c2cc', sky: '74c0fc', pale: 'f8dcc4', light: 'f1c9a5', tan: 'd9a066', brown: 'a8693f', dark: '6b4226' },
   hair: { black: '1d1a18', brown: '5a3a22', blonde: 'e0b95a', red: 'b5441c', grey: '9a9a9a', white: 'e8e8e8', blue: '3b6fd1', green: '3a9a5a', pink: 'e87bb0', purple: '8a4fc0', orange: 'e8872b' },
-  iris: { blue: '3b78d4', green: '3f9a56', brown: '6b4423', grey: '7a8a96', hazel: '8a6a2c', black: '1d1a18' },
+  iris: { cyan: '3bc9db', blue: '3b78d4', green: '3f9a56', brown: '6b4423', grey: '7a8a96', hazel: '8a6a2c', black: '1d1a18' },
   lips: { red: 'c0392b', pink: 'e07a8a', brown: '9a5a4a' },
   glass: { black: '22262b', red: 'c0392b', blue: '2f5fb3', gold: 'c8a24a', green: '2f7a4a' },
+  background: { blue: 'b6e3f4', pink: 'f8c8dc', green: 'c8efd0', yellow: 'fbeeb0', purple: 'd9c8f0', orange: 'fbd6b0', grey: 'd8dde3', gray: 'd8dde3', white: 'ffffff', black: '23262b', red: 'f4b3b3', beige: 'efe3d0' },
+  hat: { red: 'c0392b', blue: '3b6fd1', green: '3a9a5a', yellow: 'e8c85a', black: '2a2d31', white: 'f1f1f1', brown: '7a5230', purple: '8a4fc0', pink: 'e87bb0', orange: 'e8872b', grey: '9a9a9a' },
+  jewel: { gold: 'd6a93a', silver: 'c3c9d0', red: 'c0392b', blue: '3b6fd1', green: '3a9a5a', pink: 'e87bb0', purple: '8a4fc0', black: '2a2d31', white: 'f1f1f1' },
   shirt: { blue: '5b8fd6', red: 'd65b5b', green: '5bb07a', yellow: 'e8c85a', pink: 'e88bb0', purple: '8a6ad0', orange: 'e8923a', white: 'f1f1f1', black: '33363b', grey: '9aa0a8' },
 };
 const GENERIC = { red: 'c0392b', green: '3a9a5a', blue: '3b6fd1', yellow: 'e8c85a', orange: 'e8872b', purple: '8a4fc0', pink: 'e87bb0', brown: '6b4423', black: '1d1a18', white: 'f1f1f1', grey: '9a9a9a', gold: 'c8a24a' };
+const NOACC = { hat: 'none', earrings: 'none' };
 const PRESETS = [
-  ['girl', { face: 'round', hair: 'long', eyes: 'big', eyebrows: 'thin', nose: 'small', mouth: 'smile', beard: 'none', glasses: 'none' }, { skin: 'light', hair: 'brown', iris: 'green', shirt: 'pink' }],
-  ['boy', { face: 'round', hair: 'short', eyes: 'round', eyebrows: 'thick', nose: 'small', mouth: 'smile', beard: 'none', glasses: 'none' }, { skin: 'light', hair: 'brown', iris: 'brown', shirt: 'blue' }],
-  ['woman', { face: 'long', hair: 'curly', eyes: 'round', eyebrows: 'arched', nose: 'small', mouth: 'full', beard: 'none', glasses: 'none' }, { skin: 'tan', hair: 'red', iris: 'brown', shirt: 'purple' }],
-  ['man', { face: 'square', hair: 'short', eyes: 'narrow', eyebrows: 'thick', nose: 'long', mouth: 'flat', beard: 'stubble', glasses: 'none' }, { skin: 'light', hair: 'black', iris: 'blue', shirt: 'green' }],
-  ['grandma', { face: 'round', hair: 'curly', eyes: 'round', eyebrows: 'thin', nose: 'small', mouth: 'smile', beard: 'none', glasses: 'round' }, { skin: 'pale', hair: 'grey', iris: 'blue', shirt: 'yellow' }],
-  ['grandpa', { face: 'square', hair: 'none', eyes: 'narrow', eyebrows: 'thick', nose: 'wide', mouth: 'smile', beard: 'full', glasses: 'round' }, { skin: 'tan', hair: 'white', iris: 'grey', shirt: 'blue' }],
+  ['girl', { face: 'round', hair: 'long', eyes: 'big', eyebrows: 'thin', nose: 'small', mouth: 'smile', beard: 'none', glasses: 'none', ...NOACC }, { background: 'blue', skin: 'light', hair: 'brown', iris: 'green', shirt: 'pink' }],
+  ['boy', { face: 'round', hair: 'short', eyes: 'round', eyebrows: 'thick', nose: 'small', mouth: 'smile', beard: 'none', glasses: 'none', ...NOACC }, { background: 'blue', skin: 'light', hair: 'brown', iris: 'brown', shirt: 'blue' }],
+  ['woman', { face: 'long', hair: 'curly', eyes: 'round', eyebrows: 'arched', nose: 'small', mouth: 'full', beard: 'none', glasses: 'none', ...NOACC }, { background: 'blue', skin: 'tan', hair: 'red', iris: 'brown', shirt: 'purple' }],
+  ['man', { face: 'square', hair: 'short', eyes: 'narrow', eyebrows: 'thick', nose: 'long', mouth: 'flat', beard: 'stubble', glasses: 'none', ...NOACC }, { background: 'blue', skin: 'light', hair: 'black', iris: 'blue', shirt: 'green' }],
+  ['grandma', { face: 'round', hair: 'curly', eyes: 'round', eyebrows: 'thin', nose: 'small', mouth: 'smile', beard: 'none', glasses: 'round', ...NOACC }, { background: 'blue', skin: 'pale', hair: 'grey', iris: 'blue', shirt: 'yellow' }],
+  ['grandpa', { face: 'square', hair: 'none', eyes: 'narrow', eyebrows: 'thick', nose: 'wide', mouth: 'smile', beard: 'full', glasses: 'round', ...NOACC }, { background: 'blue', skin: 'tan', hair: 'white', iris: 'grey', shirt: 'blue' }],
 ];
+PRESETS.push(
+  ['robot', { face: 'robot', hair: 'antenna', eyes: 'led', eyebrows: 'none', nose: 'none', mouth: 'grille', beard: 'none', glasses: 'none', ...NOACC }, { background: 'blue', skin: 'sky', iris: 'cyan', shirt: 'grey', lips: 'brown' }],
+  ['emoji', { face: 'emoji', hair: 'none', eyes: 'dot', eyebrows: 'none', nose: 'none', mouth: 'smile', beard: 'none', glasses: 'none', ...NOACC }, { background: 'blue', skin: 'yellow', lips: 'brown' }],
+);
 const EXPR = [
   ['neutral', {}, '', ['normal', 'calm', 'plain']],
   ['happy', { mouth: 'grin', eyebrows: 'arched' }, '', ['smiling', 'cheerful', 'glad', 'laughing', 'joyful', 'grinning']],
@@ -154,7 +181,7 @@ export const FACES_STUB = [
   ...Object.entries(COL).flatMap(([role, m]) => Object.entries(m).map(([n, rgb]) => `@c.${role}.${n} k.faces.colour role=${role} name=${n} rgb=${rgb}`)),
   ...Object.entries(GENERIC).map(([n, rgb]) => `@c.any.${n} k.faces.colour role=any name=${n} rgb=${rgb}`),
   ...Object.entries({ tiny: 'small', little: 'small', huge: 'big', large: 'big', enormous: 'big', wavy: 'curly', blond: 'blonde', ginger: 'red', gray: 'grey', spectacles: 'glasses', mustache: 'moustache', bearded: 'full' }).map(([w, m]) => `@y.${w} k.faces.synonym word=${w} means=${m}`),
-  ...['freckles', 'earrings', 'hat', 'cap', 'scar', 'dimples', 'wrinkles', 'tattoo', 'piercing', 'ears', 'makeup', 'bow', 'headband', 'braces'].map((w) => `@u.${w} k.faces.unsupported word=${w}`),
+  ...['freckles', 'scar', 'dimples', 'wrinkles', 'tattoo', 'piercing', 'ears', 'makeup', 'bow', 'headband', 'braces', 'necklace', 'scarf'].map((w) => `@u.${w} k.faces.unsupported word=${w}`),
 ].join('\n') + '\n';
 
 let current = null;
