@@ -79,7 +79,7 @@ test('veto: "switch to klingon" lists the languages the app has, from the ui.she
   const r = await s.send('switch to klingon');
   assert.equal(r.text, 'I do not speak klingon. The languages I have: English and Romanian.');
   const off = await (await session('off', 'robot')).send('switch to klingon');
-  assert.match(off.text, /I did not understand/);
+  assert.match(off.text, /I did not (understand|catch)/);
   const ok = await s.send('switch to romanian');
   assert.doesNotMatch(ok.text, /I do not speak/);
 });

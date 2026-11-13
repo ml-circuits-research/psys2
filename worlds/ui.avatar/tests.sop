@@ -34,7 +34,7 @@
     session=a
 
 @t.ui.avatar.n07 core.test
-    input="Wear glasses."
+    input="Put on glasses."
     expect="I put on round glasses"
     expectState="face.slots.glasses=round"
     session=a

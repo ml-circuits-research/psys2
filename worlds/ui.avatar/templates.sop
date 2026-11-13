@@ -1,116 +1,42 @@
-@tpl.ui.avatar.add core.template
-    for=action.avatar.add
-    text="{value}"
+@gen.ui.avatar.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@tpl.ui.avatar.make core.template
+    for=action.ui.avatar.make
+    text="{note}"
 
 @tpl.ui.avatar.remove core.template
-    for=action.avatar.remove
-    text="{value}"
-
-@tpl.ui.avatar.bare core.template
-    for=action.avatar.bare
-    text="{value}"
-
-@tpl.ui.avatar.restyle core.template
-    for=action.avatar.restyle
-    text="{value}"
+    for=action.ui.avatar.remove
+    text="{note}"
 
 @tpl.ui.avatar.change core.template
-    for=action.avatar.change
-    text="{value}"
+    for=action.ui.avatar.change
+    text="{note}"
 
-@tpl.ui.avatar.which core.template
-    for=action.avatar.which
-    text="{value}"
+@tpl.ui.avatar.send core.template
+    for=action.ui.avatar.send
+    text="{note}"
 
-@tpl.ui.avatar.colour core.template
-    for=action.avatar.colour
-    text="{value}"
-
-@tpl.ui.avatar.resize core.template
-    for=action.avatar.resize
-    text="{value}"
-
-@tpl.ui.avatar.move core.template
-    for=action.avatar.move
-    text="{value}"
-
-@tpl.ui.avatar.mood core.template
-    for=action.avatar.mood
-    text="{value}"
-
-@tpl.ui.avatar.askMood core.template
-    for=action.avatar.askMood
-    text="{value}"
-
-@tpl.ui.avatar.checkMood core.template
-    for=action.avatar.checkMood
-    text="{value}"
-
-@tpl.ui.avatar.describeFace core.template
-    for=action.avatar.describeFace
-    text="{value}"
-
-@tpl.ui.avatar.describe core.template
-    for=action.avatar.describe
-    text="{value}"
-
-@tpl.ui.avatar.has core.template
-    for=action.avatar.has
-    text="{value}"
-
-@tpl.ui.avatar.parts core.template
-    for=action.avatar.parts
-    text="{value}"
-
-@tpl.ui.avatar.preset core.template
-    for=action.avatar.preset
-    text="{value}"
-
-@tpl.ui.avatar.save core.template
-    for=action.avatar.save
-    text="{value}"
-
-@tpl.ui.avatar.load core.template
-    for=action.avatar.load
-    text="{value}"
-
-@tpl.ui.avatar.list core.template
-    for=action.avatar.list
-    text="{value}"
-
-@tpl.ui.avatar.surprise core.template
-    for=action.avatar.surprise
-    text="{value}"
-
-@tpl.ui.avatar.reset core.template
-    for=action.avatar.reset
-    text="{value}"
+@tpl.ui.avatar.ask core.template
+    for=action.ui.avatar.ask
+    text="{note}"
 
 @tpl.ui.avatar.undo core.template
-    for=action.avatar.undo
-    text="{value}"
+    for=action.ui.avatar.undo
+    text="{note}"
 
 @tpl.ui.avatar.redo core.template
-    for=action.avatar.redo
-    text="{value}"
+    for=action.ui.avatar.redo
+    text="{note}"
 
-@tpl.ui.avatar.setName core.template
-    for=action.avatar.setName
-    text="{value}"
+@tpl.ui.avatar.save core.template
+    for=action.ui.avatar.save
+    text="{note}"
 
-@tpl.ui.avatar.askName core.template
-    for=action.avatar.askName
-    text="{value}"
+@tpl.ui.avatar.load core.template
+    for=action.ui.avatar.load
+    text="{note}"
 
-@tpl.ui.avatar.nameOf core.template
-    for=action.avatar.nameOf
-    text="{value}"
-
-@tpl.ui.avatar.animate core.template
-    for=action.avatar.animate
-    text="{value}"
-
-@tpl.ui.avatar.setPartUnknown core.template
-    for=action.avatar.setPartUnknown
-    text="{value}"
-
+@tpl.ui.avatar.place core.template
+    for=action.ui.avatar.place
+    text="{note}"

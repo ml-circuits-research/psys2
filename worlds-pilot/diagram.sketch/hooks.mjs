@@ -6,14 +6,22 @@
 import * as E from '../../worlds/diagram.sketch/ops.mjs';
 
 const by = { make: 'create', remove: 'delete', change: 'set', place: 'move', connect: 'connect', pick: 'select', copy: 'duplicate' };
+/** A clause that depends on the one before it ("... and connect A to it", cut at the "and"): the pronoun is the thing the last command made or named (state.last, the engine's own "it"). */
+const deref = (ctx, text) => {
+  const last = Array.isArray(ctx.state?.last) ? ctx.state.last.filter((x) => typeof x === 'string') : [];
+  if (!last.length) return text;
+  return String(text).replace(/\b(it|them)\b/gi, (w) => (/^it$/i.test(w) ? last[last.length - 1] : last.join(' and ')));
+};
 const run = (fn) => (ctx, r) => {
-  const out = fn(ctx, { text: r.text });
+  const out = fn(ctx, { text: deref(ctx, r.text) });
   return out && typeof out.then !== 'function' ? out : undefined;
 };
 const domain = {};
 for (const [act, op] of Object.entries(by)) domain[act] = (ctx, r) => run(E[op])(ctx, r);
+// "Place a medium white ellipse named Cloud at 198, 98": the verb of placing, but a thing that is named is a thing that is made
+domain.place = (ctx, r) => run(/\b(?:named|called)\b/i.test(String(r.text)) ? E.create : E.move)(ctx, r);
 domain.group = (ctx, r) => run(r.mode === 'apart' ? E.ungroup : E.group)(ctx, r);
-domain.ask = (ctx, r) => (r.mode === 'what' || r.mode === 'count' || r.mode === 'where' ? run(E.ask_describe)(ctx, r) : undefined);
+domain.ask = (ctx, r) => (['what', 'count', 'where', 'exists', 'describe'].includes(r.mode) ? run(E.ask_describe)(ctx, r) : undefined);
 domain.undo = (ctx) => E.undo(ctx, {});
 domain.redo = (ctx) => E.redo(ctx, {});
 

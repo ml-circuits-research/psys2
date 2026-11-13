@@ -1,174 +1,104 @@
-@op.ui.avatar.add core.operation
-    impl=add
-    semantics=action
-    action=avatar.add
-    doc="Wears or adds a part by the words of the user (a hat, round glasses, a red cap): the slot, the variant, its features and colour are read over the data of the catalog, no part is named here. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.remove core.operation
-    impl=remove
-    semantics=action
-    action=avatar.remove
-    doc="Takes a part off (every slot the words can mean: hair is two). A part a face needs cannot be taken off. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.bare core.operation
-    impl=bare
-    semantics=action
-    action=avatar.bare
-    doc="A phrase with no verb: a described face is drawn, a part with modifiers is put on, a bare part name puts it on or takes it off by what the face has now. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.restyle core.operation
-    impl=restyle
-    semantics=action
-    action=avatar.restyle
-    doc="Make it / become / be: a saved face, a preset, an expression, a colour for a part, or the next variant of a part, by the words. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.change core.operation
-    impl=change
-    semantics=action
-    action=avatar.change
-    doc="Another, next or previous variant of a part (dir=different|next|previous). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.which core.operation
-    impl=which
-    semantics=action
-    action=avatar.which
-    doc="Which variants of a part there are, as small pictures to tap. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.colour core.operation
-    impl=colour
-    semantics=action
-    action=avatar.colour
-    doc="Colours a part: a face colour by its tint (skin, hair, eyes, clothes) or a colour the part offers. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.resize core.operation
-    impl=resize
-    semantics=action
-    action=avatar.resize
-    doc="Bigger or smaller for a part (dir=bigger|smaller); the parts inside it and resting on it follow. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.move core.operation
-    impl=move
-    semantics=action
-    action=avatar.move
-    doc="Moves a part (closer together, higher, lower) through the SPACE module inside the face frame, within half its size of its anchor. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.mood core.operation
-    impl=mood
-    semantics=action
-    action=avatar.mood
-    doc="An expression of the catalog (happy, sad, wink ...). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.askMood core.operation
-    impl=askMood
-    semantics=action
-    action=avatar.askMood
-    doc="Tells the expression. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.checkMood core.operation
-    impl=checkMood
-    semantics=action
-    action=avatar.checkMood
-    doc="Says whether the face has an expression. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.describeFace core.operation
-    impl=describeFace
-    semantics=action
-    action=avatar.describeFace
-    doc="Draws a face from a description (a woman with a long face, small green eyes and curly red hair): a preset to start from and the variants of the named parts; says what could not be matched. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.describe core.operation
-    impl=describe
-    semantics=action
-    action=avatar.describe
-    doc="Says what the face has. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.has core.operation
-    impl=has
-    semantics=action
-    action=avatar.has
-    doc="Says whether the face has a part (do you have glasses). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.parts core.operation
-    impl=parts
-    semantics=action
-    action=avatar.parts
-    doc="Says which parts can be changed. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.preset core.operation
-    impl=preset
-    semantics=action
-    action=avatar.preset
-    doc="Becomes a preset face of the catalog (a woman, a clown). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.save core.operation
-    impl=save
-    semantics=action
-    action=avatar.save
-    doc="Saves the face under a name (save this as Grandma). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.load core.operation
-    impl=load
-    semantics=action
-    action=avatar.load
-    doc="Brings back a saved face or a preset by name. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.list core.operation
-    impl=list
-    semantics=action
-    action=avatar.list
-    doc="Lists the saved faces and the presets. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.surprise core.operation
-    impl=surprise
-    semantics=action
-    action=avatar.surprise
-    doc="A face of random variants. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.reset core.operation
-    impl=reset
-    semantics=action
-    action=avatar.reset
-    doc="Back to the preset the face started from. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.undo core.operation
-    impl=undo
-    semantics=action
-    action=avatar.undo
-    doc="Takes back the last change. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.redo core.operation
-    impl=redo
-    semantics=action
-    action=avatar.redo
-    doc="Does the undone change again. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.setName core.operation
-    impl=setName
-    semantics=action
-    action=avatar.setName
-    doc="Gives the avatar a name. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.askName core.operation
-    impl=askName
-    semantics=action
-    action=avatar.askName
-    doc="Tells the name. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
-
-@op.ui.avatar.nameOf core.operation
-    impl=nameOf
-    semantics=action
-    action=avatar.nameOf
-    doc="The bare name of the avatar; kids.common speaks it as the assistant name (ctx.request(avatar.nameOf)). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+@gen.ui.avatar.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
 @op.ui.avatar.animate core.operation
     impl=animate
     semantics=action
     action=avatar.animate
-    doc="Queues the effect avatar.animate (wave, nod, dance ...): a moment, not stored state. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+    doc="An operation of this world that is not an act (own.mjs: animate)."
+
+@op.ui.avatar.setName core.operation
+    impl=setName
+    semantics=action
+    action=avatar.setName
+    doc="An operation of this world that is not an act (own.mjs: setName)."
+
+@op.ui.avatar.askName core.operation
+    impl=askName
+    semantics=action
+    action=avatar.askName
+    doc="An operation of this world that is not an act (own.mjs: askName)."
+
+@op.ui.avatar.nameOf core.operation
+    impl=nameOf
+    semantics=action
+    action=avatar.nameOf
+    doc="An operation of this world that is not an act (own.mjs: nameOf)."
 
 @op.ui.avatar.setPartUnknown core.operation
     impl=setPartUnknown
     semantics=action
     action=avatar.setPartUnknown
-    doc="The drawing world hands over make your nose bigger when your ... names no object there. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+    doc="An operation of this world that is not an act (own.mjs: setPartUnknown)."
 
+@op.ui.avatar.view core.operation
+    impl=view
+    semantics=action
+    action=ui.avatar.view
+    doc="The declaration of this world as a view of the session things (spec 23): its aspects and words."
+
+@op.ui.avatar.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=ui.avatar.adopt
+    doc="Takes a thing of the session store into this world: the act make, then change for each attribute (spec 23)."
+
+@op.ui.avatar.make core.operation
+    impl=make
+    semantics=action
+    action=ui.avatar.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.remove core.operation
+    impl=remove
+    semantics=action
+    action=ui.avatar.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.change core.operation
+    impl=change
+    semantics=action
+    action=ui.avatar.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.send core.operation
+    impl=send
+    semantics=action
+    action=ui.avatar.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.ask core.operation
+    impl=ask
+    semantics=action
+    action=ui.avatar.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.undo core.operation
+    impl=undo
+    semantics=action
+    action=ui.avatar.undo
+    doc="The act 'undo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.redo core.operation
+    impl=redo
+    semantics=action
+    action=ui.avatar.redo
+    doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.save core.operation
+    impl=save
+    semantics=action
+    action=ui.avatar.save
+    doc="The act 'save' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.load core.operation
+    impl=load
+    semantics=action
+    action=ui.avatar.load
+    doc="The act 'load' (spec 21), applied by the generic executor to this world's schema."
+
+@op.ui.avatar.place core.operation
+    impl=place
+    semantics=action
+    action=ui.avatar.place
+    doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."

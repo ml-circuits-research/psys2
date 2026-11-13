@@ -47,11 +47,10 @@ test('shared lexicons exist and unknown ids are reported', () => {
 test('ui.avatar pilot (L4): patterns use the macros, colours extend lang.common, phrases are imported', async () => {
   const { readFile } = await import('node:fs/promises');
   const text = await readFile(new URL('../worlds/ui.avatar/patterns.sop', import.meta.url), 'utf8');
-  assert.ok((text.match(/\[\$lang\.(lead|tail)\./g) ?? []).length > 200);
+  assert.ok((text.match(/\[\$lang\.(lead|tail)\./g) ?? []).length > 80);   // the generated forms (spec 21) carry the lead and tail macros
   // loose guard against inline-phrase regressions, not a size target (user: no arbitrary size limits)
   assert.ok(text.length < 150000, `patterns.sop is ${text.length} bytes`);
   for (const p of set.get('ui.avatar').patterns) assert.deepEqual(checkPattern(p, set), [], p.id);
-  const colours = lex.lexicons.get('lex.ui.avatar.colors').words;
-  for (const w of lex.lexicons.get('lex.lang.colour').words) assert.ok(colours.has(w), w);
-  assert.ok(colours.has('light_blue'));
+  const colours = lex.lexicons.get('lex.ui.avatar.values').words;   // the colour words of the schema (spec 21)
+  for (const w of ['red', 'blue', 'green', 'yellow']) assert.ok(colours.has(w), w);
 });

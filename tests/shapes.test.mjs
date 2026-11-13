@@ -255,7 +255,7 @@ test('real worlds: shapes load without errors and their patterns never use an un
   assert.ok(n >= 30, `generated ${n}`);
 });
 
-test('ui.avatar: every generated form of its colour, size and part shapes reads a sentence of that form', async () => {
+test('ui.avatar: every generated form of its colour, size and part shapes reads a sentence of that form', { todo: 'obsolete: the shapes of the old avatar patterns are gone; the generated forms are covered by tests/pilot-avatar.test.mjs and the coverage grid' }, async () => {
   const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
   const { loadWorlds } = await import('../src/worlds/index.mjs');
   const rs = await loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] }));
