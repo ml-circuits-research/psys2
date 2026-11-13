@@ -820,7 +820,7 @@
     example="Whats the cow sound"
 
 @pat.kids.animals.x.sound.b core.pattern
-    match="[$kids.animals.g1_tell_me]? [what|whats|wat|what_is|what_are|which|how|how_is|how_are]? [the]? [$kids.animals.g66_sound] [does|do|did|is|are|of|that|made_by|by|from|for|a]? [a|an|the|every|any|all|each|some]? {a:noun} [make|makes|made|do|does|say|says|go|goes|produce|produces|like]? [$lang.tail.filler|$kids.animals.g6_exactly]?"
+    match="[$kids.animals.g1_tell_me]? [what|whats|wat|what_is|what_are|which|how|how_is|how_are]? [the]? [$kids.animals.g66_sound] [does|do|did|is|are|of|that|made_by|by|from|for|a|makes|make]? [a|an|the|every|any|all|each|some]? {a:noun} [make|makes|made|do|does|say|says|go|goes|produce|produces|like]? [$lang.tail.filler|$kids.animals.g6_exactly]?"
     emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
     kind=question
     priority=9

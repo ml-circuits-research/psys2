@@ -2510,3 +2510,12 @@
     expectStatus=conflicting
     doc="the knowledge base says 8, the child said 6: the library keeps both and says so"
     reasoner=matrix
+
+@t.animals.rt1 core.test
+    input="what sound makes a cow"
+    expect="A cow goes moo."
+    doc="word order that comes back from a translation model: the verb before the animal (ROUND-TRIP-MINING)"
+
+@t.animals.rt2 core.test
+    input="what noise makes a duck"
+    expect="A duck goes quack."

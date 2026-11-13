@@ -87,7 +87,7 @@
     example="I buy a ball and a pencil."
 
 @pat.kids.shop.price.costs core.pattern
-    match="[a|an|the|one|1]? {item:noun} [costs|cost] {n:number} [lei|leu] [$lang.tail.filler|each]?"
+    match="[a|an|the|one|1]? {item:noun} [costs|cost] {n:number} [lei|leu]? [$lang.tail.filler|each]?"
     emit="@{_} kids.shop.price item={item} cost={n}"
     kind=statement
     priority=10

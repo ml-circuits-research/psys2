@@ -1,0 +1,40 @@
+{"id":"kids.arith#067","lang":"fr","original":"Ana has 8 pencils. Ben gives Ana 6 pencils. How many pencils does Ana have?","back_translation":"Ana has 8 crayons. Ben gives Ana 6 pencils. How many pencils does Ana have?","hand":"mt-wrong","mechanical":"reader-gap"}
+{"id":"kids.arith#073","lang":"fr","original":"Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have altogether?","back_translation":"Tom has 11 crayons. Leo has 1 pencil. How many pencils do they have in total?","hand":"mt-wrong","mechanical":"reader-gap"}
+{"id":"kids.arith#097","lang":"fr","original":"Ana has 13 stickers. Tom gives Ana 1 sticker. How many stickers does Ana have?","back_translation":"Ana has 13 stickers. Tom gives an Ana 1 sticker. How many stickers does Ana have?","hand":"reader-gap","mechanical":"reader-gap"}
+{"id":"ui.avatar#006","lang":"fr","original":"give me plus shaped eyes","back_translation":"Give me eyes more","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"ui.avatar#012","lang":"fr","original":"Siren on top","back_translation":"Mermaid on the top","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"ui.avatar#018","lang":"fr","original":"remove the thing on your chest","back_translation":"Take the thing off your chest","hand":"reader-gap","mechanical":"mt-wrong"}
+{"id":"ui.avatar#024","lang":"fr","original":"Make your eyes round","back_translation":"Turn your eyes","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"ui.avatar#030","lang":"fr","original":"body color should be red","back_translation":"The color of the body should be red","hand":"reader-gap","mechanical":"reader-gap"}
+{"id":"ui.avatar#048","lang":"fr","original":"wear a hat","back_translation":"Wearing a hat","hand":"reader-gap","mechanical":"reader-gap"}
+{"id":"ui.avatar#060","lang":"fr","original":"go back one","back_translation":"Back one","hand":"reader-gap","mechanical":"mt-wrong"}
+{"id":"ui.avatar#072","lang":"fr","original":"make yes bigger and red lips","back_translation":"Do yes bigger and red lips","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"kids.arith#121","lang":"fr","original":"what is 20 minus 8","back_translation":"What is 20 min. 8","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"kids.animals#009","lang":"fr","original":"hey what sound does a cow make","back_translation":"What a cow does","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"kids.animals#015","lang":"fr","original":"um can penguins fly","back_translation":"Penguins can fly","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"kids.shapes#011","lang":"fr","original":"what do red and yellow make then how many sides does a hexagon have pls","back_translation":"what do red and yellow do so how many sides does a hexagon have pls","hand":"mt-wrong","mechanical":"reader-gap"}
+{"id":"kids.arith#127","lang":"fr","original":"what is 20 minus 8, what is 9 times 3 pls","back_translation":"What is 20 mins 8, what is 9 times 3 pls","hand":"mt-wrong","mechanical":"judge-strict"}
+{"id":"kids.time#035","lang":"fr","original":"um how many days are in a week. what do red and yellow make, what day comes after Monday","back_translation":"How many days are in a week. what red and yellow do, what day comes after Monday","hand":"mt-wrong","mechanical":"judge-strict"}
+{"id":"kids.animals#031","lang":"fr","original":"can penguins fly and then what sound does a cow make, what do red and yellow make","back_translation":"Can penguins fly and then what sound does a cow make, what do red and yellow do","hand":"mt-wrong","mechanical":"judge-strict"}
+{"id":"ui.avatar#093","lang":"fr","original":"make your body green and can penguins fly","back_translation":"Can making your body green and penguins fly","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"art.draw#004","lang":"fr","original":"draw 2 trees then what sound does a cow make","back_translation":"Draw 2 trees so what sound does a cow make","hand":"reader-gap","mechanical":"reader-gap"}
+{"id":"kids.tasks#002","lang":"fr","original":"add milk to my shopping list and also can penguins fly","back_translation":"Add milk to my shopping list and also penguins can fly","hand":"mt-wrong","mechanical":"judge-strict"}
+{"id":"kids.animals#033","lang":"fr","original":"wat sound does a cow mak","back_translation":"What a cow mak sounds","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"docs.editor#001","lang":"fr","original":"edd a heading Shopping","back_translation":"edd a section Shopping","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"games.tictactoe#030","lang":"fr","original":"I give up","back_translation":"I's giving up","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"kids.shapes#034","lang":"fr","original":"please what do red and yellow make","back_translation":"Please, what do the red and yellow do","hand":"mt-wrong","mechanical":"reader-gap"}
+{"id":"kids.animals#051","lang":"fr","original":"is a whale a fish","back_translation":"A whale is a fish","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"kids.tasks#022","lang":"fr","original":"how many things are left on my to-do list","back_translation":"How much is left on my list of things to do","hand":"reader-gap","mechanical":"reader-gap"}
+{"id":"kids.common#031","lang":"fr","original":"thanks, bye","back_translation":"Thank you, the bye","hand":"reader-gap","mechanical":"reader-gap"}
+{"id":"art.draw#023","lang":"fr","original":"Draw two houses.","back_translation":"Desict two houses.","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"art.draw#029","lang":"fr","original":"Draw a house.","back_translation":"A house is a house.","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"art.draw#041","lang":"fr","original":"move the house up","back_translation":"Move the house upsides","hand":"mt-wrong","mechanical":"reader-gap"}
+{"id":"art.draw#071","lang":"fr","original":"house blue and tree red","back_translation":"Blue house and red tree","hand":"reader-gap","mechanical":"reader-gap"}
+{"id":"art.draw#077","lang":"fr","original":"draw a house and a tree","back_translation":"Drawing a house and a tree","hand":"reader-gap","mechanical":"reader-gap"}
+{"id":"geo.map#071","lang":"fr","original":"zoom out","back_translation":"Zoom","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"data.charts#008","lang":"fr","original":"new chart: cats 2, dogs 7","back_translation":"New table: cats 2, dogs 7","hand":"mt-wrong","mechanical":"reader-gap"}
+{"id":"media.music#014","lang":"fr","original":"i want to know what key has 5 sharps","back_translation":"I want to know which key has 5 points","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"media.music#026","lang":"fr","original":"what notes are in a c major chord","back_translation":"What are the grades in a major agreement","hand":"mt-wrong","mechanical":"mt-wrong"}
+{"id":"media.music#032","lang":"fr","original":"what chord is C E G","back_translation":"What is the C E G","hand":"mt-wrong","mechanical":"reader-gap"}
+{"id":"media.music#038","lang":"fr","original":"Play the G major scale","back_translation":"Play on the main scale G","hand":"mt-wrong","mechanical":"reader-gap"}
+{"id":"media.music#068","lang":"fr","original":"play twinkle twinkle and draw a house","back_translation":"play sparkle sparkle and draw a house","hand":"mt-wrong","mechanical":"reader-gap"}

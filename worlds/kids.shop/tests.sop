@@ -822,3 +822,9 @@
     session=mp6
     input="I have 10 lei. I don't spend 4 lei."
     expect="OK, you did not spend 4 lei. Nothing changes."
+
+@t.shop.rt1 core.test
+    session=rt1
+    input="A kite costs 4"
+    expect="OK, one kite costs 4 lei."
+    doc="the currency word is optional (it is lost in a round trip through another language)"
