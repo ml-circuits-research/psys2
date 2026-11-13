@@ -30,7 +30,7 @@ export const CARDS_FILE = join(REPO, 'worlds/meta.worlds/kb.sop');
 const SKIP_WORLDS = new Set(['core', 'lang.common', 'common.sense', 'meta.worlds', 'session.conversation']);
 const OTHERS_MAX = 2;   // a world's tab id or last id part is its name when the other worlds' patterns use the word at most this often
 const SLOT_FROM = 0.2;   // a world whose patterns take a number (or a name) in at least a quarter of them says so: `slot=number`, `slot=agent`
-const MAX_ACT = 60, MAX_THING = 48, MAX_FRAME = 10, SHARED_FROM = 3, DROP_FROM = 5, SHARE_OWN = 0.5, SHARE_SHARED = 0.2, ASKS_MOSTLY = 0.7;   // things: a word of 3 or 4 worlds is shared, of 5 or more says nothing; actions: a world with at least half of all the uses of the word owns it, with a fifth shares it
+const MAX_CLAIM = 40, MAX_ACT = 60, MAX_THING = 48, MAX_FRAME = 10, SHARED_FROM = 3, DROP_FROM = 5, SHARE_OWN = 0.5, SHARE_SHARED = 0.2, ASKS_MOSTLY = 0.7;   // things: a word of 3 or 4 worlds is shared, of 5 or more says nothing; actions: a world with at least half of all the uses of the word owns it, with a fifth shares it
 const QUESTION_WORDS = new Set(['what', 'who', 'whom', 'whose', 'where', 'when', 'why', 'how', 'which', 'is', 'are', 'was', 'were', 'does', 'do', 'did', 'can', 'could', 'will', 'would', 'should', 'has', 'have']);
 const wordOk = (w) => /^[a-z][a-z']*$/.test(w) && w.length >= 2 && !GRAMMAR.has(w) && !PERSON.has(w);   // one word (a phrase atom with _ is a lead-in or a filler, not an action)
 const toks = (t) => String(t ?? '').toLowerCase().match(/[a-z][a-z']*/g) ?? [];
@@ -175,7 +175,9 @@ export async function buildCards(set) {
     // the aliases a world declares are its names; its tab id and the last part of its id too, unless other worlds use the word as an action ("draw")
     const names = r.names.filter((n) => r.aliases.includes(n) || (n === r.tabId || n === r.lastSeg) && (total.get(n) ?? 0) === 0 || (n === r.tabId || n === r.lastSeg) && (total.get(n) ?? 0) - (r.act.get(n) ?? 0) <= OTHERS_MAX);   // a verb that is the tab id ("draw", used by several worlds) is an action word, not a name; a word that other worlds mention at most twice ("hangman", "chess") is its name
     const nameSet = new Set(names);
-    return { ...r, names, act: act.filter((x) => share(r, x) >= SHARE_OWN && !nameSet.has(x)), actshared: act.filter((x) => share(r, x) < SHARE_OWN && !nameSet.has(x)), thing: thing.filter((x) => thingSpread.get(x) < SHARED_FROM), thingshared: thing.filter((x) => thingSpread.get(x) >= SHARED_FROM), frame, frameshared, catalog };
+    // a world whose every pattern claims its tab (a generated schema world) would list its whole vocabulary: the claimed words that are also its action words come first, at most MAX_CLAIM
+    const claim = r.claim.length <= MAX_CLAIM ? r.claim : [...r.claim].sort((a, b) => (r.act.has(b) - r.act.has(a)) || (r.canon.has(b) - r.canon.has(a)) || a.localeCompare(b)).slice(0, MAX_CLAIM).sort();
+    return { ...r, names, claim, act: act.filter((x) => share(r, x) >= SHARE_OWN && !nameSet.has(x)), actshared: act.filter((x) => share(r, x) < SHARE_OWN && !nameSet.has(x)), thing: thing.filter((x) => thingSpread.get(x) < SHARED_FROM), thingshared: thing.filter((x) => thingSpread.get(x) >= SHARED_FROM), frame, frameshared, catalog };
   });
   return cards.sort((a, b) => a.id.localeCompare(b.id));
 }

@@ -218,7 +218,7 @@ test('capabilities: a short grouped sentence from world summaries, falling back 
   assert.match(r.text, /change my face/);
   assert.match(r.text, /Ask me "what can I say here\?" for examples\.$/);
   assert.equal((r.text.match(/\bplay\b/g) ?? []).length, 1, 'one "play" group');
-  assert.ok(r.text.length < 400);
+  assert.ok(r.text.length < 500, `${r.text.length} chars`);   // the list grows with the installed worlds (Seating plan and Timeline fall back to their titles)
   const ctx = { worlds: () => [
     { id: 'core', title: 'Core', summary: '' }, { id: 'a', title: 'Chat world', summary: 'chat' }, { id: 'b', title: 'Sums', summary: 'do sums' },
     { id: 'c', title: 'Plain title' }, { id: 'd', title: 'x', summary: '' }, { id: 'e', title: 'x', summary: 'play chess' }, { id: 'f', title: 'x', summary: 'play go' },

@@ -325,7 +325,7 @@ export function faceColour(ctx, a, data) {
   if (f.slots[slot] === NONE && slotOf(data, slot).optional) put(data, f, slot, bestVariant(data, slot, c.features, null) ?? slotOf(data, slot).variants[0].name);
   const r = paintSlot(data, f, slot, col);
   if (r === null) { f.history.pop(); const offered = [...new Set(slotOf(data, slot).variants.flatMap((v) => v.parts.filter((p) => !p.tint).flatMap((p) => p.colour)))]; return no(`I have no ${plain(col.name)} ${plain(nounOf(slot))}.${offered.length ? ` It can be ${joinOr(offered)}.` : ''}`); }
-  return finish(ctx, data, f, indexOf(data).roleOf[slot] === col.of ? `My ${plain(col.of)} ${col.of === 'clothes' ? 'are' : 'is'} ${plain(col.name)} now.` : `I have ${phraseOf(data, f, slot)} now.`);
+  return finish(ctx, data, f, col.of && indexOf(data).roleOf[slot] === col.of ? `My ${plain(col.of)} ${col.of === 'clothes' ? 'are' : 'is'} ${plain(col.name)} now.` : `I have ${phraseOf(data, f, slot)} now.`);
 }
 
 // ---- size and place ---------------------------------------------------------------------------------------------------------------------------------------------------

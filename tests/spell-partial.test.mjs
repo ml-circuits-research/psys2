@@ -60,6 +60,13 @@ test('spellAlternates swaps one known word for a close neighbour (yes -> eyes), 
   assert.ok(!alts.some((a) => a.corrections[0].from === 'make'));
 });
 
+test('findPartialWindow: a window that ends in a determiner or preposition while words follow is never a reading ("what is a" + an unknown noun)', async () => {
+  const parse = (re) => (slice) => re.test(slice);
+  assert.equal(await findPartialWindow('what is a glimbus', parse(/^what is a$/)), null);
+  assert.equal(await findPartialWindow('what is a blorp?', parse(/^what is a\??$/)), null);
+  assert.ok(await findPartialWindow('hey buddy what is 7 times 6 sweetie', parse(/^what is 7 times 6$/)));
+});
+
 test('findPartialWindow: longest readable run, tail punctuation kept, negations and known words never ignored', async () => {
   const parse = (re) => (s) => (re.test(s) ? { s } : null);
   const w = await findPartialWindow('hey buddy what is 7 times 6 sweetie', parse(/^what is 7 times 6$/));

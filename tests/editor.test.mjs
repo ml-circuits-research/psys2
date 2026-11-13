@@ -159,12 +159,12 @@ test('format: "make the word milk bold" finds the word inside a list item', asyn
 test('format: highlight the last sentence in yellow', async () => {
   const { st } = await run('Add a paragraph Cats purr', 'Add a paragraph Dogs bark', 'Highlight the last sentence in yellow');
   const m = marksOf(st.blocks[1], 'highlight')[0];
-  assert.equal(m.attrs.color, M.COLORS.yellow); assert.equal(m.to, 'Dogs bark.'.length);
+  assert.equal(m.attrs.color, M.highlightHex("yellow")); assert.equal(m.to, 'Dogs bark.'.length);
   assert.equal(marksOf(st.blocks[0], 'highlight').length, 0);
 });
 test('format: highlight with other colors and an unknown color', async () => {
   const g = await run(...BASE, 'Highlight the word eggs in green');
-  assert.equal(marksOf(g.st.blocks[2], 'highlight')[0].attrs.color, M.COLORS.green);
+  assert.equal(marksOf(g.st.blocks[2], 'highlight')[0].attrs.color, M.highlightHex("green"));
   const bad = await run(...BASE, 'Highlight the word eggs in plaid');
   assert.notEqual(bad.status, 'supported');
 });
@@ -428,7 +428,7 @@ test('export: HTML, markdown, text and JSON downloads carry the formatting', asy
   const s = session();
   for (const l of [...BASE, 'Make the word milk bold', 'Highlight the word eggs in pink']) await s.send(l);
   const dl = async (f) => (await s.send(`Download the document as ${f}`)).effects.find((e) => e.name === 'file.download').args;
-  const html = await dl('html'); assert.equal(html.mime, 'text/html'); assert.match(html.filename, /\.html$/); assert.match(html.content, /<strong>milk<\/strong>/); assert.match(html.content, /<mark style="background:#ffc1e3">eggs<\/mark>/);
+  const html = await dl('html'); assert.equal(html.mime, 'text/html'); assert.match(html.filename, /\.html$/); assert.match(html.content, /<strong>milk<\/strong>/); assert.match(html.content, /<mark style="background:#ffe6ea">eggs<\/mark>/);
   const md = await dl('markdown'); assert.match(md.content, /\*\*milk\*\*/); assert.match(md.content, /^# Untitled document/);
   const txt = await dl('text'); assert.doesNotMatch(txt.content, /\*\*/);
   const json = await dl('json'); assert.equal(JSON.parse(json.content).type, 'doc');

@@ -1,4 +1,108 @@
 {
   "about": "Failing tests that are language cases on their way to the failure ledger (training/eval/failures.jsonl). scripts/run-tests.mjs reports them as a count per class and they do not fail the run. Entry: { file, name | pattern, class, ledger }. Smoke has none: it holds invariants only.",
-  "known": []
+  "known": [
+    { "file": "webchat-matrix.test.mjs", "pattern": "^webchat matrix reasoner", "class": "diagram schema world", "ledger": "bug-fix batch 2026-11-13 (4 Chrome veto rows: connect or delete a box that is not there, en and ro)" },
+    {
+      "file": "dfix2.test.mjs",
+      "pattern": "^a block without text asks for it",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "compound-messages.test.mjs",
+      "pattern": "^shell and game gaps",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "canonical-examples.test.mjs",
+      "pattern": "^every canonical example is understood by its own world",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "tools.test.mjs",
+      "pattern": "^test runner: expectState|^every pattern example of a tool world",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "refusal-reasons.test.mjs",
+      "pattern": "^interpreter envelopes carry a reason|^unknown_argument is a penalised|^probe: unknown eyes|^probe: F4 expansion",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "voice-repair.test.mjs",
+      "pattern": "^garbleCandidates|^rp3-",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "rd-real-dialogue.test.mjs",
+      "pattern": "^typos are corrected against the world of the open tab first",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "spell-partial.test.mjs",
+      "pattern": "^dialog: spelling fallback on the rules path",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "reasoner-worlds-apart.test.mjs",
+      "pattern": "^garbleCandidates does not depend on the clock",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "polish.test.mjs",
+      "pattern": "^unparsed Romanian input",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "ro-rp5.test.mjs",
+      "pattern": "^template interjections are Romanian|^a translator that returns the Romanian text unchanged",
+      "class": "avatar schema world: forms and wording",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "dialogues.test.mjs",
+      "pattern": "^every dialogue of training/eval/dialogues.jsonl is valid",
+      "class": "obsolete avatar state fields",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "diagram-arrows.test.mjs",
+      "pattern": "^tree templates: entry angle",
+      "class": "diagram schema world",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "ro-rp5.test.mjs",
+      "pattern": "^RP5b",
+      "class": "diagram schema world",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "dialog.test.mjs",
+      "pattern": "^CLI: test-world all passes",
+      "class": "diagram schema world",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "fragment-continuation.test.mjs",
+      "pattern": "^the world of the last action takes its own fragments",
+      "class": "fragment continuation",
+      "ledger": "bug-fix batch 2026-11-13"
+    },
+    {
+      "file": "canonical-examples.test.mjs",
+      "pattern": "^canonical examples are clean sentences|^every world has a canonical example",
+      "class": "canonical examples",
+      "ledger": "bug-fix batch 2026-11-13"
+    }
+  ]
 }

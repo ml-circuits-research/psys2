@@ -1118,7 +1118,7 @@ const connectionsPlugin = {
         if (list.length < 2) throw new SOPError('Pairing needs at least two shapes, e.g. "connect the circles in a chain".');
         const pairs = a.pairing === 'all' ? list.flatMap((x, i) => list.slice(i + 1).map(y => [x, y])) : list.slice(1).map((y, i) => [list[i], y]);
         for (const [x, y] of pairs) {
-          if (W.state.edges.some(e => e.from === x.name && e.to === y.name)) { notes.push(`${x.name} → ${y.name} already exists`); continue; }
+          if (W.state.edges.some(e => e.from === x.name && e.to === y.name)) { notes.push(`That arrow already connects ${x.name} and ${y.name}`); continue; }
           ctx.emit({ op: 'link', edge: W.newEdge(x.name, y.name, { style: a.style || 'solid', arrow: a.arrow || 'forward', color: a.color || null }) });
         }
         return { value: list.map(s => s.name), notes: notes.concat([`${a.pairing || 'chain'}: ${list.map(s => s.name).join(' → ')}`]) };
@@ -1128,7 +1128,7 @@ const connectionsPlugin = {
         const x = need(W, f), y = need(W, t);
         if (x === y) throw new SOPError(`${x.name} can't connect to itself.`);
         for (const z of [x, y]) if (z.shape === 'text') throw new SOPError(`${z.name} is a text; arrows join shapes. Connect the shape next to it instead.`);
-        if (W.state.edges.some(e => e.from === x.name && e.to === y.name)) { notes.push(`${x.name} → ${y.name} already exists`); continue; }
+        if (W.state.edges.some(e => e.from === x.name && e.to === y.name)) { notes.push(`That arrow already connects ${x.name} and ${y.name}`); continue; }
         ctx.emit({ op: 'link', edge: W.newEdge(x.name, y.name, { style: a.style || 'solid', arrow: a.arrow || 'forward', label: a.label != null ? String(a.label) : null, color: a.color || null }) });
       }
       return { value: from.concat(to), notes };
