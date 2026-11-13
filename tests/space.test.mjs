@@ -165,13 +165,11 @@ for (const reasoner of ['ops', 'matrix']) {
 import { buildRules } from '../scripts/build-space-lexicon.mjs';
 import { generate2, runCases2 } from '../training/eval/space-set2.mjs';
 
-test('the rules file is the RULES of the module, and the knowledge facts of common.sense are the module KNOWLEDGE', () => {
+test('the rules file is the RULES of the module, and the arrangement knowledge is read from the catalog tables (no table of the module)', () => {
   assert.equal(readFileSync(new URL('../worlds/space/rules.sop', import.meta.url), 'utf8'), buildRules());
-  const kb = readFileSync(new URL('../worlds/common.sense/kb.sop', import.meta.url), 'utf8');
-  const facts = (type) => kb.split(/\n(?=@)/).filter((b) => new RegExp(`^@\\S+ ${type}\\b`).test(b)).map((b) => Object.fromEntries([...b.matchAll(/^\s+(\w+)=(\S+)/gm)].map((m) => [m[1], m[2]])));
-  assert.deepEqual(facts('common\\.sense\\.supports').map((f) => [f.top, f.base]), S.KNOWLEDGE.supports);
-  assert.deepEqual(facts('common\\.sense\\.around').map((f) => [f.kind, f.centre]), S.KNOWLEDGE.around);
-  assert.deepEqual(facts('common\\.sense\\.facepart').map((f) => [f.kind, Number(f.rank), Number(f.mirror)]), S.KNOWLEDGE.face);
+  assert.ok(!readFileSync(new URL('../worlds/common.sense/kb.sop', import.meta.url), 'utf8').includes('common.sense.supports'), 'the supports facts live in k.scenes / k.layouts');
+  assert.ok(S.KNOWLEDGE.supports.some(([a, b]) => a === 'cup' && b === 'table') && S.KNOWLEDGE.supports.some(([a, b]) => a === 'house' && b === 'ground'));
+  assert.deepEqual(S.KNOWLEDGE.face.map((f) => f[0]).slice(0, 5), ['eyebrow', 'eye', 'ear', 'nose', 'mouth']);
 });
 
 test('surface overlap: boxes that overlap in an empty corner do not overlap; a real overlap does', () => {
