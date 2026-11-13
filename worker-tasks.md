@@ -3651,3 +3651,28 @@ P3 does not remove the model. It is the same kind of encoder (DistilBERT today) 
 - P1 is judged on the owner logs and the ledger, as you say, not on the old per-world test sets alone. Undo per request (your item 8) is the owner's rule: correct.
 - Phrasing variety: act phrases come from the knowledge repo's `k.actions` (14 acts, 52 roles with their markers, 291 verbs including "get rid of", "take off", "put on"), by lookup; misses go to the ledger as class "act phrase".
 The cost estimate is accepted; publish the smallest slice of each as it works (SHIP-NOW).
+
+## Reviewer 2026-11-13 20:55 — validated at 974af72 (smoke 58/58); reviewer's Chrome probe of the new avatar: findings (classes for the ledger and the acts pilot, not point fixes)
+
+**Probe conditions, to read the results right:** local build served by `openChat`, reading = rules only, English, and **the knowledge catalog was unreachable from the reviewer's box** (github.io is blocked there), so the avatar ran on the bundled default face. 14 turns on the Avatar tab, no page errors.
+
+| said | reply | verdict |
+| --- | --- | --- |
+| make the avatar an angry boy | "I have a round head now." | wrong: neither boy nor angry |
+| add eyeglasses | not understood; offers "add eyeglasses to my list" | wrong |
+| remove eyeglasses | "I can't find "eyeglasses" in the picture. The picture is empty." | wrong world (art.draw answers on the Avatar tab) |
+| eyeglasses | not understood | wrong |
+| put a hat | "I already have a bow hat." | plausible offline |
+| remove the hat | "I can't find "hat" in the picture. The picture is empty." | wrong world |
+| put on earrings | "I put on stud earrings." | right |
+| make green eyes | not understood; offers colour mixing | wrong (worked in the owner's log before) |
+| what hats are there? | "bow and none" | right offline |
+| undo / redo | redo says: I did it again: "what hats are there" | redo of a question is not an action |
+| give him a beard / without the beard | right | right |
+
+**What this shows, as causes:**
+1. **Without the catalog the avatar does not know its own slots.** The bundled default face must carry every slot name with its synonyms and at least "none" plus one variant per slot, so add / remove / bare name / colour work offline; the catalog adds variants. Say in PROGRESS when the face set is not loaded.
+2. **"remove X" on the Avatar tab is answered by art.draw.** A reading from another world than the tab on screen, with an unknown thing, must lose to the tab's own "I have no X" (the meta.worlds rule set: the act is known in the active world, the thing is not found anywhere → the active world answers). Check why invariant (c) did not catch a reply coming from another world when the tab did not change; extend the invariant: the replying world is the active world unless the message names a thing or a world found elsewhere.
+3. **Colour and preset + expression in one sentence** ("make green eyes", "an angry boy") fail in the interim reading: do not patch it; they are rows of the acts grid (change attribute; make from preset with a second change). They go to the ledger as class "act phrase" / "two acts in one sentence".
+4. **Undo / redo count only state-changing requests** (a question is not a step).
+Please run the same 14 turns with the catalog reachable and put both columns in worker-log, so the reviewer can separate offline causes from reading causes. Script: /home/claude/shot/av.mjs on the reviewer box; the turn list is the first column above.
