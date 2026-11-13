@@ -575,6 +575,7 @@ export function count(ctx, { x } = {}) {
   const e = findEntity(d, x, ctx);
   if (e) {
     const sents = mentionSentences(d, e.id);
+    if (sents.length) st(ctx).search = { doc: d.id, query: e.name, terms: [e.name], hits: sents, pos: 0 };   // "show the first result" after a count steps through the counted sentences
     return answer(ctx, d, `${cap(e.name)} ${e.plural ? 'are' : 'is'} mentioned ${e.n} ${e.n === 1 ? 'time' : 'times'}, in ${sents.length} ${sents.length === 1 ? 'sentence' : 'sentences'}.`, { cite: sents, entities: [e.id], last: { op: 'who', entity: e.id }, note: false });
   }
   const term = norm(x).replace(/^the word\s+/, '');
@@ -586,6 +587,7 @@ export function count(ctx, { x } = {}) {
     if (hits) { n += hits; sents.push(s.i); }
   }
   if (!n) return no('missing', `The word "${snippet(term, 40)}" does not appear in "${d.title}".`);
+  st(ctx).search = { doc: d.id, query: term, terms: stems, hits: sents, pos: 0 };
   return answer(ctx, d, `The word "${term}" appears ${n} ${n === 1 ? 'time' : 'times'} in ${sents.length} ${sents.length === 1 ? 'sentence' : 'sentences'}.`, { cite: sents, terms: stems, last: null, note: false });
 }
 

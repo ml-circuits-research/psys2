@@ -13,8 +13,8 @@
  *     time budget (`budgetMs`, the best candidates found so far are returned) cap the effort whatever the message looks like.
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
-import { editDistance } from './rules/index.mjs?v=5525af09ec';
-import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs?v=e9d7996804';
+import { editDistance } from './rules/index.mjs?v=ea505bde99';
+import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs?v=586074662c';
 
 const now = () => globalThis.performance?.now?.() ?? Date.now();
 const WORD = /[A-Za-zÀ-ɏ]+/g;

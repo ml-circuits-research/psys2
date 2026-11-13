@@ -886,6 +886,11 @@
     card=one
     ask="Which gender do the names have (m or f)?"
 
+@core.lexicon.keep core.key
+    value=atom
+    card=one
+    ask="Must the machine translator keep these words as they are (verbatim)?"
+
 @core.lexicon.doc core.key
     value=string
     card=one

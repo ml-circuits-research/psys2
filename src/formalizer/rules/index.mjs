@@ -237,6 +237,9 @@ export function splitPossessives(tokens, lex) {
   return out;
 }
 
+/** A connective followed by a question word inside swallowed free text. */
+const QUESTION_TAIL_RE = /(?:,|\b(?:and|then|but))\s+(?:also\s+)?(?:what|how|who|where|when|which|why|can|could|does|do|is|are|will)\b/i;
+
 const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
@@ -524,6 +527,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const txt = sl.text ?? '';
       if (MARKER_RE.test(txt)) return true;
       if (!SEP_RE.test(txt)) return false;
+      if (QUESTION_TAIL_RE.test(txt)) return true;   // "... and what sound does a cow make": a question after a connective is not part of the text
       if (swallowsAnaphora(txt)) return true;   // "... and a yellow one" belongs to the one-anaphora expansion
       if (unknownArg) return true;
       const at = els.findIndex((e) => e.t === 'slot' && e.name === name);
@@ -642,10 +646,12 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     // a catch-all whole reading that swallowed "then ..." while every clause is understood on its own (any worlds), each by a
     // pattern at least as specific: "then" is an explicit sequence, so keep the clauses ("move left twice, then undo")
     const swallowedThen = whole && clauses.length > 1 && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])then([\s,]|$)/i.test(sl.text ?? ''));
-    if (swallowedThen && parts.every((p) => !p.unparsed && !isWeak(p) && (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0))) return { done: parts, fallback: null };
+    // a clause that opens with a question word is never the continuation of a command's free text: it needs no priority bar
+    const specific = (p, i) => (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) || (i > 0 && QUESTION_WORDS.has(clauses[i][0]?.lower));
+    if (swallowedThen && parts.every((p, i) => !p.unparsed && !isWeak(p) && specific(p, i))) return { done: parts, fallback: null };
     // the same, with and/comma, when all clauses are understood in one world whatever their priority (the clauses are complete sentences)
     const swallowedSep = whole && clauses.length > 1 && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|but)([\s,]|$)|,/i.test(sl.text ?? ''));
-    if (swallowedSep && parts.every((p) => !p.unparsed && !isWeak(p) && p.match.worldId === parts[0].match.worldId && (p.match.worldId === whole.match.worldId || beats(p, bar)))) return { done: parts, fallback: null };
+    if (swallowedSep && parts.every((p, i) => !p.unparsed && !isWeak(p) && ((p.match.worldId === parts[0].match.worldId && (p.match.worldId === whole.match.worldId || beats(p, bar))) || (i > 0 && QUESTION_WORDS.has(clauses[i][0]?.lower))))) return { done: parts, fallback: null };
     return null;
   };
 
@@ -722,10 +728,12 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const swallowed = clauses.length > 1 && Object.values(whole.match?.slots ?? {}).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|then|but)([\s,]|$)|,/i.test(sl.text ?? ''));
       if (swallowed) {
         const parts = clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(firstWord(c)) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)))));
-        // clauses of one world, or a command followed by a question of another world ("add a heading Shopping and what is 2 plus 2")
+        // clauses of one world, or a command followed by a question of another world ("add a heading Shopping and what is 2 plus 2"), or a
+        // command of another world that is read almost entirely by fixed words ("play twinkle twinkle and draw a house"); a question clause needs no priority bar
         const sameWorld = (p) => p.match?.worldId === parts[0].match?.worldId;
-        const trailingQuestions = clauses.slice(1).every((c) => QUESTION_WORDS.has(firstWord(c)));
-        if (parts.every((p) => !p.unparsed && (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) && (sameWorld(p) || trailingQuestions)) && (parts.slice(1).every(sameWorld) || trailingQuestions)) return { done: parts, fallback: null };
+        const isQ = (i) => i > 0 && QUESTION_WORDS.has(firstWord(clauses[i]));
+        const ownCommand = (p, i) => i > 0 && clauses[i].filter(isContent).length >= 3 && fixedCoverage(p.match, clauses[i].filter(isContent).length) >= 0.5;
+        if (parts.every((p, i) => !p.unparsed && ((p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) || isQ(i)) && (i === 0 || sameWorld(p) || isQ(i) || ownCommand(p, i)))) return { done: parts, fallback: null };
       }
       const cut = splitSwallowedCommand(tokens, whole);
       if (cut) return { done: cut, fallback: null };
@@ -742,6 +750,17 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         const q = QUESTION_WORDS.has(firstWord(c)) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)));
         return readGroup(c, q);
       });
+      // a connective inside one clause ("what do red AND yellow make") cut it in two unreadable halves: read the neighbours again as one
+      for (let i = 0; i + 1 < parts.length; i++) {
+        budget.tick('index.rejoin');
+        if (!parts[i].unparsed || !parts[i + 1].unparsed) continue;
+        const a = clauses[i], b = clauses[i + 1];
+        const merged = tokens.filter((t) => t.start >= a[0].start && t.end <= b[b.length - 1].end);
+        const q = QUESTION_WORDS.has(firstWord(a)) || (s.isQuestion && i + 1 === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)));
+        const again = readGroup(merged, q);
+        if (again.unparsed || isWeak(again)) continue;
+        parts.splice(i, 2, again); clauses.splice(i, 2, merged); i--;
+      }
       if (parts.some((p) => !p.unparsed)) return { done: parts, fallback: null };
     }
     return { done: null, fallback: { ...whole, span: s.span, text: s.text } };

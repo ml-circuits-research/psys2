@@ -52,3 +52,14 @@ The rule translator above is the `rules` strategy. `mt-small` (a small CPU machi
 - **Other families** with authored entries: the mouth-size refusal (the parts without a size ladder; the robot and the emoji take the widest or narrowest mouth instead, RP5c), "I can not find {np} in your picture." (plural noun phrase for "all the red circles", RP5c), the tic-tac-toe start, the missing-place prompt of the drawing tab with its examples, the chart "no numbers" help, "Drew 3 circles." (the {shapes} slot) and the random-diagram reply, "I drew N things at the bottom.", moving a thing into the water.
 - **The English reading.** The "I took that as" line (best effort, spec 03 7.15) is only produced when no rule or frame reads the sentence; the tab commands above are read by frames, so their replies carry no English quote.
 - **Check.** `node scripts/check-ro-replies.mjs [--families N]` lists the replies still kept in English by family (quoted text, numbers and ids blanked), largest first.
+
+## Keep-list for the on-device model (ROUND-TRIP-MINING step 3)
+
+The on-device model (Bergamot) sometimes changes what must stay: the currency "lei" becomes "rents", a song title is translated word by word, a name is declined. `src/translate/keep-list.mjs` protects the app's own words as placeholders around the model (protect before, restore after), in every direction, on the engine worker's backend (`docs/webchat/ui/engine-worker.mjs`) and in the Node adapter (`scripts/lib/mt-node.mjs`, option `keep`). The list is derived from the worlds' English side, not written per language:
+
+- **names**: every lexicon of class `name` (people, pets), protected only when written with a capital letter and when no other lexicon holds the same word; plus the names the user told this session (`sessionNames`);
+- **verbatim**: every lexicon that carries `keep=verbatim` (the money unit of `kids.shop`), and the `title` and `aka` values of knowledge entities that have a `title` (song titles), whatever the case;
+- **tabs**: the `tab`, `tabTitle` and `tabAlias` of every manifest, only in the form "the <name> tab" (a bare "draw" is a verb);
+- numbers need no placeholder (the checker requires them); place names are not kept (a model translates "Germany" and "Allemagne" correctly).
+
+Placeholders are letters only (`Zorqa`, `Zorqb`, ...). When the model loses or changes a placeholder, the unprotected translation is used (the checker of the translation layer still judges it). Tests: `tests/keep-list.test.mjs`. Limit: a real user writes the localized label of a tab, so the tab part only helps a user who types the English word.

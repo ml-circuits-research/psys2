@@ -660,7 +660,7 @@
 
 @pat.ui.avatar.undo core.pattern
     canonical="Go back to how you were."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [undo|undo_that|undo_it|undo_the_last_change|undo_the_last_look|undo_last_change|undo_my_last_change|revert|revert_that|take_that_back|change_it_back|change_that_back|put_it_back|turn_it_back|go_back_to_how_you_were|go_back_to_how_you_looked|go_back_to_before|go_back_to_the_way_you_were|go_back_to_the_previous_look|go_back_to_your_previous_look|look_like_before|be_like_before|be_how_you_were|be_as_you_were|look_how_you_were|how_you_were|as_you_were|like_before|as_before] [$lang.tail.filler]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [undo|go_back_one|go_back_one_step|go_back_a_step|step_back|undo_that|undo_it|undo_the_last_change|undo_the_last_look|undo_last_change|undo_my_last_change|revert|revert_that|take_that_back|change_it_back|change_that_back|put_it_back|turn_it_back|go_back_to_how_you_were|go_back_to_how_you_looked|go_back_to_before|go_back_to_the_way_you_were|go_back_to_the_previous_look|go_back_to_your_previous_look|look_like_before|be_like_before|be_how_you_were|be_as_you_were|look_how_you_were|how_you_were|as_you_were|like_before|as_before] [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.undo"
     kind=request
     priority=13

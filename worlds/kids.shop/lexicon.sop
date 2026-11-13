@@ -30,7 +30,8 @@
 
 @lex.kids.shop.units core.lexicon
     class=unit
-    doc="The money unit: one leu, many lei"
+    keep=verbatim
+    doc="The money unit: one leu, many lei (the machine translator must not change it, spec 05 keep-list)"
     word=leu
     word=lei
     plural=leu:lei

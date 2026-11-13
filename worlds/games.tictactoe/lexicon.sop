@@ -338,6 +338,8 @@
     alt=will_play
     alt=will_go
     alt=put_my_x
+    alt=put_me
+    alt=place_me
     alt=put_it
     alt=place_it
     alt=play_it

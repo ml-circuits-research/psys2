@@ -11,6 +11,7 @@ import { join, dirname, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Worker } from 'node:worker_threads';
 import { createMtHost } from '../../docs/webchat/ui/mt-host.mjs';
+import { protectedTranslate } from '../../src/translate/keep-list.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 export const VENDOR = join(REPO, 'docs/webchat/vendor/bergamot');
@@ -27,7 +28,7 @@ function spawnNodeWorker() {
   return like;
 }
 
-export async function createNodeMt({ cacheDir, registry = loadRegistry(), onState, deadlineMs, initDeadlineMs } = {}) {
+export async function createNodeMt({ cacheDir, registry = loadRegistry(), onState, deadlineMs, initDeadlineMs, keep = null } = {}) {   // keep: () => { keep, extra } (src/translate/keep-list.mjs): the app words the model must not change
   mkdirSync(cacheDir, { recursive: true });
   const fetchFile = async (url, { bytes, onProgress }) => {
     const file = join(cacheDir, url.replace(/^https?:\/\//, '').replace(/[^\w.-]+/g, '_'));
@@ -44,5 +45,7 @@ export async function createNodeMt({ cacheDir, registry = loadRegistry(), onStat
     const out = gunzipSync(gz);
     return out.buffer.slice(out.byteOffset, out.byteOffset + out.byteLength);
   };
-  return createMtHost({ registry, fetchFile, spawn: spawnNodeWorker, onState, deadlineMs, initDeadlineMs });
+  const host = createMtHost({ registry, fetchFile, spawn: spawnNodeWorker, onState, deadlineMs, initDeadlineMs });
+  if (keep) host.translate = protectedTranslate(host.translate.bind(host), keep);
+  return host;
 }
