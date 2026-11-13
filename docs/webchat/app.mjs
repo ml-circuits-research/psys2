@@ -527,7 +527,13 @@ export async function mountPsys2(element, options = {}) {
   async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {
     user ??= addMessage('user', text);
     const ctl = new AbortController();
-    const correction = inputHistory.push(text);   // INPUT-HISTORY: an edited recalled message sent right after a failed turn is a correction of it (M1)
+    if (user?.msg && !user.msg.dataset.said) {   // INPUT-HISTORY on touch: a tap on a sent message copies it into the box for editing
+      user.msg.dataset.said = text;
+      let at = 0;
+      const tap = () => { if (performance.now() - at < 500) return; at = performance.now(); if (inputHistory.recallText(text)) events.add('recall', text); };
+      user.bubble.addEventListener('click', tap); user.bubble.addEventListener('touchend', tap);
+    }
+    const correction = user && 'correction' in user ? user.correction : inputHistory.push(text);   // INPUT-HISTORY: an edited recalled message sent right after a failed turn is a correction of it (M1)
     const tn = turn = { ctl, t0: tPress, text, correction, reason: null, undo: null, mode, recId, shown: [], tabBefore: view, killsBefore: engineClient?.stats.kills.length ?? 0 };
     busy++; setStatus();
     restAvatar(true);
@@ -740,7 +746,7 @@ export async function mountPsys2(element, options = {}) {
   /** A phrase is logged the moment it is sent (RD7), so it counts even if the answer is slow, fails or the page closes; the reply fills the outcome later. */
   function logPhraseStart(text, mode, voice = {}) {
     if (!settings.logPhrases) return null;
-    try { const rec = { ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }), ...(voice.queueMs != null ? { queueMs: voice.queueMs } : {}) }; phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
+    try { const rec = { ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply: null, correction: voice.correction ?? null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }), ...(voice.queueMs != null ? { queueMs: voice.queueMs } : {}) }; phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
   }
   // ---------- developer mode and the debug view (DBG) ----------
   // Off: nothing of it is loaded, recorded or kept. On: ui/debug.mjs is imported once and keeps a ring buffer of the last 200 turns.
@@ -923,7 +929,8 @@ export async function mountPsys2(element, options = {}) {
   const dispatch = (t, mode, voice) => {
     const tPress = performance.now();
     const user = addMessage('user', t);
-    const recId = logPhraseStart(t, mode, voice);
+    user.correction = inputHistory.push(t);   // the flag is known before the phrase is logged
+    const recId = logPhraseStart(t, mode, { ...(voice ?? {}), correction: user.correction });
     events.add('message', t, { mode, ...(recId ? { recId } : {}) });
     return process(t, mode, user, recId, tPress);
   };
