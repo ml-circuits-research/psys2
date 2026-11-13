@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
-import { oneAnaphora } from '../src/formalizer/rules/expand.mjs';
+import { en } from '../src/lang/en.mjs';
+const oneAnaphora = en.oneAnaphora;
 import { tokenize } from '../src/formalizer/rules/normalize.mjs';
 
 const rules = createTranslator();

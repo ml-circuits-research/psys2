@@ -14,7 +14,8 @@ import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs
 import { routeScores } from './router.mjs';
 import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
-import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
+import { en } from '../../lang/en.mjs';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse, serialize } from '../../soplang/index.mjs';
 import { budget } from '../../dialog/budget.mjs';
 import { readingVariants, dropStyleIn } from './variants.mjs';
@@ -592,7 +593,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     if (!ana) return false;
     const last = txt.split(/\s*,\s*|\s+and\s+/i).pop();
     const ts = tokenize(last).filter((t) => t.kind === 'word' || t.kind === 'number');
-    return ts.length >= 2 && !!oneAnaphora(ts, ts.length > 1 ? [{ kind: 'word', lower: 'x' }, { kind: 'word', lower: 'y' }] : [], ana.opts);
+    return ts.length >= 2 && !!en.oneAnaphora(ts, ts.length > 1 ? [{ kind: 'word', lower: 'x' }, { kind: 'word', lower: 'y' }] : [], ana.opts);
   };
 
   /** A parsed segment whose free-text slot swallowed a separator, a correction marker or a repetition. */
@@ -644,7 +645,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const w = selfCorrect(tokens, { whole: true });
       return w ? tryClauses([{ tokens: w.tokens.filter((t) => t.kind !== 'punct'), span: w.region, info: { kind: 'self-correction', source: w.region, dropped: w.dropped, copied: [] } }], null, bar) : null;
     }
-    for (const cand of sharedArgument(toks)) {
+    for (const cand of en.sharedArgument(toks)) {
       const clauses = cand.clauses.map((c, i) => ({ tokens: c.tokens, span: c.own, guard: true, info: { kind: 'shared-argument', source: src, copied: c.copied, ...(sc ? { dropped: sc.dropped } : {}), index: i, of: cand.clauses.length } }));
       const segs = tryClauses(clauses, null, bar);
       if (segs) return segs;
@@ -689,7 +690,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         let ai = i - 1;
         while (ai > 0 && ana.isElliptic(clauses[ai])) { budget.tick('index.expandClauses'); ai--; }
         if (!ana.isElliptic(clauses[ai]) && !parts[ai].unparsed && !isWeak(parts[ai])) {
-          const res = oneAnaphora(ct, clauses[ai], ana.opts);
+          const res = en.oneAnaphora(ct, clauses[ai], ana.opts);
           if (res) {
             const sp = [ct[0].start, ct[ct.length - 1].end];
             for (const cand of res.candidates) {
@@ -714,7 +715,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       }
       const anchorIdx = parts.findIndex((p) => !p.unparsed && !isWeak(p));
       if ((part.unparsed || stray) && anchorIdx >= 0 && anchorIdx < i) {
-        for (const pre of ellipsisPrefixes(clauses[anchorIdx])) {
+        for (const pre of en.ellipsisPrefixes(clauses[anchorIdx])) {
           const sp = [ct[0].start, ct[ct.length - 1].end];
           const segs = tryClauses([{ tokens: [...pre, ...ct.filter((t) => t.kind !== 'punct')], span: sp, guard: true, info: { kind: 'verb-ellipsis', source: sp, copied: [[pre[0].start, pre[pre.length - 1].end]] } }], parts[anchorIdx].match.worldId, bar);
           if (segs) { out.push(...segs); changed = true; return; }
@@ -771,7 +772,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       if (parts.length === 0) { seg = read(here, []); if (!seg) return fail(); }
       else {
         const snap = snapHere;
-        const variants = [{ ts: here, copied: [], own: true }, ...[...ellipsisPrefixes(parts[0].toks)].map((pre) => ({ ts: [...pre, ...here], copied: [[pre[0].start, pre[pre.length - 1].end]], own: false }))];
+        const variants = [{ ts: here, copied: [], own: true }, ...[...en.ellipsisPrefixes(parts[0].toks)].map((pre) => ({ ts: [...pre, ...here], copied: [[pre[0].start, pre[pre.length - 1].end]], own: false }))];
         for (const v of variants) {
           const r = read(v.ts, v.copied);
           if (!r) { form.restore(snap); continue; }

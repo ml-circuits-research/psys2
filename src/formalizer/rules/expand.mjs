@@ -10,9 +10,7 @@
 import { splitSentences, tokenize } from './normalize.mjs';
 import { budget } from '../../dialog/budget.mjs';
 
-const DETERMINERS = new Set(['a', 'an', 'the', 'your', 'my', 'his', 'her', 'its', 'their', 'our', 'this', 'that', 'these', 'those', 'some', 'ur']);
 const isWord = (t) => t.kind === 'word' || t.kind === 'number';
-const isSep = (t) => t.lower === ',' || t.lower === 'and';
 
 /** Correction markers: [words, needsLeadingComma]. Multi-word markers are unambiguous; single words need a comma before. */
 const MARKERS = [
@@ -189,38 +187,6 @@ export async function correctMessage(text, { probe = null } = {}) {
   return corrections.length ? { text: out + text.slice(pos), corrections } : { text, corrections };
 }
 
-/**
- * Shared argument: "make your eyes and body blue", "the tree and the house blue", "eyes, body and mouth blue".
- * Proposes, in order of preference, `prefix head_i suffix` for each coordinated head; the suffix is the shared trailing argument
- * (1 or 2 words), the prefix is the shared leading verb phrase.
- * @returns {Generator<{ clauses: Array<{ tokens, own: number[], copied: number[][] }> }>}
- */
-export function* sharedArgument(tokens) {
-  if (tokens.some((t) => t.lower === 'then' || t.lower === 'but')) return;
-  const parts = [[]];
-  for (const t of tokens) { if (isSep(t)) parts.push([]); else parts[parts.length - 1].push(t); }
-  const P = parts.map((p) => p.filter(isWord));
-  if (P.length < 2 || P.length > 5 || P.some((p) => !p.length)) return;
-  const last = P[P.length - 1];
-  for (let s = 1; s <= 2; s++) {
-    if (last.length - s < 1 || last.length - s > 3) continue;
-    const suffix = last.slice(last.length - s);
-    for (let h0 = 1; h0 <= Math.min(3, P[0].length); h0++) {
-      const prefix = P[0].slice(0, P[0].length - h0);
-      const heads = [P[0].slice(P[0].length - h0), ...P.slice(1, -1), last.slice(0, last.length - s)];
-      if (heads.some((h) => !h.length || h.length > 3)) continue;
-      const pl = prefix[prefix.length - 1]?.lower;
-      if (pl && DETERMINERS.has(pl) && heads.some((h, i) => i > 0 && DETERMINERS.has(h[0].lower))) continue;
-      yield {
-        clauses: heads.map((h) => ({
-          tokens: [...prefix, ...h, ...suffix], own: span(h),
-          copied: [...(prefix.length ? [span(prefix)] : []), span(suffix)],
-        })),
-      };
-    }
-  }
-}
-
 /** Repetition: a clause ending in "twice" / "N times" -> { tokens: the clause without it, n, dropped }. */
 export function repetition(tokens) {
   const w = tokens.filter(isWord);
@@ -233,75 +199,4 @@ export function repetition(tokens) {
   return { tokens: w.slice(0, n - drop), n: cnt, dropped: span(w.slice(n - drop)) };
 }
 
-/** Verb ellipsis: prefixes (1 then 2 words) of the anchor clause to put before an elliptic clause. */
-export function* ellipsisPrefixes(anchorTokens) {
-  const w = anchorTokens.filter(isWord);
-  for (let len = 1; len <= 2 && len < w.length; len++) {
-    const pre = w.slice(0, len);
-    if (pre.some((t) => t.kind === 'number')) return;
-    if (len === 2 && DETERMINERS.has(pre[1].lower)) return;
-    yield pre;
-  }
-}
-
-/**
- * One-anaphora (spec 03 section 1c): an elliptic noun phrase after a command, "and a yellow one" / "and another yellow one" /
- * "and one yellow" / "and two big ones", repeats the previous command with its noun and the new modifiers.
- * `ct` is the elliptic clause, `anchor` the earlier clause it continues. Returns `null` when `ct` is not such a phrase, else
- * `{ mods, candidates }`: candidate token lists for the new clause (verb and determiner of the anchor, the new modifiers, then
- * the anchor's noun; anchor modifiers of another class than a new one are kept: "a big green house and a yellow one" -> big yellow).
- * Phrasing comes from the caller (phrase groups `lang.elide.*` of lang.common): `leads` (a, an, another, one), `nouns` (one, ones),
- * `sameClass(a, b)` (two words of one lexicon), `isModifier(w)` (a word of some lexicon), `singular(w)`.
- */
-export function oneAnaphora(ct, anchor, { leads, nouns, sameClass = () => false, isModifier = () => false, singular = (w) => w }) {
-  const w = ct.filter(isWord).map((t) => (t.kind === 'number' && t.alt === 'one' ? { ...t, kind: 'word', lower: 'one' } : t));   // the tokenizer reads "one" as the number 1
-  const wa = anchor.filter(isWord);
-  if (w.length < 2 || w.length > 5 || wa.length < 2) return null;
-  const count = (t) => t.kind === 'number' || /^(two|three|four|five|six|seven|eight|nine|ten)$/.test(t.lower);
-  let lead = null, mods, plural = false, bare = false;
-  const last = w[w.length - 1].lower;
-  if (nouns.has(last)) {   // [lead]? mods* one|ones
-    plural = /s$/.test(last);
-    const first = w[0];
-    const hasLead = leads.has(first.lower) || (count(first) && plural);
-    if (hasLead) lead = first;
-    mods = w.slice(hasLead ? 1 : 0, -1);
-    if (!hasLead && !mods.length) return null;
-  } else if (w[0].lower === 'one' && w.length <= 3 && w.slice(1).every((t) => isModifier(t.lower))) {   // one mods+
-    lead = w[0]; mods = w.slice(1); bare = true;
-  } else return null;
-  if (mods.length > 3 || mods.some((t) => count(t) || nouns.has(t.lower) || DETERMINERS.has(t.lower))) return null;
-  // the anchor: verb words, then the noun phrase (determiner or number, modifiers, noun tail of 1 or 2 words)
-  const out = [];
-  const newDet = () => {
-    if (lead && count(lead)) return [lead];
-    const nxt = (mods[0] ?? wa[wa.length - 1]).lower;
-    const base = lead && /^an?$/.test(lead.lower) ? lead.lower : (/^[aeiou]/.test(nxt) ? 'an' : 'a');
-    return [{ kind: 'word', raw: base, lower: base, start: ct[0].start, end: ct[0].start, synth: true }];
-  };
-  for (let t = 1; t <= 2; t++) {
-    if (wa.length - t < 1) break;
-    const tail = wa.slice(wa.length - t);
-    const body = wa.slice(0, wa.length - t);
-    // noun phrase start: the last determiner or number of the body, else right after its first word (the verb)
-    let s = -1;
-    for (let i = body.length - 1; i >= 1; i--) if (DETERMINERS.has(body[i].lower) || count(body[i])) { s = i; break; }
-    const hasDet = s >= 0;
-    if (!hasDet) s = 1;
-    const det = hasDet ? body[s] : null;
-    const kept = body.slice(hasDet ? s + 1 : s).filter((m) => !mods.some((n) => sameClass(m.lower, n.lower)));
-    const variants = kept.length ? [kept, []] : [[]];
-    for (const k of variants) {
-      let nounTail = tail;
-      const singNP = !plural && (!lead || !count(lead));
-      if (singNP && tail.length) {
-        const lw = tail[tail.length - 1];
-        const sg = singular(lw.lower);
-        if (sg !== lw.lower) nounTail = [...tail.slice(0, -1), { ...lw, raw: sg, lower: sg, textOverride: sg }];
-      }
-      const dets = hasDet ? (DETERMINERS.has(det.lower) && !/^(a|an|the)$/.test(det.lower) ? [det] : newDet()) : (lead && count(lead) ? [lead] : []);
-      out.push([...body.slice(0, s), ...dets, ...k, ...mods, ...nounTail]);
-    }
-  }
-  return { mods, lead, bare, candidates: out };
-}
+// Shared argument, verb ellipsis and one-anaphora are English grammar: they live in src/lang/en.mjs (facts of handover/lang.en), `en.sharedArgument`, `en.ellipsisPrefixes`, `en.oneAnaphora`.

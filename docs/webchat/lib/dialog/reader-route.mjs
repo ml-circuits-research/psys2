@@ -15,11 +15,11 @@
  * Read-only, with a budget: `interpret` and `score` run under the turn's budget; nothing is told to any world; a failure keeps the other readings.
  */
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=07dd1fe4f2';
-import { lexIndex } from '../worlds/lexicon.mjs?v=4e3b339134';
+import { lexIndex } from '../worlds/lexicon.mjs?v=a107e43628';
 import { parseNumberRun, isNumberWord } from '../formalizer/rules/numbers.mjs?v=c979ec3317';
 import { budget } from './budget.mjs?v=123c3e1329';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=fe5fe63391';
-import { FILLER, leftOut } from './world-aware.mjs?v=f760114f9a';
+import { FILLER, leftOut } from './world-aware.mjs?v=9f5abf5827';
 
 /**
  * What the reader may take (measured, spec 16 section 7.4): `freeText` (an argument that takes any words, class `rest`/`noun`/`words`: the descriptions cover only part of a world, so
