@@ -107,3 +107,22 @@ test('a thing with no facts is answered plainly, never drawn as a random shape',
     assert.equal(state.objects.length, 0, reasoner);
   }
 });
+
+test('the built-in kinds are described as facts; the ones the facts can say fully are drawn from them, the same as the hand-coded picture', () => {
+  const out = execFileSync('node', ['scripts/kinds-to-objects.mjs', '--check'], { encoding: 'utf8' });
+  assert.match(out, /up to date/);
+  assert.deepEqual(scene.KINDS_FROM_FACTS.slice().sort(), ['circle', 'heart', 'moon', 'oval', 'rectangle', 'square', 'star', 'triangle']);
+  const bounds = (parts) => {
+    const xs = [], ys = [];
+    for (const p of parts) { if (p.pts) for (const [x, y] of p.pts) { xs.push(x); ys.push(y); } else { xs.push(p.x - p.w / 2, p.x + p.w / 2); ys.push(p.y - p.h / 2, p.y + p.h / 2); } }
+    return [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  };
+  for (const kind of scene.KINDS_FROM_FACTS) {
+    const hand = bounds(scene.handCodedParts(kind)), facts = bounds(scene.kindParts(kind));
+    // the facts are a rounded copy in their own frame: the same silhouette, the same proportions
+    const hr = (hand[1] - hand[0]) / (hand[3] - hand[2]), fr = (facts[1] - facts[0]) / (facts[3] - facts[2]);
+    assert.ok(Math.abs(hr - fr) < 0.02 * hr, `${kind}: proportions`);
+    assert.equal(scene.partsOf({ kind, size: 100, color: 'green' })[0].hex, scene.colorHex('green'), `${kind}: the user colour replaces the main colour`);
+    assert.equal(scene.partsOf({ kind, size: 100 })[0].hex, scene.colorHex(scene.KINDS[kind].color), `${kind}: default colour`);
+  }
+});

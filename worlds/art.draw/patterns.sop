@@ -1559,7 +1559,7 @@
 @pat.art.draw.x.count.open core.pattern
     canonical="How many lighthouses are there?"
     match="how_many {k:words(2,noun)} [are_there|are_in_my_picture|are_in_my_drawing|are_in_the_picture|are_in_the_drawing|do_i_have|have_i_drawn|did_i_draw]"
-    emit="@{_} core.request action=draw.count arg.kind={k} arg.kt=\"{k}\""
+    emit="@{_} core.request action=draw.count arg.kind=\"{k}\" arg.kt=\"{k}\""
     kind=request
     priority=4
     example="How many lighthouses are there?"

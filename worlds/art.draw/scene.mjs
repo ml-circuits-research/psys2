@@ -7,7 +7,7 @@
 // object color, sh: lightness shift, f: fill override, t: stroke thickness in units, r: rotation in degrees }:
 //   rect/ellipse {x,y,w,h}   poly/line/curve {pts:[[x,y]...]}   arc {x,y,w,h,a0,a1} (radians, top half = PI..2*PI)
 
-import { THINGS, THING_WORDS } from './things.catalog.mjs';
+import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs';
 
 export const W = 1000, H = 700;
 export const HORIZON = 470;           // the sky ends and the ground begins here
@@ -364,6 +364,10 @@ for (const k of Object.values(BUILTIN)) k.aspect ??= 1;
 // An object of the catalog (knowledge/k.objects: parts with a primitive shape, a box x y w h in a 0-100 frame, a draw order, colours, points) is a kind like the
 // built-in ones: the key of its kind is `composite:<name>`, an object on the canvas says `kind: 'composite', thing: '<name>'`, and the same renderer draws its parts.
 export const COMPOSITE = 'composite:';
+// The built-in kinds whose facts (knowledge/art.draw.kinds, written by scripts/kinds-to-objects.mjs) draw the same picture as the hand-coded builder: they are drawn from
+// their facts, through thingBuild like every catalog thing. The others keep their hand-coded parts: the facts cannot say a line's thickness, a merged silhouette, a
+// lightness shift, a fill override or a second part that follows the object colour (the list is in spec 07 and in worker-log).
+export const KINDS_FROM_FACTS = ['circle', 'oval', 'square', 'rectangle', 'triangle', 'star', 'heart', 'moon'];
 const BASE_NAMES = new Set(Object.keys(BASE_COLORS));
 /** The catalog object a spoken word means ("lighthouse", "home" -> house, "robots" -> robot), or null. */
 export function thingOfWord(word) {
@@ -388,9 +392,9 @@ const trianglePts = ({ x, y, w, h, pointing = 'up' }) => ({
 })[pointing] ?? [[x + w / 2, y], [x + w, y + h], [x, y + h]];
 
 /** The groups of a thing's parts: `key` (a part kind such as window, else the part name; plural when several), the member part names, the spoken words. */
-export function thingGroups(name) {
+export function thingGroups(name, src = THINGS) {
   const groups = new Map();
-  for (const p of THINGS[name] ?? []) {
+  for (const p of src[name] ?? []) {
     const base = p.kind ?? p.name.replace(/^(?:left|right|front|back|top|bottom|middle|upper|lower|inner|outer)_/, '');   // left_tower and right_tower are two towers
     if (!groups.has(base)) groups.set(base, []);
     groups.get(base).push(p);
@@ -403,15 +407,15 @@ export function thingGroups(name) {
   }
   return out;
 }
-const unitOf = (name) => {
-  const ps = THINGS[name] ?? [];
+const unitOf = (name, src = THINGS) => {
+  const ps = src[name] ?? [];
   const xs = ps.flatMap((p) => [p.x, p.x + p.w]), ys = ps.flatMap((p) => [p.y, p.y + p.h]);
   const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), bw = Math.max(x1 - x0, 1), bh = Math.max(y1 - y0, 1);
   return { x0, y0, bw, bh, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2 };
 };
 /** Local-space parts (the format of the built-in kinds) of a catalog object: scaled to the width of its content, centred. */
-export function thingBuild(name) {
-  const u = unitOf(name), groups = thingGroups(name);
+export function thingBuild(name, src = THINGS) {
+  const u = unitOf(name, src), groups = thingGroups(name, src);
   const list = [];
   groups.forEach((g, gi) => {
     g.members.forEach((p, mi) => list.push({ g, p, z: p.z, order: gi * 1000 + mi }));
@@ -419,7 +423,7 @@ export function thingBuild(name) {
   list.sort((a, b) => a.z - b.z || a.order - b.order);
   const fx = (v) => round((v - u.cx) / u.bw), fy = (v) => round((v - u.cy) / u.bw);
   const area = (p) => (p.shape === 'line' || p.shape === 'arc' ? 0 : p.w * p.h);
-  const main = [...(THINGS[name] ?? [])].sort((a, b) => area(b) - area(a))[0];
+  const main = [...(src[name] ?? [])].sort((a, b) => area(b) - area(a))[0];
   return list.map(({ g, p }) => {
     const c = hexOfPart(p), cx = p.x + p.w / 2, cy = p.y + p.h / 2, o = { c: p.rgb ?? c };
     if (p === main || (main && p.name === main.name)) o.m = 1;
@@ -451,6 +455,10 @@ export function thingDef(name) {
   thingDefs.set(name, def);
   return def;
 }
+const HAND_BUILD = Object.fromEntries(KINDS_FROM_FACTS.map((k) => [k, BUILTIN[k].build]));
+for (const k of KINDS_FROM_FACTS) if (KIND_THINGS[k]) BUILTIN[k].build = () => thingBuild(k, KIND_THINGS);
+/** The hand-coded parts of a built-in kind (what the facts of knowledge/art.draw.kinds are written from, and what the side-by-side pictures compare with). */
+export const handCodedParts = (kind) => (HAND_BUILD[kind] ?? BUILTIN[kind].build)();
 /** The kinds of the board: the built-in ones, and `composite:<thing>` for every object of the catalog. */
 export const KINDS = new Proxy(BUILTIN, {
   get: (t, k) => (typeof k === 'string' && k.startsWith(COMPOSITE) ? thingDef(k.slice(COMPOSITE.length)) : t[k]),
