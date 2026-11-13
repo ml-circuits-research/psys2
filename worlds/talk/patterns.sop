@@ -139,6 +139,27 @@
     example="Which is the fifth month?"
     doc="Frame: which one is the Nth of the months, seasons, days or planets."
 
+@pat.talk.nth.which core.pattern
+    canonical="Which planet is the third from the sun?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichseq] {s:lex.talk.sequences} is [the]? {n:ordinal} [$lang.talk.seqtail]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.neighbour arg.n={n} arg.s=\"{s}\""
+    kind=request
+    tabOnly=true
+    priority=11
+    example="Which month is the fifth?"
+    doc="Frame: which planet (month, day, season) is the Nth, with the sequence word first."
+
+@pat.talk.other core.pattern
+    canonical="No, the other one."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.other] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.other"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=12
+    example="The other one."
+    doc="Correction: after two things were compared, the conversation moves to the other one of the two."
+
 @pat.talk.board core.pattern
     canonical="What did we talk about?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.board] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
@@ -215,6 +236,17 @@
     priority=12
     example="Is it bigger than Earth?"
     doc="Follow-up without a subject: is the current topic bigger than another thing."
+
+@pat.talk.it.compare.bare core.pattern
+    canonical="Bigger than Earth?"
+    match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.compar] than [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.compare arg.b=\"{b}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=11
+    example="Bigger than Mars?"
+    doc="Fragment without a subject: is the current topic bigger than another thing (the same as the question with it)."
 
 @pat.talk.change.colour core.pattern
     canonical="Make it red."
