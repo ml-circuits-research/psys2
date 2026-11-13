@@ -53,6 +53,16 @@
     status=conflicting
     text="{note}"
 
+@tpl.art.draw.reselect.m.refused core.template
+    for=op.art.draw.reselect
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.spatial.m.refused core.template
+    for=op.art.draw.spatial
+    status=conflicting
+    text="{note}"
+
 @tpl.art.draw.turn.m.refused core.template
     for=op.art.draw.turn
     status=conflicting

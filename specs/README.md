@@ -26,4 +26,5 @@ PSys2 is a neurosymbolic assistant that runs entirely in the browser, with no se
 | [16-world-aware-reading.md](16-world-aware-reading.md) | World-aware reading (E2, an option, off by default): veto of readings the world cannot take, the library's order for the choice among readings, the explanations |
 | [17-knowledge-lookup.md](17-knowledge-lookup.md) | Knowledge by lookup: the catalog, question frames, who uses a hit |
 | [18-talk-tab.md](18-talk-tab.md) | The Talk tab: question frames, answer cards, the topic board, how do you know, honest scope |
+| [19-space-module.md](19-space-module.md) | Tab worlds and shared modules (modules never compete in routing); the module `space`: selection by position, relative moves, placements, layouts, questions, the spatial words |
 | [decisions/ADR-009](decisions/ADR-009-nx-encoder-formalizer-in-the-webchat.md) | The NX encoder formalizer in the webchat: strategy setting (hybrid default, neural, rules), one encoder pass |

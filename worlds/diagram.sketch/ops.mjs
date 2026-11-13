@@ -18,6 +18,7 @@
 
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs';
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs';
+import * as space from '../space/space.mjs';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs';   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
@@ -441,6 +442,74 @@ function randomDiagram(ctx, s, pick = Math.floor(Math.random() * RANDOM_DIAGRAMS
 }
 
 const NOT_READY = () => { loadEngine(); return no('The diagram engine is still loading. Please say that again in a moment.', 'missing'); };
+
+// ---- the place of things: handed to the shared module `space` ------------------------------------------------------------------
+const SPACE_FRAME = { w: 800, h: 500, step: 80 };   // the engine's canvas and the length of one plain move
+const SPACE_KINDS = { circle: 'circle', square: 'square', rectangle: 'rectangle', triangle: 'triangle', diamond: 'diamond', ellipse: 'ellipse', oval: 'ellipse', hexagon: 'hexagon', star: 'star', text: 'text', box: '*', shape: '*', thing: '*', node: '*', item: '*' };
+const spaceKind = (w) => { const b = space.words([w])[0], k = SPACE_KINDS[b] ?? SPACE_KINDS[b.replace(/e?s$/, '')]; return k ? { kind: k, plural: b.endsWith('s') && !SPACE_KINDS[b] } : null; };
+const SPACE_ACTIONS = new Set(['move', 'align', 'arrange', 'distribute', 'respace', 'improve', 'swap', 'snap', 'fit']);
+/** The shapes as the module sees them: the centre (relative to the frame), the box; the id is the name. */
+function spaceItems(s) {
+  const fr = s.frame ?? { x: 0, y: 0 };
+  return s.shapes.filter((x) => !x.layer && !x.template).map((x) => {
+    const k = x.size, w = x.w ?? (x.shape === 'rectangle' ? Math.round(k * 1.6) : x.shape === 'ellipse' ? Math.round(k * 1.45) : k), h = x.h ?? k;
+    return { id: x.name, kind: x.shape, name: x.shape, x: x.x - fr.x, y: x.y - fr.y, w, h };
+  });
+}
+/** A moving or arranging sentence the module reads (the middle box, a bit more to the left, further, in a row, tidy up ...), or null to leave it to the engine. */
+function spaceTry(text, s, kind) {
+  if (!SPACE_ACTIONS.has(kind.name) || !/\b(?:move|put|place|shift|push|slide|nudge|drag|further|more|again|row|column|grid|circle|line|tidy|align|spread|space|swap|centre|center|layout|neaten|clean)\b/i.test(text)) return null;
+  const items = spaceItems(s);
+  if (items.length < 1) return null;
+  const r = space.interpret(text, { items, frame: SPACE_FRAME, kindOf: spaceKind, last: s.last ?? [], lastMove: s.lastMove });
+  if (!r) return null;
+
+  if (r.type === 'ask') return no(r.say, 'missing');
+  if (r.type === 'error') return null;   // what the module cannot read, the engine reads or refuses in its own words
+  // the engine's layout (row, column, grid, circle, align, distribute, its score) stays; the module tidies free shapes that overlap ("make a better layout" when nothing is connected)
+  if (r.type === 'layout' && (!['tidy', 'swap'].includes(r.op) || s.edges.length || !Object.keys(r.boxes ?? {}).length)) return null;
+  return r;
+}
+/** A question about places (is A above B, which one is in the middle, how far apart): the module reads it on the boxes of the shapes. */
+export const spatial = (ctx, args = {}) => {
+  if (!K) return NOT_READY();
+  const s = ensure(ctx), items = spaceItems(s);
+  if (!items.length) return no('The diagram is empty. Draw something first.', 'missing');
+  const r = space.interpret(String(args.text ?? ''), { items, frame: SPACE_FRAME, kindOf: spaceKind, last: s.last ?? [], lastMove: s.lastMove });
+  if ((!r || r.type === 'error') && /^\s*(?:is|are)\b/i.test(args.text ?? '')) return make({ type: 'question', name: 'check' })(ctx, { text: String(args.text) });   // names, not places: the engine's check
+  if ((!r || r.type === 'error') && /^\s*which\b/i.test(args.text ?? '')) return make({ type: 'question', name: 'list' })(ctx, { text: String(args.text) });
+  if ((!r || r.type === 'error') && /^\s*(?:swap|switch|exchange|trade)\b/i.test(args.text ?? '')) return make({ type: 'command', name: 'swap' })(ctx, { text: String(args.text) });   // names, not places: the engine's swap
+  if (!r || r.type === 'error') return no(r?.say ?? 'I could not read that question about places.', 'missing');
+  if (r.type === 'ask') return no(r.say, 'missing');
+  if (r.type === 'layout') return spaceApply(ctx, s, r);
+  return ok(r.say);
+};
+/** "no, not the first one, the middle one": puts the shapes of the last move back, then does the same move on the one meant now (one request). */
+export const reselect = (ctx, args = {}) => {
+  if (!K) return NOT_READY();
+  const s = ensure(ctx), info = s.lastMoveInfo;
+  if (!info) return no('There is no move to correct yet. Say which shape to move, for example "move the middle box to the right".', 'missing');
+  const back = info.before.map((b, i) => ({ id: `rb${i}`, type: 'command', args: { action: 'move', target: b.id, at: `${b.x},${b.y}` } }));
+  const res = execute(ctx, s, back);
+  if (res.status !== 'supported') return res;
+  const words = String(args.text ?? '').toLowerCase().split(/\s+/).filter((w) => w && !['the', 'a', 'an', 'one', 'it'].includes(w));
+  const noun = info.kind && info.kind !== '*' ? info.kind : 'box';
+  return make({ type: 'command', name: 'move' })(ctx, { text: `move the ${words.join(' ')} ${noun} ${info.dest}` });
+};
+function spaceApply(ctx, s, r) {
+  const nodes = [];
+  let n = 0;
+  r.before = spaceItems(s).filter((i) => r.boxes?.[i.id]).map((i) => ({ id: i.id, x: i.x, y: i.y }));
+  for (const [name, b] of Object.entries(r.boxes ?? {})) {
+    nodes.push({ id: `sp${n++}`, type: 'command', args: { action: 'move', target: name, at: `${b.x},${b.y}` } });
+    if (b.w != null) nodes.push({ id: `sp${n++}`, type: 'command', args: { action: 'resize', target: name, width: b.w, height: b.h } });
+  }
+  if (nodes.length) { const res = execute(ctx, s, nodes); if (res.status !== 'supported') return res; }
+  s.last = r.ids?.length ? r.ids : s.last;
+  s.lastMove = r.memory ?? (r.type === 'move' ? null : s.lastMove);
+  if (r.type === 'move') s.lastMoveInfo = { dest: r.dest, kind: r.kind, before: r.before };   // what "no, the middle one" corrects
+  return ok(r.say);
+}
 /** Common entry of every operation: `kind` = { type, name } of the engine wire. */
 const make = (kind) => (ctx, args = {}) => {
   if (!K) return NOT_READY();
@@ -452,6 +521,9 @@ const make = (kind) => (ctx, args = {}) => {
   if (text) {
     const prepared = prepareText(text, s);
     if (typeof process !== 'undefined' && process.env?.DIAG_DEBUG) console.error('[diagram]', JSON.stringify(text), '->', JSON.stringify(prepared));
+    const absent = kind.type === 'command' ? missingNamed(s, kind.name, text) : [];   // a name the diagram does not have is never replaced by another shape: not for the module either
+    const sp = absent.length ? null : spaceTry(prepared, s, kind);
+    if (sp) return sp.status ? sp : spaceApply(ctx, s, sp);
     const sel = selectCommand(prepared, s, ctx);
     if (sel) return sel;
     // a name the diagram does not have ("delete the box End") is not "the one box": the reader drops an unknown name and keeps the kind, which would act on another shape

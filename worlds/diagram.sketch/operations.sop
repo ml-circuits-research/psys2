@@ -28,6 +28,18 @@
     action=diagram.move
     doc="Diagram command action=move; cue words: move, shift, drag, push, nudge, slide, reposition, relocate, scoot, shove, park, tuck"
 
+@op.diagram.sketch.reselect core.operation
+    impl=reselect
+    semantics=action
+    action=diagram.reselect
+    doc="Corrects which shape the last move was about: puts the moved shapes back and moves the one meant now the same way (the place of a shape is read by the module space)."
+
+@op.diagram.sketch.spatial core.operation
+    impl=spatial
+    semantics=action
+    action=diagram.spatial
+    doc="Answers a question about places (is A above B, which one is in the middle, how far apart); the place of shapes is read by the module space."
+
 @op.diagram.sketch.set core.operation
     impl=set
     semantics=action
