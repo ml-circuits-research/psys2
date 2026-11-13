@@ -3514,3 +3514,29 @@ The 49 "wrong" of C on operational go to the ledger as one group, not fixed sing
 ## Reviewer 2026-11-13 18:35 — validated at 7f0bcb3: smoke 242 pass, 0 fail (197 s on the reviewer box)
 
 No test rerun beyond the smoke. Still waiting for, in this order: the failure ledger with the grouping report, the smoke cut to invariants, the replay of owner-log-2026-11-13b on the merged build (per class), router C as default. The knowledge repo now has `k.scenes` (61 scenes; usual place and size class for 2,033 things), `k.people` (8 kinds, 60 roles), `k.feelings` (30, 20 with a face expression): KNOWLEDGE-ALL-WORLDS item 1 (generic reading) makes them usable; "draw a farm" should then compose a scene from `k.scenes` with the SPACE solver (the knowledge previews pile things up: placing is your side).
+
+## Reviewer 2026-11-13 18:55 — owner's fourth log (33 turns, English): USER-ACTIONS in the log, ONE AVATAR, "about the current discussion"
+
+**Data:** `training/eval/owner-log-2026-11-13c.jsonl` (class and `expected`). It goes to the failure ledger; the items below are mechanisms, not row fixes.
+
+### USER-ACTIONS in the phrase log (owner)
+The export holds only messages, so nobody can tell which tab the owner was on or what he tapped between two messages. Record every user action as an event in the same log, in order: tab opened (by tap, by a message, by a transferred card), button and chip taps, option cards chosen, undo / redo, clear, settings changed, language changed, a recalled message (arrow history), microphone on / off, a drawing or card tapped. Each event: time, kind, target, tab before and after. `scripts/analyze-phrase-log.mjs` shows the timeline and flags every message whose reading used another tab than the one on screen. Export format version 3; old exports still load. Nothing leaves the device (as today).
+
+### ONE AVATAR (owner): only the new vector avatar; remove the old one and the duplication
+The owner sees two avatar systems and chaos: the avatar is drawn with glasses yet "remove eyeglasses", "add eyeglasses", "put a hat" are not understood (rows 1, 2, 4, 5, 6, 33), and row 6 went to art.draw.
+1. **Delete the old avatar**: the DiceBear library (1.36 MB), its operations, patterns, lexicon, presets, tests and the `FACE_DELEGATES` hand-over. One state (`state.face`), one renderer, one set of operations. Old saved avatars map to the nearest preset once, then the mapping code goes too. Report lines and bytes removed.
+2. **Data only from the knowledge repo's `k.faces`** (16 slots, 134 hand-written variants, 13 presets, 7 expressions; hats, glasses, earrings and other accessories are slots there; more hats are being added). Remove the local stub. Every slot and variant is usable by any of its names and synonyms from the catalog; no accessory list in PSys2.
+3. **One generic operation set over slots** (not a pattern per accessory): add / wear / put on, remove / take off / without, change / next / another, which ones are there, colour, size, position; a bare slot name ("eyeglasses") asks add or remove from the present state. "remove X" for a part the face is drawn with must work for every slot: test it by looping over the catalog's slots, not by listed words.
+4. **Space:** parts sit by the face layout and anchors of the shared `space` module (a hat on the top of the head, glasses on the eyes); resizing one adapts the neighbours.
+5. **Routing:** on the Avatar tab a part of the face is a referent of that world (meta.worlds referent rule); art.draw never takes it.
+6. The header avatar, the talking mouth and expressions use the same renderer. One Chrome probe at the end with a sheet of 12 faces and each accessory added and removed; send the sheet path in worker-log.
+
+### ABOUT-THE-DISCUSSION (new, serves the goal: worlds combining)
+"draw a nice chart about the current discussion", "create a chart about …", "create a document about the current discussion" (rows 17, 18, 20) are requests to another world with the session as the data. General mechanism: the dialogue module (M1) offers the session as facts (things drawn and their counts, topics looked up in Talk, games played and results, places shown); through delegation (M3) any world may take "the current discussion / what we did / so far" as its content: a chart of counts, a document with one section per world, a diagram of topics, a Talk card. One implementation in the module, no pattern per tab. Experiment: 20 sessions × 4 target worlds, right content yes/no.
+
+### Classes seen again (ledger only, no single fixes)
+- "why?" answered about an older turn instead of the last one (row 19) → M1 why-answers use the last turn.
+- "random colours" for a set (rows 12, 13) → scene sets with an attribute per member ("each", "random", "different").
+- "sudan capital" (row 31) → knowledge relation between two things in one request, by lookup (k.geo has capitals).
+- "Ta-da!" is still in replies (row 9): the interjections were to go in every language.
+- "I can't reach the picture catalog right now" on the owner's machine (row 17): say in worker-log why the catalog was unreachable there and what the user sees when offline.
