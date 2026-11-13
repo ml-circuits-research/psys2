@@ -66,7 +66,7 @@
     "lib/dialog/dispatch-validate.mjs": "581c4c22e0e2a600",
     "lib/dialog/encoder-dispatch.mjs": "928f5e21aff66825",
     "lib/dialog/followup.mjs": "a80f066b4fada950",
-    "lib/dialog/index.mjs": "89cb49c83dff5ee1",
+    "lib/dialog/index.mjs": "9cbed21ac2007eb8",
     "lib/dialog/knowledge-lookup.mjs": "68352197fa14e7ab",
     "lib/dialog/meta-worlds.mjs": "b0e63dd576d859db",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -107,7 +107,7 @@
     "lib/formalizer/strategy.mjs": "bb35f035830fab64",
     "lib/formalizer/voice.mjs": "6f20c70e97e7e7d6",
     "lib/formalizer/wordpiece.mjs": "0dfeb8fa5444e2df",
-    "lib/interpreter/index.mjs": "3b938510d71b71d8",
+    "lib/interpreter/index.mjs": "06ec6a566632515e",
     "lib/interpreter/lang.mjs": "4526bc607086cb3d",
     "lib/interpreter/memory.mjs": "2672e73fe97f3277",
     "lib/interpreter/render.mjs": "29d3ec2c79479fb9",
@@ -115,7 +115,7 @@
     "lib/knowledge/faces.mjs": "48f87ccb3859a058",
     "lib/knowledge/facts.mjs": "76f9cade59c52c15",
     "lib/knowledge/layouts.mjs": "165a82122c9226c1",
-    "lib/knowledge/learned.mjs": "4bca39a02a6c0768",
+    "lib/knowledge/learned.mjs": "8fb54dc4bca0f427",
     "lib/legends/index.mjs": "ada11d48a49f2c91",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
     "lib/loaders/knowledge-cache.mjs": "5afb651adf762afc",
@@ -265,6 +265,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T17:53:45.387Z",
-  "commit": "73194a19-dirty"
+  "builtAt": "2026-11-13T17:56:25.935Z",
+  "commit": "49b1d0ea-dirty"
 }

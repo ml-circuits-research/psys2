@@ -59,7 +59,7 @@ export function learn(lines, taught) {
 }
 
 /** The knowledge catalog with the learned wires of a session overlaid. `read()` returns the wire lines (text); the overlay is rebuilt only when they change. */
-export function withLearned(base, read) {
+export function withLearned(base, read, readMem = null) {
   if (!base) return base;
   let seen = -1, wires = [];
   const all = () => {
@@ -68,18 +68,50 @@ export function withLearned(base, read) {
     return wires;
   };
   const one = (r, k) => r.f[k]?.[0];
+  // What the worlds of the session were told in their own statements (the wires they keep: `kids.animals.animal name=duck can_swim=true`, a pet `kind=dog called=Rex`): every non-core wire of the
+  // session memory that carries a name (name / word / called) is a record of that name for the overlay, in any world, with no table of types.
+  const NAMEY = /^(?:name|word|called)$/;
+  const memWires = (cands) => {
+    const all0 = !cands;
+    if (!readMem) return [];
+    const out = [], all = readMem() ?? [];
+    const byId = new Map(all.map((w) => [w.id, w]));
+    const tail = (k) => String(k).split('.').at(-1);
+    for (const w of all) {
+      budget.tick('learned.mem');
+      if (/^(?:core|session|ui|meta)\./.test(w.type) || w.entries.some((e) => e.key === 'core.status' && e.value?.v === 'retracted')) continue;
+      const f = {};
+      for (const e of w.entries) { let v = String(e.value?.v ?? ''); if (byId.get(v.replace(/^\$/, ''))) { const r = byId.get(v.replace(/^\$/, '')); v = String(r.entries.find((x) => /(?:^|\.)name$/.test(x.key))?.value?.v ?? v); } (f[tail(e.key)] ??= []).push(v); }
+      const hit = all0 ? [null, f.called ?? f.name ?? ['']] : Object.entries(f).find(([k, vs]) => NAMEY.test(k) && vs.some((v) => cands.includes(v.toLowerCase().replace(/_/g, ' '))));
+      if (!hit) continue;
+      if (!f.name) f.name = [hit[1][0]];
+      out.push({ id: w.id, type: w.type, f, shard: 'session.memory' });
+    }
+    return out;
+  };
+  const memWiresAll = () => memWires(null);
   const forWord = (word) => {
     const cands = lemmaCandidates(word).map((c) => c.replace(/_/g, ' '));
     const mine = all().filter((w) => (w.type === 'k.words.sense' && cands.includes(String(one(w, 'word')).toLowerCase())) || (w.type === 'k.commonsense.thing' && cands.includes(String(one(w, 'name')).toLowerCase())));
     const own = all().filter((w) => w.type === 'session.learned.own' && cands.includes(String(one(w, 'name')).toLowerCase()));
-    return { cands, mine, own };
+    return { cands, mine, own, mem: memWires(cands) };
   };
+  /** The things the user told a world about by name (a wire with a `kind` and a `called`: a pet, a relative), whatever the world. */
+  const ownFromMemory = () => memWiresAll().filter((w) => w.f.kind?.[0] && w.f.called?.[0]).map((w) => ({ kind: w.f.kind[0].toLowerCase().replace(/_/g, ' '), name: w.f.called[0] }));
   const merge = (word, th, parentOf) => {
     budget.tick('learned.merge');
-    const { cands, mine, own } = forWord(word);
-    if (!mine.length && !own.length) return th;
+    const { cands, mine, own, mem } = forWord(word);
+    if (!mine.length && !own.length && !mem.length) return th;
     const out = th ? { ...th, senses: [...(th.senses ?? [])], objects: [...(th.objects ?? [])] } : { name: cands[0], word, shards: [], loaded: [], objects: [], commonsense: null, senses: [], wires: [], learned: true };
     out.learned = true;
+    if (mem.length) { out.wires = [...(out.wires ?? []), ...mem]; out.fromSession = true; }
+    for (const w of mem) for (const [k, vs] of Object.entries(w.f)) {   // an ability a world keeps as a flag (can_swim=true) is an ability of the kind
+      const m = /^can_(.+)$/.exec(k);
+      if (!m || !/^(?:true|false)$/.test(vs[0])) continue;
+      const cs = out.commonsense = { ...(out.commonsense ?? {}), shard: out.commonsense?.shard ?? 'session.memory', name: out.commonsense?.name ?? [out.name] };
+      const key = vs[0] === 'true' ? 'can' : 'cannot';
+      cs[key] = [...new Set([...(cs[key] ?? []), m[1].replace(/_/g, ' ')])];
+    }
     for (const w of mine) {
       if (w.type === 'k.words.sense') out.senses.unshift({ pos: 'noun', n: 0, gloss: one(w, 'gloss') ?? '', synonyms: [], isA: w.f.is_a ?? [], shard: 'session.learned' });
       else {
@@ -111,17 +143,17 @@ export function withLearned(base, read) {
   };
   const o = Object.create(base);
   o.base = base;
-  o.peek = (word) => { const th = base.peek(word); return forWord(word).mine.length || forWord(word).own.length ? merge(word, th ?? null, (p) => o.peek(p)) : th; };
+  o.peek = (word) => { const th = base.peek(word); return (() => { const f = forWord(word); return f.mine.length || f.own.length || f.mem.length; })() ? merge(word, th ?? null, (p) => o.peek(p)) : th; };
   o.thing = async (word) => {
     const th = await base.thing(word);
     const f = forWord(word);
-    if (!f.mine.length && !f.own.length) return th;
+    if (!f.mine.length && !f.own.length && !f.mem.length) return th;
     for (const p of [...f.mine, ...f.own].flatMap((w) => w.f.is_a ?? (w.f.kind ?? []))) await base.thing(p).catch(() => null);
     return merge(word, th, (p) => o.peek(p));
   };
   o.wires = async (type, opts) => [...await base.wires(type, opts), ...all().filter((w) => w.type === type).map((w) => ({ ...w, shard: 'session.learned', source: 'user' }))];
   /** The things the user named, optionally of one kind: [{ kind, name }]. */
-  o.own = (kindWord) => all().filter((w) => w.type === 'session.learned.own').map((w) => ({ kind: one(w, 'kind'), name: one(w, 'name') }))
+  o.own = (kindWord) => [...all().filter((w) => w.type === 'session.learned.own').map((w) => ({ kind: one(w, 'kind'), name: one(w, 'name') })), ...ownFromMemory()]
     .filter((x) => !kindWord || lemmaCandidates(kindWord).map((c) => c.replace(/_/g, ' ')).includes(x.kind));
   /** The kinds above a word in the is-a chain, learned first: ['house', 'building']. A synchronous read of what is settled. */
   o.ancestors = (word) => {

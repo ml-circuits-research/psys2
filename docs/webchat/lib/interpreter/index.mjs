@@ -20,7 +20,7 @@ import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 import { Renderer, fallbackText, listText } from './render.mjs?v=237d079f93';
 import { FormSession } from '../formalizer/rules/session.mjs?v=e445741b59';
 import { makeLang } from './lang.mjs?v=b0313edaaa';
-import { withLearned } from '../knowledge/learned.mjs?v=7c836f47fc';
+import { withLearned } from '../knowledge/learned.mjs?v=0cf950ab1d';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 export { Renderer } from './render.mjs?v=237d079f93';
@@ -374,7 +374,7 @@ export class Interpreter {
   _knowledgeFor(session) {
     const base = this.knowledge;
     if (!base) return null;
-    if (!session._kn || session._kn.base !== base) session._kn = { base, kn: withLearned(base, () => session.state['session.things']?.learned) };
+    if (!session._kn || session._kn.base !== base) session._kn = { base, kn: withLearned(base, () => session.state['session.things']?.learned, () => session.memory?.own?.all?.()) };
     return session._kn.kn;
   }
 

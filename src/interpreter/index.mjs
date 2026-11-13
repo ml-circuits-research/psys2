@@ -374,7 +374,7 @@ export class Interpreter {
   _knowledgeFor(session) {
     const base = this.knowledge;
     if (!base) return null;
-    if (!session._kn || session._kn.base !== base) session._kn = { base, kn: withLearned(base, () => session.state['session.things']?.learned) };
+    if (!session._kn || session._kn.base !== base) session._kn = { base, kn: withLearned(base, () => session.state['session.things']?.learned, () => session.memory?.own?.all?.()) };
     return session._kn.kn;
   }
 
