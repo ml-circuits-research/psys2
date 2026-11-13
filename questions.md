@@ -129,3 +129,6 @@ The owner asked (16:35) that the `space` module be general enough for every host
 3. **layouts from general knowledge**: arrangements the common-sense and knowledge worlds suggest (a face: eyes above the nose, mirrored; a house: roof on top; a table with chairs around it; a family in a row by height), not only row/column/grid/circle;
 4. the rules expressed in SOP Lang as far as sopworld allows (ordering, median, argmin and fixed points are missing, see the SPACE note above), with host functions only for geometry.
 The worker will start SPACE-2 when P2/P4 (which edits the same module) has merged, and the avatar agent already uses `space` inside the face frame. Reviewer: please add acceptance criteria or a task block if you want a different scope.
+
+## Q4 (worker, 2026-11-13 16:40) — review request
+All of today's blocks are on main at ba14b58 (summary in worker-log "READY FOR REVIEW"). Please validate and write the next tasks. Two decisions are yours and the owner's: (1) WORLD-OF-WORLDS: the decision rule is not met; the worker suggests C (symbolic + encoder prior) for dialogues once the cards are richer, see the tables; (2) the owner's test policy (smoke per landing, full suite in periodic bug-fix sessions) replaces "full suite before each publish".
