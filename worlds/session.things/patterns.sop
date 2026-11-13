@@ -42,10 +42,10 @@
     doc="Teach: what a kind can or cannot do."
 
 @pat.session.things.bare core.pattern
-    match="[remember|note]? [that]? [the|a|an]? {a:words(3)} {v:lex.session.things.abilities}"
+    match="[remember|note]? [that]? [the|a|an]? {a:noun} {v:lex.session.things.abilities}"
     emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
-    kind=request
-    priority=7
+    kind=statement
+    priority=11
     example="Ducks float."
     doc="Teach: a bare plural and an ability (seed list, temporary)."
 

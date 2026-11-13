@@ -163,7 +163,11 @@ export function withLearned(base, read, readMem = null) {
       const next = [];
       for (const w of up) {
         const th = o.peek(w);
-        for (const p of (th?.senses ?? []).flatMap((s) => s.isA ?? [])) { const k = String(p).replace(/_/g, ' '); if (!seen.has(k)) { seen.add(k); out.push(k); next.push(k); } }
+        // the parents a word has: its senses' is-a, what the records of the catalog say it is (a role `is=girl`, a kind `is_a=child`) and, last, the figure it is drawn as
+        // (`drawing=person`: a sister, a girl, a man are drawn as a person, so they are people), with no table of words
+        const recs = (th?.wires ?? []).filter((x) => !/^(?:core|session|ui|meta)\./.test(x.type));
+        const parents = [...(th?.senses ?? []).flatMap((s) => s.isA ?? []), ...recs.flatMap((x) => [...(x.f?.is ?? []), ...(x.f?.is_a ?? [])]), ...recs.flatMap((x) => x.f?.drawing ?? [])];
+        for (const p of parents) { const k = String(p).replace(/_/g, ' '); if (!seen.has(k)) { seen.add(k); out.push(k); next.push(k); } }
       }
       up = next;
     }
