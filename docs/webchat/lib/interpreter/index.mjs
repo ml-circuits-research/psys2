@@ -369,7 +369,7 @@ export class Interpreter {
 
   /** What an action of the library asks of the host besides its answer: the tab to bring forward (`openTab`) and the client-side effects it queues (`effects`: [{ name, args }]). */
   _libraryExtras(session, env, action) {
-    if (env.openTab) { this.runAction(session, 'ui.openTab', { tab: env.openTab }); delete env.openTab; }
+    if (env.openTab) { if (!session.noTabFollow) this.runAction(session, 'ui.openTab', { tab: env.openTab }); delete env.openTab; }   // noTabFollow: the dialog layer says this reading is loose (spelling-corrected, partial) and names no world: it brings no tab forward
     if (Array.isArray(env.effects)) {
       const world = session.rs?.reasoner.ownerOfAction(action) ?? null;
       for (const e of env.effects) session.effects.push({ name: String(e.name), args: structuredClone(e.args ?? {}), world });

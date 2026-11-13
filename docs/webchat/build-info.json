@@ -60,7 +60,7 @@
     "lib/dialog/dispatch-validate.mjs": "28dbbbe5dc619aec",
     "lib/dialog/encoder-dispatch.mjs": "9f83e9fe8fbabe8e",
     "lib/dialog/followup.mjs": "a80f066b4fada950",
-    "lib/dialog/index.mjs": "6515693e6f415e7e",
+    "lib/dialog/index.mjs": "cae1bf164db31789",
     "lib/dialog/knowledge-lookup.mjs": "f10d72eb135f9cc9",
     "lib/dialog/meta-worlds.mjs": "d7c790249bf8416d",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -101,7 +101,7 @@
     "lib/formalizer/strategy.mjs": "d8d90f05ea4327d0",
     "lib/formalizer/voice.mjs": "b57fe90e64754893",
     "lib/formalizer/wordpiece.mjs": "0dfeb8fa5444e2df",
-    "lib/interpreter/index.mjs": "14f6cc31c6557754",
+    "lib/interpreter/index.mjs": "71e37b52e48d454f",
     "lib/interpreter/lang.mjs": "e9a324ecfe2b963d",
     "lib/interpreter/memory.mjs": "2672e73fe97f3277",
     "lib/interpreter/render.mjs": "29d3ec2c79479fb9",
@@ -251,6 +251,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T16:01:25.701Z",
-  "commit": "fbe9fcb"
+  "builtAt": "2026-11-13T16:17:36.063Z",
+  "commit": "fddd4b3"
 }
