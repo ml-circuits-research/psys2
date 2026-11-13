@@ -1592,18 +1592,6 @@
     example="Swap the glasses for round ones."
     example="Change the glasses to square."
 
-@pat.ui.avatar.face.give core.pattern
-    canonical="Give her silver hoop earrings."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give|get|put|add|fit] [her|him|it|them|the_face|the_avatar] [a|an|the|some|new]? {w:words(3)} {p:lex.ui.avatar.faceparts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.faceSetPart arg.part={p} arg.words=\"{w}\""
-    kind=request
-    tabOnly=true
-    priority=13
-    example="Give her silver hoop earrings."
-    example="Give him round glasses."
-    example="Give her a red hat."
-    doc="A colour and an option of one part of the drawn face, said about the face in the third person (give her gold hoop earrings)."
-
 @pat.ui.avatar.face.save core.pattern
     canonical="Save this face as Anna."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [save|keep|store|remember|name] [this|it|the_face|this_face|my_face|me|the_avatar|that|the_drawing]? [as|under|called|named|under_the_name] {n:words(3)}"

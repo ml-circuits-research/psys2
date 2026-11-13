@@ -82,28 +82,3 @@
     semantics=action
     action=prof.fieldOf
     doc="Answers one stored field (\"where do I live?\"), or says it does not know it yet."
-
-@op.user.profile.keep core.operation
-    impl=keep
-    semantics=action
-    action=prof.keep
-    doc="Keeps one text for another world under a key (saved faces: ctx.request(\"prof.keep\", { key, value })). Not a profile field, wiped with the profile."
-
-@op.user.profile.recall core.operation
-    impl=recall
-    semantics=action
-    action=prof.recall
-    doc="The text kept under a key: ctx.request(\"prof.recall\", { key }); missing when nothing is kept."
-
-@op.user.profile.keptKeys core.operation
-    impl=keptKeys
-    semantics=action
-    action=prof.kept
-    doc="The keys kept for other worlds that start with a prefix, one per line: ctx.request(\"prof.kept\", { prefix })."
-
-@op.user.profile.unkeep core.operation
-    impl=unkeep
-    semantics=action
-    action=prof.unkeep
-    doc="Removes what was kept under a key: ctx.request(\"prof.unkeep\", { key })."
-

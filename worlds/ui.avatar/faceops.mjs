@@ -303,7 +303,6 @@ export function faceSetPart(ctx, { part, value, text, words: w, n } = {}) {
     return no(`I do not know ${plain(nounOf(slot))} like "${rest.join(' ')}". My ${nounOf(slot)} can be ${joinOr(names.map(plain))}.`);
   }
   if (m.id || exact) put(f, data, slot, exact?.id ?? m.id);
-  else if (slotOf(data, slot).optional && f.slots[slot] === 'none') put(f, data, slot, pickable(data, slot)[0].id);   // "a red hat": a colour names the part, so the part appears (a colour on a hat that is not there would say nothing)
   if (Object.keys(tmp.colours).length) Object.assign(f.colours, tmp.colours);
   return finish(ctx, `${opener(f)} ${sayHave(f, slot, data)}${m.unmatched.length && (m.id || exact) ? ` I have no "${m.unmatched.join(' ')}" yet.` : ''}`);
 }
@@ -491,7 +490,6 @@ export function facePreset(ctx, kind) {
   const data = getFaces(), name = KINDS[String(kind).toLowerCase()] ?? kind;
   if (!data.presets[name]) return null;
   const f = faceOf(ctx), saved = f.saved, nm = f.name;
-  if (saved[keyOf(String(kind))] || fromProfile(ctx, keyOf(String(kind)))) return faceLoad(ctx, { name: kind });   // the user's own face of that name ("be Grandma") comes before my preset
   Object.assign(f, newFace(name, data), { saved, name: nm });
   return finish(ctx, `${opener(f)} I drew ${art(plain(name))} ${plain(name)}: ${describeFace(f, data)}.`);
 }
@@ -501,48 +499,33 @@ export function faceStart(ctx) {
   f.active = true; clean(f);
   return finish(ctx, `${opener(f)} I am a drawn face now: ${describeFace(f)}. Describe another one, or change one part at a time.`);
 }
-// Saved faces also live in the user's profile (user.profile keeps them for the user, `prof.keep` under "face.<key>"), so they survive the session and the avatar;
-// without a profile world the faces stay in this world's state, as before.
-const PROFILE_PREFIX = 'face.';
-const toProfile = (ctx, k, entry) => { try { ctx.request?.('prof.keep', { key: PROFILE_PREFIX + k, value: JSON.stringify(entry) }); } catch { /* no profile world: the state keeps it */ } };
-function fromProfile(ctx, k) {
-  try { const r = ctx.request?.('prof.recall', { key: PROFILE_PREFIX + k }); if (r?.status === 'supported') { const e = JSON.parse(r.value); if (e && typeof e === 'object' && e.slots) return e; } } catch { /* nothing kept */ }
-  return null;
-}
-function profileFaces(ctx) {
-  try {
-    const r = ctx.request?.('prof.kept', { prefix: PROFILE_PREFIX });
-    return r?.status === 'supported' && r.value ? String(r.value).split('\n').map((key) => fromProfile(ctx, key.slice(PROFILE_PREFIX.length))).filter(Boolean) : [];
-  } catch { return []; }
-}
 export function faceSave(ctx, { name } = {}) {
   const f = faceOf(ctx), n = cleanName(name);
   if (!n) return no('What should I call this face?');
   const k = keyOf(n);
-  const shadows = !!getFaces().presets[k];   // a saved face may take the name of one of my own ("Grandma"): "be Grandma" then brings back yours
+  if (getFaces().presets[k]) return no(`"${n}" is one of my own faces. Choose another name.`);
   if (!f.saved[k] && Object.keys(f.saved).length >= 12) return no('I can keep twelve faces. Delete one first.');
   f.saved[k] = { name: n, ...startOf(f) };
-  toProfile(ctx, k, f.saved[k]);
   f.name = n;
-  return finish(ctx, `${opener(f)} I saved this face as ${n}${shadows ? `, so "be ${n}" now brings back yours, not my own` : ''}. Say "be ${n}" to bring it back.`);
+  return finish(ctx, `${opener(f)} I saved this face as ${n}. Say "be ${n}" to bring it back.`);
 }
 export function faceLoad(ctx, { name } = {}) {
   const f = faceOf(ctx), n = cleanName(name).replace(/^(?:the|my)\s+/i, '').replace(/\s+face$/i, ''), k = keyOf(n);
   if (!k) return no('Which face do you want?');
   const data = getFaces(), mood = expressionOf(k, data);
-  if (mood && !f.saved[k] && !fromProfile(ctx, k)) return faceMood(ctx, { mood: k });
-  const hit = f.saved[k] ?? fromProfile(ctx, k);
+  if (mood && !f.saved[k]) return faceMood(ctx, { mood: k });
+  const hit = f.saved[k];
   if (hit) {
     Object.assign(f, { active: true, slots: { ...hit.slots }, colours: { ...hit.colours }, adj: structuredClone(hit.adj ?? {}), expression: 'neutral', name: hit.name }); clean(f);
     return finish(ctx, `${opener(f)} I am ${hit.name} now: ${describeFace(f, data)}.`);
   }
   const p = facePreset(ctx, k);
   if (p) return p;
-  const have = [...new Set([...Object.values(f.saved), ...profileFaces(ctx)].map((x) => x.name)), ...presetList(data).map(plain)];
+  const have = [...Object.values(f.saved).map((x) => x.name), ...presetList(data).map(plain)];
   return no(`I do not have a face called ${n}. I know ${joinAnd(have)}. To keep this one, say "save this as ${n}".`);
 }
 export function faceList(ctx) {
-  const f = faceOf(ctx), mine = [...new Set([...Object.values(f.saved), ...profileFaces(ctx)].map((x) => x.name))];
+  const f = faceOf(ctx), mine = Object.values(f.saved).map((x) => x.name);
   return ok(`${mine.length ? `Your faces: ${joinAnd(mine)}. ` : 'You have not saved a face yet. '}My own: ${joinAnd(presetList().map(plain))}.`);
 }
 
