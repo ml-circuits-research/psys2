@@ -462,7 +462,7 @@ const make = (kind) => (ctx, args = {}) => {
     }
     const f = systemFor(s).formalize(prepared, readerCtx(s));
     if (!f.nodes.length) return no(`I could not read "${text}" as something to do with the diagram.${(f.notes ?? []).length ? ` ${f.notes[0]}` : ''}`, 'missing');
-    const fx = fixNodes(f.nodes, prepared, s);
+  const fx = fixNodes(f.nodes, prepared, s);
     if (fx.clarify) return no(fx.clarify, 'missing');
     return execute(ctx, s, fx.nodes);
   }
@@ -597,8 +597,7 @@ export function read(text, state = {}) {
   const s = { ...initialState(), ...state };
   assignIds(s);
   const prepared = prepareText(text, s), f = systemFor(s).formalize(prepared, readerCtx(s));
-  if (process.env?.DIAG_DEBUG) console.error("[nodes]", JSON.stringify(f.nodes));
-    const fx = fixNodes(f.nodes, prepared, s);
+  const fx = fixNodes(f.nodes, prepared, s);
   return fx.nodes ? { ...f, nodes: fx.nodes } : f;
 }
 export const kit = () => K;

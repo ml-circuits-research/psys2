@@ -143,8 +143,8 @@
     "worlds/diagram.sketch/engine/auto-layout.mjs": "46f97a4739eb8339",
     "worlds/diagram.sketch/engine/logic.mjs": "09664b189e5d152c",
     "worlds/diagram.sketch/engine/templates.mjs": "625a2dc2ee86f062",
-    "worlds/diagram.sketch/fns.mjs": "ccb0fe00a931ad89",
-    "worlds/diagram.sketch/ops.mjs": "2e3e1cc0d9f3b66e",
+    "worlds/diagram.sketch/fns.mjs": "38dc90054e38c705",
+    "worlds/diagram.sketch/ops.mjs": "683687e7a6b583a4",
     "worlds/diagram.sketch/refs.mjs": "5d7c74441762a25e",
     "worlds/docs.editor/coverage.md": "532dde81b41608d7",
     "worlds/docs.editor/datagen.mjs": "5e2eb5732fc989b1",
@@ -235,6 +235,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T12:19:43.542Z",
-  "commit": "18033a4-dirty"
+  "builtAt": "2026-11-13T12:34:48.122Z",
+  "commit": "cf1fe84-dirty"
 }
