@@ -897,7 +897,7 @@ interesant,interesantă,interesanți,interesante|interesting
 important,importantă,importanți,importante|important
 diferit,diferită,diferiți,diferite|different
 întreg,întreagă,întregi,întregi|whole
-stâng,stângă,stângi,stângi|left
+stâng,stângă,stângi,stângi,stinga,stînga|left
 drept,dreaptă,drepți,drepte|right
 rotund,rotundă,rotunzi,rotunde|round
 ascuțit,ascuțită,ascuțiți,ascuțite|sharp
@@ -1031,6 +1031,7 @@ aproape|near|adv
 repede|quickly|adv
 încet|slowly|adv
 primul,prima,primii,primele|the first|det
+cea|the one|det
 ultimul,ultima,ultimii,ultimele|the last|det
 bine|well|adv
 așa|like this|adv

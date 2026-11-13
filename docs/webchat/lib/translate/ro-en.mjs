@@ -3,7 +3,7 @@
 // Pipeline per sentence:  tokens -> number words -> phrase frames -> items (NP, VG, wh, pp ...)
 //                         -> clause splitting -> clause grammar -> pieces with source spans.
 import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=136a228c61';
-import * as M from './morphology.ro.mjs?v=ce6dcf2901';
+import * as M from './morphology.ro.mjs?v=280cb6d3a2';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { FRAMES } from './phrases.ro-en.mjs?v=fe79201d73';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
@@ -125,6 +125,8 @@ function prepareTokens(toksIn) {
         continue;
       }
     }
+    // "la stinga", "din stinga" (the old spelling, no diacritics): the side, not the verb "să stingă" (turn off)
+    if (t.kind === 'word' && t.key === 'stinga' && /^(la|in|din|spre|pe)$/.test(toks[i - 1]?.key ?? '')) { out.push({ ...t, key: 'stanga', an: M.analyze('stanga') }); continue; }
     out.push(t);
   }
   return out;
@@ -942,6 +944,8 @@ function buildItems(toks, info) {
           }
           const whBefore = items.some((x) => x.t === 'wh');
           if (whBefore && nx && verbsOf(nx).length) { items.push({ t: 'adv', en: 'left', tok: t, flags: new Set(['end']), start: t.start, end: t.end }); i++; continue; }
+          // "mai la stânga", "mai jos": a comparative of a direction is "more" (a further move), not "still"
+          if (nx && (/^(sus|jos)$/.test(nx.key) || (nx.key === 'la' && toks[i + 2] && /^(stang|stanga|stinga|dreapt|dreapta)$/.test(toks[i + 2].key)))) { items.push({ t: 'adv', en: 'more', tok: t, flags: new Set(), start: t.start, end: t.end }); i++; continue; }
           items.push({ t: 'adv', en: 'still', tok: t, flags: new Set(['freq']), start: t.start, end: t.end }); i++; continue;
         }
         ctx.content++; ctx.mapped++;

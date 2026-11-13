@@ -20,6 +20,8 @@ import {
   registerThings, partGuessed,
 } from './scene.mjs?v=7685e439c3';
 
+import * as space from '../space/space.mjs?v=c917d7caac';   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=7685e439c3';
 
 // The turn's step budget (a no-op outside a turn): placement and name resolution are searches whose cost grows with the picture.
@@ -56,7 +58,7 @@ const GROUND_COLOR = { grass: 'green', sand: 'yellow', snow: 'white', sea: 'blue
 const GROUND_NAME = { grass: 'grass', sand: 'sand', snow: 'snow', sea: 'water' };
 
 export const SIZE_WORDS = {
-  tiny: 0.45, teeny: 0.4, mini: 0.5, itsy: 0.4, little: 0.6, small: 0.65, medium: 1, normal: 1, regular: 1, middle: 1,
+  tiny: 0.45, teeny: 0.4, mini: 0.5, itsy: 0.4, little: 0.6, small: 0.65, medium: 1, normal: 1, regular: 1,
   big: 1.5, large: 1.5, huge: 2.1, giant: 2.3, gigantic: 2.5, enormous: 2.4, massive: 2.3, great: 1.6,
 };
 /** Comparatives that size a new thing relative to the existing one of its kind (+1 bigger, -1 smaller). */
@@ -72,8 +74,8 @@ export const WHO_PRESET = {
 const WHO_OF_WORD = { man: 'man', men: 'man', woman: 'woman', women: 'woman', girl: 'girl', girls: 'girl', boy: 'boy', boys: 'boy' };
 /** Moods a drawn person can have: the smile curve turns up (happy) or down (sad). */
 export const MOOD_WORDS = { happy: 'happy', glad: 'happy', smiling: 'happy', cheerful: 'happy', sad: 'sad', unhappy: 'sad', crying: 'sad', upset: 'sad' };
-const SUPERLATIVE = { biggest: 'big', largest: 'big', hugest: 'big', tallest: 'big', smallest: 'small', tiniest: 'small', littlest: 'small' };
-const ORDINALS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1, final: -1 };
+const SUPERLATIVE = { ...space.SIZES, hugest: 'big' };
+const ORDINALS = { ...space.ORDINALS, final: -1 };
 const ORDINAL_WORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 const NUMBERS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, hundred: 100 };
 const QUANTITY = { more: 3, some: 3, few: 3, several: 4, couple: 2, many: 6, lots: 7, loads: 7, bunch: 5, plenty: 6 };
@@ -278,7 +280,7 @@ function groupPhrase(objs, { positions = false } = {}) {
 
 // ---- noun phrases: who is meant ---------------------------------------------------------------------------------------
 const LOC_START = new Set(['on', 'in', 'at', 'near', 'next', 'beside', 'by', 'under', 'above', 'below', 'over', 'behind', 'between', 'inside', 'underneath', 'beneath', 'close']);
-const POS_WORDS = { left: 'left', leftmost: 'left', right: 'right', rightmost: 'right', top: 'top', upper: 'top', highest: 'top', topmost: 'top', bottom: 'bottom', lower: 'bottom', lowest: 'bottom', bottommost: 'bottom' };
+const POS_WORDS = { ...space.POSITIONS, lower: 'bottom' };   // the words of the place of a thing are the module's
 const DET_ALL = new Set(['all', 'every', 'each', 'both']);
 const DET_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these', 'those', 'any', 'some', 'another', 'of', 'in', 'picture', 'drawing', 'painting']);
 
@@ -286,12 +288,12 @@ const DET_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these
 export function parseNP(text) {
   budget.tick('art.np');   // recurses on the words after "of"
   const all = toks(text);
-  const np = { text: String(text ?? ''), pron: null, all: false, ordinal: null, size: null, superlative: false, color: null, kind: null, plural: false, part: null, partOf: null, loc: null, pos: null, special: null, one: false, known: true };
+  const np = { text: String(text ?? ''), pron: null, all: false, ordinal: null, size: null, superlative: false, color: null, kind: null, plural: false, part: null, partOf: null, loc: null, pos: null, other: false, count: null, special: null, one: false, known: true };
   if (!all.length) return { ...np, known: false };
   // a location tail: "the tree on the left", "the cat next to the house"
   let words = all, loc = null;
   for (let i = 1; i < all.length; i++) {
-    if (LOC_START.has(all[i]) && !(all[i] === 'in' && all[i - 1] === 'front') && !(all[i] === 'on' && all[i - 1] === 'top') && !(all[i] === 'close' && all[i + 1] !== 'to')) {
+    if ((LOC_START.has(all[i]) || (all[i] === 'from' && Object.hasOwn(POS_WORDS, all[i + 1] === 'the' ? all[i + 2] : all[i + 1]) && all.length === i + (all[i + 1] === 'the' ? 3 : 2))) && !(all[i] === 'in' && all[i - 1] === 'front') && !(all[i] === 'on' && all[i - 1] === 'top') && !(all[i] === 'close' && all[i + 1] !== 'to')) {
       words = all.slice(0, i); loc = all.slice(i); break;
     }
   }
@@ -306,7 +308,9 @@ export function parseNP(text) {
     if (w === 'everything' || w === 'all') { np.special = 'everything'; continue; }
     if (PRONOUN_ONE.has(w) && words.length <= 2) { np.pron = 'one'; continue; }
     if (PRONOUN_MANY.has(w) && words.length <= 2) { np.pron = 'many'; continue; }
-    if (DET_SKIP.has(w) || w === 'other') continue;
+    if (w === 'other') { np.other = true; continue; }
+    if (Object.hasOwn(space.COUNTS, w) && w !== 'both' && words[i + 1] !== 'of') { np.count = space.COUNTS[w]; np.plural = true; continue; }
+    if (DET_SKIP.has(w)) continue;
     if (Object.hasOwn(ORDINALS, w)) { np.ordinal = ORDINALS[w]; continue; }
     if (Object.hasOwn(SUPERLATIVE, w)) { np.size = SUPERLATIVE[w]; np.superlative = true; continue; }
     if (Object.hasOwn(SIZE_WORDS, w)) { np.size = SIZE_WORDS[w] > 1 ? 'big' : SIZE_WORDS[w] < 1 ? 'small' : 'medium'; continue; }
@@ -354,7 +358,7 @@ const partColor = (o, part) => (part ? o.parts?.[part] ?? null : null);
  * Rules (no guessing without saying so): "it" is the selected thing or what was just drawn; several matches are
  * narrowed by ordinal, size, side, selection and recency, and the reply says which one was taken.
  */
-export function resolveNP(s, np, { many = false } = {}) {
+export function resolveNP(s, np, { many = false, ask = false } = {}) {
   budget.tick('art.np', 1 + s.objects.length);   // recurses through np.partOf; each level scans the picture
   const out = { objs: [], special: np.special && np.special !== 'everything' ? np.special : null, np };
   if (np.special === 'everything') { out.objs = s.objects.slice(); out.everything = true; return out; }
@@ -387,31 +391,54 @@ export function resolveNP(s, np, { many = false } = {}) {
     }
     return { ...out, error: `I can not find ${label} in your picture.${hint}`, missing: true };
   }
-  if (np.loc) list = narrowByLocation(s, list, np.loc);
-  if (np.pos) list = pickExtreme(list, np.pos);
-  if (np.ordinal) {
-    const pool = np.kind && np.kind !== '*' && !np.color ? list.slice() : list;
-    pool.sort((a, b) => idNum(a) - idNum(b));
-    const idx = np.ordinal === -1 ? pool.length - 1 : np.ordinal - 1;
-    if (!pool[idx]) return { ...out, error: `There ${pool.length === 1 ? 'is only 1' : `are only ${pool.length}`} ${pool.length === 1 ? (np.kind && kindName(np.kind)) ?? 'one' : pluralOfKind(np.kind ?? 'thing')} in your picture, so there is no ${ORDINAL_WORD[np.ordinal] ?? 'last'} one.`, missing: true };
-    out.objs = [pool[idx]]; return out;
-  }
-  if (np.size && list.length > 1) {
-    const sorted = list.slice().sort((a, b) => (np.size === 'big' ? b.size - a.size : a.size - b.size));
-    if (np.superlative || !many) { out.objs = [sorted[0]]; return out; }
+  // which one by its place or order (left, middle, second, next to the sun, between ..., the other one, the biggest): the shared module `space` decides
+  const spec = specOf(np, list, many);
+  if (spec) {
+    const r = space.select(projectAll(list), spec, { frame: FRAME, last: s.last, resolve: (tk) => projectAll(resolveNP(s, parseNP(tk.join(' '))).objs ?? []) });
+    if (r.error === 'few') return { ...out, error: `There ${r.n === 1 ? 'is only 1' : `are only ${r.n}`} ${r.n === 1 ? (np.kind && kindName(np.kind)) ?? 'one' : pluralOfKind(np.kind ?? 'thing')} in your picture, so there is no ${ORDINAL_WORD[np.ordinal] ?? 'last'} one.`, missing: true };
+    if (r.ask) return { ...out, error: r.ask, missing: true, asked: true };
+    if (r.ids?.length) { out.objs = r.ids.map((id) => byId(s, id)); return out; }
   }
   if (list.length === 1) { out.objs = list; return out; }
   if (np.all || (np.plural && many) || (many && np.kind === '*')) { out.objs = list; return out; }
-  // several matches for a single thing: the selected one, else the newest of what was just handled, else the newest
+  // several matches for a single thing: the selected one, else the newest of what was just handled, else the newest. A request that acts on it (`ask`) asks instead,
+  // naming the candidates by position, unless the selection or the one thing just handled settles it: never silently the first.
   const sel = list.find((o) => o.id === s.selected);
-  const recent = list.filter((o) => s.last.includes(o.id)).sort((a, b) => idNum(b) - idNum(a))[0];
+  const handled = list.filter((o) => s.last.includes(o.id));
+  if (ask && !sel && handled.length !== 1) {
+    const r = space.select(projectAll(list), { plural: false }, { frame: FRAME });
+    return { ...out, error: r.ask ?? 'Which one do you mean?', missing: true, asked: true };
+  }
+  const recent = handled.sort((a, b) => idNum(b) - idNum(a))[0];
   const newest = list.slice().sort((a, b) => idNum(b) - idNum(a))[0];
   const pick = sel ?? recent ?? newest;
-  const order = sameKindOrder(s, pick);
   out.objs = [pick];
-  out.note = `There are ${list.length} ${pluralOfKind(kindKey(pick), list.length)}, so I took the ${order} one. You can say "the first ${kindName(kindKey(pick))}" or "all the ${pluralOfKind(kindKey(pick))}".`;
-  out.ambiguous = list.length;
+  if (!ask) {
+    out.note = `There are ${list.length} ${pluralOfKind(kindKey(pick), list.length)}, so I took the ${sameKindOrder(s, pick)} one. You can say "the first ${kindName(kindKey(pick))}" or "all the ${pluralOfKind(kindKey(pick))}".`;
+    out.ambiguous = list.length;
+  }
   return out;
+}
+const FRAME = { w: W, h: H, step: 110 };
+/** The objects as the module sees them: one box each (centre, size) and the stacking order. */
+const projectAll = (list) => list.map((o) => { const b = bbox(o); return { id: o.id, kind: kindKey(o), name: kindName(kindKey(o)), x: o.x, y: o.y, w: b.w, h: b.h, z: o.z }; });
+/** The selection a noun phrase asks for, as the module's spec (null when it asks for nothing by place or order). */
+function specOf(np, list, many) {
+  const spec = { ord: np.ordinal, pos: np.pos, size: null, other: np.other, count: np.count, all: np.all, plural: np.plural && many, next: null, between: null };
+  if (np.size && list.length > 1) { const a = list.map((o) => bbox(o).w * bbox(o).h); if (Math.max(...a) !== Math.min(...a) && (np.superlative || !many)) spec.size = np.size; }
+  if (np.loc) {
+    const loc = space.parseSel(['x', ...np.loc]);
+    spec.next = loc.next; spec.between = loc.between;
+    const region = !loc.next && !loc.between ? regionIn(np.loc) : null;
+    if (region) {   // "the tree on the left", "the cat in the top right": the things whose centre is in that part, then the one most to that side
+      const inside = list.filter((o) => regionOf(o.x, o.y) === region || regionOf(o.x, o.y).includes(region));
+      if (inside.length) { if (['left', 'right', 'top', 'bottom'].includes(region) && inside.length > 1) spec.pos ??= region; if (inside.length < list.length && !spec.pos) spec.restrict = inside.map((o) => o.id); }
+      else if (['left', 'right', 'top', 'bottom'].includes(region)) spec.pos ??= region;
+      else if (region === 'center') spec.pos ??= 'middle';
+    }
+  }
+  if (!spec.ord && !spec.pos && !spec.size && !spec.other && !spec.count && !spec.next && !spec.between && !spec.restrict) return null;
+  return spec;
 }
 const idNum = (o) => Number(String(o.id).replace(/\D/g, '')) || 0;
 const sameKindOrder = (s, o) => {
@@ -427,30 +454,6 @@ function describeWanted(np) {
   if (np.kind && np.kind !== '*') bits.push(many ? pluralOfKind(np.kind) : kindName(np.kind)); else if (np.part) bits.push(np.part.replace(/s$/, '')); else bits.push('thing');
   const t = bits.join(' ');
   return many ? t : `${a_(t)} ${t}`;   // RP5c: "red circles" (plural, no "any"), so the Romanian reply agrees
-}
-function pickExtreme(list, pos) {
-  if (list.length < 2) return list;
-  const key = { left: (o) => o.x, right: (o) => -o.x, top: (o) => o.y, bottom: (o) => -o.y }[pos];
-  return [list.slice().sort((a, b) => key(a) - key(b))[0]];
-}
-/** Narrow candidates with a location tail ("on the left", "next to the sun", "in the top right"). */
-function narrowByLocation(s, list, loc) {
-  if (list.length < 2) return list;
-  const rel = parseRelation(loc);
-  if (rel?.refs?.length) {
-    const refs = rel.refs.flatMap((r) => resolveNP(s, parseNP(r)).objs ?? []);
-    if (refs.length) {
-      const d = (o) => Math.min(...refs.map((r) => Math.hypot(o.x - r.x, o.y - r.y)));
-      return [list.slice().sort((a, b) => d(a) - d(b))[0]];
-    }
-  }
-  const region = regionIn(loc);
-  if (region) {
-    const inside = list.filter((o) => regionOf(o.x, o.y) === region || regionOf(o.x, o.y).includes(region));
-    if (inside.length) return inside.length > 1 && ['left', 'right', 'top', 'bottom'].includes(region) ? pickExtreme(inside, region) : inside;
-    if (['left', 'right', 'top', 'bottom'].includes(region)) return pickExtreme(list, region);
-  }
-  return list;
 }
 
 // ---- places and relations -----------------------------------------------------------------------------------------------
@@ -1151,9 +1154,7 @@ export const setSize = guard((ctx, args, s) => {
 });
 
 // ---- moving ------------------------------------------------------------------------------------------------------------
-const STEP = 110;
-const STEP_AMOUNT = { a_bit: 0.5, a_little: 0.5, a_little_bit: 0.5, a_tiny_bit: 0.3, slightly: 0.4, just_a_bit: 0.5, much: 2.2, a_lot: 2.5, way: 3, far: 3, very_much: 2.5, so_much: 2.5, all_the_way: 20 };
-const DIR_VEC = { left: [-1, 0], right: [1, 0], up: [0, -1], down: [0, 1], higher: [0, -1], lower: [0, 1], upward: [0, -1], downward: [0, 1], upwards: [0, -1], downwards: [0, 1], leftwards: [-1, 0], rightwards: [1, 0], forward: [0, 0], back: [0, 0] };
+const AMOUNT_RE = new RegExp(`\\b(?:${Object.keys(space.AMOUNTS).map((k) => k.replace(/_/g, ' ')).sort((x, y) => y.length - x.length).join('|')})\\b`);   // the module's amount words (a bit, a lot, all the way ...)
 const REL_STRONG = new Set(['to', 'towards', 'toward', 'into', 'onto', 'next', 'beside', 'near', 'by', 'under', 'underneath', 'beneath', 'below', 'above', 'over', 'behind', 'between']);
 const DIR_WORDS = new Set(['up', 'down', 'left', 'right', 'higher', 'lower', 'closer', 'further', 'farther', 'back', 'forward', 'away', 'upwards', 'downwards', 'upward', 'downward', 'leftwards', 'rightwards']);
 const DET = new Set(['the', 'a', 'an', 'my', 'that', 'this', 'its', 'every', 'each', 'all', 'both', 'first', 'second', 'third', 'last']);
@@ -1166,8 +1167,10 @@ export function splitDest(text) {
     const t = w[i];
     if (REL_STRONG.has(t)) return 'strong';
     if (t === 'a' && /^(bit|little|lot|tiny|way)$/.test(w[i + 1] ?? '')) return 'dir';
+    if (['more', 'even'].includes(t) && (DIR_WORDS.has(w[i + 1] ?? '') || ['at', 'to', 'towards'].includes(w[i + 1] ?? ''))) return 'dir';   // "more at right": a further move
+    if (['much', 'slightly', 'way', 'far'].includes(t) && DIR_WORDS.has(w[i + 1] ?? '')) return 'dir';   // "much higher", "slightly left": the amount belongs to the move
     if (DIR_WORDS.has(t)) {
-      if (['left', 'right', 'up', 'down', 'back'].includes(t) && (DET.has(w[i - 1]) || kindOfWord(w[i + 1] ?? '') || w[i + 1] === '1' || w[i + 1] === 'one')) return null;
+      if (['left', 'right', 'up', 'down', 'back'].includes(t) && (DET.has(w[i - 1]) || w[i - 1] === 'from' || kindOfWord(w[i + 1] ?? '') || w[i + 1] === '1' || w[i + 1] === 'one')) return null;
       return 'dir';
     }
     if (WEAK.has(t)) return 'weak';
@@ -1195,13 +1198,10 @@ export function parseDest(text) {
   // absolute coordinates on the 1000 x 700 canvas: "at 200, 300", "to x 200 y 300", "to 200 by 300"
   const abs = w.join(' ').match(/^(?:at|to|on|onto|into)?\s*(?:the\s+)?(?:position|point|spot|coordinates)?\s*(?:x\s*)?(\d+(?:\.\d+)?)\s*(?:,|and|by|x|comma)?\s*(?:y\s*)?(\d+(?:\.\d+)?)$/);
   if (abs) return { kind: 'abs', x: Number(abs[1]), y: Number(abs[2]) };
-  // amount words
-  let amount = 1;
-  const joined = w.join(' ');
-  for (const [k, v] of Object.entries(STEP_AMOUNT)) {
-    const phrase = k.replace(/_/g, ' ');
-    if (new RegExp(`\\b${phrase}\\b`).test(joined)) { amount = v; w = toks(joined.replace(new RegExp(`\\b${phrase}\\b`), ' ')); break; }
-  }
+  // amount words (the module's): taken out here so that the relation and the region read what is left; the move itself is read by the module
+  const joined = w.join(' '), mv = space.parseMove(joined);
+  const edgeAmt = !!mv?.segs.some((x) => x.mult === 'edge');
+  w = toks(joined.replace(AMOUNT_RE, ' '));
   const j = w.join(' ');
   if (/\b(to the front|forward|to the top of everything|in front of everything)\b/.test(j)) return { kind: 'z', dir: 'front' };
   if (/\b(to the back|backward|backwards|to the bottom of everything|behind everything)\b/.test(j)) return { kind: 'z', dir: 'back' };
@@ -1209,20 +1209,16 @@ export function parseDest(text) {
   if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|sand|beach|snow)$/.test(j)) return { kind: 'region', region: 'ground' };
   const rel = parseRelation(w);
   if (rel) return { kind: 'rel', rel: rel.rel, refs: rel.refs, closer: /\bcloser\b/.test(j) };
-  if (/\b(edge|far)\b/.test(j) || amount >= 20) {
+  if (/\b(edge|far)\b/.test(j) || edgeAmt) {
     const r = regionIn(w);
     if (r) return { kind: 'region', region: r };
   }
   const side = /\b(side|corner|edge|half|part|middle|center|centre|sky|ground|grass|floor)\b/.test(j);
   const region = regionIn(w);
-  if (region && (side || /^(on|at|in|into|onto)\b/.test(j) || region === 'top left' || region === 'top right' || region === 'bottom left' || region === 'bottom right')) return { kind: 'region', region };
-  if (/\b(down|up|left|right|higher|lower)\b/.test(j) || region) {
-    const dirs = w.filter((x) => Object.hasOwn(DIR_VEC, x) && !['forward', 'back'].includes(x));
-    let dx = 0, dy = 0;
-    for (const d of dirs) { dx += DIR_VEC[d][0]; dy += DIR_VEC[d][1]; }
-    if (!dirs.length && region) { const v = DIR_VEC[region] ?? [0, 0]; dx = v[0]; dy = v[1]; }
-    if (dx || dy) return { kind: 'step', dx: dx * STEP * amount, dy: dy * STEP * amount, label: dirs.join(' and ') || region };
-  }
+  const andDirs = !!mv && mv.segs.length > 1 && /\band\b/.test(j);   // "right and lower": two directions, not the region bottom right
+  if (region && !andDirs && (side || /^(on|at|in|into|onto)\b/.test(j) || region === 'top left' || region === 'top right' || region === 'bottom left' || region === 'bottom right')) return { kind: 'region', region };
+  if (mv && (mv.segs.length || mv.again)) return { kind: 'step', move: mv, label: w.filter((x) => Object.hasOwn(space.DIRS, x)).join(' and ') || 'further' };
+  if (region && space.DIRS[region]) return { kind: 'step', move: { segs: [{ dx: space.DIRS[region][0], dy: space.DIRS[region][1], mult: 1 }] }, label: region };
   if (/\b(closer|nearer)\b/.test(j)) return { kind: 'closer' };
   if (/\b(centre|center|middle)\b/.test(j)) return { kind: 'region', region: 'center' };
   return null;
@@ -1232,7 +1228,7 @@ function applyDest(s, objs, dest) {
   const done = [];
   for (const o of objs) {
     const b = bbox(o);
-    if (dest.kind === 'step') { o.x += dest.dx; o.y += dest.dy; clampIn(o); }
+    if (dest.kind === 'step') { const r = space.planMove([{ id: o.id, x: o.x, y: o.y, w: b.w, h: b.h }], FRAME, dest.move, s.lastMove); if (r.error) return { error: 'I do not remember a move to repeat. Say which way to go, for example "a bit more to the left".' }; o.x = r.boxes[o.id].x; o.y = r.boxes[o.id].y; clampIn(o); dest.memory = r.memory; }
     else if (dest.kind === 'abs') { o.x = dest.x; o.y = dest.y; clampIn(o); }
     else if (dest.kind === 'region') { placeRegion(s, o, dest.region); }
     else if (dest.kind === 'rel') {
@@ -1251,27 +1247,31 @@ function applyDest(s, objs, dest) {
 }
 
 export const move = guard((ctx, args, s) => {
-  let phrase = args.phrase ?? '';
+  let phrase = String(args.phrase ?? '').replace(/_/g, ' ');
   const adj = [args.m1, args.m2].filter(Boolean).join(' ');
   if (adj) phrase = /^the /i.test(phrase) ? phrase.replace(/^the /i, `the ${adj} `) : `${adj} ${phrase}`;
   // "slide the house over to the right": "over to" is a direction, not the relation "over"
   phrase = phrase.replace(/\b(?:over|across|along) (to|towards|toward)\b/gi, '$1');
-  const { target: tt, dest } = splitDest(phrase);
+  let { target: tt, dest } = splitDest(phrase);
+  if (!toks(tt.replace(AMOUNT_RE, ' ')).filter((x) => !['a', 'the', 'more', 'even', 'and', 'also', 'then', 'so', 'please'].includes(x)).length) { dest = `${tt} ${dest}`.trim(); tt = ''; }   // "and a bit lower": only an amount before the direction, so it is the same thing
   if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'missing');
-  const t = target(s, tt || 'it', { many: true });
+  const d = parseDest(dest);   // the destination is checked before asking which one is meant
+  if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);
+  const t = target(s, tt || 'it', { many: true, ask: true });
   if (t.error) return t.error;
   const { r } = t;
   if (r.special) return no('The sky and the ground stay where they are. You can move the things you drew.');
-  const d = parseDest(dest);
-  if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);
   remember(s, 'moved something');
   // RP5b: "move the fish into the water": say "in the water" (not "on the ground") and add the water when the picture has none
   const target_ = /^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(water|sea|ocean|lake|sand|beach|snow)$/.exec(toks(dest).join(' '))?.[1];
   const wantGround = target_ ? GROUND_WORDS[target_] : null;
   const addedGround = wantGround && s.ground !== wantGround ? wantGround : null;
   if (addedGround) { s.ground = addedGround; s.groundColor = GROUND_COLOR[addedGround]; }
+  const before = r.objs.map((o) => ({ id: o.id, x: o.x, y: o.y, z: o.z }));
   const res = applyDest(s, r.objs, d);
   if (res.error) { s.history.pop(); return no(res.error, 'missing'); }
+  s.lastMove = d.kind === 'step' ? d.memory : null;   // what "further" repeats
+  s.lastMoveInfo = { dest, kind: kindKey(r.objs[0]), before };   // what "no, the middle one" corrects
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
@@ -1282,6 +1282,43 @@ export const move = guard((ctx, args, s) => {
   return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : ''}.`, r));
 });
 void 0;
+
+/** "no, not the first one, the middle one": puts the things of the last move back and does the same move on the one meant now (one request, one step). */
+export const reselect = guard((ctx, args, s) => {
+  const info = s.lastMoveInfo;
+  if (!info) return no('There is no move to correct yet. Say which thing to move, for example "move the middle house to the right".', 'missing');
+  for (const b of info.before) { const o = byId(s, b.id); if (o) { o.x = b.x; o.y = b.y; o.z = b.z; } }
+  const np = parseNP(args.phrase ?? '');
+  const words = toks(args.phrase ?? '').filter((w) => !['the', 'a', 'an', 'one', 'it'].includes(w));
+  const kind = np.kind && np.kind !== '*' ? kindName(np.kind) : kindName(info.kind);
+  return move(ctx, { phrase: `the ${words.join(' ')} ${kind} ${info.dest}`.replace(/\s+/g, ' ') });
+});
+
+/**
+ * A sentence about places that is not a plain move of one thing (a row, a grid, tidy up, swap, line up, "what is next to the house", "which one is in the middle",
+ * "is the sun above the tree", "how far apart"): the shared module `space` reads it on the boxes of the picture; this applies the boxes and says what it said.
+ */
+export const spatial = guard((ctx, args, s) => {
+  const items = projectAll(s.objects);
+  if (!items.length) return no('Your picture is empty. Try "draw a red house".', 'missing');
+  const r = space.interpret(String(args.text ?? ''), { items, frame: FRAME, kindOf: (w) => kindOfWord(w) ?? null, last: s.last, lastMove: s.lastMove });
+  if (!r) return no('I did not understand where things should go. Try "put the houses in a row" or "what is next to the sun?".', 'unsupported');
+  if (r.type === 'ask') return no(r.say, 'missing');
+  if (r.type === 'error') return no(r.say, 'missing');
+  if (r.type === 'answer') return ok(r.say);
+  const moved = Object.keys(r.boxes ?? {});
+  if (!moved.length) return ok(r.say);
+  remember(s, r.type === 'layout' ? 'arranged things' : 'moved something');
+  for (const id of moved) {
+    const o = byId(s, id), b = r.boxes[id];
+    if (b.w != null) o.size = Math.max(10, Math.round(o.size * (b.w / bbox(o).w)));
+    o.x = b.x; o.y = b.y; clampIn(o);
+  }
+  s.last = r.ids?.length ? r.ids : s.last;
+  s.lastMove = r.memory ?? null;
+  open(ctx);
+  return ok(`${opener(s)} ${r.say.replace(/^I /, 'I ')}`);
+});
 
 export const nudge = guard((ctx, args, s) => {
   const dir = String(args.d ?? '').toLowerCase().replace(/^further_/, '');
