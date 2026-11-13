@@ -4590,3 +4590,101 @@
     alt=what_can
     alt=what_does
     alt=what_do
+
+@phrase.lang.box.shapedlike core.phrase
+    frame=false
+    doc="Frame of a single box or shape made in the form of a thing (\"a box shaped like a guitar\", \"a rectangle in the form of a house\"): the words between the box noun and the thing."
+    alt=shaped_like
+    alt=shaped_as
+    alt=made_like
+    alt=drawn_like
+    alt=built_like
+    alt=formed_like
+    alt=in_the_shape_of
+    alt=in_the_form_of
+
+@phrase.lang.intent.greet core.phrase
+    doc="Greet the assistant."
+    alt=hello
+    alt=hi
+    alt=hey
+    alt=hiya
+    alt=howdy
+    alt=hello_there
+    alt=hi_there
+    alt=hey_there
+    alt=good_morning
+    alt=good_afternoon
+    alt=good_evening
+    alt=greetings
+    alt=hey_hey
+    alt=yo
+
+@phrase.lang.intent.assistantname core.phrase
+    doc="Ask the assistant for its name."
+    alt=what_is_your_name
+    alt=whats_your_name
+    alt=what_s_your_name
+    alt=what_are_you_called
+    alt=what_should_i_call_you
+    alt=what_do_i_call_you
+    alt=what_can_i_call_you
+    alt=tell_me_your_name
+    alt=do_you_have_a_name
+    alt=may_i_ask_your_name
+    alt=can_i_ask_your_name
+    alt=how_should_i_address_you
+    alt=how_do_i_address_you
+    alt=who_am_i_talking_to
+
+@phrase.lang.intent.whoareyou core.phrase
+    doc="Ask who the assistant is."
+    alt=who_are_you
+    alt=who_are_u
+    alt=who_r_u
+    alt=who_are_you_exactly
+    alt=who_is_this
+    alt=who_am_i_chatting_with
+    alt=who_is_speaking_to_me
+    alt=introduce_yourself
+    alt=tell_me_about_you
+    alt=you_are_who
+
+@phrase.lang.intent.thanks core.phrase
+    doc="Thank the assistant."
+    alt=thanks
+    alt=thank_you
+    alt=thanks_a_lot
+    alt=thank_you_very_much
+    alt=thanks_a_ton
+    alt=many_thanks
+    alt=thx
+    alt=ty
+    alt=cheers
+    alt=much_appreciated
+
+@phrase.lang.intent.goodbye core.phrase
+    doc="Say goodbye to the assistant."
+    alt=goodbye
+    alt=bye
+    alt=bye_bye
+    alt=see_you
+    alt=see_you_later
+    alt=see_ya
+    alt=good_night
+    alt=farewell
+    alt=take_care
+    alt=talk_to_you_later
+
+@phrase.lang.intent.whatismyname core.phrase
+    doc="Ask the assistant what the user's name is."
+    alt=what_is_my_name
+    alt=whats_my_name
+    alt=what_s_my_name
+    alt=who_am_i
+    alt=do_you_know_my_name
+    alt=do_you_remember_my_name
+    alt=do_you_know_who_i_am
+    alt=what_do_you_call_me
+    alt=what_am_i_called
+    alt=do_you_remember_me

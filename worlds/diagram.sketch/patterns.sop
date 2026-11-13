@@ -1838,6 +1838,16 @@
     example="Make a diagram shaped like a lighthouse."
     doc="DRAW-FROM-FACTS: the diagram takes the part boxes of a thing of the catalog as its layout (one box per part, labelled with the part name). The thing is an open slot, looked up after the reading."
 
+@pat.diagram.sketch.shaped.box core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [add|draw|make|create|build|put|insert|give_me|show_me]? [a|an|the]? [box|boxes|rectangle|node|shape|block] [$lang.box.shapedlike] [a|an|the] {o:words(2,noun)}"
+    emit="@{_} core.request action=diagram.shapedLike arg.o=\"{o}\""
+    kind=request
+    priority=14
+    tabPriority=21
+    example="Add a box shaped like a guitar."
+    example="Draw a shape in the form of a house."
+    doc="DRAW-FROM-FACTS: 'a box shaped like a house' is read as the diagram shaped like that thing (one box per part, at the part's place); an unknown thing is answered plainly."
+
 @pat.diagram.sketch.shaped.arrange core.pattern
     match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [arrange|lay_out|organize|organise|put|place|rearrange] [the|these|my]? [boxes|shapes|diagram|them] [as|like|into|in_the_shape_of|in_the_form_of] [a|an|the] {o:words(2,noun)}"
     emit="@{_} core.request action=diagram.shapedLike arg.o=\"{o}\""
