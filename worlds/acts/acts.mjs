@@ -38,7 +38,7 @@ export const ACTS = {
   place: { R: ['thing', 'place'], O: [], mutates: true, verb: 'move' },
   connect: { R: ['thing', 'place'], O: [], mutates: true, verb: 'connect' },
   group: { R: ['thing'], O: [], mutates: true, verb: 'group', modes: ['group', 'apart'] },
-  pick: { R: ['thing'], O: [], mutates: false, verb: 'select' },
+  pick: { R: ['thing'], O: [], mutates: false, verb: 'select', modes: ['pick', 'none'] },
   ask: { R: [], O: ['thing', 'attribute', 'place'], mutates: false, verb: 'tell', modes: ['what', 'count', 'where', 'why', 'last', 'has', 'options', 'describe', 'state', 'exists'] },
   copy: { R: ['thing'], O: [], mutates: true, verb: 'copy' },
   send: { R: ['thing', 'place'], O: [], mutates: false, verb: 'send' },

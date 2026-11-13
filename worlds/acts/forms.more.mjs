@@ -3,7 +3,7 @@
 // people ask for the same acts: with a wish ("I want a red house"), as a question about what is there ("is there a tree?", "describe my picture"), counted or located in other words,
 // with an amount ("a bit smaller"), turned, cleared, a surprise. The notation is that of FORMS (L lead-in, D determiner, V.<act>, REL, `{role:ATTR|VALUE|KIND|MORE|LESS|TURN|NOUN}`),
 // `{x:lexicon?}` is optional. Roles beyond the six (`m1`, `m2`: modifier words before a kind, `kind`) are joined back into the thing by the world's hooks. No imports: browser-safe.
-export const FLAGS_MORE = ['wish', 'list', 'say', 'scale', 'turn', 'clear', 'random'];
+export const FLAGS_MORE = ['wish', 'list', 'say', 'scale', 'turn', 'clear', 'random', 'none', 'ground'];
 const W = '[$lang.shape.want]';
 const OF = '[in|on|at|of]? [my|the|this|our]? NOUN?';
 const OF_REQ = '[in|on|at|of] [my|the|this|our]? NOUN';
@@ -84,6 +84,20 @@ export const FORMS_MORE = [
   { id: 'make.random', act: 'make', mode: 'random', match: 'L [surprise_me|surprise_us|surprise] [with_a_picture|with_a_drawing|with_something]? [for_me|pls|please|thx]?', args: [], priority: 11, if: 'random', example: 'Surprise me.' },
   { id: 'make.random.picture', act: 'make', mode: 'random', match: 'L [i_want_you_to]? [draw|make|paint|sketch|create|doodle|give_me|show_me|i_want|whip_up] [me|us]? [a|an|the|some]? [random|nice|pretty|beautiful|lovely|new|cool|happy|sunny|surprise|surprising]? [picture|scene|landscape|drawing|painting|masterpiece|surprise] [for_me|pls|please|thx]?', args: [], priority: 11, if: 'random', example: 'Draw me a nice picture.' },
   { id: 'make.random.any', act: 'make', mode: 'random', match: 'L [i_want_you_to]? [draw|make|paint|sketch|create|doodle|give_me|show_me|whip_up] [me|us]? [something|anything|whatever|something_nice|something_random|something_pretty|anything_nice] [you_like|you_want|you_feel_like]? [for_me|pls|please|thx]?', args: [], priority: 11, if: 'random', example: 'Draw something.' },
+  // none: the act pick with nothing picked (mode `none`, the schema says it, no pattern of a world does): "deselect everything", "nothing selected please".
+  // TEMPORARY words, reported to k.actions in handover/k.actions-missing.md: the catalog has no verb that means pick with no object (deselect, unselect, unmark, unhighlight, untick).
+  { id: 'pick.none', act: 'pick', mode: 'none', match: 'L [deselect|unselect|unpick|unmark|unhighlight|untick|unselected] [everything|all|it|that|this|them|the_selection|the_highlight|the_highlights]? [please|pls|plz]?', args: [], priority: 12, if: 'none', example: 'Deselect everything.' },
+  { id: 'pick.none.state', act: 'pick', mode: 'none', match: 'L [nothing|no_thing|none] [selected|highlighted|picked|marked] [please|pls|plz|now]?', args: [], priority: 12, if: 'none', example: 'Nothing selected please.' },
+  { id: 'pick.none.clear', act: 'pick', mode: 'none', match: 'L [clear|remove|drop|forget|cancel|stop] D [the|my|this]? [selection|highlight|highlights|highlighting]', args: [], priority: 12, if: 'none', example: 'Clear the selection.' },
+  // save with a format: "save my picture as SVG", "download the drawing as a PNG" (the format is the attribute of the act: `value`). TEMPORARY: download / export mean save here, the catalog lists download under load.
+  { id: 'save.noun', act: 'save', match: 'L V.save D NOUN [as|in|to|under|called]? D {value:words}', args: ['value'], priority: 11, if: 'none', example: 'Save my picture as SVG.' },
+  { id: 'save.download', act: 'save', match: 'L [download|export|get] D NOUN [as|in|to|under|called|a]? D {value:words}', args: ['value'], priority: 11, if: 'none', example: 'Download the drawing as a PNG.' },
+  // undo with the verbs of k.actions (undo, restore, take back, roll back, revert, go back) and a few object words
+  { id: 'undo.verb', act: 'undo', match: 'L V.undo [that|it|this|the_last|my_last|the|one]? [thing|change|step|action|move|one|drawing]? [back]? [please|pls|plz]?', args: [], priority: 11, if: 'none', example: 'Undo that change.' },
+  // the part of a thing: "the house needs a pink door" (owner is the place, the part the thing, as in make.give)
+  { id: 'make.part.needs', act: 'make', lit: { rel: 'to' }, match: 'L D {place:words} [needs|should_have|must_have|has_to_have|needs_to_have|ought_to_have] D {thing:rest}', args: ['place', 'thing'], priority: 10, if: 'wish', example: 'The house needs a pink door.' },
+  // the ground: "a bit of snow would be nice", "I want sand under everything"
+  { id: 'make.would', act: 'make', match: 'D [bit_of|little|some|lots_of|a_lot_of|more]? {thing:words} [would_be_nice|would_be_nicer|would_be_good|would_look_nice|would_be_cool|would_be_great]', args: ['thing'], priority: 10, if: 'ground', example: 'A bit of snow would be nice.' },
 ];
 /** The lexicons the forms above need besides those of acts.mjs, as [lexicon id suffix, doc, words]: `turn` and `nouns` are per world (`lex.<ns>.turn`), `lex.space.factor` is the space module's. */
 export const TURN_WORDS = ['around', 'over', 'back', 'round', 'upside_down', 'the_other_way', 'backwards', 'clockwise', 'counter_clockwise', 'to_the_left', 'to_the_right', 'to_left', 'to_right', 'left', 'right', 'sideways', 'forward'];

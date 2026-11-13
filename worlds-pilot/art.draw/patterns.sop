@@ -939,3 +939,74 @@
     tabPriority=19
     example="Draw something."
     canonical="Draw something."
+
+@pat.art.draw.pick.none core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [deselect|unselect|unpick|unmark|unhighlight|untick|unselected] [everything|all|it|that|this|them|the_selection|the_highlight|the_highlights]? [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.mode=none arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Deselect everything."
+    canonical="Deselect everything."
+
+@pat.art.draw.pick.none.state core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [nothing|no_thing|none] [selected|highlighted|picked|marked] [please|pls|plz|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.mode=none arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Nothing selected please."
+
+@pat.art.draw.pick.none.clear core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [clear|remove|drop|forget|cancel|stop] [$acts.det]? [the|my|this]? [selection|highlight|highlights|highlighting] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.mode=none arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Clear the selection."
+    canonical="Clear the selection."
+
+@pat.art.draw.save.noun core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [$acts.det]? {noun:lex.art.draw.nouns} [as|in|to|under|called]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.save arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Save my picture as SVG."
+    canonical="Save my picture as SVG."
+
+@pat.art.draw.save.download core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [download|export|get] [$acts.det]? {noun:lex.art.draw.nouns} [as|in|to|under|called|a]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.save arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Download the drawing as a PNG."
+    canonical="Download the drawing as a PNG."
+
+@pat.art.draw.undo.verb core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.undo] [that|it|this|the_last|my_last|the|one]? [thing|change|step|action|move|one|drawing]? [back]? [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.undo arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Undo that change."
+    canonical="Undo that change."
+
+@pat.art.draw.make.part.needs core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {place:words} [needs|should_have|must_have|has_to_have|needs_to_have|ought_to_have] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.rel=\"to\" arg.place=\"{place}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="The house needs a pink door."
+    canonical="The house needs a pink door."
+
+@pat.art.draw.make.would core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$acts.det]? [bit_of|little|some|lots_of|a_lot_of|more]? {thing:words} [would_be_nice|would_be_nicer|would_be_good|would_look_nice|would_be_cool|would_be_great] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="A bit of snow would be nice."
+    canonical="A bit of snow would be nice."

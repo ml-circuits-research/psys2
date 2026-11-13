@@ -52,6 +52,9 @@ function build(set) {
     return false;
   };
   const index = { plurals, irregularSingular, lexicons, names, units, nounsMulti, byWorld, phrases };
+  const openLex = [...lexicons.values()].filter((l) => l.words.open);
+  /** True when a lexicon open to the catalog knows the word (a kind of the catalog, looked up now). */
+  index.openHas = openLex.length ? (word) => openLex.some((l) => l.words.has(word)) : () => false;
   index.lemma = (word) => singularLemma(word, irregularSingular);
   return index;
 }

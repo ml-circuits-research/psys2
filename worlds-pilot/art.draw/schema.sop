@@ -18,6 +18,8 @@
     turn=yes
     clear=yes
     random=yes
+    none=yes
+    ground=yes
     acts=make
     acts=remove
     acts=change

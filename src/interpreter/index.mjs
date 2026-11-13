@@ -271,6 +271,7 @@ export class Interpreter {
     } catch (e) {
       if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e;
       if (e instanceof BudgetError) return finish({ status: 'budget', note: e.message });
+      if (globalThis.process?.env?.PSYS2_DEBUG_OPS) console.error('[op threw]', op.id, e?.stack ?? e);
       return finish({ status: 'error', note: `${op.id} threw: ${e?.message ?? e}` });
     }
     if (!res || typeof res !== 'object' || !STATUSES.has(res.status)) {

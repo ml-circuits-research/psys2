@@ -9,7 +9,7 @@ import { splitThings } from '../../worlds/acts/acts.mjs';
 import { partsOf, kindKey, kindName } from '../../worlds/art.draw/scene.mjs';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-const TAIL = new Set(['there', 'here', 'now', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
+const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
 const words = (t) => { const w = String(t ?? '').toLowerCase().replace(/_/g, ' ').replace(/[^a-z0-9' -]+/g, ' ').split(/\s+/).filter(Boolean); while (w.length > 1 && TAIL.has(w.at(-1))) w.pop(); return w; };
 const PREP = new Set(['with', 'in', 'on', 'at', 'under', 'over', 'next', 'near', 'beside', 'by', 'above', 'below', 'behind', 'between', 'inside', 'to', 'from', 'of', 'for', 'around', 'across', 'and']);
 const DET = new Set(['a', 'an', 'the', 'another', 'my', 'this', 'that', 'one']);
@@ -21,13 +21,14 @@ export const tOf = (r) => [r.thing, r.place && r.rel ? `${rel(r)} ${r.place}` : 
 
 /** "a big red house with a blue door next to the tree" -> the arguments of the board's add: count, quantity, up to three modifiers, the kind as said, the tail (parts and place). */
 export function addArgs(r) {
-  const w = words([r.m1, r.m2, r.thing].filter(Boolean).join(' '));
+  const w = words([r.m1, r.m2, r.thing].filter(Boolean).join(' ').replace(/\b(couple|bunch|lot|lots|loads|plenty|few) of\b/gi, '$1'));   // "a couple of stars": the quantity word, no preposition
   const cut = w.findIndex((x, i) => i > 0 && PREP.has(x));
   const head = cut < 0 ? w : w.slice(0, cut), tail = cut < 0 ? [] : w.slice(cut);
   const a = {}; let i = 0;
   while (i < head.length - 1 && DET.has(head[i])) { budget.tick('draw.addArgs'); i++; }
   if (r.amount != null) a.n = String(r.amount);
   else if (/^\d+$/.test(head[i] ?? '') || Object.hasOwn(space.COUNTS, head[i] ?? '') && head[i] !== 'both') { a.n = /^\d+$/.test(head[i]) ? head[i] : String(space.COUNTS[head[i]]); i++; }
+  else if (head[i] === 'couple' && i < head.length - 1) { a.n = '2'; i++; }
   else if (QUANTITY.has(head[i] ?? '') && i < head.length - 1) { a.q = head[i]; i++; }
   const mods = [];
   while (i < head.length - 1 && mods.length < 3 && (D.isShade(head[i]) || D.isColorWord(head[i]) || Object.hasOwn(D.SIZE_WORDS, head[i]) || Object.hasOwn(D.COMPARATIVES, head[i]))) { budget.tick('draw.addArgs'); mods.push(head[i++]); }
@@ -66,6 +67,7 @@ function accepts({ action, mode, roles, text, state, kindWord }) {
   const said = roles.thing ?? roles.rest ?? '';
   if (act === 'ask' && ['describe', 'options'].includes(mode)) return true;
   if (act === 'ask' && !said && !roles.place) return false;
+  if (act === 'change' && /^(?:scene|mood|time|sky|picture|drawing|background)$/.test(words(said).at(-1) ?? '') && TIMES.has(words(roles.value).at(-1) ?? '')) return true;   // "change the scene to dawn"
   if (!said) return true;
   const t = words(text).join(' ');
   if (act === 'make' && /^(?:please |can you |could you )?(?:draw|sketch|paint|doodle)\b/.test(t)) return true;
@@ -83,13 +85,15 @@ export const hooks = {
   know: { colour: (w) => D.isShade(w) || D.isColorWord(w) },
   domain: {
     make: (ctx, r) => {
+      if (r.rel === 'to' && PRONOUN.test(String(r.place ?? '').trim())) r = { ...r, rel: undefined, place: undefined };   // "it needs a rainbow": the pronoun is no owner, the sentence is a wish
       if (r.mode === 'random') return D.scene(ctx, {});
       if (!r.thing) return D.askKind(ctx, {});
       const np = D.parseNP([r.thing, r.place && /^(?:to|on|for)$/.test(rel(r)) ? `of ${r.place}` : ''].join(' '));   // "give the house a blue door", "add a black door to the house": a part of a thing of the picture
       if (np.part && (np.kind || r.place) && !(np.partKinds && !np.kind && !r.place)) return D.givePart(ctx, { t: np.partOf ? r.place : np.kind ?? r.place, color: np.color ?? undefined, part: np.part });
       const a = addArgs(r), last = words(a.kind).at(-1) ?? '';
-      if (GROUNDS(last) && (!a.where || /^(?:on|in|to|at|under)\s+(?:the\s+)?(?:ground|floor|bottom)/.test(a.where))) return D.ground(ctx, { g: last });
+      if (GROUNDS(last) && (!a.where || /^(?:on|in|to|at|under)\s+(?:the\s+)?(?:ground|floor|bottom|everything|picture|drawing)/.test(a.where))) return D.ground(ctx, { g: last });
       if (last === 'sky' && !a.where) return D.ground(ctx, { g: 'sky' });
+      if (TIMES.has(last) && !a.where && words(a.kind).every((x) => TIMES.has(x) || DET.has(x) || x === 'bright' || x === 'it' || x === 'its' || x === 'be')) return D.setMood(ctx, { w: words(a.kind).find((x) => TIMES.has(x) && x !== 'day') ?? last });   // "make it a sunny day"
       if (splitThings(r.thing).length < 2 && !D.kindOfWord(a.kind) && (!D.kindOfWord(last) || words(a.kind).length > 1) && !D.UNDRAWABLE.has(last.replace(/s$/, '')) && !/^(?:\d+|one|two|three)$/.test(last)) return D.add(ctx, { ...a, open: [a.m1, a.m2, a.m3, a.kind].filter(Boolean).join(' ') });   // a word the board does not draw: the catalog is asked, then a part of a thing of the picture ("add a third window"), else "I don't know how to draw X yet"
       return D.add(ctx, a);
     },
@@ -119,6 +123,7 @@ export const hooks = {
       return undefined;
     },
     place: (ctx, r) => {
+      { const tw = words(r.thing); const last = tw.at(-1) ?? ''; if (GROUNDS(last) && tw.length <= 2 && /^(?:ground|floor|bottom|everything|picture|drawing)$/.test(words(r.place).at(-1) ?? '') && !(ctx.state.objects ?? []).some((o) => kindName(kindKey(o)) === last)) return D.ground(ctx, { g: last }); }   // "I need water on the floor": the ground, not a thing to move
       if (r.mode === 'layout') return D.spatial(ctx, { text: r.text });
       if (rel(r) === 'apart' && !r.place) return D.takeApart(ctx, { t: tOf({ thing: r.thing }) });
       if (rel(r) === 'together' && !r.place) return D.group(ctx, { t: r.thing, name: /\bas\s+(?:a\s+|an\s+|the\s+)?(.+?)\s*$/i.exec(String(r.text ?? ''))?.[1] });
@@ -126,7 +131,7 @@ export const hooks = {
       return D.move(ctx, { phrase: [r.thing, r.amount, rel(r), r.amount2, r.place].filter(Boolean).join(' ').replace(/_/g, ' ') });
     },
     group: (ctx, r) => (r.mode === 'apart' ? D.takeApart(ctx, { t: tOf(r) }) : D.group(ctx, { t: tOf(r) })),
-    pick: (ctx, r) => D.select(ctx, { t: tOf(r) }),
+    pick: (ctx, r) => (r.mode === 'none' ? D.deselect(ctx, {}) : D.select(ctx, { t: tOf(r) })),
     copy: (ctx, r) => {
       const t = tOf(r) || 'it';
       const probe = D.parseNP(t);
@@ -147,6 +152,6 @@ export const hooks = {
     },
     undo: (ctx) => D.undo(ctx, {}),
     redo: (ctx) => D.redo(ctx, {}),
-    save: (ctx, r) => D.save(ctx, { f: r.value }),
+    save: (ctx, r) => D.save(ctx, { f: words(r.value).filter((x) => !DET.has(x)).at(-1) }),
   },
 };
