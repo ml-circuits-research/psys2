@@ -22,6 +22,7 @@
 
 import { ACT_VERBS } from './verbs.generated.mjs';
 import { FORMS_MORE, FLAGS_MORE, TURN_WORDS } from './forms.more.mjs';
+import { FORMS_DATA, FLAGS_DATA } from './forms.data.mjs';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs';
 
 export { ACT_VERBS };
@@ -85,7 +86,7 @@ const yes = (v) => v === 'yes' || v === 'true';
 export function parseSchema(wires) {
   const sw = wires.find((w) => w.type === 'acts.schema');
   if (!sw) throw new Error('schema.sop has no acts.schema wire');
-  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout', 'rel', 'thingask', 'matrix', 'reader', 'tabUndo', 'claim', 'signal', 'opencolour', ...FLAGS_MORE].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
+  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout', 'rel', 'thingask', 'matrix', 'reader', 'tabUndo', 'claim', 'signal', 'opencolour', ...FLAGS_MORE, ...FLAGS_DATA].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
   const schema = { id: sw.id, noun: val(sw, 'noun') ?? sw.id, acts: new Set(vals(sw, 'acts')), limits: { items: 100, history: 30, ...Object.fromEntries(sw.entries.filter((e) => e.key.startsWith('limit.')).map((e) => [e.key.slice(6), Number(e.value.v)])) }, kinds: {}, attrs: {}, doc: val(sw, 'doc') ?? '', tabOnly: val(sw, 'tabOnly') === 'yes' };
   for (const a of schema.acts) if (!Object.hasOwn(ACTS, a)) throw new Error(`unknown act '${a}' in ${sw.id}`);
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
@@ -226,7 +227,7 @@ function conditions(s) {
   return {
     in: Object.values(s.kinds).some((k) => k.in), named: Object.values(s.kinds).some((k) => k.named), attrs: Object.keys(s.attrs).length > 0,
     name: !!s.flags?.name, layout: !!s.flags?.layout, rel: !!s.flags?.rel, thingask: !!s.flags?.thingask, self: !!s.flags?.self, dir: !!s.flags?.dir, be: !!s.flags?.be, has: !!s.flags?.has, bare: !!s.flags?.bare,
-    ...Object.fromEntries(FLAGS_MORE.map((f) => [f, !!s.flags?.[f]])), reader: !!s.flags?.reader, values: valueWords(s).length > 0 || anyColour(s), number: Object.values(s.attrs).some((a) => a.type === 'number'), more: cmpWords(s, 'more').length > 0, less: cmpWords(s, 'less').length > 0,
+    ...Object.fromEntries([...FLAGS_MORE, ...FLAGS_DATA].map((f) => [f, !!s.flags?.[f]])), reader: !!s.flags?.reader, values: valueWords(s).length > 0 || anyColour(s), number: Object.values(s.attrs).some((a) => a.type === 'number'), more: cmpWords(s, 'more').length > 0, less: cmpWords(s, 'less').length > 0,
   };
 }
 const attrWords = (s) => [...new Set(Object.values(s.attrs).flatMap((a) => [a.name, ...a.words]))];
@@ -235,15 +236,15 @@ const kindWords = (s) => [...new Set(Object.values(s.kinds).flatMap((k) => [k.na
 /** The forms a world gets: those whose condition the schema meets and whose act the world declares. */
 export function formsFor(schema) {
   const c = conditions(schema);
-  return [...FORMS, ...FORMS_MORE].filter((f) => schema.acts.has(f.act) && (!f.if || c[f.if]));
+  return [...FORMS, ...FORMS_MORE, ...FORMS_DATA].filter((f) => schema.acts.has(f.act) && (!f.if || c[f.if]));
 }
 // every form may start with a filler ("pls", "so") and end with one ("please", "from now on"): a free capture at the end stops before the tail
 /** Forms whose words say "yourself" / "the avatar" themselves: they claim the sentence for their world on any tab (pattern tabClaim). */
 const CLAIMING = new Set(['make.self', 'make.on', 'change.self', 'change.be.self', 'change.should.self', 'change.call', 'change.call.2', 'change.name.is', 'change.name.called', 'ask.name']);
 const expandMatch = (m, ns) => `[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? ${expandCore(m, ns)} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?`;
 const expandCore = (m, ns) => m.replace(/\[V\.(\w+)\|/g, '[$acts.verb.$1|').replace(/\{(\w+):words\}$/, '{$1:rest}').replace(/\bL\b/g, '[$lang.lead.polite]?').replace(/\bD\b/g, '[$acts.det]?').replace(/\bV\.(\w+)/g, '[$acts.verb.$1]')
-  .replace(/\bREL\b/g, '{rel:lex.acts.rel}').replace(/\{(\w+):ATTR\}/g, `{$1:lex.${ns}.attrs}`).replace(/\{(\w+):VALUE(\??)\}/g, `{$1:lex.${ns}.values$2}`)
-  .replace(/\{(\w+):KIND\}/g, `{$1:lex.${ns}.kinds}`).replace(/\{(\w+):MORE\}/g, `{$1:lex.${ns}.more}`).replace(/\{(\w+):LESS\}/g, `{$1:lex.${ns}.less}`)
+  .replace(/\bREL\b/g, '{rel:lex.acts.rel}').replace(/\{(\w+):ATTR(\??)\}/g, `{$1:lex.${ns}.attrs$2}`).replace(/\{(\w+):VALUE(\??)\}/g, `{$1:lex.${ns}.values$2}`)
+  .replace(/\{(\w+):KIND(\??)\}/g, `{$1:lex.${ns}.kinds$2}`).replace(/\{(\w+):MORE\}/g, `{$1:lex.${ns}.more}`).replace(/\{(\w+):LESS\}/g, `{$1:lex.${ns}.less}`)
   .replace(/\{(\w+):TURN(\??)\}/g, `{$1:lex.${ns}.turn$2}`).replace(/\{(\w+):FACTOR\}/g, `{$1:lex.${ns}.factor}`).replace(/\bNOUN\?/g, `{noun:lex.${ns}.nouns?}`).replace(/\bNOUN\b/g, `{noun:lex.${ns}.nouns}`);
 const wordsLex = (id, doc, words, cls = 'modifier', extend = null, open = null) => `@${id} core.lexicon\n    class=${cls}\n    doc=${JSON.stringify(doc)}\n${extend ? `    extends=${extend}\n` : ''}${open?.[0] === '@colour' ? '    open=colour\n' : open?.length ? `    open=knowledge\n${open.map((c) => `    catalog=${c}\n`).join('')}` : ''}${words.map((w) => `    word=${w.replace(/\s+/g, '_')}`).join('\n')}\n`;
 
@@ -258,7 +259,7 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () 
     ...(valueWords(schema).length || anyColour(schema) ? [wordsLex(`lex.${ns}.values`, 'Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)', valueWords(schema), 'modifier', anyColour(schema) ? '$lex.lang.colour' : null, schema.flags?.opencolour ? ['@colour'] : null)] : []),
     ...(cmpWords(schema, 'more').length ? [wordsLex(`lex.${ns}.more`, 'Comparatives that mean more of an attribute', cmpWords(schema, 'more'))] : []),
     ...(cmpWords(schema, 'less').length ? [wordsLex(`lex.${ns}.less`, 'Comparatives that mean less of an attribute', cmpWords(schema, 'less'))] : []),
-    ...(FLAGS_MORE.some((f) => schema.flags?.[f]) ? [wordsLex(`lex.${ns}.nouns`, 'The words for the whole thing the world holds (the picture, the drawing)', [schema.noun, ...(schema.view?.words ?? [])])] : []),
+    ...([...FLAGS_MORE, ...FLAGS_DATA].some((f) => schema.flags?.[f]) ? [wordsLex(`lex.${ns}.nouns`, 'The words for the whole thing the world holds (the picture, the drawing)', [...new Set([schema.noun, ...(schema.view?.words ?? []), ...(schema.kinds[schema.noun]?.words ?? [])])])] : []),
     ...(schema.flags?.turn ? [wordsLex(`lex.${ns}.turn`, 'How a thing is turned (forms.more.mjs)', TURN_WORDS)] : []),
     ...(schema.flags?.scale ? [wordsLex(`lex.${ns}.factor`, 'Factors of a size (twice as big)', ['twice', 'double', 'triple', 'thrice', 'half', 'two_times', 'three_times', 'four_times', 'ten_times'])] : []),
   ].join('\n');
@@ -829,13 +830,14 @@ export function createExecutor(schema, hooks = {}) {
   function operation(ctx, act, args = {}) {
     const req0 = { ...args };
     hooks.before?.(ctx, act, req0);
-    // ONE UNDO STEP PER MESSAGE: the engine runs "put on a hat and make it red" as two requests; the world's history (`hooks.history(state)`, else `state.history`) keeps the snapshot taken before the FIRST of them, so one "undo" takes the message back (spec 21 section 9)
+    // ONE UNDO STEP PER ACT GROUP: an act group ("put on a hat and make it red" asked as one request) is several acts; the world's history (`hooks.history(state)`, else `state.history`) keeps the snapshot taken before the FIRST of them, so one "undo" takes the message back (spec 21 section 9)
     const hist = () => { const h = hooks.history ? hooks.history(ctx.state) : ctx.state.history; return Array.isArray(h) ? h : null; };
-    const turn = String(args.request?.id ?? '').split('_')[0] || null;
+    // (only an explicit act group, `actGroup`, is one step: the requests of a message are one step each, spec 15 "one step per request", and "undo the whole message" takes them all)
+    const turn = /^grp\d+_/.test(String(args.request?.id ?? '')) ? String(args.request.id).split('_')[0] : null;
     const g = ctx.state.stepGroup, H0 = hist();
     const base = g && turn && g.turn === turn && H0 && g.base <= H0.length ? g.base : (H0?.length ?? 0);
     if (turn) ctx.state.stepGroup = { turn, base };
-    const done = () => { const H = hist(); if (H && H.length > base + 1 && !['undo', 'redo'].includes(act)) { H.splice(base + 1); hooks.afterGroup?.(ctx.state); } };
+    const done = () => { const H = hist(); if (turn && H && H.length > base + 1 && !['undo', 'redo'].includes(act)) { H.splice(base + 1); hooks.afterGroup?.(ctx.state); } };
     let r = operationParts(ctx, act, req0);
     done();
     return hooks.after?.(ctx, act, req0, r) ?? r;

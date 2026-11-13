@@ -1,0 +1,1299 @@
+@pat.data.charts.create.refresh core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [update|refresh|redo|rebuild|recount] [the|this|my|that]? {c:lex.data.charts.nouns} [again|now|with_the_new_numbers|from_the_conversation]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.refresh"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Update the chart."
+
+@pat.data.charts.create.holdings core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g56_make] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from|about|showing]? what {who:words} [has|have|got|owns|own|holds|hold] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Make a bar chart of what everyone has."
+    example="Show me a pie chart of what Tom and Ana have."
+
+@pat.data.charts.create.holdings2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [chart|graph|plot|visualize|visualise|show|draw] [me]? what {who:words} [has|have|got|owns|own|holds|hold] [as|in|on]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Chart what Tom and Ana have."
+    example="Graph what everyone has as a pie chart."
+
+@pat.data.charts.create.holdings.item core.pattern
+    canonical="Make a bar chart of the apples."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g56_make] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for]? [all]? [the]? {item:lex.kids.arith.items} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"everyone\" arg.item={item} arg.type={t}"
+    kind=request
+    priority=34
+    example="Make a bar chart of the apples."
+
+@pat.data.charts.create.holdings.item2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [chart|graph|plot|visualize] [all]? [the]? {item:lex.kids.arith.items} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"everyone\" arg.item={item}"
+    kind=request
+    priority=34
+    example="Chart the pears."
+
+@pat.data.charts.create.prices core.pattern
+    canonical="Compare the prices of the fruit."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g22_make] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about|showing]? [the]? [prices|price|costs|cost] [of|for]? [the|all_the|all]? {w:words}"
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Chart the prices of the toys."
+    example="Compare the prices of the fruit."
+    example="Make a bar chart of the prices of the school things."
+
+@pat.data.charts.create.prices.all core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [chart|graph|plot|visualize] [all]? [the]? [prices|costs] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"everything\""
+    kind=request
+    priority=34
+    example="Chart all the prices."
+
+@pat.data.charts.create.prices.how core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g22_make] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} how_much {w:words} [cost|costs] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Chart how much the toys cost."
+
+@pat.data.charts.create.legs core.pattern
+    canonical="Compare the legs of the sea animals."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g22_make] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about|showing]? [the]? legs [of|for|on]? [the|all_the|all]? {w:words}"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Compare the legs of the sea animals."
+    example="Chart the legs of a dog, a spider and a bee."
+
+@pat.data.charts.create.legs.how core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g22_make] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about]? how_many legs [the|all_the|all|do_the|do|does_a|does_the|does|do_all_the]? {w:words} [have|has] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Chart how many legs the farm animals have."
+
+@pat.data.charts.create.list core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g22_make] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from]? [my|the|our]? {list:words} list [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Make a pie chart of my shopping list."
+
+@pat.data.charts.create.list.as core.pattern
+    canonical="Show my shopping list as a chart."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [show|display|plot|draw|chart|graph|visualize|make|turn|give] [me]? [my|the|our]? {list:words} list [as|in|on|into|with]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Show my shopping list as a chart."
+
+@pat.data.charts.create.list.chart core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [chart|graph|plot|visualize] [my|the|our]? {list:words} list [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\""
+    kind=request
+    priority=34
+    example="Chart my to-do list."
+
+@pat.data.charts.create.lists core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [chart|graph|plot|visualize] [all]? [my|the|our]? lists [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"\""
+    kind=request
+    priority=34
+    example="Chart my lists."
+
+@pat.data.charts.create.lists.as core.pattern
+    canonical="Show my lists as a chart."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [show|display|make|give] [me]? [all]? [my|the|our]? lists [as|in|on|into]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"\""
+    kind=request
+    priority=34
+    example="Show my lists as a chart."
+
+@pat.data.charts.values.show core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [show|display|add|put|turn_on|switch_on|print|write|include|give_me|let_me_see] [me]? [the|all_the|each|all]? [$data.charts.g47_values] [$data.charts.g31_on_the_bars]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Show the values."
+
+@pat.data.charts.values.label core.pattern
+    canonical="Label the bars with the numbers."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [label|mark|annotate] [the|each|all_the]? [bars|slices|points|columns|segments|bar|slice] with [the]? [values|numbers|amounts|figures] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Label the bars with the numbers."
+
+@pat.data.charts.values.hide core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [hide|remove|delete|turn_off|switch_off|stop_showing|do_not_show|take_away|clear|drop] [the|all_the|each|all]? [$data.charts.g47_values] [$data.charts.g31_on_the_bars]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=off"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Hide the numbers."
+
+@pat.data.charts.values.percent core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [show|display|add|put|use|give_me] [me]? [the]? [percentages|percents|percentage_labels|percent_values|percent|shares] [on_the_chart|on_the_slices|instead|on_each_slice|too]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=percent"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Show the percentages."
+
+@pat.data.charts.q.extreme core.pattern
+    canonical="What is the smallest?"
+    canonical="Which is the biggest?"
+    match="[which|what] [is|are]? [the]? {w:lex.data.charts.extent} [$data.charts.g48_1]? [in_the_chart|in_it|here|of_all|of_them|in_the_graph|on_the_chart|of_the_bars]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.extreme arg.w={w}"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Which is the biggest?"
+    example="What is the smallest?"
+
+@pat.data.charts.q.extreme2 core.pattern
+    match="[which|what] [$data.charts.g48_1]? [has|have|got|is_the|is|are_the|are] [the]? {w:lex.data.charts.extent} [value|number|amount|count|1]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.extreme arg.w={w}"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Which has the most?"
+    example="Which one is the lowest?"
+
+@pat.data.charts.q.total core.pattern
+    canonical="What is the total?"
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [what|how_much] [is|are]? [the]? [total|sum|grand_total|total_amount|total_number|total_value|overall_total] [of_all|of_everything|of_the_bars|of_them|altogether|in_total|in_all|in_the_chart|of_the_chart|of_all_of_them]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=32
+    needsState=charts
+    example="What is the total?"
+
+@pat.data.charts.q.total.up core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [add|sum|total|count] [them|everything|it|all_the_bars|the_bars|the_values|the_numbers|these]? [up|together] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Add them up."
+
+@pat.data.charts.q.total.many core.pattern
+    match="how_many [are_there|do_we_have|do_they_have|in_all|altogether|in_total|all_together|are_there_in_total|are_there_altogether|are_there_all_together] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=31
+    needsState=charts
+    example="How many altogether?"
+
+@pat.data.charts.q.average core.pattern
+    canonical="What is the average?"
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [what|how_much] [is|are]? [the]? [average|mean|avg] [value|number|amount|size|height]? [of_all|of_them|of_the_bars|in_the_chart|of_the_chart|per_bar|per_item|per_person|each|overall]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.average"
+    kind=request
+    priority=32
+    needsState=charts
+    example="What is the average?"
+
+@pat.data.charts.q.diff core.pattern
+    canonical="How many more apples than pears?"
+    match="how_many [more|fewer|less] {a:words(3)} than {b:words(3)}"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="How many more apples than pears?"
+
+@pat.data.charts.q.diff.much core.pattern
+    canonical="How much more is plums than apples?"
+    match="how_much [more|less] [is|are]? {a:words(3)} than {b:words(3)}"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="How much more is plums than apples?"
+
+@pat.data.charts.q.diff.between core.pattern
+    match="what [is|are] [the]? difference between {a:words(3)} and {b:words(3)}"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=32
+    needsState=charts
+    example="What is the difference between apples and pears?"
+
+@pat.data.charts.q.compare core.pattern
+    canonical="Which is bigger, apples or pears?"
+    match="which [is|are]? {w:lex.data.charts.extent} {a:words(3)} or {b:words(3)}"
+    emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Which is bigger, apples or pears?"
+
+@pat.data.charts.q.percent core.pattern
+    canonical="What percentage are apples?"
+    match="what [$data.charts.g52_percentage] [is|are|of_the_total_is|of_the_total_are|of_the_chart_is|of_the_chart_are|of_the_whole_is] [the]? {l:words(3)}"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=18
+    needsState=charts
+    example="What percentage are apples?"
+
+@pat.data.charts.q.percent.of core.pattern
+    match="what [$data.charts.g52_percentage] [of_the_total|of_the_chart|of_the_whole|of_everything|of_all] [is|are|does|do] [the]? {l:words(3)} [$data.charts.g51_make_up]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=18
+    needsState=charts
+    example="What share of the chart do plums take?"
+
+@pat.data.charts.q.percent.much core.pattern
+    match="how_much [of_the_chart|of_the_total|of_the_whole|of_it|of_the_pie] [is|are|does|do] [the]? {l:words(3)} [make_up|take_up|have|account_for|represent|take]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=18
+    needsState=charts
+    example="How much of the chart is apples?"
+
+@pat.data.charts.q.percent.does core.pattern
+    canonical="What percent does apples make up?"
+    match="what [percent|percentage|share] [does|do] [the]? {l:words(3)} [$data.charts.g51_make_up] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=18
+    needsState=charts
+    example="What percent does apples make up?"
+
+@pat.data.charts.q.describe core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [describe|explain|summarize|summarise|tell_me_about] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.describe"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Describe the chart."
+
+@pat.data.charts.q.describe2 core.pattern
+    canonical="What does the chart show?"
+    match="[what_does_the_chart_show|what_does_the_graph_show|what_is_on_the_chart|what_is_in_the_chart|what_is_the_chart_about|what_does_this_chart_show|what_does_it_show|what_do_you_see|what_is_on_the_graph|what_does_this_graph_show|what_are_the_values|what_are_the_numbers] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.describe"
+    kind=request
+    priority=32
+    needsState=charts
+    example="What does the chart show?"
+
+@pat.data.charts.q.read core.pattern
+    canonical="Read the chart aloud."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [read|read_out] [me]? [the|this|my|that]? {c:lex.data.charts.nouns} [aloud|out_loud|out]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.read"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Read the chart aloud."
+
+@pat.data.charts.nav.list core.pattern
+    canonical="What charts do I have?"
+    match="[what|which] [charts|graphs] [do_i_have|have_i_made|are_there|do_we_have|exist|have_i_got] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.listCharts"
+    kind=request
+    priority=32
+    example="What charts do I have?"
+
+@pat.data.charts.nav.list.count core.pattern
+    canonical="How many charts do I have?"
+    match="how_many [charts|graphs] [do_i_have|are_there|have_i_made|do_we_have|have_i_got|exist] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.listCharts"
+    kind=request
+    priority=32
+    example="How many charts do I have?"
+
+@pat.data.charts.nav.list.show core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [list|show|name|tell_me] [me]? [all]? [my|the|our]? [charts|graphs] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.listCharts"
+    kind=request
+    priority=28
+    example="List my charts."
+
+@pat.data.charts.export.image core.pattern
+    canonical="Save the chart as a picture."
+    canonical="Download the chart as an image."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [download|save|export|get|give_me] [me]? [the|this|my|a]? {c:lex.data.charts.nouns?} [as|to|in|into]? [a|an]? [image|picture|png|photo|jpeg|jpg|screenshot|pic|photograph] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.download"
+    kind=request
+    priority=32
+    example="Download the chart as an image."
+    example="Save the chart as a picture."
+
+@pat.data.charts.export.picture core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [take|grab|get|make] [a]? [picture|image|screenshot|photo|snapshot] of [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.download"
+    kind=request
+    priority=32
+    example="Take a picture of the chart."
+
+@pat.data.charts.export.chart core.pattern
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [download|save|export] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.download"
+    kind=request
+    priority=31
+    example="Download the chart."
+
+@pat.data.charts.export.csv core.pattern
+    canonical="Download the chart data as a spreadsheet."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [download|save|export] [the|this|my|that]? [chart]? [data|numbers|values|table|spreadsheet|csv] [as|to|in]? [a|an]? [csv|spreadsheet|text|file|table]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=32
+    example="Download the chart data as a spreadsheet."
+
+@pat.data.charts.export.copy core.pattern
+    canonical="Copy the chart data."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? copy [the|this|my|that]? [chart]? [data|numbers|values|table] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.copyData"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Copy the chart data."
+
+@pat.data.charts.export.doc core.pattern
+    canonical="Put the chart in the document."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g53_put] [the|this|my|that]? [chart|graph|picture|image] [in|into|to|on|onto] [the|this|my|that]? [document|doc|editor|page] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.toDocument"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Put the chart in the document."
+
+@pat.data.charts.export.doc.data core.pattern
+    canonical="Put the chart data in the document."
+    match="[$lang.lead.polite|$data.charts.g2_hey]? [$data.charts.g53_put] [the|this|my|that]? [chart]? [data|numbers|values|table] [in|into|to|on|onto] [the|this|my|that]? [document|doc|editor|page] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=chart.toDocumentData"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Put the chart data in the document."
+
+
+@pat.data.charts.x.refresh2 core.pattern
+    canonical="Reload the chart."
+    match="[$lang.lead.polite|hey|pls|plz]? [redraw|re_draw|reload|refresh|update|rebuild|re_build|renew|regenerate|recalculate|redo] [it|that|this|the|my]? {c:lex.data.charts.nouns?} [again|now]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.refresh"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Redraw it."
+    example="Reload the chart."
+    example="Refresh it pls."
+
+@pat.data.charts.x.export.csv2 core.pattern
+    canonical="Get the chart numbers as a spreadsheet."
+    match="[$lang.lead.polite|hey|pls|plz]? [get|grab|give_me|download|save|export|send_me|i_want|let_me_have|can_i_get|can_i_download|can_i_have|make|create|produce|turn_into|put|dump|write|output|fetch|pull|extract|take] [me]? [the|my|this|that|a|an|all_the|all|these|those]? [chart|graph|plot|diagram]? [numbers|values|data|table|figures|spreadsheet|sheet|csv|numbers_as|values_as|data_as|figures_as|table_as|as_a_spreadsheet|data_as_a_spreadsheet|numbers_in|values_in|figures_in|data_in|numbers_into|values_into|figures_into|data_into|numbers_to|values_to|figures_to|data_to|figures_as_a|numbers_as_a|values_as_a|data_as_a] [as|to|in|into|for]? [a|an|the]? [spreadsheet|sheet|csv|file|table|excel|xls|xlsx|spreadsheet_file|csv_file|text_file|text|download|document_file]? [file|pls|plz]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=29
+    example="Spreadsheet of the chart data."
+    example="Get the chart numbers as a spreadsheet."
+    example="Save the numbers in a spreadsheet file."
+
+@pat.data.charts.x.export.csv3 core.pattern
+    match="[spreadsheet|sheet|csv|excel|table] [of|for|from|with]? [the|my|this|that]? [chart|graph|plot]? [data|numbers|values|figures|pls|plz]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=30
+    example="Spreadsheet of the chart data."
+
+@pat.data.charts.x.export.csv4 core.pattern
+    match="[can_i|could_i|may_i|can_we|could_we|can_you_let_me|let_me|i_want_to|i_would_like_to|i_wanna|how_do_i|how_can_i|id_like_to] [download|save|get|export|have|grab|take] [the|my|this|that|a]? [values|numbers|data|figures|table|chart_data|chart_numbers|chart_values|chart_figures] [as|in|to|into]? [a|an|the]? [sheet|spreadsheet|csv|file|table|excel]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=32
+    example="Can I download the values as a sheet?"
+
+@pat.data.charts.x.export.doc2 core.pattern
+    canonical="Paste the figures in the doc."
+    match="[$lang.lead.polite|hey|pls|plz]? [paste|put|insert|place|drop|add|move|send|copy|transfer|push|pour|write|include|stick|throw|get|bring|export|import|pull|dump|inject|embed|attach|append] [me]? [the|my|this|that|all_the|all|these|those]? [chart|graph|plot|diagram]? [figures|numbers|values|data|table|figures_in|numbers_in|values_in|data_in|figures_into|numbers_into|values_into|data_into|figures_to|numbers_to|values_to|data_to|chart_figures|chart_numbers|chart_values|chart_data] [in|into|to|on|onto|inside|within|in_to|over_to]? [the|this|my|that|a]? [document|doc|editor|page|text|notes|file|word_doc|word_document|docs]? [pls|plz|now]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.toDocumentData"
+    kind=request
+    priority=29
+    needsState=charts
+    example="Paste the figures in the doc."
+    example="Numbers into the document please."
+    example="Insert the chart figures in the document."
+
+@pat.data.charts.x.values3 core.pattern
+    canonical="I want to see the figures."
+    match="[$lang.lead.polite|hey|pls|plz]? [i_want_to_see|let_me_see|can_i_see|show|display|add|put|turn_on|switch_on|print|include|give_me|label|annotate|numbers_on|figures_on|put_numbers_on|write] [me]? [the|all_the|each|all|every|their|its]? [bars|slices|points|columns|segments]? [with]? [their|the|its]? [values|numbers|value_labels|data_labels|amounts|counts|figures|numerals|digits] [on_the_bars|on_the_chart|on_it|on_them|on_top|too|on|on_each_bar|there|above_the_bars|here]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    kind=request
+    priority=31
+    needsState=charts
+    example="I want to see the figures."
+    example="Label the bars with their numbers."
+
+@pat.data.charts.x.values4 core.pattern
+    match="[numbers|figures|values|amounts|counts] [on|please|pls|plz|on_please|on_pls|visible|shown|showing]"
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Numbers on please."
+
+@pat.data.charts.r2.hold.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g23_make]? [me|us]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from|about|showing|on|with|using]? what {who:lex.data.charts.everyone} [$data.charts.g13_has]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Pie chart of what everybody has."
+
+@pat.data.charts.r2.hold.b core.pattern
+    canonical="A pie with what the kids have."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g23_make]? [me|us]? [a|an|the]? {t:lex.data.charts.types} [of|for|from|about|showing|on|with|using]? what {who:lex.data.charts.everyone} [$data.charts.g13_has]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="A pie with what the kids have."
+
+@pat.data.charts.r2.hold.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g23_make]? [me|us]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|from|about|showing|on|with|using]? [the]? {who:lex.data.charts.everyone} ['s]? [stuff|things|items|belongings|fruit|fruits|apples|toys|possessions|holdings|stock|inventory|goods|numbers|counts|amounts|stuff_they_have|stuff_they_own] [as|in|on|into|with|using|to]? [a|an]? {t2:lex.data.charts.types?} {c2:lex.data.charts.nouns?} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Everyones stuff as a bar chart."
+
+@pat.data.charts.r2.hold.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g23_make]? [me|us]? [the]? {who:lex.data.charts.everyone} ['s]? [stuff|things|items|belongings|fruit|apples|toys|possessions|numbers|counts|amounts]? [as|in|on|into|with|using|to] [a|an]? {t:lex.data.charts.types} {c:lex.data.charts.nouns?} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Show everyones stuff as bars."
+
+@pat.data.charts.r2.hold.e core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g29_make]? [me|us]? {who:lex.data.charts.everyone} [$data.charts.g13_has]? what [as|in|on|into|with|using|to] [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Everyone has what, as a bar chart."
+
+@pat.data.charts.r2.hold.f core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g42_make]? [me|us]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from|about|showing|on|with|using]? {who:lex.data.charts.everyone} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Bar chart everyone."
+
+@pat.data.charts.r2.hold.g core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g29_make]? [me|us]? [slices|slice|a_pie|pie_slices] [for|of|from|with]? what {who:lex.data.charts.everyone} [$data.charts.g13_has]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type=pie"
+    kind=request
+    priority=35
+    example="Slices for what everyone owns."
+
+@pat.data.charts.r2.hold.h core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g29_make]? [me|us]? each [kid|kids|child|person|1] [s]? [$data.charts.g49_stuff]? [as|in|into|with] [slices|slice]"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"everyone\" arg.type=pie"
+    kind=request
+    priority=35
+    example="Show each kids fruit as slices."
+
+@pat.data.charts.r2.hold.i core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g29_make]? [me|us]? each [kid|kids|child|person|1] [s]? [$data.charts.g49_stuff]? [as|in|into|with|on] [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"everyone\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Each kids stuff in a pie chart."
+
+@pat.data.charts.r2.prices.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g17_make]? [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|about|showing]? [the]? {w:words(3)} [prices|price|costs|cost|pricing] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Make a bar chart of the toy costs."
+
+@pat.data.charts.r2.prices.a2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g17_make]? [me]? [the]? {w:words(3)} [prices|price|costs|cost|pricing] [as|in|on|into|with|for]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=34
+    example="Toy prices as a chart."
+
+@pat.data.charts.r2.prices.a3 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [chart|graph|plot|visualize|compare] [the]? {w:words(3)} [prices|price|costs|cost|pricing] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\""
+    kind=request
+    priority=34
+    example="Chart toys prices pls."
+
+@pat.data.charts.r2.prices.b core.pattern
+    canonical="Can you chart what the toys cost."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g17_make]? [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|about|showing]? what [the]? {w:words(3)} [cost|costs]"
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Can you chart what the toys cost."
+
+@pat.data.charts.r2.prices.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? how_much [do|does|are|is]? [the]? {w:words(3)} [cost|costs] [and|then|so|,]? [chart_it|graph_it|plot_it|chart_them|graph_them|make_a_chart|as_a_chart|in_a_chart|as_a_graph|in_a_graph|chart_that|graph_that|visualize_it|as_bars|show_it_as_a_chart|put_that_in_a_chart|put_it_in_a_chart|make_it_a_chart|draw_it|draw_a_chart] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\""
+    kind=request
+    priority=35
+    example="How much do the toys cost, chart it."
+
+@pat.data.charts.r2.legs.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g17_make]? [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|about|showing]? [the|number_of|how_many|animal|animals]? legs [of|for|on|do|does|has|have|that]? [the|all_the|all]? {w:words(8)} [have|has]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Make a chart of the legs of a dog, a spider and a bee."
+
+@pat.data.charts.r2.legs.a2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g17_make]? [me]? [the]? legs [of|for|on|do|does|has|have|that]? [the|all_the|all]? {w:words(8)} [have|has]? [as|in|on|into|to] [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Legs of a dog, a spider and a bee as a chart."
+
+@pat.data.charts.r2.legs.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g17_make]? [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [the]? {w:words(8)} legs [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Chart dog spider bee legs."
+
+@pat.data.charts.r2.legs.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g54_animal]? legs {c:lex.data.charts.nouns} [of|for|about|with|from|:]? {w:words(8)}"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\""
+    kind=request
+    priority=35
+    example="Animal legs chart: dog, spider, bee."
+
+@pat.data.charts.r2.legs.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [chart|graph|plot|make_a_chart_of|show|draw|visualize]? how_many legs [do|does|have|has]? {w:words(8)} [have|has]? [,]? [chart_it|graph_it|plot_it|chart_them|as_a_chart|in_a_chart|as_a_graph|in_a_graph|chart_that|graph_that|visualize_it|as_bars|put_it_in_a_chart|make_a_chart|draw_it] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\""
+    kind=request
+    priority=35
+    example="How many legs do a dog and a spider have, chart it."
+
+@pat.data.charts.r2.list.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [make|create|draw|build|plot|chart|graph|show|give|prepare|visualize|display|turn]? [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from|with|on|about]? [$data.charts.g43_what_is]? [on|in]? [my|the|our]? {list:lex.data.charts.listnames} [list]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Chart my shopping list."
+
+@pat.data.charts.r2.list.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? {list:lex.data.charts.listnames} list [as|in|on|into|with|to|for]? [a|an]? {t:lex.data.charts.types} {c:lex.data.charts.nouns?} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Shopping list chart pls."
+
+@pat.data.charts.r2.list.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [make|draw|show|chart|graph|plot|give|do|visualize]? [me]? {t:lex.data.charts.types} [of|for|from|with|on]? [my|the|our]? {list:lex.data.charts.listnames} [list]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Pie of my shopping list."
+
+@pat.data.charts.r2.list.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [make|draw|show|chart|graph|plot|give|do|visualize|display|turn]? [me]? [my|the|our]? {list:lex.data.charts.listnames} [list]? [into|as|in|on|to]? [a|an]? {t:lex.data.charts.types} {c:lex.data.charts.nouns?} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Show my groceries list in a pie."
+
+@pat.data.charts.r2.list.e core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [make|create|draw|build|plot|chart|graph|show|give|prepare|visualize|display|do|turn]? [me]? [a|an|the]? {t:lex.data.charts.types} {c:lex.data.charts.nouns?} [of|for|from|with|on|about]? [$data.charts.g43_what_is]? [on|in]? [my|the|our] {list:lex.data.charts.listnames} [list]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Pie chart the shopping list."
+
+@pat.data.charts.r2.val.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [show|display|add|put|turn_on|switch_on|print|write|include|give_me|let_me_see|i_want_to_see|i_need_to_see|can_i_see|make_visible|reveal|label|mark|annotate|tell_me|see|read|get|have|enable|activate|use|keep|display_the|show_the|let_us_see|i_wanna_see|lets_see|let_me_have] [me]? [the|all_the|each|all|their|every]? [how_much_each_1_is|how_much_each_is|how_big_each_1_is|how_big_each_is|how_much_each_bar_is|how_much_each_slice_is|how_much_each_1_has|how_much_each_has|how_many_each_1_has|how_many_each_has|how_many_each_is|the_amounts|the_numbers|the_values|the_figures|the_counts|the_data|the_labels|the_value_labels|the_data_labels|the_numbers_on_it|the_numbers_on_them|the_numbers_on_the_bars|the_numbers_on_the_chart|the_numbers_on_the_graph|the_values_on_it|the_values_on_them|the_values_on_the_bars|the_values_on_the_chart|the_values_on_the_graph|the_figures_on_it|the_figures_on_them|the_figures_on_the_bars|the_figures_on_the_chart|the_figures_on_the_graph|the_amounts_on_it|the_amounts_on_them|the_amounts_on_the_bars|the_amounts_on_the_chart|the_amounts_on_the_graph|the_counts_on_it|the_counts_on_them|the_counts_on_the_bars|the_counts_on_the_chart|the_counts_on_the_graph] [on_the_chart|on_the_bars|on_it|on_them|on_the_graph|there|here|too|also|pls|plz|thx|ty|now|again|on_top|above_the_bars|next_to_the_bars|beside_the_bars|on_each_bar|on_each_slice|on_every_bar|on_every_slice|on_each_1|on_every_1|for_each_1|for_every_1|for_each|for_every|for_each_bar|for_every_bar|for_each_slice|for_every_slice]? [on_the_chart|on_the_bars|on_it|on_them|on_the_graph|there|here|too|also]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Show me how much each one is on the chart."
+
+@pat.data.charts.r2.val.b core.pattern
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [values|numbers|figures|amounts|counts|labels|data_labels|value_labels|data|the_numbers|the_values|the_figures|the_amounts|the_counts] [on|please|pls|plz|thx|ty|on_please|on_pls|visible|shown|showing|on_it|on_them|on_the_bars|on_the_chart|on_the_graph|on_top|above_the_bars|next_to_the_bars|too|as_well|also|again|now|back|back_on|back_please]"
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Numbers on please."
+
+@pat.data.charts.r2.val.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [hide|remove|delete|turn_off|switch_off|stop_showing|do_not_show|dont_show|take_away|clear|drop|kill|lose|ditch|get_rid_of|cut|scrap|bin|skip|wipe|zap|nix|axe|dump|toss|disable|clean_off|take_off|wipe_off|delete_off|rub_out|no_more|without|no|i_do_not_need|i_do_not_want|i_dont_need|i_dont_want|we_do_not_need|we_do_not_want|do_not_need|do_not_want|dont_need|dont_want|stop|do_not_put|dont_put|do_not_add|dont_add|do_not_print|dont_print|do_not_write|dont_write|do_not_include|dont_include|no_need_for|no_need_to_show|no_need_to_have|no_need_to_see|no_need_to_print|no_need_to_write|no_need_to_include|no_need_to_add|no_need_to_put] [the|all_the|each|all|their|every|any|those|these|that|this]? [values|numbers|figures|amounts|counts|labels|data_labels|value_labels|number_labels|figure_labels|amount_labels|count_labels|numbers_on_the_bars|numbers_on_the_chart|numbers_on_the_graph|numbers_on_it|numbers_on_them|values_on_the_bars|values_on_the_chart|values_on_the_graph|values_on_it|values_on_them|figures_on_the_bars|figures_on_the_chart|figures_on_the_graph|figures_on_it|figures_on_them] [$lang.tail.filler|on_the_chart|on_the_bars|on_it|on_them|on_the_graph|on_top|above_the_bars|any_longer]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=off"
+    kind=request
+    priority=32
+    needsState=charts
+    example="No numbers on the bars."
+
+@pat.data.charts.r2.val.pct core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [show|display|add|put|use|give_me|switch_to|change_to|turn_on|print|write|include|make|label|mark|annotate|let_me_see|i_want_to_see|i_need_to_see|can_i_see|see|read|get|have|enable|activate|keep|show_the|display_the|put_the|use_the|give_me_the] [me]? [the|all_the|each|all|their|every]? [percentages|percents|percentage_labels|percent_values|percent|shares|percentage|percentage_values|percent_labels|pct|percents_on_it|percents_on_them|percentages_on_it|percentages_on_them|percentages_on_the_chart|percents_on_the_chart|percentages_on_the_bars|percents_on_the_bars|percentages_on_the_graph|percents_on_the_graph|percentages_on_the_slices|percents_on_the_slices|shares_on_it|shares_on_them|shares_on_the_chart|shares_on_the_bars|shares_on_the_graph|shares_on_the_slices] [on_the_chart|on_the_slices|instead|on_each_slice|too|on_it|on_them|on_the_bars|on_the_graph|there|here|also|pls|plz|thx|ty|now|again|on_top|above_the_bars|for_each_1|for_every_1|for_each|for_every]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=percent"
+    kind=request
+    priority=31
+    needsState=charts
+    example="Show percentages."
+
+@pat.data.charts.r2.ext.a core.pattern
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [tell_me|show_me|give_me|say|name|find|whats|what_is|which_is|which_1_is|which_are|which_ones_are|which|what|who|who_has|who_has_got|which_1_has|which_has|which_1|can_you_tell_me|do_you_know|let_me_know|i_want_to_know|i_wanna_know|what_has|what_s|find_me|what_are|and|so|ok|okay|now|hmm|hm|uh|um|well|and_now|so_what_is|so_which_is|so_which|so_what|so_who|so_whats] [1|bar|bars|item|items|slice|slices|value|number|label|thing|column|point|segment|fruit|category|entry|name|amount|count|result|data_point|element|winner|ones|of_them|of_all|here|bit|option|choice|score|animal|kid|person|child|toy|shape|colour|color|piece|part|pick|answer|figure|stat|row|series|line|dot|player|team|group|class|type|kind|sort|variety|brand|product|food|drink|snack|game]? ['s]? [is|are|has|have|got|was|were]? [on|at|in|the|a]? [the]? {w:lex.data.charts.extent} [1|bar|bars|item|items|slice|slices|value|number|label|thing|column|point|segment|fruit|category|entry|name|amount|count|result|data_point|element|winner|ones|of_them|of_all|here|bit|option|choice|score|animal|kid|person|child|toy|shape|colour|color|piece|part|pick|answer|figure|stat|row|series|line|dot|player|team|group|class|type|kind|sort|variety|brand|product|food|drink|snack|game]? [is_it|are_they|in_the_chart|in_it|on_the_chart|in_the_graph|on_the_graph|here|of_all|of_them|of_the_bars|overall|then|there|is|are|has|have|got|wins|is_on_top|is_that|is_this|is_which|is_what|please|pls|plz|thx|ty|now|again|by_far|by_a_mile|of_all_of_them|of_all_of_it|of_everything|of_the_lot|in_total|in_all|at_all|in_here|in_there|on_there|on_here|on_it|on_them|here_please|there_please|now_please|then_please|is_it_please|are_they_please]? [1|bar|bars|item|items|slice|slices|value|number|label|thing|column|point|segment|fruit|category|entry|name|amount|count|result|data_point|element|winner|ones|of_them|of_all|here|bit|option|choice|score|animal|kid|person|child|toy|shape|colour|color|piece|part|pick|answer|figure|stat|row|series|line|dot|player|team|group|class|type|kind|sort|variety|brand|product|food|drink|snack|game]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
+    emit="@{_} core.request action=chart.extreme arg.w={w}"
+    kind=request
+    priority=28
+    needsState=charts
+    example="Which one is largest."
+
+@pat.data.charts.r2.ext.bare core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {w:lex.data.charts.superl} [1|bar|item|slice|value|number|label|thing|column|point|segment|fruit|category|entry|name|amount|count|result|data_point|element|winner|ones|of_them|of_all|here|bit|option|choice|score]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.extreme arg.w={w}"
+    kind=request
+    priority=30
+    needsState=charts
+    example="Biggest."
+
+@pat.data.charts.r2.ext.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {w:lex.data.charts.extent} [which_is_it|which_1_is_it|which_1|which_is_that|what_is_it|who_is_it|which_are_they|which_ones|which_is|who_is|who|which_1_is|which_has_it|who_has_it] [is_it]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.extreme arg.w={w}"
+    kind=request
+    priority=28
+    needsState=charts
+    example="The max, which is it."
+
+@pat.data.charts.r2.ext.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g9_tell_me]? [is|are|has|have|got|was|were]? [on|at|in]? [the]? [top|bottom|front|back|head|end|start|lead|tail|peak|summit|first_place|last_place|first|last] [of_the_chart|of_it|of_the_graph|of_the_bars|of_the_list|of_the_ranking]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.extreme arg.w=top"
+    kind=request
+    priority=28
+    needsState=charts
+    example="What is on top."
+
+@pat.data.charts.r2.tot.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g9_tell_me]? [how_much_is|how_much_are|how_much|how_many|can_you_work_out|can_you_calculate|work_out|calculate|compute|figure_out|get|find_out|tell_me]? [is|are]? [the|a|an|my]? [total|sum|grand_total|overall_total|full_total|complete_total|whole_total|overall|altogether|all_together|in_total|in_all|combined|sum_total|tally|summation|totals|total_amount|total_number|total_value|total_count|tot|grand|sums|sum_up|full_sum|overall_sum|whole_sum|total_sum|combined_total|combined_sum|cumulative|running_total|aggregate|gross] [of|for|from|across|over]? [all|everything|the_chart|it|them|the_bars|all_the_bars|all_the_numbers|all_the_values|the_numbers|the_values|all_of_them|all_of_it|these|the_data|the_whole_thing|the_graph|all_the_slices|the_slices|all_the_columns|the_columns|all_the_items|the_items|all_the_entries|the_entries|all_the_figures|the_figures|all_the_amounts|the_amounts|all_the_counts|the_counts|all_the_results|the_results|everyone|everybody|each_1|each|all_together|altogether|in_total|in_all|combined]? [altogether|all_together|in_total|in_all|combined|overall|now|is_it|is_that|is_what|is_this|then|again|there|here|for_me|in_the_chart|on_the_chart|in_the_graph|on_the_graph|in_it|on_it|in_here|in_there]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=28
+    needsState=charts
+    example="Grand total."
+
+@pat.data.charts.r2.tot.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|how_much|how_many|which] [do|does|would|will|did|can|could|should|shall|might|may|must|have|has|are|is] [they|it|these|all_of_them|everything|the_bars|the_numbers|the_values|all_the_bars|all_the_numbers|all_the_values|those|this|that|the_slices|the_columns|the_items|the_entries|the_figures|the_amounts|the_counts|the_results|all_of_it|all_of_these|all_of_those|all_together|altogether] [all]? [add_up_to|come_to|total|sum_to|make|equal|make_up|amount_to|add_up|come_out_to|add_to|come_out_at|work_out_at|work_out_to|sum_up_to|total_up_to|add_together_to|come_together_to|stack_up_to|tot_up_to|tally_up_to|tally_to|clock_in_at|clock_up|clock_in|weigh_in_at|reach|hit|get_to|end_up_at|end_up_with|end_up|come_up_to|come_up_with|come_up|give|yield|produce|result_in|lead_to] [up|to|at|together|altogether|in_total|in_all|all_together|overall|combined]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=28
+    needsState=charts
+    example="What do they add up to."
+
+@pat.data.charts.r2.tot.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? how_much [is|are|do|does|would|will|have|has]? [it|they|everything|all_of_it|all_of_them|the_bars|these|all_the_bars|the_numbers|that|those|this|the_values|the_slices|the_columns|the_items|the_entries|the_figures|the_amounts|the_counts|the_results|all_of_these|all_of_those]? [all|all_in|all_in_all|in_all|in_total|all_up|altogether|together]? [together|altogether|all_together|in_total|in_all|in_sum|combined|add_up_to|add_up|make|come_to|come_out_to|sum_up_to|total|sum_to|equal|make_up|amount_to|add_to|come_out_at|work_out_at|work_out_to|overall|all_up|in_all_in_all|all_in_all|altogether_now|together_now|all_together_now|in_total_now|in_all_now|all_up_now|overall_now|combined_now]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=28
+    needsState=charts
+    example="How much is it all together."
+
+@pat.data.charts.r2.tot.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [add|sum|total|tally|tot|calculate|combine|work_out|add_together|sum_up|tally_up|tot_up|add_up|total_up|lets_add|let_us_add|lets_sum|let_us_sum|lets_total|let_us_total] [them|everything|it|all|all_of_it|all_of_them|all_the_bars|the_bars|the_values|the_numbers|all_the_numbers|all_the_values|these|them_all|it_all|all_of_the_numbers|all_of_the_values|all_of_the_bars|the_slices|the_columns|the_items|the_entries|the_figures|the_amounts|the_counts|the_results|all_the_slices|all_the_columns|all_the_items|all_the_entries|all_the_figures|all_the_amounts|all_the_counts|all_the_results|those|that|this|all_of_these|all_of_those] [all]? [of_it|of_them]? [up|together|altogether|all_together|for_me|all_up|in_total|in_all|overall|combined]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=28
+    needsState=charts
+    example="Add them all up."
+
+@pat.data.charts.r2.tot.d2 core.pattern
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [add|sum|total|count|tally|tot|calculate|combine|work_out|add_together|sum_up|count_up|tally_up|tot_up|add_up|total_up] [up|together|altogether|all_together|all_up|in_total|in_all|overall|combined|up_please] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=28
+    needsState=charts
+    example="Sum up."
+
+@pat.data.charts.r2.tot.e core.pattern
+    match="[altogether|all_together|in_total|in_all|together|overall|combined|all_up|all_in_all|in_sum|in_summary] [how_many|how_much|what|the_total|total|please|pls|plz|thx|ty|now|how_many_is_that|how_much_is_that|what_is_that|whats_that|what_does_that_make|what_does_it_make|what_does_that_come_to|what_does_it_come_to|what_does_that_add_up_to|what_does_it_add_up_to|what_is_the_sum|whats_the_sum|what_is_the_total|whats_the_total]"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=28
+    needsState=charts
+    example="All together how many."
+
+@pat.data.charts.r2.avg.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g9_tell_me]? [how_much_is|how_much_are|how_much|how_many|can_you_work_out|can_you_calculate|work_out|calculate|compute|figure_out|get|find_out|tell_me|give_me|what_is_the|whats_the]? [is|are]? [the|a|an|my|on|on_the]? [average|mean|avg|typical|norm|usual|mid|middle|ave|averaged|averages|means|avgs|typicals|norms|usuals|mids|middles|aves] [$data.charts.g25_value]? [of|for|across|over|from|per|by|on|in]? [all|everything|the_chart|it|them|the_bars|all_the_bars|all_the_numbers|all_the_values|the_numbers|the_values|all_of_them|all_of_it|these|the_data|the_whole_thing|the_graph|each|each_bar|each_1|bar|item|slice|column|point|segment|category|entry|label|thing|element|everyone|everybody|person|kid|child|animal|toy|fruit|shape|colour|color|piece|part|group|class|type|kind|sort|variety]? [value|number|amount|size|height|score|count|figure|result|pls|plz|thx|ty|now|again|overall|in_total|in_all|altogether|all_together|combined|is_it|is_that|is_what|is_this|then|there|here|for_me|in_the_chart|on_the_chart|in_the_graph|on_the_graph|in_it|on_it|in_here|in_there]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.average"
+    kind=request
+    priority=28
+    needsState=charts
+    example="The average number."
+
+@pat.data.charts.r2.avg.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [on|on_the]? average [what|how_much|how_many|pls|plz]? [per|for|by|on|in|across|over|from|of]? [bar|item|slice|column|point|segment|category|entry|label|thing|element|each|each_bar|each_1|everyone|everybody|person|kid|child|animal|toy|fruit|shape|colour|color|piece|part|group|class|type|kind|sort|variety]? [pls|plz]?"
+    emit="@{_} core.request action=chart.average"
+    kind=request
+    priority=28
+    needsState=charts
+    example="On average?"
+
+@pat.data.charts.r2.avg.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|how_much|how_many|which] [is|are|do|does|would|will|did|can|could|should|shall|might|may|must|have|has]? [the]? [typical|usual|normal|standard|regular|ordinary|common|general|everyday|middle|mid|medium|mean|median_ish] [$data.charts.g25_value]? [is|are|per_bar|per_item|per_slice|per_column|per_point|per_segment|per_category|per_entry|per_label|per_thing|per_element|each|pls|plz|thx|ty|now]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.average"
+    kind=request
+    priority=28
+    needsState=charts
+    example="Whats the typical value."
+
+@pat.data.charts.r2.dif.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g35_the]? [$data.charts.g34_difference] [between|of|for|in|from|btw|btwn|b_w]? {a:words(3)} [and|vs|versus|to|with|from|or|v|against|and_the|vs_the|versus_the|to_the|with_the|from_the|or_the|v_the|against_the|compared_to|compared_with|relative_to|relative_to_the|in_relation_to|as_against|as_opposed_to] {b:words(3)} [$lang.tail.filler|$data.charts.g50_is_what]?"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Gap between apples and pears."
+
+@pat.data.charts.r2.dif.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g35_the]? [$data.charts.g34_difference] {a:words(2)} {b:words(2)} [$lang.tail.filler|$data.charts.g50_is_what]?"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=27
+    needsState=charts
+    example="Difference apples pears."
+
+@pat.data.charts.r2.dif.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what_is|whats|tell_me|show_me|give_me|find|work_out|calculate|compute]? [the]? {a:noun} [minus|take_away|subtract|taking_away|subtracting|subtracts|minus_the|take_away_the|subtract_the] {b:noun} [is_what|equals_what|equals|is|how_much|how_many|pls|plz|thx|ty|now|then|there|here|for_me|is_how_much|is_how_many|is_it|is_that]?"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Apples minus pears."
+
+@pat.data.charts.r2.dif.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [how_much|how_many|by_how_much|by_how_many|how_far] [bigger|larger|greater|higher|taller|more|fewer|less|smaller|lower|ahead|behind|further|farther|better|worse|above|below|over|under|extra|bigger_is|bigger_are] [are|is|do|does]? {a:words(3)} [than|compared_to|versus|vs|over|against|ahead_of|behind|from|and|to|compared_with|relative_to|beyond|above|below|under|more_than|less_than|fewer_than|bigger_than|larger_than|greater_than|higher_than|taller_than|smaller_than|lower_than|better_than|worse_than|as_against|as_opposed_to|rather_than|instead_of] {b:words(3)} [$lang.tail.filler|there|here|is_it|is_that]?"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="How much bigger are apples than pears."
+
+@pat.data.charts.r2.dif.e core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {a:words(3)} [beat|beats|beating|top|tops|outdo|outdoes|exceed|exceeds|lead|leads|are_ahead_of|is_ahead_of|are_above|are_over|is_above|is_over|outrun|outruns|outscore|outscores|outnumber|outnumbers|win_against|wins_against|win_over|wins_over|are_up_on|is_up_on|are_ahead_of_the|is_ahead_of_the|are_above_the|are_over_the|is_above_the|is_over_the|beat_the|beats_the|top_the|tops_the|exceed_the|exceeds_the|lead_the|leads_the] [the]? {b:words(3)} [by_how_much|by_how_many|by_what|by_how_far|by_how_big|by_how_little|by_what_margin|by_what_amount|by_what_number|by_what_gap|by_what_difference|by_how_much_more|by_how_many_more|by_how_much_exactly|by_how_many_exactly|how_much|how_many|by_what_factor]"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Apples beat pears by how much."
+
+@pat.data.charts.r2.dif.f core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? how_far [ahead|behind|apart|above|below|over|off|away|up|down|further|farther|out|in]? [is|are]? {a:words(3)} [of|over|from|to|ahead_of|behind|and|vs|versus|than|above|below|apart_from|away_from|off|out_of|in|beyond|past|ahead_of_the|behind_the|from_the|to_the|of_the|over_the|above_the|below_the|apart_from_the|away_from_the|off_the|out_of_the|beyond_the|past_the] {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="How far ahead is apples over pears."
+
+@pat.data.charts.r2.dif.g core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {a:words(3)} [vs|versus|v|against|or|and|compared_to|compared_with|to|with|v_s|vs_the|versus_the|against_the|or_the|and_the|compared_to_the|compared_with_the|to_the|with_the] [the]? {b:words(3)} [how_much|how_many|by_how_much|by_how_many|difference|gap|diff|what_difference|what_gap|how_big_is_the_gap|how_big_is_the_difference|whats_the_gap|whats_the_difference|what_is_the_gap|what_is_the_difference] [more|less|fewer|bigger|different|larger|smaller|higher|lower|taller|shorter|greater|better|worse|extra|apart|ahead|behind|up|down|over|under|above|below|than|difference|gap]?"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Apples vs pears how much more."
+
+@pat.data.charts.r2.dif.h core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? {b:words(3)} how_many [less|fewer|more] than {a:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Pears how many less than apples."
+
+@pat.data.charts.r2.cmp.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g44_is]? [the]? {a:words(3)} {w:lex.data.charts.extent} [$data.charts.g37_than] [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Is apples bigger than pears."
+
+@pat.data.charts.r2.cmp.a.more core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g44_is]? [the]? {a:words(3)} [more|bigger_in_number] [$data.charts.g37_than] [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Is apples bigger than pears."
+
+@pat.data.charts.r2.cmp.a.less core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g44_is]? [the]? {a:words(3)} [less|fewer] [$data.charts.g37_than] [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Is apples bigger than pears."
+
+@pat.data.charts.r2.cmp.a2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [do|does|did|will|would|can|could] [the]? {a:words(3)} [beat|beats|top|tops|outdo|outdoes|outscore|outscores|outnumber|outnumbers|outrun|outruns|lead|leads|exceed|exceeds] [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Do apples beat pears."
+
+@pat.data.charts.r2.cmp.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {a:words(3)} [or|vs|versus|v|against|and|compared_to|compared_with|with|to|&|or_the|vs_the|versus_the|v_the|against_the|and_the] [the]? {b:words(3)} [,|:]? [which|who|what]? [$data.charts.g21_1]? [is|has|have|are|1|has_got|have_got]? [the]? {w:lex.data.charts.extent} [$data.charts.g32_number]?"
+    emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Apples or pears, which is more."
+
+@pat.data.charts.r2.cmp.c.more core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {a:words(3)} [or|vs|versus|v|against|and|compared_to|compared_with|with|to|&|or_the|vs_the|versus_the|v_the|against_the|and_the] [the]? {b:words(3)} [,|:]? [which|who|what]? [$data.charts.g21_1]? [is|has|have|are|1|has_got|have_got]? [the]? [more|bigger_in_number] [$data.charts.g32_number]?"
+    emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Apples or pears, which is more."
+
+@pat.data.charts.r2.cmp.c.less core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {a:words(3)} [or|vs|versus|v|against|and|compared_to|compared_with|with|to|&|or_the|vs_the|versus_the|v_the|against_the|and_the] [the]? {b:words(3)} [,|:]? [which|who|what]? [$data.charts.g21_1]? [is|has|have|are|1|has_got|have_got]? [the]? [less|fewer] [$data.charts.g32_number]?"
+    emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Apples or pears, which is more."
+
+@pat.data.charts.r2.cmp.c2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {a:words(3)} [or|vs|versus|v|against|and|compared_to|compared_with|with|to|&|or_the|vs_the|versus_the|v_the|against_the|and_the] [the]? {b:words(3)} [who|which]? [wins|is_winning|is_the_winner|is_ahead|is_leading|is_on_top|win|are_winning|are_ahead|are_leading|are_on_top]"
+    emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Apples vs pears who wins."
+
+@pat.data.charts.r2.cmp.e core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [which|who|what]? [$data.charts.g38_1]? [is|has|have|are|1|has_got|have_got]? [the]? {w:lex.data.charts.extent} [$data.charts.g41_number]? [,|:]? [the]? {a:words(3)} [or|vs|versus|v|against|and|compared_to|compared_with|with|to|&|or_the|vs_the|versus_the|v_the|against_the|and_the] [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Which has the bigger number, pears or apples."
+
+@pat.data.charts.r2.cmp.e.more core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [which|who|what]? [$data.charts.g38_1]? [is|has|have|are|1|has_got|have_got]? [the]? [more|bigger_in_number] [$data.charts.g41_number]? [,|:]? [the]? {a:words(3)} [or|vs|versus|v|against|and|compared_to|compared_with|with|to|&|or_the|vs_the|versus_the|v_the|against_the|and_the] [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Which has the bigger number, pears or apples."
+
+@pat.data.charts.r2.cmp.e.less core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [which|who|what]? [$data.charts.g38_1]? [is|has|have|are|1|has_got|have_got]? [the]? [less|fewer] [$data.charts.g41_number]? [,|:]? [the]? {a:words(3)} [or|vs|versus|v|against|and|compared_to|compared_with|with|to|&|or_the|vs_the|versus_the|v_the|against_the|and_the] [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Which has the bigger number, pears or apples."
+
+@pat.data.charts.r2.cmp.g core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? {w:lex.data.charts.extent} [the]? {a:words(3)} [or|vs|versus|v|against|&] [$data.charts.g19_more]? [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="More apples or more pears."
+
+@pat.data.charts.r2.cmp.g.more core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [more|bigger_in_number] [the]? {a:words(3)} [or|vs|versus|v|against|&] [$data.charts.g19_more]? [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="More apples or more pears."
+
+@pat.data.charts.r2.cmp.g.less core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [less|fewer] [the]? {a:words(3)} [or|vs|versus|v|against|&] [$data.charts.g19_more]? [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="More apples or more pears."
+
+@pat.data.charts.r2.cmp.h core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g27_is_it] [the]? {a:words(3)} [or|vs|versus|v|against|and|&] [the]? {b:words(3)} [$data.charts.g33_that_is] [the]? {w:lex.data.charts.extent} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Is it apples or pears that is larger."
+
+@pat.data.charts.r2.cmp.h.more core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g27_is_it] [the]? {a:words(3)} [or|vs|versus|v|against|and|&] [the]? {b:words(3)} [$data.charts.g33_that_is] [the]? [more|bigger_in_number] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Is it apples or pears that is larger."
+
+@pat.data.charts.r2.cmp.h.less core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g27_is_it] [the]? {a:words(3)} [or|vs|versus|v|against|and|&] [the]? {b:words(3)} [$data.charts.g33_that_is] [the]? [less|fewer] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Is it apples or pears that is larger."
+
+@pat.data.charts.r2.cmp.i core.pattern
+    canonical="Compare apples and pears."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [compare|contrast|weigh_up|weigh|pit|put_side_by_side|set_side_by_side|line_up|compare_the|contrast_the|weigh_up_the] [the]? {a:words(3)} [and|with|to|against|vs|versus|or|&|and_the|with_the|to_the|against_the|vs_the|versus_the|or_the|alongside|alongside_the|next_to|next_to_the|beside|beside_the|opposite|opposite_the|facing|facing_the|versus_that_of|against_that_of|and_that_of|with_that_of|to_that_of] [the]? {b:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    priority=28
+    needsState=charts
+    example="Compare apples and pears."
+
+@pat.data.charts.r2.pct.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what_is|whats|what|tell_me|show_me|give_me|find|work_out|calculate|compute]? [the]? {l:words(3)} [percent|percentage|percentage_of_the_total|share|proportion|fraction|portion|pct|as_a_percent|as_a_percentage|as_percent|in_percent|in_percentage|in_percent_of_the_total|as_a_share|as_a_fraction|as_a_proportion|of_the_total|as_percentage|per_cent|percent_share|percentage_share|percent_of_total|percentage_of_total|share_of_the_total|share_of_the_whole|share_of_the_chart|share_of_everything|share_of_all|part_of_the_total|part_of_the_whole|part_of_the_chart|part_of_everything|part_of_all|slice_of_the_total|slice_of_the_whole|slice_of_the_chart|slice_of_everything|slice_of_all|piece_of_the_total|piece_of_the_whole|piece_of_the_chart|piece_of_everything|piece_of_all] [of_the_total|of_the_chart|of_the_whole|of_everything|in_total|of_all|pls|plz|thx|ty|now|is_it|is_that|is_what|then|there|here|for_me|of_the_pie|of_the_graph]?"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=12
+    needsState=charts
+    example="Apples as a percent."
+
+@pat.data.charts.r2.pct.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what_is|whats|what|tell_me|show_me|give_me|find|work_out|calculate|compute|give_me_the|show_me_the|tell_me_the|find_the|work_out_the|calculate_the|compute_the]? [the]? [percent|percentage|pct|share|proportion|portion|fraction|per_cent|percent_share|percentage_share|part|piece|slice|bit|cut|chunk|section|segment|fraction_of_the_total|percent_of_the_total|percentage_of_the_total|share_of_the_total] [of|for|that|which|by|taken_by|held_by|owned_by|made_by|made_up_by|accounted_for_by|represented_by|covered_by|occupied_by|filled_by|belongs_to|belonging_to|goes_to|going_to|is_for|are_for|is_of|are_of|is_by|are_by|is_from|are_from|is_in|are_in|is_on|are_on|is_at|are_at|is_to|are_to|is_with|are_with]? [the]? {l:words(3)} [of_the_total|of_the_chart|of_everything|in_total|pls|plz|thx|ty|now|is_it|is_that|is_what|then|there|here|for_me|of_the_pie|of_the_graph|of_the_whole|of_all|in_percent|in_percentage|as_a_percent|as_a_percentage|as_percent|as_percentage|in_pct|as_pct|in_per_cent|as_per_cent]?"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=12
+    needsState=charts
+    example="Percent apples."
+
+@pat.data.charts.r2.pct.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|which|how_much|how_many]? [portion|part|piece|slice|bit|cut|chunk|section|segment|fraction|share|proportion|percent|percentage|pct|per_cent|percent_share|percentage_share] [of_it|of_the_total|of_the_chart|of_the_pie|of_the_whole|of_everything|of_all|of_the_graph|of_them|of_all_of_it|of_all_of_them|of_this|of_that|of_these|of_those]? [is|are|does|do|goes_to|belongs_to|is_for|are_for|is_taken_by|are_taken_by|is_held_by|are_held_by|is_owned_by|are_owned_by|is_made_by|are_made_by|is_made_up_by|are_made_up_by|is_accounted_for_by|are_accounted_for_by|is_represented_by|are_represented_by|is_covered_by|are_covered_by|is_occupied_by|are_occupied_by|is_filled_by|are_filled_by|do_the|does_the|is_the|are_the|do_we_have|does_it_have|do_you_have|do_they_have|has|have]? [the]? {l:words(3)} [make_up|take_up|have|account_for|represent|get|hold|cover|occupy|own|fill|take|make|use|use_up|eat|eat_up|consume|swallow|claim|command|control|dominate|form|constitute|comprise|contribute|add|bring|give|yield|produce|total|sum_to|amount_to]? [in|as|by|in_percent|in_percentage|as_a_percent|as_a_percentage|as_percent|as_percentage|in_pct|as_pct|in_per_cent|as_per_cent|by_percentage|by_percent|by_pct|by_per_cent]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=14
+    needsState=charts
+    example="What portion are apples."
+
+@pat.data.charts.r2.desc.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [describe|explain|summarize|summarise|sum_up|recap|interpret|analyse|analyze|tell_me_about|talk_about|walk_me_through|go_through|break_down|outline|narrate|talk_me_through|take_me_through|run_through|run_me_through|explain_to_me|describe_to_me] [me|to_me|us|to_us]? [the|this|my|that|our|it|what|everything|these|those|all_the|all|all_of_it|all_of_this|all_of_that|all_of_these|all_of_those]? {c:lex.data.charts.nouns?} [in_words|in_detail|in_short|in_brief|briefly|pls|plz|thx|ty|now|again|for_me|for_us|to_me|to_us|out_loud|aloud|a_bit|a_little|a_little_bit|quickly|simply|in_simple_words|in_plain_words|in_plain_english|in_simple_terms|in_plain_terms]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.describe"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Describe it pls."
+
+@pat.data.charts.r2.desc.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [give|show|tell|let|get|send|write|do|can_i_get|i_want|i_need|i_d_like|id_like|i_would_like|we_need|we_want|make|have|bring|read|post|put|draw|produce|provide|prepare|offer|hand|pass|serve|deliver|supply|compose|create|generate|build|come_up_with] [me|us]? [a|an|the|some]? [short|quick|brief|simple|small|little|full|detailed|complete|plain|clear|nice|good|proper|basic|general|overall|rough]? [description|summary|overview|explanation|recap|rundown|breakdown|run_down|run_through|analysis|interpretation|readout|report|synopsis|digest|abstract|outline|sketch|account|story|narrative|review|commentary|walkthrough|walk_through|tour|brief|briefing] [of|for|about|on|to]? [the|this|my|that|it|our]? {c:lex.data.charts.nouns?} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.describe"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Give me a description of the graph."
+
+@pat.data.charts.r2.desc.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [whats|what_is|what_s|what] [this|the|that|my|our|it]? {c:lex.data.charts.nouns} [about|showing|saying|telling|for|all_about|trying_to_say|trying_to_show|trying_to_tell|supposed_to_say|supposed_to_show|supposed_to_tell|meant_to_say|meant_to_show|meant_to_tell|doing|even|actually_about|actually_showing|actually_saying|actually_telling|really_about|really_showing|really_saying|really_telling|then|there|here|pls|plz|thx|ty|now]? [about|showing|saying|telling|for|all_about|then|there|here|pls|plz|thx|ty|now]?"
+    emit="@{_} core.request action=chart.describe"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Whats this chart about."
+
+@pat.data.charts.r2.desc.d core.pattern
+    canonical="What does this graph show me."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what_does|what_do|what_did|what_will|what_would|what_can|what_could|what_should|what_shall|what_might|what_may|what_must|how_does|how_do|how_did|how_will|how_would|how_can|how_could|how_should|how_shall|how_might|how_may|how_must] [the|this|that|my|our|it]? {c:lex.data.charts.nouns?} [show|say|tell|display|mean|represent|contain|have|include|look_like|illustrate|depict|indicate|reveal|convey|communicate|present|portray|picture|suggest|imply|demonstrate|exhibit|express|reflect|report|state|read|stand_for|come_to] [me|us|you|now|exactly|then|there|here|pls|plz|thx|ty|again|actually|really|even|in_total|in_all|overall|altogether|all_together|combined|in_short|in_brief|briefly|in_words|in_detail|a_bit|a_little|a_little_bit|quickly|simply|in_simple_words|in_plain_words|in_plain_english|in_simple_terms|in_plain_terms]? [$lang.tail.filler|me|us|you|exactly|there|here]?"
+    emit="@{_} core.request action=chart.describe"
+    kind=request
+    priority=33
+    needsState=charts
+    example="What does this graph show me."
+
+@pat.data.charts.r2.desc.e core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what_am|what_are|what_can|what_do|what_did|what_will|what_would|what_could|what_should|what_shall|what_might|what_may|what_must|what_have|what_has] [i|we|you|u|they|he|she] [looking_at|seeing|see|reading|viewing|watching|looking|supposed_to_see|meant_to_see|supposed_to_read|meant_to_read|supposed_to_look_at|meant_to_look_at|supposed_to_view|meant_to_view|supposed_to_watch|meant_to_watch|looking_at_here|seeing_here|reading_here|viewing_here|watching_here|looking_at_now|seeing_now|reading_now|viewing_now|watching_now] [in|on|at|here_in|here|from|through|within|inside|over]? [the|this|that|my|our|it]? {c:lex.data.charts.nouns?} [here|now|exactly|right_now|then|there|pls|plz|thx|ty|again|actually|really|even|at_the_moment|currently|at_present|presently|for_now|so_far|as_of_now|as_it_stands|as_things_stand]?"
+    emit="@{_} core.request action=chart.describe"
+    kind=request
+    priority=33
+    needsState=charts
+    example="What am I looking at in the chart."
+
+@pat.data.charts.r2.desc.f core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [tell|show|let|say|explain|describe|give|read|remind|help|teach|inform|brief|fill|update|enlighten|clue|advise|notify|apprise|instruct] [me|us]? [what|how|exactly_what|exactly_how] [the|this|that|my|our|it]? {c:lex.data.charts.nouns} [looks_like|looks|shows|says|is_about|is|has|contains|includes|displays|means|represents|illustrates|depicts|indicates|reveals|conveys|communicates|presents|portrays|pictures|suggests|implies|demonstrates|exhibits|expresses|reflects|reports|states|reads|stands_for|comes_to|looks_like_now|looks_now|shows_now|says_now|is_about_now|is_now|has_now|contains_now|includes_now|displays_now|means_now|represents_now] [like|about|now|then|there|here|pls|plz|thx|ty|again|actually|really|even|at_the_moment|currently|at_present|presently|for_now|so_far|as_of_now|as_it_stands|as_things_stand]? [$lang.tail.filler|like|about|there|here]?"
+    emit="@{_} core.request action=chart.describe"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Tell me what the chart looks like."
+
+@pat.data.charts.r2.read.a core.pattern
+    canonical="Say the numbers out loud."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [read|read_out|say|speak|voice|narrate|recite|tell_me|announce|read_aloud|speak_out|say_out|pronounce|dictate|sound_out|tell|vocalize|vocalise|utter|articulate|enunciate|proclaim|declaim|deliver|broadcast|express|state|read_me|say_me|speak_me|voice_me|narrate_me|recite_me|announce_me|read_us|say_us|speak_us|voice_us|narrate_us|recite_us|announce_us] [me|us]? [the|this|my|that|all_the|all|these|our|it|what|everything]? [chart|graph|plot|diagram|numbers|values|figures|data|bars|results|labels|stats|amounts|counts|chart_data|content|contents|thing|whole_chart|whole_graph|title|slices|columns|points|dots|lines|entries|items|categories|segments|rows|totals|averages|means|sums|tallies|summary|description|overview|report|picture|story|narrative|review|commentary] [to_me|for_me|out|aloud|out_loud|loudly|to_us|for_us|slowly|clearly|pls|plz|thx|ty|now|again|1_by_1|1_at_a_time|bit_by_bit|step_by_step|in_order|from_left_to_right|from_top_to_bottom|from_first_to_last|from_start_to_finish|from_beginning_to_end|from_the_top|from_the_start|from_the_beginning]? [$lang.tail.filler|out|aloud|out_loud|loudly]?"
+    emit="@{_} core.request action=chart.read"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Say the numbers out loud."
+
+@pat.data.charts.r2.read.b core.pattern
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [read|say|speak|tell_me|recite|narrate|voice|announce|pronounce|dictate|tell|vocalize|vocalise|utter|articulate|enunciate|proclaim|declaim|deliver|broadcast|express|state|read_it|say_it|speak_it|voice_it|narrate_it|recite_it|announce_it|read_that|say_that|speak_that|voice_that|narrate_that|recite_that|announce_that|read_this|say_this|speak_this|voice_this|narrate_this|recite_this|announce_this|read_them|say_them|speak_them|voice_them|narrate_them|recite_them|announce_them] [it|that|this|them|everything|all|me|it_all|us|them_all|all_of_it|all_of_them|all_of_that|all_of_this]? [out|aloud|out_loud|loudly|to_me|for_me|to_us|for_us|slowly|clearly|read_out|read_aloud|speak_out|say_out|out_loud_please|aloud_please|out_please|loudly_please|to_me_please|for_me_please|to_us_please|for_us_please|slowly_please|clearly_please] [please|pls|plz|thx|ty|now|again|1_by_1|1_at_a_time|bit_by_bit|step_by_step|in_order]?"
+    emit="@{_} core.request action=chart.read"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Read it out."
+
+@pat.data.charts.r2.read.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [read_out|read_aloud|speak|say|tell_me|read|narrate|recite|voice|announce] [what|everything|all_that|whatever|all_of_what|the_things_that|the_stuff_that|the_text_that|the_numbers_that|the_values_that|the_figures_that|the_data_that|the_bars_that|the_results_that] [the|this|that|my|our|it]? [chart|graph|plot|diagram|it]? [says|shows|has|contains|reads|tells|displays|means|represents|illustrates|depicts|indicates|reveals|conveys|communicates|presents|portrays|pictures|suggests|implies|demonstrates|exhibits|expresses|reflects|reports|states|stands_for|comes_to|have|include|includes|hold|holds|carry|carries|bear|bears|keep|keeps|store|stores|list|lists|enumerate|enumerates|cite|cites|quote|quotes|mention|mentions|note|notes|record|records|register|registers|log|logs|count|counts|tally|tallies] [$lang.tail.filler|aloud|out_loud|out|loudly]?"
+    emit="@{_} core.request action=chart.read"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Read out what the chart says."
+
+@pat.data.charts.r2.read.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [aloud|out_loud|read_aloud|read_it|speak_it|say_it|read_out_loud|speak_out_loud|say_out_loud|loudly|read_loudly|speak_loudly|say_loudly|read_it_out|speak_it_out|say_it_out|read_it_aloud|speak_it_aloud|say_it_aloud|read_it_out_loud|speak_it_out_loud|say_it_out_loud|read_it_loudly|speak_it_loudly|say_it_loudly|read_out|speak_out|say_out] [$lang.tail.filler|to_us]?"
+    emit="@{_} core.request action=chart.read"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Aloud please."
+
+@pat.data.charts.r2.list.q1 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [my|all_my|all_the|the|all|our|existing|saved|open|current|every|each|all_of_my|all_of_the|all_of_our|all_existing|all_saved|all_open|all_current|every_1_of_my|every_1_of_the|every_1_of_our]? [charts|graphs|plots|diagrams|chart_list|graph_list|plot_list|diagram_list] [list|pls|plz|thx|ty|so_far|i_have|i_made|i_have_made|saved|here|overview|menu|catalog|catalogue|inventory|available|open|exist|now|again|there|then|are_there|do_i_have|do_we_have|have_i_made|have_i_got|are_open|are_saved|are_available|are_current|are_existing|exist_now|exist_here|exist_there|exist_so_far|exist_already]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.listCharts"
+    kind=request
+    priority=33
+    example="My charts."
+
+@pat.data.charts.r2.list.q2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [give|show|tell|let|get|bring|send|read|display|list|name|enumerate|can_i_see|can_you_list|i_want_to_see|let_me_see|pull_up|i_want|i_need|i_d_like|id_like|i_would_like|we_need|we_want|make|have|post|put|draw|produce|provide|prepare|offer|hand|pass|serve|deliver|supply|compose|create|generate|build|come_up_with|what_are|which_are|where_are|whats|what_is] [me|us]? [the|my|our|all_the|all_my|all|a|every|each|existing|saved|open|current]? [list_of|overview_of|names_of|titles_of|catalog_of|catalogue_of|summary_of|index_of|inventory_of|menu_of|roster_of|register_of|record_of|log_of|directory_of|rundown_of|breakdown_of|run_down_of|run_through_of|walkthrough_of|walk_through_of|tour_of|brief_of|briefing_of|picture_of|readout_of|report_of|synopsis_of|digest_of|abstract_of|outline_of|sketch_of|account_of|story_of|narrative_of|review_of|commentary_of]? [the|my|our|all|all_my|all_the|every|each|existing|saved|open|current]? [charts|graphs|plots|diagrams|chart_list|graph_list|plot_list|diagram_list|list_of_charts|list_of_graphs] [i_have|i_made|i_have_made|do_i_have|we_have|exist|there_are|saved|so_far|pls|plz|thx|ty|now|again|here|there|then|available|open|current|existing|are_open|are_saved|are_available|are_current|are_existing]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.listCharts"
+    kind=request
+    priority=33
+    example="Give me the list of graphs."
+
+@pat.data.charts.r2.list.q3 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [how_many|what|which] [charts|graphs|plots|diagrams] [do_i_have|are_there|have_i_made|do_we_have|have_i_got|exist|are_open|are_saved|are_available|do_you_have|have_i_saved|have_we_made|have_we_got|are_current|are_existing|are_around|are_here|are_there_so_far|do_i_have_saved|do_i_have_open|do_i_have_so_far|do_i_have_now|do_i_have_here|do_i_have_there|do_i_have_already]? [saved|so_far|now|open|made|available|here|already|currently|at_the_moment|and_what_are_they|and_which_ones|and_which|and_what|and_what_are_they_called|and_what_are_their_names|and_what_are_their_titles|pls|plz|thx|ty|again|there|then|around|existing|current]? [and_what_are_they|and_which_ones|and_which|and_what|and_what_are_they_called|and_what_are_their_names|and_what_are_their_titles|pls|plz|thx|ty|again|there|then|around|existing|current]?"
+    emit="@{_} core.request action=chart.listCharts"
+    kind=request
+    priority=33
+    example="How many charts and what are they."
+
+@pat.data.charts.r2.list.q4 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|which|how_many|whats|what_is|what_are|which_are|where_are|how_many_are|how_many_have] [have|has|did|do|does|can|could|will|would|should|shall|might|may|must|are|is|was|were]? [i|we|you|there|they]? [made|saved|got|created|drawn|built|done|opened|started|prepared|produced|generated|kept|stored|made_so_far|saved_so_far|got_so_far|created_so_far|drawn_so_far|built_so_far|done_so_far|opened_so_far|started_so_far|prepared_so_far|produced_so_far|generated_so_far|kept_so_far|stored_so_far] [charts|graphs|plots|diagrams|so_far|already|until_now|up_to_now|till_now|to_date|thus_far|here|there|now]? [so_far|already|until_now|up_to_now|till_now|to_date|thus_far|here|there|now|pls|plz|thx|ty|again]?"
+    emit="@{_} core.request action=chart.listCharts"
+    kind=request
+    priority=33
+    example="What have I made."
+
+@pat.data.charts.r2.exp.img core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [save|download|export|get|grab|take|capture|snap|dump|print|keep|store|give_me|send_me|i_want|i_need|need|want|can_i_get|can_i_have|can_i_download|let_me_download|let_me_have|let_me_save|make|create|produce|generate|render|draw|show_me|bring_me|fetch|get_me|do|turn|convert|change|put|write|output|save_as|download_as|export_as|get_as|grab_as|take_as|capture_as|snap_as|dump_as|print_as|keep_as|store_as] [me]? [a|an|the|this|my|that|it|a_copy_of|our]? [chart|graph|plot|diagram]? [as|to|in|into|a|an|like|by|of|for|from|with|using|via|through|on|onto|as_a|as_an|to_a|to_an|in_a|in_an|into_a|into_an|like_a|like_an|of_a|of_an|for_a|for_an|from_a|from_an|with_a|with_an|using_a|using_an|via_a|via_an|through_a|through_an|on_a|on_an|onto_a|onto_an]? [a|an|the]? [$data.charts.g18_image] [of_it|of_the_chart|of_the_graph|of_this|of_the_data|pls|plz|thx|ty|now|again|for_me|too|also|file|format|version|copy]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.download"
+    kind=request
+    priority=32
+    example="Give me a picture of the chart."
+
+@pat.data.charts.r2.exp.img2 core.pattern
+    match="[a|an|the|my|this]? [$data.charts.g18_image] [of|for|from|with|using|via|through|on|onto|as]? [the|this|my|that|it|our]? [chart|graph|plot|diagram]? [$lang.tail.filler|download|export|file|also|version|copy|format]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.download"
+    kind=request
+    priority=32
+    example="PNG please."
+
+@pat.data.charts.r2.exp.csv core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [export|download|save|send|get|give_me|put|dump|convert|turn|write|copy|create|make|i_want|can_i_get|let_me_have|let_me_download|let_me_save|let_me_export|send_me|bring_me|fetch|get_me|do|change|produce|generate|render|output|save_as|download_as|export_as|get_as|grab|take|capture|snap|print|keep|store|need|want|i_need|can_i_have|can_i_download|can_i_save|can_i_export|show_me|pull|pull_out|extract|rip|lift|transfer|move|copy_over|copy_out|dump_out|spit_out|write_out|print_out|output_to] [me]? [the|this|my|that|all_the|all|it|our|a|an]? [chart|graph|plot|diagram]? [data|numbers|values|table|figures|results|chart|graph|it|rows|stats|counts|amounts|entries|items|labels|content|contents|info|information|details|records|sheet|spreadsheet|csv] [to|as|into|in|for|to_a|as_a|in_a|as_an|to_an|into_a|into_an|for_a|for_an|a|an|via|through|using|with|on|onto|over_to|across_to|out_to|out_as|out_in]? [a|an|the]? [$data.charts.g16_excel] [$lang.tail.filler|file|format|also|version|copy]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=32
+    example="Export it as csv."
+
+@pat.data.charts.r2.exp.csv2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [chart|graph|plot|diagram]? [data|numbers|values|table|figures|results|rows|stats|counts|amounts|entries|items|labels|content|contents|info|information|details|records] [to|as|into|in|for|via|through|using|with|on|onto|over_to|across_to|out_to|out_as|out_in] [a|an|the]? [$data.charts.g16_excel] [$lang.tail.filler|file|format|also|version|copy]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=32
+    example="Chart data to excel please."
+
+@pat.data.charts.r2.exp.copy core.pattern
+    canonical="Put the numbers on my clipboard."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [copy|clipboard|grab_and_copy|copy_over|put|place|send|move|save|store|stick|dump|paste|add|yank|take|get|grab|give_me|pop|throw|toss|chuck|drop|push|pull|lift|transfer|duplicate|clone|snapshot|capture|record|log|keep|hold|save_to|store_to|copy_to|put_on|put_in|place_on|place_in|send_to|move_to|save_in|store_in|stick_on|stick_in|dump_on|dump_in|paste_in|paste_on|add_to|add_on|take_to|get_to|grab_to|give_to|pop_in|pop_on|throw_in|throw_on|toss_in|toss_on|chuck_in|chuck_on|drop_in|drop_on|push_to|pull_to|lift_to|transfer_to] [me]? [$data.charts.g40_the]? [chart|graph|plot|diagram]? [$data.charts.g24_data]? [from|of|in|out_of|off|on]? [the|this|my|that|it|our]? [chart|graph|plot|diagram|it]? [to|into|in|on|onto|onto_the|to_the|in_the|on_my|to_my|in_my|into_my|into_the|over_to|across_to|out_to]? [the|my|a|our]? [clipboard|clip_board|paste_buffer|copy_buffer|buffer|pasteboard|clip|copy_paste|copy_and_paste] [$lang.tail.filler|also]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.copyData"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Put the numbers on my clipboard."
+
+@pat.data.charts.r2.exp.copy2 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [clipboard|clip_board|clip] [$data.charts.g40_the]? [chart|graph|plot|diagram]? [$data.charts.g24_data] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.copyData"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Clipboard the figures."
+
+@pat.data.charts.r2.exp.copy3 core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [grab|take|get|pull|lift|fetch|pick|collect|gather|extract|rip|snatch|seize|capture|nab|snag|swipe|steal|borrow|lift_out|pull_out|take_out|get_out|grab_out] [$data.charts.g40_the]? [chart|graph|plot|diagram]? [data|numbers|values|table|figures|results|chart_data|stats|rows|counts|amounts|entries|items|labels|content|contents|info|information|details|records] [and|then|so|&|and_then|and_just|and_simply|and_quickly|and_easily] [copy|clipboard|copy_over|copy_out|paste|pop|stick|stash|store|save|keep|hold|clip] [them|it|those|these|the_numbers|the_data|the_values|the_figures|all_of_them|all_of_it|all]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.copyData"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Grab the numbers and copy them."
+
+@pat.data.charts.r2.doc.a core.pattern
+    canonical="Send the chart to my document."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g8_put] [me]? [the|this|my|that|our|it|a|an]? [chart|graph|plot|diagram|picture|image|it|that|this|1|them|figure|illustration|drawing|graphic|visual]? [$data.charts.g26_in] [the|this|my|that|our|a]? [$data.charts.g4_document] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.toDocument"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Send the chart to my document."
+
+@pat.data.charts.r2.doc.b core.pattern
+    match="[document|doc|editor|docs] [pls|plz]? [add|put|insert|send|place|paste|drop|include] [the|this|my|that]? {c:lex.data.charts.nouns?} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.toDocument"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Document please, add the chart."
+
+@pat.data.charts.r2.doc.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the|this|my|that|our]? {c:lex.data.charts.nouns} [into|in|to|for|on|onto|inside|within|over_to|across_to|in_to|to_the|into_the|in_the|on_the|onto_the|inside_the|within_the|over_to_the|across_to_the] [the|this|my|that|our|a]? [$data.charts.g4_document] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.toDocument"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Chart into the doc pls."
+
+@pat.data.charts.r2.docd.a core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g8_put]? [me]? [the|this|my|that|our|a|an]? [chart|graph|plot|diagram]? [data|numbers|values|table|figures|data_table|chart_data|chart_values|values_table|data_values|stats|results|rows|counts|amounts|entries|items|labels|content|contents|info|information|details|records] [$data.charts.g26_in] [the|this|my|that|our|a]? [$data.charts.g4_document] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.toDocumentData"
+    kind=request
+    priority=34
+    needsState=charts
+    example="Drop the data table in the doc."
+
+@pat.data.charts.r2.opt.a core.pattern
+    canonical="What chart types can I use."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|which|whats|what_are|which_are|what_is|which_is|list|show_me|tell_me|name|give_me|any|how_many] [kinds_of|types_of|sorts_of|kind_of|type_of|sort_of|different|other|available|possible|all_the|all|the|more|some]? [chart_types|graph_types|chart_styles|graph_styles|chart_kinds|graph_kinds|charts|graphs|colours|colors|palettes|themes|chart_options|graph_options] [can|could|may|do|does|are|is|will|would|should]? [i|we|you|u|there|available|possible|supported|offered|allowed]? [use|make|draw|have|pick|choose|try|do|get|see|show|plot|build|create|select|apply|available|possible|supported|offered|allowed|there]? [for|in|with|on|as|from]? [the|this|my|a|an|our]? [chart|graph|plot|diagram|charts|graphs|them|it]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.options"
+    kind=request
+    priority=33
+    needsState=charts
+    example="What chart types can I use."
+
+@pat.data.charts.r2.opt.b core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|whats|what_are|what_is|how_many] [can_you|could_you|can_i|could_i|can_we|do_you|do_i|do_we|will_you|would_you|should_i|may_i|are_you_able_to|am_i_able_to] [do|make|draw|show|plot|chart|graph|build|create|offer|support|handle|know|try] [with|for|in|about|using|from|to]? [charts|graphs|plots|diagrams|a_chart|a_graph|a_plot|a_diagram|the_chart|the_graph|this_chart|this_graph|my_chart|my_graph] [$lang.tail.filler|here|there]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.options"
+    kind=request
+    priority=33
+    needsState=charts
+    example="What can you do with charts."
+
+@pat.data.charts.r2.opt.c core.pattern
+    canonical="List the chart types."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [show|list|tell|give|name|say] [me|us]? [the|all_the|all|my|our]? [chart_types|graph_types|chart_styles|chart_kinds|types_of_charts|kinds_of_charts|types_of_graphs|kinds_of_graphs|colour_options|color_options|palettes|palette_names|chart_options|graph_options|options|choices|chart_help|graph_help] [i_can_use|i_can_pick|i_can_choose|you_have|you_know|you_support|available]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.options"
+    kind=request
+    priority=33
+    needsState=charts
+    example="List the chart types."
+
+@pat.data.charts.r2.pct.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? how_much [of_it|of_the_total|of_the_chart|of_the_pie|of_the_whole|of_everything|of_this|of_that|of_them|of_all] [is|are|do|does|goes_to|belongs_to]? [the]? {l:words(3)} [in|as|by]? [percent|percentage|pct]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=14
+    needsState=charts
+    example="How much of it is apples in %."
+
+@pat.data.charts.r2.pct.e core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|which]? [percent|percentage|pct|per_cent] [is|are]? [the]? {l:words(3)} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    kind=request
+    priority=14
+    needsState=charts
+    example="What percentage are apples."
+
+@pat.data.charts.r2.refresh.c core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the|this|my|that]? {c:lex.data.charts.nouns} [needs|needs_an|needs_a|need|needs_to_be|has_to_be|should_be|must_be|wants|want|is_old|is_out_of_date|is_outdated|is_stale|is_wrong|looks_old] [an|a|the]? [update|updating|refresh|refreshed|redraw|redrawn|reload|reloaded|rebuild|rebuilt|recount|recounted|updated|redone|fresh|new_numbers|new_data]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.refresh"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Chart needs an update."
+
+@pat.data.charts.r2.refresh.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [re-draw|re-do|re-build|re-count|re-load|re-make|re-fresh|re-calculate|re-generate] [the|this|my|that]? {c:lex.data.charts.nouns?} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.refresh"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Re-draw the chart."
+
+@pat.data.charts.r2.legs.e core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [make|create|chart|graph|plot|compare|show|draw|visualize|display|build]? [me]? [a|an|the]? {w:words(6)} legs [as|in|on|into|to]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
+    kind=request
+    priority=35
+    example="Spiders and cows legs chart."
+
+@pat.data.charts.r2.legs.c2 core.pattern
+    canonical="Make a legs chart for spiders and cows."
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [make|create|draw|build|show|give|prepare|display]? [me]? [a|an|the]? [$data.charts.g54_animal]? legs {c:lex.data.charts.nouns} [of|for|about|with|from|:]? {w:words(8)}"
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\""
+    kind=request
+    priority=35
+    example="Make a legs chart for spiders and cows."
+
+@pat.data.charts.r2.copy.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [copy|grab|take|get|duplicate|clone] [the|this|my|that|all_the|all|our]? [chart|graph|plot|diagram]? [data|numbers|values|table|figures|results|chart_data|stats|rows|counts|amounts|entries|items|labels] [from|of|in|out_of|off] [the|this|my|that|it|our] [chart|graph|plot|diagram] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.copyData"
+    kind=request
+    priority=33
+    needsState=charts
+    example="Copy the data from the chart."
+
+@pat.data.charts.r2.hold.item core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g42_make]? [me|us]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|from|about|showing|on|with|using]? [the]? {item:lex.kids.arith.items} [that|which]? {who:lex.data.charts.everyone} [$data.charts.g13_has]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"everyone\" arg.item={item} arg.type={t}"
+    kind=request
+    priority=35
+    example="Graph the apples everyone has."
+
+@pat.data.charts.r2.ext.win core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [which_1_wins|who_wins|which_wins|what_wins|who_is_winning|who_is_ahead|who_is_leading|who_is_the_winner|who_is_on_top|which_is_winning|which_is_ahead|which_1_is_ahead|which_1_is_winning|who_is_first|which_is_first|which_1_is_first|who_comes_first|which_comes_first|whos_winning|whos_ahead|who_wins_overall|which_wins_overall] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.extreme arg.w=biggest"
+    kind=request
+    priority=26
+    needsState=charts
+    example="Which one wins."
+
+@pat.data.charts.r2.tot.f core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|whats|what_is|and_what_is|so_what_is] [is|are]? [it|they|everything|all_of_it|that|all_of_them]? [all]? [together|altogether|all_together|in_total|in_all|combined|all_in_all] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.total"
+    kind=request
+    priority=28
+    needsState=charts
+    example="So what is it all together."
+
+@pat.data.charts.r2.val.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? [values|numbers|figures|amounts|counts|labels|data_labels|value_labels|number_labels] [off|away|gone|hidden|out|no_more|not_needed|not_wanted|should_go|can_go|must_go|should_be_off|should_be_hidden|should_be_gone] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=off"
+    kind=request
+    priority=32
+    needsState=charts
+    example="Numbers off."
+
+@pat.data.charts.r2.opt.d core.pattern
+    match="[$lang.lead.polite|$data.charts.g1_hey]? [what|which|whats|what_are|which_are] [other]? [options|choices|settings|features|commands|things|possibilities|abilities|functions|tools] [are|do|can|have|is|exist|else]? [there|available|i_have|you_have|you_got|i_got|exist|do_you_have|can_i_choose|can_i_pick|can_i_use|can_i_set|can_i_change|can_i_do|are_available|are_there|do_i_have|here|for_charts|for_graphs|with_charts|with_graphs|for_the_chart|for_the_graph|on_offer]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    emit="@{_} core.request action=chart.options"
+    kind=request
+    priority=29
+    needsState=charts
+    example="What options are there."
