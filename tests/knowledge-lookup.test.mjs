@@ -94,9 +94,9 @@ test('dialog with a catalog: the frame decides, the hit supplies the words', asy
 test('drawing: a thing of the catalog is drawn from its parts; no hit is the plain refusal', async () => {
   engine.setKnowledge(createFacts({ source }));
   try {
-    let r = await send('draw a comet', 'art.draw');
+    let r = await send('draw a comet', 'draw');
     assert.match(r.text, /I drew a (?:white )?comet/);
-    r = await send('draw a blorp', 'art.draw');
+    r = await send('draw a blorp', 'draw');
     assert.equal(r.text, "I don't know how to draw a blorp yet.");
   } finally { engine.setKnowledge(null); }
 });
@@ -107,7 +107,7 @@ test('delete / move / connect with a catalog hit: the plain refusal, never a glo
     'k.words/shards/dr.sop': ['@k.words.dragon.noun.1 k.words.sense word=dragon pos=noun n=1 gloss="a creature of Teutonic mythology" core.source="t"', '@k.words.end.noun.1 k.words.sense word=end pos=noun n=1 gloss="the point where something ends" core.source="t"'].join('\n') };
   engine.setKnowledge(createFacts({ source: { text: async (p) => files[p] ?? null } }));
   try {
-    for (const [msg, tab, plain] of [['delete the dragon', 'art.draw', /^I can't find .dragon. in the picture/], ['move the dragon to the left', 'art.draw', /dragon/], ['color the dragon red', 'art.draw', /dragon/]]) {
+    for (const [msg, tab, plain] of [['delete the dragon', 'draw', /^I can't find .dragon. in the picture/], ['move the dragon to the left', 'draw', /dragon/], ['color the dragon red', 'draw', /dragon/]]) {
       const r = await send(msg, tab);
       assert.doesNotMatch(r.text, /Teutonic|mythology|I know what/, msg);
       assert.match(r.text, plain, msg);
