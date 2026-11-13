@@ -1,0 +1,979 @@
+@describe.setpart core.describe
+    op=avatar.setPart
+    intent=command
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=ind
+    frames=can
+
+@describe.setpart.v core.describe.arg
+    of=$describe.setpart
+    name=v
+    class=lex.ui.avatar.options
+
+@describe.setpart.n core.describe.arg
+    of=$describe.setpart
+    name=n
+    class=number
+    optional=true
+
+@describe.setpart.p core.describe.arg
+    of=$describe.setpart
+    name=p
+    class=lex.ui.avatar.parts
+    optional=true
+
+@describe.setpart.en core.describe.words
+    of=$describe.setpart
+    lang=en
+    verb=$w.en.give.avatar.setPart
+    verb=$w.en.use.avatar.setPart
+    verb=$w.en.wear.avatar.setPart
+    verb=$w.en.add.avatar.setPart
+    verb=$w.en.try.avatar.setPart
+    verb=$w.en.get.avatar.setPart
+    verb=$w.en.choose.avatar.setPart
+    verb=$w.en.pick.avatar.setPart
+    prep.v=$w.en.yourself.avatar.setPart.v
+    det.v=$w.en.a.avatar.setPart.v
+    det.v=$w.en.an.avatar.setPart.v
+    det.v=$w.en.the.avatar.setPart.v
+    det.v=$w.en.your.avatar.setPart.v
+    det.v=$w.en.some.avatar.setPart.v
+    det.v=$w.en.new.avatar.setPart.v
+    prep.p=$w.en.on.avatar.setPart.p
+    prep.p=$w.en.in.avatar.setPart.p
+    det.p=$w.en.your.avatar.setPart.p
+    det.p=$w.en.the.avatar.setPart.p
+    det.p=$w.en.ur.avatar.setPart.p
+
+@describe.resize.grow core.describe
+    op=avatar.resizePart
+    intent=command
+    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir=bigger"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.resize.grow.p core.describe.arg
+    of=$describe.resize.grow
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.resize.grow.en core.describe.words
+    of=$describe.resize.grow
+    lang=en
+    verb=$w.en.enlarge.avatar.resizePart
+    verb=$w.en.widen.avatar.resizePart
+    verb=$w.en.grow.avatar.resizePart
+    verb=$w.en.expand.avatar.resizePart
+    verb=$w.en.increase.avatar.resizePart
+    verb=$w.en.upsize.avatar.resizePart
+    det.p=$w.en.your.avatar.resizePart.p
+    det.p=$w.en.the.avatar.resizePart.p
+    det.p=$w.en.ur.avatar.resizePart.p
+
+@describe.resize.shrink core.describe
+    op=avatar.resizePart
+    intent=command
+    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir=smaller"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.resize.shrink.p core.describe.arg
+    of=$describe.resize.shrink
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.resize.shrink.en core.describe.words
+    of=$describe.resize.shrink
+    lang=en
+    verb=$w.en.shrink.avatar.resizePart
+    verb=$w.en.narrow.avatar.resizePart
+    verb=$w.en.reduce.avatar.resizePart
+    verb=$w.en.decrease.avatar.resizePart
+    verb=$w.en.downsize.avatar.resizePart
+    det.p=$w.en.your.avatar.resizePart.p
+    det.p=$w.en.the.avatar.resizePart.p
+    det.p=$w.en.ur.avatar.resizePart.p
+
+@describe.resize.size core.describe
+    op=avatar.resizePart
+    intent=command
+    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir={s}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.resize.size.s core.describe.arg
+    of=$describe.resize.size
+    name=s
+    class=lex.ui.avatar.size
+
+@describe.resize.size.p core.describe.arg
+    of=$describe.resize.size
+    name=p
+    class=lex.ui.avatar.parts
+    optional=true
+
+@describe.resize.size.en core.describe.words
+    of=$describe.resize.size
+    lang=en
+    verb=$w.en.make.avatar.resizePart
+    verb=$w.en.get.avatar.resizePart
+    prep.s=$w.en.yourself.avatar.resizePart.s
+    det.p=$w.en.your.avatar.resizePart.p
+    det.p=$w.en.the.avatar.resizePart.p
+    det.p=$w.en.ur.avatar.resizePart.p
+
+@describe.step.next core.describe
+    op=avatar.step
+    intent=command
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=next"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.step.next.p core.describe.arg
+    of=$describe.step.next
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.step.next.en core.describe.words
+    of=$describe.step.next
+    lang=en
+    verb=$w.en.show.avatar.step
+    verb=$w.en.give.avatar.step
+    verb=$w.en.try.avatar.step
+    verb=$w.en.switch.avatar.step
+    verb=$w.en.go.avatar.step
+    det.p=$w.en.next.avatar.step.p
+    det.p=$w.en.the.avatar.step.p
+
+@describe.step.previous core.describe
+    op=avatar.step
+    intent=command
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.step.previous.p core.describe.arg
+    of=$describe.step.previous
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.step.previous.en core.describe.words
+    of=$describe.step.previous
+    lang=en
+    verb=$w.en.show.avatar.step
+    verb=$w.en.give.avatar.step
+    verb=$w.en.try.avatar.step
+    verb=$w.en.switch.avatar.step
+    verb=$w.en.go.avatar.step
+    det.p=$w.en.previous.avatar.step.p
+    det.p=$w.en.last.avatar.step.p
+
+@describe.step.different core.describe
+    op=avatar.step
+    intent=command
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=different"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.step.different.p core.describe.arg
+    of=$describe.step.different
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.step.different.en core.describe.words
+    of=$describe.step.different
+    lang=en
+    verb=$w.en.show.avatar.step
+    verb=$w.en.give.avatar.step
+    verb=$w.en.try.avatar.step
+    verb=$w.en.get.avatar.step
+    det.p=$w.en.different.avatar.step.p
+    det.p=$w.en.another.avatar.step.p
+    det.p=$w.en.other.avatar.step.p
+
+@describe.setcolor.part core.describe
+    op=avatar.setColor
+    intent=command
+    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setcolor.part.p core.describe.arg
+    of=$describe.setcolor.part
+    name=p
+    class=lex.ui.avatar.colorparts
+
+@describe.setcolor.part.c core.describe.arg
+    of=$describe.setcolor.part
+    name=c
+    class=lex.ui.avatar.colors
+
+@describe.setcolor.part.en core.describe.words
+    of=$describe.setcolor.part
+    lang=en
+    verb=$w.en.make.avatar.setColor
+    verb=$w.en.paint.avatar.setColor
+    verb=$w.en.color.avatar.setColor
+    verb=$w.en.colour.avatar.setColor
+    verb=$w.en.turn.avatar.setColor
+    verb=$w.en.set.avatar.setColor
+    det.p=$w.en.your.avatar.setColor.p
+    det.p=$w.en.the.avatar.setColor.p
+    det.p=$w.en.ur.avatar.setColor.p
+    prep.c=$w.en.to.avatar.setColor.c
+    prep.c=$w.en.be.avatar.setColor.c
+
+@describe.setcolor.main core.describe
+    op=avatar.setColor
+    intent=command
+    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setcolor.main.c core.describe.arg
+    of=$describe.setcolor.main
+    name=c
+    class=lex.ui.avatar.colors
+
+@describe.setcolor.main.en core.describe.words
+    of=$describe.setcolor.main
+    lang=en
+    verb=$w.en.paint.avatar.setColor
+    verb=$w.en.color.avatar.setColor
+    verb=$w.en.colour.avatar.setColor
+    verb=$w.en.dye.avatar.setColor
+    verb=$w.en.turn.avatar.setColor
+    verb=$w.en.go.avatar.setColor
+    verb=$w.en.become.avatar.setColor
+    verb=$w.en.be.avatar.setColor
+    prep.c=$w.en.yourself.avatar.setColor.c
+
+@describe.shiftcolor core.describe
+    op=avatar.shiftColor
+    intent=command
+    emit="@{_} core.request action=avatar.shiftColor arg.part={p} arg.dir={t}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.shiftcolor.p core.describe.arg
+    of=$describe.shiftcolor
+    name=p
+    class=lex.ui.avatar.colorparts
+
+@describe.shiftcolor.t core.describe.arg
+    of=$describe.shiftcolor
+    name=t
+    class=lex.ui.avatar.tone
+
+@describe.shiftcolor.en core.describe.words
+    of=$describe.shiftcolor
+    lang=en
+    verb=$w.en.make.avatar.shiftColor
+    verb=$w.en.turn.avatar.shiftColor
+    verb=$w.en.change.avatar.shiftColor
+    det.p=$w.en.your.avatar.shiftColor.p
+    det.p=$w.en.the.avatar.shiftColor.p
+    det.p=$w.en.ur.avatar.shiftColor.p
+    prep.t=$w.en.be.avatar.shiftColor.t
+    det.t=$w.en.bit.avatar.shiftColor.t
+
+@describe.askcolor core.describe
+    op=avatar.askColor
+    intent=query
+    emit="@{_} core.request action=avatar.askColor arg.part={p}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+
+@describe.askcolor.p core.describe.arg
+    of=$describe.askcolor
+    name=p
+    class=lex.ui.avatar.colorparts
+
+@describe.askcolor.en core.describe.words
+    of=$describe.askcolor
+    lang=en
+    tverb=$w.en.are.avatar.askColor
+    tverb=$w.en.is.avatar.askColor
+    noun=$w.en.color.avatar.askColor
+    noun=$w.en.colour.avatar.askColor
+    ask=$w.en.what.avatar.askColor
+    prep.p=$w.en.of.avatar.askColor.p
+    det.p=$w.en.your.avatar.askColor.p
+    det.p=$w.en.the.avatar.askColor.p
+    det.p=$w.en.ur.avatar.askColor.p
+
+@describe.listcolors core.describe
+    op=avatar.listColors
+    intent=query
+    emit="@{_} core.request action=avatar.listColors arg.part={p}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+    frames=tell
+
+@describe.listcolors.p core.describe.arg
+    of=$describe.listcolors
+    name=p
+    class=lex.ui.avatar.colorparts
+    optional=true
+
+@describe.listcolors.en core.describe.words
+    of=$describe.listcolors
+    lang=en
+    noun=$w.en.colors.avatar.listColors
+    noun=$w.en.colours.avatar.listColors
+    prep.p=$w.en.of.avatar.listColors.p
+    prep.p=$w.en.for.avatar.listColors.p
+    det.p=$w.en.your.avatar.listColors.p
+    det.p=$w.en.the.avatar.listColors.p
+    det.p=$w.en.ur.avatar.listColors.p
+
+@describe.setchar core.describe
+    op=avatar.setCharacter
+    intent=command
+    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setchar.who core.describe.arg
+    of=$describe.setchar
+    name=who
+    class=lex.ui.avatar.characters
+    slot=ui.avatar.character.active
+
+@describe.setchar.en core.describe.words
+    of=$describe.setchar
+    lang=en
+    verb=$w.en.become.avatar.setCharacter
+    verb=$w.en.be.avatar.setCharacter
+    verb=$w.en.turn.avatar.setCharacter
+    verb=$w.en.change.avatar.setCharacter
+    verb=$w.en.switch.avatar.setCharacter
+    verb=$w.en.transform.avatar.setCharacter
+    verb=$w.en.make.avatar.setCharacter
+    verb=$w.en.show.avatar.setCharacter
+    verb=$w.en.give.avatar.setCharacter
+    verb=$w.en.use.avatar.setCharacter
+    rest=$w.en.avatar.avatar.setCharacter
+    rest=$w.en.face.avatar.setCharacter
+    rest=$w.en.character.avatar.setCharacter
+    prep.who=$w.en.into.avatar.setCharacter.who
+    prep.who=$w.en.to.avatar.setCharacter.who
+    prep.who=$w.en.yourself.avatar.setCharacter.who
+    prep.who=$w.en.me.avatar.setCharacter.who
+    det.who=$w.en.a.avatar.setCharacter.who
+    det.who=$w.en.an.avatar.setCharacter.who
+    det.who=$w.en.the.avatar.setCharacter.who
+
+@describe.askchar core.describe
+    op=avatar.askCharacter
+    intent=query
+    emit="@{_} core.request action=avatar.askCharacter"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.askchar.en core.describe.words
+    of=$describe.askchar
+    lang=en
+    noun=$w.en.character.avatar.askCharacter
+    noun=$w.en.avatar.avatar.askCharacter
+    ask=$w.en.which.avatar.askCharacter
+    ask=$w.en.what.avatar.askCharacter
+
+@describe.listchars core.describe
+    op=avatar.listCharacters
+    intent=query
+    emit="@{_} core.request action=avatar.listCharacters"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+    frames=tell
+
+@describe.listchars.en core.describe.words
+    of=$describe.listchars
+    lang=en
+    noun=$w.en.characters.avatar.listCharacters
+    noun=$w.en.avatars.avatar.listCharacters
+    noun=$w.en.forms.avatar.listCharacters
+
+@describe.setmood core.describe
+    op=avatar.setMood
+    intent=command
+    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setmood.m core.describe.arg
+    of=$describe.setmood
+    name=m
+    class=lex.ui.avatar.moods
+
+@describe.setmood.en core.describe.words
+    of=$describe.setmood
+    lang=en
+    verb=$w.en.look.avatar.setMood
+    verb=$w.en.be.avatar.setMood
+    verb=$w.en.feel.avatar.setMood
+    verb=$w.en.seem.avatar.setMood
+    verb=$w.en.act.avatar.setMood
+    verb=$w.en.appear.avatar.setMood
+    verb=$w.en.get.avatar.setMood
+    verb=$w.en.become.avatar.setMood
+    prep.m=$w.en.yourself.avatar.setMood.m
+    det.m=$w.en.a.avatar.setMood.m
+    det.m=$w.en.very.avatar.setMood.m
+    det.m=$w.en.so.avatar.setMood.m
+    det.m=$w.en.really.avatar.setMood.m
+
+@describe.checkmood core.describe
+    op=avatar.checkMood
+    intent=query
+    emit="@{_} core.request action=avatar.checkMood arg.mood={m}"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.checkmood.m core.describe.arg
+    of=$describe.checkmood
+    name=m
+    class=lex.ui.avatar.moods
+
+@describe.checkmood.en core.describe.words
+    of=$describe.checkmood
+    lang=en
+    ask=$w.en.are.avatar.checkMood
+    ask=$w.en.do.avatar.checkMood
+    ask=$w.en.is.avatar.checkMood
+
+@describe.askmood core.describe
+    op=avatar.askMood
+    intent=query
+    emit="@{_} core.request action=avatar.askMood"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+
+@describe.askmood.en core.describe.words
+    of=$describe.askmood
+    lang=en
+    tverb=$w.en.feel.avatar.askMood
+    tverb=$w.en.feeling.avatar.askMood
+    noun=$w.en.mood.avatar.askMood
+    noun=$w.en.feeling.avatar.askMood
+    noun=$w.en.expression.avatar.askMood
+    ask=$w.en.how.avatar.askMood
+
+@describe.askname core.describe
+    op=avatar.askName
+    intent=query
+    emit="@{_} core.request action=avatar.askName"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+
+@describe.askname.en core.describe.words
+    of=$describe.askname
+    lang=en
+    noun=$w.en.name.avatar.askName
+    ask=$w.en.what.avatar.askName
+
+@describe.askseed core.describe
+    op=avatar.askSeed
+    intent=query
+    emit="@{_} core.request action=avatar.askSeed"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+
+@describe.askseed.en core.describe.words
+    of=$describe.askseed
+    lang=en
+    noun=$w.en.seed.avatar.askSeed
+    ask=$w.en.what.avatar.askSeed
+
+@describe.surprise core.describe
+    op=avatar.surprise
+    intent=command
+    emit="@{_} core.request action=avatar.surprise arg.mode=surprise"
+    priority=12
+    frames=phr
+    frames=imp
+
+@describe.surprise.en core.describe.words
+    of=$describe.surprise
+    lang=en
+    phrase=$phrase.lang.intent.surpriseme
+    verb=$w.en.randomize.avatar.surprise
+    verb=$w.en.randomise.avatar.surprise
+    verb=$w.en.shuffle.avatar.surprise
+    verb=$w.en.roll.avatar.surprise
+    verb=$w.en.reroll.avatar.surprise
+    noun=$w.en.look.avatar.surprise
+    noun=$w.en.dice.avatar.surprise
+    noun=$w.en.avatar.avatar.surprise
+
+@describe.everything core.describe
+    op=avatar.surprise
+    intent=command
+    emit="@{_} core.request action=avatar.surprise arg.mode=everything"
+    priority=12
+    frames=imp
+
+@describe.everything.en core.describe.words
+    of=$describe.everything
+    lang=en
+    verb=$w.en.change.avatar.surprise
+    verb=$w.en.swap.avatar.surprise
+    verb=$w.en.shuffle.avatar.surprise
+    verb=$w.en.redo.avatar.surprise
+    verb=$w.en.redesign.avatar.surprise
+    noun=$w.en.everything.avatar.surprise
+
+@describe.reset core.describe
+    op=avatar.reset
+    intent=command
+    emit="@{_} core.request action=avatar.reset"
+    priority=12
+    frames=phr
+    frames=imp
+
+@describe.reset.en core.describe.words
+    of=$describe.reset
+    lang=en
+    phrase=$phrase.lang.intent.startover
+    verb=$w.en.reset.avatar.reset
+    verb=$w.en.restart.avatar.reset
+    noun=$w.en.yourself.avatar.reset
+    noun=$w.en.face.avatar.reset
+    noun=$w.en.avatar.avatar.reset
+
+@describe.resetpart core.describe
+    op=avatar.resetPart
+    intent=command
+    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
+    priority=13
+    frames=imp
+    frames=can
+
+@describe.resetpart.p core.describe.arg
+    of=$describe.resetpart
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.resetpart.en core.describe.words
+    of=$describe.resetpart
+    lang=en
+    verb=$w.en.reset.avatar.resetPart
+    verb=$w.en.restore.avatar.resetPart
+    det.p=$w.en.the.avatar.resetPart.p
+    det.p=$w.en.your.avatar.resetPart.p
+    det.p=$w.en.ur.avatar.resetPart.p
+    unit.p=$w.en.default.avatar.resetPart.p
+    unit.p=$w.en.normal.avatar.resetPart.p
+
+@describe.removepart core.describe
+    op=avatar.removePart
+    intent=command
+    emit="@{_} core.request action=avatar.removePart arg.part={p}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.removepart.p core.describe.arg
+    of=$describe.removepart
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.removepart.en core.describe.words
+    of=$describe.removepart
+    lang=en
+    verb=$w.en.remove.avatar.removePart
+    verb=$w.en.drop.avatar.removePart
+    verb=$w.en.lose.avatar.removePart
+    verb=$w.en.delete.avatar.removePart
+    verb=$w.en.hide.avatar.removePart
+    det.p=$w.en.your.avatar.removePart.p
+    det.p=$w.en.the.avatar.removePart.p
+    det.p=$w.en.ur.avatar.removePart.p
+
+@describe.removeall core.describe
+    op=avatar.removeAll
+    intent=command
+    emit="@{_} core.request action=avatar.removeAll"
+    priority=12
+    frames=imp
+
+@describe.removeall.en core.describe.words
+    of=$describe.removeall
+    lang=en
+    verb=$w.en.remove.avatar.removeAll
+    verb=$w.en.drop.avatar.removeAll
+    noun=$w.en.everything.avatar.removeAll
+    noun=$w.en.accessories.avatar.removeAll
+
+@describe.animate core.describe
+    op=avatar.animate
+    intent=command
+    emit="@{_} core.request action=avatar.animate arg.anim={a}"
+    priority=12
+    frames=imp
+    frames=can
+
+@describe.animate.a core.describe.arg
+    of=$describe.animate
+    name=a
+    class=lex.ui.avatar.anims
+
+@describe.animate.en core.describe.words
+    of=$describe.animate
+    lang=en
+    verb=$w.en.do.avatar.animate
+    verb=$w.en.give.avatar.animate
+    verb=$w.en.make.avatar.animate
+    verb=$w.en.show.avatar.animate
+    verb=$w.en.perform.avatar.animate
+    prep.a=$w.en.me.avatar.animate.a
+    det.a=$w.en.a.avatar.animate.a
+
+@describe.askparts core.describe
+    op=avatar.askParts
+    intent=query
+    emit="@{_} core.request action=avatar.askParts"
+    priority=12
+    kind=question
+    frames=phr
+    frames=qnoun
+
+@describe.askparts.en core.describe.words
+    of=$describe.askparts
+    lang=en
+    phrase=$phrase.lang.intent.whatcanichange
+    noun=$w.en.parts.avatar.askParts
+
+@describe.listoptions core.describe
+    op=avatar.listOptions
+    intent=query
+    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+    frames=bare
+
+@describe.listoptions.p core.describe.arg
+    of=$describe.listoptions
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.listoptions.en core.describe.words
+    of=$describe.listoptions
+    lang=en
+    noun=$w.en.options.avatar.listOptions
+    noun=$w.en.choices.avatar.listOptions
+    noun=$w.en.styles.avatar.listOptions
+    noun=$w.en.variants.avatar.listOptions
+    prep.p=$w.en.for.avatar.listOptions.p
+    prep.p=$w.en.of.avatar.listOptions.p
+    det.p=$w.en.your.avatar.listOptions.p
+    det.p=$w.en.the.avatar.listOptions.p
+    det.p=$w.en.ur.avatar.listOptions.p
+
+@describe.askpart core.describe
+    op=avatar.askPart
+    intent=query
+    emit="@{_} core.request action=avatar.askPart arg.part={p}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+
+@describe.askpart.p core.describe.arg
+    of=$describe.askpart
+    name=p
+    class=lex.ui.avatar.parts
+
+@describe.askpart.en core.describe.words
+    of=$describe.askpart
+    lang=en
+    tverb=$w.en.have.avatar.askPart
+    tverb=$w.en.are.avatar.askPart
+    noun=$w.en.kind.avatar.askPart
+    noun=$w.en.type.avatar.askPart
+    noun=$w.en.style.avatar.askPart
+    ask=$w.en.what.avatar.askPart
+    ask=$w.en.which.avatar.askPart
+    det.p=$w.en.your.avatar.askPart.p
+    det.p=$w.en.the.avatar.askPart.p
+    det.p=$w.en.ur.avatar.askPart.p
+
+@describe.describe core.describe
+    op=avatar.describe
+    intent=query
+    emit="@{_} core.request action=avatar.describe"
+    priority=12
+    kind=question
+    frames=phr
+    frames=imp
+
+@describe.describe.en core.describe.words
+    of=$describe.describe
+    lang=en
+    phrase=$phrase.lang.intent.describeyourself
+    verb=$w.en.describe.avatar.describe
+    noun=$w.en.yourself.avatar.describe
+
+@describe.undo core.describe
+    op=avatar.undo
+    intent=command
+    emit="@{_} core.request action=avatar.undo"
+    priority=12
+    frames=phr
+
+@describe.undo.en core.describe.words
+    of=$describe.undo
+    lang=en
+    phrase=$phrase.lang.intent.undo
+
+@w.en.give.avatar.setPart core.word text=give means=avatar.setPart
+@w.en.use.avatar.setPart core.word text=use means=avatar.setPart
+@w.en.wear.avatar.setPart core.word text=wear means=avatar.setPart
+@w.en.add.avatar.setPart core.word text=add means=avatar.setPart
+@w.en.try.avatar.setPart core.word text=try means=avatar.setPart
+@w.en.get.avatar.setPart core.word text=get means=avatar.setPart
+@w.en.choose.avatar.setPart core.word text=choose means=avatar.setPart
+@w.en.pick.avatar.setPart core.word text=pick means=avatar.setPart
+@w.en.yourself.avatar.setPart.v core.word text=yourself means=avatar.setPart.v
+@w.en.a.avatar.setPart.v core.word text=a means=avatar.setPart.v
+@w.en.an.avatar.setPart.v core.word text=an means=avatar.setPart.v
+@w.en.the.avatar.setPart.v core.word text=the means=avatar.setPart.v
+@w.en.your.avatar.setPart.v core.word text=your means=avatar.setPart.v
+@w.en.some.avatar.setPart.v core.word text=some means=avatar.setPart.v
+@w.en.new.avatar.setPart.v core.word text=new means=avatar.setPart.v
+@w.en.on.avatar.setPart.p core.word text=on means=avatar.setPart.p
+@w.en.in.avatar.setPart.p core.word text=in means=avatar.setPart.p
+@w.en.your.avatar.setPart.p core.word text=your means=avatar.setPart.p
+@w.en.the.avatar.setPart.p core.word text=the means=avatar.setPart.p
+@w.en.ur.avatar.setPart.p core.word text=ur means=avatar.setPart.p
+@w.en.enlarge.avatar.resizePart core.word text=enlarge means=avatar.resizePart
+@w.en.widen.avatar.resizePart core.word text=widen means=avatar.resizePart
+@w.en.grow.avatar.resizePart core.word text=grow means=avatar.resizePart
+@w.en.expand.avatar.resizePart core.word text=expand means=avatar.resizePart
+@w.en.increase.avatar.resizePart core.word text=increase means=avatar.resizePart
+@w.en.upsize.avatar.resizePart core.word text=upsize means=avatar.resizePart
+@w.en.your.avatar.resizePart.p core.word text=your means=avatar.resizePart.p
+@w.en.the.avatar.resizePart.p core.word text=the means=avatar.resizePart.p
+@w.en.ur.avatar.resizePart.p core.word text=ur means=avatar.resizePart.p
+@w.en.shrink.avatar.resizePart core.word text=shrink means=avatar.resizePart
+@w.en.narrow.avatar.resizePart core.word text=narrow means=avatar.resizePart
+@w.en.reduce.avatar.resizePart core.word text=reduce means=avatar.resizePart
+@w.en.decrease.avatar.resizePart core.word text=decrease means=avatar.resizePart
+@w.en.downsize.avatar.resizePart core.word text=downsize means=avatar.resizePart
+@w.en.make.avatar.resizePart core.word text=make means=avatar.resizePart
+@w.en.get.avatar.resizePart core.word text=get means=avatar.resizePart
+@w.en.yourself.avatar.resizePart.s core.word text=yourself means=avatar.resizePart.s
+@w.en.show.avatar.step core.word text=show means=avatar.step
+@w.en.give.avatar.step core.word text=give means=avatar.step
+@w.en.try.avatar.step core.word text=try means=avatar.step
+@w.en.switch.avatar.step core.word text=switch means=avatar.step
+@w.en.go.avatar.step core.word text=go means=avatar.step
+@w.en.next.avatar.step.p core.word text=next means=avatar.step.p
+@w.en.the.avatar.step.p core.word text=the means=avatar.step.p
+@w.en.previous.avatar.step.p core.word text=previous means=avatar.step.p
+@w.en.last.avatar.step.p core.word text=last means=avatar.step.p
+@w.en.get.avatar.step core.word text=get means=avatar.step
+@w.en.different.avatar.step.p core.word text=different means=avatar.step.p
+@w.en.another.avatar.step.p core.word text=another means=avatar.step.p
+@w.en.other.avatar.step.p core.word text=other means=avatar.step.p
+@w.en.make.avatar.setColor core.word text=make means=avatar.setColor
+@w.en.paint.avatar.setColor core.word text=paint means=avatar.setColor
+@w.en.color.avatar.setColor core.word text=color means=avatar.setColor
+@w.en.colour.avatar.setColor core.word text=colour means=avatar.setColor
+@w.en.turn.avatar.setColor core.word text=turn means=avatar.setColor
+@w.en.set.avatar.setColor core.word text=set means=avatar.setColor
+@w.en.your.avatar.setColor.p core.word text=your means=avatar.setColor.p
+@w.en.the.avatar.setColor.p core.word text=the means=avatar.setColor.p
+@w.en.ur.avatar.setColor.p core.word text=ur means=avatar.setColor.p
+@w.en.to.avatar.setColor.c core.word text=to means=avatar.setColor.c
+@w.en.be.avatar.setColor.c core.word text=be means=avatar.setColor.c
+@w.en.dye.avatar.setColor core.word text=dye means=avatar.setColor
+@w.en.go.avatar.setColor core.word text=go means=avatar.setColor
+@w.en.become.avatar.setColor core.word text=become means=avatar.setColor
+@w.en.be.avatar.setColor core.word text=be means=avatar.setColor
+@w.en.yourself.avatar.setColor.c core.word text=yourself means=avatar.setColor.c
+@w.en.make.avatar.shiftColor core.word text=make means=avatar.shiftColor
+@w.en.turn.avatar.shiftColor core.word text=turn means=avatar.shiftColor
+@w.en.change.avatar.shiftColor core.word text=change means=avatar.shiftColor
+@w.en.your.avatar.shiftColor.p core.word text=your means=avatar.shiftColor.p
+@w.en.the.avatar.shiftColor.p core.word text=the means=avatar.shiftColor.p
+@w.en.ur.avatar.shiftColor.p core.word text=ur means=avatar.shiftColor.p
+@w.en.be.avatar.shiftColor.t core.word text=be means=avatar.shiftColor.t
+@w.en.bit.avatar.shiftColor.t core.word text=bit means=avatar.shiftColor.t
+@w.en.are.avatar.askColor core.word text=are means=avatar.askColor
+@w.en.is.avatar.askColor core.word text=is means=avatar.askColor
+@w.en.color.avatar.askColor core.word text=color means=avatar.askColor
+@w.en.colour.avatar.askColor core.word text=colour means=avatar.askColor
+@w.en.what.avatar.askColor core.word text=what means=avatar.askColor
+@w.en.of.avatar.askColor.p core.word text=of means=avatar.askColor.p
+@w.en.your.avatar.askColor.p core.word text=your means=avatar.askColor.p
+@w.en.the.avatar.askColor.p core.word text=the means=avatar.askColor.p
+@w.en.ur.avatar.askColor.p core.word text=ur means=avatar.askColor.p
+@w.en.colors.avatar.listColors core.word text=colors means=avatar.listColors
+@w.en.colours.avatar.listColors core.word text=colours means=avatar.listColors
+@w.en.of.avatar.listColors.p core.word text=of means=avatar.listColors.p
+@w.en.for.avatar.listColors.p core.word text=for means=avatar.listColors.p
+@w.en.your.avatar.listColors.p core.word text=your means=avatar.listColors.p
+@w.en.the.avatar.listColors.p core.word text=the means=avatar.listColors.p
+@w.en.ur.avatar.listColors.p core.word text=ur means=avatar.listColors.p
+@w.en.become.avatar.setCharacter core.word text=become means=avatar.setCharacter
+@w.en.be.avatar.setCharacter core.word text=be means=avatar.setCharacter
+@w.en.turn.avatar.setCharacter core.word text=turn means=avatar.setCharacter
+@w.en.change.avatar.setCharacter core.word text=change means=avatar.setCharacter
+@w.en.switch.avatar.setCharacter core.word text=switch means=avatar.setCharacter
+@w.en.transform.avatar.setCharacter core.word text=transform means=avatar.setCharacter
+@w.en.make.avatar.setCharacter core.word text=make means=avatar.setCharacter
+@w.en.show.avatar.setCharacter core.word text=show means=avatar.setCharacter
+@w.en.give.avatar.setCharacter core.word text=give means=avatar.setCharacter
+@w.en.use.avatar.setCharacter core.word text=use means=avatar.setCharacter
+@w.en.avatar.avatar.setCharacter core.word text=avatar means=avatar.setCharacter
+@w.en.face.avatar.setCharacter core.word text=face means=avatar.setCharacter
+@w.en.character.avatar.setCharacter core.word text=character means=avatar.setCharacter
+@w.en.into.avatar.setCharacter.who core.word text=into means=avatar.setCharacter.who
+@w.en.to.avatar.setCharacter.who core.word text=to means=avatar.setCharacter.who
+@w.en.yourself.avatar.setCharacter.who core.word text=yourself means=avatar.setCharacter.who
+@w.en.me.avatar.setCharacter.who core.word text=me means=avatar.setCharacter.who
+@w.en.a.avatar.setCharacter.who core.word text=a means=avatar.setCharacter.who
+@w.en.an.avatar.setCharacter.who core.word text=an means=avatar.setCharacter.who
+@w.en.the.avatar.setCharacter.who core.word text=the means=avatar.setCharacter.who
+@w.en.character.avatar.askCharacter core.word text=character means=avatar.askCharacter
+@w.en.avatar.avatar.askCharacter core.word text=avatar means=avatar.askCharacter
+@w.en.which.avatar.askCharacter core.word text=which means=avatar.askCharacter
+@w.en.what.avatar.askCharacter core.word text=what means=avatar.askCharacter
+@w.en.characters.avatar.listCharacters core.word text=characters means=avatar.listCharacters
+@w.en.avatars.avatar.listCharacters core.word text=avatars means=avatar.listCharacters
+@w.en.forms.avatar.listCharacters core.word text=forms means=avatar.listCharacters
+@w.en.look.avatar.setMood core.word text=look means=avatar.setMood
+@w.en.be.avatar.setMood core.word text=be means=avatar.setMood
+@w.en.feel.avatar.setMood core.word text=feel means=avatar.setMood
+@w.en.seem.avatar.setMood core.word text=seem means=avatar.setMood
+@w.en.act.avatar.setMood core.word text=act means=avatar.setMood
+@w.en.appear.avatar.setMood core.word text=appear means=avatar.setMood
+@w.en.get.avatar.setMood core.word text=get means=avatar.setMood
+@w.en.become.avatar.setMood core.word text=become means=avatar.setMood
+@w.en.yourself.avatar.setMood.m core.word text=yourself means=avatar.setMood.m
+@w.en.a.avatar.setMood.m core.word text=a means=avatar.setMood.m
+@w.en.very.avatar.setMood.m core.word text=very means=avatar.setMood.m
+@w.en.so.avatar.setMood.m core.word text=so means=avatar.setMood.m
+@w.en.really.avatar.setMood.m core.word text=really means=avatar.setMood.m
+@w.en.are.avatar.checkMood core.word text=are means=avatar.checkMood
+@w.en.do.avatar.checkMood core.word text=do means=avatar.checkMood
+@w.en.is.avatar.checkMood core.word text=is means=avatar.checkMood
+@w.en.feel.avatar.askMood core.word text=feel means=avatar.askMood
+@w.en.feeling.avatar.askMood core.word text=feeling means=avatar.askMood
+@w.en.mood.avatar.askMood core.word text=mood means=avatar.askMood
+@w.en.expression.avatar.askMood core.word text=expression means=avatar.askMood
+@w.en.how.avatar.askMood core.word text=how means=avatar.askMood
+@w.en.name.avatar.askName core.word text=name means=avatar.askName
+@w.en.what.avatar.askName core.word text=what means=avatar.askName
+@w.en.seed.avatar.askSeed core.word text=seed means=avatar.askSeed
+@w.en.what.avatar.askSeed core.word text=what means=avatar.askSeed
+@w.en.randomize.avatar.surprise core.word text=randomize means=avatar.surprise
+@w.en.randomise.avatar.surprise core.word text=randomise means=avatar.surprise
+@w.en.shuffle.avatar.surprise core.word text=shuffle means=avatar.surprise
+@w.en.roll.avatar.surprise core.word text=roll means=avatar.surprise
+@w.en.reroll.avatar.surprise core.word text=reroll means=avatar.surprise
+@w.en.look.avatar.surprise core.word text=look means=avatar.surprise
+@w.en.dice.avatar.surprise core.word text=dice means=avatar.surprise
+@w.en.avatar.avatar.surprise core.word text=avatar means=avatar.surprise
+@w.en.change.avatar.surprise core.word text=change means=avatar.surprise
+@w.en.swap.avatar.surprise core.word text=swap means=avatar.surprise
+@w.en.redo.avatar.surprise core.word text=redo means=avatar.surprise
+@w.en.redesign.avatar.surprise core.word text=redesign means=avatar.surprise
+@w.en.everything.avatar.surprise core.word text=everything means=avatar.surprise
+@w.en.reset.avatar.reset core.word text=reset means=avatar.reset
+@w.en.restart.avatar.reset core.word text=restart means=avatar.reset
+@w.en.yourself.avatar.reset core.word text=yourself means=avatar.reset
+@w.en.face.avatar.reset core.word text=face means=avatar.reset
+@w.en.avatar.avatar.reset core.word text=avatar means=avatar.reset
+@w.en.reset.avatar.resetPart core.word text=reset means=avatar.resetPart
+@w.en.restore.avatar.resetPart core.word text=restore means=avatar.resetPart
+@w.en.the.avatar.resetPart.p core.word text=the means=avatar.resetPart.p
+@w.en.your.avatar.resetPart.p core.word text=your means=avatar.resetPart.p
+@w.en.ur.avatar.resetPart.p core.word text=ur means=avatar.resetPart.p
+@w.en.default.avatar.resetPart.p core.word text=default means=avatar.resetPart.p
+@w.en.normal.avatar.resetPart.p core.word text=normal means=avatar.resetPart.p
+@w.en.remove.avatar.removePart core.word text=remove means=avatar.removePart
+@w.en.drop.avatar.removePart core.word text=drop means=avatar.removePart
+@w.en.lose.avatar.removePart core.word text=lose means=avatar.removePart
+@w.en.delete.avatar.removePart core.word text=delete means=avatar.removePart
+@w.en.hide.avatar.removePart core.word text=hide means=avatar.removePart
+@w.en.your.avatar.removePart.p core.word text=your means=avatar.removePart.p
+@w.en.the.avatar.removePart.p core.word text=the means=avatar.removePart.p
+@w.en.ur.avatar.removePart.p core.word text=ur means=avatar.removePart.p
+@w.en.remove.avatar.removeAll core.word text=remove means=avatar.removeAll
+@w.en.drop.avatar.removeAll core.word text=drop means=avatar.removeAll
+@w.en.everything.avatar.removeAll core.word text=everything means=avatar.removeAll
+@w.en.accessories.avatar.removeAll core.word text=accessories means=avatar.removeAll
+@w.en.do.avatar.animate core.word text=do means=avatar.animate
+@w.en.give.avatar.animate core.word text=give means=avatar.animate
+@w.en.make.avatar.animate core.word text=make means=avatar.animate
+@w.en.show.avatar.animate core.word text=show means=avatar.animate
+@w.en.perform.avatar.animate core.word text=perform means=avatar.animate
+@w.en.me.avatar.animate.a core.word text=me means=avatar.animate.a
+@w.en.a.avatar.animate.a core.word text=a means=avatar.animate.a
+@w.en.parts.avatar.askParts core.word text=parts means=avatar.askParts
+@w.en.options.avatar.listOptions core.word text=options means=avatar.listOptions
+@w.en.choices.avatar.listOptions core.word text=choices means=avatar.listOptions
+@w.en.styles.avatar.listOptions core.word text=styles means=avatar.listOptions
+@w.en.variants.avatar.listOptions core.word text=variants means=avatar.listOptions
+@w.en.for.avatar.listOptions.p core.word text=for means=avatar.listOptions.p
+@w.en.of.avatar.listOptions.p core.word text=of means=avatar.listOptions.p
+@w.en.your.avatar.listOptions.p core.word text=your means=avatar.listOptions.p
+@w.en.the.avatar.listOptions.p core.word text=the means=avatar.listOptions.p
+@w.en.ur.avatar.listOptions.p core.word text=ur means=avatar.listOptions.p
+@w.en.have.avatar.askPart core.word text=have means=avatar.askPart
+@w.en.are.avatar.askPart core.word text=are means=avatar.askPart
+@w.en.kind.avatar.askPart core.word text=kind means=avatar.askPart
+@w.en.type.avatar.askPart core.word text=type means=avatar.askPart
+@w.en.style.avatar.askPart core.word text=style means=avatar.askPart
+@w.en.what.avatar.askPart core.word text=what means=avatar.askPart
+@w.en.which.avatar.askPart core.word text=which means=avatar.askPart
+@w.en.your.avatar.askPart.p core.word text=your means=avatar.askPart.p
+@w.en.the.avatar.askPart.p core.word text=the means=avatar.askPart.p
+@w.en.ur.avatar.askPart.p core.word text=ur means=avatar.askPart.p
+@w.en.describe.avatar.describe core.word text=describe means=avatar.describe
+@w.en.yourself.avatar.describe core.word text=yourself means=avatar.describe

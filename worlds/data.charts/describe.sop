@@ -1,0 +1,1410 @@
+@describe.fromtext core.describe
+    op=chart.fromText
+    intent=command
+    emit="@{_} core.request action=chart.fromText arg.text=\"{d}\" arg.type={t}"
+    priority=11
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.fromtext.t core.describe.arg
+    of=$describe.fromtext
+    name=t
+    class=lex.data.charts.types
+    optional=true
+
+@describe.fromtext.c core.describe.arg
+    of=$describe.fromtext
+    name=c
+    class=lex.data.charts.nouns
+
+@describe.fromtext.d core.describe.arg
+    of=$describe.fromtext
+    name=d
+    class=words
+    size=12
+
+@describe.fromtext.en core.describe.words
+    of=$describe.fromtext
+    lang=en
+    verb=$w.en.make.chart.fromText
+    verb=$w.en.create.chart.fromText
+    verb=$w.en.draw.chart.fromText
+    verb=$w.en.chart.chart.fromText
+    verb=$w.en.graph.chart.fromText
+    verb=$w.en.plot.chart.fromText
+    det.t=$w.en.a.chart.fromText.t
+    det.t=$w.en.an.chart.fromText.t
+    det.t=$w.en.the.chart.fromText.t
+    prep.d=$w.en.of.chart.fromText.d
+    prep.d=$w.en.for.chart.fromText.d
+    prep.d=$w.en.from.chart.fromText.d
+    prep.d=$w.en.with.chart.fromText.d
+
+@describe.new core.describe
+    op=chart.new
+    intent=command
+    emit="@{_} core.request action=chart.new arg.type={t}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.new.t core.describe.arg
+    of=$describe.new
+    name=t
+    class=lex.data.charts.types
+    optional=true
+
+@describe.new.c core.describe.arg
+    of=$describe.new
+    name=c
+    class=lex.data.charts.nouns
+
+@describe.new.en core.describe.words
+    of=$describe.new
+    lang=en
+    verb=$w.en.start.chart.new
+    verb=$w.en.create.chart.new
+    verb=$w.en.make.chart.new
+    verb=$w.en.begin.chart.new
+    verb=$w.en.open.chart.new
+    det.t=$w.en.a.chart.new.t
+    det.t=$w.en.an.chart.new.t
+    det.t=$w.en.another.chart.new.t
+    det.t=$w.en.new.chart.new.t
+
+@describe.refresh core.describe
+    op=chart.refresh
+    intent=command
+    emit="@{_} core.request action=chart.refresh"
+    priority=12
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.refresh.en core.describe.words
+    of=$describe.refresh
+    lang=en
+    verb=$w.en.update.chart.refresh
+    verb=$w.en.redraw.chart.refresh
+    verb=$w.en.reload.chart.refresh
+    verb=$w.en.refresh.chart.refresh
+    verb=$w.en.rerender.chart.refresh
+    verb=$w.en.redo.chart.refresh
+    noun=$w.en.chart.chart.refresh
+    noun=$w.en.graph.chart.refresh
+    noun=$w.en.it.chart.refresh
+
+@describe.duplicate core.describe
+    op=chart.duplicate
+    intent=command
+    emit="@{_} core.request action=chart.duplicate"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.duplicate.en core.describe.words
+    of=$describe.duplicate
+    lang=en
+    verb=$w.en.duplicate.chart.duplicate
+    verb=$w.en.copy.chart.duplicate
+    verb=$w.en.clone.chart.duplicate
+    noun=$w.en.chart.chart.duplicate
+    noun=$w.en.graph.chart.duplicate
+    noun=$w.en.it.chart.duplicate
+
+@describe.fromholdings core.describe
+    op=chart.fromHoldings
+    intent=command
+    emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.fromholdings.t core.describe.arg
+    of=$describe.fromholdings
+    name=t
+    class=lex.data.charts.types
+    optional=true
+
+@describe.fromholdings.c core.describe.arg
+    of=$describe.fromholdings
+    name=c
+    class=lex.data.charts.nouns
+    optional=true
+
+@describe.fromholdings.who core.describe.arg
+    of=$describe.fromholdings
+    name=who
+    class=lex.data.charts.everyone
+
+@describe.fromholdings.en core.describe.words
+    of=$describe.fromholdings
+    lang=en
+    verb=$w.en.make.chart.fromHoldings
+    verb=$w.en.chart.chart.fromHoldings
+    verb=$w.en.graph.chart.fromHoldings
+    verb=$w.en.plot.chart.fromHoldings
+    verb=$w.en.show.chart.fromHoldings
+    verb=$w.en.compare.chart.fromHoldings
+    rest=$w.en.has.chart.fromHoldings
+    rest=$w.en.have.chart.fromHoldings
+    det.t=$w.en.a.chart.fromHoldings.t
+    det.t=$w.en.an.chart.fromHoldings.t
+    det.t=$w.en.the.chart.fromHoldings.t
+    prep.who=$w.en.of.chart.fromHoldings.who
+    prep.who=$w.en.what.chart.fromHoldings.who
+
+@describe.fromprices core.describe
+    op=chart.fromPrices
+    intent=command
+    emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\" arg.type={t}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.fromprices.t core.describe.arg
+    of=$describe.fromprices
+    name=t
+    class=lex.data.charts.types
+    optional=true
+
+@describe.fromprices.c core.describe.arg
+    of=$describe.fromprices
+    name=c
+    class=lex.data.charts.nouns
+    optional=true
+
+@describe.fromprices.w core.describe.arg
+    of=$describe.fromprices
+    name=w
+    class=words
+    size=3
+
+@describe.fromprices.en core.describe.words
+    of=$describe.fromprices
+    lang=en
+    verb=$w.en.chart.chart.fromPrices
+    verb=$w.en.compare.chart.fromPrices
+    verb=$w.en.graph.chart.fromPrices
+    verb=$w.en.plot.chart.fromPrices
+    verb=$w.en.show.chart.fromPrices
+    noun=$w.en.prices.chart.fromPrices
+    det.t=$w.en.a.chart.fromPrices.t
+    det.t=$w.en.an.chart.fromPrices.t
+    det.t=$w.en.the.chart.fromPrices.t
+    prep.w=$w.en.of.chart.fromPrices.w
+    prep.w=$w.en.for.chart.fromPrices.w
+    det.w=$w.en.the.chart.fromPrices.w
+    det.w=$w.en.all.chart.fromPrices.w
+
+@describe.fromlegs core.describe
+    op=chart.fromLegs
+    intent=command
+    emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.fromlegs.t core.describe.arg
+    of=$describe.fromlegs
+    name=t
+    class=lex.data.charts.types
+    optional=true
+
+@describe.fromlegs.c core.describe.arg
+    of=$describe.fromlegs
+    name=c
+    class=lex.data.charts.nouns
+    optional=true
+
+@describe.fromlegs.w core.describe.arg
+    of=$describe.fromlegs
+    name=w
+    class=words
+    size=8
+
+@describe.fromlegs.en core.describe.words
+    of=$describe.fromlegs
+    lang=en
+    verb=$w.en.chart.chart.fromLegs
+    verb=$w.en.compare.chart.fromLegs
+    verb=$w.en.graph.chart.fromLegs
+    verb=$w.en.plot.chart.fromLegs
+    verb=$w.en.show.chart.fromLegs
+    noun=$w.en.legs.chart.fromLegs
+    det.t=$w.en.a.chart.fromLegs.t
+    det.t=$w.en.an.chart.fromLegs.t
+    det.t=$w.en.the.chart.fromLegs.t
+    prep.w=$w.en.of.chart.fromLegs.w
+    prep.w=$w.en.for.chart.fromLegs.w
+    det.w=$w.en.the.chart.fromLegs.w
+    det.w=$w.en.all.chart.fromLegs.w
+
+@describe.fromlist core.describe
+    op=chart.fromList
+    intent=command
+    emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.fromlist.t core.describe.arg
+    of=$describe.fromlist
+    name=t
+    class=lex.data.charts.types
+    optional=true
+
+@describe.fromlist.c core.describe.arg
+    of=$describe.fromlist
+    name=c
+    class=lex.data.charts.nouns
+    optional=true
+
+@describe.fromlist.list core.describe.arg
+    of=$describe.fromlist
+    name=list
+    class=lex.data.charts.listnames
+
+@describe.fromlist.en core.describe.words
+    of=$describe.fromlist
+    lang=en
+    verb=$w.en.make.chart.fromList
+    verb=$w.en.chart.chart.fromList
+    verb=$w.en.graph.chart.fromList
+    verb=$w.en.plot.chart.fromList
+    verb=$w.en.show.chart.fromList
+    rest=$w.en.list.chart.fromList
+    det.t=$w.en.a.chart.fromList.t
+    det.t=$w.en.an.chart.fromList.t
+    det.t=$w.en.the.chart.fromList.t
+    prep.list=$w.en.of.chart.fromList.list
+    prep.list=$w.en.for.chart.fromList.list
+    det.list=$w.en.my.chart.fromList.list
+    det.list=$w.en.the.chart.fromList.list
+
+@describe.addpoint core.describe
+    op=chart.addPoint
+    intent=command
+    emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.addpoint.l core.describe.arg
+    of=$describe.addpoint
+    name=l
+    class=words
+    size=3
+
+@describe.addpoint.n core.describe.arg
+    of=$describe.addpoint
+    name=n
+    class=number
+
+@describe.addpoint.c core.describe.arg
+    of=$describe.addpoint
+    name=c
+    class=lex.data.charts.nouns
+    optional=true
+
+@describe.addpoint.en core.describe.words
+    of=$describe.addpoint
+    lang=en
+    verb=$w.en.add.chart.addPoint
+    verb=$w.en.put.chart.addPoint
+    verb=$w.en.insert.chart.addPoint
+    prep.c=$w.en.to.chart.addPoint.c
+    prep.c=$w.en.on.chart.addPoint.c
+    prep.c=$w.en.in.chart.addPoint.c
+    det.c=$w.en.the.chart.addPoint.c
+    det.c=$w.en.my.chart.addPoint.c
+
+@describe.addpoint2 core.describe
+    op=chart.addPoint
+    intent=command
+    emit="@{_} core.request action=chart.addPoint arg.text=\"{n} {l}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.addpoint2.n core.describe.arg
+    of=$describe.addpoint2
+    name=n
+    class=number
+
+@describe.addpoint2.l core.describe.arg
+    of=$describe.addpoint2
+    name=l
+    class=words
+    size=3
+
+@describe.addpoint2.c core.describe.arg
+    of=$describe.addpoint2
+    name=c
+    class=lex.data.charts.nouns
+    optional=true
+
+@describe.addpoint2.en core.describe.words
+    of=$describe.addpoint2
+    lang=en
+    verb=$w.en.add.chart.addPoint
+    verb=$w.en.put.chart.addPoint
+    verb=$w.en.insert.chart.addPoint
+    prep.c=$w.en.to.chart.addPoint.c
+    prep.c=$w.en.on.chart.addPoint.c
+    prep.c=$w.en.in.chart.addPoint.c
+    det.c=$w.en.the.chart.addPoint.c
+    det.c=$w.en.my.chart.addPoint.c
+
+@describe.removepoint core.describe
+    op=chart.removePoint
+    intent=command
+    emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.removepoint.l core.describe.arg
+    of=$describe.removepoint
+    name=l
+    class=words
+    size=3
+
+@describe.removepoint.c core.describe.arg
+    of=$describe.removepoint
+    name=c
+    class=lex.data.charts.nouns
+    optional=true
+
+@describe.removepoint.en core.describe.words
+    of=$describe.removepoint
+    lang=en
+    verb=$w.en.delete.chart.removePoint
+    verb=$w.en.remove.chart.removePoint
+    verb=$w.en.take.chart.removePoint
+    verb=$w.en.drop.chart.removePoint
+    det.l=$w.en.the.chart.removePoint.l
+    prep.c=$w.en.to.chart.removePoint.c
+    prep.c=$w.en.on.chart.removePoint.c
+    prep.c=$w.en.in.chart.removePoint.c
+    prep.c=$w.en.from.chart.removePoint.c
+    prep.c=$w.en.off.chart.removePoint.c
+    det.c=$w.en.the.chart.removePoint.c
+    det.c=$w.en.my.chart.removePoint.c
+
+@describe.setpoint core.describe
+    op=chart.setPoint
+    intent=command
+    emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setpoint.l core.describe.arg
+    of=$describe.setpoint
+    name=l
+    class=words
+    size=3
+
+@describe.setpoint.n core.describe.arg
+    of=$describe.setpoint
+    name=n
+    class=number
+
+@describe.setpoint.en core.describe.words
+    of=$describe.setpoint
+    lang=en
+    verb=$w.en.change.chart.setPoint
+    verb=$w.en.set.chart.setPoint
+    verb=$w.en.update.chart.setPoint
+    det.l=$w.en.the.chart.setPoint.l
+    prep.n=$w.en.to.chart.setPoint.n
+    prep.n=$w.en.at.chart.setPoint.n
+
+@describe.adjustup core.describe
+    op=chart.adjustPoint
+    intent=command
+    emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.adjustup.l core.describe.arg
+    of=$describe.adjustup
+    name=l
+    class=words
+    size=3
+
+@describe.adjustup.n core.describe.arg
+    of=$describe.adjustup
+    name=n
+    class=number
+
+@describe.adjustup.en core.describe.words
+    of=$describe.adjustup
+    lang=en
+    verb=$w.en.increase.chart.adjustPoint
+    verb=$w.en.raise.chart.adjustPoint
+    verb=$w.en.add.chart.adjustPoint
+    verb=$w.en.boost.chart.adjustPoint
+    verb=$w.en.grow.chart.adjustPoint
+    det.l=$w.en.the.chart.adjustPoint.l
+    prep.n=$w.en.by.chart.adjustPoint.n
+
+@describe.adjustdown core.describe
+    op=chart.adjustPoint
+    intent=command
+    emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.adjustdown.l core.describe.arg
+    of=$describe.adjustdown
+    name=l
+    class=words
+    size=3
+
+@describe.adjustdown.n core.describe.arg
+    of=$describe.adjustdown
+    name=n
+    class=number
+
+@describe.adjustdown.en core.describe.words
+    of=$describe.adjustdown
+    lang=en
+    verb=$w.en.decrease.chart.adjustPoint
+    verb=$w.en.lower.chart.adjustPoint
+    verb=$w.en.reduce.chart.adjustPoint
+    verb=$w.en.subtract.chart.adjustPoint
+    verb=$w.en.cut.chart.adjustPoint
+    verb=$w.en.drop.chart.adjustPoint
+    det.l=$w.en.the.chart.adjustPoint.l
+    prep.n=$w.en.by.chart.adjustPoint.n
+
+@describe.renamepoint core.describe
+    op=chart.renamePoint
+    intent=command
+    emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.renamepoint.a core.describe.arg
+    of=$describe.renamepoint
+    name=a
+    class=words
+    size=3
+
+@describe.renamepoint.b core.describe.arg
+    of=$describe.renamepoint
+    name=b
+    class=words
+    size=3
+
+@describe.renamepoint.en core.describe.words
+    of=$describe.renamepoint
+    lang=en
+    verb=$w.en.rename.chart.renamePoint
+    verb=$w.en.relabel.chart.renamePoint
+    verb=$w.en.label.chart.renamePoint
+    verb=$w.en.call.chart.renamePoint
+    det.a=$w.en.the.chart.renamePoint.a
+    prep.b=$w.en.to.chart.renamePoint.b
+    prep.b=$w.en.as.chart.renamePoint.b
+
+@describe.cleardata core.describe
+    op=chart.clearData
+    intent=command
+    emit="@{_} core.request action=chart.clearData"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.cleardata.en core.describe.words
+    of=$describe.cleardata
+    lang=en
+    verb=$w.en.clear.chart.clearData
+    verb=$w.en.wipe.chart.clearData
+    verb=$w.en.reset.chart.clearData
+    verb=$w.en.empty.chart.clearData
+    verb=$w.en.erase.chart.clearData
+    noun=$w.en.chart.chart.clearData
+    noun=$w.en.data.chart.clearData
+    noun=$w.en.numbers.chart.clearData
+    noun=$w.en.graph.chart.clearData
+
+@describe.settype core.describe
+    op=chart.setType
+    intent=command
+    emit="@{_} core.request action=chart.setType arg.type={t}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.settype.t core.describe.arg
+    of=$describe.settype
+    name=t
+    class=lex.data.charts.types
+
+@describe.settype.en core.describe.words
+    of=$describe.settype
+    lang=en
+    verb=$w.en.make.chart.setType
+    verb=$w.en.show.chart.setType
+    verb=$w.en.turn.chart.setType
+    verb=$w.en.change.chart.setType
+    verb=$w.en.switch.chart.setType
+    verb=$w.en.draw.chart.setType
+    rest=$w.en.chart.chart.setType
+    rest=$w.en.graph.chart.setType
+    prep.t=$w.en.it.chart.setType.t
+    prep.t=$w.en.to.chart.setType.t
+    prep.t=$w.en.as.chart.setType.t
+    prep.t=$w.en.into.chart.setType.t
+    det.t=$w.en.a.chart.setType.t
+    det.t=$w.en.an.chart.setType.t
+    det.t=$w.en.the.chart.setType.t
+
+@describe.stack core.describe
+    op=chart.setStacked
+    intent=command
+    emit="@{_} core.request action=chart.setStacked arg.on=true"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.stack.en core.describe.words
+    of=$describe.stack
+    lang=en
+    verb=$w.en.stack.chart.setStacked
+    noun=$w.en.bars.chart.setStacked
+    noun=$w.en.chart.chart.setStacked
+    noun=$w.en.them.chart.setStacked
+
+@describe.unstack core.describe
+    op=chart.setStacked
+    intent=command
+    emit="@{_} core.request action=chart.setStacked arg.on=false"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.unstack.en core.describe.words
+    of=$describe.unstack
+    lang=en
+    verb=$w.en.unstack.chart.setStacked
+    verb=$w.en.separate.chart.setStacked
+    verb=$w.en.split.chart.setStacked
+    noun=$w.en.bars.chart.setStacked
+    noun=$w.en.chart.chart.setStacked
+    noun=$w.en.them.chart.setStacked
+
+@describe.settitle core.describe
+    op=chart.setTitle
+    intent=command
+    emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.settitle.t core.describe.arg
+    of=$describe.settitle
+    name=t
+    class=rest
+
+@describe.settitle.en core.describe.words
+    of=$describe.settitle
+    lang=en
+    verb=$w.en.call.chart.setTitle
+    verb=$w.en.title.chart.setTitle
+    prep.t=$w.en.it.chart.setTitle.t
+    prep.t=$w.en.chart.chart.setTitle.t
+    prep.t=$w.en.to.chart.setTitle.t
+    prep.t=$w.en.as.chart.setTitle.t
+    det.t=$w.en.the.chart.setTitle.t
+
+@describe.settitle2 core.describe
+    op=chart.setTitle
+    intent=command
+    emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.settitle2.t core.describe.arg
+    of=$describe.settitle2
+    name=t
+    class=rest
+
+@describe.settitle2.en core.describe.words
+    of=$describe.settitle2
+    lang=en
+    verb=$w.en.change.chart.setTitle
+    verb=$w.en.set.chart.setTitle
+    verb=$w.en.make.chart.setTitle
+    verb=$w.en.update.chart.setTitle
+    noun=$w.en.title.chart.setTitle
+    prep.t=$w.en.to.chart.setTitle.t
+    prep.t=$w.en.as.chart.setTitle.t
+
+@describe.removetitle core.describe
+    op=chart.removeTitle
+    intent=command
+    emit="@{_} core.request action=chart.removeTitle"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.removetitle.en core.describe.words
+    of=$describe.removetitle
+    lang=en
+    verb=$w.en.remove.chart.removeTitle
+    verb=$w.en.delete.chart.removeTitle
+    verb=$w.en.clear.chart.removeTitle
+    verb=$w.en.hide.chart.removeTitle
+    verb=$w.en.drop.chart.removeTitle
+    noun=$w.en.title.chart.removeTitle
+
+@describe.setcolor core.describe
+    op=chart.setColor
+    intent=command
+    emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setcolor.s core.describe.arg
+    of=$describe.setcolor
+    name=s
+    class=lex.data.charts.shades
+    optional=true
+
+@describe.setcolor.c core.describe.arg
+    of=$describe.setcolor
+    name=c
+    class=lex.data.charts.colors
+
+@describe.setcolor.en core.describe.words
+    of=$describe.setcolor
+    lang=en
+    verb=$w.en.use.chart.setColor
+    verb=$w.en.make.chart.setColor
+    verb=$w.en.color.chart.setColor
+    verb=$w.en.colour.chart.setColor
+    verb=$w.en.paint.chart.setColor
+    verb=$w.en.pick.chart.setColor
+
+@describe.setpalette core.describe
+    op=chart.setPalette
+    intent=command
+    emit="@{_} core.request action=chart.setPalette arg.p={p}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setpalette.p core.describe.arg
+    of=$describe.setpalette
+    name=p
+    class=lex.data.charts.palettes
+
+@describe.setpalette.en core.describe.words
+    of=$describe.setpalette
+    lang=en
+    verb=$w.en.use.chart.setPalette
+    verb=$w.en.make.chart.setPalette
+    verb=$w.en.switch.chart.setPalette
+    verb=$w.en.pick.chart.setPalette
+    verb=$w.en.try.chart.setPalette
+    rest=$w.en.colors.chart.setPalette
+    rest=$w.en.colours.chart.setPalette
+    rest=$w.en.palette.chart.setPalette
+    prep.p=$w.en.it.chart.setPalette.p
+    det.p=$w.en.the.chart.setPalette.p
+    det.p=$w.en.a.chart.setPalette.p
+
+@describe.setorient core.describe
+    op=chart.setOrientation
+    intent=command
+    emit="@{_} core.request action=chart.setOrientation arg.o={o}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setorient.o core.describe.arg
+    of=$describe.setorient
+    name=o
+    class=lex.data.charts.orient
+
+@describe.setorient.en core.describe.words
+    of=$describe.setorient
+    lang=en
+    verb=$w.en.make.chart.setOrientation
+    verb=$w.en.turn.chart.setOrientation
+    verb=$w.en.show.chart.setOrientation
+    verb=$w.en.draw.chart.setOrientation
+    verb=$w.en.set.chart.setOrientation
+    verb=$w.en.flip.chart.setOrientation
+    rest=$w.en.bars.chart.setOrientation
+    rest=$w.en.chart.chart.setOrientation
+    prep.o=$w.en.it.chart.setOrientation.o
+    prep.o=$w.en.bars.chart.setOrientation.o
+    prep.o=$w.en.to.chart.setOrientation.o
+
+@describe.valueson core.describe
+    op=chart.setValues
+    intent=command
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.valueson.en core.describe.words
+    of=$describe.valueson
+    lang=en
+    verb=$w.en.show.chart.setValues
+    verb=$w.en.display.chart.setValues
+    verb=$w.en.label.chart.setValues
+    verb=$w.en.add.chart.setValues
+    noun=$w.en.values.chart.setValues
+    noun=$w.en.numbers.chart.setValues
+    noun=$w.en.labels.chart.setValues
+    noun=$w.en.bars.chart.setValues
+
+@describe.valuesoff core.describe
+    op=chart.setValues
+    intent=command
+    emit="@{_} core.request action=chart.setValues arg.mode=off"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.valuesoff.en core.describe.words
+    of=$describe.valuesoff
+    lang=en
+    verb=$w.en.hide.chart.setValues
+    verb=$w.en.remove.chart.setValues
+    verb=$w.en.drop.chart.setValues
+    verb=$w.en.clear.chart.setValues
+    noun=$w.en.values.chart.setValues
+    noun=$w.en.numbers.chart.setValues
+    noun=$w.en.labels.chart.setValues
+
+@describe.legendon core.describe
+    op=chart.setLegend
+    intent=command
+    emit="@{_} core.request action=chart.setLegend arg.on=true"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.legendon.en core.describe.words
+    of=$describe.legendon
+    lang=en
+    verb=$w.en.show.chart.setLegend
+    verb=$w.en.display.chart.setLegend
+    verb=$w.en.add.chart.setLegend
+    verb=$w.en.turn.chart.setLegend
+    noun=$w.en.legend.chart.setLegend
+    noun=$w.en.key.chart.setLegend
+
+@describe.legendoff core.describe
+    op=chart.setLegend
+    intent=command
+    emit="@{_} core.request action=chart.setLegend arg.on=false"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.legendoff.en core.describe.words
+    of=$describe.legendoff
+    lang=en
+    verb=$w.en.hide.chart.setLegend
+    verb=$w.en.remove.chart.setLegend
+    verb=$w.en.drop.chart.setLegend
+    verb=$w.en.delete.chart.setLegend
+    noun=$w.en.legend.chart.setLegend
+    noun=$w.en.key.chart.setLegend
+
+@describe.extreme core.describe
+    op=chart.extreme
+    intent=query
+    emit="@{_} core.request action=chart.extreme arg.w={w}"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.extreme.w core.describe.arg
+    of=$describe.extreme
+    name=w
+    class=lex.data.charts.extent
+
+@describe.extreme.en core.describe.words
+    of=$describe.extreme
+    lang=en
+    ask=$w.en.which.chart.extreme
+    ask=$w.en.what.chart.extreme
+    ask=$w.en.who.chart.extreme
+    det.w=$w.en.the.chart.extreme.w
+
+@describe.total core.describe
+    op=chart.total
+    intent=query
+    emit="@{_} core.request action=chart.total"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.total.en core.describe.words
+    of=$describe.total
+    lang=en
+    phrase=$phrase.lang.intent.totalofall
+
+@describe.average core.describe
+    op=chart.average
+    intent=query
+    emit="@{_} core.request action=chart.average"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+    frames=bare
+
+@describe.average.en core.describe.words
+    of=$describe.average
+    lang=en
+    noun=$w.en.average.chart.average
+    noun=$w.en.mean.chart.average
+
+@describe.percent core.describe
+    op=chart.percent
+    intent=query
+    emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+
+@describe.percent.l core.describe.arg
+    of=$describe.percent
+    name=l
+    class=words
+    size=3
+
+@describe.percent.en core.describe.words
+    of=$describe.percent
+    lang=en
+    noun=$w.en.percentage.chart.percent
+    noun=$w.en.percent.chart.percent
+    noun=$w.en.share.chart.percent
+    prep.l=$w.en.of.chart.percent.l
+    prep.l=$w.en.for.chart.percent.l
+
+@describe.valueof core.describe
+    op=chart.valueOf
+    intent=query
+    emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+
+@describe.valueof.l core.describe.arg
+    of=$describe.valueof
+    name=l
+    class=words
+    size=3
+
+@describe.valueof.en core.describe.words
+    of=$describe.valueof
+    lang=en
+    noun=$w.en.value.chart.valueOf
+    noun=$w.en.number.chart.valueOf
+    noun=$w.en.amount.chart.valueOf
+    prep.l=$w.en.of.chart.valueOf.l
+    prep.l=$w.en.for.chart.valueOf.l
+
+@describe.count core.describe
+    op=chart.countItems
+    intent=query
+    emit="@{_} core.request action=chart.countItems"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.count.en core.describe.words
+    of=$describe.count
+    lang=en
+    phrase=$phrase.lang.intent.countitems
+
+@describe.describe core.describe
+    op=chart.describe
+    intent=query
+    emit="@{_} core.request action=chart.describe"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.describe.en core.describe.words
+    of=$describe.describe
+    lang=en
+    phrase=$phrase.lang.intent.describechart
+
+@describe.read core.describe
+    op=chart.read
+    intent=command
+    emit="@{_} core.request action=chart.read"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.read.en core.describe.words
+    of=$describe.read
+    lang=en
+    verb=$w.en.read.chart.read
+    verb=$w.en.say.chart.read
+    verb=$w.en.speak.chart.read
+    noun=$w.en.chart.chart.read
+    noun=$w.en.numbers.chart.read
+    noun=$w.en.values.chart.read
+    noun=$w.en.graph.chart.read
+    rest=$w.en.aloud.chart.read
+
+@describe.switch core.describe
+    op=chart.switchChart
+    intent=command
+    emit="@{_} core.request action=chart.switchChart arg.n={n}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.switch.n core.describe.arg
+    of=$describe.switch
+    name=n
+    class=number
+
+@describe.switch.en core.describe.words
+    of=$describe.switch
+    lang=en
+    verb=$w.en.go.chart.switchChart
+    verb=$w.en.show.chart.switchChart
+    verb=$w.en.switch.chart.switchChart
+    verb=$w.en.open.chart.switchChart
+    prep.n=$w.en.to.chart.switchChart.n
+    det.n=$w.en.chart.chart.switchChart.n
+    det.n=$w.en.number.chart.switchChart.n
+
+@describe.delchart core.describe
+    op=chart.deleteChart
+    intent=command
+    emit="@{_} core.request action=chart.deleteChart arg.n={n}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.delchart.n core.describe.arg
+    of=$describe.delchart
+    name=n
+    class=number
+
+@describe.delchart.en core.describe.words
+    of=$describe.delchart
+    lang=en
+    verb=$w.en.delete.chart.deleteChart
+    verb=$w.en.remove.chart.deleteChart
+    verb=$w.en.drop.chart.deleteChart
+    det.n=$w.en.chart.chart.deleteChart.n
+    det.n=$w.en.number.chart.deleteChart.n
+
+@describe.listcharts core.describe
+    op=chart.listCharts
+    intent=query
+    emit="@{_} core.request action=chart.listCharts"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.listcharts.en core.describe.words
+    of=$describe.listcharts
+    lang=en
+    phrase=$phrase.lang.intent.listcharts
+
+@describe.download core.describe
+    op=chart.download
+    intent=command
+    emit="@{_} core.request action=chart.download"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.download.en core.describe.words
+    of=$describe.download
+    lang=en
+    verb=$w.en.download.chart.download
+    verb=$w.en.save.chart.download
+    verb=$w.en.export.chart.download
+    noun=$w.en.chart.chart.download
+    noun=$w.en.graph.chart.download
+    noun=$w.en.image.chart.download
+    noun=$w.en.picture.chart.download
+
+@describe.downloaddata core.describe
+    op=chart.downloadData
+    intent=command
+    emit="@{_} core.request action=chart.downloadData"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.downloaddata.en core.describe.words
+    of=$describe.downloaddata
+    lang=en
+    verb=$w.en.download.chart.downloadData
+    verb=$w.en.save.chart.downloadData
+    verb=$w.en.export.chart.downloadData
+    noun=$w.en.data.chart.downloadData
+    noun=$w.en.csv.chart.downloadData
+    noun=$w.en.numbers.chart.downloadData
+    noun=$w.en.table.chart.downloadData
+
+@describe.undo core.describe
+    op=chart.undo
+    intent=command
+    emit="@{_} core.request action=chart.undo"
+    priority=12
+    frames=phr
+
+@describe.undo.en core.describe.words
+    of=$describe.undo
+    lang=en
+    phrase=$phrase.lang.intent.undo
+
+@describe.redo core.describe
+    op=chart.redo
+    intent=command
+    emit="@{_} core.request action=chart.redo"
+    priority=12
+    frames=phr
+
+@describe.redo.en core.describe.words
+    of=$describe.redo
+    lang=en
+    phrase=$phrase.lang.intent.redo
+
+@w.en.make.chart.fromText core.word text=make means=chart.fromText
+@w.en.create.chart.fromText core.word text=create means=chart.fromText
+@w.en.draw.chart.fromText core.word text=draw means=chart.fromText
+@w.en.chart.chart.fromText core.word text=chart means=chart.fromText
+@w.en.graph.chart.fromText core.word text=graph means=chart.fromText
+@w.en.plot.chart.fromText core.word text=plot means=chart.fromText
+@w.en.a.chart.fromText.t core.word text=a means=chart.fromText.t
+@w.en.an.chart.fromText.t core.word text=an means=chart.fromText.t
+@w.en.the.chart.fromText.t core.word text=the means=chart.fromText.t
+@w.en.of.chart.fromText.d core.word text=of means=chart.fromText.d
+@w.en.for.chart.fromText.d core.word text=for means=chart.fromText.d
+@w.en.from.chart.fromText.d core.word text=from means=chart.fromText.d
+@w.en.with.chart.fromText.d core.word text=with means=chart.fromText.d
+@w.en.start.chart.new core.word text=start means=chart.new
+@w.en.create.chart.new core.word text=create means=chart.new
+@w.en.make.chart.new core.word text=make means=chart.new
+@w.en.begin.chart.new core.word text=begin means=chart.new
+@w.en.open.chart.new core.word text=open means=chart.new
+@w.en.a.chart.new.t core.word text=a means=chart.new.t
+@w.en.an.chart.new.t core.word text=an means=chart.new.t
+@w.en.another.chart.new.t core.word text=another means=chart.new.t
+@w.en.new.chart.new.t core.word text=new means=chart.new.t
+@w.en.update.chart.refresh core.word text=update means=chart.refresh
+@w.en.redraw.chart.refresh core.word text=redraw means=chart.refresh
+@w.en.reload.chart.refresh core.word text=reload means=chart.refresh
+@w.en.refresh.chart.refresh core.word text=refresh means=chart.refresh
+@w.en.rerender.chart.refresh core.word text=rerender means=chart.refresh
+@w.en.redo.chart.refresh core.word text=redo means=chart.refresh
+@w.en.chart.chart.refresh core.word text=chart means=chart.refresh
+@w.en.graph.chart.refresh core.word text=graph means=chart.refresh
+@w.en.it.chart.refresh core.word text=it means=chart.refresh
+@w.en.duplicate.chart.duplicate core.word text=duplicate means=chart.duplicate
+@w.en.copy.chart.duplicate core.word text=copy means=chart.duplicate
+@w.en.clone.chart.duplicate core.word text=clone means=chart.duplicate
+@w.en.chart.chart.duplicate core.word text=chart means=chart.duplicate
+@w.en.graph.chart.duplicate core.word text=graph means=chart.duplicate
+@w.en.it.chart.duplicate core.word text=it means=chart.duplicate
+@w.en.make.chart.fromHoldings core.word text=make means=chart.fromHoldings
+@w.en.chart.chart.fromHoldings core.word text=chart means=chart.fromHoldings
+@w.en.graph.chart.fromHoldings core.word text=graph means=chart.fromHoldings
+@w.en.plot.chart.fromHoldings core.word text=plot means=chart.fromHoldings
+@w.en.show.chart.fromHoldings core.word text=show means=chart.fromHoldings
+@w.en.compare.chart.fromHoldings core.word text=compare means=chart.fromHoldings
+@w.en.has.chart.fromHoldings core.word text=has means=chart.fromHoldings
+@w.en.have.chart.fromHoldings core.word text=have means=chart.fromHoldings
+@w.en.a.chart.fromHoldings.t core.word text=a means=chart.fromHoldings.t
+@w.en.an.chart.fromHoldings.t core.word text=an means=chart.fromHoldings.t
+@w.en.the.chart.fromHoldings.t core.word text=the means=chart.fromHoldings.t
+@w.en.of.chart.fromHoldings.who core.word text=of means=chart.fromHoldings.who
+@w.en.what.chart.fromHoldings.who core.word text=what means=chart.fromHoldings.who
+@w.en.chart.chart.fromPrices core.word text=chart means=chart.fromPrices
+@w.en.compare.chart.fromPrices core.word text=compare means=chart.fromPrices
+@w.en.graph.chart.fromPrices core.word text=graph means=chart.fromPrices
+@w.en.plot.chart.fromPrices core.word text=plot means=chart.fromPrices
+@w.en.show.chart.fromPrices core.word text=show means=chart.fromPrices
+@w.en.prices.chart.fromPrices core.word text=prices means=chart.fromPrices
+@w.en.a.chart.fromPrices.t core.word text=a means=chart.fromPrices.t
+@w.en.an.chart.fromPrices.t core.word text=an means=chart.fromPrices.t
+@w.en.the.chart.fromPrices.t core.word text=the means=chart.fromPrices.t
+@w.en.of.chart.fromPrices.w core.word text=of means=chart.fromPrices.w
+@w.en.for.chart.fromPrices.w core.word text=for means=chart.fromPrices.w
+@w.en.the.chart.fromPrices.w core.word text=the means=chart.fromPrices.w
+@w.en.all.chart.fromPrices.w core.word text=all means=chart.fromPrices.w
+@w.en.chart.chart.fromLegs core.word text=chart means=chart.fromLegs
+@w.en.compare.chart.fromLegs core.word text=compare means=chart.fromLegs
+@w.en.graph.chart.fromLegs core.word text=graph means=chart.fromLegs
+@w.en.plot.chart.fromLegs core.word text=plot means=chart.fromLegs
+@w.en.show.chart.fromLegs core.word text=show means=chart.fromLegs
+@w.en.legs.chart.fromLegs core.word text=legs means=chart.fromLegs
+@w.en.a.chart.fromLegs.t core.word text=a means=chart.fromLegs.t
+@w.en.an.chart.fromLegs.t core.word text=an means=chart.fromLegs.t
+@w.en.the.chart.fromLegs.t core.word text=the means=chart.fromLegs.t
+@w.en.of.chart.fromLegs.w core.word text=of means=chart.fromLegs.w
+@w.en.for.chart.fromLegs.w core.word text=for means=chart.fromLegs.w
+@w.en.the.chart.fromLegs.w core.word text=the means=chart.fromLegs.w
+@w.en.all.chart.fromLegs.w core.word text=all means=chart.fromLegs.w
+@w.en.make.chart.fromList core.word text=make means=chart.fromList
+@w.en.chart.chart.fromList core.word text=chart means=chart.fromList
+@w.en.graph.chart.fromList core.word text=graph means=chart.fromList
+@w.en.plot.chart.fromList core.word text=plot means=chart.fromList
+@w.en.show.chart.fromList core.word text=show means=chart.fromList
+@w.en.list.chart.fromList core.word text=list means=chart.fromList
+@w.en.a.chart.fromList.t core.word text=a means=chart.fromList.t
+@w.en.an.chart.fromList.t core.word text=an means=chart.fromList.t
+@w.en.the.chart.fromList.t core.word text=the means=chart.fromList.t
+@w.en.of.chart.fromList.list core.word text=of means=chart.fromList.list
+@w.en.for.chart.fromList.list core.word text=for means=chart.fromList.list
+@w.en.my.chart.fromList.list core.word text=my means=chart.fromList.list
+@w.en.the.chart.fromList.list core.word text=the means=chart.fromList.list
+@w.en.add.chart.addPoint core.word text=add means=chart.addPoint
+@w.en.put.chart.addPoint core.word text=put means=chart.addPoint
+@w.en.insert.chart.addPoint core.word text=insert means=chart.addPoint
+@w.en.to.chart.addPoint.c core.word text=to means=chart.addPoint.c
+@w.en.on.chart.addPoint.c core.word text=on means=chart.addPoint.c
+@w.en.in.chart.addPoint.c core.word text=in means=chart.addPoint.c
+@w.en.the.chart.addPoint.c core.word text=the means=chart.addPoint.c
+@w.en.my.chart.addPoint.c core.word text=my means=chart.addPoint.c
+@w.en.delete.chart.removePoint core.word text=delete means=chart.removePoint
+@w.en.remove.chart.removePoint core.word text=remove means=chart.removePoint
+@w.en.take.chart.removePoint core.word text=take means=chart.removePoint
+@w.en.drop.chart.removePoint core.word text=drop means=chart.removePoint
+@w.en.the.chart.removePoint.l core.word text=the means=chart.removePoint.l
+@w.en.to.chart.removePoint.c core.word text=to means=chart.removePoint.c
+@w.en.on.chart.removePoint.c core.word text=on means=chart.removePoint.c
+@w.en.in.chart.removePoint.c core.word text=in means=chart.removePoint.c
+@w.en.from.chart.removePoint.c core.word text=from means=chart.removePoint.c
+@w.en.off.chart.removePoint.c core.word text=off means=chart.removePoint.c
+@w.en.the.chart.removePoint.c core.word text=the means=chart.removePoint.c
+@w.en.my.chart.removePoint.c core.word text=my means=chart.removePoint.c
+@w.en.change.chart.setPoint core.word text=change means=chart.setPoint
+@w.en.set.chart.setPoint core.word text=set means=chart.setPoint
+@w.en.update.chart.setPoint core.word text=update means=chart.setPoint
+@w.en.the.chart.setPoint.l core.word text=the means=chart.setPoint.l
+@w.en.to.chart.setPoint.n core.word text=to means=chart.setPoint.n
+@w.en.at.chart.setPoint.n core.word text=at means=chart.setPoint.n
+@w.en.increase.chart.adjustPoint core.word text=increase means=chart.adjustPoint
+@w.en.raise.chart.adjustPoint core.word text=raise means=chart.adjustPoint
+@w.en.add.chart.adjustPoint core.word text=add means=chart.adjustPoint
+@w.en.boost.chart.adjustPoint core.word text=boost means=chart.adjustPoint
+@w.en.grow.chart.adjustPoint core.word text=grow means=chart.adjustPoint
+@w.en.the.chart.adjustPoint.l core.word text=the means=chart.adjustPoint.l
+@w.en.by.chart.adjustPoint.n core.word text=by means=chart.adjustPoint.n
+@w.en.decrease.chart.adjustPoint core.word text=decrease means=chart.adjustPoint
+@w.en.lower.chart.adjustPoint core.word text=lower means=chart.adjustPoint
+@w.en.reduce.chart.adjustPoint core.word text=reduce means=chart.adjustPoint
+@w.en.subtract.chart.adjustPoint core.word text=subtract means=chart.adjustPoint
+@w.en.cut.chart.adjustPoint core.word text=cut means=chart.adjustPoint
+@w.en.drop.chart.adjustPoint core.word text=drop means=chart.adjustPoint
+@w.en.rename.chart.renamePoint core.word text=rename means=chart.renamePoint
+@w.en.relabel.chart.renamePoint core.word text=relabel means=chart.renamePoint
+@w.en.label.chart.renamePoint core.word text=label means=chart.renamePoint
+@w.en.call.chart.renamePoint core.word text=call means=chart.renamePoint
+@w.en.the.chart.renamePoint.a core.word text=the means=chart.renamePoint.a
+@w.en.to.chart.renamePoint.b core.word text=to means=chart.renamePoint.b
+@w.en.as.chart.renamePoint.b core.word text=as means=chart.renamePoint.b
+@w.en.clear.chart.clearData core.word text=clear means=chart.clearData
+@w.en.wipe.chart.clearData core.word text=wipe means=chart.clearData
+@w.en.reset.chart.clearData core.word text=reset means=chart.clearData
+@w.en.empty.chart.clearData core.word text=empty means=chart.clearData
+@w.en.erase.chart.clearData core.word text=erase means=chart.clearData
+@w.en.chart.chart.clearData core.word text=chart means=chart.clearData
+@w.en.data.chart.clearData core.word text=data means=chart.clearData
+@w.en.numbers.chart.clearData core.word text=numbers means=chart.clearData
+@w.en.graph.chart.clearData core.word text=graph means=chart.clearData
+@w.en.make.chart.setType core.word text=make means=chart.setType
+@w.en.show.chart.setType core.word text=show means=chart.setType
+@w.en.turn.chart.setType core.word text=turn means=chart.setType
+@w.en.change.chart.setType core.word text=change means=chart.setType
+@w.en.switch.chart.setType core.word text=switch means=chart.setType
+@w.en.draw.chart.setType core.word text=draw means=chart.setType
+@w.en.chart.chart.setType core.word text=chart means=chart.setType
+@w.en.graph.chart.setType core.word text=graph means=chart.setType
+@w.en.it.chart.setType.t core.word text=it means=chart.setType.t
+@w.en.to.chart.setType.t core.word text=to means=chart.setType.t
+@w.en.as.chart.setType.t core.word text=as means=chart.setType.t
+@w.en.into.chart.setType.t core.word text=into means=chart.setType.t
+@w.en.a.chart.setType.t core.word text=a means=chart.setType.t
+@w.en.an.chart.setType.t core.word text=an means=chart.setType.t
+@w.en.the.chart.setType.t core.word text=the means=chart.setType.t
+@w.en.stack.chart.setStacked core.word text=stack means=chart.setStacked
+@w.en.bars.chart.setStacked core.word text=bars means=chart.setStacked
+@w.en.chart.chart.setStacked core.word text=chart means=chart.setStacked
+@w.en.them.chart.setStacked core.word text=them means=chart.setStacked
+@w.en.unstack.chart.setStacked core.word text=unstack means=chart.setStacked
+@w.en.separate.chart.setStacked core.word text=separate means=chart.setStacked
+@w.en.split.chart.setStacked core.word text=split means=chart.setStacked
+@w.en.call.chart.setTitle core.word text=call means=chart.setTitle
+@w.en.title.chart.setTitle core.word text=title means=chart.setTitle
+@w.en.it.chart.setTitle.t core.word text=it means=chart.setTitle.t
+@w.en.chart.chart.setTitle.t core.word text=chart means=chart.setTitle.t
+@w.en.to.chart.setTitle.t core.word text=to means=chart.setTitle.t
+@w.en.as.chart.setTitle.t core.word text=as means=chart.setTitle.t
+@w.en.the.chart.setTitle.t core.word text=the means=chart.setTitle.t
+@w.en.change.chart.setTitle core.word text=change means=chart.setTitle
+@w.en.set.chart.setTitle core.word text=set means=chart.setTitle
+@w.en.make.chart.setTitle core.word text=make means=chart.setTitle
+@w.en.update.chart.setTitle core.word text=update means=chart.setTitle
+@w.en.remove.chart.removeTitle core.word text=remove means=chart.removeTitle
+@w.en.delete.chart.removeTitle core.word text=delete means=chart.removeTitle
+@w.en.clear.chart.removeTitle core.word text=clear means=chart.removeTitle
+@w.en.hide.chart.removeTitle core.word text=hide means=chart.removeTitle
+@w.en.drop.chart.removeTitle core.word text=drop means=chart.removeTitle
+@w.en.title.chart.removeTitle core.word text=title means=chart.removeTitle
+@w.en.use.chart.setColor core.word text=use means=chart.setColor
+@w.en.make.chart.setColor core.word text=make means=chart.setColor
+@w.en.color.chart.setColor core.word text=color means=chart.setColor
+@w.en.colour.chart.setColor core.word text=colour means=chart.setColor
+@w.en.paint.chart.setColor core.word text=paint means=chart.setColor
+@w.en.pick.chart.setColor core.word text=pick means=chart.setColor
+@w.en.use.chart.setPalette core.word text=use means=chart.setPalette
+@w.en.make.chart.setPalette core.word text=make means=chart.setPalette
+@w.en.switch.chart.setPalette core.word text=switch means=chart.setPalette
+@w.en.pick.chart.setPalette core.word text=pick means=chart.setPalette
+@w.en.try.chart.setPalette core.word text=try means=chart.setPalette
+@w.en.colors.chart.setPalette core.word text=colors means=chart.setPalette
+@w.en.colours.chart.setPalette core.word text=colours means=chart.setPalette
+@w.en.palette.chart.setPalette core.word text=palette means=chart.setPalette
+@w.en.it.chart.setPalette.p core.word text=it means=chart.setPalette.p
+@w.en.the.chart.setPalette.p core.word text=the means=chart.setPalette.p
+@w.en.a.chart.setPalette.p core.word text=a means=chart.setPalette.p
+@w.en.make.chart.setOrientation core.word text=make means=chart.setOrientation
+@w.en.turn.chart.setOrientation core.word text=turn means=chart.setOrientation
+@w.en.show.chart.setOrientation core.word text=show means=chart.setOrientation
+@w.en.draw.chart.setOrientation core.word text=draw means=chart.setOrientation
+@w.en.set.chart.setOrientation core.word text=set means=chart.setOrientation
+@w.en.flip.chart.setOrientation core.word text=flip means=chart.setOrientation
+@w.en.bars.chart.setOrientation core.word text=bars means=chart.setOrientation
+@w.en.chart.chart.setOrientation core.word text=chart means=chart.setOrientation
+@w.en.it.chart.setOrientation.o core.word text=it means=chart.setOrientation.o
+@w.en.bars.chart.setOrientation.o core.word text=bars means=chart.setOrientation.o
+@w.en.to.chart.setOrientation.o core.word text=to means=chart.setOrientation.o
+@w.en.show.chart.setValues core.word text=show means=chart.setValues
+@w.en.display.chart.setValues core.word text=display means=chart.setValues
+@w.en.label.chart.setValues core.word text=label means=chart.setValues
+@w.en.add.chart.setValues core.word text=add means=chart.setValues
+@w.en.values.chart.setValues core.word text=values means=chart.setValues
+@w.en.numbers.chart.setValues core.word text=numbers means=chart.setValues
+@w.en.labels.chart.setValues core.word text=labels means=chart.setValues
+@w.en.bars.chart.setValues core.word text=bars means=chart.setValues
+@w.en.hide.chart.setValues core.word text=hide means=chart.setValues
+@w.en.remove.chart.setValues core.word text=remove means=chart.setValues
+@w.en.drop.chart.setValues core.word text=drop means=chart.setValues
+@w.en.clear.chart.setValues core.word text=clear means=chart.setValues
+@w.en.show.chart.setLegend core.word text=show means=chart.setLegend
+@w.en.display.chart.setLegend core.word text=display means=chart.setLegend
+@w.en.add.chart.setLegend core.word text=add means=chart.setLegend
+@w.en.turn.chart.setLegend core.word text=turn means=chart.setLegend
+@w.en.legend.chart.setLegend core.word text=legend means=chart.setLegend
+@w.en.key.chart.setLegend core.word text=key means=chart.setLegend
+@w.en.hide.chart.setLegend core.word text=hide means=chart.setLegend
+@w.en.remove.chart.setLegend core.word text=remove means=chart.setLegend
+@w.en.drop.chart.setLegend core.word text=drop means=chart.setLegend
+@w.en.delete.chart.setLegend core.word text=delete means=chart.setLegend
+@w.en.which.chart.extreme core.word text=which means=chart.extreme
+@w.en.what.chart.extreme core.word text=what means=chart.extreme
+@w.en.who.chart.extreme core.word text=who means=chart.extreme
+@w.en.the.chart.extreme.w core.word text=the means=chart.extreme.w
+@w.en.average.chart.average core.word text=average means=chart.average
+@w.en.mean.chart.average core.word text=mean means=chart.average
+@w.en.percentage.chart.percent core.word text=percentage means=chart.percent
+@w.en.percent.chart.percent core.word text=percent means=chart.percent
+@w.en.share.chart.percent core.word text=share means=chart.percent
+@w.en.of.chart.percent.l core.word text=of means=chart.percent.l
+@w.en.for.chart.percent.l core.word text=for means=chart.percent.l
+@w.en.value.chart.valueOf core.word text=value means=chart.valueOf
+@w.en.number.chart.valueOf core.word text=number means=chart.valueOf
+@w.en.amount.chart.valueOf core.word text=amount means=chart.valueOf
+@w.en.of.chart.valueOf.l core.word text=of means=chart.valueOf.l
+@w.en.for.chart.valueOf.l core.word text=for means=chart.valueOf.l
+@w.en.read.chart.read core.word text=read means=chart.read
+@w.en.say.chart.read core.word text=say means=chart.read
+@w.en.speak.chart.read core.word text=speak means=chart.read
+@w.en.chart.chart.read core.word text=chart means=chart.read
+@w.en.numbers.chart.read core.word text=numbers means=chart.read
+@w.en.values.chart.read core.word text=values means=chart.read
+@w.en.graph.chart.read core.word text=graph means=chart.read
+@w.en.aloud.chart.read core.word text=aloud means=chart.read
+@w.en.go.chart.switchChart core.word text=go means=chart.switchChart
+@w.en.show.chart.switchChart core.word text=show means=chart.switchChart
+@w.en.switch.chart.switchChart core.word text=switch means=chart.switchChart
+@w.en.open.chart.switchChart core.word text=open means=chart.switchChart
+@w.en.to.chart.switchChart.n core.word text=to means=chart.switchChart.n
+@w.en.chart.chart.switchChart.n core.word text=chart means=chart.switchChart.n
+@w.en.number.chart.switchChart.n core.word text=number means=chart.switchChart.n
+@w.en.delete.chart.deleteChart core.word text=delete means=chart.deleteChart
+@w.en.remove.chart.deleteChart core.word text=remove means=chart.deleteChart
+@w.en.drop.chart.deleteChart core.word text=drop means=chart.deleteChart
+@w.en.chart.chart.deleteChart.n core.word text=chart means=chart.deleteChart.n
+@w.en.number.chart.deleteChart.n core.word text=number means=chart.deleteChart.n
+@w.en.download.chart.download core.word text=download means=chart.download
+@w.en.save.chart.download core.word text=save means=chart.download
+@w.en.export.chart.download core.word text=export means=chart.download
+@w.en.chart.chart.download core.word text=chart means=chart.download
+@w.en.graph.chart.download core.word text=graph means=chart.download
+@w.en.image.chart.download core.word text=image means=chart.download
+@w.en.picture.chart.download core.word text=picture means=chart.download
+@w.en.download.chart.downloadData core.word text=download means=chart.downloadData
+@w.en.save.chart.downloadData core.word text=save means=chart.downloadData
+@w.en.export.chart.downloadData core.word text=export means=chart.downloadData
+@w.en.data.chart.downloadData core.word text=data means=chart.downloadData
+@w.en.csv.chart.downloadData core.word text=csv means=chart.downloadData
+@w.en.numbers.chart.downloadData core.word text=numbers means=chart.downloadData
+@w.en.table.chart.downloadData core.word text=table means=chart.downloadData

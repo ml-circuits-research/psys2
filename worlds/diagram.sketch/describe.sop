@@ -1,0 +1,679 @@
+@describe.create core.describe
+    op=diagram.create
+    intent=command
+    emit="@{_} core.request action=diagram.create arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.create.s core.describe.arg
+    of=$describe.create
+    name=s
+    class=lex.diagram.sketch.shapenoun
+
+@describe.create.t core.describe.arg
+    of=$describe.create
+    name=t
+    class=rest
+    optional=true
+
+@describe.create.en core.describe.words
+    of=$describe.create
+    lang=en
+    verb=$w.en.draw.diagram.create
+    verb=$w.en.add.diagram.create
+    verb=$w.en.create.diagram.create
+    verb=$w.en.make.diagram.create
+    verb=$w.en.put.diagram.create
+    det.s=$w.en.a.diagram.create.s
+    det.s=$w.en.an.diagram.create.s
+    det.s=$w.en.another.diagram.create.s
+    det.s=$w.en.new.diagram.create.s
+    det.s=$w.en.some.diagram.create.s
+
+@describe.delete core.describe
+    op=diagram.delete
+    intent=command
+    emit="@{_} core.request action=diagram.delete arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.delete.t core.describe.arg
+    of=$describe.delete
+    name=t
+    class=rest
+
+@describe.delete.en core.describe.words
+    of=$describe.delete
+    lang=en
+    verb=$w.en.delete.diagram.delete
+    verb=$w.en.remove.diagram.delete
+    verb=$w.en.erase.diagram.delete
+    verb=$w.en.clear.diagram.delete
+
+@describe.move core.describe
+    op=diagram.move
+    intent=command
+    emit="@{_} core.request action=diagram.move arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.move.t core.describe.arg
+    of=$describe.move
+    name=t
+    class=rest
+
+@describe.move.en core.describe.words
+    of=$describe.move
+    lang=en
+    verb=$w.en.move.diagram.move
+    verb=$w.en.nudge.diagram.move
+    verb=$w.en.shift.diagram.move
+    verb=$w.en.push.diagram.move
+    verb=$w.en.drag.diagram.move
+    verb=$w.en.slide.diagram.move
+
+@describe.arrange core.describe
+    op=diagram.arrange
+    intent=command
+    emit="@{_} core.request action=diagram.arrange arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.arrange.t core.describe.arg
+    of=$describe.arrange
+    name=t
+    class=rest
+
+@describe.arrange.en core.describe.words
+    of=$describe.arrange
+    lang=en
+    verb=$w.en.arrange.diagram.arrange
+    verb=$w.en.organize.diagram.arrange
+    verb=$w.en.organise.diagram.arrange
+    verb=$w.en.lay.diagram.arrange
+
+@describe.resize core.describe
+    op=diagram.resize
+    intent=command
+    emit="@{_} core.request action=diagram.resize arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.resize.t core.describe.arg
+    of=$describe.resize
+    name=t
+    class=rest
+
+@describe.resize.en core.describe.words
+    of=$describe.resize
+    lang=en
+    verb=$w.en.shrink.diagram.resize
+    verb=$w.en.enlarge.diagram.resize
+    verb=$w.en.grow.diagram.resize
+    verb=$w.en.resize.diagram.resize
+    verb=$w.en.scale.diagram.resize
+
+@describe.rename core.describe
+    op=diagram.rename
+    intent=command
+    emit="@{_} core.request action=diagram.rename arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.rename.t core.describe.arg
+    of=$describe.rename
+    name=t
+    class=rest
+
+@describe.rename.en core.describe.words
+    of=$describe.rename
+    lang=en
+    verb=$w.en.rename.diagram.rename
+
+@describe.label core.describe
+    op=diagram.label
+    intent=command
+    emit="@{_} core.request action=diagram.label arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.label.t core.describe.arg
+    of=$describe.label
+    name=t
+    class=rest
+
+@describe.label.en core.describe.words
+    of=$describe.label
+    lang=en
+    verb=$w.en.label.diagram.label
+    verb=$w.en.caption.diagram.label
+    verb=$w.en.tag.diagram.label
+
+@describe.duplicate core.describe
+    op=diagram.duplicate
+    intent=command
+    emit="@{_} core.request action=diagram.duplicate arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.duplicate.t core.describe.arg
+    of=$describe.duplicate
+    name=t
+    class=rest
+
+@describe.duplicate.en core.describe.words
+    of=$describe.duplicate
+    lang=en
+    verb=$w.en.duplicate.diagram.duplicate
+    verb=$w.en.copy.diagram.duplicate
+    verb=$w.en.clone.diagram.duplicate
+
+@describe.disconnect core.describe
+    op=diagram.disconnect
+    intent=command
+    emit="@{_} core.request action=diagram.disconnect arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.disconnect.t core.describe.arg
+    of=$describe.disconnect
+    name=t
+    class=rest
+
+@describe.disconnect.en core.describe.words
+    of=$describe.disconnect
+    lang=en
+    verb=$w.en.disconnect.diagram.disconnect
+    verb=$w.en.unlink.diagram.disconnect
+    verb=$w.en.detach.diagram.disconnect
+
+@describe.swap core.describe
+    op=diagram.swap
+    intent=command
+    emit="@{_} core.request action=diagram.swap arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.swap.t core.describe.arg
+    of=$describe.swap
+    name=t
+    class=rest
+
+@describe.swap.en core.describe.words
+    of=$describe.swap
+    lang=en
+    verb=$w.en.swap.diagram.swap
+    verb=$w.en.exchange.diagram.swap
+
+@describe.group core.describe
+    op=diagram.group
+    intent=command
+    emit="@{_} core.request action=diagram.group arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.group.t core.describe.arg
+    of=$describe.group
+    name=t
+    class=rest
+
+@describe.group.en core.describe.words
+    of=$describe.group
+    lang=en
+    verb=$w.en.group.diagram.group
+    verb=$w.en.bundle.diagram.group
+    verb=$w.en.cluster.diagram.group
+
+@describe.ungroup core.describe
+    op=diagram.ungroup
+    intent=command
+    emit="@{_} core.request action=diagram.ungroup arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ungroup.t core.describe.arg
+    of=$describe.ungroup
+    name=t
+    class=rest
+
+@describe.ungroup.en core.describe.words
+    of=$describe.ungroup
+    lang=en
+    verb=$w.en.ungroup.diagram.ungroup
+    verb=$w.en.dissolve.diagram.ungroup
+
+@describe.connect core.describe
+    op=diagram.connect
+    intent=command
+    emit="@{_} core.request action=diagram.connect arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.connect.t core.describe.arg
+    of=$describe.connect
+    name=t
+    class=rest
+
+@describe.connect.en core.describe.words
+    of=$describe.connect
+    lang=en
+    verb=$w.en.connect.diagram.connect
+    verb=$w.en.link.diagram.connect
+    verb=$w.en.join.diagram.connect
+    verb=$w.en.attach.diagram.connect
+    verb=$w.en.wire.diagram.connect
+
+@describe.align core.describe
+    op=diagram.align
+    intent=command
+    emit="@{_} core.request action=diagram.align arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.align.t core.describe.arg
+    of=$describe.align
+    name=t
+    class=rest
+
+@describe.align.en core.describe.words
+    of=$describe.align
+    lang=en
+    verb=$w.en.align.diagram.align
+
+@describe.distribute core.describe
+    op=diagram.distribute
+    intent=command
+    emit="@{_} core.request action=diagram.distribute arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.distribute.t core.describe.arg
+    of=$describe.distribute
+    name=t
+    class=rest
+
+@describe.distribute.en core.describe.words
+    of=$describe.distribute
+    lang=en
+    verb=$w.en.distribute.diagram.distribute
+    verb=$w.en.space.diagram.distribute
+
+@describe.forget core.describe
+    op=diagram.forget
+    intent=command
+    emit="@{_} core.request action=diagram.forget arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.forget.t core.describe.arg
+    of=$describe.forget
+    name=t
+    class=rest
+
+@describe.forget.en core.describe.words
+    of=$describe.forget
+    lang=en
+    verb=$w.en.forget.diagram.forget
+
+@describe.improve core.describe
+    op=diagram.improve
+    intent=command
+    emit="@{_} core.request action=diagram.improve arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.improve.t core.describe.arg
+    of=$describe.improve
+    name=t
+    class=rest
+    optional=true
+
+@describe.improve.en core.describe.words
+    of=$describe.improve
+    lang=en
+    verb=$w.en.tidy.diagram.improve
+    verb=$w.en.declutter.diagram.improve
+    verb=$w.en.beautify.diagram.improve
+    verb=$w.en.neaten.diagram.improve
+
+@describe.respace core.describe
+    op=diagram.respace
+    intent=command
+    emit="@{_} core.request action=diagram.respace arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.respace.t core.describe.arg
+    of=$describe.respace
+    name=t
+    class=rest
+
+@describe.respace.en core.describe.words
+    of=$describe.respace
+    lang=en
+    verb=$w.en.condense.diagram.respace
+    verb=$w.en.loosen.diagram.respace
+    verb=$w.en.respace.diagram.respace
+
+@describe.snap core.describe
+    op=diagram.snap
+    intent=command
+    emit="@{_} core.request action=diagram.snap arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.snap.t core.describe.arg
+    of=$describe.snap
+    name=t
+    class=rest
+
+@describe.snap.en core.describe.words
+    of=$describe.snap
+    lang=en
+    verb=$w.en.snap.diagram.snap
+
+@describe.flip core.describe
+    op=diagram.flip
+    intent=command
+    emit="@{_} core.request action=diagram.flip arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.flip.t core.describe.arg
+    of=$describe.flip
+    name=t
+    class=rest
+
+@describe.flip.en core.describe.words
+    of=$describe.flip
+    lang=en
+    verb=$w.en.flip.diagram.flip
+    verb=$w.en.mirror.diagram.flip
+
+@describe.reverse core.describe
+    op=diagram.reverse
+    intent=command
+    emit="@{_} core.request action=diagram.reverse arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.reverse.t core.describe.arg
+    of=$describe.reverse
+    name=t
+    class=rest
+
+@describe.reverse.en core.describe.words
+    of=$describe.reverse
+    lang=en
+    verb=$w.en.reverse.diagram.reverse
+
+@describe.sort core.describe
+    op=diagram.sort
+    intent=command
+    emit="@{_} core.request action=diagram.sort arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.sort.t core.describe.arg
+    of=$describe.sort
+    name=t
+    class=rest
+
+@describe.sort.en core.describe.words
+    of=$describe.sort
+    lang=en
+    verb=$w.en.sort.diagram.sort
+    verb=$w.en.alphabetize.diagram.sort
+    verb=$w.en.alphabetise.diagram.sort
+
+@describe.equalize core.describe
+    op=diagram.equalize
+    intent=command
+    emit="@{_} core.request action=diagram.equalize arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.equalize.t core.describe.arg
+    of=$describe.equalize
+    name=t
+    class=rest
+
+@describe.equalize.en core.describe.words
+    of=$describe.equalize
+    lang=en
+    verb=$w.en.equalize.diagram.equalize
+    verb=$w.en.equalise.diagram.equalize
+    verb=$w.en.unify.diagram.equalize
+    verb=$w.en.normalize.diagram.equalize
+
+@describe.straighten core.describe
+    op=diagram.straighten
+    intent=command
+    emit="@{_} core.request action=diagram.straighten arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.straighten.t core.describe.arg
+    of=$describe.straighten
+    name=t
+    class=rest
+
+@describe.straighten.en core.describe.words
+    of=$describe.straighten
+    lang=en
+    verb=$w.en.straighten.diagram.straighten
+
+@describe.untangle core.describe
+    op=diagram.untangle
+    intent=command
+    emit="@{_} core.request action=diagram.untangle arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.untangle.t core.describe.arg
+    of=$describe.untangle
+    name=t
+    class=rest
+
+@describe.untangle.en core.describe.words
+    of=$describe.untangle
+    lang=en
+    verb=$w.en.untangle.diagram.untangle
+    verb=$w.en.uncross.diagram.untangle
+
+@describe.fit core.describe
+    op=diagram.fit
+    intent=command
+    emit="@{_} core.request action=diagram.fit arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.fit.t core.describe.arg
+    of=$describe.fit
+    name=t
+    class=rest
+
+@describe.fit.en core.describe.words
+    of=$describe.fit
+    lang=en
+    verb=$w.en.fit.diagram.fit
+    verb=$w.en.recenter.diagram.fit
+    verb=$w.en.recentre.diagram.fit
+
+@describe.count core.describe
+    op=diagram.ask.count
+    intent=command
+    emit="@{_} core.request action=diagram.ask.count arg.text=\"{segment}\""
+    priority=3
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.count.t core.describe.arg
+    of=$describe.count
+    name=t
+    class=rest
+
+@describe.count.en core.describe.words
+    of=$describe.count
+    lang=en
+    verb=$w.en.count.diagram.ask.count
+    verb=$w.en.tally.diagram.ask.count
+
+@describe.undo core.describe
+    op=diagram.undo
+    intent=command
+    emit="@{_} core.request action=diagram.undo arg.text=\"{segment}\""
+    priority=3
+    frames=phr
+
+@describe.undo.en core.describe.words
+    of=$describe.undo
+    lang=en
+    phrase=$phrase.lang.intent.undo
+
+@describe.redo core.describe
+    op=diagram.redo
+    intent=command
+    emit="@{_} core.request action=diagram.redo arg.text=\"{segment}\""
+    priority=3
+    frames=phr
+
+@describe.redo.en core.describe.words
+    of=$describe.redo
+    lang=en
+    phrase=$phrase.lang.intent.redo
+
+@w.en.draw.diagram.create core.word text=draw means=diagram.create
+@w.en.add.diagram.create core.word text=add means=diagram.create
+@w.en.create.diagram.create core.word text=create means=diagram.create
+@w.en.make.diagram.create core.word text=make means=diagram.create
+@w.en.put.diagram.create core.word text=put means=diagram.create
+@w.en.a.diagram.create.s core.word text=a means=diagram.create.s
+@w.en.an.diagram.create.s core.word text=an means=diagram.create.s
+@w.en.another.diagram.create.s core.word text=another means=diagram.create.s
+@w.en.new.diagram.create.s core.word text=new means=diagram.create.s
+@w.en.some.diagram.create.s core.word text=some means=diagram.create.s
+@w.en.delete.diagram.delete core.word text=delete means=diagram.delete
+@w.en.remove.diagram.delete core.word text=remove means=diagram.delete
+@w.en.erase.diagram.delete core.word text=erase means=diagram.delete
+@w.en.clear.diagram.delete core.word text=clear means=diagram.delete
+@w.en.move.diagram.move core.word text=move means=diagram.move
+@w.en.nudge.diagram.move core.word text=nudge means=diagram.move
+@w.en.shift.diagram.move core.word text=shift means=diagram.move
+@w.en.push.diagram.move core.word text=push means=diagram.move
+@w.en.drag.diagram.move core.word text=drag means=diagram.move
+@w.en.slide.diagram.move core.word text=slide means=diagram.move
+@w.en.arrange.diagram.arrange core.word text=arrange means=diagram.arrange
+@w.en.organize.diagram.arrange core.word text=organize means=diagram.arrange
+@w.en.organise.diagram.arrange core.word text=organise means=diagram.arrange
+@w.en.lay.diagram.arrange core.word text=lay means=diagram.arrange
+@w.en.shrink.diagram.resize core.word text=shrink means=diagram.resize
+@w.en.enlarge.diagram.resize core.word text=enlarge means=diagram.resize
+@w.en.grow.diagram.resize core.word text=grow means=diagram.resize
+@w.en.resize.diagram.resize core.word text=resize means=diagram.resize
+@w.en.scale.diagram.resize core.word text=scale means=diagram.resize
+@w.en.rename.diagram.rename core.word text=rename means=diagram.rename
+@w.en.label.diagram.label core.word text=label means=diagram.label
+@w.en.caption.diagram.label core.word text=caption means=diagram.label
+@w.en.tag.diagram.label core.word text=tag means=diagram.label
+@w.en.duplicate.diagram.duplicate core.word text=duplicate means=diagram.duplicate
+@w.en.copy.diagram.duplicate core.word text=copy means=diagram.duplicate
+@w.en.clone.diagram.duplicate core.word text=clone means=diagram.duplicate
+@w.en.disconnect.diagram.disconnect core.word text=disconnect means=diagram.disconnect
+@w.en.unlink.diagram.disconnect core.word text=unlink means=diagram.disconnect
+@w.en.detach.diagram.disconnect core.word text=detach means=diagram.disconnect
+@w.en.swap.diagram.swap core.word text=swap means=diagram.swap
+@w.en.exchange.diagram.swap core.word text=exchange means=diagram.swap
+@w.en.group.diagram.group core.word text=group means=diagram.group
+@w.en.bundle.diagram.group core.word text=bundle means=diagram.group
+@w.en.cluster.diagram.group core.word text=cluster means=diagram.group
+@w.en.ungroup.diagram.ungroup core.word text=ungroup means=diagram.ungroup
+@w.en.dissolve.diagram.ungroup core.word text=dissolve means=diagram.ungroup
+@w.en.connect.diagram.connect core.word text=connect means=diagram.connect
+@w.en.link.diagram.connect core.word text=link means=diagram.connect
+@w.en.join.diagram.connect core.word text=join means=diagram.connect
+@w.en.attach.diagram.connect core.word text=attach means=diagram.connect
+@w.en.wire.diagram.connect core.word text=wire means=diagram.connect
+@w.en.align.diagram.align core.word text=align means=diagram.align
+@w.en.distribute.diagram.distribute core.word text=distribute means=diagram.distribute
+@w.en.space.diagram.distribute core.word text=space means=diagram.distribute
+@w.en.forget.diagram.forget core.word text=forget means=diagram.forget
+@w.en.tidy.diagram.improve core.word text=tidy means=diagram.improve
+@w.en.declutter.diagram.improve core.word text=declutter means=diagram.improve
+@w.en.beautify.diagram.improve core.word text=beautify means=diagram.improve
+@w.en.neaten.diagram.improve core.word text=neaten means=diagram.improve
+@w.en.condense.diagram.respace core.word text=condense means=diagram.respace
+@w.en.loosen.diagram.respace core.word text=loosen means=diagram.respace
+@w.en.respace.diagram.respace core.word text=respace means=diagram.respace
+@w.en.snap.diagram.snap core.word text=snap means=diagram.snap
+@w.en.flip.diagram.flip core.word text=flip means=diagram.flip
+@w.en.mirror.diagram.flip core.word text=mirror means=diagram.flip
+@w.en.reverse.diagram.reverse core.word text=reverse means=diagram.reverse
+@w.en.sort.diagram.sort core.word text=sort means=diagram.sort
+@w.en.alphabetize.diagram.sort core.word text=alphabetize means=diagram.sort
+@w.en.alphabetise.diagram.sort core.word text=alphabetise means=diagram.sort
+@w.en.equalize.diagram.equalize core.word text=equalize means=diagram.equalize
+@w.en.equalise.diagram.equalize core.word text=equalise means=diagram.equalize
+@w.en.unify.diagram.equalize core.word text=unify means=diagram.equalize
+@w.en.normalize.diagram.equalize core.word text=normalize means=diagram.equalize
+@w.en.straighten.diagram.straighten core.word text=straighten means=diagram.straighten
+@w.en.untangle.diagram.untangle core.word text=untangle means=diagram.untangle
+@w.en.uncross.diagram.untangle core.word text=uncross means=diagram.untangle
+@w.en.fit.diagram.fit core.word text=fit means=diagram.fit
+@w.en.recenter.diagram.fit core.word text=recenter means=diagram.fit
+@w.en.recentre.diagram.fit core.word text=recentre means=diagram.fit
+@w.en.count.diagram.ask.count core.word text=count means=diagram.ask.count
+@w.en.tally.diagram.ask.count core.word text=tally means=diagram.ask.count

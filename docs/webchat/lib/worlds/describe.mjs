@@ -109,7 +109,7 @@ export function describePatterns(d, { phrases = null, lexicons = null, lg = EN }
   const names = new Set(args.map((a) => a.name));
   for (const t of d.emit.match(/\{(\w+)\}/g) ?? []) {
     const n = t.slice(1, -1);
-    if (/^_\d*$/.test(n)) continue;
+    if (/^_\d*$/.test(n) || n === 'segment') continue;   // `{segment}`: the reserved placeholder for the sentence itself (spec 03 section 2)
     if (!names.has(n) && !args.some((a) => a.qty === n)) throw new Error(`describe '${d.id}': emit uses {${n}} which no arg declares`);
   }
   const want = d.frames?.length ? d.frames : IF[intent];

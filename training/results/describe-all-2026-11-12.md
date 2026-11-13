@@ -20,6 +20,12 @@ Rewrite of the descriptions after the user direction (generalization, not memori
 | games.guess | 500 | 465 | 54 | 0.93 | yes | 101 / 0 / 0 | 101 / 0 / 0 | 92 / 3 / 6 | 97/130 passed |  |
 | games.chess | 1760 | 1250 | 244 | 0.71 | yes | 148 / 3 / 1 | 148 / 3 / 1 | 124 / 14 / 14 | 133/269 passed |  |
 | ui.shell | 778 | 592 | 141 | 0.76 | yes | 88 / 2 / 0 | 88 / 2 / 0 | 59 / 16 / 15 | 33/64 passed |  |
+| media.music | 2892 | 1281 | 267 | 0.44 | yes | 200 / 3 / 4 | 200 / 3 / 4 | 149 / 11 / 47 | 177/413 passed | melody notes and song titles as `rest` are not described |
+| data.charts | 2690 | 1277 | 283 | 0.47 | yes | 179 / 4 / 3 | 179 / 4 / 3 | 133 / 17 / 36 | 140/277 passed |  |
+| docs.reader | 2514 | 644 | 121 | 0.26 | yes | 219 / 1 / 8 | 219 / 1 / 8 | 164 / 13 / 51 | 120/209 passed |  |
+| ui.avatar | 1299 | 890 | 208 | 0.69 | yes | 271 / 5 / 10 | 272 / 5 / 9 | 161 / 19 / 106 | 172/327 passed |  |
+| art.draw | 1353 | 1037 | 207 | 0.77 | yes | 313 / 5 / 17 | 313 / 5 / 17 | 228 / 49 / 58 | 271/577 passed |  |
+| diagram.sketch | 1724 | 593 | 81 | 0.34 | yes | 29 / 6 / 0 | 29 / 6 / 0 | 5 / 21 / 9 | 582/760 passed | cue words plus a trailing `rest`; emit `{segment}`; generated at the lowest priority |
 
 - **Gate.** Size: met by every world in the table (the three games, user.profile, chess and ui.shell were rewritten here; the kids.* worlds, kids.shop, geo.map and docs.editor already met it: ratios 0.20 to 0.63). **No new wrong answer in `add`** for any world of this rewrite (add rows equal the hand-written rows or gain one).
 - **`only`** is the measurement mode (every hand-written pattern of a described operation is dropped). The losses are the hand-written coverage the description does not state; they are listed as gaps below, not hidden by growing the description. `only` wrong counts also contain cases the neighbouring worlds' descriptions steal (art.draw `move`, media.music `song`/interval, ui.avatar `wrong`): these are the same shape as in the earlier DESCRIBE-ALL runs and are one more reason `only` is not shipped.
@@ -44,10 +50,17 @@ Rewrite of the descriptions after the user direction (generalization, not memori
 | kids.time | 128 | 128 | 0 | 0 |
 | ui.shell | 141 | 141 | 0 | 141 |
 | user.profile | 70 | 70 | 0 | 70 |
+| media.music | 267 | 267 | 0 | 228 |
+| data.charts | 283 | 283 | 0 | 272 |
+| docs.reader | 121 | 121 | 0 | 121 |
+| ui.avatar | 208 | 208 | 0 | 188 |
+| art.draw | 207 | 207 | 0 | 200 |
+| diagram.sketch | 81 | 81 | 0 | 81 |
 
 ## Gaps (reported, not shipped long)
 
-1. **Not done in this run (no description yet):** media.music, data.charts, docs.reader, ui.avatar, ui.help, art.draw, diagram.sketch. They need the same method (shared groups plus real words); ui.help and ui.avatar are mostly multi-word intents (what can you do, how do I play) that want `lang.intent` groups; art.draw, media.music, data.charts and diagram.sketch are verb + lexicon-argument worlds. Their hand-written patterns stay the only readers.
+1. **Second batch (2026-11-13): media.music, data.charts, docs.reader, ui.avatar, art.draw, diagram.sketch** (ui.help was done earlier). Same method and gate; new shared groups in `worlds/lang.common/lexicon.sop` (clearly separate blocks: tool, draw, music, chart and reader intents). Gate: size met by all six (ratios 0.28 to 0.79); add rows equal the hand-written rows or gain one (ui.avatar +1 right) and, measured over all worlds and both sets, **no case turns wrong and none is lost** in `add` (an earlier version of the descriptions did: broad `rest`-based verbs of docs.reader open/across, media.music melody set/add, ui.avatar name/seed/has, art.draw colorOf and the `short` frames stole sentences of other worlds; they were removed, not tuned). The `only` losses are the gaps: sentence-level phrasings of the hand-written patterns (melody notes and song titles, `which major key has 3 flats`, `the tempo should be 140`, chart edits such as `double the apples`, `legend on`, section-relative reading questions such as `and section 4?`), ellipsis follow-ups and compound questions. Not described on purpose: free-text arguments introduced by a bare verb (they steal other worlds' sentences). diagram.sketch is described by cue words plus a trailing `rest` and the reserved `{segment}` emit (spec 03 section 2c); its generated patterns have the lowest priority, so they never beat another world.
+   Slot declarations: ui.avatar (`who`, `name`, `seed`) was declared with `slot=` and dropped with the description of name and seed (free text); `ui.avatar.character.active` stays on `setchar`.
 2. **Games, spelled-out letters and notation:** hangman letter names ("bee", "see": 26 patterns of the hand-written file), chess algebraic notation `o-o`, castling questions and the `s2.*` opening phrases ("move my e pawn two squares") are not in the descriptions (a letter-name lexicon with a mapping to the letter would need a value mapping a description does not have).
 3. **Whole-sentence phrase lists are not matched one to one:** "put my x in the top left" (tictactoe), "start a hangman game with the word tiger" (the `with the word` form is stated, the sentence-initial `start a hangman game` with an article is not), "i concede", "make the computer easier" (chess), "how many letters does the word have". These are the `only` losses of the tables.
 4. **tests.sop in `only`:** the world test files are paraphrase lists built on the hand-written patterns (tictactoe 33 of 173, hangman 111 of 154, guess 97 of 130, chess 133 of 269, ui.shell 33 of 64, user.profile 121 of 144); by the data principle (overlap is fine, contamination is not removed) these are not training data to drop, and `only` is not shipped.
