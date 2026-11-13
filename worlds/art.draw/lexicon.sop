@@ -39,6 +39,14 @@
     word=yacht
     word=mountain
     word=hill
+    word=lake
+    word=pond
+    word=river
+    word=stream
+    word=road
+    word=street
+    word=field
+    word=patch
     word=rainbow
     word=person
     word=man
@@ -111,7 +119,6 @@
     word=water
     word=sea
     word=ocean
-    word=lake
 
     word=sandy
     word=snowy
@@ -673,6 +680,13 @@
     word=sea
     word=ocean
     word=lake
+    word=pond
+    word=river
+    word=stream
+    word=road
+    word=street
+    word=field
+    word=patch
     word=sandy
     word=snowy
     word=grassy

@@ -42,7 +42,7 @@ export const KIND_WORDS = {
   house: 'house', home: 'house', cottage: 'house', hut: 'house', tree: 'tree', pine: 'tree', palm: 'tree', sun: 'sun', cloud: 'cloud',
   car: 'car', automobile: 'car', truck: 'car', flower: 'flower', rose: 'flower', daisy: 'flower', tulip: 'flower', sunflower: 'flower',
   cat: 'cat', kitten: 'cat', kitty: 'cat', dog: 'dog', puppy: 'dog', fish: 'fish', goldfish: 'fish', bird: 'bird', birdie: 'bird',
-  boat: 'boat', ship: 'boat', sailboat: 'boat', yacht: 'boat', mountain: 'mountain', hill: 'mountain', rainbow: 'rainbow',
+  boat: 'boat', ship: 'boat', sailboat: 'boat', yacht: 'boat', mountain: 'mountain', hill: 'hill', lake: 'lake', pond: 'lake', river: 'river', stream: 'river', road: 'road', street: 'road', field: 'field', patch: 'patch', rainbow: 'rainbow',
   person: 'person', man: 'person', woman: 'person', boy: 'person', girl: 'person', child: 'person', kid: 'person', balloon: 'balloon',
   rocket: 'rocket', spaceship: 'rocket', moon: 'moon', crescent: 'moon',
   circle: 'circle', ball: 'circle', dot: 'circle', square: 'square', box: 'square', rectangle: 'rectangle', triangle: 'triangle',
@@ -53,7 +53,7 @@ export const KIND_WORDS = {
 const UNDRAWABLE = new Set(['monkey', 'lion', 'tiger', 'elephant', 'horse', 'cow', 'pig', 'rabbit', 'bear', 'duck', 'frog', 'snake', 'giraffe', 'zebra', 'sheep', 'turtle', 'butterfly', 'mouse']);
 const IRREGULAR = { people: 'person', men: 'person', women: 'person', children: 'person', kids: 'person', mice: null, leaves: null, fishes: 'fish' };
 /** Ground cover words -> ground kind. */
-export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', lake: 'sea', sandy: 'sand', snowy: 'snow', grassy: 'grass', watery: 'sea', icy: 'snow', wet: 'sea', beachy: 'sand' };
+export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', sandy: 'sand', snowy: 'snow', grassy: 'grass', watery: 'sea', icy: 'snow', wet: 'sea', beachy: 'sand' };
 const GROUND_COLOR = { grass: 'green', sand: 'yellow', snow: 'white', sea: 'blue' };
 const GROUND_NAME = { grass: 'grass', sand: 'sand', snow: 'snow', sea: 'water' };
 
@@ -167,7 +167,7 @@ function loadUsualPlaces(ctx) {
   }
   if (m.size) USUAL = m;
 }
-const anchorOf = (kind) => USUAL.get(kind) ?? 'any';
+const anchorOf = (kind) => USUAL.get(kind) ?? (KINDS[kind]?.region ? 'ground' : 'any');   // a place (lake, road, field) lies on the ground
 const onGround = (kind) => ['ground', 'horizon'].includes(anchorOf(kind));
 const byId = (s, id) => s.objects.find((o) => o.id === id);
 const effectiveColor = (o) => o.color ?? defaultColor(kindKey(o));
@@ -187,6 +187,7 @@ function restore(s, snap) {
 /** Call before changing the picture. */
 function remember(s, label) {
   s.history.push(snapshot(s, label));
+  s.prev = s.history.at(-1);   // the picture before the newest step: what follow-ups ("but keep the lake", "not over the water") compare with, in both reasoners
   if (s.history.length > MAX_HISTORY) s.history.splice(0, s.history.length - MAX_HISTORY);
   s.future = [];
 }
@@ -332,6 +333,7 @@ export function parseNP(text) {
     if (Object.hasOwn(POS_WORDS, w) && !(w === 'top' && np.kind) && words[i + 1] !== 'of') { np.pos = POS_WORDS[w]; continue; }
     if (w === 'one' || w === 'ones' || w === '1') { np.one = true; continue; }
     if (isShade(w) || isColorWord(w)) { colorWords.push(w); continue; }
+    if (w === 'water' && waterBody()) { np.kind ??= waterBody(); continue; }   // "the water" is the lake or the river of the picture, when it has one
     if (w === 'sky') { np.special = 'sky'; continue; }
     if (w === 'background' || w === 'paper' || w === 'page' || w === 'canvas') { np.special = 'background'; continue; }
     if (Object.hasOwn(GROUND_WORDS, w) || w === 'ground' || w === 'floor') { np.special = 'ground'; np.groundWord = GROUND_WORDS[w] ?? null; continue; }
@@ -349,6 +351,10 @@ export function parseNP(text) {
   if (!np.kind && np.one && np.pron === null) np.kind = null;
   return np;
 }
+/** The kind of the first body of water (lake, river) the picture has, or null: "the water" means it. */
+const waterBody = () => (curScene?.objects ?? []).map(kindKey).find((k) => k === 'lake' || k === 'river') ?? null;
+/** Is `word` the name of a place (lake, field ...) the picture has no object of? Then "in the lake" keeps its older reading: the water or ground of the picture. */
+const absentPlace = (word) => { const k = kindOfWord(word)?.kind; return !!k && !!KINDS[k]?.region && !(curScene?.objects ?? []).some((o) => kindKey(o) === k); };
 /** A spoken part word without a kind ("roof"): { word, kinds } over every kind that has such a part. */
 function findPartWord(w) {
   const base = w.replace(/s$/, '');
@@ -491,23 +497,26 @@ export function regionIn(words) {
   if (bottom) return 'bottom';
   return null;
 }
+const isColorOnly = (t) => { const w = toks(t).filter((x) => !['a', 'an', 'the', 'color', 'colour'].includes(x)); return w.length > 0 && w.every((x) => isShade(x) || isColorWord(x)); };
 const REL_PATTERNS = [
   ['between', /\bbetween\b/], ['front', /\b(?:in front of|before)\b/], ['behind', /\b(?:behind|at the back of)\b/],
   ['on', /\b(?:on top of|on)\b/], ['above', /\b(?:above|over|higher than)\b/], ['below', /\b(?:below|under|underneath|beneath|lower than)\b/],
   ['leftof', /\b(?:to the left of|on the left of|left of|on the left hand side of|at the left of)\b/], ['rightof', /\b(?:to the right of|on the right of|right of|on the right hand side of|at the right of)\b/],
   ['next', /\b(?:next to|beside|near|by|close to|closer to|alongside|besides|nearby|near to)\b/],
+  ['in', /\b(?:in|into|inside|within)\b/], ['around', /\b(?:around|round|surrounding)\b/],
 ];
 /** A relation to other things: { rel, refs: [noun phrase texts] } or null. Order of the patterns matters (longest first). */
 export function parseRelation(words) {
   const text = Array.isArray(words) ? words.join(' ') : clean(words);
-  const order = ['between', 'front', 'behind', 'leftof', 'rightof', 'next', 'above', 'below', 'on'];
+  const order = ['between', 'front', 'behind', 'leftof', 'rightof', 'next', 'above', 'below', 'around', 'on', 'in'];
   for (const rel of order) {
     const re = REL_PATTERNS.find((p) => p[0] === rel)[1];
     const m = re.exec(text);
     if (!m) continue;
     const rest = text.slice(m.index + m[0].length).trim();
     // "on the left" / "on the ground" are places, not relations to a thing
-    if (rel === 'on' && (regionIn(rest.split(' ')) || /^(?:the )?(?:left|right|top|bottom|ground|grass|floor)/.test(rest))) continue;
+    if ((rel === 'on' || rel === 'in') && (regionIn(rest.split(' ')) || /^(?:the )?(?:left|right|top|bottom|ground|grass|floor|sky|middle|centre|center|corner|background|picture|drawing)\b/.test(rest))) continue;
+    if (rel === 'in' && (isColorOnly(rest) || (/^(?:the )?(?:water|sea|ocean|sand|beach|snow)$/.test(rest) && !(rest.endsWith('water') && waterBody())) || absentPlace(rest.split(' ').at(-1)) || !(kindOfWord(rest.split(' ').at(-1)) || (rest.endsWith('water') && waterBody())))) continue;   // "in blue"; the water or ground of the picture; a place the picture does not have
     if (!rest) continue;
     const refs = (rel === 'between' ? rest.split(/\band\b/) : [rest]).map((x) => x.trim()).filter(Boolean);
     return { rel, refs, text: m[0] };
@@ -542,12 +551,12 @@ const SKY_X = [850, 150, 500, 330, 690, 60, 940, 230, 780];
  * the water is made: the sea when there is no ground yet, a pond on the ground otherwise. Returns the spot in a pond, or null for the ground band.
  */
 function waterSpot(s, o) {
-  const pond = s.objects.find((x) => x.tag === 'pond');
+  const pond = s.objects.find((x) => x.tag === 'pond' || kindKey(x) === 'lake');
   if (!pond && s.ground !== 'sea' && !NEEDS.has(kindKey(o))) return null;   // no water and the thing can do without: it stands where things of the ground stand
   if (pond) { placeNote = `I put the ${kindName(kindKey(o))} in the pond.`; return { x: pond.x, y: pond.y }; }
   if (s.ground === 'sea') { placeNote = `I put the ${kindName(kindKey(o))} in the water.`; return null; }
   if (!s.ground && !s.objects.some((x) => onGround(kindKey(x)))) { s.ground = 'sea'; s.groundColor = 'blue'; placeNote = `I added some water for the ${kindName(kindKey(o))}.`; return null; }
-  const p = makeObject(s, 'oval', { color: 'blue', tag: 'pond' });
+  const p = makeObject(s, 'lake', { color: 'blue', tag: 'pond' });
   p.size = 260; p.z = o.z - 1;
   defaultSpotOn(s, p, 'ground');
   s.objects.push(p);
@@ -615,7 +624,8 @@ function defaultSpotOn(s, o, anchor) {
 }
 
 /** Place `o` relative to other objects (already resolved). `side` is used only by next/leftof/rightof. */
-function placeRelative(s, o, rel, refs) {
+function placeRelative(s, o, rel0, refs) {
+  const rel = rel0 === 'on' && KINDS[kindKey(refs[0])]?.region ? 'in' : rel0;   // on the lake is in it; on top of the house is above it
   const gap = 24, b = bbox(o), k = KINDS[kindKey(o)];
   const R0 = bbox(refs[0]);
   const ground = onGround(kindKey(o)) || anchorOf(kindKey(o)) === 'water';
@@ -644,6 +654,12 @@ function placeRelative(s, o, rel, refs) {
     }
     case 'front': place.x = R0.cx + R0.w * 0.12; place.y = Math.min(H - 6 - b.h / 2, R0.y1 + 22 - b.h / 2); break;
     case 'behind': place.x = R0.cx + R0.w * 0.28; place.y = R0.y1 - b.h / 2 - 6; break;
+    case 'in': place.x = R0.cx; place.y = R0.cy; break;
+    case 'around': {   // a place goes round the thing (as big as needed), a thing stands next to it
+      if (KINDS[kindKey(o)]?.region) { place.x = R0.cx; place.y = R0.cy; o.size = Math.round(Math.min(W * 0.9, Math.max(o.size, R0.w * 1.8, (R0.h * 1.4) / (KINDS[kindKey(o)].aspect || 1)))); }
+      else { place.x = sideX(R0.cx < W / 2 ? 1 : -1, R0); place.y = alignY(R0); }
+      break;
+    }
     case 'between': {
       const R1 = bbox(refs[1] ?? refs[0]);
       place.x = (R0.cx + R1.cx) / 2; place.y = ground ? Math.max(R0.y1, R1.y1) - b.h / 2 : (R0.cy + R1.cy) / 2; break;
@@ -653,8 +669,8 @@ function placeRelative(s, o, rel, refs) {
   o.x = place.x; o.y = place.y;
   clampIn(o);
   const z = s.objects.reduce((m, x) => Math.max(m, x.z), -Infinity);
-  if (rel === 'behind') o.z = refs[0].z - 1;
-  else if (['below', 'front', 'on', 'above', 'next', 'leftof', 'rightof', 'between'].includes(rel)) o.z = Math.max(o.z, refs[0].z + 1, Number.isFinite(z) ? o.z : 0);
+  if (rel === 'behind' || (rel === 'around' && KINDS[kindKey(o)]?.region)) o.z = refs[0].z - 1;
+  else if (!KINDS[kindKey(o)]?.region && ['below', 'front', 'on', 'in', 'above', 'next', 'leftof', 'rightof', 'between', 'around'].includes(rel)) o.z = Math.max(o.z, refs[0].z + 1, Number.isFinite(z) ? o.z : 0);
 }
 
 // ---- making objects -------------------------------------------------------------------------------------------------------
@@ -663,7 +679,7 @@ function makeObject(s, kind, { color = null, factor = 1, fill = null, tag = null
   const k = KINDS[kind];
   const o = {
     id: `o${s.nextId++}`, kind: kind.startsWith(COMPOSITE) ? 'composite' : kind, ...(kind.startsWith(COMPOSITE) ? { thing: thingOfKey(kind) } : {}), x: W / 2, y: H / 2, size: Math.round(k.size * factor), color: color ? canonColor(color) : null,
-    fill: fill ?? k.fill ?? 'crayon', rotation: 0, flip: false, z: (Z_LAYER[kind] ?? 0) + s.nextId, parts: {},
+    fill: fill ?? k.fill ?? 'crayon', rotation: 0, flip: false, z: (Z_LAYER[kind] ?? (k.region ? -2500 : 0)) + s.nextId, parts: {},
   };
   if (tag) o.tag = tag;
   if (k.custom) o.shape = k.shape;   // a piece or a group drawn again keeps its parts with it
@@ -996,7 +1012,7 @@ const describePlacing = (o, place, refs) => {
   if (!o && !place.region) return '';
   if (place.rel && refs[0]) {
     const label = describeObject(refs[0], { article: 'the', size: false });
-    return { rightof: ` to the right of ${label}`, leftof: ` to the left of ${label}`, next: ` next to ${label}`, above: ` above ${label}`, on: ` on top of ${label}`, below: ` under ${label}`, front: ` in front of ${label}`, behind: ` behind ${label}`, between: ` between ${label} and ${describeObject(refs[1] ?? refs[0], { article: 'the', size: false })}` }[place.rel] ?? '';
+    return { rightof: ` to the right of ${label}`, leftof: ` to the left of ${label}`, next: ` next to ${label}`, above: ` above ${label}`, on: ` on top of ${label}`, below: ` under ${label}`, front: ` in front of ${label}`, behind: ` behind ${label}`, in: ` in ${label}`, around: ` around ${label}`, between: ` between ${label} and ${describeObject(refs[1] ?? refs[0], { article: 'the', size: false })}` }[place.rel] ?? '';
   }
   if (place.region) return { sky: ' in the sky', ground: ' on the ground' }[place.region] ?? ` ${REGION_PHRASE[place.region]}`;
   return '';
@@ -1249,7 +1265,7 @@ export function parseDest(text) {
   if (/\b(to the front|forward|to the top of everything|in front of everything)\b/.test(j)) return { kind: 'z', dir: 'front' };
   if (/\b(to the back|backward|backwards|to the bottom of everything|behind everything)\b/.test(j)) return { kind: 'z', dir: 'back' };
   // "in the water", "into the sea": the ground band (the water, sand, grass or snow the picture has)
-  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|sand|beach|snow)$/.test(j)) return { kind: 'region', region: 'ground' };
+  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|pond|sand|beach|snow)$/.test(j) && (absentPlace(w.at(-1)) || !(kindOfWord(w.at(-1)) || (w.at(-1) === 'water' && waterBody())))) return { kind: 'region', region: 'ground' };   // a lake of the picture is a thing: the relation below
   const rel = parseRelation(w);
   if (rel) return { kind: 'rel', rel: rel.rel, refs: rel.refs, closer: /\bcloser\b/.test(j) };
   if (/\b(edge|far)\b/.test(j) || edgeAmt) {
@@ -1267,9 +1283,30 @@ export function parseDest(text) {
   return null;
 }
 
+/**
+ * Several things put in relation to another thing keep their arrangement: the one nearest to their centre is placed by the relation and the others follow it
+ * rigidly (they were all put on one spot before). Returns the moved objects, or { error }; null when this is not a case for it.
+ */
+function moveGroupRel(s, objs, dest) {
+  if (dest.kind !== 'rel' || objs.length < 2 || dest.rel === 'in') return null;
+  const refs = [];
+  for (const text of dest.refs) { const r = resolveNP(s, parseNP(text)); const ref = r.objs.find((x) => !objs.includes(x)); if (!ref) return null; refs.push(ref); }
+  const cx = objs.reduce((a, o) => a + o.x, 0) / objs.length, cy = objs.reduce((a, o) => a + o.y, 0) / objs.length;
+  const anchor = objs.slice().sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy))[0];
+  const orig = objs.map((o) => ({ o, x: o.x, y: o.y, z: o.z })), a0 = { x: anchor.x, y: anchor.y };
+  placeRelative(s, anchor, dest.rel, refs);
+  const dx = anchor.x - a0.x, dy = anchor.y - a0.y;
+  for (const { o, x, y, z } of orig) { if (o !== anchor) { o.x = x + dx; o.y = y + dy; o.z = Math.max(z, anchor.z); } }
+  // the whole group stays on the canvas: slide it back as one
+  const bs = objs.map(bbox), over = { x: Math.max(0, Math.max(...bs.map((b) => b.x1)) - (W - 4)) - Math.max(0, 4 - Math.min(...bs.map((b) => b.x0))), y: Math.max(0, Math.max(...bs.map((b) => b.y1)) - (H - 4)) - Math.max(0, 4 - Math.min(...bs.map((b) => b.y0))) };
+  for (const o of objs) { o.x = Math.round(o.x - over.x); o.y = Math.round(o.y - over.y); }
+  return { done: objs };
+}
+
 function applyDest(s, objs, dest) {
   const done = [];
-  for (const o of objs) {
+  { const g = moveGroupRel(s, objs, dest); if (g) return g; }
+  for (const [i, o] of objs.entries()) {
     const b = bbox(o);
     if (dest.kind === 'step') { const r = space.planMove([{ id: o.id, x: o.x, y: o.y, w: b.w, h: b.h }], FRAME, dest.move, s.lastMove); if (r.error) return { error: 'I do not remember a move to repeat. Say which way to go, for example "a bit more to the left".' }; o.x = r.boxes[o.id].x; o.y = r.boxes[o.id].y; clampIn(o); dest.memory = r.memory; }
     else if (dest.kind === 'abs') { o.x = dest.x; o.y = dest.y; clampIn(o); }
@@ -1279,6 +1316,10 @@ function applyDest(s, objs, dest) {
       for (const text of dest.refs) { const r = resolveNP(s, parseNP(text)); if (!r.objs.length) return { error: r.error ?? `I can not find "${text}".` }; refs.push(r.objs.find((x) => x !== o) ?? r.objs[0]); }
       if (refs[0] === o) return { error: 'A thing can not be next to itself!' };
       placeRelative(s, o, dest.rel, refs);
+      if (objs.length > 1 && (dest.rel === 'in' || (dest.rel === 'on' && KINDS[kindKey(refs[0])]?.region))) {   // several things in one place: spread across it
+        const R = bbox(refs[0]);
+        o.x = R.x0 + ((i + 0.5) / objs.length) * R.w; o.y = R.cy + (i % 2 ? 0.12 : -0.06) * R.h; clampIn(o);
+      }
     } else if (dest.kind === 'z') {
       const zs = s.objects.map((x) => x.z);
       o.z = dest.dir === 'front' ? Math.max(...zs) + 1 : Math.min(...zs) - 1;
@@ -1289,6 +1330,59 @@ function applyDest(s, objs, dest) {
   return { done };
 }
 
+/**
+ * "put a lake next to the house", "place another road", "and a lake": a thing that is not in the picture (or is asked for with "another") is added, not moved
+ * (SCENE-NATURAL P4: the verb of such a message is "put", and a thing that is not there yet is made). Null when the phrase moves something that exists.
+ */
+function addMissing(ctx, s, tt, dest) {
+  let ws = toks(`${tt} ${dest}`), joined = false;
+  while (ws.length > 1 && ['and', 'also', 'too', 'then', 'now', 'plus'].includes(ws[0])) { budget.tick('ops.addMissing'); ws = ws.slice(1); joined = true; }   // "and a lake": one more
+  const spec = parseMoreSpec(ws);
+  if (!spec) return null;
+  const k = kindOfWord(spec.kind);
+  if (!k || k.kind === '*' || !isKind(k.kind)) return null;
+  const again = joined || ws.includes('another');
+  if (!again && sameKind(s, k.kind).length) return null;
+  const r = add(ctx, spec);
+  return r;
+}
+
+/** The ground cover asked for as a thing with a place ("put grass under the houses"): a patch of it as wide as the group, where the relation says (SCENE-NATURAL P4). */
+function coverPlace(ctx, s, groundWord, d) {
+  if (!d || !['rel', 'region'].includes(d.kind) || (d.kind === 'region' && d.region === 'ground')) return null;
+  const kind = groundWord === 'sea' ? 'lake' : 'patch', color = { sea: 'blue', sand: 'tan', snow: 'white' }[groundWord] ?? 'green';
+  let group = [];
+  if (d.kind === 'rel') {
+    for (const text of d.refs) { const r = resolveNP(s, parseNP(text), { many: true }); if (!r.objs.length) return no(r.error ?? `I can not find "${text}".`, 'missing'); group.push(...r.objs); }
+    group = [...new Set(group)];
+  }
+  const o = makeObject(s, kind, { color });
+  const aspect = KINDS[kind].aspect;
+  if (group.length) {
+    const bs = group.map(bbox), x0 = Math.min(...bs.map((b) => b.x0)), x1 = Math.max(...bs.map((b) => b.x1)), y0 = Math.min(...bs.map((b) => b.y0)), y1 = Math.max(...bs.map((b) => b.y1));
+    const gw = x1 - x0, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    o.size = Math.round(Math.max(gw * 1.15, KINDS[kind].size * 0.6));
+    const bh = o.size * aspect, gap = 20;
+    o.x = cx;
+    switch (d.rel) {
+      case 'below': case 'front': o.y = y1 + bh * 0.15; break;
+      case 'above': o.y = y0 - bh / 2 - gap; break;
+      case 'rightof': o.x = x1 + gap + o.size / 2; o.y = y1 - bh / 2; break;
+      case 'leftof': o.x = x0 - gap - o.size / 2; o.y = y1 - bh / 2; break;
+      case 'next': o.x = cx < W / 2 ? x1 + gap + o.size / 2 : x0 - gap - o.size / 2; o.y = y1 - bh / 2; break;
+      case 'around': o.size = Math.round(Math.max(gw * 1.6, (y1 - y0) * 1.8 / aspect)); o.y = cy; break;
+      default: o.y = cy; break;   // in, on, behind: the place lies under them, centred
+    }
+    o.z = Math.min(o.z, ...group.map((x) => x.z - 1));
+    clampIn(o);
+  } else placeRegion(s, o, d.region);
+  remember(s, `added ${kind === 'patch' ? 'a patch of grass' : 'a lake'}`);
+  s.objects.push(o); s.last = [o.id];
+  open(ctx);
+  const label = kind === 'lake' ? 'a lake' : groundWord === 'grass' ? 'a patch of grass' : `a patch of ${GROUND_NAME[groundWord]}`;
+  return ok(`${opener(s)} I put ${label}${d.kind === 'rel' ? (group.length > 1 && group.every((x) => kindKey(x) === kindKey(group[0])) ? describePlacing(o, { rel: d.rel }, [group[0]]).replace(/ the .*$/, ` the ${pluralOfKind(kindKey(group[0]), group.length)}`) : describePlacing(o, { rel: d.rel }, [group[0]])) : describePlacing(null, { region: d.region }, [])}.`, { data: { made: [o.id] } });
+}
+
 export const move = guard((ctx, args, s) => {
   let phrase = String(args.phrase ?? '').replace(/_/g, ' ');
   const adj = [args.m1, args.m2].filter(Boolean).join(' ');
@@ -1297,17 +1391,23 @@ export const move = guard((ctx, args, s) => {
   phrase = phrase.replace(/\b(?:over|across|along) (to|towards|toward)\b/gi, '$1');
   let { target: tt, dest } = splitDest(phrase);
   if (!toks(tt.replace(AMOUNT_RE, ' ')).filter((x) => !['a', 'the', 'more', 'even', 'and', 'also', 'then', 'so', 'please'].includes(x)).length) { dest = `${tt} ${dest}`.trim(); tt = ''; }   // "and a bit lower": only an amount before the direction, so it is the same thing
+  if (args.verb === 'put') { const am = addMissing(ctx, s, tt, dest); if (am) return am; }   // a placing verb with a thing that is not in the picture adds it
   if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'missing');
   const d = parseDest(dest);   // the destination is checked before asking which one is meant
   if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);
-  const t = target(s, tt || 'it', { many: true, ask: true });
+  // a bare "it" is what the last step handled, all of it ("further left" after moving three houses moves the three)
+  const lastThings = (!tt || (/^(?:it|them)$/.test(tt.trim()) && /\b(?:further|farther|more|again)\b/.test(dest))) && !s.selected ? s.last.map((id) => byId(s, id)).filter(Boolean) : [];
+  const t = lastThings.length > 1 ? { r: { objs: lastThings, np: parseNP('them') } } : target(s, tt || 'it', { many: true, ask: true });
   if (t.error) return t.error;
   const { r } = t;
-  if (r.special) return no('The sky and the ground stay where they are. You can move the things you drew.');
+  if (r.special) {
+    const c = r.special === 'ground' && r.np?.groundWord ? coverPlace(ctx, s, r.np.groundWord, d) : null;   // grass under the houses is a patch of grass, not the ground itself
+    return c ?? no('The sky and the ground stay where they are. You can move the things you drew.');
+  }
   remember(s, 'moved something');
   // RP5b: "move the fish into the water": say "in the water" (not "on the ground") and add the water when the picture has none
-  const target_ = /^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(water|sea|ocean|lake|sand|beach|snow)$/.exec(toks(dest).join(' '))?.[1];
-  const wantGround = target_ ? GROUND_WORDS[target_] : null;
+  const target_ = d.kind !== 'region' ? null : /^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(water|sea|ocean|lake|sand|beach|snow)$/.exec(toks(dest).join(' '))?.[1];
+  const wantGround = target_ ? GROUND_WORDS[target_] ?? (/^(?:lake|pond)$/.test(target_) ? 'sea' : null) : null;
   const addedGround = wantGround && s.ground !== wantGround ? wantGround : null;
   if (addedGround) { s.ground = addedGround; s.groundColor = GROUND_COLOR[addedGround]; }
   const before = r.objs.map((o) => ({ id: o.id, x: o.x, y: o.y, z: o.z }));
@@ -1361,6 +1461,62 @@ export const spatial = guard((ctx, args, s) => {
   s.lastMove = r.memory ?? null;
   open(ctx);
   return ok(`${opener(s)} ${r.say.replace(/^I /, 'I ')}`);
+});
+
+// ---- follow-ups that change the last step (SCENE-NATURAL P2): "but keep the lake", "not over the water" ---------------------------------------------------
+/** What the last step did to the picture, from the snapshot it left on the history: the things it made, changed and removed. */
+function lastStep(s) {
+  const snap = s.prev;
+  if (!snap) return null;
+  budget.tick('art.step', s.objects.length + snap.objects.length + 1);
+  const was = new Map(snap.objects.map((o) => [o.id, o])), now = new Map(s.objects.map((o) => [o.id, o]));
+  const sig = (o) => JSON.stringify([o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.z, o.parts]);
+  return { snap, was, added: s.objects.filter((o) => !was.has(o.id)), changed: s.objects.filter((o) => was.has(o.id) && sig(o) !== sig(was.get(o.id))), removed: snap.objects.filter((o) => !now.has(o.id)) };
+}
+const putBack = (o, w) => { Object.assign(o, { ...w, parts: { ...(w.parts ?? {}) } }); };
+/** "not over the water": what the last step made or moved onto the named thing goes back (made things go away, moved things return); the rest of the step stays. */
+export const except_ = guard((ctx, args, s) => {
+  const step = lastStep(s);
+  if (!step) return no('I have not done anything yet that I could take back part of.', 'missing');
+  const r = resolveNP(s, parseNP(args.x ?? ''), { many: true });
+  if (r.error) return no(r.error, 'missing');
+  if (r.special || !r.objs.length) return no('Say which thing it should stay clear of, for example "not over the lake".', 'missing');
+  const reach = (o) => r.objs.some((t) => t !== o && overlapRatio(bbox(o), bbox(t)) > 0.05);
+  const touched = [...step.added, ...step.changed].filter(reach);
+  const label = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
+  if (!touched.length) return no(`Nothing I just did reaches ${label}.`, 'unsupported');
+  remember(s, `kept things off ${label}`);
+  for (const o of touched) { if (step.was.has(o.id)) putBack(o, step.was.get(o.id)); else s.objects = s.objects.filter((x) => x !== o); }
+  s.last = touched.filter((o) => step.was.has(o.id)).map((o) => o.id);
+  open(ctx);
+  const made = touched.filter((o) => !step.was.has(o.id)), moved = touched.filter((o) => step.was.has(o.id));
+  const say = (xs) => `the ${pluralOfKind(kindKey(xs[0]), xs.length)}`;
+  return ok(`${opener(s)} ${[made.length ? `I took ${made.length === 1 ? sayObj(made[0]) : say(made)} away from ${label}` : '', moved.length ? `I put ${moved.length === 1 ? sayObj(moved[0]) : say(moved)} back` : ''].filter(Boolean).join(' and ')}.`);
+});
+/** "but keep the lake": a thing the last step removed or changed comes back as it was. */
+export const keep = guard((ctx, args, s) => {
+  const step = lastStep(s);
+  if (!step) return no('I have not changed anything yet, so there is nothing to keep.', 'missing');
+  const np = parseNP(args.x ?? '');
+  const view = { ...s, objects: step.snap.objects };
+  let want = [];
+  if (np.pron) want = [...step.removed, ...step.changed.map((o) => step.was.get(o.id))];
+  else if (np.special === 'ground') {
+    if ((np.groundWord ?? s.ground) === step.snap.ground && s.ground !== step.snap.ground) { remember(s, 'kept the ground'); s.ground = step.snap.ground; s.groundColor = step.snap.groundColor; open(ctx); return ok(`${opener(s)} I kept the ${GROUND_NAME[s.ground] ?? 'ground'} as it was.`); }
+    return no('The ground is as it was.', 'unsupported');
+  } else { const r = resolveNP(view, np, { many: true }); if (r.error) return no(r.error, 'missing'); want = r.objs; }
+  const now = new Map(s.objects.map((o) => [o.id, o]));
+  const sig = (o) => JSON.stringify([o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.z, o.parts]);
+  const back = want.filter((w) => !now.has(w.id) || sig(now.get(w.id)) !== sig(w));
+  const label = want.length === 1 ? sayObj(want[0]) : want.length ? `the ${pluralOfKind(kindKey(want[0]), want.length)}` : 'it';
+  if (!want.length) return no('I have nothing to put back.', 'unsupported');
+  if (!back.length) return ok(`${cap1(label)} ${want.length === 1 ? 'is' : 'are'} still there as before.`);
+  remember(s, `kept ${label}`);
+  for (const w of back) { const cur = byId(s, w.id); if (cur) putBack(cur, w); else s.objects.push({ ...w, parts: { ...(w.parts ?? {}) } }); }
+  s.objects.sort((a, b) => idNum(a) - idNum(b));
+  s.last = back.map((o) => o.id);
+  open(ctx);
+  return ok(`${opener(s)} I kept ${label}.`);
 });
 
 export const nudge = guard((ctx, args, s) => {

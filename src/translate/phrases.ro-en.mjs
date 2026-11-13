@@ -198,6 +198,10 @@ const BASE_FRAMES = [
   { p: 'încă|inca una|unul|alta|altul {col}', out: 'another {col} one' },
   { p: 'încă|inca una|unul|alta|altul {adj}', out: 'another {adj} one' },
   { p: 'alta|altul {col}', out: 'another {col} one' },
+  { p: 'încă|inca un|o {np:bare}', out: 'another {np}' },
+  { p: 'nu și|si peste {np}', out: 'not over {np}' },   // "nu și peste apă": the last step must not reach a thing (SCENE-NATURAL P2)
+  { p: 'nu și|si pe {np}', out: 'not on {np}' },
+  { p: 'nu și|si în|in {np}', out: 'not in {np}' },   // "încă un crocodil": one more of the thing just made (SCENE-NATURAL P2), not "still a crocodile"
   { p: 'alta|altul {adj}', out: 'another {adj} one' },
   { p: '{col} închis|închisă', out: 'dark {col}' },
   { p: '{col} deschis|deschisă', out: 'light {col}' },

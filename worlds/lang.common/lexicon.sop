@@ -1098,6 +1098,48 @@
     alt=draw
     alt=drawing
 
+@phrase.lang.keep core.phrase
+    doc="Keep what the last step took away or covered (SCENE-NATURAL P2): but keep, leave, do not remove."
+    alt=keep
+    alt=leave
+    alt=but_keep
+    alt=but_leave
+    alt=keep_also
+    alt=dont_remove
+    alt=do_not_remove
+    alt=dont_delete
+    alt=do_not_delete
+    alt=dont_erase
+    alt=dont_replace
+    alt=do_not_replace
+    alt=let_stay
+
+@phrase.lang.except core.phrase
+    doc="The last step must not reach a thing (SCENE-NATURAL P2): not over the water, not on the road, but not the lake."
+    alt=not_over
+    alt=not_on
+    alt=not_in
+    alt=not_above
+    alt=not_under
+    alt=not_on_top_of
+    alt=not_also
+    alt=not_also_over
+    alt=not_also_on
+    alt=not_also_in
+    alt=but_not
+    alt=but_not_over
+    alt=but_not_on
+    alt=and_not
+    alt=and_not_over
+    alt=no_not
+    alt=dont_cover
+    alt=do_not_cover
+    alt=dont_cover_the
+    alt=do_not_cover_the
+    alt=dont_put_it_on
+    alt=do_not_put_it_on
+    alt=not_covering
+
 @phrase.lang.cancel core.phrase
     frame=false
     doc="Cancellations (ctx.lang.cancel): never mind, forget it, cancel that."
