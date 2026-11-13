@@ -1,0 +1,202 @@
+@legend.meta.worlds core.legend
+    namespace=meta.worlds
+    version=0.1.0
+    imports=core
+    doc="What a world is (cards), what is live this turn, what the message is made of, and the votes and blocks the routing rules derive from them"
+
+# ---- a card: one per world (generated into kb.sop)
+@meta.worlds.card core.type
+    extends=core.state
+    doc="One world: its id, its tab, whether it needs something running, its names, action words, kinds of things and question frames. The words marked shared are used by more than two worlds and weigh little."
+@meta.worlds.card.id core.key
+    value=atom
+    card=one
+    ask="Which world?"
+@meta.worlds.card.tab core.key
+    value=atom
+    card=one
+    ask="Which tab?"
+@meta.worlds.card.kind core.key
+    value=atom
+    card=one
+    ask="Tab or module?"
+@meta.worlds.card.run core.key
+    value=atom
+    card=one
+    ask="Does it need something running?"
+@meta.worlds.card.nav core.key
+    value=atom
+    card=one
+    ask="Does it open tabs?"
+@meta.worlds.card.catalog core.key
+    value=atom
+    card=one
+    ask="Does it take any thing of the knowledge catalog?"
+@meta.worlds.card.name core.key
+    value=atom
+    card=many
+    ask="What is it called?"
+@meta.worlds.card.navact core.key
+    value=atom
+    card=many
+    ask="Which words open a tab?"
+@meta.worlds.card.claim core.key
+    value=atom
+    card=many
+    ask="Which words does it claim while its tab is open?"
+@meta.worlds.card.act core.key
+    value=atom
+    card=many
+    ask="Which action words belong to it?"
+@meta.worlds.card.actshared core.key
+    value=atom
+    card=many
+    ask="Which shared action words?"
+@meta.worlds.card.thing core.key
+    value=atom
+    card=many
+    ask="Which kinds of things does it hold or make?"
+@meta.worlds.card.thingshared core.key
+    value=atom
+    card=many
+    ask="Which shared things?"
+@meta.worlds.card.frame core.key
+    value=atom
+    card=many
+    ask="Which question frames?"
+
+@meta.worlds.card.frameshared core.key
+    value=atom
+    card=many
+    ask="Which question frames does it share with other worlds?"
+
+# ---- facts about the words of the routing: words that start a game, worlds that act anywhere
+@meta.worlds.start core.type
+    extends=core.state
+@meta.worlds.start.word core.key
+    value=atom
+    card=one
+    ask="Which word starts something?"
+@meta.worlds.anywhere core.type
+    extends=core.state
+@meta.worlds.anywhere.world core.key
+    value=atom
+    card=one
+    ask="Which world acts anywhere?"
+
+# ---- live facts of the turn (told by the host)
+@meta.worlds.live core.type
+    extends=core.state
+@meta.worlds.live.world core.key
+    value=atom
+    card=one
+    ask="Which world?"
+@meta.worlds.live.active core.key
+    value=atom
+    card=one
+    ask="Is it the open tab?"
+@meta.worlds.live.running core.key
+    value=atom
+    card=one
+    ask="Does it have something running?"
+@meta.worlds.live.asked core.key
+    value=atom
+    card=one
+    ask="Did it ask a question last turn?"
+@meta.worlds.live.last core.key
+    value=atom
+    card=one
+    ask="Was it the world of the last action?"
+@meta.worlds.live.notab core.key
+    value=atom
+    card=one
+    ask="Is no tab open?"
+@meta.worlds.live.recent core.key
+    value=atom
+    card=one
+    ask="Did it answer lately?"
+@meta.worlds.scene core.type
+    extends=core.state
+@meta.worlds.scene.world core.key
+    value=atom
+    card=one
+    ask="Which world?"
+@meta.worlds.scene.thing core.key
+    value=atom
+    card=one
+    ask="Which thing is in its scene?"
+@meta.worlds.prior core.type
+    extends=core.state
+@meta.worlds.prior.world core.key
+    value=atom
+    card=one
+    ask="Which world?"
+@meta.worlds.prior.pts core.key
+    value=integer
+    card=one
+    ask="How many points does the encoder give it?"
+
+# ---- the message
+@meta.worlds.msg core.type
+    extends=core.state
+@meta.worlds.msg.word core.key
+    value=atom
+    card=many
+    ask="Which words (and word pairs) does it have?"
+@meta.worlds.msg.frag core.key
+    value=atom
+    card=one
+    ask="Is it a piece without a verb of its own?"
+@meta.worlds.msg.catalog core.key
+    value=atom
+    card=many
+    ask="Which words are things of the knowledge catalog?"
+
+# ---- derived
+@meta.worlds.starts core.type
+    extends=core.state
+@meta.worlds.starts.yes core.key
+    value=atom
+    card=one
+    ask="Does the message start something?"
+@meta.worlds.vote core.type
+    extends=core.state
+    doc="A reason for a world: the rule that fired, its points and the word it rests on"
+@meta.worlds.vote.world core.key
+    value=atom
+    card=one
+    ask="Which world?"
+@meta.worlds.vote.rule core.key
+    value=atom
+    card=one
+    ask="Which rule?"
+@meta.worlds.vote.weight core.key
+    value=integer
+    card=one
+    ask="How many points?"
+@meta.worlds.vote.via core.key
+    value=atom
+    card=one
+    ask="Which word?"
+@meta.worlds.block core.type
+    extends=core.state
+    doc="A reason a world cannot take the message"
+@meta.worlds.block.world core.key
+    value=atom
+    card=one
+    ask="Which world?"
+@meta.worlds.block.rule core.key
+    value=atom
+    card=one
+    ask="Which rule?"
+@meta.worlds.say core.type
+    extends=core.state
+    doc="The plain words of the reason a rule gives; {via} is the word it rests on, {name} the world's everyday name"
+@meta.worlds.say.rule core.key
+    value=atom
+    card=one
+    ask="Which rule?"
+@meta.worlds.say.text core.key
+    value=string
+    card=one
+    ask="What does it say?"

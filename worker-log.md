@@ -953,3 +953,33 @@ Left for later: transfers between worlds, avatar reactions, session/profile card
 - Hosts: art.draw (part polygons of composites, joins in `move`, pattern `x.space.sense`), diagram.sketch (outlines of shapes), ui.avatar (slot anchor box as parts). Spec 19 section 5.
 - Measure: eval-space 150/150 both reasoners, plus 60 new seeded cases (surface, joining, knowledge layouts) 60/60; tests/space.test.mjs 18, loop-guard, test-world space/common.sense/art.draw/ui.avatar/diagram.sketch pass; draw, diagram, avatar-faces, scene-referents, art-draw-parts tests pass. Behaviour change: "put X in the centre" no longer overlaps another thing (the consistency rule moves it clear).
 - Open: docs/webchat not rebuilt (lead rebuilds after merge); art.draw `placeRelative` does not use `enforce` ground limits; no avatar face-layout command yet; diagram has no patterns for around / by height / stack.
+
+## 2026-11-13 — WORLD-OF-WORLDS (meta.worlds, routers A / B / C)
+Built: `worlds/meta.worlds` (module, no tab; generated cards `kb.sop` by `scripts/build-world-cards.mjs`, SOP rules `matrix.sop` with reasons, spec 20), `src/dialog/meta-worlds.mjs`, `symbolic-router.mjs` (setting `routing`: dispatcher (A, default) | symbolic (B) | symbolic+encoder (C)), SCENE-NATURAL P1 (`no-continuation`) now asks the module's `nocontinuation` rule, tabClaim expressed as a `claim` card key + rule (weight 60). Experiment: `scripts/eval-world-routing.mjs`, encoder scores on CUDA by `psys2_train.world_scores` (ckpt dispatcher-v5s2-c3265, 21 worlds; the shipped v4e has no diagram.sketch). Results: `training/results/world-routing-2026-11-13.json`. Measured BEFORE merging main (SPACE card, P2..P7 not in it).
+World-level: the world each router picks vs the case's world; "asked" = no world taken. Multi-world messages (families multi, world-switch, triple) are left out. A = encoder top 3 validated by the rules (not validated = asked); A1 = encoder top-1 only.
+
+| set | n | A right/wrong/asked | A1 right % | B right/wrong/asked | C right/wrong/asked |
+| --- | --- | --- | --- | --- | --- |
+| operational | 1030 | 982/11/37 (95.3) | 96.1 | 692/199/139 (67.2) | 967/49/14 (93.9) |
+| minimal pairs | 122 | 115/4/3 (94.3) | 100 | 81/33/8 (66.4) | 122/0/0 (100) |
+| knowledge lookup | 190 | 105/36/49 (55.3) | 53.7 | 115/31/44 (60.5) | 103/76/11 (54.2) |
+| dialogues (turns) | 2241 | 1459/444/338 (65.1) | 72.6 | 1481/519/241 (66.1) | 1791/409/41 (79.9) |
+| owner log (13 with a world expectation) | 13 | 7/0/6 | 92.3 | 8/5/0 | 9/3/1 |
+| wrong-tab (160 canonical + 40 fragments) | 200 | 134/43/23 (67.0) | 72.5 | 104/55/41 (52.0) | 149/32/19 (74.5) |
+| wrong-tab, operational messages | 200 | 157/32/11 (78.5) | 87.0 | 92/65/43 (46.0) | 169/25/6 (84.5) |
+| ALL | 3996 | 74.0 | 79.4 | 64.4 | 82.8 |
+
+Time per message: A 39 ms (validator; encoder 0.2 ms amortised on the GPU batch), B 1.7 ms, C 1.8 ms.
+Prior weight (C, points): 10 -> 73.5, 20 -> 79.9, 30 -> 82.8, 45 -> 82.3 overall (operational 80.3 / 90.3 / 94.0 / 95.4; wrong-tab 57.5 / 67.5 / 73 / 75.5).
+
+Hold-out (encoder output of one world masked, no retraining), right % on the held-out world's own messages:
+| world | n | A trained | C trained | C masked (30 pts) | C masked (15 pts) | B |
+| --- | --- | --- | --- | --- | --- | --- |
+| art.draw | 419 | 75.4 | 85.4 | 62.5 (-22.9) | 72.6 | 74.7 |
+| diagram.sketch | 72 | 93.1 | 90.3 | 73.6 (-16.7) | 75.0 | 76.4 |
+| geo.map | 230 | 78.3 | 88.7 | 59.1 (-29.6) | 63.5 | 75.7 |
+| games.chess | 174 | 66.1 | 68.4 | 47.7 (-20.7) | 54.0 | 56.3 |
+Over all messages the masked C loses 0.7 to 2.2 points of 82.8 (80.6 / 82.8 / 81.1 / 81.8). B vs A trained on the held-out worlds: -0.7, -16.7, -2.6, -9.8.
+Talk card with no training (87 messages whose world is talk): A 0 (no label), B 21, C 4 (the prior points to trained worlds). Cost of the card on messages of other worlds (right with/without): B 1481/1491 dialogues, 692/699 operational; C none or 1.
+
+Decision rule: NOT met. C is not at least as good as A everywhere (operational 93.9 vs 95.3/96.1, wrong-tab-ops 84.5 vs 87.0 against A1, knowledge 54.2 vs 55.3; it is better on dialogues, wrong-tab, minimal pairs against A) and B loses more than 3 points on 3 of 4 hold-outs. Findings: (1) the cards are generated from patterns, so B depends on their coverage (arith "less than", "split by", greetings, typos are not on any card; near-word repair helped some); (2) the prior weight trades the trained case against the hold-out (30 and 45 best trained, 15 best masked), so the encoder cannot be both a strong prior and harmless for a world it does not know; (3) where the symbolic rules have evidence (referent, named world, running game, last action, wrong tab) they fix what the encoder gets wrong (dialogues +14.8, wrong-tab +7.5 over A); (4) the validator in A counts "not validated" as asked, A1 is the fairer encoder baseline. Not done: end-to-end owner-log replay with B (the world-level owner set has 13 messages), masked A. sopworld gaps: questions.md Q3.

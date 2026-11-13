@@ -103,6 +103,13 @@ Q1 answered by the reviewer in worker-tasks.md ("Answer to Q1 ... RE-VENDOR 0.7.
 
 Blocking: no. Meanwhile: (1) is applied; the veto is being made the default (user decision 2026-11-12) with the false `no-game` vetoes fixed first; (2)–(6) wait for the answer.
 
+## Q3 (WORLD-OF-WORLDS, 2026-11-13): what sopworld lacks for ranking worlds with reasons
+
+The rules of `meta.worlds` (worlds/meta.worlds/matrix.sop) run in the library: `core.rule` with `not=` works (a block that disappears when a fact is told later), joins over many-valued keys work, and a derived wire can be the input of another rule. Four things were missing, each worked around by the host (blocking: no):
+1. **Text in a derived wire.** `core.rule ... then=` cannot interpolate variables into a string (only a `core.deny`'s `why` can). The plain-words reason is therefore a table of `meta.worlds.say` wires (rule -> text with `{via}` and `{name}`) that the host fills. Proposal: `say="the ?x is in your ?w"` on `core.rule`, kept in the derived wire's `meta`, so `explain` returns it.
+2. **A sum per key.** `core.calc fn=sum over=` gives one total for the whole pattern, not one per world, so the host adds the points of the votes per world. Proposal: `group=?w` on `core.calc`.
+3. **Soft scores in `rank`.** `rank` orders readings by consistency, referents, lacks, words left out and assumptions, never by points. A router needs weighted evidence, so the order is the host's (`score` desc). Proposal: a `weight` on rules that `rank` can use as a last criterion.
+4. **A cap per rule.** A rule fires once per binding (a long message that names two things votes twice). The host caps votes per rule. Proposal: `limit=2` on `core.rule`.
 ## 2026-11-13 — SPACE: what sopworld lacks for the module `space` (library items; no blocker, host functions used)
 
 The module `space` (worlds/space/, specs/18) is rules in JavaScript (`space.mjs`) over a projection `space.item` / `space.frame`; none of its arithmetic is a declared host function of sopworld yet, because the library lacks what a selection needs. Please pass to the library:

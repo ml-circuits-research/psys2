@@ -22,6 +22,11 @@ export const RUNTIME_DEFAULTS = Object.freeze({
   fastPath: false,                // encoder only: skip the model when the rules read the whole message and the interpreter accepts it (PERF; the webchat turns it on)
 });
 
+/**
+ * `routing` (spec 20) is an optional setting outside the shared defaults until the reviewer decides: 'dispatcher' (A, today; also when missing) | 'symbolic' (B: meta.worlds,
+ * the encoder's world head unread) | 'symbolic+encoder' (C: meta.worlds with the encoder as one prior). `sessionOptions` and `createRuntime` read it from the settings object.
+ */
+
 /** The named evaluation modes and the settings each one means. `encoder+n1` is the shipped default. */
 export const MODES = Object.freeze({
   rules: { ...RUNTIME_DEFAULTS, formalizer: 'rules', normalizer: false },
@@ -56,7 +61,7 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
+  return { ...(settings.routing && settings.routing !== 'dispatcher' ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
 }
 
 /**
@@ -64,7 +69,7 @@ export function sessionOptions(settings, extra = {}) {
  * `load` loads the dispatcher parts (host specific), `normalizer` is the host's normalizer provider or null.
  */
 export function createRuntime({ engine, settings, load, normalizer = null, waitForModel = true, isPaused = null, ...rest }) {
-  const enc = createDispatcherFormalizer({ load, getPolicy: () => policyFromSettings(settings), normalizer, waitForModel, ...rest });
+  const enc = createDispatcherFormalizer({ load, getPolicy: () => policyFromSettings(settings), getRouting: () => settings.routing, normalizer, waitForModel, ...rest });
   enc.attach(engine);
   engine.formalizers.encoder = enc;
   // The NX strategy (ADR-009) shares the dispatcher's passes; it exists once the model is loaded and carries the heads. `isPaused` (the host's ORT
