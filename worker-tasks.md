@@ -3540,3 +3540,13 @@ The owner sees two avatar systems and chaos: the avatar is drawn with glasses ye
 - "sudan capital" (row 31) → knowledge relation between two things in one request, by lookup (k.geo has capitals).
 - "Ta-da!" is still in replies (row 9): the interjections were to go in every language.
 - "I can't reach the picture catalog right now" on the owner's machine (row 17): say in worker-log why the catalog was unreachable there and what the user sees when offline.
+
+## Reviewer 2026-11-13 19:00 — LOG WHAT HAPPENED (owner): the export must show the result, not only the reading
+
+The owner's log misled the reviewer: for "get to to sudan capital" the export says `geo.show sudan`, no effects, and a reply that dropped "capital"; the owner says the screen did show the capital. The export cannot settle it. Add to USER-ACTIONS (export format 3), for every turn:
+1. **What changed in the world, in plain structured form**: the state difference (things added, removed, moved, changed, with names and values: "map: centre Khartoum, zoom 6, marker Khartoum"; "drawing: +2 elephants"; "avatar: glasses removed"), produced by one generic diff of the world state before and after, not by code per world. `state.before/after` hashes stay.
+2. **What was on screen**: the active tab after the turn, the visible result in words (the same text a screen reader would get: reuse or add the accessible description of each view), and every effect that ran, including view effects that today leave `effects: []` (map moves, tab switches, cards).
+3. **All replies shown**, in order, including notices and suggestions, in the language shown and in English.
+4. **The user's reaction**: the next action within the turn gap (undo, a repeat, a correction, a thumbs tap) linked to the turn, so a later analysis can count "undone" and "repeated" as signs of a wrong result.
+5. Optional and off by default: a small thumbnail of the view per turn (size cap, local only), switchable under Privacy and history.
+`scripts/analyze-phrase-log.mjs` prints a turn as: tab, message, reading, what changed, what was shown, reaction. The ledger takes its "what happened" from these fields. For the Sudan turn say in worker-log what really happened (did the map go to the capital?).
