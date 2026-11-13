@@ -333,3 +333,21 @@
     semantics=action
     action=doc.addStructure
     doc="Adds several empty structures in order from a list (a header, two chapters, a paragraph): headings with a placeholder, chapters numbered, empty paragraphs and lists. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.make core.operation
+    impl=make
+    semantics=action
+    action=doc.make
+    doc="The act make-document: a new document with its title and its content (a text, and/or sections with a heading, paragraphs and a list) in one request, one step to undo. Brings the editor tab forward."
+
+@op.docs.editor.view core.operation
+    impl=view
+    semantics=action
+    action=docs.editor.view
+    doc="The declaration of the editor as a view of the session things (spec 23): the textual aspect; it takes a whole selection in one request and the facts of the discussion."
+
+@op.docs.editor.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=docs.editor.adopt
+    doc="Take things of the session store (and, for the discussion, its topics, games and places) into a document: a new one titled after what it is about, or sections of the open one for things sent one by one."

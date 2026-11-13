@@ -981,3 +981,29 @@ export function redo(ctx) {
   refresh(ctx);
   return ok('OK, I did it again.');
 }
+
+// ---- the chart as a VIEW of the session things (spec 23): the numeric aspect, one request for a whole selection ----------------------------------------
+// A thing counts as one of its kind; a thing that carries a number of its own (value, count, amount, price, population) is a bar of that number under its name.
+const NUMBER_ATTRS = ['value', 'count', 'amount', 'price', 'population'];
+export const view = () => ok({ id: 'data.charts', noun: 'chart', words: ['chart', 'graph', 'plot', 'bar chart', 'pie chart'], aspects: ['numeric'], counts: true, many: true, kinds: null });
+function _adopt(ctx, { things, thing, about } = {}) {
+  const list = things ?? (thing ? [thing] : []);
+  if (!list.length) return no('unsupported', 'I was given nothing to chart.');
+  const cur = current(ctx);
+  const c0 = cur?.spec?.kind === 'things' ? cur : null;
+  const rows = new Map();   // label key -> { label, value }
+  for (const [i, l] of (c0?.labels ?? []).entries()) rows.set(labelKey(l), { label: l, value: Number(c0.datasets[0].data[i]) || 0 });
+  for (const t of list) {
+    budget.tick('charts.adopt');
+    const attr = NUMBER_ATTRS.find((a) => t.attrs?.[a] != null && t.attrs[a] !== '' && Number.isFinite(Number(t.attrs[a])));
+    const label = attr ? cap(sp(t.name ?? t.label ?? t.kind)) : cap(plural(t.kind, 2));
+    const key = labelKey(label), row = rows.get(key) ?? { label, value: 0 };
+    row.value += attr ? Number(t.attrs[attr]) : 1;
+    rows.set(key, row);
+  }
+  const all = [...rows.values()];
+  const title = about ? cap(about === 'the discussion' ? about : `things in ${/^the /.test(about) ? about : `the ${about}`}`) : 'Things';
+  const c = place(ctx, {}, { title: c0?.title ?? title, type: 'bar', labels: all.map((r) => r.label), datasets: [{ label: 'Count', data: all.map((r) => r.value) }], source: [], spec: { kind: 'things', args: {} } }, c0 ? { keepId: c0.id } : {});
+  return done(ctx, `OK, here is a ${kindWord(c)} of ${about ?? 'the things you sent'} with ${all.length} ${all.length === 1 ? 'item' : 'items'}: ${joinAnd(all.map((r) => `${r.label.toLowerCase()} ${fmt(r.value)}`))}. It is open in the Charts tab.`, { data: { chart: c.id } });
+}
+export const adopt = undoable(_adopt);

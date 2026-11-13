@@ -37,3 +37,45 @@
     word=hops
     word=glide
     word=glides
+
+@lex.session.things.did core.lexicon
+    class=modifier
+    doc="TEMPORARY seed (things.mjs DID_VIEW_TEMPORARY): the verbs of 'what I drew', 'everything we made'. Deleted when k.actions says which tool a verb belongs to."
+    word=drew
+    word=drawn
+    word=made
+    word=did
+    word=built
+    word=added
+    word=created
+    word=put
+    word=placed
+    word=said
+    word=asked
+    word=painted
+    word=sketched
+    word=seated
+    word=planned
+    word=wrote
+    word=typed
+
+@lex.session.things.views core.lexicon
+    class=modifier
+    doc="TEMPORARY: the words that name a view in 'a chart of what I drew' (the words each view declares in its `view` operation, repeated here so that a pattern reads only a request for a view: 'number of items on my list' is not one). Generated from the declarations when the lexicon can be built from operations."
+    word=chart
+    word=graph
+    word=plot
+    word=document
+    word=doc
+    word=page
+    word=paragraph
+    word=summary
+    word=report
+    word=notes
+    word=timeline
+    word=calendar
+    word=drawing
+    word=picture
+    word=avatar
+    word=seating
+    word=conversation

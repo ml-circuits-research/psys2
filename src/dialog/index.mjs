@@ -320,7 +320,7 @@ export class DialogSession {
    */
   forkForValidation() {
     const s = Object.create(DialogSession.prototype);
-    s.engine = this.engine; s.isession = this.isession.clone(); s._recentWorlds = [...(this._recentWorlds ?? [])]; s._lastGame = this._lastGame;
+    s.engine = this.engine; s.isession = this.isession.clone(); s.isession.sessionFacts = this.isession.sessionFacts; s._recentWorlds = [...(this._recentWorlds ?? [])]; s._lastGame = this._lastGame;
     return s;
   }
 
@@ -1352,7 +1352,7 @@ export class DialogSession {
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
     if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
-    this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w);
+    this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
     const { set, interp, translator } = engine;

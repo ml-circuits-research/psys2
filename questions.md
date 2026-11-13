@@ -186,3 +186,9 @@ Decisions wanted:
 1. P3: compound messages — segment first (dispatcher) or tag several acts? A "none" class for non-doing turns? Owner asked whether one small model could replace DistilBERT for segmentation + world prior too: the worker can run that as an experiment if you want it.
 2. P3 size: the table suggests the 6x384 MiniLM (23 MB, 21 ms/message on the phone profile, −0.25 held-out span F1); owner decides.
 3. art.draw pilot decisions (worker-log): multi-act through act([...]), parts of a thing as kinds from k.objects, undo phrasing from lang.undo.*, a generated matrix.sop for schema worlds, `accepts` reading the segment text (done, small general fix).
+
+
+## 2026-11-13 TRANSFER (charts, document, timeline): for the reviewer
+1. A view that takes things (chart, document, timeline) publishes none of its own. Should the rows of a chart and the sections of a document become things (so T1 has rows in them), or stay sinks? I left them sinks.
+2. The named-world tier of routing (`routing.mjs`) lets "send table 1 to the chart" be read by the chart's data pattern with a number, ahead of the seating plan's `send` on its own tab. A general answer would be `tabClaim` on the generated `send` patterns of schema worlds (acts.mjs, not touched here) or "a send verb never starts chart data". Which?
+3. The view words in `lex.session.things.views` repeat what each view declares. Generating that lexicon from the `view` operations is the clean form; I left it TEMPORARY.

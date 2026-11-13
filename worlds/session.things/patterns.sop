@@ -64,3 +64,33 @@
     priority=8
     example="A boat is made of wood."
     doc="Teach: what a kind is made of."
+
+@pat.session.things.select.session core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [make|create|build|draw|give_me|show_me|show|put_together|write|start|do|generate|prepare]? [me]? [a|an|the]? [nice|new|simple|quick|short|little]? {to:lex.session.things.views} [of|about|from|on|for|with|using|based_on] [$dialogue.session]"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"the discussion\""
+    kind=request
+    signal=true
+    priority=14
+    example="Create a chart about the current discussion."
+    example="Make a document about what we did."
+    doc="The session as the content of a view: the whole selection of things (and, for a document, its topics, games and places) goes into the view named, by the one operation things.show."
+
+@pat.session.things.select.did core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [make|create|build|draw|give_me|show_me|show|put_together|write|start|do|generate|prepare]? [me]? [a|an|the]? [nice|new|simple|quick|short|little]? {to:lex.session.things.views} [of|about|from|on|for|with|using|based_on] [what|everything|all_the_things|all|the_things|things|stuff] [that]? [i|we|you] {v:lex.session.things.did} [so_far]?"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"what I {v}\""
+    kind=request
+    signal=true
+    priority=14
+    example="Make a chart of what I drew."
+    example="Create a document about everything we made."
+    doc="What the user did in one view (the verb names the view: drew is the drawing) as the content of another view."
+
+@pat.session.things.select.in core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [make|create|build|draw|give_me|show_me|show|put_together|write|start|do|generate|prepare]? [me]? [a|an|the]? [nice|new|simple|quick|short|little]? {to:lex.session.things.views} [of|about|from|on|for|with|using|based_on] [the|all_the|all|my]? [things|stuff|items|objects] [in|on|from|of] [the|my]? {v:words(2)}"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"things in {v}\""
+    kind=request
+    signal=true
+    priority=14
+    example="Make a chart of the things in the plan."
+    example="Create a document about the things in the drawing."
+    doc="The things one view holds as the content of another view."

@@ -1,0 +1,19 @@
+@t.timeline.n0 core.test
+    session=tl
+    input="Open the timeline tab."
+    expectState="ui.shell:activeTab=timeline"
+
+@t.timeline.n1 core.test
+    session=tl
+    input="add a day called Monday"
+    expect="I added moment Monday."
+
+@t.timeline.n2 core.test
+    session=tl
+    input="add a birthday called Ann"
+    expect="I added moment Ann."
+
+@t.timeline.n3 core.test
+    session=tl
+    input="set Monday time to 2"
+    expect="Monday"

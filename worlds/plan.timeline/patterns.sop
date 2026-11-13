@@ -1,0 +1,236 @@
+@gen.plan.timeline.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@pat.plan.timeline.make core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    tabOnly=true
+    example="Add a table."
+
+@pat.plan.timeline.make.n core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.make arg.amount=\"{amount}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Add 3 tables."
+
+@pat.plan.timeline.make.name core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} [called|named] {value:rest}"
+    emit="@{_} core.request action=plan.timeline.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    tabOnly=true
+    example="Add a guest called Ann."
+
+@pat.plan.timeline.remove core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    tabOnly=true
+    example="Remove the guest Ann."
+
+@pat.plan.timeline.remove.out core.pattern
+    match="[$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list]"
+    emit="@{_} core.request action=plan.timeline.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    tabOnly=true
+    example="Kick the guest Ann out."
+
+@pat.plan.timeline.change.of core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.plan.timeline.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    tabOnly=true
+    example="Change the colour of table 2 to red."
+
+@pat.plan.timeline.change.attr core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.plan.timeline.attrs} [to|be|as|into] [$acts.det]? {value:rest}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.thing=\"{thing}\" arg.attribute=\"{attribute}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    tabOnly=true
+    example="Set table 2 seats to 6."
+
+@pat.plan.timeline.change.add core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.plan.timeline.attrs} to [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=more arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    tabOnly=true
+    example="Add 2 seats to table 1."
+
+@pat.plan.timeline.change.add1 core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.make] {attribute:lex.plan.timeline.attrs} to [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=more arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    tabOnly=true
+    example="Add a seat to table 1."
+
+@pat.plan.timeline.change.less core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.plan.timeline.attrs} from [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=less arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    tabOnly=true
+    example="Remove 2 seats from table 1."
+
+@pat.plan.timeline.change.less1 core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.plan.timeline.attrs} from [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=less arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    tabOnly=true
+    example="Remove a seat from table 1."
+
+@pat.plan.timeline.change.cmp.more core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.plan.timeline.more}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Make table 1 bigger."
+
+@pat.plan.timeline.change.cmp.less core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.plan.timeline.less}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=less arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Make table 1 smaller."
+
+@pat.plan.timeline.change.bare core.pattern
+    match="[$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=5
+    tabPriority=13
+    tabOnly=true
+    example="Change table 2."
+
+@pat.plan.timeline.send.bare core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.send arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=5
+    tabPriority=13
+    tabOnly=true
+    example="Send table 1."
+
+@pat.plan.timeline.copy core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.copy arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    tabOnly=true
+    example="Copy table 2."
+
+@pat.plan.timeline.send core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:rest}"
+    emit="@{_} core.request action=plan.timeline.send arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    tabOnly=true
+    example="Send table 2 to the diagram."
+
+@pat.plan.timeline.ask.what core.pattern
+    match="[what|which] [is|are] [$acts.det]? {attribute:lex.plan.timeline.attrs} of [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="What is the colour of table 2?"
+
+@pat.plan.timeline.ask.what.is core.pattern
+    match="[what|which] {attribute:lex.plan.timeline.attrs} [is|are] [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="What colour is table 2?"
+
+@pat.plan.timeline.change.needs core.pattern
+    match="[$lang.lead.polite]? [i_want|i_need|make|let|give]? [$acts.det]? {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:lex.plan.timeline.attrs}"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.attribute=\"{attribute}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Table 1 needs 6 seats."
+
+@pat.plan.timeline.ask.count.attr core.pattern
+    match="how_many {attribute:lex.plan.timeline.attrs} [does|do|has|have] [$acts.det]? {thing:words} [have|has|got]?"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    tabPriority=22
+    tabOnly=true
+    example="How many seats does table 1 have?"
+
+@pat.plan.timeline.ask.count core.pattern
+    match="how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]?"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="How many tables are there?"
+
+@pat.plan.timeline.ask.why core.pattern
+    match="why [is|are|did|do|was|were|does] {rest:rest}"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=why arg.rest=\"{rest}\" arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    tabOnly=true
+    example="Why is table 2 blue?"
+
+@pat.plan.timeline.ask.last core.pattern
+    match="what [did|have] you [just]? [do|done|change|changed]"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=last arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    tabOnly=true
+    example="What did you just do?"
+
+@pat.plan.timeline.undo core.pattern
+    match="[undo|undo_that|undo_it|undo_the_last_thing|undo_the_last_change|take_that_back|go_back|step_back|revert_that]"
+    emit="@{_} core.request action=plan.timeline.undo arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    tabOnly=true
+    example="Undo that."
+
+@pat.plan.timeline.redo core.pattern
+    match="[redo|redo_that|redo_it|do_that_again|do_it_again]"
+    emit="@{_} core.request action=plan.timeline.redo arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    tabOnly=true
+    example="Redo that."

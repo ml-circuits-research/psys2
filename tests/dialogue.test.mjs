@@ -127,16 +127,11 @@ for (const reasoner of ['ops', 'matrix']) {
     assert.equal(s.state('art.draw').objects[0].color, 'red');
   });
 
-  test(`${reasoner}: the session as facts is the content of any request about "the current discussion" (one implementation: a chart, a paragraph)`, async () => {
+  test(`${reasoner}: the session as facts: things with their world, counted (the content of "a chart about the current discussion" is a selection in session.things, tested in things.test.mjs)`, async () => {
     const s = open();
     await saying(s, 'draw 3 cars', 'draw a house');
     const f = s.dialogue.facts();
     assert.deepEqual(f.things.map((x) => [x.noun, x.count]).sort(), [['car', 3], ['house', 1]]);
-    const chart = await s.send('create a chart about the current discussion');
-    assert.equal(chart.segments[0].world ?? chart.segments[0].match?.worldId, 'data.charts', chart.text);
-    assert.match(chart.text, /cars 3/);
-    const doc = await open('editor').send('write a paragraph about the current discussion');
-    assert.ok(doc.text.length > 0);
   });
 
   test(`${reasoner}: the dialogue memory is plain data and goes back with the undo snapshot`, async () => {

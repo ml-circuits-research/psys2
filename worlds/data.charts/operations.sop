@@ -268,3 +268,15 @@
     semantics=action
     action=chart.redo
     doc="Does the undone change again."
+
+@op.data.charts.view core.operation
+    impl=view
+    semantics=action
+    action=data.charts.view
+    doc="The declaration of the charts as a view of the session things (spec 23): the numeric aspect; a thing counts as one of its kind, a thing with a number of its own is a bar of that number; one request for a whole selection."
+
+@op.data.charts.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=data.charts.adopt
+    doc="Take things of the session store into a chart: counts per kind (or the number a thing carries), merged into the chart made from things when there is one, else a new chart."

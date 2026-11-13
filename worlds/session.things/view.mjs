@@ -123,14 +123,16 @@ export function viewOps(X, schema, ns, H = {}) {
   function adopt(ctx, { thing } = {}) {
     if (!thing?.kind) return { status: 'unsupported', note: 'I was given nothing to take.' };
     const k = ctx.knowledge;
-    const kind = kindOf(lc(thing.kind)) ?? (k?.ancestors?.(lc(thing.kind)) ?? []).map((a) => kindOf(a)).find(Boolean);
+    const lend = (a) => !['textual', 'relational'].includes(a) && thing.aspects?.[a];
+    let byAspect = false;
+    const kind = kindOf(lc(thing.kind)) ?? (k?.ancestors?.(lc(thing.kind)) ?? []).map((a) => kindOf(a)).find(Boolean) ?? kinds.find((x) => (x.aspects ?? []).some(lend) && (byAspect = true));   // last: a kind this world declares with an aspect the thing has (a month is a moment of a timeline)
     if (!kind) return { status: 'unsupported', note: `${cap(thing.name ? thing.name : an(plain(thing.kind)))} is not something the ${schema.noun} has.` };
     if (kind.max && (ctx.state.items ?? []).filter((i) => i.kind === kind.name).length >= kind.max && !H.domain) return { status: 'unsupported', note: `The ${schema.noun} is full of ${kind.plural}.` };
-    const named = kind.named && thing.name;
-    const via = kind.name !== lc(thing.kind) ? `${an(plain(thing.kind))} is a kind of ${plain(kind.name)}. ` : '';
+    const named = kind.named && (thing.name ?? (byAspect ? cap(plain(thing.kind)) : null));
+    const via = byAspect ? '' : kind.name !== lc(thing.kind) ? `${an(plain(thing.kind))} is a kind of ${plain(kind.name)}. ` : '';
     H.adopting?.(thing);
     try {
-      const made = X.operation(ctx, 'make', { thing: kind.name, ...(named ? { value: thing.name } : {}), text: `add ${an(kind.name)}` });
+      const made = X.operation(ctx, 'make', { thing: kind.name, ...(named ? { value: named } : {}), text: `add ${an(kind.name)}` });
       if (made.status !== 'supported' || /^(?:There is no|I cannot|I did not|I do not know|No )/i.test(String(made.note))) return { status: 'unsupported', note: String(made.note ?? `The ${schema.noun} cannot take ${an(plain(thing.kind))}.`) };
       const carried = [];
       for (const [name, value] of Object.entries(thing.attrs ?? {})) {
@@ -140,7 +142,7 @@ export function viewOps(X, schema, ns, H = {}) {
         const r = X.operation(ctx, 'change', { thing: H.domain?.change ? kind.name : 'it', attribute: name, value: String(value), text: `make it ${value}` });
         if (r.status === 'supported' && !/^(?:I cannot|I did not|There is no|I do not know)/i.test(String(r.note))) carried.push(`${name} ${value}`);
       }
-      const label = named ? `${kind.name} ${thing.name}` : an(plain(kind.name));
+      const label = named ? `${kind.name} ${named}` : an(plain(kind.name));
       return { status: 'supported', value: `${via}I put ${label} in the ${schema.noun}${carried.length ? ` (${carried.join(', ')})` : ''}.`, note: `adopted ${thing.id}`, kind: kind.name };
     } finally { H.adopting?.(null); }
   }

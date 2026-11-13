@@ -1,0 +1,41 @@
+@gen.plan.timeline.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@lex.plan.timeline.kinds core.lexicon
+    class=noun
+    doc="Kinds of things of this world (from schema.sop)"
+    word=moment
+    word=moments
+    word=event
+    word=events
+    word=day
+    word=days
+    word=weekday
+    word=weekdays
+    word=month
+    word=months
+    word=season
+    word=seasons
+    word=holiday
+    word=holidays
+    word=birthday
+    word=birthdays
+
+@lex.plan.timeline.attrs core.lexicon
+    class=modifier
+    doc="Attributes (from schema.sop)"
+    word=when
+    word=year
+    word=hour
+    word=date
+    word=time
+
+@lex.plan.timeline.more core.lexicon
+    class=modifier
+    doc="Comparatives that mean more of an attribute"
+    word=later
+
+@lex.plan.timeline.less core.lexicon
+    class=modifier
+    doc="Comparatives that mean less of an attribute"
+    word=earlier
