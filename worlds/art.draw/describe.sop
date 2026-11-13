@@ -834,8 +834,6 @@
     lang=en
     ask=$w.en.is.draw.exists
     ask=$w.en.are.draw.exists
-    ask=$w.en.do.draw.exists
-    ask=$w.en.does.draw.exists
     prep.m1=$w.en.there.draw.exists.m1
     det.m1=$w.en.a.draw.exists.m1
     det.m1=$w.en.an.draw.exists.m1
@@ -941,33 +939,6 @@
     noun=$w.en.canvas.draw.open
     noun=$w.en.paint.draw.open
     noun=$w.en.easel.draw.open
-
-@describe.colorof core.describe
-    op=draw.colorOf
-    intent=query
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    priority=12
-    kind=question
-    frames=qnoun
-    frames=tell
-    frames=bare
-
-@describe.colorof.t core.describe.arg
-    of=$describe.colorof
-    name=t
-    class=lex.art.draw.targets
-
-@describe.colorof.en core.describe.words
-    of=$describe.colorof
-    lang=en
-    noun=$w.en.color.draw.colorOf
-    noun=$w.en.colour.draw.colorOf
-    prep.t=$w.en.of.draw.colorOf.t
-    prep.t=$w.en.for.draw.colorOf.t
-    det.t=$w.en.the.draw.colorOf.t
-    det.t=$w.en.my.draw.colorOf.t
-    det.t=$w.en.that.draw.colorOf.t
-    det.t=$w.en.this.draw.colorOf.t
 
 @describe.askkind core.describe
     op=draw.askKind
@@ -1157,8 +1128,6 @@
 @w.en.my.draw.where.o core.word text=my means=draw.where.o
 @w.en.is.draw.exists core.word text=is means=draw.exists
 @w.en.are.draw.exists core.word text=are means=draw.exists
-@w.en.do.draw.exists core.word text=do means=draw.exists
-@w.en.does.draw.exists core.word text=does means=draw.exists
 @w.en.there.draw.exists.m1 core.word text=there means=draw.exists.m1
 @w.en.a.draw.exists.m1 core.word text=a means=draw.exists.m1
 @w.en.an.draw.exists.m1 core.word text=an means=draw.exists.m1
@@ -1189,14 +1158,6 @@
 @w.en.canvas.draw.open core.word text=canvas means=draw.open
 @w.en.paint.draw.open core.word text=paint means=draw.open
 @w.en.easel.draw.open core.word text=easel means=draw.open
-@w.en.color.draw.colorOf core.word text=color means=draw.colorOf
-@w.en.colour.draw.colorOf core.word text=colour means=draw.colorOf
-@w.en.of.draw.colorOf.t core.word text=of means=draw.colorOf.t
-@w.en.for.draw.colorOf.t core.word text=for means=draw.colorOf.t
-@w.en.the.draw.colorOf.t core.word text=the means=draw.colorOf.t
-@w.en.my.draw.colorOf.t core.word text=my means=draw.colorOf.t
-@w.en.that.draw.colorOf.t core.word text=that means=draw.colorOf.t
-@w.en.this.draw.colorOf.t core.word text=this means=draw.colorOf.t
 @w.en.draw.draw.askKind core.word text=draw means=draw.askKind
 @w.en.sketch.draw.askKind core.word text=sketch means=draw.askKind
 @w.en.paint.draw.askKind core.word text=paint means=draw.askKind
