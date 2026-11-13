@@ -8,6 +8,7 @@
 // owner-log JSONL (training/eval/owner-log-*.jsonl: { tab, text, got: { status, readings } }). Several files are merged.
 // Output: a table of the messages that (a) went to a world other than the world of the open tab, or (b) were not understood, grouped by
 // "<open tab> -> <chosen world>" and pattern, with the message texts. `--all` also lists the messages that went to the tab's own world.
+// `--timeline` (export format 3): every user action and turn in order (tab, message, reading, what changed, replies with worlds, reaction), flagging messages read in another tab's world.
 // Messages answered by ui.shell / ui.help / session worlds are not wrong-world cases (they are available in every tab); `--all` keeps them.
 import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -40,15 +41,17 @@ export function normalizeRecord(r) {
 }
 
 /** Parse a file: one JSON document ({ records } or an array) or JSON lines. */
-export function parseExport(text) {
+export function parseExport(text, { events = false } = {}) {
   const t = String(text).trim();
   if (!t) return [];
   try {
     const j = JSON.parse(t);
+    if (events) return Array.isArray(j?.events) ? j.events : [];   // format 3 only; older exports have no events
     if (Array.isArray(j)) return j;
     if (Array.isArray(j?.records)) return j.records;
     if (j && typeof j === 'object') return [j];
   } catch { /* JSON lines */ }
+  if (events) return [];
   return t.split('\n').map((l) => l.trim()).filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
 }
 
@@ -82,6 +85,41 @@ export function analyze(records, { all = false } = {}) {
   return { total, groups: list, flagged: list.reduce((n, g) => n + g.messages.length, 0) };
 }
 
+/**
+ * The timeline of an export (format 3): every user action and every turn in time order. A turn shows the tab on screen, the message, the reading (worlds),
+ * what changed, the replies with their worlds, and the reaction; `otherTab` flags a message whose reading used another world than the tab on screen.
+ */
+export function timeline(records, events = []) {
+  const items = [];
+  for (const e of events) if (e.kind !== 'message') items.push({ type: 'event', time: e.time, e });   // a message is shown as its turn
+  for (const r of records) {
+    const row = normalizeRecord(r), c = classify(row);
+    items.push({ type: 'turn', time: row.time ?? '', r, row, kind: c.kind, otherTab: c.kind === 'wrong-world' || (c.kind === 'not-understood' && false) });
+  }
+  return items.sort((a, b) => String(a.time).localeCompare(String(b.time)));
+}
+export function renderTimeline(items) {
+  const out = [];
+  for (const it of items) {
+    const at = String(it.time).slice(11, 19);
+    if (it.type === 'event') {
+      const e = it.e;
+      out.push(`${at}  [${e.kind}] ${e.target ?? ''}${e.value !== undefined ? ` = ${JSON.stringify(e.value)}` : ''}${e.via ? ` (via ${e.via})` : ''}${e.zone ? ` in ${e.zone}` : ''}${e.tab !== e.tabAfter && e.tabAfter ? `   tab ${e.tab} -> ${e.tabAfter}` : e.tab ? `   tab ${e.tab}` : ''}${e.kind === 'step' ? `   ${e.ms ?? '?'} ms${e.bytes ? `, ${e.bytes} B` : ''}${e.ok === false ? ' FAILED' : ''}` : ''}`);
+      continue;
+    }
+    const { r, row } = it, h = r.happened ?? {};
+    const worlds = [...new Set(row.pieces.map((p) => p.chosen).filter(Boolean))];
+    out.push(`${at}  TURN on tab ${row.tab ?? '?'}${h.tabAfter && h.tabAfter !== row.tab ? ` -> ${h.tabAfter}` : ''}: "${row.text}"${it.otherTab ? `   <-- reading used ${worlds.filter((w) => !EVERYWHERE.has(w)).join(', ')}, not the tab's world ${row.tabWorld ?? '?'}` : ''}`);
+    out.push(`          reading: ${worlds.join(', ') || 'none'} [${row.status}]${row.pieces[0]?.pattern ? ` ${row.pieces[0].pattern}` : ''}`);
+    const ch = (h.changes ?? []).map((x) => `${x.world}: ${x.changes.join('; ')}`);
+    out.push(`          changed: ${ch.length ? ch.join(' | ') : 'nothing'}${h.viewEffects?.length ? `   view: ${h.viewEffects.map((v) => v.kind + (v.to ? ` ${v.to}` : '')).join(', ')}` : ''}`);
+    for (const s of h.shown ?? []) out.push(`          shown [${s.world ?? s.from ?? 'host'}]: ${String(s.text).replace(/\s+/g, ' ').slice(0, 160)}`);
+    if (!h.shown?.length && r.detail?.answer) out.push(`          shown [${worlds.join(', ') || 'host'}]: ${String(r.detail.answer).slice(0, 160)}`);
+    if (r.reaction) out.push(`          reaction: ${r.reaction.kind}${r.reaction.target ? ` "${r.reaction.target}"` : ''} after ${Math.round(r.reaction.afterMs / 1000)} s`);
+  }
+  return out.join('\n');
+}
+
 export function render(result, { markdown = false } = {}) {
   const out = [];
   out.push(`${result.flagged} of ${result.total} messages went to another world than the open tab's, or were not understood (${result.groups.length} groups).`);
@@ -96,7 +134,14 @@ export function render(result, { markdown = false } = {}) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2), files = args.filter((a) => !a.startsWith('--'));
-  if (!files.length) { console.error('usage: node scripts/analyze-phrase-log.mjs <export.json|export.jsonl>... [--markdown] [--all]'); process.exit(2); }
+  if (!files.length) { console.error('usage: node scripts/analyze-phrase-log.mjs <export.json|export.jsonl>... [--markdown] [--all] [--timeline]'); process.exit(2); }
   const records = files.flatMap((f) => parseExport(readFileSync(f, 'utf8')));
+  if (args.includes('--timeline')) {
+    const events = files.flatMap((f) => parseExport(readFileSync(f, 'utf8'), { events: true }));
+    console.log(renderTimeline(timeline(records, events)));
+    const flagged = timeline(records, events).filter((i) => i.otherTab).length;
+    console.log(`\n${flagged} message${flagged === 1 ? '' : 's'} read in another tab's world than the one on screen.`);
+    process.exit(0);
+  }
   console.log(render(analyze(records, { all: args.includes('--all') }), { markdown: args.includes('--markdown') }));
 }

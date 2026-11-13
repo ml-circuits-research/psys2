@@ -44,7 +44,7 @@ export function modelRequests({ block = false } = {}) {
 }
 const phone = (o, req, settings = {}) => openChat({ ...o, browserApis: { translator: false }, beforeGoto: req.beforeGoto, settings: { formalizer: 'rules', normalizer: false, showTrace: false, ...settings } });
 const swState = (c) => c.pg.evaluate(async () => ({ workers: performance.getEntriesByType('resource').filter((e) => /translator-worker/.test(e.name)).length, caches: (await caches.keys().catch(() => [])).filter((k) => /psys2-mt/.test(k)) }));
-const waitReady = (c, lang, ms = 120000) => c.pg.waitForFunction((l) => !document.querySelector('.p2-mt-banner:not([hidden])') || /ready/.test(document.querySelector('.p2-mt-banner')?.textContent ?? ''), { timeout: ms, polling: 100 }, lang);
+const waitReady = (c, lang, ms = 120000) => c.pg.waitForFunction((l) => !document.querySelector('.p2-progress:not([hidden])') || /ready|Ready/.test(document.querySelector('.p2-progress')?.textContent ?? ''), { timeout: ms, polling: 100 }, lang);
 const romanian = (t) => /[ăâîșțĂÂÎȘȚ]|\b(am|este|ce|un|o|de|în|nu|să|pe|cu|la|și|sunt|vrei|poți|deschis|desenat)\b/i.test(t);
 const english = (t) => /\b(the|is|are|what|which|you|your|draw|open|tab)\b/i.test(t) && !romanian(t);
 const FIXED = /Nu am încă o formulare/;
@@ -62,9 +62,9 @@ export const SCENARIOS = {
       const opts = await c.pg.$$eval('select.p2-select option', (e) => e.map((x) => x.value));
       check('lazy: the selector lists English and Romanian at least', opts.includes('en') && opts.includes('ro'), opts.join(','));
       await c.pg.select('select.p2-select', 'ro');
-      await c.pg.waitForFunction(() => document.querySelector('.p2-mt-banner:not([hidden])'), { timeout: 20000, polling: 50 }).catch(() => {});
-      const banner = await c.pg.$eval('.p2-mt-banner', (e) => e.textContent).catch(() => '');
-      check('lazy: selecting Romanian shows the download state with its size', /translation model for Romanian \(\d+ MB\)|Loading the Romanian|is ready/.test(banner), banner);
+      await c.pg.waitForFunction(() => document.querySelector('.p2-progress:not([hidden])'), { timeout: 20000, polling: 50 }).catch(() => {});
+      const banner = await c.pg.$eval('.p2-progress', (e) => e.textContent).catch(() => '');
+      check('lazy: selecting Romanian shows the download state with its size', /the Romanian translation model \(\d|Loading the Romanian|Ready/.test(banner), banner);
       await waitReady(c, 'ro');
       check('lazy: the model was requested only after Romanian was selected', req.seen.length >= 6, `${req.seen.length} requests`);
     } finally { await c.close(); }
@@ -128,8 +128,8 @@ export const SCENARIOS = {
     const req = modelRequests({ block: true });
     const c = await phone(o, req, { language: 'ro' });
     try {
-      await c.pg.waitForFunction(() => /Could not get the Romanian translation model/.test(document.querySelector('.p2-mt-banner')?.textContent ?? ''), { timeout: 60000, polling: 100 });
-      check('failure: the banner says the model could not be downloaded and offers Retry', await c.pg.$('.p2-mt-banner button') !== null);
+      await c.pg.waitForFunction(() => /Romanian translation model could not be loaded/.test(document.querySelector('.p2-progress')?.textContent ?? ''), { timeout: 60000, polling: 100 });
+      check('failure: the progress panel says the model could not be loaded and offers Dismiss', await c.pg.$('.p2-progress .p2-pg-close') !== null);
       const r = await c.say('cât face 3 plus 4?', { timeout: 60000 });
       check('failure: the message is still answered (the rules answer, no hang)', r.ok && !!r.reply.trim(), `${r.ms} ms; ${r.reply.slice(0, 80)}`);
     } finally { await c.close(); }

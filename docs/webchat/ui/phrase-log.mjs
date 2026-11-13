@@ -2,6 +2,8 @@
 // Phrase log (spec 06 "Phrase log"): pure functions that turn what a person typed or said, plus the reply of
 // session.send(), into records for training data, and a small localStorage-backed store. Browser-safe, no imports.
 
+import { reactionOf } from './action-log.mjs';
+
 export const LOG_KEY = 'psys2.webchat.phrases';
 export const LOG_CAP = 5000;
 export const MODES = ['typed', 'voice', 'chip'];
@@ -129,9 +131,10 @@ export const summaryStatus = worstStatus;
 export const summaryWorlds = (r) => [...new Set(r.segments.map((s) => s.world).filter(Boolean))];
 
 /** Export record: every detail of the logged record (segments, readings and wires, timings, feedback, endType, outcome), plus the summary fields. */
-export function exportRecord(r) {
+export function exportRecord(r, events = null) {
   const { segments, ...rest } = r;
-  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, routing: routingOf(r), ...rest, segments };
+  const reaction = events ? reactionOf(r, events) : null;
+  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, routing: routingOf(r), ...rest, ...(reaction ? { reaction } : {}), segments };
 }
 /**
  * Routing of one message (SETTINGS-COHERENT item 7), for the wrong-world analysis (scripts/analyze-phrase-log.mjs): the tab that was open (id and its world),
@@ -147,9 +150,11 @@ export function routingOf(r) {
 /** Chips are not human phrasing: excluded unless includeChips. */
 export function selectForExport(list, { includeChips = false } = {}) { return list.filter((r) => includeChips || r.source !== 'chip'); }
 /** One JSON document: { format, exported, count, records } (the learning loop reads this and the older JSONL alike). */
-export function toJSON(list, { includeChips = false, diagnostics = null } = {}) {
-  const records = selectForExport(list, { includeChips }).map(exportRecord);
-  return `${JSON.stringify({ format: 'psys2-phrase-log/2', exported: new Date().toISOString(), count: records.length, ...(diagnostics ? { diagnostics } : {}), records }, null, 1)}\n`;
+export function toJSON(list, { includeChips = false, diagnostics = null, events = null } = {}) {
+  const ev = Array.isArray(events) ? events : null;
+  const records = selectForExport(list, { includeChips }).map((r) => exportRecord(r, ev));
+  // format 3 adds `events` (every user action and progress step, in order); format 2 files (no `events`) still load everywhere
+  return `${JSON.stringify({ format: ev ? 'psys2-phrase-log/3' : 'psys2-phrase-log/2', exported: new Date().toISOString(), count: records.length, ...(diagnostics ? { diagnostics } : {}), ...(ev ? { eventCount: ev.length, events: ev } : {}), records }, null, 1)}\n`;
 }
 export function toJSONL(list, { includeChips = false } = {}) {
   return selectForExport(list, { includeChips }).map((r) => JSON.stringify(exportRecord(r))).join('\n') + (list.length ? '\n' : '');

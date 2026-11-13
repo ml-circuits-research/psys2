@@ -56,7 +56,7 @@ export function createCachedFetch({ cacheName = CACHE } = {}) {
  * `h` creates elements (app.mjs's helper). Options: base (URL of the webchat), note(text) (a chat note), onChange() (the language list or a state changed),
  * spawn (tests), fetchFile (tests).
  */
-export function createTranslationLayer({ base, h, note = () => {}, onChange = () => {}, spawn = null, fetchFile = null, nativeKind = browserTranslatorKind, nativeAvailability = browserTranslatorAvailability } = {}) {
+export function createTranslationLayer({ base, h, note = () => {}, progress = null, onChange = () => {}, spawn = null, fetchFile = null, nativeKind = browserTranslatorKind, nativeAvailability = browserTranslatorAvailability } = {}) {
   let registry = null, quality = null, host = null, initPromise = null;
   const nativeBoth = new Map();   // code -> 'available' | 'downloadable' | 'downloading' (both directions with English, the browser's own Translator)
   const download = new Map();     // code -> true while a user-visible download runs
@@ -131,8 +131,16 @@ export function createTranslationLayer({ base, h, note = () => {}, onChange = ()
   }
   const needsModel = (code) => code !== 'en' && engineOf(code) === 'on-device-model';
 
+  /** PROGRESS: with the host's progress service the download is a step of the one panel (no banner of its own); the banner stays for hosts without one (tests). */
+  const pgId = (lang) => (progress?.state('translator') === 'active' ? 'translator' : `translator:${lang}`);
   function stateChanged(lang, s) {
-    if (s.phase === 'downloading') showBanner(`Downloading the translation model for ${langName(lang)} (${mbText(s.total)})… ${s.total ? Math.round((100 * s.done) / s.total) : 0}%`, { progress: s.total ? (100 * s.done) / s.total : 0 });
+    if (progress) {
+      const id = pgId(lang), label = `${s.phase === 'downloading' ? 'Downloading' : 'Loading'} the ${langName(lang)} translation model${s.phase === 'downloading' && s.total ? ` (${mbText(s.done)} / ${mbText(s.total)})` : ''}`;
+      if (s.phase === 'downloading') progress.step(id, label, s.done, s.total);
+      else if (s.phase === 'loading') progress.step(id, label, 0, 0);
+      else if (s.phase === 'ready') { if (progress.state(id) === 'active') progress.end(id, { bytes: s.total || null }); download.delete(lang); }
+      else if (s.phase === 'error') progress.fail(id, `The ${langName(lang)} translation model could not be loaded (${s.error})`, 'the rules translate the basic phrases');
+    } else if (s.phase === 'downloading') showBanner(`Downloading the translation model for ${langName(lang)} (${mbText(s.total)})… ${s.total ? Math.round((100 * s.done) / s.total) : 0}%`, { progress: s.total ? (100 * s.done) / s.total : 0 });
     else if (s.phase === 'loading') showBanner(`Loading the ${langName(lang)} translation model…`);
     else if (s.phase === 'ready' && download.get(lang)) { download.delete(lang); showBanner(`The ${langName(lang)} translation model is ready.`, { autoHide: 3000 }); }
     else if (s.phase === 'error') showBanner(`Could not get the ${langName(lang)} translation model: ${s.error}. Check the connection.`, { retry: () => prepare(lang).catch(() => {}) });
