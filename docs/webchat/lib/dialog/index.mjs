@@ -9,40 +9,41 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=55879c6fb8';
-import { loadWorlds } from '../worlds/index.mjs?v=3f6edd5f60';
-import { validateWorldSet } from '../worlds/validate.mjs?v=2c3acee2c3';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=d88531b8c2';
+import { loadWorlds } from '../worlds/index.mjs?v=4af292d57e';
+import { validateWorldSet } from '../worlds/validate.mjs?v=3e1f08c579';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=cdc9032f46';
+import { createInterpreter } from '../interpreter/index.mjs?v=51a086a41e';
 import { createReasoner } from '../reasoner/index.mjs?v=e96edcff84';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=54d7ba266b';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=e16ac8fb60';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=aab9b783ba';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=04cf68a080';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
-import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=edd2db59aa';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=2b41144e9d';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=f77a3f29d4';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=b7a4791e10';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=c9a3b0b06f';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=e046742b19';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=9d5b3f0daa';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=30772d3c13';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=36ad0e0f08';
-import { checkValues } from './value-check.mjs?v=458a97593f';
-import { Discourse } from './discourse.mjs?v=3e951484b3';
-import { Dialogue } from './dialogue.mjs?v=a1eb58ceaa';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=b56ffdb1c4';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=3a67169c97';
+import { checkValues } from './value-check.mjs?v=c1ff213a9b';
+import { attachValues } from '../knowledge/values.mjs?v=ec4fe4794e';
+import { Discourse } from './discourse.mjs?v=08e4328e90';
+import { Dialogue } from './dialogue.mjs?v=fa632c50e7';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=8112da5c77';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=37419c487a';
-import { repairFromScene } from './scene-referents.mjs?v=1e0fdd6011';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=fdcdee11f1';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=c62bcbf77e';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=27829847bf';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=9ceefd896a';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=0d22f70b20';
+import { repairFromScene } from './scene-referents.mjs?v=052fff6b77';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=a0d8122fe7';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=108c23c970';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=a8f0e824fc';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=03dfa399b9';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=f95c81083f';
 
 export { runWorldTests } from './test-runner.mjs?v=84ab4dd2bc';
 
@@ -1711,7 +1712,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   const engine = {
     knowledge: options.knowledge ?? null,
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
-    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; },
+    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** meta.worlds (spec 20): loaded by `prepareMeta()` (a host that sets `routing` to symbolic awaits it once); null until then. */
     meta: null,

@@ -9,9 +9,10 @@
 // The frame of the question decides the card (look, parts, count, compare, order); the things come from the knowledge catalog by lookup (`ctx.knowledge.peek`, filled by
 // the host through `openSlots`, spec 17), or from the basic things shipped with the drawing world. No fact: the plain "I don't know that yet" and no card.
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
-import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=4cd417b561';
+import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
 import * as space from '../space/space.mjs?v=0c5c89b98e';
-import { habitatSentence } from '../../src/knowledge/commonsense.mjs';
+import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';
+import { colourName } from '../../lib/knowledge/values.mjs?v=ec4fe4794e';   // the one colour reader (k.values)
 import * as R from './records.mjs?v=0f86b57f97';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
@@ -486,7 +487,7 @@ const activeCard = (ctx) => {
   const s = ensure(ctx);
   return [...s.cards].reverse().find((c) => c.topic === s.current && CARD_KINDS.has(c.kind) && c.data) ?? [...s.cards].reverse().find((c) => CARD_KINDS.has(c.kind) && c.data) ?? null;
 };
-const TINTS = new Set(['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown', 'black', 'white', 'grey', 'gray', 'gold', 'silver', 'turquoise', 'violet']);
+const isTint = (c) => !!colourName(c);   // any colour of the catalog (the one reader, k.values)
 const SCALE = { min: 0.6, max: 1.6, step: 0.2 };
 const refresh = (ctx, c) => ctx.effect('talk.card', { id: c.id, update: true });
 // One undoable step per request on this tab: a change of a card keeps the fields it replaced; a transfer keeps the tab that took it (that world's own undo takes it back).
@@ -501,8 +502,8 @@ export function change(ctx, { c, size, x } = {}) {
   push(ctx, { kind: 'change', id: card.id, before: memo(card) });
   const undone = () => ensure(ctx).undo.pop();   // a change that did not happen is not a step
   if (c) {
-    const colour = clean(c) === 'gray' ? 'grey' : clean(c);
-    if (!TINTS.has(colour)) { undone(); return no('unsupported', `I do not know the colour ${clean(c)} for a picture.`); }
+    const colour = colourName(clean(c)) ?? clean(c);   // the catalog's name (spelling variants included)
+    if (!isTint(colour)) { undone(); return no('unsupported', `I do not know the colour ${clean(c)} for a picture.`); }
     card.data.tint = colour;
     refresh(ctx, card);
     return ok(`I made the ${name} ${colour}.`, { values: [colour] });
@@ -537,7 +538,7 @@ export function change(ctx, { c, size, x } = {}) {
 const ASPECTS_ALL = ['visual', 'spatial', 'relational', 'numeric', 'textual', 'geographic', 'temporal', 'social'];
 /** The declaration of this world as a view: it shows every aspect (a card for each kind of thing). */
 export const view = () => ok({ id: 'talk', noun: 'conversation', words: ['talk', 'chat', 'conversation'], aspects: ASPECTS_ALL, kinds: null });
-const tintOf = (card) => (card?.data?.tint && TINTS.has(card.data.tint) ? card.data.tint : null);
+const tintOf = (card) => (card?.data?.tint && isTint(card.data.tint) ? card.data.tint : null);
 /** The topics of the conversation are things of the session: published after every card, each keeping the id the store gave it. */
 function publish(ctx) {
   const s = ensure(ctx);
@@ -565,7 +566,7 @@ export function adopt(ctx, { thing } = {}) {
   const r = lookup(ctx, thing.name ?? thing.kind) ?? lookup(ctx, kindWord);
   const parts = thing.parts?.length ? thing.parts.slice(0, MAX_PARTS) : r?.parts ?? [];
   const from = thing.originNoun ? `the ${thing.originNoun}` : thing.origin === 'learned' ? 'what you told me' : 'another view';
-  const tint = thing.attrs?.colour && TINTS.has(String(thing.attrs.colour)) ? String(thing.attrs.colour) : null;
+  const tint = thing.attrs?.colour && isTint(thing.attrs.colour) ? String(thing.attrs.colour) : null;
   const rows = [{ k: 'kind', v: String(thing.kind).replace(/_/g, ' ') }, ...(thing.name ? [{ k: 'name', v: thing.name }] : []), ...Object.entries(thing.attrs ?? {}).filter(([, v]) => v != null && v !== '').map(([k, v]) => ({ k: k.replace(/_/g, ' '), v: String(v) }))].slice(0, 10);
   const know = r?.th && (!thing.origin || thing.origin === 'learned') ? whatSentence(r, ctx) : '';   // what the catalog says belongs to a thing of the knowledge, not to one made in another view
   const text = `Here is ${thing.name ?? thing.label ?? an(kindWord)} from ${from}.${know ? ` ${know}` : ''}`;

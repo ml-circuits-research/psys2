@@ -15,6 +15,8 @@ import { parseLine, parseShard } from './catalog.mjs?v=698662f5e5';
 import { buildFaces } from './faces.mjs?v=a8975fe028';
 
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
+/** The kinds tried when a thing has no drawing of its own (a word can have dozens of senses with a kind each). */
+const MAX_KINDS = 4;
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 /** Runs `fn` after a backoff (an unreachable catalog is asked again later, not remembered as empty for the session); the timer never keeps a process alive. */
@@ -56,7 +58,7 @@ export function createFacts({ source, name = 'catalog' }) {
   const loadVocab = () => vocabLoading ??= (async () => {
     const t = clock();
     let failed = false;
-    try { const txt = await source.text('vocab.json'); stats.vocabBytes = txt?.length ?? 0; failed = !txt; vocab = txt ? JSON.parse(txt) : {}; } catch { failed = true; vocab = {}; }
+    try { const txt = await source.text('vocab.json'); stats.vocabBytes = txt?.length ?? 0; failed = !txt || !!source.fellBack?.('vocab.json'); vocab = txt ? JSON.parse(txt) : {}; } catch { failed = true; vocab = {}; }
     down = failed;
     if (failed) retryLater(() => { vocabLoading = null; vocab = null; things.clear(); });
     stats.vocabMs = clock() - t;
@@ -64,7 +66,7 @@ export function createFacts({ source, name = 'catalog' }) {
 
   const loadIndex = () => indexLoading ??= (async () => {
     let failed = false;
-    try { const txt = await source.text('index.json'); failed = !txt; index = txt ? JSON.parse(txt) : { worlds: [] }; } catch { failed = true; index = { worlds: [] }; }
+    try { const txt = await source.text('index.json'); failed = !txt || !!source.fellBack?.('index.json'); index = txt ? JSON.parse(txt) : { worlds: [] }; } catch { failed = true; index = { worlds: [] }; }
     if (failed) { down = true; retryLater(() => { indexLoading = null; index = null; }); }
   })();
 
@@ -92,8 +94,9 @@ export function createFacts({ source, name = 'catalog' }) {
       let txt = null;
       try { txt = await source.text(`${id}.sop`); } catch { /* an unreachable shard is no knowledge */ }
       stats.shardMs += clock() - t; stats.shardBytes += txt?.length ?? 0; stats.shardsLoaded.push(id);
-      if (!txt) down = true;
-      if (!txt) retryLater(() => { shards.delete(id); parsed.delete(id); wireIx.delete(id); wireMemo.clear(); things.clear(); });
+      const degraded = !txt || !!source.fellBack?.(`${id}.sop`);   // a layered source (the bundled subset under the catalog) answered for an unreachable catalog
+      if (degraded) down = true;
+      if (degraded) retryLater(() => { shards.delete(id); parsed.delete(id); wireIx.delete(id); wireMemo.clear(); things.clear(); });
       return txt ? txt.split('\n') : [];
     })());
     return shards.get(id);
@@ -106,8 +109,9 @@ export function createFacts({ source, name = 'catalog' }) {
   async function drawnAs(out, lemma, depth) {
     if (depth > 1) return;
     const own = out.wires.find((w) => w.type === 'k.objects.stand_in' && String(one(w, 'name')).toLowerCase() === lemma);
-    const kinds = [own ? one(own, 'drawing') : null, ...(own ? [] : out.senses.flatMap((x) => x.isA))].filter(Boolean);
+    const kinds = [...new Set([own ? one(own, 'drawing') : null, ...(own ? [] : out.senses.flatMap((x) => x.isA))].filter((k) => k && lemmaCandidates(k)[0] !== lemma))].slice(0, MAX_KINDS);   // never the thing itself, a few kinds at most
     for (const k of kinds) {
+      budget.tick('facts.drawnAs');
       const th = await thing(k, depth + 1);
       if (th?.objects.length) { out.drawnAs = th.drawnAs ?? th.name; out.drawnVia = own ? 'stand_in' : 'is_a'; out.objects = th.objects; return; }
     }
@@ -124,11 +128,11 @@ export function createFacts({ source, name = 'catalog' }) {
    * is a predicate over the index entry), each is read once and parsed with the shared line parser. A wire is `{ id, type, f, shard, source }` (`f`: key -> values,
    * `source`: its core.source). A world added to the catalog is readable with no change here.
    */
-  async function wires(type, { key = null, shard = null } = {}) {
-    const w = await world(type);
+  async function wires(type, { key = null, shard = null, world: inWorld = null } = {}) {
+    const w = await world(inWorld ?? type);   // `world`: a type the index does not export (a `core.word` wire of a world's shards) is read in the shards of that world
     if (!w) return [];
     const k = key == null ? null : String(key).toLowerCase();
-    const memo = shard ? null : `${type}|${k}`;
+    const memo = shard ? null : `${type}|${k}|${inWorld ?? ''}`;
     if (memo && wireMemo.has(memo)) return wireMemo.get(memo);   // the same lookup within one load costs nothing
     const out = [];
     for (const sh of w.shards.filter((x) => (k == null || x.keys?.includes(k)) && (!shard || shard(x)))) {
@@ -189,7 +193,7 @@ export function createFacts({ source, name = 'catalog' }) {
       objects: [...objects.values()].filter((o) => o.parts.length), commonsense: commonsense[0] ?? null, senses,
       wires: others,   // every other wire of its shards that names the lemma (any world: k.scenes, k.people, k.layouts, ...), generically
     };
-    if (!out.objects.length) await drawnAs(out, lemma, 0);
+    if (!out.objects.length) await drawnAs(out, lemma, depth);   // the depth is carried down: a kind-of cycle (legs is a leg, a leg is legs) must end after two steps
     stats.hits++;
     things.set(key, out); things.set(lemma, out);
     return out;

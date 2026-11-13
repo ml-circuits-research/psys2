@@ -8,21 +8,21 @@
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=e3316469a7';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=5de885797a';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=0d5858577e';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=f77a3f29d4';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=5d08e7cc46';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=07dd1fe4f2';
 import { routeScores } from './router.mjs?v=1627316289';
 import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=34ef60e7bf';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=e445741b59';
-import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=03dfa399b9';
+import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=f95c81083f';
 import { parse, serialize } from '../../soplang/index.mjs?v=26885599a7';
 import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=058ecdb0c1';
 
 export { FormSession } from './session.mjs?v=e445741b59';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=34ef60e7bf';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=5de885797a';
-export { compilePattern, matchTokens } from './matcher.mjs?v=0d5858577e';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=f77a3f29d4';
+export { compilePattern, matchTokens } from './matcher.mjs?v=5d08e7cc46';
 export { singularLemma, pluralize } from './lemma.mjs?v=3f5920ed63';
 
 const compiledCache = new WeakMap();

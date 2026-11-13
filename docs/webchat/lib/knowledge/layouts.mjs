@@ -14,10 +14,8 @@
  * layout that has slot boxes is solved from its places (`places`), no code. The local table `FALLBACK` is used only when the catalog has no layouts or no network.
  */
 import { parseLine } from './catalog.mjs?v=698662f5e5';
+import { createFacts } from './facts.mjs?v=2ace0ebd09';
 
-export const LAYOUTS_PATH = 'k.layouts/shards/layouts.sop';
-export const ANCHORS_PATH = 'k.layouts/shards/anchors.sop';
-export const JOINS_PATH = 'k.layouts/shards/joins.sop';
 export const GENERATORS = ['row', 'column', 'grid', 'ring', 'corners', 'stack', 'flow', 'tree', 'landscape', 'scatter', 'face', 'height'];
 
 /** The built-in fallback (the same shape as a parsed catalog layout). */
@@ -50,13 +48,18 @@ function placeOf(a) {
  * The text of a k.layouts shard -> layouts: { id, name, kind, about, ordered, usualFor, synonyms, generator, sort, places, slots: [[fx, fy]] (centres of the boxes, 0..1),
  * rels: [{ a, rel, b, among }], when }. A layout with neither a generator nor a slot box is skipped.
  */
-export function parseLayouts(text) {
+export const parseLayouts = (text) => layoutsOf(wiresOfText(text));
+/** `[{ type, attrs }]` of the wires of a text (a fixture or a test): the same shape the catalog reading gives. */
+function wiresOfText(text) {
+  const out = [];
+  for (const line of String(text ?? '').split('\n')) { const w = line.startsWith('@') ? parseLine(line) : null; if (w) out.push(w); }
+  return out;
+}
+/** The layouts of wires `[{ type, attrs }]` (from a text or from `facts.wires`). */
+export function layoutsOf(wires) {
   const by = new Map(), words = new Map();
   const get = (name) => { const id = idOf(name); if (!by.has(id)) by.set(id, { id, name: null, places: [], rels: [] }); return by.get(id); };
-  for (const line of String(text ?? '').split('\n')) {
-    if (!line.startsWith('@')) continue;
-    const w = parseLine(line);
-    if (!w) continue;
+  for (const w of wires) {
     const a = w.attrs, one = (k) => a[k]?.[0];
     if (w.type === 'k.layouts.layout' && one('name')) {
       Object.assign(get(one('name')), { name: one('name'), kind: one('kind') === 'fixed' ? 'fixed' : 'repeating', about: one('about') ?? '', ordered: bool(one('ordered')), usualFor: a.usual_for ?? [] });
@@ -78,28 +81,33 @@ export function parseLayouts(text) {
   return out;
 }
 /** The places on drawable things (k.layouts.anchor): [{ of, name, kind, box: {x, y, w, h}, part, holds, on }]. */
-export function parseAnchors(text) {
+export const parseAnchors = (text) => anchorsOf(wiresOfText(text));
+export function anchorsOf(wires) {
   const out = [];
-  for (const line of String(text ?? '').split('\n')) {
-    const w = line.startsWith('@') ? parseLine(line) : null;
-    if (!w || w.type !== 'k.layouts.anchor' || !w.attrs.of || !w.attrs.name || !w.attrs.kind) continue;
+  for (const w of wires) {
+    if (w.type !== 'k.layouts.anchor' || !w.attrs.of || !w.attrs.name || !w.attrs.kind) continue;
     const a = w.attrs, box = ['x', 'y', 'w', 'h'].map((k) => Number(a[k]?.[0]));
     if (box.every(Number.isFinite)) out.push({ of: a.of[0], name: a.name[0], kind: a.kind[0], box: { x: box[0], y: box[1], w: box[2], h: box[3] }, part: a.part?.[0] ?? null, holds: a.holds ?? [], on: a.on ?? [] });
   }
   return out;
 }
 /** Which kind of thing joins which (k.layouts.joins): [{ a, rel, b, side }]. */
-export function parseJoins(text) {
+export const parseJoins = (text) => joinsOf(wiresOfText(text));
+export function joinsOf(wires) {
   const out = [];
-  for (const line of String(text ?? '').split('\n')) {
-    const w = line.startsWith('@') ? parseLine(line) : null;
+  for (const w of wires) {
     if (w?.type === 'k.layouts.joins' && w.attrs.a && w.attrs.rel && w.attrs.b) out.push({ a: w.attrs.a[0], rel: w.attrs.rel[0], b: w.attrs.b[0], side: w.attrs.side?.[0] ?? null });
   }
   return out;
 }
 
 const norm = (s) => String(s ?? '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
-export function createLayouts({ source = null, path = LAYOUTS_PATH, text = null } = {}) {
+/**
+ * The layouts of the catalog, read through the generic reading path (`facts.wires`: the index says where the wires are; no shard path is written here). `facts` is the knowledge
+ * of the session (or `source`, a catalog source, which is wrapped in `createFacts`); `text` is a given text (a fixture).
+ */
+export function createLayouts({ facts = null, source = null, text = null } = {}) {
+  if (!facts && source) facts = createFacts({ source });
   let loaded = null, list = FALLBACK, from = 'fallback';
   const api = {
     get layouts() { return list; },
@@ -108,8 +116,13 @@ export function createLayouts({ source = null, path = LAYOUTS_PATH, text = null 
     async load() {
       loaded ??= (async () => {
         try {
-          const t = text ?? (source ? await source.text(path) : null);
-          const l = t ? parseLayouts(t) : [];
+          let l = [];
+          if (text != null) l = parseLayouts(text);
+          else if (facts) {
+            const read = async (type, opt) => (await facts.wires(type, opt)).map((w) => ({ type: w.type, attrs: w.f }));
+            const ws = [...await read('k.layouts.layout'), ...await read('k.layouts.slot'), ...await read('k.layouts.relation'), ...await read('core.word', { world: 'k.layouts' })];
+            l = layoutsOf(ws);
+          }
           if (l.length) { const ids = new Set(l.map((x) => x.id)); list = [...l, ...FALLBACK.filter((f) => !ids.has(f.id))]; from = 'catalog'; }
         } catch { /* no network: the fallback */ }
         return from;
