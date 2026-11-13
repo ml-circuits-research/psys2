@@ -147,7 +147,7 @@ export const SCENARIOS = {
     c = await open2(false);
     try {
       const r = await c.say(MSG, { timeout: 30000 });
-      check('fallback without a Translator: the rules reading stays, Romanian, no error', r.ok && /^Nu am înțeles/.test(r.reply), r.reply.slice(0, 70));
+      check('fallback without a Translator: the rules reading stays, Romanian, no error', r.ok && /^Nu am în[țţ]eles/.test(r.reply), r.reply.slice(0, 70));
     } finally { await c.close(); }
   },
   async ondevice(o) {
@@ -187,8 +187,9 @@ export const SCENARIOS = {
       ];
       for (const [wrong, text, why] of WRONG) {
         await c.fake.set({ mode: 'wrong', wrong });
+        // the bridge now offers candidates: the rules one wins when the checker rejects the on-device one
         const w = await turn(c, `on-device wrong output (${wrong})`, text);
-        check(`on-device wrong output (${wrong}): the checker rejected it and the rules translated`, w.tr?.strategy === 'rules' && w.tr.fallback && why.test(w.tr.reason ?? ''), JSON.stringify(w.tr));
+        check(`on-device wrong output (${wrong}): the checker rejected it and the rules translated`, w.tr?.strategy === 'rules' && (w.tr.fallback ? why.test(w.tr.reason ?? '') : /^candidate rules chosen among \d+/.test(w.tr.reason ?? '')), JSON.stringify(w.tr));
       }
       await c.fake.set({ mode: 'wrong', wrong: 'punct' });
       const p = await turn(c, 'on-device wrong output (starts with punctuation)', TRIGGER);
@@ -199,7 +200,7 @@ export const SCENARIOS = {
     c = await openRo(o, { mode: 'slow' });
     try {
       const r = await turn(c, 'on-device slow', TRIGGER);
-      check('on-device slow: no answer within the 700 ms bridge deadline -> the rules translated', r.tr?.strategy === 'rules' && r.tr.fallback && /timed out/.test(r.tr.reason ?? ''), JSON.stringify(r.tr));
+      check('on-device slow: no answer within the 700 ms bridge deadline -> the rules translated', r.tr?.strategy === 'rules' && (r.tr.fallback ? /timed out/.test(r.tr.reason ?? '') : /^candidate rules chosen among \d+/.test(r.tr.reason ?? '')), JSON.stringify(r.tr));
       check('on-device slow: the turn took the deadline, not the delay of the fake', r.ms < 1500 + 4000, `${r.ms} ms`);
     } finally { await c.close(); }
     // the older window.ai shapes

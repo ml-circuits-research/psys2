@@ -108,7 +108,7 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
   if (doc) {
     const bar = h('i', {});
     el = h('div', { class: 'p2-progress', role: 'status', 'aria-live': 'polite', hidden: true },
-      h('div', { class: 'p2-pg-row' }, h('span', { class: 'p2-pg-label' }), h('span', { class: 'p2-pg-count' }), h('button', { class: 'p2-pg-close', type: 'button', hidden: true, 'aria-label': 'Dismiss' }, '×')),
+      h('div', { class: 'p2-pg-row' }, h('span', { class: 'p2-pg-label' }), h('span', { class: 'p2-pg-count' }), h('button', { class: 'p2-pg-close', type: 'button', hidden: true, title: 'Dismiss', 'aria-label': 'Dismiss' }, '×')),
       h('div', { class: 'p2-pg-bar', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': '100' }, bar),
       h('p', { class: 'p2-pg-note', hidden: true }),
       h('p', { class: 'p2-pg-fail', hidden: true }),

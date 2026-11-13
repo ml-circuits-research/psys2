@@ -671,7 +671,7 @@ export function createExecutor(schema, hooks = {}) {
     if (r.ask) return ask(st, r.ask, { type: 'role', role: 'place', req: { ...req }, guess: `connect ${labels(a.items)}` });
     const b = r.ids.map((id) => st.items.find((i) => i.id === id)); const diff = emptyDiff();
     for (const x of a.items) for (const y of b) { if (x.id === y.id || st.links.some((l) => (l.a === x.id && l.b === y.id) || (l.a === y.id && l.b === x.id))) continue; st.links.push({ a: x.id, b: y.id }); diff.linked.push([x.id, y.id]); }
-    if (!diff.linked.length) return say(`${cap(labels(a.items))} and ${labels(b)} are already connected.`, { diff });
+    if (!diff.linked.length) return say(`That arrow already connects ${labels(a.items)} and ${labels(b)}.`, { diff, fallback: 'limit' });   // a duplicate link is refused with the reason, in every world on the executor
     st.focus = { ids: a.items.map((i) => i.id), place: st.focus.place, act: 'connect' };
     return say(`I connected ${labels(a.items)} to ${labels(b)}.${guessLine(a.guesses)}`, { diff, guesses: a.guesses });
   }
@@ -821,7 +821,7 @@ export function createExecutor(schema, hooks = {}) {
 
   /** The last resort of a world when no form read the sentence (the engine's hook `outOfScope`): the guessed act and thing, one question; never a bare "not understood". */
   function lastResort(state, text) {
-    const st = init(state); const t = toks(text);
+    const st = { items: [], ...state }; const t = toks(text);   // read only: a guess never initialises the state
     const verb = t.find((w) => Object.entries(ACT_VERBS).some(([a, vs]) => vs.includes(w) || same(w, vs.find((x) => !x.includes('_') && x.length > 3) ?? '')));
     const act = verb ? Object.entries(ACT_VERBS).find(([a, vs]) => vs.includes(verb))?.[0] : null;
     const kw = t.map((w) => kindByWord(w)).find(Boolean);
@@ -936,9 +936,9 @@ export function createExecutor(schema, hooks = {}) {
   /** What a person can point at (the discourse hook `referents`, M1): the items, the focused ones salient. */
   function referents(ctx) {
     if (hooks.referents) return hooks.referents(ctx);   // a world whose things are not `state.items` (the drawing board) names its own
-    const st = init(ctx.state);
-    const sal = new Set(st.focus.ids);
-    return st.items.map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
+    const st = ctx.state;   // a reading never changes the state: no init here
+    const sal = new Set(st.focus?.ids ?? []);
+    return (st.items ?? []).map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
   }
   return { run, operation, group: actGroup, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
 }

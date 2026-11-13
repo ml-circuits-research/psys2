@@ -46,32 +46,11 @@
     core.source="generated:meta.worlds/cards"
     id=diagram.sketch kind=tab run=none tab=diagram
     name=diagram name=diagram_editor name=flowchart name=flow_chart name=org_chart name=sketchpad name=canvas
-    claim=add claim=adjust claim=align claim=alter claim=apart claim=arrange claim=arranged claim=assemble
-    claim=attach claim=away claim=become claim=bend claim=bind claim=box claim=break claim=bridge
-    claim=bring claim=build claim=bunch claim=bundle claim=call claim=called claim=cancel claim=carry
-    claim=categorize claim=center claim=centre claim=change claim=changed claim=chart claim=choose claim=classify
-    claim=clear claim=clip claim=clone claim=close claim=cluster claim=collect claim=color claim=colour
-    claim=combine claim=connect claim=construct claim=convert claim=copy claim=correct claim=couple claim=create
-    claim=cut claim=darken claim=decrease claim=delete claim=describe claim=destroy claim=detach claim=diagram
-    claim=disassemble claim=discard claim=disconnect claim=dismantle claim=distribute claim=divide claim=doe claim=done
-    claim=drag claim=draw claim=drop claim=duplicate claim=dye claim=edit claim=eliminate claim=enlarge
-    claim=erase claim=exchange claim=expand claim=explain claim=fasten claim=fill claim=flip claim=form
-    claim=gather claim=generate claim=get claim=glue claim=graph claim=group claim=hang claim=hide
-    claim=highlight claim=hook claim=imitate claim=increase claim=insert claim=invert claim=join claim=kick
-    claim=label claim=lay claim=layout claim=lengthen claim=lift claim=like claim=link claim=lower
-    claim=lump claim=magnify claim=make claim=mark claim=merge claim=modify claim=move claim=nail
-    claim=name claim=named claim=narrow claim=need claim=open claim=opt claim=organise claim=organize
-    claim=out claim=paint claim=pair claim=photocopy claim=pick claim=pile claim=pin claim=place
-    claim=point claim=position claim=prefer claim=produce claim=pull claim=push claim=put claim=raise
-    claim=rank claim=recolor claim=recolour claim=redo claim=relate claim=relocate claim=remove claim=rename
-    claim=repeat claim=replace claim=replicate claim=reproduce claim=resize claim=reverse claim=rotate claim=round
-    claim=scale claim=scatter claim=scrap claim=select claim=send claim=separate claim=set claim=sever
-    claim=shape claim=shaped claim=sharpen claim=shift claim=shorten claim=show claim=shrink claim=sketch
-    claim=slice claim=slide claim=smooth claim=sort claim=spin claim=split claim=stack claim=stick
-    claim=straighten claim=stretch claim=substitute claim=swap claim=switch claim=take claim=tape claim=thicken
-    claim=throw claim=tick claim=tidy claim=tie claim=tilt claim=tint claim=transfer claim=transform
-    claim=turn claim=uncouple claim=undo claim=unfasten claim=ungroup claim=unhook claim=unlink claim=untie
-    claim=update claim=what claim=which claim=why claim=widen
+    claim=adjust claim=alter claim=apart claim=arranged claim=assemble claim=away claim=become claim=bend
+    claim=bind claim=break claim=bunch claim=called claim=cancel claim=carry claim=categorize claim=changed
+    claim=chart claim=choose claim=classify claim=clip claim=close claim=cluster claim=collect claim=combine
+    claim=construct claim=correct claim=couple claim=darken claim=decrease claim=describe claim=destroy claim=disassemble
+    claim=dismantle claim=divide claim=doe claim=done claim=like claim=shaped claim=take claim=what
     act=shaped act=mar act=axis act=evenly act=active act=labeled act=cluster act=graph
     act=reached act=front act=blorp act=directly act=downstream act=drum act=exec act=member
     act=default act=along act=parent act=reachable act=bind act=couple act=loosen act=normalize

@@ -487,7 +487,7 @@ async function debugFor(name, viewport, o) {
     await section('world');
     await pg.waitForFunction(() => /coverage|Operation/.test(document.querySelector('.p2-dbg-cov')?.innerText ?? ''), { timeout: 8000 }).catch(() => {});
     const wd = await pg.evaluate(() => ({ sections: [...document.querySelectorAll('.p2-dbg-body h4')].map((e) => e.textContent), cov: document.querySelector('.p2-dbg-cov')?.innerText.slice(0, 80) }));
-    check(`${tag}: World shows manifest, legend, lexicons, operations, templates and coverage`, ['Manifest (world.sop)', 'Imports', 'Counts', 'Coverage (coverage.md)'].every((x) => wd.sections.includes(x)) && wd.sections.some((x) => /^Lexicons/.test(x)) && wd.sections.some((x) => /^Operations/.test(x)) && /ui\.avatar rule coverage/.test(wd.cov ?? ''), JSON.stringify(wd).slice(0, 200));
+    check(`${tag}: World shows manifest, legend, lexicons, operations, templates and coverage`, ['Manifest (world.sop)', 'Imports', 'Counts', 'Coverage (coverage.md)'].every((x) => wd.sections.includes(x)) && wd.sections.some((x) => /^Lexicons/.test(x)) && wd.sections.some((x) => /^Operations/.test(x)) && /ui\.avatar is a schema world: its coverage is the coverage grid/.test(wd.cov ?? ''), JSON.stringify(wd).slice(0, 200));
     await section('models');
     const md = await pg.evaluate(() => ({ sections: [...document.querySelectorAll('.p2-dbg-body h4')].map((e) => e.textContent) }));
     check(`${tag}: Models shows dispatcher, normalizer and ORT worker status`, ['Dispatcher', 'Normalizer', 'ORT worker (onnxruntime-web)'].every((x) => md.sections.includes(x)), md.sections.join('|'));

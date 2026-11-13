@@ -197,7 +197,7 @@ test('copy, group, connect, save and load', () => {
   assert.match(run(X, st, 'group', { thing: 'the tables' }).note, /I grouped table 1, table 2 and table 3/);
   assert.match(run(X, st, 'group', { mode: 'apart', thing: 'the tables' }).note, /took the group apart/);
   assert.match(run(X, st, 'connect', { thing: 'table 1', place: 'table 2' }).note, /I connected table 1 to table 2/);
-  assert.match(run(X, st, 'connect', { thing: 'table 1', place: 'table 2' }).note, /already connected/);
+  assert.match(run(X, st, 'connect', { thing: 'table 1', place: 'table 2' }).note, /already connects/);
   run(X, st, 'save', { value: 'lunch' }); run(X, st, 'remove', { thing: 'all the tables' });
   assert.equal(st.items.length, 0);
   assert.match(run(X, st, 'load', { value: 'lunch' }).note, /I loaded "lunch"/);

@@ -28,7 +28,7 @@ let K = null, loading = null, sys = null, sysOf = null;
 
 /** Starts loading the engine (once). Returns a promise of the engine kit. */
 export function loadEngine() {
-  loading ??= import('./engine/logic.mjs?v=66253b79e4').then((m) => { K = m.default; return K; });
+  loading ??= import('./engine/logic.mjs?v=07f03fb3da').then((m) => { K = m.default; return K; });
   return loading;
 }
 export const engineReady = () => !!K;

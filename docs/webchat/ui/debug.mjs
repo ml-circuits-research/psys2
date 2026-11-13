@@ -326,7 +326,8 @@ export function createDebug(host) {
     const w = worldOf(), info = worldInfo(w);
     if (!info) return [h('p', { class: 'p2-muted' }, `The world ${cur.world ?? '(none)'} is not loaded.`)];
     const cov = h('div', { class: 'p2-dbg-cov' }, h('p', { class: 'p2-muted' }, 'Loading coverage.md…'));
-    host.fetchText(`worlds/${w.id}/coverage.md`).then((t) => {
+    if (info.imports.includes('acts')) cov.replaceChildren(h('p', { class: 'p2-muted' }, `${w.id} is a schema world: its coverage is the coverage grid (world x act x kind), not a coverage.md.`));   // no file to fetch (a 404 in the console)
+    else host.fetchText(`worlds/${w.id}/coverage.md`).then((t) => {
       if (!t) { cov.replaceChildren(h('p', { class: 'p2-muted' }, 'No coverage.md for this world.')); return; }
       const lines = t.split('\n');
       cov.replaceChildren(h('p', { class: 'p2-muted' }, `${lines.length} lines; the first ones are shown.`), h('pre', { class: 'p2-code' }, h('code', {}, lines.slice(0, 40).join('\n'))), h('details', {}, h('summary', {}, 'The whole file'), h('pre', { class: 'p2-code' }, h('code', {}, t))));

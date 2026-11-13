@@ -18,6 +18,8 @@ export const changesIntoQuestion = (original, slice, kinds) => kinds.length > 0 
 
 export const NEGATIONS = new Set(['not', 'no', 'never', 'without', 'dont', "don't", 'don’t', 'cannot', "can't", 'cant', "won't", 'wont', "isn't", "doesn't", "didn't", 'nothing', 'none', 'nobody', 'neither', 'nor', 'stop', 'undo', 'cancel']);
 
+/** A window that ends in a determiner or a preposition while words follow it leaves the noun it was waiting for in the ignored part ("what is a" + glimbus): never a reading. */
+const DANGLING = new Set(['a', 'an', 'the', 'my', 'your', 'some', 'any', 'this', 'that', 'of', 'to', 'for', 'with', 'in', 'on', 'at', 'by', 'from']);
 const norm = (w) => w.toLowerCase().replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
 
 /**
@@ -41,6 +43,7 @@ export async function findPartialWindow(text, tryParse, { minCoverage = 0.25, ma
   for (const [i, j] of windows) {
     const ignoredToks = [...toks.slice(0, i), ...toks.slice(j + 1)];
     if (j - i + 1 < minTokens || ignoredToks.some((t) => NEGATIONS.has(t.w) || !canIgnore(t.w))) continue;
+    if (j < toks.length - 1 && DANGLING.has(toks[j].w)) continue;
     let slice = text.slice(toks[i].s, toks[j].e);
     const coverage = slice.length / total;
     if (coverage < minCoverage) continue;
