@@ -589,62 +589,6 @@
     prep.root=$w.en.to.music.key.root
     prep.root=$w.en.of.music.key.root
 
-@describe.melodyset core.describe
-    op=music.melodySet
-    intent=command
-    emit="@{_} core.request action=music.melodySet arg.notes=\"{notes}\""
-    priority=12
-    frames=imp
-    frames=wish
-    frames=can
-
-@describe.melodyset.notes core.describe.arg
-    of=$describe.melodyset
-    name=notes
-    class=rest
-
-@describe.melodyset.en core.describe.words
-    of=$describe.melodyset
-    lang=en
-    verb=$w.en.write.music.melodySet
-    verb=$w.en.compose.music.melodySet
-    verb=$w.en.make.music.melodySet
-    verb=$w.en.create.music.melodySet
-    verb=$w.en.set.music.melodySet
-    verb=$w.en.record.music.melodySet
-    noun=$w.en.melody.music.melodySet
-    noun=$w.en.tune.music.melodySet
-    noun=$w.en.song.music.melodySet
-    prep.notes=$w.en.with.music.melodySet.notes
-    prep.notes=$w.en.of.music.melodySet.notes
-    prep.notes=$w.en.like.music.melodySet.notes
-
-@describe.melodyadd core.describe
-    op=music.melodyAdd
-    intent=command
-    emit="@{_} core.request action=music.melodyAdd arg.notes=\"{notes}\""
-    priority=12
-    frames=imp
-    frames=wish
-    frames=can
-
-@describe.melodyadd.notes core.describe.arg
-    of=$describe.melodyadd
-    name=notes
-    class=rest
-
-@describe.melodyadd.en core.describe.words
-    of=$describe.melodyadd
-    lang=en
-    verb=$w.en.add.music.melodyAdd
-    verb=$w.en.append.music.melodyAdd
-    verb=$w.en.continue.music.melodyAdd
-    verb=$w.en.put.music.melodyAdd
-    prep.notes=$w.en.with.music.melodyAdd.notes
-    det.notes=$w.en.the.music.melodyAdd.notes
-    det.notes=$w.en.notes.music.melodyAdd.notes
-    det.notes=$w.en.more.music.melodyAdd.notes
-
 @describe.melodyclear core.describe
     op=music.melodyClear
     intent=command
@@ -1386,26 +1330,6 @@
 @w.en.in.music.key.root core.word text=in means=music.key.root
 @w.en.to.music.key.root core.word text=to means=music.key.root
 @w.en.of.music.key.root core.word text=of means=music.key.root
-@w.en.write.music.melodySet core.word text=write means=music.melodySet
-@w.en.compose.music.melodySet core.word text=compose means=music.melodySet
-@w.en.make.music.melodySet core.word text=make means=music.melodySet
-@w.en.create.music.melodySet core.word text=create means=music.melodySet
-@w.en.set.music.melodySet core.word text=set means=music.melodySet
-@w.en.record.music.melodySet core.word text=record means=music.melodySet
-@w.en.melody.music.melodySet core.word text=melody means=music.melodySet
-@w.en.tune.music.melodySet core.word text=tune means=music.melodySet
-@w.en.song.music.melodySet core.word text=song means=music.melodySet
-@w.en.with.music.melodySet.notes core.word text=with means=music.melodySet.notes
-@w.en.of.music.melodySet.notes core.word text=of means=music.melodySet.notes
-@w.en.like.music.melodySet.notes core.word text=like means=music.melodySet.notes
-@w.en.add.music.melodyAdd core.word text=add means=music.melodyAdd
-@w.en.append.music.melodyAdd core.word text=append means=music.melodyAdd
-@w.en.continue.music.melodyAdd core.word text=continue means=music.melodyAdd
-@w.en.put.music.melodyAdd core.word text=put means=music.melodyAdd
-@w.en.with.music.melodyAdd.notes core.word text=with means=music.melodyAdd.notes
-@w.en.the.music.melodyAdd.notes core.word text=the means=music.melodyAdd.notes
-@w.en.notes.music.melodyAdd.notes core.word text=notes means=music.melodyAdd.notes
-@w.en.more.music.melodyAdd.notes core.word text=more means=music.melodyAdd.notes
 @w.en.clear.music.melodyClear core.word text=clear means=music.melodyClear
 @w.en.delete.music.melodyClear core.word text=delete means=music.melodyClear
 @w.en.erase.music.melodyClear core.word text=erase means=music.melodyClear
