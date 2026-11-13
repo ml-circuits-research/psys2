@@ -3129,3 +3129,18 @@ Reviewer limits and findings:
 - Make a 120-case set: 40 draw/diagram requests with things that are not in any app world; 40 knowledge questions; 40 controls that must not change. Use the hand-written `k.commonsense` and `k.objects` cores from sop-knowledge-worlds when they land (Round 1 is in progress there); until then use a stub catalog of 30 objects.
 - Measure: right world; knowledge loaded (yes/no, which shard); answer right; added latency per message; and the same set with invented nouns. Expected for invented nouns: right world, no hit, a plain "I don't know what a blorp is" reply.
 - Gate: no regression on the operational sets (rules and encoder), 0 "ops better" in the A/B. No encoder retraining for this task. If retraining seems needed, stop and report why.
+
+## Reviewer 2026-11-13 08:15 — DRAW-FROM-FACTS (owner: the drawing interpreters must be able to use the knowledge as stored)
+
+**Today:** art.draw knows 26 kinds, fixed in an enum (`kind=… house tree sun …`), and each has its own hand-coded picture. diagram.sketch has its own fixed shapes. A new thing from the knowledge worlds cannot be drawn, because nothing reads parts.
+
+**Target:** one generic renderer that draws any thing from facts. The format is `k.objects` of sop-knowledge-worlds (T5 and its amendment there): an object is a list of parts; each part has a primitive shape (rectangle, square, circle, oval, triangle, line, arc, polygon), a box `x y w h` in the object's 0–100 frame, a draw order, a colour, and points as separate wires for polygons and lines.
+
+1. **Composite renderer (art.draw).** Add `kind=composite` with `thing=<name>`: the canvas draws the parts scaled into the object's own x, y, size, rotation and flip. The user's colour replaces the main part's colour ("a red house" → red body, the other parts keep theirs). The crayon/solid/outline fill applies to every part. All existing operations (move, resize, delete, count, undo) work on the composite as on one object.
+2. **Same data for the 26 built-in kinds.** Describe the built-in kinds as `k.objects` facts too and draw them through the same renderer. Keep the hand-coded pictures only where the generic one looks clearly worse; list those in worker-log with side-by-side screenshots. Goal: one path, not two.
+3. **Parts are addressable.** "make the roof blue", "add a third window", "remove the chimney" act on parts of a composite. This is new reading on existing frames (a part name is an open slot, looked up in the object's parts), per KNOWLEDGE-BY-LOOKUP. No new training rows per object.
+4. **diagram.sketch.** "a diagram shaped like a house" or "arrange the boxes as a house": the diagram takes the part boxes of the object as the layout (one box per part, labelled with the part name, positions from `x y w h`). Arrows are not invented.
+5. **Unknown thing.** No facts → the plain reply ("I don't know how to draw a blorp yet"), never a random shape.
+6. **Tests:** a Chrome probe draws 10 things that are not in the enum from a stub of `k.objects` (use the real shards when Round 1 of sop-knowledge-worlds lands) and saves screenshots for the reviewer; unit tests for scaling, flip, colour override and part edits. Gates as usual (npm test, A/B 0 "ops better", no encoder retraining).
+
+Order: after the 2026-11-12 10:25 and 10:50 blocks; DRAW-FROM-FACTS and KNOWLEDGE-BY-LOOKUP can share the stub catalog.
