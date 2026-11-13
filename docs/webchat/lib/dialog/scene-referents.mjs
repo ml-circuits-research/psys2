@@ -50,22 +50,32 @@ export function slipDistance(a, b, max = 3) {
   return prev[b.length];
 }
 
-/** The names of the things in the worlds' states: the `kind` / `thing` strings of the objects of any list in a world state, the open tab's world first (lowercase). */
-export function sceneNouns(dialog) {
-  const state = dialog.isession?.state ?? {};
-  const ctx = dialog.context();
-  const out = new Map();   // noun -> world
+/**
+ * The things of the worlds' states, per world: the `kind` / `thing` strings (and, with `keys`, other string fields such as `name`) of the objects of any list
+ * in a world state, lowercase. `order` is the worlds to read, the open tab's first. Returns a Map world -> Set(noun).
+ */
+export function sceneThings(state, order, keys = ['thing', 'kind']) {
+  const out = new Map();
   let nodes = 0;
   const walk = (v, world, depth) => {
     if (!v || typeof v !== 'object' || depth > 3 || nodes > MAX_STATE_NODES) return;
     budget.tick('scene.walk');
     nodes++;
     if (Array.isArray(v)) { for (const x of v) walk(x, world, depth + 1); return; }
-    for (const k of ['thing', 'kind']) if (typeof v[k] === 'string' && /^[a-z][a-z _-]*$/i.test(v[k]) && v[k] !== 'composite') out.set(v[k].toLowerCase().replace(/^composite:/, '').replace(/[_-]/g, ' '), world);
+    for (const k of keys) if (typeof v[k] === 'string' && /^[a-z][a-z _-]*$/i.test(v[k]) && v[k] !== 'composite') (out.get(world) ?? out.set(world, new Set()).get(world)).add(v[k].toLowerCase().replace(/^composite:/, '').replace(/[_-]/g, ' '));
     for (const [k, x] of Object.entries(v)) if (x && typeof x === 'object' && k !== 'history' && k !== 'future' && k !== 'undo' && k !== 'redo' && k !== 'sunStash') walk(x, world, depth + 1);
   };
-  const order = [ctx.tabWorld, ...Object.keys(state)].filter((w, i, a) => w && w !== 'ui.shell' && a.indexOf(w) === i);
   for (const w of order) walk(state[w], w, 0);
+  return out;
+}
+
+/** The names of the things in the worlds' states: the `kind` / `thing` strings of the objects of any list in a world state, the open tab's world first (lowercase). */
+export function sceneNouns(dialog) {
+  const state = dialog.isession?.state ?? {};
+  const ctx = dialog.context();
+  const order = [ctx.tabWorld, ...Object.keys(state)].filter((w, i, a) => w && w !== 'ui.shell' && a.indexOf(w) === i);
+  const out = new Map();   // noun -> world (a later world of the order overwrites an earlier one, as before)
+  for (const [w, nouns] of sceneThings(state, order)) for (const n of nouns) out.set(n, w);
   return out;
 }
 

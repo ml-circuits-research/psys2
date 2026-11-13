@@ -15,15 +15,13 @@ import { budget } from './budget.mjs?v=123c3e1329';
 const tokens = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 
 /** Closed classes that carry no action: articles, pronouns, copulas and auxiliaries, prepositions, conjunctions, particles of agreement and hedging. */
-const GRAMMAR = new Set(['a', 'an', 'the', 'some', 'any', 'one', 'ones', 'it', 'its', 'this', 'that', 'these', 'those', 'there', 'here', 'they', 'them', 'their', 'he', 'him', 'his', 'she', 'her',
+export const GRAMMAR = new Set(['a', 'an', 'the', 'some', 'any', 'one', 'ones', 'it', 'its', 'this', 'that', 'these', 'those', 'there', 'here', 'they', 'them', 'their', 'he', 'him', 'his', 'she', 'her',
   'is', 'are', 'am', 'was', 'were', 'be', 'been', 'being', 'do', 'does', 'did', 'has', 'have', 'had', 'will', 'would', 'can', 'could', 'should', 'shall', 'may', 'might', 'must',
   'in', 'on', 'at', 'by', 'with', 'without', 'from', 'into', 'onto', 'to', 'of', 'for', 'under', 'over', 'above', 'below', 'near', 'next', 'between', 'around', 'behind', 'inside', 'outside', 'beside', 'than', 'as',
   'and', 'or', 'but', 'not', 'no', 'nor', 'so', 'if', 'then', 'also', 'too', 'only', 'just', 'still', 'even', 'very', 'more', 'most', 'much', 'all', 'both', 'each', 'every', 'other', 'another', 'same', 'such',
   'yes', 'yeah', 'ok', 'okay', 'maybe', 'perhaps', 'probably', 'please', 'pls', 'plz', 'well', 'now', 'again', 'instead', 'right', 'left', 'up', 'down']);
 
-const PERSON = new Set(['i', "i'm", 'im', "i've", "i'd", "i'll", 'we', "we're", 'you', "you're", 'my', 'me', 'our', 'your']);   // a clause with a speaker or an addressee is a statement or a request of its own, whatever words follow
-/** Worlds of navigation, help and shared vocabulary: they act on any message that names their things, whatever tab is open. */
-const ANYWHERE = new Set(['ui.shell', 'ui.help', 'kids.common', 'core', 'lang.common']);
+export const PERSON = new Set(['i', "i'm", 'im', "i've", "i'd", "i'll", 'we', "we're", 'you', "you're", 'my', 'me', 'our', 'your']);   // a clause with a speaker or an addressee is a statement or a request of its own, whatever words follow
 const PRONOUN = new Set(['it', 'them', 'they']);   // the personal pronouns that stand for a thing; "this tab" is a noun phrase
 
 /**
@@ -43,27 +41,27 @@ export function ownWords(seg) {
 }
 
 /**
- * The reading `seg` is a verb-less fragment taken by a world that is not the open tab's, with nothing running there (no game, no modal): `{ world }`, or null.
- * Read-only. A message that names the world ("the hangman game") is for that world, whatever tab is open.
+ * The reading `seg` is a verb-less fragment taken by a world that cannot continue anything (SCENE-NATURAL P1): `{ world, why }`, or null. Read-only.
+ * The structural test of the piece (no verb of its own, a pronoun with a scene) is made here from the reading; WHO may take a piece is the first rule set of
+ * meta.worlds (`nocontinuation`, worlds/meta.worlds/matrix.sop): the world of the last action, the open tab, a running game or modal, the world that asked,
+ * a world with a referent of the piece in its scene, a world the piece names, and the worlds that act anywhere (shell, help, names) are not blocked. `blocked(text)`
+ * is the host's call of meta.worlds for a piece (`{ world: [{ rule }] }`); without it nothing is blocked.
  */
-export function foreignFragment(dialog, seg) {
+export function foreignFragment(dialog, seg, blocked = null) {
   if (seg.unparsed || !seg.wires?.length) return null;
   const world = seg.match?.worldId;
-  if (!world || ANYWHERE.has(world)) return null;
-  const ctx = dialog.context();
-  const last = dialog.discourse?.frames?.[0]?.world ?? null;
-  if (!last) return null;   // nothing was said before that this could continue: the world that read it answers (a game that is not running says so)
-  if (last === world) return null;   // the world of the last action continues its own conversation ("now in a women" after an avatar change)
-  if (!ctx.tabWorld || ctx.tabWorld === world || ctx.gameWorld === world || ctx.modalWorld === world) return null;
+  if (!world || !blocked) return null;
   if (!(seg.wires ?? []).some((w) => w.type === 'core.request')) return null;   // a question or a statement is not a continuation
-  try { if (seg.text && dialog._worldsNamedIn(seg.text).has(world)) return null; } catch { /* keep going */ }
   // A pronoun stands for the last thing talked about, which lives in the world of the last action or in the open tab: another world has no referent for it
   // ("make it happy" on the Avatar tab, after an avatar change, is not about a shape of the diagram)
   if (tokens(seg.text).some((w) => PERSON.has(w))) return null;
   const pronoun = tokens(seg.text).some((w) => PRONOUN.has(w));
   const scene = typeof dialog.engine.set.get(world)?.ops?.checkReferents === 'function';   // a world with things to point at; a profile or a game has none
-  const why = pronoun && scene && (last || ctx.tabWorld) ? 'pronoun' : ownWords(seg).length ? null : 'no-verb';
+  const why = pronoun && scene ? 'pronoun' : ownWords(seg).length ? null : 'no-verb';
   if (!why) return null;
+  let b;
+  try { b = blocked(seg.text)?.[world]; } catch { return null; }
+  if (!b?.some((x) => x.rule === 'nocontinuation')) return null;
   // A world that can act on the piece is not refused: a bare "top left" starts tic-tac-toe, "Osaka in Japan" is a question of the map. Only a world that has
   // nothing to act on (no game running, no such thing in the scene: its dry run says missing or refused) cannot take it.
   try { const st = dialog._dryStatuses([seg]); if (st.length && st.every((x) => x === 'supported')) return null; } catch { return null; }

@@ -20,6 +20,7 @@ import { formalize } from '../formalizer/rules/index.mjs?v=6fa6cc72a4';
 import { createDispatcherRuntime, candidateSegmentations } from '../formalizer/dispatcher-runtime.mjs?v=0fe828e086';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { createDispatchValidator } from './dispatch-validate.mjs?v=1f2fa8fbfc';
+import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=fbc7dfac77';
 
 /** Demo policy: a parse the interpreter refuses for a state reason (spec 03 section 7, questions Q3) still counts as understood. */
 export const ENCODER_DEFAULT_POLICY = { acceptRefused: true };
@@ -33,7 +34,7 @@ function restrictedSet(set, ids) {
   return sub;
 }
 
-export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEFAULT_POLICY, historyLimit = 6, now = () => Date.now(), waitForModel = true, normalizer = null } = {}) {
+export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEFAULT_POLICY, getRouting = () => 'dispatcher', historyLimit = 6, now = () => Date.now(), waitForModel = true, normalizer = null } = {}) {
   let engine = null;
   let validator = null;
   let runtime = null;
@@ -105,6 +106,9 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
       const prediction = await rt.predict(text, ctx);
       const tModel = now() - t0;
       prediction.id = source;
+      // routing=symbolic*: meta.worlds ranks the worlds of every piece (the encoder's probabilities are only a prior in symbolic+encoder); the validator checks them as before
+      const routing = normalizeRouting(getRouting());
+      if (isSymbolic(routing)) { const mw = await engine.prepareMeta?.(); if (mw) rerankPrediction(prediction, mw, context, { useEncoder: routing === 'symbolic+encoder' }); }
       const out = await perf.time('validate', () => validator.validate(prediction, getPolicy()));
       const tTotal = now() - t0;
 

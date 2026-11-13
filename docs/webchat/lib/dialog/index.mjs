@@ -31,10 +31,12 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=862857c95d';
 import { Discourse } from './discourse.mjs?v=8c64a94636';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=ea1ffb2af5';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=cd5145cf8f';
-import { repairFromScene } from './scene-referents.mjs?v=cb79fe2370';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=1bacff81c5';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=542c64ccb7';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=6413af929f';
+import { repairFromScene } from './scene-referents.mjs?v=951a69d6ab';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=491dfeeb48';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=fbc7dfac77';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=34e74e902f';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -277,7 +279,8 @@ function tooComplexReply(session, text, e, b) {
 export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTimeout', 'AbortError', 'TimeoutError'].includes(e.name) || /timed out|timeout|aborted/i.test(String(e.message ?? e)));
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing } = {}) {
+    this._routing = normalizeRouting(routing);   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
     this.worldAware = normalizeWorldAware(worldAware ?? globalThis.process?.env?.PSYS2_WORLD_AWARE);
@@ -366,7 +369,7 @@ export class DialogSession {
       guard.check('dry-vocabulary');
       const vocab = spellVocabulary(set);
       if (!(english.toLowerCase().match(/[a-z']+/g) ?? []).some((w) => vocab.has(w) && !FUNCTION_WORDS.has(w))) return { complete: false, segments: 0, reason: 'no-vocabulary', ...(detail ? { detail: { english, language: lang, readings: [], skipped: 'no word of any world' } } : {}) };
-      const res = await formalizers.rules.formalize(english, { worlds: set, session: f.isession, source: 'dry', context: f.context(), router: this.engine.router });
+      const res = await formalizers.rules.formalize(english, { worlds: set, session: f.isession, source: 'dry', context: f.context(), router: this._router });
       guard.check('dry-read');
       if (db.exceeded) throw db.exceeded;   // a stage that swallowed BudgetExceeded must not report a reading
       const segs = res.segments ?? [];
@@ -480,6 +483,12 @@ export class DialogSession {
    * world or the built-in tabs; `gameWorld` is `ui.shell` state `activeGame` (set by the host); `modalWorld` is the
    * world whose state has an open `inputMode`.
    */
+  /** The router of this session: the engine's policy router, or (routing=symbolic*, meta.worlds prepared) the same ordered by meta.worlds. */
+  get _router() {
+    if (!isSymbolic(this._routing) || !this.engine.meta) return this.engine.router;
+    return (this._symRouter ??= createSymbolicRouter(this.engine.router, () => this.engine.meta));
+  }
+
   context() {
     const BUILTIN = { robot: 'ui.avatar', avatar: 'ui.avatar', editor: 'docs.editor', tictactoe: 'games.tictactoe', guess: 'games.guess', hangman: 'games.hangman' };
     const st = this.isession.state;
@@ -489,7 +498,7 @@ export class DialogSession {
     if (tabWorld?.startsWith('games.')) this._lastGame = tabWorld;   // opening a game tab ("lets play tic tac toe") makes it the game this session plays
     const gameWorld = st['ui.shell']?.activeGame ?? runningGame(st, this._lastGame);
     const recentWorlds = [...(this._recentWorlds ?? [])];
-    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, states: st };
+    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, states: st, asked: this.discourse?.pending?.world ?? null, lastAction: this.discourse?.frames?.[0]?.world ?? null };   // asked and lastAction: what meta.worlds reads (a question the world asked; the world of the last request)
   }
 
   /** Legacy focus map derived from the context: +3 for the tab world, +1 for each recent world. */
@@ -856,7 +865,7 @@ export class DialogSession {
     if (!texts.length) return null;
     for (const t of texts.slice(0, 12)) {
       let fixed;
-      try { fixed = await formalizers.rules.formalize(t.text, { ...opts, worlds: set, session: this.isession, source: opts.source, context: ctx, router: this.engine.router }); } catch { continue; }
+      try { fixed = await formalizers.rules.formalize(t.text, { ...opts, worlds: set, session: this.isession, source: opts.source, context: ctx, router: this._router }); } catch { continue; }
       if (!fixed.segments.length || fixed.segments.some((x) => x.unparsed || x.partial || x.ignored?.length)) continue;
       if (!fixed.segments.some((x) => x.match?.worldId === world) || refused(fixed.segments)) continue;
       const segments = fixed.segments.map((x) => ({ ...x, strategy: 'rules', corrections: [...(x.corrections ?? []), ...t.picks.map((p) => ({ ...p, kind: 'spell' }))], activeSpell: true }));
@@ -929,7 +938,7 @@ export class DialogSession {
     for (const cand of cands.slice(0, 3)) {
       if (Date.now() - t0 > 300) break;
       let fixed;
-      try { fixed = await formalizers.rules.formalize(cand.text, { ...opts, worlds: set, session: this.isession, source: opts.source, context: ctx, router: this.engine.router }); } catch { continue; }
+      try { fixed = await formalizers.rules.formalize(cand.text, { ...opts, worlds: set, session: this.isession, source: opts.source, context: ctx, router: this._router }); } catch { continue; }
       if (!fixed.segments.length || fixed.segments.some((x) => x.unparsed || x.partial || x.ignored?.length)) continue;
       if (dry(fixed.segments).some((x) => x !== 'supported')) continue;
       const segments = fixed.segments.map((x) => ({ ...x, strategy: 'rules', corrections: [...(x.corrections ?? []), ...cand.corrections] }));
@@ -1038,7 +1047,7 @@ export class DialogSession {
     const tag = (r, by) => { r.nx = { strategy: want, model: on, by }; return r; };
     if (!on) return tag(await this._formalizeShipped(english, sid, preferred, lenient), 'rules');
     const { set } = this.engine;
-    const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router, ...this._pickOpt() };
+    const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router, ...this._pickOpt() };
     if (want === 'neural') {
       try {
         if (!nx.untrainedReads(english, opts)) {
@@ -1063,7 +1072,7 @@ export class DialogSession {
 
   async _formalizeShipped(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial, fastPath: this.fastPath }) {
     const { set, formalizers } = this.engine;
-    const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router, ...this._pickOpt() };
+    const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router, ...this._pickOpt() };
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false, encoderError = null;
@@ -1105,7 +1114,7 @@ export class DialogSession {
     const { set, formalizers } = this.engine;
     const probe = async (t) => {
       try {
-        const r = await formalizers.rules.formalize(t, { worlds: set, session: this.isession, source: 'probe', context: this.context(), router: this.engine.router });
+        const r = await formalizers.rules.formalize(t, { worlds: set, session: this.isession, source: 'probe', context: this.context(), router: this._router });
         return r.segments.length > 0 && r.segments.every((x) => !x.unparsed) ? r.segments.map((x) => x.match?.patternId).join('+') : null;
       } catch { return null; }
     };
@@ -1350,7 +1359,7 @@ export class DialogSession {
       try {
         sceneFix = repairFromScene(this, formalText);
         if (sceneFix) {   // a message the rules read completely and a world can carry out as it is needs no repair (a word of a text the user dictates is not a thing of the scene)
-          const probe = await this.engine.formalizers.rules.formalize(formalText, { worlds: set, session: this.isession, source: 'probe', context: this.context(), router: this.engine.router });
+          const probe = await this.engine.formalizers.rules.formalize(formalText, { worlds: set, session: this.isession, source: 'probe', context: this.context(), router: this._router });
           if (probe.segments.length && probe.segments.every((x) => !x.unparsed && !x.ignored?.length && !x.partial) && this._dryStatuses(probe.segments).every((x) => x === 'supported')) sceneFix = null;
         }
       } catch { sceneFix = null; }
@@ -1382,7 +1391,7 @@ export class DialogSession {
       if (bare && bare !== formalText) { const f2 = await this._formalize(bare, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial }); if (f2.segments.length && f2.segments.every((x) => !x.unparsed)) formal = f2; }
     }
     if (!icpt && !pre && !meta && (bestEffort ?? this.bestEffort) && formal.segments.length === 1 && formal.segments[0].unparsed) {   // one unparsed clause: a fragment of a longer message is never guessed
-      formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router });
+      formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
@@ -1609,6 +1618,9 @@ export async function createEngine({ loader, translator = null, options = {}, fo
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
     setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; },
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
+    /** meta.worlds (spec 20): loaded by `prepareMeta()` (a host that sets `routing` to symbolic awaits it once); null until then. */
+    meta: null,
+    prepareMeta: async () => (engine.meta ??= await loadMetaWorlds(set)),
     /** Formalizer strategies by id (spec 06); `formalizers` overrides them (tests, an encoder endpoint). */
     formalizers: { rules: createRulesFormalizer(), encoder: createEncoderFormalizer({ endpoint: options.encoderEndpoint ?? null }), ...formalizers },
     /** Problems found at load time and by static validation (empty when everything is consistent). */
