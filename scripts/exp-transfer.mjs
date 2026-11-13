@@ -167,7 +167,9 @@ async function t2() {
       if (u.na) verdict = plainNo && !/^(?:i added|i put|i seated|ok,)/.test(text) ? 'na' : 'wrong (used where it should not be)';
       else verdict = used ? 'right' : plainNo ? 'wrong (fact ignored, said so)' : 'wrong (fact ignored)';
       const stored = (s.state('session.things')?.learned ?? []).length > 0;   // false: another world read the sentence first and keeps the fact to itself
-      rows.push({ exp: 'T2', stored, other: to !== f.in, fact: f.teach, taughtIn: f.in, taughtReply: taught.text, view: to, ask: u.ask, expect: u.na ? 'na' : 'used', verdict, reply: r.text });
+      let cause = null;
+      if (verdict.startsWith('wrong')) cause = /^(?:i drew|i don't know how to draw|i don't know whether)/i.test(String(r.text)) ? 'the tab world does not claim its verb for a kind it has no use for ("put on", "seat"): the drawing world reads it and draws (dispatch of the acts, not the knowledge tier)' : /no friend|no .* in the seating/i.test(text) && /^my /.test(u.ask.replace(/^add /, '')) ? 'the catalog has no is-a for this word (a friend is not a person kind): list for the knowledge repo' : 'unclassified';
+      rows.push({ exp: 'T2', cause, stored, other: to !== f.in, fact: f.teach, taughtIn: f.in, taughtReply: taught.text, view: to, ask: u.ask, expect: u.na ? 'na' : 'used', verdict, reply: r.text });
     }
   }
   return rows;
@@ -254,12 +256,14 @@ if (only !== 't1' && only !== 't3') {
 }
 if (verbose) for (const r of all.filter((x) => x.verdict.startsWith('wrong') || verbose)) console.log(`${r.exp} ${r.verdict}\t${r.thing ?? r.fact} -> ${r.to ?? r.view}\t${r.text ?? r.ask}\n      ${String(r.reply).slice(0, 180)}`);
 const ledger = arg('--ledger', null);   // append the wrong cells of T3 to the failure ledger (training/eval/failures.jsonl), once per text, tab and source
-if (ledger && all.some((r) => r.exp === 'T3')) {
+if (ledger && all.some((r) => r.exp === 'T3' || r.exp === 'T2')) {
   const { execSync } = await import('node:child_process'), { existsSync, appendFileSync } = await import('node:fs');
   let build = 'unknown'; try { build = execSync('git rev-parse --short HEAD', { cwd: REPO }).toString().trim(); } catch { /* not a checkout */ }
   const file = path.resolve(REPO, ledger), have = new Set(existsSync(file) ? readFileSync(file, 'utf8').split('\n').filter(Boolean).map((l) => { try { const j = JSON.parse(l); return `${j.source}\t${j.text}\t${j.tab}`; } catch { return ''; } }) : []);
+  const t2rows = all.filter((r) => r.exp === 'T2' && r.verdict.startsWith('wrong')).map((r) => ({ text: r.ask, tab: { talk: 'talk', seating: 'seating', avatar: 'avatar' }[r.view], language: 'en', happened: String(r.reply).slice(0, 240), expected: `the taught fact "${r.fact}" (taught in ${r.taughtIn}) is used or refused plainly in ${r.view}`, source: `T2 taught-fact transfer (${reasoner}) scripts/exp-transfer.mjs`, cause: r.cause, first_seen: new Date().toISOString().slice(0, 10), build })).filter((r) => !have.has(`${r.source}\t${r.text}\t${r.tab}`));
   const rows = all.filter((r) => r.exp === 'T3' && r.verdict.startsWith('wrong')).map((r) => ({ text: r.ask, tab: { drawing: 'draw', diagram: 'diagram', talk: 'talk' }[r.view], language: 'en', happened: String(r.reply).slice(0, 240), expected: `the fact "${r.fact}" (${r.taught ? 'taught in a sentence' : 'in the catalog'}) shows in the answer: ${[].concat(r.expect).join(' / ')}`, source: `T3 rule transfer (${reasoner}) scripts/exp-transfer.mjs`, cause: r.cause, first_seen: new Date().toISOString().slice(0, 10), build }))
     .filter((r) => !have.has(`${r.source}\t${r.text}\t${r.tab}`));
+  rows.push(...t2rows);
   if (rows.length) appendFileSync(file, rows.map((r) => JSON.stringify(r)).join('\n') + '\n');
   console.log(`   ledger: ${rows.length} rows appended to ${ledger}`);
 }
