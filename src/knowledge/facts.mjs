@@ -1,5 +1,5 @@
 /**
- * Knowledge catalog access (spec 17): the lookup of words in the knowledge worlds of sop-knowledge-worlds (`k.commonsense`, `k.objects`, `k.words`).
+ * Knowledge lookup over the catalog (spec 17), built on `catalog.mjs` (the shared drawable-object access of DRAW-FROM-FACTS: `parseLine`, `parseShard`): the lookup of words in the knowledge worlds of sop-knowledge-worlds (`k.commonsense`, `k.objects`, `k.words`).
  * Browser-safe: no `node:*` imports; the caller passes a `source` (`{ text(path) -> Promise<string|null> }`, a file reader in Node, `fetch` in the
  * browser: `src/loaders/knowledge-source.mjs`).
  *
@@ -10,6 +10,8 @@
  *   - no model is involved anywhere.
  * A hit says only WHICH knowledge to load. It never decides the world of a message (spec 17, section 3).
  */
+
+import { parseLine, parseShard } from './catalog.mjs';
 
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
@@ -28,24 +30,21 @@ export function lemmaCandidates(word) {
   return out;
 }
 
-/** One `.sop` fact line `@id type key=value ...` as { id, type, f } (f: key -> list of values); null for a comment or a blank line. */
+/** One `.sop` fact line as { id, type, f } (f: key -> list of values) through the shared `parseLine`; null for a comment or a blank line. */
 export function parseFact(line) {
-  if (line.charCodeAt(0) !== 64) return null;   // '@'
-  const m = /^@(\S+)\s+(\S+)\s*(.*)$/.exec(line);
-  if (!m) return null;
-  const f = {};
-  const re = /([\w.]+)=(?:"((?:[^"\\]|\\.)*)"|(\S+))/g;
-  let x;
-  while ((x = re.exec(m[3]))) (f[x[1]] ||= []).push(x[2] !== undefined ? x[2].replace(/\\(.)/g, '$1') : x[3]);
-  return { id: m[1], type: m[2], f };
+  if (line.charCodeAt(0) !== 64) return null;
+  const w = parseLine(line);
+  return w ? { id: w.id, type: w.type, f: w.attrs } : null;
 }
 
 const one = (r, k) => r.f[k]?.[0];
 
-export function createCatalog({ source, name = 'catalog' }) {
+export function createFacts({ source, name = 'catalog' }) {
   let vocab = null, vocabLoading = null;
   const shards = new Map();   // shard id -> Promise<facts[]>
   const stats = { vocabMs: 0, vocabBytes: 0, shardMs: 0, shardBytes: 0, shardsLoaded: [], lookups: 0, hits: 0 };
+  const parsed = new Map();   // object shard id -> parsed shard (the shared parser)
+  const parsedShard = async (sid) => { if (!parsed.has(sid)) { const lines = await loadShard(sid); try { parsed.set(sid, parseShard(lines.join('\n'))); } catch { parsed.set(sid, null); } } return parsed.get(sid); };
   const things = new Map();   // lemma -> thing | null  (settled lookups, readable synchronously through `peek`)
 
   const loadVocab = () => vocabLoading ??= (async () => {
@@ -87,7 +86,7 @@ export function createCatalog({ source, name = 'catalog' }) {
     const hit = await find(word);
     if (!hit) { things.set(key, null); return null; }
     const { lemma } = hit;
-    const objects = new Map(), parts = new Map(), commonsense = [], senses = [];
+    const objects = new Map(), commonsense = [], senses = [];
     for (const sid of hit.shards) {
       const lines = await loadShard(sid);
       const needle = lemma;
@@ -95,19 +94,16 @@ export function createCatalog({ source, name = 'catalog' }) {
         if (line.charCodeAt(0) !== 64 || !line.toLowerCase().includes(needle)) continue;
         const r = parseFact(line);
         if (!r) continue;
-        if (r.type === 'k.objects.object' && one(r, 'name') === lemma) objects.set(r.id, { id: r.id, variant: one(r, 'variant') ?? null, shard: sid, parts: [] });
-        else if (r.type === 'k.objects.part') { const of = one(r, 'of'); if (of === lemma) parts.set(r.id, { r, shard: sid }); }
-        else if (r.type === 'k.commonsense.thing' && one(r, 'name') === lemma) commonsense.push({ ...r.f, shard: sid });
+        if (r.type === 'k.commonsense.thing' && one(r, 'name') === lemma) commonsense.push({ ...r.f, shard: sid });
         else if (r.type === 'k.words.sense' && String(one(r, 'word')).toLowerCase() === lemma) senses.push({ pos: one(r, 'pos'), n: Number(one(r, 'n') ?? 0), gloss: one(r, 'gloss') ?? '', synonyms: r.f.synonym ?? [], isA: r.f.is_a ?? [], shard: sid });
       }
     }
-    // a part belongs to the object whose id is the prefix of the part id (`k.objects.cat.body` -> `k.objects.cat`)
-    for (const { r, shard } of parts.values()) {
-      const owner = [...objects.values()].filter((o) => r.id.startsWith(`${o.id}.`)).sort((a, b) => b.id.length - a.id.length)[0] ?? [...objects.values()].find((o) => o.shard === shard) ?? null;
-      const part = { name: one(r, 'name'), kind: one(r, 'kind') ?? null, shape: one(r, 'shape'), x: Number(one(r, 'x')), y: Number(one(r, 'y')), w: Number(one(r, 'w')), h: Number(one(r, 'h')), z: Number(one(r, 'z') ?? 0), colours: r.f.colour ?? [], rgb: one(r, 'rgb') ?? null };
-      if (owner) owner.parts.push(part);
+    // the drawable object: the parts of the shared parser (points of lines and polygons included), from the object shards of the lemma
+    for (const sid of hit.shards.filter((x) => x.startsWith('k.objects/'))) {
+      const sh = await parsedShard(sid);
+      const ps = sh?.objects.get(lemma);
+      if (ps?.length) objects.set(`${sid}#${lemma}`, { id: `${sid}#${lemma}`, shard: sid, parts: ps });
     }
-    for (const o of objects.values()) o.parts.sort((a, b) => a.z - b.z);
     senses.sort((a, b) => a.n - b.n);
     const out = {
       name: lemma, word, shards: hit.shards, loaded: [...new Set([...objects.values()].map((o) => o.shard).concat(commonsense.map((c) => c.shard), senses.map((s) => s.shard)))],

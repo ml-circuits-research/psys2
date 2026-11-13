@@ -1,0 +1,200 @@
+{"id":"kl.draw.comet.0","group":"draw","tab":"art.draw","noun":"comet","message":"draw a comet","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.comet.1","group":"draw","tab":"art.draw","noun":"comet","message":"can you sketch me a comet please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.guitar.0","group":"draw","tab":"art.draw","noun":"guitar","message":"draw a guitar","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.guitar.1","group":"draw","tab":"art.draw","noun":"guitar","message":"can you sketch me a guitar please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.lion.0","group":"draw","tab":"art.draw","noun":"lion","message":"draw a lion","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.lion.1","group":"draw","tab":"art.draw","noun":"lion","message":"can you sketch me a lion please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.monkey.0","group":"draw","tab":"art.draw","noun":"monkey","message":"draw a monkey","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.monkey.1","group":"draw","tab":"art.draw","noun":"monkey","message":"can you sketch me a monkey please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.dolphin.0","group":"draw","tab":"art.draw","noun":"dolphin","message":"draw a dolphin","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.dolphin.1","group":"draw","tab":"art.draw","noun":"dolphin","message":"can you sketch me a dolphin please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.umbrella.0","group":"draw","tab":"art.draw","noun":"umbrella","message":"draw a umbrella","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.umbrella.1","group":"draw","tab":"art.draw","noun":"umbrella","message":"can you sketch me a umbrella please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.volcano.0","group":"draw","tab":"art.draw","noun":"volcano","message":"draw a volcano","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.volcano.1","group":"draw","tab":"art.draw","noun":"volcano","message":"can you sketch me a volcano please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.telescope.0","group":"draw","tab":"art.draw","noun":"telescope","message":"draw a telescope","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.telescope.1","group":"draw","tab":"art.draw","noun":"telescope","message":"can you sketch me a telescope please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.snowflake.0","group":"draw","tab":"art.draw","noun":"snowflake","message":"draw a snowflake","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.snowflake.1","group":"draw","tab":"art.draw","noun":"snowflake","message":"can you sketch me a snowflake please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.crown.0","group":"draw","tab":"art.draw","noun":"crown","message":"draw a crown","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.crown.1","group":"draw","tab":"art.draw","noun":"crown","message":"can you sketch me a crown please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.anchor.0","group":"draw","tab":"art.draw","noun":"anchor","message":"draw a anchor","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.anchor.1","group":"draw","tab":"art.draw","noun":"anchor","message":"can you sketch me a anchor please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.bell.0","group":"draw","tab":"art.draw","noun":"bell","message":"draw a bell","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.bell.1","group":"draw","tab":"art.draw","noun":"bell","message":"can you sketch me a bell please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.key.0","group":"draw","tab":"art.draw","noun":"key","message":"draw a key","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.key.1","group":"draw","tab":"art.draw","noun":"key","message":"can you sketch me a key please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.candle.0","group":"draw","tab":"art.draw","noun":"candle","message":"draw a candle","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.draw.candle.1","group":"draw","tab":"art.draw","noun":"candle","message":"can you sketch me a candle please","world":"art.draw","answer":"^(Ta-da|I drew)"}
+{"id":"kl.diagram.castle","group":"draw","tab":"diagram.sketch","noun":"castle","message":"a diagram shaped like a castle","world":"diagram.sketch","answer":"^I drew a diagram"}
+{"id":"kl.diagram.lighthouse","group":"draw","tab":"diagram.sketch","noun":"lighthouse","message":"a diagram shaped like a lighthouse","world":"diagram.sketch","answer":"^I drew a diagram"}
+{"id":"kl.diagram.robot","group":"draw","tab":"diagram.sketch","noun":"robot","message":"a diagram shaped like a robot","world":"diagram.sketch","answer":"^I drew a diagram"}
+{"id":"kl.diagram.snowman","group":"draw","tab":"diagram.sketch","noun":"snowman","message":"a diagram shaped like a snowman","world":"diagram.sketch","answer":"^I drew a diagram"}
+{"id":"kl.diagram.apple","group":"draw","tab":"diagram.sketch","noun":"apple","message":"a diagram shaped like a apple","world":"diagram.sketch","answer":"^I drew a diagram"}
+{"id":"kl.diagram.bicycle","group":"draw","tab":"diagram.sketch","noun":"bicycle","message":"a diagram shaped like a bicycle","world":"diagram.sketch","answer":"^I drew a diagram"}
+{"id":"kl.diagram.train","group":"draw","tab":"diagram.sketch","noun":"train","message":"a diagram shaped like a train","world":"diagram.sketch","answer":"^I drew a diagram"}
+{"id":"kl.diagram.umbrella","group":"draw","tab":"diagram.sketch","noun":"umbrella","message":"a diagram shaped like a umbrella","world":"diagram.sketch","answer":"^I drew a diagram"}
+{"id":"kl.box.guitar","group":"draw","tab":"diagram.sketch","noun":"guitar","message":"add a box shaped like a guitar","world":"diagram.sketch","answer":"(?!x)x","note":"frame not read by diagram.sketch (DRAW-FROM-FACTS item 4 reads \"a diagram shaped like\"); expected gap"}
+{"id":"kl.box.crown","group":"draw","tab":"diagram.sketch","noun":"crown","message":"add a box shaped like a crown","world":"diagram.sketch","answer":"(?!x)x","note":"frame not read by diagram.sketch (DRAW-FROM-FACTS item 4 reads \"a diagram shaped like\"); expected gap"}
+{"id":"kl.box.key","group":"draw","tab":"diagram.sketch","noun":"key","message":"add a box shaped like a key","world":"diagram.sketch","answer":"(?!x)x","note":"frame not read by diagram.sketch (DRAW-FROM-FACTS item 4 reads \"a diagram shaped like\"); expected gap"}
+{"id":"kl.box.bell","group":"draw","tab":"diagram.sketch","noun":"bell","message":"add a box shaped like a bell","world":"diagram.sketch","answer":"(?!x)x","note":"frame not read by diagram.sketch (DRAW-FROM-FACTS item 4 reads \"a diagram shaped like\"); expected gap"}
+{"id":"kl.know.01","group":"know","tab":null,"frame":"define","noun":"comet","message":"what is a comet","world":"conversation","answer":"(?:extraterrestrial|frozen)"}
+{"id":"kl.know.02","group":"know","tab":null,"frame":"define","noun":"volcano","message":"what is a volcano","world":"conversation","answer":"mountain|vent|lava|molten"}
+{"id":"kl.know.03","group":"know","tab":null,"frame":"define","noun":"telescope","message":"what is a telescope","world":"conversation","answer":"optical|instrument|magnif"}
+{"id":"kl.know.04","group":"know","tab":null,"frame":"define","noun":"guitar","message":"what is a guitar","world":"conversation","answer":"stringed|strings"}
+{"id":"kl.know.05","group":"know","tab":null,"frame":"define","noun":"dolphin","message":"what is a dolphin","world":"conversation","answer":"cetacean|mammal|porpoise"}
+{"id":"kl.know.06","group":"know","tab":null,"frame":"define","noun":"moon","message":"tell me about the moon","world":"conversation","answer":"satellite|earth|rock"}
+{"id":"kl.know.07","group":"know","tab":null,"frame":"define","noun":"umbrella","message":"what is an umbrella","world":"conversation","answer":"canopy|rain|sun"}
+{"id":"kl.know.08","group":"know","tab":null,"frame":"define","noun":"pirate","message":"who is a pirate","world":"conversation","answer":"sea|ship|rob|plunder|words"}
+{"id":"kl.know.09","group":"know","tab":null,"frame":"define","noun":"planet","message":"what is a planet","world":"conversation","answer":"celestial|orbit|sun"}
+{"id":"kl.know.10","group":"know","tab":null,"frame":"define","noun":"bridge","message":"what is a bridge","world":"conversation","answer":"structure|span|river"}
+{"id":"kl.know.11","group":"know","tab":null,"frame":"define","noun":"candle","message":"what's a candle","world":"conversation","answer":"wax|wick|light"}
+{"id":"kl.know.12","group":"know","tab":null,"frame":"define","noun":"anchor","message":"what is an anchor","world":"conversation","answer":"ship|boat|heavy|hold|vessel"}
+{"id":"kl.know.13","group":"know","tab":null,"frame":"define","noun":"castle","message":"what is a castle","world":"conversation","answer":"fortif|large|building"}
+{"id":"kl.know.14","group":"know","tab":null,"frame":"define","noun":"crown","message":"what is a crown","world":"conversation","answer":"headdress|royal|monarch|top"}
+{"id":"kl.know.15","group":"know","tab":null,"frame":"define","noun":"magnet","message":"define magnet","world":"conversation","answer":"attract|iron|magnetic"}
+{"id":"kl.know.16","group":"know","tab":null,"frame":"count","noun":"spider","message":"how many legs does a spider have","world":"conversation","answer":"\\b8 legs"}
+{"id":"kl.know.17","group":"know","tab":null,"frame":"count","noun":"octopus","message":"how many legs does an octopus have","world":"conversation","answer":"\\b8 legs|eight"}
+{"id":"kl.know.18","group":"know","tab":null,"frame":"count","noun":"table","message":"how many legs does a table have","world":"conversation","answer":"\\bhas \\d+ legs"}
+{"id":"kl.know.19","group":"know","tab":null,"frame":"count","noun":"insect","message":"how many legs do insects have","world":"conversation","answer":"\\b6 legs|six"}
+{"id":"kl.know.20","group":"know","tab":null,"frame":"count","noun":"car","message":"how many wheels does a car have","world":"conversation","answer":"\\bhas \\d+ wheels"}
+{"id":"kl.know.21","group":"know","tab":null,"frame":"count","noun":"centipede","message":"how many legs does a centipede have","world":"conversation","answer":"legs"}
+{"id":"kl.know.22","group":"know","tab":null,"frame":"count","noun":"crab","message":"how many legs does a crab have","world":"conversation","answer":"\\b\\d+ legs"}
+{"id":"kl.know.23","group":"know","tab":null,"frame":"count","noun":"spider","message":"how many eyes does a spider have","world":"conversation","answer":"eyes"}
+{"id":"kl.know.24","group":"know","tab":null,"frame":"made","noun":"tree","message":"what is a tree made of","world":"conversation","answer":"wood"}
+{"id":"kl.know.25","group":"know","tab":null,"frame":"made","noun":"house","message":"what is a house made of","world":"conversation","answer":"brick|wood"}
+{"id":"kl.know.26","group":"know","tab":null,"frame":"made","noun":"boat","message":"what is a boat made of","world":"conversation","answer":"wood"}
+{"id":"kl.know.27","group":"know","tab":null,"frame":"made","noun":"car","message":"what is a car made of","world":"conversation","answer":"metal"}
+{"id":"kl.know.28","group":"know","tab":null,"frame":"made","noun":"sun","message":"what is the sun made of","world":"conversation","answer":"gas"}
+{"id":"kl.know.29","group":"know","tab":null,"frame":"where","noun":"fish","message":"where does a fish live","world":"conversation","answer":"water"}
+{"id":"kl.know.30","group":"know","tab":null,"frame":"where","noun":"cloud","message":"where can you find a cloud","world":"conversation","answer":"sky"}
+{"id":"kl.know.31","group":"know","tab":null,"frame":"where","noun":"bird","message":"where does a bird live","world":"conversation","answer":"sky|tree"}
+{"id":"kl.know.32","group":"know","tab":null,"frame":"where","noun":"plane","message":"where can you find a plane","world":"conversation","answer":"sky|airport"}
+{"id":"kl.know.33","group":"know","tab":null,"frame":"where","noun":"flower","message":"where do you find a flower","world":"conversation","answer":"garden|grass"}
+{"id":"kl.know.34","group":"know","tab":null,"frame":"where","noun":"cat","message":"where does a cat live","world":"conversation","answer":"house|home"}
+{"id":"kl.know.35","group":"know","tab":null,"frame":"can","noun":"bird","message":"what can a bird do","world":"conversation","answer":"fly"}
+{"id":"kl.know.36","group":"know","tab":null,"frame":"can","noun":"fish","message":"what can a fish do","world":"conversation","answer":"swim"}
+{"id":"kl.know.37","group":"know","tab":null,"frame":"can","noun":"boat","message":"what can a boat do","world":"conversation","answer":"float|sail"}
+{"id":"kl.know.38","group":"know","tab":null,"frame":"can","noun":"plane","message":"what can a plane do","world":"conversation","answer":"fly"}
+{"id":"kl.know.39","group":"know","tab":null,"frame":"can","noun":"dog","message":"what can a dog do","world":"conversation","answer":"run|bark|mammal"}
+{"id":"kl.know.40","group":"know","tab":null,"frame":"can","noun":"cloud","message":"what can a cloud do","world":"conversation","answer":"rain"}
+{"id":"kl.ctl.art.draw#001","group":"control","tab":"draw","message":"draw a red house, also what do red and yellow make","world":"art.draw"}
+{"id":"kl.ctl.data.charts#001","group":"control","tab":"charts","message":"make a chart: apples 5, pears 3 and how many days are in a week","world":"data.charts"}
+{"id":"kl.ctl.docs.editor#001","group":"control","tab":"editor","message":"edd a heading Shopping","world":"docs.editor"}
+{"id":"kl.ctl.docs.reader#001","group":"control","tab":"documents","message":"Which documents do I have?","world":"docs.reader"}
+{"id":"kl.ctl.games.chess#001","group":"control","tab":"chess","message":"Let's play chess.","world":"games.chess"}
+{"id":"kl.ctl.games.guess#001","group":"control","tab":"guess","message":"I am thinking of an animal","world":"games.guess"}
+{"id":"kl.ctl.games.hangman#001","group":"control","tab":"hangman","message":"lets play hangmn","world":"games.hangman"}
+{"id":"kl.ctl.games.tictactoe#001","group":"control","tab":"tictactoe","message":"stat a new tic tac toe game","world":"games.tictactoe"}
+{"id":"kl.ctl.geo.map#001","group":"control","tab":"robot","message":"what is the capital of Japan","world":"geo.map"}
+{"id":"kl.ctl.kids.animals#001","group":"control","tab":"hangman","message":"how many legs does a spider have","world":"kids.animals"}
+{"id":"kl.ctl.kids.arith#001","group":"control","tab":null,"message":"add 4 and 8","world":"kids.arith"}
+{"id":"kl.ctl.kids.common#001","group":"control","tab":null,"message":"hi im Ben","world":"kids.common"}
+{"id":"kl.ctl.kids.shapes#001","group":"control","tab":"chess","message":"how many sides does a hexagon have","world":"kids.shapes"}
+{"id":"kl.ctl.kids.shop#001","group":"control","tab":null,"message":"A ball costs 5 lei. 2 balls cost how much","world":"kids.shop"}
+{"id":"kl.ctl.kids.tasks#001","group":"control","tab":null,"message":"add milk to my shopping list and what do red and yellow make","world":"kids.tasks"}
+{"id":"kl.ctl.kids.time#001","group":"control","tab":"draw","message":"what day comes after Monday","world":"kids.time"}
+{"id":"kl.ctl.media.music#001","group":"control","tab":"music","message":"set the tempo to 120 then is Egypt in Africa","world":"media.music"}
+{"id":"kl.ctl.ui.avatar#001","group":"control","tab":"robot","message":"Give yourself visor eyes.","world":"ui.avatar"}
+{"id":"kl.ctl.ui.help#001","group":"control","tab":"robot","message":"What can I say here?","world":"ui.help"}
+{"id":"kl.ctl.ui.shell#001","group":"control","tab":"robot","message":"opn the map","world":"ui.shell"}
+{"id":"kl.ctl.art.draw#009","group":"control","tab":"draw","message":"Draw a red house.","world":"art.draw"}
+{"id":"kl.ctl.data.charts#009","group":"control","tab":"charts","message":"chart: red 4, green 6, blue 10, pink 1","world":"data.charts"}
+{"id":"kl.ctl.docs.editor#010","group":"control","tab":"editor","message":"put a heading called Notes at the top","world":"docs.editor"}
+{"id":"kl.ctl.docs.reader#008","group":"control","tab":"documents","message":"Who did the witch lock?","world":"docs.reader"}
+{"id":"kl.ctl.games.chess#003","group":"control","tab":"chess","message":"i want to play chess","world":"games.chess"}
+{"id":"kl.ctl.games.guess#002","group":"control","tab":"guess","message":"let's play twenty questions","world":"games.guess"}
+{"id":"kl.ctl.games.hangman#004","group":"control","tab":"hangman","message":"I want to play hangman","world":"games.hangman"}
+{"id":"kl.ctl.games.tictactoe#004","group":"control","tab":"tictactoe","message":"let's play tic tac toe","world":"games.tictactoe"}
+{"id":"kl.ctl.geo.map#008","group":"control","tab":"chess","message":"i want to know is Egypt in Africa","world":"geo.map"}
+{"id":"kl.ctl.kids.animals#008","group":"control","tab":"music","message":"what sound does a cow make","world":"kids.animals"}
+{"id":"kl.ctl.hand.110","group":"control","tab":null,"message":"what is a cat","world":null}
+{"id":"kl.ctl.hand.111","group":"control","tab":null,"message":"how many legs does a spider have","world":null}
+{"id":"kl.ctl.hand.112","group":"control","tab":null,"message":"tell me about spiders","world":null}
+{"id":"kl.ctl.hand.113","group":"control","tab":null,"message":"what is the capital of France","world":null}
+{"id":"kl.ctl.hand.114","group":"control","tab":"art.draw","message":"draw a house","world":null}
+{"id":"kl.ctl.hand.115","group":"control","tab":"art.draw","message":"draw a red tree","world":null}
+{"id":"kl.ctl.hand.116","group":"control","tab":null,"message":"how many legs does a dog have","world":null}
+{"id":"kl.ctl.hand.117","group":"control","tab":null,"message":"what does a rabbit eat","world":null}
+{"id":"kl.ctl.hand.118","group":"control","tab":null,"message":"hello","world":null}
+{"id":"kl.ctl.hand.119","group":"control","tab":null,"message":"how many legs does a cat have","world":null}
+{"id":"kl.draw.comet.0.inv","group":"draw","tab":"art.draw","noun":"blorp","message":"draw a blorp","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.comet.1.inv","group":"draw","tab":"art.draw","noun":"blorp","message":"can you sketch me a blorp please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.guitar.0.inv","group":"draw","tab":"art.draw","noun":"zindle","message":"draw a zindle","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.guitar.1.inv","group":"draw","tab":"art.draw","noun":"zindle","message":"can you sketch me a zindle please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.lion.0.inv","group":"draw","tab":"art.draw","noun":"quorbit","message":"draw a quorbit","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.lion.1.inv","group":"draw","tab":"art.draw","noun":"quorbit","message":"can you sketch me a quorbit please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.monkey.0.inv","group":"draw","tab":"art.draw","noun":"flambex","message":"draw a flambex","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.monkey.1.inv","group":"draw","tab":"art.draw","noun":"flambex","message":"can you sketch me a flambex please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.dolphin.0.inv","group":"draw","tab":"art.draw","noun":"snarf","message":"draw a snarf","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.dolphin.1.inv","group":"draw","tab":"art.draw","noun":"snarf","message":"can you sketch me a snarf please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.umbrella.0.inv","group":"draw","tab":"art.draw","noun":"glimbus","message":"draw a glimbus","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.umbrella.1.inv","group":"draw","tab":"art.draw","noun":"glimbus","message":"can you sketch me a glimbus please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.volcano.0.inv","group":"draw","tab":"art.draw","noun":"vrootle","message":"draw a vrootle","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.volcano.1.inv","group":"draw","tab":"art.draw","noun":"vrootle","message":"can you sketch me a vrootle please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.telescope.0.inv","group":"draw","tab":"art.draw","noun":"plimsy","message":"draw a plimsy","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.telescope.1.inv","group":"draw","tab":"art.draw","noun":"plimsy","message":"can you sketch me a plimsy please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.snowflake.0.inv","group":"draw","tab":"art.draw","noun":"kwazzle","message":"draw a kwazzle","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.snowflake.1.inv","group":"draw","tab":"art.draw","noun":"kwazzle","message":"can you sketch me a kwazzle please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.crown.0.inv","group":"draw","tab":"art.draw","noun":"drobnik","message":"draw a drobnik","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.crown.1.inv","group":"draw","tab":"art.draw","noun":"drobnik","message":"can you sketch me a drobnik please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.anchor.0.inv","group":"draw","tab":"art.draw","noun":"sfumble","message":"draw a sfumble","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.anchor.1.inv","group":"draw","tab":"art.draw","noun":"sfumble","message":"can you sketch me a sfumble please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.bell.0.inv","group":"draw","tab":"art.draw","noun":"yarnok","message":"draw a yarnok","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.bell.1.inv","group":"draw","tab":"art.draw","noun":"yarnok","message":"can you sketch me a yarnok please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.key.0.inv","group":"draw","tab":"art.draw","noun":"thwippet","message":"draw a thwippet","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.key.1.inv","group":"draw","tab":"art.draw","noun":"thwippet","message":"can you sketch me a thwippet please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.candle.0.inv","group":"draw","tab":"art.draw","noun":"norgle","message":"draw a norgle","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.draw.candle.1.inv","group":"draw","tab":"art.draw","noun":"norgle","message":"can you sketch me a norgle please","world":"art.draw","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.diagram.castle.inv","group":"draw","tab":"diagram.sketch","noun":"blorp","message":"a diagram shaped like a blorp","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.diagram.lighthouse.inv","group":"draw","tab":"diagram.sketch","noun":"zindle","message":"a diagram shaped like a zindle","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.diagram.robot.inv","group":"draw","tab":"diagram.sketch","noun":"quorbit","message":"a diagram shaped like a quorbit","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.diagram.snowman.inv","group":"draw","tab":"diagram.sketch","noun":"flambex","message":"a diagram shaped like a flambex","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.diagram.apple.inv","group":"draw","tab":"diagram.sketch","noun":"snarf","message":"a diagram shaped like a snarf","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.diagram.bicycle.inv","group":"draw","tab":"diagram.sketch","noun":"glimbus","message":"a diagram shaped like a glimbus","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.diagram.train.inv","group":"draw","tab":"diagram.sketch","noun":"vrootle","message":"a diagram shaped like a vrootle","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.diagram.umbrella.inv","group":"draw","tab":"diagram.sketch","noun":"glimbus","message":"a diagram shaped like a glimbus","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.box.guitar.inv","group":"draw","tab":"diagram.sketch","noun":"zindle","message":"add a box shaped like a zindle","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","note":"frame not read by diagram.sketch (DRAW-FROM-FACTS item 4 reads \"a diagram shaped like\"); expected gap","invented":true}
+{"id":"kl.box.crown.inv","group":"draw","tab":"diagram.sketch","noun":"drobnik","message":"add a box shaped like a drobnik","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","note":"frame not read by diagram.sketch (DRAW-FROM-FACTS item 4 reads \"a diagram shaped like\"); expected gap","invented":true}
+{"id":"kl.box.key.inv","group":"draw","tab":"diagram.sketch","noun":"thwippet","message":"add a box shaped like a thwippet","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","note":"frame not read by diagram.sketch (DRAW-FROM-FACTS item 4 reads \"a diagram shaped like\"); expected gap","invented":true}
+{"id":"kl.box.bell.inv","group":"draw","tab":"diagram.sketch","noun":"yarnok","message":"add a box shaped like a yarnok","world":"diagram.sketch","answer":"(?:don't know|do not know|cannot|can't)","note":"frame not read by diagram.sketch (DRAW-FROM-FACTS item 4 reads \"a diagram shaped like\"); expected gap","invented":true}
+{"id":"kl.know.01.inv","group":"know","tab":null,"frame":"define","noun":"blorp","message":"what is a blorp","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.02.inv","group":"know","tab":null,"frame":"define","noun":"vrootle","message":"what is a vrootle","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.03.inv","group":"know","tab":null,"frame":"define","noun":"plimsy","message":"what is a plimsy","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.04.inv","group":"know","tab":null,"frame":"define","noun":"zindle","message":"what is a zindle","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.05.inv","group":"know","tab":null,"frame":"define","noun":"snarf","message":"what is a snarf","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.06.inv","group":"know","tab":null,"frame":"define","noun":"plimsy","message":"tell me about the plimsy","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.07.inv","group":"know","tab":null,"frame":"define","noun":"glimbus","message":"what is a glimbus","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.08.inv","group":"know","tab":null,"frame":"define","noun":"kwazzle","message":"who is a kwazzle","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.09.inv","group":"know","tab":null,"frame":"define","noun":"drobnik","message":"what is a drobnik","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.10.inv","group":"know","tab":null,"frame":"define","noun":"sfumble","message":"what is a sfumble","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.11.inv","group":"know","tab":null,"frame":"define","noun":"norgle","message":"what's a norgle","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.12.inv","group":"know","tab":null,"frame":"define","noun":"sfumble","message":"what is a sfumble","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.13.inv","group":"know","tab":null,"frame":"define","noun":"blorp","message":"what is a blorp","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.14.inv","group":"know","tab":null,"frame":"define","noun":"drobnik","message":"what is a drobnik","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.15.inv","group":"know","tab":null,"frame":"define","noun":"yarnok","message":"define yarnok","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.16.inv","group":"know","tab":null,"frame":"count","noun":"thwippet","message":"how many legs does a thwippet have","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.17.inv","group":"know","tab":null,"frame":"count","noun":"norgle","message":"how many legs does a norgle have","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.18.inv","group":"know","tab":null,"frame":"count","noun":"blorp","message":"how many legs does a blorp have","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.19.inv","group":"know","tab":null,"frame":"count","noun":"zindle","message":"how many legs do zindle have","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.20.inv","group":"know","tab":null,"frame":"count","noun":"quorbit","message":"how many wheels does a quorbit have","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.21.inv","group":"know","tab":null,"frame":"count","noun":"flambex","message":"how many legs does a flambex have","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.22.inv","group":"know","tab":null,"frame":"count","noun":"snarf","message":"how many legs does a snarf have","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.23.inv","group":"know","tab":null,"frame":"count","noun":"thwippet","message":"how many eyes does a thwippet have","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.24.inv","group":"know","tab":null,"frame":"made","noun":"glimbus","message":"what is a glimbus made of","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.25.inv","group":"know","tab":null,"frame":"made","noun":"vrootle","message":"what is a vrootle made of","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.26.inv","group":"know","tab":null,"frame":"made","noun":"plimsy","message":"what is a plimsy made of","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.27.inv","group":"know","tab":null,"frame":"made","noun":"quorbit","message":"what is a quorbit made of","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.28.inv","group":"know","tab":null,"frame":"made","noun":"kwazzle","message":"what is the kwazzle made of","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.29.inv","group":"know","tab":null,"frame":"where","noun":"drobnik","message":"where does a drobnik live","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.30.inv","group":"know","tab":null,"frame":"where","noun":"sfumble","message":"where can you find a sfumble","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.31.inv","group":"know","tab":null,"frame":"where","noun":"yarnok","message":"where does a yarnok live","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.32.inv","group":"know","tab":null,"frame":"where","noun":"thwippet","message":"where can you find a thwippet","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.33.inv","group":"know","tab":null,"frame":"where","noun":"norgle","message":"where do you find a norgle","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.34.inv","group":"know","tab":null,"frame":"where","noun":"blorp","message":"where does a blorp live","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.35.inv","group":"know","tab":null,"frame":"can","noun":"yarnok","message":"what can a yarnok do","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.36.inv","group":"know","tab":null,"frame":"can","noun":"drobnik","message":"what can a drobnik do","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.37.inv","group":"know","tab":null,"frame":"can","noun":"plimsy","message":"what can a plimsy do","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.38.inv","group":"know","tab":null,"frame":"can","noun":"thwippet","message":"what can a thwippet do","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.39.inv","group":"know","tab":null,"frame":"can","noun":"zindle","message":"what can a zindle do","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}
+{"id":"kl.know.40.inv","group":"know","tab":null,"frame":"can","noun":"sfumble","message":"what can a sfumble do","world":"conversation","answer":"(?:don't know|do not know|cannot|can't)","invented":true}

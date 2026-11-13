@@ -4518,7 +4518,6 @@
     alt=my_files
     alt=my_docs
 
-# Frames of the knowledge questions (spec 17). The words are the FRAME; the thing asked about is an open slot that the host fills by lookup.
 @phrase.lang.know.define core.phrase
     doc="Lead-ins of a question about what a thing is: the rest of the message is the thing."
     alt=what_do_you_know_about
@@ -4575,8 +4574,6 @@
     alt=where_do_you_find
     alt=where_does
     alt=where_do
-    alt=where_is
-    alt=where_are
 
 @phrase.lang.know.live core.phrase
     doc="Closing words of a where question (they are dropped from the thing)."

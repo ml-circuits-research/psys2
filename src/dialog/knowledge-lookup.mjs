@@ -18,8 +18,6 @@ const article = (n) => `${/^[aeiou]/i.test(n) && !/^(?:uni|use|eu)/i.test(n) ? '
 const list = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
 const firstClause = (g) => String(g).split(/;\s*/)[0].replace(/^\([^)]*\)\s*/, '').trim();
 
-/** The argument keys of an action that carry a thing as the user said it (an open slot): `kt` (art.draw), `thing`. */
-const THING_ARGS = ['kt', 'thing'];
 
 export const knowledgeOf = (dialog) => dialog?.engine?.knowledge ?? null;
 
@@ -75,7 +73,9 @@ export async function knowledgeAnswer(dialog, english, formal) {
   if (!frame) return null;
   const seg = formal.segments[0];
   const left = seg.unparsed || !seg.wires?.length ? ['*'] : leftOut(seg, !!dialog._waLang && dialog._waLang !== 'en');
-  return left.length ? frameAnswer(dialog, frame) : null;
+  const slot = frame.slot.split(' ');
+  const respelled = !left.length && (seg.corrections ?? []).some((c) => slot.includes(String(c.from).toLowerCase()));   // "candle" read as "handle": the reading is of another word
+  return left.length || respelled ? frameAnswer(dialog, frame) : null;
 }
 
 /**
@@ -103,7 +103,12 @@ export async function preloadThings(dialog, segments) {
     if (seg.unparsed) continue;
     try {
       const rq = requestOf(seg);
-      if (rq) for (const k of THING_ARGS) if (rq.args[k]) { const n = rq.args[k].toLowerCase().replace(/[^\p{L}\p{N} -]/gu, ' ').trim(); if (n && n.split(/\s+/).length <= 3) names.add(n); }
+      // the reading's world says which slots of its action are open (a thing it has no picture of); `thing` is the generic argument of the same idea
+      if (rq?.world) {
+        const slots = dialog.engine.interp.hook(dialog.isession, rq.world, 'openSlots', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
+        for (const n of Array.isArray(slots) ? slots : []) if (n && String(n).split(/\s+/).length <= 3) names.add(String(n));
+        if (rq.args.thing) names.add(String(rq.args.thing).toLowerCase());
+      }
       for (const w of leftOut(seg, foreign).slice(0, 3)) names.add(w);
     } catch { /* a reading that cannot be inspected needs nothing */ }
   }

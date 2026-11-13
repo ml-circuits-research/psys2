@@ -15,15 +15,6 @@
     example="Draw a small blue fish."
     doc="Draws one or more things: count, size, color, kind, and an optional place or parts (\"in the top right corner\", \"next to the sun\", \"with a red roof\")."
 
-@pat.art.draw.add.open core.pattern
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [$art.draw.g4_draw] [me|us]? [$art.draw.g14_a_picture_of]? [a|an|the|some|another]? {t:words(3)}"
-    emit="@{_} core.request action=draw.add arg.kt=\"{t}\""
-    kind=request
-    priority=8
-    example="Draw a comet."
-    example="Sketch a guitar."
-    doc="The frame \"draw a X\" with an open slot (spec 17): the thing is not in the lexicon, so the operation looks it up in the knowledge catalog; without a hit it says it does not know how to draw it. Lowest priority: every pattern that knows the thing wins."
-
 @pat.art.draw.add.the core.pattern
     match="[$lang.lead.polite|$art.draw.g2_hey]? [draw|sketch|draw_me|sketch_me] the {n:number?} {q:lex.art.draw.quantity?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
     emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"{w}\""

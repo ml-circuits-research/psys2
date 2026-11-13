@@ -13,7 +13,7 @@ import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=5
 import { loadWorlds } from '../worlds/index.mjs?v=a9af43a104';
 import { validateWorldSet } from '../worlds/validate.mjs?v=b89330fded';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=fcb36d7690';
+import { createInterpreter } from '../interpreter/index.mjs?v=20061324be';
 import { createReasoner } from '../reasoner/index.mjs?v=957ba6764d';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=cbbcb24a63';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=5c85e78e47';
@@ -31,8 +31,9 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=e99f51b690';
 import { Discourse } from './discourse.mjs?v=0972f85dd8';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=681c66cd95';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f516782815';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=725a9427fc';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=a654c07905';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=a654c07905';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -1319,9 +1320,15 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
+    // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
+    if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
+      const ka = await perf.time('knowledge', () => knowledgeAnswer(this, english, formal));
+      if (ka) { meta = { reply: ka.reply, status: ka.status, info: ka.info }; formal = { segments: [], wires: [] }; }
+    }
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
     const segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    if (this.engine.knowledge && segments.length) { try { await perf.time('knowledge', () => preloadThings(this, segments)); } catch { /* no knowledge is no change */ } }   // spec 17: the open slots of the readings, looked up before the operations run
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
@@ -1432,6 +1439,9 @@ export class DialogSession {
         lines.push([T(`This could also be read in another way (${titles.join(', ')}); I used the `), { text: `"${used}"`, translate: false, quote: true }, T(' reading.')]);
       }
     }
+    if (this.engine.knowledge && !icpt && !pre && !meta) {   // spec 17: a frame the reading took whole, whose world answered "missing": the catalog is asked before the "I don't know" stands
+      try { const kf = await perf.time('knowledge', () => knowledgeFallback(this, english, segments, statuses)); if (kf) { lines.length = 0; lines.push([T(kf.reply)]); statuses[0] = kf.status; segments[0].ignored = []; segments[0].knowledge = kf.info; } } catch { /* the world's own reply stands */ }
+    }
     this.isession.batch = null;
     for (const seg of segments) {
       if (!seg.corrections?.length || seg.unparsed) continue;
@@ -1516,7 +1526,11 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   const set = await loadWorlds(loader, { reasoner: mode });
   const reasoner = mode === 'matrix' ? await createReasoner(set) : null;
   const interp = createInterpreter(set, { ...options, reasoner });
+  interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
+    knowledge: options.knowledge ?? null,
+    /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
+    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; },
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** Formalizer strategies by id (spec 06); `formalizers` overrides them (tests, an encoder endpoint). */
     formalizers: { rules: createRulesFormalizer(), encoder: createEncoderFormalizer({ endpoint: options.encoderEndpoint ?? null }), ...formalizers },
