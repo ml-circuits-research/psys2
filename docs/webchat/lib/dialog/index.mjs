@@ -30,7 +30,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=783ac97f31';
 import { checkValues } from './value-check.mjs?v=b6bdd55369';
-import { Discourse } from './discourse.mjs?v=249525fddf';
+import { Discourse } from './discourse.mjs?v=8f1a25b5db';
 import { Dialogue } from './dialogue.mjs?v=c98b9f68a1';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=ad0227e0ff';
@@ -960,13 +960,73 @@ export class DialogSession {
     const rep = await this._nameRepair(english, res, opts, lenient);
     if (rep) return rep;
     const r = await this._capabilityRead(english, res, opts, lenient);
-    if (r || !res.segments.length) return r;
+    if (r) return r;
+    const owner = await this._tabOwnsAct(english, res, opts);
+    if (owner) return owner;
+    if (!res.segments.length) return r;
     // nothing else read the message and the only reading rests on a correction that would open another world's tab: it is not understood
     const ctx = opts.context ?? this.context();
     const cross = res.segments.filter((x) => !x.unparsed && x.corrections?.length && !this._crossTabOk([x], x.corrections, ctx, english));
     if (!cross.length) return null;
     const segments = res.segments.map((x) => (cross.includes(x) ? { ...x, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [] } : x));
     return { segments, wires: segments.flatMap((x) => x.wires) };
+  }
+
+  /**
+   * The act is known in the active world, the thing is found nowhere else (worker-tasks 2026-11-13 20:55, cause 2): a reading of another world that the message does not
+   * name, whose act (the last word of its action: remove, add, change ...) is also an action of the world on the open tab, and whose dry run finds nothing to act on, is not
+   * the better reading and nothing else read the message: the ACTIVE world takes the same act on the same words and answers (its own "I have no X", or does it). The
+   * arguments move by shape: the one text argument of the foreign wire goes to the one text argument of the tab world's pattern for that act. Returns the segments or null.
+   */
+  async _tabOwnsAct(english, res, opts) {
+    const ctx = opts.context ?? this.context(), T = ctx.tabWorld; 
+    if (!T || !res.segments.length || res.segments.some((x) => x.unparsed)) return null;
+    const { set, interp } = this.engine, tw = set.get(T);
+    if (!tw?.patterns?.length) return null;
+    const named = this._worldsNamedIn(english);
+    const SKIP = new Set(['ui.shell', 'ui.help', 'core', 'lang.common']);
+    const act = (a) => String(a ?? '').split('.').pop();
+    const FUNCTION_WORDS = new Set(['a', 'an', 'the', 'my', 'your', 'from', 'off', 'to', 'of', 'on', 'in', 'into', 'with', 'and', 'please', 'it', 'this', 'that', 'these', 'those', 'some', 'any', 'all']);
+    // the required words of a pattern after its act word (its first required group): a slot, an optional group and a phrase macro say nothing about a thing
+    const namesItsOwnThing = (match) => {
+      let verbSeen = false;
+      for (const t of String(match ?? '').split(/\s+/).filter(Boolean)) {
+        if (/^\{\w+:lex\./.test(t)) return true;   // a slot filled from the world's own lexicon names a thing of that world
+        if (t.startsWith('{') || t.endsWith('?')) continue;
+        if (!verbSeen) { verbSeen = true; continue; }   // the first required group is the act word (a phrase macro, `[$...]`, is one too)
+        if (t.startsWith('[$')) continue;
+        if (!t.replace(/^\[|\]$/g, '').split('|').every((x) => FUNCTION_WORDS.has(x))) return true;
+      }
+      return false;
+    };
+    const out = [];
+    let changed = false;
+    try {
+      await this._prepareWorldsOf(res.segments);
+      const f = this.forkForValidation();
+      for (const seg of res.segments) {
+        const w = seg.match?.worldId, wire = seg.wires?.[0];
+        const action = wire?.entries?.find((e) => e.key === 'core.request.action')?.value?.v;
+        const arg = wire?.entries?.find((e) => /^core\.request\.arg\./.test(e.key));
+        const mine = w && action && !SKIP.has(w) && w !== T && !named.has(w) ? tw.patterns.find((p) => { const m = /action=([\w.]+)\s+arg\.(\w+)=\\?"\{/.exec(p.emit ?? ''); return m && act(m[1]) === act(action) && p.kind === 'request'; }) : null;
+        if (!mine || !arg || seg.wires.length !== 1 || namesItsOwnThing(set.get(w)?.patterns?.find((p) => p.id === seg.match.patternId)?.match)) { out.push(seg); continue; }   // a pattern that carries words of its own besides the act ("remove milk from my LIST") names a thing of its world: that world is meant
+        f.isession.add(seg.wires);
+        if (!['missing', 'unsupported'].includes(interp.resolve(f.isession, wire)?.status)) { out.push(seg); continue; }   // the foreign world finds nothing to act on or refuses
+        const [, tAction, tArg] = /action=([\w.]+)\s+arg\.(\w+)=\\?"\{/.exec(mine.emit);
+        const words = String(arg.value?.v ?? '').replace(/^(?:(?:the|a|an|my|your|some|any)\s+)+/i, '');
+        const entries = wire.entries.filter((e) => !/^core\.request\.arg\./.test(e.key)).map((e) => {
+          if (e.key === 'core.request.action') return { ...e, value: { ...e.value, v: tAction } };
+          if (e.key === 'core.via') return { ...e, value: { ...e.value, v: mine.id } };
+          if (e.key === 'core.in') return { ...e, value: { ...e.value, v: T } };
+          return e;
+        });
+        entries.push({ key: `core.request.arg.${tArg}`, value: { kind: 'string', v: words } });
+        const nw = { ...wire, entries, source: mine.id };
+        out.push({ ...seg, wires: [nw], match: { ...seg.match, worldId: T, patternId: mine.id }, worlds: [T] });
+        changed = true;
+      }
+    } catch { return null; }
+    return changed ? { segments: out, wires: out.flatMap((s) => s.wires) } : null;
   }
 
   async _capabilityRead(english, res, opts, lenient) {
