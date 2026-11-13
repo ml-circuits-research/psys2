@@ -1,0 +1,792 @@
+{
+ "messages": 3537,
+ "rules_mapped_to_act": 748,
+ "by_set": {
+  "operational": 256,
+  "dialogue": 492
+ },
+ "sizes": {
+  "distilbert": {
+   "all_mapped": {
+    "n": 748,
+    "agree": 0.6711229946524064
+   },
+   "comparable_worlds": {
+    "n": 443,
+    "agree": 0.8058690744920993
+   },
+   "comparable_operational": {
+    "n": 171,
+    "agree": 0.7309941520467836
+   },
+   "comparable_dialogue": {
+    "n": 272,
+    "agree": 0.8529411764705882
+   },
+   "comparable_operational_right": {
+    "n": 162,
+    "agree": 0.7222222222222222
+   },
+   "all_operational_right": {
+    "n": 245,
+    "agree": 0.6285714285714286
+   },
+   "comparable_single_command": {
+    "n": 362,
+    "agree": 0.8674033149171271
+   },
+   "top_disagreements_rules_vs_tagger": [
+    {
+     "rules": "make",
+     "tagger": "change",
+     "n": 19
+    },
+    {
+     "rules": "make",
+     "tagger": "ask",
+     "n": 12
+    },
+    {
+     "rules": "ask",
+     "tagger": "make",
+     "n": 10
+    },
+    {
+     "rules": "make",
+     "tagger": "place",
+     "n": 9
+    },
+    {
+     "rules": "change",
+     "tagger": "make",
+     "n": 6
+    },
+    {
+     "rules": "place",
+     "tagger": "make",
+     "n": 4
+    },
+    {
+     "rules": "make",
+     "tagger": "send",
+     "n": 4
+    },
+    {
+     "rules": "make",
+     "tagger": "connect",
+     "n": 3
+    }
+   ],
+   "samples": [
+    {
+     "message": "Give yourself visor eyes.",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "visor"
+      ],
+      [
+       "set",
+       "eyes"
+      ]
+     ]
+    },
+    {
+     "message": "change the mouth to a zigzag",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "mouth"
+      ],
+      [
+       "value",
+       "a"
+      ],
+      [
+       "value",
+       "zigzag"
+      ]
+     ]
+    },
+    {
+     "message": "Set your mouth to a line.",
+     "world": "ui.avatar",
+     "rules": "place",
+     "tagger": "place",
+     "roles": [
+      [
+       "place",
+       "to a line"
+      ]
+     ]
+    },
+    {
+     "message": "put a dish on your head",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "dish"
+      ]
+     ]
+    },
+    {
+     "message": "take off your antenna",
+     "world": "ui.avatar",
+     "rules": "remove",
+     "tagger": "remove",
+     "roles": [
+      [
+       "thing",
+       "antenna"
+      ]
+     ]
+    },
+    {
+     "message": "Dish on top pls.",
+     "world": "ui.avatar",
+     "rules": "place",
+     "tagger": "place",
+     "roles": [
+      [
+       "thing",
+       "dish"
+      ],
+      [
+       "place",
+       "on top pls"
+      ]
+     ]
+    },
+    {
+     "message": "put a heart on your chest",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "heart"
+      ],
+      [
+       "place",
+       "chest"
+      ]
+     ]
+    },
+    {
+     "message": "remove the thing on your chest",
+     "world": "ui.avatar",
+     "rules": "remove",
+     "tagger": "remove",
+     "roles": [
+      [
+       "thing",
+       "thing"
+      ],
+      [
+       "place",
+       "on"
+      ],
+      [
+       "place",
+       "chest"
+      ]
+     ]
+    },
+    {
+     "message": "give urself a dial on ur chest",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "dial"
+      ],
+      [
+       "value",
+       "chest"
+      ]
+     ]
+    },
+    {
+     "message": "make your body green",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "value",
+       "green"
+      ]
+     ]
+    },
+    {
+     "message": "Make my body colour blue please.",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "body"
+      ],
+      [
+       "attribute",
+       "colour"
+      ],
+      [
+       "value",
+       "blue"
+      ],
+      [
+       "value",
+       "please"
+      ]
+     ]
+    },
+    {
+     "message": "make your body purple",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "value",
+       "purple"
+      ]
+     ]
+    }
+   ]
+  },
+  "minilm6": {
+   "all_mapped": {
+    "n": 748,
+    "agree": 0.6149732620320856
+   },
+   "comparable_worlds": {
+    "n": 443,
+    "agree": 0.7607223476297968
+   },
+   "comparable_operational": {
+    "n": 171,
+    "agree": 0.695906432748538
+   },
+   "comparable_dialogue": {
+    "n": 272,
+    "agree": 0.8014705882352942
+   },
+   "comparable_operational_right": {
+    "n": 162,
+    "agree": 0.691358024691358
+   },
+   "all_operational_right": {
+    "n": 245,
+    "agree": 0.6040816326530613
+   },
+   "comparable_single_command": {
+    "n": 362,
+    "agree": 0.8176795580110497
+   },
+   "top_disagreements_rules_vs_tagger": [
+    {
+     "rules": "make",
+     "tagger": "change",
+     "n": 26
+    },
+    {
+     "rules": "make",
+     "tagger": "ask",
+     "n": 15
+    },
+    {
+     "rules": "change",
+     "tagger": "make",
+     "n": 10
+    },
+    {
+     "rules": "ask",
+     "tagger": "make",
+     "n": 8
+    },
+    {
+     "rules": "make",
+     "tagger": "place",
+     "n": 7
+    },
+    {
+     "rules": "make",
+     "tagger": "remove",
+     "n": 6
+    },
+    {
+     "rules": "ask",
+     "tagger": "change",
+     "n": 5
+    },
+    {
+     "rules": "change",
+     "tagger": "remove",
+     "n": 4
+    }
+   ],
+   "samples": [
+    {
+     "message": "Give yourself visor eyes.",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "visor"
+      ],
+      [
+       "attribute",
+       "eyes"
+      ]
+     ]
+    },
+    {
+     "message": "change the mouth to a zigzag",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "mouth"
+      ],
+      [
+       "value",
+       "a"
+      ],
+      [
+       "value",
+       "zigzag"
+      ]
+     ]
+    },
+    {
+     "message": "Set your mouth to a line.",
+     "world": "ui.avatar",
+     "rules": "place",
+     "tagger": "place",
+     "roles": [
+      [
+       "thing",
+       "mouth"
+      ],
+      [
+       "place",
+       "to a line"
+      ]
+     ]
+    },
+    {
+     "message": "put a dish on your head",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "dish"
+      ]
+     ]
+    },
+    {
+     "message": "take off your antenna",
+     "world": "ui.avatar",
+     "rules": "remove",
+     "tagger": "remove",
+     "roles": [
+      [
+       "thing",
+       "antenna"
+      ]
+     ]
+    },
+    {
+     "message": "Dish on top pls.",
+     "world": "ui.avatar",
+     "rules": "place",
+     "tagger": "place",
+     "roles": [
+      [
+       "thing",
+       "dish"
+      ],
+      [
+       "place",
+       "on"
+      ],
+      [
+       "place",
+       "top pls"
+      ]
+     ]
+    },
+    {
+     "message": "put a heart on your chest",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "heart"
+      ]
+     ]
+    },
+    {
+     "message": "remove the thing on your chest",
+     "world": "ui.avatar",
+     "rules": "remove",
+     "tagger": "remove",
+     "roles": [
+      [
+       "thing",
+       "thing"
+      ],
+      [
+       "place",
+       "chest"
+      ]
+     ]
+    },
+    {
+     "message": "give urself a dial on ur chest",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "dial"
+      ],
+      [
+       "value",
+       "chest"
+      ]
+     ]
+    },
+    {
+     "message": "make your body green",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "body"
+      ],
+      [
+       "value",
+       "green"
+      ]
+     ]
+    },
+    {
+     "message": "Make my body colour blue please.",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "body"
+      ],
+      [
+       "attribute",
+       "colour"
+      ],
+      [
+       "value",
+       "blue"
+      ]
+     ]
+    },
+    {
+     "message": "make your body purple",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "body"
+      ],
+      [
+       "value",
+       "purple"
+      ]
+     ]
+    }
+   ]
+  },
+  "minilm4": {
+   "all_mapped": {
+    "n": 748,
+    "agree": 0.643048128342246
+   },
+   "comparable_worlds": {
+    "n": 443,
+    "agree": 0.7697516930022573
+   },
+   "comparable_operational": {
+    "n": 171,
+    "agree": 0.7426900584795322
+   },
+   "comparable_dialogue": {
+    "n": 272,
+    "agree": 0.7867647058823529
+   },
+   "comparable_operational_right": {
+    "n": 162,
+    "agree": 0.7407407407407407
+   },
+   "all_operational_right": {
+    "n": 245,
+    "agree": 0.6408163265306123
+   },
+   "comparable_single_command": {
+    "n": 362,
+    "agree": 0.8176795580110497
+   },
+   "top_disagreements_rules_vs_tagger": [
+    {
+     "rules": "make",
+     "tagger": "change",
+     "n": 16
+    },
+    {
+     "rules": "change",
+     "tagger": "make",
+     "n": 14
+    },
+    {
+     "rules": "make",
+     "tagger": "ask",
+     "n": 13
+    },
+    {
+     "rules": "ask",
+     "tagger": "make",
+     "n": 8
+    },
+    {
+     "rules": "make",
+     "tagger": "connect",
+     "n": 7
+    },
+    {
+     "rules": "make",
+     "tagger": "place",
+     "n": 7
+    },
+    {
+     "rules": "make",
+     "tagger": "remove",
+     "n": 7
+    },
+    {
+     "rules": "ask",
+     "tagger": "change",
+     "n": 5
+    }
+   ],
+   "samples": [
+    {
+     "message": "Give yourself visor eyes.",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "set",
+       "visor eyes"
+      ]
+     ]
+    },
+    {
+     "message": "change the mouth to a zigzag",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "mouth"
+      ],
+      [
+       "value",
+       "zigzag"
+      ]
+     ]
+    },
+    {
+     "message": "Set your mouth to a line.",
+     "world": "ui.avatar",
+     "rules": "place",
+     "tagger": "place",
+     "roles": [
+      [
+       "thing",
+       "mouth"
+      ],
+      [
+       "place",
+       "to a line"
+      ]
+     ]
+    },
+    {
+     "message": "put a dish on your head",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "dish"
+      ]
+     ]
+    },
+    {
+     "message": "take off your antenna",
+     "world": "ui.avatar",
+     "rules": "remove",
+     "tagger": "remove",
+     "roles": [
+      [
+       "thing",
+       "antenna"
+      ]
+     ]
+    },
+    {
+     "message": "Dish on top pls.",
+     "world": "ui.avatar",
+     "rules": "place",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "dish"
+      ],
+      [
+       "place",
+       "top pls"
+      ]
+     ]
+    },
+    {
+     "message": "put a heart on your chest",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "heart"
+      ],
+      [
+       "place",
+       "chest"
+      ]
+     ]
+    },
+    {
+     "message": "remove the thing on your chest",
+     "world": "ui.avatar",
+     "rules": "remove",
+     "tagger": "remove",
+     "roles": [
+      [
+       "thing",
+       "thing"
+      ],
+      [
+       "place",
+       "chest"
+      ]
+     ]
+    },
+    {
+     "message": "give urself a dial on ur chest",
+     "world": "ui.avatar",
+     "rules": "make",
+     "tagger": "make",
+     "roles": [
+      [
+       "thing",
+       "dial"
+      ],
+      [
+       "value",
+       "chest"
+      ]
+     ]
+    },
+    {
+     "message": "make your body green",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "value",
+       "green"
+      ]
+     ]
+    },
+    {
+     "message": "Make my body colour blue please.",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "thing",
+       "body"
+      ],
+      [
+       "attribute",
+       "colour"
+      ],
+      [
+       "value",
+       "blue"
+      ],
+      [
+       "thing",
+       "please"
+      ]
+     ]
+    },
+    {
+     "message": "make your body purple",
+     "world": "ui.avatar",
+     "rules": "change",
+     "tagger": "change",
+     "roles": [
+      [
+       "value",
+       "purple"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

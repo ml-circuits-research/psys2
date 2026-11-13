@@ -1,0 +1,36 @@
+{
+ "run": "/home/salboaie/work/psys2/.claude/worktrees/agent-a2b3edeb56f53c9fd/training/runs/act-tagger/minilm4",
+ "size_mb": 19.3,
+ "runs": [
+  {
+   "throttle": 1,
+   "load": {
+    "fetchMs": 78,
+    "createMs": 321,
+    "MB": 19.3
+   },
+   "n": 300,
+   "actSame": 300,
+   "tagSame": 284,
+   "meanTokens": 9.1,
+   "medianMs": 3.4,
+   "p95Ms": 4.6,
+   "errs": []
+  },
+  {
+   "throttle": 4,
+   "load": {
+    "fetchMs": 174,
+    "createMs": 1104,
+    "MB": 19.3
+   },
+   "n": 300,
+   "actSame": 300,
+   "tagSame": 284,
+   "meanTokens": 9.1,
+   "medianMs": 12.6,
+   "p95Ms": 17.5,
+   "errs": []
+  }
+ ]
+}

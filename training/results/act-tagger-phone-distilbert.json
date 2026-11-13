@@ -1,0 +1,36 @@
+{
+ "run": "/home/salboaie/work/psys2/.claude/worktrees/agent-a2b3edeb56f53c9fd/training/runs/act-tagger/distilbert",
+ "size_mb": 67,
+ "runs": [
+  {
+   "throttle": 1,
+   "load": {
+    "fetchMs": 220,
+    "createMs": 377,
+    "MB": 67
+   },
+   "n": 300,
+   "actSame": 300,
+   "tagSame": 235,
+   "meanTokens": 9.1,
+   "medianMs": 17.9,
+   "p95Ms": 23.9,
+   "errs": []
+  },
+  {
+   "throttle": 4,
+   "load": {
+    "fetchMs": 268,
+    "createMs": 1267,
+    "MB": 67
+   },
+   "n": 300,
+   "actSame": 300,
+   "tagSame": 235,
+   "meanTokens": 9.1,
+   "medianMs": 72.5,
+   "p95Ms": 97.6,
+   "errs": []
+  }
+ ]
+}
