@@ -138,8 +138,8 @@
     "lib/worlds/validate.mjs": "c637d10db35c5d25",
     "worlds/art.draw/coverage.md": "e028db6e48c71587",
     "worlds/art.draw/datagen.mjs": "735b33ac0ed66819",
-    "worlds/art.draw/fns.mjs": "cbd0afd22d948744",
-    "worlds/art.draw/ops.mjs": "39394d54838c5cf9",
+    "worlds/art.draw/fns.mjs": "0b119cfdc0316102",
+    "worlds/art.draw/ops.mjs": "a4bbe7f6901cfd37",
     "worlds/art.draw/scene.mjs": "701b955d2fec0f99",
     "worlds/art.draw/things.catalog.mjs": "d7fcfc6371c4cffa",
     "worlds/data.charts/coverage.md": "908ba75884fc997c",
@@ -248,6 +248,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T14:26:36.972Z",
-  "commit": "875c83f"
+  "builtAt": "2026-11-13T14:28:41.169Z",
+  "commit": "a050a48"
 }

@@ -1889,6 +1889,7 @@ export const undo = guard((ctx, args, s) => {
   const snap = s.history.pop();
   s.future.push(snapshot(s, snap.label));
   restore(s, snap);
+  s.prev = s.history.at(-1) ?? null;   // what the timeline of the matrix reasoner does: the picture before the newest step that is still done
   open(ctx);
   return ok(`OK, I undid it${snap.label ? ` (${snap.label})` : ''}.`);
 });
@@ -1898,6 +1899,7 @@ export const redo = guard((ctx, args, s) => {
   const snap = s.future.pop();
   s.history.push(snapshot(s, snap.label));
   restore(s, snap);
+  s.prev = s.history.at(-1);
   open(ctx);
   return ok(`OK, I did it again${snap.label ? ` (${snap.label})` : ''}.`);
 });
