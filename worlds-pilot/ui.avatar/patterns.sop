@@ -99,6 +99,20 @@
     priority=5
     example="Change hat."
 
+@pat.ui.avatar.send.bare core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words}"
+    emit="@{_} core.request action=ui.avatar.send arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=5
+    example="Send hat."
+
+@pat.ui.avatar.send core.pattern
+    match="[$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:words}"
+    emit="@{_} core.request action=ui.avatar.send arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    example="Send hat to the diagram."
+
 @pat.ui.avatar.ask.what core.pattern
     match="[what|which] [is|are] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:words}"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""

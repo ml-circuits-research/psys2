@@ -1,0 +1,11 @@
+@tpl.session.things.learn core.template
+    for=action.things.learn
+    text="{value}"
+
+@tpl.session.things.show core.template
+    for=action.things.show
+    text="{value}"
+
+@tpl.session.things.list core.template
+    for=action.things.list
+    text="{value}"
