@@ -3173,3 +3173,13 @@ Order: after the 2026-11-12 10:25 and 10:50 blocks; DRAW-FROM-FACTS and KNOWLEDG
 - The catalog now has 2,136 drawable objects (sop-knowledge-worlds, 326 shards, about 39 MB: far too big to vendor). Load by lookup: `vocab.json` → one shard → draw. This is KNOWLEDGE-BY-LOOKUP; do it now, with the real catalog from GitHub Pages, cached in Cache Storage, and a clear reply while a shard loads or when offline.
 - Imported objects have about 12 polygon parts with many points: measure draw time and scene redraw with 20 such objects on the phone profile.
 - The diagram "shaped like a house" draws the roof as a rectangle. Use the part's own primitive shape where the diagram has it (triangle, circle, oval); keep the rectangle otherwise.
+
+## Reviewer 2026-11-13 11:15 — SMOKE and FULL suites (owner)
+
+Replace item 2 of the 10:20 block ("npm test under 10 minutes") with two suites:
+- **`npm run test:smoke`: under 2 minutes on a 4-core box.** It must catch the essence: every world loads; one or two canonical messages per world and per operation family in both reasoners; the router; the veto; undo across worlds; the translation layer with a fake translator; the build is fresh; the knowledge catalog lookup. No browser, no model download, no long sets. Choose the tests by what broke in the past: go through the regressions in worker-log and make sure each *kind* has one smoke test.
+- **`npm test` = full**, as today plus the browser matrix. It may be slow.
+- **When to run which:** every commit runs smoke. The full suite runs before each publish of the webchat (SHIP-NOW), after a re-vendor of sopworld, and at least once a day. A publish with a failing full suite is not allowed; a commit between publishes with only smoke is fine.
+- **Report** in worker-log: the smoke list with its time, and, for one week, every failure the full suite caught that smoke missed. Each such miss adds one smoke test.
+- The reviewer validates with smoke on every landing and with full once per batch or publish.
+- The load-sensitive name repair (item 1 of the 10:20 block) stays as written: a result must not depend on machine speed.
