@@ -4108,3 +4108,34 @@
     input="Make the sky red."
     expectState="sky=red"
     session=bd5
+
+@t.art.draw.dff01 core.test
+    input="Draw a red lighthouse."
+    expect="I drew a red lighthouse"
+    expectState="objects.0.thing=lighthouse"
+    session=dff1
+
+@t.art.draw.dff02 core.test
+    input="Draw a blorp."
+    expect="I don't know how to draw a blorp yet."
+    session=dff2
+
+@t.art.draw.dff03 core.test
+    input="Draw a house."
+    expectState="objects.length=1"
+    session=dff3
+
+@t.art.draw.dff04 core.test
+    input="Add a third window."
+    expect="I added a third window to the house"
+    session=dff3
+
+@t.art.draw.dff05 core.test
+    input="Remove the chimney."
+    expect="I took away the chimney of the house"
+    session=dff3
+
+@t.art.draw.dff06 core.test
+    input="Draw two blue castles."
+    expect="I drew 2 blue castles"
+    session=dff6

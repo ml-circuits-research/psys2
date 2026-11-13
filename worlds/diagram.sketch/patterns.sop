@@ -1826,3 +1826,26 @@
     tabOnly=true
     example="Use a circle layout."
     doc="Uses another layout."
+
+@pat.diagram.sketch.shaped core.pattern
+    canonical="Draw a diagram shaped like a house."
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [draw|make|create|build|sketch|give_me|show_me]? [a|an|the]? [diagram|chart|layout|picture|graph|set_of_boxes|boxes|shapes] [shaped|laid_out|arranged|drawn|made|built] [like|as|in_the_shape_of|in_the_form_of] [a|an|the] {o:words(2,noun)}"
+    emit="@{_} core.request action=diagram.shapedLike arg.o=\"{o}\""
+    kind=request
+    priority=14
+    tabPriority=21
+    example="A diagram shaped like a house."
+    example="Make a diagram shaped like a lighthouse."
+    doc="DRAW-FROM-FACTS: the diagram takes the part boxes of a thing of the catalog as its layout (one box per part, labelled with the part name). The thing is an open slot, looked up after the reading."
+
+@pat.diagram.sketch.shaped.arrange core.pattern
+    canonical="Arrange the boxes as a house."
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [arrange|lay_out|organize|organise|put|place|rearrange] [the|these|my]? [boxes|shapes|diagram|them] [as|like|into|in_the_shape_of|in_the_form_of] [a|an|the] {o:words(2,noun)}"
+    emit="@{_} core.request action=diagram.shapedLike arg.o=\"{o}\""
+    kind=request
+    priority=14
+    tabPriority=21
+    needsState=shapes
+    example="Arrange the boxes as a house."
+    example="Lay out the shapes like a castle."
+    doc="DRAW-FROM-FACTS: 'arrange the boxes as a house' draws the part boxes of the house; a layout word (row, circle, grid ...) is handed to the engine's own arrange, so the existing layouts are unchanged."

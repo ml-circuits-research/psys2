@@ -126,3 +126,28 @@ test('the built-in kinds are described as facts; the ones the facts can say full
     assert.equal(scene.partsOf({ kind, size: 100 })[0].hex, scene.colorHex(scene.KINDS[kind].color), `${kind}: default colour`);
   }
 });
+
+test('diagram.sketch: "a diagram shaped like a house" takes the part boxes as the layout, one box per part, no arrows, in both reasoners', async () => {
+  for (const reasoner of ['ops', 'matrix']) {
+    const s = engines[reasoner].createSession({ language: 'en' });
+    const r = await s.send('Make a diagram shaped like a house.');
+    assert.match(r.text, /shaped like a house: one box for each of its 6 parts/, reasoner);
+    const st = s.state('diagram.sketch');
+    const parts = THINGS.house;
+    assert.deepEqual(st.shapes.map((x) => x.name).sort(), parts.map((p) => p.name).sort(), reasoner);
+    assert.deepEqual(st.edges, [], `${reasoner}: no arrows are invented`);
+    for (const sh of st.shapes) assert.equal(sh.label, sh.name.replace(/_/g, ' '), 'labelled with the part name');
+    // positions follow the boxes: the roof is above the body, the door below the windows, the left window left of the right one
+    const at = (n) => st.shapes.find((x) => x.name === n);
+    assert.ok(at('roof').y < at('body').y && at('door').y > at('left_window').y && at('left_window').x < at('right_window').x, reasoner);
+    assert.ok(at('body').w > at('door').w && at('body').h > at('left_window').h, `${reasoner}: sizes follow the boxes`);
+    const u = await s.send('Undo.');
+    assert.match(u.text, /undid|undo/i, reasoner);
+    const n = await engines[reasoner].createSession({ language: 'en' }).send('Make a diagram shaped like a blorp.');
+    assert.equal(n.text, "I don't know how to draw a diagram shaped like a blorp yet.", reasoner);
+  }
+  // the engine's own layouts are unchanged
+  const c = engines.ops.createSession({ language: 'en' });
+  await c.send('Draw three rectangles in the diagram.');
+  assert.match((await c.send('Arrange the boxes as a circle.')).text, /Arranged 3 shapes as a circle/);
+});

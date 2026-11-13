@@ -18,6 +18,7 @@
 
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs';
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs';
+import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs';   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const TAB = 'diagram';
@@ -508,6 +509,45 @@ export const connect = make({ type: 'command', name: 'connect' });
 export const disconnect = make({ type: 'command', name: 'disconnect' });
 export const align = make({ type: 'command', name: 'align' });
 export const arrange = make({ type: 'command', name: 'arrange' });
+
+// ---- "a diagram shaped like a house" (DRAW-FROM-FACTS) --------------------------------------------------------------------
+const LAYOUT_WORDS = new Set(['row', 'column', 'line', 'grid', 'circle', 'stack', 'cluster', 'ring', 'triangle', 'square', 'pyramid', 'tree', 'layers', 'radial', 'hierarchy', 'organic']);
+const thingOfNoun = (w) => {
+  const x = String(w ?? '').toLowerCase().replace(/[^a-z ]/g, '').trim();
+  for (const t of [x, x.replace(/ies$/, 'y'), x.replace(/es$/, ''), x.replace(/s$/, '')]) if (Object.hasOwn(THING_WORDS, t)) return THING_WORDS[t];
+  return null;
+};
+/**
+ * One box per part of a thing of the catalog, labelled with the part name, put where the part is (its box x y w h in the 0-100 frame of the object, scaled to the
+ * canvas, in draw order). Nothing else is made: no arrows, no invented boxes. A layout word (a row, a circle) is the engine's own arrange.
+ */
+export function shapedLike(ctx, args = {}) {
+  if (!K) return NOT_READY();
+  const s = ensure(ctx);
+  const noun = String(args.o ?? '').toLowerCase().replace(/[^a-z ]/g, '').trim();
+  const thing = thingOfNoun(noun);
+  if (!thing) {
+    if (LAYOUT_WORDS.has(noun) && s.shapes.length) return make({ type: 'command', name: 'arrange' })(ctx, { text: `arrange the boxes as a ${noun}` });
+    const art = /^[aeiou]/.test(noun) ? 'an' : 'a';
+    return no(`I don't know how to draw a diagram shaped like ${art} ${noun} yet.`, 'unsupported');
+  }
+  const parts = [...THINGS[thing]].sort((a, b) => a.z - b.z);
+  const x0 = Math.min(...parts.map((p) => p.x)), x1 = Math.max(...parts.map((p) => p.x + p.w)), y0 = Math.min(...parts.map((p) => p.y)), y1 = Math.max(...parts.map((p) => p.y + p.h));
+  const k = Math.min(700 / Math.max(1, x1 - x0), 410 / Math.max(1, y1 - y0));
+  const taken = new Set(s.shapes.flatMap((x) => [x.name.toLowerCase(), (x.id ?? '').toLowerCase()]));
+  const nodes = parts.map((p, i) => {
+    let name = p.name, n = 1;
+    while (taken.has(name.toLowerCase()) || /^[crsdetxhk]\d+$/i.test(name)) name = `${p.name}${++n}`;
+    taken.add(name.toLowerCase());
+    const w = Math.max(10, Math.round(p.w * k)), h = Math.max(10, Math.round(p.h * k));
+    const cx = 400 + ((p.x + p.w / 2) - (x0 + x1) / 2) * k, cy = 250 + ((p.y + p.h / 2) - (y0 + y1) / 2) * k;
+    return { id: `s${i + 1}`, type: 'command', args: { action: 'create', shape: 'rectangle', name, label: p.name.replace(/_/g, ' '), width: w, height: h, at: `${Math.round(cx)},${Math.round(cy)}` } };
+  });
+  const r = execute(ctx, s, nodes);
+  if (r.status !== 'supported') return r;
+  return { ...r, value: `I drew a diagram shaped like ${/^[aeiou]/.test(thing) ? 'an' : 'a'} ${thing}: one box for each of its ${parts.length} parts, named after the part.` };
+}
+
 export const distribute = make({ type: 'command', name: 'distribute' });
 export const toFront = make({ type: 'command', name: 'toFront' });
 export const toBack = make({ type: 'command', name: 'toBack' });

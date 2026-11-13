@@ -333,3 +333,9 @@
     semantics=action
     action=diagram.select
     doc="Selects shapes or arrows by id, name or ends (\"select a1\"); the tab draws a halo on them."
+
+@op.diagram.sketch.shapedLike core.operation
+    impl=shapedLike
+    semantics=action
+    action=diagram.shapedLike
+    doc="DRAW-FROM-FACTS: a diagram shaped like a thing of the catalog (knowledge/k.objects): one box per part of the thing, labelled with the part name, at the part's box (x y w h of its 0-100 frame, scaled); no arrows are invented. A layout word (row, circle ...) is the engine's arrange; an unknown thing is answered plainly."
