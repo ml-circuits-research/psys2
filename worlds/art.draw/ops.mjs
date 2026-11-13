@@ -17,6 +17,7 @@
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
+  registerThings, partGuessed,
 } from './scene.mjs';
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs';
@@ -121,6 +122,39 @@ function colorFrom(words, fallback = null) {
   for (const w of words) { if (isShade(w)) shade = w; else if (isColorWord(w)) color = COLOR_ALIASES[w] ?? w; }
   if (!color && shade && fallback) color = fallback.split(' ').at(-1);
   return color ? canonColor([shade, color].filter(Boolean)) : null;
+}
+
+// ---- the catalog, loaded before the operation runs (spec 07 section 7) ------------------------------------------------------------
+// The board's operations are synchronous, so the dialog layer awaits `prepare({ text })` (bounded by the knowledge time limit) before the operation of a message runs.
+// With a knowledge service installed by the host (src/knowledge/service.mjs: the engine worker of the webchat installs one), the words of the message that are not known
+// as a kind or a thing are looked up in the catalog index and the shards that hold them are fetched (hand-written first, one by one until an object of that name is
+// known, at most 3 shards for a word and 5 for a message), registered in scene.mjs, and cached for the session. Without a service (tests, CLI) only the 30 vendored objects exist.
+const NOT_NOUNS = new Set(['draw', 'add', 'make', 'paint', 'put', 'create', 'sketch', 'give', 'show', 'please', 'another', 'more', 'some', 'with', 'into', 'from', 'that', 'this', 'there', 'here', 'next', 'near', 'over', 'under', 'above', 'below', 'behind', 'beside', 'between', 'left', 'right', 'top', 'bottom', 'middle', 'center', 'centre', 'corner', 'side', 'front', 'back', 'color', 'colour', 'colored', 'coloured', 'again', 'also', 'picture', 'drawing', 'page', 'paper', 'what', 'where', 'many', 'much', 'how', 'the', 'and', 'for', 'you', 'can', 'could', 'would', 'want', 'like', 'need']);
+const MAX_SHARDS_WORD = 3, MAX_SHARDS_TURN = 5;
+let loadNote = new Map();   // noun -> why its picture could not be fetched (the plain reply says so instead of "I don't know")
+const loading = new Map();  // noun -> promise (a word asked twice in a turn shares one lookup)
+/** Fetches what the words of the message need from the catalog; never throws (a failure is remembered in `loadNote`). */
+export async function prepare({ text, deadlineMs = 3000 } = {}) {
+  const svc = globalThis[Symbol.for('psys2.knowledge')];
+  if (!svc || !text) return;
+  let timer;
+  try { await Promise.race([lookUp(svc, text), new Promise((res) => { timer = setTimeout(res, deadlineMs); })]); } finally { clearTimeout(timer); }   // past the deadline the load goes on (cached), the operation answers without it
+}
+async function lookUp(svc, text) {
+  const words = [...new Set(toks(text).filter((w) => w.length > 2 && !NOT_NOUNS.has(w) && !isColorWord(w) && !isShade(w) && !Object.hasOwn(SIZE_WORDS, w) && !/^\d+$/.test(w)))].filter((w) => !kindOfWord(w)).slice(0, 4);
+  const budget = { left: MAX_SHARDS_TURN };
+  for (const w of words) {
+    if (budget.left <= 0) break;
+    if (!loading.has(w)) loading.set(w, (async () => {
+      try {
+        const { cat } = await svc.resolve(w, { maxShards: MAX_SHARDS_WORD, budget });
+        registerThings(cat.objects(), cat.keywords());
+        loadNote.delete(w);
+      } catch (e) { loadNote.set(w, String(e?.message ?? e)); }
+    })().finally(() => loading.delete(w)));
+    await loading.get(w);
+    if (kindOfWord(w)) break;   // the noun of the message is found: the other words are not looked up
+  }
 }
 
 // ---- state access -----------------------------------------------------------------------------------------------------
@@ -857,6 +891,7 @@ function openAdd(ctx, s, args) {
   const part = addPartTo(ctx, s, { noun, ord, mods });
   if (part) return { done: part };
   const plural = /s$/.test(noun) && noun.length > 3;
+  if ([noun, noun.replace(/s$/, '')].some((n) => loadNote.has(n) || loading.has(n))) return { done: no(`I could not fetch the picture of ${plural ? noun : `${a_(noun)} ${noun}`} in time, so I cannot draw it yet. Please try again in a moment.`, 'unsupported') };
   return { done: no(`I don't know how to draw ${plural ? noun : `${a_(noun)} ${noun}`} yet.`, 'unsupported') };
 }
 
@@ -1030,7 +1065,11 @@ export const recolor = guard((ctx, args, s) => {
     s.last = done.map((o) => o.id);
     open(ctx);
     const key0 = partOfWord(kindKey(done[0]), part) ?? part;
-    return ok(withNote(`${opener(s)} The ${partLabel(key0)} of ${done.length > 1 ? 'the ' + pluralOfKind(kindKey(done[0])) : sayObj(done[0])} ${/s$/.test(partLabel(key0)) && key0 !== 'crown' ? 'are' : 'is'} ${color} now.`, r));
+    // the names of about a fifth of the imported parts were guessed by a model: say so once for each such thing, so a wrong part is not a surprise
+    const guessed = done.map(kindKey).filter((k, i, a) => a.indexOf(k) === i && partGuessed(k, key0) && !(s.guessSaid ??= []).includes(k));
+    let rn = r;
+    if (guessed.length) { s.guessSaid.push(...guessed); rn = { ...r, note: `${r.note ? `${r.note} ` : ''}(The part names of this picture are guesses, so tell me if I colored the wrong one.)` }; }
+    return ok(withNote(`${opener(s)} The ${partLabel(key0)} of ${done.length > 1 ? 'the ' + pluralOfKind(kindKey(done[0])) : sayObj(done[0])} ${/s$/.test(partLabel(key0)) && key0 !== 'crown' ? 'are' : 'is'} ${color} now.`, rn));
   }
   for (const o of objs) {
     o.color = color;

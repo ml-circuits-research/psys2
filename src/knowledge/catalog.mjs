@@ -39,6 +39,7 @@ export function parseShard(text) {
       if (a.rgb) p.rgb = a.rgb[0];
       if (a.pointing) p.pointing = a.pointing[0];
       if (a.opens) p.opens = a.opens[0];
+      if (a.named) p.named = a.named[0];   // named=model: the part's name was guessed by a model (about a fifth of the imported parts)
       p.id = w.id; p.of = a.of[0]; order.push(p);
     } else if (w.type === 'k.objects.point') {
       const key = w.attrs.part[0].replace(/^\$/, '');
@@ -66,17 +67,17 @@ export const createFetchLoader = (base) => async (path) => {
 };
 
 export function createCatalog({ vocab = {}, readShard }) {
-  const objects = new Map(), words = new Map(), loaded = new Map();   // loaded: shard path -> promise of its object names
+  const objects = new Map(), names = new Map(), words = new Map(), loaded = new Map();   // loaded: shard path -> promise of its object names
   const shardsOf = (lemma) => vocab[String(lemma).toLowerCase()] ?? [];
   const variants = (w) => { const x = String(w ?? '').toLowerCase(); return [x, x.endsWith('ies') ? `${x.slice(0, -3)}y` : null, x.endsWith('es') ? x.slice(0, -2) : null, x.endsWith('s') ? x.slice(0, -1) : null].filter(Boolean); };
   async function loadShard(path) {
     if (!loaded.has(path)) {
       loaded.set(path, Promise.resolve(readShard(path)).then((text) => {
         const s = parseShard(text);
-        for (const [name, parts] of s.objects) { objects.set(name, parts); words.set(name, name); }
+        for (const [name, parts] of s.objects) { objects.set(name, parts); names.set(name, name); }
         for (const [lemma, name] of Object.entries(s.words)) words.set(lemma, name);
         return [...s.objects.keys()];
-      }));
+      }).catch((e) => { loaded.delete(path); throw e; }));   // a failed read (no network) is not remembered: the next ask tries again
     }
     return loaded.get(path);
   }
@@ -90,7 +91,15 @@ export function createCatalog({ vocab = {}, readShard }) {
       return name ? [{ name, parts: objects.get(name) }] : [];
     },
     object: (name) => objects.get(name) ?? null,
-    thingOfWord(word) { for (const v of variants(word)) if (words.has(v)) return words.get(v); return null; },
+    /** The object a word means: an object's own name wins over the keywords of other objects ("orange" is the orange, not a tangerine whose keywords say orange). */
+    thingOfWord(word) { for (const v of variants(word)) if (names.has(v)) return names.get(v); for (const v of variants(word)) if (words.has(v)) return words.get(v); return null; },
+    /** Is there a loaded object whose own name is the word (or its singular)? */
+    hasName: (word) => variants(word).some((v) => names.has(v)),
+    /** Every loaded object: Map(name -> parts), and the keyword map { lemma: object name } of the loaded shards (for hosts that keep their own registry). */
+    objects: () => objects,
+    keywords: () => Object.fromEntries(words),
+    /** Loads one shard by path (once); resolves to the names of its objects. */
+    loadShardPath: loadShard,
     loadedShards: () => [...loaded.keys()],
   };
 }
