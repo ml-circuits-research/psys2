@@ -1,0 +1,13 @@
+@layout.row k.layouts.layout
+    name=row synonym=line synonym="in a line" generator=row sort=reading when="things of one kind that belong together"
+
+@layout.corners k.layouts.layout
+    name=corners synonym="different corners" generator=corners sort=reading
+
+@layout.family-photo k.layouts.layout
+    name="family photo" synonym="group photo" sort=height
+    slot="0.2 0.55" slot="0.4 0.55" slot="0.6 0.55" slot="0.8 0.55"
+    rel="slot1 left_of slot2"
+
+@layout.top-bottom k.layouts.layout
+    name="top and bottom" sort=reading slot="0.5 0.2" slot="0.5 0.8"
