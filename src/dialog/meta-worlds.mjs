@@ -47,7 +47,7 @@ export function messageWords(text) {
   const toks = (String(text ?? '').toLowerCase().replace(/[’]/g, "'").match(/[\p{L}\p{N}']+/gu) ?? []).slice(0, MAX_TOKENS).map((t) => t.replace(/'/g, '')).filter(Boolean);
   const lem = toks.map((t) => atom(lemma(t)));
   const words = new Set();
-  toks.forEach((t, i) => { words.add(atom(t)); words.add(lem[i]); if (lem[i + 1]) words.add(`${lem[i]}_${lem[i + 1]}`); if (lem[i + 2]) words.add(`${lem[i]}_${lem[i + 1]}_${lem[i + 2]}`); });
+  toks.forEach((t, i) => { words.add(atom(t)); words.add(lem[i]); if (lem[i + 1]) words.add(`${lem[i]}_${lem[i + 1]}`); if (lem[i + 2]) words.add(`${lem[i]}_${lem[i + 1]}_${lem[i + 2]}`); if (toks[i + 1] && toks[i].length <= 4 && toks[i + 1].length <= 4) words.add(atom(`${toks[i]}${toks[i + 1]}`)); if (toks[i + 2] && toks[i].length <= 4 && toks[i + 1].length <= 4 && toks[i + 2].length <= 4) words.add(atom(`${toks[i]}${toks[i + 1]}${toks[i + 2]}`)); });   // short words run together ("tic tac toe" = tictactoe)
   words.delete('');
   return { tokens: toks, words: [...words] };
 }

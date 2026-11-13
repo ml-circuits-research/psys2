@@ -118,7 +118,7 @@ test('the routing setting: symbolic+encoder is the default (reviewer decision 20
   assert.equal('routing' in sessionOptions(settingsForMode('rules'), { language: 'en' }), false, 'no routing in the settings: the session takes the default (C)');
   const run = async (routing) => {
     const s = engine.createSession(sessionOptions({ ...settingsForMode('rules'), routing }, { language: 'en' }));
-    s.setWorldState('ui.shell', { activeTab: 'draw' });
+    s.setWorldState('ui.shell', { activeTab: 'map' });   // a tab with no reading of its own: the policy has no reason (tier 5), meta.worlds orders the worlds
     return s.send('draw a red house');
   };
   const a = await run('dispatcher'), b = await run('symbolic');
