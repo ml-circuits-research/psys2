@@ -608,7 +608,14 @@ export function planLayout(op, items, frame, o = {}) {
     const top = o.only === 'top', bottom = o.only === 'bottom', slots = [[0, 0], [1, 0], [0, 1], [1, 1]].filter(([, cy]) => !(top && cy === 1) && !(bottom && cy === 0));
     const mids = [[0.5, 0], [0.5, 1], [0, 0.5], [1, 0.5]].filter(([, my]) => !(top && my === 1) && !(bottom && my === 0)), extra = [...mids, [0.5, 0.5]];   // more things than corners: the middles of the edges, then the centre
     const all = [...slots, ...extra];
-    ord.forEach((it, k) => { budget.tick('space.corners'); const [sx, sy] = all[k % all.length]; put(it, sx === 0.5 ? frame.w / 2 : sx ? frame.w - pad - W(it) / 2 : pad + W(it) / 2, sy === 0.5 ? frame.h / 2 : sy ? frame.h - pad - H(it) / 2 : pad + H(it) / 2); });
+    const at = (it, [sx, sy]) => ({ x: sx === 0.5 ? frame.w / 2 : sx ? frame.w - pad - W(it) / 2 : pad + W(it) / 2, y: sy === 0.5 ? frame.h / 2 : sy ? frame.h - pad - H(it) / 2 : pad + H(it) / 2 });
+    let next = 0;
+    ord.forEach((it) => {   // a slot taken by something that stays (the sun in a corner) is skipped, so the next free one is used
+      let pick = null;
+      for (let t = 0; t < all.length && pick === null; t++) { budget.tick('space.corners'); const j = (next + t) % all.length; if (!(o.avoid ?? []).some((q) => q.id !== it.id && overlaps({ ...it, ...at(it, all[j]) }, q, 1))) pick = j; }
+      const j = pick ?? next % all.length; next = j + 1;
+      const c = at(it, all[j]); put(it, c.x, c.y);
+    });
   } else if (op === 'spread') {
     if (n < 3) return { error: 'few' };
     const ax = axisOf(items) ?? 'x', s = items.slice().sort((a, b) => a[ax] - b[ax]), lo = s[0][ax], hi = s.at(-1)[ax];

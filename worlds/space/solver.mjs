@@ -19,6 +19,7 @@ const WATER = ['fish', 'duck', 'boat', 'whale', 'dolphin', 'swan', 'ship'];
 export const usualPlace = (kind) => { const k = String(kind ?? '').toLowerCase().replace(/s$/, ''); return SKY.includes(k) ? 'sky' : WATER.includes(k) ? 'water' : 'ground'; };
 
 const clampBox = (p, f) => ({ x: Math.min(f.w - p.w / 2, Math.max(p.w / 2, p.x)), y: Math.min(f.h - p.h / 2, Math.max(p.h / 2, p.y)) });
+const boxesTouch = (a, b) => { const p = boxOf(a), q = boxOf(b); return p.l < q.r - 1 && q.l < p.r - 1 && p.t < q.b - 1 && q.t < p.b - 1; };
 const hashOf = (s) => { let h = 2166136261; for (const c of String(s)) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return (h >>> 0) / 4294967296; };
 
 // ---- layouts (generators); the facts of a layout are data, the arithmetic of a few are code ---------------------------------------------------------------
@@ -80,6 +81,7 @@ export function arrange(layout, items, frame, o = {}) {
   if (g === 'flow') return layered(items, frame, o.edges, 'lr');
   if (g === 'tree') return layered(items, frame, o.edges, 'td');
   if (g === 'scatter') return scatter(items, frame);
+  if (g === 'corners') o = { ...o, avoid: o.avoid ?? [] };
   const op = { ring: 'circle', corners: 'corners', row: 'row', column: 'column', grid: 'grid', stack: 'stack', height: 'height', face: 'face' }[g];
   if (!op) return {};
   const r = planLayout(op, items, frame, o);
@@ -133,7 +135,7 @@ const exempt = (a, b, facts, P) => a.parent === b.id || b.parent === a.id || a.r
  * edges: [[from, to]] for flow / tree; maxSteps: budget of this call (default 6000 geometric steps).
  * Returns { ok, boxes: { id: { x, y [, w, h] } } (only what changed), unmet: [fact], say, steps, displacement } — on failure ok:false and no boxes (the last valid state stays).
  */
-export function solve({ pieces, facts = [], frame, layout = null, ids = null, pinned = [], edges = null, mentioned = null, maxSteps = 6000, usual = null, only = null }) {
+export function solve({ pieces, facts = [], frame, layout = null, ids = null, pinned = [], edges = null, mentioned = null, maxSteps = 6000, usual = null, only = null, names = null }) {
   let steps = 0;
   const tick = (site) => { steps++; budget.tick(site); return steps <= maxSteps; };
   const cur = Object.fromEntries(pieces.map((p) => [p.id, { ...p }])), start = Object.fromEntries(pieces.map((p) => [p.id, { x: p.x, y: p.y, w: p.w, h: p.h, z: p.z }]));
@@ -144,10 +146,12 @@ export function solve({ pieces, facts = [], frame, layout = null, ids = null, pi
   if (layout) {
     const movers = list().filter((p) => (ids ? ids.includes(p.id) : live(p.id)));
     const l = typeof layout === 'string' ? { generator: layout, slots: [], sort: 'reading' } : layout;
-    const t = arrange(l, movers, frame, { edges, usual: usual ?? undefined, only });
+    const t = arrange(l, movers, frame, { edges, usual: usual ?? undefined, only, avoid: list().filter((p) => !movers.includes(p) && !p.region) });
     for (const [id, pos] of Object.entries(t)) { if (!tick('space.solve.layout')) return fail('I ran out of steps arranging them, so I left everything as it was.'); Object.assign(cur[id], clampBox({ ...cur[id], ...pos }, frame)); }
     if (l.rels?.length && ids) { /* slot relations of a layout are facts the host may add; the geometry above already satisfies the slot order */ }
   }
+  // the rule `inside-frame` holds for every piece that may move, before anything else (the smallest move back in)
+  for (const p of list()) if (live(p.id) && !p.region) { const c = clampBox(p, frame); p.x = c.x; p.y = c.y; }
   // 2. relations: weakest tier first, so the strongest is applied last and wins; rounds are bounded
   const ordered = facts.slice().sort((a, b) => tierRank(b.tier) - tierRank(a.tier) || (a.seq ?? 0) - (b.seq ?? 0));
   for (let round_ = 0; round_ < 8; round_++) {
@@ -170,16 +174,23 @@ export function solve({ pieces, facts = [], frame, layout = null, ids = null, pi
       if (d.x !== undefined || d.y !== undefined) { const c = f.rel === 'in' ? { x: mover.x, y: mover.y } : clampBox(mover, frame); mover.x = c.x; mover.y = c.y; }
       for (const k of carried) if (cur[k] && live(k) && (d.x !== undefined || d.y !== undefined)) { cur[k].x += mover.x - before.x; cur[k].y += mover.y - before.y; }
       if (before.x !== mover.x || before.y !== mover.y || before.w !== mover.w || before.z !== mover.z) changed = true;
+      if (other && live(other.id) && !holdsFact(ff, cur, frame)) {   // the frame stopped the mover: the other one gives way the opposite way
+        const inv = { left_of: 'right_of', right_of: 'left_of', above: null, next_to: 'next_to', attached_to: 'attached_to', apart_from: 'apart_from' }[ff.rel];
+        const d2 = inv ? enforceFact({ ...ff, rel: inv }, other, mover, frame, pad) : null;
+        if (d2) { const b2 = { x: other.x, y: other.y }; Object.assign(other, d2); const c = clampBox(other, frame); other.x = c.x; other.y = c.y; if (b2.x !== other.x || b2.y !== other.y) changed = true; }
+      }
     }
     if (!changed) break;
   }
   // 3. overlap removal by the smallest move
-  for (let pass = 0; pass < 24; pass++) {
+  for (let pass = 0; pass < 200; pass++) {
     const L = list();
     let any = false;
     for (let i = 0; i < L.length; i++) for (let j = i + 1; j < L.length; j++) {
-      if (!tick('space.solve.overlap')) return fail('I ran out of steps separating them, so I left everything as it was.');
+      if (j === i + 1) budget.tick('space.solve.scan');   // one tick per row of the scan
       const a = L[i], b = L[j];
+      if (!boxesTouch(a, b)) continue;   // broad phase: boxes that do not meet cost nothing
+      if (!tick('space.solve.overlap')) return fail('I ran out of steps separating them, so I left everything as it was.');
       if (exempt(a, b, facts, cur) || !overlaps(a, b, 1)) continue;
       const mover = !live(a.id) ? b : !live(b.id) ? a : (a.w * a.h <= b.w * b.h ? a : b), keep = mover === a ? b : a;
       if (!live(mover.id)) continue;
@@ -187,7 +198,10 @@ export function solve({ pieces, facts = [], frame, layout = null, ids = null, pi
       const cand = [];
       const sx = mover.x >= keep.x ? 1 : -1, sy = mover.y >= keep.y ? 1 : -1;
       cand.push({ x: mover.x + sx * ox, y: mover.y }, { x: mover.x - sx * ox, y: mover.y }, { x: mover.x, y: mover.y + sy * oy }, { x: mover.x, y: mover.y - sy * oy });
-      const ok = cand.map((c) => ({ ...clampBox({ ...mover, ...c }, frame) })).filter((c) => !overlaps({ ...mover, ...c }, keep, 1)).sort((p, q) => Math.hypot(p.x - mover.x, p.y - mover.y) - Math.hypot(q.x - mover.x, q.y - mover.y))[0];
+      const mine = facts.filter((f) => f.a === mover.id || f.b === mover.id);
+      const keepsFacts = (c) => mine.every((f) => holdsFact(f, { ...cur, [mover.id]: { ...mover, ...c } }, frame));   // a move that breaks something the user said is the last resort
+      const ok0 = cand.map((c) => ({ ...clampBox({ ...mover, ...c }, frame) })).filter((c) => !overlaps({ ...mover, ...c }, keep, 1));
+      const ok = (ok0.filter(keepsFacts).length ? ok0.filter(keepsFacts) : ok0).sort((p, q) => Math.hypot(p.x - mover.x, p.y - mover.y) - Math.hypot(q.x - mover.x, q.y - mover.y))[0];
       const to = ok ?? clampBox({ ...mover, x: mover.x + sx * ox, y: mover.y + sy * oy }, frame);
       const dx = to.x - mover.x, dy = to.y - mover.y;
       mover.x = to.x; mover.y = to.y;
@@ -196,14 +210,21 @@ export function solve({ pieces, facts = [], frame, layout = null, ids = null, pi
     }
     if (!any) break;
   }
+  for (const p of list()) if (live(p.id) && !p.region) { const c = clampBox(p, frame); p.x = round(c.x); p.y = round(c.y); }   // whole pixels, so that what the check sees is what the host gets
   // 4. the check
   const unmet = [];
   for (const f of facts) { if (!tick('space.solve.check')) return fail('I ran out of steps checking, so I left everything as it was.'); if (cur[f.a] && (!f.b || cur[f.b]) && !holdsFact(f, cur, frame)) unmet.push(f); }
+  for (const p of list()) if (!p.region && !holdsFact({ rel: 'inside_frame', a: p.id }, cur, frame, 1)) unmet.push({ rel: 'inside_frame', a: p.id, source: 'rule:inside-frame', tier: 'default' });
   const L = list(), stuck = [];
-  for (let i = 0; i < L.length; i++) for (let j = i + 1; j < L.length; j++) { tick('space.solve.check'); if (!exempt(L[i], L[j], facts, cur) && overlaps(L[i], L[j], 1)) stuck.push([L[i].id, L[j].id]); }
+  for (let i = 0; i < L.length; i++) for (let j = i + 1; j < L.length; j++) {
+    if (!boxesTouch(L[i], L[j]) || (!live(L[i].id) && !live(L[j].id))) continue;   // two pieces the user placed stay as they are: not this call's business
+    tick('space.solve.check');
+    if (!exempt(L[i], L[j], facts, cur) && overlaps(L[i], L[j], 1)) stuck.push([L[i].id, L[j].id]);
+  }
   const out = L.filter((p) => { const s = p.id in start ? start[p.id] : null; return !s || round(p.x) !== round(s.x) || round(p.y) !== round(s.y) || p.w !== s.w; });
   if (unmet.length || stuck.length) {
-    const say = unmet.length ? `I could not keep this, so I left everything as it was: ${why(unmet[0])}` : `I could not separate ${stuck[0][0]} and ${stuck[0][1]} without moving something you placed, so I left everything as it was.`;
+    const nm = (id) => names?.[id] ?? id, pinnedHit = stuck.length && (pins.has(stuck[0][0]) || pins.has(stuck[0][1]));
+    const say = unmet.length ? `I could not keep this, so I left everything as it was: ${why(unmet[0], names)}` : `I could not separate ${nm(stuck[0][0])} and ${nm(stuck[0][1])} ${pinnedHit ? 'without moving something you placed' : 'within my step limit'}, so I left everything as it was.`;
     return { ok: false, boxes: {}, unmet, stuck, say, steps, displacement: 0 };
   }
   const boxes = {};

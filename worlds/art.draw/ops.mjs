@@ -1341,7 +1341,7 @@ function layoutDest(s, objs, lay) {
   const ids = objs.map((o) => o.id), plist = pieceList(s);
   let boxes;
   if (GENERATOR[lay.op]) {
-    const r = solver.solve({ pieces: plist, facts: relsOf(s).facts, frame: FRAME, layout: GENERATOR[lay.op], ids, pinned: plist.filter((p) => !ids.includes(p.id)).map((p) => p.id), only: lay.only, mentioned: ids });
+    const r = solver.solve({ pieces: plist, facts: relsOf(s).facts, frame: FRAME, layout: GENERATOR[lay.op], ids, pinned: plist.filter((p) => !ids.includes(p.id)).map((p) => p.id), only: lay.only, mentioned: ids, names: nameMap(s) });
     if (!r.ok) return { error: r.say };
     boxes = r.boxes;
   } else { const r = space.planLayout(lay.op, plist.filter((p) => ids.includes(p.id)), FRAME, {}); if (r.error) return { error: 'I could not arrange them like that.' }; boxes = r.boxes; }
