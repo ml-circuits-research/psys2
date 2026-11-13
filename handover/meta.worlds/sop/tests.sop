@@ -1,0 +1,4 @@
+@t.meta.worlds.n1 core.test
+    input="Hello there"
+    expect="Hello"
+    doc="meta.worlds has no patterns of its own: it never answers by itself (greetings belong to kids.common). Its rules are tested in tests/meta-worlds.test.mjs."

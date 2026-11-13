@@ -1,0 +1,114 @@
+@pat.session.things.kindof core.pattern
+    match="[$lang.lead.polite]? [remember|note]? [that]? [a|an|the]? {a:words(3)} [is|are] [a|an]? [kind|type|sort] of [a|an|the]? {b:words(3)}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=9
+    example="A villa is a kind of house."
+    example="Remember that a waiter is a kind of person."
+    doc="Teach: X is a kind of Y."
+
+@pat.session.things.isa core.pattern
+    match="[remember|note]? [that]? [a|an] {a:words(3)} is [a|an] {b:words(3)}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=8
+    example="A villa is a house."
+    doc="Teach: a X is a Y (the article marks a kind)."
+
+@pat.session.things.own core.pattern
+    match="[remember|note]? [that]? my {a:words(3)} [is|was] [called|named] {n:words(3)}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=9
+    example="My dog is called Rex."
+    example="My sister is named Ann."
+    doc="Teach: a thing of the user, with its name."
+
+@pat.session.things.have core.pattern
+    match="i have [a|an] {a:words(3)} [called|named] {n:words(3)}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=9
+    example="I have a cat called Tom."
+    doc="Teach: a thing of the user, with its name."
+
+@pat.session.things.can core.pattern
+    match="[remember|note]? [that]? [the|a|an]? {a:words(3)} [can|cannot|cant] {v:words(2)}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=7
+    example="Ducks can float."
+    example="Penguins cannot fly."
+    doc="Teach: what a kind can or cannot do."
+
+@pat.session.things.bare core.pattern
+    match="[remember|note]? [that]? [the|a|an]? {a:words(3)} {v:lex.session.things.abilities}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=7
+    example="Ducks float."
+    doc="Teach: a bare plural and an ability (seed list, temporary)."
+
+@pat.session.things.live core.pattern
+    match="[remember|note]? [that]? [the|a|an]? {a:words(3)} [live|lives|stay|stays|sleep|sleeps] [in|on|at|under|near] [a|an|the]? {b:words(3)}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=7
+    example="Fish live in water."
+    doc="Teach: where a kind lives."
+
+@pat.session.things.madeof core.pattern
+    match="[remember|note]? [that]? [the|a|an]? {a:words(3)} [is|are] made [of|from] {b:words(3)}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=8
+    example="A boat is made of wood."
+    doc="Teach: what a kind is made of."
+
+@pat.session.things.select.session core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [make|create|build|draw|give_me|show_me|show|put_together|write|start|do|generate|prepare]? [me]? [a|an|the]? [nice|new|simple|quick|short|little]? {to:lex.session.things.views} [of|about|from|on|for|with|using|based_on] [$dialogue.session]"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"the discussion\""
+    kind=request
+    signal=true
+    priority=14
+    example="Create a chart about the current discussion."
+    example="Make a document about what we did."
+    doc="The session as the content of a view: the whole selection of things (and, for a document, its topics, games and places) goes into the view named, by the one operation things.show."
+
+@pat.session.things.select.did core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [make|create|build|draw|give_me|show_me|show|put_together|write|start|do|generate|prepare]? [me]? [a|an|the]? [nice|new|simple|quick|short|little]? {to:lex.session.things.views} [of|about|from|on|for|with|using|based_on] [what|everything|all_the_things|all|the_things|things|stuff] [that]? [i|we|you] {v:lex.session.things.did} [so_far]?"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"what I {v}\""
+    kind=request
+    signal=true
+    priority=14
+    example="Make a chart of what I drew."
+    example="Create a document about everything we made."
+    doc="What the user did in one view (the verb names the view: drew is the drawing) as the content of another view."
+
+@pat.session.things.select.in core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [make|create|build|draw|give_me|show_me|show|put_together|write|start|do|generate|prepare]? [me]? [a|an|the]? [nice|new|simple|quick|short|little]? {to:lex.session.things.views} [of|about|from|on|for|with|using|based_on] [the|all_the|all|my]? [things|stuff|items|objects] [in|on|from|of] [the|my]? {v:words(2)}"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"things in {v}\""
+    kind=request
+    signal=true
+    priority=14
+    example="Make a chart of the things in the plan."
+    example="Create a document about the things in the drawing."
+    doc="The things one view holds as the content of another view."
+
+@pat.session.things.select.it core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [show|put|place|pin|mark|plot|display|see|send|move|bring|add|find|locate] [me]? [it|that|this|that_one|this_one] [on|in|onto|into|to] [the|my]? {to:lex.session.things.views}"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"it\""
+    kind=request
+    signal=true
+    priority=14
+    example="Show it on the map."
+    doc="The thing last talked about, into the view named, by the one operation things.show."
+
+@pat.session.things.select.places core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [show|put|place|pin|mark|plot|display|see|send|move|bring|add] [me]? [all]? [the|my|all_the|all_my]? {n:words(1)} [that]? [we|i|you] [talked_about|discussed|mentioned|looked_at|saw|asked_about|learned_about|said|covered|talked|spoke_about] [so_far]? [on|in|onto|into|to] [the|my]? {to:lex.session.things.views}"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"{n} in the discussion\""
+    kind=request
+    signal=true
+    priority=14
+    example="Put the places we talked about on the map."
+    doc="The things of the discussion that have one aspect (places are the geographic ones) into the view named; the noun names the aspect, no kind of thing is listed here."

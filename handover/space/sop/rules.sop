@@ -1,0 +1,19 @@
+@rule.space.inside_frame space.rule
+    id=inside-frame
+    doc="Everything stays inside the frame after any placement, move or layout."
+    core.source="fixture:space/rules"
+
+@rule.space.no_overlap space.rule
+    id=no-overlap
+    doc="After a placement or a layout nothing overlaps another thing by its real surface, unless the relation is containment (in, on, around) or the user asked for it."
+    core.source="fixture:space/rules"
+
+@rule.space.on_ground space.rule
+    id=on-ground
+    doc="A thing that stands on the ground (a house, a tree) is not lifted above the ground by a layout; a move that lifts it is done and said."
+    core.source="fixture:space/rules"
+
+@rule.space.face_limits space.rule
+    id=face-limits
+    doc="A slot of a face stays within its limits and keeps the order of a face: eyebrows above eyes above nose above mouth."
+    core.source="fixture:space/rules"

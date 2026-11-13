@@ -1,0 +1,52 @@
+@time acts.schema
+    noun="timeline"
+    doc="Moments in a row by time: the things of the session that have a time."
+    acts=make
+    acts=remove
+    acts=change
+    acts=ask
+    acts=copy
+    acts=send
+    acts=undo
+    acts=redo
+    limit.items=60
+    limit.history=30
+    tabOnly=yes
+
+@time.view acts.view
+    aspects=temporal
+    word=timeline
+    word=time_line
+    word=calendar
+
+@time.moment acts.kind
+    plural=moments
+    named=yes
+    aspect=temporal
+    word=event
+    word=events
+    word=day
+    word=days
+    word=weekday
+    word=weekdays
+    word=month
+    word=months
+    word=season
+    word=seasons
+    word=holiday
+    word=holidays
+    word=birthday
+    word=birthdays
+
+@time.when acts.attr
+    of=moment
+    type=number
+    min=0
+    max=3000
+    default=1
+    word=year
+    word=hour
+    word=date
+    word=time
+    more=later
+    less=earlier

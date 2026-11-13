@@ -1,0 +1,4 @@
+@t.acts.n1 core.test
+    input="Hello there"
+    expect="Hello"
+    doc="acts has no patterns of its own: it never answers by itself. Its behaviour is tested through the schema worlds that use it (tests/acts.test.mjs)."

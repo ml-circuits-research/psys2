@@ -1,0 +1,13 @@
+@world.session.things core.world
+    namespace=session.things
+    version=0.1.0
+    legend=$legend.session.things
+    imports=world.core
+    imports=world.lang.common
+    imports=world.session.dialogue
+    formalization=rules
+    language=en
+    status=fixture
+    title="Things of the session"
+    summary=""
+    doc="A shared module, not a tab (spec 23, TRANSFER): the one store of things of the session (identity, kind from knowledge, attributes grouped in aspects: visual, spatial, relational, numeric, textual, geographic, temporal, social) and what the user taught (session.learned: wires of the knowledge format, overlaid on the catalog for this session by src/knowledge/learned.mjs). A tab is a VIEW: a schema world declares the aspects it shows (acts.view) and gets `view` and `adopt` operations generated; selecting a thing into a view is the one operation things.show. Its patterns only read what the user teaches (a villa is a kind of house; my dog is called Rex; ducks float; fish live in water). Hand-built platform fixture, not produced by the C1 workflow."
