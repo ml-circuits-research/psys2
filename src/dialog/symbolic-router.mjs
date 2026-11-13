@@ -2,9 +2,9 @@
 /**
  * The routing setting `routing` (WORLD-OF-WORLDS, spec 20), browser-safe.
  *
- *   dispatcher         (default, router A) the encoder proposes worlds, the rules validate; the tiers of ADR-004 order the readings of the rules
+ *   dispatcher         (router A; selectable under Settings > Developer) the encoder proposes worlds, the rules validate; the tiers of ADR-004 order the readings of the rules
  *   symbolic           (router B) meta.worlds picks the world: cards, live facts, rules with reasons; the encoder's world head is not read
- *   symbolic+encoder   (router C) as B with the encoder's world probabilities as one prior (weight 30 points)
+ *   symbolic+encoder   (router C, the default) as B with the encoder's world probabilities as one prior (confidence-aware weight, `DEFAULT_PRIOR` in meta-worlds.mjs)
  *
  * Two seams, both small: `createSymbolicRouter` orders the candidate readings of the rule formalizer by the world ranking of meta.worlds (the router interface of
  * src/formalizer/routing.mjs), and `rerankPrediction` replaces the world proposals of the dispatcher's prediction by the ranking (the validator then checks them
@@ -13,7 +13,7 @@
 import { liveFromContext } from './meta-worlds.mjs';
 
 export const ROUTINGS = Object.freeze(['dispatcher', 'symbolic', 'symbolic+encoder']);
-export const DEFAULT_ROUTING = 'dispatcher';
+export const DEFAULT_ROUTING = 'symbolic+encoder';   // reviewer decision 2026-11-13 18:05: C is the default; A stays selectable (Settings > Developer)
 export const normalizeRouting = (v) => (ROUTINGS.includes(v) ? v : DEFAULT_ROUTING);
 export const isSymbolic = (v) => normalizeRouting(v) !== 'dispatcher';
 

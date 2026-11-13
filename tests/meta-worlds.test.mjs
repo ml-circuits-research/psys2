@@ -110,11 +110,12 @@ test('a new world is added by its card alone', async () => {
   assert.ok(m2.worlds.includes('test.kites') && !mw.worlds.includes('test.kites'));
 });
 
-test('the routing setting: dispatcher is the default, symbolic orders the matches of the rule formalizer by meta.worlds', async () => {
+test('the routing setting: symbolic+encoder is the default (reviewer decision 2026-11-13), symbolic orders the matches of the rule formalizer by meta.worlds', async () => {
   assert.deepEqual(ROUTINGS, ['dispatcher', 'symbolic', 'symbolic+encoder']);
-  assert.equal(normalizeRouting(undefined), 'dispatcher');
-  assert.equal(normalizeRouting('nonsense'), 'dispatcher');
-  assert.equal('routing' in sessionOptions(settingsForMode('rules'), { language: 'en' }), false, 'A is the default: the options are unchanged');
+  assert.equal(normalizeRouting(undefined), 'symbolic+encoder');
+  assert.equal(normalizeRouting('nonsense'), 'symbolic+encoder');
+  assert.equal(normalizeRouting('dispatcher'), 'dispatcher');
+  assert.equal('routing' in sessionOptions(settingsForMode('rules'), { language: 'en' }), false, 'no routing in the settings: the session takes the default (C)');
   const run = async (routing) => {
     const s = engine.createSession(sessionOptions({ ...settingsForMode('rules'), routing }, { language: 'en' }));
     s.setWorldState('ui.shell', { activeTab: 'draw' });

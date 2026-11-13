@@ -280,7 +280,7 @@ export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTi
 
 export class DialogSession {
   constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing } = {}) {
-    this._routing = normalizeRouting(routing);   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
+    this.routing = routing;   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
     this.worldAware = normalizeWorldAware(worldAware ?? globalThis.process?.env?.PSYS2_WORLD_AWARE);
@@ -483,6 +483,9 @@ export class DialogSession {
    * world or the built-in tabs; `gameWorld` is `ui.shell` state `activeGame` (set by the host); `modalWorld` is the
    * world whose state has an open `inputMode`.
    */
+  get routing() { return this._routing; }
+  set routing(v) { this._routing = normalizeRouting(v); }
+
   /** The router of this session: the engine's policy router, or (routing=symbolic*, meta.worlds prepared) the same ordered by meta.worlds. */
   get _router() {
     if (!isSymbolic(this._routing) || !this.engine.meta) return this.engine.router;
