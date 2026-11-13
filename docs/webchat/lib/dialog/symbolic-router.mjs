@@ -10,7 +10,7 @@
  * src/formalizer/routing.mjs), and `rerankPrediction` replaces the world proposals of the dispatcher's prediction by the ranking (the validator then checks them
  * as before). Neither changes what a world reads: they change which world is tried first and which cannot take the message.
  */
-import { liveFromContext } from './meta-worlds.mjs?v=9f0881f454';
+import { liveFromContext } from './meta-worlds.mjs?v=7ab9389d6d';
 
 export const ROUTINGS = Object.freeze(['dispatcher', 'symbolic', 'symbolic+encoder']);
 export const DEFAULT_ROUTING = 'dispatcher';

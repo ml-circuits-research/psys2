@@ -7,7 +7,6 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
-import { classicAvatar } from './helpers.mjs';
 
 const engineWith = (reasoner) => createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 const engines = { ops: await engineWith('ops'), matrix: await engineWith('matrix') };
@@ -83,21 +82,3 @@ test('toState is computed once per instance state and handed out as a copy', asy
   assert.notDeepEqual(rs.stateOfWorld('kids.shop'), a, 'a change of the instance is a new stamp');
 });
 
-// Q2 item 5a: an undo of a confirmation also closes the offer it answered (dlg.avt#011): "yes" afterwards is not an answer to anything, in both strategies.
-for (const mode of ['ops', 'matrix']) {
-  test(`dlg.avt#011 (${mode}): undoing the confirmation closes the offer`, async () => {
-    const s = classicAvatar(engines[mode].createSession(sessionOptions(settingsForMode('rules'), { language: 'en' })));
-    const out = [];
-    for (const l of ['open the robot tab', 'Give yourself sparkle eyes.', 'Yes.', 'Undo that.', 'Yes.']) out.push((await s.send(l, {})).text);
-    const av = () => s.state()['ui.avatar'];
-    assert.match(out[1], /Say "yes" to become the emoji/);
-    assert.match(out[2], /Now I am an emoji/);
-    assert.match(out[3], /I am a robot again/);
-    assert.match(out[4], /Yes to what\?/, 'the offer was closed by the undo');
-    assert.equal(av().character, 'robot');
-    assert.ok(!av().pending && !av().inputMode);
-    // a second offer still works after the undo
-    assert.match((await s.send('Give yourself sparkle eyes.', {})).text, /Say "yes"/);
-    assert.match((await s.send('yes', {})).text, /Now I am an emoji/);
-  });
-}

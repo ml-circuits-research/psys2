@@ -80,27 +80,29 @@ export function createAvatar(container, host = null) {
   container.append(stage, caption, chipsEl, optsEl, facesEl, noteEl);
   optsEl.hidden = true; facesEl.hidden = true;
 
-  let state = null, data = null, mods = null, loading = null, retry = 0, destroyed = false, headEl = null, lastSvg = '', shown = '';
+  let full = false, state = null, data = null, mods = null, loading = null, retry = 0, destroyed = false, headEl = null, lastSvg = '', shown = '';
   let transient = null, transientTimer = 0, fxTimer = 0, talkTimer = 0, talkPhase = false, speaking = false;
   const say = (text) => { try { host?.send?.(text); } catch (e) { console.warn('avatar: could not send', e); } };
   const asset = (p) => (host?.asset ? host.asset(p) : new URL(`../${p}`, import.meta.url).href);
 
   /** The renderer and the faces of the catalog, loaded once; a catalog that cannot be reached is asked again later (the avatar then says so). */
   function load() {
-    if (data || loading || destroyed) return;
+    if (loading || destroyed || full) return;
     loading = (async () => {
       try {
-        const [draw, logic, { createFacts }, { createKnowledgeSource }, { createCachedSource }] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs'].map((p) => import(asset(p))));
+        const [draw, logic, { DEFAULT_FACE }, { createFacts }, { createKnowledgeSource }, { createCachedSource }] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs'].map((p) => import(asset(p))));
         const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URL), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
+        mods = { draw, logic }; data = DEFAULT_FACE; shown = ''; draw_();   // the bundled default face first: the tab never waits for the network
         const d = await facts.faces();
         if (!d) throw new Error('no faces in the catalog');
-        mods = { draw, logic }; data = d; shown = '';
+        data = d; full = true; shown = '';
       } catch (e) {
-        console.warn('avatar: the faces could not be loaded', e);
+        console.warn('avatar: the faces of the catalog could not be loaded; the default face stays', e);
         if (!destroyed) retry = setTimeout(() => { loading = null; load(); }, 30000);
-        loading = loading && null;
-        draw();
+        loading = null;
+        if (mods) { draw_(); return; }
+        data = null; draw_();
         return;
       }
       loading = null;
@@ -145,12 +147,13 @@ export function createAvatar(container, host = null) {
     if (o) { optsEl.replaceChildren(...o.variants.map((n) => card(n === 'none' ? 'None' : plain(n), variantSay(o.slot, n), n === 'none' ? '' : mods.draw.variantSvg(data, face, o.slot, n, { size: 52 }), face.slots[o.slot] === n))); optsEl.hidden = false; } else { optsEl.replaceChildren(); optsEl.hidden = true; }
   }
 
+  const draw_ = () => draw();
   function draw() {
     if (destroyed) return;
     nameEl.textContent = state?.name ?? 'PSys2';
     if (!data) {
       load();
-      partsEl.textContent = loading ? 'Drawing my face…' : 'I cannot reach the face catalog right now. I will try again in a moment.';
+      partsEl.textContent = 'Drawing my face…';
       return;
     }
     const face = faceOf();

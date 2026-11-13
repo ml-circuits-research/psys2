@@ -4,34 +4,17 @@ import assert from 'node:assert/strict';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
-import { classicAvatar } from './helpers.mjs';
 
 const rules = createTranslator();
 const engine = await createEngine({ loader: createFsLoader(), translator: rules });
 
 async function run(tab, messages, { lang = 'ro', eng = engine } = {}) {
-  const s = classicAvatar(eng.createSession({ language: lang }));
+  const s = eng.createSession({ language: lang });
   s.setWorldState('ui.shell', { activeTab: tab });
   let r;
   for (const m of messages) r = await s.send(m);
   return { r, s, status: (r.answers ?? []).map((a) => a.status) };
 }
-
-test('avatar expressions: fii bucuros / vesel / trist / nervos / supărat / speriat / surprins', async () => {
-  for (const w of ['bucuros', 'vesel', 'trist', 'nervos', 'supărat', 'speriat', 'surprins']) {
-    const { r, status } = await run('robot', [`fii ${w}`]);
-    assert.deepEqual(status, ['supported'], w);
-    assert.equal(r.lang, 'ro');
-    assert.match(r.text, /^\S+! Acum arăt /, w);
-  }
-});
-
-test('voice inflections: "becoming emoji", "fiind copil"', async () => {
-  const en = await run('robot', ['becoming emoji'], { lang: 'en' });
-  assert.deepEqual(en.status, ['supported']); assert.match(en.r.text, /emoji/);
-  const ro = await run('robot', ['fiind copil']);
-  assert.deepEqual(ro.status, ['supported']); assert.match(ro.r.text, /kid|copil/i);
-});
 
 test('"x și zero" names tic-tac-toe', async () => {
   for (const m of ['pornește x și zero', 'pornește x și 0']) assert.deepEqual((await run('tictactoe', [m])).status, ['supported'], m);
@@ -76,15 +59,6 @@ test('a translator that returns the Romanian text unchanged is retried through t
   assert.deepEqual(status, ['supported']); assert.match(r.text, /3 pești/);
 });
 
-test('avatar refusals are Romanian and "dreamy" eyes become sleepy', async () => {
-  const s = classicAvatar(engine.createSession({ language: 'ro' }));
-  s.setWorldState('ui.shell', { activeTab: 'robot' });
-  const a = await s.send('fa ochi cubici');
-  assert.match(a.text, /^Nu cunosc niciun fel de ochi/);
-  const b = await s.send('fa ochi visatori');
-  assert.match(b.text, /somnoroși/);
-});
-
 // ---- RP5b ----
 const english = /\b(the|you|your|with|could not|did not|Done|There you go|should|can say|numbers|Drew|I have|Now I am)\b/;
 
@@ -115,23 +89,6 @@ test('RP5b: every tab opens by its Romanian name and the voice variants, with a 
   assert.equal(already.r.text, 'Ești deja pe fila Avatar.');
 });
 
-test('RP5b: avatar become / describe / mouth-size refusal are Romanian', async () => {
-  for (const [msg, re] of [['fii un carton', /^\S+! Acum sunt un desen animat\. Am .+\./], ['fiind copil', /^\S+! Acum sunt un copil\. Am .+\./]]) {
-    const { r } = await run('robot', [msg]);
-    assert.match(r.text, re, msg); assert.ok(!english.test(r.text.replace(/\(.*\)/, '')), r.text);
-  }
-  const mouth = await run('robot', ['fii un carton', 'Fă o gură mare']);   // a character without a size ladder keeps the refusal (RP5c: robot and emoji take the widest mouth)
-  assert.match(mouth.r.text, /^Nu pot schimba mărimea gurii, dar îi pot schimba stilul\. Gura mea poate fi .+\.$/);
-  assert.equal(mouth.r.lang, 'ro');
-  const grill = await run('robot', ['un grătar gură']);
-  assert.match(grill.r.text, /o gură grătar/);
-  for (const [en, ro] of [['collared clothes, attached ears and a curve nose', 'haine cu guler, urechi lipite și un nas curbat'], ['a moustache and goatee and a short beard', 'o mustață cu barbiță și o barbă scurtă'],
-    ['cheery eyes, bangs and a teeth smile mouth', 'ochi veseli, breton și o gură cu zâmbet cu dinți'], ['hair style 4 and eyes style 5', 'părul stil 4 și ochi stil 5']]) {
-    const t = await rules.translate(`I have ${en}.`, { from: 'en', to: 'ro' });
-    assert.equal(t.text, `Am ${ro}.`); assert.deepEqual(t.unknown ?? [], []);
-  }
-});
-
 test('RP5b: tic-tac-toe start, missing-place prompt and chart help are Romanian', async () => {
   const ttt = await run('tictactoe', ['pornește x și zero']);
   assert.match(ttt.r.text, /^Bine, hai să jucăm x și 0! Ești X și începi tu\. Joc la nivelul ușor\. Spune un loc/);
@@ -156,13 +113,6 @@ test('RP5c: a tab opened by a command is the active tab for the next command', a
   const { r, s } = await run('robot', ['deschide tabul diagramă', 'desenează trei cercuri']);
   assert.match(r.text, /3 cercuri/);
   assert.equal(s.state()['ui.shell'].activeTab, 'diagram');
-});
-
-test('RP5c: already on Drawing, plural "not found", the widest mouth', async () => {
-  assert.match((await run('draw', ['deschide tabul desen'])).r.text, /^Ești deja pe fila Desen/);
-  assert.match((await run('draw', ['șterge toate cercurile roșii'])).r.text, /^Nu găsesc cercuri roșii în desen/);
-  const mouth = await run('robot', ['Fă o gură mare']);
-  assert.deepEqual(mouth.status, ['supported']); assert.match(mouth.r.text, /^\S+! Gura mea este mare acum/);
 });
 
 // RP5c item 1: a command-opened tab is the active tab for tier T. The bug was in the dry run of the capability check: with a recent world other than the

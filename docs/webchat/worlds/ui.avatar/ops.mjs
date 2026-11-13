@@ -3,12 +3,14 @@
 // slots; facedraw.mjs: the one renderer). The data comes from the catalog through the host (`ctx.knowledge.peekFaces()`, built by src/knowledge/faces.mjs before the
 // operation runs: the world's `needs` hook says so); nothing about slots, variants or accessories is written in this world. State: { name, face }.
 // Browser-safe: imports only its siblings.
-import * as F from './facelogic.mjs?v=8a1cea8bc8';
+import * as F from './facelogic.mjs?v=582a054ee2';
+import { DEFAULT_FACE } from './default-face.mjs?v=25d7a88f07';
 
 const ok = (value) => ({ status: 'supported', value });
 const no = (note) => ({ status: 'unsupported', note });
 const DEFAULT_NAME = 'PSys2';
-const dataOf = (ctx) => ctx.knowledge?.peekFaces?.() ?? null;
+/** The faces of the catalog, else the bundled default face (generated from k.faces: the default preset only): the avatar always has a face. */
+const dataOf = (ctx) => ctx.knowledge?.peekFaces?.() ?? DEFAULT_FACE;
 const ensure = (ctx) => { ctx.state.name = typeof ctx.state.name === 'string' && ctx.state.name ? ctx.state.name : DEFAULT_NAME; return ctx.state; };
 const W = (fn) => (ctx, args = {}) => { ensure(ctx); return fn(ctx, args, dataOf(ctx)); };
 

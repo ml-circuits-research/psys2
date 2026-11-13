@@ -403,6 +403,7 @@ export async function mountPsys2(element, options = {}) {
     state: (worldId) => states[worldId],
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
     asset: (path) => new URL(path, base).href,
+    knowledgeUrl: () => settings.knowledgeUrl || '',   // the catalog the engine reads (the avatar tab reads its faces from the same one)
     /** Put an element inside the answer being shown (the Talk tab's cards); false when there is no answer to put it in. */
     attach: (node) => { if (!currentBot || !node) return false; currentBot.bubble.append(node); return true; },
     /** Report a later outcome (playback finished, position found) to the world that owns the tab. */

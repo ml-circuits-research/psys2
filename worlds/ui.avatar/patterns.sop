@@ -281,7 +281,7 @@
 @pat.ui.avatar.become.you core.pattern
     canonical="Make yourself happy."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|change|paint] [yourself|urself|ur_self|the_avatar|the_face|your_face|ur_face] {w:rest} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.restyle arg.words=\"{w}\""
+    emit="@{_} core.request action=avatar.restyle arg.words=\"face {w}\""
     kind=request
     priority=10
     example="Make yourself happy."
@@ -290,7 +290,7 @@
 
 @pat.ui.avatar.which core.pattern
     canonical="What hats are there?"
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|how_many] {w:words(3)} [are_there|can_you_have|can_you_wear|can_i_pick|can_i_choose|can_you_draw|can_you_put_on|can_i_try|can_you_show]"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which] {w:words(3)} [are_there|can_you_have|can_you_wear|can_i_pick|can_i_choose|can_you_draw|can_you_put_on|can_i_try|can_you_show]"
     emit="@{_} core.request action=avatar.which arg.words=\"{w}\""
     kind=question
     tabOnly=true

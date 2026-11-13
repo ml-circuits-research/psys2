@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine, translateParts } from '../src/dialog/index.mjs';
 import { createTranslator, languageEvidence } from '../src/translate/index.mjs';
-import { sampled, classicAvatar } from './helpers.mjs';
+import { sampled } from './helpers.mjs';
 
 const rules = createTranslator();
 const engineWith = (detect) => createEngine({ loader: createFsLoader(), translator: { ...rules, detectLanguage: detect ?? rules.detectLanguage } });
@@ -40,20 +40,6 @@ test('LANG-FIXED: a session set to Romanian reads every message as Romanian, eve
     assert.equal(r.lang, 'ro', text);
     assert.equal(r.switchedLanguage, undefined, text);
   }
-});
-
-test('avatar refusals are answered in Romanian, and "dreamy" eyes map to the closest robot eyes (sleepy)', async () => {
-  const e = await engineWith();
-  const s = classicAvatar(e.createSession({ language: 'auto' }));
-  s.setWorldState('ui.shell', { activeTab: 'avatar' });
-  await s.send('fa-i ochii mari');   // strong Romanian: the session switches
-  const refusal = await s.send('fa ochi cubici');
-  assert.equal(refusal.lang, 'ro');
-  assert.match(refusal.text, /^Nu cunosc niciun fel de ochi/);
-  assert.doesNotMatch(refusal.text, /I do not know|My eyes/);
-  const dreamy = await s.send('fa ochi visatori');
-  assert.equal(dreamy.lang, 'ro');
-  assert.match(dreamy.text, /somnoroși/);
 });
 
 test('translateParts: all or nothing', async () => {

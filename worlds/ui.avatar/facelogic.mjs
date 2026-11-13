@@ -326,7 +326,7 @@ export function faceColour(ctx, a, data) {
   if (f.slots[slot] === NONE && slotOf(data, slot).optional) put(data, f, slot, bestVariant(data, slot, c.features, null) ?? slotOf(data, slot).variants[0].name);
   const r = paintSlot(data, f, slot, col);
   if (r === null) { f.history.pop(); const offered = [...new Set(slotOf(data, slot).variants.flatMap((v) => v.parts.filter((p) => !p.tint).flatMap((p) => p.colour)))]; return no(`I have no ${plain(col.name)} ${plain(nounOf(slot))}.${offered.length ? ` It can be ${joinOr(offered)}.` : ''}`); }
-  return finish(ctx, data, f, `I have ${phraseOf(data, f, slot)} now.`);
+  return finish(ctx, data, f, indexOf(data).roleOf[slot] === col.of ? `My ${plain(col.of)} ${col.of === 'clothes' ? 'are' : 'is'} ${plain(col.name)} now.` : `I have ${phraseOf(data, f, slot)} now.`);
 }
 
 // ---- size and place ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -524,7 +524,7 @@ export function faceRestyle(ctx, a, data) {
   const cl = clausesOf(data, ws);
   const slotC = cl.find((c) => c.slots.length), colourC = cl.some((c) => c.colours.length), pre = cl.find((c) => c.preset), mood = cl.find((c) => c.mood);
   if (pre && !slotC) return facePreset(ctx, pre.preset, data);
-  if (mood && !slotC) return faceMood(ctx, { mood: mood.mood }, data);
+  if (mood && !colourC) return faceMood(ctx, { mood: mood.mood }, data);
   if (slotC && colourC) return faceColour(ctx, a, data);
   if (slotC) return faceChange(ctx, { ...a, dir: 'different' }, data);
   if (colourC) return no('Which part should get the colour? For example "make the hat red".');
