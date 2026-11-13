@@ -52,7 +52,8 @@ export const CONFIGS = {
   'enc-B': { note: 'as enc-C with routing B (symbolic only, the encoder world head unread)', mode: 'encoder', set: { nxStrategy: 'rules', routing: 'symbolic' } },
   'enc-hybrid': { note: 'enc-C plus the NX reading of segments the rules left unparsed (hybrid); no normalizer', mode: 'encoder', set: { nxStrategy: 'hybrid' } },
   'enc-n1': { note: 'enc-C plus the T5 normalizer fallback; reading by rules only', mode: 'encoder+n1', set: { nxStrategy: 'rules' } },
-  'shipped': { note: 'the shipped default: encoder + normalizer + hybrid reading + routing C', mode: 'encoder+n1', set: {} },
+  'shipped': { note: 'the shipped default since 2026-11-14: encoder (segmentation + prior), rules read, no normalizer, routing C', mode: 'encoder', set: {} },
+  'shipped-old': { note: 'the shipped default of the ablation report: encoder + normalizer + hybrid reading + routing C', mode: 'encoder+n1', set: { nxStrategy: 'hybrid' } },
   'enc-neural': { note: 'model first (NX neural), no normalizer', mode: 'encoder', set: { nxStrategy: 'neural' } },
   // the symbolic readers that exist in the library and are off by default (spec 16): world-aware reading and the READER-ROUTE library reader (env switches read when the session is made)
   'rules-WAveto': { note: 'no model; world-aware reading = veto (PSYS2_WORLD_AWARE)', mode: 'rules', set: {}, env: { PSYS2_WORLD_AWARE: 'veto' } },
@@ -64,6 +65,16 @@ export const CONFIGS = {
   'enc-suspect': { note: 'as enc-C plus the suspect-word leniency prototype', mode: 'encoder', set: { nxStrategy: 'rules', suspectWords: true } },
   'rules-also': { note: 'no model; PROTOTYPE "also" joins clauses like "then" in the rules clause splitter', mode: 'rules', set: {}, proto: { also: true } },
   'rules-also-suspect': { note: 'no model; both prototypes (also-joiner, suspect-word leniency)', mode: 'rules', set: { suspectWords: true }, proto: { also: true } },
+  // since 2026-11-13 suspect-word leniency, "also" as a joiner and READER-ROUTE fill are on by default (spec 03 7.17); these configurations switch them off one by one for the before / after tables
+  'rules-off': { note: 'no model; suspect-word leniency, "also" joiner and READER-ROUTE all OFF (the state of the ablation report)', mode: 'rules', set: { suspectWords: false, reader: 'off' }, proto: { also: false } },
+  'rules-d-suspect': { note: 'no model; only the suspect-word leniency on', mode: 'rules', set: { suspectWords: true, reader: 'off' }, proto: { also: false } },
+  'rules-d-also': { note: 'no model; only "also" as a clause joiner on', mode: 'rules', set: { suspectWords: false, reader: 'off' }, proto: { also: true } },
+  'rules-d-fill': { note: 'no model; only READER-ROUTE fill on', mode: 'rules', set: { suspectWords: false, reader: 'fill' }, proto: { also: false } },
+  'rules-d-suspect-also': { note: 'no model; suspect-word leniency and "also" on, READER-ROUTE off', mode: 'rules', set: { suspectWords: true, reader: 'off' }, proto: { also: true } },
+  // the card-driven clause cutter (spec 03 7.17) switched off, for the before / after of section 1
+  'rules-nocut': { note: 'no model; defaults (suspect, also) but the card-driven clause cutter OFF', mode: 'rules', set: {}, proto: { cutter: false } },
+  'enc-C-nocut': { note: 'enc-C with the card-driven clause cutter OFF', mode: 'encoder', set: { nxStrategy: 'rules' }, proto: { cutter: false } },
+  'enc-C-segrules-nocut': { note: 'enc-C-segrules with the card-driven clause cutter OFF (the rules splitter as it was)', mode: 'encoder', set: { nxStrategy: 'rules' }, seg: 'rules', proto: { cutter: false } },
   'enc-neural-n1': { note: 'model first (NX neural) with the normalizer', mode: 'encoder+n1', set: { nxStrategy: 'neural' } },
 };
 

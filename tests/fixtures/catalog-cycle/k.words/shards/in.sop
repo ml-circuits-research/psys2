@@ -1,0 +1,6 @@
+@k.words.induce.verb.1 k.words.sense word=induce pos=verb n=1 gloss="cause to arise" synonym="bring on" is_a=generate core.source="wordnet 3.1"
+@k.words.induce.verb.2 k.words.sense word=induce pos=verb n=2 gloss="cause to do; cause to act in a specified manner" synonym=stimulate synonym=cause synonym=have synonym=get synonym=make core.source="wordnet 3.1"
+@k.words.induce.verb.3 k.words.sense word=induce pos=verb n=3 gloss="cause to occur rapidly" synonym=stimulate synonym=rush synonym=hasten is_a=effect core.source="wordnet 3.1"
+@k.words.intend.verb.1 k.words.sense word=intend pos=verb n=1 gloss="have in mind as a purpose" synonym=mean synonym=think core.source="wordnet 3.1"
+@k.words.intend.verb.2 k.words.sense word=intend pos=verb n=2 gloss="design or destine" synonym=destine synonym=designate synonym=specify is_a=plan kind_of=plan kind_of=think core.source="wordnet 3.1"
+@k.words.intend.verb.3 k.words.sense word=intend pos=verb n=3 gloss="mean or intend to express or convey" synonym=mean is_a=convey kind_of=convey kind_of=impart kind_of=tell kind_of=inform kind_of=communicate kind_of=interact kind_of=act core.source="wordnet 3.1"

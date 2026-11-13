@@ -1,0 +1,3 @@
+@k.words.quantity.noun.1 k.words.sense word=quantity pos=noun n=1 gloss="how much there is or how many there are of something that you can quantify" synonym=measure synonym=amount is_a=abstraction core.source="wordnet 3.1"
+@k.words.quantity.noun.2 k.words.sense word=quantity pos=noun n=2 gloss="an adequate or large amount" is_a=amount core.source="wordnet 3.1"
+@k.words.quantity.noun.3 k.words.sense word=quantity pos=noun n=3 gloss="the concept that something has a magnitude and can be represented in mathematical expressions by a constant or a variable" is_a=concept core.source="wordnet 3.1"

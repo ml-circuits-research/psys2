@@ -3,8 +3,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { migrateSettings, loadSettings, DEFAULT_SETTINGS, SETTINGS_VERSION, SETTINGS_KEY, applyReading, readingFrom } from '../docs/webchat/ui/settings.mjs';
-import { OPTIONS, GROUPS, INTERNAL_WORDS, READING_MODES, defaultsTable } from '../docs/webchat/ui/settings-catalog.mjs';
+import { migrateSettings, loadSettings, DEFAULT_SETTINGS, SETTINGS_VERSION, SETTINGS_KEY, applyReading } from '../docs/webchat/ui/settings.mjs';
+import { OPTIONS, GROUPS, INTERNAL_WORDS, EXPERIMENTS, defaultsTable } from '../docs/webchat/ui/settings-catalog.mjs';
 import { buildLexicon, setLexicon, addressWords, addressWordsText, SOURCE, APP_NAMES } from '../docs/webchat/ui/voice-words.mjs';
 import { isAddressed, ADDRESS_WORDS } from '../docs/webchat/ui/voice-noise.mjs';
 import { routingOf, exportRecord } from '../docs/webchat/ui/phrase-log.mjs';
@@ -13,33 +13,33 @@ import { installLexicon } from './fixtures/voice-lexicon.mjs';
 
 const store = (obj = {}) => ({ data: { ...obj }, getItem(k) { return this.data[k] ?? null; }, setItem(k, v) { this.data[k] = v; } });
 
-test('reading: hybrid is the default on every device, and the engine keys follow the one choice', () => {
-  assert.equal(DEFAULT_SETTINGS.reading, 'hybrid');
-  assert.deepEqual([DEFAULT_SETTINGS.formalizer, DEFAULT_SETTINGS.nxStrategy], ['encoder', 'hybrid']);
-  for (const [reading, f, nx] of [['hybrid', 'encoder', 'hybrid'], ['model', 'encoder', 'neural'], ['rules', 'rules', 'rules']]) {
-    const s = applyReading({ reading });
-    assert.deepEqual([s.formalizer, s.nxStrategy], [f, nx], reading);
-  }
-  assert.equal(applyReading({ reading: 'junk' }).reading, 'hybrid');
+test('reading: the rules read, one helper-model switch decides the engine keys; no who-reads-first choice', () => {
+  assert.equal(DEFAULT_SETTINGS.helperModel, true);
+  assert.equal('reading' in DEFAULT_SETTINGS, false);
+  assert.deepEqual([DEFAULT_SETTINGS.formalizer, DEFAULT_SETTINGS.nxStrategy, DEFAULT_SETTINGS.normalizer], ['encoder', 'rules', false]);
+  assert.deepEqual([applyReading({ helperModel: true }).formalizer, applyReading({ helperModel: true }).nxStrategy], ['encoder', 'rules']);
+  assert.deepEqual([applyReading({ helperModel: false }).formalizer, applyReading({ helperModel: false }).nxStrategy], ['rules', 'rules']);
+  assert.equal(applyReading({ reading: 'model' }).nxStrategy, 'rules', 'an old reading value cannot bring the model-first reader back');
 });
 
-test('reading: every older saved pair becomes hybrid once; a later explicit choice is respected', () => {
-  for (const saved of [{ formalizer: 'rules' }, { nxStrategy: 'neural' }, { nxStrategy: 'rules' }, { formalizer: 'encoder', nxStrategy: 'hybrid' }]) {
-    const st = store({ [SETTINGS_KEY]: JSON.stringify({ ...saved, settingsVersion: 4 }) });
+test('reading: every older saved profile follows the new defaults once (rules read, no normalizer, router A becomes C); a later explicit choice is respected', () => {
+  for (const saved of [{ formalizer: 'rules' }, { nxStrategy: 'neural', reading: 'model' }, { normalizer: true, routing: 'dispatcher', editHead: true }, { formalizer: 'encoder', nxStrategy: 'hybrid' }]) {
+    const st = store({ [SETTINGS_KEY]: JSON.stringify({ ...saved, settingsVersion: 5 }) });
     const s = loadSettings(true, st);
-    assert.equal(s.reading, 'hybrid', JSON.stringify(saved));
+    assert.deepEqual([s.helperModel, s.nxStrategy, s.normalizer, s.editHead, 'reading' in s], [true, 'rules', false, false, false], JSON.stringify(saved));
+    assert.notEqual(s.routing, 'dispatcher');
     assert.equal(JSON.parse(st.data[SETTINGS_KEY]).settingsVersion, SETTINGS_VERSION);
   }
-  const chosen = store({ [SETTINGS_KEY]: JSON.stringify({ reading: 'model', settingsVersion: SETTINGS_VERSION }) });
+  const chosen = store({ [SETTINGS_KEY]: JSON.stringify({ helperModel: false, normalizer: true, settingsVersion: SETTINGS_VERSION }) });
   const s = loadSettings(true, chosen);
-  assert.deepEqual([s.reading, s.formalizer, s.nxStrategy], ['model', 'encoder', 'neural']);
-  assert.equal(readingFrom({ formalizer: 'rules' }), 'rules');
-  assert.equal(migrateSettings({ reading: 'bogus', settingsVersion: SETTINGS_VERSION }).settings.reading, 'hybrid');
+  assert.deepEqual([s.helperModel, s.formalizer, s.normalizer], [false, 'rules', true]);
 });
 
 test('catalogue: every option has a group, what, when, no internal name in the label; failed experiments are in Developer with numbers', () => {
   const groups = new Set(GROUPS.map(([g]) => g));
   assert.deepEqual(GROUPS.map(([, n]) => n), ['Reading', 'Languages and voice', 'Models', 'Privacy and history', 'Developer']);
+  assert.ok(OPTIONS.length <= 20, `fewer options (was 26): ${OPTIONS.length}`);
+  for (const x of EXPERIMENTS) { assert.match(x.date, /^\d{4}-\d{2}-\d{2}$|^not measured$/, x.id); assert.ok(x.last.length > 20 && x.values.length >= 2, x.id); }
   const ids = new Set();
   for (const o of OPTIONS) {
     assert.ok(!ids.has(o.id), `duplicate ${o.id}`); ids.add(o.id);
@@ -49,10 +49,12 @@ test('catalogue: every option has a group, what, when, no internal name in the l
     assert.ok(!/[ăâîșț]|romanian|robotule/i.test(`${o.label} ${o.what} ${o.when}`), `${o.id} is language-neutral`);
     if (o.key && o.key in DEFAULT_SETTINGS && o.key !== 'timeLimits') assert.equal(DEFAULT_SETTINGS[o.key], o.default, `default of ${o.id}`);
   }
-  const edit = OPTIONS.find((o) => o.id === 'editHead');
-  assert.equal(edit.group, 'developer'); assert.equal(edit.default, false); assert.match(edit.what + edit.reason, /3 recovered|recovers 3/); assert.match(edit.reason, /7 misled/);
-  assert.equal(READING_MODES.length, 3); assert.match(READING_MODES[0].label, /Hybrid \(default\)/);
-  assert.match(defaultsTable(), /\| Reading \| How I read your messages \| `hybrid` \|/);
+  for (const gone of ['editHead', 'reading', 'fastPath', 'bestEffort', 'routing', 'worldAware', 'reasoner']) assert.ok(!OPTIONS.some((o) => o.id === gone), `${gone} is no option any more`);
+  assert.equal(OPTIONS.find((o) => o.id === 'normalizer').default, false);
+  assert.match(OPTIONS.find((o) => o.id === 'normalizer').label, /garbled sentences/);
+  assert.deepEqual(EXPERIMENTS.map((x) => x.id), ['routing', 'worldAware', 'reasoner', 'acceptRefused']);
+  assert.ok(!EXPERIMENTS.find((x) => x.id === 'routing').values.some(([v]) => v === 'dispatcher'), 'router A is removed');
+  assert.match(defaultsTable(), /\| Reading \| Use the helper model for typos and long sentences \| `true` \|/);
 });
 
 test('voice words: English only by default, another language from the translation layer (translated once, cached), address words generic', async () => {

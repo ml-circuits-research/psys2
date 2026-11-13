@@ -1,0 +1,3 @@
+@k.words.drawing.noun.1 k.words.sense word=drawing pos=noun n=1 gloss="an illustration that is drawn by hand and published in a book, magazine, or newspaper" is_a=artwork core.source="wordnet 3.1"
+@k.words.drawing.noun.2 k.words.sense word=drawing pos=noun n=2 gloss="a representation of forms or objects on a surface by means of lines" is_a=representation core.source="wordnet 3.1"
+@k.words.drawing.noun.3 k.words.sense word=drawing pos=noun n=3 gloss="the creation of artistic pictures or diagrams" synonym=draftsmanship synonym=drafting is_a=art core.source="wordnet 3.1"

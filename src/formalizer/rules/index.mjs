@@ -247,8 +247,8 @@ const FRAME_LEADS = new Set(['from now on', 'from here on', 'from then on', 'fro
 const isFrameLead = (clause) => FRAME_LEADS.has(clause.filter(isContent).map((t) => t.lower).join(' '));
 
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
-/** Experiments of the model ablation (off by default; `setProto({ also: true })`): `also` = "also" joins clauses like "then" ("draw a house, also what do red and yellow make"). */
-const PROTO = { also: false };
+/** Experiments of the model ablation (on by default since 2026-11-13; `setProto({ also: false })` switches it off): `also` = "also" joins clauses like "then" ("draw a house, also what do red and yellow make"). */
+const PROTO = { also: true, cutter: true };
 export const setProto = (p = {}) => Object.assign(PROTO, p);
 export function splitClauses(tokens) {
   const clauses = [[]];
@@ -264,6 +264,38 @@ export function splitClauses(tokens) {
     clauses.push([]);
   }
   return clauses.filter((c) => c.some(isContent));
+}
+
+/**
+ * CARD-DRIVEN CLAUSE CUTTER (model ablation 2026-11-13, section 1; spec 03 section 7.17). The dispatcher model's one operational advantage was cutting multi-clause messages where
+ * the clause splitter did not ("draw a red house and also what do red and yellow make", "can you draw a star, make it yellow"). The general mechanism: a joiner (`,` `and` `then`
+ * `also` `but`, a run of them counts as one) starts a new clause when the words after it open with an ACT word of some world's card (`act`, `actshared`, `navact` of meta.worlds)
+ * or a question word. The words come from the cards (`registerClauseStarters`), no list lives here. A cut changes nothing by itself: the cut reading is used only when the
+ * uncut reading left something unread and EVERY piece is read completely on its own (`readCut`), so a sentence that was understood is never cut.
+ */
+const STARTERS = new WeakMap();   // root world set -> Set of act words (lowercase single words) of the meta.worlds cards
+export function registerClauseStarters(set, cards) {
+  const words = new Set();
+  for (const c of cards ?? []) for (const w of [...(c.act ?? []), ...(c.actshared ?? []), ...(c.navact ?? [])]) if (/^[a-z]{2,}$/.test(w)) words.add(w);
+  STARTERS.set(set.parent ?? set, words);
+}
+const JOINER_WORDS = new Set([',', ';', 'and', 'then', 'also', 'but']);
+/** Token indices where a new clause starts: the first token after a run of joiners, when it is an act word or a question word, with content on the left and at least two content tokens on the right. */
+export function cardCuts(tokens, starters) {
+  const cuts = [];
+  for (let i = 1; i < tokens.length; i++) {
+    budget.tick('index.cardCuts');
+    if (!JOINER_WORDS.has(tokens[i].lower)) continue;
+    let j = i;
+    while (j < tokens.length && JOINER_WORDS.has(tokens[j].lower)) { budget.tick('index.cardCuts'); j++; }
+    const head = tokens[j];
+    if (head && head.kind === 'word') {
+      const w = head.alt ?? head.lower;
+      if ((starters.has(w) || QUESTION_WORDS.has(w)) && tokens.slice(cuts.at(-1) ?? 0, i).some(isContent) && tokens.slice(j).filter(isContent).length >= 2) cuts.push(j);
+    }
+    i = j - 1;
+  }
+  return cuts;
 }
 
 /** Build the match environment for one text. */
@@ -827,9 +859,42 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     for (const id of ids) for (const w of worldVocabularyOf(set, id)) out.add(w);
     return out;
   };
+  /** The sentence cut at the cards' clause starts (`cardCuts`), each piece read on its own; null unless every piece is read completely. The form state of a failed try is restored. */
+  const readCut = (s, tokens, starters, stateBefore, stateAfter, first) => {
+    const cuts = cardCuts(tokens, starters);
+    if (!cuts.length) return null;
+    // the uncut reading: unread parts (any), or ONE reading whose free-text slot swallowed a cut ("draw a tree and play twinkle twinkle": the drawing world's `rest`); in the second case the pieces
+    // must each be read by a pattern at least as specific as the swallowing one (the guard the clause expansions use for a swallowed "then"), unless the piece opens with a question word
+    const whole = first.done ? (first.done.length === 1 ? first.done[0] : null) : first.fallback;
+    const unread = !first.done || first.done.some((x) => x.unparsed);
+    const swallowed = !!whole && !whole.unparsed && !!whole.match && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && sl.span && cuts.some((ci) => tokens[ci].start >= sl.span[0] && tokens[ci].end <= sl.span[1]));
+    if (!unread && !swallowed) return null;
+    form.restore(stateBefore);
+    const bounds = [0, ...cuts, tokens.length], out = [];
+    for (let k = 0; k + 1 < bounds.length; k++) {
+      budget.tick('rules.cut');
+      let piece = tokens.slice(bounds[k], bounds[k + 1]);
+      while (piece.length && JOINER_WORDS.has(piece[piece.length - 1].lower)) { budget.tick('rules.cut'); piece = piece.slice(0, -1); }
+      while (piece.length && JOINER_WORDS.has(piece[0].lower)) { budget.tick('rules.cut'); piece = piece.slice(1); }
+      if (!piece.some(isContent)) continue;
+      const lead = piece.find(isContent);
+      const sub = { ...s, tokens: piece, span: [piece[0].start, piece[piece.length - 1].end], isQuestion: k === bounds.length - 2 ? s.isQuestion : QUESTION_WORDS.has(lead.lower) };
+      const r = readSentence(sub, piece);
+      if (!r.done || r.done.some((x) => x.unparsed || (!unread && !QUESTION_WORDS.has(lead.lower) && (x.match?.priority ?? 0) < (whole.match?.priority ?? 0)))) { form.restore(stateAfter); return null; }
+      for (const x of r.done) x.cut = { by: 'cards', piece: k };
+      out.push(...r.done);
+    }
+    return out.length > 1 ? out : (form.restore(stateAfter), null);
+  };
   for (const s of analyze(text)) {
     s.tokens = dropStyleIn(splitPossessives(s.tokens, lex));
+    const stateBefore = form.snapshot();
     const first = readSentence(s, s.tokens);
+    const starters = PROTO.cutter ? STARTERS.get(set.parent ?? set) : null;
+    if (starters) {
+      const cut = readCut(s, s.tokens, starters, stateBefore, form.snapshot(), first);
+      if (cut) { segments.push(...cut); continue; }
+    }
     if (first.done) { segments.push(...first.done); continue; }
     // nothing matched: retry once with unknown words corrected to the closest known word (typo tolerance)
     // chat spelling `u` is read as `you` in this retry only (a literal `u` of a pattern still matches through `alt`)

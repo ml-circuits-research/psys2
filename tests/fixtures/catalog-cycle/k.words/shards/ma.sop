@@ -1,0 +1,5 @@
+@k.words.make.noun.1 k.words.sense word=make pos=noun n=1 gloss="a recognizable kind" synonym=brand is_a=kind kind_of=kind kind_of=category kind_of=concept kind_of=idea kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.make.noun.2 k.words.sense word=make pos=noun n=2 gloss="the act of mixing cards haphazardly" synonym=shuffle synonym=shuffling is_a=reordering part_of="card game" kind_of=reordering kind_of=rearrangement kind_of=arrangement kind_of=composing kind_of="creating by mental acts" kind_of=creation kind_of=activity kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.make.verb.1 k.words.sense word=make pos=verb n=1 gloss="engage in" synonym=do core.source="wordnet 3.1"
+@k.words.make.verb.2 k.words.sense word=make pos=verb n=2 gloss="give certain properties to something" synonym=get is_a=change kind_of=change core.source="wordnet 3.1"
+@k.words.make.verb.3 k.words.sense word=make pos=verb n=3 gloss="make or cause to be or to become" synonym=create core.source="wordnet 3.1"

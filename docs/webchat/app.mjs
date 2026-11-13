@@ -15,7 +15,7 @@ import { createLanguage, hintText, LANG_TAGS, langName, langTag, tagOf, normaliz
 import { createTranslationLayer, QUALITY_GATE } from './ui/translation-ui.mjs';
 import { classifyVoice } from './ui/voice-noise.mjs';
 import { setLexicon, buildLexicon, addressWordsText } from './ui/voice-words.mjs';
-import { GROUPS, OPTIONS, READING_MODES, optionById, optionsOf } from './ui/settings-catalog.mjs';
+import { GROUPS, OPTIONS, EXPERIMENTS, optionById, optionsOf } from './ui/settings-catalog.mjs';
 import { createSwitchTranslator, createBrowserBackend, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, versionLabel } from './ui/dispatcher-host.mjs';
@@ -1309,7 +1309,7 @@ export async function mountPsys2(element, options = {}) {
       : d.state === 'ready' ? `loaded (${src(modelSource)}, ${Math.round((d.ms ?? 0) / 100) / 10} s)` : d.state === 'loading' ? `loading, ${d.message}` : d.state === 'error' ? `not available (${d.message})` : 'not loaded yet; the rules answer meanwhile';
     const nState = !normalizerHost ? 'this build has no normalizer model'
       : nz.state === 'ready' ? `loaded (${src(nz.source)}, ${Math.round((nz.ms ?? 0) / 100) / 10} s)` : nz.state === 'loading' ? `loading, ${nz.message}` : nz.state === 'error' ? `not available (${nz.message})`
-        : settings.normalizer === false ? 'not loaded (simplifying phrasing is switched off)' : slowLink() ? 'not loaded: the helper model loads when needed (not downloaded in the background on this connection)' : 'not loaded: the helper model loads when needed (or after 30 s idle)';
+        : settings.normalizer !== true ? 'not downloaded (optional: switch on "Help me with garbled sentences" in Reading)' : slowLink() ? 'not loaded: the helper model loads when needed (not downloaded in the background on this connection)' : 'not loaded: the helper model loads when needed (or after 30 s idle)';
     const nzMB = normalizerHost ? Math.round(Object.values(normalizerHost.meta.sizes_MB ?? {}).reduce((a, b) => a + b, 0)) : null;
     const loadBtn = (host, what) => textBtn(host.status.state === 'ready' ? 'Loaded' : host.status.state === 'loading' ? 'Loading…' : 'Load now',
       () => { host.prepare().catch(() => {}).then(refreshModelsInfo); renderSettings(); }, { disabled: host.status.state === 'ready' || host.status.state === 'loading', title: `Load the ${what} model now` });
@@ -1382,37 +1382,32 @@ export async function mountPsys2(element, options = {}) {
     const reset = textBtn('Reset time limits', () => { settings.timeLimits = { ...TIME_LIMIT_DEFAULTS }; applyTimeLimits(settings); save(); renderSettings(); });
     return h('div', { class: 'p2-field', 'data-group': 'time-limits' }, h('strong', {}, 'Time limits'), ...rows, reset);
   }
-  /** Settings › Developer › Reasoner (spec 15): which engine answers the worlds that ship a matrix. Read when the engine starts, so a change restarts it from the last state. */
-  function reasonerGroup() {
-    const current = settings.reasoner === 'ops' ? 'ops' : 'matrix';
-    return optSelect('reasoner', [['matrix', 'New engine (default)'], ['ops', 'Old engine (fallback)']], current, (v) => {
-      settings.reasoner = v === 'ops' ? 'ops' : 'matrix'; save();
-      Promise.resolve(engineClient?.restart?.('reasoner')).catch(() => {});
-      renderSettings();
+  /** Settings › Developer › Experiments: what is still being measured, one entry each with its last numbers and date (settings-catalog.mjs EXPERIMENTS). */
+  function experimentsGroup() {
+    const o = optionById('experiments');
+    const rows = EXPERIMENTS.map((x) => {
+      const cur = settings[x.key] ?? x.default;
+      const pick = x.values.some(([v]) => v === cur) ? cur : x.default;
+      const sel = select(x.values.map(([v, l]) => [String(v), l]), String(pick), (v) => {
+        settings[x.key] = x.boolean ? v === 'true' : v;
+        if (x.key === 'reasoner') settings.reasoner = v === 'ops' ? 'ops' : 'matrix';
+        save();
+        if (x.restart) Promise.resolve(engineClient?.restart?.(x.id)).catch(() => {});
+        else engineClient?.applySettings?.(settings);
+        renderSettings();
+      });
+      sel.id = `p2-f-${x.id}`;
+      return h('div', { class: 'p2-field p2-opt', 'data-experiment': x.id }, h('label', { for: sel.id }, x.label), sel, h('small', { class: 'p2-opt-what' }, `Last measured ${x.date}: ${x.last}`));
     });
-  }
-  /** Settings › Developer › World-aware reading (spec 16): default veto (user decision 2026-11-12). */
-  function worldAwareGroup() {
-    const current = ['off', 'veto', 'choose', 'observe'].includes(settings.worldAware) ? settings.worldAware : 'veto';
-    return optSelect('worldAware', [['veto', 'Check and refuse (default)'], ['choose', 'Check, refuse and choose between readings'], ['observe', 'Only observe (diagnostic)'], ['off', 'Off']], current, (v) => { settings.worldAware = v; save(); renderSettings(); });
-  }
-  /** Settings > Developer > Which world takes a message (spec 20): C (symbolic + model) is the default since 2026-11-13. */
-  function routingGroup() {
-    const current = ['dispatcher', 'symbolic', 'symbolic+encoder'].includes(settings.routing) ? settings.routing : 'symbolic+encoder';
-    return optSelect('routing', [['symbolic+encoder', 'Rules with reasons, the model as a hint (default)'], ['symbolic', 'Rules with reasons only'], ['dispatcher', 'The model proposes, the rules check (old)']], current, (v) => { settings.routing = v; save(); engineClient?.applySettings?.(settings); renderSettings(); });
+    return h('div', { class: 'p2-field', 'data-option': 'experiments' }, h('strong', {}, o.label), h('small', { class: 'p2-opt-what' }, o.what), h('small', { class: 'p2-opt-when' }, `When: ${o.when}`), ...rows);
   }
   function developerBody() {
-    const eh = optionById('editHead');
     return [
       h('p', { class: 'p2-lead' }, 'For testing and for reporting a problem. Nothing here is needed for everyday use.'),
       optCheck('showTrace', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
       optCheck('devMode', settings.devMode === true, (v) => { setDevMode(v); }),
       optCheck('showPerf', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
-      reasonerGroup(),
-      worldAwareGroup(),
-      routingGroup(),
-      ...(dispatcherEnc ? [optCheck('acceptRefused', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
-      ...(dispatcherEnc ? [optCheck('editHead', settings.editHead === true, (v) => { settings.editHead = v; save(); }, { status: eh.reason })] : []),
+      experimentsGroup(),
       timeLimitsGroup(),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Microphone clicks'), h('pre', { class: 'p2-miclog', tabindex: '0' }, micLog.length ? micLog.slice(-40).map((e) => `${e.t} ${e.via} ${e.action}: ${JSON.stringify(e.before)} -> ${JSON.stringify(e.after)}`).join('\n') : 'No clicks yet.')),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Build'), buildInfoLines()),
@@ -1461,27 +1456,22 @@ export async function mountPsys2(element, options = {}) {
     s.id = `p2-f-${id}`;
     return h('div', { class: 'p2-field p2-opt', 'data-option': id }, h('label', { for: s.id }, o.label), s, ...optionNotes(o, status));
   }
-  /** The live state of the reading model, said next to the select. The stored choice stays whatever the model does. */
+  /** The live state of the helper model, said under its switch. The stored choice stays whatever the model does. */
   function readingStatus() {
-    const mode = settings.reading;
-    if (mode === 'rules') return 'The model is not used.';
+    if (settings.helperModel === false) return 'The helper model is not used; the rules read everything.';
     const d = dispatcherStatus;
-    if (!encoderChecked) return 'Looking for the model; the rules answer meanwhile.';
-    if (!dispatcherEnc) return 'This build has no model; the rules answer. Your choice is kept.';
-    if (d.state === 'error') return `The model could not be loaded (${d.message}); the rules answer. Your choice is kept; reload the page to try again.`;
-    if (d.state === 'loading') return `The model is loading (${d.message}); the rules answer meanwhile.`;
-    if (d.state === 'ready') return `The model is ready (${modelSource === 'cache' ? 'from the cache' : 'downloaded'}, ${Math.round((d.ms ?? 0) / 100) / 10} s).`;
-    return 'The model has not loaded yet; the rules answer meanwhile.';
+    if (!encoderChecked) return 'Looking for the helper model; the rules answer meanwhile (the world of a message is chosen by the rules alone).';
+    if (!dispatcherEnc) return 'This build has no helper model; the rules answer. Your choice is kept.';
+    if (d.state === 'error') return `The helper model could not be loaded (${d.message}); the rules answer. Your choice is kept; reload the page to try again.`;
+    if (d.state === 'loading') return `The helper model is loading (${d.message}); the rules answer meanwhile, choosing the world by their reasons alone.`;
+    if (d.state === 'ready') return `The helper model is ready (${modelSource === 'cache' ? 'from the cache' : 'downloaded'}, ${Math.round((d.ms ?? 0) / 100) / 10} s).`;
+    return 'The helper model has not loaded yet; the rules answer meanwhile.';
   }
   function readingBody() {
-    const cur = settings.reading, mode = READING_MODES.find((m) => m.value === cur) ?? READING_MODES[0];
-    const sel = optSelect('reading', READING_MODES.map((m) => [m.value, m.short]), cur, (v) => { settings.reading = v; applyReading(settings); applyEngineSettings(); save(); renderSettings(); }, readingStatus());
     return [
-      sel,
-      h('p', { class: 'p2-lead p2-opt-mode' }, `${mode.label}: ${mode.text}`),
-      ...optionsOf('reading').filter((o) => o.id !== 'reading').map((o) => {
-        if (o.id === 'normalizer') return optCheck('normalizer', settings.normalizer !== false, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, { disabledWhy: normalizerHost ? '' : 'no model in this build', status: normalizerText() });
-        if (o.id === 'fastPath') return dispatcherEnc ? optCheck('fastPath', settings.fastPath, (v) => { settings.fastPath = v; applyEngineSettings(); save(); }) : null;
+      optCheck('helperModel', settings.helperModel !== false, (v) => { settings.helperModel = v; applyReading(settings); applyEngineSettings(); save(); renderSettings(); }, { status: readingStatus() }),
+      ...optionsOf('reading').filter((o) => o.id !== 'helperModel').map((o) => {
+        if (o.id === 'normalizer') return optCheck('normalizer', settings.normalizer === true, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, { disabledWhy: normalizerHost ? '' : 'no model in this build', status: normalizerText() });
         return optCheck(o.id, o.id === 'spellcheck' ? settings.spellcheck : settings[o.key] !== false && !!settings[o.key], (v) => { settings[o.key] = v; applyEngineSettings(); save(); });
       }),
     ];
@@ -1635,9 +1625,9 @@ export async function mountPsys2(element, options = {}) {
   function onEngineEvent(name, data) {
     if (name === 'dispatcher-status') {
       // PROGRESS: the reading model is a step of the one panel; the chat works meanwhile (the rules read)
-      if (data.state === 'loading') { progress.start('model', 'Loading the reading model'); progress.note('Still loading the reading model: answers may be simpler for a moment.'); }
+      if (data.state === 'loading') { progress.start('model', 'Loading the reading model'); progress.note('Still loading the reading model: until it is ready the world of each message is chosen by the rules and their reasons alone (routing B); when it is ready the model adds its hint (routing C). Answers may be simpler for a moment.'); }
       else if (data.state === 'ready') { progress.end('model', { bytes: modelBytes || null, label: 'Reading model loaded' }); progress.note(''); }
-      else if (data.state === 'error') { progress.fail('model', 'The reading model could not be loaded', 'the rules answer meanwhile'); progress.note(''); }
+      else if (data.state === 'error') { progress.fail('model', 'The reading model could not be loaded', 'the rules answer, with the symbolic routing B (no model hint)'); progress.note(''); }
       if (data.state === 'error') encoderFailed(data.message); else if (data.state === 'ready') encoderNoticed = false;
       dispatcherStatus = { ...data, message: data.state === 'loading' ? dispatcherStatus.message || data.message : data.message }; setStatus(); if (!settingsEl.hidden) renderSettings();
     } else if (name === 'normalizer-status') { if (normalizerHost) normalizerHost.status = data; if (!settingsEl.hidden) renderSettings(); }
@@ -1780,9 +1770,9 @@ export async function mountPsys2(element, options = {}) {
    */
   const slowLink = () => { const c = globalThis.navigator?.connection; return !!c && (c.saveData === true || (typeof c.effectiveType === 'string' && c.effectiveType !== '4g')); };
   const scheduleNormalizerIdle = () => {
-    if (!normalizerHost || settings.normalizer === false || slowLink()) return;
+    if (!normalizerHost || settings.normalizer !== true || slowLink()) return;
     setTimeout(async () => {
-      if (destroyed || slowLink() || settings.normalizer === false || normalizerHost.status.state !== 'idle') return;
+      if (destroyed || slowLink() || settings.normalizer !== true || normalizerHost.status.state !== 'idle') return;
       await userFirst();
       if (!destroyed) normalizerHost.prepare().catch(() => {});
     }, NORMALIZER_IDLE_MS);

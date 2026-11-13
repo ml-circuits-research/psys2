@@ -1,0 +1,4 @@
+@k.words.kind.noun.1 k.words.sense word=kind pos=noun n=1 gloss="a category of things distinguished by some common characteristic or quality" synonym=sort synonym=form synonym=variety is_a=category kind_of=category kind_of=concept kind_of=idea kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.kind.adjective.1 k.words.sense word=kind pos=adjective n=1 gloss="having or showing a tender and considerate and helpful nature; used especially of persons and their behavior" opposite=unkind core.source="wordnet 3.1"
+@k.words.kind.adjective.2 k.words.sense word=kind pos=adjective n=2 gloss="agreeable, conducive to comfort" synonym=genial near_opposite=inhospitable core.source="wordnet 3.1"
+@k.words.kind.adjective.3 k.words.sense word=kind pos=adjective n=3 gloss="tolerant and forgiving under provocation" synonym=tolerant near_opposite=unforgiving core.source="wordnet 3.1"
