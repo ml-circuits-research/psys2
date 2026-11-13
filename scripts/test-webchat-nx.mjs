@@ -34,8 +34,8 @@ export const SCENARIOS = {
       check('default: the strategy is hybrid', (await c.pg.evaluate(() => window.psys2.settings.nxStrategy)) === 'hybrid');
       await c.pg.click('button[aria-label="Settings"]');
       await c.pg.waitForSelector('.p2-modal', { timeout: 5000 });
-      await c.pg.click('#p2-st-understanding');
-      check('default: Settings has the reading strategy control', (await c.pg.$eval('#p2-f-reading-strategy', (s) => [s.value, [...s.options].map((x) => x.value).join(',')].join('|'))) === 'hybrid|hybrid,neural,rules');
+      await c.pg.click('#p2-st-reading');
+      check('default: Settings has the one reading control (SETTINGS-COHERENT)', (await c.pg.$eval('#p2-f-reading', (s) => [s.value, [...s.options].map((x) => x.value).join(',')].join('|'))) === 'hybrid|hybrid,model,rules');
       await c.pg.keyboard.press('Escape');
       const r = await c.say(MSG);
       check('default: an ordinary message is answered', r.ok && /milk/i.test(r.reply), r.reply.slice(0, 60));
@@ -49,8 +49,8 @@ export const SCENARIOS = {
       await modelReady(c.pg);
       await c.pg.click('button[aria-label="Settings"]');
       await c.pg.waitForSelector('.p2-modal', { timeout: 5000 });
-      await c.pg.click('#p2-st-understanding');
-      await c.pg.select('#p2-f-reading-strategy', 'neural'); await sleep(80);
+      await c.pg.click('#p2-st-reading');
+      await c.pg.select('#p2-f-reading', 'model'); await sleep(80);
       check('setting: neural persists and reaches the session', (await saved(c.pg)).nxStrategy === 'neural' && (await c.pg.evaluate(() => window.psys2.session.nx)) === 'neural');
       await c.pg.keyboard.press('Escape');
       const r = await c.say(MSG);
@@ -58,8 +58,8 @@ export const SCENARIOS = {
       check('setting: neural: the answer is right and the trace says the model read it', r.ok && /milk/i.test(r.reply) && /Read by\s*model/.test(t) && /Reading strategy\s*neural/.test(t), `${r.reply.slice(0, 40)} | ${(t.match(/Read by[^\n]*/) ?? [''])[0].slice(0, 60)}`);
       await c.pg.click('button[aria-label="Settings"]');
       await c.pg.waitForSelector('.p2-modal', { timeout: 5000 });
-      await c.pg.click('#p2-st-understanding');
-      await c.pg.select('#p2-f-reading-strategy', 'rules'); await sleep(80);
+      await c.pg.click('#p2-st-reading');
+      await c.pg.select('#p2-f-reading', 'rules'); await sleep(80);
       await c.pg.keyboard.press('Escape');
       const r2 = await c.say('add bread to my list');
       check('setting: rules: the rules read it', r2.ok && /Read by\s*rules/.test(await lastTrace(c.pg)) && (await saved(c.pg)).nxStrategy === 'rules');

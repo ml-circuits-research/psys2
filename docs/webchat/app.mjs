@@ -10,16 +10,18 @@ import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, createMicLock, measureSpeed, speechSupport } from './ui/speech.mjs';
-import { createLanguage, hintText, LANG_TAGS, LANG_NAMES, langName, langTag, tagOf } from './ui/language.mjs';
+import { createLanguage, hintText, LANG_TAGS, langName, langTag, tagOf } from './ui/language.mjs';
 import { createTranslationLayer, QUALITY_GATE } from './ui/translation-ui.mjs';
 import { classifyVoice } from './ui/voice-noise.mjs';
+import { setLexicon, buildLexicon, addressWordsText } from './ui/voice-words.mjs';
+import { GROUPS, OPTIONS, READING_MODES, optionById, optionsOf } from './ui/settings-catalog.mjs';
 import { createSwitchTranslator, createBrowserBackend, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel } from './ui/normalizer-host.mjs';
 import { createEngineClient } from './ui/engine-client.mjs';
 import { normalizeNxStrategy } from './lib/formalizer/nx.mjs';
-import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
+import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
@@ -135,7 +137,7 @@ export async function mountPsys2(element, options = {}) {
   const dictText = h('span', { class: 'p2-dict-text' }, 'Dictating into: Untitled document');
   const dictStop = h('button', { class: 'p2-btn-text p2-dict-stop', type: 'button', 'aria-label': 'Stop dictation', title: 'Stop dictation' }, 'Stop');
   const dictBar = h('div', { class: 'p2-dictbar', role: 'status', hidden: true }, h('i', { class: 'p2-rec', 'aria-hidden': 'true' }), dictText, dictStop);
-  const langSel = h('select', { class: 'p2-select', 'aria-label': 'Language' }, h('option', { value: 'en' }, 'English'), h('option', { value: 'ro' }, 'Română'));
+  const langSel = h('select', { class: 'p2-select', 'aria-label': 'Language' }, h('option', { value: 'en' }, 'English'));   // the other languages are filled in by renderLangSelect from the translation layer
   // MT-SERIOUS: the translation layer (browser Translator, else the on-device model downloaded lazily when a language is selected); the selector lists what it supports
   const tl = createTranslationLayer({ base, h, note: (t) => note(t), onChange: () => { renderLangSelect(); renderSettings(); } });
   globalThis.__psys2Tl = tl;   // diagnostics and the phone tests
@@ -778,8 +780,9 @@ export async function mountPsys2(element, options = {}) {
   function recordPhrase(text, mode, reply, recId = null, detail = null) {
     if (!settings.logPhrases) return;
     try {
-      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), ...(detail ? { detail } : {}) }));
-      else phrases.add(buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply }));
+      const tabWorld = tabDefs.find((t) => t.id === view)?.world ?? null;   // item 7: the world of the open tab, for the wrong-world analysis
+      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}) }));
+      else phrases.add({ ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply }), ...(tabWorld ? { tabWorld } : {}) });
     } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
   }
@@ -943,9 +946,9 @@ export async function mountPsys2(element, options = {}) {
       setStatus();
     },
     onStopCommand: () => {   // "stop microphone": handled here, never sent to the chat
-      const ro = speechLangTag().startsWith('ro'), msg = ro ? 'Am oprit microfonul.' : 'Microphone off.';
-      const before = speech.snapshot(); setHandsFree(false); speech.stopListening(); logMic('voice-command', { action: 'off', before, after: speech.snapshot() }); flashHint(msg);
-      if (settings.speaker && speechSupport.synthesis) speech.speak(msg, { lang: speechLangTag() });
+      const before = speech.snapshot(); setHandsFree(false); speech.stopListening(); logMic('voice-command', { action: 'off', before, after: speech.snapshot() });
+      flashHint('Microphone off.');
+      localized('Microphone off.').then((msg) => { if (msg !== 'Microphone off.') flashHint(msg); if (settings.speaker && speechSupport.synthesis) speech.speak(msg, { lang: speechLangTag() }); });   // the sentence of the selected language, translated once (cached)
     },
     onState: (s) => { const was = mic.speaking; mic = s; if (s.speaking && !was) startSpeakCap(); else if (!s.speaking) endSpeakCap(); robotUI()?.setSpeaking(s.speaking); setStatus(); },
     onError: (msg) => { note(msg); if (!speech.isListening() && !speech.isPaused()) { settings.handsFree = false; syncMic(); } },
@@ -972,6 +975,29 @@ export async function mountPsys2(element, options = {}) {
   on(micBtn, 'contextmenu', (e) => e.preventDefault());
   on(speakerBtn, 'click', () => setSpeaker(!settings.speaker));
   const setLanguage = (v, reason = 'selector') => language.set(v, reason);
+  // SETTINGS-COHERENT 3: short interface sentences and the voice word lists are written in English once and translated for the selected language by the translation layer (cached); nothing here is written in any other language.
+  const localizedCache = new Map();
+  async function localized(text, lang = language.get()) {
+    if (!lang || lang === 'en' || !browserBackend) return text;
+    const key = `${lang}|${text}`;
+    if (localizedCache.has(key)) return localizedCache.get(key);
+    let out = text;
+    try { const r = await withDeadline(browserBackend.translate(text, 'en', lang), 1500, { label: 'interface translation' }); const t = typeof r === 'string' ? r : r?.text ?? r?.translation; if (t && String(t).trim()) out = String(t).trim(); } catch { /* English stays */ }
+    localizedCache.set(key, out);
+    return out;
+  }
+  let voiceWordsRun = 0;
+  async function loadVoiceWords(lang) {
+    const mine = ++voiceWordsRun;
+    setLexicon(lang, null);   // another language: no stale words
+    if (!lang || lang === 'en' || !browserBackend) return;
+    const tr = async (t, f, to) => { const r = await browserBackend.translate(t, f, to); return typeof r === 'string' ? r : r?.text ?? r?.translation ?? ''; };
+    let storage = null; try { storage = options.persist !== false ? localStorage : null; } catch { storage = null; }
+    const r = await buildLexicon({ lang, translate: tr, storage, signal: { get aborted() { return mine !== voiceWordsRun || destroyed; } } });
+    if (mine !== voiceWordsRun || destroyed || r.aborted) return;
+    setLexicon(lang, r.lists);
+    if (!settingsEl.hidden) renderSettings();
+  }
   // Speech follows the selector: where the browser has no voice for the language this is said once and typing keeps working
   const voiceSaid = new Set();
   function voiceNotice(lang) {
@@ -989,12 +1015,12 @@ export async function mountPsys2(element, options = {}) {
     settings.language = lang; langSel.value = lang;
     speech?.refreshLang(); save(); renderSettings();
     session?.setWorldState?.(SHELL, { language: lang });   // the shell world's state follows the selector, so that "speak Romanian" is a change and not a no-op
-    renderLangSelect(); tl.prepare(lang).then(() => renderSettings(), () => {}); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
+    renderLangSelect(); tl.prepare(lang).then(() => { renderSettings(); loadVoiceWords(lang); }, () => {}); loadVoiceWords(lang); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
     hintEl?.remove(); hintEl = null;
-    if (reason === 'hint') note(lang === 'ro' ? 'Am trecut pe română.' : lang === 'en' ? 'Switched to English.' : `Switched to ${langName(lang)}.`);   // a switch command confirms in its own reply
+    if (reason === 'hint') { const said = `Switched to ${langName(lang, { own: false })}.`; localized(said, lang).then((t) => note(t)); }   // a switch command confirms in its own reply, in the new language
   });
   on(langSel, 'change', () => setLanguage(langSel.value, 'selector'));
-  // LANG-FIXED: the typed-message hint, the only use of the language detectors: "Pare engleză — schimb limba?" with a button. Never automatic, never for voice.
+  // LANG-FIXED: the typed-message hint, the only use of the language detectors: "That looks English — switch the language?" with a button (translated for the selected language). Never automatic, never for voice.
   let hintEl = null, hintSeq = 0;
   async function hintLanguage(text, userMsg) {
     const mine = ++hintSeq, selected = language.get();
@@ -1002,8 +1028,9 @@ export async function mountPsys2(element, options = {}) {
     try { suggested = await engineClient?.call('hint', { text, selected }); } catch { suggested = null; }
     if (mine !== hintSeq || destroyed || !suggested || suggested === language.get() || selected !== language.get()) return;
     hintEl?.remove();
-    const { text: line, button } = hintText(selected, suggested);
-    if (!userMsg?.msg?.isConnected) return;
+    const en = hintText(selected, suggested);
+    const [line, button] = await Promise.all([localized(en.text, selected), localized(en.button, selected)]);
+    if (mine !== hintSeq || !userMsg?.msg?.isConnected) return;
     // the hint sits under the typed message it is about (a small line, not a chat message: it never becomes "the last answer")
     hintEl = h('div', { class: 'p2-lang-hint', role: 'note' }, `${line} `, h('button', { class: 'p2-btn-text', type: 'button', 'data-lang-hint': suggested, onclick: () => setLanguage(suggested, 'hint') }, button));
     userMsg.msg.append(hintEl);
@@ -1036,18 +1063,22 @@ export async function mountPsys2(element, options = {}) {
     return `Model version: ${v.model ?? 'dispatcher'}, exported ${v.export_date ?? '?'}, sha256 ${String(v.sha256 ?? '').slice(0, 8)}, ${m.split ?? 'test'} world top-1 ${pct(m.world_top1)}, top-3 ${pct(m.world_top3)}, segmentation F1 ${pct(m.seg_f1)}. `;
   }
   // ---- the Settings modal (SET): full screen, one tab per topic, closes with x, Esc and Back; deep link #settings/<tab> ----
-  const SETTINGS_TABS = [['understanding', 'Understanding'], ['language', 'Language'], ['voice', 'Voice'], ['phrases', 'Phrase log'], ['models', 'Models'], ['developer', 'Developer'], ['about', 'About']];
+  const SETTINGS_TABS = [...GROUPS, ['about', 'About']];   // Reading, Languages and voice, Models, Privacy and history, Developer, About
+  /** Ids the worlds and older links use (ui.settings tab names, #settings/<tab>) and the group each now lives in. */
+  const TAB_ALIASES = { understanding: 'reading', language: 'languages', voice: 'languages', phrases: 'privacy', history: 'privacy', privacy: 'privacy' };
+  const resolveTab = (id) => (SETTINGS_TABS.some(([t]) => t === id) ? id : TAB_ALIASES[id] ?? null);
   const SET_TAB_KEY = 'psys2.webchat.settingsTab';
-  const isSettingsTab = (id) => SETTINGS_TABS.some(([t]) => t === id);
-  let settingsTab = (() => { try { const t = options.persist !== false ? localStorage.getItem(SET_TAB_KEY) : null; return isSettingsTab(t) ? t : 'understanding'; } catch { return 'understanding'; } })();
+  const isSettingsTab = (id) => resolveTab(id) !== null;
+  let settingsTab = (() => { try { const t = options.persist !== false ? localStorage.getItem(SET_TAB_KEY) : null; return resolveTab(t) ?? 'reading'; } catch { return 'reading'; } })();
   let settingsPushed = false;
   const settingsHash = () => `#settings/${settingsTab}`;
-  const hashTab = (hash) => { const m = /^#settings(?:\/([\w-]*))?$/.exec(hash ?? ''); return m ? (isSettingsTab(m[1]) ? m[1] : '') : null; };   // null: not a settings link; '' : settings without a (known) tab
+  const hashTab = (hash) => { const m = /^#settings(?:\/([\w-]*))?$/.exec(hash ?? ''); return m ? (resolveTab(m[1]) ?? '') : null; };   // null: not a settings link; '' : settings without a (known) tab
   for (const [id, label] of SETTINGS_TABS) {
     setTabsEl.append(h('button', { class: 'p2-tab p2-modal-tab', role: 'tab', type: 'button', id: `p2-st-${id}`, 'aria-controls': 'p2-set-panel', 'data-tab': id, onclick: () => setSettingsTab(id) }, label));
   }
   function setSettingsTab(id, focus = false) {
-    if (!isSettingsTab(id)) return;
+    id = resolveTab(id);
+    if (!id) return;
     settingsTab = id;
     if (options.persist !== false) try { localStorage.setItem(SET_TAB_KEY, id); } catch { /* storage unavailable */ }
     if (!settingsEl.hidden) { try { history.replaceState(history.state, '', settingsHash()); } catch { /* no history */ } }
@@ -1064,7 +1095,7 @@ export async function mountPsys2(element, options = {}) {
   });
   /** Opens the modal (on `tab`, else the last tab). One history entry is pushed so that the phone's Back button closes it. */
   function openSettings(tab, { push = true } = {}) {
-    if (tab && isSettingsTab(tab)) settingsTab = tab;
+    if (tab && isSettingsTab(tab)) settingsTab = resolveTab(tab);
     const wasOpen = !settingsEl.hidden;
     settingsEl.hidden = false; gearBtn.setAttribute('aria-expanded', 'true');
     chat.inert = true; if (paneEl) paneEl.inert = true;
@@ -1135,6 +1166,34 @@ export async function mountPsys2(element, options = {}) {
     c.checked = value; c.addEventListener('change', () => onChange(c.checked));
     return h('label', { class: 'p2-check', title: disabledWhy || null }, c, ' ', label, disabledWhy ? h('small', {}, ` (${disabledWhy})`) : null);
   }
+  // SETTINGS-COHERENT 4: the translation engine in the Models section: the browser Translator, and for the selected language the on-device model (downloaded?, size, round-trip number).
+  const nativeAvail = new Map();
+  function nativeAvailability(code) {
+    if (!browserTranslatorKind()) return 'not supported by this browser';
+    if (!nativeAvail.has(code)) {
+      nativeAvail.set(code, 'checking…');
+      Promise.all([browserTranslatorAvailability('en', code), browserTranslatorAvailability(code, 'en')]).then(([a, b]) => { nativeAvail.set(code, a === b ? a : `${a} to ${code}, ${b} to English`); if (!settingsEl.hidden && settingsTab === 'models') renderSettings(); }, () => nativeAvail.set(code, 'unknown'));
+    }
+    const a = nativeAvail.get(code);
+    return a === 'available' ? 'available on this device' : a === 'downloadable' ? 'can be downloaded by the browser' : a === 'downloading' ? 'downloading' : a === 'unavailable' ? 'does not have this language' : a;
+  }
+  function translationCard() {
+    const code = language.get();
+    const kind = browserTranslatorKind();
+    const lead = h('p', { class: 'p2-lead' }, 'Translation: other languages are translated to and from English by the browser’s own Translator when it has the language, otherwise by a small model that runs on this device.');
+    if (code === 'en') return h('div', { class: 'p2-model', 'data-card': 'translation' }, h('strong', {}, 'Translation'), lead,
+      h('dl', {}, h('dt', {}, 'Browser Translator'), h('dd', {}, kind ? 'supported' : 'not supported by this browser'), h('dt', {}, 'Selected language'), h('dd', {}, 'English needs no translation')));
+    const d = tl.describe(code), st = d.state;
+    const modelState = !d.size ? 'no on-device model for this language' : st === 'ready' ? 'downloaded and ready' : st === 'error' ? `failed: ${tl.host?.state?.(code)?.error ?? 'unknown error'}` : st === 'idle' || st == null ? 'not downloaded yet (downloads when the language is selected and the browser Translator cannot serve it)' : `${st}…`;
+    const right = d.right == null ? 'not measured' : `${d.right}% read right after a round trip English, ${d.name}, English${d.right >= QUALITY_GATE ? '' : ` (beta: under ${QUALITY_GATE}%)`}`;
+    return h('div', { class: 'p2-model', 'data-card': 'translation' }, h('strong', {}, `Translation for ${langName(code)}`), lead,
+      h('dl', {},
+        h('dt', {}, 'Browser Translator'), h('dd', {}, kind ? nativeAvailability(code) : 'not supported by this browser'),
+        h('dt', {}, 'On-device model'), h('dd', {}, modelState),
+        h('dt', {}, 'Size'), h('dd', {}, d.size ? `${d.size} for both directions` : 'none'),
+        h('dt', {}, 'Round-trip quality'), h('dd', {}, right),
+        h('dt', {}, 'Used now'), h('dd', {}, languageEngineNote())));
+  }
   const mb = (n) => (n == null ? '?' : n >= 1024 * 1048576 ? `${(n / 1073741824).toFixed(1)} GB` : `${Math.round(n / 1048576)} MB`);
   /** One card of the Models tab: name, version, size, status, actions. */
   function modelCard({ title, model, version, sizeText, statusText, cached, actions, note: more }) {
@@ -1167,7 +1226,7 @@ export async function mountPsys2(element, options = {}) {
     const speedNote = ortc ? h('small', {}, `Device speed factor for model deadlines: ${ortc.speed} (measured at load). Worker restarts: ${ortc.restarts}.`) : null;
     return [
       pausedNote,
-      h('p', { class: 'p2-lead' }, 'Two small neural models run in your browser (ONNX Runtime, WASM, no server). They only propose; the rules and the worlds decide. They are cached in this browser, so they download once per version.'),
+      h('p', { class: 'p2-lead' }, 'Two small neural models run in your browser (ONNX Runtime, WASM, no server). They only propose; the rules and the worlds decide. They are cached in this browser, so they download once per version. Below them: the translation engine for the selected language.'),
       modelCard({
         title: 'Dispatcher', model: 'DistilBERT (distilbert-base-uncased), int8: cuts a message into parts and proposes which worlds fit', version: dispatcherEnc ? dispatcherLabel : '',
         sizeText: modelsInfo.dispatcherMB ? `${modelsInfo.dispatcherMB} MB` : 'about 64 MB', statusText: dState, cached: dispatcherEnc ? modelsInfo.cached.dispatcher ?? null : false,
@@ -1179,6 +1238,7 @@ export async function mountPsys2(element, options = {}) {
         sizeText: nzMB ? `${nzMB} MB` : 'about 95 MB', statusText: nState, cached: normalizerHost ? modelsInfo.cached.normalizer ?? null : false,
         actions: normalizerHost ? [loadBtn(normalizerHost, 'normalizer')] : [],
       }),
+      translationCard(),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Cache'),
         h('p', {}, modelsInfo.usage == null ? 'The browser did not report how much storage this site uses.' : `This site uses ${mb(modelsInfo.usage)} of browser storage${modelsInfo.quota ? ` (limit about ${mb(modelsInfo.quota)})` : ''}; the models are most of it.`),
         h('div', { class: 'p2-plog-actions' }, textBtn('Remove the models from the cache', removeModelCaches, { title: 'Delete the cached model files; they download again when needed', disabled: !(modelsInfo.cached.dispatcher || modelsInfo.cached.normalizer) }))),
@@ -1231,25 +1291,28 @@ export async function mountPsys2(element, options = {}) {
   /** Settings › Developer › Reasoner (spec 15): which engine answers the worlds that ship a matrix. Read when the engine starts, so a change restarts it from the last state. */
   function reasonerGroup() {
     const current = settings.reasoner === 'ops' ? 'ops' : 'matrix';
-    return field('Reasoner', select([['matrix', 'Matrix where available (sopworld, default)'], ['ops', 'Operations (fallback)']], current, (v) => {
+    return optSelect('reasoner', [['matrix', 'New engine (default)'], ['ops', 'Old engine (fallback)']], current, (v) => {
       settings.reasoner = v === 'ops' ? 'ops' : 'matrix'; save();
       Promise.resolve(engineClient?.restart?.('reasoner')).catch(() => {});
       renderSettings();
-    }), 'Operations: every world answers through its own code, as always. Matrix: kids.shop, kids.arith and kids.tasks answer through the sopworld library (rules, states, aggregates, retract, explain) and gain a few things: a missing item is asked for, “three of them” revises a purchase, “undo that” takes it back, “why?” says what an answer rests on, “what did I pay?” is worked backwards. Changing it restarts the engine; what you said so far in the other worlds is kept, the shop, arithmetic and list facts are not.');
+    });
   }
   /** Settings › Developer › World-aware reading (spec 16): default veto (user decision 2026-11-12). */
   function worldAwareGroup() {
     const current = ['off', 'veto', 'choose', 'observe'].includes(settings.worldAware) ? settings.worldAware : 'veto';
-    return field('World-aware reading', select([['veto', 'Veto (default)'], ['choose', 'Veto and choose between readings'], ['observe', 'Observe only (diagnostic)'], ['off', 'Off']], current, (v) => { settings.worldAware = v; save(); renderSettings(); }),
-      'Before acting, a reading is checked against the worlds: a name the world does not have (“delete the dragon”), a move in a game that is not running, or words left out are not acted on; the reply says why. Off: act on every reading, as before.');
+    return optSelect('worldAware', [['veto', 'Check and refuse (default)'], ['choose', 'Check, refuse and choose between readings'], ['observe', 'Only observe (diagnostic)'], ['off', 'Off']], current, (v) => { settings.worldAware = v; save(); renderSettings(); });
   }
   function developerBody() {
+    const eh = optionById('editHead');
     return [
-      check('Show the trace of every answer (which part was read by which rule, model and validator)', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
-      check('Developer mode: a Debug button on every tab (commands, last turns with their SOP Lang wires, dry run, state, world, models); records the last 200 turns while on', settings.devMode === true, (v) => { setDevMode(v); }),
-      check('Show the per-stage timing overlay of the last message (also with ?perf=1 in the page address)', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
+      h('p', { class: 'p2-lead' }, 'For testing and for reporting a problem. Nothing here is needed for everyday use.'),
+      optCheck('showTrace', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
+      optCheck('devMode', settings.devMode === true, (v) => { setDevMode(v); }),
+      optCheck('showPerf', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
       reasonerGroup(),
       worldAwareGroup(),
+      ...(dispatcherEnc ? [optCheck('acceptRefused', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
+      ...(dispatcherEnc ? [optCheck('editHead', settings.editHead === true, (v) => { settings.editHead = v; save(); }, { status: eh.reason })] : []),
       timeLimitsGroup(),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Microphone clicks'), h('pre', { class: 'p2-miclog', tabindex: '0' }, micLog.length ? micLog.slice(-40).map((e) => `${e.t} ${e.via} ${e.action}: ${JSON.stringify(e.before)} -> ${JSON.stringify(e.after)}`).join('\n') : 'No clicks yet.')),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Build'), buildInfoLines()),
@@ -1277,24 +1340,47 @@ export async function mountPsys2(element, options = {}) {
         h('ul', { class: 'p2-credits' }, CREDITS.map(([name, version, licence, use]) => h('li', {}, h('b', {}, name), h('small', {}, ` ${version} · ${licence} · ${use}`))))),
     ];
   }
-  function understandingBody() {
+  /** The note under an option: what changes, when to turn it on, and a small details line (internal names live there only). `status` is a live sentence (model loading, engine state). */
+  function optionNotes(o, status) {
+    return [h('small', { class: 'p2-opt-what' }, o.what), h('small', { class: 'p2-opt-when' }, `When: ${o.when}`), status ? h('small', { class: 'p2-opt-status', role: 'status' }, status) : null,
+      o.details ? h('small', { class: 'p2-opt-details' }, `Details: ${o.details}`) : null];
+  }
+  /** A catalogue checkbox: the plain label, then the notes. */
+  function optCheck(id, value, onChange, { disabledWhy = '', status = null } = {}) {
+    const o = optionById(id);
+    const c = h('input', { type: 'checkbox', id: `p2-c-${id}`, disabled: disabledWhy ? true : null, title: disabledWhy || null });
+    c.checked = value; c.addEventListener('change', () => onChange(c.checked));
+    return h('div', { class: 'p2-opt', 'data-option': id }, h('label', { class: 'p2-check', title: disabledWhy || null }, c, ' ', o.label, disabledWhy ? h('small', {}, ` (${disabledWhy})`) : null), ...optionNotes(o, status));
+  }
+  /** A catalogue select: label, control, notes. */
+  function optSelect(id, opts, value, onChange, status = null) {
+    const o = optionById(id), s = select(opts, value, onChange);
+    s.id = `p2-f-${id}`;
+    return h('div', { class: 'p2-field p2-opt', 'data-option': id }, h('label', { for: s.id }, o.label), s, ...optionNotes(o, status));
+  }
+  /** The live state of the reading model, said next to the select. The stored choice stays whatever the model does. */
+  function readingStatus() {
+    const mode = settings.reading;
+    if (mode === 'rules') return 'The model is not used.';
+    const d = dispatcherStatus;
+    if (!encoderChecked) return 'Looking for the model; the rules answer meanwhile.';
+    if (!dispatcherEnc) return 'This build has no model; the rules answer. Your choice is kept.';
+    if (d.state === 'error') return `The model could not be loaded (${d.message}); the rules answer. Your choice is kept; reload the page to try again.`;
+    if (d.state === 'loading') return `The model is loading (${d.message}); the rules answer meanwhile.`;
+    if (d.state === 'ready') return `The model is ready (${modelSource === 'cache' ? 'from the cache' : 'downloaded'}, ${Math.round((d.ms ?? 0) / 100) / 10} s).`;
+    return 'The model has not loaded yet; the rules answer meanwhile.';
+  }
+  function readingBody() {
+    const cur = settings.reading, mode = READING_MODES.find((m) => m.value === cur) ?? READING_MODES[0];
+    const sel = optSelect('reading', READING_MODES.map((m) => [m.value, m.short]), cur, (v) => { settings.reading = v; applyReading(settings); applyEngineSettings(); save(); renderSettings(); }, readingStatus());
     return [
-      field('Formalizer', select([['rules', 'Rules (deterministic)'], ['encoder', !encoderChecked ? 'Encoder (checking…)' : encoderOk() ? 'Encoder (dispatcher + rule validation)' : 'Encoder (not available)', encoderChecked && !encoderOk()]], settings.formalizer,
-        (v) => { settings.formalizer = v; applyEngineSettings(); save(); renderSettings(); }),
-        dispatcherVersionText() + (!encoderChecked ? 'Looking for the dispatcher model…'
-          : dispatcherStatus.state === 'error' ? `The model could not be loaded (${dispatcherStatus.message}); the rules are in use. Reload the page to try again.`
-          : !dispatcherEnc ? 'This build has no dispatcher model (see docs/webchat/README.md). The rules are used.'
-          : `A small neural dispatcher (DistilBERT, int8, in your browser) proposes how to cut the message and which worlds fit each piece; the rules check every proposal. It is kept up to date automatically and cached in this browser. Status: ${dispatcherStatus.state === 'ready' ? `ready (${modelSource === 'cache' ? 'from the cache' : 'downloaded'}, ${Math.round((dispatcherStatus.ms ?? 0) / 100) / 10} s)` : dispatcherStatus.state === 'loading' ? `loading, ${dispatcherStatus.message}; the rules answer meanwhile` : 'not loaded (the rules are in use)'}.`)),
-      ...(dispatcherEnc ? [field('Reading strategy', select([['hybrid', 'Hybrid (rules first, the model reads what they could not)'], ['neural', 'Neural (the model first, rules as fallback)'], ['rules', 'Rules only']], normalizeNxStrategy(settings.nxStrategy),
-        (v) => { settings.nxStrategy = v; applyEngineSettings(); save(); renderSettings(); }),
-        'Who reads a message first. Hybrid keeps today’s answers and lets a small model (the heads of the same encoder pass, no second pass) read only a part that nothing else understood, when it is very sure and the part has no negation. Neural lets the model read first; a part it cannot read, or that fails the checks, goes to the rules. Rules only never asks the model to read. In every case the rules build the wires and the validator checks them; user.profile is always read by the rules. Needs the encoder formalizer.')] : []),
-      ...(dispatcherEnc ? [check('Accept parses the interpreter refuses (for example “move the piece” when no game is on)', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
-      check('Spellcheck: correct typos and chat abbreviations against the worlds’ vocabulary (for example “yes” → “eyes”)', settings.spellcheck, (v) => { settings.spellcheck = v; applyEngineSettings(); save(); }),
-      check(`Simplify phrasing (normalizer): only when nothing else reads a sentence, a small model proposes a simpler wording that the rules must read and that keeps every number, name, colour and negation (${normalizerText()})`, settings.normalizer !== false, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, normalizerHost ? null : 'no model in this build'),
-      ...(dispatcherEnc ? [check('Fast path: when the rules read the whole message and every part works, answer at once without running the model (much faster on a phone; the model still handles everything else)', settings.fastPath, (v) => { settings.fastPath = v; applyEngineSettings(); save(); })] : []),
-      ...(dispatcherEnc ? [check('Edit head (experimental, off by default): also try the dispatcher’s own simplified wording of a part when nothing else reads it; it recovers few messages and misleads more', settings.editHead === true, (v) => { settings.editHead = v; save(); })] : []),
-      check('Partial understanding: do what I understood and say what I ignored', settings.partialUnderstanding, (v) => { settings.partialUnderstanding = v; applyEngineSettings(); save(); }),
-      check('Best effort with loose words: when words do not form a sentence, do the most sensible reading and say how I took it (for example “square eyes robot” → “make your eyes square”)', settings.bestEffort !== false, (v) => { settings.bestEffort = v; applyEngineSettings(); save(); }),
+      sel,
+      h('p', { class: 'p2-lead p2-opt-mode' }, `${mode.label}: ${mode.text}`),
+      ...optionsOf('reading').filter((o) => o.id !== 'reading').map((o) => {
+        if (o.id === 'normalizer') return optCheck('normalizer', settings.normalizer !== false, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, { disabledWhy: normalizerHost ? '' : 'no model in this build', status: normalizerText() });
+        if (o.id === 'fastPath') return dispatcherEnc ? optCheck('fastPath', settings.fastPath, (v) => { settings.fastPath = v; applyEngineSettings(); save(); }) : null;
+        return optCheck(o.id, o.id === 'spellcheck' ? settings.spellcheck : settings[o.key] !== false && !!settings[o.key], (v) => { settings[o.key] = v; applyEngineSettings(); save(); });
+      }),
     ];
   }
   function languageOptions() {
@@ -1311,49 +1397,55 @@ export async function mountPsys2(element, options = {}) {
     if (d.engine === 'on-device-model') return `Translation: on-device model (bergamot-translator, ${d.size} for both directions, cached in this browser): ${d.state === 'ready' ? 'ready' : d.state === 'error' ? `failed: ${tl.host.state(code).error}` : d.state === 'idle' ? 'not downloaded yet' : `${d.state}…`}.`;
     return 'No translation engine serves this language in this browser.';
   }
-  function languageBody() {
-    return [
-      field('Language', select(languageOptions(), language.get(), (v) => setLanguage(v)), `The language you talk to me in and I answer in. The same as the selector in the header. ${languageEngineNote()}`),
-      field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
-        `Used when the language is not English. Browser on-device translator: ${translator?.translatorState?.() ?? (browserAvail === 'downloadable' || browserAvail === 'downloading' ? 'downloading… the rules translator is used meanwhile' : browserAvail)}. Its output is checked and falls back to the rules translator.`),
-      field('Language hint', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }),
-        `The selected language is the only language: every message is read and answered in it, and the microphone listens in it. The only use of language detection is a one-line hint after a typed message that is clearly in the other language (“Pare engleză — schimb limba?”, with a button; never automatic, never for voice). Browser on-device language detector: ${detectAvail}.`),
-    ];
-  }
   /** The note under the Voice field: the voice that reads the selected language, or an honest "none installed, the default voice is used" (LANG-FIXED item 8). */
   function voiceNote(voices) {
     if (!speechSupport.synthesis) return 'Speech synthesis is not supported by this browser.';
     if (!voices.length) return 'Voices are still loading or none are installed.';
     const tag = speechLangTag(), v = speech?.voiceFor(tag);
-    if (!v) return language.get() === 'ro' ? `No Romanian voice is installed on this device: answers are read with the default voice (it may sound foreign). Install one in the system settings (text-to-speech, Romanian).` : `No ${langName(language.get())} voice is installed on this device: answers are read with the default voice.`;
+    if (!v) return `No ${langName(language.get())} voice is installed on this device: answers are read with the default voice (it may sound foreign). Install one in the system settings (text-to-speech).`;
     return `Reads ${langName(language.get())} with: ${v.name} (${v.lang}).`;
   }
-  function voiceBody() {
+  function languagesBody() {
     const voices = speech?.voices() ?? [];
     const tag = speechLangTag().slice(0, 2);
     const voiceOpts = [['', 'Automatic'], ...voices.filter((v) => v.lang?.startsWith(tag)).map((v) => [v.name, `${v.name} (${v.lang})`])];
     const rateVal = h('output', {}, `${Number(settings.rate).toFixed(1)}×`);
     const rate = h('input', { type: 'range', id: 'p2-f-rate', min: '0.5', max: '1.8', step: '0.1', value: String(settings.rate), disabled: speechSupport.synthesis ? null : true });
     rate.addEventListener('input', () => { settings.rate = Number(rate.value); rateVal.textContent = `${settings.rate.toFixed(1)}×`; save(); });
+    const rateOpt = optionById('rate');
+    const words = addressWordsText(language.get()).map((w) => `“${w}”`);
+    const wakeLabelNote = `Names it listens for: ${words.length > 1 ? `${words.slice(0, -1).join(', ')} or ${words.at(-1)}` : words[0]}.`;
+    const noRec = speechSupport.recognition ? '' : 'speech recognition is not supported';
     return [
-      ...(language.get() === 'en' ? [field('English variant', select([['en-US', 'English (US)'], ['en-GB', 'English (UK)']], language.variant, (v) => { settings.englishVariant = v; language.setVariant(v); save(); renderSettings(); speech?.refreshLang(); }), 'Speech follows the selected language; only the regional variant of English can be chosen here.')] : []),
-      field('Voice', select(voiceOpts, settings.voice, (v) => { settings.voice = v; save(); }), voiceNote(voices)),
-      h('div', { class: 'p2-field' }, h('label', { for: 'p2-f-rate' }, 'Speech rate ', rateVal), rate),
-      check('Keep listening until I say stop (say "stop microphone")', settings.keepListening !== false, (v) => { settings.keepListening = v; save(); syncMic(); }, speechSupport.recognition ? '' : 'speech recognition is not supported'),
-      check('Only respond when I say "PSys2" or "robotule" (ignore other talk)', settings.wakeWord === true, (v) => { settings.wakeWord = v; save(); }, speechSupport.recognition ? '' : 'speech recognition is not supported'),
-      check('Read answers aloud', settings.speaker, (v) => setSpeaker(v), speechSupport.synthesis ? '' : 'speech synthesis is not supported'),
+      optSelect('language', languageOptions(), language.get(), (v) => setLanguage(v), languageEngineNote()),
+      optSelect('translation', [['auto', 'Automatic'], ['browser-api', 'Browser translator first'], ['rules', 'Rules only']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); },
+        `Browser translator: ${translator?.translatorState?.() ?? (browserAvail === 'downloadable' || browserAvail === 'downloading' ? 'downloading… the rules are used meanwhile' : browserAvail)}.`),
+      optSelect('languageHint', [['auto', 'Automatic'], ['browser-api', 'Browser detector'], ['rules', 'Rules only']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }, `Browser language detector: ${detectAvail}.`),
+      ...(language.get() === 'en' ? [optSelect('englishVariant', [['en-US', 'English (US)'], ['en-GB', 'English (UK)']], language.variant, (v) => { settings.englishVariant = v; language.setVariant(v); save(); renderSettings(); speech?.refreshLang(); })] : []),
+      optSelect('voice', voiceOpts, settings.voice, (v) => { settings.voice = v; save(); }, voiceNote(voices)),
+      h('div', { class: 'p2-field p2-opt', 'data-option': 'rate' }, h('label', { for: 'p2-f-rate' }, rateOpt.label, ' ', rateVal), rate, ...optionNotes(rateOpt)),
+      optCheck('keepListening', settings.keepListening !== false, (v) => { settings.keepListening = v; save(); syncMic(); }, { disabledWhy: noRec }),
+      optCheck('wakeWord', settings.wakeWord === true, (v) => { settings.wakeWord = v; save(); }, { disabledWhy: noRec, status: wakeLabelNote }),
+      optCheck('speaker', settings.speaker, (v) => setSpeaker(v), { disabledWhy: speechSupport.synthesis ? '' : 'speech synthesis is not supported' }),
     ];
+  }
+  function privacyBody() {
+    return [phraseLogSection()];
   }
   function renderSettings() {
     if (settingsEl.hidden) return;
-    const prevFocus = setBody.contains(document.activeElement) ? document.activeElement.id : null;
+    const FOCUSABLE = 'button, input, select, a[href], textarea, [tabindex]:not([tabindex="-1"])';
+    const inBody = setBody.contains(document.activeElement);
+    const prevFocus = inBody ? document.activeElement.id : null;
+    const prevIndex = inBody && !prevFocus ? [...setBody.querySelectorAll(FOCUSABLE)].indexOf(document.activeElement) : -1;   // a control without an id keeps focus by its position
     const keep = setBody.scrollTop;
     for (const btn of setTabsEl.children) { const active = btn.dataset.tab === settingsTab; btn.setAttribute('aria-selected', String(active)); btn.tabIndex = active ? 0 : -1; if (active) btn.scrollIntoView?.({ block: 'nearest', inline: 'nearest' }); }
     setBody.setAttribute('aria-labelledby', `p2-st-${settingsTab}`);
-    const bodies = { understanding: understandingBody, language: languageBody, voice: voiceBody, phrases: () => [phraseLogSection()], models: modelsBody, developer: developerBody, about: aboutBody };
+    const bodies = { reading: readingBody, languages: languagesBody, models: modelsBody, privacy: privacyBody, developer: developerBody, about: aboutBody };
     setBody.replaceChildren(...bodies[settingsTab]());
     setBody.scrollTop = keep;
     if (prevFocus) setBody.querySelector(`#${CSS.escape(prevFocus)}`)?.focus();
+    else if (prevIndex >= 0) [...setBody.querySelectorAll(FOCUSABLE)][prevIndex]?.focus();
   }
   // ---------- phrase log ----------
   const plogList = h('ul', { class: 'p2-plog-list', 'aria-label': 'Logged phrases' });
@@ -1393,9 +1485,9 @@ export async function mountPsys2(element, options = {}) {
     fsel.setAttribute('aria-label', 'Filter phrases');
     confirmClear = false;
     renderPhraseLog();
-    return h('div', { class: 'p2-plog' }, h('strong', {}, 'Phrase log'),
-      check('Keep a log of my phrases (stays in this browser)', settings.logPhrases, (v) => { settings.logPhrases = v; save(); renderPhraseLog(); }),
-      check('Include button presses in exports', settings.exportButtons === true, (v) => { settings.exportButtons = v; save(); renderPhraseLog(); }),
+    return h('div', { class: 'p2-plog' }, h('strong', {}, 'History of my messages'),
+      optCheck('logPhrases', settings.logPhrases, (v) => { settings.logPhrases = v; save(); renderPhraseLog(); }),
+      optCheck('exportButtons', settings.exportButtons === true, (v) => { settings.exportButtons = v; save(); renderPhraseLog(); }),
       plogCount, h('div', { class: 'p2-field' }, h('label', {}, 'Show '), fsel), plogList, plogActions);
   }
   let modelsAllowed = false;   // the models load after the page is usable (PERF): the rules answer meanwhile
@@ -1517,6 +1609,7 @@ export async function mountPsys2(element, options = {}) {
   setTimeout(() => { tl.init().then(() => { renderLangSelect(); return tl.prepare(language.get()); }).catch((e) => console.warn('translation layer', e)); }, 0);
 
   // optional capabilities, checked once
+  loadVoiceWords(language.get());   // the voice word lists of a language other than English (translated once, cached)
   if (browserDetectorKind()) browserDetectorAvailability().then((a) => { detectAvail = a; renderSettings(); });
   if (browserTranslatorKind()) browserTranslatorAvailability('ro', 'en').then((a) => { browserAvail = a; if (a === 'downloadable' || a === 'downloading') translator.prepareTranslator?.('ro', 'en').then(renderSettings, () => {}); renderSettings(); });
   else browserAvail = 'not supported by this browser';

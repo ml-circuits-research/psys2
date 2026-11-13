@@ -226,8 +226,12 @@
 
 /* Phrase log (settings) */
 .p2-plog { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+/* SETTINGS-COHERENT 1: the history uses the whole height of its panel at every window size (the list grows, the filter and the buttons stay in view) */
+.p2-modal-body > .p2-plog { flex: 1 1 auto; min-height: 22em; }
+.p2-plog > * { flex: none; }
+.p2-plog > .p2-plog-list { flex: 1 1 auto; }
 .p2-plog-count { margin: 0; color: var(--muted); font-size: 12px; }
-.p2-plog-list { list-style: none; margin: 0; padding: 0; max-height: 240px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); }
+.p2-plog-list { list-style: none; margin: 0; padding: 0; flex: 1 1 auto; min-height: 12em; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); }
 .p2-plog-item { display: flex; gap: 8px; align-items: flex-start; padding: 6px 8px; border-bottom: 1px solid var(--line); }
 .p2-plog-item:last-child { border-bottom: 0; }
 .p2-plog-mode { flex: none; width: 1.4em; text-align: center; }
@@ -328,3 +332,10 @@
 .p2-dbg-build { padding: 2px 16px; font-size: 12px; color: var(--muted, #667); font-family: ui-monospace, monospace; }
 .p2-update { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 6px 14px; border-radius: 16px; font-size: 13px; z-index: 6; }
 .p2-update .p2-btn-text { color: inherit; text-decoration: underline; }
+/* SETTINGS-COHERENT 5: every option says what it does (what / when / small details line) */
+.p2-opt { display: flex; flex-direction: column; gap: 2px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.p2-opt > small { display: block; color: var(--muted); font-size: 12px; line-height: 1.4; }
+.p2-opt > .p2-opt-what { color: var(--ink); font-size: 13px; }
+.p2-opt > .p2-opt-status { color: var(--accent); }
+.p2-opt > .p2-opt-details { opacity: .8; font-size: 11px; }
+.p2-opt-mode { font-size: 13px; }

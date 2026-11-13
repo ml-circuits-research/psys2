@@ -14,6 +14,7 @@ class FakeRec {
 }
 globalThis.window = { SpeechRecognition: FakeRec };
 const { createSpeech, endsOpen, splitCancel } = await import('../docs/webchat/ui/speech.mjs');
+import { installLexicon } from './fixtures/voice-lexicon.mjs';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const TIMING = { plausibleMs: 60, waitMs: 200, handsFreeMs: 300, micStopMs: 40, dryRunMs: 50, rateMs: 0, dupMs: 0 };   // the rate and duplicate filters have their own tests (voice-mobile.test.mjs)
 
@@ -28,7 +29,8 @@ function make({ busy = false, plausible = async (t) => /^(draw a red house|desen
   return { sp, log, rec: () => recs.at(-1), setLang: (l) => { curLang = l; } };
 }
 
-test('endsOpen: connectors and prepositions, English and Romanian', () => {
+test('endsOpen: connectors and prepositions, English and (from the translated lists) a second language', async () => {
+  await installLexicon('ro');
   for (const t of ['draw a red house and', 'make it bigger then', 'go to', 'a house with', 'desenează o casă și', 'apoi', 'du-te la', 'casa cu', 'așază pe', 'draw a house,']) assert.ok(endsOpen(t), t);
   for (const t of ['draw a red house', 'desenează o casă roșie', 'open the music tab']) assert.ok(!endsOpen(t), t);
   assert.deepEqual(splitCancel('draw a house cancel'), { rest: 'draw a house', word: 'cancel' });
@@ -128,7 +130,8 @@ test('EOT2: "play" waits the long pause, and "play little star" after a gap is o
   await sleep(300); assert.deepEqual(b.log.sent.map((m) => [m.text, m.how]), [['play', 'pause-timeout']]);
 });
 
-test('EOT2: a trailing verb, determiner or number waits; a lone number or a full command does not', () => {
+test('EOT2: a trailing verb, determiner or number waits; a lone number or a full command does not', async () => {
+  await installLexicon('ro');
   for (const t of ['play', 'draw a', 'add 3', 'add my', 'make it two', 'cântă', 'adaugă 5']) assert.ok(endsOpen(t), t);
   for (const t of ['3', 'two', 'play little star', 'make a house', 'yes', 'da']) assert.ok(!endsOpen(t), t);
 });

@@ -131,7 +131,18 @@ export const summaryWorlds = (r) => [...new Set(r.segments.map((s) => s.world).f
 /** Export record: every detail of the logged record (segments, readings and wires, timings, feedback, endType, outcome), plus the summary fields. */
 export function exportRecord(r) {
   const { segments, ...rest } = r;
-  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, ...rest, segments };
+  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, routing: routingOf(r), ...rest, segments };
+}
+/**
+ * Routing of one message (SETTINGS-COHERENT item 7), for the wrong-world analysis (scripts/analyze-phrase-log.mjs): the tab that was open (id and its world),
+ * per piece of the message the candidate worlds with their scores and the world finally chosen, and the set of chosen worlds.
+ */
+export function routingOf(r) {
+  const readings = Array.isArray(r?.detail?.readings) ? r.detail.readings : [];
+  const pieces = readings.length
+    ? readings.map((x) => ({ text: x.text ?? null, chosen: x.world ?? null, pattern: x.pattern ?? null, candidates: (x.candidates ?? []).map((c) => ({ world: c.world, score: c.score, valid: c.valid })) }))
+    : (r?.segments ?? []).map((s) => ({ text: s.text ?? null, chosen: s.world ?? null, pattern: s.pattern ?? null, candidates: [] }));
+  return { activeTab: r?.tab ?? null, activeWorld: r?.tabWorld ?? null, chosen: [...new Set(pieces.map((p) => p.chosen).filter(Boolean))], pieces };
 }
 /** Chips are not human phrasing: excluded unless includeChips. */
 export function selectForExport(list, { includeChips = false } = {}) { return list.filter((r) => includeChips || r.source !== 'chip'); }

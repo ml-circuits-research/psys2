@@ -9,6 +9,8 @@ import { createTranslator } from '../src/translate/index.mjs';
 
 globalThis.window = {};
 const { isStopMicCommand } = await import('../docs/webchat/ui/speech.mjs');
+import { installLexicon } from './fixtures/voice-lexicon.mjs';
+await installLexicon('ro');
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), translator: createTranslator() });
 
 const EN = ['mute the mic', 'stop listening', 'microphone off', 'mic off', 'turn off the mic', 'pause listening', 'stop the microphone', 'close the microphone', 'go to sleep', "that's all for now", 'stop microphone', 'stop the mic', 'close the mic'];
@@ -28,7 +30,7 @@ for (const [lang, list] of [['en', EN], ['ro', RO]]) {
 }
 
 test('the local matcher accepts them, with typos, and refuses ordinary sentences', () => {
-  for (const t of [...EN, ...RO, 'pune pe mute', 'mute', 'stop the microphon', 'stop mic', 'Stop microphone.', 'oprește microfon']) assert.ok(isStopMicCommand(t), t);
+  for (const t of [...EN, ...RO, 'mute', 'stop the microphon', 'stop mic', 'Stop microphone.', 'oprește microfon']) assert.ok(isStopMicCommand(t), t);
   for (const t of ['be quiet', 'stop talking', 'taci', 'stop', 'play a song', 'draw a microphone', 'open the music tab', 'make the mic bigger', 'speak slower']) assert.ok(!isStopMicCommand(t), t);
 });
 

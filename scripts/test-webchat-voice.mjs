@@ -389,7 +389,7 @@ export const SCENARIOS = {
       await p2.evaluateOnNewDocument(alwaysVisible);
       await p2.setViewport({ width: 390, height: 844 });
       await p2.evaluateOnNewDocument(fakeSpeech);
-      await p2.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify({ settingsVersion: 2, ...s })); } catch { /* ignore */ } }, { formalizer: 'rules', normalizer: false, showTrace: false, language: 'en' });
+      await p2.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify({ settingsVersion: 2, ...s })); } catch { /* ignore */ } }, { reading: 'rules', formalizer: 'rules', normalizer: false, showTrace: false, language: 'en' });
       await p2.goto(`http://localhost:${c.srvPort}/webchat/index.html`, { waitUntil: 'domcontentloaded' });
       await p2.waitForFunction(() => document.querySelector('.p2-msg.is-hint'), { timeout: 120000, polling: 50 });
       await p2.click('button.p2-mic');

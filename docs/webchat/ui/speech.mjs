@@ -7,57 +7,52 @@ const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined
 export const speechSupport = { recognition: !!Recognition, synthesis: !!synth && typeof SpeechSynthesisUtterance !== 'undefined' };
 import { LANG_TAGS, langTag } from './language.mjs';
 
-/** Words after which a sentence is clearly not finished (connectors and prepositions, English and Romanian). */
-const OPEN_ENDINGS = new Set(['and', 'then', 'to', 'with', 'or', 'but', 'a', 'an', 'the', 'of', 'in', 'on', 'at', 'for', 'from', 'by', 'next', 'also', 'plus', 'into', 'onto', 'near', 'behind', 'under', 'over', 'between', 'than', 'that', 'which', 'if', 'because', 'while', 'so',
-  'și', 'si', 'apoi', 'la', 'cu', 'pe', 'sau', 'dar', 'un', 'o', 'de', 'din', 'în', 'pentru', 'lângă', 'langa', 'după', 'dupa', 'sub', 'peste', 'între', 'intre', 'că', 'ca', 'care', 'dacă', 'daca', 'iar', 'ci', 'spre', 'către', 'catre', 'prin']);
+import { SOURCE, extraWords } from './voice-words.mjs';
+// SETTINGS-COHERENT 3: the word lists are English; another language adds its own, translated once by the translation layer (ui/voice-words.mjs).
+const list = (name) => new Set([...SOURCE[name], ...extraWords(name)]);
 const fold = (t) => norm(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[-]+/g, ' ');
 const lev = (a, b) => { const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length]; };
 /** Word match tolerant to recognizer typos: exact, or a small edit distance for longer words. */
-const near = (w, list) => list.some((x) => w === x || (x.length >= 5 && w.length >= 4 && lev(w, x) <= (x.length >= 7 ? 2 : 1)));
-const STOP_VERBS = ['stop', 'pause', 'pauza', 'close', 'end', 'quit', 'disable', 'mute', 'kill', 'shut', 'opreste', 'inchide', 'stinge', 'termina', 'dezactiveaza', 'gata'];
-const MIC_NOUNS = ['mic', 'mike', 'microphone', 'microfon', 'microfonul', 'listening', 'recording', 'ascultarea', 'asculta', 'ascultare', 'ascultatul'];
-const STOP_FILLER = new Set(['the', 'my', 'your', 'a', 'please', 'now', 'ok', 'okay', 'hey', 'te', 'rog', 'va', 'acum', 'cu', 'pls', 'turn', 'switch', 'put', 'let', 's', 'us', 'you', 'can', 'could', 'will', 'would', 'to', 'it', 'is', 'will', 'be', 'that']);
+const near = (w, words) => [...words].some((x) => w === x || (x.length >= 5 && w.length >= 4 && lev(w, x) <= (x.length >= 7 ? 2 : 1)));
+const STOP_FILLER = new Set(['the', 'my', 'your', 'a', 'please', 'now', 'ok', 'okay', 'hey', 'pls', 'turn', 'switch', 'put', 'let', 's', 'us', 'you', 'can', 'could', 'will', 'would', 'to', 'it', 'is', 'be', 'that']);
 /**
- * True when the whole utterance asks to switch the microphone off (English or Romanian, tolerant to recognizer typos):
- * "stop microphone", "stop the mic", "mic off", "turn off the microphone", "stop listening", "that's all", "oprește microfonul", "gata cu microfonul", "nu mai asculta".
+ * True when the whole utterance asks to switch the microphone off, tolerant to recognizer typos: "stop microphone", "stop the mic", "mic off", "turn off the microphone",
+ * "stop listening", "that's all". English, plus the same phrases translated for the selected language (voice-words); a typed command in any language also reaches the world through the translator.
  */
 export function isStopMicCommand(text) {
   const w = fold(text).split(' ').filter(Boolean);
   if (!w.length || w.length > 7) return false;
   const j = w.join(' ');
-  if (/^(that s all|thats all|that is all|that will be all|that s it for now|that s all for now|thats all for now|that is all for now|asta e tot|atat e tot|gata atat|mute|go to sleep|pune pe mute|taci din ascultat|gata cu ascultatul|microfon oprit|microfonul oprit)$/.test(j)) return true;
-  if (/^(mute|pause|stop) (the |my )?(mic|mike|microphone|listening)$/.test(j) || /^(pause|pauza) (ascultarea|microfonul)$/.test(j)) return true;
-  if (w.length >= 3 && w[0] === 'nu' && w[1] === 'mai' && near(w[2], ['asculta', 'inregistra'])) return w.length === 3;
+  if (/^(that s all|thats all|that is all|that will be all|that s it for now|that s all for now|thats all for now|that is all for now|mute|go to sleep)$/.test(j)) return true;
+  if (/^(mute|pause|stop) (the |my )?(mic|mike|microphone|listening)$/.test(j)) return true;
+  if (extraWords('stopPhrases').some((p) => j === p || (p.length >= 8 && lev(j, p) <= 1))) return true;
+  const micNouns = list('micNouns'), stopVerbs = list('stopVerbs');
+  micNouns.add('mike');
   const core = w.filter((x) => !STOP_FILLER.has(x));
   if (!core.length || core.length > 3) return false;
-  const noun = core.some((x) => near(x, MIC_NOUNS));
-  if (!noun) return false;
-  const verb = core.some((x) => near(x, STOP_VERBS) || x === 'off' || x === 'oprit' || x === 'oprire' || near(x, ['opreste']));
-  const micOff = core.some((x) => near(x, ['mic', 'mike', 'microphone', 'microfon', 'microfonul'])) && core.some((x) => x === 'off' || x === 'oprit');
+  if (!core.some((x) => near(x, micNouns))) return false;
+  const verb = core.some((x) => near(x, stopVerbs) || x === 'off');
+  const micOff = core.some((x) => near(x, ['mic', 'mike', 'microphone', ...extraWords('micNouns')])) && core.some((x) => x === 'off');
   return verb || micOff;
 }
 /** Words after which a command is clearly not finished: command verbs ("play", "draw a"), determiners and numbers ("add 3"). EOT2: they wait the long pause. */
-const OPEN_VERBS = new Set(['play', 'draw', 'add', 'make', 'open', 'show', 'create', 'set', 'delete', 'remove', 'put', 'move', 'change', 'write', 'start', 'give', 'tell', 'find', 'search', 'call', 'name', 'rename', 'select', 'insert', 'append', 'turn', 'switch', 'go', 'take', 'bring', 'place', 'paint', 'color', 'colour', 'fill', 'rotate', 'resize', 'increase', 'decrease', 'sing',
-  'cântă', 'canta', 'redă', 'reda', 'desenează', 'deseneaza', 'adaugă', 'adauga', 'fă', 'fa', 'deschide', 'arată', 'arata', 'creează', 'creeaza', 'pune', 'mută', 'muta', 'șterge', 'sterge', 'schimbă', 'schimba', 'scrie', 'caută', 'cauta', 'dă', 'spune', 'numește', 'numeste', 'selectează', 'selecteaza', 'inserează', 'insereaza']);
-const OPEN_DETERMINERS = new Set(['this', 'these', 'those', 'some', 'my', 'your', 'his', 'her', 'its', 'our', 'their', 'another', 'every', 'each', 'any', 'acest', 'această', 'aceasta', 'acești', 'niște', 'nişte', 'nişte', 'meu', 'mea', 'tău', 'tau']);
-const NUMBER_WORDS = new Set(['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'twenty', 'thirty', 'forty', 'fifty', 'hundred', 'zece', 'unu', 'doi', 'două', 'doua', 'trei', 'patru', 'cinci', 'șase', 'sase', 'șapte', 'sapte', 'opt', 'nouă', 'noua', 'douăzeci', 'sută', 'suta']);
-const isNumberWord = (w) => /^\d+([.,]\d+)?$/.test(w) || NUMBER_WORDS.has(w);
-export const CANCEL_WORDS = ['stop', 'cancel', 'anulează', 'anuleaza'];
+const isNumberWord = (w) => /^\d+([.,]\d+)?$/.test(w) || list('numbers').has(w);
+export const CANCEL_WORDS = SOURCE.cancel;
 const norm = (t) => String(t ?? '').toLowerCase().replace(/[.,!?;:"“”'’]+/g, ' ').replace(/\s+/g, ' ').trim();
 /** True when the text ends in a connector or a preposition (the speaker is clearly going on). */
 export function endsOpen(text) {
-  const w = norm(text).split(' ').filter(Boolean);
+  const w = fold(text).split(' ').filter(Boolean);
   if (w.length === 0) return true;
   const last = w[w.length - 1];
-  if (OPEN_ENDINGS.has(last) || /[,:;]\s*$/.test(String(text).trim())) return true;
-  if (OPEN_VERBS.has(last) || OPEN_DETERMINERS.has(last)) return true;   // "play", "draw a", "add my"
+  if (list('openEndings').has(last) || /[,:;]\s*$/.test(String(text).trim())) return true;
+  if (list('openVerbs').has(last) || list('determiners').has(last)) return true;   // "play", "draw a", "add my"
   return isNumberWord(last) && w.length > 1;   // "add 3" goes on; a lone number is a complete answer
 }
 /** "draw a red house cancel" -> { rest: "draw a red house", word: "cancel" }; the whole text being the word gives rest "". Otherwise null. */
 export function splitCancel(text) {
-  const w = norm(text).split(' ').filter(Boolean);
+  const w = fold(text).split(' ').filter(Boolean);
   const last = w[w.length - 1];
-  if (!last || !CANCEL_WORDS.includes(last)) return null;
+  if (!last || !list('cancel').has(last)) return null;
   return { rest: w.slice(0, -1).join(' '), word: last };
 }
 /** Pauses of the end-of-turn detector (ms): plausible sentence, not plausible yet, not plausible in hands-free, after the mic was stopped; the dry run's own deadline. */
@@ -65,16 +60,17 @@ export const VOICE_TIMING = { plausibleMs: 700, waitMs: 1800, handsFreeMs: 2500,
   finalSettleMs: 700, dupMs: 10000, dupDist: 0.2, rateMs: 2000, fragMax: 4, fragWindowMs: 10000, restartCap: 30, restartWindowMs: 60000, maxWords: 25, slowDryStrikes: 2 };
 
 /** Folded (no diacritics) one-word fragments: articles, pronouns, prepositions, fillers, and words the recogniser cuts out of a longer phrase. */
-export const FRAGMENT_WORDS = new Set(['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'he', 'she', 'we', 'they', 'you', 'i', 'me', 'my', 'is', 'are', 'was', 'be', 'do', 'does', 'did', 'to', 'of', 'in', 'on', 'at', 'for', 'and', 'or', 'but', 'so', 'if', 'what', 'who', 'why', 'how', 'when', 'where', 'which', 'there', 'here', 'uh', 'um', 'er', 'ah', 'oh', 'hm', 'hmm', 'mm', 'yeah', 'yes', 'no', 'ok', 'okay', 'yep', 'nope', 'sure',
-  'o', 'un', 'nista', 'ce', 'de', 'da', 'nu', 'asta', 'aceasta', 'acesta', 'acela', 'aia', 'eu', 'tu', 'el', 'ea', 'noi', 'voi', 'ei', 'ele', 'ma', 'te', 'se', 'si', 'sau', 'dar', 'ca', 'cu', 'la', 'pe', 'din', 'in', 'pentru', 'fi', 'e', 'este', 'sunt', 'am', 'ai', 'au', 'face', 'fac', 'faci', 'mama', 'tata', 'bine', 'hai', 'pai', 'aha', 'uite', 'cum', 'cand', 'unde', 'care', 'cine', 'mai', 'tot', 'foarte', 'scuze', 'enervant', 'mare']);
+export const FRAGMENT_WORDS = new Set(['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'he', 'she', 'we', 'they', 'you', 'i', 'me', 'my', 'is', 'are', 'was', 'be', 'do', 'does', 'did', 'to', 'of', 'in', 'on', 'at', 'for', 'and', 'or', 'but', 'so', 'if', 'what', 'who', 'why', 'how', 'when', 'where', 'which', 'there', 'here', 'uh', 'um', 'er', 'ah', 'oh', 'hm', 'hmm', 'mm', 'yeah', 'yes', 'no', 'ok', 'okay', 'yep', 'nope', 'sure']);
+const fragmentWords = () => new Set([...FRAGMENT_WORDS, ...extraWords('fragments')]);
 /** One-word commands that are never fragments. */
-export const KNOWN_ONE_WORD = new Set(['stop', 'undo', 'redo', 'help', 'next', 'back', 'again', 'cancel', 'reset', 'clear', 'pause', 'resume', 'ajutor', 'anuleaza', 'inapoi', 'urmatorul', 'opreste', 'refa', 'sterge']);
+export const KNOWN_ONE_WORD = new Set(['stop', 'undo', 'redo', 'help', 'next', 'back', 'again', 'cancel', 'reset', 'clear', 'pause', 'resume']);
+const knownOneWord = () => new Set([...KNOWN_ONE_WORD, ...extraWords('knownOneWord')]);
 /** True for a one- or two-word voice message that is only fragment words (see FRAGMENT_WORDS). `allowShort(text)` says the word answers an open question or a game move. */
 export function isFragment(text, { allowShort } = {}) {
   const w = fold(text).split(' ').filter(Boolean);
   if (w.length < 1 || w.length > 2) return false;
-  if (w.some((x) => KNOWN_ONE_WORD.has(x))) return false;
-  if (!w.every((x) => FRAGMENT_WORDS.has(x) || x.length <= 2)) return false;   // one or two words, all of them articles, pronouns, fillers ("o ce", "de asta")
+  if (w.some((x) => knownOneWord().has(x))) return false;
+  if (!w.every((x) => fragmentWords().has(x) || x.length <= 2)) return false;   // one or two words, all of them articles, pronouns, fillers ("o ce", "de asta")
   return !allowShort?.(text);
 }
 /** Android returns growing prefixes as separate finals. `next` replaces `prev` when it extends, contains or repeats it (or is a piece of it); otherwise it is appended. */

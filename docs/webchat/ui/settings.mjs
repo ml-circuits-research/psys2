@@ -6,12 +6,30 @@ import { TIME_LIMIT_DEFAULTS } from '../lib/dialog/time-limits.mjs';
 import { normalize as normalizeLanguage, browserLanguage, EN_VARIANTS } from './language.mjs';
 
 /** Bumped whenever a default changes in a way saved settings must follow once. */
-export const SETTINGS_VERSION = 4;
+export const SETTINGS_VERSION = 5;
 export const SETTINGS_KEY = 'psys2.webchat.settings';
+
+/** SETTINGS-COHERENT 2: the one "How I read your messages" choice. The engine still reads `formalizer` and `nxStrategy`; they are derived from `reading`. */
+export const READING_VALUES = Object.freeze(['hybrid', 'model', 'rules']);
+export const DEFAULT_READING = 'hybrid';
+/** The `reading` value an older pair of settings meant (formalizer 'rules' or strategy 'rules' = rules only; strategy 'neural' = model first; anything else hybrid). */
+export function readingFrom(s) {
+  if (s?.formalizer === 'rules' || s?.nxStrategy === 'rules') return 'rules';
+  if (s?.nxStrategy === 'neural') return 'model';
+  return 'hybrid';
+}
+/** Sets `formalizer` and `nxStrategy` from `reading` (in place; returns the object). */
+export function applyReading(s) {
+  if (!READING_VALUES.includes(s.reading)) s.reading = DEFAULT_READING;
+  s.formalizer = s.reading === 'rules' ? 'rules' : 'encoder';
+  s.nxStrategy = s.reading === 'model' ? 'neural' : s.reading === 'rules' ? 'rules' : 'hybrid';
+  return s;
+}
 
 export const DEFAULT_SETTINGS = {
   settingsVersion: SETTINGS_VERSION,
   language: 'en',
+  reading: DEFAULT_READING,       // Settings › Reading › How I read your messages: 'hybrid' (default on every device) | 'model' | 'rules'; formalizer and nxStrategy below follow it
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
   timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
   reasoner: 'matrix',             // Settings › Developer › Reasoner (spec 15): 'matrix' (default; the worlds that ship a matrix answer through the sopworld library) | 'ops' (the fallback); read when the engine starts
@@ -26,6 +44,8 @@ export const DEFAULT_SETTINGS = {
  *   default and not necessarily a choice; every later explicit choice is saved with the current version and respected.
  *   v3 (LANG-FIXED): the language is always 'en' or 'ro': a saved 'auto' (or anything else) becomes the browser language (`ro*` -> ro, otherwise en) and is saved.
  *   v4 (matrix is the default, user decision 2026-11-11): the reasoner was saved as 'ops' by the old default and a saved value cannot tell a choice from that default, so every saved 'ops' becomes 'matrix' once; a later explicit 'ops' is saved with v4 and respected.
+ *   v5 (SETTINGS-COHERENT): "Formalizer" and "Reading strategy" became one `reading` choice. Two overlapping selects could not be told apart, so a value saved by either cannot be told from a
+ *   confused choice: every saved profile is reset to hybrid once; a later explicit choice is saved with v5 and respected (a v5 profile without `reading` takes it from formalizer / nxStrategy).
  *   The Voice setting `speechLang` is gone: speech follows the selected language; only an English regional variant (en-US / en-GB) is kept, from a saved 'en-GB'.
  * Returns { settings, migrated }.
  */
@@ -48,6 +68,9 @@ export function migrateSettings(saved, navLang = globalThis.navigator?.language)
   if (from < 4) { if (s.reasoner === 'ops') s.reasoner = 'matrix'; migrated = true; }
   if (s.reasoner !== 'ops') s.reasoner = 'matrix';   // an unknown saved value is the default
   s.nxStrategy = normalizeNxStrategy(s.nxStrategy);   // ADR-009: an unknown saved value falls back to the default
+  if (from < 5) { s.reading = READING_VALUES.includes(saved?.reading) ? saved.reading : DEFAULT_READING; migrated = true; }   // `reading` never existed before v5: only a test harness or a hand-edited profile has it
+  else if (!READING_VALUES.includes(saved?.reading)) s.reading = readingFrom(s);
+  applyReading(s);
   return { settings: s, migrated };
 }
 
