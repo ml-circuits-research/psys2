@@ -143,7 +143,8 @@ async function build(dir) {
 }
 
 // ---------------------------------------------------------------- the routers
-const norm = (p, mask) => { if (!p) return null; const q = { ...p }; for (const m of mask) delete q[m]; const t = Object.values(q).reduce((a, b) => a + b, 0) || 1; for (const k of Object.keys(q)) q[k] /= t; return q; };
+// a world the encoder has no label for has no probability at all: its prior is ABSENT (not zero, not renormalised onto the others)
+const norm = (p, mask) => { if (!p) return null; const q = { ...p }; for (const m of mask) delete q[m]; return q; };
 const top3 = (p) => Object.entries(p).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([world, score]) => ({ world, score }));
 const verdict = (gold, world) => (world == null ? 'asked' : gold.world ? (world === gold.world ? 'right' : 'wrong') : gold.not.includes(world) ? 'wrong' : 'right');
 
@@ -153,7 +154,9 @@ async function run(dir, out) {
   const items = JSON.parse(readFileSync(join(dir, 'inputs.json'), 'utf8'));
   const enc = new Map(readFileSync(join(dir, 'enc-out.jsonl'), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).map((r) => [r.id, r.p]));
   const reuse = arg('reuse-a') ? JSON.parse(readFileSync(resolve(arg('reuse-a')), 'utf8')) : null;   // the A column of an earlier run of the same inputs (the validator is the slow part)
-  const weights = (arg('prior-weights', '') || '').split(',').filter(Boolean).map(Number);
+  // prior configurations to sweep: `30` (fixed points) or `a60:8:45` (adaptive: max:min:span)
+  const parseW = (x) => (x.startsWith('a') ? (([max, min, span, conf]) => ({ max, min, span, conf: conf ?? 0 }))(x.slice(1).split(':').map(Number)) : Number(x));
+  const weights = (arg('prior-weights', '') || '').split(',').filter(Boolean);
   const validator = flag('no-validator') || reuse ? null : createDispatchValidator({ engine, policy: policyFromSettings(runtimeSettings()) });
   const noTalk = new Set(mw.worlds.filter((w) => w !== 'talk'));
   const rows = [];
@@ -184,9 +187,9 @@ async function run(dir, out) {
     r.B = dec({}); r.C = dec({ prior: norm(p, []) });
     r.Bt = dec({}, noTalk); r.Ct = dec({ prior: norm(p, []) }, noTalk);   // without the talk card
     r.sweep = {};
-    for (const wt of weights) r.sweep[wt] = dec({ prior: norm(p, []), weight: wt }, noTalk);
+    for (const wt of weights) r.sweep[wt] = dec({ prior: norm(p, []), weight: parseW(wt) }, noTalk);
     r.holdout = {};
-    for (const h of HOLDOUT) { r.holdout[h] = { C: dec({ prior: norm(p, [h]) }, noTalk) }; if (weights.length) r.holdout[h].light = dec({ prior: norm(p, [h]), weight: 15 }, noTalk);  }   // (a lighter prior, 15 points, for the hold-out)
+    for (const h of HOLDOUT) { r.holdout[h] = { C: dec({ prior: norm(p, [h]) }, noTalk), sw: {} }; if (x.gold.world === h) for (const wt of weights) r.holdout[h].sw[wt] = dec({ prior: norm(p, [h]), weight: parseW(wt) }, noTalk); }
     rows.push(r);
   }
   writeFileSync(join(dir, 'rows.json'), JSON.stringify(rows));
@@ -215,14 +218,16 @@ function report(rows, out) {
     res.holdout[h] = { own: o, all: a };
     lines.push(`${h}: own n=${own.n}  A ${pct(o.A_trained.right, own.n)}  C ${pct(o.C_trained.right, own.n)}  C masked ${pct(o.C_masked.right, own.n)}  B ${pct(o.B.right, own.n)}   | all n=${rows.length}  A ${pct(a.A_trained.right, rows.length)}  C ${pct(a.C_trained.right, rows.length)}  C masked ${pct(a.C_masked.right, rows.length)}  B ${pct(a.B.right, rows.length)}`);
   }
-  if (rows[0]?.sweep) {
-    lines.push('', 'prior weight sweep (C, right %): the prior is weight x probability, in points');
+  if (Object.keys(rows[0]?.sweep ?? {}).length) {
+    lines.push('', 'prior weight sweep (C without the talk card, right %): `30` = fixed points; `aMAX:MIN:SPAN` = adaptive (max when no world leads, min when one leads by SPAN points)');
     const ws = Object.keys(rows[0].sweep);
-    lines.push('set'.padEnd(16) + ws.map((w) => `w=${w}`.padStart(8)).join(''));
+    lines.push('set'.padEnd(16) + ws.map((w) => w.padStart(11)).join(''));
     res.sweep = {};
-    for (const [s, rs] of all) { res.sweep[s] = Object.fromEntries(ws.map((w) => [w, pct(rs.filter((r) => r.sweep[w].v === 'right').length, rs.length)])); lines.push(s.padEnd(16) + ws.map((w) => String(res.sweep[s][w]).padStart(8)).join('')); }
-    lines.push('hold-out, own messages, right %: C masked at 30 points / at 15 points');
-    for (const h of HOLDOUT) { const own = rows.filter((r) => r.gold.world === h); res.holdout[h].light = pct(own.filter((r) => (r.holdout[h].light ?? r.holdout[h].C).v === 'right').length, own.length); lines.push(`${h}: ${pct(res.holdout[h].own.C_masked.right, own.length)} / ${res.holdout[h].light}`); }
+    for (const [s, rs] of all) { res.sweep[s] = Object.fromEntries(ws.map((w) => [w, pct(rs.filter((r) => r.sweep[w].v === 'right').length, rs.length)])); lines.push(s.padEnd(16) + ws.map((w) => String(res.sweep[s][w]).padStart(11)).join('')); }
+    const ops = rows.filter((r) => r.set === 'wrong-tab-ops');
+    lines.push('hold-out, own messages, right %: C masked (the encoder never saw the world), per configuration');
+    res.sweepHoldout = {};
+    for (const h of HOLDOUT) { const own = rows.filter((r) => r.gold.world === h); res.sweepHoldout[h] = Object.fromEntries(ws.map((w) => [w, { masked: pct(own.filter((r) => r.holdout[h].sw[w].v === 'right').length, own.length), trained: pct(own.filter((r) => r.sweep[w].v === 'right').length, own.length) }])); lines.push(`${h.padEnd(16)}` + ws.map((w) => `${res.sweepHoldout[h][w].trained}/${res.sweepHoldout[h][w].masked}`.padStart(11)).join('')); }
   }
   const talk = rows.filter((r) => r.gold.world === 'talk');
   // what a card costs the worlds that have none of its messages: the same sets with and without the talk card
