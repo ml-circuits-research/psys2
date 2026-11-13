@@ -16,10 +16,9 @@ import { lexIndex } from '../worlds/lexicon.mjs';
 import { editDistance } from './rules/index.mjs';
 import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs';
 
-const now = () => globalThis.performance?.now?.() ?? Date.now();
 const WORD = /[A-Za-zÀ-ɏ]+/g;
 const QUOTE = /"[^"]*"|“[^”]*”/g;
-export const NAME_LIMITS = { maxWindows: 16, maxPerWindow: 3, maxTexts: 6, budgetMs: 30, maxWords: 4, minLength: 4 };
+export const NAME_LIMITS = { maxWindows: 16, maxPerWindow: 3, maxTexts: 6, maxSteps: 4000, maxWords: 4, minLength: 4 };
 
 /** Wrapper kind of a lexicon id: which `lang.wrap.<kind>.*` phrases apply to its values. */
 export const WRAP_KINDS = [['place', /\.places$/], ['song', /songtitles$/], ['document', /\.docs$/]];
@@ -60,7 +59,7 @@ export function nameIndex(set) {
 export function nameCandidates(text, { set, vocab = spellVocabulary(set), worldOrder = [], limits = {} } = {}) {
   const L = { ...NAME_LIMITS, ...limits };
   const idx = nameIndex(set);   // built once per world set, outside the time budget
-  const t0 = now();
+  let steps = 0;   // work counted in steps (windows looked at, edit distances computed), never in milliseconds: the result must not depend on machine speed
   const quoted = [...text.matchAll(QUOTE)].map((m) => [m.index, m.index + m[0].length]);
   const toks = [...text.matchAll(WORD)].map((m) => ({ raw: m[0], lower: m[0].toLowerCase(), start: m.index, end: m.index + m[0].length })).filter((t) => !quoted.some(([a, b]) => t.start >= a && t.end <= b)).slice(0, 80);
   if (!toks.length) return [];
@@ -72,7 +71,7 @@ export function nameCandidates(text, { set, vocab = spellVocabulary(set), worldO
   outer: for (let i = 0; i < toks.length; i++) {
     for (let n = Math.min(L.maxWords, toks.length - i); n >= 1; n--) {
       if (n > 1 && !contiguous(toks[i + n - 2], toks[i + n - 1])) continue;
-      if (now() - t0 > L.budgetMs) break outer;
+      if (++steps > L.maxSteps) break outer;
       const win = toks.slice(i, i + n);
       const key = win.map((t) => t.lower).join(' ');
       if (key.length < L.minLength || key.length > 40) continue;
@@ -86,6 +85,7 @@ export function nameCandidates(text, { set, vocab = spellVocabulary(set), worldO
       for (let len = key.length - maxEdits; len <= key.length + maxEdits; len++) {
         for (const e of idx.byLen.get(len) ?? []) {
           if (bagDiff(kb, e.bag) > 2 * maxEdits) continue;
+          steps++;
           const d = editDistance(key, e.key, maxEdits);
           if (d <= maxEdits) hits.push({ e, d });
         }

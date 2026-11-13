@@ -71,12 +71,9 @@ test('abort in the middle of a turn that already changed the state (host undo sn
   assert.equal(s._msg, undo.msg);
 });
 
-test('soft deadline: searching stages stop and the best reading so far stands (no throw)', async () => {
-  const s = fresh();
-  const t0 = performance.now();
-  const r = await s.send('if i add eight and seven what do i gte', { signal: new AbortController().signal, hardMs: 20000, softMs: 0 });
-  assert.ok(r.text, 'an answer');
-  assert.ok(performance.now() - t0 < 1500, `degraded quickly (${Math.round(performance.now() - t0)} ms)`);
+test('softMs is accepted but has no clock: the reading is the same as without it (no throw)', async () => {
+  const say = (opts) => fresh().send('if i add eight and seven what do i gte', opts).then((r) => r.text);
+  assert.equal(await say({ signal: new AbortController().signal, hardMs: 20000, softMs: 0 }), await say({ signal: new AbortController().signal, hardMs: 20000 }));
 });
 
 test('restrictedSet is memoized per world set (the HANG task root of slow typo turns)', () => {

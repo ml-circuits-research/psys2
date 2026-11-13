@@ -2,7 +2,9 @@
 /**
  * Test runner: tests/*.test.mjs with node:test, one process per file, `--test-concurrency` = jobs.
  *
- *   npm test               fast mandatory suite (default): every unit/behaviour test; exhaustive sweeps on a deterministic ~10% sample
+ *   npm run test:smoke     --smoke: the SMOKE list below (under 2 minutes on 4 cores; every commit): PSYS2_SUITE=smoke, sweeps sampled, no browser, no model
+ *   npm test               --full (package.json): everything below, i.e. the full suite; before each webchat publish, after a sopworld re-vendor, daily
+ *   npm run test:fast      fast suite (what `npm test` used to be; the default of this script): every unit/behaviour test; exhaustive sweeps on a deterministic ~10% sample
  *                          (seed PSYS2_SAMPLE_SEED, default today's date, printed); full-only tests (`*.full.test.mjs` files and
  *                          `fullOnly()` tests from tests/helpers.mjs) and browser tests are skipped; worlds touched by the diff against
  *                          origin/main run their sweeps in full (`--changed`, on by default in the fast suite, `--no-changed` turns it off)
@@ -22,7 +24,7 @@ import { parseJobs } from './lib/shard.mjs';
 
 const argv = process.argv.slice(2);
 const jobs = parseJobs(argv);
-const flags = new Set(['--full', '--browser', '--changed', '--no-changed']);
+const flags = new Set(['--full', '--browser', '--smoke', '--changed', '--no-changed']);
 const rest = [];
 let seedArg;
 for (let i = 0; i < argv.length; i++) {
@@ -31,8 +33,9 @@ for (let i = 0; i < argv.length; i++) {
   else if (!flags.has(argv[i])) rest.push(argv[i]);
 }
 const browserOnly = argv.includes('--browser');
+const smoke = argv.includes('--smoke');
 const full = argv.includes('--full') || browserOnly;
-const useChanged = !full && !argv.includes('--no-changed');
+const useChanged = !full && !smoke && !argv.includes('--no-changed');
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const git = (args) => { const r = spawnSync('git', args, { cwd: root, encoding: 'utf8' }); return r.status === 0 ? r.stdout.split('\n').filter(Boolean) : null; };
@@ -49,14 +52,40 @@ function changedWorlds() {
 
 const all = readdirSync(join(root, 'tests')).filter((f) => f.endsWith('.test.mjs')).sort();
 const isBrowser = (f) => readFileSync(join(root, 'tests', f), 'utf8').includes('PUPPETEER_CORE');
+/** SMOKE suite (specs/06 "Testing"): by regression kind, see worker-log.md. Keep the total under 2 minutes on 4 cores (`taskset -c 0-3 npm run test:smoke`). */
+const SMOKE = [
+  'smoke.test.mjs',
+  'reasoner-restore.test.mjs',
+  'reasoner-worlds-apart.test.mjs',
+  'world-aware.test.mjs',
+  'keep-list.test.mjs',
+  'mt-layer.test.mjs',
+  'knowledge-lookup.test.mjs',
+  'budget.test.mjs',
+  'loop-guard.test.mjs',
+  'turn-guard.test.mjs',
+  'rd10-names-capability.test.mjs',
+  'tab-short-names.test.mjs',
+  'coherence-both.test.mjs',
+  'regression-ab.test.mjs',
+  'routing.test.mjs',
+  'reader-route.test.mjs',
+  'ab-gate.test.mjs',
+  'perf-round2.test.mjs',
+  'ellipsis-one.test.mjs',
+  'self-correction.test.mjs',
+  'translate-session.test.mjs',
+  'reasoner-draw-diagram.test.mjs',
+];
 const files = all.filter((f) => {
+  if (smoke) return SMOKE.includes(f);
   if (browserOnly) return isBrowser(f);
   if (full) return true;
   return !isBrowser(f) && !f.endsWith('.full.test.mjs');
 }).map((f) => join('tests', f));
 
-const suite = browserOnly ? 'browser' : full ? 'full' : 'fast';
-const env = { ...process.env, PSYS2_SUITE: full ? 'full' : 'fast' };
+const suite = browserOnly ? 'browser' : full ? 'full' : smoke ? 'smoke' : 'fast';
+const env = { ...process.env, PSYS2_SUITE: full ? 'full' : smoke ? 'smoke' : 'fast' };
 const seed = seedArg || process.env.PSYS2_SAMPLE_SEED || new Date().toISOString().slice(0, 10);
 env.PSYS2_SAMPLE_SEED = seed;
 let changed = [];

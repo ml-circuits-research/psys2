@@ -147,3 +147,24 @@ test('RD1b: a lone valid word ("next") is never swapped for a neighbour', async 
   const r = await s.send('next');
   assert.ok(!/neat/.test(r.text), r.text);
 });
+
+// ---- result independent of machine speed ----------------------------------------------------------------------------------------------
+test('names: the reading does not depend on the clock (frozen, busy and very slow clocks give the same reading)', async () => {
+  const real = performance.now.bind(performance);
+  const readings = [];
+  try {
+    for (const step of [0, 50, 5000]) {   // frozen, a busy machine (50 ms per call), an extremely slow one (5 s per call)
+      let t = 0;
+      performance.now = step === 0 ? () => 0 : () => (t += step);
+      const out = [];
+      for (const [tab, said] of [['map', 'show Pariss on map'], ['map', 'show New Youk'], ['avatar', 'show Londn']]) {
+        const r = await open(tab).send(said);
+        out.push(JSON.stringify(r.segments.map((x) => [!!x.unparsed, x.match?.worldId ?? null, x.corrections ?? null])));   // the reading (an operation may still hit its own visible time cap)
+      }
+      readings.push(out.join('\n'));
+    }
+  } finally { performance.now = real; }
+  assert.ok(/pariss/i.test(readings[0]) && !readings[0].includes("true"), readings[0]);
+  assert.equal(readings[1], readings[0]);
+  assert.equal(readings[2], readings[0]);
+});

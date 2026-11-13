@@ -5,8 +5,8 @@
  * formalize(text, { worlds, session, source }) -> { segments, wires }
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
-import { guard } from '../guard.mjs?v=ded769d6bc';
-import { perf } from '../perf.mjs?v=fd62b893eb';
+import { guard } from '../guard.mjs?v=5528007fa9';
+import { perf } from '../perf.mjs?v=06e451c3d4';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=e3316469a7';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=5de885797a';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=0d5858577e';
