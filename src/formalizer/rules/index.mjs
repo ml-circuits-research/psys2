@@ -401,7 +401,6 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   }
   // DECLINE (spec 21): a world may export `accepts({ action, roles, text, state })`; when it returns false the world does not own this reading ("draw a house" is not a face part),
   // so its match is dropped before routing and the next world reads the message. Pure, and every pass ticks the budget; it only looks at the words of the roles.
-  const strongOnes = new Set();
   for (let k = matches.length - 1; k >= 0; k--) {
     budget.tick('rules.accepts');
     const m = matches[k], acc = set.get(m.pattern.worldId)?.ops?.accepts;
@@ -410,17 +409,9 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
     let ok = true, strong = false;
     try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false; strong = verdict === 'focus'; } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
-    if (!ok) { matches.splice(k, 1); continue; }
-    if (strong) strongOnes.add(m);
-  }
-  // second pass: the readings that survived every world's decline decide who yields (a reading another world declined is no competitor: "draw a sea" is not a chess draw)
-  for (let k = matches.length - 1; k >= 0; k--) {
-    const m = matches[k], acc = set.get(m.pattern.worldId)?.ops?.accepts;
-    if (typeof acc !== 'function') continue;
-    let ok = true; const strong = strongOnes.has(m);
     // a world with a decline hook is a schema world whose forms keep free slots: its catch-all reading yields to a reading of another world that has no free text at all
     // ("Is a square a rectangle?" is the shapes world's, even while the avatar tab is open)
-    if (ok && !strong && context?.lastWorld !== m.pattern.worldId && context?.tabWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && !m.pattern.tabClaim)) ok = false;
+    if (ok && !strong && context?.lastWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && !m.pattern.tabClaim)) ok = false;
     if (!ok) matches.splice(k, 1);
   }
   // ACT VERB SWALLOWED (TRANSFER, spec 23): a free-text reading whose wildcard slot starts with the verb of an act that another world's act pattern reads in this very sentence ("send table 1

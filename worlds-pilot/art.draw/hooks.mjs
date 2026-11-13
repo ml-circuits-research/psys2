@@ -61,7 +61,9 @@ function thingsOf(ctx) {
 }
 
 /** DECLINE: a reading is the drawing board's when its words are things the board draws (a kind of its own or of the catalog, a part, the sky, the ground, "it") or when the sentence says "draw". */
-function accepts({ action, mode, roles, text, state, kindWord }) {
+// In the open tab the board holds the focus of the dialogue: a reading it accepts does not yield to another world's reading without free text ("draw a sea" is not a chart palette).
+const accepts = (info) => { const v = acceptsWords(info); return v === true && info.tab === 'art.draw' ? 'focus' : v; };
+function acceptsWords({ action, mode, roles, text, state, kindWord }) {
   const act = String(action ?? '').split('.').pop();
   if (!['make', 'remove', 'change', 'place', 'group', 'pick', 'ask', 'copy'].includes(act)) return true;
   const said = roles.thing ?? roles.rest ?? '';

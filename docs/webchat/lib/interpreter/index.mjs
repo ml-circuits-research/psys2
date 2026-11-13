@@ -17,13 +17,13 @@ import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=123c3e1329';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=26885599a7';
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
-import { Renderer, fallbackText, listText } from './render.mjs?v=237d079f93';
+import { Renderer, fallbackText, listText } from './render.mjs?v=f1ac16e3fb';
 import { FormSession } from '../formalizer/rules/session.mjs?v=e445741b59';
 import { makeLang } from './lang.mjs?v=b0313edaaa';
-import { withLearned } from '../knowledge/learned.mjs?v=adfec6beea';
+import { withLearned } from '../knowledge/learned.mjs?v=cfb485f029';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
-export { Renderer } from './render.mjs?v=237d079f93';
+export { Renderer } from './render.mjs?v=f1ac16e3fb';
 
 const STATUSES = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 /**
@@ -271,6 +271,7 @@ export class Interpreter {
     } catch (e) {
       if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e;
       if (e instanceof BudgetError) return finish({ status: 'budget', note: e.message });
+      if (globalThis.process?.env?.PSYS2_DEBUG_OPS) console.error('[op threw]', op.id, e?.stack ?? e);
       return finish({ status: 'error', note: `${op.id} threw: ${e?.message ?? e}` });
     }
     if (!res || typeof res !== 'object' || !STATUSES.has(res.status)) {

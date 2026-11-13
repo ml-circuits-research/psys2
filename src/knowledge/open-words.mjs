@@ -11,12 +11,22 @@ import { colourName } from './values.mjs';
 
 let attached = null;
 /** The host attaches the catalog of the session (`engine.setKnowledge`); `null` detaches it. */
-export function attachOpenWords(facts) { attached = facts ?? null; }
+export function attachOpenWords(facts) { if (facts !== attached) { firstWait = null; settled = false; } attached = facts ?? null; }
 
-/** Load what the lookups need (the vocabulary, and the part names of k.objects) once; resolves quickly afterwards. Never throws. */
+/**
+ * Load what the lookups need (the vocabulary, and the part names of k.objects). NEVER blocks a turn on the network: the first call waits a short time for a catalog that answers at once
+ * (the repository, a cached one); a catalog that is slow or hanging is read without (the reading is then that of no catalog) and the loads go on in the background, so a later turn finds
+ * the words. Never throws.
+ */
+let firstWait = null, settled = false;
+const WAIT_MS = 250;
 export async function ready() {
-  if (!attached) return;
-  try { await attached.loadVocab?.(); await attached.loadParts?.(); } catch { /* an unreachable catalog opens nothing */ }
+  if (!attached || settled) return;
+  const facts = attached;
+  const load = (async () => { try { await facts.loadVocab?.(); await facts.loadParts?.(); } catch { /* an unreachable catalog opens nothing */ } settled = facts === attached; })();
+  if (firstWait) return;   // already waited once: a pending load is not waited for again
+  firstWait = new Promise((res) => setTimeout(res, WAIT_MS));
+  await Promise.race([load, firstWait]);
 }
 
 /** True when `word` (a lemma, underscores for spaces) is a word of one of the catalog worlds and is not the name of a part of an object (a roof, a door is a part of its owner, never a kind of its own). */

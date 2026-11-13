@@ -9,11 +9,11 @@
  *   const { text, corrections } = spellCorrect('make bigger yes and red lips', { vocab: worldVocabulary(set, 'ui.avatar') });
  *   // text = 'make bigger eyes and red lips', corrections = [{ from: 'yes', to: 'eyes', span: [12, 15], kind: 'spell' }]
  */
-import { vocabularyOf, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=161e3e3802';
+import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=64f6eeac99';
 import { isNumberWord } from './rules/numbers.mjs?v=b370682723';
 import { guard } from './guard.mjs?v=eb1a66f556';
 import { namingTables } from './routing.mjs?v=34ef60e7bf';
-import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
+import { lexIndex } from '../worlds/lexicon.mjs?v=a6457b81d7';
 
 /** Common English function words: never corrected, and valid correction targets (typos of "the", "and", "with" ...). */
 export const FUNCTION_WORDS = new Set((
@@ -77,7 +77,7 @@ export const ignorable = (vocab, global = vocab) => (w) => !!w && !/\d/.test(w) 
 export function spellVocabulary(set) {
   return set.memo('spell-vocabulary', () => {
     const rv = vocabularyOf(set);
-    const vocab = new Set(rv);
+    const vocab = openVocab(new Set(rv), lexIndex(set));
     vocab.freq = new Map(rv.freq ?? []);
     // world and tab names (avatar, chart, map, drawing, document, chess ...) are the words a user names a world with; they are in every world vocabulary, so they rank as own-world words ("vatar" -> avatar)
     for (const phrases of namingTables(set).names.values()) for (const ph of phrases) for (const x of ph.split(' ')) if (/^[a-z]{3,}$/.test(x)) { vocab.add(x); }
@@ -98,7 +98,7 @@ export function worldVocabulary(set, worldId) {
   return set.memo(`spell-vocabulary:${worldId}`, () => {
     const all = spellVocabulary(set);
     const own = vocabularyOf(restrictedSet(set, [worldId]));
-    const vocab = new Set(own);
+    const vocab = openVocab(new Set(own), lexIndex(restrictedSet(set, [worldId])));
     vocab.freq = new Map(own.freq ?? []);
     for (const phrases of namingTables(set).names.values()) for (const ph of phrases) for (const x of ph.split(' ')) if (/^[a-z]{3,}$/.test(x)) { vocab.add(x); }
     vocab.nouns = all.nouns;   // content nouns of every world: one known only elsewhere is not "fixed" into this world
