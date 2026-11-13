@@ -8,7 +8,7 @@
 // kinds of avatar, in both reasoners. Every reply is plain words. Browser-safe: imports only its siblings and the shared space module.
 import { getFaces } from './facedata.mjs?v=129f43f6f1';
 import { shadeHex, COLOUR_ROLES } from './facedraw.mjs?v=f4cb696f65';
-import * as space from '../space/space.mjs?v=27b9e9b571';
+import * as space from '../space/space.mjs?v=0c5c89b98e';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const ok = (value) => ({ status: 'supported', value });

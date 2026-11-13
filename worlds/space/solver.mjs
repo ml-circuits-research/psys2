@@ -32,7 +32,7 @@ function landscape(items, f, o = {}) {
   spread(groups.water, (it) => Math.min(f.h - it.h / 2 - 8, horizon + f.h * 0.3));
   return out;
 }
-/** Layers by longest path from the roots (bounded: a cycle puts a node one layer after its first visit). edges: [[from, to], ...]. */
+/** Layers by longest path from the roots (a cycle puts a node one layer after its first visit; the queue is capped). edges: [[from, to], ...]. */
 function layers(items, edges) {
   const ids = items.map((i) => i.id), depth = Object.fromEntries(ids.map((i) => [i, 0])), indeg = Object.fromEntries(ids.map((i) => [i, 0]));
   for (const [a, b] of edges) if (a in depth && b in depth) indeg[b]++;

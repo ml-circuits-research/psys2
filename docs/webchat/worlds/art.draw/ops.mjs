@@ -20,7 +20,9 @@ import {
   registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey, partsOf,
 } from './scene.mjs?v=3549ba4382';
 
-import * as space from '../space/space.mjs?v=27b9e9b571';   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+import * as space from '../space/space.mjs?v=0c5c89b98e';
+import * as rel from '../space/pieces.mjs?v=7a5af05c50';
+import * as solver from '../space/solver.mjs?v=96409a334e';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=3549ba4382';
 
@@ -32,7 +34,7 @@ const TAB = 'draw';
 export function initialState() {
   return {
     canvas: { w: W, h: H }, objects: [], background: 'white', sky: null, ground: null, groundColor: null, mood: null, sunStash: [], sunPose: null,
-    selected: null, last: [], history: [], future: [], nextId: 1, seq: 0, seed: 20240611,
+    selected: null, last: [], history: [], future: [], nextId: 1, seq: 0, seed: 20240611, rels: { facts: [], seq: 0 },
   };
 }
 
@@ -177,11 +179,12 @@ const sameKind = (s, kind) => s.objects.filter((o) => kindKey(o) === kind);
 function snapshot(s, label) {
   return {
     label, objects: s.objects.map((o) => ({ ...o, parts: { ...(o.parts ?? {}) } })), background: s.background, sky: s.sky, ground: s.ground,
-    groundColor: s.groundColor, mood: s.mood, sunStash: structuredClone(s.sunStash ?? []), selected: s.selected, last: [...s.last],
+    groundColor: s.groundColor, mood: s.mood, sunStash: structuredClone(s.sunStash ?? []), selected: s.selected, last: [...s.last], rels: structuredClone(s.rels ?? { facts: [], seq: 0 }),
   };
 }
 function restore(s, snap) {
   s.objects = snap.objects.map((o) => ({ ...o, parts: { ...(o.parts ?? {}) } }));
+  s.rels = structuredClone(snap.rels ?? { facts: [], seq: 0 });
   Object.assign(s, { background: snap.background, sky: snap.sky, ground: snap.ground, groundColor: snap.groundColor, mood: snap.mood, sunStash: snap.sunStash, selected: snap.selected && byId(s, snap.selected) ? snap.selected : null, last: snap.last.filter((id) => byId(s, id)) });
 }
 /** Call before changing the picture. */
@@ -455,6 +458,20 @@ function outlineOfObj(o) {
   return polys.length ? polys : null;
 }
 const projectAll = (list) => list.map((o) => { const b = bbox(o), shape = outlineOfObj(o); return { id: o.id, kind: kindKey(o), name: kindName(kindKey(o)), x: o.x, y: o.y, w: b.w, h: b.h, z: o.z, ...(shape ? { shape } : {}) }; });
+/** The relations kept as facts (SPACE-2): pruned of things that are gone, and the pieces they are about (extent, outline, layer, anchors, regions as containers). */
+const relsOf = (s) => { s.rels ??= { facts: [], seq: 0 }; const ids = new Set(s.objects.map((o) => o.id)); s.rels.facts = s.rels.facts.filter((f) => ids.has(f.a) && (!f.b || ids.has(f.b))); return s.rels; };
+const pieceList = (s) => projectAll(s.objects).map((p) => rel.pieceFrom({ ...p, region: !!KINDS[p.kind]?.region, container: !!KINDS[p.kind]?.region }));
+const nameMap = (s) => Object.fromEntries(s.objects.map((o) => [o.id, sayObj(o)]));
+/** The user said where one thing is in relation to others (a placing by relation): kept as a fact of tier `said`. */
+function keepRelation(s, movers, word, refs) {
+  const store = relsOf(s);
+  for (const m of movers) for (const r of refs) { if (m === r) continue; const f = rel.factFor(word, m.id, r.id, { source: 'said', tier: 'said' }); if (f) rel.propose(store, f, { names: nameMap(s) }); }
+}
+/** The user wants them apart (or touching): remembered as a fact until the user takes it back. */
+function keepContact(s, movers, near, wish) {
+  const store = relsOf(s);
+  for (const m of movers) for (const o of near) { if (m === o) continue; rel.propose(store, wish.apart ? { rel: 'apart_from', a: m.id, b: o.id, source: 'said', tier: 'said' } : { rel: 'attached_to', a: m.id, b: o.id, source: 'said', tier: 'said' }, { names: nameMap(s) }); }
+}
 /** The selection a noun phrase asks for, as the module's spec (null when it asks for nothing by place or order). */
 function specOf(np, list, many) {
   const spec = { ord: np.ordinal, pos: np.pos, size: null, other: np.other, count: np.count, all: np.all, plural: np.plural && many, next: null, between: null };
@@ -805,6 +822,7 @@ function addThing(s, spec, ctxInfo) {
       if (i > 0) { const prev = group[i - 1], pb = bbox(prev), ob = bbox(o); o.x = prev.x + pb.w / 2 + ob.w / 2 + 14; o.y = prev.y + (ob.h - pb.h) / 2 * 0; clampIn(o); }
       s.objects.push(o);
     });
+    keepRelation(s, group, { rightof: 'rightof', leftof: 'leftof', next: 'next', above: 'above', below: 'below', on: 'on', in: 'in', front: 'front', behind: 'behind' }[place.rel] ?? place.rel, spec.refs);
   } else if (place.region) {
     group.forEach((o, i) => {
       placeRegion(s, o, place.region);
@@ -1315,8 +1333,24 @@ function moveGroupRel(s, objs, dest) {
   return { done: objs };
 }
 
+const LAYOUT_SAY = { corners: (l) => (l.only ? `each into its own ${l.only} corner` : 'each into its own corner'), row: () => 'into a row', column: () => 'into a column', grid: () => 'into a grid', circle: () => 'into a circle', spread: () => 'spread out evenly', height: () => 'into a row by height', stack: () => 'on top of each other' };
+const GENERATOR = { circle: 'ring', corners: 'corners', row: 'row', column: 'column', grid: 'grid', height: 'height', stack: 'stack' };
+/** A named layout of the group through the stable solver: the others stay where they are (pinned), nothing new overlaps, or nothing changes and the reason is said. */
+function layoutDest(s, objs, lay) {
+  if (objs.length < 2 && lay.op !== 'centre') return { error: 'I need at least two things for that.' };
+  const ids = objs.map((o) => o.id), plist = pieceList(s);
+  let boxes;
+  if (GENERATOR[lay.op]) {
+    const r = solver.solve({ pieces: plist, facts: relsOf(s).facts, frame: FRAME, layout: GENERATOR[lay.op], ids, pinned: plist.filter((p) => !ids.includes(p.id)).map((p) => p.id), only: lay.only, mentioned: ids, names: nameMap(s) });
+    if (!r.ok) return { error: r.say };
+    boxes = r.boxes;
+  } else { const r = space.planLayout(lay.op, plist.filter((p) => ids.includes(p.id)), FRAME, {}); if (r.error) return { error: 'I could not arrange them like that.' }; boxes = r.boxes; }
+  for (const o of objs) { const b = boxes[o.id]; if (b) { o.x = b.x; o.y = b.y; clampIn(o); } }
+  return { done: objs };
+}
 function applyDest(s, objs, dest) {
   const done = [];
+  if (dest.kind === 'layout') return layoutDest(s, objs, dest.lay);
   { const g = moveGroupRel(s, objs, dest); if (g) return g; }
   for (const [i, o] of objs.entries()) {
     const b = bbox(o);
@@ -1407,7 +1441,9 @@ export const move = guard((ctx, args, s) => {
   if (!toks(tt.replace(AMOUNT_RE, ' ')).filter((x) => !['a', 'the', 'more', 'even', 'and', 'also', 'then', 'so', 'please'].includes(x)).length) { dest = `${tt} ${dest}`.trim(); tt = ''; }   // "and a bit lower": only an amount before the direction, so it is the same thing
   if (args.verb === 'put') { const am = addMissing(ctx, s, tt, dest); if (am) return am; }   // a placing verb with a thing that is not in the picture adds it
   if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'missing');
-  const d = parseDest(dest);   // the destination is checked before asking which one is meant
+  let d = parseDest(dest);   // the destination is checked before asking which one is meant
+  const lay = space.parseLayout(dest);   // a layout of the group as the destination ("in different corners", "in a row"): the module's layouts, one request
+  if (lay && ['corners', 'row', 'column', 'grid', 'circle', 'spread', 'height', 'stack'].includes(lay.op)) d = { kind: 'layout', lay };
   if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);
   // a bare "it" is what the last step handled, all of it ("further left" after moving three houses moves the three)
   const lastThings = (!tt || (/^(?:it|them)$/.test(tt.trim()) && /\b(?:further|farther|more|again)\b/.test(dest))) && !s.selected ? s.last.map((id) => byId(s, id)).filter(Boolean) : [];
@@ -1425,26 +1461,55 @@ export const move = guard((ctx, args, s) => {
   const addedGround = wantGround && s.ground !== wantGround ? wantGround : null;
   if (addedGround) { s.ground = addedGround; s.groundColor = GROUND_COLOR[addedGround]; }
   const before = r.objs.map((o) => ({ id: o.id, x: o.x, y: o.y, z: o.z }));
+  const plist0 = pieceList(s), store = relsOf(s), movedIds = new Set(r.objs.map((o) => o.id)), names = nameMap(s);
+  const carried = new Map();   // SPACE-2: what is on, in or attached to a moved thing travels with it (what is merely next to it stays)
+  for (const o of r.objs) for (const c of rel.carriedBy(store, o.id, plist0)) if (!movedIds.has(c) && !carried.has(c)) carried.set(c, o.id);
   const res = applyDest(s, r.objs, d);
-  if (res.error) { s.history.pop(); return no(res.error, 'missing'); }
+  const putBack = () => { for (const b of before) { const o = byId(s, b.id); if (o) { o.x = b.x; o.y = b.y; o.z = b.z; } } s.history.pop(); };
+  if (res.error) { putBack(); return no(res.error, 'missing'); }
+  if (d.kind === 'step') for (const o of r.objs) {   // a refusal with its plain reason: a thing that stands on another is not pushed into it
+    const b0 = before.find((b) => b.id === o.id), ck = rel.checkMove(store, plist0, o.id, o.x - b0.x, o.y - b0.y, { names });
+    if (!ck.ok) { putBack(); return no(ck.reason); }
+  }
+  if (d.kind === 'step' || d.kind === 'abs') {   // the user asked to keep two things apart and has not taken it back: a move does not bring them together
+    const mp = Object.fromEntries(pieceList(s).map((p) => [p.id, p])), skip = new Set([...movedIds, ...carried.keys()]);
+    for (const f of store.facts) if (f.rel === 'apart_from') { const [m, o] = movedIds.has(f.a) ? [f.a, f.b] : movedIds.has(f.b) ? [f.b, f.a] : [null, null]; if (m && !skip.has(o) && space.gap(mp[m], mp[o]) < Math.min(24, FRAME.w * 0.04) - 1) { putBack(); return no(`${cap1(names[m])} can not go there: you asked me to keep ${names[m]} apart from ${names[o]}. Say "you can join them" to change that.`); } }
+  }
   let joinSay = '';
   if (d.kind === 'step' || d.kind === 'rel') {   // natural joining: a roof set near walls touches them; "apart" keeps a gap
     const all = projectAll(s.objects), moved = Object.fromEntries(res.done.map((o) => [o.id, { x: o.x, y: o.y }]));
     const jr = wish.apart ? { boxes: space.apartAfter(all, moved, FRAME), joined: [] } : space.joinAfter(all, moved, FRAME, wish);
     for (const [id, b] of Object.entries(jr.boxes)) { const o = byId(s, id); if (o && (o.x !== b.x || o.y !== b.y)) { o.x = b.x; o.y = b.y; clampIn(o); } }
     joinSay = space.sayJoined(jr.joined, all, '');
+    const keepNear = (jr.joined ?? []).map((j) => ({ ...j }));
+    s.pendingJoin = { joined: keepNear, apart: !!wish.apart, touch: !!wish.touch };
+  }
+  { // SPACE-2: carry what rides on the moved things, drop what no longer holds (and say so), keep what the user said and what the rules joined as facts
+    const tails = [], movedNow = new Map(r.objs.map((o) => [o.id, o]));
+    for (const [cid, mid] of carried) { const c = byId(s, cid), m = movedNow.get(mid), b0 = before.find((b) => b.id === mid); if (c && m && b0) { c.x = Math.round(c.x + m.x - b0.x); c.y = Math.round(c.y + m.y - b0.y); clampIn(c); } }
+    if (carried.size) tails.push(`${cap1([...carried.keys()].map((id) => names[id]).join(' and '))} went along with ${r.objs.length === 1 ? names[r.objs[0].id] : 'them'}.`);
+    const all1 = Object.fromEntries(pieceList(s).map((p) => [p.id, p])), dropped = [];
+    for (const o of r.objs) for (const f of store.facts.filter((g) => g.a === o.id && rel.RELS[g.rel]?.carries && !movedIds.has(g.b) && !carried.has(g.b))) if (!rel.holdsFact(f, all1, FRAME, 4)) dropped.push(f);
+    store.facts = store.facts.filter((f) => !dropped.includes(f));
+    for (const f of dropped) tails.push(`${cap1(names[f.a])} is no longer ${f.rel === 'in' ? 'in' : f.rel === 'on' ? 'on' : 'attached to'} ${names[f.b]}.`);
+    if (d.kind === 'rel') { const refs = d.refs.map((x) => resolveNP(s, parseNP(x)).objs[0]).filter(Boolean); keepRelation(s, r.objs, { rightof: 'rightof', leftof: 'leftof', next: 'next', above: 'above', below: 'below', on: 'on', in: 'in', front: 'front', behind: 'behind' }[d.rel] ?? d.rel, refs); }
+    const pj = s.pendingJoin; delete s.pendingJoin;
+    for (const j of pj?.joined ?? []) rel.propose(store, j.how === 'under' ? { rel: 'on', a: j.to, b: j.id, source: pj.touch ? 'said' : 'rule:join-near', tier: pj.touch ? 'said' : 'knowledge' } : { rel: j.how === 'on' ? 'on' : 'attached_to', a: j.id, b: j.to, source: pj.touch ? 'said' : 'rule:join-near', tier: pj.touch ? 'said' : 'knowledge' }, { names });
+    if (wish.touch) { const mp = pieceList(s); for (const o of r.objs) for (const p of mp) if (p.id !== o.id && !movedIds.has(p.id)) rel.retract(store, 'apart_from', o.id, p.id); }
+    if (wish.apart) { const mp = pieceList(s), near = mp.filter((p) => !movedIds.has(p.id) && r.objs.some((o) => { const q = mp.find((x) => x.id === o.id); return q && space.gap(q, p) < FRAME.w * 0.12; })); keepContact(s, r.objs, r.objs.length ? near.map((p) => byId(s, p.id)) : [], { apart: true }); if (near.length) tails.push(`I will keep ${r.objs.length === 1 ? names[r.objs[0].id] : 'them'} apart from ${near.map((p) => names[p.id]).join(' and ')} until you say otherwise.`); }
+    if (tails.length) r.note = [r.note, ...tails].filter(Boolean).join(' ');
   }
   s.lastMove = d.kind === 'step' ? d.memory : null;   // what "further" repeats
   s.lastMoveInfo = { dest, kind: kindKey(r.objs[0]), before };   // what "no, the middle one" corrects
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
-  const where = d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'region' ? ` ${describePlacing(null, { region: d.region }, [])}`.replace(/\s+/g, ' ') : d.kind === 'z' ? ` to the ${d.dir}` : '';
+  const where = d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'region' ? ` ${describePlacing(null, { region: d.region }, [])}`.replace(/\s+/g, ' ') : d.kind === 'z' ? ` to the ${d.dir}` : d.kind === 'layout' ? ` ${LAYOUT_SAY[d.lay.op](d.lay)}` : '';
   const relText = d.kind === 'rel' ? describePlacing(r.objs[0], { rel: d.rel }, d.refs.map((x) => resolveNP(s, parseNP(x)).objs[0] ?? r.objs[0])) : '';
   const regionText = d.kind === 'region' ? describePlacing(null, { region: d.region }, []) : '';
   if (wantGround) return ok(withNote(`${opener(s)} I moved ${name} ${wantGround === 'sea' ? 'into the water' : wantGround === 'snow' ? 'onto the snow' : `onto the ${GROUND_NAME[wantGround]}`}.${addedGround ? ` There was no ${GROUND_NAME[wantGround]}, so I added it to the ground.` : ''}`, r));
   if (joinSay) return ok(withNote(`${opener(s)} ${joinSay}`, r));
-  return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : ''}.`, r));
+  return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : d.kind === 'layout' ? ` ${LAYOUT_SAY[d.lay.op](d.lay)}` : ''}.`, r));
 });
 void 0;
 

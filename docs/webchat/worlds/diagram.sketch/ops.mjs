@@ -18,7 +18,7 @@
 
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=18f06ec836';
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
-import * as space from '../space/space.mjs?v=27b9e9b571';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
+import * as space from '../space/space.mjs?v=0c5c89b98e';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=4cd417b561';   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
@@ -461,7 +461,7 @@ function spaceItems(s) {
 }
 /** A moving or arranging sentence the module reads (the middle box, a bit more to the left, further, in a row, tidy up ...), or null to leave it to the engine. */
 function spaceTry(text, s, kind) {
-  if (!SPACE_ACTIONS.has(kind.name) || !/\b(?:move|put|place|shift|push|slide|nudge|drag|further|more|again|row|column|grid|circle|line|tidy|align|spread|space|swap|centre|center|layout|neaten|clean)\b/i.test(text)) return null;
+  if (!SPACE_ACTIONS.has(kind.name) || !/\b(?:move|put|place|shift|push|slide|nudge|drag|further|more|again|row|column|grid|circle|line|tidy|align|spread|space|swap|centre|center|layout|neaten|clean|stack|stacked|pile|height|size|around|corner|corners)\b/i.test(text)) return null;
   const items = spaceItems(s);
   if (items.length < 1) return null;
   const r = space.interpret(text, { items, frame: SPACE_FRAME, kindOf: spaceKind, last: s.last ?? [], lastMove: s.lastMove });
@@ -470,7 +470,7 @@ function spaceTry(text, s, kind) {
   if (r.type === 'ask') return no(r.say, 'missing');
   if (r.type === 'error') return null;   // what the module cannot read, the engine reads or refuses in its own words
   // the engine's layout (row, column, grid, circle, align, distribute, its score) stays; the module tidies free shapes that overlap ("make a better layout" when nothing is connected)
-  if (r.type === 'layout' && (!['tidy', 'swap'].includes(r.op) || s.edges.length || !Object.keys(r.boxes ?? {}).length)) return null;
+  if (r.type === 'layout' && (!['tidy', 'swap', 'around', 'height', 'stack', 'corners'].includes(r.op) || (['tidy', 'swap'].includes(r.op) && s.edges.length) || !Object.keys(r.boxes ?? {}).length)) return null;   // SPACE-2: around, by height, stack and corners come from the module too (no pattern of this world)
   return r;
 }
 /** A question about places (is A above B, which one is in the middle, how far apart): the module reads it on the boxes of the shapes. */

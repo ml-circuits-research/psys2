@@ -44,8 +44,8 @@ export function hull(points) {
   if (p.length < 3) return p;
   const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
   const lo = [], up = [];
-  for (const q of p) { budget.tick('space.hull'); while (lo.length >= 2 && cr(lo.at(-2), lo.at(-1), q) <= 0) lo.pop(); lo.push(q); }
-  for (const q of p.slice().reverse()) { budget.tick('space.hull'); while (up.length >= 2 && cr(up.at(-2), up.at(-1), q) <= 0) up.pop(); up.push(q); }
+  for (const q of p) { while (lo.length >= 2 && cr(lo.at(-2), lo.at(-1), q) <= 0) { budget.tick('space.hull'); lo.pop(); } lo.push(q); }
+  for (const q of p.slice().reverse()) { while (up.length >= 2 && cr(up.at(-2), up.at(-1), q) <= 0) { budget.tick('space.hull'); up.pop(); } up.push(q); }
   return lo.slice(0, -1).concat(up.slice(0, -1));
 }
 /**
