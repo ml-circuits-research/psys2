@@ -3311,3 +3311,34 @@ The owner finds the avatar system limited: fixed pictures from a library, few th
 
 **Tests:** 60 descriptions with the expected variant per slot (seeded from the features), 30 single-element changes, expressions, save and reload; a Chrome probe with screenshots of 12 described faces for the reviewer and the owner.
 **Order:** after SPACE (it needs the module); SETTINGS-COHERENT and UNDO-REDO are independent.
+
+## Reviewer 2026-11-13 15:25 — TALK tab (owner): a conversation that draws itself; experiments to improve the demo
+
+**Purpose of the whole demo (owner):** show how worlds and knowledge combine. The Talk tab is where this is visible.
+
+**What it is.** A new tab "Talk": a chat about things, where an answer can come with a small picture made from knowledge, and where the conversation itself is shown as a board of topics.
+
+1. **Answer cards, chosen by the shape of the answer, no extra model.** The world `talk` reads the question frame, looks the things up (KNOWLEDGE-BY-LOOKUP) and picks a card:
+   - what is / what does X look like → a drawing of X (`k.objects`), with its named parts on tap;
+   - what is X made of / parts of X → a small part diagram (boxes from the object's parts, the SPACE module lays them out);
+   - is X a Y / kinds of X → a small tree (`k.words` is-a, `k.animals`, `k.food`);
+   - where is X / neighbours / capital → a small map card (`k.geo`, centre and box only);
+   - which is bigger / more / how many → two or three bars or counted icons (`k.space`, `k.geo`, `k.animals`, `k.units`);
+   - when / order (months, seasons, planets from the sun) → a line with points (`k.time`, `k.space`);
+   - can X do Y / where does X live → the drawing in its place with a tick or a cross (`k.commonsense`, `k.animals`).
+   A plain sentence always comes with the card. No fact found → a plain "I don't know that yet", no card.
+2. **The topic board.** Each thing talked about becomes a node; a link goes from the topic the user came from ("and its moons?" hangs under Jupiter). Follow-ups without a subject use the current node (SCENE-NATURAL P2). Tapping a node scrolls the chat to that part; "what did we talk about?" shows the board and a one-line summary per node; the board can be saved as a picture. Layout by the SPACE module (tidy tree, no overlaps). Desktop: board beside the chat; phone: behind a button.
+3. **Cards are alive and travel between worlds.** A card can be changed by talking ("make it red", "show the moons too", "bigger"), and sent to another tab: "put it in my drawing" (becomes a composite object in art.draw), "make a diagram of this" (diagram.sketch), "show it on the map" (geo.map). This is the visible combination of worlds: each transfer is one undoable step and the reply says which tab took it.
+4. **"How do you know?"** on any answer shows a card with the path: the words of the question → the frame → the knowledge worlds and shards used → the facts (with their source and licence) → the card. Built from the trace that already exists; in plain words, no internal names.
+5. **About the user and the session.** The same tab answers from user.profile ("what do you know about me?") and from the session ("what did I draw today?", "how many moves did I make in chess?"), each with a small card. Nothing leaves the device; say so once.
+6. **The avatar reacts** (after AVATAR-FROM-PARTS): expression by the kind of turn (found, not found, surprise at a big number), and it can be asked to "look like" a topic's drawing.
+7. **Honest scope.** No free chat. The opening line and the suggestion chips show what it can talk about, taken from the catalog's worlds (things, animals, food, places, space, body, words, units, time). A message outside that gets a plain refusal with two suggestions near the user's words (nearest catalog entries).
+
+**Experiments (report each in worker-log with numbers; they decide what stays):**
+- **E-T1 Coverage of real questions.** Write 300 child-level questions over the catalog's domains without looking at the facts (seeded templates × the 1,500 common things list × 10 hand-written free-form per domain). Measure: frame read, fact found, card chosen, answer right (hand check of 60). This shows which knowledge is missing; send the gaps to the reviewer for sop-knowledge-worlds.
+- **E-T2 Which card helps.** For 40 answers, render sentence only vs sentence + card; the reviewer and the owner judge the screenshots. Drop card kinds that add nothing.
+- **E-T3 Follow-up depth.** 30 scripted conversations of 6 turns with ellipsis and corrections ("and Saturn?", "no, the other one", "bigger than Earth?"); measure how many turns stay on the right node.
+- **E-T4 Cross-world transfers.** 30 transfers of a card to art.draw / diagram.sketch / geo.map and back ("ask about this" from a drawing opens Talk on that object); all undoable; both reasoners.
+- **E-T5 Cost.** Time and steps per turn on the phone profile, first hit and warm; the catalog cache size after a 30-turn conversation.
+
+**Build order:** card kinds 1 (drawing, parts, bars, line) + the board + "how do you know" first, publish, then transfers, then the rest. It uses SPACE and P2 of SCENE-NATURAL: start after those two; the question frames and card renderers can start now in a separate worktree. Gates: smoke per commit, full before each publish, A/B clean, no encoder retraining (if routing to `talk` needs it, stop and report: the frame decides, and Talk is the active tab).
