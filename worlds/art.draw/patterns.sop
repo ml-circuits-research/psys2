@@ -1573,3 +1573,78 @@
     priority=4
     example="Draw two blue castles."
     doc="DRAW-FROM-FACTS: the same open slot with a number (draw two blue castles)."
+
+@pat.art.draw.takeApart core.pattern
+    canonical="Take the house apart."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.apart.verb] {t:words(5)} [$lang.apart] [$lang.tail.filler]?"
+    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
+    kind=request
+    priority=15
+    example="Take the house apart."
+    example="Break the car into pieces."
+    example="Pull it apart."
+    doc="Takes a thing apart: its parts become things of their own."
+
+@pat.art.draw.takeApart.first core.pattern
+    canonical="Take apart the house."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.apart.verb] apart {t:words(5)} [$lang.tail.filler]?"
+    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
+    kind=request
+    priority=15
+    example="Take apart the house."
+    example="Pull apart the car."
+
+@pat.art.draw.separate core.pattern
+    canonical="Separate the roof."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.dismantle] {t:words(5)} [$lang.apart]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
+    kind=request
+    priority=14
+    example="Separate the roof."
+    example="Dismantle the car."
+    example="Detach the door from the house."
+
+@pat.art.draw.group core.pattern
+    canonical="Put these together."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.verb] {t:words(5)} [$lang.together] [as|into|to_make|to_form]? [a|an|one|my]? {name:words(2)?}"
+    emit="@{_} core.request action=draw.group arg.t=\"{t}\" arg.name=\"{name}\""
+    kind=request
+    priority=15
+    example="Put these together."
+    example="Glue the house and the tree together."
+    example="Put them together as a boat."
+
+@pat.art.draw.group.it core.pattern
+    canonical="Group them."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [group|combine|merge|bundle|unite] {t:words(5)}"
+    emit="@{_} core.request action=draw.group arg.t=\"{t}\""
+    kind=request
+    priority=13
+    example="Group them."
+    example="Combine the house and the tree."
+
+@pat.art.draw.group.named core.pattern
+    canonical="This is a boat."
+    match="[this|these|those|they] [$lang.group.is] [a|an|my|the|one] {name:words(2)}"
+    emit="@{_} core.request action=draw.group arg.name=\"{name}\""
+    kind=request
+    priority=11
+    example="This is a boat."
+    example="These are a train."
+
+@pat.art.draw.group.into core.pattern
+    canonical="Make them into a boat."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.make] [them|these|those|all_of_them|all_of_these] into [a|an|one|my] {name:words(2)}"
+    emit="@{_} core.request action=draw.group arg.name=\"{name}\""
+    kind=request
+    priority=14
+    example="Make them into a boat."
+    example="Turn these into a train."
+
+@pat.art.draw.group.into.things core.pattern
+    canonical="Make the house and the tree into a village."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.make] [the|my] {t:words(5)} into [a|an|one|my] {name:words(2)}"
+    emit="@{_} core.request action=draw.group arg.t=\"the {t}\" arg.name=\"{name}\""
+    kind=request
+    priority=14
+    example="Make the house and the tree into a village."

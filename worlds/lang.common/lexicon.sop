@@ -4985,3 +4985,114 @@
     alt=what_things_do_you_know
     alt=which_topics_do_you_know
     alt=what_can_you_tell_me
+
+@phrase.lang.apart.verb core.phrase
+    doc="Verbs that take a thing apart when \"apart\" follows (\"take the house apart\", \"pull it apart\"), drawing board (SCENE-NATURAL P5)."
+    alt=take
+    alt=pull
+    alt=break
+    alt=tear
+    alt=split
+    alt=pick
+    alt=taking
+    alt=pulling
+    alt=breaking
+
+@phrase.lang.apart core.phrase
+    doc="\"apart\" and its variants after the thing (\"take the house apart\", \"break it into pieces\")."
+    alt=apart
+    alt=to_pieces
+    alt=to_parts
+    alt=into_pieces
+    alt=into_parts
+    alt=into_its_parts
+    alt=in_pieces
+    alt=in_parts
+    alt=into_bits
+    alt=into_its_pieces
+    alt=to_bits
+
+@phrase.lang.dismantle core.phrase
+    doc="Verbs that mean take apart without \"apart\" (\"separate the roof\", \"dismantle the car\")."
+    alt=separate
+    alt=detach
+    alt=dismantle
+    alt=disassemble
+    alt=deconstruct
+    alt=unglue
+    alt=ungroup
+    alt=unpack
+    alt=unbuild
+    alt=unscrew
+    alt=undo_the_group_of
+
+@phrase.lang.together core.phrase
+    doc="The word after \"put these\" that makes a group (\"put them together\", \"make them one\")."
+    alt=together
+    alt=as_one
+    alt=into_one
+    alt=in_one
+    alt=as_a_group
+    alt=into_a_group
+    alt=as_one_thing
+    alt=into_one_thing
+
+@phrase.lang.group.verb core.phrase
+    doc="Verbs that put things together into a group (\"glue the wheels and the box together\", \"group them\")."
+    alt=put
+    alt=group
+    alt=combine
+    alt=join
+    alt=glue
+    alt=merge
+    alt=fuse
+    alt=stick
+    alt=attach
+    alt=bring
+    alt=assemble
+    alt=link
+    alt=unite
+    alt=bundle
+    alt=tie
+    alt=connect
+
+@phrase.lang.group.is core.phrase
+    doc="\"is a\" after a pointing word, naming the things in front of the user (\"this is a boat\", \"these are a train\")."
+    alt=is
+    alt=are
+    alt=becomes
+    alt=become
+    alt=will_be
+    alt=should_be
+    alt=shall_be
+    alt=can_be
+    alt=is_now
+    alt=are_now
+    alt=is_called
+    alt=are_called
+    alt=is_meant_to_be
+    alt=are_meant_to_be
+
+@phrase.lang.group.make core.phrase
+    doc="Verbs that name a group of things \"into\" something (\"make them into a boat\", \"turn these into a train\")."
+    alt=make
+    alt=turn
+    alt=build
+    alt=form
+    alt=assemble
+    alt=create
+    alt=shape
+    alt=change
+
+@phrase.lang.group.this core.phrase
+    doc="Pointing words for what the user just drew or selected (\"this\", \"these\", \"them\")."
+    alt=this
+    alt=these
+    alt=those
+    alt=they
+    alt=it
+    alt=that
+    alt=them
+    alt=all_of_these
+    alt=all_of_them
+    alt=all_of_this

@@ -17,7 +17,7 @@
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
-  registerThings, partGuessed,
+  registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey,
 } from './scene.mjs';
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs';
@@ -77,6 +77,11 @@ const ORDINALS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6,
 const ORDINAL_WORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 const NUMBERS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, hundred: 100 };
 const QUANTITY = { more: 3, some: 3, few: 3, several: 4, couple: 2, many: 6, lots: 7, loads: 7, bunch: 5, plenty: 6 };
+const DIFFERENT = new Set(['different', 'various', 'varied', 'assorted', 'diverse', 'distinct', 'mixed', 'dissimilar', 'unlike']);
+/** Things whose colour is what they are: a different sun is a different size, not a different colour. */
+const FIXED_COLOR = new Set(['sun', 'moon', 'rainbow', 'cloud', 'person', 'tree', 'mountain']);
+const VARY_COLORS = ['red', 'blue', 'green', 'orange', 'purple', 'pink', 'yellow', 'turquoise', 'brown', 'gold'];
+const VARY_SIZES = [1, 1.3, 0.78, 1.55, 0.62, 1.15];
 const PLURAL_DEFAULT = { star: 8, flower: 4, fish: 4, balloon: 4, bird: 3, cloud: 3, tree: 3, person: 3 };
 const MAX_COUNT = 12, MAX_STARS = 30;
 const OPENERS = ['Ta-da!', 'Here you go!', 'There!', 'Done!', 'Look at that!', 'Nice!', 'Voila!'];
@@ -100,12 +105,21 @@ export function kindOfWord(word) {
   const w = String(word ?? '').toLowerCase();
   const tryOne = (x) => (Object.hasOwn(KIND_WORDS, x) ? KIND_WORDS[x] : undefined);
   const hit = (kind, plural) => ({ kind, plural });
+  // a word the board reads as another kind ("ball" = circle) is the thing of the catalog of that name once the catalog has it (the lookup registers it)
+  for (const b of [w, w.replace(/s$/, '')]) if (Object.hasOwn(KIND_WORDS, b) && KIND_WORDS[b] !== b && KIND_WORDS[b] !== '*' && isThing(b)) return hit(COMPOSITE + b, b !== w);
   let k = tryOne(w); if (k) return hit(k, false);
   if (Object.hasOwn(IRREGULAR, w) && IRREGULAR[w]) return hit(IRREGULAR[w], true);
   if (w.endsWith('ies') && (k = tryOne(`${w.slice(0, -3)}y`))) return hit(k, true);
   if (w.endsWith('es') && (k = tryOne(w.slice(0, -2)))) return hit(k, true);
   if (w.endsWith('s') && (k = tryOne(w.slice(0, -1)))) return hit(k, true);
   if (w === 'fish') return hit('fish', false);
+  // a piece taken apart or a group built in this picture: its spoken name
+  for (const o of curScene?.objects ?? []) {
+    if (!o.shape) continue;
+    const nm = kindName(kindKey(o));
+    if (w === nm) return hit(kindKey(o), false);
+    if (w === pluralOfKind(kindKey(o))) return hit(kindKey(o), true);
+  }
   // a thing of the catalog (knowledge/k.objects): looked up by its word, after the built-in kinds
   const thing = thingOfWord(w);
   if (thing) return hit(COMPOSITE + thing, w !== thing && thingOfWord(w) === thing && THING_PLURAL(w, thing));
@@ -127,6 +141,7 @@ function colorFrom(words, fallback = null) {
 // ---- state access -----------------------------------------------------------------------------------------------------
 function ensure(ctx) {
   const s = ctx.state, d = initialState();
+  for (const o of s.objects ?? []) ensureCustom(o);   // pieces and groups come back from a saved state with their shape
   for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
   loadUsualPlaces(ctx);
   placeNote = null;
@@ -341,7 +356,7 @@ function findPartWord(w) {
 /** Objects that match a parsed noun phrase, with what to do about several matches. */
 function matches(s, np) {
   let list = s.objects.slice();
-  if (np.kind && np.kind !== '*') list = list.filter((o) => kindKey(o) === np.kind);
+  if (np.kind && np.kind !== '*') list = list.filter((o) => kindKey(o) === np.kind || ((o.shape || /~/.test(np.kind)) && kindName(kindKey(o)) === kindName(np.kind)));   // a group named like a built-in kind, or equal pieces of other shapes, answer to the word
   if (np.part && np.partKinds) list = list.filter((o) => np.partKinds.includes(kindKey(o)));
   if (np.color) list = list.filter((o) => sameColorName(effectiveColor(o), np.color) || sameColorName(partColor(o, np.part), np.color));
   return list;
@@ -644,10 +659,11 @@ const Z_LAYER = { mountain: -3000, rainbow: -2000, sun: -1000, moon: -1000, clou
 function makeObject(s, kind, { color = null, factor = 1, fill = null, tag = null } = {}) {
   const k = KINDS[kind];
   const o = {
-    id: `o${s.nextId++}`, kind: kind.startsWith(COMPOSITE) ? 'composite' : kind, ...(kind.startsWith(COMPOSITE) ? { thing: kindName(kind) } : {}), x: W / 2, y: H / 2, size: Math.round(k.size * factor), color: color ? canonColor(color) : null,
+    id: `o${s.nextId++}`, kind: kind.startsWith(COMPOSITE) ? 'composite' : kind, ...(kind.startsWith(COMPOSITE) ? { thing: thingOfKey(kind) } : {}), x: W / 2, y: H / 2, size: Math.round(k.size * factor), color: color ? canonColor(color) : null,
     fill: fill ?? k.fill ?? 'crayon', rotation: 0, flip: false, z: (Z_LAYER[kind] ?? 0) + s.nextId, parts: {},
   };
   if (tag) o.tag = tag;
+  if (k.custom) o.shape = k.shape;   // a piece or a group drawn again keeps its parts with it
   return o;
 }
 
@@ -741,6 +757,15 @@ function addThing(s, spec, ctxInfo) {
     Object.assign(o.parts, spec.parts);
     group.push(o);
   }
+  if (spec.vary && group.length > 1) {   // each one differs: its own colour (not for things that have one colour by nature, nor one the user named) and its own size
+    const shuffle = (xs) => { const a = xs.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd(s) * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const sizes = shuffle(VARY_SIZES), colors = shuffle(VARY_COLORS.filter((c) => !spec.colorGiven || c !== spec.color));
+    const colourable = !spec.colorGiven && !spec.who && !FIXED_COLOR.has(kind);
+    group.forEach((o, i) => {
+      o.size = Math.round(KINDS[kind].size * spec.factor * sizes[i % sizes.length]);
+      if (colourable) o.color = canonColor(colors[i % colors.length]);
+    });
+  }
   // several things at once: even spread, drawn left to right
   const place = spec.place ?? {};
   if (place.rel && spec.refs?.length) {
@@ -807,7 +832,8 @@ function readSpec(args, tailWords) {
   // "more clouds" adds a few (2 or 3, alternating with what is already there); "more cloud" adds one
   let count = explicitN ?? (q === 'more' ? (plural ? 2 + (args.have ?? 0) % 2 : 1) : q ? QUANTITY[q] : plural ? PLURAL_DEFAULT[kind] ?? 3 : 1);
   const factor = sizeWords.length ? SIZE_WORDS[sizeWords.at(-1)] : 1;
-  return { kind, count, color, factor, comp, who, mood, tail: tailWords, mods, plural, explicit: explicitN !== null };
+  const vary = mods.some((m) => DIFFERENT.has(m));   // "3 different houses": each one differs from the others
+  return { kind, count, color, factor, comp, who, mood, tail: tailWords, mods, plural, explicit: explicitN !== null, vary, colorGiven: colorWords.length > 0 };
 }
 
 // ---- "draw a lighthouse", "add a third window": the noun is an open slot, looked up after the reading (spec 07 section 7) ------------------------------------------
@@ -815,7 +841,7 @@ function readSpec(args, tailWords) {
 function readOpen(text) {
   const words = toks(text), noun = words.at(-1) ?? '', lead = words.slice(0, -1);
   const ord = lead.map((w) => ORDINALS[w]).find((n) => n > 0) ?? null;
-  const mods = lead.filter((w) => isShade(w) || isColorWord(w) || Object.hasOwn(SIZE_WORDS, w) || Object.hasOwn(COMPARATIVES, w) || Object.hasOwn(MOOD_WORDS, w));
+  const mods = lead.filter((w) => DIFFERENT.has(w) || isShade(w) || isColorWord(w) || Object.hasOwn(SIZE_WORDS, w) || Object.hasOwn(COMPARATIVES, w) || Object.hasOwn(MOOD_WORDS, w));
   return { noun, mods, ord };
 }
 /** "add a third window": one more instance of a part of a thing in the picture (or the part put back after it was taken away). */
@@ -879,8 +905,14 @@ function openAdd(ctx, s, args) {
 export const add = guard((ctx, args, s) => {
   if (args.open !== undefined) { const r = openAdd(ctx, s, args); if (r.done) return r.done; args = r.args; }
   if (!kindOfWord(args.kind)) { const nm = registerKnown(ctx, args.kt ?? args.kind); if (nm) args = { ...args, kind: nm, kt: nm }; }   // a thing of the knowledge catalog (spec 17)
+  else { const w = String(args.kt ?? args.kind ?? '').toLowerCase(); if (Object.hasOwn(KIND_WORDS, w) && KIND_WORDS[w] !== w) registerKnown(ctx, w) ?? registerKnown(ctx, w.replace(/s$/, '')); }   // "a ball": the catalog's ball before the circle the word falls back to
   const words0 = toks(args.where ?? '');
   const spec0 = readSpec({ ...args, have: sameKind(s, kindOfWord(args.kind)?.kind).length });
+  { // "draw another boat" after the user built a boat: the group of that name, not the built-in kind
+    const said = String(args.kt ?? args.kind ?? '').toLowerCase(), words = [said, said.replace(/s$/, ''), spec0.kind];
+    const g = spec0.kind && !String(spec0.kind).startsWith(COMPOSITE) && s.objects.slice().reverse().find((o) => o.shape && words.includes(kindName(kindKey(o))));
+    if (g) spec0.kind = kindKey(g);
+  }
   const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
   if (!spec0.kind && UNDRAWABLE.has(askedFor) && !ctx.knowledge?.peek(askedFor)?.objects?.length) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
@@ -928,7 +960,7 @@ export const add = guard((ctx, args, s) => {
     if (ref) { factor = (ref.size / base) * (spec0.comp > 0 ? COMPARATIVE_STEP : 1 / COMPARATIVE_STEP); sized = true; compNote = ` (${spec0.comp > 0 ? 'bigger' : 'smaller'} than the ${ref.who ?? kindKey(ref)} I had)`; }
     else { factor = spec0.comp > 0 ? 1.5 : 0.65; compNote = ` (there was no ${spec0.kind} to compare with, so I made it ${spec0.comp > 0 ? 'big' : 'small'})`; }
   }
-  const made = addThing(s, { kind: spec0.kind, who: spec0.who, mood: spec0.mood, sized, count, color: spec0.who ? null : color, dress: color, factor, parts: withParts.parts, place: place.rel ? { rel: place.rel } : place.region ? { region: place.region } : null, refs }, null);
+  const made = addThing(s, { kind: spec0.kind, vary: spec0.vary, colorGiven: spec0.colorGiven, who: spec0.who, mood: spec0.mood, sized, count, color: spec0.who ? null : color, dress: color, factor, parts: withParts.parts, place: place.rel ? { rel: place.rel } : place.region ? { region: place.region } : null, refs }, null);
   const all = [...drawnRefs, ...made];
   let extra = [];
   if (more.length) {
@@ -1043,7 +1075,7 @@ export const recolor = guard((ctx, args, s) => {
       const key = partOfWord(kindKey(o), part) ?? partOfWord(kindKey(o), part.replace(/s$/, ''));
       if (key) { o.parts[key] = color; done.push(o); }
     }
-    if (!done.length) { s.history.pop(); const k = objs[0]?.kind; return no(`${k ? `A ${k} has no ${part.replace(/s$/, '')}. ` : ''}${k ? `You can color its ${andList(partNames(k).map(partLabel))}.` : 'I can not find that part.'}`, 'unsupported'); }
+    if (!done.length) { s.history.pop(); return no(noPart(objs[0], part), 'unsupported'); }
     s.last = done.map((o) => o.id);
     open(ctx);
     const key0 = partOfWord(kindKey(done[0]), part) ?? part;
@@ -1065,6 +1097,12 @@ export const recolor = guard((ctx, args, s) => {
 });
 const cap1 = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 
+/** "A crocodile has no wing. You can color its body, head and legs." (the board's words for a kind, never the internal ones) */
+function noPart(o, part) {
+  if (!o) return 'I can not find that part.';
+  const kk = kindKey(o), name = kindName(kk), names = partNames(kk).map(partLabel);
+  return `${cap1(a_(name))} ${name} has no ${part.replace(/s$/, '')}.${names.length > 1 ? ` You can color its ${andList(names)}.` : names.length ? ` It is all one ${names[0]}.` : ''}`;
+}
 /** "give the house a blue door". */
 export const givePart = guard((ctx, args, s) => {
   return recolor(ctx, { t: `${args.part} of ${args.t}`, shade: args.shade, color: args.color });
@@ -1479,7 +1517,7 @@ export const duplicate = guard((ctx, args, s) => {
     for (let i = 0; i < n; i++) {
       const o = makeObject(s, kindKey(src), { color: src.color, factor: src.size / KINDS[kindKey(src)].size, fill: src.fill });
       o.parts = { ...src.parts }; o.flip = src.flip; o.rotation = src.rotation;
-      if (src.thing) o.thing = src.thing; if (src.extra) o.extra = { ...src.extra }; if (src.hide) o.hide = [...src.hide];
+      if (src.thing) o.thing = src.thing; if (src.shape) o.shape = src.shape; if (src.extra) o.extra = { ...src.extra }; if (src.hide) o.hide = [...src.hide];
       defaultSpot(s, o);
       if (crowd(s, o) > 0.3) { const b = bbox(o); o.x = Math.min(W - b.w / 2 - 10, src.x + b.w + 20); o.y = src.y; clampIn(o); }
       s.objects.push(o); copies.push(o);
@@ -1488,6 +1526,106 @@ export const duplicate = guard((ctx, args, s) => {
   s.last = copies.map((o) => o.id);
   open(ctx);
   return ok(withNote(`${opener(s)} I made ${n === 1 ? 'a copy' : `${n} copies`} of ${sayObj(r.objs[0])}.`, r));
+});
+
+// ---- taking things apart and putting them together --------------------------------------------------------------------------------------------------------------
+/** A thing that was built from others puts them back where they are now (moved, resized, turned with the group). */
+function membersOf(s, g) {
+  const mem = g.shape.members, ref = g.shape.ref, k = g.size / (ref.size || g.size), a = ((g.rotation ?? 0) * Math.PI) / 180, mirror = !!g.flip;
+  return mem.map((m0) => {
+    const m = { ...structuredClone(m0), parts: { ...(m0.parts ?? {}) } };
+    let dx = (m.x - ref.x) * k; const dy = (m.y - ref.y) * k;
+    if (mirror) dx = -dx;
+    m.x = Math.round(g.x + dx * Math.cos(a) - dy * Math.sin(a)); m.y = Math.round(g.y + dx * Math.sin(a) + dy * Math.cos(a));
+    m.size = Math.max(4, Math.round(m.size * k));
+    m.rotation = ((mirror ? -(m.rotation ?? 0) : (m.rotation ?? 0)) + (g.rotation ?? 0));
+    if (mirror) m.flip = !m.flip;
+    if (g.color) m.color = g.color;
+    return m;
+  });
+}
+/** "take the house apart", "separate the roof": the parts become things of their own, keeping shape, colour and place. One step to undo. */
+export const takeApart = guard((ctx, args, s) => {
+  const text = args.t ?? 'it';
+  const t = target(s, text, { many: true });
+  if (t.error) return t.error;
+  const { r, np } = t;
+  if (r.special || !r.objs.length) return no('I can take apart the things you drew, for example "take the house apart".');
+  const part = r.part ?? np.part;
+  remember(s, `took ${r.objs.length === 1 ? sayObj(r.objs[0]) : `${r.objs.length} things`} apart`);
+  const made = [], gone = [], said = [];
+  for (const o of r.objs) {
+    if (!part && o.shape?.members?.length) {   // a group goes back to the things it was made of
+      for (const m of membersOf(s, o)) made.push(m);
+      gone.push(o); said.push(...o.shape.members.map((m) => `the ${kindName(kindKey(m))}`));
+      continue;
+    }
+    const key = part ? partOfWord(kindKey(o), part) ?? partOfWord(kindKey(o), part.replace(/s$/, '')) : null;
+    if (part && !key) continue;
+    const pieces = piecesOf(o, key ? [key] : null);
+    if (!pieces.length || (!key && pieces.length < 2)) continue;
+    for (const p of pieces) {
+      const m = makeObject(s, registerShape(p.name, p.shape), { fill: o.fill });
+      Object.assign(m, { x: p.x, y: p.y, size: p.size, rotation: p.rotation, z: p.z });
+      if (o.zone) m.zone = o.zone;
+      made.push(m); said.push(`the ${partLabel(p.name)}`);
+    }
+    if (key) o.hide = [...(o.hide ?? []), key]; else gone.push(o);
+  }
+  if (!made.length) {
+    s.history.pop();
+    const o = r.objs[0];
+    return no(part ? noPart(o, part) : `${cap1(sayObj(o))} is all one piece, so there is nothing to take apart.`, 'unsupported');
+  }
+  if (gone.length) s.objects = s.objects.filter((o) => !gone.includes(o));
+  for (const m of made) if (!m.id || byId(s, m.id)) m.id = `o${s.nextId++}`;
+  s.objects.push(...made);
+  s.objects.sort((a, b) => (a.z ?? 0) - (b.z ?? 0) || idNum(a) - idNum(b));
+  if (s.selected && !byId(s, s.selected)) s.selected = null;
+  s.last = made.map((o) => o.id);
+  open(ctx);
+  const who = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
+  if (part) { const one = new Set(said).size === 1; return ok(withNote(`${opener(s)} I separated ${andList([...new Set(said)])} from ${who}. ${one ? 'It is a thing' : 'They are things'} of ${one ? 'its' : 'their'} own now.`, r)); }
+  return ok(withNote(`${opener(s)} I took ${who} apart: ${andList([...new Set(said)])} ${new Set(said).size === 1 ? 'is a separate thing' : 'are separate things'} now.`, r));
+});
+
+/** "put these together", "this is a boat": the things become one group with a name, used like any other thing afterwards. One step to undo. */
+export const group = guard((ctx, args, s) => {
+  const nameWords = toks(args.name ?? '').filter((w) => !DET_SKIP.has(w) && w !== 'one');
+  const name = nameWords.join(' ') || 'group';
+  const text = String(args.t ?? '').trim();
+  const words = toks(text);
+  let objs = [];
+  if (!words.length || words.every((w) => PRONOUN_ONE.has(w) || PRONOUN_MANY.has(w) || DET_SKIP.has(w) || w === 'all' || w === 'everything' || w === 'together')) {
+    const sel = s.selected && byId(s, s.selected);
+    objs = (s.last ?? []).map((id) => byId(s, id)).filter(Boolean);
+    if (!objs.length && sel) objs = [sel];
+    if (!objs.length) return no('Which things? Draw them or select them first, or say "put the house and the tree together".', 'missing');
+  } else {
+    for (const piece of splitList(text)) {
+      const t = target(s, piece, { many: true });
+      if (t.error) return t.error;
+      if (t.r.special && !t.r.everything) return no('I can only put the things you drew together, not the sky or the ground.', 'unsupported');
+      for (const o of t.r.objs) if (!objs.includes(o)) objs.push(o);
+    }
+  }
+  if (!objs.length) return no('Which things? Say "put the house and the tree together".', 'missing');
+  if (objs.length > 40) return no('That is a lot of things to put together; pick fewer.', 'unsupported');
+  remember(s, `put ${objs.length === 1 ? sayObj(objs[0]) : `${objs.length} things`} together as ${a_(name)} ${name}`);
+  const built = groupOf(objs);
+  const shape = { ...built.shape, members: structuredClone(objs), ref: { x: built.x, y: built.y, size: built.size } };   // the things it was made of, to take it apart again
+  const g = makeObject(s, registerShape(name, shape), {});
+  Object.assign(g, { x: built.x, y: built.y, size: built.size, z: built.z, shape });
+  const wasSelected = objs.some((o) => o.id === s.selected);
+  s.objects = s.objects.filter((o) => !objs.includes(o));
+  s.objects.push(g);
+  s.objects.sort((a, b) => (a.z ?? 0) - (b.z ?? 0) || idNum(a) - idNum(b));
+  s.selected = wasSelected ? g.id : (s.selected && byId(s, s.selected) ? s.selected : null);
+  s.last = [g.id];
+  open(ctx);
+  const use = 'You can move it, resize it, copy it or take it apart like any other thing.';
+  if (objs.length === 1) return ok(`${opener(s)} ${cap1(sayObj(objs[0]))} is ${a_(name)} ${name} now. ${use}`);
+  return ok(`${opener(s)} I put ${andList(groupPhrase(objs).map((x) => x.replace(/^an? /, 'the ')))} together as ${a_(name)} ${name}. ${use}`);
 });
 
 // ---- moods: night, day, sunset --------------------------------------------------------------------------------------------
@@ -1737,6 +1875,8 @@ export function openSlots(ctx, { action, args = {} } = {}) {
   if (!said) return [];
   if (args.open !== undefined) return [said];
   const k = kindOfWord(args.kind);
+  const one = said.replace(/s$/, '');
+  if (k?.kind && Object.hasOwn(KIND_WORDS, one) && KIND_WORDS[one] !== one && KIND_WORDS[one] !== '*') return [one];   // "a ball": a word the board draws as another kind (a circle); the catalog may have a picture of it
   return !k || !k.kind || UNDRAWABLE.has(said.replace(/s$/, '')) ? [said] : [];
 }
 export function checkReferents(ctx, { action, args = {} } = {}) {

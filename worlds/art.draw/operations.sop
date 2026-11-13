@@ -196,3 +196,15 @@
     semantics=action
     action=draw.askKind
     doc="Clarification for \"Draw\" without an object: asks what to draw and opens a pending expectation for the missing kind (spec 11)."
+
+@op.art.draw.takeApart core.operation
+    impl=takeApart
+    semantics=action
+    action=draw.takeApart
+    doc="Takes a thing apart: its parts become things of their own, keeping shape, colour and place (one step to undo); a group goes back to the things it was made of."
+
+@op.art.draw.group core.operation
+    impl=group
+    semantics=action
+    action=draw.group
+    doc="Puts things together as one group with a name, used like any other thing afterwards (move, resize, copy, draw another)."
