@@ -5526,3 +5526,55 @@
     alt=fit_in
     alt=make_up
     alt=in
+
+@phrase.lang.talk.babylead core.phrase
+    doc="Lead-ins of a question about the name of the young of an animal (what is a baby cat called, what do you call a baby cow); the animal follows."
+    alt=what_is_a_baby
+    alt=what_is_the_baby
+    alt=what_are_baby
+    alt=what_s_a_baby
+    alt=whats_a_baby
+    alt=what_do_you_call_a_baby
+    alt=what_do_you_call_the_baby
+    alt=what_do_you_call_baby
+    alt=what_is_a_young
+    alt=what_do_you_call_a_young
+
+@phrase.lang.talk.coveredin core.phrase
+    doc="Closing words of what is X covered in (what covers the body of an animal)."
+    alt=covered_in
+    alt=covered_with
+    alt=covered_by
+    alt=wrapped_in
+    alt=dressed_in
+
+@phrase.lang.talk.whichlist core.phrase
+    doc="Lead-ins of a question that asks for a list of the things of one kind (which animals are mammals)."
+    alt=which
+    alt=what
+    alt=name_the
+    alt=list_the
+    alt=tell_me_which
+    alt=tell_me_what
+
+@phrase.lang.talk.mixlead core.phrase
+    doc="Lead-ins of a question about what mixing two colours gives (what do you get when you mix red and blue); the two colours follow."
+    alt=what_do_you_get_when_you_mix
+    alt=what_do_you_get_if_you_mix
+    alt=what_colour_do_you_get_when_you_mix
+    alt=what_color_do_you_get_when_you_mix
+    alt=what_colour_do_you_get_if_you_mix
+    alt=what_color_do_you_get_if_you_mix
+    alt=what_happens_when_you_mix
+    alt=what_happens_if_you_mix
+    alt=what_colour_is_made_by_mixing
+    alt=what_color_is_made_by_mixing
+    alt=what_do_you_get_by_mixing
+    alt=what_do_you_get_from_mixing
+
+@phrase.lang.talk.canq core.phrase
+    doc="Lead-ins of a yes or no question about what a thing can do (can a penguin fly, do penguins swim); the thing and the verb follow."
+    alt=can
+    alt=does
+    alt=do
+    alt=is_able_to

@@ -418,7 +418,7 @@
 
 @t.data.charts.n77 core.test
     input="Compare the legs of the sea animals"
-    expectState="charts.0.labels.length=9"
+    expectState="charts.0.labels.length=12"
     expectState="charts.0.datasets.0.label=Legs"
     expectState="charts.0.title=Legs of sea animals"
     session=d
@@ -432,7 +432,7 @@
 
 @t.data.charts.n79 core.test
     input="Chart how many legs the farm animals have"
-    expectState="charts.2.labels.length=10"
+    expectState="charts.2.labels.length=12"
     session=d
 
 @t.data.charts.n80 core.test

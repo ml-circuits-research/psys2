@@ -76,7 +76,7 @@ const cityZoom = (c) => (c.pop >= 5e6 ? 8 : c.pop >= 2e5 ? 9 : 10);
 let CACHE = null;
 function db(ctx) {
   const wires = ctx.find('geo.map.place');
-  if (CACHE && CACHE.n === wires.length && CACHE.first === wires[0]) return CACHE;
+  if (CACHE && CACHE.n === wires.length && CACHE.first === wires[0]) { CACHE.know = ctx.knowledge ?? null; return CACHE; }
   const byKey = new Map(), byCc = new Map(), cities = [], countries = [], regions = [], capitalOf = new Map(), citiesOf = new Map();
   for (const w of wires) {
     const type = w.type;
@@ -100,12 +100,41 @@ function db(ctx) {
     for (const k of e.keys) byKey.set(k, e);
   }
   for (const l of citiesOf.values()) l.sort((a, b) => b.pop - a.pop);
-  CACHE = { n: wires.length, first: wires[0], byKey, byCc, cities, countries, regions, capitalOf, citiesOf };
+  CACHE = { n: wires.length, first: wires[0], byKey, byCc, cities, countries, regions, capitalOf, citiesOf, know: ctx.knowledge ?? null, extra: new Map() };
   return CACHE;
 }
 /** Demonym adjectives (japanese, brazilian ...) -> the country key; used when the language layer captured an adjective instead of a place. */
 const DEMONYM = { japanese: 'japan', brazilian: 'brazil', romanian: 'romania', german: 'germany', french: 'france', spanish: 'spain', italian: 'italy', portuguese: 'portugal', polish: 'poland', hungarian: 'hungary', austrian: 'austria', swiss: 'switzerland', dutch: 'netherland', belgian: 'belgium', british: 'uk', american: 'usa', canadian: 'canada', mexican: 'mexico', argentinian: 'argentina', argentine: 'argentina', chilean: 'chile', peruvian: 'peru', colombian: 'colombia', bolivian: 'bolivia', chinese: 'china', indian: 'india', russian: 'russia', ukrainian: 'ukraine', turkish: 'turkiye', egyptian: 'egypt', nigerian: 'nigeria', kenyan: 'kenya', ethiopian: 'ethiopia', moroccan: 'morocco', australian: 'australia', greek: 'greece', swedish: 'sweden', norwegian: 'norway', danish: 'denmark', finnish: 'finland', irish: 'ireland', czech: 'czech_republic', serbian: 'serbia', bulgarian: 'bulgaria', croatian: 'croatia', slovak: 'slovakia', vietnamese: 'vietnam', thai: 'thailand', indonesian: 'indonesia', korean: 'south_korea', iranian: 'iran', iraqi: 'iraq', israeli: 'israel', saudi: 'saudi_arabia', pakistani: 'pakistan', bangladeshi: 'bangladesh', filipino: 'philippine', cuban: 'cuba', venezuelan: 'venezuela' };
-const place = (D, key) => (key === undefined ? null : D.byKey.get(String(key)) ?? D.byKey.get(DEMONYM[String(key)]) ?? null);
+/**
+ * A place the map's own data does not have is looked up in the knowledge catalog (k.geo: countries, cities, by the host's lookup before the operation runs, `ctx.knowledge.peek`): the wire
+ * of the catalog is read as the entity the map works with (a country with its box and capital, a city with its coordinates). The largest city of that name wins.
+ */
+function catalogPlace(D, key) {
+  const name = String(key).replace(/_/g, ' ').toLowerCase();
+  if (D.extra.has(name)) return D.extra.get(name);
+  const th = D.know?.peek?.(name);
+  const f = (w, k) => w.f?.[k]?.[0];
+  const num = (v) => (v === undefined || v === '' || !Number.isFinite(Number(v)) ? null : Number(v));
+  const mine = (th?.wires ?? []).filter((w) => /^k\.geo\.(?:city|country)$/.test(w.type) && String(f(w, 'name')).toLowerCase() === name);
+  const best = mine.filter((w) => w.type === 'k.geo.country')[0] ?? mine.filter((w) => w.type === 'k.geo.city').sort((a, b) => (num(f(b, 'population')) ?? 0) - (num(f(a, 'population')) ?? 0))[0];
+  let e = null;
+  if (best && num(f(best, 'lat')) !== null) {
+    const byName = (n) => D.countries.find((c) => c.name.toLowerCase() === String(n).toLowerCase());
+    if (best.type === 'k.geo.country') {
+      const box = ['south', 'west', 'north', 'east'].map((k) => num(f(best, k)));
+      e = { id: `k.geo:${name}`, name: f(best, 'name'), keys: [name.replace(/ /g, '_')], pop: num(f(best, 'population')), lat: num(f(best, 'lat')), lon: num(f(best, 'lon')), bb: box.every((v) => v !== null) ? box : null,
+        cc: String(f(best, 'code2') ?? f(best, 'code') ?? name).toUpperCase(), kind: 'country', capital: best.f.capital ?? [], cont: String(f(best, 'continent') ?? '').toLowerCase().replace(/ /g, '_'), sub: f(best, 'region') ?? '',
+        area: num(f(best, 'area')), nb: (best.f.neighbour ?? []).map((n) => byName(n)?.cc).filter(Boolean), cur: best.f.currency ?? [], lang: best.f.language ?? [], land: f(best, 'landlocked') === 'true', ind: f(best, 'independent') !== 'false' };
+    } else {
+      const c = byName(f(best, 'country'));
+      e = { id: `k.geo:${name}`, name: f(best, 'name'), keys: [name.replace(/ /g, '_')], pop: num(f(best, 'population')) ?? 0, lat: num(f(best, 'lat')), lon: num(f(best, 'lon')), bb: null,
+        cc: c?.cc ?? String(f(best, 'country') ?? ''), kind: 'city', isCapital: !!f(best, 'capital_of') };
+    }
+  }
+  if (e) D.extra.set(name, e);   // only a hit is kept: a miss may be a lookup that has not run yet
+  return e;
+}
+const place = (D, key) => (key === undefined ? null : D.byKey.get(String(key)) ?? D.byKey.get(DEMONYM[String(key)]) ?? catalogPlace(D, key));
 const the = (e) => (e.kind === 'country' && THE.has(e.name) ? `the ${e.name}` : e.name);
 const theCap = (e) => { const t = the(e); return t.charAt(0).toUpperCase() + t.slice(1); };
 const countryOf = (D, e) => (e?.kind === 'country' ? e : e?.kind === 'city' ? D.byCc.get(e.cc) ?? null : null);
@@ -119,7 +148,7 @@ const bbOf = (D, e) => {
 const labelOf = (D, e) => {
   if (e.kind === 'city') {
     const c = D.byCc.get(e.cc);
-    return `${e.isCapital ? 'capital' : 'city'} of ${c ? the(c) : e.cc} · ${human(e.pop)} people`;
+    return `${e.isCapital ? 'capital' : 'city'} of ${c ? the(c) : e.cc}${e.pop ? ` · ${human(e.pop)} people` : ''}`;
   }
   if (e.kind === 'country') return `country in ${CONT[e.cont] ?? e.cont}${e.pop ? ` · ${human(e.pop)} people` : ''}`;
   return e.rkind === 'continent' ? 'continent' : e.rkind === 'world' ? 'the whole world' : 'group of countries';
@@ -171,7 +200,7 @@ function describePlace(D, e) {
   }
   if (e.kind === 'city') {
     const c = D.byCc.get(e.cc);
-    return `${e.name} is ${e.isCapital ? 'the capital of' : 'a city in'} ${c ? the(c) : e.cc}${c ? `, in ${CONT[c.cont]}` : ''} (${deg(e.lat, e.lon)}), with about ${human(e.pop)} people.`;
+    return `${e.name} is ${e.isCapital ? 'the capital of' : 'a city in'} ${c ? the(c) : e.cc}${c ? `, in ${CONT[c.cont]}` : ''} (${deg(e.lat, e.lon)})${e.pop ? `, with about ${human(e.pop)} people` : ''}.`;
   }
   const n = members(D, e).length, cap = e.name.charAt(0).toUpperCase() + e.name.slice(1);
   if (e.rkind === 'world') return 'The world has 194 independent countries on 7 continents.';
@@ -854,6 +883,7 @@ export function highlights(ctx) {
 }
 
 export function unknown(ctx, { x }) {
+  if (x !== undefined && place(db(ctx), String(x).toLowerCase().replace(/ /g, '_'))) return where(ctx, { p: String(x).toLowerCase().replace(/ /g, '_') });   // a place the map's own data lacks but the knowledge catalog has (k.geo)
   return no('unsupported', `I do not know a place called ${x}. I know every country and capital, cities with 500,000 people or more, and Romanian and Moldovan towns with 30,000 or more.`);
 }
 
@@ -947,4 +977,9 @@ export function redo(ctx) {
   restoreFrom(st, next);
   tab(ctx);
   return ok('OK, I did it again.');
+}
+
+/** Host hook (spec 17): the places a command names, which the host looks up in the knowledge catalog before the operation runs (a place the map's own data lacks is read from k.geo, `ctx.knowledge.peek`). */
+export function openSlots(ctx, { args = {} } = {}) {
+  return ['p', 'a', 'b', 'c', 'd', 'e', 'q', 'r', 'x', 'from', 'where'].map((k) => args[k]).filter((v) => typeof v === 'string' && v).map((v) => v.replace(/_/g, ' ').toLowerCase()).filter((v) => v.split(' ').length <= 3);
 }

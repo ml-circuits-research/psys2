@@ -23,7 +23,8 @@ test('renaming needs a naming cue', async () => {
 });
 
 test('spelling: a content word of another world is not corrected into this world (boat / coat)', async () => {
-  const animals = worldVocabulary(engine.set, 'kids.animals');
+  const animals = worldVocabulary(engine.set, 'kids.shop');   // the words of a world that has no boat; it gets a coat (the animals world used to be the example with both: its knowledge moved to the catalog)
+  animals.add('coat');
   assert.ok(!animals.has('boat') && animals.has('coat'));
   assert.deepEqual(spellCorrect('a purple boat', { vocab: animals }).corrections, []);
   assert.deepEqual(spellAlternates('a purple boat', { vocab: animals }), []);

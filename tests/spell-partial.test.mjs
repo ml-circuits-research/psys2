@@ -111,9 +111,9 @@ test('dialog: partial understanding is off by default, on executes what was read
 });
 
 test('dialog: multi-command, the readable clause runs and the other is reported', async () => {
-  const r = await engine.createSession({ partial: true }).send('um whats 3 plus 4 and also how many legs has a spider');
+  const r = await engine.createSession({ partial: true }).send('um whats 3 plus 4 and also what day comes after monday');
   assert.match(r.text, /3 plus 4 is 7/);
-  assert.match(r.text, /A spider has 8 legs/);
+  assert.match(r.text, /day after Monday is Tuesday/);
   const mix = await engine.createSession({ partial: true }).send('What is 20 divided by 4? blorp frazzle wibble');
   assert.match(mix.text, /20 divided by 4 is 5/);
   assert.match(mix.text, /I did not understand "blorp frazzle wibble"/);

@@ -601,16 +601,16 @@
 @t.games.guess.m01 core.test
     session=gm1
     input="I am thinking of an animal."
-    expect="Question 1: Does it have 4 legs?"
+    expect="Question 1: Does it eat only meat?"
     expectState="phase=asking"
-    expectState="candidates.67=worm"
+    expectState="candidates.313=axolotl"
     doc="SOPWORLD stage 2: the phase, the animals still possible and the questions left are rules; a reply that does not fit the phase is refused with the rule's words; undo goes through the library"
     reasoner=matrix
 
 @t.games.guess.m02 core.test
     session=gm1
     input="Yes"
-    expect="Good. Question 2: Does it eat only plants?"
+    expect="Good. Question 2: Can it swim?"
     expectState="count=1"
     expectState="asked.0.answer=yes"
     reasoner=matrix
@@ -618,17 +618,17 @@
 @t.games.guess.m03 core.test
     session=gm1
     input="undo"
-    expect="OK, I took back your last answer. I am asking that question again: Does it have 4 legs?"
+    expect="OK, I took back your last answer. I am asking that question again: Does it eat only meat?"
     expectStatus=supported
     expectState="count=0"
     expectState="phase=asking"
-    expectState="current.text=Does it have 4 legs?"
+    expectState="current.text=Does it eat only meat?"
     reasoner=matrix
 
 @t.games.guess.m04 core.test
     session=gm1
     input="No"
-    expect="OK. Question 2: Does it eat only meat?"
+    expect="OK. Question 2: Is it a mammal?"
     expectState="count=1"
     expectState="asked.0.answer=no"
     reasoner=matrix

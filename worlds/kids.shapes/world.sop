@@ -6,14 +6,9 @@
     imports=world.kids.common
     formalization=rules
     reasoner=matrix
-    ops=kids.shapes.thing.is_color
-    ops=kids.shapes.thing.color
-    ops=kids.shapes.color.is_kind
-    ops=kids.shapes.mix.result
-    ops=kids.shapes.mix.recipe
     source="what I know about shapes and colors"
     language=en
     status=fixture
     title="Shapes and colors (primary school)"
     summary="talk about shapes and colors"
-    doc="Sides and corners of flat shapes, which shape is a kind of which, what common things look like, colors of everyday things, primary and secondary colors and color mixing. Explicit no is kept apart from unknown. Hand-built platform fixture, not produced by the C1 workflow."
+    doc="What a child teaches about shapes and colours (a thing is red, a thing is a circle, two colours make a third) and taking it back. Sides and corners of shapes, colours of everyday things, primary and secondary colours and mixing are the knowledge catalog's (k.shapes, k.colours, k.attributes), answered by the Talk tab's frames; this world holds no knowledge base and no question pattern. Hand-built platform fixture, not produced by the C1 workflow."

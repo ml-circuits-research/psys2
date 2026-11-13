@@ -14,7 +14,10 @@ export const ASK_HINTS = {
 };
 /** The size words in order, for a catalog whose schema does not list them (the schema's own enum wins). */
 const SIZE_SCALE = ['tiny', 'small', 'medium', 'large', 'huge'];
-const GENERIC_KIND = ['kind', 'class', 'is_a', 'group', 'age'];
+const GENERIC_KIND = ['kind', 'class', 'is_a', 'age'];
+/** Types that are the catalog's bookkeeping about a name (which worlds carry it, how its picture is coloured), not facts about the thing: never a record that answers, describes or says what a thing is. */
+const BOOKKEEPING = /^k\.attributes\.(?:same|found|shows|family|aspect)$/;
+const DRAWN = /^k\.attributes\.drawn$/;
 const SKIP = /^(?:name|word|drawing|named|pos|n|core\..*|gloss|synonym|shard|reply|expression|mouth|eyebrows|eyes|cheeks)$/;
 
 const sing = (w) => (/ies$/.test(w) ? `${w.slice(0, -3)}y` : /(?:ses|xes|ches|shes)$/.test(w) ? w.slice(0, -2) : /s$/.test(w) && !/ss$/.test(w) ? w.slice(0, -1) : w);
@@ -27,7 +30,7 @@ export function records(th, name, { senses = false } = {}) {
   const n = lc(name ?? th.name);
   const out = [];
   for (const w of th.wires ?? []) {
-    if (!w.type || w.type.startsWith('core.')) continue;
+    if (!w.type || w.type.startsWith('core.') || BOOKKEEPING.test(w.type)) continue;
     const ids = [...(w.f.name ?? []), ...(w.f.word ?? [])].map(lc);
     if (ids.includes(n)) out.push({ type: w.type, f: w.f, shard: w.shard });
   }
@@ -42,7 +45,7 @@ export function slotsFor(sc, word) {
   if (!w) return [];
   const out = [], seen = new Set();
   const add = (type, key) => { if (!seen.has(`${type}#${key}`)) { seen.add(`${type}#${key}`); out.push({ type, key }); } };
-  for (const cand of [w, sing(w), w.replace(/^(?:the|a|an)\s+/, '')]) {
+  for (const cand of [w, sing(w), `${w}s`, w.replace(/^(?:the|a|an)\s+/, '')]) {   // the third form is the verb as the schemas list it (say -> says)
     for (const m of sc?.slotWords?.get(cand) ?? []) { const i = m.lastIndexOf('.'); if (sc.slots.get(m.slice(0, i))?.[m.slice(i + 1)]) add(m.slice(0, i), m.slice(i + 1)); }
   }
   const keys = [w.replace(/ /g, '_'), sing(w).replace(/ /g, '_'), ...(ASK_HINTS[w] ?? [])];
@@ -53,7 +56,7 @@ export function slotsFor(sc, word) {
 
 /** The values of the first slot among `slots` that some record of the thing has: { key, type, values, rec } or null. Values are strings (the catalog's text). */
 export function valuesOf(recs, slots) {
-  const weak = (r) => /^k\.(?:scenes|commonsense)\./.test(r.type);   // the world that is about the thing itself answers before the one that only places it in a picture
+  const weak = (r) => /^k\.(?:scenes|commonsense)\./.test(r.type) || DRAWN.test(r.type);   // the world that is about the thing itself answers before the one that only places it in a picture
   for (const group of [recs.filter((r) => !weak(r)), recs.filter(weak)]) for (const { key } of slots) for (const rec of group) { const v = rec.f[key]; if (v?.length) return { key, type: rec.type, values: v, rec }; }   // every slot of the strong records first
   return null;
 }
@@ -71,7 +74,7 @@ const show = (key, values) => `${humanise(key)}: ${listOf(values.map((v) => huma
 
 /** What a record says about its thing, in one short sentence plus a few facts: "An animal (arachnid). Legs 8; habitat web." Generic over slots; null when the record holds nothing to say. */
 export function describe(recs, name, an, cap, { lead: wantLead = true } = {}) {
-  const rec = recs.find((r) => !r.type.startsWith('k.commonsense') && !r.type.startsWith('k.scenes')) ?? recs[0];
+  const rec = recs.find((r) => !r.type.startsWith('k.commonsense') && !r.type.startsWith('k.scenes') && !DRAWN.test(r.type)) ?? recs[0];
   if (!rec) return null;
   const kindKey = GENERIC_KIND.find((k) => rec.f[k]?.length);
   const noun = typeNoun(rec.type);
@@ -89,7 +92,7 @@ export function describe(recs, name, an, cap, { lead: wantLead = true } = {}) {
 /** Categories a thing belongs to, in the catalog's words: the values of its kind-like slots, the noun of its record types, the is-a of its senses. Lower case. */
 export function categories(th, recs) {
   const own = new Set(), all = new Set();
-  for (const r of recs) { if (!/^k\.(?:scenes|commonsense)\./.test(r.type)) { for (const v of [...GENERIC_KIND.flatMap((k) => r.f[k] ?? []), typeNoun(r.type).split(' ').at(-1)]) own.add(lc(v)); } for (const v of r.f.botanically ?? []) all.add(lc(v)); }
+  for (const r of recs) { if (!/^k\.(?:scenes|commonsense)\./.test(r.type) && !DRAWN.test(r.type)) { for (const v of [...GENERIC_KIND.flatMap((k) => r.f[k] ?? []), typeNoun(r.type).split(' ').at(-1)]) own.add(lc(v)); } for (const v of r.f.botanically ?? []) all.add(lc(v)); }
   for (const v of own) all.add(v);
   for (const s of th?.senses ?? []) for (const v of s.isA ?? []) all.add(lc(v));
   return { own, all };
@@ -118,4 +121,33 @@ export function countFrom(th, recs, what, sc) {
   }
   for (const r of recs) if (num(r.f.count?.[0]) !== null && lc(r.f.unit?.[0]) === s1) return { n: num(r.f.count[0]), from: 'fact', slot: 'count' };
   return null;
+}
+
+/** The slots whose declared values (enum) include a word, in the schemas: [{ type, key }] ("carnivore" is a value of k.animals.animal.diet, "primary" of k.colours.colour.kind, "mammal" of ...class). */
+export function slotsHolding(sc, word, types = null) {
+  const w = lc(word).trim(), out = [];
+  if (!w) return out;
+  for (const [type, slots] of sc?.slots ?? []) {
+    if (types && !types.includes(type)) continue;
+    for (const [key, def] of Object.entries(slots)) if (def.enum?.some((v) => lc(v) === w || lc(v) === sing(w))) out.push({ type, key });
+  }
+  return out;
+}
+
+/** The types a word means in the schemas ("animals" -> k.animals.animal), only those with slots. */
+export function typesFor(sc, word) {
+  const w = lc(word).trim(), out = [];
+  for (const cand of new Set([w, sing(w)])) for (const m of sc?.slotWords?.get(cand) ?? []) if (sc.slots.has(m) && !out.includes(m)) out.push(m);
+  return out;
+}
+
+/** The distinct names of the wires of some types whose slot `key` holds `value` (or its singular), in the catalog's order: [{ name, type }]. */
+export function namesWith(wiresByType, picks, value) {
+  const v = lc(value), s = sing(v), out = [], seen = new Set();
+  for (const { type, key } of picks) for (const w of wiresByType(type) ?? []) {
+    if (!w.f[key]?.some((x) => lc(x) === v || lc(x) === s)) continue;
+    const n = first(w, 'name');
+    if (n && !seen.has(lc(n))) { seen.add(lc(n)); out.push({ name: n, type }); }
+  }
+  return out;
 }

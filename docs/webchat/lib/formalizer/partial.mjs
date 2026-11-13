@@ -14,7 +14,13 @@ import { guard } from './guard.mjs?v=eb1a66f556';
 export const looksLikeQuestion = (text) => /\?/.test(text) || text.split(/\s+/).some((w) => QUESTION_WORDS.has(norm(w)));
 
 /** A window that turns a statement or request into a bare question ("body color should be red" -> "body color?") is not accepted. */
-export const changesIntoQuestion = (original, slice, kinds) => kinds.length > 0 && kinds.every((k) => k === 'question') && !looksLikeQuestion(original) && slice.length / Math.max(1, original.trim().length) < 0.6;
+const WH = new Set(['what', 'which', 'who', 'whom', 'whose', 'where', 'when', 'why', 'how']);
+/** A question that opens with a wh-word or ends with a question mark: no part of it is a statement ("which animals are mammals" is not "animals are mammals"). */
+const asksWh = (text) => /\?\s*$/.test(text) || WH.has(norm(String(text).trim().split(/\s+/)[0] ?? ''));
+/** A window that changes the mood is not accepted: a statement or request that becomes a bare question ("body color should be red" -> "body color?"), a wh-question that becomes a statement ("which animals are mammals" -> "animals are mammals", taught as a fact). */
+export const changesIntoQuestion = (original, slice, kinds) => kinds.length > 0
+  && ((kinds.every((k) => k === 'question') && !looksLikeQuestion(original) && slice.length / Math.max(1, original.trim().length) < 0.6)
+    || (kinds.every((k) => k === 'statement') && asksWh(original)));
 
 export const NEGATIONS = new Set(['not', 'no', 'never', 'without', 'dont', "don't", 'don’t', 'cannot', "can't", 'cant', "won't", 'wont', "isn't", "doesn't", "didn't", 'nothing', 'none', 'nobody', 'neither', 'nor', 'stop', 'undo', 'cancel']);
 
