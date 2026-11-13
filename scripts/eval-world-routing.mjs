@@ -152,7 +152,9 @@ async function run(dir, out) {
   const mw = await loadMetaWorlds(engine.set);
   const items = JSON.parse(readFileSync(join(dir, 'inputs.json'), 'utf8'));
   const enc = new Map(readFileSync(join(dir, 'enc-out.jsonl'), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).map((r) => [r.id, r.p]));
-  const validator = flag('no-validator') ? null : createDispatchValidator({ engine, policy: policyFromSettings(runtimeSettings()) });
+  const reuse = arg('reuse-a') ? JSON.parse(readFileSync(resolve(arg('reuse-a')), 'utf8')) : null;   // the A column of an earlier run of the same inputs (the validator is the slow part)
+  const weights = (arg('prior-weights', '') || '').split(',').filter(Boolean).map(Number);
+  const validator = flag('no-validator') || reuse ? null : createDispatchValidator({ engine, policy: policyFromSettings(runtimeSettings()) });
   const noTalk = new Set(mw.worlds.filter((w) => w !== 'talk'));
   const rows = [];
   for (const [i, x] of items.entries()) {
@@ -174,14 +176,17 @@ async function run(dir, out) {
       } catch (e) { why = `error ${e.message?.slice(0, 40)}`; }
       r.A = { world, v: verdict(x.gold, world), ms: performance.now() - t, why };
     }
+    if (reuse && reuse[i]?.A) r.A = reuse[i].A;
     // A without validation: the encoder's top-1 (reference)
     const a1 = p ? top3(p)[0].world : null;
     r.A1 = { world: a1, v: verdict(x.gold, a1) };
     const dec = (args, keep) => { const [d, ms] = time(() => mw.decide({ ...base, ...args, keep })); return { world: d.world, v: verdict(x.gold, d.world), ms, top: d.top, asked: d.asked, why: d.ranked[0]?.reasons.slice(0, 2).map((y) => y.say).join('; ') ?? null }; };
     r.B = dec({}); r.C = dec({ prior: norm(p, []) });
     r.Bt = dec({}, noTalk); r.Ct = dec({ prior: norm(p, []) }, noTalk);   // without the talk card
+    r.sweep = {};
+    for (const wt of weights) r.sweep[wt] = dec({ prior: norm(p, []), weight: wt }, noTalk);
     r.holdout = {};
-    for (const h of HOLDOUT) { r.holdout[h] = { C: dec({ prior: norm(p, [h]) }, noTalk) }; }
+    for (const h of HOLDOUT) { r.holdout[h] = { C: dec({ prior: norm(p, [h]) }, noTalk) }; if (weights.length) r.holdout[h].light = dec({ prior: norm(p, [h]), weight: 15 }, noTalk);   // a lighter prior (15 points) for the hold-out }
     rows.push(r);
   }
   writeFileSync(join(dir, 'rows.json'), JSON.stringify(rows));
