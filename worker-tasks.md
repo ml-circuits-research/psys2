@@ -3590,3 +3590,22 @@ If P1–P3 pass: migrate draw, Talk, charts, editor, map one by one, deleting th
 
 **What stays special:** games, arithmetic, shop: rule worlds with their own moves. They still declare their acts for routing and replies.
 **Risks to answer in questions.md:** phrasing variety the act grammar misses; replies getting bland; cost per turn; what sopworld must provide (schema declarations, generic apply, `std.fill`, `std.focus`, relations) versus host code; how FORMALIZE-FROM-WORLDS and describe.sop already cover part of this.
+
+## Reviewer 2026-11-13 19:35 — ACTS × SCHEMAS: approved by the owner. Build it. ("as flexible and intelligent as we can, with as much general knowledge as we can")
+
+The 19:25 proposal is now the main line of work; objections still go to questions.md but do not wait for answers. It absorbs WORLDS-AS-MODULES (M1 dialogue, M2 scene/space, M3 delegation are the role fillers; M4 translation stays separate), ONE AVATAR (the avatar is pilot 1) and ABOUT-THE-DISCUSSION (the session offered as facts is one more source for roles). NO POINT FIXES holds throughout.
+
+**Tasks, in order; parallel worktrees where marked:**
+- **A1 The act module** `acts` (shared, not a tab): the acts and their roles as SOP Lang; the act grammar written once (English), words for acts taken from the knowledge repo's `k.actions` (arriving; until then a small local seed that is deleted afterwards). Spec first (one page), then code.
+- **A2 The schema format** for a doing world: kinds (or "any drawable kind from knowledge"), attributes with value types, allowed acts, defaults, limits. Generate from it: the meta.worlds card, the help examples, the lexicon. Agree the format with sopworld (they have the same task from the library side); use their module when it lands.
+- **A3 The generic executor**: apply an act to a schema-described state; undo, the state difference (LOG WHAT HAPPENED), the reply and the why-answer come from the act. Both reasoners.
+- **A4 Graded fallback** (always something sensible): fill a missing role by delegation and say the guess; act not possible here → say where it is possible; else one question naming the guessed act and thing.
+- **P1 Pilot (parallel): avatar and diagram.sketch on schema + acts, zero world patterns.** Table against today's worlds on their test sets, the four owner logs, the ledger.
+- **P2 A world from a schema alone (parallel):** a seating plan (tables, seats, people; attributes name, place, colour) under 60 lines; 60 natural requests written by someone who has not seen the grammar (use the round-trip paraphraser and the knowledge words to vary them); report how many work.
+- **P3 The reader:** generate training data for an act + roles tagger from all schemas × act grammar × knowledge words; train on the Spark; hold out two worlds. Compare with the dispatcher + patterns on the dialogue and operational sets. The dispatcher is not retrained per world again.
+- **A5 The coverage grid**: generated world × act × kind sentences, run in both reasoners, shown as a table in worker-log and as a page in the debug panel; its holes become the feature list (replaces hand-written feature tests).
+- **A6 Migration** after P1–P3 pass: draw, Talk, charts, editor, map, one per landing, patterns deleted, lines removed reported.
+
+**General knowledge everywhere (owner):** every role may be filled or checked by lookup: kinds and synonyms, parts, usual place and size, usual colour, what joins what, layouts, person kinds, feelings → expressions, actions → acts. The knowledge repo is getting `k.actions` (verbs mapped to the acts with their roles), `k.attributes` (which attributes kinds usually have and their usual values), `k.values` (colour names, size words, amounts, "random / different / same"), `k.layouts`, anchors. Use them through the generic catalog reading (KNOWLEDGE-ALL-WORLDS item 1 comes first: it unblocks all of this).
+
+**Report after each task:** one table (set, before, after), the grid's hole count, patterns and lines removed. Smoke per landing only.
