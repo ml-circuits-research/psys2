@@ -1,0 +1,14 @@
+@t.session.things.n1 core.test
+    input="A villa is a kind of house."
+    expect="OK, a villa is a kind of house."
+    session=a
+
+@t.session.things.n2 core.test
+    input="My dog is called Rex."
+    expect="your dog is called Rex"
+    session=a
+
+@t.session.things.n3 core.test
+    input="Ducks float."
+    expect="OK, ducks float"
+    session=a

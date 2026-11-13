@@ -1,0 +1,171 @@
+@lex.space.ordinals core.lexicon
+    class=modifier
+    doc="Which one by order: first, second, ... last."
+    word=first
+    word=second
+    word=third
+    word=fourth
+    word=fifth
+    word=sixth
+    word=seventh
+    word=eighth
+    word=ninth
+    word=tenth
+    word=last
+    word=1st
+    word=2nd
+    word=3rd
+    word=4th
+    word=5th
+    word=6th
+
+@lex.space.positions core.lexicon
+    class=modifier
+    doc="Which one by place: left, right, top, bottom, middle (as the word of a thing: the left one, the middle house)."
+    word=left
+    word=leftmost
+    word=right
+    word=rightmost
+    word=top
+    word=topmost
+    word=upper
+    word=highest
+    word=bottom
+    word=bottommost
+    word=lowest
+    word=middle
+    word=centre
+    word=center
+    word=central
+
+@lex.space.sizes core.lexicon
+    class=modifier
+    doc="Which one by size: biggest, smallest."
+    word=biggest
+    word=largest
+    word=tallest
+    word=smallest
+    word=tiniest
+    word=littlest
+
+@lex.space.counts core.lexicon
+    class=modifier
+    doc="How many of the group: the two on the left."
+    word=two
+    word=three
+    word=four
+    word=five
+    word=both
+
+@lex.space.dirs core.lexicon
+    class=modifier
+    doc="Directions of a move, combined with and (left and down)."
+    word=left
+    word=leftwards
+    word=right
+    word=rightwards
+    word=up
+    word=upwards
+    word=upward
+    word=higher
+    word=down
+    word=downwards
+    word=downward
+    word=lower
+
+@lex.space.amounts core.lexicon
+    class=modifier
+    doc="How far one move goes: a step by default, a bit, a lot, all the way, by half."
+    word=a_tiny_bit
+    word=tiny
+    word=a_bit
+    word=a_little_bit
+    word=a_little
+    word=slightly
+    word=just_a_bit
+    word=a_step
+    word=one_step
+    word=two_steps
+    word=three_steps
+    word=much
+    word=very_much
+    word=a_lot
+    word=so_much
+    word=way
+    word=far
+    word=all_the_way
+    word=to_the_edge
+    word=by_half
+    word=half_way
+    word=halfway
+
+@lex.space.more core.lexicon
+    class=modifier
+    doc="Words that repeat or continue the last move: further, more, again."
+    word=more
+    word=even
+    word=further
+    word=farther
+    word=again
+    word=once_more
+
+@lex.space.layouts core.lexicon
+    class=modifier
+    doc="Ways to arrange a group: row, column, grid, circle, spread, align, tidy, swap, stack, by height, the parts of a face."
+    word=row
+    word=line
+    word=column
+    word=grid
+    word=circle
+    word=ring
+    word=spread
+    word=align
+    word=tidy
+    word=swap
+    word=stack
+    word=stacked
+    word=pile
+    word=height
+    word=face
+
+@lex.space.relations core.lexicon
+    class=modifier
+    doc="Where a thing goes in relation to another: next to, above, under, between, around, against, in, on."
+    word=above
+    word=over
+    word=under
+    word=below
+    word=beneath
+    word=underneath
+    word=beside
+    word=near
+    word=next_to
+    word=close_to
+    word=left_of
+    word=right_of
+    word=between
+    word=around
+    word=against
+    word=in
+    word=inside
+    word=into
+    word=on
+    word=onto
+    word=on_top_of
+
+@lex.space.contact core.lexicon
+    class=modifier
+    doc="Words that ask for contact: touching, against, joined."
+    word=touching
+    word=against
+    word=joined
+    word=attached
+    word=touch
+
+@lex.space.apart core.lexicon
+    class=modifier
+    doc="Words that ask for a gap: apart, gap, separate."
+    word=apart
+    word=gap
+    word=separate
+    word=separately
