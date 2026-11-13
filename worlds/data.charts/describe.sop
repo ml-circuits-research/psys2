@@ -17,7 +17,6 @@
     of=$describe.fromtext
     name=c
     class=lex.data.charts.nouns
-    optional=true
 
 @describe.fromtext.d core.describe.arg
     of=$describe.fromtext
@@ -638,7 +637,6 @@
     of=$describe.settitle
     lang=en
     verb=$w.en.call.chart.setTitle
-    verb=$w.en.name.chart.setTitle
     verb=$w.en.title.chart.setTitle
     prep.t=$w.en.it.chart.setTitle.t
     prep.t=$w.en.chart.chart.setTitle.t
@@ -1294,7 +1292,6 @@
 @w.en.separate.chart.setStacked core.word text=separate means=chart.setStacked
 @w.en.split.chart.setStacked core.word text=split means=chart.setStacked
 @w.en.call.chart.setTitle core.word text=call means=chart.setTitle
-@w.en.name.chart.setTitle core.word text=name means=chart.setTitle
 @w.en.title.chart.setTitle core.word text=title means=chart.setTitle
 @w.en.it.chart.setTitle.t core.word text=it means=chart.setTitle.t
 @w.en.chart.chart.setTitle.t core.word text=chart means=chart.setTitle.t
