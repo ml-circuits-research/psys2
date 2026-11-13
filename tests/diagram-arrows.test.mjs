@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import * as ops from '../worlds/diagram.sketch/ops.mjs';
+import * as ops from '../worlds/diagram.sketch/engine.mjs';
 import { routeEdges, CORNER, MIN_ENTRY, CLEAR, SPREAD } from '../worlds/diagram.sketch/arrows.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });

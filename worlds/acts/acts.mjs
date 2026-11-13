@@ -84,10 +84,11 @@ const yes = (v) => v === 'yes' || v === 'true';
 export function parseSchema(wires) {
   const sw = wires.find((w) => w.type === 'acts.schema');
   if (!sw) throw new Error('schema.sop has no acts.schema wire');
-  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout', 'rel', 'thingask', 'matrix', 'reader', ...FLAGS_MORE].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
+  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout', 'rel', 'thingask', 'matrix', 'reader', 'tabUndo', 'claim', 'signal', ...FLAGS_MORE].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
   const schema = { id: sw.id, noun: val(sw, 'noun') ?? sw.id, acts: new Set(vals(sw, 'acts')), limits: { items: 100, history: 30, ...Object.fromEntries(sw.entries.filter((e) => e.key.startsWith('limit.')).map((e) => [e.key.slice(6), Number(e.value.v)])) }, kinds: {}, attrs: {}, doc: val(sw, 'doc') ?? '', tabOnly: val(sw, 'tabOnly') === 'yes' };
   for (const a of schema.acts) if (!Object.hasOwn(ACTS, a)) throw new Error(`unknown act '${a}' in ${sw.id}`);
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
+  if (val(sw, 'boost')) schema.boost = Number(val(sw, 'boost'));
   if (val(sw, 'sample')) schema.sample = val(sw, 'sample');
   if (val(sw, 'hooks')) schema.hooks = val(sw, 'hooks');   // a sibling module with the world's hooks (knowledge, domain effects, projection): host code the schema cannot say
   if (vals(sw, 'own').length) schema.own = vals(sw, 'own');   // "<export>:<action>": operations of the world that are not acts (a name, a moment of the stage), exported by own.mjs
@@ -198,6 +199,11 @@ export const FORMS = [
   { id: 'place.layout.all', act: 'place', mode: 'layout', match: 'L [arrange|lay_out|tidy|organise|organize|space_out|distribute|align] D {thing:words} [out|up]?', args: ['thing'], priority: 8, if: 'layout', example: 'Tidy up the circles.' },
   // the world's own reader (flag `reader`): in the world's open tab, a sentence its engine reads as a command or question of a family the acts do not name (the engine's `accepts` decides)
   { id: 'read.own', act: 'own', match: '{rest:rest}', args: ['rest'], priority: 1, tabPriority: 30, tabOnly: true, if: 'reader', example: 'Which shape is the largest?' },
+  // the same reader outside the tab: only for a sentence the world's `accepts` recognises as its own frame (it names the diagram, "shaped like a house"); it is no catch-all of other worlds' sentences
+  { id: 'read.frame', act: 'own', match: '{pre:words} diagram {post:rest}', args: ['pre', 'post'], priority: 30, tabOnly: false, if: 'reader', example: 'Make a diagram shaped like a house.' },
+  { id: 'read.frame.end', act: 'own', match: '{pre:words} diagram', args: ['pre'], priority: 30, tabOnly: false, if: 'reader', example: 'Add a star to the diagram.' },
+  { id: 'read.frame.shaped', act: 'own', match: '{pre:words} [chart|layout|graph|box|boxes] [shaped|laid_out|arranged] [like|as] {post:rest}', args: ['pre', 'post'], priority: 30, tabOnly: false, if: 'reader', example: 'Add a box shaped like a guitar.' },
+  { id: 'read.frame.form', act: 'own', match: '{pre:words} [a|an] [shape|box] in_the [shape|form] of {post:rest}', args: ['pre', 'post'], priority: 30, tabOnly: false, if: 'reader', example: 'Draw a shape in the form of a house.' },
   { id: 'bare.mod', act: 'make', mode: 'bare', match: 'L D {pre:words} {thing:KIND} [at_me|a_little|twice]?', args: ['pre', 'thing'], priority: 3, if: 'bare', example: 'Round glasses.' },
   { id: 'bare', act: 'make', mode: 'bare', match: 'L D {thing:KIND} [at_me|a_little|twice]?', args: ['thing'], priority: 3, if: 'bare', example: 'Glasses.' },
 ];
@@ -234,7 +240,7 @@ export function formsFor(schema) {
 /** Forms whose words say "yourself" / "the avatar" themselves: they claim the sentence for their world on any tab (pattern tabClaim). */
 const CLAIMING = new Set(['make.self', 'make.on', 'change.self', 'change.be.self', 'change.should.self', 'change.call', 'change.call.2', 'change.name.is', 'change.name.called', 'ask.name']);
 const expandMatch = (m, ns) => `[$lang.lead.filler|pls|plz]? ${expandCore(m, ns)} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?`;
-const expandCore = (m, ns) => m.replace(/\{(\w+):words\}$/, '{$1:rest}').replace(/\bL\b/g, '[$lang.lead.polite]?').replace(/\bD\b/g, '[$acts.det]?').replace(/\bV\.(\w+)/g, '[$acts.verb.$1]')
+const expandCore = (m, ns) => m.replace(/\[V\.(\w+)\|/g, '[$acts.verb.$1|').replace(/\{(\w+):words\}$/, '{$1:rest}').replace(/\bL\b/g, '[$lang.lead.polite]?').replace(/\bD\b/g, '[$acts.det]?').replace(/\bV\.(\w+)/g, '[$acts.verb.$1]')
   .replace(/\bREL\b/g, '{rel:lex.acts.rel}').replace(/\{(\w+):ATTR\}/g, `{$1:lex.${ns}.attrs}`).replace(/\{(\w+):VALUE(\??)\}/g, `{$1:lex.${ns}.values$2}`)
   .replace(/\{(\w+):KIND\}/g, `{$1:lex.${ns}.kinds}`).replace(/\{(\w+):MORE\}/g, `{$1:lex.${ns}.more}`).replace(/\{(\w+):LESS\}/g, `{$1:lex.${ns}.less}`)
   .replace(/\{(\w+):TURN\}/g, `{$1:lex.${ns}.turn}`).replace(/\{(\w+):FACTOR\}/g, `{$1:lex.${ns}.factor}`).replace(/\bNOUN\?/g, `{noun:lex.${ns}.nouns?}`).replace(/\bNOUN\b/g, `{noun:lex.${ns}.nouns}`);
@@ -257,9 +263,10 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () 
   ].join('\n');
   const forms = formsFor(schema);
   const pats = [note];
+  const boost = Number(schema.boost ?? 0);   // a world whose signals (named shapes, arrows, chart words) beat the open tab of another world
   for (const f of forms) {
     const emit = `@{_} core.request action=${ns}.${f.act}${f.mode ? ` arg.mode=${f.mode}` : ''}${Object.entries(f.lit ?? {}).map(([k, v]) => ` arg.${k}=\\"${v}\\"`).join('')}${f.args.map((a) => ` arg.${a}=\\"{${a}}\\"`).join('')} arg.text=\\"{segment}\\"`;
-    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority}\n    tabPriority=${f.tabPriority ?? f.priority + 8}\n${CLAIMING.has(f.id) ? '    tabClaim=true\n' : ''}${schema.tabOnly || f.tabOnly ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n${isCanon(exampleOf(schema, f)) && sayable(schema, exampleOf(schema, f)) ? `    canonical=${JSON.stringify(exampleOf(schema, f))}\n` : ''}`);
+    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority + boost}\n    tabPriority=${(f.tabPriority ?? f.priority + 8) + boost}\n${schema.flags?.signal ? "    signal=true\n" : ""}${CLAIMING.has(f.id) || schema.flags?.claim ? '    tabClaim=true\n' : ''}${(f.tabOnly ?? (schema.tabOnly || (schema.flags?.tabUndo && (f.act === 'undo' || f.act === 'redo')))) ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n${isCanon(exampleOf(schema, f)) && sayable(schema, exampleOf(schema, f)) ? `    canonical=${JSON.stringify(exampleOf(schema, f))}\n` : ''}`);
   }
   const used = [...new Set(forms.map((f) => f.act))];
   const own = (schema.own ?? []).map((o) => o.split(':'));

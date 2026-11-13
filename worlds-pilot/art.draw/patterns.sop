@@ -315,7 +315,7 @@
     example="Eyes closer together."
 
 @pat.art.draw.place.layout core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [[$acts.verb.place]|arrange|lay_out|space_out|distribute|tidy|organise|organize] [$acts.det]? {thing:words} [out|up]? [in|into|as|on|along|across]? [$acts.det]? {rel:lex.acts.layout} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place|arrange|lay_out|space_out|distribute|tidy|organise|organize] [$acts.det]? {thing:words} [out|up]? [in|into|as|on|along|across]? [$acts.det]? {rel:lex.acts.layout} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.place arg.mode=layout arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
     kind=request
     priority=13

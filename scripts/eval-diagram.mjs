@@ -67,7 +67,7 @@ const stateOf = (row) => ({
 
 async function setup() {
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-  const ops = await import('../worlds/diagram.sketch/ops.mjs');
+  const ops = await import('../worlds/diagram.sketch/engine.mjs');
   const actOf = new Map(engine.set.get(WORLD).patterns.map((p) => [p.id, /action=([\w.]+)/.exec(p.emit)?.[1]]));
   const allActs = new Map(engine.set.list().flatMap((w) => w.patterns.map((p) => [p.id, /action=([\w.]+)/.exec(p.emit ?? '')?.[1] ?? null])));
   const src = createSourceSystem();

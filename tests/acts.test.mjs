@@ -40,7 +40,7 @@ test('the act words of worlds/acts are generated from the k.actions verbs, and t
 test('the twelve acts and the six roles are declared; every form belongs to a declared act and role', () => {
   assert.equal(Object.keys(A.ACTS).length, 15);   // twelve acts, undo / redo and save / load counted as two each, and `own` (the world's own reader, flag `reader`)
   assert.deepEqual(A.ROLES, ['thing', 'set', 'attribute', 'value', 'place', 'amount']);
-  for (const f of A.FORMS) { assert.ok(A.ACTS[f.act], f.id); for (const a of f.args) assert.ok([...A.ROLES, 'rel', 'rest', 'pre'].includes(a), `${f.id}: ${a}`); }
+  for (const f of A.FORMS) { assert.ok(A.ACTS[f.act], f.id); for (const a of f.args) assert.ok([...A.ROLES, 'rel', 'rest', 'pre', 'post'].includes(a), `${f.id}: ${a}`); }
 });
 
 test('the schema world has no pattern of its own: a schema of under 60 lines, everything else generated', () => {

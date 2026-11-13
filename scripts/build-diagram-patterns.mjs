@@ -5,7 +5,7 @@
 // Inputs: imports/diagram-vss-demo/world-draft/legend.json (the cue words of the source legend, commit 9900d34) and the most frequent short
 // spans per act of imports/diagram-vss-demo/data/train (via training/diagram/top-spans.json, written by scripts/convert-diagram-data.mjs).
 // Each act has one pattern made of the lead-in macros of lang.common, a world-local cue phrase (the legend's cue words of that act) and a tail;
-// the pattern hands the sentence itself ({segment}) to the operation, whose engine reads the arguments (worlds/diagram.sketch/ops.mjs).
+// the pattern hands the sentence itself ({segment}) to the operation, whose engine reads the arguments (worlds/diagram.sketch/engine.mjs).
 // With --filter, examples that the finished world does not read with that very pattern are dropped (so every example is a real example).
 import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';

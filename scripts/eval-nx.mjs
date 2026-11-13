@@ -209,7 +209,7 @@ const stateOf = (row) => ({
 let diagOps = null;
 async function runDiag(env, it) {
   const row = it.row;
-  diagOps ??= await import('../worlds/diagram.sketch/ops.mjs');
+  diagOps ??= await import('../worlds/diagram.sketch/engine.mjs');
   const allActs = (env.allActs ??= new Map(env.engine.set.list().flatMap((w) => w.patterns.map((p) => [p.id, /action=([\w.]+)/.exec(p.emit ?? '')?.[1] ?? null]))));
   const nodes = diagOps.read(row.text, stateOf(row))?.nodes ?? [];
   const goldRow = row.wires ? { wires: row.wires, text: row.text } : { type: row.type, gold: row.gold };
