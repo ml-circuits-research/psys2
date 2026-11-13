@@ -27,7 +27,7 @@ The English forms of the acts are written ONCE, as `core.phrase` groups in `worl
 
 ## 3. The schema (SOP Lang, `schema.sop`)
 ```
-@seat core.schema        noun="seating plan" acts=make acts=remove acts=change acts=place acts=ask acts=undo ...
+@seat acts.schema        noun="seating plan" acts=make acts=remove acts=change acts=place acts=ask acts=undo ...
                          limit.items=60 limit.history=30
 @seat.table acts.kind    plural=tables numbered=yes max=10
 @seat.guest acts.kind    plural=guests named=yes in=table
@@ -45,3 +45,7 @@ A missing role is filled by the first tier that has it: `said` > `focus` (`hooks
 
 ## 6. What stays out
 Chess legality, the hangman word, arithmetic: rule worlds that keep their moves and only declare their acts for routing. Layouts (`place` with `space`) go through `hooks.layout`. The reader tagger (P3) and the coverage grid (A5) are separate tasks.
+
+## 7. How a schema world meets the engine (implemented)
+Every pattern emits `action=<ns>.<act>` with the role arguments plus `arg.text="{segment}"` (the user's sentence, kept in the act log for the why-answer). The generated `ops.mjs` exports one function per act, `interceptInput` (the answer to the one open question: a role, or yes / no to a guessed act; a message that is a new command cancels the question and is read normally) and `outOfScope` (the engine's hook for the world of the open tab when nothing read the sentence: the guessed act and thing, one question, examples). Lexicons of attributes, values and comparatives are `class=modifier` (the engine must not take "blue" for a thing that "it" can mean). The engine's discourse layer owns "redo": it works through the world's own undo and is cancelled by any later turn, a query included; the executor's own redo is the fallback for hosts that call it directly.
+Measured on the seating plan (schema of 49 lines, 41 generated patterns): 40 natural requests written without looking at the grammar, read by a rule of the grammar and answered with an act reply in 39 of 40 in both reasoners (the miss is a fragment, "a bigger table 1", which belongs to the dialogue module); a correct answer in 36 of the 39 on a manual reading; the three others were found as general cells (coordinated things, unread leftovers, relation words the world does not have), fixed once in the executor, and pinned in tests/acts.test.mjs.
