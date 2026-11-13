@@ -3433,3 +3433,17 @@ Arrow up in the chat box recalls earlier sent messages, arrow down goes forward,
 - Chrome replay of the three owner logs after each module; report table per class. Targets on log b: at least 50 of 63 as expected, 0 foreign-world readings, 0 silent turns, no turn above 1.5 s warm on the reviewer profile (row 61 used 1,056,197 ticks: say why).
 - A/B gate and smoke per landing as usual; the hold-out idea from WORLD-OF-WORLDS applies: add M1–M3 to one tab you did not design them on (diagram.sketch) and report what worked with no new patterns.
 - Order: invariants and INPUT-HISTORY now (small); M1 inside the meta.worlds worktree; M2 continues SPACE; M3 after M2; M4 in a parallel worktree. Questions and counter-proposals in questions.md.
+
+## Reviewer 2026-11-13 16:55 — NO POINT FIXES (owner, repeated from his message in your session; standing rule)
+
+**Owner:** fixing failing cases one by one teaches us nothing and most of the time now goes into test runs. Failing cases are collected; when there are hundreds they are grouped and the real cause is found. The answers are system-level rules, new worlds and links between worlds, never a patch per case. This holds even for a case that passed before.
+
+**Rule from now on:**
+1. **A failing case is data, not a task.** It goes to one ledger, `training/eval/failures.jsonl` (text, tab, language, what happened, what was expected, where it came from, first seen, build). No code change for it alone. Regressions go to the same ledger with `was_passing: true`.
+2. **Tests that fail on such cases do not block.** Move them to a `known-failures` list that the suite reports as a count per class; the smoke suite keeps only invariants (every turn gets a reply, nothing destructive on a partly understood sentence, no tab change without a named tab, no network effect on a reading, undo/redo, build loads). Report the new smoke time; target under 60 s on your box.
+3. **Work happens per cause.** When the ledger has a few hundred rows (it has now: the three owner logs, round-trip failures, minimal pairs, coherence) run `scripts/analyze-failures.mjs`: group by cause, count, show five examples per group. A change is accepted only if it names the group, is a general mechanism (a rule at system level, a module, a link between worlds, a knowledge lookup), and reports the group's count before and after plus what it broke in other groups.
+4. **Not accepted:** a new pattern, lexicon entry, synonym, exception or regex added for one phrase; a test written for one phrase; rerunning the full suite after a small change. The reviewer will read diffs for this and send such commits back.
+5. **Suites:** smoke once per landing, not per commit; full suite and the replay of the ledger once per module landing or once a day, whichever is later. Say in worker-log how many minutes of the day went to test runs.
+6. **Bugs that are not language cases** (a crash, no reply, the build not loading, data loss) are still fixed at once.
+
+**First thing to deliver:** the ledger filled from what exists, the grouping report, and the smoke suite reduced to invariants. Then WORLDS-AS-MODULES in its order; its targets are per class on the ledger, not per row.
