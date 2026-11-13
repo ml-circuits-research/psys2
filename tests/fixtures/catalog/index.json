@@ -578,6 +578,35 @@
      ],
      "license": "CC0-1.0",
      "warnings": []
+    },
+    {
+     "id": "k.layouts/shards/names",
+     "path": "k.layouts/shards/names.sop",
+     "wires": 16,
+     "bytes": 5522,
+     "keys": [
+      "row",
+      "column",
+      "grid",
+      "ring",
+      "scatter",
+      "corners",
+      "stack",
+      "pyramid",
+      "tree",
+      "flow",
+      "radial",
+      "nested",
+      "border",
+      "landscape",
+      "room",
+      "family photo"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
     }
    ]
   },

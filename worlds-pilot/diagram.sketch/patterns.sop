@@ -265,6 +265,22 @@
     tabPriority=14
     example="Eyes closer together."
 
+@pat.diagram.sketch.place.layout core.pattern
+    match="[$lang.lead.polite]? [[$acts.verb.place]|arrange|lay_out|space_out|distribute|tidy|organise|organize] [$acts.det]? {thing:words} [out|up]? [in|into|as|on|along|across]? [$acts.det]? {rel:lex.acts.layout}"
+    emit="@{_} core.request action=diagram.sketch.place arg.mode=layout arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Line up the circles horizontally."
+
+@pat.diagram.sketch.place.layout.all core.pattern
+    match="[$lang.lead.polite]? [arrange|lay_out|tidy|organise|organize|space_out|distribute|align] [$acts.det]? {thing:words} [out|up]?"
+    emit="@{_} core.request action=diagram.sketch.place arg.mode=layout arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=8
+    tabPriority=16
+    example="Tidy up the circles."
+
 @pat.diagram.sketch.bare core.pattern
     match="[$lang.lead.polite]? [$acts.det]? {thing:lex.diagram.sketch.kinds} [at_me|a_little|twice]?"
     emit="@{_} core.request action=diagram.sketch.make arg.mode=bare arg.thing=\"{thing}\" arg.text=\"{segment}\""

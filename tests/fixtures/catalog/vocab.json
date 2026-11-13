@@ -496,6 +496,59 @@
   "k.layouts/shards/layouts",
   "k.layouts/shards/layouts"
  ],
+ "row": [
+  "k.layouts/shards/names",
+  "k.actions/shards/actions-move"
+ ],
+ "column": [
+  "k.layouts/shards/names"
+ ],
+ "grid": [
+  "k.layouts/shards/names"
+ ],
+ "ring": [
+  "k.layouts/shards/names",
+  "k.actions/shards/actions-body-social-nature"
+ ],
+ "scatter": [
+  "k.layouts/shards/names",
+  "k.actions/shards/verbs-place"
+ ],
+ "corners": [
+  "k.layouts/shards/names"
+ ],
+ "stack": [
+  "k.layouts/shards/names",
+  "k.actions/shards/verbs-group"
+ ],
+ "pyramid": [
+  "k.layouts/shards/names"
+ ],
+ "tree": [
+  "k.layouts/shards/names"
+ ],
+ "flow": [
+  "k.layouts/shards/names",
+  "k.actions/shards/actions-body-social-nature"
+ ],
+ "radial": [
+  "k.layouts/shards/names"
+ ],
+ "nested": [
+  "k.layouts/shards/names"
+ ],
+ "border": [
+  "k.layouts/shards/names"
+ ],
+ "landscape": [
+  "k.layouts/shards/names"
+ ],
+ "room": [
+  "k.layouts/shards/names"
+ ],
+ "family photo": [
+  "k.layouts/shards/names"
+ ],
  "accept": [
   "k.actions/shards/actions-body-social-nature"
  ],
@@ -634,9 +687,6 @@
   "k.actions/shards/actions-body-social-nature"
  ],
  "fight": [
-  "k.actions/shards/actions-body-social-nature"
- ],
- "flow": [
   "k.actions/shards/actions-body-social-nature"
  ],
  "flower": [
@@ -837,9 +887,6 @@
   "k.actions/shards/verbs-remove"
  ],
  "rest": [
-  "k.actions/shards/actions-body-social-nature"
- ],
- "ring": [
   "k.actions/shards/actions-body-social-nature"
  ],
  "run into": [
@@ -2342,9 +2389,6 @@
   "k.actions/shards/actions-move",
   "k.actions/shards/verbs-change"
  ],
- "row": [
-  "k.actions/shards/actions-move"
- ],
  "run": [
   "k.actions/shards/actions-move"
  ],
@@ -2791,9 +2835,6 @@
  "sort": [
   "k.actions/shards/verbs-group"
  ],
- "stack": [
-  "k.actions/shards/verbs-group"
- ],
  "bring back": [
   "k.actions/shards/verbs-load"
  ],
@@ -2905,9 +2946,6 @@
   "k.actions/shards/verbs-place"
  ],
  "relocate": [
-  "k.actions/shards/verbs-place"
- ],
- "scatter": [
   "k.actions/shards/verbs-place"
  ],
  "set down": [

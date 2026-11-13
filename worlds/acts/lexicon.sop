@@ -399,3 +399,33 @@
     word=down
     word=left
     word=right
+
+@lex.acts.layout core.lexicon
+    class=trigger
+    doc="Words of an arrangement: the layouts of k.layouts and the adverbs of a line-up."
+    word=row
+    word=column
+    word=grid
+    word=ring
+    word=scatter
+    word=corners
+    word=stack
+    word=pyramid
+    word=tree
+    word=flow
+    word=radial
+    word=nested
+    word=border
+    word=landscape
+    word=room
+    word=family_photo
+    word=face
+    word=horizontally
+    word=vertically
+    word=evenly
+    word=neatly
+    word=in_a_row
+    word=in_a_line
+    word=in_a_column
+    word=in_a_circle
+    word=diagonally

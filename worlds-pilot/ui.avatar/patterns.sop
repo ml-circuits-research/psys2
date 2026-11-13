@@ -217,6 +217,14 @@
     tabPriority=19
     example="Give yourself a beard."
 
+@pat.ui.avatar.make.put core.pattern
+    match="[$lang.lead.polite]? [put|place|stick|draw|give] [him|her|it|the_avatar|me|yourself|myself]? [$acts.det]? {thing:rest}"
+    emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=9
+    tabPriority=17
+    example="Give him a beard."
+
 @pat.ui.avatar.make.on core.pattern
     match="[$lang.lead.polite]? [put|place|add|stick|draw] [$acts.det]? {thing:words} [on_yourself|on_your_face|on_your_head|to_yourself|to_your_face|on_you|on_ur_face]"
     emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""

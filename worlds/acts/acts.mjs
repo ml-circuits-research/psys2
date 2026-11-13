@@ -81,7 +81,7 @@ const yes = (v) => v === 'yes' || v === 'true';
 export function parseSchema(wires) {
   const sw = wires.find((w) => w.type === 'acts.schema');
   if (!sw) throw new Error('schema.sop has no acts.schema wire');
-  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name'].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
+  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout'].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
   const schema = { id: sw.id, noun: val(sw, 'noun') ?? sw.id, acts: new Set(vals(sw, 'acts')), limits: { items: 100, history: 30, ...Object.fromEntries(sw.entries.filter((e) => e.key.startsWith('limit.')).map((e) => [e.key.slice(6), Number(e.value.v)])) }, kinds: {}, attrs: {}, doc: val(sw, 'doc') ?? '' };
   for (const a of schema.acts) if (!Object.hasOwn(ACTS, a)) throw new Error(`unknown act '${a}' in ${sw.id}`);
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
@@ -158,6 +158,7 @@ export const FORMS = [
   { id: 'load', act: 'load', match: 'L V.load D {value:words}', args: ['value'], priority: 10, example: 'Load lunch.' },
   // forms of a character-like world (flag `self`) and the open-valued ones (be / has / dir / bare): written once, used by every world that sets the flag
   { id: 'make.self', act: 'make', match: 'L V.make [me|yourself|myself] D {thing:words}', args: ['thing'], priority: 11, if: 'self', example: 'Give yourself a beard.' },
+  { id: 'make.put', act: 'make', match: 'L [put|place|stick|draw|give] [him|her|it|the_avatar|me|yourself|myself]? D {thing:words}', args: ['thing'], priority: 9, if: 'self', example: 'Give him a beard.' },
   { id: 'make.on', act: 'make', match: 'L [put|place|add|stick|draw] D {thing:words} [on_yourself|on_your_face|on_your_head|to_yourself|to_your_face|on_you|on_ur_face]', args: ['thing'], priority: 12, if: 'self', example: 'Add glasses to your face.' },
   { id: 'remove.off', act: 'remove', match: 'L [take|put|get|pull] D {thing:words} [off|away|off_yourself|off_your_face|off_your_head]', args: ['thing'], priority: 12, if: 'self', example: 'Take the glasses off.' },
   { id: 'remove.without', act: 'remove', match: 'L [make|be|look|draw|show_me]? [yourself|me|it|the_face]? [without|with_no] D {thing:words}', args: ['thing'], priority: 11, if: 'self', example: 'Without a hat.' },
@@ -183,6 +184,8 @@ export const FORMS = [
   { id: 'change.name.is', act: 'change', mode: 'set', lit: { attribute: 'name' }, match: 'L [from_now_on]? [your|ur] name [is|will_be|shall_be] {value:rest}', args: ['value'], priority: 12, if: 'name', example: 'Your name is Robi.' },
   { id: 'change.name.called', act: 'change', mode: 'set', lit: { attribute: 'name' }, match: 'L [from_now_on]? [you|u] [are|r] [called|named] {value:rest}', args: ['value'], priority: 12, if: 'name', example: 'You are called Ziggy.' },
   { id: 'ask.name', act: 'ask', mode: 'what', lit: { attribute: 'name', thing: 'yourself' }, match: 'L [what_is_your_name|what_are_you_called|who_are_you|what_do_i_call_you|what_is_ur_name|tell_me_your_name]', args: [], priority: 12, if: 'name', example: 'What is your name?' },
+  { id: 'place.layout', act: 'place', mode: 'layout', match: 'L [V.place|arrange|lay_out|space_out|distribute|tidy|organise|organize] D {thing:words} [out|up]? [in|into|as|on|along|across]? D {rel:lex.acts.layout}', args: ['thing', 'rel'], priority: 13, if: 'layout', example: 'Line up the circles horizontally.' },
+  { id: 'place.layout.all', act: 'place', mode: 'layout', match: 'L [arrange|lay_out|tidy|organise|organize|space_out|distribute|align] D {thing:words} [out|up]?', args: ['thing'], priority: 8, if: 'layout', example: 'Tidy up the circles.' },
   { id: 'bare', act: 'make', mode: 'bare', match: 'L D {thing:KIND} [at_me|a_little|twice]?', args: ['thing'], priority: 3, if: 'bare', example: 'Glasses.' },
 ];
 
@@ -191,6 +194,8 @@ export const FORMS = [
 export const REL_WORDS = ['at', 'on', 'in', 'into', 'onto', 'to', 'next_to', 'near', 'beside', 'by', 'under', 'above', 'below', 'inside', 'with', 'around', 'between'];
 export const DET_WORDS = ['a', 'an', 'the', 'another', 'my', 'this', 'that', 'one', 'some', 'our', 'your', 'ur'];
 /** Direction words of a move (flag `dir`; the words of the space module): closer together, apart, higher, lower ... */
+/** Words of an arrangement (flag layout): the names of the layouts of k.layouts (generated, layouts.generated.mjs) and the adverbs of a line-up. */
+export const LAYOUT_ADVERBS = ['horizontally', 'vertically', 'evenly', 'neatly', 'in_a_row', 'in_a_line', 'in_a_column', 'in_a_circle', 'diagonally'];
 export const DIR_WORDS = ['closer', 'closer_together', 'together', 'apart', 'further_apart', 'wider_apart', 'higher', 'lower', 'up', 'down', 'left', 'right'];
 
 // ---- generation from the schema ----------------------------------------------------------------------------------------------------------------------
@@ -199,7 +204,7 @@ const cmpWords = (s, k) => [...new Set(Object.values(s.attrs).flatMap((a) => a[k
 function conditions(s) {
   return {
     in: Object.values(s.kinds).some((k) => k.in), named: Object.values(s.kinds).some((k) => k.named), attrs: Object.keys(s.attrs).length > 0,
-    name: !!s.flags?.name, self: !!s.flags?.self, dir: !!s.flags?.dir, be: !!s.flags?.be, has: !!s.flags?.has, bare: !!s.flags?.bare,
+    name: !!s.flags?.name, layout: !!s.flags?.layout, self: !!s.flags?.self, dir: !!s.flags?.dir, be: !!s.flags?.be, has: !!s.flags?.has, bare: !!s.flags?.bare,
     values: valueWords(s).length > 0, number: Object.values(s.attrs).some((a) => a.type === 'number'), more: cmpWords(s, 'more').length > 0, less: cmpWords(s, 'less').length > 0,
   };
 }

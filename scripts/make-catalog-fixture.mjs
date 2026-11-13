@@ -48,6 +48,9 @@ put('k.demo/shards/fruits', [`@k.demo.apple k.demo.fruit name=apple colour=red t
 const lay = readFileSync(path.join(src, 'k.layouts/shards/layouts.sop'), 'utf8').split('\n').filter((l) => l.startsWith('@') && (/ layout=face /.test(l) || /^@k\.layouts\.layout\.face /.test(l)));
 const layKeys = ['face', ...lay.map((l) => / name=("[^"]*"|\S+)/.exec(l)?.[1]?.replace(/"/g, '').toLowerCase()).filter(Boolean)];
 put('k.layouts/shards/layouts', `# fixture: the face layout of k.layouts\n\n${lay.join('\n')}\n`, layKeys, ['hand-core-1']);
+// k.layouts, every layout by name (the names are the words of an arrangement: spec 21), without the slots of the layouts
+const allLay = readFileSync(path.join(src, 'k.layouts/shards/layouts.sop'), 'utf8').split('\n').filter((l) => /^@k\.layouts\.layout\.\w+ k\.layouts\.layout /.test(l) && !/ layout=face /.test(l) && !/^@k\.layouts\.layout\.face /.test(l));
+put('k.layouts/shards/names', `# fixture: the names of the layouts of k.layouts\n\n${allLay.join('\n')}\n`, allLay.map((l) => / name=("[^"]*"|\S+)/.exec(l)?.[1]?.replace(/"/g, '').toLowerCase()).filter(Boolean), ['hand-core-1']);
 // k.actions: the whole world (acts, roles, markings, verbs: the act phrases of spec 21), copied as it is
 const actionsReal = real.worlds.find((w) => w.id === 'k.actions');
 files['k.actions/schema.sop'] = readFileSync(path.join(src, 'k.actions/schema.sop'), 'utf8');
