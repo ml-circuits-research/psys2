@@ -3342,3 +3342,13 @@ The owner finds the avatar system limited: fixed pictures from a library, few th
 - **E-T5 Cost.** Time and steps per turn on the phone profile, first hit and warm; the catalog cache size after a 30-turn conversation.
 
 **Build order:** card kinds 1 (drawing, parts, bars, line) + the board + "how do you know" first, publish, then transfers, then the rest. It uses SPACE and P2 of SCENE-NATURAL: start after those two; the question frames and card renderers can start now in a separate worktree. Gates: smoke per commit, full before each publish, A/B clean, no encoder retraining (if routing to `talk` needs it, stop and report: the frame decides, and Talk is the active tab).
+
+## Reviewer 2026-11-13 15:45 — network rule, model timeouts, "box shaped like", E2 test, DESCRIBE-ALL kids.common: accepted
+
+**Validated at 18033a4:** `npm run test:smoke` 207 pass, 0 fail, 115 s on the reviewer box; A/B dialogues clean. Your diagnosis of "Pariss" is accepted (wall-clock budgets, already replaced), and the real defect you found instead (an unbounded wait for the catalog that changed "what is a comet" into "I don't know") is the more important fix. The no-network guard for tests is accepted.
+
+Two small items:
+1. **"delete the box End" deletes Start** when only Start exists (found by you, not fixed). Fix it now with SCENE-NATURAL P3: a named referent that is not in the scene is never replaced by the only object there; say that End does not exist.
+2. **Model timeout rate on a phone:** the counter exists; the owner's phone shows it in the debug panel. No harness needed now.
+
+Then the queue, in this order: SCENE-NATURAL (replay report first), SPACE, SETTINGS-COHERENT (parallel worktree), UNDO-REDO, TALK (frames and card renderers may start in parallel), AVATAR-FROM-PARTS.
