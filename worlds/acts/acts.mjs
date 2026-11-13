@@ -24,6 +24,7 @@ import { ACT_VERBS } from './verbs.generated.mjs';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs';
 import { FLAGS_DATA } from './forms.data.mjs';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs';
+import { createEffects, EFFECT_ACTS } from './effects.mjs';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
@@ -796,21 +797,21 @@ export function createExecutor(schema, hooks = {}) {
     return hooks.after?.(ctx, act, req0, r) ?? r;
   }
   /**
-   * AN ACT GROUP: several acts that one sentence asked for ("put on a hat and make it red") are ONE undo step and one reply, whoever calls them. The library's `act([...])` does the same over
-   * wires (sopworld std.acts, `_actAll`); this bridge keeps the host state (items, board, face) and the English reply, which the library does not carry (specs/21 section 10). The group stops
-   * at the first act that is not done and says why; what the earlier acts did stays one step, so "undo" takes the whole group back.
+   * AN ACT GROUP: several acts that one sentence asked for ("put on a hat and make it red") are ONE undo step and one reply, whoever calls them, and ALL OR NOTHING: the library's
+   * `act([...])` (sopworld std.schema.effect, `effects.mjs`) runs them and, when one is not done, undoes the earlier ones (a snapshot of the state), so a refused sentence changes nothing.
+   * The English reply stays the host's (specs/21 section 10); the failure says which step was not done and why.
    */
+  let effects = null;
+  const fx = () => (effects ??= createEffects(schema.id, hooks));
   let groupSeq = 0;
   function actGroup(ctx, steps) {
-    const turn = `grp${++groupSeq}`, results = [], notes = [];
-    for (let i = 0; i < steps.length; i++) {
-      budget.tick('acts.group');
-      const r = operation(ctx, steps[i].act, { ...steps[i].args, request: { id: `${turn}_w${i + 1}` } });
-      results.push(r); notes.push(String(r.note ?? '').replace(/\.$/, ''));
-      if (r.status !== 'supported' || r.fallback) return { status: r.status === 'supported' ? 'missing' : r.status, note: notes.join('. ') + '.', value: notes.join('. ') + '.', results, failed: i };
-    }
+    const turn = `grp${++groupSeq}`;
+    const done = (r) => r.status === 'supported' && !r.fallback;
+    const s = fx().sentence(ctx, steps.map((x) => x.act), steps.map((x, i) => () => { budget.tick('acts.group'); return operation(ctx, x.act, { ...x.args, request: { id: `${turn}_w${i + 1}` } }); }), done);
+    const results = s.results, notes = results.map((r) => String(r.note ?? '').replace(/\.$/, ''));
+    if (!s.ok) { const r = results[s.failed], say = `${notes[s.failed]}. I changed nothing.`; return { status: r.status === 'supported' ? 'missing' : r.status, note: say, value: say, results, failed: s.failed }; }   // the earlier steps were undone: say so, not what they would have done
     const note = `${notes.join('. ')}.`;
-    return { status: 'supported', note, value: note, results };
+    return { status: 'supported', note, value: note, results, diff: s.diff };
   }
   /** SEVERAL THINGS IN ONE ACT ("draw a sun, a cloud and a man", "remove the tree and the house"): the whole phrase is tried first (the world may read a coordination itself); when that is not a supported reply and the thing role is a coordination of noun phrases, each one is run as its own act with the other roles, as one step, and the replies are joined. */
   function operationParts(ctx, act, req0) {
@@ -818,13 +819,10 @@ export function createExecutor(schema, hooks = {}) {
     if (r.status === 'supported' && !r.fallback && !/^(?:I (?:could not|can not|do not|don't)|What |Which |There is no|I can draw)/.test(String(r.note ?? ''))) return r;
     const parts = splitThings(req0.thing);
     if (parts.length < 2 || !['make', 'remove', 'change', 'pick', 'copy', 'group', 'place'].includes(act)) return r;
-    const notes = []; let last = r;
-    for (const part of parts) {
-      budget.tick('acts.parts');
-      const one = operation0(ctx, act, { ...req0, thing: part.head, ...(part.tail && act === 'make' ? { thing: `${part.head} ${part.tail}` } : {}) });
-      if (one.status !== 'supported' || one.fallback) return r;
-      notes.push(String(one.note ?? '').replace(/\s*\(.*\)\.?$/, '').replace(/\.$/, '')); last = one;
-    }
+    const heads = parts.map((part) => ({ ...req0, thing: part.head, ...(part.tail && act === 'make' ? { thing: `${part.head} ${part.tail}` } : {}) }));
+    const s = fx().sentence(ctx, heads.map(() => act), heads.map((h) => () => { budget.tick('acts.parts'); return operation0(ctx, act, h); }), (one) => one.status === 'supported' && !one.fallback);
+    if (!s.ok) return r;   // all or nothing: the library undid the parts that were done
+    const notes = s.results.map((one) => String(one.note ?? '').replace(/\s*\(.*\)\.?$/, '').replace(/\.$/, '')), last = s.results.at(-1);
     const note = `${joinAnd(notes.map((n, i) => (i ? n.replace(/^I (?:drew|added|made|put|moved|removed|changed|took)\b\s*/i, '') : n)))}.`;
     return { ...last, note, value: note };
   }
@@ -837,11 +835,13 @@ export function createExecutor(schema, hooks = {}) {
     req.text ??= ctx.segment?.text ?? ctx.text ?? null;
     const dom = hooks.domain?.[act];   // the world's own effect for this act (host code over its own state): a result of { status, value | note }, or undefined to use the generic executor
     if (dom) {
-      const r = dom(ctx, req);
+      // a mutating act is a library effect (all or nothing inside a sentence, with the difference); a question or history act (ask, pick, undo, redo, save ...) is called as it is
+      const lib = EFFECT_ACTS.includes(act) ? fx().sentence(ctx, [act], [() => dom(ctx, req) ?? { declined: true }], (o) => o.declined || o.status === 'supported') : null;
+      const r = lib ? (lib.results[0]?.declined ? undefined : lib.results[0]) : dom(ctx, req);
       if (r) {
         init(st);
         if (r.status === 'supported') { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
-        return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
+        return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
       }
     }
     const res = run(st, req);

@@ -301,4 +301,20 @@ test('an act group: several acts, one undo step, one reply (the bridge of act([.
   assert.equal(u.status, 'supported'); assert.equal(ctx.state.items.length, 0);   // the whole group in one step
   const bad = X.group(ctx, [{ act: 'make', args: { thing: 'tables', amount: '1' } }, { act: 'remove', args: { thing: 'table 9' } }]);
   assert.notEqual(bad.status, 'supported'); assert.equal(bad.failed, 1);
+  assert.equal(ctx.state.items.length, 0, 'all or nothing: the library undid the first act when the second was refused (sopworld std.schema.effect, worlds/acts/effects.mjs)');
+});
+
+test('domain effects through the library: the difference of an act, all-or-nothing parts of one sentence', () => {
+  const board = { objects: [] };
+  const domain = {
+    make: (ctx, r) => { if (/\band\b|,|ghost/.test(String(r.thing))) return { status: 'missing', note: 'I can not draw a ghost.' }; ctx.state.objects.push({ id: `o${ctx.state.objects.length + 1}`, kind: r.thing }); return { status: 'supported', value: `I drew a ${r.thing}.` }; },
+  };
+  const X = A.createExecutor(S, { domain, referents: (ctx) => ctx.state.objects.map((o) => ({ id: o.id, sig: JSON.stringify(o) })) });
+  const ctx = { state: board, lang: {} };
+  const one = X.operation(ctx, 'make', { thing: 'sun' });
+  assert.deepEqual([one.status, one.note, one.diff.added], ['supported', 'I drew a sun.', ['o1']], 'the effect returns the difference (diff.effects of the library act)');
+  const many = X.operation(ctx, 'make', { thing: 'a cloud and a tree' });
+  assert.equal(many.status, 'supported'); assert.equal(board.objects.length, 3);
+  const bad = X.operation(ctx, 'make', { thing: 'a moon, a star and a ghost' });
+  assert.notEqual(bad.status, 'supported'); assert.equal(board.objects.length, 3, 'a ghost is refused: the moon and the star that were drawn are undone');
 });
