@@ -293,7 +293,7 @@ export function parseNP(text) {
   // a location tail: "the tree on the left", "the cat next to the house"
   let words = all, loc = null;
   for (let i = 1; i < all.length; i++) {
-    if (LOC_START.has(all[i]) && !(all[i] === 'in' && all[i - 1] === 'front') && !(all[i] === 'on' && all[i - 1] === 'top') && !(all[i] === 'close' && all[i + 1] !== 'to')) {
+    if ((LOC_START.has(all[i]) || (all[i] === 'from' && Object.hasOwn(POS_WORDS, all[i + 1] === 'the' ? all[i + 2] : all[i + 1]) && all.length === i + (all[i + 1] === 'the' ? 3 : 2))) && !(all[i] === 'in' && all[i - 1] === 'front') && !(all[i] === 'on' && all[i - 1] === 'top') && !(all[i] === 'close' && all[i + 1] !== 'to')) {
       words = all.slice(0, i); loc = all.slice(i); break;
     }
   }
@@ -1167,9 +1167,10 @@ export function splitDest(text) {
     const t = w[i];
     if (REL_STRONG.has(t)) return 'strong';
     if (t === 'a' && /^(bit|little|lot|tiny|way)$/.test(w[i + 1] ?? '')) return 'dir';
+    if (['more', 'even'].includes(t) && (DIR_WORDS.has(w[i + 1] ?? '') || ['at', 'to', 'towards'].includes(w[i + 1] ?? ''))) return 'dir';   // "more at right": a further move
     if (['much', 'slightly', 'way', 'far'].includes(t) && DIR_WORDS.has(w[i + 1] ?? '')) return 'dir';   // "much higher", "slightly left": the amount belongs to the move
     if (DIR_WORDS.has(t)) {
-      if (['left', 'right', 'up', 'down', 'back'].includes(t) && (DET.has(w[i - 1]) || kindOfWord(w[i + 1] ?? '') || w[i + 1] === '1' || w[i + 1] === 'one')) return null;
+      if (['left', 'right', 'up', 'down', 'back'].includes(t) && (DET.has(w[i - 1]) || w[i - 1] === 'from' || kindOfWord(w[i + 1] ?? '') || w[i + 1] === '1' || w[i + 1] === 'one')) return null;
       return 'dir';
     }
     if (WEAK.has(t)) return 'weak';
@@ -1252,7 +1253,7 @@ export const move = guard((ctx, args, s) => {
   // "slide the house over to the right": "over to" is a direction, not the relation "over"
   phrase = phrase.replace(/\b(?:over|across|along) (to|towards|toward)\b/gi, '$1');
   let { target: tt, dest } = splitDest(phrase);
-  if (!toks(tt.replace(AMOUNT_RE, ' ')).filter((x) => !['a', 'the', 'more', 'even'].includes(x)).length) { dest = `${tt} ${dest}`.trim(); tt = ''; }   // "and a bit lower": only an amount before the direction, so it is the same thing
+  if (!toks(tt.replace(AMOUNT_RE, ' ')).filter((x) => !['a', 'the', 'more', 'even', 'and', 'also', 'then', 'so', 'please'].includes(x)).length) { dest = `${tt} ${dest}`.trim(); tt = ''; }   // "and a bit lower": only an amount before the direction, so it is the same thing
   if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'missing');
   const d = parseDest(dest);   // the destination is checked before asking which one is meant
   if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);

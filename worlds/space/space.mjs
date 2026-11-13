@@ -476,7 +476,7 @@ export function splitMove(t, kindOf = () => null) {
     const w = t[i], prev = t[i - 1];
     if (DIR_START.has(w)) starts.push([i, 'to']);
     else if (Object.hasOwn(AMOUNTS, w) || MORE.includes(w)) starts.push([i, 'amount']);
-    else if (Object.hasOwn(DIRS, w)) { if (!(DETS.has(prev) || classify(prev) || ['on', 'in', 'at', 'from', 'of'].includes(prev)) && !(kindAt(t[i + 1]) && t[i + 1] !== 'and')) starts.push([i, 'dir']); }
+    else if (Object.hasOwn(DIRS, w)) { if (!(DETS.has(prev) || ['on', 'in', 'at', 'from', 'of'].includes(prev)) && !(kindAt(t[i + 1]) && t[i + 1] !== 'and')) starts.push([i, 'dir']); }
     else if (REL_STRONG.has(w)) starts.push([i, 'rel']);
     else if (WEAK.has(w)) starts.push([i, 'weak']);
   }
