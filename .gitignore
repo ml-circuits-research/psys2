@@ -4,6 +4,8 @@ __pycache__/
 .venv/
 training/runs/
 training/data/*.jsonl
+training/data/act-tagger/*.jsonl
+training/experiments/browser-limits/www-tagger-*/
 .DS_Store
 training/dataset/*
 !training/dataset/stats.json

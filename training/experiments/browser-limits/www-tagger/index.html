@@ -1,0 +1,25 @@
+<!doctype html><meta charset=utf-8><title>tagger bench</title>
+<script type=module>
+// P3 phone profile: an exported act + roles tagger (int8 ONNX) in headless Chrome with onnxruntime-web (the webchat's version), single-threaded wasm, under the CPU throttle the runner sets.
+import * as ort from './ort.wasm.bundle.min.mjs';
+ort.env.wasm.wasmPaths = new URL('./', location.href).href; ort.env.wasm.numThreads = 1;
+const med = (a) => { const s = [...a].sort((x, y) => x - y); return +s[s.length >> 1].toFixed(1); };
+let S;
+const feeds = (ids) => ({ input_ids: new ort.Tensor('int64', BigInt64Array.from(ids, (x) => BigInt(x)), [1, ids.length]), attention_mask: new ort.Tensor('int64', BigInt64Array.from(ids, () => 1n), [1, ids.length]) });
+window.load = async () => { const t0 = performance.now(); const b = new Uint8Array(await (await fetch('model.int8.onnx')).arrayBuffer()); const t1 = performance.now(); S = await ort.InferenceSession.create(b, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' }); return { fetchMs: Math.round(t1 - t0), createMs: Math.round(performance.now() - t1), MB: +(b.length / 1e6).toFixed(1) }; };
+const argmax = (d, o, n) => { let b = 0; for (let i = 1; i < n; i++) if (d[o + i] > d[o + b]) b = i; return b; };
+// real messages: per-message time (median, p95) and agreement of the int8 browser outputs with the fp32 CUDA reference
+window.run = async (ref) => {
+  for (let i = 0; i < 3; i++) await S.run(feeds(ref[i].ids));
+  const times = []; let actSame = 0, tagSame = 0, tokens = 0;
+  for (const r of ref) {
+    const t = performance.now(); const o = await S.run(feeds(r.ids)); times.push(performance.now() - t);
+    if (argmax(o.act_logits.data, 0, o.act_logits.dims[1]) === r.act) actSame++;
+    const L = o.tag_logits.dims[2]; let all = true; for (let k = 0; k < r.ids.length; k++) if (argmax(o.tag_logits.data, k * L, L) !== r.tags[k]) all = false;
+    if (all) tagSame++; tokens += r.ids.length;
+  }
+  const s = [...times].sort((a, b) => a - b);
+  return { n: ref.length, actSame, tagSame, meanTokens: +(tokens / ref.length).toFixed(1), medianMs: med(times), p95Ms: +s[Math.floor(0.95 * s.length)].toFixed(1) };
+};
+window.ready = true;
+</script>

@@ -1,0 +1,142 @@
+{
+ "seed": 1,
+ "generated": "2026-11-13T18:03:38.669Z",
+ "hold": [
+  "diagram.sketch",
+  "ui.avatar"
+ ],
+ "realWorlds": [
+  {
+   "id": "plan.seating",
+   "file": "worlds/plan.seating/schema.sop",
+   "held": false
+  },
+  {
+   "id": "diagram.sketch",
+   "file": "worlds-pilot/diagram.sketch/schema.sop",
+   "held": true
+  },
+  {
+   "id": "ui.avatar",
+   "file": "worlds-pilot/ui.avatar/schema.sop",
+   "held": true
+  },
+  {
+   "id": "test.seating",
+   "file": "tests/fixtures/worlds/test.seating/schema.sop",
+   "held": false
+  }
+ ],
+ "synthetic": 60,
+ "poolSizes": {
+  "objects": 2084,
+  "things": 1045,
+  "colours": 177,
+  "steps": 35,
+  "comparatives": 78,
+  "shapes": 39,
+  "directions": 18,
+  "setWords": 19,
+  "feelings": 30,
+  "cities": 773,
+  "roles": 60,
+  "attributes": 14,
+  "numbers": 221
+ },
+ "heldVocabRemovedFromPools": 108,
+ "train": {
+  "n": 242744,
+  "byAct": {
+   "remove": 20737,
+   "make": 30107,
+   "copy": 6953,
+   "ask": 45103,
+   "change": 66239,
+   "group": 21252,
+   "connect": 10682,
+   "save": 6323,
+   "pick": 7023,
+   "place": 13577,
+   "send": 10538,
+   "load": 3849,
+   "undo": 257,
+   "redo": 104
+  },
+  "byWorld": {
+   "synth.*": 227608,
+   "plan.seating": 7563,
+   "test.seating": 7573
+  }
+ },
+ "dev": {
+  "n": 5000,
+  "byAct": {
+   "ask": 973,
+   "send": 224,
+   "change": 1325,
+   "connect": 242,
+   "make": 631,
+   "save": 137,
+   "group": 418,
+   "place": 277,
+   "load": 76,
+   "remove": 421,
+   "pick": 140,
+   "copy": 131,
+   "redo": 3,
+   "undo": 2
+  },
+  "byWorld": {
+   "synth.*": 4652,
+   "plan.seating": 179,
+   "test.seating": 169
+  }
+ },
+ "test-seen": {
+  "n": 6014,
+  "byAct": {
+   "change": 1605,
+   "group": 473,
+   "redo": 12,
+   "pick": 153,
+   "ask": 1163,
+   "make": 733,
+   "remove": 502,
+   "connect": 264,
+   "place": 320,
+   "send": 241,
+   "save": 179,
+   "copy": 184,
+   "load": 174,
+   "undo": 11
+  },
+  "byWorld": {
+   "plan.seating": 97,
+   "test.seating": 97,
+   "synth.*": 5820
+  }
+ },
+ "test-held": {
+  "n": 6000,
+  "byAct": {
+   "copy": 98,
+   "change": 2351,
+   "ask": 1125,
+   "place": 491,
+   "connect": 125,
+   "undo": 38,
+   "group": 277,
+   "pick": 94,
+   "make": 634,
+   "remove": 514,
+   "redo": 29,
+   "send": 96,
+   "save": 62,
+   "load": 66
+  },
+  "byWorld": {
+   "diagram.sketch": 3000,
+   "ui.avatar": 3000
+  }
+ }
+}
