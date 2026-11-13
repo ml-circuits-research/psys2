@@ -3447,3 +3447,16 @@ Arrow up in the chat box recalls earlier sent messages, arrow down goes forward,
 6. **Bugs that are not language cases** (a crash, no reply, the build not loading, data loss) are still fixed at once.
 
 **First thing to deliver:** the ledger filled from what exists, the grouping report, and the smoke suite reduced to invariants. Then WORLDS-AS-MODULES in its order; its targets are per class on the ledger, not per row.
+
+## Reviewer 2026-11-13 17:10 — validated at 1504a75; KNOWLEDGE-ALL-WORLDS; sopworld 0.16.0
+
+**Validated at 1504a75:** `npm run test:smoke` 242 pass, 0 fail. It now takes 261 s on the reviewer box (was 115 s with 207 tests): it is growing the wrong way. Cut it to the invariants as in NO POINT FIXES, item 2. Your test policy entry matches the owner's rule; accepted.
+
+**sopworld 0.16.0 is validated: re-vendor it.** Round 18/19 there builds what WORLDS-AS-MODULES needs as library modules: `std.fill` (delegation with tiers), `std.focus` (last thing, action, place), relations, why-answers, "would this be refused" dry run, all-or-nothing groups. Build M1 and M3 on those, not in host code; if you need one before it lands, write the need in their questions.md format in your worker-log and the reviewer forwards it.
+
+**KNOWLEDGE-ALL-WORLDS.** The catalog has 11 worlds; the demo reads three by type-specific code (k.objects for drawing, k.commonsense and k.words in facts.mjs) and does not use `stand_in` at all. Make the reading generic:
+1. `facts.mjs` reads any `k.*` wire through the catalog's index (type, keys, `core.source`), no code per world; a new world in the catalog is usable with no PSys2 change. Test with a world added to a fixture catalog.
+2. Use `k.objects.stand_in` and the kind-of links for things with no drawing (M3).
+3. `k.faces` (134 hand-written variants, presets, expressions, seven imported styles) is the data for AVATAR-FROM-PARTS: no face shapes in PSys2.
+4. `k.scenes` (in work in the knowledge repo: usual place, relative size, person kinds) feeds M3 defaults; until it lands use k.commonsense.
+5. Report a table: world, used by which tabs, by which mechanism.
