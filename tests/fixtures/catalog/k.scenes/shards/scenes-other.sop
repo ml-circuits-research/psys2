@@ -1,0 +1,17 @@
+# k.scenes/shards/scenes-other: 10 space, underwater, the night, the seasons, the weather and feasts (space, underwater, night, winter, autumn, spring, rainy day, Christmas, Halloween, pirate ship): what is usually there, how many, where in the picture, what happens there, the time, weather and season that fit; and other names of the scenes.
+# sources: hand-core 1 (hand-written in this repository: tools/scenes-data.mjs)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+# space
+# underwater
+# night
+# winter
+# autumn
+# spring
+# rainy day
+# Christmas
+# Halloween
+# pirate ship
+
+@k.scenes.scene.space k.scenes.scene name=space kind=space time=night happens=orbit happens=float happens="fly a rocket" happens=explore drawing="milky way" core.source="hand-core 1"
+@k.scenes.scene.winter k.scenes.scene name=winter kind=outdoors ground=snow time=day weather=snowy season=winter happens="build a snowman" happens="throw snowballs" happens=ski happens=skate happens=sledge core.source="hand-core 1"

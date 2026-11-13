@@ -1,0 +1,44 @@
+# k.animals: common animals: their class, legs, covering, sound, habitat, diet and food, the name of their young, and
+# what they can do. Facts a child's encyclopedia states; where animals of one name differ, the key is left out.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.animals core.module name=k.animals version=1 exports=animal core.source="hand-core 1"
+
+# An animal, named by its common English name (the same name in k.objects is its drawing, in k.commonsense its
+# everyday facts). `legs` counts walking legs (a bird has 2, a fish 0); `covering` is what covers its body; `sound`
+# is the verb for the sound it makes; `habitat` is where it lives; `diet` says whether it eats plants, animals or both
+# and `eats` names typical food; `baby` is the name of its young; `can` names ways it moves and other abilities;
+# `cannot` names a well-known thing it cannot do (a penguin cannot fly); a missing `can` says nothing;
+# `drawing` names the k.objects object that draws it.
+@k.animals.animal core.type of=k.animals.animal shared=true closed=true core.source="hand-core 1"
+@k.animals.animal.name core.slot of=k.animals.animal key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.animals.animal.class core.slot of=k.animals.animal key=class required=true enum=mammal enum=bird enum=fish enum=reptile enum=amphibian enum=insect enum=arachnid enum=crustacean enum=mollusc enum=worm enum=cnidarian enum=echinoderm core.source="hand-core 1"
+@k.animals.animal.legs core.slot of=k.animals.animal key=legs kind=integer min=0 core.source="hand-core 1"
+@k.animals.animal.covering core.slot of=k.animals.animal key=covering many=true enum=fur enum=hair enum=wool enum=feathers enum=scales enum=skin enum=shell enum=spines core.source="hand-core 1"
+@k.animals.animal.sound core.slot of=k.animals.animal key=sound many=true kind=atom core.source="hand-core 1"
+@k.animals.animal.habitat core.slot of=k.animals.animal key=habitat many=true kind=atom kind=string core.source="hand-core 1"
+@k.animals.animal.diet core.slot of=k.animals.animal key=diet enum=herbivore enum=carnivore enum=omnivore core.source="hand-core 1"
+@k.animals.animal.eats core.slot of=k.animals.animal key=eats many=true kind=atom kind=string core.source="hand-core 1"
+@k.animals.animal.baby core.slot of=k.animals.animal key=baby kind=atom core.source="hand-core 1"
+@k.animals.animal.can core.slot of=k.animals.animal key=can many=true kind=atom core.source="hand-core 1"
+@k.animals.animal.cannot core.slot of=k.animals.animal key=cannot many=true kind=atom core.source="hand-core 1"
+@k.animals.animal.drawing core.slot of=k.animals.animal key=drawing kind=atom kind=string core.source="hand-core 1"
+
+# One fact never has the same verb in `can` and in `cannot`.
+@k.animals.both.can k.animals.animal name=?animal can=?verb
+@k.animals.both.cannot k.animals.animal name=?animal cannot=?verb
+@k.animals.both core.deny when=$k.animals.both.can when=$k.animals.both.cannot why="A ?animal is said both to ?verb and not to ?verb." core.source="hand-core 1"
+
+# Words for the type and keys of this world.
+@k.animals.word.animal core.word text=animal text=animals means=k.animals.animal core.source="hand-core 1"
+@k.animals.word.class core.word text=class text=kind means=k.animals.animal.class core.source="hand-core 1"
+@k.animals.word.legs core.word text=legs text=leg means=k.animals.animal.legs core.source="hand-core 1"
+@k.animals.word.covering core.word text=covering text=covered means=k.animals.animal.covering core.source="hand-core 1"
+@k.animals.word.sound core.word text=sound text=noise text=says means=k.animals.animal.sound core.source="hand-core 1"
+@k.animals.word.habitat core.word text=habitat text=lives text=live means=k.animals.animal.habitat core.source="hand-core 1"
+@k.animals.word.diet core.word text=diet means=k.animals.animal.diet core.source="hand-core 1"
+@k.animals.word.eats core.word text=eats text=eat text=food means=k.animals.animal.eats core.source="hand-core 1"
+@k.animals.word.baby core.word text=baby text=young means=k.animals.animal.baby core.source="hand-core 1"
+@k.animals.word.cannot core.word text=cannot text="can not" means=k.animals.animal.cannot core.source="hand-core 1"

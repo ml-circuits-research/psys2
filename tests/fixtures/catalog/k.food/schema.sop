@@ -1,0 +1,30 @@
+# k.food: common foods: their kind, typical colours, what they grow on or come from, and whether they are eaten raw
+# or cooked. Facts a child's encyclopedia states.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.food core.module name=k.food version=1 exports=food core.source="hand-core 1"
+
+# A food or drink, named by its common English name (the same name in k.objects is its drawing). `kind` is the
+# kitchen grouping (a tomato is a vegetable there); `botanically` says what the plant part really is where that
+# differs (a tomato is a fruit, a peanut a legume, a mushroom a fungus); `colour` uses the colour names of k.objects;
+# `grows_on` says where on a plant it grows; `comes_from` names the animal, plant, food or place it is made or taken
+# from; `eaten` says how; `drawing` names the k.objects object that draws it.
+@k.food.food core.type of=k.food.food shared=true closed=true core.source="hand-core 1"
+@k.food.food.name core.slot of=k.food.food key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.food.food.kind core.slot of=k.food.food key=kind required=true enum=fruit enum=vegetable enum=grain enum=legume enum=nut enum=bread enum=dairy enum=egg enum=meat enum=fish enum=seafood enum=sweet enum=drink enum=seasoning enum=herb enum=oil enum=sauce enum=dish core.source="hand-core 1"
+@k.food.food.botanically core.slot of=k.food.food key=botanically enum=fruit enum=legume enum=fungus core.source="hand-core 1"
+@k.food.food.colour core.slot of=k.food.food key=colour many=true enum=black enum=white enum=grey enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown core.source="hand-core 1"
+@k.food.food.grows_on core.slot of=k.food.food key=grows_on enum=tree enum=bush enum=vine enum=plant enum=underground core.source="hand-core 1"
+@k.food.food.comes_from core.slot of=k.food.food key=comes_from many=true kind=atom kind=string core.source="hand-core 1"
+@k.food.food.eaten core.slot of=k.food.food key=eaten many=true enum=raw enum=cooked core.source="hand-core 1"
+@k.food.food.drawing core.slot of=k.food.food key=drawing kind=atom kind=string core.source="hand-core 1"
+
+# Words for the type and keys of this world.
+@k.food.word.food core.word text=food text=foods means=k.food.food core.source="hand-core 1"
+@k.food.word.kind core.word text=kind means=k.food.food.kind core.source="hand-core 1"
+@k.food.word.colour core.word text=colour text=color means=k.food.food.colour core.source="hand-core 1"
+@k.food.word.grows_on core.word text=grows text=grow means=k.food.food.grows_on core.source="hand-core 1"
+@k.food.word.comes_from core.word text=comes text=made means=k.food.food.comes_from core.source="hand-core 1"
+@k.food.word.eaten core.word text=eaten text=raw text=cooked means=k.food.food.eaten core.source="hand-core 1"

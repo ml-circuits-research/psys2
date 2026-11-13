@@ -1,0 +1,8 @@
+# k.geo/shards/north-america: North America: 39 countries and territories, 98 cities, 235 rivers, 137 mountains, 33 mountain ranges.
+# sources: natural-earth 5.1.2 (Natural Earth, public domain)
+# license: public-domain
+# script: tools/import/geo.mjs
+
+@k.geo.country.CAN k.geo.country name=Canada code=CAN formal="Canada" capital=Ottawa continent="North America" region="Northern America" population=37589262 independent=true lat=60.32 lon=-101.91 west=-141 south=41.67 east=-52.65 north=83.12 core.source="natural-earth 5.1.2"
+@k.geo.river.Red.north-america k.geo.river name=Red continent="North America" country="United States" lat=32.82 lon=-96.28 west=-100.9 south=31 east=-91.66 north=34.64 core.source="natural-earth 5.1.2"
+@k.geo.river.Snake.north-america k.geo.river name=Snake continent="North America" country="United States" lat=42.84 lon=-113.06 west=-113.47 south=42.65 east=-112.64 north=43.02 core.source="natural-earth 5.1.2"

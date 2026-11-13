@@ -1,0 +1,18 @@
+# k.words/shards/ro: noun and verb senses of the words from "ro" to "royalty" (first letters "ro").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.robot.noun.1 k.words.sense word=robot pos=noun n=1 gloss="a mechanism that can move automatically" synonym=automaton synonym=golem is_a=mechanism core.source="wordnet 3.1"
+@k.words.rocket.noun.1 k.words.sense word=rocket pos=noun n=1 gloss="any vehicle self-propelled by a rocket engine" synonym=projectile is_a=vehicle core.source="wordnet 3.1"
+@k.words.rocket.noun.2 k.words.sense word=rocket pos=noun n=2 gloss="a jet engine containing its own propellant and driven by reaction propulsion" synonym="rocket engine" is_a="jet engine" part_of=rocket core.source="wordnet 3.1"
+@k.words.rocket.noun.3 k.words.sense word=rocket pos=noun n=3 gloss="erect European annual often grown as a salad crop to be harvested when young and tender" synonym=roquette synonym="garden rocket" synonym="rocket salad" synonym=arugula synonym="Eruca sativa" synonym="Eruca vesicaria sativa" is_a=herb core.source="wordnet 3.1"
+@k.words.rocket.verb.1 k.words.sense word=rocket pos=verb n=1 gloss="shoot up abruptly, like a rocket" synonym=skyrocket is_a=rise core.source="wordnet 3.1"
+@k.words.rocket.verb.2 k.words.sense word=rocket pos=verb n=2 gloss="propel with a rocket" is_a=propel core.source="wordnet 3.1"
+@k.words.roof.noun.1 k.words.sense word=roof pos=noun n=1 gloss="a protective covering that covers or forms the top of a building" is_a="protective covering" part_of=building core.source="wordnet 3.1"
+@k.words.roof.noun.2 k.words.sense word=roof pos=noun n=2 gloss="protective covering on top of a motor vehicle" is_a="protective covering" part_of=car part_of=bus part_of=truck core.source="wordnet 3.1"
+@k.words.roof.noun.3 k.words.sense word=roof pos=noun n=3 gloss="the inner top surface of a covered area or hollow space" is_a=covering part_of=cave core.source="wordnet 3.1"
+@k.words.roof.verb.1 k.words.sense word=roof pos=verb n=1 gloss="provide a building with a roof; cover a building with a roof" is_a=cover core.source="wordnet 3.1"
+@k.words.rose.noun.1 k.words.sense word=rose pos=noun n=1 gloss="any of many shrubs of the genus Rosa that bear roses" synonym=rosebush is_a=shrub core.source="wordnet 3.1"
+@k.words.rose.noun.2 k.words.sense word=rose pos=noun n=2 gloss="pinkish table wine from red grapes whose skins were removed after fermentation began" synonym="blush wine" synonym="pink wine" synonym="rose wine" is_a=wine core.source="wordnet 3.1"
+@k.words.rose.noun.3 k.words.sense word=rose pos=noun n=3 gloss="a dusty pink color" synonym=rosiness is_a=pink core.source="wordnet 3.1"

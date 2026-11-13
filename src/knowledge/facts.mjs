@@ -176,9 +176,72 @@ export function createFacts({ source, name = 'catalog' }) {
     return out;
   }
 
+
+  /**
+   * The schemas of the catalog's worlds, read generically (no code per world): `slotWords` (a word -> the slots it means, from the `core.word` wires: "legs" means k.animals.animal.legs),
+   * `slots` (type id -> { key -> { kind, enum, many } }) and `types` (type id -> { complete }). Built once; `peekSchema()` reads it synchronously (`ctx.knowledge.peekSchema()`).
+   */
+  let schemaData = null, schemaLoading = null;
+  async function schema() {
+    schemaLoading ??= (async () => {
+      await loadIndex();
+      const slotWords = new Map(), slots = new Map(), types = new Map();
+      for (const w of index.worlds) {
+        if (!w.schema) continue;
+        let text = null;
+        try { text = await source.text(w.schema); } catch { /* no schema, no slots */ }
+        for (const line of (text ?? '').split('\n')) {
+          if (line.charCodeAt(0) !== 64) continue;
+          const r = parseFact(line);
+          if (!r) continue;
+          if (r.type === 'core.type') types.set(one(r, 'of'), { complete: one(r, 'complete') === 'true', world: w.id });
+          else if (r.type === 'core.slot') { const t = one(r, 'of'); if (!slots.has(t)) slots.set(t, {}); slots.get(t)[one(r, 'key')] = { kind: r.f.kind ?? [], enum: r.f.enum ?? [], many: one(r, 'many') === 'true', id: one(r, 'id') === 'true' }; }
+          else if (r.type === 'core.word') for (const word of r.f.text ?? []) for (const m of r.f.means ?? []) { const k = word.toLowerCase(); if (!slotWords.has(k)) slotWords.set(k, new Set()); slotWords.get(k).add(m); }
+        }
+      }
+      schemaData = { slotWords, slots, types };
+      return schemaData;
+    })();
+    return schemaLoading;
+  }
+
+  /**
+   * The ordered series of the catalog (months, weekdays, seasons, planets...), read from the types whose schema has an integer `n` or `order` slot: a series is a type (or, when its wires
+   * have a `kind`, one kind of a type) with its wires sorted by that number; a type declared `complete=true` is a cycle. `{ [name]: { items: [name], cyclic, one, type } }`, built once.
+   */
+  let seriesData = null, seriesLoading = null;
+  async function series() {
+    seriesLoading ??= (async () => {
+      const sc = await schema();
+      const out = {};
+      for (const [type, keys] of sc.slots) {
+        const num = ['n', 'order'].find((k) => keys[k] && keys[k].kind.includes('integer'));
+        if (!num || !keys.name) continue;
+        const groups = new Map();
+        for (const w of await wires(type)) {
+          const n = Number(one(w, num)); if (!Number.isFinite(n)) continue;
+          const g = keys.kind ? one(w, 'kind') ?? '' : '';
+          const label = (g || type.split('.').at(-1)).toLowerCase();
+          if (!groups.has(label)) groups.set(label, []);
+          groups.get(label).push({ n, name: one(w, 'name'), w });
+        }
+        for (const [label, items] of groups) {
+          if (items.length < 3) continue;
+          items.sort((a, b) => a.n - b.n);
+          out[`${label}s`] = { items: items.map((x) => x.name), cyclic: !!sc.types.get(type)?.complete, one: label, type, wires: items.map((x) => x.w) };
+        }
+      }
+      seriesData = out;
+      return out;
+    })();
+    return seriesLoading;
+  }
+
   let facesData, facesLoading = null;
   const api = {
-    name, find, thing, stats, loadVocab, world, wires,
+    name, find, thing, stats, loadVocab, world, wires, schema, series,
+    /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
+    peekSchema: () => schemaData ?? undefined, peekSeries: () => seriesData ?? undefined,
     /** The faces of k.faces (src/knowledge/faces.mjs), built once from the catalog; null when it has none (and asked again later). */
     faces() {
       facesLoading ??= buildFaces(api).then((d) => { facesData = d; if (!d) { facesLoading = null; } return d; });

@@ -1,0 +1,12 @@
+# k.words/shards/no: noun and verb senses of the words from "no" to "nowhere" (first letters "no").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.nose.noun.1 k.words.sense word=nose pos=noun n=1 gloss="the organ of smell and entrance to the respiratory tract; the prominent part of the face of man or other mammals" synonym="olfactory organ" is_a=chemoreceptor part_of=face part_of="upper respiratory tract" core.source="wordnet 3.1"
+@k.words.nose.noun.2 k.words.sense word=nose pos=noun n=2 gloss="a front that resembles a human nose (especially the front of an aircraft)" is_a=front part_of=aircraft part_of=missile core.source="wordnet 3.1"
+@k.words.nose.noun.3 k.words.sense word=nose pos=noun n=3 gloss="the front or forward projection of a tool or weapon" is_a=front core.source="wordnet 3.1"
+@k.words.nose.verb.1 k.words.sense word=nose pos=verb n=1 gloss="search or inquire in a meddlesome way" synonym=intrude synonym="horn in" synonym=pry synonym=poke is_a=search core.source="wordnet 3.1"
+@k.words.nose.verb.2 k.words.sense word=nose pos=verb n=2 gloss="advance the forward part of with caution" is_a=advance core.source="wordnet 3.1"
+@k.words.nose.verb.3 k.words.sense word=nose pos=verb n=3 gloss="catch the scent of; get wind of" synonym=scent synonym=wind is_a=smell core.source="wordnet 3.1"
+@k.words.november.noun.1 k.words.sense word=November pos=noun n=1 gloss="the month following October and preceding December" synonym=Nov is_a="Gregorian calendar month" part_of="Gregorian calendar" core.source="wordnet 3.1"

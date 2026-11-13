@@ -1,0 +1,10 @@
+# k.words/shards/ve: noun and verb senses of the words from "veal" to "veto" (first letters "ve").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.vegetable.noun.1 k.words.sense word=vegetable pos=noun n=1 gloss="edible seeds or roots or stems or leaves or bulbs or tubers or nonsweet fruits of any of numerous herbaceous plant" synonym=veggie synonym=veg is_a=produce part_of=herb core.source="wordnet 3.1"
+@k.words.vegetable.noun.2 k.words.sense word=vegetable pos=noun n=2 gloss="any of various herbaceous plants cultivated for an edible part such as the fruit or the root of the beet or the leaf of spinach or the seeds of bean plants or the flower buds of broccoli or cauliflower" is_a=herb core.source="wordnet 3.1"
+@k.words.venus.noun.1 k.words.sense word=Venus pos=noun n=1 gloss="the second nearest planet to the sun; it is peculiar in that its rotation is slow and retrograde (in the opposite sense of the Earth and all other planets except Uranus); it is visible from Earth as an early `morning star' or an `evening star'" instance_of="terrestrial planet" instance_of="inferior planet" core.source="wordnet 3.1"
+@k.words.venus.noun.2 k.words.sense word=Venus pos=noun n=2 gloss="goddess of love; counterpart of Greek Aphrodite" synonym=Urania instance_of="Roman deity" core.source="wordnet 3.1"
+@k.words.venus.noun.3 k.words.sense word=Venus pos=noun n=3 gloss="type genus of the family Veneridae: genus of edible clams with thick oval shells" synonym="genus Venus" is_a="mollusk genus" core.source="wordnet 3.1"

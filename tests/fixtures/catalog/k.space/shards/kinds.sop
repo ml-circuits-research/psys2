@@ -1,0 +1,22 @@
+# k.space/shards/kinds: 8 kinds of things in space (star, planet, moon, comet, …): what they are made of, what they orbit, what they have and do.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.space.kind.star k.space.kind name=star made_of=gas does=shines does="gives light and heat" drawing=star core.source="hand-core 1"
+@k.space.kind.planet k.space.kind name=planet orbits=star drawing=planet core.source="hand-core 1"
+@k.space.kind.dwarf_planet k.space.kind name="dwarf planet" orbits=star core.source="hand-core 1"
+@k.space.kind.moon k.space.kind name=moon orbits=planet drawing="full moon" core.source="hand-core 1"
+@k.space.kind.comet k.space.kind name=comet made_of=ice made_of=dust orbits=star has=tail drawing=comet core.source="hand-core 1"
+@k.space.kind.asteroid k.space.kind name=asteroid made_of=rock made_of=metal orbits=star core.source="hand-core 1"
+@k.space.kind.galaxy k.space.kind name=galaxy made_of=stars made_of=gas made_of=dust drawing="milky way" core.source="hand-core 1"
+@k.space.kind.solar_system k.space.kind name="solar system" made_of=Sun made_of=planets made_of=moons made_of=comets made_of=asteroids core.source="hand-core 1"
+
+@k.space.word.kind.star core.word text=stars means=star of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.planet core.word text=planets means=planet of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.dwarf_planet core.word text="dwarf planets" means="dwarf planet" of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.moon core.word text=moons means=moon of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.comet core.word text=comets means=comet of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.asteroid core.word text=asteroids means=asteroid of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.galaxy core.word text=galaxies means=galaxy of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.solar_system core.word text="solar systems" means="solar system" of=k.space.kind.name core.source="hand-core 1"

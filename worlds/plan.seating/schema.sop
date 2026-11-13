@@ -1,0 +1,50 @@
+@seat acts.schema
+    noun="seating plan"
+    doc="Tables with seats, and the guests sitting at them."
+    acts=make
+    acts=remove
+    acts=change
+    acts=place
+    acts=connect
+    acts=group
+    acts=pick
+    acts=ask
+    acts=copy
+    acts=send
+    acts=undo
+    acts=redo
+    acts=save
+    acts=load
+    limit.items=40
+    limit.history=30
+    tabOnly=yes
+
+@seat.table acts.kind
+    plural=tables
+    numbered=yes
+    max=8
+
+@seat.guest acts.kind
+    plural=guests
+    named=yes
+    in=table
+    capacity=seats
+    word=person
+    word=people
+
+@seat.seats acts.attr
+    of=table
+    type=number
+    min=1
+    max=12
+    default=4
+    word=seat
+    more=bigger
+    less=smaller
+
+@seat.colour acts.attr
+    of=table
+    of=guest
+    type=colour
+    default=white
+    word=color

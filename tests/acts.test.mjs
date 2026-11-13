@@ -279,3 +279,11 @@ test('executor: coordinated things, unique names, unread leftovers asked not gue
   assert.match(run(X, st, 'ask', { mode: 'what', attribute: 'seats', thing: 'table 1' }).note, /Table 1 has 4 seats/);
   assert.match(run(X, st, 'ask', { mode: 'what', place: 'table 2' }).note, /At table 2: guest Ann/);
 });
+
+// ---- P2: the seating plan promoted to a real world (worlds/plan.seating): the same schema, nothing else hand-written
+test("worlds/plan.seating: a schema of under 60 lines, every other file generated and not stale", async () => {
+  const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), "../worlds/plan.seating");
+  assert.ok(readFileSync(path.join(dir, "schema.sop"), "utf8").split("\n").length < 60);
+  const { files } = await buildSchemaWorld(dir);
+  for (const [name, text] of Object.entries(files)) assert.equal(readFileSync(path.join(dir, name), "utf8"), text, `${name} is stale: run node scripts/build-schema-world.mjs worlds/plan.seating`);
+});

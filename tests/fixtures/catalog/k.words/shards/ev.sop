@@ -1,0 +1,6 @@
+# k.words/shards/ev: noun and verb senses of the words from "ev" to "evolve" (first letters "ev").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.everest.noun.1 k.words.sense word=Everest pos=noun n=1 gloss="a mountain in the central Himalayas on the border of Tibet and Nepal; the highest mountain peak in the world (29,028 feet high)" synonym="Mount Everest" synonym="Mt. Everest" instance_of="mountain peak" part_of=Himalayas part_of=Nepal part_of=Tibet core.source="wordnet 3.1"

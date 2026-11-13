@@ -1,0 +1,11 @@
+# k.words/shards/bi: noun and verb senses of the words from "bi" to "biz" (first letters "bi").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.bicycle.noun.1 k.words.sense word=bicycle pos=noun n=1 gloss="a wheeled vehicle that has two wheels and is moved by foot pedals" synonym=bike synonym=wheel synonym=cycle is_a="wheeled vehicle" core.source="wordnet 3.1"
+@k.words.bicycle.verb.1 k.words.sense word=bicycle pos=verb n=1 gloss="ride a bicycle" synonym=cycle synonym=bike synonym=pedal synonym=wheel is_a=ride core.source="wordnet 3.1"
+@k.words.bird.noun.1 k.words.sense word=bird pos=noun n=1 gloss="warm-blooded egg-laying vertebrates characterized by feathers and forelimbs modified as wings" is_a=vertebrate core.source="wordnet 3.1"
+@k.words.bird.noun.2 k.words.sense word=bird pos=noun n=2 gloss="the flesh of a bird or fowl (wild or domestic) used as food" synonym=fowl is_a=meat part_of=bird core.source="wordnet 3.1"
+@k.words.bird.noun.3 k.words.sense word=bird pos=noun n=3 gloss="informal terms for a (young) woman" synonym=dame synonym=doll synonym=wench synonym=skirt synonym=chick is_a=girl core.source="wordnet 3.1"
+@k.words.bird.verb.1 k.words.sense word=bird pos=verb n=1 gloss="watch and study birds in their natural habitat" synonym=birdwatch is_a=observe core.source="wordnet 3.1"

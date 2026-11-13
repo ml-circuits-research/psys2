@@ -105,3 +105,21 @@
     semantics=action
     action=talk.other
     doc="No, the other one: after two things were compared, the conversation moves to the other one of the two and shows it."
+
+@op.talk.ask core.operation
+    impl=ask
+    semantics=action
+    action=talk.ask
+    doc="One fact of a thing, whatever world of the knowledge catalog holds it: what colour, what does it eat, where does it live, what is the capital of X. The slot is found through the words of the knowledge schemas; no world is named in this tab."
+
+@op.talk.isa core.operation
+    impl=isa
+    semantics=action
+    action=talk.isa
+    doc="Is X a Y: yes or no from the categories of X in the catalog, with what X is when the answer is no."
+
+@op.talk.has core.operation
+    impl=has
+    semantics=action
+    action=talk.has
+    doc="Does X have a P: yes with the count when the catalog or the picture says so, no when the count is zero, else what is not known."

@@ -10,7 +10,8 @@
 // the host through `openSlots`, spec 17), or from the basic things shipped with the drawing world. No fact: the plain "I don't know that yet" and no card.
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=4cd417b561';
-import * as space from '../space/space.mjs?v=0c5c89b98e';   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import * as space from '../space/space.mjs?v=0c5c89b98e';
+import * as R from './records.mjs?v=0f86b57f97';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;
@@ -33,24 +34,34 @@ function ensure(ctx) {
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
 const no = (status, note) => ({ status, note });
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
-const an = (n) => `${/^[aeiou]/i.test(n) && !/^(?:uni|use|eu)/i.test(n) ? 'an' : 'a'} ${n}`;
+const an = (n) => /^[A-Z]/.test(n) ? n : `${(/^[aeiou]/i.test(n) && !/^(?:uni|use|eu|one)/i.test(n)) || /^(?:hour|honest|heir|honou?r)/i.test(n) ? 'an' : 'a'} ${n}`;
 const list = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
 const clean = (w) => String(w ?? '').toLowerCase().replace(/[^\p{L}\p{N} -]/gu, ' ').replace(/^\s*(?:an?|the|some)\s+/, '').replace(/\s+/g, ' ').trim();
 const firstClause = (g) => String(g).split(/;\s*/)[0].replace(/^\([^)]*\)\s*/, '').trim();
 const brief = (t, n = 80) => { const c = firstClause(t); if (c.length <= n) return c; const cut = c.slice(0, n).replace(/\s+\S*$/, ''); return `${cut}…`; };
 const singular = (w) => (/ies$/.test(w) ? `${w.slice(0, -3)}y` : /(?:ses|xes|ches|shes)$/.test(w) ? w.slice(0, -2) : /s$/.test(w) && !/ss$/.test(w) ? w.slice(0, -1) : w);
 
-// ---------------------------------------------------------------- the built-in sequences (a local table until the time and space knowledge worlds are in the catalog)
-const SEQ = {
-  months: { items: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], cyclic: true, one: 'month', lead: 'The months of the year are' },
-  seasons: { items: ['Spring', 'Summer', 'Autumn', 'Winter'], cyclic: true, one: 'season', lead: 'The seasons are' },
-  days: { items: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], cyclic: true, one: 'day', lead: 'The days of the week are' },
-  planets: { items: ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'], cyclic: false, one: 'planet', lead: 'From the sun, the planets are', first: 'the closest to the sun', last: 'the farthest from the sun' },
+// ---------------------------------------------------------------- ordered series: read from the catalog (k.time months, weekdays, seasons; k.space planets), nothing is built into this tab
+const SEQ_SOURCE = 'the ordered lists of the knowledge catalog';
+const seriesOf = (ctx) => ctx.knowledge?.peekSeries?.() ?? {};
+/** The series a word names ("months", "month", "days", "planet"): [key, series] or null. A word names a series when it is its key, its singular, or the end of its key (days -> weekdays). */
+const seqEntry = (ctx, w) => {
+  const s = clean(w);
+  if (!s) return null;
+  const all = Object.entries(seriesOf(ctx));
+  return all.find(([k]) => k === s || k === `${singular(s)}s`) ?? all.find(([k]) => s.length > 2 && (k.endsWith(s) || k.endsWith(`${singular(s)}s`))) ?? null;
 };
-const PLANET_KM = { Mercury: 4879, Venus: 12104, Earth: 12742, Mars: 6779, Jupiter: 139820, Saturn: 116460, Uranus: 50724, Neptune: 49244 };
-const SEQ_SOURCE = 'a small table built into this tab';
-const seqKey = (w) => { const s = clean(w); return /^months?$/.test(s) ? 'months' : /^seasons?$/.test(s) ? 'seasons' : /^(?:days?|weekdays?)$/.test(s) ? 'days' : /^planets?$/.test(s) ? 'planets' : null; };
-const SIZE_RANK = { tiny: 1, small: 2, little: 2, medium: 3, large: 4, big: 4, huge: 5, giant: 5, enormous: 5 };
+const seqKey = (ctx, w) => seqEntry(ctx, w)?.[0] ?? null;
+/** A series with its words. When every item names the same thing it goes around (an `orbits` slot: the planets around the Sun) the order is counted from it ("the third planet from the sun"). */
+const seqOf = (ctx, key) => {
+  const q = seriesOf(ctx)[key];
+  if (!q) return null;
+  const anchors = new Set((q.wires ?? []).map((w) => String(w.f.orbits?.[0] ?? '').toLowerCase()));
+  const from = anchors.size === 1 && [...anchors][0] ? [...anchors][0] : null;
+  return { ...q, items: q.items.map(cap), from, lead: from ? `From the ${from}, the ${key} are` : `The ${key} in order are`, first: from ? `the closest to the ${from}` : 'the first', last: from ? `the farthest from the ${from}` : 'the last' };
+};
+const noSeries = (ctx) => (offline(ctx) || !ctx.knowledge?.peekSeries?.() ? no('missing', "I can't reach the knowledge about months, days, seasons and planets right now.") : no('missing', NONE));
+const SIZE_NAMES = new Set(['tiny', 'small', 'medium', 'large', 'huge']);
 
 // ---------------------------------------------------------------- the knowledge: the catalog by lookup, else the basic things
 /** The thing a word names: { name, th (catalog lookup or null), parts (trimmed, may be empty), shards, from } or null when nothing is known. */
@@ -62,7 +73,8 @@ export function lookup(ctx, word) {
   const key = [w, singular(w), w.replace(/ies$/, 'y')].map((x) => THING_WORDS[x]).find((k) => k && THINGS[k]);
   if (!parts.length && key) { parts = THINGS[key]; shards = ['built-in basic things']; from = 'built-in'; }
   if (!th && !parts.length) return null;
-  return { name: th?.name ?? key ?? singular(w), th, parts: trimParts(parts), shards, from };
+  const written = R.first(R.records(th, th?.name).find((x) => x.f.name), 'name');   // the catalog's own spelling of a name (Japan, not japan)
+  return { name: /^[A-Z]/.test(written ?? '') ? written : th?.name ?? key ?? singular(w), th, parts: trimParts(parts), shards, from };
 }
 const trimParts = (parts) => (parts ?? []).slice(0, MAX_PARTS).map((p) => ({
   name: p.name, shape: p.shape, x: p.x, y: p.y, w: p.w, h: p.h, z: p.z, colour: (p.colour ?? ['grey']).slice(0, 2), ...(p.rgb ? { rgb: p.rgb } : {}), ...(p.points ? { points: p.points.slice(0, 40) } : {}),
@@ -101,19 +113,23 @@ function addCard(ctx, topic, card, sentence) {
   return c;
 }
 const sources = (r) => r.shards.map((id) => {
-  const kind = /^k\.objects/.test(id) ? 'the picture catalog' : /^k\.words/.test(id) ? 'the word senses' : /^k\.commonsense/.test(id) ? 'the common sense facts' : id;
+  const kind = /^k\.objects/.test(id) ? 'the picture catalog' : /^k\.words/.test(id) ? 'the word senses' : /^k\.commonsense/.test(id) ? 'the common sense facts' : `the ${String(id).split('/')[0].replace(/^k\./, '')} knowledge`;   // any other world of the catalog is named by its own id
   return { what: kind, part: /^k\.objects/.test(id) ? String(id).split('/').pop() : '' };   // the group of the picture catalog (animals, vehicles) says something to the user; the others do not
 });
 const uniq = (xs) => xs.filter((x, i) => xs.findIndex((y) => y.what === x.what && y.part === x.part) === i);
 const sourceName = (r) => uniq(sources(r));
 
 // ---------------------------------------------------------------- operations
-function whatSentence(r) {
+function whatSentence(r, ctx) {
   const name = r.name, th = r.th, sense = th?.senses?.[0], cs = th?.commonsense;
   let t;
-  if (sense) { const g = firstClause(sense.gloss); t = /^(?:a|an|the)\s/i.test(g) ? `${cap(name)} is ${g}.` : `${cap(an(name))}: ${g}.`; }
+  const ownRecs = R.records(th, name).filter((x) => !x.type.startsWith('k.commonsense') && !x.type.startsWith('k.scenes'));
+  const own = R.describe(ownRecs, name, an, cap, { lead: !sense });   // a word sense says what the thing is; the facts of its own records follow it
+  if (own && !sense) t = own;
+  else if (sense) { const g = firstClause(sense.gloss); t = /^(?:a|an|the)\s/i.test(g) ? `${cap(name)} is ${g}.` : `${cap(an(name))}: ${g}.`; }
   else if (cs) t = `${cap(an(name))} is ${cs.size?.[0] && cs.size[0] !== 'medium' ? `${cs.size[0]}, ` : ''}${cs.used_for?.[0] ? `used for ${cs.used_for[0]}` : 'a thing I know'}.`;
   else { const ns = partNames(r.parts).map((p) => (p.n > 1 ? `${p.n} ${p.name}s` : an(p.name))); t = ns.length ? `I know what ${an(name)} looks like. It has ${list(ns.slice(0, 6))}.` : `I know what ${an(name)} looks like.`; }
+  if (own && sense) t += ` ${own}`;
   if (cs?.can?.length) t += ` It can ${list(cs.can)}.`;
   return t;
 }
@@ -125,9 +141,9 @@ export function look(ctx, { o } = {}) {
   if (!subject) return no("missing", NO_TOPIC);
   const r = lookup(ctx, subject);
   if (!r) return dontKnow(ctx, false);
-  if (!r.parts.length && !r.th?.senses?.length && !r.th?.commonsense) return dontKnow(ctx, false);   // the word is only the kind of a part of something else (a ball of the snowman): nothing to say about it
+  if (!r.parts.length && !r.th?.senses?.length && !r.th?.commonsense && !R.records(r.th, r.name).length) return dontKnow(ctx, false);   // the word is only the kind of a part of something else (a ball of the snowman): nothing to say about it
   const topic = topicFor(ctx, r.name);
-  const text = whatSentence(r);
+  const text = whatSentence(r, ctx);
   if (!r.parts.length) { topic.say ||= brief(text); return ok(text, { values: [r.name] }); }
   const names = partNames(r.parts);
   addCard(ctx, topic, { kind: 'drawing', thing: r.name, title: cap(r.name), data: { parts: r.parts, names: names.map((p) => p.name) }, how: how(ctx, r, 'what it looks like', `what ${an(r.name)} looks like`, 'a drawing made from the parts of the thing') }, text);
@@ -140,6 +156,10 @@ export function parts(ctx, { o, made } = {}) {
   if (!subject) return no("missing", NO_TOPIC);
   const r = lookup(ctx, subject);
   if (!r) return dontKnow(ctx, false);
+  if (made && !partNames(r.parts).length) {   // what a thing is made of with no named parts: the made-of / comes-from slot of its records, any world
+    const hit = R.valuesOf(R.records(r.th, r.name), R.slotsFor(ctx.knowledge?.peekSchema?.(), 'made'));
+    if (hit) return ask(ctx, { o: subject, a: 'made' });
+  }
   const topic = topicFor(ctx, r.name);
   const ns = partNames(r.parts), cs = r.th?.commonsense;
   const material = made && cs?.made_of?.length ? `${cap(an(r.name))} is made of ${list(cs.made_of)}. ` : '';
@@ -156,9 +176,22 @@ export function parts(ctx, { o, made } = {}) {
 function countOf(ctx, r, p) {
   const sing = singular(clean(p));
   const th = r.th;
+  const fact = th ? R.countFrom(th, R.records(th, r.name), p, ctx.knowledge?.peekSchema?.()) : null;
+  if (fact) return { n: fact.n, from: 'gloss', about: fact.about };   // a fact of the catalog (a slot of the thing, the count of a part of it): said as a fact, not as a picture
+  const conv = unitRatio(ctx, r, p);
+  if (conv) return conv;
   if (th && ctx.knowledge?.countOf) { const c = ctx.knowledge.countOf(th, p); if (c) return c; }
   const n = r.parts.filter((x) => x.name === sing || String(x.name).endsWith(`_${sing}`)).length;
   return n ? { n, from: 'parts' } : null;
+}
+/** How many of a unit are in another ("centimetres in a metre"): both are records with a numeric `factor` of the same `quantity`. */
+function unitRatio(ctx, r, p) {
+  const other = ctx.knowledge?.peek?.(singular(clean(p)));
+  if (!other || !r.th) return null;
+  const mine = R.records(r.th, r.name).find((x) => x.f.factor), theirs = R.records(other, other.name).find((x) => x.f.factor);
+  if (!mine || !theirs || mine.f.quantity?.[0] !== theirs.f.quantity?.[0]) return null;
+  const n = Number(mine.f.factor[0]) / Number(theirs.f.factor[0]);
+  return Number.isFinite(n) && n > 0 ? { n: Math.round(n * 1e6) / 1e6, from: 'gloss' } : null;
 }
 /** How many P does X have: the sentence and that many icons. */
 export function count(ctx, { o, p } = {}) {
@@ -170,19 +203,18 @@ export function count(ctx, { o, p } = {}) {
   const what = clean(p);
   const c = countOf(ctx, r, what);
   if (!c) return no('missing', `I know what ${an(r.name)} is, but not how many ${what} it has.`);
-  const text = c.from === 'gloss' ? `${cap(an(r.name))} has ${c.n} ${what}.` : `My picture of ${an(r.name)} has ${c.n} ${what}.`;
+  const text = c.from === 'gloss' ? `${cap(an(r.name))} has ${c.about ? 'about ' : ''}${c.n} ${what}.` : `My picture of ${an(r.name)} has ${c.n} ${what}.`;
   addCard(ctx, topic, { kind: 'icons', thing: r.name, title: `${cap(what)} of ${an(r.name)}`, data: { n: c.n, label: what, from: c.from }, how: how(ctx, r, `how many ${what} ${an(r.name)} has`, `how many ${what} does ${an(r.name)} have`, `${c.n} small icons`, c.from === 'gloss' ? 'the number comes from a word sense' : 'the number is counted in my picture, so it is a picture, not a fact') }, text);
   return ok(text, { values: [c.n] });
 }
 
 function measure(ctx, name, p) {
-  const nm = cap(clean(name));
-  if (!p && PLANET_KM[nm]) return { label: nm, value: PLANET_KM[nm], unit: 'km across', planet: true, source: SEQ_SOURCE };
   const r = lookup(ctx, name);
   if (!r) return null;
   if (p) { const c = countOf(ctx, r, p); return c ? { label: cap(r.name), value: c.n, unit: clean(p), from: c.from, r } : { label: cap(r.name), value: null, r }; }
-  const sz = r.th?.commonsense?.size?.[0];
-  return SIZE_RANK[sz] ? { label: cap(r.name), value: SIZE_RANK[sz], unit: 'size', word: sz, r } : { label: cap(r.name), value: null, r };
+  const m = R.measureOf(R.records(r.th, r.name), ctx.knowledge?.peekSchema?.());
+  const proper = /^[A-Z]/.test(R.first(R.records(r.th, r.name)[0], 'name') ?? '');
+  return m ? { label: cap(r.name), proper, value: m.value, unit: m.slot === 'size' ? 'size' : m.slot, shown: m.shown, word: m.word, quantity: m.quantity, r } : { label: cap(r.name), value: null, r };
 }
 /** Which is bigger / which has more P: two bars and a sentence. */
 export function compare(ctx, { a, b, p } = {}) {
@@ -191,31 +223,32 @@ export function compare(ctx, { a, b, p } = {}) {
   if (!a0) return no("missing", NO_TOPIC);
   const x = measure(ctx, a0, part), y = measure(ctx, b, part);
   if (!x || !y) return dontKnow(ctx, false);
-  if (!!x.planet !== !!y.planet) return no('unsupported', 'I can compare two planets with each other, or things by size. Try two planets or two animals.');
+  if (x.unit !== y.unit && x.value != null && y.value != null) return no('unsupported', `I can compare two things by the same fact, and I know ${x.label.toLowerCase()} by ${x.unit} and ${y.label.toLowerCase()} by ${y.unit}.`);
+  if (x.quantity !== y.quantity && x.value != null && y.value != null) return no('unsupported', 'Those are measured in different ways, so I cannot say which is bigger.');
   if (x.value == null || y.value == null) {
     const miss = x.value == null ? x : y;
     return no('missing', part ? `I know ${an(miss.label.toLowerCase())}, but not how many ${part} it has.` : `I know ${an(miss.label.toLowerCase())}, but not how big it is.`);
   }
   const topics = [x, y].map((m) => topicFor(ctx, m.label));
   const big = x.value >= y.value ? x : y, small = big === x ? y : x;
-  const nm = (m) => (m.planet ? m.label : an(m.label.toLowerCase()));
+  const nm = (m) => (m.proper ? m.label : an(m.label.toLowerCase()));
   let text;
   if (x.value === y.value) text = part ? `${cap(nm(x))} and ${nm(y)} have the same number of ${part}: ${x.value}.` : `${cap(nm(x))} and ${nm(y)} are the same size.`;
-  else if (x.planet) text = `${big.label} is bigger than ${small.label}: about ${big.value.toLocaleString('en-US')} km across, against about ${small.value.toLocaleString('en-US')} km.`;
+  else if (!part && x.shown) text = `${cap(nm(big))} is bigger than ${nm(small)}: ${big.shown} against ${small.shown}.`;
   else if (part) text = `${cap(nm(big))} has more ${part} than ${nm(small)}: ${big.value} against ${small.value}${[x, y].some((m) => m.from === 'parts') ? ' (counted in my pictures)' : ''}.`;
   else text = `${cap(nm(big))} is bigger than ${nm(small)}.`;
-  const unit = x.planet ? 'km across' : part ? part : 'size class (small to huge)';
-  const hw = { frame: part ? 'which of two things has more of a part' : 'which of two things is bigger', words: `${x.label} or ${y.label}`, things: [x.label, y.label], sources: uniq([x.r, y.r].filter(Boolean).flatMap(sourceName).concat(x.planet ? [{ what: SEQ_SOURCE, part: 'planet sizes' }] : [])), card: 'two bars with the same scale', note: x.planet ? 'planet sizes come from a small table' : part ? '' : 'the size comes from a size word of the common sense facts (small, medium, large)' };
+  const unit = part ? part : x.unit === 'size' ? 'size class (small to huge)' : x.unit;
+  const hw = { frame: part ? 'which of two things has more of a part' : 'which of two things is bigger', words: `${x.label} or ${y.label}`, things: [x.label, y.label], sources: uniq([x.r, y.r].filter(Boolean).flatMap(sourceName)), card: 'two bars with the same scale', note: part ? '' : `the size comes from the catalog (${x.unit === 'size' ? 'a size word: tiny to huge' : x.unit})` };
   for (const t of topics) t.say ||= brief(text);
   addCard(ctx, topics[1], { kind: 'bars', thing: `${x.label} or ${y.label}`, title: `${x.label} and ${y.label}`, data: { bars: [{ label: x.label, value: x.value }, { label: y.label, value: y.value }], unit, big: x.value === y.value ? -1 : x === big ? 0 : 1 }, how: howOf(hw) }, text);
   return ok(text, { values: [x.value, y.value] });
 }
 
-/** The order of the months, seasons, days or planets: the sentence and a line with points. */
+/** The order of a series of the catalog (months, seasons, days, planets...): the sentence and a line with points. */
 export function order(ctx, { s } = {}) {
-  const key = seqKey(s);
-  if (!key) return no("missing", NONE);
-  const q = SEQ[key];
+  const key = seqKey(ctx, s);
+  const q = key && seqOf(ctx, key);
+  if (!q) return noSeries(ctx);
   const topic = topicFor(ctx, key);
   const text = `${q.lead} ${list(q.items)}.`;
   addCard(ctx, topic, { kind: 'line', thing: key, title: cap(key), data: { items: q.items, cyclic: q.cyclic, mark: -1 }, how: howOf({ frame: `the order of the ${key}`, words: key, things: [key], sources: [{ what: SEQ_SOURCE, part: key }], card: 'a line with one point for each' }) }, text);
@@ -228,7 +261,7 @@ export function neighbour(ctx, { x, dir, n, s } = {}) {
   let word = clean(x).replace(/^the\s+/, '');
   const dirWord = word.match(/^(before|after)\s+(.+)$/);   // "and before it?" after "what comes after Mars?": the ellipsis put its words into the old slot, the direction is theirs
   if (dirWord) { dir = dirWord[1]; word = dirWord[2].replace(/^the\s+/, ''); }
-  if (n === undefined && seqKey(word)) return order(ctx, { s: word });   // "and the seasons?" after "what comes after March?": the whole line
+  if (n === undefined && seqKey(ctx, word)) return order(ctx, { s: word });   // "and the seasons?" after "what comes after March?": the whole line
   if (PRON.test(word)) {   // "and before it?": the item the last line question was about
     const last = [...ensure(ctx).cards].reverse().find((c) => c.kind === 'line' && c.data?.items);
     const at = last ? (Number.isInteger(last.data.from) ? last.data.from : last.data.mark) : -1;
@@ -236,28 +269,102 @@ export function neighbour(ctx, { x, dir, n, s } = {}) {
   }
   let key = null, i = -1;
   if (n !== undefined && s) {
-    key = seqKey(s); const q = SEQ[key];
-    if (!q) return no("missing", NONE);
+    key = seqKey(ctx, s); const q = key && seqOf(ctx, key);
+    if (!q) return noSeries(ctx);
     i = Number(n) - 1;
     if (!(i >= 0 && i < q.items.length)) return no('missing', `There ${q.items.length === 1 ? 'is' : 'are'} only ${q.items.length} ${q.one}s, so there is no ${ORD[Number(n) - 1] ?? `number ${n}`} one.`);
   } else {
-    for (const k of ['months', 'days', 'seasons', 'planets']) { const j = SEQ[k].items.findIndex((it) => it.toLowerCase() === word); if (j >= 0) { key = k; i = j; break; } }
-    if (!key) return no('missing', `I know the order of the months, seasons, days and planets, but I don't know where ${word || 'that'} fits yet.`);
+    for (const k of Object.keys(seriesOf(ctx))) { const j = seriesOf(ctx)[k].items.findIndex((it) => it.toLowerCase() === word); if (j >= 0) { key = k; i = j; break; } }
+    if (!key) return Object.keys(seriesOf(ctx)).length ? no('missing', `I know the order of ${list(Object.keys(seriesOf(ctx)))}, but I don't know where ${word || 'that'} fits yet.`) : noSeries(ctx);
   }
-  const q = SEQ[key], at = q.items[i], len = q.items.length;
+  const q = seqOf(ctx, key), at = q.items[i], len = q.items.length;
   let text, mark = i;
-  if (n !== undefined && s) text = `The ${ORD[i] ?? `number ${n}`} ${q.one}${key === 'planets' ? ' from the sun' : ''} is ${at}.`;
+  if (n !== undefined && s) text = `The ${ORD[i] ?? `number ${n}`} ${q.one}${q.from ? ` from the ${q.from}` : ''} is ${at}.`;
   else {
     const d = dir === 'before' ? -1 : 1;
     const j = i + d;
     if (j < 0 || j >= len) {
       if (q.cyclic) { mark = (j + len) % len; text = d > 0 ? `After ${at} comes ${q.items[mark]}, and the ${q.one}s start again.` : `Before ${at} comes ${q.items[mark]}.`; }
-      else text = d > 0 ? `${at} is ${q.last}, so no planet comes after it.` : `${at} is ${q.first}, so no planet comes before it.`;
+      else text = d > 0 ? `${at} is ${q.last}, so no ${q.one} comes after it.` : `${at} is ${q.first}, so no ${q.one} comes before it.`;
     } else { mark = j; text = d > 0 ? `${q.items[j]} comes after ${at}.` : `${q.items[j]} comes before ${at}.`; }
   }
   const topic = topicFor(ctx, key);
   addCard(ctx, topic, { kind: 'line', thing: key, title: cap(key), data: { items: q.items, cyclic: q.cyclic, mark, from: i }, how: howOf({ frame: n !== undefined ? `which ${q.one} is number ${n}` : `what comes ${dir === 'before' ? 'before' : 'after'} ${at}`, words: n !== undefined ? `${ORD[i]} ${q.one}` : at, things: [at], sources: [{ what: SEQ_SOURCE, part: key }], card: 'the line with the answer marked' }) }, text);
   return ok(text, { values: [q.items[mark]] });
+}
+
+// ---------------------------------------------------------------- one slot of a thing, found through the schemas (no world is named here)
+const VERB_SLOTS = { does: (n, v) => `${cap(n)} ${v}.`, can: (n, v) => `${cap(n)} can ${v}.`, used_for: (n, v) => `${cap(n)} is used for ${v}.`, is_a: (n, v) => `${cap(n)} is ${/^[aeiou]/i.test(v) ? 'an' : 'a'} ${v}.` };
+/** The sentence for one slot of a thing: a verb-like slot (eats, comes from) reads as a verb, any other as "The habitat of the cow is farm". */
+function slotSentence(ctx, r, hit, attr, recs) {
+  const sc = ctx.knowledge?.peekSchema?.();
+  const nm = r.proper ? r.name : `the ${r.name}`;
+  const vals = hit.values.map((v) => String(v).replace(/_/g, ' '));
+  const lst = list(vals);
+  if (hit.key === 'gloss') {   // the first sense of each part of speech: a word like brave is an adjective and, far down the list, a noun
+    const byPos = new Map();
+    for (const x of recs.filter((y) => y.f.gloss && y.type === 'k.words.sense')) if (!byPos.has(x.f.pos?.[0])) byPos.set(x.f.pos?.[0], firstClause(x.f.gloss[0]));
+    const parts = [...byPos].slice(0, 3).map(([pos, g]) => (byPos.size > 1 && pos ? `as ${/^[aeiou]/.test(pos) ? 'an' : 'a'} ${pos}, ${g}` : g));
+    return `${cap(r.name)} means: ${parts.join('; ')}.`;
+  }
+  if (hit.key === 'synonym') return `${vals.length > 1 ? 'Synonyms' : 'A synonym'} of ${r.name}: ${lst}.`;
+  if (VERB_SLOTS[hit.key]) return VERB_SLOTS[hit.key](cap(nm), lst);
+  const label = hit.key.replace(/_/g, ' ');
+  const verbish = /_(?:from|on|at|of|by)$/.test(hit.key) || (/s$/.test(hit.key) && sc?.slotWords?.has(hit.key.slice(0, -1)));
+  if (verbish) return `${cap(nm)} ${label} ${lst}.`;
+  return vals.length > 1 ? `The ${label} of ${nm}: ${lst}.` : `The ${label} of ${nm} is ${lst}.`;
+}
+/** What is the capital of X / what colour is X / what does X eat / where does X live / what is next to X: one slot of the records of X, the slot found by the words of the schemas. */
+export function ask(ctx, { o, a } = {}) {
+  const subject = subj(ctx, o);
+  if (!subject) return no('missing', NO_TOPIC);
+  const r = lookup(ctx, subject);
+  if (!r) return dontKnow(ctx, false);
+  const sc = ctx.knowledge?.peekSchema?.();
+  const attr = clean(a);
+  const recs = R.records(r.th, r.name, { senses: true });
+  r.proper = /^[A-Z]/.test(r.name);
+  const hit = R.valuesOf(recs, R.slotsFor(sc, attr));
+  const topic = topicFor(ctx, r.name);
+  if (!hit) return no('missing', recs.length ? `I know ${an(r.name)}, but not its ${attr || 'that'} yet.` : NONE);
+  const text = slotSentence(ctx, r, hit, attr, recs);
+  const rows = [{ k: hit.key.replace(/_/g, ' '), v: hit.values.map((v) => String(v).replace(/_/g, ' ')).join(', ') }];
+  addCard(ctx, topic, { kind: 'facts', thing: r.name, title: cap(r.name), data: { rows }, how: how(ctx, { ...r, shards: [hit.rec.shard].filter(Boolean) }, `the ${hit.key.replace(/_/g, ' ')} of a thing`, `the ${attr} of ${an(r.name)}`, 'a small list with the fact') }, text);
+  return ok(text, { values: hit.values });
+}
+
+/** Does X have a P: yes with the count when the catalog's slots or the parts of its picture say so, no when the count is zero, else what is not known. */
+export function has(ctx, { o, p } = {}) {
+  const subject = subj(ctx, o);
+  if (!subject) return no('missing', NO_TOPIC);
+  const r = lookup(ctx, subject);
+  if (!r) return dontKnow(ctx, false);
+  const what = clean(p), one = singular(what);
+  const topic = topicFor(ctx, r.name);
+  const c = countOf(ctx, r, what);
+  const pictured = r.parts.some((x) => x.name === one || String(x.name).endsWith(`_${one}`));
+  const text = c ? (c.n === 0 ? `No, ${an(r.name)} has no ${what}.` : `Yes, ${an(r.name)} has ${c.about ? 'about ' : ''}${c.n} ${c.n === 1 ? one : what}.`) : pictured ? `Yes, my picture of ${an(r.name)} has ${an(one)}.` : '';
+  if (!text) return no('missing', `I know what ${an(r.name)} is, but not whether it has ${an(one)}.`);
+  topic.say ||= brief(text);
+  return ok(text, { values: [c?.n ?? 1] });
+}
+
+/** Is X a Y: yes when Y is a category of X in the catalog (the kind slots of its records, the noun of their type, the is-a of its senses), else no with what it is. */
+export function isa(ctx, { o, c } = {}) {
+  const subject = subj(ctx, o);
+  if (!subject) return no('missing', NO_TOPIC);
+  const r = lookup(ctx, subject);
+  if (!r) return dontKnow(ctx, false);
+  const recs = R.records(r.th, r.name);
+  const { own, all: cats } = R.categories(r.th, recs);
+  const want = clean(c), sing = singular(want);
+  const topic = topicFor(ctx, r.name);
+  if (!cats.size) return no('missing', NONE);
+  const yes = [want, sing].some((x) => cats.has(x));
+  const mine = [...(own.size ? own : cats)].filter((x) => x && x !== 'thing' && x !== 'sense').slice(0, 3);
+  const text = yes ? `Yes, ${an(r.name)} is ${an(sing)}.` : own.size ? `No. ${cap(an(r.name))} is ${list(mine.map(an))}, not ${an(sing)}.` : `I do not know that. I only know that ${an(r.name)} is ${list(mine.map(an))}.`;
+  topic.say ||= brief(text);
+  return ok(text, { values: [yes ? 'yes' : 'no'] });
 }
 
 /** "No, the other one": of the two things of the last comparison, the one the conversation is not on; it is shown as "what is X". */
@@ -269,7 +376,7 @@ export function other(ctx) {
   const names = bars.data.bars.map((b) => String(b.label));
   const rest = names.find((n) => clean(n) !== cur) ?? names[0];
   const bar = bars.data.bars.find((b) => String(b.label) === rest);
-  if (PLANET_KM[cap(rest)]) { topicFor(ctx, rest); return ok(`${cap(rest)} is about ${Number(bar?.value ?? PLANET_KM[cap(rest)]).toLocaleString('en-US')} km across.`, { values: [rest] }); }
+  void bar;
   return look(ctx, { o: rest.toLowerCase() });
 }
 
@@ -324,8 +431,11 @@ export function scope(ctx) {
 // ---------------------------------------------------------------- host hooks
 /** Spec 17: the things of a request that the host should look up in the catalog before the operation runs. */
 export function openSlots(ctx, { action, args = {} } = {}) {
-  const names = action === 'talk.look' || action === 'talk.parts' || action === 'talk.count' || action === 'talk.kind' ? [args.o] : action === 'talk.change' ? [args.x] : action === 'talk.compare' ? [args.a, args.b] : [];
-  return names.map(clean).filter((n) => n && n.split(' ').length <= 3 && !PLANET_KM[cap(n)]);
+  const names = action === 'talk.look' || action === 'talk.parts' || action === 'talk.kind' || action === 'talk.ask' ? [args.o] : action === 'talk.count' ? [args.o, args.p] : action === 'talk.isa' ? [args.o, args.c] : action === 'talk.has' ? [args.o] : action === 'talk.change' ? [args.x] : action === 'talk.compare' ? [args.a, args.b] : action === 'talk.neighbour' ? [args.x] : [];
+  return names.map(clean).filter((n) => n && n.split(' ').length <= 3 && !PRON.test(n));
+}
+/** Host hook: the catalog models this world reads synchronously (the schemas of the knowledge worlds, the ordered series), built by the host before an operation runs. */
+export function needs() { return ['schema', 'series']; 
 }
 
 const words = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];

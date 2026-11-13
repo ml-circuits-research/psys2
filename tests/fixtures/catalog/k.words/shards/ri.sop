@@ -1,0 +1,11 @@
+# k.words/shards/ri: noun and verb senses of the words from "ri" to "riviera" (first letters "ri").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.rice.noun.1 k.words.sense word=rice pos=noun n=1 gloss="grains used as food either unpolished or more often polished" is_a=grain is_a=starches part_of="cultivated rice" core.source="wordnet 3.1"
+@k.words.rice.noun.2 k.words.sense word=rice pos=noun n=2 gloss="annual or perennial rhizomatous marsh grasses; seed used for food; straw used for paper" is_a=cereal core.source="wordnet 3.1"
+@k.words.rice.noun.3 k.words.sense word=Rice pos=noun n=3 gloss="English lyricist who frequently worked with Andrew Lloyd Webber (born in 1944)" synonym="Sir Tim Rice" synonym="Timothy Miles Bindon Rice" instance_of=lyricist core.source="wordnet 3.1"
+@k.words.rice.verb.1 k.words.sense word=rice pos=verb n=1 gloss="sieve so that it becomes the consistency of rice" is_a=sift core.source="wordnet 3.1"
+@k.words.rings.noun.1 k.words.sense word=rings pos=noun n=1 gloss="gymnastic apparatus consisting of a pair of heavy metal circles (usually covered with leather) suspended by ropes; used for gymnastic exercises" is_a="gymnastic apparatus" core.source="wordnet 3.1"
+@k.words.river.noun.1 k.words.sense word=river pos=noun n=1 gloss="a large natural stream of water (larger than a creek)" is_a=stream part_of="water system" core.source="wordnet 3.1"

@@ -1,0 +1,6 @@
+# k.words/shards/ke: noun and verb senses of the words from "keaton" to "keypad" (first letters "ke").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.kenya.noun.1 k.words.sense word=Kenya pos=noun n=1 gloss="a republic in eastern Africa; achieved independence from the United Kingdom in 1963; major archeological discoveries have been made in the Great Rift Valley in Kenya" synonym="Republic of Kenya" instance_of="African country" part_of=Africa part_of="East Africa" core.source="wordnet 3.1"

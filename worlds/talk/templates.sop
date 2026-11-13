@@ -65,3 +65,15 @@
 @tpl.talk.undo core.template
     for=action.talk.undo
     text="{value}"
+
+@tpl.talk.ask core.template
+    for=action.talk.ask
+    text="{value}"
+
+@tpl.talk.isa core.template
+    for=action.talk.isa
+    text="{value}"
+
+@tpl.talk.has core.template
+    for=action.talk.has
+    text="{value}"

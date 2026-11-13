@@ -1,0 +1,9 @@
+# k.geo/shards/asia: Asia: 52 countries and territories, 223 cities, 217 rivers, 197 mountains, 77 mountain ranges.
+# sources: natural-earth 5.1.2 (Natural Earth, public domain)
+# license: public-domain
+# script: tools/import/geo.mjs
+
+@k.geo.country.IND k.geo.country name=India code=IND formal="Republic of India" capital="New Delhi" continent=Asia region="Southern Asia" population=1366417754 independent=true lat=22.69 lon=79.36 west=68.17 south=6.75 east=97.34 north=35.5 core.source="natural-earth 5.1.2"
+@k.geo.country.JPN k.geo.country name=Japan code=JPN formal="Japan" capital=Tokyo capital=Kyoto continent=Asia region="Eastern Asia" population=126264931 independent=true lat=36.14 lon=138.44 west=123.68 south=24.27 east=145.83 north=45.51 core.source="natural-earth 5.1.2"
+@k.geo.river.Red.asia k.geo.river name=Red continent=Asia country=China country=Vietnam lat=22.86 lon=103.34 west=100.18 south=20.28 east=106.5 north=25.44 core.source="natural-earth 5.1.2"
+@k.geo.river.You.asia k.geo.river name=You continent=Asia country=China lat=23.65 lon=106.67 west=105.26 south=22.84 east=108.09 north=24.45 core.source="natural-earth 5.1.2"

@@ -1,0 +1,34 @@
+@t.seating.n0 core.test
+    session=plan
+    input="Open the seating tab."
+    expectState="ui.shell:activeTab=seating"
+
+@t.seating.n1 core.test
+    session=plan
+    input="add 2 tables"
+    expect="I added table 1 and table 2."
+
+@t.seating.n2 core.test
+    session=plan
+    input="add a guest called Ann at table 1"
+    expect="I added guest Ann at table 1."
+
+@t.seating.n3 core.test
+    session=plan
+    input="make table 2 blue"
+    expect="I made table 2 blue"
+
+@t.seating.n4 core.test
+    session=plan
+    input="who is at table 1"
+    expect="At table 1: guest Ann."
+
+@t.seating.n5 core.test
+    session=plan
+    input="remove the hat"
+    expect="There is no hat in the seating plan."
+
+@t.seating.n6 core.test
+    session=plan
+    input="remove Ann"
+    expect="I removed guest Ann."

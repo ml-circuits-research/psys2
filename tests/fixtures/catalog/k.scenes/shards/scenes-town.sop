@@ -1,0 +1,21 @@
+# k.scenes/shards/scenes-town: 15 scenes in a town and places people build (city street, village, playground, market, harbour, airport, railway station, construction site, petrol station, zoo, fairground, football pitch, swimming pool, circus, castle): what is usually there, how many, where in the picture, what happens there, the time, weather and season that fit; and other names of the scenes.
+# sources: hand-core 1 (hand-written in this repository: tools/scenes-data.mjs)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+# city street
+# village
+# playground
+# market
+# harbour
+# airport
+# railway station
+# construction site
+# petrol station
+# zoo
+# fairground
+# football pitch
+# swimming pool
+# circus
+# castle
+
+@k.scenes.scene.castle k.scenes.scene name=castle kind=outdoors ground=grass time=day happens="guard the gate" happens="ride out" happens="hold a feast" drawing=castle core.source="hand-core 1"

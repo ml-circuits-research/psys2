@@ -1,0 +1,9 @@
+# k.words/shards/ey: noun and verb senses of the words from "eye" to "eyewitness" (first letters "ey").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.eye.noun.1 k.words.sense word=eye pos=noun n=1 gloss="the organ of sight" synonym=oculus synonym=optic is_a="sense organ" part_of="visual system" part_of=face core.source="wordnet 3.1"
+@k.words.eye.noun.2 k.words.sense word=eye pos=noun n=2 gloss="good discernment (either visually or as if visually)" is_a=sagacity core.source="wordnet 3.1"
+@k.words.eye.noun.3 k.words.sense word=eye pos=noun n=3 gloss="attention to what is seen" is_a=attention core.source="wordnet 3.1"
+@k.words.eye.verb.1 k.words.sense word=eye pos=verb n=1 gloss="look at" synonym=eyeball is_a=look core.source="wordnet 3.1"

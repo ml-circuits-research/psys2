@@ -1,0 +1,7 @@
+# k.geo/shards/africa: Africa: 59 countries and territories, 255 cities, 178 rivers, 91 mountains, 29 mountain ranges.
+# sources: natural-earth 5.1.2 (Natural Earth, public domain)
+# license: public-domain
+# script: tools/import/geo.mjs
+
+@k.geo.country.EGY k.geo.country name=Egypt code=EGY formal="Arab Republic of Egypt" capital=Cairo continent=Africa region="Northern Africa" population=100388073 independent=true lat=26.19 lon=29.45 west=24.7 south=21.99 east=36.87 north=31.65 core.source="natural-earth 5.1.2"
+@k.geo.country.KEN k.geo.country name=Kenya code=KEN formal="Republic of Kenya" capital=Nairobi continent=Africa region="Eastern Africa" population=52573973 independent=true lat=0.55 lon=37.91 west=33.9 south=-4.69 east=41.88 north=5.49 core.source="natural-earth 5.1.2"

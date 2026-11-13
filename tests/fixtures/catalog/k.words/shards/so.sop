@@ -1,0 +1,15 @@
+# k.words/shards/so: noun and verb senses of the words from "so" to "soy" (first letters "so").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.sound.noun.1 k.words.sense word=sound pos=noun n=1 gloss="the particular auditory effect produced by a given cause" is_a="sound property" core.source="wordnet 3.1"
+@k.words.sound.noun.2 k.words.sense word=sound pos=noun n=2 gloss="the subjective sensation of hearing something" synonym="auditory sensation" is_a=sensation core.source="wordnet 3.1"
+@k.words.sound.noun.3 k.words.sense word=sound pos=noun n=3 gloss="mechanical vibrations transmitted by an elastic medium" is_a="mechanical phenomenon" core.source="wordnet 3.1"
+@k.words.sound.verb.1 k.words.sense word=sound pos=verb n=1 gloss="appear in a certain way" is_a=look core.source="wordnet 3.1"
+@k.words.sound.verb.2 k.words.sense word=sound pos=verb n=2 gloss="make a certain noise or sound" synonym=go is_a="cause to be perceived" core.source="wordnet 3.1"
+@k.words.sound.verb.3 k.words.sense word=sound pos=verb n=3 gloss="give off a certain sound or sounds" core.source="wordnet 3.1"
+@k.words.soup.noun.1 k.words.sense word=soup pos=noun n=1 gloss="liquid food especially of meat or fish or vegetable stock often containing pieces of solid food" is_a=dish core.source="wordnet 3.1"
+@k.words.soup.noun.2 k.words.sense word=soup pos=noun n=2 gloss="any composition having a consistency suggestive of soup" is_a=composition core.source="wordnet 3.1"
+@k.words.soup.noun.3 k.words.sense word=soup pos=noun n=3 gloss="an unfortunate situation" is_a=situation core.source="wordnet 3.1"
+@k.words.soup.verb.1 k.words.sense word=soup pos=verb n=1 gloss="dope (a racehorse)" is_a=dope core.source="wordnet 3.1"

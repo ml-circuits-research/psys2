@@ -1,0 +1,6 @@
+# k.words/shards/pe: noun and verb senses of the words from "pe" to "pew" (first letters "pe").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.penguin.noun.1 k.words.sense word=penguin pos=noun n=1 gloss="short-legged flightless birds of cold southern especially Antarctic regions having webbed feet and wings modified as flippers" is_a="sphenisciform seabird" core.source="wordnet 3.1"

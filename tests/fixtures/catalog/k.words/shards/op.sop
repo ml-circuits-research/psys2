@@ -1,0 +1,8 @@
+# k.words/shards/op: noun and verb senses of the words from "open" to "option" (first letters "op").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.opposite.noun.1 k.words.sense word=opposite pos=noun n=1 gloss="a word that expresses a meaning opposed to the meaning of another word, in which case the two words are antonyms of each other" synonym=antonym synonym="opposite word" is_a=word core.source="wordnet 3.1"
+@k.words.opposite.noun.2 k.words.sense word=opposite pos=noun n=2 gloss="a relation of direct opposition" synonym=reverse synonym=contrary is_a=opposition core.source="wordnet 3.1"
+@k.words.opposite.noun.3 k.words.sense word=opposite pos=noun n=3 gloss="a contestant that you are matched against" synonym=opposition synonym=opponent is_a=contestant core.source="wordnet 3.1"

@@ -1,0 +1,23 @@
+# k.animals/shards/fish: 13 fish: class, legs, covering, sound, habitat, diet, food, the name of the young, abilities; and their plural forms and other names.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.animals.animal.goldfish k.animals.animal name=goldfish class=fish legs=0 covering=scales habitat=pond diet=omnivore baby=fry can=swim drawing=goldfish core.source="hand-core 1"
+@k.animals.animal.shark k.animals.animal name=shark class=fish legs=0 habitat=sea diet=carnivore eats=fish baby=pup can=swim drawing=shark core.source="hand-core 1"
+@k.animals.animal.salmon k.animals.animal name=salmon class=fish legs=0 covering=scales habitat=sea habitat=river diet=carnivore baby=fry can=swim can=jump core.source="hand-core 1"
+@k.animals.animal.tuna k.animals.animal name=tuna class=fish legs=0 covering=scales habitat=sea diet=carnivore eats=fish can=swim core.source="hand-core 1"
+@k.animals.animal.trout k.animals.animal name=trout class=fish legs=0 covering=scales habitat=river habitat=lake diet=carnivore eats=insects baby=fry can=swim core.source="hand-core 1"
+@k.animals.animal.carp k.animals.animal name=carp class=fish legs=0 covering=scales habitat=lake habitat=pond habitat=river diet=omnivore baby=fry can=swim drawing="fish koi carp" core.source="hand-core 1"
+@k.animals.animal.cod k.animals.animal name=cod class=fish legs=0 covering=scales habitat=sea diet=carnivore eats=fish can=swim core.source="hand-core 1"
+@k.animals.animal.herring k.animals.animal name=herring class=fish legs=0 covering=scales habitat=sea eats=plankton can=swim core.source="hand-core 1"
+@k.animals.animal.sardine k.animals.animal name=sardine class=fish legs=0 covering=scales habitat=sea eats=plankton can=swim core.source="hand-core 1"
+@k.animals.animal.pike k.animals.animal name=pike class=fish legs=0 covering=scales habitat=lake habitat=river diet=carnivore eats=fish can=swim core.source="hand-core 1"
+@k.animals.animal.eel k.animals.animal name=eel class=fish legs=0 habitat=river habitat=sea diet=carnivore baby=elver can=swim core.source="hand-core 1"
+@k.animals.animal.seahorse k.animals.animal name=seahorse class=fish legs=0 habitat=sea diet=carnivore baby=fry can=swim drawing=seahorse core.source="hand-core 1"
+@k.animals.animal.clownfish k.animals.animal name=clownfish class=fish legs=0 covering=scales habitat="coral reef" diet=omnivore baby=fry can=swim core.source="hand-core 1"
+
+@k.animals.word.shark core.word text=sharks means=shark of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.sardine core.word text=sardines means=sardine of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.eel core.word text=eels means=eel of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.seahorse core.word text=seahorses means=seahorse of=k.animals.animal.name core.source="hand-core 1"

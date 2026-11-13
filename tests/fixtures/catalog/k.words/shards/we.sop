@@ -1,0 +1,9 @@
+# k.words/shards/we: noun and verb senses of the words from "weaken" to "wet" (first letters "we").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.wednesday.noun.1 k.words.sense word=Wednesday pos=noun n=1 gloss="the fourth day of the week; the third working day" synonym=Midweek synonym=Wed is_a=weekday core.source="wordnet 3.1"
+@k.words.week.noun.1 k.words.sense word=week pos=noun n=1 gloss="any period of seven consecutive days" synonym=hebdomad is_a="time period" core.source="wordnet 3.1"
+@k.words.week.noun.2 k.words.sense word=week pos=noun n=2 gloss="hours or days of work in a calendar week" synonym=workweek is_a="work time" part_of=week core.source="wordnet 3.1"
+@k.words.week.noun.3 k.words.sense word=week pos=noun n=3 gloss="a period of seven consecutive days starting on Sunday" synonym="calendar week" is_a="time period" part_of="calendar month" core.source="wordnet 3.1"

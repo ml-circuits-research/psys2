@@ -1,0 +1,12 @@
+# k.words/shards/wo: noun and verb senses of the words from "woe" to "wow" (first letters "wo").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.word.noun.1 k.words.sense word=word pos=noun n=1 gloss="a unit of language that native speakers can identify" is_a="language unit" core.source="wordnet 3.1"
+@k.words.word.noun.2 k.words.sense word=word pos=noun n=2 gloss="a brief statement" is_a=statement core.source="wordnet 3.1"
+@k.words.word.noun.3 k.words.sense word=word pos=noun n=3 gloss="information about recent and important events" synonym=news synonym=intelligence synonym=tidings is_a=information core.source="wordnet 3.1"
+@k.words.word.verb.1 k.words.sense word=word pos=verb n=1 gloss="put into words or an expression" synonym="give voice" synonym=formulate synonym=phrase synonym=articulate is_a=express core.source="wordnet 3.1"
+@k.words.words.noun.1 k.words.sense word=words pos=noun n=1 gloss="the words that are spoken" is_a=speech core.source="wordnet 3.1"
+@k.words.words.noun.2 k.words.sense word=words pos=noun n=2 gloss="the text of a popular song or musical-comedy number" synonym=lyric synonym=language is_a=text part_of=song core.source="wordnet 3.1"
+@k.words.words.noun.3 k.words.sense word=words pos=noun n=3 gloss="language that is spoken or written" is_a=language core.source="wordnet 3.1"

@@ -1,0 +1,86 @@
+@gen.plan.seating.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@op.plan.seating.make core.operation
+    impl=make
+    semantics=action
+    action=plan.seating.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.remove core.operation
+    impl=remove
+    semantics=action
+    action=plan.seating.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.change core.operation
+    impl=change
+    semantics=action
+    action=plan.seating.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.place core.operation
+    impl=place
+    semantics=action
+    action=plan.seating.place
+    doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.connect core.operation
+    impl=connect
+    semantics=action
+    action=plan.seating.connect
+    doc="The act 'connect' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.group core.operation
+    impl=group
+    semantics=action
+    action=plan.seating.group
+    doc="The act 'group' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.send core.operation
+    impl=send
+    semantics=action
+    action=plan.seating.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.pick core.operation
+    impl=pick
+    semantics=action
+    action=plan.seating.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.copy core.operation
+    impl=copy
+    semantics=action
+    action=plan.seating.copy
+    doc="The act 'copy' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.ask core.operation
+    impl=ask
+    semantics=action
+    action=plan.seating.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.undo core.operation
+    impl=undo
+    semantics=action
+    action=plan.seating.undo
+    doc="The act 'undo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.redo core.operation
+    impl=redo
+    semantics=action
+    action=plan.seating.redo
+    doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.save core.operation
+    impl=save
+    semantics=action
+    action=plan.seating.save
+    doc="The act 'save' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.seating.load core.operation
+    impl=load
+    semantics=action
+    action=plan.seating.load
+    doc="The act 'load' (spec 21), applied by the generic executor to this world's schema."

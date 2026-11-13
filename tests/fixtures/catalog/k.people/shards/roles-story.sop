@@ -1,0 +1,39 @@
+# k.people/shards/roles-story: 16 figures of stories (king, queen, prince, princess, knight, pirate, witch, wizard, fairy, clown, cowboy, detective, superhero, magician, explorer, Father Christmas): what they wear, hold and use, where they work, what they do, the k.faces features that suit them; and their other names.
+# sources: hand-core 1 (hand-written in this repository: tools/people-core.mjs)
+# license: CC0-1.0
+# script: tools/people-core.mjs
+
+@k.people.role.king k.people.role name=king group=story is=man wears=crown wears=robe holds=sword uses=throne works_at=castle does=rule does="give orders" hat=crown beard=full drawing=person core.source="hand-core 1"
+@k.people.role.queen k.people.role name=queen group=story is=woman wears=crown wears=dress wears=necklace uses=throne works_at=castle does=rule hat=crown face=queen drawing=person core.source="hand-core 1"
+@k.people.role.prince k.people.role name=prince group=story is=boy wears=crown holds=sword uses=horse works_at=castle does=ride does=rescue hat=crown drawing=person core.source="hand-core 1"
+@k.people.role.princess k.people.role name=princess group=story is=girl wears=crown wears=dress works_at=castle does=dance does=sing hat=crown drawing=person core.source="hand-core 1"
+@k.people.role.knight k.people.role name=knight group=story is=man wears=armor holds=sword holds=shield uses=horse works_at=castle does="fight dragons" does=ride does="guard the castle" drawing=person core.source="hand-core 1"
+@k.people.role.pirate k.people.role name=pirate group=story is=man wears=hat wears=boots holds=sword uses=ship uses="treasure chest" uses=map uses=cannon uses=telescope works_at="pirate ship" works_at=island does="sail the seas" does="hunt for treasure" beard=full moustache=handlebar drawing=person core.source="hand-core 1"
+@k.people.role.witch k.people.role name=witch group=story is=woman wears="witches hat" holds=broomstick uses="black cat" works_at=Halloween does="cast spells" does="fly on a broomstick" drawing=person core.source="hand-core 1"
+@k.people.role.wizard k.people.role name=wizard group=story is=man wears=robe wears="witches hat" holds="magic wand" uses="crystal ball" uses=book does="cast spells" does="do magic" beard=long drawing=person core.source="hand-core 1"
+@k.people.role.fairy k.people.role name=fairy group=story is=girl wears=dress holds="magic wand" works_at=garden works_at=forest does=fly does="grant wishes" drawing=person core.source="hand-core 1"
+@k.people.role.clown k.people.role name=clown group=story wears="bow tie" holds=balloon uses=ball works_at=circus does="make people laugh" does=juggle does="fall over" hat="party hat" face=clown drawing=person core.source="hand-core 1"
+@k.people.role.cowboy k.people.role name=cowboy group=story is=man wears=boots wears=hat holds=rope uses=horse works_at=desert does=ride does="herd cattle" hat="cowboy hat" moustache=handlebar drawing=person core.source="hand-core 1"
+@k.people.role.detective k.people.role name=detective group=story wears=coat wears=hat holds="magnifying glass tilted left" uses=notebook works_at="city street" does="look for clues" does="solve mysteries" moustache=pencil shoulders=suit drawing=person core.source="hand-core 1"
+@k.people.role.superhero k.people.role name=superhero group=story wears=mask works_at="city street" does=fly does="rescue people" does="fight villains" drawing=person core.source="hand-core 1"
+@k.people.role.magician k.people.role name=magician group=story is=man wears="top hat" wears=suit wears="bow tie" holds="magic wand" uses=rabbit uses="playing cards" works_at=theatre works_at=circus does="do tricks" does="pull a rabbit out of a hat" hat="top hat" moustache=thin shoulders=suit drawing=person core.source="hand-core 1"
+@k.people.role.explorer k.people.role name=explorer group=story wears=backpack wears="hiking boot" wears=hat holds=map holds=compass uses=tent uses=telescope works_at=jungle works_at=desert works_at=mountains works_at=arctic does=explore does=discover does=climb hat="sun hat" beard=stubble drawing=person core.source="hand-core 1"
+@k.people.role.Father_Christmas k.people.role name="Father Christmas" group=story is=grandfather wears="hat Christmas" wears=boots holds="Father Christmas sack" uses=sleigh uses=Rudolph uses=present works_at=Christmas does="bring presents" does="ride a sleigh" hat=beanie beard=long moustache=walrus drawing=person core.source="hand-core 1"
+
+# Words: plural forms and other names.
+@k.people.word.role.king core.word text=kings means=king of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.queen core.word text=queens means=queen of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.prince core.word text=princes means=prince of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.princess core.word text=princesses means=princess of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.knight core.word text=knights means=knight of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.pirate core.word text=pirates text=buccaneer means=pirate of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.witch core.word text=witches means=witch of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.wizard core.word text=wizards text=sorcerer means=wizard of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.fairy core.word text=fairies means=fairy of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.clown core.word text=clowns means=clown of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.cowboy core.word text=cowboys text=cowgirl means=cowboy of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.detective core.word text=detectives text=sleuth means=detective of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.superhero core.word text=superheroes text=hero means=superhero of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.magician core.word text=magicians text=conjurer means=magician of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.explorer core.word text=explorers text=adventurer means=explorer of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.Father_Christmas core.word text=santa text="santa claus" text="father christmas" text="saint nicholas" means="Father Christmas" of=k.people.role.name core.source="hand-core 1"
