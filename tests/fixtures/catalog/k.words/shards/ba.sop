@@ -1,7 +1,7 @@
-# k.words/shards/ba: noun and verb senses of the words from "ba" to "bazaar" (first letters "ba").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ba: senses of the words from "ba" to "bazooka" (first letters "ba").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.banana.noun.1 k.words.sense word=banana pos=noun n=1 gloss="any of several tropical and subtropical treelike herbs of the genus Musa having a terminal crown of large entire leaves and usually bearing hanging clusters of elongated fruits" synonym="banana tree" is_a=herb core.source="wordnet 3.1"
-@k.words.banana.noun.2 k.words.sense word=banana pos=noun n=2 gloss="elongated crescent-shaped yellow fruit with soft sweet flesh" is_a="edible fruit" part_of="edible banana" part_of="dwarf banana" core.source="wordnet 3.1"
+@k.words.banana.noun.1 k.words.sense word=banana pos=noun n=1 gloss="any of several tropical and subtropical treelike herbs of the genus Musa having a terminal crown of large entire leaves and usually bearing hanging clusters of elongated fruits" synonym="banana tree" is_a=herb kind_of=herb kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.banana.noun.2 k.words.sense word=banana pos=noun n=2 gloss="elongated crescent-shaped yellow fruit with soft sweet flesh" is_a="edible fruit" part_of="edible banana" part_of="dwarf banana" kind_of="edible fruit" kind_of=produce kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

@@ -1,11 +1,12 @@
-# k.words/shards/st: noun and verb senses of the words from "stab" to "stylist" (first letters "st").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/st: senses of the words from "stab" to "stylist" (first letters "st").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.star.noun.1 k.words.sense word=star pos=noun n=1 gloss="(astronomy) a celestial body of hot gases that radiates energy derived from thermonuclear reactions in the interior" is_a="celestial body" core.source="wordnet 3.1"
-@k.words.star.noun.2 k.words.sense word=star pos=noun n=2 gloss="someone who is dazzlingly skilled in any field" synonym=ace synonym=adept synonym=champion synonym=sensation synonym=maven synonym=mavin synonym=virtuoso synonym=genius synonym=hotshot synonym=superstar synonym=whiz synonym=whizz synonym=wizard synonym=wiz is_a=expert core.source="wordnet 3.1"
-@k.words.star.noun.3 k.words.sense word=star pos=noun n=3 gloss="any celestial body visible (as a point of light) from the Earth at night" is_a="celestial body" core.source="wordnet 3.1"
-@k.words.star.verb.1 k.words.sense word=star pos=verb n=1 gloss="feature as the star" is_a=have core.source="wordnet 3.1"
-@k.words.star.verb.2 k.words.sense word=star pos=verb n=2 gloss="be the star in a performance" is_a=perform core.source="wordnet 3.1"
-@k.words.star.verb.3 k.words.sense word=star pos=verb n=3 gloss="mark with an asterisk" synonym=asterisk is_a=mark core.source="wordnet 3.1"
+@k.words.star.noun.1 k.words.sense word=star pos=noun n=1 gloss="(astronomy) a celestial body of hot gases that radiates energy derived from thermonuclear reactions in the interior" is_a="celestial body" kind_of="celestial body" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.star.noun.2 k.words.sense word=star pos=noun n=2 gloss="someone who is dazzlingly skilled in any field" synonym=ace synonym=adept synonym=champion synonym=sensation synonym=maven synonym=mavin synonym=virtuoso synonym=genius synonym=hotshot synonym=superstar synonym=whiz synonym=whizz synonym=wizard synonym=wiz is_a=expert kind_of=expert kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.star.noun.3 k.words.sense word=star pos=noun n=3 gloss="any celestial body visible (as a point of light) from the Earth at night" is_a="celestial body" kind_of="celestial body" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.star.verb.1 k.words.sense word=star pos=verb n=1 gloss="feature as the star" is_a=have kind_of=have core.source="wordnet 3.1"
+@k.words.star.verb.2 k.words.sense word=star pos=verb n=2 gloss="be the star in a performance" is_a=perform kind_of=perform core.source="wordnet 3.1"
+@k.words.star.verb.3 k.words.sense word=star pos=verb n=3 gloss="mark with an asterisk" synonym=asterisk is_a=mark kind_of=mark kind_of=change core.source="wordnet 3.1"
+@k.words.star.adjective.1 k.words.sense word=star pos=adjective n=1 gloss="indicating the most important performer or role" synonym=leading synonym=prima synonym=starring synonym=stellar near_opposite=minor core.source="wordnet 3.1"

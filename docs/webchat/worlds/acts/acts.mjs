@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The shared module `acts` (specs/21-acts-and-schemas.md): about twelve universal acts with six roles, the schema of a doing world, the generic executor
-// (apply an act to a schema-described state, undo, the difference, the reply, the why-answer) and the graded fallback. Browser-safe, NO imports: SOP Lang
-// wires come from the caller (`parseSchema(wires)`), knowledge and the other worlds come in as hooks.
+// (apply an act to a schema-described state, undo, the difference, the reply, the why-answer) and the graded fallback. Browser-safe, imports only the knowledge tier's colour reader: SOP Lang
+// wires come from the caller (`parseSchema(wires)`), knowledge and the other worlds come in as hooks; the only import is the colour reader of the knowledge tier.
 //
 //   ACTS, ROLES, FORMS            the acts, their roles, the English forms written once
 //   parseSchema(wires)            schema.sop wires -> schema { id, noun, acts, limits, kinds, attrs }
@@ -25,6 +25,7 @@ import { FORMS_MORE, FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=96de33f3e
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 
 export { ACT_VERBS };
+import { colourName } from '../../lib/knowledge/values.mjs?v=ec4fe4794e';   // the one colour reader (k.values)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +54,6 @@ const DET = new Set(['a', 'an', 'the', 'another', 'my', 'this', 'that', 'these',
 const PRONOUN = new Set(['it', 'them', 'that', 'those', 'these', 'this', 'him', 'her', 'they', 'there']);
 const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1 };
 const NUMW = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12 };
-export const COLOURS = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown', 'black', 'white', 'grey', 'gray', 'gold', 'silver'];
 const toks = (t) => String(t ?? '').toLowerCase().replace(/[^a-z0-9\s'-]+/g, ' ').split(/\s+/).filter(Boolean);
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`);
@@ -212,13 +212,14 @@ export const LAYOUT_ADVERBS = ['horizontally', 'vertically', 'evenly', 'neatly',
 export const DIR_WORDS = ['closer', 'closer_together', 'together', 'apart', 'further_apart', 'wider_apart', 'higher', 'lower', 'up', 'down', 'left', 'right', 'to_the_front', 'to_the_back', 'to_front', 'to_back', 'forward', 'backward'];
 
 // ---- generation from the schema ----------------------------------------------------------------------------------------------------------------------
-const valueWords = (s) => [...new Set(Object.values(s.attrs).flatMap((a) => (a.type === 'enum' ? a.values : a.type === 'colour' ? (a.values.length ? a.values : COLOURS) : a.type === 'bool' ? ['on', 'off'] : [])))];
+const anyColour = (s) => Object.values(s.attrs).some((a) => a.type === 'colour' && !a.values.length);
+const valueWords = (s) => [...new Set(Object.values(s.attrs).flatMap((a) => (a.type === 'enum' ? a.values : a.type === 'colour' ? a.values : a.type === 'bool' ? ['on', 'off'] : [])))];
 const cmpWords = (s, k) => [...new Set(Object.values(s.attrs).flatMap((a) => a[k]))].filter((w) => !w.includes(' '));
 function conditions(s) {
   return {
     in: Object.values(s.kinds).some((k) => k.in), named: Object.values(s.kinds).some((k) => k.named), attrs: Object.keys(s.attrs).length > 0,
     name: !!s.flags?.name, layout: !!s.flags?.layout, rel: !!s.flags?.rel, thingask: !!s.flags?.thingask, self: !!s.flags?.self, dir: !!s.flags?.dir, be: !!s.flags?.be, has: !!s.flags?.has, bare: !!s.flags?.bare,
-    ...Object.fromEntries(FLAGS_MORE.map((f) => [f, !!s.flags?.[f]])), reader: !!s.flags?.reader, values: valueWords(s).length > 0, number: Object.values(s.attrs).some((a) => a.type === 'number'), more: cmpWords(s, 'more').length > 0, less: cmpWords(s, 'less').length > 0,
+    ...Object.fromEntries(FLAGS_MORE.map((f) => [f, !!s.flags?.[f]])), reader: !!s.flags?.reader, values: valueWords(s).length > 0 || anyColour(s), number: Object.values(s.attrs).some((a) => a.type === 'number'), more: cmpWords(s, 'more').length > 0, less: cmpWords(s, 'less').length > 0,
   };
 }
 const attrWords = (s) => [...new Set(Object.values(s.attrs).flatMap((a) => [a.name, ...a.words]))];
@@ -237,7 +238,7 @@ const expandCore = (m, ns) => m.replace(/\{(\w+):words\}$/, '{$1:rest}').replace
   .replace(/\bREL\b/g, '{rel:lex.acts.rel}').replace(/\{(\w+):ATTR\}/g, `{$1:lex.${ns}.attrs}`).replace(/\{(\w+):VALUE(\??)\}/g, `{$1:lex.${ns}.values$2}`)
   .replace(/\{(\w+):KIND\}/g, `{$1:lex.${ns}.kinds}`).replace(/\{(\w+):MORE\}/g, `{$1:lex.${ns}.more}`).replace(/\{(\w+):LESS\}/g, `{$1:lex.${ns}.less}`)
   .replace(/\{(\w+):TURN\}/g, `{$1:lex.${ns}.turn}`).replace(/\{(\w+):FACTOR\}/g, `{$1:lex.${ns}.factor}`).replace(/\bNOUN\?/g, `{noun:lex.${ns}.nouns?}`).replace(/\bNOUN\b/g, `{noun:lex.${ns}.nouns}`);
-const wordsLex = (id, doc, words, cls = 'modifier') => `@${id} core.lexicon\n    class=${cls}\n    doc=${JSON.stringify(doc)}\n${words.map((w) => `    word=${w.replace(/\s+/g, '_')}`).join('\n')}\n`;
+const wordsLex = (id, doc, words, cls = 'modifier', extend = null) => `@${id} core.lexicon\n    class=${cls}\n    doc=${JSON.stringify(doc)}\n${extend ? `    extends=${extend}\n` : ''}${words.map((w) => `    word=${w.replace(/\s+/g, '_')}`).join('\n')}\n`;
 
 /** The generated files of a schema world: { 'lexicon.sop', 'patterns.sop', 'operations.sop', 'templates.sop' } as text. `ns` is the world's namespace. */
 /** An example is offered to people only when every noun of the seating plan it was written with is a word of this schema (a form written about seats is not shown in a world with none). */
@@ -247,7 +248,7 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () 
   const lex = [note,
     wordsLex(`lex.${ns}.kinds`, 'Kinds of things of this world (from schema.sop)', kindWords(schema), 'noun'),
     ...(Object.keys(schema.attrs).length ? [wordsLex(`lex.${ns}.attrs`, 'Attributes (from schema.sop)', attrWords(schema))] : []),
-    ...(valueWords(schema).length ? [wordsLex(`lex.${ns}.values`, 'Values the attributes take (from schema.sop)', valueWords(schema))] : []),
+    ...(valueWords(schema).length || anyColour(schema) ? [wordsLex(`lex.${ns}.values`, 'Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)', valueWords(schema), 'modifier', anyColour(schema) ? '$lex.lang.colour' : null)] : []),
     ...(cmpWords(schema, 'more').length ? [wordsLex(`lex.${ns}.more`, 'Comparatives that mean more of an attribute', cmpWords(schema, 'more'))] : []),
     ...(cmpWords(schema, 'less').length ? [wordsLex(`lex.${ns}.less`, 'Comparatives that mean less of an attribute', cmpWords(schema, 'less'))] : []),
     ...(FLAGS_MORE.some((f) => schema.flags?.[f]) ? [wordsLex(`lex.${ns}.nouns`, 'The words for the whole thing the world holds (the picture, the drawing)', [schema.noun, ...(schema.view?.words ?? [])])] : []),
@@ -443,7 +444,7 @@ export function createExecutor(schema, hooks = {}) {
     if (!raw) return undefined;
     if (a.type === 'number') { const v = num(raw); return Number.isFinite(v) ? v : undefined; }
     if (a.type === 'enum') { const hit = a.values.find((x) => x.toLowerCase() === low) ?? a.values.find((x) => same(x.toLowerCase(), low)); return hit; }
-    if (a.type === 'colour') { const list = a.values.length ? a.values : COLOURS; return list.find((x) => x === low) ?? (list === COLOURS && know.colour?.(low) ? low : list.find((x) => same(x, low))); }
+    if (a.type === 'colour') { if (!a.values.length) return colourName(low) ?? (know.colour?.(low) ? low : undefined); return a.values.find((x) => x === low) ?? a.values.find((x) => same(x, low)); }   // a colour attribute with no listed values takes any colour of the catalog (the one reader)
     if (a.type === 'bool') return ['yes', 'on', 'true'].includes(low) ? true : ['no', 'off', 'false'].includes(low) ? false : undefined;
     return raw;
   }

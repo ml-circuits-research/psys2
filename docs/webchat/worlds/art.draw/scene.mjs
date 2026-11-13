@@ -7,7 +7,8 @@
 // object color, sh: lightness shift, f: fill override, t: stroke thickness in units, r: rotation in degrees }:
 //   rect/ellipse {x,y,w,h}   poly/line/curve {pts:[[x,y]...]}   arc {x,y,w,h,a0,a1} (radians, top half = PI..2*PI)
 
-import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs?v=4cd417b561';
+import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs?v=77966d9c42';
+import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=ec4fe4794e';   // the one colour reader (k.values): no colour table in this world
 
 export const W = 1000, H = 700;
 // Things the user made by taking a picture apart or putting things together (spec 07): the parts are stored on the object (`shape`) and registered here by key, so every
@@ -17,14 +18,7 @@ const CUSTOM = new Map();   // key -> { parts (local space), aspect, size }
 export const HORIZON = 470;           // the sky ends and the ground begins here
 export const GROUND_BASE = 590;       // default baseline of things standing on the ground
 
-// ---- colors -------------------------------------------------------------------------------------------------------
-export const BASE_COLORS = {
-  red: '#e63946', orange: '#f68b1e', yellow: '#ffd43b', green: '#43b04a', blue: '#3a86e8', purple: '#9b51e0', pink: '#ff7eb6',
-  brown: '#8d5a2e', black: '#2d2d34', white: '#ffffff', grey: '#9aa1a9', turquoise: '#20c5b5', gold: '#f2b705', silver: '#c4cad2',
-  beige: '#e8d5b0', peach: '#ffb88c', skin: '#f3c69b', tan: '#d8a468', navy: '#1b2f6b', lime: '#a4d94a', magenta: '#e0338f',
-  violet: '#8a5cf5', indigo: '#4b3fbf', cyan: '#2ec4e6', maroon: '#8a1c2b', cream: '#fff4d6', lilac: '#c9a7ee', coral: '#ff6f61', mint: '#8de3c0',
-};
-export const COLOR_ALIASES = { gray: 'grey', golden: 'gold', rose: 'pink', scarlet: 'red', aqua: 'turquoise', teal: 'turquoise', ginger: 'orange', lemon: 'yellow', 'light-blue': 'light blue', grn: 'green', blu: 'blue', bloo: 'blue', blk: 'black', org: 'orange', pnk: 'pink', gry: 'grey', prp: 'purple', ylw: 'yellow', wht: 'white', brn: 'brown' };
+// ---- colors: the names and values are the catalog's (src/knowledge/values.mjs); only what a shade word does to a colour is this tool's own -------------------------------------------------------------------------------------------------------
 export const SHADES = {
   light: [0.2, -0.05], pale: [0.3, -0.25], soft: [0.14, -0.12], bright: [0.05, 0.25], dark: [-0.2, 0], deep: [-0.12, 0.1], dk: [-0.2, 0], lt: [0.2, -0.05],
 };
@@ -53,25 +47,27 @@ export function shadeHex(hex, dl = 0, ds = 0) {
   // white and black can only move towards the middle
   return hslToHex(h, clamp(s + ds), clamp(l + dl, 0.04, 0.97));
 }
-/** Canonical color name from spoken words: ["dark", "blue"] -> "dark blue"; null when it is not a color. */
+/** Canonical color name from spoken words: ["dark", "blue"] -> "dark blue"; null when it is not a color. A name the catalog has whole ("light blue", "dark red") is that colour; otherwise a shade word before a colour. */
 export function canonColor(words) {
   const ws = (Array.isArray(words) ? words : String(words ?? '').toLowerCase().split(/[\s_-]+/)).map((w) => String(w).toLowerCase()).filter(Boolean);
   if (!ws.length) return null;
-  const base0 = ws.at(-1), base = COLOR_ALIASES[base0] ?? base0;
-  if (!BASE_COLORS[base]) return null;
-  const shades = ws.slice(0, -1).filter((w) => SHADES[w]);
+  const whole = colourName(ws);
+  if (whole) return whole;
+  const base = colourName(ws.at(-1));
+  if (!base) return null;
   if (ws.slice(0, -1).some((w) => !SHADES[w])) return null;
+  const shades = ws.slice(0, -1);
   return [...shades.slice(-1), base].join(' ');
 }
 /** Hex of a canonical color name ("dark blue", "red"); a hex string passes through; unknown names give grey. */
 export function colorHex(name) {
   if (typeof name === 'string' && /^#[0-9a-f]{6}$/i.test(name)) return name;
   const canon = canonColor(name);
-  if (!canon) return BASE_COLORS.grey;
-  const ws = canon.split(' '), base = BASE_COLORS[ws.at(-1)];
-  if (ws.length === 1) return base;
-  const [dl, ds] = SHADES[ws[0]];
-  return shadeHex(base, dl, ds);
+  if (!canon) return colourHex('grey');
+  const own = colourHex(canon);
+  if (own) return own;
+  const ws = canon.split(' '), [dl, ds] = SHADES[ws[0]];
+  return shadeHex(colourHex(ws.slice(1).join(' ')) ?? colourHex('grey'), dl, ds);
 }
 export const sameColor = (a, b) => canonColor(a) === canonColor(b);
 
@@ -347,11 +343,11 @@ const BUILTIN = {
     size: 90, aspect: 2.2, color: 'blue',
     names: { shirt: ['shirt', 'body', 'top', 'clothes', 'jumper', 'sweater', 'dress'], head: ['head', 'face', 'skin'], hair: ['hair'], pants: ['pants', 'trousers', 'legs', 'leg', 'jeans'], arms: ['arm', 'arms'], shoes: ['shoe', 'shoes', 'boots'], eyes: ['eye', 'eyes'], smile: ['smile', 'mouth'] },
     build: () => [
-      L('arms', [[-0.28, -0.55], [-0.5, -0.1]], 'skin', { t: 0.08 }), L('arms', [[0.28, -0.55], [0.5, -0.1]], 'skin', { t: 0.08 }),
+      L('arms', [[-0.28, -0.55], [-0.5, -0.1]], 'peach', { t: 0.08 }), L('arms', [[0.28, -0.55], [0.5, -0.1]], 'peach', { t: 0.08 }),
       R('pants', -0.12, 0.62, 0.2, 0.55, 'navy'), R('pants', 0.12, 0.62, 0.2, 0.55, 'navy'),
       E('shoes', -0.15, 0.95, 0.28, 0.12, 'black', { f: 'solid' }), E('shoes', 0.15, 0.95, 0.28, 0.12, 'black', { f: 'solid' }),
       R('shirt', 0, -0.2, 0.6, 0.8, 'blue', { m: 1 }),
-      E('head', 0, -0.85, 0.56, 0.56, 'skin'), E('hair', 0, -1.0, 0.6, 0.28, 'brown', { f: 'solid' }),
+      E('head', 0, -0.85, 0.56, 0.56, 'peach'), E('hair', 0, -1.0, 0.6, 0.28, 'brown', { f: 'solid' }),
       dot('eyes', -0.1, -0.86, 0.03, 'black'), dot('eyes', 0.1, -0.86, 0.03, 'black'),
       K('smile', [[-0.1, -0.72], [-0.04, -0.68], [0.04, -0.68], [0.1, -0.72]], 'red', { t: 0.015 }),
     ],
@@ -394,7 +390,7 @@ export const COMPOSITE = 'composite:';
 // their facts, through thingBuild like every catalog thing. The others keep their hand-coded parts: the facts cannot say a line's thickness, a merged silhouette, a
 // lightness shift, a fill override or a second part that follows the object colour (the list is in spec 07 and in worker-log).
 export const KINDS_FROM_FACTS = ['circle', 'oval', 'square', 'rectangle', 'triangle', 'star', 'heart', 'moon'];
-const BASE_NAMES = new Set(Object.keys(BASE_COLORS));
+const BASE_NAMES = { has: (n) => !!colourName(n) };   // a colour name of the catalog (k.values), asked each time: the catalog replaces the bundled subset when it arrives
 /** The catalog object a spoken word means ("lighthouse", "home" -> house, "robots" -> robot), or null. */
 export function thingOfWord(word) {
   const w = String(word ?? '').toLowerCase();

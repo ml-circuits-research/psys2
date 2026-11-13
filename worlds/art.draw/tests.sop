@@ -1273,9 +1273,9 @@
 
 @t.art.draw.r2recolor13 core.test
     input="house in teal pls"
-    expect="The house is turquoise now."
+    expect="The house is teal now."
     expectStatus=supported
-    expectState="objects.0.color=turquoise"
+    expectState="objects.0.color=teal"
     session=r2recolor
 
 @t.art.draw.r2recolor14 core.test
@@ -3285,43 +3285,43 @@
 
 @t.art.draw.r2help06 core.test
     input="What colors can I use?"
-    expect="I know red, orange, yellow,"
+    expect="more colours, like"
     expectStatus=supported
     session=r2help
 
 @t.art.draw.r2help07 core.test
     input="which colors are available"
-    expect="I know red, orange, yellow,"
+    expect="more colours, like"
     expectStatus=supported
     session=r2help
 
 @t.art.draw.r2help08 core.test
     input="what color options do i have"
-    expect="I know red, orange, yellow,"
+    expect="more colours, like"
     expectStatus=supported
     session=r2help
 
 @t.art.draw.r2help09 core.test
     input="list the colors"
-    expect="I know red, orange, yellow,"
+    expect="more colours, like"
     expectStatus=supported
     session=r2help
 
 @t.art.draw.r2help10 core.test
     input="colour list pls"
-    expect="I know red, orange, yellow,"
+    expect="more colours, like"
     expectStatus=supported
     session=r2help
 
 @t.art.draw.r2help11 core.test
     input="colors?"
-    expect="I know red, orange, yellow,"
+    expect="more colours, like"
     expectStatus=supported
     session=r2help
 
 @t.art.draw.r2help12 core.test
     input="u got which colors"
-    expect="I know red, orange, yellow,"
+    expect="more colours, like"
     expectStatus=supported
     session=r2help
 

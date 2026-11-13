@@ -1,0 +1,16 @@
+# k.words/shards/co-1: senses of the words from "co" to "confinement" (first letters "co", part 1 of 2).
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.colour.noun.1 k.words.sense word=colour pos=noun n=1 gloss="any material used for its color" synonym="coloring material" synonym="colouring material" synonym=color is_a=material core.source="wordnet 3.1"
+@k.words.colour.noun.2 k.words.sense word=colour pos=noun n=2 gloss="(physics) the characteristic of quarks that determines their role in the strong interaction" synonym=color is_a=kind core.source="wordnet 3.1"
+@k.words.colour.noun.3 k.words.sense word=colour pos=noun n=3 gloss="interest and variety and intensity" synonym=color synonym=vividness is_a=interest core.source="wordnet 3.1"
+@k.words.colour.verb.1 k.words.sense word=colour pos=verb n=1 gloss="modify or bias" synonym=color is_a=influence core.source="wordnet 3.1"
+@k.words.colour.verb.2 k.words.sense word=colour pos=verb n=2 gloss="decorate with colors" synonym=color synonym=emblazon is_a=decorate core.source="wordnet 3.1"
+@k.words.colour.verb.3 k.words.sense word=colour pos=verb n=3 gloss="give a deceptive explanation or excuse for" synonym=color synonym=gloss is_a=apologize core.source="wordnet 3.1"
+@k.words.come.noun.1 k.words.sense word=come pos=noun n=1 gloss="the thick white fluid containing spermatozoa that is ejaculated by the male genital tract" synonym=semen synonym=seed synonym="seminal fluid" synonym=ejaculate synonym=cum is_a="liquid body substance" kind_of="liquid body substance" kind_of="body substance" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.come.verb.1 k.words.sense word=come pos=verb n=1 gloss="move toward, travel toward something or somebody or approach something or somebody" synonym="come up" is_a=travel opposite=go kind_of=travel core.source="wordnet 3.1"
+@k.words.come.verb.2 k.words.sense word=come pos=verb n=2 gloss="reach a destination; arrive by movement or progress" synonym=arrive synonym=get core.source="wordnet 3.1"
+@k.words.come.verb.3 k.words.sense word=come pos=verb n=3 gloss="come to pass; arrive, as in due course" is_a=happen kind_of=happen core.source="wordnet 3.1"
+@k.words.comet.noun.1 k.words.sense word=comet pos=noun n=1 gloss="(astronomy) a relatively small extraterrestrial body consisting of a frozen mass that travels around the sun in a highly elliptical orbit" is_a="extraterrestrial object" kind_of="extraterrestrial object" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

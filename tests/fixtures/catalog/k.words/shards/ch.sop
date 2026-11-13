@@ -1,14 +1,14 @@
-# k.words/shards/ch: noun and verb senses of the words from "chad" to "chute" (first letters "ch").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ch: senses of the words from "chad" to "chutney" (first letters "ch").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.chair.noun.1 k.words.sense word=chair pos=noun n=1 gloss="a seat for one person, with a support for the back" is_a=seat core.source="wordnet 3.1"
-@k.words.chair.noun.2 k.words.sense word=chair pos=noun n=2 gloss="the position of professor" synonym=professorship is_a=position core.source="wordnet 3.1"
-@k.words.chair.noun.3 k.words.sense word=chair pos=noun n=3 gloss="the officer who presides at the meetings of an organization" synonym=president synonym=chairman synonym=chairwoman synonym=chairperson is_a="presiding officer" core.source="wordnet 3.1"
-@k.words.chair.verb.1 k.words.sense word=chair pos=verb n=1 gloss="act or preside as chair, as of an academic department in a university" synonym=chairman is_a=head core.source="wordnet 3.1"
-@k.words.chair.verb.2 k.words.sense word=chair pos=verb n=2 gloss="preside over" synonym=moderate synonym=lead is_a="hash out" core.source="wordnet 3.1"
-@k.words.cheese.noun.1 k.words.sense word=cheese pos=noun n=1 gloss="a solid food prepared from the pressed curd of milk" is_a="dairy product" is_a=food core.source="wordnet 3.1"
-@k.words.cheese.noun.2 k.words.sense word=cheese pos=noun n=2 gloss="erect or decumbent Old World perennial with axillary clusters of rosy-purple flowers; introduced in United States" synonym="tall mallow" synonym="high mallow" synonym=cheeseflower synonym="Malva sylvestris" is_a=mallow core.source="wordnet 3.1"
-@k.words.cheese.verb.1 k.words.sense word=cheese pos=verb n=1 gloss="used in the imperative (get away, or stop it)" is_a=discontinue core.source="wordnet 3.1"
-@k.words.cheese.verb.2 k.words.sense word=cheese pos=verb n=2 gloss="wind onto a cheese" is_a=spool core.source="wordnet 3.1"
+@k.words.chair.noun.1 k.words.sense word=chair pos=noun n=1 gloss="a seat for one person, with a support for the back" is_a=seat kind_of=seat kind_of=furniture kind_of=furnishing kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.chair.noun.2 k.words.sense word=chair pos=noun n=2 gloss="the position of professor" synonym=professorship is_a=position kind_of=position kind_of=occupation kind_of=activity kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.chair.noun.3 k.words.sense word=chair pos=noun n=3 gloss="the officer who presides at the meetings of an organization" synonym=president synonym=chairman synonym=chairwoman synonym=chairperson is_a="presiding officer" kind_of="presiding officer" kind_of=leader kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.chair.verb.1 k.words.sense word=chair pos=verb n=1 gloss="act or preside as chair, as of an academic department in a university" synonym=chairman is_a=head kind_of=head kind_of=direct kind_of=manage kind_of=control core.source="wordnet 3.1"
+@k.words.chair.verb.2 k.words.sense word=chair pos=verb n=2 gloss="preside over" synonym=moderate synonym=lead is_a="hash out" kind_of="hash out" kind_of="talk of" kind_of=talk kind_of=communicate kind_of=interact kind_of=act core.source="wordnet 3.1"
+@k.words.cheese.noun.1 k.words.sense word=cheese pos=noun n=1 gloss="a solid food prepared from the pressed curd of milk" is_a="dairy product" is_a=food kind_of="dairy product" kind_of=foodstuff kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.cheese.noun.2 k.words.sense word=cheese pos=noun n=2 gloss="erect or decumbent Old World perennial with axillary clusters of rosy-purple flowers; introduced in United States" synonym="tall mallow" synonym="high mallow" synonym=cheeseflower synonym="Malva sylvestris" is_a=mallow kind_of=mallow kind_of=shrub kind_of="woody plant" kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.cheese.verb.1 k.words.sense word=cheese pos=verb n=1 gloss="used in the imperative (get away, or stop it)" is_a=discontinue kind_of=discontinue core.source="wordnet 3.1"
+@k.words.cheese.verb.2 k.words.sense word=cheese pos=verb n=2 gloss="wind onto a cheese" is_a=spool kind_of=spool kind_of=wind kind_of=move core.source="wordnet 3.1"

@@ -1,13 +1,18 @@
-# k.words/shards/th: noun and verb senses of the words from "th" to "thus" (first letters "th").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/th: senses of the words from "th" to "thus" (first letters "th").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.there.noun.1 k.words.sense word=there pos=noun n=1 gloss="a location other than here; that place" is_a=location core.source="wordnet 3.1"
-@k.words.thing.noun.1 k.words.sense word=thing pos=noun n=1 gloss="a special situation" is_a=situation core.source="wordnet 3.1"
-@k.words.thing.noun.2 k.words.sense word=thing pos=noun n=2 gloss="an action" is_a=action core.source="wordnet 3.1"
-@k.words.thing.noun.3 k.words.sense word=thing pos=noun n=3 gloss="a special abstraction" is_a=abstraction core.source="wordnet 3.1"
-@k.words.things.noun.1 k.words.sense word=things pos=noun n=1 gloss="any movable possession (especially articles of clothing)" is_a=property core.source="wordnet 3.1"
-@k.words.third.noun.1 k.words.sense word=third pos=noun n=1 gloss="one of three equal parts of a divisible whole" synonym=one-third synonym=tierce is_a="common fraction" core.source="wordnet 3.1"
-@k.words.third.noun.2 k.words.sense word=third pos=noun n=2 gloss="the fielding position of the player on a baseball team who is stationed near the third of the bases in the infield (counting counterclockwise from home plate)" synonym="third base" is_a=position core.source="wordnet 3.1"
-@k.words.third.noun.3 k.words.sense word=third pos=noun n=3 gloss="following the second position in an ordering or series" is_a=rank core.source="wordnet 3.1"
+@k.words.there.noun.1 k.words.sense word=there pos=noun n=1 gloss="a location other than here; that place" is_a=location opposite=here kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.there.adverb.1 k.words.sense word=there pos=adverb n=1 gloss="in or at that place or location" opposite=here core.source="wordnet 3.1"
+@k.words.there.adverb.2 k.words.sense word=there pos=adverb n=2 gloss="in that matter; in that respect; on that point" core.source="wordnet 3.1"
+@k.words.there.adverb.3 k.words.sense word=there pos=adverb n=3 gloss="to or toward that place; away from the speaker" synonym=thither opposite=here core.source="wordnet 3.1"
+@k.words.thing.noun.1 k.words.sense word=thing pos=noun n=1 gloss="a special situation" is_a=situation kind_of=situation kind_of=state kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.thing.noun.2 k.words.sense word=thing pos=noun n=2 gloss="an action" is_a=action kind_of=action kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.thing.noun.3 k.words.sense word=thing pos=noun n=3 gloss="a special abstraction" is_a=abstraction kind_of=abstraction kind_of=concept kind_of=idea kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.things.noun.1 k.words.sense word=things pos=noun n=1 gloss="any movable possession (especially articles of clothing)" is_a=property kind_of=property kind_of=possession kind_of=relation kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.third.noun.1 k.words.sense word=third pos=noun n=1 gloss="one of three equal parts of a divisible whole" synonym=one-third synonym=tierce is_a="common fraction" kind_of="common fraction" kind_of=fraction kind_of="rational number" kind_of="real number" kind_of="complex number" kind_of=number kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.third.noun.2 k.words.sense word=third pos=noun n=2 gloss="the fielding position of the player on a baseball team who is stationed near the third of the bases in the infield (counting counterclockwise from home plate)" synonym="third base" is_a=position kind_of=position kind_of=role kind_of=activity kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.third.noun.3 k.words.sense word=third pos=noun n=3 gloss="following the second position in an ordering or series" is_a=rank kind_of=rank kind_of=status kind_of=state kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.third.adjective.1 k.words.sense word=third pos=adjective n=1 gloss="coming next after the second and just before the fourth in position" synonym=3rd synonym=tertiary near_opposite=cardinal core.source="wordnet 3.1"
+@k.words.third.adverb.1 k.words.sense word=third pos=adverb n=1 gloss="in the third place" synonym=thirdly core.source="wordnet 3.1"

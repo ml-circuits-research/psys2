@@ -19,6 +19,22 @@
 @k.body.part.child_count core.slot of=k.body.part key=child_count kind=integer min=1 core.source="hand-core 1"
 @k.body.part.does core.slot of=k.body.part key=does many=true kind=atom kind=string core.source="hand-core 1"
 @k.body.part.drawing core.slot of=k.body.part key=drawing kind=atom kind=string core.source="hand-core 1"
+# Round 9. `about` says in one plain sentence what a main organ does. `count_per_part`: how many of it one larger
+# part has (five fingers on a hand). Approximate numbers: `count_about` (about 600 muscles), `temperature_about`
+# (the body, in degrees Celsius), `amount_about` (the blood of an adult, in litres), `length_about` (in metres),
+# `weight_about` (of an adult's organ, in kilograms). The units are k.units.measure facts. An exact and an
+# approximate count are never both on one part. `named=model`: written by a language model, only where sure.
+@k.body.part.about core.slot of=k.body.part key=about kind=string core.source="hand-core 1"
+@k.body.part.count_per_part core.slot of=k.body.part key=count_per_part kind=integer min=1 core.source="hand-core 1"
+@k.body.part.count_about core.slot of=k.body.part key=count_about kind=integer min=1 core.source="hand-core 1"
+@k.body.part.temperature_about core.slot of=k.body.part key=temperature_about kind=number core.source="hand-core 1"
+@k.body.part.amount_about core.slot of=k.body.part key=amount_about kind=number min=0 core.source="hand-core 1"
+@k.body.part.length_about core.slot of=k.body.part key=length_about kind=number min=0 core.source="hand-core 1"
+@k.body.part.weight_about core.slot of=k.body.part key=weight_about kind=number min=0 core.source="hand-core 1"
+@k.body.part.named core.slot of=k.body.part key=named enum=model core.source="hand-core 1"
+@k.body.both.exact k.body.part name=?part count=?exact
+@k.body.both.about k.body.part name=?part count_about=?about
+@k.body.both core.deny when=$k.body.both.exact when=$k.body.both.about why="The ?part has both an exact and an approximate count." core.source="hand-core 1"
 
 # One of the five senses and the part of the body it works with.
 @k.body.sense core.type of=k.body.sense shared=true closed=true complete=true core.source="hand-core 1"
@@ -31,3 +47,4 @@
 @k.body.word.count core.word text=many means=k.body.part.count core.source="hand-core 1"
 @k.body.word.does core.word text=does text=do means=k.body.part.does core.source="hand-core 1"
 @k.body.word.inside core.word text=inside text=where means=k.body.part.inside core.source="hand-core 1"
+@k.body.word.about core.word text=why text="what for" means=k.body.part.about core.source="hand-core 1"

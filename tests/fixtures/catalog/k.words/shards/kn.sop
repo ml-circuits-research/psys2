@@ -1,10 +1,10 @@
-# k.words/shards/kn: noun and verb senses of the words from "knack" to "knuckles" (first letters "kn").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/kn: senses of the words from "knack" to "knuckles" (first letters "kn").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.know.noun.1 k.words.sense word=know pos=noun n=1 gloss="the fact of being aware of information that is known to few people" is_a=knowing core.source="wordnet 3.1"
-@k.words.know.verb.1 k.words.sense word=know pos=verb n=1 gloss="be cognizant or aware of a fact or a specific piece of information; possess knowledge or information about" synonym=cognize synonym=cognise core.source="wordnet 3.1"
+@k.words.know.noun.1 k.words.sense word=know pos=noun n=1 gloss="the fact of being aware of information that is known to few people" is_a=knowing kind_of=knowing kind_of="higher cognitive process" kind_of=process kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.know.verb.1 k.words.sense word=know pos=verb n=1 gloss="be cognizant or aware of a fact or a specific piece of information; possess knowledge or information about" synonym=cognize synonym=cognise opposite=ignore core.source="wordnet 3.1"
 @k.words.know.verb.2 k.words.sense word=know pos=verb n=2 gloss="know how to do or perform something" core.source="wordnet 3.1"
 @k.words.know.verb.3 k.words.sense word=know pos=verb n=3 gloss="be aware of the truth of something; have a belief or faith in something; regard as true beyond any doubt" core.source="wordnet 3.1"
-@k.words.knowledge.noun.1 k.words.sense word=knowledge pos=noun n=1 gloss="the psychological result of perception and learning and reasoning" synonym=cognition synonym=noesis is_a="psychological feature" core.source="wordnet 3.1"
+@k.words.knowledge.noun.1 k.words.sense word=knowledge pos=noun n=1 gloss="the psychological result of perception and learning and reasoning" synonym=cognition synonym=noesis is_a="psychological feature" kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"

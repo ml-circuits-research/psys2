@@ -1,11 +1,11 @@
-# k.words/shards/ru: noun and verb senses of the words from "ru" to "rutledge" (first letters "ru").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ru: senses of the words from "ru" to "rutledge" (first letters "ru").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.run.noun.1 k.words.sense word=run pos=noun n=1 gloss="a score in baseball made by a runner touching all four bases safely" synonym=tally is_a=score core.source="wordnet 3.1"
-@k.words.run.noun.2 k.words.sense word=run pos=noun n=2 gloss="the act of testing something" synonym=test synonym=trial is_a=attempt core.source="wordnet 3.1"
-@k.words.run.noun.3 k.words.sense word=run pos=noun n=3 gloss="a race run on foot" synonym=footrace synonym="foot race" is_a=race core.source="wordnet 3.1"
-@k.words.run.verb.1 k.words.sense word=run pos=verb n=1 gloss="move fast by using one's feet, with one foot off the ground at any given time" is_a="travel rapidly" core.source="wordnet 3.1"
-@k.words.run.verb.2 k.words.sense word=run pos=verb n=2 gloss="flee; take to one's heels; cut and run" synonym=scat synonym=scarper synonym="turn tail" synonym=lam synonym="run away" synonym="hightail it" synonym=bunk synonym="head for the hills" synonym="take to the woods" synonym=escape synonym="fly the coop" synonym="break away" is_a=leave core.source="wordnet 3.1"
-@k.words.run.verb.3 k.words.sense word=run pos=verb n=3 gloss="stretch out over a distance, space, time, or scope; run or extend between two points or beyond a certain point" synonym=go synonym=pass synonym=lead synonym=extend is_a=be core.source="wordnet 3.1"
+@k.words.run.noun.1 k.words.sense word=run pos=noun n=1 gloss="a score in baseball made by a runner touching all four bases safely" synonym=tally is_a=score kind_of=score kind_of=success kind_of=attainment kind_of=accomplishment kind_of=action kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.run.noun.2 k.words.sense word=run pos=noun n=2 gloss="the act of testing something" synonym=test synonym=trial is_a=attempt kind_of=attempt kind_of=activity kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.run.noun.3 k.words.sense word=run pos=noun n=3 gloss="a race run on foot" synonym=footrace synonym="foot race" is_a=race kind_of=race kind_of=contest kind_of="social event" kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.run.verb.1 k.words.sense word=run pos=verb n=1 gloss="move fast by using one's feet, with one foot off the ground at any given time" is_a="travel rapidly" kind_of="travel rapidly" kind_of=travel core.source="wordnet 3.1"
+@k.words.run.verb.2 k.words.sense word=run pos=verb n=2 gloss="flee; take to one's heels; cut and run" synonym=scat synonym=scarper synonym="turn tail" synonym=lam synonym="run away" synonym="hightail it" synonym=bunk synonym="head for the hills" synonym="take to the woods" synonym=escape synonym="fly the coop" synonym="break away" is_a=leave kind_of=leave core.source="wordnet 3.1"
+@k.words.run.verb.3 k.words.sense word=run pos=verb n=3 gloss="stretch out over a distance, space, time, or scope; run or extend between two points or beyond a certain point" synonym=go synonym=pass synonym=lead synonym=extend is_a=be kind_of=be core.source="wordnet 3.1"

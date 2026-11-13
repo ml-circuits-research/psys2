@@ -1,10 +1,11 @@
 # k.units: units of measure: what each unit measures, and how to convert it: a value in the unit, times `factor`,
-# plus `offset` (temperatures only), is the value in the base unit of its quantity.
+# plus `offset` (temperatures only), is the value in the base unit of its quantity. And, for the numbers of the
+# other knowledge worlds, which unit each number is in (k.units.measure), so that numbers can be compared and drawn.
 # sources: hand-core 1 (hand-written in this repository)
 # license: CC0-1.0
 # script: none (hand-written)
 
-@k.units core.module name=k.units version=1 exports=quantity exports=unit core.source="hand-core 1"
+@k.units core.module name=k.units version=1 exports=quantity exports=unit exports=measure core.source="hand-core 1"
 
 # What is measured (length, mass, ...), and the unit every other unit of it converts to.
 @k.units.quantity core.type of=k.units.quantity shared=true closed=true core.source="hand-core 1"
@@ -20,8 +21,27 @@
 @k.units.unit.offset core.slot of=k.units.unit key=offset kind=number core.source="hand-core 1"
 @k.units.unit.system core.slot of=k.units.unit key=system enum=metric enum=imperial enum=other core.source="hand-core 1"
 
+
+# In which unit a number of another world is given (Round 9). `world`, `type` and `key` name the slot (`k.geo`,
+# `mountain`, `elevation`); `unit` names a k.units.unit (`metre`). A number that counts things has `counts` instead
+# (the kind of thing counted: `person`, `leg`, `moon`); a number that is a place in an order has `ordinal=true`
+# (the third planet from the Sun). `approximate=true` says that the value is only about right (a key with the
+# suffix `_about`). One fact per slot; a slot without a fact here says nothing about its unit.
+@k.units.measure core.type of=k.units.measure shared=true closed=true core.source="hand-core 1"
+@k.units.measure.world core.slot of=k.units.measure key=world id=true required=true kind=atom core.source="hand-core 1"
+@k.units.measure.type core.slot of=k.units.measure key=type id=true required=true kind=atom core.source="hand-core 1"
+@k.units.measure.key core.slot of=k.units.measure key=key id=true required=true kind=atom core.source="hand-core 1"
+@k.units.measure.unit core.slot of=k.units.measure key=unit kind=atom kind=string core.source="hand-core 1"
+@k.units.measure.counts core.slot of=k.units.measure key=counts kind=atom kind=string core.source="hand-core 1"
+@k.units.measure.ordinal core.slot of=k.units.measure key=ordinal kind=boolean core.source="hand-core 1"
+@k.units.measure.approximate core.slot of=k.units.measure key=approximate kind=boolean core.source="hand-core 1"
+@k.units.measure.both.unit k.units.measure world=?world type=?type key=?key unit=?unit
+@k.units.measure.both.counts k.units.measure world=?world type=?type key=?key counts=?thing
+@k.units.measure.both core.deny when=$k.units.measure.both.unit when=$k.units.measure.both.counts why="The number ?key of ?world ?type is said both to be in ?unit and to count ?thing." core.source="hand-core 1"
+
 # Words for the types and keys of this world.
 @k.units.word.unit core.word text=unit text=units text=measure means=k.units.unit core.source="hand-core 1"
 @k.units.word.symbol core.word text=symbol text=abbreviation means=k.units.unit.symbol core.source="hand-core 1"
 @k.units.word.factor core.word text=convert text=conversion text=factor means=k.units.unit.factor core.source="hand-core 1"
 @k.units.word.quantity core.word text=quantity text=measures means=k.units.unit.quantity core.source="hand-core 1"
+@k.units.word.measure core.word text=measured text="in which unit" means=k.units.measure core.source="hand-core 1"

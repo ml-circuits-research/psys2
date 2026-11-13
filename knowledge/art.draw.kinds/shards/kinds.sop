@@ -3,84 +3,84 @@
 
 # house
 @k.objects.kind_house k.objects.object name=house
-@k.objects.kind_house.chimney k.objects.part of=house name=chimney kind=chimney shape=rectangle x=69 y=12 w=10 h=26 z=0 colour=grey rgb="#9aa1a9"
-@k.objects.kind_house.walls k.objects.part of=house name=walls kind=walls shape=rectangle x=10 y=46 w=80 h=45 z=1 colour=yellow rgb="#ffd43b"
-@k.objects.kind_house.roof k.objects.part of=house name=roof kind=roof shape=polygon x=0 y=9 w=100 h=41 z=2 colour=red rgb="#e63946"
+@k.objects.kind_house.chimney k.objects.part of=house name=chimney kind=chimney shape=rectangle x=69 y=12 w=10 h=26 z=0 colour=grey rgb="#808080"
+@k.objects.kind_house.walls k.objects.part of=house name=walls kind=walls shape=rectangle x=10 y=46 w=80 h=45 z=1 colour=yellow rgb="#FFFF00"
+@k.objects.kind_house.roof k.objects.part of=house name=roof kind=roof shape=polygon x=0 y=9 w=100 h=41 z=2 colour=red rgb="#FF0000"
 @k.objects.kind_house.roof.p1 k.objects.point part=$k.objects.kind_house.roof n=1 x=0 y=50
 @k.objects.kind_house.roof.p2 k.objects.point part=$k.objects.kind_house.roof n=2 x=50 y=9
 @k.objects.kind_house.roof.p3 k.objects.point part=$k.objects.kind_house.roof n=3 x=100 y=50
-@k.objects.kind_house.door k.objects.part of=house name=door kind=door shape=rectangle x=42 y=64 w=16 h=27 z=3 colour=brown rgb="#8d5a2e"
-@k.objects.kind_house.knob k.objects.part of=house name=knob kind=knob shape=circle x=53.3 y=76.8 w=2.4 h=2.4 z=4 colour=grey rgb="#f2b705"
-@k.objects.kind_house.windows k.objects.part of=house name=windows kind=windows shape=square x=16 y=56 w=16 h=16 z=5 colour=blue rgb="#98bef0"
-@k.objects.kind_house.windows_2 k.objects.part of=house name=windows_2 kind=windows shape=square x=68 y=56 w=16 h=16 z=6 colour=blue rgb="#98bef0"
-@k.objects.kind_house.frames k.objects.part of=house name=frames kind=frames shape=line x=24 y=56 w=0 h=16 z=7 colour=white rgb="#ffffff"
+@k.objects.kind_house.door k.objects.part of=house name=door kind=door shape=rectangle x=42 y=64 w=16 h=27 z=3 colour=brown rgb="#A52A2A"
+@k.objects.kind_house.knob k.objects.part of=house name=knob kind=knob shape=circle x=53.3 y=76.8 w=2.4 h=2.4 z=4 colour=grey rgb="#FFD700"
+@k.objects.kind_house.windows k.objects.part of=house name=windows kind=windows shape=square x=16 y=56 w=16 h=16 z=5 colour=blue rgb="#ADD8E6"
+@k.objects.kind_house.windows_2 k.objects.part of=house name=windows_2 kind=windows shape=square x=68 y=56 w=16 h=16 z=6 colour=blue rgb="#ADD8E6"
+@k.objects.kind_house.frames k.objects.part of=house name=frames kind=frames shape=line x=24 y=56 w=0 h=16 z=7 colour=white rgb="#FFFFFF"
 @k.objects.kind_house.frames.p1 k.objects.point part=$k.objects.kind_house.frames n=1 x=24 y=56
 @k.objects.kind_house.frames.p2 k.objects.point part=$k.objects.kind_house.frames n=2 x=24 y=72
-@k.objects.kind_house.frames_2 k.objects.part of=house name=frames_2 kind=frames shape=line x=16 y=64 w=16 h=0 z=8 colour=white rgb="#ffffff"
+@k.objects.kind_house.frames_2 k.objects.part of=house name=frames_2 kind=frames shape=line x=16 y=64 w=16 h=0 z=8 colour=white rgb="#FFFFFF"
 @k.objects.kind_house.frames_2.p1 k.objects.point part=$k.objects.kind_house.frames_2 n=1 x=16 y=64
 @k.objects.kind_house.frames_2.p2 k.objects.point part=$k.objects.kind_house.frames_2 n=2 x=32 y=64
-@k.objects.kind_house.frames_3 k.objects.part of=house name=frames_3 kind=frames shape=line x=76 y=56 w=0 h=16 z=9 colour=white rgb="#ffffff"
+@k.objects.kind_house.frames_3 k.objects.part of=house name=frames_3 kind=frames shape=line x=76 y=56 w=0 h=16 z=9 colour=white rgb="#FFFFFF"
 @k.objects.kind_house.frames_3.p1 k.objects.point part=$k.objects.kind_house.frames_3 n=1 x=76 y=56
 @k.objects.kind_house.frames_3.p2 k.objects.point part=$k.objects.kind_house.frames_3 n=2 x=76 y=72
-@k.objects.kind_house.frames_4 k.objects.part of=house name=frames_4 kind=frames shape=line x=68 y=64 w=16 h=0 z=10 colour=white rgb="#ffffff"
+@k.objects.kind_house.frames_4 k.objects.part of=house name=frames_4 kind=frames shape=line x=68 y=64 w=16 h=0 z=10 colour=white rgb="#FFFFFF"
 @k.objects.kind_house.frames_4.p1 k.objects.point part=$k.objects.kind_house.frames_4 n=1 x=68 y=64
 @k.objects.kind_house.frames_4.p2 k.objects.point part=$k.objects.kind_house.frames_4 n=2 x=84 y=64
 
 # tree
 @k.objects.kind_tree k.objects.object name=tree
-@k.objects.kind_tree.trunk k.objects.part of=tree name=trunk kind=trunk shape=rectangle x=44.03 y=58.96 w=11.19 h=41.04 z=0 colour=brown rgb="#8d5a2e"
-@k.objects.kind_tree.bark k.objects.part of=tree name=bark kind=bark shape=line x=48.13 y=67.54 w=0 h=13.43 z=1 colour=brown rgb="#402915"
+@k.objects.kind_tree.trunk k.objects.part of=tree name=trunk kind=trunk shape=rectangle x=44.03 y=58.96 w=11.19 h=41.04 z=0 colour=brown rgb="#A52A2A"
+@k.objects.kind_tree.bark k.objects.part of=tree name=bark kind=bark shape=line x=48.13 y=67.54 w=0 h=13.43 z=1 colour=brown rgb="#541515"
 @k.objects.kind_tree.bark.p1 k.objects.point part=$k.objects.kind_tree.bark n=1 x=48.13 y=67.54
 @k.objects.kind_tree.bark.p2 k.objects.point part=$k.objects.kind_tree.bark n=2 x=48.13 y=80.97
-@k.objects.kind_tree.crown k.objects.part of=tree name=crown kind=crown shape=oval x=15.3 y=5.6 w=68.66 h=61.19 z=2 colour=green rgb="#43b04a"
-@k.objects.kind_tree.crown_2 k.objects.part of=tree name=crown_2 kind=crown shape=oval x=11.57 y=33.21 w=37.31 h=32.83 z=3 colour=green rgb="#43b04a"
-@k.objects.kind_tree.crown_3 k.objects.part of=tree name=crown_3 kind=crown shape=oval x=51.12 y=33.21 w=37.31 h=32.83 z=4 colour=green rgb="#43b04a"
-@k.objects.kind_tree.crown_4 k.objects.part of=tree name=crown_4 kind=crown shape=oval x=27.24 y=0 w=44.77 h=33.58 z=5 colour=green rgb="#43b04a"
+@k.objects.kind_tree.crown k.objects.part of=tree name=crown kind=crown shape=oval x=15.3 y=5.6 w=68.66 h=61.19 z=2 colour=green rgb="#008000"
+@k.objects.kind_tree.crown_2 k.objects.part of=tree name=crown_2 kind=crown shape=oval x=11.57 y=33.21 w=37.31 h=32.83 z=3 colour=green rgb="#008000"
+@k.objects.kind_tree.crown_3 k.objects.part of=tree name=crown_3 kind=crown shape=oval x=51.12 y=33.21 w=37.31 h=32.83 z=4 colour=green rgb="#008000"
+@k.objects.kind_tree.crown_4 k.objects.part of=tree name=crown_4 kind=crown shape=oval x=27.24 y=0 w=44.77 h=33.58 z=5 colour=green rgb="#008000"
 
 # sun
 @k.objects.kind_sun k.objects.object name=sun
-@k.objects.kind_sun.rays k.objects.part of=sun name=rays kind=rays shape=line x=86 y=50 w=14 h=0 z=0 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays k.objects.part of=sun name=rays kind=rays shape=line x=86 y=50 w=14 h=0 z=0 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays.p1 k.objects.point part=$k.objects.kind_sun.rays n=1 x=86 y=50
 @k.objects.kind_sun.rays.p2 k.objects.point part=$k.objects.kind_sun.rays n=2 x=100 y=50
-@k.objects.kind_sun.rays_2 k.objects.part of=sun name=rays_2 kind=rays shape=line x=81.18 y=68 w=12.12 h=7 z=1 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_2 k.objects.part of=sun name=rays_2 kind=rays shape=line x=81.18 y=68 w=12.12 h=7 z=1 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_2.p1 k.objects.point part=$k.objects.kind_sun.rays_2 n=1 x=81.18 y=68
 @k.objects.kind_sun.rays_2.p2 k.objects.point part=$k.objects.kind_sun.rays_2 n=2 x=93.3 y=75
-@k.objects.kind_sun.rays_3 k.objects.part of=sun name=rays_3 kind=rays shape=line x=68 y=81.18 w=7 h=12.12 z=2 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_3 k.objects.part of=sun name=rays_3 kind=rays shape=line x=68 y=81.18 w=7 h=12.12 z=2 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_3.p1 k.objects.point part=$k.objects.kind_sun.rays_3 n=1 x=68 y=81.18
 @k.objects.kind_sun.rays_3.p2 k.objects.point part=$k.objects.kind_sun.rays_3 n=2 x=75 y=93.3
-@k.objects.kind_sun.rays_4 k.objects.part of=sun name=rays_4 kind=rays shape=line x=50 y=86 w=0 h=14 z=3 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_4 k.objects.part of=sun name=rays_4 kind=rays shape=line x=50 y=86 w=0 h=14 z=3 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_4.p1 k.objects.point part=$k.objects.kind_sun.rays_4 n=1 x=50 y=86
 @k.objects.kind_sun.rays_4.p2 k.objects.point part=$k.objects.kind_sun.rays_4 n=2 x=50 y=100
-@k.objects.kind_sun.rays_5 k.objects.part of=sun name=rays_5 kind=rays shape=line x=25 y=81.18 w=7 h=12.12 z=4 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_5 k.objects.part of=sun name=rays_5 kind=rays shape=line x=25 y=81.18 w=7 h=12.12 z=4 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_5.p1 k.objects.point part=$k.objects.kind_sun.rays_5 n=1 x=32 y=81.18
 @k.objects.kind_sun.rays_5.p2 k.objects.point part=$k.objects.kind_sun.rays_5 n=2 x=25 y=93.3
-@k.objects.kind_sun.rays_6 k.objects.part of=sun name=rays_6 kind=rays shape=line x=6.7 y=68 w=12.12 h=7 z=5 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_6 k.objects.part of=sun name=rays_6 kind=rays shape=line x=6.7 y=68 w=12.12 h=7 z=5 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_6.p1 k.objects.point part=$k.objects.kind_sun.rays_6 n=1 x=18.82 y=68
 @k.objects.kind_sun.rays_6.p2 k.objects.point part=$k.objects.kind_sun.rays_6 n=2 x=6.7 y=75
-@k.objects.kind_sun.rays_7 k.objects.part of=sun name=rays_7 kind=rays shape=line x=0 y=50 w=14 h=0 z=6 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_7 k.objects.part of=sun name=rays_7 kind=rays shape=line x=0 y=50 w=14 h=0 z=6 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_7.p1 k.objects.point part=$k.objects.kind_sun.rays_7 n=1 x=14 y=50
 @k.objects.kind_sun.rays_7.p2 k.objects.point part=$k.objects.kind_sun.rays_7 n=2 x=0 y=50
-@k.objects.kind_sun.rays_8 k.objects.part of=sun name=rays_8 kind=rays shape=line x=6.7 y=25 w=12.12 h=7 z=7 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_8 k.objects.part of=sun name=rays_8 kind=rays shape=line x=6.7 y=25 w=12.12 h=7 z=7 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_8.p1 k.objects.point part=$k.objects.kind_sun.rays_8 n=1 x=18.82 y=32
 @k.objects.kind_sun.rays_8.p2 k.objects.point part=$k.objects.kind_sun.rays_8 n=2 x=6.7 y=25
-@k.objects.kind_sun.rays_9 k.objects.part of=sun name=rays_9 kind=rays shape=line x=25 y=6.7 w=7 h=12.12 z=8 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_9 k.objects.part of=sun name=rays_9 kind=rays shape=line x=25 y=6.7 w=7 h=12.12 z=8 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_9.p1 k.objects.point part=$k.objects.kind_sun.rays_9 n=1 x=32 y=18.82
 @k.objects.kind_sun.rays_9.p2 k.objects.point part=$k.objects.kind_sun.rays_9 n=2 x=25 y=6.7
-@k.objects.kind_sun.rays_10 k.objects.part of=sun name=rays_10 kind=rays shape=line x=50 y=0 w=0 h=14 z=9 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_10 k.objects.part of=sun name=rays_10 kind=rays shape=line x=50 y=0 w=0 h=14 z=9 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_10.p1 k.objects.point part=$k.objects.kind_sun.rays_10 n=1 x=50 y=14
 @k.objects.kind_sun.rays_10.p2 k.objects.point part=$k.objects.kind_sun.rays_10 n=2 x=50 y=0
-@k.objects.kind_sun.rays_11 k.objects.part of=sun name=rays_11 kind=rays shape=line x=68 y=6.7 w=7 h=12.12 z=10 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_11 k.objects.part of=sun name=rays_11 kind=rays shape=line x=68 y=6.7 w=7 h=12.12 z=10 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_11.p1 k.objects.point part=$k.objects.kind_sun.rays_11 n=1 x=68 y=18.82
 @k.objects.kind_sun.rays_11.p2 k.objects.point part=$k.objects.kind_sun.rays_11 n=2 x=75 y=6.7
-@k.objects.kind_sun.rays_12 k.objects.part of=sun name=rays_12 kind=rays shape=line x=81.18 y=25 w=12.12 h=7 z=11 colour=orange rgb="#f68b1e"
+@k.objects.kind_sun.rays_12 k.objects.part of=sun name=rays_12 kind=rays shape=line x=81.18 y=25 w=12.12 h=7 z=11 colour=orange rgb="#FFA500"
 @k.objects.kind_sun.rays_12.p1 k.objects.point part=$k.objects.kind_sun.rays_12 n=1 x=81.18 y=32
 @k.objects.kind_sun.rays_12.p2 k.objects.point part=$k.objects.kind_sun.rays_12 n=2 x=93.3 y=25
-@k.objects.kind_sun.disc k.objects.part of=sun name=disc kind=disc shape=circle x=18 y=18 w=64 h=64 z=12 colour=yellow rgb="#ffd43b"
-@k.objects.kind_sun.eyes k.objects.part of=sun name=eyes kind=eyes shape=circle x=36.5 y=41.5 w=7 h=7 z=13 colour=black rgb="#2d2d34"
-@k.objects.kind_sun.eyes_2 k.objects.part of=sun name=eyes_2 kind=eyes shape=circle x=56.5 y=41.5 w=7 h=7 z=14 colour=black rgb="#2d2d34"
-@k.objects.kind_sun.cheeks k.objects.part of=sun name=cheeks kind=cheeks shape=circle x=25.5 y=52.5 w=9 h=9 z=15 colour=pink rgb="#ff7eb6"
-@k.objects.kind_sun.cheeks_2 k.objects.part of=sun name=cheeks_2 kind=cheeks shape=circle x=65.5 y=52.5 w=9 h=9 z=16 colour=pink rgb="#ff7eb6"
-@k.objects.kind_sun.smile k.objects.part of=sun name=smile kind=smile shape=line x=35 y=57 w=30 h=9 z=17 colour=brown rgb="#8d5a2e"
+@k.objects.kind_sun.disc k.objects.part of=sun name=disc kind=disc shape=circle x=18 y=18 w=64 h=64 z=12 colour=yellow rgb="#FFFF00"
+@k.objects.kind_sun.eyes k.objects.part of=sun name=eyes kind=eyes shape=circle x=36.5 y=41.5 w=7 h=7 z=13 colour=black rgb="#000000"
+@k.objects.kind_sun.eyes_2 k.objects.part of=sun name=eyes_2 kind=eyes shape=circle x=56.5 y=41.5 w=7 h=7 z=14 colour=black rgb="#000000"
+@k.objects.kind_sun.cheeks k.objects.part of=sun name=cheeks kind=cheeks shape=circle x=25.5 y=52.5 w=9 h=9 z=15 colour=pink rgb="#FFC0CB"
+@k.objects.kind_sun.cheeks_2 k.objects.part of=sun name=cheeks_2 kind=cheeks shape=circle x=65.5 y=52.5 w=9 h=9 z=16 colour=pink rgb="#FFC0CB"
+@k.objects.kind_sun.smile k.objects.part of=sun name=smile kind=smile shape=line x=35 y=57 w=30 h=9 z=17 colour=brown rgb="#A52A2A"
 @k.objects.kind_sun.smile.p1 k.objects.point part=$k.objects.kind_sun.smile n=1 x=35 y=57
 @k.objects.kind_sun.smile.p2 k.objects.point part=$k.objects.kind_sun.smile n=2 x=36.23 y=58.38
 @k.objects.kind_sun.smile.p3 k.objects.point part=$k.objects.kind_sun.smile n=3 x=38 y=60.38
@@ -101,39 +101,39 @@
 
 # cloud
 @k.objects.kind_cloud k.objects.object name=cloud
-@k.objects.kind_cloud.puffs k.objects.part of=cloud name=puffs kind=puffs shape=oval x=0 y=43.5 w=44 h=34 z=0 colour=white rgb="#ffffff"
-@k.objects.kind_cloud.puffs_2 k.objects.part of=cloud name=puffs_2 kind=puffs shape=oval x=56 y=43.5 w=44 h=34 z=1 colour=white rgb="#ffffff"
-@k.objects.kind_cloud.puffs_3 k.objects.part of=cloud name=puffs_3 kind=puffs shape=oval x=15 y=19.5 w=50 h=46 z=2 colour=white rgb="#ffffff"
-@k.objects.kind_cloud.puffs_4 k.objects.part of=cloud name=puffs_4 kind=puffs shape=oval x=45 y=28.5 w=44 h=40 z=3 colour=white rgb="#ffffff"
-@k.objects.kind_cloud.puffs_5 k.objects.part of=cloud name=puffs_5 kind=puffs shape=oval x=19 y=44.5 w=62 h=36 z=4 colour=white rgb="#ffffff"
+@k.objects.kind_cloud.puffs k.objects.part of=cloud name=puffs kind=puffs shape=oval x=0 y=43.5 w=44 h=34 z=0 colour=white rgb="#FFFFFF"
+@k.objects.kind_cloud.puffs_2 k.objects.part of=cloud name=puffs_2 kind=puffs shape=oval x=56 y=43.5 w=44 h=34 z=1 colour=white rgb="#FFFFFF"
+@k.objects.kind_cloud.puffs_3 k.objects.part of=cloud name=puffs_3 kind=puffs shape=oval x=15 y=19.5 w=50 h=46 z=2 colour=white rgb="#FFFFFF"
+@k.objects.kind_cloud.puffs_4 k.objects.part of=cloud name=puffs_4 kind=puffs shape=oval x=45 y=28.5 w=44 h=40 z=3 colour=white rgb="#FFFFFF"
+@k.objects.kind_cloud.puffs_5 k.objects.part of=cloud name=puffs_5 kind=puffs shape=oval x=19 y=44.5 w=62 h=36 z=4 colour=white rgb="#FFFFFF"
 
 # car
 @k.objects.kind_car k.objects.object name=car
-@k.objects.kind_car.body k.objects.part of=car name=body kind=body shape=polygon x=19.39 y=20.15 w=61.22 h=22.45 z=0 colour=red rgb="#e63946"
+@k.objects.kind_car.body k.objects.part of=car name=body kind=body shape=polygon x=19.39 y=20.15 w=61.22 h=22.45 z=0 colour=red rgb="#FF0000"
 @k.objects.kind_car.body.p1 k.objects.point part=$k.objects.kind_car.body n=1 x=19.39 y=42.6
 @k.objects.kind_car.body.p2 k.objects.point part=$k.objects.kind_car.body n=2 x=29.59 y=20.15
 @k.objects.kind_car.body.p3 k.objects.point part=$k.objects.kind_car.body n=3 x=66.33 y=20.15
 @k.objects.kind_car.body.p4 k.objects.point part=$k.objects.kind_car.body n=4 x=80.61 y=42.6
-@k.objects.kind_car.body_2 k.objects.part of=car name=body_2 kind=body shape=rectangle x=0 y=40.56 w=100 h=26.53 z=1 colour=red rgb="#e63946"
-@k.objects.kind_car.windows k.objects.part of=car name=windows kind=windows shape=polygon x=24.49 y=26.28 w=23.47 h=14.28 z=2 colour=blue rgb="#98bef0"
+@k.objects.kind_car.body_2 k.objects.part of=car name=body_2 kind=body shape=rectangle x=0 y=40.56 w=100 h=26.53 z=1 colour=red rgb="#FF0000"
+@k.objects.kind_car.windows k.objects.part of=car name=windows kind=windows shape=polygon x=24.49 y=26.28 w=23.47 h=14.28 z=2 colour=blue rgb="#ADD8E6"
 @k.objects.kind_car.windows.p1 k.objects.point part=$k.objects.kind_car.windows n=1 x=24.49 y=40.56
 @k.objects.kind_car.windows.p2 k.objects.point part=$k.objects.kind_car.windows n=2 x=31.63 y=26.28
 @k.objects.kind_car.windows.p3 k.objects.point part=$k.objects.kind_car.windows n=3 x=47.96 y=26.28
 @k.objects.kind_car.windows.p4 k.objects.point part=$k.objects.kind_car.windows n=4 x=47.96 y=40.56
-@k.objects.kind_car.windows_2 k.objects.part of=car name=windows_2 kind=windows shape=polygon x=52.04 y=26.28 w=21.43 h=14.28 z=3 colour=blue rgb="#98bef0"
+@k.objects.kind_car.windows_2 k.objects.part of=car name=windows_2 kind=windows shape=polygon x=52.04 y=26.28 w=21.43 h=14.28 z=3 colour=blue rgb="#ADD8E6"
 @k.objects.kind_car.windows_2.p1 k.objects.point part=$k.objects.kind_car.windows_2 n=1 x=52.04 y=40.56
 @k.objects.kind_car.windows_2.p2 k.objects.point part=$k.objects.kind_car.windows_2 n=2 x=52.04 y=26.28
 @k.objects.kind_car.windows_2.p3 k.objects.point part=$k.objects.kind_car.windows_2 n=3 x=64.29 y=26.28
 @k.objects.kind_car.windows_2.p4 k.objects.point part=$k.objects.kind_car.windows_2 n=4 x=73.47 y=40.56
-@k.objects.kind_car.lights k.objects.part of=car name=lights kind=lights shape=rectangle x=92.86 y=46.17 w=6.12 h=7.15 z=4 colour=yellow rgb="#ffd43b"
-@k.objects.kind_car.wheels k.objects.part of=car name=wheels kind=wheels shape=circle x=8.67 y=54.34 w=25.51 h=25.51 z=5 colour=black rgb="#2d2d34"
-@k.objects.kind_car.wheels_2 k.objects.part of=car name=wheels_2 kind=wheels shape=circle x=65.82 y=54.34 w=25.51 h=25.51 z=6 colour=black rgb="#2d2d34"
-@k.objects.kind_car.hubcaps k.objects.part of=car name=hubcaps kind=hubcaps shape=circle x=16.33 y=61.99 w=10.2 h=10.2 z=7 colour=grey rgb="#d3d4d6"
-@k.objects.kind_car.hubcaps_2 k.objects.part of=car name=hubcaps_2 kind=hubcaps shape=circle x=73.47 y=61.99 w=10.2 h=10.2 z=8 colour=grey rgb="#d3d4d6"
+@k.objects.kind_car.lights k.objects.part of=car name=lights kind=lights shape=rectangle x=92.86 y=46.17 w=6.12 h=7.15 z=4 colour=yellow rgb="#FFFF00"
+@k.objects.kind_car.wheels k.objects.part of=car name=wheels kind=wheels shape=circle x=8.67 y=54.34 w=25.51 h=25.51 z=5 colour=black rgb="#000000"
+@k.objects.kind_car.wheels_2 k.objects.part of=car name=wheels_2 kind=wheels shape=circle x=65.82 y=54.34 w=25.51 h=25.51 z=6 colour=black rgb="#000000"
+@k.objects.kind_car.hubcaps k.objects.part of=car name=hubcaps kind=hubcaps shape=circle x=16.33 y=61.99 w=10.2 h=10.2 z=7 colour=grey rgb="#D3D3D3"
+@k.objects.kind_car.hubcaps_2 k.objects.part of=car name=hubcaps_2 kind=hubcaps shape=circle x=73.47 y=61.99 w=10.2 h=10.2 z=8 colour=grey rgb="#D3D3D3"
 
 # flower
 @k.objects.kind_flower k.objects.object name=flower
-@k.objects.kind_flower.stem k.objects.part of=flower name=stem kind=stem shape=line x=48.14 y=44.1 w=4.34 h=55.9 z=0 colour=green rgb="#43b04a"
+@k.objects.kind_flower.stem k.objects.part of=flower name=stem kind=stem shape=line x=48.14 y=44.1 w=4.34 h=55.9 z=0 colour=green rgb="#008000"
 @k.objects.kind_flower.stem.p1 k.objects.point part=$k.objects.kind_flower.stem n=1 x=50 y=44.1
 @k.objects.kind_flower.stem.p2 k.objects.point part=$k.objects.kind_flower.stem n=2 x=50.61 y=47.45
 @k.objects.kind_flower.stem.p3 k.objects.point part=$k.objects.kind_flower.stem n=3 x=51.51 y=52.25
@@ -147,7 +147,7 @@
 @k.objects.kind_flower.stem.p11 k.objects.point part=$k.objects.kind_flower.stem n=11 x=48.8 y=91.85
 @k.objects.kind_flower.stem.p12 k.objects.point part=$k.objects.kind_flower.stem n=12 x=49.52 y=96.65
 @k.objects.kind_flower.stem.p13 k.objects.point part=$k.objects.kind_flower.stem n=13 x=50 y=100
-@k.objects.kind_flower.leaves k.objects.part of=flower name=leaves kind=leaves shape=polygon x=28.95 y=71.45 w=17.26 h=11.14 z=1 colour=green rgb="#43b04a"
+@k.objects.kind_flower.leaves k.objects.part of=flower name=leaves kind=leaves shape=polygon x=28.95 y=71.45 w=17.26 h=11.14 z=1 colour=green rgb="#008000"
 @k.objects.kind_flower.leaves.p1 k.objects.point part=$k.objects.kind_flower.leaves n=1 x=46.02 y=73.08
 @k.objects.kind_flower.leaves.p2 k.objects.point part=$k.objects.kind_flower.leaves n=2 x=46.21 y=74.24
 @k.objects.kind_flower.leaves.p3 k.objects.point part=$k.objects.kind_flower.leaves n=3 x=45.81 y=75.58
@@ -172,7 +172,7 @@
 @k.objects.kind_flower.leaves.p22 k.objects.point part=$k.objects.kind_flower.leaves n=22 x=42.25 y=71.45
 @k.objects.kind_flower.leaves.p23 k.objects.point part=$k.objects.kind_flower.leaves n=23 x=43.97 y=71.64
 @k.objects.kind_flower.leaves.p24 k.objects.point part=$k.objects.kind_flower.leaves n=24 x=45.26 y=72.2
-@k.objects.kind_flower.leaves_2 k.objects.part of=flower name=leaves_2 kind=leaves shape=polygon x=53.79 y=60.27 w=17.26 h=11.14 z=2 colour=green rgb="#43b04a"
+@k.objects.kind_flower.leaves_2 k.objects.part of=flower name=leaves_2 kind=leaves shape=polygon x=53.79 y=60.27 w=17.26 h=11.14 z=2 colour=green rgb="#008000"
 @k.objects.kind_flower.leaves_2.p1 k.objects.point part=$k.objects.kind_flower.leaves_2 n=1 x=70.87 y=69.78
 @k.objects.kind_flower.leaves_2.p2 k.objects.point part=$k.objects.kind_flower.leaves_2 n=2 x=70.1 y=70.66
 @k.objects.kind_flower.leaves_2.p3 k.objects.point part=$k.objects.kind_flower.leaves_2 n=3 x=68.82 y=71.22
@@ -197,8 +197,8 @@
 @k.objects.kind_flower.leaves_2.p22 k.objects.point part=$k.objects.kind_flower.leaves_2 n=22 x=69.69 y=65.84
 @k.objects.kind_flower.leaves_2.p23 k.objects.point part=$k.objects.kind_flower.leaves_2 n=23 x=70.65 y=67.28
 @k.objects.kind_flower.leaves_2.p24 k.objects.point part=$k.objects.kind_flower.leaves_2 n=24 x=71.05 y=68.62
-@k.objects.kind_flower.petals k.objects.part of=flower name=petals kind=petals shape=oval x=41.93 y=0 w=16.14 h=23.6 z=3 colour=pink rgb="#ff7eb6"
-@k.objects.kind_flower.petals_2 k.objects.part of=flower name=petals_2 kind=petals shape=polygon x=52.6 y=8.45 w=21.02 h=19.33 z=4 colour=pink rgb="#ff7eb6"
+@k.objects.kind_flower.petals k.objects.part of=flower name=petals kind=petals shape=oval x=41.93 y=0 w=16.14 h=23.6 z=3 colour=pink rgb="#FFC0CB"
+@k.objects.kind_flower.petals_2 k.objects.part of=flower name=petals_2 kind=petals shape=polygon x=52.6 y=8.45 w=21.02 h=19.33 z=4 colour=pink rgb="#FFC0CB"
 @k.objects.kind_flower.petals_2.p1 k.objects.point part=$k.objects.kind_flower.petals_2 n=1 x=68.15 y=24.43
 @k.objects.kind_flower.petals_2.p2 k.objects.point part=$k.objects.kind_flower.petals_2 n=2 x=65.59 y=26.12
 @k.objects.kind_flower.petals_2.p3 k.objects.point part=$k.objects.kind_flower.petals_2 n=3 x=62.86 y=27.26
@@ -223,7 +223,7 @@
 @k.objects.kind_flower.petals_2.p22 k.objects.point part=$k.objects.kind_flower.petals_2 n=22 x=73.2 y=17.38
 @k.objects.kind_flower.petals_2.p23 k.objects.point part=$k.objects.kind_flower.petals_2 n=23 x=72.08 y=19.9
 @k.objects.kind_flower.petals_2.p24 k.objects.point part=$k.objects.kind_flower.petals_2 n=24 x=70.36 y=22.31
-@k.objects.kind_flower.petals_3 k.objects.part of=flower name=petals_3 kind=petals shape=polygon x=54.77 y=24.02 w=23.16 h=16.57 z=5 colour=pink rgb="#ff7eb6"
+@k.objects.kind_flower.petals_3 k.objects.part of=flower name=petals_3 kind=petals shape=polygon x=54.77 y=24.02 w=23.16 h=16.57 z=5 colour=pink rgb="#FFC0CB"
 @k.objects.kind_flower.petals_3.p1 k.objects.point part=$k.objects.kind_flower.petals_3 n=1 x=64.55 y=40.18
 @k.objects.kind_flower.petals_3.p2 k.objects.point part=$k.objects.kind_flower.petals_3 n=2 x=61.64 y=39.23
 @k.objects.kind_flower.petals_3.p3 k.objects.point part=$k.objects.kind_flower.petals_3 n=3 x=59.04 y=37.81
@@ -248,7 +248,7 @@
 @k.objects.kind_flower.petals_3.p22 k.objects.point part=$k.objects.kind_flower.petals_3 n=22 x=73.21 y=39.73
 @k.objects.kind_flower.petals_3.p23 k.objects.point part=$k.objects.kind_flower.petals_3 n=23 x=70.55 y=40.43
 @k.objects.kind_flower.petals_3.p24 k.objects.point part=$k.objects.kind_flower.petals_3 n=24 x=67.59 y=40.59
-@k.objects.kind_flower.petals_4 k.objects.part of=flower name=petals_4 kind=petals shape=polygon x=48.42 y=32.5 w=17.72 h=22.36 z=6 colour=pink rgb="#ff7eb6"
+@k.objects.kind_flower.petals_4 k.objects.part of=flower name=petals_4 kind=petals shape=polygon x=48.42 y=32.5 w=17.72 h=22.36 z=6 colour=pink rgb="#FFC0CB"
 @k.objects.kind_flower.petals_4.p1 k.objects.point part=$k.objects.kind_flower.petals_4 n=1 x=50 y=47.18
 @k.objects.kind_flower.petals_4.p2 k.objects.point part=$k.objects.kind_flower.petals_4 n=2 x=48.92 y=44.31
 @k.objects.kind_flower.petals_4.p3 k.objects.point part=$k.objects.kind_flower.petals_4 n=3 x=48.42 y=41.4
@@ -273,7 +273,7 @@
 @k.objects.kind_flower.petals_4.p22 k.objects.point part=$k.objects.kind_flower.petals_4 n=22 x=55.75 y=53.68
 @k.objects.kind_flower.petals_4.p23 k.objects.point part=$k.objects.kind_flower.petals_4 n=23 x=53.54 y=52.03
 @k.objects.kind_flower.petals_4.p24 k.objects.point part=$k.objects.kind_flower.petals_4 n=24 x=51.57 y=49.82
-@k.objects.kind_flower.petals_5 k.objects.part of=flower name=petals_5 kind=petals shape=polygon x=33.86 y=32.5 w=17.72 h=22.36 z=7 colour=pink rgb="#ff7eb6"
+@k.objects.kind_flower.petals_5 k.objects.part of=flower name=petals_5 kind=petals shape=polygon x=33.86 y=32.5 w=17.72 h=22.36 z=7 colour=pink rgb="#FFC0CB"
 @k.objects.kind_flower.petals_5.p1 k.objects.point part=$k.objects.kind_flower.petals_5 n=1 x=35.45 y=40.18
 @k.objects.kind_flower.petals_5.p2 k.objects.point part=$k.objects.kind_flower.petals_5 n=2 x=37.02 y=37.54
 @k.objects.kind_flower.petals_5.p3 k.objects.point part=$k.objects.kind_flower.petals_5 n=3 x=38.98 y=35.33
@@ -298,7 +298,7 @@
 @k.objects.kind_flower.petals_5.p22 k.objects.point part=$k.objects.kind_flower.petals_5 n=22 x=33.96 y=48.72
 @k.objects.kind_flower.petals_5.p23 k.objects.point part=$k.objects.kind_flower.petals_5 n=23 x=33.86 y=45.96
 @k.objects.kind_flower.petals_5.p24 k.objects.point part=$k.objects.kind_flower.petals_5 n=24 x=34.37 y=43.05
-@k.objects.kind_flower.petals_6 k.objects.part of=flower name=petals_6 kind=petals shape=polygon x=22.07 y=24.02 w=23.16 h=16.57 z=8 colour=pink rgb="#ff7eb6"
+@k.objects.kind_flower.petals_6 k.objects.part of=flower name=petals_6 kind=petals shape=polygon x=22.07 y=24.02 w=23.16 h=16.57 z=8 colour=pink rgb="#FFC0CB"
 @k.objects.kind_flower.petals_6.p1 k.objects.point part=$k.objects.kind_flower.petals_6 n=1 x=31.85 y=24.43
 @k.objects.kind_flower.petals_6.p2 k.objects.point part=$k.objects.kind_flower.petals_6 n=2 x=34.89 y=24.02
 @k.objects.kind_flower.petals_6.p3 k.objects.point part=$k.objects.kind_flower.petals_6 n=3 x=37.85 y=24.17
@@ -323,7 +323,7 @@
 @k.objects.kind_flower.petals_6.p22 k.objects.point part=$k.objects.kind_flower.petals_6 n=22 x=24.24 y=28.59
 @k.objects.kind_flower.petals_6.p23 k.objects.point part=$k.objects.kind_flower.petals_6 n=23 x=26.34 y=26.8
 @k.objects.kind_flower.petals_6.p24 k.objects.point part=$k.objects.kind_flower.petals_6 n=24 x=28.94 y=25.38
-@k.objects.kind_flower.petals_7 k.objects.part of=flower name=petals_7 kind=petals shape=polygon x=26.38 y=8.45 w=21.02 h=19.33 z=9 colour=pink rgb="#ff7eb6"
+@k.objects.kind_flower.petals_7 k.objects.part of=flower name=petals_7 kind=petals shape=polygon x=26.38 y=8.45 w=21.02 h=19.33 z=9 colour=pink rgb="#FFC0CB"
 @k.objects.kind_flower.petals_7.p1 k.objects.point part=$k.objects.kind_flower.petals_7 n=1 x=41.92 y=11.8
 @k.objects.kind_flower.petals_7.p2 k.objects.point part=$k.objects.kind_flower.petals_7 n=2 x=44.14 y=13.92
 @k.objects.kind_flower.petals_7.p3 k.objects.point part=$k.objects.kind_flower.petals_7 n=3 x=45.86 y=16.33
@@ -348,11 +348,11 @@
 @k.objects.kind_flower.petals_7.p22 k.objects.point part=$k.objects.kind_flower.petals_7 n=22 x=33.92 y=8.45
 @k.objects.kind_flower.petals_7.p23 k.objects.point part=$k.objects.kind_flower.petals_7 n=23 x=36.64 y=8.97
 @k.objects.kind_flower.petals_7.p24 k.objects.point part=$k.objects.kind_flower.petals_7 n=24 x=39.36 y=10.11
-@k.objects.kind_flower.center k.objects.part of=flower name=center kind=center shape=circle x=41.3 y=19.88 w=17.4 h=17.39 z=10 colour=yellow rgb="#ffd43b"
+@k.objects.kind_flower.center k.objects.part of=flower name=center kind=center shape=circle x=41.3 y=19.88 w=17.4 h=17.39 z=10 colour=yellow rgb="#FFFF00"
 
 # cat
 @k.objects.kind_cat k.objects.object name=cat
-@k.objects.kind_cat.tail k.objects.part of=cat name=tail kind=tail shape=line x=64.72 y=40.59 w=29.97 h=39.61 z=0 colour=orange rgb="#f68b1e"
+@k.objects.kind_cat.tail k.objects.part of=cat name=tail kind=tail shape=line x=64.72 y=40.59 w=29.97 h=39.61 z=0 colour=orange rgb="#FFA500"
 @k.objects.kind_cat.tail.p1 k.objects.point part=$k.objects.kind_cat.tail n=1 x=64.72 y=80.2
 @k.objects.kind_cat.tail.p2 k.objects.point part=$k.objects.kind_cat.tail n=2 x=69.63 y=79.66
 @k.objects.kind_cat.tail.p3 k.objects.point part=$k.objects.kind_cat.tail n=3 x=76.78 y=78.96
@@ -366,42 +366,42 @@
 @k.objects.kind_cat.tail.p11 k.objects.point part=$k.objects.kind_cat.tail n=11 x=89.78 y=46.78
 @k.objects.kind_cat.tail.p12 k.objects.point part=$k.objects.kind_cat.tail n=12 x=86.65 y=43.15
 @k.objects.kind_cat.tail.p13 k.objects.point part=$k.objects.kind_cat.tail n=13 x=84.52 y=40.59
-@k.objects.kind_cat.body k.objects.part of=cat name=body kind=body shape=oval x=16.2 y=43.56 w=57.43 h=55.45 z=1 colour=orange rgb="#f68b1e"
-@k.objects.kind_cat.ears k.objects.part of=cat name=ears kind=ears shape=polygon x=15.21 y=0 w=21.78 h=27.72 z=2 colour=orange rgb="#f68b1e"
+@k.objects.kind_cat.body k.objects.part of=cat name=body kind=body shape=oval x=16.2 y=43.56 w=57.43 h=55.45 z=1 colour=orange rgb="#FFA500"
+@k.objects.kind_cat.ears k.objects.part of=cat name=ears kind=ears shape=polygon x=15.21 y=0 w=21.78 h=27.72 z=2 colour=orange rgb="#FFA500"
 @k.objects.kind_cat.ears.p1 k.objects.point part=$k.objects.kind_cat.ears n=1 x=15.21 y=27.72
 @k.objects.kind_cat.ears.p2 k.objects.point part=$k.objects.kind_cat.ears n=2 x=18.18 y=0
 @k.objects.kind_cat.ears.p3 k.objects.point part=$k.objects.kind_cat.ears n=3 x=36.99 y=15.84
-@k.objects.kind_cat.ears_2 k.objects.part of=cat name=ears_2 kind=ears shape=polygon x=52.83 y=0 w=21.79 h=27.72 z=3 colour=orange rgb="#f68b1e"
+@k.objects.kind_cat.ears_2 k.objects.part of=cat name=ears_2 kind=ears shape=polygon x=52.83 y=0 w=21.79 h=27.72 z=3 colour=orange rgb="#FFA500"
 @k.objects.kind_cat.ears_2.p1 k.objects.point part=$k.objects.kind_cat.ears_2 n=1 x=74.62 y=27.72
 @k.objects.kind_cat.ears_2.p2 k.objects.point part=$k.objects.kind_cat.ears_2 n=2 x=71.65 y=0
 @k.objects.kind_cat.ears_2.p3 k.objects.point part=$k.objects.kind_cat.ears_2 n=3 x=52.83 y=15.84
-@k.objects.kind_cat.innerEars k.objects.part of=cat name=innerEars kind=innerEars shape=polygon x=20.16 y=7.92 w=10.89 h=13.86 z=4 colour=pink rgb="#ff7eb6"
+@k.objects.kind_cat.innerEars k.objects.part of=cat name=innerEars kind=innerEars shape=polygon x=20.16 y=7.92 w=10.89 h=13.86 z=4 colour=pink rgb="#FFC0CB"
 @k.objects.kind_cat.innerEars.p1 k.objects.point part=$k.objects.kind_cat.innerEars n=1 x=20.16 y=21.78
 @k.objects.kind_cat.innerEars.p2 k.objects.point part=$k.objects.kind_cat.innerEars n=2 x=21.15 y=7.92
 @k.objects.kind_cat.innerEars.p3 k.objects.point part=$k.objects.kind_cat.innerEars n=3 x=31.05 y=16.83
-@k.objects.kind_cat.innerEars_2 k.objects.part of=cat name=innerEars_2 kind=innerEars shape=polygon x=58.78 y=7.92 w=10.89 h=13.86 z=5 colour=pink rgb="#ff7eb6"
+@k.objects.kind_cat.innerEars_2 k.objects.part of=cat name=innerEars_2 kind=innerEars shape=polygon x=58.78 y=7.92 w=10.89 h=13.86 z=5 colour=pink rgb="#FFC0CB"
 @k.objects.kind_cat.innerEars_2.p1 k.objects.point part=$k.objects.kind_cat.innerEars_2 n=1 x=69.67 y=21.78
 @k.objects.kind_cat.innerEars_2.p2 k.objects.point part=$k.objects.kind_cat.innerEars_2 n=2 x=68.68 y=7.92
 @k.objects.kind_cat.innerEars_2.p3 k.objects.point part=$k.objects.kind_cat.innerEars_2 n=3 x=58.78 y=16.83
-@k.objects.kind_cat.head k.objects.part of=cat name=head kind=head shape=oval x=11.25 y=7.92 w=67.33 h=51.49 z=6 colour=orange rgb="#f68b1e"
-@k.objects.kind_cat.stripes k.objects.part of=cat name=stripes kind=stripes shape=line x=36.99 y=8.91 w=1.98 h=8.91 z=7 colour=brown rgb="#8d5a2e"
+@k.objects.kind_cat.head k.objects.part of=cat name=head kind=head shape=oval x=11.25 y=7.92 w=67.33 h=51.49 z=6 colour=orange rgb="#FFA500"
+@k.objects.kind_cat.stripes k.objects.part of=cat name=stripes kind=stripes shape=line x=36.99 y=8.91 w=1.98 h=8.91 z=7 colour=brown rgb="#A52A2A"
 @k.objects.kind_cat.stripes.p1 k.objects.point part=$k.objects.kind_cat.stripes n=1 x=36.99 y=8.91
 @k.objects.kind_cat.stripes.p2 k.objects.point part=$k.objects.kind_cat.stripes n=2 x=38.97 y=17.82
-@k.objects.kind_cat.stripes_2 k.objects.part of=cat name=stripes_2 kind=stripes shape=line x=44.91 y=7.92 w=0 h=9.9 z=8 colour=brown rgb="#8d5a2e"
+@k.objects.kind_cat.stripes_2 k.objects.part of=cat name=stripes_2 kind=stripes shape=line x=44.91 y=7.92 w=0 h=9.9 z=8 colour=brown rgb="#A52A2A"
 @k.objects.kind_cat.stripes_2.p1 k.objects.point part=$k.objects.kind_cat.stripes_2 n=1 x=44.91 y=7.92
 @k.objects.kind_cat.stripes_2.p2 k.objects.point part=$k.objects.kind_cat.stripes_2 n=2 x=44.91 y=17.82
-@k.objects.kind_cat.stripes_3 k.objects.part of=cat name=stripes_3 kind=stripes shape=line x=50.85 y=8.91 w=1.98 h=8.91 z=9 colour=brown rgb="#8d5a2e"
+@k.objects.kind_cat.stripes_3 k.objects.part of=cat name=stripes_3 kind=stripes shape=line x=50.85 y=8.91 w=1.98 h=8.91 z=9 colour=brown rgb="#A52A2A"
 @k.objects.kind_cat.stripes_3.p1 k.objects.point part=$k.objects.kind_cat.stripes_3 n=1 x=52.83 y=8.91
 @k.objects.kind_cat.stripes_3.p2 k.objects.point part=$k.objects.kind_cat.stripes_3 n=2 x=50.85 y=17.82
-@k.objects.kind_cat.eyes k.objects.part of=cat name=eyes kind=eyes shape=oval x=26.1 y=24.26 w=9.9 h=12.87 z=10 colour=green rgb="#43b04a"
-@k.objects.kind_cat.eyes_2 k.objects.part of=cat name=eyes_2 kind=eyes shape=oval x=53.83 y=24.26 w=9.9 h=12.87 z=11 colour=green rgb="#43b04a"
-@k.objects.kind_cat.pupils k.objects.part of=cat name=pupils kind=pupils shape=circle x=29.27 y=28.91 w=3.56 h=3.57 z=12 colour=black rgb="#2d2d34"
-@k.objects.kind_cat.pupils_2 k.objects.part of=cat name=pupils_2 kind=pupils shape=circle x=56.99 y=28.91 w=3.57 h=3.57 z=13 colour=black rgb="#2d2d34"
-@k.objects.kind_cat.nose k.objects.part of=cat name=nose kind=nose shape=polygon x=41.94 y=39.6 w=5.94 h=3.96 z=14 colour=pink rgb="#ff7eb6"
+@k.objects.kind_cat.eyes k.objects.part of=cat name=eyes kind=eyes shape=oval x=26.1 y=24.26 w=9.9 h=12.87 z=10 colour=green rgb="#008000"
+@k.objects.kind_cat.eyes_2 k.objects.part of=cat name=eyes_2 kind=eyes shape=oval x=53.83 y=24.26 w=9.9 h=12.87 z=11 colour=green rgb="#008000"
+@k.objects.kind_cat.pupils k.objects.part of=cat name=pupils kind=pupils shape=circle x=29.27 y=28.91 w=3.56 h=3.57 z=12 colour=black rgb="#000000"
+@k.objects.kind_cat.pupils_2 k.objects.part of=cat name=pupils_2 kind=pupils shape=circle x=56.99 y=28.91 w=3.57 h=3.57 z=13 colour=black rgb="#000000"
+@k.objects.kind_cat.nose k.objects.part of=cat name=nose kind=nose shape=polygon x=41.94 y=39.6 w=5.94 h=3.96 z=14 colour=pink rgb="#FFC0CB"
 @k.objects.kind_cat.nose.p1 k.objects.point part=$k.objects.kind_cat.nose n=1 x=41.94 y=39.6
 @k.objects.kind_cat.nose.p2 k.objects.point part=$k.objects.kind_cat.nose n=2 x=47.88 y=39.6
 @k.objects.kind_cat.nose.p3 k.objects.point part=$k.objects.kind_cat.nose n=3 x=44.91 y=43.56
-@k.objects.kind_cat.mouth k.objects.part of=cat name=mouth kind=mouth shape=line x=37.98 y=43.56 w=13.86 h=3.96 z=15 colour=grey rgb="#666e77"
+@k.objects.kind_cat.mouth k.objects.part of=cat name=mouth kind=mouth shape=line x=37.98 y=43.56 w=13.86 h=3.96 z=15 colour=grey rgb="#A9A9A9"
 @k.objects.kind_cat.mouth.p1 k.objects.point part=$k.objects.kind_cat.mouth n=1 x=37.98 y=45.54
 @k.objects.kind_cat.mouth.p2 k.objects.point part=$k.objects.kind_cat.mouth n=2 x=38.72 y=46.04
 @k.objects.kind_cat.mouth.p3 k.objects.point part=$k.objects.kind_cat.mouth n=3 x=39.78 y=46.78
@@ -419,24 +419,24 @@
 @k.objects.kind_cat.mouth.p15 k.objects.point part=$k.objects.kind_cat.mouth n=15 x=50.05 y=46.78
 @k.objects.kind_cat.mouth.p16 k.objects.point part=$k.objects.kind_cat.mouth n=16 x=51.11 y=46.04
 @k.objects.kind_cat.mouth.p17 k.objects.point part=$k.objects.kind_cat.mouth n=17 x=51.84 y=45.54
-@k.objects.kind_cat.whiskers k.objects.part of=cat name=whiskers kind=whiskers shape=line x=5.31 y=37.62 w=25.74 h=3.96 z=16 colour=grey rgb="#666e77"
+@k.objects.kind_cat.whiskers k.objects.part of=cat name=whiskers kind=whiskers shape=line x=5.31 y=37.62 w=25.74 h=3.96 z=16 colour=grey rgb="#A9A9A9"
 @k.objects.kind_cat.whiskers.p1 k.objects.point part=$k.objects.kind_cat.whiskers n=1 x=31.05 y=41.58
 @k.objects.kind_cat.whiskers.p2 k.objects.point part=$k.objects.kind_cat.whiskers n=2 x=5.31 y=37.62
-@k.objects.kind_cat.whiskers_2 k.objects.part of=cat name=whiskers_2 kind=whiskers shape=line x=5.31 y=45.54 w=25.74 h=1.98 z=17 colour=grey rgb="#666e77"
+@k.objects.kind_cat.whiskers_2 k.objects.part of=cat name=whiskers_2 kind=whiskers shape=line x=5.31 y=45.54 w=25.74 h=1.98 z=17 colour=grey rgb="#A9A9A9"
 @k.objects.kind_cat.whiskers_2.p1 k.objects.point part=$k.objects.kind_cat.whiskers_2 n=1 x=31.05 y=45.54
 @k.objects.kind_cat.whiskers_2.p2 k.objects.point part=$k.objects.kind_cat.whiskers_2 n=2 x=5.31 y=47.52
-@k.objects.kind_cat.whiskers_3 k.objects.part of=cat name=whiskers_3 kind=whiskers shape=line x=58.78 y=37.62 w=25.74 h=3.96 z=18 colour=grey rgb="#666e77"
+@k.objects.kind_cat.whiskers_3 k.objects.part of=cat name=whiskers_3 kind=whiskers shape=line x=58.78 y=37.62 w=25.74 h=3.96 z=18 colour=grey rgb="#A9A9A9"
 @k.objects.kind_cat.whiskers_3.p1 k.objects.point part=$k.objects.kind_cat.whiskers_3 n=1 x=58.78 y=41.58
 @k.objects.kind_cat.whiskers_3.p2 k.objects.point part=$k.objects.kind_cat.whiskers_3 n=2 x=84.52 y=37.62
-@k.objects.kind_cat.whiskers_4 k.objects.part of=cat name=whiskers_4 kind=whiskers shape=line x=58.78 y=45.54 w=25.74 h=1.98 z=19 colour=grey rgb="#666e77"
+@k.objects.kind_cat.whiskers_4 k.objects.part of=cat name=whiskers_4 kind=whiskers shape=line x=58.78 y=45.54 w=25.74 h=1.98 z=19 colour=grey rgb="#A9A9A9"
 @k.objects.kind_cat.whiskers_4.p1 k.objects.point part=$k.objects.kind_cat.whiskers_4 n=1 x=58.78 y=45.54
 @k.objects.kind_cat.whiskers_4.p2 k.objects.point part=$k.objects.kind_cat.whiskers_4 n=2 x=84.52 y=47.52
-@k.objects.kind_cat.paws k.objects.part of=cat name=paws kind=paws shape=oval x=23.63 y=90.1 w=16.83 h=9.9 z=20 colour=white rgb="#ffffff"
-@k.objects.kind_cat.paws_2 k.objects.part of=cat name=paws_2 kind=paws shape=oval x=49.37 y=90.1 w=16.83 h=9.9 z=21 colour=white rgb="#ffffff"
+@k.objects.kind_cat.paws k.objects.part of=cat name=paws kind=paws shape=oval x=23.63 y=90.1 w=16.83 h=9.9 z=20 colour=white rgb="#FFFFFF"
+@k.objects.kind_cat.paws_2 k.objects.part of=cat name=paws_2 kind=paws shape=oval x=49.37 y=90.1 w=16.83 h=9.9 z=21 colour=white rgb="#FFFFFF"
 
 # dog
 @k.objects.kind_dog k.objects.object name=dog
-@k.objects.kind_dog.tail k.objects.part of=dog name=tail kind=tail shape=line x=0 y=19.34 w=14.15 h=21.7 z=0 colour=brown rgb="#8d5a2e"
+@k.objects.kind_dog.tail k.objects.part of=dog name=tail kind=tail shape=line x=0 y=19.34 w=14.15 h=21.7 z=0 colour=brown rgb="#A52A2A"
 @k.objects.kind_dog.tail.p1 k.objects.point part=$k.objects.kind_dog.tail n=1 x=14.15 y=41.04
 @k.objects.kind_dog.tail.p2 k.objects.point part=$k.objects.kind_dog.tail n=2 x=12.56 y=39.2
 @k.objects.kind_dog.tail.p3 k.objects.point part=$k.objects.kind_dog.tail n=3 x=10.26 y=36.56
@@ -446,15 +446,15 @@
 @k.objects.kind_dog.tail.p7 k.objects.point part=$k.objects.kind_dog.tail n=7 x=2.3 y=24.35
 @k.objects.kind_dog.tail.p8 k.objects.point part=$k.objects.kind_dog.tail n=8 x=0.95 y=21.4
 @k.objects.kind_dog.tail.p9 k.objects.point part=$k.objects.kind_dog.tail n=9 x=0 y=19.34
-@k.objects.kind_dog.legs k.objects.part of=dog name=legs kind=legs shape=rectangle x=17.45 y=57.08 w=8.49 h=26.41 z=1 colour=brown rgb="#8d5a2e"
-@k.objects.kind_dog.legs_2 k.objects.part of=dog name=legs_2 kind=legs shape=rectangle x=31.6 y=59.91 w=8.49 h=24.52 z=2 colour=brown rgb="#8d5a2e"
-@k.objects.kind_dog.legs_3 k.objects.part of=dog name=legs_3 kind=legs shape=rectangle x=50.47 y=59.91 w=8.49 h=24.52 z=3 colour=brown rgb="#8d5a2e"
-@k.objects.kind_dog.legs_4 k.objects.part of=dog name=legs_4 kind=legs shape=rectangle x=64.62 y=57.08 w=8.49 h=26.41 z=4 colour=brown rgb="#8d5a2e"
-@k.objects.kind_dog.body k.objects.part of=dog name=body kind=body shape=oval x=10.38 y=32.55 w=64.15 h=37.73 z=5 colour=brown rgb="#8d5a2e"
-@k.objects.kind_dog.head k.objects.part of=dog name=head kind=head shape=oval x=55.66 y=15.57 w=35.85 h=33.96 z=6 colour=brown rgb="#8d5a2e"
-@k.objects.kind_dog.snout k.objects.part of=dog name=snout kind=snout shape=oval x=78.3 y=30.19 w=20.76 h=16.04 z=7 colour=grey rgb="#d8a468"
-@k.objects.kind_dog.nose k.objects.part of=dog name=nose kind=nose shape=circle x=94.34 y=31.6 w=5.66 h=5.66 z=8 colour=black rgb="#2d2d34"
-@k.objects.kind_dog.ears k.objects.part of=dog name=ears kind=ears shape=polygon x=57.19 y=18.88 w=13.92 h=27.34 z=9 colour=brown rgb="#402915"
+@k.objects.kind_dog.legs k.objects.part of=dog name=legs kind=legs shape=rectangle x=17.45 y=57.08 w=8.49 h=26.41 z=1 colour=brown rgb="#A52A2A"
+@k.objects.kind_dog.legs_2 k.objects.part of=dog name=legs_2 kind=legs shape=rectangle x=31.6 y=59.91 w=8.49 h=24.52 z=2 colour=brown rgb="#A52A2A"
+@k.objects.kind_dog.legs_3 k.objects.part of=dog name=legs_3 kind=legs shape=rectangle x=50.47 y=59.91 w=8.49 h=24.52 z=3 colour=brown rgb="#A52A2A"
+@k.objects.kind_dog.legs_4 k.objects.part of=dog name=legs_4 kind=legs shape=rectangle x=64.62 y=57.08 w=8.49 h=26.41 z=4 colour=brown rgb="#A52A2A"
+@k.objects.kind_dog.body k.objects.part of=dog name=body kind=body shape=oval x=10.38 y=32.55 w=64.15 h=37.73 z=5 colour=brown rgb="#A52A2A"
+@k.objects.kind_dog.head k.objects.part of=dog name=head kind=head shape=oval x=55.66 y=15.57 w=35.85 h=33.96 z=6 colour=brown rgb="#A52A2A"
+@k.objects.kind_dog.snout k.objects.part of=dog name=snout kind=snout shape=oval x=78.3 y=30.19 w=20.76 h=16.04 z=7 colour=grey rgb="#D2B48C"
+@k.objects.kind_dog.nose k.objects.part of=dog name=nose kind=nose shape=circle x=94.34 y=31.6 w=5.66 h=5.66 z=8 colour=black rgb="#000000"
+@k.objects.kind_dog.ears k.objects.part of=dog name=ears kind=ears shape=polygon x=57.19 y=18.88 w=13.92 h=27.34 z=9 colour=brown rgb="#541515"
 @k.objects.kind_dog.ears.p1 k.objects.point part=$k.objects.kind_dog.ears n=1 x=70.07 y=34.13
 @k.objects.kind_dog.ears.p2 k.objects.point part=$k.objects.kind_dog.ears n=2 x=68.92 y=37.62
 @k.objects.kind_dog.ears.p3 k.objects.point part=$k.objects.kind_dog.ears n=3 x=67.45 y=40.76
@@ -479,8 +479,8 @@
 @k.objects.kind_dog.ears.p22 k.objects.point part=$k.objects.kind_dog.ears n=22 x=70.93 y=24
 @k.objects.kind_dog.ears.p23 k.objects.point part=$k.objects.kind_dog.ears n=23 x=71.11 y=27.09
 @k.objects.kind_dog.ears.p24 k.objects.point part=$k.objects.kind_dog.ears n=24 x=70.82 y=30.54
-@k.objects.kind_dog.eyes k.objects.part of=dog name=eyes kind=eyes shape=circle x=75 y=24.53 w=4.72 h=4.72 z=10 colour=black rgb="#2d2d34"
-@k.objects.kind_dog.mouth k.objects.part of=dog name=mouth kind=mouth shape=line x=83.02 y=41.98 w=11.32 h=1.89 z=11 colour=black rgb="#2d2d34"
+@k.objects.kind_dog.eyes k.objects.part of=dog name=eyes kind=eyes shape=circle x=75 y=24.53 w=4.72 h=4.72 z=10 colour=black rgb="#000000"
+@k.objects.kind_dog.mouth k.objects.part of=dog name=mouth kind=mouth shape=line x=83.02 y=41.98 w=11.32 h=1.89 z=11 colour=black rgb="#000000"
 @k.objects.kind_dog.mouth.p1 k.objects.point part=$k.objects.kind_dog.mouth n=1 x=83.02 y=42.92
 @k.objects.kind_dog.mouth.p2 k.objects.point part=$k.objects.kind_dog.mouth n=2 x=84.04 y=43.16
 @k.objects.kind_dog.mouth.p3 k.objects.point part=$k.objects.kind_dog.mouth n=3 x=85.5 y=43.51
@@ -490,26 +490,26 @@
 @k.objects.kind_dog.mouth.p7 k.objects.point part=$k.objects.kind_dog.mouth n=7 x=91.86 y=42.98
 @k.objects.kind_dog.mouth.p8 k.objects.point part=$k.objects.kind_dog.mouth n=8 x=93.32 y=42.39
 @k.objects.kind_dog.mouth.p9 k.objects.point part=$k.objects.kind_dog.mouth n=9 x=94.34 y=41.98
-@k.objects.kind_dog.tongue k.objects.part of=dog name=tongue kind=tongue shape=oval x=86.79 y=42.45 w=5.66 h=8.49 z=12 colour=pink rgb="#ff7eb6"
-@k.objects.kind_dog.collar k.objects.part of=dog name=collar kind=collar shape=rectangle x=58.02 y=34.43 w=6.6 h=18.87 z=13 colour=red rgb="#e63946"
+@k.objects.kind_dog.tongue k.objects.part of=dog name=tongue kind=tongue shape=oval x=86.79 y=42.45 w=5.66 h=8.49 z=12 colour=pink rgb="#FFC0CB"
+@k.objects.kind_dog.collar k.objects.part of=dog name=collar kind=collar shape=rectangle x=58.02 y=34.43 w=6.6 h=18.87 z=13 colour=red rgb="#FF0000"
 
 # fish
 @k.objects.kind_fish k.objects.object name=fish
-@k.objects.kind_fish.tail k.objects.part of=fish name=tail kind=tail shape=polygon x=0 y=26.67 w=24.44 h=53.33 z=0 colour=orange rgb="#f68b1e"
+@k.objects.kind_fish.tail k.objects.part of=fish name=tail kind=tail shape=polygon x=0 y=26.67 w=24.44 h=53.33 z=0 colour=orange rgb="#FFA500"
 @k.objects.kind_fish.tail.p1 k.objects.point part=$k.objects.kind_fish.tail n=1 x=24.44 y=53.33
 @k.objects.kind_fish.tail.p2 k.objects.point part=$k.objects.kind_fish.tail n=2 x=0 y=26.67
 @k.objects.kind_fish.tail.p3 k.objects.point part=$k.objects.kind_fish.tail n=3 x=4.44 y=53.33
 @k.objects.kind_fish.tail.p4 k.objects.point part=$k.objects.kind_fish.tail n=4 x=0 y=80
-@k.objects.kind_fish.fin k.objects.part of=fish name=fin kind=fin shape=polygon x=50 y=11.11 w=25.56 h=20 z=1 colour=orange rgb="#f68b1e"
+@k.objects.kind_fish.fin k.objects.part of=fish name=fin kind=fin shape=polygon x=50 y=11.11 w=25.56 h=20 z=1 colour=orange rgb="#FFA500"
 @k.objects.kind_fish.fin.p1 k.objects.point part=$k.objects.kind_fish.fin n=1 x=50 y=31.11
 @k.objects.kind_fish.fin.p2 k.objects.point part=$k.objects.kind_fish.fin n=2 x=61.11 y=11.11
 @k.objects.kind_fish.fin.p3 k.objects.point part=$k.objects.kind_fish.fin n=3 x=75.56 y=31.11
-@k.objects.kind_fish.fin_2 k.objects.part of=fish name=fin_2 kind=fin shape=polygon x=55.56 y=75.56 w=15.55 h=13.33 z=2 colour=orange rgb="#f68b1e"
+@k.objects.kind_fish.fin_2 k.objects.part of=fish name=fin_2 kind=fin shape=polygon x=55.56 y=75.56 w=15.55 h=13.33 z=2 colour=orange rgb="#FFA500"
 @k.objects.kind_fish.fin_2.p1 k.objects.point part=$k.objects.kind_fish.fin_2 n=1 x=55.56 y=75.56
 @k.objects.kind_fish.fin_2.p2 k.objects.point part=$k.objects.kind_fish.fin_2 n=2 x=62.22 y=88.89
 @k.objects.kind_fish.fin_2.p3 k.objects.point part=$k.objects.kind_fish.fin_2 n=3 x=71.11 y=75.56
-@k.objects.kind_fish.body k.objects.part of=fish name=body kind=body shape=oval x=10 y=25.56 w=86.67 h=55.55 z=3 colour=orange rgb="#f68b1e"
-@k.objects.kind_fish.scales k.objects.part of=fish name=scales kind=scales shape=line x=64.44 y=34.44 w=5.56 h=37.78 z=4 colour=orange rgb="#a75807"
+@k.objects.kind_fish.body k.objects.part of=fish name=body kind=body shape=oval x=10 y=25.56 w=86.67 h=55.55 z=3 colour=orange rgb="#FFA500"
+@k.objects.kind_fish.scales k.objects.part of=fish name=scales kind=scales shape=line x=64.44 y=34.44 w=5.56 h=37.78 z=4 colour=orange rgb="#FF8C00"
 @k.objects.kind_fish.scales.p1 k.objects.point part=$k.objects.kind_fish.scales n=1 x=64.44 y=34.44
 @k.objects.kind_fish.scales.p2 k.objects.point part=$k.objects.kind_fish.scales n=2 x=65.7 y=37.84
 @k.objects.kind_fish.scales.p3 k.objects.point part=$k.objects.kind_fish.scales n=3 x=67.57 y=42.71
@@ -519,7 +519,7 @@
 @k.objects.kind_fish.scales.p7 k.objects.point part=$k.objects.kind_fish.scales n=7 x=67.57 y=63.96
 @k.objects.kind_fish.scales.p8 k.objects.point part=$k.objects.kind_fish.scales n=8 x=65.7 y=68.83
 @k.objects.kind_fish.scales.p9 k.objects.point part=$k.objects.kind_fish.scales n=9 x=64.44 y=72.22
-@k.objects.kind_fish.scales_2 k.objects.part of=fish name=scales_2 kind=scales shape=line x=48.89 y=32.22 w=5.55 h=42.22 z=5 colour=orange rgb="#a75807"
+@k.objects.kind_fish.scales_2 k.objects.part of=fish name=scales_2 kind=scales shape=line x=48.89 y=32.22 w=5.55 h=42.22 z=5 colour=orange rgb="#FF8C00"
 @k.objects.kind_fish.scales_2.p1 k.objects.point part=$k.objects.kind_fish.scales_2 n=1 x=48.89 y=32.22
 @k.objects.kind_fish.scales_2.p2 k.objects.point part=$k.objects.kind_fish.scales_2 n=2 x=50.15 y=36.02
 @k.objects.kind_fish.scales_2.p3 k.objects.point part=$k.objects.kind_fish.scales_2 n=3 x=52.01 y=41.46
@@ -529,9 +529,9 @@
 @k.objects.kind_fish.scales_2.p7 k.objects.point part=$k.objects.kind_fish.scales_2 n=7 x=52.01 y=65.21
 @k.objects.kind_fish.scales_2.p8 k.objects.point part=$k.objects.kind_fish.scales_2 n=8 x=50.15 y=70.65
 @k.objects.kind_fish.scales_2.p9 k.objects.point part=$k.objects.kind_fish.scales_2 n=9 x=48.89 y=74.44
-@k.objects.kind_fish.eyeWhite k.objects.part of=fish name=eyeWhite kind=eyeWhite shape=circle x=73.33 y=40 w=13.34 h=13.33 z=6 colour=white rgb="#ffffff"
-@k.objects.kind_fish.eye k.objects.part of=fish name=eye kind=eye shape=circle x=78.56 y=43.56 w=6.22 h=6.22 z=7 colour=black rgb="#2d2d34"
-@k.objects.kind_fish.mouth k.objects.part of=fish name=mouth kind=mouth shape=line x=93.33 y=56.67 w=6.67 h=3.33 z=8 colour=grey rgb="#666e77"
+@k.objects.kind_fish.eyeWhite k.objects.part of=fish name=eyeWhite kind=eyeWhite shape=circle x=73.33 y=40 w=13.34 h=13.33 z=6 colour=white rgb="#FFFFFF"
+@k.objects.kind_fish.eye k.objects.part of=fish name=eye kind=eye shape=circle x=78.56 y=43.56 w=6.22 h=6.22 z=7 colour=black rgb="#000000"
+@k.objects.kind_fish.mouth k.objects.part of=fish name=mouth kind=mouth shape=line x=93.33 y=56.67 w=6.67 h=3.33 z=8 colour=grey rgb="#A9A9A9"
 @k.objects.kind_fish.mouth.p1 k.objects.point part=$k.objects.kind_fish.mouth n=1 x=93.33 y=57.78
 @k.objects.kind_fish.mouth.p2 k.objects.point part=$k.objects.kind_fish.mouth n=2 x=93.93 y=58.31
 @k.objects.kind_fish.mouth.p3 k.objects.point part=$k.objects.kind_fish.mouth n=3 x=94.79 y=59.1
@@ -544,25 +544,25 @@
 
 # bird
 @k.objects.kind_bird k.objects.object name=bird
-@k.objects.kind_bird.tail k.objects.part of=bird name=tail kind=tail shape=polygon x=0 y=41.82 w=20 h=22.73 z=0 colour=blue rgb="#3a86e8"
+@k.objects.kind_bird.tail k.objects.part of=bird name=tail kind=tail shape=polygon x=0 y=41.82 w=20 h=22.73 z=0 colour=blue rgb="#0000FF"
 @k.objects.kind_bird.tail.p1 k.objects.point part=$k.objects.kind_bird.tail n=1 x=20 y=53.64
 @k.objects.kind_bird.tail.p2 k.objects.point part=$k.objects.kind_bird.tail n=2 x=0 y=41.82
 @k.objects.kind_bird.tail.p3 k.objects.point part=$k.objects.kind_bird.tail n=3 x=0 y=64.55
 @k.objects.kind_bird.tail.p4 k.objects.point part=$k.objects.kind_bird.tail n=4 x=18.18 y=62.73
-@k.objects.kind_bird.legs k.objects.part of=bird name=legs kind=legs shape=line x=41.82 y=71.82 w=0 h=10.91 z=1 colour=orange rgb="#f68b1e"
+@k.objects.kind_bird.legs k.objects.part of=bird name=legs kind=legs shape=line x=41.82 y=71.82 w=0 h=10.91 z=1 colour=orange rgb="#FFA500"
 @k.objects.kind_bird.legs.p1 k.objects.point part=$k.objects.kind_bird.legs n=1 x=41.82 y=71.82
 @k.objects.kind_bird.legs.p2 k.objects.point part=$k.objects.kind_bird.legs n=2 x=41.82 y=82.73
-@k.objects.kind_bird.legs_2 k.objects.part of=bird name=legs_2 kind=legs shape=line x=52.73 y=71.82 w=0 h=10.91 z=2 colour=orange rgb="#f68b1e"
+@k.objects.kind_bird.legs_2 k.objects.part of=bird name=legs_2 kind=legs shape=line x=52.73 y=71.82 w=0 h=10.91 z=2 colour=orange rgb="#FFA500"
 @k.objects.kind_bird.legs_2.p1 k.objects.point part=$k.objects.kind_bird.legs_2 n=1 x=52.73 y=71.82
 @k.objects.kind_bird.legs_2.p2 k.objects.point part=$k.objects.kind_bird.legs_2 n=2 x=52.73 y=82.73
-@k.objects.kind_bird.body k.objects.part of=bird name=body kind=body shape=oval x=15.45 y=30.91 w=56.37 h=41.82 z=3 colour=blue rgb="#3a86e8"
-@k.objects.kind_bird.head k.objects.part of=bird name=head kind=head shape=oval x=55.45 y=17.27 w=30.91 h=29.09 z=4 colour=blue rgb="#3a86e8"
-@k.objects.kind_bird.beak k.objects.part of=bird name=beak kind=beak shape=polygon x=85.45 y=28.18 w=14.55 h=9.09 z=5 colour=yellow rgb="#ffd43b"
+@k.objects.kind_bird.body k.objects.part of=bird name=body kind=body shape=oval x=15.45 y=30.91 w=56.37 h=41.82 z=3 colour=blue rgb="#0000FF"
+@k.objects.kind_bird.head k.objects.part of=bird name=head kind=head shape=oval x=55.45 y=17.27 w=30.91 h=29.09 z=4 colour=blue rgb="#0000FF"
+@k.objects.kind_bird.beak k.objects.part of=bird name=beak kind=beak shape=polygon x=85.45 y=28.18 w=14.55 h=9.09 z=5 colour=yellow rgb="#FFFF00"
 @k.objects.kind_bird.beak.p1 k.objects.point part=$k.objects.kind_bird.beak n=1 x=85.45 y=28.18
 @k.objects.kind_bird.beak.p2 k.objects.point part=$k.objects.kind_bird.beak n=2 x=100 y=33.64
 @k.objects.kind_bird.beak.p3 k.objects.point part=$k.objects.kind_bird.beak n=3 x=85.45 y=37.27
-@k.objects.kind_bird.eye k.objects.part of=bird name=eye kind=eye shape=circle x=73.64 y=26.36 w=5.45 h=5.46 z=6 colour=black rgb="#2d2d34"
-@k.objects.kind_bird.wing k.objects.part of=bird name=wing kind=wing shape=polygon x=23.27 y=41.04 w=29.82 h=21.56 z=7 colour=blue rgb="#3a86e8"
+@k.objects.kind_bird.eye k.objects.part of=bird name=eye kind=eye shape=circle x=73.64 y=26.36 w=5.45 h=5.46 z=6 colour=black rgb="#000000"
+@k.objects.kind_bird.wing k.objects.part of=bird name=wing kind=wing shape=polygon x=23.27 y=41.04 w=29.82 h=21.56 z=7 colour=blue rgb="#0000FF"
 @k.objects.kind_bird.wing.p1 k.objects.point part=$k.objects.kind_bird.wing n=1 x=52.7 y=46.53
 @k.objects.kind_bird.wing.p2 k.objects.point part=$k.objects.kind_bird.wing n=2 x=53.09 y=49.14
 @k.objects.kind_bird.wing.p3 k.objects.point part=$k.objects.kind_bird.wing n=3 x=52.47 y=51.94
@@ -590,30 +590,30 @@
 
 # boat
 @k.objects.kind_boat k.objects.object name=boat
-@k.objects.kind_boat.mast k.objects.part of=boat name=mast kind=mast shape=line x=50 y=4 w=0 h=58 z=0 colour=brown rgb="#8d5a2e"
+@k.objects.kind_boat.mast k.objects.part of=boat name=mast kind=mast shape=line x=50 y=4 w=0 h=58 z=0 colour=brown rgb="#A52A2A"
 @k.objects.kind_boat.mast.p1 k.objects.point part=$k.objects.kind_boat.mast n=1 x=50 y=62
 @k.objects.kind_boat.mast.p2 k.objects.point part=$k.objects.kind_boat.mast n=2 x=50 y=4
-@k.objects.kind_boat.sail k.objects.part of=boat name=sail kind=sail shape=polygon x=54 y=6 w=36 h=50 z=1 colour=white rgb="#ffffff"
+@k.objects.kind_boat.sail k.objects.part of=boat name=sail kind=sail shape=polygon x=54 y=6 w=36 h=50 z=1 colour=white rgb="#FFFFFF"
 @k.objects.kind_boat.sail.p1 k.objects.point part=$k.objects.kind_boat.sail n=1 x=54 y=6
 @k.objects.kind_boat.sail.p2 k.objects.point part=$k.objects.kind_boat.sail n=2 x=54 y=56
 @k.objects.kind_boat.sail.p3 k.objects.point part=$k.objects.kind_boat.sail n=3 x=90 y=56
-@k.objects.kind_boat.sail_2 k.objects.part of=boat name=sail_2 kind=sail shape=polygon x=20 y=18 w=26 h=38 z=2 colour=yellow rgb="#fde9a3"
+@k.objects.kind_boat.sail_2 k.objects.part of=boat name=sail_2 kind=sail shape=polygon x=20 y=18 w=26 h=38 z=2 colour=yellow rgb="#FFFFE0"
 @k.objects.kind_boat.sail_2.p1 k.objects.point part=$k.objects.kind_boat.sail_2 n=1 x=46 y=18
 @k.objects.kind_boat.sail_2.p2 k.objects.point part=$k.objects.kind_boat.sail_2 n=2 x=46 y=56
 @k.objects.kind_boat.sail_2.p3 k.objects.point part=$k.objects.kind_boat.sail_2 n=3 x=20 y=56
-@k.objects.kind_boat.flag k.objects.part of=boat name=flag kind=flag shape=polygon x=50 y=4 w=15 h=10 z=3 colour=orange rgb="#f68b1e"
+@k.objects.kind_boat.flag k.objects.part of=boat name=flag kind=flag shape=polygon x=50 y=4 w=15 h=10 z=3 colour=orange rgb="#FFA500"
 @k.objects.kind_boat.flag.p1 k.objects.point part=$k.objects.kind_boat.flag n=1 x=50 y=4
 @k.objects.kind_boat.flag.p2 k.objects.point part=$k.objects.kind_boat.flag n=2 x=65 y=9
 @k.objects.kind_boat.flag.p3 k.objects.point part=$k.objects.kind_boat.flag n=3 x=50 y=14
-@k.objects.kind_boat.hull k.objects.part of=boat name=hull kind=hull shape=polygon x=0 y=60 w=100 h=24 z=4 colour=red rgb="#e63946"
+@k.objects.kind_boat.hull k.objects.part of=boat name=hull kind=hull shape=polygon x=0 y=60 w=100 h=24 z=4 colour=red rgb="#FF0000"
 @k.objects.kind_boat.hull.p1 k.objects.point part=$k.objects.kind_boat.hull n=1 x=0 y=60
 @k.objects.kind_boat.hull.p2 k.objects.point part=$k.objects.kind_boat.hull n=2 x=100 y=60
 @k.objects.kind_boat.hull.p3 k.objects.point part=$k.objects.kind_boat.hull n=3 x=86 y=84
 @k.objects.kind_boat.hull.p4 k.objects.point part=$k.objects.kind_boat.hull n=4 x=14 y=84
-@k.objects.kind_boat.porthole k.objects.part of=boat name=porthole kind=porthole shape=circle x=31 y=66 w=8 h=8 z=5 colour=blue rgb="#98bef0"
-@k.objects.kind_boat.porthole_2 k.objects.part of=boat name=porthole_2 kind=porthole shape=circle x=51 y=66 w=8 h=8 z=6 colour=blue rgb="#98bef0"
-@k.objects.kind_boat.porthole_3 k.objects.part of=boat name=porthole_3 kind=porthole shape=circle x=71 y=66 w=8 h=8 z=7 colour=blue rgb="#98bef0"
-@k.objects.kind_boat.waves k.objects.part of=boat name=waves kind=waves shape=line x=0 y=84 w=100 h=6 z=8 colour=blue rgb="#3a86e8"
+@k.objects.kind_boat.porthole k.objects.part of=boat name=porthole kind=porthole shape=circle x=31 y=66 w=8 h=8 z=5 colour=blue rgb="#ADD8E6"
+@k.objects.kind_boat.porthole_2 k.objects.part of=boat name=porthole_2 kind=porthole shape=circle x=51 y=66 w=8 h=8 z=6 colour=blue rgb="#ADD8E6"
+@k.objects.kind_boat.porthole_3 k.objects.part of=boat name=porthole_3 kind=porthole shape=circle x=71 y=66 w=8 h=8 z=7 colour=blue rgb="#ADD8E6"
+@k.objects.kind_boat.waves k.objects.part of=boat name=waves kind=waves shape=line x=0 y=84 w=100 h=6 z=8 colour=blue rgb="#0000FF"
 @k.objects.kind_boat.waves.p1 k.objects.point part=$k.objects.kind_boat.waves n=1 x=0 y=90
 @k.objects.kind_boat.waves.p2 k.objects.point part=$k.objects.kind_boat.waves n=2 x=2.16 y=88.64
 @k.objects.kind_boat.waves.p3 k.objects.point part=$k.objects.kind_boat.waves n=3 x=5.25 y=86.63
@@ -647,7 +647,7 @@
 @k.objects.kind_boat.waves.p31 k.objects.point part=$k.objects.kind_boat.waves n=31 x=92.75 y=86.63
 @k.objects.kind_boat.waves.p32 k.objects.point part=$k.objects.kind_boat.waves n=32 x=97.03 y=88.64
 @k.objects.kind_boat.waves.p33 k.objects.point part=$k.objects.kind_boat.waves n=33 x=100 y=90
-@k.objects.kind_boat.waves_2 k.objects.part of=boat name=waves_2 kind=waves shape=line x=6 y=91 w=84 h=5 z=9 colour=blue rgb="#98bef0"
+@k.objects.kind_boat.waves_2 k.objects.part of=boat name=waves_2 kind=waves shape=line x=6 y=91 w=84 h=5 z=9 colour=blue rgb="#ADD8E6"
 @k.objects.kind_boat.waves_2.p1 k.objects.point part=$k.objects.kind_boat.waves_2 n=1 x=6 y=96
 @k.objects.kind_boat.waves_2.p2 k.objects.point part=$k.objects.kind_boat.waves_2 n=2 x=8.16 y=94.87
 @k.objects.kind_boat.waves_2.p3 k.objects.point part=$k.objects.kind_boat.waves_2 n=3 x=11.25 y=93.19
@@ -680,22 +680,22 @@
 
 # mountain
 @k.objects.kind_mountain k.objects.object name=mountain
-@k.objects.kind_mountain.rock k.objects.part of=mountain name=rock kind=rock shape=polygon x=0 y=45 w=52 h=42.5 z=0 colour=grey rgb="#9aa1a9"
+@k.objects.kind_mountain.rock k.objects.part of=mountain name=rock kind=rock shape=polygon x=0 y=45 w=52 h=42.5 z=0 colour=grey rgb="#808080"
 @k.objects.kind_mountain.rock.p1 k.objects.point part=$k.objects.kind_mountain.rock n=1 x=0 y=87.5
 @k.objects.kind_mountain.rock.p2 k.objects.point part=$k.objects.kind_mountain.rock n=2 x=23 y=45
 @k.objects.kind_mountain.rock.p3 k.objects.point part=$k.objects.kind_mountain.rock n=3 x=52 y=87.5
-@k.objects.kind_mountain.rock_2 k.objects.part of=mountain name=rock_2 kind=rock shape=polygon x=20 y=12.5 w=80 h=75 z=1 colour=grey rgb="#9aa1a9"
+@k.objects.kind_mountain.rock_2 k.objects.part of=mountain name=rock_2 kind=rock shape=polygon x=20 y=12.5 w=80 h=75 z=1 colour=grey rgb="#808080"
 @k.objects.kind_mountain.rock_2.p1 k.objects.point part=$k.objects.kind_mountain.rock_2 n=1 x=20 y=87.5
 @k.objects.kind_mountain.rock_2.p2 k.objects.point part=$k.objects.kind_mountain.rock_2 n=2 x=58 y=12.5
 @k.objects.kind_mountain.rock_2.p3 k.objects.point part=$k.objects.kind_mountain.rock_2 n=3 x=100 y=87.5
-@k.objects.kind_mountain.snow k.objects.part of=mountain name=snow kind=snow shape=polygon x=46 y=12.5 w=24 h=25.5 z=2 colour=white rgb="#ffffff"
+@k.objects.kind_mountain.snow k.objects.part of=mountain name=snow kind=snow shape=polygon x=46 y=12.5 w=24 h=25.5 z=2 colour=white rgb="#FFFFFF"
 @k.objects.kind_mountain.snow.p1 k.objects.point part=$k.objects.kind_mountain.snow n=1 x=58 y=12.5
 @k.objects.kind_mountain.snow.p2 k.objects.point part=$k.objects.kind_mountain.snow n=2 x=46 y=33
 @k.objects.kind_mountain.snow.p3 k.objects.point part=$k.objects.kind_mountain.snow n=3 x=53 y=30
 @k.objects.kind_mountain.snow.p4 k.objects.point part=$k.objects.kind_mountain.snow n=4 x=58 y=38
 @k.objects.kind_mountain.snow.p5 k.objects.point part=$k.objects.kind_mountain.snow n=5 x=64 y=30
 @k.objects.kind_mountain.snow.p6 k.objects.point part=$k.objects.kind_mountain.snow n=6 x=70 y=33
-@k.objects.kind_mountain.snow_2 k.objects.part of=mountain name=snow_2 kind=snow shape=polygon x=17 y=45 w=13 h=13 z=3 colour=white rgb="#ffffff"
+@k.objects.kind_mountain.snow_2 k.objects.part of=mountain name=snow_2 kind=snow shape=polygon x=17 y=45 w=13 h=13 z=3 colour=white rgb="#FFFFFF"
 @k.objects.kind_mountain.snow_2.p1 k.objects.point part=$k.objects.kind_mountain.snow_2 n=1 x=23 y=45
 @k.objects.kind_mountain.snow_2.p2 k.objects.point part=$k.objects.kind_mountain.snow_2 n=2 x=17 y=56
 @k.objects.kind_mountain.snow_2.p3 k.objects.point part=$k.objects.kind_mountain.snow_2 n=3 x=22 y=53
@@ -705,36 +705,36 @@
 
 # rainbow
 @k.objects.kind_rainbow k.objects.object name=rainbow
-@k.objects.kind_rainbow.bands k.objects.part of=rainbow name=bands kind=bands shape=arc x=5.36 y=22.32 w=89.28 h=49.11 z=0 colour=red rgb="#e63946" opens=down
-@k.objects.kind_rainbow.bands_2 k.objects.part of=rainbow name=bands_2 kind=bands shape=arc x=8.71 y=26 w=82.58 h=45.43 z=1 colour=orange rgb="#f68b1e" opens=down
-@k.objects.kind_rainbow.bands_3 k.objects.part of=rainbow name=bands_3 kind=bands shape=arc x=12.05 y=29.69 w=75.9 h=41.74 z=2 colour=yellow rgb="#ffd43b" opens=down
-@k.objects.kind_rainbow.bands_4 k.objects.part of=rainbow name=bands_4 kind=bands shape=arc x=15.4 y=33.37 w=69.2 h=38.06 z=3 colour=green rgb="#43b04a" opens=down
-@k.objects.kind_rainbow.bands_5 k.objects.part of=rainbow name=bands_5 kind=bands shape=arc x=18.75 y=37.05 w=62.5 h=34.38 z=4 colour=blue rgb="#98bef0" opens=down
-@k.objects.kind_rainbow.bands_6 k.objects.part of=rainbow name=bands_6 kind=bands shape=arc x=22.1 y=40.74 w=55.8 h=30.69 z=5 colour=blue rgb="#3a86e8" opens=down
-@k.objects.kind_rainbow.bands_7 k.objects.part of=rainbow name=bands_7 kind=bands shape=arc x=25.45 y=44.42 w=49.1 h=27.01 z=6 colour=purple rgb="#9b51e0" opens=down
-@k.objects.kind_rainbow.clouds k.objects.part of=rainbow name=clouds kind=clouds shape=oval x=0 y=61.61 w=19.64 h=14.28 z=7 colour=white rgb="#ffffff"
-@k.objects.kind_rainbow.clouds_2 k.objects.part of=rainbow name=clouds_2 kind=clouds shape=oval x=80.36 y=61.61 w=19.64 h=14.28 z=8 colour=white rgb="#ffffff"
-@k.objects.kind_rainbow.clouds_3 k.objects.part of=rainbow name=clouds_3 kind=clouds shape=oval x=8.93 y=65.18 w=17.86 h=12.5 z=9 colour=white rgb="#ffffff"
-@k.objects.kind_rainbow.clouds_4 k.objects.part of=rainbow name=clouds_4 kind=clouds shape=oval x=73.21 y=65.18 w=17.86 h=12.5 z=10 colour=white rgb="#ffffff"
+@k.objects.kind_rainbow.bands k.objects.part of=rainbow name=bands kind=bands shape=arc x=5.36 y=22.32 w=89.28 h=49.11 z=0 colour=red rgb="#FF0000" opens=down
+@k.objects.kind_rainbow.bands_2 k.objects.part of=rainbow name=bands_2 kind=bands shape=arc x=8.71 y=26 w=82.58 h=45.43 z=1 colour=orange rgb="#FFA500" opens=down
+@k.objects.kind_rainbow.bands_3 k.objects.part of=rainbow name=bands_3 kind=bands shape=arc x=12.05 y=29.69 w=75.9 h=41.74 z=2 colour=yellow rgb="#FFFF00" opens=down
+@k.objects.kind_rainbow.bands_4 k.objects.part of=rainbow name=bands_4 kind=bands shape=arc x=15.4 y=33.37 w=69.2 h=38.06 z=3 colour=green rgb="#008000" opens=down
+@k.objects.kind_rainbow.bands_5 k.objects.part of=rainbow name=bands_5 kind=bands shape=arc x=18.75 y=37.05 w=62.5 h=34.38 z=4 colour=blue rgb="#ADD8E6" opens=down
+@k.objects.kind_rainbow.bands_6 k.objects.part of=rainbow name=bands_6 kind=bands shape=arc x=22.1 y=40.74 w=55.8 h=30.69 z=5 colour=blue rgb="#0000FF" opens=down
+@k.objects.kind_rainbow.bands_7 k.objects.part of=rainbow name=bands_7 kind=bands shape=arc x=25.45 y=44.42 w=49.1 h=27.01 z=6 colour=purple rgb="#800080" opens=down
+@k.objects.kind_rainbow.clouds k.objects.part of=rainbow name=clouds kind=clouds shape=oval x=0 y=61.61 w=19.64 h=14.28 z=7 colour=white rgb="#FFFFFF"
+@k.objects.kind_rainbow.clouds_2 k.objects.part of=rainbow name=clouds_2 kind=clouds shape=oval x=80.36 y=61.61 w=19.64 h=14.28 z=8 colour=white rgb="#FFFFFF"
+@k.objects.kind_rainbow.clouds_3 k.objects.part of=rainbow name=clouds_3 kind=clouds shape=oval x=8.93 y=65.18 w=17.86 h=12.5 z=9 colour=white rgb="#FFFFFF"
+@k.objects.kind_rainbow.clouds_4 k.objects.part of=rainbow name=clouds_4 kind=clouds shape=oval x=73.21 y=65.18 w=17.86 h=12.5 z=10 colour=white rgb="#FFFFFF"
 
 # person
 @k.objects.kind_person k.objects.object name=person
-@k.objects.kind_person.arms k.objects.part of=person name=arms kind=arms shape=line x=26.74 y=27.44 w=10.24 h=20.93 z=0 colour=grey rgb="#f3c69b"
+@k.objects.kind_person.arms k.objects.part of=person name=arms kind=arms shape=line x=26.74 y=27.44 w=10.24 h=20.93 z=0 colour=grey rgb="#FFDAB9"
 @k.objects.kind_person.arms.p1 k.objects.point part=$k.objects.kind_person.arms n=1 x=36.98 y=27.44
 @k.objects.kind_person.arms.p2 k.objects.point part=$k.objects.kind_person.arms n=2 x=26.74 y=48.37
-@k.objects.kind_person.arms_2 k.objects.part of=person name=arms_2 kind=arms shape=line x=63.02 y=27.44 w=10.24 h=20.93 z=1 colour=grey rgb="#f3c69b"
+@k.objects.kind_person.arms_2 k.objects.part of=person name=arms_2 kind=arms shape=line x=63.02 y=27.44 w=10.24 h=20.93 z=1 colour=grey rgb="#FFDAB9"
 @k.objects.kind_person.arms_2.p1 k.objects.point part=$k.objects.kind_person.arms_2 n=1 x=63.02 y=27.44
 @k.objects.kind_person.arms_2.p2 k.objects.point part=$k.objects.kind_person.arms_2 n=2 x=73.26 y=48.37
-@k.objects.kind_person.pants k.objects.part of=person name=pants kind=pants shape=rectangle x=39.77 y=69.07 w=9.3 h=25.58 z=2 colour=grey rgb="#1b2f6b"
-@k.objects.kind_person.pants_2 k.objects.part of=person name=pants_2 kind=pants shape=rectangle x=50.93 y=69.07 w=9.3 h=25.58 z=3 colour=grey rgb="#1b2f6b"
-@k.objects.kind_person.shoes k.objects.part of=person name=shoes kind=shoes shape=oval x=36.51 y=94.42 w=13.02 h=5.58 z=4 colour=black rgb="#2d2d34"
-@k.objects.kind_person.shoes_2 k.objects.part of=person name=shoes_2 kind=shoes shape=oval x=50.47 y=94.42 w=13.02 h=5.58 z=5 colour=black rgb="#2d2d34"
-@k.objects.kind_person.shirt k.objects.part of=person name=shirt kind=shirt shape=rectangle x=36.05 y=25.12 w=27.9 h=37.21 z=6 colour=blue rgb="#3a86e8"
-@k.objects.kind_person.head k.objects.part of=person name=head kind=head shape=circle x=36.98 y=0.47 w=26.04 h=26.04 z=7 colour=grey rgb="#f3c69b"
-@k.objects.kind_person.hair k.objects.part of=person name=hair kind=hair shape=oval x=36.05 y=0 w=27.9 h=13.02 z=8 colour=brown rgb="#8d5a2e"
-@k.objects.kind_person.eyes k.objects.part of=person name=eyes kind=eyes shape=circle x=43.95 y=11.63 w=2.79 h=2.79 z=9 colour=black rgb="#2d2d34"
-@k.objects.kind_person.eyes_2 k.objects.part of=person name=eyes_2 kind=eyes shape=circle x=53.26 y=11.63 w=2.79 h=2.79 z=10 colour=black rgb="#2d2d34"
-@k.objects.kind_person.smile k.objects.part of=person name=smile kind=smile shape=line x=45.35 y=19.53 w=9.3 h=2.1 z=11 colour=red rgb="#e63946"
+@k.objects.kind_person.pants k.objects.part of=person name=pants kind=pants shape=rectangle x=39.77 y=69.07 w=9.3 h=25.58 z=2 colour=grey rgb="#000080"
+@k.objects.kind_person.pants_2 k.objects.part of=person name=pants_2 kind=pants shape=rectangle x=50.93 y=69.07 w=9.3 h=25.58 z=3 colour=grey rgb="#000080"
+@k.objects.kind_person.shoes k.objects.part of=person name=shoes kind=shoes shape=oval x=36.51 y=94.42 w=13.02 h=5.58 z=4 colour=black rgb="#000000"
+@k.objects.kind_person.shoes_2 k.objects.part of=person name=shoes_2 kind=shoes shape=oval x=50.47 y=94.42 w=13.02 h=5.58 z=5 colour=black rgb="#000000"
+@k.objects.kind_person.shirt k.objects.part of=person name=shirt kind=shirt shape=rectangle x=36.05 y=25.12 w=27.9 h=37.21 z=6 colour=blue rgb="#0000FF"
+@k.objects.kind_person.head k.objects.part of=person name=head kind=head shape=circle x=36.98 y=0.47 w=26.04 h=26.04 z=7 colour=grey rgb="#FFDAB9"
+@k.objects.kind_person.hair k.objects.part of=person name=hair kind=hair shape=oval x=36.05 y=0 w=27.9 h=13.02 z=8 colour=brown rgb="#A52A2A"
+@k.objects.kind_person.eyes k.objects.part of=person name=eyes kind=eyes shape=circle x=43.95 y=11.63 w=2.79 h=2.79 z=9 colour=black rgb="#000000"
+@k.objects.kind_person.eyes_2 k.objects.part of=person name=eyes_2 kind=eyes shape=circle x=53.26 y=11.63 w=2.79 h=2.79 z=10 colour=black rgb="#000000"
+@k.objects.kind_person.smile k.objects.part of=person name=smile kind=smile shape=line x=45.35 y=19.53 w=9.3 h=2.1 z=11 colour=red rgb="#FF0000"
 @k.objects.kind_person.smile.p1 k.objects.point part=$k.objects.kind_person.smile n=1 x=45.35 y=19.53
 @k.objects.kind_person.smile.p2 k.objects.point part=$k.objects.kind_person.smile n=2 x=45.83 y=19.91
 @k.objects.kind_person.smile.p3 k.objects.point part=$k.objects.kind_person.smile n=3 x=46.51 y=20.47
@@ -751,7 +751,7 @@
 
 # balloon
 @k.objects.kind_balloon k.objects.object name=balloon
-@k.objects.kind_balloon.string k.objects.part of=balloon name=string kind=string shape=line x=41.55 y=74.65 w=16.9 h=25.35 z=0 colour=grey rgb="#666e77"
+@k.objects.kind_balloon.string k.objects.part of=balloon name=string kind=string shape=line x=41.55 y=74.65 w=16.9 h=25.35 z=0 colour=grey rgb="#A9A9A9"
 @k.objects.kind_balloon.string.p1 k.objects.point part=$k.objects.kind_balloon.string n=1 x=50 y=74.65
 @k.objects.kind_balloon.string.p2 k.objects.point part=$k.objects.kind_balloon.string n=2 x=47.89 y=76.49
 @k.objects.kind_balloon.string.p3 k.objects.point part=$k.objects.kind_balloon.string n=3 x=44.72 y=79.14
@@ -765,12 +765,12 @@
 @k.objects.kind_balloon.string.p11 k.objects.point part=$k.objects.kind_balloon.string n=11 x=55.28 y=96.21
 @k.objects.kind_balloon.string.p12 k.objects.point part=$k.objects.kind_balloon.string n=12 x=52.11 y=98.45
 @k.objects.kind_balloon.string.p13 k.objects.point part=$k.objects.kind_balloon.string n=13 x=50 y=100
-@k.objects.kind_balloon.balloon k.objects.part of=balloon name=balloon kind=balloon shape=oval x=18.31 y=0 w=63.38 h=70.42 z=1 colour=red rgb="#e63946"
-@k.objects.kind_balloon.knot k.objects.part of=balloon name=knot kind=knot shape=polygon x=45.77 y=70.42 w=8.46 h=7.04 z=2 colour=red rgb="#e63946"
+@k.objects.kind_balloon.balloon k.objects.part of=balloon name=balloon kind=balloon shape=oval x=18.31 y=0 w=63.38 h=70.42 z=1 colour=red rgb="#FF0000"
+@k.objects.kind_balloon.knot k.objects.part of=balloon name=knot kind=knot shape=polygon x=45.77 y=70.42 w=8.46 h=7.04 z=2 colour=red rgb="#FF0000"
 @k.objects.kind_balloon.knot.p1 k.objects.point part=$k.objects.kind_balloon.knot n=1 x=50 y=70.42
 @k.objects.kind_balloon.knot.p2 k.objects.point part=$k.objects.kind_balloon.knot n=2 x=45.77 y=77.46
 @k.objects.kind_balloon.knot.p3 k.objects.point part=$k.objects.kind_balloon.knot n=3 x=54.23 y=77.46
-@k.objects.kind_balloon.shine k.objects.part of=balloon name=shine kind=shine shape=polygon x=29.15 y=11.26 w=13.53 h=19.73 z=3 colour=white rgb="#ffffff"
+@k.objects.kind_balloon.shine k.objects.part of=balloon name=shine kind=shine shape=polygon x=29.15 y=11.26 w=13.53 h=19.73 z=3 colour=white rgb="#FFFFFF"
 @k.objects.kind_balloon.shine.p1 k.objects.point part=$k.objects.kind_balloon.shine n=1 x=41.02 y=23.51
 @k.objects.kind_balloon.shine.p2 k.objects.point part=$k.objects.kind_balloon.shine n=2 x=39.69 y=25.9
 @k.objects.kind_balloon.shine.p3 k.objects.point part=$k.objects.kind_balloon.shine n=3 x=38.11 y=27.98
@@ -798,23 +798,23 @@
 
 # rocket
 @k.objects.kind_rocket k.objects.object name=rocket
-@k.objects.kind_rocket.flame k.objects.part of=rocket name=flame kind=flame shape=polygon x=40.38 y=72.12 w=19.24 h=27.88 z=0 colour=orange rgb="#f68b1e"
+@k.objects.kind_rocket.flame k.objects.part of=rocket name=flame kind=flame shape=polygon x=40.38 y=72.12 w=19.24 h=27.88 z=0 colour=orange rgb="#FFA500"
 @k.objects.kind_rocket.flame.p1 k.objects.point part=$k.objects.kind_rocket.flame n=1 x=40.38 y=72.12
 @k.objects.kind_rocket.flame.p2 k.objects.point part=$k.objects.kind_rocket.flame n=2 x=50 y=100
 @k.objects.kind_rocket.flame.p3 k.objects.point part=$k.objects.kind_rocket.flame n=3 x=59.62 y=72.12
-@k.objects.kind_rocket.flame_2 k.objects.part of=rocket name=flame_2 kind=flame shape=polygon x=45.19 y=72.12 w=9.62 h=15.38 z=1 colour=yellow rgb="#ffd43b"
+@k.objects.kind_rocket.flame_2 k.objects.part of=rocket name=flame_2 kind=flame shape=polygon x=45.19 y=72.12 w=9.62 h=15.38 z=1 colour=yellow rgb="#FFFF00"
 @k.objects.kind_rocket.flame_2.p1 k.objects.point part=$k.objects.kind_rocket.flame_2 n=1 x=45.19 y=72.12
 @k.objects.kind_rocket.flame_2.p2 k.objects.point part=$k.objects.kind_rocket.flame_2 n=2 x=50 y=87.5
 @k.objects.kind_rocket.flame_2.p3 k.objects.point part=$k.objects.kind_rocket.flame_2 n=3 x=54.81 y=72.12
-@k.objects.kind_rocket.fins k.objects.part of=rocket name=fins kind=fins shape=polygon x=22.12 y=52.88 w=13.46 h=25 z=2 colour=red rgb="#e63946"
+@k.objects.kind_rocket.fins k.objects.part of=rocket name=fins kind=fins shape=polygon x=22.12 y=52.88 w=13.46 h=25 z=2 colour=red rgb="#FF0000"
 @k.objects.kind_rocket.fins.p1 k.objects.point part=$k.objects.kind_rocket.fins n=1 x=35.58 y=52.88
 @k.objects.kind_rocket.fins.p2 k.objects.point part=$k.objects.kind_rocket.fins n=2 x=22.12 y=77.88
 @k.objects.kind_rocket.fins.p3 k.objects.point part=$k.objects.kind_rocket.fins n=3 x=35.58 y=72.12
-@k.objects.kind_rocket.fins_2 k.objects.part of=rocket name=fins_2 kind=fins shape=polygon x=64.42 y=52.88 w=13.46 h=25 z=3 colour=red rgb="#e63946"
+@k.objects.kind_rocket.fins_2 k.objects.part of=rocket name=fins_2 kind=fins shape=polygon x=64.42 y=52.88 w=13.46 h=25 z=3 colour=red rgb="#FF0000"
 @k.objects.kind_rocket.fins_2.p1 k.objects.point part=$k.objects.kind_rocket.fins_2 n=1 x=64.42 y=52.88
 @k.objects.kind_rocket.fins_2.p2 k.objects.point part=$k.objects.kind_rocket.fins_2 n=2 x=77.88 y=77.88
 @k.objects.kind_rocket.fins_2.p3 k.objects.point part=$k.objects.kind_rocket.fins_2 n=3 x=64.42 y=72.12
-@k.objects.kind_rocket.body k.objects.part of=rocket name=body kind=body shape=polygon x=35.58 y=0 w=28.84 h=73.08 z=4 colour=grey rgb="#d3d4d6"
+@k.objects.kind_rocket.body k.objects.part of=rocket name=body kind=body shape=polygon x=35.58 y=0 w=28.84 h=73.08 z=4 colour=grey rgb="#D3D3D3"
 @k.objects.kind_rocket.body.p1 k.objects.point part=$k.objects.kind_rocket.body n=1 x=35.58 y=73.08
 @k.objects.kind_rocket.body.p2 k.objects.point part=$k.objects.kind_rocket.body n=2 x=35.58 y=33.65
 @k.objects.kind_rocket.body.p3 k.objects.point part=$k.objects.kind_rocket.body n=3 x=39.42 y=16.83
@@ -822,19 +822,19 @@
 @k.objects.kind_rocket.body.p5 k.objects.point part=$k.objects.kind_rocket.body n=5 x=60.58 y=16.83
 @k.objects.kind_rocket.body.p6 k.objects.point part=$k.objects.kind_rocket.body n=6 x=64.42 y=33.65
 @k.objects.kind_rocket.body.p7 k.objects.point part=$k.objects.kind_rocket.body n=7 x=64.42 y=73.08
-@k.objects.kind_rocket.nose k.objects.part of=rocket name=nose kind=nose shape=polygon x=38.46 y=0 w=23.08 h=23.08 z=5 colour=red rgb="#e63946"
+@k.objects.kind_rocket.nose k.objects.part of=rocket name=nose kind=nose shape=polygon x=38.46 y=0 w=23.08 h=23.08 z=5 colour=red rgb="#FF0000"
 @k.objects.kind_rocket.nose.p1 k.objects.point part=$k.objects.kind_rocket.nose n=1 x=38.46 y=19.23
 @k.objects.kind_rocket.nose.p2 k.objects.point part=$k.objects.kind_rocket.nose n=2 x=50 y=0
 @k.objects.kind_rocket.nose.p3 k.objects.point part=$k.objects.kind_rocket.nose n=3 x=61.54 y=19.23
 @k.objects.kind_rocket.nose.p4 k.objects.point part=$k.objects.kind_rocket.nose n=4 x=55.77 y=21.15
 @k.objects.kind_rocket.nose.p5 k.objects.point part=$k.objects.kind_rocket.nose n=5 x=50 y=23.08
 @k.objects.kind_rocket.nose.p6 k.objects.point part=$k.objects.kind_rocket.nose n=6 x=44.23 y=21.15
-@k.objects.kind_rocket.window k.objects.part of=rocket name=window kind=window shape=circle x=42.79 y=31.25 w=14.42 h=14.42 z=6 colour=blue rgb="#98bef0"
-@k.objects.kind_rocket.stripe k.objects.part of=rocket name=stripe kind=stripe shape=rectangle x=35.58 y=64.66 w=28.84 h=3.37 z=7 colour=red rgb="#e63946"
+@k.objects.kind_rocket.window k.objects.part of=rocket name=window kind=window shape=circle x=42.79 y=31.25 w=14.42 h=14.42 z=6 colour=blue rgb="#ADD8E6"
+@k.objects.kind_rocket.stripe k.objects.part of=rocket name=stripe kind=stripe shape=rectangle x=35.58 y=64.66 w=28.84 h=3.37 z=7 colour=red rgb="#FF0000"
 
 # moon
 @k.objects.kind_moon k.objects.object name=moon
-@k.objects.kind_moon.moon k.objects.part of=moon name=moon kind=moon shape=polygon x=2.38 y=0 w=95.24 h=100 z=0 colour=yellow rgb="#fde9a3"
+@k.objects.kind_moon.moon k.objects.part of=moon name=moon kind=moon shape=polygon x=2.38 y=0 w=95.24 h=100 z=0 colour=yellow rgb="#FFFFE0"
 @k.objects.kind_moon.moon.p1 k.objects.point part=$k.objects.kind_moon.moon n=1 x=97.62 y=71.14
 @k.objects.kind_moon.moon.p2 k.objects.point part=$k.objects.kind_moon.moon n=2 x=95.62 y=74.95
 @k.objects.kind_moon.moon.p3 k.objects.point part=$k.objects.kind_moon.moon n=3 x=93.24 y=78.67
@@ -931,26 +931,26 @@
 
 # circle
 @k.objects.kind_circle k.objects.object name=circle
-@k.objects.kind_circle.body k.objects.part of=circle name=body kind=body shape=circle x=0 y=0 w=100 h=100 z=0 colour=red rgb="#e63946"
+@k.objects.kind_circle.body k.objects.part of=circle name=body kind=body shape=circle x=0 y=0 w=100 h=100 z=0 colour=red rgb="#FF0000"
 
 # square
 @k.objects.kind_square k.objects.object name=square
-@k.objects.kind_square.body k.objects.part of=square name=body kind=body shape=square x=0 y=0 w=100 h=100 z=0 colour=blue rgb="#3a86e8"
+@k.objects.kind_square.body k.objects.part of=square name=body kind=body shape=square x=0 y=0 w=100 h=100 z=0 colour=blue rgb="#0000FF"
 
 # rectangle
 @k.objects.kind_rectangle k.objects.object name=rectangle
-@k.objects.kind_rectangle.body k.objects.part of=rectangle name=body kind=body shape=rectangle x=0 y=20 w=100 h=60 z=0 colour=green rgb="#43b04a"
+@k.objects.kind_rectangle.body k.objects.part of=rectangle name=body kind=body shape=rectangle x=0 y=20 w=100 h=60 z=0 colour=green rgb="#008000"
 
 # triangle
 @k.objects.kind_triangle k.objects.object name=triangle
-@k.objects.kind_triangle.body k.objects.part of=triangle name=body kind=body shape=polygon x=0 y=5 w=100 h=90 z=0 colour=orange rgb="#f68b1e"
+@k.objects.kind_triangle.body k.objects.part of=triangle name=body kind=body shape=polygon x=0 y=5 w=100 h=90 z=0 colour=orange rgb="#FFA500"
 @k.objects.kind_triangle.body.p1 k.objects.point part=$k.objects.kind_triangle.body n=1 x=50 y=5
 @k.objects.kind_triangle.body.p2 k.objects.point part=$k.objects.kind_triangle.body n=2 x=100 y=95
 @k.objects.kind_triangle.body.p3 k.objects.point part=$k.objects.kind_triangle.body n=3 x=0 y=95
 
 # star
 @k.objects.kind_star k.objects.object name=star
-@k.objects.kind_star.body k.objects.part of=star name=body kind=body shape=polygon x=0 y=2.45 w=100 h=95.1 z=0 colour=yellow rgb="#ffd43b"
+@k.objects.kind_star.body k.objects.part of=star name=body kind=body shape=polygon x=0 y=2.45 w=100 h=95.1 z=0 colour=yellow rgb="#FFFF00"
 @k.objects.kind_star.body.p1 k.objects.point part=$k.objects.kind_star.body n=1 x=50 y=2.45
 @k.objects.kind_star.body.p2 k.objects.point part=$k.objects.kind_star.body n=2 x=62.98 y=37.16
 @k.objects.kind_star.body.p3 k.objects.point part=$k.objects.kind_star.body n=3 x=100 y=38.77
@@ -964,7 +964,7 @@
 
 # heart
 @k.objects.kind_heart k.objects.object name=heart
-@k.objects.kind_heart.body k.objects.part of=heart name=body kind=body shape=polygon x=0 y=4.8 w=100 h=90.4 z=0 colour=red rgb="#e63946"
+@k.objects.kind_heart.body k.objects.part of=heart name=body kind=body shape=polygon x=0 y=4.8 w=100 h=90.4 z=0 colour=red rgb="#FF0000"
 @k.objects.kind_heart.body.p1 k.objects.point part=$k.objects.kind_heart.body n=1 x=50 y=26.4
 @k.objects.kind_heart.body.p2 k.objects.point part=$k.objects.kind_heart.body n=2 x=50.2 y=24.9
 @k.objects.kind_heart.body.p3 k.objects.point part=$k.objects.kind_heart.body n=3 x=51.5 y=20.7
@@ -1008,21 +1008,21 @@
 
 # line
 @k.objects.kind_line k.objects.object name=line
-@k.objects.kind_line.body k.objects.part of=line name=body kind=body shape=line x=0 y=50 w=100 h=0 z=0 colour=black rgb="#2d2d34"
+@k.objects.kind_line.body k.objects.part of=line name=body kind=body shape=line x=0 y=50 w=100 h=0 z=0 colour=black rgb="#000000"
 @k.objects.kind_line.body.p1 k.objects.point part=$k.objects.kind_line.body n=1 x=0 y=50
 @k.objects.kind_line.body.p2 k.objects.point part=$k.objects.kind_line.body n=2 x=100 y=50
 
 # arrow
 @k.objects.kind_arrow k.objects.object name=arrow
-@k.objects.kind_arrow.body k.objects.part of=arrow name=body kind=body shape=line x=0 y=50 w=88 h=0 z=0 colour=black rgb="#2d2d34"
+@k.objects.kind_arrow.body k.objects.part of=arrow name=body kind=body shape=line x=0 y=50 w=88 h=0 z=0 colour=black rgb="#000000"
 @k.objects.kind_arrow.body.p1 k.objects.point part=$k.objects.kind_arrow.body n=1 x=0 y=50
 @k.objects.kind_arrow.body.p2 k.objects.point part=$k.objects.kind_arrow.body n=2 x=88 y=50
-@k.objects.kind_arrow.head k.objects.part of=arrow name=head kind=head shape=polygon x=80 y=40 w=20 h=20 z=1 colour=black rgb="#2d2d34"
+@k.objects.kind_arrow.head k.objects.part of=arrow name=head kind=head shape=polygon x=80 y=40 w=20 h=20 z=1 colour=black rgb="#000000"
 @k.objects.kind_arrow.head.p1 k.objects.point part=$k.objects.kind_arrow.head n=1 x=80 y=40
 @k.objects.kind_arrow.head.p2 k.objects.point part=$k.objects.kind_arrow.head n=2 x=100 y=50
 @k.objects.kind_arrow.head.p3 k.objects.point part=$k.objects.kind_arrow.head n=3 x=80 y=60
 
 # oval
 @k.objects.kind_oval k.objects.object name=oval
-@k.objects.kind_oval.body k.objects.part of=oval name=body kind=body shape=oval x=0 y=20 w=100 h=60 z=0 colour=purple rgb="#9b51e0"
+@k.objects.kind_oval.body k.objects.part of=oval name=body kind=body shape=oval x=0 y=20 w=100 h=60 z=0 colour=purple rgb="#800080"
 

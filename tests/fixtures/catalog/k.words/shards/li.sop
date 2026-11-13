@@ -1,17 +1,24 @@
-# k.words/shards/li: noun and verb senses of the words from "li" to "lizard" (first letters "li").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/li: senses of the words from "li" to "lizard" (first letters "li").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.lighthouse.noun.1 k.words.sense word=lighthouse pos=noun n=1 gloss="a tower with a light that gives warning of shoals to passing ships" synonym=beacon synonym="beacon light" synonym=pharos is_a=tower core.source="wordnet 3.1"
-@k.words.like.noun.1 k.words.sense word=like pos=noun n=1 gloss="a similar kind" synonym="the like" synonym="the likes of" is_a=kind core.source="wordnet 3.1"
-@k.words.like.noun.2 k.words.sense word=like pos=noun n=2 gloss="a kind of person" synonym=ilk is_a=kind core.source="wordnet 3.1"
-@k.words.like.verb.1 k.words.sense word=like pos=verb n=1 gloss="prefer or wish to do something" synonym=wish synonym=care is_a=desire core.source="wordnet 3.1"
-@k.words.like.verb.2 k.words.sense word=like pos=verb n=2 gloss="find enjoyable or agreeable" core.source="wordnet 3.1"
+@k.words.lighthouse.noun.1 k.words.sense word=lighthouse pos=noun n=1 gloss="a tower with a light that gives warning of shoals to passing ships" synonym=beacon synonym="beacon light" synonym=pharos is_a=tower kind_of=tower kind_of=structure kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.like.noun.1 k.words.sense word=like pos=noun n=1 gloss="a similar kind" synonym="the like" synonym="the likes of" is_a=kind kind_of=kind kind_of=category kind_of=concept kind_of=idea kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.like.noun.2 k.words.sense word=like pos=noun n=2 gloss="a kind of person" synonym=ilk is_a=kind kind_of=kind kind_of=category kind_of=concept kind_of=idea kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.like.verb.1 k.words.sense word=like pos=verb n=1 gloss="prefer or wish to do something" synonym=wish synonym=care is_a=desire kind_of=desire core.source="wordnet 3.1"
+@k.words.like.verb.2 k.words.sense word=like pos=verb n=2 gloss="find enjoyable or agreeable" opposite=dislike core.source="wordnet 3.1"
 @k.words.like.verb.3 k.words.sense word=like pos=verb n=3 gloss="be fond of" core.source="wordnet 3.1"
-@k.words.lion.noun.1 k.words.sense word=lion pos=noun n=1 gloss="large gregarious predatory feline of Africa and India having a tawny coat with a shaggy mane in the male" synonym="king of beasts" synonym="Panthera leo" is_a="big cat" core.source="wordnet 3.1"
-@k.words.lion.noun.2 k.words.sense word=lion pos=noun n=2 gloss="a celebrity who is lionized (much sought after)" synonym="social lion" is_a=celebrity core.source="wordnet 3.1"
-@k.words.lion.noun.3 k.words.sense word=Lion pos=noun n=3 gloss="(astrology) a person who is born while the sun is in Leo" synonym=Leo is_a=person core.source="wordnet 3.1"
-@k.words.live.verb.1 k.words.sense word=live pos=verb n=1 gloss="be an inhabitant of or reside in" synonym=populate synonym=dwell synonym=inhabit is_a=be core.source="wordnet 3.1"
+@k.words.like.adjective.1 k.words.sense word=like pos=adjective n=1 gloss="resembling or similar; having the same or some of the same characteristics; often used in combination" synonym=similar opposite=unlike core.source="wordnet 3.1"
+@k.words.like.adjective.2 k.words.sense word=like pos=adjective n=2 gloss="equal in amount or value" synonym=same opposite=unlike core.source="wordnet 3.1"
+@k.words.like.adjective.3 k.words.sense word=like pos=adjective n=3 gloss="having the same or similar characteristics" synonym=alike synonym=similar core.source="wordnet 3.1"
+@k.words.lion.noun.1 k.words.sense word=lion pos=noun n=1 gloss="large gregarious predatory feline of Africa and India having a tawny coat with a shaggy mane in the male" synonym="king of beasts" synonym="Panthera leo" is_a="big cat" kind_of="big cat" kind_of=feline kind_of=carnivore kind_of=placental kind_of=mammal kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.lion.noun.2 k.words.sense word=lion pos=noun n=2 gloss="a celebrity who is lionized (much sought after)" synonym="social lion" is_a=celebrity kind_of=celebrity kind_of="important person" kind_of=adult kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.lion.noun.3 k.words.sense word=Lion pos=noun n=3 gloss="(astrology) a person who is born while the sun is in Leo" synonym=Leo is_a=person kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.live.verb.1 k.words.sense word=live pos=verb n=1 gloss="be an inhabitant of or reside in" synonym=populate synonym=dwell synonym=inhabit is_a=be kind_of=be core.source="wordnet 3.1"
 @k.words.live.verb.2 k.words.sense word=live pos=verb n=2 gloss="lead a certain kind of life; live in a certain style" core.source="wordnet 3.1"
 @k.words.live.verb.3 k.words.sense word=live pos=verb n=3 gloss="continue to live and avoid dying" synonym=survive synonym=last synonym="live on" synonym=go synonym=endure synonym="hold up" synonym="hold out" core.source="wordnet 3.1"
+@k.words.live.adjective.1 k.words.sense word=live pos=adjective n=1 gloss="actually being performed at the time of hearing or viewing" synonym=unrecorded opposite=recorded core.source="wordnet 3.1"
+@k.words.live.adjective.2 k.words.sense word=live pos=adjective n=2 gloss="exerting force or containing energy" opposite=dead core.source="wordnet 3.1"
+@k.words.live.adjective.3 k.words.sense word=live pos=adjective n=3 gloss="possessing life" synonym=alive core.source="wordnet 3.1"
+@k.words.live.adverb.1 k.words.sense word=live pos=adverb n=1 gloss="not recorded" core.source="wordnet 3.1"

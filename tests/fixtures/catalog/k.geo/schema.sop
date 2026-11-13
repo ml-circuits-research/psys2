@@ -1,11 +1,13 @@
 # k.geo: geography: continents, countries and territories (capital, continent, region, neighbours, population, area,
-# centre, bounding box), their largest cities, rivers, mountains and mountain ranges with names. Places are points
+# centre, bounding box), their largest cities, rivers, mountains, mountain ranges, lakes, deserts, oceans and seas
+# with names. A number that is only approximate is a key with the suffix `_about` (the area of a lake, the length
+# of a river). The unit of every number is a k.units.measure fact of the world k.units. Places are points
 # and boxes only: lat and lon are degrees north and east (negative: south, west); west, south, east, north bound a box.
 # sources: natural-earth 5.1.2, countries 5.1.0; the schema itself is hand-core 1
 # license: CC0-1.0
 # script: none (hand-written); the shards are written by tools/import/geo.mjs
 
-@k.geo core.module name=k.geo version=2 exports=continent exports=country exports=city exports=river exports=mountain exports=range core.source="hand-core 1"
+@k.geo core.module name=k.geo version=2 exports=continent exports=country exports=city exports=river exports=mountain exports=range exports=lake exports=desert exports=sea core.source="hand-core 1"
 
 @k.geo.continent core.type of=k.geo.continent shared=true closed=true core.source="hand-core 1"
 @k.geo.continent.name core.slot of=k.geo.continent key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
@@ -72,6 +74,55 @@
 @k.geo.range.east core.slot of=k.geo.range key=east kind=number min=-180 max=180 core.source="hand-core 1"
 @k.geo.range.north core.slot of=k.geo.range key=north kind=number min=-90 max=90 core.source="hand-core 1"
 
+# Round 9. A lake: one of the 100 largest natural lakes; `area_about` is the area of its outline in square
+# kilometres (approximate: the water level changes); the countries on its shores; its middle and its box.
+@k.geo.lake core.type of=k.geo.lake shared=true closed=true core.source="hand-core 1"
+@k.geo.lake.name core.slot of=k.geo.lake key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.lake.continent core.slot of=k.geo.lake key=continent kind=atom kind=string core.source="hand-core 1"
+@k.geo.lake.country core.slot of=k.geo.lake key=country many=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.lake.area_about core.slot of=k.geo.lake key=area_about kind=number min=0 core.source="hand-core 1"
+@k.geo.lake.lat core.slot of=k.geo.lake key=lat kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.lake.lon core.slot of=k.geo.lake key=lon kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.lake.west core.slot of=k.geo.lake key=west kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.lake.south core.slot of=k.geo.lake key=south kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.lake.east core.slot of=k.geo.lake key=east kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.lake.north core.slot of=k.geo.lake key=north kind=number min=-90 max=90 core.source="hand-core 1"
+
+# A desert: its continent, its middle and its box; `area_about` in square kilometres where a usual figure exists
+# (the edge of a desert is not a line). `named=model`: that figure was written by a language model, only where sure.
+@k.geo.desert core.type of=k.geo.desert shared=true closed=true core.source="hand-core 1"
+@k.geo.desert.name core.slot of=k.geo.desert key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.desert.continent core.slot of=k.geo.desert key=continent kind=atom kind=string core.source="hand-core 1"
+@k.geo.desert.area_about core.slot of=k.geo.desert key=area_about kind=number min=0 core.source="hand-core 1"
+@k.geo.desert.named core.slot of=k.geo.desert key=named enum=model core.source="hand-core 1"
+@k.geo.desert.lat core.slot of=k.geo.desert key=lat kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.desert.lon core.slot of=k.geo.desert key=lon kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.desert.west core.slot of=k.geo.desert key=west kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.desert.south core.slot of=k.geo.desert key=south kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.desert.east core.slot of=k.geo.desert key=east kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.desert.north core.slot of=k.geo.desert key=north kind=number min=-90 max=90 core.source="hand-core 1"
+
+# An ocean, a sea or a part of one: `kind` (ocean, sea, gulf, bay, strait, channel), its middle and its box;
+# `area_about` in square kilometres where a usual figure exists (`named=model`).
+@k.geo.sea core.type of=k.geo.sea shared=true closed=true core.source="hand-core 1"
+@k.geo.sea.name core.slot of=k.geo.sea key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.sea.kind core.slot of=k.geo.sea key=kind required=true enum=ocean enum=sea enum=gulf enum=bay enum=strait enum=channel core.source="hand-core 1"
+@k.geo.sea.area_about core.slot of=k.geo.sea key=area_about kind=number min=0 core.source="hand-core 1"
+@k.geo.sea.named core.slot of=k.geo.sea key=named enum=model core.source="hand-core 1"
+@k.geo.sea.lat core.slot of=k.geo.sea key=lat kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.sea.lon core.slot of=k.geo.sea key=lon kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.sea.west core.slot of=k.geo.sea key=west kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.sea.south core.slot of=k.geo.sea key=south kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.sea.east core.slot of=k.geo.sea key=east kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.sea.north core.slot of=k.geo.sea key=north kind=number min=-90 max=90 core.source="hand-core 1"
+
+# Approximate numbers on the older types: the area of a continent in square kilometres and the length of a river
+# in kilometres, as usually given (`named=model`: written by a language model, only where sure).
+@k.geo.continent.area_about core.slot of=k.geo.continent key=area_about kind=number min=0 core.source="hand-core 1"
+@k.geo.continent.named core.slot of=k.geo.continent key=named enum=model core.source="hand-core 1"
+@k.geo.river.length_about core.slot of=k.geo.river key=length_about kind=number min=0 core.source="hand-core 1"
+@k.geo.river.named core.slot of=k.geo.river key=named enum=model core.source="hand-core 1"
+
 # Words for the types and keys of this world.
 @k.geo.word.country core.word text=country text=countries text=nation means=k.geo.country core.source="hand-core 1"
 @k.geo.word.city core.word text=city text=cities text=town means=k.geo.city core.source="hand-core 1"
@@ -84,3 +135,7 @@
 @k.geo.word.population core.word text=population text=people text=inhabitants means=k.geo.country.population core.source="hand-core 1"
 @k.geo.word.area core.word text=area means=k.geo.country.area core.source="hand-core 1"
 @k.geo.word.elevation core.word text=elevation text=height text=high means=k.geo.mountain.elevation core.source="hand-core 1"
+@k.geo.word.lake core.word text=lake text=lakes means=k.geo.lake core.source="hand-core 1"
+@k.geo.word.desert core.word text=desert text=deserts means=k.geo.desert core.source="hand-core 1"
+@k.geo.word.sea core.word text=sea text=seas text=ocean text=oceans text=gulf text=bay means=k.geo.sea core.source="hand-core 1"
+@k.geo.word.length core.word text=length text=long means=k.geo.river.length_about core.source="hand-core 1"

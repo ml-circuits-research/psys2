@@ -1,6 +1,6 @@
-# k.words/shards/cr: noun and verb senses of the words from "crab" to "crystal" (first letters "cr").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/cr: senses of the words from "crab" to "crystal" (first letters "cr").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.crocodile.noun.1 k.words.sense word=crocodile pos=noun n=1 gloss="large voracious aquatic reptile having a long snout with massive jaws and sharp teeth and a body covered with bony plates; of sluggish tropical waters" is_a="crocodilian reptile" core.source="wordnet 3.1"
+@k.words.crocodile.noun.1 k.words.sense word=crocodile pos=noun n=1 gloss="large voracious aquatic reptile having a long snout with massive jaws and sharp teeth and a body covered with bony plates; of sluggish tropical waters" is_a="crocodilian reptile" kind_of="crocodilian reptile" kind_of=diapsid kind_of=reptile kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

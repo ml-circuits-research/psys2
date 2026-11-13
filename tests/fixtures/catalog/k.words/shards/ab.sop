@@ -1,0 +1,9 @@
+# k.words/shards/ab: senses of the words from "ab" to "abyss" (first letters "ab").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.about.adjective.1 k.words.sense word=about pos=adjective n=1 gloss="on the move" synonym=astir near_opposite=inactive core.source="wordnet 3.1"
+@k.words.about.adverb.1 k.words.sense word=about pos=adverb n=1 gloss="(of quantities) imprecise but fairly close to correct" synonym=approximately synonym="close to" synonym="just about" synonym=some synonym=roughly synonym="more or less" synonym=around synonym="or so" core.source="wordnet 3.1"
+@k.words.about.adverb.2 k.words.sense word=about pos=adverb n=2 gloss="all around or on all sides" synonym=around core.source="wordnet 3.1"
+@k.words.about.adverb.3 k.words.sense word=about pos=adverb n=3 gloss="in the area or vicinity" synonym=around core.source="wordnet 3.1"

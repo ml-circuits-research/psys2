@@ -1,20 +1,20 @@
-# k.words/shards/se: noun and verb senses of the words from "se" to "seymour" (first letters "se").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/se: senses of the words from "se" to "seymour" (first letters "se").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.season.noun.1 k.words.sense word=season pos=noun n=1 gloss="a period of the year marked by special events or activities in some field" is_a="time period" core.source="wordnet 3.1"
-@k.words.season.noun.2 k.words.sense word=season pos=noun n=2 gloss="one of the natural periods into which the year is divided by the equinoxes and solstices or atmospheric conditions" synonym="time of year" is_a="time period" part_of=year core.source="wordnet 3.1"
-@k.words.season.noun.3 k.words.sense word=season pos=noun n=3 gloss="a recurrent time marked by major holidays" is_a="time period" core.source="wordnet 3.1"
+@k.words.season.noun.1 k.words.sense word=season pos=noun n=1 gloss="a period of the year marked by special events or activities in some field" is_a="time period" kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.season.noun.2 k.words.sense word=season pos=noun n=2 gloss="one of the natural periods into which the year is divided by the equinoxes and solstices or atmospheric conditions" synonym="time of year" is_a="time period" part_of=year kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.season.noun.3 k.words.sense word=season pos=noun n=3 gloss="a recurrent time marked by major holidays" is_a="time period" kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
 @k.words.season.verb.1 k.words.sense word=season pos=verb n=1 gloss="lend flavor to" synonym=flavor synonym=flavour core.source="wordnet 3.1"
-@k.words.season.verb.2 k.words.sense word=season pos=verb n=2 gloss="make fit" synonym=harden is_a=toughen core.source="wordnet 3.1"
-@k.words.season.verb.3 k.words.sense word=season pos=verb n=3 gloss="make more temperate, acceptable, or suitable by adding something else" synonym=temper synonym=mollify synonym=moderate is_a=weaken core.source="wordnet 3.1"
-@k.words.seed.noun.1 k.words.sense word=seed pos=noun n=1 gloss="a small hard fruit" is_a=fruit core.source="wordnet 3.1"
-@k.words.seed.noun.2 k.words.sense word=seed pos=noun n=2 gloss="a mature fertilized plant ovule consisting of an embryo and its food source and having a protective coat or testa" is_a=ovule core.source="wordnet 3.1"
-@k.words.seed.noun.3 k.words.sense word=seed pos=noun n=3 gloss="one of the outstanding players in a tournament" synonym="seeded player" is_a=player core.source="wordnet 3.1"
-@k.words.seed.verb.1 k.words.sense word=seed pos=verb n=1 gloss="go to seed; shed seeds" is_a=spill core.source="wordnet 3.1"
-@k.words.seed.verb.2 k.words.sense word=seed pos=verb n=2 gloss="help (an enterprise) in its early stages of development by providing seed money" is_a=finance core.source="wordnet 3.1"
-@k.words.seed.verb.3 k.words.sense word=seed pos=verb n=3 gloss="bear seeds" is_a=bear core.source="wordnet 3.1"
+@k.words.season.verb.2 k.words.sense word=season pos=verb n=2 gloss="make fit" synonym=harden is_a=toughen kind_of=toughen kind_of=strengthen kind_of=change core.source="wordnet 3.1"
+@k.words.season.verb.3 k.words.sense word=season pos=verb n=3 gloss="make more temperate, acceptable, or suitable by adding something else" synonym=temper synonym=mollify synonym=moderate is_a=weaken kind_of=weaken kind_of=change core.source="wordnet 3.1"
+@k.words.seed.noun.1 k.words.sense word=seed pos=noun n=1 gloss="a small hard fruit" is_a=fruit kind_of=fruit kind_of="reproductive structure" kind_of="plant organ" kind_of="plant part" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.seed.noun.2 k.words.sense word=seed pos=noun n=2 gloss="a mature fertilized plant ovule consisting of an embryo and its food source and having a protective coat or testa" is_a=ovule kind_of=ovule kind_of="reproductive structure" kind_of="plant organ" kind_of="plant part" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.seed.noun.3 k.words.sense word=seed pos=noun n=3 gloss="one of the outstanding players in a tournament" synonym="seeded player" is_a=player kind_of=player kind_of=contestant kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.seed.verb.1 k.words.sense word=seed pos=verb n=1 gloss="go to seed; shed seeds" is_a=spill kind_of=spill kind_of=move core.source="wordnet 3.1"
+@k.words.seed.verb.2 k.words.sense word=seed pos=verb n=2 gloss="help (an enterprise) in its early stages of development by providing seed money" is_a=finance kind_of=finance kind_of=pay kind_of=give kind_of=transfer core.source="wordnet 3.1"
+@k.words.seed.verb.3 k.words.sense word=seed pos=verb n=3 gloss="bear seeds" is_a=bear kind_of=bear kind_of=make core.source="wordnet 3.1"
 @k.words.september.noun.1 k.words.sense word=September pos=noun n=1 gloss="the month following August and preceding October" synonym=Sep synonym=Sept is_a="Gregorian calendar month" part_of="Gregorian calendar" core.source="wordnet 3.1"
 @k.words.seventh.noun.1 k.words.sense word=seventh pos=noun n=1 gloss="position seven in a countable series of things" is_a=rank core.source="wordnet 3.1"
 @k.words.seventh.noun.2 k.words.sense word=seventh pos=noun n=2 gloss="one part in seven equal parts" synonym=one-seventh is_a="common fraction" core.source="wordnet 3.1"

@@ -1,4 +1,4 @@
-# k.geo/shards/south-america: South America: 13 countries and territories, 63 cities, 121 rivers, 52 mountains, 22 mountain ranges.
+# k.geo/shards/south-america: South America: 13 countries and territories, 63 cities, 121 rivers, 52 mountains, 22 mountain ranges, 5 lakes, 3 deserts.
 # sources: natural-earth 5.1.2 (Natural Earth, public domain)
 # license: public-domain
 # script: tools/import/geo.mjs

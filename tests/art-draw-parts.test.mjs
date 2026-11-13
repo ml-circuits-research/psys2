@@ -53,7 +53,7 @@ for (const reasoner of ['matrix', 'ops']) {
     assert.ok(pieces.every((o) => Math.abs(o.x - house.x) < house.size && Math.abs(o.y - house.y) < house.size), 'the pieces stay where the house was');
     const roof = pieces.find((o) => /^roof/.test(o.thing));
     assert.ok(roof && roof.y < house.y, 'the roof is above the middle of the house');
-    assert.ok(roof.shape.parts.every((p) => /#3a86e8/i.test(p.c)), 'the blue roof stays blue');
+    assert.ok(roof.shape.parts.every((p) => /#0000ff/i.test(p.c)), 'the blue roof stays blue');
     // a piece is a thing of its own: it moves and is coloured alone
     await s.send('move the roof to the top right');
     await s.send('make the walls green');

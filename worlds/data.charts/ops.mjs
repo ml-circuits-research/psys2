@@ -1,5 +1,5 @@
 // Operations of data.charts: talk with a chart, build charts from the conversation (spec 07 section 6).
-// Browser-safe: no imports.
+// Browser-safe: no `node:*` imports (the colour reader is the knowledge tier's).
 //
 // State (ctx.state): { charts: [Chart], active: id | null, nextId, inputMode: null | 'chart' }
 //   Chart = { id, type: bar|line|pie|doughnut|radar|polarArea|scatter, title, labels: [string],
@@ -18,6 +18,7 @@
 //   is probed by "put the chart in the document".
 // The pure helpers at the bottom (chartView, csv) are also imported by the tab, so the tab draws exactly what the state says.
 
+import { colourName, colourHex, colourPhrases } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const TAB = 'charts';
 const TYPES = ['bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter'];
@@ -40,12 +41,6 @@ export const PALETTES = {
   earth: ['#6b4423', '#8a6b3f', '#a58c52', '#7c8a4a', '#5d7a4a', '#a8693f', '#c9a36a', '#4d5a3c'],
 };
 const PALETTE_WORD = { classic: 'classic', different: 'classic', rainbow: 'rainbow', pastel: 'pastel', ocean: 'ocean', sea: 'ocean', forest: 'forest', sunset: 'sunset', warm: 'warm', cool: 'cool', neon: 'neon', earth: 'earth', autumn: 'warm', default: null, original: null, standard: null, normal: null };
-const COLORS = {
-  red: '#e34948', orange: '#f08a24', yellow: '#f2c500', green: '#2f9e44', blue: '#2a78d6', purple: '#7048c8', pink: '#e87ba4', teal: '#1b9e91',
-  brown: '#8a5a3c', gray: '#8b929a', grey: '#8b929a', black: '#2b2b33', white: '#f4f4f1', indigo: '#4b4bb0', cyan: '#22b8cf', lime: '#82c91e',
-  gold: '#e0a800', navy: '#1f3a7a', coral: '#f2776b', mint: '#63d6a4', violet: '#9b6bd8', magenta: '#d6409f', turquoise: '#2ec4b6', crimson: '#c21e3a',
-  maroon: '#8c2f3b', lavender: '#b9a7ea', peach: '#f9b99a', silver: '#bfc5cc', beige: '#e3d5b8',
-};
 
 // ---- small helpers ----------------------------------------------------------------------------------
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
@@ -562,7 +557,7 @@ const mix = (hex, other, t) => {
 };
 const SHADE = { light: ['#ffffff', 0.35], pale: ['#ffffff', 0.55], bright: ['#ffffff', 0.12], dark: ['#000000', 0.32], deep: ['#000000', 0.22] };
 function colorHex(name, shade) {
-  const base = COLORS[String(name).toLowerCase()];
+  const base = colourHex(colourName(name));   // the colour reader (k.values): a name, its spelling or shorthand
   if (!base) return null;
   const s = SHADE[String(shade ?? '').toLowerCase()];
   return s ? mix(base, s[0], s[1]) : base;
@@ -867,8 +862,18 @@ export function onObservation(ctx, obs) {
 // Words such as "remove plums" or "make the sun red" also mean something in other worlds (a drawing, a document). This hook runs
 // before formalization and only takes a message when its label really is in the active chart, so the other worlds keep theirs.
 const SHADES_RE = '(?:(light|dark|pale|bright|deep)\\s+)?';
-const COLOR_RE = new RegExp(`^(?:make|paint|color|colour|turn|change|set)\\s+(?:the\\s+)?(.+?)(?:\\s+(?:bar|slice|point|column|segment|dot))?\\s+(?:(?:to|in|into|as)\\s+)?${SHADES_RE}(${Object.keys(COLORS).join('|')})$`, 'i');
-const GENERIC_COLOR_RE = new RegExp(`^(?:please\\s+)?(?:make|paint|color|colour|turn|change|set)\\s+(?:the\\s+)?(?:it|them|everything|all|bars?|columns?|line|chart|graph|pie|slices)(?:\\s+(?:to|in|into|as))?\\s+${SHADES_RE}(${Object.keys(COLORS).join('|')})$`, 'i');
+// the recognisers are built from the colour names of the reader and rebuilt when the catalog replaces the bundled subset
+let colourRes = null;
+function colourRe() {
+  const names = colourPhrases();
+  if (colourRes?.n !== names.length) {
+    const alt = names.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/ /g, '\\s+')).join('|');
+    colourRes = { n: names.length,
+      one: new RegExp(`^(?:make|paint|color|colour|turn|change|set)\\s+(?:the\\s+)?(.+?)(?:\\s+(?:bar|slice|point|column|segment|dot))?\\s+(?:(?:to|in|into|as)\\s+)?${SHADES_RE}(${alt})$`, 'i'),
+      all: new RegExp(`^(?:please\\s+)?(?:make|paint|color|colour|turn|change|set)\\s+(?:the\\s+)?(?:it|them|everything|all|bars?|columns?|line|chart|graph|pie|slices)(?:\\s+(?:to|in|into|as))?\\s+${SHADES_RE}(${alt})$`, 'i') };
+  }
+  return colourRes;
+}
 export function interceptInput(ctx, text) {
   const s = st(ctx);
   const c = current(ctx);
@@ -885,9 +890,9 @@ export function interceptInput(ctx, text) {
     const { items, bad } = parseData(data);
     if (items.length && !bad.length && !/\bto\b/i.test(data)) { const r = addPoint(ctx, { text: data, request: null }); return { handled: true, reply: r.value ?? r.note }; }
   }
-  m = t.match(COLOR_RE);
+  m = t.match(colourRe().one);
   if (m && inChart(m[1]) >= 0 && !/^(?:it|them|everything|all|bars?|columns?|line|chart|graph|pie)$/i.test(m[1])) { const r = setColor(ctx, { c: m[3].toLowerCase(), shade: m[2]?.toLowerCase(), label: m[1] }); return { handled: true, reply: r.value ?? r.note }; }
-  m = t.match(GENERIC_COLOR_RE);
+  m = t.match(colourRe().all);
   if (m) { const r = setColor(ctx, { c: m[2].toLowerCase(), shade: m[1]?.toLowerCase() }); return { handled: true, reply: r.value ?? r.note }; }
   return { handled: false };
 }

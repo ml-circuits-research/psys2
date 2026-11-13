@@ -1,17 +1,17 @@
-# k.words/shards/mo: noun and verb senses of the words from "mo" to "mozart" (first letters "mo").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/mo: senses of the words from "mo" to "mozzarella" (first letters "mo").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.monday.noun.1 k.words.sense word=Monday pos=noun n=1 gloss="the second day of the week; the first working day" synonym=Mon is_a=weekday core.source="wordnet 3.1"
-@k.words.month.noun.1 k.words.sense word=month pos=noun n=1 gloss="one of the twelve divisions of the calendar year" synonym="calendar month" is_a="time period" core.source="wordnet 3.1"
-@k.words.month.noun.2 k.words.sense word=month pos=noun n=2 gloss="a time unit of approximately 30 days" is_a="time unit" part_of=year core.source="wordnet 3.1"
-@k.words.moon.noun.1 k.words.sense word=Moon pos=noun n=1 gloss="the natural satellite of the Earth" synonym=moon instance_of=satellite core.source="wordnet 3.1"
-@k.words.moon.noun.2 k.words.sense word=moon pos=noun n=2 gloss="any object resembling a moon" is_a=object core.source="wordnet 3.1"
-@k.words.moon.noun.3 k.words.sense word=moon pos=noun n=3 gloss="the period between successive new moons (29.531 days)" synonym="lunar month" synonym=lunation synonym="synodic month" is_a=month part_of="lunar year" core.source="wordnet 3.1"
-@k.words.moon.verb.1 k.words.sense word=moon pos=verb n=1 gloss="have dreamlike musings or fantasies while awake" synonym=daydream is_a=idle core.source="wordnet 3.1"
-@k.words.moon.verb.2 k.words.sense word=moon pos=verb n=2 gloss="be idle in a listless or dreamy way" synonym="moon around" synonym="moon on" is_a=idle core.source="wordnet 3.1"
-@k.words.moon.verb.3 k.words.sense word=moon pos=verb n=3 gloss="expose one's buttocks to" is_a=expose core.source="wordnet 3.1"
+@k.words.monday.noun.1 k.words.sense word=Monday pos=noun n=1 gloss="the second day of the week; the first working day" synonym=Mon is_a=weekday kind_of=weekday kind_of="day of the week" kind_of="calendar day" kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.month.noun.1 k.words.sense word=month pos=noun n=1 gloss="one of the twelve divisions of the calendar year" synonym="calendar month" is_a="time period" kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.month.noun.2 k.words.sense word=month pos=noun n=2 gloss="a time unit of approximately 30 days" is_a="time unit" part_of=year kind_of="time unit" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.moon.noun.1 k.words.sense word=Moon pos=noun n=1 gloss="the natural satellite of the Earth" synonym=moon instance_of=satellite kind_of=satellite kind_of="celestial body" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.moon.noun.2 k.words.sense word=moon pos=noun n=2 gloss="any object resembling a moon" is_a=object kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.moon.noun.3 k.words.sense word=moon pos=noun n=3 gloss="the period between successive new moons (29.531 days)" synonym="lunar month" synonym=lunation synonym="synodic month" is_a=month part_of="lunar year" kind_of=month kind_of="time unit" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.moon.verb.1 k.words.sense word=moon pos=verb n=1 gloss="have dreamlike musings or fantasies while awake" synonym=daydream is_a=idle kind_of=idle core.source="wordnet 3.1"
+@k.words.moon.verb.2 k.words.sense word=moon pos=verb n=2 gloss="be idle in a listless or dreamy way" synonym="moon around" synonym="moon on" is_a=idle kind_of=idle core.source="wordnet 3.1"
+@k.words.moon.verb.3 k.words.sense word=moon pos=verb n=3 gloss="expose one's buttocks to" is_a=expose kind_of=expose kind_of=show core.source="wordnet 3.1"
 @k.words.mount.noun.1 k.words.sense word=mount pos=noun n=1 gloss="a lightweight horse kept for riding only" synonym="saddle horse" synonym="riding horse" is_a=horse core.source="wordnet 3.1"
 @k.words.mount.noun.2 k.words.sense word=mount pos=noun n=2 gloss="the act of climbing something" synonym=climb is_a=rise core.source="wordnet 3.1"
 @k.words.mount.noun.3 k.words.sense word=mount pos=noun n=3 gloss="a land mass that projects well above its surroundings; higher than a hill" synonym=mountain is_a="natural elevation" core.source="wordnet 3.1"

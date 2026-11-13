@@ -1,5 +1,5 @@
-# k.words/shards/wh: noun and verb senses of the words from "whack" to "why" (first letters "wh").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/wh: senses of the words from "whack" to "why" (first letters "wh").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
@@ -8,5 +8,5 @@
 @k.words.whale.verb.1 k.words.sense word=whale pos=verb n=1 gloss="hunt for whales" is_a=hunt core.source="wordnet 3.1"
 @k.words.whisper.noun.1 k.words.sense word=whisper pos=noun n=1 gloss="speaking softly without vibration of the vocal cords" synonym=whispering synonym=susurration synonym=voicelessness is_a=speaking core.source="wordnet 3.1"
 @k.words.whisper.noun.2 k.words.sense word=whisper pos=noun n=2 gloss="a light noise, like the noise of silk clothing or leaves blowing in the wind" synonym=rustle synonym=rustling synonym=whispering is_a=noise core.source="wordnet 3.1"
-@k.words.whisper.verb.1 k.words.sense word=whisper pos=verb n=1 gloss="speak softly; in a low voice" is_a=talk core.source="wordnet 3.1"
-@k.words.why.noun.1 k.words.sense word=why pos=noun n=1 gloss="the cause or intention underlying an action or situation, especially in the phrase `the whys and wherefores'" synonym=wherefore is_a=reason core.source="wordnet 3.1"
+@k.words.whisper.verb.1 k.words.sense word=whisper pos=verb n=1 gloss="speak softly; in a low voice" is_a=talk opposite=shout core.source="wordnet 3.1"
+@k.words.why.noun.1 k.words.sense word=why pos=noun n=1 gloss="the cause or intention underlying an action or situation, especially in the phrase `the whys and wherefores'" synonym=wherefore is_a=reason kind_of=reason kind_of="rational motive" kind_of=motivation kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"

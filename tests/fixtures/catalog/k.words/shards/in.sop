@@ -1,5 +1,5 @@
-# k.words/shards/in: noun and verb senses of the words from "in" to "involvement" (first letters "in").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/in: senses of the words from "in" to "involvement" (first letters "in").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
@@ -9,6 +9,12 @@
 @k.words.index.verb.1 k.words.sense word=index pos=verb n=1 gloss="list in an index" is_a=list core.source="wordnet 3.1"
 @k.words.index.verb.2 k.words.sense word=index pos=verb n=2 gloss="provide with an index" is_a=supply core.source="wordnet 3.1"
 @k.words.index.verb.3 k.words.sense word=index pos=verb n=3 gloss="adjust through indexation" is_a=determine core.source="wordnet 3.1"
-@k.words.india.noun.1 k.words.sense word=India pos=noun n=1 gloss="a republic in the Asian subcontinent in southern Asia; second most populous country in the world; achieved independence from the United Kingdom in 1947" synonym="Republic of India" synonym=Bharat instance_of="Asian country" part_of=Asia core.source="wordnet 3.1"
-@k.words.inside.noun.1 k.words.sense word=inside pos=noun n=1 gloss="the region that is inside of something" synonym=interior is_a=region core.source="wordnet 3.1"
-@k.words.inside.noun.2 k.words.sense word=inside pos=noun n=2 gloss="the inner or enclosed surface of something" synonym=interior is_a=surface core.source="wordnet 3.1"
+@k.words.india.noun.1 k.words.sense word=India pos=noun n=1 gloss="a republic in the Asian subcontinent in southern Asia; second most populous country in the world; achieved independence from the United Kingdom in 1947" synonym="Republic of India" synonym=Bharat instance_of="Asian country" part_of=Asia kind_of="Asian country" kind_of=country kind_of="administrative district" kind_of=district kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.inside.noun.1 k.words.sense word=inside pos=noun n=1 gloss="the region that is inside of something" synonym=interior is_a=region opposite=outside kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.inside.noun.2 k.words.sense word=inside pos=noun n=2 gloss="the inner or enclosed surface of something" synonym=interior is_a=surface opposite=outside kind_of=surface kind_of=boundary kind_of=extremity kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.inside.adjective.1 k.words.sense word=inside pos=adjective n=1 gloss="relating to or being on the side closer to the center or within a defined space" opposite=outside core.source="wordnet 3.1"
+@k.words.inside.adjective.2 k.words.sense word=inside pos=adjective n=2 gloss="being or applying to the inside of a building" near_opposite=exterior core.source="wordnet 3.1"
+@k.words.inside.adjective.3 k.words.sense word=inside pos=adjective n=3 gloss="confined to an exclusive group" synonym=inner synonym=privileged near_opposite=inclusive core.source="wordnet 3.1"
+@k.words.inside.adverb.1 k.words.sense word=inside pos=adverb n=1 gloss="within a building" synonym=indoors opposite=outside core.source="wordnet 3.1"
+@k.words.inside.adverb.2 k.words.sense word=inside pos=adverb n=2 gloss="on the inside" synonym=within opposite=outside core.source="wordnet 3.1"
+@k.words.inside.adverb.3 k.words.sense word=inside pos=adverb n=3 gloss="with respect to private feelings" synonym=inwardly core.source="wordnet 3.1"

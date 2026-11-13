@@ -1,7 +1,7 @@
-# k.words/shards/el: noun and verb senses of the words from "el" to "elvis" (first letters "el").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/el: senses of the words from "el" to "elvis" (first letters "el").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.elephant.noun.1 k.words.sense word=elephant pos=noun n=1 gloss="five-toed pachyderm" is_a=proboscidean is_a=pachyderm core.source="wordnet 3.1"
-@k.words.elephant.noun.2 k.words.sense word=elephant pos=noun n=2 gloss="the symbol of the Republican Party; introduced in cartoons by Thomas Nast in 1874" is_a=emblem core.source="wordnet 3.1"
+@k.words.elephant.noun.1 k.words.sense word=elephant pos=noun n=1 gloss="five-toed pachyderm" is_a=proboscidean is_a=pachyderm kind_of=proboscidean kind_of=placental kind_of=mammal kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.elephant.noun.2 k.words.sense word=elephant pos=noun n=2 gloss="the symbol of the Republican Party; introduced in cartoons by Thomas Nast in 1874" is_a=emblem kind_of=emblem kind_of=symbol kind_of="representational process" kind_of="basic cognitive process" kind_of=process kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"

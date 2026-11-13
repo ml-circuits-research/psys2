@@ -1,11 +1,11 @@
-# k.words/shards/or: noun and verb senses of the words from "or" to "orphanage" (first letters "or").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/or: senses of the words from "or" to "orphanage" (first letters "or").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.order.noun.1 k.words.sense word=order pos=noun n=1 gloss="(often plural) a command given by a superior (e.g., a military or law enforcement officer) that must be obeyed" is_a=command core.source="wordnet 3.1"
-@k.words.order.noun.2 k.words.sense word=order pos=noun n=2 gloss="a degree in a continuum of size or quantity" synonym="order of magnitude" is_a=magnitude core.source="wordnet 3.1"
-@k.words.order.noun.3 k.words.sense word=order pos=noun n=3 gloss="established customary state (especially of society)" is_a=state core.source="wordnet 3.1"
-@k.words.order.verb.1 k.words.sense word=order pos=verb n=1 gloss="give instructions to or direct somebody to do something with authority" synonym=tell synonym=enjoin synonym=say is_a=request core.source="wordnet 3.1"
-@k.words.order.verb.2 k.words.sense word=order pos=verb n=2 gloss="make a request for something" is_a=request core.source="wordnet 3.1"
-@k.words.order.verb.3 k.words.sense word=order pos=verb n=3 gloss="issue commands or orders for" synonym=prescribe synonym=dictate is_a=inflict core.source="wordnet 3.1"
+@k.words.order.noun.1 k.words.sense word=order pos=noun n=1 gloss="(often plural) a command given by a superior (e.g., a military or law enforcement officer) that must be obeyed" is_a=command kind_of=command kind_of="speech act" kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.order.noun.2 k.words.sense word=order pos=noun n=2 gloss="a degree in a continuum of size or quantity" synonym="order of magnitude" is_a=magnitude kind_of=magnitude kind_of=property kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.order.noun.3 k.words.sense word=order pos=noun n=3 gloss="established customary state (especially of society)" is_a=state opposite=disorder kind_of=state kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.order.verb.1 k.words.sense word=order pos=verb n=1 gloss="give instructions to or direct somebody to do something with authority" synonym=tell synonym=enjoin synonym=say is_a=request kind_of=request kind_of=ask kind_of=request kind_of=communicate kind_of=convey kind_of=transfer kind_of=move core.source="wordnet 3.1"
+@k.words.order.verb.2 k.words.sense word=order pos=verb n=2 gloss="make a request for something" is_a=request kind_of=request kind_of=communicate kind_of=convey kind_of=transfer kind_of=move core.source="wordnet 3.1"
+@k.words.order.verb.3 k.words.sense word=order pos=verb n=3 gloss="issue commands or orders for" synonym=prescribe synonym=dictate is_a=inflict kind_of=inflict kind_of=communicate kind_of=interact kind_of=act core.source="wordnet 3.1"

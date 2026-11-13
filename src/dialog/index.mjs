@@ -30,6 +30,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
 import { checkValues } from './value-check.mjs';
+import { attachValues } from '../knowledge/values.mjs';
 import { Discourse } from './discourse.mjs';
 import { Dialogue } from './dialogue.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
@@ -1727,7 +1728,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   const engine = {
     knowledge: options.knowledge ?? null,
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
-    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; },
+    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** meta.worlds (spec 20): loaded by `prepareMeta()` (a host that sets `routing` to symbolic awaits it once); null until then. */
     meta: null,

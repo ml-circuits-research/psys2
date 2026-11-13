@@ -1,14 +1,14 @@
-# k.words/shards/fo: noun and verb senses of the words from "fo" to "fox" (first letters "fo").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/fo: senses of the words from "fo" to "fox" (first letters "fo").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.food.noun.1 k.words.sense word=food pos=noun n=1 gloss="any substance that can be metabolized by an animal to give energy and build tissue" synonym=nutrient is_a=substance core.source="wordnet 3.1"
-@k.words.food.noun.2 k.words.sense word=food pos=noun n=2 gloss="any solid substance (as opposed to liquid) that is used as a source of nourishment" synonym="solid food" is_a=solid part_of=food core.source="wordnet 3.1"
-@k.words.food.noun.3 k.words.sense word=food pos=noun n=3 gloss="anything that provides mental stimulus for thinking" synonym="food for thought" synonym="intellectual nourishment" is_a=content core.source="wordnet 3.1"
-@k.words.foot.noun.1 k.words.sense word=foot pos=noun n=1 gloss="the part of the leg of a human being below the ankle joint" synonym="human foot" synonym=pes is_a="vertebrate foot" part_of=leg part_of=homo core.source="wordnet 3.1"
-@k.words.foot.noun.2 k.words.sense word=foot pos=noun n=2 gloss="a linear unit of length equal to 12 inches or a third of a yard" synonym=ft is_a="linear unit" part_of=yard core.source="wordnet 3.1"
-@k.words.foot.noun.3 k.words.sense word=foot pos=noun n=3 gloss="the lower part of anything" is_a=bottom core.source="wordnet 3.1"
-@k.words.foot.verb.1 k.words.sense word=foot pos=verb n=1 gloss="pay for something" synonym=pick is_a=pay core.source="wordnet 3.1"
-@k.words.foot.verb.2 k.words.sense word=foot pos=verb n=2 gloss="walk" synonym="leg it" synonym=hoof synonym="hoof it" is_a=walk core.source="wordnet 3.1"
-@k.words.foot.verb.3 k.words.sense word=foot pos=verb n=3 gloss="add a column of numbers" synonym="foot up" is_a=add core.source="wordnet 3.1"
+@k.words.food.noun.1 k.words.sense word=food pos=noun n=1 gloss="any substance that can be metabolized by an animal to give energy and build tissue" synonym=nutrient is_a=substance kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.food.noun.2 k.words.sense word=food pos=noun n=2 gloss="any solid substance (as opposed to liquid) that is used as a source of nourishment" synonym="solid food" is_a=solid part_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.food.noun.3 k.words.sense word=food pos=noun n=3 gloss="anything that provides mental stimulus for thinking" synonym="food for thought" synonym="intellectual nourishment" is_a=content kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.foot.noun.1 k.words.sense word=foot pos=noun n=1 gloss="the part of the leg of a human being below the ankle joint" synonym="human foot" synonym=pes is_a="vertebrate foot" part_of=leg part_of=homo kind_of="vertebrate foot" kind_of=extremity kind_of="external body part" kind_of="body part" kind_of=part kind_of=thing kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.foot.noun.2 k.words.sense word=foot pos=noun n=2 gloss="a linear unit of length equal to 12 inches or a third of a yard" synonym=ft is_a="linear unit" part_of=yard kind_of="linear unit" kind_of="unit of measurement" kind_of="definite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.foot.noun.3 k.words.sense word=foot pos=noun n=3 gloss="the lower part of anything" is_a=bottom opposite=head kind_of=bottom kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.foot.verb.1 k.words.sense word=foot pos=verb n=1 gloss="pay for something" synonym=pick is_a=pay kind_of=pay kind_of=give kind_of=transfer core.source="wordnet 3.1"
+@k.words.foot.verb.2 k.words.sense word=foot pos=verb n=2 gloss="walk" synonym="leg it" synonym=hoof synonym="hoof it" is_a=walk kind_of=walk kind_of=travel core.source="wordnet 3.1"
+@k.words.foot.verb.3 k.words.sense word=foot pos=verb n=3 gloss="add a column of numbers" synonym="foot up" is_a=add kind_of=add kind_of=calculate kind_of=reason kind_of=think core.source="wordnet 3.1"

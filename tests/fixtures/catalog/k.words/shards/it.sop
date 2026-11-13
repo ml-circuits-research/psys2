@@ -1,6 +1,6 @@
-# k.words/shards/it: noun and verb senses of the words from "it" to "itinerary" (first letters "it").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/it: senses of the words from "it" to "itinerary" (first letters "it").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.italy.noun.1 k.words.sense word=Italy pos=noun n=1 gloss="a republic in southern Europe on the Italian Peninsula; was the core of the Roman Republic and the Roman Empire between the 4th century BC and the 5th century AD" synonym="Italian Republic" synonym=Italia instance_of="European country" part_of=Europe core.source="wordnet 3.1"
+@k.words.italy.noun.1 k.words.sense word=Italy pos=noun n=1 gloss="a republic in southern Europe on the Italian Peninsula; was the core of the Roman Republic and the Roman Empire between the 4th century BC and the 5th century AD" synonym="Italian Republic" synonym=Italia instance_of="European country" part_of=Europe kind_of="European country" kind_of=country kind_of="administrative district" kind_of=district kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

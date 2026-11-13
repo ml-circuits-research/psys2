@@ -1,14 +1,17 @@
-# k.words/shards/ha: noun and verb senses of the words from "ha" to "hazel" (first letters "ha").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ha: senses of the words from "ha" to "hazel" (first letters "ha").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.hand.noun.1 k.words.sense word=hand pos=noun n=1 gloss="the (prehensile) extremity of the superior limb" synonym=manus synonym=mitt synonym=paw is_a=extremity part_of=arm part_of=homo core.source="wordnet 3.1"
-@k.words.hand.noun.2 k.words.sense word=hand pos=noun n=2 gloss="a hired laborer on a farm or ranch" synonym="hired hand" synonym="hired man" is_a=laborer core.source="wordnet 3.1"
-@k.words.hand.noun.3 k.words.sense word=hand pos=noun n=3 gloss="something written by hand" synonym=handwriting synonym=script is_a=writing core.source="wordnet 3.1"
-@k.words.hand.verb.1 k.words.sense word=hand pos=verb n=1 gloss="place into the hands or custody of" synonym=pass synonym=reach synonym="pass on" synonym="turn over" synonym=give is_a=transfer core.source="wordnet 3.1"
-@k.words.hand.verb.2 k.words.sense word=hand pos=verb n=2 gloss="guide or conduct or usher somewhere" is_a=lead core.source="wordnet 3.1"
-@k.words.have.noun.1 k.words.sense word=have pos=noun n=1 gloss="a person who possesses great material wealth" synonym="rich person" synonym="wealthy person" is_a=person core.source="wordnet 3.1"
+@k.words.hand.noun.1 k.words.sense word=hand pos=noun n=1 gloss="the (prehensile) extremity of the superior limb" synonym=manus synonym=mitt synonym=paw is_a=extremity part_of=arm part_of=homo kind_of=extremity kind_of="external body part" kind_of="body part" kind_of=part kind_of=thing kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.hand.noun.2 k.words.sense word=hand pos=noun n=2 gloss="a hired laborer on a farm or ranch" synonym="hired hand" synonym="hired man" is_a=laborer kind_of=laborer kind_of=workman kind_of=employee kind_of=worker kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.hand.noun.3 k.words.sense word=hand pos=noun n=3 gloss="something written by hand" synonym=handwriting synonym=script is_a=writing kind_of=writing kind_of="written communication" kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.hand.verb.1 k.words.sense word=hand pos=verb n=1 gloss="place into the hands or custody of" synonym=pass synonym=reach synonym="pass on" synonym="turn over" synonym=give is_a=transfer kind_of=transfer core.source="wordnet 3.1"
+@k.words.hand.verb.2 k.words.sense word=hand pos=verb n=2 gloss="guide or conduct or usher somewhere" is_a=lead kind_of=lead core.source="wordnet 3.1"
+@k.words.happy.adjective.1 k.words.sense word=happy pos=adjective n=1 gloss="enjoying or showing or marked by joy or pleasure" opposite=unhappy core.source="wordnet 3.1"
+@k.words.happy.adjective.2 k.words.sense word=happy pos=adjective n=2 gloss="marked by good fortune" synonym=felicitous near_opposite=unfortunate core.source="wordnet 3.1"
+@k.words.happy.adjective.3 k.words.sense word=happy pos=adjective n=3 gloss="eagerly disposed to act or to be of service" synonym=glad near_opposite=unwilling core.source="wordnet 3.1"
+@k.words.have.noun.1 k.words.sense word=have pos=noun n=1 gloss="a person who possesses great material wealth" synonym="rich person" synonym="wealthy person" is_a=person kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
 @k.words.have.verb.1 k.words.sense word=have pos=verb n=1 gloss="have or possess, either in a concrete or an abstract sense" synonym="have got" synonym=hold core.source="wordnet 3.1"
-@k.words.have.verb.2 k.words.sense word=have pos=verb n=2 gloss="have as a feature" synonym=feature core.source="wordnet 3.1"
-@k.words.have.verb.3 k.words.sense word=have pos=verb n=3 gloss="go through (mental or physical states or experiences)" synonym=experience synonym=receive synonym=get is_a=undergo core.source="wordnet 3.1"
+@k.words.have.verb.2 k.words.sense word=have pos=verb n=2 gloss="have as a feature" synonym=feature opposite=lack core.source="wordnet 3.1"
+@k.words.have.verb.3 k.words.sense word=have pos=verb n=3 gloss="go through (mental or physical states or experiences)" synonym=experience synonym=receive synonym=get is_a=undergo kind_of=undergo kind_of=change core.source="wordnet 3.1"

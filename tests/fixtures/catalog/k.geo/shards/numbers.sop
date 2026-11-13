@@ -1,0 +1,12 @@
+# k.geo/shards/numbers: approximate numbers as usually given: the length of 54 well-known rivers in kilometres; the area of the 5 oceans, of 17 seas, of 17 deserts and of the 7 continents in square kilometres; 12 other names. Written by a language model, only where sure (named=model). Tell it with the shards of the continents and the shard seas: the facts of one thing merge.
+# sources: hand-core 1 (hand-written in this repository: tools/geo-numbers.mjs)
+# license: CC0-1.0
+# script: tools/geo-numbers.mjs
+# The length of rivers, in kilometres.
+# The area of oceans and seas, in square kilometres.
+# The area of deserts, in square kilometres.
+# The area of the continents, in square kilometres.
+# Words: other names.
+
+@k.geo.numbers.river.Snake k.geo.river name=Snake continent="North America" length_about=1740 named=model core.source="hand-core 1"
+@k.geo.numbers.desert.Sahara k.geo.desert name=Sahara area_about=9200000 named=model core.source="hand-core 1"

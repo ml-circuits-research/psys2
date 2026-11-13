@@ -125,7 +125,7 @@ export default {
     (async () => {
       try {
         const [T, M] = await Promise.all([loadTipTap(host.asset('vendor/editor/tiptap.mjs')), import(host.asset('worlds/docs.editor/model.mjs'))]);
-        model = M;
+        model = M; bar.paintSwatches(M.highlightHex);
         editorEl.replaceChildren();
         const api = {
           getState: () => state,

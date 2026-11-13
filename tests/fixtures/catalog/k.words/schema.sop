@@ -1,5 +1,6 @@
-# k.words: English words: the noun and verb senses of frequent words, each with a short gloss, its synonyms, what it
-# is a kind of, what it is an instance of and what it is a part of. Irregular forms are core.word facts in the shards.
+# k.words: English words: the noun and verb senses of frequent words, and the adjective and adverb senses of the
+# 3,000 most frequent, each with a short gloss, its synonyms, its opposite, what it is a kind of (directly, and for
+# the common words the whole chain of kinds), what it is an instance of and what it is a part of. Irregular forms are core.word facts in the shards.
 # sources: wordnet 3.1 (Princeton WordNet 3.1); the schema itself is hand-core 1
 # license: CC0-1.0
 # script: none (hand-written); the shards are written by tools/import/wordnet.mjs
@@ -8,15 +9,23 @@
 
 # One sense of a word. `n` is the sense number in WordNet (1 is the most frequent sense of the word for that part of
 # speech). The values of synonym, is_a, instance_of and part_of are words (several words are a string).
+# Round 9: `opposite` is WordNet's antonym of the word in this sense (hot: cold); `near_opposite`, for an adjective
+# without one of its own, is the opposite of the adjective it is filed as similar to (huge is similar to large:
+# small); `kind_of` is the chain of kinds upward from the sense, nearest first, through the first kind at each step
+# (dog: canine, carnivore, placental, mammal, vertebrate, chordate, animal, organism, "living thing" …), given for
+# the senses of the 3,000 most frequent words so that "is a dog an animal" is one lookup.
 @k.words.sense core.type of=k.words.sense shared=true closed=true core.source="hand-core 1"
 @k.words.sense.word core.slot of=k.words.sense key=word id=true required=true kind=atom core.source="hand-core 1"
-@k.words.sense.pos core.slot of=k.words.sense key=pos id=true required=true enum=noun enum=verb core.source="hand-core 1"
+@k.words.sense.pos core.slot of=k.words.sense key=pos id=true required=true enum=noun enum=verb enum=adjective enum=adverb core.source="hand-core 1"
 @k.words.sense.n core.slot of=k.words.sense key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
 @k.words.sense.gloss core.slot of=k.words.sense key=gloss kind=string core.source="hand-core 1"
 @k.words.sense.synonym core.slot of=k.words.sense key=synonym many=true kind=atom kind=string core.source="hand-core 1"
 @k.words.sense.is_a core.slot of=k.words.sense key=is_a many=true kind=atom kind=string core.source="hand-core 1"
 @k.words.sense.instance_of core.slot of=k.words.sense key=instance_of many=true kind=atom kind=string core.source="hand-core 1"
 @k.words.sense.part_of core.slot of=k.words.sense key=part_of many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.opposite core.slot of=k.words.sense key=opposite many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.near_opposite core.slot of=k.words.sense key=near_opposite many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.kind_of core.slot of=k.words.sense key=kind_of many=true kind=atom kind=string core.source="hand-core 1"
 
 # Words for the type and keys of this world.
 @k.words.word.sense core.word text=word text=words text=sense text=meaning text=meanings means=k.words.sense core.source="hand-core 1"
@@ -24,3 +33,4 @@
 @k.words.word.synonym core.word text=synonym text=synonyms means=k.words.sense.synonym core.source="hand-core 1"
 @k.words.word.is_a core.word text=kind text=type means=k.words.sense.is_a core.source="hand-core 1"
 @k.words.word.part_of core.word text=part text=parts means=k.words.sense.part_of core.source="hand-core 1"
+@k.words.word.opposite core.word text=opposite text=opposites text=antonym text=antonyms means=k.words.sense.opposite core.source="hand-core 1"

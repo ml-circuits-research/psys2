@@ -9,14 +9,19 @@
 // The title is a pseudo block (id 'title') kept in state.title, titleMarks, titleAlign, titleSize.
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
+import { colourName, colourHex } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 export const DEFAULT_TITLE = 'Untitled document';
 export const MARK_TYPES = ['link', 'bold', 'italic', 'underline', 'strike', 'code', 'highlight'];
-export const COLORS = {
-  yellow: '#fff176', green: '#b9f6ca', blue: '#a7d8ff', pink: '#ffc1e3', orange: '#ffd180', red: '#ff9e9e',
-  purple: '#d9bfff', gray: '#d9dee5', cyan: '#a5f3fc', brown: '#e0c3a3',
+// A highlight colour is any colour of the catalog (the one reader, k.values) drawn as a highlighter does: the colour mixed towards white. No colour table lives in this world.
+const HIGHLIGHT_WHITE = 0.6;
+export const highlightHex = (name) => {
+  const c = colourHex(name);
+  if (!c) return null;
+  const p = [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  return `#${p.map((x) => Math.round(x + (255 - x) * HIGHLIGHT_WHITE).toString(16).padStart(2, '0')).join('')}`;
 };
-const COLOR_ALIAS = { grey: 'gray', violet: 'purple', lilac: 'purple', turquoise: 'cyan', aqua: 'cyan', magenta: 'pink', rose: 'pink', lime: 'green', gold: 'yellow' };
-export const colorName = (w) => { const k = String(w ?? '').toLowerCase().trim(); const n = COLOR_ALIAS[k] ?? k; return COLORS[n] ? n : null; };
+export const colorName = (w) => colourName(String(w ?? '').trim());
+export const DEFAULT_HIGHLIGHT = () => highlightHex('yellow');
 export const TITLE_SIZE_MIN = -2, TITLE_SIZE_MAX = 4;
 export const ALIGNS = ['left', 'center', 'right', 'justify'];
 
@@ -211,7 +216,7 @@ function inline(text, marks) {
     const [a, b] = [pts[i], pts[i + 1]];
     const active = marks.filter((m) => m.from <= a && m.to >= b).sort((x, y) => MARK_TYPES.indexOf(x.type) - MARK_TYPES.indexOf(y.type));
     const node = { type: 'text', text: text.slice(a, b) };
-    if (active.length) node.marks = active.map((m) => (m.type === 'link' ? { type: 'link', attrs: { href: m.attrs?.href ?? '' } } : m.type === 'highlight' ? { type: 'highlight', attrs: { color: m.attrs?.color ?? COLORS.yellow } } : { type: m.type }));
+    if (active.length) node.marks = active.map((m) => (m.type === 'link' ? { type: 'link', attrs: { href: m.attrs?.href ?? '' } } : m.type === 'highlight' ? { type: 'highlight', attrs: { color: m.attrs?.color ?? DEFAULT_HIGHLIGHT() } } : { type: m.type }));
     out.push(node);
   }
   return out;

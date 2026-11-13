@@ -1,0 +1,44 @@
+# k.colours: what is known about colours: the family of a colour name, whether it is light or dark, warm or cool,
+# which colours mix into which, which colour is its opposite on the colour wheel, and things that typically have
+# the colour. So that "what colour is a banana", "what do red and yellow make", "a darker blue" can be answered by
+# lookup. The exact value of a colour (its RGB) is not said here.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.colours core.module name=k.colours version=1 exports=colour exports=mix core.source="hand-core 1"
+
+# A colour, named by its common English name. `family` is the basic colour it belongs to (a basic colour is its
+# own family: red; scarlet is a red); `tone` says whether it is `light`, `medium` or `dark` among colours;
+# `temperature` whether painters call it `warm`, `cool` or `neutral`; `lighter` and `darker` name a lighter and a
+# darker colour of the same family, where there is a common name for one; `complement` names the colour opposite
+# on the colour wheel (basic colours of the wheel only); `kind=metallic` says that the colour shines like metal
+# (gold, silver). `thing` names things that typically have the colour
+# (many; the name of a k.objects object where there is one).
+@k.colours.colour core.type of=k.colours.colour shared=true closed=true core.source="hand-core 1"
+@k.colours.colour.name core.slot of=k.colours.colour key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.colours.colour.family core.slot of=k.colours.colour key=family required=true enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown enum=black enum=white enum=grey core.source="hand-core 1"
+@k.colours.colour.tone core.slot of=k.colours.colour key=tone required=true enum=light enum=medium enum=dark core.source="hand-core 1"
+@k.colours.colour.temperature core.slot of=k.colours.colour key=temperature required=true enum=warm enum=cool enum=neutral core.source="hand-core 1"
+@k.colours.colour.lighter core.slot of=k.colours.colour key=lighter kind=atom kind=string core.source="hand-core 1"
+@k.colours.colour.darker core.slot of=k.colours.colour key=darker kind=atom kind=string core.source="hand-core 1"
+@k.colours.colour.complement core.slot of=k.colours.colour key=complement kind=atom kind=string core.source="hand-core 1"
+@k.colours.colour.kind core.slot of=k.colours.colour key=kind enum=metallic core.source="hand-core 1"
+@k.colours.colour.thing core.slot of=k.colours.colour key=thing many=true kind=atom kind=string core.source="hand-core 1"
+
+# What two colours of paint give when they are mixed: `a` and `b` (in the order of the alphabet, so that a pair is
+# said once) give `gives`. All three are names of colours of this world.
+@k.colours.mix core.type of=k.colours.mix shared=true closed=true core.source="hand-core 1"
+@k.colours.mix.a core.slot of=k.colours.mix key=a id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.colours.mix.b core.slot of=k.colours.mix key=b id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.colours.mix.gives core.slot of=k.colours.mix key=gives required=true kind=atom kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.colours.word.colour core.word text=colour text=colours text=color text=colors text=coloured text=colored means=k.colours.colour core.source="hand-core 1"
+@k.colours.word.family core.word text=family text="kind of" means=k.colours.colour.family core.source="hand-core 1"
+@k.colours.word.tone core.word text=light text=dark text=pale means=k.colours.colour.tone core.source="hand-core 1"
+@k.colours.word.temperature core.word text=warm text=cool means=k.colours.colour.temperature core.source="hand-core 1"
+@k.colours.word.lighter core.word text=lighter text=paler means=k.colours.colour.lighter core.source="hand-core 1"
+@k.colours.word.darker core.word text=darker text=deeper means=k.colours.colour.darker core.source="hand-core 1"
+@k.colours.word.complement core.word text=complement text=complementary text=opposite means=k.colours.colour.complement core.source="hand-core 1"
+@k.colours.word.mix core.word text=mix text=mixes text=mixed text=mixing text=make text=makes means=k.colours.mix core.source="hand-core 1"

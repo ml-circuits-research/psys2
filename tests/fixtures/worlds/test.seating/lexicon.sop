@@ -21,21 +21,9 @@
 
 @lex.test.seating.values core.lexicon
     class=modifier
-    doc="Values the attributes take (from schema.sop)"
-    word=red
-    word=blue
-    word=green
-    word=yellow
-    word=orange
-    word=purple
-    word=pink
-    word=brown
-    word=black
-    word=white
-    word=grey
-    word=gray
-    word=gold
-    word=silver
+    doc="Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)"
+    extends=$lex.lang.colour
+
 
 @lex.test.seating.more core.lexicon
     class=modifier

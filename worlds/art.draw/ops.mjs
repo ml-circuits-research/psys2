@@ -15,11 +15,12 @@
 // Effects: draw.download { format: 'png' | 'svg', filename }. Every command that changes the picture brings the
 // Drawing tab forward: ctx.request('ui.openTab', { tab: 'draw' }).
 import {
-  W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
+  W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, SHADES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
   registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey, partsOf,
 } from './scene.mjs';
 
+import { colourName, colourNames, basicColourNames } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 import { habitat, adviceFor } from '../../src/knowledge/commonsense.mjs';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 import * as space from '../space/space.mjs';
 import * as rel from '../space/pieces.mjs';
@@ -85,7 +86,7 @@ const QUANTITY = { more: 3, some: 3, few: 3, several: 4, couple: 2, many: 6, lot
 const DIFFERENT = new Set(['different', 'various', 'varied', 'assorted', 'diverse', 'distinct', 'mixed', 'dissimilar', 'unlike']);
 /** Things whose colour is what they are: a different sun is a different size, not a different colour. */
 const FIXED_COLOR = new Set(['sun', 'moon', 'rainbow', 'cloud', 'person', 'tree', 'mountain']);
-const VARY_COLORS = ['red', 'blue', 'green', 'orange', 'purple', 'pink', 'yellow', 'turquoise', 'brown', 'gold'];
+const VARY_COLORS = () => basicColourNames().filter((c) => !['black', 'white', 'grey'].includes(c));   // the basic colours of the catalog, bright ones
 const VARY_SIZES = [1, 1.3, 0.78, 1.55, 0.62, 1.15];
 const PLURAL_DEFAULT = { star: 8, flower: 4, fish: 4, balloon: 4, bird: 3, cloud: 3, tree: 3, person: 3 };
 const MAX_COUNT = 12, MAX_STARS = 30;
@@ -137,7 +138,7 @@ const isShade = (w) => Object.hasOwn(SHADES, w);
 /** Color named by a list of words, ["dark", "blue"] -> "dark blue"; a lone shade darkens/lightens `fallback`. */
 function colorFrom(words, fallback = null) {
   let shade = null, color = null;
-  for (const w of words) { if (isShade(w)) shade = w; else if (isColorWord(w)) color = COLOR_ALIASES[w] ?? w; }
+  for (const w of words) { if (isShade(w)) shade = w; else if (isColorWord(w)) color = w; }
   if (!color && shade && fallback) color = fallback.split(' ').at(-1);
   return color ? canonColor([shade, color].filter(Boolean)) : null;
 }
@@ -341,7 +342,7 @@ export function parseNP(text) {
     if (Object.hasOwn(SIZE_WORDS, w)) { np.size = SIZE_WORDS[w] > 1 ? 'big' : SIZE_WORDS[w] < 1 ? 'small' : 'medium'; continue; }
     if (Object.hasOwn(POS_WORDS, w) && !(w === 'top' && np.kind) && words[i + 1] !== 'of') { np.pos = POS_WORDS[w]; continue; }
     if (w === 'one' || w === 'ones' || w === '1') { np.one = true; continue; }
-    if (isShade(w) || isColorWord(w)) { colorWords.push(w); continue; }
+    if ((isShade(w) || isColorWord(w)) && !(i === words.length - 1 && !np.kind && (Object.hasOwn(GROUND_WORDS, w) || kindOfWord(w)))) { colorWords.push(w); continue; }   // the last word that is both a colour of the catalog and a thing of this world (sand, orange, cherry) is the thing
     if (w === 'water' && waterBody()) { np.kind ??= waterBody(); continue; }   // "the water" is the lake or the river of the picture, when it has one
     if (w === 'sky') { np.special = 'sky'; continue; }
     if (w === 'background' || w === 'paper' || w === 'page' || w === 'canvas') { np.special = 'background'; continue; }
@@ -818,7 +819,7 @@ function addThing(s, spec, ctxInfo) {
   }
   if (spec.vary && group.length > 1) {   // each one differs: its own colour (not for things that have one colour by nature, nor one the user named) and its own size
     const shuffle = (xs) => { const a = xs.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd(s) * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-    const sizes = shuffle(VARY_SIZES), colors = shuffle(VARY_COLORS.filter((c) => !spec.colorGiven || c !== spec.color));
+    const sizes = shuffle(VARY_SIZES), colors = shuffle(VARY_COLORS().filter((c) => !spec.colorGiven || c !== spec.color));
     const colourable = !spec.colorGiven && !spec.who && !FIXED_COLOR.has(kind);
     group.forEach((o, i) => {
       o.size = Math.round(KINDS[kind].size * spec.factor * sizes[i % sizes.length]);
@@ -2119,7 +2120,7 @@ export const colorOfThing = guard((ctx, args, s) => {
 });
 
 export const help = guard(() => ok('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon, and shapes like a circle, a square, a triangle, a star, a heart, a line or an arrow. Say "draw a red house", "put a big yellow sun in the top right corner" or "make it night".'));
-export const colors = guard(() => ok(`I know ${andList(['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown', 'black', 'white', 'grey', 'turquoise', 'gold', 'silver'])}, and you can say light or dark, like "dark blue" or "light green".`));
+export const colors = guard(() => ok(`I know ${andList(basicColourNames())} and ${colourNames().length - basicColourNames().length} more colours, like ${andList(['turquoise', 'gold', 'silver', 'coral'].filter(colourName))}, and you can say light or dark, like "dark blue" or "light green".`));
 
 // ---- saving ----------------------------------------------------------------------------------------------------------------------
 export const save = guard((ctx, args, s) => {

@@ -1,13 +1,16 @@
-# k.space/shards/stars-and-galaxies: 5 named stars and galaxies beyond the solar system.
+# k.space/shards/stars-and-galaxies: 6 named stars and 2 galaxies beyond the solar system, with their distance in light years where it is well known. Written by a language model, only where sure (named=model).
 # sources: hand-core 1 (hand-written in this repository)
 # license: CC0-1.0
 # script: none (hand-written)
 
-@k.space.body.Polaris k.space.body name=Polaris kind=star in="Milky Way" core.source="hand-core 1"
-@k.space.body.Sirius k.space.body name=Sirius kind=star in="Milky Way" core.source="hand-core 1"
-@k.space.body.Proxima_Centauri k.space.body name="Proxima Centauri" kind=star colour=red in="Milky Way" core.source="hand-core 1"
-@k.space.body.Milky_Way k.space.body name="Milky Way" kind=galaxy drawing="milky way" core.source="hand-core 1"
-@k.space.body.Andromeda_Galaxy k.space.body name="Andromeda Galaxy" kind=galaxy core.source="hand-core 1"
+@k.space.body.Polaris k.space.body name=Polaris kind=star in="Milky Way" named=model core.source="hand-core 1"
+@k.space.body.Sirius k.space.body name=Sirius kind=star in="Milky Way" light_years_about=8.6 named=model core.source="hand-core 1"
+@k.space.body.Proxima_Centauri k.space.body name="Proxima Centauri" kind=star colour=red in="Milky Way" light_years_about=4.2 named=model core.source="hand-core 1"
+@k.space.body.Alpha_Centauri k.space.body name="Alpha Centauri" kind=star in="Milky Way" light_years_about=4.4 named=model core.source="hand-core 1"
+@k.space.body.Vega k.space.body name=Vega kind=star colour=white colour=blue in="Milky Way" light_years_about=25 named=model core.source="hand-core 1"
+@k.space.body.Betelgeuse k.space.body name=Betelgeuse kind=star colour=red in="Milky Way" named=model core.source="hand-core 1"
+@k.space.body.Milky_Way k.space.body name="Milky Way" kind=galaxy drawing="milky way" named=model core.source="hand-core 1"
+@k.space.body.Andromeda_Galaxy k.space.body name="Andromeda Galaxy" kind=galaxy light_years_about=2500000 named=model core.source="hand-core 1"
 
 @k.space.word.Polaris core.word text="North Star" means=Polaris of=k.space.body.name core.source="hand-core 1"
 @k.space.word.Sirius core.word text="Dog Star" means=Sirius of=k.space.body.name core.source="hand-core 1"

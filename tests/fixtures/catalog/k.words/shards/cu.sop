@@ -1,11 +1,11 @@
-# k.words/shards/cu: noun and verb senses of the words from "cub" to "cutting" (first letters "cu").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/cu: senses of the words from "cub" to "cutting" (first letters "cu").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.cup.noun.1 k.words.sense word=cup pos=noun n=1 gloss="a small open container usually used for drinking; usually has a handle" is_a=crockery is_a=container core.source="wordnet 3.1"
-@k.words.cup.noun.2 k.words.sense word=cup pos=noun n=2 gloss="the quantity a cup will hold" synonym=cupful is_a=containerful core.source="wordnet 3.1"
-@k.words.cup.noun.3 k.words.sense word=cup pos=noun n=3 gloss="any cup-shaped concavity" is_a="concave shape" core.source="wordnet 3.1"
-@k.words.cup.verb.1 k.words.sense word=cup pos=verb n=1 gloss="form into the shape of a cup" is_a=shape core.source="wordnet 3.1"
-@k.words.cup.verb.2 k.words.sense word=cup pos=verb n=2 gloss="put into a cup" is_a=insert core.source="wordnet 3.1"
-@k.words.cup.verb.3 k.words.sense word=cup pos=verb n=3 gloss="treat by applying evacuated cups to the patient's skin" synonym=transfuse is_a=treat core.source="wordnet 3.1"
+@k.words.cup.noun.1 k.words.sense word=cup pos=noun n=1 gloss="a small open container usually used for drinking; usually has a handle" is_a=crockery is_a=container kind_of=crockery kind_of=tableware kind_of=ware kind_of=article kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.cup.noun.2 k.words.sense word=cup pos=noun n=2 gloss="the quantity a cup will hold" synonym=cupful is_a=containerful kind_of=containerful kind_of="indefinite quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.cup.noun.3 k.words.sense word=cup pos=noun n=3 gloss="any cup-shaped concavity" is_a="concave shape" kind_of="concave shape" kind_of=solid kind_of=shape kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.cup.verb.1 k.words.sense word=cup pos=verb n=1 gloss="form into the shape of a cup" is_a=shape kind_of=shape kind_of=change core.source="wordnet 3.1"
+@k.words.cup.verb.2 k.words.sense word=cup pos=verb n=2 gloss="put into a cup" is_a=insert kind_of=insert kind_of=put kind_of=move core.source="wordnet 3.1"
+@k.words.cup.verb.3 k.words.sense word=cup pos=verb n=3 gloss="treat by applying evacuated cups to the patient's skin" synonym=transfuse is_a=treat kind_of=treat core.source="wordnet 3.1"

@@ -5,25 +5,21 @@
 
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const num = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
+import { colourName, colourHex, basicColour } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 const r1 = (v) => Math.round(v * 10) / 10;
 const clip = (s, n) => { const t = String(s ?? ''); return t.length > n ? `${t.slice(0, n - 1)}…` : t; };
 
-const COLOURS = {
-  red: '#d9453d', orange: '#ee8a2a', yellow: '#f2cf3e', green: '#4fa65a', blue: '#3f7fd8', purple: '#8a5cc7', pink: '#ea84b2', brown: '#8a5a36', black: '#2d2d34', white: '#f6f6f2',
-  grey: '#9aa0a6', gray: '#9aa0a6', gold: '#e0b13a', silver: '#c3c8cf', turquoise: '#3fb6b2', beige: '#e6d3ad', tan: '#cdaa7c', cream: '#f3ead2', navy: '#24407a', maroon: '#7a2b34',
-  'light blue': '#9cc5f2', 'dark green': '#2f7a3c', 'light green': '#9bd49f', 'dark blue': '#26467f', 'dark grey': '#5f656b', 'light grey': '#cfd3d8', violet: '#8b5fc9', lime: '#8bd24c', skin: '#f0c9a4',
-};
 /** A fill for a part: its exact rgb when it is #rrggbb, else the first known colour name, else grey. */
 export function fillOf(p) {
   if (/^#[0-9a-f]{6}$/i.test(p?.rgb ?? '')) return p.rgb;
-  for (const c of p?.colour ?? p?.c ?? []) { const k = String(c).toLowerCase().replace(/_/g, ' '); if (COLOURS[k]) return COLOURS[k]; }
-  return COLOURS.grey;
+  for (const c of p?.colour ?? p?.c ?? []) { const k = String(c).toLowerCase().replace(/_/g, ' '); const hex = colourHex(k); if (hex) return hex; }
+  return colourHex('grey');
 }
 
 /** The colour a card was changed to by talking ("make it red"): a whitelisted name, as a #rrggbb value; null when it was not changed. */
-export const tintOf = (card) => COLOURS[String(card?.data?.tint ?? '').toLowerCase()] ?? null;
-const NEUTRAL = new Set(['black', 'white', 'grey', 'gray', 'silver', 'transparent', 'clear']);
-const isNeutral = (p) => (p?.colour ?? p?.c ?? []).every((c) => NEUTRAL.has(String(c).toLowerCase()));
+export const tintOf = (card) => colourHex(card?.data?.tint) ?? null;
+/** A neutral part: black, white or grey in the catalog's basic colours (a word that is no colour at all, like transparent, is neutral too). */
+const isNeutral = (p) => (p?.colour ?? p?.c ?? []).every((c) => { const n = colourName(String(c).replace(/_/g, ' ')); return !n || ['black', 'white', 'grey'].includes(basicColour(n)); });
 const tintStyle = (card) => { const t = tintOf(card); return t ? ` style="fill:${t}"` : ''; };
 
 // ---------------------------------------------------------------- the picture of a thing (parts in a 0-100 frame)

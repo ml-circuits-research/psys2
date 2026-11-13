@@ -1,11 +1,18 @@
-# k.words/shards/bi: noun and verb senses of the words from "bi" to "biz" (first letters "bi").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/bi: senses of the words from "bi" to "biz" (first letters "bi").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.bicycle.noun.1 k.words.sense word=bicycle pos=noun n=1 gloss="a wheeled vehicle that has two wheels and is moved by foot pedals" synonym=bike synonym=wheel synonym=cycle is_a="wheeled vehicle" core.source="wordnet 3.1"
-@k.words.bicycle.verb.1 k.words.sense word=bicycle pos=verb n=1 gloss="ride a bicycle" synonym=cycle synonym=bike synonym=pedal synonym=wheel is_a=ride core.source="wordnet 3.1"
-@k.words.bird.noun.1 k.words.sense word=bird pos=noun n=1 gloss="warm-blooded egg-laying vertebrates characterized by feathers and forelimbs modified as wings" is_a=vertebrate core.source="wordnet 3.1"
-@k.words.bird.noun.2 k.words.sense word=bird pos=noun n=2 gloss="the flesh of a bird or fowl (wild or domestic) used as food" synonym=fowl is_a=meat part_of=bird core.source="wordnet 3.1"
-@k.words.bird.noun.3 k.words.sense word=bird pos=noun n=3 gloss="informal terms for a (young) woman" synonym=dame synonym=doll synonym=wench synonym=skirt synonym=chick is_a=girl core.source="wordnet 3.1"
-@k.words.bird.verb.1 k.words.sense word=bird pos=verb n=1 gloss="watch and study birds in their natural habitat" synonym=birdwatch is_a=observe core.source="wordnet 3.1"
+@k.words.bicycle.noun.1 k.words.sense word=bicycle pos=noun n=1 gloss="a wheeled vehicle that has two wheels and is moved by foot pedals" synonym=bike synonym=wheel synonym=cycle is_a="wheeled vehicle" kind_of="wheeled vehicle" kind_of=vehicle kind_of=conveyance kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.bicycle.verb.1 k.words.sense word=bicycle pos=verb n=1 gloss="ride a bicycle" synonym=cycle synonym=bike synonym=pedal synonym=wheel is_a=ride kind_of=ride kind_of=travel kind_of=travel core.source="wordnet 3.1"
+@k.words.big.adjective.1 k.words.sense word=big pos=adjective n=1 gloss="above average in size or number or quantity or magnitude or extent" synonym=large opposite=little core.source="wordnet 3.1"
+@k.words.big.adjective.2 k.words.sense word=big pos=adjective n=2 gloss="significant" near_opposite=unimportant core.source="wordnet 3.1"
+@k.words.big.adjective.3 k.words.sense word=big pos=adjective n=3 gloss="very intense" synonym=bad near_opposite=mild core.source="wordnet 3.1"
+@k.words.big.adverb.1 k.words.sense word=big pos=adverb n=1 gloss="extremely well" core.source="wordnet 3.1"
+@k.words.big.adverb.2 k.words.sense word=big pos=adverb n=2 gloss="in a boastful manner" synonym=boastfully synonym=vauntingly synonym=large core.source="wordnet 3.1"
+@k.words.big.adverb.3 k.words.sense word=big pos=adverb n=3 gloss="on a grand scale" opposite=small core.source="wordnet 3.1"
+@k.words.bigger.adjective.1 k.words.sense word=bigger pos=adjective n=1 gloss="large or big relative to something else" synonym=larger near_opposite=small core.source="wordnet 3.1"
+@k.words.bird.noun.1 k.words.sense word=bird pos=noun n=1 gloss="warm-blooded egg-laying vertebrates characterized by feathers and forelimbs modified as wings" is_a=vertebrate kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.bird.noun.2 k.words.sense word=bird pos=noun n=2 gloss="the flesh of a bird or fowl (wild or domestic) used as food" synonym=fowl is_a=meat part_of=bird kind_of=meat kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.bird.noun.3 k.words.sense word=bird pos=noun n=3 gloss="informal terms for a (young) woman" synonym=dame synonym=doll synonym=wench synonym=skirt synonym=chick is_a=girl kind_of=girl kind_of=woman kind_of=female kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.bird.verb.1 k.words.sense word=bird pos=verb n=1 gloss="watch and study birds in their natural habitat" synonym=birdwatch is_a=observe kind_of=observe kind_of=watch core.source="wordnet 3.1"
