@@ -538,13 +538,13 @@ export function interpret(text, ctx) {
     for (const r of rel.refs ?? []) { const x = resolve(r, ctx, { exclude: movers.map((m) => m.id) }); if (x.ask) return { type: 'ask', say: x.ask, candidates: x.candidates }; if (x.error) return errorOf(x, r); refs.push(x.items[0]); }
     const out = planPlace(movers, rel, refs, frame, items);
     if (out.error) return { type: 'error', say: 'I could not find a place for that.' };
-    return { type: 'move', ids: movers.map((m) => m.id), boxes: out.boxes, say: `I put ${groupName(movers, items)} ${sayRel(rel, refs, items)}.`, memory: null };
+    return { type: 'move', ids: movers.map((m) => m.id), boxes: out.boxes, say: `I put ${groupName(movers, items)} ${sayRel(rel, refs, items)}.`, memory: null, dest: dest.join(' '), kind: res.spec?.kind ?? '*' };
   }
   const mv = parseMove(dest);
   if (!mv) return { type: 'error', say: 'Where should it go? Try "to the left", "a bit higher" or "next to the sun".' };
   const out = planMove(movers, frame, mv, ctx.lastMove);
   if (out.error) return { type: 'error', say: 'I do not remember a move to repeat. Say which way to go.' };
-  return { type: 'move', ids: movers.map((m) => m.id), boxes: out.boxes, say: `I moved ${groupName(movers, items)} ${sayMove({ segs: out.memory.segs })}.`, memory: out.memory };
+  return { type: 'move', ids: movers.map((m) => m.id), boxes: out.boxes, say: `I moved ${groupName(movers, items)} ${sayMove({ segs: out.memory.segs })}.`, memory: out.memory, dest: dest.join(' '), kind: res.spec?.kind ?? '*' };
 }
 const sayRel = (rel, refs, all) => {
   const n = (r) => nameOf(r, all);
@@ -582,14 +582,14 @@ function layoutOf(t, ctx) {
   if (lay.op === 'tidy') {
     if (!anyOverlap(group)) return { type: 'layout', ids: [], boxes: {}, say: 'Nothing overlaps, so it is already tidy.' };
     const out = planLayout('tidy', group, ctx.frame, { all: items });
-    return { type: 'layout', ids: Object.keys(out.boxes), boxes: out.boxes, say: 'I tidied up: nothing overlaps now, and the order is the same.' };
+    return { type: 'layout', op: 'tidy', ids: Object.keys(out.boxes), boxes: out.boxes, say: 'I tidied up: nothing overlaps now, and the order is the same.' };
   }
   if (group.length < 2 && lay.op !== 'centre') return { type: 'error', say: 'I need at least two things for that.' };
   const out = planLayout(lay.op, group, ctx.frame, { how: lay.how });
   if (out.error === 'few') return { type: 'error', say: 'I need at least three things to spread out.' };
   if (out.error) return { type: 'error', say: 'I could not arrange them like that.' };
   const nm = { row: 'in a row', column: 'in a column', grid: 'in a grid', circle: 'in a circle', spread: 'spread out evenly', align: `aligned (${lay.how === 'cx' ? 'centres' : lay.how})`, size: 'the same size', centre: 'in the centre' }[lay.op];
-  return { type: 'layout', ids: group.map((g) => g.id), boxes: out.boxes, say: `I put ${group.length === 1 ? nameOf(group[0], items) : `the ${group.length} ${group.every((g) => g.kind === group[0].kind) ? `${group[0].name ?? group[0].kind}s` : 'things'}`} ${nm}.` };
+  return { type: 'layout', op: lay.op, ids: group.map((g) => g.id), boxes: out.boxes, say: `I put ${group.length === 1 ? nameOf(group[0], items) : `the ${group.length} ${group.every((g) => g.kind === group[0].kind) ? `${group[0].name ?? group[0].kind}s` : 'things'}`} ${nm}.` };
 }
 
 /** The answer to a question about places: { type: 'answer', say } (or ask / error). */

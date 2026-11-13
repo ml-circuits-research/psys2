@@ -4,6 +4,7 @@
     legend=$legend.diagram.sketch
     imports=world.core
     imports=world.lang.common
+    imports=world.space
     formalization=rules
     reasoner=matrix
     undo=diagram.undo

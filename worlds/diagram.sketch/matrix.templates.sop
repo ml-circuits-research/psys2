@@ -23,6 +23,11 @@
     status=conflicting
     text="{note}"
 
+@tpl.diagram.sketch.reselect.m.refused core.template
+    for=op.diagram.sketch.reselect
+    status=conflicting
+    text="{note}"
+
 @tpl.diagram.sketch.set.m.refused core.template
     for=op.diagram.sketch.set
     status=conflicting
