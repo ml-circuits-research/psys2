@@ -173,3 +173,13 @@
     status=conflicting
     text="{note}"
 
+
+@tpl.art.draw.takeApart.m.refused core.template
+    for=op.art.draw.takeApart
+    status=conflicting
+    text="{note}"
+
+@tpl.art.draw.group.m.refused core.template
+    for=op.art.draw.group
+    status=conflicting
+    text="{note}"

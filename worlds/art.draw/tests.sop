@@ -4139,3 +4139,38 @@
     input="Draw two blue castles."
     expect="I drew 2 blue castles"
     session=dff6
+
+@t.art.draw.p5a01 core.test
+    input="Draw a house."
+    expect="I drew a yellow house"
+    session=p5a
+
+@t.art.draw.p5a02 core.test
+    input="Make the wheels of the house red."
+    expect="A house has no wheel. You can color its chimney"
+    session=p5a
+
+@t.art.draw.p5a03 core.test
+    input="Take the house apart."
+    expect="I took the house apart"
+    session=p5a
+
+@t.art.draw.p5a04 core.test
+    input="Make the roof purple."
+    expect="The roof is purple now"
+    session=p5a
+
+@t.art.draw.p5a05 core.test
+    input="Put the roof and the walls together as a hut."
+    expect="together as a hut"
+    session=p5a
+
+@t.art.draw.p5a06 core.test
+    input="Draw another hut."
+    expect="I drew a hut"
+    session=p5a
+
+@t.art.draw.p5b01 core.test
+    input="Draw 3 different cars."
+    expect="car"
+    session=p5b
