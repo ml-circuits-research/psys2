@@ -3111,3 +3111,21 @@ Reviewer limits and findings:
 - npm test on ba08e18 (reviewer box): 1 fail, the same one as yours: `not ok 671 - the webchat build writes a modulepreload block into index.html, idempotently`. Fix it first. If two tests build the webchat at the same time, give each its own output folder, or run them in sequence. A flaky test hides real failures.
 - Language gate: the owner chose "beta" (10:07) after your 70% change. List en and ro normally; list every other engine language as "beta" with its number, whatever the number is. Keep one constant (80) that only separates normal from beta. The 70% cut-off is not needed.
 - Then continue with the 10:25 block in this order: "open draw" + short tab names, "draw a sky", ROUND-TRIP-MINING, the re-vendor of sopworld 0.14.0 (c7247e2), DESCRIBE-ALL for the remaining worlds.
+
+## Reviewer 2026-11-13 08:05 — KNOWLEDGE-BY-LOOKUP (owner's question; design and one experiment, after the 10:25 and 10:50 blocks)
+
+**Owner's rule:** do not generate training data from the knowledge worlds, and do not train the encoder (DistilBERT) to know words and things. The encoder learns the *shape* of a request. The knowledge worlds supply the *words*, by lookup at run time.
+
+**Design to build and measure:**
+1. **Shape, not vocabulary.** The encoder and the rules decide the world and the action from the frame: "draw a X", "add a box shaped like a X", "what is a X", "how many legs does a X have". X is an open slot. In training data, fill open slots with a wide random set of nouns, including invented ones ("draw a blorp"), so the model cannot learn the nouns. No new rows per knowledge fact, ever.
+2. **Lookup after reading.** When a reading has an open slot or words left out (sopworld already reports them), look these lemmas up in the knowledge catalog (`vocab.json` of sop-knowledge-worlds: lemma → shards). A hit loads only those shards. No model is involved in this step.
+3. **Who uses the knowledge:**
+   - A tab world with an action that needs a thing (art.draw "draw a house", diagram.sketch "a diagram shaped like a house") reads the parts and layout from `k.objects`, and the advice from `k.commonsense`.
+   - A question with no tab action ("what is a comet?", "how many moons does Mars have?") goes to the conversation composite, which answers from the loaded shard.
+   - The E2 veto asks the catalog before it says "I can't find …". The plain refusal comes only when there is no hit.
+4. **Routing rule to test:** the frame decides the world; the catalog hit decides only *which knowledge to load*. A catalog hit alone never moves a message to another world.
+
+**Experiment (report in worker-log):**
+- Make a 120-case set: 40 draw/diagram requests with things that are not in any app world; 40 knowledge questions; 40 controls that must not change. Use the hand-written `k.commonsense` and `k.objects` cores from sop-knowledge-worlds when they land (Round 1 is in progress there); until then use a stub catalog of 30 objects.
+- Measure: right world; knowledge loaded (yes/no, which shard); answer right; added latency per message; and the same set with invented nouns. Expected for invented nouns: right world, no hit, a plain "I don't know what a blorp is" reply.
+- Gate: no regression on the operational sets (rules and encoder), 0 "ops better" in the A/B. No encoder retraining for this task. If retraining seems needed, stop and report why.
