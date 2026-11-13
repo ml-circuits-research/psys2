@@ -536,6 +536,11 @@
     card=one
     ask="Does the pattern carry an explicit signal of its world (a named shape, an arrow between names, a flowchart word), so it beats the active tab's own matches?"
 
+@core.pattern.tabClaim core.key
+    value=boolean
+    card=one
+    ask="Is the pattern read by the world of the active tab even when the message names another world (a Talk transfer such as \"make a diagram of this\")?"
+
 @core.pattern.whole core.key
     value=boolean
     card=one

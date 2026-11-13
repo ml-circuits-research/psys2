@@ -5138,3 +5138,193 @@
     alt=all_of_these
     alt=all_of_them
     alt=all_of_this
+
+@phrase.lang.talk.it core.phrase
+    doc="The thing the conversation is on, said as a pronoun (Talk tab follow-ups)."
+    alt=it
+    alt=this
+    alt=that
+    alt=this_one
+    alt=that_one
+    alt=the_card
+    alt=the_picture
+
+@phrase.lang.talk.itlook core.phrase
+    doc="A follow-up asking what the current topic looks like."
+    alt=what_does_it_look_like
+    alt=and_what_does_it_look_like
+    alt=what_do_they_look_like
+    alt=what_does_that_look_like
+    alt=what_does_this_look_like
+
+@phrase.lang.talk.itparts core.phrase
+    doc="A follow-up asking for the parts of the current topic."
+    alt=and_its_parts
+    alt=its_parts
+    alt=what_are_its_parts
+    alt=and_what_are_its_parts
+    alt=what_parts_does_it_have
+    alt=what_is_it_made_of
+    alt=what_are_they_made_of
+    alt=what_are_the_parts
+    alt=and_the_parts
+
+@phrase.lang.talk.makeit core.phrase
+    doc="Verbs that change the colour of the card being talked about."
+    alt=make_it
+    alt=make_this
+    alt=make_that
+    alt=colour_it
+    alt=color_it
+    alt=paint_it
+    alt=turn_it
+    alt=make_the_picture
+    alt=make_the_card
+
+@phrase.lang.talk.bigger core.phrase
+    doc="Making the current card bigger."
+    alt=bigger
+    alt=larger
+    alt=make_it_bigger
+    alt=make_it_larger
+    alt=make_this_bigger
+    alt=enlarge_it
+    alt=enlarge_the_picture
+    alt=zoom_in
+    alt=make_the_picture_bigger
+    alt=a_bit_bigger
+
+@phrase.lang.talk.smaller core.phrase
+    doc="Making the current card smaller."
+    alt=smaller
+    alt=make_it_smaller
+    alt=make_this_smaller
+    alt=shrink_it
+    alt=shrink_the_picture
+    alt=zoom_out
+    alt=make_the_picture_smaller
+    alt=a_bit_smaller
+
+@phrase.lang.talk.showtoo core.phrase
+    doc="Lead-ins of adding another thing to the current card."
+    alt=show_the
+    alt=show_me_the
+    alt=add_the
+    alt=add
+    alt=include_the
+    alt=and_the
+    alt=and_also_the
+    alt=show_also_the
+    alt=draw_the
+
+@phrase.lang.talk.too core.phrase
+    doc="Closing words of adding another thing to the current card."
+    alt=too
+    alt=as_well
+    alt=also
+    alt=in_it_too
+    alt=next_to_it
+
+@phrase.lang.talk.todraw core.phrase
+    doc="Sending the current card to the drawing tab."
+    alt=put_it_in_my_drawing
+    alt=put_it_in_the_drawing
+    alt=put_this_in_my_drawing
+    alt=add_it_to_my_drawing
+    alt=add_it_to_the_drawing
+    alt=add_this_to_my_drawing
+    alt=send_it_to_my_drawing
+    alt=send_it_to_the_drawing
+    alt=put_it_in_my_picture
+    alt=copy_it_to_my_drawing
+    alt=draw_it_in_my_drawing
+    alt=put_it_on_my_drawing
+    alt=add_it_to_my_picture
+
+@phrase.lang.talk.todiagram core.phrase
+    doc="Sending the current card to the diagram tab."
+    alt=make_a_diagram_of_this
+    alt=make_a_diagram_of_it
+    alt=make_a_diagram_from_this
+    alt=make_a_diagram_from_it
+    alt=turn_it_into_a_diagram
+    alt=show_it_as_a_diagram
+    alt=send_it_to_the_diagram
+    alt=put_it_in_my_diagram
+    alt=put_it_in_a_diagram
+    alt=draw_a_diagram_of_it
+    alt=draw_a_diagram_of_this
+    alt=make_it_a_diagram
+
+@phrase.lang.talk.tomap core.phrase
+    doc="Sending the current topic to the map tab."
+    alt=show_it_on_the_map
+    alt=show_this_on_the_map
+    alt=put_it_on_the_map
+    alt=put_it_on_my_map
+    alt=send_it_to_the_map
+    alt=find_it_on_the_map
+    alt=show_me_it_on_the_map
+    alt=locate_it_on_the_map
+    alt=where_is_it_on_the_map
+
+@phrase.lang.talk.about core.phrase
+    doc="Asking about the thing that is selected on another tab."
+    alt=ask_about_this
+    alt=ask_about_it
+    alt=ask_about_this_one
+    alt=talk_about_this
+    alt=talk_about_this_one
+    alt=tell_me_more_about_this
+    alt=ask_talk_about_this
+    alt=ask_the_talk_tab_about_this
+
+@phrase.lang.talk.me core.phrase
+    doc="Asking what is known about the user."
+    alt=what_do_you_know_about_me
+    alt=what_do_you_know_about_me_so_far
+    alt=what_have_you_learned_about_me
+    alt=tell_me_what_you_know_about_me
+    alt=what_do_you_remember_about_me
+    alt=what_do_you_have_on_me
+
+@phrase.lang.talk.drawn core.phrase
+    doc="Asking what the user drew in this session."
+    alt=what_did_i_draw
+    alt=what_have_i_drawn
+    alt=what_did_i_draw_today
+    alt=what_have_i_drawn_today
+    alt=what_did_i_draw_so_far
+    alt=what_did_i_make_in_my_drawing
+
+@phrase.lang.talk.chessmoves core.phrase
+    doc="Asking how many moves the user made in the chess game."
+    alt=how_many_moves_did_i_make_in_chess
+    alt=how_many_moves_have_i_made_in_chess
+    alt=how_many_chess_moves_did_i_make
+    alt=how_many_moves_did_i_play_in_chess
+    alt=how_many_moves_have_i_played_in_chess
+    alt=how_many_moves_did_i_make_in_the_game
+    alt=how_many_moves_have_i_made
+
+@phrase.lang.talk.kindof core.phrase
+    doc="Lead-ins of a question about what kind of thing X is; the thing follows."
+    alt=what_kind_of_thing_is
+    alt=what_kind_of_thing_are
+    alt=what_sort_of_thing_is
+    alt=what_type_of_thing_is
+    alt=what_is_the_kind_of
+    alt=what_group_is
+
+@phrase.lang.talk.undo core.phrase
+    doc="Taking back the last change or transfer on the Talk tab."
+    alt=undo
+    alt=undo_that
+    alt=undo_it
+    alt=undo_this
+    alt=take_that_back
+    alt=take_it_back
+    alt=undo_the_last_one
+    alt=undo_the_last_change
+    alt=undo_the_last_step
+    alt=go_back

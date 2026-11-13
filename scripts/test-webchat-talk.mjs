@@ -67,6 +67,23 @@ async function run(label, viewport) {
     check(`${label}: a tap on a node scrolls the chat to its card`, tapped);
     await c.say('How do you know?');
     check(`${label}: how do you know adds a plain-words card`, await pg.evaluate(() => { const h = [...document.querySelectorAll('.tk-how')].at(-1); return !!h && h.textContent.includes('You asked') && !/k\.objects|shards/.test(h.textContent); }));
+    // stage 2: a card changes in place, travels to another tab and comes back; the session cards
+    await c.say('What does a lighthouse look like?');
+    const nCards = await cardCount();
+    const red = await c.say('make it red');
+    check(`${label}: "make it red" redraws the same card in place`, red.ok && (await cardCount()) === nCards && await pg.evaluate(() => [...document.querySelectorAll('.p2-bubble .tk-inchat')].at(-1).querySelector('.tk-drawing').innerHTML.includes('#d9453d')), red.reply);
+    await c.say('bigger');
+    check(`${label}: "bigger" makes the card larger`, await pg.evaluate(() => [...document.querySelectorAll('.p2-bubble .tk-inchat')].at(-1).style.maxWidth === '504px'));
+    await shot('3a-changed');
+    const sent = await c.say('put it in my drawing');
+    check(`${label}: "put it in my drawing" is taken by the Drawing tab`, /Drawing tab took it/.test(sent.reply) && await pg.evaluate(() => window.psys2.session.state()['art.draw']?.objects?.length === 1), sent.reply);
+    await shot('3b-drawing');
+    await c.say('open the talk tab');
+    const asked = await c.say('what did I draw today?');
+    check(`${label}: the session card tallies the drawing`, /drew 1 thing/.test(asked.reply) && await pg.evaluate(() => !!document.querySelector('.p2-bubble .tk-facts li')), asked.reply);
+    const about = await c.say('ask about this');
+    check(`${label}: "ask about this" from the Talk tab with nothing selected elsewhere says so`, /Select something|Here is the/.test(about.reply), about.reply);
+    await shot('3c-session');
     const scope = await c.say('tell me a joke about pirates');
     check(`${label}: outside the scope is refused with two suggestions`, scope.reply.startsWith('I cannot talk about that here') && (await pg.evaluate(() => [...document.querySelectorAll('.p2-bot, .p2-msg.is-bot')].at(-1)?.querySelectorAll('.p2-example').length)) === 2);
     await shot('3-end');

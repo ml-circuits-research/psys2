@@ -10,7 +10,7 @@ import { parse, get, getAll } from '../soplang/index.mjs?v=26885599a7';
 import { Legends } from '../legends/index.mjs?v=48b634e4da';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
 import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=bc8d4bc227';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=8c6a9e6d3c';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=6fa6cc72a4';
 import { lexIndex } from './lexicon.mjs?v=e3316469a7';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
@@ -225,6 +225,8 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     tabFollow: txt(x, 'tabFollow') === 'true',
     // signal=true: the pattern carries an explicit signal of its world (a named shape, an arrow between names, a flowchart word): a match that is not a catch-all beats the active tab's own matches (routing tier 3, DIAG)
     signal: txt(x, 'signal') === 'true',
+    // tabClaim=true: while its world owns the active tab, this pattern is read by it even when the message names another world ("make a diagram of this" on the Talk tab is a transfer, not a new diagram)
+    tabClaim: txt(x, 'tabClaim') === 'true',
     // whole=true: the pattern reads a whole list statement ("I like chess, music and maps"); when the rules read the whole message with it, a dispatcher cut into pieces never overrides it (COMPUTE-BUDGET C)
     whole: txt(x, 'whole') === 'true',
     examples: [...new Set([...getAll(x, 'example').map((v) => v.v), ...getAll(x, 'canonical').map((v) => v.v)])],

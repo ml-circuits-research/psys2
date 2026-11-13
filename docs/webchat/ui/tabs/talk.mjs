@@ -65,6 +65,12 @@ rect.tk-rootbox, .tk-rootnode .tk-box { fill: color-mix(in srgb, var(--accent) 1
 .tk-acts { display: flex; gap: 8px; margin-top: 6px; }
 .tk-link-btn { all: unset; cursor: pointer; font-size: 12px; font-weight: 650; color: var(--accent); border-radius: 6px; padding: 1px 4px; }
 .tk-link-btn:hover, .tk-link-btn:focus-visible { text-decoration: underline; }
+.tk-facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 13.5px; }
+.tk-facts li { display: grid; grid-template-columns: minmax(70px, 38%) 1fr; gap: 8px; padding: 3px 8px; border-radius: 8px; background: var(--surface-2); }
+.tk-factk { color: var(--muted); text-transform: capitalize; }
+.tk-factv { color: var(--ink); font-weight: 650; }
+.tk-tree { max-height: 220px; }
+.tk-inchat .tk-pic { margin-inline: auto; }
 .tk-how { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
 .tk-how li { display: grid; grid-template-columns: 96px 1fr; gap: 8px; font-size: 13px; line-height: 1.4; }
 .tk-howlabel { font-weight: 700; color: var(--muted); }
@@ -141,6 +147,14 @@ function make(holder, host) {
     img.src = url;
   });
 
+  /** A card made bigger or smaller by talking ("bigger"): the picture's width, and the frame of the card grows with it. */
+  function sizeOf(root, pic, card) {
+    const k = Number(card.data?.scale) || 1;
+    pic.style.width = `${Math.round(Math.min(100, 100 * k) )}%`;
+    root.style.maxWidth = `${Math.round(420 * Math.max(1, k))}px`;
+    if (k > 1) pic.style.width = '100%';
+  }
+
   /** The element of a card for the chat: title, picture, the parts on tap (a drawing), and the how-do-you-know link. */
   function buildCard(card) {
     const root = el('div', 'tk-inchat');
@@ -149,6 +163,7 @@ function make(holder, host) {
     const pic = el('div', 'tk-pic');
     pic.innerHTML = cards.cardHtml(card);
     root.append(pic);
+    sizeOf(root, pic, card);
     if (card.kind === 'drawing') {
       const names = card.data?.names ?? [], cap = el('p', 'tk-cap', names.length ? 'Tap a part to find it.' : '');
       const row = el('div', 'tk-names');
@@ -178,12 +193,20 @@ function make(holder, host) {
     show() { if (cards) render(); },
     destroy() { destroyed = true; void ready; },
     /** Called by the effect talk.card: build the card and put it inside the current answer. */
-    async showCard(id) {
+    async showCard(id, update = false) {
       await ready;
       const s = host.state(WORLD) ?? state;
       const card = (s?.cards ?? []).find((c) => c.id === id);
       if (!card || !cards) return false;
       state = s;
+      const old = update ? cardEls.get(id) : null;
+      if (old) {   // the card changed by talking: the same element, redrawn in place
+        const pic = old.querySelector('.tk-pic');
+        if (pic) { pic.innerHTML = cards.cardHtml(card); sizeOf(old, pic, card); }
+        flash(old);
+        render();
+        return true;
+      }
       const node = buildCard(card);
       cardEls.set(id, node);
       if (card.topic && !firstOfTopic.has(card.topic)) firstOfTopic.set(card.topic, node);
@@ -198,7 +221,7 @@ function make(holder, host) {
 export default {
   id: 'talk', label: 'Talk', world: WORLD, order: 95, make,
   effects: {
-    'talk.card': async ({ id }, { ui }) => { const ok = await ui?.showCard?.(String(id)); return ok ? { ok: true } : { ok: false, detail: 'the card could not be shown' }; },
+    'talk.card': async ({ id, update }, { ui }) => { const ok = await ui?.showCard?.(String(id), !!update); return ok ? { ok: true } : { ok: false, detail: 'the card could not be shown' }; },
     'talk.board': async (_args, { ui }) => { ui?.showBoard?.(); return { ok: !!ui }; },
   },
 };
