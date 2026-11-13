@@ -1,56 +1,100 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * The knowledge world `k.layouts` (SPACE-2, worker-tasks 17:40: "layouts are knowledge, not code"): named arrangements with slots, found by lookup like any fact.
- * Browser-safe: no `node:*`. Read through the catalog's source (`{ text(path) -> Promise<string|null> }`) exactly like `k.faces`, because the generic knowledge reader is not
- * on main yet; when it is, only `load` changes.
+ * The knowledge world `k.layouts` (SPACE-2): named arrangements with places, found by lookup like any fact. Browser-safe: no `node:*`. Read through the catalog's source
+ * (`{ text(path) -> Promise<string|null> }`) exactly like `k.faces`.
  *
- * Format (proposal, one wire per layout in `k.layouts/shards/layouts.sop`):
- *   @layout.row k.layouts.layout
- *       name=row synonym=line synonym="in a line" generator=row sort=reading when="things of one kind that belong together"
- *   @layout.family-photo k.layouts.layout          (no code at all: slots are fractions of the frame, filled in the order of `sort`)
- *       name="family photo" synonym="group photo" sort=height slot="0.2 0.6" slot="0.4 0.6" slot="0.6 0.6" slot="0.8 0.6" rel="slot1 left_of slot2"
+ * Format: the published one (sop-knowledge-worlds, docs/worlds/k.layouts/schema.sop), one wire per line in `k.layouts/shards/layouts.sop`:
+ *   k.layouts.layout   name= kind=repeating|fixed about= ordered= usual_for=(many)
+ *   k.layouts.slot     layout= name= count=one|many pair= optional= holds=(many) arranged= x= y= w= h=      (the box in a 0-100 frame)
+ *   k.layouts.relation layout= a= rel= b= among=neighbours|all
+ *   core.word          text=(many) means=<layout name> of=k.layouts.layout.name                              (the other names of an arrangement)
+ * (`k.layouts.anchor` and `k.layouts.joins` are read by `parseAnchors` / `parseJoins`: they are about objects, not arrangements.)
  *
- * `generator` names a built-in arrangement of solver.mjs; slots are data. The local table `FALLBACK` is used only when the catalog has no layouts or no network.
+ * A layout whose name is a built-in generator of solver.mjs (row, column, grid, ring, corners, stack, flow, tree, landscape, scatter, face) is computed by it; any other
+ * layout that has slot boxes is solved from its places (`places`), no code. The local table `FALLBACK` is used only when the catalog has no layouts or no network.
  */
 import { parseLine } from './catalog.mjs';
 
 export const LAYOUTS_PATH = 'k.layouts/shards/layouts.sop';
+export const ANCHORS_PATH = 'k.layouts/shards/anchors.sop';
+export const JOINS_PATH = 'k.layouts/shards/joins.sop';
 export const GENERATORS = ['row', 'column', 'grid', 'ring', 'corners', 'stack', 'flow', 'tree', 'landscape', 'scatter', 'face', 'height'];
 
 /** The built-in fallback (the same shape as a parsed catalog layout). */
 export const FALLBACK = [
-  { id: 'row', name: 'row', synonyms: ['line', 'in a row', 'in a line', 'side by side'], generator: 'row', sort: 'reading', slots: [], rels: [] },
-  { id: 'column', name: 'column', synonyms: ['in a column', 'one under the other'], generator: 'column', sort: 'reading', slots: [], rels: [] },
-  { id: 'grid', name: 'grid', synonyms: ['in a grid', 'rows and columns'], generator: 'grid', sort: 'reading', slots: [], rels: [] },
-  { id: 'ring', name: 'ring', synonyms: ['circle', 'in a circle', 'in a ring'], generator: 'ring', sort: 'reading', slots: [], rels: [] },
-  { id: 'corners', name: 'corners', synonyms: ['in the corners', 'different corners', 'each in a different corner'], generator: 'corners', sort: 'reading', slots: [], rels: [] },
-  { id: 'landscape', name: 'landscape', synonyms: ['a landscape', 'sky above ground'], generator: 'landscape', sort: 'none', slots: [], rels: [] },
-  { id: 'stack', name: 'stack', synonyms: ['pile', 'on top of each other'], generator: 'stack', sort: 'none', slots: [], rels: [] },
-  { id: 'flow', name: 'flow', synonyms: ['left to right', 'flow left to right'], generator: 'flow', sort: 'none', slots: [], rels: [] },
-  { id: 'tree', name: 'tree', synonyms: ['as a tree', 'hierarchy'], generator: 'tree', sort: 'none', slots: [], rels: [] },
-  { id: 'height', name: 'by height', synonyms: ['by size', 'from the tallest to the shortest'], generator: 'height', sort: 'height', slots: [], rels: [] },
+  { id: 'row', name: 'row', synonyms: ['line', 'in a row', 'in a line', 'side by side'], generator: 'row', sort: 'reading', slots: [], places: [], rels: [] },
+  { id: 'column', name: 'column', synonyms: ['in a column', 'one under the other'], generator: 'column', sort: 'reading', slots: [], places: [], rels: [] },
+  { id: 'grid', name: 'grid', synonyms: ['in a grid', 'rows and columns'], generator: 'grid', sort: 'reading', slots: [], places: [], rels: [] },
+  { id: 'ring', name: 'ring', synonyms: ['circle', 'in a circle', 'in a ring'], generator: 'ring', sort: 'reading', slots: [], places: [], rels: [] },
+  { id: 'corners', name: 'corners', synonyms: ['in the corners', 'different corners', 'each in a different corner'], generator: 'corners', sort: 'reading', slots: [], places: [], rels: [] },
+  { id: 'landscape', name: 'landscape', synonyms: ['a landscape', 'sky above ground'], generator: 'landscape', sort: 'none', slots: [], places: [], rels: [] },
+  { id: 'stack', name: 'stack', synonyms: ['pile', 'on top of each other'], generator: 'stack', sort: 'none', slots: [], places: [], rels: [] },
+  { id: 'flow', name: 'flow', synonyms: ['left to right', 'flow left to right'], generator: 'flow', sort: 'none', slots: [], places: [], rels: [] },
+  { id: 'tree', name: 'tree', synonyms: ['as a tree', 'hierarchy'], generator: 'tree', sort: 'none', slots: [], places: [], rels: [] },
+  { id: 'height', name: 'by height', synonyms: ['by size', 'from the tallest to the shortest'], generator: 'height', sort: 'height', slots: [], places: [], rels: [] },
 ];
 
-/** One layout wire -> { id, name, synonyms, generator, sort, slots: [[fx, fy]], rels: [[slotA, rel, slotB]], when } or null. */
-export function parseLayoutWire(line) {
-  const w = line.startsWith('@') ? parseLine(line) : null;
-  if (!w || w.type !== 'k.layouts.layout') return null;
-  const a = w.attrs, one = (k) => a[k]?.[0];
-  const slots = (a.slot ?? []).map((s) => s.trim().split(/\s+/).map(Number)).filter((s) => s.length >= 2 && s.every(Number.isFinite)).map(([x, y]) => [Math.min(1, Math.max(0, x)), Math.min(1, Math.max(0, y))]);
-  const rels = (a.rel ?? []).map((r) => r.trim().split(/\s+/)).filter((r) => r.length === 3);
-  const gen = one('generator');
-  if (!one('name') || (!slots.length && !GENERATORS.includes(gen))) return null;
-  return { id: w.id.replace(/^layout\./, ''), name: one('name'), synonyms: a.synonym ?? [], generator: GENERATORS.includes(gen) ? gen : null, sort: one('sort') ?? 'reading', slots, rels, when: one('when') ?? '' };
+const bool = (v) => v === 'true';
+const clamp = (n) => Math.min(100, Math.max(0, n));
+const idOf = (name) => String(name).trim().toLowerCase().replace(/\s+/g, '_');
+function placeOf(a) {
+  const one = (k) => a[k]?.[0];
+  const box = ['x', 'y', 'w', 'h'].map((k) => Number(a[k]?.[0]));
+  const hasBox = a.x && a.y && a.w && a.h && box.every(Number.isFinite);
+  return {
+    name: one('name'), count: one('count') === 'many' ? 'many' : 'one', pair: bool(one('pair')), optional: bool(one('optional')), holds: a.holds ?? [], arranged: one('arranged') ?? null,
+    box: hasBox ? { x: clamp(box[0]), y: clamp(box[1]), w: clamp(box[2]), h: clamp(box[3]) } : null,
+  };
 }
-/** The text of a k.layouts shard -> layouts (lines that are not layout wires, and wires with neither slots nor a known generator, are skipped). */
+/**
+ * The text of a k.layouts shard -> layouts: { id, name, kind, about, ordered, usualFor, synonyms, generator, sort, places, slots: [[fx, fy]] (centres of the boxes, 0..1),
+ * rels: [{ a, rel, b, among }], when }. A layout with neither a generator nor a slot box is skipped.
+ */
 export function parseLayouts(text) {
-  const out = [];
-  let buf = null;
-  const flush = () => { if (buf) { const l = parseLayoutWire(buf); if (l) out.push(l); } buf = null; };
+  const by = new Map(), words = new Map();
+  const get = (name) => { const id = idOf(name); if (!by.has(id)) by.set(id, { id, name: null, places: [], rels: [] }); return by.get(id); };
   for (const line of String(text ?? '').split('\n')) {
-    if (line.startsWith('@')) { flush(); buf = line; } else if (buf && /^\s+\S/.test(line)) buf += ` ${line.trim()}`; else if (!line.trim()) flush();
+    if (!line.startsWith('@')) continue;
+    const w = parseLine(line);
+    if (!w) continue;
+    const a = w.attrs, one = (k) => a[k]?.[0];
+    if (w.type === 'k.layouts.layout' && one('name')) {
+      Object.assign(get(one('name')), { name: one('name'), kind: one('kind') === 'fixed' ? 'fixed' : 'repeating', about: one('about') ?? '', ordered: bool(one('ordered')), usualFor: a.usual_for ?? [] });
+    } else if (w.type === 'k.layouts.slot' && one('layout') && one('name')) get(one('layout')).places.push(placeOf(a));
+    else if (w.type === 'k.layouts.relation' && one('layout') && one('a') && one('rel') && one('b')) get(one('layout')).rels.push({ a: one('a'), rel: one('rel'), b: one('b'), among: one('among') ?? null });
+    else if (w.type === 'core.word' && one('of') === 'k.layouts.layout.name' && one('means')) words.set(idOf(one('means')), [...(words.get(idOf(one('means'))) ?? []), ...(a.text ?? [])]);
   }
-  flush();
+  const out = [];
+  for (const l of by.values()) {
+    if (!l.name) continue;
+    const generator = GENERATORS.includes(l.id) ? l.id : null, boxed = l.places.filter((p) => p.box);
+    if (!generator && !boxed.length) continue;
+    const tallFirst = l.rels.some((r) => r.rel === 'smaller_than');   // the small ones stand in front of the tall ones: the tall ones are placed first
+    out.push({
+      ...l, synonyms: words.get(l.id) ?? [], generator, sort: tallFirst ? 'height' : 'reading',
+      slots: boxed.map((p) => [(p.box.x + p.box.w / 2) / 100, (p.box.y + p.box.h / 2) / 100]), when: l.usualFor?.[0] ?? '',
+    });
+  }
+  return out;
+}
+/** The places on drawable things (k.layouts.anchor): [{ of, name, kind, box: {x, y, w, h}, part, holds, on }]. */
+export function parseAnchors(text) {
+  const out = [];
+  for (const line of String(text ?? '').split('\n')) {
+    const w = line.startsWith('@') ? parseLine(line) : null;
+    if (!w || w.type !== 'k.layouts.anchor' || !w.attrs.of || !w.attrs.name || !w.attrs.kind) continue;
+    const a = w.attrs, box = ['x', 'y', 'w', 'h'].map((k) => Number(a[k]?.[0]));
+    if (box.every(Number.isFinite)) out.push({ of: a.of[0], name: a.name[0], kind: a.kind[0], box: { x: box[0], y: box[1], w: box[2], h: box[3] }, part: a.part?.[0] ?? null, holds: a.holds ?? [], on: a.on ?? [] });
+  }
+  return out;
+}
+/** Which kind of thing joins which (k.layouts.joins): [{ a, rel, b, side }]. */
+export function parseJoins(text) {
+  const out = [];
+  for (const line of String(text ?? '').split('\n')) {
+    const w = line.startsWith('@') ? parseLine(line) : null;
+    if (w?.type === 'k.layouts.joins' && w.attrs.a && w.attrs.rel && w.attrs.b) out.push({ a: w.attrs.a[0], rel: w.attrs.rel[0], b: w.attrs.b[0], side: w.attrs.side?.[0] ?? null });
+  }
   return out;
 }
 

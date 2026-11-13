@@ -546,9 +546,9 @@ export class Discourse {
     const st = this.dialog.isession.state;
     const frames = this.frames.filter((f) => f.turn === turn);
     const rsMark = this.dialog.isession.rs?.markOf(turn);   // matrix reasoner (spec 15): the library as it was before this turn
-    // a question only creates the (lazy) state of a world on first use: that is no action to undo
+    // a question is not a step (UNDO-REDO: undo and redo count only the requests that change something): what it leaves in a world's state (a first use, the choices it offered) is no action to undo or redo
     const onlyQuestions = frames.length > 0 && frames.every((f) => f.kind === 'question');
-    const worlds = Object.keys(st).filter((id) => !NO_TOPIC.has(id) && JSON.stringify(st[id]) !== before[id] && !(onlyQuestions && before[id] === undefined));
+    const worlds = Object.keys(st).filter((id) => !NO_TOPIC.has(id) && JSON.stringify(st[id]) !== before[id] && !onlyQuestions);
     if (!worlds.length) return null;
     if (!frames.length) {   // a game's turn (games keep their own state machines: no frames)
       if (kind === 'undo') {

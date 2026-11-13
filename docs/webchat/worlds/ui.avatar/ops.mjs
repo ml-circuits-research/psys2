@@ -4,7 +4,7 @@
 // operation runs: the world's `needs` hook says so); nothing about slots, variants or accessories is written in this world. State: { name, face }.
 // Browser-safe: imports only its siblings.
 import * as F from './facelogic.mjs?v=994c02d169';
-import { DEFAULT_FACE } from './default-face.mjs?v=25d7a88f07';
+import { DEFAULT_FACE } from './default-face.mjs?v=f21fba5192';
 
 const ok = (value) => ({ status: 'supported', value });
 const no = (note) => ({ status: 'unsupported', note });
