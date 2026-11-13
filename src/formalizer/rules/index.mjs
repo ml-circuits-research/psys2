@@ -353,8 +353,9 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     }
   }
   // DECLINE (spec 21): a world may export `accepts({ action, roles, text, state })`; when it returns false the world does not own this reading ("draw a house" is not a face part),
-  // so its match is dropped before routing and the next world reads the message. Pure and bounded: it only looks at the words of the roles.
+  // so its match is dropped before routing and the next world reads the message. Pure, and every pass ticks the budget; it only looks at the words of the roles.
   for (let k = matches.length - 1; k >= 0; k--) {
+    budget.tick('rules.accepts');
     const m = matches[k], acc = set.get(m.pattern.worldId)?.ops?.accepts;
     if (typeof acc !== 'function') continue;
     const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
