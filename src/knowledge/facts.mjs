@@ -90,13 +90,14 @@ export function createFacts({ source, name = 'catalog' }) {
     return wireIx.get(id);
   };
 
+  const pathOf = (id) => (/\.sop$/.test(id) ? id : `${id}.sop`);   // the catalog's own ids: a shard `k.animals/shards/birds`, a schema `k.animals/schema.sop`
   const loadShard = (id) => {
     if (!shards.has(id)) shards.set(id, (async () => {
       const t = clock();
       let txt = null;
-      try { txt = await source.text(`${id}.sop`); } catch { /* an unreachable shard is no knowledge */ }
+      try { txt = await source.text(pathOf(id)); } catch { /* an unreachable shard is no knowledge */ }
       stats.shardMs += clock() - t; stats.shardBytes += txt?.length ?? 0; stats.shardsLoaded.push(id);
-      const degraded = !txt || !!source.fellBack?.(`${id}.sop`);   // a layered source (the bundled subset under the catalog) answered for an unreachable catalog
+      const degraded = !txt || !!source.fellBack?.(pathOf(id));   // a layered source (the bundled subset under the catalog) answered for an unreachable catalog
       if (degraded) down = true;
       if (degraded) retryLater(() => { shards.delete(id); parsed.delete(id); wireIx.delete(id); wireMemo.clear(); things.clear(); });
       return txt ? txt.split('\n') : [];
@@ -191,6 +192,11 @@ export function createFacts({ source, name = 'catalog' }) {
       const sh = await parsedShard(sid);
       const ps = sh?.objects.get(lemma);
       if (ps?.length) objects.set(`${sid}#${lemma}`, { id: `${sid}#${lemma}`, shard: sid, parts: ps });
+    }
+    // a word form the catalog only lists as `core.word text=<form> means=<name> of=<world>.<type>.name` (the plural "ants" of "ant", "triangular" of "triangle") is the thing of that name
+    if (!objects.size && !commonsense.length && others.length && others.every((o) => o.type === 'core.word')) {
+      const target = others.map((o) => o.f).find((f) => f.means?.length === 1 && (f.of ?? []).some((x) => /\.(?:name|word)$/.test(x)) && (f.text ?? []).some((t) => t.toLowerCase() === lemma))?.means[0].toLowerCase();
+      if (target && target !== lemma && !walk.seen.has(target)) { const t = await thing(target, depth, walk); things.set(key, t); things.set(lemma, t); return t; }
     }
     senses.sort((a, b) => a.n - b.n);
     const out = {
