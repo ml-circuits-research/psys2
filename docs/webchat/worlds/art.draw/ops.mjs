@@ -862,10 +862,15 @@ function registerKnown(ctx, noun) {
   } catch { /* the plain refusal follows */ }
   return null;
 }
+/** P6: a function word (article, conjunction, preposition, degree word) is never "the thing": the reply asks which thing is meant instead of naming it. */
+const FUNCTION_WORDS = new Set('a an the and or but also too still more less even then than as at to of in on by from with into onto over under for it its this that these those one some any no not nor so if'.split(' '));
+const isFunctionPhrase = (t) => { const w = String(t ?? '').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []; return !w.length || w.every((x) => FUNCTION_WORDS.has(x) && x !== 'it'); };
+/** The reply for a noun phrase that names no known thing; a function word or nothing at all gets a plain question. */
+const noSuchThing = (text, list) => no(isFunctionPhrase(text) ? `Which thing do you mean? You can say ${list}.` : `I do not know what "${text}" is. You can say ${list}.`);
 /** Resolves the open slot of `draw.add`: a thing to draw (args are rewritten with its word as the kind), a part to add, or the plain "I don't know how to draw ..." reply. */
 function openAdd(ctx, s, args) {
   const { noun, mods, ord } = readOpen(args.open);
-  if (!noun) return { done: no('What should I draw?', 'missing') };
+  if (!noun || isFunctionPhrase(noun)) return { done: no('What should I draw?', 'missing') };
   registerKnown(ctx, noun);
   const k = kindOfWord(noun);
   if (k && k.kind !== '*') {
@@ -1002,7 +1007,7 @@ export const ground = guard((ctx, args, s) => {
 /** Who is meant by a noun phrase text, or an error envelope. */
 function target(s, text, opts) {
   const np = parseNP(text);
-  if (!np.known && !np.kind && !np.special && !np.pron && !np.part) return { error: no(`I do not know what "${text}" is. You can say the house, the tree, the sun, it, or everything.`) };
+  if (!np.known && !np.kind && !np.special && !np.pron && !np.part) return { error: noSuchThing(text, 'the house, the tree, the sun, it, or everything') };
   const r = resolveNP(s, np, opts);
   if (r.error) return { error: no(r.error, 'missing') };
   return { r, np };
@@ -1414,7 +1419,7 @@ export const remove = guard((ctx, args, s) => {
   const plan = [];
   for (const text of texts) {
     const np = parseNP(text);
-    if (!np.known && !np.kind && !np.special && !np.pron) return no(`I do not know what "${text}" is. You can say the car, the tree, the sky, the grass, or everything.`);
+    if (!np.known && !np.kind && !np.special && !np.pron) return noSuchThing(text, 'the car, the tree, the sky, the grass, or everything');
     const r = resolveNP(s, np, { many: true });
     if (r.error) return no(r.error, 'missing');
     // "remove the chimney": a part of a thing goes, not the thing (the part comes back with "add a chimney")

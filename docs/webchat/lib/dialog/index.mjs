@@ -132,10 +132,13 @@ export async function translateParts(parts, translator, lang, userWords = null) 
   const prim = fb ? (ownRules ? (translator.rules ?? translator) : NO_RULES) : translator;
   const routes = [];
   let fbCalls = 0;
+  // P7: with the Translator as the first choice it is asked before the rules; after it failed once in this reply it is not asked again (the rules write the rest)
+  const first = fb && !!translator.translatorFirst?.();
+  let dead = false;
   const viaBrowser = async (text) => {
-    if (!translator.viaBrowser || fbCalls >= MAX_FALLBACK_CALLS || guard.soft()) return null;
+    if (!translator.viaBrowser || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
     fbCalls++;
-    try { return await guard.abortable(translator.viaBrowser(text, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; return null; }
+    try { const r = await guard.abortable(translator.viaBrowser(text, { from: 'en', to: lang }), 'translate'); if (!r && first) dead = true; return r; } catch (e) { if (e instanceof TurnAborted) throw e; if (first) dead = true; return null; }
   };
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
@@ -146,9 +149,11 @@ export async function translateParts(parts, translator, lang, userWords = null) 
       if (rest.reading && lang !== 'en') {   // our own English reading of the user's words ("I took that as: ..."): shown in the reply language, never in English
         const inner = rest.text.replace(/^"|"$/g, '');
         let r = null;
-        try { r = await guard.abortable(prim.translate(inner, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; }
-        let tt = textOf(r);
-        if (!tt || r?.unknown?.length || r?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(tt, lang).length)) {
+        const bf = first ? await viaBrowser(inner) : null;
+        if (bf) routes.push('translator-out');
+        else try { r = await guard.abortable(prim.translate(inner, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; }
+        let tt = bf ? bf.text.trim() : textOf(r);
+        if (!bf && (!tt || r?.unknown?.length || r?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(tt, lang).length))) {
           tt = null;
           const b = fb ? await viaBrowser(inner) : null;
           if (b) { tt = b.text.trim(); routes.push('translator-out'); }
@@ -169,6 +174,7 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     i = j;
     const src = run.map((p) => p.text).join('');
     if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
+    if (first) { const b = await viaBrowser(src); if (b) { out.push({ text: fitFragment(src, b.text), translate: true, src }); routes.push('translator-out'); continue; } }
     let res = null;
     try { res = await guard.abortable(prim.translate(src, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; res = null; }
     if (res?.unknown?.length && run.length === 1 && run[0].fallback) {
@@ -1212,6 +1218,7 @@ export class DialogSession {
     const wantedLang = opts.language ?? this.language;
     if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || !(tr.rules?.supports?.(wantedLang, 'en') ?? true)) return this._sendCore(text, opts);   // a language without rules is read by the on-device translation in `_sendCore`
     const snap0 = this.snapshot();
+    if (tr.translatorFirst?.() && tr.canTranslate?.(wantedLang, 'en') && !guard.soft()) return this._sendTranslatorFirst(text, opts, snap0);
     const first = await this._sendCore(text, opts);
     // trouble points of a reading: a clause not understood (3), a part not used (1 each), a best-effort "I took that as" (2), and a message the rules left in Romanian (2)
     const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0)
@@ -1231,6 +1238,31 @@ export class DialogSession {
     }
     this.restore(snapFirst);
     tr.note?.('translator-in', { direction: 'ro->en', fallback: true, reason: 'the Translator reading was no better; the rules reading is kept' });
+    return first;
+  }
+
+  /**
+   * P7, input side with the Translator as the first choice (owner rule 2026-11-12): the Translator's English is read first. The rules read only when it is missing, late or
+   * rejected by the checker, or when its reading is poor and the rules' reading is better (a garbled translation of an app command: the safety net, never the first choice).
+   */
+  async _sendTranslatorFirst(text, opts, snap0) {
+    const tr = this.engine.translator, lang = opts.language ?? this.language;
+    const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0);
+    const b = await guard.abortable(tr.viaBrowser(text, { from: lang, to: 'en' }), 'translate');
+    if (!b) return this._sendCore(text, opts);   // missing, late or failed: the rules (the reason is in the translator usage)
+    let first = null;
+    try { first = await this._sendCore(text, opts, { english: b.text, translation: b }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; }
+    if (!first) { this.restore(snap0); return this._sendCore(text, opts); }
+    first.trace.via = 'translator-in';
+    tr.note?.('translator-in', { direction: `${lang}->en`, strategy: 'browser-api', reason: 'the Translator is the first choice' });
+    const poor = issues(first);
+    if (!poor || guard.soft()) return first;
+    const snapFirst = this.snapshot();
+    this.restore(snap0);
+    let second = null;
+    try { second = await this._sendCore(text, opts); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; }
+    if (second && issues(second) < poor) { tr.note?.('rules-translate', { direction: `${lang}->en`, fallback: true, reason: `the Translator reading had ${poor} points of trouble, the rules' has ${issues(second)}` }); return second; }
+    this.restore(snapFirst);
     return first;
   }
 
