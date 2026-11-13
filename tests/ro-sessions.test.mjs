@@ -9,12 +9,12 @@ import { createTranslator } from '../src/translate/index.mjs';
 import { settingsForMode, sessionOptions } from '../src/dialog/runtime-config.mjs';
 import { checkReply } from '../scripts/lib/ro-reply-quality.mjs';
 import { checkRomanianReplies } from '../scripts/check-ro-replies.mjs';
-import { sampled } from './helpers.mjs';
+import { sampled, classicAvatar } from './helpers.mjs';
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
 const settings = settingsForMode('rules');
 const open = (language, tab = 'robot') => {
-  const s = engine.createSession(sessionOptions(settings, { language }));
+  const s = classicAvatar(engine.createSession(sessionOptions(settings, { language })));
   s.setWorldState('ui.shell', { activeTab: tab });
   return s;
 };

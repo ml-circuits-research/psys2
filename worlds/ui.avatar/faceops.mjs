@@ -22,10 +22,10 @@ const plain = (id) => String(id).replace(/_/g, ' ');
 
 // ---- the state ------------------------------------------------------------------------------------------------------------------------------------------
 export const DEFAULT_PRESET = 'girl';
-const DEFAULT_COLOUR = { lips: 'pink', glass: 'black', skin: 'light', hair: 'brown', iris: 'brown', shirt: 'blue' };
+const DEFAULT_COLOUR = { lips: 'pink', glass: 'black', skin: 'light', hair: 'brown', iris: 'brown', shirt: 'blue', background: 'blue', hat: 'red', jewel: 'gold' };
 const SPEC_MIN = 0.6, SPEC_MAX = 1.5, STEP_SCALE = 1.15;
 /** How far a part may move from its place (frame units): it must stay a face. */
-const LIMITS = { face: { dx: [0, 0], dy: [0, 0] }, hair: { dx: [-4, 4], dy: [-6, 8] }, eyes: { dx: [-8, 6], dy: [-8, 8] }, eyebrows: { dx: [-8, 6], dy: [-8, 8] }, nose: { dx: [-4, 4], dy: [-6, 6] }, beard: { dx: [-3, 3], dy: [-5, 5] }, mouth: { dx: [-5, 5], dy: [-6, 6] }, glasses: { dx: [-3, 3], dy: [-6, 6] } };
+const LIMITS = { face: { dx: [0, 0], dy: [0, 0] }, hair: { dx: [-4, 4], dy: [-6, 8] }, eyes: { dx: [-8, 6], dy: [-8, 8] }, eyebrows: { dx: [-8, 6], dy: [-8, 8] }, nose: { dx: [-4, 4], dy: [-6, 6] }, beard: { dx: [-3, 3], dy: [-5, 5] }, hat: { dx: [-3, 3], dy: [-4, 6] }, earrings: { dx: [-2, 2], dy: [-4, 4] }, mouth: { dx: [-5, 5], dy: [-6, 6] }, glasses: { dx: [-3, 3], dy: [-6, 6] } };
 
 export function newFace(preset = DEFAULT_PRESET, data = getFaces()) {
   const p = data.presets[preset] ?? Object.values(data.presets)[0];
@@ -47,10 +47,11 @@ const clean = (f) => { f.options = null; };
 
 // ---- words ------------------------------------------------------------------------------------------------------------------------------------------------
 const PART_SLOT = { eye: 'eyes', eyes: 'eyes', eyebrow: 'eyebrows', eyebrows: 'eyebrows', brow: 'eyebrows', brows: 'eyebrows', hair: 'hair', hairstyle: 'hair', hair_style: 'hair', haircut: 'hair', beard: 'beard', facial_hair: 'beard', moustache: 'beard', mustache: 'beard',
-  glass: 'glasses', glasses: 'glasses', accessory: 'glasses', spectacles: 'glasses', face: 'face', head: 'face', face_shape: 'face', nose: 'nose', mouth: 'mouth', lip: 'mouth', lips: 'mouth' };
-const PART_ROLE = { face: 'skin', hair: 'hair', eyes: 'iris', eyebrows: 'brow', mouth: 'lips', glasses: 'glass', beard: 'beard', nose: 'skin' };
+  glass: 'glasses', glasses: 'glasses', accessory: 'glasses', spectacles: 'glasses', hat: 'hat', hats: 'hat', cap: 'hat', beanie: 'hat', earring: 'earrings', earrings: 'earrings', face: 'face', head: 'face', face_shape: 'face', nose: 'nose', mouth: 'mouth', lip: 'mouth', lips: 'mouth' };
+const PART_ROLE = { hat: 'hat', earrings: 'jewel', face: 'skin', hair: 'hair', eyes: 'iris', eyebrows: 'brow', mouth: 'lips', glasses: 'glass', beard: 'beard', nose: 'skin' };
+const BACKGROUND_WORDS = new Set(['background', 'backdrop', 'backround']);
 const SKIN_WORDS = new Set(['skin', 'complexion']), SHIRT_WORDS = new Set(['shirt', 'clothes', 'clothing', 'sweater', 'jacket', 'main', 'body']);
-const KINDS = { girl: 'girl', boy: 'boy', woman: 'woman', women: 'woman', lady: 'woman', man: 'man', men: 'man', gentleman: 'man', grandma: 'grandma', grandmother: 'grandma', grandpa: 'grandpa', grandfather: 'grandpa', child: 'girl', kid: 'boy' };
+const KINDS = { robot: 'robot', android: 'robot', bot: 'robot', emoji: 'emoji', smiley: 'emoji', girl: 'girl', boy: 'boy', woman: 'woman', women: 'woman', lady: 'woman', man: 'man', men: 'man', gentleman: 'man', grandma: 'grandma', grandmother: 'grandma', grandpa: 'grandpa', grandfather: 'grandpa', child: 'girl', kid: 'boy' };
 const OLD = new Set(['old', 'elderly', 'aged']);
 const STOP = new Set(['a', 'an', 'the', 'with', 'and', 'has', 'have', 'having', 'who', 'that', 'is', 'are', 'of', 'her', 'his', 'their', 'its', 'my', 'your', 'me', 'yourself', 'i', 'want', 'to', 'see', 'draw', 'sketch', 'make', 'build', 'create', 'give', 'show', 'describe', 'paint', 'please', 'pls', 'like', 'some', 'face', 'portrait', 'picture', 'drawing', 'person', 'looking', 'it', 'this', 'one', 'ones', 'also', 'plus', 'too', 'very', 'really', 'quite', 'on', 'in', 'for', 'be', 'get', 'put', 'wearing', 'wear', 'got', 'can', 'could', 'you', 'would', 'u', 'ur', 'whose', 'which', 'what', 'where', 'then', 'but', 'as', 'its']);
 const NEG = new Set(['no', 'without', 'not', 'never']);
@@ -122,7 +123,7 @@ export function readDescription(text, face = null, data = getFaces()) {
     if (w === 'bald') { out.picks.hair = 'none'; out.mentioned.push('hair'); flush(); continue; }
     if (w === 'bearded') { out.picks.beard = 'full'; out.mentioned.push('beard'); flush(); continue; }
     if (w === 'clean-shaven' || w === 'shaved') { out.picks.beard = 'none'; out.mentioned.push('beard'); flush(); continue; }
-    if (SKIN_WORDS.has(w) || SHIRT_WORDS.has(w)) { applyColour(out, data, SKIN_WORDS.has(w) ? 'skin' : 'shirt', pend, face); flush(); continue; }
+    if (SKIN_WORDS.has(w) || SHIRT_WORDS.has(w) || BACKGROUND_WORDS.has(w)) { applyColour(out, data, SKIN_WORDS.has(w) ? 'skin' : BACKGROUND_WORDS.has(w) ? 'background' : 'shirt', pend, face); flush(); continue; }
     const slot = slotOfWord(data, w);
     if (slot) {
       out.mentioned.push(slot);
@@ -173,6 +174,12 @@ function applyColour(out, data, role, mods, face) {
 // ---- saying what a face is -------------------------------------------------------------------------------------------------------------------------------
 function phraseOf(face, slot, data = getFaces(), id = face.slots[slot]) {
   const c = (role) => colourName(data, role, face.colours[role]);
+  if (slot === 'face' && id === 'robot') return 'a robot with a screen face';
+  if (slot === 'face' && id === 'emoji') return 'a round emoji face';
+  if (slot === 'hair' && id === 'antenna') return 'an antenna';
+  if (slot === 'eyes' && id === 'led') return `glowing ${c('iris')} eyes`;
+  if (slot === 'eyes' && id === 'dot') return 'dot eyes';
+  if (slot === 'mouth' && id === 'grille') return 'a speaker grille for a mouth';
   switch (slot) {
     case 'face': return `${art(plain(id))} ${plain(id)} face`;
     case 'hair': return id === 'none' ? 'no hair' : `${plain(id)} ${c('hair')} hair`;
@@ -182,13 +189,17 @@ function phraseOf(face, slot, data = getFaces(), id = face.slots[slot]) {
     case 'mouth': return `${art(plain(id))} ${id === 'smile' ? 'smiling' : plain(id)} mouth`;
     case 'beard': { const bc = colourName(data, 'hair', face.colours.beard ?? face.colours.hair); return id === "none" ? "no beard" : id === "moustache" ? `${art(bc)} ${bc} moustache` : `${art(bc)} ${bc} ${plain(id)} beard`; }
     case 'glasses': return id === 'none' ? 'no glasses' : id === 'sun' ? 'sunglasses' : `${plain(id)} glasses`;
+    case 'hat': return id === 'none' ? 'no hat' : `${art(c('hat'))} ${c('hat')} ${id === 'tophat' ? 'top hat' : plain(id)}`;
+    case 'earrings': return id === 'none' ? 'no earrings' : `${c('jewel')} ${plain(id)} earrings`;
     default: return `${plain(id)} ${slot}`;
   }
 }
 export function describeFace(face, data = getFaces()) {
-  const order = ['face', 'eyes', 'eyebrows', 'nose', 'mouth', 'hair', 'beard', 'glasses'].filter((s) => face.slots[s] !== undefined);
-  const yes = order.filter((s) => face.slots[s] !== 'none'), none = order.filter((s) => face.slots[s] === 'none');
-  return `${joinAnd(yes.map((s) => phraseOf(face, s, data)))}${none.length ? `, and ${joinAnd(none.map((s) => phraseOf(face, s, data)))}` : ''}`;
+  const order = ['face', 'eyes', 'eyebrows', 'nose', 'mouth', 'hair', 'beard', 'glasses', 'hat', 'earrings'].filter((s) => face.slots[s] !== undefined);
+  const special = face.slots.face === 'robot' || face.slots.face === 'emoji';   // the looks of a robot and an emoji say only what they have
+  const yes = order.filter((s) => face.slots[s] !== 'none'), none = special ? [] : order.filter((s) => face.slots[s] === 'none' && !['hat', 'earrings'].includes(s));
+  const noneSay = none.length ? `, and ${joinAnd(none.map((s) => phraseOf(face, s, data)))}` : '';
+  return `${joinAnd(yes.map((s) => phraseOf(face, s, data)))}${noneSay}`;
 }
 const opener = (f) => SAY_OK[(f.n = (f.n ?? 0) + 1) % SAY_OK.length];
 const finish = (ctx, text) => { ctx.request?.('ui.openTab', { tab: 'robot' }); return ok(text); };
@@ -227,7 +238,7 @@ function resolveSlot(f, part, data = getFaces()) {
   return { slot };
 }
 const listFor = (data, slot) => [...pickable(data, slot).map((v) => v.id), ...(slotOf(data, slot).optional ? ['none'] : [])];
-const nounOf = (slot) => ({ face: 'face', hair: 'hair', eyes: 'eyes', eyebrows: 'eyebrows', nose: 'nose', mouth: 'mouth', beard: 'beard', glasses: 'glasses' }[slot] ?? slot);
+const nounOf = (slot) => ({ face: 'face', hair: 'hair', eyes: 'eyes', eyebrows: 'eyebrows', nose: 'nose', mouth: 'mouth', beard: 'beard', glasses: 'glasses', hat: 'hat', earrings: 'earrings' }[slot] ?? slot);
 /** Sets a variant. A part the expression overrides is the user's choice now: the rest of the expression is kept as chosen parts and the expression is calm again. */
 function put(f, data, slot, id) {
   const e = data.expressions[f.expression];
@@ -333,7 +344,7 @@ export function faceResize(ctx, { part, dir } = {}) {
   a.s = next;
   return finish(ctx, `${opener(f)} I made my ${nounOf(slot)} ${up ? 'bigger' : 'smaller'}.`);
 }
-const ROLE_NOUN = { iris: 'eyes', brow: 'eyebrows', glass: 'glasses', skin: 'skin', hair: 'hair', lips: 'lips', shirt: 'shirt', beard: 'beard' };
+const ROLE_NOUN = { background: 'background', hat: 'hat', jewel: 'earrings', iris: 'eyes', brow: 'eyebrows', glass: 'glasses', skin: 'skin', hair: 'hair', lips: 'lips', shirt: 'shirt', beard: 'beard' };
 const MOVE_WORDS = { raise: 'up', lift: 'up', raised: 'up', higher: 'up', up: 'up', upwards: 'up', lower: 'down', down: 'down', lowered: 'down', drop: 'down', left: 'left', right: 'right' };
 /** "eyes closer together", "raise the eyebrows", "move the nose down a bit": the words become a move of the SPACE module, applied inside the face frame and kept within the limits. */
 export function faceMove(ctx, { part, words: w, text } = {}) {
@@ -386,6 +397,7 @@ function roleOfPart(part, data) {
   const p = String(part ?? '').toLowerCase();
   if (SKIN_WORDS.has(p)) return 'skin';
   if (SHIRT_WORDS.has(p)) return 'shirt';
+  if (BACKGROUND_WORDS.has(p)) return 'background';
   const slot = slotOfPart(p, data);
   return slot ? PART_ROLE[slot] : null;
 }
@@ -399,8 +411,9 @@ export function faceColour(ctx, { part, color } = {}) {
   f.colours[role] = shade !== undefined && /_/.test(color) ? shadeHex(hex, shade) : hex;
   if (role === 'hair') { delete f.colours.brow; delete f.colours.beard; }
   const slot = slotOfPart(part, data);
-  if (slot && f.slots[slot] === 'none') return finish(ctx, `${opener(f)} I have no ${nounOf(slot)} now, but ${slot === 'hair' ? 'it' : 'they'} will be ${plain(color)} when I have ${slot === 'hair' ? 'some' : 'one'}.`);
-  return finish(ctx, `${opener(f)} ${role === 'skin' ? `My skin is ${plain(color)} now.` : role === 'shirt' ? `My shirt is ${plain(color)} now.` : sayHave(f, slot, data)}`);
+  if (slot && ['hat', 'earrings'].includes(slot) && f.slots[slot] === 'none') put(f, data, slot, pickable(data, slot)[0].id);   // "red earrings": put some on, in that colour
+  if (slot && f.slots[slot] === 'none') return finish(ctx, `${opener(f)} I have no ${nounOf(slot)} now, but ${['hair', 'hat'].includes(slot) ? 'it' : 'they'} will be ${plain(color)} when I have ${slot === 'hair' ? 'some' : slot === 'earrings' ? 'some' : 'one'}.`);
+  return finish(ctx, `${opener(f)} ${role === 'skin' ? `My skin is ${plain(color)} now.` : role === 'shirt' ? `My shirt is ${plain(color)} now.` : role === 'background' ? `The background is ${plain(color)} now.` : sayHave(f, slot, data)}`);
 }
 export function faceShift(ctx, { part, dir } = {}) {
   const data = getFaces(), f = faceOf(ctx), role = roleOfPart(part, data);
@@ -526,8 +539,7 @@ export function faceSurprise(ctx) {
     const list = pickable(data, s.name), opts = s.optional ? [...list.map((v) => v.id), 'none', 'none'] : list.map((v) => v.id);
     put(f, data, s.name, opts[rnd(opts.length)]);
   }
-  for (const [role, pal] of Object.entries({ skin: data.colours.skin, hair: data.colours.hair, iris: data.colours.iris, shirt: data.colours.shirt })) { const v = Object.values(pal ?? {}); if (v.length) f.colours[role] = v[rnd(v.length)]; }
-  f.colours = { skin: f.colours.skin, hair: f.colours.hair, iris: f.colours.iris, lips: f.colours.lips, glass: f.colours.glass, shirt: f.colours.shirt };
+  for (const [role, pal] of Object.entries({ skin: Object.fromEntries(['pale', 'light', 'tan', 'brown', 'dark'].map((n) => [n, data.colours.skin?.[n]]).filter((x) => x[1])), hair: data.colours.hair, iris: data.colours.iris, shirt: data.colours.shirt })) { const v = Object.values(pal ?? {}); if (v.length) f.colours[role] = v[rnd(v.length)]; }
   return finish(ctx, `${opener(f)} I drew a new face: ${describeFace(f, data)}.`);
 }
 
@@ -547,13 +559,15 @@ export const FACE_DELEGATES = {
   },
   shiftColor: faceShift, setMood: faceMood, checkMood: faceCheckMood, askMood: faceAskMood, listOptions: faceListOptions, askPart: faceAskPart, hasThing: faceHas, askWearing: faceDescribeSelf, describe: faceDescribeSelf,
   askParts: faceParts, animate: faceAnimate, surprise: faceSurprise, setCharacter: faceCharacter, pickCharacter: (c) => { faceOf(c).active = false; return undefined; }, reset: (c, a) => (a?.scope === 'all' ? undefined : faceReset(c, {})),
-  listColors: (c, a) => { const data = getFaces(), role = roleOfPart(a?.part, data); return role ? ok(`My ${plain(a.part)} can be ${joinOr(Object.keys(data.colours[role === 'brow' || role === 'beard' ? 'hair' : role] ?? data.colours.any))}.`) : ok(`I can colour my ${joinAnd(['skin', 'hair', 'eyes', 'eyebrows', 'lips', 'glasses', 'shirt'])}.`); },
+  listColors: (c, a) => { const data = getFaces(), role = roleOfPart(a?.part, data); return role ? ok(`My ${plain(a.part)} can be ${joinOr(Object.keys(data.colours[role === 'brow' || role === 'beard' ? 'hair' : role] ?? data.colours.any))}.`) : ok(`I can colour my ${joinAnd(['skin', 'hair', 'eyes', 'eyebrows', 'lips', 'glasses', 'shirt', 'hat', 'earrings', 'background'])}.`); },
   askColor: (c, a) => { const f = faceOf(c), data = getFaces(), role = roleOfPart(a?.part, data); return role ? ok(`My ${ROLE_NOUN[role] ?? plain(a.part)} ${['iris', 'glass', 'brow'].includes(role) ? 'are' : 'is'} ${colourName(data, role, f.colours[role === 'brow' && !f.colours.brow ? 'hair' : role === 'beard' && !f.colours.beard ? 'hair' : role])}.`) : undefined; },
 };
 /** "become a woman" while the face is shown: a preset of the faces; any other character leaves the face. */
 export function faceCharacter(ctx, { kind, who, mood, with: add, without } = {}) {
   const k = String(kind ?? '').replace(/^old_/, '');
-  const name = kind === 'old_man' ? 'grandpa' : kind === 'old_woman' ? 'grandma' : KINDS[k] ? KINDS[k] : null;
+  const w = String(who ?? '').toLowerCase().replace(/^(?:a|an|the)_/, '');
+  // a robot and an emoji are looks of the drawn face; the other characters are the classic DiceBear ones
+  const name = kind === 'old_man' ? 'grandpa' : kind === 'old_woman' ? 'grandma' : KINDS[k] ? KINDS[k] : (['robot', 'emoji'].includes(KINDS[w]) ? KINDS[w] : null);
   if (name && getFaces().presets[name]) {
     if (add || without || mood) return faceDescribe(ctx, { words: `${name} ${mood ? String(mood).replace(/_/g, ' ') : ''} ${add ? `with ${String(add).replace(/_/g, ' ')}` : ''} ${without ? `without ${String(without).replace(/_/g, ' ')}` : ''}` });
     return facePreset(ctx, name);

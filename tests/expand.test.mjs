@@ -6,6 +6,7 @@ import { loadWorlds } from '../src/worlds/index.mjs';
 import { formalize, FormSession } from '../src/formalizer/index.mjs';
 import { selfCorrect, sharedArgument, repetition } from '../src/formalizer/rules/expand.mjs';
 import { analyze } from '../src/formalizer/rules/normalize.mjs';
+import { classicAvatar } from './helpers.mjs';
 
 // Spec 03 section 1c: conservative pre-parse expansion (review F4 rules side, R2).
 const loader = createFsLoader({ roots: [DEFAULT_ROOT] });
@@ -99,10 +100,10 @@ test('expand: never changes sentences that already parse', () => {
 });
 
 test('expand: full dialog, state after the review probe and the other families', async () => {
-  const s = engine.createSession({ language: 'en' });
+  const s = classicAvatar(engine.createSession({ language: 'en' }));
   await s.send('Make your eyes and body blue');
   assert.equal(s.state('ui.avatar').robot.colors.body, '74c0fc');
-  const t = engine.createSession({ language: 'en' });
+  const t = classicAvatar(engine.createSession({ language: 'en' }));
   const r = await t.send('make your eyes and body red');
   assert.equal(t.state('ui.avatar').robot.colors.body, 'ff9d9d');
   assert.equal(t.state('ui.avatar').robot.colors.glow, 'ff6b6b');

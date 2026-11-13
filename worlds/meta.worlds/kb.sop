@@ -29,8 +29,8 @@
     act=rename act=compare act=bananas act=cherry act=slice act=amount act=table act=caption
     act=content act=visualize act=percent act=percentage act=header act=segment act=update act=headline
     act=discard act=axe act=zap act=prepare act=entry act=paste act=csv act=editor
-    act=gdoc act=nix act=share act=chuck act=average act=category act=fraction act=height
-    act=pct act=proportion act=shred
+    act=gdoc act=nix act=share act=chuck act=average act=category act=fraction act=pct
+    act=proportion act=shred act=report
     actshared=label actshared=put actshared=delete actshared=remove actshared=download actshared=copy actshared=off actshared=out
     actshared=document actshared=against actshared=include actshared=versus actshared=vs actshared=drop actshared=count actshared=toss
     actshared=draw
@@ -61,7 +61,7 @@
     thing=axe thing=ditch thing=zap thing=banish thing=nuke thing=move
     thingshared=gold thingshared=lime thingshared=teal thingshared=cyan thingshared=navy thingshared=indigo thingshared=magenta thingshared=gray
     thingshared=draw thingshared=sketch
-    frame=are_api frame=is_closest frame=is_connected frame=is_db frame=what_group frame=which_shape
+    frame=are_api frame=is_closest frame=is_connected frame=is_db frame=what_group frame=which_box frame=which_shape
 
 @card.docs.editor meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -364,7 +364,7 @@
     act=bicycle act=planet act=spider act=longer act=heavier act=shorter
     actshared=cat actshared=taller
     frame=what_comes frame=did_we frame=which_has frame=is_bigger frame=what_parts frame=which_is
-    frameshared=what_did frameshared=what_does frameshared=can_we frameshared=what_are frameshared=what_kind frameshared=did_i frameshared=do_you frameshared=how_do
+    frameshared=what_are frameshared=what_did frameshared=what_does frameshared=can_we frameshared=what_kind frameshared=did_i frameshared=do_you frameshared=how_do
     frameshared=how_many frameshared=what_can
 
 @card.ui.avatar meta.worlds.card

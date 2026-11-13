@@ -4,12 +4,13 @@ import assert from 'node:assert/strict';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
+import { classicAvatar } from './helpers.mjs';
 
 const rules = createTranslator();
 const engine = await createEngine({ loader: createFsLoader(), translator: rules });
 
 async function run(tab, messages, { lang = 'ro', eng = engine } = {}) {
-  const s = eng.createSession({ language: lang });
+  const s = classicAvatar(eng.createSession({ language: lang }));
   s.setWorldState('ui.shell', { activeTab: tab });
   let r;
   for (const m of messages) r = await s.send(m);
@@ -76,7 +77,7 @@ test('a translator that returns the Romanian text unchanged is retried through t
 });
 
 test('avatar refusals are Romanian and "dreamy" eyes become sleepy', async () => {
-  const s = engine.createSession({ language: 'ro' });
+  const s = classicAvatar(engine.createSession({ language: 'ro' }));
   s.setWorldState('ui.shell', { activeTab: 'robot' });
   const a = await s.send('fa ochi cubici');
   assert.match(a.text, /^Nu cunosc niciun fel de ochi/);

@@ -5,8 +5,8 @@
 import { getFaces } from './facedata.mjs';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-export const ROLE_FIXED = { white: 'ffffff', line: '3a2a22', pupil: '2a1a14', mouthin: '6b1f2a', tongue: 'd9626b' };
-export const COLOUR_ROLES = ['skin', 'hair', 'iris', 'lips', 'glass', 'shirt'];
+export const ROLE_FIXED = { white: 'ffffff', line: '3a2a22', pupil: '2a1a14', mouthin: '6b1f2a', tongue: 'd9626b', screen: '161a21' };
+export const COLOUR_ROLES = ['skin', 'hair', 'iris', 'lips', 'glass', 'shirt', 'background', 'hat', 'jewel'];
 const f1 = (n) => Math.round(n * 100) / 100;
 
 const hexOf = (h) => `#${String(h).replace(/^#/, '').toLowerCase()}`;
@@ -77,7 +77,8 @@ export function renderFace(face, opts = {}, data = getFaces()) {
   }
   items.sort((p, q) => p.z - q.z);
   const size = opts.size ? ` width="${opts.size}" height="${f1((opts.size * frame.h) / frame.w)}"` : '';
-  const bg = opts.bg ? `<rect x="0" y="0" width="${frame.w}" height="${frame.h}" fill="${opts.bg}"/>` : '';
+  const back = face.colours?.background ? hexOf(face.colours.background) : opts.bg;   // the face's own background colour, else the one the host asks for
+  const bg = back ? `<rect x="0" y="0" width="${frame.w}" height="${frame.h}" fill="${back}"/>` : '';
   const label = String(opts.label ?? 'A drawn face').replace(/[<>&"]/g, ' ');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${frame.w} ${frame.h}"${size} role="img" aria-label="${label}">${bg}${items.map((i) => i.svg).join('')}</svg>`;
 }

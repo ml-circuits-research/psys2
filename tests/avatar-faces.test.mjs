@@ -25,7 +25,7 @@ const newCtx = (preset = 'woman') => { const ctx = { state: {}, request() {} }; 
 const rng = (seed) => () => { seed = (seed + 0x6d2b79f5) >>> 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 
 test('data: every slot has at least 3 variants to choose from, presets and expressions name variants that exist, colours resolve', () => {
-  assert.deepEqual(slotNames, ['face', 'hair', 'eyes', 'eyebrows', 'nose', 'beard', 'mouth', 'glasses']);
+  assert.deepEqual(slotNames, ['face', 'hair', 'eyes', 'eyebrows', 'nose', 'beard', 'mouth', 'glasses', 'earrings', 'hat']);
   for (const s of data.slots) assert.ok(pick(s.name).length >= 3, `${s.name}: ${pick(s.name).length} variants`);
   const has = (slot, id) => data.slots.find((s) => s.name === slot).variants.some((v) => v.id === id);
   for (const p of Object.values(data.presets)) for (const [slot, id] of Object.entries(p.slots)) assert.ok(has(slot, id), `${p.name}: ${slot}=${id}`);
@@ -246,7 +246,7 @@ test('presets and saved faces: be a preset, save under a name, load it again, na
   assert.match(F.faceLoad(ctx, { name: 'zed' }).note, /I do not have a face called zed/);
   assert.match(F.faceSave(ctx, { name: 'girl' }).note, /one of my own faces/);
   assert.equal(F.faceSave(ctx, { name: '' }).status, 'unsupported');
-  assert.match(F.faceList(ctx).value, /Your faces: Grandma Ann\. My own: girl, boy, woman, man, grandma and grandpa\./);
+  assert.match(F.faceList(ctx).value, /Your faces: Grandma Ann\. My own: girl, boy, woman, man, grandma, grandpa, robot and emoji\./);
   assert.equal(F.faceLoad(ctx, { name: 'happy' }).status, 'supported', 'a mood word is an expression, not a face');
   assert.equal(f.expression, 'happy');
   assert.equal(F.presetList().length, Object.keys(data.presets).length);
@@ -275,7 +275,7 @@ for (const reasoner of ['matrix', 'ops']) {
     const face = () => s.state('ui.avatar')?.face;
     const say = async (t) => (await s.send(t, {})).text;
     assert.match(await say('draw a woman with a long face, small green eyes, thick eyebrows and curly red hair, with glasses'), /I drew a woman with a long face, narrow green eyes, thick eyebrows, curly red hair and round glasses/);
-    assert.deepEqual(face().slots, { face: 'long', hair: 'curly', eyes: 'narrow', eyebrows: 'thick', nose: 'small', beard: 'none', mouth: 'full', glasses: 'round' });
+    assert.deepEqual(face().slots, { face: 'long', hair: 'curly', eyes: 'narrow', eyebrows: 'thick', nose: 'small', beard: 'none', mouth: 'full', glasses: 'round', earrings: 'none', hat: 'none' });
     const nose = face().slots.nose;
     await say('another nose');
     assert.notEqual(face().slots.nose, nose);
@@ -310,9 +310,13 @@ for (const reasoner of ['matrix', 'ops']) {
     assert.equal(face().base, 'boy');
     assert.match(await say('be Anna'), /I am Anna now/);
     assert.equal(face().slots.hair, 'curly');
-    await say('become a robot');
-    assert.equal(face().active, false, 'a DiceBear character leaves the face');
-    assert.equal(s.state('ui.avatar').character, 'robot');
+    await say('become a robot');   // the robot is a look of the drawn face (2026-11-13), not the DiceBear robot
+    assert.equal(face().active, true);
+    assert.equal(face().base, 'robot');
+    assert.equal(face().slots.eyes, 'led');
+    await say('be a cartoon');
+    assert.equal(face().active, false, 'a DiceBear character (classic) leaves the face');
+    assert.equal(s.state('ui.avatar').character, 'cartoon');
     assert.match(await say('a bigger nose'), /nose/);   // no face: the DiceBear answer, not a crash
     assert.match(await say('raise the eyebrows'), /only my drawn face can do that/);
   });

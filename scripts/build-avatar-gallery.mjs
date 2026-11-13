@@ -33,6 +33,7 @@ export async function buildGallery() {
   const out = {};
   for (const ch of CHARACTER_LIST) {
     const session = engine.createSession({});
+    session.setWorldState('ui.avatar', { face: { ...session.state('ui.avatar').face, active: false } });   // the thumbnails are the classic DiceBear looks; the drawn face is the start state
     let r = await session.send(`become ${CHARACTER_SAY[ch]}`);
     if (ch === 'robot') r = await session.send('hello');
     const st = session.state()['ui.avatar'] ?? r.state?.['ui.avatar'];

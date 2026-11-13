@@ -8,6 +8,7 @@ import { readFileSync } from 'node:fs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { buildAll } from '../scripts/gen-ui-kb.mjs';
+import { classicAvatar } from './helpers.mjs';
 
 const engineWith = (reasoner) => createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 const matrix = await engineWith('matrix');
@@ -124,6 +125,7 @@ test('ui.avatar: nothing is told until the look changes; then one look wire, a w
   const s = session(matrix);
   await say(s, ['how are you', 'what is your name']);
   assert.equal(s.isession.rs.insts.has('ui.avatar'), false, 'a question costs no instance');
+  classicAvatar(s);   // the drawn face is the start avatar; this test is about a classic character
   await say(s, ['make your hair red']);   // the robot has no hair: the offer waits for a yes
   await say(s, ['yes']);
   const [look] = wires(s, 'ui.avatar.look');
@@ -138,7 +140,7 @@ test('ui.avatar: nothing is told until the look changes; then one look wire, a w
 });
 
 test('ui.avatar: a color nobody knows, a part that has no color and the part of a character that has none are refused by the rules with the reason', async () => {
-  const s = session(matrix), o = session(ops);
+  const s = classicAvatar(session(matrix)), o = classicAvatar(session(ops));
   const r = await say(s, ['make your mouth purple']);
   assert.equal(r[0].text, 'A robot has no mouth color. Mouths can be grill, speaker, line, smile and zigzag.');
   assert.equal(r[0].statuses[0], 'unsupported');

@@ -14,13 +14,15 @@ import { buildGallery } from '../scripts/build-avatar-gallery.mjs';
 const root = (p) => fileURLToPath(new URL(`../${p}`, import.meta.url));
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const world = engine.set.get('ui.avatar');
+// the drawn face is the avatar at the start (2026-11-13); these tests are about the classic DiceBear characters, so each session starts as one
+const classic = (...a) => { const s = engine.createSession(...a); s.setWorldState('ui.avatar', { face: { ...s.state('ui.avatar').face, active: false } }); return s; };
 const lex = (id) => world.lexicons.find((l) => l.id === id)?.words ?? [];
 const CORE = ['robot', 'person', 'emoji'];
 const CHARS = [...CORE, 'portrait', 'cartoon', 'kid', 'pixel', 'pixelbot', 'funemoji'];
 const FILES = { robot: 'voxel-bot', person: 'open-peeps', emoji: 'moods', portrait: 'lorelei', cartoon: 'micah', kid: 'big-smile', pixel: 'pixel-art', pixelbot: 'pixelbot', funemoji: 'fun-emoji' };
 /** The state of the world after becoming a character (its start look is filled from the generated data). */
 async function stateOf(ch, ...more) {
-  const s = engine.createSession();
+  const s = classic();
   await s.send(`Become ${CHARACTER_SAY[ch]}.`);
   for (const m of more) await s.send(m);
   return s.state('ui.avatar');
@@ -89,7 +91,7 @@ test('every synonym and every spoken part resolves to something real', () => {
 });
 
 test('surprise me and change everything always leave a valid state, and a seed reproduces the look', async () => {
-  const s = engine.createSession();
+  const s = classic();
   for (const cmd of ['Surprise me.', 'Change everything.', 'Become a person.', 'Surprise me.', 'Change everything.', 'Turn into an emoji.', 'Surprise me.', 'Change everything.']) await s.send(cmd);
   const st = s.state('ui.avatar');
   for (const ch of CHARS) {
@@ -97,7 +99,7 @@ test('surprise me and change everything always leave a valid state, and a seed r
     for (const key of lex(`lex.ui.avatar.data.${ch}.colors`)) assert.ok(lex(`lex.ui.avatar.palette.${ch}.${key}`).includes(st[ch].colors[key]));
   }
   assert.notEqual(st.seed, 'psys2');
-  const a = engine.createSession(), b = engine.createSession();
+  const a = classic(), b = classic();
   await a.send('Use the seed banana.'); await b.send('Use the seed banana.');
   assert.deepEqual(a.state('ui.avatar').robot, b.state('ui.avatar').robot);
   await a.send('Use the seed apple.');
@@ -105,21 +107,21 @@ test('surprise me and change everything always leave a valid state, and a seed r
 });
 
 test('a glow is never the same color as the body', async () => {
-  const s = engine.createSession();
+  const s = classic();
   for (let i = 0; i < 12; i++) { await s.send(`Use the seed s${i}.`); const c = s.state('ui.avatar').robot.colors; assert.notEqual(c.glow, c.body); }
   await s.send('Make your body mint.'); await s.send('Make your glow mint.');
   const c = s.state('ui.avatar').robot.colors; assert.notEqual(c.glow, c.body);
 });
 
 test('only another character can do it: the avatar offers to become that character and waits for yes', async () => {
-  const s = engine.createSession();
+  const s = classic();
   const r = await s.send('Wear a medical mask.');
   assert.equal(s.state('ui.avatar').character, 'robot');
   assert.match(r.text, /Say "yes" to become the person/);
   await s.send('yes');
   assert.equal(s.state('ui.avatar').character, 'person');
   assert.equal(s.state('ui.avatar').person.mask !== 'none', true);
-  const q = engine.createSession();
+  const q = classic();
   assert.match((await q.send('Make the background pink.')).text, /pink|closest|background/);
   await q.send('Become a person.');
   const amb = await q.send('Make the background pink.');
@@ -227,7 +229,7 @@ test('moods: every mood a character offers is valid for its style and is read ba
   for (const ch of CHARS) {
     const st = await stateOf(ch);
     for (const mood of st.chips.moods) {
-      const s = engine.createSession();
+      const s = classic();
       await s.send(`Become ${CHARACTER_SAY[ch]}.`);
       await s.send(`Look ${mood}.`);
       const now = s.state('ui.avatar')[ch];
@@ -260,7 +262,7 @@ test('lazy loading: a style definition is fetched only when its character is fir
 });
 
 test('part by number, gallery and nth-character commands (AV)', async () => {
-  const s = engine.createSession();
+  const s = classic();
   await s.send('Become a portrait.');
   assert.equal(s.state('ui.avatar').portrait.hair, 'variant13');
   assert.match((await s.send('Hair 12.')).text, /hair style 12/);
