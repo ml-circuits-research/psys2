@@ -1,4 +1,4 @@
-# 19 — meta.worlds: choosing the world by rules with reasons (WORLD-OF-WORLDS)
+# 20 — meta.worlds: choosing the world by rules with reasons (WORLD-OF-WORLDS)
 
 Implementation: `worlds/meta.worlds/` (legend, generated cards, rules), `src/dialog/meta-worlds.mjs`, `src/dialog/symbolic-router.mjs`, `scripts/build-world-cards.mjs`, experiment `scripts/eval-world-routing.mjs` and `training/psys2_train/world_scores.py`. Tests: `tests/meta-worlds.test.mjs`. Results: `training/results/world-routing-2026-11-13.json` and the entry in `worker-log.md`.
 

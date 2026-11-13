@@ -125,3 +125,11 @@
 @tpl.art.draw.open core.template
     for=action.draw.open
     text="{value}"
+
+@tpl.art.draw.takeApart core.template
+    for=action.draw.takeApart
+    text="{value}"
+
+@tpl.art.draw.group core.template
+    for=action.draw.group
+    text="{value}"

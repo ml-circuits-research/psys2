@@ -39,6 +39,14 @@
     word=yacht
     word=mountain
     word=hill
+    word=lake
+    word=pond
+    word=river
+    word=stream
+    word=road
+    word=street
+    word=field
+    word=patch
     word=rainbow
     word=person
     word=man
@@ -111,7 +119,6 @@
     word=water
     word=sea
     word=ocean
-    word=lake
 
     word=sandy
     word=snowy
@@ -308,30 +315,13 @@
 
 @lex.art.draw.amounts core.lexicon
     class=modifier
-    doc="How much: a bit, a lot"
-    word=a_bit
-    word=a_little
-    word=a_little_bit
-    word=a_tiny_bit
-    word=slightly
-    word=just_a_bit
-    word=much
-    word=a_lot
-    word=way
-    word=very_much
-    word=so_much
-    word=even
-    word=twice
+    extends=$lex.space.amounts
+    doc="How much: a bit, a lot (the words of the module space)"
 
 @lex.art.draw.moves core.lexicon
     class=modifier
-    doc="Directions for a small move"
-    word=higher
-    word=lower
-    word=up
-    word=down
-    word=left
-    word=right
+    extends=$lex.space.dirs
+    doc="Directions for a small move (the words of the module space)"
 
 @lex.art.draw.leftright core.lexicon
     class=modifier
@@ -690,6 +680,13 @@
     word=sea
     word=ocean
     word=lake
+    word=pond
+    word=river
+    word=stream
+    word=road
+    word=street
+    word=field
+    word=patch
     word=sandy
     word=snowy
     word=grassy

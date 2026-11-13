@@ -40,6 +40,10 @@
     value=atom
     card=many
     ask="Which words open a tab?"
+@meta.worlds.card.claim core.key
+    value=atom
+    card=many
+    ask="Which words does it claim while its tab is open?"
 @meta.worlds.card.act core.key
     value=atom
     card=many

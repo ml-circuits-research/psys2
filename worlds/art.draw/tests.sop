@@ -532,7 +532,7 @@
     expect="I drew a small blue fish."
     expectStatus=supported
     expectState="objects.length=3"
-    expectState="objects.1.kind=oval"
+    expectState="objects.1.kind=lake"
     expectState="objects.1.size=260"
     expectState="objects.1.color=blue"
     session=r2add
@@ -4056,7 +4056,7 @@
     input="Draw a fish."
     expect="I made a pond for the fish."
     expectStatus=supported
-    expectState="objects.2.kind=oval"
+    expectState="objects.2.kind=lake"
     expectState="objects.2.tag=pond"
     expectState="objects.3.kind=fish"
     session=cs6
@@ -4139,3 +4139,104 @@
     input="Draw two blue castles."
     expect="I drew 2 blue castles"
     session=dff6
+
+@t.art.draw.p5a01 core.test
+    input="Draw a house."
+    expect="I drew a yellow house"
+    session=p5a
+
+@t.art.draw.p5a02 core.test
+    input="Make the wheels of the house red."
+    expect="A house has no wheel. You can color its chimney"
+    session=p5a
+
+@t.art.draw.p5a03 core.test
+    input="Take the house apart."
+    expect="I took the house apart"
+    session=p5a
+
+@t.art.draw.p5a04 core.test
+    input="Make the roof purple."
+    expect="The roof is purple now"
+    session=p5a
+
+@t.art.draw.p5a05 core.test
+    input="Put the roof and the walls together as a hut."
+    expect="together as a hut"
+    session=p5a
+
+@t.art.draw.p5a06 core.test
+    input="Draw another hut."
+    expect="I drew a hut"
+    session=p5a
+
+@t.art.draw.p5b01 core.test
+    input="Draw 3 different cars."
+    expect="car"
+    session=p5b
+@t.art.draw.pl01 core.test
+    input="Draw 2 houses."
+    expect="I drew 2 yellow houses"
+    expectStatus=supported
+    session=places1
+
+@t.art.draw.pl02 core.test
+    input="Draw a pond."
+    expect="I drew a blue lake"
+    expectStatus=supported
+    expectState="objects.2.kind=lake"
+    expectState="ground=null"
+    session=places1
+    doc="a pond is a thing with a place and a size, not water over the whole ground"
+
+@t.art.draw.pl03 core.test
+    input="Move the houses above the water."
+    expect="I moved the houses above the blue lake"
+    expectStatus=supported
+    session=places1
+    doc="the water of the picture is its lake"
+
+@t.art.draw.pl04 core.test
+    input="Put the houses in the pond."
+    expect="in the blue lake"
+    expectStatus=supported
+    session=places1
+
+@t.art.draw.pl05 core.test
+    input="Put grass under the houses."
+    expect="I put a patch of grass under the houses"
+    expectStatus=supported
+    expectState="objects.3.kind=patch"
+    session=places1
+    doc="grass under things is a patch as wide as the group, not the ground"
+
+@t.art.draw.pl06 core.test
+    input="Place a road."
+    expect="I drew a grey road"
+    expectStatus=supported
+    expectState="objects.4.kind=road"
+    session=places1
+    doc="a placing verb with a thing that is not in the picture adds it"
+
+@t.art.draw.pl07 core.test
+    input="Do not cover the road."
+    expect="Nothing I just did reaches the road"
+    session=places1
+
+@t.art.draw.pl08 core.test
+    input="Move the houses on the road."
+    expect="on top of the grey road"
+    expectStatus=supported
+    session=places1
+
+@t.art.draw.pl09 core.test
+    input="But not on the road."
+    expect="I put the houses back"
+    expectStatus=supported
+    session=places1
+    doc="the part of the last step that reaches the named thing goes back"
+
+@t.art.draw.pl10 core.test
+    input="Keep the road."
+    expect="still there as before"
+    session=places1

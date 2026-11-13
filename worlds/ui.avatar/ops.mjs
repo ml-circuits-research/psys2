@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Operations of ui.avatar: a DiceBear avatar changed by words (spec 07 section 3). Browser-safe: no imports.
+// Operations of ui.avatar: a DiceBear avatar changed by words (spec 07 section 3). Browser-safe; its one import is the drawn face (faceops.mjs, AVATAR-FROM-PARTS).
 //
 // The world reasons about the avatar without the library: the variants, palettes and color names it needs are
 // read from generated "data" lexicons (scripts/legend-from-dicebear.mjs) through ctx.lexicon(). Only the host draws.
@@ -14,6 +14,8 @@
 //   Component values are DiceBear variant ids (`none` = component hidden); colors are 6-digit hex entries of the style palette.
 // Effects: avatar.animate { name: wink|nod|dance|wave|spin|jump|bounce|wiggle|blink|shake } (a moment, not stored state).
 // Every command that changes the avatar brings its tab forward: ctx.request('ui.openTab', { tab: 'robot' }).
+// AVATAR-FROM-PARTS: a drawn face (faceops.mjs, facedata.mjs, facedraw.mjs) lives in state.face; while state.face.active, the operations below that change or ask about a part hand over to it.
+import * as Face from './faceops.mjs';
 
 /** The three original characters: only they are reached from another character ("only the person has glasses: say yes to become one"). */
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
@@ -940,7 +942,7 @@ function _describe(ctx) {
 // Every operation below is wrapped: when it changes the avatar, the state before it is pushed on `undo` (max 20).
 // An operation that cannot do something for the active character but another character can does not switch silently:
 // it sets `pending` + inputMode 'confirm' and tells the user to say yes; interceptInput then switches (and repeats the command).
-const snap = (s) => structuredClone(Object.fromEntries(['character', 'seed', ...CHARACTERS].filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));
+const snap = (s) => { const o = structuredClone(Object.fromEntries(['character', 'seed', ...CHARACTERS].filter((k) => s[k] !== undefined).map((k) => [k, s[k]]))); o.face = s.face ? { ...structuredClone(s.face), options: null } : null; return o; };   // the drawn face is part of the look (what "what noses are there?" shows is not)
 const record = (s, pre) => {
   if (JSON.stringify(pre) === JSON.stringify(snap(s))) return;
   (s.undo ??= []).push(pre);
@@ -949,8 +951,22 @@ const record = (s, pre) => {
 const W = (fn, name) => (ctx, args = {}) => {
   const s = ensure(ctx), pre = snap(s), prev = CURRENT;
   CURRENT = { fn: name, args };
-  try { return fn(ctx, args); } finally { CURRENT = prev; record(s, pre); }
+  try {
+    const mine = s.face?.active ? Face.FACE_DELEGATES[name] : null;   // the drawn face answers the requests about its parts
+    if (mine) { const r = mine(ctx, args); if (r !== undefined) return r; }
+    const out = fn(ctx, args);
+    if (s.face && !s.face.active && pre.face?.active && out?.status === 'supported' && /already/.test(out.value ?? '')) return done(ctx, 'leave', `Now I am ${spoken(s.character)}.`);   // "be a robot" from the drawn face
+    return out;
+  } finally { CURRENT = prev; record(s, pre); }
 };
+/** A question: answered by the drawn face while it is shown (no undo step). */
+const R = (fn, name) => (ctx, args = {}) => {
+  const mine = ctx.state?.face?.active ? Face.FACE_DELEGATES[name] : null;
+  if (mine) { const r = mine(ctx, args); if (r !== undefined) return r; }
+  return fn(ctx, args);
+};
+/** The operations that only a drawn face can do: with a DiceBear character on screen they say so (and what to say to get the face). */
+const FACE_ONLY = (fn, name) => W((ctx, args) => (ctx.state.face?.active ? fn(ctx, args) : { status: 'unsupported', note: `I am ${spoken(ctx.state.character)} now: only my drawn face can do that. Say "draw a face" to see it.` }), name);
 
 /** Go back to the look before the last change (also when that change was a switch of character). */
 export function undo(ctx) {
@@ -1043,24 +1059,33 @@ export const setColor = W(_setColor, 'setColor');
 export const shiftColor = W(_shiftColor, 'shiftColor');
 export const surprise = W(_surprise, 'surprise');
 export const setSeed = W(_setSeed, 'setSeed');
-export const setCharacter = W(_setCharacter, 'setCharacter');
+export const setCharacter = W(_setCharacter, 'setCharacter');   // (a drawn face leaves or takes a preset: FACE_DELEGATES)
 export const pickCharacter = W(_pickCharacter, 'pickCharacter');
 export const setMood = W(_setMood, 'setMood');
 export const reset = W(_reset, 'reset');
-export const askColor = _askColor;
-export const listColors = _listColors;
+export const askColor = R(_askColor, 'askColor');
+export const listColors = R(_listColors, 'listColors');
 export const askSeed = _askSeed;
 export const askCharacter = _askCharacter;
 export const listCharacters = _listCharacters;
-export const checkMood = _checkMood;
-export const askMood = _askMood;
+export const checkMood = R(_checkMood, 'checkMood');
+export const askMood = R(_askMood, 'askMood');
 export const setName = _setName;
 export const askName = _askName;
-export const animate = _animate;
-export const askParts = _askParts;
-export const listOptions = _listOptions;
-export const askPart = _askPart;
-export const hasThing = _hasThing;
-export const askWearing = _askWearing;
-export const describe = _describe;
+export const animate = W(_animate, 'animate');
+export const askParts = R(_askParts, 'askParts');
+export const listOptions = R(_listOptions, 'listOptions');
+export const askPart = R(_askPart, 'askPart');
+export const hasThing = R(_hasThing, 'hasThing');
+export const askWearing = R(_askWearing, 'askWearing');
+export const describe = R(_describe, 'describe');
 export const setPartColored = W(_setPartColored, 'setPartColored');
+// AVATAR-FROM-PARTS: the operations of the drawn face (they start it, or need it)
+export const faceDescribe = W(Face.faceDescribe, 'faceDescribe');
+export const faceStart = W(Face.faceStart, 'faceStart');
+export const faceLoad = W(Face.faceLoad, 'faceLoad');
+export const faceSave = W((ctx, a) => (ctx.state.face?.active ? Face.faceSave(ctx, a) : { status: 'unsupported', note: `Only a drawn face can be saved. Say "draw a face", then "save this as ${String(a?.name ?? 'Anna')}".` }), 'faceSave');
+export const faceList = R(Face.faceList, 'faceList');
+export const faceSetPart = FACE_ONLY(Face.faceSetPart, 'faceSetPart');
+export const faceMove = FACE_ONLY(Face.faceMove, 'faceMove');
+export const faceAdjust = FACE_ONLY(Face.faceAdjust, 'faceAdjust');

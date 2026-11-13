@@ -10,6 +10,10 @@
 import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs';
 
 export const W = 1000, H = 700;
+// Things the user made by taking a picture apart or putting things together (spec 07): the parts are stored on the object (`shape`) and registered here by key, so every
+// object that carries a shape draws, measures and is named like any other thing of the catalog.
+const CUSTOM = new Map();   // key -> { parts (local space), aspect, size }
+
 export const HORIZON = 470;           // the sky ends and the ground begins here
 export const GROUND_BASE = 590;       // default baseline of things standing on the ground
 
@@ -153,6 +157,28 @@ const BUILTIN = {
   line: { prim: 1, size: 260, aspect: 0.06, color: 'black', build: () => [L('body', [[-0.5, 0], [0.5, 0]], 'black', { m: 1, t: 0.02 })] },
   arrow: { prim: 1, size: 220, aspect: 0.3, color: 'black', build: () => [
     L('body', [[-0.5, 0], [0.38, 0]], 'black', { m: 1, t: 0.03 }), P('head', [[0.3, -0.1], [0.5, 0], [0.3, 0.1]], 'black', { m: 1, f: 'solid' })] },
+
+  // ---- places (SCENE-NATURAL P4): region objects with a place, a size and a name; they move, resize, disappear and serve in relations like any thing
+  lake: { region: 1, size: 280, aspect: 0.5, color: 'blue', names: { water: ['water', 'lake', 'pond', 'body'], ripples: ['ripple', 'ripples', 'waves'] }, build: () => [
+    E('water', 0, 0, 1, 0.5, 'blue', { m: 1 }),
+    K('ripples', [[-0.28, -0.06], [-0.2, -0.1], [-0.12, -0.06], [-0.04, -0.1], [0.04, -0.06]], 'light blue', { t: 0.012 }),
+    K('ripples', [[0.05, 0.1], [0.13, 0.06], [0.21, 0.1], [0.29, 0.06]], 'light blue', { t: 0.012 })] },
+  river: { region: 1, size: 520, aspect: 0.16, color: 'blue', names: { water: ['water', 'river', 'stream', 'body'], ripples: ['ripple', 'ripples', 'waves'] }, build: () => [
+    R('water', 0, 0, 1, 0.16, 'blue', { m: 1 }),
+    K('ripples', [[-0.4, -0.02], [-0.32, -0.05], [-0.24, -0.02], [-0.16, -0.05], [-0.08, -0.02]], 'light blue', { t: 0.006 }),
+    K('ripples', [[0.1, 0.03], [0.18, 0.0], [0.26, 0.03], [0.34, 0.0]], 'light blue', { t: 0.006 })] },
+  road: { region: 1, size: 520, aspect: 0.14, color: 'grey', names: { surface: ['surface', 'road', 'street', 'body'], stripes: ['stripe', 'stripes', 'line', 'lines', 'dashes'] }, build: () => [
+    R('surface', 0, 0, 1, 0.14, 'grey', { m: 1, sh: -0.25 }),
+    L('stripes', [[-0.4, 0], [-0.28, 0]], 'white', { t: 0.008 }), L('stripes', [[-0.14, 0], [-0.02, 0]], 'white', { t: 0.008 }),
+    L('stripes', [[0.12, 0], [0.24, 0]], 'white', { t: 0.008 }), L('stripes', [[0.38, 0], [0.5, 0]], 'white', { t: 0.008 })] },
+  field: { region: 1, size: 420, aspect: 0.4, color: 'green', names: { grass: ['grass', 'field', 'meadow', 'body'], rows: ['row', 'rows', 'furrows'] }, build: () => [
+    R('grass', 0, 0, 1, 0.4, 'green', { m: 1 }),
+    L('rows', [[-0.45, -0.1], [0.45, -0.1]], 'green', { m: 1, sh: -0.12, t: 0.01 }), L('rows', [[-0.45, 0.1], [0.45, 0.1]], 'green', { m: 1, sh: -0.12, t: 0.01 })] },
+  patch: { region: 1, size: 300, aspect: 0.3, color: 'green', names: { grass: ['grass', 'patch', 'lawn', 'body'] }, build: () => [
+    E('grass', 0, 0, 1, 0.3, 'green', { m: 1 }),
+    L('tufts', [[-0.2, 0.02], [-0.18, -0.05]], 'green', { m: 1, sh: -0.15, t: 0.008 }), L('tufts', [[0.1, 0.05], [0.12, -0.02]], 'green', { m: 1, sh: -0.15, t: 0.008 })] },
+  hill: { region: 1, size: 420, aspect: 0.45, color: 'green', names: { grass: ['grass', 'hill', 'body', 'slope'] }, build: () => [
+    P('grass', Array.from({ length: 25 }, (_, i) => { const t = (Math.PI * i) / 24; return [round(0.5 * Math.cos(t)), round(0.225 - 0.45 * Math.sin(t))]; }), 'green', { m: 1 })] },
 
   // ---- composites
   house: {
@@ -378,7 +404,7 @@ export function thingOfWord(word) {
   }
   return null;
 }
-export const isThing = (name) => Object.hasOwn(THINGS, name);
+export const isThing = (name) => Object.hasOwn(THINGS, name) || CUSTOM.has(name);
 /**
  * Adds objects loaded lazily from the catalog (src/knowledge/service.mjs) to the registry of drawable things: `objects` is Map(name -> parts), `keywords` { lemma: object name }.
  * The vendored hand-written objects (things.catalog.mjs) stay as they are (a loaded object of the same name does not replace them); a keyword never replaces a name that is
@@ -402,7 +428,9 @@ export function partGuessed(key, partKey) {
 /** The key of an object's kind: its kind, or `composite:<thing>`. */
 export const kindKey = (o) => (o?.kind === 'composite' && o.thing ? COMPOSITE + o.thing : o?.kind);
 /** The spoken name of a kind key ("composite:castle" -> "castle"). */
-export const kindName = (key) => (String(key).startsWith(COMPOSITE) ? String(key).slice(COMPOSITE.length) : key);
+export const kindName = (key) => (String(key).startsWith(COMPOSITE) ? String(key).slice(COMPOSITE.length).replace(/~\w+$/, '') : key);
+/** The registry key of a composite kind key ("composite:roof~x1y2" -> "roof~x1y2"): the thing an object names, which kindName shortens to the spoken word. */
+export const thingOfKey = (key) => String(key).slice(COMPOSITE.length);
 
 const plural1 = (n) => (/(s|x|ch|sh)$/.test(n) ? `${n}es` : /[^aeiou]y$/.test(n) ? `${n.slice(0, -1)}ies` : `${n}s`);
 const hexOfPart = (p) => p.rgb ?? (BASE_NAMES.has(p.colour[0]) ? p.colour[0] : 'grey');
@@ -468,6 +496,13 @@ const thingDefs = new Map();
 export function thingDef(name) {
   if (!isThing(name)) return undefined;
   if (thingDefs.has(name)) return thingDefs.get(name);
+  if (CUSTOM.has(name)) {   // a piece taken apart or a group the user built: its parts are stored, not catalog facts
+    const c = CUSTOM.get(name), words = (n) => [...new Set([n, n.replace(/s$/, ''), plural1(n)])];
+    const names = Object.fromEntries([...new Set(c.parts.map((p) => p.n))].map((n) => [n, words(n)]));
+    const def = { size: c.size, aspect: c.aspect, color: null, names, thing: name, composite: true, custom: true, shape: c, build: () => c.parts };
+    thingDefs.set(name, def);
+    return def;
+  }
   const u = unitOf(name), aspect = round(u.bh / u.bw), ps = THINGS[name];
   const main = [...ps].sort((a, b) => b.w * b.h - a.w * a.h)[0];
   const names = Object.fromEntries(thingGroups(name).map((g) => [g.key, g.words]));
@@ -500,7 +535,7 @@ export const defaultColor = (kind) => KINDS[kind]?.color ?? null;
 
 const thingCache = new Map();
 /** Local-space parts of a catalog object (cached, do not modify). */
-const thingParts = (name) => { if (!thingCache.has(name)) thingCache.set(name, thingBuild(name)); return thingCache.get(name); };
+const thingParts = (name) => { if (!thingCache.has(name)) thingCache.set(name, CUSTOM.has(name) ? CUSTOM.get(name).parts : thingBuild(name)); return thingCache.get(name); };
 const partCache = new Map();
 /** Local-space parts of a kind (cached, do not modify). */
 export function kindParts(kind) {
@@ -573,6 +608,7 @@ export const partLabel = (key) => ({ windows: 'windows', wheels: 'wheels', walls
  * (m), else the part default. `sh` shifts the lightness, `alt` replaces a default that would equal the object color.
  */
 export function partsOf(obj, build = null) {
+  ensureCustom(obj);
   const kind = kindKey(obj);
   if (!isKind(kind)) return [];
   const override = obj.parts ?? {};
@@ -591,13 +627,14 @@ export function partsOf(obj, build = null) {
       if (obj.mood === 'sad') rest.pts = rest.pts.map(([x, y]) => [x, -1.4 - y]);
       else rest.t = (rest.t ?? 0.015) * 2;
     }
-    return { ...rest, color: canonColor(color) ?? String(color), hex };
+    return { ...rest, color: canonColor(color) ?? String(color), hex, ...(p.m ? { follows: true } : {}) };
   });
 }
 
 // ---- geometry of objects --------------------------------------------------------------------------------------------
 /** Bounding box of an object in canvas pixels (rotation is taken into account for the box only). */
 export function bbox(obj) {
+  ensureCustom(obj);
   const k = KINDS[kindKey(obj)];
   const w0 = obj.size, h0 = obj.size * (k?.aspect ?? 1);
   const a = ((obj.rotation ?? 0) * Math.PI) / 180, c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a));
@@ -656,4 +693,74 @@ export function starField(n = 14, seed = 7) {
   const out = [];
   for (let i = 0; i < n; i++) out.push([Math.round(40 + rnd() * (W - 80)), Math.round(30 + rnd() * (HORIZON - 120)), Math.round(22 + rnd() * 26)]);
   return out;
+}
+
+// ---- pieces and groups (take apart, put together) -----------------------------------------------------------------------------------------------------------------
+/** Registers the shape an object carries (it may come back from a saved state); a no-op for every other object. */
+export function ensureCustom(obj) {
+  if (obj?.shape && obj.thing && !CUSTOM.has(obj.thing)) { CUSTOM.set(obj.thing, obj.shape); thingDefs.delete(obj.thing); partCache.delete(COMPOSITE + obj.thing); thingCache.delete(obj.thing); }
+}
+/** Registers a shape under a spoken name and returns the key of its kind ("roof" -> "composite:roof~k3f9a"): equal shapes share a key, different ones never clash. */
+export function registerShape(name, shape) {
+  const json = JSON.stringify(shape);
+  let h = 2166136261;
+  for (let i = 0; i < json.length; i++) h = Math.imul(h ^ json.charCodeAt(i), 16777619) >>> 0;
+  const key = `${String(name).replace(/[~\s]+/g, ' ').trim()}~${h.toString(36)}`;
+  if (!CUSTOM.has(key)) { CUSTOM.set(key, shape); thingDefs.delete(key); partCache.delete(COMPOSITE + key); thingCache.delete(key); }
+  return COMPOSITE + key;
+}
+const PI = Math.PI;
+/** A part moved into another frame: mirrored, turned (degrees), scaled and moved, in that order. */
+function xfPart(p, { mirror = false, a = 0, s = 1, tx = 0, ty = 0 }) {
+  const ca = Math.cos((a * PI) / 180), sa = Math.sin((a * PI) / 180);
+  const pt = (x, y) => { const mx = mirror ? -x : x; return [round((mx * ca - y * sa) * s + tx), round((mx * sa + y * ca) * s + ty)]; };
+  const out = { ...p };
+  if (p.pts) out.pts = p.pts.map(([x, y]) => pt(x, y));
+  else { [out.x, out.y] = pt(p.x, p.y); out.w = round(p.w * s); out.h = round(p.h * s); }
+  if (p.t) out.t = round(p.t * s);
+  if (p.r || a || mirror) out.r = round((mirror ? -(p.r ?? 0) : (p.r ?? 0)) + a);
+  if (p.s === 'arc' && mirror) { out.a0 = round(PI - p.a1); out.a1 = round(PI - p.a0); }
+  return out;
+}
+const boxOfTurned = (p) => {
+  if (p.pts) return boxOf(p);
+  const a = ((p.r ?? 0) * PI) / 180, hw = (Math.abs(p.w * Math.cos(a)) + Math.abs(p.h * Math.sin(a))) / 2, hh = (Math.abs(p.w * Math.sin(a)) + Math.abs(p.h * Math.cos(a))) / 2;
+  return { x0: p.x - hw, x1: p.x + hw, y0: p.y - hh, y1: p.y + hh };
+};
+const unionBox = (parts) => {
+  const bs = parts.map(boxOfTurned);
+  return { x0: Math.min(...bs.map((b) => b.x0)), x1: Math.max(...bs.map((b) => b.x1)), y0: Math.min(...bs.map((b) => b.y0)), y1: Math.max(...bs.map((b) => b.y1)) };
+};
+/** A drawn part, as a part definition again: its resolved colour is its own colour (a part that followed the object colour keeps following it). */
+const bake = (p) => { const { color, hex, follows, ...rest } = p; return { ...rest, c: hex, ...(follows ? { m: 1 } : {}) }; };
+/**
+ * The pieces an object falls into when it is taken apart: one per named part (all windows are one piece). Each is { name, shape, x, y, size, rotation, z } where the
+ * shape keeps the part's drawing and colour and the place keeps where it was on the canvas. `only` limits it to some part keys.
+ */
+export function piecesOf(obj, only = null) {
+  const drawn = partsOf(obj);
+  const names = [...new Set(drawn.map((p) => p.n))].filter((n) => !only || only.includes(n));
+  const mirror = !!obj.flip, a = ((obj.rotation ?? 0) * PI) / 180;
+  return names.map((name, i) => {
+    const mine = drawn.filter((p) => p.n === name).map((p) => ({ ...xfPart(bake(p), { mirror }), m: 1 }));   // one named part: recolouring the piece recolours all of it
+    const u = unionBox(mine), bw = Math.max(u.x1 - u.x0, 0.02), bh = Math.max(u.y1 - u.y0, 0.02), cx = (u.x0 + u.x1) / 2, cy = (u.y0 + u.y1) / 2;
+    const parts = mine.map((p) => xfPart(p, { s: 1 / bw, tx: -cx / bw, ty: -cy / bw }));
+    const dx = cx * obj.size, dy = cy * obj.size;
+    return {
+      name, shape: { parts, aspect: round(bh / bw), size: Math.max(8, Math.round(bw * obj.size)) },
+      x: round(obj.x + dx * Math.cos(a) - dy * Math.sin(a)), y: round(obj.y + dx * Math.sin(a) + dy * Math.cos(a)), size: Math.max(8, Math.round(bw * obj.size)), rotation: obj.rotation ?? 0, z: (obj.z ?? 0) + i / 100,
+    };
+  });
+}
+/** The shape of several objects put together (their parts in one frame, colours kept): { shape, x, y, size, z }. */
+export function groupOf(objs) {
+  const boxes = objs.map((o) => bbox(o));
+  const x0 = Math.min(...boxes.map((b) => b.x0)), x1 = Math.max(...boxes.map((b) => b.x1)), y0 = Math.min(...boxes.map((b) => b.y0)), y1 = Math.max(...boxes.map((b) => b.y1));
+  const gw = Math.max(x1 - x0, 8), gh = Math.max(y1 - y0, 8), gx = (x0 + x1) / 2, gy = (y0 + y1) / 2;
+  const parts = [];
+  for (const o of objs.slice().sort((p, q) => (p.z ?? 0) - (q.z ?? 0))) {
+    const s = o.size / gw;
+    for (const p of partsOf(o)) parts.push(xfPart(bake(p), { mirror: !!o.flip, a: o.rotation ?? 0, s, tx: (o.x - gx) / gw, ty: (o.y - gy) / gw }));
+  }
+  return { shape: { parts, aspect: round(gh / gw), size: Math.round(gw) }, x: Math.round(gx), y: Math.round(gy), size: Math.round(gw), z: Math.max(...objs.map((o) => o.z ?? 0)) };
 }

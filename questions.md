@@ -110,3 +110,22 @@ The rules of `meta.worlds` (worlds/meta.worlds/matrix.sop) run in the library: `
 2. **A sum per key.** `core.calc fn=sum over=` gives one total for the whole pattern, not one per world, so the host adds the points of the votes per world. Proposal: `group=?w` on `core.calc`.
 3. **Soft scores in `rank`.** `rank` orders readings by consistency, referents, lacks, words left out and assumptions, never by points. A router needs weighted evidence, so the order is the host's (`score` desc). Proposal: a `weight` on rules that `rank` can use as a last criterion.
 4. **A cap per rule.** A rule fires once per binding (a long message that names two things votes twice). The host caps votes per rule. Proposal: `limit=2` on `core.rule`.
+## 2026-11-13 — SPACE: what sopworld lacks for the module `space` (library items; no blocker, host functions used)
+
+The module `space` (worlds/space/, specs/18) is rules in JavaScript (`space.mjs`) over a projection `space.item` / `space.frame`; none of its arithmetic is a declared host function of sopworld yet, because the library lacks what a selection needs. Please pass to the library:
+
+1. **Ordering of a set of wires by a number** (a `core.calc` that sorts by a key and returns the n-th, or the rank of each wire): "the second from the left", "the first in reading order". Today: `readingOrder` in space.mjs.
+2. **Median / middle element of a set along a key** (`fn=median`, and the element at the median): "the middle house". Today: sort and pick in space.mjs; an even count has no middle and the host asks.
+3. **Argmin / argmax over a set** (the wire with the smallest or largest value of a key, with all ties returned): "the biggest", "the nearest to X". Today: sort in space.mjs.
+4. **Pairwise functions over two sets** (distance between two boxes, overlap test) as a calc that ranges over pairs: "next to", "no overlap". Today: `gap`, `overlaps` in space.mjs.
+5. **A fixed-point / iteration** for "tidy up" (push apart until nothing overlaps): today a bounded loop in space.mjs.
+
+Meanwhile: the module is host-function style (pure functions imported by the hosts), the spatial words are real `core.lexicon` groups (generated from the tables, checked by a test), and the schema (`space.item`, `space.frame`) is declared in `worlds/space/legend.sop` so a later matrix version can derive the same answers from wires. Blocking: no.
+
+## Q3 (worker, 2026-11-13 16:40) — SPACE-2: the owner's request for a smarter shared space (FYI, starting after SCENE-NATURAL P2/P4 lands)
+The owner asked (16:35) that the `space` module be general enough for every host, the avatar included, with consistency rules:
+1. natural overlap avoidance that knows the real **surface of each piece** (outline or polygon, not only the bounding box);
+2. **joining**: pieces that are close are joined naturally (snap and touch: a roof sits on the walls, a wheel touches the road); they stay apart when the user says so ("don't join them", "leave a gap");
+3. **layouts from general knowledge**: arrangements the common-sense and knowledge worlds suggest (a face: eyes above the nose, mirrored; a house: roof on top; a table with chairs around it; a family in a row by height), not only row/column/grid/circle;
+4. the rules expressed in SOP Lang as far as sopworld allows (ordering, median, argmin and fixed points are missing, see the SPACE note above), with host functions only for geometry.
+The worker will start SPACE-2 when P2/P4 (which edits the same module) has merged, and the avatar agent already uses `space` inside the face frame. Reviewer: please add acceptance criteria or a task block if you want a different scope.

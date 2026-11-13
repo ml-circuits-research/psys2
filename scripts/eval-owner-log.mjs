@@ -16,9 +16,11 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { settingsForMode, sessionOptions } from '../src/dialog/runtime-config.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
+import { createSwitchTranslator } from '../docs/webchat/ui/translation.mjs';
 import { visibleState } from './lib/visible-state.mjs';
 import { evaluateCase } from './lib/operational-check.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
+import { replyFlags } from './lib/reply-check.mjs';
 import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
 applyReasonerFlag();
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -29,7 +31,10 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
   const rows = readFileSync(log, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
   let chk = {};
   try { chk = JSON.parse(readFileSync(checks, 'utf8')); } catch { /* no checks yet */ }
-  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
+  // The translator of the phone / no-browser-Translator path of the webchat: rules first, a fixed Romanian line for a reply they cannot write (so the Romanian reply is checkable)
+  const rules = createTranslator();
+  const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', backend: { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator });
   // The knowledge catalog of the owner's browser, from the repository copy (knowledge/k.objects) plus a crocodile fixture (the online catalog had one).
   const kdir = join(REPO, 'knowledge'), fx = join(REPO, 'training/eval/owner-log-knowledge');
   const source = { text: async (p) => {
@@ -54,7 +59,9 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
     if (reply) {
       const after = s.state();
       const english = reply.trace?.replyEnglish ?? reply.text;
-      Object.assign(rec, { english: reply.trace?.english ?? null, reply: english.slice(0, 200), worlds: [...new Set(reply.segments.map((x) => x.world).filter(Boolean))], statuses: reply.statuses, steps: (reply.budget ?? reply.trace?.budget)?.ticks ?? null, top: (reply.budget ?? reply.trace?.budget)?.top ?? null });
+      Object.assign(rec, { replyUser: reply.text.slice(0, 200), english: reply.trace?.english ?? null, reply: english.slice(0, 200), worlds: [...new Set(reply.segments.map((x) => x.world).filter(Boolean))], statuses: reply.statuses, steps: (reply.budget ?? reply.trace?.budget)?.ticks ?? null, top: (reply.budget ?? reply.trace?.budget)?.top ?? null });
+      // P6: the reply is as natural as the request (no internal word, no dangling article, a complete sentence; in the user's language no English left)
+      rec.replyFlags = [...replyFlags(english), ...(r.lang === 'ro' && reply.text !== english ? replyFlags(reply.text, { lang: 'ro', leftovers: translator.leftovers }).map((f) => `ro:${f}`) : [])];
       const c = chk[i];
       if (c) {
         const items = evaluateCase({ world: c.world ?? 'art.draw', expect: c }, { before, after, replyText: english, effects: reply.effects, statuses: reply.statuses, unparsedAll: reply.segments.length === 0 || reply.segments.every((x) => x.unparsed), values: reply.answers.map((a) => a.value) });
@@ -90,6 +97,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log('class'.padEnd(16), 'right wrong unchecked');
     for (const [k, v] of Object.entries(sm.by_class)) console.log(k.padEnd(16), String(v.right).padStart(5), String(v.wrong).padStart(5), String(v.unchecked).padStart(9));
     console.log('TOTAL'.padEnd(16), String(sm.total.right).padStart(5), String(sm.total.wrong).padStart(5), String(sm.total.unchecked).padStart(9));
+    const unnatural = rows.filter((r) => r.replyFlags?.length);
+    console.log(`REPLY CHECK: ${unnatural.length} of ${rows.length} replies flagged`);
+    for (const r of unnatural) console.log(`  ${String(r.i).padStart(2)} ${JSON.stringify(r.reply)} => ${r.replyFlags.join('; ')}`);
     console.log(`time ${rows.reduce((a, r) => a + r.ms, 0)} ms, max ${Math.max(...rows.map((r) => r.ms))} ms`);
   }
 }

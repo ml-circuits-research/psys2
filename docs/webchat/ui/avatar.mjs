@@ -6,6 +6,12 @@
 // thumbnails are one small pre-rendered file (vendor/dicebear-styles/gallery.json, scripts/build-avatar-gallery.mjs) fetched
 // when the browser is idle after the page is up. CC BY styles show their credit under the picture.
 import { createRobot } from './robot.mjs';
+// AVATAR-FROM-PARTS: a face drawn from the parts of k.faces (worlds/ui.avatar/face*.mjs, loaded when the browser is idle, 30 KB), also in the header; the DiceBear characters stay selectable.
+const FACE_FILES = ['facedraw.mjs', 'facedata.mjs', 'faceops.mjs'];
+const SLOT_NOUN = { face: 'face', hair: 'hair', eyes: 'eyes', eyebrows: 'eyebrows', nose: 'nose', mouth: 'mouth', beard: 'beard', glasses: 'glasses' };
+/** What a tap on a variant says (typed into the chat like any other command). */
+export const faceOptionSay = (slot, id) => (id === 'none' ? (slot === 'glasses' ? 'no glasses' : `no ${SLOT_NOUN[slot] ?? slot}`) : slot === 'glasses' ? `swap the glasses for ${id}` : `make the ${SLOT_NOUN[slot] ?? slot} ${id}`);
+export const FACE_EXPRESSIONS = [['happy', 'look happy'], ['sad', 'look sad'], ['angry', 'look angry'], ['surprised', 'look surprised'], ['sleepy', 'look sleepy'], ['wink', 'wink']];
 
 const VENDOR = new URL('../vendor/', import.meta.url);
 const STYLE_FILES = { robot: 'voxel-bot', person: 'open-peeps', emoji: 'moods', portrait: 'lorelei', cartoon: 'micah', kid: 'big-smile', pixel: 'pixel-art', pixelbot: 'pixelbot', funemoji: 'fun-emoji' };
@@ -147,6 +153,15 @@ const CSS = `
 .p2-avatar-chip:hover { background: rgba(127, 140, 170, .2); }
 .p2-avatar-chip img { width: 28px; height: 28px; border-radius: 50%; }
 .p2-avatar-chip.is-mood { padding: 3px 10px; }
+.p2-avatar-faces, .p2-avatar-opts, .p2-avatar-expr { display: flex; gap: 8px; width: min(100%, 460px); overflow-x: auto; padding: 4px 2px 6px; }
+.p2-avatar-faces[hidden], .p2-avatar-opts[hidden], .p2-avatar-expr[hidden] { display: none; }
+.p2-avatar-faces .p2-avatar-card, .p2-avatar-opts .p2-avatar-card { width: 64px; }
+.p2-avatar-faces .p2-avatar-pic, .p2-avatar-opts .p2-avatar-pic { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; background: #e8edf5; }
+.p2-avatar-opts .p2-avatar-pic { border-radius: 12px; }
+.p2-avatar-pic svg { display: block; width: 100%; height: 100%; }
+.p2-head-face { display: inline-block; width: 34px; height: 34px; border-radius: 50%; overflow: hidden; vertical-align: middle; margin-right: 8px; background: #e8edf5; flex: none; }
+.p2-head-face[hidden] { display: none; }
+.p2-head-face svg { display: block; width: 100%; height: 100%; }
 .p2-avatar-credit { margin: 0; font-size: 11px; opacity: .65; text-align: center; max-width: 460px; width: 100%; }
 .p2-avatar-credit a { color: inherit; }
 .p2-avatar-name { margin: 0; font-weight: 600; font-size: 18px; }
@@ -197,10 +212,17 @@ export function createAvatar(container, host = null) {
   presetsEl.setAttribute('aria-label', 'Presets');
   const creditEl = document.createElement('p');
   creditEl.className = 'p2-avatar-credit';
-  container.append(stage, caption, strip, presetsEl, creditEl);
+  const exprEl = document.createElement('div');   // expressions of the drawn face
+  exprEl.className = 'p2-avatar-expr'; exprEl.setAttribute('role', 'group'); exprEl.setAttribute('aria-label', 'Expressions'); exprEl.hidden = true;
+  const optsEl = document.createElement('div');   // "what noses are there?": the variants as small pictures to tap
+  optsEl.className = 'p2-avatar-opts'; optsEl.setAttribute('role', 'group'); optsEl.setAttribute('aria-label', 'Choices'); optsEl.hidden = true;
+  const facesEl = document.createElement('div');   // the faces of k.faces (presets) and the saved ones
+  facesEl.className = 'p2-avatar-faces'; facesEl.setAttribute('role', 'group'); facesEl.setAttribute('aria-label', 'Drawn faces'); facesEl.hidden = true;
+  container.append(stage, caption, exprEl, optsEl, facesEl, strip, presetsEl, creditEl);
 
   let state = null, transient = null, transientTimer = 0, fxTimer = 0, core = null, lastSvg = '', destroyed = false, fallback = null, speaking = false;
   let gallery = null, galleryTimer = 0, shownChar = '', shownChips = '';
+  let fm = null, faceTimer = 0, talkTimer = 0, talkPhase = false, shownFaces = '', headEl = null;
   const styles = new Map(), pending = new Set();
   const say = (text) => { try { host?.send?.(text); } catch (e) { console.warn('avatar: could not send', e); } };
 
@@ -287,8 +309,90 @@ export function createAvatar(container, host = null) {
   }).catch((e) => console.warn('avatar: the gallery thumbnails could not be loaded', e));
   galleryTimer = setTimeout(() => { galleryTimer = 0; if (typeof requestIdleCallback === 'function') requestIdleCallback(fetchGallery, { timeout: 4000 }); else fetchGallery(); }, 1500);
 
+  // ---- the drawn face ----
+  function loadFaceModules() {
+    if (fm || destroyed) return;
+    fm = 'loading';
+    const url = (f) => (host?.asset ? host.asset(`worlds/ui.avatar/${f}`) : new URL(`../worlds/ui.avatar/${f}`, import.meta.url).href);
+    Promise.all(FACE_FILES.map((f) => import(url(f)))).then(([drawMod, data, ops]) => { fm = { draw: drawMod, data, ops, d: data.getFaces() }; shownFaces = ''; draw(); }).catch((e) => { fm = null; console.warn('avatar: the face files could not be loaded', e); });
+  }
+  const exprOf = () => (transient === 'surprised' ? 'surprised' : transient === 'smile' ? 'happy' : null);
+  function faceSvg(face, size) {
+    const t = fm.d.expressions.talking, x = exprOf();
+    const over = talkPhase && speaking ? { ...t.over, ...(talkPhase === 'alt' ? t.alt : {}) } : x ? fm.d.expressions[x].over : undefined;
+    return fm.draw.renderFace(face, { size, over, bg: size ? undefined : '#e8edf5', label: `${state.name ?? 'Avatar'}, a drawn face with ${fm.ops.describeFace(face, fm.d)}` });
+  }
+  function renderFaceRows(face) {
+    const sig = JSON.stringify([!!fm && fm !== 'loading', Object.keys(face?.saved ?? {}), face?.active, face?.options, face?.base, face?.name]);
+    if (sig === shownFaces) return;
+    shownFaces = sig;
+    const card = (label, say_, svg, on) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = `p2-avatar-card${on ? ' is-on' : ''}`; b.title = `Say: ${say_}`;
+      const pic = document.createElement('span'); pic.className = 'p2-avatar-pic';
+      if (svg) pic.innerHTML = svg;
+      const lbl = document.createElement('span'); lbl.className = 'p2-avatar-lbl'; lbl.textContent = label;
+      b.append(pic, lbl); b.addEventListener('click', () => say(say_));
+      return b;
+    };
+    const cards = [];
+    if (fm && fm !== 'loading') {
+      const thumb = (f, label) => fm.draw.renderFace(f, { label, bg: '#e8edf5' });
+      cards.push(card('Draw a face', 'draw a face', thumb(fm.ops.newFace('girl', fm.d), 'A drawn face'), false));
+      for (const name of fm.ops.presetList(fm.d)) cards.push(card(name[0].toUpperCase() + name.slice(1), `load the ${name} face`, thumb(fm.ops.newFace(name, fm.d), name), !!face?.active && face.base === name && !face.name));
+      for (const v of Object.values(face?.saved ?? {})) cards.push(card(v.name, `be ${v.name}`, thumb({ ...fm.ops.newFace('girl', fm.d), slots: v.slots, colours: v.colours, adj: v.adj }, v.name), !!face?.active && face.name === v.name));
+    }
+    facesEl.replaceChildren(...cards);
+    facesEl.hidden = !cards.length;
+    exprEl.replaceChildren(...FACE_EXPRESSIONS.map(([e, t]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'p2-avatar-chip is-mood'; b.title = `Say: ${t}`; b.textContent = e[0].toUpperCase() + e.slice(1); b.addEventListener('click', () => say(t)); return b; }));
+    exprEl.hidden = !face?.active;
+    const o = face?.options;
+    if (o && fm && fm !== 'loading' && face.active) {
+      optsEl.replaceChildren(...o.variants.map((id) => card(id === 'none' ? 'None' : id, faceOptionSay(o.slot, id), id === 'none' ? '' : fm.draw.variantSvg(face, o.slot, id, { size: 52 }, fm.d), face.slots[o.slot] === id)));
+      optsEl.hidden = false;
+    } else { optsEl.replaceChildren(); optsEl.hidden = true; }
+  }
+  function paintFace(svg, fade) {
+    if (svg === lastSvg) return;
+    lastSvg = svg;
+    const top = stage.lastElementChild;
+    if (!fade && top?.classList.contains('p2-avatar-layer')) { top.innerHTML = svg; return; }
+    const layer = document.createElement('div');
+    layer.className = 'p2-avatar-layer'; layer.innerHTML = svg;
+    const old = [...stage.children];
+    stage.append(layer);
+    requestAnimationFrame(() => requestAnimationFrame(() => { layer.classList.add('is-in'); old.forEach((o) => o.classList.remove('is-in')); }));
+    setTimeout(() => old.forEach((o) => o.remove()), FADE_MS + 60);
+  }
+  /** Draws the drawn face; true when state.face is the avatar (also while its files are still loading), false for a DiceBear character. */
+  function drawFace() {
+    const face = state?.face;
+    if (!face?.active) {
+      if (headEl) headEl.hidden = true;
+      if (strip.hidden) { strip.hidden = false; creditEl.hidden = false; exprEl.hidden = true; optsEl.hidden = true; lastSvg = ''; shownChips = ''; }
+      renderFaceRows(face);
+      return false;
+    }
+    loadFaceModules();
+    const s = normalizeState(state);
+    nameEl.textContent = s.name;
+    strip.hidden = true; presetsEl.hidden = true; creditEl.hidden = true;
+    if (!fm || fm === 'loading') return true;
+    partsEl.textContent = fm.ops.describeFace(face, fm.d);
+    stage.setAttribute('aria-label', `${s.name}, a drawn face with ${partsEl.textContent}`);
+    renderFaceRows(face);
+    paintFace(faceSvg(face), !(talkPhase && speaking));
+    if (!headEl) {
+      const title = document.querySelector('.p2-head .p2-title');
+      if (title) { headEl = document.createElement('span'); headEl.className = 'p2-head-face'; headEl.setAttribute('aria-hidden', 'true'); title.prepend(headEl); }
+    }
+    if (headEl) { headEl.hidden = false; headEl.innerHTML = faceSvg(face, 34).replace(/ width="34" height="[\d.]+"/, ''); }
+    return true;
+  }
+
   function draw() {
     if (destroyed || fallback) return;
+    if (drawFace()) return;
     const s = normalizeState(state);
     renderGallery(s);
     renderCredit(s.character);
@@ -316,6 +420,7 @@ export function createAvatar(container, host = null) {
     setTimeout(() => old.forEach((o) => o.remove()), FADE_MS + 60);
   }
 
+  faceTimer = setTimeout(() => { faceTimer = 0; if (typeof requestIdleCallback === 'function') requestIdleCallback(loadFaceModules, { timeout: 5000 }); else loadFaceModules(); }, 2500);
   request(normalizeState(null).character);
   renderGallery(normalizeState(null));
   renderCredit('robot');
@@ -330,7 +435,16 @@ export function createAvatar(container, host = null) {
       transient = kind; draw();
       transientTimer = setTimeout(() => { transient = null; draw(); }, ms);
     },
-    setSpeaking(on) { speaking = !!on; if (fallback) fallback.setSpeaking?.(on); else stage.classList.toggle('is-speaking', !!on); },
+    setSpeaking(on) {
+      speaking = !!on;
+      if (fallback) { fallback.setSpeaking?.(on); return; }
+      clearInterval(talkTimer); talkTimer = 0; talkPhase = false;
+      if (state?.face?.active) {   // the mouth alternates the talking pair (k.faces expression "talking")
+        stage.classList.remove('is-speaking');
+        if (on) talkTimer = setInterval(() => { talkPhase = talkPhase === 'alt' ? 'open' : 'alt'; draw(); }, 170);
+        draw();
+      } else stage.classList.toggle('is-speaking', !!on);
+    },
     /** Effect avatar.animate { name }. */
     animate({ name } = {}) {
       if (fallback || !/^[a-z]+$/.test(String(name ?? ''))) return;
@@ -340,6 +454,6 @@ export function createAvatar(container, host = null) {
       stage.classList.add(`fx-${name}`);
       fxTimer = setTimeout(() => stage.className = stage.className.replace(/\bfx-\w+/g, '').trim(), 2800);
     },
-    destroy() { destroyed = true; clearTimeout(transientTimer); clearTimeout(fxTimer); clearTimeout(galleryTimer); fallback?.destroy?.(); },
+    destroy() { destroyed = true; clearInterval(talkTimer); clearTimeout(faceTimer); headEl?.remove(); clearTimeout(transientTimer); clearTimeout(fxTimer); clearTimeout(galleryTimer); fallback?.destroy?.(); },
   };
 }

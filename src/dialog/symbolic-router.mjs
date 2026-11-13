@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * The routing setting `routing` (WORLD-OF-WORLDS, spec 19), browser-safe.
+ * The routing setting `routing` (WORLD-OF-WORLDS, spec 20), browser-safe.
  *
  *   dispatcher         (default, router A) the encoder proposes worlds, the rules validate; the tiers of ADR-004 order the readings of the rules
  *   symbolic           (router B) meta.worlds picks the world: cards, live facts, rules with reasons; the encoder's world head is not read

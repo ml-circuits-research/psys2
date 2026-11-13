@@ -17,8 +17,10 @@
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
-  registerThings, partGuessed,
+  registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey,
 } from './scene.mjs';
+
+import * as space from '../space/space.mjs';   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs';
 
@@ -40,7 +42,7 @@ export const KIND_WORDS = {
   house: 'house', home: 'house', cottage: 'house', hut: 'house', tree: 'tree', pine: 'tree', palm: 'tree', sun: 'sun', cloud: 'cloud',
   car: 'car', automobile: 'car', truck: 'car', flower: 'flower', rose: 'flower', daisy: 'flower', tulip: 'flower', sunflower: 'flower',
   cat: 'cat', kitten: 'cat', kitty: 'cat', dog: 'dog', puppy: 'dog', fish: 'fish', goldfish: 'fish', bird: 'bird', birdie: 'bird',
-  boat: 'boat', ship: 'boat', sailboat: 'boat', yacht: 'boat', mountain: 'mountain', hill: 'mountain', rainbow: 'rainbow',
+  boat: 'boat', ship: 'boat', sailboat: 'boat', yacht: 'boat', mountain: 'mountain', hill: 'hill', lake: 'lake', pond: 'lake', river: 'river', stream: 'river', road: 'road', street: 'road', field: 'field', patch: 'patch', rainbow: 'rainbow',
   person: 'person', man: 'person', woman: 'person', boy: 'person', girl: 'person', child: 'person', kid: 'person', balloon: 'balloon',
   rocket: 'rocket', spaceship: 'rocket', moon: 'moon', crescent: 'moon',
   circle: 'circle', ball: 'circle', dot: 'circle', square: 'square', box: 'square', rectangle: 'rectangle', triangle: 'triangle',
@@ -51,12 +53,12 @@ export const KIND_WORDS = {
 const UNDRAWABLE = new Set(['monkey', 'lion', 'tiger', 'elephant', 'horse', 'cow', 'pig', 'rabbit', 'bear', 'duck', 'frog', 'snake', 'giraffe', 'zebra', 'sheep', 'turtle', 'butterfly', 'mouse']);
 const IRREGULAR = { people: 'person', men: 'person', women: 'person', children: 'person', kids: 'person', mice: null, leaves: null, fishes: 'fish' };
 /** Ground cover words -> ground kind. */
-export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', lake: 'sea', sandy: 'sand', snowy: 'snow', grassy: 'grass', watery: 'sea', icy: 'snow', wet: 'sea', beachy: 'sand' };
+export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', sandy: 'sand', snowy: 'snow', grassy: 'grass', watery: 'sea', icy: 'snow', wet: 'sea', beachy: 'sand' };
 const GROUND_COLOR = { grass: 'green', sand: 'yellow', snow: 'white', sea: 'blue' };
 const GROUND_NAME = { grass: 'grass', sand: 'sand', snow: 'snow', sea: 'water' };
 
 export const SIZE_WORDS = {
-  tiny: 0.45, teeny: 0.4, mini: 0.5, itsy: 0.4, little: 0.6, small: 0.65, medium: 1, normal: 1, regular: 1, middle: 1,
+  tiny: 0.45, teeny: 0.4, mini: 0.5, itsy: 0.4, little: 0.6, small: 0.65, medium: 1, normal: 1, regular: 1,
   big: 1.5, large: 1.5, huge: 2.1, giant: 2.3, gigantic: 2.5, enormous: 2.4, massive: 2.3, great: 1.6,
 };
 /** Comparatives that size a new thing relative to the existing one of its kind (+1 bigger, -1 smaller). */
@@ -72,11 +74,16 @@ export const WHO_PRESET = {
 const WHO_OF_WORD = { man: 'man', men: 'man', woman: 'woman', women: 'woman', girl: 'girl', girls: 'girl', boy: 'boy', boys: 'boy' };
 /** Moods a drawn person can have: the smile curve turns up (happy) or down (sad). */
 export const MOOD_WORDS = { happy: 'happy', glad: 'happy', smiling: 'happy', cheerful: 'happy', sad: 'sad', unhappy: 'sad', crying: 'sad', upset: 'sad' };
-const SUPERLATIVE = { biggest: 'big', largest: 'big', hugest: 'big', tallest: 'big', smallest: 'small', tiniest: 'small', littlest: 'small' };
-const ORDINALS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1, final: -1 };
+const SUPERLATIVE = { ...space.SIZES, hugest: 'big' };
+const ORDINALS = { ...space.ORDINALS, final: -1 };
 const ORDINAL_WORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 const NUMBERS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, hundred: 100 };
 const QUANTITY = { more: 3, some: 3, few: 3, several: 4, couple: 2, many: 6, lots: 7, loads: 7, bunch: 5, plenty: 6 };
+const DIFFERENT = new Set(['different', 'various', 'varied', 'assorted', 'diverse', 'distinct', 'mixed', 'dissimilar', 'unlike']);
+/** Things whose colour is what they are: a different sun is a different size, not a different colour. */
+const FIXED_COLOR = new Set(['sun', 'moon', 'rainbow', 'cloud', 'person', 'tree', 'mountain']);
+const VARY_COLORS = ['red', 'blue', 'green', 'orange', 'purple', 'pink', 'yellow', 'turquoise', 'brown', 'gold'];
+const VARY_SIZES = [1, 1.3, 0.78, 1.55, 0.62, 1.15];
 const PLURAL_DEFAULT = { star: 8, flower: 4, fish: 4, balloon: 4, bird: 3, cloud: 3, tree: 3, person: 3 };
 const MAX_COUNT = 12, MAX_STARS = 30;
 const OPENERS = ['Ta-da!', 'Here you go!', 'There!', 'Done!', 'Look at that!', 'Nice!', 'Voila!'];
@@ -100,12 +107,21 @@ export function kindOfWord(word) {
   const w = String(word ?? '').toLowerCase();
   const tryOne = (x) => (Object.hasOwn(KIND_WORDS, x) ? KIND_WORDS[x] : undefined);
   const hit = (kind, plural) => ({ kind, plural });
+  // a word the board reads as another kind ("ball" = circle) is the thing of the catalog of that name once the catalog has it (the lookup registers it)
+  for (const b of [w, w.replace(/s$/, '')]) if (Object.hasOwn(KIND_WORDS, b) && KIND_WORDS[b] !== b && KIND_WORDS[b] !== '*' && isThing(b)) return hit(COMPOSITE + b, b !== w);
   let k = tryOne(w); if (k) return hit(k, false);
   if (Object.hasOwn(IRREGULAR, w) && IRREGULAR[w]) return hit(IRREGULAR[w], true);
   if (w.endsWith('ies') && (k = tryOne(`${w.slice(0, -3)}y`))) return hit(k, true);
   if (w.endsWith('es') && (k = tryOne(w.slice(0, -2)))) return hit(k, true);
   if (w.endsWith('s') && (k = tryOne(w.slice(0, -1)))) return hit(k, true);
   if (w === 'fish') return hit('fish', false);
+  // a piece taken apart or a group built in this picture: its spoken name
+  for (const o of curScene?.objects ?? []) {
+    if (!o.shape) continue;
+    const nm = kindName(kindKey(o));
+    if (w === nm) return hit(kindKey(o), false);
+    if (w === pluralOfKind(kindKey(o))) return hit(kindKey(o), true);
+  }
   // a thing of the catalog (knowledge/k.objects): looked up by its word, after the built-in kinds
   const thing = thingOfWord(w);
   if (thing) return hit(COMPOSITE + thing, w !== thing && thingOfWord(w) === thing && THING_PLURAL(w, thing));
@@ -127,6 +143,7 @@ function colorFrom(words, fallback = null) {
 // ---- state access -----------------------------------------------------------------------------------------------------
 function ensure(ctx) {
   const s = ctx.state, d = initialState();
+  for (const o of s.objects ?? []) ensureCustom(o);   // pieces and groups come back from a saved state with their shape
   for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
   loadUsualPlaces(ctx);
   placeNote = null;
@@ -150,7 +167,7 @@ function loadUsualPlaces(ctx) {
   }
   if (m.size) USUAL = m;
 }
-const anchorOf = (kind) => USUAL.get(kind) ?? 'any';
+const anchorOf = (kind) => USUAL.get(kind) ?? (KINDS[kind]?.region ? 'ground' : 'any');   // a place (lake, road, field) lies on the ground
 const onGround = (kind) => ['ground', 'horizon'].includes(anchorOf(kind));
 const byId = (s, id) => s.objects.find((o) => o.id === id);
 const effectiveColor = (o) => o.color ?? defaultColor(kindKey(o));
@@ -170,6 +187,7 @@ function restore(s, snap) {
 /** Call before changing the picture. */
 function remember(s, label) {
   s.history.push(snapshot(s, label));
+  s.prev = s.history.at(-1);   // the picture before the newest step: what follow-ups ("but keep the lake", "not over the water") compare with, in both reasoners
   if (s.history.length > MAX_HISTORY) s.history.splice(0, s.history.length - MAX_HISTORY);
   s.future = [];
 }
@@ -278,7 +296,7 @@ function groupPhrase(objs, { positions = false } = {}) {
 
 // ---- noun phrases: who is meant ---------------------------------------------------------------------------------------
 const LOC_START = new Set(['on', 'in', 'at', 'near', 'next', 'beside', 'by', 'under', 'above', 'below', 'over', 'behind', 'between', 'inside', 'underneath', 'beneath', 'close']);
-const POS_WORDS = { left: 'left', leftmost: 'left', right: 'right', rightmost: 'right', top: 'top', upper: 'top', highest: 'top', topmost: 'top', bottom: 'bottom', lower: 'bottom', lowest: 'bottom', bottommost: 'bottom' };
+const POS_WORDS = { ...space.POSITIONS, lower: 'bottom' };   // the words of the place of a thing are the module's
 const DET_ALL = new Set(['all', 'every', 'each', 'both']);
 const DET_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these', 'those', 'any', 'some', 'another', 'of', 'in', 'picture', 'drawing', 'painting']);
 
@@ -286,12 +304,12 @@ const DET_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these
 export function parseNP(text) {
   budget.tick('art.np');   // recurses on the words after "of"
   const all = toks(text);
-  const np = { text: String(text ?? ''), pron: null, all: false, ordinal: null, size: null, superlative: false, color: null, kind: null, plural: false, part: null, partOf: null, loc: null, pos: null, special: null, one: false, known: true };
+  const np = { text: String(text ?? ''), pron: null, all: false, ordinal: null, size: null, superlative: false, color: null, kind: null, plural: false, part: null, partOf: null, loc: null, pos: null, other: false, count: null, special: null, one: false, known: true };
   if (!all.length) return { ...np, known: false };
   // a location tail: "the tree on the left", "the cat next to the house"
   let words = all, loc = null;
   for (let i = 1; i < all.length; i++) {
-    if (LOC_START.has(all[i]) && !(all[i] === 'in' && all[i - 1] === 'front') && !(all[i] === 'on' && all[i - 1] === 'top') && !(all[i] === 'close' && all[i + 1] !== 'to')) {
+    if ((LOC_START.has(all[i]) || (all[i] === 'from' && Object.hasOwn(POS_WORDS, all[i + 1] === 'the' ? all[i + 2] : all[i + 1]) && all.length === i + (all[i + 1] === 'the' ? 3 : 2))) && !(all[i] === 'in' && all[i - 1] === 'front') && !(all[i] === 'on' && all[i - 1] === 'top') && !(all[i] === 'close' && all[i + 1] !== 'to')) {
       words = all.slice(0, i); loc = all.slice(i); break;
     }
   }
@@ -306,13 +324,16 @@ export function parseNP(text) {
     if (w === 'everything' || w === 'all') { np.special = 'everything'; continue; }
     if (PRONOUN_ONE.has(w) && words.length <= 2) { np.pron = 'one'; continue; }
     if (PRONOUN_MANY.has(w) && words.length <= 2) { np.pron = 'many'; continue; }
-    if (DET_SKIP.has(w) || w === 'other') continue;
+    if (w === 'other') { np.other = true; continue; }
+    if (Object.hasOwn(space.COUNTS, w) && w !== 'both' && words[i + 1] !== 'of') { np.count = space.COUNTS[w]; np.plural = true; continue; }
+    if (DET_SKIP.has(w)) continue;
     if (Object.hasOwn(ORDINALS, w)) { np.ordinal = ORDINALS[w]; continue; }
     if (Object.hasOwn(SUPERLATIVE, w)) { np.size = SUPERLATIVE[w]; np.superlative = true; continue; }
     if (Object.hasOwn(SIZE_WORDS, w)) { np.size = SIZE_WORDS[w] > 1 ? 'big' : SIZE_WORDS[w] < 1 ? 'small' : 'medium'; continue; }
     if (Object.hasOwn(POS_WORDS, w) && !(w === 'top' && np.kind) && words[i + 1] !== 'of') { np.pos = POS_WORDS[w]; continue; }
     if (w === 'one' || w === 'ones' || w === '1') { np.one = true; continue; }
     if (isShade(w) || isColorWord(w)) { colorWords.push(w); continue; }
+    if (w === 'water' && waterBody()) { np.kind ??= waterBody(); continue; }   // "the water" is the lake or the river of the picture, when it has one
     if (w === 'sky') { np.special = 'sky'; continue; }
     if (w === 'background' || w === 'paper' || w === 'page' || w === 'canvas') { np.special = 'background'; continue; }
     if (Object.hasOwn(GROUND_WORDS, w) || w === 'ground' || w === 'floor') { np.special = 'ground'; np.groundWord = GROUND_WORDS[w] ?? null; continue; }
@@ -330,6 +351,10 @@ export function parseNP(text) {
   if (!np.kind && np.one && np.pron === null) np.kind = null;
   return np;
 }
+/** The kind of the first body of water (lake, river) the picture has, or null: "the water" means it. */
+const waterBody = () => (curScene?.objects ?? []).map(kindKey).find((k) => k === 'lake' || k === 'river') ?? null;
+/** Is `word` the name of a place (lake, field ...) the picture has no object of? Then "in the lake" keeps its older reading: the water or ground of the picture. */
+const absentPlace = (word) => { const k = kindOfWord(word)?.kind; return !!k && !!KINDS[k]?.region && !(curScene?.objects ?? []).some((o) => kindKey(o) === k); };
 /** A spoken part word without a kind ("roof"): { word, kinds } over every kind that has such a part. */
 function findPartWord(w) {
   const base = w.replace(/s$/, '');
@@ -341,7 +366,7 @@ function findPartWord(w) {
 /** Objects that match a parsed noun phrase, with what to do about several matches. */
 function matches(s, np) {
   let list = s.objects.slice();
-  if (np.kind && np.kind !== '*') list = list.filter((o) => kindKey(o) === np.kind);
+  if (np.kind && np.kind !== '*') list = list.filter((o) => kindKey(o) === np.kind || ((o.shape || /~/.test(np.kind)) && kindName(kindKey(o)) === kindName(np.kind)));   // a group named like a built-in kind, or equal pieces of other shapes, answer to the word
   if (np.part && np.partKinds) list = list.filter((o) => np.partKinds.includes(kindKey(o)));
   if (np.color) list = list.filter((o) => sameColorName(effectiveColor(o), np.color) || sameColorName(partColor(o, np.part), np.color));
   return list;
@@ -354,7 +379,7 @@ const partColor = (o, part) => (part ? o.parts?.[part] ?? null : null);
  * Rules (no guessing without saying so): "it" is the selected thing or what was just drawn; several matches are
  * narrowed by ordinal, size, side, selection and recency, and the reply says which one was taken.
  */
-export function resolveNP(s, np, { many = false } = {}) {
+export function resolveNP(s, np, { many = false, ask = false } = {}) {
   budget.tick('art.np', 1 + s.objects.length);   // recurses through np.partOf; each level scans the picture
   const out = { objs: [], special: np.special && np.special !== 'everything' ? np.special : null, np };
   if (np.special === 'everything') { out.objs = s.objects.slice(); out.everything = true; return out; }
@@ -387,31 +412,54 @@ export function resolveNP(s, np, { many = false } = {}) {
     }
     return { ...out, error: `I can not find ${label} in your picture.${hint}`, missing: true };
   }
-  if (np.loc) list = narrowByLocation(s, list, np.loc);
-  if (np.pos) list = pickExtreme(list, np.pos);
-  if (np.ordinal) {
-    const pool = np.kind && np.kind !== '*' && !np.color ? list.slice() : list;
-    pool.sort((a, b) => idNum(a) - idNum(b));
-    const idx = np.ordinal === -1 ? pool.length - 1 : np.ordinal - 1;
-    if (!pool[idx]) return { ...out, error: `There ${pool.length === 1 ? 'is only 1' : `are only ${pool.length}`} ${pool.length === 1 ? (np.kind && kindName(np.kind)) ?? 'one' : pluralOfKind(np.kind ?? 'thing')} in your picture, so there is no ${ORDINAL_WORD[np.ordinal] ?? 'last'} one.`, missing: true };
-    out.objs = [pool[idx]]; return out;
-  }
-  if (np.size && list.length > 1) {
-    const sorted = list.slice().sort((a, b) => (np.size === 'big' ? b.size - a.size : a.size - b.size));
-    if (np.superlative || !many) { out.objs = [sorted[0]]; return out; }
+  // which one by its place or order (left, middle, second, next to the sun, between ..., the other one, the biggest): the shared module `space` decides
+  const spec = specOf(np, list, many);
+  if (spec) {
+    const r = space.select(projectAll(list), spec, { frame: FRAME, last: s.last, resolve: (tk) => projectAll(resolveNP(s, parseNP(tk.join(' '))).objs ?? []) });
+    if (r.error === 'few') return { ...out, error: `There ${r.n === 1 ? 'is only 1' : `are only ${r.n}`} ${r.n === 1 ? (np.kind && kindName(np.kind)) ?? 'one' : pluralOfKind(np.kind ?? 'thing')} in your picture, so there is no ${ORDINAL_WORD[np.ordinal] ?? 'last'} one.`, missing: true };
+    if (r.ask) return { ...out, error: r.ask, missing: true, asked: true };
+    if (r.ids?.length) { out.objs = r.ids.map((id) => byId(s, id)); return out; }
   }
   if (list.length === 1) { out.objs = list; return out; }
   if (np.all || (np.plural && many) || (many && np.kind === '*')) { out.objs = list; return out; }
-  // several matches for a single thing: the selected one, else the newest of what was just handled, else the newest
+  // several matches for a single thing: the selected one, else the newest of what was just handled, else the newest. A request that acts on it (`ask`) asks instead,
+  // naming the candidates by position, unless the selection or the one thing just handled settles it: never silently the first.
   const sel = list.find((o) => o.id === s.selected);
-  const recent = list.filter((o) => s.last.includes(o.id)).sort((a, b) => idNum(b) - idNum(a))[0];
+  const handled = list.filter((o) => s.last.includes(o.id));
+  if (ask && !sel && handled.length !== 1) {
+    const r = space.select(projectAll(list), { plural: false }, { frame: FRAME });
+    return { ...out, error: r.ask ?? 'Which one do you mean?', missing: true, asked: true };
+  }
+  const recent = handled.sort((a, b) => idNum(b) - idNum(a))[0];
   const newest = list.slice().sort((a, b) => idNum(b) - idNum(a))[0];
   const pick = sel ?? recent ?? newest;
-  const order = sameKindOrder(s, pick);
   out.objs = [pick];
-  out.note = `There are ${list.length} ${pluralOfKind(kindKey(pick), list.length)}, so I took the ${order} one. You can say "the first ${kindName(kindKey(pick))}" or "all the ${pluralOfKind(kindKey(pick))}".`;
-  out.ambiguous = list.length;
+  if (!ask) {
+    out.note = `There are ${list.length} ${pluralOfKind(kindKey(pick), list.length)}, so I took the ${sameKindOrder(s, pick)} one. You can say "the first ${kindName(kindKey(pick))}" or "all the ${pluralOfKind(kindKey(pick))}".`;
+    out.ambiguous = list.length;
+  }
   return out;
+}
+const FRAME = { w: W, h: H, step: 110 };
+/** The objects as the module sees them: one box each (centre, size) and the stacking order. */
+const projectAll = (list) => list.map((o) => { const b = bbox(o); return { id: o.id, kind: kindKey(o), name: kindName(kindKey(o)), x: o.x, y: o.y, w: b.w, h: b.h, z: o.z }; });
+/** The selection a noun phrase asks for, as the module's spec (null when it asks for nothing by place or order). */
+function specOf(np, list, many) {
+  const spec = { ord: np.ordinal, pos: np.pos, size: null, other: np.other, count: np.count, all: np.all, plural: np.plural && many, next: null, between: null };
+  if (np.size && list.length > 1) { const a = list.map((o) => bbox(o).w * bbox(o).h); if (Math.max(...a) !== Math.min(...a) && (np.superlative || !many)) spec.size = np.size; }
+  if (np.loc) {
+    const loc = space.parseSel(['x', ...np.loc]);
+    spec.next = loc.next; spec.between = loc.between;
+    const region = !loc.next && !loc.between ? regionIn(np.loc) : null;
+    if (region) {   // "the tree on the left", "the cat in the top right": the things whose centre is in that part, then the one most to that side
+      const inside = list.filter((o) => regionOf(o.x, o.y) === region || regionOf(o.x, o.y).includes(region));
+      if (inside.length) { if (['left', 'right', 'top', 'bottom'].includes(region) && inside.length > 1) spec.pos ??= region; if (inside.length < list.length && !spec.pos) spec.restrict = inside.map((o) => o.id); }
+      else if (['left', 'right', 'top', 'bottom'].includes(region)) spec.pos ??= region;
+      else if (region === 'center') spec.pos ??= 'middle';
+    }
+  }
+  if (!spec.ord && !spec.pos && !spec.size && !spec.other && !spec.count && !spec.next && !spec.between && !spec.restrict) return null;
+  return spec;
 }
 const idNum = (o) => Number(String(o.id).replace(/\D/g, '')) || 0;
 const sameKindOrder = (s, o) => {
@@ -427,30 +475,6 @@ function describeWanted(np) {
   if (np.kind && np.kind !== '*') bits.push(many ? pluralOfKind(np.kind) : kindName(np.kind)); else if (np.part) bits.push(np.part.replace(/s$/, '')); else bits.push('thing');
   const t = bits.join(' ');
   return many ? t : `${a_(t)} ${t}`;   // RP5c: "red circles" (plural, no "any"), so the Romanian reply agrees
-}
-function pickExtreme(list, pos) {
-  if (list.length < 2) return list;
-  const key = { left: (o) => o.x, right: (o) => -o.x, top: (o) => o.y, bottom: (o) => -o.y }[pos];
-  return [list.slice().sort((a, b) => key(a) - key(b))[0]];
-}
-/** Narrow candidates with a location tail ("on the left", "next to the sun", "in the top right"). */
-function narrowByLocation(s, list, loc) {
-  if (list.length < 2) return list;
-  const rel = parseRelation(loc);
-  if (rel?.refs?.length) {
-    const refs = rel.refs.flatMap((r) => resolveNP(s, parseNP(r)).objs ?? []);
-    if (refs.length) {
-      const d = (o) => Math.min(...refs.map((r) => Math.hypot(o.x - r.x, o.y - r.y)));
-      return [list.slice().sort((a, b) => d(a) - d(b))[0]];
-    }
-  }
-  const region = regionIn(loc);
-  if (region) {
-    const inside = list.filter((o) => regionOf(o.x, o.y) === region || regionOf(o.x, o.y).includes(region));
-    if (inside.length) return inside.length > 1 && ['left', 'right', 'top', 'bottom'].includes(region) ? pickExtreme(inside, region) : inside;
-    if (['left', 'right', 'top', 'bottom'].includes(region)) return pickExtreme(list, region);
-  }
-  return list;
 }
 
 // ---- places and relations -----------------------------------------------------------------------------------------------
@@ -473,23 +497,26 @@ export function regionIn(words) {
   if (bottom) return 'bottom';
   return null;
 }
+const isColorOnly = (t) => { const w = toks(t).filter((x) => !['a', 'an', 'the', 'color', 'colour'].includes(x)); return w.length > 0 && w.every((x) => isShade(x) || isColorWord(x)); };
 const REL_PATTERNS = [
   ['between', /\bbetween\b/], ['front', /\b(?:in front of|before)\b/], ['behind', /\b(?:behind|at the back of)\b/],
   ['on', /\b(?:on top of|on)\b/], ['above', /\b(?:above|over|higher than)\b/], ['below', /\b(?:below|under|underneath|beneath|lower than)\b/],
   ['leftof', /\b(?:to the left of|on the left of|left of|on the left hand side of|at the left of)\b/], ['rightof', /\b(?:to the right of|on the right of|right of|on the right hand side of|at the right of)\b/],
   ['next', /\b(?:next to|beside|near|by|close to|closer to|alongside|besides|nearby|near to)\b/],
+  ['in', /\b(?:in|into|inside|within)\b/], ['around', /\b(?:around|round|surrounding)\b/],
 ];
 /** A relation to other things: { rel, refs: [noun phrase texts] } or null. Order of the patterns matters (longest first). */
 export function parseRelation(words) {
   const text = Array.isArray(words) ? words.join(' ') : clean(words);
-  const order = ['between', 'front', 'behind', 'leftof', 'rightof', 'next', 'above', 'below', 'on'];
+  const order = ['between', 'front', 'behind', 'leftof', 'rightof', 'next', 'above', 'below', 'around', 'on', 'in'];
   for (const rel of order) {
     const re = REL_PATTERNS.find((p) => p[0] === rel)[1];
     const m = re.exec(text);
     if (!m) continue;
     const rest = text.slice(m.index + m[0].length).trim();
     // "on the left" / "on the ground" are places, not relations to a thing
-    if (rel === 'on' && (regionIn(rest.split(' ')) || /^(?:the )?(?:left|right|top|bottom|ground|grass|floor)/.test(rest))) continue;
+    if ((rel === 'on' || rel === 'in') && (regionIn(rest.split(' ')) || /^(?:the )?(?:left|right|top|bottom|ground|grass|floor|sky|middle|centre|center|corner|background|picture|drawing)\b/.test(rest))) continue;
+    if (rel === 'in' && (isColorOnly(rest) || (/^(?:the )?(?:water|sea|ocean|sand|beach|snow)$/.test(rest) && !(rest.endsWith('water') && waterBody())) || absentPlace(rest.split(' ').at(-1)) || !(kindOfWord(rest.split(' ').at(-1)) || (rest.endsWith('water') && waterBody())))) continue;   // "in blue"; the water or ground of the picture; a place the picture does not have
     if (!rest) continue;
     const refs = (rel === 'between' ? rest.split(/\band\b/) : [rest]).map((x) => x.trim()).filter(Boolean);
     return { rel, refs, text: m[0] };
@@ -524,12 +551,12 @@ const SKY_X = [850, 150, 500, 330, 690, 60, 940, 230, 780];
  * the water is made: the sea when there is no ground yet, a pond on the ground otherwise. Returns the spot in a pond, or null for the ground band.
  */
 function waterSpot(s, o) {
-  const pond = s.objects.find((x) => x.tag === 'pond');
+  const pond = s.objects.find((x) => x.tag === 'pond' || kindKey(x) === 'lake');
   if (!pond && s.ground !== 'sea' && !NEEDS.has(kindKey(o))) return null;   // no water and the thing can do without: it stands where things of the ground stand
   if (pond) { placeNote = `I put the ${kindName(kindKey(o))} in the pond.`; return { x: pond.x, y: pond.y }; }
   if (s.ground === 'sea') { placeNote = `I put the ${kindName(kindKey(o))} in the water.`; return null; }
   if (!s.ground && !s.objects.some((x) => onGround(kindKey(x)))) { s.ground = 'sea'; s.groundColor = 'blue'; placeNote = `I added some water for the ${kindName(kindKey(o))}.`; return null; }
-  const p = makeObject(s, 'oval', { color: 'blue', tag: 'pond' });
+  const p = makeObject(s, 'lake', { color: 'blue', tag: 'pond' });
   p.size = 260; p.z = o.z - 1;
   defaultSpotOn(s, p, 'ground');
   s.objects.push(p);
@@ -597,7 +624,8 @@ function defaultSpotOn(s, o, anchor) {
 }
 
 /** Place `o` relative to other objects (already resolved). `side` is used only by next/leftof/rightof. */
-function placeRelative(s, o, rel, refs) {
+function placeRelative(s, o, rel0, refs) {
+  const rel = rel0 === 'on' && KINDS[kindKey(refs[0])]?.region ? 'in' : rel0;   // on the lake is in it; on top of the house is above it
   const gap = 24, b = bbox(o), k = KINDS[kindKey(o)];
   const R0 = bbox(refs[0]);
   const ground = onGround(kindKey(o)) || anchorOf(kindKey(o)) === 'water';
@@ -626,6 +654,12 @@ function placeRelative(s, o, rel, refs) {
     }
     case 'front': place.x = R0.cx + R0.w * 0.12; place.y = Math.min(H - 6 - b.h / 2, R0.y1 + 22 - b.h / 2); break;
     case 'behind': place.x = R0.cx + R0.w * 0.28; place.y = R0.y1 - b.h / 2 - 6; break;
+    case 'in': place.x = R0.cx; place.y = R0.cy; break;
+    case 'around': {   // a place goes round the thing (as big as needed), a thing stands next to it
+      if (KINDS[kindKey(o)]?.region) { place.x = R0.cx; place.y = R0.cy; o.size = Math.round(Math.min(W * 0.9, Math.max(o.size, R0.w * 1.8, (R0.h * 1.4) / (KINDS[kindKey(o)].aspect || 1)))); }
+      else { place.x = sideX(R0.cx < W / 2 ? 1 : -1, R0); place.y = alignY(R0); }
+      break;
+    }
     case 'between': {
       const R1 = bbox(refs[1] ?? refs[0]);
       place.x = (R0.cx + R1.cx) / 2; place.y = ground ? Math.max(R0.y1, R1.y1) - b.h / 2 : (R0.cy + R1.cy) / 2; break;
@@ -635,8 +669,8 @@ function placeRelative(s, o, rel, refs) {
   o.x = place.x; o.y = place.y;
   clampIn(o);
   const z = s.objects.reduce((m, x) => Math.max(m, x.z), -Infinity);
-  if (rel === 'behind') o.z = refs[0].z - 1;
-  else if (['below', 'front', 'on', 'above', 'next', 'leftof', 'rightof', 'between'].includes(rel)) o.z = Math.max(o.z, refs[0].z + 1, Number.isFinite(z) ? o.z : 0);
+  if (rel === 'behind' || (rel === 'around' && KINDS[kindKey(o)]?.region)) o.z = refs[0].z - 1;
+  else if (!KINDS[kindKey(o)]?.region && ['below', 'front', 'on', 'in', 'above', 'next', 'leftof', 'rightof', 'between', 'around'].includes(rel)) o.z = Math.max(o.z, refs[0].z + 1, Number.isFinite(z) ? o.z : 0);
 }
 
 // ---- making objects -------------------------------------------------------------------------------------------------------
@@ -644,10 +678,11 @@ const Z_LAYER = { mountain: -3000, rainbow: -2000, sun: -1000, moon: -1000, clou
 function makeObject(s, kind, { color = null, factor = 1, fill = null, tag = null } = {}) {
   const k = KINDS[kind];
   const o = {
-    id: `o${s.nextId++}`, kind: kind.startsWith(COMPOSITE) ? 'composite' : kind, ...(kind.startsWith(COMPOSITE) ? { thing: kindName(kind) } : {}), x: W / 2, y: H / 2, size: Math.round(k.size * factor), color: color ? canonColor(color) : null,
-    fill: fill ?? k.fill ?? 'crayon', rotation: 0, flip: false, z: (Z_LAYER[kind] ?? 0) + s.nextId, parts: {},
+    id: `o${s.nextId++}`, kind: kind.startsWith(COMPOSITE) ? 'composite' : kind, ...(kind.startsWith(COMPOSITE) ? { thing: thingOfKey(kind) } : {}), x: W / 2, y: H / 2, size: Math.round(k.size * factor), color: color ? canonColor(color) : null,
+    fill: fill ?? k.fill ?? 'crayon', rotation: 0, flip: false, z: (Z_LAYER[kind] ?? (k.region ? -2500 : 0)) + s.nextId, parts: {},
   };
   if (tag) o.tag = tag;
+  if (k.custom) o.shape = k.shape;   // a piece or a group drawn again keeps its parts with it
   return o;
 }
 
@@ -741,6 +776,15 @@ function addThing(s, spec, ctxInfo) {
     Object.assign(o.parts, spec.parts);
     group.push(o);
   }
+  if (spec.vary && group.length > 1) {   // each one differs: its own colour (not for things that have one colour by nature, nor one the user named) and its own size
+    const shuffle = (xs) => { const a = xs.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd(s) * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const sizes = shuffle(VARY_SIZES), colors = shuffle(VARY_COLORS.filter((c) => !spec.colorGiven || c !== spec.color));
+    const colourable = !spec.colorGiven && !spec.who && !FIXED_COLOR.has(kind);
+    group.forEach((o, i) => {
+      o.size = Math.round(KINDS[kind].size * spec.factor * sizes[i % sizes.length]);
+      if (colourable) o.color = canonColor(colors[i % colors.length]);
+    });
+  }
   // several things at once: even spread, drawn left to right
   const place = spec.place ?? {};
   if (place.rel && spec.refs?.length) {
@@ -807,7 +851,8 @@ function readSpec(args, tailWords) {
   // "more clouds" adds a few (2 or 3, alternating with what is already there); "more cloud" adds one
   let count = explicitN ?? (q === 'more' ? (plural ? 2 + (args.have ?? 0) % 2 : 1) : q ? QUANTITY[q] : plural ? PLURAL_DEFAULT[kind] ?? 3 : 1);
   const factor = sizeWords.length ? SIZE_WORDS[sizeWords.at(-1)] : 1;
-  return { kind, count, color, factor, comp, who, mood, tail: tailWords, mods, plural, explicit: explicitN !== null };
+  const vary = mods.some((m) => DIFFERENT.has(m));   // "3 different houses": each one differs from the others
+  return { kind, count, color, factor, comp, who, mood, tail: tailWords, mods, plural, explicit: explicitN !== null, vary, colorGiven: colorWords.length > 0 };
 }
 
 // ---- "draw a lighthouse", "add a third window": the noun is an open slot, looked up after the reading (spec 07 section 7) ------------------------------------------
@@ -815,7 +860,7 @@ function readSpec(args, tailWords) {
 function readOpen(text) {
   const words = toks(text), noun = words.at(-1) ?? '', lead = words.slice(0, -1);
   const ord = lead.map((w) => ORDINALS[w]).find((n) => n > 0) ?? null;
-  const mods = lead.filter((w) => isShade(w) || isColorWord(w) || Object.hasOwn(SIZE_WORDS, w) || Object.hasOwn(COMPARATIVES, w) || Object.hasOwn(MOOD_WORDS, w));
+  const mods = lead.filter((w) => DIFFERENT.has(w) || isShade(w) || isColorWord(w) || Object.hasOwn(SIZE_WORDS, w) || Object.hasOwn(COMPARATIVES, w) || Object.hasOwn(MOOD_WORDS, w));
   return { noun, mods, ord };
 }
 /** "add a third window": one more instance of a part of a thing in the picture (or the part put back after it was taken away). */
@@ -859,10 +904,15 @@ function registerKnown(ctx, noun) {
   } catch { /* the plain refusal follows */ }
   return null;
 }
+/** P6: a function word (article, conjunction, preposition, degree word) is never "the thing": the reply asks which thing is meant instead of naming it. */
+const FUNCTION_WORDS = new Set('a an the and or but also too still more less even then than as at to of in on by from with into onto over under for it its this that these those one some any no not nor so if'.split(' '));
+const isFunctionPhrase = (t) => { const w = String(t ?? '').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []; return !w.length || w.every((x) => FUNCTION_WORDS.has(x) && x !== 'it'); };
+/** The reply for a noun phrase that names no known thing; a function word or nothing at all gets a plain question. */
+const noSuchThing = (text, list) => no(isFunctionPhrase(text) ? `Which thing do you mean? You can say ${list}.` : `I do not know what "${text}" is. You can say ${list}.`);
 /** Resolves the open slot of `draw.add`: a thing to draw (args are rewritten with its word as the kind), a part to add, or the plain "I don't know how to draw ..." reply. */
 function openAdd(ctx, s, args) {
   const { noun, mods, ord } = readOpen(args.open);
-  if (!noun) return { done: no('What should I draw?', 'missing') };
+  if (!noun || isFunctionPhrase(noun)) return { done: no('What should I draw?', 'missing') };
   registerKnown(ctx, noun);
   const k = kindOfWord(noun);
   if (k && k.kind !== '*') {
@@ -879,8 +929,14 @@ function openAdd(ctx, s, args) {
 export const add = guard((ctx, args, s) => {
   if (args.open !== undefined) { const r = openAdd(ctx, s, args); if (r.done) return r.done; args = r.args; }
   if (!kindOfWord(args.kind)) { const nm = registerKnown(ctx, args.kt ?? args.kind); if (nm) args = { ...args, kind: nm, kt: nm }; }   // a thing of the knowledge catalog (spec 17)
+  else { const w = String(args.kt ?? args.kind ?? '').toLowerCase(); if (Object.hasOwn(KIND_WORDS, w) && KIND_WORDS[w] !== w) registerKnown(ctx, w) ?? registerKnown(ctx, w.replace(/s$/, '')); }   // "a ball": the catalog's ball before the circle the word falls back to
   const words0 = toks(args.where ?? '');
   const spec0 = readSpec({ ...args, have: sameKind(s, kindOfWord(args.kind)?.kind).length });
+  { // "draw another boat" after the user built a boat: the group of that name, not the built-in kind
+    const said = String(args.kt ?? args.kind ?? '').toLowerCase(), words = [said, said.replace(/s$/, ''), spec0.kind];
+    const g = spec0.kind && !String(spec0.kind).startsWith(COMPOSITE) && s.objects.slice().reverse().find((o) => o.shape && words.includes(kindName(kindKey(o))));
+    if (g) spec0.kind = kindKey(g);
+  }
   const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
   if (!spec0.kind && UNDRAWABLE.has(askedFor) && !ctx.knowledge?.peek(askedFor)?.objects?.length) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
@@ -928,7 +984,7 @@ export const add = guard((ctx, args, s) => {
     if (ref) { factor = (ref.size / base) * (spec0.comp > 0 ? COMPARATIVE_STEP : 1 / COMPARATIVE_STEP); sized = true; compNote = ` (${spec0.comp > 0 ? 'bigger' : 'smaller'} than the ${ref.who ?? kindKey(ref)} I had)`; }
     else { factor = spec0.comp > 0 ? 1.5 : 0.65; compNote = ` (there was no ${spec0.kind} to compare with, so I made it ${spec0.comp > 0 ? 'big' : 'small'})`; }
   }
-  const made = addThing(s, { kind: spec0.kind, who: spec0.who, mood: spec0.mood, sized, count, color: spec0.who ? null : color, dress: color, factor, parts: withParts.parts, place: place.rel ? { rel: place.rel } : place.region ? { region: place.region } : null, refs }, null);
+  const made = addThing(s, { kind: spec0.kind, vary: spec0.vary, colorGiven: spec0.colorGiven, who: spec0.who, mood: spec0.mood, sized, count, color: spec0.who ? null : color, dress: color, factor, parts: withParts.parts, place: place.rel ? { rel: place.rel } : place.region ? { region: place.region } : null, refs }, null);
   const all = [...drawnRefs, ...made];
   let extra = [];
   if (more.length) {
@@ -956,7 +1012,7 @@ const describePlacing = (o, place, refs) => {
   if (!o && !place.region) return '';
   if (place.rel && refs[0]) {
     const label = describeObject(refs[0], { article: 'the', size: false });
-    return { rightof: ` to the right of ${label}`, leftof: ` to the left of ${label}`, next: ` next to ${label}`, above: ` above ${label}`, on: ` on top of ${label}`, below: ` under ${label}`, front: ` in front of ${label}`, behind: ` behind ${label}`, between: ` between ${label} and ${describeObject(refs[1] ?? refs[0], { article: 'the', size: false })}` }[place.rel] ?? '';
+    return { rightof: ` to the right of ${label}`, leftof: ` to the left of ${label}`, next: ` next to ${label}`, above: ` above ${label}`, on: ` on top of ${label}`, below: ` under ${label}`, front: ` in front of ${label}`, behind: ` behind ${label}`, in: ` in ${label}`, around: ` around ${label}`, between: ` between ${label} and ${describeObject(refs[1] ?? refs[0], { article: 'the', size: false })}` }[place.rel] ?? '';
   }
   if (place.region) return { sky: ' in the sky', ground: ' on the ground' }[place.region] ?? ` ${REGION_PHRASE[place.region]}`;
   return '';
@@ -999,7 +1055,7 @@ export const ground = guard((ctx, args, s) => {
 /** Who is meant by a noun phrase text, or an error envelope. */
 function target(s, text, opts) {
   const np = parseNP(text);
-  if (!np.known && !np.kind && !np.special && !np.pron && !np.part) return { error: no(`I do not know what "${text}" is. You can say the house, the tree, the sun, it, or everything.`) };
+  if (!np.known && !np.kind && !np.special && !np.pron && !np.part) return { error: noSuchThing(text, 'the house, the tree, the sun, it, or everything') };
   const r = resolveNP(s, np, opts);
   if (r.error) return { error: no(r.error, 'missing') };
   return { r, np };
@@ -1043,7 +1099,7 @@ export const recolor = guard((ctx, args, s) => {
       const key = partOfWord(kindKey(o), part) ?? partOfWord(kindKey(o), part.replace(/s$/, ''));
       if (key) { o.parts[key] = color; done.push(o); }
     }
-    if (!done.length) { s.history.pop(); const k = objs[0]?.kind; return no(`${k ? `A ${k} has no ${part.replace(/s$/, '')}. ` : ''}${k ? `You can color its ${andList(partNames(k).map(partLabel))}.` : 'I can not find that part.'}`, 'unsupported'); }
+    if (!done.length) { s.history.pop(); return no(noPart(objs[0], part), 'unsupported'); }
     s.last = done.map((o) => o.id);
     open(ctx);
     const key0 = partOfWord(kindKey(done[0]), part) ?? part;
@@ -1065,6 +1121,12 @@ export const recolor = guard((ctx, args, s) => {
 });
 const cap1 = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 
+/** "A crocodile has no wing. You can color its body, head and legs." (the board's words for a kind, never the internal ones) */
+function noPart(o, part) {
+  if (!o) return 'I can not find that part.';
+  const kk = kindKey(o), name = kindName(kk), names = partNames(kk).map(partLabel);
+  return `${cap1(a_(name))} ${name} has no ${part.replace(/s$/, '')}.${names.length > 1 ? ` You can color its ${andList(names)}.` : names.length ? ` It is all one ${names[0]}.` : ''}`;
+}
 /** "give the house a blue door". */
 export const givePart = guard((ctx, args, s) => {
   return recolor(ctx, { t: `${args.part} of ${args.t}`, shade: args.shade, color: args.color });
@@ -1151,9 +1213,7 @@ export const setSize = guard((ctx, args, s) => {
 });
 
 // ---- moving ------------------------------------------------------------------------------------------------------------
-const STEP = 110;
-const STEP_AMOUNT = { a_bit: 0.5, a_little: 0.5, a_little_bit: 0.5, a_tiny_bit: 0.3, slightly: 0.4, just_a_bit: 0.5, much: 2.2, a_lot: 2.5, way: 3, far: 3, very_much: 2.5, so_much: 2.5, all_the_way: 20 };
-const DIR_VEC = { left: [-1, 0], right: [1, 0], up: [0, -1], down: [0, 1], higher: [0, -1], lower: [0, 1], upward: [0, -1], downward: [0, 1], upwards: [0, -1], downwards: [0, 1], leftwards: [-1, 0], rightwards: [1, 0], forward: [0, 0], back: [0, 0] };
+const AMOUNT_RE = new RegExp(`\\b(?:${Object.keys(space.AMOUNTS).map((k) => k.replace(/_/g, ' ')).sort((x, y) => y.length - x.length).join('|')})\\b`);   // the module's amount words (a bit, a lot, all the way ...)
 const REL_STRONG = new Set(['to', 'towards', 'toward', 'into', 'onto', 'next', 'beside', 'near', 'by', 'under', 'underneath', 'beneath', 'below', 'above', 'over', 'behind', 'between']);
 const DIR_WORDS = new Set(['up', 'down', 'left', 'right', 'higher', 'lower', 'closer', 'further', 'farther', 'back', 'forward', 'away', 'upwards', 'downwards', 'upward', 'downward', 'leftwards', 'rightwards']);
 const DET = new Set(['the', 'a', 'an', 'my', 'that', 'this', 'its', 'every', 'each', 'all', 'both', 'first', 'second', 'third', 'last']);
@@ -1166,8 +1226,10 @@ export function splitDest(text) {
     const t = w[i];
     if (REL_STRONG.has(t)) return 'strong';
     if (t === 'a' && /^(bit|little|lot|tiny|way)$/.test(w[i + 1] ?? '')) return 'dir';
+    if (['more', 'even'].includes(t) && (DIR_WORDS.has(w[i + 1] ?? '') || ['at', 'to', 'towards'].includes(w[i + 1] ?? ''))) return 'dir';   // "more at right": a further move
+    if (['much', 'slightly', 'way', 'far'].includes(t) && DIR_WORDS.has(w[i + 1] ?? '')) return 'dir';   // "much higher", "slightly left": the amount belongs to the move
     if (DIR_WORDS.has(t)) {
-      if (['left', 'right', 'up', 'down', 'back'].includes(t) && (DET.has(w[i - 1]) || kindOfWord(w[i + 1] ?? '') || w[i + 1] === '1' || w[i + 1] === 'one')) return null;
+      if (['left', 'right', 'up', 'down', 'back'].includes(t) && (DET.has(w[i - 1]) || w[i - 1] === 'from' || kindOfWord(w[i + 1] ?? '') || w[i + 1] === '1' || w[i + 1] === 'one')) return null;
       return 'dir';
     }
     if (WEAK.has(t)) return 'weak';
@@ -1195,44 +1257,58 @@ export function parseDest(text) {
   // absolute coordinates on the 1000 x 700 canvas: "at 200, 300", "to x 200 y 300", "to 200 by 300"
   const abs = w.join(' ').match(/^(?:at|to|on|onto|into)?\s*(?:the\s+)?(?:position|point|spot|coordinates)?\s*(?:x\s*)?(\d+(?:\.\d+)?)\s*(?:,|and|by|x|comma)?\s*(?:y\s*)?(\d+(?:\.\d+)?)$/);
   if (abs) return { kind: 'abs', x: Number(abs[1]), y: Number(abs[2]) };
-  // amount words
-  let amount = 1;
-  const joined = w.join(' ');
-  for (const [k, v] of Object.entries(STEP_AMOUNT)) {
-    const phrase = k.replace(/_/g, ' ');
-    if (new RegExp(`\\b${phrase}\\b`).test(joined)) { amount = v; w = toks(joined.replace(new RegExp(`\\b${phrase}\\b`), ' ')); break; }
-  }
+  // amount words (the module's): taken out here so that the relation and the region read what is left; the move itself is read by the module
+  const joined = w.join(' '), mv = space.parseMove(joined);
+  const edgeAmt = !!mv?.segs.some((x) => x.mult === 'edge');
+  w = toks(joined.replace(AMOUNT_RE, ' '));
   const j = w.join(' ');
   if (/\b(to the front|forward|to the top of everything|in front of everything)\b/.test(j)) return { kind: 'z', dir: 'front' };
   if (/\b(to the back|backward|backwards|to the bottom of everything|behind everything)\b/.test(j)) return { kind: 'z', dir: 'back' };
   // "in the water", "into the sea": the ground band (the water, sand, grass or snow the picture has)
-  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|sand|beach|snow)$/.test(j)) return { kind: 'region', region: 'ground' };
+  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|pond|sand|beach|snow)$/.test(j) && (absentPlace(w.at(-1)) || !(kindOfWord(w.at(-1)) || (w.at(-1) === 'water' && waterBody())))) return { kind: 'region', region: 'ground' };   // a lake of the picture is a thing: the relation below
   const rel = parseRelation(w);
   if (rel) return { kind: 'rel', rel: rel.rel, refs: rel.refs, closer: /\bcloser\b/.test(j) };
-  if (/\b(edge|far)\b/.test(j) || amount >= 20) {
+  if (/\b(edge|far)\b/.test(j) || edgeAmt) {
     const r = regionIn(w);
     if (r) return { kind: 'region', region: r };
   }
   const side = /\b(side|corner|edge|half|part|middle|center|centre|sky|ground|grass|floor)\b/.test(j);
   const region = regionIn(w);
-  if (region && (side || /^(on|at|in|into|onto)\b/.test(j) || region === 'top left' || region === 'top right' || region === 'bottom left' || region === 'bottom right')) return { kind: 'region', region };
-  if (/\b(down|up|left|right|higher|lower)\b/.test(j) || region) {
-    const dirs = w.filter((x) => Object.hasOwn(DIR_VEC, x) && !['forward', 'back'].includes(x));
-    let dx = 0, dy = 0;
-    for (const d of dirs) { dx += DIR_VEC[d][0]; dy += DIR_VEC[d][1]; }
-    if (!dirs.length && region) { const v = DIR_VEC[region] ?? [0, 0]; dx = v[0]; dy = v[1]; }
-    if (dx || dy) return { kind: 'step', dx: dx * STEP * amount, dy: dy * STEP * amount, label: dirs.join(' and ') || region };
-  }
+  const andDirs = !!mv && mv.segs.length > 1 && /\band\b/.test(j);   // "right and lower": two directions, not the region bottom right
+  if (region && !andDirs && (side || /^(on|at|in|into|onto)\b/.test(j) || region === 'top left' || region === 'top right' || region === 'bottom left' || region === 'bottom right')) return { kind: 'region', region };
+  if (mv && (mv.segs.length || mv.again)) return { kind: 'step', move: mv, label: w.filter((x) => Object.hasOwn(space.DIRS, x)).join(' and ') || 'further' };
+  if (region && space.DIRS[region]) return { kind: 'step', move: { segs: [{ dx: space.DIRS[region][0], dy: space.DIRS[region][1], mult: 1 }] }, label: region };
   if (/\b(closer|nearer)\b/.test(j)) return { kind: 'closer' };
   if (/\b(centre|center|middle)\b/.test(j)) return { kind: 'region', region: 'center' };
   return null;
 }
 
+/**
+ * Several things put in relation to another thing keep their arrangement: the one nearest to their centre is placed by the relation and the others follow it
+ * rigidly (they were all put on one spot before). Returns the moved objects, or { error }; null when this is not a case for it.
+ */
+function moveGroupRel(s, objs, dest) {
+  if (dest.kind !== 'rel' || objs.length < 2 || dest.rel === 'in') return null;
+  const refs = [];
+  for (const text of dest.refs) { const r = resolveNP(s, parseNP(text)); const ref = r.objs.find((x) => !objs.includes(x)); if (!ref) return null; refs.push(ref); }
+  const cx = objs.reduce((a, o) => a + o.x, 0) / objs.length, cy = objs.reduce((a, o) => a + o.y, 0) / objs.length;
+  const anchor = objs.slice().sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy))[0];
+  const orig = objs.map((o) => ({ o, x: o.x, y: o.y, z: o.z })), a0 = { x: anchor.x, y: anchor.y };
+  placeRelative(s, anchor, dest.rel, refs);
+  const dx = anchor.x - a0.x, dy = anchor.y - a0.y;
+  for (const { o, x, y, z } of orig) { if (o !== anchor) { o.x = x + dx; o.y = y + dy; o.z = Math.max(z, anchor.z); } }
+  // the whole group stays on the canvas: slide it back as one
+  const bs = objs.map(bbox), over = { x: Math.max(0, Math.max(...bs.map((b) => b.x1)) - (W - 4)) - Math.max(0, 4 - Math.min(...bs.map((b) => b.x0))), y: Math.max(0, Math.max(...bs.map((b) => b.y1)) - (H - 4)) - Math.max(0, 4 - Math.min(...bs.map((b) => b.y0))) };
+  for (const o of objs) { o.x = Math.round(o.x - over.x); o.y = Math.round(o.y - over.y); }
+  return { done: objs };
+}
+
 function applyDest(s, objs, dest) {
   const done = [];
-  for (const o of objs) {
+  { const g = moveGroupRel(s, objs, dest); if (g) return g; }
+  for (const [i, o] of objs.entries()) {
     const b = bbox(o);
-    if (dest.kind === 'step') { o.x += dest.dx; o.y += dest.dy; clampIn(o); }
+    if (dest.kind === 'step') { const r = space.planMove([{ id: o.id, x: o.x, y: o.y, w: b.w, h: b.h }], FRAME, dest.move, s.lastMove); if (r.error) return { error: 'I do not remember a move to repeat. Say which way to go, for example "a bit more to the left".' }; o.x = r.boxes[o.id].x; o.y = r.boxes[o.id].y; clampIn(o); dest.memory = r.memory; }
     else if (dest.kind === 'abs') { o.x = dest.x; o.y = dest.y; clampIn(o); }
     else if (dest.kind === 'region') { placeRegion(s, o, dest.region); }
     else if (dest.kind === 'rel') {
@@ -1240,6 +1316,10 @@ function applyDest(s, objs, dest) {
       for (const text of dest.refs) { const r = resolveNP(s, parseNP(text)); if (!r.objs.length) return { error: r.error ?? `I can not find "${text}".` }; refs.push(r.objs.find((x) => x !== o) ?? r.objs[0]); }
       if (refs[0] === o) return { error: 'A thing can not be next to itself!' };
       placeRelative(s, o, dest.rel, refs);
+      if (objs.length > 1 && (dest.rel === 'in' || (dest.rel === 'on' && KINDS[kindKey(refs[0])]?.region))) {   // several things in one place: spread across it
+        const R = bbox(refs[0]);
+        o.x = R.x0 + ((i + 0.5) / objs.length) * R.w; o.y = R.cy + (i % 2 ? 0.12 : -0.06) * R.h; clampIn(o);
+      }
     } else if (dest.kind === 'z') {
       const zs = s.objects.map((x) => x.z);
       o.z = dest.dir === 'front' ? Math.max(...zs) + 1 : Math.min(...zs) - 1;
@@ -1250,28 +1330,91 @@ function applyDest(s, objs, dest) {
   return { done };
 }
 
+/**
+ * "put a lake next to the house", "place another road", "and a lake": a thing that is not in the picture (or is asked for with "another") is added, not moved
+ * (SCENE-NATURAL P4: the verb of such a message is "put", and a thing that is not there yet is made). Null when the phrase moves something that exists.
+ */
+function addMissing(ctx, s, tt, dest) {
+  let ws = toks(`${tt} ${dest}`), joined = false;
+  while (ws.length > 1 && ['and', 'also', 'too', 'then', 'now', 'plus'].includes(ws[0])) { budget.tick('ops.addMissing'); ws = ws.slice(1); joined = true; }   // "and a lake": one more
+  const spec = parseMoreSpec(ws);
+  if (!spec) return null;
+  const k = kindOfWord(spec.kind);
+  if (!k || k.kind === '*' || !isKind(k.kind)) return null;
+  const again = joined || ws.includes('another');
+  if (!again && sameKind(s, k.kind).length) return null;
+  const r = add(ctx, spec);
+  return r;
+}
+
+/** The ground cover asked for as a thing with a place ("put grass under the houses"): a patch of it as wide as the group, where the relation says (SCENE-NATURAL P4). */
+function coverPlace(ctx, s, groundWord, d) {
+  if (!d || !['rel', 'region'].includes(d.kind) || (d.kind === 'region' && d.region === 'ground')) return null;
+  const kind = groundWord === 'sea' ? 'lake' : 'patch', color = { sea: 'blue', sand: 'tan', snow: 'white' }[groundWord] ?? 'green';
+  let group = [];
+  if (d.kind === 'rel') {
+    for (const text of d.refs) { const r = resolveNP(s, parseNP(text), { many: true }); if (!r.objs.length) return no(r.error ?? `I can not find "${text}".`, 'missing'); group.push(...r.objs); }
+    group = [...new Set(group)];
+  }
+  const o = makeObject(s, kind, { color });
+  const aspect = KINDS[kind].aspect;
+  if (group.length) {
+    const bs = group.map(bbox), x0 = Math.min(...bs.map((b) => b.x0)), x1 = Math.max(...bs.map((b) => b.x1)), y0 = Math.min(...bs.map((b) => b.y0)), y1 = Math.max(...bs.map((b) => b.y1));
+    const gw = x1 - x0, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    o.size = Math.round(Math.max(gw * 1.15, KINDS[kind].size * 0.6));
+    const bh = o.size * aspect, gap = 20;
+    o.x = cx;
+    switch (d.rel) {
+      case 'below': case 'front': o.y = y1 + bh * 0.15; break;
+      case 'above': o.y = y0 - bh / 2 - gap; break;
+      case 'rightof': o.x = x1 + gap + o.size / 2; o.y = y1 - bh / 2; break;
+      case 'leftof': o.x = x0 - gap - o.size / 2; o.y = y1 - bh / 2; break;
+      case 'next': o.x = cx < W / 2 ? x1 + gap + o.size / 2 : x0 - gap - o.size / 2; o.y = y1 - bh / 2; break;
+      case 'around': o.size = Math.round(Math.max(gw * 1.6, (y1 - y0) * 1.8 / aspect)); o.y = cy; break;
+      default: o.y = cy; break;   // in, on, behind: the place lies under them, centred
+    }
+    o.z = Math.min(o.z, ...group.map((x) => x.z - 1));
+    clampIn(o);
+  } else placeRegion(s, o, d.region);
+  remember(s, `added ${kind === 'patch' ? 'a patch of grass' : 'a lake'}`);
+  s.objects.push(o); s.last = [o.id];
+  open(ctx);
+  const label = kind === 'lake' ? 'a lake' : groundWord === 'grass' ? 'a patch of grass' : `a patch of ${GROUND_NAME[groundWord]}`;
+  return ok(`${opener(s)} I put ${label}${d.kind === 'rel' ? (group.length > 1 && group.every((x) => kindKey(x) === kindKey(group[0])) ? describePlacing(o, { rel: d.rel }, [group[0]]).replace(/ the .*$/, ` the ${pluralOfKind(kindKey(group[0]), group.length)}`) : describePlacing(o, { rel: d.rel }, [group[0]])) : describePlacing(null, { region: d.region }, [])}.`, { data: { made: [o.id] } });
+}
+
 export const move = guard((ctx, args, s) => {
-  let phrase = args.phrase ?? '';
+  let phrase = String(args.phrase ?? '').replace(/_/g, ' ');
   const adj = [args.m1, args.m2].filter(Boolean).join(' ');
   if (adj) phrase = /^the /i.test(phrase) ? phrase.replace(/^the /i, `the ${adj} `) : `${adj} ${phrase}`;
   // "slide the house over to the right": "over to" is a direction, not the relation "over"
   phrase = phrase.replace(/\b(?:over|across|along) (to|towards|toward)\b/gi, '$1');
-  const { target: tt, dest } = splitDest(phrase);
+  let { target: tt, dest } = splitDest(phrase);
+  if (!toks(tt.replace(AMOUNT_RE, ' ')).filter((x) => !['a', 'the', 'more', 'even', 'and', 'also', 'then', 'so', 'please'].includes(x)).length) { dest = `${tt} ${dest}`.trim(); tt = ''; }   // "and a bit lower": only an amount before the direction, so it is the same thing
+  if (args.verb === 'put') { const am = addMissing(ctx, s, tt, dest); if (am) return am; }   // a placing verb with a thing that is not in the picture adds it
   if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'missing');
-  const t = target(s, tt || 'it', { many: true });
+  const d = parseDest(dest);   // the destination is checked before asking which one is meant
+  if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);
+  // a bare "it" is what the last step handled, all of it ("further left" after moving three houses moves the three)
+  const lastThings = (!tt || (/^(?:it|them)$/.test(tt.trim()) && /\b(?:further|farther|more|again)\b/.test(dest))) && !s.selected ? s.last.map((id) => byId(s, id)).filter(Boolean) : [];
+  const t = lastThings.length > 1 ? { r: { objs: lastThings, np: parseNP('them') } } : target(s, tt || 'it', { many: true, ask: true });
   if (t.error) return t.error;
   const { r } = t;
-  if (r.special) return no('The sky and the ground stay where they are. You can move the things you drew.');
-  const d = parseDest(dest);
-  if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);
+  if (r.special) {
+    const c = r.special === 'ground' && r.np?.groundWord ? coverPlace(ctx, s, r.np.groundWord, d) : null;   // grass under the houses is a patch of grass, not the ground itself
+    return c ?? no('The sky and the ground stay where they are. You can move the things you drew.');
+  }
   remember(s, 'moved something');
   // RP5b: "move the fish into the water": say "in the water" (not "on the ground") and add the water when the picture has none
-  const target_ = /^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(water|sea|ocean|lake|sand|beach|snow)$/.exec(toks(dest).join(' '))?.[1];
-  const wantGround = target_ ? GROUND_WORDS[target_] : null;
+  const target_ = d.kind !== 'region' ? null : /^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(water|sea|ocean|lake|sand|beach|snow)$/.exec(toks(dest).join(' '))?.[1];
+  const wantGround = target_ ? GROUND_WORDS[target_] ?? (/^(?:lake|pond)$/.test(target_) ? 'sea' : null) : null;
   const addedGround = wantGround && s.ground !== wantGround ? wantGround : null;
   if (addedGround) { s.ground = addedGround; s.groundColor = GROUND_COLOR[addedGround]; }
+  const before = r.objs.map((o) => ({ id: o.id, x: o.x, y: o.y, z: o.z }));
   const res = applyDest(s, r.objs, d);
   if (res.error) { s.history.pop(); return no(res.error, 'missing'); }
+  s.lastMove = d.kind === 'step' ? d.memory : null;   // what "further" repeats
+  s.lastMoveInfo = { dest, kind: kindKey(r.objs[0]), before };   // what "no, the middle one" corrects
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
@@ -1282,6 +1425,99 @@ export const move = guard((ctx, args, s) => {
   return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : ''}.`, r));
 });
 void 0;
+
+/** "no, not the first one, the middle one": puts the things of the last move back and does the same move on the one meant now (one request, one step). */
+export const reselect = guard((ctx, args, s) => {
+  const info = s.lastMoveInfo;
+  if (!info) return no('There is no move to correct yet. Say which thing to move, for example "move the middle house to the right".', 'missing');
+  for (const b of info.before) { const o = byId(s, b.id); if (o) { o.x = b.x; o.y = b.y; o.z = b.z; } }
+  const np = parseNP(args.phrase ?? '');
+  const words = toks(args.phrase ?? '').filter((w) => !['the', 'a', 'an', 'one', 'it'].includes(w));
+  const kind = np.kind && np.kind !== '*' ? kindName(np.kind) : kindName(info.kind);
+  return move(ctx, { phrase: `the ${words.join(' ')} ${kind} ${info.dest}`.replace(/\s+/g, ' ') });
+});
+
+/**
+ * A sentence about places that is not a plain move of one thing (a row, a grid, tidy up, swap, line up, "what is next to the house", "which one is in the middle",
+ * "is the sun above the tree", "how far apart"): the shared module `space` reads it on the boxes of the picture; this applies the boxes and says what it said.
+ */
+export const spatial = guard((ctx, args, s) => {
+  const items = projectAll(s.objects);
+  if (!items.length) return no('Your picture is empty. Try "draw a red house".', 'missing');
+  const r = space.interpret(String(args.text ?? ''), { items, frame: FRAME, kindOf: (w) => kindOfWord(w) ?? null, last: s.last, lastMove: s.lastMove });
+  if (!r) return no('I did not understand where things should go. Try "put the houses in a row" or "what is next to the sun?".', 'unsupported');
+  if (r.type === 'ask') return no(r.say, 'missing');
+  if (r.type === 'error') return no(r.say, 'missing');
+  if (r.type === 'answer') return ok(r.say);
+  const moved = Object.keys(r.boxes ?? {});
+  if (!moved.length) return ok(r.say);
+  remember(s, r.type === 'layout' ? 'arranged things' : 'moved something');
+  for (const id of moved) {
+    const o = byId(s, id), b = r.boxes[id];
+    if (b.w != null) o.size = Math.max(10, Math.round(o.size * (b.w / bbox(o).w)));
+    o.x = b.x; o.y = b.y; clampIn(o);
+  }
+  s.last = r.ids?.length ? r.ids : s.last;
+  s.lastMove = r.memory ?? null;
+  open(ctx);
+  return ok(`${opener(s)} ${r.say.replace(/^I /, 'I ')}`);
+});
+
+// ---- follow-ups that change the last step (SCENE-NATURAL P2): "but keep the lake", "not over the water" ---------------------------------------------------
+/** What the last step did to the picture, from the snapshot it left on the history: the things it made, changed and removed. */
+function lastStep(s) {
+  const snap = s.prev;
+  if (!snap) return null;
+  budget.tick('art.step', s.objects.length + snap.objects.length + 1);
+  const was = new Map(snap.objects.map((o) => [o.id, o])), now = new Map(s.objects.map((o) => [o.id, o]));
+  const sig = (o) => JSON.stringify([o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.z, o.parts]);
+  return { snap, was, added: s.objects.filter((o) => !was.has(o.id)), changed: s.objects.filter((o) => was.has(o.id) && sig(o) !== sig(was.get(o.id))), removed: snap.objects.filter((o) => !now.has(o.id)) };
+}
+const putBack = (o, w) => { Object.assign(o, { ...w, parts: { ...(w.parts ?? {}) } }); };
+/** "not over the water": what the last step made or moved onto the named thing goes back (made things go away, moved things return); the rest of the step stays. */
+export const except_ = guard((ctx, args, s) => {
+  const step = lastStep(s);
+  if (!step) return no('I have not done anything yet that I could take back part of.', 'missing');
+  const r = resolveNP(s, parseNP(args.x ?? ''), { many: true });
+  if (r.error) return no(r.error, 'missing');
+  if (r.special || !r.objs.length) return no('Say which thing it should stay clear of, for example "not over the lake".', 'missing');
+  const reach = (o) => r.objs.some((t) => t !== o && overlapRatio(bbox(o), bbox(t)) > 0.05);
+  const touched = [...step.added, ...step.changed].filter(reach);
+  const label = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
+  if (!touched.length) return no(`Nothing I just did reaches ${label}.`, 'unsupported');
+  remember(s, `kept things off ${label}`);
+  for (const o of touched) { if (step.was.has(o.id)) putBack(o, step.was.get(o.id)); else s.objects = s.objects.filter((x) => x !== o); }
+  s.last = touched.filter((o) => step.was.has(o.id)).map((o) => o.id);
+  open(ctx);
+  const made = touched.filter((o) => !step.was.has(o.id)), moved = touched.filter((o) => step.was.has(o.id));
+  const say = (xs) => `the ${pluralOfKind(kindKey(xs[0]), xs.length)}`;
+  return ok(`${opener(s)} ${[made.length ? `I took ${made.length === 1 ? sayObj(made[0]) : say(made)} away from ${label}` : '', moved.length ? `I put ${moved.length === 1 ? sayObj(moved[0]) : say(moved)} back` : ''].filter(Boolean).join(' and ')}.`);
+});
+/** "but keep the lake": a thing the last step removed or changed comes back as it was. */
+export const keep = guard((ctx, args, s) => {
+  const step = lastStep(s);
+  if (!step) return no('I have not changed anything yet, so there is nothing to keep.', 'missing');
+  const np = parseNP(args.x ?? '');
+  const view = { ...s, objects: step.snap.objects };
+  let want = [];
+  if (np.pron) want = [...step.removed, ...step.changed.map((o) => step.was.get(o.id))];
+  else if (np.special === 'ground') {
+    if ((np.groundWord ?? s.ground) === step.snap.ground && s.ground !== step.snap.ground) { remember(s, 'kept the ground'); s.ground = step.snap.ground; s.groundColor = step.snap.groundColor; open(ctx); return ok(`${opener(s)} I kept the ${GROUND_NAME[s.ground] ?? 'ground'} as it was.`); }
+    return no('The ground is as it was.', 'unsupported');
+  } else { const r = resolveNP(view, np, { many: true }); if (r.error) return no(r.error, 'missing'); want = r.objs; }
+  const now = new Map(s.objects.map((o) => [o.id, o]));
+  const sig = (o) => JSON.stringify([o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.z, o.parts]);
+  const back = want.filter((w) => !now.has(w.id) || sig(now.get(w.id)) !== sig(w));
+  const label = want.length === 1 ? sayObj(want[0]) : want.length ? `the ${pluralOfKind(kindKey(want[0]), want.length)}` : 'it';
+  if (!want.length) return no('I have nothing to put back.', 'unsupported');
+  if (!back.length) return ok(`${cap1(label)} ${want.length === 1 ? 'is' : 'are'} still there as before.`);
+  remember(s, `kept ${label}`);
+  for (const w of back) { const cur = byId(s, w.id); if (cur) putBack(cur, w); else s.objects.push({ ...w, parts: { ...(w.parts ?? {}) } }); }
+  s.objects.sort((a, b) => idNum(a) - idNum(b));
+  s.last = back.map((o) => o.id);
+  open(ctx);
+  return ok(`${opener(s)} I kept ${label}.`);
+});
 
 export const nudge = guard((ctx, args, s) => {
   const dir = String(args.d ?? '').toLowerCase().replace(/^further_/, '');
@@ -1377,7 +1613,7 @@ export const remove = guard((ctx, args, s) => {
   const plan = [];
   for (const text of texts) {
     const np = parseNP(text);
-    if (!np.known && !np.kind && !np.special && !np.pron) return no(`I do not know what "${text}" is. You can say the car, the tree, the sky, the grass, or everything.`);
+    if (!np.known && !np.kind && !np.special && !np.pron) return noSuchThing(text, 'the car, the tree, the sky, the grass, or everything');
     const r = resolveNP(s, np, { many: true });
     if (r.error) return no(r.error, 'missing');
     // "remove the chimney": a part of a thing goes, not the thing (the part comes back with "add a chimney")
@@ -1479,7 +1715,7 @@ export const duplicate = guard((ctx, args, s) => {
     for (let i = 0; i < n; i++) {
       const o = makeObject(s, kindKey(src), { color: src.color, factor: src.size / KINDS[kindKey(src)].size, fill: src.fill });
       o.parts = { ...src.parts }; o.flip = src.flip; o.rotation = src.rotation;
-      if (src.thing) o.thing = src.thing; if (src.extra) o.extra = { ...src.extra }; if (src.hide) o.hide = [...src.hide];
+      if (src.thing) o.thing = src.thing; if (src.shape) o.shape = src.shape; if (src.extra) o.extra = { ...src.extra }; if (src.hide) o.hide = [...src.hide];
       defaultSpot(s, o);
       if (crowd(s, o) > 0.3) { const b = bbox(o); o.x = Math.min(W - b.w / 2 - 10, src.x + b.w + 20); o.y = src.y; clampIn(o); }
       s.objects.push(o); copies.push(o);
@@ -1488,6 +1724,106 @@ export const duplicate = guard((ctx, args, s) => {
   s.last = copies.map((o) => o.id);
   open(ctx);
   return ok(withNote(`${opener(s)} I made ${n === 1 ? 'a copy' : `${n} copies`} of ${sayObj(r.objs[0])}.`, r));
+});
+
+// ---- taking things apart and putting them together --------------------------------------------------------------------------------------------------------------
+/** A thing that was built from others puts them back where they are now (moved, resized, turned with the group). */
+function membersOf(s, g) {
+  const mem = g.shape.members, ref = g.shape.ref, k = g.size / (ref.size || g.size), a = ((g.rotation ?? 0) * Math.PI) / 180, mirror = !!g.flip;
+  return mem.map((m0) => {
+    const m = { ...structuredClone(m0), parts: { ...(m0.parts ?? {}) } };
+    let dx = (m.x - ref.x) * k; const dy = (m.y - ref.y) * k;
+    if (mirror) dx = -dx;
+    m.x = Math.round(g.x + dx * Math.cos(a) - dy * Math.sin(a)); m.y = Math.round(g.y + dx * Math.sin(a) + dy * Math.cos(a));
+    m.size = Math.max(4, Math.round(m.size * k));
+    m.rotation = ((mirror ? -(m.rotation ?? 0) : (m.rotation ?? 0)) + (g.rotation ?? 0));
+    if (mirror) m.flip = !m.flip;
+    if (g.color) m.color = g.color;
+    return m;
+  });
+}
+/** "take the house apart", "separate the roof": the parts become things of their own, keeping shape, colour and place. One step to undo. */
+export const takeApart = guard((ctx, args, s) => {
+  const text = args.t ?? 'it';
+  const t = target(s, text, { many: true });
+  if (t.error) return t.error;
+  const { r, np } = t;
+  if (r.special || !r.objs.length) return no('I can take apart the things you drew, for example "take the house apart".');
+  const part = r.part ?? np.part;
+  remember(s, `took ${r.objs.length === 1 ? sayObj(r.objs[0]) : `${r.objs.length} things`} apart`);
+  const made = [], gone = [], said = [];
+  for (const o of r.objs) {
+    if (!part && o.shape?.members?.length) {   // a group goes back to the things it was made of
+      for (const m of membersOf(s, o)) made.push(m);
+      gone.push(o); said.push(...o.shape.members.map((m) => `the ${kindName(kindKey(m))}`));
+      continue;
+    }
+    const key = part ? partOfWord(kindKey(o), part) ?? partOfWord(kindKey(o), part.replace(/s$/, '')) : null;
+    if (part && !key) continue;
+    const pieces = piecesOf(o, key ? [key] : null);
+    if (!pieces.length || (!key && pieces.length < 2)) continue;
+    for (const p of pieces) {
+      const m = makeObject(s, registerShape(p.name, p.shape), { fill: o.fill });
+      Object.assign(m, { x: p.x, y: p.y, size: p.size, rotation: p.rotation, z: p.z });
+      if (o.zone) m.zone = o.zone;
+      made.push(m); said.push(`the ${partLabel(p.name)}`);
+    }
+    if (key) o.hide = [...(o.hide ?? []), key]; else gone.push(o);
+  }
+  if (!made.length) {
+    s.history.pop();
+    const o = r.objs[0];
+    return no(part ? noPart(o, part) : `${cap1(sayObj(o))} is all one piece, so there is nothing to take apart.`, 'unsupported');
+  }
+  if (gone.length) s.objects = s.objects.filter((o) => !gone.includes(o));
+  for (const m of made) if (!m.id || byId(s, m.id)) m.id = `o${s.nextId++}`;
+  s.objects.push(...made);
+  s.objects.sort((a, b) => (a.z ?? 0) - (b.z ?? 0) || idNum(a) - idNum(b));
+  if (s.selected && !byId(s, s.selected)) s.selected = null;
+  s.last = made.map((o) => o.id);
+  open(ctx);
+  const who = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
+  if (part) { const one = new Set(said).size === 1; return ok(withNote(`${opener(s)} I separated ${andList([...new Set(said)])} from ${who}. ${one ? 'It is a thing' : 'They are things'} of ${one ? 'its' : 'their'} own now.`, r)); }
+  return ok(withNote(`${opener(s)} I took ${who} apart: ${andList([...new Set(said)])} ${new Set(said).size === 1 ? 'is a separate thing' : 'are separate things'} now.`, r));
+});
+
+/** "put these together", "this is a boat": the things become one group with a name, used like any other thing afterwards. One step to undo. */
+export const group = guard((ctx, args, s) => {
+  const nameWords = toks(args.name ?? '').filter((w) => !DET_SKIP.has(w) && w !== 'one');
+  const name = nameWords.join(' ') || 'group';
+  const text = String(args.t ?? '').trim();
+  const words = toks(text);
+  let objs = [];
+  if (!words.length || words.every((w) => PRONOUN_ONE.has(w) || PRONOUN_MANY.has(w) || DET_SKIP.has(w) || w === 'all' || w === 'everything' || w === 'together')) {
+    const sel = s.selected && byId(s, s.selected);
+    objs = (s.last ?? []).map((id) => byId(s, id)).filter(Boolean);
+    if (!objs.length && sel) objs = [sel];
+    if (!objs.length) return no('Which things? Draw them or select them first, or say "put the house and the tree together".', 'missing');
+  } else {
+    for (const piece of splitList(text)) {
+      const t = target(s, piece, { many: true });
+      if (t.error) return t.error;
+      if (t.r.special && !t.r.everything) return no('I can only put the things you drew together, not the sky or the ground.', 'unsupported');
+      for (const o of t.r.objs) if (!objs.includes(o)) objs.push(o);
+    }
+  }
+  if (!objs.length) return no('Which things? Say "put the house and the tree together".', 'missing');
+  if (objs.length > 40) return no('That is a lot of things to put together; pick fewer.', 'unsupported');
+  remember(s, `put ${objs.length === 1 ? sayObj(objs[0]) : `${objs.length} things`} together as ${a_(name)} ${name}`);
+  const built = groupOf(objs);
+  const shape = { ...built.shape, members: structuredClone(objs), ref: { x: built.x, y: built.y, size: built.size } };   // the things it was made of, to take it apart again
+  const g = makeObject(s, registerShape(name, shape), {});
+  Object.assign(g, { x: built.x, y: built.y, size: built.size, z: built.z, shape });
+  const wasSelected = objs.some((o) => o.id === s.selected);
+  s.objects = s.objects.filter((o) => !objs.includes(o));
+  s.objects.push(g);
+  s.objects.sort((a, b) => (a.z ?? 0) - (b.z ?? 0) || idNum(a) - idNum(b));
+  s.selected = wasSelected ? g.id : (s.selected && byId(s, s.selected) ? s.selected : null);
+  s.last = [g.id];
+  open(ctx);
+  const use = 'You can move it, resize it, copy it or take it apart like any other thing.';
+  if (objs.length === 1) return ok(`${opener(s)} ${cap1(sayObj(objs[0]))} is ${a_(name)} ${name} now. ${use}`);
+  return ok(`${opener(s)} I put ${andList(groupPhrase(objs).map((x) => x.replace(/^an? /, 'the ')))} together as ${a_(name)} ${name}. ${use}`);
 });
 
 // ---- moods: night, day, sunset --------------------------------------------------------------------------------------------
@@ -1553,6 +1889,7 @@ export const undo = guard((ctx, args, s) => {
   const snap = s.history.pop();
   s.future.push(snapshot(s, snap.label));
   restore(s, snap);
+  s.prev = s.history.at(-1) ?? null;   // what the timeline of the matrix reasoner does: the picture before the newest step that is still done
   open(ctx);
   return ok(`OK, I undid it${snap.label ? ` (${snap.label})` : ''}.`);
 });
@@ -1562,6 +1899,7 @@ export const redo = guard((ctx, args, s) => {
   const snap = s.future.pop();
   s.history.push(snapshot(s, snap.label));
   restore(s, snap);
+  s.prev = s.history.at(-1);
   open(ctx);
   return ok(`OK, I did it again${snap.label ? ` (${snap.label})` : ''}.`);
 });
@@ -1737,6 +2075,8 @@ export function openSlots(ctx, { action, args = {} } = {}) {
   if (!said) return [];
   if (args.open !== undefined) return [said];
   const k = kindOfWord(args.kind);
+  const one = said.replace(/s$/, '');
+  if (k?.kind && Object.hasOwn(KIND_WORDS, one) && KIND_WORDS[one] !== one && KIND_WORDS[one] !== '*') return [one];   // "a ball": a word the board draws as another kind (a circle); the catalog may have a picture of it
   return !k || !k.kind || UNDRAWABLE.has(said.replace(/s$/, '')) ? [said] : [];
 }
 export function checkReferents(ctx, { action, args = {} } = {}) {

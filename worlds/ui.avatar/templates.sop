@@ -129,3 +129,35 @@
 @tpl.ui.avatar.setPartColored core.template
     for=action.avatar.setPartColored
     text="{value}"
+
+@tpl.ui.avatar.faceDescribe core.template
+    for=action.avatar.faceDescribe
+    text="{value}"
+
+@tpl.ui.avatar.faceStart core.template
+    for=action.avatar.faceStart
+    text="{value}"
+
+@tpl.ui.avatar.faceLoad core.template
+    for=action.avatar.faceLoad
+    text="{value}"
+
+@tpl.ui.avatar.faceSave core.template
+    for=action.avatar.faceSave
+    text="{value}"
+
+@tpl.ui.avatar.faceList core.template
+    for=action.avatar.faceList
+    text="{value}"
+
+@tpl.ui.avatar.faceMove core.template
+    for=action.avatar.faceMove
+    text="{value}"
+
+@tpl.ui.avatar.faceAdjust core.template
+    for=action.avatar.faceAdjust
+    text="{value}"
+
+@tpl.ui.avatar.faceSetPart core.template
+    for=action.avatar.faceSetPart
+    text="{value}"

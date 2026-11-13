@@ -221,13 +221,14 @@ export function createRouter({ id = 'policy', model = null } = {}) {
       const ofTab = (m) => m.pattern.worldId === ctx.tabWorld || (gameTab && isGameControl(m));
       const tabMatches = ctx.tabWorld ? list.filter((m) => ofTab(m) && !isNav(m)) : [];
       const bestTab = [...tabMatches].sort(inTier(wscore))[0] ?? null;
+      const tabClaimed = tabMatches.some((m) => m.pattern.tabClaim);   // a pattern of the tab's world that claims its phrase even when the message names another world
       const overriding = bestTab ? list.filter((m) => !isNav(m) && !ofTab(m) && clearlyMoreSpecific(m, bestTab, ctx)) : [];
       const reasons = new Map();
       for (const m of list) {
         const w = m.pattern.worldId;
         if (isNav(m)) { m.tier = 2; m.sub = 0; reasons.set(m, 'explicit navigation or settings command'); }
-        else if (named.has(w) && w !== ctx.tabWorld && !(ctx.tabWorld && named.has(ctx.tabWorld)) && w !== 'ui.shell' && w !== 'ui.help' && wildTokens(m) <= m.literals) { m.tier = 3; m.sub = -1; reasons.set(m, 'the message names this world (RD2: naming a world wins over the active tab)'); }
-        else if (m.pattern.signal && !ofTab(m) && ctx.tabWorld && wildTokens(m) <= m.literals + 1) { m.tier = 3; m.sub = 0; reasons.set(m, 'the sentence carries an explicit signal of this world (named shape, arrow between names, diagram form) that the active tab does not claim'); }
+        else if (named.has(w) && w !== ctx.tabWorld && !(ctx.tabWorld && named.has(ctx.tabWorld)) && !tabClaimed && w !== 'ui.shell' && w !== 'ui.help' && wildTokens(m) <= m.literals) { m.tier = 3; m.sub = -1; reasons.set(m, 'the message names this world (RD2: naming a world wins over the active tab)'); }
+        else if (m.pattern.signal && !ofTab(m) && !tabClaimed && ctx.tabWorld && wildTokens(m) <= m.literals + 1) { m.tier = 3; m.sub = 0; reasons.set(m, 'the sentence carries an explicit signal of this world (named shape, arrow between names, diagram form) that the active tab does not claim'); }
         else if (overriding.includes(m)) { m.tier = 3; m.sub = 0; reasons.set(m, `more specific than the active tab's ${bestTab.pattern.id} (no wildcard, ${m.literals} vs ${bestTab.literals} literal words, tab match is a catch-all)`); }
         else if (ofTab(m)) { m.tier = 3; m.sub = 1; reasons.set(m, `match from the world of the active tab (${ctx.activeTab ?? w})`); }
         else if (w === ctx.gameWorld) { m.tier = 4; m.sub = 0; reasons.set(m, 'world with an active game'); }

@@ -776,6 +776,8 @@ exista|exist|a:exist|existat|i
 rezulta|result|az:rezult|rezultat|i
 marca|mark|az:march|marcat|t imp
 muta|move|a:mut|mutat|t imp
+lasa|leave/left/left|a:las|lasat|t imp
+pastra|keep/kept/kept|az:păstr|păstrat|t imp
 amesteca|mix|a:amestec|amestecat|t imp
 repeta|repeat|az:repet|repetat|t imp
 selecta|select|az:select|selectat|t imp
@@ -897,7 +899,7 @@ interesant,interesantă,interesanți,interesante|interesting
 important,importantă,importanți,importante|important
 diferit,diferită,diferiți,diferite|different
 întreg,întreagă,întregi,întregi|whole
-stâng,stângă,stângi,stângi|left
+stâng,stângă,stângi,stângi,stinga,stînga|left
 drept,dreaptă,drepți,drepte|right
 rotund,rotundă,rotunzi,rotunde|round
 ascuțit,ascuțită,ascuțiți,ascuțite|sharp
@@ -1031,6 +1033,7 @@ aproape|near|adv
 repede|quickly|adv
 încet|slowly|adv
 primul,prima,primii,primele|the first|det
+cea|the one|det
 ultimul,ultima,ultimii,ultimele|the last|det
 bine|well|adv
 așa|like this|adv

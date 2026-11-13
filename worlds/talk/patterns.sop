@@ -170,3 +170,190 @@
     priority=11
     example="What can I ask?"
     doc="What this tab can talk about, with suggestions."
+
+@pat.talk.it.look core.pattern
+    canonical="What does it look like?"
+    match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.itlook] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.look"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=12
+    example="And what does it look like?"
+    doc="Follow-up without a subject: what the current topic looks like."
+
+@pat.talk.it.parts core.pattern
+    canonical="And its parts?"
+    match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.itparts] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.parts"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=12
+    example="What are its parts?"
+    example="What is it made of?"
+    doc="Follow-up without a subject: the parts of the current topic."
+
+@pat.talk.it.count core.pattern
+    canonical="How many wheels does it have?"
+    match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [and]? [$lang.know.count] {p:words(2)} [$lang.know.aux] [$lang.talk.it] [$lang.know.have] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.count arg.p=\"{p}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=12
+    example="And how many legs does it have?"
+    doc="Follow-up without a subject: how many parts the current topic has."
+
+@pat.talk.it.compare core.pattern
+    canonical="Is it bigger than Mars?"
+    match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [is|are] [$lang.talk.it] [$lang.talk.compar] than [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.compare arg.b=\"{b}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=12
+    example="Is it bigger than Earth?"
+    doc="Follow-up without a subject: is the current topic bigger than another thing."
+
+@pat.talk.change.colour core.pattern
+    canonical="Make it red."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.makeit] [a|more]? {c:lex.talk.colours} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.change arg.c=\"{c}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="Paint it blue."
+    example="Make this green."
+    doc="Change the colour of the card the conversation is on."
+
+@pat.talk.change.bigger core.pattern
+    canonical="Bigger."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.bigger] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.change arg.size=up"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="Make it bigger."
+    doc="Make the card the conversation is on bigger."
+
+@pat.talk.change.smaller core.pattern
+    canonical="Smaller."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.smaller] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.change arg.size=down"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="Make it smaller."
+    doc="Make the card the conversation is on smaller."
+
+@pat.talk.change.too core.pattern
+    canonical="Show the moons too."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.showtoo] {x:words(2,noun)} [$lang.talk.too] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.change arg.x=\"{x}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="Add the wheel too."
+    doc="Show another thing next to the one on the card (or mark one of its parts)."
+
+@pat.talk.send.draw core.pattern
+    canonical="Put it in my drawing."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.todraw] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.send arg.to=draw"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="Add it to my drawing."
+    doc="Send the card to the Drawing tab: the thing becomes an object of the drawing."
+
+@pat.talk.send.diagram core.pattern
+    canonical="Make a diagram of this."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.todiagram] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.send arg.to=diagram"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="Turn it into a diagram."
+    doc="Send the card to the Diagram tab: the parts become boxes linked to the thing."
+
+@pat.talk.send.map core.pattern
+    canonical="Show it on the map."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.tomap] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.send arg.to=map"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="Put it on the map."
+    doc="Send the topic to the Map tab when it is a place."
+
+@pat.talk.about core.pattern
+    canonical="Ask about this."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.about] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.about"
+    kind=request
+    signal=true
+    priority=14
+    example="Talk about this one."
+    doc="From another tab: open the Talk tab on the thing that is selected there (the drawing's selected object, the diagram's selected shape, the map's place)."
+
+@pat.talk.kind core.pattern
+    canonical="What kind of thing is a comet?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.kindof] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.kind arg.o=\"{o}\""
+    kind=request
+    tabOnly=true
+    priority=10
+    example="What type of thing is a spider?"
+    doc="Frame: what kind of thing is X. A sentence and a small tree from the is-a facts of the word senses."
+
+@pat.talk.me core.pattern
+    canonical="What do you know about me?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.me] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.me"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="What have you learned about me?"
+    doc="What the profile holds about the user, as a small card."
+
+@pat.talk.drawn core.pattern
+    canonical="What did I draw today?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.drawn] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.drawn"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="What have I drawn so far?"
+    doc="What is in the user's drawing in this session, as a small tally card."
+
+@pat.talk.moves core.pattern
+    canonical="How many moves did I make in chess?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.chessmoves] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.moves"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="How many moves have I made in chess?"
+    doc="How many moves the user made in the chess game of this session, as counted icons."
+
+@pat.talk.undo core.pattern
+    canonical="Undo."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.undo] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.undo"
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=14
+    example="Undo that."
+    doc="Takes back the last change of a card or the last transfer of a card to another tab (one step)."

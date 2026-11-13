@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * WORLD-OF-WORLDS experiment (spec 19): which world takes a message, by three routers.
+ * WORLD-OF-WORLDS experiment (spec 20): which world takes a message, by three routers.
  *   A  today: the encoder's world head (top 3) validated by the rules (the dispatcher validator, shipped policy)
  *   B  symbolic only: meta.worlds (cards + live facts + rules with reasons), the encoder off
  *   C  symbolic with the encoder as one prior (weight 30 points; never over a block)

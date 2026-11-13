@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * meta.worlds, the host side (WORLD-OF-WORLDS, spec 19). Browser-safe: no `node:*` imports; the library is imported lazily.
+ * meta.worlds, the host side (WORLD-OF-WORLDS, spec 20). Browser-safe: no `node:*` imports; the library is imported lazily.
  *
  * `worlds/meta.worlds/` is a shared module (not a tab, never a routing candidate): `kb.sop` holds one generated card per world, `matrix.sop` the routing rules
  * in SOP Lang. This file only (1) turns the message and the live state of the host into wires, (2) lets the library derive the votes and blocks of the rules in

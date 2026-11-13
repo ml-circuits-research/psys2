@@ -23,7 +23,7 @@ export const RUNTIME_DEFAULTS = Object.freeze({
 });
 
 /**
- * `routing` (spec 19) is an optional setting outside the shared defaults until the reviewer decides: 'dispatcher' (A, today; also when missing) | 'symbolic' (B: meta.worlds,
+ * `routing` (spec 20) is an optional setting outside the shared defaults until the reviewer decides: 'dispatcher' (A, today; also when missing) | 'symbolic' (B: meta.worlds,
  * the encoder's world head unread) | 'symbolic+encoder' (C: meta.worlds with the encoder as one prior). `sessionOptions` and `createRuntime` read it from the settings object.
  */
 

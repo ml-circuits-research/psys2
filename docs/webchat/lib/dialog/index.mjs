@@ -9,32 +9,32 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=8c6a9e6d3c';
-import { loadWorlds } from '../worlds/index.mjs?v=c4c4e0a0d3';
-import { validateWorldSet } from '../worlds/validate.mjs?v=d5f2244721';
-import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=46f11423af';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=6fa6cc72a4';
+import { loadWorlds } from '../worlds/index.mjs?v=2e0b95f59d';
+import { validateWorldSet } from '../worlds/validate.mjs?v=6d6aaffc8a';
+import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=f0caa252ef';
+import { createInterpreter } from '../interpreter/index.mjs?v=4ce9998cb1';
 import { createReasoner } from '../reasoner/index.mjs?v=601e6467e8';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=fa7fed8417';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=a6f7d81ada';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=99d904c859';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=950e3948ed';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=6f167fb82b';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=5383e556eb';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=475f8fcbf9';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=2427bf14c9';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=4f201cdfbc';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=705b493826';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=636998352c';
-import { checkValues } from './value-check.mjs?v=9392f9d951';
-import { Discourse } from './discourse.mjs?v=87f9dc9f6d';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=2afbfa69a5';
+import { checkValues } from './value-check.mjs?v=862857c95d';
+import { Discourse } from './discourse.mjs?v=8c64a94636';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=f0c070a89d';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=d5fb8ed33e';
-import { repairFromScene } from './scene-referents.mjs?v=656c8b6157';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=a19c934795';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=ea1ffb2af5';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=cd5145cf8f';
+import { repairFromScene } from './scene-referents.mjs?v=cb79fe2370';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=1bacff81c5';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -132,10 +132,13 @@ export async function translateParts(parts, translator, lang, userWords = null) 
   const prim = fb ? (ownRules ? (translator.rules ?? translator) : NO_RULES) : translator;
   const routes = [];
   let fbCalls = 0;
+  // P7: with the Translator as the first choice it is asked before the rules; after it failed once in this reply it is not asked again (the rules write the rest)
+  const first = fb && !!translator.translatorFirst?.();
+  let dead = false;
   const viaBrowser = async (text) => {
-    if (!translator.viaBrowser || fbCalls >= MAX_FALLBACK_CALLS || guard.soft()) return null;
+    if (!translator.viaBrowser || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
     fbCalls++;
-    try { return await guard.abortable(translator.viaBrowser(text, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; return null; }
+    try { const r = await guard.abortable(translator.viaBrowser(text, { from: 'en', to: lang }), 'translate'); if (!r && first) dead = true; return r; } catch (e) { if (e instanceof TurnAborted) throw e; if (first) dead = true; return null; }
   };
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
@@ -146,9 +149,11 @@ export async function translateParts(parts, translator, lang, userWords = null) 
       if (rest.reading && lang !== 'en') {   // our own English reading of the user's words ("I took that as: ..."): shown in the reply language, never in English
         const inner = rest.text.replace(/^"|"$/g, '');
         let r = null;
-        try { r = await guard.abortable(prim.translate(inner, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; }
-        let tt = textOf(r);
-        if (!tt || r?.unknown?.length || r?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(tt, lang).length)) {
+        const bf = first ? await viaBrowser(inner) : null;
+        if (bf) routes.push('translator-out');
+        else try { r = await guard.abortable(prim.translate(inner, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; }
+        let tt = bf ? bf.text.trim() : textOf(r);
+        if (!bf && (!tt || r?.unknown?.length || r?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(tt, lang).length))) {
           tt = null;
           const b = fb ? await viaBrowser(inner) : null;
           if (b) { tt = b.text.trim(); routes.push('translator-out'); }
@@ -169,6 +174,7 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     i = j;
     const src = run.map((p) => p.text).join('');
     if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
+    if (first) { const b = await viaBrowser(src); if (b) { out.push({ text: fitFragment(src, b.text), translate: true, src }); routes.push('translator-out'); continue; } }
     let res = null;
     try { res = await guard.abortable(prim.translate(src, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; res = null; }
     if (res?.unknown?.length && run.length === 1 && run[0].fallback) {
@@ -1212,6 +1218,7 @@ export class DialogSession {
     const wantedLang = opts.language ?? this.language;
     if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || !(tr.rules?.supports?.(wantedLang, 'en') ?? true)) return this._sendCore(text, opts);   // a language without rules is read by the on-device translation in `_sendCore`
     const snap0 = this.snapshot();
+    if (tr.translatorFirst?.() && tr.canTranslate?.(wantedLang, 'en') && !guard.soft()) return this._sendTranslatorFirst(text, opts, snap0);
     const first = await this._sendCore(text, opts);
     // trouble points of a reading: a clause not understood (3), a part not used (1 each), a best-effort "I took that as" (2), and a message the rules left in Romanian (2)
     const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0)
@@ -1231,6 +1238,31 @@ export class DialogSession {
     }
     this.restore(snapFirst);
     tr.note?.('translator-in', { direction: 'ro->en', fallback: true, reason: 'the Translator reading was no better; the rules reading is kept' });
+    return first;
+  }
+
+  /**
+   * P7, input side with the Translator as the first choice (owner rule 2026-11-12): the Translator's English is read first. The rules read only when it is missing, late or
+   * rejected by the checker, or when its reading is poor and the rules' reading is better (a garbled translation of an app command: the safety net, never the first choice).
+   */
+  async _sendTranslatorFirst(text, opts, snap0) {
+    const tr = this.engine.translator, lang = opts.language ?? this.language;
+    const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0);
+    const b = await guard.abortable(tr.viaBrowser(text, { from: lang, to: 'en' }), 'translate');
+    if (!b) return this._sendCore(text, opts);   // missing, late or failed: the rules (the reason is in the translator usage)
+    let first = null;
+    try { first = await this._sendCore(text, opts, { english: b.text, translation: b }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; }
+    if (!first) { this.restore(snap0); return this._sendCore(text, opts); }
+    first.trace.via = 'translator-in';
+    tr.note?.('translator-in', { direction: `${lang}->en`, strategy: 'browser-api', reason: 'the Translator is the first choice' });
+    const poor = issues(first);
+    if (!poor || guard.soft()) return first;
+    const snapFirst = this.snapshot();
+    this.restore(snap0);
+    let second = null;
+    try { second = await this._sendCore(text, opts); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; }
+    if (second && issues(second) < poor) { tr.note?.('rules-translate', { direction: `${lang}->en`, fallback: true, reason: `the Translator reading had ${poor} points of trouble, the rules' has ${issues(second)}` }); return second; }
+    this.restore(snapFirst);
     return first;
   }
 

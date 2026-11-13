@@ -12,7 +12,7 @@
 # ---- the state as wires
 @ad.k.o.oid core.slot of=art.draw.object key=oid kind=string required=true
 @ad.k.o.ord core.slot of=art.draw.object key=ord kind=integer required=true
-@ad.k.o.kind core.slot of=art.draw.object key=kind kind=atom enum=circle enum=oval enum=square enum=rectangle enum=triangle enum=star enum=heart enum=line enum=arrow enum=house enum=tree enum=sun enum=cloud enum=car enum=flower enum=cat enum=dog enum=fish enum=bird enum=boat enum=mountain enum=rainbow enum=person enum=balloon enum=rocket enum=moon required=true enum=composite
+@ad.k.o.kind core.slot of=art.draw.object key=kind kind=atom enum=circle enum=oval enum=square enum=rectangle enum=triangle enum=star enum=heart enum=line enum=arrow enum=house enum=tree enum=sun enum=cloud enum=car enum=flower enum=cat enum=dog enum=fish enum=bird enum=boat enum=mountain enum=rainbow enum=person enum=balloon enum=rocket enum=moon enum=lake enum=river enum=road enum=field enum=patch enum=hill required=true enum=composite
 @ad.k.o.color core.slot of=art.draw.object key=color kind=string required=true
 @ad.k.o.x core.slot of=art.draw.object key=x kind=number
 @ad.k.o.y core.slot of=art.draw.object key=y kind=number
@@ -61,7 +61,7 @@
 # one count per kind: an aggregate by kind whose declared groups are the kinds (sopworld 0.11 `groups=`), so that a kind with no thing has its 0
 @ad.ok art.draw.object kind=?k
 @ad.tk art.draw.tally kind=?k n=?nk
-@ad.ag.k core.aggregate over=$ad.ok by=?k groups=circle groups=oval groups=square groups=rectangle groups=triangle groups=star groups=heart groups=line groups=arrow groups=house groups=tree groups=sun groups=cloud groups=car groups=flower groups=cat groups=dog groups=fish groups=bird groups=boat groups=mountain groups=rainbow groups=person groups=balloon groups=rocket groups=moon count=?nk then=$ad.tk
+@ad.ag.k core.aggregate over=$ad.ok by=?k groups=circle groups=oval groups=square groups=rectangle groups=triangle groups=star groups=heart groups=line groups=arrow groups=house groups=tree groups=sun groups=cloud groups=car groups=flower groups=cat groups=dog groups=fish groups=bird groups=boat groups=mountain groups=rainbow groups=person groups=balloon groups=rocket groups=moon groups=lake groups=river groups=road groups=field groups=patch groups=hill count=?nk then=$ad.tk
 
 # ---- a request about a thing that is not there (asked by `guard` in fns.mjs, a dry run: the wire is never kept)
 @ad.k.w.kind core.slot of=art.draw.want key=kind kind=atom required=true

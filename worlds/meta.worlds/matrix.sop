@@ -1,11 +1,11 @@
-# meta.worlds as a matrix: which world should take a message, by rules with reasons (spec 19). Nothing here is a list of phrases and nothing is per message.
+# meta.worlds as a matrix: which world should take a message, by rules with reasons (spec 20). Nothing here is a list of phrases and nothing is per message.
 #
 # The cards (kb.sop, generated) say what each world is. The host tells, per turn, what is live (`meta.worlds.live`, `.scene`) and what the message is made of
 # (`.msg`: its words, its word pairs and triples joined with _, and whether it is a piece without a verb of its own), and optionally the encoder's points as a
 # prior (`.prior`). The rules derive votes (a reason with points: rule, world, the word it rests on) and blocks (a reason a world cannot take the message).
 # The host adds the points of the votes per world, drops the blocked worlds, and says the reasons in plain words (the `rule` names are the keys of the words).
 #
-# Points: naming a world 100; an action a world has been asked for by name ("open the chess tab") 130; a question the world asked 90 (answering) or 25
+# Points: a phrase the open tab claims for itself (tabClaim) 60 (the same pattern key the policy router reads; the generated claim words are generic, so it only adds weight, it does not outvote a named world); naming a world 100; an action a world has been asked for by name ("open the chess tab") 130; a question the world asked 90 (answering) or 25
 # (anything); a follow-up piece of the world of the last action 80; a thing the message names that is in a scene 70; an action word and a kind of thing of
 # the same world 45; one of them alone 25 (10 for an action word and 6 for a thing that three or four worlds share; five or more worlds: not on the card); a question frame 30 (12 for a plain frame that many worlds share, on the worlds that take any thing);
 # a thing of the knowledge catalog for a world that takes any 8; the open tab 12; a world that answered lately 8. The encoder is one prior (at most its weight, 30 by default): it never reaches a referent or
@@ -39,6 +39,7 @@
 @mw.c.frameshared meta.worlds.card id=?w frameshared=?x
 @mw.c.catalog meta.worlds.card id=?w catalog=yes
 @mw.c.nav meta.worlds.card id=?n navact=?x
+@mw.c.claim meta.worlds.card id=?w claim=?x
 @mw.c.run meta.worlds.card id=?w run=needs
 @mw.c.id meta.worlds.card id=?w
 @mw.sc meta.worlds.scene world=?w thing=?x
@@ -62,6 +63,8 @@
 # ---- votes
 @mw.o.named meta.worlds.vote world=?w rule=named weight=100 via=?x
 @mw.r.named core.rule when=$mw.c.name when=$mw.m.any then=$mw.o.named
+@mw.o.claim meta.worlds.vote world=?w rule=tabclaim weight=60 via=?x
+@mw.r.claim core.rule when=$mw.c.claim when=$mw.m.any when=$mw.l.active then=$mw.o.claim
 @mw.o.nav meta.worlds.vote world=?n rule=nav weight=130 via=?x
 @mw.r.nav core.rule when=$mw.c.nav when=$mw.m.any when=$mw.v.named.o then=$mw.o.nav
 @mw.o.asked meta.worlds.vote world=?w rule=asked weight=90 via=answer
@@ -110,6 +113,7 @@
 
 # ---- the reasons in plain words (the trace says these)
 @mw.say.named meta.worlds.say rule=named text="you named the {name} ({via})"
+@mw.say.tabclaim meta.worlds.say rule=tabclaim text="the {name} is open and this is one of its own phrases ({via})"
 @mw.say.nav meta.worlds.say rule=nav text="you asked to go to another tab ({via})"
 @mw.say.asked meta.worlds.say rule=asked text="the {name} asked a question and this answers it"
 @mw.say.askedany meta.worlds.say rule=askedany text="the {name} asked a question last turn"

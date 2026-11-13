@@ -122,18 +122,50 @@
     example="Make the tree small."
 
 @pat.art.draw.move core.pattern
-    canonical="Put the cat next to the house."
     canonical="Move the tree to the left."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [move|shift|push|drag|bring|put|place|set|slide|carry|send|take|lift|lower|raise|nudge|relocate|position|shove|scoot|haul|plonk|toss|stick|reposition|tuck|float|transfer] {p:words(10)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [move|shift|push|drag|bring|slide|carry|send|take|lift|lower|raise|nudge|relocate|shove|scoot|haul|reposition|float|transfer] {p:words(14)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=draw.move arg.phrase=\"{p}\""
     kind=request
     priority=9
     example="Move the tree to the left."
     example="Move the sun a bit higher."
-    example="Put the cat next to the house."
     example="Move it to the top right corner."
-    example="Put the red house on the left."
+    example="Move the red house to the left."
     example="Send the cloud behind the house."
+
+@pat.art.draw.put core.pattern
+    canonical="Put the cat next to the house."
+    doc="A placing verb: a thing that is not in the picture yet is drawn there (a lake, a road); one that is, is moved."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|set|position|plonk|toss|stick|tuck] {p:words(14)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"{p}\" arg.verb=put"
+    kind=request
+    priority=9
+    example="Put the cat next to the house."
+    example="Put it in the top right corner."
+    example="Put the red house on the left."
+    example="Place a lake next to the house."
+
+@pat.art.draw.x.keep core.pattern
+    canonical="But keep the lake."
+    match="[$lang.lead.filler|but|and|no|also|hmm]? [$lang.keep] [the|that|my|this]? {x:words(5)} [alone|there|as_it_was|please]?"
+    emit="@{_} core.request action=draw.keep arg.x=\"{x}\""
+    kind=request
+    priority=14
+    example="But keep the lake."
+    example="Do not remove the road."
+    example="Leave the pond there."
+    doc="Restores a thing the last step took away or changed (a follow-up that changes the last action)."
+
+@pat.art.draw.x.except core.pattern
+    canonical="Not over the water."
+    match="[$lang.lead.filler|but|and|no|also|hmm]? [$lang.except] [the|that|my|this]? {x:words(5)} [please]?"
+    emit="@{_} core.request action=draw.except arg.x=\"{x}\""
+    kind=request
+    priority=16
+    example="Not over the water."
+    example="But not on the road."
+    example="Do not cover the lake."
+    doc="Takes the part of the last step that reaches the named thing back (a follow-up that changes the last action)."
 
 @pat.art.draw.nudge core.pattern
     canonical="Make the cat a bit lower."
@@ -1556,6 +1588,16 @@
     example="Add a third window."
     doc="DRAW-FROM-FACTS: the thing to draw is an open slot. After the reading the operation looks the noun up in the catalog of drawable things (knowledge/k.objects, as things.catalog.mjs): a hit draws the thing from its parts; a part word of a thing in the picture adds one more of that part; nothing else is answered plainly (I don't know how to draw a blorp yet), never with a random shape."
 
+@pat.art.draw.x.again.open core.pattern
+    canonical="One more lighthouse."
+    match="[$lang.lead.filler|right|also|and|hi|pls|plz]? [1_more|one_more|another|yet_another|a_second|one_more_of_the] {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.add arg.open=\"{o}\" arg.kt=\"{o}\""
+    kind=request
+    priority=3
+    example="One more lighthouse."
+    example="Another castle."
+    doc="A follow-up that repeats the last add for a thing of the catalog (an open slot): one more of it."
+
 @pat.art.draw.x.count.open core.pattern
     canonical="How many lighthouses are there?"
     match="how_many {k:words(2,noun)} [are_there|are_in_my_picture|are_in_my_drawing|are_in_the_picture|are_in_the_drawing|do_i_have|have_i_drawn|did_i_draw]"
@@ -1573,3 +1615,166 @@
     priority=4
     example="Draw two blue castles."
     doc="DRAW-FROM-FACTS: the same open slot with a number (draw two blue castles)."
+
+@pat.art.draw.x.move.further core.pattern
+    match="[and|then|now|also]? [more|even_more|further|farther|even_further] [to_the|towards_the|towards|to]? {d:lex.space.dirs} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"it further {d}\""
+    kind=request
+    priority=14
+    example="Further left."
+    example="And even more up."
+    doc="Goes on with the last move, further in a direction (the module space reads the direction and the amount)."
+
+@pat.art.draw.x.move.further.amt core.pattern
+    match="[and|then|now|also]? {amt:lex.space.amounts} [more|even_more|further|farther|even_further]? [to_the|towards_the|towards|to]? {d:lex.space.dirs} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"it {amt} further {d}\""
+    kind=request
+    priority=14
+    example="A bit more to the right."
+    example="A lot further left."
+    doc="Goes on with the last move by an amount (a bit, a lot, all the way) in a direction."
+
+@pat.art.draw.x.move.again core.pattern
+    match="[and|then|now|also]? [further|farther|even_further|even_more|once_more|again]"
+    emit="@{_} core.request action=draw.move arg.phrase=\"it further\""
+    kind=request
+    priority=14
+    example="Further."
+    example="Again."
+    doc="Repeats the last move."
+
+@pat.art.draw.x.reselect core.pattern
+    match="[no|nope|oh_no]? not [the]? {a:words(2)} [one]? [the|but|i_meant|i_mean|the_one]? {p:words(4)}"
+    emit="@{_} core.request action=draw.reselect arg.phrase=\"{p}\""
+    kind=request
+    priority=15
+    example="No, not the first one, the middle one."
+    example="Not the left one, the right one."
+    doc="Corrects which thing the last move was about: the same move on the one meant now."
+
+@pat.art.draw.x.space.layout core.pattern
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [line_up|tidy_up|tidy|clean_up|neaten|spread_out|space_out|align|swap|untangle|distribute|stack] {r:rest?}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Tidy up."
+    example="Line up the houses."
+    example="Swap the first and the last house."
+    example="Align the trees on the left."
+    doc="Arranges things: handed to the module space."
+
+@pat.art.draw.x.space.inarow core.pattern
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|arrange|make|set|lay] {t:words(5)} [in|into|as] [a|one]? [row|column|grid|circle|line|ring|stack]"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Put the houses in a row."
+    example="Arrange the trees in a circle."
+    doc="Puts a group in a row, a column, a grid or a circle: handed to the module space."
+
+@pat.art.draw.x.space.near core.pattern
+    match="[what|whats|what_is|what_s|which_things|what_things] [is|are]? [there]? [next_to|near|beside|close_to|by] {r:rest}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="What is next to the house?"
+    doc="What is next to a thing: handed to the module space."
+
+@pat.art.draw.x.space.is core.pattern
+    match="[is|are] {a:words(4)} [above|below|under|over|beneath|underneath|left_of|right_of|to_the_left_of|to_the_right_of|next_to|near|beside] {b:rest}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Is the sun above the tree?"
+    doc="Is A above, under, left of, right of or next to B: handed to the module space."
+
+@pat.art.draw.x.space.which core.pattern
+    match="which {r:words(3)} [is|are] [in_the_middle|the_biggest|the_smallest|the_first|the_last|on_the_left|on_the_right|at_the_top|at_the_bottom|the_leftmost|the_rightmost|the_highest|the_lowest|in_the_centre|in_the_center|the_largest|closest_to|nearest_to] {c:rest?}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Which house is in the middle?"
+    example="Which one is the biggest?"
+    doc="Which one is in the middle, the biggest, on the left ...: handed to the module space."
+
+@pat.art.draw.x.space.far core.pattern
+    match="how_far [apart]? [is|are] {r:rest}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="How far apart are the sun and the tree?"
+    doc="How far two things are (near or far, never pixels): handed to the module space."
+@pat.art.draw.takeApart core.pattern
+    canonical="Take the house apart."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.apart.verb] {t:words(5)} [$lang.apart] [$lang.tail.filler]?"
+    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
+    kind=request
+    priority=15
+    example="Take the house apart."
+    example="Break the car into pieces."
+    example="Pull it apart."
+    doc="Takes a thing apart: its parts become things of their own."
+
+@pat.art.draw.takeApart.first core.pattern
+    canonical="Take apart the house."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.apart.verb] apart {t:words(5)} [$lang.tail.filler]?"
+    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
+    kind=request
+    priority=15
+    example="Take apart the house."
+    example="Pull apart the car."
+
+@pat.art.draw.separate core.pattern
+    canonical="Separate the roof."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.dismantle] {t:words(5)} [$lang.apart]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
+    kind=request
+    priority=14
+    example="Separate the roof."
+    example="Dismantle the car."
+    example="Detach the door from the house."
+
+@pat.art.draw.group core.pattern
+    canonical="Put these together."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.verb] {t:words(5)} [$lang.together] [as|into|to_make|to_form]? [a|an|one|my]? {name:words(2)?}"
+    emit="@{_} core.request action=draw.group arg.t=\"{t}\" arg.name=\"{name}\""
+    kind=request
+    priority=15
+    example="Put these together."
+    example="Glue the house and the tree together."
+    example="Put them together as a boat."
+
+@pat.art.draw.group.it core.pattern
+    canonical="Group them."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [group|combine|merge|bundle|unite] {t:words(5)}"
+    emit="@{_} core.request action=draw.group arg.t=\"{t}\""
+    kind=request
+    priority=13
+    example="Group them."
+    example="Combine the house and the tree."
+
+@pat.art.draw.group.named core.pattern
+    canonical="This is a boat."
+    match="[this|these|those|they] [$lang.group.is] [a|an|my|the|one] {name:words(2)}"
+    emit="@{_} core.request action=draw.group arg.name=\"{name}\""
+    kind=request
+    priority=11
+    example="This is a boat."
+    example="These are a train."
+
+@pat.art.draw.group.into core.pattern
+    canonical="Make them into a boat."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.make] [them|these|those|all_of_them|all_of_these] into [a|an|one|my] {name:words(2)}"
+    emit="@{_} core.request action=draw.group arg.name=\"{name}\""
+    kind=request
+    priority=14
+    example="Make them into a boat."
+    example="Turn these into a train."
+
+@pat.art.draw.group.into.things core.pattern
+    canonical="Make the house and the tree into a village."
+    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.make] [the|my] {t:words(5)} into [a|an|one|my] {name:words(2)}"
+    emit="@{_} core.request action=draw.group arg.t=\"the {t}\" arg.name=\"{name}\""
+    kind=request
+    priority=14
+    example="Make the house and the tree into a village."

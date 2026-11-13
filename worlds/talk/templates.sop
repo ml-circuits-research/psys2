@@ -33,3 +33,35 @@
 @tpl.talk.scope core.template
     for=action.talk.scope
     text="{value}"
+
+@tpl.talk.change core.template
+    for=action.talk.change
+    text="{value}"
+
+@tpl.talk.send core.template
+    for=action.talk.send
+    text="{value}"
+
+@tpl.talk.about core.template
+    for=action.talk.about
+    text="{value}"
+
+@tpl.talk.kind core.template
+    for=action.talk.kind
+    text="{value}"
+
+@tpl.talk.me core.template
+    for=action.talk.me
+    text="{value}"
+
+@tpl.talk.drawn core.template
+    for=action.talk.drawn
+    text="{value}"
+
+@tpl.talk.moves core.template
+    for=action.talk.moves
+    text="{value}"
+
+@tpl.talk.undo core.template
+    for=action.talk.undo
+    text="{value}"

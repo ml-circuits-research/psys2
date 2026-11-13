@@ -10,14 +10,20 @@
 // the host through `openSlots`, spec 17), or from the basic things shipped with the drawing world. No fact: the plain "I don't know that yet" and no card.
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=4cd417b561';
+import * as space from '../space/space.mjs?v=c917d7caac';   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;
 export const NONE = "I don't know that yet.";
+export const NO_TOPIC = 'We are not on anything yet. Ask me about something first, for example "What does a lighthouse look like?".';
 export const DOMAINS = ['things you can draw', 'their parts', 'how many parts they have', 'which of two things is bigger', 'the order of the months, seasons, days and planets'];
 export const OPENING = `I can talk about ${DOMAINS.slice(0, -1).join(', ')} and ${DOMAINS.at(-1)}. Ask me, and I will answer with a sentence and a small picture.`;
 
-export function initialState() { return { n: 0, cards: [], topics: [], current: null }; }
+export function initialState() { return { n: 0, cards: [], topics: [], current: null, said: {} }; }
+const PRON = /^(?:it|this|that|one|them|these|those|its)$/;
+const current = (ctx) => { const s = ensure(ctx); return s.topics.find((t) => t.id === s.current)?.name ?? null; };
+/** The thing a question is about: its own words, or (a pronoun or nothing) the topic the conversation is on. */
+const subj = (ctx, o) => { const w = clean(o); return !w || PRON.test(w) ? current(ctx) : o; };
 function ensure(ctx) {
   const s = ctx.state;
   if (!Array.isArray(s.cards)) Object.assign(s, initialState(), { n: Number(s.n) || 0 });
@@ -114,7 +120,10 @@ function whatSentence(r) {
 
 /** What is X / what does X look like: the sentence and a drawing of X. */
 export function look(ctx, { o } = {}) {
-  const r = lookup(ctx, o);
+  if (/^(?:parts|pieces)$/.test(clean(o)) && current(ctx)) return parts(ctx, { o: current(ctx) });   // "and its parts?" is read as an ellipsis of the last question: the parts of the topic
+  const subject = subj(ctx, o);
+  if (!subject) return no("missing", NO_TOPIC);
+  const r = lookup(ctx, subject);
   if (!r) return dontKnow(ctx, false);
   const topic = topicFor(ctx, r.name);
   const text = whatSentence(r);
@@ -126,7 +135,9 @@ export function look(ctx, { o } = {}) {
 
 /** The parts of X (or what X is made of): the sentence and a box diagram. */
 export function parts(ctx, { o, made } = {}) {
-  const r = lookup(ctx, o);
+  const subject = subj(ctx, o);
+  if (!subject) return no("missing", NO_TOPIC);
+  const r = lookup(ctx, subject);
   if (!r) return dontKnow(ctx, false);
   const topic = topicFor(ctx, r.name);
   const ns = partNames(r.parts), cs = r.th?.commonsense;
@@ -137,7 +148,7 @@ export function parts(ctx, { o, made } = {}) {
   }
   const named = ns.map((p) => (p.n > 1 ? `${p.n} ${p.name}s` : an(p.name)));
   const text = `${material}${cap(an(r.name))} has ${list(named.slice(0, 10))}${ns.length > 10 ? ' and more' : ''}.`;
-  addCard(ctx, topic, { kind: 'parts', thing: r.name, title: cap(r.name), data: { items: ns.slice(0, 12), parts: r.parts }, how: how(ctx, r, 'the parts of a thing', `the parts of ${an(r.name)}`, 'a box for the thing and a box for each named part') }, text);
+  addCard(ctx, topic, { kind: 'parts', thing: r.name, title: cap(r.name), data: { items: ns.slice(0, 12), parts: r.parts, layout: layoutParts(ns.slice(0, 12)) }, how: how(ctx, r, 'the parts of a thing', `the parts of ${an(r.name)}`, 'a box for the thing and a box for each named part') }, text);
   return ok(text, { values: ns.map((p) => p.name) });
 }
 
@@ -150,7 +161,9 @@ function countOf(ctx, r, p) {
 }
 /** How many P does X have: the sentence and that many icons. */
 export function count(ctx, { o, p } = {}) {
-  const r = lookup(ctx, o);
+  const subject = subj(ctx, o);
+  if (!subject) return no("missing", NO_TOPIC);
+  const r = lookup(ctx, subject);
   if (!r) return dontKnow(ctx, false);
   const topic = topicFor(ctx, r.name);
   const what = clean(p);
@@ -173,7 +186,9 @@ function measure(ctx, name, p) {
 /** Which is bigger / which has more P: two bars and a sentence. */
 export function compare(ctx, { a, b, p } = {}) {
   const part = p ? clean(p) : '';
-  const x = measure(ctx, a, part), y = measure(ctx, b, part);
+  const a0 = clean(a) ? a : current(ctx);
+  if (!a0) return no("missing", NO_TOPIC);
+  const x = measure(ctx, a0, part), y = measure(ctx, b, part);
   if (!x || !y) return dontKnow(ctx, false);
   if (!!x.planet !== !!y.planet) return no('unsupported', 'I can compare two planets with each other, or things by size. Try two planets or two animals.');
   if (x.value == null || y.value == null) {
@@ -287,7 +302,7 @@ export function scope(ctx) {
 // ---------------------------------------------------------------- host hooks
 /** Spec 17: the things of a request that the host should look up in the catalog before the operation runs. */
 export function openSlots(ctx, { action, args = {} } = {}) {
-  const names = action === 'talk.look' || action === 'talk.parts' || action === 'talk.count' ? [args.o] : action === 'talk.compare' ? [args.a, args.b] : [];
+  const names = action === 'talk.look' || action === 'talk.parts' || action === 'talk.count' || action === 'talk.kind' ? [args.o] : action === 'talk.change' ? [args.x] : action === 'talk.compare' ? [args.a, args.b] : [];
   return names.map(clean).filter((n) => n && n.split(' ').length <= 3 && !PLANET_KM[cap(n)]);
 }
 
@@ -309,4 +324,206 @@ export function outOfScope(ctx, { text } = {}) {
 /** Host hook: "how do you know?" on this tab is answered by the how card, not by the general explanation of the last turn. */
 export function ownsExplain(ctx, { text } = {}) {
   return /\b(?:how (?:do|did|can) you (?:know|tell)|why do you say that|where did you (?:learn|get) that|who told you|what is (?:your|that based)|what s your source)\b/.test(String(text ?? '').toLowerCase().replace(/[^a-z ]+/g, ' ').replace(/\s+/g, ' '));
+}
+
+// ---------------------------------------------------------------- the parts diagram, laid out by the SPACE module (a grid under the box of the thing)
+const BOX = { w: 130, h: 28, pad: 14, root: 62 };
+/** Where each named part's box goes: { w, h, root: { x, y }, boxes: { name: [x, y] } } (centres). No two boxes overlap (the module's grid; tested with its own `anyOverlap`). */
+export function layoutParts(items) {
+  const n = items.length;
+  if (!n) return null;
+  const cols = Math.max(1, Math.ceil(Math.sqrt(n))), rows = Math.ceil(n / cols);
+  const frame = { w: cols * (BOX.w + BOX.pad) + BOX.pad, h: rows * (BOX.h + BOX.pad) + BOX.pad };
+  const its = items.map((it, i) => ({ id: String(it.name), kind: 'part', x: 40 + i * 2, y: frame.h / 2, w: BOX.w, h: BOX.h, z: i }));
+  const plan = space.planLayout('grid', its, frame);
+  if (plan.error) return null;
+  const boxes = {};
+  for (const it of its) { const b = plan.boxes[it.id] ?? it; boxes[it.id] = [Math.round(b.x), Math.round(b.y + BOX.root)]; }
+  return { w: frame.w, h: frame.h + BOX.root, root: { x: Math.round(frame.w / 2), y: 24 }, boxes, box: { w: BOX.w, h: BOX.h } };
+}
+
+// ---------------------------------------------------------------- cards that change by talking
+const CARD_KINDS = new Set(['drawing', 'parts', 'icons', 'bars', 'line', 'tree', 'facts']);
+const activeCard = (ctx) => {
+  const s = ensure(ctx);
+  return [...s.cards].reverse().find((c) => c.topic === s.current && CARD_KINDS.has(c.kind) && c.data) ?? [...s.cards].reverse().find((c) => CARD_KINDS.has(c.kind) && c.data) ?? null;
+};
+const TINTS = new Set(['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown', 'black', 'white', 'grey', 'gray', 'gold', 'silver', 'turquoise', 'violet']);
+const SCALE = { min: 0.6, max: 1.6, step: 0.2 };
+const refresh = (ctx, c) => ctx.effect('talk.card', { id: c.id, update: true });
+// One undoable step per request on this tab: a change of a card keeps the fields it replaced; a transfer keeps the tab that took it (that world's own undo takes it back).
+const push = (ctx, step) => { const s = ensure(ctx); (s.undo ??= []).push(step); if (s.undo.length > 20) s.undo.shift(); };
+const memo = (c) => structuredClone({ tint: c.data.tint ?? null, scale: c.data.scale ?? null, mark: c.data.mark ?? null, extras: c.data.extras ?? null });
+
+/** Make it red / bigger / smaller / show the X too: the card the conversation is on changes in place. */
+export function change(ctx, { c, size, x } = {}) {
+  const card = activeCard(ctx);
+  if (!card) return no('missing', 'There is no picture to change yet. Ask me about something first, for example "What does a lighthouse look like?".');
+  const name = String(card.thing ?? 'it').toLowerCase();
+  push(ctx, { kind: 'change', id: card.id, before: memo(card) });
+  const undone = () => ensure(ctx).undo.pop();   // a change that did not happen is not a step
+  if (c) {
+    const colour = clean(c) === 'gray' ? 'grey' : clean(c);
+    if (!TINTS.has(colour)) { undone(); return no('unsupported', `I do not know the colour ${clean(c)} for a picture.`); }
+    card.data.tint = colour;
+    refresh(ctx, card);
+    return ok(`I made the ${name} ${colour}.`, { values: [colour] });
+  }
+  if (size) {
+    const cur = Number(card.data.scale) || 1;
+    const next = Math.round(Math.max(SCALE.min, Math.min(SCALE.max, cur + (size === 'up' ? SCALE.step : -SCALE.step))) * 10) / 10;
+    if (next === cur) { undone(); return ok(`The ${name} picture is already as ${size === 'up' ? 'big' : 'small'} as it gets.`, { values: [cur] }); }
+    card.data.scale = next;
+    refresh(ctx, card);
+    return ok(`I made the ${name} picture ${size === 'up' ? 'bigger' : 'smaller'}.`, { values: [next] });
+  }
+  if (x) {
+    if (card.kind !== 'drawing') { undone(); return no('unsupported', 'I can show another thing next to a drawing, not next to this kind of picture.'); }
+    const w = clean(x), sing = singular(w);
+    const mine = (card.data.parts ?? []).find((p) => { const n = clean(String(p.name).replace(/_/g, ' ')); return [w, sing].includes(n) || [w, sing].includes(n.split(' ').at(-1)); });
+    if (mine) { card.data.mark = String(mine.name); refresh(ctx, card); return ok(`The ${sing} is already in the picture. I marked it.`, { values: [sing] }); }
+    const r = lookup(ctx, w);
+    if (!r || !r.parts.length) { undone(); return dontKnow(ctx, false); }
+    const extras = card.data.extras ?? (card.data.extras = []);
+    if (extras.some((e) => e.name === r.name)) { undone(); return ok(`The ${r.name} is already next to the ${name}.`, { values: [r.name] }); }
+    if (extras.length >= 3) { undone(); return no('unsupported', 'The picture is full. Ask me about something new.'); }
+    extras.push({ name: r.name, parts: r.parts });
+    refresh(ctx, card);
+    return ok(`I put ${an(r.name)} next to the ${name}.`, { values: [r.name] });
+  }
+  undone();
+  return no('missing', 'What shall I change? You can say "make it red", "bigger" or "show the moon too".');
+}
+
+// ---------------------------------------------------------------- cards that travel to other tabs
+/** One transfer of the card (or the topic) to another tab: the other world's own operations do the work, so one undo takes it back. */
+export function send(ctx, { to } = {}) {
+  const s = ensure(ctx);
+  const topic = s.topics.find((t) => t.id === s.current);
+  if (!topic) return no('missing', 'There is nothing to send yet. Ask me about something first, for example "What does a lighthouse look like?".');
+  const card = activeCard(ctx);
+  const name = topic.name;
+  if (to === 'draw') {
+    const args = { n: 1, kind: name, kt: name, where: '', ...(card?.data?.tint ? { m1: card.data.tint } : {}) };
+    const r = ctx.request('draw.add', args);
+    if (r.status !== 'supported') return no(r.status === 'missing' ? 'missing' : 'unsupported', `The Drawing tab could not take the ${name}. ${r.note ?? r.value ?? ''}`.trim());
+    push(ctx, { kind: 'send', to: 'draw' });
+    return ok(`I put ${an(name)} in your drawing. The Drawing tab took it.`, { values: [name, 'Drawing'] });
+  }
+  if (to === 'diagram') {
+    const items = (card?.data?.items ?? partNames(card?.data?.parts ?? [])).map((p) => String(p.name).replace(/_/g, ' ')).slice(0, 8);
+    if (!items.length) return no('missing', `I have no named parts of the ${name} to make a diagram of. Ask me for its parts first.`);
+    const label = (w) => w.replace(/\b\w/g, (m) => m.toUpperCase()).replace(/ /g, '-');   // the diagram's names are one word
+    const root = label(name), names = items.map(label);
+    // one request: the boxes and the links in one sentence, so one undo takes the whole transfer back
+    const create = ctx.request('diagram.create', { text: `add a box named ${root}, ${names.map((p) => `a box named ${p}`).join(', ')} and connect ${root} to ${names.join(', ')}` });
+    if (create.status !== 'supported') return no('unsupported', `The Diagram tab could not take the ${name}. ${create.note ?? create.value ?? ''}`.trim());
+    push(ctx, { kind: 'send', to: 'diagram' });
+    return ok(`I made a diagram of the ${name} with ${items.length} part${items.length === 1 ? '' : 's'}. The Diagram tab took it.`, { values: [name, 'Diagram'] });
+  }
+  if (to === 'map') {
+    const r = ctx.request('geo.show', { a: name });   // the map's own undoable show: one step
+    if (r.status !== 'supported') return no('unsupported', `The Map tab does not know a place called ${name}, so it cannot show it.`);
+    push(ctx, { kind: 'send', to: 'map' });
+    return ok(`The Map tab took it. ${r.value ?? ''}`.trim(), { values: [name, 'Map'] });
+  }
+  return no('unsupported', 'I can send a picture to the drawing, the diagram or the map.');
+}
+
+/** Ask about this: from another tab, open Talk on the thing that is selected there. */
+export function about(ctx) {
+  const tab = ctx.peek('ui.shell')?.activeTab;
+  let name = null, where = '';
+  if (tab === 'draw') {
+    const d = ctx.peek('art.draw');
+    const o = d?.objects?.find((x) => x.id === d.selected) ?? d?.objects?.find((x) => x.id === d.last?.[0]) ?? d?.objects?.at(-1);
+    if (o) { name = o.kind === 'composite' ? o.thing : o.kind; where = 'your drawing'; }
+  } else if (tab === 'diagram') {
+    const d = ctx.peek('diagram.sketch');
+    const sel = Array.isArray(d?.selected) ? d.selected[0] : d?.selected, nm = sel?.name ?? sel ?? d?.last?.[0];
+    if (nm) { name = String(nm); where = 'your diagram'; }
+  } else if (tab === 'map') {
+    const f = ctx.peek('geo.map')?.focus;
+    if (f?.name) { name = String(f.name); where = 'the map'; }
+  }
+  if (!name) return no('missing', 'Select something in a drawing, a diagram or the map first, then ask about it.');
+  try { ctx.request('ui.openTab', { tab: 'talk' }); } catch { /* no shell loaded */ }
+  const r = look(ctx, { o: name });
+  if (r.status !== 'supported') return no(r.status, `${r.note ?? NONE} (That is the ${String(name).toLowerCase()} from ${where}.)`);
+  return ok(`Here is the ${String(name).toLowerCase()} from ${where}. ${r.value}`, { values: r.values });
+}
+
+// ---------------------------------------------------------------- what kind of thing: a small tree of the is-a facts of the word senses
+export function kind(ctx, { o } = {}) {
+  const subject = subj(ctx, o);
+  if (!subject) return no('missing', NO_TOPIC);
+  const r = lookup(ctx, subject);
+  if (!r) return dontKnow(ctx, false);
+  const isOf = (th) => [...new Set((th?.senses ?? []).flatMap((x) => x.isA ?? []).map((w) => clean(String(w).replace(/_/g, ' '))).filter(Boolean))];
+  const isA = isOf(r.th).slice(0, 3);
+  if (!isA.length) return no('missing', `I know ${an(r.name)}, but not what kind of thing it is.`);
+  const above = Object.fromEntries(isA.map((p) => [p, isOf(ctx.knowledge?.peek?.(p)).slice(0, 2)]));
+  const topic = topicFor(ctx, r.name);
+  const text = `${cap(an(r.name))} is a kind of ${list(isA)}.`;
+  addCard(ctx, topic, { kind: 'tree', thing: r.name, title: cap(r.name), data: { root: cap(r.name), parents: isA, above }, how: how(ctx, r, 'what kind of thing it is', `what kind of thing ${an(r.name)} is`, 'a small tree: the thing below, what it is a kind of above', 'the kinds come from the word senses; a kind with no entry of its own stops the tree') }, text);
+  return ok(text, { values: isA });
+}
+
+// ---------------------------------------------------------------- about the user and the session
+const PRIVATE = 'Nothing leaves this device.';
+const once = (ctx) => { const s = ensure(ctx); s.said ??= {}; if (s.said.privacy) return ''; s.said.privacy = true; return ` ${PRIVATE}`; };
+const labelOf = (o) => String(o.kind === 'composite' ? o.thing : o.kind ?? 'thing').replace(/[_-]/g, ' ');
+const plural = (w, n) => (n === 1 ? w : /(?:s|x|ch|sh)$/.test(w) ? `${w}es` : /[^aeiou]y$/.test(w) ? `${w.slice(0, -1)}ies` : `${w}s`);
+
+/** What do you know about me: the profile fields as a small card. */
+export function me(ctx) {
+  const f = ctx.peek('user.profile')?.fields ?? {};
+  const rows = Object.entries(f).map(([k, v]) => ({ k: k.replace(/_/g, ' '), v: [].concat(v?.v ?? '').join(', ') })).filter((r) => r.v).slice(0, 8);
+  const topic = topicFor(ctx, 'you');
+  if (!rows.length) { topic.say ||= 'nothing known yet'; return ok(`I do not know anything about you yet. Say "interview me" and I will learn.${once(ctx)}`, { values: [] }); }
+  const text = `I know ${rows.length} thing${rows.length === 1 ? '' : 's'} about you: ${list(rows.map((r) => `your ${r.k} is ${r.v}`))}.${once(ctx)}`;
+  addCard(ctx, topic, { kind: 'facts', thing: 'you', title: 'About you', data: { rows }, how: howOf({ frame: 'what I know about you', words: 'what do you know about me', things: ['you'], sources: [{ what: 'your profile on this device', part: '' }], card: 'a small list of what you told me' }) }, text);
+  return ok(text, { values: rows.map((r) => r.v) });
+}
+
+/** What did I draw today: a tally of the objects of the drawing in this session. */
+export function drawn(ctx) {
+  const objs = ctx.peek('art.draw')?.objects ?? [];
+  const topic = topicFor(ctx, 'your drawing');
+  if (!objs.length) { topic.say ||= 'nothing drawn yet'; return ok(`You have not drawn anything yet in this session. Say "draw a red house" on the Drawing tab.${once(ctx)}`, { values: [] }); }
+  const tally = new Map();
+  for (const o of objs) tally.set(labelOf(o), (tally.get(labelOf(o)) ?? 0) + 1);
+  const rows = [...tally].map(([k, v]) => ({ k, v })).sort((a, b) => b.v - a.v || a.k.localeCompare(b.k)).slice(0, 8);
+  const text = `In this session you drew ${objs.length} thing${objs.length === 1 ? '' : 's'}: ${list(rows.map((r) => (r.v === 1 ? an(r.k) : `${r.v} ${plural(r.k, r.v)}`)))}.${once(ctx)}`;
+  addCard(ctx, topic, { kind: 'facts', thing: 'your drawing', title: 'What you drew', data: { rows, unit: 'in this session' }, how: howOf({ frame: 'what you drew', words: 'what did I draw', things: ['your drawing'], sources: [{ what: 'your drawing in this session', part: '' }], card: 'a tally of the things in your drawing' }) }, text);
+  return ok(text, { values: rows.map((r) => r.v) });
+}
+
+/** How many moves did I make in chess: counted icons from the history of the game. */
+export function moves(ctx) {
+  const g = ctx.peek('games.chess');
+  const n = g?.history?.length ?? 0, mine = g?.user === 'black' ? Math.floor(n / 2) : Math.ceil(n / 2);
+  const topic = topicFor(ctx, 'your chess game');
+  if (!mine) { topic.say ||= 'no moves yet'; return ok(`You have not made a move in chess yet in this session.${once(ctx)}`, { values: [0] }); }
+  const text = `You made ${mine} move${mine === 1 ? '' : 's'} in chess in this session.${once(ctx)}`;
+  addCard(ctx, topic, { kind: 'icons', thing: 'your chess game', title: 'Your chess moves', data: { n: Math.min(mine, 40), label: plural('move', mine), from: 'session' }, how: howOf({ frame: 'how many chess moves you made', words: 'how many moves did I make in chess', things: ['your chess game'], sources: [{ what: 'your chess game in this session', part: '' }], card: `${Math.min(mine, 40)} small icons, one for each move` }) }, text);
+  return ok(text, { values: [mine] });
+}
+
+const UNDO_OF = { draw: ['draw.undo', 'Drawing'], diagram: ['diagram.undo', 'Diagram'], map: ['geo.undo', 'Map'] };
+/** Undo on the Talk tab: the last change of a card, or the last transfer (the tab that took it takes it back: one step). */
+export function undo(ctx) {
+  const s = ensure(ctx), step = s.undo?.pop();
+  if (!step) return no('missing', 'There is nothing to take back on this tab. To take back something in the drawing, the diagram or the map, open that tab and say undo.');
+  if (step.kind === 'change') {
+    const card = s.cards.find((c) => c.id === step.id);
+    if (!card?.data) return no('missing', 'That picture is gone, so there is nothing to take back.');
+    for (const [k, v] of Object.entries(step.before)) { if (v === null) delete card.data[k]; else card.data[k] = v; }
+    refresh(ctx, card);
+    return ok('OK, I took the change back.', { values: [card.id] });
+  }
+  const [action, tab] = UNDO_OF[step.to] ?? [];
+  const r = action ? ctx.request(action, {}) : null;
+  if (!r || r.status !== 'supported') return no('missing', `The ${tab ?? 'other'} tab had nothing to take back.`);
+  return ok(`OK, I took it back out of the ${tab} tab.`, { values: [tab] });
 }
