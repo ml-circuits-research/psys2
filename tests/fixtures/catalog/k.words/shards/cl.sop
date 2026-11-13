@@ -1,7 +1,7 @@
-# k.words/shards/cl: noun and verb senses of the words from "claim" to "clyde" (first letters "cl").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/cl: senses of the words from "claim" to "clyde" (first letters "cl").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.clock.noun.1 k.words.sense word=clock pos=noun n=1 gloss="a timepiece that shows the time of day" is_a=timepiece core.source="wordnet 3.1"
-@k.words.clock.verb.1 k.words.sense word=clock pos=verb n=1 gloss="measure the time or duration of an event or action or the person who performs an action in a certain period of time" synonym=time is_a=quantify core.source="wordnet 3.1"
+@k.words.clock.noun.1 k.words.sense word=clock pos=noun n=1 gloss="a timepiece that shows the time of day" is_a=timepiece kind_of=timepiece kind_of="measuring instrument" kind_of=instrument kind_of=device kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.clock.verb.1 k.words.sense word=clock pos=verb n=1 gloss="measure the time or duration of an event or action or the person who performs an action in a certain period of time" synonym=time is_a=quantify kind_of=quantify kind_of=carry kind_of=communicate kind_of=interact kind_of=act core.source="wordnet 3.1"

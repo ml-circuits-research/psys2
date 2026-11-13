@@ -1,4 +1,4 @@
-# k.units/shards/core: 8 quantities and 44 units with their factor to the base unit (length, mass, time, volume, area,
+# k.units/shards/core: 8 quantities and 46 units with their factor to the base unit (length, mass, time, volume, area,
 # temperature, speed, angle), and words for their plural and other spellings.
 # sources: hand-core 1 (hand-written in this repository)
 # license: CC0-1.0
@@ -22,6 +22,7 @@
 @k.units.unit.foot k.units.unit name=foot symbol=ft quantity=length factor=0.3048 system=imperial core.source="hand-core 1"
 @k.units.unit.yard k.units.unit name=yard symbol=yd quantity=length factor=0.9144 system=imperial core.source="hand-core 1"
 @k.units.unit.mile k.units.unit name=mile symbol=mi quantity=length factor=1609.344 system=imperial core.source="hand-core 1"
+@k.units.unit.light_year k.units.unit name="light year" symbol=ly quantity=length factor=9460730472580800 system=other core.source="hand-core 1"
 @k.units.unit.milligram k.units.unit name=milligram symbol=mg quantity=mass factor=0.000001 system=metric core.source="hand-core 1"
 @k.units.unit.gram k.units.unit name=gram symbol=g quantity=mass factor=0.001 system=metric core.source="hand-core 1"
 @k.units.unit.kilogram k.units.unit name=kilogram symbol=kg quantity=mass factor=1 system=metric core.source="hand-core 1"
@@ -32,6 +33,7 @@
 @k.units.unit.minute k.units.unit name=minute symbol=min quantity=time factor=60 system=other core.source="hand-core 1"
 @k.units.unit.hour k.units.unit name=hour symbol=h quantity=time factor=3600 system=other core.source="hand-core 1"
 @k.units.unit.day k.units.unit name=day symbol=d quantity=time factor=86400 system=other core.source="hand-core 1"
+@k.units.unit.year k.units.unit name=year symbol=a quantity=time factor=31557600 system=other core.source="hand-core 1"
 @k.units.unit.week k.units.unit name=week quantity=time factor=604800 system=other core.source="hand-core 1"
 @k.units.unit.millilitre k.units.unit name=millilitre symbol=ml quantity=volume factor=0.001 system=metric core.source="hand-core 1"
 @k.units.unit.centilitre k.units.unit name=centilitre symbol=cl quantity=volume factor=0.01 system=metric core.source="hand-core 1"
@@ -76,6 +78,8 @@
 @k.units.word.second core.word text=seconds means=second of=k.units.unit.name core.source="hand-core 1"
 @k.units.word.minute core.word text=minutes means=minute of=k.units.unit.name core.source="hand-core 1"
 @k.units.word.hour core.word text=hours means=hour of=k.units.unit.name core.source="hand-core 1"
+@k.units.word.light_year core.word text="light years" text=light-year text=light-years means="light year" of=k.units.unit.name core.source="hand-core 1"
+@k.units.word.year core.word text=years means=year of=k.units.unit.name core.source="hand-core 1"
 @k.units.word.day core.word text=days means=day of=k.units.unit.name core.source="hand-core 1"
 @k.units.word.week core.word text=weeks means=week of=k.units.unit.name core.source="hand-core 1"
 @k.units.word.millilitre core.word text=millilitres text=milliliter text=milliliters text=ml means=millilitre of=k.units.unit.name core.source="hand-core 1"

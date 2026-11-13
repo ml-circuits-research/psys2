@@ -3,15 +3,18 @@
 # license: CC0-1.0
 # script: none (hand-written)
 
-@k.space.kind.star k.space.kind name=star made_of=gas does=shines does="gives light and heat" drawing=star core.source="hand-core 1"
-@k.space.kind.planet k.space.kind name=planet orbits=star drawing=planet core.source="hand-core 1"
-@k.space.kind.dwarf_planet k.space.kind name="dwarf planet" orbits=star core.source="hand-core 1"
-@k.space.kind.moon k.space.kind name=moon orbits=planet drawing="full moon" core.source="hand-core 1"
-@k.space.kind.comet k.space.kind name=comet made_of=ice made_of=dust orbits=star has=tail drawing=comet core.source="hand-core 1"
-@k.space.kind.asteroid k.space.kind name=asteroid made_of=rock made_of=metal orbits=star core.source="hand-core 1"
-@k.space.kind.galaxy k.space.kind name=galaxy made_of=stars made_of=gas made_of=dust drawing="milky way" core.source="hand-core 1"
-@k.space.kind.solar_system k.space.kind name="solar system" made_of=Sun made_of=planets made_of=moons made_of=comets made_of=asteroids core.source="hand-core 1"
+@k.space.kind.star k.space.kind name=star made_of=gas does=shines does="gives light and heat" drawing=star about="A star is a huge ball of hot gas that makes its own light and heat." named=model core.source="hand-core 1"
+@k.space.kind.planet k.space.kind name=planet orbits=star drawing=planet about="A planet is a large round body that goes around a star and does not shine by itself." named=model core.source="hand-core 1"
+@k.space.kind.dwarf_planet k.space.kind name="dwarf planet" orbits=star about="A dwarf planet is a small round body that goes around a star and shares its path with other bodies." named=model core.source="hand-core 1"
+@k.space.kind.moon k.space.kind name=moon orbits=planet drawing="full moon" about="A moon is a body that goes around a planet." named=model core.source="hand-core 1"
+@k.space.kind.comet k.space.kind name=comet made_of=ice made_of=dust orbits=star has=tail drawing=comet about="A comet is a lump of ice and dust that grows a bright tail when it comes near the Sun." named=model core.source="hand-core 1"
+@k.space.kind.asteroid k.space.kind name=asteroid made_of=rock made_of=metal orbits=star about="An asteroid is a rock that goes around the Sun, much smaller than a planet." named=model core.source="hand-core 1"
+@k.space.kind.galaxy k.space.kind name=galaxy made_of=stars made_of=gas made_of=dust drawing="milky way" about="A galaxy is a huge group of stars, gas and dust held together by gravity." named=model core.source="hand-core 1"
+@k.space.kind.solar_system k.space.kind name="solar system" made_of=Sun made_of=planets made_of=moons made_of=comets made_of=asteroids about="A solar system is a star with everything that goes around it." named=model core.source="hand-core 1"
 
+@k.space.kind.constellation k.space.kind name=constellation made_of=stars about="A constellation is a group of stars that seem to form a picture in the night sky." named=model core.source="hand-core 1"
+@k.space.kind.meteor k.space.kind name=meteor made_of=rock made_of=dust about="A meteor is a streak of light made by a small rock that burns up as it falls through the air." named=model core.source="hand-core 1"
+@k.space.kind.black_hole k.space.kind name="black hole" about="A black hole is a place in space where gravity is so strong that not even light can get out." named=model core.source="hand-core 1"
 @k.space.word.kind.star core.word text=stars means=star of=k.space.kind.name core.source="hand-core 1"
 @k.space.word.kind.planet core.word text=planets means=planet of=k.space.kind.name core.source="hand-core 1"
 @k.space.word.kind.dwarf_planet core.word text="dwarf planets" means="dwarf planet" of=k.space.kind.name core.source="hand-core 1"
@@ -20,3 +23,6 @@
 @k.space.word.kind.asteroid core.word text=asteroids means=asteroid of=k.space.kind.name core.source="hand-core 1"
 @k.space.word.kind.galaxy core.word text=galaxies means=galaxy of=k.space.kind.name core.source="hand-core 1"
 @k.space.word.kind.solar_system core.word text="solar systems" means="solar system" of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.constellation core.word text=constellations means=constellation of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.meteor core.word text=meteors text="shooting star" text="shooting stars" means=meteor of=k.space.kind.name core.source="hand-core 1"
+@k.space.word.kind.black_hole core.word text="black holes" means="black hole" of=k.space.kind.name core.source="hand-core 1"

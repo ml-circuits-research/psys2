@@ -1,9 +1,9 @@
-# k.words/shards/da: noun and verb senses of the words from "da" to "dazzle" (first letters "da").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/da: senses of the words from "da" to "dazzle" (first letters "da").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.day.noun.1 k.words.sense word=day pos=noun n=1 gloss="time for Earth to make a complete rotation on its axis" synonym="twenty-four hours" synonym="twenty-four hour period" synonym="24-hour interval" synonym="solar day" synonym="mean solar day" is_a="time unit" core.source="wordnet 3.1"
-@k.words.day.noun.2 k.words.sense word=day pos=noun n=2 gloss="some point or period in time" is_a=time core.source="wordnet 3.1"
-@k.words.day.noun.3 k.words.sense word=day pos=noun n=3 gloss="a day assigned to a particular purpose or observance" is_a="calendar day" core.source="wordnet 3.1"
-@k.words.days.noun.1 k.words.sense word=days pos=noun n=1 gloss="the time during which someone's life continues" synonym=years is_a=life core.source="wordnet 3.1"
+@k.words.day.noun.1 k.words.sense word=day pos=noun n=1 gloss="time for Earth to make a complete rotation on its axis" synonym="twenty-four hours" synonym="twenty-four hour period" synonym="24-hour interval" synonym="solar day" synonym="mean solar day" is_a="time unit" kind_of="time unit" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.day.noun.2 k.words.sense word=day pos=noun n=2 gloss="some point or period in time" is_a=time kind_of=time kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.day.noun.3 k.words.sense word=day pos=noun n=3 gloss="a day assigned to a particular purpose or observance" is_a="calendar day" kind_of="calendar day" kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.days.noun.1 k.words.sense word=days pos=noun n=1 gloss="the time during which someone's life continues" synonym=years is_a=life kind_of=life kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"

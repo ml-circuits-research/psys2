@@ -1,15 +1,18 @@
-# k.words/shards/so: noun and verb senses of the words from "so" to "soy" (first letters "so").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/so: senses of the words from "so" to "soy" (first letters "so").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.sound.noun.1 k.words.sense word=sound pos=noun n=1 gloss="the particular auditory effect produced by a given cause" is_a="sound property" core.source="wordnet 3.1"
-@k.words.sound.noun.2 k.words.sense word=sound pos=noun n=2 gloss="the subjective sensation of hearing something" synonym="auditory sensation" is_a=sensation core.source="wordnet 3.1"
-@k.words.sound.noun.3 k.words.sense word=sound pos=noun n=3 gloss="mechanical vibrations transmitted by an elastic medium" is_a="mechanical phenomenon" core.source="wordnet 3.1"
-@k.words.sound.verb.1 k.words.sense word=sound pos=verb n=1 gloss="appear in a certain way" is_a=look core.source="wordnet 3.1"
-@k.words.sound.verb.2 k.words.sense word=sound pos=verb n=2 gloss="make a certain noise or sound" synonym=go is_a="cause to be perceived" core.source="wordnet 3.1"
+@k.words.sound.noun.1 k.words.sense word=sound pos=noun n=1 gloss="the particular auditory effect produced by a given cause" is_a="sound property" opposite=silence kind_of="sound property" kind_of=property kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.sound.noun.2 k.words.sense word=sound pos=noun n=2 gloss="the subjective sensation of hearing something" synonym="auditory sensation" is_a=sensation kind_of=sensation kind_of=perception kind_of="basic cognitive process" kind_of=process kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.sound.noun.3 k.words.sense word=sound pos=noun n=3 gloss="mechanical vibrations transmitted by an elastic medium" is_a="mechanical phenomenon" kind_of="mechanical phenomenon" kind_of="physical phenomenon" kind_of="natural phenomenon" kind_of=phenomenon kind_of=process kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.sound.verb.1 k.words.sense word=sound pos=verb n=1 gloss="appear in a certain way" is_a=look kind_of=look kind_of=be core.source="wordnet 3.1"
+@k.words.sound.verb.2 k.words.sense word=sound pos=verb n=2 gloss="make a certain noise or sound" synonym=go is_a="cause to be perceived" kind_of="cause to be perceived" core.source="wordnet 3.1"
 @k.words.sound.verb.3 k.words.sense word=sound pos=verb n=3 gloss="give off a certain sound or sounds" core.source="wordnet 3.1"
-@k.words.soup.noun.1 k.words.sense word=soup pos=noun n=1 gloss="liquid food especially of meat or fish or vegetable stock often containing pieces of solid food" is_a=dish core.source="wordnet 3.1"
-@k.words.soup.noun.2 k.words.sense word=soup pos=noun n=2 gloss="any composition having a consistency suggestive of soup" is_a=composition core.source="wordnet 3.1"
-@k.words.soup.noun.3 k.words.sense word=soup pos=noun n=3 gloss="an unfortunate situation" is_a=situation core.source="wordnet 3.1"
-@k.words.soup.verb.1 k.words.sense word=soup pos=verb n=1 gloss="dope (a racehorse)" is_a=dope core.source="wordnet 3.1"
+@k.words.sound.adjective.1 k.words.sense word=sound pos=adjective n=1 gloss="financially secure and safe" opposite=unsound core.source="wordnet 3.1"
+@k.words.sound.adjective.2 k.words.sense word=sound pos=adjective n=2 gloss="exercising or showing good judgment" synonym=healthy synonym=intelligent synonym=levelheaded synonym=level-headed near_opposite=unreasonable core.source="wordnet 3.1"
+@k.words.sound.adjective.3 k.words.sense word=sound pos=adjective n=3 gloss="in good condition; free from defect or damage or decay" opposite=unsound core.source="wordnet 3.1"
+@k.words.soup.noun.1 k.words.sense word=soup pos=noun n=1 gloss="liquid food especially of meat or fish or vegetable stock often containing pieces of solid food" is_a=dish kind_of=dish kind_of=nutriment kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.soup.noun.2 k.words.sense word=soup pos=noun n=2 gloss="any composition having a consistency suggestive of soup" is_a=composition kind_of=composition kind_of=mixture kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.soup.noun.3 k.words.sense word=soup pos=noun n=3 gloss="an unfortunate situation" is_a=situation kind_of=situation kind_of=condition kind_of=state kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.soup.verb.1 k.words.sense word=soup pos=verb n=1 gloss="dope (a racehorse)" is_a=dope kind_of=dope kind_of=drug kind_of=medicate kind_of=treat core.source="wordnet 3.1"

@@ -10,7 +10,9 @@
 # kitchen grouping (a tomato is a vegetable there); `botanically` says what the plant part really is where that
 # differs (a tomato is a fruit, a peanut a legume, a mushroom a fungus); `colour` uses the colour names of k.objects;
 # `grows_on` says where on a plant it grows; `comes_from` names the animal, plant, food or place it is made or taken
-# from; `eaten` says how; `drawing` names the k.objects object that draws it.
+# from; `eaten` says how; `drawing` names the k.objects object that draws it. Round 9: `made_of` names what a dish or
+# a made food is made of (bread: flour, water, yeast, salt), by the names of other foods where they are foods;
+# `colour` is the usual colour, a colour name of k.colours; `named=model`: written by a language model, only where sure.
 @k.food.food core.type of=k.food.food shared=true closed=true core.source="hand-core 1"
 @k.food.food.name core.slot of=k.food.food key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
 @k.food.food.kind core.slot of=k.food.food key=kind required=true enum=fruit enum=vegetable enum=grain enum=legume enum=nut enum=bread enum=dairy enum=egg enum=meat enum=fish enum=seafood enum=sweet enum=drink enum=seasoning enum=herb enum=oil enum=sauce enum=dish core.source="hand-core 1"
@@ -20,6 +22,8 @@
 @k.food.food.comes_from core.slot of=k.food.food key=comes_from many=true kind=atom kind=string core.source="hand-core 1"
 @k.food.food.eaten core.slot of=k.food.food key=eaten many=true enum=raw enum=cooked core.source="hand-core 1"
 @k.food.food.drawing core.slot of=k.food.food key=drawing kind=atom kind=string core.source="hand-core 1"
+@k.food.food.made_of core.slot of=k.food.food key=made_of many=true kind=atom kind=string core.source="hand-core 1"
+@k.food.food.named core.slot of=k.food.food key=named enum=model core.source="hand-core 1"
 
 # Words for the type and keys of this world.
 @k.food.word.food core.word text=food text=foods means=k.food.food core.source="hand-core 1"
@@ -28,3 +32,4 @@
 @k.food.word.grows_on core.word text=grows text=grow means=k.food.food.grows_on core.source="hand-core 1"
 @k.food.word.comes_from core.word text=comes text=made means=k.food.food.comes_from core.source="hand-core 1"
 @k.food.word.eaten core.word text=eaten text=raw text=cooked means=k.food.food.eaten core.source="hand-core 1"
+@k.food.word.made_of core.word text=ingredients text=ingredient text="made of" text=contains means=k.food.food.made_of core.source="hand-core 1"

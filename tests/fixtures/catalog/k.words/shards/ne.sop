@@ -1,7 +1,11 @@
-# k.words/shards/ne: noun and verb senses of the words from "ne" to "newton" (first letters "ne").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ne: senses of the words from "ne" to "next" (first letters "ne").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
 @k.words.neptune.noun.1 k.words.sense word=Neptune pos=noun n=1 gloss="(Roman mythology) god of the sea; counterpart of Greek Poseidon" instance_of="Roman deity" core.source="wordnet 3.1"
 @k.words.neptune.noun.2 k.words.sense word=Neptune pos=noun n=2 gloss="a giant planet with a ring of ice particles; the 8th planet from the sun is the most remote of the gas giants" instance_of="Jovian planet" instance_of="superior planet" instance_of="outer planet" core.source="wordnet 3.1"
+@k.words.next.adjective.1 k.words.sense word=next pos=adjective n=1 gloss="immediately following in time or order" synonym=following near_opposite=preceding core.source="wordnet 3.1"
+@k.words.next.adjective.2 k.words.sense word=next pos=adjective n=2 gloss="nearest in space or position; immediately adjoining without intervening space" synonym=adjacent synonym="side by side" near_opposite=distant core.source="wordnet 3.1"
+@k.words.next.adjective.3 k.words.sense word=next pos=adjective n=3 gloss="(of elected officers) elected but not yet serving" synonym=future synonym=succeeding near_opposite=outgoing core.source="wordnet 3.1"
+@k.words.next.adverb.1 k.words.sense word=next pos=adverb n=1 gloss="at the time or occasion immediately following" core.source="wordnet 3.1"

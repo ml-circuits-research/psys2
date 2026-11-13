@@ -83,8 +83,6 @@
     exclude=peach
     exclude=lime
     exclude=rose
-    exclude=sand
-    exclude=snow
 
 @lex.kids.shapes.colorkinds core.lexicon
     class=noun

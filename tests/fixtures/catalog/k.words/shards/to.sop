@@ -1,10 +1,10 @@
-# k.words/shards/to: noun and verb senses of the words from "toad" to "toyota" (first letters "to").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/to: senses of the words from "toad" to "toyota" (first letters "to").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.tomato.noun.1 k.words.sense word=tomato pos=noun n=1 gloss="mildly acid red or yellow pulpy fruit eaten as a vegetable" is_a="solanaceous vegetable" part_of=tomato core.source="wordnet 3.1"
-@k.words.tomato.noun.2 k.words.sense word=tomato pos=noun n=2 gloss="native to South America; widely cultivated in many varieties" synonym="love apple" synonym="tomato plant" synonym="Lycopersicon esculentum" is_a=herb core.source="wordnet 3.1"
+@k.words.tomato.noun.1 k.words.sense word=tomato pos=noun n=1 gloss="mildly acid red or yellow pulpy fruit eaten as a vegetable" is_a="solanaceous vegetable" part_of=tomato kind_of="solanaceous vegetable" kind_of=vegetable kind_of=produce kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.tomato.noun.2 k.words.sense word=tomato pos=noun n=2 gloss="native to South America; widely cultivated in many varieties" synonym="love apple" synonym="tomato plant" synonym="Lycopersicon esculentum" is_a=herb kind_of=herb kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
 @k.words.tooth.noun.1 k.words.sense word=tooth pos=noun n=1 gloss="hard bonelike structures in the jaws of vertebrates; used for biting and chewing or for attack and defense" is_a=bone core.source="wordnet 3.1"
 @k.words.tooth.noun.2 k.words.sense word=tooth pos=noun n=2 gloss="something resembling the tooth of an animal" is_a=projection part_of=comb part_of=saw part_of="power saw" core.source="wordnet 3.1"
 @k.words.tooth.noun.3 k.words.sense word=tooth pos=noun n=3 gloss="toothlike structure in invertebrates found in the mouth or alimentary canal or on a shell" is_a=structure core.source="wordnet 3.1"

@@ -1,0 +1,8 @@
+# k.words/shards/af: senses of the words from "affair" to "afterwards" (first letters "af").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.after.adjective.1 k.words.sense word=after pos=adjective n=1 gloss="located farther aft" near_opposite=fore core.source="wordnet 3.1"
+@k.words.after.adverb.1 k.words.sense word=after pos=adverb n=1 gloss="happening at a time subsequent to a reference time" synonym=subsequently synonym=later synonym=afterwards synonym=afterward synonym="later on" core.source="wordnet 3.1"
+@k.words.after.adverb.2 k.words.sense word=after pos=adverb n=2 gloss="behind or in the rear" core.source="wordnet 3.1"

@@ -1,17 +1,20 @@
-# k.words/shards/ho: noun and verb senses of the words from "ho" to "howling" (first letters "ho").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ho: senses of the words from "ho" to "howling" (first letters "ho").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.horse.noun.1 k.words.sense word=horse pos=noun n=1 gloss="solid-hoofed herbivorous quadruped domesticated since prehistoric times" synonym="Equus caballus" is_a=equine core.source="wordnet 3.1"
-@k.words.horse.noun.2 k.words.sense word=horse pos=noun n=2 gloss="a padded gymnastic apparatus on legs" synonym="gymnastic horse" is_a="gymnastic apparatus" core.source="wordnet 3.1"
-@k.words.horse.noun.3 k.words.sense word=horse pos=noun n=3 gloss="troops trained to fight on horseback" synonym=cavalry synonym="horse cavalry" is_a="military personnel" core.source="wordnet 3.1"
-@k.words.horse.verb.1 k.words.sense word=horse pos=verb n=1 gloss="provide with a horse or horses" is_a=provide core.source="wordnet 3.1"
-@k.words.hour.noun.1 k.words.sense word=hour pos=noun n=1 gloss="a period of time equal to 1/24th of a day" synonym=hr synonym="60 minutes" is_a="time unit" part_of=day core.source="wordnet 3.1"
-@k.words.hour.noun.2 k.words.sense word=hour pos=noun n=2 gloss="clock time" synonym="time of day" is_a="clock time" core.source="wordnet 3.1"
-@k.words.hour.noun.3 k.words.sense word=hour pos=noun n=3 gloss="a special and memorable period" is_a="time period" core.source="wordnet 3.1"
-@k.words.house.noun.1 k.words.sense word=house pos=noun n=1 gloss="a dwelling that serves as living quarters for one or more families" is_a=dwelling is_a=building core.source="wordnet 3.1"
-@k.words.house.noun.2 k.words.sense word=house pos=noun n=2 gloss="the members of a business organization that owns or operates one or more establishments" synonym=firm synonym="business firm" is_a=business core.source="wordnet 3.1"
-@k.words.house.noun.3 k.words.sense word=house pos=noun n=3 gloss="the members of a religious community living together" is_a=community core.source="wordnet 3.1"
-@k.words.house.verb.1 k.words.sense word=house pos=verb n=1 gloss="contain or cover" is_a=accommodate core.source="wordnet 3.1"
-@k.words.house.verb.2 k.words.sense word=house pos=verb n=2 gloss="provide housing for" synonym="put up" synonym=domiciliate is_a=shelter core.source="wordnet 3.1"
+@k.words.horse.noun.1 k.words.sense word=horse pos=noun n=1 gloss="solid-hoofed herbivorous quadruped domesticated since prehistoric times" synonym="Equus caballus" is_a=equine kind_of=equine kind_of="odd-toed ungulate" kind_of=ungulate kind_of=placental kind_of=mammal kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.horse.noun.2 k.words.sense word=horse pos=noun n=2 gloss="a padded gymnastic apparatus on legs" synonym="gymnastic horse" is_a="gymnastic apparatus" kind_of="gymnastic apparatus" kind_of="sports equipment" kind_of=equipment kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.horse.noun.3 k.words.sense word=horse pos=noun n=3 gloss="troops trained to fight on horseback" synonym=cavalry synonym="horse cavalry" is_a="military personnel" kind_of="military personnel" kind_of=force kind_of=organization kind_of="social group" kind_of=group kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.horse.verb.1 k.words.sense word=horse pos=verb n=1 gloss="provide with a horse or horses" is_a=provide kind_of=provide kind_of=give kind_of=transfer core.source="wordnet 3.1"
+@k.words.hot.adjective.1 k.words.sense word=hot pos=adjective n=1 gloss="used of physical heat; having a high or higher than desirable temperature or giving off heat or feeling or causing a sensation of heat or burning" opposite=cold core.source="wordnet 3.1"
+@k.words.hot.adjective.2 k.words.sense word=hot pos=adjective n=2 gloss="characterized by violent and forceful activity or movement; very intense" synonym=raging near_opposite=nonviolent core.source="wordnet 3.1"
+@k.words.hot.adjective.3 k.words.sense word=hot pos=adjective n=3 gloss="extended meanings; especially of psychological heat; marked by intensity or vehemence especially of passion or enthusiasm" opposite=cold core.source="wordnet 3.1"
+@k.words.hour.noun.1 k.words.sense word=hour pos=noun n=1 gloss="a period of time equal to 1/24th of a day" synonym=hr synonym="60 minutes" is_a="time unit" part_of=day kind_of="time unit" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.hour.noun.2 k.words.sense word=hour pos=noun n=2 gloss="clock time" synonym="time of day" is_a="clock time" kind_of="clock time" kind_of=reading kind_of=datum kind_of=information kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.hour.noun.3 k.words.sense word=hour pos=noun n=3 gloss="a special and memorable period" is_a="time period" kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.house.noun.1 k.words.sense word=house pos=noun n=1 gloss="a dwelling that serves as living quarters for one or more families" is_a=dwelling is_a=building kind_of=dwelling kind_of=housing kind_of=structure kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.house.noun.2 k.words.sense word=house pos=noun n=2 gloss="the members of a business organization that owns or operates one or more establishments" synonym=firm synonym="business firm" is_a=business kind_of=business kind_of=enterprise kind_of=organization kind_of="social group" kind_of=group kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.house.noun.3 k.words.sense word=house pos=noun n=3 gloss="the members of a religious community living together" is_a=community kind_of=community kind_of=gathering kind_of="social group" kind_of=group kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.house.verb.1 k.words.sense word=house pos=verb n=1 gloss="contain or cover" is_a=accommodate kind_of=accommodate core.source="wordnet 3.1"
+@k.words.house.verb.2 k.words.sense word=house pos=verb n=2 gloss="provide housing for" synonym="put up" synonym=domiciliate is_a=shelter kind_of=shelter kind_of=supply kind_of=give kind_of=transfer core.source="wordnet 3.1"

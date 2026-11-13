@@ -1,9 +1,12 @@
-# k.words/shards/ki: noun and verb senses of the words from "ki" to "kitty" (first letters "ki").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ki: senses of the words from "ki" to "kiwi" (first letters "ki").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.kind.noun.1 k.words.sense word=kind pos=noun n=1 gloss="a category of things distinguished by some common characteristic or quality" synonym=sort synonym=form synonym=variety is_a=category core.source="wordnet 3.1"
+@k.words.kind.noun.1 k.words.sense word=kind pos=noun n=1 gloss="a category of things distinguished by some common characteristic or quality" synonym=sort synonym=form synonym=variety is_a=category kind_of=category kind_of=concept kind_of=idea kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.kind.adjective.1 k.words.sense word=kind pos=adjective n=1 gloss="having or showing a tender and considerate and helpful nature; used especially of persons and their behavior" opposite=unkind core.source="wordnet 3.1"
+@k.words.kind.adjective.2 k.words.sense word=kind pos=adjective n=2 gloss="agreeable, conducive to comfort" synonym=genial near_opposite=inhospitable core.source="wordnet 3.1"
+@k.words.kind.adjective.3 k.words.sense word=kind pos=adjective n=3 gloss="tolerant and forgiving under provocation" synonym=tolerant near_opposite=unforgiving core.source="wordnet 3.1"
 @k.words.kite.noun.1 k.words.sense word=kite pos=noun n=1 gloss="a bank check that has been fraudulently altered to increase its face value" is_a=check core.source="wordnet 3.1"
 @k.words.kite.noun.2 k.words.sense word=kite pos=noun n=2 gloss="a bank check drawn on insufficient funds at another bank in order to take advantage of the float" is_a=check core.source="wordnet 3.1"
 @k.words.kite.noun.3 k.words.sense word=kite pos=noun n=3 gloss="plaything consisting of a light frame covered with tissue paper; flown in wind at end of a string" is_a=plaything core.source="wordnet 3.1"

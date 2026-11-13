@@ -1,4 +1,4 @@
-# k.geo/shards/europe: Europe: 50 countries and territories, 192 cities, 245 rivers, 83 mountains, 27 mountain ranges.
+# k.geo/shards/europe: Europe: 50 countries and territories, 192 cities, 245 rivers, 83 mountains, 27 mountain ranges, 15 lakes, 0 deserts.
 # sources: natural-earth 5.1.2 (Natural Earth, public domain)
 # license: public-domain
 # script: tools/import/geo.mjs

@@ -10,16 +10,15 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/acts/acts.mjs:ACTS` | 37 | k.words | 95% |
 | [ ] | table | `worlds/acts/acts.mjs:DET` | 12 | k.values | 33% |
 | [ ] | table | `worlds/acts/acts.mjs:PRONOUN` | 10 | none | 20% |
-| [ ] | table | `worlds/acts/acts.mjs:COLOURS` | 14 | k.colours | 100% |
 | [ ] | table | `worlds/acts/acts.mjs:FORMS` | 53 | k.words | 85% |
-| [ ] | table | `worlds/acts/acts.mjs:REL_WORDS` | 16 | k.actions | 81% |
+| [ ] | table | `worlds/acts/acts.mjs:REL_WORDS` | 16 | k.words | 94% |
 | [ ] | table | `worlds/acts/acts.mjs:DET_WORDS` | 11 | k.values | 36% |
-| [ ] | table | `worlds/acts/acts.mjs:DIR_WORDS` | 11 | k.values | 91% |
+| [ ] | table | `worlds/acts/acts.mjs:DIR_WORDS` | 11 | k.words | 100% |
 | [ ] | table | `worlds/acts/forms.more.mjs:FORMS_MORE` | 32 | k.words | 97% |
-| [ ] | table | `worlds/acts/forms.more.mjs:TURN_WORDS` | 10 | k.values | 90% |
+| [ ] | table | `worlds/acts/forms.more.mjs:TURN_WORDS` | 10 | k.words | 90% |
 | [ ] | table | `worlds/acts/verbs.generated.mjs:ACT_VERBS` | 222 | k.actions | 100% |
-| [ ] | lexicon | `lex.acts.rel` | 17 | k.actions | 76% |
-| [ ] | lexicon | `lex.acts.dir` | 18 | k.values | 67% |
+| [ ] | lexicon | `lex.acts.rel` | 17 | k.words | 88% |
+| [ ] | lexicon | `lex.acts.dir` | 18 | k.values | 72% |
 | [ ] | lexicon | `lex.acts.layout` | 26 | k.layouts | 73% |
 
 ## art.draw
@@ -36,16 +35,14 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/art.draw/ops.mjs:UNDRAWABLE` | 18 | k.animals | 100% |
 | [ ] | table | `worlds/art.draw/ops.mjs:WHO_PRESET` | 12 | k.words | 100% |
 | [ ] | table | `worlds/art.draw/ops.mjs:ORDINAL_WORD` | 10 | k.values | 100% |
-| [ ] | table | `worlds/art.draw/ops.mjs:VARY_COLORS` | 10 | k.colours | 100% |
 | [ ] | table | `worlds/art.draw/ops.mjs:REGION_PHRASE` | 13 | k.values | 69% |
-| [ ] | table | `worlds/art.draw/ops.mjs:LOC_START` | 17 | k.words | 76% |
+| [ ] | table | `worlds/art.draw/ops.mjs:LOC_START` | 17 | k.words | 88% |
 | [ ] | table | `worlds/art.draw/ops.mjs:DET_SKIP` | 16 | k.words | 56% |
-| [ ] | table | `worlds/art.draw/ops.mjs:REL_PATTERNS` | 11 | k.words | 64% |
-| [ ] | table | `worlds/art.draw/ops.mjs:REL_STRONG` | 17 | k.actions | 59% |
-| [ ] | table | `worlds/art.draw/ops.mjs:DIR_WORDS` | 18 | k.values | 94% |
-| [ ] | table | `worlds/art.draw/ops.mjs:DET` | 14 | k.values | 71% |
-| [ ] | table | `worlds/art.draw/scene.mjs:COLOR_ALIASES` | 15 | k.colours | 93% |
-| [ ] | table | `worlds/art.draw/scene.mjs:BUILTIN` | 197 | k.objects | 95% |
+| [ ] | table | `worlds/art.draw/ops.mjs:REL_PATTERNS` | 11 | k.words | 82% |
+| [ ] | table | `worlds/art.draw/ops.mjs:REL_STRONG` | 17 | k.words | 71% |
+| [ ] | table | `worlds/art.draw/ops.mjs:DIR_WORDS` | 18 | k.values | 100% |
+| [ ] | table | `worlds/art.draw/ops.mjs:DET` | 14 | k.words | 71% |
+| [ ] | table | `worlds/art.draw/scene.mjs:BUILTIN` | 198 | k.objects | 95% |
 | [ ] | table | `worlds/art.draw/scene.mjs:KIND_ORDER` | 26 | k.words | 100% |
 | [ ] | table | `worlds/art.draw/scene.mjs:REGIONS` | 10 | k.values | 100% |
 | [ ] | table | `worlds/art.draw/things.catalog.mjs:THINGS` | 118 | k.words | 99% |
@@ -55,23 +52,22 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | lexicon | `lex.art.draw.things` | 92 | k.words | 99% |
 | [ ] | lexicon | `lex.art.draw.ground` | 16 | k.words | 75% |
 | [ ] | lexicon | `lex.art.draw.sizes` | 14 | k.values | 100% |
-| [ ] | lexicon | `lex.art.draw.shades` | 8 | k.values | 75% |
-| [ ] | lexicon | `lex.art.draw.colors` | 44 | k.values | 80% |
-| [ ] | lexicon | `lex.art.draw.mods` | 65 | k.values | 82% |
-| [ ] | lexicon | `lex.art.draw.quantity` | 10 | k.values | 100% |
-| [ ] | lexicon | `lex.art.draw.grow` | 14 | k.values | 64% |
-| [ ] | lexicon | `lex.art.draw.fillmodes` | 13 | k.objects | 62% |
+| [ ] | lexicon | `lex.art.draw.shades` | 8 | k.words | 75% |
+| [ ] | lexicon | `lex.art.draw.mods` | 65 | k.words | 82% |
+| [ ] | lexicon | `lex.art.draw.quantity` | 10 | k.words | 100% |
+| [ ] | lexicon | `lex.art.draw.grow` | 14 | k.values | 79% |
+| [ ] | lexicon | `lex.art.draw.fillmodes` | 13 | k.words | 62% |
 | [ ] | lexicon | `lex.art.draw.times` | 18 | k.words | 94% |
 | [ ] | lexicon | `lex.art.draw.turnverbs` | 10 | k.words | 90% |
 | [ ] | lexicon | `lex.art.draw.turndirs` | 21 | k.words | 86% |
 | [ ] | lexicon | `lex.art.draw.parts` | 87 | k.objects | 95% |
 | [ ] | lexicon | `lex.art.draw.targets` | 175 | k.words | 95% |
-| [ ] | lexicon | `lex.art.draw.preps` | 22 | k.words | 77% |
-| [ ] | lexicon | `lex.art.draw.preps2` | 18 | k.words | 61% |
+| [ ] | lexicon | `lex.art.draw.preps` | 22 | k.words | 86% |
+| [ ] | lexicon | `lex.art.draw.preps2` | 18 | k.words | 72% |
 | [ ] | lexicon | `lex.art.draw.regions` | 15 | k.values | 100% |
-| [ ] | lexicon | `lex.art.draw.flipwords` | 24 | k.values | 25% |
+| [ ] | lexicon | `lex.art.draw.flipwords` | 24 | k.words | 25% |
 | [ ] | lexicon | `lex.art.draw.strongtimes` | 10 | k.words | 90% |
-| [ ] | lexicon | `lex.art.draw.relmods` | 19 | k.values | 89% |
+| [ ] | lexicon | `lex.art.draw.relmods` | 19 | k.values | 95% |
 | [ ] | lexicon | `lex.art.draw.people` | 10 | k.people | 100% |
 
 ## common.sense
@@ -91,84 +87,83 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
-| [ ] | table | `worlds/data.charts/datagen.mjs:FB` | 115 | k.words | 96% |
+| [ ] | table | `worlds/data.charts/datagen.mjs:FB` | 115 | k.words | 97% |
 | [ ] | table | `worlds/data.charts/ops.mjs:PALETTE_WORD` | 10 | k.words | 90% |
-| [ ] | table | `worlds/data.charts/ops.mjs:STOPW` | 15 | k.values | 67% |
+| [ ] | table | `worlds/data.charts/ops.mjs:STOPW` | 15 | k.words | 67% |
 | [ ] | table | `worlds/data.charts/ops.mjs:HABITATS` | 12 | k.objects | 92% |
-| [ ] | table | `worlds/data.charts/ops.mjs:UP` | 20 | k.values | 80% |
-| [ ] | table | `worlds/data.charts/ops.mjs:DOWN` | 21 | k.values | 86% |
+| [ ] | table | `worlds/data.charts/ops.mjs:UP` | 20 | k.values | 90% |
+| [ ] | table | `worlds/data.charts/ops.mjs:DOWN` | 21 | k.values | 90% |
 | [ ] | lexicon | `lex.data.charts.types` | 9 | k.objects | 89% |
-| [ ] | lexicon | `lex.data.charts.colors` | 29 | k.values | 100% |
 | [ ] | lexicon | `lex.data.charts.palettes` | 17 | k.words | 94% |
-| [ ] | lexicon | `lex.data.charts.extent` | 40 | k.values | 83% |
+| [ ] | lexicon | `lex.data.charts.extent` | 40 | k.values | 90% |
 | [ ] | lexicon | `lex.data.charts.g_school` | 8 | k.words | 100% |
 | [ ] | lexicon | `lex.data.charts.g_food` | 12 | k.food | 100% |
 | [ ] | lexicon | `lex.data.charts.triggers` | 11 | k.words | 100% |
 | [ ] | lexicon | `lex.data.charts.listnames` | 14 | k.words | 64% |
-| [ ] | lexicon | `lex.data.charts.superl` | 20 | k.values | 90% |
-| [ ] | lexicon | `lex.data.charts.everyone` | 29 | k.people | 31% |
+| [ ] | lexicon | `lex.data.charts.superl` | 20 | k.values | 100% |
+| [ ] | lexicon | `lex.data.charts.everyone` | 29 | k.words | 31% |
 
 ## diagram.sketch
 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
 | [ ] | table | `worlds/diagram.sketch/engine/auto-layout.mjs:PALETTE` | 18 | k.colours | 100% |
-| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:KEY_ORDER` | 42 | k.words | 90% |
+| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:KEY_ORDER` | 42 | k.words | 93% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:SHAPE_VALUES` | 41 | k.words | 90% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:COLOR_VALUES` | 12 | k.values | 100% |
-| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:corePlugin` | 26 | k.words | 58% |
+| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:corePlugin` | 26 | k.words | 62% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:COMMON_SENSE` | 24 | k.values | 96% |
-| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:shapesPlugin` | 165 | k.words | 82% |
+| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:shapesPlugin` | 165 | k.words | 84% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:groupsPlugin` | 23 | k.actions | 70% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:connectionsPlugin` | 56 | k.words | 63% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:opsPlugin` | 72 | k.words | 50% |
-| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:layoutPlugin` | 211 | k.words | 59% |
-| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:queriesPlugin` | 66 | k.words | 67% |
-| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:logicPlugin` | 27 | k.words | 63% |
-| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:reasoningPlugin` | 16 | k.words | 38% |
+| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:layoutPlugin` | 211 | k.words | 60% |
+| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:queriesPlugin` | 66 | k.words | 70% |
+| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:logicPlugin` | 27 | k.words | 70% |
+| [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:reasoningPlugin` | 16 | k.words | 44% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:rulesPlugin` | 11 | k.words | 82% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:STOP` | 23 | k.words | 83% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:HELP_GENERIC` | 48 | k.words | 100% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:HELP_FAMILY` | 17 | k.words | 88% |
 | [ ] | table | `worlds/diagram.sketch/engine/logic.mjs:OPS_WHOLE_ACTIONS` | 13 | k.words | 77% |
 | [ ] | table | `worlds/diagram.sketch/engine/templates.mjs:SCHEMES` | 17 | k.colours | 100% |
-| [ ] | table | `worlds/diagram.sketch/engine/templates.mjs:SCHEME_CUES` | 40 | k.objects | 57% |
+| [ ] | table | `worlds/diagram.sketch/engine/templates.mjs:SCHEME_CUES` | 40 | k.words | 57% |
 | [ ] | table | `worlds/diagram.sketch/ops.mjs:WORLD_KEYS` | 11 | k.words | 73% |
 | [ ] | table | `worlds/diagram.sketch/ops.mjs:RANDOM_DIAGRAMS` | 53 | k.words | 96% |
 | [ ] | table | `worlds/diagram.sketch/ops.mjs:NUMBER_WORD` | 11 | k.values | 100% |
 | [ ] | table | `worlds/diagram.sketch/ops.mjs:ACTIONS` | 32 | k.actions | 84% |
-| [ ] | table | `worlds/diagram.sketch/ops.mjs:ASKS` | 17 | k.words | 82% |
+| [ ] | table | `worlds/diagram.sketch/ops.mjs:ASKS` | 17 | k.words | 88% |
 | [ ] | table | `worlds/diagram.sketch/ops.mjs:LAYOUT_WORDS` | 16 | k.words | 100% |
-| [ ] | table | `worlds/diagram.sketch/refs.mjs:KNOWN` | 67 | k.words | 91% |
+| [ ] | table | `worlds/diagram.sketch/refs.mjs:KNOWN` | 67 | k.words | 94% |
 | [ ] | table | `worlds/diagram.sketch/refs.mjs:EXPLICIT` | 15 | k.words | 93% |
 | [ ] | table | `worlds/diagram.sketch/refs.mjs:KIND_WORDS` | 13 | k.shapes | 92% |
 | [ ] | table | `worlds/diagram.sketch/refs.mjs:LAYOUTS` | 13 | k.layouts | 100% |
 | [ ] | lexicon | `lex.diagram.sketch.notColor` | 36 | k.colours | 50% |
-| [ ] | lexicon | `lex.diagram.sketch.recency` | 8 | k.objects | 50% |
+| [ ] | lexicon | `lex.diagram.sketch.recency` | 8 | k.words | 63% |
 | [ ] | lexicon | `lex.diagram.sketch.action` | 169 | k.words | 77% |
 | [ ] | lexicon | `lex.diagram.sketch.shape` | 51 | k.values | 92% |
 | [ ] | lexicon | `lex.diagram.sketch.color` | 30 | k.values | 100% |
 | [ ] | lexicon | `lex.diagram.sketch.outline` | 32 | k.values | 100% |
 | [ ] | lexicon | `lex.diagram.sketch.size` | 14 | k.values | 93% |
-| [ ] | lexicon | `lex.diagram.sketch.position` | 36 | k.values | 56% |
+| [ ] | lexicon | `lex.diagram.sketch.position` | 36 | k.values | 64% |
 | [ ] | lexicon | `lex.diagram.sketch.object` | 55 | k.objects | 100% |
 | [ ] | lexicon | `lex.diagram.sketch.fill` | 17 | k.words | 53% |
 | [ ] | lexicon | `lex.diagram.sketch.layer` | 9 | k.words | 89% |
-| [ ] | lexicon | `lex.diagram.sketch.ask` | 53 | k.words | 38% |
+| [ ] | lexicon | `lex.diagram.sketch.ask` | 53 | k.words | 40% |
 | [ ] | lexicon | `lex.diagram.sketch.kind` | 9 | k.words | 100% |
-| [ ] | lexicon | `lex.diagram.sketch.arrow` | 12 | k.values | 50% |
-| [ ] | lexicon | `lex.diagram.sketch.pairing` | 11 | k.layouts | 36% |
+| [ ] | lexicon | `lex.diagram.sketch.arrow` | 12 | k.words | 50% |
+| [ ] | lexicon | `lex.diagram.sketch.pairing` | 11 | k.words | 36% |
 | [ ] | lexicon | `lex.diagram.sketch.layout` | 31 | k.layouts | 68% |
 | [ ] | lexicon | `lex.diagram.sketch.property` | 15 | k.words | 80% |
-| [ ] | lexicon | `lex.diagram.sketch.superlative` | 21 | k.values | 43% |
+| [ ] | lexicon | `lex.diagram.sketch.superlative` | 21 | k.values | 48% |
 | [ ] | lexicon | `lex.diagram.sketch.template` | 136 | k.words | 50% |
 | [ ] | lexicon | `lex.diagram.sketch.scheme` | 41 | k.words | 59% |
-| [ ] | lexicon | `lex.diagram.sketch.aspect` | 25 | none | 24% |
+| [ ] | lexicon | `lex.diagram.sketch.aspect` | 25 | k.words | 28% |
 | [ ] | lexicon | `lex.diagram.sketch.topic` | 717 | k.words | 69% |
 | [ ] | lexicon | `lex.diagram.sketch.shapenoun` | 29 | k.values | 93% |
-| [ ] | lexicon | `lex.diagram.sketch.shapeany` | 55 | k.values | 93% |
+| [ ] | lexicon | `lex.diagram.sketch.shapeany` | 55 | k.words | 93% |
 | [ ] | lexicon | `lex.diagram.sketch.setvalue` | 118 | k.values | 89% |
-| [ ] | lexicon | `lex.diagram.sketch.checkword` | 164 | k.values | 79% |
+| [ ] | lexicon | `lex.diagram.sketch.checkword` | 164 | k.words | 81% |
 | [ ] | lexicon | `lex.diagram.sketch.diagramform` | 27 | k.layouts | 44% |
 
 ## docs.editor
@@ -182,7 +177,6 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | lexicon | `lex.docs.editor.formats` | 8 | none | 13% |
 | [ ] | lexicon | `lex.docs.editor.triggers` | 8 | k.words | 88% |
 | [ ] | lexicon | `lex.docs.editor.marks` | 14 | k.words | 29% |
-| [ ] | lexicon | `lex.docs.editor.colors` | 12 | k.colours | 100% |
 | [ ] | lexicon | `lex.docs.editor.aligns` | 8 | k.words | 75% |
 | [ ] | lexicon | `lex.docs.editor.sizes` | 8 | k.values | 100% |
 | [ ] | lexicon | `lex.docs.editor.convert` | 11 | k.words | 36% |
@@ -194,48 +188,48 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
-| [ ] | table | `worlds/docs.reader/analyze.mjs:DET` | 33 | k.values | 70% |
-| [ ] | table | `worlds/docs.reader/analyze.mjs:CONJ` | 21 | k.words | 38% |
-| [ ] | table | `worlds/docs.reader/analyze.mjs:SUBORD` | 14 | k.words | 36% |
-| [ ] | table | `worlds/docs.reader/analyze.mjs:PARTICLES` | 16 | k.words | 81% |
+| [ ] | table | `worlds/docs.reader/analyze.mjs:DET` | 33 | k.words | 70% |
+| [ ] | table | `worlds/docs.reader/analyze.mjs:CONJ` | 21 | k.words | 52% |
+| [ ] | table | `worlds/docs.reader/analyze.mjs:SUBORD` | 14 | k.words | 50% |
+| [ ] | table | `worlds/docs.reader/analyze.mjs:PARTICLES` | 16 | k.words | 100% |
 | [ ] | table | `worlds/docs.reader/analyze.mjs:CONTROL_TO` | 20 | k.words | 100% |
 | [ ] | table | `worlds/docs.reader/analyze.mjs:CONTRACTION_BASE` | 12 | k.words | 67% |
-| [ ] | table | `worlds/docs.reader/datagen.mjs:FB` | 89 | k.words | 70% |
+| [ ] | table | `worlds/docs.reader/datagen.mjs:FB` | 89 | k.words | 72% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:PLURAL_ROLES` | 12 | k.words | 92% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:GENERIC` | 19 | k.words | 100% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:KIN` | 22 | k.words | 100% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:KIN_INVERSE` | 22 | k.words | 86% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:PLACE_ONLY_AFTER_PREP` | 14 | k.objects | 100% |
-| [ ] | table | `worlds/docs.reader/lang.mjs:PLACE_PREPS` | 29 | k.words | 69% |
-| [ ] | table | `worlds/docs.reader/lang.mjs:PREPS` | 15 | k.actions | 33% |
+| [ ] | table | `worlds/docs.reader/lang.mjs:PLACE_PREPS` | 29 | k.words | 90% |
+| [ ] | table | `worlds/docs.reader/lang.mjs:PREPS` | 15 | k.words | 53% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:PART_NOUNS` | 17 | k.words | 100% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:SPEECH_LEMMA` | 33 | k.words | 94% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:AUX` | 14 | k.words | 79% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:COPULA` | 12 | k.words | 92% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:ABBREV` | 25 | k.words | 52% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:DOUBLE` | 19 | k.words | 100% |
-| [ ] | table | `worlds/docs.reader/lang.mjs:NOT_VERB` | 36 | k.words | 78% |
+| [ ] | table | `worlds/docs.reader/lang.mjs:NOT_VERB` | 36 | k.words | 83% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:AMBIG_BASE` | 94 | k.words | 100% |
 | [ ] | table | `worlds/docs.reader/lang.mjs:PLACE_WORDS_IN_NAMES` | 29 | k.words | 100% |
-| [ ] | table | `worlds/docs.reader/lang.mjs:PLACE_NAME_PREV` | 25 | k.actions | 68% |
+| [ ] | table | `worlds/docs.reader/lang.mjs:PLACE_NAME_PREV` | 25 | k.words | 84% |
 | [ ] | table | `worlds/docs.reader/ops.mjs:GROUPS` | 51 | k.words | 100% |
 | [ ] | table | `worlds/docs.reader/ops.mjs:GENERIC_DOC` | 23 | k.words | 83% |
-| [ ] | table | `worlds/docs.reader/ops.mjs:Q_STOP` | 32 | k.words | 69% |
-| [ ] | table | `worlds/docs.reader/text.mjs:KEY_STOP` | 38 | k.words | 92% |
+| [ ] | table | `worlds/docs.reader/ops.mjs:Q_STOP` | 32 | k.words | 72% |
+| [ ] | table | `worlds/docs.reader/text.mjs:KEY_STOP` | 38 | k.words | 95% |
 
 ## games.chess
 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
-| [ ] | table | `worlds/games.chess/datagen.mjs:families` | 45 | k.words | 51% |
+| [ ] | table | `worlds/games.chess/datagen.mjs:families` | 45 | k.words | 56% |
 | [ ] | lexicon | `lex.games.chess.pieces` | 17 | k.words | 59% |
 | [ ] | lexicon | `lex.games.chess.files` | 21 | k.words | 76% |
 | [ ] | lexicon | `lex.games.chess.files_dh` | 14 | k.words | 71% |
 | [ ] | lexicon | `lex.games.chess.san` | 94 | none | 13% |
 | [ ] | lexicon | `lex.games.chess.promos` | 11 | k.words | 100% |
 | [ ] | lexicon | `lex.games.chess.owners` | 20 | k.words | 40% |
-| [ ] | lexicon | `lex.games.chess.ordinals` | 10 | k.values | 100% |
-| [ ] | lexicon | `lex.games.chess.strengths` | 41 | k.words | 61% |
+| [ ] | lexicon | `lex.games.chess.ordinals` | 10 | k.words | 100% |
+| [ ] | lexicon | `lex.games.chess.strengths` | 41 | k.words | 80% |
 | [ ] | lexicon | `lex.games.chess.triggers` | 14 | k.words | 86% |
 
 ## games.guess
@@ -246,9 +240,9 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/games.guess/datagen.mjs:NAMES_FB` | 26 | k.words | 62% |
 | [ ] | table | `worlds/games.guess/datagen.mjs:QW` | 36 | k.words | 81% |
 | [ ] | table | `worlds/games.guess/datagen.mjs:ANIM_FB` | 10 | k.animals | 100% |
-| [ ] | table | `worlds/games.guess/datagen.mjs:ANS` | 89 | none | 15% |
+| [ ] | table | `worlds/games.guess/datagen.mjs:ANS` | 89 | k.words | 27% |
 | [ ] | table | `worlds/games.guess/datagen.mjs:CMD` | 35 | none | 6% |
-| [ ] | table | `worlds/games.guess/fns.mjs:fns` | 13 | k.words | 46% |
+| [ ] | table | `worlds/games.guess/fns.mjs:fns` | 13 | k.words | 54% |
 | [ ] | table | `worlds/games.guess/ops.mjs:HABITAT` | 12 | none | 0% |
 | [ ] | table | `worlds/games.guess/ops.mjs:FALLBACK_KB` | 33 | k.objects | 85% |
 | [ ] | table | `worlds/games.guess/ops.mjs:FOOD_PLANT` | 11 | k.objects | 100% |
@@ -274,13 +268,13 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/games.tictactoe/datagen.mjs:IRR` | 19 | k.words | 100% |
 | [ ] | table | `worlds/games.tictactoe/datagen.mjs:NAMES_FB` | 26 | k.words | 62% |
 | [ ] | table | `worlds/games.tictactoe/datagen.mjs:QW` | 36 | k.words | 81% |
-| [ ] | table | `worlds/games.tictactoe/datagen.mjs:LEVELS_FB` | 11 | k.words | 45% |
+| [ ] | table | `worlds/games.tictactoe/datagen.mjs:LEVELS_FB` | 11 | k.words | 91% |
 | [ ] | table | `worlds/games.tictactoe/datagen.mjs:PRE` | 19 | none | 0% |
 | [ ] | table | `worlds/games.tictactoe/datagen.mjs:LISTS` | 111 | none | 3% |
 | [ ] | lexicon | `lex.games.tictactoe.positions` | 107 | none | 21% |
 | [ ] | lexicon | `lex.games.tictactoe.cols` | 9 | k.words | 78% |
 | [ ] | lexicon | `lex.games.tictactoe.rows` | 16 | k.words | 75% |
-| [ ] | lexicon | `lex.games.tictactoe.levels` | 26 | k.words | 58% |
+| [ ] | lexicon | `lex.games.tictactoe.levels` | 26 | k.words | 88% |
 | [ ] | lexicon | `lex.games.tictactoe.sw.edges` | 14 | k.values | 36% |
 
 ## geo.map
@@ -294,7 +288,7 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/geo.map/fns.mjs:HANDLED` | 12 | k.words | 83% |
 | [ ] | table | `worlds/geo.map/ops.mjs:THE` | 21 | k.geo | 90% |
 | [ ] | table | `worlds/geo.map/ops.mjs:DEMONYM` | 55 | k.geo | 95% |
-| [ ] | table | `worlds/geo.map/ops.mjs:OSM_WORDS` | 10 | k.words | 50% |
+| [ ] | table | `worlds/geo.map/ops.mjs:OSM_WORDS` | 10 | k.words | 60% |
 | [ ] | lexicon | `lex.geo.map.places` | 183 | k.geo | 47% |
 | [ ] | lexicon | `lex.geo.map.demonyms` | 59 | k.words | 76% |
 
@@ -306,7 +300,7 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/kids.animals/datagen.mjs:IRR` | 19 | k.words | 100% |
 | [ ] | table | `worlds/kids.animals/datagen.mjs:NAMES_FB` | 26 | k.words | 62% |
 | [ ] | table | `worlds/kids.animals/datagen.mjs:QW` | 36 | k.words | 81% |
-| [ ] | table | `worlds/kids.animals/datagen.mjs:FB` | 66 | k.words | 88% |
+| [ ] | table | `worlds/kids.animals/datagen.mjs:FB` | 66 | k.words | 89% |
 | [ ] | table | `worlds/kids.animals/datagen.mjs:KINDS_FB` | 13 | k.objects | 54% |
 | [ ] | table | `worlds/kids.animals/datagen.mjs:CLASSES_FB` | 10 | k.objects | 70% |
 | [ ] | table | `worlds/kids.animals/datagen.mjs:HABS` | 11 | k.objects | 91% |
@@ -342,7 +336,7 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/kids.common/datagen.mjs:QW` | 36 | k.words | 81% |
 | [ ] | table | `worlds/kids.common/datagen.mjs:ACTS` | 27 | none | 19% |
 | [ ] | table | `worlds/kids.common/datagen.mjs:FAM` | 65 | none | 0% |
-| [ ] | table | `worlds/kids.common/ops.mjs:NOT_A_NAME` | 96 | k.words | 66% |
+| [ ] | table | `worlds/kids.common/ops.mjs:NOT_A_NAME` | 96 | k.words | 71% |
 | [ ] | lexicon | `lex.kids.common.names.en.m` | 15 | k.words | 93% |
 | [ ] | lexicon | `lex.kids.common.names.en.f` | 15 | k.words | 27% |
 | [ ] | lexicon | `lex.kids.common.names.ro.m` | 10 | none | 20% |
@@ -365,7 +359,6 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/kids.shapes/datagen.mjs:THINGS_FB` | 21 | k.attributes | 100% |
 | [ ] | lexicon | `lex.kids.shapes.shapes` | 9 | k.shapes | 100% |
 | [ ] | lexicon | `lex.kids.shapes.kinds` | 10 | k.shapes | 90% |
-| [ ] | lexicon | `lex.kids.shapes.colors` | 12 | k.colours | 100% |
 | [ ] | lexicon | `lex.kids.shapes.things` | 140 | k.objects | 97% |
 | [ ] | lexicon | `lex.kids.shapes.triggers` | 14 | k.words | 100% |
 
@@ -379,7 +372,7 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/kids.shop/datagen.mjs:QW` | 36 | k.words | 81% |
 | [ ] | table | `worlds/kids.shop/datagen.mjs:ITEMS_FB` | 24 | k.words | 100% |
 | [ ] | table | `worlds/kids.shop/datagen.mjs:KIN` | 11 | k.words | 100% |
-| [ ] | table | `worlds/kids.shop/fns.mjs:fns` | 16 | k.words | 69% |
+| [ ] | table | `worlds/kids.shop/fns.mjs:fns` | 16 | k.words | 75% |
 | [ ] | lexicon | `lex.kids.shop.items` | 26 | k.objects | 100% |
 
 ## kids.tasks
@@ -425,7 +418,7 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | lexicon | `lex.media.music.scaletypes` | 27 | none | 22% |
 | [ ] | lexicon | `lex.media.music.scalemodes` | 17 | none | 18% |
 | [ ] | lexicon | `lex.media.music.instruments` | 24 | k.words | 63% |
-| [ ] | lexicon | `lex.media.music.dirs` | 16 | k.values | 69% |
+| [ ] | lexicon | `lex.media.music.dirs` | 16 | k.values | 75% |
 | [ ] | lexicon | `lex.media.music.directions` | 10 | k.values | 40% |
 | [ ] | lexicon | `lex.media.music.intervals` | 29 | k.words | 28% |
 | [ ] | lexicon | `lex.media.music.triggers` | 34 | k.words | 74% |
@@ -440,13 +433,12 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
 | [ ] | table | `worlds/plan.seating/ops.mjs:SCHEMA` | 62 | k.words | 90% |
-| [ ] | lexicon | `lex.plan.seating.values` | 14 | k.colours | 100% |
 
 ## plan.timeline
 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
-| [ ] | table | `worlds/plan.timeline/ops.mjs:SCHEMA` | 64 | k.words | 88% |
+| [ ] | table | `worlds/plan.timeline/ops.mjs:SCHEMA` | 64 | k.words | 91% |
 | [ ] | lexicon | `lex.plan.timeline.kinds` | 16 | k.words | 100% |
 
 ## space
@@ -456,39 +448,36 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 | [ ] | table | `worlds/space/pieces.mjs:REL_WORDS` | 13 | none | 0% |
 | [ ] | table | `worlds/space/pieces.mjs:PART_OF` | 15 | k.layouts | 100% |
 | [ ] | table | `worlds/space/space.mjs:LAYOUTS` | 11 | k.words | 100% |
-| [ ] | table | `worlds/space/space.mjs:RELATIONS` | 10 | k.layouts | 60% |
+| [ ] | table | `worlds/space/space.mjs:RELATIONS` | 10 | k.words | 70% |
 | [ ] | table | `worlds/space/space.mjs:KNOWLEDGE` | 28 | k.objects | 100% |
 | [ ] | table | `worlds/space/space.mjs:ORD_NAME` | 10 | k.values | 100% |
 | [ ] | table | `worlds/space/space.mjs:PLACE_VERBS` | 21 | k.words | 95% |
 | [ ] | table | `worlds/space/space.mjs:LAYOUT_VERBS` | 22 | k.words | 95% |
-| [ ] | table | `worlds/space/space.mjs:FILLER` | 22 | k.words | 68% |
-| [ ] | table | `worlds/space/space.mjs:REL_STRONG` | 10 | k.layouts | 60% |
+| [ ] | table | `worlds/space/space.mjs:FILLER` | 22 | k.words | 77% |
+| [ ] | table | `worlds/space/space.mjs:REL_STRONG` | 10 | k.words | 80% |
 | [ ] | lexicon | `lex.space.ordinals` | 17 | k.values | 82% |
 | [ ] | lexicon | `lex.space.positions` | 15 | k.values | 73% |
 | [ ] | lexicon | `lex.space.dirs` | 12 | k.values | 100% |
 | [ ] | lexicon | `lex.space.amounts` | 22 | k.values | 41% |
 | [ ] | lexicon | `lex.space.layouts` | 15 | k.words | 100% |
-| [ ] | lexicon | `lex.space.relations` | 21 | k.layouts | 48% |
+| [ ] | lexicon | `lex.space.relations` | 21 | k.words | 57% |
 
 ## talk
 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
 | [ ] | table | `worlds/talk/ops.mjs:ORD` | 12 | k.values | 100% |
-| [ ] | table | `worlds/talk/ops.mjs:TINTS` | 16 | k.colours | 100% |
 | [ ] | table | `worlds/talk/records.mjs:ASK_HINTS` | 15 | k.attributes | 93% |
 | [ ] | lexicon | `lex.talk.sequences` | 9 | k.time | 100% |
-| [ ] | lexicon | `lex.talk.colours` | 16 | k.colours | 100% |
 
 ## ui.avatar
 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
 | [ ] | table | `worlds/ui.avatar/default-face.mjs:DEFAULT_FACE` | 251 | k.faces | 92% |
-| [ ] | table | `worlds/ui.avatar/hooks.mjs:hooks` | 20 | k.values | 90% |
+| [ ] | table | `worlds/ui.avatar/hooks.mjs:hooks` | 20 | k.words | 90% |
 | [ ] | table | `worlds/ui.avatar/ops.mjs:SCHEMA` | 119 | k.words | 92% |
 | [ ] | lexicon | `lex.ui.avatar.kinds` | 79 | k.words | 71% |
-| [ ] | lexicon | `lex.ui.avatar.values` | 14 | k.colours | 100% |
 
 ## Items with no counterpart in the catalog
 
@@ -500,12 +489,10 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 - [ ] common.sense: `common.sense.supports` (kb, 14)
 - [ ] common.sense: `common.sense.around` (kb, 7)
 - [ ] common.sense: `common.sense.facepart` (kb, 5)
-- [ ] diagram.sketch: `lex.diagram.sketch.aspect` (lexicon, 25)
 - [ ] docs.editor: `lex.docs.editor.formats` (lexicon, 8)
 - [ ] docs.editor: `lex.docs.editor.structs` (lexicon, 208)
 - [ ] docs.editor: `lex.docs.editor.structsmany` (lexicon, 144)
 - [ ] games.chess: `lex.games.chess.san` (lexicon, 94)
-- [ ] games.guess: `worlds/games.guess/datagen.mjs:ANS` (table, 89)
 - [ ] games.guess: `worlds/games.guess/datagen.mjs:CMD` (table, 35)
 - [ ] games.guess: `worlds/games.guess/ops.mjs:HABITAT` (table, 12)
 - [ ] games.hangman: `worlds/games.hangman/ops.mjs:HABITAT` (table, 12)

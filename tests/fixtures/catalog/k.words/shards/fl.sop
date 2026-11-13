@@ -1,9 +1,9 @@
-# k.words/shards/fl: noun and verb senses of the words from "flack" to "flying" (first letters "fl").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/fl: senses of the words from "flack" to "flying" (first letters "fl").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.flower.noun.1 k.words.sense word=flower pos=noun n=1 gloss="a plant cultivated for its blooms or blossoms" is_a=angiosperm core.source="wordnet 3.1"
-@k.words.flower.noun.2 k.words.sense word=flower pos=noun n=2 gloss="reproductive organ of angiosperm plants especially one having showy or colorful parts" synonym=bloom synonym=blossom is_a="reproductive structure" part_of=angiosperm core.source="wordnet 3.1"
-@k.words.flower.noun.3 k.words.sense word=flower pos=noun n=3 gloss="the period of greatest prosperity or productivity" synonym=prime synonym=peak synonym=heyday synonym=bloom synonym=blossom synonym=efflorescence synonym=flush is_a="time period" core.source="wordnet 3.1"
-@k.words.flower.verb.1 k.words.sense word=flower pos=verb n=1 gloss="produce or yield flowers" synonym=bloom synonym=blossom is_a=develop core.source="wordnet 3.1"
+@k.words.flower.noun.1 k.words.sense word=flower pos=noun n=1 gloss="a plant cultivated for its blooms or blossoms" is_a=angiosperm kind_of=angiosperm kind_of=spermatophyte kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.flower.noun.2 k.words.sense word=flower pos=noun n=2 gloss="reproductive organ of angiosperm plants especially one having showy or colorful parts" synonym=bloom synonym=blossom is_a="reproductive structure" part_of=angiosperm kind_of="reproductive structure" kind_of="plant organ" kind_of="plant part" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.flower.noun.3 k.words.sense word=flower pos=noun n=3 gloss="the period of greatest prosperity or productivity" synonym=prime synonym=peak synonym=heyday synonym=bloom synonym=blossom synonym=efflorescence synonym=flush is_a="time period" kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.flower.verb.1 k.words.sense word=flower pos=verb n=1 gloss="produce or yield flowers" synonym=bloom synonym=blossom is_a=develop kind_of=develop kind_of=grow kind_of=increase kind_of="change magnitude" kind_of=change core.source="wordnet 3.1"

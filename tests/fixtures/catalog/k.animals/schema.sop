@@ -1,8 +1,9 @@
-# k.animals: common animals: their class, legs, covering, sound, habitat, diet and food, the name of their young, and
-# what they can do. Facts a child's encyclopedia states; where animals of one name differ, the key is left out.
+# k.animals: common animals: their class, legs, covering, size class, sound, habitat, diet and food, the name of
+# their young and of a group of them, and what they can and cannot do. Facts a child's encyclopedia states; where animals of one name differ, the key is left out.
 # sources: hand-core 1 (hand-written in this repository)
 # license: CC0-1.0
 # script: none (hand-written)
+# additions of Round 9 (not breaking): `size`, `group`, `named`; the class `myriapod`.
 
 @k.animals core.module name=k.animals version=1 exports=animal core.source="hand-core 1"
 
@@ -11,10 +12,13 @@
 # is the verb for the sound it makes; `habitat` is where it lives; `diet` says whether it eats plants, animals or both
 # and `eats` names typical food; `baby` is the name of its young; `can` names ways it moves and other abilities;
 # `cannot` names a well-known thing it cannot do (a penguin cannot fly); a missing `can` says nothing;
-# `drawing` names the k.objects object that draws it.
+# `drawing` names the k.objects object that draws it. `size` is the size class of the grown animal, the classes of
+# k.scenes.thing: tiny (a mouse or smaller), small (up to a cat or a hen), medium (a dog, a sheep), large (a horse,
+# a lion), huge (an elephant, a whale). `group` is the name of a group of them (a herd of cows, a pride of lions).
+# `named=model`: the fact was written by a language model, only where sure.
 @k.animals.animal core.type of=k.animals.animal shared=true closed=true core.source="hand-core 1"
 @k.animals.animal.name core.slot of=k.animals.animal key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
-@k.animals.animal.class core.slot of=k.animals.animal key=class required=true enum=mammal enum=bird enum=fish enum=reptile enum=amphibian enum=insect enum=arachnid enum=crustacean enum=mollusc enum=worm enum=cnidarian enum=echinoderm core.source="hand-core 1"
+@k.animals.animal.class core.slot of=k.animals.animal key=class required=true enum=mammal enum=bird enum=fish enum=reptile enum=amphibian enum=insect enum=arachnid enum=crustacean enum=mollusc enum=worm enum=cnidarian enum=echinoderm enum=myriapod core.source="hand-core 1"
 @k.animals.animal.legs core.slot of=k.animals.animal key=legs kind=integer min=0 core.source="hand-core 1"
 @k.animals.animal.covering core.slot of=k.animals.animal key=covering many=true enum=fur enum=hair enum=wool enum=feathers enum=scales enum=skin enum=shell enum=spines core.source="hand-core 1"
 @k.animals.animal.sound core.slot of=k.animals.animal key=sound many=true kind=atom core.source="hand-core 1"
@@ -25,6 +29,9 @@
 @k.animals.animal.can core.slot of=k.animals.animal key=can many=true kind=atom core.source="hand-core 1"
 @k.animals.animal.cannot core.slot of=k.animals.animal key=cannot many=true kind=atom core.source="hand-core 1"
 @k.animals.animal.drawing core.slot of=k.animals.animal key=drawing kind=atom kind=string core.source="hand-core 1"
+@k.animals.animal.size core.slot of=k.animals.animal key=size enum=tiny enum=small enum=medium enum=large enum=huge core.source="hand-core 1"
+@k.animals.animal.group core.slot of=k.animals.animal key=group kind=atom core.source="hand-core 1"
+@k.animals.animal.named core.slot of=k.animals.animal key=named enum=model core.source="hand-core 1"
 
 # One fact never has the same verb in `can` and in `cannot`.
 @k.animals.both.can k.animals.animal name=?animal can=?verb
@@ -42,3 +49,5 @@
 @k.animals.word.eats core.word text=eats text=eat text=food means=k.animals.animal.eats core.source="hand-core 1"
 @k.animals.word.baby core.word text=baby text=young means=k.animals.animal.baby core.source="hand-core 1"
 @k.animals.word.cannot core.word text=cannot text="can not" means=k.animals.animal.cannot core.source="hand-core 1"
+@k.animals.word.size core.word text=size text=big text=small means=k.animals.animal.size core.source="hand-core 1"
+@k.animals.word.group core.word text=group text=herd text=flock text=pack means=k.animals.animal.group core.source="hand-core 1"

@@ -1,6 +1,6 @@
-# k.words/shards/ow: noun and verb senses of the words from "owe" to "ownership" (first letters "ow").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ow: senses of the words from "owe" to "ownership" (first letters "ow").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.owl.noun.1 k.words.sense word=owl pos=noun n=1 gloss="nocturnal bird of prey with hawk-like beak and claws and large head with front-facing eyes" synonym="bird of Minerva" synonym="bird of night" synonym=hooter is_a="bird of prey" core.source="wordnet 3.1"
+@k.words.owl.noun.1 k.words.sense word=owl pos=noun n=1 gloss="nocturnal bird of prey with hawk-like beak and claws and large head with front-facing eyes" synonym="bird of Minerva" synonym="bird of night" synonym=hooter is_a="bird of prey" kind_of="bird of prey" kind_of=bird kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

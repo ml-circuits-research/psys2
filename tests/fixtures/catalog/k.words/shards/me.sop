@@ -1,12 +1,15 @@
-# k.words/shards/me: noun and verb senses of the words from "me" to "mexico" (first letters "me").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/me: senses of the words from "me" to "mexico" (first letters "me").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.mean.noun.1 k.words.sense word=mean pos=noun n=1 gloss="an average of n numbers computed by adding some function of the numbers and dividing by some function of n" synonym="mean value" is_a=average core.source="wordnet 3.1"
-@k.words.mean.verb.1 k.words.sense word=mean pos=verb n=1 gloss="mean or intend to express or convey" synonym=intend is_a=convey core.source="wordnet 3.1"
-@k.words.mean.verb.2 k.words.sense word=mean pos=verb n=2 gloss="have as a logical consequence" synonym=entail synonym=imply is_a=necessitate core.source="wordnet 3.1"
+@k.words.mean.noun.1 k.words.sense word=mean pos=noun n=1 gloss="an average of n numbers computed by adding some function of the numbers and dividing by some function of n" synonym="mean value" is_a=average kind_of=average kind_of=statistic kind_of=datum kind_of=information kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.mean.verb.1 k.words.sense word=mean pos=verb n=1 gloss="mean or intend to express or convey" synonym=intend is_a=convey kind_of=convey kind_of=impart kind_of=tell kind_of=inform kind_of=communicate kind_of=interact kind_of=act core.source="wordnet 3.1"
+@k.words.mean.verb.2 k.words.sense word=mean pos=verb n=2 gloss="have as a logical consequence" synonym=entail synonym=imply is_a=necessitate kind_of=necessitate kind_of=lead kind_of=leave kind_of=produce kind_of=make core.source="wordnet 3.1"
 @k.words.mean.verb.3 k.words.sense word=mean pos=verb n=3 gloss="denote or connote" synonym=intend synonym=signify synonym="stand for" core.source="wordnet 3.1"
+@k.words.mean.adjective.1 k.words.sense word=mean pos=adjective n=1 gloss="approximating the statistical norm or average or expected value" synonym=average near_opposite=abnormal core.source="wordnet 3.1"
+@k.words.mean.adjective.2 k.words.sense word=mean pos=adjective n=2 gloss="characterized by malice" synonym=hateful near_opposite=nice core.source="wordnet 3.1"
+@k.words.mean.adjective.3 k.words.sense word=mean pos=adjective n=3 gloss="having or showing an ignoble lack of honor or morality" synonym=base synonym=meanspirited near_opposite=noble core.source="wordnet 3.1"
 @k.words.mercury.noun.1 k.words.sense word=mercury pos=noun n=1 gloss="a heavy silvery toxic univalent and bivalent metallic element; the only metal that is liquid at ordinary temperatures" synonym=quicksilver synonym=hydrargyrum synonym=Hg synonym="atomic number 80" is_a="metallic element" core.source="wordnet 3.1"
 @k.words.mercury.noun.2 k.words.sense word=Mercury pos=noun n=2 gloss="(Roman mythology) messenger of Jupiter and god of commerce; counterpart of Greek Hermes" instance_of="Roman deity" core.source="wordnet 3.1"
 @k.words.mercury.noun.3 k.words.sense word=Mercury pos=noun n=3 gloss="the smallest planet and the nearest to the sun" instance_of="terrestrial planet" instance_of="inferior planet" core.source="wordnet 3.1"

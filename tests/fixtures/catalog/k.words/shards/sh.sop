@@ -1,17 +1,17 @@
-# k.words/shards/sh: noun and verb senses of the words from "shack" to "shy" (first letters "sh").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/sh: senses of the words from "shack" to "shy" (first letters "sh").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.shell.noun.1 k.words.sense word=shell pos=noun n=1 gloss="ammunition consisting of a cylindrical metal casing containing an explosive charge and a projectile; fired from a large gun" is_a=ammunition core.source="wordnet 3.1"
-@k.words.shell.noun.2 k.words.sense word=shell pos=noun n=2 gloss="the material that forms the hard outer covering of many animals" is_a="animal material" core.source="wordnet 3.1"
-@k.words.shell.noun.3 k.words.sense word=shell pos=noun n=3 gloss="hard outer covering or case of certain organisms such as arthropods and turtles" synonym=carapace synonym=cuticle synonym=shield is_a=scute part_of=mollusk part_of=arthropod part_of=turtle core.source="wordnet 3.1"
-@k.words.shell.verb.1 k.words.sense word=shell pos=verb n=1 gloss="use explosives on" synonym=blast is_a=bombard core.source="wordnet 3.1"
-@k.words.shell.verb.2 k.words.sense word=shell pos=verb n=2 gloss="create by using explosives" synonym=blast is_a=make core.source="wordnet 3.1"
-@k.words.shell.verb.3 k.words.sense word=shell pos=verb n=3 gloss="fall out of the pod or husk" is_a=emerge core.source="wordnet 3.1"
-@k.words.show.noun.1 k.words.sense word=show pos=noun n=1 gloss="the act of publicly exhibiting or entertaining" is_a=entertainment core.source="wordnet 3.1"
-@k.words.show.noun.2 k.words.sense word=show pos=noun n=2 gloss="something intended to communicate a particular impression" synonym=display is_a=demonstration core.source="wordnet 3.1"
-@k.words.show.noun.3 k.words.sense word=show pos=noun n=3 gloss="a social event involving a public performance or entertainment" is_a="social event" core.source="wordnet 3.1"
-@k.words.show.verb.1 k.words.sense word=show pos=verb n=1 gloss="give an exhibition of to an interested audience" synonym=demo synonym=exhibit synonym=present synonym=demonstrate is_a=show core.source="wordnet 3.1"
-@k.words.show.verb.2 k.words.sense word=show pos=verb n=2 gloss="establish the validity of something, as by an example, explanation or experiment" synonym=prove synonym=demonstrate synonym=establish synonym=shew is_a=confirm core.source="wordnet 3.1"
-@k.words.show.verb.3 k.words.sense word=show pos=verb n=3 gloss="provide evidence for" synonym=testify synonym="bear witness" synonym=prove synonym=evidence is_a=inform core.source="wordnet 3.1"
+@k.words.shell.noun.1 k.words.sense word=shell pos=noun n=1 gloss="ammunition consisting of a cylindrical metal casing containing an explosive charge and a projectile; fired from a large gun" is_a=ammunition kind_of=ammunition kind_of=weaponry kind_of=instrumentality kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.shell.noun.2 k.words.sense word=shell pos=noun n=2 gloss="the material that forms the hard outer covering of many animals" is_a="animal material" kind_of="animal material" kind_of=material kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.shell.noun.3 k.words.sense word=shell pos=noun n=3 gloss="hard outer covering or case of certain organisms such as arthropods and turtles" synonym=carapace synonym=cuticle synonym=shield is_a=scute part_of=mollusk part_of=arthropod part_of=turtle kind_of=scute kind_of="protective covering" kind_of="body covering" kind_of=covering kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.shell.verb.1 k.words.sense word=shell pos=verb n=1 gloss="use explosives on" synonym=blast is_a=bombard kind_of=bombard kind_of=attack kind_of=contend core.source="wordnet 3.1"
+@k.words.shell.verb.2 k.words.sense word=shell pos=verb n=2 gloss="create by using explosives" synonym=blast is_a=make kind_of=make core.source="wordnet 3.1"
+@k.words.shell.verb.3 k.words.sense word=shell pos=verb n=3 gloss="fall out of the pod or husk" is_a=emerge kind_of=emerge kind_of=appear core.source="wordnet 3.1"
+@k.words.show.noun.1 k.words.sense word=show pos=noun n=1 gloss="the act of publicly exhibiting or entertaining" is_a=entertainment kind_of=entertainment kind_of=diversion kind_of=activity kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.show.noun.2 k.words.sense word=show pos=noun n=2 gloss="something intended to communicate a particular impression" synonym=display is_a=demonstration kind_of=demonstration kind_of="visual communication" kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.show.noun.3 k.words.sense word=show pos=noun n=3 gloss="a social event involving a public performance or entertainment" is_a="social event" kind_of="social event" kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.show.verb.1 k.words.sense word=show pos=verb n=1 gloss="give an exhibition of to an interested audience" synonym=demo synonym=exhibit synonym=present synonym=demonstrate is_a=show kind_of=show core.source="wordnet 3.1"
+@k.words.show.verb.2 k.words.sense word=show pos=verb n=2 gloss="establish the validity of something, as by an example, explanation or experiment" synonym=prove synonym=demonstrate synonym=establish synonym=shew is_a=confirm kind_of=confirm core.source="wordnet 3.1"
+@k.words.show.verb.3 k.words.sense word=show pos=verb n=3 gloss="provide evidence for" synonym=testify synonym="bear witness" synonym=prove synonym=evidence is_a=inform kind_of=inform kind_of=communicate kind_of=interact kind_of=act core.source="wordnet 3.1"

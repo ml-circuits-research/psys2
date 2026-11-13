@@ -1,8 +1,8 @@
-# k.words/shards/he: noun and verb senses of the words from "he" to "heterosexual" (first letters "he").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/he: senses of the words from "he" to "heterosexual" (first letters "he").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.heart.noun.1 k.words.sense word=heart pos=noun n=1 gloss="the locus of feelings and intuitions" synonym=bosom is_a=intuition core.source="wordnet 3.1"
-@k.words.heart.noun.2 k.words.sense word=heart pos=noun n=2 gloss="the hollow muscular organ located behind the sternum and between the lungs; its rhythmic contractions move the blood through the body" synonym=pump synonym=ticker is_a="internal organ" part_of="circulatory system" core.source="wordnet 3.1"
-@k.words.heart.noun.3 k.words.sense word=heart pos=noun n=3 gloss="the courage to carry on" synonym=mettle synonym=nerve synonym=spunk is_a=courage core.source="wordnet 3.1"
+@k.words.heart.noun.1 k.words.sense word=heart pos=noun n=1 gloss="the locus of feelings and intuitions" synonym=bosom is_a=intuition kind_of=intuition kind_of=impression kind_of=idea kind_of=content kind_of=cognition kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.heart.noun.2 k.words.sense word=heart pos=noun n=2 gloss="the hollow muscular organ located behind the sternum and between the lungs; its rhythmic contractions move the blood through the body" synonym=pump synonym=ticker is_a="internal organ" part_of="circulatory system" kind_of="internal organ" kind_of=organ kind_of="body part" kind_of=part kind_of=thing kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.heart.noun.3 k.words.sense word=heart pos=noun n=3 gloss="the courage to carry on" synonym=mettle synonym=nerve synonym=spunk is_a=courage kind_of=courage kind_of=spirit kind_of=character kind_of=trait kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"

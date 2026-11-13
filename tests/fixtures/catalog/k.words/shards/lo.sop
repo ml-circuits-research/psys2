@@ -1,14 +1,15 @@
-# k.words/shards/lo: noun and verb senses of the words from "load" to "loyalty" (first letters "lo").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/lo: senses of the words from "load" to "loyalty" (first letters "lo").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.london.noun.1 k.words.sense word=London pos=noun n=1 gloss="the capital and largest city of England; located on the Thames in southeastern England; financial and industrial and cultural center" synonym="Greater London" synonym="British capital" synonym="capital of the United Kingdom" instance_of="national capital" part_of=England core.source="wordnet 3.1"
-@k.words.london.noun.2 k.words.sense word=London pos=noun n=2 gloss="United States writer of novels based on experiences in the Klondike gold rush (1876-1916)" synonym="Jack London" synonym="John Griffith Chaney" instance_of=writer core.source="wordnet 3.1"
-@k.words.longer.noun.1 k.words.sense word=longer pos=noun n=1 gloss="a person with a strong desire for something" synonym=thirster synonym=yearner is_a=person core.source="wordnet 3.1"
-@k.words.look.noun.1 k.words.sense word=look pos=noun n=1 gloss="the feelings expressed on a person's face" synonym=expression synonym=aspect synonym="facial expression" synonym=face is_a=countenance core.source="wordnet 3.1"
-@k.words.look.noun.2 k.words.sense word=look pos=noun n=2 gloss="the act of directing the eyes toward something and perceiving it visually" synonym=looking synonym="looking at" is_a=sensing core.source="wordnet 3.1"
-@k.words.look.noun.3 k.words.sense word=look pos=noun n=3 gloss="physical appearance" is_a=appearance core.source="wordnet 3.1"
+@k.words.london.noun.1 k.words.sense word=London pos=noun n=1 gloss="the capital and largest city of England; located on the Thames in southeastern England; financial and industrial and cultural center" synonym="Greater London" synonym="British capital" synonym="capital of the United Kingdom" instance_of="national capital" part_of=England kind_of="national capital" kind_of=capital kind_of=seat kind_of=center kind_of=area kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.london.noun.2 k.words.sense word=London pos=noun n=2 gloss="United States writer of novels based on experiences in the Klondike gold rush (1876-1916)" synonym="Jack London" synonym="John Griffith Chaney" instance_of=writer kind_of=writer kind_of=communicator kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.longer.noun.1 k.words.sense word=longer pos=noun n=1 gloss="a person with a strong desire for something" synonym=thirster synonym=yearner is_a=person kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.longer.adverb.1 k.words.sense word=longer pos=adverb n=1 gloss="for more time" core.source="wordnet 3.1"
+@k.words.look.noun.1 k.words.sense word=look pos=noun n=1 gloss="the feelings expressed on a person's face" synonym=expression synonym=aspect synonym="facial expression" synonym=face is_a=countenance kind_of=countenance kind_of=appearance kind_of=quality kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.look.noun.2 k.words.sense word=look pos=noun n=2 gloss="the act of directing the eyes toward something and perceiving it visually" synonym=looking synonym="looking at" is_a=sensing kind_of=sensing kind_of="sensory activity" kind_of=activity kind_of=act kind_of=event kind_of="psychological feature" kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.look.noun.3 k.words.sense word=look pos=noun n=3 gloss="physical appearance" is_a=appearance kind_of=appearance kind_of=quality kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
 @k.words.look.verb.1 k.words.sense word=look pos=verb n=1 gloss="perceive with attention; direct one's gaze towards" core.source="wordnet 3.1"
-@k.words.look.verb.2 k.words.sense word=look pos=verb n=2 gloss="give a certain impression or have a certain outward aspect" synonym=appear synonym=seem is_a=be core.source="wordnet 3.1"
-@k.words.look.verb.3 k.words.sense word=look pos=verb n=3 gloss="have a certain outward or facial expression" is_a=be core.source="wordnet 3.1"
+@k.words.look.verb.2 k.words.sense word=look pos=verb n=2 gloss="give a certain impression or have a certain outward aspect" synonym=appear synonym=seem is_a=be kind_of=be core.source="wordnet 3.1"
+@k.words.look.verb.3 k.words.sense word=look pos=verb n=3 gloss="have a certain outward or facial expression" is_a=be kind_of=be core.source="wordnet 3.1"

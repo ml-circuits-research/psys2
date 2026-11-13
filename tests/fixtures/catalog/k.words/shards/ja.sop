@@ -1,10 +1,10 @@
-# k.words/shards/ja: noun and verb senses of the words from "jab" to "jazz" (first letters "ja").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ja: senses of the words from "jab" to "jazz" (first letters "ja").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
 @k.words.january.noun.1 k.words.sense word=January pos=noun n=1 gloss="the first month of the year; begins 10 days after the winter solstice" synonym=Jan is_a="Gregorian calendar month" part_of="Gregorian calendar" core.source="wordnet 3.1"
-@k.words.japan.noun.1 k.words.sense word=Japan pos=noun n=1 gloss="a string of more than 3,000 islands to the east of Asia extending 1,300 miles between the Sea of Japan and the western Pacific Ocean" synonym="Japanese Islands" synonym="Japanese Archipelago" instance_of=archipelago part_of=Pacific core.source="wordnet 3.1"
-@k.words.japan.noun.2 k.words.sense word=Japan pos=noun n=2 gloss="a constitutional monarchy occupying the Japanese Archipelago; a world leader in electronics and automobile manufacture and ship building" synonym=Nippon synonym=Nihon instance_of="Asian country" part_of=Asia core.source="wordnet 3.1"
-@k.words.japan.noun.3 k.words.sense word=japan pos=noun n=3 gloss="lacquerware decorated and varnished in the Japanese manner with a glossy durable black lacquer" is_a=lacquerware core.source="wordnet 3.1"
-@k.words.japan.verb.1 k.words.sense word=japan pos=verb n=1 gloss="coat with a lacquer, as done in Japan" is_a=lacquer core.source="wordnet 3.1"
+@k.words.japan.noun.1 k.words.sense word=Japan pos=noun n=1 gloss="a string of more than 3,000 islands to the east of Asia extending 1,300 miles between the Sea of Japan and the western Pacific Ocean" synonym="Japanese Islands" synonym="Japanese Archipelago" instance_of=archipelago part_of=Pacific kind_of=archipelago kind_of=land kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.japan.noun.2 k.words.sense word=Japan pos=noun n=2 gloss="a constitutional monarchy occupying the Japanese Archipelago; a world leader in electronics and automobile manufacture and ship building" synonym=Nippon synonym=Nihon instance_of="Asian country" part_of=Asia kind_of="Asian country" kind_of=country kind_of="administrative district" kind_of=district kind_of=region kind_of=location kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.japan.noun.3 k.words.sense word=japan pos=noun n=3 gloss="lacquerware decorated and varnished in the Japanese manner with a glossy durable black lacquer" is_a=lacquerware kind_of=lacquerware kind_of=work kind_of=product kind_of=creation kind_of=artifact kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.japan.verb.1 k.words.sense word=japan pos=verb n=1 gloss="coat with a lacquer, as done in Japan" is_a=lacquer kind_of=lacquer kind_of=decorate kind_of=change core.source="wordnet 3.1"

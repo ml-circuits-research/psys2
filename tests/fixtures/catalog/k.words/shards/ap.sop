@@ -1,7 +1,7 @@
-# k.words/shards/ap: noun and verb senses of the words from "apache" to "apron" (first letters "ap").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ap: senses of the words from "apache" to "apron" (first letters "ap").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.apple.noun.1 k.words.sense word=apple pos=noun n=1 gloss="fruit with red or yellow or green skin and sweet to tart crisp whitish flesh" is_a="edible fruit" is_a=pome part_of=apple core.source="wordnet 3.1"
-@k.words.apple.noun.2 k.words.sense word=apple pos=noun n=2 gloss="native Eurasian tree widely cultivated in many varieties for its firm rounded edible fruits" synonym="orchard apple tree" synonym="Malus pumila" is_a="apple tree" core.source="wordnet 3.1"
+@k.words.apple.noun.1 k.words.sense word=apple pos=noun n=1 gloss="fruit with red or yellow or green skin and sweet to tart crisp whitish flesh" is_a="edible fruit" is_a=pome part_of=apple kind_of="edible fruit" kind_of=produce kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.apple.noun.2 k.words.sense word=apple pos=noun n=2 gloss="native Eurasian tree widely cultivated in many varieties for its firm rounded edible fruits" synonym="orchard apple tree" synonym="Malus pumila" is_a="apple tree" kind_of="apple tree" kind_of="fruit tree" kind_of="angiospermous tree" kind_of=tree kind_of="woody plant" kind_of="vascular plant" kind_of=plant kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

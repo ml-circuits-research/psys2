@@ -694,7 +694,6 @@
     word=sea_green
     word=turquoise
     word=burgundy
-    word=charcoal
     word=chestnut
     word=cornsilk
     word=dark_red
@@ -717,9 +716,7 @@
     word=scarlet
     word=thistle
     word=bisque
-    word=bronze
     word=cobalt
-    word=copper
     word=indigo
     word=maroon
     word=orange
@@ -754,17 +751,12 @@
     word=gold
     word=gray
     word=grey
-    word=jade
     word=lime
-    word=mint
     word=navy
     word=peru
     word=pink
     word=rose
     word=ruby
-    word=rust
-    word=sand
-    word=snow
     word=teal
     word=blk
     word=blu
@@ -775,7 +767,6 @@
     word=pnk
     word=prp
     word=red
-    word=tan
     word=wht
     word=ylw
 

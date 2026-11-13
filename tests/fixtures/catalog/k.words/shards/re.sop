@@ -1,8 +1,11 @@
-# k.words/shards/re: noun and verb senses of the words from "re" to "reynolds" (first letters "re").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/re: senses of the words from "re" to "reynolds" (first letters "re").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.red.noun.1 k.words.sense word=red pos=noun n=1 gloss="red color or pigment; the chromatic color resembling the hue of blood" synonym=redness is_a="chromatic color" core.source="wordnet 3.1"
-@k.words.red.noun.2 k.words.sense word=Red pos=noun n=2 gloss="a tributary of the Mississippi River that flows eastward from Texas along the southern boundary of Oklahoma and through Louisiana" synonym="Red River" instance_of=river part_of=Texas part_of=Oklahoma part_of=Louisiana core.source="wordnet 3.1"
-@k.words.red.noun.3 k.words.sense word=red pos=noun n=3 gloss="emotionally charged terms used to refer to extreme radicals or revolutionaries" synonym=Bolshevik synonym=Marxist synonym=bolshie synonym=bolshy is_a=radical core.source="wordnet 3.1"
+@k.words.red.noun.1 k.words.sense word=red pos=noun n=1 gloss="red color or pigment; the chromatic color resembling the hue of blood" synonym=redness is_a="chromatic color" kind_of="chromatic color" kind_of=color kind_of="visual property" kind_of=property kind_of=attribute kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.red.noun.2 k.words.sense word=Red pos=noun n=2 gloss="a tributary of the Mississippi River that flows eastward from Texas along the southern boundary of Oklahoma and through Louisiana" synonym="Red River" instance_of=river part_of=Texas part_of=Oklahoma part_of=Louisiana kind_of=river kind_of=stream kind_of="body of water" kind_of=thing kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.red.noun.3 k.words.sense word=red pos=noun n=3 gloss="emotionally charged terms used to refer to extreme radicals or revolutionaries" synonym=Bolshevik synonym=Marxist synonym=bolshie synonym=bolshy is_a=radical kind_of=radical kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.red.adjective.1 k.words.sense word=red pos=adjective n=1 gloss="of a color at the end of the color spectrum (next to orange); resembling the color of blood or cherries or tomatoes or rubies" synonym=reddish synonym=ruddy synonym=blood-red synonym=carmine synonym=cerise synonym=cherry synonym=cherry-red synonym=crimson synonym=ruby synonym=ruby-red synonym=scarlet near_opposite=achromatic core.source="wordnet 3.1"
+@k.words.red.adjective.2 k.words.sense word=red pos=adjective n=2 gloss="characterized by violence or bloodshed" synonym=crimson synonym=violent near_opposite=bloodless core.source="wordnet 3.1"
+@k.words.red.adjective.3 k.words.sense word=red pos=adjective n=3 gloss="(especially of the face) reddened or suffused with or as if with blood from emotion or exertion" synonym=crimson synonym=reddened synonym=red-faced synonym=flushed near_opposite=uncolored core.source="wordnet 3.1"

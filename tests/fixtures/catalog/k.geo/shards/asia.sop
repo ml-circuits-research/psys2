@@ -1,4 +1,4 @@
-# k.geo/shards/asia: Asia: 52 countries and territories, 223 cities, 217 rivers, 197 mountains, 77 mountain ranges.
+# k.geo/shards/asia: Asia: 52 countries and territories, 223 cities, 217 rivers, 197 mountains, 77 mountain ranges, 25 lakes, 16 deserts.
 # sources: natural-earth 5.1.2 (Natural Earth, public domain)
 # license: public-domain
 # script: tools/import/geo.mjs

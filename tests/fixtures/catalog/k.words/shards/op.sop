@@ -1,8 +1,12 @@
-# k.words/shards/op: noun and verb senses of the words from "open" to "option" (first letters "op").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/op: senses of the words from "open" to "option" (first letters "op").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.opposite.noun.1 k.words.sense word=opposite pos=noun n=1 gloss="a word that expresses a meaning opposed to the meaning of another word, in which case the two words are antonyms of each other" synonym=antonym synonym="opposite word" is_a=word core.source="wordnet 3.1"
-@k.words.opposite.noun.2 k.words.sense word=opposite pos=noun n=2 gloss="a relation of direct opposition" synonym=reverse synonym=contrary is_a=opposition core.source="wordnet 3.1"
-@k.words.opposite.noun.3 k.words.sense word=opposite pos=noun n=3 gloss="a contestant that you are matched against" synonym=opposition synonym=opponent is_a=contestant core.source="wordnet 3.1"
+@k.words.opposite.noun.1 k.words.sense word=opposite pos=noun n=1 gloss="a word that expresses a meaning opposed to the meaning of another word, in which case the two words are antonyms of each other" synonym=antonym synonym="opposite word" is_a=word kind_of=word kind_of="language unit" kind_of=part kind_of=relation kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.opposite.noun.2 k.words.sense word=opposite pos=noun n=2 gloss="a relation of direct opposition" synonym=reverse synonym=contrary is_a=opposition kind_of=opposition kind_of=relation kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.opposite.noun.3 k.words.sense word=opposite pos=noun n=3 gloss="a contestant that you are matched against" synonym=opposition synonym=opponent is_a=contestant kind_of=contestant kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.opposite.adjective.1 k.words.sense word=opposite pos=adjective n=1 gloss="being directly across from each other; facing" near_opposite=same core.source="wordnet 3.1"
+@k.words.opposite.adjective.2 k.words.sense word=opposite pos=adjective n=2 gloss="of leaves etc; growing in pairs on either side of a stem" synonym=paired opposite=alternate core.source="wordnet 3.1"
+@k.words.opposite.adjective.3 k.words.sense word=opposite pos=adjective n=3 gloss="moving or facing away from each other" near_opposite=same core.source="wordnet 3.1"
+@k.words.opposite.adverb.1 k.words.sense word=opposite pos=adverb n=1 gloss="directly facing each other" synonym=face-to-face synonym="face to face" core.source="wordnet 3.1"

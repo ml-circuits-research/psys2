@@ -1,9 +1,9 @@
-# k.words/shards/ra: noun and verb senses of the words from "ra" to "razor" (first letters "ra").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/ra: senses of the words from "ra" to "razor" (first letters "ra").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.rabbit.noun.1 k.words.sense word=rabbit pos=noun n=1 gloss="any of various burrowing animals of the family Leporidae having long ears and short tails; some domesticated and raised for pets or food" synonym=coney synonym=cony is_a=leporid core.source="wordnet 3.1"
-@k.words.rabbit.noun.2 k.words.sense word=rabbit pos=noun n=2 gloss="the fur of a rabbit" synonym=lapin is_a=fur core.source="wordnet 3.1"
-@k.words.rabbit.noun.3 k.words.sense word=rabbit pos=noun n=3 gloss="flesh of any of various rabbits or hares (wild or domesticated) eaten as food" synonym=hare is_a=game part_of="wood rabbit" part_of="European rabbit" part_of=hare core.source="wordnet 3.1"
-@k.words.rabbit.verb.1 k.words.sense word=rabbit pos=verb n=1 gloss="hunt rabbits" is_a=hunt core.source="wordnet 3.1"
+@k.words.rabbit.noun.1 k.words.sense word=rabbit pos=noun n=1 gloss="any of various burrowing animals of the family Leporidae having long ears and short tails; some domesticated and raised for pets or food" synonym=coney synonym=cony is_a=leporid kind_of=leporid kind_of=lagomorph kind_of=placental kind_of=mammal kind_of=vertebrate kind_of=chordate kind_of=animal kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.rabbit.noun.2 k.words.sense word=rabbit pos=noun n=2 gloss="the fur of a rabbit" synonym=lapin is_a=fur kind_of=fur kind_of="animal skin" kind_of="animal product" kind_of="animal material" kind_of=material kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.rabbit.noun.3 k.words.sense word=rabbit pos=noun n=3 gloss="flesh of any of various rabbits or hares (wild or domesticated) eaten as food" synonym=hare is_a=game part_of="wood rabbit" part_of="European rabbit" part_of=hare kind_of=game kind_of=meat kind_of=food kind_of=solid kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.rabbit.verb.1 k.words.sense word=rabbit pos=verb n=1 gloss="hunt rabbits" is_a=hunt kind_of=hunt kind_of=capture kind_of=get core.source="wordnet 3.1"

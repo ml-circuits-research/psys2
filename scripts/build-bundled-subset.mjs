@@ -34,11 +34,14 @@ function put(id, header, wires, keys) {
 const colours = await facts.wires('k.values.colour');
 const numbers = await facts.wires('k.values.number');
 if (!colours.length || !numbers.length) { console.error('the catalog has no k.values (colours, numbers): nothing to bundle'); process.exit(1); }
-// two facts the colour lexicon needs and the catalog has in other worlds, kept on the bundled colour wires: `thing=true` when the name is also a drawable thing of k.objects (a tomato, a plum),
+// two facts the colour lexicon needs and the catalog has in other worlds, kept on the bundled colour wires: `thing=true` when the name is also a drawable thing of k.objects (a tomato, a plum) or has a verb sense in k.words (rust),
 // `core=true` when k.colours lists it as one of its colours (the catalog's own judgement of a real colour)
 const objectNames = new Set((await facts.wires('k.objects.object')).map((w) => String(w.f.name?.[0]).toLowerCase()));
 const coreNames = new Set((await facts.wires('k.colours.colour')).map((w) => String(w.f.name?.[0]).toLowerCase()));
-for (const w of colours) { const n = w.f.name[0].toLowerCase(); if (objectNames.has(n)) w.f.thing = ['true']; if (coreNames.has(n)) w.f.core = ['true']; }
+// a name with a verb sense in k.words (rust, tan, sand) is a word of other kinds too: "I want to learn Rust"
+const verbal = new Set();
+for (const w of colours) { const n = w.f.name[0].toLowerCase(); if (n.includes(' ')) continue; const th = await facts.thing(n); if (th?.senses.some((x) => x.pos === 'verb')) verbal.add(n); }
+for (const w of colours) { const n = w.f.name[0].toLowerCase(); if (objectNames.has(n) || verbal.has(n)) w.f.thing = ['true']; if (coreNames.has(n)) w.f.core = ['true']; }
 put('k.values/shards/bundled', `${colours.length} colour names with their RGB and ${numbers.length} number words of k.values (colours carry thing= and core=, derived from k.objects and k.colours)`, [...colours, ...numbers], [...colours.map((w) => w.f.name[0]), ...numbers.map((w) => w.f.text[0])]);
 
 // the drawings of the built-in kinds of the drawing board: object, parts and points as the catalog has them

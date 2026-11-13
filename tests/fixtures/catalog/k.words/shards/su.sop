@@ -1,12 +1,12 @@
-# k.words/shards/su: noun and verb senses of the words from "sub" to "suv" (first letters "su").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/su: senses of the words from "sub" to "suv" (first letters "su").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
-@k.words.sun.noun.1 k.words.sense word=sun pos=noun n=1 gloss="the star that is the source of light and heat for the planets in the solar system" synonym=Sun instance_of=star core.source="wordnet 3.1"
-@k.words.sun.noun.2 k.words.sense word=sun pos=noun n=2 gloss="the rays of the sun" synonym=sunlight synonym=sunshine is_a=light core.source="wordnet 3.1"
-@k.words.sun.noun.3 k.words.sense word=sun pos=noun n=3 gloss="a person considered as a source of warmth or energy or glory etc" is_a="important person" core.source="wordnet 3.1"
-@k.words.sun.verb.1 k.words.sense word=sun pos=verb n=1 gloss="expose one's body to the sun" synonym=sunbathe is_a=lie core.source="wordnet 3.1"
-@k.words.sun.verb.2 k.words.sense word=sun pos=verb n=2 gloss="expose to the rays of the sun or affect by exposure to the sun" synonym=insolate synonym=solarize synonym=solarise is_a=expose core.source="wordnet 3.1"
-@k.words.sunday.noun.1 k.words.sense word=Sunday pos=noun n=1 gloss="first day of the week; observed as a day of rest and worship by most Christians" synonym="Lord's Day" synonym=Dominicus synonym=Sun is_a="rest day" part_of=weekend core.source="wordnet 3.1"
-@k.words.sunday.noun.2 k.words.sense word=Sunday pos=noun n=2 gloss="United States evangelist (1862-1935)" synonym="Billy Sunday" synonym="William Ashley Sunday" instance_of=evangelist core.source="wordnet 3.1"
+@k.words.sun.noun.1 k.words.sense word=sun pos=noun n=1 gloss="the star that is the source of light and heat for the planets in the solar system" synonym=Sun instance_of=star kind_of=star kind_of="celestial body" kind_of="natural object" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.sun.noun.2 k.words.sense word=sun pos=noun n=2 gloss="the rays of the sun" synonym=sunlight synonym=sunshine is_a=light kind_of=light kind_of="actinic radiation" kind_of="electromagnetic radiation" kind_of=radiation kind_of=energy kind_of="physical phenomenon" kind_of="natural phenomenon" kind_of=phenomenon kind_of=process kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.sun.noun.3 k.words.sense word=sun pos=noun n=3 gloss="a person considered as a source of warmth or energy or glory etc" is_a="important person" kind_of="important person" kind_of=adult kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.sun.verb.1 k.words.sense word=sun pos=verb n=1 gloss="expose one's body to the sun" synonym=sunbathe is_a=lie kind_of=lie core.source="wordnet 3.1"
+@k.words.sun.verb.2 k.words.sense word=sun pos=verb n=2 gloss="expose to the rays of the sun or affect by exposure to the sun" synonym=insolate synonym=solarize synonym=solarise is_a=expose kind_of=expose kind_of=subject kind_of=affect kind_of=change core.source="wordnet 3.1"
+@k.words.sunday.noun.1 k.words.sense word=Sunday pos=noun n=1 gloss="first day of the week; observed as a day of rest and worship by most Christians" synonym="Lord's Day" synonym=Dominicus synonym=Sun is_a="rest day" part_of=weekend kind_of="rest day" kind_of="day of the week" kind_of="calendar day" kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.sunday.noun.2 k.words.sense word=Sunday pos=noun n=2 gloss="United States evangelist (1862-1935)" synonym="Billy Sunday" synonym="William Ashley Sunday" instance_of=evangelist kind_of=evangelist kind_of=preacher kind_of=clergyman kind_of="spiritual leader" kind_of=leader kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"

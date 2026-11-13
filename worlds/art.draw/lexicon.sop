@@ -162,8 +162,6 @@
     doc="Color names (crayon box): the shared lexicon of colour names (lex.lang.colour, from k.values)"
     extends=$lex.lang.colour
     exclude=rose
-    exclude=sand
-    exclude=snow
 
 @lex.art.draw.mods core.lexicon
     class=modifier

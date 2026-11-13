@@ -1,18 +1,20 @@
-# k.words/shards/mi: noun and verb senses of the words from "mi" to "mixture" (first letters "mi").
-# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# k.words/shards/mi: senses of the words from "mi" to "mixture" (first letters "mi").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent, and the common things of tools/coverage.mjs)
 # license: WordNet-3.0
 # script: tools/import/wordnet.mjs
 
 @k.words.mile.noun.1 k.words.sense word=mile pos=noun n=1 gloss="a unit of length equal to 1,760 yards or 5,280 feet; exactly 1609.344 meters" synonym="statute mile" synonym="stat mi" synonym="land mile" synonym="international mile" synonym=mi is_a="linear unit" part_of=league core.source="wordnet 3.1"
 @k.words.mile.noun.2 k.words.sense word=mile pos=noun n=2 gloss="a unit of length used in navigation; exactly 1,852 meters; historically based on the distance spanned by one minute of arc in latitude" synonym="nautical mile" synonym=mi synonym="naut mi" synonym="international nautical mile" synonym="air mile" is_a="nautical linear unit" core.source="wordnet 3.1"
 @k.words.mile.noun.3 k.words.sense word=mile pos=noun n=3 gloss="a large distance" is_a="large indefinite quantity" core.source="wordnet 3.1"
-@k.words.milk.noun.1 k.words.sense word=milk pos=noun n=1 gloss="a white nutritious liquid secreted by mammals and used as food by human beings" is_a="dairy product" is_a=beverage core.source="wordnet 3.1"
-@k.words.milk.noun.2 k.words.sense word=milk pos=noun n=2 gloss="produced by mammary glands of female mammals for feeding their young" is_a="liquid body substance" is_a=nutriment core.source="wordnet 3.1"
-@k.words.milk.noun.3 k.words.sense word=Milk pos=noun n=3 gloss="a river that rises in the Rockies in northwestern Montana and flows eastward to become a tributary of the Missouri River" synonym="Milk River" instance_of=river part_of=Montana core.source="wordnet 3.1"
-@k.words.milk.verb.1 k.words.sense word=milk pos=verb n=1 gloss="take milk from female mammals" is_a=draw core.source="wordnet 3.1"
-@k.words.milk.verb.2 k.words.sense word=milk pos=verb n=2 gloss="exploit as much as possible" is_a=exploit core.source="wordnet 3.1"
-@k.words.milk.verb.3 k.words.sense word=milk pos=verb n=3 gloss="add milk to" is_a=add core.source="wordnet 3.1"
-@k.words.minute.noun.1 k.words.sense word=minute pos=noun n=1 gloss="a unit of time equal to 60 seconds or 1/60th of an hour" synonym=min is_a="time unit" part_of=hour core.source="wordnet 3.1"
-@k.words.minute.noun.2 k.words.sense word=minute pos=noun n=2 gloss="an indefinitely short time" synonym=moment synonym=mo synonym=second synonym=bit is_a=time core.source="wordnet 3.1"
-@k.words.minute.noun.3 k.words.sense word=minute pos=noun n=3 gloss="a particular point in time" synonym=moment synonym=second synonym=instant is_a=point core.source="wordnet 3.1"
-@k.words.minutes.noun.1 k.words.sense word=minutes pos=noun n=1 gloss="a written account of what transpired at a meeting" synonym=proceedings synonym=transactions is_a="written record" part_of="minute book" core.source="wordnet 3.1"
+@k.words.milk.noun.1 k.words.sense word=milk pos=noun n=1 gloss="a white nutritious liquid secreted by mammals and used as food by human beings" is_a="dairy product" is_a=beverage kind_of="dairy product" kind_of=foodstuff kind_of=food kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.milk.noun.2 k.words.sense word=milk pos=noun n=2 gloss="produced by mammary glands of female mammals for feeding their young" is_a="liquid body substance" is_a=nutriment kind_of="liquid body substance" kind_of="body substance" kind_of=substance kind_of=matter kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.milk.noun.3 k.words.sense word=Milk pos=noun n=3 gloss="a river that rises in the Rockies in northwestern Montana and flows eastward to become a tributary of the Missouri River" synonym="Milk River" instance_of=river part_of=Montana kind_of=river kind_of=stream kind_of="body of water" kind_of=thing kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.milk.verb.1 k.words.sense word=milk pos=verb n=1 gloss="take milk from female mammals" is_a=draw kind_of=draw kind_of=remove core.source="wordnet 3.1"
+@k.words.milk.verb.2 k.words.sense word=milk pos=verb n=2 gloss="exploit as much as possible" is_a=exploit kind_of=exploit kind_of=use core.source="wordnet 3.1"
+@k.words.milk.verb.3 k.words.sense word=milk pos=verb n=3 gloss="add milk to" is_a=add kind_of=add kind_of=increase kind_of="change magnitude" kind_of=change core.source="wordnet 3.1"
+@k.words.minute.noun.1 k.words.sense word=minute pos=noun n=1 gloss="a unit of time equal to 60 seconds or 1/60th of an hour" synonym=min is_a="time unit" part_of=hour kind_of="time unit" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.minute.noun.2 k.words.sense word=minute pos=noun n=2 gloss="an indefinitely short time" synonym=moment synonym=mo synonym=second synonym=bit is_a=time kind_of=time kind_of="time period" kind_of="fundamental quantity" kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.minute.noun.3 k.words.sense word=minute pos=noun n=3 gloss="a particular point in time" synonym=moment synonym=second synonym=instant is_a=point kind_of=point kind_of=measure kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.minute.adjective.1 k.words.sense word=minute pos=adjective n=1 gloss="infinitely or immeasurably small" synonym=infinitesimal near_opposite=large core.source="wordnet 3.1"
+@k.words.minute.adjective.2 k.words.sense word=minute pos=adjective n=2 gloss="characterized by painstaking care and detailed examination" synonym=narrow near_opposite=careless core.source="wordnet 3.1"
+@k.words.minutes.noun.1 k.words.sense word=minutes pos=noun n=1 gloss="a written account of what transpired at a meeting" synonym=proceedings synonym=transactions is_a="written record" part_of="minute book" kind_of="written record" kind_of=record kind_of=evidence kind_of=indication kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
