@@ -980,3 +980,68 @@
     word=different
     word=other
     word=prior
+
+@lex.ui.avatar.facemoves core.lexicon
+    class=noun
+    doc="AVATAR-FROM-PARTS: where a part of the drawn face goes (read by the SPACE module: closer together, further apart, higher, lower)."
+    word=closer
+    word=closer_together
+    word=nearer
+    word=apart
+    word=further_apart
+    word=farther_apart
+    word=wider_apart
+    word=higher
+    word=lower
+    word=up
+    word=down
+    word=left
+    word=right
+    word=to_the_left
+    word=to_the_right
+
+@lex.ui.avatar.facemoveverbs core.lexicon
+    class=noun
+    doc="AVATAR-FROM-PARTS: verbs that move a part of the drawn face (raise the eyebrows)."
+    word=raise
+    word=lift
+    word=lower
+    word=drop
+
+@lex.ui.avatar.faceamounts core.lexicon
+    class=noun
+    doc="AVATAR-FROM-PARTS: how far a part of the drawn face moves (the words of the SPACE module)."
+    word=a_bit
+    word=a_little
+    word=a_little_bit
+    word=slightly
+    word=a_lot
+    word=much
+    word=way
+    word=a_tiny_bit
+
+@lex.ui.avatar.faceadjust core.lexicon
+    class=noun
+    doc="AVATAR-FROM-PARTS: a drawn part made longer or shorter (hair: the next length)."
+    word=longer
+    word=shorter
+
+@lex.ui.avatar.facekinds core.lexicon
+    class=noun
+    plural=woman:women
+    plural=man:men
+    doc="AVATAR-FROM-PARTS: the kinds of face the faces of k.faces start from (presets)."
+    word=woman
+    word=man
+    word=girl
+    word=boy
+    word=lady
+    word=gentleman
+    word=grandma
+    word=grandpa
+    word=grandmother
+    word=grandfather
+    word=old_woman
+    word=old_man
+    word=child
+    word=kid

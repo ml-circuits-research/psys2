@@ -1465,3 +1465,147 @@
     example="Next character."
     example="Show me another avatar."
     example="Previous avatar."
+
+# ---- AVATAR-FROM-PARTS: the drawn face (faceops.mjs) ---------------------------------------------------------------------------------------------------
+
+@pat.ui.avatar.face.describe core.pattern
+    canonical="Draw a face with a long nose and small green eyes."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|sketch|draw|paint|create|build|make|give_me|show_me|i_want|let_me_see|try] [me|yourself|a|an|the|my|your]? [face|portrait|sketch|police_sketch] [of|with|like|that_has|which_has|having] {w:rest}"
+    emit="@{_} core.request action=avatar.faceDescribe arg.words=\"{w}\""
+    kind=request
+    priority=14
+    example="Draw a face with a long nose and small green eyes."
+    example="Sketch a face of a woman with curly red hair and glasses."
+    example="Describe a face with thick eyebrows."
+
+@pat.ui.avatar.face.describe.kind core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|sketch|draw|paint|show_me|let_me_see|i_want_to_see] [a|an|the]? {k:lex.ui.avatar.facekinds} [with|having|who_has|that_has]? {w:rest}"
+    emit="@{_} core.request action=avatar.faceDescribe arg.words=\"{k} {w}\""
+    kind=request
+    priority=14
+    example="Draw a woman with a long face and small green eyes."
+    example="Sketch an old man with a white beard."
+
+@pat.ui.avatar.face.describe.bare core.pattern
+    match="[a|an] {k:lex.ui.avatar.facekinds} [with|who_has|that_has|having] {w:rest}"
+    emit="@{_} core.request action=avatar.faceDescribe arg.words=\"{k} {w}\""
+    kind=request
+    priority=6
+    example="A woman with a long face and curly red hair."
+    example="A boy with big ears and glasses."
+
+@pat.ui.avatar.face.start core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|use|switch_to|draw|show_me|give_me|start|make|i_want|show] [me|yourself|a|an|the|my]? [drawn|new|vector|custom|parts]? face"
+    emit="@{_} core.request action=avatar.faceStart"
+    kind=request
+    priority=13
+    example="Draw a face."
+    example="Become a drawn face."
+    example="Show me the new face."
+
+@pat.ui.avatar.face.move core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [move|put|bring|push|pull|set|get|make|place|have|keep]? [your|the|ur|my]? {p:lex.ui.avatar.parts} {a:lex.ui.avatar.faceamounts} {m:lex.ui.avatar.facemoves} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.faceMove arg.part={p} arg.words=\"{a} {m}\""
+    kind=request
+    priority=13
+    example="Move the nose a bit down."
+    example="Put the eyebrows a little higher."
+
+@pat.ui.avatar.face.move.plain core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [move|put|bring|push|pull|set|get|make|place|have|keep]? [your|the|ur|my]? {p:lex.ui.avatar.parts} {m:lex.ui.avatar.facemoves} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.faceMove arg.part={p} arg.words=\"{m}\""
+    kind=request
+    priority=13
+    example="Eyes closer together."
+    example="Move the nose down."
+    example="Put the eyebrows higher."
+    example="Move your mouth up."
+
+@pat.ui.avatar.face.raise core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {v:lex.ui.avatar.facemoveverbs} [your|the|ur|my]? {p:lex.ui.avatar.parts} {a:lex.ui.avatar.faceamounts} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.faceMove arg.part={p} arg.words=\"{v} {a}\""
+    kind=request
+    priority=13
+    example="Lower the mouth a bit."
+
+@pat.ui.avatar.face.raise.plain core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {v:lex.ui.avatar.facemoveverbs} [your|the|ur|my]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.faceMove arg.part={p} arg.words=\"{v}\""
+    kind=request
+    priority=13
+    example="Raise the eyebrows."
+    example="Lower the mouth."
+
+@pat.ui.avatar.face.nobeard core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [no|without|lose|ditch|drop|skip] [the|your|a|any|ur|my]? {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.removePart arg.part={p}"
+    kind=request
+    priority=12
+    example="No beard."
+    example="Without the beard."
+
+@pat.ui.avatar.face.noglasses core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [no|without|lose|ditch|drop|skip] [the|your|a|any|ur|my]? [glasses|spectacles|shades|sunglasses]"
+    emit="@{_} core.request action=avatar.removePart arg.value=glass arg.text=\"glasses\""
+    kind=request
+    priority=12
+    example="No glasses."
+    example="Without the glasses."
+
+@pat.ui.avatar.face.adjust core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|get|give_me|i_want|give|have|want]? [your|the|ur|my|me]? {d:lex.ui.avatar.faceadjust} {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.faceAdjust arg.part={p} arg.dir={d}"
+    kind=request
+    priority=13
+    example="Longer hair."
+    example="Give me shorter hair."
+    example="Make the nose longer."
+
+@pat.ui.avatar.face.adjust.after core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|get|let|have|want]? [your|the|ur|my]? {p:lex.ui.avatar.parts} [be|a_bit]? {d:lex.ui.avatar.faceadjust} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.faceAdjust arg.part={p} arg.dir={d}"
+    kind=request
+    priority=13
+    example="Make the hair longer."
+    example="Make your hair shorter please."
+
+@pat.ui.avatar.face.swap.glasses core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|change|switch|replace|exchange] [the|your|my|ur]? [glasses|spectacles|shades|sunglasses] [for|to|with|into]? [a|an|the|some]? {w:words(4)}"
+    emit="@{_} core.request action=avatar.faceSetPart arg.part=glass arg.words=\"{w}\""
+    kind=request
+    priority=12
+    example="Swap the glasses for round ones."
+    example="Change the glasses to square."
+
+@pat.ui.avatar.face.save core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [save|keep|store|remember|name] [this|it|the_face|this_face|my_face|me|the_avatar|that|the_drawing]? [as|under|called|named|under_the_name] {n:words(3)}"
+    emit="@{_} core.request action=avatar.faceSave arg.name=\"{n}\""
+    kind=request
+    priority=13
+    example="Save this as Grandma."
+    example="Save this face as Anna."
+    example="Keep it under the name Tom."
+
+@pat.ui.avatar.face.load core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [be|become|look_like|turn_into|go_back_to|bring_back|load|use|switch_to|show_me|show] [the|my]? {n:words(3)} face"
+    emit="@{_} core.request action=avatar.faceLoad arg.name=\"{n}\""
+    kind=request
+    priority=13
+    example="Load the girl face."
+    example="Show me the Grandma face."
+
+@pat.ui.avatar.face.load.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [be|become|bring_back] {n:words(2)}"
+    emit="@{_} core.request action=avatar.faceLoad arg.name=\"{n}\""
+    kind=request
+    priority=2
+    example="Be Grandma."
+    example="Bring back Anna."
+
+@pat.ui.avatar.face.list core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|show_me|show|list|tell_me] [the|my|your|saved|all|are_the|are_my]? [saved|drawn|my|the]? faces [do_you_know|can_you_be|are_there|have_i_saved|have_i_made|you_know|can_you_draw|i_saved]?"
+    emit="@{_} core.request action=avatar.faceList"
+    kind=request
+    priority=13
+    example="What faces do you know?"
+    example="Show me my saved faces."

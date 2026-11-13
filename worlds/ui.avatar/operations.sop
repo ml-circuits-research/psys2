@@ -207,3 +207,51 @@
     semantics=action
     action=avatar.setPartColored
     doc="Sets a component and colors it when the character can color it (a red hat). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.faceDescribe core.operation
+    impl=faceDescribe
+    semantics=action
+    action=avatar.faceDescribe
+    doc="Draws a face from a description (a woman with a long face, small green eyes and curly red hair): the best variant per named part by plain features, says what was chosen and what could not be matched. Unnamed parts keep their variant. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.faceStart core.operation
+    impl=faceStart
+    semantics=action
+    action=avatar.faceStart
+    doc="Shows the drawn face (parts of k.faces) instead of the DiceBear character. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.faceLoad core.operation
+    impl=faceLoad
+    semantics=action
+    action=avatar.faceLoad
+    doc="Brings back a saved face or a preset of k.faces by name (be Grandma). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.faceSave core.operation
+    impl=faceSave
+    semantics=action
+    action=avatar.faceSave
+    doc="Saves the drawn face under a name (save this as Grandma). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.faceList core.operation
+    impl=faceList
+    semantics=action
+    action=avatar.faceList
+    doc="Lists the saved faces and the presets. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.faceMove core.operation
+    impl=faceMove
+    semantics=action
+    action=avatar.faceMove
+    doc="Moves a part of the drawn face (closer together, higher, lower) through the SPACE module inside the face frame, with limits. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.faceAdjust core.operation
+    impl=faceAdjust
+    semantics=action
+    action=avatar.faceAdjust
+    doc="Longer or shorter (the next hair length) or a size step for a part of the drawn face. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.faceSetPart core.operation
+    impl=faceSetPart
+    semantics=action
+    action=avatar.faceSetPart
+    doc="Sets a part of the drawn face by the words of a variant (swap the glasses for round ones). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
