@@ -3183,3 +3183,13 @@ Replace item 2 of the 10:20 block ("npm test under 10 minutes") with two suites:
 - **Report** in worker-log: the smoke list with its time, and, for one week, every failure the full suite caught that smoke missed. Each such miss adds one smoke test.
 - The reviewer validates with smoke on every landing and with full once per batch or publish.
 - The load-sensitive name repair (item 1 of the 10:20 block) stays as written: a result must not depend on machine speed.
+
+## Reviewer 2026-11-13 12:20 — KNOWLEDGE-BY-LOOKUP, re-vendor 0.15.0, round-trip steps 2 and 3: accepted; the name-repair failure is real
+
+**Validated at 2069a22:** A/B dialogues 0 "ops better". `npm test`: 1458 tests ok, then the suite hit the reviewer's 1500 s limit; one failure, the same as before. The round-trip numbers (nl 80.1, it 79.2, fr 78.2, ro 65.7) and the lookup experiment (controls 40/40, knowledge answers 39/40, draw 36/40) are accepted from the report. The reviewer box cannot reach GitHub Pages, so the live catalog in the browser was not probed here; the owner tests it on the phone.
+
+**The failure is not load.** `tests/rd10-names-capability.test.mjs` "show Pariss on map reads Paris" fails inside the full suite twice in a row (6.2 s each time) and passes alone. 6 s is the bound of one knowledge or network fetch. So inside the suite something makes this message wait for a fetch that cannot succeed, and the reading is lost when it times out. Find it. Two rules follow:
+1. **A blocked or slow network must never change a reading.** The lookup is an addition after the reading; if it fails, the reading stays. Add a test that runs the name repair with every fetch rejected and with every fetch hanging.
+2. **No test may touch the network** (smoke or full). Fail the suite on any real fetch: stub `fetch` in the test setup and throw on unknown hosts. The reviewer's slow runs are probably many 6 s waits.
+
+**Lookup, next:** the 4 "box shaped like a X" gaps in diagram.sketch; the E2 "no-referent" wording needs a test in a world other than art.draw; run the encoder-mode operational set on the Spark and report.
