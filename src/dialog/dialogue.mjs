@@ -27,7 +27,7 @@ import { budget } from './budget.mjs';
 import { GRAMMAR } from './continuation.mjs';
 import { touched } from './followup.mjs';
 import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs';
-import { describeReferent, plain } from './meta.mjs';
+import { classify, describeReferent, plain } from './meta.mjs';
 
 const LOG_LIMIT = 60;
 const FOCUS_WINDOW = 30;
@@ -238,7 +238,7 @@ export class Dialogue {
     }
 
     // 2. why-question about the conversation: from the trace of the last turn, never an action in a world
-    const w = this.why(ws, text);
+    const w = await this.why(ws, text, sid);
     if (w) return w;
 
     // 3. a complaint about the last answer
@@ -287,7 +287,7 @@ export class Dialogue {
   }
 
   // ---- why-questions and the trace -----------------------------------------------------------------------------------------------------------------------
-  why(ws, text) {
+  async why(ws, text, sid) {
     const d = this.disc, lang = this.lang;
     const as = alts(lang, 'dialogue.why');
     const a = startsWith(ws, as);
@@ -300,8 +300,15 @@ export class Dialogue {
     if (!bare && !linked) return null;
     // a world on the open tab (a game, the Talk tab) may own the question; a world that explains a named fact answers it first
     try { if (d._tabOwns('ownsExplain', plain(text))) return null; } catch { /* no hook */ }
+    // the stock forms ("why?", "why is that", "what did you do") are the discourse layer's own explanation, which asks the world first (hook `why`, its card, its reason)
+    try { if (classify(text, { lang, hasAction: !!d._repairable() })?.intent === 'explain') return null; } catch { /* continue */ }
     const wf = d._whyFact?.(plain(text));
     if (wf) return wf;
+    // the world's own explanation comes first: a question that a world of the thread (the open tab, the world last used) reads completely is that world's (ui.help "why did you not understand", a music tempo, a map)
+    try {
+      const raw = await d._readSeg(text, sid), cx = this.s.context();
+      if (raw && !raw.unparsed && [cx.tabWorld, cx.lastWorld].includes(raw.match?.worldId) && this.s._dryStatuses([raw]).every((x) => x === 'supported')) return null;
+    } catch { /* the trace answers */ }
     const rec = [...this.log].reverse().find((r) => r.kind !== 'why');
     if (!rec) return null;
     const r = this.explain(rec, text);

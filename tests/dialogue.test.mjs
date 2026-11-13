@@ -75,7 +75,9 @@ for (const reasoner of ['ops', 'matrix']) {
     const s = open();
     await saying(s, 'draw a house', 'draw a tree');
     const before = JSON.stringify(s.state('art.draw'));
-    for (const q of ['why did you do that', 'why is it so low', 'how did you get to chess']) {
+    assert.match((await s.send('why did you do that')).text, /draw a tree/, 'the stock form is explained by the discourse layer, from the world');
+    s.discourse.takePending();
+    for (const q of ['why is it so low', 'how did you get to chess']) {
       const r = await s.send(q);
       assert.match(r.text, /You said "draw a tree"/, `${q}: ${r.text}`);
       assert.match(r.text, /I read it as a request/);

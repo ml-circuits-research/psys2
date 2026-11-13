@@ -60,12 +60,12 @@
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "b5d3c84d4136c146",
     "lib/dialog/continuation.mjs": "61c3fb70fb1f2c37",
-    "lib/dialog/dialogue.mjs": "c3e7c728f317e497",
+    "lib/dialog/dialogue.mjs": "35948e068864bdb7",
     "lib/dialog/discourse.mjs": "c74a2aa6a50985ca",
     "lib/dialog/dispatch-validate.mjs": "a611c3c0de5bce65",
     "lib/dialog/encoder-dispatch.mjs": "f554e74c0ba7ce2d",
     "lib/dialog/followup.mjs": "a80f066b4fada950",
-    "lib/dialog/index.mjs": "c5ee8706ae246774",
+    "lib/dialog/index.mjs": "2b8bd4e76e029d36",
     "lib/dialog/knowledge-lookup.mjs": "4c4e184fd74706d1",
     "lib/dialog/meta-worlds.mjs": "ee29a13164f130d4",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -259,6 +259,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T17:37:56.657Z",
-  "commit": "2f6eb324-dirty"
+  "builtAt": "2026-11-13T17:42:12.691Z",
+  "commit": "a796dcd2-dirty"
 }
