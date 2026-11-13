@@ -23,6 +23,7 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
   const failures = [];          // { key, text, still, at }
   const finished = [];          // step records in the order they ended
   const listeners = new Set();
+  let noteText = '';             // one standing line under the bar ("still loading the model: answers may be simpler for a moment")
   let last = {};                // id -> { ms, bytes } from the previous start (localStorage)
   try { const v = JSON.parse(storage?.getItem(PROGRESS_KEY) ?? '{}'); if (v && typeof v === 'object') last = v; } catch { last = {}; }
   const persist = () => { try { storage?.setItem(PROGRESS_KEY, JSON.stringify(last)); } catch { /* storage unavailable */ } };
@@ -99,7 +100,7 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
     }
     const idx = open.length ? plans.get(open[0][0]).ids.indexOf(main?.id) + 1 : 0;
     const label = main ? `${main.label}${main.total && main.total > 1 && !/\d+\s*\/\s*\d+|MB/.test(main.label) ? ` (${main.done}/${main.total})` : ''}` : '';
-    return { label, fraction, busy: !!main || active.length > 0, stepNo: idx, stepOf: open.length ? plans.get(open[0][0]).ids.length : 0, active: active.map((t) => t.id), failures: failures.slice(), steps: [...tasks.values()].filter((t) => t.state !== 'queued' || t.plan) };
+    return { note: noteText, label, fraction, busy: !!main || active.length > 0, stepNo: idx, stepOf: open.length ? plans.get(open[0][0]).ids.length : 0, active: active.map((t) => t.id), failures: failures.slice(), steps: [...tasks.values()].filter((t) => t.state !== 'queued' || t.plan) };
   }
 
   // ---------- panel ----------
@@ -109,6 +110,7 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
     el = h('div', { class: 'p2-progress', role: 'status', 'aria-live': 'polite', hidden: true },
       h('div', { class: 'p2-pg-row' }, h('span', { class: 'p2-pg-label' }), h('span', { class: 'p2-pg-count' }), h('button', { class: 'p2-pg-close', type: 'button', hidden: true, 'aria-label': 'Dismiss' }, '×')),
       h('div', { class: 'p2-pg-bar', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': '100' }, bar),
+      h('p', { class: 'p2-pg-note', hidden: true }),
       h('p', { class: 'p2-pg-fail', hidden: true }),
       h('details', { class: 'p2-pg-details' }, h('summary', {}, 'Details'), h('ol', { class: 'p2-pg-steps' })));
     el.querySelector('.p2-pg-close').addEventListener('click', () => { failures.length = 0; hideAt = 0; render(); });
@@ -137,6 +139,9 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
     barEl.classList.toggle('is-indeterminate', pct == null);
     barEl.firstChild.style.width = pct == null ? '' : `${pct}%`;
     if (pct == null) barEl.removeAttribute('aria-valuenow'); else barEl.setAttribute('aria-valuenow', String(pct));
+    const ne = el.querySelector('.p2-pg-note');
+    ne.hidden = !v.note || idle;
+    if (v.note) txt(ne, v.note);
     const fe = el.querySelector('.p2-pg-fail');
     fe.hidden = !v.failures.length;
     if (v.failures.length) txt(fe, v.failures.map((f) => `${f.text}${f.still ? `: ${f.still}` : ''}`).join(' '));
@@ -157,6 +162,8 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
 
   return {
     plan, start, step, end, fail, view,
+    /** A standing line shown under the bar while something is loading; '' clears it. */
+    note(text) { noteText = text || ''; schedule(); },
     get element() { return el; },
     steps: () => finished.slice(),
     state: (id) => tasks.get(id)?.state ?? null,

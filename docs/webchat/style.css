@@ -339,3 +339,24 @@
 .p2-opt > .p2-opt-status { color: var(--accent); }
 .p2-opt > .p2-opt-details { opacity: .8; font-size: 11px; }
 .p2-opt-mode { font-size: 13px; }
+
+/* PROGRESS: the one panel of every wait (ui/progress.mjs): a bar, the current step, a details fold; no part draws a spinner of its own */
+.p2-progress { margin: 0 .75rem .25rem; padding: .35rem .6rem; border-radius: .5rem; font-size: .85rem; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--line)); }
+.p2-progress[hidden] { display: none; }
+.p2-progress.is-failed { background: color-mix(in srgb, #c0392b 10%, var(--surface)); border-color: color-mix(in srgb, #c0392b 35%, var(--line)); }
+.p2-pg-row { display: flex; align-items: baseline; gap: .5rem; }
+.p2-pg-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.p2-pg-count { color: var(--muted); font-size: .75rem; }
+.p2-pg-close { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 .25rem; }
+.p2-pg-bar { height: 5px; margin: .3rem 0; border-radius: 3px; background: var(--line); overflow: hidden; position: relative; }
+.p2-pg-bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+.p2-pg-bar.is-indeterminate > i { position: absolute; width: 30%; animation: p2-pg-slide 1.4s infinite ease-in-out; }
+@keyframes p2-pg-slide { from { left: -30%; } to { left: 100%; } }
+@media (prefers-reduced-motion: reduce) { .p2-pg-bar.is-indeterminate > i { animation: none; width: 100%; opacity: .4; } }
+.p2-pg-note, .p2-pg-fail { margin: .15rem 0; font-size: .8rem; color: var(--muted); }
+.p2-pg-fail { color: var(--ink); }
+.p2-pg-details summary { cursor: pointer; font-size: .75rem; color: var(--muted); }
+.p2-pg-steps { margin: .25rem 0 0; padding-left: 1.2rem; font-size: .75rem; color: var(--muted); list-style: none; }
+.p2-pg-steps .is-failed { color: #c0392b; } .p2-pg-steps .is-active { color: var(--ink); }
+.p2-pg-ms { font-variant-numeric: tabular-nums; }
+.p2-text.is-acting { opacity: .75; }

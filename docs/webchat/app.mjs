@@ -27,6 +27,9 @@ import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLi
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
 import { createFeedback } from './ui/feedback.mjs';
+import { createProgress } from './ui/progress.mjs';
+import { createEventLog, describeTarget, tapKind } from './ui/action-log.mjs';
+import { snapshotState, describeChanges } from './ui/state-diff.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
@@ -84,6 +87,7 @@ const mark = (name) => { try { performance.mark(`psys2:${name}`); } catch { /* n
  * Returns { engine, session, send(text), applyState(snapshot), settings, destroy() }.
  */
 export async function mountPsys2(element, options = {}) {
+  const tEntry = performance.now();   // PROGRESS: everything before this was the page code (HTML, scripts, modules)
   const base = new URL(options.baseUrl ?? HERE, document.baseURI);
   if (!document.querySelector('link[data-psys2-css]')) {
     document.head.append(h('link', { rel: 'stylesheet', href: new URL('style.css', base).href, 'data-psys2-css': '' }));
@@ -93,6 +97,7 @@ export async function mountPsys2(element, options = {}) {
   // LANG-FIXED: ONE language, owned by ui/language.mjs. settings.language mirrors it (saved); nothing else decides how a message is read, answered or heard.
   const language = createLanguage({ initial: settings.language, variant: settings.englishVariant });
   settings.language = language.get();
+  language.onChange(({ lang, previous, reason }) => { try { events.add('language', lang, { from: previous, reason }); } catch { /* logging never breaks the app */ } });
   const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...settings, handsFree: false })); } catch { /* storage unavailable */ } };
   const plugins = await loadTabPlugins(base);
   const builtin = TABS.map((t, i) => ({ order: (i + 1) * 10, ...t }));
@@ -113,6 +118,15 @@ export async function mountPsys2(element, options = {}) {
   let busy = 0, turn = null, flash = null, flashTimer = null, interim = '', mic = { listening: false, speaking: false, mode: null };
   let destroyed = false, shellSeen = false;
   const phrases = createStore(options.persist !== false ? globalThis.localStorage : null);
+  // USER-ACTIONS: every user action and every progress step is an event next to the phrase records (export format 3); nothing leaves the device
+  const events = createEventLog(options.persist !== false ? globalThis.localStorage : null, { getTab: () => view, enabled: () => !!settings.logPhrases });
+  // PROGRESS: one service and one panel for every wait; the start-up steps in their real order, weighted by the last start's measured times
+  const progress = createProgress({ storage: options.persist !== false ? globalThis.localStorage : null, localize: (t) => localized(t),
+    onStep: (r) => events.add('step', r.label, { stepId: r.id, ms: r.ms, bytes: r.bytes, ok: r.ok, ...(r.error ? { error: r.error } : {}), tab: null, tabAfter: null }) });
+  progress.plan('startup', [{ id: 'page', label: 'Loading the page code' }, { id: 'worlds', label: 'Loading the worlds' }, { id: 'reasoner', label: 'Starting the reasoner' }, { id: 'model', label: 'Loading the reading model' },
+    { id: 'translator', label: 'Loading the translator' }, { id: 'catalog', label: 'Reading the knowledge catalog index' }, { id: 'voices', label: 'Finding voices' }]);
+  progress.start('page', 'Loading the page code');
+  progress.end('page', { ms: Math.round(tEntry), bytes: (() => { try { return performance.getEntriesByType('resource').filter((r) => /\.m?js(\?|$)/.test(r.name)).reduce((a, r) => a + (r.transferSize || r.encodedBodySize || 0), 0); } catch { return null; } })() });
   let logFilter = 'all', confirmClear = false;
   const cleanups = [];
   const on = (target, ev, fn, opts) => { target.addEventListener(ev, fn, opts); cleanups.push(() => target.removeEventListener(ev, fn, opts)); };
@@ -139,7 +153,7 @@ export async function mountPsys2(element, options = {}) {
   const dictBar = h('div', { class: 'p2-dictbar', role: 'status', hidden: true }, h('i', { class: 'p2-rec', 'aria-hidden': 'true' }), dictText, dictStop);
   const langSel = h('select', { class: 'p2-select', 'aria-label': 'Language' }, h('option', { value: 'en' }, 'English'));   // the other languages are filled in by renderLangSelect from the translation layer
   // MT-SERIOUS: the translation layer (browser Translator, else the on-device model downloaded lazily when a language is selected); the selector lists what it supports
-  const tl = createTranslationLayer({ base, h, note: (t) => note(t), onChange: () => { renderLangSelect(); renderSettings(); } });
+  const tl = createTranslationLayer({ base, h, note: (t) => note(t), progress, onChange: () => { renderLangSelect(); renderSettings(); } });
   globalThis.__psys2Tl = tl;   // diagnostics and the phone tests
   function renderLangSelect() {
     const cur = language.get(), list = tl.listed();
@@ -162,7 +176,7 @@ export async function mountPsys2(element, options = {}) {
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
       h('div', { class: 'p2-tools' }, langSel, gearBtn)),
-    statusEl, tl.banner, log, queueEl, dictBar, form,
+    statusEl, progress.element, log, queueEl, dictBar, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
@@ -172,8 +186,20 @@ export async function mountPsys2(element, options = {}) {
   const dbgRow = h('div', { class: 'p2-dbgrow', hidden: true }, dbgBtn);
   const paneEl = tabDefs.length ? h('section', { class: 'p2-pane', 'aria-label': 'Tools' }, tabsEl, dbgRow, panelsEl) : null;
   if (paneEl) root.append(paneEl); else root.classList.add('p2-chat-only');
-  const modalHost = h('div', { class: 'p2 p2-modal-host' }, settingsEl);   // in <body>, so that "full screen" is the viewport even when the page stacks the chat and the tools
+  const modalHost = h('div', { class: 'p2 p2-modal-host' }, settingsEl);
+  // USER-ACTIONS: taps are recorded by one delegated listener (no per-tab code): the name, the area, what kind of thing it was; tabs, the mic and Send have their own events
+  const logTap = (e) => {
+    try {
+      if (e.target?.closest?.('.p2-tab, .p2-mic, .p2-send:not(.is-stop)')) return;
+      const d = describeTarget(e.target, root); if (!d?.target) return;
+      events.add(tapKind(d.target), d.target, { zone: d.zone, what: d.what });
+    } catch { /* logging never breaks a tap */ }
+  };
+  const logSetting = (e) => {
+    try { const t = e.target, o = t?.closest?.('[data-option]'); events.add('settings', o?.dataset.option ?? t?.id ?? t?.name ?? 'setting', { value: t?.type === 'checkbox' ? !!t.checked : String(t?.value ?? '').slice(0, 80), zone: 'settings' }); } catch { /* ignore */ }
+  };   // in <body>, so that "full screen" is the viewport even when the page stacks the chat and the tools
   document.body.append(modalHost);
+  on(root, 'click', logTap, true); on(modalHost, 'click', logTap, true); on(modalHost, 'change', logSetting, true);
 
   const tabBtns = {};
   const VIEW_TABS = new Set(['map', 'diagram', 'charts']);   // pan / zoom / scroll stay usable while the host is busy
@@ -186,15 +212,16 @@ export async function mountPsys2(element, options = {}) {
   on(tabsEl, 'keydown', (e) => {
     const ids = tabDefs.map((t) => t.id), i = ids.indexOf(view);
     const next = e.key === 'ArrowRight' ? ids[(i + 1) % ids.length] : e.key === 'ArrowLeft' ? ids[(i - 1 + ids.length) % ids.length] : e.key === 'Home' ? ids[0] : e.key === 'End' ? ids.at(-1) : null;
-    if (next) { e.preventDefault(); userTab(next); tabBtns[next].btn.focus(); }
+    if (next) { e.preventDefault(); userTab(next, 'key'); tabBtns[next].btn.focus(); }
   });
   /** The user opened a tab (click or arrow keys): the dialog engine must know it too (routing tier T, tab-bound questions), RP5b. */
-  function userTab(id) {
-    showTab(id);
+  function userTab(id, via = 'tap') {
+    showTab(id, via);
     if (tabBtns[id] && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
   }
-  function showTab(id) {
+  function showTab(id, via = 'command') {
     if (!tabBtns[id]) return;
+    if (id !== view) events.add('tab', id, { via, tabAfter: id });   // USER-ACTIONS: how the tab was opened (tap | key | message | card | example | command)
     view = id;
     for (const [k, { btn, panel }] of Object.entries(tabBtns)) {
       const active = k === id, ui = panelUI[k]?.ui;
@@ -213,11 +240,15 @@ export async function mountPsys2(element, options = {}) {
     const meta = h('div', { class: 'p2-meta' }, h('time', {}, time()));
     const msg = h('div', { class: `p2-msg is-${who}${className ? ` ${className}` : ''}` }, bubble, meta);
     log.append(msg); scrollDown();
+    if (turn && who === 'bot' && !/is-typing/.test(className ?? '')) turn.shown?.push({ bubble, cls: className ?? '' });   // LOG WHAT HAPPENED: every reply shown during the turn
     return { msg, bubble, meta };
   }
   let dispatcherStatus = { state: 'idle', message: '' };   // Encoder formalizer (lazy model load)
   let dispatcherEnc = null;
   let dispatcherVersion = null;   // meta.json `version` block of the published model
+  const OFFLINE_LINE = /I can't reach the picture catalog right now, so I can only (?:draw|show) the basic things\.\s*/;
+  let offlineSaid = false;
+  let modelBytes = 0;             // the size of the reading model as the download reported it (the start-up table)
   let dispatcherLabel = '';       // 'v<date> <sha8>'
   let modelSource = null;         // 'cache' | 'network' (where the loaded model came from)
   let normalizerHost = null;      // phrasing normalizer (seq2seq fallback, spec 03 section 7.11); null when this build ships no model
@@ -267,7 +298,6 @@ export async function mountPsys2(element, options = {}) {
     const parts = [];
     if (flash) parts.push(flash);
     if (busy) parts.push('Thinking…');
-    if (dispatcherStatus.state === 'loading') parts.push(`Model loading… ${dispatcherStatus.message} (rules answer meanwhile)`);
     if (mic.speaking) parts.push('Speaking…');
     else if (mic.listening) parts.push(interim ? `Listening: “${interim}”` : mic.mode === 'ptt' ? 'Listening (hold space)…' : 'Listening…');
     else if (mic.paused) parts.push('Microphone paused — tap to resume');
@@ -328,8 +358,8 @@ export async function mountPsys2(element, options = {}) {
   }
   function applyShell(sh) {
     if (!sh) return;
-    if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab); } return; } // startup snapshot: do not override saved host settings
-    if (sh.activeTab && sh.activeTab !== lastShellTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab); }
+    if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab, 'start'); } return; } // startup snapshot: do not override saved host settings
+    if (sh.activeTab && sh.activeTab !== lastShellTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab, turn ? 'message' : 'command'); }
     if (sh.speaker !== undefined && sh.speaker !== lastShell.speaker) setSpeaker(!!sh.speaker, false);
     if (sh.handsFree !== undefined && sh.handsFree !== lastShell.handsFree) setHandsFree(!!sh.handsFree, false);
     if (sh.listening === false && lastShell.listening !== false) speech?.stopListening();
@@ -399,6 +429,8 @@ export async function mountPsys2(element, options = {}) {
   /** What tab plugins may use: send a command through the language layer, speak, read/patch world state, load assets. */
   const hostApi = {
     send: (text) => send(String(text), 'chip'),   // ignored (with a hint) while a turn runs
+    /** A card or control that moves the person to another tab (a transferred card): logged as a tab opened by a card. */
+    openTab: (id) => { userTab(id, 'card'); },
     speak: (text) => { if (speech && speechSupport.synthesis) speech.speak(String(text), { lang: speechLangTag() }); },
     state: (worldId) => states[worldId],
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
@@ -459,6 +491,21 @@ export async function mountPsys2(element, options = {}) {
   }
   /** Background work (rule compilation, warm-up) steps aside while a turn runs: the person's message always comes first (PERF round 3). */
   let lastTurnEnd = 0;
+  // PROGRESS: a turn that passes 400 ms shows what is being done in the input (the stages the engine already times). Typing ahead is kept (a message sent meanwhile waits in the queue);
+  // while a state-changing action runs (carrying out, showing the result) the input is marked busy and Stop is the way out.
+  const STAGE_WORDS = { spell: 'checking spelling', correct: 'checking spelling', rules: 'reading', formalize: 'reading', 'nx.read': 'reading', discourse: 'reading', voice: 'reading', normalizer: 'rewording your message', 'init.compilePattern': 'preparing the rules',
+    interpreter: 'carrying it out', lookup: 'looking up knowledge', effects: 'showing the result', restarting: 'restarting the engine', download: 'downloading a model' };
+  const STATE_STAGES = new Set(['interpreter', 'effects']);
+  const INPUT_PLACEHOLDER = input.placeholder;
+  let stageOverride = null;
+  function setInputStage(stage) {
+    stageOverride = stage || null;
+    const words = STAGE_WORDS[stage] ?? 'working', text = `${words[0].toUpperCase()}${words.slice(1)}…`;
+    if (input.dataset.stage === String(stage)) return;
+    input.dataset.stage = String(stage); input.placeholder = text; input.setAttribute('aria-busy', STATE_STAGES.has(stage) ? 'true' : 'false'); input.classList.toggle('is-acting', STATE_STAGES.has(stage));
+    localized(text).then((t) => { if (input.dataset.stage === String(stage) && t) input.placeholder = t; });
+  }
+  function clearInputStage() { stageOverride = null; delete input.dataset.stage; input.placeholder = INPUT_PLACEHOLDER; input.removeAttribute('aria-busy'); input.classList.remove('is-acting'); }
   const userFirst = async () => { while ((turn || performance.now() - lastTurnEnd < QUIET_MS) && !destroyed) await sleep(50); };   // a short quiet period after a turn: a long synchronous chunk must not start right behind an answer
   const fmtDur = (ms) => (ms < 1000 ? `${Math.max(1, Math.round(ms))} ms` : `${(ms / 1000).toFixed(1)} s`);
   /** Resolves after the browser painted the current DOM (so the typed message and the thinking bubble show before the heavy work blocks the thread). */
@@ -474,11 +521,11 @@ export async function mountPsys2(element, options = {}) {
   async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {
     user ??= addMessage('user', text);
     const ctl = new AbortController();
-    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode, recId, killsBefore: engineClient?.stats.kills.length ?? 0 };
+    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode, recId, shown: [], tabBefore: view, killsBefore: engineClient?.stats.kills.length ?? 0 };
     busy++; setStatus();
     restAvatar(true);
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
-    const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), thinkingLabel), { className: 'is-typing' });
+    const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, thinkingLabel), { className: 'is-typing' });
     typing.msg.removeAttribute('aria-live');
     translator.resetUsage();
     hostStage('thinking', recId);
@@ -511,7 +558,7 @@ export async function mountPsys2(element, options = {}) {
         }
       }
     }
-    ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; }, 100);
+    ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; if (performance.now() - tStart > 400) setInputStage(stageOverride ?? engineClient?.stage ?? null); }, 100);
     watchdog = setTimeout(() => { tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - (performance.now() - tPress)));
     const backstop = new Promise((_, rej) => { backstopTimer = setTimeout(() => rej(new TurnAborted('timeout', 'host')), Math.max(0, limit + TURN_LIMITS.backstopMs - (performance.now() - tPress))); });
     backstop.catch(() => {});
@@ -537,7 +584,7 @@ export async function mountPsys2(element, options = {}) {
         addMessage('bot', `Something went wrong while processing that: ${e?.message ?? e}`, { className: 'is-error' });
       }
     } finally {
-      clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker);
+      clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker); clearInputStage();
       if (typing.msg.isConnected) typing.msg.remove();
       if (turn === tn) { turn = null; lastTurnEnd = performance.now(); hostStage('idle'); restAvatar(false); }
       effectsPending = 0;
@@ -591,6 +638,7 @@ export async function mountPsys2(element, options = {}) {
     await afterPaint();
     if (tn.ctl.signal.aborted) throw new TurnAborted(tn.reason ?? 'stopped', 'start');
     tn.undo = session.snapshot?.() ?? null;
+    try { tn.snapBefore = snapshotState(session.state?.()); } catch { tn.snapBefore = null; }   // LOG WHAT HAPPENED: the world state before, for the one generic diff
     const remaining = Math.max(1, limit - (performance.now() - tStart));
     try { tn.stateBefore = dbg ? dbg.beforeTurn() : hashState(session.state?.() ?? null); } catch { tn.stateBefore = null; }   // FB: the state hash before the turn, stored with the record
     let reply;
@@ -611,7 +659,9 @@ export async function mountPsys2(element, options = {}) {
     typing.msg.remove();
     const usage = translator.usage.map((u) => ({ ...u }));
     const detection = translator.detectUsage.map((u) => ({ ...u }));
-    const answer = (reply.text ?? '').trim() || '(no answer)';
+    let answer = (reply.text ?? '').trim() || '(no answer)';
+    // PROGRESS 5: the unreachable catalog is said once in the panel; a reply repeats the world's line only the first time
+    if (OFFLINE_LINE.test(answer)) { const rest = answer.replace(OFFLINE_LINE, '').trim(); if (offlineSaid && rest) answer = rest; offlineSaid = true; }
     const notUnderstood = mode === 'voice' && (reply.statuses ?? []).length > 0 && !(reply.statuses ?? []).includes('supported') && (reply.segments ?? []).some((sg) => sg.unparsed);
     const botMsg = addMessage('bot', answer);
     if (notUnderstood) {   // MOBILE-VOICE: repeated not-understood voice replies within 20 s are collapsed into one (the first gets a count)
@@ -637,14 +687,16 @@ export async function mountPsys2(element, options = {}) {
     lastAnswerLen = String(answer).length;
     if (settings.speaker && speech && speechSupport.synthesis) speech.speak(answer, { lang: speechLangTag() });
     const tEffects = performance.now();
-    hostStage('effects', recId);
+    hostStage('effects', recId); setInputStage('effects');
     let effects;
     try { effects = await runEffects(reply.effects); } catch (e) { botMsg.msg.remove(); throw e; }   // stopped while the effects ran: the answer is withdrawn
     const effectsMs = performance.now() - tEffects;
     let stateAfter = null;
     try { stateAfter = hashState(session.state?.() ?? null); } catch { /* ignore */ }
     const detail = recId && settings.logPhrases ? buildDetail(reply, { serialize: serializeWires, tab: view, state: { before: tn.stateBefore ?? null, after: stateAfter } }) : null;
-    recordPhrase(text, mode, reply, recId, detail);
+    let happened = null;
+    if (recId && settings.logPhrases) { try { happened = buildHappened(tn, reply, botMsg, effects); } catch (e) { console.warn('what-happened failed', e); } }
+    recordPhrase(text, mode, reply, recId, detail, happened);
     if (reply.budgetExceeded && !reply.knownBad) runawayNotice('budgetExceeded', { text, stage: reply.budgetExceeded.stage ?? null, site: reply.budgetExceeded.site, ticks: reply.budgetExceeded.ticks, bySite: reply.budgetExceeded.bySite ?? null, ms: Math.round(performance.now() - tStart), recId, tStart });
     if (dbg) { try { dbg.record({ text, mode, tab: view, reply, usage, detection, effects, recId, stateBefore: tn.stateBefore ?? null, stateAfter, endType: voiceEnd(recId) }); } catch (e) { console.warn('debug record failed', e); } }
     // FB: the next accepted phrasing after a thumbs-down is its correction; a spoken complaint rates the previous answer
@@ -779,11 +831,30 @@ export async function mountPsys2(element, options = {}) {
     if (track) { if (lastAnswer) lastAnswer.undo = null; lastAnswer = ref; }   // only the latest answer can be taken back (one snapshot is kept)
     return ref;
   }
-  function recordPhrase(text, mode, reply, recId = null, detail = null) {
+  /**
+   * LOG WHAT HAPPENED (reduced): the tab on screen after the turn, each reply shown with the world it came from, and what the worlds changed, from ONE generic diff of
+   * the state before and after (ui/state-diff.mjs, no code per world), plus the view effects (tab switch, a tab's world changed, effects that ran).
+   */
+  function buildHappened(tn, reply, botMsg, effects) {
+    const changes = describeChanges(tn.snapBefore, snapshotState(session.state?.()));
+    const worlds = [...new Set((reply.segments ?? []).map((sg) => sg.match?.worldId).filter(Boolean))];
+    const shown = (tn.shown ?? []).map((x) => {
+      const clone = x.bubble.cloneNode(true); clone.querySelectorAll('.p2-chips-row').forEach((n) => n.remove());
+      const chips = [...x.bubble.querySelectorAll('.p2-example')].map((b) => b.textContent);
+      const main = x.bubble === botMsg.bubble;
+      return { text: (clone.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 300), world: main ? (worlds.join('+') || null) : null, ...(main ? {} : { from: 'host' }), ...(chips.length ? { suggestions: chips } : {}) };
+    });
+    const viewEffects = [];
+    if (tn.tabBefore !== view) viewEffects.push({ kind: 'tab', from: tn.tabBefore, to: view });
+    for (const c of changes) { const t = tabDefs.find((d) => d.world === c.world); if (t) viewEffects.push({ kind: 'view', tab: t.id, world: c.world }); }
+    for (const e of effects ?? []) viewEffects.push({ kind: 'effect', name: e.name, ok: e.ok });
+    return { tabAfter: view, shown, changes, viewEffects };
+  }
+  function recordPhrase(text, mode, reply, recId = null, detail = null, happened = null) {
     if (!settings.logPhrases) return;
     try {
       const tabWorld = tabDefs.find((t) => t.id === view)?.world ?? null;   // item 7: the world of the open tab, for the wrong-world analysis
-      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}) }));
+      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}) }));
       else phrases.add({ ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply }), ...(tabWorld ? { tabWorld } : {}) });
     } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
@@ -843,6 +914,7 @@ export async function mountPsys2(element, options = {}) {
     const tPress = performance.now();
     const user = addMessage('user', t);
     const recId = logPhraseStart(t, mode, voice);
+    events.add('message', t, { mode, ...(recId ? { recId } : {}) });
     return process(t, mode, user, recId, tPress);
   };
   /** Sends one message; while a turn runs (or others wait) it joins the visible queue and runs in order. */
@@ -897,7 +969,7 @@ export async function mountPsys2(element, options = {}) {
     const ex = surprisePicker?.next();
     if (!ex) { flashHint('No examples are available yet.'); return; }
     // an example is shown on the tab it was recorded for: a short one ("Add a table.", "Add a bullet: milk.") means something else on the drawing tab, which would read it itself
-    if (ex.tab && ex.tab !== 'robot' && tabBtns[ex.tab] && view !== ex.tab) userTab(ex.tab);
+    if (ex.tab && ex.tab !== 'robot' && tabBtns[ex.tab] && view !== ex.tab) userTab(ex.tab, 'example');
     send(ex.text, 'chip', { example: true });
   });
   on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); askDrop(); } else if (sendBtn.classList.contains('is-stop')) { e.preventDefault(); stopTurn(); } });
@@ -921,6 +993,7 @@ export async function mountPsys2(element, options = {}) {
   function setHandsFree(on, fromUser = true) {
     if (on && !speechSupport.recognition) return;
     settings.handsFree = on;
+    if (fromUser) events.add('mic', on ? 'on' : 'off', { via: 'settings' });
     speech?.setHandsFree(on); save(); setStatus(); renderSettings();
     if (fromUser) session?.setWorldState?.(SHELL, { handsFree: on });
   }
@@ -968,7 +1041,7 @@ export async function mountPsys2(element, options = {}) {
   function micClick(via = 'click') {
     const r = speech.toggle({ single: settings.keepListening === false });
     if (r.after.on !== settings.handsFree) { settings.handsFree = r.after.on; save(); session?.setWorldState?.(SHELL, { handsFree: r.after.on, listening: r.after.on }); renderSettings(); }
-    logMic(via, r); setStatus();
+    logMic(via, r); events.add('mic', r.after.on ? 'on' : 'off', { via }); setStatus();
     return r;
   }
   on(micBtn, 'click', () => { if (!micBtn.disabled) micClick('click'); });
@@ -1459,7 +1532,7 @@ export async function mountPsys2(element, options = {}) {
   const MODE_NAME = { typed: 'typed', voice: 'spoken', chip: 'button' };
   /** One click: the share sheet where the browser offers one for files (phones), else a download. Returns the number of records. */
   function exportPhrases() {
-    const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true, diagnostics: diagnostics() });
+    const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true, diagnostics: diagnostics(), events: events.all() });
     const n = JSON.parse(body).count;
     if (!n) { toast('No phrases to export yet'); return 0; }
     saveFile(exportFilename(), body);
@@ -1481,7 +1554,7 @@ export async function mountPsys2(element, options = {}) {
     }));
     const btn = (label, fn, cls = 'p2-btn-text') => h('button', { class: cls, type: 'button', onclick: fn }, label);
     plogActions.replaceChildren(...(confirmClear
-      ? [h('span', { class: 'p2-plog-confirm', role: 'alert' }, `Delete all ${all.length} entries?`), btn('Yes, clear', () => { phrases.clear(); confirmClear = false; renderPhraseLog(); }, 'p2-btn-text is-danger'), btn('Keep them', () => { confirmClear = false; renderPhraseLog(); })]
+      ? [h('span', { class: 'p2-plog-confirm', role: 'alert' }, `Delete all ${all.length} entries?`), btn('Yes, clear', () => { phrases.clear(); events.clear(); confirmClear = false; renderPhraseLog(); }, 'p2-btn-text is-danger'), btn('Keep them', () => { confirmClear = false; renderPhraseLog(); })]
       : [btn('Export JSON', exportPhrases), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
   }
   function phraseLogSection() {
@@ -1535,17 +1608,31 @@ export async function mountPsys2(element, options = {}) {
   const ortMirror = { restarts: 0, stats: {}, paused: null, speed: 1, limits: null, lanes: {}, resume() { this.paused = null; engineClient?.call('ort-resume').catch(() => {}); }, restart: (lane, why) => engineClient.call('ort-restart', { lane, why }) };   // the real ORT client lives in the engine worker; this mirror is refreshed by its events
   function onEngineEvent(name, data) {
     if (name === 'dispatcher-status') {
+      // PROGRESS: the reading model is a step of the one panel; the chat works meanwhile (the rules read)
+      if (data.state === 'loading') { progress.start('model', 'Loading the reading model'); progress.note('Still loading the reading model: answers may be simpler for a moment.'); }
+      else if (data.state === 'ready') { progress.end('model', { bytes: modelBytes || null, label: 'Reading model loaded' }); progress.note(''); }
+      else if (data.state === 'error') { progress.fail('model', 'The reading model could not be loaded', 'the rules answer meanwhile'); progress.note(''); }
       if (data.state === 'error') encoderFailed(data.message); else if (data.state === 'ready') encoderNoticed = false;
       dispatcherStatus = { ...data, message: data.state === 'loading' ? dispatcherStatus.message || data.message : data.message }; setStatus(); if (!settingsEl.hidden) renderSettings();
     } else if (name === 'normalizer-status') { if (normalizerHost) normalizerHost.status = data; if (!settingsEl.hidden) renderSettings(); }
     else if (name === 'model-source') modelSource = data;
-    else if (name === 'progress') { dispatcherStatus = { ...dispatcherStatus, message: data }; setStatus(); }
+    else if (name === 'progress') {
+      dispatcherStatus = { ...dispatcherStatus, message: data }; setStatus();
+      const m = /(\d+(?:\.\d+)?) \/ (\d+(?:\.\d+)?) MB/.exec(String(data));
+      if (m) { modelBytes = Math.round(Number(m[2]) * 1e6); progress.step('model', `Downloading the reading model (${m[1]} / ${m[2]} MB)`, Number(m[1]), Number(m[2])); }
+      else if (data) progress.step('model', `${String(data)[0].toUpperCase()}${String(data).slice(1)}`.replace(/…$/, ''), 0, 0);
+    }
+    else if (name === 'boot-step') {   // PROGRESS: the engine worker's start-up, in the order it happens
+      if (data.op === 'start') progress.start(data.id, data.id === 'worlds' ? 'Loading the worlds' : 'Starting the reasoner');
+      else if (data.id === 'worlds') progress.end('worlds', { bytes: data.bytes ?? null, label: `Loaded ${data.count} worlds` });
+      else progress.end(data.id);
+    } else if (name === 'catalog') { if (data.down) progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available'); }
     else if (name === 'ort') { Object.assign(ortMirror, data); globalThis.__psys2Ort = ortMirror; }
     else if (name === 'ort-paused') { ortMirror.paused = data; try { globalThis.dispatchEvent?.(new CustomEvent('psys2-ort-paused', { detail: data })); } catch { /* no events */ } }
     else if (name === 'rules-compiled') mark('rules-compiled');
     else if (name === 'warm') mark(`warm-${data}`);
     else if (name === 'model-timeout') { modelTimeouts.push(data); if (dbg) dbg.noteModelTimeout(data); }   // MODEL-TIMEOUTS: kept until the debug panel exists, then shown once with the count
-    else if (name === 'notice') note(String(data));   // an interim line of the engine (a catalog lookup in progress); the reply follows
+    else if (name === 'notice') { note(String(data)); if (turn) setInputStage('lookup'); }   // an interim line of the engine (a catalog lookup in progress); the reply follows
   }
   try {
     const soplang = await import(new URL('lib/soplang/index.mjs', base).href);
@@ -1566,6 +1653,7 @@ export async function mountPsys2(element, options = {}) {
     translator = { get usage() { return engineClient.usage; }, get detectUsage() { return engineClient.detection; }, resetUsage() { engineClient.resetUsage(); },
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
     const worldsVer = globalThis.__psys2Mod?.['worlds/index.json'];
+    progress.start('worlds', 'Loading the worlds');
     const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
     engine = { worlds: () => info.worlds.map((id) => ({ id })), problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
@@ -1574,6 +1662,7 @@ export async function mountPsys2(element, options = {}) {
     session.setWorldState?.(SHELL, { language: language.get() });   // the shell world's language state starts as the selector (LANG-FIXED)
   } catch (e) {
     console.error(e);
+    progress.fail('worlds', `PSys2 could not start: ${e?.message ?? e}`, '');
     statusEl.textContent = 'Could not start';
     note(`PSys2 could not start: ${e?.message ?? e}. If you opened this page from disk, serve it over HTTP instead; if lib/ or worlds/ are missing, run "npm run build:webchat".`);
     input.disabled = sendBtn.disabled = dieBtn.disabled = true;
@@ -1610,9 +1699,19 @@ export async function mountPsys2(element, options = {}) {
   setStatus();
 
   // MT-SERIOUS: the model registry loads after the first paint; a saved non-English language starts its model now
-  setTimeout(() => { tl.init().then(() => { renderLangSelect(); return tl.prepare(language.get()); }).catch((e) => console.warn('translation layer', e)); }, 0);
+  setTimeout(() => {
+    const l0 = language.get();
+    if (l0 === 'en') progress.end('translator', { ms: 0, label: 'Translator: not needed for English' });
+    else progress.start('translator', `Loading the ${langName(l0)} translator`);
+    tl.init().then(() => { renderLangSelect(); return tl.prepare(language.get()); }).catch((e) => console.warn('translation layer', e)).finally(() => { if (progress.state('translator') === 'active') progress.end('translator'); });
+  }, 0);
 
   // optional capabilities, checked once
+  {   // PROGRESS: the voices the browser offers (they arrive late in some browsers); bounded
+    progress.start('voices', 'Finding voices');
+    const done = () => { if (progress.state('voices') === 'active') progress.end('voices', { label: `Voices: ${speech?.voices?.().length ?? 0} found` }); };
+    if (!speechSupport.synthesis || speech?.voices?.().length) done(); else { try { speech?.onVoicesChanged?.(() => { if (speech.voices().length) done(); }); } catch { /* no events */ } setTimeout(done, 2500); }
+  }
   loadVoiceWords(language.get());   // the voice word lists of a language other than English (translated once, cached)
   if (browserDetectorKind()) browserDetectorAvailability().then((a) => { detectAvail = a; renderSettings(); });
   /** The browser Translator for the selected language (to English): availability, and a background download where the browser can. Generic: any language, not a fixed one. */
@@ -1629,11 +1728,13 @@ export async function mountPsys2(element, options = {}) {
     addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
   }
   const handle = {
-    engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab, get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
+    engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => showTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),
     get micLog() { return micLog; }, micClick,
+    /** USER-ACTIONS hook for other features: `actions.record(kind, target, extra)`; `actions.recall(text)` is called by the arrow-key message history (INPUT-HISTORY). */
+    actions: { record: (kind, target, extra) => events.add(kind, target, extra), recall: (text) => events.add('recall', text), events: () => events.all() }, progress,
     destroy() { destroyed = true; engineClient?.destroy(); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   // FREEZE: the listening state is never restored; the microphone starts only with a click
@@ -1666,8 +1767,13 @@ export async function mountPsys2(element, options = {}) {
         await dispatcherEnc.prepare(); mark('dispatcher-ready');
         if (!destroyed) await engineClient.warm({ phase: 'model' });
         scheduleNormalizerIdle();
-      }
+      } else progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' });
     } catch { /* warm-up is best effort */ }
+    if (destroyed) return;
+    // PROGRESS: the knowledge catalog's index (vocabulary, about 1.3 MB, cached): the last start-up step, and the place where an unreachable catalog is said once
+    progress.start('catalog', 'Reading the knowledge catalog index');
+    try { const r = await engineClient.call('catalog'); if (r?.ok) progress.end('catalog', { bytes: r.bytes ?? null }); else progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available'); }
+    catch { progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available'); }
   };
   setTimeout(() => { if (!destroyed) warm(); }, 100);
   return handle;

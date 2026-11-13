@@ -93,6 +93,9 @@ function applySettings(s, extra) {
 
 const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds', KNOWLEDGE_FETCH_MS = 6000;
 // ---------- boot ----------
+let facts = null, catalogDown = null;   // the knowledge catalog (spec 17) and the last reachability the page was told about
+/** PROGRESS: tells the page when the catalog turns unreachable or reachable again (after a lookup), once per change. */
+function reportCatalog() { const down = !!facts?.unreachable?.(); if (down !== catalogDown) { catalogDown = down; evt('catalog', { down }); } }
 async function init(m) {
   Object.assign(ver, m.versions ?? {});
   testHooks = m.testHooks === true;
@@ -109,9 +112,12 @@ async function init(m) {
     g.guard.check = (stage) => { report(stage); return gc(stage); };
     g.guard.setStage = (stage) => { report(stage); return gs(stage); };
     g.guard.abortable = (p, stage) => { report(stage); return ga(p, stage); }; }
+  evt('boot-step', { id: 'worlds', op: 'start' });   // PROGRESS: the page's start-up panel follows the real order
   const res = await fetch(m.worldsUrl, { cache: 'default' });
   if (!res.ok) throw new Error(`worlds/index.json: HTTP ${res.status}`);
-  const bundle = await res.json();
+  const bundleText = await res.text(), bundle = JSON.parse(bundleText);
+  evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleText.length, count: Object.keys(bundle.worlds ?? {}).length });
+  evt('boot-step', { id: 'reasoner', op: 'start' });
   for (const [id, w] of Object.entries(bundle.worlds)) {
     if (m.onlyWorlds && id !== 'core' && !m.onlyWorlds.includes(id)) delete bundle.worlds[id];
     else {
@@ -125,6 +131,7 @@ async function init(m) {
   { const kl = await imp('lib/translate/keep-list.mjs'); const raw = backend.translate; backend.translate = kl.protectedTranslate(raw, () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(session) } : null)); }
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
   engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
+  evt('boot-step', { id: 'reasoner', op: 'end' });
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
   // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
   engine.onModelTimeout = (info) => evt('model-timeout', info);   // a model call timed out and the rules answered (spec 06): the debug panel says so once and counts
@@ -133,7 +140,10 @@ async function init(m) {
     const [{ createFacts }, { createKnowledgeSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs')]);
     const { createCachedSource } = await imp('lib/loaders/knowledge-cache.mjs');
     const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
-    engine.setKnowledge(createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]) } }));
+    let catalogBytes = 0;
+    facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]).then((t) => { catalogBytes += t?.length ?? 0; return t; }) } });
+    facts.bytesRead = () => catalogBytes;
+    engine.setKnowledge(facts);
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
   if (testHooks) installFaults();
@@ -207,7 +217,7 @@ const handlers = {
       annotateWires(reply);
       return { reply, state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
-    } finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
+    } finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); reportCatalog(); }
   },
   async dry(m) {
     const ctl = new AbortController(); ctl.dry = true;
@@ -223,6 +233,14 @@ const handlers = {
   async hint(m) {
     const t = engine.translator;
     return mods.lang.suggestSwitch(m.text, mods.lang.normalize(m.selected), { detect: (x) => t.detectLanguage(x), evidence: (x) => t.evidence(x) });
+  },
+  /** PROGRESS: the page asks for the catalog's vocabulary (about 1.3 MB, cached): the start-up step "knowledge catalog index". */
+  async catalog() {
+    if (!facts) return { ok: false, reason: 'not attached' };
+    const t0 = performance.now();
+    try { await facts.loadVocab(); } catch { /* the flag says it */ }
+    reportCatalog();
+    return { ok: !facts.unreachable(), ms: Math.round(performance.now() - t0), bytes: facts.stats.vocabBytes ?? 0 };
   },
   async observe(m) {
     const out = await session.observeIn(m.obs, { language: mods.lang.normalize(settings.language) });   // the reaction (the engine's chess move) is shown in the selected language
