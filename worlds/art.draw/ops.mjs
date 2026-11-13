@@ -1167,6 +1167,7 @@ export function splitDest(text) {
     const t = w[i];
     if (REL_STRONG.has(t)) return 'strong';
     if (t === 'a' && /^(bit|little|lot|tiny|way)$/.test(w[i + 1] ?? '')) return 'dir';
+    if (['much', 'slightly', 'way', 'far'].includes(t) && DIR_WORDS.has(w[i + 1] ?? '')) return 'dir';   // "much higher", "slightly left": the amount belongs to the move
     if (DIR_WORDS.has(t)) {
       if (['left', 'right', 'up', 'down', 'back'].includes(t) && (DET.has(w[i - 1]) || kindOfWord(w[i + 1] ?? '') || w[i + 1] === '1' || w[i + 1] === 'one')) return null;
       return 'dir';
@@ -1213,7 +1214,8 @@ export function parseDest(text) {
   }
   const side = /\b(side|corner|edge|half|part|middle|center|centre|sky|ground|grass|floor)\b/.test(j);
   const region = regionIn(w);
-  if (region && (side || /^(on|at|in|into|onto)\b/.test(j) || region === 'top left' || region === 'top right' || region === 'bottom left' || region === 'bottom right')) return { kind: 'region', region };
+  const andDirs = !!mv && mv.segs.length > 1 && /\band\b/.test(j);   // "right and lower": two directions, not the region bottom right
+  if (region && !andDirs && (side || /^(on|at|in|into|onto)\b/.test(j) || region === 'top left' || region === 'top right' || region === 'bottom left' || region === 'bottom right')) return { kind: 'region', region };
   if (mv && (mv.segs.length || mv.again)) return { kind: 'step', move: mv, label: w.filter((x) => Object.hasOwn(space.DIRS, x)).join(' and ') || 'further' };
   if (region && space.DIRS[region]) return { kind: 'step', move: { segs: [{ dx: space.DIRS[region][0], dy: space.DIRS[region][1], mult: 1 }] }, label: region };
   if (/\b(closer|nearer)\b/.test(j)) return { kind: 'closer' };

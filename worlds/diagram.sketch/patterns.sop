@@ -1902,3 +1902,43 @@
     example="No, not the first one, the middle one."
     example="Not the left one, the right one."
     doc="Corrects which shape the last move was about: the same move on the one meant now."
+
+@pat.diagram.sketch.space.is core.pattern
+    match="[is|are] {a:words(4)} [above|below|under|over|beneath|underneath|left_of|right_of|to_the_left_of|to_the_right_of|next_to|near|beside] {b:rest}"
+    emit="@{_} core.request action=diagram.spatial arg.text=\"{segment}\""
+    kind=question
+    priority=21
+    tabPriority=21
+    needsState=shapes
+    example="Is the circle above the square?"
+    doc="Is A above, under, left of, right of or next to B: handed to the module space."
+
+@pat.diagram.sketch.space.which core.pattern
+    match="which {r:words(3)} [is|are] [in_the_middle|in_the_centre|in_the_center] {c:rest?}"
+    emit="@{_} core.request action=diagram.spatial arg.text=\"{segment}\""
+    kind=question
+    priority=21
+    tabPriority=21
+    needsState=shapes
+    example="Which box is in the middle?"
+    doc="Which one is in the middle, the biggest, on the left ...: handed to the module space."
+
+@pat.diagram.sketch.space.far core.pattern
+    match="how_far [apart]? [is|are] {r:rest}"
+    emit="@{_} core.request action=diagram.spatial arg.text=\"{segment}\""
+    kind=question
+    priority=21
+    tabPriority=21
+    needsState=shapes
+    example="How far apart are the circle and the square?"
+    doc="How far two shapes are (near or far, never pixels): handed to the module space."
+
+@pat.diagram.sketch.space.swap core.pattern
+    match="[swap|switch|exchange|trade] [the]? {a:words(3)} and [the]? {b:words(3)}"
+    emit="@{_} core.request action=diagram.spatial arg.text=\"swap {a} and {b}\""
+    kind=request
+    priority=21
+    tabPriority=21
+    needsState=shapes
+    example="Swap the first and the last circle."
+    doc="Swaps two shapes named by place (the first and the last): handed to the module space; names are left to the engine."

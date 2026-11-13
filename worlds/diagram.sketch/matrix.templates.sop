@@ -28,6 +28,11 @@
     status=conflicting
     text="{note}"
 
+@tpl.diagram.sketch.spatial.m.refused core.template
+    for=op.diagram.sketch.spatial
+    status=conflicting
+    text="{note}"
+
 @tpl.diagram.sketch.set.m.refused core.template
     for=op.diagram.sketch.set
     status=conflicting

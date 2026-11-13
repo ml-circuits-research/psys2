@@ -467,9 +467,23 @@ function spaceTry(text, s, kind) {
   if (r.type === 'ask') return no(r.say, 'missing');
   if (r.type === 'error') return null;   // what the module cannot read, the engine reads or refuses in its own words
   // the engine's layout (row, column, grid, circle, align, distribute, its score) stays; the module tidies free shapes that overlap ("make a better layout" when nothing is connected)
-  if (r.type === 'layout' && (r.op !== 'tidy' || s.edges.length || !Object.keys(r.boxes ?? {}).length)) return null;
+  if (r.type === 'layout' && (!['tidy', 'swap'].includes(r.op) || s.edges.length || !Object.keys(r.boxes ?? {}).length)) return null;
   return r;
 }
+/** A question about places (is A above B, which one is in the middle, how far apart): the module reads it on the boxes of the shapes. */
+export const spatial = (ctx, args = {}) => {
+  if (!K) return NOT_READY();
+  const s = ensure(ctx), items = spaceItems(s);
+  if (!items.length) return no('The diagram is empty. Draw something first.', 'missing');
+  const r = space.interpret(String(args.text ?? ''), { items, frame: SPACE_FRAME, kindOf: spaceKind, last: s.last ?? [], lastMove: s.lastMove });
+  if ((!r || r.type === 'error') && /^\s*(?:is|are)\b/i.test(args.text ?? '')) return make({ type: 'question', name: 'check' })(ctx, { text: String(args.text) });   // names, not places: the engine's check
+  if ((!r || r.type === 'error') && /^\s*which\b/i.test(args.text ?? '')) return make({ type: 'question', name: 'list' })(ctx, { text: String(args.text) });
+  if ((!r || r.type === 'error') && /^\s*(?:swap|switch|exchange|trade)\b/i.test(args.text ?? '')) return make({ type: 'command', name: 'swap' })(ctx, { text: String(args.text) });   // names, not places: the engine's swap
+  if (!r || r.type === 'error') return no(r?.say ?? 'I could not read that question about places.', 'missing');
+  if (r.type === 'ask') return no(r.say, 'missing');
+  if (r.type === 'layout') return spaceApply(ctx, s, r);
+  return ok(r.say);
+};
 /** "no, not the first one, the middle one": puts the shapes of the last move back, then does the same move on the one meant now (one request). */
 export const reselect = (ctx, args = {}) => {
   if (!K) return NOT_READY();
