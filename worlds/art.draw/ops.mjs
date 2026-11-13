@@ -172,6 +172,7 @@ function restore(s, snap) {
 /** Call before changing the picture. */
 function remember(s, label) {
   s.history.push(snapshot(s, label));
+  s.prev = s.history.at(-1);   // the picture before the newest step: what follow-ups ("but keep the lake", "not over the water") compare with, in both reasoners
   if (s.history.length > MAX_HISTORY) s.history.splice(0, s.history.length - MAX_HISTORY);
   s.future = [];
 }
@@ -1356,7 +1357,9 @@ export const move = guard((ctx, args, s) => {
   if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'missing');
   const d = parseDest(dest);   // the destination is checked before asking which one is meant
   if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);
-  const t = target(s, tt || 'it', { many: true, ask: true });
+  // a bare "it" is what the last step handled, all of it ("further left" after moving three houses moves the three)
+  const lastThings = (!tt || (/^(?:it|them)$/.test(tt.trim()) && /\b(?:further|farther|more|again)\b/.test(dest))) && !s.selected ? s.last.map((id) => byId(s, id)).filter(Boolean) : [];
+  const t = lastThings.length > 1 ? { r: { objs: lastThings, np: parseNP('them') } } : target(s, tt || 'it', { many: true, ask: true });
   if (t.error) return t.error;
   const { r } = t;
   if (r.special) {
@@ -1420,6 +1423,62 @@ export const spatial = guard((ctx, args, s) => {
   s.lastMove = r.memory ?? null;
   open(ctx);
   return ok(`${opener(s)} ${r.say.replace(/^I /, 'I ')}`);
+});
+
+// ---- follow-ups that change the last step (SCENE-NATURAL P2): "but keep the lake", "not over the water" ---------------------------------------------------
+/** What the last step did to the picture, from the snapshot it left on the history: the things it made, changed and removed. */
+function lastStep(s) {
+  const snap = s.prev;
+  if (!snap) return null;
+  budget.tick('art.step', s.objects.length + snap.objects.length + 1);
+  const was = new Map(snap.objects.map((o) => [o.id, o])), now = new Map(s.objects.map((o) => [o.id, o]));
+  const sig = (o) => JSON.stringify([o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.z, o.parts]);
+  return { snap, was, added: s.objects.filter((o) => !was.has(o.id)), changed: s.objects.filter((o) => was.has(o.id) && sig(o) !== sig(was.get(o.id))), removed: snap.objects.filter((o) => !now.has(o.id)) };
+}
+const putBack = (o, w) => { Object.assign(o, { ...w, parts: { ...(w.parts ?? {}) } }); };
+/** "not over the water": what the last step made or moved onto the named thing goes back (made things go away, moved things return); the rest of the step stays. */
+export const except_ = guard((ctx, args, s) => {
+  const step = lastStep(s);
+  if (!step) return no('I have not done anything yet that I could take back part of.', 'missing');
+  const r = resolveNP(s, parseNP(args.x ?? ''), { many: true });
+  if (r.error) return no(r.error, 'missing');
+  if (r.special || !r.objs.length) return no('Say which thing it should stay clear of, for example "not over the lake".', 'missing');
+  const reach = (o) => r.objs.some((t) => t !== o && overlapRatio(bbox(o), bbox(t)) > 0.05);
+  const touched = [...step.added, ...step.changed].filter(reach);
+  const label = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
+  if (!touched.length) return no(`Nothing I just did reaches ${label}.`, 'unsupported');
+  remember(s, `kept things off ${label}`);
+  for (const o of touched) { if (step.was.has(o.id)) putBack(o, step.was.get(o.id)); else s.objects = s.objects.filter((x) => x !== o); }
+  s.last = touched.filter((o) => step.was.has(o.id)).map((o) => o.id);
+  open(ctx);
+  const made = touched.filter((o) => !step.was.has(o.id)), moved = touched.filter((o) => step.was.has(o.id));
+  const say = (xs) => `the ${pluralOfKind(kindKey(xs[0]), xs.length)}`;
+  return ok(`${opener(s)} ${[made.length ? `I took ${made.length === 1 ? sayObj(made[0]) : say(made)} away from ${label}` : '', moved.length ? `I put ${moved.length === 1 ? sayObj(moved[0]) : say(moved)} back` : ''].filter(Boolean).join(' and ')}.`);
+});
+/** "but keep the lake": a thing the last step removed or changed comes back as it was. */
+export const keep = guard((ctx, args, s) => {
+  const step = lastStep(s);
+  if (!step) return no('I have not changed anything yet, so there is nothing to keep.', 'missing');
+  const np = parseNP(args.x ?? '');
+  const view = { ...s, objects: step.snap.objects };
+  let want = [];
+  if (np.pron) want = [...step.removed, ...step.changed.map((o) => step.was.get(o.id))];
+  else if (np.special === 'ground') {
+    if ((np.groundWord ?? s.ground) === step.snap.ground && s.ground !== step.snap.ground) { remember(s, 'kept the ground'); s.ground = step.snap.ground; s.groundColor = step.snap.groundColor; open(ctx); return ok(`${opener(s)} I kept the ${GROUND_NAME[s.ground] ?? 'ground'} as it was.`); }
+    return no('The ground is as it was.', 'unsupported');
+  } else { const r = resolveNP(view, np, { many: true }); if (r.error) return no(r.error, 'missing'); want = r.objs; }
+  const now = new Map(s.objects.map((o) => [o.id, o]));
+  const sig = (o) => JSON.stringify([o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.z, o.parts]);
+  const back = want.filter((w) => !now.has(w.id) || sig(now.get(w.id)) !== sig(w));
+  const label = want.length === 1 ? sayObj(want[0]) : want.length ? `the ${pluralOfKind(kindKey(want[0]), want.length)}` : 'it';
+  if (!want.length) return no('I have nothing to put back.', 'unsupported');
+  if (!back.length) return ok(`${cap1(label)} ${want.length === 1 ? 'is' : 'are'} still there as before.`);
+  remember(s, `kept ${label}`);
+  for (const w of back) { const cur = byId(s, w.id); if (cur) putBack(cur, w); else s.objects.push({ ...w, parts: { ...(w.parts ?? {}) } }); }
+  s.objects.sort((a, b) => idNum(a) - idNum(b));
+  s.last = back.map((o) => o.id);
+  open(ctx);
+  return ok(`${opener(s)} I kept ${label}.`);
 });
 
 export const nudge = guard((ctx, args, s) => {

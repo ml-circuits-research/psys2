@@ -145,6 +145,28 @@
     example="Put the red house on the left."
     example="Place a lake next to the house."
 
+@pat.art.draw.x.keep core.pattern
+    canonical="But keep the lake."
+    match="[$lang.lead.filler|but|and|no|also|hmm]? [$lang.keep] [the|that|my|this]? {x:words(5)} [alone|there|as_it_was|please]?"
+    emit="@{_} core.request action=draw.keep arg.x=\"{x}\""
+    kind=request
+    priority=14
+    example="But keep the lake."
+    example="Do not remove the road."
+    example="Leave the pond there."
+    doc="Restores a thing the last step took away or changed (a follow-up that changes the last action)."
+
+@pat.art.draw.x.except core.pattern
+    canonical="Not over the water."
+    match="[$lang.lead.filler|but|and|no|also|hmm]? [$lang.except] [the|that|my|this]? {x:words(5)} [please]?"
+    emit="@{_} core.request action=draw.except arg.x=\"{x}\""
+    kind=request
+    priority=16
+    example="Not over the water."
+    example="But not on the road."
+    example="Do not cover the lake."
+    doc="Takes the part of the last step that reaches the named thing back (a follow-up that changes the last action)."
+
 @pat.art.draw.nudge core.pattern
     canonical="Make the cat a bit lower."
     canonical="Make the sun higher."
@@ -1565,6 +1587,16 @@
     example="Sketch a castle."
     example="Add a third window."
     doc="DRAW-FROM-FACTS: the thing to draw is an open slot. After the reading the operation looks the noun up in the catalog of drawable things (knowledge/k.objects, as things.catalog.mjs): a hit draws the thing from its parts; a part word of a thing in the picture adds one more of that part; nothing else is answered plainly (I don't know how to draw a blorp yet), never with a random shape."
+
+@pat.art.draw.x.again.open core.pattern
+    canonical="One more lighthouse."
+    match="[$lang.lead.filler|right|also|and|hi|pls|plz]? [1_more|one_more|another|yet_another|a_second|one_more_of_the] {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.add arg.open=\"{o}\" arg.kt=\"{o}\""
+    kind=request
+    priority=3
+    example="One more lighthouse."
+    example="Another castle."
+    doc="A follow-up that repeats the last add for a thing of the catalog (an open slot): one more of it."
 
 @pat.art.draw.x.count.open core.pattern
     canonical="How many lighthouses are there?"

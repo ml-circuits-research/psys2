@@ -208,3 +208,15 @@
     semantics=action
     action=draw.askKind
     doc="Clarification for \"Draw\" without an object: asks what to draw and opens a pending expectation for the missing kind (spec 11)."
+
+@op.art.draw.keep core.operation
+    impl=keep
+    semantics=action
+    action=draw.keep
+    doc="Puts back the thing the last step removed, covered or changed, when the user says to keep it."
+
+@op.art.draw.except core.operation
+    impl=except_
+    semantics=action
+    action=draw.except
+    doc="Takes back the part of the last step that reaches the named thing: the things it made or moved over it go back."

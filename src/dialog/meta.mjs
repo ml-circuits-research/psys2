@@ -76,7 +76,7 @@ export function classify(text, ctx = {}) {
     if (re === REPAIR_CORRECT[2] && !ctx.hasAction) continue;
     return { intent: 'repair', how: 'replace', content };
   }
-  m = t.match(NOT_X);
+  m = lang.except?.(t) ? null : t.match(NOT_X);   // "not over the water" keeps the last step off a thing (a world's follow-up), it corrects no word
   if (m && ctx.hasAction) return { intent: 'repair', how: 'replace', content: plain(m[2]), not: plain(m[1]) };
   return null;
 }
