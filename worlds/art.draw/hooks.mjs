@@ -67,7 +67,11 @@ function acceptsWords({ action, mode, roles, text, state, kindWord }) {
   const act = String(action ?? '').split('.').pop();
   if (!['make', 'remove', 'change', 'place', 'group', 'pick', 'ask', 'copy'].includes(act)) return true;
   const said = roles.thing ?? roles.rest ?? '';
-  if (act === 'ask' && ['describe', 'options'].includes(mode)) return true;
+  if (act === 'ask' && mode === 'options') {   // "show Pariss" is a place of the map, not the list of things to draw: the free words must name the drawing (a thing, a colour, "options", "draw")
+    const ws = words(roles.thing ?? roles.rest ?? '');
+    return !ws.length || ws.some((x) => /^(?:things?|objects?|items?|shapes?|options?|colou?rs?|shades?|paints?|crayons?|draw|drawing|drawn|pictures?|animals?|stuff|available)$/.test(x) || D.kindOfWord(x) != null || D.kindOfWord(x.replace(/s$/, '')) != null || kindWord?.(x) === true);
+  }
+  if (act === 'ask' && mode === 'describe') return true;
   if (act === 'ask' && !said && !roles.place) return false;
   if ((act === 'make' || act === 'change') && !roles.place && TIMES.has(words(said).at(-1) ?? '') && words(said).every((x) => TIMES.has(x) || DET.has(x) || /^(?:it|its|so|be|bright|nice|sunny|a|the)$/.test(x))) return true;   // "make it a sunny day", "change it so its day"
   if (act === 'change' && /^(?:scene|mood|time|sky|picture|drawing|background)$/.test(words(said).at(-1) ?? '') && TIMES.has(words(roles.value).at(-1) ?? '')) return true;   // "change the scene to dawn"

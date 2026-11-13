@@ -16,10 +16,10 @@
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { restrictedSet } from '../formalizer/spell.mjs?v=e6f9268f93';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=4117266ea0';
-import { foreignFragment } from './continuation.mjs?v=4967bb5219';
-import { liveFromContext } from './meta-worlds.mjs?v=dce454fc3e';
+import { restrictedSet } from '../formalizer/spell.mjs?v=6c91a786a4';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=dc30576b7d';
+import { foreignFragment } from './continuation.mjs?v=b8c293a6e7';
+import { liveFromContext } from './meta-worlds.mjs?v=f35d56c48b';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */
@@ -151,6 +151,18 @@ export function sayMissing(ref) {
   return { text: `I can't find ${orList(names)} in the ${where}. ${ref.here ? `In the ${where} I can see: ${ref.here}.` : `The ${where} is empty.`}` };
 }
 
+/**
+ * One clause that coordinates a thing the world does not have with an earlier part ("clear everything and zork the plimp"): the whole request is held (nothing runs on a
+ * partly read sentence), and the reply names the part that was read and not acted on, as the hold of separate clauses does.
+ */
+function heldPart(text, missing) {
+  const t = String(text ?? ''), low = t.toLowerCase();
+  const at = Math.min(...missing.map((m) => low.indexOf(String(m.name).toLowerCase())).filter((i) => i > 0));
+  if (!Number.isFinite(at)) return '';
+  const m = /^(.*\S)\s*(?:,|\band\b|\bthen\b|\balso\b|\bplus\b)[\s,]*$/i.exec(t.slice(0, at));
+  return m && m[1].split(/\s+/).length >= 2 ? ` I did not act on "${m[1].trim()}" either, because I could not read all of your message.` : '';
+}
+
 /** The reason a reading must not be acted on, from what the world says of it; null when it may stand. */
 export function vetoOf(wa, seg, ref, mode) {
   const k = kinds(mode);
@@ -158,6 +170,7 @@ export function vetoOf(wa, seg, ref, mode) {
   if (wa.fragment && k.has('no-continuation')) return { kind: 'no-continuation', why: `a piece without a verb of its own, read by ${wa.fragment.world}, which has nothing running and is not the open tab`, say: `I am not sure how “${seg.text}” fits what we were doing. Please say the whole request.`, status: 'missing' };
   if (ref && k.has('no-referent')) {
     const s = sayMissing(ref);
+    s.text += heldPart(seg.text, ref.missing);
     return { kind: 'no-referent', why: `the world has no ${ref.missing.map((m) => m.name).join(' or ')}`, say: s.text, status: 'missing', ...(ref.offer ? { offer: { rewrite: ref.offer, world: ref.world, question: s.question } } : {}) };
   }
   if (k.has('library') && wa.libVeto?.some((x) => !LIB_KEEP.has(x))) { const why = wa.libVeto.filter((x) => !LIB_KEEP.has(x)); return { kind: 'library', why: `the library's veto: ${why.join(', ')}`, reasons: why }; }

@@ -14,13 +14,13 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=e6f9268f93';
-import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=4117266ea0';
+import { restrictedSet } from '../formalizer/spell.mjs?v=6c91a786a4';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=dc30576b7d';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=ea700d2a2b';
+import { en } from '../lang/en.mjs?v=08dd6017a3';
 import { touchedCount } from './followup.mjs?v=88af56c068';
 
 export const FRAME_LIMIT = 5;
@@ -822,7 +822,7 @@ export class Discourse {
     const tabWorld = d.context().tabWorld;
     const ownRedo = !!(tabWorld && d.engine.set.get(tabWorld)?.redoAction);   // a tab world with its own redo answers "redo" itself (its operations)
     if (!top) return ownRedo ? null : nothing;   // the tab world answers itself ("There is nothing to redo." in its words)
-    if (ownRedo && !rs && !top.whole) return null;
+    if (ownRedo && !top.whole && !(rs && rs.turns.at(-1)?.turn === top.turn)) return null;   // a world with its own redo answers unless the undo was a step of the matrix timeline (a schema world keeps its own history in both reasoners)
     this.redoStack.pop();
     const act = top.act;
     if (rs && !top.whole && rs.turns.at(-1)?.turn === top.turn) { rs.undoLast(d.isession, null); rs.redos.pop(); this._restoreOwn(null, top.pre); }   // (a redo is not itself redone)   // the undo was a step of the timeline: take that step back
@@ -861,9 +861,8 @@ export class Discourse {
     const norm = (w) => String(w).toLowerCase().replace(/(?:ies)$/, 'y').replace(/(?:es|s)$/, '');
     const list = (xs) => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
     const q = (t) => `"${String(t ?? 'a step').replace(/[.!?\s]+$/, '')}"`;
-    if (rs?.turns.length) {
-      const k = rs.findStep(words);
-      if (k < 0) return null;
+    const k = rs?.turns.length ? rs.findStep(words) : -1;   // a step of the timeline; a request of a world that keeps its own history (schema worlds) is found among the actions below
+    if (k >= 0) {
       if (k === rs.turns.length - 1) return this._matrixUndo(text);
       const e = rs.turns[k], deps = rs.dependents(k);
       if (!deps.length) {
@@ -1303,6 +1302,7 @@ export class Discourse {
     const m = t.match(AMBIGUOUS_VERB);
     if (m) {
       const noun = m[2].toLowerCase();
+      if (en.nounPhrase(`${noun} ${t.slice(m[0].length).trim()}`).relative) return null;   // "the house that is red" says which one: the world reads the relative clause
       const same = refs.filter((r) => (r.words ?? [r.noun]).includes(noun));
       if (same.length < 2 || same.some((r) => r.salient)) return null;
       const at = m[0].length - `${m[1]} ${m[2]}`.length;   // the pattern ends with the noun phrase

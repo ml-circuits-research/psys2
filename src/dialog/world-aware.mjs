@@ -151,6 +151,18 @@ export function sayMissing(ref) {
   return { text: `I can't find ${orList(names)} in the ${where}. ${ref.here ? `In the ${where} I can see: ${ref.here}.` : `The ${where} is empty.`}` };
 }
 
+/**
+ * One clause that coordinates a thing the world does not have with an earlier part ("clear everything and zork the plimp"): the whole request is held (nothing runs on a
+ * partly read sentence), and the reply names the part that was read and not acted on, as the hold of separate clauses does.
+ */
+function heldPart(text, missing) {
+  const t = String(text ?? ''), low = t.toLowerCase();
+  const at = Math.min(...missing.map((m) => low.indexOf(String(m.name).toLowerCase())).filter((i) => i > 0));
+  if (!Number.isFinite(at)) return '';
+  const m = /^(.*\S)\s*(?:,|\band\b|\bthen\b|\balso\b|\bplus\b)[\s,]*$/i.exec(t.slice(0, at));
+  return m && m[1].split(/\s+/).length >= 2 ? ` I did not act on "${m[1].trim()}" either, because I could not read all of your message.` : '';
+}
+
 /** The reason a reading must not be acted on, from what the world says of it; null when it may stand. */
 export function vetoOf(wa, seg, ref, mode) {
   const k = kinds(mode);
@@ -158,6 +170,7 @@ export function vetoOf(wa, seg, ref, mode) {
   if (wa.fragment && k.has('no-continuation')) return { kind: 'no-continuation', why: `a piece without a verb of its own, read by ${wa.fragment.world}, which has nothing running and is not the open tab`, say: `I am not sure how “${seg.text}” fits what we were doing. Please say the whole request.`, status: 'missing' };
   if (ref && k.has('no-referent')) {
     const s = sayMissing(ref);
+    s.text += heldPart(seg.text, ref.missing);
     return { kind: 'no-referent', why: `the world has no ${ref.missing.map((m) => m.name).join(' or ')}`, say: s.text, status: 'missing', ...(ref.offer ? { offer: { rewrite: ref.offer, world: ref.world, question: s.question } } : {}) };
   }
   if (k.has('library') && wa.libVeto?.some((x) => !LIB_KEEP.has(x))) { const why = wa.libVeto.filter((x) => !LIB_KEEP.has(x)); return { kind: 'library', why: `the library's veto: ${why.join(', ')}`, reasons: why }; }

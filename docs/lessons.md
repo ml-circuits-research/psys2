@@ -81,3 +81,9 @@ The numbers behind each line are in `worker-log.md` (entries named in brackets) 
 - A fix is accepted when it names a cause group and reports the group's count before and after; most "bugs" in the ledger are one group seen many times (boundary 1,656 of 2,504 failing cases: translation and typing, not the pipeline).
 - A pair of worlds that cooperate is worth more than a feature inside one world: T1 shows 11 of 15 world pairs working with no per-pair code.
 - What each landing deleted is the real measure: lines of hand-written language, general lines still in PSys2, knowledge items still in worlds. The table makes it visible; the accuracy sets only guard.
+
+## Smoke invariants after the art.draw switch (worker-log "smoke invariants after the art.draw switch")
+- A red invariant is not always the invariant's subject: the network test was red because a generated catch-all reading (`show {thing:words}`) of the wrong world read a typo before the tab's repair. Read the failing assertion before blaming the named cause; the readings with and without the catalog were equal all along.
+- A free-words slot in a generated pattern needs the same decline rule as any catch-all: the world's `accepts` must say what the words may be (here: names of the drawing), not accept the act.
+- Two layers each kept "one step per message" (the executor's `stepGroup`, a hand merge inside `add`); the owner's rule is one step per request, so a rule stated in a spec is a test, and a spec line that contradicts a newer decision (spec 21 section on undo) is a bug to fix with the code.
+- **[LIB]** The undo contract of the library should be per request with an optional "whole message" tag; hosts then do not re-implement grouping (executor, dialogue timeline and world engine each held a copy).

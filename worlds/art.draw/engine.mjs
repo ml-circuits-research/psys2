@@ -1057,7 +1057,7 @@ const addInner = guard((ctx, args, s) => {
   if (more.length) {
     // the rest of the sentence is another thing: "and a tree"
     const sub = parseMoreSpec(more);
-    if (sub) { const r = add(ctx, sub); if (r.status === 'supported') { extra = r.data?.made ?? []; s.history.splice(-2, 1); } else if (r.status !== 'supported') { s.last = made.map((o) => o.id); return ok(`I drew ${groupPhrase(made).join(' and ')}. But ${r.note.charAt(0).toLowerCase()}${r.note.slice(1)}`, { data: { made: all.map((o) => o.id) } }); } }
+    if (sub) { const r = add(ctx, sub); if (r.status === 'supported') { extra = r.data?.made ?? []; } else if (r.status !== 'supported') { s.last = made.map((o) => o.id); return ok(`I drew ${groupPhrase(made).join(' and ')}. But ${r.note.charAt(0).toLowerCase()}${r.note.slice(1)}`, { data: { made: all.map((o) => o.id) } }); } }
   }
   s.last = [...made, ...extra.map((id) => byId(s, id)).filter(Boolean)].map((o) => o.id);
   s.mood = s.mood === 'night' && made.some((o) => kindKey(o) === 'sun') ? s.mood : s.mood;
