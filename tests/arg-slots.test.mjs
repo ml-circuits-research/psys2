@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Q2 item 2 / J2 (spec 16 section 8): `core.describe.arg slot=<type>.<key>` is the one declaration of what an argument of a host-run action fills. From it the host derives
-// a parameter type named like the action, and the library (sopworld 0.13.1) judges the reading by the fallback: the value must fit the slot's kind and range.
+// a parameter type named like the action, and the library (sopworld 0.14.0) judges the reading by the fallback: the value must fit the slot's kind and range.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';

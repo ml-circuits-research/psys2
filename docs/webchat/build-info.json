@@ -54,10 +54,10 @@
     "lib/dialog/discourse.mjs": "be9968003fd3b2b7",
     "lib/dialog/dispatch-validate.mjs": "428a5675626b4fcd",
     "lib/dialog/encoder-dispatch.mjs": "800a1db4e618d23c",
-    "lib/dialog/index.mjs": "6ff6fc89d86dd801",
+    "lib/dialog/index.mjs": "81bef72fab3d1d98",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
-    "lib/dialog/reader-route.mjs": "3a3fb93b38d1512e",
+    "lib/dialog/reader-route.mjs": "86d82e57bc1f35da",
     "lib/dialog/runtime-config.mjs": "08e124a6aaf79d05",
     "lib/dialog/surprise.mjs": "bd76e5f4d59d803e",
     "lib/dialog/test-runner.mjs": "f4828bf7550a0b77",
@@ -97,7 +97,7 @@
     "lib/interpreter/render.mjs": "29d3ec2c79479fb9",
     "lib/legends/index.mjs": "ada11d48a49f2c91",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
-    "lib/reasoner/index.mjs": "0b2a0ebf532d5e4e",
+    "lib/reasoner/index.mjs": "fe065c58d7de5e6c",
     "lib/reasoner/ns.mjs": "024a4cfbf7a15cbd",
     "lib/soplang/index.mjs": "c3ef0aeb95aea0b7",
     "lib/translate/avatar.en-ro.mjs": "78e6b458378d43a3",
@@ -114,9 +114,9 @@
     "lib/translate/places.ro-en.mjs": "94650384878ada19",
     "lib/translate/replies.en-ro.mjs": "a6f50a065cd4b4ff",
     "lib/translate/ro-en.mjs": "a4d5b469ccd2c53f",
-    "lib/vendor/LICENSES.md": "92a33b28898f3162",
+    "lib/vendor/LICENSES.md": "34636642a079041e",
     "lib/vendor/sopworld/LICENSE": "93611051303e500a",
-    "lib/vendor/sopworld/sopworld.mjs": "0044367da5044cf9",
+    "lib/vendor/sopworld/sopworld.mjs": "d7240105f2dcd4a7",
     "lib/vendor/sopworld/tools/scan-loops.mjs": "c468386b69b7edda",
     "lib/worlds/canonical.mjs": "331dd143a11d8880",
     "lib/worlds/describe.mjs": "54791396af2bdff0",
@@ -228,6 +228,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T07:16:50.851Z",
-  "commit": "96e7548"
+  "builtAt": "2026-11-13T07:31:15.696Z",
+  "commit": "bbdb91d"
 }
