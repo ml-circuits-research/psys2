@@ -216,15 +216,6 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
 import { LIMITS } from './time-limits.mjs';
 import { languageCommand } from '../translate/language-command.mjs';
-
-/**
- * A world's lazy pre-step (ops `prepare({ text })`: a lazily loaded engine (spec 04), or the catalog shards a message needs (spec 07 section 7)) before its operation runs:
- * awaited, never fatal. The world gets the message text and the knowledge time limit (`deadlineMs`, LIMITS.knowledgeMs): a pre-step that fetches stops waiting after it
- * (the operation then answers without the fetch, which goes on and is cached); the turn guard bounds the rest.
- */
-async function runPrepare(prep, text) {
-  try { await guard.abortable(Promise.resolve(prep({ text, deadlineMs: LIMITS.knowledgeMs })), 'prepare'); } catch (e) { if (e instanceof TurnAborted) throw e; /* the operation then says it is not ready */ }
-}
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1406,7 +1397,7 @@ export class DialogSession {
         continue;
       }
       // a world with a lazily loaded engine (ops `prepare()`, async, idempotent: spec 04) is made ready before its operations run
-      { const prep = this.engine.set.get(seg.match?.worldId)?.ops?.prepare; if (typeof prep === 'function') await runPrepare(prep, seg.text); }
+      { const prep = this.engine.set.get(seg.match?.worldId)?.ops?.prepare; if (typeof prep === 'function') { try { await prep(); } catch { /* the operation then says it is not ready */ } } }
       this.isession.add(seg.wires);
       this.isession.batch = { index: segNo++, count: segments.length };   // ops see their place in the message (a game's host cannot answer between two commands of one message)
       const statements = [];

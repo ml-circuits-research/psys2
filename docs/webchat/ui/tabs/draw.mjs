@@ -6,6 +6,7 @@ import { createRenderer, PAPER } from './draw/render.mjs';
 
 const VENDOR = new URL('../../vendor/draw/rough.mjs', import.meta.url);
 const SCENE_ASSET = 'worlds/art.draw/scene.mjs';
+const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds';
 const W = 1000, H = 700;
 
 const CRAYONS = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown', 'black', 'white', 'grey'];
@@ -138,11 +139,29 @@ function make(holder, host) {
   hintTimer = setInterval(() => { hintIndex++; if (!hint.hidden) showHint(); }, 4200);
 
   // ---- animation -----------------------------------------------------------------------------------------------
+  // Things of the knowledge catalog (spec 17) that the page does not have yet are fetched here (the engine worker has its own copy): they appear once their parts are there.
+  const known = (o) => !scene || o.kind !== 'composite' || scene.isThing(o.thing), asking = new Set();
+  let facts = null;
+  function ensureThings(objs) {
+    for (const o of objs) {
+      if (known(o) || asking.has(o.thing)) continue;
+      asking.add(o.thing);
+      (async () => {
+        try {
+          facts ??= await Promise.all([import(host.asset('lib/knowledge/facts.mjs')), import(host.asset('lib/loaders/knowledge-source.mjs'))]).then(([f, k]) => f.createFacts({ source: k.createKnowledgeSource(KNOWLEDGE_URL) }));
+          const th = await facts.thing(o.thing), parts = th?.objects?.[0]?.parts;
+          if (parts?.length) { scene.registerThings(new Map([[th.name, parts]])); if (!destroyed) { sync(state); schedule(); } }
+        } catch { /* the picture shows without it */ }
+        asking.delete(o.thing);
+      })();
+    }
+  }
   function sync(next) {
     const now = performance.now();
     const ids = new Set();
     let batch = 0;
-    for (const o of next.objects ?? []) {
+    ensureThings(next.objects ?? []);
+    for (const o of (next.objects ?? []).filter(known)) {
       ids.add(o.id);
       const s = shown.get(o.id);
       if (!s) shown.set(o.id, { obj: o, cur: { x: o.x, y: o.y, size: o.size, rotation: o.rotation ?? 0, flipX: o.flip ? -1 : 1 }, born: now + batch++ * 140, dying: 0 });
@@ -212,7 +231,7 @@ function make(holder, host) {
   // ---- clicks ---------------------------------------------------------------------------------------------------
   function objectAt(x, y) {
     if (!scene) return null;
-    const objs = [...(state.objects ?? [])].sort((a, b) => (b.z ?? 0) - (a.z ?? 0));
+    const objs = [...(state.objects ?? [])].filter(known).sort((a, b) => (b.z ?? 0) - (a.z ?? 0));
     for (const o of objs) {
       const b = scene.bbox(o), pad = 6;
       if (x >= b.x0 - pad && x <= b.x1 + pad && y >= b.y0 - pad && y <= b.y1 + pad) return o;
@@ -260,13 +279,13 @@ function make(holder, host) {
       if (!renderer) return { ok: false, detail: 'the drawing is not ready yet' };
       const name = `${String(filename).replace(/[^\w.\- ]+/g, '_').slice(0, 60) || 'my-drawing'}.${format === 'svg' ? 'svg' : 'png'}`;
       let blob;
-      if (format === 'svg') blob = new Blob([renderer.toSVG(state)], { type: 'image/svg+xml' });
+      if (format === 'svg') blob = new Blob([renderer.toSVG({ ...state, objects: (state.objects ?? []).filter(known) })], { type: 'image/svg+xml' });
       else {
         const off = document.createElement('canvas');
         off.width = W * 2; off.height = H * 2;
         const octx = off.getContext('2d');
         octx.setTransform(2, 0, 0, 2, 0, 0);
-        renderer.drawScene(octx, rough.canvas(off), state, { selected: null });
+        renderer.drawScene(octx, rough.canvas(off), { ...state, objects: (state.objects ?? []).filter(known) }, { selected: null });
         blob = await new Promise((res) => off.toBlob(res, 'image/png'));
       }
       const url = URL.createObjectURL(blob);

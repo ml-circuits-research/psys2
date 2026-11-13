@@ -9,8 +9,7 @@ export const TIME_LIMIT_SPECS = Object.freeze({
   normalizerMs: { def: 3000, min: 500, max: 30000, label: 'Normalizer call deadline', note: 'one model call of the phrasing normalizer' },
   graceMs:      { def: 1500, min: 100, max: 10000, label: 'Worker cancel grace', note: 'how long a cancelled model call may keep running before its worker is restarted' },
   lenientMs:    { def: 3000, min: 500, max: 30000, label: 'Leniency budget', note: 'spelling variants and partial windows of one message' },
-  knowledgeMs:  { def: 3000, min: 500, max: 30000, label: 'Knowledge fetch cap', note: 'the catalog shards a message needs (fetch and parse) before its operation runs; past it the operation answers without them and the load carries on in the background' },
-  effectMs:    { def: 3000, min: 500, max: 30000, label: 'Host effect cap', note: 'one host effect (tab animation, engine move, music start); the tabs are veiled meanwhile' },
+  effectMs:     { def: 3000, min: 500, max: 30000, label: 'Host effect cap', note: 'one host effect (tab animation, engine move, music start); the tabs are veiled meanwhile' },
   speakBaseMs:  { def: 6000, min: 1000, max: 60000, label: 'Speech veil base', note: 'how long a spoken answer veils the tabs at least (plus a little per character)' },
   speakMaxMs:   { def: 60000, min: 5000, max: 300000, label: 'Speech veil cap', note: 'a spoken answer never veils the tabs longer than this (the speech itself goes on)' },
 });

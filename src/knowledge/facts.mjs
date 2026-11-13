@@ -15,6 +15,8 @@ import { parseLine, parseShard } from './catalog.mjs';
 
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
+/** Runs `fn` after a backoff (an unreachable catalog is asked again later, not remembered as empty for the session); the timer never keeps a process alive. */
+const retryLater = (fn, ms = 30000) => { const t = setTimeout(fn, ms); t.unref?.(); };
 
 /** The lemma candidates of a word, most likely first: the word, then the singular forms of a regular plural. Pure, no vocabulary. */
 export function lemmaCandidates(word) {
@@ -49,7 +51,9 @@ export function createFacts({ source, name = 'catalog' }) {
 
   const loadVocab = () => vocabLoading ??= (async () => {
     const t = clock();
-    try { const txt = await source.text('vocab.json'); stats.vocabBytes = txt?.length ?? 0; vocab = txt ? JSON.parse(txt) : {}; } catch { vocab = {}; }
+    let failed = false;
+    try { const txt = await source.text('vocab.json'); stats.vocabBytes = txt?.length ?? 0; failed = !txt; vocab = txt ? JSON.parse(txt) : {}; } catch { failed = true; vocab = {}; }
+    if (failed) retryLater(() => { vocabLoading = null; vocab = null; things.clear(); });
     stats.vocabMs = clock() - t;
   })();
 
@@ -59,6 +63,7 @@ export function createFacts({ source, name = 'catalog' }) {
       let txt = null;
       try { txt = await source.text(`${id}.sop`); } catch { /* an unreachable shard is no knowledge */ }
       stats.shardMs += clock() - t; stats.shardBytes += txt?.length ?? 0; stats.shardsLoaded.push(id);
+      if (!txt) retryLater(() => { shards.delete(id); parsed.delete(id); things.clear(); });
       return txt ? txt.split('\n') : [];
     })());
     return shards.get(id);

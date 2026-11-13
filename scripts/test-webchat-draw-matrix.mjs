@@ -58,7 +58,7 @@ export const drawScenarios = ({ openChat, MATRIX, check, say }) => ({
   async veto(o) {
     // world-aware veto is the default (spec 16): plain-language replies, the user's label in quotes, one short question; English and Romanian (through the translator)
     for (const [lang, connect, remove] of [['en', 'connect Start to End', 'delete the dragon'], ['ro', 'conectează c1 cu End', 'șterge dragonul']]) {
-      const c = await openChat({ ...o, settings: { ...MATRIX, language: lang } });
+      const c = await openChat({ ...o, settings: { ...MATRIX, language: lang, knowledgeUrl: 'http://127.0.0.1:9' } });   // no catalog here: with the real one attached "delete the dragon" is answered with what a dragon is (spec 17)
       try {
         if (lang === 'ro') await say(c, 'deschide fila diagramă');
         await say(c, lang === 'en' ? 'draw a red box called Start' : 'desenează un cerc roșu');

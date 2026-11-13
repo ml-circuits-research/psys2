@@ -379,6 +379,26 @@ export function thingOfWord(word) {
   return null;
 }
 export const isThing = (name) => Object.hasOwn(THINGS, name);
+/**
+ * Adds objects loaded lazily from the catalog (src/knowledge/service.mjs) to the registry of drawable things: `objects` is Map(name -> parts), `keywords` { lemma: object name }.
+ * The vendored hand-written objects (things.catalog.mjs) stay as they are (a loaded object of the same name does not replace them); a keyword never replaces a name that is
+ * already a word. The registry is the module object of things.catalog.mjs, so the diagram world sees the same things. Returns the names added.
+ */
+export function registerThings(objects, keywords = {}) {
+  const added = [];
+  for (const [name, parts] of objects) {
+    if (Object.hasOwn(THINGS, name)) continue;
+    THINGS[name] = parts; THING_WORDS[name] = name; added.push(name);
+    partCache.delete(COMPOSITE + name); thingCache.delete(name); thingDefs.delete(name);
+  }
+  for (const [lemma, name] of Object.entries(keywords)) if (!Object.hasOwn(THING_WORDS, lemma) && Object.hasOwn(THINGS, name)) THING_WORDS[lemma] = name;
+  return added;
+}
+/** Were the names of this part group of a thing guessed by a model (`named=model` in the catalog)? ("the stem of the grapes": the part words may be off.) */
+export function partGuessed(key, partKey) {
+  const name = kindName(key);
+  return thingGroups(name).some((g) => g.key === partKey && g.members.some((m) => m.named === 'model'));
+}
 /** The key of an object's kind: its kind, or `composite:<thing>`. */
 export const kindKey = (o) => (o?.kind === 'composite' && o.thing ? COMPOSITE + o.thing : o?.kind);
 /** The spoken name of a kind key ("composite:castle" -> "castle"). */
