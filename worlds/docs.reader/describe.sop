@@ -451,31 +451,6 @@
     noun=$w.en.highlighting.docr.clearSearch
     noun=$w.en.highlights.docr.clearSearch
 
-@describe.across core.describe
-    op=docr.across
-    intent=query
-    emit="@{_} core.request action=docr.across arg.q=\"{q}\""
-    priority=12
-    kind=question
-    frames=ask
-
-@describe.across.q core.describe.arg
-    of=$describe.across
-    name=q
-    class=words
-    size=6
-
-@describe.across.en core.describe.words
-    of=$describe.across
-    lang=en
-    noun=$w.en.documents.docr.across
-    noun=$w.en.files.docr.across
-    noun=$w.en.stories.docr.across
-    ask=$w.en.which.docr.across
-    prep.q=$w.en.mention.docr.across.q
-    prep.q=$w.en.mentions.docr.across.q
-    det.q=$w.en.the.docr.across.q
-
 @describe.relation core.describe
     op=docr.relation
     intent=query
@@ -586,29 +561,6 @@
     of=$describe.list
     lang=en
     phrase=$phrase.lang.intent.listdocs
-
-@describe.open core.describe
-    op=docr.open
-    intent=command
-    emit="@{_} core.request action=docr.open arg.t=\"{t}\""
-    priority=12
-    frames=imp
-    frames=wish
-    frames=can
-
-@describe.open.t core.describe.arg
-    of=$describe.open
-    name=t
-    class=words
-    size=8
-
-@describe.open.en core.describe.words
-    of=$describe.open
-    lang=en
-    verb=$w.en.open.docr.open
-    verb=$w.en.switch.docr.open
-    prep.t=$w.en.to.docr.open.t
-    det.t=$w.en.the.docr.open.t
 
 @describe.close core.describe
     op=docr.close
@@ -741,13 +693,6 @@
 @w.en.search.docr.clearSearch core.word text=search means=docr.clearSearch
 @w.en.highlighting.docr.clearSearch core.word text=highlighting means=docr.clearSearch
 @w.en.highlights.docr.clearSearch core.word text=highlights means=docr.clearSearch
-@w.en.documents.docr.across core.word text=documents means=docr.across
-@w.en.files.docr.across core.word text=files means=docr.across
-@w.en.stories.docr.across core.word text=stories means=docr.across
-@w.en.which.docr.across core.word text=which means=docr.across
-@w.en.mention.docr.across.q core.word text=mention means=docr.across.q
-@w.en.mentions.docr.across.q core.word text=mentions means=docr.across.q
-@w.en.the.docr.across.q core.word text=the means=docr.across.q
 @w.en.who.docr.relation core.word text=who means=docr.relation
 @w.en.the.docr.relation.x core.word text=the means=docr.relation.x
 @w.en.the.docr.relation.r core.word text=the means=docr.relation.r
@@ -765,10 +710,6 @@
 @w.en.text.docr.read core.word text=text means=docr.read
 @w.en.tale.docr.read core.word text=tale means=docr.read
 @w.en.aloud.docr.read core.word text=aloud means=docr.read
-@w.en.open.docr.open core.word text=open means=docr.open
-@w.en.switch.docr.open core.word text=switch means=docr.open
-@w.en.to.docr.open.t core.word text=to means=docr.open.t
-@w.en.the.docr.open.t core.word text=the means=docr.open.t
 @w.en.close.docr.close core.word text=close means=docr.close
 @w.en.file.docr.close core.word text=file means=docr.close
 @w.en.document.docr.close core.word text=document means=docr.close
