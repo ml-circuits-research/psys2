@@ -1,0 +1,43 @@
+# 18 — Tab worlds and shared modules; the module `space`
+
+Status: implemented (first version, 2026-11-13). Owner direction: the drawing world deals with drawings; where things are, which one is meant by its position and how to arrange them come from one place that other worlds can ask too; and there must not be more and more worlds competing for a message.
+
+## 1. Two kinds of worlds
+
+| Kind | What it is | Routing |
+| --- | --- | --- |
+| **Tab world** | What the user does; one per tab (`tab=` in `world.sop`): art.draw, diagram.sketch, data.charts, geo.map, games.chess, media.music, docs.reader, user.profile. It has patterns, operations and state, and it competes for messages (spec 03 section 4, spec 16). | routing candidate |
+| **Shared module** | A world, or a library of one, that tab worlds import and that never competes: no patterns of its own, no operations of its own, so it is never a routing target. `space`, `common.sense` (spec 15), the knowledge catalog lookup (spec 17), the follow-up handling of the dialogue layer (spec 11). | never a candidate |
+
+Do **not** merge tab worlds into one: every phrase would compete with every other, which is the wrong-world problem. What several tabs need is a module they ask.
+
+**Worlds that are really modules today** (found by the repository: no `tab=` and the patterns are used while another tab is active). They can stop being routing candidates of their own; what they offer is reached from the active tab or the conversation layer: `ui.help` (answers about the app, a conversation concern), `ui.shell` (opens tabs, settings: dialogue layer), `ui.avatar` (the avatar tab's commands, used from any tab), the `kids.*` worlds (`kids.arith`, `kids.shop`, `kids.time`, `kids.animals`, `kids.shapes`, `kids.tasks`, `kids.common`: small-talk and lessons reached from any tab), and the games with no `tab=` (`games.guess`, `games.hangman`, `games.tictactoe`: a candidate only while a game runs, spec 16 `no-game` veto). Moving them out of routing is a separate decision (it touches the dispatcher labels); WORLD-OF-WORLDS (`meta.worlds`) is where it is decided, with `kind=tab|module` on the world card. This spec only introduces the kind and the first module that is built as one from the start.
+
+## 2. The module `space` (`worlds/space/`)
+
+Files: `world.sop` (namespace `space`, status fixture, no patterns), `legend.sop` (the projection), `lexicon.sop` (the words, generated from the tables of `space.mjs` by `scripts/build-space-lexicon.mjs`; `tests/space.test.mjs` checks it is not stale), `space.mjs` (rules and arithmetic, browser-safe, no imports), `tests.sop` (a placeholder: it is tested through its hosts and by `tests/space.test.mjs`).
+
+**Projection.** A host gives `space.item id= kind= x= y= w= h= z=` (the centre and the box, y grows downward, in the host's units) in `space.frame w= h= [step=]` (`step`: how far one plain move goes; default a tenth of the width). The module answers with selections (ids), target boxes (`{ id: { x, y [, w, h] } }`) and sentences; the host applies the boxes to its own objects (art.draw: `o.x`, `o.y`, `o.size`; diagram.sketch: engine `move ... at x,y` and `resize` nodes, so the engine's undo and rules still apply). The module never draws and knows nothing about houses or boxes: a host passes `kindOf(word) -> { kind, plural }` for the words that name its kinds (`*` means any kind).
+
+**1. Selection by position and order** (`parseSel`, `select`): first, second, last (reading order: rows from the top, each row left to right), left / right / top / bottom (`the left one`, `leftmost`, `the second from the right`, `the two on the left`), middle (the median along the axis the group spreads on; with an even number there is no middle: the host asks), nearest to / next to X, between X and Y, biggest / smallest, "the other one" (not what the last action handled). With a kind ("the middle house") and without ("the one in the middle"). An ambiguous selection returns `{ ask, candidates }` with the candidates named by position ("There are 3: the left house, the middle house and the right house. Which one do you mean?"); the module never silently takes the first. A host that has context (a selected thing, the one thing just handled) uses it before asking.
+
+**2. Relative moves** (`parseMove`, `planMove`): direction words, combined ("left and down" is both), each with an amount: default one step, a bit (0.5), a tiny bit (0.3), more / much (2.2), a lot (2.5), way / far (3), all the way (to the edge), by half (half the way to the edge). "further", "even more", "again" repeat the last move (`memory` returned by a move is kept by the host as `lastMove`; SCENE-NATURAL P2 calls into this). Boxes stay inside the frame.
+
+**3. Placements by relation** (`parseRel`, `planPlace`): in, on, above, under, next to / near, left of, right of, between, around, in a corner (top left ...), the centre, at an edge, on the left half. The target box does not overlap another item unless the relation is containment (in, on, around); a fixed side slides along the side until it is free, "next to" tries the side the thing is on, then the others.
+
+**4. Layouts** (`parseLayout`, `planLayout`): in a row, in a column, in a grid, in a circle, spread evenly, align (left, right, top, bottom, centres), same size, centre the group, swap two, tidy up (push overlapping boxes apart along the shorter way, keep the order). Free arrangements only: the diagram's layout engine stays for connected graphs (`arrange`, `align`, `distribute`, its score), and "make a better layout" maps to tidy up when nothing is connected and something overlaps.
+
+**5. Questions** (`parseQuestion`, `answerQuestion`): "what is next to the house?", "which one is in the middle?", "is the sun above the tree?", "how far apart are the sun and the tree?" (touching, close, a bit apart, far apart; never pixels).
+
+**6. Words.** The spatial words are `core.lexicon` groups of the module (`lex.space.ordinals`, `positions`, `sizes`, `counts`, `dirs`, `amounts`, `more`, `layouts`, `relations`); a host's patterns use them (`{d:lex.space.dirs}`) and a host lexicon extends them (`extends=$lex.space.amounts`). New phrasing for these words goes in the module, never in a host's patterns.
+
+`interpret(text, ctx)` reads a whole sentence at once for a host that has no reading of its own; `ctx = { items, frame, kindOf, last, lastMove }`; the result is `{ type: 'move' | 'layout' | 'answer' | 'ask' | 'error', ids, boxes, say, memory, dest, kind, op }` or `null` when the sentence is not about places.
+
+## 3. How a host uses it
+
+- **art.draw** keeps its own reading of the verb and the thing (`move`, noun phrases with colour and parts). `parseNP` takes the spatial words from the module (`POSITIONS`, `ORDINALS`, `SIZES`, `COUNTS`); `resolveNP` hands the candidate list to `space.select` (a request that acts on the thing, `ask: true`, asks instead of taking the newest; callers that only look a thing up keep the old fallback and its note); `parseDest` reads the amount and the directions with `space.parseMove` and `applyDest` moves with `space.planMove`; the last move is kept in `lastMove` (for "further") and in `lastMoveInfo` (for "no, not the first one, the middle one": the op `draw.reselect` puts the things back and moves the one meant now, one request). New: the op `draw.spatial` (patterns `x.space.*`) for row / column / grid / circle / tidy up / swap / align and the questions. Ground-aware relations (a thing stands on the ground) stay in the host's `placeRelative`.
+- **diagram.sketch** hands a moving or arranging sentence to `space.interpret` before the engine reads it (`spaceTry`, only for the actions move, align, arrange, distribute, respace, improve, swap, snap, fit): a selection by place, amounts, "further", a relation, "tidy up" of overlapping free shapes and "swap the first and the last" are applied as engine nodes; whatever the module cannot read (a shape named by its name, a layout of the engine) goes to the engine unchanged. The ops `diagram.reselect` and `diagram.spatial` (questions: is A above B, which is in the middle, how far apart; names go to the engine's `check` and `list`) are the same as in art.draw.
+
+## 4. Tests
+
+`tests/space.test.mjs` (module functions, the lexicon, the 5 rows of class `space` of `training/eval/owner-log-2026-11-13.jsonl` through the Romanian boundary in both reasoners, 18 of the generated requests per reasoner); `training/eval/space-set.mjs` generates 150 seeded requests over both hosts (selection x move x relation x layout x question, 2 to 6 objects, expected boxes or predicates computed from plain geometry); `node scripts/eval-space.mjs` runs all 150 through both reasoners.

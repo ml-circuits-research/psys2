@@ -1,0 +1,12 @@
+@world.space core.world
+    namespace=space
+    version=0.1.0
+    legend=$legend.space
+    imports=world.core
+    reasoner=matrix
+    formalization=rules
+    language=en
+    status=fixture
+    title="Space"
+    summary=""
+    doc="A shared module, not a tab: where things are, which one is meant by its position, how to move and arrange them. A host world (art.draw, diagram.sketch; later data.charts, geo.map, game boards) imports it and gives it a projection of its objects, space.item id kind x y w h z in a space.frame w h; the module answers with selections, boxes that do not overlap, layouts and answers about places, and the host applies them to its own objects. It has no patterns and no operations of its own, so it is never a routing target. The spatial words (left, right, above, between, middle, first, last, row, grid, a bit, all the way ...) are its lexicons. The rules and the arithmetic are in space.mjs, a browser-safe module the hosts import. Hand-built platform fixture, not produced by the C1 workflow."

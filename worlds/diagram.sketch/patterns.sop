@@ -1858,3 +1858,87 @@
     example="Arrange the boxes as a house."
     example="Lay out the shapes like a castle."
     doc="DRAW-FROM-FACTS: 'arrange the boxes as a house' draws the part boxes of the house; a layout word (row, circle, grid ...) is handed to the engine's own arrange, so the existing layouts are unchanged."
+
+@pat.diagram.sketch.move.further core.pattern
+    match="[and|then|now|also]? [more|even_more|further|farther|even_further] [to_the|towards_the|towards|to]? {d:lex.space.dirs} [$lang.tail.filler]?"
+    emit="@{_} core.request action=diagram.move arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=16
+    needsState=shapes
+    example="Further left."
+    example="And even more up."
+    doc="Goes on with the last move, further in a direction (the module space reads the direction and the amount)."
+
+@pat.diagram.sketch.move.further.amt core.pattern
+    match="[and|then|now|also]? {amt:lex.space.amounts} [more|even_more|further|farther|even_further]? [to_the|towards_the|towards|to]? {d:lex.space.dirs} [$lang.tail.filler]?"
+    emit="@{_} core.request action=diagram.move arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=16
+    needsState=shapes
+    example="A bit more to the right."
+    example="A lot further left."
+    doc="Goes on with the last move by an amount (a bit, a lot, all the way) in a direction."
+
+@pat.diagram.sketch.move.again core.pattern
+    match="[and|then|now|also]? [further|farther|even_further|even_more|once_more|again]"
+    emit="@{_} core.request action=diagram.move arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=16
+    needsState=shapes
+    example="Further."
+    example="Again."
+    doc="Repeats the last move."
+
+@pat.diagram.sketch.reselect core.pattern
+    match="[no|nope|oh_no]? not [the]? {a:words(2)} [one]? [the|but|i_meant|i_mean|the_one]? {p:words(4)}"
+    emit="@{_} core.request action=diagram.reselect arg.text=\"{p}\""
+    kind=request
+    priority=15
+    tabPriority=16
+    needsState=shapes
+    example="No, not the first one, the middle one."
+    example="Not the left one, the right one."
+    doc="Corrects which shape the last move was about: the same move on the one meant now."
+
+@pat.diagram.sketch.space.is core.pattern
+    match="[is|are] {a:words(4)} [above|below|under|over|beneath|underneath|left_of|right_of|to_the_left_of|to_the_right_of|next_to|near|beside] {b:rest}"
+    emit="@{_} core.request action=diagram.spatial arg.text=\"{segment}\""
+    kind=question
+    priority=21
+    tabPriority=21
+    needsState=shapes
+    example="Is the circle above the square?"
+    doc="Is A above, under, left of, right of or next to B: handed to the module space."
+
+@pat.diagram.sketch.space.which core.pattern
+    match="which {r:words(3)} [is|are] [in_the_middle|in_the_centre|in_the_center] {c:rest?}"
+    emit="@{_} core.request action=diagram.spatial arg.text=\"{segment}\""
+    kind=question
+    priority=21
+    tabPriority=21
+    needsState=shapes
+    example="Which box is in the middle?"
+    doc="Which one is in the middle, the biggest, on the left ...: handed to the module space."
+
+@pat.diagram.sketch.space.far core.pattern
+    match="how_far [apart]? [is|are] {r:rest}"
+    emit="@{_} core.request action=diagram.spatial arg.text=\"{segment}\""
+    kind=question
+    priority=21
+    tabPriority=21
+    needsState=shapes
+    example="How far apart are the circle and the square?"
+    doc="How far two shapes are (near or far, never pixels): handed to the module space."
+
+@pat.diagram.sketch.space.swap core.pattern
+    match="[swap|switch|exchange|trade] [the]? {a:words(3)} and [the]? {b:words(3)}"
+    emit="@{_} core.request action=diagram.spatial arg.text=\"swap {a} and {b}\""
+    kind=request
+    priority=21
+    tabPriority=21
+    needsState=shapes
+    example="Swap the first and the last circle."
+    doc="Swaps two shapes named by place (the first and the last): handed to the module space; names are left to the engine."

@@ -1,0 +1,65 @@
+@legend.space core.legend
+    namespace=space
+    version=0.1.0
+    imports=core
+    doc="Where things are: the projection a host world gives (items in a frame) and nothing else"
+
+@space.frame core.type
+    extends=core.state
+    doc="The frame the items are in: its width and height in the host's units, y grows downward. The optional step is how far one plain move goes (default a tenth of the width)."
+    example="The drawing is 1000 wide and 700 high."
+
+@space.frame.w core.key
+    value=number
+    card=one
+    ask="How wide is the frame?"
+
+@space.frame.h core.key
+    value=number
+    card=one
+    ask="How high is the frame?"
+
+@space.frame.step core.key
+    value=number
+    card=one
+    ask="How far is one step?"
+
+@space.item core.type
+    extends=core.state
+    doc="One object of the host as a box: its id, its kind, the centre (x, y), the size (w, h) and the stacking order (z). The module never sees more than this."
+    example="The house is a box 120 wide and 120 high centred at 200, 400."
+
+@space.item.id core.key
+    value=string
+    card=one
+    ask="Which object is it?"
+
+@space.item.kind core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@space.item.x core.key
+    value=number
+    card=one
+    ask="Where is its centre across?"
+
+@space.item.y core.key
+    value=number
+    card=one
+    ask="Where is its centre down?"
+
+@space.item.w core.key
+    value=number
+    card=one
+    ask="How wide is it?"
+
+@space.item.h core.key
+    value=number
+    card=one
+    ask="How high is it?"
+
+@space.item.z core.key
+    value=number
+    card=one
+    ask="What is its stacking order?"
