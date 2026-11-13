@@ -62,7 +62,7 @@ export function near(a, b) {
     return d === 2 && a[at] === b[at + 1] && a[at + 1] === b[at] && a.slice(at + 2) === b.slice(at + 2);
   }
   const [s, l] = a.length < b.length ? [a, b] : [b, a];
-  let i = 0; while (i < s.length && s[i] === l[i]) i++;
+  let i = 0; for (let j = 0; j < s.length; j++) { if (s[j] !== l[j]) break; i++; }
   return s.slice(i) === l.slice(i + 1);
 }
 const same = (a, b) => a === b || near(a, b);
