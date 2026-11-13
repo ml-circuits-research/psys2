@@ -8,8 +8,8 @@
  *  - `:plural` pluralizes unless the context number (`value`, else `count`, `n`) equals 1.
  *  - A template whose placeholders cannot all be resolved is skipped (next candidate or fallback).
  */
-import { lexIndex } from '../worlds/lexicon.mjs?v=a107e43628';
-import { pluralize } from '../formalizer/rules/lemma.mjs?v=20d9ef9ad8';
+import { lexIndex } from '../worlds/lexicon.mjs?v=b0ef9b1423';
+import { pluralize } from '../formalizer/rules/lemma.mjs?v=931d861e63';
 
 const PLACEHOLDER = /\{([A-Za-z_][\w.]*)((?::[a-z]+)*)\}/g;
 

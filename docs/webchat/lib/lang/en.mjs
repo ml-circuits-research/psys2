@@ -18,7 +18,7 @@
  *   ellipsisPrefixes(tokens) the 1-2 first words of an anchor clause that a verb ellipsis copies
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
-import { parse } from '../soplang/index.mjs?v=26885599a7';
+import { parse } from '../soplang/index.mjs?v=c57881f705';
 import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=476f0e950b';
 
 const all = (w, k) => w.attrs[k] ?? [];

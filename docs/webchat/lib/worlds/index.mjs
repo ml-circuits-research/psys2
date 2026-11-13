@@ -6,13 +6,13 @@
  *   readFile(id, name)      -> Promise<string | null>   file text, null when absent
  *   loadOps(id)             -> Promise<object | null>   module namespace of ops.mjs
  */
-import { parse, get, getAll } from '../soplang/index.mjs?v=26885599a7';
-import { Legends } from '../legends/index.mjs?v=48b634e4da';
+import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
+import { Legends } from '../legends/index.mjs?v=db730c4e69';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
-import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=bc8d4bc227';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=ac0b50e4b0';
-import { lexIndex } from './lexicon.mjs?v=a107e43628';
-import { budget } from '../dialog/budget.mjs?v=123c3e1329';
+import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=f19cebf218';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=2653b631cc';
+import { lexIndex } from './lexicon.mjs?v=b0ef9b1423';
+import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 // Reasoner files (spec 15). `matrix.sop` and `mapping.sop` are data for src/reasoner. The `matrix.*.sop` extras are appended to the world's own

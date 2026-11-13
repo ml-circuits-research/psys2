@@ -26,7 +26,7 @@ import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=445ab3fd8f';   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=4d49055b41';   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
