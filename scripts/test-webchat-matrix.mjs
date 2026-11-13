@@ -560,7 +560,7 @@ export const SCENARIOS = {
 // the document worlds' scenarios (scripts/test-webchat-docs.mjs)
 Object.assign(SCENARIOS, docScenarios({ openChat, MATRIX, check, say }));
 // art.draw and diagram.sketch (scripts/test-webchat-draw-matrix.mjs)
-Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, check, say }));
+Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, OPS, check, say }));
 // the UI worlds' scenarios (scripts/test-webchat-ui-matrix.mjs)
 Object.assign(SCENARIOS, uiScenarios({ openChat, MATRIX, check, say }));
 

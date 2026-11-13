@@ -7,7 +7,56 @@
  *   diagram  the diagram on the tab follows the wires: an arrow that is already there is refused with the reason, undo and redo go through the timeline in the
  *            editor's words, the tab keeps its shapes and arrows.
  */
-export const drawScenarios = ({ openChat, MATRIX, check, say }) => ({
+// UNDO-REDO: the Undo and Redo buttons of the Drawing, Chess and Diagram tabs send "undo" / "redo" like the words do. A button is pressed like a user does.
+const press = async (c, selector, label) => {
+  const n = await c.pg.$$eval('.p2-msg.is-bot:not(.is-typing)', (e) => e.length);
+  const hit = await c.pg.evaluate((sel, lab) => { const b = [...document.querySelectorAll(sel)].find((x) => x.textContent.trim().includes(lab)); if (!b || b.disabled) return false; b.click(); return true; }, selector, label);
+  if (!hit) return null;
+  await c.pg.waitForFunction((n) => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing') && document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)').length > n, { timeout: 30000, polling: 20 }, n).catch(() => {});
+  return c.pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot:not([data-runaway])')].at(-1)?.querySelector('.p2-bubble')?.innerText ?? '');
+};
+export const drawScenarios = ({ openChat, MATRIX, OPS, check, say }) => ({
+  async undoredo(o) {
+    for (const [label, settings] of [['matrix', MATRIX], ['ops', OPS ?? { ...MATRIX, reasoner: 'ops', settingsVersion: 4 }]]) {
+      const c = await openChat({ ...o, settings });
+      const st = async (w) => JSON.parse(await c.state())[w] ?? {};
+      const kinds = async () => (await st('art.draw')).objects?.map((x) => x.kind).join(',') ?? '';
+      try {
+        await say(c, 'open the drawing tab');
+        await say(c, 'draw a house');
+        await say(c, 'draw a sky and a sun');
+        const a = await press(c, '.dr-act', 'Undo');
+        check(`undoredo ${label}: the Undo button of the Drawing tab takes back the last request of the message (the sun), the sky stays`, /drew a yellow sun/.test(a ?? '') && (await kinds()) === 'house' && !!(await st('art.draw')).sky, `${a} | ${await kinds()}`);
+        const b = await press(c, '.dr-act', 'Redo');
+        check(`undoredo ${label}: the Redo button puts the sun back and says what it did`, /did it again \(drew a yellow sun\)/.test(b ?? '') && (await kinds()) === 'house,sun', `${b} | ${await kinds()}`);
+        await press(c, '.dr-act', 'Undo'); await press(c, '.dr-act', 'Undo');
+        const d = await press(c, '.dr-act', 'Redo');
+        check(`undoredo ${label}: two undos then one redo bring the sky back first`, /did it again \(added the sky\)/.test(d ?? '') && !!(await st('art.draw')).sky && (await kinds()) === 'house', `${d} | ${await kinds()}`);
+        await say(c, 'draw a cat');
+        const e = await press(c, '.dr-act', 'Redo');
+        check(`undoredo ${label}: a new action clears the redo list`, /nothing to redo/i.test(e ?? ''), String(e));
+        await say(c, 'open the music tab');
+        const f = await say(c, 'undo the house');
+        check(`undoredo ${label}: "undo the house" through a tab switch takes the house back alone`, /took back "draw a house"|would also have to take back/.test(f), f.slice(0, 120));
+        const w = await say(c, 'undo the whole message');
+        check(`undoredo ${label}: "undo the whole message" answers`, /whole message|nothing|took|back/i.test(w), w.slice(0, 100));
+        // the chess tab
+        await say(c, 'play chess');
+        await say(c, 'e2 to e4');
+        const g = await press(c, '.cx-btn', 'Undo');
+        const h = await press(c, '.cx-btn', 'Redo');
+        check(`undoredo ${label}: chess Undo then Redo buttons take the move back and play it again`, /took back your last move/.test(g ?? '') && /did it again: "e2 to e4"/.test(h ?? '') && (await st('games.chess')).history?.length >= 1, `${g} | ${h}`);
+        // the diagram tab
+        await say(c, 'open the diagram tab');
+        await say(c, 'draw a red box called Start');
+        const i = await press(c, '.dg-btn', 'Undo');
+        const j = await press(c, '.dg-btn', 'Redo');
+        check(`undoredo ${label}: diagram Undo then Redo buttons`, !!i && !!j && (await st('diagram.sketch')).shapes?.length === 1, `${i} | ${j}`);
+        await c.pg.screenshot({ path: process.env.UNDOREDO_SHOT ?? `/tmp/undoredo-${label}.png` }).catch(() => {});
+        check(`undoredo ${label}: no page errors`, c.errors.length === 0, c.errors[0] ?? '');
+      } finally { await c.close(); }
+    }
+  },
   async draw(o) {
     const c = await openChat({ ...o, settings: MATRIX });
     const st = async () => JSON.parse(await c.state())['art.draw'] ?? {};
@@ -27,7 +76,7 @@ export const drawScenarios = ({ openChat, MATRIX, check, say }) => ({
       check('draw: "undo" says what it took back, in the board\'s words, and the house is red again on the tab', /^OK, I undid it \(colored it blue\)\.$/.test(u) && d.objects[0].color === 'red', `${u.slice(0, 60)} | ${d.objects?.[0]?.color}`);
       const x = await say(c, 'redo');
       const e = await st();
-      check('draw: "redo" does it again', x === 'OK, I did it again.' && e.objects[0].color === 'blue', `${x.slice(0, 40)} | ${e.objects?.[0]?.color}`);
+      check('draw: "redo" does it again', x === 'OK, I did it again (colored it blue).' && e.objects[0].color === 'blue', `${x.slice(0, 40)} | ${e.objects?.[0]?.color}`);
       await say(c, 'how many trees are there');
       const w = await say(c, 'why?');
       check('draw: "why?" names the source of the world', /the picture/.test(w), w.slice(0, 120));

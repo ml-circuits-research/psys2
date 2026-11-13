@@ -48,6 +48,7 @@ function make(holder, host) {
   const btn = (label, cmd, title) => h('button', { class: 'cx-btn', type: 'button', title: title ?? cmd, onclick: () => host.send(cmd) }, label);
   const hintBtn = btn('Hint', 'give me a hint', 'Show the best move');
   const undoBtn = btn('Undo', 'undo my move', 'Take back my last move and the reply');
+  const redoBtn = btn('Redo', 'redo', 'Play the move I took back again');
   const resignBtn = btn('Resign', 'I resign the game');
   const drawBtn = btn('Offer draw', 'offer a draw');
   const say = h('p', { class: 'cx-say' }, 'Try saying ', SAY.slice(0, 5).flatMap((t, i) => [i ? ', ' : '', h('q', {}, t)]), '.');
@@ -57,7 +58,7 @@ function make(holder, host) {
       status,
       h('div', { class: 'cx-panel' }, h('h4', {}, 'Strength'), h('div', { class: 'cx-levels' }, levelBtns), lvlName, engineInfo),
       h('div', { class: 'cx-panel' }, h('h4', {}, 'Moves'), moves, empty),
-      h('div', { class: 'cx-actions' }, btn('New game', 'new chess game'), undoBtn, hintBtn, btn('Flip board', 'flip the board'), drawBtn, resignBtn),
+      h('div', { class: 'cx-actions' }, btn('New game', 'new chess game'), undoBtn, redoBtn, hintBtn, btn('Flip board', 'flip the board'), drawBtn, resignBtn),
       say));
   holder.style.maxWidth = '1040px';
   holder.append(root);

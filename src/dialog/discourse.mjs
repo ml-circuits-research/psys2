@@ -87,6 +87,7 @@ export class Discourse {
     this.pending = null; // { type: 'fill' | 'confirm', world, ... }
     this.last = null;    // provenance of the last resolution (for the trace)
     this.actions = [];   // effectful turns, newest first: { turn, text, worlds, before, after, frames } (undo, repair, explain)
+    this.redoStack = []; // what a world's own undo or "undo the whole message" took out, newest last: { turn, worlds, pre, act, whole? } (redo; a new action empties it)
     this.shown = {};          // turn -> the reply as the user saw it (translated), for "why?"
     this.lastFacts = null;    // { turn, ids, types, text, world }: the fact wires of the newest statement turn (ops reasoner)
     this.lastAnswer = null;   // { text, turn }: the last reply that was not itself a repeat or an explanation
@@ -100,7 +101,7 @@ export class Discourse {
 
   /** The memory as plain JSON (no class instances, no functions): `Discourse.fromJSON(dialog, json)` or `load(json)` puts it back. */
   toJSON() {
-    return JSON.parse(JSON.stringify({ frames: this.frames, pending: this.pending, last: this.last, actions: this.actions, lastAnswer: this.lastAnswer,
+    return JSON.parse(JSON.stringify({ frames: this.frames, pending: this.pending, last: this.last, actions: this.actions, redoStack: this.redoStack, lastAnswer: this.lastAnswer,
       lastByWorld: this.lastByWorld, topics: this.topics, icptTurn: this.icptTurn, list: this.list }));
   }
 
@@ -109,6 +110,7 @@ export class Discourse {
     const j = json && typeof json === 'object' ? JSON.parse(JSON.stringify(json)) : {};
     this.frames = Array.isArray(j.frames) ? j.frames : [];
     this.actions = Array.isArray(j.actions) ? j.actions : [];
+    this.redoStack = Array.isArray(j.redoStack) ? j.redoStack : [];
     this.pending = j.pending ?? null; this.last = j.last ?? null; this.lastAnswer = j.lastAnswer ?? null;
     this.lastByWorld = j.lastByWorld && typeof j.lastByWorld === 'object' ? j.lastByWorld : {};
     this.topics = Array.isArray(j.topics) ? j.topics : []; this.icptTurn = j.icptTurn ?? null; this.list = j.list ?? null;
@@ -384,6 +386,7 @@ export class Discourse {
   noteTurn(seg, rendered, turn) {
     const w = seg.match?.worldId;
     if (!w || seg.unparsed) return;
+    if (this.lastByWorld[w] && this.lastByWorld[w].turn !== turn) (this.prevByWorld ??= {})[w] = this.lastByWorld[w];   // what the world did before (a redo names what an undo took out)
     this.lastByWorld[w] = { text: seg.text, reply: rendered, turn };
     this.lastWorld = w;
     if (!NO_TOPIC.has(w)) this.topics = [w, ...this.topics.filter((x) => x !== w)].slice(0, 6);
@@ -483,9 +486,9 @@ export class Discourse {
   _shownOr(turn, english) { const shown = this.shown[turn]; return shown && shown !== english ? { text: shown, translate: false } : { text: english, translate: true }; }
 
   /** The user's own words of a past turn, quoted as typed (never back-translated); the English reading when the source is gone. */
-  _quoted(turn, fallback) {
+  _quoted(turn, fallback, orig = null) {
     const src = this.dialog.sources.get(`msg${turn}`);
-    const text = String(src?.original ?? fallback ?? '').trim().replace(/[.!?\s]+$/, '');
+    const text = String(orig ?? src?.original ?? fallback ?? '').trim().replace(/[.!?\s]+$/, '');
     return { text: `"${text}"`, translate: false, quote: true };
   }
 
@@ -535,16 +538,35 @@ export class Discourse {
   }
 
   /** End of turn: when the turn changed the state of a world, keep what is needed to take it back (undo, repair). */
-  commitTurn({ turn, text, before }) {
+  commitTurn({ turn, text, before, kind = null }) {
     const st = this.dialog.isession.state;
     const frames = this.frames.filter((f) => f.turn === turn);
     const rsMark = this.dialog.isession.rs?.markOf(turn);   // matrix reasoner (spec 15): the library as it was before this turn
     // a question only creates the (lazy) state of a world on first use: that is no action to undo
     const onlyQuestions = frames.length > 0 && frames.every((f) => f.kind === 'question');
     const worlds = Object.keys(st).filter((id) => !NO_TOPIC.has(id) && JSON.stringify(st[id]) !== before[id] && !(onlyQuestions && before[id] === undefined));
-    if (!worlds.length || !frames.length) return null;
-    if (frames.some((f) => /undo/i.test(`${f.patternId} ${f.op}`))) { this.actions.shift(); return null; }   // the world took the last action back itself
-    if (frames.some((f) => /redo/i.test(`${f.patternId} ${f.op}`))) return null;
+    if (!worlds.length) return null;
+    if (!frames.length) {   // a game's turn (games keep their own state machines: no frames)
+      if (kind === 'undo') {
+        const w = worlds.find((x) => x.startsWith('games.')) ?? worlds[0], prev = this.prevByWorld?.[w];
+        this.redoStack.push({ turn, worlds, pre: Object.fromEntries(worlds.map((id) => [id, before[id]])), act: null, say: prev && !/undo|take back|revert|retract|rewind/i.test(prev.text) ? { text: prev.text, reply: prev.reply, turn: prev.turn } : null });
+        if (this.redoStack.length > 10) this.redoStack.shift();
+      } else if (kind !== 'redo' && kind !== 'keep') this.redoStack = [];
+      return null;
+    }
+    if (frames.some((f) => /undo/i.test(`${f.patternId} ${f.op}`))) {   // the world took the last action back itself: what it took out is kept for "redo"
+      const act = this.actions.shift();
+      this.redoStack.push({ turn, worlds, pre: Object.fromEntries(worlds.map((id) => [id, before[id]])), act: act ?? null });
+      if (this.redoStack.length > 10) this.redoStack.shift();
+      return null;
+    }
+    if (frames.some((f) => /redo/i.test(`${f.patternId} ${f.op}`))) {   // the world's own redo ran: the action it put back is the newest again, and the list is spent
+      const top = this.redoStack.pop();
+      if (top?.act && !top.whole) this.actions.unshift(top.act);
+      this.redoStack = [];
+      return null;
+    }
+    this.redoStack = [];   // a new action makes what was undone final
     const act = { turn, text, worlds, before: Object.fromEntries(worlds.map((id) => [id, before[id]])), after: Object.fromEntries(worlds.map((id) => [id, JSON.stringify(st[id])])), frames: frames.slice().reverse(), rsMark };
     this.actions.unshift(act);
     this.actions.length = Math.min(this.actions.length, 10);
@@ -653,6 +675,7 @@ export class Discourse {
     if (pend?.type === 'offer') {
       const y = this.lang.yesNo(text);
       if (y === 'yes' && pend.accept === 'undo') { const a = pend.action; const said = a?.frames[0]?.reply; return this.undoAction(a) ? this._say(said ? [{ text: 'OK, I undid it: ', translate: true }, this._shownOr(a.frames[0].turn, said), { text: '.', translate: false }] : [{ text: 'OK, I undid it.', translate: true }], { kind: 'offer', accept: 'undo', of: a.text }) : null; }
+      if (y === 'yes' && pend.accept === 'undoTo') return this._undoTo(pend);
       if (y === 'yes' && pend.accept === 'rewrite') return { rewrite: pend.rewrite, info: { kind: 'offer', accept: 'rewrite', rewrite: pend.rewrite, world: pend.world } };
       if (y === 'no' || /^(?:no|nope|nah|not now|not really)(?: (?:thanks|thank you|leave it|keep it|its fine|never mind|leave it as it is|keep it as it is|leave it alone|leave it that way|keep it that way|its ok|its okay))?$/.test(t)) return { reply: 'OK, I will leave it as it is.', info: { kind: 'offer', declined: true } };
     }
@@ -666,32 +689,10 @@ export class Discourse {
     if (!this.list) { const ac = runDiscussionCommand(d, text, d._msg); if (ac) return ac; }
     // everything the session timeline held has been taken back: say so (a world's own "undo" would answer for itself, or another world's, whatever its tab)
     if (UNDO.test(t) && d.isession.rs && !d.isession.rs.turns.length && d.isession.rs.undone > 0 && !(this.actions[0]?.turn > d.isession.rs.undoneAt)) return { reply: 'There is nothing more to undo.', status: 'missing', info: { kind: 'undo', of: null, via: 'core.matrix' } };
+    // UNDO-REDO (spec 15): "redo", "undo all of that" / "undo the whole message", "undo the sun" (a named earlier step)
+    { const ur = this._undoRedo(text); if (ur) return ur; }
     // matrix reasoner (spec 15): "undo that" takes back what the turn before told the library (a purchase, a statement); the money and the counts follow
-    if (UNDO.test(t) && d.isession.rs?.canUndo(d._msg) && !(this.actions[0]?.turn > d.isession.rs.turns.at(-1).turn)) {   // not when a newer action of a world without library state is what "that" means
-      const rs = d.isession.rs;
-      // a tab world whose own undo counts views or steps (docs.editor, docs.reader: a selection move is not an entry) answers for itself, in its words
-      const gw = [...rs.reasoner.undoOf.values()].find((w) => w.id === d.context().tabWorld && w.isView);
-      if (gw) {
-        const env = rs.undoAction(gw, d.isession);
-        if (env.undoneTurn != null) { this.actions = this.actions.filter((a) => a.turn !== env.undoneTurn); this.frames = this.frames.filter((f) => f.turn !== env.undoneTurn); }
-        rs.undoneAt = d._msg;
-        if (env.status === 'supported' && env.value) return { reply: env.value, info: { kind: 'undo', of: null, via: 'core.matrix' } };
-      }
-      // one timeline across the worlds' instances (spec 15): the newest turn that changed anything goes back, whichever world it belonged to, and the reply says
-      // what it was, in the words of that world (a game's "took back your last guess") or by quoting what the user said (their own words, never the English reading)
-      const turn0 = rs.turns.at(-1).turn;
-      const undoWorld = rs.turns.at(-1).worlds?.[0] ?? null;
-      const noted = (reply) => { if (undoWorld && reply) this.noteWorld(undoWorld, text, reply, d._msg); };   // "What did you do?" afterwards names the undo, as it does when the world undoes by itself
-      const act0 = this.actions.find((a) => a.turn === turn0);
-      const r = rs.undoLast(d.isession, act0?.text ?? d.sources.get(`msg${turn0}`)?.english ?? null);
-      const turn = r.turn;
-      rs.undoneAt = d._msg;
-      if (act0) this._setState(Object.fromEntries(act0.worlds.filter((w) => !rs.reasoner.stateOf.has(w)).map((w) => [w, act0.before[w]])));   // worlds whose state is not derived from the library
-      this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn);
-      noted(r.value);
-      if (r.quote) return this._say([{ text: 'OK, I took that back: ', translate: true }, this._quoted(turn, r.quote), { text: '.', translate: false }], { kind: 'undo', of: r.quote, via: 'core.matrix' });
-      return { reply: r.value, info: { kind: 'undo', of: act0?.text ?? null, via: 'core.matrix' } };
-    }
+    if (UNDO.test(t)) { const mu = this._matrixUndo(text); if (mu) return mu; }
     // ops reasoner: "No, she gives him 4." revises the statement just made
     { const cf = await this._correctFact(text, sid); if (cf) return cf; }
     // "Why do I have nothing left?", "why is milk done?": the worlds that can explain the named fact answer from what is known
@@ -730,6 +731,182 @@ export class Discourse {
       }
     }
     return this._references(text, sid);
+  }
+
+  // ---- undo, redo, the whole message, a named step (UNDO-REDO, spec 15) ------------------------------------------------------------
+
+  /** The actions and frames of a turn leave the memory once no entry of the timeline holds a request of it any more. */
+  _forget(turn) {
+    const rs = this.dialog.isession.rs;
+    if (rs?.turns.some((t) => t.turn === turn)) return;
+    this.actions = this.actions.filter((a) => a.turn !== turn); this.frames = this.frames.filter((f) => f.turn !== turn);
+  }
+
+  /**
+   * "Undo that" with the matrix reasoner: a tab world that counts steps answers for itself, else the newest entry of the timeline (one request of the user) goes back
+   * and the reply names it. Null when there is nothing to take back that way (the world's own undo or the "nothing to undo" answers follow).
+   */
+  _matrixUndo(text) {
+    const d = this.dialog, rs = d.isession.rs;
+    if (!(rs?.canUndo(d._msg) && !(this.actions[0]?.turn > rs.turns.at(-1).turn))) return null;   // not when a newer action of a world without library state is what "that" means
+    // a tab world whose own undo counts views or steps (docs.editor, docs.reader: a selection move is not an entry) answers for itself, in its words
+    const gw = [...rs.reasoner.undoOf.values()].find((w) => w.id === d.context().tabWorld && w.isView);
+    if (gw && rs.turns.at(-1).worlds?.includes(gw.id)) {   // the newest request was this world's (a request of another world is undone by the generic step below)
+      const env = rs.undoAction(gw, d.isession);
+      if (env.undoneTurn != null) this._forget(env.undoneTurn);
+      rs.undoneAt = d._msg;
+      if (env.status === 'supported' && env.value) return { reply: env.value, info: { kind: 'undo', of: null, via: 'core.matrix' } };
+    }
+    // one timeline across the worlds' instances (spec 15): the newest entry (one request of the user) goes back, whichever world it belonged to, and the reply says
+    // what it was, in the words of that world (a game's "took back your last guess") or by quoting what the user said (their own words, never the English reading)
+    const last = rs.turns.at(-1), turn0 = last.turn;
+    const undoWorld = last.worlds?.[0] ?? null;
+    const noted = (reply) => { if (undoWorld && reply) this.noteWorld(undoWorld, text, reply, d._msg); };   // "What did you do?" afterwards names the undo, as it does when the world undoes by itself
+    const act0 = this.actions.find((a) => a.turn === turn0);
+    const r = rs.undoLast(d.isession, last.said ?? act0?.text ?? d.sources.get(`msg${turn0}`)?.english ?? null);
+    const turn = r.turn;
+    rs.undoneAt = d._msg;
+    this._restoreOwn(act0, last.snap);
+    this._forget(turn);
+    noted(r.value);
+    if (r.quote) return this._say([{ text: 'OK, I took that back: ', translate: true }, this._quoted(turn, r.quote, r.orig), { text: '.', translate: false }], { kind: 'undo', of: r.quote, via: 'core.matrix' });
+    return { reply: r.value, info: { kind: 'undo', of: act0?.text ?? null, via: 'core.matrix' } };
+  }
+  /** The worlds that do not derive their state from the library go back to the state before the step (its own snapshot, else the one of the turn's action). */
+  _restoreOwn(act, snap = null) {
+    const rs = this.dialog.isession.rs;
+    if (!rs) return;
+    const own = [...new Set([...(act?.worlds ?? []), ...Object.keys(snap ?? {})])].filter((w) => !rs.reasoner.stateOf.has(w));
+    const map = {};
+    for (const w of own) { const v = snap && w in snap ? snap[w] : act?.before?.[w]; if (v !== undefined || (!snap && act)) map[w] = v; }
+    this._setState(map);
+  }
+
+  /** "redo", "undo all of that", "undo the sun": the three shapes of UNDO-REDO that are not a plain undo. Null for anything else. */
+  _undoRedo(text) {
+    const lang = this.lang;
+    if (lang.redo?.(text)) return this._redo();
+    if (lang.undoAll?.(text)) return this._undoAll(text);
+    const named = lang.undoNamed?.(text);
+    return named ? this._undoNamed(text, named) : null;
+  }
+
+  /** What a redo says: the quote of the request that came back. */
+  _redoSay(quote, orig, turn) {
+    return quote ? this._say([{ text: 'OK, I did it again: ', translate: true }, this._quoted(turn, quote, orig), { text: '.', translate: false }], { kind: 'redo', of: quote }) : { reply: 'OK, I did it again.', info: { kind: 'redo' } };
+  }
+  _redo() {
+    const d = this.dialog, rs = d.isession.rs;
+    const nothing = { reply: 'There is nothing to redo.', status: 'missing', info: { kind: 'redo', of: null } };
+    // the library's own undos (a generic "undo that", a tab world's undo): the timeline goes forward again
+    if (rs) {
+      const r = rs.redoLast(d.isession);
+      if (r) {
+        if (r.quote && /^OK, I did it again: /.test(r.value)) return this._redoSay(r.quote, r.orig, r.turn);
+        return { reply: r.value, info: { kind: 'redo', of: r.quote ?? null, via: 'core.matrix' } };
+      }
+    }
+    // what a world's own undo (operations: "undo my move") or "undo all of that" took out: the states before it are put back
+    const top = this.redoStack.at(-1);
+    const tabWorld = d.context().tabWorld;
+    const ownRedo = !!(tabWorld && d.engine.set.get(tabWorld)?.redoAction);   // a tab world with its own redo answers "redo" itself (its operations)
+    if (!top) return ownRedo ? null : nothing;   // the tab world answers itself ("There is nothing to redo." in its words)
+    if (ownRedo && !rs && !top.whole) return null;
+    this.redoStack.pop();
+    const act = top.act;
+    if (rs && !top.whole && rs.turns.at(-1)?.turn === top.turn) { rs.undoLast(d.isession, null); rs.redos.pop(); this._restoreOwn(null, top.pre); }   // (a redo is not itself redone)   // the undo was a step of the timeline: take that step back
+    else this._setState(top.pre);
+    if (act) this.actions.splice(Math.min(top.at ?? 0, this.actions.length), 0, act);
+    if (!act && top.say) { const w = top.worlds.find((x) => x.startsWith('games.')); if (w) this.noteWorld(w, top.say.text, top.say.reply, top.say.turn); return this._redoSay(top.say.text, null, top.say.turn); }
+    return this._redoSay(act?.text, null, act?.turn);
+  }
+
+  /** "undo all of that" / "undo the whole message": every request of the last message goes back, as one step. */
+  _undoAll(text) {
+    const d = this.dialog, rs = d.isession.rs;
+    if (rs?.turns.length && rs.canUndo(d._msg) && !(this.actions[0]?.turn > rs.turns.at(-1).turn)) {
+      if (rs.lastMessage().length <= 1) return this._matrixUndo(text);   // a message of one request: that is a plain undo
+      const act0 = this.actions.find((a) => a.turn === rs.turns.at(-1).turn);
+      const first = rs.lastMessage().at(-1);
+      const r = rs.undoMessage(d.isession);
+      rs.undoneAt = d._msg;
+      this._restoreOwn(act0, first.snap);
+      this._forget(r.turn);
+      const src = d.sources.get(`msg${r.turn}`);
+      const what = src?.original ?? r.said.join(' and ');
+      return this._say([{ text: `OK, I took back the whole message (${r.count} requests): `, translate: true }, this._quoted(r.turn, what), { text: '.', translate: false }], { kind: 'undo', of: what, via: 'core.matrix', whole: r.count });
+    }
+    const act = this.actions[0];
+    if (!act || act.readOnly) return { reply: rs?.undone ? 'There is nothing more to undo.' : 'There is nothing to undo.', status: 'missing', info: { kind: 'undo', of: null } };
+    const now = Object.fromEntries(act.worlds.map((w) => [w, JSON.stringify(d.isession.state[w])]));
+    this.undoAction(act);
+    this.redoStack.push({ turn: act.turn, worlds: act.worlds, pre: now, act, whole: true, at: 0 });
+    return this._say([{ text: 'OK, I took back the whole message: ', translate: true }, this._quoted(act.turn, act.text), { text: '.', translate: false }], { kind: 'undo', of: act.text, whole: true });
+  }
+
+  /** "undo the sun": an earlier request that is independent of the later ones goes back alone; otherwise the later ones are named and the user is asked. */
+  _undoNamed(text, words) {
+    const d = this.dialog, rs = d.isession.rs;
+    const norm = (w) => String(w).toLowerCase().replace(/(?:ies)$/, 'y').replace(/(?:es|s)$/, '');
+    const list = (xs) => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
+    const q = (t) => `"${String(t ?? 'a step').replace(/[.!?\s]+$/, '')}"`;
+    if (rs?.turns.length) {
+      const k = rs.findStep(words);
+      if (k < 0) return null;
+      if (k === rs.turns.length - 1) return this._matrixUndo(text);
+      const e = rs.turns[k], deps = rs.dependents(k);
+      if (!deps.length) {
+        const act0 = this.actions.find((a) => a.turn === e.turn);
+        const r = rs.undoStep(d.isession, k);
+        rs.undoneAt = d._msg;
+        this._restoreOwn(act0, e.snap);
+        this._forget(r.turn);
+        return this._say([{ text: 'OK, I took back ', translate: true }, this._quoted(r.turn, r.said ?? words.join(' '), r.orig), { text: '; what you did after it stays.', translate: true }], { kind: 'undo', of: r.said, via: 'core.matrix', named: true });
+      }
+      this.pending = { type: 'offer', accept: 'undoTo', world: e.worlds[0] ?? null, expected: 'yes/no', question: 'Shall I take them all back?', turn: d._msg };
+      this._undoToTarget = e;   // not persisted: after a restart the question is stale
+      return this._say([{ text: 'To take back ', translate: true }, this._quoted(e.turn, e.said ?? words.join(' '), e.orig), { text: ` I would also have to take back ${list(deps.map((t) => q(t.orig ?? t.said)))}. Shall I take them all back? Say "yes" or "no".`, translate: true }], { kind: 'offer', accept: 'undoTo', of: e.said, later: deps.map((t) => t.said) });
+    }
+    // operations: the actions of the last messages (one per message); the worlds they changed are what depends on what
+    const j = this.actions.findIndex((a) => { const have = new Set(String(a.text ?? '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(' ').filter(Boolean).flatMap((w) => [w, norm(w)])); return words.every((w) => have.has(norm(w))); });
+    if (j < 0) return null;
+    if (j === 0) return this._undoAll(text);
+    const act = this.actions[j], deps = this.actions.slice(0, j).filter((a) => a.worlds.some((w) => act.worlds.includes(w)));
+    if (!deps.length) {
+      const now = Object.fromEntries(act.worlds.map((w) => [w, JSON.stringify(d.isession.state[w])]));
+      this._back(act);
+      this.actions = this.actions.filter((x) => x !== act); this.frames = this.frames.filter((f) => f.turn !== act.turn);
+      this.redoStack.push({ turn: act.turn, worlds: act.worlds, pre: now, act, whole: true, at: j - 1 });
+      return this._say([{ text: 'OK, I took back ', translate: true }, this._quoted(act.turn, act.text), { text: '; what you did after it stays.', translate: true }], { kind: 'undo', of: act.text, named: true });
+    }
+    this.pending = { type: 'offer', accept: 'undoTo', actionTurn: act.turn, world: act.worlds[0] ?? null, expected: 'yes/no', question: 'Shall I take them all back?', turn: d._msg };
+    return this._say([{ text: 'To take back ', translate: true }, this._quoted(act.turn, act.text), { text: ` I would also have to take back ${list(deps.map((a) => q(a.text)))}. Shall I take them all back? Say "yes" or "no".`, translate: true }], { kind: 'offer', accept: 'undoTo', of: act.text, later: deps.map((a) => a.text) });
+  }
+  /** "yes" to "I would also have to take back ...": the step and everything after it go back. */
+  _undoTo(pend) {
+    const d = this.dialog, rs = d.isession.rs;
+    const stale = { reply: 'That has changed since I asked, so I left everything as it is.', info: { kind: 'offer', accept: 'undoTo', stale: true } };
+    if (pend.actionTurn === undefined) {
+      const e = this._undoToTarget;
+      this._undoToTarget = null;
+      const k = e && rs ? rs.turns.indexOf(e) : -1;
+      if (k < 0) return stale;
+      const acts = this.actions.filter((a) => a.turn >= e.turn);
+      const r = rs.undoThrough(d.isession, k);
+      rs.undoneAt = d._msg;
+      for (const a of acts) this._restoreOwn(a, a.turn === e.turn ? e.snap : null);
+      for (const turn of new Set(acts.map((a) => a.turn).concat(r.turn))) this._forget(turn);
+      return this._say([{ text: 'OK, I took back ', translate: true }, this._quoted(r.turn, r.said ?? '', r.orig), { text: ' and what came after it.', translate: true }], { kind: 'undo', of: r.said, via: 'core.matrix', through: true });
+    }
+    const j = this.actions.findIndex((a) => a.turn === pend.actionTurn);
+    if (j < 0) return stale;
+    const act = this.actions[j];
+    const now = Object.fromEntries([...new Set(this.actions.slice(0, j + 1).flatMap((a) => a.worlds))].map((w) => [w, JSON.stringify(d.isession.state[w])]));
+    for (let i = 0; i <= j; i++) this._back(this.actions[i]);   // the oldest `before` of a world is applied last
+    const gone = this.actions.slice(0, j + 1);
+    this.actions = this.actions.slice(j + 1); this.frames = this.frames.filter((f) => !gone.some((a) => a.turn === f.turn));
+    this.redoStack.push({ turn: act.turn, worlds: Object.keys(now), pre: now, act, whole: true, at: 0 });
+    return this._say([{ text: 'OK, I took back ', translate: true }, this._quoted(act.turn, act.text), { text: ' and what came after it.', translate: true }], { kind: 'undo', of: act.text, through: true });
   }
 
   /** True while a game that asks or expects yes/no is on: the guessing game in progress, or a game that is the active game or tab of the host. */

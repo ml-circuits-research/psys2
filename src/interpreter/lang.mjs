@@ -164,7 +164,29 @@ export function makeLang(source) {
     return null;
   };
 
-  return { know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+  // ---- UNDO-REDO: "redo", "undo all of that", "undo the sun" -------------------------------------------------------------
+  const REDO = set('lang.redo'), UNDO_ALL = set('lang.undo.all');
+  const LEADS = [...new Set(phrase('lang.undo.lead'))].sort((a, b) => b.length - a.length), SKIP = set('lang.undo.skip');
+  /** "redo", "do it again", "put it back": put back what the last undo took out. */
+  const redo = (text) => REDO.has(plain(text));
+  /** "undo all of that", "undo the whole message": take back everything the last message asked for. */
+  const undoAll = (text) => UNDO_ALL.has(plain(text));
+  /**
+   * "undo the sun", "take back the house": the content words that name an earlier step (['sun']), or null when the text is not of that shape or names nothing
+   * ("undo the last one" is no name: it is a plain undo).
+   */
+  const undoNamed = (text) => {
+    const t = plain(text);
+    for (const l of LEADS) {
+      if (!t.startsWith(l + ' ')) continue;
+      const rest = t.slice(l.length + 1).split(' ').filter((w) => w && !SKIP.has(w));
+      if (!rest.length || rest.some((w) => w === 'last' || w === 'first' || w === 'twice' || w === 'move' || w === 'moves')) return null;
+      return rest;
+    }
+    return null;
+  };
+
+  return { redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;

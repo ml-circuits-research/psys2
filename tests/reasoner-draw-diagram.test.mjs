@@ -122,7 +122,7 @@ test('art.draw: a scene the rules cannot allow is refused with the reason, and t
 test('art.draw: undo and redo go through the library (undo=, redo=) in the words of the board, and a selection is no step', async () => {
   const { s, out } = await run(matrix, 'draw', ['draw a red house', 'make it night', 'select the house', 'undo', 'redo', 'undo', 'undo', 'undo']);
   assert.equal(out[3], 'OK, I undid it (made it night).', 'the selection is a view, the undo takes back what changed the picture');
-  assert.equal(out[4], 'OK, I did it again.');
+  assert.equal(out[4], 'OK, I did it again (made it night).');
   assert.equal(out[5], 'OK, I undid it (made it night).');
   assert.match(out[6], /^OK, I undid it \(drew a red house\)\.$|^OK, I undid it\.$/);
   assert.equal(out[7], 'There is nothing more to undo.');

@@ -2357,7 +2357,7 @@
 
 @t.art.draw.r2undo04 core.test
     input="Redo."
-    expect="OK, I did it again."
+    expect="OK, I did it again (made it night)."
     expectStatus=supported
     expectState="objects.length=16"
     expectState="objects.1.kind=moon"
@@ -2515,7 +2515,7 @@
 
 @t.art.draw.r2undo21 core.test
     input="undo the undo"
-    expect="OK, I did it again."
+    expect="OK, I did it again (made it night)."
     expectStatus=supported
     expectState="objects.length=16"
     expectState="objects.1.kind=moon"
@@ -2540,7 +2540,7 @@
 
 @t.art.draw.r2undo24 core.test
     input="get that back please"
-    expect="OK, I did it again."
+    expect="OK, I did it again (made it night)."
     expectStatus=supported
     expectState="objects.length=16"
     expectState="objects.1.kind=moon"
@@ -2559,7 +2559,7 @@
 
 @t.art.draw.r2undo26 core.test
     input="bring it back"
-    expect="OK, I did it again."
+    expect="OK, I did it again (made it night)."
     expectStatus=supported
     expectState="objects.length=16"
     expectState="objects.1.kind=moon"

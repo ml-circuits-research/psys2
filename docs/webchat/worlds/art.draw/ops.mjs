@@ -1563,7 +1563,7 @@ export const redo = guard((ctx, args, s) => {
   s.history.push(snapshot(s, snap.label));
   restore(s, snap);
   open(ctx);
-  return ok('OK, I did it again.');
+  return ok(`OK, I did it again${snap.label ? ` (${snap.label})` : ''}.`);
 });
 export const clearEverything = guard((ctx, args, s) => {
   { const r = shared(ctx, 'clear'); if (r) return r; }

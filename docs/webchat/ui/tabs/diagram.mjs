@@ -89,7 +89,7 @@ function make(holder, host) {
   const namesBtn = btn('Names', 'Hide the names above the shapes', () => { showNames = !showNames; namesBtn.setAttribute('aria-pressed', String(showNames)); redraw(); });
   namesBtn.setAttribute('aria-pressed', 'true');
   const idsBtn = btn('Ids', 'Hide the short ids of the shapes and arrows (c1, r1, a1)', () => { showIds = !showIds; idsBtn.setAttribute('aria-pressed', String(showIds)); try { localStorage.setItem('p2-diagram-ids', showIds ? '1' : '0'); } catch { /* storage may be off */ } redraw(); });
-  tools.append(zoomBox, namesBtn, idsBtn, html('span', 'dg-spacer'), btn('Undo', 'Undo the last change', () => host.send('undo')), btn('Save SVG', 'Save the diagram as an SVG file', () => host.send('save the diagram as an SVG')), btn('Save PNG', 'Save the diagram as a PNG file', () => host.send('save the diagram as a PNG')));
+  tools.append(zoomBox, namesBtn, idsBtn, html('span', 'dg-spacer'), btn('Undo', 'Undo the last change', () => host.send('undo')), btn('Redo', 'Do the last undone change again', () => host.send('redo')), btn('Save SVG', 'Save the diagram as an SVG file', () => host.send('save the diagram as an SVG')), btn('Save PNG', 'Save the diagram as a PNG file', () => host.send('save the diagram as a PNG')));
 
   let K = null, AR = null, loading = null, state = EMPTY, destroyed = false, hintIndex = 0, showNames = true, showIds = true, tucked = new Set(), loadError = null, stagePanel = null;
   const zv = { k: 1, dx: 0, dy: 0 };
