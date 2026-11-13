@@ -53,3 +53,23 @@ Right: fr 75.0 to 76.4, it 74.1 to 76.9, nb 72.7 to 74.5, de 72.7 to 74.5, nl 71
 
 - `training/eval/paraphrases-rt-2026-11-12.jsonl`: 146 English paraphrases (deduplicated by world, text and expectation, English only, gold = the original case's expectation; `langs` lists the languages that produced the text). Because `reader-gap` is an upper bound, part of the gold is wrong for the text (the model changed the meaning); today the rules read 17.1% right (0% before the fixes, by construction), 11.6% partly, 21.9% wrong, 49.3% not understood. Use it as a to-do list and a regression target, not as a pass rate.
 - `training/paraphrases/out/mt-roundtrip.jsonl`: 223 rows in the format of `scripts/collect-paraphrases.mjs` (77 originals as canonicals, 146 variants, `source='mt-roundtrip:<lang>'` on the variants, `source='mt-roundtrip:original'` on the canonicals). 114 variant rows carry an expected circuit (label_status counts of the 146 variants: rules-agree 31, rules-own 28, rules-fail 60 (the canonical's target inherited through the value match, when it applies), rules-differ 1, rules-unverified 2, needs_review 24; rows without a circuit are kept for review, not for training). Not retrained here.
+
+## Next steps 2 and 3 (2026-11-13)
+
+**Step 2, the 9 "original-fails" cases (all fixed; English originals now 216/216 right on the sample).** General means, specified in spec 03 section 1c: (a) a clause that opens with a question word after `and`/`then`/`,` is its own clause, not the free text of the command before it ("draw 2 trees then what sound does a cow make", "add milk to my shopping list and also can penguins fly"; the `kids.tasks` two-list pattern now requires its preposition); (b) a command of another world after a connective that is read mostly by fixed words ("play twinkle twinkle and draw a house"); (c) two neighbouring clauses cut inside one question are read again as one ("what do red and yellow make"). World gaps: `ui.avatar` undo accepts "go back one", `games.tictactoe` accepts "put me in ...", `docs.reader` keeps the counted sentences as the search ("count the witch", "show the first result"). Tests: `tests/compound-messages.test.mjs`. Gate (operational set, matrix, rules mode): right 95.3% to 97.1%, the set of wrong cases identical (10 before and after).
+
+**Step 3, MT keep-list** (`src/translate/keep-list.mjs`, spec 05): currency (`keep=verbatim` lexicon), names (class `name`, capitalised), song titles, "the <tab> tab", names told in the session; placeholders around the model (`Zorqa`...). Same 216-case sample, same reading, 9 languages (`round-trip-cases-keep-2026-11-13.jsonl` = with keep-list; the baseline is the 2026-11-12 translations read with the new reading):
+
+| language | 11-12 | baseline, new reading | with keep-list |
+| --- | --- | --- | --- |
+| fr | 75.0 | 77.3 | 78.2 |
+| it | 74.1 | 78.2 | 79.2 |
+| nb | 72.7 | 76.4 | 77.8 |
+| de | 72.7 | 76.4 | 76.9 |
+| nl | 71.8 | 79.2 | 80.1 |
+| is | 71.8 | 77.3 | 78.7 |
+| bg | 71.3 | 75.5 | 75.9 |
+| es | 70.4 | 73.1 | 74.1 |
+| ro | 61.1 | 64.4 | 65.7 |
+
+The keep-list adds +19 right cases over 1944 (23 verdict flips: 21 gained, 2 lost: "4 lei" read back as "leis", "Tom gives" turned into "Tom provides" when a name is a placeholder). The moved classes: mt-wrong -1 to -3 per language (it 30 to 28, de 32 to 30, ro 51 to 48), reader-gap -1 to -3 (nb, is, nl). What it fixes: the currency ("5 lei" to "5 rents / 5 sorry / 5 her / 14 slates"), song titles ("twinkle twinkle" to "sparkle sparkle"), a name ("Zoe" to "Zoë", "Ana" to "Anah"). Caveat: for tab names the round trip is optimistic (a real user writes the localized label; the English-word protection only helps who types the English word). The reading fixes of step 2 account for most of the gain over 11-12 (+2.3 to +7.4 points, mostly the 9 original-fails and the question-after-connective cases that every language shares). `quality.json` updated for these 9 languages (the other languages keep their 11-12 numbers; they were not re-measured).

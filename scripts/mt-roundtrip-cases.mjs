@@ -5,6 +5,7 @@
  * English engine; one JSON line per (case, language) with the original, the back-translation, what we read (reply, failing expectations, strategy) and the verdict.
  *
  *   node scripts/mt-roundtrip-cases.mjs --cache <dir> --lang fr,de [--every 6] [--reasoner matrix|ops] --out file.jsonl [--translations earlier.jsonl]
+ *   --keep: protect the keep-list words (currency, names, tab names, song titles) with placeholders around the model
  *   --translations: reuse the foreign text and back-translation of an earlier run (same model output, only the reading is redone: the "after" measurement).
  */
 import { writeFileSync, existsSync, readFileSync } from 'node:fs';
@@ -16,6 +17,7 @@ import { createTranslator } from '../src/translate/index.mjs';
 import { settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { createNodeMt } from './lib/mt-node.mjs';
 import { runCase, loadCases } from './eval-operational.mjs';
+import { keepListOf } from '../src/translate/keep-list.mjs';
 import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
 
 applyReasonerFlag();
@@ -31,7 +33,8 @@ const earlierFile = arg('translations');
 if (earlierFile && existsSync(earlierFile)) {
   for (const l of readFileSync(earlierFile, 'utf8').split('\n').filter(Boolean)) { const r = JSON.parse(l); earlier.set(`${r.id}|${r.lang}`, r); }
 }
-const mt = earlier.size ? null : await createNodeMt({ cacheDir: arg('cache') });
+const useKeep = process.argv.includes('--keep');   // the MT keep-list (src/translate/keep-list.mjs)
+const mt = earlier.size ? null : await createNodeMt({ cacheDir: arg('cache'), keep: useKeep ? () => ({ keep: keepListOf(engine.set) }) : null });
 const lines = [];
 const base = new Map();   // verdict of the ORIGINAL English message (a failing original is not a round-trip loss)
 for (const c of sample) base.set(c.id, (await runCase(engine, settings, c)).outcome);
