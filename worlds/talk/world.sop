@@ -9,7 +9,7 @@
     language=en
     status=fixture
     title="Talk about things"
-    summary="talk about things and see the answer"
+    summary="talk about things"
     tab=talk
     tabTitle="Talk"
     tabAlias=talk

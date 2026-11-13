@@ -183,7 +183,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "16f176dcd3a5d975",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "0444fb82cb05f421",
+    "worlds/index.json": "117fcb2d7f2747f0",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -239,6 +239,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T12:53:48.447Z",
-  "commit": "532324d-dirty"
+  "builtAt": "2026-11-13T13:06:52.288Z",
+  "commit": "13ba925-dirty"
 }
