@@ -370,8 +370,11 @@ export class Discourse {
       const raw = content.join(' ');
       if (fragPrep) variants.push(content.slice(1).join(' '));
       else {
+        // "What is a bicycle?" + "and a ball?": the determiner is already in front of the slot, so the fragment's own is dropped first ("What is a ball?", not "What is a a ball?")
+        const twice = DETERMINERS.has(lead) && content.length > 1 && DETERMINERS.has(prev);
+        if (twice) variants.push(content.slice(1).join(' '));
         variants.push(raw);
-        if (DETERMINERS.has(lead) && content.length > 1) variants.push(content.slice(1).join(' '));
+        if (!twice && DETERMINERS.has(lead) && content.length > 1) variants.push(content.slice(1).join(' '));
       }
       for (const v of variants) {
         if (!v || v.toLowerCase() === s.text.toLowerCase()) continue;

@@ -3377,3 +3377,191 @@ Then the queue, in this order: SCENE-NATURAL (replay report first), SPACE, SETTI
 
 **Limits to respect:** general means only; no per-message rules; the cards must stay small (the DESCRIBE-ALL size gate counts them); both reasoners; smoke per commit. If sopworld lacks something for ranking with reasons, write it in questions.md.
 **Order:** start now in a separate worktree, in parallel with SCENE-NATURAL: P1 of SCENE-NATURAL is the first rule set of this module, so build P1 inside `meta.worlds` rather than twice.
+
+## Reviewer 2026-11-13 16:40 — WORLDS-AS-MODULES (owner): one theory for the owner's third log, no point patches
+
+**Data:** `training/eval/owner-log-2026-11-13b.jsonl`, 63 turns in the Draw tab, each with class and `expected`. Only 11 did what the owner meant. This build did not have SCENE-NATURAL, SPACE or WORLD-OF-WORLDS yet, so first run the replay on your current worktrees and report what those already fix. Do not fix single rows; every item below is a general mechanism and is measured on this log plus the two earlier ones.
+
+**Owner's direction:** worlds are reusable modules that are combined. A world learns to delegate: it gets reasoning, defaults and gap filling from other worlds. Rebuild from modules and reuse; do not patch each tab.
+
+**Why the turns failed (counts on 63):** translation left source words or picked the wrong sense (10: "linga", "fetita", "in to turn off" for left, "the girl of the house" for in front of); lists and fragments read as separate sentences and taken by hangman, chess, music, tasks, docs (13 foreign-world readings, one started a chess game and changed tab); continuations and corrections not known as such (9); kinds not drawn though knowledge has a relative (villa, puddle, grandfather, donkey, baby) (5); things placed where they do not belong and then a remark every turn instead of a right default (goat, cow, house, sun) (5); lake and grass replace the ground instead of being things (3); "different corners", "a bit lower" turned into a corner (5); two turns with no reply at all; typos in the source language (5).
+
+### The theory: a turn is five questions, each owned by one module; a tab world owns only its actions
+1. **What kind of turn is it?** new request, continuation, correction, complaint, question about what happened → `session.dialogue` (new, M1).
+2. **Which world takes it?** → `meta.worlds` (in work). Add the rule this log needs: an action that would be refused in its world's present state (hangman with no game) loses to every other reading; a reading from another world than the active tab must cover the whole sentence and never changes tab or starts something from a fragment.
+3. **Which things, where, how many?** → `scene` (new, M2) on top of `space` (in work).
+4. **What is missing?** → delegation (M3): the world states the gap, another module fills it and says where the value came from.
+5. **Was the English right?** → the translation layer picks among candidates by what the reader understands (M4).
+
+### M1 `session.dialogue` (shared module, not a tab)
+Holds the focus (last thing, last action, last place, last world) and reads the turn kind before any tab world:
+- **continuation:** a turn with no verb or no thing inherits them from the focus ("on the lake", "further right", "and lower", "a sun", "a house and 2 fish");
+- **list:** in "V a, b, c and d" every item inherits V and the frame; items are never separate sentences;
+- **correction:** "no X, Y", "not on it, on the swing", "that is centre, not right", "I said X", "I mistyped X" → undo or amend the last request and redo it with the change (uses UNDO-REDO: one step);
+- **complaint or why-question:** "why is it so low", "why did you not answer", "how did you get to chess" → an answer from the trace in plain words (which reading, which default and its source) and an offer to undo; never an action in some world;
+- **question about the scene:** "did you not draw a girl before?" → answered from the scene and the history.
+One contract for every tab: the tab receives a complete request (verb, things, place) or nothing.
+
+### M2 `scene` (shared module; art.draw becomes scene + shapes from knowledge + renderer)
+- regions (sky, ground, water, grass) are things with an extent: several lakes, a small lake on the left, grass above the lake; adding one never replaces another unless asked;
+- relations kept as facts and re-applied when things move: on, in, next to, in front of, behind, above, sitting on; "next to X, on the left" is one place;
+- amounts: "a bit", "more", "further", "still" are steps from the present place; a corner only when a corner is said;
+- sets: "a fish", "the fish" (all), "the first", "each in a different corner" (distribute);
+- the same module serves diagram.sketch, geo.map pins, Talk cards and the avatar parts; report which hand-written move/place patterns each tab drops.
+
+### M3 Delegation: needs and offers
+A world declares what a request needs (kind drawable, place, size, colour, count); modules declare what they offer. The engine fills a gap in this fixed order and records the source on the wire: said by the user > dialogue focus > scene state > knowledge > the world's own default.
+- kind not drawable → knowledge `stand_in` / kind-of / nearest drawable relative, said once ("a villa, drawn as a house"); person kinds (child, baby, boy, girl, grandfather) are variants of person and are found by any of those names later;
+- place not said → usual place from knowledge (k.scenes, k.commonsense): sun in the sky, duck on water, goat and house on the ground. The remark about fish in water is given once per thing and only when the user put it there; never as a suffix on other turns;
+- the same contract for size, colour, count, and for other tabs (a chart asks knowledge for units, a map asks for the capital). Write it once in the host and once as a proposal for sopworld (they get a task for needs/offers); no per-world code.
+
+### M4 Translation chosen by understanding (all languages, nothing per language)
+- produce candidates from every available translator (browser Translator, on-device model, rules) plus one candidate after source-side spelling repair (missing diacritics and near words from the model's own vocabulary);
+- reject a candidate that still has source-language words (token seen in the input and not English);
+- among the rest take the one the reader understands completely in the active tab; ties → the browser translator. Log all candidates in the phrase export.
+- reply side: no interjections ("voilà", "Ta-da", "S-A comis", "Pst") in any language; replies generated in plain English and translated whole.
+
+### Invariants (tests, both reasoners)
+- every turn gets a reply (rows 11 and 51 gave none: find the cause and add the test);
+- if any part of one sentence is not understood, nothing destructive runs from the other parts; ask instead, with the understood part named;
+- no reading changes tab without the tab being named.
+
+### INPUT-HISTORY (owner)
+Arrow up in the chat box recalls earlier sent messages, arrow down goes forward, the unsent draft is kept and comes back at the end; works in every tab, per session, typed and voice turns; only when the caret is on the first line (up) or last line (down). On touch: tap a past message → it is copied to the box for editing. A recalled message that is edited and sent right after a failed turn counts as a correction (M1).
+
+### Measure and order
+- Chrome replay of the three owner logs after each module; report table per class. Targets on log b: at least 50 of 63 as expected, 0 foreign-world readings, 0 silent turns, no turn above 1.5 s warm on the reviewer profile (row 61 used 1,056,197 ticks: say why).
+- A/B gate and smoke per landing as usual; the hold-out idea from WORLD-OF-WORLDS applies: add M1–M3 to one tab you did not design them on (diagram.sketch) and report what worked with no new patterns.
+- Order: invariants and INPUT-HISTORY now (small); M1 inside the meta.worlds worktree; M2 continues SPACE; M3 after M2; M4 in a parallel worktree. Questions and counter-proposals in questions.md.
+
+## Reviewer 2026-11-13 16:55 — NO POINT FIXES (owner, repeated from his message in your session; standing rule)
+
+**Owner:** fixing failing cases one by one teaches us nothing and most of the time now goes into test runs. Failing cases are collected; when there are hundreds they are grouped and the real cause is found. The answers are system-level rules, new worlds and links between worlds, never a patch per case. This holds even for a case that passed before.
+
+**Rule from now on:**
+1. **A failing case is data, not a task.** It goes to one ledger, `training/eval/failures.jsonl` (text, tab, language, what happened, what was expected, where it came from, first seen, build). No code change for it alone. Regressions go to the same ledger with `was_passing: true`.
+2. **Tests that fail on such cases do not block.** Move them to a `known-failures` list that the suite reports as a count per class; the smoke suite keeps only invariants (every turn gets a reply, nothing destructive on a partly understood sentence, no tab change without a named tab, no network effect on a reading, undo/redo, build loads). Report the new smoke time; target under 60 s on your box.
+3. **Work happens per cause.** When the ledger has a few hundred rows (it has now: the three owner logs, round-trip failures, minimal pairs, coherence) run `scripts/analyze-failures.mjs`: group by cause, count, show five examples per group. A change is accepted only if it names the group, is a general mechanism (a rule at system level, a module, a link between worlds, a knowledge lookup), and reports the group's count before and after plus what it broke in other groups.
+4. **Not accepted:** a new pattern, lexicon entry, synonym, exception or regex added for one phrase; a test written for one phrase; rerunning the full suite after a small change. The reviewer will read diffs for this and send such commits back.
+5. **Suites:** smoke once per landing, not per commit; full suite and the replay of the ledger once per module landing or once a day, whichever is later. Say in worker-log how many minutes of the day went to test runs.
+6. **Bugs that are not language cases** (a crash, no reply, the build not loading, data loss) are still fixed at once.
+
+**First thing to deliver:** the ledger filled from what exists, the grouping report, and the smoke suite reduced to invariants. Then WORLDS-AS-MODULES in its order; its targets are per class on the ledger, not per row.
+
+## Reviewer 2026-11-13 17:10 — validated at 1504a75; KNOWLEDGE-ALL-WORLDS; sopworld 0.16.0
+
+**Validated at 1504a75:** `npm run test:smoke` 242 pass, 0 fail. It now takes 261 s on the reviewer box (was 115 s with 207 tests): it is growing the wrong way. Cut it to the invariants as in NO POINT FIXES, item 2. Your test policy entry matches the owner's rule; accepted.
+
+**sopworld 0.16.0 is validated: re-vendor it.** Round 18/19 there builds what WORLDS-AS-MODULES needs as library modules: `std.fill` (delegation with tiers), `std.focus` (last thing, action, place), relations, why-answers, "would this be refused" dry run, all-or-nothing groups. Build M1 and M3 on those, not in host code; if you need one before it lands, write the need in their questions.md format in your worker-log and the reviewer forwards it.
+
+**KNOWLEDGE-ALL-WORLDS.** The catalog has 11 worlds; the demo reads three by type-specific code (k.objects for drawing, k.commonsense and k.words in facts.mjs) and does not use `stand_in` at all. Make the reading generic:
+1. `facts.mjs` reads any `k.*` wire through the catalog's index (type, keys, `core.source`), no code per world; a new world in the catalog is usable with no PSys2 change. Test with a world added to a fixture catalog.
+2. Use `k.objects.stand_in` and the kind-of links for things with no drawing (M3).
+3. `k.faces` (134 hand-written variants, presets, expressions, seven imported styles) is the data for AVATAR-FROM-PARTS: no face shapes in PSys2.
+4. `k.scenes` (in work in the knowledge repo: usual place, relative size, person kinds) feeds M3 defaults; until it lands use k.commonsense.
+5. Report a table: world, used by which tabs, by which mechanism.
+
+## Reviewer 2026-11-13 17:40 — SPACE as one general world (owner): design, used by drawing, diagrams, avatar, Talk cards, maps
+
+**Owner's question (also asked in your session):** can one space world be general and clever enough for every tab: avoid overlaps naturally, know the surface of each piece, join pieces that are near, keep them apart when asked, take layouts from general knowledge? Reviewer's answer: feasible, if it is split in three layers and the numbers are computed by functions, not by rules. This block replaces the earlier SPACE block and M2 of WORLDS-AS-MODULES where they differ. Write your own view and objections in questions.md before building.
+
+**Layer 1: what a piece is (facts).** Every placeable thing, in any tab, is a `space.piece`: an extent (box) and, when known, an outline (from the part points of k.objects / k.faces), a layer (behind, in front), and named anchors (top, bottom, centre, left, right, plus anchors given by knowledge: seat of a swing, surface of a lake, chin of a head, port of a box). A piece may contain pieces (a face holds eyes; a scene holds a lake; a box holds a label), so the same facts serve an avatar, a drawing and a diagram.
+
+**Layer 2: what must hold (relations and rules, SOP Lang, sopworld `std.relations`).** Relations are kept facts, not one-off moves: on, in, next to, left of, above, in front of, behind, attached to, aligned with, same size as, apart from, inside the frame. Rules add relations nobody said, each with its source and each defeasible by the user:
+- pieces do not overlap unless one is in, on, behind or attached to the other;
+- a piece stays inside its container;
+- pieces that are near and of a kind that joins (wall and roof, arm and body, arrow and box, hair and head; from knowledge "part of" and anchors) become attached at matching anchors; "do not join them" / "apart" removes it and is remembered;
+- usual place and usual relative size from knowledge (k.scenes) when nothing is said;
+- when a piece moves, what is on it or attached to it moves with it; what was merely next to it does not.
+Conflicts are ranked with the delegation tiers (said by user > focus > scene > knowledge > default) and a refused relation gives a plain reason ("the cow cannot go lower: it is on the ground").
+
+**Layer 3: where things go (a small solver, one function for all tabs).** Input: pieces, relations, the frame. Output: positions and sizes, changing as little as possible from the present ones (stability: nothing the user placed jumps). Steps: named layout first if there is one, then relation constraints, then overlap removal by smallest moves, then a check; if no solution within the step budget, keep the last valid state and say which relation could not be kept. Deterministic, both reasoners call the same function; no wall clock.
+
+**Layouts are knowledge, not code.** A layout is a named arrangement with slots: row, column, grid, ring, scatter, corners, stack, tree, flow left to right, landscape (sky above ground, water in ground), face (the slots of k.faces), room. They live in the knowledge repo (`k.layouts`: slots, their relations, when it is usual), are found by lookup like any fact, and "arrange them in a ring", "each in a different corner", "like a family photo" pick one. A new layout needs no PSys2 change.
+
+**Who uses it:** art.draw (scene), diagram.sketch (boxes, arrows attached at ports, no overlaps, flow/tree layouts), ui.avatar (face layout, parts attached at anchors, resize a part and the neighbours adapt), Talk cards (board layout), geo.map (pins and labels that do not cover each other). Each tab keeps its actions and renderer and drops its own placing code; report the lines removed per tab.
+
+**Experiments before it is made the default (report per tab, on the ledger classes place, relation, amount, distribute, default-place plus 30 new scripted scenes per tab):**
+- E-S1 overlap rate and frame escapes after each of 200 scripted additions and moves: target 0 unwanted overlaps;
+- E-S2 stability: mean displacement of pieces the request did not mention: target near 0;
+- E-S3 joins: 40 near pairs that should join and 40 that should not: errors and whether "apart" is respected afterwards;
+- E-S4 the same 20 requests ("put A next to B", "arrange in a row", "bigger", "swap A and B") in drawing, diagram and avatar with no tab-specific patterns;
+- E-S5 cost in steps for 10, 50, 200 pieces on the phone profile;
+- E-S6 hold-out: a layout added only in the knowledge repo is usable without a PSys2 change.
+
+**Limits to say honestly in the report:** outlines are approximate (boxes and convex hulls first; true shapes later if E-S1 needs it); "natural" joining depends on knowledge having anchors, so list the kinds without anchors; the solver is not a physics engine.
+
+**Order:** pieces and relations on art.draw first (it unblocks the owner's log), then the solver with row/corners/landscape, then diagram.sketch, then the avatar with k.faces. The knowledge repo gets `k.layouts` and anchors as a task; sopworld builds `std.relations`.
+
+## Reviewer 2026-11-13 17:45 — answer to Q3 (SPACE-2)
+
+Your `space` module (selection, amounts, relations, row/column/grid/circle; eval 150/150 in both reasoners) is accepted as the base; not yet probed in Chrome by the reviewer. **The 17:40 block is the scope and the acceptance criteria of SPACE-2**: add to the module pieces with outlines and anchors, relations kept as facts (today they are one-off placements), the rule set with sources, the stable solver, and layouts read from `k.layouts`. The missing sopworld functions (ordering, median, argmin) are in sopworld Round 17/19 (`std.order`, `std.relations`); move the rules there as they land and keep host JavaScript for geometry only. The size gate does not apply to `space`: it adds abilities; report instead the placing code each host drops.
+
+## Reviewer 2026-11-13 18:05 — WORLD-OF-WORLDS results read; SPACE-2, TALK 2, AVATAR-FROM-PARTS, k.faces noted (not test-run by the reviewer, by the owner's rule)
+
+**Routing decision:** the stated rule is not met, but the numbers answer the owner's priority (coherence in dialogue first): C is 82.8 overall against 74.0 for A, +14.8 on dialogue turns, +7.5 on wrong-tab, 100% on minimal pairs, and loses 1.4 on single operational messages. **Make C (symbolic + encoder, 30 points) the default router now**, A stays selectable under Developer. Say in About which router is on.
+
+**Next experiment, on causes not cases (three general changes, same table):**
+1. **Cards from more than patterns.** B fails where the card has no words (arith "less than", greetings, typos). Build the card also from the world's `describe.sop`, its operations and legend, its lexicon with near words, and the knowledge kinds it holds; no hand lists.
+2. **A prior that knows when it does not know.** The encoder prior counts only when its top score is confident and the world is in its label set; for a world without a label the prior is absent, not zero. Report the hold-out again; target: masked C within 5 points of trained C.
+3. **Refusal as evidence.** Use the dry run "would be refused in the present state" (sopworld Round 19) as a rule for every world, replacing the special case for games.
+The 49 "wrong" of C on operational go to the ledger as one group, not fixed singly.
+
+**SPACE-2:** matches the 17:40 block in scope (surfaces, joining with "apart", layouts from knowledge, rules in rules.sop). Still owed from that block: relations kept as facts after the move (moving the swing moves the child), the stability measure (E-S2), layouts read from the knowledge repo's `k.layouts` (arriving) rather than the local `KNOWLEDGE` table, the avatar face-layout command, diagram patterns for around / by height / stack through the module (no new per-tab patterns).
+**AVATAR-FROM-PARTS:** the real `k.faces` is published (16 slots, 134 hand-written variants, 13 presets, 7 expressions, seven imported styles): switch from the stub, then remove the DiceBear library (1.36 MB) once the presets cover the old characters.
+**Usual place and size:** `k.scenes` now has them for 2,033 drawable things, `k.people` has eight kinds of person, and there are hand stand-ins (villa, puddle and 88 more): use them in M3 instead of `common.sense` tables.
+
+## Reviewer 2026-11-13 18:35 — validated at 7f0bcb3: smoke 242 pass, 0 fail (197 s on the reviewer box)
+
+No test rerun beyond the smoke. Still waiting for, in this order: the failure ledger with the grouping report, the smoke cut to invariants, the replay of owner-log-2026-11-13b on the merged build (per class), router C as default. The knowledge repo now has `k.scenes` (61 scenes; usual place and size class for 2,033 things), `k.people` (8 kinds, 60 roles), `k.feelings` (30, 20 with a face expression): KNOWLEDGE-ALL-WORLDS item 1 (generic reading) makes them usable; "draw a farm" should then compose a scene from `k.scenes` with the SPACE solver (the knowledge previews pile things up: placing is your side).
+
+## Reviewer 2026-11-13 18:55 — owner's fourth log (33 turns, English): USER-ACTIONS in the log, ONE AVATAR, "about the current discussion"
+
+**Data:** `training/eval/owner-log-2026-11-13c.jsonl` (class and `expected`). It goes to the failure ledger; the items below are mechanisms, not row fixes.
+
+### USER-ACTIONS in the phrase log (owner)
+The export holds only messages, so nobody can tell which tab the owner was on or what he tapped between two messages. Record every user action as an event in the same log, in order: tab opened (by tap, by a message, by a transferred card), button and chip taps, option cards chosen, undo / redo, clear, settings changed, language changed, a recalled message (arrow history), microphone on / off, a drawing or card tapped. Each event: time, kind, target, tab before and after. `scripts/analyze-phrase-log.mjs` shows the timeline and flags every message whose reading used another tab than the one on screen. Export format version 3; old exports still load. Nothing leaves the device (as today).
+
+### ONE AVATAR (owner): only the new vector avatar; remove the old one and the duplication
+The owner sees two avatar systems and chaos: the avatar is drawn with glasses yet "remove eyeglasses", "add eyeglasses", "put a hat" are not understood (rows 1, 2, 4, 5, 6, 33), and row 6 went to art.draw.
+1. **Delete the old avatar**: the DiceBear library (1.36 MB), its operations, patterns, lexicon, presets, tests and the `FACE_DELEGATES` hand-over. One state (`state.face`), one renderer, one set of operations. Old saved avatars map to the nearest preset once, then the mapping code goes too. Report lines and bytes removed.
+2. **Data only from the knowledge repo's `k.faces`** (16 slots, 134 hand-written variants, 13 presets, 7 expressions; hats, glasses, earrings and other accessories are slots there; more hats are being added). Remove the local stub. Every slot and variant is usable by any of its names and synonyms from the catalog; no accessory list in PSys2.
+3. **One generic operation set over slots** (not a pattern per accessory): add / wear / put on, remove / take off / without, change / next / another, which ones are there, colour, size, position; a bare slot name ("eyeglasses") asks add or remove from the present state. "remove X" for a part the face is drawn with must work for every slot: test it by looping over the catalog's slots, not by listed words.
+4. **Space:** parts sit by the face layout and anchors of the shared `space` module (a hat on the top of the head, glasses on the eyes); resizing one adapts the neighbours.
+5. **Routing:** on the Avatar tab a part of the face is a referent of that world (meta.worlds referent rule); art.draw never takes it.
+6. The header avatar, the talking mouth and expressions use the same renderer. One Chrome probe at the end with a sheet of 12 faces and each accessory added and removed; send the sheet path in worker-log.
+
+### ABOUT-THE-DISCUSSION (new, serves the goal: worlds combining)
+"draw a nice chart about the current discussion", "create a chart about …", "create a document about the current discussion" (rows 17, 18, 20) are requests to another world with the session as the data. General mechanism: the dialogue module (M1) offers the session as facts (things drawn and their counts, topics looked up in Talk, games played and results, places shown); through delegation (M3) any world may take "the current discussion / what we did / so far" as its content: a chart of counts, a document with one section per world, a diagram of topics, a Talk card. One implementation in the module, no pattern per tab. Experiment: 20 sessions × 4 target worlds, right content yes/no.
+
+### Classes seen again (ledger only, no single fixes)
+- "why?" answered about an older turn instead of the last one (row 19) → M1 why-answers use the last turn.
+- "random colours" for a set (rows 12, 13) → scene sets with an attribute per member ("each", "random", "different").
+- "sudan capital" (row 31) → knowledge relation between two things in one request, by lookup (k.geo has capitals).
+- "Ta-da!" is still in replies (row 9): the interjections were to go in every language.
+- "I can't reach the picture catalog right now" on the owner's machine (row 17): say in worker-log why the catalog was unreachable there and what the user sees when offline.
+
+## Reviewer 2026-11-13 19:00 — LOG WHAT HAPPENED (owner): the export must show the result, not only the reading
+
+The owner's log misled the reviewer: for "get to to sudan capital" the export says `geo.show sudan`, no effects, and a reply that dropped "capital"; the owner says the screen did show the capital. The export cannot settle it. Add to USER-ACTIONS (export format 3), for every turn:
+1. **What changed in the world, in plain structured form**: the state difference (things added, removed, moved, changed, with names and values: "map: centre Khartoum, zoom 6, marker Khartoum"; "drawing: +2 elephants"; "avatar: glasses removed"), produced by one generic diff of the world state before and after, not by code per world. `state.before/after` hashes stay.
+2. **What was on screen**: the active tab after the turn, the visible result in words (the same text a screen reader would get: reuse or add the accessible description of each view), and every effect that ran, including view effects that today leave `effects: []` (map moves, tab switches, cards).
+3. **All replies shown**, in order, including notices and suggestions, in the language shown and in English.
+4. **The user's reaction**: the next action within the turn gap (undo, a repeat, a correction, a thumbs tap) linked to the turn, so a later analysis can count "undone" and "repeated" as signs of a wrong result.
+5. Optional and off by default: a small thumbnail of the view per turn (size cap, local only), switchable under Privacy and history.
+`scripts/analyze-phrase-log.mjs` prints a turn as: tab, message, reading, what changed, what was shown, reaction. The ledger takes its "what happened" from these fields. For the Sudan turn say in worker-log what really happened (did the map go to the capital?).
+
+## Reviewer 2026-11-13 19:05 — LOG WHAT HAPPENED: reduced (owner)
+
+Keep it small. Per turn the export needs only: the tab on screen, each reply shown **with the world it came from**, and what that world changed (the state difference in words). Drop item 5 (thumbnails) and the screen-reader description of item 2; item 4 (reaction) only as the next user action already recorded by USER-ACTIONS.
+
+## Reviewer 2026-11-13 19:10 — PROGRESS (owner): show what is loading and what is being done, step by step
+
+Loading is slow now; the owner does not mind the time, he minds not seeing what happens. One mechanism for every wait:
+1. **One progress service** (`ui/progress.mjs`): any part of the app reports `start(id, label)`, `step(id, label, done, total)`, `end(id)`; the service owns one small panel (a bar plus the current step in plain words, and a "details" fold with the steps done and their times). No part draws its own spinner.
+2. **Start-up:** the steps in order as they really happen: page code, the worlds (count), the reasoner, the reading model (MB loaded of total), the translator for the selected language, the knowledge catalog index, voices. The bar is weighted by measured sizes/times of the last start (stored locally), so it moves evenly. The chat is usable as soon as the rules can read; later steps continue in the panel ("still loading the model: answers may be simpler for a moment").
+3. **New worlds and knowledge:** opening a tab or a lookup that loads a world, a shard, a face set or a layout shows the same panel with the name ("loading drawings: farm animals").
+4. **Long turns:** when a turn passes 400 ms the input shows what is being done (reading, looking up knowledge, placing things, drawing), from the stages the engine already times; the input is blocked only while a state-changing action runs, typing ahead is kept and sent after, and a Stop button cancels where the step budget allows.
+5. **Failures in the same place:** a step that fails or times out says so in the panel with what still works ("the picture catalog could not be reached: basic drawings only"), and the turn's reply does not repeat it more than once.
+6. Texts are generated in English and translated like every reply; nothing per language. The steps are recorded as events in the phrase export (USER-ACTIONS), with durations.
+7. Check with one Chrome probe at 4x CPU throttle and a slow network profile: screenshots of start-up at three moments, a world load, a long turn. Report the start-up table (step, ms, bytes) in worker-log; that table is also the list of what to speed up later.

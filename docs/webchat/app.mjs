@@ -631,7 +631,9 @@ export async function mountPsys2(element, options = {}) {
     if (!notUnderstood) applyState(reply.state);   // noise never switches the tab
     const expressions = reply.statuses ?? [];
     if (!avatarChanged && robotUI()) {
-      if (expressions.includes('missing')) robotUI().express('surprised');
+      const mood = tabDefs.find((x) => x.id === view)?.mood?.(reply, answer);   // a tab may react to the kind of its own turn (Talk: found, not found, a big number)
+      if (mood) robotUI().express(mood);
+      else if (expressions.includes('missing')) robotUI().express('surprised');
       else if (expressions.includes('supported')) robotUI().express('smile');
     }
     lastAnswerLen = String(answer).length;

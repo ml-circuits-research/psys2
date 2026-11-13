@@ -125,6 +125,7 @@ export function look(ctx, { o } = {}) {
   if (!subject) return no("missing", NO_TOPIC);
   const r = lookup(ctx, subject);
   if (!r) return dontKnow(ctx, false);
+  if (!r.parts.length && !r.th?.senses?.length && !r.th?.commonsense) return dontKnow(ctx, false);   // the word is only the kind of a part of something else (a ball of the snowman): nothing to say about it
   const topic = topicFor(ctx, r.name);
   const text = whatSentence(r);
   if (!r.parts.length) { topic.say ||= brief(text); return ok(text, { values: [r.name] }); }
@@ -224,7 +225,15 @@ export function order(ctx, { s } = {}) {
 const ORD = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth'];
 /** What comes after / before X, or which one is the Nth: the sentence and the line with the point marked. */
 export function neighbour(ctx, { x, dir, n, s } = {}) {
-  const word = clean(x).replace(/^the\s+/, '');
+  let word = clean(x).replace(/^the\s+/, '');
+  const dirWord = word.match(/^(before|after)\s+(.+)$/);   // "and before it?" after "what comes after Mars?": the ellipsis put its words into the old slot, the direction is theirs
+  if (dirWord) { dir = dirWord[1]; word = dirWord[2].replace(/^the\s+/, ''); }
+  if (n === undefined && seqKey(word)) return order(ctx, { s: word });   // "and the seasons?" after "what comes after March?": the whole line
+  if (PRON.test(word)) {   // "and before it?": the item the last line question was about
+    const last = [...ensure(ctx).cards].reverse().find((c) => c.kind === 'line' && c.data?.items);
+    const at = last ? (Number.isInteger(last.data.from) ? last.data.from : last.data.mark) : -1;
+    if (last && at >= 0) word = clean(last.data.items[at]);
+  }
   let key = null, i = -1;
   if (n !== undefined && s) {
     key = seqKey(s); const q = SEQ[key];
@@ -249,6 +258,19 @@ export function neighbour(ctx, { x, dir, n, s } = {}) {
   const topic = topicFor(ctx, key);
   addCard(ctx, topic, { kind: 'line', thing: key, title: cap(key), data: { items: q.items, cyclic: q.cyclic, mark, from: i }, how: howOf({ frame: n !== undefined ? `which ${q.one} is number ${n}` : `what comes ${dir === 'before' ? 'before' : 'after'} ${at}`, words: n !== undefined ? `${ORD[i]} ${q.one}` : at, things: [at], sources: [{ what: SEQ_SOURCE, part: key }], card: 'the line with the answer marked' }) }, text);
   return ok(text, { values: [q.items[mark]] });
+}
+
+/** "No, the other one": of the two things of the last comparison, the one the conversation is not on; it is shown as "what is X". */
+export function other(ctx) {
+  const s = ensure(ctx);
+  const bars = [...s.cards].reverse().find((c) => c.kind === 'bars' && c.data?.bars?.length === 2);
+  const cur = clean(current(ctx));
+  if (!bars) return no('missing', 'I do not know which other one you mean. Ask me to compare two things first, for example "Which is bigger, a dog or a house?".');
+  const names = bars.data.bars.map((b) => String(b.label));
+  const rest = names.find((n) => clean(n) !== cur) ?? names[0];
+  const bar = bars.data.bars.find((b) => String(b.label) === rest);
+  if (PLANET_KM[cap(rest)]) { topicFor(ctx, rest); return ok(`${cap(rest)} is about ${Number(bar?.value ?? PLANET_KM[cap(rest)]).toLocaleString('en-US')} km across.`, { values: [rest] }); }
+  return look(ctx, { o: rest.toLowerCase() });
 }
 
 /** What did we talk about: one line per topic; the tab shows the board. */

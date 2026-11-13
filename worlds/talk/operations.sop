@@ -99,3 +99,9 @@
     semantics=action
     action=talk.undo
     doc="Take back the last change of a card or the last transfer to another tab: one step."
+
+@op.talk.other core.operation
+    impl=other
+    semantics=action
+    action=talk.other
+    doc="No, the other one: after two things were compared, the conversation moves to the other one of the two and shows it."

@@ -29,7 +29,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=90ece0d788';
 import { checkValues } from './value-check.mjs?v=506216f967';
-import { Discourse } from './discourse.mjs?v=a408919143';
+import { Discourse } from './discourse.mjs?v=74a997b12b';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=081ff151f0';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=48044eb25c';

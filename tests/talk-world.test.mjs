@@ -7,7 +7,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { cardHtml, boardSvg, layoutBoard, drawingSvg, BOARD, esc } from '../worlds/talk/cards.mjs';
-import tab, { CHIPS } from '../docs/webchat/ui/tabs/talk.mjs';
+import tab, { CHIPS, mood } from '../docs/webchat/ui/tabs/talk.mjs';
 
 const FILES = {
   'vocab.json': JSON.stringify({ comet: ['k.objects/shards/sky', 'k.words/shards/co'], spider: ['k.words/shards/sp'], elephant: ['k.commonsense/shards/core'], mouse: ['k.commonsense/shards/core'], lighthouse: ['k.objects/shards/buildings'], tail: ['k.words/shards/co'] }),
@@ -185,4 +185,46 @@ test('board layout: a tidy tree, no overlaps, parents beside their children', ()
   assert.ok(L.nodes.every((n) => n.x >= 0 && n.y >= 0 && n.x + BOARD.nodeW <= L.width && n.y + BOARD.nodeH <= L.height));
   assert.match(boardSvg(topics, 't2'), /tk-current/);
   assert.equal(layoutBoard([]).nodes.length, 1);
+});
+
+test('E-T1/E-T3 fixes: "and a X?" keeps one article and reaches the topic, a bare "bigger than X?" is the compare frame, "which planet is the third?" is read', async () => {
+  engine.setKnowledge(createFacts({ source }));
+  const s = session();
+  await s.send('What is a comet?');
+  let r = await s.send('and a lighthouse?');
+  assert.equal(r.trace.discourse.resolved.rewritten, 'What is a lighthouse?');
+  assert.match(r.text, /a tower/);
+  assert.equal(s.state('talk').topics.find((t) => t.id === s.state('talk').current).name, 'lighthouse');
+  r = await s.send('bigger than a mouse?');
+  assert.match(r.text, /but not how big|bigger|same size/);
+  r = await s.send('Which planet is the third from the sun?');
+  assert.match(r.text, /third planet from the sun is Earth/);
+  r = await s.send('Which month is the fifth?');
+  assert.match(r.text, /May/);
+});
+
+test('E-T3 fixes: "and before it?" and "and the seasons?" on a line, "no, the other one" after a comparison', async () => {
+  engine.setKnowledge(null);
+  const s = session();
+  await s.send('What comes after Mars?');
+  let r = await s.send('and before it?');
+  assert.equal(r.text, 'Earth comes before Mars.');
+  r = await s.send('and the seasons?');
+  assert.match(r.text, /Spring, Summer, Autumn and Winter/);
+  await s.send('Is Earth bigger than Mars?');
+  r = await s.send('no, the other one');
+  assert.match(r.text, /^(?:Mars|Earth) is about [\d,]+ km across\.$/);
+  r = await s.send('no, the other one');
+  assert.match(r.text, /^(?:Mars|Earth) is about/);
+});
+
+test('avatar reactions (host hook): found is happy, not found is sad, a big number is surprising', async () => {
+  engine.setKnowledge(null);
+  const s = session();
+  const m = async (q) => { const r = await s.send(q); return mood(r, r.text); };
+  assert.equal(await m('What comes after Mars?'), 'smile');
+  assert.equal(await m('What is a blorp?'), null);
+  assert.equal(await m('Is Jupiter bigger than Mars?'), 'surprised');
+  assert.equal(tab.mood, mood);
+  assert.equal(mood({ statuses: [] }, 'hello'), null);
 });
