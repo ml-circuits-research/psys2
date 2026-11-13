@@ -28,7 +28,7 @@ for (const reasoner of ['ops', 'matrix']) {
     assert.match(r.text, /I drew a white house/);
   });
 
-  test(`${reasoner}: the acts cover the phrases the chat lost: eyes closer together, bare eyeglasses, do you have glasses, add and remove eyeglasses`, { todo: reasoner === 'ops' ? 'known failure: with the large fixture catalog the ops reasoner spends about 12000 steps on a turn (facts.wires 7900) and the turn budget stops the fourth clause; ledger class budget' : false }, async () => {
+  test(`${reasoner}: the acts cover the phrases the chat lost: eyes closer together, bare eyeglasses, do you have glasses, add and remove eyeglasses`, { todo: reasoner === 'ops' ? 'known failure, ledger class budget: the first catalog turn of the ops reasoner still stops at the turn budget in this test (6100 steps in a script, the same turn passes there); the steps fell from 11700 to 6100 with the wire index' : false }, async () => {
     const r = await say(session(e), 'make the eyes closer together', 'eyeglasses', 'do you have glasses?', 'remove eyeglasses', 'add eyeglasses');
     assert.match(r[0].text, /moved my eyes closer together/);
     assert.match(r[1].text, /glasses/); assert.doesNotMatch(r[1].text, /did not (catch|understand)/);
@@ -43,6 +43,17 @@ for (const reasoner of ['ops', 'matrix']) {
     assert.equal(s.state('ui.avatar').face.expression, 'angry');
     assert.equal(s.state('ui.avatar').face.base, 'boy');
     assert.doesNotMatch(r.text, /did not/);
+  });
+
+  test(`${reasoner}: several acts in one sentence are ONE undo step`, async () => {
+    const s = session(e);
+    await say(s, 'put on earrings');
+    const before = JSON.stringify(s.state('ui.avatar').face.slots);
+    await s.send('make the avatar an angry boy');
+    assert.equal(s.state('ui.avatar').face.expression, 'angry');
+    await s.send('undo');
+    assert.equal(JSON.stringify(s.state('ui.avatar').face.slots), before, 'one undo goes back before both acts');
+    assert.notEqual(s.state('ui.avatar').face.expression, 'angry');
   });
 
   test(`${reasoner}: focus: "make it red" after "put on a hat" means the hat`, async () => {

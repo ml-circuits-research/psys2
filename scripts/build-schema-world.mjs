@@ -4,6 +4,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parse } from '../src/soplang/index.mjs';
+import { isCanonicalSentence } from '../src/worlds/canonical.mjs';
 import { parseSchema, generate } from '../worlds/acts/acts.mjs';
 
 /** { files, schema } for a world directory. */
@@ -14,7 +15,7 @@ export async function build(dir) {
   const ns = path.basename(dir);
   const schema = parseSchema(wires);
   const rel = path.relative(dir, path.resolve(import.meta.dirname, '../worlds/acts/acts.mjs')).split(path.sep).join('/');
-  return { files: generate(schema, ns, rel), schema };
+  return { files: generate(schema, ns, rel, isCanonicalSentence), schema };
 }
 if (import.meta.url === `file://${process.argv[1]}`) {
   const dir = path.resolve(process.argv[2] ?? '.');

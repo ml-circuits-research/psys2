@@ -12,7 +12,7 @@ import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDist
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs';
 import { routeScores } from './router.mjs';
-import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
 import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { parse, serialize } from '../../soplang/index.mjs';
@@ -359,8 +359,12 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     const m = matches[k], acc = set.get(m.pattern.worldId)?.ops?.accepts;
     if (typeof acc !== 'function') continue;
     const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
-    let ok = true;
-    try { ok = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }) !== false; } catch { ok = true; }
+    for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
+    let ok = true, strong = false;
+    try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false; strong = verdict === 'focus'; } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
+    // a world with a decline hook is a schema world whose forms keep free slots: its catch-all reading yields to a reading of another world that has no free text at all
+    // ("Is a square a rectangle?" is the shapes world's, even while the avatar tab is open)
+    if (ok && !strong && context?.lastWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && !m.pattern.tabClaim)) ok = false;
     if (!ok) matches.splice(k, 1);
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);

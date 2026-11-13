@@ -26,7 +26,7 @@
 import { budget } from './budget.mjs?v=123c3e1329';
 import { GRAMMAR } from './continuation.mjs?v=c651104054';
 import { touched } from './followup.mjs?v=1e203c3efd';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=8c10eddd4b';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=48dc2ad3f2';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
 
 const LOG_LIMIT = 60;
@@ -514,7 +514,9 @@ export class Dialogue {
       if (npish) for (const v of verbs) cands.push({ text: `${v} ${bare}`, roles: { action: v } });
       else {
         // the verb of a place comes from the focus (what was done before), else from the words of the act `place` (the knowledge tier: the shared acts module)
-        const known = alts(lang, 'acts.verb.place').filter((a) => a.length === 1).map((a) => a[0]).filter((v) => !placeVerbs.includes(v));
+        // the order of the catalog's verbs is not the order of use: the verbs that the examples of the world's own move operation start with come first, the most used first (the user's words are the world's words)
+        const lead = new Map(); for (const p of this.s.engine.set.get(world)?.patterns ?? []) if (/action=[\w.]*(?:move|place)/.test(p.emit ?? '')) for (const e of p.examples ?? []) { budget.tick('dialogue.verbs'); const w0 = String(e).toLowerCase().split(/\s+/)[0]; lead.set(w0, (lead.get(w0) ?? 0) + 1); }
+        const known = alts(lang, 'acts.verb.place').filter((a) => a.length === 1).map((a) => a[0]).filter((v) => !placeVerbs.includes(v)).sort((x, y) => (lead.get(y) ?? 0) - (lead.get(x) ?? 0));
         const pv = [...placeVerbs, ...verbs.filter((v) => !placeVerbs.includes(v)), ...known];
         const things = [thing, thing && /^all the /.test(thing) ? 'them' : 'it'].filter(Boolean);
         for (const v of pv) for (const th of things) cands.push({ text: `${v} ${th} ${bare}`, roles: { action: v, thing: th }, viaKnowledge: known.includes(v) && !placeVerbs.includes(v) && !verbs.includes(v) });

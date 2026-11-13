@@ -9,36 +9,36 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=f273240139';
-import { loadWorlds } from '../worlds/index.mjs?v=835b404863';
-import { validateWorldSet } from '../worlds/validate.mjs?v=a1fe6cfc9f';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=888d5a4144';
+import { loadWorlds } from '../worlds/index.mjs?v=34ab13175c';
+import { validateWorldSet } from '../worlds/validate.mjs?v=72f892791d';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=c67ee241d3';
+import { createInterpreter } from '../interpreter/index.mjs?v=94c62ceb85';
 import { createReasoner } from '../reasoner/index.mjs?v=e96edcff84';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=42be8d6ec1';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=ff17463a99';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=416febc3b0';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=46c04ea6cd';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=457fe9cf06';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=bfa6256ddb';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=6474ae2d9a';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=655b296bcd';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=e046742b19';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=8c10eddd4b';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=48dc2ad3f2';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=28af958efd';
-import { checkValues } from './value-check.mjs?v=a9d3668e6e';
-import { Discourse } from './discourse.mjs?v=4c5f7a5a86';
-import { Dialogue } from './dialogue.mjs?v=4ec8a1e65e';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=74adcda6ff';
+import { checkValues } from './value-check.mjs?v=f42f6f01d4';
+import { Discourse } from './discourse.mjs?v=cb5ea69880';
+import { Dialogue } from './dialogue.mjs?v=26150d0731';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=6c09274686';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=08e0f34ad3';
-import { repairFromScene } from './scene-referents.mjs?v=4ed5c1a9d8';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=a076249920';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=5e11822958';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=426170f837';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=3800b0329a';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=5b25c7fd8b';
+import { repairFromScene } from './scene-referents.mjs?v=2e9612f351';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=a08e69f50e';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=4540a0eca3';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=5d50bbc1ca';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -1518,19 +1518,21 @@ export class DialogSession {
         if (seg.veto.offer) disc.pending = { type: 'offer', accept: 'rewrite', rewrite: seg.veto.offer.rewrite, world: seg.veto.offer.world, expected: 'yes/no', question: seg.veto.offer.question, turn: this._msg };
         continue;
       }
+      // a specific explanation ("I do not speak klingon") comes before the world's graded fallback
+      const waSay = seg.unparsed && waMode !== 'off' && waMode !== 'observe' ? explainUnparsed(this, seg.text) : null;
+      if (waSay) { lines.push([T(waSay)]); statuses.push('unsupported'); continue; }
       // honest scope: the world of the open tab may refuse a message it cannot talk about, in its own words, with the nearest things it can (hook `outOfScope`, the Talk tab)
       if (seg.unparsed) {
         const cx = this.context(), tw = cx.tabWorld ?? cx.lastWorld;   // no tab open: the world last used says what it can do
         const oos = tw ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
         if (typeof oos?.say === 'string' && oos.say) {
+          if (set.get('ui.help')) (this.isession.state['ui.help'] ??= {}).lastUnparsed = { text: seg.text, world: tw, suggestions: oos.suggest ?? [] };   // the help still knows what was not understood ("why not?")
           lines.push([T(oos.say)]);
           if (oos.suggest?.length) this.isession.effects.push({ name: 'chat.suggest', args: { items: oos.suggest }, world: tw });
           statuses.push('unsupported');
           continue;
         }
       }
-      const waSay = seg.unparsed && waMode !== 'off' && waMode !== 'observe' ? explainUnparsed(this, seg.text) : null;
-      if (waSay) { lines.push([T(waSay)]); statuses.push('unsupported'); continue; }
       if (seg.unparsed) {
         // examples from the world of the open tab first: the router's word-overlap guess can point anywhere
         const routed = seg.worlds.map((w) => w.id), here = Object.entries(this.focus()).find(([, n]) => n >= 3)?.[0];

@@ -6,6 +6,8 @@
     sample=circle
     dir=yes
     layout=yes
+    rel=yes
+    thingask=yes
     bare=yes
     acts=make
     acts=remove
@@ -23,6 +25,7 @@
 
 @dg.shape acts.kind
     plural=shapes
+    named=yes
     word=circle
     word=circles
     word=square

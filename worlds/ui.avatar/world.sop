@@ -5,7 +5,10 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
-    undo=avatar.undo
+    undo=ui.avatar.undo
+    redo=ui.avatar.redo
+    imports=world.acts
+    imports=world.lang.common
     source="how I look"
     language=en
     status=fixture

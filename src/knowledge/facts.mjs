@@ -68,6 +68,24 @@ export function createFacts({ source, name = 'catalog' }) {
     if (failed) { down = true; retryLater(() => { indexLoading = null; index = null; }); }
   })();
 
+  const wireMemo = new Map();   // (type|key) -> the wires of a lookup with no shard filter, until the catalog reloads
+  const wireIx = new Map();   // shard id -> { byType: Map(type -> wires), byValue: Map(lowercased value -> wires) }, built once per load
+  const wireIndex = async (id) => {
+    if (!wireIx.has(id)) {
+      const lines = await loadShard(id), byType = new Map(), byValue = new Map();
+      for (const line of lines) {
+        budget.tick('facts.index');
+        if (line.charCodeAt(0) !== 64) continue;
+        const r = parseFact(line);
+        if (!r) continue;
+        (byType.get(r.type) ?? byType.set(r.type, []).get(r.type)).push(r);
+        for (const v of new Set(Object.values(r.f).flatMap((vs) => vs.map((x) => String(x).toLowerCase())))) (byValue.get(v) ?? byValue.set(v, []).get(v)).push(r);
+      }
+      wireIx.set(id, { byType, byValue });
+    }
+    return wireIx.get(id);
+  };
+
   const loadShard = (id) => {
     if (!shards.has(id)) shards.set(id, (async () => {
       const t = clock();
@@ -75,7 +93,7 @@ export function createFacts({ source, name = 'catalog' }) {
       try { txt = await source.text(`${id}.sop`); } catch { /* an unreachable shard is no knowledge */ }
       stats.shardMs += clock() - t; stats.shardBytes += txt?.length ?? 0; stats.shardsLoaded.push(id);
       if (!txt) down = true;
-      if (!txt) retryLater(() => { shards.delete(id); parsed.delete(id); things.clear(); });
+      if (!txt) retryLater(() => { shards.delete(id); parsed.delete(id); wireIx.delete(id); wireMemo.clear(); things.clear(); });
       return txt ? txt.split('\n') : [];
     })());
     return shards.get(id);
@@ -110,16 +128,17 @@ export function createFacts({ source, name = 'catalog' }) {
     const w = await world(type);
     if (!w) return [];
     const k = key == null ? null : String(key).toLowerCase();
+    const memo = shard ? null : `${type}|${k}`;
+    if (memo && wireMemo.has(memo)) return wireMemo.get(memo);   // the same lookup within one load costs nothing
     const out = [];
     for (const sh of w.shards.filter((x) => (k == null || x.keys?.includes(k)) && (!shard || shard(x)))) {
-      const lines = await loadShard(sh.id);
-      for (const line of lines) {
+      const ix = await wireIndex(sh.id);   // the shard is read and indexed once (by type, then by value): a turn's lookups cost the matches, not the lines
+      for (const r of (k == null ? ix.byType.get(type) : ix.byValue.get(k)?.filter((x) => x.type === type)) ?? []) {
         budget.tick('facts.wires');
-        if (line.charCodeAt(0) !== 64) continue;
-        const r = parseFact(line);
-        if (r && r.type === type && (k == null || Object.values(r.f).some((v) => v.some((x) => String(x).toLowerCase() === k)))) out.push({ ...r, shard: sh.id, source: r.f['core.source']?.[0] ?? null });
+        out.push({ ...r, shard: sh.id, source: r.f['core.source']?.[0] ?? null });
       }
     }
+    if (memo && !down) wireMemo.set(memo, out);
     return out;
   }
 
