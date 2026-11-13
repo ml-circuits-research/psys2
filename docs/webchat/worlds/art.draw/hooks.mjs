@@ -5,7 +5,7 @@
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
 import * as D from './engine.mjs?v=98d4ce06e3';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
-import { splitThings } from '../acts/acts.mjs?v=604ad994cd';
+import { splitThings } from '../acts/acts.mjs?v=fac2d3efbb';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=94b5cebde0';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };

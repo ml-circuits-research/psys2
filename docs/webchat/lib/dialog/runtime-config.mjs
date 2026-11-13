@@ -6,7 +6,7 @@
  *   const enc = createRuntime({ engine, settings, load, normalizer, waitForModel });   // encoder strategy, attached and registered
  *   const session = engine.createSession(sessionOptions(settings));
  */
-import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=181ec7a65d';
+import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=a9fc82413f';
 import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=8ade995e9f';
 
 /** The shipped defaults of everything that changes what the pipeline answers (the webchat adds UI-only keys on top). */
