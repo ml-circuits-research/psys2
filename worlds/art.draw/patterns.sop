@@ -1672,6 +1672,16 @@
     example="Arrange the trees in a circle."
     doc="Puts a group in a row, a column, a grid or a circle: handed to the module space."
 
+@pat.art.draw.x.space.sense core.pattern
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|arrange|set|lay|sort|stack|pile|line_up|order] {t:words(6)} [by_height|by_size|by_their_height|by_their_size|in_a_circle_around|in_a_ring_around|in_a_circle_round|around|on_top_of_each_other|on_top_of_one_another|in_a_stack|in_a_pile|from_smallest_to_biggest|from_smallest_to_tallest|from_biggest_to_smallest|from_tallest_to_shortest|in_the_places_of_a_face|like_a_face] {r:rest?}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    example="Put the chairs around the table."
+    example="Arrange the people by height."
+    example="Stack the boxes on top of each other."
+    doc="Layouts from general knowledge (around a table, by height, stacked, the parts of a face): handed to the module space."
+
 @pat.art.draw.x.space.near core.pattern
     match="[what|whats|what_is|what_s|which_things|what_things] [is|are]? [there]? [next_to|near|beside|close_to|by] {r:rest}"
     emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""

@@ -27,10 +27,12 @@ export const COUNTS = { two: 2, three: 3, four: 4, five: 5, both: 2 };
 export const DIRS = { left: [-1, 0], leftwards: [-1, 0], right: [1, 0], rightwards: [1, 0], up: [0, -1], upwards: [0, -1], upward: [0, -1], higher: [0, -1], down: [0, 1], downwards: [0, 1], downward: [0, 1], lower: [0, 1] };
 export const AMOUNTS = { a_tiny_bit: 0.3, tiny: 0.3, a_bit: 0.5, a_little_bit: 0.5, a_little: 0.5, slightly: 0.5, just_a_bit: 0.5, a_step: 1, one_step: 1, two_steps: 2, three_steps: 3, much: 2.2, very_much: 2.5, a_lot: 2.5, so_much: 2.5, way: 3, far: 3, all_the_way: 'edge', to_the_edge: 'edge', by_half: 'half', half_way: 'half', halfway: 'half' };
 export const MORE = ['more', 'even', 'further', 'farther', 'again', 'once_more'];
-export const LAYOUTS = { row: 'row', line: 'row', column: 'column', grid: 'grid', circle: 'circle', ring: 'circle', spread: 'spread', align: 'align', tidy: 'tidy', swap: 'swap' };
-export const RELATIONS = { above: 'above', over: 'above', under: 'under', below: 'under', beneath: 'under', underneath: 'under', beside: 'next', near: 'next', next_to: 'next', close_to: 'next', left_of: 'leftof', right_of: 'rightof', between: 'between', around: 'around', in: 'in', inside: 'in', into: 'in', on: 'on', onto: 'on', on_top_of: 'on' };
+export const LAYOUTS = { row: 'row', line: 'row', column: 'column', grid: 'grid', circle: 'circle', ring: 'circle', spread: 'spread', align: 'align', tidy: 'tidy', swap: 'swap', stack: 'stack', stacked: 'stack', pile: 'stack', height: 'height', face: 'face' };
+export const CONTACT = ['touching', 'against', 'joined', 'attached', 'touch'];
+export const APART = ['apart', 'gap', 'separate', 'separately'];
+export const RELATIONS = { above: 'above', over: 'above', under: 'under', below: 'under', beneath: 'under', underneath: 'under', beside: 'next', near: 'next', next_to: 'next', close_to: 'next', left_of: 'leftof', right_of: 'rightof', between: 'between', around: 'around', against: 'against', in: 'in', inside: 'in', into: 'in', on: 'on', onto: 'on', on_top_of: 'on' };
 const NAMED = (m) => Object.keys(m);
-export const WORDS = { ordinals: NAMED(ORDINALS), positions: NAMED(POSITIONS), sizes: NAMED(SIZES), counts: NAMED(COUNTS), dirs: NAMED(DIRS), amounts: NAMED(AMOUNTS), more: MORE, layouts: NAMED(LAYOUTS), relations: NAMED(RELATIONS) };
+export const WORDS = { ordinals: NAMED(ORDINALS), positions: NAMED(POSITIONS), sizes: NAMED(SIZES), counts: NAMED(COUNTS), dirs: NAMED(DIRS), amounts: NAMED(AMOUNTS), more: MORE, layouts: NAMED(LAYOUTS), relations: NAMED(RELATIONS), contact: CONTACT, apart: APART };
 
 const JOINED = [...NAMED(AMOUNTS), ...MORE, ...NAMED(RELATIONS), 'to_the_left_of', 'to_the_right_of', 'on_the_left_of', 'on_the_right_of', 'next_to', 'on_top_of']
   .filter((w) => w.includes('_')).map((w) => w.split('_')).sort((a, b) => b.length - a.length);
@@ -60,11 +62,108 @@ export function classify(w) {
 const W = (it) => it.w ?? 0, H = (it) => it.h ?? 0;
 export const boxOf = (it) => ({ l: it.x - W(it) / 2, r: it.x + W(it) / 2, t: it.y - H(it) / 2, b: it.y + H(it) / 2 });
 const area = (it) => W(it) * H(it);
-const overlaps = (a, b, pad = 0) => { const p = boxOf(a), q = boxOf(b); return p.l < q.r - pad && q.l < p.r - pad && p.t < q.b - pad && q.t < p.b - pad; };
-/** Gap between two boxes (0 when they touch or overlap). */
-export const gap = (a, b) => { const p = boxOf(a), q = boxOf(b); return Math.hypot(Math.max(0, p.l - q.r, q.l - p.r), Math.max(0, p.t - q.b, q.t - p.b)); };
+const rectPoly = (cx, cy, w, h) => [[cx - w / 2, cy - h / 2], [cx + w / 2, cy - h / 2], [cx + w / 2, cy + h / 2], [cx - w / 2, cy + h / 2]];
+/** Does the item carry a real outline? `shape` = polygons as offsets from the centre ([[ [dx, dy], ... ], ...]); `parts` = boxes { x, y, w, h } as offsets from the centre. */
+export const shaped = (it) => !!(it.shape?.length || it.parts?.length);
+/** The surface of an item as absolute polygons: its outline, the union of its part boxes, or its box. */
+export function surface(it) {
+  if (it.shape?.length) return it.shape.map((p) => p.map(([dx, dy]) => [it.x + dx, it.y + dy]));
+  if (it.parts?.length) return it.parts.map((b) => rectPoly(it.x + (b.x ?? 0), it.y + (b.y ?? 0), b.w, b.h));
+  return [rectPoly(it.x, it.y, W(it), H(it))];
+}
+/** The outline (offsets from the centre) of a plain geometric shape in a w x h box: circle, ellipse, triangle, diamond, hexagon, star; null for a box. */
+export function outlineOf(kind, w, h) {
+  const k = String(kind ?? '').toLowerCase(), ring = (n, f = 1) => Array.from({ length: n }, (_, i) => { const a = -Math.PI / 2 + (2 * Math.PI * i) / n, r = i % 2 && f !== 1 ? f : 1; return [(Math.cos(a) * w * r) / 2, (Math.sin(a) * h * r) / 2]; });
+  if (k === 'circle' || k === 'ellipse' || k === 'oval') return [ring(20)];
+  if (k === 'triangle') return [[[0, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]]];
+  if (k === 'diamond') return [[[0, -h / 2], [w / 2, 0], [0, h / 2], [-w / 2, 0]]];
+  if (k === 'hexagon') return [[[-w / 4, -h / 2], [w / 4, -h / 2], [w / 2, 0], [w / 4, h / 2], [-w / 4, h / 2], [-w / 2, 0]]];
+  if (k === 'star') return [ring(10, 0.42)];
+  return null;
+}
+const cross3 = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+const segsCross = (p1, p2, p3, p4) => { const d1 = cross3(p3, p4, p1), d2 = cross3(p3, p4, p2), d3 = cross3(p1, p2, p3), d4 = cross3(p1, p2, p4); return ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)); };
+function inPoly(pt, poly) {
+  let c = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    budget.tick('space.inpoly');
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if (yi > pt[1] !== yj > pt[1] && pt[0] < ((xj - xi) * (pt[1] - yi)) / (yj - yi) + xi) c = !c;
+  }
+  return c;
+}
+const centroid = (p) => [sum(p.map((v) => v[0])) / p.length, sum(p.map((v) => v[1])) / p.length];
+/** Grows (negative `pad`) or shrinks (positive) a polygon about its centre by about `pad` px. */
+function inset(poly, pad) {
+  if (!pad) return poly;
+  const c = centroid(poly), r = Math.max(1, ...poly.map((v) => Math.hypot(v[0] - c[0], v[1] - c[1])));
+  const k = Math.max(0.05, 1 - pad / r);
+  return poly.map((v) => [c[0] + (v[0] - c[0]) * k, c[1] + (v[1] - c[1]) * k]);
+}
+const bboxOfPoly = (p) => { let l = Infinity, r = -Infinity, t = Infinity, b = -Infinity; for (const [x, y] of p) { l = Math.min(l, x); r = Math.max(r, x); t = Math.min(t, y); b = Math.max(b, y); } return { l, r, t, b }; };
+function polyHit(p, q) {
+  const a = bboxOfPoly(p), b = bboxOfPoly(q);
+  if (a.l >= b.r || b.l >= a.r || a.t >= b.b || b.t >= a.b) return false;
+  for (let i = 0; i < p.length; i++) for (let j = 0; j < q.length; j++) if (segsCross(p[i], p[(i + 1) % p.length], q[j], q[(j + 1) % q.length])) return true;
+  return inPoly(centroid(p), q) || inPoly(centroid(q), p) || p.some((v) => inPoly(v, q) && !onEdge(v, q)) || q.some((v) => inPoly(v, p) && !onEdge(v, p));
+}
+const onEdge = (v, poly) => poly.some((a, i) => { const b = poly[(i + 1) % poly.length]; return Math.abs(cross3(a, b, v)) < 1e-6 && v[0] >= Math.min(a[0], b[0]) - 1e-6 && v[0] <= Math.max(a[0], b[0]) + 1e-6 && v[1] >= Math.min(a[1], b[1]) - 1e-6 && v[1] <= Math.max(a[1], b[1]) + 1e-6; });
+const segDist = (a, b, c, d) => {
+  if (segsCross(a, b, c, d)) return 0;
+  const ps = (p, s, e) => { const dx = e[0] - s[0], dy = e[1] - s[1], l = dx * dx + dy * dy, t = l ? Math.max(0, Math.min(1, ((p[0] - s[0]) * dx + (p[1] - s[1]) * dy) / l)) : 0; return Math.hypot(p[0] - s[0] - t * dx, p[1] - s[1] - t * dy); };
+  return Math.min(ps(a, c, d), ps(b, c, d), ps(c, a, b), ps(d, a, b));
+};
+const boxHit = (a, b, pad) => { const p = boxOf(a), q = boxOf(b); return p.l < q.r - pad && q.l < p.r - pad && p.t < q.b - pad && q.t < p.b - pad; };
+/** Do two items overlap? By their real surfaces when either has an outline (shape / parts), else by their boxes. `pad` > 0 tolerates a touch, < 0 asks for a margin. */
+export const overlaps = (a, b, pad = 0) => {
+  if (!boxHit(a, b, Math.min(pad, 0))) return false;
+  if (!shaped(a) && !shaped(b)) return boxHit(a, b, pad);
+  budget.tick('space.surface');
+  const P = surface(a).map((p) => inset(p, pad)), Q = surface(b).map((p) => inset(p, pad));
+  return P.some((p) => Q.some((q) => polyHit(p, q)));
+};
+/** Gap between two items (0 when they touch or overlap): box gap, or the distance of the real surfaces when either has an outline. */
+export const gap = (a, b) => {
+  if (!shaped(a) && !shaped(b)) { const p = boxOf(a), q = boxOf(b); return Math.hypot(Math.max(0, p.l - q.r, q.l - p.r), Math.max(0, p.t - q.b, q.t - p.b)); }
+  if (overlaps(a, b, 0)) return 0;
+  budget.tick('space.gap');
+  let best = Infinity;
+  for (const p of surface(a)) for (const q of surface(b)) for (let i = 0; i < p.length; i++) for (let j = 0; j < q.length; j++) best = Math.min(best, segDist(p[i], p[(i + 1) % p.length], q[j], q[(j + 1) % q.length]));
+  return best;
+};
 const clampIn = (it, f) => ({ ...it, x: Math.round(Math.min(f.w - W(it) / 2, Math.max(W(it) / 2, it.x))), y: Math.round(Math.min(f.h - H(it) / 2, Math.max(H(it) / 2, it.y))) });
 const stepOf = (f) => f.step ?? f.w * 0.1;
+
+
+// ---- general knowledge and consistency rules (declared once; the facts are also in worlds/common.sense/kb.sop, tests/space.test.mjs keeps them in step) --------------
+/**
+ * What common sense says about arrangement, as data: `supports` (a roof sits on walls, a cup on a table: what touches what), `around` (chairs go around a table),
+ * `face` (the order of the parts of a face: rank from the top, and the share of the width where a mirrored pair sits). A host may pass its own in ctx.knowledge.
+ */
+export const KNOWLEDGE = {
+  supports: [['roof', 'walls'], ['roof', 'house'], ['chimney', 'roof'], ['wheel', 'road'], ['car', 'road'], ['cup', 'table'], ['plate', 'table'], ['lamp', 'table'], ['book', 'shelf'], ['book', 'table'], ['vase', 'table'], ['person', 'floor'], ['house', 'ground'], ['tree', 'ground']],
+  around: [['chair', 'table'], ['stool', 'table'], ['plate', 'table'], ['person', 'table'], ['cup', 'table'], ['bench', 'fire'], ['chair', 'desk']],
+  face: [['brow', 1, 0.2], ['eye', 2, 0.2], ['ear', 2, 0.44], ['nose', 3, 0], ['mouth', 4, 0]],
+};
+/** The consistency rules every host gets from `enforce` (also listed as space.rule rows in worlds/space/rules.sop, generated from this table). */
+export const RULES = [
+  { id: 'inside-frame', doc: 'Everything stays inside the frame after any placement, move or layout.' },
+  { id: 'no-overlap', doc: 'After a placement or a layout nothing overlaps another thing by its real surface, unless the relation is containment (in, on, around) or the user asked for it.' },
+  { id: 'on-ground', doc: 'A thing that stands on the ground (a house, a tree) is not lifted above the ground by a layout; a move that lifts it is done and said.' },
+  { id: 'face-limits', doc: 'A slot of a face stays within its limits and keeps the order of a face: eyebrows above eyes above nose above mouth.' },
+];
+const singular = (k) => String(k ?? '').toLowerCase().replace(/~\w+$/, '').replace(/(?:ies)$/, 'y').replace(/(?<!s)s$/, '');
+const kn = (c) => ({ ...KNOWLEDGE, ...(c?.knowledge ?? {}) });
+const supportPair = (top, base, c) => { const a = singular(top.kind ?? top.name), b = singular(base.kind ?? base.name), na = singular(top.name), nb = singular(base.name); return kn(c).supports.some(([t, u]) => (singular(t) === a || singular(t) === na) && (singular(u) === b || singular(u) === nb)); };
+const faceFact = (it, c) => { const k = singular(it.kind ?? it.name), n = singular(it.name); return kn(c).face.find(([f]) => singular(f) === k || singular(f) === n); };
+const aroundFact = (movKind, refKind, c) => kn(c).around.some(([m, r]) => singular(m) === singular(movKind) && singular(r) === singular(refKind));
+/** "don't join them", "leave a gap", "apart": the user wants a gap; "touching", "against": the user wants contact. */
+export function contactWish(input) {
+  const t = words(input).join(' ');
+  if (/\b(?:do not|dont|don t|not|never|without) (?:join|touch|attach|connect|stick|snap)\w*\b|\bleave (?:a |some )?(?:gap|space|room)\b|\bwith (?:a )?(?:gap|space)\b|\bapart\b|\bseparate\w*\b|\bnot touching\b|\bkeep (?:them )?apart\b|\bat a distance\b/.test(t)) return { apart: true };
+  if (/\b(?:touching|against|joined|attached|touch|stuck|connected)\b/.test(t)) return { touch: true };
+  return {};
+}
 
 /** Reading order: rows from the top, each row left to right (items whose centres are less than half a height apart are in one row). */
 export function readingOrder(items) {
@@ -289,19 +388,121 @@ function regionRel(t) {
   if (v.length === 1) return { rel: 'region', region: `half ${v[0]}` };
   return null;
 }
+const JOIN_GAP = 1.5;   // px: two joined things touch (a hair of air, so rounding never makes them overlap)
+const unit = (dx, dy) => { const l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; };
+const snapRange = (frame) => Math.hypot(frame.w, frame.h) * 0.045;   // "close": a small share of the frame
 /**
- * The target box of each mover for a relation: { boxes: { id: { x, y, w?, h? } } } with no overlap against the other items unless the relation is containment
- * (in, on, around). `others` = every item of the host (movers and references are told apart by id).
+ * Moves `pos` (a centre) of `m` along the unit vector `dir` until its real surface is `want` px from `ref`'s, never through it. Boxes with no outline are left
+ * where they are unless `force`. Returns the new centre.
  */
-export function planPlace(movers, rel, refs, frame, others = []) {
-  const margin = Math.max(8, frame.w * 0.02), gapPx = Math.max(6, frame.w * 0.015), boxes = {}, ids = new Set(movers.map((m) => m.id));
+export function settle(m, pos, dir, ref, want = JOIN_GAP, force = false) {
+  if (!force && !shaped(m) && !shaped(ref)) return pos;
+  const reach = Math.hypot(W(m) + W(ref), H(m) + H(ref)), stepSz = Math.max(2, reach / 48);
+  const at = (t) => ({ ...m, x: pos.x + dir[0] * t, y: pos.y + dir[1] * t });
+  if (overlaps(at(0), ref, 0.5) || gap(at(0), ref) <= want + 0.75) return pos;
+  let prev = 0, hit = null;
+  for (let t = stepSz; t <= reach; t += stepSz) { budget.tick('space.settle'); if (overlaps(at(t), ref, 0) || gap(at(t), ref) < want) { hit = t; break; } prev = t; }
+  if (hit == null) return pos;
+  let lo = prev, hi = hit;
+  for (let k = 0; k < 12; k++) { const mid = (lo + hi) / 2; if (!overlaps(at(mid), ref, 0) && gap(at(mid), ref) >= want) lo = mid; else hi = mid; }
+  const q = at(lo);
+  return { x: Math.round(q.x * 10) / 10, y: Math.round(q.y * 10) / 10 };
+}
+/** The opposite of settle: a thing that sits inside another is lifted out along `dir` until the outlines just touch. */
+function eject(m, pos, dir, ref, want = JOIN_GAP) {
+  const reach = Math.hypot(W(m) + W(ref), H(m) + H(ref)), stepSz = Math.max(2, reach / 48), at = (t) => ({ ...m, x: pos.x + dir[0] * t, y: pos.y + dir[1] * t });
+  let prev = 0;
+  for (let t = stepSz; t <= reach; t += stepSz) {
+    budget.tick('space.eject');
+    if (!overlaps(at(t), ref, 0) && gap(at(t), ref) >= want) {
+      let lo = prev, hi = t;
+      for (let k = 0; k < 12; k++) { const mid = (lo + hi) / 2; if (!overlaps(at(mid), ref, 0) && gap(at(mid), ref) >= want) hi = mid; else lo = mid; }
+      const q = at(hi); return { x: Math.round(q.x * 10) / 10, y: Math.round(q.y * 10) / 10 };
+    }
+    prev = t;
+  }
+  return pos;
+}
+const howJoined = (m, ref) => ({ above: 'on', below: 'under', left: 'against', right: 'against' }[sideOf(ref, m)]);
+/** Does the relation (or the wish) imply contact between this mover and that other thing? */
+function contactImplied(m, other, rel, o) {
+  if (o.apart) return false;
+  if (o.touch || rel === 'on' || rel === 'against') return true;
+  return supportPair(m, other, o) || supportPair(other, m, o);
+}
+/**
+ * "Natural joining": after a placement or a move, a thing that ended close to another one (within a small share of the frame) and whose relation implies contact
+ * (on, against, touching, a roof and walls, a wheel and a road) is snapped so the two touch without overlapping. Returns { pos, joined: [{ id, to, how }] }.
+ */
+function joinNear(m, pos, others, rel, o, frame) {
+  const joined = [], range = snapRange(frame);
+  let cur = pos;
+  for (const x of others) {
+    if (x.id === m.id) continue;
+    const here = { ...m, ...cur };
+    if (!contactImplied(m, x, rel, o)) continue;
+    const g = gap(here, x);
+    if (g > range) continue;
+    if (g === 0 && overlaps(here, x, 1)) {   // sunk into it: lift it out the way it came in
+      const dir = { above: [0, -1], below: [0, 1], left: [-1, 0], right: [1, 0] }[sideOf(x, here)], lifted = eject(m, cur, dir, x);
+      if (!others.some((z) => z.id !== x.id && z.id !== m.id && overlaps({ ...m, ...lifted }, z, 1))) cur = lifted;
+    }
+
+    const g2 = gap({ ...m, ...cur }, x);
+    if (g2 > JOIN_GAP + 0.75) {
+      const dir = unit(x.x - here.x, x.y - here.y);
+      const moved = settle(m, cur, dir, x, JOIN_GAP, true);
+      if (!others.some((z) => z.id !== x.id && z.id !== m.id && overlaps({ ...m, ...moved }, z, 1))) cur = moved;
+    }
+    if (gap({ ...m, ...cur }, x) <= JOIN_GAP + 3 && !overlaps({ ...m, ...cur }, x, 1)) joined.push({ id: m.id, to: x.id, how: howJoined({ ...m, ...cur }, x) });
+  }
+  return { pos: cur, joined };
+}
+/** "Leave a gap": a thing that ended closer than a gap to another is pushed away along the line between their centres until the gap is there. */
+export function apartAfter(items, boxes, frame, minGap = Math.max(24, frame.w * 0.05)) {
+  const out = { ...boxes }, ids = Object.keys(boxes);
+  for (const id of ids) {
+    const it = items.find((i) => i.id === id); if (!it) continue;
+    const others = items.filter((i) => !ids.includes(i.id));
+    for (let k = 0; k < 40; k++) {
+      budget.tick('space.apart');
+      const m = clampIn({ ...it, ...out[id] }, frame), x = others.find((q) => gap(m, q) < minGap);
+      if (!x) break;
+      const d = unit(m.x - x.x || 1, m.y - x.y), nx = m.x + d[0] * 6, ny = m.y + d[1] * 6, c = clampIn({ ...it, x: nx, y: ny }, frame);
+      if (c.x === m.x && c.y === m.y) break;
+      out[id] = { ...out[id], x: c.x, y: c.y };
+    }
+  }
+  return out;
+}
+/** After a plain move: things that ended close to something they belong against are joined. boxes: { id: { x, y } } -> { boxes, joined }. */
+export function joinAfter(items, boxes, frame, o = {}) {
+  const out = { ...boxes }, joined = [], ids = Object.keys(boxes);
+  if (o.apart) return { boxes: out, joined };
+  const now = (it) => ({ ...it, ...(out[it.id] ?? {}) });
+  for (const id of ids) {
+    const m = now(items.find((i) => i.id === id)); if (!m) continue;
+    const r = joinNear(m, { x: m.x, y: m.y }, items.filter((i) => !ids.includes(i.id)).concat(items.filter((i) => ids.includes(i.id) && i.id !== id).map(now)), null, o, frame);
+    if (r.joined.length) { out[id] = { ...out[id], x: Math.round(r.pos.x), y: Math.round(r.pos.y) }; joined.push(...r.joined); }
+  }
+  return { boxes: out, joined };
+}
+/**
+ * The target box of each mover for a relation: { boxes: { id: { x, y, w?, h? } }, joined } with no overlap (by real surface) against the other items unless the
+ * relation is containment (in, on, around). `others` = every item of the host (movers and references are told apart by id). `o`: { apart, touch, knowledge }.
+ */
+export function planPlace(movers, rel, refs, frame, others = [], o = {}) {
+  const margin = Math.max(8, frame.w * 0.02), apartPx = Math.max(24, frame.w * 0.05), boxes = {}, ids = new Set(movers.map((m) => m.id)), joined = [];
   const placed = [];
-  const fixed = () => others.filter((o) => !ids.has(o.id)).concat(placed);
-  const free = (c, ignore) => !fixed().some((o) => !ignore.includes(o.id) && overlaps(c, o, 1));
+  const fixed = () => others.filter((x) => !ids.has(x.id)).concat(placed);
+  const free = (c, ignore) => !fixed().some((x) => !ignore.includes(x.id) && overlaps(c, x, 1));
   const refIds = refs.map((r) => r.id);
   for (const m of movers) {
     let cand = [];
     const r = refs[0], br = r && boxOf(r);
+    const relName = rel.rel === 'on' ? 'on' : rel.rel === 'against' ? 'against' : null;
+    const join = !!r && rel.rel !== 'region' && contactImplied(m, r, relName, o);
+    const gapPx = o.apart ? apartPx : join ? JOIN_GAP : Math.max(6, frame.w * 0.015);
     const near = (x, y) => clampIn({ ...m, x, y }, frame);
     if (rel.rel === 'region') {
       const [cx, cy] = [frame.w / 2, frame.h / 2], mw = W(m) / 2 + margin, mh = H(m) / 2 + margin;
@@ -316,10 +517,10 @@ export function planPlace(movers, rel, refs, frame, others = []) {
       if (!a || !b) return { error: 'ref' };
       cand = [near((a.x + b.x) / 2, (a.y + b.y) / 2), near((a.x + b.x) / 2, (a.y + b.y) / 2 - H(m)), near((a.x + b.x) / 2, (a.y + b.y) / 2 + H(m))];
     } else if (rel.rel === 'in') cand = [near(r.x, r.y)];
-    else if (rel.rel === 'on') cand = [near(r.x, br.t - H(m) / 2)];
+    else if (rel.rel === 'on') { const c = near(r.x, br.t - H(m) / 2 - (o.apart ? apartPx : 0)); c.d = 'above'; cand = [c]; }
     else if (rel.rel === 'around') { boxes[m.id] = { x: r.x, y: r.y, w: Math.round(W(r) * 1.4 + 2 * margin), h: Math.round(H(r) * 1.4 + 2 * margin) }; continue; }
     else if (r) {
-      const g = gapPx, side = (d) => ({ right: near(br.r + W(m) / 2 + g, r.y), left: near(br.l - W(m) / 2 - g, r.y), above: near(r.x, br.t - H(m) / 2 - g), below: near(r.x, br.b + H(m) / 2 + g) }[d]);
+      const g = gapPx, side = (d) => ({ ...{ right: near(br.r + W(m) / 2 + g, r.y), left: near(br.l - W(m) / 2 - g, r.y), above: near(r.x, br.t - H(m) / 2 - g), below: near(r.x, br.b + H(m) / 2 + g) }[d], d });
       const order = rel.rel === 'above' ? ['above'] : rel.rel === 'under' ? ['below'] : rel.rel === 'leftof' ? ['left'] : rel.rel === 'rightof' ? ['right'] : (() => {
         const first = sideOf(r, m);   // the side the thing already is on
         return [first, ...['right', 'left', 'below', 'above'].filter((x) => x !== first)];
@@ -327,16 +528,28 @@ export function planPlace(movers, rel, refs, frame, others = []) {
       cand = order.map(side);
       if (order.length === 1) {   // a fixed side: slide along it until nothing is in the way
         const d = order[0], horiz = d === 'left' || d === 'right', base = cand[0];
-        for (let k = 1; k <= 12; k++) for (const sgn of [1, -1]) cand.push(near(base.x + (horiz ? 0 : sgn * k * (W(m) / 2 + gapPx)), base.y + (horiz ? sgn * k * (H(m) / 2 + gapPx) : 0)));
+        for (let k = 1; k <= 12; k++) for (const sgn of [1, -1]) cand.push({ ...near(base.x + (horiz ? 0 : sgn * k * (W(m) / 2 + gapPx)), base.y + (horiz ? sgn * k * (H(m) / 2 + gapPx) : 0)), d });
       }
     }
     if (!cand.length) return { error: 'rel' };
-    const ignore = rel.rel === 'in' || rel.rel === 'on' ? [...refIds] : rel.rel === 'between' ? [] : [];
+    const ignore = rel.rel === 'in' || rel.rel === 'on' ? [...refIds] : [];
     const pick = cand.find((c) => free(c, ignore)) ?? cand[0];
-    placed.push({ ...m, x: pick.x, y: pick.y });
-    boxes[m.id] = { x: pick.x, y: pick.y };
+    let at = { x: pick.x, y: pick.y };
+    // the real surfaces: a joined thing is drawn up to its neighbour until the outlines touch
+    if (r && join && pick.d && !o.apart) {
+      const dir = { above: [0, 1], below: [0, -1], left: [1, 0], right: [-1, 0] }[pick.d];
+      const s = settle(m, at, dir, r, JOIN_GAP);
+      if (free({ ...m, ...s }, ignore)) at = s;
+    }
+    const nearJoin = joinNear(m, at, fixed().filter(() => !(rel.rel === 'in' || rel.rel === 'around')), relName, o, frame);
+    at = { x: Math.round(nearJoin.pos.x), y: Math.round(nearJoin.pos.y) };
+    const jn = [...nearJoin.joined];
+    if (r && join && gap({ ...m, ...at }, r) <= JOIN_GAP + 3 && !jn.some((j) => j.to === r.id)) jn.push({ id: m.id, to: r.id, how: howJoined({ ...m, ...at }, r) });
+    joined.push(...jn);
+    placed.push({ ...m, x: at.x, y: at.y });
+    boxes[m.id] = { x: at.x, y: at.y };
   }
-  return { boxes };
+  return { boxes, joined };
 }
 
 // ---- layouts -----------------------------------------------------------------------------------------------------------------------------------------
@@ -347,10 +560,15 @@ export function parseLayout(input) {
   if (re('tidy|tidy up|clean up|neaten|make a better layout|better layout|improve the layout|fix the layout|fix the overlaps?|no overlaps?|stop overlapping|stop them overlapping|untangle')) return { op: 'tidy' };
   if (re('swap|switch places|exchange places|trade places')) return { op: 'swap' };
   if (re('same size|same sizes|equal size|equal sizes|the same size')) return { op: 'size' };
+  const ar = /\baround (?:the |a |an |that |this )?(.+)$/.exec(j);   // "put the chairs around the table", "in a circle around the table"
+  if (ar && !re('between')) return { op: 'around', ref: ar[1].split(' ') };
+  if (re('by height|by size|by their height|by their size|in order of (?:height|size)|sorted by (?:height|size)|smallest to (?:the )?(?:biggest|largest|tallest)|small to (?:big|large|tall)|shortest to (?:the )?tallest|tallest to (?:the )?(?:smallest|shortest)|biggest to (?:the )?smallest|largest to (?:the )?smallest|tallest first|biggest first')) return { op: 'height', desc: re('tallest to|biggest to|largest to|tallest first|biggest first') };
+  if (re('on top of each other|on top of one another|stack them|stacked|in a stack|a stack|pile them|piled|in a pile|a pile')) return { op: 'stack' };
+  if (re('the face|a face|face parts|parts of the face|face') && !re('row|column|grid|circle')) return { op: 'face' };
   const a = /\balign\w*\b.*?\b(left|right|top|bottom|centres?|centers?|middle|horizontally|vertically)\b/.exec(j);
   if (a) return { op: 'align', how: { centre: 'cx', centres: 'cx', center: 'cx', centers: 'cx', middle: 'cx', horizontally: 'cy', vertically: 'cx' }[a[1]] ?? a[1] };
   if (re('in a row|in one row|in a line|in one line|line up|lined up|side by side|horizontally in a row|a row')) return { op: 'row' };
-  if (re('in a column|in one column|in a stack|stack them|stacked|one under the other|on top of each other vertically|a column')) return { op: 'column' };
+  if (re('in a column|in one column|one under the other|a column')) return { op: 'column' };
   if (re('in a grid|a grid|in rows and columns|into a grid')) return { op: 'grid' };
   if (re('in a circle|in a ring|into a circle|into a ring|round in a circle|a circle')) return { op: 'circle' };
   if (re('spread|space them|spaced|evenly|even spacing|distribute|space out|spread out')) return { op: 'spread' };
@@ -402,6 +620,53 @@ export function planLayout(op, items, frame, o = {}) {
   } else if (op === 'centre') {
     const dx = frame.w / 2 - cx, dy = frame.h / 2 - cy;
     for (const it of items) put(it, it.x + dx, it.y + dy);
+  } else if (op === 'height') {   // a row sorted by size, standing on one baseline (the lowest bottom of the group)
+    const s = items.slice().sort((a, b) => (o.desc ? area(b) - area(a) : area(a) - area(b)) || a.x - b.x), sizes = s.map(W), total = sum(sizes), room = frame.w - 2 * pad;
+    const g = Math.max(pad * 0.5, Math.min(pad * 3, (room - total) / Math.max(1, n - 1))), span = total + g * (n - 1), base = Math.min(bb.b, frame.h - pad);
+    let p = Math.max(pad, Math.min(frame.w - pad - span, cx - span / 2));
+    s.forEach((it, k) => { put(it, p + sizes[k] / 2, base - H(it) / 2); p += sizes[k] + g; });
+  } else if (op === 'stack') {   // things piled on top of each other, touching: what supports sits lower (a table under a cup), else the bigger one is lower
+    const s = items.slice().sort((a, b) => area(b) - area(a) || a.x - b.x);
+    for (let round = 0; round < n; round++) for (let i = 0; i + 1 < n; i++) if (supportPair(s[i], s[i + 1], o)) [s[i], s[i + 1]] = [s[i + 1], s[i]];   // the supporter goes below
+    const total = sum(s.map(H)) + JOIN_GAP * (n - 1);
+    if (total > frame.h - 2 * pad) return { error: 'room' };
+    const bottom = Math.max(pad + total, Math.min(bb.b, frame.h - pad)), wmax = Math.max(...s.map(W)), x0 = Math.min(frame.w - pad - wmax / 2, Math.max(pad + wmax / 2, cx));
+    let top = bottom, prev = null;
+    for (const it of s) {
+      let y = top - H(it) / 2 - (prev ? JOIN_GAP : 0);
+      if (prev) { const q = settle({ ...it, x: x0, y }, { x: x0, y }, [0, 1], prev, JOIN_GAP); y = q.y; }
+      put(it, x0, y); const at = { ...it, ...boxes[it.id] }; top = boxOf(at).t; prev = at;
+    }
+  } else if (op === 'around') {   // movers evenly around a reference thing, each touching its ring (chairs around a table)
+    const ref = o.ref;
+    if (!ref) return { error: 'ref' };
+    const movers = items.filter((i) => i.id !== ref.id);
+    if (!movers.length) return { error: 'none' };
+    const m = movers.length, g = JOIN_GAP + Math.max(2, frame.w * 0.004), ang = (it) => Math.atan2(it.y - ref.y, it.x - ref.x);
+    const byAngle = movers.slice().sort((a, b) => ang(a) - ang(b));
+    const start = -Math.PI / 2, ring = byAngle.map((it, k) => {
+      const a = start + (2 * Math.PI * k) / m, dir = [Math.cos(a), Math.sin(a)], d0 = Math.hypot(W(it) + W(ref), H(it) + H(ref)) / 2 + 2;
+      const pos = settle(it, { x: ref.x + dir[0] * d0, y: ref.y + dir[1] * d0 }, [-dir[0], -dir[1]], ref, g, true);
+      return { it, dir, d: Math.hypot(pos.x - ref.x, pos.y - ref.y) };
+    });
+    let k = 1;
+    const at = (r, sc) => ({ ...r.it, x: ref.x + r.dir[0] * r.d * sc, y: ref.y + r.dir[1] * r.d * sc });
+    for (let t = 0; t < 14; t++, k *= 1.08) {
+      budget.tick('space.around');
+      const ps = ring.map((r) => clampIn(at(r, k), frame));
+      if (!ps.some((p, i) => ps.slice(i + 1).some((q) => overlaps(p, q, 1)) || overlaps(p, ref, 1))) break;
+    }
+    ring.forEach((r) => { const p = at(r, k); put(r.it, p.x, p.y); });
+  } else if (op === 'face') {   // the parts of a face: rank from the top (brows, eyes and ears, nose, mouth), a mirrored pair sits either side of the middle
+    const parts = items.map((it) => ({ it, f: faceFact(it, o) })).filter((x) => x.f);
+    if (parts.length < 2) return { error: 'few' };
+    const reg = o.region ?? { l: 0, t: 0, r: frame.w, b: frame.h }, rw = reg.r - reg.l, rh = reg.b - reg.t, mid = (reg.l + reg.r) / 2;
+    const ranks = [...new Set(parts.map((x) => x.f[1]))].sort((a, b) => a - b);
+    const yAt = (rank) => reg.t + rh * (0.28 + (ranks.length < 2 ? 0.2 : (0.5 * ranks.indexOf(rank)) / (ranks.length - 1)));
+    for (const kind of new Set(parts.map((x) => x.f[0]))) {
+      const grp = parts.filter((x) => x.f[0] === kind).sort((a, b) => a.it.x - b.it.x), mir = grp[0].f[2];
+      grp.forEach((x, k) => put(x.it, grp.length === 1 || !mir ? mid : mid + (k - (grp.length - 1) / 2) * 2 * mir * rw, yAt(x.f[1])));
+    }
   } else if (op === 'tidy') return tidy(items, frame, o.all ?? items);
   else return { error: 'op' };
   return { boxes };
@@ -415,9 +680,10 @@ function tidy(items, frame, all) {
     const list = [...cur.values()];
     for (let i = 0; i < list.length; i++) for (const q of [...list.slice(i + 1), ...still]) {
       const a = list[i];
-      if (!overlaps(a, q, -gp * 0 + 0)) continue;
-      const pa = boxOf(a), pq = boxOf(q);
-      const ox = Math.min(pa.r, pq.r) - Math.max(pa.l, pq.l) + gp, oy = Math.min(pa.b, pq.b) - Math.max(pa.t, pq.t) + gp;
+      if (!overlaps(a, q, 0)) continue;
+      const pa = boxOf(a), pq = boxOf(q), sh = shaped(a) || shaped(q);
+      let ox = Math.min(pa.r, pq.r) - Math.max(pa.l, pq.l) + gp, oy = Math.min(pa.b, pq.b) - Math.max(pa.t, pq.t) + gp;
+      if (sh) { ox = Math.max(3, ox * 0.3); oy = Math.max(3, oy * 0.3); }   // real outlines: the boxes may overlap while the surfaces do not, so push a little at a time
       const fixedQ = still.includes(q), share = fixedQ ? 1 : 0.5;
       if (ox <= oy) { const s = a.x <= q.x ? -1 : 1; a.x += s * ox * share; if (!fixedQ) q.x -= s * ox * 0.5; }
       else { const s = a.y <= q.y ? -1 : 1; a.y += s * oy * share; if (!fixedQ) q.y -= s * oy * 0.5; }
@@ -432,6 +698,48 @@ function tidy(items, frame, all) {
 }
 /** Is anything overlapping? */
 export const anyOverlap = (items) => items.some((a, i) => items.slice(i + 1).some((b) => overlaps(a, b, 1)));
+
+/**
+ * The consistency rules (RULES), applied to the boxes any spatial operation answers, for every host. `o`: { move: the boxes are a plain move (a thing that would
+ * newly overlap another stops short instead of being pushed), contain: the relation is containment (no overlap rule), ground: { top, kinds } (things that stand
+ * on the ground: the ground starts at `top`), limits: { id: { x: [lo, hi], y: [lo, hi] } } (a face slot), skip: [rule ids] }. Returns { boxes, notes } (notes: plain
+ * words for what had to give, never a refusal).
+ */
+export function enforce(items, boxes, frame, o = {}) {
+  const skip = new Set(o.skip ?? []), notes = [], by = new Map(items.map((i) => [i.id, i])), out = {};
+  const now = (id) => ({ ...by.get(id), ...out[id] });
+  for (const [id, b] of Object.entries(boxes)) {
+    const it = by.get(id); if (!it) { out[id] = b; continue; }
+    let c = { ...it, ...b };
+    if (!skip.has('face-limits') && o.limits?.[id]) { const L = o.limits[id]; if (L.x) c.x = Math.min(L.x[1], Math.max(L.x[0], c.x)); if (L.y) c.y = Math.min(L.y[1], Math.max(L.y[0], c.y)); }
+    if (!skip.has('on-ground') && o.ground && o.ground.kinds?.has?.(singular(it.kind ?? it.name)) && boxOf(c).b < o.ground.top) {
+      if (o.move) notes.push(`${it.name ?? it.kind} is up in the sky now, not on the ground`);
+      else c.y = o.ground.top + H(c) / 2 + 4;
+    }
+    if (!skip.has('inside-frame')) c = clampIn(c, frame);
+    out[id] = { ...b, x: Math.round(c.x), y: Math.round(c.y) };
+  }
+  if (skip.has('no-overlap') || o.contain) return { boxes: out, notes };
+  const was = (a, bq) => overlaps(by.get(a.id) ?? a, by.get(bq.id) ?? bq, 1);
+  const clash = (id) => items.filter((x) => x.id !== id && overlaps(now(id), now(x.id), 1) && !was(by.get(id), x));
+  const bad = Object.keys(out).filter((id) => by.has(id) && clash(id).length);
+  if (!bad.length) return { boxes: out, notes };
+  if (o.move) {   // stop short: back along the move until nothing new is touched
+    for (const id of bad) {
+      const from = by.get(id), to = out[id];
+      let lo = 0, hi = 1;
+      for (let k = 0; k < 10; k++) { const mid = (lo + hi) / 2; out[id] = { ...to, x: from.x + (to.x - from.x) * mid, y: from.y + (to.y - from.y) * mid }; if (clash(id).length) hi = mid; else lo = mid; }
+      out[id] = { ...to, x: Math.round(from.x + (to.x - from.x) * lo), y: Math.round(from.y + (to.y - from.y) * lo) };
+      notes.push(`I stopped the ${by.get(id).name ?? by.get(id).kind} short so it does not overlap anything`);
+    }
+    return { boxes: out, notes };
+  }
+  const movers = bad.map((id) => now(id)), rest = items.filter((x) => !bad.includes(x.id)).map((x) => now(x.id));
+  const t = tidy(movers, frame, rest.concat(movers));
+  for (const [id, c] of Object.entries(t.boxes ?? {})) out[id] = { ...out[id], x: c.x, y: c.y };
+  notes.push('I moved things apart so nothing overlaps');
+  return { boxes: out, notes };
+}
 
 // ---- questions ---------------------------------------------------------------------------------------------------------------------------------------
 /** "what is next to the house", "which one is in the middle", "is the sun above the tree", "how far apart are A and B": { ask, ... } or null. */
@@ -510,7 +818,8 @@ export function resolve(tokens, ctx, o = {}, depth = 0) {
 }
 
 const nameOf = (it, all) => label(it, all.filter((x) => x.kind === it.kind));
-const groupName = (its, all) => (its.length === 1 ? nameOf(its[0], all) : `the ${its[0].name ?? its[0].kind}s`);
+const plural = (n) => (n === 'person' ? 'people' : n === 'man' ? 'men' : n === 'woman' ? 'women' : n === 'child' ? 'children' : /(?:s|x|ch|sh)$/.test(n) ? `${n}es` : `${n}s`);
+const groupName = (its, all) => (its.length === 1 ? nameOf(its[0], all) : `the ${plural(its[0].name ?? its[0].kind)}`);
 
 /**
  * The whole sentence at once. ctx: { items, frame, kindOf, last: ids, lastMove }. Returns null when the sentence is not about places, or
@@ -522,9 +831,11 @@ export function interpret(text, ctx) {
   if (!t.length) return null;
   const q = parseQuestion(t);
   if (q) return answerQuestion(q, ctx);
+  const wish = contactWish(t);
+  t = stripWish(t);
   const verb = PLACE_VERBS.has(t[0]) ? 'place' : LAYOUT_VERBS.has(t[0]) ? 'layout' : null;
   if (verb === 'layout') return layoutOf(t, ctx);
-  if (verb === 'place' && parseLayout(t) && !['tidy', 'swap', 'size', 'centre'].includes(parseLayout(t).op)) return layoutOf(t, ctx);   // "put the houses in a row"
+  if (verb === 'place' && parseLayout(t) && !['tidy', 'swap', 'size', 'centre'].includes(parseLayout(t).op)) { const lr = layoutOf(t, ctx); if (lr) return lr; }   // "put the houses in a row"
   if (verb) t = t.slice(1);
   const bare = !verb && (Object.hasOwn(DIRS, t[0]) || MORE.includes(t[0]) || Object.hasOwn(AMOUNTS, t[0]));   // a follow-up with no verb and no thing: "further left", "a bit more to the right"
   if (!verb && !bare) return null;
@@ -539,20 +850,40 @@ export function interpret(text, ctx) {
   if (rel && !dirOnly) {
     const refs = [];
     for (const r of rel.refs ?? []) { const x = resolve(r, ctx, { exclude: movers.map((m) => m.id) }); if (x.ask) return { type: 'ask', say: x.ask, candidates: x.candidates }; if (x.error) return errorOf(x, r); refs.push(x.items[0]); }
-    const out = planPlace(movers, rel, refs, frame, items);
+    const out = planPlace(movers, rel, refs, frame, items, { ...wish, knowledge: ctx.knowledge });
     if (out.error) return { type: 'error', say: 'I could not find a place for that.' };
-    return { type: 'move', ids: movers.map((m) => m.id), boxes: out.boxes, say: `I put ${groupName(movers, items)} ${sayRel(rel, refs, items)}.`, memory: null, dest: dest.join(' '), kind: res.spec?.kind ?? '*' };
+    const fit = enforce(items, out.boxes, frame, { contain: ['in', 'on', 'around'].includes(rel.rel), ground: ctx.ground, limits: ctx.limits });
+    const base = `I put ${groupName(movers, items)} ${sayRel(rel, refs, items)}${wish.apart ? ', with a gap' : ''}.`;
+    return { type: 'move', ids: movers.map((m) => m.id), boxes: fit.boxes, say: sayJoined(out.joined, items, base, fit.notes), joined: out.joined, memory: null, dest: dest.join(' '), kind: res.spec?.kind ?? '*' };
   }
   const mv = parseMove(dest);
   if (!mv) return { type: 'error', say: 'Where should it go? Try "to the left", "a bit higher" or "next to the sun".' };
   const out = planMove(movers, frame, mv, ctx.lastMove);
   if (out.error) return { type: 'error', say: 'I do not remember a move to repeat. Say which way to go.' };
-  return { type: 'move', ids: movers.map((m) => m.id), boxes: out.boxes, say: `I moved ${groupName(movers, items)} ${sayMove({ segs: out.memory.segs })}.`, memory: out.memory, dest: dest.join(' '), kind: res.spec?.kind ?? '*' };
+  const fit = enforce(items, out.boxes, frame, { move: true, ground: ctx.ground, limits: ctx.limits });
+  const jn = joinAfter(items, wish.apart ? apartAfter(items, fit.boxes, frame) : fit.boxes, frame, { ...wish, knowledge: ctx.knowledge });
+  return { type: 'move', ids: movers.map((m) => m.id), boxes: jn.boxes, say: sayJoined(jn.joined, items, `I moved ${groupName(movers, items)} ${sayMove({ segs: out.memory.segs })}.`, jn.joined.length ? [] : fit.notes, true), joined: jn.joined, memory: out.memory, dest: dest.join(' '), kind: res.spec?.kind ?? '*' };
+}
+/** The words of what was joined: "I set the roof on the walls." (when a join is the whole story) or the plain sentence followed by the joins. */
+export function sayJoined(joined, items, base, notes = [], after = false) {
+  const nm = (id) => nameOf(items.find((i) => i.id === id), items);
+  const sent = (joined ?? []).map((j) => `I set ${nm(j.id)} ${j.how} ${nm(j.to)}.`);
+  const tail = (notes ?? []).length ? ` ${notes.map((n) => `${n[0].toUpperCase()}${n.slice(1)}.`).join(' ')}` : '';
+  if (!sent.length) return base + tail;
+  return (after ? `${base} ` : '') + sent.join(' ') + tail;
+}
+/** Drops the words of the wish about contact ("touching", "don't join them", "leave a gap", "apart") from a sentence, so the rest reads as before. */
+export function stripWish(t) {
+  const j = ` ${t.join(' ')} `.replace(/ (?:and |but |yet )?(?:do not|dont|don t|never|without) (?:join|touch|attach|connect|stick|snap)\w*(?: them| it| together)?(?= |$)/g, ' ')
+    .replace(/ (?:and |but )?(?:leave|keep) (?:a |some )?(?:gap|space|room|them apart|it apart)(?: between them| between)?(?= |$)/g, ' ')
+    .replace(/ (?:with|but with) (?:a )?(?:gap|space)(?= |$)/g, ' ').replace(/ (?:and |but )?(?:not|never) touching(?: it| them)?(?= |$)/g, ' ')
+    .replace(/ (?:and |but )?(?:touching|joined|attached)(?: it| them| to it)?(?= |$)/g, ' ').replace(/ (?:and )?(?:apart|separately|separate)(?= |$)/g, ' ');
+  return j.split(' ').filter(Boolean);
 }
 const sayRel = (rel, refs, all) => {
   const n = (r) => nameOf(r, all);
   if (rel.rel === 'region') return rel.region === 'centre' ? 'in the centre' : rel.region.startsWith('half ') ? `on the ${rel.region.slice(5)}` : rel.region.startsWith('edge ') ? `at the ${rel.region.slice(5)} edge` : rel.region === 'corner' ? 'in the corner' : `in the ${rel.region} corner`;
-  const p = { above: 'above', under: 'under', leftof: 'to the left of', rightof: 'to the right of', next: 'next to', in: 'in', on: 'on', around: 'around' }[rel.rel];
+  const p = { above: 'above', under: 'under', leftof: 'to the left of', rightof: 'to the right of', next: 'next to', in: 'in', on: 'on', around: 'around', against: 'against' }[rel.rel];
   return rel.rel === 'between' ? `between ${n(refs[0])} and ${n(refs[1])}` : `${p} ${n(refs[0])}`;
 };
 function errorOf(res, tokens) {
@@ -566,7 +897,7 @@ function layoutOf(t, ctx) {
   const items = ctx.items ?? [], lay = parseLayout(t);
   if (!lay) return null;
   let group = items;
-  const spec = parseSel(t.filter((w) => !['row', 'column', 'grid', 'circle', 'places', 'in', 'a', 'size', 'same', 'up'].includes(w)), ctx.kindOf);
+  const spec = parseSel((lay.op === 'around' ? t.slice(0, Math.max(0, t.indexOf('around'))) : t).filter((w) => !['row', 'column', 'grid', 'circle', 'places', 'in', 'a', 'size', 'same', 'up'].includes(w)), ctx.kindOf);
   if (spec.kind && spec.kind !== '*') group = items.filter((i) => i.kind === spec.kind);
   if (lay.op === 'swap') {
     const j = t.indexOf('and'), strip = (x) => x.filter((w) => !['places', 'with', 'swap', 'switch', 'exchange', 'trade', 'the_places_of'].includes(w));
@@ -582,6 +913,11 @@ function layoutOf(t, ctx) {
     const out = planLayout('swap', [], ctx.frame, { picks: [a.items[0], b.items[0]] });
     return { type: 'layout', ids: [a.ids[0], b.ids[0]], boxes: out.boxes, say: `I swapped ${nameOf(a.items[0], items)} and ${nameOf(b.items[0], items)}.` };
   }
+  if (lay.op === 'around') return aroundOf(t, ctx, spec, lay, group);
+  if (lay.op === 'face') {
+    group = items.filter((i) => faceFact(i, ctx));
+    if (group.length < 2) return { type: 'error', say: 'I need some parts of a face for that, for example eyes, a nose and a mouth.' };
+  }
   if (!group.length) return { type: 'error', say: 'There is nothing to arrange yet.' };
   if (lay.op === 'tidy') {
     if (!anyOverlap(group)) return { type: 'layout', ids: [], boxes: {}, say: 'Nothing overlaps, so it is already tidy.' };
@@ -589,11 +925,31 @@ function layoutOf(t, ctx) {
     return { type: 'layout', op: 'tidy', ids: Object.keys(out.boxes), boxes: out.boxes, say: 'I tidied up: nothing overlaps now, and the order is the same.' };
   }
   if (group.length < 2 && lay.op !== 'centre') return { type: 'error', say: 'I need at least two things for that.' };
-  const out = planLayout(lay.op, group, ctx.frame, { how: lay.how });
+  const out = planLayout(lay.op, group, ctx.frame, { how: lay.how, desc: lay.desc, knowledge: ctx.knowledge, region: ctx.region });
+  if (out.error === 'room') return { type: 'error', say: 'They do not fit on top of each other in this space.' };
+  if (!out.error && ['stack', 'height', 'face', 'row', 'column', 'grid', 'circle'].includes(lay.op)) { const fit = enforce(items, out.boxes, ctx.frame, { ground: lay.op === 'face' ? null : ctx.ground, limits: ctx.limits }); out.boxes = fit.boxes; }
+  if (out.error === 'few' && lay.op === 'face') return { type: 'error', say: 'I need some parts of a face for that, for example eyes, a nose and a mouth.' };
   if (out.error === 'few') return { type: 'error', say: 'I need at least three things to spread out.' };
   if (out.error) return { type: 'error', say: 'I could not arrange them like that.' };
-  const nm = { row: 'in a row', column: 'in a column', grid: 'in a grid', circle: 'in a circle', spread: 'spread out evenly', align: `aligned (${lay.how === 'cx' ? 'centres' : lay.how})`, size: 'the same size', centre: 'in the centre' }[lay.op];
-  return { type: 'layout', op: lay.op, ids: group.map((g) => g.id), boxes: out.boxes, say: `I put ${group.length === 1 ? nameOf(group[0], items) : `the ${group.length} ${group.every((g) => g.kind === group[0].kind) ? `${group[0].name ?? group[0].kind}s` : 'things'}`} ${nm}.` };
+  const nm = { row: 'in a row', column: 'in a column', grid: 'in a grid', circle: 'in a circle', spread: 'spread out evenly', align: `aligned (${lay.how === 'cx' ? 'centres' : lay.how})`, size: 'the same size', centre: 'in the centre', stack: 'on top of each other', height: lay.desc ? 'in a row, the biggest first' : 'in a row, from the smallest to the biggest', face: 'in the places of a face' }[lay.op];
+  return { type: 'layout', op: lay.op, ids: group.map((g) => g.id), boxes: out.boxes, say: `I put ${group.length === 1 ? nameOf(group[0], items) : `the ${group.length} ${group.every((g) => g.kind === group[0].kind) ? plural(group[0].name ?? group[0].kind) : 'things'}`} ${nm}.` };
+}
+
+/** "put the chairs around the table", "in a circle around the table": the group goes evenly around a reference thing (null when this is not a group around something). */
+function aroundOf(t, ctx, spec, lay, group) {
+  const items = ctx.items ?? [], at = t.indexOf('around');
+  if (at < 0) return null;
+  const refRes = resolve(lay.ref, ctx, {});
+  if (refRes.ask) return { type: 'ask', say: refRes.ask, candidates: refRes.candidates };
+  if (refRes.error) return null;
+  const ref = refRes.items[0];
+  let movers = spec.kind && spec.kind !== '*' ? items.filter((i) => i.kind === spec.kind && i.id !== ref.id) : [];
+  if (!movers.length && !spec.kind) movers = items.filter((i) => aroundFact(i.kind ?? i.name, ref.kind ?? ref.name, ctx));
+  if (movers.length < 2 && !(movers.length && aroundFact(movers[0].kind, ref.kind, ctx))) return null;
+  const out = planLayout('around', movers, ctx.frame, { ref });
+  if (out.error) return null;
+  const fit = enforce(items, out.boxes, ctx.frame, { ground: null, limits: ctx.limits });
+  return { type: 'layout', op: 'around', ids: movers.map((m) => m.id), boxes: fit.boxes, say: `I put ${movers.length === 1 ? nameOf(movers[0], items) : `the ${movers.length} ${plural(movers[0].name ?? movers[0].kind)}`} around ${nameOf(ref, items)}.` };
 }
 
 /** The answer to a question about places: { type: 'answer', say } (or ask / error). */

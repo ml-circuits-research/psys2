@@ -199,3 +199,138 @@
     phase=night
     say="There is usually no sun at night"
     core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.roof.walls common.sense.supports
+    top=roof
+    base=walls
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.roof.house common.sense.supports
+    top=roof
+    base=house
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.chimney.roof common.sense.supports
+    top=chimney
+    base=roof
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.wheel.road common.sense.supports
+    top=wheel
+    base=road
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.car.road common.sense.supports
+    top=car
+    base=road
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.cup.table common.sense.supports
+    top=cup
+    base=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.plate.table common.sense.supports
+    top=plate
+    base=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.lamp.table common.sense.supports
+    top=lamp
+    base=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.book.shelf common.sense.supports
+    top=book
+    base=shelf
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.book.table common.sense.supports
+    top=book
+    base=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.vase.table common.sense.supports
+    top=vase
+    base=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.person.floor common.sense.supports
+    top=person
+    base=floor
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.house.ground common.sense.supports
+    top=house
+    base=ground
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.supports.tree.ground common.sense.supports
+    top=tree
+    base=ground
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.around.chair.table common.sense.around
+    kind=chair
+    centre=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.around.stool.table common.sense.around
+    kind=stool
+    centre=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.around.plate.table common.sense.around
+    kind=plate
+    centre=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.around.person.table common.sense.around
+    kind=person
+    centre=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.around.cup.table common.sense.around
+    kind=cup
+    centre=table
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.around.bench.fire common.sense.around
+    kind=bench
+    centre=fire
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.around.chair.desk common.sense.around
+    kind=chair
+    centre=desk
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.facepart.brow common.sense.facepart
+    kind=brow
+    rank=1
+    mirror=0.2
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.facepart.eye common.sense.facepart
+    kind=eye
+    rank=2
+    mirror=0.2
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.facepart.ear common.sense.facepart
+    kind=ear
+    rank=2
+    mirror=0.44
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.facepart.nose common.sense.facepart
+    kind=nose
+    rank=3
+    mirror=0
+    core.source="fixture:common.sense/facts"
+
+@kb.cs.facepart.mouth common.sense.facepart
+    kind=mouth
+    rank=4
+    mirror=0
+    core.source="fixture:common.sense/facts"

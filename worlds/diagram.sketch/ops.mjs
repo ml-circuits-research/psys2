@@ -455,7 +455,8 @@ function spaceItems(s) {
   const fr = s.frame ?? { x: 0, y: 0 };
   return s.shapes.filter((x) => !x.layer && !x.template).map((x) => {
     const k = x.size, w = x.w ?? (x.shape === 'rectangle' ? Math.round(k * 1.6) : x.shape === 'ellipse' ? Math.round(k * 1.45) : k), h = x.h ?? k;
-    return { id: x.name, kind: x.shape, name: x.shape, x: x.x - fr.x, y: x.y - fr.y, w, h };
+    const shape = space.outlineOf(x.shape, w, h);   // the real outline of a triangle, a diamond ...: overlap and joining use the surface, not the box
+    return { id: x.name, kind: x.shape, name: x.shape, x: x.x - fr.x, y: x.y - fr.y, w, h, ...(shape ? { shape } : {}) };
   });
 }
 /** A moving or arranging sentence the module reads (the middle box, a bit more to the left, further, in a row, tidy up ...), or null to leave it to the engine. */
