@@ -11,9 +11,10 @@
 // Every exported operation is wrapped so that `doc` and `stats` are rebuilt after it (the tab renders `doc` with TipTap).
 
 import {
-  DEFAULT_TITLE, COLORS, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
+  DEFAULT_TITLE, highlightHex, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
   sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
 } from './model.mjs';
+import { basicColourNames } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
@@ -552,8 +553,8 @@ function _format(ctx, { t, mark, color, off } = {}) {
   let hex = null, cname = null;
   if (type === 'highlight' && !off) {
     cname = colorName(color ?? 'yellow');
-    if (!cname) return no('unsupported', `I do not know the color "${color}". I can highlight in ${joinAnd(Object.keys(COLORS))}.`);
-    hex = COLORS[cname];
+    if (!cname) return no('unsupported', `I do not know the color "${color}". I can highlight in ${joinAnd(basicColourNames())} and many more colours.`);
+    hex = highlightHex(cname);
   }
   const ranges = rangesOf(res).filter((r) => r.to > r.from);
   if (!ranges.length) return no('missing', 'There is no text there to format.');

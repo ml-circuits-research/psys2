@@ -115,11 +115,12 @@ function make(holder, host) {
 
   // ---- toolbar -------------------------------------------------------------------------------------------------
   const send = (text) => host.send(text);
-  const COLORS = { red: '#e63946', orange: '#f68b1e', yellow: '#ffd43b', green: '#43b04a', blue: '#3a86e8', purple: '#9b51e0', pink: '#ff7eb6', brown: '#8d5a2e', black: '#2d2d34', white: '#ffffff', grey: '#9aa1a9' };
+  const crayonButtons = [];   // painted with the colour reader of the board (the catalog's k.values through scene.colorHex) once the scene module is loaded
+  const paintCrayons = () => { for (const [c, b] of crayonButtons) if (scene) b.style.background = scene.colorHex(c); };
   for (const c of CRAYONS) {
     const b = el('button', 'dr-crayon');
     b.type = 'button'; b.title = `Color it ${c}`; b.setAttribute('aria-label', `Color it ${c}`);
-    b.style.background = COLORS[c];
+    crayonButtons.push([c, b]);
     if (c === 'white') b.style.boxShadow = 'inset 0 0 0 2px #d8d2c4, 0 1px 0 rgba(0,0,0,.25)';
     b.addEventListener('click', () => send(`color it ${c}`));
     crayons.append(b);
@@ -256,7 +257,7 @@ function make(holder, host) {
   // ---- library loading ------------------------------------------------------------------------------------------
   Promise.all([import(VENDOR.href), import(host.asset(SCENE_ASSET))]).then(([r, s]) => {
     if (destroyed) return;
-    rough = r.default ?? r.rough; scene = s;
+    rough = r.default ?? r.rough; scene = s; paintCrayons();
     renderer = createRenderer(rough, scene);
     ctx = canvas.getContext('2d');
     rc = rough.canvas(canvas);

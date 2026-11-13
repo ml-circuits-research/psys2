@@ -250,7 +250,9 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
       if (WORLD_TEXT.test(f)) entry.files[f] = await readFile(path.join(dir, f), 'utf8');
       else if (f.endsWith('.mjs')) {
         await mkdir(path.dirname(path.join(outDir, 'worlds', id, f)), { recursive: true });
-        await cp(path.join(dir, f), path.join(outDir, 'worlds', id, f));
+        // a world module reaches the knowledge tier with `../../src/knowledge/x.mjs`; in the built tree the same modules are in `lib/` (same layout, one level up from `worlds/`)
+        const text = (await readFile(path.join(dir, f), 'utf8')).replace(/((?:\.\.\/)+)src\//g, '$1lib/');
+        await writeFile(path.join(outDir, 'worlds', id, f), text);
       }
     }
     if (await exists(path.join(dir, 'ops.mjs'))) entry.opsUrl = `worlds/${id}/ops.mjs`;

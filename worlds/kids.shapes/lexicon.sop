@@ -77,19 +77,14 @@
 
 @lex.kids.shapes.colors core.lexicon
     class=noun
-    doc="Colors"
-    word=red
-    word=yellow
-    word=blue
-    word=orange
-    word=green
-    word=purple
-    word=pink
-    word=brown
-    word=black
-    word=white
-    word=grey
-    word=light_blue
+    doc="Colors: the shared lexicon of colour names (lex.lang.colour, from k.values)"
+    extends=$lex.lang.colour
+    exclude=lemon
+    exclude=peach
+    exclude=lime
+    exclude=rose
+    exclude=sand
+    exclude=snow
 
 @lex.kids.shapes.colorkinds core.lexicon
     class=noun

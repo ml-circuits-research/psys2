@@ -22,36 +22,8 @@
 
 @lex.data.charts.colors core.lexicon
     class=noun
-    doc="Color names the chart understands"
-    word=red
-    word=orange
-    word=yellow
-    word=green
-    word=blue
-    word=purple
-    word=pink
-    word=teal
-    word=brown
-    word=gray
-    word=grey
-    word=black
-    word=white
-    word=indigo
-    word=cyan
-    word=lime
-    word=gold
-    word=navy
-    word=coral
-    word=mint
-    word=violet
-    word=magenta
-    word=turquoise
-    word=crimson
-    word=maroon
-    word=lavender
-    word=peach
-    word=silver
-    word=beige
+    doc="Color names the chart understands: the shared lexicon of colour names (lex.lang.colour, from k.values)"
+    extends=$lex.lang.colour
 
 @lex.data.charts.shades core.lexicon
     class=noun

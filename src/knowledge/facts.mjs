@@ -56,7 +56,7 @@ export function createFacts({ source, name = 'catalog' }) {
   const loadVocab = () => vocabLoading ??= (async () => {
     const t = clock();
     let failed = false;
-    try { const txt = await source.text('vocab.json'); stats.vocabBytes = txt?.length ?? 0; failed = !txt; vocab = txt ? JSON.parse(txt) : {}; } catch { failed = true; vocab = {}; }
+    try { const txt = await source.text('vocab.json'); stats.vocabBytes = txt?.length ?? 0; failed = !txt || !!source.fellBack?.('vocab.json'); vocab = txt ? JSON.parse(txt) : {}; } catch { failed = true; vocab = {}; }
     down = failed;
     if (failed) retryLater(() => { vocabLoading = null; vocab = null; things.clear(); });
     stats.vocabMs = clock() - t;
@@ -64,7 +64,7 @@ export function createFacts({ source, name = 'catalog' }) {
 
   const loadIndex = () => indexLoading ??= (async () => {
     let failed = false;
-    try { const txt = await source.text('index.json'); failed = !txt; index = txt ? JSON.parse(txt) : { worlds: [] }; } catch { failed = true; index = { worlds: [] }; }
+    try { const txt = await source.text('index.json'); failed = !txt || !!source.fellBack?.('index.json'); index = txt ? JSON.parse(txt) : { worlds: [] }; } catch { failed = true; index = { worlds: [] }; }
     if (failed) { down = true; retryLater(() => { indexLoading = null; index = null; }); }
   })();
 
@@ -92,8 +92,9 @@ export function createFacts({ source, name = 'catalog' }) {
       let txt = null;
       try { txt = await source.text(`${id}.sop`); } catch { /* an unreachable shard is no knowledge */ }
       stats.shardMs += clock() - t; stats.shardBytes += txt?.length ?? 0; stats.shardsLoaded.push(id);
-      if (!txt) down = true;
-      if (!txt) retryLater(() => { shards.delete(id); parsed.delete(id); wireIx.delete(id); wireMemo.clear(); things.clear(); });
+      const degraded = !txt || !!source.fellBack?.(`${id}.sop`);   // a layered source (the bundled subset under the catalog) answered for an unreachable catalog
+      if (degraded) down = true;
+      if (degraded) retryLater(() => { shards.delete(id); parsed.delete(id); wireIx.delete(id); wireMemo.clear(); things.clear(); });
       return txt ? txt.split('\n') : [];
     })());
     return shards.get(id);

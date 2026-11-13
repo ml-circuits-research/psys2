@@ -58,7 +58,8 @@ if (kwArg || !existsSync(POOLS_FILE)) {
 
 const NAMES = ['Ann', 'Max', 'Zoe', 'Tom', 'Eva', 'Leo', 'Mia', 'Sam', 'Ivy', 'Dan', 'Kim', 'Raj', 'Lena', 'Omar', 'Nina', 'Paul', 'Rosa', 'Ben', 'Ida', 'Hugo', 'Anya', 'Luca', 'Yara', 'Felix', 'Maya', 'Noah', 'Jade', 'Otto'].map((n) => n.toLowerCase());
 const LEADS = ['', '', '', '', '', 'please', 'can you', 'could you', 'would you', 'i want you to', 'i would like to', 'now', 'ok', 'hey', 'just', 'go ahead and', 'i need you to', 'let us'];
-const FALLBACK_COLOURS = A.COLOURS;
+import { basicColourNames } from '../src/knowledge/values.mjs';
+const FALLBACK_COLOURS = basicColourNames();   // the catalog's basic colours (the one reader)
 const SAVE_NAMES = ['lunch', 'draft', 'version two', 'my plan', 'backup', 'start', 'before', 'party', 'test', 'final', 'first try', 'monday'];
 const WORLD_NOUNS = ['the diagram', 'the avatar', 'the drawing', 'the map', 'the chart', 'the editor', 'the seating plan', 'the talk', 'the face'];
 const NUMW = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'twelve'];

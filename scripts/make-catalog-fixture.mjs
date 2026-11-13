@@ -69,7 +69,7 @@ const putMerged = (id, text, keys, sources) => {   // a shard id that a hand-siz
   shards[at].wires = files[`${id}.sop`].split('\n').filter((l) => l.startsWith('@')).length; shards[at].bytes = files[`${id}.sop`].length;
 };
 const extra = [];
-for (const id of ['k.animals', 'k.body', 'k.commonsense', 'k.feelings', 'k.food', 'k.people', 'k.space', 'k.time', 'k.units', 'k.geo', 'k.words', 'k.scenes']) {
+for (const id of ['k.animals', 'k.body', 'k.colours', 'k.commonsense', 'k.feelings', 'k.food', 'k.people', 'k.space', 'k.time', 'k.units', 'k.values', 'k.geo', 'k.words', 'k.scenes']) {
   const rw = realIndex.get(id);
   if (!rw) continue;
   files[`${id}/schema.sop`] = readFileSync(path.join(src, id, 'schema.sop'), 'utf8');

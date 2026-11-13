@@ -29,7 +29,8 @@ const ICONS = {
   rowDel: P('M3 5h18v4H3V5Zm0 6h18v2H3v-2Zm6 6h8v2H9v-2Z'),
   colDel: P('M5 3h4v18H5V3Zm6 0h2v18h-2V3Zm3 9h6v2h-6v-2Z'),
 };
-const COLORS = [['yellow', '#fff176'], ['green', '#b9f6ca'], ['blue', '#a7d8ff'], ['pink', '#ffc1e3'], ['orange', '#ffd180'], ['purple', '#d9bfff']];
+// the swatches are colours of the catalog (the one colour reader) drawn as a highlighter: filled by `setHighlightHex` once the document model is loaded
+const COLORS = ['yellow', 'green', 'blue', 'pink', 'orange', 'purple'].map((n) => [n, '#eee']);
 
 export function createToolbar({ send, say }) {
   const btns = {};
@@ -128,6 +129,8 @@ export function createToolbar({ send, say }) {
 
   return {
     el: root, actions, menus: menuHost,
+    /** Paints the swatches with the highlight colours of the document model (`model.highlightHex`: the catalog's colours as a highlighter draws them). */
+    paintSwatches(highlightHex) { for (const b of palette.querySelectorAll('.pe-swatch:not(.pe-swatch-none)')) { const n = b.title.replace('Highlight ', ''); b.style.background = highlightHex(n) ?? ''; } },
     update(i) {
       info = i;
       const set = (id, on) => { const b = btns[id]; if (b) { b.setAttribute('aria-pressed', String(!!on)); b.classList.toggle('is-on', !!on); } };

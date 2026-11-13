@@ -89,13 +89,13 @@
 
 @t.data.charts.n17 core.test
     input="Make the bars green"
-    expectState="charts.0.datasets.0.color=#2f9e44"
+    expectState="charts.0.datasets.0.color=#008000"
     session=a
 
 @t.data.charts.n18 core.test
     input="Color it light blue"
     expect="light blue"
-    expectState="charts.0.datasets.0.color=#75a7e4"
+    expectState="charts.0.datasets.0.color=#5959ff"
     session=a
 
 @t.data.charts.n19 core.test
@@ -106,7 +106,7 @@
 
 @t.data.charts.n20 core.test
     input="Make the pears bar red"
-    expectState="charts.0.options.pointColors.Pears=#e34948"
+    expectState="charts.0.options.pointColors.Pears=#FF0000"
     session=a
 
 @t.data.charts.n21 core.test
@@ -573,7 +573,7 @@
 
 @t.data.charts.n104 core.test
     input="Make Tom light green"
-    expectState="charts.2.options.pointColors.Tom=#78c085"
+    expectState="charts.2.options.pointColors.Tom=#59ac59"
     session=g
 
 @t.data.charts.n105 core.test

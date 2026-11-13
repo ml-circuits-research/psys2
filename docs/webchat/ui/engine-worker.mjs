@@ -129,12 +129,13 @@ async function init(m) {
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
   // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
   engine.onModelTimeout = (info) => evt('model-timeout', info);   // a model call timed out and the rules answered (spec 06): the debug panel says so once and counts
-  // Offline, the 30 hand-written objects vendored in the world (things.catalog.mjs) still draw; lookups of other things then answer as unknown.
+  // Offline, the objects vendored in the world (things.catalog.mjs) and the bundled subset still work; lookups of other things then answer as unknown.
   try {
-    const [{ createFacts }, { createKnowledgeSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs')]);
+    const [{ createFacts }, { createKnowledgeSource }, { createLayeredSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs'), imp('lib/knowledge/bundled-source.mjs')]);
     const { createCachedSource } = await imp('lib/loaders/knowledge-cache.mjs');
     const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
-    engine.setKnowledge(createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]) } }));
+    // the bundled subset (colours, number words, the drawings of the built-in kinds: generated from the catalog) answers for a catalog that cannot be reached; the catalog replaces it when it can
+    engine.setKnowledge(createFacts({ source: createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]) }) }));
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
   if (testHooks) installFaults();

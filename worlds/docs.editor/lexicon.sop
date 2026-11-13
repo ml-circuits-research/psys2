@@ -115,18 +115,8 @@
 
 @lex.docs.editor.colors core.lexicon
     class=noun
-    word=yellow
-    word=green
-    word=blue
-    word=pink
-    word=orange
-    word=red
-    word=purple
-    word=gray
-    word=grey
-    word=cyan
-    word=brown
-    word=violet
+    doc="Colour names: the shared lexicon of colour names (lex.lang.colour, from k.values)"
+    extends=$lex.lang.colour
 
 @lex.docs.editor.aligns core.lexicon
     class=noun
