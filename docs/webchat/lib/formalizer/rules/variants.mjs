@@ -8,7 +8,7 @@
  * rewritten text goes through the same rules, so nothing is invented and nothing that already reads is changed.
  */
 
-import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
+import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 
 const SUBJECTS = new Set(['he', 'she', 'it', 'they', 'we', 'someone', 'somebody', 'one']);
 const STYLE_IN = new Map([['bold', 'bold'], ['italics', 'italic'], ['italic', 'italic'], ['underline', 'underline'], ['underlined', 'underline']]);

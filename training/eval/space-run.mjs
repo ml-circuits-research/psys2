@@ -3,7 +3,7 @@
 //   import { runCases } from './space-run.mjs';   const results = await runCases(cases, { reasoner: 'ops' | 'matrix' });  -> [{ id, cls, host, ok, why, text, reply }]
 import { createFsLoader, DEFAULT_ROOT } from '../../src/loaders/fs-loader.mjs';
 import { createEngine } from '../../src/dialog/index.mjs';
-import * as draw from '../../worlds/art.draw/ops.mjs';
+import * as draw from '../../worlds/art.draw/engine.mjs';
 import * as diagram from '../../worlds/diagram.sketch/ops.mjs';
 import { hosts } from './space-set.mjs';
 

@@ -2,7 +2,7 @@
 // SPACE-2 E-S1 / E-S2 on the drawing host: 30 scripted scenes of 7 turns through the real dialog engine (add, add, add, relation, move, relation, move); counts the turns that leave an
 // unwanted overlap (more than 15 % of the smaller box, not a region, not a related pair when the build keeps relation facts) or an object outside the canvas, and the mean displacement of the
 // objects a turn did not mention. Uses only the engine and art.draw's public exports, so it also runs on an older build (the baseline).
-import * as draw from '../../worlds/art.draw/ops.mjs';
+import * as draw from '../../worlds/art.draw/engine.mjs';
 import { settingsForMode, sessionOptions } from '../../src/dialog/runtime-config.mjs';
 const rng = (seed) => () => { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 const KIND_WORDS = ['house', 'tree', 'sun', 'cat', 'dog', 'car', 'flower', 'bird', 'boat', 'cloud'];

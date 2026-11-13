@@ -1,233 +1,116 @@
+@gen.art.draw.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
 @op.art.draw.add core.operation
     impl=add
     semantics=action
     action=draw.add
-    doc="Draws one or more things (kind, count, size, color, parts, place) and answers what it drew. Brings the Drawing tab forward."
+    doc="An operation of this world that is not an act (own.mjs: add)."
 
-@op.art.draw.ground core.operation
-    impl=ground
+@op.art.draw.drawUndo core.operation
+    impl=drawUndo
     semantics=action
-    action=draw.ground
-    doc="Adds grass, sand, snow or water to the ground."
+    action=draw.undo
+    doc="An operation of this world that is not an act (own.mjs: drawUndo)."
 
-@op.art.draw.scene core.operation
-    impl=scene
+@op.art.draw.drawRedo core.operation
+    impl=drawRedo
     semantics=action
-    action=draw.scene
-    doc="Draws a seeded surprise scene with sun, clouds, house, trees and flowers."
-
-@op.art.draw.setMood core.operation
-    impl=setMood
-    semantics=action
-    action=draw.mood
-    doc="Night (dark sky, moon and stars), day (blue sky and sun) or sunset."
-
-@op.art.draw.recolor core.operation
-    impl=recolor
-    semantics=action
-    action=draw.recolor
-    doc="Colors an object, a part of it (roof, door, wheels), the sky, the ground or the background."
-
-@op.art.draw.givePart core.operation
-    impl=givePart
-    semantics=action
-    action=draw.givePart
-    doc="Colors a named part of a thing: give the house a blue door."
-
-@op.art.draw.resize core.operation
-    impl=resize
-    semantics=action
-    action=draw.resize
-    doc="Makes things bigger or smaller by a relative amount."
-
-@op.art.draw.matchSize core.operation
-    impl=matchSize
-    semantics=action
-    action=draw.matchSize
-    doc="Gives things the same size as another thing: make the tree the same size as the house."
-
-@op.art.draw.setSize core.operation
-    impl=setSize
-    semantics=action
-    action=draw.setSize
-    doc="Sets the size by a word: tiny, small, big, huge."
-
-@op.art.draw.move core.operation
-    impl=move
-    semantics=action
-    action=draw.move
-    doc="Moves things to a named region, by a step, or next to / above / under / between other things."
-
-@op.art.draw.nudge core.operation
-    impl=nudge
-    semantics=action
-    action=draw.nudge
-    doc="Moves things a bit higher, lower, left or right."
-
-@op.art.draw.reselect core.operation
-    impl=reselect
-    semantics=action
-    action=draw.reselect
-    doc="Corrects which thing the last move was about: puts the moved things back and moves the one meant now the same way."
-
-@op.art.draw.spatial core.operation
-    impl=spatial
-    semantics=action
-    action=draw.spatial
-    doc="Arranges things (row, column, grid, circle, spread, align, same size, swap, tidy up) and answers questions about places (what is next to, which one is in the middle, is A above B, how far apart); the place of things is read by the module space."
-
-@op.art.draw.turn core.operation
-    impl=turn
-    semantics=action
-    action=draw.turn
-    doc="Turns things around, to face a side, upside down or by degrees."
-
-@op.art.draw.remove core.operation
-    impl=remove
-    semantics=action
-    action=draw.remove
-    doc="Deletes things, the sky color or the ground; \"everything except\" keeps some things."
-
-@op.art.draw.removeIt core.operation
-    impl=removeIt
-    semantics=action
-    action=draw.removeIt
-    doc="Deletes the selected thing or what was just drawn (with the editor open: its selection)."
-
-@op.art.draw.clearEverything core.operation
-    impl=clearEverything
-    semantics=action
-    action=draw.clearAll
-    doc="Clears the whole picture (shared with the document editor: with the editor open it clears the document)."
+    action=draw.redo
+    doc="An operation of this world that is not an act (own.mjs: drawRedo)."
 
 @op.art.draw.newDrawing core.operation
     impl=newDrawing
     semantics=action
     action=draw.new
-    doc="Starts a new drawing; undo brings the old one back."
-
-@op.art.draw.undo core.operation
-    impl=undo
-    semantics=action
-    action=draw.undo
-    doc="Undoes the last change (history of 50); when the editor tab is open it undoes the document instead."
-
-@op.art.draw.redo core.operation
-    impl=redo
-    semantics=action
-    action=draw.redo
-    doc="Redoes what was undone."
-
-@op.art.draw.select core.operation
-    impl=select
-    semantics=action
-    action=draw.select
-    doc="Selects a thing (outlined in the tab); also what a click on the tab sends."
-
-@op.art.draw.deselect core.operation
-    impl=deselect
-    semantics=action
-    action=draw.deselect
-    doc="Clears the selection."
-
-@op.art.draw.fillMode core.operation
-    impl=fillMode
-    semantics=action
-    action=draw.fill
-    doc="Fills in with crayon, solid color, or leaves only an outline."
-
-@op.art.draw.duplicate core.operation
-    impl=duplicate
-    semantics=action
-    action=draw.duplicate
-    doc="Copies a thing."
-
-@op.art.draw.describe core.operation
-    impl=describe
-    semantics=action
-    action=draw.describe
-    doc="Describes the picture in words: things, places, sky and ground."
-
-@op.art.draw.count core.operation
-    impl=count
-    semantics=action
-    action=draw.count
-    doc="Counts things of a kind (and color)."
-
-@op.art.draw.whereIs core.operation
-    impl=whereIs
-    semantics=action
-    action=draw.where
-    doc="Tells where a thing is."
-
-@op.art.draw.exists core.operation
-    impl=exists
-    semantics=action
-    action=draw.exists
-    doc="Tells whether a thing is in the picture."
-
-@op.art.draw.colorOfThing core.operation
-    impl=colorOfThing
-    semantics=action
-    action=draw.colorOf
-    doc="Tells the color of a thing, a part, the sky or the ground."
-
-@op.art.draw.whatsNear core.operation
-    impl=whatsNear
-    semantics=action
-    action=draw.near
-    doc="Tells what is near a thing."
-
-@op.art.draw.help core.operation
-    impl=help
-    semantics=action
-    action=draw.help
-    doc="Tells what can be drawn."
-
-@op.art.draw.colors core.operation
-    impl=colors
-    semantics=action
-    action=draw.colors
-    doc="Tells which colors can be used."
-
-@op.art.draw.save core.operation
-    impl=save
-    semantics=action
-    action=draw.save
-    doc="Queues the effect draw.download (PNG or SVG)."
+    doc="An operation of this world that is not an act (own.mjs: newDrawing)."
 
 @op.art.draw.openTab core.operation
     impl=openTab
     semantics=action
     action=draw.open
-    doc="Brings the Drawing tab forward."
+    doc="An operation of this world that is not an act (own.mjs: openTab)."
 
-
-@op.art.draw.askKind core.operation
-    impl=askKind
+@op.art.draw.view core.operation
+    impl=view
     semantics=action
-    action=draw.askKind
-    doc="Clarification for \"Draw\" without an object: asks what to draw and opens a pending expectation for the missing kind (spec 11)."
+    action=art.draw.view
+    doc="The declaration of this world as a view of the session things (spec 23): its aspects and words."
 
-@op.art.draw.takeApart core.operation
-    impl=takeApart
+@op.art.draw.adopt core.operation
+    impl=adopt
     semantics=action
-    action=draw.takeApart
-    doc="Takes a thing apart: its parts become things of their own, keeping shape, colour and place (one step to undo); a group goes back to the things it was made of."
+    action=art.draw.adopt
+    doc="Takes a thing of the session store into this world: the act make, then change for each attribute (spec 23)."
+
+@op.art.draw.make core.operation
+    impl=make
+    semantics=action
+    action=art.draw.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.remove core.operation
+    impl=remove
+    semantics=action
+    action=art.draw.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.change core.operation
+    impl=change
+    semantics=action
+    action=art.draw.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.place core.operation
+    impl=place
+    semantics=action
+    action=art.draw.place
+    doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."
 
 @op.art.draw.group core.operation
     impl=group
     semantics=action
-    action=draw.group
-    doc="Puts things together as one group with a name, used like any other thing afterwards (move, resize, copy, draw another)."
-@op.art.draw.keep core.operation
-    impl=keep
-    semantics=action
-    action=draw.keep
-    doc="Puts back the thing the last step removed, covered or changed, when the user says to keep it."
+    action=art.draw.group
+    doc="The act 'group' (spec 21), applied by the generic executor to this world's schema."
 
-@op.art.draw.except core.operation
-    impl=except_
+@op.art.draw.send core.operation
+    impl=send
     semantics=action
-    action=draw.except
-    doc="Takes back the part of the last step that reaches the named thing: the things it made or moved over it go back."
+    action=art.draw.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.pick core.operation
+    impl=pick
+    semantics=action
+    action=art.draw.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.copy core.operation
+    impl=copy
+    semantics=action
+    action=art.draw.copy
+    doc="The act 'copy' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.ask core.operation
+    impl=ask
+    semantics=action
+    action=art.draw.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.undo core.operation
+    impl=undo
+    semantics=action
+    action=art.draw.undo
+    doc="The act 'undo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.redo core.operation
+    impl=redo
+    semantics=action
+    action=art.draw.redo
+    doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.save core.operation
+    impl=save
+    semantics=action
+    action=art.draw.save
+    doc="The act 'save' (spec 21), applied by the generic executor to this world's schema."

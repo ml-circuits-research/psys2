@@ -20,10 +20,7 @@ const OUT = path.resolve(REPO, arg('out', 'training/data/act-tagger-real'));
 const HOLD = new Set(arg('hold', 'ui.avatar,diagram.sketch').split(','));
 const SEED = Number(arg('seed', 1));
 mkdirSync(OUT, { recursive: true });
-// the pilot art.draw (schema world) shadows the real board; a directory holding only it (diagram.sketch and the avatar are schema worlds already in worlds/)
-const PILOT = arg('pilot', path.join(OUT, '.pilot-roots'));
-if (!existsSync(path.join(PILOT, 'art.draw'))) { mkdirSync(PILOT, { recursive: true }); cpSync(path.join(REPO, 'worlds-pilot/art.draw'), path.join(PILOT, 'art.draw'), { recursive: true }); }
-process.env.PSYS2_PILOT_ROOTS = PILOT;
+// art.draw is a schema world in worlds/ since the switch (2026-11-14): no pilot root any more
 const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
 const { createEngine } = await import('../src/dialog/index.mjs');
 const { createFacts } = await import('../src/knowledge/facts.mjs');

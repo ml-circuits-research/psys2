@@ -2,7 +2,7 @@
  * ASTRA snapshots and persistence (spec 13 section 6). Browser-safe: storage is a localStorage-like object passed in by the host.
  */
 import { EventLog } from './log.mjs?v=5c1fe52efb';
-import { budget } from '../dialog/budget.mjs?v=123c3e1329';
+import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 export const SCHEMA = 1;
 /** `MIGRATIONS[n]` upgrades a record of schema n to schema n + 1. */

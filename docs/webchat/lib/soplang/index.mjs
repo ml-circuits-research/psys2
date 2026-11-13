@@ -5,7 +5,7 @@
  * value = { kind: 'atom' | 'string' | 'ref' | 'var', v: string }
  *   ref `$id` has v = 'id'; `$?x` (the wire whose id the variable ?x holds) has v = '?x'; var `?name` has v = 'name'.
  */
-import { budget } from '../dialog/budget.mjs?v=123c3e1329';
+import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 const IDENT = /^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_][A-Za-z0-9_-]*)*$/;
 const REFID = /^\??[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_][A-Za-z0-9_-]*)*$/;

@@ -13,8 +13,8 @@
  * our legends), the legends of the world and of its imports as they are, their knowledge bases, the world's matrix (`matrix.sop`) and its functions (`fns.mjs`).
  * Reply wording stays in our templates.
  */
-import { serialize, parse as parseOurs, ref as refValue, atom as atomValue, str as strValue } from '../soplang/index.mjs?v=26885599a7';
-import { budget as turnBudget } from '../dialog/budget.mjs?v=123c3e1329';
+import { serialize, parse as parseOurs, ref as refValue, atom as atomValue, str as strValue } from '../soplang/index.mjs?v=c57881f705';
+import { budget as turnBudget } from '../dialog/budget.mjs?v=00bce6e369';
 import { nsWorld, nsContext, strip } from './ns.mjs?v=655a807958';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */

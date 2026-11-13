@@ -9,7 +9,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
-import * as draw from '../worlds/art.draw/ops.mjs';
+import * as draw from '../worlds/art.draw/engine.mjs';
 import { generate } from '../training/eval/space-set.mjs';
 import { runCases } from '../training/eval/space-run.mjs';
 
