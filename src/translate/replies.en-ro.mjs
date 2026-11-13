@@ -166,7 +166,7 @@ CAP_ENTRIES.push(['Now I look {mood}.', 'Acum arăt {mood}.'], ['Yes, I look {mo
 const TABLE = [
   ...CAP_ENTRIES,
   // ---- openers and small talk
-  ['Voila!', 'Poftim!'], ['Look at that!', 'Uite!'], ['Look!', 'Uite!'], ['Ta-da!', 'Gata!'], ['Nice!', 'Frumos!'], ['Done!', 'Gata!'], ['Okay!', 'Bine!'], ['Sure!', 'Sigur!'], ['Good luck!', 'Mult noroc!'],
+  ['Look at that!', 'Uite!'], ['Look!', 'Uite!'], ['Nice!', 'Frumos!'], ['Done!', 'Gata!'], ['Okay!', 'Bine!'], ['Sure!', 'Sigur!'], ['Good luck!', 'Mult noroc!'],
   ['There you go!', 'Poftim!'], ['Here you go!', 'Poftim!'], ['There!', 'Gata!'], ['Good game!', 'Joc frumos!'], ['Good.', 'Bine.'],
   ['What would you like to talk about?', 'Despre ce ai vrea să vorbim?'],
   ['I am fine, thank you!', 'Sunt bine, mulțumesc!'], ['I am doing well, thanks for asking!', 'Sunt bine, mulțumesc că ai întrebat!'],

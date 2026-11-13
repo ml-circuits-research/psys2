@@ -13,7 +13,6 @@ import * as space from '../space/space.mjs?v=27b9e9b571';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const ok = (value) => ({ status: 'supported', value });
 const no = (note) => ({ status: 'unsupported', note });
-const SAY_OK = ['Done!', 'OK!', 'Sure!', 'There you go!'];
 const words = (t) => String(t ?? '').toLowerCase().replace(/_/g, ' ').replace(/[^a-z0-9\s'-]+/g, ' ').split(/\s+/).filter(Boolean);
 const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
 const joinOr = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} or ${a.at(-1)}`);
@@ -201,7 +200,6 @@ export function describeFace(face, data = getFaces()) {
   const noneSay = none.length ? `, and ${joinAnd(none.map((s) => phraseOf(face, s, data)))}` : '';
   return `${joinAnd(yes.map((s) => phraseOf(face, s, data)))}${noneSay}`;
 }
-const opener = (f) => SAY_OK[(f.n = (f.n ?? 0) + 1) % SAY_OK.length];
 const finish = (ctx, text) => { ctx.request?.('ui.openTab', { tab: 'robot' }); return ok(text); };
 const unmatchedSay = (list) => {
   const cannot = list.filter((x) => /^no /.test(x)), none = list.filter((x) => !/^no /.test(x));
@@ -228,7 +226,7 @@ export function faceDescribe(ctx, { words: text, w } = {}) {
   const bits = named.map((s) => phraseOf(f, s, data));
   const lead = r.kind ? `I drew ${art(r.kind)} ${plain(r.kind)}` : 'I changed the face';
   const exp = r.expression && r.expression !== 'neutral' ? ` It looks ${r.expression}.` : '';
-  return finish(ctx, `${opener(f)} ${lead}${bits.length ? `${r.kind ? ' with' : ':'} ${joinAnd(bits)}` : ''}.${exp}${unmatchedSay(r.unmatched)}${r.kind ? '' : ' The other parts stay as they were.'}`);
+  return finish(ctx, `${lead}${bits.length ? `${r.kind ? ' with' : ':'} ${joinAnd(bits)}` : ''}.${exp}${unmatchedSay(r.unmatched)}${r.kind ? '' : ' The other parts stay as they were.'}`);
 }
 
 // ---- one element at a time -------------------------------------------------------------------------------------------------------------------------------
@@ -261,7 +259,7 @@ export function faceStep(ctx, { part, dir }) {
   else if (dir === 'next') next = list[(cur + 1) % list.length];
   else { f.n = (f.n ?? 0) + 1; next = list[(cur + 1 + (f.n % Math.max(1, list.length - 1))) % list.length]; if (next === list[cur]) next = list[(cur + 1) % list.length]; }
   put(f, data, slot, next);
-  return finish(ctx, `${opener(f)} ${sayHave(f, slot, data)}`);
+  return finish(ctx, `${sayHave(f, slot, data)}`);
 }
 
 /** A variant named in words ("make the nose small", "sunglasses", "hair 2"): the slot may be missing when the word belongs to one variant only. */
@@ -279,20 +277,20 @@ export function faceSetPart(ctx, { part, value, text, words: w, n } = {}) {
   if (!w && !text && !value && n !== undefined && n !== '') {
     const list = pickable(data, slot);
     const v = list[Number(n) - 1]; if (!v) return no(`My ${nounOf(slot)} go from 1 to ${list.length}.`);
-    put(f, data, slot, v.id); return finish(ctx, `${opener(f)} ${sayHave(f, slot, data)}`);
+    put(f, data, slot, v.id); return finish(ctx, `${sayHave(f, slot, data)}`);
   }
   if (n !== undefined && n !== '' && /^\d+$/.test(String(n)) && !ws.some((x) => !/^\d+$/.test(x) && x !== slot)) {
-    const v = pickable(data, slot)[Number(n) - 1]; if (v) { put(f, data, slot, v.id); return finish(ctx, `${opener(f)} ${sayHave(f, slot, data)}`); }
+    const v = pickable(data, slot)[Number(n) - 1]; if (v) { put(f, data, slot, v.id); return finish(ctx, `${sayHave(f, slot, data)}`); }
   }
   const role = PART_ROLE[slot], tmp = { colours: {}, picks: {} };
   const rest = applyColour(tmp, data, role, ws.filter((x) => x !== slot && !STOP.has(x)), f);
   if (/^(none|nothing|no|off)$/.test(rest.join(' ')) || (rest.length === 1 && ['none', 'bald', 'shaved'].includes(rest[0]))) {
     if (!slotOf(data, slot).optional) return no(`I cannot take off my ${nounOf(slot)}.`);
-    put(f, data, slot, 'none'); return finish(ctx, `${opener(f)} ${sayHave(f, slot, data)}`);
+    put(f, data, slot, 'none'); return finish(ctx, `${sayHave(f, slot, data)}`);
   }
   if (!rest.length && !Object.keys(tmp.colours).length) {   // "give yourself a beard": the part by its name only
     if (f.slots[slot] !== 'none') return ok(`I already have ${phraseOf(f, slot, data)}.`);
-    put(f, data, slot, pickable(data, slot)[0].id); return finish(ctx, `${opener(f)} ${sayHave(f, slot, data)}`);
+    put(f, data, slot, pickable(data, slot)[0].id); return finish(ctx, `${sayHave(f, slot, data)}`);
   }
   const m = matchVariant(data, slot, rest.map((x) => (x === 'sunglass' ? 'sun' : x)), f.slots[slot]);
   const asMood = expressionOf(rest.join(' '), data);
@@ -304,7 +302,7 @@ export function faceSetPart(ctx, { part, value, text, words: w, n } = {}) {
   }
   if (m.id || exact) put(f, data, slot, exact?.id ?? m.id);
   if (Object.keys(tmp.colours).length) Object.assign(f.colours, tmp.colours);
-  return finish(ctx, `${opener(f)} ${sayHave(f, slot, data)}${m.unmatched.length && (m.id || exact) ? ` I have no "${m.unmatched.join(' ')}" yet.` : ''}`);
+  return finish(ctx, `${sayHave(f, slot, data)}${m.unmatched.length && (m.id || exact) ? ` I have no "${m.unmatched.join(' ')}" yet.` : ''}`);
 }
 
 export function faceRemove(ctx, { part, value, text } = {}) {
@@ -315,20 +313,20 @@ export function faceRemove(ctx, { part, value, text } = {}) {
   clean(f);
   if (f.slots[slot] === 'none') return ok(`I have no ${slot === 'hair' ? 'hair' : nounOf(slot)} already.`);
   put(f, data, slot, 'none');
-  return finish(ctx, `${opener(f)} ${sayHave(f, slot, data)}`);
+  return finish(ctx, `${sayHave(f, slot, data)}`);
 }
 export function faceRemoveAll(ctx) {
   const data = getFaces(), f = faceOf(ctx); clean(f);
   for (const s of data.slots) if (s.optional) put(f, data, s.name, 'none');
-  return finish(ctx, `${opener(f)} I took off the hair, the beard and the glasses.`);
+  return finish(ctx, `I took off the hair, the beard and the glasses.`);
 }
 export function faceReset(ctx, { part } = {}) {
   const data = getFaces(), f = faceOf(ctx); clean(f);
   const base = data.presets[f.base] ?? Object.values(data.presets)[0];
-  if (!part) { const saved = f.saved, name = f.name; Object.assign(f, newFace(f.base, data), { saved, name }); return finish(ctx, `${opener(f)} I am back to the ${plain(base.name)} face.`); }
+  if (!part) { const saved = f.saved, name = f.name; Object.assign(f, newFace(f.base, data), { saved, name }); return finish(ctx, `I am back to the ${plain(base.name)} face.`); }
   const { slot, error } = resolveSlot(f, part, data); if (error) return no(error);
   put(f, data, slot, base.slots[slot] ?? f.slots[slot]); delete f.adj[slot];
-  return finish(ctx, `${opener(f)} My ${nounOf(slot)} are back to normal: ${phraseOf(f, slot, data)}.`);
+  return finish(ctx, `My ${nounOf(slot)} are back to normal: ${phraseOf(f, slot, data)}.`);
 }
 
 // ---- size and place (the SPACE module, inside the face frame, with limits) ----------------------------------------------------------------------------------
@@ -342,7 +340,7 @@ export function faceResize(ctx, { part, dir } = {}) {
   const next = Math.round(Math.min(SPEC_MAX, Math.max(SPEC_MIN, up ? before * STEP_SCALE : before / STEP_SCALE)) * 100) / 100;
   if (next === before) return ok(`My ${nounOf(slot)} cannot get any ${up ? 'bigger' : 'smaller'} and still be a face.`);
   a.s = next;
-  return finish(ctx, `${opener(f)} I made my ${nounOf(slot)} ${up ? 'bigger' : 'smaller'}.`);
+  return finish(ctx, `I made my ${nounOf(slot)} ${up ? 'bigger' : 'smaller'}.`);
 }
 const ROLE_NOUN = { background: 'background', hat: 'hat', jewel: 'earrings', iris: 'eyes', brow: 'eyebrows', glass: 'glasses', skin: 'skin', hair: 'hair', lips: 'lips', shirt: 'shirt', beard: 'beard' };
 const MOVE_WORDS = { raise: 'up', lift: 'up', raised: 'up', higher: 'up', up: 'up', upwards: 'up', lower: 'down', down: 'down', lowered: 'down', drop: 'down', left: 'left', right: 'right' };
@@ -373,7 +371,7 @@ export function faceMove(ctx, { part, words: w, text } = {}) {
   clean(f);
   a.dx = Math.round(dx * 10) / 10; a.dy = Math.round(dy * 10) / 10;
   const what = sl.pair && (closer || apart) ? (closer ? 'closer together' : 'further apart') : space.sayMove(mv);
-  return finish(ctx, `${opener(f)} I moved my ${nounOf(slot)} ${what}.`);
+  return finish(ctx, `I moved my ${nounOf(slot)} ${what}.`);
 }
 const boxFor = (f, sl) => ({ x: sl.x + (f.adj[sl.name]?.dx ?? 0), y: sl.y + (f.adj[sl.name]?.dy ?? 0) });
 
@@ -383,11 +381,11 @@ export function faceAdjust(ctx, { part, dir } = {}) {
   if (slot === 'hair' && ['longer', 'shorter'].includes(dir)) {
     const list = pickable(data, 'hair').sort((a, b) => a.size - b.size), cur = list.findIndex((v) => v.id === f.slots.hair);
     clean(f);
-    if (f.slots.hair === 'none') { put(f, data, 'hair', list[0].id); return finish(ctx, `${opener(f)} ${sayHave(f, 'hair', data)}`); }
+    if (f.slots.hair === 'none') { put(f, data, 'hair', list[0].id); return finish(ctx, `${sayHave(f, 'hair', data)}`); }
     const to = list[cur + (dir === 'longer' ? 1 : -1)];
     if (!to) return ok(dir === 'longer' ? 'This is the longest hair I have.' : 'This is the shortest hair I have: I can take it off with "no hair".');
     put(f, data, 'hair', to.id);
-    return finish(ctx, `${opener(f)} ${sayHave(f, 'hair', data)}`);
+    return finish(ctx, `${sayHave(f, 'hair', data)}`);
   }
   return faceResize(ctx, { part, dir });
 }
@@ -412,8 +410,8 @@ export function faceColour(ctx, { part, color } = {}) {
   if (role === 'hair') { delete f.colours.brow; delete f.colours.beard; }
   const slot = slotOfPart(part, data);
   if (slot && ['hat', 'earrings'].includes(slot) && f.slots[slot] === 'none') put(f, data, slot, pickable(data, slot)[0].id);   // "red earrings": put some on, in that colour
-  if (slot && f.slots[slot] === 'none') return finish(ctx, `${opener(f)} I have no ${nounOf(slot)} now, but ${['hair', 'hat'].includes(slot) ? 'it' : 'they'} will be ${plain(color)} when I have ${slot === 'hair' ? 'some' : slot === 'earrings' ? 'some' : 'one'}.`);
-  return finish(ctx, `${opener(f)} ${role === 'skin' ? `My skin is ${plain(color)} now.` : role === 'shirt' ? `My shirt is ${plain(color)} now.` : role === 'background' ? `The background is ${plain(color)} now.` : sayHave(f, slot, data)}`);
+  if (slot && f.slots[slot] === 'none') return finish(ctx, `I have no ${nounOf(slot)} now, but ${['hair', 'hat'].includes(slot) ? 'it' : 'they'} will be ${plain(color)} when I have ${slot === 'hair' ? 'some' : slot === 'earrings' ? 'some' : 'one'}.`);
+  return finish(ctx, `${role === 'skin' ? `My skin is ${plain(color)} now.` : role === 'shirt' ? `My shirt is ${plain(color)} now.` : role === 'background' ? `The background is ${plain(color)} now.` : sayHave(f, slot, data)}`);
 }
 export function faceShift(ctx, { part, dir } = {}) {
   const data = getFaces(), f = faceOf(ctx), role = roleOfPart(part, data);
@@ -421,7 +419,7 @@ export function faceShift(ctx, { part, dir } = {}) {
   clean(f);
   const key = role === 'brow' && !f.colours.brow ? 'hair' : role === 'beard' && !f.colours.beard ? 'hair' : role;
   f.colours[key] = shadeHex(f.colours[key], dir === 'lighter' ? 0.25 : -0.25).slice(1);
-  return finish(ctx, `${opener(f)} I made my ${plain(part)} ${dir === 'lighter' ? 'lighter' : 'darker'}.`);
+  return finish(ctx, `I made my ${plain(part)} ${dir === 'lighter' ? 'lighter' : 'darker'}.`);
 }
 
 // ---- expressions ------------------------------------------------------------------------------------------------------------------------------------------
@@ -440,7 +438,7 @@ export function faceMood(ctx, { mood, dir } = {}) {
   clean(f);
   if (f.expression === to) return ok(to === 'neutral' ? 'I already look calm.' : `I already look ${to === 'wink' ? 'like I am winking' : to}.`);
   f.expression = to;
-  return finish(ctx, `${opener(f)} ${to === 'wink' ? 'I am winking.' : to === 'neutral' ? 'I look calm now.' : `Now I look ${to}.`}`);
+  return finish(ctx, `${to === 'wink' ? 'I am winking.' : to === 'neutral' ? 'I look calm now.' : `Now I look ${to}.`}`);
 }
 export function faceCheckMood(ctx, { mood } = {}) {
   const f = faceOf(ctx), to = expressionOf(mood);
@@ -491,13 +489,13 @@ export function facePreset(ctx, kind) {
   if (!data.presets[name]) return null;
   const f = faceOf(ctx), saved = f.saved, nm = f.name;
   Object.assign(f, newFace(name, data), { saved, name: nm });
-  return finish(ctx, `${opener(f)} I drew ${art(plain(name))} ${plain(name)}: ${describeFace(f, data)}.`);
+  return finish(ctx, `I drew ${art(plain(name))} ${plain(name)}: ${describeFace(f, data)}.`);
 }
 export function faceStart(ctx) {
   const f = faceOf(ctx);
   if (f.active) return ok('I am already a drawn face.');
   f.active = true; clean(f);
-  return finish(ctx, `${opener(f)} I am a drawn face now: ${describeFace(f)}. Describe another one, or change one part at a time.`);
+  return finish(ctx, `I am a drawn face now: ${describeFace(f)}. Describe another one, or change one part at a time.`);
 }
 export function faceSave(ctx, { name } = {}) {
   const f = faceOf(ctx), n = cleanName(name);
@@ -507,7 +505,7 @@ export function faceSave(ctx, { name } = {}) {
   if (!f.saved[k] && Object.keys(f.saved).length >= 12) return no('I can keep twelve faces. Delete one first.');
   f.saved[k] = { name: n, ...startOf(f) };
   f.name = n;
-  return finish(ctx, `${opener(f)} I saved this face as ${n}. Say "be ${n}" to bring it back.`);
+  return finish(ctx, `I saved this face as ${n}. Say "be ${n}" to bring it back.`);
 }
 export function faceLoad(ctx, { name } = {}) {
   const f = faceOf(ctx), n = cleanName(name).replace(/^(?:the|my)\s+/i, '').replace(/\s+face$/i, ''), k = keyOf(n);
@@ -517,7 +515,7 @@ export function faceLoad(ctx, { name } = {}) {
   const hit = f.saved[k];
   if (hit) {
     Object.assign(f, { active: true, slots: { ...hit.slots }, colours: { ...hit.colours }, adj: structuredClone(hit.adj ?? {}), expression: 'neutral', name: hit.name }); clean(f);
-    return finish(ctx, `${opener(f)} I am ${hit.name} now: ${describeFace(f, data)}.`);
+    return finish(ctx, `I am ${hit.name} now: ${describeFace(f, data)}.`);
   }
   const p = facePreset(ctx, k);
   if (p) return p;
@@ -540,7 +538,7 @@ export function faceSurprise(ctx) {
     put(f, data, s.name, opts[rnd(opts.length)]);
   }
   for (const [role, pal] of Object.entries({ skin: Object.fromEntries(['pale', 'light', 'tan', 'brown', 'dark'].map((n) => [n, data.colours.skin?.[n]]).filter((x) => x[1])), hair: data.colours.hair, iris: data.colours.iris, shirt: data.colours.shirt })) { const v = Object.values(pal ?? {}); if (v.length) f.colours[role] = v[rnd(v.length)]; }
-  return finish(ctx, `${opener(f)} I drew a new face: ${describeFace(f, data)}.`);
+  return finish(ctx, `I drew a new face: ${describeFace(f, data)}.`);
 }
 
 /** The wink of the animations is an expression of the drawn face. */

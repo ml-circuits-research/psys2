@@ -44,7 +44,7 @@
     session=c2
     reasoner=matrix
     input="Add milk to my shopping list."
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
 
 @t.conv.n9 core.test
     session=c2

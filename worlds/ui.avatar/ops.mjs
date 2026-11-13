@@ -139,14 +139,12 @@ const MOOD_ADJ = { fear: 'scared' };
 const moodWord = (mood) => { const w = String(mood).replace(/_/g, ' '); return MOOD_ADJ[w] ?? w; };
 const ANIM_OF = { wink: 'wink', nod: 'nod', dance: 'dance', wave: 'wave', spin: 'spin', jump: 'jump', bounce: 'bounce', wiggle: 'wiggle', blink: 'blink', shake: 'shake' };
 const ANIM_SAY = { wink: 'Wink wink!', nod: 'Yes, yes! I am nodding.', dance: 'Watch me dance!', wave: 'Hello there! I am waving at you.', spin: 'Wheee, here I spin!', jump: 'Up I go!', bounce: 'Boing, boing!', wiggle: 'Wiggle wiggle!', blink: 'Blink blink!', shake: 'No, no! I am shaking my head.' };
-const OPENERS = ['Done!', 'Okay!', 'Sure!', 'Ta-da!', 'There you go!'];
 
 // ---- small helpers ----------------------------------------------------------------------------------------------
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
 const no = (note) => ({ status: 'unsupported', note });
 export const hash = (str) => { let h = 2166136261; for (const c of String(str)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; };
 const rng = (seed) => { let t = hash(seed) + 0x6d2b79f5; return () => { t = (t + 0x6d2b79f5) >>> 0; let r = Math.imul(t ^ (t >>> 15), 1 | t); r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r; return (((r ^ (r >>> 14)) >>> 0) / 4294967296); }; };
-const opener = (key) => OPENERS[hash(key) % OPENERS.length];
 const a = (word) => ((w) => (/s$/.test(w) && !/ss$/.test(w) ? '' : /^[aeiou]/i.test(w) ? 'an' : 'a'))(String(word).replace(/\s*\d+$/, ''));
 const andList = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
 const orList = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} or ${xs.at(-1)}`);
@@ -166,7 +164,7 @@ function caption(ctx) {
   s.chips = chips(ch);
   s.caption = { character: ch, for: partsSig(v), text: components(ctx, ch).filter((k) => v[k] !== 'none').map((k) => phraseOf(ctx, ch, k, v[k]).replace(/\bmy\b/g, 'its')).join(' · ') };
 }
-const done = (ctx, key, sentence) => { ensure(ctx); caption(ctx); ctx.request('ui.openTab', { tab: 'robot' }); return ok(`${opener(key)} ${sentence}`); };
+const done = (ctx, key, sentence) => { ensure(ctx); caption(ctx); ctx.request('ui.openTab', { tab: 'robot' }); return ok(sentence); };
 const clean = (s) => String(s ?? '').replace(/ {2,}/g, ' ').trim();
 export const say = (key, display) => (/^style \d+$/.test(display) ? `${STYLE_NOUN[key] ?? LABEL[key] ?? key} ${display}` : clean(PHRASE[key] ? PHRASE[key](display) : `${display} ${LABEL[key] ?? key}`));
 
@@ -1042,7 +1040,7 @@ export function interceptInput(ctx, text) {
   const pre = snap(s);
   s.character = p.character;
   const fn = p.replay && REPLAY[p.replay.fn];
-  const strip = (x) => String(x ?? '').replace(/^(Done|Okay|Sure|Ta-da|There you go)! /, '');
+  const strip = (x) => String(x ?? '');
   const reply = fn
     ? `Now I am ${spoken(p.character)}. ${strip((r => r.value ?? r.note)(fn(ctx, p.replay.args)))}`
     : `Now I am ${spoken(p.character)}. ${describeShort(ctx, s)}`;

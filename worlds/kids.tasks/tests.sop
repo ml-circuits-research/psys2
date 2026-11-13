@@ -1,7 +1,7 @@
 @t.tasks.n1 core.test
     session=shop
     input="add milk to my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
 
 @t.tasks.n2 core.test
     session=shop
@@ -67,7 +67,7 @@
 @t.tasks.n13 core.test
     session=todo
     input="add do my homework to my to-do list"
-    expect="Done! I added do my homework to your to-do list."
+    expect="I added do my homework to your to-do list."
 
 @t.tasks.n14 core.test
     session=todo
@@ -183,7 +183,7 @@
 @t.tasks.n35 core.test
     session=multi
     input="add bread, eggs and milk to my shopping list"
-    expect="Done! I added bread, eggs and milk to your shopping list."
+    expect="I added bread, eggs and milk to your shopping list."
 
 @t.tasks.n36 core.test
     session=multi
@@ -248,12 +248,12 @@
 @t.tasks.n47 core.test
     session=count
     input="I need to buy apples"
-    expect="Done! I added apples to your shopping list."
+    expect="I added apples to your shopping list."
 
 @t.tasks.n48 core.test
     session=count
     input="I have to tidy my room"
-    expect="Done! I added tidy my room to your to-do list."
+    expect="I added tidy my room to your to-do list."
 
 @t.tasks.n49 core.test
     session=count
@@ -326,7 +326,7 @@
 
 @t.tasks.w02 core.test
     input="Please add milk 2 my list."
-    expect="Done! I added milk to your to-do list."
+    expect="I added milk to your to-do list."
     doc="wording variant (widened phrasing)"
 
 @t.tasks.w03 core.test
@@ -346,137 +346,137 @@
 
 @t.tasks.sw001 core.test
     input="Please write milk on my shopping list."
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw002 core.test
     input="can u add milk to my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw003 core.test
     input="pop milk onto my shopping list pls"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw004 core.test
     input="could you jot down milk on my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw005 core.test
     input="hey put milk on the shopping list for me"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw006 core.test
     input="i need milk on my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw007 core.test
     input="we need milk on the shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw008 core.test
     input="i forgot milk on my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw009 core.test
     input="milk needs to go on my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw010 core.test
     input="milk should be on the shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw011 core.test
     input="would you mind adding milk to my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw012 core.test
     input="i want you to add milk to my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw013 core.test
     input="stick milk on my shopping list"
-    expect="Done! I added milk to your shopping list."
+    expect="I added milk to your shopping list."
     doc="add: verbs, politeness, fillers"
 
 @t.tasks.sw014 core.test
     input="socks for the garden list please"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw015 core.test
     input="socks on the garden list"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw016 core.test
     input="garden list: socks"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw017 core.test
     input="garden list add socks"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw018 core.test
     input="socks go on the garden list"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw019 core.test
     input="add socks to garden list pls"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw020 core.test
     input="can u put socks on my garden list"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw021 core.test
     input="add socks in my garden list"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw022 core.test
     input="hey put socks on the garden list"
-    expect="Done! I added socks to your garden list."
+    expect="I added socks to your garden list."
     doc="add: noun-first and list-first"
 
 @t.tasks.sw023 core.test
     input="add bread to shopping"
-    expect="Done! I added bread to your shopping list."
+    expect="I added bread to your shopping list."
     doc="add: list named without the word list"
 
 @t.tasks.sw024 core.test
     input="put bread on shopping"
-    expect="Done! I added bread to your shopping list."
+    expect="I added bread to your shopping list."
     doc="add: list named without the word list"
 
 @t.tasks.sw025 core.test
     input="add bread to my shopping"
-    expect="Done! I added bread to your shopping list."
+    expect="I added bread to your shopping list."
     doc="add: list named without the word list"
 
 @t.tasks.sw026 core.test
     input="bread to my shopping list"
-    expect="Done! I added bread to your shopping list."
+    expect="I added bread to your shopping list."
     doc="add: list named without the word list"
 
 @t.tasks.sw027 core.test
     input="could you add bread to shopping"
-    expect="Done! I added bread to your shopping list."
+    expect="I added bread to your shopping list."
     doc="add: list named without the word list"
 
 @t.tasks.sw028 core.test

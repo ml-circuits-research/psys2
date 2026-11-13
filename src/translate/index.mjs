@@ -8,9 +8,9 @@
 // A sentence whose negation or question word could not be mapped is not translated: it is omitted from
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs';
-import { analyze, placeOf } from './morphology.ro.mjs';
+import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs';
 import { translateRoEn } from './ro-en.mjs';
-import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs';
+import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
 // Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;
@@ -147,6 +147,7 @@ export function translate(text, opts = {}) {
   return { text: '', alignment: [], unknown: [], notes: [`unsupported language pair ${from} -> ${to}`], confidence: 0, untranslatable: source ? [{ span: [0, source.length], reason: `unsupported language pair ${from} -> ${to}` }] : [] };
 }
 
+let roVocab = null;
 export function createTranslator() {
   return {
     detectLanguage: (text) => detectLanguage(text),
@@ -154,6 +155,10 @@ export function createTranslator() {
     translate: (text, opts) => translate(text, opts),
     /** English words left in a Romanian output (RD5: the caller then keeps the whole reply in English). */
     leftovers: (text, lang) => (lang === 'ro' ? englishLeftovers(String(text ?? '').replace(/"[^"]*"|„[^”]*”|«[^»]*»/g, ' ')) : []),   // quoted text is the user's own words (or an example), never a leftover (same rule as ro-reply-quality)
+    /** M4: the words this translator knows of a source language, Map<folded, surface forms[]> (spelling repair); null for a language it has no rules for. Built once. */
+    sourceVocabulary: (lang) => (lang === 'ro' ? (roVocab ??= surfaceForms()) : null),
+    /** M4: true for an English word of this translator's lexicon (or a regular form of one). */
+    knownEnglish: (word) => knownEnglishWord(String(word ?? '').toLowerCase()),
     supports: (from, to) => (from === 'ro' && to === 'en') || (from === 'en' && to === 'ro'),
   };
 }

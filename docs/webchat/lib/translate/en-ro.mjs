@@ -1,11 +1,11 @@
 // English -> Romanian translation of short answers (rule based, browser-safe).
 // Reverse use of the bilingual lexicon plus a small clause generator and answer frames.
 import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=136a228c61';
-import * as M from './morphology.ro.mjs?v=6d391f8fd4';
+import * as M from './morphology.ro.mjs?v=25dfbed96c';
 import * as L from './lexicon.ro-en.mjs?v=0f4eaf8bf9';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
-import { translateReplySentence } from './replies.en-ro.mjs?v=79771776a5';
+import { translateReplySentence } from './replies.en-ro.mjs?v=9f9a7d79f7';
 import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
@@ -861,6 +861,9 @@ function isEnglishDerived(k) {
   for (const suf of ['est', 'er', 'ing', 'ed', 'ly', 'es', 's']) if (k.endsWith(suf) && k.length - suf.length >= 3) add(k.slice(0, -suf.length));
   return stems.some((s) => nounMap.has(s) || verbMap.has(s) || adjMap.has(s));
 }
+
+/** True for an English word of the lexicon or a regular form of one (M4: a candidate translation that keeps a word of the input that is not English still has source words). */
+export const knownEnglishWord = (k) => isEnglishWord(k) || isEnglishDerived(k);
 
 /**
  * English words that survived in a Romanian output (a word of the English lexicon that Romanian does not also know). A reply with such a word

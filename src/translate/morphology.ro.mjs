@@ -369,3 +369,11 @@ export function lexiconStats() {
 }
 
 export { pluralEn };
+
+/** Source-side vocabulary for spelling repair (M4): every known surface form, keyed by its folded key: Map<folded, string[]> (forms with their diacritics). */
+export function surfaceForms() {
+  const out = new Map();
+  for (const [k, list] of index) out.set(k, [...new Set(list.map((a) => a.form))]);
+  for (const [k, e] of nameIndex) if (!out.has(k)) out.set(k, [String(e?.ro ?? e?.name ?? k)]);
+  return out;
+}

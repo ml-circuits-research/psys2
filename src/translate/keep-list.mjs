@@ -89,14 +89,14 @@ export function protectText(text, keep, { extra = [] } = {}) {
  * unprotected translation is used (the checker of the translation layer still judges it). `getKeep()` = { keep, extra } is read at every call.
  */
 export function protectedTranslate(translate, getKeep) {
-  return async (text, from, to) => {
+  return async (text, from, to, ...rest) => {
     let info;
     try { info = getKeep?.(); } catch { info = null; }
-    if (!info || (!info.keep && !(info.extra?.length))) return translate(text, from, to);
+    if (!info || (!info.keep && !(info.extra?.length))) return translate(text, from, to, ...rest);
     const p = protectText(text, info.keep, { extra: info.extra ?? [] });
-    if (!p.found.length) return translate(text, from, to);
-    const out = await translate(p.text, from, to);
+    if (!p.found.length) return translate(text, from, to, ...rest);
+    const out = await translate(p.text, from, to, ...rest);
     const back = p.restore(out);
-    return back ?? translate(text, from, to);
+    return back ?? translate(text, from, to, ...rest);
   };
 }

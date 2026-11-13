@@ -180,9 +180,18 @@ export function createBrowserBackend({ mt = null } = {}) {
     if (!nativePair.has(key)) nativePair.set(key, withDeadline(browserTranslatorAvailability(from, to), AVAILABILITY_TIMEOUT_MS, { label: 'translator availability' }).then((a) => a !== 'unavailable' && a !== 'unsupported', () => false));
     return nativePair.get(key);
   }
-  async function browserTranslate(text, from, to) {
+  /** M4: the translators that can answer this pair right now, each one separately: ['native', 'model']. */
+  async function sources(from, to) {
+    const lang = from === 'en' ? to : from, out = [];
+    if (await nativeSupports(from, to)) out.push('native');
+    if (mt && mt.has(lang) && mt.state(lang).phase === 'ready') out.push('model');
+    return out;
+  }
+  async function browserTranslate(text, from, to, only = null) {
     const lang = from === 'en' ? to : from;
     const model = mt && mt.has(lang);
+    if (only === 'native') return nativeTranslate(text, from, to);   // M4: one candidate per translator
+    if (only === 'model') { if (!model) throw new Error('no on-device model'); return mt.translate(text, from, to); }
     if (await nativeSupports(from, to)) {
       try { return await nativeTranslate(text, from, to); } catch (e) { if (!(model && mt.state(lang).phase === 'ready')) throw e; }
     }
@@ -215,7 +224,7 @@ export function createBrowserBackend({ mt = null } = {}) {
     if (!det) throw new Error('still downloading');
     return await withDeadline(det.detect(String(text)), DETECT_TIMEOUT_MS, { label: 'language detection' });
   }
-  return { translatorKind: () => browserTranslatorKind() ?? (mt ? 'mt' : null), nativeKind: browserTranslatorKind, hasModel: !!mt, detectorKind: browserDetectorKind, translate: browserTranslate, detect, prepare: prepareTranslator, state: translatorState };
+  return { translatorKind: () => browserTranslatorKind() ?? (mt ? 'mt' : null), nativeKind: browserTranslatorKind, hasModel: !!mt, detectorKind: browserDetectorKind, translate: browserTranslate, sources, detect, prepare: prepareTranslator, state: translatorState };
 }
 
 /** Deadline of a call from the engine worker to the page's browser API: the page itself waits at most 400 ms, this leaves room for the message round trip. */
@@ -232,7 +241,8 @@ export function createRemoteBackend({ kinds, call, deadlineMs = kinds?.mt ? REMO
   return {
     translatorKind: () => kinds.translator ?? null,
     detectorKind: () => kinds.detector ?? null,
-    translate: async (text, from, to) => { if (!kinds.translator) throw new Error('no browser translator'); return bounded('translate', { text, from, to }, 'page translation'); },
+    translate: async (text, from, to, only = null) => { if (!kinds.translator) throw new Error('no browser translator'); return bounded('translate', { text, from, to, ...(only ? { only } : {}) }, 'page translation'); },
+    sources: async (from, to) => [...((kinds.translator && (!kinds.pairs || kinds.pairs.includes(`${from}>${to}`))) ? ['native'] : []), ...(kinds.mt ? ['model'] : [])],   // M4: the page says what exists; a call that fails is just no candidate
     detect: async (text) => { if (!kinds.detector) throw new Error('no browser language detector'); return bounded('detect', { text }, 'page language detection'); },
     prepare: async () => {},
     supports: (from, to) => !kinds.pairs || kinds.pairs.includes(`${from}>${to}`),
@@ -309,6 +319,28 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
         entry.strategy = 'browser-api'; entry.fallback = false;
         return { text: out, alignment: text ? [{ src: [0, text.length], tgt: [0, out.length] }] : [], unknown: [], notes: [`translated by the browser on-device Translator API (${via})`], confidence: 1, strategy: 'browser-api', via };
       } catch (e) { entry.reason = `browser API error: ${e?.message ?? e}`; return null; }
+    },
+    /**
+     * M4: one candidate per available machine translator (the browser Translator and the on-device model), each through the checker (numbers, names, negation).
+     * [{ source: 'browser' | 'model', text, translation, rejected? }]; never throws; the calls run side by side, each bounded by the backend deadline.
+     */
+    async candidatesViaMT(text, { from, to }) {
+      if (getStrategy() === 'rules' || !backend.translatorKind() || !(backend.supports?.(from, to) ?? true)) return [];
+      let srcs = [];
+      try { srcs = (await backend.sources?.(from, to)) ?? ['native']; } catch { srcs = []; }
+      const via = to === 'en' ? 'translator-in' : 'translator-out';
+      const done = await Promise.all(srcs.map(async (src) => {
+        const entry = { direction: `${from}->${to}`, requested: getStrategy(), strategy: 'rules', fallback: true, reason: null, via, candidate: src };
+        usage.push(entry);
+        try {
+          const out = await backend.translate(text, from, to, src);
+          const bad = checkTranslation(text, out, { from, to });
+          if (bad) entry.reason = `checker failed: ${bad}`; else { entry.strategy = 'browser-api'; entry.fallback = false; }
+          return { source: src === 'model' ? 'model' : 'browser', text: out, rejected: bad ? `checker: ${bad}` : null,
+            translation: { text: out, alignment: text ? [{ src: [0, text.length], tgt: [0, String(out).length] }] : [], unknown: [], notes: [`translated by the ${src === 'model' ? 'on-device model' : 'browser on-device Translator API'} (${via})`], confidence: 1, strategy: 'browser-api', via } };
+        } catch (e) { entry.reason = `${src} error: ${e?.message ?? e}`; return null; }
+      }));
+      return done.filter(Boolean);
     },
     async translate(text, opts) {
       const { from, to } = opts;
