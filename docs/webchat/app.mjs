@@ -896,6 +896,8 @@ export async function mountPsys2(element, options = {}) {
     if (turn) { flashHint(BUSY_HINT); return; }
     const ex = surprisePicker?.next();
     if (!ex) { flashHint('No examples are available yet.'); return; }
+    // an example is shown on the tab it was recorded for: a short one ("Add a table.", "Add a bullet: milk.") means something else on the drawing tab, which would read it itself
+    if (ex.tab && ex.tab !== 'robot' && tabBtns[ex.tab] && view !== ex.tab) userTab(ex.tab);
     send(ex.text, 'chip', { example: true });
   });
   on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); askDrop(); } else if (sendBtn.classList.contains('is-stop')) { e.preventDefault(); stopTurn(); } });
