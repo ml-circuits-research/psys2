@@ -3554,3 +3554,14 @@ The owner's log misled the reviewer: for "get to to sudan capital" the export sa
 ## Reviewer 2026-11-13 19:05 — LOG WHAT HAPPENED: reduced (owner)
 
 Keep it small. Per turn the export needs only: the tab on screen, each reply shown **with the world it came from**, and what that world changed (the state difference in words). Drop item 5 (thumbnails) and the screen-reader description of item 2; item 4 (reaction) only as the next user action already recorded by USER-ACTIONS.
+
+## Reviewer 2026-11-13 19:10 — PROGRESS (owner): show what is loading and what is being done, step by step
+
+Loading is slow now; the owner does not mind the time, he minds not seeing what happens. One mechanism for every wait:
+1. **One progress service** (`ui/progress.mjs`): any part of the app reports `start(id, label)`, `step(id, label, done, total)`, `end(id)`; the service owns one small panel (a bar plus the current step in plain words, and a "details" fold with the steps done and their times). No part draws its own spinner.
+2. **Start-up:** the steps in order as they really happen: page code, the worlds (count), the reasoner, the reading model (MB loaded of total), the translator for the selected language, the knowledge catalog index, voices. The bar is weighted by measured sizes/times of the last start (stored locally), so it moves evenly. The chat is usable as soon as the rules can read; later steps continue in the panel ("still loading the model: answers may be simpler for a moment").
+3. **New worlds and knowledge:** opening a tab or a lookup that loads a world, a shard, a face set or a layout shows the same panel with the name ("loading drawings: farm animals").
+4. **Long turns:** when a turn passes 400 ms the input shows what is being done (reading, looking up knowledge, placing things, drawing), from the stages the engine already times; the input is blocked only while a state-changing action runs, typing ahead is kept and sent after, and a Stop button cancels where the step budget allows.
+5. **Failures in the same place:** a step that fails or times out says so in the panel with what still works ("the picture catalog could not be reached: basic drawings only"), and the turn's reply does not repeat it more than once.
+6. Texts are generated in English and translated like every reply; nothing per language. The steps are recorded as events in the phrase export (USER-ACTIONS), with durations.
+7. Check with one Chrome probe at 4x CPU throttle and a slow network profile: screenshots of start-up at three moments, a world load, a long turn. Report the start-up table (step, ms, bytes) in worker-log; that table is also the list of what to speed up later.
