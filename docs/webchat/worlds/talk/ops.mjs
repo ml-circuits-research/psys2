@@ -11,6 +11,7 @@
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=4cd417b561';
 import * as space from '../space/space.mjs?v=0c5c89b98e';
+import { habitatSentence } from '../../src/knowledge/commonsense.mjs';
 import * as R from './records.mjs?v=0f86b57f97';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
@@ -135,7 +136,7 @@ function whatSentence(r, ctx) {
   if (cs?.can?.length) t += ` It can ${list(cs.can)}.`;
   if (cs?.cannot?.length) t += ` It cannot ${list(cs.cannot)}.`;
   if (cs?.made_of?.length) t += ` It is made of ${list(cs.made_of)}.`;
-  if (cs?.at?.length && th?.learned) t += ` You find it ${/^(?:in|on|at|under|near)\b/.test(cs.at[0]) ? '' : 'in '}${list(cs.at)}.`;   // what the user taught about where it lives
+  { const where = habitatSentence(ctx?.knowledge, name); if (where) t += ` ${where}`; }   // where it lives: the catalog or what the user taught, one lookup shared with the other views (src/knowledge/commonsense.mjs)
   return t;
 }
 
@@ -582,7 +583,7 @@ export function send(ctx, { to } = {}) {
   if (!topic) return no('missing', 'There is nothing to send yet. Ask me about something first, for example "What does a lighthouse look like?".');
   const card = activeCard(ctx);
   const name = topic.name;
-  if (!['draw', 'diagram', 'map'].includes(to)) {   // every other place is a view of the session things: the store decides what it can take (draw, diagram and map are not views yet)
+  if (!['draw', 'diagram'].includes(to)) {   // every other place (the map too) is a view of the session things: the store decides what it can take (draw and diagram are not views yet)
     if (!topic.thingId) return no('missing', `I have not put the ${name} in the session yet. Ask me about it first.`);
     const r = ctx.request('things.show', { ids: [topic.thingId], to, from: 'talk' });
     return r?.status === 'supported' ? ok(String(r.value), { values: [name, to] }) : no(r?.status ?? 'unsupported', String(r?.note ?? `I cannot show the ${name} there.`));
@@ -605,13 +606,7 @@ export function send(ctx, { to } = {}) {
     push(ctx, { kind: 'send', to: 'diagram' });
     return ok(`I made a diagram of the ${name} with ${items.length} part${items.length === 1 ? '' : 's'}. The Diagram tab took it.`, { values: [name, 'Diagram'] });
   }
-  if (to === 'map') {
-    const r = ctx.request('geo.show', { a: name });   // the map's own undoable show: one step
-    if (r.status !== 'supported') return no('unsupported', `The Map tab does not know a place called ${name}, so it cannot show it.`);
-    push(ctx, { kind: 'send', to: 'map' });
-    return ok(`The Map tab took it. ${r.value ?? ''}`.trim(), { values: [name, 'Map'] });
-  }
-  return no('unsupported', 'I can send a picture to the drawing, the diagram or the map.');
+  return no('unsupported', 'I can send a picture to the drawing or the diagram.');
 }
 
 /** Ask about this: from another tab, open Talk on the thing that is selected there. */

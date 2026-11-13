@@ -20,7 +20,7 @@ import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 import { Renderer, fallbackText, listText } from './render.mjs?v=237d079f93';
 import { FormSession } from '../formalizer/rules/session.mjs?v=e445741b59';
 import { makeLang } from './lang.mjs?v=b0313edaaa';
-import { withLearned } from '../knowledge/learned.mjs?v=ce10b38530';
+import { withLearned } from '../knowledge/learned.mjs?v=1112a5ac2a';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 export { Renderer } from './render.mjs?v=237d079f93';
@@ -292,6 +292,8 @@ export class Interpreter {
     const seqOf = (w) => { const e = w.entries.find((x) => x.key === 'core.seq'); return e ? Number(e.value.v) : -Infinity; };
     const ctx = {
       /** The operation says something happened by itself in the middle of the user's turn (the engine's late reply): the library takes the state over now and the user's step begins after it (matrix reasoner timeline). */
+      /** True when the matrix reasoner is in use: its soft rules say the advice of common sense themselves (spec 15 "Advice"); a world that gives advice of its own for what the rules do not cover asks this first. */
+      rulesAdvise: !!session.rs,
       checkpoint: session.rs ? () => {  session.rs.adoptState(session); session.rs.checkpoint(); } : undefined,
       find: (type, where) => { check(); const r = mem.find(type, resolveWhere(type, where)); this._charge(st, r.length); return r; },
       ordered: (type, where) => {

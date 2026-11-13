@@ -877,6 +877,38 @@ export const clearHighlight = undoable(_clearHighlight);
 export const clearLines = undoable(_clearLines);
 export const layer = undoable(_layer);
 
+// ---- the map as a VIEW of the session things (spec 23): the geographic aspect, one request for a whole selection -------------------------------------------------
+// A thing is a pin where the map knows its place: by its name or its kind (the places of the catalog and of this world's data), else by the position it carries (lat and lon).
+// What has no known place is said plainly; nothing here reads a tab's own cards: every view hands things over through things.show.
+export const view = () => ok({ id: 'geo.map', noun: 'map', words: ['map', 'atlas', 'world map', 'pin', 'pins'], aspects: ['geographic'], many: true, kinds: null });
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
+const keyOf = (w) => String(w ?? '').toLowerCase().trim().replace(/[\s-]+/g, '_');
+function _adopt(ctx, { things, thing, facts } = {}) {
+  const list = [...(things ?? (thing ? [thing] : [])), ...((facts?.places ?? []).map((p) => ({ name: p, kind: 'place', attrs: {} })))];
+  if (!list.length) return no('unsupported', 'I was given nothing to put on the map.');
+  const D = db(ctx), s = ctx.state;
+  const found = [], lost = [];
+  for (const t of list) {
+    budget.tick('map.adopt');
+    const name = t.name ?? t.label ?? String(t.kind ?? '').replace(/_/g, ' ');
+    const e = [t.name, t.label, t.kind].map((k) => place(D, keyOf(k))).find((x) => x && x.lat !== null && x.kind !== 'region')
+      ?? (Number.isFinite(Number(t.attrs?.lat)) && Number.isFinite(Number(t.attrs?.lon)) ? { name, kind: 'point', lat: Number(t.attrs.lat), lon: Number(t.attrs.lon) } : null);
+    if (e) found.push(e); else lost.push(name);
+  }
+  const miss = lost.length ? ` I do not know where ${list_(lost)} ${lost.length === 1 ? 'is' : 'are'}, so ${lost.length === 1 ? 'it is' : 'they are'} not on the map.` : '';
+  if (!found.length) return no('unsupported', miss.trim());
+  tab(ctx);
+  const added = [];
+  for (const e of found) if (marker(s, D, e, e.kind === 'point' ? `${deg(e.lat, e.lon)}` : undefined)) added.push(e.name);
+  if (found.length === 1) { const e = found[0]; if (e.kind === 'point') viewPoint(s, e.lat, e.lon, 6); else focusOn(s, D, e); }
+  else { viewBox(s, union(found.map((e) => [e.lat, e.lon, e.lat, e.lon]))); s.focus = null; }
+  const names = found.map((e) => e.name);
+  const say = found.length === 1 ? `${added.length ? 'I put a pin on' : ''}${added.length ? ' ' : ''}${added.length ? names[0] : `${names[0]} is already on the map`}.` : `I put ${added.length === found.length ? '' : `${added.length} new `}pins on ${list_(names)}${added.length < found.length ? ` (${found.length - added.length} already there)` : ''}.`;
+  return ok(`${say}${miss}`);
+}
+const list_ = list;
+export const adopt = undoable(_adopt);
+
 // ---- undo ------------------------------------------------------------------------------------------------
 const MAX_UNDO = 30;
 const snapshot = (st) => { const { history, future, ...rest } = st; return JSON.stringify(rest); };

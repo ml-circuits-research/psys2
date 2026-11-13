@@ -20,6 +20,7 @@ import {
   registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey, partsOf,
 } from './scene.mjs?v=3549ba4382';
 
+import { habitat, adviceFor } from '../../src/knowledge/commonsense.mjs';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 import * as space from '../space/space.mjs?v=0c5c89b98e';
 import * as rel from '../space/pieces.mjs?v=7a5af05c50';
 import * as solver from '../space/solver.mjs?v=a9e4428ba1';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
@@ -147,6 +148,8 @@ function ensure(ctx) {
   for (const o of s.objects ?? []) ensureCustom(o);   // pieces and groups come back from a saved state with their shape
   for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
   loadUsualPlaces(ctx);
+  curKnow = ctx.knowledge ?? null;
+  saidPlace = null;
   placeNote = null;
   curScene = s;
   return s;
@@ -154,6 +157,9 @@ function ensure(ctx) {
 
 // ---- where things usually are: the facts of common.sense (worlds/common.sense/kb.sop), read from the session through the world's imports; no table of kinds here
 let USUAL = new Map();
+let RULED = new Set();     // kinds whose rule (common.sense.rule) says the advice itself in the matrix reasoner; for any other kind the knowledge tier is asked (T3 rule transfer)
+let saidPlace = null;      // the place word the user said when it is read as the ground band ("in the water": the water of the picture)
+let curKnow = null;        // the knowledge of the session (the catalog with what the user taught), for the kinds this world has no row for
 const NEEDS = new Set();   // kinds that cannot be anywhere else than their place (a fish): the place is made when the picture has none   // kind -> 'sky' | 'ground' | 'water' | 'horizon' (the far edge of the ground); a kind with no row is placed anywhere ('any')
 let curScene = null;        // the picture the running operation works on (for the words that depend on whether there is water)
 let placeNote = null;    // what the last placing did that the user did not ask for ("I put the fish in the pond."), said once after the drawing
@@ -167,8 +173,10 @@ function loadUsualPlaces(ctx) {
     if (ctx.val(w, 'must') === 'yes') NEEDS.add(ctx.val(w, 'kind'));
   }
   if (m.size) USUAL = m;
+  try { RULED = ctx.rulesAdvise ? new Set(ctx.find('common.sense.rule').map((w) => ctx.val(w, 'kind'))) : new Set(); } catch { RULED = new Set(); }   // with the ops reasoner no rule speaks: every kind goes through the knowledge tier
 }
-const anchorOf = (kind) => USUAL.get(kind) ?? (KINDS[kind]?.region ? 'ground' : 'any');   // a place (lake, road, field) lies on the ground
+const knownAnchor = (kind) => { const z = habitat(curKnow, String(kind).replace(/_/g, ' '))?.zones?.[0]; return z ?? null; };   // delegation: a kind this world has no row for is asked of the knowledge tier (catalog and taught)
+const anchorOf = (kind) => USUAL.get(kind) ?? knownAnchor(kind) ?? (KINDS[kind]?.region ? 'ground' : 'any');   // a place (lake, road, field) lies on the ground
 const onGround = (kind) => ['ground', 'horizon'].includes(anchorOf(kind));
 const byId = (s, id) => s.objects.find((o) => o.id === id);
 const effectiveColor = (o) => o.color ?? defaultColor(kindKey(o));
@@ -629,6 +637,8 @@ function placeRegion(s, o, region) {
   const spot = placeInRegion(region, b.w, b.h, anchorOf(kindKey(o)));
   o.x = spot.x; o.y = spot.y;
   if (region === 'sky' || region === 'ground') o.zone = region;   // the user named the sky or the ground: common.sense may say it when that is not where such a thing usually is
+  if ((region === 'sky' || region === 'ground') && !RULED.has(kindKey(o)) && !placeNote) { const adv = adviceFor(curKnow, kindName(kindKey(o)), saidPlace ?? region); if (adv) placeNote = `(${adv})`; }
+  saidPlace = null;   // the kinds without a rule of this world's own: the knowledge tier says it, in both reasoners
   if (region === 'ground') { // a free spot on the ground band
     const keep = o.y; defaultSpotOn(s, o, 'ground'); if (!Number.isFinite(o.y)) o.y = keep;
   }
@@ -1309,7 +1319,7 @@ export function parseDest(text) {
   if (/\b(to the front|forward|to the top of everything|in front of everything)\b/.test(j)) return { kind: 'z', dir: 'front' };
   if (/\b(to the back|backward|backwards|to the bottom of everything|behind everything)\b/.test(j)) return { kind: 'z', dir: 'back' };
   // "in the water", "into the sea": the ground band (the water, sand, grass or snow the picture has)
-  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|pond|sand|beach|snow)$/.test(j) && (absentPlace(w.at(-1)) || !(kindOfWord(w.at(-1)) || (w.at(-1) === 'water' && waterBody())))) return { kind: 'region', region: 'ground' };   // a lake of the picture is a thing: the relation below
+  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|pond|sand|beach|snow)$/.test(j) && (absentPlace(w.at(-1)) || !(kindOfWord(w.at(-1)) || (w.at(-1) === 'water' && waterBody())))) { saidPlace = w.at(-1); return { kind: 'region', region: 'ground' }; }   // a lake of the picture is a thing: the relation below
   const rel = parseRelation(w);
   if (rel) return { kind: 'rel', rel: rel.rel, refs: rel.refs, closer: /\bcloser\b/.test(j) };
   if (/\b(edge|far)\b/.test(j) || edgeAmt) {

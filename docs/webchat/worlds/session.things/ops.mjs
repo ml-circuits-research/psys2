@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Operations of session.things (spec 23): learn (session.learned), sync (a view publishes its things), show (select things into a view), list. Browser-safe.
 import { parseTeach, learn as learnWire } from '../../src/knowledge/learned.mjs';
-import { ASPECTS, aspectsOf, ensure, labelOf, select, sync as syncStore, viewByWords, whyNot } from './things.mjs?v=a78328057f';
+import { ASPECTS, aspectsOf, ensure, labelOf, select, sync as syncStore, viewByWords, whyNot } from './things.mjs?v=f904abbe0f';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const ok = (value, extra = {}) => ({ status: 'supported', value, ...extra });
@@ -103,7 +103,7 @@ export function show(ctx, { ids, thing, to, from } = {}) {
   const things = sel.things;
   const facts = sel.session && view.facts ? ctx.sessionFacts?.() : null;
   const hasFacts = !!facts && !!(facts.topics?.length || facts.games?.length || facts.places?.length);
-  if (!things.length && !hasFacts) return no('missing', `There is nothing to show in the ${view.noun}: no such thing in this session yet.`);
+  if (!things.length && !hasFacts) return no('unsupported', `There is nothing to show in the ${view.noun}: no such thing in this session yet.`);
   const cells = [], lines = [], take = [];
   const about = sel.session ? 'the discussion' : sel.view ? sel.view.noun : null;
   for (const t of things) {
