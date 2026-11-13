@@ -53,9 +53,14 @@ export const SCENARIOS = {
   async plausible(o) {
     const c = await open(o);
     try {
+      await idle(c);   // a startup turn (greeting, engine warm-up) may still own the guard: a dry run then declines ("busy") by design
       const snap = () => c.pg.evaluate(() => JSON.stringify([window.psys2.session.state(), window.psys2.session.memory?.(), window.psys2.session._msg, window.psys2.session._sessionLang]));
       const before = await snap();
-      const dry = await c.pg.evaluate(async () => [await window.psys2.session.dryRead('make a house', { language: 'en' }), await window.psys2.session.dryRead('fă o casă mare', { language: 'ro' }), await window.psys2.session.dryRead('make a house and', { language: 'en' })]);
+      // a background warm-up turn of the worker may own the turn guard for a moment: a dry run then declines ("busy") by design, so each read is retried until it is not busy
+      const dry = await c.pg.evaluate(async () => {
+        const read = async (t, language) => { let r; for (let i = 0; i < 40; i++) { r = await window.psys2.session.dryRead(t, { language }); if (r.reason !== 'busy') break; await new Promise((x) => setTimeout(x, 150)); } return r; };
+        return [await read('make a house', 'en'), await read('fă o casă mare', 'ro'), await read('make a house and', 'en')];
+      });
       check('dry run: complete readings found, no side effects on the session', dry[0].complete && dry[1].complete && (await snap()) === before, JSON.stringify(dry.map((d) => d.reason)));
       for (const [label, text, settings] of [['English', 'make a house', {}], ['Romanian', 'desenează o casă', { language: 'ro' }]]) {
         await sleep(2200);   // the rate guard: one voice message in 2 s

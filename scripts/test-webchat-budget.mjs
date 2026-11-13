@@ -128,7 +128,8 @@ export const SCENARIOS = {
     try {
       const known = await c.say('câte zile are iunie?', { timeout: 30000 });
       let calls = await c.fake.calls();
-      check('fallback: a message the rules understand never reaches the Translator', known.ok && !calls.some((x) => x.op === 'translate' && x.text === 'câte zile are iunie?'), `${calls.length} calls`);
+      // P7 (owner rule 2026-11-12): with a Translator present it is the FIRST choice, also for a message the rules understand; the rules only answer when it is missing, late or rejected
+      check('fallback: with a Translator present it is asked first (translator-first, P7) and the message is answered', known.ok && /30|treizeci/.test(known.reply) && calls.some((x) => x.op === 'translate' && x.text === 'câte zile are iunie?'), `${calls.length} calls`);
       const r = await c.say(MSG, { timeout: 30000 });
       calls = await c.fake.calls();
       const u = await usageOf(c);

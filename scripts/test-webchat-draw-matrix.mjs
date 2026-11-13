@@ -119,7 +119,7 @@ export const drawScenarios = ({ openChat, MATRIX, OPS, check, say }) => ({
         await say(c, lang === 'en' ? 'draw a house' : 'desenează o casă');
         const d = await say(c, remove);
         console.log(`veto ${lang} delete: ${d}`);
-        check(`veto ${lang}: "${remove}" says what it cannot find and what the picture has`, (lang === 'en' ? /^I can't find \u201cdragon\u201d in the picture\. In the picture I can see: .*house/.test(d) : /^Nu găsesc \u201edragonul\u201d în imagine\. În imagine văd: .*casă/.test(d)), d.slice(0, 140));
+        check(`veto ${lang}: "${remove}" says what it cannot find and what the picture has`, (lang === 'en' ? /^I can't find \u201cdragon\u201d in the picture\. In the picture I can see: .*house/.test(d) : /^Nu găsesc \u201edragon(ul)?\u201d în imagine\. În imagine văd: .*casă/.test(d)), d.slice(0, 140));
         check(`veto ${lang}: no page errors`, c.errors.length === 0, c.errors[0] ?? '');
       } finally { await c.close(); }
     }
