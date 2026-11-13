@@ -1,0 +1,10 @@
+# k.scenes/shards/things-p: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 192 drawable things whose name starts with "p"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.penguin k.scenes.thing name=penguin place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.pizza k.scenes.thing name=pizza place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.plane k.scenes.thing name=plane place=sky size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.planet k.scenes.thing name=planet place=sky size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.plant k.scenes.thing name=plant place=ground size=small named=model core.source="hand-core 1"

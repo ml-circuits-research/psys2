@@ -1,0 +1,12 @@
+# k.words/shards/do: noun and verb senses of the words from "do" to "dozens" (first letters "do").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.dog.noun.1 k.words.sense word=dog pos=noun n=1 gloss="a member of the genus Canis (probably descended from the common wolf) that has been domesticated by man since prehistoric times; occurs in many breeds" synonym="domestic dog" synonym="Canis familiaris" is_a=canine is_a="domestic animal" core.source="wordnet 3.1"
+@k.words.dog.noun.2 k.words.sense word=dog pos=noun n=2 gloss="a dull unattractive unpleasant girl or woman" synonym=frump is_a="unpleasant woman" core.source="wordnet 3.1"
+@k.words.dog.noun.3 k.words.sense word=dog pos=noun n=3 gloss="informal term for a man" is_a=chap core.source="wordnet 3.1"
+@k.words.dog.verb.1 k.words.sense word=dog pos=verb n=1 gloss="go after with the intent to catch" synonym=chase synonym="chase after" synonym=trail synonym=tail synonym=tag synonym="give chase" synonym="go after" synonym=track is_a=pursue core.source="wordnet 3.1"
+@k.words.door.noun.1 k.words.sense word=door pos=noun n=1 gloss="a swinging or sliding barrier that will close the entrance to a room or building or vehicle" is_a="movable barrier" part_of=doorway core.source="wordnet 3.1"
+@k.words.door.noun.2 k.words.sense word=door pos=noun n=2 gloss="the entrance (the space in a wall) through which you enter or leave a room or building; the space that a door can close" synonym=doorway synonym="room access" synonym=threshold is_a=entrance part_of=wall core.source="wordnet 3.1"
+@k.words.door.noun.3 k.words.sense word=door pos=noun n=3 gloss="anything providing a means of access (or escape)" is_a=entree core.source="wordnet 3.1"

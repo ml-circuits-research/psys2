@@ -1,0 +1,32 @@
+# k.animals/shards/reptiles-and-amphibians: 13 reptiles and amphibians: class, legs, covering, sound, habitat, diet, food, the name of the young, abilities; and their plural forms and other names.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.animals.animal.snake k.animals.animal name=snake class=reptile legs=0 covering=scales sound=hiss habitat=forest habitat=desert habitat=grassland diet=carnivore eats=mice eats=frogs drawing=snake core.source="hand-core 1"
+@k.animals.animal.lizard k.animals.animal name=lizard class=reptile legs=4 covering=scales habitat=desert habitat=forest eats=insects baby=hatchling can=climb can=run drawing=lizard core.source="hand-core 1"
+@k.animals.animal.crocodile k.animals.animal name=crocodile class=reptile legs=4 covering=scales habitat=river habitat=swamp diet=carnivore eats=fish eats=meat baby=hatchling can=swim drawing=crocodile core.source="hand-core 1"
+@k.animals.animal.alligator k.animals.animal name=alligator class=reptile legs=4 covering=scales habitat=swamp habitat=river diet=carnivore eats=fish eats=meat baby=hatchling can=swim core.source="hand-core 1"
+@k.animals.animal.turtle k.animals.animal name=turtle class=reptile legs=4 covering=shell covering=scales habitat=sea habitat=pond baby=hatchling can=swim drawing=turtle core.source="hand-core 1"
+@k.animals.animal.tortoise k.animals.animal name=tortoise class=reptile legs=4 covering=shell covering=scales habitat=grassland habitat=desert diet=herbivore eats=grass eats=leaves baby=hatchling drawing=tortoise core.source="hand-core 1"
+@k.animals.animal.chameleon k.animals.animal name=chameleon class=reptile legs=4 covering=scales habitat=jungle habitat=forest diet=carnivore eats=insects baby=hatchling can=climb drawing=chameleon core.source="hand-core 1"
+@k.animals.animal.iguana k.animals.animal name=iguana class=reptile legs=4 covering=scales habitat=jungle diet=herbivore eats=leaves eats=fruit baby=hatchling can=climb can=swim core.source="hand-core 1"
+@k.animals.animal.gecko k.animals.animal name=gecko class=reptile legs=4 covering=scales habitat=house habitat=forest habitat=desert diet=carnivore eats=insects baby=hatchling can=climb core.source="hand-core 1"
+@k.animals.animal.frog k.animals.animal name=frog class=amphibian legs=4 covering=skin sound=croak habitat=pond habitat=river diet=carnivore eats=insects baby=tadpole can=jump can=swim drawing=frog core.source="hand-core 1"
+@k.animals.animal.toad k.animals.animal name=toad class=amphibian legs=4 covering=skin sound=croak habitat=garden habitat=pond diet=carnivore eats=insects eats=worms baby=tadpole can=jump can=swim drawing=toad core.source="hand-core 1"
+@k.animals.animal.newt k.animals.animal name=newt class=amphibian legs=4 covering=skin habitat=pond diet=carnivore eats=insects eats=worms can=swim core.source="hand-core 1"
+@k.animals.animal.salamander k.animals.animal name=salamander class=amphibian legs=4 covering=skin habitat=forest habitat=pond diet=carnivore eats=insects eats=worms core.source="hand-core 1"
+
+@k.animals.word.snake core.word text=snakes means=snake of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.lizard core.word text=lizards means=lizard of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.crocodile core.word text=crocodiles means=crocodile of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.alligator core.word text=alligators means=alligator of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.turtle core.word text=turtles means=turtle of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.tortoise core.word text=tortoises means=tortoise of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.chameleon core.word text=chameleons means=chameleon of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.iguana core.word text=iguanas means=iguana of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.gecko core.word text=geckos means=gecko of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.frog core.word text=frogs means=frog of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.toad core.word text=toads means=toad of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.newt core.word text=newts means=newt of=k.animals.animal.name core.source="hand-core 1"
+@k.animals.word.salamander core.word text=salamanders means=salamander of=k.animals.animal.name core.source="hand-core 1"

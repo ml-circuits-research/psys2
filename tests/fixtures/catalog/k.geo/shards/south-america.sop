@@ -1,0 +1,6 @@
+# k.geo/shards/south-america: South America: 13 countries and territories, 63 cities, 121 rivers, 52 mountains, 22 mountain ranges.
+# sources: natural-earth 5.1.2 (Natural Earth, public domain)
+# license: public-domain
+# script: tools/import/geo.mjs
+
+@k.geo.country.BRA k.geo.country name=Brazil code=BRA formal="Federative Republic of Brazil" capital=Brasília continent="South America" region="South America" population=211049527 independent=true lat=-12.1 lon=-49.56 west=-74 south=-33.74 east=-34.81 north=5.26 core.source="natural-earth 5.1.2"

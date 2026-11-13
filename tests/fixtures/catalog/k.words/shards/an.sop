@@ -1,0 +1,9 @@
+# k.words/shards/an: noun and verb senses of the words from "an" to "anxiety" (first letters "an").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ancient.noun.1 k.words.sense word=ancient pos=noun n=1 gloss="a very old person" synonym=antediluvian is_a=oldster core.source="wordnet 3.1"
+@k.words.ancient.noun.2 k.words.sense word=ancient pos=noun n=2 gloss="a person who lived in ancient times" is_a=person core.source="wordnet 3.1"
+@k.words.animal.noun.1 k.words.sense word=animal pos=noun n=1 gloss="a living organism characterized by voluntary movement" synonym="animate being" synonym=beast synonym=brute synonym=creature synonym=fauna is_a=organism core.source="wordnet 3.1"
+@k.words.ant.noun.1 k.words.sense word=ant pos=noun n=1 gloss="social insect living in organized colonies; characteristically the males and fertile queen have wings during breeding season; wingless sterile females are the workers" synonym=emmet synonym=pismire is_a="hymenopterous insect" core.source="wordnet 3.1"

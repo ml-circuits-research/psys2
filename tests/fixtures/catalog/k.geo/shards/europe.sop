@@ -1,0 +1,10 @@
+# k.geo/shards/europe: Europe: 50 countries and territories, 192 cities, 245 rivers, 83 mountains, 27 mountain ranges.
+# sources: natural-earth 5.1.2 (Natural Earth, public domain)
+# license: public-domain
+# script: tools/import/geo.mjs
+
+@k.geo.country.FRA k.geo.country name=France code=FRA formal="French Republic" capital=Paris continent=Europe region="Western Europe" population=67059887 independent=true lat=46.7 lon=2.55 west=-61.79 south=-21.37 east=55.84 north=51.1 core.source="natural-earth 5.1.2"
+@k.geo.country.ITA k.geo.country name=Italy code=ITA formal="Italian Republic" capital=Rome continent=Europe region="Southern Europe" population=60297396 independent=true lat=44.73 lon=11.08 west=6.63 south=36.69 east=18.49 north=47.08 core.source="natural-earth 5.1.2"
+@k.geo.country.ESP k.geo.country name=Spain code=ESP formal="Kingdom of Spain" capital=Madrid continent=Europe region="Southern Europe" population=47076781 independent=true lat=40.09 lon=-3.46 west=-18.16 south=27.65 east=4.32 north=43.76 core.source="natural-earth 5.1.2"
+@k.geo.city.FRA.Paris k.geo.city name=Paris country=France capital_of=France population=9904000 lat=48.87 lon=2.33 core.source="natural-earth 5.1.2"
+@k.geo.city.GBR.London k.geo.city name=London country="United Kingdom" capital_of="United Kingdom" population=8567000 lat=51.5 lon=-0.12 core.source="natural-earth 5.1.2"

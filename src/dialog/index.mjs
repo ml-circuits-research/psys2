@@ -31,6 +31,7 @@ import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mj
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
 import { checkValues } from './value-check.mjs';
 import { Discourse } from './discourse.mjs';
+import { Dialogue } from './dialogue.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
@@ -134,21 +135,35 @@ const NO_RULES = { translate: (text) => ({ text: '', alignment: [], unknown: [St
 export async function translateParts(parts, translator, lang, userWords = null) {
   const flat = parts.map((p) => ({ ...p }));
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
-  // RO-TRANSLATE-FALLBACK (spec 06): with a switch translator in 'fallback' mode the rules and templates write first; a run they cannot put into the
-  // reply language goes to the on-device Translator (checked), and a reply nothing could translate becomes a Romanian sentence, never English.
+  // M4, output side (spec 06): one path for every language. The candidates of a run are the machine translators' (the browser Translator, the on-device model: each
+  // alone, checked) and the language pack's rules translator, if it has the pair; the first complete one wins (the machine ones first, owner rule P7); a run nothing
+  // could translate leaves the reply in English, and in a Romanian session it becomes a Romanian sentence, never English.
   const fb = lang !== 'en' && translator.fallbackMode?.() === 'fallback';
-  // MT-SERIOUS: only Romanian has rules; any other language goes straight to the on-device translation (the stub says "not translated" for it)
   const ownRules = fb && (translator.rules?.supports?.('en', lang) ?? true);
   const prim = fb ? (ownRules ? (translator.rules ?? translator) : NO_RULES) : translator;
   const routes = [];
-  let fbCalls = 0;
-  // P7: with the Translator as the first choice it is asked before the rules; after it failed once in this reply it is not asked again (the rules write the rest)
-  const first = fb && !!translator.translatorFirst?.();
-  let dead = false;
-  const viaBrowser = async (text) => {
-    if (!translator.viaBrowser || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
+  let fbCalls = 0, dead = false;   // after a failed machine round in this reply the rules write the rest
+  const viaMachine = async (text) => {
+    if (!fb || !translator.candidatesViaMT || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
     fbCalls++;
-    try { const r = await guard.abortable(translator.viaBrowser(text, { from: 'en', to: lang }), 'translate'); if (!r && first) dead = true; return r; } catch (e) { if (e instanceof TurnAborted) throw e; if (first) dead = true; return null; }
+    try {
+      const cs = await guard.abortable(translator.candidatesViaMT(text, { from: 'en', to: lang }), 'translate');
+      const ok = (cs ?? []).find((c) => !c.rejected && c.text && !(typeof translator.leftovers === 'function' && translator.leftovers(c.text, lang).length));
+      if (!ok) dead = true;
+      return ok ? ok.translation ?? { text: ok.text } : null;
+    } catch (e) { if (e instanceof TurnAborted) throw e; dead = true; return null; }
+  };
+  const viaRules = async (text) => { try { return await guard.abortable(prim.translate(text, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; return null; } };
+  const isComplete = (r, t) => !!t && !r?.unknown?.length && !r?.untranslatable?.length && !(typeof translator.leftovers === 'function' && translator.leftovers(t, lang).length);
+  /** The one candidate chooser: the machine candidates, then the rules (and the rules again on the fallback wording). { text, route, incomplete }; null when `machineOnly` and no machine answered. */
+  const choose = async (src, { fallback = null, machineOnly = false } = {}) => {
+    const m = await viaMachine(src);
+    if (m && textOf(m)) return { text: textOf(m).trim(), route: 'translator-out', incomplete: false };
+    if (machineOnly) return null;
+    let r = await viaRules(src);
+    if (r?.unknown?.length && fallback) r = await viaRules(fallback);
+    const t = textOf(r);
+    return { text: t ?? '', route: null, incomplete: !isComplete(r, t) };
   };
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
@@ -157,23 +172,13 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     if (!flat[i].translate) {
       const { join, fallback, incomplete, ...rest } = flat[i];
       if (rest.reading && lang !== 'en') {   // our own English reading of the user's words ("I took that as: ..."): shown in the reply language, never in English
-        const inner = rest.text.replace(/^"|"$/g, '');
-        let r = null;
-        const bf = first ? await viaBrowser(inner) : null;
-        if (bf) routes.push('translator-out');
-        else try { r = await guard.abortable(prim.translate(inner, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; }
-        let tt = bf ? bf.text.trim() : textOf(r);
-        if (!bf && (!tt || r?.unknown?.length || r?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(tt, lang).length))) {
-          tt = null;
-          const b = fb ? await viaBrowser(inner) : null;
-          if (b) { tt = b.text.trim(); routes.push('translator-out'); }
-        }
-        if (tt) { out.push({ ...rest, text: `"${tt}"` }); i++; continue; }
+        const c = await choose(rest.text.replace(/^"|"$/g, ''));
+        if (c.text && !c.incomplete) { if (c.route) routes.push(c.route); out.push({ ...rest, text: `"${c.text}"` }); i++; continue; }
         if (translator.leftovers) complete = false;
       }
-      if (incomplete && fb && rest.en) {   // an example the rules could not translate: the Translator tries it on its own
-        const b = await viaBrowser(rest.en.replace(/^"|"$/g, ''));
-        if (b) { out.push({ ...rest, text: `"${b.text.trim()}"`, en: rest.en }); routes.push('translator-out'); i++; continue; }
+      if (incomplete && fb && rest.en) {   // an example the rules could not translate: the machine translators try it on their own
+        const c = await choose(rest.en.replace(/^"|"$/g, ''), { machineOnly: true });
+        if (c) { out.push({ ...rest, text: `"${c.text}"`, en: rest.en }); routes.push(c.route); i++; continue; }
       }
       if (incomplete) complete = false;
       out.push(rest); i++; continue;
@@ -184,19 +189,10 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     i = j;
     const src = run.map((p) => p.text).join('');
     if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
-    if (first) { const b = await viaBrowser(src); if (b) { out.push({ text: fitFragment(src, b.text), translate: true, src }); routes.push('translator-out'); continue; } }
-    let res = null;
-    try { res = await guard.abortable(prim.translate(src, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; res = null; }
-    if (res?.unknown?.length && run.length === 1 && run[0].fallback) {
-      try { res = await guard.abortable(prim.translate(run[0].fallback, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; res = null; }
-    }
-    const t = textOf(res);
-    if (!t || res?.unknown?.length || res?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(t, lang).length)) {
-      const b = fb ? await viaBrowser(src) : null;
-      if (b) { out.push({ text: fitFragment(src, b.text), translate: true, src }); routes.push('translator-out'); continue; }
-      complete = false;
-    }
-    out.push({ text: t ? fitFragment(src, quoteUserWords(t, userWords)) : src, translate: true, src });
+    const c = await choose(src, { fallback: run.length === 1 ? run[0].fallback : null });
+    if (c.route) { out.push({ text: fitFragment(src, c.text), translate: true, src }); routes.push(c.route); continue; }
+    if (c.incomplete) complete = false;
+    out.push({ text: c.text ? fitFragment(src, quoteUserWords(c.text, userWords)) : src, translate: true, src });
   }
   let result;
   if (!complete) {   // keep the whole reply in English: translated runs and the examples (which carry their English text in `en`) revert; quoted user text stays as typed
@@ -309,6 +305,8 @@ export class DialogSession {
     this.isession = engine.interp.createSession();
     /** Discourse memory (spec 11, ADR-006): recent frames and the pending expectation. */
     this.discourse = new Discourse(this);
+    /** The dialogue module (WORLDS-AS-MODULES M1, worlds/session.dialogue): the focus, the kind of every turn, the trace the why-answers are read from. */
+    this.dialogue = new Dialogue(this);
     /** Persistent discussions and world instances (spec 13, ADR-008): bookkeeping around the turn, never changes a reading. */
     this.astra = createSessionAstra(this);
     this.sources = new Map();
@@ -1201,13 +1199,14 @@ export class DialogSession {
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
     let rs = null;
     try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
-    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
+    return { v: 1, discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
   restoreMemory(mem) {
     if (!mem || typeof mem !== 'object' || mem.v !== 1) return false;
     this.discourse.load(mem.discourse);
+    if (mem.dialogue) this.dialogue.load(mem.dialogue);
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
     if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
     if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
@@ -1221,7 +1220,7 @@ export class DialogSession {
     return {
       isession: this.isession.clone(), msg: this._msg, recent: [...(this._recentWorlds ?? [])], lang: [this._sessionLang, this._weakRo],
       discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
-      sources: new Set(this.sources.keys()), astra: this.astra?.capture(),
+      sources: new Set(this.sources.keys()), astra: this.astra?.capture(), dialogue: this.dialogue.toJSON(),
     };
   }
 
@@ -1231,6 +1230,7 @@ export class DialogSession {
     this.isession = snap.isession; this._msg = snap.msg; this._recentWorlds = snap.recent; [this._sessionLang, this._weakRo] = snap.lang;
     Object.assign(this.discourse, snap.discourse);
     this.astra?.rollback(snap.astra);
+    if (snap.dialogue) this.dialogue.load(snap.dialogue);
     for (const k of [...this.sources.keys()]) if (!snap.sources.has(k)) this.sources.delete(k);
   }
 
@@ -1289,8 +1289,10 @@ export class DialogSession {
     return r;
   }
 
-  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader } = {}, override = null) {
+  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w);
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
     const { set, interp, translator } = engine;
@@ -1318,20 +1320,11 @@ export class DialogSession {
       }
       if (lang !== 'en' && lang !== 'unknown') {
         const heard = lang === 'ro' ? soundAlikes(text, this.context().tabWorld) : text;
-        const fbMode = translator.fallbackMode?.() === 'fallback';   // rules first; the Translator is asked only by `_send` when the reading is poor
-        const noRules = fbMode && !(translator.rules?.supports?.(lang, 'en') ?? true);
-        if (noRules && !override) {   // MT-SERIOUS: a language without rules is read by the on-device translation; when it is not ready or fails the message stays as typed (not understood)
-          const b = guard.soft() ? null : await perf.time('translate', () => guard.abortable(translator.viaBrowser?.(text, { from: lang, to: 'en' }) ?? null, 'translate').catch((e) => { if (e instanceof TurnAborted) throw e; return null; }));
-          translation = b ?? { text, alignment: [], unknown: [text], notes: ['the on-device translation did not answer'], confidence: 0 };
-        } else translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
+        const fbMode = translator.fallbackMode?.() === 'fallback';   // M4: `_send` chose the English among the candidates (`override`); without one the language pack's rules translate (translators off, soft limit, nothing translated)
+        translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = override?.english ?? textOf(translation) ?? text;
         // INVARIANT (every turn gets a reply): a translator that cannot map a sentence ("negation could not be mapped") returns an empty text; the message then stays as typed, so that the reading is poor and says so (or the browser Translator is asked)
         if (!english.trim() && text.trim()) { english = text; translation = { ...(translation ?? {}), text, alignment: [], unknown: [], notes: [...(translation?.notes ?? []), 'the rules translation was empty'], confidence: 0 }; }
-        // an engine that returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare") is retried through the rules translator, which covers the app's own verbs and nouns
-        const rules = translator.rules;
-        if (!override && rules && rules !== translator && lang === 'ro' && english.trim().toLowerCase() === text.trim().toLowerCase()) {
-          try { const again = await guard.abortable(rules.translate(heard, { from: lang, to: 'en' }), 'translate'); if (textOf(again) && textOf(again).trim().toLowerCase() !== text.trim().toLowerCase()) { translation = again; english = textOf(again); } } catch { /* keep the first reading */ }
-        }
       } else lang = 'en';
     }
     this._waLang = lang;   // world-aware reading (spec 16): the words a Romanian message leaves out are the translator's, not the reading's
@@ -1356,13 +1349,16 @@ export class DialogSession {
     let meta = null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
     let formalText = english;
     if (!icpt) {
-      meta = await perf.time('discourse', () => disc.meta(english, pend, sid));
+      // M1: the kind of the turn is read BEFORE any tab world: a fragment is completed from the focus, a complaint or a why-question is answered from the trace, a correction amends the last request
+      meta = await perf.time('dialogue', () => this.dialogue.turn(english, { pend, sid, correction })) ?? await perf.time('discourse', () => disc.meta(english, pend, sid));
       if (meta?.rewrite) formalText = meta.rewrite;
       if (meta?.pre) pre = meta.pre;
       if (!pre && !meta) {
         if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
         if (!pre) pre = await perf.time('discourse', () => disc.ellipsis(english, sid));
         if (!pre) pre = await disc.pronoun(english, sid);
+        // M1: what the frames of the discourse layer could not complete (no verb of its own, a list) is completed from the dialogue focus; the tab gets a complete request or nothing
+        if (!pre) { const c = await perf.time('dialogue', () => this.dialogue.complete(english, sid)); if (c?.pre) { pre = c.pre; meta = null; } else if (c?.rewrite) formalText = c.rewrite; }
         // "and how many days are in a week?" with nothing to continue: the connective joins nothing, the question stands on its own
         // "and a heading Dairy too": a fragment nothing could continue loses its trailing "too" (it must not become part of the text)
         if (!pre && english !== engine.interp.lang.stripConnective(english)) formalText = engine.interp.lang.stripTrailing(english);
@@ -1464,7 +1460,7 @@ export class DialogSession {
       }
       // honest scope: the world of the open tab may refuse a message it cannot talk about, in its own words, with the nearest things it can (hook `outOfScope`, the Talk tab)
       if (seg.unparsed) {
-        const tw = this.context().tabWorld;
+        const cx = this.context(), tw = cx.tabWorld ?? cx.lastWorld;   // no tab open: the world last used says what it can do
         const oos = tw ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
         if (typeof oos?.say === 'string' && oos.say) {
           lines.push([T(oos.say)]);
@@ -1615,6 +1611,7 @@ export class DialogSession {
     this.isession.rs?.commitTurn(this._msg, english);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore, kind: ['undo', 'redo'].includes(meta?.info?.kind) ? 'keep' : segments.some((x) => /undo/i.test(x.match?.patternId ?? '')) ? 'undo' : segments.some((x) => /redo/i.test(x.match?.patternId ?? '')) ? 'redo' : null });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
+    this.dialogue.record({ english, original: text, kind: this.dialogue._kind ?? meta?.info?.dialogue ?? (correction ? 'correction' : 'new'), metaKind: meta?.info?.kind ?? null, segments, statuses, reply: englishReply, effect: disc.actions[0]?.turn === this._msg, tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };
     const feedback = meta?.feedback ?? null;
     const state = {};

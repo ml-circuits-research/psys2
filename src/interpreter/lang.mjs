@@ -195,7 +195,7 @@ export function makeLang(source) {
     return null;
   };
 
-  return { except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+  return { phrase, except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;

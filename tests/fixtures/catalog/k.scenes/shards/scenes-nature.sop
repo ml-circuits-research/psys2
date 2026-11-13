@@ -1,0 +1,26 @@
+# k.scenes/shards/scenes-nature: 19 scenes in nature and the countryside (beach, farm, forest, mountains, meadow, river, lake, pond, desert, jungle, savanna, arctic, island, garden, park, orchard, campsite, field, picnic): what is usually there, how many, where in the picture, what happens there, the time, weather and season that fit; and other names of the scenes.
+# sources: hand-core 1 (hand-written in this repository: tools/scenes-data.mjs)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+# beach
+# farm
+# forest
+# mountains
+# meadow
+# river
+# lake
+# pond
+# desert
+# jungle
+# savanna
+# arctic
+# island
+# garden
+# park
+# orchard
+# campsite
+# field
+# picnic
+
+@k.scenes.scene.river k.scenes.scene name=river kind=outdoors ground=grass time=day happens=fish happens="paddle a canoe" happens="skip stones" happens=swim drawing=river core.source="hand-core 1"
+@k.scenes.scene.island k.scenes.scene name=island kind=outdoors ground=sand time=day weather=sunny happens="look for treasure" happens="wait for a ship" happens=swim drawing=island core.source="hand-core 1"

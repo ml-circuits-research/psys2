@@ -103,3 +103,10 @@ test('language codes: any registry code is valid, tags and names come from the c
   registerLanguages(['fr']);
   assert.equal(l.set('fr'), true); assert.equal(l.tag(), 'fr');
 });
+
+test('checker: a name in another script than the target (Берлин, Ана) is transliterated, so it is not compared letter by letter; the same script still is', () => {
+  assert.equal(checkTranslation('Покажи ми Берлин.', 'Show me Berlin.', { from: 'bg', to: 'en' }), null);
+  assert.equal(checkTranslation('Ана има 8 молива.', 'Anna has 8 pencils.', { from: 'bg', to: 'en' }), null);
+  assert.match(checkTranslation('Show me Paris and Rome now', 'Show me the capital now', { from: 'fr', to: 'en' }) ?? '', /names not preserved/);
+  assert.match(checkTranslation('Покажи ми 8 молива', 'Show me pencils', { from: 'bg', to: 'en' }) ?? '', /numbers not preserved/);
+});

@@ -1,0 +1,11 @@
+# k.words/shards/ar: noun and verb senses of the words from "ar" to "aryan" (first letters "ar").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.are.noun.1 k.words.sense word=are pos=noun n=1 gloss="a unit of surface area equal to 100 square meters" synonym=ar is_a="area unit" part_of=hectare core.source="wordnet 3.1"
+@k.words.arm.noun.1 k.words.sense word=arm pos=noun n=1 gloss="a human limb; technically the part of the superior limb between the shoulder and the elbow but commonly used to refer to the whole superior limb" is_a=limb part_of=body part_of=homo core.source="wordnet 3.1"
+@k.words.arm.noun.2 k.words.sense word=arm pos=noun n=2 gloss="any projection that is thought to resemble a human arm" synonym=branch synonym=limb is_a=projection core.source="wordnet 3.1"
+@k.words.arm.noun.3 k.words.sense word=arm pos=noun n=3 gloss="any instrument or instrumentality used in fighting or hunting" synonym=weapon synonym="weapon system" is_a=instrument part_of=weaponry core.source="wordnet 3.1"
+@k.words.arm.verb.1 k.words.sense word=arm pos=verb n=1 gloss="prepare oneself for a military confrontation" synonym="build up" synonym=fortify synonym=gird core.source="wordnet 3.1"
+@k.words.arm.verb.2 k.words.sense word=arm pos=verb n=2 gloss="supply with arms" is_a=supply core.source="wordnet 3.1"

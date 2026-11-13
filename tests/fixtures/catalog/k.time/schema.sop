@@ -1,0 +1,42 @@
+# k.time: the calendar: months, weekdays, seasons by hemisphere, and spans of time (durations).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.time core.module name=k.time version=1 exports=month exports=weekday exports=season exports=duration core.source="hand-core 1"
+
+# A month of the Gregorian calendar. `n` is its number in the year; `days` in a common year, `leap_days` in a leap
+# year when that differs; `season_north` and `season_south` are its season in each hemisphere.
+@k.time.month core.type of=k.time.month shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.month.name core.slot of=k.time.month key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.time.month.n core.slot of=k.time.month key=n required=true kind=integer min=1 max=12 core.source="hand-core 1"
+@k.time.month.days core.slot of=k.time.month key=days required=true kind=integer min=28 max=31 core.source="hand-core 1"
+@k.time.month.leap_days core.slot of=k.time.month key=leap_days kind=integer min=28 max=31 core.source="hand-core 1"
+@k.time.month.season_north core.slot of=k.time.month key=season_north required=true enum=spring enum=summer enum=autumn enum=winter core.source="hand-core 1"
+@k.time.month.season_south core.slot of=k.time.month key=season_south required=true enum=spring enum=summer enum=autumn enum=winter core.source="hand-core 1"
+
+# A day of the week. `n` counts from Monday (ISO 8601); `weekend` is true for Saturday and Sunday.
+@k.time.weekday core.type of=k.time.weekday shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.weekday.name core.slot of=k.time.weekday key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.time.weekday.n core.slot of=k.time.weekday key=n required=true kind=integer min=1 max=7 core.source="hand-core 1"
+@k.time.weekday.weekend core.slot of=k.time.weekday key=weekend required=true kind=boolean core.source="hand-core 1"
+
+# A season. `n` is its order in the year, spring first; `after` names the season before it.
+@k.time.season core.type of=k.time.season shared=true closed=true complete=true core.source="hand-core 1"
+@k.time.season.name core.slot of=k.time.season key=name id=true required=true enum=spring enum=summer enum=autumn enum=winter core.source="hand-core 1"
+@k.time.season.n core.slot of=k.time.season key=n required=true kind=integer min=1 max=4 core.source="hand-core 1"
+@k.time.season.after core.slot of=k.time.season key=after required=true enum=spring enum=summer enum=autumn enum=winter core.source="hand-core 1"
+
+# A span of time: it is `count` times the span `unit` names (a week is 7 days). The second has no smaller unit here.
+@k.time.duration core.type of=k.time.duration shared=true closed=true core.source="hand-core 1"
+@k.time.duration.name core.slot of=k.time.duration key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.time.duration.count core.slot of=k.time.duration key=count kind=number min=0 core.source="hand-core 1"
+@k.time.duration.unit core.slot of=k.time.duration key=unit kind=atom kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.time.word.month core.word text=month text=months means=k.time.month core.source="hand-core 1"
+@k.time.word.weekday core.word text=weekday text=weekdays means=k.time.weekday core.source="hand-core 1"
+@k.time.word.season core.word text=season text=seasons means=k.time.season core.source="hand-core 1"
+@k.time.word.duration core.word text=long text=lasts text=duration means=k.time.duration core.source="hand-core 1"
+@k.time.word.days core.word text=days means=k.time.month.days core.source="hand-core 1"
+@k.time.word.weekend core.word text=weekend means=k.time.weekday.weekend core.source="hand-core 1"

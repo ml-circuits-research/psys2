@@ -1,0 +1,8 @@
+# k.words/shards/gi: noun and verb senses of the words from "gi" to "giving" (first letters "gi").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.giant.noun.1 k.words.sense word=giant pos=noun n=1 gloss="any creature of exceptional size" is_a=animal core.source="wordnet 3.1"
+@k.words.giant.noun.2 k.words.sense word=giant pos=noun n=2 gloss="a person of exceptional importance and reputation" synonym=colossus synonym=behemoth synonym=heavyweight synonym=titan is_a="important person" core.source="wordnet 3.1"
+@k.words.giant.noun.3 k.words.sense word=giant pos=noun n=3 gloss="an unusually large enterprise" is_a=enterprise core.source="wordnet 3.1"

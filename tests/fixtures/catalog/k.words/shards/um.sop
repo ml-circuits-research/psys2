@@ -1,0 +1,8 @@
+# k.words/shards/um: noun and verb senses of the words from "uma" to "umbrella" (first letters "um").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.umbrella.noun.1 k.words.sense word=umbrella pos=noun n=1 gloss="a lightweight handheld collapsible canopy" is_a=canopy core.source="wordnet 3.1"
+@k.words.umbrella.noun.2 k.words.sense word=umbrella pos=noun n=2 gloss="a formation of military planes maintained over ground operations or targets" is_a=defense core.source="wordnet 3.1"
+@k.words.umbrella.noun.3 k.words.sense word=umbrella pos=noun n=3 gloss="having the function of uniting a group of similar things" is_a=union core.source="wordnet 3.1"

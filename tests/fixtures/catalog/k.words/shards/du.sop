@@ -1,0 +1,11 @@
+# k.words/shards/du: noun and verb senses of the words from "dubai" to "duty" (first letters "du").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.duck.noun.1 k.words.sense word=duck pos=noun n=1 gloss="small wild or domesticated web-footed broad-billed swimming bird usually having a depressed body and short legs" is_a="anseriform bird" core.source="wordnet 3.1"
+@k.words.duck.noun.2 k.words.sense word=duck pos=noun n=2 gloss="(cricket) a score of nothing by a batsman" synonym="duck's egg" is_a=score core.source="wordnet 3.1"
+@k.words.duck.noun.3 k.words.sense word=duck pos=noun n=3 gloss="flesh of a duck (domestic or wild)" is_a=poultry part_of=duck core.source="wordnet 3.1"
+@k.words.duck.verb.1 k.words.sense word=duck pos=verb n=1 gloss="to move (the head or body) quickly downwards or away" is_a=move core.source="wordnet 3.1"
+@k.words.duck.verb.2 k.words.sense word=duck pos=verb n=2 gloss="submerge or plunge suddenly" is_a=dive core.source="wordnet 3.1"
+@k.words.duck.verb.3 k.words.sense word=duck pos=verb n=3 gloss="dip into a liquid" synonym=dip synonym=douse is_a=dunk core.source="wordnet 3.1"

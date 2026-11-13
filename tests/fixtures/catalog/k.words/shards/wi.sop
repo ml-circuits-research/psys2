@@ -1,0 +1,8 @@
+# k.words/shards/wi: noun and verb senses of the words from "wi" to "wizard" (first letters "wi").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.windows.noun.1 k.words.sense word=Windows pos=noun n=1 gloss="(trademark) an operating system with a graphical user interface" is_a="operating system" core.source="wordnet 3.1"
+@k.words.winter.noun.1 k.words.sense word=winter pos=noun n=1 gloss="the coldest season of the year; in the northern hemisphere it extends from the winter solstice to the vernal equinox" synonym=wintertime is_a=season core.source="wordnet 3.1"
+@k.words.winter.verb.1 k.words.sense word=winter pos=verb n=1 gloss="spend the winter" synonym=overwinter is_a=spend core.source="wordnet 3.1"

@@ -15,7 +15,11 @@ let seed = Number(arg('--seed', 7));
 const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 2 ** 32; };
 const pick = (xs) => xs[Math.floor(rnd() * xs.length)];
 const KN = new URL('../knowledge/', import.meta.url).pathname;
-const source = { text: async (p) => { try { return readFileSync(p === 'vocab.json' ? `${KN}k.objects/vocab.json` : `${KN}${p}`, 'utf8'); } catch { return null; } } };
+// --catalog <dir>: a catalog in the layout of the real one (index.json, vocab.json, shards); default: the local picture catalog only (knowledge/k.objects). `--catalog fixture` = tests/fixtures/catalog (extended with the worlds Talk reads generically).
+const CAT = arg('--catalog', null) === 'fixture' ? new URL('../tests/fixtures/catalog/', import.meta.url).pathname : arg('--catalog', null);
+const source = CAT
+  ? { text: async (p) => { try { return readFileSync(`${CAT.replace(/\/$/, '')}/${p}`, 'utf8'); } catch { return null; } } }
+  : { text: async (p) => { try { return readFileSync(p === 'vocab.json' ? `${KN}k.objects/vocab.json` : `${KN}${p}`, 'utf8'); } catch { return null; } } };
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
 let facts;

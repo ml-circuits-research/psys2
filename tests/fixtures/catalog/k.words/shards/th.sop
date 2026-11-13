@@ -1,0 +1,13 @@
+# k.words/shards/th: noun and verb senses of the words from "th" to "thus" (first letters "th").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.there.noun.1 k.words.sense word=there pos=noun n=1 gloss="a location other than here; that place" is_a=location core.source="wordnet 3.1"
+@k.words.thing.noun.1 k.words.sense word=thing pos=noun n=1 gloss="a special situation" is_a=situation core.source="wordnet 3.1"
+@k.words.thing.noun.2 k.words.sense word=thing pos=noun n=2 gloss="an action" is_a=action core.source="wordnet 3.1"
+@k.words.thing.noun.3 k.words.sense word=thing pos=noun n=3 gloss="a special abstraction" is_a=abstraction core.source="wordnet 3.1"
+@k.words.things.noun.1 k.words.sense word=things pos=noun n=1 gloss="any movable possession (especially articles of clothing)" is_a=property core.source="wordnet 3.1"
+@k.words.third.noun.1 k.words.sense word=third pos=noun n=1 gloss="one of three equal parts of a divisible whole" synonym=one-third synonym=tierce is_a="common fraction" core.source="wordnet 3.1"
+@k.words.third.noun.2 k.words.sense word=third pos=noun n=2 gloss="the fielding position of the player on a baseball team who is stationed near the third of the bases in the infield (counting counterclockwise from home plate)" synonym="third base" is_a=position core.source="wordnet 3.1"
+@k.words.third.noun.3 k.words.sense word=third pos=noun n=3 gloss="following the second position in an ordering or series" is_a=rank core.source="wordnet 3.1"

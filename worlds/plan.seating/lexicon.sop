@@ -1,0 +1,48 @@
+@gen.plan.seating.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@lex.plan.seating.kinds core.lexicon
+    class=noun
+    doc="Kinds of things of this world (from schema.sop)"
+    word=table
+    word=tables
+    word=guest
+    word=guests
+    word=person
+    word=people
+
+@lex.plan.seating.attrs core.lexicon
+    class=modifier
+    doc="Attributes (from schema.sop)"
+    word=seats
+    word=seat
+    word=colour
+    word=color
+
+@lex.plan.seating.values core.lexicon
+    class=modifier
+    doc="Values the attributes take (from schema.sop)"
+    word=red
+    word=blue
+    word=green
+    word=yellow
+    word=orange
+    word=purple
+    word=pink
+    word=brown
+    word=black
+    word=white
+    word=grey
+    word=gray
+    word=gold
+    word=silver
+
+@lex.plan.seating.more core.lexicon
+    class=modifier
+    doc="Comparatives that mean more of an attribute"
+    word=bigger
+
+@lex.plan.seating.less core.lexicon
+    class=modifier
+    doc="Comparatives that mean less of an attribute"
+    word=smaller

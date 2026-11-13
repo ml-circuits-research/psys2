@@ -1,0 +1,14 @@
+# k.words/shards/in: noun and verb senses of the words from "in" to "involvement" (first letters "in").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.index.noun.1 k.words.sense word=index pos=noun n=1 gloss="a numerical scale used to compare variables with one another or with some reference number" is_a=scale core.source="wordnet 3.1"
+@k.words.index.noun.2 k.words.sense word=index pos=noun n=2 gloss="a number or ratio (a value on a scale of measurement) derived from a series of observed facts; can reveal relative changes as a function of time" synonym="index number" synonym=indicant synonym=indicator is_a=fact core.source="wordnet 3.1"
+@k.words.index.noun.3 k.words.sense word=index pos=noun n=3 gloss="a mathematical notation indicating the number of times a quantity is multiplied by itself" synonym=exponent synonym=power is_a="mathematical notation" core.source="wordnet 3.1"
+@k.words.index.verb.1 k.words.sense word=index pos=verb n=1 gloss="list in an index" is_a=list core.source="wordnet 3.1"
+@k.words.index.verb.2 k.words.sense word=index pos=verb n=2 gloss="provide with an index" is_a=supply core.source="wordnet 3.1"
+@k.words.index.verb.3 k.words.sense word=index pos=verb n=3 gloss="adjust through indexation" is_a=determine core.source="wordnet 3.1"
+@k.words.india.noun.1 k.words.sense word=India pos=noun n=1 gloss="a republic in the Asian subcontinent in southern Asia; second most populous country in the world; achieved independence from the United Kingdom in 1947" synonym="Republic of India" synonym=Bharat instance_of="Asian country" part_of=Asia core.source="wordnet 3.1"
+@k.words.inside.noun.1 k.words.sense word=inside pos=noun n=1 gloss="the region that is inside of something" synonym=interior is_a=region core.source="wordnet 3.1"
+@k.words.inside.noun.2 k.words.sense word=inside pos=noun n=2 gloss="the inner or enclosed surface of something" synonym=interior is_a=surface core.source="wordnet 3.1"

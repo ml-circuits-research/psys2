@@ -1,0 +1,11 @@
+# k.words/shards/cu: noun and verb senses of the words from "cub" to "cutting" (first letters "cu").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.cup.noun.1 k.words.sense word=cup pos=noun n=1 gloss="a small open container usually used for drinking; usually has a handle" is_a=crockery is_a=container core.source="wordnet 3.1"
+@k.words.cup.noun.2 k.words.sense word=cup pos=noun n=2 gloss="the quantity a cup will hold" synonym=cupful is_a=containerful core.source="wordnet 3.1"
+@k.words.cup.noun.3 k.words.sense word=cup pos=noun n=3 gloss="any cup-shaped concavity" is_a="concave shape" core.source="wordnet 3.1"
+@k.words.cup.verb.1 k.words.sense word=cup pos=verb n=1 gloss="form into the shape of a cup" is_a=shape core.source="wordnet 3.1"
+@k.words.cup.verb.2 k.words.sense word=cup pos=verb n=2 gloss="put into a cup" is_a=insert core.source="wordnet 3.1"
+@k.words.cup.verb.3 k.words.sense word=cup pos=verb n=3 gloss="treat by applying evacuated cups to the patient's skin" synonym=transfuse is_a=treat core.source="wordnet 3.1"

@@ -1,0 +1,23 @@
+# k.people/shards/kinds: 8 kinds of person (baby, child, boy, girl, man, woman, grandfather, grandmother) as variants of the one person drawing: age, sex, usual height, hair, the k.faces preset; and their other names.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.people.kind.baby k.people.kind name=baby age=baby height_about=40 hair=little face=baby drawing=person core.source="hand-core 1"
+@k.people.kind.child k.people.kind name=child age=child height_about=65 hair=short face=child drawing=person core.source="hand-core 1"
+@k.people.kind.boy k.people.kind name=boy age=child sex=male height_about=70 hair=short face=boy is_a=child drawing=person core.source="hand-core 1"
+@k.people.kind.girl k.people.kind name=girl age=child sex=female height_about=70 hair=long face=girl is_a=child drawing=person core.source="hand-core 1"
+@k.people.kind.man k.people.kind name=man age=adult sex=male height_about=100 hair=short face=man drawing=person core.source="hand-core 1"
+@k.people.kind.woman k.people.kind name=woman age=adult sex=female height_about=93 hair=long face=woman drawing=person core.source="hand-core 1"
+@k.people.kind.grandfather k.people.kind name=grandfather age=old sex=male height_about=96 hair=grey hair=little face="old man" is_a=man drawing=person core.source="hand-core 1"
+@k.people.kind.grandmother k.people.kind name=grandmother age=old sex=female height_about=89 hair=white hair=grey face="old woman" is_a=woman drawing=person core.source="hand-core 1"
+
+# Words: plural forms and other names. Every name of a kind finds its fact.
+@k.people.word.baby core.word text=babies text=infant text=infants text=newborn means=baby of=k.people.kind.name core.source="hand-core 1"
+@k.people.word.child core.word text=children text=kid text=kids text=toddler text=toddlers means=child of=k.people.kind.name core.source="hand-core 1"
+@k.people.word.boy core.word text=boys text=lad text=lads means=boy of=k.people.kind.name core.source="hand-core 1"
+@k.people.word.girl core.word text=girls means=girl of=k.people.kind.name core.source="hand-core 1"
+@k.people.word.man core.word text=men text=gentleman text=gentlemen means=man of=k.people.kind.name core.source="hand-core 1"
+@k.people.word.woman core.word text=women text=lady text=ladies means=woman of=k.people.kind.name core.source="hand-core 1"
+@k.people.word.grandfather core.word text=grandfathers text=grandpa text=granddad text=grandad text=grandpas text="old man" means=grandfather of=k.people.kind.name core.source="hand-core 1"
+@k.people.word.grandmother core.word text=grandmothers text=grandma text=granny text=grandmas text=nan text=nana text="old woman" means=grandmother of=k.people.kind.name core.source="hand-core 1"

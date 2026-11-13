@@ -1,0 +1,61 @@
+# k.commonsense: everyday common sense: where things usually are, what they can do, what they are used for and made
+# of, how big they are, and how many of them a scene usually has. Soft rules give advice, never refusals.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.commonsense core.module name=k.commonsense version=1 exports=thing exports=placed core.source="hand-core 1"
+
+# A thing of everyday life, named by an English lemma. Shared: it belongs to every namespace, so an application's
+# facts in its own namespace join with it.
+@k.commonsense.thing core.type of=k.commonsense.thing shared=true closed=true core.source="hand-core 1"
+@k.commonsense.thing.name core.slot of=k.commonsense.thing key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.commonsense.thing.at core.slot of=k.commonsense.thing key=at many=true kind=atom kind=string core.source="hand-core 1"
+@k.commonsense.thing.can core.slot of=k.commonsense.thing key=can many=true kind=atom kind=string core.source="hand-core 1"
+@k.commonsense.thing.used_for core.slot of=k.commonsense.thing key=used_for many=true kind=atom kind=string core.source="hand-core 1"
+@k.commonsense.thing.made_of core.slot of=k.commonsense.thing key=made_of many=true kind=atom kind=string core.source="hand-core 1"
+@k.commonsense.thing.is_a core.slot of=k.commonsense.thing key=is_a many=true kind=atom kind=string core.source="hand-core 1"
+@k.commonsense.thing.part_of core.slot of=k.commonsense.thing key=part_of many=true kind=atom kind=string core.source="hand-core 1"
+@k.commonsense.thing.has core.slot of=k.commonsense.thing key=has many=true kind=atom kind=string core.source="hand-core 1"
+@k.commonsense.thing.size core.slot of=k.commonsense.thing key=size enum=tiny enum=small enum=medium enum=large enum=huge core.source="hand-core 1"
+@k.commonsense.thing.usually_count core.slot of=k.commonsense.thing key=usually_count kind=integer min=1 core.source="hand-core 1"
+
+# A thing placed somewhere in a scene, as an application tells it (it may extend this type with its own).
+@k.commonsense.placed core.type of=k.commonsense.placed core.source="hand-core 1"
+@k.commonsense.placed.thing core.slot of=k.commonsense.placed key=thing required=true kind=atom core.source="hand-core 1"
+@k.commonsense.placed.at core.slot of=k.commonsense.placed key=at kind=atom core.source="hand-core 1"
+@k.commonsense.placed.scene core.slot of=k.commonsense.placed key=scene kind=atom core.source="hand-core 1"
+
+# Soft rule: a thing that is usually in water, placed in the sky.
+@k.commonsense.water.sky.thing k.commonsense.thing name=?thing at=water
+@k.commonsense.water.sky.placed k.commonsense.placed thing=?thing at=?place
+@k.commonsense.water.sky.is core.check fn=eq args=?place args=sky
+@k.commonsense.water.sky core.deny when=$k.commonsense.water.sky.thing when=$k.commonsense.water.sky.placed if=$k.commonsense.water.sky.is soft=true why="A ?thing is usually in water, not in the ?place." core.source="hand-core 1"
+
+# Soft rule: a thing that is usually in water, placed on grass.
+@k.commonsense.water.grass.thing k.commonsense.thing name=?thing at=water
+@k.commonsense.water.grass.placed k.commonsense.placed thing=?thing at=?place
+@k.commonsense.water.grass.is core.check fn=eq args=?place args=grass
+@k.commonsense.water.grass core.deny when=$k.commonsense.water.grass.thing when=$k.commonsense.water.grass.placed if=$k.commonsense.water.grass.is soft=true why="A ?thing is usually in water, not on the ?place." core.source="hand-core 1"
+
+# Soft rule: a thing that cannot fly and is not usually in the sky, placed in the sky.
+@k.commonsense.nofly.thing k.commonsense.thing name=?thing
+@k.commonsense.nofly.placed k.commonsense.placed thing=?thing at=sky
+@k.commonsense.nofly.flies k.commonsense.thing name=?thing can=fly
+@k.commonsense.nofly.sky k.commonsense.thing name=?thing at=sky
+@k.commonsense.nofly core.deny when=$k.commonsense.nofly.thing when=$k.commonsense.nofly.placed not=$k.commonsense.nofly.flies not=$k.commonsense.nofly.sky soft=true why="A ?thing cannot fly, so it is not usually in the sky." core.source="hand-core 1"
+
+# Soft rule: more of a thing in one scene than it usually has (one issue per scene and thing).
+@k.commonsense.count.thing k.commonsense.thing name=?thing usually_count=?usual
+@k.commonsense.count.first k.commonsense.placed thing=?thing scene=?scene core.select=first
+@k.commonsense.count.all k.commonsense.placed thing=?thing scene=?scene
+@k.commonsense.count.n core.calc out=?n fn=count over=$k.commonsense.count.all
+@k.commonsense.count.more core.check fn=gt args=?n args=?usual
+@k.commonsense.count core.deny when=$k.commonsense.count.thing when=$k.commonsense.count.first with=$k.commonsense.count.n if=$k.commonsense.count.more soft=true why="A scene usually has only ?usual ?thing, not ?n." core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.commonsense.word.thing core.word text=thing text=things means=k.commonsense.thing core.source="hand-core 1"
+@k.commonsense.word.at core.word text=where text=live text=lives means=k.commonsense.thing.at core.source="hand-core 1"
+@k.commonsense.word.used_for core.word text=use text=used means=k.commonsense.thing.used_for core.source="hand-core 1"
+@k.commonsense.word.made_of core.word text=made text=material means=k.commonsense.thing.made_of core.source="hand-core 1"
+@k.commonsense.word.size core.word text=size text=big text=small means=k.commonsense.thing.size core.source="hand-core 1"

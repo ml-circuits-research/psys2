@@ -337,6 +337,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     for (const { p, order, c } of index.candidates(noPct ? new Set([...bag, ...bagNoPct]) : bag)) {
       budget.tick('rules.pattern');
       if (isQuestion && p.kind === 'statement') continue;
+      if (p.tabOnly && p.worldId !== context?.tabWorld) continue;   // the router drops it anyway; a match of it must not stop the later views ("can you" dropped) from being tried
       if (last && !c.usesFiller) continue;
       let m = prefilterPasses(c, bag) ? matchTokens(c, view, env) : null;
       if (!m && noPct && prefilterPasses(c, bagNoPct)) m = matchTokens(c, noPct, env);

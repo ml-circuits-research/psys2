@@ -16,11 +16,11 @@
  *   enc.attach(engine); engine.formalizers.encoder = enc;
  *   enc.onStatus((s) => ...);   // { state: 'idle' | 'loading' | 'ready' | 'error', message, ms? }
  */
-import { formalize } from '../formalizer/rules/index.mjs?v=b73374fce9';
+import { formalize } from '../formalizer/rules/index.mjs?v=eab76d472a';
 import { createDispatcherRuntime, candidateSegmentations } from '../formalizer/dispatcher-runtime.mjs?v=0fe828e086';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
-import { createDispatchValidator } from './dispatch-validate.mjs?v=cabd197346';
-import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=2dfa874001';
+import { createDispatchValidator } from './dispatch-validate.mjs?v=b3c0093fdb';
+import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=eda86b588d';
 
 /** Demo policy: a parse the interpreter refuses for a state reason (spec 03 section 7, questions Q3) still counts as understood. */
 export const ENCODER_DEFAULT_POLICY = { acceptRefused: true };

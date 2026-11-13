@@ -1,0 +1,73 @@
+# k.scenes: typical scenes and where things usually are: for every drawable thing its usual place and its relative
+# size, and for each scene what is usually there, how many, where in the picture, what happens there, and the time
+# and weather that fit. So that "draw a beach" can be composed from things that have drawings.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.scenes core.module name=k.scenes version=1 exports=thing exports=scene exports=has core.source="hand-core 1"
+
+# The usual place and the relative size of a thing, named as its drawing in k.objects (the same name) or as a
+# stand-in there. `place` is where one usually sees it: in the `sky` (also: in the air), on the `ground` (outdoors),
+# on or in the `water`, `indoors`, or `on_thing`: on another thing, which `on` names (a hat on a head, a roof on a
+# house). A thing indoors may also name what it is usually on (`place=indoors on=table`). `size` is the size of the
+# real thing among five classes: `tiny` fits in a closed hand (a coin, a bee, a berry); `small` is held in one or
+# two hands (a cup, a book, a cat, a shoe); `medium` is carried in both arms, up to the size of a person (a chair,
+# a dog, a bicycle, a person); `large` is bigger than a person, up to a truck (a car, a horse, a bed, a tent);
+# `huge` is bigger than a truck (a house, a tree, a ship, a mountain, the sun). A key is left out where the thing
+# has no usual place or the size is not plain. `named=model`: the label was given by a language model from the
+# name of the thing, and only where sure; a sample was checked against the drawings.
+@k.scenes.thing core.type of=k.scenes.thing shared=true closed=true core.source="hand-core 1"
+@k.scenes.thing.name core.slot of=k.scenes.thing key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.thing.place core.slot of=k.scenes.thing key=place enum=sky enum=ground enum=water enum=indoors enum=on_thing core.source="hand-core 1"
+@k.scenes.thing.on core.slot of=k.scenes.thing key=on many=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.thing.size core.slot of=k.scenes.thing key=size enum=tiny enum=small enum=medium enum=large enum=huge core.source="hand-core 1"
+@k.scenes.thing.named core.slot of=k.scenes.thing key=named enum=model core.source="hand-core 1"
+
+# A thing that is on another thing says which.
+@k.scenes.on_what.fact k.scenes.thing name=?thing place=on_thing core.absent=on
+@k.scenes.on_what core.deny when=$k.scenes.on_what.fact why="?thing is said to be on another thing, but not on which." core.source="hand-core 1"
+
+# A scene, named by its common English name. `kind` says whether it is `outdoors`, `indoors`, `underwater` or in
+# `space`; `ground` names what covers the ground (sand, grass, snow, floor); `time`, `weather` and `season` are those
+# that fit (left out when any fits); `happens` names what people or animals usually do there (a verb or a short
+# phrase); `drawing` names a k.objects object that draws the whole scene, where one exists.
+@k.scenes.scene core.type of=k.scenes.scene shared=true closed=true core.source="hand-core 1"
+@k.scenes.scene.name core.slot of=k.scenes.scene key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.scene.kind core.slot of=k.scenes.scene key=kind required=true enum=outdoors enum=indoors enum=underwater enum=space core.source="hand-core 1"
+@k.scenes.scene.ground core.slot of=k.scenes.scene key=ground kind=atom kind=string core.source="hand-core 1"
+@k.scenes.scene.time core.slot of=k.scenes.scene key=time many=true enum=morning enum=day enum=evening enum=night core.source="hand-core 1"
+@k.scenes.scene.weather core.slot of=k.scenes.scene key=weather many=true enum=sunny enum=cloudy enum=rainy enum=snowy enum=windy enum=stormy enum=foggy core.source="hand-core 1"
+@k.scenes.scene.season core.slot of=k.scenes.scene key=season many=true enum=spring enum=summer enum=autumn enum=winter core.source="hand-core 1"
+@k.scenes.scene.happens core.slot of=k.scenes.scene key=happens many=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.scene.drawing core.slot of=k.scenes.scene key=drawing kind=atom kind=string core.source="hand-core 1"
+
+# What is usually in a scene: one fact per scene and thing. `count` is how many there usually are; `where` is the
+# layer of the picture: `sky` (the top, outdoors), `ceiling` (the top, indoors), `background` (far away, behind the
+# rest), `wall` (on the back wall of a room), `ground` (standing on the ground or the floor), `water` (on or in the
+# water of the scene), `foreground` (near, in front of the rest); `side` is `left`, `centre` or `right` where the
+# thing has a usual side; `on` names another thing of the same scene that it is on or in (a duck on the pond, a cup
+# on the table), and a thing on or in the water of a scene that is not all water says on which water (a boat on the
+# sea); `fills=true` says that the thing fills its layer from side to side (the sea behind a beach, the road of a
+# street); `drawing` names the k.objects object that draws the thing, where one exists.
+@k.scenes.has core.type of=k.scenes.has shared=true closed=true core.source="hand-core 1"
+@k.scenes.has.scene core.slot of=k.scenes.has key=scene id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.has.thing core.slot of=k.scenes.has key=thing id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.has.count core.slot of=k.scenes.has key=count required=true kind=integer min=1 core.source="hand-core 1"
+@k.scenes.has.where core.slot of=k.scenes.has key=where required=true enum=sky enum=ceiling enum=background enum=wall enum=ground enum=water enum=foreground core.source="hand-core 1"
+@k.scenes.has.side core.slot of=k.scenes.has key=side enum=left enum=centre enum=right core.source="hand-core 1"
+@k.scenes.has.on core.slot of=k.scenes.has key=on kind=atom kind=string core.source="hand-core 1"
+@k.scenes.has.fills core.slot of=k.scenes.has key=fills kind=boolean core.source="hand-core 1"
+@k.scenes.has.drawing core.slot of=k.scenes.has key=drawing kind=atom kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.scenes.word.scene core.word text=scene text=scenes text=setting means=k.scenes.scene core.source="hand-core 1"
+@k.scenes.word.has core.word text=has text=have text=there means=k.scenes.has core.source="hand-core 1"
+@k.scenes.word.place core.word text=place text=usually means=k.scenes.thing.place core.source="hand-core 1"
+@k.scenes.word.size core.word text=size text=big text=large means=k.scenes.thing.size core.source="hand-core 1"
+@k.scenes.word.happens core.word text=happens text=happen text=do means=k.scenes.scene.happens core.source="hand-core 1"
+@k.scenes.word.weather core.word text=weather means=k.scenes.scene.weather core.source="hand-core 1"
+@k.scenes.word.time core.word text=time means=k.scenes.scene.time core.source="hand-core 1"
+@k.scenes.word.season core.word text=season means=k.scenes.scene.season core.source="hand-core 1"
+@k.scenes.word.count core.word text=count text="how many" means=k.scenes.has.count core.source="hand-core 1"
+@k.scenes.word.where core.word text=where means=k.scenes.has.where core.source="hand-core 1"

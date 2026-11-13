@@ -1,0 +1,27 @@
+# k.units: units of measure: what each unit measures, and how to convert it: a value in the unit, times `factor`,
+# plus `offset` (temperatures only), is the value in the base unit of its quantity.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.units core.module name=k.units version=1 exports=quantity exports=unit core.source="hand-core 1"
+
+# What is measured (length, mass, ...), and the unit every other unit of it converts to.
+@k.units.quantity core.type of=k.units.quantity shared=true closed=true core.source="hand-core 1"
+@k.units.quantity.name core.slot of=k.units.quantity key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.units.quantity.base core.slot of=k.units.quantity key=base required=true kind=atom kind=string core.source="hand-core 1"
+
+# A unit. base value = value * factor + offset. `system` says where it is used.
+@k.units.unit core.type of=k.units.unit shared=true closed=true core.source="hand-core 1"
+@k.units.unit.name core.slot of=k.units.unit key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.units.unit.symbol core.slot of=k.units.unit key=symbol kind=atom kind=string core.source="hand-core 1"
+@k.units.unit.quantity core.slot of=k.units.unit key=quantity required=true kind=atom core.source="hand-core 1"
+@k.units.unit.factor core.slot of=k.units.unit key=factor required=true kind=number core.source="hand-core 1"
+@k.units.unit.offset core.slot of=k.units.unit key=offset kind=number core.source="hand-core 1"
+@k.units.unit.system core.slot of=k.units.unit key=system enum=metric enum=imperial enum=other core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.units.word.unit core.word text=unit text=units text=measure means=k.units.unit core.source="hand-core 1"
+@k.units.word.symbol core.word text=symbol text=abbreviation means=k.units.unit.symbol core.source="hand-core 1"
+@k.units.word.factor core.word text=convert text=conversion text=factor means=k.units.unit.factor core.source="hand-core 1"
+@k.units.word.quantity core.word text=quantity text=measures means=k.units.unit.quantity core.source="hand-core 1"

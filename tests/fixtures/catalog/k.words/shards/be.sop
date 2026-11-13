@@ -1,0 +1,7 @@
+# k.words/shards/be: noun and verb senses of the words from "be" to "bey" (first letters "be").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.bee.noun.1 k.words.sense word=bee pos=noun n=1 gloss="any of numerous hairy-bodied insects including social and solitary species" is_a="hymenopterous insect" core.source="wordnet 3.1"
+@k.words.bee.noun.2 k.words.sense word=bee pos=noun n=2 gloss="a social gathering to carry out some communal task or to hold competitions" is_a="social gathering" core.source="wordnet 3.1"

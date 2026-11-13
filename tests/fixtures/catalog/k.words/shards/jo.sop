@@ -1,0 +1,8 @@
+# k.words/shards/jo: noun and verb senses of the words from "job" to "joyce" (first letters "jo").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.journey.noun.1 k.words.sense word=journey pos=noun n=1 gloss="the act of traveling from one place to another" synonym=journeying is_a=travel core.source="wordnet 3.1"
+@k.words.journey.verb.1 k.words.sense word=journey pos=verb n=1 gloss="undertake a journey or trip" synonym=travel is_a=travel core.source="wordnet 3.1"
+@k.words.journey.verb.2 k.words.sense word=journey pos=verb n=2 gloss="travel upon or across" synonym=travel is_a=travel core.source="wordnet 3.1"

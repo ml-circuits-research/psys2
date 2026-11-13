@@ -1,0 +1,60 @@
+# k.people: kinds of person (baby, child, man, grandmother ...) as variants of one person drawing, and (from R7.5)
+# roles and jobs: what they wear, hold and use, where they work, and the features that map to k.faces.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.people core.module name=k.people version=1 exports=kind exports=role core.source="hand-core 1"
+
+# A kind of person by age and sex. All kinds are drawn by the one person drawing of k.objects (`drawing`), varied by
+# what the fact says: `age` (baby, child, adult, old), `sex` where the word says it, `height_about`: the usual
+# height in per cent of the height of a grown man (an approximate number, so the key ends in `_about`), `hair`:
+# what the hair is usually like (`little`, `short`, `long`, `grey`, `white`; many), and `face`: the name of the
+# k.faces preset (style `plain`) that shows such a face. `is_a` names the wider kind (a boy is a child, a
+# grandfather is a man). Other names for the kind (kid, grandpa, lady) are core.word facts.
+@k.people.kind core.type of=k.people.kind shared=true closed=true core.source="hand-core 1"
+@k.people.kind.name core.slot of=k.people.kind key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.people.kind.age core.slot of=k.people.kind key=age required=true enum=baby enum=child enum=adult enum=old core.source="hand-core 1"
+@k.people.kind.sex core.slot of=k.people.kind key=sex enum=male enum=female core.source="hand-core 1"
+@k.people.kind.height_about core.slot of=k.people.kind key=height_about required=true kind=integer min=1 max=120 core.source="hand-core 1"
+@k.people.kind.hair core.slot of=k.people.kind key=hair many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.kind.face core.slot of=k.people.kind key=face kind=atom kind=string core.source="hand-core 1"
+@k.people.kind.is_a core.slot of=k.people.kind key=is_a many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.kind.drawing core.slot of=k.people.kind key=drawing required=true kind=atom kind=string core.source="hand-core 1"
+
+# A role or job. `group` says what kind of role it is: a `job`, a member of the `family`, or a figure of a `story`.
+# `is` names the kind of person where the role says it (a grandmother is a grandmother, a king is a man, a
+# princess is a girl). `wears`, `holds` and `uses` name things, by the name of their drawing in k.objects where one
+# exists (a doctor wears a "lab coat", holds a stethoscope); `works_at` names where the role is usually found, a
+# scene of k.scenes where one exists; `does` names what the role does (a verb or a short phrase). The keys `hat`,
+# `glasses`, `beard`, `moustache` and `shoulders` name the variant of that k.faces slot (style `plain`) that suits
+# the role, and `face` a k.faces preset. Every role is drawn by the person drawing (`drawing`).
+@k.people.role core.type of=k.people.role shared=true closed=true core.source="hand-core 1"
+@k.people.role.name core.slot of=k.people.role key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.people.role.group core.slot of=k.people.role key=group required=true enum=job enum=family enum=story core.source="hand-core 1"
+@k.people.role.is core.slot of=k.people.role key=is kind=atom kind=string core.source="hand-core 1"
+@k.people.role.wears core.slot of=k.people.role key=wears many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.role.holds core.slot of=k.people.role key=holds many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.role.uses core.slot of=k.people.role key=uses many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.role.works_at core.slot of=k.people.role key=works_at many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.role.does core.slot of=k.people.role key=does many=true kind=atom kind=string core.source="hand-core 1"
+@k.people.role.hat core.slot of=k.people.role key=hat kind=atom kind=string core.source="hand-core 1"
+@k.people.role.glasses core.slot of=k.people.role key=glasses kind=atom kind=string core.source="hand-core 1"
+@k.people.role.beard core.slot of=k.people.role key=beard kind=atom kind=string core.source="hand-core 1"
+@k.people.role.moustache core.slot of=k.people.role key=moustache kind=atom kind=string core.source="hand-core 1"
+@k.people.role.shoulders core.slot of=k.people.role key=shoulders kind=atom kind=string core.source="hand-core 1"
+@k.people.role.face core.slot of=k.people.role key=face kind=atom kind=string core.source="hand-core 1"
+@k.people.role.drawing core.slot of=k.people.role key=drawing required=true kind=atom kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.people.word.kind core.word text=person text=people text=persons means=k.people.kind core.source="hand-core 1"
+@k.people.word.age core.word text=age text=old means=k.people.kind.age core.source="hand-core 1"
+@k.people.word.height core.word text=height text=tall means=k.people.kind.height_about core.source="hand-core 1"
+@k.people.word.hair core.word text=hair means=k.people.kind.hair core.source="hand-core 1"
+@k.people.word.face core.word text=face means=k.people.kind.face core.source="hand-core 1"
+@k.people.word.role core.word text=role text=roles text=job text=jobs text=work means=k.people.role core.source="hand-core 1"
+@k.people.word.wears core.word text=wears text=wear text=clothes means=k.people.role.wears core.source="hand-core 1"
+@k.people.word.holds core.word text=holds text=hold text=carries means=k.people.role.holds core.source="hand-core 1"
+@k.people.word.uses core.word text=uses text=use text=tools means=k.people.role.uses core.source="hand-core 1"
+@k.people.word.works_at core.word text=works text="works at" text=workplace means=k.people.role.works_at core.source="hand-core 1"
+@k.people.word.does core.word text=does means=k.people.role.does core.source="hand-core 1"

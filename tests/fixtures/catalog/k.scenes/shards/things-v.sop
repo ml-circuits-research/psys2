@@ -1,0 +1,6 @@
+# k.scenes/shards/things-v: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 28 drawable things whose name starts with "v"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.Venus k.scenes.thing name=Venus place=sky size=huge named=model core.source="hand-core 1"

@@ -1,0 +1,50 @@
+# k.space: the solar system and beyond: the Sun, the eight planets, a dwarf planet, some named moons, a comet, a few
+# stars and galaxies, and what kinds of things these are. Facts a child's encyclopedia states.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.space core.module name=k.space version=1 exports=body exports=kind core.source="hand-core 1"
+
+# A named thing in space. `orbits` names what it goes around; `order` is a planet's place counted from the Sun;
+# `size` is a planet's size class and `size_rank` its place by size (1 is the largest planet); `group` says whether
+# a planet is rocky, a gas giant (gas) or an ice giant (ice); `moons` is an exact count, `moons_about` a count that
+# grows as more small moons are found; `rings` says whether it has rings; `orbit_years` is about how many Earth
+# years one trip around the Sun takes; `in` names the galaxy it is in; `drawing` names the k.objects object that draws it.
+@k.space.body core.type of=k.space.body shared=true closed=true core.source="hand-core 1"
+@k.space.body.name core.slot of=k.space.body key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.space.body.kind core.slot of=k.space.body key=kind required=true kind=atom kind=string core.source="hand-core 1"
+@k.space.body.orbits core.slot of=k.space.body key=orbits kind=atom kind=string core.source="hand-core 1"
+@k.space.body.order core.slot of=k.space.body key=order kind=integer min=1 max=8 core.source="hand-core 1"
+@k.space.body.size core.slot of=k.space.body key=size enum=small enum=medium enum=large enum=huge core.source="hand-core 1"
+@k.space.body.size_rank core.slot of=k.space.body key=size_rank kind=integer min=1 max=8 core.source="hand-core 1"
+@k.space.body.group core.slot of=k.space.body key=group enum=rocky enum=gas enum=ice core.source="hand-core 1"
+@k.space.body.moons core.slot of=k.space.body key=moons kind=integer min=0 core.source="hand-core 1"
+@k.space.body.moons_about core.slot of=k.space.body key=moons_about kind=integer min=0 core.source="hand-core 1"
+@k.space.body.rings core.slot of=k.space.body key=rings kind=boolean core.source="hand-core 1"
+@k.space.body.orbit_years core.slot of=k.space.body key=orbit_years kind=number min=0 core.source="hand-core 1"
+@k.space.body.colour core.slot of=k.space.body key=colour many=true enum=black enum=white enum=grey enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown core.source="hand-core 1"
+@k.space.body.in core.slot of=k.space.body key=in kind=atom kind=string core.source="hand-core 1"
+@k.space.body.drawing core.slot of=k.space.body key=drawing kind=atom kind=string core.source="hand-core 1"
+
+# An exact count and an approximate count are never both on one body.
+@k.space.both.exact k.space.body name=?body moons=?exact
+@k.space.both.about k.space.body name=?body moons_about=?about
+@k.space.both core.deny when=$k.space.both.exact when=$k.space.both.about why="?body has both an exact and an approximate count of moons." core.source="hand-core 1"
+
+# A kind of thing in space: what it is made of, what it goes around, what it has, what it does.
+@k.space.kind core.type of=k.space.kind shared=true closed=true core.source="hand-core 1"
+@k.space.kind.name core.slot of=k.space.kind key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.made_of core.slot of=k.space.kind key=made_of many=true kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.orbits core.slot of=k.space.kind key=orbits kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.has core.slot of=k.space.kind key=has many=true kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.does core.slot of=k.space.kind key=does many=true kind=atom kind=string core.source="hand-core 1"
+@k.space.kind.drawing core.slot of=k.space.kind key=drawing kind=atom kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.space.word.body core.word text=space text="solar system" means=k.space.body core.source="hand-core 1"
+@k.space.word.orbits core.word text=orbits text=orbit text=around means=k.space.body.orbits core.source="hand-core 1"
+@k.space.word.order core.word text=order means=k.space.body.order core.source="hand-core 1"
+@k.space.word.moons core.word text=moons means=k.space.body.moons core.source="hand-core 1"
+@k.space.word.rings core.word text=rings text=ring means=k.space.body.rings core.source="hand-core 1"
+@k.space.word.size core.word text=size text=largest text=smallest means=k.space.body.size_rank core.source="hand-core 1"

@@ -1,0 +1,14 @@
+# k.space/shards/stars-and-galaxies: 5 named stars and galaxies beyond the solar system.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.space.body.Polaris k.space.body name=Polaris kind=star in="Milky Way" core.source="hand-core 1"
+@k.space.body.Sirius k.space.body name=Sirius kind=star in="Milky Way" core.source="hand-core 1"
+@k.space.body.Proxima_Centauri k.space.body name="Proxima Centauri" kind=star colour=red in="Milky Way" core.source="hand-core 1"
+@k.space.body.Milky_Way k.space.body name="Milky Way" kind=galaxy drawing="milky way" core.source="hand-core 1"
+@k.space.body.Andromeda_Galaxy k.space.body name="Andromeda Galaxy" kind=galaxy core.source="hand-core 1"
+
+@k.space.word.Polaris core.word text="North Star" means=Polaris of=k.space.body.name core.source="hand-core 1"
+@k.space.word.Sirius core.word text="Dog Star" means=Sirius of=k.space.body.name core.source="hand-core 1"
+@k.space.word.Milky_Way core.word text="milky way" means="Milky Way" of=k.space.body.name core.source="hand-core 1"
