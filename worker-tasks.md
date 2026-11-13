@@ -3621,3 +3621,7 @@ What the grouping says, and what follows (causes, not cases):
 4. **Reading model: 83 s of the cold start at 1 MB/s (65 MB).** After P3 the tagger replaces the dispatcher: set a size target for it (under 25 MB) and say what is possible.
 5. sopworld asks (their Q26) for your patterns.sop files and spec 03 copied into its `compat/psys2/` to measure an indexed matcher on the real set: do it (hand-written files only).
 Then the ACTS × SCHEMAS order (A1, A2, A3; P1 and P2 in parallel), with sopworld 0.17.0 (`std.schema`, `std.acts`) when it lands.
+
+## Reviewer 2026-11-13 20:00 — correction: the "under 25 MB" for the P3 tagger is not a requirement
+
+The reviewer set that number without a measurement. Replace it by an experiment inside P3: train the act + roles tagger at three sizes (the present DistilBERT base; a 6-layer 384-wide model of the MiniLM class; a 4-layer one), each int8-quantised, and report size, cold load time at 1 MB/s, time per message on the phone profile, and accuracy on the seen and the two held-out worlds. The owner and the reviewer choose from the table.
