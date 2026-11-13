@@ -124,8 +124,8 @@
     "lib/worlds/validate.mjs": "668392061ee0985b",
     "worlds/art.draw/coverage.md": "e028db6e48c71587",
     "worlds/art.draw/datagen.mjs": "735b33ac0ed66819",
-    "worlds/art.draw/fns.mjs": "0ea1d7432a511040",
-    "worlds/art.draw/ops.mjs": "0332884066f3bb97",
+    "worlds/art.draw/fns.mjs": "3e1a8363e5162d01",
+    "worlds/art.draw/ops.mjs": "d11afe243c5cf11c",
     "worlds/art.draw/scene.mjs": "4578699a0525a1b8",
     "worlds/data.charts/coverage.md": "908ba75884fc997c",
     "worlds/data.charts/datagen.mjs": "fc1501bebb41ff64",
@@ -173,7 +173,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "16f176dcd3a5d975",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "ee8d9dfb37262db1",
+    "worlds/index.json": "a6aae1123911201f",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -227,6 +227,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-12T09:23:22.249Z",
-  "commit": "0305e61"
+  "builtAt": "2026-11-13T06:55:21.533Z",
+  "commit": "e64c425-dirty"
 }

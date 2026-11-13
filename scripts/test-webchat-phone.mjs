@@ -74,7 +74,7 @@ export const SCENARIOS = {
     const req = modelRequests();
     const c = await phone(o, req, { language: 'ro' });
     try {
-      const probes = [['cât face 3 plus 4?', /7/], ['fă o diagramă random', null], ['deschide diagrama', null], ['cum mă numesc?', null], ['desenează o pisică verde', null]];
+      const probes = [['cât face 3 plus 4?', /7/], ['fă o diagramă random', null], ['deschide diagrama', null], ['cum mă numesc?', null], ['desenează o pisică verde', null], ['fă părul roșu', null], ['care e capitala Franței?', /Pari[sz]/]];
       let first = true;
       for (const [msg, must] of probes) {
         const r = await c.say(msg, { timeout: first ? 180000 : 20000 });
@@ -114,8 +114,7 @@ export const SCENARIOS = {
     const c = await phone(o, req, { language: 'en' });
     try {
       const opts = await c.pg.$$eval('select.p2-select option', (e) => e.map((x) => x.value));
-      check('other: German is not in the selector unless it passed the quality gate (or "show all" is on)', true, opts.join(','));
-      await c.pg.evaluate(() => window.__psys2Tl?.setShowAll?.(true));
+      check('other: German is listed in the selector (every engine language is, under the gate as beta)', opts.includes('de'), opts.join(','));
       await c.pg.evaluate(() => { const s = document.querySelector('select.p2-select'); if (![...s.options].some((x) => x.value === 'de')) { const o = document.createElement('option'); o.value = 'de'; o.textContent = 'Deutsch'; s.append(o); } });
       await c.pg.select('select.p2-select', 'de');
       await waitReady(c, 'de');
