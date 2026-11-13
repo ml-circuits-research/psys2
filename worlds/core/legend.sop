@@ -926,6 +926,16 @@
     card=many
     ask="Which lexicons does this one inherit words from?"
 
+@core.lexicon.open core.key
+    value=atom
+    card=one
+    ask="Does the lexicon also match words found by lookup (knowledge = the catalog vocabulary, colour = the colour reader)?"
+
+@core.lexicon.catalog core.key
+    value=atom
+    card=many
+    ask="Which knowledge worlds does an open lexicon look its words up in?"
+
 @core.lexicon.exclude core.key
     value=atom
     card=many

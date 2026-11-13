@@ -1,3 +1,128 @@
+@gen.data.charts.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@lex.data.charts.kinds core.lexicon
+    class=noun
+    doc="Kinds of things of this world (from schema.sop)"
+    word=chart
+    word=charts
+    word=graph
+    word=graphs
+    word=plot
+    word=plots
+    word=diagram
+    word=point
+    word=points
+    word=bar
+    word=bars
+    word=slice
+    word=slices
+    word=column
+    word=columns
+    word=segment
+    word=dot
+    word=item
+    word=items
+
+@lex.data.charts.attrs core.lexicon
+    class=modifier
+    doc="Attributes (from schema.sop)"
+    word=type
+    word=title
+    word=heading
+    word=axis
+    word=orientation
+    word=value
+    word=number
+    word=size
+    word=count
+    word=amount
+    word=label
+    word=name
+    word=colour
+    word=color
+    word=colors
+    word=colours
+    word=legend
+    word=stacked
+    word=stacking
+    word=sort
+    word=order
+    word=palette
+
+@lex.data.charts.values core.lexicon
+    class=modifier
+    doc="Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)"
+    extends=$lex.lang.colour
+    open=colour
+    word=bar
+    word=line
+    word=pie
+    word=doughnut
+    word=donut
+    word=radar
+    word=polar_area
+    word=polar
+    word=scatter
+    word=horizontal
+    word=vertical
+    word=sideways
+    word=sideway
+    word=upright
+    word=lie_down
+    word=on
+    word=off
+    word=desc
+    word=asc
+    word=alpha
+    word=none
+    word=rainbow
+    word=pastel
+    word=ocean
+    word=forest
+    word=sunset
+    word=warm
+    word=cool
+    word=neon
+    word=earth
+    word=different
+    word=differently
+    word=default
+
+@lex.data.charts.more core.lexicon
+    class=modifier
+    doc="Comparatives that mean more of an attribute"
+    word=bigger
+
+@lex.data.charts.less core.lexicon
+    class=modifier
+    doc="Comparatives that mean less of an attribute"
+    word=smaller
+
+@lex.data.charts.nouns core.lexicon
+    class=modifier
+    doc="The words for the whole thing the world holds (the picture, the drawing)"
+    word=chart
+    word=graph
+    word=graphs
+    word=plot
+    word=plots
+    word=diagram
+
+@lex.data.charts.factor core.lexicon
+    class=modifier
+    doc="Factors of a size (twice as big)"
+    word=twice
+    word=double
+    word=triple
+    word=thrice
+    word=half
+    word=two_times
+    word=three_times
+    word=four_times
+    word=ten_times
+
+# ---- lexicon.extra.sop (hand-written, appended by the generator)
 @lex.data.charts.types core.lexicon
     class=noun
     doc="Chart types as people say them (Chart.js: bar, line, pie, doughnut, radar, polarArea, scatter)"
@@ -11,14 +136,6 @@
     word=polar
     word=scatter
     plural=pie:pies
-
-@lex.data.charts.nouns core.lexicon
-    class=noun
-    doc="Words for a chart"
-    word=chart
-    word=graph
-    word=plot
-    word=diagram
 
 @lex.data.charts.colors core.lexicon
     class=noun
@@ -54,11 +171,6 @@
     word=original
     word=standard
     word=normal
-
-@lex.data.charts.ordinals core.lexicon
-    class=noun
-    extends=$lex.lang.ordinal
-    doc="Positions of a chart"
 
 @lex.data.charts.extent core.lexicon
     class=noun
@@ -114,84 +226,6 @@
     word=vertical
     word=vertically
     word=upright
-
-@lex.data.charts.g_toys core.lexicon
-    class=noun
-    doc="Items of the shop price list that are toys"
-    word=ball
-    word=doll
-    word=kite
-    word=puzzle
-    word=balloon
-    word=toy_car
-
-@lex.data.charts.g_fruit core.lexicon
-    class=noun
-    doc="Fruit on the shop price list"
-    word=apple
-    word=banana
-    word=orange
-    word=pear
-
-@lex.data.charts.g_school core.lexicon
-    class=noun
-    doc="School things on the shop price list"
-    word=pencil
-    word=pen
-    word=eraser
-    word=ruler
-    word=notebook
-    word=sticker
-    word=book
-    word=backpack
-
-@lex.data.charts.g_snacks core.lexicon
-    class=noun
-    doc="Snacks and baked things on the shop price list"
-    word=biscuit
-    word=chocolate
-    word=ice_cream
-    word=sandwich
-    word=bread
-
-@lex.data.charts.g_drinks core.lexicon
-    class=noun
-    doc="Drinks on the shop price list"
-    word=juice
-    word=milk
-    word=water
-
-@lex.data.charts.g_food core.lexicon
-    class=noun
-    doc="Everything to eat or drink on the shop price list"
-    word=apple
-    word=banana
-    word=orange
-    word=pear
-    word=bread
-    word=milk
-    word=juice
-    word=water
-    word=biscuit
-    word=chocolate
-    word=ice_cream
-    word=sandwich
-
-@lex.data.charts.triggers core.lexicon
-    class=trigger
-    doc="Words that point to charts"
-    word=chart
-    word=graph
-    word=plot
-    word=diagram
-    word=bar
-    word=pie
-    word=doughnut
-    word=legend
-    word=stacked
-    word=horizontal
-    word=vertical
-
 
 @lex.data.charts.listnames core.lexicon
     class=noun
@@ -303,75 +337,6 @@
     alt=we_want_to
     alt=we_would_like_to
 
-@phrase.data.charts.g3_go_back_to core.phrase
-    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
-    alt=go_back_to
-    alt=go_to
-    alt=show
-    alt=show_me
-    alt=open
-    alt=switch_to
-    alt=bring_up
-    alt=bring_back
-    alt=bring_it_back
-    alt=display
-    alt=return_to
-    alt=back_to
-    alt=take_me_to
-    alt=see
-    alt=view
-    alt=pull_up
-    alt=let_me_see
-    alt=i_want_to_see
-    alt=i_want
-    alt=load
-    alt=select
-    alt=pick
-    alt=choose
-    alt=get
-    alt=jump_to
-    alt=flip_to
-    alt=revert_to
-    alt=look_at
-    alt=check
-    alt=go_back_to_the
-    alt=use
-    alt=activate
-    alt=focus_on
-    alt=navigate_to
-    alt=put_up
-    alt=show_again
-    alt=go
-    alt=move_to
-    alt=move_back_to
-    alt=get_back_to
-    alt=get_me
-    alt=fetch
-    alt=find
-    alt=find_me
-    alt=give_me
-    alt=bring_me
-    alt=bring
-    alt=call_up
-    alt=call_back
-    alt=recall
-    alt=reopen
-    alt=re_open
-    alt=restore
-    alt=resume
-    alt=continue_with
-    alt=carry_on_with
-    alt=work_on
-    alt=edit
-    alt=change_to
-    alt=swap_to
-    alt=toggle_to
-    alt=cycle_to
-    alt=scroll_to
-    alt=skip_to
-    alt=head_to
-    alt=get_to
-
 @phrase.data.charts.g4_document core.phrase
     frame=false
     doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
@@ -455,190 +420,6 @@
     alt=a_file
     alt=a_report
     alt=a_paper
-
-@phrase.data.charts.g5_a core.phrase
-    frame=false
-    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
-    alt=a
-    alt=an
-    alt=the
-    alt=nice
-    alt=pretty
-    alt=lovely
-    alt=really
-    alt=very
-    alt=more
-    alt=kind_of
-    alt=sort_of
-    alt=just
-    alt=only
-    alt=all
-    alt=nicely
-    alt=bit_of
-    alt=some
-    alt=that
-    alt=this
-    alt=good
-    alt=proper
-    alt=plain
-    alt=simple
-    alt=solid
-    alt=clean
-    alt=true
-    alt=real
-    alt=pure
-    alt=bold
-    alt=strong
-    alt=rich
-    alt=deep
-    alt=full
-    alt=total
-    alt=complete
-    alt=fresh
-    alt=cool
-    alt=warm
-    alt=beautiful
-    alt=sweet
-    alt=cute
-    alt=great
-
-@phrase.data.charts.g6_em core.phrase
-    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
-    alt=em
-    alt=them
-    alt=the_bars
-    alt=the_chart
-    alt=it
-    alt=the_values
-    alt=everything
-    alt=these
-    alt=the_data
-    alt=the_numbers
-    alt=all
-    alt=the_graph
-    alt=the_columns
-    alt=the_slices
-    alt=the_lines
-    alt=the_points
-    alt=the_items
-    alt=the_entries
-    alt=the_labels
-    alt=the_figures
-    alt=the_amounts
-    alt=the_counts
-    alt=the_results
-    alt=the_whole_chart
-    alt=the_whole_thing
-    alt=all_of_them
-    alt=all_of_it
-    alt=this
-    alt=that
-    alt=those
-    alt=the_pie
-    alt=the_dots
-    alt=the_series
-    alt=bars
-    alt=chart
-    alt=data
-    alt=values
-    alt=items
-    alt=slices
-    alt=columns
-    alt=points
-    alt=graph
-
-@phrase.data.charts.g7_em core.phrase
-    frame=false
-    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
-    alt=em
-    alt=bars
-    alt=bar
-    alt=columns
-    alt=column
-    alt=line
-    alt=lines
-    alt=chart
-    alt=graph
-    alt=pie
-    alt=slices
-    alt=points
-    alt=dots
-    alt=everything
-    alt=it
-    alt=them
-    alt=all
-    alt=things
-    alt=stuff
-    alt=data
-    alt=series
-    alt=bar_colour
-    alt=bar_color
-    alt=bar_colors
-    alt=bar_colours
-    alt=colour
-    alt=color
-    alt=colours
-    alt=colors
-    alt=the_bars
-    alt=the_lines
-    alt=the_chart
-    alt=the_graph
-    alt=the_pie
-    alt=the_columns
-    alt=the_slices
-    alt=the_points
-    alt=the_dots
-    alt=the_series
-    alt=the_line
-    alt=the_bar
-    alt=the_column
-    alt=the_slice
-    alt=the_point
-    alt=the_dot
-    alt=the_data
-    alt=the_whole_chart
-    alt=the_whole_graph
-    alt=the_whole_thing
-    alt=this
-    alt=that
-    alt=these
-    alt=those
-    alt=all_of_it
-    alt=all_of_them
-    alt=each_bar
-    alt=every_bar
-    alt=each_1
-    alt=every_1
-    alt=the_chart_colour
-    alt=the_chart_color
-    alt=the_chart_colours
-    alt=the_chart_colors
-    alt=all_the_bars
-    alt=all_the_lines
-    alt=all_the_columns
-    alt=all_the_slices
-    alt=all_the_points
-    alt=all_the_dots
-    alt=all_the_series
-    alt=all_the_data
-    alt=bar_colour_to
-    alt=bar_color_to
-    alt=the_bar_colour
-    alt=the_bar_color
-    alt=the_bar_colours
-    alt=the_bar_colors
-    alt=the_line_colour
-    alt=the_line_color
-    alt=the_line_colours
-    alt=the_line_colors
-    alt=the_colour
-    alt=the_color
-    alt=the_colours
-    alt=the_colors
-    alt=colours_to
-    alt=colors_to
-    alt=colour_to
-    alt=color_to
 
 @phrase.data.charts.g8_put core.phrase
     frame=false
@@ -799,148 +580,6 @@
     alt=so_who
     alt=so_whats
 
-@phrase.data.charts.g10_sort core.phrase
-    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
-    alt=sort
-    alt=order
-    alt=arrange
-    alt=rank
-    alt=put
-    alt=list
-    alt=show
-    alt=go
-    alt=run
-    alt=have
-    alt=keep
-    alt=do
-    alt=place
-    alt=line_up
-    alt=organise
-    alt=organize
-    alt=display
-    alt=set
-    alt=reorder
-    alt=re_order
-    alt=re_sort
-    alt=resort
-    alt=rearrange
-    alt=re_arrange
-    alt=stack
-    alt=sequence
-    alt=align
-    alt=group
-    alt=file
-    alt=bring
-    alt=move
-    alt=get
-    alt=make
-    alt=turn
-    alt=switch
-    alt=flip
-    alt=swap
-    alt=reverse
-    alt=invert
-    alt=change
-    alt=use
-
-@phrase.data.charts.g11_1 core.phrase
-    frame=false
-    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
-    alt=1
-    alt=bar
-    alt=bars
-    alt=item
-    alt=items
-    alt=slice
-    alt=slices
-    alt=value
-    alt=number
-    alt=label
-    alt=thing
-    alt=column
-    alt=point
-    alt=segment
-    alt=fruit
-    alt=category
-    alt=entry
-    alt=name
-    alt=amount
-    alt=count
-    alt=result
-    alt=data_point
-    alt=element
-    alt=winner
-    alt=ones
-    alt=of_them
-    alt=of_all
-    alt=here
-    alt=bit
-    alt=option
-    alt=choice
-    alt=score
-    alt=animal
-    alt=kid
-    alt=person
-    alt=child
-    alt=toy
-    alt=shape
-    alt=colour
-    alt=color
-    alt=piece
-    alt=part
-    alt=pick
-    alt=answer
-    alt=figure
-    alt=stat
-    alt=row
-    alt=series
-    alt=line
-    alt=dot
-    alt=player
-    alt=team
-    alt=group
-    alt=class
-    alt=type
-    alt=kind
-    alt=sort
-    alt=variety
-    alt=brand
-    alt=product
-    alt=food
-    alt=drink
-    alt=snack
-    alt=game
-
-@phrase.data.charts.g12_delete core.phrase
-    frame=false
-    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
-    alt=delete
-    alt=remove
-    alt=erase
-    alt=discard
-    alt=close
-    alt=get_rid_of
-    alt=throw_away
-    alt=drop
-    alt=scrap
-    alt=trash
-    alt=bin
-    alt=zap
-    alt=kill
-    alt=nix
-    alt=axe
-    alt=take_out
-    alt=throw_out
-    alt=chuck_out
-    alt=destroy
-    alt=shut
-    alt=shut_down
-    alt=shred
-    alt=junk
-    alt=get_rid_of_the
-    alt=take_out_the
-    alt=throw_away_the
-
 @phrase.data.charts.g13_has core.phrase
     frame=false
     doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
@@ -968,81 +607,6 @@
     alt=are_holding
     alt=have_now
     alt=has_now
-
-@phrase.data.charts.g14_add core.phrase
-    frame=false
-    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
-    alt=add
-    alt=put
-    alt=include
-    alt=insert
-    alt=stick
-    alt=throw_in
-    alt=throw
-    alt=chuck
-    alt=toss
-    alt=pop
-    alt=tack
-    alt=append
-    alt=give_me
-    alt=plus
-    alt=new_item
-    alt=new_bar
-    alt=new_entry
-    alt=extra
-    alt=also
-    alt=and_also
-    alt=another
-    alt=1_more
-    alt=new
-    alt=enter
-    alt=type_in
-    alt=write
-    alt=record
-    alt=log
-    alt=note
-    alt=count
-    alt=throw_on
-    alt=pop_in
-    alt=add_in
-    alt=put_in
-    alt=stick_in
-    alt=add_on
-    alt=tack_on
-    alt=can_you_add
-    alt=let_us_add
-
-@phrase.data.charts.g15_legend core.phrase
-    frame=false
-    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
-    alt=legend
-    alt=key
-    alt=legend_box
-    alt=legend_panel
-    alt=colour_key
-    alt=color_key
-    alt=colour_legend
-    alt=color_legend
-    alt=chart_key
-    alt=graph_key
-    alt=chart_legend
-    alt=graph_legend
-    alt=label_box
-    alt=labels_box
-    alt=labels_panel
-    alt=label_panel
-    alt=names_box
-    alt=names_panel
-    alt=index
-    alt=colour_index
-    alt=color_index
-    alt=colour_guide
-    alt=color_guide
-    alt=guide
-    alt=colour_chart
-    alt=color_chart
-    alt=colour_map
-    alt=color_map
 
 @phrase.data.charts.g16_excel core.phrase
     frame=false
@@ -1149,42 +713,6 @@
     alt=lower
     alt=shorter
     alt=worse
-
-@phrase.data.charts.g20_make core.phrase
-    frame=false
-    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
-    alt=make
-    alt=set
-    alt=change
-    alt=update
-    alt=put
-    alt=use
-    alt=give
-    alt=write
-    alt=type
-    alt=add
-    alt=edit
-    alt=rename
-    alt=switch
-    alt=turn
-    alt=enter
-    alt=put_in
-    alt=insert
-    alt=fix
-    alt=adjust
-    alt=replace
-    alt=make_the
-    alt=set_the
-    alt=change_the
-    alt=put_the
-    alt=alter
-    alt=modify
-    alt=name
-    alt=call
-    alt=label
-    alt=let
-    alt=have
-    alt=get
 
 @phrase.data.charts.g21_1 core.phrase
     frame=false
@@ -1337,20 +865,6 @@
     alt=is_that_the
     alt=is_this_the
 
-@phrase.data.charts.g28_title core.phrase
-    frame=false
-    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
-    alt=title
-    alt=heading
-    alt=header
-    alt=caption
-    alt=headline
-    alt=top_text
-    alt=chart_name
-    alt=graph_name
-    alt=chart_title
-    alt=graph_title
-
 @phrase.data.charts.g29_make core.phrase
     doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
     alt=make
@@ -1365,19 +879,6 @@
     alt=visualize
     alt=display
     alt=get
-
-@phrase.data.charts.g30_delete core.phrase
-    frame=false
-    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
-    alt=delete
-    alt=remove
-    alt=erase
-    alt=discard
-    alt=close
-    alt=get_rid_of
-    alt=throw_away
-    alt=drop
-    alt=scrap
 
 @phrase.data.charts.g31_on_the_bars core.phrase
     doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
@@ -1461,20 +962,6 @@
     alt=calculate_the
     alt=compute_the
 
-@phrase.data.charts.g36_of_the_chart core.phrase
-    frame=false
-    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
-    alt=of_the_chart
-    alt=of_it
-    alt=of_the_graph
-    alt=of_this_chart
-    alt=for_the_chart
-    alt=for_it
-    alt=on_top
-    alt=at_the_top
-    alt=on_the_chart
-    alt=of_this
-
 @phrase.data.charts.g37_than core.phrase
     frame=false
     doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
@@ -1503,21 +990,6 @@
     alt=are_they
     alt=ones
     alt=of_them
-
-@phrase.data.charts.g39_go_back_to core.phrase
-    frame=false
-    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
-    alt=go_back_to
-    alt=go_to
-    alt=show
-    alt=open
-    alt=switch_to
-    alt=bring_up
-    alt=display
-    alt=return_to
-    alt=back_to
-    alt=take_me_to
-    alt=see
 
 @phrase.data.charts.g40_the core.phrase
     frame=false
@@ -1588,27 +1060,6 @@
     alt=would
     alt=can
     alt=could
-
-@phrase.data.charts.g45_value core.phrase
-    frame=false
-    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
-    alt=value
-    alt=number
-    alt=amount
-    alt=bar
-    alt=slice
-    alt=figure
-    alt=count
-    alt=size
-
-@phrase.data.charts.g46_show_it core.phrase
-    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
-    alt=show_it
-    alt=show_me
-    alt=open_it
-    alt=show_it_to_me
-    alt=let_me_see_it
-    alt=bring_it_up
 
 @phrase.data.charts.g47_values core.phrase
     frame=false
@@ -1700,16 +1151,6 @@
     alt=pet
     alt=pets
 
-@phrase.data.charts.g55_title core.phrase
-    frame=false
-    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
-    alt=title
-    alt=heading
-    alt=header
-    alt=caption
-    alt=headline
-    alt=name
-
 @phrase.data.charts.g56_make core.phrase
     frame=false
     doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
@@ -1720,3 +1161,65 @@
     alt=show
     alt=give
     alt=prepare
+
+@lex.data.charts.g_toys core.lexicon
+    class=noun
+    doc="Items of the shop price list that are toys"
+    word=ball
+    word=doll
+    word=kite
+    word=puzzle
+    word=balloon
+    word=toy_car
+
+@lex.data.charts.g_fruit core.lexicon
+    class=noun
+    doc="Fruit on the shop price list"
+    word=apple
+    word=banana
+    word=orange
+    word=pear
+
+@lex.data.charts.g_school core.lexicon
+    class=noun
+    doc="School things on the shop price list"
+    word=pencil
+    word=pen
+    word=eraser
+    word=ruler
+    word=notebook
+    word=sticker
+    word=book
+    word=backpack
+
+@lex.data.charts.g_snacks core.lexicon
+    class=noun
+    doc="Snacks and baked things on the shop price list"
+    word=biscuit
+    word=chocolate
+    word=ice_cream
+    word=sandwich
+    word=bread
+
+@lex.data.charts.g_drinks core.lexicon
+    class=noun
+    doc="Drinks on the shop price list"
+    word=juice
+    word=milk
+    word=water
+
+@lex.data.charts.g_food core.lexicon
+    class=noun
+    doc="Everything to eat or drink on the shop price list"
+    word=apple
+    word=banana
+    word=orange
+    word=pear
+    word=bread
+    word=milk
+    word=juice
+    word=water
+    word=biscuit
+    word=chocolate
+    word=ice_cream
+    word=sandwich

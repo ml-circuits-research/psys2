@@ -387,7 +387,6 @@
     class=modifier
     doc="The words for the whole thing the world holds (the picture, the drawing)"
     word=drawing
-    word=drawing
     word=picture
     word=canvas
     word=drawing_board
