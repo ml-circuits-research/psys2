@@ -7,7 +7,7 @@
 // words of the board. Browser-safe; it imports its sibling ops.mjs for the tables (a world is plain files).
 import {
   initialState, parseNP, splitDest, kindOfWord, kindName, describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP, bbox, HORIZON,
-} from './ops.mjs?v=fdfc09ca58';
+} from './ops.mjs?v=b2a640fdb4';
 
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
@@ -152,6 +152,7 @@ const noun = (np) => np.known && !np.pron && !np.special && !np.part && !np.part
  * so does the hint they give when the kind is there in other colours.
  */
 export function guard({ action, args, check }) {
+  if (args?.verb === 'put') return null;   // a placing verb adds a thing that is not in the picture (the operation does it)
   const text = TARGET[action]?.(args ?? {});
   if (text == null || text === '') return null;
   const np = parseNP(text);

@@ -186,7 +186,16 @@ export function makeLang(source) {
     return null;
   };
 
-  return { redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+  // ---- SCENE-NATURAL P2: "not over the water", "but not on the road": the last step must not reach a thing ------------------------------
+  const EXCEPT = [...new Set(phrase('lang.except'))].filter((l) => l.includes(' ')).sort((a, b) => b.length - a.length);
+  /** The words of the thing a follow-up keeps the last step away from ("not over the water" -> ['the', 'water']), or null. A bare "not" is a correction of a word, not this. */
+  const except = (text) => {
+    const t = plain(text);
+    for (const l of EXCEPT) if (t.startsWith(`${l} `)) return t.slice(l.length + 1).split(' ').filter(Boolean);
+    return null;
+  };
+
+  return { except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;

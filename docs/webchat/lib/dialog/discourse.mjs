@@ -18,8 +18,9 @@ import { restrictedSet } from '../formalizer/spell.mjs?v=475f8fcbf9';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=5de885797a';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
-import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=d1c52c97ac';
+import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
 import { budget } from './budget.mjs?v=123c3e1329';
+import { touchedCount } from './followup.mjs?v=1e203c3efd';
 
 export const FRAME_LIMIT = 5;
 
@@ -234,7 +235,7 @@ export class Discourse {
       }
       for (const cand of this._candidates(frame, frag.content)) {
         if (cand.wild && frag.kind === 'bare') continue;   // gibberish with no marker is no text for a free slot ("asdf qwer zxcv")
-        if (cand.wild && ((own && own.match?.worldId !== frame.world) || META_SKIP.has(frag.content[0].toLowerCase()) || /^lets?$/i.test(frag.content[0]))) continue;   // a command of its own is no text for a free slot
+        if (cand.wild && ((own && own.match?.worldId !== frame.world) || (own && !own.unparsed && own.match?.worldId === frame.world && own.wires?.some((w) => w.type === 'core.request' && !w.entries?.some((e) => /\.ask\./.test(String(own.match.patternId))))) || META_SKIP.has(frag.content[0].toLowerCase()) || /^lets?$/i.test(frag.content[0]))) continue;   // a command of its own is no text for a free slot
         const hit = await this._try(frame.world, cand.text, opts);
         if (!hit) continue;
         const seg = hit.res.segments[0];
@@ -1146,7 +1147,7 @@ export class Discourse {
     const ws = frame.text.replace(/[?!.]+$/, '').split(' ');
     const isDegreeWord = (w) => this.lang.COMPARATIVES.includes(w.toLowerCase()) || /^(left|right|up|down|higher|lower|more|less|forward|back|upward|downward|upwards|downwards)$/i.test(w);
     const slotT = frame.slots.find((x) => x.name === 't' || x.name === 'target') ?? null;
-    const tText = slotT ? slotT.text : 'it';
+    const tText = slotT ? slotT.text : touchedCount(this._recentAction()) > 1 ? 'them' : 'it';   // P2: what the last action touched; several things are "them"
     const verb = /^(?:make|let|turn|get)$/i.test(ws[0]) ? ws[0] : 'Make';
     const adv = deg.adv ?? '';
     const join = (...xs) => xs.filter(Boolean).join(' ');
@@ -1171,7 +1172,10 @@ export class Discourse {
       cands.push(frame.text.replace(/[?!.]+$/, ''));   // "more" without an adverb: do it once more
     } else if (deg.type === 'comparative') {
       const rep = join(adv, deg.comparative);
-      const c = withDegreeWord(rep);
+      // a size word does not replace a position word of the last frame ("bigger" after "move the houses higher" is a new size request about the same things)
+      const POSITION = /^(left|right|up|down|higher|lower|forward|back|upward|downward|upwards|downwards)$/i;
+      const lastWord = [...ws].reverse().find(isDegreeWord);
+      const c = lastWord && POSITION.test(lastWord) !== POSITION.test(deg.comparative) ? null : withDegreeWord(rep);
       if (c) cands.push(c);
       cands.push(join(verb, tText, rep));
       cands.push(join(verb, 'it', rep));
@@ -1186,6 +1190,8 @@ export class Discourse {
       const hit = await this._try(frame.world, cand, opts);
       if (!hit) continue;
       if (hit.res.segments[0].match.patternId === 'unknown') { this.dialog.isession.form.restore(hit.snap); continue; }
+      // the world must be able to carry the candidate out: a request it would only answer with a question ("where should it go?") is not the follow-up meant
+      try { const st = this.dialog._dryStatuses(hit.res.segments); if (st.length && !st.every((x) => x === 'supported')) { this.dialog.isession.form.restore(hit.snap); continue; } } catch { /* no dry run: take it */ }
       return { pre: this._finish(hit, { kind: 'degree', type: deg.type, adverb: deg.adv ?? null, of: frame.text, fragment: deg.text ?? null, rewritten: cand, world: frame.world, frameTurn: frame.turn }) };
     }
     return null;

@@ -776,6 +776,8 @@ exista|exist|a:exist|existat|i
 rezulta|result|az:rezult|rezultat|i
 marca|mark|az:march|marcat|t imp
 muta|move|a:mut|mutat|t imp
+lasa|leave/left/left|a:las|lasat|t imp
+pastra|keep/kept/kept|az:păstr|păstrat|t imp
 amesteca|mix|a:amestec|amestecat|t imp
 repeta|repeat|az:repet|repetat|t imp
 selecta|select|az:select|selectat|t imp

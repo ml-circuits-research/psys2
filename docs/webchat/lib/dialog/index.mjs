@@ -13,7 +13,7 @@ import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=8
 import { loadWorlds } from '../worlds/index.mjs?v=c4c4e0a0d3';
 import { validateWorldSet } from '../worlds/validate.mjs?v=d5f2244721';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=46f11423af';
+import { createInterpreter } from '../interpreter/index.mjs?v=4ce9998cb1';
 import { createReasoner } from '../reasoner/index.mjs?v=601e6467e8';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=fa7fed8417';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=a6f7d81ada';
@@ -29,7 +29,7 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=636998352c';
 import { checkValues } from './value-check.mjs?v=9392f9d951';
-import { Discourse } from './discourse.mjs?v=87f9dc9f6d';
+import { Discourse } from './discourse.mjs?v=da560c2631';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=f0c070a89d';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=d5fb8ed33e';
