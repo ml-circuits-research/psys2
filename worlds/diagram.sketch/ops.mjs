@@ -117,6 +117,8 @@ function plain(s, n, many = false) {
   const same = (s.shapes ?? []).filter((x) => x.shape === kind && !x.layer);
   return many || same.length > 1 || !same.some((x) => x.name === n) ? `${kind} ${Number(m[2])}` : `the ${kind}`;
 }
+/** P6: an internal id inside a sentence that names shapes ("c1 → s1 already exists", "change about c1, s1 and c2") is said in plain words ("circle 1 → square 1"). */
+const plainIds = (s, text) => String(text).replace(/(?<![\w-])([crsdetxhk]\d+)(?![\w-])/gi, (m) => plain(s, m, true));
 /** "a circle", "3 triangles": the shapes just drawn, named in plain words. */
 function drawnPhrase(s, names) {
   const out = [], cnt = new Map();
@@ -235,7 +237,7 @@ function summarize(result, s) {
       }
     }
     if (st.answer && !ownAnswer) answers.push(st.answer);
-    for (const n of st.notes || []) if (/^(reverted|re-applied|there was nothing)|already/.test(n)) said.push(n.charAt(0).toUpperCase() + n.slice(1) + '.');
+    for (const n of st.notes || []) if (/^(reverted|re-applied|there was nothing)|already/.test(n)) said.push(plainIds(s, n).replace(/^./, (c) => c.toUpperCase()) + '.');
   }
   const out = [];
   if (adds.length) out.push(`Drew ${few(drawnPhrase(s, adds), 6)}.`);
@@ -403,7 +405,7 @@ function execute(ctx, s, nodes) {
   if (!result.ok) {
     const err = result.error;
     const text = summarize({ steps: result.steps.filter((st) => !st.error) }, s);
-    const said = shortNames(s, err?.message ?? 'I could not do that.');
+    const said = shortNames(s, /^What should change about /.test(err?.message ?? '') ? plainIds(s, err.message) : (err?.message ?? 'I could not do that.'));
     const clarify = err && err.name === 'Clarify';
     if (result.partial) return ok(`${shortNames(s, text)} But: ${said}`);
     return no(said, clarify ? 'missing' : 'unsupported');
