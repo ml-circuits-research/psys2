@@ -8,7 +8,7 @@
  * Nested sends (the validator replays earlier messages in scratch sessions) do not open a record of their own; their time lands in the
  * `seed` stage. Outside a record every call is a no-op, so the cost when nobody looks is a null check.
  */
-import { guard } from './guard.mjs?v=5528007fa9';
+import { guard } from './guard.mjs?v=eb1a66f556';
 const now = () => globalThis.performance?.now?.() ?? Date.now();
 let cur = null;
 

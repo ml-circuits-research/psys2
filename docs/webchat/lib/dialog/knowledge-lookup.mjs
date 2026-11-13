@@ -9,7 +9,7 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=7b9ec8aa78';
+import { leftOut, requestOf } from './world-aware.mjs?v=35026f1769';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -52,10 +52,30 @@ export function answerFrom(frame, th, catalog) {
   }
 }
 
+/**
+ * Rule A (spec 17, section 6): a lookup is an addition after the reading, never a precondition. A catalog that rejects, or never answers, must leave the reading and
+ * the turn exactly as they would be without a catalog: `within` settles with `TIMED_OUT` after `engine.knowledgeDeadlineMs` (default 6000, one network read) and counts it
+ * in `engine.knowledgeStats.timeouts`; a rejection counts as `failures`. The caller then does what it does for "no hit" and keeps the reading.
+ */
+export const TIMED_OUT = Symbol('knowledge lookup timed out');
+export const LOOKUP_DEADLINE_MS = 6000;
+export const knowledgeStatsOf = (dialog) => (dialog.engine.knowledgeStats ??= { timeouts: 0, failures: 0 });
+async function within(dialog, promise) {
+  const st = knowledgeStatsOf(dialog);
+  let timer;
+  try {
+    const r = await Promise.race([Promise.resolve(promise), new Promise((res) => { timer = setTimeout(() => res(TIMED_OUT), dialog.engine.knowledgeDeadlineMs ?? LOOKUP_DEADLINE_MS); })]);
+    if (r === TIMED_OUT) st.timeouts++;
+    return r;
+  } catch { st.failures++; return TIMED_OUT; } finally { clearTimeout(timer); }
+}
+
 async function frameAnswer(dialog, frame) {
   const cat = knowledgeOf(dialog);
   const t0 = clock();
-  const th = await cat.thing(frame.slot);
+  const th = await within(dialog, cat.thing(frame.slot));
+  if (th === TIMED_OUT) return null;   // the reading stands, the world answers as it would without a catalog
+  if (!th && cat.unreachable?.()) { knowledgeStatsOf(dialog).failures++; return null; }   // an unreachable catalog is not "I don't know what a X is": nothing changes
   const ms = clock() - t0;
   if (!th) return { reply: `I don't know what ${article(frame.slot)} is.`, status: 'missing', info: { kind: 'knowledge', frame, hit: false, ms } };
   const ans = answerFrom(frame, th, cat);
@@ -87,7 +107,7 @@ export async function knowledgeFallback(dialog, english, segments, statuses) {
   const frame = dialog.engine.interp.lang.know?.(english);
   if (!frame) return null;
   const r = await frameAnswer(dialog, frame);
-  return r.info.hit ? r : null;
+  return r?.info.hit ? r : null;
 }
 
 /**
@@ -138,13 +158,16 @@ export async function preloadThings(dialog, segments) {
     } catch { /* a reading that cannot be inspected needs nothing */ }
   }
   const done = [];
-  for (const n of [...names].slice(0, 6)) {
-    try {
-      const p = cat.thing(n);
-      if (drawNames.has(n) && cat.peek?.(n) === undefined) await noticeIfSlow(dialog, p, n);
-      const th = await p; done.push({ name: n, hit: !!th, shards: th?.loaded ?? [] });
-    } catch { /* no knowledge is no hit */ }
-  }
+  const all = (async () => {
+    for (const n of [...names].slice(0, 6)) {
+      try {
+        const p = cat.thing(n);
+        if (drawNames.has(n) && cat.peek?.(n) === undefined) await noticeIfSlow(dialog, p, n);
+        const th = await p; done.push({ name: n, hit: !!th, shards: th?.loaded ?? [] });
+      } catch { /* no knowledge is no hit */ }
+    }
+  })();
+  await within(dialog, all);   // one bound for the whole preload: a catalog that hangs delays the turn once, by one read's bound, and changes nothing
   return done;
 }
 

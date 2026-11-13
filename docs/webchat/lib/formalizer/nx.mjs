@@ -23,11 +23,11 @@
  * message that an untrained world's rules read is left to the rules path.
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
-import { compilePattern, formalize } from './rules/index.mjs?v=3ef1962f06';
-import { candidateSegmentations } from './dispatcher-runtime.mjs?v=9875fdfe88';
+import { compilePattern, formalize } from './rules/index.mjs?v=8c6a9e6d3c';
+import { candidateSegmentations } from './dispatcher-runtime.mjs?v=0fe828e086';
 import { atom } from '../soplang/index.mjs?v=26885599a7';
-import { perf } from './perf.mjs?v=06e451c3d4';
-import { guard, TurnAborted } from './guard.mjs?v=5528007fa9';
+import { perf } from './perf.mjs?v=b75de4ae38';
+import { guard, TurnAborted } from './guard.mjs?v=eb1a66f556';
 
 /** The strategies and the one constant that picks the default. */
 export const NX_STRATEGIES = Object.freeze(['hybrid', 'neural', 'rules']);

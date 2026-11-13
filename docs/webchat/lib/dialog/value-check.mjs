@@ -18,7 +18,7 @@
  */
 import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=616917393c';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=e603001bfa';
+import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=475f8fcbf9';
 import { budget } from './budget.mjs?v=123c3e1329';
 
 export const COLORS = new Set('red orange yellow green blue purple violet pink brown black white gray grey gold golden silver cyan magenta turquoise beige navy teal maroon lime lilac indigo tan rose peach crimson scarlet azure'.split(' '));

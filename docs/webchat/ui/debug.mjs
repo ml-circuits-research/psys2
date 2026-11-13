@@ -242,9 +242,21 @@ export function createDebug(host) {
     return out;
   }
   const turnDump = (t) => ({ seq: t.seq, id: t.id, time: t.time, text: t.text, mode: t.mode, tab: t.tab, endType: t.endType, worlds: t.worlds, answer: t.answer, outcome: t.outcome, stage: t.stage, ms: t.ms, readings: t.readings, perf: t.perf, state: { before: t.stateBefore, after: t.stateAfter }, trace: t.reply?.trace ?? null, effects: t.effects, translation: t.usage, detection: t.detection });
+  // MODEL-TIMEOUTS (spec 06): said once (one banner, its count updates), never repeated per turn; the turn's trace lists its own timeouts.
+  let modelTimeout = null;
+  const timeoutBanner = () => modelTimeout ? [h('p', { class: 'p2-dbg-sum p2-dbg-timeout', role: 'status', 'data-count': String(modelTimeout.count) },
+    `A model call timed out (${modelTimeout.first.stage}: ${modelTimeout.first.message}) and the rules answered instead; so a slower device can read a message differently from a fast one. Model timeouts this session: ${modelTimeout.count}.`)] : [];
+  function noteModelTimeout(info) {
+    const firstTime = !modelTimeout;
+    modelTimeout = { first: modelTimeout?.first ?? info, count: info?.count ?? ((modelTimeout?.count ?? 0) + 1) };
+    if (firstTime) { try { host.toast?.('A model call timed out; the rules answered instead (see the debug view).'); } catch { /* no toast */ } }
+    if (isOpen() && (section === 'turns' || section === 'models')) render();
+  }
+
   function turnsSection() {
     const list = turnsFor(ring, cur.world), all = list.map(turnDump);
     return [
+      ...timeoutBanner(),
       h('div', { class: 'p2-dbg-sum', 'data-count': String(list.length) }, list.length ? `The last ${list.length} turn${list.length > 1 ? 's' : ''} that touched ${cur.world} (newest first; ${ring.length} of at most ${RING_MAX} turns are kept while developer mode is on).` : `No turn touched ${cur.world} since developer mode was switched on. Send a command to this tab.`),
       toolbar('turns', () => all), ...list.map(turnBox),
     ];
@@ -346,6 +358,7 @@ export function createDebug(host) {
     const ortInfo = ort ? { restarts: ort.restarts, stats: ort.stats, lanes: ort.lanes ? Object.fromEntries(Object.entries(ort.lanes).map(([k, v]) => [k, v && typeof v === 'object' ? { busy: !!v.busy, queued: v.queue?.length ?? v.queued ?? null } : v])) : null, sessions: ort.sessions ? [...(ort.sessions.keys?.() ?? Object.keys(ort.sessions))] : null } : null;
     const data = { ...m, ort: ortInfo, calls };
     return [
+      ...timeoutBanner(),
       toolbar('models', () => data),
       sec('Dispatcher', kv([['Formalizer setting', m.formalizer], ['Model', m.dispatcher?.label || 'none'], ['Status', m.dispatcher?.status?.state ? `${m.dispatcher.status.state}${m.dispatcher.status.message ? `: ${m.dispatcher.status.message}` : ''}` : undefined], ['Source', m.dispatcher?.source ?? undefined], ['Version', m.dispatcher?.version ? JSON.stringify(m.dispatcher.version) : undefined]])),
       sec('Normalizer', kv([['Model', m.normalizer?.label ?? 'none in this build'], ['Status', m.normalizer?.status?.state ?? undefined], ['Source', m.normalizer?.status?.source ?? undefined], ['Loaded in', m.normalizer?.status?.ms != null ? `${m.normalizer.status.ms} ms` : undefined]])),
@@ -369,7 +382,7 @@ export function createDebug(host) {
   }
 
   return {
-    ring, record, beforeTurn, open, close, isOpen, render, el, get section() { return section; },
+    ring, record, beforeTurn, noteModelTimeout, get modelTimeoutCount() { return modelTimeout?.count ?? 0; }, open, close, isOpen, render, el, get section() { return section; },
     /** One dump of everything the view knows about a tab's world (the phrase log's "debug dump" link). */
     dumpFor(worldId) { return { world: worldId, turns: turnsFor(ring, worldId, RING_MAX).map(turnDump) }; },
     turnFor(id) { const t = ring.find((x) => x.id === id); return t ? turnDump(t) : null; },

@@ -9,31 +9,31 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=3ef1962f06';
-import { loadWorlds } from '../worlds/index.mjs?v=498008c228';
-import { validateWorldSet } from '../worlds/validate.mjs?v=488a98bad6';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=8c6a9e6d3c';
+import { loadWorlds } from '../worlds/index.mjs?v=c4c4e0a0d3';
+import { validateWorldSet } from '../worlds/validate.mjs?v=d5f2244721';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=8099a24cd4';
+import { createInterpreter } from '../interpreter/index.mjs?v=4b73d707c4';
 import { createReasoner } from '../reasoner/index.mjs?v=73fd11fca2';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=832559362f';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=ad3cc02326';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=fa7fed8417';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=a6f7d81ada';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=5377ba90b8';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=1d9da06254';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=e603001bfa';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=6f167fb82b';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=5383e556eb';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=475f8fcbf9';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
-import { perf } from '../formalizer/perf.mjs?v=06e451c3d4';
-import { guard, TurnAborted } from '../formalizer/guard.mjs?v=5528007fa9';
+import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
+import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=aaee10754b';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=e2929cefb2';
-import { checkValues } from './value-check.mjs?v=2a2fd64304';
-import { Discourse } from './discourse.mjs?v=e77f1f5814';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=636998352c';
+import { checkValues } from './value-check.mjs?v=9392f9d951';
+import { Discourse } from './discourse.mjs?v=2d3be3453c';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=673367ec02';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=ca5283006a';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=7b9ec8aa78';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=0391d4a9dc';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=43ef077175';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=35026f1769';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -265,6 +265,9 @@ function tooComplexReply(session, text, e, b) {
     trace: { intercepted: null, effects: [], formalizer: { preferred: session.formalizer, used: [] }, source: null, original: text, english: text, replyEnglish: TOO_COMPLEX, segments: [], router: [], routing: [], patterns: [], operations: [], statuses: [], wires: [], budget: rep, budgetExceeded: record },
   };
 }
+
+/** A model call that hit its deadline: an ORT lane timeout (`OrtTimeout`), an aborted encoder fetch (`AbortError`, `TimeoutError`) or a message that says so. */
+export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTimeout', 'AbortError', 'TimeoutError'].includes(e.name) || /timed out|timeout|aborted/i.test(String(e.message ?? e)));
 
 export class DialogSession {
   constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader } = {}) {
@@ -997,6 +1000,22 @@ export class DialogSession {
   }
 
   /**
+   * MODEL-TIMEOUTS (spec 06 "Model timeouts are visible"): a model call that timed out (encoder 1500 ms, dispatcher / normalizer lane deadlines) and was answered by the rules
+   * instead is recorded, never silent: counted per session and per engine (`engine.modelStats`), listed in the turn's `trace.formalizer.modelTimeouts`, and announced to the host
+   * through `engine.onModelTimeout({ stage, message, count, first })` (`first` once per session; the webchat debug panel says it once and keeps the count). Deadlines are unchanged.
+   */
+  _noteModelTimeout(stage, e) {
+    if (!isModelTimeout(e)) return;
+    const st = (this.engine.modelStats ??= { timeouts: 0, byStage: {} });
+    st.timeouts++; st.byStage[stage] = (st.byStage[stage] ?? 0) + 1;
+    this.modelTimeouts = (this.modelTimeouts ?? 0) + 1;
+    const message = e?.message ?? String(e);
+    (this._turnModelTimeouts ??= []).push({ stage, message });
+    const first = this.modelTimeouts === 1;
+    try { this.engine.onModelTimeout?.({ stage, message, count: this.modelTimeouts, total: st.timeouts, first }); } catch { /* a listener must not break the turn */ }
+  }
+
+  /**
    * Formalize one message (spec 03 section 7.16). The NX strategy picks who reads first:
    *   rules   the shipped path (`_formalizeShipped`)
    *   hybrid  the shipped path, then the model reads the segments it left unparsed (gate and validator)
@@ -1019,7 +1038,7 @@ export class DialogSession {
           const r = await perf.time('nx', () => guard.abortable(nx.formalize(english, opts), 'nx'));
           if (r.complete) return tag({ segments: r.segments, wires: r.wires, dispatch: null }, 'model');
         }
-      } catch (e) { if (e instanceof TurnAborted) throw e; /* the model failed: the rules path answers */ }
+      } catch (e) { if (e instanceof TurnAborted) throw e; this._noteModelTimeout('nx', e); /* the model failed: the rules path answers */ }
     }
     const res = await this._formalizeShipped(english, sid, preferred, lenient);
     if (want === 'hybrid' && res.segments.some((x) => x.unparsed)) {
@@ -1027,7 +1046,7 @@ export class DialogSession {
         const o2 = { ...opts, context: this.context() };
         const refined = await perf.time('nx', () => guard.abortable(nx.refine(res, o2), 'nx'));
         return tag(refined, refined === res ? 'rules' : 'model');
-      } catch (e) { if (e instanceof TurnAborted) throw e; }
+      } catch (e) { if (e instanceof TurnAborted) throw e; this._noteModelTimeout('nx.refine', e); }
     }
     return tag(res, 'rules');
   }
@@ -1041,7 +1060,7 @@ export class DialogSession {
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false, encoderError = null;
-    try { usable = !!enc && !!(await perf.time('encoder.available', () => guard.abortable(enc.available(), 'encoder.available'))) && set.list().some((w) => enc.supports(w)); } catch { usable = false; }
+    try { usable = !!enc && !!(await perf.time('encoder.available', () => guard.abortable(enc.available(), 'encoder.available'))) && set.list().some((w) => enc.supports(w)); } catch (e) { usable = false; if (e instanceof TurnAborted) throw e; this._noteModelTimeout('encoder.available', e); }
     if (usable && lenient.fastPath) { const quick = await this._quickRules(english, opts); if (quick) return quick; }
     if (usable) {
       try {
@@ -1059,7 +1078,7 @@ export class DialogSession {
         if (active) return { segments: active.segments, wires: active.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
         const done = await this._withLeniency({ segments, wires: [] }, opts, lenient);
         return { segments: done.segments, wires: done.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
-      } catch (e) { encoderError = e?.message ?? String(e); /* the encoder failed: fall through to the rules */ }
+      } catch (e) { encoderError = e?.message ?? String(e); this._noteModelTimeout('encoder', e); /* the encoder failed: fall through to the rules */ }
     }
     const res = await perf.time('rules', () => rules.formalize(english, opts));
     for (const s of res.segments) s.strategy = 'rules';
@@ -1113,6 +1132,7 @@ export class DialogSession {
     const own = perf.start();
     // Turn guard (spec 06 "Turn lifecycle"): the outermost send installs the abort signal and the deadlines; nested sends (validator replays) inherit them.
     const g = guard.install({ signal: opts.signal ?? null, hardMs: opts.hardMs ?? Infinity, softMs: opts.softMs ?? Infinity, force: !!opts.signal });
+    if (g) guard.onModelTimeout((stage, e) => this._noteModelTimeout(stage, e));
     // Compute budget (spec 06 "Compute budgets"): one per turn, passed down through the shared `budget` handle; nested sends join the outer turn's budget.
     const tb = opts.budget ?? createBudget();
     const bt = installBudget(tb, { force: !!opts.budget });
@@ -1220,6 +1240,7 @@ export class DialogSession {
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
     this._wa = normalizeWorldAware(worldAware ?? this.worldAware);
+    this._turnModelTimeouts = [];
     this._beNow = bestEffort ?? this.bestEffort;
     const wanted = language ?? this.language;
     let lang = 'en', translation = null, english = text;
@@ -1320,7 +1341,7 @@ export class DialogSession {
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
-      const ka = await perf.time('knowledge', () => knowledgeAnswer(this, english, formal));
+      let ka = null; try { ka = await perf.time('knowledge', () => knowledgeAnswer(this, english, formal)); } catch { /* no knowledge is no change */ }
       if (ka) { meta = { reply: ka.reply, status: ka.status, info: ka.info }; formal = { segments: [], wires: [] }; }
     }
     const { wires, dispatch, encoderError } = formal;
@@ -1503,7 +1524,7 @@ export class DialogSession {
     return {
       text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}), ...(assumptions.length ? { assumptions } : {}), ...(warnings.length ? { warnings } : {}),
       trace: {
-        intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], nx: formal.nx ?? null, ...(encoderError ? { error: encoderError } : {}) },
+        intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], nx: formal.nx ?? null, ...(encoderError ? { error: encoderError } : {}), modelTimeoutCount: this.modelTimeouts ?? 0, ...(this._turnModelTimeouts?.length ? { modelTimeouts: this._turnModelTimeouts } : {}) },
         dispatch: dispatch ?? null,
         discourse: { resolved: pre?.info ?? null, meta: meta?.info ?? null, ...(feedback ? { feedback } : {}), pending: disc.pending ? { type: disc.pending.type, world: disc.pending.world, key: disc.pending.key, expected: disc.pending.expected, question: disc.pending.question } : null, consumed: pend ? { type: pend.type, world: pend.world, question: pend.question } : null, frames: disc.frames.length },
         ...(feedback ? { feedback } : {}),

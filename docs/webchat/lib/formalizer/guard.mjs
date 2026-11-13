@@ -45,6 +45,10 @@ export const guard = {
   /** Releases the guard of `token` (a no-op when another guard replaced it in the meantime: a stale turn must not release the new turn's guard). */
   release(token) { if (token && cur === token) { cur = null; for (const w of token.waiters) w(); } },
   setStage(stage) { if (cur) cur.stage = stage; },
+  /** The turn's listener for model calls that timed out and were replaced by the rules (MODEL-TIMEOUTS): set by the dialog on the guard it installed. */
+  onModelTimeout(fn) { if (cur) cur.modelTimeout = fn; },
+  /** Reports a model call that failed in a place that swallows the error (the normalizer): the turn counts it when it is a timeout. */
+  modelTimeout(stage, e) { try { cur?.modelTimeout?.(stage, e); } catch { /* reporting never breaks a turn */ } },
   /** Throws TurnAborted at a cancellation point. */
   check(stage) {
     const c = cur;

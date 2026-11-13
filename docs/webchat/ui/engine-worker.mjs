@@ -127,6 +127,7 @@ async function init(m) {
   engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
   // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
+  engine.onModelTimeout = (info) => evt('model-timeout', info);   // a model call timed out and the rules answered (spec 06): the debug panel says so once and counts
   // Offline, the 30 hand-written objects vendored in the world (things.catalog.mjs) still draw; lookups of other things then answer as unknown.
   try {
     const [{ createFacts }, { createKnowledgeSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs')]);

@@ -266,6 +266,9 @@ function tooComplexReply(session, text, e, b) {
   };
 }
 
+/** A model call that hit its deadline: an ORT lane timeout (`OrtTimeout`), an aborted encoder fetch (`AbortError`, `TimeoutError`) or a message that says so. */
+export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTimeout', 'AbortError', 'TimeoutError'].includes(e.name) || /timed out|timeout|aborted/i.test(String(e.message ?? e)));
+
 export class DialogSession {
   constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader } = {}) {
     this.engine = engine;
@@ -997,6 +1000,22 @@ export class DialogSession {
   }
 
   /**
+   * MODEL-TIMEOUTS (spec 06 "Model timeouts are visible"): a model call that timed out (encoder 1500 ms, dispatcher / normalizer lane deadlines) and was answered by the rules
+   * instead is recorded, never silent: counted per session and per engine (`engine.modelStats`), listed in the turn's `trace.formalizer.modelTimeouts`, and announced to the host
+   * through `engine.onModelTimeout({ stage, message, count, first })` (`first` once per session; the webchat debug panel says it once and keeps the count). Deadlines are unchanged.
+   */
+  _noteModelTimeout(stage, e) {
+    if (!isModelTimeout(e)) return;
+    const st = (this.engine.modelStats ??= { timeouts: 0, byStage: {} });
+    st.timeouts++; st.byStage[stage] = (st.byStage[stage] ?? 0) + 1;
+    this.modelTimeouts = (this.modelTimeouts ?? 0) + 1;
+    const message = e?.message ?? String(e);
+    (this._turnModelTimeouts ??= []).push({ stage, message });
+    const first = this.modelTimeouts === 1;
+    try { this.engine.onModelTimeout?.({ stage, message, count: this.modelTimeouts, total: st.timeouts, first }); } catch { /* a listener must not break the turn */ }
+  }
+
+  /**
    * Formalize one message (spec 03 section 7.16). The NX strategy picks who reads first:
    *   rules   the shipped path (`_formalizeShipped`)
    *   hybrid  the shipped path, then the model reads the segments it left unparsed (gate and validator)
@@ -1019,7 +1038,7 @@ export class DialogSession {
           const r = await perf.time('nx', () => guard.abortable(nx.formalize(english, opts), 'nx'));
           if (r.complete) return tag({ segments: r.segments, wires: r.wires, dispatch: null }, 'model');
         }
-      } catch (e) { if (e instanceof TurnAborted) throw e; /* the model failed: the rules path answers */ }
+      } catch (e) { if (e instanceof TurnAborted) throw e; this._noteModelTimeout('nx', e); /* the model failed: the rules path answers */ }
     }
     const res = await this._formalizeShipped(english, sid, preferred, lenient);
     if (want === 'hybrid' && res.segments.some((x) => x.unparsed)) {
@@ -1027,7 +1046,7 @@ export class DialogSession {
         const o2 = { ...opts, context: this.context() };
         const refined = await perf.time('nx', () => guard.abortable(nx.refine(res, o2), 'nx'));
         return tag(refined, refined === res ? 'rules' : 'model');
-      } catch (e) { if (e instanceof TurnAborted) throw e; }
+      } catch (e) { if (e instanceof TurnAborted) throw e; this._noteModelTimeout('nx.refine', e); }
     }
     return tag(res, 'rules');
   }
@@ -1041,7 +1060,7 @@ export class DialogSession {
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false, encoderError = null;
-    try { usable = !!enc && !!(await perf.time('encoder.available', () => guard.abortable(enc.available(), 'encoder.available'))) && set.list().some((w) => enc.supports(w)); } catch { usable = false; }
+    try { usable = !!enc && !!(await perf.time('encoder.available', () => guard.abortable(enc.available(), 'encoder.available'))) && set.list().some((w) => enc.supports(w)); } catch (e) { usable = false; if (e instanceof TurnAborted) throw e; this._noteModelTimeout('encoder.available', e); }
     if (usable && lenient.fastPath) { const quick = await this._quickRules(english, opts); if (quick) return quick; }
     if (usable) {
       try {
@@ -1059,7 +1078,7 @@ export class DialogSession {
         if (active) return { segments: active.segments, wires: active.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
         const done = await this._withLeniency({ segments, wires: [] }, opts, lenient);
         return { segments: done.segments, wires: done.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
-      } catch (e) { encoderError = e?.message ?? String(e); /* the encoder failed: fall through to the rules */ }
+      } catch (e) { encoderError = e?.message ?? String(e); this._noteModelTimeout('encoder', e); /* the encoder failed: fall through to the rules */ }
     }
     const res = await perf.time('rules', () => rules.formalize(english, opts));
     for (const s of res.segments) s.strategy = 'rules';
@@ -1113,6 +1132,7 @@ export class DialogSession {
     const own = perf.start();
     // Turn guard (spec 06 "Turn lifecycle"): the outermost send installs the abort signal and the deadlines; nested sends (validator replays) inherit them.
     const g = guard.install({ signal: opts.signal ?? null, hardMs: opts.hardMs ?? Infinity, softMs: opts.softMs ?? Infinity, force: !!opts.signal });
+    if (g) guard.onModelTimeout((stage, e) => this._noteModelTimeout(stage, e));
     // Compute budget (spec 06 "Compute budgets"): one per turn, passed down through the shared `budget` handle; nested sends join the outer turn's budget.
     const tb = opts.budget ?? createBudget();
     const bt = installBudget(tb, { force: !!opts.budget });
@@ -1220,6 +1240,7 @@ export class DialogSession {
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
     this._wa = normalizeWorldAware(worldAware ?? this.worldAware);
+    this._turnModelTimeouts = [];
     this._beNow = bestEffort ?? this.bestEffort;
     const wanted = language ?? this.language;
     let lang = 'en', translation = null, english = text;
@@ -1320,7 +1341,7 @@ export class DialogSession {
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
-      const ka = await perf.time('knowledge', () => knowledgeAnswer(this, english, formal));
+      let ka = null; try { ka = await perf.time('knowledge', () => knowledgeAnswer(this, english, formal)); } catch { /* no knowledge is no change */ }
       if (ka) { meta = { reply: ka.reply, status: ka.status, info: ka.info }; formal = { segments: [], wires: [] }; }
     }
     const { wires, dispatch, encoderError } = formal;
@@ -1503,7 +1524,7 @@ export class DialogSession {
     return {
       text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}), ...(assumptions.length ? { assumptions } : {}), ...(warnings.length ? { warnings } : {}),
       trace: {
-        intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], nx: formal.nx ?? null, ...(encoderError ? { error: encoderError } : {}) },
+        intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], nx: formal.nx ?? null, ...(encoderError ? { error: encoderError } : {}), modelTimeoutCount: this.modelTimeouts ?? 0, ...(this._turnModelTimeouts?.length ? { modelTimeouts: this._turnModelTimeouts } : {}) },
         dispatch: dispatch ?? null,
         discourse: { resolved: pre?.info ?? null, meta: meta?.info ?? null, ...(feedback ? { feedback } : {}), pending: disc.pending ? { type: disc.pending.type, world: disc.pending.world, key: disc.pending.key, expected: disc.pending.expected, question: disc.pending.question } : null, consumed: pend ? { type: pend.type, world: pend.world, question: pend.question } : null, frames: disc.frames.length },
         ...(feedback ? { feedback } : {}),
