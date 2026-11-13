@@ -132,7 +132,7 @@ export function windowSpans(n, size, stride = Math.max(1, size >> 1)) {
 
 const FULL = 1e9;   // maxLength meaning "do not truncate" for the tokenizer
 
-import { perf } from './perf.mjs?v=06e451c3d4';
+import { perf } from './perf.mjs?v=b75de4ae38';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
 export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editTags = null, editTau = 0.5, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3 } = {}) {

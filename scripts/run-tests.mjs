@@ -16,7 +16,8 @@
  *   (default jobs = os.availableParallelism(); --jobs 1 = serial). Tests must not share fixed temp paths or ports (use mkdtemp and listen(0)).
  * A failure of a sampled sweep is reproduced with the printed seed: PSYS2_SAMPLE_SEED=<seed> node --test tests/<file>
  */
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, mkdtempSync, existsSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -61,6 +62,8 @@ const SMOKE = [
   'keep-list.test.mjs',
   'mt-layer.test.mjs',
   'knowledge-lookup.test.mjs',
+  'network-never-changes-reading.test.mjs',
+  'model-timeouts.test.mjs',
   'budget.test.mjs',
   'loop-guard.test.mjs',
   'turn-guard.test.mjs',
@@ -94,6 +97,13 @@ if ((full) && !env.PUPPETEER_CORE) console.log('note: PUPPETEER_CORE is not set;
 
 console.log(`== psys2 ${suite} suite: ${files.length} files, ${jobs} jobs` + (full ? ', all sweeps in full' : `, sweeps sampled at ~10%, seed ${seed}, changed worlds in full: ${changed.length ? changed.join(', ') : '(none)'}`));
 const t0 = Date.now();
-const r = spawnSync(process.execPath, ['--test', `--test-concurrency=${jobs}`, ...rest, ...files], { stdio: 'inherit', cwd: root, env });
+// Rule B (specs/06 "Testing"): no test touches the network. The preload makes fetch/http to a non-loopback host throw, and logs it so that a test that swallows the error still fails the run.
+const netDir = mkdtempSync(join(tmpdir(), 'psys2-net-'));
+env.PSYS2_NET_LOG = join(netDir, 'attempts.log');
+const preload = join(root, 'scripts', 'lib', 'no-network.mjs');
+const r = spawnSync(process.execPath, ['--import', preload, '--test', `--test-concurrency=${jobs}`, ...rest, ...files], { stdio: 'inherit', cwd: root, env });
+const netViolations = existsSync(env.PSYS2_NET_LOG) ? readFileSync(env.PSYS2_NET_LOG, 'utf8').trim() : '';
+rmSync(netDir, { recursive: true, force: true });
+if (netViolations) console.log(`== NETWORK ACCESS IN TESTS (not allowed):\n${netViolations}`);
 console.log(`== psys2 ${suite} suite finished in ${((Date.now() - t0) / 1000).toFixed(1)} s wall (seed ${seed}, exit ${r.status ?? 1})`);
-process.exit(r.status ?? 1);
+process.exit(netViolations ? 1 : (r.status ?? 1));

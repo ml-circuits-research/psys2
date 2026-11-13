@@ -16,7 +16,7 @@
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
 import { budget } from './budget.mjs?v=123c3e1329';
-import { restrictedSet } from '../formalizer/spell.mjs?v=e603001bfa';
+import { restrictedSet } from '../formalizer/spell.mjs?v=475f8fcbf9';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=5de885797a';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);

@@ -15,14 +15,14 @@
  *
  * Output: { id, text, status: 'understood' | 'not_understood', winner, produced, notUnderstood, why, trace }.
  */
-import { perf } from '../formalizer/perf.mjs?v=06e451c3d4';
-import { guard } from '../formalizer/guard.mjs?v=5528007fa9';
-import { formalize, FormSession } from '../formalizer/index.mjs?v=a427e6d508';
-import { youTarget } from '../formalizer/rules/index.mjs?v=3ef1962f06';
+import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
+import { guard } from '../formalizer/guard.mjs?v=eb1a66f556';
+import { formalize, FormSession } from '../formalizer/index.mjs?v=c49ecf2368';
+import { youTarget } from '../formalizer/rules/index.mjs?v=8c6a9e6d3c';
 import { serialize } from '../soplang/index.mjs?v=26885599a7';
-import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=e603001bfa';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=aaee10754b';
-import { checkValues } from './value-check.mjs?v=2a2fd64304';
+import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=475f8fcbf9';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
+import { checkValues } from './value-check.mjs?v=9392f9d951';
 import { wildTokens } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { budget } from './budget.mjs?v=123c3e1329';
 
@@ -140,7 +140,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const key = JSON.stringify([world, tab, text, beam]);
     if (normCache.has(key)) return { status: 'ready', rewrites: normCache.get(key) };
     let out;
-    try { out = await perf.time('normalizer', () => guard.abortable((typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }), 'normalizer')); } catch { return { status: 'error', rewrites: [] }; }
+    try { out = await perf.time('normalizer', () => guard.abortable((typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }), 'normalizer')); } catch (e) { guard.modelTimeout('normalizer', e); return { status: 'error', rewrites: [] }; }
     const status = Array.isArray(out) || out == null ? 'ready' : out.status === 'not_ready' || out.status === 'error' ? out.status : 'ready';
     if (status !== 'ready') return { status, rewrites: [] };
     const rewrites = toRewrites(Array.isArray(out) ? out : out?.rewrites, beam);

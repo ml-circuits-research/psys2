@@ -140,7 +140,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const key = JSON.stringify([world, tab, text, beam]);
     if (normCache.has(key)) return { status: 'ready', rewrites: normCache.get(key) };
     let out;
-    try { out = await perf.time('normalizer', () => guard.abortable((typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }), 'normalizer')); } catch { return { status: 'error', rewrites: [] }; }
+    try { out = await perf.time('normalizer', () => guard.abortable((typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }), 'normalizer')); } catch (e) { guard.modelTimeout('normalizer', e); return { status: 'error', rewrites: [] }; }
     const status = Array.isArray(out) || out == null ? 'ready' : out.status === 'not_ready' || out.status === 'error' ? out.status : 'ready';
     if (status !== 'ready') return { status, rewrites: [] };
     const rewrites = toRewrites(Array.isArray(out) ? out : out?.rewrites, beam);

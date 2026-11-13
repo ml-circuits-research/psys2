@@ -700,6 +700,7 @@ export async function mountPsys2(element, options = {}) {
     label(dbgBtn, `Debug this world (${t?.label ?? view})`);
     dbgBtn.replaceChildren(h('span', { class: 'p2-dbg-ico', 'aria-hidden': 'true' }, '🐞'), ` Debug ${t?.label ?? ''}`);
   }
+  const modelTimeouts = [];
   async function loadDebug() {
     if (dbg) return dbg;
     dbgLoading ??= import('./ui/debug.mjs').then((m) => {
@@ -718,6 +719,7 @@ export async function mountPsys2(element, options = {}) {
           longTasks: longTasks.slice(-30),
         }),
       });
+      for (const t of modelTimeouts) dbg.noteModelTimeout(t);
       return dbg;
     }).catch((e) => { console.warn('debug view failed to load', e); dbgLoading = null; return null; });
     return dbgLoading;
@@ -1446,6 +1448,7 @@ export async function mountPsys2(element, options = {}) {
     else if (name === 'ort-paused') { ortMirror.paused = data; try { globalThis.dispatchEvent?.(new CustomEvent('psys2-ort-paused', { detail: data })); } catch { /* no events */ } }
     else if (name === 'rules-compiled') mark('rules-compiled');
     else if (name === 'warm') mark(`warm-${data}`);
+    else if (name === 'model-timeout') { modelTimeouts.push(data); if (dbg) dbg.noteModelTimeout(data); }   // MODEL-TIMEOUTS: kept until the debug panel exists, then shown once with the count
     else if (name === 'notice') note(String(data));   // an interim line of the engine (a catalog lookup in progress); the reply follows
   }
   try {

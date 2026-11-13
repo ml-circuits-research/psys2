@@ -9,7 +9,7 @@ export const knowledgeLocation = () => globalThis.process?.env?.PSYS2_KNOWLEDGE 
 export function createKnowledgeSource(location) {
   const base = String(location).replace(/\/+$/, '');
   if (/^https?:\/\//i.test(base)) {
-    return { text: async (p) => { const r = await fetch(`${base}/${p}`); return r.ok ? r.text() : null; } };
+    return { text: async (p) => { const r = await fetch(`${base}/${p}`, { signal: globalThis.AbortSignal?.timeout?.(6000) }); return r.ok ? r.text() : null; } };
   }
   return {
     text: async (p) => {
