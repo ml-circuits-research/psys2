@@ -1,0 +1,3 @@
+@k.objects.house k.objects.object name=house core.source="fixture 1"
+@k.objects.house.body k.objects.part of=house name=body shape=rectangle x=20 y=45 w=60 h=50 z=1 colour=red core.source="fixture 1"
+@k.objects.house.roof k.objects.part of=house name=roof shape=triangle x=12 y=15 w=76 h=30 z=2 colour=brown core.source="fixture 1"

@@ -1,0 +1,20 @@
+# k.faces/shards/plain-cheeks: the variants of the slot `cheeks` in the style `plain` (the side on the viewer's left; the other side is its mirror image): features, and parts with a primitive shape, a box in the frame of the face, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+
+@k.faces.plain.cheeks.blush k.faces.variant slot=cheeks name=blush style=plain shape=oval kind=blush core.source="hand-core 1"
+@k.faces.plain.cheeks.blush.blush k.faces.part slot=cheeks of=blush name=blush shape=oval x=26 y=54 w=10 h=6 z=1 colour=pink rgb="#F2A0A0" core.source="hand-core 1"
+@k.faces.plain.cheeks.round_blush k.faces.variant slot=cheeks name="round blush" style=plain shape=round kind=blush core.source="hand-core 1"
+@k.faces.plain.cheeks.round_blush.blush k.faces.part slot=cheeks of="round blush" name=blush shape=circle x=26.5 y=52.5 w=9 h=9 z=1 colour=pink rgb="#F2A0A0" core.source="hand-core 1"
+@k.faces.plain.cheeks.freckles k.faces.variant slot=cheeks name=freckles style=plain kind=freckles core.source="hand-core 1"
+@k.faces.plain.cheeks.freckles.freckle_1 k.faces.part slot=cheeks of=freckles name=freckle_1 kind=freckle shape=circle x=27 y=54 w=1.6 h=1.6 z=1 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.cheeks.freckles.freckle_2 k.faces.part slot=cheeks of=freckles name=freckle_2 kind=freckle shape=circle x=31 y=56 w=1.6 h=1.6 z=1 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.cheeks.freckles.freckle_3 k.faces.part slot=cheeks of=freckles name=freckle_3 kind=freckle shape=circle x=34 y=53 w=1.6 h=1.6 z=1 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.cheeks.freckles.freckle_4 k.faces.part slot=cheeks of=freckles name=freckle_4 kind=freckle shape=circle x=29.5 y=51.5 w=1.6 h=1.6 z=1 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.cheeks.wrinkles k.faces.variant slot=cheeks name=wrinkles style=plain age=old kind=wrinkles core.source="hand-core 1"
+@k.faces.plain.cheeks.wrinkles.upper_line k.faces.part slot=cheeks of=wrinkles name=upper_line kind=wrinkle shape=line x=27 y=53 w=6 h=2 z=1 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.cheeks.wrinkles.lower_line k.faces.part slot=cheeks of=wrinkles name=lower_line kind=wrinkle shape=line x=30 y=58 w=6 h=5 z=1 colour=brown tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.cheeks.wrinkles.upper_line.p1 k.faces.point part=$k.faces.plain.cheeks.wrinkles.upper_line n=1 x=27 y=53 core.source="hand-core 1"
+@k.faces.plain.cheeks.wrinkles.upper_line.p2 k.faces.point part=$k.faces.plain.cheeks.wrinkles.upper_line n=2 x=33 y=55 core.source="hand-core 1"
+@k.faces.plain.cheeks.wrinkles.lower_line.p1 k.faces.point part=$k.faces.plain.cheeks.wrinkles.lower_line n=1 x=30 y=58 core.source="hand-core 1"
+@k.faces.plain.cheeks.wrinkles.lower_line.p2 k.faces.point part=$k.faces.plain.cheeks.wrinkles.lower_line n=2 x=36 y=63 core.source="hand-core 1"

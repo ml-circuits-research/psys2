@@ -1,0 +1,475 @@
+{
+ "amber": [
+  "k.faces/shards/colours"
+ ],
+ "auburn": [
+  "k.faces/shards/colours"
+ ],
+ "black": [
+  "k.faces/shards/colours"
+ ],
+ "blond": [
+  "k.faces/shards/colours"
+ ],
+ "blue": [
+  "k.faces/shards/colours"
+ ],
+ "brown": [
+  "k.faces/shards/colours"
+ ],
+ "clothes": [
+  "k.faces/shards/colours"
+ ],
+ "dark brown": [
+  "k.faces/shards/colours"
+ ],
+ "eyes": [
+  "k.faces/shards/colours",
+  "k.faces/shards/plain-eyes",
+  "k.faces/shards/slots"
+ ],
+ "green": [
+  "k.faces/shards/colours"
+ ],
+ "grey": [
+  "k.faces/shards/colours"
+ ],
+ "hair": [
+  "k.faces/shards/colours"
+ ],
+ "hazel": [
+  "k.faces/shards/colours"
+ ],
+ "light": [
+  "k.faces/shards/colours"
+ ],
+ "metal grey": [
+  "k.faces/shards/colours"
+ ],
+ "olive": [
+  "k.faces/shards/colours"
+ ],
+ "orange": [
+  "k.faces/shards/colours"
+ ],
+ "pale": [
+  "k.faces/shards/colours"
+ ],
+ "pink": [
+  "k.faces/shards/colours"
+ ],
+ "purple": [
+  "k.faces/shards/colours"
+ ],
+ "red": [
+  "k.faces/shards/colours"
+ ],
+ "skin": [
+  "k.faces/shards/colours"
+ ],
+ "tan": [
+  "k.faces/shards/colours"
+ ],
+ "white": [
+  "k.faces/shards/colours"
+ ],
+ "yellow": [
+  "k.faces/shards/colours"
+ ],
+ "beard": [
+  "k.faces/shards/plain-beard",
+  "k.faces/shards/slots"
+ ],
+ "full": [
+  "k.faces/shards/plain-beard"
+ ],
+ "short": [
+  "k.faces/shards/plain-beard",
+  "k.faces/shards/plain-eyebrows",
+  "k.faces/shards/plain-hair-front"
+ ],
+ "stubble": [
+  "k.faces/shards/plain-beard"
+ ],
+ "blush": [
+  "k.faces/shards/plain-cheeks"
+ ],
+ "cheeks": [
+  "k.faces/shards/plain-cheeks",
+  "k.faces/shards/slots"
+ ],
+ "freckles": [
+  "k.faces/shards/plain-cheeks"
+ ],
+ "round blush": [
+  "k.faces/shards/plain-cheeks"
+ ],
+ "wrinkles": [
+  "k.faces/shards/plain-cheeks"
+ ],
+ "bolt": [
+  "k.faces/shards/plain-earrings",
+  "k.faces/shards/plain-nose"
+ ],
+ "drop": [
+  "k.faces/shards/plain-earrings"
+ ],
+ "earrings": [
+  "k.faces/shards/plain-earrings",
+  "k.faces/shards/slots"
+ ],
+ "hoop": [
+  "k.faces/shards/plain-earrings"
+ ],
+ "large hoop": [
+  "k.faces/shards/plain-earrings"
+ ],
+ "pearl": [
+  "k.faces/shards/plain-earrings"
+ ],
+ "stud": [
+  "k.faces/shards/plain-earrings"
+ ],
+ "ears": [
+  "k.faces/shards/plain-ears",
+  "k.faces/shards/slots"
+ ],
+ "large": [
+  "k.faces/shards/plain-ears",
+  "k.faces/shards/plain-eyes"
+ ],
+ "pointed": [
+  "k.faces/shards/plain-ears",
+  "k.faces/shards/plain-nose"
+ ],
+ "round": [
+  "k.faces/shards/plain-ears",
+  "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-glasses",
+  "k.faces/shards/plain-head",
+  "k.faces/shards/plain-nose"
+ ],
+ "small": [
+  "k.faces/shards/plain-ears",
+  "k.faces/shards/plain-mouth",
+  "k.faces/shards/plain-nose",
+  "k.faces/shards/plain-shoulders"
+ ],
+ "square": [
+  "k.faces/shards/plain-ears",
+  "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-glasses",
+  "k.faces/shards/plain-head"
+ ],
+ "arched": [
+  "k.faces/shards/plain-eyebrows"
+ ],
+ "bushy": [
+  "k.faces/shards/plain-eyebrows"
+ ],
+ "eyebrows": [
+  "k.faces/shards/plain-eyebrows",
+  "k.faces/shards/slots"
+ ],
+ "raised": [
+  "k.faces/shards/plain-eyebrows"
+ ],
+ "straight": [
+  "k.faces/shards/plain-eyebrows"
+ ],
+ "thick": [
+  "k.faces/shards/plain-eyebrows",
+  "k.faces/shards/plain-moustache",
+  "k.faces/shards/plain-neck"
+ ],
+ "thick arched": [
+  "k.faces/shards/plain-eyebrows"
+ ],
+ "dot": [
+  "k.faces/shards/plain-eyes"
+ ],
+ "lashes": [
+  "k.faces/shards/plain-eyes"
+ ],
+ "narrow": [
+  "k.faces/shards/plain-eyes"
+ ],
+ "oval": [
+  "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-head"
+ ],
+ "surprised": [
+  "k.faces/shards/plain-eyes",
+  "k.faces/shards/presets"
+ ],
+ "glasses": [
+  "k.faces/shards/plain-glasses",
+  "k.faces/shards/slots",
+  "k.words/shards/gl"
+ ],
+ "small round": [
+  "k.faces/shards/plain-glasses"
+ ],
+ "afro": [
+  "k.faces/shards/plain-hair-back"
+ ],
+ "bun": [
+  "k.faces/shards/plain-hair-back"
+ ],
+ "hair_back": [
+  "k.faces/shards/plain-hair-back",
+  "k.faces/shards/slots"
+ ],
+ "long curly": [
+  "k.faces/shards/plain-hair-back"
+ ],
+ "long straight": [
+  "k.faces/shards/plain-hair-back"
+ ],
+ "long wavy": [
+  "k.faces/shards/plain-hair-back"
+ ],
+ "pigtails": [
+  "k.faces/shards/plain-hair-back"
+ ],
+ "bald on top": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "centre parting": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "curly": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "fringe": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "hair_front": [
+  "k.faces/shards/plain-hair-front",
+  "k.faces/shards/slots"
+ ],
+ "long sides": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "side parting": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "spikes": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "tuft": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "wavy": [
+  "k.faces/shards/plain-hair-front"
+ ],
+ "antenna": [
+  "k.faces/shards/plain-hat"
+ ],
+ "beanie": [
+  "k.faces/shards/plain-hat"
+ ],
+ "bow": [
+  "k.faces/shards/plain-hat"
+ ],
+ "cap": [
+  "k.faces/shards/plain-hat"
+ ],
+ "crown": [
+  "k.faces/shards/plain-hat"
+ ],
+ "hat": [
+  "k.faces/shards/plain-hat",
+  "k.faces/shards/slots"
+ ],
+ "party hat": [
+  "k.faces/shards/plain-hat"
+ ],
+ "box": [
+  "k.faces/shards/plain-head"
+ ],
+ "head": [
+  "k.faces/shards/plain-head",
+  "k.faces/shards/slots"
+ ],
+ "heart": [
+  "k.faces/shards/plain-head"
+ ],
+ "long": [
+  "k.faces/shards/plain-head",
+  "k.faces/shards/plain-nose"
+ ],
+ "wide": [
+  "k.faces/shards/plain-head",
+  "k.faces/shards/plain-nose"
+ ],
+ "moustache": [
+  "k.faces/shards/plain-moustache",
+  "k.faces/shards/slots"
+ ],
+ "thin": [
+  "k.faces/shards/plain-moustache",
+  "k.faces/shards/plain-neck"
+ ],
+ "walrus": [
+  "k.faces/shards/plain-moustache"
+ ],
+ "big smile": [
+  "k.faces/shards/plain-mouth"
+ ],
+ "full lips": [
+  "k.faces/shards/plain-mouth"
+ ],
+ "grille": [
+  "k.faces/shards/plain-mouth"
+ ],
+ "grin": [
+  "k.faces/shards/plain-mouth"
+ ],
+ "mouth": [
+  "k.faces/shards/plain-mouth",
+  "k.faces/shards/slots"
+ ],
+ "neutral": [
+  "k.faces/shards/plain-mouth"
+ ],
+ "smile": [
+  "k.faces/shards/plain-mouth"
+ ],
+ "smirk": [
+  "k.faces/shards/plain-mouth"
+ ],
+ "medium": [
+  "k.faces/shards/plain-neck",
+  "k.faces/shards/plain-nose"
+ ],
+ "neck": [
+  "k.faces/shards/plain-neck",
+  "k.faces/shards/slots"
+ ],
+ "necklace": [
+  "k.faces/shards/plain-neck"
+ ],
+ "pipe": [
+  "k.faces/shards/plain-neck"
+ ],
+ "button": [
+  "k.faces/shards/plain-nose"
+ ],
+ "nose": [
+  "k.faces/shards/plain-nose",
+  "k.faces/shards/slots"
+ ],
+ "hoodie": [
+  "k.faces/shards/plain-shoulders"
+ ],
+ "metal plate": [
+  "k.faces/shards/plain-shoulders"
+ ],
+ "shirt": [
+  "k.faces/shards/plain-shoulders"
+ ],
+ "shoulders": [
+  "k.faces/shards/plain-shoulders",
+  "k.faces/shards/slots"
+ ],
+ "suit": [
+  "k.faces/shards/plain-shoulders"
+ ],
+ "t-shirt": [
+  "k.faces/shards/plain-shoulders"
+ ],
+ "tank top": [
+  "k.faces/shards/plain-shoulders"
+ ],
+ "v-neck": [
+  "k.faces/shards/plain-shoulders"
+ ],
+ "alien": [
+  "k.faces/shards/presets"
+ ],
+ "angry": [
+  "k.faces/shards/presets"
+ ],
+ "baby": [
+  "k.faces/shards/presets"
+ ],
+ "bearded man": [
+  "k.faces/shards/presets"
+ ],
+ "boy": [
+  "k.faces/shards/presets"
+ ],
+ "child": [
+  "k.faces/shards/presets"
+ ],
+ "clown": [
+  "k.faces/shards/presets"
+ ],
+ "girl": [
+  "k.faces/shards/presets"
+ ],
+ "happy": [
+  "k.faces/shards/presets"
+ ],
+ "man": [
+  "k.faces/shards/presets"
+ ],
+ "old man": [
+  "k.faces/shards/presets"
+ ],
+ "old woman": [
+  "k.faces/shards/presets"
+ ],
+ "queen": [
+  "k.faces/shards/presets"
+ ],
+ "robot": [
+  "k.faces/shards/presets"
+ ],
+ "sad": [
+  "k.faces/shards/presets"
+ ],
+ "sleepy": [
+  "k.faces/shards/presets"
+ ],
+ "talking": [
+  "k.faces/shards/presets"
+ ],
+ "wink": [
+  "k.faces/shards/presets"
+ ],
+ "woman": [
+  "k.faces/shards/presets"
+ ],
+ "woman with curly hair": [
+  "k.faces/shards/presets"
+ ],
+ "plain": [
+  "k.faces/shards/slots"
+ ],
+ "house": [
+  "k.objects/shards/buildings"
+ ],
+ "body": [
+  "k.objects/shards/buildings"
+ ],
+ "roof": [
+  "k.objects/shards/buildings"
+ ],
+ "villa": [
+  "k.objects/shards/stand-ins-hand"
+ ],
+ "mansion": [
+  "k.words/shards/ma"
+ ],
+ "spectacles": [
+  "k.words/shards/sp"
+ ],
+ "apple": [
+  "k.demo/shards/fruits"
+ ],
+ "lemon": [
+  "k.demo/shards/fruits"
+ ]
+}
