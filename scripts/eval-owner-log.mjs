@@ -7,7 +7,7 @@
  * operational-check format of scripts/lib/operational-check.mjs plus `reply_not` / `reply_any` regexes on the English reply and `world_not`).
  * Messages without a check are reported but not counted. Reports right / wrong per class and the steps (budget ticks) per message.
  *
- *   node scripts/eval-owner-log.mjs [--verbose] [--json] [--only 12,13]
+ *   node scripts/eval-owner-log.mjs [--verbose] [--json] [--only 12,13] [--log -,b,c]   ('-' = the first log, 'b', 'c' = the later ones; no checks for those)
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
@@ -50,12 +50,13 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
     if (!s || r.time.slice(0, 10) !== prevDay) s = engine.createSession(sessionOptions(settings, { language: 'en' }));
     prevDay = r.time.slice(0, 10);
     s.setWorldState('ui.shell', { activeTab: r.tab });
+    if (r.activeWorld && !r.tab) s.setWorldState('ui.shell', { activeTab: 'robot' });
     const before = s.state();
     const t0 = performance.now();
     let reply = null, error = null;
     try { reply = await s.send(r.text, r.lang === 'ro' ? { language: 'ro' } : undefined); } catch (e) { error = e.message; }
     const ms = performance.now() - t0;
-    const rec = { i, class: r.class, tab: r.tab, text: r.text, ms: Math.round(ms), error };
+    const rec = { i, class: r.class, tab: r.tab, lang: r.lang, text: r.text, expected: r.expected ?? null, logged: r.got?.answer ?? null, ms: Math.round(ms), error };
     if (reply) {
       const after = s.state();
       const english = reply.trace?.replyEnglish ?? reply.text;
@@ -89,7 +90,16 @@ export function summarize(rows) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const only = arg('only') ? new Set(arg('only').split(',').map(Number)) : null;
-  const rows = (await replay()).filter((r) => !only || only.has(r.i));
+  // --log a,b,c : suffixes of training/eval/owner-log-2026-11-13<suffix>.jsonl ('' = the first log); the checks file applies to the first log only
+  const logs = (arg('log', '') ).split(',').map((x) => (x === '-' ? '' : x));
+  const rows = [];
+  for (const sfx of logs) {
+    const log = join(REPO, `training/eval/owner-log-2026-11-13${sfx}.jsonl`);
+    const part = await replay({ log, checks: sfx ? '/nonexistent' : undefined });
+    for (const r of part) { r.log = sfx || 'a'; rows.push(r); }
+    if (logs.length > 1) console.error(`--- log ${sfx || 'a'}: ${JSON.stringify(summarize(part).total)}`);
+  }
+  rows.splice(0, rows.length, ...rows.filter((r) => !only || only.has(r.i)));
   if (flag('json')) console.log(JSON.stringify(rows, null, 1));
   else {
     for (const r of rows) if (flag('verbose') || r.outcome === 'wrong') console.log(`${String(r.i).padStart(2)} ${r.outcome.padEnd(9)} [${r.tab}/${r.class}] ${JSON.stringify(r.text)} -> ${JSON.stringify(r.english)} => ${JSON.stringify(r.reply)} ${r.worlds?.join(',')} ${r.ms}ms${r.failing?.length ? ` FAIL ${r.failing.join(' ')}` : ''}`);
