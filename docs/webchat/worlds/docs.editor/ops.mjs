@@ -1290,3 +1290,66 @@ export function summary(ctx) {
   const n = (s.blocks ?? []).length;
   return n ? `The document "${s.title}" has ${n} ${n === 1 ? 'block' : 'blocks'}.` : `The document "${s.title}" is empty.`;
 }
+
+// ---- make a document with content in ONE request, and the document as a VIEW of the session things (spec 23) ----------------------------------------------
+/** The blocks of `sections`: [{ heading?, paragraphs?: [text], items?: [text] }]. A plain `content` text is paragraphs (one per line, else one). */
+function blocksOf_(sections) {
+  const out = [];
+  for (const sec of sections) {
+    budget.tick('editor.sections');
+    if (sec.heading) out.push({ kind: 'heading', level: 2, text: String(sec.heading) });
+    for (const p of sec.paragraphs ?? []) if (String(p).trim()) out.push({ kind: 'paragraph', text: String(p).trim() });
+    if (sec.items?.length) out.push({ kind: 'list', style: 'bullet', items: sec.items.map(String) });
+  }
+  return out;
+}
+/** The act make-document: a new document with a title and its content in one request (`content` text, and/or `sections`), one step to undo. */
+function _make(ctx, { title, content, sections } = {}) {
+  const text = String(content ?? '').trim().replace(/^["\u201c](.*)["\u201d]$/s, '$1');
+  const secs = [...(sections ?? []), ...(text ? [{ paragraphs: text.split(/\n+/) }] : [])];
+  if (!secs.length && !String(title ?? '').trim()) return no('unsupported', 'What should the document say? Give it a title or some text, for example: "make a document called Holiday with the text We go to the sea."');
+  const t = String(title ?? '').trim();
+  createDoc(ctx, t ? cap(t) : DEFAULT_TITLE, blocksOf_(secs));
+  const n = ctx.state.blocks.length;
+  return ok(`OK, I made a document${t ? ` called "${ctx.state.title}"` : ''} with ${n} ${plural(n, 'block')}. It is open in the editor.`);
+}
+export const make = W(_make);
+
+export const view = () => ok({ id: 'docs.editor', noun: 'document', words: ['document', 'doc', 'page', 'editor', 'paragraph', 'summary', 'report', 'notes'], aspects: ['textual'], many: true, facts: true, kinds: null });
+const describeThing = (t) => {
+  const kind = String(t.kind).replace(/_/g, ' '), a = t.attrs ?? {};
+  const colour = a.colour ?? a.color, rest = Object.entries(a).filter(([k, v]) => !['colour', 'color', 'owner', 'place', 'size', 'x', 'y'].includes(k) && v != null && v !== '' && typeof v !== 'object').map(([k, v]) => `${k} ${v}`);
+  const head = t.name ? `${t.name}, ${an(`${colour ? `${colour} ` : ''}${kind}`)}` : `${colour ? `${colour} ` : ''}${kind}`;
+  return `${cap(head)}${rest.length ? ` (${rest.join(', ')})` : ''}${a.place ? `, ${/^(?:on|in|at|under|near|next|behind|above|below|inside)\b/.test(a.place) ? '' : 'at '}${a.place}` : ''}`;
+};
+/** Things (one section for the view each came from) and the facts of the discussion (topics, games, places) as a new document, or, for things sent one by one, as sections of the open one. */
+function _adopt(ctx, { things, thing, facts, about } = {}) {
+  const list = things ?? (thing ? [thing] : []);
+  const by = new Map();
+  for (const t of list) { budget.tick('editor.adopt'); const k = t.originNoun ? `From the ${t.originNoun}` : 'Things'; (by.get(k) ?? by.set(k, []).get(k)).push(describeThing(t)); }
+  const sections = [...by].map(([heading, items]) => ({ heading: cap(heading), items }));
+  if (facts?.topics?.length) sections.push({ heading: 'Topics', paragraphs: [`We talked about ${joinAnd(facts.topics)}.`] });
+  if (facts?.games?.length) sections.push({ heading: 'Games', items: facts.games.map((g) => `${g.title}${g.result ? `: ${g.result}` : g.status ? ` (${g.status})` : ''}`) });
+  if (facts?.places?.length) sections.push({ heading: 'Places', paragraphs: [`We looked at ${joinAnd(facts.places)}.`] });
+  if (!sections.length) return no('unsupported', 'I was given nothing to write.');
+  const s = ctx.state;
+  if (about || !s.blocks.length) {
+    const title = about ? cap(about === 'the discussion' ? 'About the discussion' : `About the ${String(about).replace(/^the /, '')}`) : 'Things';
+    createDoc(ctx, title, blocksOf_(sections));
+    return ok(`OK, I made a document called "${title}" with ${sections.length} ${plural(sections.length, 'section')}. It is open in the editor.`);
+  }
+  commit(s);
+  for (const sec of sections) {   // sent into the open document: its section for that view is found or made
+    const at = s.blocks.findIndex((b) => b.kind === 'heading' && b.text === sec.heading);
+    if (at >= 0) {
+      const lst = s.blocks.slice(at + 1).findIndex((b) => b.kind === 'heading');
+      const end = lst < 0 ? s.blocks.length : at + 1 + lst;
+      const l = s.blocks.slice(at + 1, end).find((b) => b.kind === 'list');
+      if (l && sec.items) { l.items.push(...sec.items); continue; }
+    }
+    for (const b of blocksOf_([sec])) addBlock(s, b);
+  }
+  show(ctx);
+  return ok(`OK, I added ${list.length} ${plural(list.length, 'thing')} to the document.`);
+}
+export const adopt = W(_adopt);

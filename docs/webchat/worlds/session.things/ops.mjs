@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Operations of session.things (spec 23): learn (session.learned), sync (a view publishes its things), show (select things into a view), list. Browser-safe.
 import { parseTeach, learn as learnWire } from '../../src/knowledge/learned.mjs';
-import { ASPECTS, aspectsOf, ensure, find, labelOf, sync as syncStore, viewByWords, whyNot } from './things.mjs?v=1f3978926b';
+import { ASPECTS, aspectsOf, ensure, labelOf, select, sync as syncStore, viewByWords, whyNot } from './things.mjs?v=a78328057f';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const ok = (value, extra = {}) => ({ status: 'supported', value, ...extra });
@@ -65,31 +65,72 @@ function viewsOf(ctx, st) {
   return Object.values(out);
 }
 
-/** Select things into a view. args: { ids | thing (words), to (the view's words), from (the view that sends) }. */
+/**
+ * The things of worlds that hold things without being views (the drawing board today): their referents, as the session offers them (`ctx.sessionFacts`), enter the store under the id of
+ * the world, each keeping its identity. Returns the worlds as places things come from, [{ id, noun, words }].
+ */
+function bridge(ctx, st, views) {
+  const f = ctx.sessionFacts?.();
+  if (!f) return [];
+  const own = new Set(views.map((v) => v.id)), by = new Map();
+  for (const it of f.items ?? []) { budget.tick('things.bridge'); if (!own.has(it.world)) { if (!by.has(it.world)) by.set(it.world, []); by.get(it.world).push(it); } }
+  for (const w of st.bridged ?? []) if (!by.has(w)) by.set(w, []);
+  st.bridgeIds ??= {};
+  const aspects = aspectsFor(ctx);
+  for (const [world, items] of by) {
+    const r = syncStore(st, world, items.map((i) => ({ key: i.id, thingId: st.bridgeIds[i.id], kind: i.kind, name: null, attrs: { ...(i.aspects ?? {}) } })), aspects);
+    Object.assign(st.bridgeIds, r.ids);
+  }
+  st.bridged = [...by].filter(([, i]) => i.length).map(([w]) => w);
+  const worlds = ctx.worlds?.() ?? [];
+  return st.bridged.map((id) => {
+    const w = worlds.find((x) => x.id === id);
+    const title = String(w?.title ?? id.split('.').at(-1)).replace(/\s*\([^)]*\)\s*/g, ' ').trim().toLowerCase();
+    return { id, noun: title, words: [w?.tab, ...title.split(' ')].filter(Boolean) };
+  });
+}
+
+const thingArg = (t, views) => ({ id: t.id, kind: t.kind, name: t.name, label: t.label, attrs: t.attrs, parts: t.parts, origin: t.origin, originNoun: views.find((v) => v.id === t.origin)?.noun, aspects: t.aspects });
+
+/** Select things into a view. args: { ids | thing (words: a name, a kind, "what I drew", "the discussion"), to (the view's words), from (the view that sends) }. */
 export function show(ctx, { ids, thing, to, from } = {}) {
   const st = ensure(ctx.state);
   const views = viewsOf(ctx, st);
   const view = viewByWords(views, to);
   if (!view) return no('unsupported', `I do not know a place called "${to}" to show things in. I can show things in ${list(views.map((v) => `the ${v.noun}`)) || 'no view yet'}.`);
-  const things = (ids?.length ? ids.map((id) => st.things.find((t) => t.id === id)).filter(Boolean) : find(st, thing));
-  if (!things.length) return no('missing', `There is nothing to show in the ${view.noun}: no such thing in this session yet.`);
-  const cells = [], lines = [];
+  const holders = bridge(ctx, st, views);
+  const sel = ids?.length ? { things: ids.map((id) => st.things.find((t) => t.id === id)).filter(Boolean), session: false, view: null } : select(st, thing, [...views, ...holders]);
+  const things = sel.things;
+  const facts = sel.session && view.facts ? ctx.sessionFacts?.() : null;
+  const hasFacts = !!facts && !!(facts.topics?.length || facts.games?.length || facts.places?.length);
+  if (!things.length && !hasFacts) return no('missing', `There is nothing to show in the ${view.noun}: no such thing in this session yet.`);
+  const cells = [], lines = [], take = [];
+  const about = sel.session ? 'the discussion' : sel.view ? sel.view.noun : null;
   for (const t of things) {
     budget.tick('things.show');
     const cell = { id: t.id, kind: t.kind, name: t.name, to: view.id };
     const why = whyNot(t, view);
     if (t.shown.includes(view.id)) { cell.status = 'already'; cell.note = `${labelOf(t) === t.kind ? `The ${t.kind}` : labelOf(t)} is already in the ${view.noun}.`; }
     else if (why) { cell.status = 'na'; cell.note = why; }
+    else if (view.many) { take.push({ cell, t }); cells.push(cell); continue; }
     else {
-      const r = ctx.request(`${view.id}.adopt`, { thing: { id: t.id, kind: t.kind, name: t.name, label: t.label, attrs: t.attrs, parts: t.parts, origin: t.origin, originNoun: views.find((v) => v.id === t.origin)?.noun } });
+      const r = ctx.request(`${view.id}.adopt`, { thing: thingArg(t, views) });
       if (r?.status === 'supported') { cell.status = 'ok'; cell.note = String(r.value ?? r.note); }
       else { cell.status = 'refused'; cell.note = String(r?.note ?? r?.value ?? `The ${view.noun} cannot take ${an(t.kind)}.`); }
     }
     cells.push(cell); lines.push(cell.note);
   }
+  if (view.many && (take.length || hasFacts)) {   // one request for the whole selection: one step to undo, and a view that counts or writes sees the set
+    const r = ctx.request(`${view.id}.adopt`, { things: take.map((x) => thingArg(x.t, views)), facts: hasFacts ? { topics: facts.topics, games: facts.games, places: facts.places } : null, about });
+    for (const x of take) {
+      if (r?.status === 'supported') { x.cell.status = 'ok'; x.cell.note = String(r.value ?? r.note); if (!x.t.shown.includes(view.id)) x.t.shown.push(view.id); }
+      else { x.cell.status = 'refused'; x.cell.note = String(r?.note ?? r?.value ?? `The ${view.noun} cannot take ${an(x.t.kind)}.`); }
+    }
+    lines.push(String(r?.status === 'supported' ? r.value ?? r.note : r?.note ?? r?.value ?? `The ${view.noun} could not take them.`));
+  }
   ctx.effect('things.shown', { to: view.id, cells });
   ctx.effect('things.shown.' + view.id, { n: cells.filter((c) => c.status === 'ok').length });
-  return ok(lines.join(' '), { cells });
+  return ok([...new Set(lines)].join(' '), { cells });
 }
 
 /** What the store holds, one line per thing with its aspects and the views that show it. */

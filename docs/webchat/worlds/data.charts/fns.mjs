@@ -6,7 +6,7 @@
 // rules refuse what cannot be (the same label twice, a number of a chart that is not there, two active charts) and derive what follows from the numbers: the
 // total of every label, the total, count, biggest and smallest of a chart, the total of a series. The questions about the data are answered from those derived
 // wires (the actions at the bottom say them in the words of ops.mjs). Browser-safe; it imports its sibling ops.mjs for the tables (a world is plain files).
-import { initialState, labelKey, fmt, DOWN, itemsWord, joinAnd, low, round, NONE } from './ops.mjs?v=03f7b6ab23';
+import { initialState, labelKey, fmt, DOWN, itemsWord, joinAnd, low, round, NONE } from './ops.mjs?v=2aa3be842c';
 
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);

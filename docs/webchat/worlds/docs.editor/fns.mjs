@@ -5,7 +5,7 @@
 // `toState` derives the state the engine keeps (and the tab renders) from the wires, `adopt` says which wires to retract, tell and set for a state the operations
 // changed (so undo, the rules and the refusals read what was done), `guard` asks the rules whether the target of a request exists, `isView` says which undo steps
 // only moved the cursor or the selection, `undoWords` says what an undo or a redo did in the world's words. Browser-safe; it imports its sibling files.
-import { initialState, finish } from './ops.mjs?v=b1ad0a65f0';
+import { initialState, finish } from './ops.mjs?v=b2e6235314';
 
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
 const str = (v) => JSON.stringify(String(v));

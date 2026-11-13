@@ -13,7 +13,7 @@ import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=8
 import { loadWorlds } from '../worlds/index.mjs?v=34ab13175c';
 import { validateWorldSet } from '../worlds/validate.mjs?v=72f892791d';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=94c62ceb85';
+import { createInterpreter } from '../interpreter/index.mjs?v=018e73a540';
 import { createReasoner } from '../reasoner/index.mjs?v=e96edcff84';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=416febc3b0';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=46c04ea6cd';
@@ -31,7 +31,7 @@ import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mj
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=74adcda6ff';
 import { checkValues } from './value-check.mjs?v=f42f6f01d4';
 import { Discourse } from './discourse.mjs?v=cb5ea69880';
-import { Dialogue } from './dialogue.mjs?v=26150d0731';
+import { Dialogue } from './dialogue.mjs?v=6b799bebc6';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=3800b0329a';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=5b25c7fd8b';
@@ -320,7 +320,7 @@ export class DialogSession {
    */
   forkForValidation() {
     const s = Object.create(DialogSession.prototype);
-    s.engine = this.engine; s.isession = this.isession.clone(); s._recentWorlds = [...(this._recentWorlds ?? [])]; s._lastGame = this._lastGame;
+    s.engine = this.engine; s.isession = this.isession.clone(); s.isession.sessionFacts = this.isession.sessionFacts; s._recentWorlds = [...(this._recentWorlds ?? [])]; s._lastGame = this._lastGame;
     return s;
   }
 
@@ -1352,7 +1352,7 @@ export class DialogSession {
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
     if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=0f30e71e97').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
-    this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w);
+    this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
     const { set, interp, translator } = engine;
