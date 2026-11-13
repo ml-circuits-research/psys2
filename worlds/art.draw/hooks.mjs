@@ -85,7 +85,7 @@ function acceptsWords({ action, mode, roles, text, state, kindWord, tab }) {   /
   const t = words(text).join(' ');
   if (act === 'make' && /^(?:please |can you |could you )?(?:draw|sketch|paint|doodle)\b/.test(t)) {   // "draw" claims whatever follows only when its last word is a thing this board (or the catalog vocabulary) knows: "draw a flowchart with Start, Check and Done" is not a thing it draws, and the world that has flowcharts reads it
     const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1);
-    return tab !== 'art.draw' || !k || np0Known(k) || kindWord?.(k) === true || kindWord?.(k.replace(/s$/, '')) === true || D.parseNP(roles.thing).known;
+    return tab !== 'art.draw' || !k || np0Known(k) || kindWord?.(k) === true || kindWord?.(k.replace(/s$/, '')) === true || D.parseNP(roles.thing).known || 'refuse';
   }
   const np = D.parseNP(said);
   if (tab && tab !== 'art.draw' && !np.known && !np.pron && !np.special) return false;   // outside its own tab the board claims only a reading it fully supports: every word of the thing is read ("paragraph The cat sat" is not a thing it draws)

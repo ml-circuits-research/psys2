@@ -923,7 +923,20 @@ export function createExecutor(schema, hooks = {}) {
     return r.guess?.thing ? r : undefined;   // no clue of an act or a thing of this world: the engine's own "I did not understand" (it quotes the words and offers examples)
   }
   /** DECLINE: the formalizer asks before routing whether this world owns a reading ({ action, mode, roles, text, state }); hooks.accepts says no when the words are not of this world. */
-  const accepts = (info) => (hooks.accepts ? hooks.accepts({ ...info, kindWord: (w) => !!kindByWord(String(w ?? '').toLowerCase()) }) !== false : true);   // kindWord: a word the schema says is one of its kinds (its lexicon, the catalog vocabulary included)
+  // FULL SUPPORT (spec 20, arbitration rule 2): a role phrase that coordinates things ("everything and fork the plimp") is supported only when EVERY conjunct is, so a world never claims a sentence whose
+  // second half is words it does not know; the sentence then goes unread and the leniency stage reads the clauses one by one ("I understood the first, not the second").
+  const accepts = (info) => {
+    if (!hooks.accepts) return true;
+    const ask = (i) => hooks.accepts({ ...i, kindWord: (w) => !!kindByWord(String(w ?? '').toLowerCase()) });
+    // a bare form ("{pre} {thing}") is the catch-all for modifiers ("big red house"); a pre that starts with a value verb and goes on "to" ("change vatar to a" man) is that act's sentence, which did not read: not the bare form's
+    const first = String(info.roles?.pre ?? '').toLowerCase().split(/\s+/)[0];
+    if (info.mode === 'bare' && first && ACT_VERBS.set.includes(first) && !ACT_VERBS.make.includes(first) && /\bto\b/i.test(info.roles.pre)) return false;   // (the verbs of the act that takes a value: change, modify, replace ...)
+    const v = ask(info);
+    const said = String(info.roles?.thing ?? '');
+    if (v === false || !/\band\b|,/i.test(said) || !['remove', 'change', 'place', 'copy', 'group', 'pick'].includes(String(info.action ?? '').split('.').pop())) return v === 'focus' || v === 'refuse' ? v : v !== false;   // 'focus' (the world holds the focus of the dialogue: the open tab owns its acts first) reaches the formalizer, which then does not make the reading yield
+    const parts = said.split(/\s*(?:,|\band\b)\s*/i).filter(Boolean);
+    return parts.length < 2 || parts.every((c) => ask({ ...info, roles: { ...info.roles, thing: c }, text: c }) !== false) ? v : false;
+  };   // kindWord: a word the schema says is one of its kinds (its lexicon, the catalog vocabulary included)
   /** What a person can point at (the discourse hook `referents`, M1): the items, the focused ones salient. */
   function referents(ctx) {
     if (hooks.referents) return hooks.referents(ctx);   // a world whose things are not `state.items` (the drawing board) names its own

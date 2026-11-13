@@ -77,3 +77,10 @@ The numbers behind each line are in `worker-log.md` (entries named in brackets) 
 - A free-words slot in a generated pattern needs the same decline rule as any catch-all: the world's `accepts` must say what the words may be (here: names of the drawing), not accept the act.
 - Two layers each kept "one step per message" (the executor's `stepGroup`, a hand merge inside `add`); the owner's rule is one step per request, so a rule stated in a spec is a test, and a spec line that contradicts a newer decision (spec 21 section on undo) is a bug to fix with the code.
 - **[LIB]** The undo contract of the library should be per request with an optional "whole message" tag; hosts then do not re-implement grouping (executor, dialogue timeline and world engine each held a copy).
+
+## Arbitration of generated worlds (worker-log "ARBITRATION")
+- Generalised: four rules in the formalizer's decline step instead of per-phrase entries (tab owns its acts, full support, plain refusal, no loose tab change); arbitration known-failures 36 to 9, the 6 invariants green on the full sweep, art.draw own tests unchanged (39 failing before and after).
+- Did not generalise: worlds that are hand-written catch-alls (music "another one", tic-tac-toe bare "move", kids.tasks "remove X") still claim bare sentences because they have no `accepts`; the fix belongs to their schema migration, not to the arbiter.
+- **[LIB]** `accepts` needs a documented three-valued verdict (own / decline / refuse) and an optional `resolves(words)` hook; the 'focus' verdict was silently turned into `true` by the acts wrapper for as long as the hook existed, so the tab never owned its acts. A verdict that a wrapper may erase should be tested once.
+- **[LIB]** A decline restored as a refusal must not run on spelling variants or one-world views of the set (it made every variant "read"); the library's arbiter should know which pass it is in.
+- Method: stale fixtures hide real wins (tests used the tab id `art.draw`, which is no tab); check the fixture before the code.

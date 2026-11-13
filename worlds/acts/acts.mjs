@@ -933,7 +933,7 @@ export function createExecutor(schema, hooks = {}) {
     if (info.mode === 'bare' && first && ACT_VERBS.set.includes(first) && !ACT_VERBS.make.includes(first) && /\bto\b/i.test(info.roles.pre)) return false;   // (the verbs of the act that takes a value: change, modify, replace ...)
     const v = ask(info);
     const said = String(info.roles?.thing ?? '');
-    if (v === false || !/\band\b|,/i.test(said) || !['remove', 'change', 'place', 'copy', 'group', 'pick'].includes(String(info.action ?? '').split('.').pop())) return v === 'focus' ? v : v !== false;   // 'focus' (the world holds the focus of the dialogue: the open tab owns its acts first) reaches the formalizer, which then does not make the reading yield
+    if (v === false || !/\band\b|,/i.test(said) || !['remove', 'change', 'place', 'copy', 'group', 'pick'].includes(String(info.action ?? '').split('.').pop())) return v === 'focus' || v === 'refuse' ? v : v !== false;   // 'focus' (the world holds the focus of the dialogue: the open tab owns its acts first) reaches the formalizer, which then does not make the reading yield
     const parts = said.split(/\s*(?:,|\band\b)\s*/i).filter(Boolean);
     return parts.length < 2 || parts.every((c) => ask({ ...info, roles: { ...info.roles, thing: c }, text: c }) !== false) ? v : false;
   };   // kindWord: a word the schema says is one of its kinds (its lexicon, the catalog vocabulary included)

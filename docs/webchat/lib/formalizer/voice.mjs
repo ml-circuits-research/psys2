@@ -11,7 +11,7 @@
  *
  * Every pass is capped (words, candidates, a time budget) and calls the turn guard, so no spoken message can hang the turn.
  */
-import { editDistance } from './rules/index.mjs?v=2653b631cc';
+import { editDistance } from './rules/index.mjs?v=0f59c477d2';
 import { guard } from './guard.mjs?v=eb1a66f556';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 

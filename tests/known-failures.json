@@ -140,12 +140,6 @@
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
-      "file": "canonical-examples.test.mjs",
-      "pattern": "^help and \"Did you mean\" quote canonical examples only$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
       "file": "commonsense.test.mjs",
       "pattern": "^a fish in the sky: done, and one friendly warning, never a refusal$",
       "class": "usual place / number / time notes -> knowledge scenes rules (std.relations)",
@@ -155,18 +149,6 @@
       "file": "commonsense.test.mjs",
       "pattern": "^a second sun and a car in the sky are warned about, the sun at night too$",
       "class": "usual place / number / time notes -> knowledge scenes rules (std.relations)",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "diagram.test.mjs",
-      "pattern": "^diagram signals beat the Drawing tab: arrows between names and flowchart words$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "diagram.test.mjs",
-      "pattern": "^the Drawing tab keeps its own words: houses, trees and \"describe the canvas\" on the Drawing tab$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
@@ -332,30 +314,6 @@
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
-      "file": "invariants.test.mjs",
-      "pattern": "^ops: no message changes the tab unless it names a tab \\(owner-log messages, and a loose why-question\\)$",
-      "class": "arbitration between worlds: another world claims what the draw tab no longer reads (an invariant: tab change / refusal by another world)",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "invariants.test.mjs",
-      "pattern": "^ops: the world that answers is the world of the open tab unless the message names a world \\(no refusal of another world for an act the tab has\\)$",
-      "class": "arbitration between worlds: another world claims what the draw tab no longer reads (an invariant: tab change / refusal by another world)",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "invariants.test.mjs",
-      "pattern": "^matrix: no message changes the tab unless it names a tab \\(owner-log messages, and a loose why-question\\)$",
-      "class": "arbitration between worlds: another world claims what the draw tab no longer reads (an invariant: tab change / refusal by another world)",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "invariants.test.mjs",
-      "pattern": "^matrix: the world that answers is the world of the open tab unless the message names a world \\(no refusal of another world for an act the tab has\\)$",
-      "class": "arbitration between worlds: another world claims what the draw tab no longer reads (an invariant: tab change / refusal by another world)",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
       "file": "kids-worlds.test.mjs",
       "pattern": "^world kids\\.shop: loads without problems, has >= 25 tests and they all pass$",
       "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
@@ -365,12 +323,6 @@
       "file": "knowledge-all-worlds.test.mjs",
       "pattern": "^drawing a stand-in: drawn by its kind, and the reply says so once$",
       "class": "drawing from knowledge: stand-ins and composites through the acts (draw-from-facts hooks)",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "knowledge-lookup.test.mjs",
-      "pattern": "^delete / move / connect with a catalog hit: the plain refusal, never a gloss$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
@@ -405,12 +357,6 @@
     },
     {
       "file": "rd-real-dialogue.test.mjs",
-      "pattern": "^a message that names a world routes to it whatever tab is open$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd-real-dialogue.test.mjs",
       "pattern": "^bare \"next\", \"more\", \"another one\" follow the active tab; music claims them on its tab or while a song plays$",
       "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
@@ -418,72 +364,6 @@
     {
       "file": "rd-real-dialogue.test.mjs",
       "pattern": "^never corrected towards another world when the active world reads the sentence$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: \"show Pariss\" on map reads Paris$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: \"show New Youk\" on map reads New York$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: \"show Londn\" on avatar reads London$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: \"show Parris\" on draw reads Paris$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: \"show Bern city\" on map reads Bern$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: \"show the city of Bern\" on map reads Bern$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: \"show the town of Pariss\" on charts reads Paris$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: \"show Brazil country\" on map reads Brazil$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^capability: \"change vatar to a man\" on draw reaches the avatar, not the editor$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^capability: \"change X to Y\" stays with the editor on its tab and when X is in the document$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "rd10-names-capability.test.mjs",
-      "pattern": "^names: the reading does not depend on the clock \\(frozen, busy and very slow clocks give the same reading\\)$",
       "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
@@ -524,12 +404,6 @@
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
-      "file": "routing.test.mjs",
-      "pattern": "^\"Make it bigger\" is a drawing command on the drawing tab, not a map zoom$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
       "file": "space.test.mjs",
       "pattern": "^owner rows, ops: first house left and down, further left, the middle house, the correction, the right house$",
       "class": "place forms: behind / so-its-under -> acts forms (space layouts)",
@@ -554,12 +428,6 @@
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
-      "file": "talk-world.test.mjs",
-      "pattern": "^honest scope: a plain refusal with two nearest suggestions, no free chat$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
       "file": "typo-tabfollow.test.mjs",
       "pattern": "^tab follow on the real worlds: \"Show me Bucharest\" asked on the avatar tab opens the Map$",
       "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
@@ -567,37 +435,7 @@
     },
     {
       "file": "world-aware.test.mjs",
-      "pattern": "^off: the shipped reply, nothing recorded on the segments$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "world-aware.test.mjs",
       "pattern": "^veto: \"fă părul roșu\" leaves out \"părul\": nothing is changed, the reply names the word \\(off: no veto is recorded\\)$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "world-aware.test.mjs",
-      "pattern": "^veto: \"delete the dragon\" says what the picture holds, changes nothing$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "world-aware.test.mjs",
-      "pattern": "^veto: a game move while no game runs and another tab is open is not played \\(no-game\\)$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "world-aware.test.mjs",
-      "pattern": "^choose: the reading the open tab can take wins over a move in a game that is not running; veto alone keeps the router order$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "world-aware.test.mjs",
-      "pattern": "^nothing is half done: a vetoed clause holds back the readable ones of the same message$",
       "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
