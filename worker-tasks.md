@@ -3609,3 +3609,15 @@ The 19:25 proposal is now the main line of work; objections still go to question
 **General knowledge everywhere (owner):** every role may be filled or checked by lookup: kinds and synonyms, parts, usual place and size, usual colour, what joins what, layouts, person kinds, feelings → expressions, actions → acts. The knowledge repo is getting `k.actions` (verbs mapped to the acts with their roles), `k.attributes` (which attributes kinds usually have and their usual values), `k.values` (colour names, size words, amounts, "random / different / same"), `k.layouts`, anchors. Use them through the generic catalog reading (KNOWLEDGE-ALL-WORLDS item 1 comes first: it unblocks all of this).
 
 **Report after each task:** one table (set, before, after), the grid's hole count, patterns and lines removed. Smoke per landing only.
+
+## Reviewer 2026-11-13 19:55 — validated at 85f059a; ledger, smoke cut, INPUT-HISTORY, logging, PROGRESS, M4, router C: accepted
+
+**Smoke at 85f059a: 58 tests, 58 pass, 0 fail, 123 s on the reviewer box** (your 21 s; this box is about six times slower: fine). Read, not test-run: the ledger (846 rows) with the grouping report, the invariants and the two real bugs they found (empty translation → no reply; a partly read sentence clearing the picture or starting chess), INPUT-HISTORY, export format 3 with events and `happened`, the progress service, M4, WORLD-OF-WORLDS 2 with C as default. The Sudan and catalog answers are accepted as written.
+
+What the grouping says, and what follows (causes, not cases):
+1. **Translation is the largest group by far** (291 changed meaning + 151 reader gaps + 22 residue of 846). M4 with the on-device model removes the residue on the owner logs (42 → 5). So: load the on-device model whenever the browser Translator is missing for the language, show it in PROGRESS, and make M4 the only path. Then rerun the round-trip numbers per language; the "beta" marks follow the new numbers.
+2. **Log b on the rules path: 46 of 63 replies still say not understood.** That is the old per-world reading. Do not patch it: it is the first measure for ACTS × SCHEMAS (P1) and for M1 (continuation / correction / why: 69 rows, second non-translation group).
+3. **Talk: 132 rows of no fact / frame not read**, mostly knowledge the fixture lacks: switch Talk to the real catalog through the generic reading (KNOWLEDGE-ALL-WORLDS item 1); the knowledge repo now has k.scenes, k.people, k.feelings, k.layouts, k.actions (14 acts, 291 verbs) and is adding attributes and values.
+4. **Reading model: 83 s of the cold start at 1 MB/s (65 MB).** After P3 the tagger replaces the dispatcher: set a size target for it (under 25 MB) and say what is possible.
+5. sopworld asks (their Q26) for your patterns.sop files and spec 03 copied into its `compat/psys2/` to measure an indexed matcher on the real set: do it (hand-written files only).
+Then the ACTS × SCHEMAS order (A1, A2, A3; P1 and P2 in parallel), with sopworld 0.17.0 (`std.schema`, `std.acts`) when it lands.
