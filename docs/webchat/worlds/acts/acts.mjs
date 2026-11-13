@@ -830,13 +830,14 @@ export function createExecutor(schema, hooks = {}) {
   function operation(ctx, act, args = {}) {
     const req0 = { ...args };
     hooks.before?.(ctx, act, req0);
-    // ONE UNDO STEP PER MESSAGE: the engine runs "put on a hat and make it red" as two requests; the world's history (`hooks.history(state)`, else `state.history`) keeps the snapshot taken before the FIRST of them, so one "undo" takes the message back (spec 21 section 9)
+    // ONE UNDO STEP PER ACT GROUP: an act group ("put on a hat and make it red" asked as one request) is several acts; the world's history (`hooks.history(state)`, else `state.history`) keeps the snapshot taken before the FIRST of them, so one "undo" takes the message back (spec 21 section 9)
     const hist = () => { const h = hooks.history ? hooks.history(ctx.state) : ctx.state.history; return Array.isArray(h) ? h : null; };
-    const turn = String(args.request?.id ?? '').split('_')[0] || null;
+    // (only an explicit act group, `actGroup`, is one step: the requests of a message are one step each, spec 15 "one step per request", and "undo the whole message" takes them all)
+    const turn = /^grp\d+_/.test(String(args.request?.id ?? '')) ? String(args.request.id).split('_')[0] : null;
     const g = ctx.state.stepGroup, H0 = hist();
     const base = g && turn && g.turn === turn && H0 && g.base <= H0.length ? g.base : (H0?.length ?? 0);
     if (turn) ctx.state.stepGroup = { turn, base };
-    const done = () => { const H = hist(); if (H && H.length > base + 1 && !['undo', 'redo'].includes(act)) { H.splice(base + 1); hooks.afterGroup?.(ctx.state); } };
+    const done = () => { const H = hist(); if (turn && H && H.length > base + 1 && !['undo', 'redo'].includes(act)) { H.splice(base + 1); hooks.afterGroup?.(ctx.state); } };
     let r = operationParts(ctx, act, req0);
     done();
     return hooks.after?.(ctx, act, req0, r) ?? r;
