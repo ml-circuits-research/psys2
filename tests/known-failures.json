@@ -1,0 +1,4 @@
+{
+  "about": "Failing tests that are language cases on their way to the failure ledger (training/eval/failures.jsonl). scripts/run-tests.mjs reports them as a count per class and they do not fail the run. Entry: { file, name | pattern, class, ledger }. Smoke has none: it holds invariants only.",
+  "known": []
+}

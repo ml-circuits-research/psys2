@@ -2,7 +2,7 @@
 /**
  * Test runner: tests/*.test.mjs with node:test, one process per file, `--test-concurrency` = jobs.
  *
- *   npm run test:smoke     --smoke: the SMOKE list below (under 2 minutes on 4 cores; every commit): PSYS2_SUITE=smoke, sweeps sampled, no browser, no model
+ *   npm run test:smoke     --smoke: the SMOKE list below = invariants only (under 1 minute on 4 cores; once per landing): PSYS2_SUITE=smoke, sweeps sampled, no browser, no model
  *   npm test               --full (package.json): everything below, i.e. the full suite; before each webchat publish, after a sopworld re-vendor, daily
  *   npm run test:fast      fast suite (what `npm test` used to be; the default of this script): every unit/behaviour test; exhaustive sweeps on a deterministic ~10% sample
  *                          (seed PSYS2_SAMPLE_SEED, default today's date, printed); full-only tests (`*.full.test.mjs` files and
@@ -53,35 +53,21 @@ function changedWorlds() {
 
 const all = readdirSync(join(root, 'tests')).filter((f) => f.endsWith('.test.mjs')).sort();
 const isBrowser = (f) => readFileSync(join(root, 'tests', f), 'utf8').includes('PUPPETEER_CORE');
-/** SMOKE suite (specs/06 "Testing"): by regression kind, see worker-log.md. Keep the total under 2 minutes on 4 cores (`taskset -c 0-3 npm run test:smoke`). */
+/**
+ * SMOKE suite = INVARIANTS only (worker-tasks "NO POINT FIXES", item 2): every turn gets a reply, nothing destructive runs on a partly understood sentence,
+ * no tab change without a named tab, no network effect on a reading, undo/redo, the build loads and is fresh, no Romanian in worlds, the loop guard and the
+ * turn guard. Language-case tests (a phrase, a paraphrase, a dialogue) are not in smoke: they run in the full suite, and a failing one goes to the failure ledger
+ * (training/eval/failures.jsonl) and to tests/known-failures.json, not to a patch. Target: under 60 s on 4 cores (`taskset -c 0-3 npm run test:smoke`).
+ */
 const SMOKE = [
-  'smoke.test.mjs',
-  'reasoner-restore.test.mjs',
-  'reasoner-worlds-apart.test.mjs',
-  'world-aware.test.mjs',
-  'fragment-continuation.test.mjs',
-  'scene-referents.test.mjs',
-  'keep-list.test.mjs',
-  'mt-layer.test.mjs',
-  'knowledge-lookup.test.mjs',
-  'network-never-changes-reading.test.mjs',
-  'model-timeouts.test.mjs',
-  'budget.test.mjs',
-  'loop-guard.test.mjs',
-  'turn-guard.test.mjs',
-  'rd10-names-capability.test.mjs',
-  'tab-short-names.test.mjs',
-  'coherence-both.test.mjs',
-  'regression-ab.test.mjs',
-  'undo-redo.test.mjs',
-  'routing.test.mjs',
-  'reader-route.test.mjs',
-  'ab-gate.test.mjs',
-  'perf-round2.test.mjs',
-  'ellipsis-one.test.mjs',
-  'self-correction.test.mjs',
-  'translate-session.test.mjs',
-  'reasoner-draw-diagram.test.mjs',
+  'invariants.test.mjs',               // every turn gets a reply; nothing destructive on a partly understood sentence; no tab change without a named tab (both reasoners)
+  'smoke.test.mjs',                    // every world loads in both reasoners; the built webchat is fresh
+  'build-versioning.test.mjs',         // the build loads: module versions and import maps agree
+  'network-never-changes-reading.test.mjs',   // no network effect on a reading
+  'undo-redo.test.mjs',                // undo / redo
+  'no-romanian-in-worlds.test.mjs',    // nothing but English in worlds/
+  'loop-guard.test.mjs',               // a loop never runs away
+  'turn-guard.test.mjs',               // a turn always settles (deadline, stop): the reply comes
 ];
 const files = all.filter((f) => {
   if (smoke) return SMOKE.includes(f);
@@ -89,6 +75,14 @@ const files = all.filter((f) => {
   if (full) return true;
   return !isBrowser(f) && !f.endsWith('.full.test.mjs');
 }).map((f) => join('tests', f));
+
+/**
+ * known-failures (worker-tasks "NO POINT FIXES"): tests/known-failures.json lists failing tests that are language cases on their way to the failure ledger:
+ * { "known": [ { "file": "x.test.mjs", "name": "exact test name" | "pattern": "regex", "class": "translation residue", "ledger": "source id" } ] }.
+ * They are reported as a count per class and do not fail the run; any other failure does. The smoke suite has no known failures (invariants only).
+ */
+const knownList = (() => { try { return JSON.parse(readFileSync(process.env.PSYS2_KNOWN_FAILURES || join(root, 'tests', 'known-failures.json'), 'utf8')).known ?? []; } catch { return []; } })();
+const isKnown = (f) => knownList.find((k) => (!k.file || k.file === f.file) && (k.name ? k.name === f.name : k.pattern ? new RegExp(k.pattern).test(f.name) : false));
 
 const suite = browserOnly ? 'browser' : full ? 'full' : smoke ? 'smoke' : 'fast';
 const env = { ...process.env, PSYS2_SUITE: full ? 'full' : smoke ? 'smoke' : 'fast' };
@@ -104,9 +98,21 @@ const t0 = Date.now();
 const netDir = mkdtempSync(join(tmpdir(), 'psys2-net-'));
 env.PSYS2_NET_LOG = join(netDir, 'attempts.log');
 const preload = join(root, 'scripts', 'lib', 'no-network.mjs');
-const r = spawnSync(process.execPath, ['--import', preload, '--test', `--test-concurrency=${jobs}`, ...rest, ...files], { stdio: 'inherit', cwd: root, env });
+env.PSYS2_FAILURES_OUT = join(netDir, 'failures.jsonl');
+const reporter = join(root, 'scripts', 'lib', 'known-failures-reporter.mjs');
+const r = spawnSync(process.execPath, ['--import', preload, '--test', `--test-reporter=${reporter}`, '--test-reporter-destination=stdout', `--test-concurrency=${jobs}`, ...rest, ...files], { stdio: 'inherit', cwd: root, env });
+const failed = existsSync(env.PSYS2_FAILURES_OUT) ? readFileSync(env.PSYS2_FAILURES_OUT, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : [];
+const known = failed.filter((f) => isKnown(f)), fresh = failed.filter((f) => !isKnown(f));
+if (known.length) {
+  const byClass = {}; for (const f of known) { const c = isKnown(f).class ?? 'unclassified'; byClass[c] = (byClass[c] ?? 0) + 1; }
+  console.log(`== KNOWN FAILURES (do not fail the run): ${known.length}  ${Object.entries(byClass).map(([c, n]) => `${c}: ${n}`).join(', ')}`);
+}
+if (fresh.length) console.log(`== NEW FAILURES: ${fresh.length}\n${fresh.map((f) => `   ${f.file}: ${f.name}`).join('\n')}`);
+// the exit code of node --test is 1 when any test failed; it is forgiven only when every recorded failure is known (a crash without a recorded failure still fails)
+const runOk = r.status === 0 || (failed.length > 0 && fresh.length === 0);
 const netViolations = existsSync(env.PSYS2_NET_LOG) ? readFileSync(env.PSYS2_NET_LOG, 'utf8').trim() : '';
-rmSync(netDir, { recursive: true, force: true });
+
 if (netViolations) console.log(`== NETWORK ACCESS IN TESTS (not allowed):\n${netViolations}`);
 console.log(`== psys2 ${suite} suite finished in ${((Date.now() - t0) / 1000).toFixed(1)} s wall (seed ${seed}, exit ${r.status ?? 1})`);
-process.exit(netViolations ? 1 : (r.status ?? 1));
+rmSync(netDir, { recursive: true, force: true });
+process.exit(netViolations ? 1 : (runOk ? 0 : (r.status ?? 1)));
