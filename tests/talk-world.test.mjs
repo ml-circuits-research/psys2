@@ -7,7 +7,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { cardHtml, boardSvg, layoutBoard, drawingSvg, BOARD, esc } from '../worlds/talk/cards.mjs';
-import tab, { CHIPS } from '../docs/webchat/ui/tabs/talk.mjs';
+import tab, { CHIPS, mood } from '../docs/webchat/ui/tabs/talk.mjs';
 
 const FILES = {
   'vocab.json': JSON.stringify({ comet: ['k.objects/shards/sky', 'k.words/shards/co'], spider: ['k.words/shards/sp'], elephant: ['k.commonsense/shards/core'], mouse: ['k.commonsense/shards/core'], lighthouse: ['k.objects/shards/buildings'], tail: ['k.words/shards/co'] }),
@@ -216,4 +216,15 @@ test('E-T3 fixes: "and before it?" and "and the seasons?" on a line, "no, the ot
   assert.match(r.text, /^(?:Mars|Earth) is about [\d,]+ km across\.$/);
   r = await s.send('no, the other one');
   assert.match(r.text, /^(?:Mars|Earth) is about/);
+});
+
+test('avatar reactions (host hook): found is happy, not found is sad, a big number is surprising', async () => {
+  engine.setKnowledge(null);
+  const s = session();
+  const m = async (q) => { const r = await s.send(q); return mood(r, r.text); };
+  assert.equal(await m('What comes after Mars?'), 'happy');
+  assert.equal(await m('What is a blorp?'), 'sad');
+  assert.equal(await m('Is Jupiter bigger than Mars?'), 'surprised');
+  assert.equal(tab.mood, mood);
+  assert.equal(mood({ statuses: [] }, 'hello'), null);
 });

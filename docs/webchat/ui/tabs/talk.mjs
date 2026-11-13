@@ -218,8 +218,21 @@ function make(holder, host) {
   };
 }
 
+/**
+ * The avatar's reaction to a turn of this tab (host hook `mood`, called by app.mjs after each reply on the Talk tab): found -> happy, not found -> sad,
+ * a surprising big number (100,000 or more in the answer) -> surprised; null for anything else (the host's general reaction applies). Pure.
+ */
+export function mood(reply, answer) {
+  const statuses = reply?.statuses ?? [];
+  const text = String(answer ?? reply?.text ?? '');
+  const nums = (text.match(/\d[\d,]*(?:\.\d+)?/g) ?? []).map((x) => Number(x.replace(/,/g, '')));
+  if (statuses.includes('missing')) return 'sad';
+  if (!statuses.includes('supported')) return null;
+  return nums.some((n) => n >= 100000) ? 'surprised' : 'happy';
+}
+
 export default {
-  id: 'talk', label: 'Talk', world: WORLD, order: 95, make,
+  id: 'talk', mood, label: 'Talk', world: WORLD, order: 95, make,
   effects: {
     'talk.card': async ({ id, update }, { ui }) => { const ok = await ui?.showCard?.(String(id), !!update); return ok ? { ok: true } : { ok: false, detail: 'the card could not be shown' }; },
     'talk.board': async (_args, { ui }) => { ui?.showBoard?.(); return { ok: !!ui }; },
