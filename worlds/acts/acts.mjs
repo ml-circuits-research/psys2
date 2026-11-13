@@ -88,9 +88,11 @@ export function parseSchema(wires) {
   if (val(sw, 'sample')) schema.sample = val(sw, 'sample');
   if (val(sw, 'hooks')) schema.hooks = val(sw, 'hooks');   // a sibling module with the world's hooks (knowledge, domain effects, projection): host code the schema cannot say
   if (vals(sw, 'own').length) schema.own = vals(sw, 'own');   // "<export>:<action>": operations of the world that are not acts (a name, a moment of the stage), exported by own.mjs
+  const vw = wires.find((x) => x.type === 'acts.view');   // the world is a VIEW of the session's things (spec 23): the aspects it shows and the words that name it
+  if (vw) schema.view = { aspects: vals(vw, 'aspects'), words: vals(vw, 'word') };
   for (const w of wires.filter((x) => x.type === 'acts.kind')) {
     const name = w.id.slice(sw.id.length + 1);
-    schema.kinds[name] = { name, plural: val(w, 'plural') ?? `${name}s`, numbered: yes(val(w, 'numbered')), named: yes(val(w, 'named')), max: val(w, 'max') ? Number(val(w, 'max')) : null, in: val(w, 'in') ?? null, capacity: val(w, 'capacity') ?? null, acts: vals(w, 'acts'), any: val(w, 'any') === 'knowledge', words: vals(w, 'word') };
+    schema.kinds[name] = { name, plural: val(w, 'plural') ?? `${name}s`, numbered: yes(val(w, 'numbered')), named: yes(val(w, 'named')), max: val(w, 'max') ? Number(val(w, 'max')) : null, in: val(w, 'in') ?? null, capacity: val(w, 'capacity') ?? null, acts: vals(w, 'acts'), any: val(w, 'any') === 'knowledge', words: vals(w, 'word'), ...(vals(w, 'aspect').length ? { aspects: vals(w, 'aspect') } : {}) };   // aspect=: what a thing of this kind has (spec 23)
   }
   for (const w of wires.filter((x) => x.type === 'acts.attr')) {
     const name = w.id.slice(sw.id.length + 1);
@@ -239,10 +241,11 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs') {
   }
   const used = [...new Set(forms.map((f) => f.act))];
   const own = (schema.own ?? []).map((o) => o.split(':'));
+  const viewOpsSop = schema.view ? ['view', 'adopt'].map((fn) => `@op.${ns}.${fn} core.operation\n    impl=${fn}\n    semantics=action\n    action=${ns}.${fn}\n    doc=${JSON.stringify(fn === 'view' ? 'The declaration of this world as a view of the session things (spec 23): its aspects and words.' : 'Takes a thing of the session store into this world: the act make, then change for each attribute (spec 23).')}\n`) : [];
   const ownOps = own.map(([fn, action]) => `@op.${ns}.${fn} core.operation\n    impl=${fn}\n    semantics=action\n    action=${action}\n    doc=${JSON.stringify(`An operation of this world that is not an act (own.mjs: ${fn}).`)}\n`);
-  const ops = [note, ...ownOps, ...used.map((a) => `@op.${ns}.${a} core.operation\n    impl=${a}\n    semantics=action\n    action=${ns}.${a}\n    doc=${JSON.stringify(`The act '${a}' (spec 21), applied by the generic executor to this world's schema.`)}\n`)].join('\n');
+  const ops = [note, ...ownOps, ...viewOpsSop, ...used.map((a) => `@op.${ns}.${a} core.operation\n    impl=${a}\n    semantics=action\n    action=${ns}.${a}\n    doc=${JSON.stringify(`The act '${a}' (spec 21), applied by the generic executor to this world's schema.`)}\n`)].join('\n');
   const tpl = [note, ...used.map((a) => `@tpl.${ns}.${a} core.template\n    for=action.${ns}.${a}\n    text="{note}"\n`)].join('\n');
-  const opsMjs = `// GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.\nimport { createExecutor, deserializeSchema } from '${actsUrl}';\n${schema.hooks ? `import { hooks } from './${schema.hooks}';\n` : ''}${own.length ? `export * from './own.mjs';\n` : ''}const SCHEMA = ${JSON.stringify(serializeSchema(schema))};\nconst X = createExecutor(deserializeSchema(SCHEMA)${schema.hooks ? ', hooks' : ''});\n${used.map((a) => `export const ${a} = (ctx, args = {}) => X.operation(ctx, '${a}', args);`).join('\n')}\nexport const interceptInput = (ctx, text) => X.interceptInput(ctx, text);\nexport const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);\n${schema.hooks ? "export const accepts = (info) => X.accepts(info);\n" : ''}export const referents = (ctx) => X.referents(ctx);\nexport const executor = X;\n`;
+  const opsMjs = `// GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.\nimport { createExecutor, deserializeSchema } from '${actsUrl}';\n${schema.view ? `import { withView, viewOps } from '${actsUrl.replace(/acts\/acts\.mjs$/, 'session.things/view.mjs')}';\n` : ''}${schema.hooks ? `import { hooks } from './${schema.hooks}';\n` : ''}${own.length ? `export * from './own.mjs';\n` : ''}const SCHEMA = ${JSON.stringify(serializeSchema(schema))};\n${schema.view ? `const H = withView(SCHEMA, '${ns}', ${schema.hooks ? 'hooks' : '{}'});\n` : ''}const X = createExecutor(deserializeSchema(SCHEMA)${schema.view ? ', H' : schema.hooks ? ', hooks' : ''});\n${used.map((a) => `export const ${a} = (ctx, args = {}) => X.operation(ctx, '${a}', args);`).join('\n')}\nexport const interceptInput = (ctx, text) => X.interceptInput(ctx, text);\nexport const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);\n${schema.hooks ? "export const accepts = (info) => X.accepts(info);\n" : ''}export const referents = (ctx) => X.referents(ctx);\nexport const executor = X;\n${schema.view ? `export const { view, adopt } = viewOps(X, SCHEMA, '${ns}', H);\n` : ''}`;
   return { 'lexicon.sop': lex, 'patterns.sop': pats.join('\n'), 'operations.sop': ops, 'templates.sop': tpl, 'ops.mjs': opsMjs };
 }
 export const serializeSchema = (s) => ({ ...s, acts: [...s.acts] });
@@ -660,6 +663,8 @@ export function createExecutor(schema, hooks = {}) {
     const to = toks(req.place).filter((w) => !DET.has(w)).join(' ');
     if (!to) return ask(st, `Send ${labels(t.items)} where?`, { type: 'role', role: 'place', req: { ...req }, guess: `send ${labels(t.items)}` });
     const ok = hooks.send?.(t.items.map((i) => ({ ...i })), to);
+    if (typeof ok === 'string') return say(ok, { fallback: 'none' });   // the view says plainly why it cannot take them (spec 23)
+    if (ok && typeof ok === 'object' && ok.say) { st.outbox.push({ to, ids: t.items.map((i) => i.id) }); return say(`${ok.say}${guessLine(t.guesses)}`, { guesses: t.guesses, effect: { type: 'send', to } }); }
     if (!ok) return say(`I cannot reach the ${to} from here, so I sent nothing; ${labels(t.items)} ${t.items.length > 1 ? 'stay' : 'stays'} where ${t.items.length > 1 ? 'they are' : 'it is'}.`, { fallback: 'none' });
     st.outbox.push({ to, ids: t.items.map((i) => i.id) });
     return say(`I sent ${labels(t.items)} to the ${to}.${guessLine(t.guesses)}`, { guesses: t.guesses, effect: { type: 'send', to } });
@@ -779,7 +784,14 @@ export function createExecutor(schema, hooks = {}) {
   }
 
   // ---- the engine's door ----
+  /** The engine's door; a view's hooks (spec 23) see the request before (`before`: may rewrite the roles, knows the ctx) and the result after (`after`: publishes the things). */
   function operation(ctx, act, args = {}) {
+    const req0 = { ...args };
+    hooks.before?.(ctx, act, req0);
+    const r = operation0(ctx, act, req0);
+    return hooks.after?.(ctx, act, req0, r) ?? r;
+  }
+  function operation0(ctx, act, args = {}) {
     const st = ctx.state;
     live.dlg = ctx.dialogueFocus ?? null;
     if (st.inputMode === 'confirm') { st.pending = null; st.inputMode = null; }   // a new request cancels an open question

@@ -26,6 +26,18 @@ function severalActs(c, text, d) {
 /** Runs a face-logic function with the catalog data (or the bundled default face). */
 const W = (fn) => (ctx, r) => { ensure(ctx); return fn(ctx, r, dataOf(ctx)); };
 
+/** The things of the face for the session store (spec 23): the face as one composite thing (parts in the 0-100 frame, colours resolved) and each worn optional slot (hat, glasses ...). */
+function thingsOf(ctx) {
+  const f = ctx.state.face, d = dataOf(ctx);
+  if (!f || !d?.slots) return [];
+  const rgb = (p) => { const g = String(p.tint ?? '').replace(/_shade$/, ''), c = d.colours?.[g]?.[f.colours?.[g]]; return c ? { ...p, rgb: String(p.tint).endsWith('_shade') ? c.shade : c.rgb } : p; };
+  const partsOf = (slot) => (slot.variants.find((v) => v.name === f.slots[slot.name])?.parts ?? []).map((p) => ({ ...rgb(p), z: (slot.z ?? 0) * 10 + (p.z ?? 0) }));
+  const worn = d.slots.filter((s) => f.slots[s.name] && f.slots[s.name] !== 'none');
+  const out = [{ key: 'face', kind: 'face', name: ctx.state.name || null, attrs: { ...(f.expression ? { feeling: f.expression } : {}), ...(f.colours ?? {}) }, parts: worn.flatMap(partsOf) }];
+  for (const s of worn.filter((x) => x.optional)) out.push({ key: s.name, kind: s.name, name: null, attrs: { variant: f.slots[s.name], ...(f.paint?.[s.name] ? { colour: f.paint[s.name] } : {}) }, parts: partsOf(s) });
+  return out;
+}
+
 /** DECLINE (spec 21): the words of a reading must be of a face (a slot, a variant, a preset, an expression) or of the stage (a moment) or about the avatar itself; "draw a house" is not, so the next world reads it. */
 function accepts({ action, mode, roles }) {
   const act = String(action ?? '').split('.').pop();
@@ -41,6 +53,7 @@ function accepts({ action, mode, roles }) {
 }
 
 export const hooks = {
+  thingsOf,
   accepts,
   domain: {
     make: (ctx, r0) => {

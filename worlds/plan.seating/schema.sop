@@ -19,6 +19,13 @@
     limit.history=30
     tabOnly=yes
 
+@seat.view acts.view
+    aspects=relational
+    aspects=numeric
+    aspects=social
+    word=seating
+    word=seating_plan
+
 @seat.table acts.kind
     plural=tables
     numbered=yes
@@ -29,6 +36,7 @@
     named=yes
     in=table
     capacity=seats
+    aspect=social
     word=person
     word=people
 

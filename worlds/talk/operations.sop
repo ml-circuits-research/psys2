@@ -123,3 +123,15 @@
     semantics=action
     action=talk.has
     doc="Does X have a P: yes with the count when the catalog or the picture says so, no when the count is zero, else what is not known."
+
+@op.talk.view core.operation
+    impl=view
+    semantics=action
+    action=talk.view
+    doc="The declaration of Talk as a view of the session things (spec 23): every aspect, one card for each kind of thing."
+
+@op.talk.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=talk.adopt
+    doc="Take a thing of the session store into the conversation: a picture when it has a look, a list of what is known otherwise."

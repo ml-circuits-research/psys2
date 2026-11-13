@@ -20,6 +20,7 @@ import { Memory, WireStore } from './memory.mjs';
 import { Renderer, fallbackText, listText } from './render.mjs';
 import { FormSession } from '../formalizer/rules/session.mjs';
 import { makeLang } from './lang.mjs';
+import { withLearned } from '../knowledge/learned.mjs';
 
 export { Memory, WireStore } from './memory.mjs';
 export { Renderer } from './render.mjs';
@@ -360,13 +361,21 @@ export class Interpreter {
       /** Shared vocabulary of lang.common: yesNo, unsure, cancel, stripLead, ordinal, degree, colour, size, position ... */
       lang: this.lang,
       /** The knowledge catalog (spec 17) or null: `peek(name)` is the settled lookup of a thing (undefined: not looked up, null: not known, else its parts and facts). */
-      knowledge: this.knowledge ?? null,
+      knowledge: this._knowledgeFor(session),   // the catalog with what this session was taught overlaid (spec 23, session.learned)
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
       /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. */
       worlds: () => this.set.list().map((w) => ({ id: w.id, title: w.title, summary: w.summaryPhrase, status: w.status, doc: w.doc, tab: w.tab })),
     };
     return ctx;
+  }
+
+  /** The catalog as this session reads it: the shared catalog with the session's learned wires (state of session.things) overlaid; cached per session and catalog. */
+  _knowledgeFor(session) {
+    const base = this.knowledge;
+    if (!base) return null;
+    if (!session._kn || session._kn.base !== base) session._kn = { base, kn: withLearned(base, () => session.state['session.things']?.learned, () => session.memory?.own?.all?.()) };
+    return session._kn.kn;
   }
 
   /** What an action of the library asks of the host besides its answer: the tab to bring forward (`openTab`) and the client-side effects it queues (`effects`: [{ name, args }]). */

@@ -19,6 +19,7 @@ export function build(data = DEFAULT_FACE) {
     acts=redo
     acts=save
     acts=load
+    acts=send
     own=animate:avatar.animate
     own=setName:avatar.setName
     own=askName:avatar.askName
@@ -33,6 +34,7 @@ export function build(data = DEFAULT_FACE) {
     name=yes
     limit.items=40
     limit.history=40`];
+  out.push(`@face.view acts.view\n    aspects=visual\n    aspects=spatial\n    word=avatar\n    word=face\n    word=robot`);
   const ks = [];
   for (const s of data.slots) {
     const words = new Set([plain(s.name), s.name.split('_')[0], ...(data.aliases[s.name] ?? []).map((a) => a.toLowerCase())]);

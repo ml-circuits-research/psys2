@@ -1,7 +1,9 @@
 // GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.
 import { createExecutor, deserializeSchema } from '../acts/acts.mjs';
-const SCHEMA = {"id":"seat","noun":"seating plan","acts":["make","remove","change","place","connect","group","pick","ask","copy","send","undo","redo","save","load"],"limits":{"items":40,"history":30},"kinds":{"table":{"name":"table","plural":"tables","numbered":true,"named":false,"max":8,"in":null,"capacity":null,"acts":[],"any":false,"words":[]},"guest":{"name":"guest","plural":"guests","numbered":false,"named":true,"max":null,"in":"table","capacity":"seats","acts":[],"any":false,"words":["person","people"]}},"attrs":{"seats":{"name":"seats","of":["table"],"type":"number","values":[],"min":1,"max":12,"def":"4","more":["bigger"],"less":["smaller"],"words":["seat"],"step":1},"colour":{"name":"colour","of":["table","guest"],"type":"colour","values":[],"min":null,"max":null,"def":"white","more":[],"less":[],"words":["color"],"step":1}},"doc":"Tables with seats, and the guests sitting at them.","tabOnly":true};
-const X = createExecutor(deserializeSchema(SCHEMA));
+import { withView, viewOps } from '../session.things/view.mjs';
+const SCHEMA = {"id":"seat","noun":"seating plan","acts":["make","remove","change","place","connect","group","pick","ask","copy","send","undo","redo","save","load"],"limits":{"items":40,"history":30},"kinds":{"table":{"name":"table","plural":"tables","numbered":true,"named":false,"max":8,"in":null,"capacity":null,"acts":[],"any":false,"words":[]},"guest":{"name":"guest","plural":"guests","numbered":false,"named":true,"max":null,"in":"table","capacity":"seats","acts":[],"any":false,"words":["person","people"],"aspects":["social"]}},"attrs":{"seats":{"name":"seats","of":["table"],"type":"number","values":[],"min":1,"max":12,"def":"4","more":["bigger"],"less":["smaller"],"words":["seat"],"step":1},"colour":{"name":"colour","of":["table","guest"],"type":"colour","values":[],"min":null,"max":null,"def":"white","more":[],"less":[],"words":["color"],"step":1}},"doc":"Tables with seats, and the guests sitting at them.","tabOnly":true,"view":{"aspects":["relational","numeric","social"],"words":["seating","seating_plan"]}};
+const H = withView(SCHEMA, 'plan.seating', {});
+const X = createExecutor(deserializeSchema(SCHEMA), H);
 export const make = (ctx, args = {}) => X.operation(ctx, 'make', args);
 export const remove = (ctx, args = {}) => X.operation(ctx, 'remove', args);
 export const change = (ctx, args = {}) => X.operation(ctx, 'change', args);
@@ -20,3 +22,4 @@ export const interceptInput = (ctx, text) => X.interceptInput(ctx, text);
 export const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);
 export const referents = (ctx) => X.referents(ctx);
 export const executor = X;
+export const { view, adopt } = viewOps(X, SCHEMA, 'plan.seating', H);

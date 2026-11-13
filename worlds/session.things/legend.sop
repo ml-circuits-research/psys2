@@ -1,0 +1,5 @@
+@legend.session.things core.legend
+    namespace=session.things
+    version=0.1.0
+    imports=core
+    doc="The things of the session and what the user taught. State: things (id, kind, name, attrs, origin, shown, aspects), views (declarations, cached), learned (wires of the knowledge format as text)."
