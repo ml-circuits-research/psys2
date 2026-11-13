@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { normalizeWorldAware, baseMode, leftOut, sayMissing } from '../src/dialog/world-aware.mjs';
+import { normalizeWorldAware, baseMode, leftOut, sayMissing, vetoOf } from '../src/dialog/world-aware.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const session = async (worldAware, tab, setup = []) => {
@@ -174,4 +174,19 @@ test('veto: a word that a vetoed reading names is never reported as "I did not k
   const r = await s.send('fă părul roșu', { language: 'ro' });
   assert.match(r.text, /părul/);
   assert.ok(!/Nu am știut cuvântul/.test(r.text), r.text);
+});
+
+// E2 wording outside art.draw: the plain no-referent reply (no offer to add the thing) for a diagram reference names the thing in quotes, says "diagram", and
+// lists what the diagram holds; with an offer (what diagram.sketch's own hook returns for "connect Start to End") it asks one short question instead.
+test('no-referent wording in diagram.sketch: plain reply without an offer, one question with an offer', async () => {
+  const plain = { world: 'diagram.sketch', where: 'diagram', missing: [{ name: 'End', kind: 'box' }], here: 'Start' };
+  const v = vetoOf({ left: [] }, { text: 'x' }, plain, 'veto');
+  assert.equal(v.kind, 'no-referent');
+  assert.equal(v.say, 'I can\'t find “End” in the diagram. In the diagram I can see: Start.');
+  assert.equal(v.offer, undefined);
+  assert.equal(vetoOf({ left: [] }, { text: 'x' }, { ...plain, here: null }, 'veto').say, 'I can\'t find “End” in the diagram. The diagram is empty.');
+  const s = await session('veto', 'diagram', ['add a rectangle called Start']);
+  const r = await s.send('connect Start to End');
+  assert.equal(r.segments[0].veto.kind, 'no-referent');
+  assert.equal(r.text, 'I can\'t find a box called “End”. Shall I add it?');
 });

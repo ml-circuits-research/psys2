@@ -41,6 +41,16 @@ test('a quantified optional item expands to every count form and drops the absen
   assert.ok(list.some((p) => p.emit.includes('count=1')));
 });
 
+test('kids.common small talk: 6 descriptions load clean, generate one pattern each and keep every hand-written pattern', async () => {
+  const set = await load('add');
+  const base = await load(null);
+  const w = set.worlds.get('kids.common');
+  assert.equal(w.descriptions.length, 6);
+  assert.deepEqual(w.errors.filter((e) => e.file === 'describe.sop'), []);
+  assert.equal(w.generated.patterns.length, 6);
+  assert.equal(w.patterns.length, base.worlds.get('kids.common').patterns.length + 6);
+});
+
 test('descriptions are not read unless PSYS_GEN_PATTERNS is set', async () => {
   const set = await load(null);
   for (const id of WORLDS) { const w = set.worlds.get(id); assert.equal(w.descriptions.length, 0); assert.equal(w.generated, null); }

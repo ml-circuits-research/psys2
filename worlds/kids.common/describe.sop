@@ -1,0 +1,68 @@
+@describe.greet core.describe
+    op=chat.greet
+    intent=command
+    emit="@{_} core.request action=chat.greet"
+    frames=phr
+
+@describe.greet.en core.describe.words
+    of=$describe.greet
+    lang=en
+    phrase=$phrase.lang.intent.greet
+
+@describe.name core.describe
+    op=chat.name
+    intent=query
+    emit="@{_} core.request action=chat.name"
+    priority=14
+    frames=phr
+
+@describe.name.en core.describe.words
+    of=$describe.name
+    lang=en
+    phrase=$phrase.lang.intent.assistantname
+
+@describe.who core.describe
+    op=chat.who
+    intent=query
+    emit="@{_} core.request action=chat.who"
+    priority=14
+    frames=phr
+
+@describe.who.en core.describe.words
+    of=$describe.who
+    lang=en
+    phrase=$phrase.lang.intent.whoareyou
+
+@describe.thanks core.describe
+    op=chat.thanks
+    intent=command
+    emit="@{_} core.request action=chat.thanks"
+    frames=phr
+
+@describe.thanks.en core.describe.words
+    of=$describe.thanks
+    lang=en
+    phrase=$phrase.lang.intent.thanks
+
+@describe.bye core.describe
+    op=chat.bye
+    intent=command
+    emit="@{_} core.request action=chat.bye"
+    frames=phr
+
+@describe.bye.en core.describe.words
+    of=$describe.bye
+    lang=en
+    phrase=$phrase.lang.intent.goodbye
+
+@describe.myname core.describe
+    op=chat.myname
+    intent=query
+    emit="@{_} core.request action=chat.myname"
+    priority=14
+    frames=phr
+
+@describe.myname.en core.describe.words
+    of=$describe.myname
+    lang=en
+    phrase=$phrase.lang.intent.whatismyname
