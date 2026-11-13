@@ -67,12 +67,13 @@ function accepts({ action, mode, roles, text, state, kindWord }) {
   const said = roles.thing ?? roles.rest ?? '';
   if (act === 'ask' && ['describe', 'options'].includes(mode)) return true;
   if (act === 'ask' && !said && !roles.place) return false;
+  if ((act === 'make' || act === 'change') && !roles.place && TIMES.has(words(said).at(-1) ?? '') && words(said).every((x) => TIMES.has(x) || DET.has(x) || /^(?:it|its|so|be|bright|nice|sunny|a|the)$/.test(x))) return true;   // "make it a sunny day", "change it so its day"
   if (act === 'change' && /^(?:scene|mood|time|sky|picture|drawing|background)$/.test(words(said).at(-1) ?? '') && TIMES.has(words(roles.value).at(-1) ?? '')) return true;   // "change the scene to dawn"
   if (!said) return true;
   const t = words(text).join(' ');
   if (act === 'make' && /^(?:please |can you |could you )?(?:draw|sketch|paint|doodle)\b/.test(t)) return true;
   const np = D.parseNP(said);
-  if (D.drawingNP(np) || np.pron || np.special) return true;
+  if (D.drawingNP(np) || np.pron || np.special || (PRONOUN.test(words(said)[0] ?? '') && act !== 'make')) return true;   // "it upside down": a pronoun first, the rest is how
   if (act === 'make') { const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1); return !!k && (D.kindOfWord(k) != null || D.kindOfWord(k.replace(/s$/, '')) != null || kindWord?.(k) === true); }   // a word of the catalog vocabulary (the schema's kind lexicon) is a thing to draw even before the lookup found its picture
   return !!np.known && (state?.objects ?? []).length > 0;
 }
@@ -118,6 +119,10 @@ export const hooks = {
       return D.remove(ctx, { phrase: t });
     },
     change: (ctx, r) => {
+      if (r.mode === 'turn') {   // "turn it into sunset", "turn the house into a tiny one": the turn verb of a change of value
+        const into = /\b(?:turn|turns|turned)\s+(.+?)\s+into\s+(?:an?\s+|the\s+)?(.+?)\s*$/.exec(words(r.text).join(' '));
+        if (into) r = { ...r, mode: 'set', thing: into[1], value: into[2].replace(/\s+(?:one|size|sized)$/, ''), place: undefined, rel: undefined };
+      }
       const t = tOf(r) || 'it', vw = words(r.value), v = vw.join(' ');
       if (r.mode === 'same') return D.matchSize(ctx, { t, o: words(r.value).join(' ') });
       if ((r.mode === 'more' || r.mode === 'less') && /^(?:please |can you |could you )?(?:i want |draw |make )?(?:a|an)\s/i.test(String(r.text ?? '').trim()) && r.value && !/\b(?:it|them)\b/.test(t)) return D.add(ctx, addArgs({ thing: `${r.value} ${r.thing}` }));   // "a bigger house": a new one, compared with the old

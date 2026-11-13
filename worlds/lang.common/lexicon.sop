@@ -1133,7 +1133,6 @@
     alt=revert_it
     alt=revert_the_last_change
     alt=revert_the_last_step
-    alt=get_that_back
     alt=never_mind_undo_that
     alt=that_was_wrong_undo_it
 
@@ -1151,6 +1150,8 @@
     alt=put_that_back
     alt=bring_it_back
     alt=bring_that_back
+    alt=get_that_back
+    alt=get_it_back
     alt=undo_the_undo
     alt=take_that_back_again
 

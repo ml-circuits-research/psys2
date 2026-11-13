@@ -381,6 +381,14 @@
     example="Draw a big red house."
     canonical="Draw a big red house."
 
+@pat.art.draw.make.more core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [more|some_more|add_more|even_more] {thing:lex.art.draw.kinds} [like|about|say|make_it|total|so]? {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    example="More stars, like 4."
+
 @pat.art.draw.make.bare.mods core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {amount:number?} {m1:lex.art.draw.values?} {m2:lex.art.draw.values?} {thing:lex.art.draw.kinds} [please|pls|plz|thx|thanks|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.make arg.amount=\"{amount}\" arg.m1=\"{m1}\" arg.m2=\"{m2}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
