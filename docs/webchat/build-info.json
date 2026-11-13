@@ -61,7 +61,7 @@
     "lib/dialog/dispatch-validate.mjs": "28dbbbe5dc619aec",
     "lib/dialog/encoder-dispatch.mjs": "7850fe5a3bc78466",
     "lib/dialog/followup.mjs": "a80f066b4fada950",
-    "lib/dialog/index.mjs": "554ccfac37a611bd",
+    "lib/dialog/index.mjs": "d5dd71297b827078",
     "lib/dialog/knowledge-lookup.mjs": "9a332a30c76fa4eb",
     "lib/dialog/meta-worlds.mjs": "ee87314b6be122c1",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -117,7 +117,7 @@
     "lib/reasoner/index.mjs": "9ff90cf50f071a90",
     "lib/reasoner/ns.mjs": "024a4cfbf7a15cbd",
     "lib/soplang/index.mjs": "c3ef0aeb95aea0b7",
-    "lib/translate/candidates.mjs": "a60f919738f82858",
+    "lib/translate/candidates.mjs": "e518c293d27cf8b3",
     "lib/translate/canonical.en-ro.mjs": "e8ac6d4a2fe6d734",
     "lib/translate/en-ro.mjs": "f1ce0d4b27607be5",
     "lib/translate/index.mjs": "3976944b8b117077",
@@ -253,6 +253,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T17:21:37.397Z",
-  "commit": "795a4ae7"
+  "builtAt": "2026-11-13T17:27:15.299Z",
+  "commit": "198e56b3"
 }
