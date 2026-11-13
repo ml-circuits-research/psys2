@@ -4,6 +4,7 @@
 import { writeFile } from 'node:fs/promises';
 import { generate } from '../training/eval/space-set.mjs';
 import { runCases, summary } from '../training/eval/space-run.mjs';
+import { generate2, runCases2 } from '../training/eval/space-set2.mjs';
 
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
 const cases = generate(Number(arg('seed', 20261113)), Number(arg('n', 150)));
@@ -17,4 +18,11 @@ for (const m of modes) {
   for (const [k, v] of Object.entries(summary(res)).sort()) console.log(`  ${k.padEnd(18)} ${v.ok}/${v.n}`);
   for (const r of res.filter((x) => !x.ok)) console.log(`  FAIL ${r.id} [${r.host}/${r.cls}] "${r.text}" -> ${r.why}`);
 }
+// SPACE-2: surface overlap, joining (with and without "apart") and layouts from general knowledge (60 seeded cases, the module's reader on both hosts' projections)
+const cases2 = generate2(Number(arg('seed2', 20261114)), Number(arg('n2', 60)));
+const res2 = runCases2(cases2);
+console.log(`\n== space-2 (surface, joining, knowledge layouts): ${res2.filter((r) => r.ok).length}/${res2.length}`);
+for (const [k, v] of Object.entries(summary(res2.map((r) => ({ ...r, host: 'k' })))).sort()) console.log(`  ${k.padEnd(18)} ${v.ok}/${v.n}`);
+for (const r of res2.filter((x) => !x.ok)) console.log(`  FAIL ${r.id} [${r.host}/${r.cls}] "${r.text}" -> ${r.why}`);
+all.space2 = res2;
 if (arg('json')) await writeFile(arg('json'), JSON.stringify({ cases, results: all }, null, 1));

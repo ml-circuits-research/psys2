@@ -111,7 +111,7 @@
 
 @lex.space.layouts core.lexicon
     class=modifier
-    doc="Ways to arrange a group: row, column, grid, circle, spread, align, tidy, swap."
+    doc="Ways to arrange a group: row, column, grid, circle, spread, align, tidy, swap, stack, by height, the parts of a face."
     word=row
     word=line
     word=column
@@ -122,10 +122,15 @@
     word=align
     word=tidy
     word=swap
+    word=stack
+    word=stacked
+    word=pile
+    word=height
+    word=face
 
 @lex.space.relations core.lexicon
     class=modifier
-    doc="Where a thing goes in relation to another: next to, above, under, between, around, in, on."
+    doc="Where a thing goes in relation to another: next to, above, under, between, around, against, in, on."
     word=above
     word=over
     word=under
@@ -140,9 +145,27 @@
     word=right_of
     word=between
     word=around
+    word=against
     word=in
     word=inside
     word=into
     word=on
     word=onto
     word=on_top_of
+
+@lex.space.contact core.lexicon
+    class=modifier
+    doc="Words that ask for contact: touching, against, joined."
+    word=touching
+    word=against
+    word=joined
+    word=attached
+    word=touch
+
+@lex.space.apart core.lexicon
+    class=modifier
+    doc="Words that ask for a gap: apart, gap, separate."
+    word=apart
+    word=gap
+    word=separate
+    word=separately

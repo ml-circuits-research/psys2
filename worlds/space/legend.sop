@@ -63,3 +63,25 @@
     value=number
     card=one
     ask="What is its stacking order?"
+
+@space.item.shape core.key
+    value=string
+    card=one
+    ask="What is its outline?"
+    doc="Optional real outline: one or more polygons as offsets from the centre, written 'dx,dy dx,dy ...; dx,dy ...'. Overlap, non-overlap placement, tidy up and joining use this surface and fall back to the box."
+
+@space.item.parts core.key
+    value=string
+    card=one
+    ask="Which boxes is it made of?"
+    doc="Optional union of part boxes as offsets from the centre, written 'x,y,w,h; x,y,w,h'. Used as the surface when there is no shape."
+
+@space.rule core.type
+    extends=core.state
+    doc="A consistency rule every host gets after any spatial operation (generated from RULES in space.mjs by scripts/build-space-lexicon.mjs)."
+    example="Everything stays inside the frame."
+
+@space.rule.id core.key
+    value=atom
+    card=one
+    ask="Which rule is it?"

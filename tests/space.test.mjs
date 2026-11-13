@@ -78,7 +78,9 @@ test('placements by relation leave no overlap; between, around, corner, centre',
   assert.deepEqual(run('put the sun between the first house and the last house', items).boxes.sun1, { x: 500, y: 300 });   // the middle house is in the way, so just above it
   assert.equal(run('put the sun around the middle house', items).boxes.sun1.w > 100, true);
   assert.deepEqual(run('put the sun in the top left corner', items).boxes.sun1, { x: 70, y: 70 });
-  assert.deepEqual(run('put the sun in the centre', items).boxes.sun1, { x: 500, y: 350 });
+  const ctr = run('put the sun in the centre', items).boxes.sun1;   // the centre is taken by the middle house: the consistency rule moves the sun clear of it
+  assert.equal(ctr.x, 500);
+  assert.ok(Math.abs(ctr.y - 400) >= 100, JSON.stringify(ctr));
 });
 
 test('layouts: row, column, grid, circle, spread, align, same size, centre, swap, tidy up', () => {
@@ -158,3 +160,59 @@ for (const reasoner of ['ops', 'matrix']) {
     assert.deepEqual(res.filter((r) => !r.ok).map((r) => `${r.id} ${r.text}: ${r.why}`), []);
   });
 }
+
+// ---- SPACE-2: surfaces, joining, knowledge layouts, consistency rules ----------------------------------------------------------------------------------------
+import { buildRules } from '../scripts/build-space-lexicon.mjs';
+import { generate2, runCases2 } from '../training/eval/space-set2.mjs';
+
+test('the rules file is the RULES of the module, and the knowledge facts of common.sense are the module KNOWLEDGE', () => {
+  assert.equal(readFileSync(new URL('../worlds/space/rules.sop', import.meta.url), 'utf8'), buildRules());
+  const kb = readFileSync(new URL('../worlds/common.sense/kb.sop', import.meta.url), 'utf8');
+  const facts = (type) => kb.split(/\n(?=@)/).filter((b) => new RegExp(`^@\\S+ ${type}\\b`).test(b)).map((b) => Object.fromEntries([...b.matchAll(/^\s+(\w+)=(\S+)/gm)].map((m) => [m[1], m[2]])));
+  assert.deepEqual(facts('common\\.sense\\.supports').map((f) => [f.top, f.base]), S.KNOWLEDGE.supports);
+  assert.deepEqual(facts('common\\.sense\\.around').map((f) => [f.kind, f.centre]), S.KNOWLEDGE.around);
+  assert.deepEqual(facts('common\\.sense\\.facepart').map((f) => [f.kind, Number(f.rank), Number(f.mirror)]), S.KNOWLEDGE.face);
+});
+
+test('surface overlap: boxes that overlap in an empty corner do not overlap; a real overlap does', () => {
+  const a = { id: 'a', x: 100, y: 100, w: 100, h: 100, shape: S.outlineOf('triangle', 100, 100) };
+  const b = { id: 'b', x: 186, y: 38, w: 100, h: 100, shape: S.outlineOf('triangle', 100, 100) };
+  assert.equal(S.overlaps(a, b), false);
+  assert.ok(S.gap(a, b) > 3);
+  assert.equal(S.overlaps(a, { ...b, x: 130, y: 100 }), true);
+  assert.equal(S.overlaps({ ...a, shape: undefined }, { ...b, shape: undefined }), true);   // as boxes they do
+  const parts = { id: 'p', x: 300, y: 100, w: 100, h: 100, parts: [{ x: 0, y: 40, w: 100, h: 20 }] };   // a table top only: something can sit under it
+  assert.equal(S.overlaps(parts, { id: 'q', x: 300, y: 70, w: 30, h: 30 }, 0), false);
+});
+
+test('joining: on joins the surfaces, "apart" keeps a gap, knowledge says a roof belongs against walls', () => {
+  const items = [{ id: 'r', kind: 'roof', name: 'roof', x: 100, y: 100, w: 150, h: 70, shape: S.outlineOf('triangle', 150, 70) }, { id: 'w', kind: 'walls', name: 'walls', x: 500, y: 400, w: 150, h: 80 }];
+  const kinds2 = (w) => ({ roof: { kind: 'roof' }, walls: { kind: 'walls' } }[w] ?? null);
+  const j = S.interpret('put the roof on the walls', { items, frame, kindOf: kinds2, last: [] });
+  assert.match(j.say, /^I set the roof on the walls/);
+  assert.ok(S.gap({ ...items[0], ...j.boxes.r }, items[1]) <= 4 && !S.overlaps({ ...items[0], ...j.boxes.r }, items[1], 1));
+  const a = S.interpret("put the roof on the walls, don't join them", { items, frame, kindOf: kinds2, last: [] });
+  assert.doesNotMatch(a.say, /I set/);
+  assert.ok(S.gap({ ...items[0], ...a.boxes.r }, items[1]) >= 12);
+  const nj = S.interpret('put the roof next to the walls', { items, frame, kindOf: kinds2, last: [] });
+  assert.match(nj.say, /I set the roof against the walls/);
+});
+
+test('layouts from general knowledge (around, by height, stacked, a face) and surfaces: the seeded SPACE-2 set', () => {
+  for (const seed of [20261114, 7]) {
+    const r = runCases2(generate2(seed, 60));
+    assert.equal(r.filter((x) => !x.ok).map((x) => `${x.id} ${x.text}: ${x.why}`).join('\n'), '');
+  }
+});
+
+test('consistency: enforce keeps things inside the frame, off each other, a face in its limits and a house on the ground', () => {
+  const items = [{ id: 'a', kind: 'house', x: 100, y: 100, w: 100, h: 100 }, { id: 'b', kind: 'house', x: 400, y: 100, w: 100, h: 100 }];
+  const e = S.enforce(items, { a: { x: 380, y: 110 }, b: { x: 400, y: 100 } }, frame);
+  assert.ok(!S.overlaps({ ...items[0], ...e.boxes.a }, { ...items[1], ...e.boxes.b }, 1), JSON.stringify(e));
+  const m = S.enforce(items, { a: { x: 5000, y: -50 } }, frame);
+  assert.deepEqual(m.boxes.a, { x: 950, y: 50 });
+  const lim = S.enforce(items, { a: { x: 130, y: 100 } }, frame, { limits: { a: { x: [90, 110] } } });
+  assert.equal(lim.boxes.a.x, 110);
+  const g = S.enforce([{ id: 'h', kind: 'house', name: 'house', x: 500, y: 600, w: 100, h: 100 }], { h: { x: 500, y: 100 } }, frame, { move: true, ground: { top: 470, kinds: new Set(['house']) } });
+  assert.match(g.notes[0], /not on the ground/);
+});
