@@ -1,0 +1,99 @@
+@t.ui.avatar.n00 core.test
+    input="Take off the hat."
+    expect="I took off a bow"
+    expectState="face.slots.hat=none"
+    session=a
+    given="ui.shell:activeTab=robot"
+
+@t.ui.avatar.n01 core.test
+    input="Put on a hat."
+    expect="I put on a cap"
+    expectState="face.slots.hat=cap"
+    session=a
+
+@t.ui.avatar.n03 core.test
+    input="Another hat."
+    expect="I have"
+    session=a
+
+@t.ui.avatar.n04 core.test
+    input="Take off the hat."
+    expect="I took off a"
+    expectState="face.slots.hat=none"
+    session=a
+
+@t.ui.avatar.n05 core.test
+    input="Undo."
+    expect="I went back"
+    session=a
+
+@t.ui.avatar.n06 core.test
+    input="Redo."
+    expect="I did it again"
+    expectState="face.slots.hat=none"
+    session=a
+
+@t.ui.avatar.n07 core.test
+    input="Wear glasses."
+    expect="I put on round glasses"
+    expectState="face.slots.glasses=round"
+    session=a
+
+@t.ui.avatar.n09 core.test
+    input="Take off the eyeglasses."
+    expect="I took off round glasses"
+    expectState="face.slots.glasses=none"
+    session=a
+
+@t.ui.avatar.n12 core.test
+    input="What hats are there?"
+    expect="I can draw cap"
+    expectState="face.options.slot=hat"
+    session=a
+
+@t.ui.avatar.n16 core.test
+    input="Become a clown."
+    expect="I drew a clown"
+    expectState="face.base=clown"
+    session=a
+
+@t.ui.avatar.n18 core.test
+    input="Save this as Grandma."
+    expect="I saved this face as Grandma"
+    session=a
+
+@t.ui.avatar.n19 core.test
+    input="Become a woman."
+    expect="I drew a woman"
+    session=a
+
+@t.ui.avatar.n21 core.test
+    input="Take off your beard."
+    expect="I"
+    session=a
+
+@t.ui.avatar.n22 core.test
+    input="Call yourself Robi."
+    expect="my name is Robi"
+    expectState="name=Robi"
+    session=a
+
+@t.ui.avatar.n23 core.test
+    input="What is your name?"
+    expect="My name is Robi."
+    session=a
+
+@t.ui.avatar.n24 core.test
+    input="Can you dance?"
+    expectEffect=avatar.animate
+    session=a
+
+@t.ui.avatar.n25 core.test
+    input="Surprise me."
+    expect="I drew a new face"
+    session=a
+
+@t.ui.avatar.n26 core.test
+    input="What do you look like?"
+    expect="I have"
+    session=a

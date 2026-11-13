@@ -7,7 +7,7 @@ import { hashState, buildDetail } from './phrase-log.mjs';
 
 export const RING_MAX = 200;   // turns kept while developer mode is on
 export const LAST_TURNS = 20;  // turns shown per world
-export const DEBUG_SECTIONS = [['commands', 'Commands'], ['turns', 'Last turns'], ['dry', 'Dry run'], ['state', 'State'], ['world', 'World'], ['models', 'Models']];
+export const DEBUG_SECTIONS = [['commands', 'Commands'], ['turns', 'Last turns'], ['dry', 'Dry run'], ['state', 'State'], ['world', 'World'], ['models', 'Models'], ['grid', 'Coverage']];
 
 const clip = (v, n = 80) => { const t = String(v ?? ''); return t.length > n ? `${t.slice(0, n - 1)}…` : t; };
 const val = (e) => (e?.value && typeof e.value === 'object' && 'v' in e.value ? e.value.v : e?.value);
@@ -345,6 +345,17 @@ export function createDebug(host) {
     ];
   }
 
+  /** A5 (spec 21): the coverage grid of the schema worlds (scripts/coverage-grid.mjs writes coverage-grid.json): world x act x kind, per reasoner. Its holes are the feature list. */
+  function gridSection() {
+    const box = h('div', {}, h('p', { class: 'p2-muted' }, 'Loading the grid ...'));
+    fetch(new URL('../coverage-grid.json', import.meta.url)).then((r) => r.json()).then((g) => {
+      box.replaceChildren(...g.worlds.map((w) => h('details', { open: w.holes > 0 }, h('summary', {}, h('b', {}, w.id), ` ${w.total - w.holes}/${w.total} read in both reasoners, ${w.holes} holes`),
+        h('table', { class: 'p2-dbg-grid' }, h('tr', {}, ['act', 'kind', 'sentence', 'ops', 'matrix'].map((x) => h('th', {}, x))),
+          ...w.cells.map((c) => h('tr', {}, h('td', {}, c.act), h('td', {}, c.kind), h('td', {}, h('span', {}, c.text), ' ', tryBtn(c.text)), h('td', {}, c.ops), h('td', {}, c.matrix)))))));
+    }).catch(() => box.replaceChildren(h('p', { class: 'p2-muted' }, 'No coverage grid in this build.')));
+    return [h('p', { class: 'p2-muted' }, 'Generated sentences, one per act and kind of each schema world, said in both reasoners (read, asked, missed).'), box];
+  }
+
   function modelsSection() {
     const m = host.models(), ort = globalThis.__psys2Ort ?? null;
     const mine = ring.filter((t) => t.worlds.includes(cur.world) || t.tabWorld === cur.world).slice(-LAST_TURNS).reverse();
@@ -375,7 +386,7 @@ export function createDebug(host) {
     for (const b of tabsEl.children) { const a = b.dataset.section === section; b.setAttribute('aria-selected', String(a)); b.tabIndex = a ? 0 : -1; if (a) b.scrollIntoView?.({ block: 'nearest', inline: 'nearest' }); }
     bodyEl.setAttribute('aria-labelledby', `p2-dt-${section}`);
     bodyEl.dataset.section = section;
-    const fns = { commands: commandsSection, turns: turnsSection, dry: drySection, state: stateSection, world: worldSection, models: modelsSection };
+    const fns = { commands: commandsSection, turns: turnsSection, dry: drySection, state: stateSection, world: worldSection, models: modelsSection, grid: gridSection };
     const keep = bodyEl.scrollTop;
     bodyEl.replaceChildren(...fns[section]());
     bodyEl.scrollTop = keep;

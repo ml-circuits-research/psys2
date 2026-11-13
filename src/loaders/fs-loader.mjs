@@ -11,7 +11,11 @@ export const DEFAULT_ROOT = fileURLToPath(new URL('../../worlds', import.meta.ur
 
 const exists = (p) => stat(p).then(() => true, () => false);
 
-export function createFsLoader({ roots = [DEFAULT_ROOT] } = {}) {
+/** PSYS2_PILOT_ROOTS (path-delimited directories) are searched BEFORE the given roots: a pilot world there shadows the world of the same id (spec 21, pilots: side-by-side comparison with no change to any eval script). */
+const pilotRoots = () => (typeof process !== 'undefined' && process.env?.PSYS2_PILOT_ROOTS ? process.env.PSYS2_PILOT_ROOTS.split(path.delimiter).filter(Boolean) : []);
+
+export function createFsLoader({ roots: given = [DEFAULT_ROOT] } = {}) {
+  const roots = [...pilotRoots(), ...given];
   const dirs = new Map(); // id -> directory
   let scanned = false;
   async function scan() {
