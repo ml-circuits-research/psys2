@@ -23,10 +23,10 @@
  * The session as facts (`facts()`): things made and their counts, topics, games and results, places shown. A view takes "the current discussion" as content
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
-import { budget } from './budget.mjs?v=123c3e1329';
-import { GRAMMAR } from './continuation.mjs?v=c651104054';
-import { touched } from './followup.mjs?v=1e203c3efd';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=050f8e63e9';
+import { budget } from './budget.mjs?v=00bce6e369';
+import { GRAMMAR } from './continuation.mjs?v=9848873af8';
+import { touched } from './followup.mjs?v=88af56c068';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=536557aaf4';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
 
 const LOG_LIMIT = 60;

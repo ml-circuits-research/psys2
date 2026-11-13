@@ -8,7 +8,7 @@
 //                when none is complete, the one with the fewest points of trouble (ties go to the earlier one, the browser translator).
 //
 // Browser-safe (no node:*); every loop ticks the compute budget; the candidate loop has its own step limit.
-import { budget } from '../dialog/budget.mjs?v=123c3e1329';
+import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 export const MAX_CANDIDATES = 6;       // candidates kept per message
 export const MAX_REPAIR_STEPS = 60000; // vocabulary comparisons one repair may make

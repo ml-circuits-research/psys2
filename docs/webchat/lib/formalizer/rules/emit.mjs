@@ -1,6 +1,6 @@
 /** Emit templates (spec 03 section 2): placeholders, fresh ids, auto-added core keys. Browser-safe. */
-import { parse, atom, ref, str } from '../../soplang/index.mjs?v=26885599a7';
-import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
+import { parse, atom, ref, str } from '../../soplang/index.mjs?v=c57881f705';
+import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 
 const OPT_ENTRY = /(\s)([A-Za-z_][\w.-]*)=("?)\{([A-Za-z_]\w*)(?:\|\w+)?\}\3(?=\s|$|@)/g;
 const FRESH = /^_\d*$/;

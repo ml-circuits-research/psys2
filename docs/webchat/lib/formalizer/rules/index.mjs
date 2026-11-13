@@ -8,21 +8,21 @@
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=4e3b339134';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=fe5fe63391';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=443330729c';
-import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=07dd1fe4f2';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=3978a46ba3';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=bd8b302eaa';
+import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
 import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=34ef60e7bf';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=e445741b59';
-import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=2312c641e7';
-import { parse, serialize } from '../../soplang/index.mjs?v=26885599a7';
-import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
-import { readingVariants, dropStyleIn } from './variants.mjs?v=058ecdb0c1';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=14399629de';
+import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=8db424e905';
+import { parse, serialize } from '../../soplang/index.mjs?v=c57881f705';
+import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
+import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
 
-export { FormSession } from './session.mjs?v=e445741b59';
+export { FormSession } from './session.mjs?v=14399629de';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=34ef60e7bf';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=fe5fe63391';
-export { compilePattern, matchTokens } from './matcher.mjs?v=443330729c';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=3978a46ba3';
+export { compilePattern, matchTokens } from './matcher.mjs?v=bd8b302eaa';
 export { singularLemma, pluralize } from './lemma.mjs?v=3f5920ed63';
 
 const compiledCache = new WeakMap();

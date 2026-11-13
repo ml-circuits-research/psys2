@@ -6,7 +6,7 @@
  * keeps a list of things with ids. The dialogue layer knows them without asking the world: an action keeps the state of its worlds before and after (`act.before`,
  * `act.after`, JSON), and the things that were added or changed are the entries with an `id` whose record differs. No world code, no vocabulary.
  */
-import { budget } from './budget.mjs?v=123c3e1329';
+import { budget } from './budget.mjs?v=00bce6e369';
 
 const parse = (j) => { try { return j == null ? null : JSON.parse(j); } catch { return null; } };
 const isList = (v) => Array.isArray(v) && v.length > 0 && v.every((x) => x && typeof x === 'object' && x.id != null);

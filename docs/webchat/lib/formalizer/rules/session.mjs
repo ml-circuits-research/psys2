@@ -2,7 +2,7 @@
  * Per-session state of the rule formalizer: counters, agent entities and mention recency
  * (spec 03 section 3). Browser-safe.
  */
-import { makeWire, str, atom } from '../../soplang/index.mjs?v=26885599a7';
+import { makeWire, str, atom } from '../../soplang/index.mjs?v=c57881f705';
 
 const PRONOUNS = {
   he: 'm', him: 'm', his: 'm', she: 'f', her: 'f', they: 'any', them: 'any', their: 'any',

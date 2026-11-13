@@ -1,1793 +1,1139 @@
-@pat.art.draw.add core.pattern
-    canonical="Draw a red house."
-    canonical="Draw a small blue fish."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [$art.draw.g4_draw] [$art.draw.g14_a_picture_of]? [a|an|another|1_more|a_few]? {n:number?} {q:lex.art.draw.quantity?} [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"{w}\""
+@gen.art.draw.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@pat.art.draw.make core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="Add a house."
+    canonical="Add a house."
+
+@pat.art.draw.make.place core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=12
-    example="Draw a red house."
-    example="Draw three trees."
-    example="Put a big yellow sun in the top right corner."
-    example="Add a cloud next to the sun."
-    example="Draw a cat under the tree."
-    example="Draw a house with a red roof and a blue door."
-    example="Add 5 stars."
-    example="Draw a small blue fish."
-    doc="Draws one or more things: count, size, color, kind, and an optional place or parts (\"in the top right corner\", \"next to the sun\", \"with a red roof\")."
+    tabPriority=20
+    example="Add a guest at house."
 
-@pat.art.draw.add.the core.pattern
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [draw|sketch|draw_me|sketch_me] the {n:number?} {q:lex.art.draw.quantity?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"{w}\""
+@pat.art.draw.make.n core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.amount=\"{amount}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
-    example="Draw the sun."
-    example="Sketch the moon in the sky."
+    tabPriority=20
+    example="Add 3 houses."
+    canonical="Add 3 houses."
 
-@pat.art.draw.scene core.pattern
-    canonical="Draw me a nice picture."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [draw|make|paint|create|show|sketch|give] [me|us]? [a|an|something|anything|a_surprise]? [random|nice|pretty|beautiful|lovely|surprise|new|cool|happy|sunny]? [picture|scene|landscape|drawing|something|surprise|painting|masterpiece] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.scene"
-    kind=request
-    priority=13
-    example="Draw me a nice picture."
-    example="Draw something."
-    example="Paint a landscape."
-
-@pat.art.draw.night core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|turn|let|set|change|switch|go] [it|the_picture|the_drawing|the_sky|the_scene|the_day|everything]? [into|to|be|become]? [a|the]? {w:lex.art.draw.times} [time|day|night]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=13
-    example="Make it night."
-    example="Make it day."
-    example="Make it a sunny day."
-    example="Turn it into sunset."
-
-@pat.art.draw.night.is core.pattern
-    match="[it_is|it_was|it_gets|it_becomes] {w:lex.art.draw.times} [time|now|outside]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=12
-    example="It is night."
-
-@pat.art.draw.recolor core.pattern
-    canonical="Make the sky dark blue."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|color|colour|paint|turn|dye|fill|change|set|shade|crayon|color_in|colour_in] {t:words(7)} [to|into|in|with|using|be|like|to_be|to_look|kind_of|sort_of|really|totally|more|a]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"{t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=13
-    example="Color the sun orange."
-    example="Make the sky dark blue."
-    example="Paint the house blue."
-    example="Make the roof of the house green."
-    example="Color the door brown."
-    example="Make it red."
-    example="Change the grass to light green."
-
-@pat.art.draw.part core.pattern
-    canonical="Give the car black wheels."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [give|put] {t:words(5)} [a|an|some|its]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {part:words(2)}"
-    emit="@{_} core.request action=draw.givePart arg.t=\"{t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
-    kind=request
-    priority=11
-    example="Give the house a blue door."
-    example="Give the car black wheels."
-
-@pat.art.draw.grow core.pattern
-    canonical="Make the house bigger."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|let|turn|get|resize|rescale] {t:words(6)} {amt:lex.art.draw.amounts?} {d:lex.art.draw.grow} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=15
-    example="Make the house bigger."
-    example="Make the tree a bit smaller."
-    example="Make it much bigger."
-    example="Make the sun twice as big."
-
-@pat.art.draw.enlarge core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [enlarge|grow|expand|blow_up|inflate|increase|scale_up|magnify] {t:words(6)} {amt:lex.art.draw.amounts?} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d=bigger"
-    kind=request
-    priority=13
-    example="Enlarge the sun."
-    example="Blow up the balloon a lot."
-
-@pat.art.draw.shrink core.pattern
-    canonical="Shrink the tree a little."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [shrink|reduce|decrease|squash|minimize|scale_down|squeeze] {t:words(6)} {amt:lex.art.draw.amounts?} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d=smaller"
-    kind=request
-    priority=13
-    example="Shrink the house."
-    example="Shrink the tree a little."
-
-@pat.art.draw.samesize core.pattern
-    canonical="Make the tree the same size as the house."
-    canonical="Make the cat as big as the dog."
-    match="[pls|can_you|could_you|will_you|would_you]? [make|let|turn|get] {t:words(5)} [the_same_size_as|the_same_size_like|as_big_as|as_large_as|as_small_as|as_tall_as|the_same_as|equal_in_size_to] {o:words(5)} [pls|thanks|now]?"
-    emit="@{_} core.request action=draw.matchSize arg.t=\"{t}\" arg.o=\"{o}\""
-    kind=request
-    priority=15
-    example="Make the tree the same size as the house."
-    example="Make the cat as big as the dog."
-
-@pat.art.draw.size core.pattern
-    canonical="Make the sun huge."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|let|turn|get] {t:words(6)} {s:lex.art.draw.sizes} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.setSize arg.t=\"{t}\" arg.s={s}"
-    kind=request
-    priority=15
-    example="Make the sun huge."
-    example="Make it tiny."
-    example="Make the tree small."
-
-@pat.art.draw.move core.pattern
-    canonical="Move the tree to the left."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [move|shift|push|drag|bring|slide|carry|send|take|lift|lower|raise|nudge|relocate|shove|scoot|haul|reposition|float|transfer] {p:words(14)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"{p}\""
-    kind=request
-    priority=9
-    example="Move the tree to the left."
-    example="Move the sun a bit higher."
-    example="Move it to the top right corner."
-    example="Move the red house to the left."
-    example="Send the cloud behind the house."
-
-@pat.art.draw.put core.pattern
-    canonical="Put the cat next to the house."
-    doc="A placing verb: a thing that is not in the picture yet is drawn there (a lake, a road); one that is, is moved."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|set|position|plonk|toss|stick|tuck] {p:words(14)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"{p}\" arg.verb=put"
-    kind=request
-    priority=9
-    example="Put the cat next to the house."
-    example="Put it in the top right corner."
-    example="Put the red house on the left."
-    example="Place a lake next to the house."
-
-@pat.art.draw.x.keep core.pattern
-    match="[$lang.lead.filler|but|and|no|also|hmm]? [$lang.keep] [the|that|my|this]? {x:words(5)} [alone|there|as_it_was|please]?"
-    emit="@{_} core.request action=draw.keep arg.x=\"{x}\""
-    kind=request
-    onlyWhile=prev
-    priority=14
-    example="But keep the lake."
-    example="Keep the lake."
-    example="Do not remove the road."
-    example="Leave the pond there."
-    doc="Restores a thing the last step took away or changed (a follow-up that changes the last action)."
-
-@pat.art.draw.x.except core.pattern
-    canonical="Not over the water."
-    match="[$lang.lead.filler|but|and|no|also|hmm]? [$lang.except] [the|that|my|this]? {x:words(5)} [please]?"
-    emit="@{_} core.request action=draw.except arg.x=\"{x}\""
-    kind=request
-    priority=16
-    example="Not over the water."
-    example="But not on the road."
-    example="Do not cover the lake."
-    doc="Takes the part of the last step that reaches the named thing back (a follow-up that changes the last action)."
-
-@pat.art.draw.nudge core.pattern
-    canonical="Make the cat a bit lower."
-    canonical="Make the sun higher."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|let|get] {t:words(6)} {amt:lex.art.draw.amounts?} {d:lex.art.draw.moves} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.nudge arg.t=\"{t}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=13
-    example="Make the sun higher."
-    example="Make the cat a bit lower."
-
-@pat.art.draw.turn core.pattern
-    canonical="Rotate the house 45 degrees."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? {v:lex.art.draw.turnverbs} {t:words(6)} {d:lex.art.draw.turndirs} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.verb={v} arg.phrase=\"{t} {d}\""
+@pat.art.draw.make.name.place core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=14
-    example="Turn the car around."
-    example="Rotate the house 45 degrees."
-    example="Turn it upside down."
-    example="Turn the dog to face left."
-
-@pat.art.draw.turn.bare core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [flip|rotate|spin|tilt|mirror|twist|swivel|lean|reverse|invert] {p:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.verb=flip arg.phrase=\"{p}\""
-    kind=request
-    priority=14
-    example="Flip the dog."
-    example="Tilt the tree."
-    example="Spin the star."
-
-@pat.art.draw.face core.pattern
-    canonical="Make the car face left."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|get|let] {p:words(7)} [face|look|point|go|face_to|look_to|looking|facing] [to|towards]? [the]? {d:lex.art.draw.leftright} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.phrase=\"{p} face {d}\""
-    kind=request
-    priority=15
-    example="Make the car face left."
-    example="Make the dog look to the right."
-
-@pat.art.draw.upside core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|get|let|turn] {p:words(7)} upside_down [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.phrase=\"{p} upside down\""
-    kind=request
-    priority=15
-    example="Make the house upside down."
-
-@pat.art.draw.clear core.pattern
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [delete|remove|erase|clear|wipe|empty|clean|get_rid_of|throw_away|trash|destroy|wipe_out|clean_up] [all|everything|all_of|all_the]? [everything|things|stuff]? [in|on|from|off]? [my|the|this]? [whole]? [picture|drawing|painting|canvas|drawing_board|page|paper|screen|everything] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.clearAll"
-    kind=request
-    priority=12
-    example="Clear the picture."
-    example="Erase everything."
-    example="Wipe the canvas."
-
-@pat.art.draw.remove.it core.pattern
-    canonical="Delete it."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [delete|remove|erase|get_rid_of|throw_away|trash|destroy] [it|this|that|them] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.removeIt"
-    kind=request
-    priority=14
-    example="Delete it."
+    tabPriority=22
+    example="Add a guest called Ann at house."
 
 @pat.art.draw.remove core.pattern
-    canonical="Get rid of the clouds."
-    canonical="Remove everything except the house."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [delete|remove|erase|get_rid_of|take_away|rub_out|throw_away|take_out|destroy|wipe_out|trash|scrub_out|clear_away|clear_out|kill|zap|ditch|dump|bin|lose|chuck|sweep_away|rub_off] {p:words(10)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.remove arg.phrase=\"{p}\""
-    kind=request
-    priority=8
-    example="Delete the car."
-    example="Remove everything except the house."
-    example="Remove the grass."
-    example="Delete the second tree."
-    example="Get rid of the clouds."
-
-@pat.art.draw.new core.pattern
-    canonical="Give me a fresh sheet of paper."
-    canonical="Start a new drawing."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [start|begin|make|get|open|take|give_me|i_want|let_us_start|let_us_make|can_i_have|i_need]? [a|an|another]? [new|fresh|blank|clean|empty] [drawing|picture|painting|canvas|sheet|sheet_of_paper|paper|piece_of_paper|drawing_board] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.new"
-    kind=request
-    priority=13
-    example="Start a new drawing."
-    example="Give me a fresh sheet of paper."
-    example="New picture."
-
-@pat.art.draw.undo core.pattern
-    canonical="Undo my last drawing."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [undo|undo_that|undo_it|undo_this|undo_the_last_thing|undo_my_last_thing|undo_the_last_drawing|undo_my_last_drawing|undo_the_last_change|take_that_back|take_it_back|oops] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.undo"
-    kind=request
-    priority=15
-    example="Undo."
-    example="Undo my last drawing."
-    example="Take that back."
-
-@pat.art.draw.redo core.pattern
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [redo|redo_that|redo_it|do_it_again|put_it_back|bring_it_back] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.redo"
-    kind=request
-    priority=15
-    example="Redo."
-    example="Bring it back."
-
-@pat.art.draw.select core.pattern
-    canonical="Select the house."
-    canonical="Select the red car."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [select|click|tap|pick|choose|touch|highlight|point_at|click_on|tap_on|focus_on] [on]? [the|my|that]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.select arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=14
-    example="Select the house."
-    example="Click the second tree."
-    example="Select the red car."
-
-@pat.art.draw.deselect core.pattern
-    canonical="Deselect everything."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [deselect|unselect|unpick|unhighlight] [everything|it|all|the_picture|that]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.deselect"
-    kind=request
-    priority=14
-    example="Deselect everything."
-
-@pat.art.draw.deselect.clear core.pattern
-    canonical="Clear the selection."
-    match="[clear|remove|drop] [the|my]? selection [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.deselect"
-    kind=request
-    priority=12
-    example="Clear the selection."
-
-@pat.art.draw.fill core.pattern
-    canonical="Make the circle solid."
-    canonical="Make the star an outline."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|color|colour|fill|turn|leave|draw] {t:words(5)} {m:lex.art.draw.fillmodes} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.fill arg.t=\"{t}\" arg.mode={m}"
-    kind=request
-    priority=11
-    example="Make the circle solid."
-    example="Make the star an outline."
-    example="Make the heart hollow."
-
-@pat.art.draw.fill.in core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [fill|color|colour|crayon|scribble|shade|color_in|colour_in] [in]? {t:words(5)} [in]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.fill arg.t=\"{t}\" arg.mode=crayon"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
-    example="Fill in the star."
-    example="Fill the circle."
+    tabPriority=18
+    example="Remove the guest Ann."
 
-@pat.art.draw.copy core.pattern
-    canonical="Copy the house."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [copy|duplicate|clone|double] {t:words(5)}"
-    emit="@{_} core.request action=draw.duplicate arg.t=\"{t}\""
-    kind=request
-    priority=10
-    example="Copy the house."
-    example="Duplicate the tree."
-
-@pat.art.draw.copy.of core.pattern
-    canonical="Make a copy of the cat."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|draw|add|give_me] [a|1]? copy_of {t:words(5)}"
-    emit="@{_} core.request action=draw.duplicate arg.t=\"{t}\""
-    kind=request
-    priority=12
-    example="Make a copy of the cat."
-
-@pat.art.draw.another core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|draw|add|give_me] [me]? [another|1_more] [1|copy|of_it|of_that|of_them]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.duplicate arg.t=it"
-    kind=request
-    priority=12
-    example="Make another one."
-    example="Draw one more."
-
-@pat.art.draw.more core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|draw|add|give_me] {n:number} more [of_them|of_it|of_that]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.duplicate arg.t=it arg.n={n}"
-    kind=request
-    priority=12
-    example="Make 2 more."
-
-@pat.art.draw.describe core.pattern
-    canonical="What is in my drawing?"
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [describe|tell_me_about|show_me|what_is_in|what_is_on|what_do_you_see_in|what_can_you_see_in|look_at|tell_me_what_is_in] [all_of]? [my|the|this]? [picture|drawing|painting|artwork|canvas|page|paper|masterpiece] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.describe"
-    kind=request
-    priority=13
-    example="Describe my picture."
-    example="What is in my drawing?"
-
-@pat.art.draw.describe.did core.pattern
-    match="what [did|have] [i|we] [draw|drawn|drew|paint|painted|make|made|add|added] [so_far|already|here|today]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.describe"
-    kind=request
-    priority=13
-    example="What did I draw?"
-
-@pat.art.draw.describe.see core.pattern
-    match="what [do|can|could] [you|u] see [in|on]? [my|the]? [$art.draw.g15_picture]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.describe"
-    kind=request
-    priority=12
-    example="What can you see in my picture?"
-
-@pat.art.draw.count core.pattern
-    canonical="How many red balloons are there?"
-    canonical="How many trees are there?"
-    match="how_many {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [are_there|are_there_in_my_picture|are_in_my_picture|are_in_my_drawing|are_in_the_picture|are_in_the_drawing|are_there_in_the_picture|are_there_in_my_drawing|did_i_draw|have_i_drawn|do_i_have|have_i_got|are_here|can_you_see|do_you_see|are_there_now|in_my_picture|in_my_drawing|in_the_picture|in_the_drawing|are_on_the_ground|are_in_the_sky]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="How many trees are there?"
-    example="How many red balloons are there?"
-    example="How many things are in my picture?"
-
-@pat.art.draw.count.verb core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? count [all]? [the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Count the clouds."
-
-@pat.art.draw.where core.pattern
-    canonical="Where is the cat?"
-    canonical="Where is the second tree?"
-    match="where [is|are|r|was|were|s] [the|my|a|that|this]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} {r:rest?}"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Where is the cat?"
-    example="Where are the trees?"
-    example="Where is the second tree?"
-
-@pat.art.draw.exists core.pattern
-    match="[is_there|are_there] [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on|inside]? [my|the|this]? [$art.draw.g11_picture] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Is there a house in my picture?"
-    example="Are there any clouds in my drawing?"
-
-@pat.art.draw.exists.have core.pattern
-    match="[do|did] [i|we] have [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on]? [my|the|this]? [$art.draw.g11_picture] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Do I have a sun in my picture?"
-
-@pat.art.draw.near core.pattern
-    canonical="What is next to the sun?"
-    match="[what_is|what_are|whats|what|is_anything|is_there_anything|anything|things|stuff|what_things|what_stuff|what_objects|which_things|something] [is|are]? [right|directly|just|closest|really]? [next_to|near|beside|by|close_to|nearest_to|around|touching|adjacent_to|near_to] [my|the|that|this]? {t:words(5)} [in|on]? [my|the]? [$art.draw.g15_picture]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.near arg.t=\"{t}\""
-    kind=request
-    priority=12
-    example="What is next to the sun?"
-
-@pat.art.draw.help core.pattern
-    canonical="What can I draw?"
-    match="[what|which] [things|shapes|animals|pictures]? [can|could|may] [i|you|we] [draw|paint|make|add] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.help"
-    kind=request
-    priority=12
-    example="What can I draw?"
-
-@pat.art.draw.colors core.pattern
-    canonical="What colors can I use?"
-    match="what [colors|colours|crayons|paints] [can|do|may] [i|you|we] [use|have|know|paint_with|draw_with] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colors"
-    kind=request
-    priority=13
-    example="What colors can I use?"
-
-@pat.art.draw.save core.pattern
-    canonical="Download the drawing as a PNG."
-    canonical="Save my picture as SVG."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [save|download|export|keep|store|print|get|send_me|i_want|can_i_have] [me]? [my|the|this|a|an]? [drawing|picture|painting|image|artwork|masterpiece|picture_file|drawing_file] [as|in|to|into]? [a|an]? {f:lex.art.draw.formats?} [file|image|picture|format]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.save arg.f={f}"
-    kind=request
-    priority=13
-    example="Save my drawing."
-    example="Save my picture as SVG."
-    example="Download the drawing as a PNG."
-
-@pat.art.draw.save.it core.pattern
-    match="[save|download|export] [it|this|that] [as|in|to|into] [a|an]? {f:lex.art.draw.formats} [file|image|picture|format]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.save arg.f={f}"
-    kind=request
-    priority=13
-    example="Save it as SVG."
-
-@pat.art.draw.open core.pattern
-    match="[open|show|go_to|switch_to|take_me_to|show_me|bring_up|let_us_go_to|i_want_to_go_to] [me]? [the|my]? [drawing|painting|paint|picture|art|sketch|drawing_board|drawing_pad|canvas|art_board|paintbox|easel] [tab|page|board|screen|app|pad|mode|window|area]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.open"
+@pat.art.draw.remove.out core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
-    example="Open the drawing board."
-    example="Go to the paint tab."
+    tabPriority=19
+    example="Kick the guest Ann out."
 
-@pat.art.draw.x.add.bare core.pattern
-    match="{n:number} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+@pat.art.draw.remove.place core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words} [from|out_of|off] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.remove arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Remove the guests from house."
+
+@pat.art.draw.change.of core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.art.draw.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    example="Change the colour of house to red."
+    canonical="Change the colour of house to red."
+
+@pat.art.draw.change.attr core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.art.draw.attrs} [to|be|as|into] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.attribute=\"{attribute}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Set house seats to 6."
+
+@pat.art.draw.change.value core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.art.draw.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Make house blue."
+    canonical="Make house blue."
+
+@pat.art.draw.change.cmp.more core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.art.draw.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Make house bigger."
+    canonical="Make house bigger."
+
+@pat.art.draw.change.cmp.less core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.art.draw.less} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=less arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Make house smaller."
+    canonical="Make house smaller."
+
+@pat.art.draw.place core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=11
-    example="5 stars"
-    example="3 red balloons please"
-
-@pat.art.draw.x.add.pls core.pattern
-    match="[a|an|some|another]? {n:number?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [pls|plz|plss|thx|thanks|ty|for_me|asap]"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=11
-    example="red house pls"
-    example="a tree pls"
-
-@pat.art.draw.x.add.verbs core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g3_gimme] [$art.draw.g13_a_picture_of]? {n:number?} {q:lex.art.draw.quantity?} [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"{w}\""
-    kind=request
-    priority=11
-    example="Gimme a blue cat."
-    example="It needs a sun."
-
-@pat.art.draw.x.add.added core.pattern
-    match="[i_want|i_d_like|i_need|we_need|give_me|get_me|i_wanna_have|i_would_like|we_want] [a|an|another|some|a_few]? {n:number?} {q:lex.art.draw.quantity?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} [added|drawn|made|there|too|as_well|in_it|in_the_picture|on_it|in_my_picture|for_me|here]"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=13
-    example="I want 5 stars added."
-
-@pat.art.draw.x.backdrop core.pattern
-    canonical="Draw the sky."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [add|put|draw|make|paint|give_me|show_me|i_want|i_need|i_d_like|create] [me]? [some|the|a|an|my]? {g:lex.art.draw.backdrop} [pls|plz|please|thanks]?"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    kind=request
-    priority=13
-    example="Draw a sky."
-    example="Draw the sky."
-    example="Paint the ground."
-    example="Add a sky."
-
-@pat.art.draw.x.ground.on core.pattern
-    canonical="Put some sand down."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [add|put|draw|make|give_me|throw|sprinkle|spread|lay|paint|pour|scatter|i_want|i_need|get|show_me|i_d_like]? [me]? [some|sum|the|a_bit_of|a_little|a_little_bit_of|more|a|a_lot_of|lots_of|plenty_of]? {g:lex.art.draw.ground} [on|to|onto|for|under|over|at|in|across|along|down|below|beneath|all_over] [the|my|all|every|everything|it]? [ground|floor|bottom|everything|picture|drawing|canvas|earth|land|scene|there|it|here|everywhere|below|part]? [of_the_picture|of_the_page|of_the_canvas|of_the_drawing|of_it|of_everything|of_the_scene|of_my_picture|of_my_drawing]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    kind=request
-    priority=13
-    example="Sand on the ground."
-    example="Put some sand down."
-    example="I want sand under everything."
-
-@pat.art.draw.x.ground.some core.pattern
-    match="[some|a_bit_of|a_little|more|a_little_bit_of|a_few|lots_of] {g:lex.art.draw.ground} [would_be_nice|would_be_good|would_be_great|would_be_cool|would_be_fun|needed|too|also|as_well|now|here] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    kind=request
-    priority=13
-    example="A bit of grass would be nice."
-
-@pat.art.draw.x.ground.some2 core.pattern
-    match="[$art.draw.g16_some] {g:lex.art.draw.ground} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    kind=request
-    priority=13
-    example="Some sand please."
-
-@pat.art.draw.x.ground.pls core.pattern
-    match="{g:lex.art.draw.ground} [pls|plz|plss|thx|thanks|ty|for_me|too|also|as_well|would_be_nice|would_be_good|would_be_great|would_be_cool|needed|now]"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    kind=request
-    priority=13
-    example="Grass pls."
-
-@pat.art.draw.x.ground.should core.pattern
-    match="[the|my|that|this|our|those|these|all_the|all_my]? [ground|floor|bottom|land|earth] [should_be|must_be|needs_to_be|has_to_be|to_be|to|as|is|should_look_like|can_be|could_be|will_be|becomes|turns|goes|looks_like|is_now|is_going_to_be]? {g:lex.art.draw.ground} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    kind=request
-    priority=13
-    example="The ground should be sand."
-
-@pat.art.draw.x.ground.make core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|turn|change|set|switch|paint|cover|fill|let|get|turn_into] [the|my]? [ground|floor|bottom|land|earth|picture] [to|into|be|become|look_like|with|in|a|the]? {g:lex.art.draw.ground} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    kind=request
-    priority=14
-    example="Can you make the floor sandy?"
-    example="Cover the ground with snow."
-
-@pat.art.draw.x.scene.surprise core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [surprise_me|surprise_us|surprise|astonish_me|amaze_me|wow_me] [me|us]? [with]? [a|an|some|something|anything]? [picture|drawing|painting|scene|landscape|sketch|art|artwork|masterpiece|nice|cool|something|random]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.scene"
-    kind=request
-    priority=13
-    example="Surprise me with a picture."
-
-@pat.art.draw.x.scene.any core.pattern
-    canonical="Sketch anything you like."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [draw|sketch|paint|make|create|doodle|show|do] [me|us]? [anything|something|whatever|anything_you_like|anything_you_want|something_nice|something_cool|something_random|something_pretty|whatever_you_like|whatever_you_want|what_you_like|what_you_want|any_thing] [you_like|you_want|you_wish|you_can|you_think_of|else|else_you_like|nice|cool|random|pretty|new]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.scene"
-    kind=request
-    priority=13
-    example="Sketch anything you like."
-
-@pat.art.draw.x.mood.want core.pattern
-    canonical="I want sunset."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [i_want|i_d_like|give_me|show_me|let_it_be|let_there_be|have_it|set_it_to|put_it_in|switch_to|go_to|go_into|turn_to|change_to|change_it_to|be|i_need|i_would_like|i_like|it_should_be|it_should_look_like|how_about|what_about] [a|the|some|an]? {w:lex.art.draw.times} [mode|time|look|vibe|theme|sky|scene|picture|now|already|outside|there|pls]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=13
-    example="I want sunset."
-
-@pat.art.draw.x.mood.noun core.pattern
-    match="{w:lex.art.draw.times} [mode|time|look|vibe|theme|scene|pls|plz|now|view|style|setting|sky|already] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=13
-    example="Sunset mode."
-    example="Night time pls."
-
-@pat.art.draw.x.mood.should core.pattern
-    match="[it|the_picture|the_scene|the_drawing|everything|the_sky] [should|must|needs_to|has_to|ought_to|will|would|can|could|to] [look|be|feel|seem|become|turn|get|go|change_to] [like|as|into|to]? [a|the|an]? {w:lex.art.draw.times} [look|time|mode|now]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=13
-    example="It should look like sunset."
-
-@pat.art.draw.x.mood.set core.pattern
-    canonical="Set the mood to sunset."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [set|change|switch|put|turn|make] [the|my]? [mood|time|time_of_day|scene|theme|vibe|look|setting|lighting|ambience|atmosphere|sky] [to|into|as|be|a]? [a|the]? {w:lex.art.draw.times} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=14
-    example="Set the mood to sunset."
-
-@pat.art.draw.x.recolor.should core.pattern
-    canonical="The roof should be green."
-    match="[the|my|that|this]? {t:lex.art.draw.targets} [should|must|needs_to|has_to|ought_to|to|goes|go|turns|becomes|in|gets|color|colour|colors|colours|should_be|must_be|needs_to_be|has_to_be|to_be|would_be|could_be|can_be|will_be] [be|become|turn|look|go|get|like]? [a|an|more|the]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=14
-    example="The roof should be green."
-    example="House in teal please."
-
-@pat.art.draw.x.recolor.should.bare core.pattern
-    match="[the|my|that|this]? {t:lex.art.draw.targets} [be|become|turn|look|go|get|like]? [a|an|more|the]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=9
-    example="The roof green."
-
-@pat.art.draw.x.recolor.verbfirst core.pattern
-    match="{c:lex.art.draw.colors} [the|my] {t:lex.art.draw.targets} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.color={c}"
-    kind=request
-    priority=14
-    example="Green the roof."
-
-@pat.art.draw.x.recolor.adj core.pattern
-    match="{sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {t:lex.art.draw.parts} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=9
-    example="Green roof."
-
-@pat.art.draw.x.recolor.want core.pattern
-    match="[i_want|i_d_like|i_need|i_would_like|we_want|make_it_so|i_wish|how_about|what_about|maybe] [the|my]? {t:lex.art.draw.targets} [to_be|to_look|to_become|to_go|to_turn]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=14
-    example="I want the house blue."
-
-@pat.art.draw.x.recolor.would core.pattern
-    match="[a|an|the]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {t:lex.art.draw.targets} [would_be_nice|would_be_better|would_look_nicer|would_look_better|would_be_nicer|would_be_good|would_be_great|would_be_cool|would_be_pretty|looks_better|looks_nicer]"
-    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=14
-    example="A blue sky would be nicer."
-
-@pat.art.draw.x.part.gets core.pattern
-    match="[the|my]? {t:lex.art.draw.things} [gets|get|needs|should_get|should_have|must_have|needs_to_have|has|can_have|could_have|would_look_good_with|wants|deserves|will_get|has_to_have|to_have|with|needs_a|gets_a] [a|an|some|its|new]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {part:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.givePart arg.t=\"the {t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
-    kind=request
-    priority=12
-    example="The house needs a pink door."
-
-@pat.art.draw.x.part.could core.pattern
-    match="[could|can|will|would|should|does|do] [the|my]? {t:lex.art.draw.things} have [a|an|some|its]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {part:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.givePart arg.t=\"the {t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
-    kind=request
-    priority=12
-    example="Could the house have a yellow door?"
-
-@pat.art.draw.x.part.add core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [add|put|stick|attach|give|paint|draw|make|colour|color] [a|an|some]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {part:lex.art.draw.parts} [on|to|onto|for|in|at|of] [the|my]? {t:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.givePart arg.t=\"the {t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
-    kind=request
-    priority=14
-    example="Add a black door to the house."
-    example="Blue door on the house pls."
-
-@pat.art.draw.x.part.noverb core.pattern
-    match="{sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {part:lex.art.draw.parts} [on|to|for|of|in] [the|my]? {t:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.givePart arg.t=\"the {t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
-    kind=request
-    priority=14
-    example="Blue door on the house pls."
-
-@pat.art.draw.x.part.paint core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [paint|color|colour|make] [the|my]? {part:lex.art.draw.parts} {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [on|of|for|in] [the|my]? {t:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.givePart arg.t=\"the {t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
-    kind=request
-    priority=14
-    example="Paint the roof brown on the house."
-
-@pat.art.draw.x.size.nouncmp core.pattern
-    match="[the|my|that|this]? {t:lex.art.draw.things} {amt:lex.art.draw.amounts?} {d:lex.art.draw.grow} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.resize arg.t=\"the {t}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=14
-    example="Tree smaller pls."
-    example="House a little bigger."
-
-@pat.art.draw.x.size.cmpnoun core.pattern
-    match="{amt:lex.art.draw.amounts?} {d:lex.art.draw.grow} [the|my|that|this]? {t:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.resize arg.t=\"the {t}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=14
-    example="Smaller tree."
-    example="Bigger house pls."
-
-@pat.art.draw.x.size.should core.pattern
-    match="[the|my|that|this]? {t:lex.art.draw.things} [should|must|needs_to|has_to|ought_to|could|can|will|would|to|should_be|must_be|needs_to_be|has_to_be|should_get|needs_to_get|could_be|can_be|would_be|to_be|to_get|to_become|is_too_small_make_it] [be|get|become|look|grow|go]? {amt:lex.art.draw.amounts?} {d:lex.art.draw.grow} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.resize arg.t=\"the {t}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=14
-    example="The sun needs to be a lot bigger."
-
-@pat.art.draw.x.size.after core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|let|get|turn] {t:words(6)} {d:lex.art.draw.grow} {amt:lex.art.draw.amounts} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=15
-    example="Can u make the sun bigger a lot?"
-
-@pat.art.draw.x.size.noun core.pattern
-    match="[the|my|that|this]? {t:lex.art.draw.things} [should_be|must_be|needs_to_be|has_to_be|to_be|to|goes|get|gets|to_become|is_now|should_get|needs_to_get|becomes]? {s:lex.art.draw.sizes} [size|sized|one]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.setSize arg.t=\"the {t}\" arg.s={s}"
-    kind=request
-    priority=14
-    example="House huge."
-    example="House should be medium size."
-
-@pat.art.draw.x.size.want core.pattern
-    match="[i_want|i_d_like|i_need|i_would_like|give_me|we_want|we_need|make_me] [the|my]? {t:lex.art.draw.things} {s:lex.art.draw.sizes} [size|sized|one]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.setSize arg.t=\"the {t}\" arg.s={s}"
-    kind=request
-    priority=14
-    example="I want the house massive."
-
-@pat.art.draw.x.size.into core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [turn|make|change] [the|my]? {t:lex.art.draw.things} [into|to] [a|an]? {s:lex.art.draw.sizes} [one|1|ones|size|sized|thing|version]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.setSize arg.t=\"the {t}\" arg.s={s}"
-    kind=request
-    priority=15
-    example="Turn the house into a tiny one."
-
-@pat.art.draw.x.move.noun core.pattern
-    match="[the|my|that|this]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} {pp:lex.art.draw.preps} {d:words(9)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} {pp} {d}\" arg.m1={m1} arg.m2={m2}"
-    kind=request
-    priority=13
-    example="Tree to the left pls."
-    example="Cat between the two trees."
-
-@pat.art.draw.x.move.subj core.pattern
-    match="[the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [goes|go|belongs|should_go|should_be|needs_to_go|needs_to_be|has_to_be|must_go|must_be|ought_to_be|can_go|stays|should_move|needs_to_move|has_to_go|is_going|wants_to_be|wants_to_go|will_go|belongs_on|should_sit|should_stand|needs_to_sit|sits|stands|is_now|goes_now|needs_to_be_moved|should_be_moved|to_go|to_be] [right|directly|just]? {pp:lex.art.draw.preps} {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} {pp} {d}\" arg.m1={m1} arg.m2={m2}"
-    kind=request
-    priority=12
-    example="House goes on the left."
-    example="The house needs to be on the left."
-
-@pat.art.draw.x.move.subj2 core.pattern
-    match="[the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [goes|go|should_go|needs_to_go|has_to_go|must_go|should_move|needs_to_move] {pp:lex.art.draw.moves} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} {pp}\" arg.m1={m1} arg.m2={m2}"
-    kind=request
-    priority=12
-    example="The house goes left."
-
-@pat.art.draw.x.move.regionfor core.pattern
-    match="{pos:lex.art.draw.regions} [side|corner|part|half|edge|area|spot]? [for|of|is_for|goes_to_the] [the|my|that]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} on the {pos}\" arg.m1={m1} arg.m2={m2}"
-    kind=request
-    priority=12
-    example="Left side for the house please."
-
-@pat.art.draw.x.move.regionforit core.pattern
-    match="{pos:lex.art.draw.regions} [side|corner|part|half|edge|area|spot]? [for|of] [it|that|this|them] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"it on the {pos}\""
-    kind=request
-    priority=12
-    example="Top right corner for it."
-
-@pat.art.draw.x.move.pron core.pattern
-    match="[it|that|this|them] {pp:lex.art.draw.preps2} {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"it {pp} {d}\""
-    kind=request
-    priority=11
-    example="It to the top right."
-
-@pat.art.draw.x.nudge.a core.pattern
-    match="[the|my]? {k:lex.art.draw.things} {amt:lex.art.draw.amounts?} {d:lex.art.draw.moves} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.nudge arg.t=\"the {k}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=14
-    example="Sun a bit up."
-
-@pat.art.draw.x.nudge.a2 core.pattern
-    match="[the|my]? {k:lex.art.draw.things} {amt:lex.art.draw.amounts} [to_the|towards_the|towards|to]? {d:lex.art.draw.moves} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.nudge arg.t=\"the {k}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=14
-    example="Sun a tiny bit to the left."
-
-@pat.art.draw.x.nudge.b core.pattern
-    match="[the|my]? {k:lex.art.draw.things} [to_the|towards_the|towards|to]? {d:lex.art.draw.moves} {amt:lex.art.draw.amounts} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.nudge arg.t=\"the {k}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=14
-    example="Sun up a bit."
-
-@pat.art.draw.x.nudge.should core.pattern
-    match="[the|my]? {k:lex.art.draw.things} [$art.draw.g5_needs_to_go] {amt:lex.art.draw.amounts?} [to_the|towards_the|towards|to]? {d:lex.art.draw.moves} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.nudge arg.t=\"the {k}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=14
-    example="The sun needs to go up."
-
-@pat.art.draw.x.nudge.should2 core.pattern
-    match="[the|my]? {k:lex.art.draw.things} [$art.draw.g5_needs_to_go] [to_the|towards_the|towards|to]? {d:lex.art.draw.moves} {amt:lex.art.draw.amounts} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.nudge arg.t=\"the {k}\" arg.amt={amt} arg.d={d}"
-    kind=request
-    priority=14
-    example="The sun needs to go up a bit."
-
-@pat.art.draw.x.turn.noun core.pattern
-    match="[the|my]? {k:lex.art.draw.things} {d:lex.art.draw.flipwords} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.verb=flip arg.phrase=\"the {k} {d}\""
-    kind=request
-    priority=5
-    example="Dog the other way."
-    example="Car around pls."
-
-@pat.art.draw.x.turn.should core.pattern
-    match="[the|my]? {k:lex.art.draw.things} [should|must|needs_to|has_to|ought_to|could|can|will|would] [look|face|go|point|turn|be|face_the|look_the|be_facing|be_looking|be_turned|be_pointing|be_flipped]? {d:lex.art.draw.flipwords} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.verb=flip arg.phrase=\"the {k} {d}\""
-    kind=request
-    priority=14
-    example="The car should look the other way."
-
-@pat.art.draw.x.undo.free core.pattern
-    match="[$lang.lead.filler|wait|no|hang_on|uh_oh|hold_on|stop|back_up]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [undo|revert|rewind|roll_back|rollback|take_back|step_back|ctrl_z|control_z|reverse_that|reverse_it|undo_it|undo_that|undo_this|take_that_back|take_it_back|scrap_that|scrap_it|cancel_that|cancel_it|my_bad|that_was_wrong|that_was_a_mistake|go_back_one_step|go_back_1_step|one_step_back|1_step_back] {r:words(5)?} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.undo"
-    kind=request
-    priority=15
-    example="Oops, take that back."
-    example="Revert the last change."
-    example="Ctrl z."
-
-@pat.art.draw.x.undo.back core.pattern
-    match="[go|step|roll|take_it|put_it|get_it|bring_it|change_it|set_it|turn_it|go_1_step|go_one_step]? back [one_step|1_step|a_step|once|to_how_it_was|to_before|to_the_way_it_was|to_what_it_was|one_move|1_move|one_change|1_change|to_normal|to_before_that|to_the_start|to_the_beginning|to_the_previous_state|to_how_it_looked|to_how_it_was_before|to_before_i_did_that|to_the_last_step] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.undo"
-    kind=request
-    priority=15
-    example="Go back one step."
-    example="Back to how it was."
-
-@pat.art.draw.x.undo.backto core.pattern
-    canonical="Go back to the day picture."
-    match="[go|get|bring_it|put_it|take_it|switch|change_it|turn_it] back [to]? [the]? {w:lex.art.draw.times} [picture|scene|drawing|version|one|state|look|mood|sky|mode] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.undo"
-    kind=request
-    priority=15
-    example="Go back to the day picture."
-
-@pat.art.draw.x.redo.more core.pattern
-    canonical="Undo the undo."
-    canonical="Redo the last step."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [redo|re_do|do_it_again|do_that_again|put_it_back|bring_it_back|bring_that_back|get_it_back|get_that_back|restore|restore_it|restore_that|bring_back|put_back|get_back|un_undo|unundo|undo_the_undo|undo_undo|redo_it|redo_that] {r:words(7)?} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.redo"
-    kind=request
-    priority=15
-    example="Redo the last step."
-    example="Undo the undo."
-    example="Get that back please."
-
-@pat.art.draw.x.clear.all core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [clear|wipe|erase|delete|remove|empty|clean|trash|get_rid_of|throw_away|dump|scrub] [it|them|these|those|this|that]? [all|everything]? [all|everything] [off|away|out|up|of_it|of_them|of_that]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.clearAll"
-    kind=request
-    priority=15
-    example="Wipe it all off."
-    example="Clear all."
-
-@pat.art.draw.x.remove.itaway core.pattern
-    match="[throw|take|clear|wipe|kick|rub|get|toss|dump|ditch|chuck|scrub|sweep|push|get_rid_of|pick|clean] [it|this|that|them] [all]? [away|out|off|up] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.removeIt"
-    kind=request
-    priority=14
-    example="Throw it away."
-    example="Take it out."
-
-@pat.art.draw.x.remove.nomore core.pattern
-    match="[no_more|not_any_more|none_of_the|lose_the|ditch_the|drop_the|skip_the|scrap_the|dump_the|bin_the|kill_the|zap_the|enough] [the]? {t:lex.art.draw.targets} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.remove arg.phrase=\"the {t}\""
-    kind=request
-    priority=13
-    example="No more grass pls."
-
-@pat.art.draw.x.remove.dontwant core.pattern
-    match="[i_do_not_want|i_do_not_need|i_do_not_like|we_do_not_want|we_do_not_need|i_dont_want|i_no_longer_want|i_do_not_want_any|i_hate|i_am_tired_of|we_do_not_like|get_rid_of_the|please_no] [the|any|a|an|more|that|this|these|those|my]? {t:lex.art.draw.targets} [anymore|any_more|no_more|at_all|now|any_longer|here|in_it|in_the_picture|in_my_picture|there]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
-    emit="@{_} core.request action=draw.remove arg.phrase=\"the {t}\""
-    kind=request
-    priority=13
-    example="I don't want grass anymore."
-
-@pat.art.draw.x.remove.away core.pattern
-    match="[clear|wipe|rub|sweep|scrub|erase] {p:words(6)} [away|off|out] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.remove arg.phrase=\"{p}\""
-    kind=request
-    priority=12
-    example="Clear the grass away."
-
-@pat.art.draw.x.fill.noun core.pattern
-    match="[the|my]? {t:lex.art.draw.things} [should_be|must_be|needs_to_be|to_be|to|as|is|goes|should_look|should_look_like|has_to_be]? [just|only|just_an|just_a|an|a|only_an|only_a]? {m:lex.art.draw.fillmodes} [only|just]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.fill arg.t=\"the {t}\" arg.mode={m}"
-    kind=request
-    priority=12
-    example="Star outline only."
-    example="The star should be just an outline."
-
-@pat.art.draw.x.fill.modefirst core.pattern
-    match="{m:lex.art.draw.fillmodes} [the|my]? {t:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.fill arg.t=\"the {t}\" arg.mode={m}"
-    kind=request
-    priority=12
-    example="Solid heart."
-
-@pat.art.draw.x.dup.another core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|draw|add|give_me|get_me|i_want|i_need|i_d_like|create|do|put|show_me|gimme|i_would_like|can_i_have]? [me]? [again]? [another|one_more|1_more|a_second|a_2nd|a_third|an_extra|yet_another|a_new|the_same|same] [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [just_like_it|like_it|like_that|too|again|just_like_that|just_the_same|the_same]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.duplicate arg.t=it"
-    kind=request
-    priority=11
-    example="Another car."
-    example="Again, the same car."
-
-@pat.art.draw.x.dup.one core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|draw|add|give_me|get_me|do|put|gimme|i_want|i_need]? [me]? [one_more|1_more|another|a_second|1_other|one_other] [of_those|of_these|of_that|of_it|of_them|one|1|like_it|like_that|of_the_same|the_same]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.duplicate arg.t=it"
-    kind=request
-    priority=13
-    example="Make one more of those."
-
-@pat.art.draw.x.dup.copy core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make|draw|add|give_me|get_me|i_want|i_need|create|do|put|gimme|can_i_have|i_d_like|show_me]? [me]? [a|an|another|1|one|the]? [second|2nd|extra|new|another|spare]? [copy|duplicate|clone|twin|replica|copy_of|duplicate_of|clone_of|twin_of|replica_of|double_of] [of|for]? {t:words(5)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.duplicate arg.t=\"{t}\""
-    kind=request
-    priority=12
-    example="Get me a second copy of the tree."
-    example="Can you make a twin of the car?"
-
-@pat.art.draw.x.dup.nouncopy core.pattern
-    match="[the|my]? {t:lex.art.draw.things} [copy|duplicate|clone|twin|double] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.duplicate arg.t=\"the {t}\""
-    kind=request
-    priority=12
-    example="Tree copy please."
-
-@pat.art.draw.x.select.none core.pattern
-    match="[nothing|no_thing|none|no_one|nobody] [is]? [selected|chosen|highlighted|picked|active|marked] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.deselect"
-    kind=request
-    priority=14
-    example="Nothing selected please."
-
-@pat.art.draw.x.select.letgo core.pattern
-    match="[let_go|forget|drop|stop_selecting|unselect_everything|cancel_selection|clear_the_selection|release] [of]? [it|the_selection|everything|that|this]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.deselect"
-    kind=request
-    priority=12
-    example="Let go of it."
-
-@pat.art.draw.x.count.how core.pattern
-    match="how_many {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [are|do|did|have|is|can]? [there|i|we|you|u]? [have|got|draw|drawn|see|made|make|add|added|in|on|here]? [in|on]? [there|here|it|my|the|this]? [picture|drawing|page|canvas|paper|painting|scene|artwork|screen]? [now|so_far|already|altogether|in_total|total|overall]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="How many balloons are on there?"
-    example="How many items are on the page?"
-
-@pat.art.draw.x.count.number core.pattern
-    match="[number_of|the_number_of|total_number_of|amount_of|the_total_of|total|count_of|tally_of|the_count_of] [the|my|all_the|all_my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on|do_i_have|i_have|are_there|there_are|i_drew|i_made|i_drew_so_far|there]? [the|my]? [picture|drawing|page|canvas|painting|paper|scene|artwork]? [now|so_far|altogether|in_total|total|overall]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Number of trees in the picture."
-
-@pat.art.draw.x.count.noun core.pattern
-    match="[the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [count|total|number|tally] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Tree count?"
-
-@pat.art.draw.x.count.can core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [count|tally|total|add_up|number] [all]? [of]? [the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Can u count my trees?"
-
-@pat.art.draw.x.exists.bare core.pattern
-    canonical="Is there a house?"
-    match="[is_there|are_there|got|have_i_got|do_i_have|do_we_have|is|any|have_we_got|did_i_draw|did_i_add|did_i_make|did_we_draw] [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on|inside]? [there|here|it|the|my|this]? [picture|drawing|painting|page|paper|canvas|scene|artwork|yet|already]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=11
-    example="Is there a house?"
-    example="Any flowers in there?"
-
-@pat.art.draw.x.exists.does core.pattern
-    match="[does|did] [my|the|this] [$art.draw.g11_picture] [have|contain|include|show|got] [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Does my picture have a house?"
-
-@pat.art.draw.x.exists.isin core.pattern
-    canonical="Is a boat in there?"
-    match="[is|are] [a|an|the|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in_there|in_it|in_here|on_it|there|here|in_the_picture|in_my_picture|on_there] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Is a boat in there?"
-
-@pat.art.draw.x.where.did core.pattern
-    match="[where|wher] [did|do|does|can|could|will|would|should|have|has|had] [you|i|we|u]? [put|leave|place|draw|stick|add|see|find|spot|hide|move|keep|make|paint|drop|park] [$art.draw.g7_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=8
-    example="Where did you put the trees?"
-    example="Where can I see the tree?"
-
-@pat.art.draw.x.where.go core.pattern
-    match="[where|wher] [did|does|do|has|have|will] [$art.draw.g7_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [go|end_up|disappear|get_to|run_off|hide|run|move|vanish|get|went|fly|walk] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Where did the cat go?"
-
-@pat.art.draw.x.where.tell core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [tell_me|show_me|say|let_me_know|i_want_to_know|i_wanna_know|do_you_know|point_to|point_out|show|explain|can_you_say|i_would_like_to_know|i_d_like_to_know|i_wonder] [me]? [where|wher] [is|are|r|was|were]? [$art.draw.g7_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [is|are|r|went|are_at|is_at|stands|stand|sits|sit|lives|live|belongs|belong|can_be_found|are_located|is_located|ended_up|got_to|at]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Tell me where the trees are."
-
-@pat.art.draw.x.where.after core.pattern
-    match="[$art.draw.g7_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [where|wher|whr|where_at|where_exactly|where_is_it|where_are_they|where_now|where_is|where_are|where_to_find|where_exactly_is|wheres_that] [exactly|now|at]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Cat where?"
-    example="Trees, where exactly?"
-
-@pat.art.draw.x.where.find core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [find|locate|spot|look_for|search_for|help_me_find|seek|find_me] [me]? [$art.draw.g7_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Find the cat."
-
-@pat.art.draw.x.where.loc core.pattern
-    match="[what_is|what_are|whats|what|tell_me|give_me|show_me|state|say|name|reveal]? [the]? [location|position|place|spot|whereabouts|coordinates|coordinate|placement] [of|for] [$art.draw.g7_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Location of the cat?"
-
-@pat.art.draw.x.where.which core.pattern
-    match="[which|what] [place|spot|part|position|location|area|corner|side|region|section] [is|are] [$art.draw.g7_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|at|on|located_in|found_in|sitting_in|standing_in|living_in]"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Which spot is the cat in?"
-
-@pat.art.draw.x.where.they core.pattern
-    match="[where|wher] [are|is] [they|it|he|she|them] [$art.draw.g7_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things}"
-    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Where are they, the trees?"
-
-@pat.art.draw.x.help.what core.pattern
-    match="[what|which|whats] [things|shapes|animals|pictures|kinds_of_things|kinds_of_pictures|kind_of_things|kinds_of_shapes|stuff|objects|items|sort_of_things|sorts_of_things|types_of_things|kinds_of_animals]? [can|could|may|might|do|should] [i|you|we|u|one] [draw|paint|make|add|sketch|create|put|put_in|have|pick|choose|try] [to|in|into|on]? [my|the|this|it]? [picture|drawing|page|canvas|painting|paper|board|in_it|here|with_you|in_this|on_it]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.help"
-    kind=request
-    priority=12
-    example="What can u draw?"
-    example="What can I add to my picture?"
-
-@pat.art.draw.x.help.list core.pattern
-    canonical="List the things I can draw."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [list|show|tell|name|give|show_me|list_me|enumerate|tell_me|give_me|name_all|show_all] [me]? [all]? [the|all_the|all_of_the|some]? [things|shapes|pictures|objects|items|stuff|kinds_of_things|animals|kinds_of_pictures|options|choices] [that]? [i|you|we|u|there]? [can|could|may|might|are|is]? [draw|paint|make|add|do|sketch|create|available|there|possible|ready|on_offer|offered]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.help"
-    kind=request
-    priority=12
-    example="List the things I can draw."
-
-@pat.art.draw.x.help.showme core.pattern
-    match="[list|show|tell|name|give|explain|remind|let_me_see|let_me_know|i_want_to_know|i_wanna_know|do_you_know|can_you_tell_me|tell_me|show_me] [me]? what [i|we|you|u] [can|could|may|might] [draw|paint|make|add|sketch|create|put] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.help"
-    kind=request
-    priority=12
-    example="Show me what I can draw."
-
-@pat.art.draw.x.colors.which core.pattern
-    canonical="Which colors are available?"
-    match="[which|what|whats] [colors|colours|crayons|paints|color_options|colour_options|color_choices|colour_choices|crayon_colors|paint_colors] [can|could|may|do|are|is|would|have] [i|you|we|u|there|available|possible|ready|allowed|permitted|supported]? [use|have|pick|choose|see|paint_with|draw_with|select|get|available|there|offered|on_offer|in_the_box|know|try|allowed|permitted|supported|accepted|usable|possible]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colors"
-    kind=request
-    priority=13
-    example="Which colors are available?"
-    example="What color options do I have?"
-
-@pat.art.draw.x.colors.list core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [list|show|tell|name|give|show_me|list_me|tell_me|give_me] [me]? [all]? [the|all_the|all_of_the]? [colors|colours|crayons|paints|color_options] [i_can_use|available|there_are|you_have|i_have|i_can_paint_with|i_can_draw_with|i_can_pick|i_can_choose|i_can_have|you_got|are_allowed|are_possible|are_there|you_know|i_got]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colors"
-    kind=request
-    priority=13
-    example="List the colors."
-
-@pat.art.draw.x.colors.noun core.pattern
-    match="[colors|colours|color|colour|crayon|crayons|paint|paints] [list|options|choices|palette|menu|box|available|chart] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colors"
-    kind=request
-    priority=13
-    example="Colour list pls."
-
-@pat.art.draw.x.describe.verb core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [describe|explain|summarize|summarise|list|tell_me_about|sum_up|recap|read_out|talk_about|say_something_about|review] [me]? [my|the|this|our|that]? [$art.draw.g8_art] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.describe"
-    kind=request
-    priority=13
-    example="Describe my art."
-
-@pat.art.draw.x.describe.what core.pattern
-    canonical="Explain what's on the page."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [explain|tell_me|tell|say|show_me|list|name|read_out|describe|let_me_know] [me]? [what_is|whats|what_s|what|everything|all_that] {r:words(5)} [picture|drawing|page|canvas|painting|paper|art|artwork|scene|screen|board] [right_now|now|at_the_moment|currently|so_far]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.describe"
-    kind=request
-    priority=13
-    example="Explain what's on the page."
-
-@pat.art.draw.x.describe.made core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [tell_me|tell|show_me|explain|say|list|describe|remind_me] [me]? what [i|we] [made|drew|have|did|painted|sketched|created|added|drawn] [so_far|already|here|today|there|now]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.describe"
-    kind=request
-    priority=13
-    example="Tell me what I made."
-
-@pat.art.draw.x.describe.whats core.pattern
-    match="[whats|what_is|what_s] [there|in|on] [my|the|this]? [$art.draw.g8_art] [right_now|now|at_the_moment|currently|so_far|already|there]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.describe"
-    kind=request
-    priority=13
-    example="What's in the picture right now?"
-
-@pat.art.draw.x.save.want core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g12_i_want_to]? [save|download|export|keep|store|print|get|grab|send] [me]? [a_copy_of]? [my|the|this|a|an|that]? [art|artwork|drawing|picture|painting|image|sketch|doodle|creation|masterpiece|work] [as|in|to|into]? [a|an]? {f:lex.art.draw.formats?} [file|image|picture|format|copy]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.save arg.f={f}"
-    kind=request
-    priority=13
-    example="I want to keep my drawing."
-    example="Save my art as an image."
-
-@pat.art.draw.x.save.it core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [save|download|export|keep|store|print] [it|this|that|them] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.save"
-    kind=request
-    priority=13
-    example="Save it."
-
-@pat.art.draw.x.colorof.of core.pattern
-    canonical="Tell me the color of the house."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g18_tell_me]? [the]? [color|colour] [of|for] [the|my|that|this]? {t:words(5)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=5
-    example="Color of my house?"
-    example="Tell me the color of the house."
-
-@pat.art.draw.x.colorof.oft core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g18_tell_me]? [the]? [color|colour] [of|for] [the|my|that|this]? {t:lex.art.draw.targets} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=14
-    example="Color of my house?"
-
-@pat.art.draw.x.colorof.noun core.pattern
-    match="[the|my]? {t:lex.art.draw.targets} [color|colour|colors|colours] [is_it|now]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=9
-    example="House color?"
-
-@pat.art.draw.x.colorof.painted core.pattern
-    match="[what_is|whats|what] [the|my]? {t:words(4)} [painted|colored|coloured|colored_in|coloured_in] [now|right_now]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=14
-    example="What's the house painted?"
-
-@pat.art.draw.x.colorof.is core.pattern
-    match="[is|are] [the|my] {t:words(4)} {c:lex.art.draw.colors} [now|right_now|at_the_moment]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=5
-    example="Is the house red?"
-
-@pat.art.draw.x.colorof.ist core.pattern
-    match="[is|are] [the|my] {t:lex.art.draw.targets} {c:lex.art.draw.colors} [now|right_now|at_the_moment]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=12
-    example="Is the house red?"
-
-@pat.art.draw.x.mood.bare core.pattern
-    match="{w:lex.art.draw.strongtimes} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=13
-    example="Sunset please."
-
-@pat.art.draw.x.dup.nounof core.pattern
-    match="[1_more|one_more|another|a_second|a_2nd|a_third|yet_another] [of]? [those|these|the|that]? {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.duplicate arg.t=\"the {k}\""
-    kind=request
-    priority=12
-    example="One more of those trees."
-
-@pat.art.draw.x.add.like core.pattern
-    match="[more|some|add|draw|put]? {k:lex.art.draw.things} [like|about|around|maybe|x|times|roughly] {n:number} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=11
-    example="More stars, like 5."
-
-@pat.art.draw.x.count.everything core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [count|tally|total|number] [everything|all|all_of_it|them_all|all_the_things|the_things]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.kind=thing arg.kt=\"things\""
-    kind=request
-    priority=12
-    example="Count everything."
-
-@pat.art.draw.x.count.total core.pattern
-    match="[whats|what_is|what_s] [the]? [total|full|overall]? [count|number|amount|tally] [of]? [things|items|objects|shapes|bits|stuff|pieces] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.kind=thing arg.kt=\"things\""
-    kind=request
-    priority=12
-    example="What's the total count of things?"
-
-@pat.art.draw.x.add.clean core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g4_draw] [$art.draw.g14_a_picture_of]? [a|an|another|1_more|a_few]? {n:number?} {q:lex.art.draw.quantity?} [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=13
-    example="Could you sketch a blue car for me?"
-
-@pat.art.draw.x.add.incolor core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g6_draw] [a|an|another|some|1]? {n:number?} {k:lex.art.draw.things} [$art.draw.g9_in] {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [color|colour]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={c} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=13
-    example="I want you to draw a car in blue."
-    example="Draw a fish in blue."
-
-@pat.art.draw.x.add.incolor2 core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g6_draw] [a|an|another|some|1]? {n:number?} {m1:lex.art.draw.sizes} {k:lex.art.draw.things} [$art.draw.g9_in] {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [color|colour]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.m2={c} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=13
-    example="Draw a big car in blue."
-
-@pat.art.draw.x.ground.needs core.pattern
-    match="[it|the_ground|the_picture|the_scene|the_floor|the_drawing|this|the_bottom] [needs|wants|should_have|could_use|must_have|needs_some|needs_more|would_like|could_do_with|has_to_have|needs_a_bit_of|needs_a_little] [some|a_bit_of|a_little|more|a_little_bit_of|a_few]? {g:lex.art.draw.ground} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    kind=request
-    priority=13
-    example="It needs sand."
-
-@pat.art.draw.x.mood.so core.pattern
-    match="[change|make|set|turn|get|let] [it|things|everything|the_scene|the_picture] so [that]? [its|it_is|it_s|it_gets|it_becomes|it_looks_like|it_looks|it_will_be|it_would_be|it_is_like|the_sky_is|the_scene_is] {w:lex.art.draw.times} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=14
-    example="Change it so its sunset."
-
-@pat.art.draw.x.recolor.wish core.pattern
-    match="[$art.draw.g10_i_want] {t:words(5)} [to_be|to_look|to_become|to_turn|to_go|to|be|in]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"{t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=13
-    example="I want the door on the house to be green."
-    example="I want the house blue."
-
-@pat.art.draw.x.recolor.so core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make_it_so|make_it_so_that|so] {t:words(5)} [is|are|becomes|turns|goes|looks|gets] {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"{t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=13
-    example="Make it so the sky is blue."
-
-@pat.art.draw.x.recolor.colorfirst core.pattern
-    match="{sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [for|on] [the|my]? {t:lex.art.draw.targets} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
-    kind=request
-    priority=14
-    example="Dark blue for the sky."
-
-@pat.art.draw.x.part.compound core.pattern
-    canonical="Make the house door green."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [paint|color|colour|make|turn|change|set|fill] [the|my]? [the]? {t:lex.art.draw.things} {part:lex.art.draw.parts} [to|into|with|in]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.givePart arg.t=\"the {t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
-    kind=request
-    priority=14
-    example="Make the house door green."
-
-@pat.art.draw.x.part.compound2 core.pattern
-    match="[the|my]? {t:lex.art.draw.things} {part:lex.art.draw.parts} [to_be|to|should_be|in|is]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.givePart arg.t=\"the {t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
-    kind=request
-    priority=14
-    example="House door green pls."
-
-@pat.art.draw.x.size.wish core.pattern
-    canonical="I want the cat to be huge."
-    match="[i_want|i_d_like|i_need|i_would_like|we_want|i_wish|i_prefer] {t:words(4)} [to_be|to_look|to_become|to|be]? {s:lex.art.draw.sizes} [size|sized|one]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.setSize arg.t=\"{t}\" arg.s={s}"
-    kind=request
-    priority=13
-    example="I want the cat to be huge."
-
-@pat.art.draw.x.size.so core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [make_it_so|make_it_so_that|so] {t:words(5)} [is|are|becomes|goes|looks|gets] {s:lex.art.draw.sizes} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.setSize arg.t=\"{t}\" arg.s={s}"
-    kind=request
-    priority=13
-    example="Make it so the cat is huge."
-
-@pat.art.draw.x.size.upto core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [blow|blow_up|enlarge|grow|scale|make|turn|inflate|stretch] {t:words(5)} [up]? [to|into|until_it_is|until_its|so_it_is|so_its] [a]? {s:lex.art.draw.sizes} [size|sized]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.setSize arg.t=\"{t}\" arg.s={s}"
-    kind=request
-    priority=14
-    example="Blow the cat up to huge size."
-
-@pat.art.draw.x.move.want core.pattern
-    match="[$art.draw.g10_i_want] [the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [to_be|to_go|to_sit|to_stand|to_move|to_end_up|to_be_put|to_be_moved|to_be_placed|to_be_found|to_live|to_stay|to_hang]? {pp:lex.art.draw.preps} {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} {pp} {d}\" arg.m1={m1} arg.m2={m2}"
-    kind=request
-    priority=12
-    example="I want the cat under the tree."
-
-@pat.art.draw.x.move.so core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [move|put|place|slide|shift|push|bring|get|make|set|drag] {t:words(4)} so [that]? [its|it_is|it_s|they_are|theyre|it_will_be|it_can_be|it_sits|it_stands|it_goes] {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"{t} {d}\""
-    kind=request
-    priority=12
-    example="Move the cat so its under the tree."
-
-@pat.art.draw.x.turn.verbafter core.pattern
-    match="[the|my]? {k:lex.art.draw.things} [turn|flip|spin|rotate|turns|flips|spins|turn_around|flip_around] [around|round|over|back|the_other_way|backwards]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.verb=turn arg.phrase=\"the {k} around\""
-    kind=request
-    priority=13
-    example="Cat turn around thx."
-
-@pat.art.draw.x.turn.aroundthe core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [turn|flip|spin|rotate|swing|twist] [around|round|over|back] [the|my|that|this]? {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.verb=turn arg.phrase=\"the {k} around\""
-    kind=request
-    priority=14
-    example="Turn around the cat."
-
-@pat.art.draw.x.turn.wish core.pattern
-    match="[$art.draw.g10_i_want] [the|my]? {k:lex.art.draw.things} [turned|flipped|spun|rotated|reversed|mirrored|facing|looking|pointing|to_face|to_look|to_turn|to_be_turned|to_be_flipped|to_be]? {d:lex.art.draw.flipwords} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.turn arg.verb=turn arg.phrase=\"the {k} {d}\""
-    kind=request
-    priority=14
-    example="I want the cat turned around."
-
-@pat.art.draw.x.count.tell core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [tell_me|let_me_know|say|i_wanna_know|i_want_to_know|can_you_tell_me|do_you_know|i_would_like_to_know|show_me|check|find_out|i_d_like_to_know|i_wonder] [me]? how_many {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [are_there|there_are|are|do_i_have|i_have|have_i_got|are_in_the_picture|are_in_it|are_on_the_page|there_is|did_i_draw|did_i_make|have_i_drawn|do_you_see|there_r|r_there]? [in|on]? [the|my]? [picture|drawing|page|canvas|painting|scene]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Tell me how many trees there are."
-
-@pat.art.draw.x.count.nounfirst core.pattern
-    match="[the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [how_many|how_many_are_there|how_many_are_in_it|how_many_in_total|how_many_altogether] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Trees how many?"
-
-@pat.art.draw.x.colors.bare core.pattern
-    match="[the]? [colors|colours|crayons|paints|color_choices|colour_choices] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colors"
-    kind=request
-    priority=11
-    example="Colors?"
-
-@pat.art.draw.x.colors.ugot core.pattern
-    match="[u_got|you_got|do_you_have|have_you_got|you_have|u_have|u_have_got|which|what|do_u_have|got] [which|what]? [colors|colours|crayons|paints] [do_you_have|u_have|u_got|you_got|can_i_pick|can_i_choose|is_there|are_there|do_u_have|have_you_got|you_know]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colors"
-    kind=request
-    priority=12
-    example="U got which colors?"
-
-@pat.art.draw.x.save.it2 core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g12_i_want_to]? [save|download|export|keep|store|print] [it|this|that|them] [as|in|to|into]? [a|an]? {f:lex.art.draw.formats} [file|image|picture|format|copy]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.save arg.f={f}"
-    kind=request
-    priority=14
-    example="I want to save it as a png file."
-
-@pat.art.draw.x.save.fmtfirst core.pattern
-    match="[can_i_get|can_i_have|give_me|get_me|i_want|i_need|make|make_me]? [a|the]? {f:lex.art.draw.formats} [of|from|for|version_of|copy_of|file_of] [my|the|this|that]? [$art.draw.g8_art] [save|download|export|keep|get|grab]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.save arg.f={f}"
-    kind=request
-    priority=13
-    example="PNG of my picture, save pls."
-
-@pat.art.draw.x.remove.takeout core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [take_out|clear_out|get_out] [the|my|that|this|those|these|all_the]? {t:lex.art.draw.targets} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.remove arg.phrase=\"the {t}\""
-    kind=request
-    priority=12
-    example="Take out the grass."
-
-@pat.art.draw.x.add.gerund core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [would_you_mind|do_you_mind|would_you_be_able_to|are_you_able_to|how_about|what_about|im_thinking_of|i_am_thinking_of|i_was_thinking_of|i_am_in_the_mood_for|time_for|lets_try|let_us_try|thinking_of|keep|try] [drawing|sketching|painting|adding|making|putting|creating|doodling|drawing_me|sketching_me|giving_me|getting_me|showing_me] [a|an|another|some|a_few|more|1_more|one|the]? {n:number?} {q:lex.art.draw.quantity?} [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=12
-    example="Would you mind drawing a heart?"
-
-@pat.art.draw.x.add.verbs.clean core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [$art.draw.g3_gimme] [$art.draw.g13_a_picture_of]? {n:number?} {q:lex.art.draw.quantity?} [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" "
-    kind=request
-    priority=12
-    example="Gimme a blue cat."
-    example="It needs a sun."
-
-@pat.art.draw.bare core.pattern
-    match="[pls|can_you|could_you|let_us]? [draw|sketch|paint] [pls]?"
-    emit="@{_} core.request action=draw.askKind"
-    kind=request
-    priority=11
-    example="Draw."
-    doc="A drawing command without the thing to draw: asks what to draw and expects the answer as the next utterance (discourse pending, spec 11). Priority 11 keeps the chess draw offer on other tabs; on the drawing tab the tab bias selects this pattern."
-
-@pat.art.draw.x2.bare.colored core.pattern
-    match="[$lang.lead.filler|pls|plz]? [a|an|one|some|another]? {n:number?} {m1:lex.art.draw.mods} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|pls|plz|thanks]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=9
-    tabOnly=true
-    example="A purple tree please."
-    example="A big red house."
-
-@pat.art.draw.x2.mood.look core.pattern
-    match="[$lang.lead.filler|pls|plz]? [make|turn|let|have|set|change] [it|the_picture|the_scene|the_sky|everything|the_drawing|this] [to]? [look|seem|feel|be|become|turn|go|appear|get] [like|as|into]? {w:lex.art.draw.times} [time|now|outside|pls]?"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    kind=request
-    priority=12
-    example="Make it look like night time."
-    example="Turn it into evening."
-
-@pat.art.draw.x2.clean.page core.pattern
-    canonical="Give me a blank canvas."
-    canonical="I want a clean page."
-    match="[$lang.lead.filler|pls|plz]? [i_want|i_would_like|i_d_like|id_like|i_need|give_me|can_i_have|could_i_have|may_i_have|let_me_have|start_with|let_us_start_with|how_about] [a|an|the|my]? [clean|blank|empty|fresh|new|white|clear|clean_white|plain] [page|canvas|paper|sheet|picture|drawing|slate|board|screen]"
-    emit="@{_} core.request action=draw.clearAll"
-    kind=request
-    priority=12
-    example="I want a clean page."
-    example="Give me a blank canvas."
-
-@pat.art.draw.x2.bare.plain core.pattern
-    match="[$lang.lead.filler|pls|plz]? [a|an|one|some|another] {n:number?} {m1:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|please|pls|plz|thanks]"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.kind={k} arg.kt=\"{k}\""
-    kind=request
-    priority=9
-    tabOnly=true
-    example="A boat please."
-
-@pat.art.draw.add.again core.pattern
-    match="[$lang.lead.filler|pls|plz]? [a|an|another|one_more] {m1:lex.art.draw.relmods} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} [pls|plz|thanks|thx]?"
-    emit="@{_} core.request action=draw.add arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"\""
-    kind=request
-    priority=12
-    tabOnly=true
-    example="A bigger house."
-    example="A smaller tree."
-    doc="Ellipsis after a draw on the Drawing tab: a comparative or a mood before the thing repeats the draw (a bigger house, a happy girl). A bare noun alone is not read: a comma list (a sun, a cloud and a bird) must stay one command."
-
-@pat.art.draw.add.person core.pattern
-    match="[$lang.lead.filler|pls|plz]? [a|an|another|one_more] {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.people} [pls|plz|thanks|thx]?"
-    emit="@{_} core.request action=draw.add arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\" arg.where=\"\""
-    kind=request
-    priority=12
-    tabOnly=true
-    example="A man."
-    example="Another happy girl."
-    doc="Ellipsis after a draw on the Drawing tab for people (a man, a girl): repeats the draw with the person presets."
-
-@pat.art.draw.color.my core.pattern
-    canonical="What color is my house?"
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [what|whats|which] [color|colour] [is|are]? [my] {t:words(5)} [$art.draw.g17_painted]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=13
-    example="What color is my house?"
-
-@pat.art.draw.color.in core.pattern
-    match="what [color|colour] [is|are] [the]? {t:words(5)} [in|of|on] [my|the] [$art.draw.g15_picture] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=13
-    example="What color is the sky in my picture?"
-
-@pat.art.draw.color.of core.pattern
-    canonical="What is the color of my car?"
-    match="what is the [color|colour] of my {t:words(5)}"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=13
-    example="What is the color of my car?"
-
-@pat.art.draw.x.colorof.the core.pattern
-    match="[what|whats|which] [color|colour] [is|are]? [the|that|this] {t:lex.art.draw.things} [$art.draw.g17_painted]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
-    kind=request
-    priority=14
-    example="What colour is the house?"
-
-@shape.art.draw.ground core.shape
-    family=do
-    verb="draw|add|put|make|paint|create|give_me|show_me|add_some|draw_some"
-    obj="g:lex.art.draw.ground"
-    det="some|the|a_bit_of|more|a|a_lot_of"
-    extra="[on_the_ground|to_the_ground|to_the_picture|to_my_picture|to_my_drawing]?"
-    forms=imp,wish,ind,q
-    sample="g=grass"
-    emit="@{_} core.request action=draw.ground arg.g={g}"
-    priority=13
-    example="Add grass."
-
-@shape.art.draw.mood core.shape
-    family=set
-    verb="make|turn|let|set|change|switch|go"
-    noun="it|the_picture|the_drawing|the_sky|the_scene|the_day|everything"
-    val="w:lex.art.draw.times"
-    link="into|to|be|become"
-    det="a"
-    sample="w=night"
-    emit="@{_} core.request action=draw.mood arg.w={w}"
-    priority=13
-    skip=state,q
-    example="Make it night."
-
-@pat.art.draw.x.move.state core.pattern
-    canonical="The sun is above the clouds."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [the|my]? {m1:lex.art.draw.mods?} {k:lex.art.draw.things} [is|are|should_be|must_be|needs_to_be|has_to_be|goes|go|sits|stands|belongs|stays] [to_be|to_go|to_sit]? {pp:lex.art.draw.preps} {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} {pp} {d}\" arg.m1={m1}"
-    kind=request
-    priority=12
-    example="The sun is above the clouds."
-    example="The cat should be under the tree."
-    doc="RP3: a position stated as a fact is a request to put the thing there."
-
-@pat.art.draw.x.move.notunder core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [the|my]? {k:lex.art.draw.things} [is|are|should_be|must_be|goes|go|stays|stay]? [up|above|over|higher|on_top|on_top_of] [not|and_not|instead_of|rather_than|but_not] [under|below|beneath|underneath|behind|in_front_of] {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} above {d}\""
-    kind=request
-    priority=13
-    example="The sun up, not under the clouds."
-    doc="RP3: 'up, not under X' is above X."
-
-@pat.art.draw.x.move.notabove core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [the|my]? {k:lex.art.draw.things} [is|are|should_be|must_be|goes|go|stays|stay]? [down|below|under|beneath|underneath|lower] [not|and_not|instead_of|rather_than|but_not] [above|over|on_top_of|on_top] {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} under {d}\""
-    kind=request
-    priority=13
-    example="The sun down, not above the clouds."
-
-@pat.art.draw.x.add.open core.pattern
-    canonical="Draw a lighthouse."
-    canonical="Add a third window."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [draw|sketch|paint|add|create|draw_me|paint_me|sketch_me] [a|an|another] {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.open=\"{o}\" arg.kt=\"{o}\""
-    kind=request
-    priority=4
-    example="Draw a red lighthouse."
-    example="Sketch a castle."
-    example="Add a third window."
-    doc="DRAW-FROM-FACTS: the thing to draw is an open slot. After the reading the operation looks the noun up in the catalog of drawable things (knowledge/k.objects, as things.catalog.mjs): a hit draws the thing from its parts; a part word of a thing in the picture adds one more of that part; nothing else is answered plainly (I don't know how to draw a blorp yet), never with a random shape."
-
-@pat.art.draw.x.again.open core.pattern
-    canonical="One more lighthouse."
-    match="[$lang.lead.filler|right|also|and|hi|pls|plz]? [1_more|one_more|another|yet_another|a_second|one_more_of_the] {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.open=\"{o}\" arg.kt=\"{o}\""
-    kind=request
-    priority=3
-    example="One more lighthouse."
-    example="Another castle."
-    doc="A follow-up that repeats the last add for a thing of the catalog (an open slot): one more of it."
-
-@pat.art.draw.x.count.open core.pattern
-    canonical="How many lighthouses are there?"
-    match="how_many {k:words(2,noun)} [are_there|are_in_my_picture|are_in_my_drawing|are_in_the_picture|are_in_the_drawing|do_i_have|have_i_drawn|did_i_draw]"
-    emit="@{_} core.request action=draw.count arg.kind=\"{k}\" arg.kt=\"{k}\""
-    kind=request
-    priority=4
-    example="How many lighthouses are there?"
-    doc="DRAW-FROM-FACTS: counts a thing of the catalog (a composite) as one object each; the noun is looked up after the reading, a word that is no thing is answered plainly."
-
-@pat.art.draw.x.add.open.n core.pattern
-    canonical="Draw two blue castles."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [draw|sketch|paint|add|create|draw_me|paint_me|sketch_me] {n:number} {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.add arg.n={n} arg.open=\"{o}\" arg.kt=\"{o}\""
-    kind=request
-    priority=4
-    example="Draw two blue castles."
-    doc="DRAW-FROM-FACTS: the same open slot with a number (draw two blue castles)."
-
-@pat.art.draw.x.move.further core.pattern
-    match="[and|then|now|also]? [more|even_more|further|farther|even_further] [to_the|towards_the|towards|to]? {d:lex.space.dirs} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"it further {d}\""
-    kind=request
-    priority=14
-    example="Further left."
-    example="And even more up."
-    doc="Goes on with the last move, further in a direction (the module space reads the direction and the amount)."
-
-@pat.art.draw.x.move.further.amt core.pattern
-    match="[and|then|now|also]? {amt:lex.space.amounts} [more|even_more|further|farther|even_further]? [to_the|towards_the|towards|to]? {d:lex.space.dirs} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=draw.move arg.phrase=\"it {amt} further {d}\""
-    kind=request
-    priority=14
-    example="A bit more to the right."
-    example="A lot further left."
-    doc="Goes on with the last move by an amount (a bit, a lot, all the way) in a direction."
-
-@pat.art.draw.x.move.again core.pattern
-    match="[and|then|now|also]? [further|farther|even_further|even_more|once_more|again]"
-    emit="@{_} core.request action=draw.move arg.phrase=\"it further\""
-    kind=request
-    priority=14
-    example="Further."
-    example="Again."
-    doc="Repeats the last move."
-
-@pat.art.draw.x.reselect core.pattern
-    canonical="Not the left one, the right one."
-    match="[no|nope|oh_no]? not [the]? {a:words(2)} [one]? [the|but|i_meant|i_mean|the_one]? {p:words(4)}"
-    emit="@{_} core.request action=draw.reselect arg.phrase=\"{p}\""
-    kind=request
-    priority=15
-    example="No, not the first one, the middle one."
-    example="Not the left one, the right one."
-    doc="Corrects which thing the last move was about: the same move on the one meant now."
-
-@pat.art.draw.x.space.layout core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [line_up|tidy_up|tidy|clean_up|neaten|spread_out|space_out|align|swap|untangle|distribute|stack] {r:rest?}"
-    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    example="Tidy up."
-    example="Line up the houses."
-    example="Swap the first and the last house."
-    example="Align the trees on the left."
-    doc="Arranges things: handed to the module space."
-
-@pat.art.draw.x.space.inarow core.pattern
-    canonical="Put the houses in a row."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|arrange|make|set|lay] {t:words(5)} [in|into|as] [a|one]? [row|column|grid|circle|line|ring|stack]"
-    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    example="Put the houses in a row."
-    example="Arrange the trees in a circle."
-    doc="Puts a group in a row, a column, a grid or a circle: handed to the module space."
-
-@pat.art.draw.x.space.sense core.pattern
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|arrange|set|lay|sort|stack|pile|line_up|order] {t:words(6)} [by_height|by_size|by_their_height|by_their_size|in_a_circle_around|in_a_ring_around|in_a_circle_round|around|on_top_of_each_other|on_top_of_one_another|in_a_stack|in_a_pile|from_smallest_to_biggest|from_smallest_to_tallest|from_biggest_to_smallest|from_tallest_to_shortest|in_the_places_of_a_face|like_a_face] {r:rest?}"
-    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
-    kind=request
-    priority=13
-    example="Put the chairs around the table."
-    example="Arrange the people by height."
-    example="Stack the boxes on top of each other."
-    doc="Layouts from general knowledge (around a table, by height, stacked, the parts of a face): handed to the module space."
-
-@pat.art.draw.x.space.near core.pattern
-    match="[what|whats|what_is|what_s|which_things|what_things] [is|are]? [there]? [next_to|near|beside|close_to|by] {r:rest}"
-    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    example="What is next to the house?"
-    doc="What is next to a thing: handed to the module space."
-
-@pat.art.draw.x.space.is core.pattern
-    match="[is|are] {a:words(4)} [above|below|under|over|beneath|underneath|left_of|right_of|to_the_left_of|to_the_right_of|next_to|near|beside] {b:rest}"
-    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    example="Is the sun above the tree?"
-    doc="Is A above, under, left of, right of or next to B: handed to the module space."
-
-@pat.art.draw.x.space.which core.pattern
-    match="which {r:words(3)} [is|are] [in_the_middle|the_biggest|the_smallest|the_first|the_last|on_the_left|on_the_right|at_the_top|at_the_bottom|the_leftmost|the_rightmost|the_highest|the_lowest|in_the_centre|in_the_center|the_largest|closest_to|nearest_to] {c:rest?}"
-    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    example="Which house is in the middle?"
-    example="Which one is the biggest?"
-    doc="Which one is in the middle, the biggest, on the left ...: handed to the module space."
-
-@pat.art.draw.x.space.far core.pattern
-    match="how_far [apart]? [is|are] {r:rest}"
-    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    example="How far apart are the sun and the tree?"
-    doc="How far two things are (near or far, never pixels): handed to the module space."
-@pat.art.draw.takeApart core.pattern
-    canonical="Take the house apart."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.apart.verb] {t:words(5)} [$lang.apart] [$lang.tail.filler]?"
-    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
-    kind=request
-    priority=15
-    example="Take the house apart."
-    example="Break the car into pieces."
-    example="Pull it apart."
-    doc="Takes a thing apart: its parts become things of their own."
-
-@pat.art.draw.takeApart.first core.pattern
-    canonical="Take apart the house."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.apart.verb] apart {t:words(5)} [$lang.tail.filler]?"
-    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
-    kind=request
-    priority=15
-    example="Take apart the house."
-    example="Pull apart the car."
-
-@pat.art.draw.separate core.pattern
-    canonical="Separate the roof."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.dismantle] {t:words(5)} [$lang.apart]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=draw.takeApart arg.t=\"{t}\""
-    kind=request
-    priority=14
-    example="Separate the roof."
-    example="Dismantle the car."
-    example="Detach the door from the house."
+    tabPriority=19
+    example="Put the guest Ann at house."
 
 @pat.art.draw.group core.pattern
-    canonical="Put these together."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.verb] {t:words(5)} [$lang.together] [as|into|to_make|to_form]? [a|an|one|my]? {name:words(2)?}"
-    emit="@{_} core.request action=draw.group arg.t=\"{t}\" arg.name=\"{name}\""
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.group] [$acts.det]? {thing:words} [together]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.group arg.mode=group arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
-    priority=15
-    example="Put these together."
-    example="Glue the house and the tree together."
-    example="Put them together as a boat."
+    priority=10
+    tabPriority=18
+    example="Group the houses."
+    canonical="Group the houses."
 
-@pat.art.draw.group.it core.pattern
-    canonical="Group them."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [group|combine|merge|bundle|unite] {t:words(5)}"
-    emit="@{_} core.request action=draw.group arg.t=\"{t}\""
+@pat.art.draw.apart core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.apart] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
-    priority=13
-    example="Group them."
-    example="Combine the house and the tree."
+    priority=10
+    tabPriority=18
+    example="Take the houses apart."
+    canonical="Take the houses apart."
 
-@pat.art.draw.group.named core.pattern
-    canonical="This is a boat."
-    match="[this|these|those|they] [$lang.group.is] [a|an|my|the|one] {name:words(2)}"
-    emit="@{_} core.request action=draw.group arg.name=\"{name}\""
+@pat.art.draw.apart.2 core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|break|pull|split] [$acts.det]? {thing:words} [apart|up] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
-    example="This is a boat."
-    example="These are a train."
+    tabPriority=19
+    example="Take the houses apart."
+    canonical="Take the houses apart."
 
-@pat.art.draw.group.into core.pattern
-    canonical="Make them into a boat."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.make] [them|these|those|all_of_them|all_of_these] into [a|an|one|my] {name:words(2)}"
-    emit="@{_} core.request action=draw.group arg.name=\"{name}\""
+@pat.art.draw.place.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=5
+    tabPriority=13
+    example="Move the guest."
+
+@pat.art.draw.change.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=5
+    tabPriority=13
+    example="Change house."
+    canonical="Change house."
+
+@pat.art.draw.send.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.send arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=5
+    tabPriority=13
+    example="Send house."
+    canonical="Send house."
+
+@pat.art.draw.pick core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="Select house."
+    canonical="Select house."
+
+@pat.art.draw.copy core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.copy arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="Copy house."
+    canonical="Copy house."
+
+@pat.art.draw.send core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.send arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Send house to the diagram."
+    canonical="Send house to the diagram."
+
+@pat.art.draw.ask.what core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.art.draw.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="What is the colour of house?"
+    canonical="What is the colour of house?"
+
+@pat.art.draw.ask.what.is core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] {attribute:lex.art.draw.attrs} [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="What colour is house?"
+    canonical="What colour is house?"
+
+@pat.art.draw.change.should core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.art.draw.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="house should be blue."
+
+@pat.art.draw.ask.at core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|who] [is|are|sits|sit|stands|stand] [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Who is at house?"
+    canonical="Who is at house?"
+
+@pat.art.draw.ask.count core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="How many houses are there?"
+    canonical="How many houses are there?"
+
+@pat.art.draw.ask.count.at core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|is]? [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=count arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    tabPriority=21
+    example="How many guests are at house?"
+
+@pat.art.draw.ask.where core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? where [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=where arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Where is Ann?"
+    canonical="Where is Ann?"
+
+@pat.art.draw.ask.why core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? why [is|are|did|do|was|were|does] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=why arg.rest=\"{rest}\" arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    example="Why is house blue?"
+    canonical="Why is house blue?"
+
+@pat.art.draw.ask.last core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? what [did|have] you [just]? [do|done|change|changed] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=last arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    example="What did you just do?"
+    canonical="What did you just do?"
+
+@pat.art.draw.undo core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.undo arg.text=\"{segment}\""
+    kind=request
+    priority=16
+    tabPriority=24
+    example="Undo that."
+    canonical="Undo that."
+
+@pat.art.draw.redo core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.redo arg.text=\"{segment}\""
+    kind=request
+    priority=16
+    tabPriority=24
+    example="Redo that."
+    canonical="Redo that."
+
+@pat.art.draw.save core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.save arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="Save it as lunch."
+    canonical="Save it as lunch."
+
+@pat.art.draw.place.dir core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [move|put|bring|push|pull|take|shift|raise|lower|make] [$acts.det]? {thing:words} {rel:lex.acts.dir} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Move the eyes closer together."
+    canonical="Move the eyes closer together."
+
+@pat.art.draw.place.dir.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} {rel:lex.acts.dir} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
+    kind=request
+    priority=6
+    tabPriority=14
+    example="Eyes closer together."
+
+@pat.art.draw.place.layout core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place|arrange|lay_out|space_out|distribute|tidy|organise|organize] [$acts.det]? {thing:words} [out|up]? [in|into|as|on|along|across]? [$acts.det]? {rel:lex.acts.layout} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.mode=layout arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Line up the circles horizontally."
+
+@pat.art.draw.place.layout.all core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [arrange|lay_out|tidy|organise|organize|space_out|distribute|align] [$acts.det]? {thing:words} [out|up]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.mode=layout arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=8
+    tabPriority=16
+    example="Tidy up the circles."
+
+@pat.art.draw.bare.mod core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {pre:words} {thing:lex.art.draw.kinds} [at_me|a_little|twice]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.mode=bare arg.pre=\"{pre}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=3
+    tabPriority=11
+    example="Round glasses."
+
+@pat.art.draw.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:lex.art.draw.kinds} [at_me|a_little|twice]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.mode=bare arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=3
+    tabPriority=11
+    example="Glasses."
+
+@pat.art.draw.make.wish core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.shape.want] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=9
+    tabPriority=17
+    example="I want a house."
+    canonical="I want a house."
+
+@pat.art.draw.make.verb core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [something|please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.text=\"{segment}\""
+    kind=request
+    priority=2
+    tabPriority=10
+    example="Draw."
+
+@pat.art.draw.make.need core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [it_needs|there_should_be|there_must_be|we_need|let_there_be|there_needs_to_be|i_want_there_to_be] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=9
+    tabPriority=17
+    example="There should be a house."
+    canonical="There should be a house."
+
+@pat.art.draw.make.mods core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [me|us]? [$acts.det]? {amount:number?} {m1:lex.art.draw.values?} {m2:lex.art.draw.values?} {thing:lex.art.draw.kinds} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.amount=\"{amount}\" arg.m1=\"{m1}\" arg.m2=\"{m2}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Draw a big red house."
+    canonical="Draw a big red house."
+
+@pat.art.draw.make.more core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [more|some_more|add_more|even_more] {thing:lex.art.draw.kinds} [like|about|say|make_it|total|so]? {amount:number} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.text=\"{segment}\""
     kind=request
     priority=14
-    example="Make them into a boat."
-    example="Turn these into a train."
+    tabPriority=22
+    example="More stars, like 4."
 
-@pat.art.draw.group.into.things core.pattern
-    canonical="Make the house and the tree into a village."
-    match="[$lang.lead.polite|$art.draw.g2_hey]? [$lang.group.make] [the|my] {t:words(5)} into [a|an|one|my] {name:words(2)}"
-    emit="@{_} core.request action=draw.group arg.t=\"the {t}\" arg.name=\"{name}\""
+@pat.art.draw.make.bare.mods core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {amount:number?} {m1:lex.art.draw.values?} {m2:lex.art.draw.values?} {thing:lex.art.draw.kinds} [please|pls|plz|thx|thanks|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.amount=\"{amount}\" arg.m1=\"{m1}\" arg.m2=\"{m2}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=4
+    tabPriority=12
+    example="A big red house please."
+    canonical="A big red house please."
+
+@pat.art.draw.change.wish core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.shape.want] [$acts.det]? {thing:words} [to_be|to_look|to_become|to_be_a|to_look_like|be]? {value:lex.art.draw.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="I want the house blue."
+    canonical="I want the house blue."
+
+@pat.art.draw.change.would core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_would_like|i_d_like|id_like|i_want|i_need] [$acts.det]? {thing:words} [to_be|to_look|to_become|to_be_a]? {value:lex.art.draw.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="I would like the sky to be pink."
+    canonical="I would like the sky to be pink."
+
+@pat.art.draw.change.would.be core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {value:lex.art.draw.values} {thing:words} [would_be_nicer|would_be_nice|would_look_better|would_be_better] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.value=\"{value}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="A purple sky would be nicer."
+    canonical="A purple sky would be nicer."
+
+@pat.art.draw.change.short core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} {value:lex.art.draw.values} [please|pls|plz|thx|thanks|only|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=4
+    tabPriority=12
+    example="House huge."
+
+@pat.art.draw.change.short.first core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.art.draw.values} {thing:words} [please|pls|plz|thx|thanks|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.value=\"{value}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=4
+    tabPriority=12
+    example="Solid star."
+
+@pat.art.draw.change.state.sky core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [it_is|its|it_s|it_looks|it_gets|it_becomes|it_should_be|it_should_look_like|let_it_be|i_want_it_to_be|i_want_it|make_it|make_it_look_like|make_it_look|make_it_seem_like|turn_it_into|change_it_to|set_it_to] {value:lex.art.draw.values} [time|mode|now|already|please|pls]? [time|mode]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="It is red."
+    canonical="It is red."
+
+@pat.art.draw.change.bare.value core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.art.draw.values} [time|mode|please|pls]? [time|mode]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=3
+    tabPriority=11
+    example="Red."
+
+@pat.art.draw.place.wish core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.shape.want] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="I want the house next to the tree."
+    canonical="I want the house next to the tree."
+
+@pat.art.draw.place.needs core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [needs_to_be|should_be|must_be|has_to_be|goes|go|belongs|should_go|needs_to_go|should_stand|stands|is] {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="The house goes next to the tree."
+    canonical="The house goes next to the tree."
+
+@pat.art.draw.make.give core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? give [$acts.det]? {place:words} [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.rel=\"to\" arg.place=\"{place}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="Give the house a blue door."
+    canonical="Give the house a blue door."
+
+@pat.art.draw.make.have core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [could|can|would|should|may|must] [$acts.det]? {place:words} [have] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.rel=\"to\" arg.place=\"{place}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="Could the house have a yellow door?"
+    canonical="Could the house have a yellow door?"
+
+@pat.art.draw.remove.no core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_do_not_want|i_dont_want|i_do_not_need|i_dont_need|no_more|no_longer_want|i_no_longer_need|i_dont_like|i_do_not_like|get_rid_of] [$acts.det]? {thing:words} [anymore|any_more|please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="I do not want the house anymore."
+    canonical="I do not want the house anymore."
+
+@pat.art.draw.remove.away core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words} [away|off|out|up] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Clear the house away."
+    canonical="Clear the house away."
+
+@pat.art.draw.ask.exists core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [is|are|was] there [any|a|an|some|the]? {thing:words} [in|on|at|of]? [my|the|this|our]? {noun:lex.art.draw.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    tabPriority=21
+    example="Is there a house in my picture?"
+    canonical="Is there a house in my picture?"
+
+@pat.art.draw.ask.exists.have core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [do|does|did|can] [i|we|you|u]? have [$acts.det]? [any|some]? {thing:words} [in|on|at|of]? [my|the|this|our]? {noun:lex.art.draw.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Do I have a house in my picture?"
+    canonical="Do I have a house in my picture?"
+
+@pat.art.draw.ask.exists.noun core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [does|do] [$acts.det]? [my|the|this]? {noun:lex.art.draw.nouns} have [$acts.det]? [any|some]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Does my picture have a house?"
+    canonical="Does my picture have a house?"
+
+@pat.art.draw.ask.exists.any core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [any|some] {thing:words} [in_there|in_here|there|here|in_it] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=8
+    tabPriority=16
+    example="Any houses in there?"
+
+@pat.art.draw.ask.exists.is core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [is|are] [$acts.det]? {thing:words} [in_there|in_here|there|here|in_it|in_the_picture|in_my_picture] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=8
+    tabPriority=16
+    example="Is a house in there?"
+    canonical="Is a house in there?"
+
+@pat.art.draw.ask.exists.color core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [is|are] [$acts.det]? {thing:words} {value:lex.art.draw.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=has arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=question
+    priority=9
+    tabPriority=17
+    example="Is the house red?"
+    canonical="Is the house red?"
+
+@pat.art.draw.ask.describe core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|explain|summarise|summarize|list|show|tell_me_about|tell_me] [$acts.det]? [my|the|this|our]? [whats_in|what_is_in|whats_on|what_is_on]? {noun:lex.art.draw.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=describe arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    example="Describe my picture."
+    canonical="Describe my picture."
+
+@pat.art.draw.ask.describe.whats core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|explain|summarise|summarize|list|show|tell_me|tell_us] [whats_in|what_is_in|whats_on|what_is_on|what_s_on|what_s_in|what_is_there_in|what_is_there_on] [$acts.det]? [my|the|this|our]? {noun:lex.art.draw.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=describe arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    tabPriority=22
+    example="Explain whats on the page."
+
+@pat.art.draw.ask.describe.what core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [what|whats|which] [is|are|s|have_i_got|can_you_see|do_you_see|can_i_see|do_i_have]? [in|on|at|of] [my|the|this|our]? {noun:lex.art.draw.nouns} [right_now|now|there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=describe arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    tabPriority=22
+    example="What is in my picture?"
+    canonical="What is in my picture?"
+
+@pat.art.draw.ask.describe.made core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [what|whats] [did_i|have_i|i|we|did_we|have_we] [draw|drew|drawn|make|made|add|added|put|do|done|create|created|paint|painted] [so_far|today|here]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=describe arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    example="What did I draw?"
+    canonical="What did I draw?"
+
+@pat.art.draw.ask.describe.see core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|which] [things|objects|shapes]? [can_you_see|do_you_see|can_i_see|do_i_see|are_there|is_there|is_visible|have_i_got] [in|on]? [my|the|this]? {noun:lex.art.draw.nouns} [right_now|now|there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=describe arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    tabPriority=22
+    example="What can you see in my picture?"
+    canonical="What can you see in my picture?"
+
+@pat.art.draw.ask.options core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|list|show|tell_me|show_me|name] [the]? {thing:words} [can_i|could_i|can_you|may_i|do_you_know|are_there|are_available|do_i_have|do_you_have|can_we|is_available|options] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=options arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    example="What colours can I use?"
+    canonical="What colours can I use?"
+
+@pat.art.draw.ask.options.what core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|whats] [can_i|could_i|can_you|can_u|could_u|can_we|may_i|do_you_know|do_i_have] [draw|add|make|use|paint|do|put|sketch|pick|choose] [to_my_picture|to_the_picture|to_my_drawing|to_it|in_my_picture|here]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=options arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    example="What can I draw?"
+    canonical="What can I draw?"
+
+@pat.art.draw.ask.options.show core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show_me|tell_me|list|name] [what|which] [i|you|we] [can|could] [draw|add|make|use|paint|do|put|sketch] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=options arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    example="Show me what I can draw."
+    canonical="Show me what I can draw."
+
+@pat.art.draw.ask.options.verb core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [list|show|name|tell_me] [$acts.det]? [the|all|all_the|all_of_the|your]? {thing:words} [list|options|available|you_know|i_can_use|i_can_add|i_can_draw|i_can_make]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=options arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=6
+    tabPriority=14
+    example="List the things I can draw."
+    canonical="List the things I can draw."
+
+@pat.art.draw.ask.options.short core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {thing:words} [list|options|available|are_available|do_i_have|can_i_use] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=options arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=5
+    tabPriority=13
+    example="Colour list please."
+
+@pat.art.draw.ask.count.verb core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [count|tally|number|total] [$acts.det]? {thing:words} [in|on|at|of]? [my|the|this|our]? {noun:lex.art.draw.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Count the houses."
+    canonical="Count the houses."
+
+@pat.art.draw.ask.count.number core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [the_number_of|number_of|count_of|total_number_of|the_count_of|the_total_of] [$acts.det]? {thing:words} [in|on|at|of]? [my|the|this|our]? {noun:lex.art.draw.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Number of houses in the picture."
+
+@pat.art.draw.ask.count.tail core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [count|total|number] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=8
+    tabPriority=16
+    example="House count?"
+
+@pat.art.draw.ask.count.first core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} how_many [are_there|do_i_have|are_in_there|are_in_it]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=8
+    tabPriority=16
+    example="Houses how many?"
+
+@pat.art.draw.ask.count.tell core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know|can_you_tell_me|do_you_know] how_many {thing:words} [are|is|there|are_there]? [there]? [in|on|at|of]? [my|the|this|our]? {noun:lex.art.draw.nouns?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    tabPriority=21
+    example="Tell me how many houses there are."
+    canonical="Tell me how many houses there are."
+
+@pat.art.draw.ask.where.did core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [where|which_spot|which_place|which_part|what_place] [is|are|did|do|can_i_see|can_i_find|will_i_find|should_i_look_for|do_i_find]? [i_find|i_see|you_put|you_draw|you_place]? [$acts.det]? {thing:words} [go|now|exactly|are|is|in|at|located|live]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=where arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Where did the house go?"
+    canonical="Where did the house go?"
+
+@pat.art.draw.ask.where.find core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [find|locate|point_to|point_at|look_for|spot] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=where arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=11
+    tabPriority=19
+    example="Find the house."
+    canonical="Find the house."
+
+@pat.art.draw.ask.where.of core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [location_of|position_of|place_of|whereabouts_of|spot_of] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=where arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Location of the house?"
+
+@pat.art.draw.ask.where.tail core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} where [exactly|is_it|are_they|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=where arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=8
+    tabPriority=16
+    example="House where?"
+
+@pat.art.draw.ask.attr.of core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know|can_you_tell_me]? [what_is|whats|what_s|which_is]? [$acts.det]? {attribute:lex.art.draw.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Tell me the colour of the house."
+    canonical="Tell me the colour of the house."
+
+@pat.art.draw.ask.colour.painted core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|what_is|what_colour_is|what_color_is|which_colour_is|which_color_is] [$acts.det]? {thing:words} [painted|coloured|colored|drawn|made] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.attribute=\"colour\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Whats the house painted?"
+
+@pat.art.draw.ask.attr.short core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} {attribute:lex.art.draw.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.thing=\"{thing}\" arg.attribute=\"{attribute}\" arg.text=\"{segment}\""
+    kind=question
+    priority=6
+    tabPriority=14
+    example="House colour?"
+
+@pat.art.draw.copy.another core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|get_me|give_me|add|get|i_want|let_me_have]? [me]? [another|one_more|1_more|a_second|a_twin_of|a_copy_of|a_second_copy_of|a_duplicate_of|a_clone_of|yet_another] [one|copy|of_it|of_that|of_them]? {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.copy arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Make another house."
+    canonical="Make another house."
+
+@pat.art.draw.copy.n core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} more [of_them|of_it|of_that]? {thing:words?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.copy arg.amount=\"{amount}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Make 2 more."
+    canonical="Make 2 more."
+
+@pat.art.draw.copy.short core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [copy|twin|duplicate|clone] [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.copy arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=6
+    tabPriority=14
+    example="House copy please."
+
+@pat.art.draw.change.cmp.more.amt core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.art.draw.more} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=more arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Make the house a bit bigger."
+    canonical="Make the house a bit bigger."
+
+@pat.art.draw.change.cmp.less.amt core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.art.draw.less} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=less arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Make the house a bit smaller."
+    canonical="Make the house a bit smaller."
+
+@pat.art.draw.change.cmp.should core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [needs_to_be|should_be|must_be|has_to_be|is_too|is_not] {amount:lex.space.amounts?} {value:lex.art.draw.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=more arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="The house needs to be a lot bigger."
+    canonical="The house needs to be a lot bigger."
+
+@pat.art.draw.change.cmp.short.more core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.art.draw.more} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=more arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=4
+    tabPriority=12
+    example="House a little bigger."
+
+@pat.art.draw.change.cmp.short.less core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} {amount:lex.space.amounts?} {value:lex.art.draw.less} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=less arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=4
+    tabPriority=12
+    example="House a little smaller."
+
+@pat.art.draw.change.cmp.first.more core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.art.draw.more} {thing:words} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=more arg.value=\"{value}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=4
+    tabPriority=12
+    example="Bigger house."
+
+@pat.art.draw.change.cmp.first.less core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {value:lex.art.draw.less} {thing:words} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=less arg.value=\"{value}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=4
+    tabPriority=12
+    example="Smaller house."
+
+@pat.art.draw.change.grow core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [enlarge|grow|expand|blow_up|inflate|magnify|stretch|make_bigger|scale_up] [$acts.det]? {thing:words} {amount:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=more arg.value=\"bigger\" arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Enlarge the house a lot."
+    canonical="Enlarge the house a lot."
+
+@pat.art.draw.change.shrink core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [shrink|reduce|compress|minimise|minimize|deflate|scale_down|make_smaller] [$acts.det]? {thing:words} {amount:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=less arg.value=\"smaller\" arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Shrink the house."
+    canonical="Shrink the house."
+
+@pat.art.draw.change.same core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to_be]? [the_same_size_as|the_same_size_like|same_size_as|as_big_as|as_large_as|as_small_as|as_tall_as|the_same_as|equal_in_size_to] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=same arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=15
+    tabPriority=23
+    example="Make the tree the same size as the house."
+    canonical="Make the tree the same size as the house."
+
+@pat.art.draw.change.same.short core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [the_same_size_as|same_size_as|as_big_as|as_large_as|as_small_as|the_same_as] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=same arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="The same size as the house."
+    canonical="The same size as the house."
+
+@pat.art.draw.change.times core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.art.draw.factor} [as_big|as_large|as_tall|as_wide|as_small|as_big_as_it_is|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Make the house twice as big."
+    canonical="Make the house twice as big."
+
+@pat.art.draw.change.times.short core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {value:lex.art.draw.factor} [as_big|as_large|as_tall|as_wide|as_small|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=more arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Twice as big."
+
+@pat.art.draw.place.dir.amt core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place|move|put|bring|push|pull|take|shift|raise|lower|make|nudge|needs_to_go|should_go|needs_to_move|should_move|goes|go]? [$acts.det]? {thing:words} {amount:lex.space.amounts?} [to_the|to|towards]? {rel:lex.acts.dir} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.place arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.rel=\"{rel}\" arg.amount2=\"{amount2}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Move the house up a bit."
+    canonical="Move the house up a bit."
+
+@pat.art.draw.change.turn core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [turn|flip|rotate|spin|mirror|swivel|reverse|swing] [$acts.det]? {thing:words} {value:lex.art.draw.turn?} {amount:number?} [degrees|degree]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=turn arg.thing=\"{thing}\" arg.value=\"{value}\" arg.amount=\"{amount}\" arg.text=\"{segment}\""
+    kind=request
+    priority=15
+    tabPriority=23
+    example="Turn the house around."
+    canonical="Turn the house around."
+
+@pat.art.draw.change.turn.make core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|let|have|get] [$acts.det]? {thing:words} [look|face|turn|go|point]? {value:lex.art.draw.turn} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=turn arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=14
-    example="Make the house and the tree into a village."
+    tabPriority=22
+    example="Make the house look the other way."
+    canonical="Make the house look the other way."
+
+@pat.art.draw.change.turn.state core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [turns|turn|goes|go|looks|look|faces|face|should_go|should_look|should_face|should_turn|needs_to_turn|needs_to_look|should_be_turned|to_look|to_face]? {value:lex.art.draw.turn} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=turn arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=5
+    tabPriority=13
+    example="The house should look the other way."
+    canonical="The house should look the other way."
+
+@pat.art.draw.change.turn.wish core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.shape.want] [$acts.det]? {thing:words} [turned|flipped|rotated|mirrored|reversed|to_turn|to_face|to_look]? {value:lex.art.draw.turn} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=turn arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="I want the house turned around."
+    canonical="I want the house turned around."
+
+@pat.art.draw.remove.all core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [clear|wipe|erase|delete|remove|empty|scrap|clean|get_rid_of|throw_away] [everything|all|it_all|all_of_it|all_off|all_of_this] [off|away|out|ok|okay|please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.remove arg.mode=all arg.thing=\"everything\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Clear everything."
+    canonical="Clear everything."
+
+@pat.art.draw.remove.all.noun core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [clear|wipe|erase|delete|remove|empty|scrap|clean|get_rid_of|throw_away] [the|my|this|our]? [whole|entire|all_of_the]? {noun:lex.art.draw.nouns} [off|away|out|ok|okay|please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.remove arg.mode=all arg.thing=\"everything\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Clear the picture."
+    canonical="Clear the picture."
+
+@pat.art.draw.remove.new core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [start|begin|open|get|give_me|make|let_s_start|lets_start|i_want|i_need|show_me]? [a|an|another]? [new|fresh|blank|clean|empty] {noun:lex.art.draw.nouns?} [sheet|sheet_of_paper|of_paper|page|canvas|start]? [of_paper]? [please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.remove arg.mode=new arg.thing=\"everything\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Start a new picture."
+    canonical="Start a new picture."
+
+@pat.art.draw.make.random core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [surprise_me|surprise_us|surprise] [with_a_picture|with_a_drawing|with_something]? [for_me|pls|please|thx]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.mode=random arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Surprise me."
+    canonical="Surprise me."
+
+@pat.art.draw.make.random.picture core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want_you_to]? [draw|make|paint|sketch|create|doodle|give_me|show_me|i_want|whip_up] [me|us]? [a|an|the|some]? [random|nice|pretty|beautiful|lovely|new|cool|happy|sunny|surprise|surprising]? [picture|scene|landscape|drawing|painting|masterpiece|surprise] [for_me|pls|please|thx]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.mode=random arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Draw me a nice picture."
+    canonical="Draw me a nice picture."
+
+@pat.art.draw.make.random.any core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want_you_to]? [draw|make|paint|sketch|create|doodle|give_me|show_me|whip_up] [me|us]? [something|anything|whatever|something_nice|something_random|something_pretty|anything_nice] [you_like|you_want|you_feel_like]? [for_me|pls|please|thx]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.mode=random arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Draw something."
+    canonical="Draw something."
+
+@pat.art.draw.pick.none core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [deselect|unselect|unpick|unmark|unhighlight|untick|unselected] [everything|all|it|that|this|them|the_selection|the_highlight|the_highlights]? [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.mode=none arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Deselect everything."
+    canonical="Deselect everything."
+
+@pat.art.draw.pick.none.state core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [nothing|no_thing|none] [selected|highlighted|picked|marked] [please|pls|plz|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.mode=none arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Nothing selected please."
+
+@pat.art.draw.pick.none.clear core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [clear|remove|drop|forget|cancel|stop] [$acts.det]? [the|my|this]? [selection|highlight|highlights|highlighting] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.mode=none arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    example="Clear the selection."
+    canonical="Clear the selection."
+
+@pat.art.draw.pick.click core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [click|tap|touch|press|click_on|tap_on|touch_on] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.mode=pick arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Click the second tree."
+
+@pat.art.draw.save.noun core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [$acts.det]? {noun:lex.art.draw.nouns} [as|in|to|under|called]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.save arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Save my picture as SVG."
+    canonical="Save my picture as SVG."
+
+@pat.art.draw.save.download core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [download|export|get] [$acts.det]? {noun:lex.art.draw.nouns} [as|in|to|under|called|a]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.save arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Download the drawing as a PNG."
+    canonical="Download the drawing as a PNG."
+
+@pat.art.draw.undo.verb core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.undo] [that|it|this|the_last|my_last|the|one]? [thing|change|step|action|move|one|drawing]? [back]? [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.undo arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Undo that change."
+    canonical="Undo that change."
+
+@pat.art.draw.make.part.needs core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {place:words} [needs|should_have|must_have|has_to_have|needs_to_have|ought_to_have] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.rel=\"to\" arg.place=\"{place}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="The house needs a pink door."
+    canonical="The house needs a pink door."
+
+@pat.art.draw.make.would core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? [bit_of|little|some|lots_of|a_lot_of|more]? {thing:words} [would_be_nice|would_be_nicer|would_be_good|would_look_nice|would_be_cool|would_be_great] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="A bit of snow would be nice."
+    canonical="A bit of snow would be nice."
+
+@pat.art.draw.change.value.size core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|get|let|change|blow_up|scale_up|scale|resize] [$acts.det]? {thing:words} [to_be|to|up_to|into|be|as]? [a|an]? {value:lex.art.draw.values} [size|sized|sized_one|one|in_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    example="Turn the house into a tiny one."
+    canonical="Turn the house into a tiny one."
+
+@pat.art.draw.change.value.size.up core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [blow|scale|build|make|puff|pump|grow] [$acts.det]? {thing:words} up [to|into]? [a|an]? {value:lex.art.draw.values} [size|sized|in_size]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    example="Blow the cat up to huge size."
+
+@pat.art.draw.change.should.size core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [needs_to_be|should_be|must_be|has_to_be|ought_to_be] {value:lex.art.draw.values} [size|sized|in_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    example="The house should be medium size."
+    canonical="The house should be medium size."
+
+@pat.art.draw.change.with core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [fill|fill_in|colour|color|paint|cover|colour_in|color_in|dye|tint] [$acts.det]? {thing:words} [with|in|using] [$acts.det]? {value:lex.art.draw.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=15
+    tabPriority=23
+    example="Fill the sun with yellow."
+    canonical="Fill the sun with yellow."
+
+@pat.art.draw.change.in core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} in {value:lex.art.draw.values} [please|pls|plz|thx|thanks]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=6
+    tabPriority=14
+    example="House in teal please."
+
+@pat.art.draw.change.fill.in core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [fill_in|colour_in|color_in|fill] [$acts.det]? {thing:words} [in|in_please]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.value=\"crayon\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Fill in the star."
+    canonical="Fill in the star."
+
+@pat.art.draw.ask.near core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|anything|is_anything|is_there_anything|what_is|what_things_are|which_things_are] [right|just]? [near|nearby|close_to|around] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.rel=\"near\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    tabPriority=21
+    example="Whats near the sun?"
+
+@pat.art.draw.ask.beside core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|anything|is_anything|is_there_anything|what_is|what_things_are|which_things_are] [right|just]? [next_to|beside|by|alongside|right_by] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.rel=\"next to\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    tabPriority=21
+    example="Anything next to the cloud?"

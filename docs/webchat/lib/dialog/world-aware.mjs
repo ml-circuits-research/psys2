@@ -15,11 +15,11 @@
  * The order is the library's (`rank`, RANKING): consistent, referents left ambiguous, lacks, words left out, assumptions, then the given order. Nothing
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
-import { budget } from './budget.mjs?v=123c3e1329';
-import { restrictedSet } from '../formalizer/spell.mjs?v=050f8e63e9';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=fe5fe63391';
-import { foreignFragment } from './continuation.mjs?v=c651104054';
-import { liveFromContext } from './meta-worlds.mjs?v=bb54ad5eb1';
+import { budget } from './budget.mjs?v=00bce6e369';
+import { restrictedSet } from '../formalizer/spell.mjs?v=536557aaf4';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=3978a46ba3';
+import { foreignFragment } from './continuation.mjs?v=9848873af8';
+import { liveFromContext } from './meta-worlds.mjs?v=82df6ec85e';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */

@@ -10,7 +10,7 @@
  * The test is structural, no phrase lists: what the user said outside the slots of the reading and outside the closed grammar classes is his own verb
  * (or noun-verb); when nothing is left the clause is only an argument. The rest is read from the context (`dialog.context()`) and the reading's own world.
  */
-import { budget } from './budget.mjs?v=123c3e1329';
+import { budget } from './budget.mjs?v=00bce6e369';
 
 const tokens = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 

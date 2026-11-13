@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine, runWorldTests } from '../src/dialog/index.mjs';
 import * as scene from '../worlds/art.draw/scene.mjs';
-import * as ops from '../worlds/art.draw/ops.mjs';
+import * as ops from '../worlds/art.draw/engine.mjs';
 import { generate } from '../worlds/art.draw/datagen.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });

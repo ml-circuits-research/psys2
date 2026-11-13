@@ -3,14 +3,14 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from '../../worlds/art.draw/ops.mjs';
-import * as space from '../../worlds/space/space.mjs';
-import { splitThings } from '../../worlds/acts/acts.mjs';
-import { partsOf, kindKey, kindName } from '../../worlds/art.draw/scene.mjs';
+import * as D from './engine.mjs';
+import * as space from '../space/space.mjs';
+import { splitThings } from '../acts/acts.mjs';
+import { partsOf, kindKey, kindName } from './scene.mjs';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
-const words = (t) => { const w = String(t ?? '').toLowerCase().replace(/_/g, ' ').replace(/[^a-z0-9' -]+/g, ' ').split(/\s+/).filter(Boolean); while (w.length > 1 && TAIL.has(w.at(-1))) w.pop(); return w; };
+const words = (t) => { const w = String(t ?? '').toLowerCase().replace(/_/g, ' ').replace(/[^a-z0-9' -]+/g, ' ').split(/\s+/).filter(Boolean); while (w.length > 1 && TAIL.has(w.at(-1))) { budget.tick('draw.words'); w.pop(); } return w; };
 const PREP = new Set(['with', 'in', 'on', 'at', 'under', 'over', 'next', 'near', 'beside', 'by', 'above', 'below', 'behind', 'between', 'inside', 'to', 'from', 'of', 'for', 'around', 'across', 'and']);
 const DET = new Set(['a', 'an', 'the', 'another', 'my', 'this', 'that', 'one']);
 const QUANTITY = new Set(['some', 'few', 'several', 'couple', 'many', 'lots', 'loads', 'bunch', 'plenty', 'more']);
@@ -129,7 +129,7 @@ export const hooks = {
       if (r.mode === 'same') return D.matchSize(ctx, { t, o: words(r.value).join(' ') });
       if ((r.mode === 'more' || r.mode === 'less') && /^(?:please |can you |could you )?(?:i want |draw |make )?(?:a|an)\s/i.test(String(r.text ?? '').trim()) && r.value && !/\b(?:it|them)\b/.test(t)) return D.add(ctx, addArgs({ thing: `${r.value} ${r.thing}` }));   // "a bigger house": a new one, compared with the old
       if (r.mode === 'turn') {
-        const tw = words(t); const how = []; while (tw.length > 1 && /^(?:around|over|back|round|upside|down|the|other|way|backwards|clockwise|counter|to|left|right|degrees|degree|\d+)$/.test(tw.at(-1))) how.unshift(tw.pop());
+        const tw = words(t); const how = []; while (tw.length > 1 && /^(?:around|over|back|round|upside|down|the|other|way|backwards|clockwise|counter|to|left|right|degrees|degree|\d+)$/.test(tw.at(-1))) { budget.tick('draw.how'); how.unshift(tw.pop()); }
         return D.turn(ctx, { verb: words(r.text)[0], phrase: `${tw.join(' ')} ${[r.amount ? `${r.amount} degrees` : '', v, ...how].filter(Boolean).join(' ')}`.trim() });
       }
       if (vw.length === 1 && /^(?:twice|double|half)$/.test(vw[0])) return D.resize(ctx, { t, d: `${vw[0] === 'half' ? 'half' : 'twice'}_as_big` });
@@ -146,7 +146,7 @@ export const hooks = {
       { // the thing the generic reading took may carry the noise of the sentence: "house needs to be on the" (+ left), "house over" (+ to the right)
         const tw = words(r.thing); const cut = tw.findIndex((x, i) => i > 0 && /^(?:needs|need|should|must|has|so|which|that)$/.test(x));
         const onThe = cut >= 0 && /\bon\b/.test(tw.slice(cut).join(' ')) || /\bon (?:the)?$/.test(tw.join(' '));
-        const head = (cut >= 0 ? tw.slice(0, cut) : tw); while (head.length > 1 && /^(?:over|on|in|at|the|to|be|a|an|it|its|is|go|goes)$/.test(head.at(-1))) head.pop();
+        const head = (cut >= 0 ? tw.slice(0, cut) : tw); while (head.length > 1 && /^(?:over|on|in|at|the|to|be|a|an|it|its|is|go|goes)$/.test(head.at(-1))) { budget.tick('draw.head'); head.pop(); }
         if (head.join(' ') !== tw.join(' ') && head.length) r = { ...r, thing: head.join(' '), ...(onThe && !r.place && rel(r) && /^(?:left|right|top|bottom|up|down)$/.test(rel(r)) ? { place: `the ${rel(r)}`, rel: 'on' } : {}) };
       }
       { const tw = words(r.thing); const last = tw.at(-1) ?? ''; if (GROUNDS(last) && tw.length <= 2 && /^(?:ground|floor|bottom|everything|picture|drawing)$/.test(words(r.place).at(-1) ?? '') && !(ctx.state.objects ?? []).some((o) => kindName(kindKey(o)) === last)) return D.ground(ctx, { g: last }); }   // "I need water on the floor": the ground, not a thing to move
