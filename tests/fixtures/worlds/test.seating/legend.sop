@@ -1,0 +1,6 @@
+@legend.test.seating core.legend
+    namespace=test.seating
+    version=0.1.0
+    imports=core
+    imports=acts
+    doc="Tables and guests of a seating plan; the state is kept by the generic executor of acts.mjs."

@@ -1,0 +1,58 @@
+@gen.test.seating.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@tpl.test.seating.make core.template
+    for=action.test.seating.make
+    text="{note}"
+
+@tpl.test.seating.remove core.template
+    for=action.test.seating.remove
+    text="{note}"
+
+@tpl.test.seating.change core.template
+    for=action.test.seating.change
+    text="{note}"
+
+@tpl.test.seating.place core.template
+    for=action.test.seating.place
+    text="{note}"
+
+@tpl.test.seating.connect core.template
+    for=action.test.seating.connect
+    text="{note}"
+
+@tpl.test.seating.group core.template
+    for=action.test.seating.group
+    text="{note}"
+
+@tpl.test.seating.send core.template
+    for=action.test.seating.send
+    text="{note}"
+
+@tpl.test.seating.pick core.template
+    for=action.test.seating.pick
+    text="{note}"
+
+@tpl.test.seating.copy core.template
+    for=action.test.seating.copy
+    text="{note}"
+
+@tpl.test.seating.ask core.template
+    for=action.test.seating.ask
+    text="{note}"
+
+@tpl.test.seating.undo core.template
+    for=action.test.seating.undo
+    text="{note}"
+
+@tpl.test.seating.redo core.template
+    for=action.test.seating.redo
+    text="{note}"
+
+@tpl.test.seating.save core.template
+    for=action.test.seating.save
+    text="{note}"
+
+@tpl.test.seating.load core.template
+    for=action.test.seating.load
+    text="{note}"

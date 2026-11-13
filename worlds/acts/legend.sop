@@ -1,0 +1,5 @@
+@legend.acts core.legend
+    namespace=acts
+    version=0.1.0
+    imports=core
+    doc="Acts and schemas (spec 21): the words of the acts. The schema types (acts.schema, acts.kind, acts.attr) are read from a world schema.sop by acts.mjs, not loaded as wires."
