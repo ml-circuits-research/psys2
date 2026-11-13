@@ -3565,3 +3565,28 @@ Loading is slow now; the owner does not mind the time, he minds not seeing what 
 5. **Failures in the same place:** a step that fails or times out says so in the panel with what still works ("the picture catalog could not be reached: basic drawings only"), and the turn's reply does not repeat it more than once.
 6. Texts are generated in English and translated like every reply; nothing per language. The steps are recorded as events in the phrase export (USER-ACTIONS), with durations.
 7. Check with one Chrome probe at 4x CPU throttle and a slow network profile: screenshots of start-up at three moments, a world load, a long turn. Report the start-up table (step, ms, bytes) in worker-log; that table is also the list of what to speed up later.
+
+## Reviewer 2026-11-13 19:25 — PROPOSAL for comment (owner asked for a method to generalise faster): ACTS × SCHEMAS. Do not build yet; write objections and a cost estimate in questions.md
+
+Smoke at 3588006: 242 pass, 0 fail. (The reviewer's blocks of 16:40–19:10 reached main only at 17:00 local because of a failed push on the reviewer's side: read them all, in order.)
+
+**The problem in one sentence.** Every world that does things (draw, diagram, avatar, Talk, charts, editor, map) is programmed by hand: its own patterns, its own operations, its own replies. So every world has its own holes ("remove eyeglasses", "delete the box End", "change the title", "random colours"), a phrase learned in one world helps no other, and a new world costs weeks.
+
+**The idea.** What users ask of these worlds is the same dozen things. Say them once.
+1. **Universal acts** (one shared module, about twelve): make, remove, change (set / more / less an attribute), place (move, put, arrange), connect, group / take apart, pick (which one), ask (what, how many, where, why), copy, send to another world, undo / redo, save / load. Each act has the same roles everywhere: thing, set, attribute, value, place, amount.
+2. **A world is a schema, not a program.** It declares in SOP Lang: its kinds of things (or "any drawable thing from knowledge"), their attributes and value types, which acts apply, defaults, limits. Diagram: box, arrow, label; text, shape, colour. Avatar: the face slots; variant, colour, size. Chart: series, bar; label, value. Document: title, section, paragraph. Talk: card, topic. Draw: any k.objects kind; colour, size. The `meta.worlds` card is generated from the same schema.
+3. **Roles are filled by the shared modules, the same way in every world**: thing and set by the scene and the dialogue focus (with spelling tolerance), place by `space`, kinds, synonyms, parts and defaults by knowledge, values by small value modules (colours, sizes, numbers, "random", "different"), what is missing by delegation.
+4. **One reader.** Language is read into act + roles, not into a per-world pattern. The grammar of acts is written once; the words come from the schemas and from knowledge. The model is trained to tag act and roles, which do not depend on the world: every example from any world improves all of them, and a new world needs no training.
+5. **One executor.** An act on a schema is applied generically (create an instance, set an attribute, relate two things). A world keeps code only for its renderer and for what is truly its own (chess legality, the hangman word). Undo, the state difference in the log, the reply ("I removed the glasses") and the why-answer all come from the act and are written once.
+6. **Always something sensible.** In order: complete reading → do it; a role missing → fill it by delegation, do it, say the guess; the act does not apply here → say what does and where ("a chart has no hat; the avatar does") ; nothing → name the act and thing it guessed and ask one question. Never a bare "I did not understand".
+
+**Why this scales with data.** Every failure falls into one cell: an act phrase not known (fix once, all worlds gain), a kind or synonym missing (knowledge), an attribute missing (one line of schema), a referent wrong (dialogue / space), an act the executor lacks (one implementation, all worlds gain). The ledger groups itself by cell. And a **coverage grid** is generated, not written: for every world × act × kind one generated sentence must work; the holes are the feature list (today it would show avatar × remove × glasses).
+
+**Proof before any migration (three experiments, report with tables):**
+- **P1 pilot on the avatar and the diagram** (the avatar is being rebuilt anyway): schema + acts only, zero world patterns. Compare with today's hand-written worlds on their test sets, the owner logs and the ledger. Pass: not worse on the old sets, better on the logs.
+- **P2 a world from a schema alone**: add one small world nobody designed for (a seating plan, or a playlist) as a schema of under 60 lines, no patterns, no training. Measure how many of 60 natural requests work.
+- **P3 the reader**: train the act + roles tagger on generated data from all schemas except two worlds; test on those two. Pass: within 5 points of the worlds it saw.
+If P1–P3 pass: migrate draw, Talk, charts, editor, map one by one, deleting their patterns; report patterns and lines removed per world.
+
+**What stays special:** games, arithmetic, shop: rule worlds with their own moves. They still declare their acts for routing and replies.
+**Risks to answer in questions.md:** phrasing variety the act grammar misses; replies getting bland; cost per turn; what sopworld must provide (schema declarations, generic apply, `std.fill`, `std.focus`, relations) versus host code; how FORMALIZE-FROM-WORLDS and describe.sop already cover part of this.
