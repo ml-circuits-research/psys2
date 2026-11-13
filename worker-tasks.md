@@ -3160,3 +3160,16 @@ Order: after the 2026-11-12 10:25 and 10:50 blocks; DRAW-FROM-FACTS and KNOWLEDG
 
 - **Re-vendor sopworld at 782cd0c (0.15.0)**, not c7247e2: it includes 0.14.0 (host functions declared in SOP Lang) and Round 16 (a soft issue no longer makes the knowledge it read "conflicting"; order-independent merge across modules; `core.module version=`). The common.sense advice depends on the first fix.
 - **Knowledge catalog now:** `k.objects` has 841 drawable objects (30 hand-written with named parts; 811 imported from Noto Emoji, about 20% of their parts named by a model and marked `named=model`), `k.commonsense`, `k.words` (WordNet, 318 shards). Use the real catalog for KNOWLEDGE-BY-LOOKUP and DRAW-FROM-FACTS; no stub. Imported objects have many polygon parts (12 on average, up to 40 points each): measure draw time on the phone profile.
+
+## Reviewer 2026-11-13 10:20 — DESCRIBE-ALL second batch and DRAW-FROM-FACTS accepted, with one finding
+
+**Validated at 65972ba:** DESCRIBE-ALL second batch: npm test 1509 pass, 0 fail. DRAW-FROM-FACTS: A/B dialogues 0 "ops better"; screenshots checked (castle and house drawn from parts and edited; a diagram shaped like a house). Accepted.
+
+**Finding: the test suite is too slow and one test is load-sensitive.** On the reviewer box `npm test` took 1078 s for the previous tree and did not finish in 1200 s for this one (914 tests ok before the stop). One failure under load: `tests/rd10-names-capability.test.mjs` "show Pariss on map reads Paris" answered "I did not understand"; alone it passes 3 of 3. So a spelling repair has a time limit that a busy machine misses. Fix:
+1. Find the deadline behind this (name repair under a budget) and make the *result* independent of machine speed: either no wall-clock budget for a step that changes the reading, or a step count instead of time.
+2. Bring `npm test` back under 10 minutes on a 4-core box: report the 20 slowest test files; share world loads between tests of a file; move browser-heavy tests to a separate `npm run test:browser` that the gate still runs.
+
+**DRAW-FROM-FACTS, next:**
+- The catalog now has 2,136 drawable objects (sop-knowledge-worlds, 326 shards, about 39 MB: far too big to vendor). Load by lookup: `vocab.json` → one shard → draw. This is KNOWLEDGE-BY-LOOKUP; do it now, with the real catalog from GitHub Pages, cached in Cache Storage, and a clear reply while a shard loads or when offline.
+- Imported objects have about 12 polygon parts with many points: measure draw time and scene redraw with 20 such objects on the phone profile.
+- The diagram "shaped like a house" draws the roof as a rectangle. Use the part's own primitive shape where the diagram has it (triangle, circle, oval); keep the rectangle otherwise.
