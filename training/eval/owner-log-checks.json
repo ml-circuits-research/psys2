@@ -1,0 +1,207 @@
+{
+"5": {
+"unchanged": true
+},
+"6": {
+"unchanged": true,
+"reply_not": "drew|Done"
+},
+"7": {
+"world": "diagram.sketch",
+"state": [
+"shapes[last].color=red"
+]
+},
+"8": {
+"world": "diagram.sketch",
+"state": [
+"shapes.length=$+4"
+]
+},
+"9": {
+"world": "diagram.sketch",
+"state": [
+"shapes.length=$+0"
+],
+"reply_not": "Drew"
+},
+"12": {
+"unchanged": true
+},
+"13": {
+"world": "diagram.sketch",
+"state": [
+"shapes.length=$+0"
+],
+"reply_not": "Drew"
+},
+"14": {
+"reply_not": "Which shape"
+},
+"15": {
+"reply_not": "Which shape"
+},
+"17": {
+"world": "diagram.sketch",
+"reply_not": "Which shape should I change"
+},
+"18": {
+"unchanged": true
+},
+"19": {
+"unchanged": true
+},
+"20": {
+"unchanged": true
+},
+"21": {
+"unchanged": true
+},
+"23": {
+"world": "diagram.sketch",
+"state": [
+"shapes.length=$+3"
+]
+},
+"24": {
+"unchanged": true
+},
+"25": {
+"unchanged": true
+},
+"27": {
+"world": "ui.avatar",
+"reply_not": "did not understand",
+"world_not": "diagram.sketch"
+},
+"28": {
+"world": "ui.avatar",
+"reply_not": "did not understand",
+"world_not": "diagram.sketch"
+},
+"31": {
+"world": "ui.avatar",
+"reply_not": "Which shape|did not understand",
+"world_not": "diagram.sketch"
+},
+"32": {
+"unchanged": true
+},
+"33": {
+"reply_not": "red circle"
+},
+"35": {
+"state": [
+"objects.length=$+1"
+],
+"reply_not": "did not understand"
+},
+"37": {
+"reply_any": "turned the crocodile"
+},
+"38": {
+"reply_any": "legs of the crocodile are black|has no leg|has these parts"
+},
+"39": {
+"reply_not": "did not understand|composite",
+"world_not": [
+"docs.editor",
+"geo.map"
+]
+},
+"40": {
+"reply_not": "did not understand|composite",
+"world_not": [
+"docs.editor",
+"geo.map"
+]
+},
+"41": {
+"reply_not": "3 yellow houses"
+},
+"42": {
+"reply_not": "hangman",
+"world_not": "games.hangman"
+},
+"43": {
+"state": [
+"ground!=sea"
+]
+},
+"44": {
+"reply_not": "do not know what|did not understand"
+},
+"45": {
+"reply_not": "do not know what|did not understand"
+},
+"46": {
+"reply_not": "hangman",
+"world_not": "games.hangman"
+},
+"47": {
+"reply_not": "can not find|do not know|did not understand"
+},
+"48": {
+"reply_not": "can not find"
+},
+"49": {
+"reply_not": "can not find"
+},
+"50": {
+"reply_not": "draw an? A\\b|hangman|did not understand|know how to draw"
+},
+"51": {
+"reply_any": "moved the houses"
+},
+"52": {
+"reply_not": "do not know what|did not understand"
+},
+"53": {
+"reply_any": "moved the houses"
+},
+"54": {
+"reply_any": "moved the crocodiles"
+},
+"55": {
+"reply_not": "do not know what|did not understand"
+},
+"56": {
+"reply_not": "stay where they are"
+},
+"57": {
+"reply_not": "not understand|do not know"
+},
+"58": {
+"reply_not": "did not understand|is blue now"
+},
+"59": {
+"reply_not": "not understand|do not know"
+},
+"60": {
+"reply_not": "stay where they are"
+},
+"61": {
+"reply_not": "not understand|do not know"
+},
+"62": {
+"reply_not": "Where should it go|did not understand"
+},
+"63": {
+"reply_not": "Where should it go|did not understand"
+},
+"64": {
+"reply_not": "did not understand|do not know what"
+},
+"65": {
+"reply_not": "did not understand|do not know what"
+},
+"66": {
+"reply_not": "took the last one|can not find"
+},
+"67": {
+"reply_not": "did not understand|Where should it go"
+},
+"68": {
+"reply_not": "took the last one|can not find"
+}
+}
