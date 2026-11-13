@@ -147,6 +147,9 @@ export async function compute({ meas, worlds } = {}) {
   rows.push({ label: 'Cross-world captures (target 0)', value: String(captures.length), detail: `cases of the corpus where a world answered another world's sentence or the wrong world took it (groups "foreign-world reading" ${captures.filter((c) => /^foreign/.test(c.group)).length}, "wrong world routing" ${captures.filter((c) => /^wrong world/.test(c.group)).length}); the invariants test and test-world catch them at the landing` });
   if (ind.richest?.total) rows.push({ label: 'Richest world on acts: its own tests', value: `${ind.richest.world} ${pct(ind.richest.right, ind.richest.total)}`, detail: `${ind.richest.right} of ${ind.richest.total} tests of ${ind.richest.world}${ind.richest.where === 'worlds-pilot' ? ' (the schema pilot, worlds-pilot)' : ' (the switched world)'}, ${ind.richest.schemaLines} schema lines; the switch of the world to schema + acts is the proof (${ind.richest.date})` });
 
+  const holes = cases.filter((c) => c.kind === 'lang-hole');
+  if (holes.length) { const by = {}; for (const c of holes) { const h = (c.class ?? '').replace('lang-hole:', ''); (by[h] ??= { right: 0, total: 0 }); by[h].total++; if (c.outcome === 'right') by[h].right++; } rows.push({ label: 'Holes of English read (handover/lang.en)', value: `${holes.filter((c) => c.outcome === 'right').length} of ${holes.length}`, detail: `${Object.entries(by).map(([h, v]) => `${h} ${v.right}/${v.total}`).join(', ')}; cases training/eval/lang-holes.jsonl (scripts/eval-lang-holes.mjs); controls must stay right` }); }
+
   const runs = readRuns(), lastRun = runs.at(-1);
   const kinds = {}; for (const c of cases) kinds[c.kind] = (kinds[c.kind] ?? 0) + 1;
   const stage = {}; for (const c of cases.filter((x) => x.outcome === 'wrong')) stage[c.stage ?? '?'] = (stage[c.stage ?? '?'] ?? 0) + 1;

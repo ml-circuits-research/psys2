@@ -16,10 +16,17 @@
  *   bareDistributes(part)    a part that is only a number or an ordinal takes the kind of the part before it ("tables 1 and 2")
  *   sharedArgument(tokens)   shared leading verb phrase / trailing argument of a coordination ("make your eyes and body blue")
  *   ellipsisPrefixes(tokens) the 1-2 first words of an anchor clause that a verb ellipsis copies
+ *   cutWords(also) cardJoiners() sequenceWords(also)   the clause joiners (the splitter's cut words, the card-driven cutter's, "then"/"also" that may follow "and"), frameLeads() leads that keep their comma
+ *   corrections() leadOnly() answers() answerRegex() answerWords()   self-correction markers [[words], needsComma], words of a lead-only clause, bare answers
+ *   questionWords(view)      question-start (first word of a question), wh-lead (fuzzy wh), question-tail (a question after a connective)
+ *   frames(set?)             the argument frames of the acts [{ id, act, mode, match, args, priority, if, lit, tabOnly, tabPriority, example }] in the order of the facts (sets: acts, acts.more, acts.data)
+ *   nounPhrase(text)         the readings of a noun phrase beyond its head noun: { text, choice?: [{ text, alt }], partitive?: { mode: 'ask' | 'all' | 'count', n? }, other?: { plural }, relative?: true }
+ *   timeRelation(word)       a temporal preposition as a relation: { rel: 'before', order: 'earlier' | 'later' | 'within', span? }, null for any other word (prepositions.sop in=time)
+ *   negatedRequest(text)     "do not remove table 3" -> { rest: 'remove table 3', leadEnd } (a request that must not be carried out), null for anything else
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
 import { parse } from '../soplang/index.mjs?v=c57881f705';
-import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=476f0e950b';
+import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=2581020668';
 
 const all = (w, k) => w.attrs[k] ?? [];
 const one = (w, k) => all(w, k)[0];
@@ -102,6 +109,103 @@ export function createLangEn(source = LANG_EN_FACTS) {
     const parts = [];
     for (const piece of raw) { tick('acts.split'); if (parts.length && !startRe().test(piece.split(/\s+/)[0])) parts[parts.length - 1] += ` and ${piece}`; else parts.push(piece); }
     return parts.length < 2 ? [] : parts.map((x) => ({ head: x, tail }));
+  }
+
+  // ---- clauses (handover/lang.en/shards/clauses.sop) ----
+  const joiners = () => of('joiner');
+  /** The words the clause splitter cuts at; `also` off (the ablation switch) drops "also". */
+  const cutWords = (also = true) => cached(`cw:${also}`, () => new Set(joiners().filter((w) => one(w, 'cut') === 'yes' && (also || one(w, 'kind') !== 'addition')).map((w) => one(w, 'text'))));
+  /** The sequence words ("then", "also") that may follow "and" or a comma without a new cut. */
+  const sequenceWords = (also = true) => cached(`sw:${also}`, () => joiners().filter((w) => ['sequence', 'addition'].includes(one(w, 'kind')) && (also || one(w, 'kind') !== 'addition')).map((w) => one(w, 'text')));
+  const cardJoiners = () => cached('cj', () => new Set(joiners().filter((w) => one(w, 'card-cut') === 'yes').map((w) => one(w, 'text'))));
+  const frameLeads = () => cached('fl', () => new Set(of('frame-lead').map((w) => one(w, 'text'))));
+  const corrections = () => cached('co', () => of('correction').map((w) => [one(w, 'text').split(' '), one(w, 'comma') === 'yes']));
+  const leadOnly = () => cached('lo', () => new Set(of('correction.lead').flatMap((w) => all(w, 'text'))));
+  const answers = () => cached('an', () => of('answer').flatMap((w) => all(w, 'text')));
+  const answerRegex = () => cached('ar', () => new RegExp(`^(${answers().join('|')})$`));
+  const answerWords = () => cached('aw', () => [...answers()].sort((a, b) => b.split(' ').length - a.split(' ').length));
+  const questionWords = (view) => cached(`q:${view}`, () => new Set([...words('wh', view), ...words('aux', view)]));
+
+  // ---- argument frames of the acts (handover/lang.en/shards/frames-acts.sop) ----
+  const frames = (set) => cached(`f:${set}`, () => of('frame').filter((w) => !set || one(w, 'set') === set).map((w) => {
+    const f = { id: w.id.slice(`lang.en.frame.${one(w, 'set')}.`.length), act: one(w, 'act'), match: one(w, 'pattern'), args: all(w, 'role'), priority: Number(one(w, 'priority')), example: one(w, 'example') };
+    if (one(w, 'mode')) f.mode = one(w, 'mode');
+    if (one(w, 'needs')) f.if = one(w, 'needs');
+    const lit = Object.keys(w.attrs).filter((k) => k.startsWith('lit.'));
+    if (lit.length) f.lit = Object.fromEntries(lit.map((k) => [k.slice(4), one(w, k)]));
+    if (one(w, 'tab-only')) f.tabOnly = one(w, 'tab-only') === 'yes';
+    if (one(w, 'tab-priority')) f.tabPriority = Number(one(w, 'tab-priority'));
+    return f;
+  }));
+
+  // ---- noun-phrase readings: relative clauses, "some of", "the other one", "or" (np.sop, slice 2) ----
+  const wordList = (text) => String(text ?? '').trim().split(/\s+/).filter(Boolean);
+  const lowerOf = (w) => w.toLowerCase().replace(/[,.;:!?]+$/g, '');
+  const mw = (type) => cached(`mw:${type}`, () => of(type).filter((w) => one(w, 'text')).map((w) => [one(w, 'text').split(' '), w]).sort((a, b) => b[0].length - a[0].length));
+  const startsWithWords = (ws, seq) => seq.every((x, i) => ws[i] != null && lowerOf(ws[i]) === x);
+  /**
+   * What a noun phrase says besides its head: a choice ("table 1 or table 2": each part may lack its noun, "the red or the blue house", so a part carries `alt`, itself plus the last word of the last part),
+   * a part of a set ("some of the tables", "two of them": `text` is the set; mode ask = which ones, all = the whole set, count = n of them), "the other table" / "the others" / "another one" (`text` without the word "one"),
+   * a relative clause with be ("the table that is red" -> text "red table"). One level: a part of a choice is read again by the caller. Plain noun phrases come back unchanged ({ text }).
+   */
+  function nounPhrase(text) {
+    const raw = String(text ?? '').trim();
+    const out = { text: raw };
+    const ws = wordList(raw);
+    const choiceWords = cached('choice', () => new Set(of('choice').map((w) => one(w, 'text'))));
+    if (ws.some((w, i) => i > 0 && i < ws.length - 1 && choiceWords.has(lowerOf(w)))) {
+      const parts = []; let cur = [];
+      for (const w of ws) {
+        if (choiceWords.has(lowerOf(w)) && cur.length) { parts.push(cur); cur = []; }
+        else if (/,$/.test(w)) { cur.push(w.replace(/,$/, '')); parts.push(cur); cur = []; }
+        else cur.push(w);
+      }
+      if (cur.length) parts.push(cur);
+      if (parts.length >= 2) { const lastWord = parts[parts.length - 1].at(-1); out.choice = parts.map((p, i) => ({ text: p.join(' '), alt: i < parts.length - 1 ? `${p.join(' ')} ${lastWord}` : null })); return out; }
+    }
+    for (const [seq, w] of mw('partitive')) {
+      if (!startsWithWords(ws, seq)) continue;
+      const mode = one(w, 'mode');
+      if (mode === 'count') continue;
+      if (lowerOf(ws[seq.length] ?? '') === 'of' && ws.length > seq.length + 1) {
+        const rest = ws.slice(seq.length + 1).join(' ');
+        return mode === 'all' ? { text: `${seq.join(' ')} ${rest}`, partitive: { mode: 'all' } } : { text: rest, partitive: { mode: 'ask' } };
+      }
+    }
+    if (lowerOf(ws[0] ?? '') === 'of' && ws.length > 1 && of('partitive').some((w) => one(w, 'mode') === 'bare')) return { text: ws.slice(1).join(' '), partitive: { mode: 'ask' } };
+    const nums = numerals('acts');
+    if (ws.length > 2 && lowerOf(ws[1]) === 'of' && (/^\d+$/.test(ws[0]) || Object.hasOwn(nums, lowerOf(ws[0])))) return { text: ws.slice(2).join(' '), partitive: { mode: 'count', n: /^\d+$/.test(ws[0]) ? Number(ws[0]) : nums[lowerOf(ws[0])] } };
+    for (const [seq, w] of mw('other')) {
+      if (!startsWithWords(ws, seq)) continue;
+      const rest = ws.slice(seq.length).filter((x) => !/^ones?$/i.test(x));
+      return { text: rest.join(' '), other: { plural: one(w, 'plural') === 'yes' } };
+    }
+    const rel = cached('relpron', () => new Set(of('relpron').map((w) => one(w, 'text')))), cop = cached('copula', () => new Set(of('copula').map((w) => one(w, 'text'))));
+    const r = ws.findIndex((w, i) => i > 0 && rel.has(lowerOf(w)));
+    if (r > 0 && cop.has(lowerOf(ws[r + 1] ?? '')) && ws.length > r + 2) {
+      const mods = ws.slice(r + 2), prep = words('prep', 'acts.rel');
+      if (!mods.some((m) => prep.has(lowerOf(m)) || lowerOf(m) === 'not' || lowerOf(m) === 'no')) return { text: [...mods, ...ws.slice(0, r)].join(' '), relative: true };
+    }
+    return out;
+  }
+
+  const timeRelation = (word) => cached(`tr:${word}`, () => { const w = of('prep').find((x) => all(x, 'in').includes('time') && one(x, 'text') === String(word).toLowerCase()); return w ? { rel: one(w, 'rel'), order: one(w, 'order'), ...(one(w, 'span') ? { span: one(w, 'span') } : {}) } : null; });
+
+  // ---- negated requests: "do not remove table 3" is no request (clauses.sop lang.en.neg.imperative) ----
+  function negatedRequest(text) {
+    const src = String(text ?? '').replace(/[.!]+$/, '');
+    const ws = wordList(src), starts = [...src.matchAll(/\S+/g)].map((m) => m.index);
+    const lead = cached('negreq', () => of('neg.imperative').flatMap((w) => all(w, 'text').map((t) => t.split(' '))).sort((a, b) => b.length - a.length));
+    const skip = cached('negskip', () => new Set(of('neg.imperative.skip').flatMap((w) => all(w, 'text'))));
+    let at = 0;
+    if (ws[0] && ['please', 'pls', 'plz'].includes(lowerOf(ws[0]))) at = 1;
+    for (const seq of lead) {
+      if (!startsWithWords(ws.slice(at), seq)) continue;
+      const rest = ws.slice(at + seq.length);
+      if (rest.length < 2 || skip.has(lowerOf(rest[0])) || rest.some((w) => cutWords().has(lowerOf(w)) || /[,;]$/.test(w))) return null;   // a message with several clauses is cut first
+      return { rest: rest.join(' '), leadEnd: starts[at + seq.length] };   // leadEnd: the offset in `text` where the rest starts (the lead is [0, leadEnd))
+    }
+    return null;
   }
 
   const dets = (view) => words('det', view);
@@ -207,7 +311,7 @@ export function createLangEn(source = LANG_EN_FACTS) {
     return { mods, lead, bare, candidates: out };
   }
 
-  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, facts: () => norm };
+  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, cutWords, sequenceWords, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
 }
 
 /** The English of this build: the facts of handover/lang.en as shipped in en.facts.generated.mjs. */

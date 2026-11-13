@@ -9,14 +9,12 @@
 
 import { splitSentences, tokenize } from './normalize.mjs';
 import { budget } from '../../dialog/budget.mjs';
+import { en } from '../../lang/en.mjs';
 
 const isWord = (t) => t.kind === 'word' || t.kind === 'number';
 
-/** Correction markers: [words, needsLeadingComma]. Multi-word markers are unambiguous; single words need a comma before. */
-const MARKERS = [
-  [['no', 'wait'], false], [['i', 'mean'], false], [['i', 'meant'], false], [['no', 'sorry'], false], [['scratch', 'that'], false],
-  [['make', 'that'], true], [['or', 'rather'], false], [['no'], true], [['sorry'], true], [['actually'], true], [['wait'], true], [['rather'], true], [['oops'], true],
-];
+/** Correction markers: [words, needsLeadingComma]. Multi-word markers are unambiguous; single words need a comma before. From the facts of handover/lang.en (clauses shard), in order. */
+const MARKERS = en.corrections();
 
 /** Swallowed free text that holds a correction marker, "then" or a repetition: always a sign of a catch-all reading. */
 export const MARKER_RE = /(^|[\s,])(then|no|sorry|actually|wait|rather|mean|meant|oops)([\s,]|$)|(^|\s)(twice|(\d+|two|three|four|five|six|seven|eight|nine|ten) times?)$/i;
@@ -60,11 +58,10 @@ function align(A, B, whole) {
 }
 
 /** A bare answer to a yes/no question: a list of them ("yes, no, I don't know, maybe") is a sequence of answers, never "no" correcting "yes". */
-const BARE_ANSWER = /^(yes|yeah|yep|yup|yea|no|nope|nah|maybe|perhaps|probably|sometimes|idk|i dont know|i do not know|dont know|do not know|not sure|unsure|i am not sure|im not sure|i guess|sort of|kind of|kinda)$/;
+const BARE_ANSWER = en.answerRegex();
 const isBareAnswer = (toks) => BARE_ANSWER.test(toks.map((t) => t.lower.replace(/'/g, '')).join(' '));
 
-const ANSWER_WORDS = ['i dont know', 'i do not know', 'dont know', 'do not know', 'i am not sure', 'im not sure', 'not sure', 'sort of', 'kind of', 'i guess',
-  'yes', 'yeah', 'yep', 'yup', 'yea', 'no', 'nope', 'nah', 'maybe', 'perhaps', 'probably', 'sometimes', 'idk', 'unsure', 'kinda'];
+const ANSWER_WORDS = en.answerWords();
 
 /**
  * A message made only of bare answers without separators ("yes no maybe idk") is a sequence of answers: the commas are put in.
@@ -83,7 +80,7 @@ export function splitAnswerList(text) {
   return out.length > 1 ? out.join(', ') : text;
 }
 
-const LEAD_ONLY = new Set(['no', 'not', 'wait', 'sorry', 'oops', 'actually', 'hmm', 'hm', 'um', 'uh', 'er', 'oh', 'ah', 'hold', 'on', 'well', 'ok', 'okay', 'my', 'bad', 'mistake', 'a', 'second', 'sec', 'whoops', 'ugh']);
+const LEAD_ONLY = en.leadOnly();
 
 /**
  * Self-correction: "blue, no, green" / "red, I mean blue" / "draw a cat, no wait, a dog" / "knight to f3, no, knight to c3": the

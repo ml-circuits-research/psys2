@@ -1302,6 +1302,7 @@ export class Discourse {
     const m = t.match(AMBIGUOUS_VERB);
     if (m) {
       const noun = m[2].toLowerCase();
+      if (en.nounPhrase(`${noun} ${t.slice(m[0].length).trim()}`).relative) return null;   // "the house that is red" says which one: the world reads the relative clause
       const same = refs.filter((r) => (r.words ?? [r.noun]).includes(noun));
       if (same.length < 2 || same.some((r) => r.salient)) return null;
       const at = m[0].length - `${m[1]} ${m[2]}`.length;   // the pattern ends with the noun phrase

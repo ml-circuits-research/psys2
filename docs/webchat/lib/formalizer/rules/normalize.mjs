@@ -4,9 +4,10 @@
  * into the original text. Original casing is kept in `raw`.
  */
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
+import { en } from '../../lang/en.mjs?v=08dd6017a3';
 import { isNumberWord, parseNumberRun, ordinalWordValue, digitWordValue } from './numbers.mjs?v=c4762ab8d4';
 
-export const QUESTION_WORDS = new Set(['how', 'what', 'who', 'where', 'when', 'which', 'why', 'is', 'are', 'does', 'do', 'can', 'did']);
+export const QUESTION_WORDS = en.questionWords('question-start');   // facts of handover/lang.en (clauses shard)
 
 const CONTRACTIONS = {
   "can't": ['can', 'not'], cannot: ['can', 'not'], "won't": ['will', 'not'], "i'm": ['I', 'am'], "let's": ['let', 'us'],

@@ -40,33 +40,37 @@
 @lang.en.correction.oops lang.en.correction text=oops comma=yes
 @lang.en.correction.rule lang.en.correction.rule doc="the words after the marker replace the part of the abandoned clause they correct: the whole clause when the correction restarts the command; the last number when it is a number; up to / from the shared word otherwise. A bare answer list ('yes, no, maybe') is never a correction."
 
+# words of an abandoned clause that make it only a lead ("wait, I meant yes", "sorry, ..."): such a clause is a correction of the previous turn, not of a clause of this message (expand.mjs LEAD_ONLY)
+@lang.en.correction.lead-only lang.en.correction.lead text=no text=not text=wait text=sorry text=oops text=actually text=hmm text=hm text=um text=uh text=er text=oh text=ah text=hold text=on text=well text=ok text=okay text=my text=bad text=mistake text=a text=second text=sec text=whoops text=ugh
+
 # ---- bare answers to a yes/no question ----
 @lang.en.answer.yes lang.en.answer polarity=yes text=yes text=yeah text=yep text=yup text=yea
 @lang.en.answer.no lang.en.answer polarity=no text=no text=nope text=nah
 @lang.en.answer.unsure lang.en.answer polarity=unsure text=maybe text=perhaps text=probably text=sometimes text=idk text="i dont know" text="i do not know" text="dont know" text="do not know" text="not sure" text=unsure text="i am not sure" text="im not sure" text="i guess" text="sort of" text="kind of" text=kinda
 
-# ---- question words and the auxiliaries that open a yes/no question ----
-@lang.en.wh.what lang.en.wh text=what asks=thing
-@lang.en.wh.which lang.en.wh text=which asks=thing-of-a-set
-@lang.en.wh.who lang.en.wh text=who asks=person
-@lang.en.wh.whom lang.en.wh text=whom asks=person case=object
-@lang.en.wh.whose lang.en.wh text=whose asks=owner
-@lang.en.wh.where lang.en.wh text=where asks=place
-@lang.en.wh.when lang.en.wh text=when asks=time
-@lang.en.wh.why lang.en.wh text=why asks=reason
-@lang.en.wh.how lang.en.wh text=how asks=manner-or-degree
+# ---- question words and the auxiliaries that open a yes/no question; `in=` names the view of one old list: question-start (normalize.mjs QUESTION_WORDS: the first word of a question), wh-lead (index.mjs WH_WORDS: the words a fuzzy wh match may name),
+#      question-tail (index.mjs QUESTION_TAIL_RE: a question after a connective inside swallowed text) ----
+@lang.en.wh.what lang.en.wh text=what asks=thing in=question-start in=wh-lead in=question-tail
+@lang.en.wh.which lang.en.wh text=which asks=thing-of-a-set in=question-start in=wh-lead in=question-tail
+@lang.en.wh.who lang.en.wh text=who asks=person in=question-start in=wh-lead in=question-tail
+@lang.en.wh.whom lang.en.wh text=whom asks=person case=object in=wh-lead
+@lang.en.wh.whose lang.en.wh text=whose asks=owner in=wh-lead
+@lang.en.wh.where lang.en.wh text=where asks=place in=question-start in=wh-lead in=question-tail
+@lang.en.wh.when lang.en.wh text=when asks=time in=question-start in=wh-lead in=question-tail
+@lang.en.wh.why lang.en.wh text=why asks=reason in=question-start in=wh-lead in=question-tail
+@lang.en.wh.how lang.en.wh text=how asks=manner-or-degree in=question-start in=wh-lead in=question-tail
 @lang.en.wh.howmany lang.en.wh text="how many" asks=count of=plural
 @lang.en.wh.howmuch lang.en.wh text="how much" asks=amount of=mass
-@lang.en.aux.is lang.en.aux text=is tense=present number=sg
-@lang.en.aux.are lang.en.aux text=are tense=present number=pl
+@lang.en.aux.is lang.en.aux text=is tense=present number=sg in=question-start in=question-tail
+@lang.en.aux.are lang.en.aux text=are tense=present number=pl in=question-start in=question-tail
 @lang.en.aux.was lang.en.aux text=was tense=past number=sg
 @lang.en.aux.were lang.en.aux text=were tense=past number=pl
-@lang.en.aux.does lang.en.aux text=does tense=present number=sg support=do
-@lang.en.aux.do lang.en.aux text=do tense=present support=do
-@lang.en.aux.did lang.en.aux text=did tense=past support=do
-@lang.en.aux.can lang.en.aux text=can modal=ability
-@lang.en.aux.could lang.en.aux text=could modal=ability,politeness
-@lang.en.aux.will lang.en.aux text=will modal=future
+@lang.en.aux.does lang.en.aux text=does tense=present number=sg support=do in=question-start in=question-tail
+@lang.en.aux.do lang.en.aux text=do tense=present support=do in=question-start in=question-tail
+@lang.en.aux.did lang.en.aux text=did tense=past support=do in=question-start
+@lang.en.aux.can lang.en.aux text=can modal=ability in=question-start in=question-tail
+@lang.en.aux.could lang.en.aux text=could modal=ability,politeness in=question-tail
+@lang.en.aux.will lang.en.aux text=will modal=future in=question-tail
 @lang.en.aux.would lang.en.aux text=would modal=politeness,conditional
 @lang.en.aux.should lang.en.aux text=should modal=advice
 @lang.en.aux.has lang.en.aux text=has tense=present number=sg support=have
@@ -86,7 +90,9 @@
 @lang.en.neg.words lang.en.neg text=not text=no text=never text=without text=nothing text=none text=nobody text=nowhere text=neither text=nor text=cannot
 @lang.en.neg.contracted lang.en.neg pattern="(.+)n't" doc="every n't contraction (don't, isn't, can't, won't ...) and the same without apostrophe (dont, isnt, cant): value-check.mjs counts them as negation"
 @lang.en.neg.rule.same lang.en.neg.rule doc="a rewrite of a sentence (normalizer, paraphrase, correction) must keep the negation: both or neither carry one; stop / undo / cancel are not negations here"
-@lang.en.neg.rule.aux lang.en.neg.rule doc="negation of an act ('do not add a table', 'Ion does not eat 1 apple') is not read by the act forms today (holes: minimal pairs mp#012, 022, 023, 025, 027)"
+@lang.en.neg.rule.aux lang.en.neg.rule doc="negation of a statement ('Ion does not eat 1 apple': the worlds' neg patterns, kids.arith kids.shop) is read by the worlds; negation of a REQUEST is read here (slice 2): the sentence opens with the lead words of neg.imperative and is not carried out" status=read read=en.negatedRequest
+@lang.en.neg.imperative.1 lang.en.neg.imperative text="do not" text="dont" text="don't" text="please do not" text="do not ever" text="do not just" doc="the words that turn a request into 'do not': the rest is what must not be done; the system says it will not and changes nothing"
+@lang.en.neg.imperative.skip lang.en.neg.imperative.skip text=know text=worry text=mind text=forget text=think text=care text=bother text=say text=sure text=like text=want text=need text=have text=let doc="not a negated request: 'do not know', 'never mind', 'don't forget to save' (that one is a positive request), 'I do not want ...' has a subject"
 
 # ---- imperatives ----
 @lang.en.imperative.rule lang.en.imperative.rule doc="the verb of a request is the words before the first determiner, number, pronoun or preposition (at most 3, lead-in words removed): the first word of an imperative sentence"

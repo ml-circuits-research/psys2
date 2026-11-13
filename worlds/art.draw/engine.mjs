@@ -22,6 +22,7 @@ import {
 
 import { colourName, colourNames, basicColourNames } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 import { habitat, adviceFor } from '../../src/knowledge/commonsense.mjs';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
+import { en } from '../../src/lang/en.mjs';   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
 import * as space from '../space/space.mjs';
 import * as rel from '../space/pieces.mjs';
 import * as solver from '../space/solver.mjs';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
@@ -313,6 +314,7 @@ const DET_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these
 /** Parses words like "the big red tree on the left" into a description of the thing meant. */
 export function parseNP(text) {
   budget.tick('art.np');   // recurses on the words after "of"
+  { const x = en.nounPhrase(text); if (x.relative) text = x.text; }   // "the house that is red" is "the red house"
   const all = toks(text);
   const np = { text: String(text ?? ''), pron: null, all: false, ordinal: null, size: null, superlative: false, color: null, kind: null, plural: false, part: null, partOf: null, loc: null, pos: null, other: false, count: null, special: null, one: false, known: true };
   if (!all.length) return { ...np, known: false };
@@ -395,6 +397,24 @@ const partColor = (o, part) => (part ? o.parts?.[part] ?? null : null);
 export function resolveNP(s, np, { many = false, ask = false } = {}) {
   budget.tick('art.np', 1 + s.objects.length);   // recurses through np.partOf; each level scans the picture
   const out = { objs: [], special: np.special && np.special !== 'everything' ? np.special : null, np };
+  // a choice ("the red or the blue house") and a part of a set ("some of the houses", "two of them") are asked, never guessed (np.sop, en.nounPhrase)
+  const x = np.text && !np.partOf ? en.nounPhrase(np.text) : null;
+  if (x?.choice) {
+    const found = [];
+    for (const part of x.choice) {
+      let r = resolveNP(s, parseNP(part.text), { many });
+      if (!r.objs.length && part.alt) { const r2 = resolveNP(s, parseNP(part.alt), { many }); if (r2.objs.length) r = r2; }
+      if (!r.objs.length) return r;
+      for (const o of r.objs) if (!found.includes(o)) found.push(o);
+    }
+    if (found.length === 1) return { ...out, objs: found };
+    return { ...out, error: `Which do you mean: ${found.map(sayObj).join(' or ')}?`, missing: true, asked: true };
+  }
+  if (x?.partitive) {
+    const r = resolveNP(s, parseNP(x.text), { many: true });
+    if (r.error || r.special || x.partitive.mode === 'all' || r.objs.length < 2 || (x.partitive.mode === 'count' && x.partitive.n >= r.objs.length)) return r;
+    return { ...out, error: `Which ${x.partitive.mode === 'count' ? `${x.partitive.n} of` : 'ones of'} ${andList(r.objs.map(sayObj))}? Say which, for example "the first one" or "the red one".`, missing: true, asked: true };
+  }
   if (np.special === 'everything') { out.objs = s.objects.slice(); out.everything = true; return out; }
   if (out.special) return out;
   if (np.pron === 'one') {

@@ -14,13 +14,13 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=45a9b8b973';
-import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=3978a46ba3';
+import { restrictedSet } from '../formalizer/spell.mjs?v=6c91a786a4';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=dc30576b7d';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=4d49055b41';
+import { en } from '../lang/en.mjs?v=08dd6017a3';
 import { touchedCount } from './followup.mjs?v=88af56c068';
 
 export const FRAME_LIMIT = 5;
@@ -1302,6 +1302,7 @@ export class Discourse {
     const m = t.match(AMBIGUOUS_VERB);
     if (m) {
       const noun = m[2].toLowerCase();
+      if (en.nounPhrase(`${noun} ${t.slice(m[0].length).trim()}`).relative) return null;   // "the house that is red" says which one: the world reads the relative clause
       const same = refs.filter((r) => (r.words ?? [r.noun]).includes(noun));
       if (same.length < 2 || same.some((r) => r.salient)) return null;
       const at = m[0].length - `${m[1]} ${m[2]}`.length;   // the pattern ends with the noun phrase

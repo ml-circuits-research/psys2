@@ -252,6 +252,11 @@ export class Dialogue {
     const ack = await this.ack(ws, text, sid);
     if (ack) return ack;
 
+    // 4b. a negated request ("do not remove table 3", "never draw a sun"): nothing is carried out, whatever world could have read the verb (handover/lang.en clauses.sop neg.imperative)
+    const negated = en.negatedRequest(text);
+    // ... unless a world's own pattern reads the negation ("Dont loop it" is the music world's loop off): the negation words are then in no free capture of the reading
+    if (negated && !(await this._negationOwned(text, negated, sid))) return this.tag({ reply: `OK, I will not ${negated.rest}. Nothing changed.`, info: { kind: 'negated-request', rest: negated.rest, dialogue: 'negation' } }, 'negation');
+
     // 5. a question about the scene or the history
     const q = this.sceneQuestion(ws, text);
     if (q) return q;
@@ -268,6 +273,14 @@ export class Dialogue {
     }
 
     return null;   // "a chart about the current discussion" is not read here: it is a selection of the session things into a view (session.things, spec 23)
+  }
+
+  /** Does the world's reading of the whole sentence use the negation (no free-text capture covers the lead)? A reading that swallowed "do not" into a capture ("Do not draw a" + sun) did not. */
+  async _negationOwned(text, negated, sid) {
+    const seg = await this.disc._readSeg(text, sid);
+    if (!seg?.match) return false;
+    const free = Object.values(seg.match.slots ?? {}).filter((x) => x?.span && !/^(?:lex\.|number|ordinal)/.test(String(x.class ?? '')));
+    return !free.some((x) => x.span[0] < negated.leadEnd);
   }
 
   tag(r, kind) { r.info = { ...(r.info ?? {}), dialogue: kind }; this._kind = kind; return r; }
