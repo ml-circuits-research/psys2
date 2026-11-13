@@ -146,12 +146,13 @@
     example="Place a lake next to the house."
 
 @pat.art.draw.x.keep core.pattern
-    canonical="But keep the lake."
     match="[$lang.lead.filler|but|and|no|also|hmm]? [$lang.keep] [the|that|my|this]? {x:words(5)} [alone|there|as_it_was|please]?"
     emit="@{_} core.request action=draw.keep arg.x=\"{x}\""
     kind=request
+    onlyWhile=prev
     priority=14
     example="But keep the lake."
+    example="Keep the lake."
     example="Do not remove the road."
     example="Leave the pond there."
     doc="Restores a thing the last step took away or changed (a follow-up that changes the last action)."
@@ -1644,6 +1645,7 @@
     doc="Repeats the last move."
 
 @pat.art.draw.x.reselect core.pattern
+    canonical="Not the left one, the right one."
     match="[no|nope|oh_no]? not [the]? {a:words(2)} [one]? [the|but|i_meant|i_mean|the_one]? {p:words(4)}"
     emit="@{_} core.request action=draw.reselect arg.phrase=\"{p}\""
     kind=request
@@ -1664,6 +1666,7 @@
     doc="Arranges things: handed to the module space."
 
 @pat.art.draw.x.space.inarow core.pattern
+    canonical="Put the houses in a row."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|arrange|make|set|lay] {t:words(5)} [in|into|as] [a|one]? [row|column|grid|circle|line|ring|stack]"
     emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
     kind=request

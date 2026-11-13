@@ -968,7 +968,9 @@ export class DialogSession {
     const named = namedWorlds((english.toLowerCase().match(/[a-z0-9]+/g) ?? []).map((w) => ({ kind: 'word', lower: w, raw: w })), namingTables(set).names);
     const SKIP = new Set(['ui.shell', 'ui.help', 'core', 'lang.common']);
     await this._prepareWorldsOf(res.segments);
-    const suspect = res.segments.filter((x) => { const w = x.match?.worldId; return w && !SKIP.has(w) && (w !== ctx.tabWorld || (named.size > 0 && !named.has(w)) || (!!ctx.lastWorld && ctx.lastWorld !== w && !SKIP.has(ctx.lastWorld))); });
+    // a phrase the open tab claims for itself (`tabClaim`: "make a diagram of this" on the Talk tab) is that world's answer, also when it is "nothing to send yet"
+    const claimed = (x) => !!x.match?.worldId && x.match.worldId === ctx.tabWorld && !!set.get(x.match.worldId)?.patterns?.find((p) => p.id === x.match.patternId)?.tabClaim;
+    const suspect = res.segments.filter((x) => { const w = x.match?.worldId; return w && !SKIP.has(w) && !claimed(x) && (w !== ctx.tabWorld || (named.size > 0 && !named.has(w)) || (!!ctx.lastWorld && ctx.lastWorld !== w && !SKIP.has(ctx.lastWorld))); });
     const crossBad = res.segments.filter((x) => x.corrections?.length && !this._crossTabOk([x], x.corrections, ctx, english)).map((x) => x.match.worldId);
     if (!suspect.length && !crossBad.length) return null;
     const bad = new Set(crossBad);

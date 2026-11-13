@@ -221,6 +221,8 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     tabOnly: txt(x, 'tabOnly') === 'true', tabPriority: txt(x, 'tabPriority') == null ? null : Number(txt(x, 'tabPriority')),
     yieldsTo: getAll(x, 'yieldsTo').map((v) => v.v),
     needsState: txt(x, 'needsState') ?? null,
+    // onlyWhile=<path>: the pattern is considered only while that path of its world's state is truthy, also when its world owns the tab
+    onlyWhile: txt(x, 'onlyWhile') ?? null,
     // tabFollow=true: a bare reading (a coordinate such as "b1") that only the world of the active tab, the active game or a recently used world may claim (RD2)
     tabFollow: txt(x, 'tabFollow') === 'true',
     // signal=true: the pattern carries an explicit signal of its world (a named shape, an arrow between names, a flowchart word): a match that is not a catch-all beats the active tab's own matches (routing tier 3, DIAG)
@@ -259,7 +261,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
   w.tests = wires['tests.sop'].filter((x) => x.type === 'core.test').map((x) => ({
     id: x.id, wire: x, worldId: id, input: txt(x, 'input'), expect: getAll(x, 'expect').map((v) => v.v),
     expectStatus: txt(x, 'expectStatus'),
-    expectState: getAll(x, 'expectState').map((v) => v.v), expectEffect: getAll(x, 'expectEffect').map((v) => v.v), language: txt(x, 'language') ?? 'en', session: txt(x, 'session'),
+    expectState: getAll(x, 'expectState').map((v) => v.v), expectEffect: getAll(x, 'expectEffect').map((v) => v.v), given: getAll(x, 'given').map((v) => v.v), language: txt(x, 'language') ?? 'en', session: txt(x, 'session'),
     reasoner: txt(x, 'reasoner'),   // `ops` or `matrix`: the test only runs with that reasoner strategy (spec 15); absent = both
   }));
   return w;
