@@ -20,6 +20,12 @@ export function fillOf(p) {
   return COLOURS.grey;
 }
 
+/** The colour a card was changed to by talking ("make it red"): a whitelisted name, as a #rrggbb value; null when it was not changed. */
+export const tintOf = (card) => COLOURS[String(card?.data?.tint ?? '').toLowerCase()] ?? null;
+const NEUTRAL = new Set(['black', 'white', 'grey', 'gray', 'silver', 'transparent', 'clear']);
+const isNeutral = (p) => (p?.colour ?? p?.c ?? []).every((c) => NEUTRAL.has(String(c).toLowerCase()));
+const tintStyle = (card) => { const t = tintOf(card); return t ? ` style="fill:${t}"` : ''; };
+
 // ---------------------------------------------------------------- the picture of a thing (parts in a 0-100 frame)
 function partShape(p, fill, extra = '') {
   const x = num(p.x), y = num(p.y), w = Math.max(0.5, num(p.w)), h = Math.max(0.5, num(p.h));
@@ -34,19 +40,42 @@ function partShape(p, fill, extra = '') {
   else svg = `<rect x="${r1(x)}" y="${r1(y)}" width="${r1(w)}" height="${r1(h)}" rx="${r1(Math.min(w, h) / 6)}" ${st}/>`;
   return `<g class="tk-part" data-part="${esc(p.name)}"${extra}><title>${esc(String(p.name ?? '').replace(/_/g, ' '))}</title>${svg}</g>`;
 }
-/** The drawing of a thing: its parts in draw order. `opts.only` marks one part (the others fade). */
+/** The drawing of a thing: its parts in draw order. `opts.only` marks one part (the others fade); `opts.tint` repaints the parts that are not black, white or grey;
+ *  `opts.extras` ([{ name, parts }]) puts other things next to it, each in its own frame. */
 export function drawingSvg(parts, opts = {}) {
-  const list = [...(parts ?? [])].filter((p) => p && typeof p === 'object').sort((a, b) => num(a.z) - num(b.z));
-  const body = list.map((p) => partShape(p, fillOf(p), opts.only && opts.only !== p.name ? ' opacity=".28"' : '')).join('');
-  return `<svg class="tk-svg tk-drawing" viewBox="-4 -4 108 108" role="img" aria-label="${esc(opts.label ?? 'drawing')}" preserveAspectRatio="xMidYMid meet">${body}</svg>`;
+  const frame = (list0, dx, tint) => {
+    const list = [...(list0 ?? [])].filter((p) => p && typeof p === 'object').sort((a, b) => num(a.z) - num(b.z));
+    const tintable = tint && list.some((p) => !isNeutral(p));
+    const body = list.map((p) => partShape(p, tint && (!tintable || !isNeutral(p)) ? tint : fillOf(p), opts.only && opts.only !== p.name ? ' opacity=".28"' : '')).join('');
+    return dx ? `<g transform="translate(${dx} 0)">${body}</g>` : body;
+  };
+  const extras = (opts.extras ?? []).slice(0, 3), n = 1 + extras.length;
+  const body = frame(parts, 0, opts.tint) + extras.map((e, i) => frame(e.parts, (i + 1) * 116, null)).join('');
+  return `<svg class="tk-svg tk-drawing" viewBox="-4 -4 ${n * 116 - 8} 108" role="img" aria-label="${esc(opts.label ?? 'drawing')}" preserveAspectRatio="xMidYMid meet">${body}</svg>`;
 }
 
 // ---------------------------------------------------------------- parts: a box for the thing on the left, a box for each named part in a column, elbow links (a plain layout until the layout module exists)
 export function partsSvg(card) {
-  const items = (card.data?.items ?? []).slice(0, 10);
+  const items = (card.data?.items ?? []).slice(0, 12), lay = card.data?.layout;
+  const rootStyle = tintStyle(card);
+  if (lay?.boxes && lay.w && lay.h) {   // laid out by the SPACE module: the thing on top, a grid of boxes under it
+    const bw = num(lay.box?.w, 130), bh = num(lay.box?.h, 28), rx0 = num(lay.root?.x), ry0 = num(lay.root?.y, 24);
+    let out = '';
+    for (const it of items) {
+      const c = lay.boxes[it.name]; if (!Array.isArray(c)) continue;
+      out += `<path d="M${r1(rx0)} ${r1(ry0 + 18)} C${r1(rx0)} ${r1((ry0 + 18 + num(c[1]) - bh / 2) / 2)} ${r1(num(c[0]))} ${r1((ry0 + 18 + num(c[1]) - bh / 2) / 2)} ${r1(num(c[0]))} ${r1(num(c[1]) - bh / 2)}" class="tk-link" fill="none"/>`;
+    }
+    out += `<rect x="${r1(rx0 - 52)}" y="${r1(ry0 - 18)}" width="104" height="36" rx="9" class="tk-box tk-rootbox"${rootStyle}/><text x="${r1(rx0)}" y="${r1(ry0 + 4.5)}" text-anchor="middle" class="tk-t tk-b">${esc(clip(card.title ?? card.thing, 14))}</text>`;
+    for (const it of items) {
+      const c = lay.boxes[it.name]; if (!Array.isArray(c)) continue;
+      const label = it.n > 1 ? `${it.name} \u00d7${it.n}` : it.name;
+      out += `<g class="tk-partbox" data-part="${esc(String(it.name).replace(/ /g, '_'))}"><rect x="${r1(num(c[0]) - bw / 2)}" y="${r1(num(c[1]) - bh / 2)}" width="${bw}" height="${bh}" rx="7" class="tk-box"/><text x="${r1(num(c[0]))}" y="${r1(num(c[1]) + 4.5)}" text-anchor="middle" class="tk-t">${esc(clip(label, 18))}</text><title>${esc(label)}</title></g>`;
+    }
+    return `<svg class="tk-svg tk-partsdiagram" viewBox="0 0 ${num(lay.w)} ${num(lay.h)}" role="img" aria-label="${esc(`parts of ${card.thing}`)}">${out}</svg>`;
+  }
   const bw = 130, bh = 28, gy = 8, rx = 150, W = rx + bw + 8, H = Math.max(48, items.length * (bh + gy) - gy + 16);
   const cy = H / 2;
-  let out = `<rect x="8" y="${r1(cy - 18)}" width="104" height="36" rx="9" class="tk-box tk-rootbox"/><text x="60" y="${r1(cy + 4.5)}" text-anchor="middle" class="tk-t tk-b">${esc(clip(card.title ?? card.thing, 14))}</text>`;
+  let out = `<rect x="8" y="${r1(cy - 18)}" width="104" height="36" rx="9" class="tk-box tk-rootbox"${rootStyle}/><text x="60" y="${r1(cy + 4.5)}" text-anchor="middle" class="tk-t tk-b">${esc(clip(card.title ?? card.thing, 14))}</text>`;
   items.forEach((it, i) => {
     const y = 8 + i * (bh + gy), my = y + bh / 2;
     out += `<path d="M112 ${r1(cy)} C131 ${r1(cy)} 131 ${r1(my)} ${rx} ${r1(my)}" class="tk-link" fill="none"/>`;
@@ -62,7 +91,7 @@ export function iconsSvg(card) {
   const per = n > 16 ? 10 : 8, rows = Math.max(1, Math.ceil(n / per));
   const W = per * 30 + 20, H = rows * 30 + 46;
   let out = '';
-  for (let i = 0; i < n; i++) out += `<circle cx="${20 + (i % per) * 30}" cy="${26 + Math.floor(i / per) * 30}" r="10" class="tk-dot"/><text x="${20 + (i % per) * 30}" y="${30 + Math.floor(i / per) * 30}" text-anchor="middle" class="tk-t tk-dotn">${i + 1}</text>`;
+  for (let i = 0; i < n; i++) out += `<circle cx="${20 + (i % per) * 30}" cy="${26 + Math.floor(i / per) * 30}" r="10" class="tk-dot"${tintStyle(card)}/><text x="${20 + (i % per) * 30}" y="${30 + Math.floor(i / per) * 30}" text-anchor="middle" class="tk-t tk-dotn">${i + 1}</text>`;
   out += `<text x="10" y="${H - 8}" class="tk-t tk-b">${esc(`${num(card.data?.n)} ${card.data?.label ?? ''}`)}</text>`;
   return `<svg class="tk-svg tk-icons" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(`${num(card.data?.n)} ${card.data?.label ?? ''}`)}">${out}</svg>`;
 }
@@ -75,7 +104,7 @@ export function barsSvg(card) {
   let out = '';
   bars.forEach((b, i) => {
     const y = 14 + i * 38, w = Math.max(3, (Math.abs(num(b.value)) / max) * bw);
-    out += `<text x="${lw - 8}" y="${y + 17}" text-anchor="end" class="tk-t">${esc(clip(b.label, 12))}</text><rect x="${lw}" y="${y}" width="${r1(w)}" height="24" rx="5" class="tk-bar${card.data?.big === i ? ' tk-big' : ''}"/><text x="${r1(lw + w + 6)}" y="${y + 17}" class="tk-t tk-b">${esc(num(b.value).toLocaleString('en-US'))}</text>`;
+    out += `<text x="${lw - 8}" y="${y + 17}" text-anchor="end" class="tk-t">${esc(clip(b.label, 12))}</text><rect x="${lw}" y="${y}" width="${r1(w)}" height="24" rx="5" class="tk-bar${card.data?.big === i ? ' tk-big' : ''}"${tintStyle(card)}/><text x="${r1(lw + w + 6)}" y="${y + 17}" class="tk-t tk-b">${esc(num(b.value).toLocaleString('en-US'))}</text>`;
   });
   out += `<text x="${lw}" y="${H - 6}" class="tk-t tk-muted">${esc(clip(card.data?.unit ?? '', 34))}</text>`;
   return `<svg class="tk-svg tk-bars" viewBox="0 0 ${lw + bw + 56} ${H}" role="img" aria-label="${esc(card.title)}">${out}</svg>`;
@@ -89,11 +118,42 @@ export function lineSvg(card) {
   let out = `<line x1="20" y1="${y}" x2="${W - 20}" y2="${y}" class="tk-axis"/>`;
   items.forEach((it, i) => {
     const x = 20 + i * step, hot = i === mark, was = i === from && from !== mark && from !== undefined;
-    out += `<g class="tk-pt" data-item="${esc(it)}"><circle cx="${x}" cy="${y}" r="${hot ? 9 : 6}" class="tk-point${hot ? ' tk-hot' : was ? ' tk-was' : ''}"/>`;
+    out += `<g class="tk-pt" data-item="${esc(it)}"><circle cx="${x}" cy="${y}" r="${hot ? 9 : 6}" class="tk-point${hot ? ' tk-hot' : was ? ' tk-was' : ''}"${hot ? tintStyle(card) : ''}/>`;
     out += tilt ? `<text transform="translate(${x + 3} ${y + 16}) rotate(48)" class="tk-t${hot ? ' tk-b' : ''}">${esc(clip(it, 11))}</text>` : `<text x="${x}" y="${y + 28}" text-anchor="middle" class="tk-t${hot ? ' tk-b' : ''}">${esc(it)}</text>`;
     out += `<text x="${x}" y="${y - 14}" text-anchor="middle" class="tk-t tk-muted tk-small">${i + 1}</text><title>${esc(it)}</title></g>`;
   });
   return `<svg class="tk-svg tk-line" viewBox="0 0 ${W} ${tilt ? 112 : 92}" role="img" aria-label="${esc(card.title)}">${out}</svg>`;
+}
+
+// ---------------------------------------------------------------- a small tree: the thing below, what it is a kind of above (from the is-a facts)
+export function treeSvg(card) {
+  const root = String(card.data?.root ?? card.thing ?? ''), parents = (card.data?.parents ?? []).slice(0, 3), above = card.data?.above ?? {};
+  const bw = 120, bh = 28, gx = 14, gy = 34;
+  const lv2 = parents.map((p) => (above[p] ?? []).slice(0, 2));
+  const slot = (i) => Math.max(1, lv2[i].length);
+  const cols = parents.reduce((n, _, i) => n + slot(i), 0) || 1, W = cols * (bw + gx) + gx;
+  const rows = lv2.some((l) => l.length) ? 3 : 2, H = rows * (bh + gy) - gy + 16;
+  const yRoot = H - bh - 8, yMid = rows === 3 ? 8 + bh + gy : 8;
+  let out = '', cx = gx;
+  const rootX = W / 2 - bw / 2, node = (x, y, t, cls = '') => `<g><rect x="${r1(x)}" y="${r1(y)}" width="${bw}" height="${bh}" rx="7" class="tk-box${cls}"/><text x="${r1(x + bw / 2)}" y="${r1(y + 18)}" text-anchor="middle" class="tk-t${cls ? ' tk-b' : ''}">${esc(clip(t, 16))}</text></g>`;
+  parents.forEach((p, i) => {
+    const w = slot(i) * (bw + gx) - gx, px = cx + w / 2 - bw / 2;
+    out += `<path d="M${r1(rootX + bw / 2)} ${r1(yRoot)} C${r1(rootX + bw / 2)} ${r1(yRoot - gy / 2)} ${r1(px + bw / 2)} ${r1(yMid + bh + gy / 2)} ${r1(px + bw / 2)} ${r1(yMid + bh)}" class="tk-link" fill="none"/>`;
+    lv2[i].forEach((g, k) => {
+      const gxp = cx + k * (bw + gx);
+      out += `<path d="M${r1(px + bw / 2)} ${r1(yMid)} C${r1(px + bw / 2)} ${r1(yMid - gy / 2)} ${r1(gxp + bw / 2)} ${r1(8 + bh + gy / 2)} ${r1(gxp + bw / 2)} ${r1(8 + bh)}" class="tk-link" fill="none"/>` + node(gxp, 8, g);
+    });
+    out += node(px, yMid, p);
+    cx += slot(i) * (bw + gx);
+  });
+  out += node(rootX, yRoot, root, ' tk-rootbox');
+  return `<svg class="tk-svg tk-tree" viewBox="0 0 ${r1(W)} ${r1(H)}" role="img" aria-label="${esc(`${root} is a kind of ${parents.join(' and ')}`)}">${out}</svg>`;
+}
+
+// ---------------------------------------------------------------- a small list of facts (what is known about the user, a tally of the session)
+export function factsHtml(card) {
+  const rows = (card.data?.rows ?? []).slice(0, 10);
+  return `<ul class="tk-facts">${rows.map((r) => `<li><span class="tk-factk">${esc(r.k)}</span><span class="tk-factv">${esc(r.v)}</span></li>`).join('')}</ul>${card.data?.unit ? `<p class="tk-cap">${esc(card.data.unit)}</p>` : ''}`;
 }
 
 // ---------------------------------------------------------------- how do you know
@@ -105,7 +165,9 @@ export function howHtml(card) {
 /** The markup of a card: { html, className } (an svg for the picture kinds, a list for `how`). */
 export function cardHtml(card, opts = {}) {
   switch (card?.kind) {
-    case 'drawing': return drawingSvg(card.data?.parts, { label: `drawing of ${card.thing}`, only: opts.only });
+    case 'drawing': return drawingSvg(card.data?.parts, { label: `drawing of ${card.thing}`, only: opts.only !== undefined ? opts.only : (card.data?.mark ? String(card.data.mark) : null), tint: tintOf(card), extras: card.data?.extras });
+    case 'tree': return treeSvg(card);
+    case 'facts': return factsHtml(card);
     case 'parts': return partsSvg(card);
     case 'icons': return iconsSvg(card);
     case 'bars': return barsSvg(card);

@@ -10,3 +10,23 @@
     word=weekdays
     word=planets
     word=planet
+
+@lex.talk.colours core.lexicon
+    class=colour
+    doc="Colours a card can be changed to by talking (make it red)"
+    word=red
+    word=orange
+    word=yellow
+    word=green
+    word=blue
+    word=purple
+    word=pink
+    word=brown
+    word=black
+    word=white
+    word=grey
+    word=gray
+    word=gold
+    word=silver
+    word=turquoise
+    word=violet

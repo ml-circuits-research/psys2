@@ -84,3 +84,35 @@
     input="Which planet is after Neptune?"
     expect="Neptune is the farthest from the sun, so no planet comes after it."
     session=a
+
+@t.talk.s01 core.test
+    input="Open the talk tab."
+    expectState="ui.shell:activeTab=talk"
+    session=b
+
+@t.talk.s02 core.test
+    input="What does a bicycle look like?"
+    expectEffect=talk.card
+    session=b
+
+@t.talk.s03 core.test
+    input="Make it red."
+    expect="I made the bicycle red."
+    expectState="cards.0.data.tint=red"
+    session=b
+
+@t.talk.s04 core.test
+    input="And its parts?"
+    expect="A bicycle has"
+    expectState="cards.1.kind=parts"
+    session=b
+
+@t.talk.s05 core.test
+    input="What do you know about me?"
+    expect="Nothing leaves this device."
+    session=b
+
+@t.talk.s06 core.test
+    input="Undo."
+    expect="I took the change back."
+    session=b

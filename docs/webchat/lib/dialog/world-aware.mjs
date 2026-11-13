@@ -16,7 +16,7 @@
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
 import { budget } from './budget.mjs?v=123c3e1329';
-import { restrictedSet } from '../formalizer/spell.mjs?v=475f8fcbf9';
+import { restrictedSet } from '../formalizer/spell.mjs?v=705b493826';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=5de885797a';
 import { foreignFragment } from './continuation.mjs?v=e6e9522fc5';
 
