@@ -48,6 +48,13 @@ put('k.demo/shards/fruits', [`@k.demo.apple k.demo.fruit name=apple colour=red t
 const lay = readFileSync(path.join(src, 'k.layouts/shards/layouts.sop'), 'utf8').split('\n').filter((l) => l.startsWith('@') && (/ layout=face /.test(l) || /^@k\.layouts\.layout\.face /.test(l)));
 const layKeys = ['face', ...lay.map((l) => / name=("[^"]*"|\S+)/.exec(l)?.[1]?.replace(/"/g, '').toLowerCase()).filter(Boolean)];
 put('k.layouts/shards/layouts', `# fixture: the face layout of k.layouts\n\n${lay.join('\n')}\n`, layKeys, ['hand-core-1']);
+// k.layouts, every layout by name (the names are the words of an arrangement: spec 21), without the slots of the layouts
+const allLay = readFileSync(path.join(src, 'k.layouts/shards/layouts.sop'), 'utf8').split('\n').filter((l) => /^@k\.layouts\.layout\.\w+ k\.layouts\.layout /.test(l) && !/ layout=face /.test(l) && !/^@k\.layouts\.layout\.face /.test(l));
+put('k.layouts/shards/names', `# fixture: the names of the layouts of k.layouts\n\n${allLay.join('\n')}\n`, allLay.map((l) => / name=("[^"]*"|\S+)/.exec(l)?.[1]?.replace(/"/g, '').toLowerCase()).filter(Boolean), ['hand-core-1']);
+// k.actions: the whole world (acts, roles, markings, verbs: the act phrases of spec 21), copied as it is
+const actionsReal = real.worlds.find((w) => w.id === 'k.actions');
+files['k.actions/schema.sop'] = readFileSync(path.join(src, 'k.actions/schema.sop'), 'utf8');
+for (const sh of actionsReal.shards) put(sh.id, readFileSync(path.join(src, sh.path), 'utf8'), sh.keys, sh.sources);
 // The worlds Talk reads generically (E-T1): the small ones whole (animals, body, commonsense, feelings, food, people, space, time, units); the big ones (k.words, k.geo, k.scenes) keep only the
 // wires that name a word the Talk experiment asks about (scripts/exp-talk.mjs). Each world's schema.sop is copied too: its core.word wires say which words mean which slot.
 const wanted = new Set([...readFileSync(path.join(import.meta.dirname, 'exp-talk.mjs'), 'utf8').matchAll(/'([^'\n]{2,40})'/g)].flatMap((m) => m[1].toLowerCase().replace(/[^a-z' -]/g, ' ').split(/\s+/)).filter((w) => w.length > 2));
@@ -98,6 +105,7 @@ const worlds = [
   { id: 'k.objects', version: '3', schema: 'k.objects/schema.sop', exports: ['k.objects.object', 'k.objects.part', 'k.objects.stand_in'], depends: [], shards: byWorld('k.objects') },
   { id: 'k.words', version: '1', schema: 'k.words/schema.sop', exports: ['k.words.sense'], depends: [], shards: byWorld('k.words') },
   { id: 'k.layouts', version: '1', schema: 'k.layouts/schema.sop', exports: ['k.layouts.layout', 'k.layouts.slot'], depends: [], shards: byWorld('k.layouts') },
+  { id: 'k.actions', version: actionsReal.version, schema: 'k.actions/schema.sop', exports: actionsReal.exports, depends: [], shards: byWorld('k.actions') },
   { id: 'k.demo', version: '1', schema: 'k.demo/schema.sop', exports: ['k.demo.fruit'], depends: [], shards: byWorld('k.demo') },
   ...extra.map((e) => ({ ...e, shards: byWorld(e.id) })),
 ];

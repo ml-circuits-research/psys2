@@ -1,0 +1,16 @@
+# k.actions/shards/verbs-undo: 6 verbs and phrasal verbs that mean the act "undo" (undo, restore, take back, roll back, revert, go back ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 3 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 3 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.undo.undo k.actions.verb text=undo act=undo sense=1 gloss="cancel, annul, or reverse an action or its effect" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.undo.restore k.actions.verb text=restore act=undo sense=1 gloss="return to its original or usable and functioning condition" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.undo.take_back k.actions.verb text="take back" act=undo object=thing separable=true core.source="hand-core 1"
+@k.actions.verb.undo.roll_back k.actions.verb text="roll back" act=undo object=thing separable=true core.source="hand-core 1"
+@k.actions.verb.undo.revert k.actions.verb text=revert act=undo sense=1 gloss="go back to a previous state" named=model core.source="wordnet 3.1"
+@k.actions.verb.undo.go_back k.actions.verb text="go back" act=undo core.source="hand-core 1"
+
+# Markings: after this verb, the word marks the role.
+@k.actions.marking.undo.revert.to k.actions.marking verb=revert act=undo marker=to role=state core.source="hand-core 1"
+@k.actions.marking.undo.go_back.to k.actions.marking verb="go back" act=undo marker=to role=state core.source="hand-core 1"

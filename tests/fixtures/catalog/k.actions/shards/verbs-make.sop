@@ -1,0 +1,30 @@
+# k.actions/shards/verbs-make: 15 verbs and phrasal verbs that mean the act "make" (make, create, draw, sketch, paint, build, construct, produce ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 15 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 0 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.make.make k.actions.verb text=make act=make sense=3 gloss="make or cause to be or to become" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.create k.actions.verb text=create act=make sense=1 sense=2 gloss="make or cause to be or to become" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.draw k.actions.verb text=draw act=make sense=6 gloss="represent by making a drawing of, as with a pencil, chalk, etc. on a surface" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.sketch k.actions.verb text=sketch act=make sense=1 gloss="make a sketch of" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.paint k.actions.verb text=paint act=make sense=3 gloss="make a painting of" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.build k.actions.verb text=build act=make sense=1 gloss="make by combining materials and parts" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.construct k.actions.verb text=construct act=make sense=1 gloss="make by combining materials and parts" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.produce k.actions.verb text=produce act=make sense=2 gloss="create or manufacture a man-made product" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.generate k.actions.verb text=generate act=make sense=1 gloss="bring into existence" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.put_up k.actions.verb text="put up" act=make sense=3 gloss="construct, build, or erect" object=kind separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.make.add k.actions.verb text=add act=make sense=1 gloss="make an addition (to); join or combine or unite with others; increase the quality, quantity, size or scope of" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.assemble k.actions.verb text=assemble act=make sense=1 gloss="create by putting components or members together" object=kind named=model core.source="wordnet 3.1"
+@k.actions.verb.make.put_together k.actions.verb text="put together" act=make sense=1 gloss="create by putting components or members together" object=kind separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.make.set_up k.actions.verb text="set up" act=make sense=2 gloss="create by putting components or members together" object=kind separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.make.put_on k.actions.verb text="put on" act=make sense=2 gloss="add to something existing" object=kind named=model core.source="wordnet 3.1"
+
+# Markings: after this verb, the word marks the role.
+@k.actions.marking.make.add.to k.actions.marking verb=add act=make marker=to role=place core.source="hand-core 1"
+@k.actions.marking.make.assemble.from k.actions.marking verb=assemble act=make marker=from role=material core.source="hand-core 1"
+@k.actions.marking.make.assemble.out_of k.actions.marking verb=assemble act=make marker="out of" role=material core.source="hand-core 1"
+@k.actions.marking.make.put_together.from k.actions.marking verb="put together" act=make marker=from role=material core.source="hand-core 1"
+@k.actions.marking.make.put_together.out_of k.actions.marking verb="put together" act=make marker="out of" role=material core.source="hand-core 1"
+@k.actions.marking.make.set_up.from k.actions.marking verb="set up" act=make marker=from role=material core.source="hand-core 1"
+@k.actions.marking.make.set_up.out_of k.actions.marking verb="set up" act=make marker="out of" role=material core.source="hand-core 1"

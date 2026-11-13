@@ -20,6 +20,9 @@
 //   unread(ctx, text)      -> a reply string when the world can read a sentence the forms did not (its own reader), else undefined
 //   domain.<act>(ctx, req) -> { status, value | note } | undefined   the world's own effect for an act over its own state (the generic executor is used when it returns undefined)
 
+import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
+
+export { ACT_VERBS };
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -78,7 +81,7 @@ const yes = (v) => v === 'yes' || v === 'true';
 export function parseSchema(wires) {
   const sw = wires.find((w) => w.type === 'acts.schema');
   if (!sw) throw new Error('schema.sop has no acts.schema wire');
-  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name'].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
+  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout'].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
   const schema = { id: sw.id, noun: val(sw, 'noun') ?? sw.id, acts: new Set(vals(sw, 'acts')), limits: { items: 100, history: 30, ...Object.fromEntries(sw.entries.filter((e) => e.key.startsWith('limit.')).map((e) => [e.key.slice(6), Number(e.value.v)])) }, kinds: {}, attrs: {}, doc: val(sw, 'doc') ?? '', tabOnly: val(sw, 'tabOnly') === 'yes' };
   for (const a of schema.acts) if (!Object.hasOwn(ACTS, a)) throw new Error(`unknown act '${a}' in ${sw.id}`);
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
@@ -155,6 +158,7 @@ export const FORMS = [
   { id: 'load', act: 'load', match: 'L V.load D {value:words}', args: ['value'], priority: 10, example: 'Load lunch.' },
   // forms of a character-like world (flag `self`) and the open-valued ones (be / has / dir / bare): written once, used by every world that sets the flag
   { id: 'make.self', act: 'make', match: 'L V.make [me|yourself|myself] D {thing:words}', args: ['thing'], priority: 11, if: 'self', example: 'Give yourself a beard.' },
+  { id: 'make.put', act: 'make', match: 'L [put|place|stick|draw|give] [him|her|it|the_avatar|me|yourself|myself]? D {thing:words}', args: ['thing'], priority: 9, if: 'self', example: 'Give him a beard.' },
   { id: 'make.on', act: 'make', match: 'L [put|place|add|stick|draw] D {thing:words} [on_yourself|on_your_face|on_your_head|to_yourself|to_your_face|on_you|on_ur_face]', args: ['thing'], priority: 12, if: 'self', example: 'Add glasses to your face.' },
   { id: 'remove.off', act: 'remove', match: 'L [take|put|get|pull] D {thing:words} [off|away|off_yourself|off_your_face|off_your_head]', args: ['thing'], priority: 12, if: 'self', example: 'Take the glasses off.' },
   { id: 'remove.without', act: 'remove', match: 'L [make|be|look|draw|show_me]? [yourself|me|it|the_face]? [without|with_no] D {thing:words}', args: ['thing'], priority: 11, if: 'self', example: 'Without a hat.' },
@@ -180,27 +184,18 @@ export const FORMS = [
   { id: 'change.name.is', act: 'change', mode: 'set', lit: { attribute: 'name' }, match: 'L [from_now_on]? [your|ur] name [is|will_be|shall_be] {value:rest}', args: ['value'], priority: 12, if: 'name', example: 'Your name is Robi.' },
   { id: 'change.name.called', act: 'change', mode: 'set', lit: { attribute: 'name' }, match: 'L [from_now_on]? [you|u] [are|r] [called|named] {value:rest}', args: ['value'], priority: 12, if: 'name', example: 'You are called Ziggy.' },
   { id: 'ask.name', act: 'ask', mode: 'what', lit: { attribute: 'name', thing: 'yourself' }, match: 'L [what_is_your_name|what_are_you_called|who_are_you|what_do_i_call_you|what_is_ur_name|tell_me_your_name]', args: [], priority: 12, if: 'name', example: 'What is your name?' },
+  { id: 'place.layout', act: 'place', mode: 'layout', match: 'L [V.place|arrange|lay_out|space_out|distribute|tidy|organise|organize] D {thing:words} [out|up]? [in|into|as|on|along|across]? D {rel:lex.acts.layout}', args: ['thing', 'rel'], priority: 13, if: 'layout', example: 'Line up the circles horizontally.' },
+  { id: 'place.layout.all', act: 'place', mode: 'layout', match: 'L [arrange|lay_out|tidy|organise|organize|space_out|distribute|align] D {thing:words} [out|up]?', args: ['thing'], priority: 8, if: 'layout', example: 'Tidy up the circles.' },
   { id: 'bare', act: 'make', mode: 'bare', match: 'L D {thing:KIND} [at_me|a_little|twice]?', args: ['thing'], priority: 3, if: 'bare', example: 'Glasses.' },
 ];
 
-/** Seed verbs (act words). TEMPORARY: replaced by the `k.actions` words of the knowledge repo when the catalog is read generically; delete then. */
-export const SEED_VERBS = {
-  make: ['add', 'make', 'create', 'build', 'insert', 'put_up', 'set_up', 'i_need', 'i_want', 'give_me', 'wear', 'put_on', 'give_yourself', 'draw', 'sketch', 'spawn'],
-  remove: ['remove', 'delete', 'erase', 'take_away', 'get_rid_of', 'discard', 'take_off', 'take_out', 'drop', 'kick_out', 'throw_away', 'lose', 'hide', 'ditch'],
-  set: ['set', 'change', 'make', 'turn', 'colour', 'color', 'paint', 'switch'],
-  place: ['move', 'put', 'place', 'seat', 'shift', 'relocate', 'drag'],
-  connect: ['connect', 'link', 'join', 'attach', 'tie', 'wire'],
-  group: ['group', 'bundle', 'put_together', 'combine'],
-  apart: ['ungroup', 'take_apart', 'split', 'separate', 'break_up', 'break_apart', 'split_up'],
-  pick: ['select', 'pick', 'choose', 'take', 'click_on', 'pick_out', 'highlight', 'mark'],
-  copy: ['copy', 'duplicate', 'clone', 'repeat'],
-  send: ['send', 'give', 'hand', 'pass', 'export'],
-  save: ['save', 'store', 'remember', 'keep'],
-  load: ['load', 'open', 'restore', 'recall', 'bring_back', 'go_to'],
-};
+/** The verbs of every act: from the knowledge world k.actions (worlds/acts/verbs.generated.mjs, generated by scripts/build-acts-lexicon.mjs). No local seed. */
+
 export const REL_WORDS = ['at', 'on', 'in', 'into', 'onto', 'to', 'next_to', 'near', 'beside', 'by', 'under', 'above', 'below', 'inside', 'with', 'around', 'between'];
 export const DET_WORDS = ['a', 'an', 'the', 'another', 'my', 'this', 'that', 'one', 'some', 'our', 'your', 'ur'];
 /** Direction words of a move (flag `dir`; the words of the space module): closer together, apart, higher, lower ... */
+/** Words of an arrangement (flag layout): the names of the layouts of k.layouts (generated, layouts.generated.mjs) and the adverbs of a line-up. */
+export const LAYOUT_ADVERBS = ['horizontally', 'vertically', 'evenly', 'neatly', 'in_a_row', 'in_a_line', 'in_a_column', 'in_a_circle', 'diagonally'];
 export const DIR_WORDS = ['closer', 'closer_together', 'together', 'apart', 'further_apart', 'wider_apart', 'higher', 'lower', 'up', 'down', 'left', 'right'];
 
 // ---- generation from the schema ----------------------------------------------------------------------------------------------------------------------
@@ -209,7 +204,7 @@ const cmpWords = (s, k) => [...new Set(Object.values(s.attrs).flatMap((a) => a[k
 function conditions(s) {
   return {
     in: Object.values(s.kinds).some((k) => k.in), named: Object.values(s.kinds).some((k) => k.named), attrs: Object.keys(s.attrs).length > 0,
-    name: !!s.flags?.name, self: !!s.flags?.self, dir: !!s.flags?.dir, be: !!s.flags?.be, has: !!s.flags?.has, bare: !!s.flags?.bare,
+    name: !!s.flags?.name, layout: !!s.flags?.layout, self: !!s.flags?.self, dir: !!s.flags?.dir, be: !!s.flags?.be, has: !!s.flags?.has, bare: !!s.flags?.bare,
     values: valueWords(s).length > 0, number: Object.values(s.attrs).some((a) => a.type === 'number'), more: cmpWords(s, 'more').length > 0, less: cmpWords(s, 'less').length > 0,
   };
 }
@@ -221,7 +216,7 @@ export function formsFor(schema) {
   const c = conditions(schema);
   return FORMS.filter((f) => schema.acts.has(f.act) && (!f.if || c[f.if]));
 }
-const expandMatch = (m, ns) => m.replace(/\bL\b/g, '[$lang.lead.polite]?').replace(/\bD\b/g, '[$acts.det]?').replace(/\bV\.(\w+)/g, '[$acts.verb.$1]')
+const expandMatch = (m, ns) => m.replace(/\{(\w+):words\}$/, '{$1:rest}').replace(/\bL\b/g, '[$lang.lead.polite]?').replace(/\bD\b/g, '[$acts.det]?').replace(/\bV\.(\w+)/g, '[$acts.verb.$1]')
   .replace(/\bREL\b/g, '{rel:lex.acts.rel}').replace(/\{(\w+):ATTR\}/g, `{$1:lex.${ns}.attrs}`).replace(/\{(\w+):VALUE\}/g, `{$1:lex.${ns}.values}`)
   .replace(/\{(\w+):KIND\}/g, `{$1:lex.${ns}.kinds}`).replace(/\{(\w+):MORE\}/g, `{$1:lex.${ns}.more}`).replace(/\{(\w+):LESS\}/g, `{$1:lex.${ns}.less}`);
 const wordsLex = (id, doc, words, cls = 'modifier') => `@${id} core.lexicon\n    class=${cls}\n    doc=${JSON.stringify(doc)}\n${words.map((w) => `    word=${w.replace(/\s+/g, '_')}`).join('\n')}\n`;
@@ -240,14 +235,14 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs') {
   const pats = [note];
   for (const f of forms) {
     const emit = `@{_} core.request action=${ns}.${f.act}${f.mode ? ` arg.mode=${f.mode}` : ''}${Object.entries(f.lit ?? {}).map(([k, v]) => ` arg.${k}=\\"${v}\\"`).join('')}${f.args.map((a) => ` arg.${a}=\\"{${a}}\\"`).join('')} arg.text=\\"{segment}\\"`;
-    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority}\n${schema.tabOnly ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n`);
+    pats.push(`@pat.${ns}.${f.id} core.pattern\n    match="${expandMatch(f.match, ns)}"\n    emit="${emit}"\n    kind=${f.act === 'ask' ? 'question' : 'request'}\n    priority=${f.priority}\n    tabPriority=${f.priority + 8}\n${schema.tabOnly ? "    tabOnly=true\n" : ""}    example=${JSON.stringify(exampleOf(schema, f))}\n`);
   }
   const used = [...new Set(forms.map((f) => f.act))];
   const own = (schema.own ?? []).map((o) => o.split(':'));
   const ownOps = own.map(([fn, action]) => `@op.${ns}.${fn} core.operation\n    impl=${fn}\n    semantics=action\n    action=${action}\n    doc=${JSON.stringify(`An operation of this world that is not an act (own.mjs: ${fn}).`)}\n`);
   const ops = [note, ...ownOps, ...used.map((a) => `@op.${ns}.${a} core.operation\n    impl=${a}\n    semantics=action\n    action=${ns}.${a}\n    doc=${JSON.stringify(`The act '${a}' (spec 21), applied by the generic executor to this world's schema.`)}\n`)].join('\n');
   const tpl = [note, ...used.map((a) => `@tpl.${ns}.${a} core.template\n    for=action.${ns}.${a}\n    text="{note}"\n`)].join('\n');
-  const opsMjs = `// GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.\nimport { createExecutor, deserializeSchema } from '${actsUrl}';\n${schema.hooks ? `import { hooks } from './${schema.hooks}';\n` : ''}${own.length ? `export * from './own.mjs';\n` : ''}const SCHEMA = ${JSON.stringify(serializeSchema(schema))};\nconst X = createExecutor(deserializeSchema(SCHEMA)${schema.hooks ? ', hooks' : ''});\n${used.map((a) => `export const ${a} = (ctx, args = {}) => X.operation(ctx, '${a}', args);`).join('\n')}\nexport const interceptInput = (ctx, text) => X.interceptInput(ctx, text);\nexport const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);\nexport const referents = (ctx) => X.referents(ctx);\nexport const executor = X;\n`;
+  const opsMjs = `// GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.\nimport { createExecutor, deserializeSchema } from '${actsUrl}';\n${schema.hooks ? `import { hooks } from './${schema.hooks}';\n` : ''}${own.length ? `export * from './own.mjs';\n` : ''}const SCHEMA = ${JSON.stringify(serializeSchema(schema))};\nconst X = createExecutor(deserializeSchema(SCHEMA)${schema.hooks ? ', hooks' : ''});\n${used.map((a) => `export const ${a} = (ctx, args = {}) => X.operation(ctx, '${a}', args);`).join('\n')}\nexport const interceptInput = (ctx, text) => X.interceptInput(ctx, text);\nexport const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);\n${schema.hooks ? "export const accepts = (info) => X.accepts(info);\n" : ''}export const referents = (ctx) => X.referents(ctx);\nexport const executor = X;\n`;
   return { 'lexicon.sop': lex, 'patterns.sop': pats.join('\n'), 'operations.sop': ops, 'templates.sop': tpl, 'ops.mjs': opsMjs };
 }
 export const serializeSchema = (s) => ({ ...s, acts: [...s.acts] });
@@ -260,7 +255,7 @@ export const examples = (schema) => formsFor(schema).map((f) => exampleOf(schema
 /** The words of the `meta.worlds` card: act words, thing words (kinds and attributes), the frame words. Generated, so a schema world needs no hand-made card. */
 export function card(schema) {
   const acts = [...new Set(formsFor(schema).map((f) => f.act))];
-  const verbs = [...new Set(acts.flatMap((a) => (SEED_VERBS[a] ?? []).filter((v) => !v.includes('_'))))];
+  const verbs = [...new Set(acts.flatMap((a) => (ACT_VERBS[a] ?? []).filter((v) => !v.includes('_'))))];
   return { acts, act: verbs, thing: [...kindWords(schema), ...attrWords(schema)], noun: schema.noun };
 }
 /** Coverage sentences (A5): for every act of the world and every kind it can apply to, one sentence built from the same forms. { act, kind, text }. */
@@ -407,7 +402,7 @@ export function createExecutor(schema, hooks = {}) {
   }
 
   // ---- bookkeeping ----
-  const rec = (st, req, res) => { st.log.push({ act: req.act, mode: req.mode ?? null, text: req.text ?? null, roles: roleView(req), diff: res.diff ?? null, reply: res.note, guesses: res.guesses ?? [] }); if (st.log.length > 50) st.log.shift(); st.last = st.log[st.log.length - 1]; };
+  const rec = (st, req, res) => { st.log.push({ act: req.act, mode: req.mode ?? null, text: req.text ?? null, roles: roleView(req), diff: res.diff ?? null, reply: res.note, guesses: res.guesses ?? [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; };
   const roleView = (r) => Object.fromEntries(['thing', 'attribute', 'value', 'place', 'amount', 'rel', 'rest'].filter((k) => r[k] != null && r[k] !== '').map((k) => [k, r[k]]));
   const say = (note, extra = {}) => ({ status: 'supported', note, ...extra });
   const guessLine = (g) => (g.length ? ` (${cap(joinAnd(g))}.)` : '');
@@ -687,7 +682,7 @@ export function createExecutor(schema, hooks = {}) {
 
   function askAct(st, req) {
     const mode = req.mode ?? 'what';
-    if (mode === 'last') { const l = st.last; return say(l ? `${l.reply}` : 'I have not done anything yet.'); }
+    if (mode === 'last') { const l = st.lastAct; return say(l ? `${l.reply}` : 'I have not done anything yet.'); }
     if (mode === 'why') return why(st, req);
     if (mode === 'count') {
       let r = req.thing ? resolve(st, req.thing, { allowEmpty: true }) : { ids: [] };
@@ -724,7 +719,7 @@ export function createExecutor(schema, hooks = {}) {
     const words = toks(req.rest).filter((w) => !DET.has(w) || PRONOUN.has(w));
     const rest = words.join(' ');
     if (/^(you (do|say|did|said) (that|it|this)|that|it|you)$/.test(rest) || !words.length) {
-      const l = st.last; return l ? say(`Because ${l.text ? `you said "${l.text}"` : 'you asked'}: ${strip(l.reply)}.${l.guesses.length ? ` ${cap(joinAnd(l.guesses))}.` : ''}`) : say('I have not done anything yet, so there is nothing to explain.');
+      const l = st.lastAct; return l ? say(`Because ${l.text ? `you said "${l.text}"` : 'you asked'}: ${strip(l.reply)}.${l.guesses.length ? ` ${cap(joinAnd(l.guesses))}.` : ''}`) : say('I have not done anything yet, so there is nothing to explain.');
     }
     // the thing: the longest run of words that names something
     const isVal = (w) => Object.values(schema.attrs).some((a) => same(w, a.name) || a.words.includes(w) || (valueOf(a, w) !== undefined && a.type !== 'text' && a.type !== 'number'));
@@ -735,7 +730,7 @@ export function createExecutor(schema, hooks = {}) {
     let it = ids ? st.items.find((i) => i.id === ids[0]) : null;
     if (!it && left.length) { const f = focusOf(st).ids.map((id) => st.items.find((i) => i.id === id)).find(Boolean); if (f) it = f; }   // no thing named: the focus ("why is it blue")
     const attrHit = Object.values(schema.attrs).find((a) => left.some((w) => same(w, a.name) || a.words.includes(w) || valueOf(a, w) !== undefined && a.type !== 'text' && a.type !== 'number'));
-    if (!it) return say(`I do not know what "${req.rest}" is about. ${st.last ? `The last thing I did: ${strip(st.last.reply)}, because ${st.last.text ? `you said "${st.last.text}"` : 'you asked'}.` : 'I have not done anything yet.'}`);
+    if (!it) return say(`I do not know what "${req.rest}" is about. ${st.lastAct ? `The last thing I did: ${strip(st.lastAct.reply)}, because ${st.lastAct.text ? `you said "${st.lastAct.text}"` : 'you asked'}.` : 'I have not done anything yet.'}`);
     if (attrHit && it.attrs[attrHit.name] !== undefined) {
       const w = left.find((x) => valueOf(attrHit, x) !== undefined && !same(x, attrHit.name));
       const cur = it.attrs[attrHit.name];
@@ -756,7 +751,7 @@ export function createExecutor(schema, hooks = {}) {
     const h = st.history.pop();
     if (!h) return say('There is nothing to undo.');
     st.future.push({ snap: snapshot(st), reply: h.reply, act: h.act, logLen: h.logLen });
-    restore(st, h.snap); st.log.length = Math.min(st.log.length, h.logLen); st.last = st.log[st.log.length - 1] ?? null;
+    restore(st, h.snap); st.log.length = Math.min(st.log.length, h.logLen); st.lastAct = st.log[st.log.length - 1] ?? null;
     return say(`I undid that: ${past(h.reply)}.`, { diff: emptyDiff(), undone: h.act });
   }
   function doRedo(st) {
@@ -770,8 +765,8 @@ export function createExecutor(schema, hooks = {}) {
   /** The last resort of a world when no form read the sentence (the engine's hook `outOfScope`): the guessed act and thing, one question; never a bare "not understood". */
   function lastResort(state, text) {
     const st = init(state); const t = toks(text);
-    const verb = t.find((w) => Object.entries(SEED_VERBS).some(([a, vs]) => vs.includes(w) || same(w, vs.find((x) => !x.includes('_') && x.length > 3) ?? '')));
-    const act = verb ? Object.entries(SEED_VERBS).find(([a, vs]) => vs.includes(verb))?.[0] : null;
+    const verb = t.find((w) => Object.entries(ACT_VERBS).some(([a, vs]) => vs.includes(w) || same(w, vs.find((x) => !x.includes('_') && x.length > 3) ?? '')));
+    const act = verb ? Object.entries(ACT_VERBS).find(([a, vs]) => vs.includes(verb))?.[0] : null;
     const kw = t.map((w) => kindByWord(w)).find(Boolean);
     const thing = kw ? (st.items.find((i) => i.kind === kw.kind.name) ? label(st.items.find((i) => i.kind === kw.kind.name)) : kw.kind.name) : null;
     const actOk = act && schema.acts.has(act === 'set' ? 'change' : act === 'apart' ? 'group' : act) ? (act === 'set' ? 'change' : act === 'apart' ? 'group' : act) : null;
@@ -796,14 +791,14 @@ export function createExecutor(schema, hooks = {}) {
       const r = dom(ctx, req);
       if (r) {
         init(st);
-        if (r.status === 'supported') { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.last = st.log[st.log.length - 1]; }
+        if (r.status === 'supported') { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
         return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
       }
     }
     const res = run(st, req);
     return { status: 'supported', note: res.note, value: res.note, ...(res.effect ? { effect: res.effect } : {}), fallback: res.fallback, diff: res.diff };
   }
-  const VERBS = new Set(Object.values(SEED_VERBS).flat().filter((v) => !v.includes('_')).concat(['undo', 'redo', 'why', 'what', 'how', 'where', 'who', 'which', 'select', 'delete']));
+  const VERBS = new Set(Object.values(ACT_VERBS).flat().filter((v) => !v.includes('_')).concat(['undo', 'redo', 'why', 'what', 'how', 'where', 'who', 'which', 'select', 'delete']));
   const looksLikeCommand = (t) => { const w = toks(t).filter((x) => !['please', 'can', 'you', 'could'].includes(x)); return w.length > 0 && VERBS.has(w[0]) && !kindByWord(w[0]); };
   /** The one question the executor asked: a role (the answer is the role) or a guessed act (yes / no). */
   function interceptInput(ctx, text) {
@@ -826,11 +821,13 @@ export function createExecutor(schema, hooks = {}) {
   }
   /** What the engine's hook outOfScope gets: the world's own reader first (hooks.unread(ctx, text) -> a reply string), else the graded last resort. */
   function outOfScope(ctx, text) { const u = hooks.unread?.(ctx, text); return typeof u === 'string' && u ? { say: u } : lastResort(ctx.state, text); }
+  /** DECLINE: the formalizer asks before routing whether this world owns a reading ({ action, mode, roles, text, state }); hooks.accepts says no when the words are not of this world. */
+  const accepts = (info) => (hooks.accepts ? hooks.accepts(info) !== false : true);
   /** What a person can point at (the discourse hook `referents`, M1): the items, the focused ones salient. */
   function referents(ctx) {
     const st = init(ctx.state);
     const sal = new Set(st.focus.ids);
     return st.items.map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
   }
-  return { run, operation, interceptInput, lastResort, outOfScope, init, resolve, labels, schema, referents };
+  return { run, operation, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
 }

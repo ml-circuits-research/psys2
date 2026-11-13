@@ -1,0 +1,25 @@
+# k.actions/shards/verbs-group: 19 verbs and phrasal verbs that mean the act "group" (group, gather, collect, combine, merge, cluster, bundle, bunch ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 18 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 1 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.group.group k.actions.verb text=group act=group sense=1 gloss="arrange into a group or groups" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.gather k.actions.verb text=gather act=group sense=1 gloss="assemble or get together" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.collect k.actions.verb text=collect act=group sense=1 gloss="get or gather together" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.combine k.actions.verb text=combine act=group sense=2 gloss="put or add together" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.merge k.actions.verb text=merge act=group sense=3 gloss="join or combine" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.cluster k.actions.verb text=cluster act=group sense=2 gloss="gather or cause to gather into a cluster" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.bundle k.actions.verb text=bundle act=group sense=1 gloss="make into a bundle" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.bunch k.actions.verb text=bunch act=group sense=1 gloss="form into a bunch" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.lump k.actions.verb text=lump act=group sense=1 gloss="put together indiscriminately" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.pair k.actions.verb text=pair act=group sense=4 gloss="arrange in pairs" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.stack k.actions.verb text=stack act=group sense=2 gloss="arrange in stacks" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.pile k.actions.verb text=pile act=group sense=1 gloss="arrange in stacks" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.put_together k.actions.verb text="put together" act=group object=thing separable=true core.source="hand-core 1"
+@k.actions.verb.group.sort k.actions.verb text=sort act=group sense=2 gloss="arrange or order by classes or categories" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.classify k.actions.verb text=classify act=group sense=1 gloss="arrange or order by classes or categories" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.categorize k.actions.verb text=categorize act=group sense=1 gloss="place into or assign to a category" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.organize k.actions.verb text=organize act=group sense=4 gloss="bring order and organization to" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.arrange k.actions.verb text=arrange act=group sense=1 gloss="put into a proper or systematic order" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.group.rank k.actions.verb text=rank act=group sense=2 gloss="assign a rank or rating to" object=thing named=model core.source="wordnet 3.1"

@@ -1,0 +1,31 @@
+# k.actions/shards/verbs-remove: 21 verbs and phrasal verbs that mean the act "remove" (remove, delete, erase, take away, take out, get rid of, rub out, wipe out ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 21 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 0 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.remove.remove k.actions.verb text=remove act=remove sense=1 sense=3 gloss="remove something concrete, as by lifting, pushing, or taking off, or remove something abstract" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.delete k.actions.verb text=delete act=remove sense=1 sense=2 gloss="remove or make invisible" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.erase k.actions.verb text=erase act=remove sense=1 sense=2 gloss="remove from memory or existence" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.take_away k.actions.verb text="take away" act=remove sense=2 gloss="remove something concrete, as by lifting, pushing, or taking off, or remove something abstract" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.take_out k.actions.verb text="take out" act=remove sense=3 gloss="take out or remove" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.get_rid_of k.actions.verb text="get rid of" act=remove sense=1 gloss="dispose of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.rub_out k.actions.verb text="rub out" act=remove sense=1 gloss="remove by or as if by rubbing or erasing" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.wipe_out k.actions.verb text="wipe out" act=remove sense=4 gloss="remove from memory or existence" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.wipe_off k.actions.verb text="wipe off" act=remove sense=2 gloss="remove by or as if by rubbing or erasing" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.clear k.actions.verb text=clear act=remove sense=5 gloss="remove" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.discard k.actions.verb text=discard act=remove sense=1 gloss="throw or cast away" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.eliminate k.actions.verb text=eliminate act=remove sense=1 gloss="terminate, end, or take out" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.throw_away k.actions.verb text="throw away" act=remove sense=1 gloss="throw or cast away" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.throw_out k.actions.verb text="throw out" act=remove sense=2 gloss="throw or cast away" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.destroy k.actions.verb text=destroy act=remove sense=1 gloss="do away with, cause the destruction or undoing of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.do_away_with k.actions.verb text="do away with" act=remove sense=1 gloss="terminate, end, or take out" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.scrap k.actions.verb text=scrap act=remove sense=1 gloss="dispose of (something useless or old)" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.cancel k.actions.verb text=cancel act=remove sense=4 gloss="remove or make invisible" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.cut_out k.actions.verb text="cut out" act=remove sense=1 gloss="delete or remove" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.cross_out k.actions.verb text="cross out" act=remove sense=1 gloss="remove from a list" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.remove.take_off k.actions.verb text="take off" act=remove sense=2 gloss="take away or remove" object=thing separable=true after_particle=source named=model core.source="wordnet 3.1"
+
+# Markings: after this verb, the word marks the role.
+@k.actions.marking.remove.cross_out.from k.actions.marking verb="cross out" act=remove marker=from role=source core.source="hand-core 1"
+@k.actions.marking.remove.take_off.from k.actions.marking verb="take off" act=remove marker=from role=source core.source="hand-core 1"

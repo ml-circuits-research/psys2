@@ -4,12 +4,14 @@
 # license: CC0-1.0
 # script: none (hand-written)
 
-@k.feelings core.module name=k.feelings version=1 exports=feeling core.source="hand-core 1"
+@k.feelings core.module name=k.feelings version=2 exports=feeling core.source="hand-core 1"
 
 # A feeling, named by the adjective for someone who has it (happy, afraid). `tone` says whether it is `pleasant`,
 # `unpleasant` or `neutral` to have. How a face shows it: `expression` names the k.faces expression (style `plain`)
 # that fits, where one does; `mouth`, `eyebrows`, `eyes` and `cheeks` name the variant of that k.faces slot (style
 # `plain`) that shows the feeling: they are put on after the expression, or alone where no expression fits.
+# `looks_like` names another feeling that a face shows in the same way: the face cannot tell the two apart (lonely,
+# guilty and sad look the same), what caused the feeling does. A feeling without it has a face of its own.
 # `caused_by` names things that usually cause the feeling (short phrases; many); `opposite` names the opposite
 # feeling, where there is a plain one; `reply` is a kind thing to say to someone who has the feeling. Other words
 # for the feeling (scared, glad, the noun fear) are core.word facts.
@@ -21,6 +23,7 @@
 @k.feelings.feeling.eyebrows core.slot of=k.feelings.feeling key=eyebrows kind=atom kind=string core.source="hand-core 1"
 @k.feelings.feeling.eyes core.slot of=k.feelings.feeling key=eyes kind=atom kind=string core.source="hand-core 1"
 @k.feelings.feeling.cheeks core.slot of=k.feelings.feeling key=cheeks kind=atom kind=string core.source="hand-core 1"
+@k.feelings.feeling.looks_like core.slot of=k.feelings.feeling key=looks_like kind=atom kind=string core.source="hand-core 1"
 @k.feelings.feeling.caused_by core.slot of=k.feelings.feeling key=caused_by many=true required=true kind=string core.source="hand-core 1"
 @k.feelings.feeling.opposite core.slot of=k.feelings.feeling key=opposite kind=atom kind=string core.source="hand-core 1"
 @k.feelings.feeling.reply core.slot of=k.feelings.feeling key=reply required=true kind=string core.source="hand-core 1"
@@ -30,4 +33,5 @@
 @k.feelings.word.caused_by core.word text=cause text=causes text=why text=because means=k.feelings.feeling.caused_by core.source="hand-core 1"
 @k.feelings.word.opposite core.word text=opposite means=k.feelings.feeling.opposite core.source="hand-core 1"
 @k.feelings.word.reply core.word text=reply text=say text=answer means=k.feelings.feeling.reply core.source="hand-core 1"
+@k.feelings.word.looks_like core.word text="looks like" text="same face" text=alike means=k.feelings.feeling.looks_like core.source="hand-core 1"
 @k.feelings.word.expression core.word text=expression text=face text=looks means=k.feelings.feeling.expression core.source="hand-core 1"
