@@ -1,0 +1,130 @@
+@phrase.dialogue.yes core.phrase
+    frame=false
+    doc="A bare agreement (dialogue module): read with nothing pending it is an answer to nothing."
+    alt=yes
+    alt=yeah
+    alt=yep
+    alt=yup
+    alt=sure
+    alt=of_course
+    alt=definitely
+    alt=absolutely
+
+@phrase.dialogue.no core.phrase
+    frame=false
+    doc="A bare refusal or withdrawal (dialogue module): right after an action it is a rejection of that action, never a command."
+    alt=no
+    alt=nope
+    alt=nah
+    alt=wait
+    alt=dont
+    alt=dont_do_it
+    alt=dont_do_that
+    alt=hold_on
+    alt=not_really
+
+@phrase.dialogue.polite core.phrase
+    frame=false
+    doc="Politeness and softeners around a bare yes or no (dialogue module): they carry no content."
+    alt=please
+    alt=thanks
+    alt=thank_you
+    alt=thanks_a_lot
+    alt=thing
+    alt=then
+    alt=now
+    alt=ok
+    alt=okay
+    alt=really
+    alt=though
+    alt=for_now
+
+@phrase.dialogue.said core.phrase
+    frame=false
+    doc="The user restates what he asked or typed (a correction of his own words): the rest of the clause is the request."
+    alt=i_said
+    alt=i_meant
+    alt=i_mean
+    alt=i_asked
+    alt=i_wanted
+    alt=i_typed
+    alt=i_wrote
+    alt=i_mistyped
+    alt=i_misspelled
+    alt=i_misspelt
+    alt=i_meant_to_say
+    alt=i_wanted_to_say
+    alt=i_was_asking
+    alt=what_i_said_was
+
+@phrase.dialogue.complaint core.phrase
+    frame=false
+    doc="A complaint about the last answer: it is about the last turn, never an action in a world."
+    alt=thats_wrong
+    alt=that_is_wrong
+    alt=this_is_wrong
+    alt=thats_not_right
+    alt=that_is_not_right
+    alt=not_what_i_asked
+    alt=not_what_i_wanted
+    alt=not_what_i_said
+    alt=you_got_it_wrong
+    alt=you_did_it_wrong
+    alt=you_misunderstood
+    alt=you_made_a_mistake
+    alt=you_are_wrong
+    alt=you_keep
+    alt=ridiculous
+    alt=nonsense
+    alt=stupid
+    alt=useless
+    alt=makes_no_sense
+    alt=makes_no_sense_at_all
+    alt=you_should_not
+    alt=you_should
+    alt=you_never
+
+@phrase.dialogue.why core.phrase
+    frame=false
+    doc="A question about the conversation itself (why did you, how did you get to): answered from the trace of the last turn."
+    alt=why
+    alt=how_come
+    alt=how_did_you
+    alt=how_did_it
+    alt=how_did_that
+    alt=what_made_you
+    alt=what_made_it
+    alt=on_what_basis
+
+@phrase.dialogue.history core.phrase
+    frame=false
+    doc="Markers of the past in a question about what happened earlier in the session."
+    alt=before
+    alt=earlier
+    alt=already
+    alt=previously
+    alt=a_moment_ago
+    alt=just_now
+    alt=at_the_start
+    alt=at_first
+    alt=yet
+
+@phrase.dialogue.session core.phrase
+    frame=false
+    doc="The session itself as the content of a request ('a chart about the current discussion'): offered as facts by the dialogue module."
+    alt=the_current_discussion
+    alt=the_current_conversation
+    alt=the_discussion
+    alt=this_discussion
+    alt=our_discussion
+    alt=the_conversation
+    alt=this_conversation
+    alt=our_conversation
+    alt=the_chat
+    alt=this_chat
+    alt=our_chat
+    alt=what_we_said
+    alt=what_we_did
+    alt=what_we_talked_about
+    alt=our_session
+    alt=this_session

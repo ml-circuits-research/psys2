@@ -1,0 +1,4 @@
+@t.session.dialogue.n1 core.test
+    input="Hello there"
+    expect="Hello"
+    doc="session.dialogue has no patterns of its own: it never answers by itself. Its behaviour is tested through the session (tests/dialogue.test.mjs)."

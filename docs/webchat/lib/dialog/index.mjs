@@ -13,7 +13,7 @@ import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=b
 import { loadWorlds } from '../worlds/index.mjs?v=cdba90e914';
 import { validateWorldSet } from '../worlds/validate.mjs?v=7f69f4ee91';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=146123c4fe';
+import { createInterpreter } from '../interpreter/index.mjs?v=d31230cd4b';
 import { createReasoner } from '../reasoner/index.mjs?v=7438bf1b67';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=e3e7c6c8ea';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=136a73b8b2';
@@ -30,7 +30,8 @@ import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } 
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=90ece0d788';
 import { checkValues } from './value-check.mjs?v=506216f967';
-import { Discourse } from './discourse.mjs?v=74a997b12b';
+import { Discourse } from './discourse.mjs?v=e0baa4f86e';
+import { Dialogue } from './dialogue.mjs?v=fddc7203ac';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=c113955232';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=864d2445e4';
@@ -309,6 +310,8 @@ export class DialogSession {
     this.isession = engine.interp.createSession();
     /** Discourse memory (spec 11, ADR-006): recent frames and the pending expectation. */
     this.discourse = new Discourse(this);
+    /** The dialogue module (WORLDS-AS-MODULES M1, worlds/session.dialogue): the focus, the kind of every turn, the trace the why-answers are read from. */
+    this.dialogue = new Dialogue(this);
     /** Persistent discussions and world instances (spec 13, ADR-008): bookkeeping around the turn, never changes a reading. */
     this.astra = createSessionAstra(this);
     this.sources = new Map();
@@ -1201,13 +1204,14 @@ export class DialogSession {
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
     let rs = null;
     try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
-    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
+    return { v: 1, discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
   restoreMemory(mem) {
     if (!mem || typeof mem !== 'object' || mem.v !== 1) return false;
     this.discourse.load(mem.discourse);
+    if (mem.dialogue) this.dialogue.load(mem.dialogue);
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
     if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
     if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
@@ -1221,7 +1225,7 @@ export class DialogSession {
     return {
       isession: this.isession.clone(), msg: this._msg, recent: [...(this._recentWorlds ?? [])], lang: [this._sessionLang, this._weakRo],
       discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
-      sources: new Set(this.sources.keys()), astra: this.astra?.capture(),
+      sources: new Set(this.sources.keys()), astra: this.astra?.capture(), dialogue: this.dialogue.toJSON(),
     };
   }
 
@@ -1231,6 +1235,7 @@ export class DialogSession {
     this.isession = snap.isession; this._msg = snap.msg; this._recentWorlds = snap.recent; [this._sessionLang, this._weakRo] = snap.lang;
     Object.assign(this.discourse, snap.discourse);
     this.astra?.rollback(snap.astra);
+    if (snap.dialogue) this.dialogue.load(snap.dialogue);
     for (const k of [...this.sources.keys()]) if (!snap.sources.has(k)) this.sources.delete(k);
   }
 
@@ -1289,8 +1294,10 @@ export class DialogSession {
     return r;
   }
 
-  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader } = {}, override = null) {
+  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=7ddf29d0df').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w);
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
     const { set, interp, translator } = engine;
@@ -1356,13 +1363,16 @@ export class DialogSession {
     let meta = null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
     let formalText = english;
     if (!icpt) {
-      meta = await perf.time('discourse', () => disc.meta(english, pend, sid));
+      // M1: the kind of the turn is read BEFORE any tab world: a fragment is completed from the focus, a complaint or a why-question is answered from the trace, a correction amends the last request
+      meta = await perf.time('dialogue', () => this.dialogue.turn(english, { pend, sid, correction })) ?? await perf.time('discourse', () => disc.meta(english, pend, sid));
       if (meta?.rewrite) formalText = meta.rewrite;
       if (meta?.pre) pre = meta.pre;
       if (!pre && !meta) {
         if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
         if (!pre) pre = await perf.time('discourse', () => disc.ellipsis(english, sid));
         if (!pre) pre = await disc.pronoun(english, sid);
+        // M1: what the frames of the discourse layer could not complete (no verb of its own, a list) is completed from the dialogue focus; the tab gets a complete request or nothing
+        if (!pre) { const c = await perf.time('dialogue', () => this.dialogue.complete(english, sid)); if (c?.pre) { pre = c.pre; meta = null; } else if (c?.rewrite) formalText = c.rewrite; }
         // "and how many days are in a week?" with nothing to continue: the connective joins nothing, the question stands on its own
         // "and a heading Dairy too": a fragment nothing could continue loses its trailing "too" (it must not become part of the text)
         if (!pre && english !== engine.interp.lang.stripConnective(english)) formalText = engine.interp.lang.stripTrailing(english);
@@ -1464,7 +1474,7 @@ export class DialogSession {
       }
       // honest scope: the world of the open tab may refuse a message it cannot talk about, in its own words, with the nearest things it can (hook `outOfScope`, the Talk tab)
       if (seg.unparsed) {
-        const tw = this.context().tabWorld;
+        const cx = this.context(), tw = cx.tabWorld ?? cx.lastWorld;   // no tab open: the world last used says what it can do
         const oos = tw ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
         if (typeof oos?.say === 'string' && oos.say) {
           lines.push([T(oos.say)]);
@@ -1615,6 +1625,7 @@ export class DialogSession {
     this.isession.rs?.commitTurn(this._msg, english);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore, kind: ['undo', 'redo'].includes(meta?.info?.kind) ? 'keep' : segments.some((x) => /undo/i.test(x.match?.patternId ?? '')) ? 'undo' : segments.some((x) => /redo/i.test(x.match?.patternId ?? '')) ? 'redo' : null });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
+    this.dialogue.record({ english, original: text, kind: this.dialogue._kind ?? meta?.info?.dialogue ?? (correction ? 'correction' : 'new'), metaKind: meta?.info?.kind ?? null, segments, statuses, reply: englishReply, effect: disc.actions[0]?.turn === this._msg, tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };
     const feedback = meta?.feedback ?? null;
     const state = {};
