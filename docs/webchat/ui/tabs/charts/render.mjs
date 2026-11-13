@@ -1,4 +1,4 @@
-// Chart.js configuration for the Charts tab: turns a chart view (worlds/data.charts/ops.mjs chartView) into Chart.js options,
+// Chart.js configuration for the Charts tab: turns a chart view (worlds/data.charts/chart.mjs chartView) into Chart.js options,
 // updates a live chart in place (so bars grow, slices turn and colors fade on every change) and draws value labels.
 
 export function themeOf(el) {

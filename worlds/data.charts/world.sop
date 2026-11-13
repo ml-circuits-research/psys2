@@ -9,7 +9,8 @@
     imports=world.kids.tasks
     imports=world.kids.animals
     formalization=rules
-    reasoner=matrix
+    imports=world.acts
+    imports=world.lang.common
     undo=chart.undo
     redo=chart.redo
     source="the numbers in your charts"

@@ -8,7 +8,6 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { toState as geoState, adopt as geoAdopt } from '../worlds/geo.map/fns.mjs';
-import { toState as chartState, adopt as chartAdopt } from '../worlds/data.charts/fns.mjs';
 
 const engineWith = (reasoner) => createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 const matrix = await engineWith('matrix');
@@ -19,8 +18,8 @@ const inst = (s, id) => s.isession.rs.insts.get(id).world;
 const stateOf = (s, id) => JSON.parse(JSON.stringify(s.state()[id]));
 const sameState = (a, b) => { const strip = ({ history, future, ...rest }) => rest; return assert.deepEqual(strip(a), strip(b)); };   // the undo history is the library's in matrix mode, a key of the state in ops
 
-test('both worlds opt in, say so in world.sop, and the matrices load without a problem', () => {
-  for (const id of ['geo.map', 'data.charts']) {
+test('geo.map opts in, says so in world.sop, and the matrix loads without a problem (data.charts is a schema world, with no matrix: spec 21)', () => {
+  for (const id of ['geo.map']) {
     const w = matrix.set.get(id);
     assert.equal(w.reasoner, 'matrix', id);
     assert.ok(w.undoAction && w.redoAction, `${id} undoes and redoes through the library`);
@@ -113,67 +112,4 @@ test('geo.map: undo and redo go through the library (undo=, redo=) and say it in
   assert.equal(stateOf(s, 'geo.map').markers.length, 1);
   assert.equal(stateOf(s, 'geo.map').history, undefined, 'the history is the library\'s, not a key of the state');
   assert.equal(inst(s, 'geo.map').ofType('geo.map.marker').length, 1);
-});
-
-test('data.charts: the chart and its numbers are wires, derived back without loss; the totals are rules and aggregates', async () => {
-  const { s } = await run(matrix, 'charts', ['Make a chart: apples 5, pears 3, plums 8', 'add bananas 4', 'make it a pie chart']);
-  const w = inst(s, 'data.charts');
-  assert.equal(w.ofType('data.charts.chart').length, 1);
-  assert.equal(w.ofType('data.charts.point').length, 4);
-  assert.equal(JSON.stringify(chartState({ find: (t) => w.ofType(t) })), JSON.stringify(s.state()['data.charts']), 'library = session state');
-  assert.deepEqual(chartAdopt({ state: stateOf(s, 'data.charts'), find: (t) => w.ofType(t) }), { retract: [], tell: '', sets: [], replace: [] });
-  const lt = Object.fromEntries(w.ofType('data.charts.labeltotal').map((x) => [JSON.parse(x.attrs.label[0]), x.attrs.total[0]]));
-  assert.deepEqual(lt, { Apples: '5', Pears: '3', Plums: '8', Bananas: '4' });
-  const ct = w.ofType('data.charts.charttotal')[0].attrs;
-  assert.deepEqual([ct.sum, ct.count, ct.max, ct.min].map((a) => a[0]), ['20', '4', '8', '3']);
-  assert.deepEqual(w.ofType('data.charts.top').map((x) => JSON.parse(x.attrs.label[0])), ['Plums']);
-  assert.deepEqual(w.ofType('data.charts.bottom').map((x) => JSON.parse(x.attrs.label[0])), ['Pears']);
-});
-
-test('data.charts: several series and ties come out of the rules (a chart of what everyone has)', async () => {
-  const { s, out } = await run(matrix, 'charts', ['Make a chart: apples 5, pears 5, plums 2']);
-  assert.match(out[0], /apples 5, pears 5 and plums 2/);
-  assert.deepEqual(inst(s, 'data.charts').ofType('data.charts.top').map((x) => JSON.parse(x.attrs.label[0])).sort(), ['Apples', 'Pears'], 'a tie: both labels are on top');
-  assert.match((await s.send('what is the biggest', {})).text, /^Apples and Pears are tied for the biggest, with 5 each\.$/);
-  const two = JSON.parse(JSON.stringify(s.state()['data.charts']));
-  const c = two.charts[0];
-  c.datasets.push({ label: 'Second', data: [1, 2, 3], color: null });
-  Object.assign(s.isession.state['data.charts'], two);
-  assert.equal(s.isession.rs.adoptState(s.isession), null);
-  const w = inst(s, 'data.charts');
-  assert.deepEqual(w.ofType('data.charts.seriestotal').map((x) => [JSON.parse(x.attrs.series[0]), x.attrs.total[0]]).sort(), [['Second', '6'], ['Value', '12']]);
-  assert.deepEqual(w.ofType('data.charts.top').map((x) => JSON.parse(x.attrs.label[0])), ['Pears']);   // 6, 7, 5: pears is on top with its second series
-  const q = await s.send('what is the total', {});
-  assert.match(q.text, /^The total is 18 \(Value 12, Second 6\)\.$/);
-});
-
-test('data.charts: a state that cannot be (the same label twice) is refused with the reason and the chart stays as it was', async () => {
-  const { s, out } = await run(matrix, 'charts', ['Make a chart: apples 5, pears 3, plums 8', 'rename apples to pears']);
-  assert.equal(out[1], 'That does not add up. Pears is in the chart twice.');
-  assert.deepEqual(stateOf(s, 'data.charts').charts[0].labels, ['Apples', 'Pears', 'Plums']);
-  assert.equal(inst(s, 'data.charts').ofType('data.charts.point').length, 3);
-  const ops1 = await run(ops, 'charts', ['Make a chart: apples 5, pears 3, plums 8', 'rename apples to pears']);
-  assert.equal(ops1.out[1], 'OK, apples is now called pears.', 'ops keeps the duplicate: the refusal is a gain of the matrix');
-});
-
-test('data.charts: the same replies, statuses and state with the switch on and off (a scripted session)', async () => {
-  const script = ['Make a chart: apples 5, pears 3, plums 8', 'what is the biggest', 'what is the smallest', 'what is the total', 'what is the average', 'how much is plums', 'what percent is pears', 'compare apples and pears', 'what is the difference between plums and pears', 'how many items are there', 'add bananas 4', 'change pears to 6', 'make it a pie chart', 'sort by size', 'what is the biggest', 'undo', 'undo', 'undo the undo', 'remove plums', 'what is the total', 'how much is grapes'];
-  const m = await run(matrix, 'charts', script);
-  const o = await run(ops, 'charts', script);
-  assert.deepEqual(m.out, o.out);
-  sameState(stateOf(m.s, 'data.charts'), stateOf(o.s, 'data.charts'));
-});
-
-test('data.charts: undo and redo go through the library (undo=, redo=), the wires follow', async () => {
-  const { s, out } = await run(matrix, 'charts', ['Make a chart: apples 5, pears 3', 'add plums 8', 'undo', 'undo the undo', 'what is the total']);
-  assert.match(out[2], /undid the last change to the chart/);
-  assert.equal(out[3], 'OK, I did it again.');
-  assert.equal(out[4], 'The total is 16.');
-  assert.equal(stateOf(s, 'data.charts').history, undefined);
-  assert.equal(inst(s, 'data.charts').ofType('data.charts.point').length, 3);
-});
-
-test('data.charts: "why?" says what the numbers came from (the user\'s words, or the source of the world)', async () => {
-  const { out } = await run(matrix, 'charts', ['Make a chart: apples 5, pears 3', 'what is the total', 'why?']);
-  assert.match(out[2], /I worked that out from what you told me: "Make a chart: apples 5, pears 3"/);
 });
