@@ -94,10 +94,35 @@ export async function knowledgeFallback(dialog, english, segments, statuses) {
  * Look up the things the readings need but their worlds do not hold: the open-slot arguments of a request (`kt`, `thing`) and the content words a reading left out.
  * Fills the catalog's settled cache so that operations read it synchronously (`ctx.knowledge.peek`). Never throws. Returns what was looked up.
  */
+/** How long a lookup may take before the user is told it is running (a cached shard answers sooner and says nothing). */
+export const NOTICE_AFTER_MS = 350;
+/**
+ * A lookup of a thing to draw that is still running after NOTICE_AFTER_MS says so ("Looking up how a pineapple looks..."): `engine.onNotice(text)` gets the line in
+ * the user's language (the translator's rules, one short sentence), and the drawing follows as the reply. Nothing is said when the host has no `onNotice`.
+ */
+async function noticeIfSlow(dialog, lookup, name) {
+  const notice = dialog.engine?.onNotice;
+  if (!notice) return;
+  let timer;
+  const slow = await Promise.race([lookup.then(() => false, () => false), new Promise((res) => { timer = setTimeout(() => res(true), NOTICE_AFTER_MS); })]);
+  clearTimeout(timer);
+  if (!slow) return;
+  try {
+    let text = `Looking up how ${article(name)} looks…`;
+    const lang = dialog._waLang;
+    if (lang && lang !== 'en' && lang !== 'unknown' && dialog.engine.translator) {
+      const r = await (dialog.engine.translator.rules ?? dialog.engine.translator).translate(text, { from: 'en', to: lang });
+      const t = typeof r === 'string' ? r : r?.text;
+      if (t && !r?.unknown?.length) text = t;
+    }
+    notice(text);
+  } catch { /* no notice */ }
+}
+
 export async function preloadThings(dialog, segments) {
   const cat = knowledgeOf(dialog);
   if (!cat) return [];
-  const names = new Set();
+  const names = new Set(), drawNames = new Set();
   const foreign = !!dialog._waLang && dialog._waLang !== 'en';
   for (const seg of segments ?? []) {
     if (seg.unparsed) continue;
@@ -106,14 +131,20 @@ export async function preloadThings(dialog, segments) {
       // the reading's world says which slots of its action are open (a thing it has no picture of); `thing` is the generic argument of the same idea
       if (rq?.world) {
         const slots = dialog.engine.interp.hook(dialog.isession, rq.world, 'openSlots', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
-        for (const n of Array.isArray(slots) ? slots : []) if (n && String(n).split(/\s+/).length <= 3) names.add(String(n));
+        for (const n of Array.isArray(slots) ? slots : []) if (n && String(n).split(/\s+/).length <= 3) { names.add(String(n)); drawNames.add(String(n)); }
         if (rq.args.thing) names.add(String(rq.args.thing).toLowerCase());
       }
       for (const w of leftOut(seg, foreign).slice(0, 3)) names.add(w);
     } catch { /* a reading that cannot be inspected needs nothing */ }
   }
   const done = [];
-  for (const n of [...names].slice(0, 6)) { try { const th = await cat.thing(n); done.push({ name: n, hit: !!th, shards: th?.loaded ?? [] }); } catch { /* no knowledge is no hit */ } }
+  for (const n of [...names].slice(0, 6)) {
+    try {
+      const p = cat.thing(n);
+      if (drawNames.has(n) && cat.peek?.(n) === undefined) await noticeIfSlow(dialog, p, n);
+      const th = await p; done.push({ name: n, hit: !!th, shards: th?.loaded ?? [] });
+    } catch { /* no knowledge is no hit */ }
+  }
   return done;
 }
 

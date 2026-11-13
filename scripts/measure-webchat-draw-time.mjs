@@ -10,6 +10,7 @@ import { openChat } from './test-webchat-turns.mjs';
 
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
 const THINGS = (arg('--things', 'pineapple,melon,parachute,helicopter,banana,lime,grapes,watermelon,tangerine,lemon')).split(',');
+const SCENE_N = Number(arg('--scene', 20));
 const REDRAWS = Number(arg('--redraws', 30));
 const MATRIX = { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' };
 const pct = (a, p) => { const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(p * s.length))]; };
@@ -21,7 +22,7 @@ const inked = (c) => c.pg.evaluate(() => {
 });
 
 const c = await openChat({ settings: MATRIX, throttle: 4, viewport: { width: 390, height: 844, deviceScaleFactor: 2 } });
-const first = [], turn = [], redraw = [], rows = [];
+const first = [], turn = [], redraw = [], rows = [], scene20 = [];
 try {
   for (const t of THINGS) {
     await c.say('clear everything');
@@ -43,10 +44,25 @@ try {
       return out;
     }, REDRAWS);
     const parts = await c.pg.evaluate(async () => { const s = await import('./worlds/art.draw/scene.mjs'); const st = window.psys2.session.state()['art.draw']; return st.objects[0] ? s.partsOf(st.objects[0]).length : 0; });
+    // a picture of SCENE_N copies of this imported thing (the scene redraw of a busy picture: every part of every object, polygons with their points)
+    const sc = await c.pg.evaluate(async (n, reps) => {
+      const [{ createRenderer }, scene, rough] = await Promise.all([import('./ui/tabs/draw/render.mjs'), import('./worlds/art.draw/scene.mjs'), import('./vendor/draw/rough.mjs')]);
+      const R = rough.default ?? rough.rough, rend = createRenderer(R, scene);
+      const st = JSON.parse(JSON.stringify(window.psys2.session.state()['art.draw'])); const o0 = st.objects[0];
+      st.objects = Array.from({ length: n }, (_, i) => ({ ...o0, id: `m${i}`, x: 40 + (i % 5) * 140, y: 60 + Math.floor(i / 5) * 120, size: 90 }));
+      const cv = document.createElement('canvas'); cv.width = 780; cv.height = 546;
+      const ctx = cv.getContext('2d'); ctx.setTransform(0.78, 0, 0, 0.78, 0, 0);
+      const out = [];
+      for (let i = 0; i < reps; i++) { const a = performance.now(); rend.drawScene(ctx, R.canvas(cv), st, { selected: null }); out.push(performance.now() - a); }
+      return { ms: out, parts: scene.partsOf(o0).length };
+    }, SCENE_N, Math.min(REDRAWS, 15));
+    scene20.push({ thing: t, parts: sc.parts, p50: +pct(sc.ms.slice(1), 0.5).toFixed(1), p95: +pct(sc.ms.slice(1), 0.95).toFixed(1), cold: +sc.ms[0].toFixed(1) });
     first.push(tInk); turn.push(tTurn); redraw.push(...ms);
     rows.push({ thing: t, drawn: objs[0]?.thing === t, parts, turnMs: tTurn, firstInkMs: tInk, redrawP50: +pct(ms.slice(1), 0.5).toFixed(1), redrawP95: +pct(ms.slice(1), 0.95).toFixed(1), ink: +ink.toFixed(3), reply: r.reply.slice(0, 40) });
   }
   console.table(rows);
+  console.log(`scene of ${SCENE_N} copies of the object:`); console.table(scene20);
+  { const all = scene20.flatMap((r) => [r.p50, r.p95]); console.log(`scene redraw (${SCENE_N} objects): median of p50 ${pct(scene20.map((r) => r.p50), 0.5)} ms, worst p95 ${Math.max(...all)} ms`); }
   console.log(`first draw (Enter -> inked): p50 ${pct(first, 0.5)} ms, p95 ${pct(first, 0.95)} ms; turn only: p50 ${pct(turn, 0.5)} ms, p95 ${pct(turn, 0.95)} ms`);
   console.log(`redraw (drawScene, ${redraw.length} calls over ${THINGS.length} objects, the cold first call of each object included; the per-object p50/p95 drop it): p50 ${pct(redraw, 0.5).toFixed(1)} ms, p95 ${pct(redraw, 0.95).toFixed(1)} ms, max ${Math.max(...redraw).toFixed(1)} ms`);
   console.log(c.errors.length ? `page errors: ${c.errors.join(' | ')}` : 'no page errors');
