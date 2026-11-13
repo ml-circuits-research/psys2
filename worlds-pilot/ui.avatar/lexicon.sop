@@ -1,0 +1,126 @@
+@gen.ui.avatar.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@lex.ui.avatar.kinds core.lexicon
+    class=noun
+    doc="Kinds of things of this world (from schema.sop)"
+    word=hair_back
+    word=hair_backs
+    word=hair
+    word=long_hair
+    word=shoulders
+    word=shoulder
+    word=clothes
+    word=clothe
+    word=neck
+    word=necks
+    word=cervix
+    word=ears
+    word=ear
+    word=head
+    word=heads
+    word=head_shape
+    word=caput
+    word=cheeks
+    word=cheek
+    word=blush
+    word=freckles
+    word=freckle
+    word=beard
+    word=beards
+    word=face_fungus
+    word=face_fungu
+    word=whiskers
+    word=whisker
+    word=mouth
+    word=mouths
+    word=oral_cavity
+    word=oral_fissure
+    word=rima_oris
+    word=rima_ori
+    word=moustache
+    word=moustaches
+    word=moustach
+    word=mustache
+    word=nose
+    word=noses
+    word=nos
+    word=olfactory_organ
+    word=eyes
+    word=eye
+    word=eyebrows
+    word=eyebrow
+    word=glasses
+    word=glass
+    word=sunglasses
+    word=sunglass
+    word=spectacles
+    word=spectacle
+    word=specs
+    word=spec
+    word=eyeglasses
+    word=eyeglass
+    word=hair_front
+    word=hair_fronts
+    word=fringe
+    word=earrings
+    word=earring
+    word=hat
+    word=hats
+    word=cap
+    word=crown
+    word=helmet
+    word=chapeau
+    word=lid
+    word=moment
+    word=moments
+    word=wink
+    word=nod
+    word=dance
+    word=wave
+    word=spin
+    word=jump
+    word=bounce
+    word=wiggle
+    word=blink
+
+@lex.ui.avatar.attrs core.lexicon
+    class=modifier
+    doc="Attributes (from schema.sop)"
+    word=colour
+    word=color
+    word=size
+
+@lex.ui.avatar.values core.lexicon
+    class=modifier
+    doc="Values the attributes take (from schema.sop)"
+    word=red
+    word=blue
+    word=green
+    word=yellow
+    word=orange
+    word=purple
+    word=pink
+    word=brown
+    word=black
+    word=white
+    word=grey
+    word=gray
+    word=gold
+    word=silver
+
+@lex.ui.avatar.more core.lexicon
+    class=modifier
+    doc="Comparatives that mean more of an attribute"
+    word=bigger
+    word=larger
+    word=longer
+    word=wider
+
+@lex.ui.avatar.less core.lexicon
+    class=modifier
+    doc="Comparatives that mean less of an attribute"
+    word=smaller
+    word=tinier
+    word=shorter
+    word=narrower

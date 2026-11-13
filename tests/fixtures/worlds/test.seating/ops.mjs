@@ -17,5 +17,5 @@ export const redo = (ctx, args = {}) => X.operation(ctx, 'redo', args);
 export const save = (ctx, args = {}) => X.operation(ctx, 'save', args);
 export const load = (ctx, args = {}) => X.operation(ctx, 'load', args);
 export const interceptInput = (ctx, text) => X.interceptInput(ctx, text);
-export const outOfScope = (ctx, a = {}) => X.lastResort(ctx.state, a.text);
+export const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);
 export const executor = X;

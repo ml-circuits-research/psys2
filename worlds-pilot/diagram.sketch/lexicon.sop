@@ -1,0 +1,84 @@
+@gen.diagram.sketch.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@lex.diagram.sketch.kinds core.lexicon
+    class=noun
+    doc="Kinds of things of this world (from schema.sop)"
+    word=shape
+    word=shapes
+    word=circle
+    word=circles
+    word=square
+    word=squares
+    word=rectangle
+    word=rectangles
+    word=triangle
+    word=triangles
+    word=diamond
+    word=diamonds
+    word=ellipse
+    word=ellipses
+    word=ellips
+    word=oval
+    word=hexagon
+    word=hexagons
+    word=star
+    word=stars
+    word=box
+    word=boxes
+    word=node
+    word=nodes
+    word=dot
+    word=arrow
+    word=arrows
+    word=line
+    word=lines
+    word=connection
+    word=connections
+    word=link
+    word=links
+    word=edge
+    word=text
+    word=texts
+    word=label
+    word=labels
+    word=caption
+    word=note
+
+@lex.diagram.sketch.attrs core.lexicon
+    class=modifier
+    doc="Attributes (from schema.sop)"
+    word=colour
+    word=color
+    word=fill
+    word=size
+
+@lex.diagram.sketch.values core.lexicon
+    class=modifier
+    doc="Values the attributes take (from schema.sop)"
+    word=red
+    word=blue
+    word=green
+    word=yellow
+    word=orange
+    word=purple
+    word=pink
+    word=brown
+    word=black
+    word=white
+    word=grey
+    word=gray
+    word=gold
+    word=silver
+
+@lex.diagram.sketch.more core.lexicon
+    class=modifier
+    doc="Comparatives that mean more of an attribute"
+    word=bigger
+    word=larger
+
+@lex.diagram.sketch.less core.lexicon
+    class=modifier
+    doc="Comparatives that mean less of an attribute"
+    word=smaller
+    word=tinier

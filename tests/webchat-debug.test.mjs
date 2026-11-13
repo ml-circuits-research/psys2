@@ -11,7 +11,7 @@ const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
 
 test('developer mode is off by default and the sections are the six of the task', () => {
   assert.equal(DEFAULT_SETTINGS.devMode, false);
-  assert.deepEqual(DEBUG_SECTIONS.map(([id]) => id), ['commands', 'turns', 'dry', 'state', 'world', 'models']);
+  assert.deepEqual(DEBUG_SECTIONS.map(([id]) => id), ['commands', 'turns', 'dry', 'state', 'world', 'models', 'grid']);
   assert.equal(RING_MAX, 200);
   assert.equal(LAST_TURNS, 20);
 });

@@ -1,0 +1,16 @@
+@legend.ui.avatar core.legend
+    namespace=ui.avatar
+    version=0.3.0
+    imports=core
+    imports=kids.common
+    doc="The avatar: one face drawn from the parts of the knowledge world k.faces (slots with anchor boxes, variants with plain features, presets, expressions, colours). The state is the name and the choices (a variant for each slot, four face colours, adjustments of size and place, the expression); the data is read from the catalog by the host."
+
+@ui.avatar.face core.type
+    extends=core.state
+    doc="The face and its name. The world state holds name and face (slots, colours, paint, adj, expression, base, saved faces, undo history)."
+    example="Put on a hat."
+
+@ui.avatar.face.name core.key
+    value=string
+    card=one
+    ask="What is your name?"

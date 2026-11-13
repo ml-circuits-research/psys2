@@ -1,6 +1,6 @@
 // Writes worlds/acts/lexicon.sop from the seed words in worlds/acts/acts.mjs (spec 21). The file is generated, never edited; tests/acts.test.mjs checks it.
 import { writeFile } from 'node:fs/promises';
-import { SEED_VERBS, REL_WORDS, DET_WORDS } from '../worlds/acts/acts.mjs';
+import { SEED_VERBS, REL_WORDS, DET_WORDS, DIR_WORDS } from '../worlds/acts/acts.mjs';
 
 const phrase = (id, doc, words, frame = false) => `@phrase.acts.${id} core.phrase\n${frame ? '' : '    frame=false\n'}    doc=${JSON.stringify(doc)}\n${words.map((w) => `    alt=${w}`).join('\n')}\n`;
 export function build() {
@@ -8,6 +8,7 @@ export function build() {
   for (const [act, words] of Object.entries(SEED_VERBS)) out.push(phrase(`verb.${act}`, `Seed words of the act ${act} (temporary, to be replaced by k.actions).`, words));
   out.push(phrase('det', 'Determiners before a thing.', DET_WORDS, true));
   out.push(`@lex.acts.rel core.lexicon\n    class=trigger\n    doc="Relation words of the role place (at, on, next to ...)."\n${REL_WORDS.map((w) => `    word=${w}`).join('\n')}\n`);
+  out.push(`@lex.acts.dir core.lexicon\n    class=trigger\n    doc="Direction words of a move of a thing (closer together, apart, higher, lower ...)."\n${DIR_WORDS.map((w) => `    word=${w}`).join('\n')}\n`);
   return out.join('\n');
 }
 if (import.meta.url === `file://${process.argv[1]}`) { await writeFile(new URL('../worlds/acts/lexicon.sop', import.meta.url), build()); console.log('worlds/acts/lexicon.sop written'); }

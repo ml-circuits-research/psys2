@@ -1,0 +1,46 @@
+@gen.diagram.sketch.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@tpl.diagram.sketch.make core.template
+    for=action.diagram.sketch.make
+    text="{note}"
+
+@tpl.diagram.sketch.remove core.template
+    for=action.diagram.sketch.remove
+    text="{note}"
+
+@tpl.diagram.sketch.change core.template
+    for=action.diagram.sketch.change
+    text="{note}"
+
+@tpl.diagram.sketch.connect core.template
+    for=action.diagram.sketch.connect
+    text="{note}"
+
+@tpl.diagram.sketch.group core.template
+    for=action.diagram.sketch.group
+    text="{note}"
+
+@tpl.diagram.sketch.pick core.template
+    for=action.diagram.sketch.pick
+    text="{note}"
+
+@tpl.diagram.sketch.copy core.template
+    for=action.diagram.sketch.copy
+    text="{note}"
+
+@tpl.diagram.sketch.ask core.template
+    for=action.diagram.sketch.ask
+    text="{note}"
+
+@tpl.diagram.sketch.undo core.template
+    for=action.diagram.sketch.undo
+    text="{note}"
+
+@tpl.diagram.sketch.redo core.template
+    for=action.diagram.sketch.redo
+    text="{note}"
+
+@tpl.diagram.sketch.place core.template
+    for=action.diagram.sketch.place
+    text="{note}"

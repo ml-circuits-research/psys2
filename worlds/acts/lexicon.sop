@@ -14,6 +14,12 @@
     alt=i_need
     alt=i_want
     alt=give_me
+    alt=wear
+    alt=put_on
+    alt=give_yourself
+    alt=draw
+    alt=sketch
+    alt=spawn
 
 @phrase.acts.verb.remove core.phrase
     frame=false
@@ -29,6 +35,9 @@
     alt=drop
     alt=kick_out
     alt=throw_away
+    alt=lose
+    alt=hide
+    alt=ditch
 
 @phrase.acts.verb.set core.phrase
     frame=false
@@ -141,6 +150,8 @@
     alt=one
     alt=some
     alt=our
+    alt=your
+    alt=ur
 
 @lex.acts.rel core.lexicon
     class=trigger
@@ -162,3 +173,19 @@
     word=with
     word=around
     word=between
+
+@lex.acts.dir core.lexicon
+    class=trigger
+    doc="Direction words of a move of a thing (closer together, apart, higher, lower ...)."
+    word=closer
+    word=closer_together
+    word=together
+    word=apart
+    word=further_apart
+    word=wider_apart
+    word=higher
+    word=lower
+    word=up
+    word=down
+    word=left
+    word=right
