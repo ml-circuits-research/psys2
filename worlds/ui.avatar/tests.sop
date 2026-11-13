@@ -1784,3 +1784,46 @@
     input="would you say you are happy"
     expect="happy"
     doc="GAPS-1"
+
+@t.ui.avatar.f01 core.test
+    input="Draw a face with a long nose and small green eyes."
+    expect="narrow green eyes"
+    expectState="face.slots.nose=long"
+    expectState="face.active=true"
+    session=face
+
+@t.ui.avatar.f02 core.test
+    input="Another nose."
+    expect="nose now"
+    session=face
+
+@t.ui.avatar.f03 core.test
+    input="Eyes closer together."
+    expect="closer together"
+    session=face
+
+@t.ui.avatar.f04 core.test
+    input="Make it happy."
+    expectState="face.expression=happy"
+    session=face
+
+@t.ui.avatar.f05 core.test
+    input="Draw a woman with curly red hair and freckles."
+    expect="I have no freckles yet"
+    expectState="face.slots.hair=curly"
+    session=face
+
+@t.ui.avatar.f06 core.test
+    input="Save this as Anna."
+    expect="saved this face as Anna"
+    session=face
+
+@t.ui.avatar.f07 core.test
+    input="Be a robot."
+    expectState="face.active=false"
+    session=face
+
+@t.ui.avatar.f08 core.test
+    input="Raise the eyebrows."
+    expect="only my drawn face can do that"
+    session=face

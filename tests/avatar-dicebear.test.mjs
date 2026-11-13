@@ -57,9 +57,10 @@ test('world: at least 60 tests, all pass; ops.mjs imports nothing', async () => 
   const r = await runWorldTests(engine, 'ui.avatar');
   assert.deepEqual(r.failed, []);
   const src = await readFile(root('worlds/ui.avatar/ops.mjs'), 'utf8');
-  assert.doesNotMatch(src, /^\s*import[\s{(*]/m);
+  const imports = [...src.matchAll(/^\s*import[\s{(*].*$/gm)].map((m) => m[0].trim());
+  assert.deepEqual(imports, ["import * as Face from './faceops.mjs';"], 'the one import: the drawn face (AVATAR-FROM-PARTS), a sibling file');
   assert.doesNotMatch(src, /\bimport\s*\(/);
-  assert.doesNotMatch(src, /\bfrom ['"]/);
+  assert.equal([...src.matchAll(/\bfrom ['"]/g)].length, 1);
 });
 
 test('every lexicon entry the formalizer can match has at most three words and a singular last word', () => {
