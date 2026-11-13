@@ -18,7 +18,7 @@
 
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=18f06ec836';
 import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
-import * as space from '../space/space.mjs?v=0c5c89b98e';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
+import * as space from '../space/space.mjs?v=f98ca4dd42';   // where things are, which one is meant by its place, how far a move goes, free layouts (shared module, specs/18)
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';   // the catalog of drawable things (knowledge/k.objects), shared with the drawing board
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 

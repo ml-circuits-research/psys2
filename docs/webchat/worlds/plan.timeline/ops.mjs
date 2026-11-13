@@ -1,5 +1,5 @@
 // GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.
-import { createExecutor, deserializeSchema } from '../acts/acts.mjs?v=c26ea418c9';
+import { createExecutor, deserializeSchema } from '../acts/acts.mjs?v=60144f6ae1';
 import { withView, viewOps } from '../session.things/view.mjs?v=4fceb26000';
 const SCHEMA = {"id":"time","noun":"timeline","acts":["make","remove","change","ask","copy","send","undo","redo"],"limits":{"items":60,"history":30},"kinds":{"moment":{"name":"moment","plural":"moments","numbered":false,"named":true,"max":null,"in":null,"capacity":null,"acts":[],"any":false,"words":["event","events","day","days","weekday","weekdays","month","months","season","seasons","holiday","holidays","birthday","birthdays"],"aspects":["temporal"]}},"attrs":{"when":{"name":"when","of":["moment"],"type":"number","values":[],"min":0,"max":3000,"def":"1","more":["later"],"less":["earlier"],"words":["year","hour","date","time"],"step":1}},"doc":"Moments in a row by time: the things of the session that have a time.","tabOnly":true,"view":{"aspects":["temporal"],"words":["timeline","time_line","calendar"]}};
 const H = withView(SCHEMA, 'plan.timeline', {});

@@ -8,7 +8,7 @@
  * The wires written: a kind-of fact is a word sense (`k.words.sense ... is_a=`), an ability or a habitat is a commonsense fact (`k.commonsense.thing ... can= / cannot= / at= / made_of=`), a thing of
  * the user is `session.learned.own kind= name= owner=user`.
  */
-import { parseFact, lemmaCandidates } from './facts.mjs?v=d578d003c4';
+import { parseFact, lemmaCandidates } from './facts.mjs?v=0391718f14';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 // TEMPORARY (until k.actions / k.commonsense carry the abilities of kinds): the verbs read as an ability when a bare plural says them ("ducks float"). Other forms need no list.

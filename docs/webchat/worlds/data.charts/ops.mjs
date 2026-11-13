@@ -18,7 +18,7 @@
 //   is probed by "put the chart in the document".
 // The pure helpers at the bottom (chartView, csv) are also imported by the tab, so the tab draws exactly what the state says.
 
-import { colourName, colourHex, colourPhrases } from '../../lib/knowledge/values.mjs?v=ec4fe4794e';   // the one colour reader (k.values)
+import { colourName, colourHex, colourPhrases } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const TAB = 'charts';
 const TYPES = ['bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter'];

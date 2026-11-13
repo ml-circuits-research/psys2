@@ -34,11 +34,11 @@ svg{display:block;min-width:600px;width:100%;height:auto}svg text{fill:var(--fg)
 <li><span class="big"><b class="n">3</b>act</span>
 <dl><dt>decides</dt><dd><code>the chosen world's patterns (src/interpreter); worlds/acts for schema worlds</code></dd><dt>from</dt><dd>patterns.sop of the world, or the acts of its schema</dd>
 <dt>alternatives</dt><dd><span class="big">median 1</span>, max 2 <small>(readings kept: the winning pattern, its runner-up, the other readings; ran on 132 of 165 turns)</small></dd>
-<dt>seen deciding</dt><dd>art.draw 93, games.hangman 12, diagram.sketch 11, ui.avatar 10, session.things 3</dd></dl></li>
+<dt>seen deciding</dt><dd>art.draw 93, games.hangman 12, diagram.sketch 11, ui.avatar 9, docs.editor 3</dd></dl></li>
 <li><span class="big"><b class="n">4</b>things</span>
 <dl><dt>decides</dt><dd><code>the world's lexicon; worlds/session.things; the knowledge catalog</code></dd><dt>from</dt><dd>lexicon.sop, the registry of things, the catalog (knowledge/k.objects)</dd>
 <dt>alternatives</dt><dd><span class="big">median 1</span>, max 3 <small>(slots the pattern read from the sentence; ran on 128 of 165 turns)</small></dd>
-<dt>seen deciding</dt><dd>art.draw 93, games.hangman 12, diagram.sketch 11, ui.avatar 10, session.things 3</dd></dl></li>
+<dt>seen deciding</dt><dd>art.draw 93, games.hangman 12, diagram.sketch 11, ui.avatar 9, docs.editor 3</dd></dl></li>
 <li><span class="big"><b class="n">5</b>what is missing and who fills it</span>
 <dl><dt>decides</dt><dd><code>src/dialog/dialogue.mjs fill (std.fill); continuation.mjs</code></dd><dt>from</dt><dd>tiers: said, then focus, then scene, then knowledge, then default</dd>
 <dt>alternatives</dt><dd><span class="big">median 0</span>, max 2 <small>(gaps filled from outside the sentence; ran on 3 of 165 turns)</small></dd>
@@ -86,11 +86,11 @@ svg{display:block;min-width:600px;width:100%;height:auto}svg text{fill:var(--fg)
 <div class="scroll"><table><thead><tr><th>world</th><th>role</th><th class="num">hand-written lines</th><th class="num">reuse</th><th class="num">turns</th><th class="num">helped</th></tr></thead><tbody>
 <tr><td>acts</td><td>library</td><td class="num">1033</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
 <tr><td>art.draw</td><td>tab</td><td class="num">7184</td><td class="num">0</td><td class="num">87</td><td class="num">40%</td></tr>
-<tr><td>common.sense</td><td>knowledge</td><td class="num">453</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
+<tr><td>common.sense</td><td>knowledge</td><td class="num">304</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
 <tr><td>core</td><td>shared</td><td class="num">849</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
 <tr><td>data.charts</td><td>tab</td><td class="num">7628</td><td class="num">0</td><td class="num">2</td><td class="num">0%</td></tr>
 <tr><td>diagram.sketch</td><td>tab</td><td class="num">8615</td><td class="num">0</td><td class="num">11</td><td class="num">0%</td></tr>
-<tr><td>docs.editor</td><td>tab</td><td class="num">9385</td><td class="num">0</td><td class="num">2</td><td class="num">0%</td></tr>
+<tr><td>docs.editor</td><td>tab</td><td class="num">9385</td><td class="num">0</td><td class="num">3</td><td class="num">0%</td></tr>
 <tr><td>docs.reader</td><td>tab</td><td class="num">7440</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
 <tr><td>games.chess</td><td>tab</td><td class="num">5814</td><td class="num">0.88</td><td class="num">0</td><td class="num">-</td></tr>
 <tr><td>games.guess</td><td>content</td><td class="num">2000</td><td class="num">0.27</td><td class="num">1</td><td class="num">0%</td></tr>
@@ -112,9 +112,9 @@ svg{display:block;min-width:600px;width:100%;height:auto}svg text{fill:var(--fg)
 <tr><td>session.conversation</td><td>shared</td><td class="num">26</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
 <tr><td>session.dialogue</td><td>library</td><td class="num">140</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
 <tr><td>session.things</td><td>library</td><td class="num">611</td><td class="num">-</td><td class="num">3</td><td class="num">33%</td></tr>
-<tr><td>space</td><td>library</td><td class="num">1554</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
-<tr><td>talk</td><td>tab</td><td class="num">1573</td><td class="num">0</td><td class="num">2</td><td class="num">100%</td></tr>
-<tr><td>ui.avatar</td><td>tab</td><td class="num">606</td><td class="num">0</td><td class="num">10</td><td class="num">90%</td></tr>
+<tr><td>space</td><td>library</td><td class="num">1553</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr>
+<tr><td>talk</td><td>tab</td><td class="num">1572</td><td class="num">0</td><td class="num">2</td><td class="num">100%</td></tr>
+<tr><td>ui.avatar</td><td>tab</td><td class="num">606</td><td class="num">0</td><td class="num">9</td><td class="num">100%</td></tr>
 <tr><td>ui.help</td><td>content</td><td class="num">1824</td><td class="num">0</td><td class="num">1</td><td class="num">0%</td></tr>
 <tr><td>ui.shell</td><td>content</td><td class="num">2499</td><td class="num">0</td><td class="num">1</td><td class="num">0%</td></tr>
 <tr><td>user.profile</td><td>tab</td><td class="num">3715</td><td class="num">0</td><td class="num">0</td><td class="num">-</td></tr></tbody></table></div>

@@ -6,8 +6,8 @@
 //
 // Synchronous by design (the matcher is): the host loads the vocabulary before reading (`ready()`, called by the dialogue at the start of a turn); until then nothing is open and the
 // lexicon is its closed list. Browser-safe: no node imports.
-import { lemmaCandidates } from './facts.mjs?v=d578d003c4';
-import { colourName } from './values.mjs?v=ec4fe4794e';
+import { lemmaCandidates } from './facts.mjs?v=0391718f14';
+import { colourName } from './values.mjs?v=189c43bb28';
 
 let attached = null;
 /** The host attaches the catalog of the session (`engine.setKnowledge`); `null` detaches it. */

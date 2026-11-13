@@ -13,9 +13,9 @@
 import {
   DEFAULT_TITLE, highlightHex, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
   sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
-} from './model.mjs?v=f8d5904d54';
-import { basicColourNames } from '../../lib/knowledge/values.mjs?v=ec4fe4794e';   // the one colour reader (k.values)
-import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=542e0709cd';
+} from './model.mjs?v=3f425c13e5';
+import { basicColourNames } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
+import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=2bdb2c2c37';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const MAX_HISTORY = 50;

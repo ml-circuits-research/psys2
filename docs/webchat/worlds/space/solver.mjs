@@ -7,8 +7,8 @@
 // Steps: (1) the named layout, if any (generator or slots from `k.layouts`); (2) the relation constraints, weakest tier first so the strongest wins;
 // (3) overlap removal by the smallest move (what carries something moves it too); (4) the check. If the check fails (a relation cannot be kept, an overlap cannot be removed, the
 // step budget ran out) the answer keeps the LAST VALID state (the input positions) and says which relation could not be kept.
-import { overlaps, gap, boxOf, planLayout, readingOrder } from './space.mjs?v=0c5c89b98e';
-import { RELS, tierRank, holdsFact, carriedBy, why } from './pieces.mjs?v=7a5af05c50';
+import { overlaps, gap, boxOf, planLayout, readingOrder } from './space.mjs?v=f98ca4dd42';
+import { RELS, tierRank, holdsFact, carriedBy, why } from './pieces.mjs?v=d38d7cc794';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const round = (v) => Math.round(v);

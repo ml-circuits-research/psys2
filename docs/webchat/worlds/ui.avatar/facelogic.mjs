@@ -7,7 +7,7 @@
 //   adj: { <slot>: { s: scale, dx, dy } }, expression, base (the preset it started from), name, saved: { <key>: { name, slots, colours, paint, adj } }, options (what "which hats are there"
 //   shows), refs (the things of the face: the referents of this world), history / future (undo, redo), n (a counter) }.
 // Browser-safe: imports only the shared space module.
-import * as space from '../space/space.mjs?v=0c5c89b98e';
+import * as space from '../space/space.mjs?v=f98ca4dd42';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export const NONE = 'none';

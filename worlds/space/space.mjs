@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The shared module `space` (specs/19-space-module.md): where things are, which one is meant by its position, how to move and arrange them. Browser-safe, no
-// imports. A host world gives it a projection of its objects, items { id, kind, x, y, w, h, z, name? } (x, y = the centre, y grows downward) in a frame
+// imports of its own but the knowledge reader (src/knowledge/arrangement.mjs). A host world gives it a projection of its objects, items { id, kind, x, y, w, h, z, name? } (x, y = the centre, y grows downward) in a frame
 // { w, h, step? }, and applies the boxes it answers; the module never draws and knows nothing about houses or boxes. The words live in lexicon.sop (core.lexicon
 // groups); tests/space.test.mjs keeps this file and the lexicon in step.
 //
@@ -14,6 +14,7 @@
 //   parseQuestion / answer    what is next to X, which is in the middle, is A above B, how far apart
 //   interpret(text, ctx)      the whole sentence at once (hosts without their own reading of the verb and the thing)
 
+import { arrangement } from '../../src/knowledge/arrangement.mjs';   // what rests on what, the parts of a face (k.scenes, k.layouts)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const toks = (t) => String(t ?? '').toLowerCase().replace(/[^a-z0-9\s]+/g, ' ').split(/\s+/).filter(Boolean);
 const has = (a, w) => a.includes(w);
@@ -135,16 +136,13 @@ const clampIn = (it, f) => ({ ...it, x: Math.round(Math.min(f.w - W(it) / 2, Mat
 const stepOf = (f) => f.step ?? f.w * 0.1;
 
 
-// ---- general knowledge and consistency rules (declared once; the facts are also in worlds/common.sense/kb.sop, tests/space.test.mjs keeps them in step) --------------
+// ---- general knowledge and consistency rules ------------------------------------------------------------------------------------------------------------
 /**
- * What common sense says about arrangement, as data: `supports` (a roof sits on walls, a cup on a table: what touches what), `around` (chairs go around a table),
- * `face` (the order of the parts of a face: rank from the top, and the share of the width where a mirrored pair sits). A host may pass its own in ctx.knowledge.
+ * What knowledge says about arrangement, as data: `supports` (a roof sits on walls, a cup on a table: what touches what), `around` (chairs go around a table), `face` (the order of
+ * the parts of a face: rank from the top, and the share of the width where a mirrored pair sits). Nothing is held here: the table is read from the knowledge worlds (k.scenes, k.layouts)
+ * by src/knowledge/arrangement.mjs, seeded from the bundled subset. A host may pass its own in ctx.knowledge.
  */
-export const KNOWLEDGE = {
-  supports: [['roof', 'walls'], ['roof', 'house'], ['chimney', 'roof'], ['wheel', 'road'], ['car', 'road'], ['cup', 'table'], ['plate', 'table'], ['lamp', 'table'], ['book', 'shelf'], ['book', 'table'], ['vase', 'table'], ['person', 'floor'], ['house', 'ground'], ['tree', 'ground']],
-  around: [['chair', 'table'], ['stool', 'table'], ['plate', 'table'], ['person', 'table'], ['cup', 'table'], ['bench', 'fire'], ['chair', 'desk']],
-  face: [['brow', 1, 0.2], ['eye', 2, 0.2], ['ear', 2, 0.44], ['nose', 3, 0], ['mouth', 4, 0]],
-};
+export const KNOWLEDGE = { get supports() { return arrangement().supports; }, get around() { return arrangement().around; }, get face() { return arrangement().face; } };
 /** The consistency rules every host gets from `enforce` (also listed as space.rule rows in worlds/space/rules.sop, generated from this table). */
 export const RULES = [
   { id: 'inside-frame', doc: 'Everything stays inside the frame after any placement, move or layout.' },
@@ -154,8 +152,10 @@ export const RULES = [
 ];
 const singular = (k) => String(k ?? '').toLowerCase().replace(/~\w+$/, '').replace(/(?:ies)$/, 'y').replace(/(?<!s)s$/, '');
 const kn = (c) => ({ ...KNOWLEDGE, ...(c?.knowledge ?? {}) });
-const supportPair = (top, base, c) => { const a = singular(top.kind ?? top.name), b = singular(base.kind ?? base.name), na = singular(top.name), nb = singular(base.name); return kn(c).supports.some(([t, u]) => (singular(t) === a || singular(t) === na) && (singular(u) === b || singular(u) === nb)); };
-const faceFact = (it, c) => { const k = singular(it.kind ?? it.name), n = singular(it.name); return kn(c).face.find(([f]) => singular(f) === k || singular(f) === n); };
+const pairIndex = new WeakMap();   // the supports table -> Set of "top|base" (singular), built once per table: the knowledge tables hold about a thousand pairs
+const supportSet = (tab) => { let ix = pairIndex.get(tab); if (!ix) { ix = new Set(tab.map(([t, u]) => `${singular(t)}|${singular(u)}`)); pairIndex.set(tab, ix); } return ix; };
+const supportPair = (top, base, c) => { const ix = supportSet(kn(c).supports), a = singular(top.kind ?? top.name), b = singular(base.kind ?? base.name), na = singular(top.name), nb = singular(base.name); return ix.has(`${a}|${b}`) || ix.has(`${a}|${nb}`) || ix.has(`${na}|${b}`) || ix.has(`${na}|${nb}`); };
+const faceFact = (it, c) => { const k = singular(it.kind ?? it.name), n = singular(it.name); return kn(c).face.find(([f, , , ...also]) => [f, ...also].some((x) => singular(x) === k || singular(x) === n)); };
 const aroundFact = (movKind, refKind, c) => kn(c).around.some(([m, r]) => singular(m) === singular(movKind) && singular(r) === singular(refKind));
 /** "don't join them", "leave a gap", "apart": the user wants a gap; "touching", "against": the user wants contact. */
 export function contactWish(input) {

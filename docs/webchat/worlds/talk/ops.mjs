@@ -10,10 +10,10 @@
 // the host through `openSlots`, spec 17), or from the basic things shipped with the drawing world. No fact: the plain "I don't know that yet" and no card.
 // Effect: talk.card { id } asks the Talk tab to show the card inside the answer; chat.suggest { items } shows suggestions as chips.
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
-import * as space from '../space/space.mjs?v=0c5c89b98e';
+import * as space from '../space/space.mjs?v=f98ca4dd42';
 import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';
-import { colourName } from '../../lib/knowledge/values.mjs?v=ec4fe4794e';   // the one colour reader (k.values)
-import * as R from './records.mjs?v=0f86b57f97';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import { colourName } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
+import * as R from './records.mjs?v=0a501bb260';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;

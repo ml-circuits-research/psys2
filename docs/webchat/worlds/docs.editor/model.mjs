@@ -9,7 +9,7 @@
 // The title is a pseudo block (id 'title') kept in state.title, titleMarks, titleAlign, titleSize.
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
-import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=ec4fe4794e';   // the one colour reader (k.values)
+import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
 export const DEFAULT_TITLE = 'Untitled document';
 export const MARK_TYPES = ['link', 'bold', 'italic', 'underline', 'strike', 'code', 'highlight'];
 // A highlight colour is any colour of the catalog (the one reader, k.values) drawn as a highlighter does: the colour mixed towards white. No colour table lives in this world.
