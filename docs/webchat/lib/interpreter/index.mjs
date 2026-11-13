@@ -19,7 +19,7 @@ import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=268
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 import { Renderer, fallbackText, listText } from './render.mjs?v=237d079f93';
 import { FormSession } from '../formalizer/rules/session.mjs?v=e445741b59';
-import { makeLang } from './lang.mjs?v=512d13f1bb';
+import { makeLang } from './lang.mjs?v=dfe36d9901';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 export { Renderer } from './render.mjs?v=237d079f93';
@@ -357,6 +357,8 @@ export class Interpreter {
       lexicon: (id) => { const l = this.set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; },
       /** Shared vocabulary of lang.common: yesNo, unsure, cancel, stripLead, ordinal, degree, colour, size, position ... */
       lang: this.lang,
+      /** The knowledge catalog (spec 17) or null: `peek(name)` is the settled lookup of a thing (undefined: not looked up, null: not known, else its parts and facts). */
+      knowledge: this.knowledge ?? null,
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
       /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. */

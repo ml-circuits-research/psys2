@@ -357,6 +357,8 @@ export class Interpreter {
       lexicon: (id) => { const l = this.set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; },
       /** Shared vocabulary of lang.common: yesNo, unsure, cancel, stripLead, ordinal, degree, colour, size, position ... */
       lang: this.lang,
+      /** The knowledge catalog (spec 17) or null: `peek(name)` is the settled lookup of a thing (undefined: not looked up, null: not known, else its parts and facts). */
+      knowledge: this.knowledge ?? null,
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
       /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. */

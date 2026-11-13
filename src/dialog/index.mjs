@@ -32,6 +32,7 @@ import { checkValues } from './value-check.mjs';
 import { Discourse } from './discourse.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
 import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs';
 import { recognize } from '../astra/moves.mjs';
 import { panel } from '../astra/where.mjs';
@@ -1319,9 +1320,15 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
+    // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
+    if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
+      const ka = await perf.time('knowledge', () => knowledgeAnswer(this, english, formal));
+      if (ka) { meta = { reply: ka.reply, status: ka.status, info: ka.info }; formal = { segments: [], wires: [] }; }
+    }
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
     const segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    if (this.engine.knowledge && segments.length) { try { await perf.time('knowledge', () => preloadThings(this, segments)); } catch { /* no knowledge is no change */ } }   // spec 17: the open slots of the readings, looked up before the operations run
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
@@ -1432,6 +1439,9 @@ export class DialogSession {
         lines.push([T(`This could also be read in another way (${titles.join(', ')}); I used the `), { text: `"${used}"`, translate: false, quote: true }, T(' reading.')]);
       }
     }
+    if (this.engine.knowledge && !icpt && !pre && !meta) {   // spec 17: a frame the reading took whole, whose world answered "missing": the catalog is asked before the "I don't know" stands
+      try { const kf = await perf.time('knowledge', () => knowledgeFallback(this, english, segments, statuses)); if (kf) { lines.length = 0; lines.push([T(kf.reply)]); statuses[0] = kf.status; segments[0].ignored = []; segments[0].knowledge = kf.info; } } catch { /* the world's own reply stands */ }
+    }
     this.isession.batch = null;
     for (const seg of segments) {
       if (!seg.corrections?.length || seg.unparsed) continue;
@@ -1516,7 +1526,11 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   const set = await loadWorlds(loader, { reasoner: mode });
   const reasoner = mode === 'matrix' ? await createReasoner(set) : null;
   const interp = createInterpreter(set, { ...options, reasoner });
+  interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
+    knowledge: options.knowledge ?? null,
+    /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
+    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; },
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** Formalizer strategies by id (spec 06); `formalizers` overrides them (tests, an encoder endpoint). */
     formalizers: { rules: createRulesFormalizer(), encoder: createEncoderFormalizer({ endpoint: options.encoderEndpoint ?? null }), ...formalizers },

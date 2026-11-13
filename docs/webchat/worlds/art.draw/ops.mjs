@@ -14,6 +14,7 @@
 //     nextId, seq, seed }
 // Effects: draw.download { format: 'png' | 'svg', filename }. Every command that changes the picture brings the
 // Drawing tab forward: ctx.request('ui.openTab', { tab: 'draw' }).
+import { THINGS, THING_WORDS } from './things.catalog.mjs?v=4cd417b561';
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
@@ -845,10 +846,24 @@ function addPartTo(ctx, s, { noun, ord, mods }) {
   open(ctx);
   return ok(`${opener(s)} ${said}`, { data: { made: [o.id] } });
 }
+/**
+ * KNOWLEDGE-BY-LOOKUP (spec 17): a noun the built-in catalog of things does not have, but the host found in the knowledge catalog before this operation ran
+ * (`ctx.knowledge.peek`), is registered as a drawable thing (its parts as the shared parser read them), so it is drawn like any other thing. The registration lives
+ * in the module, as long as the page: a saved picture that names the thing needs the lookup again. No catalog or no hit: nothing happens.
+ */
+function registerKnown(ctx, noun) {
+  try {
+    const th = ctx.knowledge?.peek(noun);
+    const parts = th?.objects?.[0]?.parts;
+    if (parts?.length) { if (!Object.hasOwn(THINGS, th.name)) { THINGS[th.name] = parts; THING_WORDS[th.name] = th.name; } return th.name; }
+  } catch { /* the plain refusal follows */ }
+  return null;
+}
 /** Resolves the open slot of `draw.add`: a thing to draw (args are rewritten with its word as the kind), a part to add, or the plain "I don't know how to draw ..." reply. */
 function openAdd(ctx, s, args) {
   const { noun, mods, ord } = readOpen(args.open);
   if (!noun) return { done: no('What should I draw?', 'missing') };
+  registerKnown(ctx, noun);
   const k = kindOfWord(noun);
   if (k && k.kind !== '*') {
     const m = Object.fromEntries(mods.slice(0, 3).map((w, i) => [`m${i + 1}`, w]));
@@ -862,10 +877,11 @@ function openAdd(ctx, s, args) {
 
 export const add = guard((ctx, args, s) => {
   if (args.open !== undefined) { const r = openAdd(ctx, s, args); if (r.done) return r.done; args = r.args; }
+  if (!kindOfWord(args.kind)) { const nm = registerKnown(ctx, args.kt ?? args.kind); if (nm) args = { ...args, kind: nm, kt: nm }; }   // a thing of the knowledge catalog (spec 17)
   const words0 = toks(args.where ?? '');
   const spec0 = readSpec({ ...args, have: sameKind(s, kindOfWord(args.kind)?.kind).length });
   const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
-  if (!spec0.kind && UNDRAWABLE.has(askedFor)) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
+  if (!spec0.kind && UNDRAWABLE.has(askedFor) && !ctx.knowledge?.peek(askedFor)?.objects?.length) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
   // a tail with more things: "... and a tree"
   const withParts0 = parseWith(spec0.kind, words0);
@@ -1706,6 +1722,18 @@ export function referents(ctx) {
  * IS in the picture, so that the reply says what the world holds instead of listing what could be drawn. `undefined` when every noun phrase is one the
  * world knows (an object that is merely absent is answered by the operation itself).
  */
+/**
+ * Host hook (spec 17): the things of a reading that this world has no picture for, as the user said them (open slots the host may look up in the knowledge catalog).
+ * The `open` argument of an open-slot reading, and the thing a lexicon word named when the board cannot draw that kind (the animals it has no picture of).
+ */
+export function openSlots(ctx, { action, args = {} } = {}) {
+  if (action !== 'draw.add') return [];
+  const said = String(args.open ?? args.kt ?? '').toLowerCase().replace(/[^\p{L}\p{N} -]/gu, ' ').trim();
+  if (!said) return [];
+  if (args.open !== undefined) return [said];
+  const k = kindOfWord(args.kind);
+  return !k || !k.kind || UNDRAWABLE.has(said.replace(/s$/, '')) ? [said] : [];
+}
 export function checkReferents(ctx, { action, args = {} } = {}) {
   const s = ensure(ctx);
   const texts = action === 'draw.remove' ? splitList(args.phrase ?? '') : [args.t, args.o].filter((x) => typeof x === 'string' && x);

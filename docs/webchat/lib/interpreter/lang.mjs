@@ -120,7 +120,51 @@ export function makeLang(source) {
     return null;
   };
 
-  return { yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+
+  // ---- knowledge frames (spec 17): the SHAPE of a question about a thing; the thing is an open slot, never a word list ----------------------
+  const KNOW = {
+    define: phrase('lang.know.define'), det: new Set(phrase('lang.know.det')), count: phrase('lang.know.count'), aux: new Set(phrase('lang.know.aux')),
+    have: new Set(phrase('lang.know.have')), made: phrase('lang.know.made'), where: phrase('lang.know.where'), live: phrase('lang.know.live'), can: phrase('lang.know.can'),
+  };
+  const lead = (alts, ws) => alts.slice().sort((a, b) => b.split(' ').length - a.split(' ').length).map((a) => a.split(' ')).find((a) => a.length < ws.length && a.every((x, i) => ws[i] === x)) ?? null;
+  const tail = (alts, ws) => alts.slice().sort((a, b) => b.split(' ').length - a.split(' ').length).map((a) => a.split(' ')).find((a) => a.length < ws.length && a.every((x, i) => ws[ws.length - a.length + i] === x)) ?? null;
+  const noDet = (ws) => (KNOW.det.has(ws[0]) ? ws.slice(1) : ws);
+  /**
+   * The knowledge frame of a message, or null: `{ kind: 'define' | 'count' | 'made' | 'where' | 'can', slot, part? }` where `slot` is the open slot (the thing, 1 to 3 words,
+   * as said) and `part` the counted part ("legs"). Only the frame words come from `lang.know.*`; any noun fits the slot, invented ones too.
+   */
+  const know = (text) => {
+    const ws = plain(text).split(' ').filter(Boolean);
+    const slotOf = (xs) => { const s = noDet(xs); return s.length >= 1 && s.length <= 3 && s.every((w) => /^[\p{L}\p{N}-]+$/u.test(w)) ? s.join(' ') : null; };
+    if (!ws.length) return null;
+    const cl = lead(KNOW.count, ws);
+    if (cl && ws.length > cl.length + 3) {   // how many <part> <aux> <det>? <thing> have   |   how many <part> has <det>? <thing>
+      const rest = ws.slice(cl.length), i = rest.findIndex((w, k) => k >= 1 && (KNOW.aux.has(w) || KNOW.have.has(w)));
+      if (i >= 1 && i <= 2) {
+        let body = rest.slice(i + 1);
+        if (KNOW.have.has(body.at(-1)) && !KNOW.have.has(rest[i])) body = body.slice(0, -1);
+        else if (KNOW.have.has(rest[i]) && KNOW.have.has(body.at(-1))) body = body.slice(0, -1);
+        const slot = slotOf(body);
+        if (slot) return { kind: 'count', part: rest.slice(0, i).join(' '), slot };
+      }
+      return null;
+    }
+    const wl = lead(KNOW.where, ws);
+    if (wl) { let b = ws.slice(wl.length); const lv = tail(KNOW.live, b); if (lv) b = b.slice(0, b.length - lv.length); const slot = slotOf(b); return slot ? { kind: 'where', slot } : null; }
+    const cn = lead(KNOW.can, ws);
+    if (cn && ws.at(-1) === 'do') { const slot = slotOf(ws.slice(cn.length, -1)); return slot ? { kind: 'can', slot } : null; }
+    const dl = lead(KNOW.define, ws);
+    if (dl) {
+      let b = ws.slice(dl.length);
+      const md = tail(KNOW.made, b);
+      if (md && ['what is', 'what are', 'what s', 'whats'].includes(dl.join(' '))) { const slot = slotOf(b.slice(0, b.length - md.length)); return slot ? { kind: 'made', slot } : null; }
+      const slot = slotOf(b);
+      return slot ? { kind: 'define', slot } : null;
+    }
+    return null;
+  };
+
+  return { know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;
