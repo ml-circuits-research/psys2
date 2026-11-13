@@ -7,7 +7,7 @@
 #
 # Points: naming a world 100; an action a world has been asked for by name ("open the chess tab") 130; a question the world asked 90 (answering) or 25
 # (anything); a follow-up piece of the world of the last action 80; a thing the message names that is in a scene 70; an action word and a kind of thing of
-# the same world 45; one of them alone 25 (10 for an action word and 6 for a thing that three or four worlds share; five or more worlds: not on the card); a question frame 30;
+# the same world 45; one of them alone 25 (10 for an action word and 6 for a thing that three or four worlds share; five or more worlds: not on the card); a question frame 30 (12 for a plain frame that many worlds share, on the worlds that take any thing);
 # a thing of the knowledge catalog for a world that takes any 8; the open tab 12; a world that answered lately 8. The encoder is one prior (at most its weight, 30 by default): it never reaches a referent or
 # a running game, and a block is not a vote: nothing outvotes it.
 
@@ -36,6 +36,7 @@
 @mw.c.thingy meta.worlds.card id=?w thing=?y
 @mw.c.thingshared meta.worlds.card id=?w thingshared=?x
 @mw.c.frame meta.worlds.card id=?w frame=?x
+@mw.c.frameshared meta.worlds.card id=?w frameshared=?x
 @mw.c.catalog meta.worlds.card id=?w catalog=yes
 @mw.c.nav meta.worlds.card id=?n navact=?x
 @mw.c.run meta.worlds.card id=?w run=needs
@@ -87,6 +88,8 @@
 @mw.r.thingshared core.rule when=$mw.c.thingshared when=$mw.m.any then=$mw.o.thingshared
 @mw.o.frame meta.worlds.vote world=?w rule=frame weight=30 via=?x
 @mw.r.frame core.rule when=$mw.c.frame when=$mw.m.any then=$mw.o.frame
+@mw.o.frameshared meta.worlds.vote world=?w rule=frameshared weight=12 via=?x
+@mw.r.frameshared core.rule when=$mw.c.frameshared when=$mw.m.any then=$mw.o.frameshared
 @mw.o.catalog meta.worlds.vote world=?w rule=catalog weight=8 via=?x
 @mw.r.catalog core.rule when=$mw.c.catalog when=$mw.m.cat then=$mw.o.catalog
 @mw.o.active meta.worlds.vote world=?w rule=active weight=12 via=tab
@@ -120,6 +123,7 @@
 @mw.say.actshared meta.worlds.say rule=actshared text="{via} can be done in the {name} (among others)"
 @mw.say.thingshared meta.worlds.say rule=thingshared text="a {via} can be in the {name} (among others)"
 @mw.say.frame meta.worlds.say rule=frame text="the question ({via}) is one the {name} answers"
+@mw.say.frameshared meta.worlds.say rule=frameshared text="the question ({via}) is a plain question about things, which the {name} answers"
 @mw.say.catalog meta.worlds.say rule=catalog text="the {name} takes any thing we know about ({via})"
 @mw.say.active meta.worlds.say rule=active text="the {name} is open"
 @mw.say.recent meta.worlds.say rule=recent text="the {name} answered lately"

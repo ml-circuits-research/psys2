@@ -186,7 +186,7 @@ async function run(dir, out) {
     r.sweep = {};
     for (const wt of weights) r.sweep[wt] = dec({ prior: norm(p, []), weight: wt }, noTalk);
     r.holdout = {};
-    for (const h of HOLDOUT) { r.holdout[h] = { C: dec({ prior: norm(p, [h]) }, noTalk) }; if (weights.length) r.holdout[h].light = dec({ prior: norm(p, [h]), weight: 15 }, noTalk);   // a lighter prior (15 points) for the hold-out }
+    for (const h of HOLDOUT) { r.holdout[h] = { C: dec({ prior: norm(p, [h]) }, noTalk) }; if (weights.length) r.holdout[h].light = dec({ prior: norm(p, [h]), weight: 15 }, noTalk);  }   // (a lighter prior, 15 points, for the hold-out)
     rows.push(r);
   }
   writeFileSync(join(dir, 'rows.json'), JSON.stringify(rows));
@@ -215,7 +215,19 @@ function report(rows, out) {
     res.holdout[h] = { own: o, all: a };
     lines.push(`${h}: own n=${own.n}  A ${pct(o.A_trained.right, own.n)}  C ${pct(o.C_trained.right, own.n)}  C masked ${pct(o.C_masked.right, own.n)}  B ${pct(o.B.right, own.n)}   | all n=${rows.length}  A ${pct(a.A_trained.right, rows.length)}  C ${pct(a.C_trained.right, rows.length)}  C masked ${pct(a.C_masked.right, rows.length)}  B ${pct(a.B.right, rows.length)}`);
   }
+  if (rows[0]?.sweep) {
+    lines.push('', 'prior weight sweep (C, right %): the prior is weight x probability, in points');
+    const ws = Object.keys(rows[0].sweep);
+    lines.push('set'.padEnd(16) + ws.map((w) => `w=${w}`.padStart(8)).join(''));
+    res.sweep = {};
+    for (const [s, rs] of all) { res.sweep[s] = Object.fromEntries(ws.map((w) => [w, pct(rs.filter((r) => r.sweep[w].v === 'right').length, rs.length)])); lines.push(s.padEnd(16) + ws.map((w) => String(res.sweep[s][w]).padStart(8)).join('')); }
+    lines.push('hold-out, own messages, right %: C masked at 30 points / at 15 points');
+    for (const h of HOLDOUT) { const own = rows.filter((r) => r.gold.world === h); res.holdout[h].light = pct(own.filter((r) => (r.holdout[h].light ?? r.holdout[h].C).v === 'right').length, own.length); lines.push(`${h}: ${pct(res.holdout[h].own.C_masked.right, own.length)} / ${res.holdout[h].light}`); }
+  }
   const talk = rows.filter((r) => r.gold.world === 'talk');
+  // what a card costs the worlds that have none of its messages: the same sets with and without the talk card
+  res.talkCost = Object.fromEntries(sets.map((s) => { const rs = rows.filter((r) => r.set === s && r.gold.world !== 'talk'); const n = (k) => rs.filter((r) => r[k].v === 'right').length; return [s, { n: rs.length, B_with: n('B'), B_without: n('Bt'), C_with: n('C'), C_without: n('Ct') }]; }));
+  lines.push('', 'talk card cost (messages of other worlds only; right with the card / without it): ' + Object.entries(res.talkCost).map(([s, v]) => `${s} B ${v.B_with}/${v.B_without} C ${v.C_with}/${v.C_without}`).join('; '));
   res.talk = { n: talk.length, A: tally(talk, 'A'), B: tally(talk, 'B'), C: tally(talk, 'C') };
   lines.push('', `talk (no training): n=${talk.length} messages whose world is talk; A right ${res.talk.A.right}, B right ${res.talk.B.right}, C right ${res.talk.C.right}`);
   const conf = {};

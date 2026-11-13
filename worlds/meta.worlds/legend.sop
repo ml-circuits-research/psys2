@@ -61,6 +61,11 @@
     card=many
     ask="Which question frames?"
 
+@meta.worlds.card.frameshared core.key
+    value=atom
+    card=many
+    ask="Which question frames does it share with other worlds?"
+
 # ---- facts about the words of the routing: words that start a game, worlds that act anywhere
 @meta.worlds.start core.type
     extends=core.state

@@ -1,0 +1,750 @@
+{
+ "encoder": "training/runs/dispatcher-v5s2-c3265 (21 worlds incl. diagram.sketch; none of talk, user.profile)",
+ "sets": {
+  "operational": {
+   "n": 1030,
+   "A": {
+    "n": 1030,
+    "right": 982,
+    "wrong": 11,
+    "asked": 37,
+    "ms": 24028.324260000103
+   },
+   "A1": {
+    "n": 1030,
+    "right": 990,
+    "wrong": 40,
+    "asked": 0,
+    "ms": 0
+   },
+   "B": {
+    "n": 1030,
+    "right": 692,
+    "wrong": 199,
+    "asked": 139,
+    "ms": 1801.9523609999987
+   },
+   "C": {
+    "n": 1030,
+    "right": 967,
+    "wrong": 49,
+    "asked": 14,
+    "ms": 1828.9173829999522
+   },
+   "Bt": {
+    "n": 1030,
+    "right": 699,
+    "wrong": 189,
+    "asked": 142,
+    "ms": 1761.1477109999691
+   },
+   "Ct": {
+    "n": 1030,
+    "right": 968,
+    "wrong": 48,
+    "asked": 14,
+    "ms": 1821.252067000003
+   }
+  },
+  "minimal-pairs": {
+   "n": 122,
+   "A": {
+    "n": 122,
+    "right": 115,
+    "wrong": 4,
+    "asked": 3,
+    "ms": 4172.683243000109
+   },
+   "A1": {
+    "n": 122,
+    "right": 122,
+    "wrong": 0,
+    "asked": 0,
+    "ms": 0
+   },
+   "B": {
+    "n": 122,
+    "right": 81,
+    "wrong": 33,
+    "asked": 8,
+    "ms": 235.55223099996147
+   },
+   "C": {
+    "n": 122,
+    "right": 122,
+    "wrong": 0,
+    "asked": 0,
+    "ms": 242.45760399998835
+   },
+   "Bt": {
+    "n": 122,
+    "right": 81,
+    "wrong": 4,
+    "asked": 37,
+    "ms": 233.70482400000765
+   },
+   "Ct": {
+    "n": 122,
+    "right": 122,
+    "wrong": 0,
+    "asked": 0,
+    "ms": 239.54987799998707
+   }
+  },
+  "knowledge": {
+   "n": 190,
+   "A": {
+    "n": 190,
+    "right": 105,
+    "wrong": 36,
+    "asked": 49,
+    "ms": 3405.8313800000324
+   },
+   "A1": {
+    "n": 190,
+    "right": 102,
+    "wrong": 88,
+    "asked": 0,
+    "ms": 0
+   },
+   "B": {
+    "n": 190,
+    "right": 115,
+    "wrong": 31,
+    "asked": 44,
+    "ms": 290.85106500000256
+   },
+   "C": {
+    "n": 190,
+    "right": 103,
+    "wrong": 76,
+    "asked": 11,
+    "ms": 383.37743000000046
+   },
+   "Bt": {
+    "n": 190,
+    "right": 100,
+    "wrong": 32,
+    "asked": 58,
+    "ms": 282.6782960000055
+   },
+   "Ct": {
+    "n": 190,
+    "right": 103,
+    "wrong": 78,
+    "asked": 9,
+    "ms": 310.3819509999521
+   }
+  },
+  "dialogues": {
+   "n": 2241,
+   "A": {
+    "n": 2241,
+    "right": 1459,
+    "wrong": 444,
+    "asked": 338,
+    "ms": 111462.970072
+   },
+   "A1": {
+    "n": 2241,
+    "right": 1628,
+    "wrong": 613,
+    "asked": 0,
+    "ms": 0
+   },
+   "B": {
+    "n": 2241,
+    "right": 1481,
+    "wrong": 519,
+    "asked": 241,
+    "ms": 3632.761904000392
+   },
+   "C": {
+    "n": 2241,
+    "right": 1791,
+    "wrong": 409,
+    "asked": 41,
+    "ms": 3907.068553000063
+   },
+   "Bt": {
+    "n": 2241,
+    "right": 1491,
+    "wrong": 513,
+    "asked": 237,
+    "ms": 3492.5172260000327
+   },
+   "Ct": {
+    "n": 2241,
+    "right": 1791,
+    "wrong": 409,
+    "asked": 41,
+    "ms": 3764.22758900006
+   }
+  },
+  "owner-log": {
+   "n": 13,
+   "A": {
+    "n": 13,
+    "right": 7,
+    "wrong": 0,
+    "asked": 6,
+    "ms": 2188.954260999977
+   },
+   "A1": {
+    "n": 13,
+    "right": 12,
+    "wrong": 1,
+    "asked": 0,
+    "ms": 0
+   },
+   "B": {
+    "n": 13,
+    "right": 8,
+    "wrong": 5,
+    "asked": 0,
+    "ms": 22.336000999988755
+   },
+   "C": {
+    "n": 13,
+    "right": 9,
+    "wrong": 3,
+    "asked": 1,
+    "ms": 25.67241899999499
+   },
+   "Bt": {
+    "n": 13,
+    "right": 8,
+    "wrong": 5,
+    "asked": 0,
+    "ms": 22.254226000004564
+   },
+   "Ct": {
+    "n": 13,
+    "right": 9,
+    "wrong": 3,
+    "asked": 1,
+    "ms": 27.481461999981548
+   }
+  },
+  "wrong-tab": {
+   "n": 200,
+   "A": {
+    "n": 200,
+    "right": 134,
+    "wrong": 43,
+    "asked": 23,
+    "ms": 5807.818325000349
+   },
+   "A1": {
+    "n": 200,
+    "right": 145,
+    "wrong": 55,
+    "asked": 0,
+    "ms": 0
+   },
+   "B": {
+    "n": 200,
+    "right": 104,
+    "wrong": 55,
+    "asked": 41,
+    "ms": 419.58191100011754
+   },
+   "C": {
+    "n": 200,
+    "right": 149,
+    "wrong": 32,
+    "asked": 19,
+    "ms": 476.76465300009295
+   },
+   "Bt": {
+    "n": 200,
+    "right": 99,
+    "wrong": 57,
+    "asked": 44,
+    "ms": 405.5900440000114
+   },
+   "Ct": {
+    "n": 200,
+    "right": 146,
+    "wrong": 36,
+    "asked": 18,
+    "ms": 470.0246450000268
+   }
+  },
+  "wrong-tab-ops": {
+   "n": 200,
+   "A": {
+    "n": 200,
+    "right": 157,
+    "wrong": 32,
+    "asked": 11,
+    "ms": 5042.049503000104
+   },
+   "A1": {
+    "n": 200,
+    "right": 174,
+    "wrong": 26,
+    "asked": 0,
+    "ms": 0
+   },
+   "B": {
+    "n": 200,
+    "right": 92,
+    "wrong": 65,
+    "asked": 43,
+    "ms": 382.40824399991834
+   },
+   "C": {
+    "n": 200,
+    "right": 169,
+    "wrong": 25,
+    "asked": 6,
+    "ms": 395.48014900008275
+   },
+   "Bt": {
+    "n": 200,
+    "right": 97,
+    "wrong": 57,
+    "asked": 46,
+    "ms": 365.12013100004697
+   },
+   "Ct": {
+    "n": 200,
+    "right": 169,
+    "wrong": 25,
+    "asked": 6,
+    "ms": 404.53966000006767
+   }
+  },
+  "ALL": {
+   "n": 3996,
+   "A": {
+    "n": 3996,
+    "right": 2959,
+    "wrong": 570,
+    "asked": 467,
+    "ms": 156108.63104400068
+   },
+   "A1": {
+    "n": 3996,
+    "right": 3173,
+    "wrong": 823,
+    "asked": 0,
+    "ms": 0
+   },
+   "B": {
+    "n": 3996,
+    "right": 2573,
+    "wrong": 907,
+    "asked": 516,
+    "ms": 6785.443717000379
+   },
+   "C": {
+    "n": 3996,
+    "right": 3310,
+    "wrong": 594,
+    "asked": 92,
+    "ms": 7259.738191000175
+   },
+   "Bt": {
+    "n": 3996,
+    "right": 2575,
+    "wrong": 857,
+    "asked": 564,
+    "ms": 6563.0124580000775
+   },
+   "Ct": {
+    "n": 3996,
+    "right": 3308,
+    "wrong": 599,
+    "asked": 89,
+    "ms": 7037.457252000078
+   }
+  }
+ },
+ "holdout": {
+  "art.draw": {
+   "own": {
+    "A_trained": {
+     "n": 419,
+     "right": 316
+    },
+    "C_trained": {
+     "n": 419,
+     "right": 358
+    },
+    "C_masked": {
+     "n": 419,
+     "right": 262
+    },
+    "B": {
+     "n": 419,
+     "right": 313
+    }
+   },
+   "all": {
+    "A_trained": {
+     "n": 3996,
+     "right": 2959
+    },
+    "C_trained": {
+     "n": 3996,
+     "right": 3308
+    },
+    "C_masked": {
+     "n": 3996,
+     "right": 3222
+    },
+    "B": {
+     "n": 3996,
+     "right": 2575
+    }
+   },
+   "light": 72.6
+  },
+  "diagram.sketch": {
+   "own": {
+    "A_trained": {
+     "n": 72,
+     "right": 67
+    },
+    "C_trained": {
+     "n": 72,
+     "right": 65
+    },
+    "C_masked": {
+     "n": 72,
+     "right": 53
+    },
+    "B": {
+     "n": 72,
+     "right": 55
+    }
+   },
+   "all": {
+    "A_trained": {
+     "n": 3996,
+     "right": 2959
+    },
+    "C_trained": {
+     "n": 3996,
+     "right": 3308
+    },
+    "C_masked": {
+     "n": 3996,
+     "right": 3307
+    },
+    "B": {
+     "n": 3996,
+     "right": 2575
+    }
+   },
+   "light": 75
+  },
+  "geo.map": {
+   "own": {
+    "A_trained": {
+     "n": 230,
+     "right": 180
+    },
+    "C_trained": {
+     "n": 230,
+     "right": 204
+    },
+    "C_masked": {
+     "n": 230,
+     "right": 136
+    },
+    "B": {
+     "n": 230,
+     "right": 174
+    }
+   },
+   "all": {
+    "A_trained": {
+     "n": 3996,
+     "right": 2959
+    },
+    "C_trained": {
+     "n": 3996,
+     "right": 3308
+    },
+    "C_masked": {
+     "n": 3996,
+     "right": 3242
+    },
+    "B": {
+     "n": 3996,
+     "right": 2575
+    }
+   },
+   "light": 63.5
+  },
+  "games.chess": {
+   "own": {
+    "A_trained": {
+     "n": 174,
+     "right": 115
+    },
+    "C_trained": {
+     "n": 174,
+     "right": 119
+    },
+    "C_masked": {
+     "n": 174,
+     "right": 83
+    },
+    "B": {
+     "n": 174,
+     "right": 98
+    }
+   },
+   "all": {
+    "A_trained": {
+     "n": 3996,
+     "right": 2959
+    },
+    "C_trained": {
+     "n": 3996,
+     "right": 3308
+    },
+    "C_masked": {
+     "n": 3996,
+     "right": 3269
+    },
+    "B": {
+     "n": 3996,
+     "right": 2575
+    }
+   },
+   "light": 54
+  }
+ },
+ "talk": {
+  "n": 87,
+  "A": {
+   "n": 87,
+   "right": 0,
+   "wrong": 35,
+   "asked": 52,
+   "ms": 1776.9114009999175
+  },
+  "B": {
+   "n": 87,
+   "right": 21,
+   "wrong": 27,
+   "asked": 39,
+   "ms": 124.88212999999087
+  },
+  "C": {
+   "n": 87,
+   "right": 4,
+   "wrong": 74,
+   "asked": 9,
+   "ms": 215.52480499999365
+  }
+ },
+ "sweep": {
+  "operational": {
+   "10": 80.3,
+   "20": 90.3,
+   "30": 94,
+   "45": 95.4
+  },
+  "minimal-pairs": {
+   "10": 69.7,
+   "20": 100,
+   "30": 100,
+   "45": 100
+  },
+  "knowledge": {
+   "10": 54.7,
+   "20": 54.2,
+   "30": 54.2,
+   "45": 53.7
+  },
+  "dialogues": {
+   "10": 75,
+   "20": 77.6,
+   "30": 79.9,
+   "45": 78
+  },
+  "owner-log": {
+   "10": 61.5,
+   "20": 69.2,
+   "30": 69.2,
+   "45": 76.9
+  },
+  "wrong-tab": {
+   "10": 57.5,
+   "20": 67.5,
+   "30": 73,
+   "45": 75.5
+  },
+  "wrong-tab-ops": {
+   "10": 59,
+   "20": 78,
+   "30": 84.5,
+   "45": 86.5
+  },
+  "ALL": {
+   "10": 73.5,
+   "20": 79.9,
+   "30": 82.8,
+   "45": 82.3
+  }
+ },
+ "talkCost": {
+  "operational": {
+   "n": 1030,
+   "B_with": 692,
+   "B_without": 699,
+   "C_with": 967,
+   "C_without": 968
+  },
+  "minimal-pairs": {
+   "n": 122,
+   "B_with": 81,
+   "B_without": 81,
+   "C_with": 122,
+   "C_without": 122
+  },
+  "knowledge": {
+   "n": 110,
+   "B_with": 99,
+   "B_without": 100,
+   "C_with": 103,
+   "C_without": 103
+  },
+  "dialogues": {
+   "n": 2241,
+   "B_with": 1481,
+   "B_without": 1491,
+   "C_with": 1791,
+   "C_without": 1791
+  },
+  "owner-log": {
+   "n": 13,
+   "B_with": 8,
+   "B_without": 8,
+   "C_with": 9,
+   "C_without": 9
+  },
+  "wrong-tab": {
+   "n": 193,
+   "B_with": 99,
+   "B_without": 99,
+   "C_with": 145,
+   "C_without": 146
+  },
+  "wrong-tab-ops": {
+   "n": 200,
+   "B_with": 92,
+   "B_without": 97,
+   "C_with": 169,
+   "C_without": 169
+  }
+ },
+ "confusionB": [
+  [
+   "kids.arith -> ui.avatar",
+   54
+  ],
+  [
+   "kids.arith -> talk",
+   51
+  ],
+  [
+   "ui.avatar -> diagram.sketch",
+   39
+  ],
+  [
+   "art.draw -> diagram.sketch",
+   38
+  ],
+  [
+   "kids.tasks -> docs.editor",
+   36
+  ],
+  [
+   "games.chess -> ui.shell",
+   27
+  ],
+  [
+   "ui.avatar -> art.draw",
+   25
+  ],
+  [
+   "kids.shapes -> ui.avatar",
+   20
+  ],
+  [
+   "media.music -> diagram.sketch",
+   19
+  ],
+  [
+   "games.chess -> diagram.sketch",
+   18
+  ],
+  [
+   "talk -> kids.animals",
+   18
+  ],
+  [
+   "ui.avatar -> kids.common",
+   17
+  ],
+  [
+   "user.profile -> kids.animals",
+   17
+  ],
+  [
+   "kids.arith -> kids.shop",
+   14
+  ],
+  [
+   "kids.animals -> talk",
+   13
+  ],
+  [
+   "kids.common -> ui.avatar",
+   13
+  ],
+  [
+   "kids.arith -> ui.help",
+   12
+  ],
+  [
+   "games.tictactoe -> diagram.sketch",
+   12
+  ],
+  [
+   "kids.animals -> ui.avatar",
+   12
+  ],
+  [
+   "docs.editor -> diagram.sketch",
+   12
+  ],
+  [
+   "user.profile -> ui.avatar",
+   12
+  ],
+  [
+   "kids.common -> kids.animals",
+   11
+  ],
+  [
+   "geo.map -> data.charts",
+   11
+  ],
+  [
+   "diagram.sketch -> art.draw",
+   10
+  ],
+  [
+   "ui.shell -> kids.shop",
+   9
+  ]
+ ]
+}

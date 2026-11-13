@@ -27,7 +27,7 @@ import { TAB_ACTIONS } from '../src/formalizer/routing.mjs';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const CARDS_FILE = join(REPO, 'worlds/meta.worlds/kb.sop');
 const SKIP_WORLDS = new Set(['core', 'lang.common', 'common.sense', 'meta.worlds', 'session.conversation']);
-const MAX_ACT = 60, MAX_THING = 48, MAX_FRAME = 10, SHARED_FROM = 3, DROP_FROM = 5, SHARE_OWN = 0.5, SHARE_SHARED = 0.2;   // things: a word of 3 or 4 worlds is shared, of 5 or more says nothing; actions: a world with at least half of all the uses of the word owns it, with a fifth shares it
+const MAX_ACT = 60, MAX_THING = 48, MAX_FRAME = 10, SHARED_FROM = 3, DROP_FROM = 5, SHARE_OWN = 0.5, SHARE_SHARED = 0.2, ASKS_MOSTLY = 0.7;   // things: a word of 3 or 4 worlds is shared, of 5 or more says nothing; actions: a world with at least half of all the uses of the word owns it, with a fifth shares it
 const QUESTION_WORDS = new Set(['what', 'who', 'whom', 'whose', 'where', 'when', 'why', 'how', 'which', 'is', 'are', 'was', 'were', 'does', 'do', 'did', 'can', 'could', 'will', 'would', 'should', 'has', 'have']);
 const wordOk = (w) => /^[a-z][a-z']*$/.test(w) && w.length >= 2 && !GRAMMAR.has(w) && !PERSON.has(w);   // one word (a phrase atom with _ is a lead-in or a filler, not an action)
 const toks = (t) => String(t ?? '').toLowerCase().match(/[a-z][a-z']*/g) ?? [];
@@ -49,7 +49,7 @@ function literalsOf(match, phrases, depth = 0) {
       if (!alt || alt.startsWith('{')) continue;
       if (alt.startsWith('$')) {
         const id = alt.slice(1).replace(/\?$/, '');
-        if (id.startsWith('lang.') || depth > 2) continue;
+        if (depth > 2) continue;
         for (const a of phrases.get(id) ?? []) out.push(...(a.startsWith('$') ? literalsOf(a, phrases, depth + 1) : [a]));
       } else out.push(alt.replace(/\?$/, ''));
     }
@@ -75,12 +75,25 @@ function notActions(set) {
   return out;
 }
 
+/** Words of modifier lexicons that two or more worlds have (colours, sizes, directions, units): arguments of an action, not actions. */
+function modifierWords(set) {
+  const seen = new Map();
+  for (const w of set.list()) for (const l of w.lexicons ?? []) {
+    const cls = l.wire?.entries?.find((e) => e.key === 'class')?.value?.v ?? l.class;
+    if (['thing', 'noun', 'name', 'trigger'].includes(cls)) continue;
+    for (const x of l.words ?? []) { const k = lemma(String(x).toLowerCase()); (seen.get(k) ?? seen.set(k, new Set()).get(k)).add(w.id); }
+  }
+  return new Set([...seen].filter(([, ws]) => ws.size >= 2).map(([k]) => k));
+}
+
 export async function buildCards(set) {
   const phrases = phraseTable(set);
+  const modifiers = modifierWords(set);
   const things = notActions(set);
   const worlds = set.list().filter((w) => !SKIP_WORLDS.has(w.id) && w.patterns?.length);
   const raw = worlds.map((w) => {
     const act = new Map(), thing = new Set(thingWords(w)), frames = new Map(), canon = new Set(), canonPatterns = new Map();
+    let nCanon = 0, nQuestions = 0;
     let nav = false;
     const navact = new Set();
     for (const p of w.patterns) {
@@ -90,6 +103,7 @@ export async function buildCards(set) {
       const seenHere = new Set();
       for (const c of p.canonical ?? []) {
         const t = toks(c);
+        nCanon++; if (/\?\s*$/.test(c) || QUESTION_WORDS.has(t[0])) nQuestions++;
         const names = new Set((String(c).match(/[A-Za-z][A-Za-z']*/g) ?? []).filter((x, i) => i > 0 && /^[A-Z]/.test(x) && x !== 'I').map((x) => x.toLowerCase()));   // Ben, Paris: names of the example, not what the world is for
         for (const x of t) { const l = lemma(x); if (wordOk(l) && !thing.has(l) && !names.has(x)) seenHere.add(l); }
         if (!(/\?\s*$/.test(c) || QUESTION_WORDS.has(t[0]))) continue;
@@ -98,13 +112,13 @@ export async function buildCards(set) {
       for (const l of seenHere) canonPatterns.set(l, (canonPatterns.get(l) ?? 0) + 1);
     }
     for (const [l, k] of canonPatterns) if (k >= 2) { act.set(l, (act.get(l) ?? 0) + 2 * k); canon.add(l); }   // the words of the canonical examples of two patterns or more come first: they are what the world's authors say it is for
-    for (const t of [...thing, ...things]) act.delete(t);   // a thing word or a name is a thing, not an action
+    for (const t of [...thing, ...things, ...modifiers]) act.delete(t);   // a thing word, a name or a modifier (a colour, a size) is an argument, not an action
     const tab = w.tab ?? null;
     const last = w.id.split('.').at(-1);
     const norm = (n) => lemma(String(n).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, ''));
     const aliases = (tab?.aliases ?? []).map(norm), tabId = tab?.id ? norm(tab.id) : null, lastSeg = norm(last);
     const names = [...new Set([tab?.id, ...(tab?.aliases ?? []), last].filter(Boolean).map((n) => String(n).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '')).map(lemma).filter((n) => n.length >= 3 && !GRAMMAR.has(n)))];
-    return { id: w.id, canon, aliases, tabId, lastSeg, tab: tab?.id ?? null, navact: [...navact].sort(), kind: tab ? 'tab' : 'module', needs: tab?.kind === 'game' || w.id.startsWith('games.'), nav, names, act, thing, frames };
+    return { id: w.id, asks: nCanon ? nQuestions / nCanon : 0, canon, aliases, tabId, lastSeg, tab: tab?.id ?? null, navact: [...navact].sort(), kind: tab ? 'tab' : 'module', needs: tab?.kind === 'game' || w.id.startsWith('games.'), nav, names, act, thing, frames };
   });
   // shared = used by SHARED_FROM or more worlds (counted over every candidate word, before the cap)
   const spread = (key) => { const m = new Map(); for (const r of raw) for (const x of (r[key] instanceof Map ? r[key].keys() : r[key])) m.set(x, (m.get(x) ?? 0) + 1); return m; };
@@ -118,11 +132,13 @@ export async function buildCards(set) {
   const cards = raw.map((r) => {
     const act = [...r.act.keys()].filter((x) => share(r, x) >= SHARE_SHARED).sort((a, b) => (r.canon.has(b) - r.canon.has(a)) || share(r, b) * r.act.get(b) - share(r, a) * r.act.get(a) || a.localeCompare(b)).slice(0, MAX_ACT), thing = take([...r.thing].filter((x) => thingSpread.get(x) < DROP_FROM), thingSpread, MAX_THING);
     const frame = take([...r.frames.keys()].filter((f) => frameSpread.get(f) < SHARED_FROM), frameSpread, MAX_FRAME, r.frames, new Set());
+    // a world whose canonical examples are mostly questions answers the plain frames (what is X, how many X) that many worlds share: it keeps them as shared frames
+    const frameshared = r.asks >= ASKS_MOSTLY ? take([...r.frames.keys()].filter((f) => frameSpread.get(f) >= SHARED_FROM), frameSpread, MAX_FRAME, r.frames, new Set()) : [];
     const catalog = r.id === 'art.draw' || r.id === 'talk';
     // the aliases a world declares are its names; its tab id and the last part of its id too, unless other worlds use the word as an action ("draw")
     const names = r.names.filter((n) => r.aliases.includes(n) || (n === r.tabId || n === r.lastSeg) && (total.get(n) ?? 0) === 0);   // a verb that is the tab id ("draw") is an action word, not a name
     const nameSet = new Set(names);
-    return { ...r, names, act: act.filter((x) => share(r, x) >= SHARE_OWN && !nameSet.has(x)), actshared: act.filter((x) => share(r, x) < SHARE_OWN && !nameSet.has(x)), thing: thing.filter((x) => thingSpread.get(x) < SHARED_FROM), thingshared: thing.filter((x) => thingSpread.get(x) >= SHARED_FROM), frame, catalog };
+    return { ...r, names, act: act.filter((x) => share(r, x) >= SHARE_OWN && !nameSet.has(x)), actshared: act.filter((x) => share(r, x) < SHARE_OWN && !nameSet.has(x)), thing: thing.filter((x) => thingSpread.get(x) < SHARED_FROM), thingshared: thing.filter((x) => thingSpread.get(x) >= SHARED_FROM), frame, frameshared, catalog };
   });
   return cards.sort((a, b) => a.id.localeCompare(b.id));
 }
@@ -133,7 +149,7 @@ export function cardsText(cards) {
   let out = '# GENERATED by scripts/build-world-cards.mjs from the worlds (patterns, lexicons, manifests). Do not edit: change the world and regenerate.\n# `npm test` fails when this file is stale (tests/meta-worlds.test.mjs).\n';
   for (const c of cards) {
     out += `\n@card.${c.id} meta.worlds.card\n    core.source="generated:meta.worlds/cards"\n    id=${c.id} kind=${c.kind} run=${c.needs ? 'needs' : 'none'}${c.tab ? ` tab=${c.tab}` : ''}${c.nav ? ' nav=yes' : ''}${c.catalog ? ' catalog=yes' : ''}\n`;
-    out += chunks('name', c.names) + chunks('navact', c.navact) + chunks('act', c.act) + chunks('actshared', c.actshared) + chunks('thing', c.thing) + chunks('thingshared', c.thingshared) + chunks('frame', c.frame);
+    out += chunks('name', c.names) + chunks('navact', c.navact) + chunks('act', c.act) + chunks('actshared', c.actshared) + chunks('thing', c.thing) + chunks('thingshared', c.thingshared) + chunks('frame', c.frame) + chunks('frameshared', c.frameshared);
   }
   return out;
 }

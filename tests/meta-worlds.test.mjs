@@ -66,17 +66,17 @@ test('a referent in a scene is strong evidence: "the crocodiles" on another tab 
 
 test('SCENE-NATURAL P1 is the first rule set: a piece without a verb continues the last action, and a world with nothing to continue is blocked', () => {
   const l = live({ active: 'art.draw', last: 'art.draw' });
-  const r = mw.route({ text: 'the water', live: l });
+  const r = mw.route({ text: 'the water', live: l, catalog: ['water'] });
   assert.equal(r.fragment, true);
   assert.equal(r.ranked[0].world, 'art.draw');
   assert.ok(r.ranked[0].reasons.some((x) => x.rule === 'followup'));
   assert.ok(r.blocked['diagram.sketch']?.some((b) => b.rule === 'nocontinuation'), 'a world that is not open, not last, not running cannot take a piece');
   assert.ok(!r.blocked['ui.shell'], 'the shell acts anywhere');
   // a world with a referent of the piece in its scene is not blocked
-  const r2 = mw.route({ text: 'the crocodiles', live: live({ active: 'art.draw', last: 'art.draw', scene: { 'diagram.sketch': ['crocodile'] } }) });
+  const r2 = mw.route({ text: 'the crocodiles', catalog: ['crocodile'], live: live({ active: 'art.draw', last: 'art.draw', scene: { 'diagram.sketch': ['crocodile'] } }) });
   assert.ok(!r2.blocked['diagram.sketch']);
   // nothing said before: nothing to continue, nothing is blocked
-  assert.equal(Object.keys(mw.route({ text: 'the water', live: live({ active: 'art.draw' }) }).blocked).filter((x) => !x.startsWith('games.')).length, 0);
+  assert.equal(Object.keys(mw.route({ text: 'the water', catalog: ['water'], live: live({ active: 'art.draw' }) }).blocked).filter((x) => !x.startsWith('games.')).length, 0);
 });
 
 test('a world that needs something running cannot take a message that does not start it, and no encoder prior outvotes a block', () => {

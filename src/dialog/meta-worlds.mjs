@@ -17,6 +17,7 @@
 import { GRAMMAR, PERSON } from './continuation.mjs';
 import { sceneThings } from './scene-referents.mjs';
 import { budget } from './budget.mjs';
+import { editDistance } from '../formalizer/rules/normalize.mjs';
 
 /** The singular, lowercase: ies -> y, es after s/x/ch/sh, a final s (not ss, us, is). */
 export function lemma(w) {
@@ -30,6 +31,8 @@ export function lemma(w) {
 }
 
 const MAX_TOKENS = 40;
+/** Words that open a question or turn a clause into one: a message that has one is not a piece of a request. */
+const QUESTION = new Set(['what', 'whats', 'who', 'whom', 'whose', 'where', 'when', 'why', 'how', 'which', 'is', 'are', 'was', 'were', 'does', 'do', 'did', 'can', 'could', 'will', 'would', 'should', 'has', 'have']);
 const atom = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/^_+|_+$/g, '');
 
 /** The words of a message as the rules see them: each word and its lemma, then the pairs and triples of lemmas joined with _. */
@@ -57,32 +60,57 @@ export async function loadMetaWorlds(set, { lib = null, priorWeight = 30 } = {})
   }
   const cards = base.ofType('meta.worlds.card').map((c) => ({
     id: one(c, 'id'), tab: one(c, 'tab'), kind: one(c, 'kind'), run: one(c, 'run'), nav: one(c, 'nav') === 'yes', catalog: one(c, 'catalog') === 'yes',
-    name: attrs(c, 'name'), navact: attrs(c, 'navact'), act: attrs(c, 'act'), actshared: attrs(c, 'actshared'), thing: attrs(c, 'thing'), thingshared: attrs(c, 'thingshared'), frame: attrs(c, 'frame'),
+    name: attrs(c, 'name'), navact: attrs(c, 'navact'), act: attrs(c, 'act'), actshared: attrs(c, 'actshared'), thing: attrs(c, 'thing'), thingshared: attrs(c, 'thingshared'), frame: attrs(c, 'frame'), frameshared: attrs(c, 'frameshared'),
   }));
   const byId = new Map(cards.map((c) => [c.id, c]));
   const says = new Map(base.ofType('meta.worlds.say').map((s) => [one(s, 'rule'), one(s, 'text')]));
-  const verbs = new Set(cards.flatMap((c) => [...c.act, ...c.actshared, ...c.frame]));
+  const verbs = new Set(cards.flatMap((c) => [...c.act, ...c.actshared, ...c.frame]));   // (a shared frame, "what is", does not make a message a request)
   // a word that no card and no scene has can match nothing: it is not told to the rules (the module is smaller to derive, the answer is the same)
-  const known = new Set([...cards.flatMap((c) => [...c.name, ...c.act, ...c.actshared, ...c.thing, ...c.thingshared, ...c.frame, ...c.navact]), ...base.ofType('meta.worlds.start').map((x) => one(x, 'word'))]);
+  const known = new Set([...cards.flatMap((c) => [...c.name, ...c.act, ...c.actshared, ...c.thing, ...c.thingshared, ...c.frame, ...c.frameshared, ...c.navact]), ...base.ofType('meta.worlds.start').map((x) => one(x, 'word'))]);
   const nameOf = (id) => { const c = byId.get(id); return (c?.name?.[0] ?? id.split('.').at(-1)).replace(/_/g, ' '); };
   const CAP = { act: 2, thing: 2, actshared: 1, thingshared: 1, referent: 2, named: 2, frame: 1, catalog: 1, actthing: 1 };   // a long message must not win on repetition
 
-  /** Whether the message is a piece without a verb of its own: short, nobody speaking of themselves, no word that any world takes as an action, no question frame. */
-  function isFragment(text, tokens, words) {
-    if (!tokens.length || tokens.length > 7 || /\?\s*$/.test(String(text))) return false;
-    if (tokens.some((t) => PERSON.has(t))) return false;
+  // a word the message has wrong by a slip of the fingers ("paragrph", "Pariss") is read as the one word of the cards it is one or two edits from, when exactly one is
+  const byLen = new Map();
+  for (const x of known) if (/^[a-z]+$/.test(x) && x.length >= 5) (byLen.get(x.length) ?? byLen.set(x.length, []).get(x.length)).push(x);
+  function nearWords(tokens, sceneAtoms, catalog) {
+    const out = [];
+    for (const t of tokens) {
+      const w = atom(t);
+      if (w.length < 6 || known.has(w) || known.has(atom(lemma(t))) || sceneAtoms.has(w) || catalog.has(w) || catalog.has(atom(lemma(t)))) continue;
+      const reach = w.length >= 8 ? 2 : 1;
+      let best = null, d0 = reach + 1, tie = false;
+      for (let n = w.length - reach; n <= w.length + reach; n++) for (const k of byLen.get(n) ?? []) {
+        budget.tick('meta.worlds.near');
+        if (k[0] !== w[0] && k[1] !== w[1]) continue;
+        const d = editDistance(w, k);
+        if (d < d0) { d0 = d; best = k; tie = false; } else if (d === d0 && k !== best) tie = true;
+      }
+      if (best && !tie) out.push(best);
+    }
+    return out;
+  }
+
+  /**
+   * Whether the message is a piece without a verb of its own: short, nobody speaking of themselves, not a question, no number, no word that any world takes
+   * as an action, no question frame, and at least one word that a card or a scene knows (a thing: "the crocodiles", "the water"; garbage is not a piece).
+   */
+  function isFragment(text, tokens, words, sceneAtoms = new Set()) {
+    if (!tokens.length || tokens.length > 5 || /\?\s*$/.test(String(text))) return false;
+    if (tokens.some((t) => PERSON.has(t) || /\d/.test(t) || QUESTION.has(t))) return false;
     if (words.some((x) => verbs.has(x))) return false;
-    return tokens.some((t) => !GRAMMAR.has(t));
+    return words.some((x) => (known.has(x) || sceneAtoms.has(x)) && !GRAMMAR.has(x));   // sceneAtoms here also holds the catalog words of the message
   }
 
   function route({ text, live = {}, prior = null, fragment = null, catalog = [], keep = null, weight = priorWeight }) {
     budget.tick('meta.worlds.route');
     const t0 = globalThis.performance?.now?.() ?? Date.now();
     const { tokens, words } = messageWords(text);
-    const frag = fragment ?? isFragment(text, tokens, words);
     const f = base.fork();
     const sceneAtoms = new Set(Object.entries(live.scene ?? {}).filter(([id]) => byId.has(id)).flatMap(([, things]) => [...things].flatMap((x) => [atom(x), atom(lemma(x))])));
-    const told = words.filter((x) => known.has(x) || sceneAtoms.has(x));
+    const catalogSet = new Set(catalog.flatMap((x) => [atom(x), atom(lemma(x))]));
+    const frag = fragment ?? isFragment(text, tokens, words, new Set([...sceneAtoms, ...catalogSet]));
+    const told = [...new Set([...words.filter((x) => known.has(x) || sceneAtoms.has(x)), ...nearWords(tokens, sceneAtoms, catalogSet)])];
     const lines = [`@m meta.worlds.msg ${told.map((x) => `word=${x}`).join(' ')} frag=${frag ? 'yes' : 'no'}${catalog.length ? ` ${catalog.map((x) => `catalog=${atom(x)}`).join(' ')}` : ''}`];
     const l = new Map();
     const flag = (id, k, v = 'yes') => { if (!id || !byId.has(id)) return; (l.get(id) ?? l.set(id, {}).get(id))[k] = v; };
@@ -116,7 +144,7 @@ export async function loadMetaWorlds(set, { lib = null, priorWeight = 30 } = {})
   }
 
   /** `route` plus the decision: asked when no world has evidence (`minScore`) or the best two worlds are within `margin` points. */
-  function decide(args, { minScore = 15, margin = 4 } = {}) {
+  function decide(args, { minScore = 12, margin = 4 } = {}) {
     const r = route(args);
     const [a, b] = r.ranked;
     let asked = null;
