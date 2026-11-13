@@ -521,7 +521,8 @@ const make = (kind) => (ctx, args = {}) => {
   if (text) {
     const prepared = prepareText(text, s);
     if (typeof process !== 'undefined' && process.env?.DIAG_DEBUG) console.error('[diagram]', JSON.stringify(text), '->', JSON.stringify(prepared));
-    const sp = spaceTry(prepared, s, kind);
+    const absent = kind.type === 'command' ? missingNamed(s, kind.name, text) : [];   // a name the diagram does not have is never replaced by another shape: not for the module either
+    const sp = absent.length ? null : spaceTry(prepared, s, kind);
     if (sp) return sp.status ? sp : spaceApply(ctx, s, sp);
     const sel = selectCommand(prepared, s, ctx);
     if (sel) return sel;

@@ -14,6 +14,7 @@
 //   parseQuestion / answer    what is next to X, which is in the middle, is A above B, how far apart
 //   interpret(text, ctx)      the whole sentence at once (hosts without their own reading of the verb and the thing)
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const toks = (t) => String(t ?? '').toLowerCase().replace(/[^a-z0-9\s]+/g, ' ').split(/\s+/).filter(Boolean);
 const has = (a, w) => a.includes(w);
 const sum = (a) => a.reduce((x, y) => x + y, 0);
@@ -37,6 +38,7 @@ const JOINED = [...NAMED(AMOUNTS), ...MORE, ...NAMED(RELATIONS), 'to_the_left_of
 export function words(text) {
   const t = Array.isArray(text) ? text.slice() : toks(text), out = [];
   for (let i = 0; i < t.length;) {
+    budget.tick('space.words');
     const hit = JOINED.find((j) => j.every((w, k) => t[i + k] === w));
     if (hit) { out.push(hit.join('_')); i += hit.length; } else out.push(t[i++]);
   }
@@ -489,11 +491,12 @@ export function splitMove(t, kindOf = () => null) {
   return { target: t.slice(0, at), dest: t.slice(at) };
 }
 
-const stripFiller = (t) => { let i = 0; while (i < t.length && FILLER.has(t[i])) i++; return t.slice(i); };
+const stripFiller = (t) => { const i = t.findIndex((w) => !FILLER.has(w)); return i < 0 ? [] : t.slice(i); };
 const pronoun = (t) => t.length > 0 && t.length <= 2 && t.every((w) => ['it', 'them', 'that', 'this', 'those', 'these', 'one', 'ones', 'the', 'same'].includes(w));
 
 /** The items a noun phrase means: { ids, items } | { ask } | { error }. */
-export function resolve(tokens, ctx, o = {}) {
+export function resolve(tokens, ctx, o = {}, depth = 0) {
+  if (depth > 3) return { error: 'none' };   // a reference inside a reference (next to the one next to ...) stops here
   const t = words(tokens), items = ctx.items ?? [];
   if (!t.length || pronoun(t)) { const ids = (ctx.last ?? []).filter((id) => items.some((i) => i.id === id)); return ids.length ? { ids, items: items.filter((i) => ids.includes(i.id)) } : { error: 'nolast' }; }
   if (t.some((w) => w === 'everything' || w === 'all' || w === 'things') && t.every((w) => ['everything', 'all', 'all_of', 'the', 'of', 'things', 'stuff', 'them'].includes(w))) return { ids: items.map((i) => i.id), items };
@@ -501,7 +504,7 @@ export function resolve(tokens, ctx, o = {}) {
   if (spec.unknown.length && !spec.kind) return { error: 'unknown', note: spec.unknown[0] };
   const pool = items.filter((i) => (!spec.kind || spec.kind === '*' || i.kind === spec.kind) && !(o.exclude ?? []).includes(i.id));
   if (!pool.length) return { error: 'none', spec };
-  const r = select(pool, spec, { ...ctx, resolve: (x) => resolve(x, ctx, { exclude: o.exclude }).items ?? [] });
+  const r = select(pool, spec, { ...ctx, resolve: (x) => resolve(x, ctx, { exclude: o.exclude }, depth + 1).items ?? [] });
   if (r.ask || r.error) return { ...r, spec };
   return { ids: r.ids, items: items.filter((i) => r.ids.includes(i.id)), spec };
 }
@@ -568,9 +571,10 @@ function layoutOf(t, ctx) {
   if (lay.op === 'swap') {
     const j = t.indexOf('and'), strip = (x) => x.filter((w) => !['places', 'with', 'swap', 'switch', 'exchange', 'trade', 'the_places_of'].includes(w));
     let ta = strip(t.slice(0, j)), tb = strip(t.slice(j + 1));
-    const kw = (x) => x.find((w) => ctx.kindOf?.(w)), shared = kw(tb) ?? kw(ta);   // "the first and the last house": one kind for both
-    if (shared && !kw(ta)) ta = [...ta, shared];
-    if (shared && !kw(tb)) tb = [...tb, shared];
+    const kindWordOf = (x) => x.find((w) => ctx.kindOf?.(w));
+    const shared = kindWordOf(tb) ?? kindWordOf(ta);   // "the first and the last house": one kind for both
+    if (shared && !kindWordOf(ta)) ta = [...ta, shared];
+    if (shared && !kindWordOf(tb)) tb = [...tb, shared];
     const a = j > 0 ? resolve(ta, ctx) : null;
     const b = j > 0 ? resolve(tb, ctx, { exclude: a?.ids ?? [] }) : null;
     for (const r of [a, b]) if (r?.ask) return { type: 'ask', say: r.ask, candidates: r.candidates };
