@@ -1468,3 +1468,35 @@ Removed: model first, NX hybrid reader, edit head, router A, fast-path switch (0
 Cold start (computed from the sizes, not re-timed in Chrome; 1 MB/s link, page code and worlds as before): downloaded in the first minutes: before page + worlds + 68.3 MB model + 97.0 MB normalizer (idle-loaded after 30 s on a fast link) = 165.3 MB beyond the page; after page + worlds + 68.3 MB model, the normalizer only when the person asks. Model ready: 68 s (was 68 s, then the normalizer started at 30 s idle and ran to about 165 s); never blocking either way (the rules answer meanwhile, routing B). Phone profile: the helper model can be switched off (the page then loads no model at all: 0 MB beyond the worlds).
 
 Checks (targeted, no full suites): `tests/facts-cycle`, `runtime-config`, `nx-strategy`, `settings-coherent`, `invariants`, `loop-guard` pass; `node src/cli.mjs test-world all` both reasoners: every world passes except the 13 known `diagram.sketch` rows of the previous landing (758/771 on both, identical to the main commit message; the ledger holds them); smoke once: 21.6 s, 3 failures before the fixes above (loop guard on the cutter's loops, the "zork" invariant text), 0 after. `tests/meta-worlds.test.mjs` "size gate" fails on the new diagram.sketch card (not mine, from the diagram switch). The Chrome UI test `scripts/test-webchat-ui.mjs` was updated for the new Reading group and the Experiments list but not run. Not changed (owner decisions made, applied above): NX hybrid default and normalizer default are the decisions (1) and (2) of this block. Test-run time of this task: about 55 minutes in the heavy queue (eval chains 6 + 6 configs, test-world twice, smoke once).
+
+## 2026-11-14 KNOWLEDGE-OUT step 4 (rest), 5, 6, 7: partial (worker; no push)
+
+**Landed (general mechanisms, no per-phrase code).**
+1. `src/knowledge/arrangement.mjs` (+ `arrangement-derive.mjs`, generated `bundled-arrangement.mjs`): ONE reader of what rests on what and the parts of a face, from k.scenes (`on=`, `place=ground`), k.layouts (joins, face slots) and k.words (aliases: brow = eyebrow). Deleted: the `KNOWLEDGE` table of `worlds/space/space.mjs` (28 entries), the `common.sense.supports` (14), `around` (7) and `facepart` (5) facts and types of common.sense. The space module reads the reader; the supports lookup is indexed (1,500 pairs).
+2. Catalog reading fixes in `facts.mjs` found by the Talk comparison: (a) a schema shard id that is its own path (`k.animals/schema.sop`) was read as `schema.sop.sop`, a miss set `unreachable()` and many Talk and draw replies said "I can't reach the picture catalog" (the online catalog was read as offline after any word that points at a schema); (b) a word form listed only as `core.word text=ants means=ant` is the thing `ant` (ants, cows, triangles); (c) `valuesOf` in Talk lets every slot of the strong records answer before any weak record (camel: habitat desert, not place ground). Test `tests/facts-forms.test.mjs`.
+3. `scripts/eval-knowledge-gain.mjs --set more`: 145 requests beyond the old kb files (animals beyond the 68, places beyond the cities, countries beyond the map kb, the calendar), expected values read from the catalog (`--truth`).
+4. `handover/knowledge-out/catalog-lacks.md` and a questions.md entry (what the catalog lacks; why the kids kb files stay).
+
+**Before / after.**
+
+| item | before | after |
+| --- | --- | --- |
+| gain set `more` (no catalog / catalog): animal legs | 1/50 | 42/50 |
+| animal sound | 0/30 | 23/30 |
+| place where (map) | 0/40 | 0/40 (the map refuses unknown places; no k.geo fallback yet) |
+| place capital (Talk) | 0/10 | 8/10 |
+| time facts | 0/15 | 15/15 |
+| total | 1/145 | 88/145 |
+| kids.animals inputs answered by Talk from the catalog (same / near wording / other, n=493) | 364 / 46 / 83 | 365 / 46 / 82 |
+| kids.shapes (n=473) | 392 / 26 / 55 | 393 / 26 / 54 |
+| kids.time (n=221) | 131 / 30 / 60 | 131 / 30 / 60 |
+| test-world all, matrix and ops | 13 diagram rows | the same 13 rows only |
+| smoke | | 21 tests green, about 20 s |
+| talk-generic, talk-transfers, knowledge-lookup, space | 4 + 2 known failures on main | the same 4 + 2 (sp060, comet, E-T4 map transfers: not mine, checked on the base) |
+| docs/webchat/worlds size | 8,130,471 B | 8,118,227 B |
+| common.sense kb | 336 lines | 201 lines; legend -50 |
+| space.mjs KNOWLEDGE | 28 entries | 0 (getter over the reader) |
+
+**Step 5 report (which kids world must stay).** Talk answers fact questions of kids.animals (74% same wording, 83% with near wording), kids.shapes (83%, 89%) and kids.time facts (59%, 73%) from the catalog. What Talk lacks as frames, by cause: baby-name ("what is a baby cat called"), covered-in, sound with "say", yes/no with a count ("does a dog have 4 legs") and with a class or diet ("is a lion a carnivore"), list by class ("which animals are mammals"), "primary colours", "what shape is a stop sign". kids.time must stay as a tab: today / tomorrow / the clock are state, not facts. kids.animals can go once the games read animals by lookup and the frames above exist in Talk; kids.shapes likewise. geo.map stays (the map is a tool). NOT done: deletion of the kids kb files (blocked: games.guess / games.hangman `reads=`, synchronous kb load, fixture-worded tests; questions.md) and of the geo.map kb (generated by scripts/build-geo-data.mjs; the reader rewrite for outlines, bounding boxes and neighbours is a task of its own; k.geo lacks 137 city names and 16 country names, see the hand-over).
+**Not done:** common.sense `livesin` / `rule` / `place` / `single` / `absent` (read by art.draw fns.mjs and the soft rules; derivable from k.scenes but art.draw is being changed by another track: left for after it lands). Baseline of the inventory refreshed: space KNOWLEDGE and the three common.sense types removed; stale diagram / acts entries from other landings refreshed too.
+**Test minutes:** about 25 (talkvs comparisons 6 x 1 min, gain sets 3 x 4 min, test-world all 2 x 40 s, smoke 2 x 25 s, targeted tests).
