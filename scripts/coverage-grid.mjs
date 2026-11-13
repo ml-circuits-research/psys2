@@ -18,8 +18,10 @@ const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
 const perAct = Number(arg('per-act', 4));
 const roots = [path.join(REPO, 'worlds-pilot'), path.join(REPO, 'tests/fixtures/worlds')].filter(existsSync);
-const worlds = roots.flatMap((r) => readdirSync(r).filter((d) => existsSync(path.join(r, d, 'schema.sop'))).map((d) => ({ id: d, dir: path.join(r, d) })));
-const tabOf = { 'ui.avatar': 'robot', 'diagram.sketch': 'diagram' };
+// every schema world: the pilots, the real worlds with a schema.sop, and the fixtures (the seating fixture is left out: the real plan.seating reads the same sentences)
+const scan = [path.join(REPO, 'worlds-pilot'), path.join(REPO, 'worlds'), path.join(REPO, 'tests/fixtures/worlds')].filter(existsSync);
+const worlds = scan.flatMap((r) => readdirSync(r).filter((d) => existsSync(path.join(r, d, 'schema.sop')) && d !== 'test.seating' && d !== 'acts').map((d) => ({ id: d, dir: path.join(r, d) })));
+const tabOf = Object.fromEntries(worlds.map((w) => [w.id, /^\s*tab=(\S+)/m.exec(readFileSync(path.join(w.dir, 'world.sop'), 'utf8'))?.[1] ?? (w.id === 'ui.avatar' ? 'robot' : null)]).filter(([, t]) => t));
 const CHANGES = new Set(['make', 'remove', 'change', 'place', 'connect', 'group', 'copy', 'load']);
 const REFUSAL = /did not understand|did not catch|I can't find|I cannot|There is no|Where should it go|Your picture is empty|not sure how|I do not know|Something went wrong|nothing to/i;
 const SAMPLE = { make: 'make', remove: 'remove', set: 'change', place: 'place', connect: 'connect', group: 'group', apart: 'group', pick: 'pick', copy: 'copy', send: 'send', save: 'save', load: 'load' };
