@@ -14,7 +14,7 @@ import { loadWorlds } from '../worlds/index.mjs?v=bf83165839';
 import { validateWorldSet } from '../worlds/validate.mjs?v=b89330fded';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
 import { createInterpreter } from '../interpreter/index.mjs?v=fcb36d7690';
-import { createReasoner } from '../reasoner/index.mjs?v=72f385a8d9';
+import { createReasoner } from '../reasoner/index.mjs?v=957ba6764d';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=cbbcb24a63';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=5c85e78e47';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
@@ -31,7 +31,7 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=e99f51b690';
 import { Discourse } from './discourse.mjs?v=0972f85dd8';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=aef64a7291';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=681c66cd95';
 import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f516782815';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
