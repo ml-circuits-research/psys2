@@ -3819,3 +3819,14 @@ Validated: smoke 62/62 at f18f5114; sopworld 0.24.0 (354 tests, 0 fail) with `tu
 - the worlds as a graph: tab views, shared modules (library), knowledge worlds, with an edge when one asks another for something (fill, lookup, view, layout), weighted by how often on the logs;
 - three numbers per world: hand-written lines, reuse number, share of its turns answered with help from another world.
 The trace of one turn ("why") uses the same vocabulary, so the page explains what the trace shows. This page is how the owner and new contributors see what the system has become; regenerate it at each landing.
+
+## Reviewer 2026-11-14 00:40 — STANDING DIRECTION; validated at 3021d931 (smoke 62/62)
+
+**Owner, 2026-11-13 22:54 (standing direction for all three repositories):** the goal is to accumulate experience in how worlds are made, to improve sopworld, to generalise, to accumulate cases, and to learn how to combine worlds so that coverage grows. Everything else is secondary. Small regressions are acceptable when generality and learning are gained.
+
+What this changes in practice:
+1. **Switch rule relaxed.** A pilot world on schema + acts is switched when it is within **10%** of today on its own tests and not more than 3 rows worse on the owner logs, if it removes hand-written language code. art.draw: remeasure after act groups / parts as kinds / open classes by lookup and switch at that rule. Old worlds are deleted one landing after the switch.
+2. **The measures that count, reported at every landing in one table (generated, in worker-log and the system map):** worlds on schema + acts (count), hand-written language lines in tab worlds, general lines still in PSys2, reuse number per world, coverage grid holes (k.actions verbs × kinds × values, judged by diff), cross-world turns (answered with help of another world) on the logs and the ledger, cases in the corpus. Accuracy sets stay as a guard, not the goal.
+3. **Cases accumulate.** Every owner log, ledger row, generated grid case and transfer experiment row goes into one case corpus with its cause group and stage (sopworld's ledger format); it only grows; a case that changes from right to wrong is listed, not hidden.
+4. **Lessons are written down.** `docs/lessons.md`: after each landing, 3–5 lines: what generalised, what did not and why, which mechanism should exist in the library or the knowledge repo instead. This is the experience the owner wants to accumulate; the reviewer forwards the library-relevant lines.
+5. **Combinations as the coverage lever.** Prefer work that makes a new pair of worlds cooperate (a view, a fill, a lookup, a transfer) over work inside one world. Count pairs that cooperate (T1–T6 matrix) as a headline number.
