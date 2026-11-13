@@ -125,9 +125,10 @@
     "lib/worlds/validate.mjs": "e2370042e89b51ec",
     "worlds/art.draw/coverage.md": "e028db6e48c71587",
     "worlds/art.draw/datagen.mjs": "735b33ac0ed66819",
-    "worlds/art.draw/fns.mjs": "3e1a8363e5162d01",
-    "worlds/art.draw/ops.mjs": "d11afe243c5cf11c",
-    "worlds/art.draw/scene.mjs": "4578699a0525a1b8",
+    "worlds/art.draw/fns.mjs": "4122a92544665940",
+    "worlds/art.draw/ops.mjs": "824d8b2f47f30a59",
+    "worlds/art.draw/scene.mjs": "5ecd02953e0aea71",
+    "worlds/art.draw/things.catalog.mjs": "d7fcfc6371c4cffa",
     "worlds/data.charts/coverage.md": "908ba75884fc997c",
     "worlds/data.charts/datagen.mjs": "fc1501bebb41ff64",
     "worlds/data.charts/fns.mjs": "78bd33a837235e06",
@@ -136,8 +137,8 @@
     "worlds/diagram.sketch/engine/auto-layout.mjs": "46f97a4739eb8339",
     "worlds/diagram.sketch/engine/logic.mjs": "09664b189e5d152c",
     "worlds/diagram.sketch/engine/templates.mjs": "625a2dc2ee86f062",
-    "worlds/diagram.sketch/fns.mjs": "425247627edfc57c",
-    "worlds/diagram.sketch/ops.mjs": "d132963b23863def",
+    "worlds/diagram.sketch/fns.mjs": "4f2ac80ea58573ac",
+    "worlds/diagram.sketch/ops.mjs": "2c1baf455f414e7f",
     "worlds/diagram.sketch/refs.mjs": "5d7c74441762a25e",
     "worlds/docs.editor/coverage.md": "532dde81b41608d7",
     "worlds/docs.editor/datagen.mjs": "5e2eb5732fc989b1",
@@ -174,7 +175,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "16f176dcd3a5d975",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "e6f27cf4eca9e1af",
+    "worlds/index.json": "6c9fe855ef458e4e",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -228,6 +229,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T07:59:04.417Z",
-  "commit": "6ae8b24"
+  "builtAt": "2026-11-13T08:13:23.934Z",
+  "commit": "70b3a40"
 }
