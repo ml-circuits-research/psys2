@@ -41,7 +41,11 @@ export function createSymbolicRouter(base, getMeta) {
       if (!first || first.score < MIN_EVIDENCE || (second && first.score - second.score < MIN_MARGIN)) return r;   // meta.worlds has no opinion (the same bar as `decide`): the policy order stands (a clause of a longer message, "play B1" after "play tic tac toe")
       const index = new Map(res.ranked.map((x, i) => [x.world, i]));
       const rank = (m) => (res.blocked[m.pattern.worldId] ? 1e6 : index.has(m.pattern.worldId) ? index.get(m.pattern.worldId) : 1e3);
-      const matches = r.matches.map((m, i) => ({ m, i })).sort((a, b) => rank(a.m) - rank(b.m) || a.i - b.i).map((x) => x.m);
+      // the policy's order inside a tier is priority, literal words, fewer wildcard tokens (how well a pattern covers the sentence): meta.worlds never overrides that,
+      // it breaks the ties the policy leaves to the word-overlap score and the pattern order (a world's own, more specific reading is not moved away)
+      const w0 = r.matches[0], tied = (m) => m.tier === w0.tier && m.sub === w0.sub && (m.rank ?? m.pattern.priority) === (w0.rank ?? w0.pattern.priority) && m.literals === w0.literals && m.skips === w0.skips;
+      const group = r.matches.filter(tied);
+      const matches = [...group.map((m, i) => ({ m, i })).sort((a, b) => rank(a.m) - rank(b.m) || a.i - b.i).map((x) => x.m), ...r.matches.filter((m) => !tied(m))];
       const win = matches[0], world = win.pattern.worldId, top = res.ranked.find((x) => x.world === world);
       const runner = matches.find((m) => m.pattern.worldId !== world) ?? null;
       const decision = { ...(r.decision ?? {}), router: 'meta.worlds', tier: r.decision?.tier ?? 5, tierName: 'meta.worlds', reason: top ? `because ${reasonOf(top)}` : 'no reason of meta.worlds; the policy order', contested: !!runner,
