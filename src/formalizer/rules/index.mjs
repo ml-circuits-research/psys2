@@ -360,7 +360,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     if (typeof acc !== 'function') continue;
     const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
     let ok = true;
-    try { ok = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, roles, text: roles[SEGMENT_SLOT] ?? null, state: context?.states?.[m.pattern.worldId] ?? null }) !== false; } catch { ok = true; }
+    try { ok = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }) !== false; } catch { ok = true; }
     if (!ok) matches.splice(k, 1);
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
