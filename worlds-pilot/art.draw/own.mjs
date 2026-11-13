@@ -19,8 +19,11 @@ export function openSlots(ctx, { action, args = {} } = {}) {
   if (actOf(action) !== 'make') return [];
   return D.openSlots(ctx, { action: 'draw.add', args: addArgs(args) });
 }
+/** Words for the sky as a whole, which the picture always has ("change the scene to dawn"): the regions of the schema, so they are never missing. */
+const WHOLE = /(?:^|\s)(?:scene|mood|time|weather|atmosphere)$/i;
 export function checkReferents(ctx, { action, args = {} } = {}) {
   const a = actOf(action);
+  if (a === 'change' && WHOLE.test(String(args.thing ?? '').trim())) return undefined;
   if (a === 'remove') return D.checkReferents(ctx, { action: 'draw.remove', args: { phrase: args.thing ?? '' } });
   if (['change', 'place', 'copy', 'group', 'pick', 'ask'].includes(a) && args.thing) return D.checkReferents(ctx, { action: `draw.${a}`, args: { t: tOf(args) } });
   return undefined;

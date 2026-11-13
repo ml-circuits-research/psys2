@@ -91,6 +91,8 @@ export const hooks = {
       const np = D.parseNP([r.thing, r.place && /^(?:to|on|for)$/.test(rel(r)) ? `of ${r.place}` : ''].join(' '));   // "give the house a blue door", "add a black door to the house": a part of a thing of the picture
       if (np.part && (np.kind || r.place) && !(np.partKinds && !np.kind && !r.place)) return D.givePart(ctx, { t: np.partOf ? r.place : np.kind ?? r.place, color: np.color ?? undefined, part: np.part });
       const a = addArgs(r), last = words(a.kind).at(-1) ?? '';
+      // a modifier before a kind that is in the picture, with no verb and no "a" / number: "solid star", "big red house" is a change of that thing ("star outline only" ...)
+      if (r.m1 && !r.amount && !/\b(?:draw|drawing|make|add|paint|sketch|doodle|create|give|gimme|get|whip|want|wanna|need|like|put|place|set|turn|show|sketching)\b/.test(words(r.text).join(' ')) && !DET.has(words(r.text)[0] ?? '') && !/^\d/.test(words(r.text)[0] ?? '') && (ctx.state.objects ?? []).some((o) => kindName(kindKey(o)) === last || kindKey(o) === last)) { const ch = hooks.domain.change(ctx, { ...r, mode: 'set', value: [r.m1, r.m2].filter(Boolean).join(' '), thing: r.thing }); if (ch) return ch; }
       if (GROUNDS(last) && (!a.where || /^(?:on|in|to|at|under)\s+(?:the\s+)?(?:ground|floor|bottom|everything|picture|drawing)/.test(a.where))) return D.ground(ctx, { g: last });
       if (last === 'sky' && !a.where) return D.ground(ctx, { g: 'sky' });
       if (TIMES.has(last) && !a.where && words(a.kind).every((x) => TIMES.has(x) || DET.has(x) || x === 'bright' || x === 'it' || x === 'its' || x === 'be')) return D.setMood(ctx, { w: words(a.kind).find((x) => TIMES.has(x) && x !== 'day') ?? last });   // "make it a sunny day"
@@ -107,6 +109,7 @@ export const hooks = {
     },
     change: (ctx, r) => {
       const t = tOf(r) || 'it', vw = words(r.value), v = vw.join(' ');
+      if (r.mode === 'same') return D.matchSize(ctx, { t, o: words(r.value).join(' ') });
       if ((r.mode === 'more' || r.mode === 'less') && /^(?:please |can you |could you )?(?:i want |draw |make )?(?:a|an)\s/i.test(String(r.text ?? '').trim()) && r.value && !/\b(?:it|them)\b/.test(t)) return D.add(ctx, addArgs({ thing: `${r.value} ${r.thing}` }));   // "a bigger house": a new one, compared with the old
       if (r.mode === 'turn') {
         const tw = words(t); const how = []; while (tw.length > 1 && /^(?:around|over|back|round|upside|down|the|other|way|backwards|clockwise|counter|to|left|right|degrees|degree|\d+)$/.test(tw.at(-1))) how.unshift(tw.pop());
@@ -128,6 +131,7 @@ export const hooks = {
       if (rel(r) === 'apart' && !r.place) return D.takeApart(ctx, { t: tOf({ thing: r.thing }) });
       if (rel(r) === 'together' && !r.place) return D.group(ctx, { t: r.thing, name: /\bas\s+(?:a\s+|an\s+|the\s+)?(.+?)\s*$/i.exec(String(r.text ?? ''))?.[1] });
       if (r.place && new RegExp(`\\b(?:a|an|another|some|\\d+|two|three|four|five)\\s+${String(r.thing ?? '').replace(/[^a-z0-9 ]/gi, '').trim().replace(/\s+/g, '\\s+')}`, 'i').test(String(r.text ?? ''))) return hooks.domain.make(ctx, r);   // "put a sun in the corner": an indefinite thing is a new one (the act `place` reread as `make`)
+      if (rel(r) === 'over' && /^(?:to|towards)\b/.test(String(r.place ?? ''))) r = { ...r, rel: undefined, place: String(r.place).replace(/^(?:to|towards)\s+(?:the\s+)?/, '') };   // "slide it over to the right"
       return D.move(ctx, { phrase: [r.thing, r.amount, rel(r), r.amount2, r.place].filter(Boolean).join(' ').replace(/_/g, ' ') });
     },
     group: (ctx, r) => (r.mode === 'apart' ? D.takeApart(ctx, { t: tOf(r) }) : D.group(ctx, { t: tOf(r) })),

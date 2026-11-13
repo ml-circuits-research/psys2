@@ -372,6 +372,15 @@
     example="There should be a house."
     canonical="There should be a house."
 
+@pat.art.draw.make.mods core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [me|us]? [$acts.det]? {amount:number?} {m1:lex.art.draw.values?} {m2:lex.art.draw.values?} {thing:lex.art.draw.kinds} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.amount=\"{amount}\" arg.m1=\"{m1}\" arg.m2=\"{m2}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Draw a big red house."
+    canonical="Draw a big red house."
+
 @pat.art.draw.make.bare.mods core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {amount:number?} {m1:lex.art.draw.values?} {m2:lex.art.draw.values?} {thing:lex.art.draw.kinds} [please|pls|plz|thx|thanks|now]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.make arg.amount=\"{amount}\" arg.m1=\"{m1}\" arg.m2=\"{m2}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
@@ -594,7 +603,7 @@
     canonical="What colours can I use?"
 
 @pat.art.draw.ask.options.what core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|whats] [can_i|could_i|can_you|can_we|may_i|do_you_know|do_i_have] [draw|add|make|use|paint|do|put|sketch|pick|choose] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|whats] [can_i|could_i|can_you|can_u|could_u|can_we|may_i|do_you_know|do_i_have] [draw|add|make|use|paint|do|put|sketch|pick|choose] [to_my_picture|to_the_picture|to_my_drawing|to_it|in_my_picture|here]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.ask arg.mode=options arg.text=\"{segment}\""
     kind=question
     priority=11
@@ -824,6 +833,24 @@
     example="Shrink the house."
     canonical="Shrink the house."
 
+@pat.art.draw.change.same core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to_be]? [the_same_size_as|the_same_size_like|same_size_as|as_big_as|as_large_as|as_small_as|as_tall_as|the_same_as|equal_in_size_to] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=same arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=15
+    tabPriority=23
+    example="Make the tree the same size as the house."
+    canonical="Make the tree the same size as the house."
+
+@pat.art.draw.change.same.short core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [the_same_size_as|same_size_as|as_big_as|as_large_as|as_small_as|the_same_as] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=same arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="The same size as the house."
+    canonical="The same size as the house."
+
 @pat.art.draw.change.times core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.art.draw.factor} [as_big|as_large|as_tall|as_wide|as_small|as_big_as_it_is|the_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
@@ -1010,3 +1037,46 @@
     tabPriority=18
     example="A bit of snow would be nice."
     canonical="A bit of snow would be nice."
+
+@pat.art.draw.change.value.size core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|get|let|change|blow_up|scale_up|scale|resize] [$acts.det]? {thing:words} [to_be|to|up_to|into|be|as]? [a|an]? {value:lex.art.draw.values} [size|sized|sized_one|one|in_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    example="Turn the house into a tiny one."
+    canonical="Turn the house into a tiny one."
+
+@pat.art.draw.change.value.size.up core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [blow|scale|build|make|puff|pump|grow] [$acts.det]? {thing:words} up [to|into]? [a|an]? {value:lex.art.draw.values} [size|sized|in_size]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    example="Blow the cat up to huge size."
+
+@pat.art.draw.change.should.size core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [needs_to_be|should_be|must_be|has_to_be|ought_to_be] {value:lex.art.draw.values} [size|sized|in_size] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    example="The house should be medium size."
+    canonical="The house should be medium size."
+
+@pat.art.draw.change.fill.in core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [fill_in|colour_in|color_in|fill] [$acts.det]? {thing:words} [in|in_please]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.change arg.mode=set arg.value=\"crayon\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    example="Fill in the star."
+    canonical="Fill in the star."
+
+@pat.art.draw.ask.near core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|anything|is_anything|is_there_anything|what_is|what_things_are|which_things_are] [right|just]? {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    tabPriority=21
+    example="Whats near the sun?"

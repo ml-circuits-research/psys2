@@ -34,7 +34,7 @@ export const ROLES = ['thing', 'set', 'attribute', 'value', 'place', 'amount'];
 export const ACTS = {
   make: { R: ['thing'], O: ['value', 'place', 'amount'], mutates: true, verb: 'add' },
   remove: { R: ['thing'], O: ['place'], mutates: true, verb: 'remove' },
-  change: { R: ['thing'], O: ['attribute', 'value', 'amount'], mutates: true, verb: 'change', modes: ['set', 'more', 'less', 'next', 'prev', 'other', 'be'] },
+  change: { R: ['thing'], O: ['attribute', 'value', 'amount'], mutates: true, verb: 'change', modes: ['set', 'more', 'less', 'next', 'prev', 'other', 'be', 'same'] },
   place: { R: ['thing', 'place'], O: [], mutates: true, verb: 'move' },
   connect: { R: ['thing', 'place'], O: [], mutates: true, verb: 'connect' },
   group: { R: ['thing'], O: [], mutates: true, verb: 'group', modes: ['group', 'apart'] },
