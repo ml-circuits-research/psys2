@@ -42,13 +42,21 @@
 @mw.c.claim meta.worlds.card id=?w claim=?x
 @mw.c.run meta.worlds.card id=?w run=needs
 @mw.c.id meta.worlds.card id=?w
+@mw.c.slotnum meta.worlds.card id=?w slot=number
+@mw.c.slotagent meta.worlds.card id=?w slot=agent
+@mw.m.slotnum meta.worlds.msg slotword=number
+@mw.m.slotagent meta.worlds.msg slotword=agent
+@mw.lx.own meta.worlds.lex world=?w word=?x scope=own
+@mw.lx.shared meta.worlds.lex world=?w word=?x scope=shared
 @mw.sc meta.worlds.scene world=?w thing=?x
 @mw.l.asked meta.worlds.live world=?w asked=yes
 @mw.l.last meta.worlds.live world=?w last=yes
 @mw.l.lastany meta.worlds.live last=yes
 @mw.l.active meta.worlds.live world=?w active=yes
 @mw.l.running meta.worlds.live world=?w running=yes
+@mw.l.actv.o meta.worlds.live world=?o active=yes
 @mw.l.recent meta.worlds.live world=?w recent=yes
+@mw.l.refused meta.worlds.live world=?w refused=yes
 @mw.l.notab meta.worlds.live notab=yes
 @mw.p.prior meta.worlds.prior world=?w pts=?p
 @mw.a.any meta.worlds.anywhere world=?w
@@ -66,7 +74,7 @@
 @mw.o.claim meta.worlds.vote world=?w rule=tabclaim weight=60 via=?x
 @mw.r.claim core.rule when=$mw.c.claim when=$mw.m.any when=$mw.l.active then=$mw.o.claim
 @mw.o.nav meta.worlds.vote world=?n rule=nav weight=130 via=?x
-@mw.r.nav core.rule when=$mw.c.nav when=$mw.m.any when=$mw.v.named.o then=$mw.o.nav
+@mw.r.nav core.rule when=$mw.c.nav when=$mw.m.any when=$mw.v.named.o not=$mw.l.actv.o then=$mw.o.nav
 @mw.o.asked meta.worlds.vote world=?w rule=asked weight=90 via=answer
 @mw.r.asked core.rule when=$mw.l.asked when=$mw.m.frag then=$mw.o.asked
 @mw.o.askedany meta.worlds.vote world=?w rule=askedany weight=25 via=question
@@ -89,13 +97,21 @@
 @mw.r.actshared core.rule when=$mw.c.actshared when=$mw.m.any then=$mw.o.actshared
 @mw.o.thingshared meta.worlds.vote world=?w rule=thingshared weight=6 via=?x
 @mw.r.thingshared core.rule when=$mw.c.thingshared when=$mw.m.any then=$mw.o.thingshared
+@mw.o.slotnum meta.worlds.vote world=?w rule=slotnumber weight=6 via=number
+@mw.r.slotnum core.rule when=$mw.c.slotnum when=$mw.m.slotnum then=$mw.o.slotnum
+@mw.o.slotagent meta.worlds.vote world=?w rule=slotagent weight=30 via=name
+@mw.r.slotagent core.rule when=$mw.c.slotagent when=$mw.m.slotagent then=$mw.o.slotagent
+@mw.o.lexown meta.worlds.vote world=?w rule=lexword weight=25 via=?x
+@mw.r.lexown core.rule when=$mw.lx.own then=$mw.o.lexown
+@mw.o.lexshared meta.worlds.vote world=?w rule=lexshared weight=6 via=?x
+@mw.r.lexshared core.rule when=$mw.lx.shared then=$mw.o.lexshared
 @mw.o.frame meta.worlds.vote world=?w rule=frame weight=30 via=?x
 @mw.r.frame core.rule when=$mw.c.frame when=$mw.m.any then=$mw.o.frame
 @mw.o.frameshared meta.worlds.vote world=?w rule=frameshared weight=12 via=?x
 @mw.r.frameshared core.rule when=$mw.c.frameshared when=$mw.m.any then=$mw.o.frameshared
 @mw.o.catalog meta.worlds.vote world=?w rule=catalog weight=8 via=?x
 @mw.r.catalog core.rule when=$mw.c.catalog when=$mw.m.cat then=$mw.o.catalog
-@mw.o.active meta.worlds.vote world=?w rule=active weight=12 via=tab
+@mw.o.active meta.worlds.vote world=?w rule=active weight=24 via=tab
 @mw.r.active core.rule when=$mw.l.active then=$mw.o.active
 @mw.o.recent meta.worlds.vote world=?w rule=recent weight=8 via=recent
 @mw.r.recent core.rule when=$mw.l.recent then=$mw.o.recent
@@ -110,6 +126,10 @@
 # unless the piece names a thing of its scene or names it (SCENE-NATURAL P1)
 @mw.o.nocont meta.worlds.block world=?w rule=nocontinuation
 @mw.r.nocont core.rule when=$mw.c.id when=$mw.m.frag when=$mw.l.lastany not=$mw.l.notab not=$mw.a.any not=$mw.l.last not=$mw.l.active not=$mw.l.running not=$mw.l.asked not=$mw.v.ref.w not=$mw.v.named.w then=$mw.o.nocont
+
+# refusal as evidence: the host tells which worlds would refuse the message in the present state (a dry run of the world: no game running, nothing to delete ...)
+@mw.o.refused meta.worlds.block world=?w rule=refused
+@mw.r.refused core.rule when=$mw.l.refused then=$mw.o.refused
 
 # ---- the reasons in plain words (the trace says these)
 @mw.say.named meta.worlds.say rule=named text="you named the {name} ({via})"
@@ -126,11 +146,16 @@
 @mw.say.thing meta.worlds.say rule=thing text="a {via} is something the {name} holds"
 @mw.say.actshared meta.worlds.say rule=actshared text="{via} can be done in the {name} (among others)"
 @mw.say.thingshared meta.worlds.say rule=thingshared text="a {via} can be in the {name} (among others)"
+@mw.say.slotnumber meta.worlds.say rule=slotnumber text="the {name} takes numbers"
+@mw.say.slotagent meta.worlds.say rule=slotagent text="the {name} talks about people by name"
+@mw.say.lexword meta.worlds.say rule=lexword text="{via} is one of the words of the {name}"
+@mw.say.lexshared meta.worlds.say rule=lexshared text="{via} is one of the words of the {name} (among others)"
 @mw.say.frame meta.worlds.say rule=frame text="the question ({via}) is one the {name} answers"
 @mw.say.frameshared meta.worlds.say rule=frameshared text="the question ({via}) is a plain question about things, which the {name} answers"
 @mw.say.catalog meta.worlds.say rule=catalog text="the {name} takes any thing we know about ({via})"
 @mw.say.active meta.worlds.say rule=active text="the {name} is open"
 @mw.say.recent meta.worlds.say rule=recent text="the {name} answered lately"
 @mw.say.encoder meta.worlds.say rule=encoder text="the model's first guess"
+@mw.say.refused meta.worlds.say rule=refused text="the {name} would refuse this as things are now"
 @mw.say.notrunning meta.worlds.say rule=notrunning text="nothing is running in the {name}, so it cannot take this"
 @mw.say.nocontinuation meta.worlds.say rule=nocontinuation text="a piece without a verb of its own does not continue anything in the {name}"

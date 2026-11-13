@@ -125,6 +125,7 @@ async function init(m) {
   { const kl = await imp('lib/translate/keep-list.mjs'); const raw = backend.translate; backend.translate = kl.protectedTranslate(raw, () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(session) } : null)); }
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
   engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
+  try { await engine.prepareMeta?.(); } catch { /* the policy router answers alone (spec 20) */ }   // meta.worlds: the default router (C)
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
   // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
   engine.onModelTimeout = (info) => evt('model-timeout', info);   // a model call timed out and the rules answered (spec 06): the debug panel says so once and counts

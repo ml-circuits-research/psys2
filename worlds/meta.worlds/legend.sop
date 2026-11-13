@@ -65,6 +65,11 @@
     card=many
     ask="Which question frames?"
 
+@meta.worlds.card.slot core.key
+    value=atom
+    card=many
+    ask="Which kinds of values do its requests take (number, agent)?"
+
 @meta.worlds.card.frameshared core.key
     value=atom
     card=many
@@ -111,6 +116,10 @@
     value=atom
     card=one
     ask="Is no tab open?"
+@meta.worlds.live.refused core.key
+    value=atom
+    card=one
+    ask="Would the world refuse this message in the present state (a dry run told by the host)?"
 @meta.worlds.live.recent core.key
     value=atom
     card=one
@@ -136,6 +145,22 @@
     card=one
     ask="How many points does the encoder give it?"
 
+# ---- a word of a world's lexicons (derived by the host when the module loads, from the worlds' own lexicon declarations; told per message for the words it has)
+@meta.worlds.lex core.type
+    extends=core.state
+@meta.worlds.lex.world core.key
+    value=atom
+    card=one
+    ask="Which world's lexicon has the word?"
+@meta.worlds.lex.word core.key
+    value=atom
+    card=one
+    ask="Which word?"
+@meta.worlds.lex.scope core.key
+    value=atom
+    card=one
+    ask="Does one or two worlds have the word (own) or three or four (shared)?"
+
 # ---- the message
 @meta.worlds.msg core.type
     extends=core.state
@@ -147,6 +172,10 @@
     value=atom
     card=one
     ask="Is it a piece without a verb of its own?"
+@meta.worlds.msg.slotword core.key
+    value=atom
+    card=many
+    ask="Which kinds of values does it have (number, agent)?"
 @meta.worlds.msg.catalog core.key
     value=atom
     card=many

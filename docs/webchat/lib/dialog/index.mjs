@@ -31,12 +31,12 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=506216f967';
 import { Discourse } from './discourse.mjs?v=74a997b12b';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=081ff151f0';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=48044eb25c';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=c14af18283';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=d1954217c7';
 import { repairFromScene } from './scene-referents.mjs?v=adc8f57abc';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=ecaf2f58c5';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=92d6d0bc40';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=71d230dc8d';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=fe93f8510c';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ff9c014f42';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=662a9b84fa';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -280,7 +280,7 @@ export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTi
 
 export class DialogSession {
   constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing } = {}) {
-    this._routing = normalizeRouting(routing);   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
+    this.routing = routing;   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
     this.worldAware = normalizeWorldAware(worldAware ?? globalThis.process?.env?.PSYS2_WORLD_AWARE);
@@ -483,6 +483,9 @@ export class DialogSession {
    * world or the built-in tabs; `gameWorld` is `ui.shell` state `activeGame` (set by the host); `modalWorld` is the
    * world whose state has an open `inputMode`.
    */
+  get routing() { return this._routing; }
+  set routing(v) { this._routing = normalizeRouting(v); }
+
   /** The router of this session: the engine's policy router, or (routing=symbolic*, meta.worlds prepared) the same ordered by meta.worlds. */
   get _router() {
     if (!isSymbolic(this._routing) || !this.engine.meta) return this.engine.router;

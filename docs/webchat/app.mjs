@@ -1308,6 +1308,11 @@ export async function mountPsys2(element, options = {}) {
     const current = ['off', 'veto', 'choose', 'observe'].includes(settings.worldAware) ? settings.worldAware : 'veto';
     return optSelect('worldAware', [['veto', 'Check and refuse (default)'], ['choose', 'Check, refuse and choose between readings'], ['observe', 'Only observe (diagnostic)'], ['off', 'Off']], current, (v) => { settings.worldAware = v; save(); renderSettings(); });
   }
+  /** Settings > Developer > Which world takes a message (spec 20): C (symbolic + model) is the default since 2026-11-13. */
+  function routingGroup() {
+    const current = ['dispatcher', 'symbolic', 'symbolic+encoder'].includes(settings.routing) ? settings.routing : 'symbolic+encoder';
+    return optSelect('routing', [['symbolic+encoder', 'Rules with reasons, the model as a hint (default)'], ['symbolic', 'Rules with reasons only'], ['dispatcher', 'The model proposes, the rules check (old)']], current, (v) => { settings.routing = v; save(); engineClient?.applySettings?.(settings); renderSettings(); });
+  }
   function developerBody() {
     const eh = optionById('editHead');
     return [
@@ -1317,6 +1322,7 @@ export async function mountPsys2(element, options = {}) {
       optCheck('showPerf', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
       reasonerGroup(),
       worldAwareGroup(),
+      routingGroup(),
       ...(dispatcherEnc ? [optCheck('acceptRefused', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
       ...(dispatcherEnc ? [optCheck('editHead', settings.editHead === true, (v) => { settings.editHead = v; save(); }, { status: eh.reason })] : []),
       timeLimitsGroup(),

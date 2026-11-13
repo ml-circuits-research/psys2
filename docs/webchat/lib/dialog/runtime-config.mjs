@@ -6,7 +6,7 @@
  *   const enc = createRuntime({ engine, settings, load, normalizer, waitForModel });   // encoder strategy, attached and registered
  *   const session = engine.createSession(sessionOptions(settings));
  */
-import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=abbd13460b';
+import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=b0bb4b448c';
 import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=136a73b8b2';
 
 /** The shipped defaults of everything that changes what the pipeline answers (the webchat adds UI-only keys on top). */
@@ -23,8 +23,8 @@ export const RUNTIME_DEFAULTS = Object.freeze({
 });
 
 /**
- * `routing` (spec 20) is an optional setting outside the shared defaults until the reviewer decides: 'dispatcher' (A, today; also when missing) | 'symbolic' (B: meta.worlds,
- * the encoder's world head unread) | 'symbolic+encoder' (C: meta.worlds with the encoder as one prior). `sessionOptions` and `createRuntime` read it from the settings object.
+ * `routing` (spec 20) is an optional setting outside the shared defaults until the reviewer decides: 'dispatcher' (A) | 'symbolic' (B: meta.worlds,
+ * the encoder's world head unread) | 'symbolic+encoder' (C: meta.worlds with the encoder as one prior; the default, also when missing). `sessionOptions` and `createRuntime` read it from the settings object.
  */
 
 /** The named evaluation modes and the settings each one means. `encoder+n1` is the shipped default. */
@@ -61,7 +61,7 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { ...(settings.routing && settings.routing !== 'dispatcher' ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
+  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
 }
 
 /**
