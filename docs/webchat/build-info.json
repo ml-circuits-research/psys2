@@ -68,7 +68,7 @@
     "lib/dialog/dispatch-validate.mjs": "7131e1d0a496bff5",
     "lib/dialog/encoder-dispatch.mjs": "e2f73dd213f06fae",
     "lib/dialog/followup.mjs": "a80f066b4fada950",
-    "lib/dialog/index.mjs": "163c2a0f8f7adc56",
+    "lib/dialog/index.mjs": "635c77c210bd7151",
     "lib/dialog/knowledge-lookup.mjs": "a66e2450e1a8126b",
     "lib/dialog/meta-worlds.mjs": "2d7b3703ac642891",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -109,16 +109,16 @@
     "lib/formalizer/strategy.mjs": "7a678740bb93a9c7",
     "lib/formalizer/voice.mjs": "68a5a3952ce89e18",
     "lib/formalizer/wordpiece.mjs": "0dfeb8fa5444e2df",
-    "lib/interpreter/index.mjs": "171cb85366e6b379",
+    "lib/interpreter/index.mjs": "f42b61c4f23c23ac",
     "lib/interpreter/lang.mjs": "4526bc607086cb3d",
     "lib/interpreter/memory.mjs": "2672e73fe97f3277",
     "lib/interpreter/render.mjs": "29d3ec2c79479fb9",
     "lib/knowledge/catalog.mjs": "139f58bbfd6a2cfc",
     "lib/knowledge/commonsense.mjs": "0803ae68554f5776",
     "lib/knowledge/faces.mjs": "48f87ccb3859a058",
-    "lib/knowledge/facts.mjs": "e9c6e3e97b0f2f65",
+    "lib/knowledge/facts.mjs": "cb39d9b26ac6754e",
     "lib/knowledge/layouts.mjs": "165a82122c9226c1",
-    "lib/knowledge/learned.mjs": "91b59a2046c9516d",
+    "lib/knowledge/learned.mjs": "f9386054db4c16d8",
     "lib/legends/index.mjs": "ada11d48a49f2c91",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
     "lib/loaders/knowledge-cache.mjs": "5afb651adf762afc",
@@ -273,6 +273,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T19:50:58.003Z",
-  "commit": "e08a029d"
+  "builtAt": "2026-11-13T19:56:05.976Z",
+  "commit": "536f3c06"
 }

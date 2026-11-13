@@ -15,6 +15,8 @@ import { parseLine, parseShard } from './catalog.mjs?v=698662f5e5';
 import { buildFaces } from './faces.mjs?v=a8975fe028';
 
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
+/** The kinds tried when a thing has no drawing of its own (a word can have dozens of senses with a kind each). */
+const MAX_KINDS = 4;
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 /** Runs `fn` after a backoff (an unreachable catalog is asked again later, not remembered as empty for the session); the timer never keeps a process alive. */
@@ -106,8 +108,9 @@ export function createFacts({ source, name = 'catalog' }) {
   async function drawnAs(out, lemma, depth) {
     if (depth > 1) return;
     const own = out.wires.find((w) => w.type === 'k.objects.stand_in' && String(one(w, 'name')).toLowerCase() === lemma);
-    const kinds = [own ? one(own, 'drawing') : null, ...(own ? [] : out.senses.flatMap((x) => x.isA))].filter(Boolean);
+    const kinds = [...new Set([own ? one(own, 'drawing') : null, ...(own ? [] : out.senses.flatMap((x) => x.isA))].filter((k) => k && lemmaCandidates(k)[0] !== lemma))].slice(0, MAX_KINDS);   // never the thing itself, a few kinds at most
     for (const k of kinds) {
+      budget.tick('facts.drawnAs');
       const th = await thing(k, depth + 1);
       if (th?.objects.length) { out.drawnAs = th.drawnAs ?? th.name; out.drawnVia = own ? 'stand_in' : 'is_a'; out.objects = th.objects; return; }
     }
@@ -189,7 +192,7 @@ export function createFacts({ source, name = 'catalog' }) {
       objects: [...objects.values()].filter((o) => o.parts.length), commonsense: commonsense[0] ?? null, senses,
       wires: others,   // every other wire of its shards that names the lemma (any world: k.scenes, k.people, k.layouts, ...), generically
     };
-    if (!out.objects.length) await drawnAs(out, lemma, 0);
+    if (!out.objects.length) await drawnAs(out, lemma, depth);   // the depth is carried down: a kind-of cycle (legs is a leg, a leg is legs) must end after two steps
     stats.hits++;
     things.set(key, out); things.set(lemma, out);
     return out;

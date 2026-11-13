@@ -20,7 +20,7 @@ import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 import { Renderer, fallbackText, listText } from './render.mjs?v=237d079f93';
 import { FormSession } from '../formalizer/rules/session.mjs?v=e445741b59';
 import { makeLang } from './lang.mjs?v=b0313edaaa';
-import { withLearned } from '../knowledge/learned.mjs?v=1112a5ac2a';
+import { withLearned } from '../knowledge/learned.mjs?v=127267c1e5';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 export { Renderer } from './render.mjs?v=237d079f93';
