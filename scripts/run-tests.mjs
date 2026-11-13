@@ -59,6 +59,8 @@ const SMOKE = [
   'reasoner-restore.test.mjs',
   'reasoner-worlds-apart.test.mjs',
   'world-aware.test.mjs',
+  'fragment-continuation.test.mjs',
+  'scene-referents.test.mjs',
   'keep-list.test.mjs',
   'mt-layer.test.mjs',
   'knowledge-lookup.test.mjs',

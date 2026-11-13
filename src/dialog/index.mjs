@@ -34,6 +34,7 @@ import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
 import { foreignFragment } from './continuation.mjs';
+import { repairFromScene } from './scene-referents.mjs';
 import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs';
 import { recognize } from '../astra/moves.mjs';
 import { panel } from '../astra/where.mjs';
@@ -1312,8 +1313,12 @@ export class DialogSession {
         if (!pre) { const bare = engine.interp.lang.stripConnective(english); if (bare !== english && QUESTION_WORD.test(bare)) formalText = bare; }
       }
     }
+    // SCENE-NATURAL P3: an unknown noun that names a thing of the scene (or of the open tab) with a slip is read as that thing before any dictionary repair
+    let sceneFix = null;
+    if (!icpt && !pre && meta?.reply == null) { try { sceneFix = repairFromScene(this, formalText); } catch { sceneFix = null; } if (sceneFix) formalText = sceneFix.text; }
     let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial, fastPath: fastPath ?? this.fastPath, nx: nx ?? this.nx }));
     if (meta?.rewrite && !pre) for (const sg of formal.segments) sg.discourse = meta.info;
+    if (sceneFix) { const sg = formal.segments.find((x) => !x.unparsed); if (sg) sg.corrections = [...(sg.corrections ?? []), ...sceneFix.corrections]; }
     // SCENE-NATURAL P1: a piece without a verb of its own that only another world (not the open tab, nothing running) reads continues the conversation of the open
     // tab: it is tried as the missing piece of the last turn there (below, as for any unreadable single clause); the world-aware veto holds it back otherwise
     if (!icpt && !pre && !meta && formal.segments.length === 1 && ['veto', 'choose'].includes(baseMode(normalizeWorldAware(worldAware ?? this.worldAware))) && foreignFragment(this, formal.segments[0])) {

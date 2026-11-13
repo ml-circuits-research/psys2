@@ -55,12 +55,13 @@
     "lib/dialog/discourse.mjs": "d84aae958b7ddb1a",
     "lib/dialog/dispatch-validate.mjs": "9d1075fc2347a99e",
     "lib/dialog/encoder-dispatch.mjs": "848c16b7b1748a1e",
-    "lib/dialog/index.mjs": "0361077a996b0320",
+    "lib/dialog/index.mjs": "bc6f09fb8cbe7570",
     "lib/dialog/knowledge-lookup.mjs": "1b70f40d7cf25c40",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
     "lib/dialog/reader-route.mjs": "695827508fdf8453",
     "lib/dialog/runtime-config.mjs": "448c18e8991efb4d",
+    "lib/dialog/scene-referents.mjs": "f35f131b059c63f6",
     "lib/dialog/surprise.mjs": "bd76e5f4d59d803e",
     "lib/dialog/test-runner.mjs": "f4828bf7550a0b77",
     "lib/dialog/time-limits.mjs": "1709dafdeaa245d3",
@@ -236,6 +237,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T12:32:06.907Z",
-  "commit": "4d71d64-dirty"
+  "builtAt": "2026-11-13T12:41:07.506Z",
+  "commit": "b48aa08-dirty"
 }

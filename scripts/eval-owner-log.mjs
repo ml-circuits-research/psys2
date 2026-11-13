@@ -48,7 +48,7 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
     const before = s.state();
     const t0 = performance.now();
     let reply = null, error = null;
-    try { reply = await s.send(r.text, r.lang === 'ro' ? { language: 'auto' } : undefined); } catch (e) { error = e.message; }
+    try { reply = await s.send(r.text, r.lang === 'ro' ? { language: 'ro' } : undefined); } catch (e) { error = e.message; }
     const ms = performance.now() - t0;
     const rec = { i, class: r.class, tab: r.tab, text: r.text, ms: Math.round(ms), error };
     if (reply) {
