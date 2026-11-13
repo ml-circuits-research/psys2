@@ -103,7 +103,7 @@ export function show(ctx, { ids, thing, to, from } = {}) {
   const things = sel.things;
   const facts = sel.session && view.facts ? ctx.sessionFacts?.() : null;
   const hasFacts = !!facts && !!(facts.topics?.length || facts.games?.length || facts.places?.length);
-  if (!things.length && !hasFacts) return no('missing', `There is nothing to show in the ${view.noun}: no such thing in this session yet.`);
+  if (!things.length && !hasFacts) return no('unsupported', `There is nothing to show in the ${view.noun}: no such thing in this session yet.`);
   const cells = [], lines = [], take = [];
   const about = sel.session ? 'the discussion' : sel.view ? sel.view.noun : null;
   for (const t of things) {

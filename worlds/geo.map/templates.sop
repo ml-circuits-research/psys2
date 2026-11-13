@@ -177,3 +177,11 @@
 @tpl.geo.map.unknown core.template
     for=action.geo.unknown
     text="{value}"
+
+@tpl.geo.map.view core.template
+    for=action.geo.map.view
+    text="{value}"
+
+@tpl.geo.map.adopt core.template
+    for=action.geo.map.adopt
+    text="{value}"

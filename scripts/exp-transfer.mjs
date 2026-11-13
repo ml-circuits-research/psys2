@@ -6,13 +6,14 @@
 // "send it to X"), judged against EXPECTATIONS written below by hand from common sense, not from the code.
 //   node scripts/exp-transfer.mjs [--reasoner ops|matrix] [--catalog tests/fixtures/catalog] [--out file.jsonl] [--only t1|t2] [--verbose]
 // T1: 30 things made in the three views (10 each) are shown in each of the other two views: 60 cells, each right / not applicable said plainly / wrong.
+// T3: 20 common-sense facts (10 of the catalog, 10 taught), each used in the real drawing board, the diagram and Talk (60 cells): right / not applicable (said plainly) / wrong, wrong cells go to the failure ledger by cause (--ledger).
 // T2: 20 taught facts, each taught in one view and used in the other two views (40 cells), same three outcomes.
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
-process.env.PSYS2_PILOT_ROOTS = process.env.PSYS2_T1_ROOTS ?? path.join(REPO, 'worlds-pilot');   // with --draw the drawing board (worlds-pilot/art.draw) is a fourth view   // the pilot avatar shadows worlds/ui.avatar until the executor switch lands
+process.env.PSYS2_PILOT_ROOTS = process.env.PSYS2_T1_ROOTS ?? (arg('--only', null) === 't3' ? path.join(REPO, 'no-pilot-roots') : path.join(REPO, 'worlds-pilot'));   // T3 measures the real drawing board (worlds/art.draw), so no pilot shadows it   // with --draw the drawing board (worlds-pilot/art.draw) is a fourth view   // the pilot avatar shadows worlds/ui.avatar until the executor switch lands
 const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
 const { createEngine } = await import('../src/dialog/index.mjs');
 const { createFacts } = await import('../src/knowledge/facts.mjs');
@@ -24,10 +25,10 @@ const catalog = () => createFacts({ source: { text: async (p) => { try { return 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 engine.setKnowledge(catalog());
 const WITH_DRAW = process.argv.includes('--draw');
-const TAB = { avatar: 'robot', seating: 'seating', talk: 'talk', ...(WITH_DRAW ? { draw: 'draw' } : {}), chart: 'charts', doc: 'editor', time: 'talk' };
-const WORLD = { avatar: 'ui.avatar', seating: 'plan.seating', talk: 'talk', draw: 'art.draw', chart: 'data.charts', doc: 'docs.editor', time: 'plan.timeline' };
+const TAB = { avatar: 'robot', seating: 'seating', talk: 'talk', ...(WITH_DRAW ? { draw: 'draw' } : {}), chart: 'charts', doc: 'editor', time: 'talk', map: 'talk' };
+const WORLD = { avatar: 'ui.avatar', seating: 'plan.seating', talk: 'talk', draw: 'art.draw', chart: 'data.charts', doc: 'docs.editor', time: 'plan.timeline', map: 'geo.map' };
 const SEND = { avatar: (t, to) => `send the ${t} to the ${to}`, seating: (t, to) => `send ${t} to the ${to}`, talk: (t, to) => `send it to the ${to}`, draw: (t, to) => `send the ${t} to the ${to}` };
-const TO = { avatar: 'avatar', seating: 'seating plan', talk: 'talk', draw: 'drawing', chart: 'chart', doc: 'document', time: 'timeline' };
+const TO = { avatar: 'avatar', seating: 'seating plan', talk: 'talk', draw: 'drawing', chart: 'chart', doc: 'document', time: 'timeline', map: 'map' };
 
 async function session() {
   const s = engine.createSession({ language: 'en' });
@@ -85,7 +86,7 @@ if (WITH_DRAW) { THINGS.push(...DRAW_THINGS); for (const th of THINGS) if (th.vi
 // temporal things (T6-lite): made in Talk from the calendar of the knowledge; the timeline takes them, the picture views cannot
 const TIME_THINGS = ['What is Monday?|monday', 'What is winter?|winter', 'What is March?|march', 'What is Tuesday?|tuesday'].map((x) => x.split('|')).map(([m, ref]) => ({ view: 'talk', make: [m], ref, expect: { avatar: 'na', seating: 'na', ...(WITH_DRAW ? { draw: 'na' } : {}) }, keep: {} }));
 THINGS.push(...TIME_THINGS);
-for (const th of THINGS) { th.expect.chart = 'ok'; th.expect.doc = 'ok'; th.expect.time = TIME_THINGS.includes(th) ? 'ok' : 'na'; th.keep = { ...(th.keep ?? {}), doc: th.keep?.talk ?? [] }; if (th.view !== 'talk' || TIME_THINGS.includes(th)) th.expect.talk = th.expect.talk ?? 'ok'; }
+for (const th of THINGS) { th.expect.chart = 'ok'; th.expect.doc = 'ok'; th.expect.time = TIME_THINGS.includes(th) ? 'ok' : 'na'; const place = ['Paris', 'France', 'Japan'].includes(th.ref); th.expect.map = place ? 'ok' : 'na'; th.keep = { ...(th.keep ?? {}), map: place ? [th.ref] : [] }; th.keep = { ...(th.keep ?? {}), doc: th.keep?.talk ?? [] }; if (th.view !== 'talk' || TIME_THINGS.includes(th)) th.expect.talk = th.expect.talk ?? 'ok'; }
 const THING_WARM = ['monday', 'march', 'winter', 'tuesday', 'bicycle', 'spider', 'house', 'comet', 'moon', 'paris', 'france', 'japan', 'hat', 'table', 'glasses', 'beard'];
 
 /** Reads what a view holds after a transfer: the text of its state, to look for the words that must survive. */
@@ -172,17 +173,79 @@ async function t2() {
   return rows;
 }
 
+
+// ------------------------------------------------------------------------------------------------------------------------------------ T3: rule transfer
+// A common-sense fact (of the catalog: k.commonsense / k.scenes, or taught in a sentence: session.learned) must change what every view does, with no rule of its own in the view:
+//   drawing: a place fact gives advice when the thing is put elsewhere ("draw a fish in the sky": "Fish usually live in water, not in the sky"), a kind-of fact draws the kind as the parent
+//   diagram: a connection of a thing to a place that contradicts the fact is refused or labelled with the reason (the diagram has no notion of place yet: a cell the diagram cannot judge is `wrong (no behaviour)`)
+//   talk: the fact is in the answer about the thing
+// `na` cells: the view has no use for the fact (a duck cannot be drawn, an ability has no place) and says so plainly.
+const F = (fact, teach, draw, talk, dia) => ({ fact, teach, draw, talk, dia });
+const FACTS3 = [
+  F('fish live in water', null, { ask: 'draw a fish in the sky', has: ['water'] }, { ask: 'Tell me about a fish.', has: ['water'] }, { ask: 'connect Fish to Sky', has: ['water'] }),
+  F('a house stands on the ground', null, { ask: 'draw a house in the sky', has: ['ground'] }, { ask: 'Tell me about a house.', has: ['ground'] }, { ask: 'connect House to Sky', has: ['ground'] }),
+  F('a boat floats on water', null, { ask: 'draw a boat in the sky', has: ['water'] }, { ask: 'Tell me about a boat.', has: ['water'] }, { ask: 'connect Boat to Sky', has: ['water'] }),
+  F('the sun is in the sky', null, { ask: 'draw a sun in the water', has: ['sky'] }, { ask: 'Tell me about the sun.', has: ['sky'] }, { ask: 'connect Sun to Water', has: ['sky'] }),
+  F('a tree stands on the ground', null, { ask: 'draw a tree in the sky', has: ['ground'] }, { ask: 'Tell me about a tree.', has: ['ground', 'forest', 'garden', 'park'] }, { ask: 'connect Tree to Sky', has: ['ground', 'forest'] }),
+  F('a cloud is in the sky', null, { ask: 'draw a cloud in the water', has: ['sky'] }, { ask: 'Tell me about a cloud.', has: ['sky'] }, { ask: 'connect Cloud to Water', has: ['sky'] }),
+  F('a plane flies in the sky', null, { ask: 'draw a plane in the water', has: ['sky', 'air'] }, { ask: 'Tell me about a plane.', has: ['sky'] }, { ask: 'connect Plane to Water', has: ['sky'] }),
+  F('a car drives on the road', null, { ask: 'draw a car in the water', has: ['road', 'ground'] }, { ask: 'Tell me about a car.', has: ['road'] }, { ask: 'connect Car to Water', has: ['road'] }),
+  F('birds can fly', null, { na: true, ask: 'draw a bird flying' }, { ask: 'Tell me about a bird.', has: ['fly'] }, { na: true }),
+  F('a dog can bark', null, { na: true, ask: 'draw a dog barking' }, { ask: 'Tell me about a dog.', has: ['bark'] }, { na: true }),
+  F('a villa is a kind of house', 'a villa is a kind of house', { ask: 'draw a villa', has: ['house'] }, { ask: 'What kind of thing is a villa?', has: ['house'] }, { na: true }),
+  F('a cottage is a kind of house', 'a cottage is a kind of house', { ask: 'draw a cottage', has: ['house'] }, { ask: 'What kind of thing is a cottage?', has: ['house'] }, { na: true }),
+  F('a yacht is a kind of boat', 'a yacht is a kind of boat', { ask: 'draw a yacht', has: ['boat'] }, { ask: 'What kind of thing is a yacht?', has: ['boat'] }, { na: true }),
+  F('a taxi is a kind of car', 'a taxi is a kind of car', { ask: 'draw a taxi', has: ['car'] }, { ask: 'What kind of thing is a taxi?', has: ['car'] }, { na: true }),
+  F('ducks float', 'ducks float', { na: true, ask: 'draw a duck' }, { ask: 'Tell me about a duck.', has: ['float'] }, { na: true }),
+  F('penguins cannot fly', 'penguins cannot fly', { na: true, ask: 'draw a penguin flying' }, { ask: 'Tell me about a penguin.', has: ['fly'] }, { na: true }),
+  F('snowmen stand on the ground', 'snowmen stand on the ground', { ask: 'draw a snowman in the sky', has: ['ground'] }, { ask: 'Tell me about a snowman.', has: ['ground'] }, { ask: 'connect Snowman to Sky', has: ['ground'] }),
+  F('trains stay on the ground', 'trains stay on the ground', { ask: 'draw a train in the sky', has: ['ground'] }, { ask: 'Tell me about a train.', has: ['ground'] }, { ask: 'connect Train to Sky', has: ['ground'] }),
+  F('lighthouses stand on the ground', 'lighthouses stand on the ground', { ask: 'draw a lighthouse in the sky', has: ['ground'] }, { ask: 'Tell me about a lighthouse.', has: ['ground'] }, { ask: 'connect Lighthouse to Sky', has: ['ground'] }),
+  F('kites fly in the sky', 'kites fly in the sky', { na: true, ask: 'draw a kite' }, { ask: 'Tell me about a kite.', has: ['sky'] }, { na: true }),
+];
+const T3_WARM = ['fish', 'house', 'boat', 'sun', 'tree', 'cloud', 'plane', 'car', 'bird', 'dog', 'villa', 'cottage', 'yacht', 'taxi', 'duck', 'penguin', 'snowman', 'train', 'lighthouse', 'kite', 'sky', 'water', 'ground'];
+const PLAIN_NO = /not something|cannot|can't|do not know|don't know|did not understand|no .* to show|there is no|have not|not sure|yet/i;
+async function t3() {
+  const rows = [];
+  for (const f of FACTS3) {
+    for (const [view, tab, probe] of [['drawing', 'draw', f.draw], ['diagram', 'diagram', f.dia], ['talk', 'talk', f.talk]]) {
+      const s = await session();
+      await warm(T3_WARM);
+      if (f.teach) { s.setWorldState('ui.shell', { activeTab: 'talk' }); await s.send(f.teach); await warm(T3_WARM); }
+      s.setWorldState('ui.shell', { activeTab: tab });
+      if (view === 'diagram') { const m = /^connect (\w+) to (\w+)$/.exec(probe.ask ?? ''); if (m) { await s.send(`add a box named ${m[1]}`); await s.send(`add a box named ${m[2]}`); } }
+      const r = probe.ask ? await s.send(probe.ask) : { text: '' };
+      const text = String(r.text ?? '').toLowerCase();
+      let verdict, cause = null;
+      if (probe.na) verdict = !probe.ask || PLAIN_NO.test(text) || !/^(?:i drew|drew|connected|ok)/.test(text) ? 'na' : 'wrong (used where it should not be)';
+      else if ((probe.has ?? []).some((w) => text.includes(w))) verdict = 'right';
+      else {
+        verdict = view === 'diagram' ? 'wrong (no behaviour)' : PLAIN_NO.test(text) ? 'wrong (fact ignored, said so)' : 'wrong (fact ignored)';
+        cause = view === 'diagram' ? 'diagram has no place semantics: nothing asks the knowledge tier' : view === 'drawing' ? (/did not understand/.test(text) ? 'the drawing grammar does not read "<kind> in the <place>" for a kind of the catalog or a taught kind' : /at the bottom/.test(text) ? 'the drawing reads "in the water" as the bottom band and loses the place word' : f.teach ? 'a taught fact is not read by the drawing (no delegation)' : 'a catalog fact is not read by the drawing (no delegation)') : (f.teach ? 'another world (kids.animals) reads the taught sentence first and keeps the fact private' : 'a catalog fact is not in the Talk answer');
+      }
+      rows.push({ exp: 'T3', fact: f.fact, taught: !!f.teach, view, ask: probe.ask ?? null, expect: probe.na ? 'na' : probe.has, verdict, cause, reply: r.text });
+    }
+  }
+  return rows;
+}
+
 const tally = (rows) => {
   const c = { right: 0, na: 0, wrong: 0 };
   for (const r of rows) c[r.verdict.startsWith('wrong') ? 'wrong' : r.verdict]++;
   return c;
 };
 const all = [];
-if (only !== 't2') {
+if (only === 't3') {
+  const r = await t3(); all.push(...r); console.log(`T3 (${reasoner}): ${r.length} cells`, JSON.stringify(tally(r)));
+  for (const v of ['drawing', 'diagram', 'talk']) console.log(`   in ${v.padEnd(8)} ${JSON.stringify(tally(r.filter((x) => x.view === v)))}   catalog ${JSON.stringify(tally(r.filter((x) => x.view === v && !x.taught)))}  taught ${JSON.stringify(tally(r.filter((x) => x.view === v && x.taught)))}`);
+  const causes = {}; for (const x of r.filter((y) => y.cause)) causes[x.cause] = (causes[x.cause] ?? 0) + 1;
+  console.log('   misses by cause:', JSON.stringify(causes, null, 1));
+}
+if (only !== 't2' && only !== 't3') {
   const r = await t1(); all.push(...r); console.log(`T1 (${reasoner}): ${r.length} cells`, JSON.stringify(tally(r)));
   for (const to of [...new Set(r.map((x) => x.to))]) console.log(`   into ${to.padEnd(8)} ${JSON.stringify(tally(r.filter((x) => x.to === to)))}`);
 }
-if (only !== 't1') {
+if (only !== 't1' && only !== 't3') {
   const r = await t2(); all.push(...r);
   const other = r.filter((x) => x.other);
   console.log(`T2 (${reasoner}): ${other.length} cells in the other two views (${r.length} with the view it was taught in)`, JSON.stringify(tally(other)));
@@ -190,6 +253,16 @@ if (only !== 't1') {
   console.log(`   facts the session store took: ${JSON.stringify(tally(other.filter((x) => x.stored)))}  facts another world kept to itself: ${JSON.stringify(tally(other.filter((x) => !x.stored)))}`);
 }
 if (verbose) for (const r of all.filter((x) => x.verdict.startsWith('wrong') || verbose)) console.log(`${r.exp} ${r.verdict}\t${r.thing ?? r.fact} -> ${r.to ?? r.view}\t${r.text ?? r.ask}\n      ${String(r.reply).slice(0, 180)}`);
+const ledger = arg('--ledger', null);   // append the wrong cells of T3 to the failure ledger (training/eval/failures.jsonl), once per text, tab and source
+if (ledger && all.some((r) => r.exp === 'T3')) {
+  const { execSync } = await import('node:child_process'), { existsSync, appendFileSync } = await import('node:fs');
+  let build = 'unknown'; try { build = execSync('git rev-parse --short HEAD', { cwd: REPO }).toString().trim(); } catch { /* not a checkout */ }
+  const file = path.resolve(REPO, ledger), have = new Set(existsSync(file) ? readFileSync(file, 'utf8').split('\n').filter(Boolean).map((l) => { try { const j = JSON.parse(l); return `${j.source}\t${j.text}\t${j.tab}`; } catch { return ''; } }) : []);
+  const rows = all.filter((r) => r.exp === 'T3' && r.verdict.startsWith('wrong')).map((r) => ({ text: r.ask, tab: { drawing: 'draw', diagram: 'diagram', talk: 'talk' }[r.view], language: 'en', happened: String(r.reply).slice(0, 240), expected: `the fact "${r.fact}" (${r.taught ? 'taught in a sentence' : 'in the catalog'}) shows in the answer: ${[].concat(r.expect).join(' / ')}`, source: `T3 rule transfer (${reasoner}) scripts/exp-transfer.mjs`, cause: r.cause, first_seen: new Date().toISOString().slice(0, 10), build }))
+    .filter((r) => !have.has(`${r.source}\t${r.text}\t${r.tab}`));
+  if (rows.length) appendFileSync(file, rows.map((r) => JSON.stringify(r)).join('\n') + '\n');
+  console.log(`   ledger: ${rows.length} rows appended to ${ledger}`);
+}
 const out = arg('--out', null);
 if (out) writeFileSync(out, all.map((r) => JSON.stringify(r)).join('\n') + '\n');
 process.exit(0);

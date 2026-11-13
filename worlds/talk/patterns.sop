@@ -316,17 +316,6 @@
     example="Make a diagram of this."
     doc="Send the card to the Diagram tab: the parts become boxes linked to the thing."
 
-@pat.talk.send.map core.pattern
-    canonical="Show it on the map."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.tomap] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
-    emit="@{_} core.request action=talk.send arg.to=map"
-    kind=request
-    tabOnly=true
-    tabClaim=true
-    priority=14
-    example="Put it on the map."
-    doc="Send the topic to the Map tab when it is a place."
-
 @pat.talk.send.view core.pattern
     canonical="Show it in the seating plan."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [send|show|put|move|give] [it|this|that]? [to|in|on|into|onto] [the|my]? {to:words(3)}"

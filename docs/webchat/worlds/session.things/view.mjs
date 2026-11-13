@@ -6,7 +6,7 @@
 //   - the act `send` hands things to another view through the store (`things.show`), which says plainly when a view cannot take a thing.
 // `viewOps(X, schema, ns, H)` gives the two operations of the world as a view: `view` (its declaration) and `adopt` (take a thing of the store: the act make, then change for each
 // attribute it carries). Browser-safe, no `process`; every loop ticks the budget.
-import { aspectOfAttr } from './things.mjs?v=a78328057f';
+import { aspectOfAttr } from './things.mjs?v=f904abbe0f';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const lc = (s) => String(s ?? '').toLowerCase();

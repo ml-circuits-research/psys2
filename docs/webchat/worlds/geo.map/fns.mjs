@@ -6,7 +6,7 @@
 // highlighted country that is not one) refuse what cannot be, and the knowledge base (countries, cities, regions: kb.sop) answers what the user claims about
 // places (`gmClaim`: "Paris is in Germany." is refused with "Paris is not in Germany; it is in France."). Browser-safe; it imports its sibling ops.mjs for the
 // initial state (a world is plain files).
-import { initialState, isIn, isCapital, borderYN } from './ops.mjs?v=07fb4bd635';
+import { initialState, isIn, isCapital, borderYN } from './ops.mjs?v=134f18272b';
 
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
