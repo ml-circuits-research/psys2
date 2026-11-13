@@ -48,11 +48,7 @@ export function sessionNames(session) {
   return [...agents.values()].filter((a) => !a.special && a.name).map((a) => String(a.name));
 }
 
-const PLACE = (i) => {
-  let s = '', n = i;
-  do { s = 'abcdefghijklmnopqrstuvwxyz'[n % 26] + s; n = Math.floor(n / 26) - 1; } while (n >= 0);
-  return `Zorq${s}`;   // letters only (digits would mix with the numbers the checker compares); survived every model tried
-};
+const PLACE = (i) => `Zorq${[...i.toString(26)].map((c) => 'abcdefghijklmnopqrstuvwxyz'[parseInt(c, 26)]).join('')}`;   // letters only (digits would mix with the numbers the checker compares); survived every model tried
 
 const re = (alts, flags) => alts.length ? new RegExp(`(?<![${LETTER}])(?:${alts.map((a) => a.split(' ').map(escapeRe).join('[\\s_]+')).join('|')})(?![${LETTER}])`, flags) : null;
 

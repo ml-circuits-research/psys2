@@ -752,6 +752,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       });
       // a connective inside one clause ("what do red AND yellow make") cut it in two unreadable halves: read the neighbours again as one
       for (let i = 0; i + 1 < parts.length; i++) {
+        budget.tick('index.rejoin');
         if (!parts[i].unparsed || !parts[i + 1].unparsed) continue;
         const a = clauses[i], b = clauses[i + 1];
         const merged = tokens.filter((t) => t.start >= a[0].start && t.end <= b[b.length - 1].end);

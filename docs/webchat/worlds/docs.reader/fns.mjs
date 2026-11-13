@@ -5,7 +5,7 @@
 // on. The library is the record: `toState` derives the state the engine keeps (and the tab renders) from the wires, `adopt` says which wires to retract, tell and
 // set for a state the operations changed, `guard` asks the rules whether the sentence, paragraph or section a request names exists, `undoWords` says what an undo
 // took back in the world's words. Browser-safe; it imports its sibling files.
-import { initialState } from './ops.mjs?v=20aadd5c96';
+import { initialState } from './ops.mjs?v=d5f534504f';
 
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
 const str = (v) => JSON.stringify(String(v));
