@@ -33,6 +33,7 @@ import { checkValues } from './value-check.mjs?v=1b319cb023';
 import { attachValues } from '../knowledge/values.mjs?v=ec4fe4794e';
 import { Discourse } from './discourse.mjs?v=f5d754ecb2';
 import { Dialogue } from './dialogue.mjs?v=89e37d4cbf';
+import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=5f9a5c01c7';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=9d2bfbad2c';
@@ -1712,6 +1713,7 @@ export class DialogSession {
         routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),
         patterns: segments.filter((s) => s.match).map((s) => s.match.patternId),
         operations: icpt ? [...ops, ...icpt.ops] : ops, statuses, wires: [...wires, ...answerWires].map((w) => w.id),
+        steps: turnSteps({ segments, operations: icpt ? [...ops, ...icpt.ops] : ops, statuses, rec: this.dialogue.log.at(-1) }),   // the same vocabulary as docs/system-map.html (src/dialog/steps.mjs)
       },
     };
   }
