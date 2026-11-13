@@ -454,6 +454,12 @@ const make = (kind) => (ctx, args = {}) => {
     if (typeof process !== 'undefined' && process.env?.DIAG_DEBUG) console.error('[diagram]', JSON.stringify(text), '->', JSON.stringify(prepared));
     const sel = selectCommand(prepared, s, ctx);
     if (sel) return sel;
+    // a name the diagram does not have ("delete the box End") is not "the one box": the reader drops an unknown name and keeps the kind, which would act on another shape
+    const gone = kind.type === 'command' ? missingNamed(s, kind.name, text) : [];
+    if (gone.length) {
+      const have = s.shapes.filter((x) => !x.layer && !x.template).map((x) => x.name);
+      return no(`I can't find ${listing(gone.map((x) => `\u201c${x}\u201d`))} in the diagram. ${have.length ? `In the diagram I can see: ${listing(have)}.` : 'The diagram is empty.'}`, 'missing');
+    }
     const f = systemFor(s).formalize(prepared, readerCtx(s));
     if (!f.nodes.length) return no(`I could not read "${text}" as something to do with the diagram.${(f.notes ?? []).length ? ` ${f.notes[0]}` : ''}`, 'missing');
     const fx = fixNodes(f.nodes, prepared, s);
@@ -591,7 +597,8 @@ export function read(text, state = {}) {
   const s = { ...initialState(), ...state };
   assignIds(s);
   const prepared = prepareText(text, s), f = systemFor(s).formalize(prepared, readerCtx(s));
-  const fx = fixNodes(f.nodes, prepared, s);
+  if (process.env?.DIAG_DEBUG) console.error("[nodes]", JSON.stringify(f.nodes));
+    const fx = fixNodes(f.nodes, prepared, s);
   return fx.nodes ? { ...f, nodes: fx.nodes } : f;
 }
 export const kit = () => K;
@@ -659,12 +666,46 @@ export function summary(ctx) {
 }
 export { _delete as delete };
 
+const NAMED_ACTIONS = new Set(['delete', 'move', 'rename', 'resize', 'set', 'label', 'duplicate', 'toFront', 'toBack']);
+const BARE_VERBS = /^(?:please\s+)?(?:delete|remove|erase|move|rename|resize|duplicate|copy|label)\s+(?:the\s+)?/i;
+const NOT_A_NAME = /^(?:shapes?|arrows?|lines?|connections?|everything|all|nothing|diagram|canvas|picture|them|it|this|that|these|those|each|every|last|first|next|previous|other|another|same|left|right|top|bottom|up|down|center|middle|front|back|one|ones|to|with|and|by|from|on|in|at|a|an|the|text|label|group|template|background|layer)$/i;
+const KIND_NOUNS = 'box|boxes|circle|rectangle|square|oval|ellipse|triangle|diamond|hexagon|star|rhombus|rect';
+/**
+ * The names a command points at ("the box End", "the circle called Moon", a bare capitalised "End") that the diagram has no shape or group for. Read-only,
+ * shared by the operation (which must not act on another shape) and the world-aware hook. Only a name that is clearly a name counts: it follows a kind
+ * word and is capitalised, quoted or introduced by "called"/"named", or it is the capitalised object right after the verb. Short ids (c1, circle1) are left to the engine.
+ */
+export function missingNamed(state, action, text) {
+  const t = String(text ?? '').trim();
+  // a sentence the patterns took for a creation ("delete the box called Moon" reads as a named shape) is still a delete: the leading verb decides
+  if (!NAMED_ACTIONS.has(action) && !(action === 'create' && BARE_VERBS.test(t))) return [];
+  const known = (n) => !n || NOT_A_NAME.test(n) || ID_RE.test(n) || LONG_RE.test(n) || shapeOf(state, n) || (state.groups ?? []).some((g) => String(g.name).toLowerCase() === n.toLowerCase());
+  const out = [];
+  const add = (n) => { n = String(n ?? '').trim(); if (!known(n) && !out.some((x) => x.toLowerCase() === n.toLowerCase())) out.push(n); };
+  const re = new RegExp(`\\b(?:${KIND_NOUNS})\\s+(?:(called|named)\\s+)?(?:["\u201c]([^"\u201d]+)["\u201d]|([A-Za-z][\\w-]*))`, 'gi');
+  for (const m of t.matchAll(re)) {
+    budget.tick('diagram.missingNamed');
+    const called = m[1], quoted = m[2], word = m[3];
+    if (quoted != null || called || /^[A-Z]/.test(word)) add(quoted ?? word);
+  }
+  if (!out.length) {
+    const b = BARE_VERBS.exec(t);
+    if (b) { const w = /^["\u201c]?([A-Z][\w-]*)["\u201d]?(?=\s|[.!?,]|$)/.exec(t.slice(b[0].length)); if (w && !new RegExp(`^(?:${KIND_NOUNS})$`, 'i').test(w[1])) add(w[1]); }
+  }
+  return out;
+}
+
 /**
  * World-aware hook (spec 16), read-only: the shapes a "connect A to B" names that the diagram does not have, and the sentence that would add them and
  * connect, so the dialogue can say "I can't find a box called “End”. Shall I add it?" instead of "a connection needs two ends". `undefined` when every name
  * is a shape (or the request names none: "connect them").
  */
 export function checkReferents(ctx, { action, args = {} } = {}) {
+  const named = missingNamed(ctx.state ?? {}, String(action ?? '').replace(/^diagram\./, ''), args.text);
+  if (named.length) {
+    const have = ((ctx.state ?? {}).shapes ?? []).filter((x) => !x.layer && !x.template).map((x) => x.name);
+    return { missing: named.map((name) => ({ name, kind: 'box' })), here: have.length ? have.join(', ') : null, where: 'diagram' };   // no offer: nothing to add
+  }
   if (action !== 'diagram.connect') return undefined;
   const m = /^\s*(?:please\s+)?(?:connect|link|join)\s+(.+?)\s+(?:to|with|and)\s+(.+?)\s*[.!?]?\s*$/i.exec(String(args.text ?? ''));
   if (!m) return undefined;

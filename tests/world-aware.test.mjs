@@ -190,3 +190,24 @@ test('no-referent wording in diagram.sketch: plain reply without an offer, one q
   assert.equal(r.segments[0].veto.kind, 'no-referent');
   assert.equal(r.text, 'I can\'t find a box called “End”. Shall I add it?');
 });
+
+// A name the diagram does not have is never "the one box": "delete the box End" with only Start used to delete Start (the reader drops the unknown name and keeps
+// the kind). End to end, the plain E2 reply comes back and the diagram is unchanged, for delete, move, rename and resize; the world's own operation says the same
+// with the option off.
+test('diagram.sketch: a missing name is not another shape (delete / move / rename), plain E2 reply, nothing changes', async () => {
+  const want = 'I can\'t find “End” in the diagram. In the diagram I can see: Start.';
+  for (const mode of ['veto', 'off']) {
+    const s = await session(mode, 'diagram', ['add a box called Start']);
+    const shapes = () => JSON.stringify(s.state()['diagram.sketch'].shapes.map((x) => [x.name, x.x, x.y]));
+    const before = shapes();
+    for (const m of ['delete the box End', 'delete End', 'move the box End to the right', 'rename End to Foo', 'resize the box End']) {
+      const r = await s.send(m);
+      assert.equal(r.text, want, `${mode}: ${m}`);
+      assert.equal(shapes(), before, `${mode}: ${m} changed the diagram`);
+    }
+    assert.match((await s.send('delete the box called Moon')).text, /^I can't find “Moon” in the diagram\./);
+    assert.equal(shapes(), before);
+  }
+  const s = await session('veto', 'diagram', ['add a box called Start']);
+  assert.equal((await s.send('delete the box Start')).text, 'Deleted Start.');
+});
