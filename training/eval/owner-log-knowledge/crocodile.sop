@@ -1,0 +1,9 @@
+# k.objects/shards/owner-log: a crocodile for the owner-log eval (the owner's browser had it from the online catalog; the repository copy does not).
+# source: fixture of this repository, licence CC0-1.0
+@k.objects.crocodile k.objects.object name=crocodile core.source="owner-log fixture"
+@k.objects.crocodile.body k.objects.part of=crocodile name=body shape=oval x=10 y=45 w=75 h=25 z=1 colour=green core.source="owner-log fixture"
+@k.objects.crocodile.head k.objects.part of=crocodile name=head shape=oval x=0 y=40 w=25 h=18 z=2 colour=green left_of=body core.source="owner-log fixture"
+@k.objects.crocodile.eye k.objects.part of=crocodile name=eye shape=circle x=8 y=40 w=4 h=4 z=3 colour=black inside=head core.source="owner-log fixture"
+@k.objects.crocodile.tail k.objects.part of=crocodile name=tail shape=triangle x=80 y=48 w=20 h=14 z=0 colour=green right_of=body core.source="owner-log fixture"
+@k.objects.crocodile.front_leg k.objects.part of=crocodile name=front_leg kind=leg shape=rectangle x=25 y=68 w=7 h=14 z=0 colour=green below=body core.source="owner-log fixture"
+@k.objects.crocodile.back_leg k.objects.part of=crocodile name=back_leg kind=leg shape=rectangle x=65 y=68 w=7 h=14 z=0 colour=green below=body core.source="owner-log fixture"
