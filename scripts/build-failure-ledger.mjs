@@ -13,6 +13,7 @@ import { readFileSync, appendFileSync, existsSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { classify as rtClassify } from './mt-roundtrip-classify.mjs';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LEDGER = join(REPO, 'training/eval/failures.jsonl');
 const arg = (k) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : undefined; };
@@ -71,7 +72,7 @@ if (!skip.has('coherence')) {
 if (!skip.has('roundtrip')) {
   for (const r of jsonl('training/results/round-trip-cases-keep-2026-11-13.jsonl')) {
     if (r.verdict === 'right') continue;
-    add({ text: r.foreign, tab: null, language: r.lang, happened: `${r.reading?.reply ?? ''} [back-translation: ${r.back_translation}]`, expected: `${r.original} -> ${JSON.stringify(r.expect?.answer ?? r.expect?.state ?? null)}`, class: `roundtrip:${r.class ?? r.verdict}`, source: `round-trip-cases-keep-2026-11-13#${r.id}/${r.lang}` });
+    add({ text: r.foreign, tab: null, language: r.lang, happened: `${r.reading?.reply ?? ''} [back-translation: ${r.back_translation}]`, expected: `${r.original} -> ${JSON.stringify(r.expect?.answer ?? r.expect?.state ?? null)}`, class: `roundtrip:${r.class ?? rtClassify(r) ?? r.verdict}`, source: `round-trip-cases-keep-2026-11-13#${r.id}/${r.lang}` });
   }
 }
 if (!skip.has('routing')) {
