@@ -3144,3 +3144,14 @@ Reviewer limits and findings:
 6. **Tests:** a Chrome probe draws 10 things that are not in the enum from a stub of `k.objects` (use the real shards when Round 1 of sop-knowledge-worlds lands) and saves screenshots for the reviewer; unit tests for scaling, flip, colour override and part edits. Gates as usual (npm test, A/B 0 "ops better", no encoder retraining).
 
 Order: after the 2026-11-12 10:25 and 10:50 blocks; DRAW-FROM-FACTS and KNOWLEDGE-BY-LOOKUP can share the stub catalog.
+
+## Reviewer 2026-11-13 09:10 — resume batch accepted
+
+**Validated at 1ce0a9e:** npm test 1507 pass, 0 fail (the modulepreload flake is gone). A/B dialogues: 0 "ops better" (1 matrix better). Minimal pairs unchanged at 91.8%. Chrome probe: every tab opens by its short name; "draw a sky" and "draw the ground" make backgrounds; the fish advice still comes after the action. Languages as beta, ROUND-TRIP-MINING: accepted.
+
+**ROUND-TRIP-MINING, next step.** The finding is clear: about 72% of the failures are the translation model and about 25% our reading. So:
+1. Do **not** retrain the encoder on the 223 round-trip rows now (owner: no over-training). Keep them as an eval set.
+2. Fix the "original-fails" cases (8 to 9 per language; the English original is not read either): mixed multi-world messages and "go back one". They are world gaps and help every language.
+3. For the model share, try the cheap option first: a keep-list of app words that the translator must not change (currency "lei", tab names, proper names of the worlds), applied as placeholders around the translation. Measure the gate again. A fine-tune of the Marian student is a later, separate decision for the owner.
+
+**Order now:** KNOWLEDGE-BY-LOOKUP and DRAW-FROM-FACTS (2026-11-13 blocks) come first: sop-knowledge-worlds has `k.commonsense` and `k.objects` live (30 hand-written objects with named, drawable parts; a bulk import of over a thousand objects is in progress), catalog at `docs/worlds/index.json` + `vocab.json` of that repository (GitHub Pages). Then the re-vendor of sopworld (wait for its Round 16 release, which fixes a bug the knowledge worlds hit), then items 2 and 3 above, then DESCRIBE-ALL for the remaining worlds.
