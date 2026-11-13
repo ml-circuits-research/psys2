@@ -317,8 +317,9 @@ export function createAvatar(container, host = null) {
   function loadFaceModules() {
     if (fm || destroyed) return;
     fm = 'loading';
+    host?.progress?.start('face-set', 'Loading the face set');   // PROGRESS
     const url = (f) => (host?.asset ? host.asset(`worlds/ui.avatar/${f}`) : new URL(`../worlds/ui.avatar/${f}`, import.meta.url).href);
-    Promise.all(FACE_FILES.map((f) => import(url(f)))).then(([drawMod, data, ops]) => { fm = { draw: drawMod, data, ops, d: data.getFaces() }; shownFaces = ''; draw(); }).catch((e) => { fm = null; console.warn('avatar: the face files could not be loaded', e); });
+    Promise.all(FACE_FILES.map((f) => import(url(f)))).then(([drawMod, data, ops]) => { fm = { draw: drawMod, data, ops, d: data.getFaces() }; shownFaces = ''; host?.progress?.end('face-set'); draw(); }).catch((e) => { fm = null; host?.progress?.fail('face-set', 'The face set could not be loaded', 'the avatar stays as it is'); console.warn('avatar: the face files could not be loaded', e); });
   }
   const exprOf = () => (transient === 'surprised' ? 'surprised' : transient === 'smile' ? 'happy' : null);
   function faceSvg(face, size) {

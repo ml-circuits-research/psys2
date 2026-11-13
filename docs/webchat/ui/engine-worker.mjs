@@ -141,7 +141,15 @@ async function init(m) {
     const { createCachedSource } = await imp('lib/loaders/knowledge-cache.mjs');
     const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
     let catalogBytes = 0;
-    facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]).then((t) => { catalogBytes += t?.length ?? 0; return t; }) } });
+    facts = createFacts({ source: { text: (p) => {
+      const t0 = performance.now(), shard = p !== 'vocab.json' && p !== 'index.json';
+      const slow = shard ? setTimeout(() => evt('load', { op: 'start', path: p }), 150) : 0;   // PROGRESS: a shard that takes longer than 150 ms is named in the panel
+      return Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]).then((t) => {
+        catalogBytes += t?.length ?? 0; clearTimeout(slow);
+        if (shard && performance.now() - t0 >= 150) evt('load', { op: t == null ? 'fail' : 'end', path: p, bytes: t?.length ?? 0 });
+        return t;
+      });
+    } } });
     facts.bytesRead = () => catalogBytes;
     engine.setKnowledge(facts);
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads

@@ -25,7 +25,7 @@ function make(holder, host) {
   injectCss();
   holder.classList.add('geo-map-body');
   const root = h('div', { class: 'geo-map', role: 'application', 'aria-label': 'World map. Use the chat or your voice to move it.' });
-  const loading = h('div', { class: 'geo-loading' }, 'Loading the map…');
+  const loading = h('div', { class: 'geo-loading' });   // empty while loading (the host's progress panel names the step); the text appears only on failure
   const chip = h('div', { class: 'geo-chip', hidden: true, 'aria-hidden': 'true' });
   const statusEl = h('div', { class: 'geo-status', 'aria-hidden': 'true' });
   const sr = h('p', { class: 'geo-sr', 'aria-live': 'polite' });
@@ -45,6 +45,7 @@ function make(holder, host) {
   const sizeOk = () => root.clientWidth > 20 && root.clientHeight > 20;
 
   async function init() {
+    host.progress?.start('map-data', 'Loading the map: countries and places');   // PROGRESS: the one panel, no spinner of the tab's own
     try {
       const [lib, topo, pl] = await Promise.all([
         import(host.asset('vendor/map/leaflet.mjs')),
@@ -56,9 +57,11 @@ function make(holder, host) {
       places = pl;
       countries = topoFeatures(topo, 'countries');
       build();
+      host.progress?.end('map-data');
     } catch (e) {
       console.warn('map tab failed to start', e);
       loading.textContent = `The map could not be loaded (${e?.message ?? e}).`;
+      host.progress?.fail('map-data', 'The map could not be loaded', 'the other tabs still work');
     }
   }
 

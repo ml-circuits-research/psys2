@@ -431,6 +431,8 @@ export async function mountPsys2(element, options = {}) {
     send: (text) => send(String(text), 'chip'),   // ignored (with a hint) while a turn runs
     /** A card or control that moves the person to another tab (a transferred card): logged as a tab opened by a card. */
     openTab: (id) => { userTab(id, 'card'); },
+    /** PROGRESS: tabs report a load (a world's data, a face set, a layout) to the one panel: start(id, label), step(id, label, done, total), end(id), fail(id, text, stillWorks). */
+    progress: { start: (...a) => progress.start(...a), step: (...a) => progress.step(...a), end: (...a) => progress.end(...a), fail: (...a) => progress.fail(...a) },
     speak: (text) => { if (speech && speechSupport.synthesis) speech.speak(String(text), { lang: speechLangTag() }); },
     state: (worldId) => states[worldId],
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
@@ -493,7 +495,7 @@ export async function mountPsys2(element, options = {}) {
   let lastTurnEnd = 0;
   // PROGRESS: a turn that passes 400 ms shows what is being done in the input (the stages the engine already times). Typing ahead is kept (a message sent meanwhile waits in the queue);
   // while a state-changing action runs (carrying out, showing the result) the input is marked busy and Stop is the way out.
-  const STAGE_WORDS = { spell: 'checking spelling', correct: 'checking spelling', rules: 'reading', formalize: 'reading', 'nx.read': 'reading', discourse: 'reading', voice: 'reading', normalizer: 'rewording your message', 'init.compilePattern': 'preparing the rules',
+  const STAGE_WORDS = { seed: 'getting ready', knowledge: 'looking up knowledge', spell: 'checking spelling', correct: 'checking spelling', rules: 'reading', formalize: 'reading', 'nx.read': 'reading', discourse: 'reading', voice: 'reading', normalizer: 'rewording your message', 'init.compilePattern': 'preparing the rules',
     interpreter: 'carrying it out', lookup: 'looking up knowledge', effects: 'showing the result', restarting: 'restarting the engine', download: 'downloading a model' };
   const STATE_STAGES = new Set(['interpreter', 'effects']);
   const INPUT_PLACEHOLDER = input.placeholder;
@@ -558,7 +560,7 @@ export async function mountPsys2(element, options = {}) {
         }
       }
     }
-    ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; if (performance.now() - tStart > 400) setInputStage(stageOverride ?? engineClient?.stage ?? null); }, 100);
+    ticker = setInterval(() => { const long = performance.now() - tStart > 400; thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s${long ? ` · ${STAGE_WORDS[stageOverride ?? engineClient?.stage] ?? 'working'}` : ''}`; if (long) setInputStage(stageOverride ?? engineClient?.stage ?? null); }, 100);
     watchdog = setTimeout(() => { tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - (performance.now() - tPress)));
     const backstop = new Promise((_, rej) => { backstopTimer = setTimeout(() => rej(new TurnAborted('timeout', 'host')), Math.max(0, limit + TURN_LIMITS.backstopMs - (performance.now() - tPress))); });
     backstop.catch(() => {});
@@ -1626,6 +1628,10 @@ export async function mountPsys2(element, options = {}) {
       if (data.op === 'start') progress.start(data.id, data.id === 'worlds' ? 'Loading the worlds' : 'Starting the reasoner');
       else if (data.id === 'worlds') progress.end('worlds', { bytes: data.bytes ?? null, label: `Loaded ${data.count} worlds` });
       else progress.end(data.id);
+    } else if (name === 'load') {   // PROGRESS: a knowledge shard that takes a moment ("Loading drawings: noto money 02")
+      const m = /^k\.([a-z]+)\/(?:shards\/)?(.+)\.sop$/.exec(String(data.path)), kind = { objects: 'drawings', words: 'word senses', geo: 'places', commonsense: 'common-sense facts' }[m?.[1]] ?? 'knowledge';
+      const id = `shard:${data.path}`, label = `Loading ${kind}: ${String(m?.[2] ?? data.path).replace(/[-_]+/g, ' ')}`;
+      if (data.op === 'start') progress.start(id, label); else if (data.op === 'end') progress.end(id, { bytes: data.bytes, label }); else progress.fail(id, `Could not load ${kind}`, 'the basic things still work', { label });
     } else if (name === 'catalog') { if (data.down) progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available'); }
     else if (name === 'ort') { Object.assign(ortMirror, data); globalThis.__psys2Ort = ortMirror; }
     else if (name === 'ort-paused') { ortMirror.paused = data; try { globalThis.dispatchEvent?.(new CustomEvent('psys2-ort-paused', { detail: data })); } catch { /* no events */ } }
