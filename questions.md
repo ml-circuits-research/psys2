@@ -102,3 +102,15 @@ Q1 answered by the reviewer in worker-tasks.md ("Answer to Q1 ... RE-VENDOR 0.7.
 6. **Games are the slowest group (+3.5 ms at p50).** `lib.act` takes 2.4 ms per turn and `_state` 0.9 ms (7.8 derivations per turn). Proposal: cache `toState` per instance stamp across a turn, which is safe because it is a pure function of the instance. The library item is a cheaper `act` transaction for actions that change one wire. OK to do the host part?
 
 Blocking: no. Meanwhile: (1) is applied; the veto is being made the default (user decision 2026-11-12) with the false `no-game` vetoes fixed first; (2)–(6) wait for the answer.
+
+## 2026-11-13 — SPACE: what sopworld lacks for the module `space` (library items; no blocker, host functions used)
+
+The module `space` (worlds/space/, specs/18) is rules in JavaScript (`space.mjs`) over a projection `space.item` / `space.frame`; none of its arithmetic is a declared host function of sopworld yet, because the library lacks what a selection needs. Please pass to the library:
+
+1. **Ordering of a set of wires by a number** (a `core.calc` that sorts by a key and returns the n-th, or the rank of each wire): "the second from the left", "the first in reading order". Today: `readingOrder` in space.mjs.
+2. **Median / middle element of a set along a key** (`fn=median`, and the element at the median): "the middle house". Today: sort and pick in space.mjs; an even count has no middle and the host asks.
+3. **Argmin / argmax over a set** (the wire with the smallest or largest value of a key, with all ties returned): "the biggest", "the nearest to X". Today: sort in space.mjs.
+4. **Pairwise functions over two sets** (distance between two boxes, overlap test) as a calc that ranges over pairs: "next to", "no overlap". Today: `gap`, `overlaps` in space.mjs.
+5. **A fixed-point / iteration** for "tidy up" (push apart until nothing overlaps): today a bounded loop in space.mjs.
+
+Meanwhile: the module is host-function style (pure functions imported by the hosts), the spatial words are real `core.lexicon` groups (generated from the tables, checked by a test), and the schema (`space.item`, `space.frame`) is declared in `worlds/space/legend.sop` so a later matrix version can derive the same answers from wires. Blocking: no.
