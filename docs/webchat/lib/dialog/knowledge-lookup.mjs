@@ -6,10 +6,10 @@
  *                        shards of the thing, by the conversation; no hit: the plain "I don't know what a X is".
  *   - `preloadThings`    the things a reading needs but its world does not have (the open slot of an action, the words it left out) are looked up before the operations run,
  *                        so an operation reads them synchronously through `ctx.knowledge.peek(name)`.
- *   - `missingText`      the E2 veto asks the catalog before it says "I can't find ..."; the plain refusal only when there is no hit.
+ *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=a654c07905';
+import { leftOut, requestOf } from './world-aware.mjs?v=eb95c25528';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -117,23 +117,3 @@ export async function preloadThings(dialog, segments) {
   return done;
 }
 
-/**
- * The E2 veto's sentence when the catalog knows a name the world does not hold (spec 16 + 17): "There is no comet in the picture yet, but I know what a comet is"
- * instead of "I can't find a thing called comet". Returns `{ text, question? }` or null when the catalog has no hit (the plain refusal stays).
- */
-export async function missingText(dialog, ref) {
-  const cat = knowledgeOf(dialog);
-  if (!cat || !ref?.missing?.length) return null;
-  const known = [];
-  for (const m of ref.missing) { try { const th = await cat.thing(m.name); if (th) known.push({ m, th }); } catch { /* none */ } }
-  if (known.length !== ref.missing.length) return null;
-  const where = ref.where ?? 'world';
-  const names = known.map(({ th }) => th.name);
-  const noun = known.length === 1 ? article(names[0]) : list(names);
-  if (ref.offer) {
-    const many = known.length > 1;
-    return { text: `There is no ${list(names)} in the ${where} yet, but I know what ${noun} ${many ? 'are' : 'is'}. Shall I add ${many ? 'them' : 'it'}?`, question: `Shall I add ${many ? 'them' : 'it'}?` };
-  }
-  const g = known[0].th.senses[0] ? firstClause(known[0].th.senses[0].gloss) : null;
-  return { text: `There is no ${list(names)} in the ${where}.${g && known.length === 1 ? ` ${cap(article(names[0]))} is ${g.replace(/^(?:a|an|the)\s/i, '')}.` : ''}` };
-}

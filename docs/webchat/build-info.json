@@ -54,18 +54,18 @@
     "lib/dialog/discourse.mjs": "be9968003fd3b2b7",
     "lib/dialog/dispatch-validate.mjs": "428a5675626b4fcd",
     "lib/dialog/encoder-dispatch.mjs": "800a1db4e618d23c",
-    "lib/dialog/index.mjs": "3035774690239fbe",
-    "lib/dialog/knowledge-lookup.mjs": "bc1d8ceec05fb219",
+    "lib/dialog/index.mjs": "cad079bc9e0ac0f7",
+    "lib/dialog/knowledge-lookup.mjs": "8631429251b0d092",
     "lib/dialog/meta.mjs": "af07dfe0ee02a4a0",
     "lib/dialog/normalizer-runtime.mjs": "20c125de4117118b",
-    "lib/dialog/reader-route.mjs": "378e808636cc2ea9",
+    "lib/dialog/reader-route.mjs": "f7047cce2ff19ccc",
     "lib/dialog/runtime-config.mjs": "08e124a6aaf79d05",
     "lib/dialog/surprise.mjs": "bd76e5f4d59d803e",
     "lib/dialog/test-runner.mjs": "f4828bf7550a0b77",
     "lib/dialog/time-limits.mjs": "b15ac0ef11c2093c",
     "lib/dialog/value-check.mjs": "d665a9b5600aa7bc",
     "lib/dialog/word-reader.mjs": "66b04031759f4788",
-    "lib/dialog/world-aware.mjs": "7d40d47f65e0dc62",
+    "lib/dialog/world-aware.mjs": "d21b2e9e4b2826cf",
     "lib/formalizer/best-effort.mjs": "14eebef298c8975d",
     "lib/formalizer/dispatcher-runtime.mjs": "719a9533c12c2dbc",
     "lib/formalizer/edit-tags.mjs": "14423e3fc078f85c",
@@ -233,6 +233,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T08:33:26.397Z",
-  "commit": "1447728-dirty"
+  "builtAt": "2026-11-13T08:46:04.383Z",
+  "commit": "3aecceb-dirty"
 }

@@ -100,3 +100,19 @@ test('drawing: a thing of the catalog is drawn from its parts; no hit is the pla
     assert.equal(r.text, "I don't know how to draw a blorp yet.");
   } finally { engine.setKnowledge(null); }
 });
+
+// An action on a referent that must exist in the world is refused in the world's plain words, whatever the catalog knows (owner, 2026-11-13).
+test('delete / move / connect with a catalog hit: the plain refusal, never a gloss', async () => {
+  const files = { ...FILES, 'vocab.json': JSON.stringify({ ...JSON.parse(FILES['vocab.json']), dragon: ['k.words/shards/dr'], end: ['k.words/shards/dr'] }),
+    'k.words/shards/dr.sop': ['@k.words.dragon.noun.1 k.words.sense word=dragon pos=noun n=1 gloss="a creature of Teutonic mythology" core.source="t"', '@k.words.end.noun.1 k.words.sense word=end pos=noun n=1 gloss="the point where something ends" core.source="t"'].join('\n') };
+  engine.setKnowledge(createFacts({ source: { text: async (p) => files[p] ?? null } }));
+  try {
+    for (const [msg, tab, plain] of [['delete the dragon', 'art.draw', /^I can't find .dragon. in the picture/], ['move the dragon to the left', 'art.draw', /dragon/], ['color the dragon red', 'art.draw', /dragon/]]) {
+      const r = await send(msg, tab);
+      assert.doesNotMatch(r.text, /Teutonic|mythology|I know what/, msg);
+      assert.match(r.text, plain, msg);
+    }
+    const r = await send('connect Start to End', 'diagram.sketch');
+    assert.doesNotMatch(r.text, /I know what|the point where/, r.text);
+  } finally { engine.setKnowledge(null); }
+});

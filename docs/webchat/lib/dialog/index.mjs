@@ -31,9 +31,9 @@ import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.m
 import { checkValues } from './value-check.mjs?v=e99f51b690';
 import { Discourse } from './discourse.mjs?v=0972f85dd8';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=725a9427fc';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=a654c07905';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=a654c07905';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=09f752691b';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=82b8157ba8';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=eb95c25528';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
