@@ -3342,3 +3342,38 @@ The owner finds the avatar system limited: fixed pictures from a library, few th
 - **E-T5 Cost.** Time and steps per turn on the phone profile, first hit and warm; the catalog cache size after a 30-turn conversation.
 
 **Build order:** card kinds 1 (drawing, parts, bars, line) + the board + "how do you know" first, publish, then transfers, then the rest. It uses SPACE and P2 of SCENE-NATURAL: start after those two; the question frames and card renderers can start now in a separate worktree. Gates: smoke per commit, full before each publish, A/B clean, no encoder retraining (if routing to `talk` needs it, stop and report: the frame decides, and Talk is the active tab).
+
+## Reviewer 2026-11-13 15:45 — network rule, model timeouts, "box shaped like", E2 test, DESCRIBE-ALL kids.common: accepted
+
+**Validated at 18033a4:** `npm run test:smoke` 207 pass, 0 fail, 115 s on the reviewer box; A/B dialogues clean. Your diagnosis of "Pariss" is accepted (wall-clock budgets, already replaced), and the real defect you found instead (an unbounded wait for the catalog that changed "what is a comet" into "I don't know") is the more important fix. The no-network guard for tests is accepted.
+
+Two small items:
+1. **"delete the box End" deletes Start** when only Start exists (found by you, not fixed). Fix it now with SCENE-NATURAL P3: a named referent that is not in the scene is never replaced by the only object there; say that End does not exist.
+2. **Model timeout rate on a phone:** the counter exists; the owner's phone shows it in the debug panel. No harness needed now.
+
+Then the queue, in this order: SCENE-NATURAL (replay report first), SPACE, SETTINGS-COHERENT (parallel worktree), UNDO-REDO, TALK (frames and card renderers may start in parallel), AVATAR-FROM-PARTS.
+
+## Reviewer 2026-11-13 16:00 — WORLD-OF-WORLDS (owner): an experiment in symbolic routing, so that a new world needs no retraining
+
+**Owner's idea:** choosing the right tab is a symbolic problem. Have a world about worlds: one schema, one instance per world, and rules that pick the world from what each world is and from its state. Retraining DistilBERT for every new world does not scale and does not work well.
+
+**Design to try.** A shared module `meta.worlds` (not a tab, never a routing candidate itself):
+1. **One instance per world, generated, not hand-written** (`scripts/build-world-cards.mjs`, stale check in a test), from the world's matrix, operations, `describe.sop` and lexicon: `meta.world id= tab= kind=tab|module`, its **actions** (verb groups: draw, move, play, read, count…), the **kinds of things** it holds or makes (shape, box, piece, word, country…; for art.draw and Talk also "any thing of the knowledge catalog"), its **question frames**, its **names** ("the drawing", "the diagram", "chess"), and whether it needs something **running** (a game, an open document).
+2. **Live facts each turn** (cheap, from state the host already has): the active tab; per world: is something running, the names and kinds of the things in its scene, the last action and its objects, whether it asked the user a question last turn.
+3. **Routing as rules with reasons** (sopworld rank / judged readings, soft scores, all in SOP Lang):
+   - the message names a world → that world;
+   - the last turn asked a question → its world answers first;
+   - a fragment or follow-up → the world of the last action (SCENE-NATURAL P1, P2);
+   - a referent of the message is in a world's scene → that world (strongest evidence after naming);
+   - the verb belongs to a world's actions and the thing is of a kind it holds → that world; among several, the active tab wins;
+   - a world that needs something running and has nothing running cannot take a message that does not start it;
+   - knowledge frames with no tab action → Talk (or the conversation composite until Talk exists).
+   The result is a ranked list with the rule that fired, shown in the trace in plain words ("because the crocodiles are in your drawing").
+4. **The encoder becomes one signal.** Its world scores enter the ranking as a prior with a weight; they never override a referent or a running-state rule. A new world is added by its card alone.
+
+**Experiment (report in worker-log, table per set):** compare three routers: A = today (encoder dispatcher + rules validation), B = symbolic only (`meta.worlds`, encoder off), C = symbolic with the encoder as a prior. Sets: operational (all), dialogues, minimal pairs, `owner-log-2026-11-13.jsonl`, and a new **wrong-tab set** of 200 messages said on a tab other than their own (seeded: every world's canonical requests × 3 other active tabs, plus 40 fragments after a turn). Measure right world, wrong world, asked, time per message.
+- **The hold-out test that matters:** remove one world from the encoder's label set without retraining (mask its outputs) and route with B and C; do it for 4 worlds in turn (art.draw, diagram.sketch, geo.map, games.chess). Then add the TALK world's card with no training at all. Report how much is lost against the trained case.
+- **Decision rule for the reviewer and the owner:** if C is at least as good as A everywhere and B loses less than 3 points on the hold-outs, routing moves to `meta.worlds`, the dispatcher's world head stops being retrained for new worlds, and A stays behind a setting for comparison.
+
+**Limits to respect:** general means only; no per-message rules; the cards must stay small (the DESCRIBE-ALL size gate counts them); both reasoners; smoke per commit. If sopworld lacks something for ranking with reasons, write it in questions.md.
+**Order:** start now in a separate worktree, in parallel with SCENE-NATURAL: P1 of SCENE-NATURAL is the first rule set of this module, so build P1 inside `meta.worlds` rather than twice.
