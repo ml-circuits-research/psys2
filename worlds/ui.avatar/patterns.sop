@@ -208,7 +208,7 @@
     canonical="What did you just do?"
 
 @pat.ui.avatar.undo core.pattern
-    match="[$lang.lead.filler|pls|plz]? [undo|undo_that|undo_it|undo_the_last_thing|undo_the_last_change|take_that_back|go_back|step_back|revert_that] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.undo arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -217,7 +217,7 @@
     canonical="Undo that."
 
 @pat.ui.avatar.redo core.pattern
-    match="[$lang.lead.filler|pls|plz]? [redo|redo_that|redo_it|do_that_again|do_it_again] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.redo arg.text=\"{segment}\""
     kind=request
     priority=11

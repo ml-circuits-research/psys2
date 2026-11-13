@@ -285,7 +285,7 @@
     canonical="What did you just do?"
 
 @pat.diagram.sketch.undo core.pattern
-    match="[$lang.lead.filler|pls|plz]? [undo|undo_that|undo_it|undo_the_last_thing|undo_the_last_change|take_that_back|go_back|step_back|revert_that] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=diagram.sketch.undo arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -294,7 +294,7 @@
     canonical="Undo that."
 
 @pat.diagram.sketch.redo core.pattern
-    match="[$lang.lead.filler|pls|plz]? [redo|redo_that|redo_it|do_that_again|do_it_again] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=diagram.sketch.redo arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -343,6 +343,16 @@
     priority=8
     tabPriority=16
     example="Tidy up the circles."
+
+@pat.diagram.sketch.read.own core.pattern
+    match="[$lang.lead.filler|pls|plz]? {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=diagram.sketch.own arg.rest=\"{rest}\" arg.text=\"{segment}\""
+    kind=request
+    priority=1
+    tabPriority=30
+    tabOnly=true
+    example="Which shape is the largest?"
+    canonical="Which shape is the largest?"
 
 @pat.diagram.sketch.bare.mod core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {pre:words} {thing:lex.diagram.sketch.kinds} [at_me|a_little|twice]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"

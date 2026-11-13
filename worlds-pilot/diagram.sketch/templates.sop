@@ -44,3 +44,7 @@
 @tpl.diagram.sketch.place core.template
     for=action.diagram.sketch.place
     text="{note}"
+
+@tpl.diagram.sketch.own core.template
+    for=action.diagram.sketch.own
+    text="{note}"

@@ -53,7 +53,7 @@ export const KIND_WORDS = {
   thing: '*', object: '*', item: '*', shape: '*', bit: '*', piece: '*',
 };
 /** Animals people ask for that the canvas cannot draw (yet): the reply names what it can draw. */
-const UNDRAWABLE = new Set(['monkey', 'lion', 'tiger', 'elephant', 'horse', 'cow', 'pig', 'rabbit', 'bear', 'duck', 'frog', 'snake', 'giraffe', 'zebra', 'sheep', 'turtle', 'butterfly', 'mouse']);
+export const UNDRAWABLE = new Set(['monkey', 'lion', 'tiger', 'elephant', 'horse', 'cow', 'pig', 'rabbit', 'bear', 'duck', 'frog', 'snake', 'giraffe', 'zebra', 'sheep', 'turtle', 'butterfly', 'mouse']);
 const IRREGULAR = { people: 'person', men: 'person', women: 'person', children: 'person', kids: 'person', mice: null, leaves: null, fishes: 'fish' };
 /** Ground cover words -> ground kind. */
 export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', sandy: 'sand', snowy: 'snow', grassy: 'grass', watery: 'sea', icy: 'snow', wet: 'sea', beachy: 'sand' };
@@ -347,6 +347,9 @@ export function parseNP(text) {
     if (w === 'background' || w === 'paper' || w === 'page' || w === 'canvas') { np.special = 'background'; continue; }
     if (Object.hasOwn(GROUND_WORDS, w) || w === 'ground' || w === 'floor') { np.special = 'ground'; np.groundWord = GROUND_WORDS[w] ?? null; continue; }
     if (w === 'picture' || w === 'drawing' || w === 'painting' || w === 'everything') { np.special = 'everything'; continue; }
+    const owner = np.partOf?.kind && np.partOf.kind !== '*' ? np.partOf.kind : null;   // "a door of the house": a word that is a part of the owner is that part, not the kind of the same name
+    const ownPart = owner ? partOfWord(owner, w) ?? partOfWord(owner, w.replace(/s$/, '')) : null;
+    if (ownPart) { np.part = ownPart; continue; }
     const k = kindOfWord(w);
     if (k && !(np.kind && partOfWord(np.kind, w))) { if (k.kind === '*') { np.kind = '*'; } else if (!np.kind) np.kind = k.kind; np.plural ||= k.plural; continue; }
     // part words: "the roof", "the car wheels"

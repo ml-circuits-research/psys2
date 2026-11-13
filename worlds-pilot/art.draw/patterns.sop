@@ -271,7 +271,7 @@
     canonical="What did you just do?"
 
 @pat.art.draw.undo core.pattern
-    match="[$lang.lead.filler|pls|plz]? [undo|undo_that|undo_it|undo_the_last_thing|undo_the_last_change|take_that_back|go_back|step_back|revert_that] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.undo arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -280,7 +280,7 @@
     canonical="Undo that."
 
 @pat.art.draw.redo core.pattern
-    match="[$lang.lead.filler|pls|plz]? [redo|redo_that|redo_it|do_that_again|do_it_again] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.redo arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -458,6 +458,24 @@
     tabPriority=19
     example="The house goes next to the tree."
     canonical="The house goes next to the tree."
+
+@pat.art.draw.make.give core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? give [$acts.det]? {place:words} [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.rel=\"to\" arg.place=\"{place}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="Give the house a blue door."
+    canonical="Give the house a blue door."
+
+@pat.art.draw.make.have core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [could|can|would|should|may|must] [$acts.det]? {place:words} [have] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.make arg.rel=\"to\" arg.place=\"{place}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    example="Could the house have a yellow door?"
+    canonical="Could the house have a yellow door?"
 
 @pat.art.draw.remove.no core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_do_not_want|i_dont_want|i_do_not_need|i_dont_need|no_more|no_longer_want|i_no_longer_need|i_dont_like|i_do_not_like|get_rid_of] [$acts.det]? {thing:words} [anymore|any_more|please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"

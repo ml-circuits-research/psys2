@@ -5,6 +5,7 @@
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
 import * as D from '../../worlds/art.draw/ops.mjs';
 import * as space from '../../worlds/space/space.mjs';
+import { splitThings } from '../../worlds/acts/acts.mjs';
 import { partsOf, kindKey, kindName } from '../../worlds/art.draw/scene.mjs';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -59,7 +60,7 @@ function thingsOf(ctx) {
 }
 
 /** DECLINE: a reading is the drawing board's when its words are things the board draws (a kind of its own or of the catalog, a part, the sky, the ground, "it") or when the sentence says "draw". */
-function accepts({ action, mode, roles, text, state }) {
+function accepts({ action, mode, roles, text, state, kindWord }) {
   const act = String(action ?? '').split('.').pop();
   if (!['make', 'remove', 'change', 'place', 'group', 'pick', 'ask', 'copy'].includes(act)) return true;
   const said = roles.thing ?? roles.rest ?? '';
@@ -70,12 +71,13 @@ function accepts({ action, mode, roles, text, state }) {
   if (act === 'make' && /^(?:please |can you |could you )?(?:draw|sketch|paint|doodle)\b/.test(t)) return true;
   const np = D.parseNP(said);
   if (D.drawingNP(np) || np.pron || np.special) return true;
-  if (act === 'make') { const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1); return !!k && (D.kindOfWord(k) != null || D.kindOfWord(k.replace(/s$/, '')) != null); }
+  if (act === 'make') { const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1); return !!k && (D.kindOfWord(k) != null || D.kindOfWord(k.replace(/s$/, '')) != null || kindWord?.(k) === true); }   // a word of the catalog vocabulary (the schema's kind lexicon) is a thing to draw even before the lookup found its picture
   return !!np.known && (state?.objects ?? []).length > 0;
 }
 
 export const hooks = {
   thingsOf,
+  afterGroup: (st) => { st.prev = st.history.at(-1) ?? null; },   // one undo step per message: the picture before the newest step is the one the grouped step left
   accepts,
   referents: D.referents,
   know: { colour: (w) => D.isShade(w) || D.isColorWord(w) },
@@ -84,10 +86,11 @@ export const hooks = {
       if (r.mode === 'random') return D.scene(ctx, {});
       if (!r.thing) return D.askKind(ctx, {});
       const np = D.parseNP([r.thing, r.place && /^(?:to|on|for)$/.test(rel(r)) ? `of ${r.place}` : ''].join(' '));   // "give the house a blue door", "add a black door to the house": a part of a thing of the picture
-      if (np.part && !np.partOf && (np.kind || r.place) && !(np.partKinds && !np.kind && !r.place)) return D.givePart(ctx, { t: np.kind ?? r.place, color: np.color ?? undefined, part: np.part });
+      if (np.part && (np.kind || r.place) && !(np.partKinds && !np.kind && !r.place)) return D.givePart(ctx, { t: np.partOf ? r.place : np.kind ?? r.place, color: np.color ?? undefined, part: np.part });
       const a = addArgs(r), last = words(a.kind).at(-1) ?? '';
       if (GROUNDS(last) && (!a.where || /^(?:on|in|to|at|under)\s+(?:the\s+)?(?:ground|floor|bottom)/.test(a.where))) return D.ground(ctx, { g: last });
       if (last === 'sky' && !a.where) return D.ground(ctx, { g: 'sky' });
+      if (splitThings(r.thing).length < 2 && !D.kindOfWord(a.kind) && (!D.kindOfWord(last) || words(a.kind).length > 1) && !D.UNDRAWABLE.has(last.replace(/s$/, '')) && !/^(?:\d+|one|two|three)$/.test(last)) return D.add(ctx, { ...a, open: [a.m1, a.m2, a.m3, a.kind].filter(Boolean).join(' ') });   // a word the board does not draw: the catalog is asked, then a part of a thing of the picture ("add a third window"), else "I don't know how to draw X yet"
       return D.add(ctx, a);
     },
     remove: (ctx, r) => {
