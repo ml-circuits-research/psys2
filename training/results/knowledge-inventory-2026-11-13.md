@@ -7,15 +7,17 @@ Items: kb fact types, code tables (>= 10 words) and lexicon groups (>= 8 words) 
 
 | done | kind | item | size | counterpart | overlap |
 | --- | --- | --- | ---: | --- | ---: |
-| [ ] | table | `worlds/acts/acts.mjs:ACTS` | 37 | k.words | 95% |
+| [ ] | table | `worlds/acts/acts.mjs:ACTS` | 39 | k.words | 95% |
 | [ ] | table | `worlds/acts/acts.mjs:DET` | 12 | k.values | 33% |
 | [ ] | table | `worlds/acts/acts.mjs:PRONOUN` | 10 | none | 20% |
-| [ ] | table | `worlds/acts/acts.mjs:FORMS` | 53 | k.words | 85% |
+| [ ] | table | `worlds/acts/acts.mjs:FORMS` | 55 | k.words | 85% |
 | [ ] | table | `worlds/acts/acts.mjs:REL_WORDS` | 16 | k.words | 94% |
 | [ ] | table | `worlds/acts/acts.mjs:DET_WORDS` | 11 | k.values | 36% |
 | [ ] | table | `worlds/acts/acts.mjs:DIR_WORDS` | 11 | k.words | 100% |
-| [ ] | table | `worlds/acts/forms.more.mjs:FORMS_MORE` | 32 | k.words | 97% |
+| [ ] | table | `worlds/acts/acts.mjs:PREP_CUT` | 23 | k.words | 96% |
+| [ ] | table | `worlds/acts/forms.more.mjs:FORMS_MORE` | 33 | k.words | 97% |
 | [ ] | table | `worlds/acts/forms.more.mjs:TURN_WORDS` | 10 | k.words | 90% |
+| [ ] | table | `worlds/acts/matrix.mjs:REST_KEYS` | 13 | k.words | 69% |
 | [ ] | table | `worlds/acts/verbs.generated.mjs:ACT_VERBS` | 222 | k.actions | 100% |
 | [ ] | lexicon | `lex.acts.rel` | 17 | k.words | 88% |
 | [ ] | lexicon | `lex.acts.dir` | 18 | k.values | 72% |

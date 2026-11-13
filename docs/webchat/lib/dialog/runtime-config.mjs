@@ -6,8 +6,8 @@
  *   const enc = createRuntime({ engine, settings, load, normalizer, waitForModel });   // encoder strategy, attached and registered
  *   const session = engine.createSession(sessionOptions(settings));
  */
-import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=341576e33d';
-import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=04cf68a080';
+import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=142a79ae3f';
+import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6e8d12ea76';
 
 /** The shipped defaults of everything that changes what the pipeline answers (the webchat adds UI-only keys on top). */
 export const RUNTIME_DEFAULTS = Object.freeze({
@@ -61,7 +61,7 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
+  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.suspectWords === true ? { suspect: true } : {}), ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
 }
 
 /**

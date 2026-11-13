@@ -9,37 +9,37 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=d88531b8c2';
-import { loadWorlds } from '../worlds/index.mjs?v=4af292d57e';
-import { validateWorldSet } from '../worlds/validate.mjs?v=3e1f08c579';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=4a00794bce';
+import { loadWorlds } from '../worlds/index.mjs?v=c9cd434e83';
+import { validateWorldSet } from '../worlds/validate.mjs?v=c4a39595f3';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=51a086a41e';
+import { createInterpreter } from '../interpreter/index.mjs?v=c1a48b446b';
 import { createReasoner } from '../reasoner/index.mjs?v=e96edcff84';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=aab9b783ba';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=04cf68a080';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=1c18d82421';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6e8d12ea76';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=f77a3f29d4';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=b7a4791e10';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=c9a3b0b06f';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=426841edbd';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=ad4b9daf11';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=e046742b19';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=30772d3c13';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=12b0ad2c5e';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=b56ffdb1c4';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=3a67169c97';
-import { checkValues } from './value-check.mjs?v=c1ff213a9b';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=de77801e89';
+import { checkValues } from './value-check.mjs?v=09c4ebc820';
 import { attachValues } from '../knowledge/values.mjs?v=ec4fe4794e';
-import { Discourse } from './discourse.mjs?v=08e4328e90';
-import { Dialogue } from './dialogue.mjs?v=fa632c50e7';
+import { Discourse } from './discourse.mjs?v=bc0117d104';
+import { Dialogue } from './dialogue.mjs?v=e4115366eb';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=9ceefd896a';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=0d22f70b20';
-import { repairFromScene } from './scene-referents.mjs?v=052fff6b77';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=a0d8122fe7';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=108c23c970';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=a8f0e824fc';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=445c3ff546';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=1c5093c769';
+import { repairFromScene } from './scene-referents.mjs?v=78f30c0cc9';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=a95b412274';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=817d03323f';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=c6b5c36bae';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -284,7 +284,7 @@ function tooComplexReply(session, text, e, b) {
 export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTimeout', 'AbortError', 'TimeoutError'].includes(e.name) || /timed out|timeout|aborted/i.test(String(e.message ?? e)));
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing, suspect = false } = {}) {
     this.routing = routing;   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
@@ -295,6 +295,8 @@ export class DialogSession {
     this.nx = normalizeNxStrategy(nx);
     /** Best effort with loose words (spec 03 section 7.15): after everything else failed, execute the most sensible reading of the content words (off in the library, on in the shipped settings). */
     this.bestEffort = bestEffort;
+    /** SUSPECT-WORD leniency (model ablation 2026-11-13, off by default): a segment the rules read completely but whose text holds a word no world knows that is a slip away from a known word is also tried spell-corrected (the correction is kept only when the rules read the corrected text completely), as an unparsed segment is. */
+    this.suspect = suspect;
     /** Encoder fast path (PERF): when the rules read the whole message and the interpreter accepts every reading, skip the model. */
     this.fastPath = fastPath;
     /** Leniency (spec 03 sections 7.9 and 7.10): spell-correct unparsed text (on by default), accept the readable part of a message (off by default; the webchat turns it on). */
@@ -763,12 +765,26 @@ export class DialogSession {
     return { ...formal, segments, wires: segments.flatMap((x) => x.wires) };
   }
 
+  /** True when the text of `seg` holds a word that no world knows and that is one slip (spell budget) from a known word of some world. */
+  _suspectWord(seg) {
+    try {
+      const set = this.engine.set;
+      if (this._dryStatuses([seg]).every((x) => x === 'supported')) return false;   // a reading the interpreter accepts is left alone (names, dictated text); only a refused one (unknown tab, unknown item, missing argument) is suspect
+      const protect = protectedWordsOf(set, this.context().tabWorld);
+      return spellCorrect(seg.text, { vocab: spellVocabulary(set), protect, short: false, abbreviations: false }).corrections.length > 0;
+    } catch { return false; }
+  }
+
   async _withLeniency(res, opts, o) {
-    if (!res.segments.some((x) => x.unparsed) || !(o.spell || o.partial)) return res;
+    if ((!res.segments.some((x) => x.unparsed) && !(this.suspect && o.spell)) || !(o.spell || o.partial)) return res;
     const segments = [];
     o = { ...o, steps: 0 };   // the whole leniency stage of this message (spelling variants, partial windows) shares one step budget
     for (const seg of res.segments) {
-      const fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
+      let fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
+      if (!fixed && this.suspect && o.spell && !seg.unparsed && !seg.corrections?.length && this._suspectWord(seg)) {
+        const f2 = await this._lenient(seg, opts, { ...o, partial: false });   // spelling only
+        if (f2?.length && f2.every((x) => !x.unparsed) && f2.some((x) => x.corrections?.length)) fixed = f2;
+      }
       if (fixed) segments.push(...fixed); else segments.push(seg);
     }
     return { ...res, segments, wires: segments.flatMap((x) => x.wires) };

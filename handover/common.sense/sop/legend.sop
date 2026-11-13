@@ -1,0 +1,190 @@
+@legend.common.sense core.legend
+    namespace=common.sense
+    version=0.1.0
+    imports=core
+    doc="Plain general facts about kinds of things (where they usually are, how many, when) and what a host world tells about the things it holds"
+
+@common.sense.livesin core.type
+    extends=core.state
+    doc="A place where a kind of thing usually is. The row marked usual=yes is the default place of a new thing of that kind when nobody says where; where=horizon says it stands at the far edge of the place (a mountain); must=yes says it cannot be anywhere else (a fish), so a host makes the place when it has none."
+    example="Fish live in water."
+
+@common.sense.livesin.kind core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@common.sense.livesin.place core.key
+    value=atom
+    card=one
+    ask="Which place is it usually in?"
+
+@common.sense.livesin.usual core.key
+    value=atom
+    card=one
+    ask="Is this its default place?"
+
+@common.sense.livesin.where core.key
+    value=atom
+    card=one
+    ask="Where in the place?"
+
+@common.sense.livesin.must core.key
+    value=atom
+    card=one
+    ask="Can it be nowhere else?"
+
+@common.sense.rule core.type
+    extends=core.state
+    doc="A kind of thing that has usual places (its livesin rows): the friendly sentence that says it."
+    example="Fish usually live in water."
+
+@common.sense.rule.kind core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@common.sense.rule.say core.key
+    value=string
+    card=one
+    ask="What is usually so?"
+
+@common.sense.place core.type
+    extends=core.state
+    doc="How a place is said after a kind of thing that is not usually there."
+    example="in the sky"
+
+@common.sense.place.name core.key
+    value=atom
+    card=one
+    ask="Which place?"
+
+@common.sense.place.phrase core.key
+    value=string
+    card=one
+    ask="How is it said?"
+
+@common.sense.single core.type
+    extends=core.state
+    doc="A kind of thing of which there is usually only one."
+    example="There is usually one sun."
+
+@common.sense.single.kind core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@common.sense.single.say core.key
+    value=string
+    card=one
+    ask="What is usually so?"
+
+@common.sense.absent core.type
+    extends=core.state
+    doc="A kind of thing that is usually not there at some moment (no sun at night)."
+    example="There is usually no sun at night."
+
+@common.sense.absent.kind core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@common.sense.absent.phase core.key
+    value=atom
+    card=one
+    ask="At which moment?"
+
+@common.sense.absent.say core.key
+    value=string
+    card=one
+    ask="What is usually so?"
+
+@common.sense.thing core.type
+    extends=core.state
+    doc="A thing the host world holds: its name in that world and its kind."
+    example="a fish"
+
+@common.sense.thing.thing core.key
+    value=string
+    card=one
+    ask="Which thing?"
+
+@common.sense.thing.kind core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@common.sense.at core.type
+    extends=core.state
+    doc="Where a thing of the host world is (a place of the facts), told only when the host knows."
+    example="the fish is in the sky"
+
+@common.sense.at.thing core.key
+    value=string
+    card=one
+    ask="Which thing?"
+
+@common.sense.at.place core.key
+    value=atom
+    card=one
+    ask="In which place?"
+
+@common.sense.moment core.type
+    extends=core.state
+    doc="The moment of the host world: day or night."
+    example="It is night."
+
+@common.sense.moment.phase core.key
+    value=atom
+    card=one
+    ask="Which moment?"
+
+@common.sense.supports core.type
+    extends=core.state
+    doc="What rests on what, so the two touch when one is put near the other: a roof sits on walls, a cup on a table, a wheel on a road. The module space joins them (snaps so they touch without overlapping) unless the user says to keep a gap."
+    example="A roof sits on the walls."
+
+@common.sense.supports.top core.key
+    value=atom
+    card=one
+    ask="What sits on the other?"
+
+@common.sense.supports.base core.key
+    value=atom
+    card=one
+    ask="What does it sit on?"
+
+@common.sense.around core.type
+    extends=core.state
+    doc="What is arranged around what: chairs go around a table. A layout 'around' picks the things of the first kind when no kind is named."
+    example="Chairs go around a table."
+
+@common.sense.around.kind core.key
+    value=atom
+    card=one
+    ask="What goes around?"
+
+@common.sense.around.centre core.key
+    value=atom
+    card=one
+    ask="Around what?"
+
+@common.sense.facepart core.type
+    extends=core.state
+    doc="The order of the parts of a face from the top (rank) and the share of the width at which a mirrored pair sits either side of the middle (mirror, 0 = in the middle): eyebrows above eyes above nose above mouth."
+    example="The eyes are above the nose."
+
+@common.sense.facepart.kind core.key
+    value=atom
+    card=one
+    ask="Which part?"
+
+@common.sense.facepart.rank core.key
+    value=number
+    card=one
+    ask="How far down from the top?"
+
+@common.sense.facepart.mirror core.key
+    value=number
+    card=one
+    ask="How far from the middle (share of the width)?"

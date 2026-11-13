@@ -1103,6 +1103,40 @@
     alt=unsure
     alt=clueless
 
+@phrase.lang.undo core.phrase
+    frame=false
+    doc="Take back the last step (every schema world reads it as the act undo; the discourse layer handles the shapes with a name or a count): undo, undo that, ctrl z, go back one step, revert the last change, back to how it was."
+    alt=undo
+    alt=undo_that
+    alt=undo_it
+    alt=undo_this
+    alt=undo_the_last_thing
+    alt=undo_the_last_change
+    alt=undo_the_last_step
+    alt=undo_last
+    alt=undo_please
+    alt=wait_undo
+    alt=oops_undo
+    alt=ctrl_z
+    alt=control_z
+    alt=take_that_back
+    alt=take_it_back
+    alt=take_the_last_step_back
+    alt=go_back
+    alt=go_back_one_step
+    alt=go_back_a_step
+    alt=step_back
+    alt=one_step_back
+    alt=back_one_step
+    alt=back_to_how_it_was
+    alt=revert_that
+    alt=revert_it
+    alt=revert_the_last_change
+    alt=revert_the_last_step
+    alt=get_that_back
+    alt=never_mind_undo_that
+    alt=that_was_wrong_undo_it
+
 @phrase.lang.redo core.phrase
     frame=false
     doc="Put back what an undo took out (ctx.lang.redo, UNDO-REDO): redo, redo that, do it again, put it back."

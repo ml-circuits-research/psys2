@@ -1,0 +1,23 @@
+# common.sense as a matrix: SOFT rules over plain facts. No rule here refuses anything: a soft deny is a standing core.issue, and the host world says it as a
+# friendly warning after it did what was asked. The host tells what it holds as common.sense.thing (name, kind), common.sense.at (name, place) and
+# common.sense.moment (phase); the facts (kb.sop) are the general knowledge. Every id starts with cs. : the host treats the issues of cs.d.* rules as advice.
+
+# a kind of thing is where it usually is: a thing of a kind that has usual places, in a place that is not one of them
+@cs.t common.sense.thing thing=?i kind=?k
+@cs.a common.sense.at thing=?i place=?p
+@cs.l common.sense.rule kind=?k say=?say
+@cs.pl common.sense.place name=?p phrase=?ph
+@cs.ok common.sense.livesin kind=?k place=?p
+@cs.d.place core.deny soft=true when=$cs.t when=$cs.a when=$cs.l when=$cs.pl not=$cs.ok why="?say, not ?ph."
+
+# of some kinds there is usually one (one sun)
+@cs.t1 common.sense.thing thing=?a kind=?k
+@cs.t2 common.sense.thing thing=?b kind=?k
+@cs.s common.sense.single kind=?k say=?say
+@cs.diff core.check fn=neq args=?a args=?b
+@cs.d.single core.deny soft=true when=$cs.t1 when=$cs.t2 when=$cs.s if=$cs.diff why="?say."
+
+# some things are usually not there at some moment (no sun at night)
+@cs.m common.sense.moment phase=?ph
+@cs.n common.sense.absent kind=?k phase=?ph say=?say
+@cs.d.night core.deny soft=true when=$cs.t when=$cs.m when=$cs.n why="?say."

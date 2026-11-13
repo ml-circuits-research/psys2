@@ -34,10 +34,12 @@ export function withView(schema, ns, hooks = {}) {
     const ts = toks(req.thing);
     const content = ts.filter((w) => !SKIP.has(w) && !/^\d+$/.test(w));
     if (!content.length || content.some((w) => kindOf(w))) return;
-    const my = /^(?:my|our)\s/.test(lc(req.thing).trim());
+    const said = lc(req.text ?? ctx.segment?.text ?? '');   // the act reader drops a determiner from the role ("my sister" gives thing=sister): the sentence still says whose it is
+    const mine = /^(?:my|our)\s/.test(lc(req.thing).trim());
     for (let i = content.length - 1; i >= 0; i--) {   // the head noun is the last word
       budget.tick('view.knowledge');
       const w = content[i];
+      const my = mine || new RegExp(`\\b(?:my|our)\\s+(?:\\w+\\s+)?${w.replace(/[^\w']/g, '')}\\b`).test(said);
       const own = my ? k.own?.(w)?.[0] : null;
       const via = [w, ...(own ? [own.kind] : [])];
       for (const v of via) {

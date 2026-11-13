@@ -200,3 +200,15 @@ Found while moving the colour and number-word tables out of the worlds (k.values
 3. **Drawings** for the built-in kinds of the drawing board that k.objects lacks: circle, square, rectangle, triangle, line, arrow, oval (k.shapes has the shapes; the board draws them as primitives).
 4. **Number words:** `third` is both an ordinal and a fraction (one text, two kinds): fine, but the reader keys by text and kind; `a dozen`, `a couple` are `group` words, read as numbers by no world yet.
 5. **Usable RGB for a drawing board:** the CSS value of `red` is #FF0000 and of `green` #008000; the board now paints with them (the old hand palette was softer). If the catalog has a softer "crayon" set, say which wire.
+
+## Q9 (2026-11-13, model ablation): decisions for the reviewer and the owner
+
+Report `training/results/model-ablation-2026-11-13.md`. All models together buy 95 right answers in 6,099 (1.6 points) over no model, at 165 MB, 165 s cold load at 1 MB/s and 4.8 times the time per message; the wrong count does not go down. Decisions wanted:
+1. **NX hybrid reader** (default today): it reads 10 turns of 6,744, rescues 6, breaks 9. Set the default `nxStrategy` to `rules`? (Recommended: yes. `neural` loses 126 right, adds 136 wrong; keep selectable only.)
+2. **Segmentation model**: it is the encoder's whole operational advantage (+19 of 1296) and nothing on dialogues. Build the card-driven clause cutter (cut at a joiner when the right side starts with an action word or question frame of any world) and re-measure, then decide whether the dispatcher model stays? (Recommended: yes, one task; the dispatcher stays until then.)
+3. **Routing**: C when the encoder is on, B when it is off, A not a candidate (end to end the three are within 3 messages; A hurts knowledge probes, and its world-level number drifted from 981 to 915 on the operational set since the first experiment). Make B the documented fallback when the model is not loaded?
+4. **T5 normalizer** (97 MB): +28 right (0.5 point), 9 broken, cold load 97 s. Make it an optional, user-triggered download, never part of the first load on a phone profile? (Recommended: yes.)
+5. **Prototypes ready for review** (flags off, spec 03 7.17): suspect-word leniency (`suspectWords`) and "also" as a joiner: +21 right, -14 wrong, no regression on operational / dialogues / minimal pairs. Switch on by default? Also candidate: READER-ROUTE `fill` (+14, no regression above 1).
+6. **Act tagger P3**: not wired, no checkpoint kept, 72 to 74 % agreement with the generated patterns. Drop as a runtime reader and keep the generator for schema authoring only?
+7. **Bug F1 (needs an owner)**: `facts.thing('legs')` is unbounded on the online catalog checkout b705b3c: the Talk tab freezes and runs out of memory on "How many legs does a spider have?" against that catalog. A step budget and a cap on wires per lemma are needed before the online catalog meets real input. The ablation used the repository catalog.
+8. **Translation**: rules-only Romanian reads 75.9 % against 78.0 % shipped; MT stays for every language without a rules pack. No change proposed.

@@ -1,0 +1,12 @@
+@world.session.dialogue core.world
+    namespace=session.dialogue
+    version=0.1.0
+    legend=$legend.session.dialogue
+    imports=world.core
+    imports=world.lang.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Dialogue"
+    summary=""
+    doc="A shared module, not a tab (spec 22, WORLDS-AS-MODULES M1): the dialogue of the session. It holds the focus (last thing, action, place, world) on sopworld std.focus, fills the gaps of a fragment through std.fill, reads the kind of every turn BEFORE any tab world (continuation, list, correction, complaint, why-question, question about the scene, bare yes or no) and gives the tab a complete request or nothing. It offers the session as facts (things drawn and counts, topics, games, places) so that any world can take 'the current discussion' as content. This world has no patterns and no operations of its own, so it is never a routing target; its cue words are the core.phrase groups of lexicon.sop and the code is src/dialog/dialogue.mjs. Hand-built platform fixture, not produced by the C1 workflow."
