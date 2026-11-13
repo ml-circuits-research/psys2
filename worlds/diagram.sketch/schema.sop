@@ -12,6 +12,10 @@
     thingask=yes
     bare=yes
     reader=yes
+    tabUndo=yes
+    claim=yes
+    signal=yes
+    boost=14
     acts=make
     acts=remove
     acts=change

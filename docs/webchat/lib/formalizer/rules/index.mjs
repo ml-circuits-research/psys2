@@ -242,6 +242,10 @@ const QUESTION_TAIL_RE = /(?:,|\b(?:and|then|but))\s+(?:also\s+)?(?:what|how|who
 
 const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 
+/** Words that open a standing rule or a default ("from now on", "by default"): a comma after them does not end a clause. */
+const FRAME_LEADS = new Set(['from now on', 'from here on', 'from then on', 'from today on', 'by default', 'in future', 'in the future', 'as a rule', 'for now', 'always']);
+const isFrameLead = (clause) => FRAME_LEADS.has(clause.filter(isContent).map((t) => t.lower).join(' '));
+
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
 export function splitClauses(tokens) {
   const clauses = [[]];
@@ -250,6 +254,7 @@ export function splitClauses(tokens) {
     const t = tokens[i];
     const sep = t.lower === ',' || t.lower === 'and' || t.lower === 'then' || t.lower === 'but';
     if (!sep) { clauses[clauses.length - 1].push(t); continue; }
+    if (t.lower === ',' && isFrameLead(clauses[clauses.length - 1])) continue;   // "From now on, squares should be gray": the frame of a rule belongs to the sentence it opens
     if (t.lower === 'and' && tokens[i + 1]?.lower === 'then') i++;
     if (t.lower === ',' && ['and', 'but', 'then'].includes(tokens[i + 1]?.lower)) i++;
     clauses.push([]);

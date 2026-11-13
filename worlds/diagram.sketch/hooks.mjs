@@ -17,7 +17,7 @@ const run = (fn, pron = false) => (ctx, r) => {
   return out && typeof out.then !== 'function' ? out : undefined;
 };
 const domain = {};
-for (const [act, op] of Object.entries(by)) domain[act] = (ctx, r) => run(E[op], act === 'connect' || act === 'make')(ctx, r);
+for (const [act, op] of Object.entries(by)) domain[act] = (ctx, r) => run(E[op], act === 'connect')(ctx, r);
 // "Place a medium white ellipse named Cloud at 198, 98": the verb of placing, but a thing that is named is a thing that is made
 domain.place = (ctx, r) => run(/\b(?:named|called)\b/i.test(String(r.text)) ? E.create : E.move)(ctx, r);
 domain.group = (ctx, r) => run(r.mode === 'apart' ? E.ungroup : E.group)(ctx, r);
@@ -25,6 +25,8 @@ domain.group = (ctx, r) => run(r.mode === 'apart' ? E.ungroup : E.group)(ctx, r)
 domain.ask = (ctx, r) => (['why', 'last'].includes(r.mode) ? undefined : run(E.ask_describe)(ctx, r));
 /** The world's own reader (act `own`): the engine reads the sentence itself, a question or a command. */
 domain.own = (ctx, r) => {
+  const sh = SHAPED.exec(String(r.text ?? ''));
+  if (sh) return E.shapedLike(ctx, { o: sh[1] ?? sh[2] });
   const n = engineNode(String(r.text ?? ''), ctx.state);
   const fn = !n ? null : n.type === 'question' ? E.ask_describe : n.type === 'command' ? E[n.args?.action] : null;   // the family the engine names is the function that runs it (a name or an unknown one is the engine's to refuse)
   const text = String(r.text ?? '').trim();
@@ -40,8 +42,16 @@ const GENEROUS = new Set(['create', 'delete', 'move', 'set', 'group', 'ungroup',
  * extreme, cycle, a default rule ...); the engine reads generously, so everything else is left to the forms of the schema and the other worlds. A fact ("Done is red") is the
  * diagram's only when the diagram has shapes (it states something about one of them).
  */
-function accepts({ action, text, state }) {
-  if (!String(action ?? '').endsWith('.own')) return true;
+/** Frames only the diagram has: a sentence that names the diagram ("add a star to the diagram") or says what a diagram is shaped like ("shaped like a house", "in the form of a house"): the diagram's whatever tab is open; the drawing board declines them. */
+const SIGNAL = /\b(?:rectangles?|boxe?s?|circles?|squares?|diamonds?|ellipses?|triangles?|hexagons?|nodes?|shapes?)\s+(?:called|named)\b|\barrows?\s+(?:from|between|to)\b|\b(?:flow\s?chart|org(?:anisation|anization)?\s+chart|mind\s?map|diagram)\b/i;   // words only a diagram says: named shapes, arrows between names, chart words
+const namesShape = (text, state) => { const w = new Set(String(text).toLowerCase().match(/[a-z0-9]+/g) ?? []); return (state?.shapes ?? []).some((x) => x.name && w.has(String(x.name).toLowerCase())); };
+const FRAME = /\bdiagram\b|\b(?:chart|layout|graph|box|boxes)\s+(?:shaped|laid out|arranged)\s+(?:like|as)\b|\ban? (?:shape|box) in the (?:shape|form) of\b/i;
+const SHAPED = /\b(?:shaped|laid out|arranged|drawn|made|built)\s+(?:like|as|in the (?:shape|form) of)\s+(?:an?|the)?\s*(.+?)\s*[.!?]*$|\bin the (?:shape|form) of\s+(?:an?|the)?\s*(.+?)\s*[.!?]*$/i;
+function accepts({ action, text, state, tab }) {
+  // outside its own tab the diagram reads only what says "diagram": a signal word, named shapes, arrows, or the name of a shape it has (the Drawing board keeps "draw a sky and a sun")
+  if (tab !== 'diagram.sketch' && !FRAME.test(String(text ?? '')) && !SIGNAL.test(String(text ?? '')) && !namesShape(String(text ?? ''), state)) return false;
+  if (!String(action ?? '').endsWith('.own')) return tab !== 'diagram.sketch' ? 'focus' : true;   // signalled outside its tab: it does not yield to the open tab's world
+  if (FRAME.test(String(text ?? ''))) return 'focus';
   try {
     const n = engineNode(String(text ?? ''), state);
     if (!n || noTarget(String(text ?? ''), state)) return false;

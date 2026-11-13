@@ -45,7 +45,11 @@ export async function build(dir) {
   const schema = parseSchema(wires);
   await addCatalogWords(schema);
   const rel = path.relative(dir, path.resolve(import.meta.dirname, '../worlds/acts/acts.mjs')).split(path.sep).join('/');
-  return { files: generate(schema, ns, rel, isCanonicalSentence), schema };
+  const files = generate(schema, ns, rel, isCanonicalSentence);
+  // hand-written vocabulary a world keeps beside the generated one (the legend words of the diagram engine: shape names, colours ...): appended to the generated lexicon.sop
+  const extra = await readFile(path.join(dir, 'lexicon.extra.sop'), 'utf8').catch(() => null);
+  if (extra) files['lexicon.sop'] += `\n# ---- lexicon.extra.sop (hand-written, appended by the generator)\n${extra}`;
+  return { files, schema };
 }
 if (import.meta.url === `file://${process.argv[1]}`) {
   const dir = path.resolve(process.argv[2] ?? '.');
