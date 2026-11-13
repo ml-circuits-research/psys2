@@ -3634,3 +3634,20 @@ P3 does not remove the model. It is the same kind of encoder (DistilBERT today) 
 
 - **sopworld 0.18.0** (validated by the reviewer: 322 tests, 0 fail): `std.fill` (tiers user, focus, scene, knowledge, default), `std.focus`, `std.relations`, `world.why`, `world.act([...])` all-or-nothing as one undo step, `PatternIndex`, `std.schema` (a doing world as data) and `std.acts` (make, remove, change, place, connect, group / ungroup, pick, ask, copy; refusals that name what is allowed and where; `diff` on every result). See its `examples/acts.mjs` (a seating plan and a face on the same acts). **Build A2 and A3 on these, not in host code**; P2 (the seating plan) can start from that example. What is missing for you goes to worker-log as a need; the reviewer forwards it (Round 21 there already has: send / save / undo as acts, schema → card, examples and replies, knowledge as a filler, sets and values, the session as facts).
 - **Knowledge repo** (reviewer: npm test 2,489 pass, 0 fail; 18 worlds): new since your fixture: `k.scenes`, `k.people`, `k.feelings`, `k.layouts` (17 arrangements, 117 anchors, 171 joins), `k.actions` (14 acts, 52 roles with their markers, 291 verbs; 187 everyday actions), `k.values` (170 colour names with RGB, scales, comparatives), work hats and clothes in `k.faces`. Take the act words (A1) and the value words from there by lookup; delete the local seeds.
+
+## Reviewer 2026-11-13 20:35 — answers to Q5 (SPACE-2 build) and to the ACTS × SCHEMAS objections
+
+**Q5.**
+1. **`k.layouts` is published; use its format, not your proposal** (github.com/ml-circuits-research/sop-knowledge-worlds, `docs/worlds/k.layouts/schema.sop`): `k.layouts.layout name= kind=repeating|fixed about= ordered= usual_for=`; `k.layouts.slot layout= name= count=one|many pair= optional= holds= arranged= x= y= w= h=` (box in a 0–100 frame, no notation inside values); `k.layouts.relation`; `k.layouts.anchor` (117 on hand-written objects; more coming, also as points on imported drawings); `k.layouts.joins` (171). 17 arrangements. Your "slots only" case (E-S6) is exactly a `fixed` layout with slot boxes: write `parseLayouts` for this shape. Repeating layouts (row, ring, grid) are named there and computed by your generators.
+2. Convex hulls: accepted as the first version; say it in the report.
+3. **Confirmed:** moving the carried thing off its support drops the fact and says so once; no refusal.
+4. Tiers and `apart` as a said fact: accepted.
+5. sopworld 0.18.0 is validated and has `std.relations`, `std.fill`, `std.focus`: vendor it in the main branch first, then move the rule rows.
+6, 7: accepted.
+
+**ACTS × SCHEMAS objections: accepted as written, with three decisions.**
+- Generating patterns, operations and templates from `schema.sop` so that routing, undo and both reasoners keep working: yes, good first slice.
+- **The executor is the library's, not the host's.** sopworld 0.18.0 already has `std.schema` and `std.acts` (make, remove, change, place, connect, group / ungroup, pick, ask, copy, refusals with alternatives, `diff`, `why`, `act([...])`); send / save / load / undo as acts, schema → card and replies, sets and values, and the session as facts are its Round 21. Your `acts.mjs` executor is a bridge: keep the English (act grammar, value parsers), the renderer and the generators in the host; switch the applying of acts to the library as soon as it is vendored, and do not grow rules in the bridge.
+- P1 is judged on the owner logs and the ledger, as you say, not on the old per-world test sets alone. Undo per request (your item 8) is the owner's rule: correct.
+- Phrasing variety: act phrases come from the knowledge repo's `k.actions` (14 acts, 52 roles with their markers, 291 verbs including "get rid of", "take off", "put on"), by lookup; misses go to the ledger as class "act phrase".
+The cost estimate is accepted; publish the smallest slice of each as it works (SHIP-NOW).
