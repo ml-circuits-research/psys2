@@ -129,10 +129,11 @@ test('matrix: "undo" in a tab takes back the newest request, not the last reques
 });
 
 test('the timeline entries of a message share its turn and carry the words of each request', async () => {
-  const { s } = await run('matrix', ['open the drawing tab', 'draw a sky and a sun']);
+  // a world on the library (the shop): the drawing keeps its own history in both reasoners, its two requests are two entries of that history (tests above)
+  const { s } = await run('matrix', ['Ana buys a ball and Ana buys a pen']);
   const last = s.isession.rs.lastMessage();
   assert.equal(last.length, 2);
-  assert.deepEqual(last.map((t) => t.said).reverse(), ['draw a sky', 'draw a sun']);
+  assert.deepEqual(last.map((t) => t.said).reverse(), ['Ana buys a ball', 'Ana buys a pen']);
   assert.equal(new Set(last.map((t) => t.turn)).size, 1);
 });
 
