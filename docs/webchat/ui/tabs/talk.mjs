@@ -219,16 +219,16 @@ function make(holder, host) {
 }
 
 /**
- * The avatar's reaction to a turn of this tab (host hook `mood`, called by app.mjs after each reply on the Talk tab): found -> happy, not found -> sad,
+ * The avatar's reaction to a turn of this tab (host hook `mood`, called by app.mjs after each reply on the Talk tab): found -> smile, not found -> null (the host's general reaction applies),
  * a surprising big number (100,000 or more in the answer) -> surprised; null for anything else (the host's general reaction applies). Pure.
  */
 export function mood(reply, answer) {
   const statuses = reply?.statuses ?? [];
   const text = String(answer ?? reply?.text ?? '');
   const nums = (text.match(/\d[\d,]*(?:\.\d+)?/g) ?? []).map((x) => Number(x.replace(/,/g, '')));
-  if (statuses.includes('missing')) return 'sad';
+  if (statuses.includes('missing')) return null;
   if (!statuses.includes('supported')) return null;
-  return nums.some((n) => n >= 100000) ? 'surprised' : 'happy';
+  return nums.some((n) => n >= 100000) ? 'surprised' : 'smile';
 }
 
 export default {

@@ -50,7 +50,6 @@ const ANIMATED = new Set(['robot', 'emoji', 'pixelbot']);
 /** Short-lived expression from the status of a reply (not stored in the world). */
 const EXPRESSIONS = {
   smile: { person: { expression: 'smile' }, emoji: { eyes: 'happy', mouth: 'smile' }, robot: { eyes: 'happy', mouth: 'smile' } },
-  happy: { person: { expression: 'smile' }, emoji: { eyes: 'happy', mouth: 'smile' }, robot: { eyes: 'happy', mouth: 'smile' } },   // the drawn face has its own happy and sad; the DiceBear styles have no sad
   surprised: { person: { expression: 'awe' }, emoji: { eyes: 'bigPupils', mouth: 'gasp' }, robot: { eyes: 'round', mouth: 'speaker' } },
 };
 const LABEL = { eyes: 'eyes', mouth: 'mouth', top: 'top', chest: 'chest', head: 'hair', expression: 'expression', accessories: '', facialHair: 'facial hair', mask: '', face: 'face', cheeks: 'cheeks' };
@@ -321,7 +320,7 @@ export function createAvatar(container, host = null) {
     const url = (f) => (host?.asset ? host.asset(`worlds/ui.avatar/${f}`) : new URL(`../worlds/ui.avatar/${f}`, import.meta.url).href);
     Promise.all(FACE_FILES.map((f) => import(url(f)))).then(([drawMod, data, ops]) => { fm = { draw: drawMod, data, ops, d: data.getFaces() }; shownFaces = ''; draw(); }).catch((e) => { fm = null; console.warn('avatar: the face files could not be loaded', e); });
   }
-  const exprOf = () => (transient === 'surprised' ? 'surprised' : transient === 'smile' || transient === 'happy' ? 'happy' : transient === 'sad' ? 'sad' : null);
+  const exprOf = () => (transient === 'surprised' ? 'surprised' : transient === 'smile' ? 'happy' : null);
   function faceSvg(face, size) {
     const t = fm.d.expressions.talking, x = exprOf();
     const over = talkPhase && speaking ? { ...t.over, ...(talkPhase === 'alt' ? t.alt : {}) } : x ? fm.d.expressions[x].over : undefined;
@@ -438,7 +437,7 @@ export function createAvatar(container, host = null) {
     /** Short-lived mood from the status of a reply (not stored): 'smile' or 'surprised'. */
     express(kind, ms = 2200) {
       if (fallback) { fallback.express?.(kind, ms); return; }
-      if (!EXPRESSIONS[kind] && !(kind === 'sad' && state?.face?.active)) return;
+      if (!EXPRESSIONS[kind]) return;
       clearTimeout(transientTimer);
       transient = kind; draw();
       transientTimer = setTimeout(() => { transient = null; draw(); }, ms);

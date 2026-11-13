@@ -222,8 +222,8 @@ test('avatar reactions (host hook): found is happy, not found is sad, a big numb
   engine.setKnowledge(null);
   const s = session();
   const m = async (q) => { const r = await s.send(q); return mood(r, r.text); };
-  assert.equal(await m('What comes after Mars?'), 'happy');
-  assert.equal(await m('What is a blorp?'), 'sad');
+  assert.equal(await m('What comes after Mars?'), 'smile');
+  assert.equal(await m('What is a blorp?'), null);
   assert.equal(await m('Is Jupiter bigger than Mars?'), 'surprised');
   assert.equal(tab.mood, mood);
   assert.equal(mood({ statuses: [] }, 'hello'), null);
