@@ -1,0 +1,18 @@
+# k.actions/shards/verbs-save: 12 verbs and phrasal verbs that mean the act "save" (save, write, store, keep, record, write down, preserve, remember ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 11 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 1 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.save.save k.actions.verb text=save act=save sense=11 gloss="record data on a computer" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.write k.actions.verb text=write act=save sense=6 gloss="record data on a computer" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.store k.actions.verb text=store act=save sense=1 sense=2 gloss="keep or lay aside for future use" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.keep k.actions.verb text=keep act=save sense=3 gloss="retain possession of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.record k.actions.verb text=record act=save sense=1 gloss="make a record of; set down in permanent form" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.write_down k.actions.verb text="write down" act=save sense=1 gloss="put down in writing; of texts, musical compositions, etc." object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.save.preserve k.actions.verb text=preserve act=save sense=2 gloss="keep in safety and protect from harm, decay, loss, or destruction" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.remember k.actions.verb text=remember act=save sense=2 gloss="keep in mind for attention or consideration" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.back_up k.actions.verb text="back up" act=save sense=4 gloss="make a copy of (a computer file) especially for storage in another place as a security copy" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.save.archive k.actions.verb text=archive act=save sense=1 gloss="put into an archive" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.memorize k.actions.verb text=memorize act=save sense=1 gloss="commit to memory; learn by heart" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.save.hold_on_to k.actions.verb text="hold on to" act=save object=thing core.source="hand-core 1"

@@ -1,0 +1,24 @@
+# k.actions/shards/verbs-pick: 12 verbs and phrasal verbs that mean the act "pick" (pick, select, choose, take, pick out, single out, mark, highlight ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 12 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 0 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.pick.pick k.actions.verb text=pick act=pick sense=1 gloss="select carefully from a group" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.select k.actions.verb text=select act=pick sense=1 gloss="pick out, select, or choose from a number of alternatives" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.choose k.actions.verb text=choose act=pick sense=1 gloss="pick out, select, or choose from a number of alternatives" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.take k.actions.verb text=take act=pick sense=10 gloss="pick out, select, or choose from a number of alternatives" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.pick_out k.actions.verb text="pick out" act=pick sense=1 gloss="pick out, select, or choose from a number of alternatives" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.single_out k.actions.verb text="single out" act=pick sense=1 gloss="select from a group" object=thing separable=true named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.mark k.actions.verb text=mark act=pick sense=2 gloss="designate as if by a mark" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.highlight k.actions.verb text=highlight act=pick sense=1 gloss="move into the foreground to make more visible or prominent" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.tick k.actions.verb text=tick act=pick sense=4 gloss="put a check mark on or near or next to" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.point k.actions.verb text=point act=pick sense=1 gloss="indicate a place, direction, person, or thing; either spatially or figuratively" named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.prefer k.actions.verb text=prefer act=pick sense=2 gloss="select as an alternative over another" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.pick.opt k.actions.verb text=opt act=pick sense=1 gloss="select as an alternative over another" named=model core.source="wordnet 3.1"
+
+# Markings: after this verb, the word marks the role.
+@k.actions.marking.pick.point.at k.actions.marking verb=point act=pick marker=at role=thing core.source="hand-core 1"
+@k.actions.marking.pick.point.to k.actions.marking verb=point act=pick marker=to role=thing core.source="hand-core 1"
+@k.actions.marking.pick.prefer.over k.actions.marking verb=prefer act=pick marker=over role=other core.source="hand-core 1"
+@k.actions.marking.pick.opt.for k.actions.marking verb=opt act=pick marker=for role=thing core.source="hand-core 1"

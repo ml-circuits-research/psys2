@@ -2,24 +2,27 @@
     text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
 @pat.ui.avatar.make core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Add a hat."
 
 @pat.ui.avatar.make.n core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest}"
     emit="@{_} core.request action=ui.avatar.make arg.amount=\"{amount}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Add 3 hats."
 
 @pat.ui.avatar.remove core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Remove the guest Ann."
 
 @pat.ui.avatar.remove.out core.pattern
@@ -27,20 +30,23 @@
     emit="@{_} core.request action=ui.avatar.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Kick the guest Ann out."
 
 @pat.ui.avatar.change.of core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Change the colour of hat to red."
 
 @pat.ui.avatar.change.attr core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.ui.avatar.attrs} [to|be|as|into] [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.ui.avatar.attrs} [to|be|as|into] [$acts.det]? {value:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.attribute=\"{attribute}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Set hat seats to 6."
 
 @pat.ui.avatar.change.value core.pattern
@@ -48,34 +54,39 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make hat blue."
 
 @pat.ui.avatar.change.add core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.ui.avatar.attrs} to [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.ui.avatar.attrs} to [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=more arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Add 2 seats to hat."
 
 @pat.ui.avatar.change.add1 core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {attribute:lex.ui.avatar.attrs} to [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {attribute:lex.ui.avatar.attrs} to [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=more arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Add a seat to hat."
 
 @pat.ui.avatar.change.less core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.ui.avatar.attrs} from [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.ui.avatar.attrs} from [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=less arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Remove 2 seats from hat."
 
 @pat.ui.avatar.change.less1 core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.ui.avatar.attrs} from [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.ui.avatar.attrs} from [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=less arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Remove a seat from hat."
 
 @pat.ui.avatar.change.cmp.more core.pattern
@@ -83,6 +94,7 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make hat bigger."
 
 @pat.ui.avatar.change.cmp.less core.pattern
@@ -90,27 +102,31 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=less arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make hat smaller."
 
 @pat.ui.avatar.change.bare core.pattern
-    match="[$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
+    tabPriority=13
     example="Change hat."
 
 @pat.ui.avatar.ask.what core.pattern
-    match="[what|which] [is|are] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:words}"
+    match="[what|which] [is|are] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What is the colour of hat?"
 
 @pat.ui.avatar.ask.what.is core.pattern
-    match="[what|which] {attribute:lex.ui.avatar.attrs} [is|are] [$acts.det]? {thing:words}"
+    match="[what|which] {attribute:lex.ui.avatar.attrs} [is|are] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What colour is hat?"
 
 @pat.ui.avatar.change.should core.pattern
@@ -118,6 +134,7 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="hat should be blue."
 
 @pat.ui.avatar.change.needs core.pattern
@@ -125,6 +142,7 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.attribute=\"{attribute}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="hat needs 6 seats."
 
 @pat.ui.avatar.ask.count.attr core.pattern
@@ -132,6 +150,7 @@
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=14
+    tabPriority=22
     example="How many seats does hat have?"
 
 @pat.ui.avatar.ask.count core.pattern
@@ -139,13 +158,15 @@
     emit="@{_} core.request action=ui.avatar.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="How many hats are there?"
 
 @pat.ui.avatar.ask.why core.pattern
-    match="why [is|are|did|do|was|were|does] {rest:words}"
+    match="why [is|are|did|do|was|were|does] {rest:rest}"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=why arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=question
     priority=11
+    tabPriority=19
     example="Why is hat blue?"
 
 @pat.ui.avatar.ask.last core.pattern
@@ -153,6 +174,7 @@
     emit="@{_} core.request action=ui.avatar.ask arg.mode=last arg.text=\"{segment}\""
     kind=question
     priority=11
+    tabPriority=19
     example="What did you just do?"
 
 @pat.ui.avatar.undo core.pattern
@@ -160,6 +182,7 @@
     emit="@{_} core.request action=ui.avatar.undo arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Undo that."
 
 @pat.ui.avatar.redo core.pattern
@@ -167,27 +190,31 @@
     emit="@{_} core.request action=ui.avatar.redo arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Redo that."
 
 @pat.ui.avatar.save core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:rest}"
     emit="@{_} core.request action=ui.avatar.save arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Save it as lunch."
 
 @pat.ui.avatar.load core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.load] [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.load] [$acts.det]? {value:rest}"
     emit="@{_} core.request action=ui.avatar.load arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Load lunch."
 
 @pat.ui.avatar.make.self core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] [me|yourself|myself] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] [me|yourself|myself] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Give yourself a beard."
 
 @pat.ui.avatar.make.on core.pattern
@@ -195,6 +222,7 @@
     emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Add glasses to your face."
 
 @pat.ui.avatar.remove.off core.pattern
@@ -202,62 +230,71 @@
     emit="@{_} core.request action=ui.avatar.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Take the glasses off."
 
 @pat.ui.avatar.remove.without core.pattern
-    match="[$lang.lead.polite]? [make|be|look|draw|show_me]? [yourself|me|it|the_face]? [without|with_no] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [make|be|look|draw|show_me]? [yourself|me|it|the_face]? [without|with_no] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Without a hat."
 
 @pat.ui.avatar.change.another core.pattern
-    match="[$lang.lead.polite]? [try|show|give_me|let_me_see|i_want|have|use|put_on|wear]? [another|a_different|a_new|another_one] {thing:words}"
+    match="[$lang.lead.polite]? [try|show|give_me|let_me_see|i_want|have|use|put_on|wear]? [another|a_different|a_new|another_one] {thing:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=other arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Try a different hat."
 
 @pat.ui.avatar.change.next core.pattern
-    match="[$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to]? [$acts.det]? [next|following|one_more] {thing:words}"
+    match="[$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to]? [$acts.det]? [next|following|one_more] {thing:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=next arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Try the next hat."
 
 @pat.ui.avatar.change.prev core.pattern
-    match="[$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to|go_back_to]? [$acts.det]? [previous|prior|one_before] {thing:words}"
+    match="[$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to|go_back_to]? [$acts.det]? [previous|prior|one_before] {thing:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=prev arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Previous nose."
 
 @pat.ui.avatar.change.swap core.pattern
-    match="[$lang.lead.polite]? [swap|change|switch|replace|exchange] [$acts.det]? {thing:words} [for|with|to|into|by] [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [swap|change|switch|replace|exchange] [$acts.det]? {thing:words} [for|with|to|into|by] [$acts.det]? {value:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Change the hat to a crown."
 
 @pat.ui.avatar.change.self core.pattern
-    match="[$lang.lead.polite]? [make|turn|change|paint] [yourself|urself|the_avatar|the_face|your_face|ur_face] {value:words}"
+    match="[$lang.lead.polite]? [make|turn|change|paint] [yourself|urself|the_avatar|the_face|your_face|ur_face] {value:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Paint yourself green."
 
 @pat.ui.avatar.change.be core.pattern
-    match="[$lang.lead.polite]? [be|become|look|feel|turn_into|change_into|transform_into|morph_into|look_like|act_like] [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [be|become|look|feel|turn_into|change_into|transform_into|morph_into|look_like|act_like] [$acts.det]? {value:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=be arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Look happy."
 
 @pat.ui.avatar.change.be.self core.pattern
-    match="[$lang.lead.polite]? [make|let|get] [yourself|urself|myself|me] {value:words}"
+    match="[$lang.lead.polite]? [make|let|get] [yourself|urself|myself|me] {value:rest}"
     emit="@{_} core.request action=ui.avatar.change arg.mode=be arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Make yourself happy."
 
 @pat.ui.avatar.place.dir core.pattern
@@ -265,6 +302,7 @@
     emit="@{_} core.request action=ui.avatar.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Move the eyes closer together."
 
 @pat.ui.avatar.place.dir.bare core.pattern
@@ -272,20 +310,23 @@
     emit="@{_} core.request action=ui.avatar.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
     kind=request
     priority=6
+    tabPriority=14
     example="Eyes closer together."
 
 @pat.ui.avatar.ask.has core.pattern
-    match="[do|did|can|could] [you|u] [have|got|wear|see|has] [$acts.det]? {thing:words}"
+    match="[do|did|can|could] [you|u] [have|got|wear|see|has] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="Do you have glasses?"
 
 @pat.ui.avatar.ask.has.2 core.pattern
-    match="[have|are] [you|u] [got|wearing|having] [$acts.det]? {thing:words}"
+    match="[have|are] [you|u] [got|wearing|having] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="Are you wearing a hat?"
 
 @pat.ui.avatar.ask.options core.pattern
@@ -293,6 +334,7 @@
     emit="@{_} core.request action=ui.avatar.ask arg.mode=options arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What hats are there?"
 
 @pat.ui.avatar.ask.options.all core.pattern
@@ -300,6 +342,7 @@
     emit="@{_} core.request action=ui.avatar.ask arg.mode=options arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What can I change?"
 
 @pat.ui.avatar.ask.state core.pattern
@@ -307,6 +350,7 @@
     emit="@{_} core.request action=ui.avatar.ask arg.mode=state arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What is your expression?"
 
 @pat.ui.avatar.ask.describe core.pattern
@@ -314,6 +358,7 @@
     emit="@{_} core.request action=ui.avatar.ask arg.mode=describe arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What are you wearing?"
 
 @pat.ui.avatar.make.random core.pattern
@@ -321,6 +366,7 @@
     emit="@{_} core.request action=ui.avatar.make arg.mode=random arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Surprise me."
 
 @pat.ui.avatar.remove.reset core.pattern
@@ -328,6 +374,7 @@
     emit="@{_} core.request action=ui.avatar.remove arg.mode=all arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Reset."
 
 @pat.ui.avatar.change.call core.pattern
@@ -335,6 +382,7 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"name\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Call yourself Robi."
 
 @pat.ui.avatar.change.call.2 core.pattern
@@ -342,6 +390,7 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"name\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="I will call you Robi."
 
 @pat.ui.avatar.change.name.is core.pattern
@@ -349,6 +398,7 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"name\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Your name is Robi."
 
 @pat.ui.avatar.change.name.called core.pattern
@@ -356,6 +406,7 @@
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"name\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="You are called Ziggy."
 
 @pat.ui.avatar.ask.name core.pattern
@@ -363,6 +414,7 @@
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"name\" arg.thing=\"yourself\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What is your name?"
 
 @pat.ui.avatar.bare core.pattern
@@ -370,4 +422,5 @@
     emit="@{_} core.request action=ui.avatar.make arg.mode=bare arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=3
+    tabPriority=11
     example="Glasses."

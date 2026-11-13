@@ -2,24 +2,27 @@
     text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
 @pat.diagram.sketch.make core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Add a circle."
 
 @pat.diagram.sketch.make.n core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.make arg.amount=\"{amount}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Add 3 circles."
 
 @pat.diagram.sketch.remove core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Remove the guest Ann."
 
 @pat.diagram.sketch.remove.out core.pattern
@@ -27,20 +30,23 @@
     emit="@{_} core.request action=diagram.sketch.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Kick the guest Ann out."
 
 @pat.diagram.sketch.change.of core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.diagram.sketch.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.diagram.sketch.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest}"
     emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Change the colour of circle to red."
 
 @pat.diagram.sketch.change.attr core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.diagram.sketch.attrs} [to|be|as|into] [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.diagram.sketch.attrs} [to|be|as|into] [$acts.det]? {value:rest}"
     emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.thing=\"{thing}\" arg.attribute=\"{attribute}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Set circle seats to 6."
 
 @pat.diagram.sketch.change.value core.pattern
@@ -48,34 +54,39 @@
     emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make circle blue."
 
 @pat.diagram.sketch.change.add core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.diagram.sketch.attrs} to [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.diagram.sketch.attrs} to [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.change arg.mode=more arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Add 2 seats to circle."
 
 @pat.diagram.sketch.change.add1 core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {attribute:lex.diagram.sketch.attrs} to [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {attribute:lex.diagram.sketch.attrs} to [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.change arg.mode=more arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Add a seat to circle."
 
 @pat.diagram.sketch.change.less core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.diagram.sketch.attrs} from [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.diagram.sketch.attrs} from [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.change arg.mode=less arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Remove 2 seats from circle."
 
 @pat.diagram.sketch.change.less1 core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.diagram.sketch.attrs} from [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.diagram.sketch.attrs} from [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.change arg.mode=less arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Remove a seat from circle."
 
 @pat.diagram.sketch.change.cmp.more core.pattern
@@ -83,6 +94,7 @@
     emit="@{_} core.request action=diagram.sketch.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make circle bigger."
 
 @pat.diagram.sketch.change.cmp.less core.pattern
@@ -90,13 +102,15 @@
     emit="@{_} core.request action=diagram.sketch.change arg.mode=less arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make circle smaller."
 
 @pat.diagram.sketch.connect core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:words} [to|with|and] [$acts.det]? {place:words}"
+    match="[$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:words} [to|with|and] [$acts.det]? {place:rest}"
     emit="@{_} core.request action=diagram.sketch.connect arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Connect circle to circle."
 
 @pat.diagram.sketch.group core.pattern
@@ -104,13 +118,15 @@
     emit="@{_} core.request action=diagram.sketch.group arg.mode=group arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Group the circles."
 
 @pat.diagram.sketch.apart core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.apart] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.apart] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Take the circles apart."
 
 @pat.diagram.sketch.apart.2 core.pattern
@@ -118,48 +134,55 @@
     emit="@{_} core.request action=diagram.sketch.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Take the circles apart."
 
 @pat.diagram.sketch.change.bare core.pattern
-    match="[$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
+    tabPriority=13
     example="Change circle."
 
 @pat.diagram.sketch.connect.bare core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.connect arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
+    tabPriority=13
     example="Connect circle."
 
 @pat.diagram.sketch.pick core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.pick arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Select circle."
 
 @pat.diagram.sketch.copy core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.copy arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Copy circle."
 
 @pat.diagram.sketch.ask.what core.pattern
-    match="[what|which] [is|are] [$acts.det]? {attribute:lex.diagram.sketch.attrs} of [$acts.det]? {thing:words}"
+    match="[what|which] [is|are] [$acts.det]? {attribute:lex.diagram.sketch.attrs} of [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What is the colour of circle?"
 
 @pat.diagram.sketch.ask.what.is core.pattern
-    match="[what|which] {attribute:lex.diagram.sketch.attrs} [is|are] [$acts.det]? {thing:words}"
+    match="[what|which] {attribute:lex.diagram.sketch.attrs} [is|are] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=diagram.sketch.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What colour is circle?"
 
 @pat.diagram.sketch.change.should core.pattern
@@ -167,6 +190,7 @@
     emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="circle should be blue."
 
 @pat.diagram.sketch.change.needs core.pattern
@@ -174,6 +198,7 @@
     emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.attribute=\"{attribute}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="circle needs 6 seats."
 
 @pat.diagram.sketch.ask.count.attr core.pattern
@@ -181,6 +206,7 @@
     emit="@{_} core.request action=diagram.sketch.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=14
+    tabPriority=22
     example="How many seats does circle have?"
 
 @pat.diagram.sketch.ask.count core.pattern
@@ -188,13 +214,15 @@
     emit="@{_} core.request action=diagram.sketch.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="How many circles are there?"
 
 @pat.diagram.sketch.ask.why core.pattern
-    match="why [is|are|did|do|was|were|does] {rest:words}"
+    match="why [is|are|did|do|was|were|does] {rest:rest}"
     emit="@{_} core.request action=diagram.sketch.ask arg.mode=why arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=question
     priority=11
+    tabPriority=19
     example="Why is circle blue?"
 
 @pat.diagram.sketch.ask.last core.pattern
@@ -202,6 +230,7 @@
     emit="@{_} core.request action=diagram.sketch.ask arg.mode=last arg.text=\"{segment}\""
     kind=question
     priority=11
+    tabPriority=19
     example="What did you just do?"
 
 @pat.diagram.sketch.undo core.pattern
@@ -209,6 +238,7 @@
     emit="@{_} core.request action=diagram.sketch.undo arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Undo that."
 
 @pat.diagram.sketch.redo core.pattern
@@ -216,6 +246,7 @@
     emit="@{_} core.request action=diagram.sketch.redo arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Redo that."
 
 @pat.diagram.sketch.place.dir core.pattern
@@ -223,6 +254,7 @@
     emit="@{_} core.request action=diagram.sketch.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Move the eyes closer together."
 
 @pat.diagram.sketch.place.dir.bare core.pattern
@@ -230,6 +262,7 @@
     emit="@{_} core.request action=diagram.sketch.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
     kind=request
     priority=6
+    tabPriority=14
     example="Eyes closer together."
 
 @pat.diagram.sketch.bare core.pattern
@@ -237,4 +270,5 @@
     emit="@{_} core.request action=diagram.sketch.make arg.mode=bare arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=3
+    tabPriority=11
     example="Glasses."

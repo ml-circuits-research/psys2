@@ -35,8 +35,8 @@ test('commands: generated from every loaded world, grouped by operation, with ca
   // worlds that have a tab always have commands; only the library worlds (no patterns of their own) may be empty
   for (const w of engine.set.list()) if (w.tab) assert.ok(!empty.includes(w.id), `${w.id} has a tab but no patterns`);
   const av = commandsOf(engine.set.list().find((w) => w.id === 'ui.avatar'));
-  assert.ok(av.groups.some((g) => g.op === 'avatar.setColor'));
-  assert.ok(av.canonical.length > 0 && av.shapes.length > 0 && av.examples > 50);
+  assert.ok(av.groups.some((g) => g.op === 'avatar.add'));
+  assert.ok(av.canonical.length > 0 && av.examples > 50);
 });
 
 test('world: manifest, imports, legend, lexicons, operations and templates as data', () => {
@@ -44,8 +44,8 @@ test('world: manifest, imports, legend, lexicons, operations and templates as da
   assert.deepEqual(info.manifest.namespace, ['ui.avatar']);
   assert.ok(info.imports.length >= 1);
   assert.ok(info.legend.types.length > 0 && info.legend.keys.length > 0);
-  assert.ok(info.lexicons.length > 10 && info.counts.words > 100);
-  assert.ok(info.operations.some((o) => o.action === 'avatar.setPart' && o.impl === 'setPart' && o.doc));
+  assert.ok(info.lexicons.length >= 3 && info.counts.words > 20);
+  assert.ok(info.operations.some((o) => o.action === 'avatar.add' && o.impl === 'add' && o.doc));
   assert.ok(info.templates.length > 0);
   assert.equal(worldInfo(null), null);
 });
@@ -70,12 +70,12 @@ test('dry run with detail executes nothing: same state hash, readings and wires 
   const s = engine.createSession({});
   await s.send('hello');
   const before = hashState(s.state());
-  const res = await s.dryRead('make the eyes blue', { language: 'en', detail: true, deadlineMs: 2000 });
+  const res = await s.dryRead('put on a hat', { language: 'en', detail: true, deadlineMs: 2000 });
   assert.equal(res.complete, true);
   assert.equal(res.detail.readings[0].world, 'ui.avatar');
   assert.ok(res.detail.readings[0].wires.length >= 1);
   assert.equal(hashState(s.state()), before);
-  const plain = await s.dryRead('make the eyes blue', { language: 'en' });
+  const plain = await s.dryRead('put on a hat', { language: 'en' });
   assert.equal(plain.detail, undefined);   // the voice detector's call is unchanged
   const bad = await s.dryRead('zzq flarb wug', { language: 'en', detail: true });
   assert.equal(bad.complete, false);
