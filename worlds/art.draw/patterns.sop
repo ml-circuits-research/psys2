@@ -1609,3 +1609,56 @@
     example="No, not the first one, the middle one."
     example="Not the left one, the right one."
     doc="Corrects which thing the last move was about: the same move on the one meant now."
+
+@pat.art.draw.x.space.layout core.pattern
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [line_up|tidy_up|tidy|clean_up|neaten|spread_out|space_out|align|swap|untangle|distribute|stack] {r:rest?}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Tidy up."
+    example="Line up the houses."
+    example="Swap the first and the last house."
+    example="Align the trees on the left."
+    doc="Arranges things: handed to the module space."
+
+@pat.art.draw.x.space.inarow core.pattern
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|arrange|make|set|lay] {t:words(5)} [in|into|as] [a|one]? [row|column|grid|circle|line|ring|stack]"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Put the houses in a row."
+    example="Arrange the trees in a circle."
+    doc="Puts a group in a row, a column, a grid or a circle: handed to the module space."
+
+@pat.art.draw.x.space.near core.pattern
+    match="[what|whats|what_is|what_s|which_things|what_things] [is|are]? [there]? [next_to|near|beside|close_to|by] {r:rest}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="What is next to the house?"
+    doc="What is next to a thing: handed to the module space."
+
+@pat.art.draw.x.space.is core.pattern
+    match="[is|are] {a:words(4)} [above|below|under|over|beneath|underneath|left_of|right_of|to_the_left_of|to_the_right_of|next_to|near|beside] {b:rest}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Is the sun above the tree?"
+    doc="Is A above, under, left of, right of or next to B: handed to the module space."
+
+@pat.art.draw.x.space.which core.pattern
+    match="which {r:words(3)} [is|are] [in_the_middle|the_biggest|the_smallest|the_first|the_last|on_the_left|on_the_right|at_the_top|at_the_bottom|the_leftmost|the_rightmost|the_highest|the_lowest|in_the_centre|in_the_center|the_largest|closest_to|nearest_to] {c:rest?}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Which house is in the middle?"
+    example="Which one is the biggest?"
+    doc="Which one is in the middle, the biggest, on the left ...: handed to the module space."
+
+@pat.art.draw.x.space.far core.pattern
+    match="how_far [apart]? [is|are] {r:rest}"
+    emit="@{_} core.request action=draw.spatial arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="How far apart are the sun and the tree?"
+    doc="How far two things are (near or far, never pixels): handed to the module space."

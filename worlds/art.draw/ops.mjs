@@ -1291,6 +1291,32 @@ export const reselect = guard((ctx, args, s) => {
   return move(ctx, { phrase: `the ${words.join(' ')} ${kind} ${info.dest}`.replace(/\s+/g, ' ') });
 });
 
+/**
+ * A sentence about places that is not a plain move of one thing (a row, a grid, tidy up, swap, line up, "what is next to the house", "which one is in the middle",
+ * "is the sun above the tree", "how far apart"): the shared module `space` reads it on the boxes of the picture; this applies the boxes and says what it said.
+ */
+export const spatial = guard((ctx, args, s) => {
+  const items = projectAll(s.objects);
+  if (!items.length) return no('Your picture is empty. Try "draw a red house".', 'missing');
+  const r = space.interpret(String(args.text ?? ''), { items, frame: FRAME, kindOf: (w) => kindOfWord(w) ?? null, last: s.last, lastMove: s.lastMove });
+  if (!r) return no('I did not understand where things should go. Try "put the houses in a row" or "what is next to the sun?".', 'unsupported');
+  if (r.type === 'ask') return no(r.say, 'missing');
+  if (r.type === 'error') return no(r.say, 'missing');
+  if (r.type === 'answer') return ok(r.say);
+  const moved = Object.keys(r.boxes ?? {});
+  if (!moved.length) return ok(r.say);
+  remember(s, r.type === 'layout' ? 'arranged things' : 'moved something');
+  for (const id of moved) {
+    const o = byId(s, id), b = r.boxes[id];
+    if (b.w != null) o.size = Math.max(10, Math.round(o.size * (b.w / bbox(o).w)));
+    o.x = b.x; o.y = b.y; clampIn(o);
+  }
+  s.last = r.ids?.length ? r.ids : s.last;
+  s.lastMove = r.memory ?? null;
+  open(ctx);
+  return ok(`${opener(s)} ${r.say.replace(/^I /, 'I ')}`);
+});
+
 export const nudge = guard((ctx, args, s) => {
   const dir = String(args.d ?? '').toLowerCase().replace(/^further_/, '');
   const amt = String(args.amt ?? '').toLowerCase();

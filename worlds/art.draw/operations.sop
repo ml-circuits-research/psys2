@@ -70,6 +70,12 @@
     action=draw.reselect
     doc="Corrects which thing the last move was about: puts the moved things back and moves the one meant now the same way."
 
+@op.art.draw.spatial core.operation
+    impl=spatial
+    semantics=action
+    action=draw.spatial
+    doc="Arranges things (row, column, grid, circle, spread, align, same size, swap, tidy up) and answers questions about places (what is next to, which one is in the middle, is A above B, how far apart); the place of things is read by the module space."
+
 @op.art.draw.turn core.operation
     impl=turn
     semantics=action

@@ -626,7 +626,7 @@ export function answerQuestion(q, ctx) {
     const r = select(pool, cond, { ...ctx, resolve: (x) => resolve(x, ctx).items ?? [] });
     if (r.ask) return { type: 'answer', say: r.ask };
     if (r.error) return { type: 'error', say: 'I could not tell which one.' };
-    return { type: 'answer', say: `${cap(nameOf(items.find((i) => i.id === r.ids[0]), items))} is the one.`, ids: r.ids };
+    return { type: 'answer', say: `It is ${nameOf(items.find((i) => i.id === r.ids[0]), items)}.`, ids: r.ids };
   }
   return null;
 }
