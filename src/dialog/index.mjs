@@ -221,7 +221,7 @@ export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
 /** A voice dry run is skipped for texts longer than this many words (room talk, not a command). */
 const DRY_MAX_WORDS = 25;
-export const LENIENT_BUDGET_MS = 3000;   // default only; the live value is LIMITS.lenientMs (time-limits.mjs)
+export const LENIENT_MAX_STEPS = 600;   // checks of the leniency stage per message (one per variant or window tried); a step count, not a time, so the reading does not depend on machine speed
 
 const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
 
@@ -521,7 +521,7 @@ export class DialogSession {
 
   async _lenientRun(seg, opts, o, depth = 0) {
     budget.tick('dialog.lenient');
-    const late = () => guard.soft() || (o.until != null && performance.now() > o.until);   // out of time: no further guessing
+    const late = () => guard.soft() || (o.steps != null && ++o.steps > LENIENT_MAX_STEPS);   // out of time: no further guessing
     if (late()) return null;
     const { spell, partial } = o;
     const { set, formalizers } = this.engine;
@@ -545,15 +545,13 @@ export class DialogSession {
     if (spell) {
       // proper names and their wrappers (RD10): whole-value matching against the lexicons, bounded in candidates and time
       try { nameIndex(set); } catch { /* none */ }   // built once per world set (not counted in the budget)
-      const t0 = Date.now(), NAME_BUDGET_MS = 120;
-      const order = [...new Set(ids.filter((w) => w !== '*').flatMap((w) => set.available(w)))];
+            const order = [...new Set(ids.filter((w) => w !== '*').flatMap((w) => set.available(w)))];
       let named = [];
       try { named = perf.timeSync ? perf.timeSync('names', () => nameCandidates(seg.text, { set, vocab: spellVocabulary(set), worldOrder: order })) : nameCandidates(seg.text, { set, vocab: spellVocabulary(set), worldOrder: order }); } catch { named = []; }
       for (const cand of named.slice(0, 4)) {
         // the worlds that own the value first (and are candidates), then the usual order; every world together is tried before the rest
         const own = ids.filter((w) => w !== '*' && cand.worlds.some((cw) => set.available(w).includes(cw)));
         for (const world of [...new Set([...own.slice(0, 2), '*'])]) {
-          if (Date.now() - t0 > NAME_BUDGET_MS) break;
           const res = await parse(world, cand.text);
           if (res) return wrap(res, { corrections: cand.corrections });
         }
@@ -739,7 +737,7 @@ export class DialogSession {
   async _withLeniency(res, opts, o) {
     if (!res.segments.some((x) => x.unparsed) || !(o.spell || o.partial)) return res;
     const segments = [];
-    o = { ...o, until: performance.now() + LIMITS.lenientMs };   // the whole leniency stage of this message (spelling variants, partial windows) shares one time budget
+    o = { ...o, steps: 0 };   // the whole leniency stage of this message (spelling variants, partial windows) shares one step budget
     for (const seg of res.segments) {
       const fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
       if (fixed) segments.push(...fixed); else segments.push(seg);
