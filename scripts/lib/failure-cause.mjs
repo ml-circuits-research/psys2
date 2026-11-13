@@ -29,3 +29,22 @@ export function causeOf(r) {
   return 'other / wrong result';
 }
 function NOT_UNDERSOD(h) { return NOT_UNDERSTOOD.test(h); }
+
+/**
+ * The pipeline stage a cause group belongs to (the step ids of src/dialog/steps.mjs, plus `boundary` for the translation and typing layer in
+ * front of the pipeline, and `host` for crashes). A heuristic by cause group, like `causeOf`: it says where to look first.
+ */
+export function stageOf(group) {
+  const g = String(group ?? '');
+  if (/^crash/.test(g)) return 'host';
+  if (/^no reply/.test(g)) return 'reply';
+  if (/translation|roundtrip|^robustness/.test(g)) return 'boundary';
+  if (/routing|foreign-world/.test(g)) return 'world';
+  if (/fragment|continuation|session as content|^dialogue/.test(g)) return 'kind';
+  if (/avatar part|acted on a partly/.test(g)) return 'act';
+  if (/unknown kind|Talk: no fact/.test(g)) return 'things';
+  if (/default place|region/.test(g)) return 'missing';
+  if (/amount|relation|set distribution/.test(g)) return 'apply';
+  if (/^coherence|^minimal pair|not understood|other/.test(g)) return 'reply';
+  return 'unknown';
+}

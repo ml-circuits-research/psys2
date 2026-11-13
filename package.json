@@ -14,6 +14,7 @@
     "test:worlds": "node src/cli.mjs test-world all",
     "chat": "node src/cli.mjs chat",
     "serve": "node src/server/index.mjs",
-    "build:webchat": "node scripts/build-webchat.mjs"
+    "build:webchat": "node scripts/build-webchat.mjs",
+    "landing": "node scripts/update-cases.mjs && node scripts/build-system-map.mjs --write && node scripts/landing-table.mjs"
   }
 }

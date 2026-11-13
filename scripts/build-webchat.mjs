@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Builds the static browser demo (spec 06 "Webchat", spec 07 §4).
 //
-//   node scripts/build-webchat.mjs [--out <dir>] [--models [<export dir>] [--meta-only]]      (default out: docs/webchat)
+//   node scripts/build-webchat.mjs [--out <dir>] [--models [<export dir>] [--meta-only]] [--landing]      (default out: docs/webchat)
+//   --landing   first runs the landing routine (npm run landing): scripts/update-cases.mjs (case corpus, lists right-to-wrong changes) and scripts/build-system-map.mjs --write
+//               (the system map with the table of the measures that count, scripts/landing-table.mjs). Do this once per landing, after the merge; `node scripts/landing-table.mjs --log` then appends the table to worker-log.md.
 //
 // Output (only these paths are written; everything else in the out dir is left alone):
 //   lib/                    browser-safe copies of src/{soplang,legends,worlds,formalizer,interpreter,dialog,translate,astra,reasoner,knowledge,vendor}
@@ -302,6 +304,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  if (process.argv.includes('--landing')) for (const [script, ...args] of [['update-cases.mjs'], ['build-system-map.mjs', '--write']]) execFileSync(process.execPath, [path.join(REPO, 'scripts', script), ...args], { cwd: REPO, stdio: 'inherit' });
   const i = process.argv.indexOf('--out');
   const outDir = i > 0 ? path.resolve(process.argv[i + 1]) : undefined;
   const m = process.argv.indexOf('--models');
