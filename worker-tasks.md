@@ -3377,3 +3377,59 @@ Then the queue, in this order: SCENE-NATURAL (replay report first), SPACE, SETTI
 
 **Limits to respect:** general means only; no per-message rules; the cards must stay small (the DESCRIBE-ALL size gate counts them); both reasoners; smoke per commit. If sopworld lacks something for ranking with reasons, write it in questions.md.
 **Order:** start now in a separate worktree, in parallel with SCENE-NATURAL: P1 of SCENE-NATURAL is the first rule set of this module, so build P1 inside `meta.worlds` rather than twice.
+
+## Reviewer 2026-11-13 16:40 — WORLDS-AS-MODULES (owner): one theory for the owner's third log, no point patches
+
+**Data:** `training/eval/owner-log-2026-11-13b.jsonl`, 63 turns in the Draw tab, each with class and `expected`. Only 11 did what the owner meant. This build did not have SCENE-NATURAL, SPACE or WORLD-OF-WORLDS yet, so first run the replay on your current worktrees and report what those already fix. Do not fix single rows; every item below is a general mechanism and is measured on this log plus the two earlier ones.
+
+**Owner's direction:** worlds are reusable modules that are combined. A world learns to delegate: it gets reasoning, defaults and gap filling from other worlds. Rebuild from modules and reuse; do not patch each tab.
+
+**Why the turns failed (counts on 63):** translation left source words or picked the wrong sense (10: "linga", "fetita", "in to turn off" for left, "the girl of the house" for in front of); lists and fragments read as separate sentences and taken by hangman, chess, music, tasks, docs (13 foreign-world readings, one started a chess game and changed tab); continuations and corrections not known as such (9); kinds not drawn though knowledge has a relative (villa, puddle, grandfather, donkey, baby) (5); things placed where they do not belong and then a remark every turn instead of a right default (goat, cow, house, sun) (5); lake and grass replace the ground instead of being things (3); "different corners", "a bit lower" turned into a corner (5); two turns with no reply at all; typos in the source language (5).
+
+### The theory: a turn is five questions, each owned by one module; a tab world owns only its actions
+1. **What kind of turn is it?** new request, continuation, correction, complaint, question about what happened → `session.dialogue` (new, M1).
+2. **Which world takes it?** → `meta.worlds` (in work). Add the rule this log needs: an action that would be refused in its world's present state (hangman with no game) loses to every other reading; a reading from another world than the active tab must cover the whole sentence and never changes tab or starts something from a fragment.
+3. **Which things, where, how many?** → `scene` (new, M2) on top of `space` (in work).
+4. **What is missing?** → delegation (M3): the world states the gap, another module fills it and says where the value came from.
+5. **Was the English right?** → the translation layer picks among candidates by what the reader understands (M4).
+
+### M1 `session.dialogue` (shared module, not a tab)
+Holds the focus (last thing, last action, last place, last world) and reads the turn kind before any tab world:
+- **continuation:** a turn with no verb or no thing inherits them from the focus ("on the lake", "further right", "and lower", "a sun", "a house and 2 fish");
+- **list:** in "V a, b, c and d" every item inherits V and the frame; items are never separate sentences;
+- **correction:** "no X, Y", "not on it, on the swing", "that is centre, not right", "I said X", "I mistyped X" → undo or amend the last request and redo it with the change (uses UNDO-REDO: one step);
+- **complaint or why-question:** "why is it so low", "why did you not answer", "how did you get to chess" → an answer from the trace in plain words (which reading, which default and its source) and an offer to undo; never an action in some world;
+- **question about the scene:** "did you not draw a girl before?" → answered from the scene and the history.
+One contract for every tab: the tab receives a complete request (verb, things, place) or nothing.
+
+### M2 `scene` (shared module; art.draw becomes scene + shapes from knowledge + renderer)
+- regions (sky, ground, water, grass) are things with an extent: several lakes, a small lake on the left, grass above the lake; adding one never replaces another unless asked;
+- relations kept as facts and re-applied when things move: on, in, next to, in front of, behind, above, sitting on; "next to X, on the left" is one place;
+- amounts: "a bit", "more", "further", "still" are steps from the present place; a corner only when a corner is said;
+- sets: "a fish", "the fish" (all), "the first", "each in a different corner" (distribute);
+- the same module serves diagram.sketch, geo.map pins, Talk cards and the avatar parts; report which hand-written move/place patterns each tab drops.
+
+### M3 Delegation: needs and offers
+A world declares what a request needs (kind drawable, place, size, colour, count); modules declare what they offer. The engine fills a gap in this fixed order and records the source on the wire: said by the user > dialogue focus > scene state > knowledge > the world's own default.
+- kind not drawable → knowledge `stand_in` / kind-of / nearest drawable relative, said once ("a villa, drawn as a house"); person kinds (child, baby, boy, girl, grandfather) are variants of person and are found by any of those names later;
+- place not said → usual place from knowledge (k.scenes, k.commonsense): sun in the sky, duck on water, goat and house on the ground. The remark about fish in water is given once per thing and only when the user put it there; never as a suffix on other turns;
+- the same contract for size, colour, count, and for other tabs (a chart asks knowledge for units, a map asks for the capital). Write it once in the host and once as a proposal for sopworld (they get a task for needs/offers); no per-world code.
+
+### M4 Translation chosen by understanding (all languages, nothing per language)
+- produce candidates from every available translator (browser Translator, on-device model, rules) plus one candidate after source-side spelling repair (missing diacritics and near words from the model's own vocabulary);
+- reject a candidate that still has source-language words (token seen in the input and not English);
+- among the rest take the one the reader understands completely in the active tab; ties → the browser translator. Log all candidates in the phrase export.
+- reply side: no interjections ("voilà", "Ta-da", "S-A comis", "Pst") in any language; replies generated in plain English and translated whole.
+
+### Invariants (tests, both reasoners)
+- every turn gets a reply (rows 11 and 51 gave none: find the cause and add the test);
+- if any part of one sentence is not understood, nothing destructive runs from the other parts; ask instead, with the understood part named;
+- no reading changes tab without the tab being named.
+
+### INPUT-HISTORY (owner)
+Arrow up in the chat box recalls earlier sent messages, arrow down goes forward, the unsent draft is kept and comes back at the end; works in every tab, per session, typed and voice turns; only when the caret is on the first line (up) or last line (down). On touch: tap a past message → it is copied to the box for editing. A recalled message that is edited and sent right after a failed turn counts as a correction (M1).
+
+### Measure and order
+- Chrome replay of the three owner logs after each module; report table per class. Targets on log b: at least 50 of 63 as expected, 0 foreign-world readings, 0 silent turns, no turn above 1.5 s warm on the reviewer profile (row 61 used 1,056,197 ticks: say why).
+- A/B gate and smoke per landing as usual; the hold-out idea from WORLD-OF-WORLDS applies: add M1–M3 to one tab you did not design them on (diagram.sketch) and report what worked with no new patterns.
+- Order: invariants and INPUT-HISTORY now (small); M1 inside the meta.worlds worktree; M2 continues SPACE; M3 after M2; M4 in a parallel worktree. Questions and counter-proposals in questions.md.
