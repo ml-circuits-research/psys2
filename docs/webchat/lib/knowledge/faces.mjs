@@ -9,7 +9,7 @@
  *
  * `load()` also makes the data the one the avatar world draws (`useFaces`), so that the real world replaces the stub without another change.
  */
-import { parseFaces, getFaces, useFaces } from '../../worlds/ui.avatar/facedata.mjs?v=021cfd1d17';
+import { parseFaces, getFaces, useFaces } from '../../worlds/ui.avatar/facedata.mjs?v=129f43f6f1';
 
 export const FACES_PATH = 'k.faces/shards/faces.sop';
 

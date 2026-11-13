@@ -165,6 +165,13 @@ export function effectivePriority(m, ctx) {
  * that world has contents (the state path is non-empty) or owns the active tab. Without the session states in the context it always holds.
  */
 export function populated(pattern, ctx) {
+  // `onlyWhile=<path>`: a request that only makes sense in a state of its world (a part of the drawn face) is read only while that state holds,
+  // even on the world's own tab, so that "top right" on the avatar tab is still a tic-tac-toe move while no face is drawn
+  if (pattern.onlyWhile && ctx?.states) {
+    let s = ctx.states[pattern.worldId];
+    for (const k of pattern.onlyWhile.split('.')) s = s?.[k];
+    if (Array.isArray(s) ? !s.length : !s) return false;
+  }
   const p = pattern.needsState;
   if (!p || !ctx?.states || pattern.worldId === ctx.tabWorld) return true;
   let v = ctx.states[pattern.worldId];

@@ -9,40 +9,40 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=6fa6cc72a4';
-import { loadWorlds } from '../worlds/index.mjs?v=2e0b95f59d';
-import { validateWorldSet } from '../worlds/validate.mjs?v=6d6aaffc8a';
-import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=f0caa252ef';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=b73374fce9';
+import { loadWorlds } from '../worlds/index.mjs?v=cdba90e914';
+import { validateWorldSet } from '../worlds/validate.mjs?v=7f69f4ee91';
+import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
 import { createInterpreter } from '../interpreter/index.mjs?v=4ce9998cb1';
 import { createReasoner } from '../reasoner/index.mjs?v=601e6467e8';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=99d904c859';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=950e3948ed';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=e3e7c6c8ea';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=136a73b8b2';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=2427bf14c9';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=4f201cdfbc';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=705b493826';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=baca68c7ad';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=bd62044808';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=94e1022aec';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=2afbfa69a5';
-import { checkValues } from './value-check.mjs?v=862857c95d';
-import { Discourse } from './discourse.mjs?v=8c64a94636';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=90ece0d788';
+import { checkValues } from './value-check.mjs?v=506216f967';
+import { Discourse } from './discourse.mjs?v=a408919143';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=542c64ccb7';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=6413af929f';
-import { repairFromScene } from './scene-referents.mjs?v=951a69d6ab';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=491dfeeb48';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=fbc7dfac77';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=34e74e902f';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=081ff151f0';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=48044eb25c';
+import { repairFromScene } from './scene-referents.mjs?v=adc8f57abc';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=ecaf2f58c5';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=92d6d0bc40';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=71d230dc8d';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=03dfa399b9';
 
-export { runWorldTests } from './test-runner.mjs?v=4483a1dec0';
+export { runWorldTests } from './test-runner.mjs?v=84ab4dd2bc';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
@@ -968,7 +968,9 @@ export class DialogSession {
     const named = namedWorlds((english.toLowerCase().match(/[a-z0-9]+/g) ?? []).map((w) => ({ kind: 'word', lower: w, raw: w })), namingTables(set).names);
     const SKIP = new Set(['ui.shell', 'ui.help', 'core', 'lang.common']);
     await this._prepareWorldsOf(res.segments);
-    const suspect = res.segments.filter((x) => { const w = x.match?.worldId; return w && !SKIP.has(w) && (w !== ctx.tabWorld || (named.size > 0 && !named.has(w)) || (!!ctx.lastWorld && ctx.lastWorld !== w && !SKIP.has(ctx.lastWorld))); });
+    // a phrase the open tab claims for itself (`tabClaim`: "make a diagram of this" on the Talk tab) is that world's answer, also when it is "nothing to send yet"
+    const claimed = (x) => !!x.match?.worldId && x.match.worldId === ctx.tabWorld && !!set.get(x.match.worldId)?.patterns?.find((p) => p.id === x.match.patternId)?.tabClaim;
+    const suspect = res.segments.filter((x) => { const w = x.match?.worldId; return w && !SKIP.has(w) && !claimed(x) && (w !== ctx.tabWorld || (named.size > 0 && !named.has(w)) || (!!ctx.lastWorld && ctx.lastWorld !== w && !SKIP.has(ctx.lastWorld))); });
     const crossBad = res.segments.filter((x) => x.corrections?.length && !this._crossTabOk([x], x.corrections, ctx, english)).map((x) => x.match.worldId);
     if (!suspect.length && !crossBad.length) return null;
     const bad = new Set(crossBad);

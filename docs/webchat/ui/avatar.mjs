@@ -6,9 +6,10 @@
 // thumbnails are one small pre-rendered file (vendor/dicebear-styles/gallery.json, scripts/build-avatar-gallery.mjs) fetched
 // when the browser is idle after the page is up. CC BY styles show their credit under the picture.
 import { createRobot } from './robot.mjs';
-// AVATAR-FROM-PARTS: a face drawn from the parts of k.faces (worlds/ui.avatar/face*.mjs, loaded when the browser is idle, 30 KB), also in the header; the DiceBear characters stay selectable.
+// AVATAR-FROM-PARTS: a face drawn from the parts of k.faces (worlds/ui.avatar/face*.mjs, 30 KB) is the avatar at the start, also in the header; the DiceBear characters stay selectable for a few versions, marked "classic".
 const FACE_FILES = ['facedraw.mjs', 'facedata.mjs', 'faceops.mjs'];
-const SLOT_NOUN = { face: 'face', hair: 'hair', eyes: 'eyes', eyebrows: 'eyebrows', nose: 'nose', mouth: 'mouth', beard: 'beard', glasses: 'glasses' };
+const SLOT_NOUN = { face: 'face', hair: 'hair', eyes: 'eyes', eyebrows: 'eyebrows', nose: 'nose', mouth: 'mouth', beard: 'beard', glasses: 'glasses', hat: 'hat', earrings: 'earrings' };
+const ORDINAL = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth'];
 /** What a tap on a variant says (typed into the chat like any other command). */
 export const faceOptionSay = (slot, id) => (id === 'none' ? (slot === 'glasses' ? 'no glasses' : `no ${SLOT_NOUN[slot] ?? slot}`) : slot === 'glasses' ? `swap the glasses for ${id}` : `make the ${SLOT_NOUN[slot] ?? slot} ${id}`);
 export const FACE_EXPRESSIONS = [['happy', 'look happy'], ['sad', 'look sad'], ['angry', 'look angry'], ['surprised', 'look surprised'], ['sleepy', 'look sleepy'], ['wink', 'wink']];
@@ -154,6 +155,7 @@ const CSS = `
 .p2-avatar-chip img { width: 28px; height: 28px; border-radius: 50%; }
 .p2-avatar-chip.is-mood { padding: 3px 10px; }
 .p2-avatar-faces, .p2-avatar-opts, .p2-avatar-expr { display: flex; gap: 8px; width: min(100%, 460px); overflow-x: auto; padding: 4px 2px 6px; }
+.p2-avatar-tag { font-size: 9px; line-height: 1; opacity: .7; text-transform: uppercase; letter-spacing: .04em; }
 .p2-avatar-faces[hidden], .p2-avatar-opts[hidden], .p2-avatar-expr[hidden] { display: none; }
 .p2-avatar-faces .p2-avatar-card, .p2-avatar-opts .p2-avatar-card { width: 64px; }
 .p2-avatar-faces .p2-avatar-pic, .p2-avatar-opts .p2-avatar-pic { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; background: #e8edf5; }
@@ -290,7 +292,8 @@ export function createAvatar(container, host = null) {
     const num = document.createElement('span'); num.className = 'p2-avatar-num'; num.textContent = String(i + 1);
     const pic = document.createElement('span'); pic.className = 'p2-avatar-pic';
     const lbl = document.createElement('span'); lbl.className = 'p2-avatar-lbl'; lbl.textContent = CHARACTER_LABEL[ch];
-    b.append(num, pic, lbl);
+    const tag = document.createElement('span'); tag.className = 'p2-avatar-tag'; tag.textContent = 'classic';
+    b.append(num, pic, lbl, tag);
     b.addEventListener('click', () => say(`become ${CHARACTER_SAY[ch]}`));
     strip.append(b);
   });
@@ -306,6 +309,7 @@ export function createAvatar(container, host = null) {
     }
     shownChips = '';
     renderGallery(normalizeState(state));
+    if (state?.face) { shownFaces = ''; renderFaceRows(state.face); }   // the classic cards of the face rows
   }).catch((e) => console.warn('avatar: the gallery thumbnails could not be loaded', e));
   galleryTimer = setTimeout(() => { galleryTimer = 0; if (typeof requestIdleCallback === 'function') requestIdleCallback(fetchGallery, { timeout: 4000 }); else fetchGallery(); }, 1500);
 
@@ -323,7 +327,7 @@ export function createAvatar(container, host = null) {
     return fm.draw.renderFace(face, { size, over, bg: size ? undefined : '#e8edf5', label: `${state.name ?? 'Avatar'}, a drawn face with ${fm.ops.describeFace(face, fm.d)}` });
   }
   function renderFaceRows(face) {
-    const sig = JSON.stringify([!!fm && fm !== 'loading', Object.keys(face?.saved ?? {}), face?.active, face?.options, face?.base, face?.name]);
+    const sig = JSON.stringify([!!fm && fm !== 'loading', Object.keys(face?.saved ?? {}), face?.active, face?.options, face?.base, face?.name, !!gallery]);
     if (sig === shownFaces) return;
     shownFaces = sig;
     const card = (label, say_, svg, on) => {
@@ -342,6 +346,7 @@ export function createAvatar(container, host = null) {
       for (const name of fm.ops.presetList(fm.d)) cards.push(card(name[0].toUpperCase() + name.slice(1), `load the ${name} face`, thumb(fm.ops.newFace(name, fm.d), name), !!face?.active && face.base === name && !face.name));
       for (const v of Object.values(face?.saved ?? {})) cards.push(card(v.name, `be ${v.name}`, thumb({ ...fm.ops.newFace('girl', fm.d), slots: v.slots, colours: v.colours, adj: v.adj }, v.name), !!face?.active && face.name === v.name));
     }
+    if (cards.length && gallery) CHARACTER_LIST.forEach((ch, i) => { if (gallery[ch]) cards.push(card(`${CHARACTER_LABEL[ch]} (classic)`, `pick the ${ORDINAL[i]} character`, gallery[ch], !face?.active && state?.character === ch)); });   // the DiceBear characters, until they are removed
     facesEl.replaceChildren(...cards);
     facesEl.hidden = !cards.length;
     exprEl.replaceChildren(...FACE_EXPRESSIONS.map(([e, t]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'p2-avatar-chip is-mood'; b.title = `Say: ${t}`; b.textContent = e[0].toUpperCase() + e.slice(1); b.addEventListener('click', () => say(t)); return b; }));
@@ -366,7 +371,8 @@ export function createAvatar(container, host = null) {
   }
   /** Draws the drawn face; true when state.face is the avatar (also while its files are still loading), false for a DiceBear character. */
   function drawFace() {
-    const face = state?.face;
+    // no state yet (the world has not answered): the avatar starts as the default drawn face
+    const face = state == null ? (fm && fm !== 'loading' ? (fm.start ??= fm.ops.newFace()) : { active: true }) : state.face;
     if (!face?.active) {
       if (headEl) headEl.hidden = true;
       if (strip.hidden) { strip.hidden = false; creditEl.hidden = false; exprEl.hidden = true; optsEl.hidden = true; lastSvg = ''; shownChips = ''; }
@@ -420,8 +426,9 @@ export function createAvatar(container, host = null) {
     setTimeout(() => old.forEach((o) => o.remove()), FADE_MS + 60);
   }
 
-  faceTimer = setTimeout(() => { faceTimer = 0; if (typeof requestIdleCallback === 'function') requestIdleCallback(loadFaceModules, { timeout: 5000 }); else loadFaceModules(); }, 2500);
-  request(normalizeState(null).character);
+  // the drawn face is the start avatar: its files load at once; the DiceBear style of a classic character only when one is shown
+  loadFaceModules();
+  if (state?.face?.active === false) request(normalizeState(state).character);
   renderGallery(normalizeState(null));
   renderCredit('robot');
 

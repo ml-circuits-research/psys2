@@ -10,7 +10,7 @@ import { parse, get, getAll } from '../soplang/index.mjs?v=26885599a7';
 import { Legends } from '../legends/index.mjs?v=48b634e4da';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
 import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=bc8d4bc227';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=6fa6cc72a4';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=b73374fce9';
 import { lexIndex } from './lexicon.mjs?v=e3316469a7';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
@@ -221,6 +221,8 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     tabOnly: txt(x, 'tabOnly') === 'true', tabPriority: txt(x, 'tabPriority') == null ? null : Number(txt(x, 'tabPriority')),
     yieldsTo: getAll(x, 'yieldsTo').map((v) => v.v),
     needsState: txt(x, 'needsState') ?? null,
+    // onlyWhile=<path>: the pattern is considered only while that path of its world's state is truthy, also when its world owns the tab
+    onlyWhile: txt(x, 'onlyWhile') ?? null,
     // tabFollow=true: a bare reading (a coordinate such as "b1") that only the world of the active tab, the active game or a recently used world may claim (RD2)
     tabFollow: txt(x, 'tabFollow') === 'true',
     // signal=true: the pattern carries an explicit signal of its world (a named shape, an arrow between names, a flowchart word): a match that is not a catch-all beats the active tab's own matches (routing tier 3, DIAG)
@@ -259,7 +261,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
   w.tests = wires['tests.sop'].filter((x) => x.type === 'core.test').map((x) => ({
     id: x.id, wire: x, worldId: id, input: txt(x, 'input'), expect: getAll(x, 'expect').map((v) => v.v),
     expectStatus: txt(x, 'expectStatus'),
-    expectState: getAll(x, 'expectState').map((v) => v.v), expectEffect: getAll(x, 'expectEffect').map((v) => v.v), language: txt(x, 'language') ?? 'en', session: txt(x, 'session'),
+    expectState: getAll(x, 'expectState').map((v) => v.v), expectEffect: getAll(x, 'expectEffect').map((v) => v.v), given: getAll(x, 'given').map((v) => v.v), language: txt(x, 'language') ?? 'en', session: txt(x, 'session'),
     reasoner: txt(x, 'reasoner'),   // `ops` or `matrix`: the test only runs with that reasoner strategy (spec 15); absent = both
   }));
   return w;
