@@ -124,7 +124,7 @@
 @pat.art.draw.move core.pattern
     canonical="Put the cat next to the house."
     canonical="Move the tree to the left."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [move|shift|push|drag|bring|put|place|set|slide|carry|send|take|lift|lower|raise|nudge|relocate|position|shove|scoot|haul|plonk|toss|stick|reposition|tuck|float|transfer] {p:words(10)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [move|shift|push|drag|bring|put|place|set|slide|carry|send|take|lift|lower|raise|nudge|relocate|position|shove|scoot|haul|plonk|toss|stick|reposition|tuck|float|transfer] {p:words(14)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=draw.move arg.phrase=\"{p}\""
     kind=request
     priority=9
@@ -1573,3 +1573,39 @@
     priority=4
     example="Draw two blue castles."
     doc="DRAW-FROM-FACTS: the same open slot with a number (draw two blue castles)."
+
+@pat.art.draw.x.move.further core.pattern
+    match="[and|then|now|also]? [more|even_more|further|farther|even_further] [to_the|towards_the|towards|to]? {d:lex.space.dirs} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"it further {d}\""
+    kind=request
+    priority=14
+    example="Further left."
+    example="And even more up."
+    doc="Goes on with the last move, further in a direction (the module space reads the direction and the amount)."
+
+@pat.art.draw.x.move.further.amt core.pattern
+    match="[and|then|now|also]? {amt:lex.space.amounts} [more|even_more|further|farther|even_further]? [to_the|towards_the|towards|to]? {d:lex.space.dirs} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"it {amt} further {d}\""
+    kind=request
+    priority=14
+    example="A bit more to the right."
+    example="A lot further left."
+    doc="Goes on with the last move by an amount (a bit, a lot, all the way) in a direction."
+
+@pat.art.draw.x.move.again core.pattern
+    match="[and|then|now|also]? [further|farther|even_further|even_more|once_more|again]"
+    emit="@{_} core.request action=draw.move arg.phrase=\"it further\""
+    kind=request
+    priority=14
+    example="Further."
+    example="Again."
+    doc="Repeats the last move."
+
+@pat.art.draw.x.reselect core.pattern
+    match="[no|nope|oh_no]? not [the]? {a:words(2)} [one]? [the|but|i_meant|i_mean|the_one]? {p:words(4)}"
+    emit="@{_} core.request action=draw.reselect arg.phrase=\"{p}\""
+    kind=request
+    priority=15
+    example="No, not the first one, the middle one."
+    example="Not the left one, the right one."
+    doc="Corrects which thing the last move was about: the same move on the one meant now."

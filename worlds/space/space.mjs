@@ -147,7 +147,7 @@ export function parseSel(input, kindOf = () => null) {
  * -> items for "next to X" and "between X and Y" }. Result: { ids } or { ask, candidates } (the host asks, naming the candidates by position) or { error }.
  */
 export function select(pool, spec, ctx = {}) {
-  let g = pool.slice();
+  let g = spec.restrict ? pool.filter((i) => spec.restrict.includes(i.id)) : pool.slice();
   if (!g.length) return { ids: [], error: 'none' };
   const one = (it) => ({ ids: [it.id] });
   const refs = (toks_) => (ctx.resolve ? ctx.resolve(toks_) : []) ?? [];
@@ -195,7 +195,8 @@ export function select(pool, spec, ctx = {}) {
     if (!s[k]) return { error: 'few', n: s.length };
     return one(s[k]);
   }
-  if (spec.count) return { ids: readingOrder(g).slice(0, spec.count).map((i) => i.id) };
+  if (spec.count && g.length === spec.count) return { ids: g.map((i) => i.id) };
+  if (spec.count && g.length > spec.count) return { ask: `There are ${g.length}, not ${spec.count}: ${listOf(readingOrder(g).map((i) => label(i, g)))}. Which ${spec.count} do you mean?`, candidates: g.map((i) => i.id), ambiguous: true };
   if (spec.all || spec.plural || g.length === 1) return { ids: g.map((i) => i.id) };
   return { ask: `There are ${g.length}: ${listOf(readingOrder(g).map((i) => label(i, g)))}. Which one do you mean?`, candidates: g.map((i) => i.id), ambiguous: true };
 }

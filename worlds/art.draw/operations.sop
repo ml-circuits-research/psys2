@@ -64,6 +64,12 @@
     action=draw.nudge
     doc="Moves things a bit higher, lower, left or right."
 
+@op.art.draw.reselect core.operation
+    impl=reselect
+    semantics=action
+    action=draw.reselect
+    doc="Corrects which thing the last move was about: puts the moved things back and moves the one meant now the same way."
+
 @op.art.draw.turn core.operation
     impl=turn
     semantics=action
