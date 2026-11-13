@@ -41,7 +41,7 @@ export function modelHashes({ dispatcherDir, normalizerDir, withNormalizer }) {
  * The pipeline of a mode: { settings, info, enc, normalizerHost }. mode: rules | encoder | encoder+n1 (settings come from runtime-config's MODES;
  * `overrides` patches them for experiments and is reported in info.settings). info = { mode, settings, hashes, load_ms }.
  */
-export async function openNodeRuntime({ engine, mode, ortPath, dispatcherDir, normalizerDir, editTau, ortThreads = 0, overrides = {} }) {
+export async function openNodeRuntime({ engine, mode, ortPath, dispatcherDir, normalizerDir, editTau, ortThreads = 0, overrides = {}, partsExtra = null }) {   // partsExtra: optional extra parts of the dispatcher runtime (ablation: `segmenter`)
   const settings = { ...settingsForMode(mode), ...overrides };
   const dDir = resolve(dispatcherDir ?? DEFAULT_DISPATCHER_DIR), nDir = resolve(normalizerDir ?? DEFAULT_NORMALIZER_DIR);
   const info = { mode, settings: runtimeSettings(settings), hashes: null, load_ms: { dispatcher: null, normalizer: null } };
@@ -80,7 +80,7 @@ export async function openNodeRuntime({ engine, mode, ortPath, dispatcherDir, no
     const session = await ort.InferenceSession.create(join(dDir, 'model.int8.onnx'), { graphOptimizationLevel: 'all', ...threadOpts });
     const editTags = meta.onnx?.outputs?.includes('edit_logits') ? readJSON(join(dDir, 'edit-vocab.json')).tags : null;
     const vocab = join(dDir, existsSync(join(dDir, 'vocab.txt')) ? 'vocab.txt' : 'tokenizer/vocab.txt');
-    return { ort, session, tokenizer: createWordPieceTokenizer(readFileSync(vocab, 'utf8')), worlds: meta.worlds, editTags, editTau: editTau ?? meta.edit_threshold ?? 0.5, useContext: meta.context !== false, nx: meta.nx ?? null };
+    return { ort, session, tokenizer: createWordPieceTokenizer(readFileSync(vocab, 'utf8')), worlds: meta.worlds, editTags, editTau: editTau ?? meta.edit_threshold ?? 0.5, useContext: meta.context !== false, nx: meta.nx ?? null, ...(partsExtra ?? {}) };
   };
   const enc = createRuntime({ engine, settings, load, normalizer: normalizerHost?.provider ?? null, waitForModel: true });
   const t0 = performance.now();

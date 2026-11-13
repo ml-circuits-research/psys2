@@ -283,7 +283,7 @@ function tooComplexReply(session, text, e, b) {
 export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTimeout', 'AbortError', 'TimeoutError'].includes(e.name) || /timed out|timeout|aborted/i.test(String(e.message ?? e)));
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing, suspect = false } = {}) {
     this.routing = routing;   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
@@ -294,6 +294,8 @@ export class DialogSession {
     this.nx = normalizeNxStrategy(nx);
     /** Best effort with loose words (spec 03 section 7.15): after everything else failed, execute the most sensible reading of the content words (off in the library, on in the shipped settings). */
     this.bestEffort = bestEffort;
+    /** SUSPECT-WORD leniency (model ablation 2026-11-13, off by default): a segment the rules read completely but whose text holds a word no world knows that is a slip away from a known word is also tried spell-corrected (the correction is kept only when the rules read the corrected text completely), as an unparsed segment is. */
+    this.suspect = suspect;
     /** Encoder fast path (PERF): when the rules read the whole message and the interpreter accepts every reading, skip the model. */
     this.fastPath = fastPath;
     /** Leniency (spec 03 sections 7.9 and 7.10): spell-correct unparsed text (on by default), accept the readable part of a message (off by default; the webchat turns it on). */
@@ -762,12 +764,26 @@ export class DialogSession {
     return { ...formal, segments, wires: segments.flatMap((x) => x.wires) };
   }
 
+  /** True when the text of `seg` holds a word that no world knows and that is one slip (spell budget) from a known word of some world. */
+  _suspectWord(seg) {
+    try {
+      const set = this.engine.set;
+      if (this._dryStatuses([seg]).every((x) => x === 'supported')) return false;   // a reading the interpreter accepts is left alone (names, dictated text); only a refused one (unknown tab, unknown item, missing argument) is suspect
+      const protect = protectedWordsOf(set, this.context().tabWorld);
+      return spellCorrect(seg.text, { vocab: spellVocabulary(set), protect, short: false, abbreviations: false }).corrections.length > 0;
+    } catch { return false; }
+  }
+
   async _withLeniency(res, opts, o) {
-    if (!res.segments.some((x) => x.unparsed) || !(o.spell || o.partial)) return res;
+    if ((!res.segments.some((x) => x.unparsed) && !(this.suspect && o.spell)) || !(o.spell || o.partial)) return res;
     const segments = [];
     o = { ...o, steps: 0 };   // the whole leniency stage of this message (spelling variants, partial windows) shares one step budget
     for (const seg of res.segments) {
-      const fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
+      let fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
+      if (!fixed && this.suspect && o.spell && !seg.unparsed && !seg.corrections?.length && this._suspectWord(seg)) {
+        const f2 = await this._lenient(seg, opts, { ...o, partial: false });   // spelling only
+        if (f2?.length && f2.every((x) => !x.unparsed) && f2.some((x) => x.corrections?.length)) fixed = f2;
+      }
       if (fixed) segments.push(...fixed); else segments.push(seg);
     }
     return { ...res, segments, wires: segments.flatMap((x) => x.wires) };

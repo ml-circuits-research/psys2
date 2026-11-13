@@ -1,0 +1,7658 @@
+{
+ "note": "MODEL ABLATION 2026-11-13: every model of the runtime switched on/off end to end (scripts/eval-ablation.mjs, scripts/ablation-report.mjs). Outcomes: right / wrong (partly counts as wrong) / asked / nu (not understood); sets without gold: answered / asked / nu. Reasoner: matrix. Dispatcher: docs/webchat/models/dispatcher (int8, 68.0 MB), normalizer docs/webchat/models/normalizer (int8, 97.0 MB). The full runs share 20 cores; time per message comes from the single-thread latency sample (400 rows).",
+ "configs": {
+  "enc-suspect": "as enc-C plus the suspect-word leniency prototype",
+  "rules-RDchoose": "no model; READER-ROUTE = choose",
+  "rules-RDfill": "no model; READER-ROUTE = fill (the library reader reads clauses nobody read)",
+  "rules-WAchoose-RDchoose": "no model; world-aware = choose and READER-ROUTE = choose",
+  "rules-WAchoose": "no model; world-aware reading = choose",
+  "rules-WAveto": "no model; world-aware reading = veto (PSYS2_WORLD_AWARE)",
+  "rules-also-suspect": "no model; both prototypes (also-joiner, suspect-word leniency)",
+  "rules-also": "no model; PROTOTYPE \"also\" joins clauses like \"then\" in the rules clause splitter",
+  "rules-suspect": "no model; PROTOTYPE suspect-word leniency (a completely read segment with an unknown word one slip from a known word is spell-corrected like an unparsed one)",
+  "enc-A": "as enc-C with routing A (the encoder world head proposes, the rules validate)",
+  "enc-B": "as enc-C with routing B (symbolic only, the encoder world head unread)",
+  "enc-C-segrules": "as enc-C, the rules clause splitter replaces the model segmentation",
+  "enc-C": "encoder: segmentation + world prior + validator; reading by rules only; routing C; no normalizer",
+  "enc-hybrid": "enc-C plus the NX reading of segments the rules left unparsed (hybrid); no normalizer",
+  "enc-n1": "enc-C plus the T5 normalizer fallback; reading by rules only",
+  "enc-neural": "model first (NX neural), no normalizer",
+  "rules-A": "no model; rules formalizer; the old rule router (routing A)",
+  "rules-C": "no model; rules formalizer; meta.worlds routing (B, no encoder prior)",
+  "shipped": "the shipped default: encoder + normalizer + hybrid reading + routing C",
+  "enc-neural-n1": "model first (NX neural) with the normalizer"
+ },
+ "end_to_end": {
+  "enc-suspect": {
+   "note": "as enc-C plus the suspect-word leniency prototype",
+   "wall_ms": 172906,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1159,
+     "wrong": 88,
+     "asked": 13,
+     "nu": 36,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 132,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 48,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2079,
+     "wrong": 61,
+     "asked": 46,
+     "nu": 55,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 289,
+     "wrong": 66,
+     "asked": 6,
+     "nu": 27,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 991,
+     "right": 878,
+     "wrong": 71,
+     "asked": 14,
+     "nu": 28,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 325,
+     "wrong": 203,
+     "asked": 56,
+     "nu": 59,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 31,
+     "wrong": 83,
+     "asked": 7,
+     "nu": 25,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 21,
+     "answered": 42
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 134,
+     "answered": 350
+    }
+   },
+   "gold_total": {
+    "n": 6096,
+    "right": 5050,
+    "wrong": 596,
+    "asked": 149,
+    "nu": 290,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 11,
+     "answered": 121
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 19
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 17,
+     "answered": 26
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 29,
+     "answered": 23
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-RDchoose": {
+   "note": "no model; READER-ROUTE = choose",
+   "wall_ms": 63588,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1141,
+     "wrong": 104,
+     "asked": 14,
+     "nu": 37,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 132,
+     "wrong": 17,
+     "asked": 4,
+     "nu": 47,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2082,
+     "wrong": 57,
+     "asked": 49,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 288,
+     "wrong": 64,
+     "asked": 6,
+     "nu": 30,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 987,
+     "right": 822,
+     "wrong": 102,
+     "asked": 21,
+     "nu": 42,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 340,
+     "wrong": 158,
+     "asked": 71,
+     "nu": 74,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 24,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 35,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 28,
+     "answered": 34
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 6,
+     "answered": 27
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 141,
+     "answered": 343
+    }
+   },
+   "gold_total": {
+    "n": 6092,
+    "right": 4984,
+    "wrong": 589,
+    "asked": 178,
+    "nu": 329,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 13,
+     "answered": 119
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-RDfill": {
+   "note": "no model; READER-ROUTE = fill (the library reader reads clauses nobody read)",
+   "wall_ms": 40637,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1141,
+     "wrong": 104,
+     "asked": 14,
+     "nu": 37,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 47,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2082,
+     "wrong": 57,
+     "asked": 49,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 287,
+     "wrong": 66,
+     "asked": 6,
+     "nu": 29,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 987,
+     "right": 830,
+     "wrong": 103,
+     "asked": 21,
+     "nu": 33,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 340,
+     "wrong": 158,
+     "asked": 71,
+     "nu": 74,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 24,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 35,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 28,
+     "answered": 34
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 25
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 141,
+     "answered": 343
+    }
+   },
+   "gold_total": {
+    "n": 6092,
+    "right": 4992,
+    "wrong": 591,
+    "asked": 178,
+    "nu": 319,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 13,
+     "answered": 119
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-WAchoose-RDchoose": {
+   "note": "no model; world-aware = choose and READER-ROUTE = choose",
+   "wall_ms": 71806,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1142,
+     "wrong": 104,
+     "asked": 13,
+     "nu": 37,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 132,
+     "wrong": 29,
+     "asked": 4,
+     "nu": 35,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2086,
+     "wrong": 54,
+     "asked": 48,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 286,
+     "wrong": 66,
+     "asked": 6,
+     "nu": 30,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 987,
+     "right": 826,
+     "wrong": 102,
+     "asked": 21,
+     "nu": 38,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 342,
+     "wrong": 156,
+     "asked": 71,
+     "nu": 74,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 24,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 35,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 22,
+     "answered": 40
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 6,
+     "answered": 27
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 141,
+     "answered": 343
+    }
+   },
+   "gold_total": {
+    "n": 6092,
+    "right": 4993,
+    "wrong": 598,
+    "asked": 176,
+    "nu": 313,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 13,
+     "answered": 119
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-WAchoose": {
+   "note": "no model; world-aware reading = choose",
+   "wall_ms": 43409,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1141,
+     "wrong": 104,
+     "asked": 13,
+     "nu": 38,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 47,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2086,
+     "wrong": 54,
+     "asked": 48,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 285,
+     "wrong": 66,
+     "asked": 7,
+     "nu": 30,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 987,
+     "right": 817,
+     "wrong": 104,
+     "asked": 23,
+     "nu": 43,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 340,
+     "wrong": 155,
+     "asked": 72,
+     "nu": 76,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 22,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 37,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 29,
+     "answered": 33
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 25
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 141,
+     "answered": 343
+    }
+   },
+   "gold_total": {
+    "n": 6092,
+    "right": 4979,
+    "wrong": 586,
+    "asked": 180,
+    "nu": 335,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 13,
+     "answered": 119
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-WAveto": {
+   "note": "no model; world-aware reading = veto (PSYS2_WORLD_AWARE)",
+   "wall_ms": 54288,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1140,
+     "wrong": 104,
+     "asked": 14,
+     "nu": 38,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 47,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2082,
+     "wrong": 57,
+     "asked": 49,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 288,
+     "wrong": 65,
+     "asked": 6,
+     "nu": 29,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 987,
+     "right": 824,
+     "wrong": 102,
+     "asked": 23,
+     "nu": 38,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 338,
+     "wrong": 157,
+     "asked": 72,
+     "nu": 76,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 22,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 37,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 23,
+     "answered": 39
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 6,
+     "answered": 27
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 141,
+     "answered": 343
+    }
+   },
+   "gold_total": {
+    "n": 6092,
+    "right": 4982,
+    "wrong": 588,
+    "asked": 181,
+    "nu": 329,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 13,
+     "answered": 119
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-also-suspect": {
+   "note": "no model; both prototypes (also-joiner, suspect-word leniency)",
+   "wall_ms": 38650,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1143,
+     "wrong": 101,
+     "asked": 14,
+     "nu": 38,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 132,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 48,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2083,
+     "wrong": 57,
+     "asked": 48,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 287,
+     "wrong": 65,
+     "asked": 6,
+     "nu": 30,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 991,
+     "right": 839,
+     "wrong": 92,
+     "asked": 24,
+     "nu": 36,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 338,
+     "wrong": 157,
+     "asked": 72,
+     "nu": 76,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 22,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 37,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 33
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 25
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 144,
+     "answered": 340
+    }
+   },
+   "gold_total": {
+    "n": 6096,
+    "right": 4999,
+    "wrong": 575,
+    "asked": 181,
+    "nu": 329,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 16,
+     "answered": 116
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-also": {
+   "note": "no model; PROTOTYPE \"also\" joins clauses like \"then\" in the rules clause splitter",
+   "wall_ms": 36112,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1143,
+     "wrong": 101,
+     "asked": 14,
+     "nu": 38,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 47,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2082,
+     "wrong": 57,
+     "asked": 49,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 288,
+     "wrong": 64,
+     "asked": 6,
+     "nu": 30,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 991,
+     "right": 829,
+     "wrong": 102,
+     "asked": 24,
+     "nu": 36,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 338,
+     "wrong": 157,
+     "asked": 72,
+     "nu": 76,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 22,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 37,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 29,
+     "answered": 33
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 25
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 141,
+     "answered": 343
+    }
+   },
+   "gold_total": {
+    "n": 6096,
+    "right": 4990,
+    "wrong": 584,
+    "asked": 182,
+    "nu": 328,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 13,
+     "answered": 119
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-suspect": {
+   "note": "no model; PROTOTYPE suspect-word leniency (a completely read segment with an unknown word one slip from a known word is spell-corrected like an unparsed one)",
+   "wall_ms": 37499,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1140,
+     "wrong": 104,
+     "asked": 14,
+     "nu": 38,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 132,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 48,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2082,
+     "wrong": 57,
+     "asked": 49,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 288,
+     "wrong": 64,
+     "asked": 6,
+     "nu": 30,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 987,
+     "right": 835,
+     "wrong": 89,
+     "asked": 23,
+     "nu": 40,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 338,
+     "wrong": 157,
+     "asked": 72,
+     "nu": 76,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 22,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 37,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 33
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 25
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 145,
+     "answered": 339
+    }
+   },
+   "gold_total": {
+    "n": 6092,
+    "right": 4992,
+    "wrong": 574,
+    "asked": 181,
+    "nu": 333,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 17,
+     "answered": 115
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "enc-A": {
+   "note": "as enc-C with routing A (the encoder world head proposes, the rules validate)",
+   "wall_ms": 42664,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1157,
+     "wrong": 88,
+     "asked": 14,
+     "nu": 37,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 3,
+     "asked": 3,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 125,
+     "wrong": 35,
+     "asked": 5,
+     "nu": 35,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2078,
+     "wrong": 65,
+     "asked": 45,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 288,
+     "wrong": 66,
+     "asked": 6,
+     "nu": 28,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 990,
+     "right": 863,
+     "wrong": 75,
+     "asked": 14,
+     "nu": 38,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 322,
+     "wrong": 207,
+     "asked": 55,
+     "nu": 59,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 31,
+     "wrong": 82,
+     "asked": 8,
+     "nu": 25,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 18,
+     "answered": 44
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 6,
+     "answered": 27
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 136,
+     "answered": 348
+    }
+   },
+   "gold_total": {
+    "n": 6095,
+    "right": 5021,
+    "wrong": 625,
+    "asked": 151,
+    "nu": 287,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 12,
+     "answered": 120
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 17,
+     "answered": 26
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 29,
+     "answered": 23
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "enc-B": {
+   "note": "as enc-C with routing B (symbolic only, the encoder world head unread)",
+   "wall_ms": 42675,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1156,
+     "wrong": 91,
+     "asked": 13,
+     "nu": 36,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 15,
+     "asked": 4,
+     "nu": 48,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2076,
+     "wrong": 64,
+     "asked": 49,
+     "nu": 52,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 284,
+     "wrong": 70,
+     "asked": 7,
+     "nu": 27,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 44,
+     "wrong": 5,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 995,
+     "right": 860,
+     "wrong": 78,
+     "asked": 18,
+     "nu": 39,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 317,
+     "wrong": 206,
+     "asked": 59,
+     "nu": 61,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 31,
+     "wrong": 82,
+     "asked": 8,
+     "nu": 25,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 20,
+     "answered": 42
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 135,
+     "answered": 349
+    }
+   },
+   "gold_total": {
+    "n": 6100,
+    "right": 5013,
+    "wrong": 615,
+    "asked": 161,
+    "nu": 300,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 12,
+     "answered": 120
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 19
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 17,
+     "answered": 26
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 29,
+     "answered": 23
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "enc-C-segrules": {
+   "note": "as enc-C, the rules clause splitter replaces the model segmentation",
+   "wall_ms": 28669,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1140,
+     "wrong": 105,
+     "asked": 12,
+     "nu": 39,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 20,
+     "asked": 4,
+     "nu": 43,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2072,
+     "wrong": 68,
+     "asked": 47,
+     "nu": 54,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 287,
+     "wrong": 66,
+     "asked": 6,
+     "nu": 29,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 991,
+     "right": 856,
+     "wrong": 81,
+     "asked": 15,
+     "nu": 39,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 329,
+     "wrong": 192,
+     "asked": 58,
+     "nu": 64,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 25,
+     "wrong": 81,
+     "asked": 8,
+     "nu": 32,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 27,
+     "answered": 35
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 138,
+     "answered": 346
+    }
+   },
+   "gold_total": {
+    "n": 6096,
+    "right": 4999,
+    "wrong": 621,
+    "asked": 153,
+    "nu": 312,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 12,
+     "answered": 120
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 19
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 26,
+     "answered": 38
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 17,
+     "answered": 26
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "enc-C": {
+   "note": "encoder: segmentation + world prior + validator; reading by rules only; routing C; no normalizer",
+   "wall_ms": 50317,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1159,
+     "wrong": 88,
+     "asked": 13,
+     "nu": 36,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 47,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2079,
+     "wrong": 61,
+     "asked": 47,
+     "nu": 54,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 289,
+     "wrong": 66,
+     "asked": 6,
+     "nu": 27,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 991,
+     "right": 865,
+     "wrong": 76,
+     "asked": 14,
+     "nu": 36,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 325,
+     "wrong": 203,
+     "asked": 56,
+     "nu": 59,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 31,
+     "wrong": 83,
+     "asked": 7,
+     "nu": 25,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 20,
+     "answered": 42
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 134,
+     "answered": 350
+    },
+    "operational-ro": {
+     "n": 2480,
+     "right": 1910,
+     "wrong": 231,
+     "asked": 72,
+     "nu": 267,
+     "answered": 0
+    }
+   },
+   "gold_total": {
+    "n": 6096,
+    "right": 5038,
+    "wrong": 601,
+    "asked": 150,
+    "nu": 296,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 11,
+     "answered": 121
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 19
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 17,
+     "answered": 26
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 29,
+     "answered": 23
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "enc-hybrid": {
+   "note": "enc-C plus the NX reading of segments the rules left unparsed (hybrid); no normalizer",
+   "wall_ms": 51333,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1159,
+     "wrong": 88,
+     "asked": 13,
+     "nu": 36,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 125,
+     "wrong": 34,
+     "asked": 5,
+     "nu": 36,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2079,
+     "wrong": 61,
+     "asked": 47,
+     "nu": 54,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 289,
+     "wrong": 64,
+     "asked": 7,
+     "nu": 28,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 991,
+     "right": 865,
+     "wrong": 76,
+     "asked": 14,
+     "nu": 36,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 328,
+     "wrong": 203,
+     "asked": 56,
+     "nu": 56,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 31,
+     "wrong": 83,
+     "asked": 7,
+     "nu": 25,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 20,
+     "answered": 43
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 133,
+     "answered": 351
+    }
+   },
+   "gold_total": {
+    "n": 6096,
+    "right": 5033,
+    "wrong": 617,
+    "asked": 152,
+    "nu": 283,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 11,
+     "answered": 121
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 19
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 17,
+     "answered": 26
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 28,
+     "answered": 24
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "enc-n1": {
+   "note": "enc-C plus the T5 normalizer fallback; reading by rules only",
+   "wall_ms": 56703,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1159,
+     "wrong": 89,
+     "asked": 12,
+     "nu": 36,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 128,
+     "wrong": 31,
+     "asked": 5,
+     "nu": 36,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2078,
+     "wrong": 62,
+     "asked": 46,
+     "nu": 55,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 290,
+     "wrong": 65,
+     "asked": 6,
+     "nu": 27,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 994,
+     "right": 874,
+     "wrong": 73,
+     "asked": 13,
+     "nu": 34,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 344,
+     "wrong": 197,
+     "asked": 49,
+     "nu": 53,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 36,
+     "wrong": 80,
+     "asked": 7,
+     "nu": 23,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 18,
+     "answered": 44
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 131,
+     "answered": 353
+    }
+   },
+   "gold_total": {
+    "n": 6099,
+    "right": 5066,
+    "wrong": 605,
+    "asked": 141,
+    "nu": 276,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 11,
+     "answered": 121
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 20
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 24,
+     "answered": 40
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 4,
+     "answered": 15
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 17,
+     "answered": 26
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 29,
+     "answered": 23
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "enc-neural": {
+   "note": "model first (NX neural), no normalizer",
+   "wall_ms": 44584,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1119,
+     "wrong": 128,
+     "asked": 15,
+     "nu": 34,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 134,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 46,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 1997,
+     "wrong": 121,
+     "asked": 60,
+     "nu": 63,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 295,
+     "wrong": 60,
+     "asked": 6,
+     "nu": 27,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 991,
+     "right": 840,
+     "wrong": 105,
+     "asked": 14,
+     "nu": 32,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 644,
+     "right": 335,
+     "wrong": 216,
+     "asked": 44,
+     "nu": 49,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 35,
+     "wrong": 83,
+     "asked": 6,
+     "nu": 22,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 20,
+     "answered": 42
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 126,
+     "answered": 358
+    }
+   },
+   "gold_total": {
+    "n": 6097,
+    "right": 4912,
+    "wrong": 737,
+    "asked": 152,
+    "nu": 285,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 10,
+     "answered": 122
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 19
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 4,
+     "answered": 6
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 23,
+     "answered": 41
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 14,
+     "answered": 29
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 28,
+     "answered": 24
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-A": {
+   "note": "no model; rules formalizer; the old rule router (routing A)",
+   "wall_ms": 15027,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1140,
+     "wrong": 104,
+     "asked": 14,
+     "nu": 38,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 47,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2082,
+     "wrong": 57,
+     "asked": 49,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 287,
+     "wrong": 66,
+     "asked": 6,
+     "nu": 29,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 987,
+     "right": 818,
+     "wrong": 103,
+     "asked": 23,
+     "nu": 43,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 338,
+     "wrong": 157,
+     "asked": 72,
+     "nu": 76,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 22,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 37,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 29,
+     "answered": 33
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 25
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 141,
+     "answered": 343
+    }
+   },
+   "gold_total": {
+    "n": 6092,
+    "right": 4975,
+    "wrong": 590,
+    "asked": 181,
+    "nu": 334,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 13,
+     "answered": 119
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "rules-C": {
+   "note": "no model; rules formalizer; meta.worlds routing (B, no encoder prior)",
+   "wall_ms": 16292,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1140,
+     "wrong": 104,
+     "asked": 14,
+     "nu": 38,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 2,
+     "asked": 4,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 133,
+     "wrong": 16,
+     "asked": 4,
+     "nu": 47,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2082,
+     "wrong": 57,
+     "asked": 49,
+     "nu": 53,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 287,
+     "wrong": 65,
+     "asked": 7,
+     "nu": 29,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 43,
+     "wrong": 6,
+     "asked": 1,
+     "nu": 7,
+     "answered": 12
+    },
+    "typos": {
+     "n": 991,
+     "right": 821,
+     "wrong": 103,
+     "asked": 24,
+     "nu": 43,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 338,
+     "wrong": 157,
+     "asked": 72,
+     "nu": 76,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 22,
+     "wrong": 79,
+     "asked": 8,
+     "nu": 37,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 29,
+     "answered": 33
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 25
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 141,
+     "answered": 343
+    },
+    "operational-ro": {
+     "n": 2480,
+     "right": 1883,
+     "wrong": 239,
+     "asked": 71,
+     "nu": 287,
+     "answered": 0
+    }
+   },
+   "gold_total": {
+    "n": 6096,
+    "right": 4978,
+    "wrong": 589,
+    "asked": 183,
+    "nu": 334,
+    "answered": 12
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 13,
+     "answered": 119
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 18
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 9,
+     "answered": 5
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 25,
+     "answered": 39
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 14
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 30,
+     "answered": 22
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 17
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "shipped": {
+   "note": "the shipped default: encoder + normalizer + hybrid reading + routing C",
+   "wall_ms": 71154,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1159,
+     "wrong": 89,
+     "asked": 12,
+     "nu": 36,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 132,
+     "wrong": 21,
+     "asked": 4,
+     "nu": 43,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 2078,
+     "wrong": 62,
+     "asked": 46,
+     "nu": 55,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 290,
+     "wrong": 65,
+     "asked": 6,
+     "nu": 27,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 994,
+     "right": 874,
+     "wrong": 73,
+     "asked": 13,
+     "nu": 34,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 643,
+     "right": 347,
+     "wrong": 197,
+     "asked": 49,
+     "nu": 50,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 36,
+     "wrong": 80,
+     "asked": 7,
+     "nu": 23,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 45
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 131,
+     "answered": 353
+    },
+    "operational-ro": {
+     "n": 2480,
+     "right": 1934,
+     "wrong": 231,
+     "asked": 65,
+     "nu": 250,
+     "answered": 0
+    }
+   },
+   "gold_total": {
+    "n": 6099,
+    "right": 5073,
+    "wrong": 595,
+    "asked": 140,
+    "nu": 280,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 11,
+     "answered": 121
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 20
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 5
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 24,
+     "answered": 40
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 4,
+     "answered": 15
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 18,
+     "answered": 25
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 28,
+     "answered": 24
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  },
+  "enc-neural-n1": {
+   "note": "model first (NX neural) with the normalizer",
+   "wall_ms": 152570,
+   "sets": {
+    "operational": {
+     "n": 1296,
+     "right": 1119,
+     "wrong": 129,
+     "asked": 14,
+     "nu": 34,
+     "answered": 0
+    },
+    "minimal-pairs": {
+     "n": 122,
+     "right": 112,
+     "wrong": 4,
+     "asked": 2,
+     "nu": 4,
+     "answered": 0
+    },
+    "knowledge": {
+     "n": 200,
+     "right": 124,
+     "wrong": 23,
+     "asked": 5,
+     "nu": 48,
+     "answered": 0
+    },
+    "dialogues": {
+     "n": 2241,
+     "right": 1997,
+     "wrong": 122,
+     "asked": 59,
+     "nu": 63,
+     "answered": 0
+    },
+    "wrong-tab": {
+     "n": 388,
+     "right": 294,
+     "wrong": 61,
+     "asked": 6,
+     "nu": 27,
+     "answered": 0
+    },
+    "owner-a": {
+     "n": 69,
+     "right": 45,
+     "wrong": 4,
+     "asked": 1,
+     "nu": 8,
+     "answered": 11
+    },
+    "typos": {
+     "n": 995,
+     "right": 864,
+     "wrong": 104,
+     "asked": 11,
+     "nu": 16,
+     "answered": 0
+    },
+    "loose-words": {
+     "n": 644,
+     "right": 354,
+     "wrong": 209,
+     "asked": 38,
+     "nu": 43,
+     "answered": 0
+    },
+    "paraphrases-rt": {
+     "n": 146,
+     "right": 40,
+     "wrong": 80,
+     "asked": 6,
+     "nu": 20,
+     "answered": 0
+    },
+    "owner-b": {
+     "n": 63,
+     "right": 0,
+     "wrong": 0,
+     "asked": 1,
+     "nu": 24,
+     "answered": 38
+    },
+    "owner-c": {
+     "n": 33,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 5,
+     "answered": 28
+    },
+    "ledger": {
+     "n": 484,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 123,
+     "answered": 361
+    }
+   },
+   "gold_total": {
+    "n": 6101,
+    "right": 4949,
+    "wrong": 736,
+    "asked": 142,
+    "nu": 263,
+    "answered": 11
+   },
+   "nogold": {},
+   "ledger_groups": {
+    "Talk: no fact in the catalog / frame not read": {
+     "n": 132,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 10,
+     "answered": 122
+    },
+    "acted on a partly understood sentence": {
+     "n": 4,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 4
+    },
+    "other / wrong result": {
+     "n": 27,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 20
+    },
+    "translation residue / wrong sense / source typo": {
+     "n": 21,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 13
+    },
+    "foreign-world reading": {
+     "n": 8,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 7
+    },
+    "unknown kind (no drawing / stand-in)": {
+     "n": 5,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 4
+    },
+    "not understood (no cause key)": {
+     "n": 14,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 8,
+     "answered": 6
+    },
+    "fragment / list split": {
+     "n": 10,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 4,
+     "answered": 6
+    },
+    "region as a thing / ground replaced": {
+     "n": 7,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 7
+    },
+    "continuation / correction / why-question": {
+     "n": 64,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 22,
+     "answered": 42
+    },
+    "amount / relation / set distribution": {
+     "n": 19,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 4,
+     "answered": 15
+    },
+    "default place": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "no reply": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "avatar part not an operation of the avatar world": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 1,
+     "answered": 2
+    },
+    "session as content (about the discussion)": {
+     "n": 3,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 3
+    },
+    "minimal pair (comparison)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "minimal pair (order)": {
+     "n": 6,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 6
+    },
+    "minimal pair (direction)": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 2,
+     "answered": 0
+    },
+    "dialogue: other turn kinds": {
+     "n": 43,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 14,
+     "answered": 29
+    },
+    "coherence (contradiction)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (default-revision)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (deduce)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "coherence (assumption-visible)": {
+     "n": 1,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 1
+    },
+    "roundtrip: translation changed meaning": {
+     "n": 52,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 28,
+     "answered": 24
+    },
+    "roundtrip: translation kept meaning, reader gap": {
+     "n": 25,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 7,
+     "answered": 18
+    },
+    "roundtrip: answer wording only": {
+     "n": 2,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 2
+    },
+    "wrong world routing (confusion pair)": {
+     "n": 17,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 0,
+     "answered": 17
+    },
+    "roundtrip: English original not read": {
+     "n": 9,
+     "right": 0,
+     "wrong": 0,
+     "asked": 0,
+     "nu": 3,
+     "answered": 6
+    }
+   }
+  }
+ },
+ "latency_ms_single_thread_sample400": {
+  "enc-A": {
+   "n": 400,
+   "mean": 146.2,
+   "p50": 100.5,
+   "p95": 428.8
+  },
+  "enc-B": {
+   "n": 400,
+   "mean": 174.6,
+   "p50": 123,
+   "p95": 519.3
+  },
+  "enc-C-segrules": {
+   "n": 400,
+   "mean": 111.6,
+   "p50": 60.6,
+   "p95": 357.4
+  },
+  "enc-C": {
+   "n": 400,
+   "mean": 165.2,
+   "p50": 130.3,
+   "p95": 451.5
+  },
+  "enc-hybrid": {
+   "n": 400,
+   "mean": 163.4,
+   "p50": 125.9,
+   "p95": 481.8
+  },
+  "enc-n1": {
+   "n": 400,
+   "mean": 179.6,
+   "p50": 131.6,
+   "p95": 503.6
+  },
+  "enc-neural-n1": {
+   "n": 400,
+   "mean": 153.5,
+   "p50": 113.7,
+   "p95": 476.4
+  },
+  "enc-neural": {
+   "n": 400,
+   "mean": 150.6,
+   "p50": 111.4,
+   "p95": 465.5
+  },
+  "rules-A": {
+   "n": 400,
+   "mean": 38.9,
+   "p50": 15.5,
+   "p95": 176.2
+  },
+  "rules-C": {
+   "n": 400,
+   "mean": 38.9,
+   "p50": 18.1,
+   "p95": 174.5
+  },
+  "shipped": {
+   "n": 400,
+   "mean": 185.1,
+   "p50": 138.2,
+   "p95": 519
+  }
+ },
+ "router_world_level_A_B_C": {
+  "encoder": "training/runs/dispatcher-v5s2-c3265 (21 worlds incl. diagram.sketch; none of talk, user.profile)",
+  "sets": {
+   "operational": {
+    "n": 1030,
+    "A": {
+     "n": 1030,
+     "right": 915,
+     "wrong": 29,
+     "asked": 86,
+     "ms": 22775.259777999927
+    },
+    "A1": {
+     "n": 1030,
+     "right": 990,
+     "wrong": 40,
+     "asked": 0,
+     "ms": 0
+    },
+    "B": {
+     "n": 1030,
+     "right": 759,
+     "wrong": 179,
+     "asked": 92,
+     "ms": 2994.908971000044
+    },
+    "C": {
+     "n": 1030,
+     "right": 948,
+     "wrong": 75,
+     "asked": 7,
+     "ms": 5198.416933000019
+    },
+    "Bt": {
+     "n": 1030,
+     "right": 761,
+     "wrong": 176,
+     "asked": 93,
+     "ms": 2400.7858240001465
+    },
+    "Ct": {
+     "n": 1030,
+     "right": 948,
+     "wrong": 75,
+     "asked": 7,
+     "ms": 4892.930636999966
+    }
+   },
+   "minimal-pairs": {
+    "n": 122,
+    "A": {
+     "n": 122,
+     "right": 113,
+     "wrong": 6,
+     "asked": 3,
+     "ms": 3903.388459999951
+    },
+    "A1": {
+     "n": 122,
+     "right": 122,
+     "wrong": 0,
+     "asked": 0,
+     "ms": 0
+    },
+    "B": {
+     "n": 122,
+     "right": 115,
+     "wrong": 7,
+     "asked": 0,
+     "ms": 347.28317199998855
+    },
+    "C": {
+     "n": 122,
+     "right": 117,
+     "wrong": 5,
+     "asked": 0,
+     "ms": 597.5920530000658
+    },
+    "Bt": {
+     "n": 122,
+     "right": 115,
+     "wrong": 7,
+     "asked": 0,
+     "ms": 268.6123089999528
+    },
+    "Ct": {
+     "n": 122,
+     "right": 117,
+     "wrong": 5,
+     "asked": 0,
+     "ms": 544.9461989999909
+    }
+   },
+   "knowledge": {
+    "n": 190,
+    "A": {
+     "n": 190,
+     "right": 105,
+     "wrong": 36,
+     "asked": 49,
+     "ms": 3089.4775419998914
+    },
+    "A1": {
+     "n": 190,
+     "right": 102,
+     "wrong": 88,
+     "asked": 0,
+     "ms": 0
+    },
+    "B": {
+     "n": 190,
+     "right": 130,
+     "wrong": 42,
+     "asked": 18,
+     "ms": 442.40562600003614
+    },
+    "C": {
+     "n": 190,
+     "right": 113,
+     "wrong": 71,
+     "asked": 6,
+     "ms": 799.3205930001423
+    },
+    "Bt": {
+     "n": 190,
+     "right": 102,
+     "wrong": 65,
+     "asked": 23,
+     "ms": 366.5660819999903
+    },
+    "Ct": {
+     "n": 190,
+     "right": 103,
+     "wrong": 81,
+     "asked": 6,
+     "ms": 737.5799049999478
+    }
+   },
+   "dialogues": {
+    "n": 2241,
+    "A": {
+     "n": 2241,
+     "right": 1406,
+     "wrong": 452,
+     "asked": 383,
+     "ms": 115420.82560500006
+    },
+    "A1": {
+     "n": 2241,
+     "right": 1628,
+     "wrong": 613,
+     "asked": 0,
+     "ms": 0
+    },
+    "B": {
+     "n": 2241,
+     "right": 1636,
+     "wrong": 426,
+     "asked": 179,
+     "ms": 6732.080171999129
+    },
+    "C": {
+     "n": 2241,
+     "right": 1785,
+     "wrong": 430,
+     "asked": 26,
+     "ms": 11555.6124670001
+    },
+    "Bt": {
+     "n": 2241,
+     "right": 1638,
+     "wrong": 427,
+     "asked": 176,
+     "ms": 5304.767184000317
+    },
+    "Ct": {
+     "n": 2241,
+     "right": 1785,
+     "wrong": 430,
+     "asked": 26,
+     "ms": 10467.045217000035
+    }
+   },
+   "owner-log": {
+    "n": 13,
+    "A": {
+     "n": 13,
+     "right": 7,
+     "wrong": 0,
+     "asked": 6,
+     "ms": 2381.827403000032
+    },
+    "A1": {
+     "n": 13,
+     "right": 10,
+     "wrong": 3,
+     "asked": 0,
+     "ms": 0
+    },
+    "B": {
+     "n": 13,
+     "right": 7,
+     "wrong": 4,
+     "asked": 2,
+     "ms": 47.63181600003736
+    },
+    "C": {
+     "n": 13,
+     "right": 9,
+     "wrong": 4,
+     "asked": 0,
+     "ms": 79.3706189999939
+    },
+    "Bt": {
+     "n": 13,
+     "right": 7,
+     "wrong": 4,
+     "asked": 2,
+     "ms": 33.77271499997005
+    },
+    "Ct": {
+     "n": 13,
+     "right": 9,
+     "wrong": 4,
+     "asked": 0,
+     "ms": 73.64414199988823
+    }
+   },
+   "wrong-tab": {
+    "n": 188,
+    "A": {
+     "n": 188,
+     "right": 121,
+     "wrong": 38,
+     "asked": 29,
+     "ms": 5221.546505999635
+    },
+    "A1": {
+     "n": 188,
+     "right": 130,
+     "wrong": 58,
+     "asked": 0,
+     "ms": 0
+    },
+    "B": {
+     "n": 188,
+     "right": 73,
+     "wrong": 78,
+     "asked": 37,
+     "ms": 604.5082279999042
+    },
+    "C": {
+     "n": 188,
+     "right": 109,
+     "wrong": 69,
+     "asked": 10,
+     "ms": 1121.9517610004987
+    },
+    "Bt": {
+     "n": 188,
+     "right": 73,
+     "wrong": 75,
+     "asked": 40,
+     "ms": 489.13888899964513
+    },
+    "Ct": {
+     "n": 188,
+     "right": 108,
+     "wrong": 69,
+     "asked": 11,
+     "ms": 1012.6704809998628
+    }
+   },
+   "wrong-tab-ops": {
+    "n": 200,
+    "A": {
+     "n": 200,
+     "right": 141,
+     "wrong": 37,
+     "asked": 22,
+     "ms": 4553.555442000099
+    },
+    "A1": {
+     "n": 200,
+     "right": 181,
+     "wrong": 19,
+     "asked": 0,
+     "ms": 0
+    },
+    "B": {
+     "n": 200,
+     "right": 94,
+     "wrong": 64,
+     "asked": 42,
+     "ms": 685.1478819992044
+    },
+    "C": {
+     "n": 200,
+     "right": 159,
+     "wrong": 37,
+     "asked": 4,
+     "ms": 1158.2799520004774
+    },
+    "Bt": {
+     "n": 200,
+     "right": 99,
+     "wrong": 58,
+     "asked": 43,
+     "ms": 553.1170759996749
+    },
+    "Ct": {
+     "n": 200,
+     "right": 160,
+     "wrong": 36,
+     "asked": 4,
+     "ms": 1072.2936259993585
+    }
+   },
+   "ALL": {
+    "n": 3984,
+    "A": {
+     "n": 3984,
+     "right": 2808,
+     "wrong": 598,
+     "asked": 578,
+     "ms": 157345.88073599958
+    },
+    "A1": {
+     "n": 3984,
+     "right": 3163,
+     "wrong": 821,
+     "asked": 0,
+     "ms": 0
+    },
+    "B": {
+     "n": 3984,
+     "right": 2814,
+     "wrong": 800,
+     "asked": 370,
+     "ms": 11853.965866998344
+    },
+    "C": {
+     "n": 3984,
+     "right": 3240,
+     "wrong": 691,
+     "asked": 53,
+     "ms": 20510.544378001297
+    },
+    "Bt": {
+     "n": 3984,
+     "right": 2795,
+     "wrong": 812,
+     "asked": 377,
+     "ms": 9416.760078999696
+    },
+    "Ct": {
+     "n": 3984,
+     "right": 3230,
+     "wrong": 700,
+     "asked": 54,
+     "ms": 18801.11020699905
+    }
+   }
+  },
+  "holdout": {
+   "art.draw": {
+    "own": {
+     "A_trained": {
+      "n": 424,
+      "right": 320
+     },
+     "C_trained": {
+      "n": 424,
+      "right": 365
+     },
+     "C_masked": {
+      "n": 424,
+      "right": 349
+     },
+     "B": {
+      "n": 424,
+      "right": 359
+     }
+    },
+    "all": {
+     "A_trained": {
+      "n": 3984,
+      "right": 2808
+     },
+     "C_trained": {
+      "n": 3984,
+      "right": 3230
+     },
+     "C_masked": {
+      "n": 3984,
+      "right": 3219
+     },
+     "B": {
+      "n": 3984,
+      "right": 2795
+     }
+    }
+   },
+   "diagram.sketch": {
+    "own": {
+     "A_trained": {
+      "n": 72,
+      "right": 67
+     },
+     "C_trained": {
+      "n": 72,
+      "right": 63
+     },
+     "C_masked": {
+      "n": 72,
+      "right": 58
+     },
+     "B": {
+      "n": 72,
+      "right": 63
+     }
+    },
+    "all": {
+     "A_trained": {
+      "n": 3984,
+      "right": 2808
+     },
+     "C_trained": {
+      "n": 3984,
+      "right": 3230
+     },
+     "C_masked": {
+      "n": 3984,
+      "right": 3239
+     },
+     "B": {
+      "n": 3984,
+      "right": 2795
+     }
+    }
+   },
+   "geo.map": {
+    "own": {
+     "A_trained": {
+      "n": 234,
+      "right": 184
+     },
+     "C_trained": {
+      "n": 234,
+      "right": 209
+     },
+     "C_masked": {
+      "n": 234,
+      "right": 196
+     },
+     "B": {
+      "n": 234,
+      "right": 199
+     }
+    },
+    "all": {
+     "A_trained": {
+      "n": 3984,
+      "right": 2808
+     },
+     "C_trained": {
+      "n": 3984,
+      "right": 3230
+     },
+     "C_masked": {
+      "n": 3984,
+      "right": 3222
+     },
+     "B": {
+      "n": 3984,
+      "right": 2795
+     }
+    }
+   },
+   "games.chess": {
+    "own": {
+     "A_trained": {
+      "n": 172,
+      "right": 116
+     },
+     "C_trained": {
+      "n": 172,
+      "right": 146
+     },
+     "C_masked": {
+      "n": 172,
+      "right": 129
+     },
+     "B": {
+      "n": 172,
+      "right": 134
+     }
+    },
+    "all": {
+     "A_trained": {
+      "n": 3984,
+      "right": 2808
+     },
+     "C_trained": {
+      "n": 3984,
+      "right": 3230
+     },
+     "C_masked": {
+      "n": 3984,
+      "right": 3213
+     },
+     "B": {
+      "n": 3984,
+      "right": 2795
+     }
+    }
+   }
+  },
+  "talk": {
+   "n": 86,
+   "A": {
+    "n": 86,
+    "right": 0,
+    "wrong": 34,
+    "asked": 52,
+    "ms": 1448.420354999951
+   },
+   "B": {
+    "n": 86,
+    "right": 29,
+    "wrong": 40,
+    "asked": 17,
+    "ms": 196.0388330000278
+   },
+   "C": {
+    "n": 86,
+    "right": 11,
+    "wrong": 70,
+    "asked": 5,
+    "ms": 362.86995200008096
+   }
+  },
+  "talkCost": {
+   "operational": {
+    "n": 1030,
+    "B_with": 759,
+    "B_without": 761,
+    "C_with": 948,
+    "C_without": 948
+   },
+   "minimal-pairs": {
+    "n": 122,
+    "B_with": 115,
+    "B_without": 115,
+    "C_with": 117,
+    "C_without": 117
+   },
+   "knowledge": {
+    "n": 110,
+    "B_with": 102,
+    "B_without": 102,
+    "C_with": 103,
+    "C_without": 103
+   },
+   "dialogues": {
+    "n": 2241,
+    "B_with": 1636,
+    "B_without": 1638,
+    "C_with": 1785,
+    "C_without": 1785
+   },
+   "owner-log": {
+    "n": 13,
+    "B_with": 7,
+    "B_without": 7,
+    "C_with": 9,
+    "C_without": 9
+   },
+   "wrong-tab": {
+    "n": 182,
+    "B_with": 72,
+    "B_without": 73,
+    "C_with": 108,
+    "C_without": 108
+   },
+   "wrong-tab-ops": {
+    "n": 200,
+    "B_with": 94,
+    "B_without": 99,
+    "C_with": 159,
+    "C_without": 160
+   }
+  },
+  "confusionB": [
+   [
+    "kids.arith -> ui.avatar",
+    57
+   ],
+   [
+    "kids.tasks -> ui.avatar",
+    50
+   ],
+   [
+    "ui.avatar -> diagram.sketch",
+    40
+   ],
+   [
+    "ui.avatar -> art.draw",
+    25
+   ],
+   [
+    "user.profile -> kids.arith",
+    21
+   ],
+   [
+    "kids.arith -> kids.time",
+    20
+   ],
+   [
+    "ui.avatar -> geo.map",
+    20
+   ],
+   [
+    "kids.shapes -> ui.avatar",
+    19
+   ],
+   [
+    "kids.common -> ui.avatar",
+    18
+   ],
+   [
+    "kids.common -> kids.arith",
+    17
+   ],
+   [
+    "kids.animals -> ui.avatar",
+    17
+   ],
+   [
+    "ui.shell -> ui.avatar",
+    14
+   ],
+   [
+    "talk -> ui.avatar",
+    14
+   ],
+   [
+    "games.chess -> diagram.sketch",
+    14
+   ],
+   [
+    "ui.avatar -> games.chess",
+    13
+   ],
+   [
+    "kids.shop -> ui.avatar",
+    13
+   ],
+   [
+    "ui.help -> ui.avatar",
+    13
+   ],
+   [
+    "talk -> kids.animals",
+    13
+   ],
+   [
+    "user.profile -> geo.map",
+    11
+   ],
+   [
+    "kids.animals -> talk",
+    10
+   ],
+   [
+    "ui.help -> ui.shell",
+    10
+   ],
+   [
+    "user.profile -> ui.avatar",
+    9
+   ],
+   [
+    "geo.map -> data.charts",
+    8
+   ],
+   [
+    "kids.arith -> kids.shop",
+    7
+   ],
+   [
+    "art.draw -> diagram.sketch",
+    7
+   ]
+  ]
+ },
+ "router_note": "world-level comparison of scripts/eval-world-routing.mjs on current main (encoder = dispatcher-v5s2-c3265 scored on CUDA bf16 in one batch, 3984 items): A = encoder top-3 validated by the rules; A1 = encoder top-1; B symbolic; C symbolic + encoder prior.",
+ "sizes_bytes": {
+  "dispatcher_distilbert_int8": 68021618,
+  "dispatcher_with_vocab_meta": 68299175,
+  "normalizer_t5_int8_encoder": 39023020,
+  "normalizer_t5_int8_decoder": 55523781,
+  "normalizer_total_with_tokenizer": 96974516,
+  "bergamot_wasm_engine": 5174294,
+  "bergamot_ro_pair_approx": 29700000,
+  "act_tagger_int8_distilbert": 67000000.0,
+  "act_tagger_int8_minilm6": 23000000.0,
+  "act_tagger_int8_minilm4": 19300000.0
+ },
+ "cold_load_seconds_at_1MB_s": {
+  "dispatcher": 68.3,
+  "normalizer": 97.0,
+  "both": 165.3,
+  "bergamot_engine_plus_ro_pair": 34.9,
+  "act_tagger_minilm4": 19.3
+ },
+ "node_model_load_ms_local_disk": {
+  "dispatcher": [
+   81,
+   94
+  ],
+  "normalizer": 175,
+  "engine_and_worlds": [
+   236,
+   350
+  ]
+ },
+ "rescues_between_configs": {
+  "rules-C -> enc-C (all sets with gold or answered)": {
+   "gained": 140,
+   "by_class": {
+    "phrasing": 69,
+    "typo": 39,
+    "unknown word": 20,
+    "typo+unknown": 8,
+    "multi-clause": 4
+   },
+   "lost": 62,
+   "lost_by_class": {
+    "phrasing": 41,
+    "typo": 14,
+    "unknown word": 5,
+    "typo+unknown": 2
+   }
+  },
+  "enc-C -> enc-C-segrules (rules clause splitter instead of the model segmentation)": {
+   "gained": 17,
+   "lost": 67
+  },
+  "enc-C -> enc-hybrid (NX reader)": {
+   "gained": 6,
+   "lost": 9,
+   "turns_read_by_the_model": 10,
+   "of": 6744
+  },
+  "enc-C -> enc-n1 (normalizer)": {
+   "gained": 42,
+   "by_class": {
+    "phrasing": 34,
+    "unknown word": 5,
+    "typo": 3
+   },
+   "lost": 9
+  },
+  "enc-C -> enc-neural (model first)": {
+   "gained": 74,
+   "lost": 192,
+   "turns_read_by_the_model": 1778
+  },
+  "rules-C -> shipped": {
+   "gained": 181,
+   "lost": 62
+  },
+  "rules-C -> rules-suspect (prototype, refusal-gated)": {
+   "gained": 21,
+   "lost": 11
+  },
+  "rules-C -> rules-also": {
+   "gained": 13,
+   "lost": 1
+  },
+  "rules-C -> rules-also-suspect": {
+   "gained": 25,
+   "lost": 7
+  }
+ },
+ "act_tagger_P3": {
+  "source": "training/results/act-tagger-agreement.json (the checkpoints are not kept in the repository or runs directory, so no end-to-end run was possible)",
+  "agreement_with_the_rules_act_on_doing_worlds_operational_right_n162": {
+   "distilbert": 0.722,
+   "minilm6": 0.691,
+   "minilm4": 0.741
+  },
+  "doing_worlds_n443": {
+   "distilbert": 0.806,
+   "minilm6": 0.761,
+   "minilm4": 0.77
+  }
+ }
+}

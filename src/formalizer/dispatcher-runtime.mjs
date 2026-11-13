@@ -135,7 +135,8 @@ const FULL = 1e9;   // maxLength meaning "do not truncate" for the tokenizer
 import { perf } from './perf.mjs';
 import { budget } from '../dialog/budget.mjs';
 
-export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editTags = null, editTau = 0.5, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3 } = {}) {
+export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editTags = null, editTau = 0.5, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3, segmenter = null } = {}) {
+  // `segmenter(text) -> [[start, end], ...]` (optional, ablation of the model's segmentation): one given segmentation replaces the model's candidates; the default (null) is the shipped behaviour
   if (!ort?.Tensor || !session?.run || !tokenizer?.encode || !worlds?.length) throw new Error('createDispatcherRuntime needs { ort, session, tokenizer, worlds }');
   const cache = new Map();
 
@@ -225,6 +226,13 @@ export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editT
   const predict = (text, context = {}) => perf.time('predict', () => predictRun(text, context));
   const predictRun = async (text, context = {}) => {
     const ctx = { tab: context.tab ?? null, recent_worlds: [...(context.recent_worlds ?? [])], session: [...(context.session ?? [])] };
+    if (segmenter) {
+      const given = (segmenter(text) ?? []).filter(([a, b]) => b > a);
+      const segs = given.length ? given : [[0, text.length]];
+      const seenG = new Map();
+      for (const [a, b] of segs) { const t = text.slice(a, b); if (!seenG.has(t)) seenG.set(t, await rankFull(t, ctx)); }
+      return { text, context: ctx, boundaries: [], segmentations: [{ score: 0, segments: segs.map(([a, b]) => { const r = seenG.get(text.slice(a, b)); return { start: a, end: b, text: text.slice(a, b), worlds: r.worlds, ...(r.simplified ? { simplified: r.simplified } : {}) }; }) }] };
+    }
     const { enc, probs } = await segment(text);
     const cands = candidateSegmentations(text, enc.offsets, probs, beam, uncertain);
     const seen = new Map();
