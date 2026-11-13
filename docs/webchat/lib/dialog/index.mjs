@@ -9,31 +9,31 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=ea505bde99';
-import { loadWorlds } from '../worlds/index.mjs?v=b80f2bb0ed';
-import { validateWorldSet } from '../worlds/validate.mjs?v=8d68f53a2f';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=3ef1962f06';
+import { loadWorlds } from '../worlds/index.mjs?v=498008c228';
+import { validateWorldSet } from '../worlds/validate.mjs?v=488a98bad6';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=20061324be';
+import { createInterpreter } from '../interpreter/index.mjs?v=8099a24cd4';
 import { createReasoner } from '../reasoner/index.mjs?v=73fd11fca2';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=1a704a5980';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=c92f4c2c3a';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=832559362f';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=ad3cc02326';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=0b600540d5';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=624be7140d';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=586074662c';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=5377ba90b8';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=1d9da06254';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=e603001bfa';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
-import { perf } from '../formalizer/perf.mjs?v=fd62b893eb';
-import { guard, TurnAborted } from '../formalizer/guard.mjs?v=ded769d6bc';
+import { perf } from '../formalizer/perf.mjs?v=06e451c3d4';
+import { guard, TurnAborted } from '../formalizer/guard.mjs?v=5528007fa9';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=e468d994f5';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=aaf9e25259';
-import { checkValues } from './value-check.mjs?v=c28ecacc68';
-import { Discourse } from './discourse.mjs?v=4577ba3f2e';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=aaee10754b';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=e2929cefb2';
+import { checkValues } from './value-check.mjs?v=2a2fd64304';
+import { Discourse } from './discourse.mjs?v=e77f1f5814';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=16afc127d1';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=dac48ff86f';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=068a0e5855';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=673367ec02';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=ca5283006a';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=7b9ec8aa78';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -214,14 +214,14 @@ const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
-import { LIMITS } from './time-limits.mjs?v=0212bba139';
+import { LIMITS } from './time-limits.mjs?v=3dc818f0e6';
 import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
 /** A voice dry run is skipped for texts longer than this many words (room talk, not a command). */
 const DRY_MAX_WORDS = 25;
-export const LENIENT_BUDGET_MS = 3000;   // default only; the live value is LIMITS.lenientMs (time-limits.mjs)
+export const LENIENT_MAX_STEPS = 600;   // checks of the leniency stage per message (one per variant or window tried); a step count, not a time, so the reading does not depend on machine speed
 
 const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
 
@@ -521,7 +521,7 @@ export class DialogSession {
 
   async _lenientRun(seg, opts, o, depth = 0) {
     budget.tick('dialog.lenient');
-    const late = () => guard.soft() || (o.until != null && performance.now() > o.until);   // out of time: no further guessing
+    const late = () => guard.soft() || (o.steps != null && ++o.steps > LENIENT_MAX_STEPS);   // out of time: no further guessing
     if (late()) return null;
     const { spell, partial } = o;
     const { set, formalizers } = this.engine;
@@ -545,15 +545,13 @@ export class DialogSession {
     if (spell) {
       // proper names and their wrappers (RD10): whole-value matching against the lexicons, bounded in candidates and time
       try { nameIndex(set); } catch { /* none */ }   // built once per world set (not counted in the budget)
-      const t0 = Date.now(), NAME_BUDGET_MS = 120;
-      const order = [...new Set(ids.filter((w) => w !== '*').flatMap((w) => set.available(w)))];
+            const order = [...new Set(ids.filter((w) => w !== '*').flatMap((w) => set.available(w)))];
       let named = [];
       try { named = perf.timeSync ? perf.timeSync('names', () => nameCandidates(seg.text, { set, vocab: spellVocabulary(set), worldOrder: order })) : nameCandidates(seg.text, { set, vocab: spellVocabulary(set), worldOrder: order }); } catch { named = []; }
       for (const cand of named.slice(0, 4)) {
         // the worlds that own the value first (and are candidates), then the usual order; every world together is tried before the rest
         const own = ids.filter((w) => w !== '*' && cand.worlds.some((cw) => set.available(w).includes(cw)));
         for (const world of [...new Set([...own.slice(0, 2), '*'])]) {
-          if (Date.now() - t0 > NAME_BUDGET_MS) break;
           const res = await parse(world, cand.text);
           if (res) return wrap(res, { corrections: cand.corrections });
         }
@@ -739,7 +737,7 @@ export class DialogSession {
   async _withLeniency(res, opts, o) {
     if (!res.segments.some((x) => x.unparsed) || !(o.spell || o.partial)) return res;
     const segments = [];
-    o = { ...o, until: performance.now() + LIMITS.lenientMs };   // the whole leniency stage of this message (spelling variants, partial windows) shares one time budget
+    o = { ...o, steps: 0 };   // the whole leniency stage of this message (spelling variants, partial windows) shares one step budget
     for (const seg of res.segments) {
       const fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
       if (fixed) segments.push(...fixed); else segments.push(seg);
