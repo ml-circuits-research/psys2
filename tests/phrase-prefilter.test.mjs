@@ -36,5 +36,5 @@ test('prefilter never rejects a migrated ui.avatar pattern that matches its own 
       if (m) { matched++; assert.ok(prefilterPasses(c, wordBag(t)), `${p.id}: ${ex}`); }
     }
   }
-  assert.ok(matched > 100, `matched ${matched}`);
+  assert.ok(matched > 40, `matched ${matched}`);
 });

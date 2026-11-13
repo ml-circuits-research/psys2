@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// ui.avatar (pilot, spec 21): the operations that are not acts: the name, a moment of the stage (wave, nod, dance ...), the host hook `needs`, and what other worlds call
+// ui.avatar (spec 21): the operations that are not acts: the name, a moment of the stage (wave, nod, dance ...), the host hook `needs`, and what other worlds call
 // (avatar.nameOf, avatar.setPartUnknown). The face itself is changed by the acts of the schema (hooks.mjs). Browser-safe.
-import * as F from '../../worlds/ui.avatar/facelogic.mjs';
-import { DEFAULT_FACE } from '../../worlds/ui.avatar/default-face.mjs';
+import * as F from './facelogic.mjs?v=994c02d169';
+import { DEFAULT_FACE } from './default-face.mjs?v=f21fba5192';
 
 export const ok = (value) => ({ status: 'supported', value });
 export const no = (note) => ({ status: 'unsupported', note });
@@ -10,6 +10,9 @@ export const DEFAULT_NAME = 'PSys2';
 /** The faces of the catalog, else the bundled default face: the avatar always has a face. */
 export const dataOf = (ctx) => ctx.knowledge?.peekFaces?.() ?? DEFAULT_FACE;
 export const ensure = (ctx) => { ctx.state.name = typeof ctx.state.name === 'string' && ctx.state.name ? ctx.state.name : DEFAULT_NAME; return ctx.state; };
+
+/** The engine seeds the state of a tool world at the start of a session: the avatar has its name before anything is said. */
+export function initialState() { return { name: DEFAULT_NAME }; }
 
 /** Host hook: what the world needs from the catalog before an operation runs. */
 export function needs() { return ['faces']; }

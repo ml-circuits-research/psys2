@@ -1,6 +1,6 @@
-// Writes worlds-pilot/ui.avatar/schema.sop from the slots of the catalog k.faces (here: the bundled default face generated from it). One kind per slot, the slot's other
+// Writes worlds/ui.avatar/schema.sop from the slots of the catalog k.faces (here: the bundled default face generated from it). One kind per slot, the slot's other
 // names as words; the attributes are the ones the face logic understands (colour, size, place). When k.faces changes: node scripts/build-default-face.mjs, then this, then
-// node scripts/build-schema-world.mjs worlds-pilot/ui.avatar. (spec 21, pilot P1)
+// node scripts/build-schema-world.mjs worlds/ui.avatar. (spec 21, pilot P1)
 import { writeFile } from 'node:fs/promises';
 import { DEFAULT_FACE } from '../worlds/ui.avatar/default-face.mjs';
 
@@ -46,4 +46,4 @@ export function build(data = DEFAULT_FACE) {
   out.push(`@face.size acts.attr${of}\n    type=number\n    min=0.6\n    max=1.5\n    default=1\n    more=bigger\n    more=larger\n    more=longer\n    more=wider\n    less=smaller\n    less=tinier\n    less=shorter\n    less=narrower`);
   return `${out.join('\n\n')}\n`;
 }
-if (import.meta.url === `file://${process.argv[1]}`) { await writeFile(new URL('../worlds-pilot/ui.avatar/schema.sop', import.meta.url), build()); console.log('worlds-pilot/ui.avatar/schema.sop written'); }
+if (import.meta.url === `file://${process.argv[1]}`) { await writeFile(new URL('../worlds/ui.avatar/schema.sop', import.meta.url), build()); console.log('worlds/ui.avatar/schema.sop written'); }

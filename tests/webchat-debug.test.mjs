@@ -35,7 +35,7 @@ test('commands: generated from every loaded world, grouped by operation, with ca
   // worlds that have a tab always have commands; only the library worlds (no patterns of their own) may be empty
   for (const w of engine.set.list()) if (w.tab) assert.ok(!empty.includes(w.id), `${w.id} has a tab but no patterns`);
   const av = commandsOf(engine.set.list().find((w) => w.id === 'ui.avatar'));
-  assert.ok(av.groups.some((g) => g.op === 'avatar.add'));
+  assert.ok(av.groups.some((g) => g.op === 'ui.avatar.make'));
   assert.ok(av.canonical.length > 0 && av.examples > 50);
 });
 
@@ -45,7 +45,7 @@ test('world: manifest, imports, legend, lexicons, operations and templates as da
   assert.ok(info.imports.length >= 1);
   assert.ok(info.legend.types.length > 0 && info.legend.keys.length > 0);
   assert.ok(info.lexicons.length >= 3 && info.counts.words > 20);
-  assert.ok(info.operations.some((o) => o.action === 'avatar.add' && o.impl === 'add' && o.doc));
+  assert.ok(info.operations.some((o) => o.action === 'ui.avatar.make' && o.impl === 'make' && o.doc));
   assert.ok(info.templates.length > 0);
   assert.equal(worldInfo(null), null);
 });

@@ -399,6 +399,12 @@
     word=down
     word=left
     word=right
+    word=to_the_front
+    word=to_the_back
+    word=to_front
+    word=to_back
+    word=forward
+    word=backward
 
 @lex.acts.layout core.lexicon
     class=trigger
