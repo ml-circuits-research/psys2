@@ -15,18 +15,17 @@ export const LANG_TAGS = { en: 'en-US', ro: 'ro-RO', zh: 'zh-CN', zh_hant: 'zh-T
 export const langTag = (lang) => LANG_TAGS[lang] ?? String(lang).replace('_', '-');
 /** The display name of a language in its own language and in English ("română"/"Romanian"), through Intl.DisplayNames. */
 export function langName(lang, { own = false } = {}) {
-  if (LANG_NAMES[lang]) return own ? LANG_NAMES[lang].ro && lang === 'ro' ? 'Română' : LANG_NAMES[lang].en : LANG_NAMES[lang].en;
   const code = lang === 'zh_hant' ? 'zh-Hant' : lang === 'zh' ? 'zh-Hans' : lang;
   try { const n = new Intl.DisplayNames([own ? code : 'en'], { type: 'language' }).of(code); if (n) return own ? n.charAt(0).toLocaleUpperCase(code) + n.slice(1) : n; } catch { /* no Intl names */ }
-  return lang;
+  return LANG_NAMES[lang] ?? lang;   // no Intl names: the English name of the two built-in languages, else the code
 }
 export const EN_VARIANTS = ['en-US', 'en-GB'];
-export const LANG_NAMES = { en: { en: 'English', ro: 'engleză' }, ro: { en: 'Romanian', ro: 'română' } };
+const LANG_NAMES = { en: 'English', ro: 'Romanian' };   // fallback names where Intl.DisplayNames is missing
 
 /** 'en' | 'ro', or `fallback` for anything else (an old saved 'auto', a typo). */
 export const normalize = (lang, fallback = 'en') => (isCode(lang) ? lang : fallback);
-/** The language of the browser: `ro*` is Romanian, everything else English. The migration of an old saved 'auto' uses it. */
-export const browserLanguage = (navLang = globalThis.navigator?.language) => (/^ro\b/i.test(String(navLang ?? '')) ? 'ro' : 'en');
+/** The language of the browser when it is a known language (English, the registered engine languages), else English. The migration of an old saved 'auto' uses it. */
+export const browserLanguage = (navLang = globalThis.navigator?.language) => { const c = String(navLang ?? '').slice(0, 2).toLowerCase(); return known.has(c) ? c : 'en'; };
 /** The BCP-47 tag of a language; `variant` (en-GB) only applies to English. */
 export const tagOf = (lang, variant = '') => (normalize(lang) === 'en' && EN_VARIANTS.includes(variant) ? variant : langTag(normalize(lang)));
 /** The other language. */
@@ -60,12 +59,10 @@ export function createLanguage({ initial = 'en', variant = '' } = {}) {
   };
 }
 
-/** What the one-line hint says, in the selected language ("Pare engleză — schimb limba?"). */
-export function hintText(selected, suggested) {
-  const s = normalize(suggested);
-  return normalize(selected) === 'ro'
-    ? { text: `Pare ${LANG_NAMES[s].ro} — schimb limba?`, button: `Treci pe ${LANG_NAMES[s].ro}` }
-    : { text: `That looks ${langName(s)} — switch the language?`, button: `Switch to ${langName(s)}` };
+/** What the one-line hint says, in English; the host translates both strings for the selected language through the translation layer. */
+export function hintText(_selected, suggested) {
+  const name = langName(normalize(suggested));
+  return { text: `That looks ${name} — switch the language?`, button: `Switch to ${name}` };
 }
 
 /**

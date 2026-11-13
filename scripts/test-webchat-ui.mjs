@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * Headless UI tests of the real webchat at 390x844 (phone) and 1280x800 (desktop): tasks SET, UI1 and DOC.
+ * Headless UI tests of the real webchat at 390x844 (phone) and 1440x900 (desktop): tasks SET, UI1 and DOC.
  *
  *   settings   the full-screen Settings modal: open/close with the x, Esc and Back, tabs, deep link, last tab, every control saves,
  *              voice and text commands, 0 console errors, one screenshot per tab
@@ -22,9 +22,9 @@ import { openChat } from './test-webchat-turns.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const VIEWPORTS = {
   phone: { width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true },
-  desktop: { width: 1280, height: 800, deviceScaleFactor: 1 },
+  desktop: { width: 1440, height: 900, deviceScaleFactor: 1 },
 };
-export const SETTINGS_TABS = ['understanding', 'language', 'voice', 'phrases', 'models', 'developer', 'about'];
+export const SETTINGS_TABS = ['reading', 'languages', 'models', 'privacy', 'developer', 'about'];   // SETTINGS-COHERENT: Reading, Languages and voice, Models, Privacy and history, Developer, About
 
 const results = [];
 const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? `  (${detail})` : ''}`); return ok; };
@@ -60,10 +60,10 @@ async function settingsFor(name, viewport, o) {
     const dlg = await pg.evaluate(() => { const m = document.querySelector('.p2-modal'); const r = m.getBoundingClientRect(); return { role: m.getAttribute('role'), modal: m.getAttribute('aria-modal'), w: Math.round(r.width), h: Math.round(r.height), tabs: [...m.querySelectorAll('[role=tab]')].map((t) => t.dataset.tab), list: !!m.querySelector('[role=tablist]'), title: m.querySelector('.p2-modal-title')?.textContent, focusIn: m.contains(document.activeElement), inertChat: document.querySelector('.p2-chat').inert }; });
     check(`${tag}: role=dialog, aria-modal, title "Settings", a tablist`, dlg.role === 'dialog' && dlg.modal === 'true' && dlg.title === 'Settings' && dlg.list);
     check(`${tag}: full screen (${dlg.w}x${dlg.h})`, dlg.w >= viewport.width - 2 && dlg.h >= viewport.height - 2);
-    check(`${tag}: seven tabs in order`, JSON.stringify(dlg.tabs) === JSON.stringify(SETTINGS_TABS), dlg.tabs.join(','));
+    check(`${tag}: six tabs in order`, JSON.stringify(dlg.tabs) === JSON.stringify(SETTINGS_TABS), dlg.tabs.join(','));
     check(`${tag}: focus is inside, the page behind is inert`, dlg.focusIn && dlg.inertChat);
     // every tab renders its controls
-    const expect = { understanding: ['#p2-f-formalizer', 'input[type=checkbox]'], language: ['#p2-f-language', '#p2-f-translation', '#p2-f-language-hint'], voice: ['#p2-f-voice', '#p2-f-rate', 'input[type=checkbox]'], phrases: ['.p2-plog-list', '.p2-plog-actions', 'select[aria-label="Filter phrases"]', 'input[type=checkbox]'], models: ['.p2-model', '.p2-btn-text'], developer: ['input[type=checkbox]'], about: ['a[data-source-link=about]', '.p2-credits li'] };
+    const expect = { reading: ['#p2-f-reading', 'input[type=checkbox]'], languages: ['#p2-f-language', '#p2-f-translation', '#p2-f-languageHint', '#p2-f-voice', '#p2-f-rate', 'input[type=checkbox]'], privacy: ['.p2-plog-list', '.p2-plog-actions', 'select[aria-label="Filter phrases"]', 'input[type=checkbox]'], models: ['.p2-model', '.p2-btn-text', '[data-card=translation]'], developer: ['input[type=checkbox]'], about: ['a[data-source-link=about]', '.p2-credits li'] };
     for (const t of SETTINGS_TABS) {
       await pg.click(`#p2-st-${t}`);
       await sleep(150);
@@ -71,15 +71,15 @@ async function settingsFor(name, viewport, o) {
       check(`${tag}: tab ${t} renders its controls`, miss.length === 0 && (await activeTab(pg)) === t, miss.join(' | '));
       await shot(c, o, `settings-${t}-${name}`);
     }
-    check(`${tag}: phrase log tab has Export JSON and Clear, no Copy as text`, await (async () => { await pg.click('#p2-st-phrases'); return pg.evaluate(() => { const t = [...document.querySelectorAll('.p2-plog-actions button')].map((b) => b.textContent); return t.includes('Export JSON') && !t.includes('Copy as text') && t.includes('Clear'); }); })());
+    check(`${tag}: phrase log tab has Export JSON and Clear, no Copy as text`, await (async () => { await pg.click('#p2-st-privacy'); return pg.evaluate(() => { const t = [...document.querySelectorAll('.p2-plog-actions button')].map((b) => b.textContent); return t.includes('Export JSON') && !t.includes('Copy as text') && t.includes('Clear'); }); })());
     check(`${tag}: Developer tab shows the build`, await (async () => { await pg.click('#p2-st-developer'); await sleep(300); return pg.evaluate(() => /Built:/.test(document.querySelector('.p2-modal-body').innerText)); })());
     check(`${tag}: Models tab shows the dispatcher and the normalizer status`, await (async () => { await pg.click('#p2-st-models'); await sleep(300); return pg.evaluate(() => { const t = document.querySelector('.p2-modal-body').innerText; return /Dispatcher/.test(t) && /Normalizer/.test(t) && /Status/.test(t) && /loads when needed|loaded|loading|not loaded/.test(t); }); })());
     // tabs by keyboard
     await pg.focus('#p2-st-models'); await pg.keyboard.press('ArrowRight');
-    check(`${tag}: arrow keys move between tabs`, (await activeTab(pg)) === 'developer');
+    check(`${tag}: arrow keys move between tabs`, (await activeTab(pg)) === 'privacy');
     // every checkbox and select saves
     let changed = 0, total = 0, unsaved = [];
-    for (const t of ['understanding', 'language', 'voice', 'phrases', 'developer']) {
+    for (const t of ['reading', 'languages', 'privacy', 'developer']) {
       await pg.click(`#p2-st-${t}`); await sleep(100);
       const ids = await pg.$$eval('.p2-modal-body input[type=checkbox]:not(:disabled)', (e) => e.map((x) => x.id));
       for (const id of ids) {
@@ -91,15 +91,46 @@ async function settingsFor(name, viewport, o) {
       }
     }
     check(`${tag}: every checkbox saves its setting (${changed}/${total})`, changed === total, unsaved.join(', '));
-    await pg.click('#p2-st-language');
+    await pg.click('#p2-st-languages');
     await pg.select('#p2-f-language', 'ro'); await sleep(100);
     check(`${tag}: the language select saves and the header follows`, (await saved(pg)).language === 'ro' && (await pg.$eval('select[aria-label="Language"]', (s) => s.value)) === 'ro');
     await pg.select('#p2-f-language', 'en');
     await pg.select('#p2-f-translation', 'rules'); await sleep(60);
     check(`${tag}: translation saves`, (await saved(pg)).translation === 'rules');
-    await pg.click('#p2-st-understanding');
-    await pg.select('#p2-f-formalizer', 'rules'); await sleep(60);
-    check(`${tag}: formalizer saves and reaches the session`, (await saved(pg)).formalizer === 'rules' && (await pg.evaluate(() => window.psys2.session.formalizer ?? window.psys2.session.settings?.formalizer ?? 'rules')) === 'rules');
+    await pg.click('#p2-st-reading');
+    // SETTINGS-COHERENT 2: one select, Hybrid by default, no Formalizer / Reading strategy pair
+    const rd = await pg.evaluate(() => ({ one: !!document.querySelector('#p2-f-reading'), old: !!document.querySelector('#p2-f-formalizer, #p2-f-reading-strategy'), label: document.querySelector('label[for=p2-f-reading]')?.textContent, values: [...document.querySelectorAll('#p2-f-reading option')].map((o) => o.value), shown: document.querySelector('#p2-f-reading')?.value, text: document.querySelector('.p2-modal-body').innerText, labels: [...document.querySelectorAll('.p2-modal-body label')].map((l) => l.textContent.trim()) }));
+    check(`${tag}: one "How I read your messages" select (hybrid | model | rules), the saved choice is shown, no Formalizer or Reading strategy`, rd.one && !rd.old && rd.label === 'How I read your messages' && rd.values.join() === 'hybrid,model,rules' && rd.shown === (await saved(pg)).reading && /Hybrid \(default\)/.test(rd.text) && !rd.labels.some((l) => /^(Formalizer|Reading strategy)$/.test(l)), JSON.stringify({ one: rd.one, old: rd.old, label: rd.label, shown: rd.shown, hy: /Hybrid \(default\)/.test(rd.text), labels: rd.labels.slice(0, 4) }));
+    await pg.select('#p2-f-reading', 'rules'); await sleep(60);
+    check(`${tag}: rules only saves and reaches the session`, (await saved(pg)).reading === 'rules' && (await saved(pg)).formalizer === 'rules' && (await pg.evaluate(() => window.psys2.session.formalizer ?? window.psys2.session.settings?.formalizer ?? 'rules')) === 'rules');
+    await pg.select('#p2-f-reading', 'model'); await sleep(60);
+    check(`${tag}: model first saves (encoder + neural)`, (await saved(pg)).reading === 'model' && (await saved(pg)).nxStrategy === 'neural' && (await saved(pg)).formalizer === 'encoder');
+    await pg.select('#p2-f-reading', 'hybrid'); await sleep(60);
+    check(`${tag}: hybrid saves (encoder + hybrid)`, (await saved(pg)).reading === 'hybrid' && (await saved(pg)).nxStrategy === 'hybrid');
+    // SETTINGS-COHERENT 5: every option says what it does and when; no internal name in a label
+    const noteProblems = [];
+    for (const t of ['reading', 'languages', 'privacy', 'developer']) {
+      await pg.click(`#p2-st-${t}`); await sleep(100);
+      noteProblems.push(...await pg.evaluate((t) => [...document.querySelectorAll('.p2-modal-body [data-option]')].flatMap((e) => { const l = (e.querySelector('label')?.textContent ?? '').trim(); const bad = []; if (!e.querySelector('.p2-opt-what')?.textContent) bad.push('what'); if (!e.querySelector('.p2-opt-when')?.textContent) bad.push('when'); if (/dispatcher|\bhead\b|\bnx\b|veto|matrix|formalizer|encoder/i.test(l)) bad.push('internal name'); return bad.length ? [`${t}/${e.dataset.option}: ${bad.join(', ')}`] : []; }), t));
+    }
+    check(`${tag}: every option has what / when and no internal name in its label`, noteProblems.length === 0, noteProblems.join(' | '));
+    // SETTINGS-COHERENT 3: the wake word option names no Romanian word
+    await pg.click('#p2-st-languages'); await sleep(80);
+    const wake = await pg.evaluate(() => document.querySelector('[data-option=wakeWord]')?.innerText ?? '');
+    check(`${tag}: the wake word option names the app and the English words only`, /PSys2/.test(wake) && /robot/.test(wake) && !/robotule|asistent|calculator/i.test(wake), wake.replace(/\s+/g, ' ').slice(0, 160));
+    // SETTINGS-COHERENT 6: Developer carries the failed experiment with its numbers
+    await pg.click('#p2-st-developer'); await sleep(80);
+    const dev = await pg.evaluate(() => document.querySelector('[data-option=editHead]')?.innerText ?? '');
+    check(`${tag}: Developer shows "edit head" off with its measured numbers`, /3 recovered|recovers 3/.test(dev) && /7 misled|misleads 7/.test(dev), dev.replace(/\s+/g, ' ').slice(0, 120));
+    // SETTINGS-COHERENT 1: the history uses the whole height of its panel (list bottom reaches the buttons, list at least half of the panel)
+    await pg.click('#p2-st-privacy'); await sleep(150);
+    const hist = await pg.evaluate(() => { const b = document.querySelector('.p2-modal-body').getBoundingClientRect(), l = document.querySelector('.p2-plog-list').getBoundingClientRect(), a = document.querySelector('.p2-plog-actions').getBoundingClientRect(); return { body: [Math.round(b.top), Math.round(b.bottom)], list: [Math.round(l.top), Math.round(l.bottom)], actions: [Math.round(a.top), Math.round(a.bottom)], h: Math.round(l.height), bh: Math.round(b.height) }; });
+    check(`${tag}: the history list fills the rest of its panel (list ${hist.h}px of ${hist.bh}px, ends ${hist.actions[0] - hist.list[1]}px above the buttons, buttons end ${hist.body[1] - hist.actions[1]}px above the panel bottom)`, hist.h >= 200 && hist.actions[0] - hist.list[1] <= 24 && hist.body[1] - hist.actions[1] <= 40, JSON.stringify(hist));
+    await shot(c, o, `settings-history-${name}`);
+    // the models tab: the translation engine
+    await pg.click('#p2-st-models'); await sleep(150);
+    const mt = await pg.evaluate(() => document.querySelector('[data-card=translation]')?.innerText ?? '');
+    check(`${tag}: Models shows the translation engine (browser Translator, selected language)`, /Browser Translator/.test(mt) && /Translation/.test(mt), mt.replace(/\s+/g, ' ').slice(0, 120));
     // spellcheck takes effect at once
     const spell = await pg.evaluate(() => window.psys2.settings.spellcheck);
     check(`${tag}: settings object is live (spellcheck=${spell})`, typeof spell === 'boolean');
@@ -109,7 +140,7 @@ async function settingsFor(name, viewport, o) {
     check(`${tag}: the page is usable again (not inert)`, await pg.evaluate(() => !document.querySelector('.p2-chat').inert));
     // Esc
     await pg.click('button[aria-label="Settings"]'); await waitModal(pg, true);
-    check(`${tag}: reopening shows the last tab (remembered)`, (await activeTab(pg)) === 'understanding');
+    check(`${tag}: reopening shows the last tab (remembered)`, (await activeTab(pg)) === 'models');
     await pg.keyboard.press('Escape');
     check(`${tag}: Esc closes`, await waitModal(pg, false));
     // Back
@@ -127,17 +158,17 @@ async function settingsFor(name, viewport, o) {
     // deep link
     await pg.evaluate(() => { location.hash = '#settings/voice'; });
     await waitModal(pg, true);
-    check(`${tag}: deep link #settings/voice (hashchange)`, (await activeTab(pg)) === 'voice');
+    check(`${tag}: deep link #settings/voice (hashchange) opens Languages and voice`, (await activeTab(pg)) === 'languages');
     await pg.evaluate(() => { location.hash = '#settings/about'; }); await sleep(150);
     check(`${tag}: deep link switches tab while open`, (await activeTab(pg)) === 'about');
     await pg.click('.p2-modal-close'); await waitModal(pg, false);
     // voice and text commands
     await c.say('open the voice settings');
-    check(`${tag}: "open the voice settings" opens the Voice tab`, (await modalOpen(pg)) && (await activeTab(pg)) === 'voice');
+    check(`${tag}: "open the voice settings" opens the Languages and voice tab`, (await modalOpen(pg)) && (await activeTab(pg)) === 'languages');
     await pg.evaluate(() => window.psys2.send('close settings')); await sleep(300);
     check(`${tag}: "close settings" closes`, await waitModal(pg, false));
     await c.say('show the phrase log');
-    check(`${tag}: "show the phrase log" opens the Phrase log tab`, (await modalOpen(pg)) && (await activeTab(pg)) === 'phrases');
+    check(`${tag}: "show the phrase log" opens the Privacy and history tab`, (await modalOpen(pg)) && (await activeTab(pg)) === 'privacy');
     await pg.keyboard.press('Escape'); await waitModal(pg, false);
     await c.say('open settings');
     check(`${tag}: "open settings" opens the modal`, await modalOpen(pg));
@@ -152,6 +183,15 @@ async function settingsFor(name, viewport, o) {
     await d.pg.goBack().catch(() => {});
     check(`${tag}: deep link page: no console errors`, d.consoleErrors.length === 0 && d.errors.length === 0, [...d.consoleErrors, ...d.errors][0] ?? '');
   } finally { await d.close(); }
+  // SETTINGS-COHERENT 2: a device with nothing saved, and one with an old saved pair, both show Hybrid (default)
+  for (const [label, raw] of [['nothing saved', {}], ['old saved rules + neural (v4)', { formalizer: 'rules', nxStrategy: 'neural', settingsVersion: 4 }]]) {
+    const f = await openChat({ ...o, throttle: 1, viewport, hash: '#settings/reading', settings: { __raw: raw } });
+    try {
+      await waitModal(f.pg, true);
+      const v = await f.pg.$eval('#p2-f-reading', (x) => x.value).catch(() => null);
+      check(`${tag}: ${label}: How I read your messages shows Hybrid`, v === 'hybrid', String(v));
+    } finally { await f.close(); }
+  }
 }
 
 async function ui1For(name, viewport, o) {
@@ -169,7 +209,7 @@ async function ui1For(name, viewport, o) {
     await pg.click('.p2-speaker');
     const sp = await pg.evaluate(() => ({ p: document.querySelector('.p2-speaker').getAttribute('aria-pressed'), l: document.querySelector('.p2-speaker').getAttribute('aria-label'), t: document.querySelector('.p2-speaker').title, saved: JSON.parse(localStorage.getItem('psys2.webchat.settings')).speaker }));
     check(`${tag}: the read-aloud toggle says its state and saves (${sp.l})`, sp.p === 'true' && sp.l === 'Read answers aloud: on' && sp.t === sp.l && sp.saved === true);
-    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-voice'); await sleep(100);
+    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-languages'); await sleep(100);
     check(`${tag}: Settings > Voice shows the same switch`, await pg.$eval('#p2-c-read-answers-aloud', (e) => e.checked));
     await pg.click('.p2-modal-close'); await waitModal(pg, false);
     await pg.click('.p2-speaker');
@@ -353,7 +393,7 @@ async function feedbackFor(name, viewport, o) {
     await c.say('nu asta am vrut');
     check(`${tag}: Romanian "nu asta am vrut" is the same complaint`, (await rec()).feedback === 'negative', JSON.stringify((await rec()).feedback));
     await pg.select('select.p2-select', 'en');
-    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-phrases');
+    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-privacy');
     await pg.waitForSelector('.p2-plog-item');
     await pg.evaluate(() => { const s = document.querySelector('select[aria-label="Filter phrases"]'); s.value = 'down'; s.dispatchEvent(new Event('change')); });
     const hist = await pg.$$eval('.p2-plog-item', (e) => e.map((x) => [x.querySelector('.p2-plog-vote')?.textContent.trim(), x.textContent]));
@@ -460,7 +500,7 @@ async function debugFor(name, viewport, o) {
     const ringLen = await pg.evaluate(() => { const d = window.psys2.debug; for (let i = 0; i < 250; i++) d.record({ text: `t${i}`, mode: 'typed', tab: 'robot' }); return d.ring.length; });
     check(`${tag}: the ring buffer keeps 200 turns`, ringLen === 200, String(ringLen));
     // the phrase log's debug dump link
-    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-phrases'); await pg.waitForSelector('.p2-plog-item');
+    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-privacy'); await pg.waitForSelector('.p2-plog-item');
     const dumpLinks = await pg.$$eval('.p2-plog-dump', (e) => e.length);
     check(`${tag}: the phrase log has a debug dump link per message`, dumpLinks >= 1, String(dumpLinks));
     check(`${tag}: 0 console errors`, c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');

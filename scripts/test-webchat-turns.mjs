@@ -47,7 +47,7 @@ export async function openChat({ throttle = 4, chrome, init = null, settings = {
   const pg = await browser.newPage();
   await pg.setViewport(viewport);
   if (throttle > 1) await (await pg.createCDPSession()).send('Emulation.setCPUThrottlingRate', { rate: throttle });
-  await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify({ settingsVersion: 2, ...s })); } catch { /* ignore */ } }, settings);
+  await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify(s.__raw ?? { settingsVersion: 2, ...(s.formalizer === 'rules' && !s.reading ? { reading: 'rules' } : {}), ...s })); } catch { /* ignore */ } }, settings);   // SETTINGS-COHERENT: the one reading choice (`__raw`: seed exactly this object, for migration checks)
   // The on-device Translator and LanguageDetector are faked by default (success mode; `browserApis: false` leaves the page without them, `{ mode, wrong, shape }`
   // picks another; `chat.fake.set({ mode })` flips it later): the code behind them only ever ran in a real Chrome (scripts/lib/fake-browser-apis.mjs).
   const fake = browserApis === false ? null : await installFakeBrowserApis(pg, browserApis);
