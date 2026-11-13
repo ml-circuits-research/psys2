@@ -567,6 +567,7 @@ export function parseLayout(input) {
   if (re('the face|a face|face parts|parts of the face|face') && !re('row|column|grid|circle')) return { op: 'face' };
   const a = /\balign\w*\b.*?\b(left|right|top|bottom|centres?|centers?|middle|horizontally|vertically)\b/.exec(j);
   if (a) return { op: 'align', how: { centre: 'cx', centres: 'cx', center: 'cx', centers: 'cx', middle: 'cx', horizontally: 'cy', vertically: 'cx' }[a[1]] ?? a[1] };
+  if (re('in (?:the |different |separate |all (?:the )?)?(?:different |separate )?corners|each in (?:a|its own|its) (?:different |separate )?corner|different corners?|one in each corner|in all (?:the )?corners')) return { op: 'corners', only: re('top|upper') ? 'top' : re('bottom|lower') ? 'bottom' : null };
   if (re('in a row|in one row|in a line|in one line|line up|lined up|side by side|horizontally in a row|a row')) return { op: 'row' };
   if (re('in a column|in one column|one under the other|a column')) return { op: 'column' };
   if (re('in a grid|a grid|in rows and columns|into a grid')) return { op: 'grid' };
@@ -603,6 +604,11 @@ export function planLayout(op, items, frame, o = {}) {
     const r = Math.max(Math.max(...items.map((i) => Math.max(W(i), H(i)))) * n / (2 * Math.PI) + pad, Math.min(frame.w, frame.h) * 0.2), rr = Math.min(r, Math.min(frame.w, frame.h) / 2 - Math.max(...items.map((i) => Math.max(W(i), H(i)))) / 2 - 4);
     const ccx = Math.min(frame.w - rr - 1, Math.max(rr + 1, cx)), ccy = Math.min(frame.h - rr - 1, Math.max(rr + 1, cy));
     ord.forEach((it, k) => { const a = -Math.PI / 2 + (2 * Math.PI * k) / n; put(it, ccx + rr * Math.cos(a), ccy + rr * Math.sin(a)); });
+  } else if (op === 'corners') {   // each thing in its own corner (reading order: top left, top right, bottom left, bottom right; "top" keeps the top two); more things than corners cycle
+    const top = o.only === 'top', bottom = o.only === 'bottom', slots = [[0, 0], [1, 0], [0, 1], [1, 1]].filter(([, cy]) => !(top && cy === 1) && !(bottom && cy === 0));
+    const mids = [[0.5, 0], [0.5, 1], [0, 0.5], [1, 0.5]].filter(([, my]) => !(top && my === 1) && !(bottom && my === 0)), extra = [...mids, [0.5, 0.5]];   // more things than corners: the middles of the edges, then the centre
+    const all = [...slots, ...extra];
+    ord.forEach((it, k) => { budget.tick('space.corners'); const [sx, sy] = all[k % all.length]; put(it, sx === 0.5 ? frame.w / 2 : sx ? frame.w - pad - W(it) / 2 : pad + W(it) / 2, sy === 0.5 ? frame.h / 2 : sy ? frame.h - pad - H(it) / 2 : pad + H(it) / 2); });
   } else if (op === 'spread') {
     if (n < 3) return { error: 'few' };
     const ax = axisOf(items) ?? 'x', s = items.slice().sort((a, b) => a[ax] - b[ax]), lo = s[0][ax], hi = s.at(-1)[ax];
@@ -897,7 +903,7 @@ function layoutOf(t, ctx) {
   const items = ctx.items ?? [], lay = parseLayout(t);
   if (!lay) return null;
   let group = items;
-  const spec = parseSel((lay.op === 'around' ? t.slice(0, Math.max(0, t.indexOf('around'))) : t).filter((w) => !['row', 'column', 'grid', 'circle', 'places', 'in', 'a', 'size', 'same', 'up'].includes(w)), ctx.kindOf);
+  const spec = parseSel((lay.op === 'around' ? t.slice(0, Math.max(0, t.indexOf('around'))) : t).filter((w) => !['row', 'column', 'grid', 'circle', 'places', 'in', 'a', 'size', 'same', 'up', 'corners', 'corner', 'different', 'separate', 'each', 'top', 'bottom', 'upper', 'lower'].includes(w)), ctx.kindOf);
   if (spec.kind && spec.kind !== '*') group = items.filter((i) => i.kind === spec.kind);
   if (lay.op === 'swap') {
     const j = t.indexOf('and'), strip = (x) => x.filter((w) => !['places', 'with', 'swap', 'switch', 'exchange', 'trade', 'the_places_of'].includes(w));
@@ -925,13 +931,13 @@ function layoutOf(t, ctx) {
     return { type: 'layout', op: 'tidy', ids: Object.keys(out.boxes), boxes: out.boxes, say: 'I tidied up: nothing overlaps now, and the order is the same.' };
   }
   if (group.length < 2 && lay.op !== 'centre') return { type: 'error', say: 'I need at least two things for that.' };
-  const out = planLayout(lay.op, group, ctx.frame, { how: lay.how, desc: lay.desc, knowledge: ctx.knowledge, region: ctx.region });
+  const out = planLayout(lay.op, group, ctx.frame, { how: lay.how, desc: lay.desc, only: lay.only, knowledge: ctx.knowledge, region: ctx.region });
   if (out.error === 'room') return { type: 'error', say: 'They do not fit on top of each other in this space.' };
-  if (!out.error && ['stack', 'height', 'face', 'row', 'column', 'grid', 'circle'].includes(lay.op)) { const fit = enforce(items, out.boxes, ctx.frame, { ground: lay.op === 'face' ? null : ctx.ground, limits: ctx.limits }); out.boxes = fit.boxes; }
+  if (!out.error && ['stack', 'height', 'face', 'row', 'column', 'grid', 'circle', 'corners'].includes(lay.op)) { const fit = enforce(items, out.boxes, ctx.frame, { ground: lay.op === 'face' ? null : ctx.ground, limits: ctx.limits }); out.boxes = fit.boxes; }
   if (out.error === 'few' && lay.op === 'face') return { type: 'error', say: 'I need some parts of a face for that, for example eyes, a nose and a mouth.' };
   if (out.error === 'few') return { type: 'error', say: 'I need at least three things to spread out.' };
   if (out.error) return { type: 'error', say: 'I could not arrange them like that.' };
-  const nm = { row: 'in a row', column: 'in a column', grid: 'in a grid', circle: 'in a circle', spread: 'spread out evenly', align: `aligned (${lay.how === 'cx' ? 'centres' : lay.how})`, size: 'the same size', centre: 'in the centre', stack: 'on top of each other', height: lay.desc ? 'in a row, the biggest first' : 'in a row, from the smallest to the biggest', face: 'in the places of a face' }[lay.op];
+  const nm = { corners: lay.only ? `each in its own ${lay.only} corner` : 'each in its own corner', row: 'in a row', column: 'in a column', grid: 'in a grid', circle: 'in a circle', spread: 'spread out evenly', align: `aligned (${lay.how === 'cx' ? 'centres' : lay.how})`, size: 'the same size', centre: 'in the centre', stack: 'on top of each other', height: lay.desc ? 'in a row, the biggest first' : 'in a row, from the smallest to the biggest', face: 'in the places of a face' }[lay.op];
   return { type: 'layout', op: lay.op, ids: group.map((g) => g.id), boxes: out.boxes, say: `I put ${group.length === 1 ? nameOf(group[0], items) : `the ${group.length} ${group.every((g) => g.kind === group[0].kind) ? plural(group[0].name ?? group[0].kind) : 'things'}`} ${nm}.` };
 }
 
