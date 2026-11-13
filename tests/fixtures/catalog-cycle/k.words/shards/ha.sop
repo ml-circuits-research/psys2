@@ -1,0 +1,7 @@
+@k.words.happen.verb.1 k.words.sense word=happen pos=verb n=1 gloss="come to pass" synonym=hap synonym="go on" synonym="pass off" synonym=occur synonym=pass synonym="fall out" synonym="come about" synonym="take place" core.source="wordnet 3.1"
+@k.words.happen.verb.2 k.words.sense word=happen pos=verb n=2 gloss="happen, occur, or be the case in the course of events or by chance" synonym=befall synonym=bechance is_a=happen kind_of=happen core.source="wordnet 3.1"
+@k.words.happen.verb.3 k.words.sense word=happen pos=verb n=3 gloss="chance to be or do something, without intention or causation" is_a=chance kind_of=chance kind_of=happen core.source="wordnet 3.1"
+@k.words.have.noun.1 k.words.sense word=have pos=noun n=1 gloss="a person who possesses great material wealth" synonym="rich person" synonym="wealthy person" is_a=person kind_of=person kind_of=organism kind_of="living thing" kind_of=whole kind_of=object kind_of="physical entity" kind_of=entity core.source="wordnet 3.1"
+@k.words.have.verb.1 k.words.sense word=have pos=verb n=1 gloss="have or possess, either in a concrete or an abstract sense" synonym="have got" synonym=hold core.source="wordnet 3.1"
+@k.words.have.verb.2 k.words.sense word=have pos=verb n=2 gloss="have as a feature" synonym=feature opposite=lack core.source="wordnet 3.1"
+@k.words.have.verb.3 k.words.sense word=have pos=verb n=3 gloss="go through (mental or physical states or experiences)" synonym=experience synonym=receive synonym=get is_a=undergo kind_of=undergo kind_of=change core.source="wordnet 3.1"

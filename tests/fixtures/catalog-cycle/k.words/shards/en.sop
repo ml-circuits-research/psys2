@@ -1,0 +1,3 @@
+@k.words.encouragement.noun.1 k.words.sense word=encouragement pos=noun n=1 gloss="the expression of approval and support" is_a=approval opposite=discouragement core.source="wordnet 3.1"
+@k.words.encouragement.noun.2 k.words.sense word=encouragement pos=noun n=2 gloss="the act of giving hope or support to someone" synonym=boost is_a=aid core.source="wordnet 3.1"
+@k.words.encouragement.noun.3 k.words.sense word=encouragement pos=noun n=3 gloss="the feeling of being encouraged" is_a=hope core.source="wordnet 3.1"

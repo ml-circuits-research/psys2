@@ -33,7 +33,7 @@ const GOOD = 'add milk to my list';
 const NONSENSE = 'flurble wibble zzz qux';
 
 test('the default strategy is one constant, hybrid; unknown values fall back to it', () => {
-  assert.equal(DEFAULT_NX_STRATEGY, 'hybrid');
+  assert.equal(DEFAULT_NX_STRATEGY, 'rules');
   assert.equal(RUNTIME_DEFAULTS.nxStrategy, 'hybrid');
   assert.equal(DEFAULT_SETTINGS.nxStrategy, 'hybrid');
   for (const v of ['hybrid', 'neural', 'rules']) assert.equal(normalizeNxStrategy(v), v);

@@ -1,0 +1,5 @@
+@k.words.feature.noun.1 k.words.sense word=feature pos=noun n=1 gloss="a prominent attribute or aspect of something" synonym=characteristic is_a=property core.source="wordnet 3.1"
+@k.words.feature.noun.2 k.words.sense word=feature pos=noun n=2 gloss="the characteristic parts of a person's face: eyes and nose and mouth and chin" synonym=lineament is_a="body part" part_of=face core.source="wordnet 3.1"
+@k.words.feature.noun.3 k.words.sense word=feature pos=noun n=3 gloss="the principal (full-length) film in a program at a movie theater" synonym="feature film" is_a=movie core.source="wordnet 3.1"
+@k.words.feature.verb.1 k.words.sense word=feature pos=verb n=1 gloss="have as a feature" synonym=have core.source="wordnet 3.1"
+@k.words.feature.verb.2 k.words.sense word=feature pos=verb n=2 gloss="wear or display in an ostentatious or proud manner" synonym=sport synonym=boast is_a=have core.source="wordnet 3.1"

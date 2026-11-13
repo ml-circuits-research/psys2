@@ -12,12 +12,10 @@ export const GROUPS = Object.freeze([
   ['developer', 'Developer'],
 ]);
 
-/** The "How I read your messages" choices; `value` is the stored `reading` setting. */
-export const READING_MODES = Object.freeze([
-  { value: 'hybrid', label: 'Hybrid (default)', short: 'Hybrid (default): rules first, the model reads what they could not', text: 'Rules first; the model reads what the rules could not.' },
-  { value: 'model', label: 'Model first', short: 'Model first: the model reads, the rules check and fall back', text: 'The model reads first; the rules check it and take over when it fails. Measured worse: 16.2% wrong answers against 0.3% with Hybrid.' },
-  { value: 'rules', label: 'Rules only', short: 'Rules only: no model reads anything', text: 'No model reads anything; fastest, and works before the model has loaded.' },
-]);
+/**
+ * THE RULE (2026-11-14, owner): an option exists only while its values differ measurably (more than 0.3 point on some set), or the person must choose for a reason other than accuracy
+ * (size, privacy, sound, language). A switch that is only being measured lives in EXPERIMENTS (Developer), with its last numbers and the date; an experiment that loses is deleted, not kept as an option.
+ */
 
 /**
  * id, group, key (the stored setting, when one), label, what, when, details, default, reason.
@@ -25,36 +23,26 @@ export const READING_MODES = Object.freeze([
  */
 export const OPTIONS = Object.freeze([
   // ---- Reading ----
-  { id: 'reading', group: 'reading', key: 'reading', label: 'How I read your messages', default: 'hybrid',
-    what: 'Chooses who reads a message first: the rules, the small model, or both.',
-    when: 'Leave it on Hybrid; pick Rules only to avoid the model download or to compare, Model first only to try it (it is measured worse).',
-    details: 'Stored as `reading`; the engine still gets the older `formalizer` (encoder | rules) and `nxStrategy` (hybrid | neural | rules) derived from it.',
-    reason: 'ADR-009: Hybrid adds nothing wrong on the dev data; model first measured 16.2% wrong on the operational set against 0.3% shipped, and about 20 points fewer dialogue turns right.' },
+  { id: 'helperModel', group: 'reading', key: 'helperModel', label: 'Use the helper model for typos and long sentences', default: true,
+    what: 'A small model (68 MB, loaded in the background, never in the way) splits long messages into their parts and hints which tab a short one belongs to; the rules still read and check everything. While it loads, the rules alone answer.',
+    when: 'Keep it on; turn it off on a phone with little data or memory: you lose 0.7 point (43 of 6,100 test messages: misspelled words 4 points better with it, loose-word sentences 2.5 points worse) and the page needs 68 MB less.',
+    details: 'The dispatcher encoder: segmentation and world prior (spec 03 7.14, spec 20). The model never reads a message on its own (the "model first" and hybrid readers were removed: 126 right fewer, and 6 rescued against 9 broken).',
+    reason: 'Ablation 2026-11-13 and the re-measure after the clause cutter and the suspect-word leniency (worker-log 2026-11-14): the gap against the rules alone is in the report.' },
   { id: 'spellcheck', group: 'reading', key: 'spellcheck', label: 'Fix typos and chat abbreviations', default: true,
     what: 'A word that no world knows is replaced by the closest word a world knows, and I say so.',
     when: 'Keep it on; turn it off if I change a word you meant exactly, such as a made-up name.',
     details: 'Spelling repair against the vocabulary of the worlds (spec 03, 7.9).',
     reason: 'Passed its gate (RD1b: a word that is valid in some world is never corrected); evaluations unchanged with it on.' },
-  { id: 'normalizer', group: 'reading', key: 'normalizer', label: 'Rephrase what I cannot read', default: true,
-    what: 'When nothing else reads a sentence, a small model suggests a simpler wording; I use it only if the rules read it and every number, name, colour and negation is kept.',
-    when: 'Keep it on; turn it off to save the model download or if you ever see a rewrite that changed your meaning.',
-    details: 'The normalizer (FLAN-T5 small, int8), spec 03, 7.12.',
-    reason: 'Operational English set: 98.6% right and 0.4% wrong with the dispatcher and the normalizer, against 95.4% and 0.5% with the rules alone (training/RESULTS.md).' },
+  { id: 'normalizer', group: 'reading', key: 'normalizer', label: 'Help me with garbled sentences', default: false,
+    what: 'Downloads a second small model (97 MB, once, kept in this browser). When nothing else reads a sentence it suggests a simpler wording; I use it only if the rules read it and every number, name, colour and negation is kept.',
+    when: 'Only if you often write scrambled or badly misspelled sentences and have the data to spare: it reads 28 more of 6,100 test messages (0.5 point), nothing for ordinary sentences.',
+    details: 'The normalizer (FLAN-T5 small, int8), spec 03, 7.12. Not loaded until you switch this on.',
+    reason: 'Ablation 2026-11-13: +28 right of 6,099 for 97 MB and about 20 ms more per message that the rules could not read; owner decision 2026-11-14: optional download.' },
   { id: 'partial', group: 'reading', key: 'partialUnderstanding', label: 'Do what I understood and say what I ignored', default: true,
     what: 'In a long message, I do the parts I understood and tell you which part I skipped.',
     when: 'Keep it on; turn it off if you prefer me to do nothing unless I understood the whole message.',
     details: 'Partial understanding, spec 03, 7.10.',
     reason: 'In the shipped pipeline since 7.10; evaluations count a partly understood message as right only when the executed part is right.' },
-  { id: 'bestEffort', group: 'reading', key: 'bestEffort', label: 'Guess loose words and say how I took them', default: true,
-    what: 'When words do not form a sentence (“square eyes robot”), I do the most sensible reading and say how I took it.',
-    when: 'Keep it on; turn it off if you want “I did not understand” instead of a guess.',
-    details: 'Best effort with loose words, spec 03, 7.15.',
-    reason: 'In the shipped pipeline since 7.15: a guess is acceptable because the worlds are harmless and the reply says how it was read.' },
-  { id: 'fastPath', group: 'reading', key: 'fastPath', label: 'Answer at once when the rules read everything', default: true,
-    what: 'When the rules understand the whole message and every part works, I answer without waiting for the model.',
-    when: 'Keep it on, especially on a phone; turn it off only to compare with the full pipeline.',
-    details: 'Fast path, spec 06; the model still handles everything the rules did not read.',
-    reason: 'Passed its gate: model ready under 5 s and median answer 300 ms or less at 4x CPU throttle; evaluation unchanged (0 differences).' },
   // ---- Languages and voice ----
   { id: 'language', group: 'languages', key: 'language', label: 'Language', default: 'en',
     what: 'The language you talk to me in and I answer in; the microphone listens in it too.',
@@ -112,30 +100,32 @@ export const OPTIONS = Object.freeze([
   { id: 'showPerf', group: 'developer', key: 'showPerf', label: 'Show timing of the last message', default: false,
     what: 'Shows how long each stage of the last message took.', when: 'Turn it on to see why something felt slow (also ?perf=1 in the address).',
     details: 'Per-stage timing overlay.', reason: 'A diagnostic.' },
-  { id: 'reasoner', group: 'developer', key: 'reasoner', label: 'Engine for shop, arithmetic and task worlds', default: 'matrix',
-    what: 'Chooses which engine answers the shop, arithmetic and tasks worlds; the new one also asks for a missing item, takes “undo that” back and explains “why?”.',
-    when: 'Leave it on the new engine; switch to the old one only to compare. Changing it restarts the engine and forgets the shop, arithmetic and list facts.',
-    details: 'Reasoner: matrix (sopworld library, default) | ops (fallback); spec 15.', reason: 'User decision 2026-11-11: matrix is the default.' },
-  { id: 'worldAware', group: 'developer', key: 'worldAware', label: 'Check readings against what the worlds contain', default: 'veto',
-    what: 'Before acting I check that the reading fits the world: no deleting a thing that does not exist, no game move when no game runs; I say why when I refuse.',
-    when: 'Leave it on; turn it off to act on every reading as before, or set “Observe only” to see what it would have refused.',
-    details: 'World-aware reading, spec 16: veto | choose | observe | off.', reason: 'User decision 2026-11-12: veto is the default.' },
-  { id: 'routing', group: 'developer', key: 'routing', label: 'Which world takes a message', default: 'symbolic+encoder',
-    what: 'Chooses how I pick the world (drawing, chess, shop ...) for a message: rules that give a reason for every choice, with the small model as a hint (default), the rules alone, or the older way where the model proposes and the rules check.',
-    when: 'Leave it on the default; switch to compare. “Show how each answer was made” says why a world was taken.',
-    details: 'Routing, spec 20: symbolic+encoder (C, default) | symbolic (B) | dispatcher (A).', reason: 'Reviewer decision 2026-11-13: C is the default.' },
   { id: 'timeLimits', group: 'developer', key: 'timeLimits', label: 'Time limits', default: 'built-in',
     what: 'How long each stage may take before I stop it and say so.', when: 'Raise them on a very slow device; lower them to test the safety stops.',
     details: 'Clamped to a range per limit; applied at the next turn.', reason: 'Defaults come from the compute-budget work (src/dialog/time-limits.mjs).' },
-  { id: 'acceptRefused', group: 'developer', key: 'encoderAcceptRefused', label: 'Accept game commands when no game is on', default: true,
-    what: 'A command such as “move the piece” is understood even when no game runs, so I can answer “start a game first”.',
-    when: 'Leave it on; turn it off to treat such commands as not understood.',
-    details: 'Accept parses the interpreter refuses by state (spec 03, 7.14).', reason: 'Shipped default of the encoder pipeline (spec 03, 7.14); no separate gate was run.' },
-  { id: 'editHead', group: 'developer', key: 'editHead', label: 'Experimental: let the model reword a part before the rules read it', default: false,
-    what: 'Also tries the model’s own simplified wording of a part that nothing else reads. Measured: it recovers 3 messages and misleads 7.',
-    when: 'Do not turn it on unless you are testing; it is off until the owner decides.',
-    details: 'S1 edit head, spec 03, 7.8; eval-dispatch on 11,303 messages (test + held-out), review decision (e) 2026-11-09.',
-    reason: 'Failed its gate (misled must be at most a quarter of recovered): 3 recovered against 7 misled on eval-dispatch, test + held-out, 11,303 messages.' },
+  { id: 'experiments', group: 'developer', key: null, label: 'Experiments', default: 'see the list',
+    what: 'Switches that are still being measured, each with its last numbers and date. They are here so they can be compared, not because everyday use needs them.',
+    when: 'Only when you test or report a problem. An experiment that loses its measurement is deleted, not kept.',
+    details: 'EXPERIMENTS in settings-catalog.mjs.', reason: 'Owner rule 2026-11-14: one list, not one option per experiment.' },
+]);
+
+/**
+ * What is still being measured. `key` is the stored setting, `values` [value, label], `last` the numbers of the last measurement and `date` when. `restart: true` = changing it restarts the engine.
+ * Dropped by the measurement of 2026-11-13/14: router A, model first, the NX hybrid reader, the edit head, the fast-path and best-effort switches (no difference above 0.3 point).
+ */
+export const EXPERIMENTS = Object.freeze([
+  { id: 'routing', key: 'routing', default: 'symbolic+encoder', label: 'Which world takes a message',
+    values: [['symbolic+encoder', 'Rules with reasons, the helper model as a hint (default)'], ['symbolic', 'Rules with reasons only']],
+    last: 'End to end the two differ by 3 messages of 6,100 (0.05 point); at world level alone 81.3% against 70.6% (3,984 messages). Without the helper model the second one runs.', date: '2026-11-13' },
+  { id: 'worldAware', key: 'worldAware', default: 'veto', label: 'Check readings against what the worlds contain',
+    values: [['veto', 'Check and refuse (default)'], ['choose', 'Check, refuse and choose between readings'], ['observe', 'Only observe (diagnostic)'], ['off', 'Off']],
+    last: 'veto +4 and choose +1 right of 6,092 against off (0.07 point); it refuses what cannot happen and says why (user decision 2026-11-12).', date: '2026-11-13' },
+  { id: 'reasoner', key: 'reasoner', default: 'matrix', label: 'Engine for shop, arithmetic and task worlds', restart: true,
+    values: [['matrix', 'New engine (default)'], ['ops', 'Old engine (fallback)']],
+    last: 'The same results on the suites (both pass every world test); the new one asks for a missing item, takes "undo that" back and explains "why?" (user decision 2026-11-11). Changing it forgets the shop, arithmetic and list facts.', date: '2026-11-11' },
+  { id: 'acceptRefused', key: 'encoderAcceptRefused', default: true, label: 'Accept game commands when no game is on', boolean: true,
+    values: [[true, 'On (default)'], [false, 'Off']],
+    last: 'Not measured separately (shipped with the helper model pipeline); lets me answer "start a game first".', date: 'not measured' },
 ]);
 
 export const optionById = (id) => OPTIONS.find((o) => o.id === id) ?? null;

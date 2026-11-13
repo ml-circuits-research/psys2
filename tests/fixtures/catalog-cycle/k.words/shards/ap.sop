@@ -1,0 +1,2 @@
+@k.words.approve.verb.1 k.words.sense word=approve pos=verb n=1 gloss="give sanction to" synonym=O.K. synonym=okay synonym=sanction is_a=authorize opposite=disapprove core.source="wordnet 3.1"
+@k.words.approve.verb.2 k.words.sense word=approve pos=verb n=2 gloss="judge to be right or commendable; think well of" is_a=evaluate opposite=disapprove core.source="wordnet 3.1"

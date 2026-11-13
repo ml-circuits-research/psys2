@@ -1,0 +1,3 @@
+@k.words.publication.noun.1 k.words.sense word=publication pos=noun n=1 gloss="a copy of a printed work offered for distribution" is_a=work core.source="wordnet 3.1"
+@k.words.publication.noun.2 k.words.sense word=publication pos=noun n=2 gloss="the act of issuing printed materials" synonym=issue is_a=printing core.source="wordnet 3.1"
+@k.words.publication.noun.3 k.words.sense word=publication pos=noun n=3 gloss="the communication of something to the public; making information generally known" is_a=communication core.source="wordnet 3.1"

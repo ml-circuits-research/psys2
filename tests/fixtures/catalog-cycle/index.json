@@ -1,0 +1,598 @@
+{
+ "worlds": [
+  {
+   "id": "k.words",
+   "version": "1",
+   "schema": "k.words/schema.sop",
+   "exports": [
+    "k.words.sense"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.words/shards/ad",
+     "path": "k.words/shards/ad.sop",
+     "wires": 131,
+     "bytes": 30273,
+     "keys": [
+      "ad"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ap",
+     "path": "k.words/shards/ap.sop",
+     "wires": 107,
+     "bytes": 25399,
+     "keys": [
+      "appearance",
+      "approval",
+      "approve"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ar",
+     "path": "k.words/shards/ar.sop",
+     "wires": 194,
+     "bytes": 44374,
+     "keys": [
+      "arrangement",
+      "art",
+      "artwork"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ca",
+     "path": "k.words/shards/ca.sop",
+     "wires": 575,
+     "bytes": 140905,
+     "keys": [
+      "category",
+      "cause"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ch",
+     "path": "k.words/shards/ch.sop",
+     "wires": 518,
+     "bytes": 122370,
+     "keys": [
+      "chance",
+      "change",
+      "choice"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/cl",
+     "path": "k.words/shards/cl.sop",
+     "wires": 267,
+     "bytes": 60457,
+     "keys": [
+      "claim"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/co-1",
+     "path": "k.words/shards/co-1.sop",
+     "wires": 626,
+     "bytes": 140974,
+     "keys": [
+      "collection",
+      "commercial",
+      "commodity",
+      "communicate",
+      "communication",
+      "concept"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/cr",
+     "path": "k.words/shards/cr.sop",
+     "wires": 339,
+     "bytes": 75755,
+     "keys": [
+      "create",
+      "creation"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/de",
+     "path": "k.words/shards/de.sop",
+     "wires": 532,
+     "bytes": 114171,
+     "keys": [
+      "decide",
+      "decision",
+      "delegate",
+      "demand",
+      "demonstration",
+      "desire"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/dr",
+     "path": "k.words/shards/dr.sop",
+     "wires": 188,
+     "bytes": 44604,
+     "keys": [
+      "drawing"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/du",
+     "path": "k.words/shards/du.sop",
+     "wires": 110,
+     "bytes": 23748,
+     "keys": [
+      "duty"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ef",
+     "path": "k.words/shards/ef.sop",
+     "wires": 11,
+     "bytes": 3130,
+     "keys": [
+      "effect"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/en",
+     "path": "k.words/shards/en.sop",
+     "wires": 171,
+     "bytes": 36968,
+     "keys": [
+      "encouragement",
+      "end",
+      "ending",
+      "entertainment"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ev",
+     "path": "k.words/shards/ev.sop",
+     "wires": 67,
+     "bytes": 15422,
+     "keys": [
+      "evaluate"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ex",
+     "path": "k.words/shards/ex.sop",
+     "wires": 262,
+     "bytes": 55142,
+     "keys": [
+      "expect",
+      "expectation"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fe",
+     "path": "k.words/shards/fe.sop",
+     "wires": 155,
+     "bytes": 36540,
+     "keys": [
+      "feature",
+      "feeling"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ha",
+     "path": "k.words/shards/ha.sop",
+     "wires": 380,
+     "bytes": 85168,
+     "keys": [
+      "happen",
+      "have"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ho",
+     "path": "k.words/shards/ho.sop",
+     "wires": 335,
+     "bytes": 73862,
+     "keys": [
+      "hope"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/id",
+     "path": "k.words/shards/id.sop",
+     "wires": 32,
+     "bytes": 7658,
+     "keys": [
+      "idea"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/in",
+     "path": "k.words/shards/in.sop",
+     "wires": 520,
+     "bytes": 108182,
+     "keys": [
+      "induce",
+      "influence",
+      "inform",
+      "intend",
+      "interact"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ki",
+     "path": "k.words/shards/ki.sop",
+     "wires": 98,
+     "bytes": 24174,
+     "keys": [
+      "kind"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/le",
+     "path": "k.words/shards/le.sop",
+     "wires": 254,
+     "bytes": 58044,
+     "keys": [
+      "leader",
+      "leg",
+      "legs"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ma",
+     "path": "k.words/shards/ma.sop",
+     "wires": 670,
+     "bytes": 154902,
+     "keys": [
+      "make"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/me",
+     "path": "k.words/shards/me.sop",
+     "wires": 262,
+     "bytes": 58341,
+     "keys": [
+      "message"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/mo",
+     "path": "k.words/shards/mo.sop",
+     "wires": 382,
+     "bytes": 88969,
+     "keys": [
+      "move",
+      "movement",
+      "movie"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/oc",
+     "path": "k.words/shards/oc.sop",
+     "wires": 30,
+     "bytes": 5828,
+     "keys": [
+      "occupation"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/op",
+     "path": "k.words/shards/op.sop",
+     "wires": 66,
+     "bytes": 15079,
+     "keys": [
+      "opinion"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pl",
+     "path": "k.words/shards/pl.sop",
+     "wires": 206,
+     "bytes": 48286,
+     "keys": [
+      "plan"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pr",
+     "path": "k.words/shards/pr.sop",
+     "wires": 542,
+     "bytes": 118988,
+     "keys": [
+      "printing",
+      "produce",
+      "product",
+      "promotion",
+      "property",
+      "prove"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pu",
+     "path": "k.words/shards/pu.sop",
+     "wires": 178,
+     "bytes": 40178,
+     "keys": [
+      "publication",
+      "purpose"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/qu",
+     "path": "k.words/shards/qu.sop",
+     "wires": 138,
+     "bytes": 29372,
+     "keys": [
+      "quantity"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/re",
+     "path": "k.words/shards/re.sop",
+     "wires": 895,
+     "bytes": 185968,
+     "keys": [
+      "religious",
+      "representation",
+      "request",
+      "result"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sh",
+     "path": "k.words/shards/sh.sop",
+     "wires": 410,
+     "bytes": 91281,
+     "keys": [
+      "show"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/su",
+     "path": "k.words/shards/su.sop",
+     "wires": 354,
+     "bytes": 80296,
+     "keys": [
+      "succeed",
+      "superior",
+      "support"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/th",
+     "path": "k.words/shards/th.sop",
+     "wires": 236,
+     "bytes": 54329,
+     "keys": [
+      "think"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/tr",
+     "path": "k.words/shards/tr.sop",
+     "wires": 438,
+     "bytes": 100730,
+     "keys": [
+      "transfer",
+      "try"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/un",
+     "path": "k.words/shards/un.sop",
+     "wires": 141,
+     "bytes": 29968,
+     "keys": [
+      "undergo"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/wo",
+     "path": "k.words/shards/wo.sop",
+     "wires": 125,
+     "bytes": 30333,
+     "keys": [
+      "work"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "WordNet-3.0",
+     "warnings": []
+    }
+   ],
+   "sources": [
+    "wordnet-3.1"
+   ],
+   "licenses": [
+    "WordNet-3.0"
+   ],
+   "warnings": []
+  }
+ ]
+}

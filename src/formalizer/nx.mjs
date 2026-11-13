@@ -31,7 +31,7 @@ import { guard, TurnAborted } from './guard.mjs';
 
 /** The strategies and the one constant that picks the default. */
 export const NX_STRATEGIES = Object.freeze(['hybrid', 'neural', 'rules']);
-export const DEFAULT_NX_STRATEGY = 'hybrid';
+export const DEFAULT_NX_STRATEGY = 'rules';   // owner decision 2026-11-14 (defaults by the numbers): the rules read; hybrid rescued 6 turns and broke 9 of 6,744, neural is 126 right fewer. The strategies stay for measurement only (no setting offers them).
 /** NX7 gate for the hybrid strategy (A3, with the negation guard); the neural strategy uses the negation guard and a minimum word coverage (0.6). */
 export const NX_GATES = Object.freeze({
   hybrid: Object.freeze({ tauOp: 0.99, tauFrame: 0.9, spans: true, noNeg: true }),
