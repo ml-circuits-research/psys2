@@ -7,7 +7,6 @@
     frames=wish
     frames=ind
     frames=can
-    frames=short
 
 @describe.setpart.v core.describe.arg
     of=$describe.setpart
@@ -141,7 +140,6 @@
     frames=imp
     frames=wish
     frames=can
-    frames=short
 
 @describe.step.next.p core.describe.arg
     of=$describe.step.next
@@ -167,7 +165,6 @@
     frames=imp
     frames=wish
     frames=can
-    frames=short
 
 @describe.step.previous.p core.describe.arg
     of=$describe.step.previous
@@ -193,7 +190,6 @@
     frames=imp
     frames=wish
     frames=can
-    frames=short
 
 @describe.step.different.p core.describe.arg
     of=$describe.step.different
@@ -253,7 +249,6 @@
     frames=imp
     frames=wish
     frames=can
-    frames=short
 
 @describe.setcolor.main.c core.describe.arg
     of=$describe.setcolor.main
@@ -311,14 +306,12 @@
     priority=12
     kind=question
     frames=qnoun
-    frames=ask
     frames=bare
 
 @describe.askcolor.p core.describe.arg
     of=$describe.askcolor
     name=p
     class=lex.ui.avatar.colorparts
-    optional=true
 
 @describe.askcolor.en core.describe.words
     of=$describe.askcolor
@@ -368,12 +361,12 @@
     frames=imp
     frames=wish
     frames=can
-    frames=short
 
 @describe.setchar.who core.describe.arg
     of=$describe.setchar
     name=who
     class=lex.ui.avatar.characters
+    slot=ui.avatar.character.active
 
 @describe.setchar.en core.describe.words
     of=$describe.setchar
@@ -406,7 +399,6 @@
     priority=12
     kind=question
     frames=phr
-    frames=ask
 
 @describe.askchar.en core.describe.words
     of=$describe.askchar
@@ -441,7 +433,6 @@
     frames=imp
     frames=wish
     frames=can
-    frames=short
 
 @describe.setmood.m core.describe.arg
     of=$describe.setmood
@@ -472,7 +463,6 @@
     priority=12
     kind=question
     frames=ask
-    frames=short
 
 @describe.checkmood.m core.describe.arg
     of=$describe.checkmood
@@ -494,7 +484,6 @@
     kind=question
     frames=qnoun
     frames=bare
-    frames=ask
 
 @describe.askmood.en core.describe.words
     of=$describe.askmood
@@ -506,32 +495,6 @@
     noun=$w.en.expression.avatar.askMood
     ask=$w.en.how.avatar.askMood
 
-@describe.setname core.describe
-    op=avatar.setName
-    intent=command
-    emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
-    priority=12
-    frames=imp
-    frames=wish
-    frames=ind
-
-@describe.setname.name core.describe.arg
-    of=$describe.setname
-    name=name
-    class=rest
-
-@describe.setname.en core.describe.words
-    of=$describe.setname
-    lang=en
-    verb=$w.en.call.avatar.setName
-    verb=$w.en.rename.avatar.setName
-    verb=$w.en.name.avatar.setName
-    rest=$w.en.please.avatar.setName
-    prep.name=$w.en.yourself.avatar.setName.name
-    prep.name=$w.en.you.avatar.setName.name
-    prep.name=$w.en.to.avatar.setName.name
-    prep.name=$w.en.as.avatar.setName.name
-
 @describe.askname core.describe
     op=avatar.askName
     intent=query
@@ -540,42 +503,12 @@
     kind=question
     frames=qnoun
     frames=bare
-    frames=ask
 
 @describe.askname.en core.describe.words
     of=$describe.askname
     lang=en
     noun=$w.en.name.avatar.askName
     ask=$w.en.what.avatar.askName
-
-@describe.setseed core.describe
-    op=avatar.setSeed
-    intent=command
-    emit="@{_} core.request action=avatar.setSeed arg.seed=\"{s}\""
-    priority=12
-    frames=imp
-    frames=wish
-    frames=can
-
-@describe.setseed.s core.describe.arg
-    of=$describe.setseed
-    name=s
-    class=rest
-
-@describe.setseed.en core.describe.words
-    of=$describe.setseed
-    lang=en
-    verb=$w.en.use.avatar.setSeed
-    verb=$w.en.set.avatar.setSeed
-    verb=$w.en.try.avatar.setSeed
-    verb=$w.en.change.avatar.setSeed
-    noun=$w.en.seed.avatar.setSeed
-    prep.s=$w.en.to.avatar.setSeed.s
-    prep.s=$w.en.as.avatar.setSeed.s
-    prep.s=$w.en.from.avatar.setSeed.s
-    det.s=$w.en.the.avatar.setSeed.s
-    det.s=$w.en.a.avatar.setSeed.s
-    det.s=$w.en.your.avatar.setSeed.s
 
 @describe.askseed core.describe
     op=avatar.askSeed
@@ -585,7 +518,6 @@
     kind=question
     frames=qnoun
     frames=bare
-    frames=ask
 
 @describe.askseed.en core.describe.words
     of=$describe.askseed
@@ -721,7 +653,6 @@
     priority=12
     frames=imp
     frames=can
-    frames=short
 
 @describe.animate.a core.describe.arg
     of=$describe.animate
@@ -790,7 +721,6 @@
     kind=question
     frames=qnoun
     frames=bare
-    frames=ask
 
 @describe.askpart.p core.describe.arg
     of=$describe.askpart
@@ -810,31 +740,6 @@
     det.p=$w.en.your.avatar.askPart.p
     det.p=$w.en.the.avatar.askPart.p
     det.p=$w.en.ur.avatar.askPart.p
-
-@describe.hasthing core.describe
-    op=avatar.hasThing
-    intent=query
-    emit="@{_} core.request action=avatar.hasThing arg.value={v} arg.text=\"{v}\""
-    priority=12
-    kind=question
-    frames=ask
-
-@describe.hasthing.v core.describe.arg
-    of=$describe.hasthing
-    name=v
-    class=lex.ui.avatar.options
-
-@describe.hasthing.en core.describe.words
-    of=$describe.hasthing
-    lang=en
-    tverb=$w.en.have.avatar.hasThing
-    tverb=$w.en.wear.avatar.hasThing
-    tverb=$w.en.got.avatar.hasThing
-    ask=$w.en.do.avatar.hasThing
-    ask=$w.en.does.avatar.hasThing
-    det.v=$w.en.a.avatar.hasThing.v
-    det.v=$w.en.an.avatar.hasThing.v
-    det.v=$w.en.any.avatar.hasThing.v
 
 @describe.describe core.describe
     op=avatar.describe
@@ -1002,27 +907,8 @@
 @w.en.mood.avatar.askMood core.word text=mood means=avatar.askMood
 @w.en.expression.avatar.askMood core.word text=expression means=avatar.askMood
 @w.en.how.avatar.askMood core.word text=how means=avatar.askMood
-@w.en.call.avatar.setName core.word text=call means=avatar.setName
-@w.en.rename.avatar.setName core.word text=rename means=avatar.setName
-@w.en.name.avatar.setName core.word text=name means=avatar.setName
-@w.en.please.avatar.setName core.word text=please means=avatar.setName
-@w.en.yourself.avatar.setName.name core.word text=yourself means=avatar.setName.name
-@w.en.you.avatar.setName.name core.word text=you means=avatar.setName.name
-@w.en.to.avatar.setName.name core.word text=to means=avatar.setName.name
-@w.en.as.avatar.setName.name core.word text=as means=avatar.setName.name
 @w.en.name.avatar.askName core.word text=name means=avatar.askName
 @w.en.what.avatar.askName core.word text=what means=avatar.askName
-@w.en.use.avatar.setSeed core.word text=use means=avatar.setSeed
-@w.en.set.avatar.setSeed core.word text=set means=avatar.setSeed
-@w.en.try.avatar.setSeed core.word text=try means=avatar.setSeed
-@w.en.change.avatar.setSeed core.word text=change means=avatar.setSeed
-@w.en.seed.avatar.setSeed core.word text=seed means=avatar.setSeed
-@w.en.to.avatar.setSeed.s core.word text=to means=avatar.setSeed.s
-@w.en.as.avatar.setSeed.s core.word text=as means=avatar.setSeed.s
-@w.en.from.avatar.setSeed.s core.word text=from means=avatar.setSeed.s
-@w.en.the.avatar.setSeed.s core.word text=the means=avatar.setSeed.s
-@w.en.a.avatar.setSeed.s core.word text=a means=avatar.setSeed.s
-@w.en.your.avatar.setSeed.s core.word text=your means=avatar.setSeed.s
 @w.en.seed.avatar.askSeed core.word text=seed means=avatar.askSeed
 @w.en.what.avatar.askSeed core.word text=what means=avatar.askSeed
 @w.en.randomize.avatar.surprise core.word text=randomize means=avatar.surprise
@@ -1089,13 +975,5 @@
 @w.en.your.avatar.askPart.p core.word text=your means=avatar.askPart.p
 @w.en.the.avatar.askPart.p core.word text=the means=avatar.askPart.p
 @w.en.ur.avatar.askPart.p core.word text=ur means=avatar.askPart.p
-@w.en.have.avatar.hasThing core.word text=have means=avatar.hasThing
-@w.en.wear.avatar.hasThing core.word text=wear means=avatar.hasThing
-@w.en.got.avatar.hasThing core.word text=got means=avatar.hasThing
-@w.en.do.avatar.hasThing core.word text=do means=avatar.hasThing
-@w.en.does.avatar.hasThing core.word text=does means=avatar.hasThing
-@w.en.a.avatar.hasThing.v core.word text=a means=avatar.hasThing.v
-@w.en.an.avatar.hasThing.v core.word text=an means=avatar.hasThing.v
-@w.en.any.avatar.hasThing.v core.word text=any means=avatar.hasThing.v
 @w.en.describe.avatar.describe core.word text=describe means=avatar.describe
 @w.en.yourself.avatar.describe core.word text=yourself means=avatar.describe
