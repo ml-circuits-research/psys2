@@ -31,6 +31,7 @@ import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mj
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
 import { checkValues } from './value-check.mjs';
 import { attachValues } from '../knowledge/values.mjs';
+import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs';
 import { Discourse } from './discourse.mjs';
 import { Dialogue } from './dialogue.mjs';
 import { turnSteps } from './steps.mjs';
@@ -1242,6 +1243,7 @@ export class DialogSession {
     const tb = opts.budget ?? createBudget();
     const bt = installBudget(tb, { force: !!opts.budget });
     const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
+    if (this.engine.knowledge) await openWordsReady();   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
     try {
       const reply = await this._send(text, opts);
       // INVARIANT (every turn gets a reply): a message that produced no words at all (bare punctuation, an empty reading) is answered, quoting what was typed
@@ -1726,11 +1728,12 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   const set = await loadWorlds(loader, { reasoner: mode });
   const reasoner = mode === 'matrix' ? await createReasoner(set) : null;
   const interp = createInterpreter(set, { ...options, reasoner });
+  attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
     knowledge: options.knowledge ?? null,
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
-    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
+    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachOpenWords(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** meta.worlds (spec 20): loaded by `prepareMeta()` (a host that sets `routing` to symbolic awaits it once); null until then. */
     meta: null,

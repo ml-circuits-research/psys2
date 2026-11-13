@@ -265,7 +265,7 @@ export function createFacts({ source, name = 'catalog' }) {
     return seriesLoading;
   }
 
-  let facesData, facesLoading = null;
+  let facesData, facesLoading = null, partsData, partsLoading = null;
   const api = {
     name, find, thing, stats, loadVocab, world, wires, schema, series,
     /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
@@ -277,6 +277,21 @@ export function createFacts({ source, name = 'catalog' }) {
     },
     /** The faces already built, or undefined (a synchronous read for operations: `ctx.knowledge.peekFaces()`). */
     peekFaces: () => facesData,
+    /** The vocabulary (lemma -> shard ids) once loaded, else null (a synchronous read for the open classes of the readers, src/knowledge/open-words.mjs). */
+    peekVocab: () => vocab,
+    /** Names of the parts of objects (k.objects.part: roof, door, wheel), read once from the k.objects shards; `peekParts()` is the set once loaded, else undefined. */
+    loadParts() {
+      partsLoading ??= (async () => {
+        const out = new Set();
+        const w = await world('k.objects');
+        for (const sh of w?.shards ?? []) for (const r of (await wireIndex(sh.id)).byType.get('k.objects.part') ?? []) { const n = one(r, 'name'); if (n) out.add(String(n).toLowerCase()); }
+        partsData = out;
+        if (!w) partsLoading = null;
+        return out;
+      })();
+      return partsLoading;
+    },
+    peekParts: () => partsData,
     /** True when the catalog could not be read last time (offline or too slow): a miss then is "I cannot reach it", not "it does not exist". */
     unreachable: () => down,
     /** The settled lookup of a word, or undefined when it has not been looked up (a synchronous read for operations: `ctx.knowledge.peek`). null = looked up, not known. */

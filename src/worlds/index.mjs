@@ -203,6 +203,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     id: x.id, wire: x, worldId: id, class: txt(x, 'class'), words: getAll(x, 'word').map((v) => v.v),
     plurals: getAll(x, 'plural').map((v) => v.v), gender: txt(x, 'gender'),
     extends: getAll(x, 'extends').map((v) => String(v.v).replace(/^\$/, '')), exclude: getAll(x, 'exclude').map((v) => String(v.v).toLowerCase()),
+    open: txt(x, 'open') ?? null, catalogs: getAll(x, 'catalog').map((v) => String(v.v)),   // open=knowledge: also any word of these catalog worlds, looked up when a sentence is read (src/knowledge/open-words.mjs)
   }));
   w.phrases = wires['lexicon.sop'].filter((x) => x.type === 'core.phrase').map((x) => ({
     id: x.id.replace(/^phrase\./, ''), wireId: x.id, wire: x, worldId: id, frame: txt(x, 'frame') !== 'false',

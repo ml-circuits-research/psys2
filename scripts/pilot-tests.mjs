@@ -13,6 +13,8 @@ const { createEngine, runWorldTests } = await import('../src/dialog/index.mjs');
 const id = process.argv[2], tab = arg('tab', null), reasoner = arg('reasoner', 'matrix');
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 if (tab) { const cs = engine.createSession.bind(engine); engine.createSession = (o) => { const s = cs(o); s.setWorldState('ui.shell', { activeTab: tab }); return s; }; }
+const { createFacts } = await import('../src/knowledge/facts.mjs'); const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
+if (engine.set.get(id).lexicons.some((l) => l.open) || typeof engine.set.get(id).ops?.needs === 'function') engine.setKnowledge(createFacts({ source: createKnowledgeSource(path.join(DEFAULT_ROOT, '../tests/fixtures/catalog')) }));   // the world reads kinds by lookup in the catalog (the local fixture)
 const r = await runWorldTests(engine, id);
 console.log(JSON.stringify({ world: id, pilot: process.argv.includes('--pilot'), tab, reasoner, passed: r.passed, total: r.total, failed: r.failed.length }));
 if (process.argv.includes('--list')) for (const f of r.failed) console.log(`${f.id}\t${f.message.slice(0, 200)}`);

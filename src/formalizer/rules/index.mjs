@@ -132,6 +132,11 @@ export async function precompile(set, { budgetMs = 10, yieldFn = () => new Promi
  * Every word the loaded worlds know: literals of all patterns (and alternatives) and the words of all lexicons
  * (multi-word entries split into words), with plural forms. Used for typo correction (spec 03 section 1b).
  */
+/** A vocabulary Set that also knows the words the open lexicons find in the catalog (looked up on `has`): the typo corrector must not "fix" a kind of the catalog into another word. */
+export function openVocab(vocab, lex) {
+  if (lex.openHas) { const base = Set.prototype.has; vocab.has = (w) => base.call(vocab, w) || lex.openHas(String(w)); }
+  return vocab;
+}
 export function vocabularyOf(set) {
   return set.memo('vocabulary', () => {
     const vocab = new Set();
@@ -171,6 +176,7 @@ export function vocabularyOf(set) {
     for (const l of lex.lexicons.values()) for (const w of l.words) for (const part of w.split('_')) add(part);
     for (const [s, pl] of lex.plurals) { add(s); add(pl); }
     for (const w of freq.keys()) vocab.add(w);
+    openVocab(vocab, lex);
     return vocab;
   });
 }

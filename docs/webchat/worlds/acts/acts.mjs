@@ -21,7 +21,7 @@
 //   domain.<act>(ctx, req) -> { status, value | note } | undefined   the world's own effect for an act over its own state (the generic executor is used when it returns undefined)
 
 import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
-import { FORMS_MORE, FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=96de33f3eb';
+import { FORMS_MORE, FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=24d59d4971';
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 
 export { ACT_VERBS };
@@ -34,11 +34,11 @@ export const ROLES = ['thing', 'set', 'attribute', 'value', 'place', 'amount'];
 export const ACTS = {
   make: { R: ['thing'], O: ['value', 'place', 'amount'], mutates: true, verb: 'add' },
   remove: { R: ['thing'], O: ['place'], mutates: true, verb: 'remove' },
-  change: { R: ['thing'], O: ['attribute', 'value', 'amount'], mutates: true, verb: 'change', modes: ['set', 'more', 'less', 'next', 'prev', 'other', 'be'] },
+  change: { R: ['thing'], O: ['attribute', 'value', 'amount'], mutates: true, verb: 'change', modes: ['set', 'more', 'less', 'next', 'prev', 'other', 'be', 'same'] },
   place: { R: ['thing', 'place'], O: [], mutates: true, verb: 'move' },
   connect: { R: ['thing', 'place'], O: [], mutates: true, verb: 'connect' },
   group: { R: ['thing'], O: [], mutates: true, verb: 'group', modes: ['group', 'apart'] },
-  pick: { R: ['thing'], O: [], mutates: false, verb: 'select' },
+  pick: { R: ['thing'], O: [], mutates: false, verb: 'select', modes: ['pick', 'none'] },
   ask: { R: [], O: ['thing', 'attribute', 'place'], mutates: false, verb: 'tell', modes: ['what', 'count', 'where', 'why', 'last', 'has', 'options', 'describe', 'state', 'exists'] },
   copy: { R: ['thing'], O: [], mutates: true, verb: 'copy' },
   send: { R: ['thing', 'place'], O: [], mutates: false, verb: 'send' },
@@ -84,7 +84,7 @@ const yes = (v) => v === 'yes' || v === 'true';
 export function parseSchema(wires) {
   const sw = wires.find((w) => w.type === 'acts.schema');
   if (!sw) throw new Error('schema.sop has no acts.schema wire');
-  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout', 'rel', 'thingask', 'matrix', 'reader', 'tabUndo', 'claim', 'signal', ...FLAGS_MORE].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
+  const flags = Object.fromEntries(['self', 'dir', 'be', 'has', 'bare', 'name', 'layout', 'rel', 'thingask', 'matrix', 'reader', 'tabUndo', 'claim', 'signal', 'opencolour', ...FLAGS_MORE].filter((f) => yes(val(sw, f))).map((f) => [f, true]));
   const schema = { id: sw.id, noun: val(sw, 'noun') ?? sw.id, acts: new Set(vals(sw, 'acts')), limits: { items: 100, history: 30, ...Object.fromEntries(sw.entries.filter((e) => e.key.startsWith('limit.')).map((e) => [e.key.slice(6), Number(e.value.v)])) }, kinds: {}, attrs: {}, doc: val(sw, 'doc') ?? '', tabOnly: val(sw, 'tabOnly') === 'yes' };
   for (const a of schema.acts) if (!Object.hasOwn(ACTS, a)) throw new Error(`unknown act '${a}' in ${sw.id}`);
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
@@ -161,8 +161,8 @@ export const FORMS = [
   { id: 'ask.about', act: 'ask', mode: 'describe', match: 'L [describe|tell_me_about|explain] D {thing:rest}', args: ['thing'], priority: 6, if: 'thingask', example: 'Describe the circle.' },
   { id: 'ask.exists', act: 'ask', mode: 'exists', match: '[is|are] there [any|a|an|some]? {thing:rest}', args: ['thing'], priority: 11, if: 'thingask', example: 'Is there a circle?' },
   { id: 'ask.last', act: 'ask', mode: 'last', match: 'what [did|have] you [just]? [do|done|change|changed]', args: [], priority: 11, example: 'What did you just do?' },
-  { id: 'undo', act: 'undo', match: '[$lang.undo]', args: [], priority: 11, example: 'Undo that.' },
-  { id: 'redo', act: 'redo', match: '[$lang.redo]', args: [], priority: 11, example: 'Redo that.' },
+  { id: 'undo', act: 'undo', match: '[$lang.undo]', args: [], priority: 16, example: 'Undo that.' },
+  { id: 'redo', act: 'redo', match: '[$lang.redo]', args: [], priority: 16, example: 'Redo that.' },
   { id: 'save', act: 'save', match: 'L V.save [it|this|everything]? [as|under|called]? {value:words}', args: ['value'], priority: 10, example: 'Save it as lunch.' },
   { id: 'load', act: 'load', match: 'L V.load D {value:words}', args: ['value'], priority: 10, example: 'Load lunch.' },
   // forms of a character-like world (flag `self`) and the open-valued ones (be / has / dir / bare): written once, used by every world that sets the flag
@@ -239,12 +239,12 @@ export function formsFor(schema) {
 // every form may start with a filler ("pls", "so") and end with one ("please", "from now on"): a free capture at the end stops before the tail
 /** Forms whose words say "yourself" / "the avatar" themselves: they claim the sentence for their world on any tab (pattern tabClaim). */
 const CLAIMING = new Set(['make.self', 'make.on', 'change.self', 'change.be.self', 'change.should.self', 'change.call', 'change.call.2', 'change.name.is', 'change.name.called', 'ask.name']);
-const expandMatch = (m, ns) => `[$lang.lead.filler|pls|plz]? ${expandCore(m, ns)} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?`;
+const expandMatch = (m, ns) => `[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? ${expandCore(m, ns)} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?`;
 const expandCore = (m, ns) => m.replace(/\[V\.(\w+)\|/g, '[$acts.verb.$1|').replace(/\{(\w+):words\}$/, '{$1:rest}').replace(/\bL\b/g, '[$lang.lead.polite]?').replace(/\bD\b/g, '[$acts.det]?').replace(/\bV\.(\w+)/g, '[$acts.verb.$1]')
   .replace(/\bREL\b/g, '{rel:lex.acts.rel}').replace(/\{(\w+):ATTR\}/g, `{$1:lex.${ns}.attrs}`).replace(/\{(\w+):VALUE(\??)\}/g, `{$1:lex.${ns}.values$2}`)
   .replace(/\{(\w+):KIND\}/g, `{$1:lex.${ns}.kinds}`).replace(/\{(\w+):MORE\}/g, `{$1:lex.${ns}.more}`).replace(/\{(\w+):LESS\}/g, `{$1:lex.${ns}.less}`)
   .replace(/\{(\w+):TURN\}/g, `{$1:lex.${ns}.turn}`).replace(/\{(\w+):FACTOR\}/g, `{$1:lex.${ns}.factor}`).replace(/\bNOUN\?/g, `{noun:lex.${ns}.nouns?}`).replace(/\bNOUN\b/g, `{noun:lex.${ns}.nouns}`);
-const wordsLex = (id, doc, words, cls = 'modifier', extend = null) => `@${id} core.lexicon\n    class=${cls}\n    doc=${JSON.stringify(doc)}\n${extend ? `    extends=${extend}\n` : ''}${words.map((w) => `    word=${w.replace(/\s+/g, '_')}`).join('\n')}\n`;
+const wordsLex = (id, doc, words, cls = 'modifier', extend = null, open = null) => `@${id} core.lexicon\n    class=${cls}\n    doc=${JSON.stringify(doc)}\n${extend ? `    extends=${extend}\n` : ''}${open?.[0] === '@colour' ? '    open=colour\n' : open?.length ? `    open=knowledge\n${open.map((c) => `    catalog=${c}\n`).join('')}` : ''}${words.map((w) => `    word=${w.replace(/\s+/g, '_')}`).join('\n')}\n`;
 
 /** The generated files of a schema world: { 'lexicon.sop', 'patterns.sop', 'operations.sop', 'templates.sop' } as text. `ns` is the world's namespace. */
 /** An example is offered to people only when every noun of the seating plan it was written with is a word of this schema (a form written about seats is not shown in a world with none). */
@@ -252,9 +252,9 @@ const sayable = (schema, ex) => [...ex.matchAll(/\b(seats?|guests?|tables?)\b/gi
 export function generate(schema, ns, actsUrl = '../acts/acts.mjs', isCanon = () => false) {
   const note = `@gen.${ns}.note core.note\n    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."\n`;
   const lex = [note,
-    wordsLex(`lex.${ns}.kinds`, 'Kinds of things of this world (from schema.sop)', kindWords(schema), 'noun'),
+    wordsLex(`lex.${ns}.kinds`, 'Kinds of things of this world (from schema.sop)', kindWords(schema), 'noun', null, [...new Set(Object.values(schema.kinds).flatMap((k) => k.catalog ?? []))]),
     ...(Object.keys(schema.attrs).length ? [wordsLex(`lex.${ns}.attrs`, 'Attributes (from schema.sop)', attrWords(schema))] : []),
-    ...(valueWords(schema).length || anyColour(schema) ? [wordsLex(`lex.${ns}.values`, 'Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)', valueWords(schema), 'modifier', anyColour(schema) ? '$lex.lang.colour' : null)] : []),
+    ...(valueWords(schema).length || anyColour(schema) ? [wordsLex(`lex.${ns}.values`, 'Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)', valueWords(schema), 'modifier', anyColour(schema) ? '$lex.lang.colour' : null, schema.flags?.opencolour ? ['@colour'] : null)] : []),
     ...(cmpWords(schema, 'more').length ? [wordsLex(`lex.${ns}.more`, 'Comparatives that mean more of an attribute', cmpWords(schema, 'more'))] : []),
     ...(cmpWords(schema, 'less').length ? [wordsLex(`lex.${ns}.less`, 'Comparatives that mean less of an attribute', cmpWords(schema, 'less'))] : []),
     ...(FLAGS_MORE.some((f) => schema.flags?.[f]) ? [wordsLex(`lex.${ns}.nouns`, 'The words for the whole thing the world holds (the picture, the drawing)', [schema.noun, ...(schema.view?.words ?? [])])] : []),
@@ -851,6 +851,23 @@ export function createExecutor(schema, hooks = {}) {
     done();
     return hooks.after?.(ctx, act, req0, r) ?? r;
   }
+  /**
+   * AN ACT GROUP: several acts that one sentence asked for ("put on a hat and make it red") are ONE undo step and one reply, whoever calls them. The library's `act([...])` does the same over
+   * wires (sopworld std.acts, `_actAll`); this bridge keeps the host state (items, board, face) and the English reply, which the library does not carry (specs/21 section 10). The group stops
+   * at the first act that is not done and says why; what the earlier acts did stays one step, so "undo" takes the whole group back.
+   */
+  let groupSeq = 0;
+  function actGroup(ctx, steps) {
+    const turn = `grp${++groupSeq}`, results = [], notes = [];
+    for (let i = 0; i < steps.length; i++) {
+      budget.tick('acts.group');
+      const r = operation(ctx, steps[i].act, { ...steps[i].args, request: { id: `${turn}_w${i + 1}` } });
+      results.push(r); notes.push(String(r.note ?? '').replace(/\.$/, ''));
+      if (r.status !== 'supported' || r.fallback) return { status: r.status === 'supported' ? 'missing' : r.status, note: notes.join('. ') + '.', value: notes.join('. ') + '.', results, failed: i };
+    }
+    const note = `${notes.join('. ')}.`;
+    return { status: 'supported', note, value: note, results };
+  }
   /** SEVERAL THINGS IN ONE ACT ("draw a sun, a cloud and a man", "remove the tree and the house"): the whole phrase is tried first (the world may read a coordination itself); when that is not a supported reply and the thing role is a coordination of noun phrases, each one is run as its own act with the other roles, as one step, and the replies are joined. */
   function operationParts(ctx, act, req0) {
     const r = operation0(ctx, act, req0);
@@ -923,5 +940,5 @@ export function createExecutor(schema, hooks = {}) {
     const sal = new Set(st.focus.ids);
     return st.items.map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
   }
-  return { run, operation, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
+  return { run, operation, group: actGroup, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
 }

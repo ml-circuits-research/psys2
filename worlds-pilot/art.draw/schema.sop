@@ -18,6 +18,9 @@
     turn=yes
     clear=yes
     random=yes
+    none=yes
+    opencolour=yes
+    ground=yes
     acts=make
     acts=remove
     acts=change
@@ -40,6 +43,10 @@
     word=picture
     word=canvas
     word=drawing_board
+    word=page
+    word=art
+    word=artwork
+    word=sketch
 
 @pic.thing acts.kind
     plural=things

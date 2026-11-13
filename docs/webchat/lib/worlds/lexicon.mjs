@@ -3,6 +3,7 @@
  * Built once per WorldSet (memoized).
  */
 import { singularLemma } from '../formalizer/rules/lemma.mjs?v=3f5920ed63';
+import { OpenWords, probeOf } from '../knowledge/open-words.mjs?v=a8bcc81d67';
 
 /** Index of every lexicon of every loaded world. */
 export function lexIndex(set) {
@@ -22,7 +23,11 @@ function build(set) {
     const weights = new Map();
     for (const ph of w.phrases ?? []) phrases.set(ph.id, { id: ph.id, worldId: w.id, alts: ph.alts, frame: ph.frame });
     for (const lex of w.lexicons) {
-      const words = new Set(lex.words.map((x) => x.toLowerCase()));
+      let words = new Set(lex.words.map((x) => x.toLowerCase()));
+      if ((lex.open === 'knowledge' && lex.catalogs?.length) || lex.open === 'colour') {   // an open class: its own words plus the catalog's, by lookup at reading time; a word of the world's other lexicons or of the acts is theirs
+        const closed = words, wid = w.id, me = lex.id;
+        words = new OpenWords(closed, probeOf(lex.open, lex.catalogs), lex.open === 'colour' ? undefined : (entry) => isTaken(entry, wid, me));
+      }
       lexicons.set(lex.id, { id: lex.id, class: lex.class, worldId: w.id, words });
       for (const p of lex.plurals) {
         const [s, pl] = p.toLowerCase().split(':');
@@ -38,7 +43,18 @@ function build(set) {
     // a world with nothing to run (lang.common: phrases and shared lexicons only) is never a routing target
     if (w.patterns.length || w.operations.length) byWorld.set(w.id, weights);
   }
+  // the words that belong to something else than a kind: the other lexicons of the same world and the shared words of the acts (verbs, determiners, prepositions); built on first use
+  let actWords = null;
+  const isTaken = (entry, worldId, selfId) => {
+    actWords ??= (() => { const out = new Set(); for (const [id, ph] of phrases) if (id.startsWith('acts.') || id === 'lang.shape.want') for (const alt of ph.alts) out.add(alt.join('_')); const rel = lexicons.get('lex.acts.rel'); if (rel) for (const x of rel.words) out.add(x); return out; })();
+    if (actWords.has(entry)) return true;
+    for (const [id, l] of lexicons) if (l.worldId === worldId && id !== selfId && !l.words.open && l.class !== 'noun' && l.words.has(entry)) return true;
+    return false;
+  };
   const index = { plurals, irregularSingular, lexicons, names, units, nounsMulti, byWorld, phrases };
+  const openLex = [...lexicons.values()].filter((l) => l.words.open);
+  /** True when a lexicon open to the catalog knows the word (a kind of the catalog, looked up now). */
+  index.openHas = openLex.length ? (word) => openLex.some((l) => l.words.has(word)) : () => false;
   index.lemma = (word) => singularLemma(word, irregularSingular);
   return index;
 }

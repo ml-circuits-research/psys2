@@ -2,7 +2,7 @@
     text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
 @pat.ui.avatar.make core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
@@ -11,7 +11,7 @@
     canonical="Add a hat."
 
 @pat.ui.avatar.make.n core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.make arg.amount=\"{amount}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -20,7 +20,7 @@
     canonical="Add 3 hats."
 
 @pat.ui.avatar.remove core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
@@ -28,7 +28,7 @@
     example="Remove the guest Ann."
 
 @pat.ui.avatar.remove.out core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [kick|throw|take|send|get|put] [$acts.det]? {thing:words} [out|away|off_the_list] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -36,7 +36,7 @@
     example="Kick the guest Ann out."
 
 @pat.ui.avatar.change.of core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=14
@@ -45,7 +45,7 @@
     canonical="Change the colour of hat to red."
 
 @pat.ui.avatar.change.attr core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.ui.avatar.attrs} [to|be|as|into] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.ui.avatar.attrs} [to|be|as|into] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.attribute=\"{attribute}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=13
@@ -53,7 +53,7 @@
     example="Set hat seats to 6."
 
 @pat.ui.avatar.change.value core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.ui.avatar.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.ui.avatar.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -62,7 +62,7 @@
     canonical="Make hat blue."
 
 @pat.ui.avatar.change.add core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.ui.avatar.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.ui.avatar.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=more arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=14
@@ -70,7 +70,7 @@
     example="Add 2 seats to hat."
 
 @pat.ui.avatar.change.add1 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {attribute:lex.ui.avatar.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {attribute:lex.ui.avatar.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=more arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
@@ -78,7 +78,7 @@
     example="Add a seat to hat."
 
 @pat.ui.avatar.change.less core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.ui.avatar.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.ui.avatar.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=less arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=14
@@ -86,7 +86,7 @@
     example="Remove 2 seats from hat."
 
 @pat.ui.avatar.change.less1 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.ui.avatar.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.ui.avatar.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=less arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
@@ -94,7 +94,7 @@
     example="Remove a seat from hat."
 
 @pat.ui.avatar.change.cmp.more core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.ui.avatar.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.ui.avatar.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -103,7 +103,7 @@
     canonical="Make hat bigger."
 
 @pat.ui.avatar.change.cmp.less core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.ui.avatar.less} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.ui.avatar.less} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=less arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -112,7 +112,7 @@
     canonical="Make hat smaller."
 
 @pat.ui.avatar.change.bare core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
@@ -121,7 +121,7 @@
     canonical="Change hat."
 
 @pat.ui.avatar.send.bare core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.send arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
@@ -130,7 +130,7 @@
     canonical="Send hat."
 
 @pat.ui.avatar.send core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.send arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -139,7 +139,7 @@
     canonical="Send hat to the diagram."
 
 @pat.ui.avatar.ask.what core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [is|are] [$acts.det]? {attribute:lex.ui.avatar.attrs} of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -148,7 +148,7 @@
     canonical="What is the colour of hat?"
 
 @pat.ui.avatar.ask.what.is core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] {attribute:lex.ui.avatar.attrs} [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] {attribute:lex.ui.avatar.attrs} [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -157,7 +157,7 @@
     canonical="What colour is hat?"
 
 @pat.ui.avatar.change.should core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.ui.avatar.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.ui.avatar.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -165,7 +165,7 @@
     example="hat should be blue."
 
 @pat.ui.avatar.change.needs core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want|i_need|make|let|give]? [$acts.det]? {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:lex.ui.avatar.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want|i_need|make|let|give]? [$acts.det]? {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:lex.ui.avatar.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.attribute=\"{attribute}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -173,7 +173,7 @@
     example="hat needs 6 seats."
 
 @pat.ui.avatar.ask.count.attr core.pattern
-    match="[$lang.lead.filler|pls|plz]? how_many {attribute:lex.ui.avatar.attrs} [does|do|has|have] [$acts.det]? {thing:words} [have|has|got]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {attribute:lex.ui.avatar.attrs} [does|do|has|have] [$acts.det]? {thing:words} [have|has|got]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=14
@@ -181,7 +181,7 @@
     example="How many seats does hat have?"
 
 @pat.ui.avatar.ask.count core.pattern
-    match="[$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -190,7 +190,7 @@
     canonical="How many hats are there?"
 
 @pat.ui.avatar.ask.why core.pattern
-    match="[$lang.lead.filler|pls|plz]? why [is|are|did|do|was|were|does] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? why [is|are|did|do|was|were|does] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=why arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=question
     priority=11
@@ -199,7 +199,7 @@
     canonical="Why is hat blue?"
 
 @pat.ui.avatar.ask.last core.pattern
-    match="[$lang.lead.filler|pls|plz]? what [did|have] you [just]? [do|done|change|changed] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? what [did|have] you [just]? [do|done|change|changed] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=last arg.text=\"{segment}\""
     kind=question
     priority=11
@@ -208,25 +208,25 @@
     canonical="What did you just do?"
 
 @pat.ui.avatar.undo core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.undo arg.text=\"{segment}\""
     kind=request
-    priority=11
-    tabPriority=19
+    priority=16
+    tabPriority=24
     example="Undo that."
     canonical="Undo that."
 
 @pat.ui.avatar.redo core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.redo arg.text=\"{segment}\""
     kind=request
-    priority=11
-    tabPriority=19
+    priority=16
+    tabPriority=24
     example="Redo that."
     canonical="Redo that."
 
 @pat.ui.avatar.save core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.save arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=10
@@ -235,7 +235,7 @@
     canonical="Save it as lunch."
 
 @pat.ui.avatar.load core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.load] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.load] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.load arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=10
@@ -244,7 +244,7 @@
     canonical="Load lunch."
 
 @pat.ui.avatar.make.self core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [yourself|myself|urself] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [yourself|myself|urself] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -254,7 +254,7 @@
     canonical="Give yourself a beard."
 
 @pat.ui.avatar.make.put core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [put|place|stick|draw|give] [him|her|it|the_avatar|me|yourself|myself]? [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [put|place|stick|draw|give] [him|her|it|the_avatar|me|yourself|myself]? [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=9
@@ -263,7 +263,7 @@
     canonical="Give him a beard."
 
 @pat.ui.avatar.make.on core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [put|place|add|stick|draw] [$acts.det]? {thing:words} [on_yourself|on_your_face|on_your_head|to_yourself|to_your_face|on_you|on_ur_face] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [put|place|add|stick|draw] [$acts.det]? {thing:words} [on_yourself|on_your_face|on_your_head|to_yourself|to_your_face|on_you|on_ur_face] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -273,7 +273,7 @@
     canonical="Add glasses to your face."
 
 @pat.ui.avatar.remove.off core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|put|get|pull] [$acts.det]? {thing:words} [off|away|off_yourself|off_your_face|off_your_head] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|put|get|pull] [$acts.det]? {thing:words} [off|away|off_yourself|off_your_face|off_your_head] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -282,7 +282,7 @@
     canonical="Take the glasses off."
 
 @pat.ui.avatar.remove.without core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|be|look|draw|show_me]? [yourself|me|it|the_face]? [without|with_no] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|be|look|draw|show_me]? [yourself|me|it|the_face]? [without|with_no] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -290,7 +290,7 @@
     example="Without a hat."
 
 @pat.ui.avatar.change.another core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|i_want|have|use|put_on|wear]? [another|a_different|a_new|another_one] {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|i_want|have|use|put_on|wear]? [another|a_different|a_new|another_one] {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=other arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -299,7 +299,7 @@
     canonical="Try a different hat."
 
 @pat.ui.avatar.change.next core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to]? [$acts.det]? [next|following|one_more] {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to]? [$acts.det]? [next|following|one_more] {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=next arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -308,7 +308,7 @@
     canonical="Try the next hat."
 
 @pat.ui.avatar.change.prev core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to|go_back_to]? [$acts.det]? [previous|prior|one_before] {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to|go_back_to]? [$acts.det]? [previous|prior|one_before] {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=prev arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -316,7 +316,7 @@
     example="Previous nose."
 
 @pat.ui.avatar.change.swap core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|change|switch|replace|exchange] [$acts.det]? {thing:words} [for|with|to|into|by] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|change|switch|replace|exchange] [$acts.det]? {thing:words} [for|with|to|into|by] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -325,7 +325,7 @@
     canonical="Change the hat to a crown."
 
 @pat.ui.avatar.change.self core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|change|paint] [yourself|urself|the_avatar|the_face|your_face|ur_face] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|change|paint] [yourself|urself|the_avatar|the_face|your_face|ur_face] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -335,7 +335,7 @@
     canonical="Paint yourself green."
 
 @pat.ui.avatar.change.be core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [be|become|look|feel|turn_into|change_into|transform_into|morph_into|look_like|act_like] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [be|become|look|feel|turn_into|change_into|transform_into|morph_into|look_like|act_like] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=be arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=10
@@ -344,7 +344,7 @@
     canonical="Look happy."
 
 @pat.ui.avatar.change.be.self core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|let|get] [yourself|urself|myself|the_avatar|the_robot|the_face] [look|feel|be|become]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|let|get] [yourself|urself|myself|the_avatar|the_robot|the_face] [look|feel|be|become]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=be arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -354,7 +354,7 @@
     canonical="Make yourself happy."
 
 @pat.ui.avatar.change.should.self core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$acts.det]? [avatar|robot|face] [should|must|has_to|needs_to|shall] [be|become|look|feel] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? [avatar|robot|face] [should|must|has_to|needs_to|shall] [be|become|look|feel] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=be arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -364,7 +364,7 @@
     canonical="The avatar should be a clown."
 
 @pat.ui.avatar.place.dir core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [move|put|bring|push|pull|take|shift|raise|lower|make] [$acts.det]? {thing:words} {rel:lex.acts.dir} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [move|put|bring|push|pull|take|shift|raise|lower|make] [$acts.det]? {thing:words} {rel:lex.acts.dir} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
     kind=request
     priority=13
@@ -373,7 +373,7 @@
     canonical="Move the eyes closer together."
 
 @pat.ui.avatar.place.dir.bare core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} {rel:lex.acts.dir} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} {rel:lex.acts.dir} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
     kind=request
     priority=6
@@ -381,7 +381,7 @@
     example="Eyes closer together."
 
 @pat.ui.avatar.ask.has core.pattern
-    match="[$lang.lead.filler|pls|plz]? [do|did|can|could] [you|u] [have|got|wear|see|has] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [do|did|can|could] [you|u] [have|got|wear|see|has] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -390,7 +390,7 @@
     canonical="Do you have glasses?"
 
 @pat.ui.avatar.ask.has.2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [have|are] [you|u] [got|wearing|having] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [have|are] [you|u] [got|wearing|having] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=has arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -399,7 +399,7 @@
     canonical="Are you wearing a hat?"
 
 @pat.ui.avatar.ask.options core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] {thing:words} [are_there|can_you_have|can_you_wear|can_i_pick|can_i_choose|can_you_draw|can_you_put_on|can_i_try|can_you_show] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] {thing:words} [are_there|can_you_have|can_you_wear|can_i_pick|can_i_choose|can_you_draw|can_you_put_on|can_i_try|can_you_show] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=options arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -408,7 +408,7 @@
     canonical="What hats are there?"
 
 @pat.ui.avatar.ask.options.all core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] [can|could] [i|you|u] [change|customize|customise|modify|adjust|tweak|wear|put_on] [about_you|about_yourself|on_you]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|which] [can|could] [i|you|u] [change|customize|customise|modify|adjust|tweak|wear|put_on] [about_you|about_yourself|on_you]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=options arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -417,7 +417,7 @@
     canonical="What can I change?"
 
 @pat.ui.avatar.ask.state core.pattern
-    match="[$lang.lead.filler|pls|plz]? [how_do_you_feel|how_are_you_feeling|what_is_your_mood|what_is_your_expression|what_mood_are_you_in|how_are_you_looking|how_do_you_look_now] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [how_do_you_feel|how_are_you_feeling|what_is_your_mood|what_is_your_expression|what_mood_are_you_in|how_are_you_looking|how_do_you_look_now] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=state arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -426,7 +426,7 @@
     canonical="What is your expression?"
 
 @pat.ui.avatar.ask.describe core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe_yourself|describe_you|what_do_you_look_like|what_do_you_look_like_now|what_are_you_wearing|what_do_you_have_on|how_do_you_look|tell_me_what_you_look_like|describe_your_face|describe_your_look|describe_your_avatar|what_do_you_look_like_today] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe_yourself|describe_you|what_do_you_look_like|what_do_you_look_like_now|what_are_you_wearing|what_do_you_have_on|how_do_you_look|tell_me_what_you_look_like|describe_your_face|describe_your_look|describe_your_avatar|what_do_you_look_like_today] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=describe arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -435,7 +435,7 @@
     canonical="What are you wearing?"
 
 @pat.ui.avatar.make.random core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [surprise|surprise_me|shuffle_yourself|randomise_yourself|randomize_yourself|make_a_random_face|a_random_face|something_random] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [surprise|surprise_me|shuffle_yourself|randomise_yourself|randomize_yourself|make_a_random_face|a_random_face|something_random] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.make arg.mode=random arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -444,7 +444,7 @@
     canonical="Surprise me."
 
 @pat.ui.avatar.remove.reset core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [reset|reset_yourself|start_over|start_again|clear_your_face|go_back_to_normal|go_default] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [reset|reset_yourself|start_over|start_again|clear_your_face|go_back_to_normal|go_default] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.remove arg.mode=all arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -452,7 +452,7 @@
     example="Reset."
 
 @pat.ui.avatar.change.call core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [call|name|rename] [yourself|urself|the_avatar] [to|as]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [call|name|rename] [yourself|urself|the_avatar] [to|as]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"name\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -462,7 +462,7 @@
     canonical="Call yourself Robi."
 
 @pat.ui.avatar.change.call.2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_will_call_you|i_am_calling_you|i_call_you|we_will_call_you|from_now_on_i_will_call_you|call_you] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_will_call_you|i_am_calling_you|i_call_you|we_will_call_you|from_now_on_i_will_call_you|call_you] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"name\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -472,7 +472,7 @@
     canonical="I will call you Robi."
 
 @pat.ui.avatar.change.name.is core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [from_now_on]? [your|ur] name [is|will_be|shall_be] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [from_now_on]? [your|ur] name [is|will_be|shall_be] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"name\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -482,7 +482,7 @@
     canonical="Your name is Robi."
 
 @pat.ui.avatar.change.name.called core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [from_now_on]? [you|u] [are|r] [called|named] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [from_now_on]? [you|u] [are|r] [called|named] {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.change arg.mode=set arg.attribute=\"name\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -492,7 +492,7 @@
     canonical="You are called Ziggy."
 
 @pat.ui.avatar.ask.name core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what_is_your_name|what_are_you_called|what_do_i_call_you|what_is_ur_name|tell_me_your_name] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what_is_your_name|what_are_you_called|what_do_i_call_you|what_is_ur_name|tell_me_your_name] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"name\" arg.thing=\"yourself\" arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -502,7 +502,7 @@
     canonical="What is your name?"
 
 @pat.ui.avatar.bare.mod core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {pre:words} {thing:lex.ui.avatar.kinds} [at_me|a_little|twice]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {pre:words} {thing:lex.ui.avatar.kinds} [at_me|a_little|twice]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.make arg.mode=bare arg.pre=\"{pre}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=3
@@ -510,7 +510,7 @@
     example="Round glasses."
 
 @pat.ui.avatar.bare core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:lex.ui.avatar.kinds} [at_me|a_little|twice]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:lex.ui.avatar.kinds} [at_me|a_little|twice]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.make arg.mode=bare arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=3

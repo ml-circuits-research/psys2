@@ -10,8 +10,8 @@ import { parse, get, getAll } from '../soplang/index.mjs?v=26885599a7';
 import { Legends } from '../legends/index.mjs?v=48b634e4da';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
 import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=bc8d4bc227';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=161e3e3802';
-import { lexIndex } from './lexicon.mjs?v=e3316469a7';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=64f6eeac99';
+import { lexIndex } from './lexicon.mjs?v=a6457b81d7';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
@@ -203,6 +203,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
     id: x.id, wire: x, worldId: id, class: txt(x, 'class'), words: getAll(x, 'word').map((v) => v.v),
     plurals: getAll(x, 'plural').map((v) => v.v), gender: txt(x, 'gender'),
     extends: getAll(x, 'extends').map((v) => String(v.v).replace(/^\$/, '')), exclude: getAll(x, 'exclude').map((v) => String(v.v).toLowerCase()),
+    open: txt(x, 'open') ?? null, catalogs: getAll(x, 'catalog').map((v) => String(v.v)),   // open=knowledge: also any word of these catalog worlds, looked up when a sentence is read (src/knowledge/open-words.mjs)
   }));
   w.phrases = wires['lexicon.sop'].filter((x) => x.type === 'core.phrase').map((x) => ({
     id: x.id.replace(/^phrase\./, ''), wireId: x.id, wire: x, worldId: id, frame: txt(x, 'frame') !== 'false',
