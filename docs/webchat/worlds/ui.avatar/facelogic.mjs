@@ -7,13 +7,13 @@
 //   adj: { <slot>: { s: scale, dx, dy } }, expression, base (the preset it started from), name, saved: { <key>: { name, slots, colours, paint, adj } }, options (what "which hats are there"
 //   shows), refs (the things of the face: the referents of this world), history / future (undo, redo), n (a counter) }.
 // Browser-safe: imports only the shared space module.
-import * as space from '../space/space.mjs?v=27b9e9b571';
+import * as space from '../space/space.mjs?v=0c5c89b98e';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export const NONE = 'none';
 const ok = (value) => ({ status: 'supported', value });
 const no = (note) => ({ status: 'unsupported', note });
-const SAY_OK = ['Done!', 'OK!', 'Sure!', 'There you go!'];
+// No interjection openers (M4: replies are plain English, translated whole).
 const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
 const joinOr = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} or ${a.at(-1)}`);
 const plain = (t) => String(t).replace(/_/g, ' ');
@@ -174,8 +174,7 @@ export function thingsOf(data, face) {
   for (const s of data.slots) { const n = face.slots[s.name]; if (n && n !== NONE) { out.add(lc(n)); for (const k of slotOf(data, s.name).variants.find((v) => v.name === n)?.features.kind ?? []) out.add(k); } }
   return [...out].filter((x) => /^[a-z][a-z -]*$/.test(x));
 }
-const opener = (f) => SAY_OK[(f.n = (f.n ?? 0) + 1) % SAY_OK.length];
-const finish = (ctx, data, f, text) => { f.refs = thingsOf(data, f).map((thing) => ({ thing })); ctx.request?.('ui.openTab', { tab: 'robot' }); return ok(`${opener(f)} ${text}`); };
+const finish = (ctx, data, f, text) => { f.refs = thingsOf(data, f).map((thing) => ({ thing })); ctx.request?.('ui.openTab', { tab: 'robot' }); return ok(text); };
 
 // ---- choosing a variant -------------------------------------------------------------------------------------------------------------------------------------------
 /** The best variant of a slot for plain feature words: the most words matched; a tie keeps the current one; none when nothing matches. */

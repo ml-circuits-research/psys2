@@ -88,7 +88,6 @@ const VARY_COLORS = ['red', 'blue', 'green', 'orange', 'purple', 'pink', 'yellow
 const VARY_SIZES = [1, 1.3, 0.78, 1.55, 0.62, 1.15];
 const PLURAL_DEFAULT = { star: 8, flower: 4, fish: 4, balloon: 4, bird: 3, cloud: 3, tree: 3, person: 3 };
 const MAX_COUNT = 12, MAX_STARS = 30;
-const OPENERS = ['Ta-da!', 'Here you go!', 'There!', 'Done!', 'Look at that!', 'Nice!', 'Voila!'];
 const PRONOUN_ONE = new Set(['it', 'this', 'that', 'itself', 'him', 'her']);
 const PRONOUN_MANY = new Set(['them', 'they', 'these', 'those', 'themselves']);
 
@@ -228,7 +227,6 @@ function shared(ctx, what) {
   const r = ctx.request(entry[0], entry[1]);
   return r && !/no operation for action/.test(r.note ?? '') ? r : null;
 }
-const opener = (s) => OPENERS[(s.seq++) % OPENERS.length];
 /** Seeded pseudo-random number in [0, 1), advancing the seed kept in the state (pictures are reproducible). */
 const rnd = (s) => { s.seed = (Math.imul(s.seed, 1664525) + 1013904223) >>> 0; return s.seed / 4294967296; };
 
@@ -919,18 +917,23 @@ function addPartTo(ctx, s, { noun, ord, mods }) {
   if (mods.length) { const c = colorFrom(mods.filter((m) => isShade(m) || isColorWord(m))); if (c) { o.parts = { ...o.parts, [key]: c }; said += ` The ${label} ${/s$/.test(label) ? 'are' : 'is'} ${c}.`; } }
   s.last = [o.id];
   open(ctx);
-  return ok(`${opener(s)} ${said}`, { data: { made: [o.id] } });
+  return ok(`${said}`, { data: { made: [o.id] } });
 }
 /**
  * KNOWLEDGE-BY-LOOKUP (spec 17): a noun the built-in catalog of things does not have, but the host found in the knowledge catalog before this operation ran
  * (`ctx.knowledge.peek`), is registered as a drawable thing (its parts as the shared parser read them), so it is drawn like any other thing. The registration lives
  * in the module, as long as the page: a saved picture that names the thing needs the lookup again. No catalog or no hit: nothing happens.
  */
+let drawnNote = null;
 function registerKnown(ctx, noun) {
   try {
     const th = ctx.knowledge?.peek(noun);
     const parts = th?.objects?.[0]?.parts;
-    if (parts?.length) { registerThings(new Map([[th.name, parts]])); return th.name; }
+    if (parts?.length) {
+      registerThings(new Map([[th.name, parts]]));
+      if (th.drawnAs && th.drawnAs !== th.name) drawnNote = { name: th.name, as: th.drawnAs };   // a stand-in: said once, in the reply of the turn
+      return th.name;
+    }
   } catch { /* the plain refusal follows */ }
   return null;
 }
@@ -956,7 +959,7 @@ function openAdd(ctx, s, args) {
   return { done: no(`I don't know how to draw ${plural ? noun : `${a_(noun)} ${noun}`} yet.`, 'unsupported') };
 }
 
-export const add = guard((ctx, args, s) => {
+const addInner = guard((ctx, args, s) => {
   if (args.open !== undefined) { const r = openAdd(ctx, s, args); if (r.done) return r.done; args = r.args; }
   if (!kindOfWord(args.kind)) { const nm = registerKnown(ctx, args.kt ?? args.kind); if (nm) args = { ...args, kind: nm, kt: nm }; }   // a thing of the knowledge catalog (spec 17)
   else { const w = String(args.kt ?? args.kind ?? '').toLowerCase(); if (Object.hasOwn(KIND_WORDS, w) && KIND_WORDS[w] !== w) registerKnown(ctx, w) ?? registerKnown(ctx, w.replace(/s$/, '')); }   // "a ball": the catalog's ball before the circle the word falls back to
@@ -1020,7 +1023,7 @@ export const add = guard((ctx, args, s) => {
   if (more.length) {
     // the rest of the sentence is another thing: "and a tree"
     const sub = parseMoreSpec(more);
-    if (sub) { const r = add(ctx, sub); if (r.status === 'supported') { extra = r.data?.made ?? []; s.history.splice(-2, 1); } else if (r.status !== 'supported') { s.last = made.map((o) => o.id); return ok(`${opener(s)} I drew ${groupPhrase(made).join(' and ')}. But ${r.note.charAt(0).toLowerCase()}${r.note.slice(1)}`, { data: { made: all.map((o) => o.id) } }); } }
+    if (sub) { const r = add(ctx, sub); if (r.status === 'supported') { extra = r.data?.made ?? []; s.history.splice(-2, 1); } else if (r.status !== 'supported') { s.last = made.map((o) => o.id); return ok(`I drew ${groupPhrase(made).join(' and ')}. But ${r.note.charAt(0).toLowerCase()}${r.note.slice(1)}`, { data: { made: all.map((o) => o.id) } }); } }
   }
   s.last = [...made, ...extra.map((id) => byId(s, id)).filter(Boolean)].map((o) => o.id);
   s.mood = s.mood === 'night' && made.some((o) => kindKey(o) === 'sun') ? s.mood : s.mood;
@@ -1036,8 +1039,19 @@ export const add = guard((ctx, args, s) => {
   const partNote = '';
   const placed = placeNote ? ` ${placeNote}` : '';
   placeNote = null;
-  return ok(`${opener(s)} I drew ${phrase}${partNote}${where}${capNote}.${placed}`, { data: { made: s.last.slice() } });
+  return ok(`I drew ${phrase}${partNote}${where}${capNote}.${placed}`, { data: { made: s.last.slice() } });
 });
+/** "Draw a villa": a thing with no drawing of its own is drawn by the object of its kind (k.objects.stand_in, or the kind of its word sense); the reply says so once per thing. */
+export const add = (ctx, args = {}) => {
+  drawnNote = null;
+  const r = addInner(ctx, args);
+  const n = drawnNote; drawnNote = null;
+  if (n && r?.status === 'supported' && typeof r.value === 'string') {
+    const s = ensure(ctx), said = (s.drawnAsSaid ??= []);
+    if (!said.includes(n.name)) { said.push(n.name); r.value += ` (${a_(n.name)} ${n.name}, drawn as ${a_(n.as)} ${n.as}.)`; }
+  }
+  return r;
+};
 const describePlacing = (o, place, refs) => {
   if (!o && !place.region) return '';
   if (place.rel && refs[0]) {
@@ -1073,13 +1087,13 @@ export const ground = guard((ctx, args, s) => {
     const had = !!s.sky;
     if (!s.sky) { s.sky = 'light blue'; s.mood = null; }
     open(ctx);
-    return ok(had ? `${opener(s)} The sky is already there: it is ${s.sky}. You can change its color.` : `${opener(s)} I drew a light blue sky behind everything.`);
+    return ok(had ? `The sky is already there: it is ${s.sky}. You can change its color.` : `I drew a light blue sky behind everything.`);
   }
   const g = GROUND_WORDS[String(args.g ?? '').toLowerCase()] ?? 'grass';
   remember(s, `added ${GROUND_NAME[g]}`);
   s.ground = g; s.groundColor = GROUND_COLOR[g];
   open(ctx);
-  return ok(`${opener(s)} I added ${GROUND_NAME[g]} to the ground.`);
+  return ok(`I added ${GROUND_NAME[g]} to the ground.`);
 });
 
 /** Who is meant by a noun phrase text, or an error envelope. */
@@ -1119,7 +1133,7 @@ export const recolor = guard((ctx, args, s) => {
   if (r.special) {
     const what = recolorSpecial(s, r.special, color, np);
     open(ctx);
-    return ok(`${opener(s)} ${what.charAt(0).toUpperCase()}${what.slice(1)} is ${color} now.`);
+    return ok(`${what.charAt(0).toUpperCase()}${what.slice(1)} is ${color} now.`);
   }
   const part = r.part ?? np.part;
   const objs = r.objs;
@@ -1137,7 +1151,7 @@ export const recolor = guard((ctx, args, s) => {
     const guessed = done.map(kindKey).filter((k, i, a) => a.indexOf(k) === i && partGuessed(k, key0) && !(s.guessSaid ??= []).includes(k));
     let rn = r;
     if (guessed.length) { s.guessSaid.push(...guessed); rn = { ...r, note: `${r.note ? `${r.note} ` : ''}(The part names of this picture are guesses, so tell me if I colored the wrong one.)` }; }
-    return ok(withNote(`${opener(s)} The ${partLabel(key0)} of ${done.length > 1 ? 'the ' + pluralOfKind(kindKey(done[0])) : sayObj(done[0])} ${/s$/.test(partLabel(key0)) && key0 !== 'crown' ? 'are' : 'is'} ${color} now.`, rn));
+    return ok(withNote(`The ${partLabel(key0)} of ${done.length > 1 ? 'the ' + pluralOfKind(kindKey(done[0])) : sayObj(done[0])} ${/s$/.test(partLabel(key0)) && key0 !== 'crown' ? 'are' : 'is'} ${color} now.`, rn));
   }
   for (const o of objs) {
     o.color = color;
@@ -1147,7 +1161,7 @@ export const recolor = guard((ctx, args, s) => {
   open(ctx);
   const name = objs.length === 1 ? sayObj(objs[0]) : `the ${pluralOfKind(kindKey(objs[0]), objs.length)}`;
   const sameKinds = new Set(objs.map((o) => kindKey(o))).size === 1;
-  return ok(withNote(`${opener(s)} ${cap1(sameKinds || objs.length === 1 ? name : `${objs.length} things`)} ${objs.length > 1 ? 'are' : 'is'} ${color} now.`, r));
+  return ok(withNote(`${cap1(sameKinds || objs.length === 1 ? name : `${objs.length} things`)} ${objs.length > 1 ? 'are' : 'is'} ${color} now.`, r));
 });
 const cap1 = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 
@@ -1194,7 +1208,7 @@ export const resize = guard((ctx, args, s) => {
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
-  return ok(withNote(`${opener(s)} I made ${r.everything ? 'everything' : name} ${up ? 'bigger' : 'smaller'}${capped ? ' (that is as far as it goes!)' : ''}.`, r));
+  return ok(withNote(`I made ${r.everything ? 'everything' : name} ${up ? 'bigger' : 'smaller'}${capped ? ' (that is as far as it goes!)' : ''}.`, r));
 });
 
 /** "make the tree the same size as the house": the target gets the width of the reference thing. */
@@ -1217,7 +1231,7 @@ export const matchSize = guard((ctx, args, s) => {
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
-  return ok(`${opener(s)} ${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} now the same size as ${sayObj(r0)}.`);
+  return ok(`${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} now the same size as ${sayObj(r0)}.`);
 });
 
 export const setSize = guard((ctx, args, s) => {
@@ -1239,7 +1253,7 @@ export const setSize = guard((ctx, args, s) => {
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
-  return ok(withNote(`${opener(s)} ${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} ${word} now.`, r));
+  return ok(withNote(`${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} ${word} now.`, r));
 });
 
 // ---- moving ------------------------------------------------------------------------------------------------------------
@@ -1426,7 +1440,7 @@ function coverPlace(ctx, s, groundWord, d) {
   s.objects.push(o); s.last = [o.id];
   open(ctx);
   const label = kind === 'lake' ? 'a lake' : groundWord === 'grass' ? 'a patch of grass' : `a patch of ${GROUND_NAME[groundWord]}`;
-  return ok(`${opener(s)} I put ${label}${d.kind === 'rel' ? (group.length > 1 && group.every((x) => kindKey(x) === kindKey(group[0])) ? describePlacing(o, { rel: d.rel }, [group[0]]).replace(/ the .*$/, ` the ${pluralOfKind(kindKey(group[0]), group.length)}`) : describePlacing(o, { rel: d.rel }, [group[0]])) : describePlacing(null, { region: d.region }, [])}.`, { data: { made: [o.id] } });
+  return ok(`I put ${label}${d.kind === 'rel' ? (group.length > 1 && group.every((x) => kindKey(x) === kindKey(group[0])) ? describePlacing(o, { rel: d.rel }, [group[0]]).replace(/ the .*$/, ` the ${pluralOfKind(kindKey(group[0]), group.length)}`) : describePlacing(o, { rel: d.rel }, [group[0]])) : describePlacing(null, { region: d.region }, [])}.`, { data: { made: [o.id] } });
 }
 
 export const move = guard((ctx, args, s) => {
@@ -1507,9 +1521,9 @@ export const move = guard((ctx, args, s) => {
   const where = d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'region' ? ` ${describePlacing(null, { region: d.region }, [])}`.replace(/\s+/g, ' ') : d.kind === 'z' ? ` to the ${d.dir}` : d.kind === 'layout' ? ` ${LAYOUT_SAY[d.lay.op](d.lay)}` : '';
   const relText = d.kind === 'rel' ? describePlacing(r.objs[0], { rel: d.rel }, d.refs.map((x) => resolveNP(s, parseNP(x)).objs[0] ?? r.objs[0])) : '';
   const regionText = d.kind === 'region' ? describePlacing(null, { region: d.region }, []) : '';
-  if (wantGround) return ok(withNote(`${opener(s)} I moved ${name} ${wantGround === 'sea' ? 'into the water' : wantGround === 'snow' ? 'onto the snow' : `onto the ${GROUND_NAME[wantGround]}`}.${addedGround ? ` There was no ${GROUND_NAME[wantGround]}, so I added it to the ground.` : ''}`, r));
-  if (joinSay) return ok(withNote(`${opener(s)} ${joinSay}`, r));
-  return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : d.kind === 'layout' ? ` ${LAYOUT_SAY[d.lay.op](d.lay)}` : ''}.`, r));
+  if (wantGround) return ok(withNote(`I moved ${name} ${wantGround === 'sea' ? 'into the water' : wantGround === 'snow' ? 'onto the snow' : `onto the ${GROUND_NAME[wantGround]}`}.${addedGround ? ` There was no ${GROUND_NAME[wantGround]}, so I added it to the ground.` : ''}`, r));
+  if (joinSay) return ok(withNote(`${joinSay}`, r));
+  return ok(withNote(`I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : d.kind === 'layout' ? ` ${LAYOUT_SAY[d.lay.op](d.lay)}` : ''}.`, r));
 });
 void 0;
 
@@ -1548,7 +1562,7 @@ export const spatial = guard((ctx, args, s) => {
   s.last = r.ids?.length ? r.ids : s.last;
   s.lastMove = r.memory ?? null;
   open(ctx);
-  return ok(`${opener(s)} ${r.say.replace(/^I /, 'I ')}`);
+  return ok(`${r.say.replace(/^I /, 'I ')}`);
 });
 
 // ---- follow-ups that change the last step (SCENE-NATURAL P2): "but keep the lake", "not over the water" ---------------------------------------------------
@@ -1579,7 +1593,7 @@ export const except_ = guard((ctx, args, s) => {
   open(ctx);
   const made = touched.filter((o) => !step.was.has(o.id)), moved = touched.filter((o) => step.was.has(o.id));
   const say = (xs) => `the ${pluralOfKind(kindKey(xs[0]), xs.length)}`;
-  return ok(`${opener(s)} ${[made.length ? `I took ${made.length === 1 ? sayObj(made[0]) : say(made)} away from ${label}` : '', moved.length ? `I put ${moved.length === 1 ? sayObj(moved[0]) : say(moved)} back` : ''].filter(Boolean).join(' and ')}.`);
+  return ok(`${[made.length ? `I took ${made.length === 1 ? sayObj(made[0]) : say(made)} away from ${label}` : '', moved.length ? `I put ${moved.length === 1 ? sayObj(moved[0]) : say(moved)} back` : ''].filter(Boolean).join(' and ')}.`);
 });
 /** "but keep the lake": a thing the last step removed or changed comes back as it was. */
 export const keep = guard((ctx, args, s) => {
@@ -1590,7 +1604,7 @@ export const keep = guard((ctx, args, s) => {
   let want = [];
   if (np.pron) want = [...step.removed, ...step.changed.map((o) => step.was.get(o.id))];
   else if (np.special === 'ground') {
-    if ((np.groundWord ?? s.ground) === step.snap.ground && s.ground !== step.snap.ground) { remember(s, 'kept the ground'); s.ground = step.snap.ground; s.groundColor = step.snap.groundColor; open(ctx); return ok(`${opener(s)} I kept the ${GROUND_NAME[s.ground] ?? 'ground'} as it was.`); }
+    if ((np.groundWord ?? s.ground) === step.snap.ground && s.ground !== step.snap.ground) { remember(s, 'kept the ground'); s.ground = step.snap.ground; s.groundColor = step.snap.groundColor; open(ctx); return ok(`I kept the ${GROUND_NAME[s.ground] ?? 'ground'} as it was.`); }
     return no('The ground is as it was.', 'unsupported');
   } else { const r = resolveNP(view, np, { many: true }); if (r.error) return no(r.error, 'missing'); want = r.objs; }
   const now = new Map(s.objects.map((o) => [o.id, o]));
@@ -1604,7 +1618,7 @@ export const keep = guard((ctx, args, s) => {
   s.objects.sort((a, b) => idNum(a) - idNum(b));
   s.last = back.map((o) => o.id);
   open(ctx);
-  return ok(`${opener(s)} I kept ${label}.`);
+  return ok(`I kept ${label}.`);
 });
 
 export const nudge = guard((ctx, args, s) => {
@@ -1665,7 +1679,7 @@ export const turn = guard((ctx, args, s) => {
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
-  return ok(withNote(`${opener(s)} I turned ${name} ${say}.`, r));
+  return ok(withNote(`I turned ${name} ${say}.`, r));
 });
 
 // ---- removing ---------------------------------------------------------------------------------------------------------------
@@ -1692,7 +1706,7 @@ export const remove = guard((ctx, args, s) => {
     s.objects = s.objects.filter((o) => keep.has(o.id));
     s.last = [...keep]; if (s.selected && !byId(s, s.selected)) s.selected = null;
     open(ctx);
-    return ok(`${opener(s)} I took away ${gone.length === 1 ? describeObject(gone[0], { article: 'the', size: false }) : `${gone.length} things`}. I kept ${andList(groupPhrase(s.objects.filter((o) => keep.has(o.id))))}.`);
+    return ok(`I took away ${gone.length === 1 ? describeObject(gone[0], { article: 'the', size: false }) : `${gone.length} things`}. I kept ${andList(groupPhrase(s.objects.filter((o) => keep.has(o.id))))}.`);
   }
   if (/^(everything|all|all of it|all things|every thing|the whole picture|everything in my picture)$/.test(joined) || /^(everything|all) (in|on|from) /.test(joined)) return clear(ctx, {});
   const removed = [], notes = [];
@@ -1714,7 +1728,7 @@ export const remove = guard((ctx, args, s) => {
       if (!gone.length) { s.history.pop(); return no('That part is already gone.', 'missing'); }
       s.last = r.objs.map((o) => o.id);
       open(ctx);
-      return ok(`${opener(s)} I took away ${andList(gone)}.`);
+      return ok(`I took away ${andList(gone)}.`);
     }
     plan.push(r);
   }
@@ -1731,7 +1745,7 @@ export const remove = guard((ctx, args, s) => {
   s.last = []; if (s.selected && !byId(s, s.selected)) s.selected = null;
   open(ctx);
   const parts = [...(removed.length ? [andList(groupPhrase(removed).map((x) => x.replace(/^an? /, 'the ')))] : []), ...specials];
-  return ok(`${opener(s)} I took away ${andList(parts)}.${notes.length ? ` ${notes[0]}` : ''}`);
+  return ok(`I took away ${andList(parts)}.${notes.length ? ` ${notes[0]}` : ''}`);
 });
 
 /** "delete it": the selected thing, or what was just drawn (with the editor open, its selection). */
@@ -1788,7 +1802,7 @@ export const fillMode = guard((ctx, args, s) => {
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
-  return ok(withNote(`${opener(s)} ${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} ${mode === 'outline' ? 'just an outline' : mode === 'solid' ? 'filled in' : 'colored in with crayon'} now.`, r));
+  return ok(withNote(`${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} ${mode === 'outline' ? 'just an outline' : mode === 'solid' ? 'filled in' : 'colored in with crayon'} now.`, r));
 });
 
 export const duplicate = guard((ctx, args, s) => {
@@ -1811,7 +1825,7 @@ export const duplicate = guard((ctx, args, s) => {
   }
   s.last = copies.map((o) => o.id);
   open(ctx);
-  return ok(withNote(`${opener(s)} I made ${n === 1 ? 'a copy' : `${n} copies`} of ${sayObj(r.objs[0])}.`, r));
+  return ok(withNote(`I made ${n === 1 ? 'a copy' : `${n} copies`} of ${sayObj(r.objs[0])}.`, r));
 });
 
 // ---- taking things apart and putting them together --------------------------------------------------------------------------------------------------------------
@@ -1871,8 +1885,8 @@ export const takeApart = guard((ctx, args, s) => {
   s.last = made.map((o) => o.id);
   open(ctx);
   const who = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(kindKey(r.objs[0]), r.objs.length)}`;
-  if (part) { const one = new Set(said).size === 1; return ok(withNote(`${opener(s)} I separated ${andList([...new Set(said)])} from ${who}. ${one ? 'It is a thing' : 'They are things'} of ${one ? 'its' : 'their'} own now.`, r)); }
-  return ok(withNote(`${opener(s)} I took ${who} apart: ${andList([...new Set(said)])} ${new Set(said).size === 1 ? 'is a separate thing' : 'are separate things'} now.`, r));
+  if (part) { const one = new Set(said).size === 1; return ok(withNote(`I separated ${andList([...new Set(said)])} from ${who}. ${one ? 'It is a thing' : 'They are things'} of ${one ? 'its' : 'their'} own now.`, r)); }
+  return ok(withNote(`I took ${who} apart: ${andList([...new Set(said)])} ${new Set(said).size === 1 ? 'is a separate thing' : 'are separate things'} now.`, r));
 });
 
 /** "put these together", "this is a boat": the things become one group with a name, used like any other thing afterwards. One step to undo. */
@@ -1910,8 +1924,8 @@ export const group = guard((ctx, args, s) => {
   s.last = [g.id];
   open(ctx);
   const use = 'You can move it, resize it, copy it or take it apart like any other thing.';
-  if (objs.length === 1) return ok(`${opener(s)} ${cap1(sayObj(objs[0]))} is ${a_(name)} ${name} now. ${use}`);
-  return ok(`${opener(s)} I put ${andList(groupPhrase(objs).map((x) => x.replace(/^an? /, 'the ')))} together as ${a_(name)} ${name}. ${use}`);
+  if (objs.length === 1) return ok(`${cap1(sayObj(objs[0]))} is ${a_(name)} ${name} now. ${use}`);
+  return ok(`I put ${andList(groupPhrase(objs).map((x) => x.replace(/^an? /, 'the ')))} together as ${a_(name)} ${name}. ${use}`);
 });
 
 // ---- moods: night, day, sunset --------------------------------------------------------------------------------------------
@@ -1966,7 +1980,7 @@ export const setMood = guard((ctx, args, s) => {
     line = 'The sun is going down and the sky is orange.';
   }
   open(ctx);
-  return ok(`${opener(s)} ${line}`);
+  return ok(`${line}`);
 });
 
 // ---- history -------------------------------------------------------------------------------------------------------------------
@@ -2123,7 +2137,7 @@ export const scene = guard((ctx, args, s) => {
   made.push(make(['cat', 'dog'][Math.floor(rnd(s) * 2)]), make('bird'));
   s.last = made.map((o) => o.id);
   open(ctx);
-  return ok(`${opener(s)} I drew a sunny scene for you: ${andList(groupPhrase(made))}. You can change anything, for example "make the house blue".`);
+  return ok(`I drew a sunny scene for you: ${andList(groupPhrase(made))}. You can change anything, for example "make the house blue".`);
 });
 
 export const openTab = guard((ctx) => {
