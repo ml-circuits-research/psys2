@@ -18,7 +18,7 @@ from torch import nn
 from transformers import AutoModel, AutoTokenizer, AutoConfig
 
 ROOT = Path(__file__).resolve().parents[2]
-ACTS = ["ask", "change", "connect", "copy", "group", "load", "make", "pick", "place", "redo", "remove", "save", "send", "undo"]
+ACTS = ["ask", "change", "connect", "copy", "group", "load", "make", "pick", "place", "redo", "remove", "save", "send", "undo", "none"]
 ROLES = ["thing", "set", "attribute", "value", "place", "amount"]
 TAGS = ["O"] + [f"{p}-{r}" for r in ROLES for p in "BI"]
 SIZES = {"distilbert": ("distilbert-base-uncased", None), "minilm6": ("nreimers/MiniLM-L6-H384-uncased", None), "minilm4": ("nreimers/MiniLM-L6-H384-uncased", 4)}
@@ -43,7 +43,8 @@ class Tagger(nn.Module):
 
 
 def read(path):
-    return [json.loads(l) for l in Path(path).read_text().splitlines() if l.strip()]
+    """Rows of a jsonl file; rows of an act this tagger has no class for (the grammar's `own`: a world's own reader form, not a universal act) are left out."""
+    return [r for r in (json.loads(l) for l in Path(path).read_text().splitlines() if l.strip()) if r["act"] in ACTS]
 
 
 def encode(tok, rows, max_len=64):
@@ -109,6 +110,28 @@ def score(model, tok, rows, dev):
     return {"n": len(rows), "act_acc": acc, "span_f1": f1(tp, fp, fn), "sentence_exact": exact / len(rows), "role_f1": {k: f1(*v) for k, v in per.items()}, "by_world": byw}
 
 
+def real_score(model, tok, rows, dev):
+    """Scores on real pieces: act accuracy, span F1 on accepted pieces (the labels of the executor's reading), none-class precision / recall, message agreement (every piece of a message right)."""
+    pa, pt = predict(model, tok, rows, dev)
+    n = len(rows); acc = sum(p == r["act"] for p, r in zip(pa, rows)) / max(1, n)
+    tp = fp = fn = 0
+    for p, r in zip(pt, rows):
+        if r["act"] == "none": continue
+        g = spans(r["tags"]); q = spans(p); tp += len(g & q); fp += len(q - g); fn += len(g - q)
+    f1 = 2 * tp / max(1, 2 * tp + fp + fn)
+    gn = [r["act"] == "none" for r in rows]; pn = [p == "none" for p in pa]
+    ntp = sum(a and b for a, b in zip(gn, pn)); nprec = ntp / max(1, sum(pn)); nrec = ntp / max(1, sum(gn))
+    acc_rows = [(p, r) for p, r in zip(pa, rows) if r["act"] != "none"]
+    acc_act = sum(p == r["act"] for p, r in acc_rows) / max(1, len(acc_rows))
+    msgs = {}
+    for p, r in zip(pa, rows): msgs.setdefault(r["msg"], []).append(p == r["act"])
+    agree = sum(all(v) for v in msgs.values()) / max(1, len(msgs))
+    byact = {}
+    for p, r in zip(pa, rows): byact.setdefault(r["act"], []).append(p == r["act"])
+    return {"pieces": n, "messages": len(msgs), "act_acc": acc, "act_acc_on_accepted": acc_act, "accepted_pieces": len(acc_rows), "span_f1": f1, "none_pieces": sum(gn), "none_precision": nprec, "none_recall": nrec, "message_agreement": agree,
+            "by_act": {k: {"n": len(v), "acc": sum(v) / len(v)} for k, v in sorted(byact.items())}}
+
+
 def fake_quant_int8(model):
     """Weights of every Linear and Embedding rounded to int8 per output channel (quantise then dequantise): a CUDA stand-in for the int8 ONNX graph."""
     with torch.no_grad():
@@ -141,6 +164,9 @@ def main():
     ap.add_argument("--size", required=True, choices=list(SIZES)); ap.add_argument("--data", default=str(ROOT / "training/data/act-tagger"))
     ap.add_argument("--epochs", type=int, default=5); ap.add_argument("--bs", type=int, default=256); ap.add_argument("--lr", type=float, default=None)
     ap.add_argument("--out", default=None); ap.add_argument("--results", default=None); ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--real", default=None, help="dir with real-train / real-test-seen / real-test-held jsonl (scripts/gen-act-tagger-real.mjs); enables the real-data round")
+    ap.add_argument("--real-rep", type=int, default=20, help="copies of the real training pieces mixed into every epoch")
+    ap.add_argument("--synth", type=int, default=0, help="use only this many synthetic training rows (0 = all)")
     a = ap.parse_args()
     assert torch.cuda.is_available(), "CUDA is required: training and scoring never run on CPU"
     torch.manual_seed(a.seed); random.seed(a.seed); np.random.seed(a.seed)
@@ -150,6 +176,11 @@ def main():
     model = Tagger(base, layers).to(dev)
     nparams = sum(p.numel() for p in model.parameters())
     data = {k: read(Path(a.data) / f"{k}.jsonl") for k in ["train", "dev", "test-seen", "test-held"]}
+    realdata = {}
+    if a.real:
+        realdata = {k: read(Path(a.real) / f"real-{k}.jsonl") for k in ["train", "test-seen", "test-held"]}
+        if a.synth: random.shuffle(data["train"]); data["train"] = data["train"][:a.synth]
+        data["train"] = data["train"] + realdata["train"] * a.real_rep
     ids, labs, _ = encode(tok, data["train"]); acts = [ACTS.index(r["act"]) for r in data["train"]]
     lr = a.lr or (5e-5 if a.size == "distilbert" else 1.5e-4)
     opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
@@ -173,6 +204,15 @@ def main():
            "acts": ACTS, "tags": TAGS, "gpu_bf16": {k: score(model, tok, data[k], dev) for k in ["dev", "test-seen", "test-held"]}}
     out.mkdir(parents=True, exist_ok=True); torch.save(model.state_dict(), out / "best.pt")
     q = Tagger(base, layers).to(dev); q.load_state_dict(model.state_dict()); fake_quant_int8(q)
+    if a.real:
+        res["real"] = {k: real_score(model, tok, v, dev) for k, v in realdata.items() if k != "train"}
+        res["real_int8_weights"] = {k: real_score(q, tok, v, dev) for k, v in realdata.items() if k != "train"}
+        res["real_train_pieces"] = len(realdata["train"]); res["real_rep"] = a.real_rep
+        dump = {}
+        for k in ["test-seen", "test-held"]:
+            pa, pt = predict(model, tok, realdata[k], dev)
+            dump[k] = [{"text": r["text"], "gold": r["act"], "pred": p, "msg": r["msg"], "world": r["world"], "source": r["source"], "gold_tags": r["tags"], "pred_tags": t} for r, p, t in zip(realdata[k], pa, pt)]
+        (out / "real-predictions.json").write_text(json.dumps(dump))
     res["gpu_int8_weights"] = {k: score(q, tok, data[k], dev) for k in ["test-seen", "test-held"]}
     res["onnx"] = export(model, tok, out)
     (out / "meta.json").write_text(json.dumps({"acts": ACTS, "tags": TAGS, "base": base, "layers": res["layers"], "max_len": 64, "lowercase": True}, indent=1))
