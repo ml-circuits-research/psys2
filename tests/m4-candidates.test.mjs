@@ -43,6 +43,13 @@ test('choice: when every candidate keeps source words the least bad is still rea
   assert.equal(chosen.source, 'browser');
 });
 
+test('choice: a soft rejection (a name that differs) still competes by understanding; a hard one (checker) never does', async () => {
+  const hard = await chooseCandidate([{ source: 'model', text: 'Draw a goat', rejected: 'checker: numbers not preserved (3)' }], 'x', { understand: async () => ({ issues: 0 }), isEnglish: english });
+  assert.equal(hard.chosen, null);
+  const soft = await chooseCandidate([{ source: 'model', text: 'Draw a goat', rejected: 'checker: names not preserved (Parys)', soft: true }], 'x', { understand: async () => ({ issues: 0 }), isEnglish: english });
+  assert.equal(soft.chosen.source, 'model');
+});
+
 test('gather: every translator, one repaired candidate, no duplicates; a failing translator is just absent', async () => {
   const rules = { supports: () => true, translate: (t) => ({ text: t.replace('capră', 'goat').replace('desenează', 'draw'), alignment: [], unknown: [] }), sourceVocabulary: () => vocab, knownEnglish: (w) => english(w) };
   const translator = { rules, candidatesViaMT: async (t) => [{ source: 'browser', text: `B:${t}`, translation: { text: `B:${t}` } }, { source: 'model', text: `B:${t}`, translation: { text: `B:${t}` } }] };

@@ -134,21 +134,35 @@ const NO_RULES = { translate: (text) => ({ text: '', alignment: [], unknown: [St
 export async function translateParts(parts, translator, lang, userWords = null) {
   const flat = parts.map((p) => ({ ...p }));
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
-  // RO-TRANSLATE-FALLBACK (spec 06): with a switch translator in 'fallback' mode the rules and templates write first; a run they cannot put into the
-  // reply language goes to the on-device Translator (checked), and a reply nothing could translate becomes a Romanian sentence, never English.
+  // M4, output side (spec 06): one path for every language. The candidates of a run are the machine translators' (the browser Translator, the on-device model: each
+  // alone, checked) and the language pack's rules translator, if it has the pair; the first complete one wins (the machine ones first, owner rule P7); a run nothing
+  // could translate leaves the reply in English, and in a Romanian session it becomes a Romanian sentence, never English.
   const fb = lang !== 'en' && translator.fallbackMode?.() === 'fallback';
-  // MT-SERIOUS: only Romanian has rules; any other language goes straight to the on-device translation (the stub says "not translated" for it)
   const ownRules = fb && (translator.rules?.supports?.('en', lang) ?? true);
   const prim = fb ? (ownRules ? (translator.rules ?? translator) : NO_RULES) : translator;
   const routes = [];
-  let fbCalls = 0;
-  // P7: with the Translator as the first choice it is asked before the rules; after it failed once in this reply it is not asked again (the rules write the rest)
-  const first = fb && !!translator.translatorFirst?.();
-  let dead = false;
-  const viaBrowser = async (text) => {
-    if (!translator.viaBrowser || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
+  let fbCalls = 0, dead = false;   // after a failed machine round in this reply the rules write the rest
+  const viaMachine = async (text) => {
+    if (!fb || !translator.candidatesViaMT || fbCalls >= MAX_FALLBACK_CALLS || guard.soft() || dead) return null;
     fbCalls++;
-    try { const r = await guard.abortable(translator.viaBrowser(text, { from: 'en', to: lang }), 'translate'); if (!r && first) dead = true; return r; } catch (e) { if (e instanceof TurnAborted) throw e; if (first) dead = true; return null; }
+    try {
+      const cs = await guard.abortable(translator.candidatesViaMT(text, { from: 'en', to: lang }), 'translate');
+      const ok = (cs ?? []).find((c) => !c.rejected && c.text && !(typeof translator.leftovers === 'function' && translator.leftovers(c.text, lang).length));
+      if (!ok) dead = true;
+      return ok ? ok.translation ?? { text: ok.text } : null;
+    } catch (e) { if (e instanceof TurnAborted) throw e; dead = true; return null; }
+  };
+  const viaRules = async (text) => { try { return await guard.abortable(prim.translate(text, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; return null; } };
+  const isComplete = (r, t) => !!t && !r?.unknown?.length && !r?.untranslatable?.length && !(typeof translator.leftovers === 'function' && translator.leftovers(t, lang).length);
+  /** The one candidate chooser: the machine candidates, then the rules (and the rules again on the fallback wording). { text, route, incomplete }; null when `machineOnly` and no machine answered. */
+  const choose = async (src, { fallback = null, machineOnly = false } = {}) => {
+    const m = await viaMachine(src);
+    if (m && textOf(m)) return { text: textOf(m).trim(), route: 'translator-out', incomplete: false };
+    if (machineOnly) return null;
+    let r = await viaRules(src);
+    if (r?.unknown?.length && fallback) r = await viaRules(fallback);
+    const t = textOf(r);
+    return { text: t ?? '', route: null, incomplete: !isComplete(r, t) };
   };
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
@@ -157,23 +171,13 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     if (!flat[i].translate) {
       const { join, fallback, incomplete, ...rest } = flat[i];
       if (rest.reading && lang !== 'en') {   // our own English reading of the user's words ("I took that as: ..."): shown in the reply language, never in English
-        const inner = rest.text.replace(/^"|"$/g, '');
-        let r = null;
-        const bf = first ? await viaBrowser(inner) : null;
-        if (bf) routes.push('translator-out');
-        else try { r = await guard.abortable(prim.translate(inner, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; }
-        let tt = bf ? bf.text.trim() : textOf(r);
-        if (!bf && (!tt || r?.unknown?.length || r?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(tt, lang).length))) {
-          tt = null;
-          const b = fb ? await viaBrowser(inner) : null;
-          if (b) { tt = b.text.trim(); routes.push('translator-out'); }
-        }
-        if (tt) { out.push({ ...rest, text: `"${tt}"` }); i++; continue; }
+        const c = await choose(rest.text.replace(/^"|"$/g, ''));
+        if (c.text && !c.incomplete) { if (c.route) routes.push(c.route); out.push({ ...rest, text: `"${c.text}"` }); i++; continue; }
         if (translator.leftovers) complete = false;
       }
-      if (incomplete && fb && rest.en) {   // an example the rules could not translate: the Translator tries it on its own
-        const b = await viaBrowser(rest.en.replace(/^"|"$/g, ''));
-        if (b) { out.push({ ...rest, text: `"${b.text.trim()}"`, en: rest.en }); routes.push('translator-out'); i++; continue; }
+      if (incomplete && fb && rest.en) {   // an example the rules could not translate: the machine translators try it on their own
+        const c = await choose(rest.en.replace(/^"|"$/g, ''), { machineOnly: true });
+        if (c) { out.push({ ...rest, text: `"${c.text}"`, en: rest.en }); routes.push(c.route); i++; continue; }
       }
       if (incomplete) complete = false;
       out.push(rest); i++; continue;
@@ -184,19 +188,10 @@ export async function translateParts(parts, translator, lang, userWords = null) 
     i = j;
     const src = run.map((p) => p.text).join('');
     if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
-    if (first) { const b = await viaBrowser(src); if (b) { out.push({ text: fitFragment(src, b.text), translate: true, src }); routes.push('translator-out'); continue; } }
-    let res = null;
-    try { res = await guard.abortable(prim.translate(src, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; res = null; }
-    if (res?.unknown?.length && run.length === 1 && run[0].fallback) {
-      try { res = await guard.abortable(prim.translate(run[0].fallback, { from: 'en', to: lang }), 'translate'); } catch (e) { if (e instanceof TurnAborted) throw e; res = null; }
-    }
-    const t = textOf(res);
-    if (!t || res?.unknown?.length || res?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(t, lang).length)) {
-      const b = fb ? await viaBrowser(src) : null;
-      if (b) { out.push({ text: fitFragment(src, b.text), translate: true, src }); routes.push('translator-out'); continue; }
-      complete = false;
-    }
-    out.push({ text: t ? fitFragment(src, quoteUserWords(t, userWords)) : src, translate: true, src });
+    const c = await choose(src, { fallback: run.length === 1 ? run[0].fallback : null });
+    if (c.route) { out.push({ text: fitFragment(src, c.text), translate: true, src }); routes.push(c.route); continue; }
+    if (c.incomplete) complete = false;
+    out.push({ text: c.text ? fitFragment(src, quoteUserWords(c.text, userWords)) : src, translate: true, src });
   }
   let result;
   if (!complete) {   // keep the whole reply in English: translated runs and the examples (which carry their English text in `en`) revert; quoted user text stays as typed
@@ -1318,20 +1313,11 @@ export class DialogSession {
       }
       if (lang !== 'en' && lang !== 'unknown') {
         const heard = lang === 'ro' ? soundAlikes(text, this.context().tabWorld) : text;
-        const fbMode = translator.fallbackMode?.() === 'fallback';   // rules first; the Translator is asked only by `_send` when the reading is poor
-        const noRules = fbMode && !(translator.rules?.supports?.(lang, 'en') ?? true);
-        if (noRules && !override) {   // MT-SERIOUS: a language without rules is read by the on-device translation; when it is not ready or fails the message stays as typed (not understood)
-          const b = guard.soft() ? null : await perf.time('translate', () => guard.abortable(translator.viaBrowser?.(text, { from: lang, to: 'en' }) ?? null, 'translate').catch((e) => { if (e instanceof TurnAborted) throw e; return null; }));
-          translation = b ?? { text, alignment: [], unknown: [text], notes: ['the on-device translation did not answer'], confidence: 0 };
-        } else translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
+        const fbMode = translator.fallbackMode?.() === 'fallback';   // M4: `_send` chose the English among the candidates (`override`); without one the language pack's rules translate (translators off, soft limit, nothing translated)
+        translation = override?.translation ?? await perf.time('translate', () => guard.abortable((fbMode ? translator.rules ?? translator : translator).translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = override?.english ?? textOf(translation) ?? text;
         // INVARIANT (every turn gets a reply): a translator that cannot map a sentence ("negation could not be mapped") returns an empty text; the message then stays as typed, so that the reading is poor and says so (or the browser Translator is asked)
         if (!english.trim() && text.trim()) { english = text; translation = { ...(translation ?? {}), text, alignment: [], unknown: [], notes: [...(translation?.notes ?? []), 'the rules translation was empty'], confidence: 0 }; }
-        // an engine that returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare") is retried through the rules translator, which covers the app's own verbs and nouns
-        const rules = translator.rules;
-        if (!override && rules && rules !== translator && lang === 'ro' && english.trim().toLowerCase() === text.trim().toLowerCase()) {
-          try { const again = await guard.abortable(rules.translate(heard, { from: lang, to: 'en' }), 'translate'); if (textOf(again) && textOf(again).trim().toLowerCase() !== text.trim().toLowerCase()) { translation = again; english = textOf(again); } } catch { /* keep the first reading */ }
-        }
       } else lang = 'en';
     }
     this._waLang = lang;   // world-aware reading (spec 16): the words a Romanian message leaves out are the translator's, not the reading's

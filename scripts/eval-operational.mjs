@@ -68,8 +68,8 @@ export async function runCase(engine, settings, c, { onTurn } = {}) {   // onTur
   const before = s.state();
   const t0 = performance.now();
   let reply, error = null;
-  const ro = c.lang === 'ro';   // Romanian cases (training/eval/operational-ro.jsonl): language auto, the expectations are checked on the English reply
-  try { reply = await s.send(c.message, ro ? { language: 'auto' } : undefined); } catch (e) { error = e.message; }
+  const ro = c.lang === 'ro' || !!c.sendLanguage;   // foreign cases (training/eval/operational-ro.jsonl: language auto; scripts/mt-roundtrip-m4.mjs: `sendLanguage`): the expectations are checked on the English reply
+  try { reply = await s.send(c.message, c.sendLanguage ? { language: c.sendLanguage } : ro ? { language: 'auto' } : undefined); } catch (e) { error = e.message; }
   const ms = performance.now() - t0;
   await onTurn?.(s);
   if (!reply) return { id: c.id, world: c.world, outcome: 'wrong', error, ms };
@@ -88,6 +88,7 @@ export async function runCase(engine, settings, c, { onTurn } = {}) {   // onTur
     trivial: items.filter((x) => x.trivial).length,
     n_items: items.filter((x) => !(x.trivial && items.some((y) => !y.trivial))).length,
     strategy: [...new Set(reply.segments.map((x) => x.strategy))].join(','),
+    ...(c.sendLanguage ? { english: reply.trace?.english } : {}),
     ...(ro && (reply.trace?.via || reply.trace?.replyVia) ? { via: [reply.trace.via, ...(reply.trace.replyVia ?? [])].filter(Boolean) } : {}),
     ...(last ? {} : {}),
   };

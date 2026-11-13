@@ -164,7 +164,7 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
   const viaRules = async (s) => { if (!hasRules) return null; try { const r = await abortable(rules.translate(s, { from, to }), 'translate'); return textOf(r) && !r?.untranslatable?.length ? r : null; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return null; } };
   budget.tick('candidates.gather');
   const mt = await viaMT(text);
-  for (const m of mt) add(m.source, m.translation ?? m.text, m.rejected ? { rejected: m.rejected } : {});
+  for (const m of mt) add(m.source, m.translation ?? m.text, m.rejected ? { rejected: m.rejected, ...(m.soft ? { soft: true } : {}) } : {});
   const r = await viaRules(text);
   if (r) add('rules', r);
   // one candidate after the spelling repair, by the first translator that is available
@@ -193,13 +193,13 @@ export async function chooseCandidate(cands, input, { understand, isEnglish, sof
   let pool = [];
   cands.forEach((c, i) => {
     budget.tick('candidates.residue');
-    if (c.rejected) return;
+    if (c.rejected && !c.soft) return;   // a soft rejection (names: exonyms such as Parys / Paris differ between languages) is only a warning: the reader's understanding decides
     c.residue = sourceResidue(c.text, input, isEnglish);
     if (c.residue.length) { log[i].rejected = `source words: ${c.residue.slice(0, 4).join(', ')}`; return; }
     pool.push(i);
   });
   if (!pool.length) {   // every candidate keeps source words (or failed the checker): the least bad is still read, so that the person gets an answer
-    pool = cands.map((c, i) => i).filter((i) => !cands[i].rejected).sort((a, b) => (cands[a].residue?.length ?? 0) - (cands[b].residue?.length ?? 0));
+    pool = cands.map((c, i) => i).filter((i) => (!cands[i].rejected || cands[i].soft)).sort((a, b) => (cands[a].residue?.length ?? 0) - (cands[b].residue?.length ?? 0));
     for (const i of pool) log[i].fallback = true;
   }
   if (!pool.length) return { chosen: null, log };
