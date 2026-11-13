@@ -3460,3 +3460,35 @@ Arrow up in the chat box recalls earlier sent messages, arrow down goes forward,
 3. `k.faces` (134 hand-written variants, presets, expressions, seven imported styles) is the data for AVATAR-FROM-PARTS: no face shapes in PSys2.
 4. `k.scenes` (in work in the knowledge repo: usual place, relative size, person kinds) feeds M3 defaults; until it lands use k.commonsense.
 5. Report a table: world, used by which tabs, by which mechanism.
+
+## Reviewer 2026-11-13 17:40 — SPACE as one general world (owner): design, used by drawing, diagrams, avatar, Talk cards, maps
+
+**Owner's question (also asked in your session):** can one space world be general and clever enough for every tab: avoid overlaps naturally, know the surface of each piece, join pieces that are near, keep them apart when asked, take layouts from general knowledge? Reviewer's answer: feasible, if it is split in three layers and the numbers are computed by functions, not by rules. This block replaces the earlier SPACE block and M2 of WORLDS-AS-MODULES where they differ. Write your own view and objections in questions.md before building.
+
+**Layer 1: what a piece is (facts).** Every placeable thing, in any tab, is a `space.piece`: an extent (box) and, when known, an outline (from the part points of k.objects / k.faces), a layer (behind, in front), and named anchors (top, bottom, centre, left, right, plus anchors given by knowledge: seat of a swing, surface of a lake, chin of a head, port of a box). A piece may contain pieces (a face holds eyes; a scene holds a lake; a box holds a label), so the same facts serve an avatar, a drawing and a diagram.
+
+**Layer 2: what must hold (relations and rules, SOP Lang, sopworld `std.relations`).** Relations are kept facts, not one-off moves: on, in, next to, left of, above, in front of, behind, attached to, aligned with, same size as, apart from, inside the frame. Rules add relations nobody said, each with its source and each defeasible by the user:
+- pieces do not overlap unless one is in, on, behind or attached to the other;
+- a piece stays inside its container;
+- pieces that are near and of a kind that joins (wall and roof, arm and body, arrow and box, hair and head; from knowledge "part of" and anchors) become attached at matching anchors; "do not join them" / "apart" removes it and is remembered;
+- usual place and usual relative size from knowledge (k.scenes) when nothing is said;
+- when a piece moves, what is on it or attached to it moves with it; what was merely next to it does not.
+Conflicts are ranked with the delegation tiers (said by user > focus > scene > knowledge > default) and a refused relation gives a plain reason ("the cow cannot go lower: it is on the ground").
+
+**Layer 3: where things go (a small solver, one function for all tabs).** Input: pieces, relations, the frame. Output: positions and sizes, changing as little as possible from the present ones (stability: nothing the user placed jumps). Steps: named layout first if there is one, then relation constraints, then overlap removal by smallest moves, then a check; if no solution within the step budget, keep the last valid state and say which relation could not be kept. Deterministic, both reasoners call the same function; no wall clock.
+
+**Layouts are knowledge, not code.** A layout is a named arrangement with slots: row, column, grid, ring, scatter, corners, stack, tree, flow left to right, landscape (sky above ground, water in ground), face (the slots of k.faces), room. They live in the knowledge repo (`k.layouts`: slots, their relations, when it is usual), are found by lookup like any fact, and "arrange them in a ring", "each in a different corner", "like a family photo" pick one. A new layout needs no PSys2 change.
+
+**Who uses it:** art.draw (scene), diagram.sketch (boxes, arrows attached at ports, no overlaps, flow/tree layouts), ui.avatar (face layout, parts attached at anchors, resize a part and the neighbours adapt), Talk cards (board layout), geo.map (pins and labels that do not cover each other). Each tab keeps its actions and renderer and drops its own placing code; report the lines removed per tab.
+
+**Experiments before it is made the default (report per tab, on the ledger classes place, relation, amount, distribute, default-place plus 30 new scripted scenes per tab):**
+- E-S1 overlap rate and frame escapes after each of 200 scripted additions and moves: target 0 unwanted overlaps;
+- E-S2 stability: mean displacement of pieces the request did not mention: target near 0;
+- E-S3 joins: 40 near pairs that should join and 40 that should not: errors and whether "apart" is respected afterwards;
+- E-S4 the same 20 requests ("put A next to B", "arrange in a row", "bigger", "swap A and B") in drawing, diagram and avatar with no tab-specific patterns;
+- E-S5 cost in steps for 10, 50, 200 pieces on the phone profile;
+- E-S6 hold-out: a layout added only in the knowledge repo is usable without a PSys2 change.
+
+**Limits to say honestly in the report:** outlines are approximate (boxes and convex hulls first; true shapes later if E-S1 needs it); "natural" joining depends on knowledge having anchors, so list the kinds without anchors; the solver is not a physics engine.
+
+**Order:** pieces and relations on art.draw first (it unblocks the owner's log), then the solver with row/corners/landscape, then diagram.sketch, then the avatar with k.faces. The knowledge repo gets `k.layouts` and anchors as a task; sopworld builds `std.relations`.
