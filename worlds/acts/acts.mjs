@@ -294,6 +294,12 @@ export function createExecutor(schema, hooks = {}) {
   // ---- referents ----
   /** The things a phrase names: { ids } | { ask } | { none, kindWord } | { unknownKind } with `source` (said | focus | scene) and `guess`. */
   function resolve(st, text, opts = {}) {
+    // the readings of a noun phrase beyond its head (facts of handover/lang.en, np.sop; en.nounPhrase): a choice, a part of a set, "the other one", a relative clause
+    const np = en.nounPhrase(text);
+    if (np.choice) return resolveChoice(st, np.choice, opts);
+    if (np.partitive) return resolvePartitive(st, np, opts);
+    if (np.other) return resolveOther(st, np, opts);
+    if (np.relative) text = np.text;
     const parts = en.splitList(text);
     if (parts.length < 2) return resolveOne(st, text, opts);
     const ids = []; let kind = null;
@@ -306,6 +312,42 @@ export function createExecutor(schema, hooks = {}) {
       for (const id of r.ids) if (!ids.includes(id)) ids.push(id);
     }
     return { ids, source: 'said', kind };
+  }
+  /** "table 1 or table 2": the system never takes both and never takes the last; it asks which. A part without its noun ("the red or the blue house") takes the last word of the last part. */
+  function resolveChoice(st, choice, opts) {
+    const ids = []; let kind = null;
+    for (const part of choice) {
+      budget.tick('acts.choice');
+      let p = part.text;
+      if (kind && en.bareDistributes(p)) p = `${kind} ${p}`;
+      let r = resolve(st, p, opts);
+      if (!r.ids && part.alt) { const r2 = resolve(st, part.alt, opts); if (r2.ids) r = r2; }
+      if (!r.ids) return r;
+      kind ??= r.kind;
+      for (const id of r.ids) if (!ids.includes(id)) ids.push(id);
+    }
+    if (ids.length === 1) return { ids, source: 'said', kind };
+    return { ask: `Which do you mean: ${ids.map((id) => label(st.items.find((i) => i.id === id))).join(' or ')}?`, candidates: ids };
+  }
+  /** "some of the tables", "two of the tables": a part of a set. The whole set when the count covers it ("all of them", "three of the three"), else the system asks which ones. */
+  function resolvePartitive(st, np, opts) {
+    const r = resolve(st, np.text, opts);
+    if (!r.ids || r.ids.length < 2 || np.partitive.mode === 'all' || (np.partitive.mode === 'count' && np.partitive.n >= r.ids.length)) return r;
+    const items = r.ids.map((id) => st.items.find((i) => i.id === id)).filter(Boolean);
+    return { ask: `Which ${np.partitive.mode === 'count' ? `${np.partitive.n} of` : 'ones of'} ${joinAnd(items.map((i) => label(i)))}? Say their names or numbers.`, candidates: r.ids };
+  }
+  /** "the other table", "the other one", "another one": the things of that kind that are not the dialogue focus (the kind of the focus when none is said). */
+  function resolveOther(st, np, opts) {
+    const ws = toks(np.text).filter((w) => !DET.has(w));
+    let kind = null;
+    for (const w of ws) { const h = kindByWord(w); if (h) { kind = h.kind.name; break; } }
+    const focus = focusOf(st).ids.filter((id) => st.items.some((i) => i.id === id));
+    if (!kind && !ws.length) kind = st.items.find((i) => focus.includes(i.id))?.kind ?? null;
+    if (!kind) return ws.length ? resolveOne(st, np.text, opts) : { missing: true };
+    const pool = st.items.filter((i) => i.kind === kind && !focus.includes(i.id));
+    if (!pool.length) return { none: true, kind, kindWord: 'other' };
+    if (pool.length === 1 || np.other.plural) return { ids: pool.map((i) => i.id), source: 'focus', kind, guess: `I took ${labels(pool)} as the other one` };
+    return { ask: `Which other ${kind}: ${joinAnd(pool.map((i) => label(i)))}?`, candidates: pool.map((i) => i.id) };
   }
   function resolveOne(st, text, { allowEmpty = false } = {}) {
     const t = toks(text).filter((w) => !DET.has(w) || PRONOUN.has(w));

@@ -90,7 +90,9 @@
 @lang.en.neg.words lang.en.neg text=not text=no text=never text=without text=nothing text=none text=nobody text=nowhere text=neither text=nor text=cannot
 @lang.en.neg.contracted lang.en.neg pattern="(.+)n't" doc="every n't contraction (don't, isn't, can't, won't ...) and the same without apostrophe (dont, isnt, cant): value-check.mjs counts them as negation"
 @lang.en.neg.rule.same lang.en.neg.rule doc="a rewrite of a sentence (normalizer, paraphrase, correction) must keep the negation: both or neither carry one; stop / undo / cancel are not negations here"
-@lang.en.neg.rule.aux lang.en.neg.rule doc="negation of an act ('do not add a table', 'Ion does not eat 1 apple') is not read by the act forms today (holes: minimal pairs mp#012, 022, 023, 025, 027)"
+@lang.en.neg.rule.aux lang.en.neg.rule doc="negation of a statement ('Ion does not eat 1 apple': the worlds' neg patterns, kids.arith kids.shop) is read by the worlds; negation of a REQUEST is read here (slice 2): the sentence opens with the lead words of neg.imperative and is not carried out" status=read read=en.negatedRequest
+@lang.en.neg.imperative.1 lang.en.neg.imperative text="do not" text="dont" text="don't" text="please do not" text="do not ever" text="do not just" doc="the words that turn a request into 'do not': the rest is what must not be done; the system says it will not and changes nothing"
+@lang.en.neg.imperative.skip lang.en.neg.imperative.skip text=know text=worry text=mind text=forget text=think text=care text=bother text=say text=sure text=like text=want text=need text=have text=let doc="not a negated request: 'do not know', 'never mind', 'don't forget to save' (that one is a positive request), 'I do not want ...' has a subject"
 
 # ---- imperatives ----
 @lang.en.imperative.rule lang.en.imperative.rule doc="the verb of a request is the words before the first determiner, number, pronoun or preposition (at most 3, lead-in words removed): the first word of an imperative sentence"

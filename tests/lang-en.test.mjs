@@ -79,3 +79,30 @@ test('frames: the argument frames of the acts are facts (238: acts 85, acts.more
   assert.deepEqual([own.tabOnly, own.tabPriority, own.args], [true, 30, ['rest']]);
   assert.deepEqual(en.frames('acts.more').find((f) => f.id === 'ask.near').lit, { rel: 'near' });
 });
+
+test('noun phrases: relative clause, "some of", "the other one", "or" are readings of facts (np.sop slice 2)', () => {
+  assert.deepEqual(en.nounPhrase('table that is red'), { text: 'red table', relative: true });
+  assert.equal(en.nounPhrase('table that is at table 1').relative, undefined);   // a place is no modifier: left to the world
+  assert.deepEqual(en.nounPhrase('some of the tables'), { text: 'the tables', partitive: { mode: 'ask' } });
+  assert.deepEqual(en.nounPhrase('of the tables').partitive, { mode: 'ask' });   // the form's own determiner took "some"
+  assert.deepEqual(en.nounPhrase('two of the houses').partitive, { mode: 'count', n: 2 });
+  assert.equal(en.nounPhrase('all of the tables').text, 'all the tables');
+  assert.deepEqual(en.nounPhrase('other table').other, { plural: false });
+  assert.equal(en.nounPhrase('the other one').text, '');
+  const c = en.nounPhrase('the red or the blue house').choice;
+  assert.deepEqual(c.map((p) => p.alt), ['the red house', null]);
+  assert.equal(en.nounPhrase('red and blue house').choice, undefined);
+});
+
+test('negated requests: "do not remove table 3" is no request; "never mind" and "dont know" are not requests either way', () => {
+  assert.deepEqual(en.negatedRequest("don't add a table"), { rest: 'add a table', leadEnd: 6 });
+  assert.deepEqual(en.negatedRequest('please do not draw a sun'), { rest: 'draw a sun', leadEnd: 14 });
+  for (const t of ['never mind', 'never remove table 1', 'dont know', "don't forget to save it", 'do not remove table 3, add table 4', 'I do not know']) assert.equal(en.negatedRequest(t), null, t);
+});
+
+test('temporal prepositions are facts (relation and order) that no act form reads as a place', () => {
+  assert.deepEqual(en.timeRelation('before'), { rel: 'before', order: 'earlier' });
+  assert.deepEqual(en.timeRelation('until'), { rel: 'until', order: 'earlier', span: 'end' });
+  assert.equal(en.timeRelation('at'), null);
+  assert.ok(!en.words('prep', 'acts.rel').has('before') && !en.words('prep', 'dialogue').has('during'));
+});

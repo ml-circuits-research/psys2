@@ -36,3 +36,12 @@
 @lang.en.prep.as lang.en.prep text=as rel=as role=role in=routing.format core.source="psys2 closed-class sets 2026-11-14"
 @lang.en.prep.like lang.en.prep text=like rel=like role=similarity in=routing.format core.source="psys2 closed-class sets 2026-11-14"
 @lang.en.prep.resembling lang.en.prep text=resembling rel=like role=similarity in=routing.format core.source="psys2 closed-class sets 2026-11-14"
+
+# ---- temporal prepositions as relations (slice 2): `in=time`, not part of the act forms' relation words (acts.rel), so no schema world reads them as a place. `order` is the position of the first thing against the second on a line of time ----
+@lang.en.prep.before lang.en.prep text=before rel=before time=yes order=earlier in=time core.source="slice 2 2026-11-14"
+@lang.en.prep.after lang.en.prep text=after rel=after time=yes order=later in=time core.source="slice 2 2026-11-14"
+@lang.en.prep.earlier_than lang.en.prep text=earlier_than rel=before time=yes order=earlier in=time core.source="slice 2 2026-11-14"
+@lang.en.prep.later_than lang.en.prep text=later_than rel=after time=yes order=later in=time core.source="slice 2 2026-11-14"
+@lang.en.prep.during lang.en.prep text=during rel=during time=yes order=within in=time core.source="slice 2 2026-11-14"
+@lang.en.prep.until lang.en.prep text=until rel=until time=yes order=earlier span=end in=time core.source="slice 2 2026-11-14"
+@lang.en.prep.since lang.en.prep text=since rel=since time=yes order=later span=start in=time core.source="slice 2 2026-11-14"
