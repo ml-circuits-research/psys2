@@ -3292,3 +3292,22 @@ What it owns, once, for every host:
    Find where steps are merged today (session undo timeline of RESTORE-1, the grouping added for the chess engine reply) and report the cause.
 3. **"Undo the X"** (undo a named earlier step, not the last): if the step is independent of later ones, undo only it; otherwise say what else would be undone and ask.
 4. Tests in both reasoners and across worlds (undo/redo through a tab switch), a Chrome probe with the Undo/Redo buttons, and rows in the smoke suite.
+
+## Reviewer 2026-11-13 14:55 — AVATAR-FROM-PARTS (owner): the avatar becomes a drawing made of replaceable parts
+
+The owner finds the avatar system limited: fixed pictures from a library, few things can change. He wants a real vector face made of small elements that can be replaced, resized, moved and recoloured, built from a description, like a police sketch, with a few presets.
+
+**Data:** the knowledge world `k.faces` of sop-knowledge-worlds (Round 6 there, in progress): slots of a face with anchor boxes, variants per slot with plain features (round, long, thick, curly, small, smiling…), presets, expressions, colour names. Loaded by lookup like `k.objects`. Start on the hand-written core when it lands; a stub of 3 variants per slot is fine until then.
+
+**In the app:**
+1. **Renderer.** The Avatar tab draws the face with the DRAW-FROM-FACTS renderer (one slot after another, mirrored pairs, colours from the face's palette). Crisp at any size; the small avatar in the header uses the same data.
+2. **Describe a face.** "a woman with a long face, small green eyes, thick eyebrows and curly red hair, with glasses" → choose per slot the variant whose features match best, say what was chosen and what could not be matched ("I have no freckles yet"). Unnamed slots keep the current variant. Open slots and features are read by frame, as in KNOWLEDGE-BY-LOOKUP; no training rows per feature.
+3. **Change one element.** "another nose", "the next mouth", "a bigger nose", "eyes closer together", "raise the eyebrows", "longer hair", "blue eyes", "no beard", "swap the glasses for round ones". Size, position and distance changes go through the SPACE module inside the face frame, with limits so that it stays a face. "what noses are there?" shows the variants as small pictures to tap.
+4. **Expressions and talking.** happy, sad, angry, surprised, sleepy, wink switch the variants named by `k.faces.expression`; "make it happy" on the Avatar tab is this. While the voice speaks, the mouth alternates the talking pair.
+5. **Presets and saving.** The presets of `k.faces` appear as today's character choices; a face the user made can be named, saved in the profile and reloaded ("save this as Grandma", "be Grandma").
+6. **Shared with drawing.** "draw me in the picture" / "draw a girl with red hair" in the Drawing tab places a face (later a figure) as a composite object, addressable by parts like any other.
+7. **Old avatars.** Keep the current DiceBear-based characters selectable until the new faces cover them; then remove the library. Report the bundle size before and after.
+8. Everything is undoable (one step per request), works in both reasoners, and has replies in plain words.
+
+**Tests:** 60 descriptions with the expected variant per slot (seeded from the features), 30 single-element changes, expressions, save and reload; a Chrome probe with screenshots of 12 described faces for the reviewer and the owner.
+**Order:** after SPACE (it needs the module); SETTINGS-COHERENT and UNDO-REDO are independent.
