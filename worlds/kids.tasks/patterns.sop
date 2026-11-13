@@ -424,7 +424,7 @@
     example="Put socks on my garden."
 
 @pat.kids.tasks.w.add.and core.pattern
-    match="[$lang.lead.polite|pls|hey|just|so]? [$kids.tasks.g46_add] {a:words(3)} [to|on|onto|into] [my|the|our]? {la:words(1)} [list]? [and|and_also|also|plus|then] [add|put]? {b:words(3)} [to|on|onto|into|for]? [my|the|our]? {lb:words(1)} [list]? [$lang.tail.filler]?"
+    match="[$lang.lead.polite|pls|hey|just|so]? [$kids.tasks.g46_add] {a:words(3)} [to|on|onto|into] [my|the|our]? {la:words(1)} [list]? [and|and_also|also|plus|then] [add|put]? {b:words(3)} [to|on|onto|into|for] [my|the|our]? {lb:words(1)} [list]? [$lang.tail.filler]?"
     emit="@{_} core.request action=tasks.add arg.item=\"{a}\" arg.list=\"{la}\"\n@{_1} core.request action=tasks.add arg.item=\"{b}\" arg.list=\"{lb}\""
     kind=request
     priority=8

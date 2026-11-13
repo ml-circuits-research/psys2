@@ -62,6 +62,9 @@ Real messages often omit or repeat words: "make your eyes and body blue", "eyes 
     priority=10
     example="Tom has 5 apples."
 ```
+
+**Compound messages (ROUND-TRIP-MINING step 2).** Three general rules for a sentence cut at `and` / `then` / `,`: (a) when a whole reading is a command whose free-text slot swallowed a connective followed by a question word ("draw 2 trees and what sound does a cow make"), the slot is weak and the question is its own clause: a clause that opens with a question word needs neither the priority bar nor the same world as the command; (b) a command of another world after a connective is accepted as a clause when at least half of its words are fixed words of its pattern (not free text) and it has three or more content words ("play twinkle twinkle and draw a house"); (c) when cutting at a connective leaves two neighbouring clauses unread ("what do red | yellow make"), they are read again as one (the connective stays inside the question). Tests: `tests/compound-messages.test.mjs`.
+
 ### Match syntax (token level, anchored to the whole sentence without its final punctuation)
 | Element | Meaning |
 | --- | --- |
