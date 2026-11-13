@@ -127,7 +127,13 @@ function candidates(el, tokens, i, env, slotsSoFar) {
   }
   const t = tokens[i];
   if (!t || (t.filler && cls !== 'recent')) return [];
-  const text = (len) => (len === 1 && t.textOverride != null ? t.textOverride : env.text.slice(t.start, tokens[i + len - 1].end));   // textOverride: a token the expansion changed (one-anaphora singular noun)
+  // textOverride: a token the expansion changed (one-anaphora singular noun). A token list the expansion rewrote (verb and determiner of the anchor, the new modifiers, the anchor's noun) is not a slice
+  // of the source: its offsets run backwards, so the text of the slot is the words of the tokens ("draw a green one" -> thing "green house", not "").
+  const text = (len) => {
+    if (len === 1 && t.textOverride != null) return t.textOverride;
+    for (let k = 1; k < len; k++) { const a = tokens[i + k - 1], b = tokens[i + k]; if (a.synth || b.synth || b.start < a.end) return tokens.slice(i, i + len).map((x) => x.textOverride ?? x.raw ?? x.lower).join(' '); }
+    return env.text.slice(t.start, tokens[i + len - 1].end);
+  };
   const span = (len) => [t.start, tokens[i + len - 1].end];
   switch (cls) {
     case 'number': {

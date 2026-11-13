@@ -72,3 +72,9 @@
     semantics=action
     action=diagram.sketch.place
     doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."
+
+@op.diagram.sketch.own core.operation
+    impl=own
+    semantics=action
+    action=diagram.sketch.own
+    doc="The act 'own' (spec 21), applied by the generic executor to this world's schema."

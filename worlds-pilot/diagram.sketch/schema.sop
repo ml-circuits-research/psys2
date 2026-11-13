@@ -9,6 +9,7 @@
     rel=yes
     thingask=yes
     bare=yes
+    reader=yes
     acts=make
     acts=remove
     acts=change
@@ -20,6 +21,7 @@
     acts=copy
     acts=undo
     acts=redo
+    acts=own
     limit.items=200
     limit.history=30
 

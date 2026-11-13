@@ -23,6 +23,9 @@ export const FORMS_MORE = [
   { id: 'change.bare.value', act: 'change', mode: 'set', match: 'L D {value:VALUE} [time|mode|please|pls]? [time|mode]?', args: ['value'], priority: 3, if: 'wish', example: 'Red.' },
   { id: 'place.wish', act: 'place', match: `L ${W} D {thing:words} REL D {place:words}`, args: ['thing', 'rel', 'place'], priority: 12, if: 'wish', example: 'I want the house next to the tree.' },
   { id: 'place.needs', act: 'place', match: 'L D {thing:words} [needs_to_be|should_be|must_be|has_to_be|goes|go|belongs|should_go|needs_to_go|should_stand|stands|is] REL D {place:words}', args: ['thing', 'rel', 'place'], priority: 11, if: 'wish', example: 'The house goes next to the tree.' },
+  // a part of a thing as a kind: "give the house a blue door", "could the house have a yellow door" (the owner is the place, the part the thing; the world's hooks read a part name of k.objects as a part of the owner)
+  { id: 'make.give', act: 'make', lit: { rel: 'to' }, match: 'L give D {place:words} D {thing:rest}', args: ['place', 'thing'], priority: 10, if: 'wish', example: 'Give the house a blue door.' },
+  { id: 'make.have', act: 'make', lit: { rel: 'to' }, match: 'L [could|can|would|should|may|must] D {place:words} [have] D {thing:rest}', args: ['place', 'thing'], priority: 10, if: 'wish', example: 'Could the house have a yellow door?' },
   { id: 'remove.no', act: 'remove', match: 'L [i_do_not_want|i_dont_want|i_do_not_need|i_dont_need|no_more|no_longer_want|i_no_longer_need|i_dont_like|i_do_not_like|get_rid_of] D {thing:words} [anymore|any_more|please|pls]?', args: ['thing'], priority: 11, if: 'wish', example: 'I do not want the house anymore.' },
   { id: 'remove.away', act: 'remove', match: 'L V.remove D {thing:words} [away|off|out|up]', args: ['thing'], priority: 12, if: 'wish', example: 'Clear the house away.' },
   // list: is there X? / do I have X? / describe, what is in, what did I draw

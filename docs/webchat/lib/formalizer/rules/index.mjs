@@ -9,7 +9,7 @@ import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=e3316469a7';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=5de885797a';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=0d5858577e';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=32e0c452bf';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=07dd1fe4f2';
 import { routeScores } from './router.mjs?v=1627316289';
 import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=34ef60e7bf';
@@ -22,7 +22,7 @@ import { readingVariants, dropStyleIn } from './variants.mjs?v=058ecdb0c1';
 export { FormSession } from './session.mjs?v=e445741b59';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=34ef60e7bf';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=5de885797a';
-export { compilePattern, matchTokens } from './matcher.mjs?v=0d5858577e';
+export { compilePattern, matchTokens } from './matcher.mjs?v=32e0c452bf';
 export { singularLemma, pluralize } from './lemma.mjs?v=3f5920ed63';
 
 const compiledCache = new WeakMap();

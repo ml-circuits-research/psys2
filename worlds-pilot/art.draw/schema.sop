@@ -48,6 +48,9 @@
     word=object
     word=item
     word=shape
+    catalog=k.objects
+    catalog=k.animals
+    catalog=k.food
     word=house
     word=home
     word=cottage

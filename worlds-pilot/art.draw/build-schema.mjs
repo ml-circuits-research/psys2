@@ -41,6 +41,7 @@ ${['make', 'remove', 'change', 'place', 'group', 'pick', 'ask', 'copy', 'undo', 
     word=object
     word=item
     word=shape
+${lines('catalog', ['k.objects', 'k.animals', 'k.food'])}
 ${lines('word', Object.entries(KIND_WORDS).filter(([, k]) => k !== '*').map(([w]) => w))}
 
 @pic.ground acts.kind
