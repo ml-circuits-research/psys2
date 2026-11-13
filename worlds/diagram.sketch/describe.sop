@@ -2,7 +2,7 @@
     op=diagram.create
     intent=command
     emit="@{_} core.request action=diagram.create arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -36,7 +36,7 @@
     op=diagram.delete
     intent=command
     emit="@{_} core.request action=diagram.delete arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -58,7 +58,7 @@
     op=diagram.move
     intent=command
     emit="@{_} core.request action=diagram.move arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -82,7 +82,7 @@
     op=diagram.arrange
     intent=command
     emit="@{_} core.request action=diagram.arrange arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -104,7 +104,7 @@
     op=diagram.resize
     intent=command
     emit="@{_} core.request action=diagram.resize arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -127,7 +127,7 @@
     op=diagram.rename
     intent=command
     emit="@{_} core.request action=diagram.rename arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -146,7 +146,7 @@
     op=diagram.label
     intent=command
     emit="@{_} core.request action=diagram.label arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -167,7 +167,7 @@
     op=diagram.duplicate
     intent=command
     emit="@{_} core.request action=diagram.duplicate arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -188,7 +188,7 @@
     op=diagram.disconnect
     intent=command
     emit="@{_} core.request action=diagram.disconnect arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -209,7 +209,7 @@
     op=diagram.swap
     intent=command
     emit="@{_} core.request action=diagram.swap arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -229,7 +229,7 @@
     op=diagram.group
     intent=command
     emit="@{_} core.request action=diagram.group arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -250,7 +250,7 @@
     op=diagram.ungroup
     intent=command
     emit="@{_} core.request action=diagram.ungroup arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -270,7 +270,7 @@
     op=diagram.connect
     intent=command
     emit="@{_} core.request action=diagram.connect arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -293,7 +293,7 @@
     op=diagram.align
     intent=command
     emit="@{_} core.request action=diagram.align arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -312,7 +312,7 @@
     op=diagram.distribute
     intent=command
     emit="@{_} core.request action=diagram.distribute arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -332,7 +332,7 @@
     op=diagram.forget
     intent=command
     emit="@{_} core.request action=diagram.forget arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -351,7 +351,7 @@
     op=diagram.improve
     intent=command
     emit="@{_} core.request action=diagram.improve arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -374,7 +374,7 @@
     op=diagram.respace
     intent=command
     emit="@{_} core.request action=diagram.respace arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -395,7 +395,7 @@
     op=diagram.snap
     intent=command
     emit="@{_} core.request action=diagram.snap arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -414,7 +414,7 @@
     op=diagram.flip
     intent=command
     emit="@{_} core.request action=diagram.flip arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -434,7 +434,7 @@
     op=diagram.reverse
     intent=command
     emit="@{_} core.request action=diagram.reverse arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -453,7 +453,7 @@
     op=diagram.sort
     intent=command
     emit="@{_} core.request action=diagram.sort arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -474,7 +474,7 @@
     op=diagram.equalize
     intent=command
     emit="@{_} core.request action=diagram.equalize arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -496,7 +496,7 @@
     op=diagram.straighten
     intent=command
     emit="@{_} core.request action=diagram.straighten arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -515,7 +515,7 @@
     op=diagram.untangle
     intent=command
     emit="@{_} core.request action=diagram.untangle arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -535,7 +535,7 @@
     op=diagram.fit
     intent=command
     emit="@{_} core.request action=diagram.fit arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -556,7 +556,7 @@
     op=diagram.ask.count
     intent=command
     emit="@{_} core.request action=diagram.ask.count arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=imp
     frames=wish
     frames=can
@@ -576,7 +576,7 @@
     op=diagram.undo
     intent=command
     emit="@{_} core.request action=diagram.undo arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=phr
 
 @describe.undo.en core.describe.words
@@ -588,7 +588,7 @@
     op=diagram.redo
     intent=command
     emit="@{_} core.request action=diagram.redo arg.text=\"{segment}\""
-    priority=9
+    priority=3
     frames=phr
 
 @describe.redo.en core.describe.words
