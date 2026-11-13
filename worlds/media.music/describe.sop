@@ -1,0 +1,1505 @@
+@describe.playnote core.describe
+    op=music.playNote
+    intent=command
+    emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note} arg.oct={oct} arg.inst={inst}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.playnote.reg core.describe.arg
+    of=$describe.playnote
+    name=reg
+    class=lex.media.music.registers
+    optional=true
+
+@describe.playnote.note core.describe.arg
+    of=$describe.playnote
+    name=note
+    class=lex.media.music.notes
+
+@describe.playnote.oct core.describe.arg
+    of=$describe.playnote
+    name=oct
+    class=number
+    optional=true
+
+@describe.playnote.inst core.describe.arg
+    of=$describe.playnote
+    name=inst
+    class=lex.media.music.instruments
+    optional=true
+
+@describe.playnote.en core.describe.words
+    of=$describe.playnote
+    lang=en
+    verb=$w.en.play.music.playNote
+    verb=$w.en.hear.music.playNote
+    verb=$w.en.sing.music.playNote
+    verb=$w.en.try.music.playNote
+    det.reg=$w.en.the.music.playNote.reg
+    det.reg=$w.en.a.music.playNote.reg
+    det.note=$w.en.the.music.playNote.note
+    det.note=$w.en.note.music.playNote.note
+    prep.inst=$w.en.on.music.playNote.inst
+    prep.inst=$w.en.with.music.playNote.inst
+    prep.inst=$w.en.using.music.playNote.inst
+    prep.inst=$w.en.in.music.playNote.inst
+    det.inst=$w.en.the.music.playNote.inst
+    det.inst=$w.en.a.music.playNote.inst
+
+@describe.playchord core.describe
+    op=music.playChord
+    intent=command
+    emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.inst={inst}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.playchord.root core.describe.arg
+    of=$describe.playchord
+    name=root
+    class=lex.media.music.notes
+
+@describe.playchord.q core.describe.arg
+    of=$describe.playchord
+    name=q
+    class=lex.media.music.qualities
+
+@describe.playchord.n core.describe.arg
+    of=$describe.playchord
+    name=n
+    class=number
+    optional=true
+
+@describe.playchord.inst core.describe.arg
+    of=$describe.playchord
+    name=inst
+    class=lex.media.music.instruments
+    optional=true
+
+@describe.playchord.en core.describe.words
+    of=$describe.playchord
+    lang=en
+    verb=$w.en.play.music.playChord
+    verb=$w.en.hear.music.playChord
+    verb=$w.en.sing.music.playChord
+    verb=$w.en.try.music.playChord
+    rest=$w.en.chord.music.playChord
+    det.root=$w.en.a.music.playChord.root
+    det.root=$w.en.an.music.playChord.root
+    det.root=$w.en.the.music.playChord.root
+    prep.inst=$w.en.on.music.playChord.inst
+    prep.inst=$w.en.with.music.playChord.inst
+    prep.inst=$w.en.using.music.playChord.inst
+    prep.inst=$w.en.in.music.playChord.inst
+    det.inst=$w.en.the.music.playChord.inst
+    det.inst=$w.en.a.music.playChord.inst
+
+@describe.playscale core.describe
+    op=music.playScale
+    intent=command
+    emit="@{_} core.request action=music.playScale arg.root={root} arg.st={st} arg.dir={dir} arg.inst={inst}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.playscale.root core.describe.arg
+    of=$describe.playscale
+    name=root
+    class=lex.media.music.notes
+
+@describe.playscale.st core.describe.arg
+    of=$describe.playscale
+    name=st
+    class=lex.media.music.scaletypes
+
+@describe.playscale.dir core.describe.arg
+    of=$describe.playscale
+    name=dir
+    class=lex.media.music.directions
+    optional=true
+
+@describe.playscale.inst core.describe.arg
+    of=$describe.playscale
+    name=inst
+    class=lex.media.music.instruments
+    optional=true
+
+@describe.playscale.en core.describe.words
+    of=$describe.playscale
+    lang=en
+    verb=$w.en.play.music.playScale
+    verb=$w.en.hear.music.playScale
+    verb=$w.en.sing.music.playScale
+    verb=$w.en.try.music.playScale
+    rest=$w.en.scale.music.playScale
+    det.root=$w.en.a.music.playScale.root
+    det.root=$w.en.an.music.playScale.root
+    det.root=$w.en.the.music.playScale.root
+    prep.inst=$w.en.on.music.playScale.inst
+    prep.inst=$w.en.with.music.playScale.inst
+    prep.inst=$w.en.using.music.playScale.inst
+    prep.inst=$w.en.in.music.playScale.inst
+    det.inst=$w.en.the.music.playScale.inst
+    det.inst=$w.en.a.music.playScale.inst
+
+@describe.playany core.describe
+    op=music.playAny
+    intent=command
+    emit="@{_} core.request action=music.playAny arg.title=\"{title}\" arg.inst={inst}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.playany.title core.describe.arg
+    of=$describe.playany
+    name=title
+    class=lex.media.music.songtitles
+
+@describe.playany.inst core.describe.arg
+    of=$describe.playany
+    name=inst
+    class=lex.media.music.instruments
+    optional=true
+
+@describe.playany.en core.describe.words
+    of=$describe.playany
+    lang=en
+    verb=$w.en.play.music.playAny
+    verb=$w.en.hear.music.playAny
+    verb=$w.en.sing.music.playAny
+    verb=$w.en.try.music.playAny
+    det.title=$w.en.the.music.playAny.title
+    det.title=$w.en.song.music.playAny.title
+    det.title=$w.en.tune.music.playAny.title
+    prep.inst=$w.en.on.music.playAny.inst
+    prep.inst=$w.en.with.music.playAny.inst
+    prep.inst=$w.en.using.music.playAny.inst
+    prep.inst=$w.en.in.music.playAny.inst
+    det.inst=$w.en.the.music.playAny.inst
+    det.inst=$w.en.a.music.playAny.inst
+
+@describe.random core.describe
+    op=music.random
+    intent=command
+    emit="@{_} core.request action=music.random"
+    priority=12
+    bareVerb=true
+    frames=phr
+    frames=imp
+    frames=can
+
+@describe.random.en core.describe.words
+    of=$describe.random
+    lang=en
+    phrase=$phrase.lang.intent.surpriseme
+    verb=$w.en.play.music.random
+    verb=$w.en.hear.music.random
+    verb=$w.en.sing.music.random
+    verb=$w.en.try.music.random
+    noun=$w.en.song.music.random
+    noun=$w.en.tune.music.random
+    noun=$w.en.music.music.random
+    noun=$w.en.something.music.random
+
+@describe.replay core.describe
+    op=music.replay
+    intent=command
+    emit="@{_} core.request action=music.replay"
+    priority=12
+    frames=phr
+
+@describe.replay.en core.describe.words
+    of=$describe.replay
+    lang=en
+    phrase=$phrase.lang.intent.playagain
+
+@describe.playmelody core.describe
+    op=music.playMelody
+    intent=command
+    emit="@{_} core.request action=music.playMelody arg.inst={inst}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.playmelody.inst core.describe.arg
+    of=$describe.playmelody
+    name=inst
+    class=lex.media.music.instruments
+    optional=true
+
+@describe.playmelody.en core.describe.words
+    of=$describe.playmelody
+    lang=en
+    verb=$w.en.play.music.playMelody
+    verb=$w.en.hear.music.playMelody
+    verb=$w.en.sing.music.playMelody
+    verb=$w.en.try.music.playMelody
+    noun=$w.en.melody.music.playMelody
+    noun=$w.en.tune.music.playMelody
+    noun=$w.en.notes.music.playMelody
+    prep.inst=$w.en.on.music.playMelody.inst
+    prep.inst=$w.en.with.music.playMelody.inst
+    prep.inst=$w.en.using.music.playMelody.inst
+    prep.inst=$w.en.in.music.playMelody.inst
+    det.inst=$w.en.the.music.playMelody.inst
+    det.inst=$w.en.a.music.playMelody.inst
+
+@describe.stop core.describe
+    op=music.stop
+    intent=command
+    emit="@{_} core.request action=music.stop"
+    priority=12
+    bareVerb=true
+    frames=imp
+    frames=can
+
+@describe.stop.en core.describe.words
+    of=$describe.stop
+    lang=en
+    verb=$w.en.stop.music.stop
+    verb=$w.en.halt.music.stop
+    verb=$w.en.pause.music.stop
+    verb=$w.en.mute.music.stop
+    verb=$w.en.silence.music.stop
+    verb=$w.en.quiet.music.stop
+    noun=$w.en.music.music.stop
+    noun=$w.en.sound.music.stop
+    noun=$w.en.song.music.stop
+    noun=$w.en.playing.music.stop
+    noun=$w.en.tune.music.stop
+
+@describe.loopon core.describe
+    op=music.loop
+    intent=command
+    emit="@{_} core.request action=music.loop arg.on=true"
+    priority=12
+    bareVerb=true
+    frames=imp
+    frames=can
+
+@describe.loopon.en core.describe.words
+    of=$describe.loopon
+    lang=en
+    verb=$w.en.loop.music.loop
+    verb=$w.en.repeat.music.loop
+    verb=$w.en.keep.music.loop
+    noun=$w.en.it.music.loop
+    noun=$w.en.song.music.loop
+    noun=$w.en.music.music.loop
+    noun=$w.en.tune.music.loop
+    noun=$w.en.looping.music.loop
+    noun=$w.en.repeating.music.loop
+
+@describe.loopoff core.describe
+    op=music.loop
+    intent=command
+    emit="@{_} core.request action=music.loop arg.on=false"
+    priority=13
+    frames=imp
+    frames=can
+
+@describe.loopoff.en core.describe.words
+    of=$describe.loopoff
+    lang=en
+    verb=$w.en.stop.music.loop
+    verb=$w.en.end.music.loop
+    verb=$w.en.cancel.music.loop
+    noun=$w.en.looping.music.loop
+    noun=$w.en.loop.music.loop
+    noun=$w.en.repeating.music.loop
+
+@describe.faster core.describe
+    op=music.tempo
+    intent=command
+    emit="@{_} core.request action=music.tempo arg.dir=faster"
+    priority=12
+    frames=phr
+
+@describe.faster.en core.describe.words
+    of=$describe.faster
+    lang=en
+    phrase=$phrase.lang.intent.faster
+
+@describe.slower core.describe
+    op=music.tempo
+    intent=command
+    emit="@{_} core.request action=music.tempo arg.dir=slower"
+    priority=12
+    frames=phr
+
+@describe.slower.en core.describe.words
+    of=$describe.slower
+    lang=en
+    phrase=$phrase.lang.intent.slower
+
+@describe.bpm core.describe
+    op=music.tempo
+    intent=command
+    emit="@{_} core.request action=music.tempo arg.bpm={bpm}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.bpm.bpm core.describe.arg
+    of=$describe.bpm
+    name=bpm
+    class=number
+
+@describe.bpm.en core.describe.words
+    of=$describe.bpm
+    lang=en
+    verb=$w.en.set.music.tempo
+    verb=$w.en.change.music.tempo
+    verb=$w.en.make.music.tempo
+    verb=$w.en.play.music.tempo
+    verb=$w.en.use.music.tempo
+    noun=$w.en.tempo.music.tempo
+    noun=$w.en.speed.music.tempo
+    noun=$w.en.bpm.music.tempo
+    prep.bpm=$w.en.to.music.tempo.bpm
+    prep.bpm=$w.en.at.music.tempo.bpm
+
+@describe.louder core.describe
+    op=music.volume
+    intent=command
+    emit="@{_} core.request action=music.volume arg.dir=louder"
+    priority=12
+    frames=phr
+
+@describe.louder.en core.describe.words
+    of=$describe.louder
+    lang=en
+    phrase=$phrase.lang.intent.louder
+
+@describe.quieter core.describe
+    op=music.volume
+    intent=command
+    emit="@{_} core.request action=music.volume arg.dir=quieter"
+    priority=12
+    frames=phr
+
+@describe.quieter.en core.describe.words
+    of=$describe.quieter
+    lang=en
+    phrase=$phrase.lang.intent.quieter
+
+@describe.volset core.describe
+    op=music.volume
+    intent=command
+    emit="@{_} core.request action=music.volume arg.v={v}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.volset.v core.describe.arg
+    of=$describe.volset
+    name=v
+    class=number
+
+@describe.volset.en core.describe.words
+    of=$describe.volset
+    lang=en
+    verb=$w.en.set.music.volume
+    verb=$w.en.change.music.volume
+    verb=$w.en.make.music.volume
+    verb=$w.en.put.music.volume
+    verb=$w.en.turn.music.volume
+    noun=$w.en.volume.music.volume
+    noun=$w.en.sound.music.volume
+    prep.v=$w.en.to.music.volume.v
+    prep.v=$w.en.at.music.volume.v
+    unit.v=$w.en.percent.music.volume.v
+
+@describe.instrument core.describe
+    op=music.instrument
+    intent=command
+    emit="@{_} core.request action=music.instrument arg.inst={inst}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.instrument.inst core.describe.arg
+    of=$describe.instrument
+    name=inst
+    class=lex.media.music.instruments
+
+@describe.instrument.en core.describe.words
+    of=$describe.instrument
+    lang=en
+    verb=$w.en.use.music.instrument
+    verb=$w.en.switch.music.instrument
+    verb=$w.en.change.music.instrument
+    verb=$w.en.choose.music.instrument
+    verb=$w.en.pick.music.instrument
+    verb=$w.en.select.music.instrument
+    prep.inst=$w.en.to.music.instrument.inst
+    prep.inst=$w.en.like.music.instrument.inst
+    det.inst=$w.en.the.music.instrument.inst
+    det.inst=$w.en.a.music.instrument.inst
+    det.inst=$w.en.an.music.instrument.inst
+
+@describe.octave core.describe
+    op=music.octave
+    intent=command
+    emit="@{_} core.request action=music.octave arg.n={n} arg.dir={dir} arg.replay=true"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.octave.n core.describe.arg
+    of=$describe.octave
+    name=n
+    class=number
+    optional=true
+
+@describe.octave.dir core.describe.arg
+    of=$describe.octave
+    name=dir
+    class=lex.media.music.dirs
+
+@describe.octave.en core.describe.words
+    of=$describe.octave
+    lang=en
+    verb=$w.en.play.music.octave
+    verb=$w.en.shift.music.octave
+    verb=$w.en.move.music.octave
+    verb=$w.en.raise.music.octave
+    verb=$w.en.lower.music.octave
+    verb=$w.en.put.music.octave
+    verb=$w.en.go.music.octave
+    det.n=$w.en.an.music.octave.n
+    det.n=$w.en.a.music.octave.n
+    det.n=$w.en.one.music.octave.n
+    unit.n=$w.en.octave.music.octave.n
+    unit.n=$w.en.octaves.music.octave.n
+
+@describe.transpose core.describe
+    op=music.transpose
+    intent=command
+    emit="@{_} core.request action=music.transpose arg.dir={dir} arg.n={n} arg.unit={unit}"
+    priority=12
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.transpose.dir core.describe.arg
+    of=$describe.transpose
+    name=dir
+    class=lex.media.music.dirs
+
+@describe.transpose.n core.describe.arg
+    of=$describe.transpose
+    name=n
+    class=number
+
+@describe.transpose.unit core.describe.arg
+    of=$describe.transpose
+    name=unit
+    class=lex.media.music.intervals
+
+@describe.transpose.en core.describe.words
+    of=$describe.transpose
+    lang=en
+    verb=$w.en.transpose.music.transpose
+    verb=$w.en.shift.music.transpose
+    verb=$w.en.move.music.transpose
+    noun=$w.en.it.music.transpose
+    prep.n=$w.en.by.music.transpose.n
+    det.n=$w.en.a.music.transpose.n
+    det.n=$w.en.an.music.transpose.n
+
+@describe.transposeto core.describe
+    op=music.transposeTo
+    intent=command
+    emit="@{_} core.request action=music.transposeTo arg.root={root} arg.m={m}"
+    priority=12
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.transposeto.root core.describe.arg
+    of=$describe.transposeto
+    name=root
+    class=lex.media.music.notes
+
+@describe.transposeto.m core.describe.arg
+    of=$describe.transposeto
+    name=m
+    class=lex.media.music.modes
+    optional=true
+
+@describe.transposeto.en core.describe.words
+    of=$describe.transposeto
+    lang=en
+    verb=$w.en.transpose.music.transposeTo
+    verb=$w.en.play.music.transposeTo
+    verb=$w.en.make.music.transposeTo
+    verb=$w.en.put.music.transposeTo
+    verb=$w.en.move.music.transposeTo
+    noun=$w.en.it.music.transposeTo
+    noun=$w.en.this.music.transposeTo
+    noun=$w.en.that.music.transposeTo
+    prep.root=$w.en.to.music.transposeTo.root
+    prep.root=$w.en.in.music.transposeTo.root
+
+@describe.key core.describe
+    op=music.key
+    intent=statement
+    emit="@{_} core.request action=music.key arg.root={root} arg.m={m}"
+    priority=12
+    kind=statement
+    frames=stmt
+    frames=about
+
+@describe.key.root core.describe.arg
+    of=$describe.key
+    name=root
+    class=lex.media.music.notes
+
+@describe.key.m core.describe.arg
+    of=$describe.key
+    name=m
+    class=lex.media.music.modes
+    optional=true
+
+@describe.key.en core.describe.words
+    of=$describe.key
+    lang=en
+    verb=$w.en.are.music.key
+    verb=$w.en.play.music.key
+    verb=$w.en.write.music.key
+    verb=$w.en.stay.music.key
+    noun=$w.en.key.music.key
+    subject=$w.en.we.music.key
+    subject=$w.en.i.music.key
+    subject=$w.en.you.music.key
+    prep.root=$w.en.in.music.key.root
+    prep.root=$w.en.to.music.key.root
+    prep.root=$w.en.of.music.key.root
+
+@describe.melodyset core.describe
+    op=music.melodySet
+    intent=command
+    emit="@{_} core.request action=music.melodySet arg.notes=\"{notes}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.melodyset.notes core.describe.arg
+    of=$describe.melodyset
+    name=notes
+    class=rest
+
+@describe.melodyset.en core.describe.words
+    of=$describe.melodyset
+    lang=en
+    verb=$w.en.write.music.melodySet
+    verb=$w.en.compose.music.melodySet
+    verb=$w.en.make.music.melodySet
+    verb=$w.en.create.music.melodySet
+    verb=$w.en.set.music.melodySet
+    verb=$w.en.record.music.melodySet
+    noun=$w.en.melody.music.melodySet
+    noun=$w.en.tune.music.melodySet
+    noun=$w.en.song.music.melodySet
+    prep.notes=$w.en.with.music.melodySet.notes
+    prep.notes=$w.en.of.music.melodySet.notes
+    prep.notes=$w.en.like.music.melodySet.notes
+
+@describe.melodyadd core.describe
+    op=music.melodyAdd
+    intent=command
+    emit="@{_} core.request action=music.melodyAdd arg.notes=\"{notes}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.melodyadd.notes core.describe.arg
+    of=$describe.melodyadd
+    name=notes
+    class=rest
+
+@describe.melodyadd.en core.describe.words
+    of=$describe.melodyadd
+    lang=en
+    verb=$w.en.add.music.melodyAdd
+    verb=$w.en.append.music.melodyAdd
+    verb=$w.en.continue.music.melodyAdd
+    verb=$w.en.put.music.melodyAdd
+    prep.notes=$w.en.with.music.melodyAdd.notes
+    det.notes=$w.en.the.music.melodyAdd.notes
+    det.notes=$w.en.notes.music.melodyAdd.notes
+    det.notes=$w.en.more.music.melodyAdd.notes
+
+@describe.melodyclear core.describe
+    op=music.melodyClear
+    intent=command
+    emit="@{_} core.request action=music.melodyClear"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.melodyclear.en core.describe.words
+    of=$describe.melodyclear
+    lang=en
+    verb=$w.en.clear.music.melodyClear
+    verb=$w.en.delete.music.melodyClear
+    verb=$w.en.erase.music.melodyClear
+    verb=$w.en.reset.music.melodyClear
+    verb=$w.en.start.music.melodyClear
+    verb=$w.en.wipe.music.melodyClear
+    noun=$w.en.melody.music.melodyClear
+    noun=$w.en.tune.music.melodyClear
+    noun=$w.en.song.music.melodyClear
+
+@describe.melodyundo core.describe
+    op=music.melodyUndo
+    intent=command
+    emit="@{_} core.request action=music.melodyUndo"
+    priority=12
+    frames=phr
+
+@describe.melodyundo.en core.describe.words
+    of=$describe.melodyundo
+    lang=en
+    phrase=$phrase.lang.intent.undonote
+
+@describe.melodyshow core.describe
+    op=music.melodyShow
+    intent=query
+    emit="@{_} core.request action=music.melodyShow"
+    priority=12
+    kind=question
+    frames=imp
+    frames=qnoun
+    frames=tell
+    frames=bare
+
+@describe.melodyshow.en core.describe.words
+    of=$describe.melodyshow
+    lang=en
+    verb=$w.en.show.music.melodyShow
+    verb=$w.en.display.music.melodyShow
+    verb=$w.en.see.music.melodyShow
+    verb=$w.en.read.music.melodyShow
+    noun=$w.en.melody.music.melodyShow
+    noun=$w.en.tune.music.melodyShow
+
+@describe.shownotes core.describe
+    op=music.showNotes
+    intent=command
+    emit="@{_} core.request action=music.showNotes"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.shownotes.en core.describe.words
+    of=$describe.shownotes
+    lang=en
+    verb=$w.en.show.music.showNotes
+    verb=$w.en.name.music.showNotes
+    verb=$w.en.list.music.showNotes
+    verb=$w.en.display.music.showNotes
+    verb=$w.en.tell.music.showNotes
+    noun=$w.en.notes.music.showNotes
+
+@describe.showscore core.describe
+    op=music.showScore
+    intent=command
+    emit="@{_} core.request action=music.showScore"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.showscore.en core.describe.words
+    of=$describe.showscore
+    lang=en
+    verb=$w.en.show.music.showScore
+    verb=$w.en.display.music.showScore
+    verb=$w.en.see.music.showScore
+    verb=$w.en.read.music.showScore
+    verb=$w.en.open.music.showScore
+    noun=$w.en.score.music.showScore
+    noun=$w.en.music.music.showScore
+    noun=$w.en.notation.music.showScore
+    noun=$w.en.sheet.music.showScore
+
+@describe.listsongs core.describe
+    op=music.listSongs
+    intent=query
+    emit="@{_} core.request action=music.listSongs"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.listsongs.en core.describe.words
+    of=$describe.listsongs
+    lang=en
+    phrase=$phrase.lang.intent.listsongs
+
+@describe.listinstruments core.describe
+    op=music.listInstruments
+    intent=query
+    emit="@{_} core.request action=music.listInstruments"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.listinstruments.en core.describe.words
+    of=$describe.listinstruments
+    lang=en
+    phrase=$phrase.lang.intent.listinstruments
+
+@describe.listtypes core.describe
+    op=music.listTypes
+    intent=command
+    emit="@{_} core.request action=music.listTypes arg.what={what}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.listtypes.what core.describe.arg
+    of=$describe.listtypes
+    name=what
+    class=lex.media.music.things
+
+@describe.listtypes.en core.describe.words
+    of=$describe.listtypes
+    lang=en
+    verb=$w.en.list.music.listTypes
+    verb=$w.en.show.music.listTypes
+    verb=$w.en.name.music.listTypes
+    verb=$w.en.tell.music.listTypes
+    det.what=$w.en.the.music.listTypes.what
+    det.what=$w.en.all.music.listTypes.what
+    det.what=$w.en.your.music.listTypes.what
+
+@describe.scalenotes core.describe
+    op=music.scaleNotes
+    intent=query
+    emit="@{_} core.request action=music.scaleNotes arg.root={root} arg.st={st}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+
+@describe.scalenotes.root core.describe.arg
+    of=$describe.scalenotes
+    name=root
+    class=lex.media.music.notes
+
+@describe.scalenotes.st core.describe.arg
+    of=$describe.scalenotes
+    name=st
+    class=lex.media.music.scaletypes
+    optional=true
+
+@describe.scalenotes.en core.describe.words
+    of=$describe.scalenotes
+    lang=en
+    noun=$w.en.notes.music.scaleNotes
+    rest=$w.en.scale.music.scaleNotes
+    prep.root=$w.en.in.music.scaleNotes.root
+    prep.root=$w.en.of.music.scaleNotes.root
+    det.root=$w.en.the.music.scaleNotes.root
+
+@describe.chordnotes core.describe
+    op=music.chordNotes
+    intent=query
+    emit="@{_} core.request action=music.chordNotes arg.root={root} arg.q={q} arg.n={n}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+
+@describe.chordnotes.root core.describe.arg
+    of=$describe.chordnotes
+    name=root
+    class=lex.media.music.notes
+
+@describe.chordnotes.q core.describe.arg
+    of=$describe.chordnotes
+    name=q
+    class=lex.media.music.qualities
+    optional=true
+
+@describe.chordnotes.n core.describe.arg
+    of=$describe.chordnotes
+    name=n
+    class=number
+    optional=true
+
+@describe.chordnotes.en core.describe.words
+    of=$describe.chordnotes
+    lang=en
+    noun=$w.en.notes.music.chordNotes
+    rest=$w.en.chord.music.chordNotes
+    prep.root=$w.en.in.music.chordNotes.root
+    prep.root=$w.en.of.music.chordNotes.root
+    det.root=$w.en.a.music.chordNotes.root
+    det.root=$w.en.an.music.chordNotes.root
+    det.root=$w.en.the.music.chordNotes.root
+
+@describe.chordname3 core.describe
+    op=music.chordName
+    intent=query
+    emit="@{_} core.request action=music.chordName arg.notes=\"{n1} {n2} {n3}\""
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=imp
+
+@describe.chordname3.n1 core.describe.arg
+    of=$describe.chordname3
+    name=n1
+    class=lex.media.music.notes
+
+@describe.chordname3.n2 core.describe.arg
+    of=$describe.chordname3
+    name=n2
+    class=lex.media.music.notes
+
+@describe.chordname3.n3 core.describe.arg
+    of=$describe.chordname3
+    name=n3
+    class=lex.media.music.notes
+
+@describe.chordname3.en core.describe.words
+    of=$describe.chordname3
+    lang=en
+    verb=$w.en.name.music.chordName
+    verb=$w.en.identify.music.chordName
+    noun=$w.en.chord.music.chordName
+    prep.n2=$w.en.and.music.chordName.n2
+    prep.n3=$w.en.and.music.chordName.n3
+
+@describe.chordname4 core.describe
+    op=music.chordName
+    intent=query
+    emit="@{_} core.request action=music.chordName arg.notes=\"{n1} {n2} {n3} {n4}\""
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=imp
+
+@describe.chordname4.n1 core.describe.arg
+    of=$describe.chordname4
+    name=n1
+    class=lex.media.music.notes
+
+@describe.chordname4.n2 core.describe.arg
+    of=$describe.chordname4
+    name=n2
+    class=lex.media.music.notes
+
+@describe.chordname4.n3 core.describe.arg
+    of=$describe.chordname4
+    name=n3
+    class=lex.media.music.notes
+
+@describe.chordname4.n4 core.describe.arg
+    of=$describe.chordname4
+    name=n4
+    class=lex.media.music.notes
+
+@describe.chordname4.en core.describe.words
+    of=$describe.chordname4
+    lang=en
+    verb=$w.en.name.music.chordName
+    verb=$w.en.identify.music.chordName
+    noun=$w.en.chord.music.chordName
+    prep.n2=$w.en.and.music.chordName.n2
+    prep.n3=$w.en.and.music.chordName.n3
+    prep.n4=$w.en.and.music.chordName.n4
+
+@describe.keysig core.describe
+    op=music.keySig
+    intent=query
+    emit="@{_} core.request action=music.keySig arg.acc={acc} arg.root={root} arg.m={m}"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.keysig.acc core.describe.arg
+    of=$describe.keysig
+    name=acc
+    class=lex.media.music.accs
+
+@describe.keysig.root core.describe.arg
+    of=$describe.keysig
+    name=root
+    class=lex.media.music.notes
+
+@describe.keysig.m core.describe.arg
+    of=$describe.keysig
+    name=m
+    class=lex.media.music.modes
+    optional=true
+
+@describe.keysig.en core.describe.words
+    of=$describe.keysig
+    lang=en
+    tverb=$w.en.have.music.keySig
+    tverb=$w.en.has.music.keySig
+    ask=$w.en.how.music.keySig
+    det.acc=$w.en.many.music.keySig.acc
+    det.root=$w.en.the.music.keySig.root
+    det.root=$w.en.does.music.keySig.root
+    det.root=$w.en.is.music.keySig.root
+
+@describe.keywith core.describe
+    op=music.keyWith
+    intent=query
+    emit="@{_} core.request action=music.keyWith arg.n={n} arg.acc={acc}"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.keywith.n core.describe.arg
+    of=$describe.keywith
+    name=n
+    class=number
+
+@describe.keywith.acc core.describe.arg
+    of=$describe.keywith
+    name=acc
+    class=lex.media.music.accs
+
+@describe.keywith.en core.describe.words
+    of=$describe.keywith
+    lang=en
+    noun=$w.en.key.music.keyWith
+    ask=$w.en.which.music.keyWith
+    ask=$w.en.what.music.keyWith
+    prep.n=$w.en.has.music.keyWith.n
+    prep.n=$w.en.with.music.keyWith.n
+
+@describe.interval core.describe
+    op=music.interval
+    intent=query
+    emit="@{_} core.request action=music.interval arg.a={a} arg.b={b}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+
+@describe.interval.a core.describe.arg
+    of=$describe.interval
+    name=a
+    class=lex.media.music.notes
+
+@describe.interval.b core.describe.arg
+    of=$describe.interval
+    name=b
+    class=lex.media.music.notes
+
+@describe.interval.en core.describe.words
+    of=$describe.interval
+    lang=en
+    noun=$w.en.interval.music.interval
+    noun=$w.en.distance.music.interval
+    prep.a=$w.en.between.music.interval.a
+    prep.a=$w.en.from.music.interval.a
+    prep.b=$w.en.and.music.interval.b
+    prep.b=$w.en.to.music.interval.b
+
+@describe.above core.describe
+    op=music.above
+    intent=query
+    emit="@{_} core.request action=music.above arg.iv={iv} arg.dir={dir} arg.note={note}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+
+@describe.above.iv core.describe.arg
+    of=$describe.above
+    name=iv
+    class=lex.media.music.intervals
+
+@describe.above.dir core.describe.arg
+    of=$describe.above
+    name=dir
+    class=lex.media.music.dirs
+
+@describe.above.note core.describe.arg
+    of=$describe.above
+    name=note
+    class=lex.media.music.notes
+
+@describe.above.en core.describe.words
+    of=$describe.above
+    lang=en
+    noun=$w.en.note.music.above
+    det.iv=$w.en.a.music.above.iv
+    det.iv=$w.en.an.music.above.iv
+    det.iv=$w.en.the.music.above.iv
+
+@describe.relative core.describe
+    op=music.relative
+    intent=query
+    emit="@{_} core.request action=music.relative arg.kind={kind} arg.root={root} arg.m={m}"
+    priority=12
+    kind=question
+    frames=qnoun
+
+@describe.relative.kind core.describe.arg
+    of=$describe.relative
+    name=kind
+    class=lex.media.music.modes
+
+@describe.relative.root core.describe.arg
+    of=$describe.relative
+    name=root
+    class=lex.media.music.notes
+
+@describe.relative.m core.describe.arg
+    of=$describe.relative
+    name=m
+    class=lex.media.music.modes
+    optional=true
+
+@describe.relative.en core.describe.words
+    of=$describe.relative
+    lang=en
+    noun=$w.en.relative.music.relative
+    prep.root=$w.en.of.music.relative.root
+
+@describe.keychords core.describe
+    op=music.keyChords
+    intent=query
+    emit="@{_} core.request action=music.keyChords arg.root={root} arg.m={m}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+
+@describe.keychords.root core.describe.arg
+    of=$describe.keychords
+    name=root
+    class=lex.media.music.notes
+
+@describe.keychords.m core.describe.arg
+    of=$describe.keychords
+    name=m
+    class=lex.media.music.modes
+    optional=true
+
+@describe.keychords.en core.describe.words
+    of=$describe.keychords
+    lang=en
+    noun=$w.en.chords.music.keyChords
+    prep.root=$w.en.in.music.keyChords.root
+    prep.root=$w.en.of.music.keyChords.root
+    prep.root=$w.en.for.music.keyChords.root
+    det.root=$w.en.the.music.keyChords.root
+    det.root=$w.en.key.music.keyChords.root
+
+@describe.frequency core.describe
+    op=music.frequency
+    intent=query
+    emit="@{_} core.request action=music.frequency arg.reg={reg} arg.note={note} arg.oct={oct}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+
+@describe.frequency.reg core.describe.arg
+    of=$describe.frequency
+    name=reg
+    class=lex.media.music.registers
+    optional=true
+
+@describe.frequency.note core.describe.arg
+    of=$describe.frequency
+    name=note
+    class=lex.media.music.notes
+
+@describe.frequency.oct core.describe.arg
+    of=$describe.frequency
+    name=oct
+    class=number
+    optional=true
+
+@describe.frequency.en core.describe.words
+    of=$describe.frequency
+    lang=en
+    noun=$w.en.frequency.music.frequency
+    noun=$w.en.pitch.music.frequency
+    noun=$w.en.hertz.music.frequency
+    prep.reg=$w.en.of.music.frequency.reg
+    det.reg=$w.en.the.music.frequency.reg
+
+@describe.enharmonic core.describe
+    op=music.enharmonic
+    intent=query
+    emit="@{_} core.request action=music.enharmonic arg.note={note}"
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=bare
+
+@describe.enharmonic.note core.describe.arg
+    of=$describe.enharmonic
+    name=note
+    class=lex.media.music.notes
+
+@describe.enharmonic.en core.describe.words
+    of=$describe.enharmonic
+    lang=en
+    noun=$w.en.enharmonic.music.enharmonic
+    prep.note=$w.en.of.music.enharmonic.note
+    prep.note=$w.en.for.music.enharmonic.note
+
+@describe.howfast core.describe
+    op=music.status
+    intent=query
+    emit="@{_} core.request action=music.status arg.what=tempo"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.howfast.en core.describe.words
+    of=$describe.howfast
+    lang=en
+    phrase=$phrase.lang.intent.howfast
+
+@describe.howloud core.describe
+    op=music.status
+    intent=query
+    emit="@{_} core.request action=music.status arg.what=volume"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.howloud.en core.describe.words
+    of=$describe.howloud
+    lang=en
+    phrase=$phrase.lang.intent.howloud
+
+@describe.songcomposer core.describe
+    op=music.songInfo
+    intent=query
+    emit="@{_} core.request action=music.songInfo arg.title=\"{title}\" arg.what=composer"
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.songcomposer.title core.describe.arg
+    of=$describe.songcomposer
+    name=title
+    class=lex.media.music.songtitles
+
+@describe.songcomposer.en core.describe.words
+    of=$describe.songcomposer
+    lang=en
+    ask=$w.en.who.music.songInfo
+    prep.title=$w.en.wrote.music.songInfo.title
+    prep.title=$w.en.composed.music.songInfo.title
+    prep.title=$w.en.written.music.songInfo.title
+
+@w.en.play.music.playNote core.word text=play means=music.playNote
+@w.en.hear.music.playNote core.word text=hear means=music.playNote
+@w.en.sing.music.playNote core.word text=sing means=music.playNote
+@w.en.try.music.playNote core.word text=try means=music.playNote
+@w.en.the.music.playNote.reg core.word text=the means=music.playNote.reg
+@w.en.a.music.playNote.reg core.word text=a means=music.playNote.reg
+@w.en.the.music.playNote.note core.word text=the means=music.playNote.note
+@w.en.note.music.playNote.note core.word text=note means=music.playNote.note
+@w.en.on.music.playNote.inst core.word text=on means=music.playNote.inst
+@w.en.with.music.playNote.inst core.word text=with means=music.playNote.inst
+@w.en.using.music.playNote.inst core.word text=using means=music.playNote.inst
+@w.en.in.music.playNote.inst core.word text=in means=music.playNote.inst
+@w.en.the.music.playNote.inst core.word text=the means=music.playNote.inst
+@w.en.a.music.playNote.inst core.word text=a means=music.playNote.inst
+@w.en.play.music.playChord core.word text=play means=music.playChord
+@w.en.hear.music.playChord core.word text=hear means=music.playChord
+@w.en.sing.music.playChord core.word text=sing means=music.playChord
+@w.en.try.music.playChord core.word text=try means=music.playChord
+@w.en.chord.music.playChord core.word text=chord means=music.playChord
+@w.en.a.music.playChord.root core.word text=a means=music.playChord.root
+@w.en.an.music.playChord.root core.word text=an means=music.playChord.root
+@w.en.the.music.playChord.root core.word text=the means=music.playChord.root
+@w.en.on.music.playChord.inst core.word text=on means=music.playChord.inst
+@w.en.with.music.playChord.inst core.word text=with means=music.playChord.inst
+@w.en.using.music.playChord.inst core.word text=using means=music.playChord.inst
+@w.en.in.music.playChord.inst core.word text=in means=music.playChord.inst
+@w.en.the.music.playChord.inst core.word text=the means=music.playChord.inst
+@w.en.a.music.playChord.inst core.word text=a means=music.playChord.inst
+@w.en.play.music.playScale core.word text=play means=music.playScale
+@w.en.hear.music.playScale core.word text=hear means=music.playScale
+@w.en.sing.music.playScale core.word text=sing means=music.playScale
+@w.en.try.music.playScale core.word text=try means=music.playScale
+@w.en.scale.music.playScale core.word text=scale means=music.playScale
+@w.en.a.music.playScale.root core.word text=a means=music.playScale.root
+@w.en.an.music.playScale.root core.word text=an means=music.playScale.root
+@w.en.the.music.playScale.root core.word text=the means=music.playScale.root
+@w.en.on.music.playScale.inst core.word text=on means=music.playScale.inst
+@w.en.with.music.playScale.inst core.word text=with means=music.playScale.inst
+@w.en.using.music.playScale.inst core.word text=using means=music.playScale.inst
+@w.en.in.music.playScale.inst core.word text=in means=music.playScale.inst
+@w.en.the.music.playScale.inst core.word text=the means=music.playScale.inst
+@w.en.a.music.playScale.inst core.word text=a means=music.playScale.inst
+@w.en.play.music.playAny core.word text=play means=music.playAny
+@w.en.hear.music.playAny core.word text=hear means=music.playAny
+@w.en.sing.music.playAny core.word text=sing means=music.playAny
+@w.en.try.music.playAny core.word text=try means=music.playAny
+@w.en.the.music.playAny.title core.word text=the means=music.playAny.title
+@w.en.song.music.playAny.title core.word text=song means=music.playAny.title
+@w.en.tune.music.playAny.title core.word text=tune means=music.playAny.title
+@w.en.on.music.playAny.inst core.word text=on means=music.playAny.inst
+@w.en.with.music.playAny.inst core.word text=with means=music.playAny.inst
+@w.en.using.music.playAny.inst core.word text=using means=music.playAny.inst
+@w.en.in.music.playAny.inst core.word text=in means=music.playAny.inst
+@w.en.the.music.playAny.inst core.word text=the means=music.playAny.inst
+@w.en.a.music.playAny.inst core.word text=a means=music.playAny.inst
+@w.en.play.music.random core.word text=play means=music.random
+@w.en.hear.music.random core.word text=hear means=music.random
+@w.en.sing.music.random core.word text=sing means=music.random
+@w.en.try.music.random core.word text=try means=music.random
+@w.en.song.music.random core.word text=song means=music.random
+@w.en.tune.music.random core.word text=tune means=music.random
+@w.en.music.music.random core.word text=music means=music.random
+@w.en.something.music.random core.word text=something means=music.random
+@w.en.play.music.playMelody core.word text=play means=music.playMelody
+@w.en.hear.music.playMelody core.word text=hear means=music.playMelody
+@w.en.sing.music.playMelody core.word text=sing means=music.playMelody
+@w.en.try.music.playMelody core.word text=try means=music.playMelody
+@w.en.melody.music.playMelody core.word text=melody means=music.playMelody
+@w.en.tune.music.playMelody core.word text=tune means=music.playMelody
+@w.en.notes.music.playMelody core.word text=notes means=music.playMelody
+@w.en.on.music.playMelody.inst core.word text=on means=music.playMelody.inst
+@w.en.with.music.playMelody.inst core.word text=with means=music.playMelody.inst
+@w.en.using.music.playMelody.inst core.word text=using means=music.playMelody.inst
+@w.en.in.music.playMelody.inst core.word text=in means=music.playMelody.inst
+@w.en.the.music.playMelody.inst core.word text=the means=music.playMelody.inst
+@w.en.a.music.playMelody.inst core.word text=a means=music.playMelody.inst
+@w.en.stop.music.stop core.word text=stop means=music.stop
+@w.en.halt.music.stop core.word text=halt means=music.stop
+@w.en.pause.music.stop core.word text=pause means=music.stop
+@w.en.mute.music.stop core.word text=mute means=music.stop
+@w.en.silence.music.stop core.word text=silence means=music.stop
+@w.en.quiet.music.stop core.word text=quiet means=music.stop
+@w.en.music.music.stop core.word text=music means=music.stop
+@w.en.sound.music.stop core.word text=sound means=music.stop
+@w.en.song.music.stop core.word text=song means=music.stop
+@w.en.playing.music.stop core.word text=playing means=music.stop
+@w.en.tune.music.stop core.word text=tune means=music.stop
+@w.en.loop.music.loop core.word text=loop means=music.loop
+@w.en.repeat.music.loop core.word text=repeat means=music.loop
+@w.en.keep.music.loop core.word text=keep means=music.loop
+@w.en.it.music.loop core.word text=it means=music.loop
+@w.en.song.music.loop core.word text=song means=music.loop
+@w.en.music.music.loop core.word text=music means=music.loop
+@w.en.tune.music.loop core.word text=tune means=music.loop
+@w.en.looping.music.loop core.word text=looping means=music.loop
+@w.en.repeating.music.loop core.word text=repeating means=music.loop
+@w.en.stop.music.loop core.word text=stop means=music.loop
+@w.en.end.music.loop core.word text=end means=music.loop
+@w.en.cancel.music.loop core.word text=cancel means=music.loop
+@w.en.set.music.tempo core.word text=set means=music.tempo
+@w.en.change.music.tempo core.word text=change means=music.tempo
+@w.en.make.music.tempo core.word text=make means=music.tempo
+@w.en.play.music.tempo core.word text=play means=music.tempo
+@w.en.use.music.tempo core.word text=use means=music.tempo
+@w.en.tempo.music.tempo core.word text=tempo means=music.tempo
+@w.en.speed.music.tempo core.word text=speed means=music.tempo
+@w.en.bpm.music.tempo core.word text=bpm means=music.tempo
+@w.en.to.music.tempo.bpm core.word text=to means=music.tempo.bpm
+@w.en.at.music.tempo.bpm core.word text=at means=music.tempo.bpm
+@w.en.set.music.volume core.word text=set means=music.volume
+@w.en.change.music.volume core.word text=change means=music.volume
+@w.en.make.music.volume core.word text=make means=music.volume
+@w.en.put.music.volume core.word text=put means=music.volume
+@w.en.turn.music.volume core.word text=turn means=music.volume
+@w.en.volume.music.volume core.word text=volume means=music.volume
+@w.en.sound.music.volume core.word text=sound means=music.volume
+@w.en.to.music.volume.v core.word text=to means=music.volume.v
+@w.en.at.music.volume.v core.word text=at means=music.volume.v
+@w.en.percent.music.volume.v core.word text=percent means=music.volume.v
+@w.en.use.music.instrument core.word text=use means=music.instrument
+@w.en.switch.music.instrument core.word text=switch means=music.instrument
+@w.en.change.music.instrument core.word text=change means=music.instrument
+@w.en.choose.music.instrument core.word text=choose means=music.instrument
+@w.en.pick.music.instrument core.word text=pick means=music.instrument
+@w.en.select.music.instrument core.word text=select means=music.instrument
+@w.en.to.music.instrument.inst core.word text=to means=music.instrument.inst
+@w.en.like.music.instrument.inst core.word text=like means=music.instrument.inst
+@w.en.the.music.instrument.inst core.word text=the means=music.instrument.inst
+@w.en.a.music.instrument.inst core.word text=a means=music.instrument.inst
+@w.en.an.music.instrument.inst core.word text=an means=music.instrument.inst
+@w.en.play.music.octave core.word text=play means=music.octave
+@w.en.shift.music.octave core.word text=shift means=music.octave
+@w.en.move.music.octave core.word text=move means=music.octave
+@w.en.raise.music.octave core.word text=raise means=music.octave
+@w.en.lower.music.octave core.word text=lower means=music.octave
+@w.en.put.music.octave core.word text=put means=music.octave
+@w.en.go.music.octave core.word text=go means=music.octave
+@w.en.an.music.octave.n core.word text=an means=music.octave.n
+@w.en.a.music.octave.n core.word text=a means=music.octave.n
+@w.en.one.music.octave.n core.word text=one means=music.octave.n
+@w.en.octave.music.octave.n core.word text=octave means=music.octave.n
+@w.en.octaves.music.octave.n core.word text=octaves means=music.octave.n
+@w.en.transpose.music.transpose core.word text=transpose means=music.transpose
+@w.en.shift.music.transpose core.word text=shift means=music.transpose
+@w.en.move.music.transpose core.word text=move means=music.transpose
+@w.en.it.music.transpose core.word text=it means=music.transpose
+@w.en.by.music.transpose.n core.word text=by means=music.transpose.n
+@w.en.a.music.transpose.n core.word text=a means=music.transpose.n
+@w.en.an.music.transpose.n core.word text=an means=music.transpose.n
+@w.en.transpose.music.transposeTo core.word text=transpose means=music.transposeTo
+@w.en.play.music.transposeTo core.word text=play means=music.transposeTo
+@w.en.make.music.transposeTo core.word text=make means=music.transposeTo
+@w.en.put.music.transposeTo core.word text=put means=music.transposeTo
+@w.en.move.music.transposeTo core.word text=move means=music.transposeTo
+@w.en.it.music.transposeTo core.word text=it means=music.transposeTo
+@w.en.this.music.transposeTo core.word text=this means=music.transposeTo
+@w.en.that.music.transposeTo core.word text=that means=music.transposeTo
+@w.en.to.music.transposeTo.root core.word text=to means=music.transposeTo.root
+@w.en.in.music.transposeTo.root core.word text=in means=music.transposeTo.root
+@w.en.are.music.key core.word text=are means=music.key
+@w.en.play.music.key core.word text=play means=music.key
+@w.en.write.music.key core.word text=write means=music.key
+@w.en.stay.music.key core.word text=stay means=music.key
+@w.en.key.music.key core.word text=key means=music.key
+@w.en.we.music.key core.word text=we means=music.key
+@w.en.i.music.key core.word text=i means=music.key
+@w.en.you.music.key core.word text=you means=music.key
+@w.en.in.music.key.root core.word text=in means=music.key.root
+@w.en.to.music.key.root core.word text=to means=music.key.root
+@w.en.of.music.key.root core.word text=of means=music.key.root
+@w.en.write.music.melodySet core.word text=write means=music.melodySet
+@w.en.compose.music.melodySet core.word text=compose means=music.melodySet
+@w.en.make.music.melodySet core.word text=make means=music.melodySet
+@w.en.create.music.melodySet core.word text=create means=music.melodySet
+@w.en.set.music.melodySet core.word text=set means=music.melodySet
+@w.en.record.music.melodySet core.word text=record means=music.melodySet
+@w.en.melody.music.melodySet core.word text=melody means=music.melodySet
+@w.en.tune.music.melodySet core.word text=tune means=music.melodySet
+@w.en.song.music.melodySet core.word text=song means=music.melodySet
+@w.en.with.music.melodySet.notes core.word text=with means=music.melodySet.notes
+@w.en.of.music.melodySet.notes core.word text=of means=music.melodySet.notes
+@w.en.like.music.melodySet.notes core.word text=like means=music.melodySet.notes
+@w.en.add.music.melodyAdd core.word text=add means=music.melodyAdd
+@w.en.append.music.melodyAdd core.word text=append means=music.melodyAdd
+@w.en.continue.music.melodyAdd core.word text=continue means=music.melodyAdd
+@w.en.put.music.melodyAdd core.word text=put means=music.melodyAdd
+@w.en.with.music.melodyAdd.notes core.word text=with means=music.melodyAdd.notes
+@w.en.the.music.melodyAdd.notes core.word text=the means=music.melodyAdd.notes
+@w.en.notes.music.melodyAdd.notes core.word text=notes means=music.melodyAdd.notes
+@w.en.more.music.melodyAdd.notes core.word text=more means=music.melodyAdd.notes
+@w.en.clear.music.melodyClear core.word text=clear means=music.melodyClear
+@w.en.delete.music.melodyClear core.word text=delete means=music.melodyClear
+@w.en.erase.music.melodyClear core.word text=erase means=music.melodyClear
+@w.en.reset.music.melodyClear core.word text=reset means=music.melodyClear
+@w.en.start.music.melodyClear core.word text=start means=music.melodyClear
+@w.en.wipe.music.melodyClear core.word text=wipe means=music.melodyClear
+@w.en.melody.music.melodyClear core.word text=melody means=music.melodyClear
+@w.en.tune.music.melodyClear core.word text=tune means=music.melodyClear
+@w.en.song.music.melodyClear core.word text=song means=music.melodyClear
+@w.en.show.music.melodyShow core.word text=show means=music.melodyShow
+@w.en.display.music.melodyShow core.word text=display means=music.melodyShow
+@w.en.see.music.melodyShow core.word text=see means=music.melodyShow
+@w.en.read.music.melodyShow core.word text=read means=music.melodyShow
+@w.en.melody.music.melodyShow core.word text=melody means=music.melodyShow
+@w.en.tune.music.melodyShow core.word text=tune means=music.melodyShow
+@w.en.show.music.showNotes core.word text=show means=music.showNotes
+@w.en.name.music.showNotes core.word text=name means=music.showNotes
+@w.en.list.music.showNotes core.word text=list means=music.showNotes
+@w.en.display.music.showNotes core.word text=display means=music.showNotes
+@w.en.tell.music.showNotes core.word text=tell means=music.showNotes
+@w.en.notes.music.showNotes core.word text=notes means=music.showNotes
+@w.en.show.music.showScore core.word text=show means=music.showScore
+@w.en.display.music.showScore core.word text=display means=music.showScore
+@w.en.see.music.showScore core.word text=see means=music.showScore
+@w.en.read.music.showScore core.word text=read means=music.showScore
+@w.en.open.music.showScore core.word text=open means=music.showScore
+@w.en.score.music.showScore core.word text=score means=music.showScore
+@w.en.music.music.showScore core.word text=music means=music.showScore
+@w.en.notation.music.showScore core.word text=notation means=music.showScore
+@w.en.sheet.music.showScore core.word text=sheet means=music.showScore
+@w.en.list.music.listTypes core.word text=list means=music.listTypes
+@w.en.show.music.listTypes core.word text=show means=music.listTypes
+@w.en.name.music.listTypes core.word text=name means=music.listTypes
+@w.en.tell.music.listTypes core.word text=tell means=music.listTypes
+@w.en.the.music.listTypes.what core.word text=the means=music.listTypes.what
+@w.en.all.music.listTypes.what core.word text=all means=music.listTypes.what
+@w.en.your.music.listTypes.what core.word text=your means=music.listTypes.what
+@w.en.notes.music.scaleNotes core.word text=notes means=music.scaleNotes
+@w.en.scale.music.scaleNotes core.word text=scale means=music.scaleNotes
+@w.en.in.music.scaleNotes.root core.word text=in means=music.scaleNotes.root
+@w.en.of.music.scaleNotes.root core.word text=of means=music.scaleNotes.root
+@w.en.the.music.scaleNotes.root core.word text=the means=music.scaleNotes.root
+@w.en.notes.music.chordNotes core.word text=notes means=music.chordNotes
+@w.en.chord.music.chordNotes core.word text=chord means=music.chordNotes
+@w.en.in.music.chordNotes.root core.word text=in means=music.chordNotes.root
+@w.en.of.music.chordNotes.root core.word text=of means=music.chordNotes.root
+@w.en.a.music.chordNotes.root core.word text=a means=music.chordNotes.root
+@w.en.an.music.chordNotes.root core.word text=an means=music.chordNotes.root
+@w.en.the.music.chordNotes.root core.word text=the means=music.chordNotes.root
+@w.en.name.music.chordName core.word text=name means=music.chordName
+@w.en.identify.music.chordName core.word text=identify means=music.chordName
+@w.en.chord.music.chordName core.word text=chord means=music.chordName
+@w.en.and.music.chordName.n2 core.word text=and means=music.chordName.n2
+@w.en.and.music.chordName.n3 core.word text=and means=music.chordName.n3
+@w.en.and.music.chordName.n4 core.word text=and means=music.chordName.n4
+@w.en.have.music.keySig core.word text=have means=music.keySig
+@w.en.has.music.keySig core.word text=has means=music.keySig
+@w.en.how.music.keySig core.word text=how means=music.keySig
+@w.en.many.music.keySig.acc core.word text=many means=music.keySig.acc
+@w.en.the.music.keySig.root core.word text=the means=music.keySig.root
+@w.en.does.music.keySig.root core.word text=does means=music.keySig.root
+@w.en.is.music.keySig.root core.word text=is means=music.keySig.root
+@w.en.key.music.keyWith core.word text=key means=music.keyWith
+@w.en.which.music.keyWith core.word text=which means=music.keyWith
+@w.en.what.music.keyWith core.word text=what means=music.keyWith
+@w.en.has.music.keyWith.n core.word text=has means=music.keyWith.n
+@w.en.with.music.keyWith.n core.word text=with means=music.keyWith.n
+@w.en.interval.music.interval core.word text=interval means=music.interval
+@w.en.distance.music.interval core.word text=distance means=music.interval
+@w.en.between.music.interval.a core.word text=between means=music.interval.a
+@w.en.from.music.interval.a core.word text=from means=music.interval.a
+@w.en.and.music.interval.b core.word text=and means=music.interval.b
+@w.en.to.music.interval.b core.word text=to means=music.interval.b
+@w.en.note.music.above core.word text=note means=music.above
+@w.en.a.music.above.iv core.word text=a means=music.above.iv
+@w.en.an.music.above.iv core.word text=an means=music.above.iv
+@w.en.the.music.above.iv core.word text=the means=music.above.iv
+@w.en.relative.music.relative core.word text=relative means=music.relative
+@w.en.of.music.relative.root core.word text=of means=music.relative.root
+@w.en.chords.music.keyChords core.word text=chords means=music.keyChords
+@w.en.in.music.keyChords.root core.word text=in means=music.keyChords.root
+@w.en.of.music.keyChords.root core.word text=of means=music.keyChords.root
+@w.en.for.music.keyChords.root core.word text=for means=music.keyChords.root
+@w.en.the.music.keyChords.root core.word text=the means=music.keyChords.root
+@w.en.key.music.keyChords.root core.word text=key means=music.keyChords.root
+@w.en.frequency.music.frequency core.word text=frequency means=music.frequency
+@w.en.pitch.music.frequency core.word text=pitch means=music.frequency
+@w.en.hertz.music.frequency core.word text=hertz means=music.frequency
+@w.en.of.music.frequency.reg core.word text=of means=music.frequency.reg
+@w.en.the.music.frequency.reg core.word text=the means=music.frequency.reg
+@w.en.enharmonic.music.enharmonic core.word text=enharmonic means=music.enharmonic
+@w.en.of.music.enharmonic.note core.word text=of means=music.enharmonic.note
+@w.en.for.music.enharmonic.note core.word text=for means=music.enharmonic.note
+@w.en.who.music.songInfo core.word text=who means=music.songInfo
+@w.en.wrote.music.songInfo.title core.word text=wrote means=music.songInfo.title
+@w.en.composed.music.songInfo.title core.word text=composed means=music.songInfo.title
+@w.en.written.music.songInfo.title core.word text=written means=music.songInfo.title
