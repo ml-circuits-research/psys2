@@ -280,11 +280,13 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
     leftovers: (text, lang) => rules.leftovers?.(text, lang) ?? [],
     supports: (f, t) => rules.supports?.(f, t) ?? true,
     /**
-     * RO-TRANSLATE-FALLBACK. 'auto' (the default) means: the rules read and write first; the on-device Translator is the safety net for what they could not do
-     * (the dialog engine asks `viaBrowser` for a Romanian message that was not understood, or for an English reply the rules could not put into Romanian).
-     * 'browser-api' keeps the old order (the Translator first, the rules when it fails); 'rules' never uses the Translator. Returns 'fallback' | 'primary' | 'off'.
+     * RO-TRANSLATE-FALLBACK. 'auto' (the default) uses the fallback machinery (routes, 'ro-generic' line, bounded calls); WHO goes first is `translatorFirst()` (P7, owner rule
+     * 2026-11-12: with a browser Translator the Translator translates input and output, the rules answer when it is missing, late or fails the checker).
+     * 'browser-api' keeps the old plain order (the Translator, then the rules); 'rules' never uses the Translator. Returns 'fallback' | 'primary' | 'off'.
      */
     fallbackMode() { const pref = getStrategy(); return pref === 'rules' ? 'off' : pref === 'browser-api' ? 'primary' : 'fallback'; },
+    /** P7: true when the Translator (browser or on-device model) is the FIRST choice, for input and output: strategy 'auto' with a Translator present. The rules then read and write only when it is missing, late or fails the checker. */
+    translatorFirst() { return getStrategy() !== 'rules' && !!backend.translatorKind(); },
     /** True when a Translator for this pair exists in this window (or the page behind the worker bridge), whatever its model state. */
     canTranslate(from, to) { return getStrategy() !== 'rules' && !!backend.translatorKind() && (backend.supports?.(from, to) ?? true); },
     /** Records the route of a turn in `usage` (trace and phrase log): `via` is 'translator-in' | 'translator-out' | 'rules-translate' | 'ro-generic'. */

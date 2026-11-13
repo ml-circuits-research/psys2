@@ -61,14 +61,25 @@ for (const reasoner of ['matrix', 'ops']) {
   });
 }
 
-test('input: when the rules understand, the Translator is never asked (rules first)', async () => {
+test('input (P7): with a Translator present it is asked first, even when the rules would have understood; the rules read only when it is missing or fails', async () => {
   const calls = [];
   const tr = mk(base, okBackend(calls));
   const s = await session(tr);
   const r = await s.send('mă cheamă Ana', { language: 'ro' });
   assert.match(r.text, /Ana/);
-  assert.equal(r.trace.via, undefined);
-  assert.deepEqual(calls.filter((c) => c.f === 'ro'), []);
+  assert.equal(r.trace.via, 'translator-in');
+  assert.ok(calls.some((c) => c.f === 'ro' && c.to === 'en'));
+  // a stub Translator whose answer is checked and accepted is the reading, whatever the rules would say ("inca un" is "one more", never "still a")
+  const stub = mk(base, backendOf(async (t, f) => (f === 'ro' ? 'Draw another crocodile' : 'Gata.')));
+  const r2 = await (await session(stub)).send('inca un crocodil', { language: 'ro' });
+  assert.equal(r2.trace.english, 'Draw another crocodile');
+  assert.equal(r2.trace.via, 'translator-in');
+  // missing or failing Translator: the rules read (and write)
+  for (const backend of [backendOf(async () => '', { kind: null }), backendOf(async () => { throw new Error('down'); })]) {
+    const rr = await (await session(mk(base, backend))).send('mă cheamă Ana', { language: 'ro' });
+    assert.match(rr.text, /Ana/);
+    assert.notEqual(rr.trace.via, 'translator-in');
+  }
 });
 
 test('input: a Translator that is absent, switched off, wrong or late leaves the rules reading and never throws', async () => {
@@ -122,7 +133,9 @@ test('output: no template and no usable Translator: a Romanian line, never Engli
     assert.doesNotMatch(shown, /quasars/);
   }
   const ok = await translateParts([{ text: 'I drew a house.', translate: true }], mk(base, okBackend()), 'ro');
-  assert.deepEqual(ok.routes, ['rules-translate']);
+  assert.deepEqual(ok.routes, ['translator-out']);   // P7: the Translator first
+  const rulesOnly = await translateParts([{ text: 'I drew a house.', translate: true }], mk(base, backendOf(async () => { throw new Error('down'); })), 'ro');
+  assert.deepEqual(rulesOnly.routes, ['rules-translate']);   // it failed: the rules wrote it
 });
 
 test('output: the plain rules translator keeps its old behaviour (a reply it cannot translate stays English as a whole)', async () => {
