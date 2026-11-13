@@ -3625,3 +3625,7 @@ Then the ACTS × SCHEMAS order (A1, A2, A3; P1 and P2 in parallel), with sopworl
 ## Reviewer 2026-11-13 20:00 — correction: the "under 25 MB" for the P3 tagger is not a requirement
 
 The reviewer set that number without a measurement. Replace it by an experiment inside P3: train the act + roles tagger at three sizes (the present DistilBERT base; a 6-layer 384-wide model of the MiniLM class; a 4-layer one), each int8-quantised, and report size, cold load time at 1 MB/s, time per message on the phone profile, and accuracy on the seen and the two held-out worlds. The owner and the reviewer choose from the table.
+
+## Reviewer 2026-11-13 20:05 — clarification on P3 (owner asked): DistilBERT stays
+
+P3 does not remove the model. It is the same kind of encoder (DistilBERT today) trained for a different output: act + roles instead of world + per-world labels. The present dispatcher keeps running, as the prior of router C and for reading, until P3 shows on the tables that the act + roles model is at least as good on the seen worlds and better on worlds it never saw. Only then is it swapped, as an owner decision.
