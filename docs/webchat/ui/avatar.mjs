@@ -94,11 +94,14 @@ export function createAvatar(container, host = null) {
         const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URL), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
         mods = { draw, logic }; data = DEFAULT_FACE; shown = ''; draw_();   // the bundled default face first: the tab never waits for the network
+        host?.progress?.start?.('faces', 'Loading the face set');   // PROGRESS: said while it loads, and when it cannot be had
         const d = await facts.faces();
         if (!d) throw new Error('no faces in the catalog');
         data = d; full = true; shown = '';
+        host?.progress?.end?.('faces', { label: 'Face set loaded' });
       } catch (e) {
         console.warn('avatar: the faces of the catalog could not be loaded; the default face stays', e);
+        host?.progress?.fail?.('faces', 'The face set could not be loaded', 'the bundled face works: every part can be added, removed and coloured, with fewer variants');
         if (!destroyed) retry = setTimeout(() => { loading = null; load(); }, 30000);
         loading = null;
         if (mods) { draw_(); return; }

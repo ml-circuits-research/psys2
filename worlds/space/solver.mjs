@@ -68,7 +68,25 @@ function scatter(items, f) {
 function bySlots(items, f, l) {
   const ord = l.sort === 'height' ? items.slice().sort((a, b) => b.h - a.h || (a.id < b.id ? -1 : 1)) : l.sort === 'size' ? items.slice().sort((a, b) => b.w * b.h - a.w * a.h || (a.id < b.id ? -1 : 1)) : l.sort === 'none' ? items : readingOrder(items);
   const out = {};
+  if (l.places?.some((p) => p.box)) return byPlaces(ord, f, l.places.filter((p) => p.box));
   ord.forEach((it, i) => { budget.tick('space.slots'); const s = l.slots[i % l.slots.length]; out[it.id] = { x: s[0] * f.w, y: s[1] * f.h }; });
+  return out;
+}
+/**
+ * The places of a k.layouts layout with their boxes (0-100 frame): a place of one thing takes one item, a place of many shares what is left equally and spreads its items
+ * along the box (a row across, a column down); an optional place is filled only when there are things for it. The items come in the order given.
+ */
+function byPlaces(ord, f, places) {
+  const out = {}, n = ord.length, single = places.filter((p) => p.count !== 'many'), many = places.filter((p) => p.count === 'many');
+  const ones = single.filter((p) => !p.optional).slice(0, many.length ? Math.max(0, n - many.length) : n);
+  for (const p of single.filter((q) => q.optional)) if (many.length ? n - ones.length > 2 * many.length : ones.length < n) ones.push(p);   // an optional place only when there are enough things for it
+  const left = n - ones.length, share = many.length ? many.map((_, i) => Math.floor(left / many.length) + (i < left % many.length ? 1 : 0)) : [];
+  const taken = new Map(); let at = 0;
+  many.forEach((p, i) => { taken.set(p, ord.slice(at, at + share[i])); at += share[i]; });
+  const spot = (b, k, m, col) => (col ? { x: (b.x + b.w / 2) * f.w / 100, y: (b.y + b.h * (k + 0.5) / m) * f.h / 100 } : { x: (b.x + b.w * (k + 0.5) / m) * f.w / 100, y: (b.y + b.h / 2) * f.h / 100 });
+  for (const p of many) { const g = taken.get(p); g.forEach((it, k) => { budget.tick('space.slots'); out[it.id] = spot(p.box, k, g.length, p.arranged === 'column'); }); }
+  const front = ord.filter((it) => !many.some((p) => taken.get(p).includes(it)));
+  front.forEach((it, i) => { budget.tick('space.slots'); const p = ones[i % Math.max(1, ones.length)] ?? many[0] ?? places[0]; out[it.id] = spot(p.box, 0, 1, false); });
   return out;
 }
 /** Target centres of a layout for the items. `layout`: a parsed k.layouts entry ({ generator, slots, sort }) or a generator name. */
