@@ -186,3 +186,34 @@ test('board layout: a tidy tree, no overlaps, parents beside their children', ()
   assert.match(boardSvg(topics, 't2'), /tk-current/);
   assert.equal(layoutBoard([]).nodes.length, 1);
 });
+
+test('E-T1/E-T3 fixes: "and a X?" keeps one article and reaches the topic, a bare "bigger than X?" is the compare frame, "which planet is the third?" is read', async () => {
+  engine.setKnowledge(createFacts({ source }));
+  const s = session();
+  await s.send('What is a comet?');
+  let r = await s.send('and a lighthouse?');
+  assert.equal(r.trace.discourse.resolved.rewritten, 'What is a lighthouse?');
+  assert.match(r.text, /a tower/);
+  assert.equal(s.state('talk').topics.find((t) => t.id === s.state('talk').current).name, 'lighthouse');
+  r = await s.send('bigger than a mouse?');
+  assert.match(r.text, /but not how big|bigger|same size/);
+  r = await s.send('Which planet is the third from the sun?');
+  assert.match(r.text, /third planet from the sun is Earth/);
+  r = await s.send('Which month is the fifth?');
+  assert.match(r.text, /May/);
+});
+
+test('E-T3 fixes: "and before it?" and "and the seasons?" on a line, "no, the other one" after a comparison', async () => {
+  engine.setKnowledge(null);
+  const s = session();
+  await s.send('What comes after Mars?');
+  let r = await s.send('and before it?');
+  assert.equal(r.text, 'Earth comes before Mars.');
+  r = await s.send('and the seasons?');
+  assert.match(r.text, /Spring, Summer, Autumn and Winter/);
+  await s.send('Is Earth bigger than Mars?');
+  r = await s.send('no, the other one');
+  assert.match(r.text, /^(?:Mars|Earth) is about [\d,]+ km across\.$/);
+  r = await s.send('no, the other one');
+  assert.match(r.text, /^(?:Mars|Earth) is about/);
+});

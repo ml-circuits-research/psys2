@@ -4974,6 +4974,22 @@
     alt=whats_the
     alt=which_one_is_the
 
+@phrase.lang.talk.whichseq core.phrase
+    doc="Which or what, in front of a sequence word: which planet is the third from the sun."
+    alt=which
+    alt=what
+
+@phrase.lang.talk.other core.phrase
+    doc="Asking for the other one of the two things just compared."
+    alt=the_other_one
+    alt=no_the_other_one
+    alt=the_other
+    alt=no_the_other
+    alt=i_meant_the_other_one
+    alt=not_that_one
+    alt=no_not_that_one
+    alt=the_other_one_then
+
 @phrase.lang.talk.board core.phrase
     doc="Asking for the board of topics or what was talked about."
     alt=what_did_we_talk_about
