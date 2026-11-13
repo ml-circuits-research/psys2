@@ -151,7 +151,7 @@ export const SCENARIOS = {
       await c.say('please make bigger eyes for the robot');
       await c.pg.waitForFunction(() => document.querySelector('.p2-lang-hint button, [data-lang-hint]'), { timeout: 6000, polling: 50 }).catch(() => {});
       const hint = await c.pg.evaluate(() => document.querySelector('.p2-lang-hint')?.innerText ?? null);
-      check('command: the typed English message gets the one-line hint (in Romanian) with a button', /Pare engleză — schimb limba\?/.test(hint ?? ''), String(hint));
+      check('command: the typed English message gets the one-line hint (translated for the selected language, not a fixed string) with a button', /engl/i.test(hint ?? '') && !!(await c.pg.$('.p2-lang-hint button')), String(hint));
       check('command: the hint did not switch anything', (await selector(c)) === 'ro');
       await c.pg.evaluate(() => document.querySelector('[data-lang-hint]')?.click());
       await sleep(400);
@@ -193,7 +193,7 @@ export const SCENARIOS = {
       await sleep(500);
       const u1 = await c.pg.evaluate(() => window.__utterances.slice());
       check('voice: with no Romanian voice installed the answer is still spoken (default voice, ro-RO)', u1.length > 0 && u1.every((u) => u.lang === 'ro-RO' && u.voice === null), JSON.stringify(u1.slice(0, 2)));
-      const settingsTab = async (id) => { await c.pg.evaluate((id) => document.querySelector(`#p2-st-${id}`)?.click(), id); await sleep(250); return c.pg.evaluate(() => document.querySelector('.p2-modal-body')?.innerText ?? ''); };
+      const settingsTab = async (id) => { await c.pg.evaluate((id) => document.querySelector(`#p2-st-${id === 'voice' || id === 'language' ? 'languages' : id}`)?.click(), id); await sleep(250); return c.pg.evaluate(() => document.querySelector('.p2-modal-body')?.innerText ?? ''); };
       await c.pg.evaluate(() => { window.__voices = [{ name: 'Test English', lang: 'en-US' }]; });
       await c.pg.click('button[aria-label="Settings"]');
       await sleep(300);

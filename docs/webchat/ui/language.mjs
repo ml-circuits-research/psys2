@@ -62,7 +62,7 @@ export function createLanguage({ initial = 'en', variant = '' } = {}) {
 /** What the one-line hint says, in English; the host translates both strings for the selected language through the translation layer. */
 export function hintText(_selected, suggested) {
   const name = langName(normalize(suggested));
-  return { text: `That looks ${name} — switch the language?`, button: `Switch to ${name}` };
+  return { text: `Switch to ${name}?`, button: `Switch to ${name}` };   // short and plain: it is machine-translated for the selected language
 }
 
 /**
