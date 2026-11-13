@@ -87,6 +87,16 @@ export const hooks = {
     make: (ctx, r) => {
       if (r.rel === 'to' && PRONOUN.test(String(r.place ?? '').trim())) r = { ...r, rel: undefined, place: undefined };   // "it needs a rainbow": the pronoun is no owner, the sentence is a wish
       if (r.mode === 'random') return D.scene(ctx, {});
+      if (r.pre && r.mode === 'bare' && !/\b(?:between|under|over|above|below|behind|next to|beside|near|in front of|left|right|top|bottom)\b/.test(words(r.pre).join(' '))) {   // a bare kind after words the form did not name: "yo could you sketch a purple" -> the colour and size words are the modifiers
+        const pw = words(r.pre), mods = pw.filter((x) => D.isShade(x) || D.isColorWord(x) || Object.hasOwn(D.SIZE_WORDS, x)), n = pw.find((x) => /^\d+$/.test(x));
+        if (mods.length || n) r = { ...r, m1: r.m1 ?? mods[0], m2: r.m2 ?? mods[1], amount: r.amount ?? n };
+      }
+      if (r.pre && r.mode === 'bare') {   // "left side for the house", "cat between the two trees": a place said before the kind
+        const pre = words(r.pre).join(' '), k = words(r.thing).join(' ');
+        const side = /^(?:the )?(left|right|top|bottom)(?: side| corner)?(?: for| of)?(?: the)?$/.exec(pre);
+        if (side) return D.move(ctx, { phrase: `${k} on the ${side[1]}` });
+        if (/\b(?:between|under|over|above|below|behind|next to|beside|near|in front of)\b/.test(pre) && /\b(?:the|two|both)\s*$/.test(pre)) return D.move(ctx, { phrase: `${pre} ${k}` });
+      }
       if (!r.thing) return D.askKind(ctx, {});
       const np = D.parseNP([r.thing, r.place && /^(?:to|on|for)$/.test(rel(r)) ? `of ${r.place}` : ''].join(' '));   // "give the house a blue door", "add a black door to the house": a part of a thing of the picture
       if (np.part && (np.kind || r.place) && !(np.partKinds && !np.kind && !r.place)) return D.givePart(ctx, { t: np.partOf ? r.place : np.kind ?? r.place, color: np.color ?? undefined, part: np.part });
@@ -126,12 +136,19 @@ export const hooks = {
       return undefined;
     },
     place: (ctx, r) => {
+      { // the thing the generic reading took may carry the noise of the sentence: "house needs to be on the" (+ left), "house over" (+ to the right)
+        const tw = words(r.thing); const cut = tw.findIndex((x, i) => i > 0 && /^(?:needs|need|should|must|has|so|which|that)$/.test(x));
+        const onThe = cut >= 0 && /\bon\b/.test(tw.slice(cut).join(' ')) || /\bon (?:the)?$/.test(tw.join(' '));
+        const head = (cut >= 0 ? tw.slice(0, cut) : tw); while (head.length > 1 && /^(?:over|on|in|at|the|to|be|a|an|it|its|is|go|goes)$/.test(head.at(-1))) head.pop();
+        if (head.join(' ') !== tw.join(' ') && head.length) r = { ...r, thing: head.join(' '), ...(onThe && !r.place && rel(r) && /^(?:left|right|top|bottom|up|down)$/.test(rel(r)) ? { place: `the ${rel(r)}`, rel: 'on' } : {}) };
+      }
       { const tw = words(r.thing); const last = tw.at(-1) ?? ''; if (GROUNDS(last) && tw.length <= 2 && /^(?:ground|floor|bottom|everything|picture|drawing)$/.test(words(r.place).at(-1) ?? '') && !(ctx.state.objects ?? []).some((o) => kindName(kindKey(o)) === last)) return D.ground(ctx, { g: last }); }   // "I need water on the floor": the ground, not a thing to move
       if (r.mode === 'layout') return D.spatial(ctx, { text: r.text });
       if (rel(r) === 'apart' && !r.place) return D.takeApart(ctx, { t: tOf({ thing: r.thing }) });
       if (rel(r) === 'together' && !r.place) return D.group(ctx, { t: r.thing, name: /\bas\s+(?:a\s+|an\s+|the\s+)?(.+?)\s*$/i.exec(String(r.text ?? ''))?.[1] });
       if (r.place && new RegExp(`\\b(?:a|an|another|some|\\d+|two|three|four|five)\\s+${String(r.thing ?? '').replace(/[^a-z0-9 ]/gi, '').trim().replace(/\s+/g, '\\s+')}`, 'i').test(String(r.text ?? ''))) return hooks.domain.make(ctx, r);   // "put a sun in the corner": an indefinite thing is a new one (the act `place` reread as `make`)
       if (rel(r) === 'over' && /^(?:to|towards)\b/.test(String(r.place ?? ''))) r = { ...r, rel: undefined, place: String(r.place).replace(/^(?:to|towards)\s+(?:the\s+)?/, '') };   // "slide it over to the right"
+      if (!r.place && /^(?:left|right)$/.test(rel(r))) r = { ...r, rel: `to the ${rel(r)}` };   // a bare direction is "to the left"
       return D.move(ctx, { phrase: [r.thing, r.amount, rel(r), r.amount2, r.place].filter(Boolean).join(' ').replace(/_/g, ' ') });
     },
     group: (ctx, r) => (r.mode === 'apart' ? D.takeApart(ctx, { t: tOf(r) }) : D.group(ctx, { t: tOf(r) })),

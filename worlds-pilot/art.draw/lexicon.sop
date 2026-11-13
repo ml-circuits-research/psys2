@@ -115,6 +115,7 @@
 @lex.art.draw.values core.lexicon
     class=modifier
     doc="Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)"
+    open=colour
     word=red
     word=orange
     word=yellow
@@ -390,6 +391,10 @@
     word=picture
     word=canvas
     word=drawing_board
+    word=page
+    word=art
+    word=artwork
+    word=sketch
 
 @lex.art.draw.turn core.lexicon
     class=modifier

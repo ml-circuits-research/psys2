@@ -7,6 +7,7 @@
 // Synchronous by design (the matcher is): the host loads the vocabulary before reading (`ready()`, called by the dialogue at the start of a turn); until then nothing is open and the
 // lexicon is its closed list. Browser-safe: no node imports.
 import { lemmaCandidates } from './facts.mjs';
+import { colourName } from './values.mjs';
 
 let attached = null;
 /** The host attaches the catalog of the session (`engine.setKnowledge`); `null` detaches it. */
@@ -35,7 +36,11 @@ export function knowsKind(word, catalogs) {
  * spelling and routing indexes (which walk the words) are unchanged.
  */
 export class OpenWords extends Set {
-  constructor(words, catalogs, blocked) { super(words); this.catalogs = catalogs; this.blocked = blocked ?? (() => false); this.open = true; }
-  has(entry) { return super.has(entry) || (!this.blocked(entry) && knowsKind(entry, this.catalogs)); }
+  /** `probe(entry)` decides for a word that is not in the list: the catalog vocabulary for kinds (`catalogs`), the colour reader of k.values for colours. */
+  constructor(words, probe, blocked) { super(words); this.probe = probe; this.blocked = blocked ?? (() => false); this.open = true; }
+  has(entry) { return super.has(entry) || (!this.blocked(entry) && this.probe(entry)); }
 }
 export { lemmaCandidates };
+
+/** The probe of an open lexicon: `open=knowledge` + catalogs (kinds of the catalog) or `open=colour` (any colour the one colour reader knows, with its spellings and shorthand). */
+export const probeOf = (open, catalogs) => (open === 'colour' ? (w) => w.length >= 2 && !!colourName(String(w).replace(/_/g, ' ')) : (w) => knowsKind(w, catalogs));

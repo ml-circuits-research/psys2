@@ -3,7 +3,7 @@
  * Built once per WorldSet (memoized).
  */
 import { singularLemma } from '../formalizer/rules/lemma.mjs';
-import { OpenWords } from '../knowledge/open-words.mjs';
+import { OpenWords, probeOf } from '../knowledge/open-words.mjs';
 
 /** Index of every lexicon of every loaded world. */
 export function lexIndex(set) {
@@ -24,9 +24,9 @@ function build(set) {
     for (const ph of w.phrases ?? []) phrases.set(ph.id, { id: ph.id, worldId: w.id, alts: ph.alts, frame: ph.frame });
     for (const lex of w.lexicons) {
       let words = new Set(lex.words.map((x) => x.toLowerCase()));
-      if (lex.open === 'knowledge' && lex.catalogs?.length) {   // an open class: its own words plus the catalog's, by lookup at reading time; a word of the world's other lexicons or of the acts is theirs
+      if ((lex.open === 'knowledge' && lex.catalogs?.length) || lex.open === 'colour') {   // an open class: its own words plus the catalog's, by lookup at reading time; a word of the world's other lexicons or of the acts is theirs
         const closed = words, wid = w.id, me = lex.id;
-        words = new OpenWords(closed, lex.catalogs, (entry) => isTaken(entry, wid, me));
+        words = new OpenWords(closed, probeOf(lex.open, lex.catalogs), lex.open === 'colour' ? undefined : (entry) => isTaken(entry, wid, me));
       }
       lexicons.set(lex.id, { id: lex.id, class: lex.class, worldId: w.id, words });
       for (const p of lex.plurals) {
