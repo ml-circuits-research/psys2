@@ -7,7 +7,7 @@
 
 export const ASPECTS = ['visual', 'spatial', 'relational', 'numeric', 'textual', 'geographic', 'temporal', 'social'];
 /** What a view says about an aspect to a person ("a table has no picture to show"). */
-export const ASPECT_WORDS = { visual: 'picture', spatial: 'place', relational: 'links', numeric: 'numbers', textual: 'name', geographic: 'position on the map', temporal: 'time', social: 'people side' };
+export const ASPECT_WORDS = { visual: 'picture', spatial: 'place', relational: 'links', numeric: 'numbers', textual: 'name', geographic: 'position on Earth', temporal: 'time', social: 'people side' };
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const lc = (s) => String(s ?? '').toLowerCase().trim();
@@ -133,6 +133,8 @@ const SESSION_WORDS = /^(?:the |this |our |that )?(?:current )?(?:discussion|con
 /** Verbs of doing and the word of the view that does it (TEMPORARY until k.actions says which tool a verb belongs to): "what I drew" is what the drawing holds. */
 const DID_VIEW_TEMPORARY = { drew: 'draw', drawn: 'draw', draw: 'draw', painted: 'draw', sketched: 'draw', seated: 'seating', planned: 'plan', wrote: 'document', typed: 'document' };
 const DID_ANY = new Set(['made', 'did', 'added', 'built', 'created', 'put', 'placed', 'said', 'have', 'had', 'has', 'got', 'asked']);
+/** Nouns that name an aspect rather than a kind (TEMPORARY until k.attributes gives the words of aspects): "the places we talked about" are the things with a geographic aspect. */
+const ASPECT_NOUN_TEMPORARY = { places: 'geographic', place: 'geographic', locations: 'geographic', location: 'geographic', cities: 'geographic', countries: 'geographic', spots: 'geographic', moments: 'temporal', dates: 'temporal', days: 'temporal', people: 'social', persons: 'social' };
 const stem = (w) => lc(w).replace(/(?:ing|ed|es|s)$/, '');
 const sameWord = (a, b) => a === b || (a.length > 2 && b.length > 2 && stem(a) === stem(b));
 /** The view (declared, or a world that keeps things without being a view) a word names, by loose word match. `views`: [{ id, noun, words }]. */
@@ -150,6 +152,8 @@ export function select(state, phrase, views = [], last = null) {
   const w = lc(phrase).replace(/[?.!,]+/g, ' ').replace(/\s+/g, ' ').trim();
   if (SESSION_WORDS.test(w)) return { things: [...state.things], session: true, view: null };
   const toks = w.replace(/\b(?:the|a|an|my|our|this|that|these|those|things|thing|stuff|items|what|all|of|i|we|you|so|far|in|on|at|from|have|has|had)\b/g, ' ').split(/\s+/).filter(Boolean);
+  const byAspect = /^(\w+) in the discussion$/.exec(w);
+  if (byAspect && ASPECT_NOUN_TEMPORARY[byAspect[1]]) return { things: state.things.filter((t) => t.aspects?.[ASPECT_NOUN_TEMPORARY[byAspect[1]]]), session: false, view: null, aspect: ASPECT_NOUN_TEMPORARY[byAspect[1]] };
   const did = (w.match(/\b(?:what|everything|all|things|stuff)\s+(?:that\s+)?(?:i|we|you)\s+(\w+)/) ?? [])[1];
   if (did) {
     if (DID_ANY.has(did) && !DID_VIEW_TEMPORARY[did]) return { things: [...state.things], session: true, view: null };

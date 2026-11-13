@@ -5272,18 +5272,6 @@
     alt=draw_a_diagram_of_this
     alt=make_it_a_diagram
 
-@phrase.lang.talk.tomap core.phrase
-    doc="Sending the current topic to the map tab."
-    alt=show_it_on_the_map
-    alt=show_this_on_the_map
-    alt=put_it_on_the_map
-    alt=put_it_on_my_map
-    alt=send_it_to_the_map
-    alt=find_it_on_the_map
-    alt=show_me_it_on_the_map
-    alt=locate_it_on_the_map
-    alt=where_is_it_on_the_map
-
 @phrase.lang.talk.about core.phrase
     doc="Asking about the thing that is selected on another tab."
     alt=ask_about_this

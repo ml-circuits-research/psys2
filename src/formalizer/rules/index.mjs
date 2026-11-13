@@ -367,6 +367,23 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     if (ok && !strong && context?.lastWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && !m.pattern.tabClaim)) ok = false;
     if (!ok) matches.splice(k, 1);
   }
+  // ACT VERB SWALLOWED (TRANSFER, spec 23): a free-text reading whose wildcard slot starts with the verb of an act that another world's act pattern reads in this very sentence ("send table 1
+  // to the chart": the chart's data pattern took "send table" as its data) yields to the act. The act pattern names its verb group (`$acts.verb.<act>`) and its action ends with the act, so
+  // no phrase is listed here; naming a view ("the chart") does not make the view's own data reading win over a send.
+  if (matches.length > 1) {
+    const actOf = (o) => { const a = /action=[\w.]*\.(\w+)/.exec(o.pattern.emit ?? '')?.[1]; return a && String(o.pattern.match ?? '').includes(`$acts.verb.${a}]`) ? a : null; };
+    const acts = matches.map((o) => [o, actOf(o)]).filter(([, a]) => a);
+    if (acts.length) {
+      for (let k = matches.length - 1; k >= 0; k--) {
+        budget.tick('rules.actverb');
+        const m = matches[k];
+        if (m.pattern.tabClaim || actOf(m)) continue;
+        const starts = Object.values(m.slots ?? {}).filter((s) => (s.class === 'rest' || s.class === 'words') && s.tokens && s.tokens[1] > s.tokens[0]).map((s) => s.tokens[0]);
+        const swallowed = starts.some((i) => acts.some(([o, a]) => o.pattern.worldId !== m.pattern.worldId && (lex.phrases.get(`acts.verb.${a}`)?.alts ?? []).some((alt) => alt.every((w, j) => String(toks[i + j]?.lower ?? '') === String(w).toLowerCase()))));
+        if (swallowed) matches.splice(k, 1);
+      }
+    }
+  }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
   if (kept.length !== matches.length) matches.splice(0, matches.length, ...kept);
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));

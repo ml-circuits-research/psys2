@@ -94,3 +94,21 @@
     example="Make a chart of the things in the plan."
     example="Create a document about the things in the drawing."
     doc="The things one view holds as the content of another view."
+
+@pat.session.things.select.it core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [show|put|place|pin|mark|plot|display|see|send|move|bring|add|find|locate] [me]? [it|that|this|that_one|this_one] [on|in|onto|into|to] [the|my]? {to:lex.session.things.views}"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"it\""
+    kind=request
+    signal=true
+    priority=14
+    example="Show it on the map."
+    doc="The thing last talked about, into the view named, by the one operation things.show."
+
+@pat.session.things.select.places core.pattern
+    match="[$lang.lead.polite|$lang.lead.filler]? [show|put|place|pin|mark|plot|display|see|send|move|bring|add] [me]? [all]? [the|my|all_the|all_my]? {n:words(1)} [that]? [we|i|you] [talked_about|discussed|mentioned|looked_at|saw|asked_about|learned_about|said|covered|talked|spoke_about] [so_far]? [on|in|onto|into|to] [the|my]? {to:lex.session.things.views}"
+    emit="@{_} core.request action=things.show arg.to=\"{to}\" arg.thing=\"{n} in the discussion\""
+    kind=request
+    signal=true
+    priority=14
+    example="Put the places we talked about on the map."
+    doc="The things of the discussion that have one aspect (places are the geographic ones) into the view named; the noun names the aspect, no kind of thing is listed here."

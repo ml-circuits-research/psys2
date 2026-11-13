@@ -286,3 +286,15 @@
     semantics=action
     action=geo.redo
     doc="Does the undone change again."
+
+@op.geo.map.view core.operation
+    impl=view
+    semantics=action
+    action=geo.map.view
+    doc="The declaration of the map as a view of the session things (spec 23): the geographic aspect; one request for a whole selection."
+
+@op.geo.map.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=geo.map.adopt
+    doc="Take things of the session store onto the map as pins, where the map knows their place (by name, by kind, or by the lat and lon they carry); what has no known place is said plainly."
