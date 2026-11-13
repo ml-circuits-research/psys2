@@ -215,3 +215,26 @@ Report `training/results/model-ablation-2026-11-13.md`. All models together buy 
 
 ## Q (worker, 2026-11-13): shared things / taught tier / catalog from sopworld 0.23.0: confirm the order before the consumers are rewritten
 0.23.0 is vendored (build-bundle included). The library's catalog and things TELL wires into a World; our `facts.mjs`, `learned.mjs` and `session.things` give synchronous JS records to about 25 consumers and registry items of tabs that run in our interpreter, so the "thin adapter, delete ours" step is a rewrite of the consumers (details and the proposed order a, b, c in worker-log "sopworld 0.23.0 vendored"). Please confirm: (1) wait for KNOWLEDGE-OUT to land before touching `facts.mjs`; (2) order a (taught tier through a session World with both stores compared), then b (catalog wires), then c (tab worlds as schema worlds, art.draw first); (3) acceptable that session.things is deleted only when the last tab has moved.
+
+## Q10 (worker, 2026-11-14 01:10) — owner-agreed proposal: tracked scaling indicators, and ENGLISH AS A WORLD
+**Owner (paraphrased from Romanian):** agrees with the indicators below, but not necessarily as the main measure: a small LLM or BERT may be good enough for language; our focus is the symbolic world model and rules that compose across worlds. Still, if we solve language better through our own worlds — if what is known about English grammar is encapsulated as a sopworld world — that would be very interesting. "Propose it."
+
+**1. Scaling indicators (tracked at each landing, next to the existing tables; not the only gate):**
+- a new world from a schema alone: share of 60 natural requests (written without seeing the grammar) answered right — today 31/60 (plan.seating);
+- robustness sets: typos 840/987, loose words 335/643, paraphrases-rt 22/146 (rules default);
+- cross-world captures per landing (a world answering another world's sentence; the invariant and test-world catch them) — target 0;
+- the richest world on acts: art.draw pilot 81% of its tests, owner logs not worse — the switch is the proof.
+
+**2. ENGLISH AS A WORLD (proposal).** Today English knowledge is scattered: the act grammar (`worlds/acts` FORMS), lang.common phrase groups, the clause splitter and card-driven cutter, one-anaphora and pronoun rules, the ellipsis/continuation rules of session.dialogue, value parsers, plural tables, number words. Proposal: one reusable world `lang.en` (SOP Lang facts + rules in sop-knowledge-worlds; the few functions it needs in the library as `std.grammar`) holding what is known about English, independent of any app:
+- morphology (inflection, plurals, irregulars; from k.words where present), word classes and lemma lookup;
+- argument structure of verbs (who does what to what, with which preposition) — the roles of the acts come from here, k.actions supplies the verbs;
+- noun phrases: determiners, quantifiers ("each", "all the", "three different"), modifiers, possession ("the legs of the crocodile", "the house's door"), relative clauses;
+- coordination and ellipsis ("a white house and a green one", "red and blue", "move it and the tree");
+- anaphora and reference (it / them / one / that one / the other), deixis ("here", "there", "this");
+- negation, questions (wh-, yes/no, tag), imperatives, politeness and fillers;
+- spatial and temporal prepositions as relations (feeding the space and time modules);
+- clause structure: conjunctions, "then", "also", conditionals ("if ... then"), frame leads ("from now on").
+The act reader, the dialogue module and the cutter then read with `lang.en` instead of their own English rules (PSys2 keeps only the UI strings); other languages could be added as sibling worlds later, with translation staying the default path.
+**Measure:** the same four indicators plus the ledger groups "act phrase", "fragment/list", "translation reader-gap"; and a head-to-head on the robustness sets: `lang.en` rules vs the small encoder vs both. The model stays as a fallback where it measurably wins; the owner's point stands that a small model may be good enough, so the experiment decides.
+**First slice suggested:** noun phrases + coordination/ellipsis + anaphora (the largest causes in the owner logs and the art.draw pilot), moved out of acts.mjs / dialogue.mjs into `lang.en`, with no change in numbers as the gate, then grow it.
+Reviewer: please accept, change or order this; the worker can start the first slice in a parallel worktree.
