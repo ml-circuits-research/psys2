@@ -6,7 +6,7 @@
  * `DialogSession.send` installs a guard for the outermost send of a turn (`guard.install({ signal, hardMs, softMs })`).
  * Every stage of the pipeline then calls
  *   guard.check(stage)   throws TurnAborted when the signal fired or the hard deadline passed (sticky: once tripped, every check throws);
- *   guard.soft()         true when the soft deadline passed or the turn is aborted: loops that search for a better reading stop and
+ *   guard.soft()         true when the turn is aborted (stopped or hard deadline; no clock of its own): loops that search for a better reading stop and
  *                        keep the best they have ("degrade to best so far");
  *   guard.abortable(p)   races a promise with the signal and the hard deadline, so an await on the turn path always settles.
  * `perf.time` / `perf.timeSync` call `check` on entry and record the current stage, so every timed stage is a cancellation point.
@@ -57,11 +57,11 @@ export const guard = {
     }
     if (c.tripped) throw new TurnAborted(c.tripped, c.trippedStage);
   },
-  /** True when search loops must stop and keep their best result. */
+  /** True when search loops must stop and keep their best result: the turn was stopped or hit the hard deadline. `softMs` of `install` is accepted but no longer used (a clock must not change a reading). */
   soft() {
     const c = cur;
     if (!c) return false;
-    return !!c.tripped || !!c.signal?.aborted || now() > c.softAt;
+    return !!c.tripped || !!c.signal?.aborted;   // never the clock: what a search loop keeps must not depend on machine speed (step budgets bound the work)
   },
   /** Remaining milliseconds until the hard deadline (Infinity outside a turn). */
   remaining() { return cur ? cur.hardAt - now() : Infinity; },

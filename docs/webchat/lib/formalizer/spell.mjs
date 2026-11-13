@@ -9,9 +9,9 @@
  *   const { text, corrections } = spellCorrect('make bigger yes and red lips', { vocab: worldVocabulary(set, 'ui.avatar') });
  *   // text = 'make bigger eyes and red lips', corrections = [{ from: 'yes', to: 'eyes', span: [12, 15], kind: 'spell' }]
  */
-import { vocabularyOf, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=ea505bde99';
+import { vocabularyOf, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs?v=3ef1962f06';
 import { isNumberWord } from './rules/numbers.mjs?v=616917393c';
-import { guard } from './guard.mjs?v=ded769d6bc';
+import { guard } from './guard.mjs?v=5528007fa9';
 import { namingTables } from './routing.mjs?v=91ded5d03a';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 
