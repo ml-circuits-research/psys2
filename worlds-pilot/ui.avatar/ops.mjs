@@ -18,5 +18,7 @@ export const load = (ctx, args = {}) => X.operation(ctx, 'load', args);
 export const place = (ctx, args = {}) => X.operation(ctx, 'place', args);
 export const interceptInput = (ctx, text) => X.interceptInput(ctx, text);
 export const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);
+export const accepts = (info) => X.accepts(info);
+export const referents = (ctx) => X.referents(ctx);
 export const executor = X;
 export const { view, adopt } = viewOps(X, SCHEMA, 'ui.avatar', H);

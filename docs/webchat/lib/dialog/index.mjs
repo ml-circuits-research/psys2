@@ -9,35 +9,36 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=b73374fce9';
-import { loadWorlds } from '../worlds/index.mjs?v=cdba90e914';
-import { validateWorldSet } from '../worlds/validate.mjs?v=7f69f4ee91';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=65b81ce894';
+import { loadWorlds } from '../worlds/index.mjs?v=18ac0b22c1';
+import { validateWorldSet } from '../worlds/validate.mjs?v=c6d2fc9793';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=78bd7eb7c3';
+import { createInterpreter } from '../interpreter/index.mjs?v=317ba42ac5';
 import { createReasoner } from '../reasoner/index.mjs?v=e96edcff84';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=e3e7c6c8ea';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=136a73b8b2';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=e5822c22d3';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=97b5688d35';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=baca68c7ad';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=bd62044808';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=b28ef3cebe';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=a355d30edb';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=e046742b19';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=94e1022aec';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=b1676c9611';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=508dde0033';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=90ece0d788';
-import { checkValues } from './value-check.mjs?v=506216f967';
-import { Discourse } from './discourse.mjs?v=74a997b12b';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=4bf857adc7';
+import { checkValues } from './value-check.mjs?v=b2dd880ff4';
+import { Discourse } from './discourse.mjs?v=0ea8da1a41';
+import { Dialogue } from './dialogue.mjs?v=f8d53d8e62';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=a443cf49c8';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=3f9ced9f9a';
-import { repairFromScene } from './scene-referents.mjs?v=adc8f57abc';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=db2a9a606e';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=2dfa874001';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=07c1576341';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=eb52b61f31';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=654abfe7f8';
+import { repairFromScene } from './scene-referents.mjs?v=588c7b6e5b';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=c51bf5a763';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=56cf6d7f3a';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=250d1f969d';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
@@ -304,6 +305,8 @@ export class DialogSession {
     this.isession = engine.interp.createSession();
     /** Discourse memory (spec 11, ADR-006): recent frames and the pending expectation. */
     this.discourse = new Discourse(this);
+    /** The dialogue module (WORLDS-AS-MODULES M1, worlds/session.dialogue): the focus, the kind of every turn, the trace the why-answers are read from. */
+    this.dialogue = new Dialogue(this);
     /** Persistent discussions and world instances (spec 13, ADR-008): bookkeeping around the turn, never changes a reading. */
     this.astra = createSessionAstra(this);
     this.sources = new Map();
@@ -957,13 +960,73 @@ export class DialogSession {
     const rep = await this._nameRepair(english, res, opts, lenient);
     if (rep) return rep;
     const r = await this._capabilityRead(english, res, opts, lenient);
-    if (r || !res.segments.length) return r;
+    if (r) return r;
+    const owner = await this._tabOwnsAct(english, res, opts);
+    if (owner) return owner;
+    if (!res.segments.length) return r;
     // nothing else read the message and the only reading rests on a correction that would open another world's tab: it is not understood
     const ctx = opts.context ?? this.context();
     const cross = res.segments.filter((x) => !x.unparsed && x.corrections?.length && !this._crossTabOk([x], x.corrections, ctx, english));
     if (!cross.length) return null;
     const segments = res.segments.map((x) => (cross.includes(x) ? { ...x, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [] } : x));
     return { segments, wires: segments.flatMap((x) => x.wires) };
+  }
+
+  /**
+   * The act is known in the active world, the thing is found nowhere else (worker-tasks 2026-11-13 20:55, cause 2): a reading of another world that the message does not
+   * name, whose act (the last word of its action: remove, add, change ...) is also an action of the world on the open tab, and whose dry run finds nothing to act on, is not
+   * the better reading and nothing else read the message: the ACTIVE world takes the same act on the same words and answers (its own "I have no X", or does it). The
+   * arguments move by shape: the one text argument of the foreign wire goes to the one text argument of the tab world's pattern for that act. Returns the segments or null.
+   */
+  async _tabOwnsAct(english, res, opts) {
+    const ctx = opts.context ?? this.context(), T = ctx.tabWorld; 
+    if (!T || !res.segments.length || res.segments.some((x) => x.unparsed)) return null;
+    const { set, interp } = this.engine, tw = set.get(T);
+    if (!tw?.patterns?.length) return null;
+    const named = this._worldsNamedIn(english);
+    const SKIP = new Set(['ui.shell', 'ui.help', 'core', 'lang.common']);
+    const act = (a) => String(a ?? '').split('.').pop();
+    const FUNCTION_WORDS = new Set(['a', 'an', 'the', 'my', 'your', 'from', 'off', 'to', 'of', 'on', 'in', 'into', 'with', 'and', 'please', 'it', 'this', 'that', 'these', 'those', 'some', 'any', 'all']);
+    // the required words of a pattern after its act word (its first required group): a slot, an optional group and a phrase macro say nothing about a thing
+    const namesItsOwnThing = (match) => {
+      let verbSeen = false;
+      for (const t of String(match ?? '').split(/\s+/).filter(Boolean)) {
+        if (/^\{\w+:lex\./.test(t)) return true;   // a slot filled from the world's own lexicon names a thing of that world
+        if (t.startsWith('{') || t.endsWith('?')) continue;
+        if (!verbSeen) { verbSeen = true; continue; }   // the first required group is the act word (a phrase macro, `[$...]`, is one too)
+        if (t.startsWith('[$')) continue;
+        if (!t.replace(/^\[|\]$/g, '').split('|').every((x) => FUNCTION_WORDS.has(x))) return true;
+      }
+      return false;
+    };
+    const out = [];
+    let changed = false;
+    try {
+      await this._prepareWorldsOf(res.segments);
+      const f = this.forkForValidation();
+      for (const seg of res.segments) {
+        const w = seg.match?.worldId, wire = seg.wires?.[0];
+        const action = wire?.entries?.find((e) => e.key === 'core.request.action')?.value?.v;
+        const arg = wire?.entries?.find((e) => /^core\.request\.arg\./.test(e.key));
+        const mine = w && action && !SKIP.has(w) && w !== T && !named.has(w) ? tw.patterns.find((p) => { const m = /action=([\w.]+)\s+arg\.(\w+)=\\?"\{/.exec(p.emit ?? ''); return m && act(m[1]) === act(action) && p.kind === 'request'; }) : null;
+        if (!mine || !arg || seg.wires.length !== 1 || namesItsOwnThing(set.get(w)?.patterns?.find((p) => p.id === seg.match.patternId)?.match)) { out.push(seg); continue; }   // a pattern that carries words of its own besides the act ("remove milk from my LIST") names a thing of its world: that world is meant
+        f.isession.add(seg.wires);
+        if (!['missing', 'unsupported'].includes(interp.resolve(f.isession, wire)?.status)) { out.push(seg); continue; }   // the foreign world finds nothing to act on or refuses
+        const [, tAction, tArg] = /action=([\w.]+)\s+arg\.(\w+)=\\?"\{/.exec(mine.emit);
+        const words = String(arg.value?.v ?? '').replace(/^(?:(?:the|a|an|my|your|some|any)\s+)+/i, '');
+        const entries = wire.entries.filter((e) => !/^core\.request\.arg\./.test(e.key)).map((e) => {
+          if (e.key === 'core.request.action') return { ...e, value: { ...e.value, v: tAction } };
+          if (e.key === 'core.via') return { ...e, value: { ...e.value, v: mine.id } };
+          if (e.key === 'core.in') return { ...e, value: { ...e.value, v: T } };
+          return e;
+        });
+        entries.push({ key: `core.request.arg.${tArg}`, value: { kind: 'string', v: words } });
+        const nw = { ...wire, entries, source: mine.id };
+        out.push({ ...seg, wires: [nw], match: { ...seg.match, worldId: T, patternId: mine.id }, worlds: [T] });
+        changed = true;
+      }
+    } catch { return null; }
+    return changed ? { segments: out, wires: out.flatMap((s) => s.wires) } : null;
   }
 
   async _capabilityRead(english, res, opts, lenient) {
@@ -1196,13 +1259,14 @@ export class DialogSession {
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
     let rs = null;
     try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
-    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
+    return { v: 1, discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
   restoreMemory(mem) {
     if (!mem || typeof mem !== 'object' || mem.v !== 1) return false;
     this.discourse.load(mem.discourse);
+    if (mem.dialogue) this.dialogue.load(mem.dialogue);
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
     if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
     if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
@@ -1216,7 +1280,7 @@ export class DialogSession {
     return {
       isession: this.isession.clone(), msg: this._msg, recent: [...(this._recentWorlds ?? [])], lang: [this._sessionLang, this._weakRo],
       discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
-      sources: new Set(this.sources.keys()), astra: this.astra?.capture(),
+      sources: new Set(this.sources.keys()), astra: this.astra?.capture(), dialogue: this.dialogue.toJSON(),
     };
   }
 
@@ -1226,6 +1290,7 @@ export class DialogSession {
     this.isession = snap.isession; this._msg = snap.msg; this._recentWorlds = snap.recent; [this._sessionLang, this._weakRo] = snap.lang;
     Object.assign(this.discourse, snap.discourse);
     this.astra?.rollback(snap.astra);
+    if (snap.dialogue) this.dialogue.load(snap.dialogue);
     for (const k of [...this.sources.keys()]) if (!snap.sources.has(k)) this.sources.delete(k);
   }
 
@@ -1284,8 +1349,10 @@ export class DialogSession {
     return r;
   }
 
-  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader } = {}, override = null) {
+  async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=0f30e71e97').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w);
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
     const { set, interp, translator } = engine;
@@ -1342,13 +1409,16 @@ export class DialogSession {
     let meta = null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
     let formalText = english;
     if (!icpt) {
-      meta = await perf.time('discourse', () => disc.meta(english, pend, sid));
+      // M1: the kind of the turn is read BEFORE any tab world: a fragment is completed from the focus, a complaint or a why-question is answered from the trace, a correction amends the last request
+      meta = await perf.time('dialogue', () => this.dialogue.turn(english, { pend, sid, correction })) ?? await perf.time('discourse', () => disc.meta(english, pend, sid));
       if (meta?.rewrite) formalText = meta.rewrite;
       if (meta?.pre) pre = meta.pre;
       if (!pre && !meta) {
         if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
         if (!pre) pre = await perf.time('discourse', () => disc.ellipsis(english, sid));
         if (!pre) pre = await disc.pronoun(english, sid);
+        // M1: what the frames of the discourse layer could not complete (no verb of its own, a list) is completed from the dialogue focus; the tab gets a complete request or nothing
+        if (!pre) { const c = await perf.time('dialogue', () => this.dialogue.complete(english, sid)); if (c?.pre) { pre = c.pre; meta = null; } else if (c?.rewrite) formalText = c.rewrite; }
         // "and how many days are in a week?" with nothing to continue: the connective joins nothing, the question stands on its own
         // "and a heading Dairy too": a fragment nothing could continue loses its trailing "too" (it must not become part of the text)
         if (!pre && english !== engine.interp.lang.stripConnective(english)) formalText = engine.interp.lang.stripTrailing(english);
@@ -1450,7 +1520,7 @@ export class DialogSession {
       }
       // honest scope: the world of the open tab may refuse a message it cannot talk about, in its own words, with the nearest things it can (hook `outOfScope`, the Talk tab)
       if (seg.unparsed) {
-        const tw = this.context().tabWorld;
+        const cx = this.context(), tw = cx.tabWorld ?? cx.lastWorld;   // no tab open: the world last used says what it can do
         const oos = tw ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
         if (typeof oos?.say === 'string' && oos.say) {
           lines.push([T(oos.say)]);
@@ -1601,6 +1671,7 @@ export class DialogSession {
     this.isession.rs?.commitTurn(this._msg, english);   // a turn that changed the library keeps its mark: what "undo that" and the undo of the dialogue layer rewind to (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore, kind: ['undo', 'redo'].includes(meta?.info?.kind) ? 'keep' : segments.some((x) => /undo/i.test(x.match?.patternId ?? '')) ? 'undo' : segments.some((x) => /redo/i.test(x.match?.patternId ?? '')) ? 'redo' : null });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
+    this.dialogue.record({ english, original: text, kind: this.dialogue._kind ?? meta?.info?.dialogue ?? (meta?.info?.kind === 'explain' ? 'why' : null) ?? (correction ? 'correction' : 'new'), metaKind: meta?.info?.kind ?? null, segments, statuses, reply: englishReply, effect: disc.actions[0]?.turn === this._msg, tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };
     const feedback = meta?.feedback ?? null;
     const state = {};

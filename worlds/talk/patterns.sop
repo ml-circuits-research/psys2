@@ -337,7 +337,7 @@
     priority=12
     example="Send it to the seating plan."
     example="Show it on the avatar."
-    doc="Select the thing of the topic into any other view of the session things (spec 22): the store says what the view can take."
+    doc="Select the thing of the topic into any other view of the session things (spec 23): the store says what the view can take."
 
 @pat.talk.about core.pattern
     canonical="Ask about this."

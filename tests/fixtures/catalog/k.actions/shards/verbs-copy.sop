@@ -1,0 +1,15 @@
+# k.actions/shards/verbs-copy: 9 verbs and phrasal verbs that mean the act "copy" (copy, duplicate, clone, replicate, reproduce, repeat, photocopy, imitate ...): the WordNet senses read for it, the role of the object, what the verb itself says, and the prepositions that mark a role after this verb.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: the verb, its sense numbers and the gloss of 8 verbs; which act a sense means and the roles are a language model's reading, named=model)
+# sources: hand-core 1 (hand-written in this repository: 1 verbs that WordNet does not list in this meaning, and the markings; sources/hand-core/act-verbs.tsv)
+# license: WordNet-3.0
+# script: tools/acts-core.mjs
+
+@k.actions.verb.copy.copy k.actions.verb text=copy act=copy sense=3 sense=4 gloss="reproduce or make an exact copy of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.copy.duplicate k.actions.verb text=duplicate act=copy sense=3 gloss="make a duplicate or duplicates of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.copy.clone k.actions.verb text=clone act=copy sense=1 gloss="make multiple identical copies of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.copy.replicate k.actions.verb text=replicate act=copy sense=2 gloss="reproduce or make an exact copy of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.copy.reproduce k.actions.verb text=reproduce act=copy sense=1 gloss="make a copy or equivalent of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.copy.repeat k.actions.verb text=repeat act=copy sense=2 gloss="make or do or perform again" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.copy.photocopy k.actions.verb text=photocopy act=copy sense=1 gloss="reproduce by xerography" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.copy.imitate k.actions.verb text=imitate act=copy sense=3 gloss="make a reproduction or copy of" object=thing named=model core.source="wordnet 3.1"
+@k.actions.verb.copy.make_a_copy_of k.actions.verb text="make a copy of" act=copy object=thing core.source="hand-core 1"

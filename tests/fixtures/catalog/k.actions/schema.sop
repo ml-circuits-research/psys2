@@ -1,0 +1,105 @@
+# k.actions: the words of the acts. The acts a person asks an application for (make, remove, change, place, connect,
+# group, take apart, pick, ask, copy, send, undo, save, load), the roles each act takes with the prepositions that
+# mark them, and the English verbs and phrasal verbs that mean each act. And the common actions of everyday life
+# (cut, fly, sleep): who or what does it, to what, with what, where, what comes of it, the opposite action and the
+# action that undoes it.
+# sources: wordnet 3.1 (Princeton WordNet 3.1: verbs, sense numbers, glosses); hand-core 1 (the acts, the roles, the markings, and the schema itself)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/acts-core.mjs
+
+@k.actions core.module name=k.actions version=2 exports=act exports=role exports=verb exports=marking exports=action exports=similar core.source="hand-core 1"
+
+# An act: one of the few things a person can ask for, whatever the things are. `about` says it in plain words;
+# `opposite` names the act that does the contrary, where there is one; `role` names the roles the act takes (many).
+@k.actions.act core.type of=k.actions.act shared=true closed=true core.source="hand-core 1"
+@k.actions.act.name core.slot of=k.actions.act key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.act.about core.slot of=k.actions.act key=about required=true kind=string core.source="hand-core 1"
+@k.actions.act.opposite core.slot of=k.actions.act key=opposite kind=atom kind=string core.source="hand-core 1"
+@k.actions.act.role core.slot of=k.actions.act key=role many=true required=true kind=atom kind=string core.source="hand-core 1"
+
+# A role of an act: something the act can be told (the thing, the place, the new value). `holds` says what kind of
+# filler it takes; `needed=true`: the act cannot be done without it. `marker` (many) names the prepositions and
+# other words that usually mark the role after any verb of the act ("on the table": the place); a role with no
+# marker is said without one (the object of the verb, a number before the noun). A verb may mark a role in its own
+# way: see k.actions.marking, which comes first.
+@k.actions.role core.type of=k.actions.role shared=true closed=true core.source="hand-core 1"
+@k.actions.role.act core.slot of=k.actions.role key=act id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.role.name core.slot of=k.actions.role key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.role.holds core.slot of=k.actions.role key=holds required=true enum=thing enum=kind enum=place enum=direction enum=value enum=attribute enum=amount enum=number enum=name enum=person enum=group enum=topic enum=means core.source="hand-core 1"
+@k.actions.role.needed core.slot of=k.actions.role key=needed kind=boolean core.source="hand-core 1"
+@k.actions.role.about core.slot of=k.actions.role key=about required=true kind=string core.source="hand-core 1"
+@k.actions.role.marker core.slot of=k.actions.role key=marker many=true kind=atom kind=string core.source="hand-core 1"
+
+# A verb or a phrasal verb (`text`: "put", "get rid of") that means an act. One fact per verb and act: a verb with
+# two meanings has two facts ("put on": place a thing on something, and make one more). `sense` (many) are the
+# numbers of the WordNet verb senses of `text` that were read and mean the act (they join k.words.sense by word,
+# pos=verb and n, where k.words keeps the sense); `gloss` is WordNet's definition of the first of them. A verb with
+# no `sense` is hand-written: WordNet does not list it in this meaning. `object` names the role that the object of
+# the verb fills; `complement` the role of an adjective or noun right after the object ("paint the door red": the
+# value). `attribute` and `value` say what the verb itself already fixes ("enlarge": the size, larger).
+# `separable=true`: the object may stand between the verb and its particle ("take the hat off"); `after_particle`
+# names the role of a second noun phrase after the particle ("put the hat on the man": the place).
+# `named=model`: that the sense means the act, and the roles, were read and judged by a language model.
+@k.actions.verb core.type of=k.actions.verb shared=true closed=true core.source="hand-core 1"
+@k.actions.verb.text core.slot of=k.actions.verb key=text id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.verb.act core.slot of=k.actions.verb key=act id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.verb.sense core.slot of=k.actions.verb key=sense many=true kind=integer min=1 core.source="hand-core 1"
+@k.actions.verb.gloss core.slot of=k.actions.verb key=gloss kind=string core.source="hand-core 1"
+@k.actions.verb.object core.slot of=k.actions.verb key=object kind=atom kind=string core.source="hand-core 1"
+@k.actions.verb.complement core.slot of=k.actions.verb key=complement kind=atom kind=string core.source="hand-core 1"
+@k.actions.verb.attribute core.slot of=k.actions.verb key=attribute kind=atom kind=string core.source="hand-core 1"
+@k.actions.verb.value core.slot of=k.actions.verb key=value kind=atom kind=string core.source="hand-core 1"
+@k.actions.verb.separable core.slot of=k.actions.verb key=separable kind=boolean core.source="hand-core 1"
+@k.actions.verb.after_particle core.slot of=k.actions.verb key=after_particle kind=atom kind=string core.source="hand-core 1"
+@k.actions.verb.named core.slot of=k.actions.verb key=named enum=model core.source="hand-core 1"
+
+# After this verb (in this act) the word `marker` marks the role `role` ("replace the cat with a dog": with marks
+# the replacement). It comes before the markers of the role itself.
+@k.actions.marking core.type of=k.actions.marking shared=true closed=true core.source="hand-core 1"
+@k.actions.marking.verb core.slot of=k.actions.marking key=verb id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.marking.act core.slot of=k.actions.marking key=act id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.marking.marker core.slot of=k.actions.marking key=marker id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.marking.role core.slot of=k.actions.marking key=role required=true kind=atom kind=string core.source="hand-core 1"
+
+# An everyday action, named by its English verb in the base form (cut, fly, "pick up"): what people, animals and
+# things do, as against the acts above, which are what a person asks an application for. `group` sorts the actions: `move`
+# (moving oneself), `hands` (handling a thing), `make`, `change` (changing a thing), `sense`, `mind`, `talk` (speech
+# and other sounds and signs), `body`, `social` (with others), `nature` (what weather, plants and things do).
+# `who` names who or what usually does it (kinds: person, animal, bird, wind; many); `object` what it is usually done
+# to (many; left out when it is done to nothing: sleep); `tool` what it is usually done with (many: a thing, or a
+# part of the body); `where` a k.scenes scene where it usually happens (many); `result` says what comes of it;
+# `opposite` names the opposite action and `undone_by` the action that undoes it, where there is one (both are
+# names of actions of this world); `example` is one plain sentence. The other forms of the verb (cuts, cutting) are
+# core.word facts.
+@k.actions.action core.type of=k.actions.action shared=true closed=true core.source="hand-core 1"
+@k.actions.action.name core.slot of=k.actions.action key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.action.group core.slot of=k.actions.action key=group required=true enum=move enum=hands enum=make enum=change enum=sense enum=mind enum=talk enum=body enum=social enum=nature core.source="hand-core 1"
+@k.actions.action.who core.slot of=k.actions.action key=who many=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.action.object core.slot of=k.actions.action key=object many=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.action.tool core.slot of=k.actions.action key=tool many=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.action.where core.slot of=k.actions.action key=where many=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.action.result core.slot of=k.actions.action key=result required=true kind=string core.source="hand-core 1"
+@k.actions.action.opposite core.slot of=k.actions.action key=opposite kind=atom kind=string core.source="hand-core 1"
+@k.actions.action.undone_by core.slot of=k.actions.action key=undone_by kind=atom kind=string core.source="hand-core 1"
+@k.actions.action.example core.slot of=k.actions.action key=example required=true kind=string core.source="hand-core 1"
+
+# A verb or phrase that means nearly the same as an action, or a kind of it: `name` is the verb or phrase (stroll,
+# "rub out"), `action` the action of this world it is close to (walk, erase). It is not the same action: a host that
+# reads "stroll" as "walk" knows that it has widened the word. One verb can be close to several actions.
+@k.actions.similar core.type of=k.actions.similar shared=true closed=true core.source="hand-core 1"
+@k.actions.similar.name core.slot of=k.actions.similar key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.actions.similar.action core.slot of=k.actions.similar key=action id=true required=true kind=atom kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.actions.word.act core.word text=act text=acts text=command text=commands means=k.actions.act core.source="hand-core 1"
+@k.actions.word.verb core.word text=verb text=verbs text="phrasal verb" text="phrasal verbs" means=k.actions.verb core.source="hand-core 1"
+@k.actions.word.role core.word text=role text=roles means=k.actions.role core.source="hand-core 1"
+@k.actions.word.marker core.word text=preposition text=prepositions text=marker text=markers means=k.actions.role.marker core.source="hand-core 1"
+@k.actions.word.action core.word text=action text=actions text=do text=does text=doing means=k.actions.action core.source="hand-core 1"
+@k.actions.word.who core.word text=who text=doer means=k.actions.action.who core.source="hand-core 1"
+@k.actions.word.tool core.word text=tool text=tools text=with means=k.actions.action.tool core.source="hand-core 1"
+@k.actions.word.where core.word text=where means=k.actions.action.where core.source="hand-core 1"
+@k.actions.word.result core.word text=result text=results text=happens text=outcome means=k.actions.action.result core.source="hand-core 1"
+@k.actions.word.opposite core.word text=opposite means=k.actions.action.opposite core.source="hand-core 1"
+@k.actions.word.undone_by core.word text=undo text=undoes text=undone text=reverse means=k.actions.action.undone_by core.source="hand-core 1"
+@k.actions.word.similar core.word text=similar text=like text=means means=k.actions.similar core.source="hand-core 1"

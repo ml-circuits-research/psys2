@@ -5,6 +5,7 @@
     own=create:diagram.create
     sample=circle
     dir=yes
+    layout=yes
     bare=yes
     acts=make
     acts=remove

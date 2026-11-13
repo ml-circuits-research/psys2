@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
- * session.learned (spec 22): what the user teaches in any view ("a villa is a kind of house", "my dog is called Rex", "ducks float", "fish live in water") stored as wires of
+ * session.learned (spec 23): what the user teaches in any view ("a villa is a kind of house", "my dog is called Rex", "ducks float", "fish live in water") stored as wires of
  * the knowledge format (`@learned.N <type> key=value ... core.source="user"`) in the session, and read at the knowledge tier by every consumer: `withLearned(catalog, read)` returns the
  * catalog with those wires overlaid, with the same API (`peek`, `thing`, `wires`), so a view that reads the catalog reads the lesson with no code of its own.
  * Browser-safe: no `node:*`. The catalog is shared by all sessions; the learned wires belong to one session (the caller gives `read`, a function returning the wire lines).

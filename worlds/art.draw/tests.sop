@@ -458,6 +458,7 @@
 
 @t.art.draw.err01 core.test
     input="Delete the car."
+    given="ui.shell:activeTab=draw"
     expect="empty"
     expectStatus=missing
     session=err

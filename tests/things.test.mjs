@@ -1,4 +1,4 @@
-// TRANSFER first slice (spec 22): the session store of things, aspects, views, session.learned. Targeted tests: the pure modules, and one conversation per reasoner that moves things between
+// TRANSFER first slice (spec 23): the session store of things, aspects, views, session.learned. Targeted tests: the pure modules, and one conversation per reasoner that moves things between
 // three views (seating plan, Talk, avatar) with no code per pair of views.
 import test from 'node:test';
 import assert from 'node:assert/strict';

@@ -329,6 +329,8 @@ export class Interpreter {
         return mem.retract(String(wireId).replace(/^\$/, ''), reason);
       },
       state: (session.state[op.worldId] ??= {}),
+      /** The dialogue module's focus for this world as words ({ thing, place }) or null (M1; the acts executor resolves it when its own focus is empty). */
+      dialogueFocus: typeof session.dialogueFocus === 'function' ? () => session.dialogueFocus(op.worldId) : undefined,
       /** Where the command stands in its message: { index, count } (index = executed segments before it), or null outside a dialog message. Spec 04. */
       batch: session.batch ?? null,
       /** Queue a client-side effect (spec 07). Actions only. Returned by session.send() as `effects`. */
@@ -359,7 +361,7 @@ export class Interpreter {
       /** Shared vocabulary of lang.common: yesNo, unsure, cancel, stripLead, ordinal, degree, colour, size, position ... */
       lang: this.lang,
       /** The knowledge catalog (spec 17) or null: `peek(name)` is the settled lookup of a thing (undefined: not looked up, null: not known, else its parts and facts). */
-      knowledge: this._knowledgeFor(session),   // the catalog with what this session was taught overlaid (spec 22, session.learned)
+      knowledge: this._knowledgeFor(session),   // the catalog with what this session was taught overlaid (spec 23, session.learned)
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
       /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. */

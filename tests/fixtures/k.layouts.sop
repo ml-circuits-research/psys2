@@ -1,13 +1,19 @@
-@layout.row k.layouts.layout
-    name=row synonym=line synonym="in a line" generator=row sort=reading when="things of one kind that belong together"
-
-@layout.corners k.layouts.layout
-    name=corners synonym="different corners" generator=corners sort=reading
-
-@layout.family-photo k.layouts.layout
-    name="family photo" synonym="group photo" sort=height
-    slot="0.2 0.55" slot="0.4 0.55" slot="0.6 0.55" slot="0.8 0.55"
-    rel="slot1 left_of slot2"
-
-@layout.top-bottom k.layouts.layout
-    name="top and bottom" sort=reading slot="0.5 0.2" slot="0.5 0.8"
+# fixture for tests: the published k.layouts format (sop-knowledge-worlds, docs/worlds/k.layouts/schema.sop), a few arrangements only
+@k.layouts.layout.row k.layouts.layout name=row kind=repeating about="Things side by side on one line." ordered=true usual_for="people in a queue"
+@k.layouts.slot.row.item k.layouts.slot layout=row name=item count=many holds=thing
+@k.layouts.relation.row.item.left_of.item k.layouts.relation layout=row a=item rel=left_of b=item among=neighbours
+@k.layouts.layout.corners k.layouts.layout name=corners kind=fixed about="Four things in the four corners." usual_for="fish in a tank"
+@k.layouts.layout.family_photo k.layouts.layout name="family photo" kind=fixed about="The tall ones at the back, the small ones in front." usual_for="a family"
+@k.layouts.slot.family_photo.back_row k.layouts.slot layout="family photo" name=back_row count=many holds=adult arranged=row x=10 y=10 w=80 h=60
+@k.layouts.slot.family_photo.front_row k.layouts.slot layout="family photo" name=front_row count=many holds=child arranged=row x=20 y=45 w=60 h=50
+@k.layouts.slot.family_photo.pet k.layouts.slot layout="family photo" name=pet count=one optional=true holds=dog x=80 y=72 w=16 h=22
+@k.layouts.relation.family_photo.front_row.smaller_than.back_row k.layouts.relation layout="family photo" a=front_row rel=smaller_than b=back_row
+@k.layouts.layout.top_and_bottom k.layouts.layout name="top and bottom" kind=fixed about="One thing above, one below." usual_for="a title and a caption"
+@k.layouts.slot.top_and_bottom.top k.layouts.slot layout="top and bottom" name=top count=one x=40 y=10 w=20 h=20
+@k.layouts.slot.top_and_bottom.bottom k.layouts.slot layout="top and bottom" name=bottom count=one x=40 y=70 w=20 h=20
+@k.layouts.layout.nothing k.layouts.layout name=nothing kind=fixed about="Has no places and no generator: skipped."
+@k.layouts.word.layout.row core.word text=row text=line text="in a line" means=row of=k.layouts.layout.name
+@k.layouts.word.layout.corners core.word text=corners text="different corners" means=corners of=k.layouts.layout.name
+@k.layouts.word.layout.family_photo core.word text="family photo" text="group photo" means="family photo" of=k.layouts.layout.name
+@k.layouts.anchor.chair.seat k.layouts.anchor of=chair name=seat kind=seat x=25 y=55 w=50 h=0 part=seat holds=person
+@k.layouts.joins.hat.sits_on.head k.layouts.joins a=hat rel=sits_on b=head side=top

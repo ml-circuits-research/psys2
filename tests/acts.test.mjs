@@ -28,8 +28,11 @@ const seatSchema = () => A.parseSchema(parse(readFileSync(path.join(SEAT, 'schem
 const S = seatSchema();
 
 // ---- A1 / A2: the module and the generated files ----------------------------------------------------------------------------------------------------
-test('the act words of worlds/acts are generated from the seed table, and the schema world files are not stale', async () => {
-  assert.equal(readFileSync(new URL('../worlds/acts/lexicon.sop', import.meta.url), 'utf8'), buildLexicon());
+test('the act words of worlds/acts are generated from the k.actions verbs, and the schema world files are not stale', async () => {
+  const gen = await buildLexicon();
+  assert.equal(readFileSync(new URL('../worlds/acts/lexicon.sop', import.meta.url), 'utf8'), gen.lexicon);
+  assert.equal(readFileSync(new URL('../worlds/acts/verbs.generated.mjs', import.meta.url), 'utf8'), gen.module);
+  assert.ok(A.ACT_VERBS.make.includes('put_on') && A.ACT_VERBS.remove.includes('get_rid_of') && A.ACT_VERBS.remove.includes('take_off'), 'the verbs are those of k.actions');
   const { files } = await buildSchemaWorld(SEAT);
   for (const [name, text] of Object.entries(files)) assert.equal(readFileSync(path.join(SEAT, name), 'utf8'), text, `${name} is stale: run node scripts/build-schema-world.mjs tests/fixtures/worlds/test.seating`);
 });

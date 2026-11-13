@@ -22,7 +22,7 @@ import {
 
 import * as space from '../space/space.mjs?v=0c5c89b98e';
 import * as rel from '../space/pieces.mjs?v=7a5af05c50';
-import * as solver from '../space/solver.mjs?v=96409a334e';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+import * as solver from '../space/solver.mjs?v=a9e4428ba1';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=3549ba4382';
 

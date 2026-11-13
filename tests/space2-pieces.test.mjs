@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import * as P from '../worlds/space/pieces.mjs';
 import * as S from '../worlds/space/space.mjs';
 import { solve } from '../worlds/space/solver.mjs';
-import { createLayouts, parseLayouts } from '../src/knowledge/layouts.mjs';
+import { createLayouts, parseLayouts, parseAnchors, parseJoins } from '../src/knowledge/layouts.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { settingsForMode, sessionOptions } from '../src/dialog/runtime-config.mjs';
@@ -71,14 +71,16 @@ test('the solver is deterministic and flow / tree layouts follow edges', () => {
 
 test('k.layouts: parsed from the knowledge text; a layout that is only slots needs no code (E-S6); the fallback stays when there are none', async () => {
   const text = readFileSync(new URL('./fixtures/k.layouts.sop', import.meta.url), 'utf8');
-  assert.equal(parseLayouts(text).length, 4);
+  assert.equal(parseLayouts(text).length, 4);   // 'nothing' has neither a generator nor a place
+  assert.equal(parseAnchors(text)[0].kind, 'seat'); assert.equal(parseJoins(text)[0].rel, 'sits_on');
   const L = createLayouts({ text }); await L.load();
   assert.equal(L.from, 'catalog');
   const fam = L.find('arrange them like a family photo');
-  assert.equal(fam.id, 'family-photo');
+  assert.equal(fam.id, 'family_photo');
   const pcs = [['dad', 200], ['mum', 170], ['kid', 100], ['baby', 60]].map(([id, h], i) => mk(id, 'person', 100 + i * 20, 300, 60, h, i));
   const r = solve({ pieces: pcs, frame, layout: fam });
-  assert.ok(r.ok); assert.ok(r.boxes.dad.x < r.boxes.mum.x && r.boxes.mum.x < r.boxes.kid.x && r.boxes.kid.x < r.boxes.baby.x);
+  assert.ok(r.ok);   // the tall ones in the back row, the small ones in the front row (the places and their boxes are data), each row in reading order
+  assert.ok(r.boxes.dad.x < r.boxes.mum.x && r.boxes.kid.x < r.boxes.baby.x && r.boxes.dad.y < r.boxes.kid.y && r.boxes.mum.y < r.boxes.baby.y);
   assert.equal(L.find('in different corners').generator, 'corners');
   const none = createLayouts({ source: { text: async () => null } }); await none.load();
   assert.equal(none.from, 'fallback'); assert.ok(none.find('in a row'));

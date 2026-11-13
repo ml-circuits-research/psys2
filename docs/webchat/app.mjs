@@ -6,6 +6,7 @@
 //
 // The host renders world state (`reply.state`, `session.state()`) and executes effects from an allow-list.
 import { h } from './ui/util.mjs';
+import { createInputHistory } from './ui/input-history.mjs';
 import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
@@ -138,6 +139,8 @@ export async function mountPsys2(element, options = {}) {
   const log = h('div', { class: 'p2-log', role: 'log', 'aria-live': 'polite', 'aria-relevant': 'additions', 'aria-label': 'Conversation', tabindex: '0' });
   const statusEl = h('p', { class: 'p2-status', 'aria-live': 'off' }, 'Loading…');
   const input = h('input', { class: 'p2-text', type: 'text', id: `p2-in-${Math.random().toString(36).slice(2, 7)}`, autocomplete: 'off', enterkeyhint: 'send', placeholder: 'Type a message…', 'aria-label': 'Message' });
+  const inputHistory = createInputHistory(input);   // arrow up / down recall; the keydown listener is added below with the other input listeners
+  input.addEventListener('keydown', inputHistory.onKeydown);
   // Every icon button carries a tooltip (title) with the same text as its aria-label, saying what it does and what state it is in (UI1).
   const label = (btn, text) => { if (btn._label === text) return; btn._label = text; btn.setAttribute('aria-label', text); btn.title = text; };   // SOAK-BUSY: no DOM write when nothing changed
   const micBtn = h('button', { class: 'p2-btn p2-mic', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Speak a message', title: 'Speak a message' }, icon('mic'));
@@ -524,7 +527,14 @@ export async function mountPsys2(element, options = {}) {
   async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {
     user ??= addMessage('user', text);
     const ctl = new AbortController();
-    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode, recId, shown: [], tabBefore: view, killsBefore: engineClient?.stats.kills.length ?? 0 };
+    if (user?.msg && !user.msg.dataset.said) {   // INPUT-HISTORY on touch: a tap on a sent message copies it into the box for editing
+      user.msg.dataset.said = text;
+      let at = 0;
+      const tap = () => { if (performance.now() - at < 500) return; at = performance.now(); if (inputHistory.recallText(text)) events.add('recall', text); };
+      user.bubble.addEventListener('click', tap); user.bubble.addEventListener('touchend', tap);
+    }
+    const correction = user && 'correction' in user ? user.correction : inputHistory.push(text);   // INPUT-HISTORY: an edited recalled message sent right after a failed turn is a correction of it (M1)
+    const tn = turn = { ctl, t0: tPress, text, correction, reason: null, undo: null, mode, recId, shown: [], tabBefore: view, killsBefore: engineClient?.stats.kills.length ?? 0 };
     busy++; setStatus();
     restAvatar(true);
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
@@ -566,6 +576,7 @@ export async function mountPsys2(element, options = {}) {
     const backstop = new Promise((_, rej) => { backstopTimer = setTimeout(() => rej(new TurnAborted('timeout', 'host')), Math.max(0, limit + TURN_LIMITS.backstopMs - (performance.now() - tPress))); });
     backstop.catch(() => {});
       reply = await Promise.race([runTurn(tn, text, mode, user, recId, typing, ticker, tStart, limit), backstop]);
+      try { inputHistory.noteOutcome(!reply || [].concat(reply.statuses ?? []).some((x) => x !== 'supported')); } catch { /* no history */ }
     } catch (e) {
       if (e?.name === 'EngineDown') {   // the engine could not (re)start: a distinct, visible error (not "too long"), logged
         typing.msg.remove();
@@ -648,7 +659,7 @@ export async function mountPsys2(element, options = {}) {
     const sentLang = language.get();   // LANG-FIXED: the language this turn was read in
     try {
       reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: sentLang, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, worldAware: settings.worldAware ?? 'veto', fastPath: settings.fastPath === true, nx: settings.nxStrategy,
-        signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + 300, { signal: tn.ctl.signal, label: 'turn' });
+        correction: tn.correction ?? undefined, signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
       if (e instanceof TurnAborted && engineClient?.stage) e.stage = engineClient.stage;   // the stage the engine worker reported last (the page-side deadline only knows 'turn')
       if (e instanceof TurnAborted || tn.ctl.signal.aborted) throw e;
@@ -735,7 +746,7 @@ export async function mountPsys2(element, options = {}) {
   /** A phrase is logged the moment it is sent (RD7), so it counts even if the answer is slow, fails or the page closes; the reply fills the outcome later. */
   function logPhraseStart(text, mode, voice = {}) {
     if (!settings.logPhrases) return null;
-    try { const rec = { ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }), ...(voice.queueMs != null ? { queueMs: voice.queueMs } : {}) }; phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
+    try { const rec = { ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply: null, correction: voice.correction ?? null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }), ...(voice.queueMs != null ? { queueMs: voice.queueMs } : {}) }; phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
   }
   // ---------- developer mode and the debug view (DBG) ----------
   // Off: nothing of it is loaded, recorded or kept. On: ui/debug.mjs is imported once and keeps a ring buffer of the last 200 turns.
@@ -918,7 +929,8 @@ export async function mountPsys2(element, options = {}) {
   const dispatch = (t, mode, voice) => {
     const tPress = performance.now();
     const user = addMessage('user', t);
-    const recId = logPhraseStart(t, mode, voice);
+    user.correction = inputHistory.push(t);   // the flag is known before the phrase is logged
+    const recId = logPhraseStart(t, mode, { ...(voice ?? {}), correction: user.correction });
     events.add('message', t, { mode, ...(recId ? { recId } : {}) });
     return process(t, mode, user, recId, tPress);
   };

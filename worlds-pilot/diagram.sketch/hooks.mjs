@@ -21,7 +21,8 @@ export const hooks = {
   domain,
   /** The engine's own reader for a sentence of the open tab that no form read: a string reply, or undefined. */
   unread: (ctx, text) => {
-    const out = E.create(ctx, { text });   // the family is only a label for the engine: its reader decides from the sentence
+    // a question and a command are the two families (act ask, any other act); the engine's reader decides the rest from the sentence
+    const out = (/\?\s*$|^(?:is|are|does|do|did|how|what|which|who|whom|where|can|why|list|show|tell|count)\b/i.test(String(text).trim()) ? E.ask_describe : E.create)(ctx, { text });
     return out && out.status === 'supported' ? (out.value ?? out.note) : undefined;
   },
 };

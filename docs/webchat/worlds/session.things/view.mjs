@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// A schema world as a VIEW of the session things (spec 22). `withView(schema, ns, hooks)` wraps the hooks of an acts executor so that, with no code in the world:
+// A schema world as a VIEW of the session things (spec 23). `withView(schema, ns, hooks)` wraps the hooks of an acts executor so that, with no code in the world:
 //   - after every request the world's things are published to the store (`things.sync`), each keeping its id across views;
 //   - the knowledge tier is read before the roles are used: a word the schema does not know that the knowledge (catalog or what the user taught) says is a kind of a kind of this
 //     world is read as that kind ("a waiter is a kind of person" makes "add a waiter" a guest), and "my sister" is the name the user gave;
 //   - the act `send` hands things to another view through the store (`things.show`), which says plainly when a view cannot take a thing.
 // `viewOps(X, schema, ns, H)` gives the two operations of the world as a view: `view` (its declaration) and `adopt` (take a thing of the store: the act make, then change for each
 // attribute it carries). Browser-safe, no `process`; every loop ticks the budget.
-import { aspectOfAttr } from './things.mjs?v=fb64cd6cd8';
+import { aspectOfAttr } from './things.mjs?v=1f3978926b';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const lc = (s) => String(s ?? '').toLowerCase();

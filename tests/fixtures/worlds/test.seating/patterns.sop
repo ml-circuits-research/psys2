@@ -2,45 +2,51 @@
     text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
 @pat.test.seating.make core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.make arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Add a table."
 
 @pat.test.seating.make.place core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest}"
     emit="@{_} core.request action=test.seating.make arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Add a guest at table 1."
 
 @pat.test.seating.make.n core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest}"
     emit="@{_} core.request action=test.seating.make arg.amount=\"{amount}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Add 3 tables."
 
 @pat.test.seating.make.name core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} [called|named] {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} [called|named] {value:rest}"
     emit="@{_} core.request action=test.seating.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Add a guest called Ann."
 
 @pat.test.seating.make.name.place core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest}"
     emit="@{_} core.request action=test.seating.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Add a guest called Ann at table 1."
 
 @pat.test.seating.remove core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Remove the guest Ann."
 
 @pat.test.seating.remove.out core.pattern
@@ -48,27 +54,31 @@
     emit="@{_} core.request action=test.seating.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Kick the guest Ann out."
 
 @pat.test.seating.remove.place core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words} [from|out_of|off] [$acts.det]? {place:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words} [from|out_of|off] [$acts.det]? {place:rest}"
     emit="@{_} core.request action=test.seating.remove arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Remove the guests from table 1."
 
 @pat.test.seating.change.of core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.test.seating.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.test.seating.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest}"
     emit="@{_} core.request action=test.seating.change arg.mode=set arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Change the colour of table 2 to red."
 
 @pat.test.seating.change.attr core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.test.seating.attrs} [to|be|as|into] [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {attribute:lex.test.seating.attrs} [to|be|as|into] [$acts.det]? {value:rest}"
     emit="@{_} core.request action=test.seating.change arg.mode=set arg.thing=\"{thing}\" arg.attribute=\"{attribute}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Set table 2 seats to 6."
 
 @pat.test.seating.change.value core.pattern
@@ -76,34 +86,39 @@
     emit="@{_} core.request action=test.seating.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make table 2 blue."
 
 @pat.test.seating.change.add core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.test.seating.attrs} to [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.test.seating.attrs} to [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.change arg.mode=more arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Add 2 seats to table 1."
 
 @pat.test.seating.change.add1 core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.make] {attribute:lex.test.seating.attrs} to [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.make] {attribute:lex.test.seating.attrs} to [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.change arg.mode=more arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Add a seat to table 1."
 
 @pat.test.seating.change.less core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.test.seating.attrs} from [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.test.seating.attrs} from [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.change arg.mode=less arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=14
+    tabPriority=22
     example="Remove 2 seats from table 1."
 
 @pat.test.seating.change.less1 core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.test.seating.attrs} from [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.test.seating.attrs} from [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.change arg.mode=less arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
+    tabPriority=21
     example="Remove a seat from table 1."
 
 @pat.test.seating.change.cmp.more core.pattern
@@ -111,6 +126,7 @@
     emit="@{_} core.request action=test.seating.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make table 1 bigger."
 
 @pat.test.seating.change.cmp.less core.pattern
@@ -118,20 +134,23 @@
     emit="@{_} core.request action=test.seating.change arg.mode=less arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Make table 1 smaller."
 
 @pat.test.seating.place core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:words}"
+    match="[$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest}"
     emit="@{_} core.request action=test.seating.place arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Put the guest Ann at table 2."
 
 @pat.test.seating.connect core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:words} [to|with|and] [$acts.det]? {place:words}"
+    match="[$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:words} [to|with|and] [$acts.det]? {place:rest}"
     emit="@{_} core.request action=test.seating.connect arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Connect table 1 to table 2."
 
 @pat.test.seating.group core.pattern
@@ -139,13 +158,15 @@
     emit="@{_} core.request action=test.seating.group arg.mode=group arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Group the tables."
 
 @pat.test.seating.apart core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.apart] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.apart] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Take the tables apart."
 
 @pat.test.seating.apart.2 core.pattern
@@ -153,69 +174,79 @@
     emit="@{_} core.request action=test.seating.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Take the tables apart."
 
 @pat.test.seating.place.bare core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.place arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
+    tabPriority=13
     example="Move the guest."
 
 @pat.test.seating.change.bare core.pattern
-    match="[$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.change arg.mode=set arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
+    tabPriority=13
     example="Change table 2."
 
 @pat.test.seating.connect.bare core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.connect arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
+    tabPriority=13
     example="Connect table 1."
 
 @pat.test.seating.send.bare core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.send arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=5
+    tabPriority=13
     example="Send table 1."
 
 @pat.test.seating.pick core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.pick arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Select table 2."
 
 @pat.test.seating.copy core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:words}"
+    match="[$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.copy arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Copy table 2."
 
 @pat.test.seating.send core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:words}"
+    match="[$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:words} to [$acts.det]? {place:rest}"
     emit="@{_} core.request action=test.seating.send arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Send table 2 to the diagram."
 
 @pat.test.seating.ask.what core.pattern
-    match="[what|which] [is|are] [$acts.det]? {attribute:lex.test.seating.attrs} of [$acts.det]? {thing:words}"
+    match="[what|which] [is|are] [$acts.det]? {attribute:lex.test.seating.attrs} of [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What is the colour of table 2?"
 
 @pat.test.seating.ask.what.is core.pattern
-    match="[what|which] {attribute:lex.test.seating.attrs} [is|are] [$acts.det]? {thing:words}"
+    match="[what|which] {attribute:lex.test.seating.attrs} [is|are] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="What colour is table 2?"
 
 @pat.test.seating.change.should core.pattern
@@ -223,6 +254,7 @@
     emit="@{_} core.request action=test.seating.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Table 2 should be blue."
 
 @pat.test.seating.change.needs core.pattern
@@ -230,13 +262,15 @@
     emit="@{_} core.request action=test.seating.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.attribute=\"{attribute}\" arg.text=\"{segment}\""
     kind=request
     priority=12
+    tabPriority=20
     example="Table 1 needs 6 seats."
 
 @pat.test.seating.ask.at core.pattern
-    match="[what|who] [is|are|sits|sit|stands|stand] [there]? {rel:lex.acts.rel} [$acts.det]? {place:words}"
+    match="[what|who] [is|are|sits|sit|stands|stand] [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest}"
     emit="@{_} core.request action=test.seating.ask arg.mode=what arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="Who is at table 1?"
 
 @pat.test.seating.ask.count.attr core.pattern
@@ -244,6 +278,7 @@
     emit="@{_} core.request action=test.seating.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=14
+    tabPriority=22
     example="How many seats does table 1 have?"
 
 @pat.test.seating.ask.count core.pattern
@@ -251,27 +286,31 @@
     emit="@{_} core.request action=test.seating.ask arg.mode=count arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="How many tables are there?"
 
 @pat.test.seating.ask.count.at core.pattern
-    match="how_many {thing:words} [are|is]? [there]? {rel:lex.acts.rel} [$acts.det]? {place:words}"
+    match="how_many {thing:words} [are|is]? [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest}"
     emit="@{_} core.request action=test.seating.ask arg.mode=count arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=question
     priority=13
+    tabPriority=21
     example="How many guests are at table 1?"
 
 @pat.test.seating.ask.where core.pattern
-    match="where [is|are] [$acts.det]? {thing:words}"
+    match="where [is|are] [$acts.det]? {thing:rest}"
     emit="@{_} core.request action=test.seating.ask arg.mode=where arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
+    tabPriority=20
     example="Where is Ann?"
 
 @pat.test.seating.ask.why core.pattern
-    match="why [is|are|did|do|was|were|does] {rest:words}"
+    match="why [is|are|did|do|was|were|does] {rest:rest}"
     emit="@{_} core.request action=test.seating.ask arg.mode=why arg.rest=\"{rest}\" arg.text=\"{segment}\""
     kind=question
     priority=11
+    tabPriority=19
     example="Why is table 2 blue?"
 
 @pat.test.seating.ask.last core.pattern
@@ -279,6 +318,7 @@
     emit="@{_} core.request action=test.seating.ask arg.mode=last arg.text=\"{segment}\""
     kind=question
     priority=11
+    tabPriority=19
     example="What did you just do?"
 
 @pat.test.seating.undo core.pattern
@@ -286,6 +326,7 @@
     emit="@{_} core.request action=test.seating.undo arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Undo that."
 
 @pat.test.seating.redo core.pattern
@@ -293,18 +334,21 @@
     emit="@{_} core.request action=test.seating.redo arg.text=\"{segment}\""
     kind=request
     priority=11
+    tabPriority=19
     example="Redo that."
 
 @pat.test.seating.save core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:rest}"
     emit="@{_} core.request action=test.seating.save arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Save it as lunch."
 
 @pat.test.seating.load core.pattern
-    match="[$lang.lead.polite]? [$acts.verb.load] [$acts.det]? {value:words}"
+    match="[$lang.lead.polite]? [$acts.verb.load] [$acts.det]? {value:rest}"
     emit="@{_} core.request action=test.seating.load arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=10
+    tabPriority=18
     example="Load lunch."

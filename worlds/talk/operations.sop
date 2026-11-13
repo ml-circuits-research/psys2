@@ -128,7 +128,7 @@
     impl=view
     semantics=action
     action=talk.view
-    doc="The declaration of Talk as a view of the session things (spec 22): every aspect, one card for each kind of thing."
+    doc="The declaration of Talk as a view of the session things (spec 23): every aspect, one card for each kind of thing."
 
 @op.talk.adopt core.operation
     impl=adopt

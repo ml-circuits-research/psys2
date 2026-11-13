@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// TRANSFER first slice (spec 22, worker-tasks 21:30): experiments T1 and T2 over three views of the session things: the pilot avatar (worlds-pilot/ui.avatar), the seating plan
+// TRANSFER first slice (spec 23, worker-tasks 21:30): experiments T1 and T2 over three views of the session things: the pilot avatar (worlds-pilot/ui.avatar), the seating plan
 // (worlds/plan.seating) and Talk (worlds/talk). No code per pair of views is involved: every transfer is the one operation things.show (the `send` act of a schema world or Talk's
 // "send it to X"), judged against EXPECTATIONS written below by hand from common sense, not from the code.
 //   node scripts/exp-transfer.mjs [--reasoner ops|matrix] [--catalog tests/fixtures/catalog] [--out file.jsonl] [--only t1|t2] [--verbose]

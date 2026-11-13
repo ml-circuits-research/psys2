@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// A schema world as a VIEW of the session things (spec 22). `withView(schema, ns, hooks)` wraps the hooks of an acts executor so that, with no code in the world:
+// A schema world as a VIEW of the session things (spec 23). `withView(schema, ns, hooks)` wraps the hooks of an acts executor so that, with no code in the world:
 //   - after every request the world's things are published to the store (`things.sync`), each keeping its id across views;
 //   - the knowledge tier is read before the roles are used: a word the schema does not know that the knowledge (catalog or what the user taught) says is a kind of a kind of this
 //     world is read as that kind ("a waiter is a kind of person" makes "add a waiter" a guest), and "my sister" is the name the user gave;

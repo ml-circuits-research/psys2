@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// session.things (spec 22): one store of things for the session. A thing has an identity, a kind (a word of the knowledge), attributes and the aspects those give it; a tab is a VIEW
+// session.things (spec 23): one store of things for the session. A thing has an identity, a kind (a word of the knowledge), attributes and the aspects those give it; a tab is a VIEW
 // that declares which aspects it shows. Pure and browser-safe: the state is a plain object (the state of the world session.things), knowledge comes in as a settled lookup `th`
 // (what `ctx.knowledge.peek(kind)` returns) and as `ancestors(kind)`; no `process`, no `node:*`.
 //

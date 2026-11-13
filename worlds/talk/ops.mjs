@@ -532,7 +532,7 @@ export function change(ctx, { c, size, x } = {}) {
   return no('missing', 'What shall I change? You can say "make it red", "bigger" or "show the moon too".');
 }
 
-// ---------------------------------------------------------------- Talk as a VIEW of the session things (spec 22): any aspect, shown as a card
+// ---------------------------------------------------------------- Talk as a VIEW of the session things (spec 23): any aspect, shown as a card
 const ASPECTS_ALL = ['visual', 'spatial', 'relational', 'numeric', 'textual', 'geographic', 'temporal', 'social'];
 /** The declaration of this world as a view: it shows every aspect (a card for each kind of thing). */
 export const view = () => ok({ id: 'talk', noun: 'conversation', words: ['talk', 'chat', 'conversation'], aspects: ASPECTS_ALL, kinds: null });

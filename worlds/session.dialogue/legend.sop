@@ -1,0 +1,5 @@
+@legend.session.dialogue core.legend
+    namespace=session.dialogue
+    version=0.1.0
+    imports=core
+    doc="Dialogue module (spec 22): the cue words of the turn kinds. The focus and the gap filling are sopworld std.focus and std.fill, read by src/dialog/dialogue.mjs."

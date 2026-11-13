@@ -18,4 +18,5 @@ export const save = (ctx, args = {}) => X.operation(ctx, 'save', args);
 export const load = (ctx, args = {}) => X.operation(ctx, 'load', args);
 export const interceptInput = (ctx, text) => X.interceptInput(ctx, text);
 export const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);
+export const referents = (ctx) => X.referents(ctx);
 export const executor = X;
