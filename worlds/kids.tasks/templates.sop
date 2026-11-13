@@ -1,10 +1,10 @@
 @tpl.kids.tasks.t1 core.template
     for=action.tasks.add
-    text="Done! I added {values:list} to your {value} list. {note}"
+    text="I added {values:list} to your {value} list. {note}"
 
 @tpl.kids.tasks.t2 core.template
     for=action.tasks.add
-    text="Done! I added {values:list} to your {value} list."
+    text="I added {values:list} to your {value} list."
 
 @tpl.kids.tasks.t3 core.template
     for=action.tasks.add

@@ -21,6 +21,7 @@ import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=5de885797a';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=baca68c7ad';
 import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=bd62044808';
+import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=1a42d60ef7';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=94e1022aec';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
@@ -1234,62 +1235,58 @@ export class DialogSession {
   }
 
   /**
-   * RO-TRANSLATE-FALLBACK, input side (spec 06). A Romanian message is read through the rules first. When the reading is poor (a clause not understood, a
-   * part not used, a best-effort "I took that as") and the on-device Translator exists, the message is translated by it, read again with the English rules,
-   * and that second reading replaces the first only when it is better (fewer clauses lost) and the checker accepted the translation. The session goes
-   * back to where it was before the first reading, so a rejected second reading leaves no trace; the first one is then put back unchanged.
+   * Input side of a foreign-language message (spec 06, M4): with the translators on ('fallback' mode) the English is chosen among candidates by `_sendByCandidates`;
+   * with them off, English input, or past the soft time limit, the core reads it as it is (rules translation).
    */
   async _send(text, opts = {}) {
     const tr = this.engine.translator;
     const wantedLang = opts.language ?? this.language;
-    if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || !(tr.rules?.supports?.(wantedLang, 'en') ?? true)) return this._sendCore(text, opts);   // a language without rules is read by the on-device translation in `_sendCore`
-    const snap0 = this.snapshot();
-    if (tr.translatorFirst?.() && tr.canTranslate?.(wantedLang, 'en') && !guard.soft()) return this._sendTranslatorFirst(text, opts, snap0);
-    const first = await this._sendCore(text, opts);
-    // trouble points of a reading: a clause not understood (3), a part not used (1 each), a best-effort "I took that as" (2), and a message the rules left in Romanian (2)
-    const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0)
-      + (String(r.trace?.english ?? '').trim().toLowerCase() === String(text).trim().toLowerCase() && r.translation?.unknown?.length ? 2 : 0);
-    const poor = issues(first);
-    if (first.lang === 'en' || !poor || !tr.canTranslate?.(first.lang, 'en') || guard.soft()) return first;
-    const b = await guard.abortable(tr.viaBrowser(text, { from: first.lang, to: 'en' }), 'translate');
-    if (!b || b.text.trim().toLowerCase() === String(first.trace?.english ?? '').trim().toLowerCase()) return first;
-    const snapFirst = this.snapshot();
-    this.restore(snap0);
-    let second = null;
-    try { second = await this._sendCore(text, opts, { english: b.text, translation: b }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; second = null; }
-    if (second && issues(second) < poor) {
-      second.trace.via = 'translator-in'; second.trace.firstReading = { english: first.trace?.english, issues: poor, reply: first.text };
-      tr.note?.('translator-in', { direction: 'ro->en', strategy: 'browser-api', reason: `the rules reading had ${poor} points of trouble, the Translator's has ${issues(second)}` });
-      return second;
+    if (!tr || tr.fallbackMode?.() !== 'fallback' || wantedLang === 'en' || guard.soft()) return this._sendCore(text, opts);
+    return this._sendByCandidates(text, opts);
+  }
+
+  /** Points of trouble of a reading of one candidate English in the active tab: 0 = the reader understands all of it (nothing unparsed, ignored or partial; every wire supported; no other world's reading). */
+  async _understands(english) {
+    const { set, formalizers, interp } = this.engine;
+    const f = this.forkForValidation();
+    const ctx = f.context();
+    const res = await formalizers.rules.formalize(splitAnswerList(interp.lang.stripFiller(english) || english), { worlds: set, session: f.isession, source: 'candidate', context: ctx, router: this._router });
+    const segs = res.segments ?? [];
+    if (!segs.length) return { issues: 9 };
+    const HOME = /^(ui|session|user|meta|common|lang|core)\b|^talk$/;
+    let issues = 0;
+    for (const sg of segs) {
+      budget.tick('index.understands');
+      issues += (sg.unparsed ? 3 : 0) + (sg.ignored?.length ?? 0) + (sg.partial ? 2 : 0) + (sg.bestEffort ? 2 : 0);
+      const w = sg.match?.worldId;
+      if (w && ctx.tabWorld && w !== ctx.tabWorld && !HOME.test(w)) issues += 2;   // a reading in another world than the open tab is not an understanding in it
+      if (sg.unparsed) continue;
+      f.isession.add(sg.wires);
+      for (const wire of sg.wires) { const r = interp.resolve(f.isession, wire); if (r?.status && r.status !== 'supported') issues += r.status === 'unsupported' || r.status === 'error' ? 2 : 1; }
     }
-    this.restore(snapFirst);
-    tr.note?.('translator-in', { direction: 'ro->en', fallback: true, reason: 'the Translator reading was no better; the rules reading is kept' });
-    return first;
+    return { issues };
   }
 
   /**
-   * P7, input side with the Translator as the first choice (owner rule 2026-11-12): the Translator's English is read first. The rules read only when it is missing, late or
-   * rejected by the checker, or when its reading is poor and the rules' reading is better (a garbled translation of an app command: the safety net, never the first choice).
+   * M4 (WORLDS-AS-MODULES), input side, all languages: the English comes from the candidates of every available translator plus one after source-side spelling repair;
+   * a candidate that keeps a source word is rejected; among the rest the reader's dry reading in the active tab picks the one it understands completely (ties: the
+   * browser Translator first). All candidates are kept in `trace.candidates` (phrase export). The step budget bounds the loop; nothing here is per language.
    */
-  async _sendTranslatorFirst(text, opts, snap0) {
+  async _sendByCandidates(text, opts) {
     const tr = this.engine.translator, lang = opts.language ?? this.language;
-    const issues = (r) => (r.segments ?? []).reduce((n, g) => n + (g.unparsed ? 3 : 0) + (g.ignored?.length ?? 0) + (g.bestEffort ? 2 : 0), 0);
-    const b = await guard.abortable(tr.viaBrowser(text, { from: lang, to: 'en' }), 'translate');
-    if (!b) return this._sendCore(text, opts);   // missing, late or failed: the rules (the reason is in the translator usage)
-    let first = null;
-    try { first = await this._sendCore(text, opts, { english: b.text, translation: b }); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; }
-    if (!first) { this.restore(snap0); return this._sendCore(text, opts); }
-    first.trace.via = 'translator-in';
-    tr.note?.('translator-in', { direction: `${lang}->en`, strategy: 'browser-api', reason: 'the Translator is the first choice' });
-    const poor = issues(first);
-    if (!poor || guard.soft()) return first;
-    const snapFirst = this.snapshot();
-    this.restore(snap0);
-    let second = null;
-    try { second = await this._sendCore(text, opts); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; }
-    if (second && issues(second) < poor) { tr.note?.('rules-translate', { direction: `${lang}->en`, fallback: true, reason: `the Translator reading had ${poor} points of trouble, the rules' has ${issues(second)}` }); return second; }
-    this.restore(snapFirst);
-    return first;
+    const { set } = this.engine;
+    const vocab = spellVocabulary(set);
+    const isEnglish = englishTest((w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!tr.rules?.knownEnglish?.(w));
+    const cands = await gatherCandidates(text, { from: lang, to: 'en', translator: tr, abortable: (p, stage) => guard.abortable(p, stage) });
+    if (!cands.length) return this._sendCore(text, opts);   // nothing translated it: the core says so (MT-SERIOUS)
+    const pick = await chooseCandidate(cands, text, { understand: (e) => this._understands(e), isEnglish, soft: () => guard.soft() });
+    if (!pick.chosen) return this._sendCore(text, opts);
+    const c = pick.chosen, machine = c.source === 'browser' || c.source === 'model' || /^repaired-(browser|model)$/.test(c.source);
+    const r = await this._sendCore(text, opts, { english: c.text, translation: c.translation });
+    r.trace.candidates = pick.log;
+    r.trace.via = machine ? 'translator-in' : 'rules-translate';
+    tr.note?.(machine ? 'translator-in' : 'rules-translate', { direction: `${lang}->en`, strategy: machine ? 'browser-api' : 'rules', reason: `candidate ${c.source} chosen among ${cands.length}` });
+    return r;
   }
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader } = {}, override = null) {

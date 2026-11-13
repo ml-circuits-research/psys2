@@ -22,7 +22,7 @@ test('avatar expressions: fii bucuros / vesel / trist / nervos / supărat / sper
     const { r, status } = await run('robot', [`fii ${w}`]);
     assert.deepEqual(status, ['supported'], w);
     assert.equal(r.lang, 'ro');
-    assert.match(r.text, /^\S+! Acum arăt /, w);
+    assert.match(r.text, /^Acum arăt /, w);
   }
 });
 
@@ -62,7 +62,7 @@ test('drawing: move into the water, ask where when the place is missing, delete 
 });
 
 test('template interjections are Romanian in a Romanian session', async () => {
-  for (const [en, ro] of [['Voila!', 'Poftim!'], ['Look at that!', 'Uite!']]) {
+  for (const [en, ro] of [['Look at that!', 'Uite!']]) {
     const t = await rules.translate(en, { from: 'en', to: 'ro' });
     assert.equal(t.text, ro);
     assert.deepEqual(t.unknown ?? [], []);
@@ -116,7 +116,7 @@ test('RP5b: every tab opens by its Romanian name and the voice variants, with a 
 });
 
 test('RP5b: avatar become / describe / mouth-size refusal are Romanian', async () => {
-  for (const [msg, re] of [['fii un carton', /^\S+! Acum sunt un desen animat\. Am .+\./], ['fiind copil', /^\S+! Acum sunt un copil\. Am .+\./]]) {
+  for (const [msg, re] of [['fii un carton', /^Acum sunt un desen animat\. Am .+\./], ['fiind copil', /^Acum sunt un copil\. Am .+\./]]) {
     const { r } = await run('robot', [msg]);
     assert.match(r.text, re, msg); assert.ok(!english.test(r.text.replace(/\(.*\)/, '')), r.text);
   }
@@ -162,7 +162,7 @@ test('RP5c: already on Drawing, plural "not found", the widest mouth', async () 
   assert.match((await run('draw', ['deschide tabul desen'])).r.text, /^Ești deja pe fila Desen/);
   assert.match((await run('draw', ['șterge toate cercurile roșii'])).r.text, /^Nu găsesc cercuri roșii în desen/);
   const mouth = await run('robot', ['Fă o gură mare']);
-  assert.deepEqual(mouth.status, ['supported']); assert.match(mouth.r.text, /^\S+! Gura mea este mare acum/);
+  assert.deepEqual(mouth.status, ['supported']); assert.match(mouth.r.text, /^Gura mea este mare acum/);
 });
 
 // RP5c item 1: a command-opened tab is the active tab for tier T. The bug was in the dry run of the capability check: with a recent world other than the

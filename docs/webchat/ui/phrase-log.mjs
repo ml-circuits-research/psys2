@@ -36,6 +36,7 @@ export function buildRecord({ text, mode = 'typed', language = 'en', tab = null,
   try { via = [reply?.trace?.via, ...(reply?.trace?.replyVia ?? [])].filter(Boolean); } catch { via = []; }
   return {
     ...(via.length ? { via: [...new Set(via)] } : {}),
+    ...(reply?.trace?.candidates?.length ? { candidates: reply.trace.candidates.slice(0, 8).map((c) => ({ ...c, text: String(c.text ?? '').slice(0, 300), ...(c.repaired ? { repaired: String(c.repaired).slice(0, 300) } : {}) })) } : {}),   // M4: every candidate English, which one was chosen, and why the others were not (source words, checker, issues)
     id: id ?? newId(now), time: new Date(now).toISOString(), text: String(text ?? ''), mode: MODES.includes(mode) ? mode : 'typed',
     source: mode === 'chip' ? 'chip' : 'human', lang: reply?.lang ?? language, english, tab, segments,
     unparsed: segments.some((s) => s.unparsed), formalizer,

@@ -1656,7 +1656,7 @@ export async function mountPsys2(element, options = {}) {
     encoderChecked = true;
     // Facades of the models that live in the engine worker (the page only needs their labels, status and a way to start loading them)
     browserBackend = createBrowserBackend({ mt: tl.mtProxy });
-    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getLanguage: () => language.get(), browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: () => view, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
+    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getLanguage: () => language.get(), browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to, m.only ?? null) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: () => view, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
     if (meta) {
       dispatcherEnc = { prepare: () => engineClient.call('prepare', { which: 'dispatcher' }) };
       dispatcherVersion = meta.version ?? null;

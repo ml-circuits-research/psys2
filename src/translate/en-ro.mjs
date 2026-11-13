@@ -862,6 +862,9 @@ function isEnglishDerived(k) {
   return stems.some((s) => nounMap.has(s) || verbMap.has(s) || adjMap.has(s));
 }
 
+/** True for an English word of the lexicon or a regular form of one (M4: a candidate translation that keeps a word of the input that is not English still has source words). */
+export const knownEnglishWord = (k) => isEnglishWord(k) || isEnglishDerived(k);
+
 /**
  * English words that survived in a Romanian output (a word of the English lexicon that Romanian does not also know). A reply with such a word
  * is mixed, so the caller keeps the whole reply in English instead.
