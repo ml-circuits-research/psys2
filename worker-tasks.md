@@ -3718,3 +3718,33 @@ Please run the same 14 turns with the catalog reachable and put both columns in 
 **First slice to build now (small, then measure T1 and T2):** `session.things` with identity and aspects on top of the acts executor (std.acts); the pilot avatar, the seating plan and one existing tab (Talk cards) as views of it; `session.learned` for taught facts with the knowledge tier reading it; the T1 matrix for those three. Then art.draw as a view (with its acts pilot), then charts and the document ("about the current discussion" becomes a selection of session things into those views).
 
 **Not in scope:** rule worlds (games, arithmetic, shop) keep their state; they may publish results as things (a score, a list) but are not views.
+
+## Reviewer 2026-11-13 22:30 — KNOWLEDGE-OUT (owner): tab worlds hold no general knowledge; review of the overlaps and the refactoring
+
+**Owner's rule:** a tab world knows only how to drive its tool (drawing, diagram, chart, map, document, avatar). Everything about the world at large comes from the knowledge worlds by lookup. Expectation to test: the same level at least, and a clear rise in the quality and reach of answers.
+
+**Review (reviewer's count on main today; `^@` wires in kb.sop and tables in code):**
+
+| in PSys2 | what it is | in the knowledge repo |
+| --- | --- | --- |
+| geo.map kb: 1,001 cities, 250 countries, 38 regions | geography | k.geo: 238 countries, 867 cities, 1,065 rivers, 624 mountains, ranges, continents, capitals |
+| kids.animals kb: 68 animals | animal facts | k.animals: 314 animals (legs, covering, habitat, diet, abilities being extended) |
+| kids.shapes kb: 165 (88 families, 49 things, 12 colours, 9 shapes, 7 mixes) | shapes, colours, mixes, typical things | k.shapes (36), k.colours (33 colours, 25 mixes), k.values (170 colour names) |
+| kids.time kb: 33 (months, days, seasons, lengths) | calendar facts | k.time |
+| common.sense kb: 62 (lives in, supports, around, face part, place, rules) | common sense | k.scenes (usual place and size of 2,033 things), k.layouts (anchors, joins), k.attributes, k.commonsense |
+| space.mjs `KNOWLEDGE` table | layouts and joins | k.layouts (17 arrangements, 117 anchors, 171 joins) |
+| art.draw scene.mjs: `BUILTIN` drawings, `BASE_COLORS`, `COLOR_ALIASES`, `SHADES`, `PLURALS`, `KIND_ORDER`, `things.catalog.mjs` | drawings, colour names, plurals | k.objects (2,108 drawings), k.values, k.words |
+| colour names or values in at least 10 files (art.draw, data.charts, docs.editor, talk, diagram lexicon, avatar default face, acts) | colours | k.values, k.colours |
+| acts lexicon seed verbs; lang.common (259 entries: number words, yes / no, politeness) | act words, number words | k.actions (291 verbs), k.values (222 number words) |
+| datagen tables (irregular plurals, number words, first names) in several worlds | words | k.words, k.values, k.people |
+| kids.shop 26 prices, media.music 10 songs | sample content of a world | none: stays as the world's sample data, marked as such |
+| ui.help 71, ui.shell 109, user.profile 92, meta.worlds 26 | facts about the application and the user | not general knowledge: stay |
+
+**Refactoring, in this order (each step with a before / after table; NO POINT FIXES holds):**
+1. **Inventory by script, not by hand:** `scripts/knowledge-inventory.mjs` lists every fact type in a world's kb, every data table in world code and every lexicon group that names things of the world at large, with its counterpart in the catalog (by name overlap) or "none". The table above is the seed; the script output is the checklist and a test fails when a new general fact appears in a tab world.
+2. **One reading path:** all of it through the generic catalog reading (`facts.wires`, `thing()`), `std.fill` at the knowledge tier and the joins table the knowledge repo is building (one name, one thing across worlds). No world parses a knowledge shard itself.
+3. **Offline and first paint:** a small bundled subset **generated from the catalog at build time** (the things of the 30 old built-in drawings, the colour names, the number words, the act verbs, the default face), never hand copies; the catalog replaces it when reachable. This also fixes the avatar not knowing its slots offline.
+4. **Move, world by world, deleting as you go:** colours and number words first (they touch every world: one colour reader for all), then common.sense + space `KNOWLEDGE` (→ k.scenes, k.layouts, k.attributes), art.draw built-ins and tables, kids.shapes, kids.animals, kids.time, geo.map. What the knowledge repo lacks is listed by the script and sent to it (the reviewer has asked it to import what your kb files have and it lacks); do not keep a private copy "meanwhile" for more than one landing.
+5. **kids.* worlds become thin**: their question patterns are the `ask` act over knowledge (Talk does the same): one implementation; report which of the five kids worlds still needs to exist as a tab world.
+6. **Measure (same sets before and after each step):** the worlds' own tests, the three owner logs, the ledger groups, the Talk question set (301; fact found was 29%), the knowledge-lookup set (190), cold start size and time (the 5.3 MB of worlds should fall), per-turn steps. Plus one new generated set that shows the gain: 200 questions and requests about things the old kb did not have (animals beyond the 68, colours beyond the 12, places beyond the cities) in draw, Talk, map and charts.
+7. Report lines and wires removed per world and the reuse number per world (own wires against shared).
