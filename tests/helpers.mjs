@@ -49,7 +49,7 @@ export const mini = (ns, { imports = ['core'], legend = '', files = {}, opsSrc }
 // PSYS2_SUITE=fast: exhaustive sweeps run on a deterministic ~10% sample (seed PSYS2_SAMPLE_SEED, default the date);
 // PSYS2_SUITE=full (also the default when a file is run directly with `node --test`): everything in full.
 // PSYS2_CHANGED_WORLDS=a,b | all: worlds whose files differ from the main branch run their sweeps in full even in the fast suite.
-export const SUITE = process.env.PSYS2_SUITE === 'fast' ? 'fast' : 'full';
+export const SUITE = ['fast', 'smoke'].includes(process.env.PSYS2_SUITE) ? 'fast' : 'full';   // smoke = fast sampling
 export const SAMPLE_SEED = process.env.PSYS2_SAMPLE_SEED || new Date().toISOString().slice(0, 10);
 const CHANGED = (process.env.PSYS2_CHANGED_WORLDS || '').split(',').filter(Boolean);
 export const SAMPLE_RATE = 0.1;

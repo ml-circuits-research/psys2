@@ -45,7 +45,8 @@
 - Documentation: [`docs/`](docs/index.html); browser demo: [`docs/webchat/`](docs/webchat/index.html)
 
 ```bash
-npm test                         # all tests
+npm run test:smoke               # smoke suite (under 2 minutes, every commit)
+npm test                         # full suite (before a webchat publish, after a re-vendor, daily); add PUPPETEER_CORE for the browser matrix
 node src/cli.mjs chat            # terminal dialog (C2)
 node src/cli.mjs test-world all  # world competency tests
 node src/server/index.mjs        # HTTP API on :8080

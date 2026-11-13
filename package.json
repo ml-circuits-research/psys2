@@ -6,8 +6,10 @@
   "license": "AGPL-3.0-only",
   "engines": { "node": ">=20" },
   "scripts": {
-    "test": "node scripts/run-tests.mjs",
+    "test": "node scripts/run-tests.mjs --full",
     "test:full": "node scripts/run-tests.mjs --full",
+    "test:smoke": "node scripts/run-tests.mjs --smoke",
+    "test:fast": "node scripts/run-tests.mjs",
     "test:browser": "node scripts/run-tests.mjs --browser",
     "test:worlds": "node src/cli.mjs test-world all",
     "chat": "node src/cli.mjs chat",

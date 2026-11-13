@@ -11,12 +11,14 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
-export const SAMPLE = [
+const FULL_SAMPLE = [
   // the seven (REGRESSION-AB)
   'dlg.kidsA#010', 'dlg.drm#011', 'dlg.drm#014', 'dlg.drm#021', 'dlg.gms#002', 'dlg.gms#006', 'dlg.doc#035',
   // the other chess, kids, draw, music and editor dialogues the modes differ on (undo, redo, wording)
   'dlg.kidsB#016', 'dlg.avt#001', 'dlg.avt#011', 'dlg.avt#036', 'dlg.drm#007', 'dlg.drm#025', 'dlg.drm#031', 'dlg.drm#038', 'dlg.ed#006',
 ];
+// smoke suite (PSYS2_SUITE=smoke): the chess/undo dialogues, the kind of coherence bug that broke before; the other dialogues run in the full suite
+export const SAMPLE = process.env.PSYS2_SUITE === 'smoke' ? ['dlg.gms#002', 'dlg.gms#006', 'dlg.doc#035', 'dlg.kidsA#010', 'dlg.drm#011'] : FULL_SAMPLE;
 
 test(`A/B gate: no "ops better" dialogue in the fixed sample (${SAMPLE.length} dialogues)`, { timeout: 280000 }, () => {
   const r = spawnSync(process.execPath, [join(REPO, 'scripts/ab-sopworld.mjs'), '--sets', 'dialogues', '--ids', SAMPLE.join(','), '--no-write'], { cwd: REPO, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 270000 });
