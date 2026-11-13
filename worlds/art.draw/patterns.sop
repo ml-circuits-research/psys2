@@ -122,18 +122,28 @@
     example="Make the tree small."
 
 @pat.art.draw.move core.pattern
-    canonical="Put the cat next to the house."
     canonical="Move the tree to the left."
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [move|shift|push|drag|bring|put|place|set|slide|carry|send|take|lift|lower|raise|nudge|relocate|position|shove|scoot|haul|plonk|toss|stick|reposition|tuck|float|transfer] {p:words(14)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [move|shift|push|drag|bring|slide|carry|send|take|lift|lower|raise|nudge|relocate|shove|scoot|haul|reposition|float|transfer] {p:words(14)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=draw.move arg.phrase=\"{p}\""
     kind=request
     priority=9
     example="Move the tree to the left."
     example="Move the sun a bit higher."
-    example="Put the cat next to the house."
     example="Move it to the top right corner."
-    example="Put the red house on the left."
+    example="Move the red house to the left."
     example="Send the cloud behind the house."
+
+@pat.art.draw.put core.pattern
+    canonical="Put the cat next to the house."
+    doc="A placing verb: a thing that is not in the picture yet is drawn there (a lake, a road); one that is, is moved."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [put|place|set|position|plonk|toss|stick|tuck] {p:words(14)} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"{p}\" arg.verb=put"
+    kind=request
+    priority=9
+    example="Put the cat next to the house."
+    example="Put it in the top right corner."
+    example="Put the red house on the left."
+    example="Place a lake next to the house."
 
 @pat.art.draw.nudge core.pattern
     canonical="Make the cat a bit lower."

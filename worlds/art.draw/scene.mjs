@@ -154,6 +154,28 @@ const BUILTIN = {
   arrow: { prim: 1, size: 220, aspect: 0.3, color: 'black', build: () => [
     L('body', [[-0.5, 0], [0.38, 0]], 'black', { m: 1, t: 0.03 }), P('head', [[0.3, -0.1], [0.5, 0], [0.3, 0.1]], 'black', { m: 1, f: 'solid' })] },
 
+  // ---- places (SCENE-NATURAL P4): region objects with a place, a size and a name; they move, resize, disappear and serve in relations like any thing
+  lake: { region: 1, size: 280, aspect: 0.5, color: 'blue', names: { water: ['water', 'lake', 'pond', 'body'], ripples: ['ripple', 'ripples', 'waves'] }, build: () => [
+    E('water', 0, 0, 1, 0.5, 'blue', { m: 1 }),
+    K('ripples', [[-0.28, -0.06], [-0.2, -0.1], [-0.12, -0.06], [-0.04, -0.1], [0.04, -0.06]], 'light blue', { t: 0.012 }),
+    K('ripples', [[0.05, 0.1], [0.13, 0.06], [0.21, 0.1], [0.29, 0.06]], 'light blue', { t: 0.012 })] },
+  river: { region: 1, size: 520, aspect: 0.16, color: 'blue', names: { water: ['water', 'river', 'stream', 'body'], ripples: ['ripple', 'ripples', 'waves'] }, build: () => [
+    R('water', 0, 0, 1, 0.16, 'blue', { m: 1 }),
+    K('ripples', [[-0.4, -0.02], [-0.32, -0.05], [-0.24, -0.02], [-0.16, -0.05], [-0.08, -0.02]], 'light blue', { t: 0.006 }),
+    K('ripples', [[0.1, 0.03], [0.18, 0.0], [0.26, 0.03], [0.34, 0.0]], 'light blue', { t: 0.006 })] },
+  road: { region: 1, size: 520, aspect: 0.14, color: 'grey', names: { surface: ['surface', 'road', 'street', 'body'], stripes: ['stripe', 'stripes', 'line', 'lines', 'dashes'] }, build: () => [
+    R('surface', 0, 0, 1, 0.14, 'grey', { m: 1, sh: -0.25 }),
+    L('stripes', [[-0.4, 0], [-0.28, 0]], 'white', { t: 0.008 }), L('stripes', [[-0.14, 0], [-0.02, 0]], 'white', { t: 0.008 }),
+    L('stripes', [[0.12, 0], [0.24, 0]], 'white', { t: 0.008 }), L('stripes', [[0.38, 0], [0.5, 0]], 'white', { t: 0.008 })] },
+  field: { region: 1, size: 420, aspect: 0.4, color: 'green', names: { grass: ['grass', 'field', 'meadow', 'body'], rows: ['row', 'rows', 'furrows'] }, build: () => [
+    R('grass', 0, 0, 1, 0.4, 'green', { m: 1 }),
+    L('rows', [[-0.45, -0.1], [0.45, -0.1]], 'green', { m: 1, sh: -0.12, t: 0.01 }), L('rows', [[-0.45, 0.1], [0.45, 0.1]], 'green', { m: 1, sh: -0.12, t: 0.01 })] },
+  patch: { region: 1, size: 300, aspect: 0.3, color: 'green', names: { grass: ['grass', 'patch', 'lawn', 'body'] }, build: () => [
+    E('grass', 0, 0, 1, 0.3, 'green', { m: 1 }),
+    L('tufts', [[-0.2, 0.02], [-0.18, -0.05]], 'green', { m: 1, sh: -0.15, t: 0.008 }), L('tufts', [[0.1, 0.05], [0.12, -0.02]], 'green', { m: 1, sh: -0.15, t: 0.008 })] },
+  hill: { region: 1, size: 420, aspect: 0.45, color: 'green', names: { grass: ['grass', 'hill', 'body', 'slope'] }, build: () => [
+    P('grass', Array.from({ length: 25 }, (_, i) => { const t = (Math.PI * i) / 24; return [round(0.5 * Math.cos(t)), round(0.225 - 0.45 * Math.sin(t))]; }), 'green', { m: 1 })] },
+
   // ---- composites
   house: {
     size: 240, aspect: 0.82, color: 'yellow',

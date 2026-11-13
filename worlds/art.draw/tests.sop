@@ -532,7 +532,7 @@
     expect="I drew a small blue fish."
     expectStatus=supported
     expectState="objects.length=3"
-    expectState="objects.1.kind=oval"
+    expectState="objects.1.kind=lake"
     expectState="objects.1.size=260"
     expectState="objects.1.color=blue"
     session=r2add
@@ -4056,7 +4056,7 @@
     input="Draw a fish."
     expect="I made a pond for the fish."
     expectStatus=supported
-    expectState="objects.2.kind=oval"
+    expectState="objects.2.kind=lake"
     expectState="objects.2.tag=pond"
     expectState="objects.3.kind=fish"
     session=cs6
