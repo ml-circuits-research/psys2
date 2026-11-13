@@ -354,8 +354,8 @@
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=diagram.sketch.undo arg.text=\"{segment}\""
     kind=request
-    priority=25
-    tabPriority=33
+    priority=30
+    tabPriority=38
     signal=true
     tabClaim=true
     tabOnly=true
@@ -366,8 +366,8 @@
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=diagram.sketch.redo arg.text=\"{segment}\""
     kind=request
-    priority=25
-    tabPriority=33
+    priority=30
+    tabPriority=38
     signal=true
     tabClaim=true
     tabOnly=true

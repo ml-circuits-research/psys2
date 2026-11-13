@@ -161,8 +161,8 @@ export const FORMS = [
   { id: 'ask.about', act: 'ask', mode: 'describe', match: 'L [describe|tell_me_about|explain] D {thing:rest}', args: ['thing'], priority: 6, if: 'thingask', example: 'Describe the circle.' },
   { id: 'ask.exists', act: 'ask', mode: 'exists', match: '[is|are] there [any|a|an|some]? {thing:rest}', args: ['thing'], priority: 11, if: 'thingask', example: 'Is there a circle?' },
   { id: 'ask.last', act: 'ask', mode: 'last', match: 'what [did|have] you [just]? [do|done|change|changed]', args: [], priority: 11, example: 'What did you just do?' },
-  { id: 'undo', act: 'undo', match: '[$lang.undo]', args: [], priority: 11, example: 'Undo that.' },
-  { id: 'redo', act: 'redo', match: '[$lang.redo]', args: [], priority: 11, example: 'Redo that.' },
+  { id: 'undo', act: 'undo', match: '[$lang.undo]', args: [], priority: 16, example: 'Undo that.' },
+  { id: 'redo', act: 'redo', match: '[$lang.redo]', args: [], priority: 16, example: 'Redo that.' },
   { id: 'save', act: 'save', match: 'L V.save [it|this|everything]? [as|under|called]? {value:words}', args: ['value'], priority: 10, example: 'Save it as lunch.' },
   { id: 'load', act: 'load', match: 'L V.load D {value:words}', args: ['value'], priority: 10, example: 'Load lunch.' },
   // forms of a character-like world (flag `self`) and the open-valued ones (be / has / dir / bare): written once, used by every world that sets the flag
@@ -851,6 +851,23 @@ export function createExecutor(schema, hooks = {}) {
     done();
     return hooks.after?.(ctx, act, req0, r) ?? r;
   }
+  /**
+   * AN ACT GROUP: several acts that one sentence asked for ("put on a hat and make it red") are ONE undo step and one reply, whoever calls them. The library's `act([...])` does the same over
+   * wires (sopworld std.acts, `_actAll`); this bridge keeps the host state (items, board, face) and the English reply, which the library does not carry (specs/21 section 10). The group stops
+   * at the first act that is not done and says why; what the earlier acts did stays one step, so "undo" takes the whole group back.
+   */
+  let groupSeq = 0;
+  function group(ctx, steps) {
+    const turn = `grp${++groupSeq}`, results = [], notes = [];
+    for (let i = 0; i < steps.length; i++) {
+      budget.tick('acts.group');
+      const r = operation(ctx, steps[i].act, { ...steps[i].args, request: { id: `${turn}_w${i + 1}` } });
+      results.push(r); notes.push(String(r.note ?? '').replace(/\.$/, ''));
+      if (r.status !== 'supported' || r.fallback) return { status: r.status === 'supported' ? 'missing' : r.status, note: notes.join('. ') + '.', value: notes.join('. ') + '.', results, failed: i };
+    }
+    const note = `${notes.join('. ')}.`;
+    return { status: 'supported', note, value: note, results };
+  }
   /** SEVERAL THINGS IN ONE ACT ("draw a sun, a cloud and a man", "remove the tree and the house"): the whole phrase is tried first (the world may read a coordination itself); when that is not a supported reply and the thing role is a coordination of noun phrases, each one is run as its own act with the other roles, as one step, and the replies are joined. */
   function operationParts(ctx, act, req0) {
     const r = operation0(ctx, act, req0);
@@ -923,5 +940,5 @@ export function createExecutor(schema, hooks = {}) {
     const sal = new Set(st.focus.ids);
     return st.items.map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
   }
-  return { run, operation, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
+  return { run, operation, group, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
 }

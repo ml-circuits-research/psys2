@@ -149,6 +149,7 @@ export const hooks = {
       }
       { const tw = words(r.thing); const last = tw.at(-1) ?? ''; if (GROUNDS(last) && tw.length <= 2 && /^(?:ground|floor|bottom|everything|picture|drawing)$/.test(words(r.place).at(-1) ?? '') && !(ctx.state.objects ?? []).some((o) => kindName(kindKey(o)) === last)) return D.ground(ctx, { g: last }); }   // "I need water on the floor": the ground, not a thing to move
       if (r.mode === 'layout') return D.spatial(ctx, { text: r.text });
+      if (!r.place && !rel(r) && /(?:^|\s)(?:place|put|set|add)\s+(?:a|an|another|some|\d+|two|three|four|five)\s/.test(words(r.text).join(' ') + ' ')) return hooks.domain.make(ctx, r);   // "place a road": no place said, an indefinite thing: it is drawn
       if (rel(r) === 'apart' && !r.place) return D.takeApart(ctx, { t: tOf({ thing: r.thing }) });
       if (rel(r) === 'together' && !r.place) return D.group(ctx, { t: r.thing, name: /\bas\s+(?:a\s+|an\s+|the\s+)?(.+?)\s*$/i.exec(String(r.text ?? ''))?.[1] });
       if (r.place && new RegExp(`\\b(?:a|an|another|some|\\d+|two|three|four|five)\\s+${String(r.thing ?? '').replace(/[^a-z0-9 ]/gi, '').trim().replace(/\s+/g, '\\s+')}`, 'i').test(String(r.text ?? ''))) return hooks.domain.make(ctx, r);   // "put a sun in the corner": an indefinite thing is a new one (the act `place` reread as `make`)

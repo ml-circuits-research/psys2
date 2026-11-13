@@ -23,6 +23,7 @@ export function openSlots(ctx, { action, args = {} } = {}) {
 const WHOLE = /(?:^|\s)(?:scene|mood|time|weather|atmosphere)$/i;
 export function checkReferents(ctx, { action, args = {} } = {}) {
   const a = actOf(action);
+  if (a === 'ask' && ['options', 'describe'].includes(String(args.mode ?? ''))) return undefined;   // "what colour options do I have": a question about the board, not a thing in it
   if (a === 'change' && (WHOLE.test(String(args.thing ?? '').trim()) || /^(?:it|them|that|this)\b/i.test(String(args.thing ?? '').trim()))) return undefined;   // the whole scene, or a pronoun the dialogue resolves
   if (a === 'remove') return D.checkReferents(ctx, { action: 'draw.remove', args: { phrase: args.thing ?? '' } });
   if (['change', 'place', 'copy', 'group', 'pick', 'ask'].includes(a) && args.thing) return D.checkReferents(ctx, { action: `draw.${a}`, args: { t: tOf(args) } });

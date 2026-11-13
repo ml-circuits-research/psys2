@@ -211,8 +211,8 @@
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.undo arg.text=\"{segment}\""
     kind=request
-    priority=11
-    tabPriority=19
+    priority=16
+    tabPriority=24
     example="Undo that."
     canonical="Undo that."
 
@@ -220,8 +220,8 @@
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.redo arg.text=\"{segment}\""
     kind=request
-    priority=11
-    tabPriority=19
+    priority=16
+    tabPriority=24
     example="Redo that."
     canonical="Redo that."
 

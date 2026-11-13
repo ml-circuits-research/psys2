@@ -274,8 +274,8 @@
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.undo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.undo arg.text=\"{segment}\""
     kind=request
-    priority=11
-    tabPriority=19
+    priority=16
+    tabPriority=24
     example="Undo that."
     canonical="Undo that."
 
@@ -283,8 +283,8 @@
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.redo] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.redo arg.text=\"{segment}\""
     kind=request
-    priority=11
-    tabPriority=19
+    priority=16
+    tabPriority=24
     example="Redo that."
     canonical="Redo that."
 
@@ -442,7 +442,7 @@
     example="Solid star."
 
 @pat.art.draw.change.state.sky core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [it_is|its|it_s|it_looks|it_gets|it_becomes|it_should_be|it_should_look_like|let_it_be|i_want_it_to_be|i_want_it|make_it] {value:lex.art.draw.values} [time|mode|now|already|please|pls]? [time|mode]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [it_is|its|it_s|it_looks|it_gets|it_becomes|it_should_be|it_should_look_like|let_it_be|i_want_it_to_be|i_want_it|make_it|make_it_look_like|make_it_look|make_it_seem_like|turn_it_into|change_it_to|set_it_to] {value:lex.art.draw.values} [time|mode|now|already|please|pls]? [time|mode]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.change arg.mode=set arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=11
@@ -573,6 +573,14 @@
     tabPriority=19
     example="Describe my picture."
     canonical="Describe my picture."
+
+@pat.art.draw.ask.describe.whats core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|explain|summarise|summarize|list|show|tell_me|tell_us] [whats_in|what_is_in|whats_on|what_is_on|what_s_on|what_s_in|what_is_there_in|what_is_there_on] [$acts.det]? [my|the|this|our]? {noun:lex.art.draw.nouns} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=describe arg.text=\"{segment}\""
+    kind=question
+    priority=14
+    tabPriority=22
+    example="Explain whats on the page."
 
 @pat.art.draw.ask.describe.what core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [tell_me|show_me|let_me_know]? [what|whats|which] [is|are|s|have_i_got|can_you_see|do_you_see|can_i_see|do_i_have]? [in|on|at|of] [my|the|this|our]? {noun:lex.art.draw.nouns} [right_now|now|there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -706,7 +714,7 @@
     canonical="Find the house."
 
 @pat.art.draw.ask.where.of core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [location|position|place|whereabouts|spot]_of [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [location_of|position_of|place_of|whereabouts_of|spot_of] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.ask arg.mode=where arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=12
@@ -729,6 +737,14 @@
     tabPriority=20
     example="Tell me the colour of the house."
     canonical="Tell me the colour of the house."
+
+@pat.art.draw.ask.colour.painted core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|whats|what_s|what_is|what_colour_is|what_color_is|which_colour_is|which_color_is] [$acts.det]? {thing:words} [painted|coloured|colored|drawn|made] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.ask arg.mode=what arg.attribute=\"colour\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    example="Whats the house painted?"
 
 @pat.art.draw.ask.attr.short core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} {attribute:lex.art.draw.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -1000,6 +1016,14 @@
     tabPriority=20
     example="Clear the selection."
     canonical="Clear the selection."
+
+@pat.art.draw.pick.click core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [click|tap|touch|press|click_on|tap_on|touch_on] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=art.draw.pick arg.mode=pick arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    example="Click the second tree."
 
 @pat.art.draw.save.noun core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [$acts.det]? {noun:lex.art.draw.nouns} [as|in|to|under|called]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"

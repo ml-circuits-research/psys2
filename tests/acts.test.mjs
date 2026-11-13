@@ -290,3 +290,15 @@ test("worlds/plan.seating: a schema of under 60 lines, every other file generate
   const { files } = await buildSchemaWorld(dir);
   for (const [name, text] of Object.entries(files)) assert.equal(readFileSync(path.join(dir, name), "utf8"), text, `${name} is stale: run node scripts/build-schema-world.mjs worlds/plan.seating`);
 });
+
+test('an act group: several acts, one undo step, one reply (the bridge of act([...]) over host state)', () => {
+  const X = A.createExecutor(S);
+  const ctx = { state: {}, lang: {} };
+  const g = X.group(ctx, [{ act: 'make', args: { thing: 'tables', amount: '2' } }, { act: 'make', args: { thing: 'guest', value: 'Ann' } }]);
+  assert.equal(g.status, 'supported'); assert.equal(g.results.length, 2);
+  assert.equal(ctx.state.items.length, 3);
+  const u = X.operation(ctx, 'undo', {});
+  assert.equal(u.status, 'supported'); assert.equal(ctx.state.items.length, 0);   // the whole group in one step
+  const bad = X.group(ctx, [{ act: 'make', args: { thing: 'tables', amount: '1' } }, { act: 'remove', args: { thing: 'table 9' } }]);
+  assert.notEqual(bad.status, 'supported'); assert.equal(bad.failed, 1);
+});
