@@ -49,11 +49,10 @@
     name=diagram name=diagram_editor name=flowchart name=flow_chart name=org_chart name=sketchpad name=canvas
     act=adjacent act=feed act=affect act=arrangement act=captioned act=cluster act=lighter act=trigger
     act=wider act=connector act=tagged act=backmost act=chained act=cyclic act=diagonal act=fatter
-    act=frontmost act=graph act=heavier act=henceforth act=reached act=shaped act=shorter act=slimmer
-    act=thicken act=thicker act=thinner act=unconnect act=upper act=wired act=reachable act=replica
-    act=thin
-    actshared=lead actshared=chart actshared=labeled actshared=labelled actshared=taller actshared=front actshared=lay actshared=titled
-    actshared=reading actshared=arranged actshared=longer actshared=built
+    act=frontmost act=graph act=henceforth act=reached act=shaped act=slimmer act=thicken act=thicker
+    act=thinner act=unconnect act=upper act=wired act=reachable act=replica act=thin
+    actshared=lead actshared=chart actshared=heavier actshared=labeled actshared=labelled actshared=shorter actshared=taller actshared=front
+    actshared=lay actshared=titled actshared=reading actshared=arranged actshared=built actshared=longer
     thing=everything thing=newest thing=new thing=latest thing=oldest thing=earliest thing=undo thing=revert
     thing=redo thing=reapply thing=create thing=add thing=make thing=put thing=place thing=insert
     thing=build thing=spawn thing=throw thing=slap thing=pop thing=stick thing=plonk thing=delete
@@ -361,9 +360,9 @@
     name=talk
     claim=add claim=bigger claim=doe claim=heavier claim=larger claim=longer claim=shorter claim=smaller
     claim=taller claim=undo
-    act=bicycle act=planet act=spider act=longer act=heavier act=shorter
-    actshared=cat actshared=taller
-    frame=what_comes frame=did_we frame=which_has frame=is_bigger frame=what_parts frame=which_is
+    act=planet act=bicycle act=spider act=longer act=heavier act=shorter act=taller
+    actshared=cat
+    frame=what_comes frame=did_we frame=which_has frame=which_planet frame=is_bigger frame=what_parts frame=which_is
     frameshared=what_are frameshared=what_did frameshared=what_does frameshared=can_we frameshared=what_kind frameshared=did_i frameshared=do_you frameshared=how_do
     frameshared=how_many frameshared=what_can
 

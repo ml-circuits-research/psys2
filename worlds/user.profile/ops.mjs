@@ -19,7 +19,7 @@ const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', '
 const clean = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
 
 export function initialState() {
-  return { v: 1, fields: {}, skipped: {}, asks: {}, followed: {}, sensitive: [], pending: null, question: '', active: false, inputMode: null, turns: 0, lastKey: null, lastSection: null, lastFollow: false, phrase: {}, resumeKey: null, plan: null, counts: null, n: 0, focus: null };
+  return { v: 1, kept: {}, fields: {}, skipped: {}, asks: {}, followed: {}, sensitive: [], pending: null, question: '', active: false, inputMode: null, turns: 0, lastKey: null, lastSection: null, lastFollow: false, phrase: {}, resumeKey: null, plan: null, counts: null, n: 0, focus: null };
 }
 
 // ---- knowledge base: the plan -----------------------------------------------------------------------------------------
@@ -496,6 +496,22 @@ export const setName = W((ctx, { name }) => {
   return ok(n);
 });
 export const nameOf = (ctx) => ok(list(st(ctx).fields.name?.v)[0] ?? '');
+/**
+ * Things other worlds keep for the user (saved faces: "save this as Grandma"): one text per key, at most 40 keys of 4,000 characters, wiped with the profile.
+ * ctx.request("prof.keep", { key, value }), ctx.request("prof.recall", { key }), ctx.request("prof.kept", { prefix }). Never shown as a profile field.
+ */
+export const keep = W((ctx, { key, value }) => {
+  const s = st(ctx), k = clean(key).slice(0, 80), v = String(value ?? '');
+  if (!k || !v) return no('unsupported', 'There is nothing to keep.');
+  s.kept ??= {};
+  if (!(k in s.kept) && Object.keys(s.kept).length >= 40) return no('unsupported', 'I cannot keep more than forty things for you.');
+  if (v.length > 4000) return no('unsupported', 'That is too big to keep.');
+  s.kept[k] = v;
+  return ok(k);
+});
+export const recall = (ctx, { key }) => { const v = st(ctx).kept?.[clean(key)]; return v === undefined ? no('missing', 'I have not kept that.') : ok(v); };
+export const keptKeys = (ctx, { prefix }) => ok(Object.keys(st(ctx).kept ?? {}).filter((k) => k.startsWith(clean(prefix))).join('\n'));
+export const unkeep = W((ctx, { key }) => { const s = st(ctx), k = clean(key); if (!(s.kept && k in s.kept)) return no('missing', 'I have not kept that.'); delete s.kept[k]; return ok(k); });
 /** "Where do I live?" and friends: one stored field, or an honest "I do not know yet". */
 export function fieldOf(ctx, { field = 'location' } = {}) {
   const v = list(st(ctx).fields[field]?.v);

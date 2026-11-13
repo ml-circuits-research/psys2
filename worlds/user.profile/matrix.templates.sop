@@ -12,3 +12,26 @@
     for=op.user.profile.setName
     status=conflicting
     text="{note}"
+
+@tpl.user.profile.m.keep.refused core.template
+    for=op.user.profile.keep
+    status=conflicting
+    text="{note}"
+
+
+@tpl.user.profile.m.recall.refused core.template
+    for=op.user.profile.recall
+    status=conflicting
+    text="{note}"
+
+
+@tpl.user.profile.m.keptKeys.refused core.template
+    for=op.user.profile.keptKeys
+    status=conflicting
+    text="{note}"
+
+
+@tpl.user.profile.m.unkeep.refused core.template
+    for=op.user.profile.unkeep
+    status=conflicting
+    text="{note}"

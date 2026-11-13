@@ -244,7 +244,10 @@ test('presets and saved faces: be a preset, save under a name, load it again, na
   assert.equal(JSON.stringify([f.slots, f.colours]), was, 'the same face comes back');
   assert.match(F.faceLoad(ctx, { name: 'grandpa' }).value, /I drew a grandpa/);
   assert.match(F.faceLoad(ctx, { name: 'zed' }).note, /I do not have a face called zed/);
-  assert.match(F.faceSave(ctx, { name: 'girl' }).note, /one of my own faces/);
+  assert.match(F.faceSave(ctx, { name: 'girl' }).value, /so "be girl" now brings back yours/);
+  F.facePreset(ctx, 'boy');
+  assert.match(F.faceLoad(ctx, { name: 'girl' }).value, /I am girl now/, 'the saved face wins over the preset of the same name');
+  delete f.saved.girl;
   assert.equal(F.faceSave(ctx, { name: '' }).status, 'unsupported');
   assert.match(F.faceList(ctx).value, /Your faces: Grandma Ann\. My own: girl, boy, woman, man, grandma, grandpa, robot and emoji\./);
   assert.equal(F.faceLoad(ctx, { name: 'happy' }).status, 'supported', 'a mood word is an expression, not a face');
@@ -319,6 +322,31 @@ for (const reasoner of ['matrix', 'ops']) {
     assert.equal(s.state('ui.avatar').character, 'cartoon');
     assert.match(await say('a bigger nose'), /nose/);   // no face: the DiceBear answer, not a crash
     assert.match(await say('raise the eyebrows'), /only my drawn face can do that/);
+  });
+}
+
+// ---- saved faces live in the profile; "give her silver hoop earrings" ---------------------------------------------------------------------------------------
+for (const reasoner of ['matrix', 'ops']) {
+  test(`${reasoner} reasoner: "save this as Grandma" is kept in user.profile and "be Grandma" brings it back in a new session; "give her silver hoop earrings"`, async () => {
+    const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
+    const open = () => { const x = engine.createSession(sessionOptions(settingsForMode('rules'), { language: 'en' })); x.setWorldState('ui.shell', { activeTab: 'robot' }); return x; };
+    const s = open();
+    const say = async (x, q) => (await x.send(q, {})).text;
+    assert.match(await say(s, 'give her silver hoop earrings'), /silver hoop earrings/);
+    assert.equal(s.state('ui.avatar').face.slots.earrings, 'hoop');
+    assert.equal(s.state('ui.avatar').face.colours.jewel, F.colourHex(getFaces(), 'jewel', 'silver'));
+    assert.match(await say(s, 'draw a woman with curly red hair'), /woman/);
+    assert.match(await say(s, 'save this as Grandma'), /saved this face as Grandma/);
+    const kept = s.state('user.profile').kept;
+    assert.deepEqual(Object.keys(kept), ['face.grandma'], 'the profile keeps it');
+    assert.equal(JSON.parse(kept['face.grandma']).slots.hair, 'curly');
+    await say(s, 'become a boy');
+    // a new session of the same user: only the profile comes along
+    const s2 = open();
+    s2.setWorldState('user.profile', structuredClone(s.state('user.profile')));
+    assert.match(await say(s2, 'be Grandma'), /I am Grandma now/);
+    assert.equal(s2.state('ui.avatar').face.slots.hair, 'curly');
+    assert.match(await say(s2, 'show me my saved faces'), /Your faces: Grandma\./);
   });
 }
 
