@@ -807,6 +807,17 @@ export const add = guard((ctx, args, s) => {
   const words0 = toks(args.where ?? '');
   const spec0 = readSpec({ ...args, have: sameKind(s, kindOfWord(args.kind)?.kind).length });
   const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
+  // spec 17: a thing the board has no picture for is looked up in the knowledge catalog (the host looked it up before the operation ran). A hit is drawn from its parts when
+  // the board can (the composite renderer of DRAW-FROM-FACTS), otherwise the reply says what is known; a miss is the plain "I don't know how to draw a X yet", never a random shape.
+  if (!spec0.kind && askedFor && ctx.knowledge) {
+    const th = ctx.knowledge.peek(askedFor);
+    if (th === null) return no(`I don't know how to draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet.`);
+    if (th?.objects?.length) {
+      if (typeof addComposite === 'function') return addComposite(ctx, args, s, th);
+      const parts = [...new Set(th.objects[0].parts.map((p) => p.name).filter((n) => !/^part\d*$/.test(n)))].slice(0, 6);
+      return no(`I know what ${/^[aeiou]/.test(th.name) ? 'an' : 'a'} ${th.name} looks like${parts.length ? ` (${parts.join(', ')})` : ''}, but my drawing board cannot draw it yet.`);
+    }
+  }
   if (!spec0.kind && UNDRAWABLE.has(askedFor)) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
   // a tail with more things: "... and a tree"
