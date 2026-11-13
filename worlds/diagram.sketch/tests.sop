@@ -4892,3 +4892,21 @@
     input="Draw a shape in the form of a house."
     expect="I drew a diagram shaped like a house"
     session=shaped.box.c
+
+@t.diagram.sketch.missing.name.a core.test
+    input="Draw a rectangle called Start."
+    expect="Drew "
+    expectState="shapes.length=1"
+    session=missing.name
+
+@t.diagram.sketch.missing.name.b core.test
+    input="delete the box End"
+    expect="I can't find “End” in the diagram. In the diagram I can see: Start."
+    expectState="shapes.length=1"
+    session=missing.name
+
+@t.diagram.sketch.missing.name.c core.test
+    input="move End to the right"
+    expect="I can't find “End” in the diagram. In the diagram I can see: Start."
+    expectState="shapes.length=1"
+    session=missing.name
