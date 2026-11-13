@@ -103,6 +103,7 @@
     "lib/interpreter/memory.mjs": "2672e73fe97f3277",
     "lib/interpreter/render.mjs": "29d3ec2c79479fb9",
     "lib/knowledge/catalog.mjs": "139f58bbfd6a2cfc",
+    "lib/knowledge/faces.mjs": "c63f53de27a18098",
     "lib/knowledge/facts.mjs": "7e1088e848849c69",
     "lib/legends/index.mjs": "ada11d48a49f2c91",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
@@ -187,7 +188,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "16f176dcd3a5d975",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "4763d536d58494e1",
+    "worlds/index.json": "badf4832091a6726",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -227,8 +228,11 @@
     "worlds/talk/ops.mjs": "841e05143d60a7c9",
     "worlds/ui.avatar/coverage.md": "7f8a2b93f4fd3dea",
     "worlds/ui.avatar/datagen.mjs": "7b6d8141609ea71b",
-    "worlds/ui.avatar/fns.mjs": "8e48f854d1345b53",
-    "worlds/ui.avatar/ops.mjs": "929a816fa5d4f380",
+    "worlds/ui.avatar/facedata.mjs": "b088d593bb4089f8",
+    "worlds/ui.avatar/facedraw.mjs": "cbf4e983ff0aeb78",
+    "worlds/ui.avatar/faceops.mjs": "c7015c3fd6c19491",
+    "worlds/ui.avatar/fns.mjs": "1305c98d4c5d4e9f",
+    "worlds/ui.avatar/ops.mjs": "cd58ba866355bd12",
     "worlds/ui.help/coverage.md": "c104d6620e1078d4",
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
     "worlds/ui.help/fns.mjs": "8a4ce7e2f3ef5a5a",
@@ -244,6 +248,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T14:19:19.556Z",
-  "commit": "3d47dcb"
+  "builtAt": "2026-11-13T14:26:36.972Z",
+  "commit": "875c83f"
 }
