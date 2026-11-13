@@ -6,6 +6,7 @@
  */
 import { isFillerWord } from './normalize.mjs?v=fe5fe63391';
 import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
+import { en } from '../../lang/en.mjs?v=445ab3fd8f';
 
 /** Quantity unit table: lowercase token -> canonical symbol. */
 export const UNIT_TABLE = new Map(Object.entries({
@@ -35,7 +36,7 @@ export const OP_WORDS = {
 
 /** True when the literal word list contains a filler (an old or new filler word, `for me`, `u know`, `like`) or a leading `then` / `so` / `and` / `after that`. */
 // Personal pronouns are never a noun slot value ("I live in Cluj" is not a fact about an animal called "i").
-const PERSONAL_PRONOUNS = new Set(['i', 'you', 'we', 'they', 'he', 'she', 'it', 'me', 'us', 'him', 'her', 'them']);
+const PERSONAL_PRONOUNS = en.words('pron', 'matcher');
 
 function listsFiller(words) {
   return words.some((w, k) => isFillerWord(w) || w === 'like' || w === 'then' || w === 'so' || w === 'and' || (w === 'that' && words[k - 1] === 'after') || (w === 'me' && words[k - 1] === 'for') || (w === 'know' && ['u', 'you', 'ya'].includes(words[k - 1])));

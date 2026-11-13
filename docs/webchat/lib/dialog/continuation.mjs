@@ -11,6 +11,7 @@
  * (or noun-verb); when nothing is left the clause is only an argument. The rest is read from the context (`dialog.context()`) and the reading's own world.
  */
 import { budget } from './budget.mjs?v=123c3e1329';
+import { en } from '../lang/en.mjs?v=445ab3fd8f';
 
 const tokens = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 
@@ -22,7 +23,7 @@ export const GRAMMAR = new Set(['a', 'an', 'the', 'some', 'any', 'one', 'ones', 
   'yes', 'yeah', 'ok', 'okay', 'maybe', 'perhaps', 'probably', 'please', 'pls', 'plz', 'well', 'now', 'again', 'instead', 'right', 'left', 'up', 'down']);
 
 export const PERSON = new Set(['i', "i'm", 'im', "i've", "i'd", "i'll", 'we', "we're", 'you', "you're", 'my', 'me', 'our', 'your']);   // a clause with a speaker or an addressee is a statement or a request of its own, whatever words follow
-const PRONOUN = new Set(['it', 'them', 'they']);   // the personal pronouns that stand for a thing; "this tab" is a noun phrase
+const PRONOUN = en.words('pron', 'continuation');   // the personal pronouns that stand for a thing; "this tab" is a noun phrase
 
 /**
  * The words of the clause that are neither inside a slot of the reading nor grammar: what the user said with a word of his own ("draw", "move", "make"). A
