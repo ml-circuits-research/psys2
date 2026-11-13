@@ -1,0 +1,12 @@
+# k.words/shards/eg: noun and verb senses of the words from "egg" to "egyptian" (first letters "eg").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.egg.noun.1 k.words.sense word=egg pos=noun n=1 gloss="animal reproductive body consisting of an ovum or embryo together with nutritive and protective envelopes; especially the thin-shelled reproductive body laid by e.g. female birds" is_a=ovum core.source="wordnet 3.1"
+@k.words.egg.noun.2 k.words.sense word=egg pos=noun n=2 gloss="oval reproductive body of a fowl (especially a hen) used as food" synonym=eggs is_a=foodstuff core.source="wordnet 3.1"
+@k.words.egg.noun.3 k.words.sense word=egg pos=noun n=3 gloss="one of the two male reproductive glands that produce spermatozoa and secrete androgens" synonym=testis synonym=testicle synonym=orchis synonym=ball synonym=ballock synonym=bollock synonym=nut is_a="male reproductive gland" is_a=gonad part_of="male reproductive system" part_of="male genitalia" core.source="wordnet 3.1"
+@k.words.egg.verb.1 k.words.sense word=egg pos=verb n=1 gloss="throw eggs at" is_a=pelt core.source="wordnet 3.1"
+@k.words.egg.verb.2 k.words.sense word=egg pos=verb n=2 gloss="coat with beaten egg" is_a=coat core.source="wordnet 3.1"
+@k.words.egypt.noun.1 k.words.sense word=Egypt pos=noun n=1 gloss="a republic in northeastern Africa known as the United Arab Republic until 1971; site of an ancient civilization that flourished from 2600 to 30 BC" synonym="Arab Republic of Egypt" synonym="United Arab Republic" instance_of="African country" part_of="Middle East" part_of=Africa core.source="wordnet 3.1"
+@k.words.egypt.noun.2 k.words.sense word=Egypt pos=noun n=2 gloss="an ancient empire to the west of Israel; centered on the Nile River and ruled by a Pharaoh; figured in many events described in the Old Testament" synonym="Egyptian Empire" instance_of=empire core.source="wordnet 3.1"

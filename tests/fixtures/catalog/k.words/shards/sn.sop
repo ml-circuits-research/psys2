@@ -1,0 +1,12 @@
+# k.words/shards/sn: noun and verb senses of the words from "snack" to "snug" (first letters "sn").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.snake.noun.1 k.words.sense word=snake pos=noun n=1 gloss="limbless scaly elongate reptile; some are venomous" synonym=serpent synonym=ophidian is_a=diapsid core.source="wordnet 3.1"
+@k.words.snake.noun.2 k.words.sense word=snake pos=noun n=2 gloss="a deceitful or treacherous person" synonym="snake in the grass" is_a="bad person" core.source="wordnet 3.1"
+@k.words.snake.noun.3 k.words.sense word=Snake pos=noun n=3 gloss="a tributary of the Columbia River that rises in Wyoming and flows westward; discovered in 1805 by the Lewis and Clark Expedition" synonym="Snake River" instance_of=river part_of=Wyoming part_of=Idaho part_of=Oregon part_of=Washington core.source="wordnet 3.1"
+@k.words.snake.verb.1 k.words.sense word=snake pos=verb n=1 gloss="move smoothly and sinuously, like a snake" is_a=glide core.source="wordnet 3.1"
+@k.words.snake.verb.2 k.words.sense word=snake pos=verb n=2 gloss="form a snake-like pattern" is_a=wind core.source="wordnet 3.1"
+@k.words.snake.verb.3 k.words.sense word=snake pos=verb n=3 gloss="move along a winding path" is_a=weave core.source="wordnet 3.1"
+@k.words.snowman.noun.1 k.words.sense word=snowman pos=noun n=1 gloss="a figure of a person made of packed snow" is_a=figure core.source="wordnet 3.1"

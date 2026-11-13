@@ -1,0 +1,7 @@
+# k.words/shards/ei: noun and verb senses of the words from "eiffel" to "eisenhower" (first letters "ei").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.eighth.noun.1 k.words.sense word=eighth pos=noun n=1 gloss="position eight in a countable series of things" is_a=rank core.source="wordnet 3.1"
+@k.words.eighth.noun.2 k.words.sense word=eighth pos=noun n=2 gloss="one part in eight equal parts" synonym=one-eighth is_a="common fraction" core.source="wordnet 3.1"

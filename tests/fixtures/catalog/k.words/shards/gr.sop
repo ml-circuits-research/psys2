@@ -1,0 +1,7 @@
+# k.words/shards/gr: noun and verb senses of the words from "grab" to "grunt" (first letters "gr").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.gram.noun.1 k.words.sense word=gram pos=noun n=1 gloss="a metric unit of weight equal to one thousandth of a kilogram" synonym=gramme synonym=gm synonym=g is_a="metric weight unit" part_of=dekagram core.source="wordnet 3.1"
+@k.words.gram.noun.2 k.words.sense word=Gram pos=noun n=2 gloss="Danish physician and bacteriologist who developed a method of staining bacteria to distinguish among them (1853-1938)" synonym="Hans C. J. Gram" instance_of=bacteriologist core.source="wordnet 3.1"

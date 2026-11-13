@@ -1,0 +1,8 @@
+# k.words/shards/un: noun and verb senses of the words from "un" to "unwind" (first letters "un").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.undo.verb.1 k.words.sense word=undo pos=verb n=1 gloss="cancel, annul, or reverse an action or its effect" is_a="change by reversal" core.source="wordnet 3.1"
+@k.words.undo.verb.2 k.words.sense word=undo pos=verb n=2 gloss="deprive of certain characteristics" synonym=unmake core.source="wordnet 3.1"
+@k.words.undo.verb.3 k.words.sense word=undo pos=verb n=3 gloss="cause the ruin or downfall of" is_a=ruin core.source="wordnet 3.1"

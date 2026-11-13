@@ -1,0 +1,7 @@
+# k.words/shards/oc: noun and verb senses of the words from "occasion" to "octopus" (first letters "oc").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.octopus.noun.1 k.words.sense word=octopus pos=noun n=1 gloss="tentacles of octopus prepared as food" is_a=seafood part_of=octopus core.source="wordnet 3.1"
+@k.words.octopus.noun.2 k.words.sense word=octopus pos=noun n=2 gloss="bottom-living cephalopod having a soft oval body with eight long tentacles" synonym=devilfish is_a=octopod core.source="wordnet 3.1"

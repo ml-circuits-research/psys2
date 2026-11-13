@@ -1,0 +1,13 @@
+# k.words/shards/te: noun and verb senses of the words from "te" to "texture" (first letters "te").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.teeth.noun.1 k.words.sense word=teeth pos=noun n=1 gloss="the kind and number and arrangement of teeth (collectively) in a person or animal" synonym=dentition is_a=set part_of=mouth core.source="wordnet 3.1"
+@k.words.tell.noun.1 k.words.sense word=Tell pos=noun n=1 gloss="a Swiss patriot who lived in the early 14th century and who was renowned for his skill as an archer; according to legend an Austrian governor compelled him to shoot an apple from his son's head with his crossbow (which he did successfully without mishap)" synonym="William Tell" instance_of=archer core.source="wordnet 3.1"
+@k.words.tell.verb.1 k.words.sense word=tell pos=verb n=1 gloss="express in words" synonym=state synonym=say is_a=express core.source="wordnet 3.1"
+@k.words.tell.verb.2 k.words.sense word=tell pos=verb n=2 gloss="let something be known" is_a=inform core.source="wordnet 3.1"
+@k.words.tell.verb.3 k.words.sense word=tell pos=verb n=3 gloss="narrate or give a detailed account of" synonym=narrate synonym=recount synonym=recite is_a=inform core.source="wordnet 3.1"
+@k.words.tent.noun.1 k.words.sense word=tent pos=noun n=1 gloss="a portable shelter (usually of canvas stretched over supporting poles and fastened to the ground with ropes and pegs)" synonym="collapsible shelter" is_a=shelter core.source="wordnet 3.1"
+@k.words.tent.noun.2 k.words.sense word=tent pos=noun n=2 gloss="a web that resembles a tent or carpet" is_a=web core.source="wordnet 3.1"
+@k.words.tent.verb.1 k.words.sense word=tent pos=verb n=1 gloss="live in or as if in a tent" synonym=camp synonym=encamp synonym="camp out" synonym=bivouac is_a=populate core.source="wordnet 3.1"

@@ -1,0 +1,7 @@
+# k.words/shards/on: noun and verb senses of the words from "one" to "onion" (first letters "on").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.one.noun.1 k.words.sense word=one pos=noun n=1 gloss="the smallest whole number or a numeral representing this number" synonym=1 synonym=I synonym=ace synonym=single synonym=unity is_a=digit core.source="wordnet 3.1"
+@k.words.one.noun.2 k.words.sense word=one pos=noun n=2 gloss="a single person or thing" is_a=unit core.source="wordnet 3.1"

@@ -1,0 +1,12 @@
+# k.scenes/shards/things-r: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 90 drawable things whose name starts with "r"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.rabbit k.scenes.thing name=rabbit place=ground size=small named=model core.source="hand-core 1"
+@k.scenes.thing.rice k.scenes.thing name=rice place=indoors on=table size=small named=model core.source="hand-core 1"
+@k.scenes.thing.river k.scenes.thing name=river place=ground size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.robot k.scenes.thing name=robot place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.rocket k.scenes.thing name=rocket place=sky size=huge named=model core.source="hand-core 1"
+@k.scenes.thing.roof k.scenes.thing name=roof place=on_thing on=house size=large named=model core.source="hand-core 1"
+@k.scenes.thing.rose k.scenes.thing name=rose place=ground size=small named=model core.source="hand-core 1"

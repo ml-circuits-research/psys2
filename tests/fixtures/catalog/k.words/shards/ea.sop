@@ -1,0 +1,16 @@
+# k.words/shards/ea: noun and verb senses of the words from "eager" to "eats" (first letters "ea").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ear.noun.1 k.words.sense word=ear pos=noun n=1 gloss="the sense organ for hearing and equilibrium" is_a="sense organ" part_of=head part_of="auditory system" part_of="vestibular apparatus" core.source="wordnet 3.1"
+@k.words.ear.noun.2 k.words.sense word=ear pos=noun n=2 gloss="good hearing" is_a=hearing core.source="wordnet 3.1"
+@k.words.ear.noun.3 k.words.sense word=ear pos=noun n=3 gloss="the externally visible cartilaginous structure of the external ear" synonym=auricle synonym=pinna is_a="cartilaginous structure" part_of="external ear" core.source="wordnet 3.1"
+@k.words.earth.noun.1 k.words.sense word=Earth pos=noun n=1 gloss="the 3rd planet from the sun; the planet we live on" synonym=earth synonym=world synonym=globe instance_of="terrestrial planet" core.source="wordnet 3.1"
+@k.words.earth.noun.2 k.words.sense word=earth pos=noun n=2 gloss="the loose soft material that makes up a large part of the land surface" synonym=ground is_a=material core.source="wordnet 3.1"
+@k.words.earth.noun.3 k.words.sense word=earth pos=noun n=3 gloss="the solid part of the earth's surface" synonym=land synonym="dry land" synonym=ground synonym="solid ground" synonym="terra firma" is_a=object part_of=Earth core.source="wordnet 3.1"
+@k.words.earth.verb.1 k.words.sense word=earth pos=verb n=1 gloss="hide in the earth like a hunted animal" is_a=hide core.source="wordnet 3.1"
+@k.words.earth.verb.2 k.words.sense word=earth pos=verb n=2 gloss="connect to the earth" is_a=ground core.source="wordnet 3.1"
+@k.words.eat.verb.1 k.words.sense word=eat pos=verb n=1 gloss="take in solid food" is_a=eat is_a=consume core.source="wordnet 3.1"
+@k.words.eat.verb.2 k.words.sense word=eat pos=verb n=2 gloss="eat a meal; take a meal" is_a=consume core.source="wordnet 3.1"
+@k.words.eat.verb.3 k.words.sense word=eat pos=verb n=3 gloss="take in food; used of animals only" synonym=feed is_a=consume core.source="wordnet 3.1"

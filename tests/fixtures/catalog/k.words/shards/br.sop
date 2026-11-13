@@ -1,0 +1,24 @@
+# k.words/shards/br: noun and verb senses of the words from "br" to "bryan" (first letters "br").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.brain.noun.1 k.words.sense word=brain pos=noun n=1 gloss="that part of the central nervous system that includes all the higher nervous centers; enclosed within the skull; continuous with the spinal cord" synonym=encephalon is_a="neural structure" part_of=head part_of="central nervous system" core.source="wordnet 3.1"
+@k.words.brain.noun.2 k.words.sense word=brain pos=noun n=2 gloss="mental ability" synonym=brainpower synonym="learning ability" synonym="mental capacity" synonym=mentality synonym=wit is_a=intelligence core.source="wordnet 3.1"
+@k.words.brain.noun.3 k.words.sense word=brain pos=noun n=3 gloss="that which is responsible for one's thoughts, feelings, and conscious brain functions; the seat of the faculty of reason" synonym=mind synonym=head synonym=psyche synonym=nous is_a=cognition core.source="wordnet 3.1"
+@k.words.brain.verb.1 k.words.sense word=brain pos=verb n=1 gloss="hit on the head" is_a=hit core.source="wordnet 3.1"
+@k.words.brain.verb.2 k.words.sense word=brain pos=verb n=2 gloss="kill by smashing someone's skull" is_a=kill core.source="wordnet 3.1"
+@k.words.brave.noun.1 k.words.sense word=brave pos=noun n=1 gloss="a North American Indian warrior" is_a=warrior core.source="wordnet 3.1"
+@k.words.brave.noun.2 k.words.sense word=brave pos=noun n=2 gloss="people who are brave" is_a=people core.source="wordnet 3.1"
+@k.words.brave.verb.1 k.words.sense word=brave pos=verb n=1 gloss="face and withstand with courage" synonym=weather synonym=endure synonym="brave out" is_a=defy core.source="wordnet 3.1"
+@k.words.brazil.noun.1 k.words.sense word=Brazil pos=noun n=1 gloss="the largest Latin American country and the largest Portuguese speaking country in the world; located in the central and northeastern part of South America; world's leading coffee exporter" synonym="Federative Republic of Brazil" synonym=Brasil instance_of="South American country" part_of="South America" core.source="wordnet 3.1"
+@k.words.brazil.noun.2 k.words.sense word=brazil pos=noun n=2 gloss="three-sided tropical American nut with white oily meat and hard brown shell" synonym="brazil nut" is_a="edible nut" part_of="brazil nut" core.source="wordnet 3.1"
+@k.words.bread.noun.1 k.words.sense word=bread pos=noun n=1 gloss="food made from dough of flour or meal and usually raised with yeast or baking powder and then baked" synonym=breadstuff synonym="staff of life" is_a="baked goods" is_a=starches part_of=sandwich core.source="wordnet 3.1"
+@k.words.bread.noun.2 k.words.sense word=bread pos=noun n=2 gloss="informal terms for money" synonym=boodle synonym=cabbage synonym=clams synonym=dinero synonym=dough synonym=gelt synonym=kale synonym=lettuce synonym=lolly synonym=lucre synonym=loot synonym=moolah synonym=pelf synonym=scratch synonym=shekels synonym=simoleons synonym=sugar synonym=wampum is_a=money core.source="wordnet 3.1"
+@k.words.bread.verb.1 k.words.sense word=bread pos=verb n=1 gloss="cover with bread crumbs" is_a=cover core.source="wordnet 3.1"
+@k.words.bridge.noun.1 k.words.sense word=bridge pos=noun n=1 gloss="a structure that allows people or vehicles to cross an obstacle such as a river or canal or railway etc." synonym=span is_a=structure part_of="transportation system" core.source="wordnet 3.1"
+@k.words.bridge.noun.2 k.words.sense word=bridge pos=noun n=2 gloss="a circuit consisting of two branches (4 arms arranged in a diamond configuration) across which a meter is connected" synonym="bridge circuit" is_a=circuit core.source="wordnet 3.1"
+@k.words.bridge.noun.3 k.words.sense word=bridge pos=noun n=3 gloss="something resembling a bridge in form or function" is_a=connection core.source="wordnet 3.1"
+@k.words.bridge.verb.1 k.words.sense word=bridge pos=verb n=1 gloss="connect or reduce the distance between" synonym="bridge over" is_a=connect core.source="wordnet 3.1"
+@k.words.bridge.verb.2 k.words.sense word=bridge pos=verb n=2 gloss="make a bridge across" is_a=join core.source="wordnet 3.1"
+@k.words.bridge.verb.3 k.words.sense word=bridge pos=verb n=3 gloss="cross over on a bridge" is_a=traverse core.source="wordnet 3.1"

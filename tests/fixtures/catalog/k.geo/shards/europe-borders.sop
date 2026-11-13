@@ -1,0 +1,8 @@
+# k.geo/shards/europe-borders: Europe: the neighbours, the area in square kilometres and whether it is landlocked, for 49 countries and territories. Tell it with the shard europe: the facts of one country merge.
+# sources: countries 5.1.0 (mledoze/countries, ODbL-1.0)
+# license: ODbL-1.0
+# script: tools/import/geo.mjs
+
+@k.geo.borders.FRA k.geo.country name=France neighbour=Andorra neighbour=Belgium neighbour=Germany neighbour=Italy neighbour=Luxembourg neighbour=Monaco neighbour=Spain neighbour=Switzerland area=551695 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.ITA k.geo.country name=Italy neighbour=Austria neighbour=France neighbour="San Marino" neighbour=Slovenia neighbour=Switzerland neighbour=Vatican area=301336 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.ESP k.geo.country name=Spain neighbour=Andorra neighbour=France neighbour=Morocco neighbour=Portugal area=505992 landlocked=false core.source="countries 5.1.0"

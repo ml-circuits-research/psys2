@@ -1,0 +1,12 @@
+# k.words/shards/ki: noun and verb senses of the words from "ki" to "kitty" (first letters "ki").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.kind.noun.1 k.words.sense word=kind pos=noun n=1 gloss="a category of things distinguished by some common characteristic or quality" synonym=sort synonym=form synonym=variety is_a=category core.source="wordnet 3.1"
+@k.words.kite.noun.1 k.words.sense word=kite pos=noun n=1 gloss="a bank check that has been fraudulently altered to increase its face value" is_a=check core.source="wordnet 3.1"
+@k.words.kite.noun.2 k.words.sense word=kite pos=noun n=2 gloss="a bank check drawn on insufficient funds at another bank in order to take advantage of the float" is_a=check core.source="wordnet 3.1"
+@k.words.kite.noun.3 k.words.sense word=kite pos=noun n=3 gloss="plaything consisting of a light frame covered with tissue paper; flown in wind at end of a string" is_a=plaything core.source="wordnet 3.1"
+@k.words.kite.verb.1 k.words.sense word=kite pos=verb n=1 gloss="increase the amount (of a check) fraudulently" is_a=increase core.source="wordnet 3.1"
+@k.words.kite.verb.2 k.words.sense word=kite pos=verb n=2 gloss="get credit or money by using a bad check" is_a=obtain core.source="wordnet 3.1"
+@k.words.kite.verb.3 k.words.sense word=kite pos=verb n=3 gloss="soar or fly like a kite" is_a=glide core.source="wordnet 3.1"

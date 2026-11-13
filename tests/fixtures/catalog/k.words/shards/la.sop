@@ -1,0 +1,11 @@
+# k.words/shards/la: noun and verb senses of the words from "la" to "lazarus" (first letters "la").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.ladder.noun.1 k.words.sense word=ladder pos=noun n=1 gloss="steps consisting of two parallel members connected by rungs; for climbing up or down" is_a=stairs core.source="wordnet 3.1"
+@k.words.ladder.noun.2 k.words.sense word=ladder pos=noun n=2 gloss="ascending stages by which somebody or something can progress" is_a=degree core.source="wordnet 3.1"
+@k.words.ladder.noun.3 k.words.sense word=ladder pos=noun n=3 gloss="a row of unravelled stitches" synonym=run synonym=ravel is_a=damage core.source="wordnet 3.1"
+@k.words.ladder.verb.1 k.words.sense word=ladder pos=verb n=1 gloss="come unraveled or undone as if by snagging" synonym=run is_a=break core.source="wordnet 3.1"
+@k.words.lamp.noun.1 k.words.sense word=lamp pos=noun n=1 gloss="an artificial source of visible illumination" is_a="source of illumination" core.source="wordnet 3.1"
+@k.words.lamp.noun.2 k.words.sense word=lamp pos=noun n=2 gloss="a piece of furniture holding one or more electric light bulbs" is_a=furniture core.source="wordnet 3.1"

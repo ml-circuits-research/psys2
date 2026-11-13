@@ -1,0 +1,23 @@
+# k.people/shards/roles-family: 8 members of a family (mother, father, grandmother, grandfather, sister, brother, aunt, uncle): what they wear, hold and use, where they work, what they do, the k.faces features that suit them; and their other names.
+# sources: hand-core 1 (hand-written in this repository: tools/people-core.mjs)
+# license: CC0-1.0
+# script: tools/people-core.mjs
+
+@k.people.role.mother k.people.role name=mother group=family is=woman does="look after the children" face=woman drawing=person core.source="hand-core 1"
+@k.people.role.father k.people.role name=father group=family is=man does="look after the children" face=man drawing=person core.source="hand-core 1"
+@k.people.role.grandmother k.people.role name=grandmother group=family is=grandmother wears=glasses holds=yarn uses="rocking chair" uses="walking stick" does="tell stories" does=knit does=bake glasses="small round" face="old woman" drawing=person core.source="hand-core 1"
+@k.people.role.grandfather k.people.role name=grandfather group=family is=grandfather wears=glasses holds="walking stick" uses=armchair uses=newspaper does="tell stories" does="read the newspaper" moustache=walrus face="old man" drawing=person core.source="hand-core 1"
+@k.people.role.sister k.people.role name=sister group=family is=girl does=play face=girl drawing=person core.source="hand-core 1"
+@k.people.role.brother k.people.role name=brother group=family is=boy does=play face=boy drawing=person core.source="hand-core 1"
+@k.people.role.aunt k.people.role name=aunt group=family is=woman does=visit face=woman drawing=person core.source="hand-core 1"
+@k.people.role.uncle k.people.role name=uncle group=family is=man does=visit face="bearded man" drawing=person core.source="hand-core 1"
+
+# Words: plural forms and other names.
+@k.people.word.role.mother core.word text=mothers text=mum text=mom text=mummy text=mommy text=mama means=mother of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.father core.word text=fathers text=dad text=daddy text=papa means=father of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.grandmother core.word text=grandma text=granny text=nan text=nana means=grandmother of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.grandfather core.word text=grandpa text=granddad text=grandad means=grandfather of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.sister core.word text=sisters means=sister of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.brother core.word text=brothers means=brother of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.aunt core.word text=aunts text=auntie text=aunty means=aunt of=k.people.role.name core.source="hand-core 1"
+@k.people.word.role.uncle core.word text=uncles means=uncle of=k.people.role.name core.source="hand-core 1"

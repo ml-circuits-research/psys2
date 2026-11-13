@@ -1,0 +1,8 @@
+# k.scenes/shards/things-d: the usual place (sky, ground, water, indoors, on another thing) and the relative size (tiny to huge) of 75 drawable things whose name starts with "d"; labelled by a language model from the names (named=model), a sample checked against the drawings.
+# sources: hand-core 1 (hand-written in this repository: sources/hand-core/place-size.tsv)
+# license: CC0-1.0
+# script: tools/scenes-core.mjs
+
+@k.scenes.thing.dog k.scenes.thing name=dog place=ground size=medium named=model core.source="hand-core 1"
+@k.scenes.thing.door k.scenes.thing name=door place=on_thing on=wall size=large named=model core.source="hand-core 1"
+@k.scenes.thing.duck k.scenes.thing name=duck place=water size=small named=model core.source="hand-core 1"

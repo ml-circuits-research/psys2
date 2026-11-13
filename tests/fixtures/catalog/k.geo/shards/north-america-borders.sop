@@ -1,0 +1,6 @@
+# k.geo/shards/north-america-borders: North America: the neighbours, the area in square kilometres and whether it is landlocked, for 39 countries and territories. Tell it with the shard north-america: the facts of one country merge.
+# sources: countries 5.1.0 (mledoze/countries, ODbL-1.0)
+# license: ODbL-1.0
+# script: tools/import/geo.mjs
+
+@k.geo.borders.CAN k.geo.country name=Canada neighbour="United States" area=9984670 landlocked=false core.source="countries 5.1.0"

@@ -1,0 +1,9 @@
+# k.words/shards/pa: noun and verb senses of the words from "pa" to "payroll" (first letters "pa").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.paris.noun.1 k.words.sense word=Paris pos=noun n=1 gloss="the capital and largest city of France; and international center of culture and commerce" synonym="City of Light" synonym="French capital" synonym="capital of France" instance_of="national capital" part_of=France core.source="wordnet 3.1"
+@k.words.paris.noun.2 k.words.sense word=Paris pos=noun n=2 gloss="sometimes placed in subfamily Trilliaceae" synonym="genus Paris" is_a="plant genus" core.source="wordnet 3.1"
+@k.words.paris.noun.3 k.words.sense word=Paris pos=noun n=3 gloss="(Greek mythology) the prince of Troy who abducted Helen from her husband Menelaus and provoked the Trojan War" instance_of="mythical being" core.source="wordnet 3.1"
+@k.words.parts.noun.1 k.words.sense word=parts pos=noun n=1 gloss="the local environment" is_a=environment core.source="wordnet 3.1"

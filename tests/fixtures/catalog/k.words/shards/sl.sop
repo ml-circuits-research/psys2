@@ -1,0 +1,10 @@
+# k.words/shards/sl: noun and verb senses of the words from "slab" to "slut" (first letters "sl").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.sleep.noun.1 k.words.sense word=sleep pos=noun n=1 gloss="a natural and periodic state of rest during which consciousness of the world is suspended" synonym=slumber is_a="physical condition" core.source="wordnet 3.1"
+@k.words.sleep.noun.2 k.words.sense word=sleep pos=noun n=2 gloss="a torpid state resembling deep sleep" synonym=sopor is_a="physical condition" core.source="wordnet 3.1"
+@k.words.sleep.noun.3 k.words.sense word=sleep pos=noun n=3 gloss="a period of time spent sleeping" synonym=nap is_a="time period" core.source="wordnet 3.1"
+@k.words.sleep.verb.1 k.words.sense word=sleep pos=verb n=1 gloss="be asleep" synonym=kip synonym=slumber synonym="log Z's" synonym="catch some Z's" is_a=rest core.source="wordnet 3.1"
+@k.words.sleep.verb.2 k.words.sense word=sleep pos=verb n=2 gloss="be able to accommodate for sleeping" is_a=accommodate core.source="wordnet 3.1"

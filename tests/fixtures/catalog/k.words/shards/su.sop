@@ -1,0 +1,12 @@
+# k.words/shards/su: noun and verb senses of the words from "sub" to "suv" (first letters "su").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.sun.noun.1 k.words.sense word=sun pos=noun n=1 gloss="the star that is the source of light and heat for the planets in the solar system" synonym=Sun instance_of=star core.source="wordnet 3.1"
+@k.words.sun.noun.2 k.words.sense word=sun pos=noun n=2 gloss="the rays of the sun" synonym=sunlight synonym=sunshine is_a=light core.source="wordnet 3.1"
+@k.words.sun.noun.3 k.words.sense word=sun pos=noun n=3 gloss="a person considered as a source of warmth or energy or glory etc" is_a="important person" core.source="wordnet 3.1"
+@k.words.sun.verb.1 k.words.sense word=sun pos=verb n=1 gloss="expose one's body to the sun" synonym=sunbathe is_a=lie core.source="wordnet 3.1"
+@k.words.sun.verb.2 k.words.sense word=sun pos=verb n=2 gloss="expose to the rays of the sun or affect by exposure to the sun" synonym=insolate synonym=solarize synonym=solarise is_a=expose core.source="wordnet 3.1"
+@k.words.sunday.noun.1 k.words.sense word=Sunday pos=noun n=1 gloss="first day of the week; observed as a day of rest and worship by most Christians" synonym="Lord's Day" synonym=Dominicus synonym=Sun is_a="rest day" part_of=weekend core.source="wordnet 3.1"
+@k.words.sunday.noun.2 k.words.sense word=Sunday pos=noun n=2 gloss="United States evangelist (1862-1935)" synonym="Billy Sunday" synonym="William Ashley Sunday" instance_of=evangelist core.source="wordnet 3.1"

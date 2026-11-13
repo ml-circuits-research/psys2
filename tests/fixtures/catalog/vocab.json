@@ -27,6 +27,8 @@
   "k.faces/shards/colours",
   "k.faces/shards/plain-eyes",
   "k.faces/shards/slots",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
   "k.layouts/shards/layouts"
  ],
  "green": [
@@ -36,7 +38,8 @@
   "k.faces/shards/colours"
  ],
  "hair": [
-  "k.faces/shards/colours"
+  "k.faces/shards/colours",
+  "k.body/shards/core"
  ],
  "hazel": [
   "k.faces/shards/colours"
@@ -48,10 +51,12 @@
   "k.faces/shards/colours"
  ],
  "olive": [
-  "k.faces/shards/colours"
+  "k.faces/shards/colours",
+  "k.food/shards/fruit"
  ],
  "orange": [
-  "k.faces/shards/colours"
+  "k.faces/shards/colours",
+  "k.food/shards/fruit"
  ],
  "pale": [
   "k.faces/shards/colours"
@@ -63,10 +68,15 @@
   "k.faces/shards/colours"
  ],
  "red": [
-  "k.faces/shards/colours"
+  "k.faces/shards/colours",
+  "k.words/shards/re",
+  "k.geo/shards/asia",
+  "k.geo/shards/north-america",
+  "k.words/shards/re"
  ],
  "skin": [
-  "k.faces/shards/colours"
+  "k.faces/shards/colours",
+  "k.body/shards/core"
  ],
  "tan": [
   "k.faces/shards/colours"
@@ -137,6 +147,7 @@
  "ears": [
   "k.faces/shards/plain-ears",
   "k.faces/shards/slots",
+  "k.objects/shards/animals",
   "k.layouts/shards/layouts"
  ],
  "large": [
@@ -206,13 +217,15 @@
  ],
  "surprised": [
   "k.faces/shards/plain-eyes",
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.feelings/shards/feelings"
  ],
  "glasses": [
   "k.faces/shards/plain-glasses",
   "k.faces/shards/slots",
   "k.words/shards/gl",
-  "k.layouts/shards/layouts"
+  "k.layouts/shards/layouts",
+  "k.words/shards/gl"
  ],
  "small round": [
   "k.faces/shards/plain-glasses"
@@ -273,7 +286,9 @@
   "k.faces/shards/plain-hair-front"
  ],
  "antenna": [
-  "k.faces/shards/plain-hat"
+  "k.faces/shards/plain-hat",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
  ],
  "beanie": [
   "k.faces/shards/plain-hat"
@@ -282,14 +297,17 @@
   "k.faces/shards/plain-hat"
  ],
  "cap": [
-  "k.faces/shards/plain-hat"
+  "k.faces/shards/plain-hat",
+  "k.objects/shards/buildings"
  ],
  "crown": [
-  "k.faces/shards/plain-hat"
+  "k.faces/shards/plain-hat",
+  "k.objects/shards/nature"
  ],
  "hat": [
   "k.faces/shards/plain-hat",
   "k.faces/shards/slots",
+  "k.objects/shards/figures",
   "k.layouts/shards/layouts"
  ],
  "party hat": [
@@ -301,10 +319,16 @@
  "head": [
   "k.faces/shards/plain-head",
   "k.faces/shards/slots",
-  "k.layouts/shards/layouts"
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.layouts/shards/layouts",
+  "k.body/shards/core"
  ],
  "heart": [
-  "k.faces/shards/plain-head"
+  "k.faces/shards/plain-head",
+  "k.words/shards/he",
+  "k.body/shards/core",
+  "k.words/shards/he"
  ],
  "long": [
   "k.faces/shards/plain-head",
@@ -324,7 +348,8 @@
   "k.faces/shards/plain-neck"
  ],
  "walrus": [
-  "k.faces/shards/plain-moustache"
+  "k.faces/shards/plain-moustache",
+  "k.animals/shards/mammals"
  ],
  "big smile": [
   "k.faces/shards/plain-mouth"
@@ -341,7 +366,9 @@
  "mouth": [
   "k.faces/shards/plain-mouth",
   "k.faces/shards/slots",
-  "k.layouts/shards/layouts"
+  "k.objects/shards/figures",
+  "k.layouts/shards/layouts",
+  "k.body/shards/core"
  ],
  "neutral": [
   "k.faces/shards/plain-mouth"
@@ -359,7 +386,8 @@
  "neck": [
   "k.faces/shards/plain-neck",
   "k.faces/shards/slots",
-  "k.layouts/shards/layouts"
+  "k.layouts/shards/layouts",
+  "k.body/shards/core"
  ],
  "necklace": [
   "k.faces/shards/plain-neck"
@@ -368,12 +396,19 @@
   "k.faces/shards/plain-neck"
  ],
  "button": [
-  "k.faces/shards/plain-nose"
+  "k.faces/shards/plain-nose",
+  "k.objects/shards/figures"
  ],
  "nose": [
   "k.faces/shards/plain-nose",
   "k.faces/shards/slots",
-  "k.layouts/shards/layouts"
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/vehicles",
+  "k.words/shards/no",
+  "k.layouts/shards/layouts",
+  "k.body/shards/core",
+  "k.words/shards/no"
  ],
  "hoodie": [
   "k.faces/shards/plain-shoulders"
@@ -405,31 +440,41 @@
   "k.faces/shards/presets"
  ],
  "angry": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.feelings/shards/feelings"
  ],
  "baby": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.people/shards/kinds"
  ],
  "bearded man": [
   "k.faces/shards/presets"
  ],
  "boy": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.people/shards/kinds"
  ],
  "child": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.objects/shards/figures",
+  "k.people/shards/kinds"
  ],
  "clown": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.people/shards/roles-story"
  ],
  "girl": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.people/shards/kinds"
  ],
  "happy": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.feelings/shards/feelings"
  ],
  "man": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.objects/shards/figures",
+  "k.people/shards/kinds"
  ],
  "old man": [
   "k.faces/shards/presets"
@@ -438,13 +483,19 @@
   "k.faces/shards/presets"
  ],
  "queen": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.people/shards/roles-story"
  ],
  "robot": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.objects/shards/figures",
+  "k.words/shards/ro",
+  "k.words/shards/ro",
+  "k.scenes/shards/things-r"
  ],
  "sad": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.feelings/shards/feelings"
  ],
  "sleepy": [
   "k.faces/shards/presets"
@@ -456,40 +507,3062 @@
   "k.faces/shards/presets"
  ],
  "woman": [
-  "k.faces/shards/presets"
+  "k.faces/shards/presets",
+  "k.objects/shards/figures",
+  "k.people/shards/kinds"
  ],
  "woman with curly hair": [
   "k.faces/shards/presets"
  ],
  "plain": [
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.words/shards/pl",
+  "k.words/shards/pl"
  ],
  "house": [
-  "k.objects/shards/buildings"
+  "k.objects/shards/buildings",
+  "k.words/shards/ho",
+  "k.commonsense/shards/core",
+  "k.words/shards/ho",
+  "k.scenes/shards/things-h"
  ],
  "body": [
-  "k.objects/shards/buildings"
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles",
+  "k.words/shards/bo",
+  "k.body/shards/core",
+  "k.words/shards/bo"
  ],
  "roof": [
+  "k.objects/shards/buildings",
+  "k.words/shards/ro",
+  "k.words/shards/ro",
+  "k.scenes/shards/things-r"
+ ],
+ "base": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/sky"
+ ],
+ "castle": [
+  "k.objects/shards/buildings",
+  "k.words/shards/ca",
+  "k.words/shards/ca",
+  "k.scenes/shards/scenes-town",
+  "k.scenes/shards/things-c"
+ ],
+ "castles": [
   "k.objects/shards/buildings"
+ ],
+ "chimney": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "color": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "colour": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles",
+  "k.words/shards/co",
+  "k.words/shards/co"
+ ],
+ "door": [
+  "k.objects/shards/buildings",
+  "k.words/shards/do",
+  "k.words/shards/do",
+  "k.scenes/shards/things-d"
+ ],
+ "drawing": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "gate": [
+  "k.objects/shards/buildings"
+ ],
+ "home": [
+  "k.objects/shards/buildings"
+ ],
+ "houses": [
+  "k.objects/shards/buildings"
+ ],
+ "lamp": [
+  "k.objects/shards/buildings",
+  "k.words/shards/la",
+  "k.words/shards/la",
+  "k.scenes/shards/things-l"
+ ],
+ "left_merlon": [
+  "k.objects/shards/buildings"
+ ],
+ "left_roof": [
+  "k.objects/shards/buildings"
+ ],
+ "left_tower": [
+  "k.objects/shards/buildings"
+ ],
+ "left_window": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "lighthouse": [
+  "k.objects/shards/buildings",
+  "k.words/shards/li",
+  "k.words/shards/li",
+  "k.scenes/shards/things-l"
+ ],
+ "lighthouses": [
+  "k.objects/shards/buildings"
+ ],
+ "merlon": [
+  "k.objects/shards/buildings"
+ ],
+ "merlons": [
+  "k.objects/shards/buildings"
+ ],
+ "middle_merlon": [
+  "k.objects/shards/buildings"
+ ],
+ "object": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "objects": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "part": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "parts": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles",
+  "k.words/shards/pa",
+  "k.words/shards/pa"
+ ],
+ "picture": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "right_merlon": [
+  "k.objects/shards/buildings"
+ ],
+ "right_roof": [
+  "k.objects/shards/buildings"
+ ],
+ "right_tower": [
+  "k.objects/shards/buildings"
+ ],
+ "right_window": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "roofs": [
+  "k.objects/shards/buildings"
+ ],
+ "shape": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "stripe": [
+  "k.objects/shards/buildings"
+ ],
+ "tower": [
+  "k.objects/shards/buildings"
+ ],
+ "towers": [
+  "k.objects/shards/buildings"
+ ],
+ "wall": [
+  "k.objects/shards/buildings"
+ ],
+ "window": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "windows": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles",
+  "k.words/shards/wi",
+  "k.words/shards/wi"
  ],
  "villa": [
   "k.objects/shards/stand-ins-hand"
  ],
+ "antennae": [
+  "k.objects/shards/animals"
+ ],
+ "back_leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/household"
+ ],
+ "beak": [
+  "k.objects/shards/animals"
+ ],
+ "bird": [
+  "k.objects/shards/animals",
+  "k.words/shards/bi",
+  "k.commonsense/shards/core",
+  "k.words/shards/bi",
+  "k.scenes/shards/things-b"
+ ],
+ "birds": [
+  "k.objects/shards/animals"
+ ],
+ "butterflies": [
+  "k.objects/shards/animals"
+ ],
+ "butterfly": [
+  "k.objects/shards/animals",
+  "k.animals/shards/invertebrates"
+ ],
+ "cat": [
+  "k.objects/shards/animals",
+  "k.words/shards/ca",
+  "k.animals/shards/mammals",
+  "k.commonsense/shards/core",
+  "k.words/shards/ca",
+  "k.scenes/shards/things-c"
+ ],
+ "cats": [
+  "k.objects/shards/animals"
+ ],
+ "dog": [
+  "k.objects/shards/animals",
+  "k.words/shards/do",
+  "k.animals/shards/mammals",
+  "k.commonsense/shards/core",
+  "k.words/shards/do",
+  "k.scenes/shards/things-d"
+ ],
+ "dogs": [
+  "k.objects/shards/animals"
+ ],
+ "ear": [
+  "k.objects/shards/animals",
+  "k.words/shards/ea",
+  "k.body/shards/core",
+  "k.words/shards/ea"
+ ],
+ "eye": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.words/shards/ey",
+  "k.body/shards/core",
+  "k.words/shards/ey"
+ ],
+ "fin": [
+  "k.objects/shards/animals",
+  "k.objects/shards/vehicles"
+ ],
+ "fish": [
+  "k.objects/shards/animals",
+  "k.words/shards/fi",
+  "k.commonsense/shards/core",
+  "k.words/shards/fi",
+  "k.scenes/shards/things-f"
+ ],
+ "fishes": [
+  "k.objects/shards/animals"
+ ],
+ "front_leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/household"
+ ],
+ "kitten": [
+  "k.objects/shards/animals"
+ ],
+ "left_antenna": [
+  "k.objects/shards/animals"
+ ],
+ "left_ear": [
+  "k.objects/shards/animals"
+ ],
+ "left_eye": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
+ ],
+ "left_leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household"
+ ],
+ "left_lower_wing": [
+  "k.objects/shards/animals"
+ ],
+ "left_upper_wing": [
+  "k.objects/shards/animals"
+ ],
+ "leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.words/shards/le",
+  "k.body/shards/core",
+  "k.words/shards/le"
+ ],
+ "legs": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.words/shards/le",
+  "k.words/shards/le"
+ ],
+ "puppy": [
+  "k.objects/shards/animals"
+ ],
+ "right_antenna": [
+  "k.objects/shards/animals"
+ ],
+ "right_ear": [
+  "k.objects/shards/animals"
+ ],
+ "right_eye": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
+ ],
+ "right_leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household"
+ ],
+ "right_lower_wing": [
+  "k.objects/shards/animals"
+ ],
+ "right_upper_wing": [
+  "k.objects/shards/animals"
+ ],
+ "tail": [
+  "k.objects/shards/animals",
+  "k.objects/shards/vehicles",
+  "k.words/shards/ta",
+  "k.words/shards/ta"
+ ],
+ "wing": [
+  "k.objects/shards/animals",
+  "k.objects/shards/vehicles"
+ ],
+ "wings": [
+  "k.objects/shards/animals",
+  "k.objects/shards/vehicles"
+ ],
+ "arm": [
+  "k.objects/shards/figures",
+  "k.words/shards/ar",
+  "k.body/shards/core",
+  "k.words/shards/ar"
+ ],
+ "arms": [
+  "k.objects/shards/figures"
+ ],
+ "ball": [
+  "k.objects/shards/figures"
+ ],
+ "balls": [
+  "k.objects/shards/figures"
+ ],
+ "bottom_ball": [
+  "k.objects/shards/figures"
+ ],
+ "bottom_button": [
+  "k.objects/shards/figures"
+ ],
+ "buttons": [
+  "k.objects/shards/figures"
+ ],
+ "left_arm": [
+  "k.objects/shards/figures"
+ ],
+ "middle_ball": [
+  "k.objects/shards/figures"
+ ],
+ "people": [
+  "k.objects/shards/figures"
+ ],
+ "person": [
+  "k.objects/shards/figures"
+ ],
+ "right_arm": [
+  "k.objects/shards/figures"
+ ],
+ "robots": [
+  "k.objects/shards/figures"
+ ],
+ "snowman": [
+  "k.objects/shards/figures",
+  "k.words/shards/sn",
+  "k.words/shards/sn",
+  "k.scenes/shards/things-s"
+ ],
+ "snowmen": [
+  "k.objects/shards/figures"
+ ],
+ "top_button": [
+  "k.objects/shards/figures"
+ ],
+ "back": [
+  "k.objects/shards/household",
+  "k.body/shards/core"
+ ],
+ "canopy": [
+  "k.objects/shards/household"
+ ],
+ "chair": [
+  "k.objects/shards/household",
+  "k.words/shards/ch",
+  "k.words/shards/ch",
+  "k.scenes/shards/things-c"
+ ],
+ "chairs": [
+  "k.objects/shards/household"
+ ],
+ "cup": [
+  "k.objects/shards/household",
+  "k.words/shards/cu",
+  "k.words/shards/cu",
+  "k.scenes/shards/things-c"
+ ],
+ "cups": [
+  "k.objects/shards/household"
+ ],
+ "first_rung": [
+  "k.objects/shards/household"
+ ],
+ "fourth_rung": [
+  "k.objects/shards/household"
+ ],
+ "handle": [
+  "k.objects/shards/household"
+ ],
+ "hook": [
+  "k.objects/shards/household"
+ ],
+ "ladder": [
+  "k.objects/shards/household",
+  "k.words/shards/la",
+  "k.words/shards/la",
+  "k.scenes/shards/things-l"
+ ],
+ "ladders": [
+  "k.objects/shards/household"
+ ],
+ "left_rail": [
+  "k.objects/shards/household"
+ ],
+ "mug": [
+  "k.objects/shards/household"
+ ],
+ "rail": [
+  "k.objects/shards/household"
+ ],
+ "rails": [
+  "k.objects/shards/household"
+ ],
+ "right_rail": [
+  "k.objects/shards/household"
+ ],
+ "rung": [
+  "k.objects/shards/household"
+ ],
+ "rungs": [
+  "k.objects/shards/household"
+ ],
+ "saucer": [
+  "k.objects/shards/household"
+ ],
+ "seat": [
+  "k.objects/shards/household",
+  "k.objects/shards/vehicles"
+ ],
+ "second_rung": [
+  "k.objects/shards/household"
+ ],
+ "table": [
+  "k.objects/shards/household",
+  "k.words/shards/ta",
+  "k.words/shards/ta",
+  "k.scenes/shards/things-t"
+ ],
+ "tables": [
+  "k.objects/shards/household"
+ ],
+ "third_rung": [
+  "k.objects/shards/household"
+ ],
+ "top": [
+  "k.objects/shards/household"
+ ],
+ "umbrella": [
+  "k.objects/shards/household",
+  "k.words/shards/um",
+  "k.words/shards/um",
+  "k.scenes/shards/things-u"
+ ],
+ "umbrellas": [
+  "k.objects/shards/household"
+ ],
+ "apple": [
+  "k.objects/shards/nature",
+  "k.words/shards/ap",
+  "k.demo/shards/fruits",
+  "k.food/shards/fruit",
+  "k.words/shards/ap",
+  "k.scenes/shards/things-a"
+ ],
+ "apples": [
+  "k.objects/shards/nature"
+ ],
+ "bottom_petal": [
+  "k.objects/shards/nature"
+ ],
+ "centre": [
+  "k.objects/shards/nature"
+ ],
+ "flower": [
+  "k.objects/shards/nature",
+  "k.words/shards/fl",
+  "k.commonsense/shards/core",
+  "k.words/shards/fl",
+  "k.scenes/shards/things-f"
+ ],
+ "flowers": [
+  "k.objects/shards/nature"
+ ],
+ "hill": [
+  "k.objects/shards/nature"
+ ],
+ "leaf": [
+  "k.objects/shards/nature"
+ ],
+ "left_petal": [
+  "k.objects/shards/nature"
+ ],
+ "mountain": [
+  "k.objects/shards/nature"
+ ],
+ "mountains": [
+  "k.objects/shards/nature"
+ ],
+ "petal": [
+  "k.objects/shards/nature"
+ ],
+ "petals": [
+  "k.objects/shards/nature"
+ ],
+ "right_petal": [
+  "k.objects/shards/nature"
+ ],
+ "snow_cap": [
+  "k.objects/shards/nature"
+ ],
+ "stem": [
+  "k.objects/shards/nature"
+ ],
+ "top_petal": [
+  "k.objects/shards/nature"
+ ],
+ "tree": [
+  "k.objects/shards/nature",
+  "k.words/shards/tr",
+  "k.commonsense/shards/core",
+  "k.words/shards/tr",
+  "k.scenes/shards/things-t"
+ ],
+ "trees": [
+  "k.objects/shards/nature"
+ ],
+ "trunk": [
+  "k.objects/shards/nature"
+ ],
+ "bottom_ray": [
+  "k.objects/shards/sky"
+ ],
+ "cloud": [
+  "k.objects/shards/sky",
+  "k.commonsense/shards/core"
+ ],
+ "clouds": [
+  "k.objects/shards/sky"
+ ],
+ "crescent": [
+  "k.objects/shards/sky"
+ ],
+ "disc": [
+  "k.objects/shards/sky"
+ ],
+ "left_puff": [
+  "k.objects/shards/sky"
+ ],
+ "left_ray": [
+  "k.objects/shards/sky"
+ ],
+ "middle_puff": [
+  "k.objects/shards/sky"
+ ],
+ "moon": [
+  "k.objects/shards/sky",
+  "k.words/shards/mo",
+  "k.commonsense/shards/core",
+  "k.space/shards/kinds",
+  "k.space/shards/solar-system",
+  "k.words/shards/mo",
+  "k.scenes/shards/things-m"
+ ],
+ "moons": [
+  "k.objects/shards/sky"
+ ],
+ "puff": [
+  "k.objects/shards/sky"
+ ],
+ "puffs": [
+  "k.objects/shards/sky"
+ ],
+ "ray": [
+  "k.objects/shards/sky"
+ ],
+ "rays": [
+  "k.objects/shards/sky"
+ ],
+ "right_puff": [
+  "k.objects/shards/sky"
+ ],
+ "right_ray": [
+  "k.objects/shards/sky"
+ ],
+ "star": [
+  "k.objects/shards/sky",
+  "k.words/shards/st",
+  "k.commonsense/shards/core",
+  "k.space/shards/kinds",
+  "k.words/shards/st",
+  "k.scenes/shards/things-s"
+ ],
+ "stars": [
+  "k.objects/shards/sky"
+ ],
+ "sun": [
+  "k.objects/shards/sky",
+  "k.words/shards/su",
+  "k.commonsense/shards/core",
+  "k.space/shards/solar-system",
+  "k.words/shards/su",
+  "k.scenes/shards/things-s"
+ ],
+ "top_ray": [
+  "k.objects/shards/sky"
+ ],
+ "aeroplane": [
+  "k.objects/shards/vehicles"
+ ],
+ "airplane": [
+  "k.objects/shards/vehicles"
+ ],
+ "airplanes": [
+  "k.objects/shards/vehicles"
+ ],
+ "back_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "bicycle": [
+  "k.objects/shards/vehicles",
+  "k.words/shards/bi",
+  "k.words/shards/bi",
+  "k.scenes/shards/things-b"
+ ],
+ "bicycles": [
+  "k.objects/shards/vehicles"
+ ],
+ "bike": [
+  "k.objects/shards/vehicles"
+ ],
+ "boat": [
+  "k.objects/shards/vehicles",
+  "k.words/shards/bo",
+  "k.commonsense/shards/core",
+  "k.words/shards/bo",
+  "k.scenes/shards/things-b"
+ ],
+ "boats": [
+  "k.objects/shards/vehicles"
+ ],
+ "cabin": [
+  "k.objects/shards/vehicles"
+ ],
+ "car": [
+  "k.objects/shards/vehicles",
+  "k.words/shards/ca",
+  "k.commonsense/shards/core",
+  "k.words/shards/ca",
+  "k.scenes/shards/things-c"
+ ],
+ "carriage": [
+  "k.objects/shards/vehicles"
+ ],
+ "cars": [
+  "k.objects/shards/vehicles"
+ ],
+ "engine": [
+  "k.objects/shards/vehicles"
+ ],
+ "far_wing": [
+  "k.objects/shards/vehicles"
+ ],
+ "fins": [
+  "k.objects/shards/vehicles"
+ ],
+ "first_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "first_window": [
+  "k.objects/shards/vehicles"
+ ],
+ "flame": [
+  "k.objects/shards/vehicles"
+ ],
+ "fork": [
+  "k.objects/shards/vehicles"
+ ],
+ "fourth_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "frame": [
+  "k.objects/shards/vehicles"
+ ],
+ "front_sail": [
+  "k.objects/shards/vehicles"
+ ],
+ "front_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "handlebar": [
+  "k.objects/shards/vehicles"
+ ],
+ "hull": [
+  "k.objects/shards/vehicles"
+ ],
+ "left_fin": [
+  "k.objects/shards/vehicles"
+ ],
+ "left_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "main_sail": [
+  "k.objects/shards/vehicles"
+ ],
+ "mast": [
+  "k.objects/shards/vehicles"
+ ],
+ "near_wing": [
+  "k.objects/shards/vehicles"
+ ],
+ "plane": [
+  "k.objects/shards/vehicles",
+  "k.words/shards/pl",
+  "k.commonsense/shards/core",
+  "k.words/shards/pl",
+  "k.scenes/shards/things-p"
+ ],
+ "planes": [
+  "k.objects/shards/vehicles"
+ ],
+ "right_fin": [
+  "k.objects/shards/vehicles"
+ ],
+ "right_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "rocket": [
+  "k.objects/shards/vehicles",
+  "k.words/shards/ro",
+  "k.words/shards/ro",
+  "k.scenes/shards/things-r"
+ ],
+ "rockets": [
+  "k.objects/shards/vehicles"
+ ],
+ "sail": [
+  "k.objects/shards/vehicles"
+ ],
+ "sailboat": [
+  "k.objects/shards/vehicles"
+ ],
+ "sails": [
+  "k.objects/shards/vehicles"
+ ],
+ "seat_tube": [
+  "k.objects/shards/vehicles"
+ ],
+ "second_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "second_window": [
+  "k.objects/shards/vehicles"
+ ],
+ "ship": [
+  "k.objects/shards/vehicles"
+ ],
+ "third_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "third_window": [
+  "k.objects/shards/vehicles"
+ ],
+ "train": [
+  "k.objects/shards/vehicles",
+  "k.words/shards/tr",
+  "k.words/shards/tr",
+  "k.scenes/shards/things-t"
+ ],
+ "trains": [
+  "k.objects/shards/vehicles"
+ ],
+ "wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "wheels": [
+  "k.objects/shards/vehicles"
+ ],
  "mansion": [
+  "k.words/shards/ma",
+  "k.words/shards/ma"
+ ],
+ "make": [
+  "k.words/shards/ma",
+  "k.words/shards/ma"
+ ],
+ "march": [
+  "k.words/shards/ma",
+  "k.time/shards/calendar",
+  "k.words/shards/ma"
+ ],
+ "mars": [
+  "k.words/shards/ma",
+  "k.space/shards/solar-system",
+  "k.words/shards/ma",
+  "k.scenes/shards/things-m"
+ ],
+ "matrix": [
+  "k.words/shards/ma",
+  "k.words/shards/ma"
+ ],
+ "may": [
+  "k.words/shards/ma",
+  "k.time/shards/calendar",
   "k.words/shards/ma"
  ],
  "spectacles": [
+  "k.words/shards/sp",
   "k.words/shards/sp"
+ ],
+ "space": [
+  "k.words/shards/sp",
+  "k.words/shards/sp",
+  "k.scenes/shards/scenes-other"
+ ],
+ "spain": [
+  "k.words/shards/sp",
+  "k.geo/shards/europe-borders",
+  "k.geo/shards/europe",
+  "k.words/shards/sp"
+ ],
+ "spider": [
+  "k.words/shards/sp",
+  "k.animals/shards/invertebrates",
+  "k.words/shards/sp",
+  "k.scenes/shards/things-s"
+ ],
+ "ancient": [
+  "k.words/shards/an",
+  "k.words/shards/an"
+ ],
+ "animal": [
+  "k.words/shards/an",
+  "k.words/shards/an"
+ ],
+ "ant": [
+  "k.words/shards/an",
+  "k.animals/shards/invertebrates",
+  "k.words/shards/an",
+  "k.scenes/shards/things-a"
+ ],
+ "are": [
+  "k.words/shards/ar",
+  "k.words/shards/ar"
+ ],
+ "banana": [
+  "k.words/shards/ba",
+  "k.food/shards/fruit",
+  "k.words/shards/ba",
+  "k.scenes/shards/things-b"
+ ],
+ "bee": [
+  "k.words/shards/be",
+  "k.animals/shards/invertebrates",
+  "k.words/shards/be",
+  "k.scenes/shards/things-b"
+ ],
+ "board": [
+  "k.words/shards/bo",
+  "k.words/shards/bo"
+ ],
+ "bones": [
+  "k.words/shards/bo",
+  "k.words/shards/bo"
+ ],
+ "brain": [
+  "k.words/shards/br",
+  "k.body/shards/core",
+  "k.words/shards/br"
+ ],
+ "brave": [
+  "k.words/shards/br",
+  "k.words/shards/br"
+ ],
+ "brazil": [
+  "k.words/shards/br",
+  "k.geo/shards/south-america-borders",
+  "k.geo/shards/south-america",
+  "k.words/shards/br"
+ ],
+ "bread": [
+  "k.words/shards/br",
+  "k.food/shards/grains-nuts-and-pulses",
+  "k.words/shards/br",
+  "k.scenes/shards/things-b"
+ ],
+ "bridge": [
+  "k.words/shards/br",
+  "k.words/shards/br",
+  "k.scenes/shards/things-b"
+ ],
+ "bus": [
+  "k.words/shards/bu",
+  "k.words/shards/bu",
+  "k.scenes/shards/things-b"
+ ],
+ "cake": [
+  "k.words/shards/ca",
+  "k.food/shards/other",
+  "k.words/shards/ca",
+  "k.scenes/shards/things-c"
+ ],
+ "can": [
+  "k.words/shards/ca",
+  "k.words/shards/ca"
+ ],
+ "canada": [
+  "k.words/shards/ca",
+  "k.geo/shards/north-america-borders",
+  "k.geo/shards/north-america",
+  "k.words/shards/ca"
+ ],
+ "capital": [
+  "k.words/shards/ca",
+  "k.words/shards/ca"
+ ],
+ "card": [
+  "k.words/shards/ca",
+  "k.words/shards/ca",
+  "k.scenes/shards/things-c"
+ ],
+ "cards": [
+  "k.words/shards/ca",
+  "k.words/shards/ca"
+ ],
+ "carrot": [
+  "k.words/shards/ca",
+  "k.food/shards/vegetables",
+  "k.words/shards/ca",
+  "k.scenes/shards/things-c"
+ ],
+ "catalog": [
+  "k.words/shards/ca",
+  "k.words/shards/ca"
+ ],
+ "cheese": [
+  "k.words/shards/ch",
+  "k.food/shards/animal-foods",
+  "k.words/shards/ch",
+  "k.scenes/shards/things-c"
+ ],
+ "clock": [
+  "k.words/shards/cl",
+  "k.words/shards/cl",
+  "k.scenes/shards/things-c"
+ ],
+ "come": [
+  "k.words/shards/co",
+  "k.words/shards/co"
+ ],
+ "comet": [
+  "k.words/shards/co",
+  "k.space/shards/kinds",
+  "k.words/shards/co",
+  "k.scenes/shards/things-c"
+ ],
+ "correction": [
+  "k.words/shards/co",
+  "k.words/shards/co"
+ ],
+ "country": [
+  "k.words/shards/co",
+  "k.words/shards/co"
+ ],
+ "cow": [
+  "k.words/shards/co",
+  "k.animals/shards/mammals",
+  "k.words/shards/co",
+  "k.scenes/shards/things-c"
+ ],
+ "cows": [
+  "k.words/shards/co",
+  "k.words/shards/co"
+ ],
+ "crocodile": [
+  "k.words/shards/cr",
+  "k.animals/shards/reptiles-and-amphibians",
+  "k.words/shards/cr",
+  "k.scenes/shards/things-c"
+ ],
+ "day": [
+  "k.words/shards/da",
+  "k.time/shards/calendar",
+  "k.units/shards/core",
+  "k.words/shards/da"
+ ],
+ "days": [
+  "k.words/shards/da",
+  "k.words/shards/da"
+ ],
+ "december": [
+  "k.words/shards/de",
+  "k.time/shards/calendar",
+  "k.words/shards/de"
+ ],
+ "duck": [
+  "k.words/shards/du",
+  "k.animals/shards/birds",
+  "k.words/shards/du",
+  "k.scenes/shards/things-d"
+ ],
+ "earth": [
+  "k.words/shards/ea",
+  "k.space/shards/solar-system",
+  "k.words/shards/ea",
+  "k.scenes/shards/things-e"
+ ],
+ "eat": [
+  "k.words/shards/ea",
+  "k.words/shards/ea"
+ ],
+ "egg": [
+  "k.words/shards/eg",
+  "k.food/shards/animal-foods",
+  "k.words/shards/eg",
+  "k.scenes/shards/things-e"
+ ],
+ "egypt": [
+  "k.words/shards/eg",
+  "k.geo/shards/africa-borders",
+  "k.geo/shards/africa",
+  "k.words/shards/eg"
+ ],
+ "eighth": [
+  "k.words/shards/ei",
+  "k.words/shards/ei"
+ ],
+ "elephant": [
+  "k.words/shards/el",
+  "k.animals/shards/mammals",
+  "k.words/shards/el",
+  "k.scenes/shards/things-e"
+ ],
+ "everest": [
+  "k.words/shards/ev",
+  "k.words/shards/ev"
+ ],
+ "fifth": [
+  "k.words/shards/fi",
+  "k.words/shards/fi"
+ ],
+ "first": [
+  "k.words/shards/fi",
+  "k.words/shards/fi"
+ ],
+ "food": [
+  "k.words/shards/fo",
+  "k.words/shards/fo"
+ ],
+ "foot": [
+  "k.words/shards/fo",
+  "k.body/shards/core",
+  "k.units/shards/core",
+  "k.words/shards/fo"
+ ],
+ "france": [
+  "k.words/shards/fr",
+  "k.geo/shards/europe-borders",
+  "k.geo/shards/europe",
+  "k.words/shards/fr"
+ ],
+ "free": [
+  "k.words/shards/fr",
+  "k.words/shards/fr"
+ ],
+ "friday": [
+  "k.words/shards/fr",
+  "k.time/shards/calendar",
+  "k.words/shards/fr"
+ ],
+ "frog": [
+  "k.words/shards/fr",
+  "k.animals/shards/reptiles-and-amphibians",
+  "k.words/shards/fr",
+  "k.scenes/shards/things-f"
+ ],
+ "fruit": [
+  "k.words/shards/fr",
+  "k.words/shards/fr"
+ ],
+ "giant": [
+  "k.words/shards/gi",
+  "k.words/shards/gi"
+ ],
+ "gram": [
+  "k.words/shards/gr",
+  "k.units/shards/core",
+  "k.words/shards/gr"
+ ],
+ "hand": [
+  "k.words/shards/ha",
+  "k.body/shards/core",
+  "k.words/shards/ha"
+ ],
+ "have": [
+  "k.words/shards/ha",
+  "k.words/shards/ha"
+ ],
+ "horse": [
+  "k.words/shards/ho",
+  "k.animals/shards/mammals",
+  "k.words/shards/ho",
+  "k.scenes/shards/things-h"
+ ],
+ "hour": [
+  "k.words/shards/ho",
+  "k.time/shards/calendar",
+  "k.units/shards/core",
+  "k.words/shards/ho"
+ ],
+ "index": [
+  "k.words/shards/in",
+  "k.words/shards/in"
+ ],
+ "india": [
+  "k.words/shards/in",
+  "k.geo/shards/asia-borders",
+  "k.geo/shards/asia",
+  "k.words/shards/in"
+ ],
+ "inside": [
+  "k.words/shards/in",
+  "k.words/shards/in"
+ ],
+ "island": [
+  "k.words/shards/is",
+  "k.words/shards/is",
+  "k.scenes/shards/scenes-nature",
+  "k.scenes/shards/things-i"
+ ],
+ "italy": [
+  "k.words/shards/it",
+  "k.geo/shards/europe-borders",
+  "k.geo/shards/europe",
+  "k.words/shards/it"
+ ],
+ "january": [
+  "k.words/shards/ja",
+  "k.time/shards/calendar",
+  "k.words/shards/ja"
+ ],
+ "japan": [
+  "k.words/shards/ja",
+  "k.geo/shards/asia-borders",
+  "k.geo/shards/asia",
+  "k.words/shards/ja"
+ ],
+ "journey": [
+  "k.words/shards/jo",
+  "k.words/shards/jo"
+ ],
+ "july": [
+  "k.words/shards/ju",
+  "k.time/shards/calendar",
+  "k.words/shards/ju"
+ ],
+ "jupiter": [
+  "k.words/shards/ju",
+  "k.space/shards/solar-system",
+  "k.words/shards/ju",
+  "k.scenes/shards/things-j"
+ ],
+ "kenya": [
+  "k.words/shards/ke",
+  "k.geo/shards/africa-borders",
+  "k.geo/shards/africa",
+  "k.words/shards/ke"
+ ],
+ "kind": [
+  "k.words/shards/ki",
+  "k.words/shards/ki"
+ ],
+ "kite": [
+  "k.words/shards/ki",
+  "k.words/shards/ki",
+  "k.scenes/shards/things-k"
+ ],
+ "know": [
+  "k.words/shards/kn",
+  "k.words/shards/kn"
+ ],
+ "knowledge": [
+  "k.words/shards/kn",
+  "k.words/shards/kn"
+ ],
+ "like": [
+  "k.words/shards/li",
+  "k.words/shards/li"
+ ],
+ "lion": [
+  "k.words/shards/li",
+  "k.animals/shards/mammals",
+  "k.words/shards/li",
+  "k.scenes/shards/things-l"
+ ],
+ "live": [
+  "k.words/shards/li",
+  "k.words/shards/li"
+ ],
+ "london": [
+  "k.words/shards/lo",
+  "k.geo/shards/europe",
+  "k.words/shards/lo"
+ ],
+ "longer": [
+  "k.words/shards/lo",
+  "k.words/shards/lo"
+ ],
+ "look": [
+  "k.words/shards/lo",
+  "k.words/shards/lo"
+ ],
+ "mean": [
+  "k.words/shards/me",
+  "k.words/shards/me"
+ ],
+ "mercury": [
+  "k.words/shards/me",
+  "k.space/shards/solar-system",
+  "k.words/shards/me",
+  "k.scenes/shards/things-m"
+ ],
+ "metre": [
+  "k.words/shards/me",
+  "k.units/shards/core",
+  "k.words/shards/me"
+ ],
+ "mile": [
+  "k.words/shards/mi",
+  "k.units/shards/core",
+  "k.words/shards/mi"
+ ],
+ "milk": [
+  "k.words/shards/mi",
+  "k.food/shards/animal-foods",
+  "k.words/shards/mi",
+  "k.scenes/shards/things-m"
+ ],
+ "minute": [
+  "k.words/shards/mi",
+  "k.time/shards/calendar",
+  "k.units/shards/core",
+  "k.words/shards/mi"
+ ],
+ "minutes": [
+  "k.words/shards/mi",
+  "k.words/shards/mi"
+ ],
+ "monday": [
+  "k.words/shards/mo",
+  "k.time/shards/calendar",
+  "k.words/shards/mo"
+ ],
+ "month": [
+  "k.words/shards/mo",
+  "k.words/shards/mo"
+ ],
+ "mount": [
+  "k.words/shards/mo",
+  "k.words/shards/mo"
+ ],
+ "neptune": [
+  "k.words/shards/ne",
+  "k.space/shards/solar-system",
+  "k.words/shards/ne",
+  "k.scenes/shards/things-n"
+ ],
+ "november": [
+  "k.words/shards/no",
+  "k.time/shards/calendar",
+  "k.words/shards/no"
+ ],
+ "octopus": [
+  "k.words/shards/oc",
+  "k.animals/shards/invertebrates",
+  "k.words/shards/oc",
+  "k.scenes/shards/things-o"
+ ],
+ "one": [
+  "k.words/shards/on",
+  "k.words/shards/on"
+ ],
+ "opposite": [
+  "k.words/shards/op",
+  "k.words/shards/op"
+ ],
+ "order": [
+  "k.words/shards/or",
+  "k.words/shards/or"
+ ],
+ "owl": [
+  "k.words/shards/ow",
+  "k.animals/shards/birds",
+  "k.words/shards/ow",
+  "k.scenes/shards/things-o"
+ ],
+ "paris": [
+  "k.words/shards/pa",
+  "k.geo/shards/europe",
+  "k.words/shards/pa"
+ ],
+ "penguin": [
+  "k.words/shards/pe",
+  "k.animals/shards/birds",
+  "k.words/shards/pe",
+  "k.scenes/shards/things-p"
+ ],
+ "pizza": [
+  "k.words/shards/pi",
+  "k.food/shards/other",
+  "k.words/shards/pi",
+  "k.scenes/shards/things-p"
+ ],
+ "planet": [
+  "k.words/shards/pl",
+  "k.space/shards/kinds",
+  "k.words/shards/pl",
+  "k.scenes/shards/things-p"
+ ],
+ "plant": [
+  "k.words/shards/pl",
+  "k.words/shards/pl",
+  "k.scenes/shards/things-p"
+ ],
+ "rabbit": [
+  "k.words/shards/ra",
+  "k.animals/shards/mammals",
+  "k.words/shards/ra",
+  "k.scenes/shards/things-r"
+ ],
+ "rice": [
+  "k.words/shards/ri",
+  "k.food/shards/grains-nuts-and-pulses",
+  "k.words/shards/ri",
+  "k.scenes/shards/things-r"
+ ],
+ "rings": [
+  "k.words/shards/ri",
+  "k.words/shards/ri"
+ ],
+ "river": [
+  "k.words/shards/ri",
+  "k.words/shards/ri",
+  "k.scenes/shards/scenes-nature",
+  "k.scenes/shards/things-r"
+ ],
+ "rose": [
+  "k.words/shards/ro",
+  "k.words/shards/ro",
+  "k.scenes/shards/things-r"
+ ],
+ "run": [
+  "k.words/shards/ru",
+  "k.words/shards/ru"
+ ],
+ "sahara": [
+  "k.words/shards/sa",
+  "k.words/shards/sa"
+ ],
+ "saturn": [
+  "k.words/shards/sa",
+  "k.space/shards/solar-system",
+  "k.words/shards/sa",
+  "k.scenes/shards/things-s"
+ ],
+ "season": [
+  "k.words/shards/se",
+  "k.words/shards/se"
+ ],
+ "seed": [
+  "k.words/shards/se",
+  "k.words/shards/se"
+ ],
+ "september": [
+  "k.words/shards/se",
+  "k.time/shards/calendar",
+  "k.words/shards/se"
+ ],
+ "seventh": [
+  "k.words/shards/se",
+  "k.words/shards/se"
+ ],
+ "shell": [
+  "k.words/shards/sh",
+  "k.words/shards/sh",
+  "k.scenes/shards/things-s"
+ ],
+ "show": [
+  "k.words/shards/sh",
+  "k.words/shards/sh"
+ ],
+ "sleep": [
+  "k.words/shards/sl",
+  "k.words/shards/sl"
+ ],
+ "snake": [
+  "k.words/shards/sn",
+  "k.animals/shards/reptiles-and-amphibians",
+  "k.geo/shards/north-america",
+  "k.words/shards/sn",
+  "k.scenes/shards/things-s"
+ ],
+ "sound": [
+  "k.words/shards/so",
+  "k.words/shards/so"
+ ],
+ "soup": [
+  "k.words/shards/so",
+  "k.food/shards/other",
+  "k.words/shards/so",
+  "k.scenes/shards/things-s"
+ ],
+ "sunday": [
+  "k.words/shards/su",
+  "k.time/shards/calendar",
+  "k.words/shards/su"
+ ],
+ "talk": [
+  "k.words/shards/ta",
+  "k.words/shards/ta"
+ ],
+ "teeth": [
+  "k.words/shards/te",
+  "k.words/shards/te"
+ ],
+ "tell": [
+  "k.words/shards/te",
+  "k.words/shards/te"
+ ],
+ "tent": [
+  "k.words/shards/te",
+  "k.words/shards/te",
+  "k.scenes/shards/things-t"
+ ],
+ "there": [
+  "k.words/shards/th",
+  "k.words/shards/th"
+ ],
+ "thing": [
+  "k.words/shards/th",
+  "k.words/shards/th"
+ ],
+ "things": [
+  "k.words/shards/th",
+  "k.words/shards/th"
+ ],
+ "third": [
+  "k.words/shards/th",
+  "k.words/shards/th"
+ ],
+ "time": [
+  "k.words/shards/ti",
+  "k.units/shards/core",
+  "k.words/shards/ti"
+ ],
+ "tomato": [
+  "k.words/shards/to",
+  "k.food/shards/vegetables",
+  "k.words/shards/to",
+  "k.scenes/shards/things-t"
+ ],
+ "tooth": [
+  "k.words/shards/to",
+  "k.body/shards/core",
+  "k.words/shards/to"
+ ],
+ "tulip": [
+  "k.words/shards/tu",
+  "k.words/shards/tu",
+  "k.scenes/shards/things-t"
+ ],
+ "undo": [
+  "k.words/shards/un",
+  "k.words/shards/un"
+ ],
+ "vegetable": [
+  "k.words/shards/ve",
+  "k.words/shards/ve"
+ ],
+ "venus": [
+  "k.words/shards/ve",
+  "k.space/shards/solar-system",
+  "k.words/shards/ve",
+  "k.scenes/shards/things-v"
+ ],
+ "wednesday": [
+  "k.words/shards/we",
+  "k.time/shards/calendar",
+  "k.words/shards/we"
+ ],
+ "week": [
+  "k.words/shards/we",
+  "k.time/shards/calendar",
+  "k.units/shards/core",
+  "k.words/shards/we"
+ ],
+ "whale": [
+  "k.words/shards/wh",
+  "k.animals/shards/mammals",
+  "k.words/shards/wh",
+  "k.scenes/shards/things-w"
+ ],
+ "whisper": [
+  "k.words/shards/wh",
+  "k.words/shards/wh"
+ ],
+ "why": [
+  "k.words/shards/wh",
+  "k.words/shards/wh"
+ ],
+ "winter": [
+  "k.words/shards/wi",
+  "k.time/shards/calendar",
+  "k.words/shards/wi",
+  "k.scenes/shards/scenes-other"
+ ],
+ "word": [
+  "k.words/shards/wo",
+  "k.words/shards/wo"
+ ],
+ "words": [
+  "k.words/shards/wo",
+  "k.words/shards/wo"
+ ],
+ "year": [
+  "k.words/shards/ye",
+  "k.time/shards/calendar",
+  "k.words/shards/ye"
  ],
  "face": [
   "k.layouts/shards/layouts",
-  "k.layouts/shards/layouts"
- ],
- "apple": [
-  "k.demo/shards/fruits"
+  "k.layouts/shards/layouts",
+  "k.body/shards/core"
  ],
  "lemon": [
-  "k.demo/shards/fruits"
+  "k.demo/shards/fruits",
+  "k.food/shards/fruit"
+ ],
+ "canary": [
+  "k.animals/shards/birds"
+ ],
+ "crow": [
+  "k.animals/shards/birds"
+ ],
+ "cuckoo": [
+  "k.animals/shards/birds"
+ ],
+ "dove": [
+  "k.animals/shards/birds"
+ ],
+ "eagle": [
+  "k.animals/shards/birds"
+ ],
+ "emu": [
+  "k.animals/shards/birds"
+ ],
+ "falcon": [
+  "k.animals/shards/birds"
+ ],
+ "flamingo": [
+  "k.animals/shards/birds"
+ ],
+ "goose": [
+  "k.animals/shards/birds"
+ ],
+ "hawk": [
+  "k.animals/shards/birds"
+ ],
+ "hen": [
+  "k.animals/shards/birds"
+ ],
+ "heron": [
+  "k.animals/shards/birds"
+ ],
+ "hummingbird": [
+  "k.animals/shards/birds"
+ ],
+ "kingfisher": [
+  "k.animals/shards/birds"
+ ],
+ "magpie": [
+  "k.animals/shards/birds"
+ ],
+ "nightingale": [
+  "k.animals/shards/birds"
+ ],
+ "ostrich": [
+  "k.animals/shards/birds"
+ ],
+ "parrot": [
+  "k.animals/shards/birds"
+ ],
+ "peacock": [
+  "k.animals/shards/birds"
+ ],
+ "pelican": [
+  "k.animals/shards/birds"
+ ],
+ "pigeon": [
+  "k.animals/shards/birds"
+ ],
+ "robin": [
+  "k.animals/shards/birds"
+ ],
+ "rooster": [
+  "k.animals/shards/birds"
+ ],
+ "seagull": [
+  "k.animals/shards/birds"
+ ],
+ "sparrow": [
+  "k.animals/shards/birds"
+ ],
+ "stork": [
+  "k.animals/shards/birds"
+ ],
+ "swallow": [
+  "k.animals/shards/birds"
+ ],
+ "swan": [
+  "k.animals/shards/birds"
+ ],
+ "toucan": [
+  "k.animals/shards/birds"
+ ],
+ "turkey": [
+  "k.animals/shards/birds",
+  "k.food/shards/animal-foods"
+ ],
+ "vulture": [
+  "k.animals/shards/birds"
+ ],
+ "woodpecker": [
+  "k.animals/shards/birds"
+ ],
+ "carp": [
+  "k.animals/shards/fish"
+ ],
+ "clownfish": [
+  "k.animals/shards/fish"
+ ],
+ "cod": [
+  "k.animals/shards/fish",
+  "k.food/shards/animal-foods"
+ ],
+ "eel": [
+  "k.animals/shards/fish"
+ ],
+ "goldfish": [
+  "k.animals/shards/fish"
+ ],
+ "herring": [
+  "k.animals/shards/fish",
+  "k.food/shards/animal-foods"
+ ],
+ "pike": [
+  "k.animals/shards/fish"
+ ],
+ "salmon": [
+  "k.animals/shards/fish",
+  "k.food/shards/animal-foods"
+ ],
+ "sardine": [
+  "k.animals/shards/fish",
+  "k.food/shards/animal-foods"
+ ],
+ "seahorse": [
+  "k.animals/shards/fish"
+ ],
+ "shark": [
+  "k.animals/shards/fish"
+ ],
+ "trout": [
+  "k.animals/shards/fish"
+ ],
+ "tuna": [
+  "k.animals/shards/fish",
+  "k.food/shards/animal-foods"
+ ],
+ "beetle": [
+  "k.animals/shards/invertebrates"
+ ],
+ "cockroach": [
+  "k.animals/shards/invertebrates"
+ ],
+ "crab": [
+  "k.animals/shards/invertebrates",
+  "k.food/shards/animal-foods"
+ ],
+ "cricket": [
+  "k.animals/shards/invertebrates"
+ ],
+ "dragonfly": [
+  "k.animals/shards/invertebrates"
+ ],
+ "earthworm": [
+  "k.animals/shards/invertebrates"
+ ],
+ "firefly": [
+  "k.animals/shards/invertebrates"
+ ],
+ "flea": [
+  "k.animals/shards/invertebrates"
+ ],
+ "fly": [
+  "k.animals/shards/invertebrates"
+ ],
+ "grasshopper": [
+  "k.animals/shards/invertebrates"
+ ],
+ "jellyfish": [
+  "k.animals/shards/invertebrates"
+ ],
+ "ladybird": [
+  "k.animals/shards/invertebrates"
+ ],
+ "lobster": [
+  "k.animals/shards/invertebrates",
+  "k.food/shards/animal-foods"
+ ],
+ "mosquito": [
+  "k.animals/shards/invertebrates"
+ ],
+ "moth": [
+  "k.animals/shards/invertebrates"
+ ],
+ "scorpion": [
+  "k.animals/shards/invertebrates"
+ ],
+ "shrimp": [
+  "k.animals/shards/invertebrates",
+  "k.food/shards/animal-foods"
+ ],
+ "slug": [
+  "k.animals/shards/invertebrates"
+ ],
+ "snail": [
+  "k.animals/shards/invertebrates"
+ ],
+ "squid": [
+  "k.animals/shards/invertebrates"
+ ],
+ "starfish": [
+  "k.animals/shards/invertebrates"
+ ],
+ "termite": [
+  "k.animals/shards/invertebrates"
+ ],
+ "wasp": [
+  "k.animals/shards/invertebrates"
+ ],
+ "alpaca": [
+  "k.animals/shards/mammals"
+ ],
+ "anteater": [
+  "k.animals/shards/mammals"
+ ],
+ "antelope": [
+  "k.animals/shards/mammals"
+ ],
+ "badger": [
+  "k.animals/shards/mammals"
+ ],
+ "bat": [
+  "k.animals/shards/mammals"
+ ],
+ "bear": [
+  "k.animals/shards/mammals"
+ ],
+ "beaver": [
+  "k.animals/shards/mammals"
+ ],
+ "bison": [
+  "k.animals/shards/mammals"
+ ],
+ "blue whale": [
+  "k.animals/shards/mammals"
+ ],
+ "boar": [
+  "k.animals/shards/mammals"
+ ],
+ "buffalo": [
+  "k.animals/shards/mammals"
+ ],
+ "camel": [
+  "k.animals/shards/mammals"
+ ],
+ "cheetah": [
+  "k.animals/shards/mammals"
+ ],
+ "chimpanzee": [
+  "k.animals/shards/mammals"
+ ],
+ "deer": [
+  "k.animals/shards/mammals"
+ ],
+ "dolphin": [
+  "k.animals/shards/mammals"
+ ],
+ "donkey": [
+  "k.animals/shards/mammals"
+ ],
+ "fox": [
+  "k.animals/shards/mammals"
+ ],
+ "giraffe": [
+  "k.animals/shards/mammals"
+ ],
+ "goat": [
+  "k.animals/shards/mammals"
+ ],
+ "gorilla": [
+  "k.animals/shards/mammals"
+ ],
+ "guinea pig": [
+  "k.animals/shards/mammals"
+ ],
+ "hamster": [
+  "k.animals/shards/mammals"
+ ],
+ "hedgehog": [
+  "k.animals/shards/mammals"
+ ],
+ "hippopotamus": [
+  "k.animals/shards/mammals"
+ ],
+ "hyena": [
+  "k.animals/shards/mammals"
+ ],
+ "jaguar": [
+  "k.animals/shards/mammals"
+ ],
+ "kangaroo": [
+  "k.animals/shards/mammals"
+ ],
+ "koala": [
+  "k.animals/shards/mammals"
+ ],
+ "leopard": [
+  "k.animals/shards/mammals"
+ ],
+ "llama": [
+  "k.animals/shards/mammals"
+ ],
+ "lynx": [
+  "k.animals/shards/mammals"
+ ],
+ "meerkat": [
+  "k.animals/shards/mammals"
+ ],
+ "mole": [
+  "k.animals/shards/mammals"
+ ],
+ "monkey": [
+  "k.animals/shards/mammals"
+ ],
+ "moose": [
+  "k.animals/shards/mammals"
+ ],
+ "mouse": [
+  "k.animals/shards/mammals"
+ ],
+ "orangutan": [
+  "k.animals/shards/mammals"
+ ],
+ "otter": [
+  "k.animals/shards/mammals"
+ ],
+ "ox": [
+  "k.animals/shards/mammals"
+ ],
+ "panda": [
+  "k.animals/shards/mammals"
+ ],
+ "pig": [
+  "k.animals/shards/mammals"
+ ],
+ "polar bear": [
+  "k.animals/shards/mammals"
+ ],
+ "pony": [
+  "k.animals/shards/mammals"
+ ],
+ "porcupine": [
+  "k.animals/shards/mammals"
+ ],
+ "raccoon": [
+  "k.animals/shards/mammals"
+ ],
+ "rat": [
+  "k.animals/shards/mammals"
+ ],
+ "reindeer": [
+  "k.animals/shards/mammals"
+ ],
+ "rhinoceros": [
+  "k.animals/shards/mammals"
+ ],
+ "seal": [
+  "k.animals/shards/mammals"
+ ],
+ "sheep": [
+  "k.animals/shards/mammals"
+ ],
+ "skunk": [
+  "k.animals/shards/mammals"
+ ],
+ "sloth": [
+  "k.animals/shards/mammals"
+ ],
+ "squirrel": [
+  "k.animals/shards/mammals"
+ ],
+ "tiger": [
+  "k.animals/shards/mammals"
+ ],
+ "wolf": [
+  "k.animals/shards/mammals"
+ ],
+ "yak": [
+  "k.animals/shards/mammals"
+ ],
+ "zebra": [
+  "k.animals/shards/mammals"
+ ],
+ "alligator": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "chameleon": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "gecko": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "iguana": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "lizard": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "newt": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "salamander": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "toad": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "tortoise": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "turtle": [
+  "k.animals/shards/reptiles-and-amphibians"
+ ],
+ "ankle": [
+  "k.body/shards/core"
+ ],
+ "artery": [
+  "k.body/shards/core"
+ ],
+ "belly": [
+  "k.body/shards/core"
+ ],
+ "bladder": [
+  "k.body/shards/core"
+ ],
+ "blood": [
+  "k.body/shards/core"
+ ],
+ "bone": [
+  "k.body/shards/core"
+ ],
+ "cheek": [
+  "k.body/shards/core"
+ ],
+ "chest": [
+  "k.body/shards/core"
+ ],
+ "chin": [
+  "k.body/shards/core"
+ ],
+ "elbow": [
+  "k.body/shards/core"
+ ],
+ "eyebrow": [
+  "k.body/shards/core"
+ ],
+ "finger": [
+  "k.body/shards/core"
+ ],
+ "forehead": [
+  "k.body/shards/core"
+ ],
+ "hearing": [
+  "k.body/shards/core"
+ ],
+ "heel": [
+  "k.body/shards/core"
+ ],
+ "hip": [
+  "k.body/shards/core"
+ ],
+ "intestine": [
+  "k.body/shards/core"
+ ],
+ "kidney": [
+  "k.body/shards/core"
+ ],
+ "knee": [
+  "k.body/shards/core"
+ ],
+ "lip": [
+  "k.body/shards/core"
+ ],
+ "liver": [
+  "k.body/shards/core"
+ ],
+ "lung": [
+  "k.body/shards/core"
+ ],
+ "muscle": [
+  "k.body/shards/core"
+ ],
+ "nail": [
+  "k.body/shards/core"
+ ],
+ "nerve": [
+  "k.body/shards/core"
+ ],
+ "rib": [
+  "k.body/shards/core"
+ ],
+ "shoulder": [
+  "k.body/shards/core"
+ ],
+ "sight": [
+  "k.body/shards/core"
+ ],
+ "skeleton": [
+  "k.body/shards/core"
+ ],
+ "skull": [
+  "k.body/shards/core"
+ ],
+ "smell": [
+  "k.body/shards/core"
+ ],
+ "spine": [
+  "k.body/shards/core"
+ ],
+ "stomach": [
+  "k.body/shards/core"
+ ],
+ "taste": [
+  "k.body/shards/core"
+ ],
+ "thumb": [
+  "k.body/shards/core"
+ ],
+ "toe": [
+  "k.body/shards/core"
+ ],
+ "tongue": [
+  "k.body/shards/core"
+ ],
+ "touch": [
+  "k.body/shards/core"
+ ],
+ "vein": [
+  "k.body/shards/core"
+ ],
+ "wrist": [
+  "k.body/shards/core"
+ ],
+ "grass": [
+  "k.commonsense/shards/core"
+ ],
+ "afraid": [
+  "k.feelings/shards/feelings"
+ ],
+ "amused": [
+  "k.feelings/shards/feelings"
+ ],
+ "ashamed": [
+  "k.feelings/shards/feelings"
+ ],
+ "bored": [
+  "k.feelings/shards/feelings"
+ ],
+ "calm": [
+  "k.feelings/shards/feelings"
+ ],
+ "confused": [
+  "k.feelings/shards/feelings"
+ ],
+ "curious": [
+  "k.feelings/shards/feelings"
+ ],
+ "disappointed": [
+  "k.feelings/shards/feelings"
+ ],
+ "disgusted": [
+  "k.feelings/shards/feelings"
+ ],
+ "embarrassed": [
+  "k.feelings/shards/feelings"
+ ],
+ "excited": [
+  "k.feelings/shards/feelings"
+ ],
+ "frustrated": [
+  "k.feelings/shards/feelings"
+ ],
+ "grateful": [
+  "k.feelings/shards/feelings"
+ ],
+ "guilty": [
+  "k.feelings/shards/feelings"
+ ],
+ "homesick": [
+  "k.feelings/shards/feelings"
+ ],
+ "hopeful": [
+  "k.feelings/shards/feelings"
+ ],
+ "hurt": [
+  "k.feelings/shards/feelings"
+ ],
+ "jealous": [
+  "k.feelings/shards/feelings"
+ ],
+ "lonely": [
+  "k.feelings/shards/feelings"
+ ],
+ "loved": [
+  "k.feelings/shards/feelings"
+ ],
+ "nervous": [
+  "k.feelings/shards/feelings"
+ ],
+ "proud": [
+  "k.feelings/shards/feelings"
+ ],
+ "relieved": [
+  "k.feelings/shards/feelings"
+ ],
+ "shy": [
+  "k.feelings/shards/feelings"
+ ],
+ "tired": [
+  "k.feelings/shards/feelings"
+ ],
+ "worried": [
+  "k.feelings/shards/feelings"
+ ],
+ "bacon": [
+  "k.food/shards/animal-foods"
+ ],
+ "beef": [
+  "k.food/shards/animal-foods"
+ ],
+ "butter": [
+  "k.food/shards/animal-foods"
+ ],
+ "chicken": [
+  "k.food/shards/animal-foods"
+ ],
+ "cream": [
+  "k.food/shards/animal-foods"
+ ],
+ "ham": [
+  "k.food/shards/animal-foods"
+ ],
+ "lamb": [
+  "k.food/shards/animal-foods"
+ ],
+ "mussel": [
+  "k.food/shards/animal-foods"
+ ],
+ "oyster": [
+  "k.food/shards/animal-foods"
+ ],
+ "pork": [
+  "k.food/shards/animal-foods"
+ ],
+ "sausage": [
+  "k.food/shards/animal-foods"
+ ],
+ "steak": [
+  "k.food/shards/animal-foods"
+ ],
+ "yogurt": [
+  "k.food/shards/animal-foods"
+ ],
+ "apricot": [
+  "k.food/shards/fruit"
+ ],
+ "avocado": [
+  "k.food/shards/fruit"
+ ],
+ "blackberry": [
+  "k.food/shards/fruit"
+ ],
+ "blackcurrant": [
+  "k.food/shards/fruit"
+ ],
+ "blueberry": [
+  "k.food/shards/fruit"
+ ],
+ "cherry": [
+  "k.food/shards/fruit"
+ ],
+ "coconut": [
+  "k.food/shards/fruit"
+ ],
+ "date": [
+  "k.food/shards/fruit"
+ ],
+ "fig": [
+  "k.food/shards/fruit"
+ ],
+ "gooseberry": [
+  "k.food/shards/fruit"
+ ],
+ "grape": [
+  "k.food/shards/fruit"
+ ],
+ "grapefruit": [
+  "k.food/shards/fruit"
+ ],
+ "kiwi": [
+  "k.food/shards/fruit"
+ ],
+ "lime": [
+  "k.food/shards/fruit"
+ ],
+ "mandarin": [
+  "k.food/shards/fruit"
+ ],
+ "mango": [
+  "k.food/shards/fruit"
+ ],
+ "melon": [
+  "k.food/shards/fruit"
+ ],
+ "papaya": [
+  "k.food/shards/fruit"
+ ],
+ "peach": [
+  "k.food/shards/fruit"
+ ],
+ "pear": [
+  "k.food/shards/fruit"
+ ],
+ "pineapple": [
+  "k.food/shards/fruit"
+ ],
+ "plum": [
+  "k.food/shards/fruit"
+ ],
+ "pomegranate": [
+  "k.food/shards/fruit"
+ ],
+ "quince": [
+  "k.food/shards/fruit"
+ ],
+ "raspberry": [
+  "k.food/shards/fruit"
+ ],
+ "strawberry": [
+  "k.food/shards/fruit"
+ ],
+ "watermelon": [
+  "k.food/shards/fruit"
+ ],
+ "almond": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "barley": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "bean": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "bread roll": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "cashew": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "chestnut": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "chickpea": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "corn": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "flour": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "hazelnut": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "lentil": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "noodles": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "oats": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "pasta": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "peanut": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "pecan": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "pistachio": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "rye": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "soybean": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "spaghetti": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "toast": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "walnut": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "wheat": [
+  "k.food/shards/grains-nuts-and-pulses"
+ ],
+ "apple juice": [
+  "k.food/shards/other"
+ ],
+ "basil": [
+  "k.food/shards/other"
+ ],
+ "biscuit": [
+  "k.food/shards/other"
+ ],
+ "chocolate": [
+  "k.food/shards/other"
+ ],
+ "cinnamon": [
+  "k.food/shards/other"
+ ],
+ "coffee": [
+  "k.food/shards/other"
+ ],
+ "doughnut": [
+  "k.food/shards/other"
+ ],
+ "french fries": [
+  "k.food/shards/other"
+ ],
+ "ginger": [
+  "k.food/shards/other"
+ ],
+ "hamburger": [
+  "k.food/shards/other"
+ ],
+ "honey": [
+  "k.food/shards/other"
+ ],
+ "hot chocolate": [
+  "k.food/shards/other"
+ ],
+ "hot dog": [
+  "k.food/shards/other"
+ ],
+ "ice cream": [
+  "k.food/shards/other"
+ ],
+ "jam": [
+  "k.food/shards/other"
+ ],
+ "juice": [
+  "k.food/shards/other"
+ ],
+ "ketchup": [
+  "k.food/shards/other"
+ ],
+ "lemonade": [
+  "k.food/shards/other"
+ ],
+ "maple syrup": [
+  "k.food/shards/other"
+ ],
+ "marmalade": [
+  "k.food/shards/other"
+ ],
+ "milkshake": [
+  "k.food/shards/other"
+ ],
+ "mint": [
+  "k.food/shards/other"
+ ],
+ "mustard": [
+  "k.food/shards/other"
+ ],
+ "olive oil": [
+  "k.food/shards/other"
+ ],
+ "omelette": [
+  "k.food/shards/other"
+ ],
+ "orange juice": [
+  "k.food/shards/other"
+ ],
+ "pancake": [
+  "k.food/shards/other"
+ ],
+ "parsley": [
+  "k.food/shards/other"
+ ],
+ "pepper": [
+  "k.food/shards/other"
+ ],
+ "pie": [
+  "k.food/shards/other"
+ ],
+ "popcorn": [
+  "k.food/shards/other"
+ ],
+ "porridge": [
+  "k.food/shards/other"
+ ],
+ "salad": [
+  "k.food/shards/other"
+ ],
+ "salt": [
+  "k.food/shards/other"
+ ],
+ "sandwich": [
+  "k.food/shards/other"
+ ],
+ "sugar": [
+  "k.food/shards/other"
+ ],
+ "sunflower oil": [
+  "k.food/shards/other"
+ ],
+ "tea": [
+  "k.food/shards/other"
+ ],
+ "tofu": [
+  "k.food/shards/other"
+ ],
+ "water": [
+  "k.food/shards/other"
+ ],
+ "artichoke": [
+  "k.food/shards/vegetables"
+ ],
+ "asparagus": [
+  "k.food/shards/vegetables"
+ ],
+ "aubergine": [
+  "k.food/shards/vegetables"
+ ],
+ "beetroot": [
+  "k.food/shards/vegetables"
+ ],
+ "bell pepper": [
+  "k.food/shards/vegetables"
+ ],
+ "broccoli": [
+  "k.food/shards/vegetables"
+ ],
+ "cabbage": [
+  "k.food/shards/vegetables"
+ ],
+ "cauliflower": [
+  "k.food/shards/vegetables"
+ ],
+ "celery": [
+  "k.food/shards/vegetables"
+ ],
+ "chilli pepper": [
+  "k.food/shards/vegetables"
+ ],
+ "courgette": [
+  "k.food/shards/vegetables"
+ ],
+ "cucumber": [
+  "k.food/shards/vegetables"
+ ],
+ "garlic": [
+  "k.food/shards/vegetables"
+ ],
+ "green bean": [
+  "k.food/shards/vegetables"
+ ],
+ "kale": [
+  "k.food/shards/vegetables"
+ ],
+ "leek": [
+  "k.food/shards/vegetables"
+ ],
+ "lettuce": [
+  "k.food/shards/vegetables"
+ ],
+ "mushroom": [
+  "k.food/shards/vegetables"
+ ],
+ "onion": [
+  "k.food/shards/vegetables"
+ ],
+ "parsnip": [
+  "k.food/shards/vegetables"
+ ],
+ "pea": [
+  "k.food/shards/vegetables"
+ ],
+ "potato": [
+  "k.food/shards/vegetables"
+ ],
+ "pumpkin": [
+  "k.food/shards/vegetables"
+ ],
+ "radish": [
+  "k.food/shards/vegetables"
+ ],
+ "spinach": [
+  "k.food/shards/vegetables"
+ ],
+ "sweet potato": [
+  "k.food/shards/vegetables"
+ ],
+ "turnip": [
+  "k.food/shards/vegetables"
+ ],
+ "grandfather": [
+  "k.people/shards/kinds",
+  "k.people/shards/roles-family"
+ ],
+ "grandmother": [
+  "k.people/shards/kinds",
+  "k.people/shards/roles-family"
+ ],
+ "aunt": [
+  "k.people/shards/roles-family"
+ ],
+ "brother": [
+  "k.people/shards/roles-family"
+ ],
+ "father": [
+  "k.people/shards/roles-family"
+ ],
+ "mother": [
+  "k.people/shards/roles-family"
+ ],
+ "sister": [
+  "k.people/shards/roles-family"
+ ],
+ "uncle": [
+  "k.people/shards/roles-family"
+ ],
+ "astronaut": [
+  "k.people/shards/roles-jobs"
+ ],
+ "baker": [
+  "k.people/shards/roles-jobs"
+ ],
+ "builder": [
+  "k.people/shards/roles-jobs"
+ ],
+ "bus driver": [
+  "k.people/shards/roles-jobs"
+ ],
+ "carpenter": [
+  "k.people/shards/roles-jobs"
+ ],
+ "cleaner": [
+  "k.people/shards/roles-jobs"
+ ],
+ "cook": [
+  "k.people/shards/roles-jobs"
+ ],
+ "dancer": [
+  "k.people/shards/roles-jobs"
+ ],
+ "dentist": [
+  "k.people/shards/roles-jobs"
+ ],
+ "doctor": [
+  "k.people/shards/roles-jobs"
+ ],
+ "farmer": [
+  "k.people/shards/roles-jobs"
+ ],
+ "firefighter": [
+  "k.people/shards/roles-jobs"
+ ],
+ "fisherman": [
+  "k.people/shards/roles-jobs"
+ ],
+ "footballer": [
+  "k.people/shards/roles-jobs"
+ ],
+ "gardener": [
+  "k.people/shards/roles-jobs"
+ ],
+ "hairdresser": [
+  "k.people/shards/roles-jobs"
+ ],
+ "judge": [
+  "k.people/shards/roles-jobs"
+ ],
+ "librarian": [
+  "k.people/shards/roles-jobs"
+ ],
+ "mechanic": [
+  "k.people/shards/roles-jobs"
+ ],
+ "musician": [
+  "k.people/shards/roles-jobs"
+ ],
+ "nurse": [
+  "k.people/shards/roles-jobs"
+ ],
+ "painter": [
+  "k.people/shards/roles-jobs"
+ ],
+ "photographer": [
+  "k.people/shards/roles-jobs"
+ ],
+ "pilot": [
+  "k.people/shards/roles-jobs"
+ ],
+ "plumber": [
+  "k.people/shards/roles-jobs"
+ ],
+ "police officer": [
+  "k.people/shards/roles-jobs"
+ ],
+ "postman": [
+  "k.people/shards/roles-jobs"
+ ],
+ "sailor": [
+  "k.people/shards/roles-jobs"
+ ],
+ "scientist": [
+  "k.people/shards/roles-jobs"
+ ],
+ "shopkeeper": [
+  "k.people/shards/roles-jobs"
+ ],
+ "singer": [
+  "k.people/shards/roles-jobs"
+ ],
+ "soldier": [
+  "k.people/shards/roles-jobs"
+ ],
+ "swimmer": [
+  "k.people/shards/roles-jobs"
+ ],
+ "teacher": [
+  "k.people/shards/roles-jobs"
+ ],
+ "vet": [
+  "k.people/shards/roles-jobs"
+ ],
+ "waiter": [
+  "k.people/shards/roles-jobs"
+ ],
+ "cowboy": [
+  "k.people/shards/roles-story"
+ ],
+ "detective": [
+  "k.people/shards/roles-story"
+ ],
+ "explorer": [
+  "k.people/shards/roles-story"
+ ],
+ "fairy": [
+  "k.people/shards/roles-story"
+ ],
+ "father christmas": [
+  "k.people/shards/roles-story"
+ ],
+ "king": [
+  "k.people/shards/roles-story"
+ ],
+ "knight": [
+  "k.people/shards/roles-story"
+ ],
+ "magician": [
+  "k.people/shards/roles-story"
+ ],
+ "pirate": [
+  "k.people/shards/roles-story"
+ ],
+ "prince": [
+  "k.people/shards/roles-story"
+ ],
+ "princess": [
+  "k.people/shards/roles-story"
+ ],
+ "superhero": [
+  "k.people/shards/roles-story"
+ ],
+ "witch": [
+  "k.people/shards/roles-story"
+ ],
+ "wizard": [
+  "k.people/shards/roles-story"
+ ],
+ "asteroid": [
+  "k.space/shards/kinds"
+ ],
+ "dwarf planet": [
+  "k.space/shards/kinds"
+ ],
+ "galaxy": [
+  "k.space/shards/kinds"
+ ],
+ "solar system": [
+  "k.space/shards/kinds"
+ ],
+ "callisto": [
+  "k.space/shards/solar-system"
+ ],
+ "deimos": [
+  "k.space/shards/solar-system"
+ ],
+ "europa": [
+  "k.space/shards/solar-system"
+ ],
+ "ganymede": [
+  "k.space/shards/solar-system"
+ ],
+ "halley's comet": [
+  "k.space/shards/solar-system"
+ ],
+ "io": [
+  "k.space/shards/solar-system"
+ ],
+ "phobos": [
+  "k.space/shards/solar-system"
+ ],
+ "pluto": [
+  "k.space/shards/solar-system"
+ ],
+ "titan": [
+  "k.space/shards/solar-system"
+ ],
+ "triton": [
+  "k.space/shards/solar-system"
+ ],
+ "uranus": [
+  "k.space/shards/solar-system",
+  "k.scenes/shards/things-u"
+ ],
+ "andromeda galaxy": [
+  "k.space/shards/stars-and-galaxies"
+ ],
+ "milky way": [
+  "k.space/shards/stars-and-galaxies"
+ ],
+ "polaris": [
+  "k.space/shards/stars-and-galaxies"
+ ],
+ "proxima centauri": [
+  "k.space/shards/stars-and-galaxies"
+ ],
+ "sirius": [
+  "k.space/shards/stars-and-galaxies"
+ ],
+ "april": [
+  "k.time/shards/calendar"
+ ],
+ "august": [
+  "k.time/shards/calendar"
+ ],
+ "autumn": [
+  "k.time/shards/calendar"
+ ],
+ "century": [
+  "k.time/shards/calendar"
+ ],
+ "common year": [
+  "k.time/shards/calendar"
+ ],
+ "decade": [
+  "k.time/shards/calendar"
+ ],
+ "february": [
+  "k.time/shards/calendar"
+ ],
+ "fortnight": [
+  "k.time/shards/calendar"
+ ],
+ "june": [
+  "k.time/shards/calendar"
+ ],
+ "leap year": [
+  "k.time/shards/calendar"
+ ],
+ "millennium": [
+  "k.time/shards/calendar"
+ ],
+ "october": [
+  "k.time/shards/calendar"
+ ],
+ "quarter": [
+  "k.time/shards/calendar"
+ ],
+ "saturday": [
+  "k.time/shards/calendar"
+ ],
+ "second": [
+  "k.time/shards/calendar",
+  "k.units/shards/core"
+ ],
+ "spring": [
+  "k.time/shards/calendar"
+ ],
+ "summer": [
+  "k.time/shards/calendar"
+ ],
+ "thursday": [
+  "k.time/shards/calendar"
+ ],
+ "tuesday": [
+  "k.time/shards/calendar"
+ ],
+ "acre": [
+  "k.units/shards/core"
+ ],
+ "angle": [
+  "k.units/shards/core"
+ ],
+ "area": [
+  "k.units/shards/core"
+ ],
+ "centilitre": [
+  "k.units/shards/core"
+ ],
+ "centimetre": [
+  "k.units/shards/core"
+ ],
+ "cubic metre": [
+  "k.units/shards/core"
+ ],
+ "decilitre": [
+  "k.units/shards/core"
+ ],
+ "decimetre": [
+  "k.units/shards/core"
+ ],
+ "degree": [
+  "k.units/shards/core"
+ ],
+ "degree celsius": [
+  "k.units/shards/core"
+ ],
+ "degree fahrenheit": [
+  "k.units/shards/core"
+ ],
+ "full turn": [
+  "k.units/shards/core"
+ ],
+ "gallon": [
+  "k.units/shards/core"
+ ],
+ "hectare": [
+  "k.units/shards/core"
+ ],
+ "inch": [
+  "k.units/shards/core"
+ ],
+ "kelvin": [
+  "k.units/shards/core"
+ ],
+ "kilogram": [
+  "k.units/shards/core"
+ ],
+ "kilometre": [
+  "k.units/shards/core"
+ ],
+ "kilometre per hour": [
+  "k.units/shards/core"
+ ],
+ "knot": [
+  "k.units/shards/core"
+ ],
+ "length": [
+  "k.units/shards/core"
+ ],
+ "litre": [
+  "k.units/shards/core"
+ ],
+ "mass": [
+  "k.units/shards/core"
+ ],
+ "metre per second": [
+  "k.units/shards/core"
+ ],
+ "mile per hour": [
+  "k.units/shards/core"
+ ],
+ "milligram": [
+  "k.units/shards/core"
+ ],
+ "millilitre": [
+  "k.units/shards/core"
+ ],
+ "millimetre": [
+  "k.units/shards/core"
+ ],
+ "ounce": [
+  "k.units/shards/core"
+ ],
+ "pint": [
+  "k.units/shards/core"
+ ],
+ "pound": [
+  "k.units/shards/core"
+ ],
+ "right angle": [
+  "k.units/shards/core"
+ ],
+ "speed": [
+  "k.units/shards/core"
+ ],
+ "square centimetre": [
+  "k.units/shards/core"
+ ],
+ "square kilometre": [
+  "k.units/shards/core"
+ ],
+ "square metre": [
+  "k.units/shards/core"
+ ],
+ "tablespoon": [
+  "k.units/shards/core"
+ ],
+ "teaspoon": [
+  "k.units/shards/core"
+ ],
+ "temperature": [
+  "k.units/shards/core"
+ ],
+ "tonne": [
+  "k.units/shards/core"
+ ],
+ "volume": [
+  "k.units/shards/core"
+ ],
+ "yard": [
+  "k.units/shards/core"
+ ],
+ "you": [
+  "k.geo/shards/asia"
  ]
 }

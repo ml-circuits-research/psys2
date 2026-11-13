@@ -5,8 +5,8 @@
 
 @t.talk.n02 core.test
     input="What does a bicycle look like?"
-    expect="I know what a bicycle looks like."
-    expect="a back wheel"
+    expect="Bicycle is a wheeled vehicle"
+    expect="two wheels"
     expectEffect=talk.card
     expectState="cards.0.kind=drawing"
     expectState="topics.0.name=bicycle"

@@ -1,0 +1,86 @@
+# k.geo: geography: continents, countries and territories (capital, continent, region, neighbours, population, area,
+# centre, bounding box), their largest cities, rivers, mountains and mountain ranges with names. Places are points
+# and boxes only: lat and lon are degrees north and east (negative: south, west); west, south, east, north bound a box.
+# sources: natural-earth 5.1.2, countries 5.1.0; the schema itself is hand-core 1
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/import/geo.mjs
+
+@k.geo core.module name=k.geo version=2 exports=continent exports=country exports=city exports=river exports=mountain exports=range core.source="hand-core 1"
+
+@k.geo.continent core.type of=k.geo.continent shared=true closed=true core.source="hand-core 1"
+@k.geo.continent.name core.slot of=k.geo.continent key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+
+# A country or territory. `name` is its common short English name (`"United States"`, `Serbia`), `formal` its formal name; `neighbour` names the countries it has a land border with;
+# `population` counts people; `area` is in square kilometres.
+@k.geo.country core.type of=k.geo.country shared=true closed=true core.source="hand-core 1"
+@k.geo.country.name core.slot of=k.geo.country key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.country.code core.slot of=k.geo.country key=code kind=atom core.source="hand-core 1"
+@k.geo.country.formal core.slot of=k.geo.country key=formal kind=string core.source="hand-core 1"
+@k.geo.country.capital core.slot of=k.geo.country key=capital many=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.country.continent core.slot of=k.geo.country key=continent kind=atom kind=string core.source="hand-core 1"
+@k.geo.country.region core.slot of=k.geo.country key=region kind=atom kind=string core.source="hand-core 1"
+@k.geo.country.neighbour core.slot of=k.geo.country key=neighbour many=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.country.population core.slot of=k.geo.country key=population kind=integer min=0 core.source="hand-core 1"
+@k.geo.country.area core.slot of=k.geo.country key=area kind=number min=0 core.source="hand-core 1"
+@k.geo.country.landlocked core.slot of=k.geo.country key=landlocked kind=boolean core.source="hand-core 1"
+@k.geo.country.independent core.slot of=k.geo.country key=independent kind=boolean core.source="hand-core 1"
+@k.geo.country.lat core.slot of=k.geo.country key=lat kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.country.lon core.slot of=k.geo.country key=lon kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.country.west core.slot of=k.geo.country key=west kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.country.south core.slot of=k.geo.country key=south kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.country.east core.slot of=k.geo.country key=east kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.country.north core.slot of=k.geo.country key=north kind=number min=-90 max=90 core.source="hand-core 1"
+
+# A city: one of the largest of its country, or its capital (`capital_of` names the country).
+@k.geo.city core.type of=k.geo.city shared=true closed=true core.source="hand-core 1"
+@k.geo.city.name core.slot of=k.geo.city key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.city.country core.slot of=k.geo.city key=country id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.city.capital_of core.slot of=k.geo.city key=capital_of kind=atom kind=string core.source="hand-core 1"
+@k.geo.city.population core.slot of=k.geo.city key=population kind=integer min=0 core.source="hand-core 1"
+@k.geo.city.lat core.slot of=k.geo.city key=lat kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.city.lon core.slot of=k.geo.city key=lon kind=number min=-180 max=180 core.source="hand-core 1"
+
+# A river: the countries it flows through, the continent most of it is in, its middle and its box.
+@k.geo.river core.type of=k.geo.river shared=true closed=true core.source="hand-core 1"
+@k.geo.river.name core.slot of=k.geo.river key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.river.continent core.slot of=k.geo.river key=continent id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.river.country core.slot of=k.geo.river key=country many=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.river.lat core.slot of=k.geo.river key=lat kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.river.lon core.slot of=k.geo.river key=lon kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.river.west core.slot of=k.geo.river key=west kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.river.south core.slot of=k.geo.river key=south kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.river.east core.slot of=k.geo.river key=east kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.river.north core.slot of=k.geo.river key=north kind=number min=-90 max=90 core.source="hand-core 1"
+
+# A mountain: a named summit; `elevation` is its height in metres above the sea.
+@k.geo.mountain core.type of=k.geo.mountain shared=true closed=true core.source="hand-core 1"
+@k.geo.mountain.name core.slot of=k.geo.mountain key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.mountain.continent core.slot of=k.geo.mountain key=continent id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.mountain.country core.slot of=k.geo.mountain key=country kind=atom kind=string core.source="hand-core 1"
+@k.geo.mountain.elevation core.slot of=k.geo.mountain key=elevation kind=integer core.source="hand-core 1"
+@k.geo.mountain.lat core.slot of=k.geo.mountain key=lat kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.mountain.lon core.slot of=k.geo.mountain key=lon kind=number min=-180 max=180 core.source="hand-core 1"
+
+# A mountain range: a name, a middle and a box.
+@k.geo.range core.type of=k.geo.range shared=true closed=true core.source="hand-core 1"
+@k.geo.range.name core.slot of=k.geo.range key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.range.continent core.slot of=k.geo.range key=continent id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.geo.range.lat core.slot of=k.geo.range key=lat kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.range.lon core.slot of=k.geo.range key=lon kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.range.west core.slot of=k.geo.range key=west kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.range.south core.slot of=k.geo.range key=south kind=number min=-90 max=90 core.source="hand-core 1"
+@k.geo.range.east core.slot of=k.geo.range key=east kind=number min=-180 max=180 core.source="hand-core 1"
+@k.geo.range.north core.slot of=k.geo.range key=north kind=number min=-90 max=90 core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.geo.word.country core.word text=country text=countries text=nation means=k.geo.country core.source="hand-core 1"
+@k.geo.word.city core.word text=city text=cities text=town means=k.geo.city core.source="hand-core 1"
+@k.geo.word.river core.word text=river text=rivers means=k.geo.river core.source="hand-core 1"
+@k.geo.word.mountain core.word text=mountain text=mountains text=peak means=k.geo.mountain core.source="hand-core 1"
+@k.geo.word.range core.word text=range text=ranges means=k.geo.range core.source="hand-core 1"
+@k.geo.word.continent core.word text=continent text=continents means=k.geo.continent core.source="hand-core 1"
+@k.geo.word.capital core.word text=capital text=capitals means=k.geo.country.capital core.source="hand-core 1"
+@k.geo.word.neighbour core.word text=neighbour text=neighbours text=neighbor text=neighbors text=border text=borders means=k.geo.country.neighbour core.source="hand-core 1"
+@k.geo.word.population core.word text=population text=people text=inhabitants means=k.geo.country.population core.source="hand-core 1"
+@k.geo.word.area core.word text=area means=k.geo.country.area core.source="hand-core 1"
+@k.geo.word.elevation core.word text=elevation text=height text=high means=k.geo.mountain.elevation core.source="hand-core 1"

@@ -1,0 +1,9 @@
+# k.words/shards/ra: noun and verb senses of the words from "ra" to "razor" (first letters "ra").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.rabbit.noun.1 k.words.sense word=rabbit pos=noun n=1 gloss="any of various burrowing animals of the family Leporidae having long ears and short tails; some domesticated and raised for pets or food" synonym=coney synonym=cony is_a=leporid core.source="wordnet 3.1"
+@k.words.rabbit.noun.2 k.words.sense word=rabbit pos=noun n=2 gloss="the fur of a rabbit" synonym=lapin is_a=fur core.source="wordnet 3.1"
+@k.words.rabbit.noun.3 k.words.sense word=rabbit pos=noun n=3 gloss="flesh of any of various rabbits or hares (wild or domesticated) eaten as food" synonym=hare is_a=game part_of="wood rabbit" part_of="European rabbit" part_of=hare core.source="wordnet 3.1"
+@k.words.rabbit.verb.1 k.words.sense word=rabbit pos=verb n=1 gloss="hunt rabbits" is_a=hunt core.source="wordnet 3.1"

@@ -1,0 +1,60 @@
+# k.objects/shards/household: table, chair, cup, umbrella, ladder. Parts with a primitive shape, a box in the 0 to 100 frame
+# of the object (x right, y down), a draw order z and typical colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# table
+@k.objects.table k.objects.object name=table core.source="hand-core 1"
+@k.objects.table.top k.objects.part of=table name=top shape=rectangle x=5 y=35 w=90 h=8 z=1 colour=brown colour=white above=left_leg core.source="hand-core 1"
+@k.objects.table.left_leg k.objects.part of=table name=left_leg kind=leg shape=rectangle x=10 y=43 w=7 h=50 z=1 colour=brown colour=white below=top core.source="hand-core 1"
+@k.objects.table.right_leg k.objects.part of=table name=right_leg kind=leg shape=rectangle x=83 y=43 w=7 h=50 z=1 colour=brown colour=white below=top core.source="hand-core 1"
+
+# chair
+@k.objects.chair k.objects.object name=chair core.source="hand-core 1"
+@k.objects.chair.seat k.objects.part of=chair name=seat shape=rectangle x=25 y=55 w=50 h=7 z=2 colour=brown core.source="hand-core 1"
+@k.objects.chair.back k.objects.part of=chair name=back shape=rectangle x=25 y=10 w=7 h=45 z=1 colour=brown above=seat core.source="hand-core 1"
+@k.objects.chair.back_leg k.objects.part of=chair name=back_leg kind=leg shape=rectangle x=25 y=62 w=7 h=33 z=1 colour=brown below=seat core.source="hand-core 1"
+@k.objects.chair.front_leg k.objects.part of=chair name=front_leg kind=leg shape=rectangle x=68 y=62 w=7 h=33 z=1 colour=brown below=seat core.source="hand-core 1"
+
+# cup
+@k.objects.cup k.objects.object name=cup core.source="hand-core 1"
+@k.objects.cup.body k.objects.part of=cup name=body shape=rectangle x=20 y=30 w=50 h=52 z=2 colour=red colour=white colour=blue core.source="hand-core 1"
+@k.objects.cup.handle k.objects.part of=cup name=handle shape=arc x=60 y=40 w=22 h=30 z=1 colour=red colour=white colour=blue opens=left right_of=body core.source="hand-core 1"
+@k.objects.cup.saucer k.objects.part of=cup name=saucer shape=oval x=8 y=80 w=74 h=10 z=1 colour=white below=body core.source="hand-core 1"
+
+# umbrella
+@k.objects.umbrella k.objects.object name=umbrella core.source="hand-core 1"
+@k.objects.umbrella.canopy k.objects.part of=umbrella name=canopy shape=polygon x=5 y=8 w=90 h=37 z=2 colour=red colour=blue colour=black colour=yellow above=handle core.source="hand-core 1"
+@k.objects.umbrella.handle k.objects.part of=umbrella name=handle shape=line x=50 y=45 w=0 h=40 z=1 colour=black below=canopy centered=true core.source="hand-core 1"
+@k.objects.umbrella.hook k.objects.part of=umbrella name=hook shape=arc x=42 y=80 w=8 h=10 z=1 colour=black opens=up below=handle core.source="hand-core 1"
+@k.objects.umbrella.canopy.p1 k.objects.point part=$k.objects.umbrella.canopy n=1 x=5 y=45 core.source="hand-core 1"
+@k.objects.umbrella.canopy.p2 k.objects.point part=$k.objects.umbrella.canopy n=2 x=10 y=30 core.source="hand-core 1"
+@k.objects.umbrella.canopy.p3 k.objects.point part=$k.objects.umbrella.canopy n=3 x=20 y=18 core.source="hand-core 1"
+@k.objects.umbrella.canopy.p4 k.objects.point part=$k.objects.umbrella.canopy n=4 x=35 y=10 core.source="hand-core 1"
+@k.objects.umbrella.canopy.p5 k.objects.point part=$k.objects.umbrella.canopy n=5 x=50 y=8 core.source="hand-core 1"
+@k.objects.umbrella.canopy.p6 k.objects.point part=$k.objects.umbrella.canopy n=6 x=65 y=10 core.source="hand-core 1"
+@k.objects.umbrella.canopy.p7 k.objects.point part=$k.objects.umbrella.canopy n=7 x=80 y=18 core.source="hand-core 1"
+@k.objects.umbrella.canopy.p8 k.objects.point part=$k.objects.umbrella.canopy n=8 x=90 y=30 core.source="hand-core 1"
+@k.objects.umbrella.canopy.p9 k.objects.point part=$k.objects.umbrella.canopy n=9 x=95 y=45 core.source="hand-core 1"
+@k.objects.umbrella.handle.p1 k.objects.point part=$k.objects.umbrella.handle n=1 x=50 y=45 core.source="hand-core 1"
+@k.objects.umbrella.handle.p2 k.objects.point part=$k.objects.umbrella.handle n=2 x=50 y=85 core.source="hand-core 1"
+
+# ladder
+@k.objects.ladder k.objects.object name=ladder core.source="hand-core 1"
+@k.objects.ladder.left_rail k.objects.part of=ladder name=left_rail kind=rail shape=rectangle x=25 y=3 w=6 h=94 z=1 colour=brown left_of=right_rail core.source="hand-core 1"
+@k.objects.ladder.right_rail k.objects.part of=ladder name=right_rail kind=rail shape=rectangle x=69 y=3 w=6 h=94 z=1 colour=brown right_of=left_rail core.source="hand-core 1"
+@k.objects.ladder.first_rung k.objects.part of=ladder name=first_rung kind=rung shape=rectangle x=31 y=15 w=38 h=4 z=2 colour=brown above=second_rung core.source="hand-core 1"
+@k.objects.ladder.second_rung k.objects.part of=ladder name=second_rung kind=rung shape=rectangle x=31 y=35 w=38 h=4 z=2 colour=brown core.source="hand-core 1"
+@k.objects.ladder.third_rung k.objects.part of=ladder name=third_rung kind=rung shape=rectangle x=31 y=55 w=38 h=4 z=2 colour=brown core.source="hand-core 1"
+@k.objects.ladder.fourth_rung k.objects.part of=ladder name=fourth_rung kind=rung shape=rectangle x=31 y=75 w=38 h=4 z=2 colour=brown below=third_rung core.source="hand-core 1"
+
+# words
+@k.objects.word.table core.word text=table text=tables means=table of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.chair core.word text=chair text=chairs means=chair of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.cup core.word text=cup text=cups text=mug means=cup of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.umbrella core.word text=umbrella text=umbrellas means=umbrella of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.ladder core.word text=ladder text=ladders means=ladder of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.part.leg core.word text=leg text=legs means=leg of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.rail core.word text=rail text=rails means=rail of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.rung core.word text=rung text=rungs means=rung of=k.objects.part.kind core.source="hand-core 1"

@@ -1,0 +1,11 @@
+# k.words/shards/ti: noun and verb senses of the words from "ti" to "titus" (first letters "ti").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.time.noun.1 k.words.sense word=time pos=noun n=1 gloss="an instance or single occasion for some event" synonym=clip is_a=case core.source="wordnet 3.1"
+@k.words.time.noun.2 k.words.sense word=time pos=noun n=2 gloss="a period of time considered as a resource under your control and sufficient to accomplish something" is_a="time period" core.source="wordnet 3.1"
+@k.words.time.noun.3 k.words.sense word=time pos=noun n=3 gloss="an indefinite period (usually marked by specific attributes or activities)" is_a="time period" core.source="wordnet 3.1"
+@k.words.time.verb.1 k.words.sense word=time pos=verb n=1 gloss="measure the time or duration of an event or action or the person who performs an action in a certain period of time" synonym=clock is_a=quantify core.source="wordnet 3.1"
+@k.words.time.verb.2 k.words.sense word=time pos=verb n=2 gloss="assign a time for an activity or event" is_a=schedule core.source="wordnet 3.1"
+@k.words.time.verb.3 k.words.sense word=time pos=verb n=3 gloss="set the speed, duration, or execution of" is_a=determine core.source="wordnet 3.1"

@@ -456,12 +456,51 @@
     {
      "id": "k.objects/shards/buildings",
      "path": "k.objects/shards/buildings.sop",
-     "wires": 3,
-     "bytes": 332,
+     "wires": 35,
+     "bytes": 4778,
      "keys": [
       "house",
       "body",
-      "roof"
+      "roof",
+      "base",
+      "cap",
+      "castle",
+      "castles",
+      "chimney",
+      "color",
+      "colour",
+      "door",
+      "drawing",
+      "gate",
+      "home",
+      "houses",
+      "lamp",
+      "left_merlon",
+      "left_roof",
+      "left_tower",
+      "left_window",
+      "lighthouse",
+      "lighthouses",
+      "merlon",
+      "merlons",
+      "middle_merlon",
+      "object",
+      "objects",
+      "part",
+      "parts",
+      "picture",
+      "right_merlon",
+      "right_roof",
+      "right_tower",
+      "right_window",
+      "roofs",
+      "shape",
+      "stripe",
+      "tower",
+      "towers",
+      "wall",
+      "window",
+      "windows"
      ],
      "sources": [
       "fixture-1"
@@ -482,6 +521,356 @@
      ],
      "license": "CC0-1.0",
      "warnings": []
+    },
+    {
+     "id": "k.objects/shards/animals",
+     "path": "k.objects/shards/animals.sop",
+     "wires": 64,
+     "bytes": 9584,
+     "keys": [
+      "antenna",
+      "antennae",
+      "back_leg",
+      "beak",
+      "bird",
+      "birds",
+      "body",
+      "butterflies",
+      "butterfly",
+      "cat",
+      "cats",
+      "color",
+      "colour",
+      "dog",
+      "dogs",
+      "drawing",
+      "ear",
+      "ears",
+      "eye",
+      "eyes",
+      "fin",
+      "fish",
+      "fishes",
+      "front_leg",
+      "head",
+      "kitten",
+      "left_antenna",
+      "left_ear",
+      "left_eye",
+      "left_leg",
+      "left_lower_wing",
+      "left_upper_wing",
+      "leg",
+      "legs",
+      "nose",
+      "object",
+      "objects",
+      "part",
+      "parts",
+      "picture",
+      "puppy",
+      "right_antenna",
+      "right_ear",
+      "right_eye",
+      "right_leg",
+      "right_lower_wing",
+      "right_upper_wing",
+      "shape",
+      "tail",
+      "wing",
+      "wings"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.objects/shards/figures",
+     "path": "k.objects/shards/figures.sop",
+     "wires": 51,
+     "bytes": 7521,
+     "keys": [
+      "antenna",
+      "arm",
+      "arms",
+      "ball",
+      "balls",
+      "body",
+      "bottom_ball",
+      "bottom_button",
+      "button",
+      "buttons",
+      "child",
+      "color",
+      "colour",
+      "drawing",
+      "eye",
+      "eyes",
+      "hat",
+      "head",
+      "left_arm",
+      "left_eye",
+      "left_leg",
+      "leg",
+      "legs",
+      "man",
+      "middle_ball",
+      "mouth",
+      "nose",
+      "object",
+      "objects",
+      "part",
+      "parts",
+      "people",
+      "person",
+      "picture",
+      "right_arm",
+      "right_eye",
+      "right_leg",
+      "robot",
+      "robots",
+      "shape",
+      "snowman",
+      "snowmen",
+      "top_button",
+      "woman"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.objects/shards/household",
+     "path": "k.objects/shards/household.sop",
+     "wires": 43,
+     "bytes": 6117,
+     "keys": [
+      "back",
+      "back_leg",
+      "body",
+      "canopy",
+      "chair",
+      "chairs",
+      "color",
+      "colour",
+      "cup",
+      "cups",
+      "drawing",
+      "first_rung",
+      "fourth_rung",
+      "front_leg",
+      "handle",
+      "hook",
+      "ladder",
+      "ladders",
+      "left_leg",
+      "left_rail",
+      "leg",
+      "legs",
+      "mug",
+      "object",
+      "objects",
+      "part",
+      "parts",
+      "picture",
+      "rail",
+      "rails",
+      "right_leg",
+      "right_rail",
+      "rung",
+      "rungs",
+      "saucer",
+      "seat",
+      "second_rung",
+      "shape",
+      "table",
+      "tables",
+      "third_rung",
+      "top",
+      "umbrella",
+      "umbrellas"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.objects/shards/nature",
+     "path": "k.objects/shards/nature.sop",
+     "wires": 33,
+     "bytes": 4746,
+     "keys": [
+      "apple",
+      "apples",
+      "body",
+      "bottom_petal",
+      "centre",
+      "color",
+      "colour",
+      "crown",
+      "drawing",
+      "flower",
+      "flowers",
+      "hill",
+      "leaf",
+      "left_petal",
+      "mountain",
+      "mountains",
+      "object",
+      "objects",
+      "part",
+      "parts",
+      "petal",
+      "petals",
+      "picture",
+      "right_petal",
+      "shape",
+      "snow_cap",
+      "stem",
+      "top_petal",
+      "tree",
+      "trees",
+      "trunk"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.objects/shards/sky",
+     "path": "k.objects/shards/sky.sop",
+     "wires": 52,
+     "bytes": 6555,
+     "keys": [
+      "base",
+      "body",
+      "bottom_ray",
+      "cloud",
+      "clouds",
+      "color",
+      "colour",
+      "crescent",
+      "disc",
+      "drawing",
+      "left_puff",
+      "left_ray",
+      "middle_puff",
+      "moon",
+      "moons",
+      "object",
+      "objects",
+      "part",
+      "parts",
+      "picture",
+      "puff",
+      "puffs",
+      "ray",
+      "rays",
+      "right_puff",
+      "right_ray",
+      "shape",
+      "star",
+      "stars",
+      "sun",
+      "top_ray"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.objects/shards/vehicles",
+     "path": "k.objects/shards/vehicles.sop",
+     "wires": 110,
+     "bytes": 14882,
+     "keys": [
+      "aeroplane",
+      "airplane",
+      "airplanes",
+      "back_wheel",
+      "bicycle",
+      "bicycles",
+      "bike",
+      "boat",
+      "boats",
+      "body",
+      "cabin",
+      "car",
+      "carriage",
+      "cars",
+      "chimney",
+      "color",
+      "colour",
+      "drawing",
+      "engine",
+      "far_wing",
+      "fin",
+      "fins",
+      "first_wheel",
+      "first_window",
+      "flame",
+      "fork",
+      "fourth_wheel",
+      "frame",
+      "front_sail",
+      "front_wheel",
+      "handlebar",
+      "hull",
+      "left_fin",
+      "left_wheel",
+      "left_window",
+      "main_sail",
+      "mast",
+      "near_wing",
+      "nose",
+      "object",
+      "objects",
+      "part",
+      "parts",
+      "picture",
+      "plane",
+      "planes",
+      "right_fin",
+      "right_wheel",
+      "right_window",
+      "rocket",
+      "rockets",
+      "sail",
+      "sailboat",
+      "sails",
+      "seat",
+      "seat_tube",
+      "second_wheel",
+      "second_window",
+      "shape",
+      "ship",
+      "tail",
+      "third_wheel",
+      "third_window",
+      "train",
+      "trains",
+      "wheel",
+      "wheels",
+      "window",
+      "windows",
+      "wing",
+      "wings"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
     }
    ]
   },
@@ -497,10 +886,15 @@
     {
      "id": "k.words/shards/ma",
      "path": "k.words/shards/ma.sop",
-     "wires": 1,
-     "bytes": 133,
+     "wires": 19,
+     "bytes": 3663,
      "keys": [
-      "mansion"
+      "mansion",
+      "make",
+      "march",
+      "mars",
+      "matrix",
+      "may"
      ],
      "sources": [
       "fixture-1"
@@ -525,13 +919,1359 @@
     {
      "id": "k.words/shards/sp",
      "path": "k.words/shards/sp.sop",
-     "wires": 1,
-     "bytes": 156,
+     "wires": 9,
+     "bytes": 1847,
      "keys": [
-      "spectacles"
+      "spectacles",
+      "space",
+      "spain",
+      "spider"
      ],
      "sources": [
       "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/an",
+     "path": "k.words/shards/an.sop",
+     "wires": 4,
+     "bytes": 1130,
+     "keys": [
+      "ancient",
+      "animal",
+      "ant"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ap",
+     "path": "k.words/shards/ap.sop",
+     "wires": 2,
+     "bytes": 745,
+     "keys": [
+      "apple"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ar",
+     "path": "k.words/shards/ar.sop",
+     "wires": 6,
+     "bytes": 1440,
+     "keys": [
+      "are",
+      "arm"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ba",
+     "path": "k.words/shards/ba.sop",
+     "wires": 2,
+     "bytes": 800,
+     "keys": [
+      "banana"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/be",
+     "path": "k.words/shards/be.sop",
+     "wires": 2,
+     "bytes": 650,
+     "keys": [
+      "bee"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/bi",
+     "path": "k.words/shards/bi.sop",
+     "wires": 6,
+     "bytes": 1439,
+     "keys": [
+      "bicycle",
+      "bird"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/bo",
+     "path": "k.words/shards/bo.sop",
+     "wires": 14,
+     "bytes": 2920,
+     "keys": [
+      "board",
+      "boat",
+      "body",
+      "bones"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/br",
+     "path": "k.words/shards/br.sop",
+     "wires": 19,
+     "bytes": 4365,
+     "keys": [
+      "brain",
+      "brave",
+      "brazil",
+      "bread",
+      "bridge"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/bu",
+     "path": "k.words/shards/bu.sop",
+     "wires": 6,
+     "bytes": 1484,
+     "keys": [
+      "bus"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ca",
+     "path": "k.words/shards/ca.sop",
+     "wires": 38,
+     "bytes": 7837,
+     "keys": [
+      "cake",
+      "can",
+      "canada",
+      "capital",
+      "car",
+      "card",
+      "cards",
+      "carrot",
+      "castle",
+      "cat",
+      "catalog"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ch",
+     "path": "k.words/shards/ch.sop",
+     "wires": 9,
+     "bytes": 1958,
+     "keys": [
+      "chair",
+      "cheese"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/cl",
+     "path": "k.words/shards/cl.sop",
+     "wires": 2,
+     "bytes": 658,
+     "keys": [
+      "clock"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/co",
+     "path": "k.words/shards/co.sop",
+     "wires": 22,
+     "bytes": 4630,
+     "keys": [
+      "colour",
+      "come",
+      "comet",
+      "correction",
+      "country",
+      "cow",
+      "cows"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/cr",
+     "path": "k.words/shards/cr.sop",
+     "wires": 1,
+     "bytes": 554,
+     "keys": [
+      "crocodile"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/cu",
+     "path": "k.words/shards/cu.sop",
+     "wires": 6,
+     "bytes": 1172,
+     "keys": [
+      "cup"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/da",
+     "path": "k.words/shards/da.sop",
+     "wires": 4,
+     "bytes": 1022,
+     "keys": [
+      "day",
+      "days"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/de",
+     "path": "k.words/shards/de.sop",
+     "wires": 1,
+     "bytes": 477,
+     "keys": [
+      "december"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/do",
+     "path": "k.words/shards/do.sop",
+     "wires": 7,
+     "bytes": 1830,
+     "keys": [
+      "dog",
+      "door"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/du",
+     "path": "k.words/shards/du.sop",
+     "wires": 6,
+     "bytes": 1249,
+     "keys": [
+      "duck"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ea",
+     "path": "k.words/shards/ea.sop",
+     "wires": 11,
+     "bytes": 2195,
+     "keys": [
+      "ear",
+      "earth",
+      "eat"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/eg",
+     "path": "k.words/shards/eg.sop",
+     "wires": 7,
+     "bytes": 2011,
+     "keys": [
+      "egg",
+      "egypt"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ei",
+     "path": "k.words/shards/ei.sop",
+     "wires": 2,
+     "bytes": 600,
+     "keys": [
+      "eighth"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/el",
+     "path": "k.words/shards/el.sop",
+     "wires": 2,
+     "bytes": 617,
+     "keys": [
+      "elephant"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ev",
+     "path": "k.words/shards/ev.sop",
+     "wires": 1,
+     "bytes": 617,
+     "keys": [
+      "everest"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ey",
+     "path": "k.words/shards/ey.sop",
+     "wires": 4,
+     "bytes": 882,
+     "keys": [
+      "eye"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fi",
+     "path": "k.words/shards/fi.sop",
+     "wires": 11,
+     "bytes": 2316,
+     "keys": [
+      "fifth",
+      "first",
+      "fish"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fl",
+     "path": "k.words/shards/fl.sop",
+     "wires": 4,
+     "bytes": 1130,
+     "keys": [
+      "flower"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fo",
+     "path": "k.words/shards/fo.sop",
+     "wires": 9,
+     "bytes": 1906,
+     "keys": [
+      "food",
+      "foot"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fr",
+     "path": "k.words/shards/fr.sop",
+     "wires": 16,
+     "bytes": 3001,
+     "keys": [
+      "france",
+      "free",
+      "friday",
+      "frog",
+      "fruit"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/gi",
+     "path": "k.words/shards/gi.sop",
+     "wires": 3,
+     "bytes": 786,
+     "keys": [
+      "giant"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/gr",
+     "path": "k.words/shards/gr.sop",
+     "wires": 2,
+     "bytes": 768,
+     "keys": [
+      "gram"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ha",
+     "path": "k.words/shards/ha.sop",
+     "wires": 9,
+     "bytes": 1904,
+     "keys": [
+      "hand",
+      "have"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/he",
+     "path": "k.words/shards/he.sop",
+     "wires": 3,
+     "bytes": 918,
+     "keys": [
+      "heart"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ho",
+     "path": "k.words/shards/ho.sop",
+     "wires": 12,
+     "bytes": 2350,
+     "keys": [
+      "horse",
+      "hour",
+      "house"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/in",
+     "path": "k.words/shards/in.sop",
+     "wires": 9,
+     "bytes": 2070,
+     "keys": [
+      "index",
+      "india",
+      "inside"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/is",
+     "path": "k.words/shards/is.sop",
+     "wires": 2,
+     "bytes": 591,
+     "keys": [
+      "island"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/it",
+     "path": "k.words/shards/it.sop",
+     "wires": 1,
+     "bytes": 618,
+     "keys": [
+      "italy"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ja",
+     "path": "k.words/shards/ja.sop",
+     "wires": 5,
+     "bytes": 1488,
+     "keys": [
+      "january",
+      "japan"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/jo",
+     "path": "k.words/shards/jo.sop",
+     "wires": 3,
+     "bytes": 747,
+     "keys": [
+      "journey"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ju",
+     "path": "k.words/shards/ju.sop",
+     "wires": 3,
+     "bytes": 982,
+     "keys": [
+      "july",
+      "jupiter"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ke",
+     "path": "k.words/shards/ke.sop",
+     "wires": 1,
+     "bytes": 630,
+     "keys": [
+      "kenya"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ki",
+     "path": "k.words/shards/ki.sop",
+     "wires": 7,
+     "bytes": 1501,
+     "keys": [
+      "kind",
+      "kite"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/kn",
+     "path": "k.words/shards/kn.sop",
+     "wires": 5,
+     "bytes": 1234,
+     "keys": [
+      "know",
+      "knowledge"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/la",
+     "path": "k.words/shards/la.sop",
+     "wires": 6,
+     "bytes": 1295,
+     "keys": [
+      "ladder",
+      "lamp"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/le",
+     "path": "k.words/shards/le.sop",
+     "wires": 4,
+     "bytes": 1099,
+     "keys": [
+      "leg",
+      "legs"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/li",
+     "path": "k.words/shards/li.sop",
+     "wires": 12,
+     "bytes": 2350,
+     "keys": [
+      "lighthouse",
+      "like",
+      "lion",
+      "live"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/lo",
+     "path": "k.words/shards/lo.sop",
+     "wires": 9,
+     "bytes": 2128,
+     "keys": [
+      "london",
+      "longer",
+      "look"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/me",
+     "path": "k.words/shards/me.sop",
+     "wires": 10,
+     "bytes": 2408,
+     "keys": [
+      "mean",
+      "mercury",
+      "metre"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/mi",
+     "path": "k.words/shards/mi.sop",
+     "wires": 13,
+     "bytes": 2933,
+     "keys": [
+      "mile",
+      "milk",
+      "minute",
+      "minutes"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/mo",
+     "path": "k.words/shards/mo.sop",
+     "wires": 15,
+     "bytes": 2783,
+     "keys": [
+      "monday",
+      "month",
+      "moon",
+      "mount"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ne",
+     "path": "k.words/shards/ne.sop",
+     "wires": 2,
+     "bytes": 752,
+     "keys": [
+      "neptune"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/no",
+     "path": "k.words/shards/no.sop",
+     "wires": 7,
+     "bytes": 1667,
+     "keys": [
+      "nose",
+      "november"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/oc",
+     "path": "k.words/shards/oc.sop",
+     "wires": 2,
+     "bytes": 647,
+     "keys": [
+      "octopus"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/on",
+     "path": "k.words/shards/on.sop",
+     "wires": 2,
+     "bytes": 622,
+     "keys": [
+      "one"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/op",
+     "path": "k.words/shards/op.sop",
+     "wires": 3,
+     "bytes": 925,
+     "keys": [
+      "opposite"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/or",
+     "path": "k.words/shards/or.sop",
+     "wires": 6,
+     "bytes": 1355,
+     "keys": [
+      "order"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ow",
+     "path": "k.words/shards/ow.sop",
+     "wires": 1,
+     "bytes": 541,
+     "keys": [
+      "owl"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pa",
+     "path": "k.words/shards/pa.sop",
+     "wires": 4,
+     "bytes": 1121,
+     "keys": [
+      "paris",
+      "parts"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pe",
+     "path": "k.words/shards/pe.sop",
+     "wires": 1,
+     "bytes": 521,
+     "keys": [
+      "penguin"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pi",
+     "path": "k.words/shards/pi.sop",
+     "wires": 1,
+     "bytes": 497,
+     "keys": [
+      "pizza"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pl",
+     "path": "k.words/shards/pl.sop",
+     "wires": 18,
+     "bytes": 4016,
+     "keys": [
+      "plain",
+      "plane",
+      "planet",
+      "plant"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ra",
+     "path": "k.words/shards/ra.sop",
+     "wires": 4,
+     "bytes": 1059,
+     "keys": [
+      "rabbit"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/re",
+     "path": "k.words/shards/re.sop",
+     "wires": 3,
+     "bytes": 1026,
+     "keys": [
+      "red"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ri",
+     "path": "k.words/shards/ri.sop",
+     "wires": 6,
+     "bytes": 1518,
+     "keys": [
+      "rice",
+      "rings",
+      "river"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ro",
+     "path": "k.words/shards/ro.sop",
+     "wires": 13,
+     "bytes": 2775,
+     "keys": [
+      "robot",
+      "rocket",
+      "roof",
+      "rose"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ru",
+     "path": "k.words/shards/ru.sop",
+     "wires": 6,
+     "bytes": 1593,
+     "keys": [
+      "run"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sa",
+     "path": "k.words/shards/sa.sop",
+     "wires": 3,
+     "bytes": 993,
+     "keys": [
+      "sahara",
+      "saturn"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/se",
+     "path": "k.words/shards/se.sop",
+     "wires": 16,
+     "bytes": 3073,
+     "keys": [
+      "season",
+      "seed",
+      "september",
+      "seventh"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sh",
+     "path": "k.words/shards/sh.sop",
+     "wires": 12,
+     "bytes": 2565,
+     "keys": [
+      "shell",
+      "show"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sl",
+     "path": "k.words/shards/sl.sop",
+     "wires": 5,
+     "bytes": 1157,
+     "keys": [
+      "sleep"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sn",
+     "path": "k.words/shards/sn.sop",
+     "wires": 7,
+     "bytes": 1524,
+     "keys": [
+      "snake",
+      "snowman"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/so",
+     "path": "k.words/shards/so.sop",
+     "wires": 10,
+     "bytes": 1840,
+     "keys": [
+      "sound",
+      "soup"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/st",
+     "path": "k.words/shards/st.sop",
+     "wires": 6,
+     "bytes": 1448,
+     "keys": [
+      "star"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/su",
+     "path": "k.words/shards/su.sop",
+     "wires": 7,
+     "bytes": 1635,
+     "keys": [
+      "sun",
+      "sunday"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ta",
+     "path": "k.words/shards/ta.sop",
+     "wires": 17,
+     "bytes": 3469,
+     "keys": [
+      "table",
+      "tail",
+      "talk"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/te",
+     "path": "k.words/shards/te.sop",
+     "wires": 8,
+     "bytes": 1930,
+     "keys": [
+      "teeth",
+      "tell",
+      "tent"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/th",
+     "path": "k.words/shards/th.sop",
+     "wires": 8,
+     "bytes": 1604,
+     "keys": [
+      "there",
+      "thing",
+      "things",
+      "third"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ti",
+     "path": "k.words/shards/ti.sop",
+     "wires": 6,
+     "bytes": 1357,
+     "keys": [
+      "time"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/to",
+     "path": "k.words/shards/to.sop",
+     "wires": 5,
+     "bytes": 1326,
+     "keys": [
+      "tomato",
+      "tooth"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/tr",
+     "path": "k.words/shards/tr.sop",
+     "wires": 12,
+     "bytes": 2777,
+     "keys": [
+      "train",
+      "tree"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/tu",
+     "path": "k.words/shards/tu.sop",
+     "wires": 1,
+     "bytes": 507,
+     "keys": [
+      "tulip"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/um",
+     "path": "k.words/shards/um.sop",
+     "wires": 3,
+     "bytes": 785,
+     "keys": [
+      "umbrella"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/un",
+     "path": "k.words/shards/un.sop",
+     "wires": 3,
+     "bytes": 713,
+     "keys": [
+      "undo"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ve",
+     "path": "k.words/shards/ve.sop",
+     "wires": 5,
+     "bytes": 1657,
+     "keys": [
+      "vegetable",
+      "venus"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/we",
+     "path": "k.words/shards/we.sop",
+     "wires": 4,
+     "bytes": 1024,
+     "keys": [
+      "wednesday",
+      "week"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/wh",
+     "path": "k.words/shards/wh.sop",
+     "wires": 7,
+     "bytes": 1648,
+     "keys": [
+      "whale",
+      "whisper",
+      "why"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/wi",
+     "path": "k.words/shards/wi.sop",
+     "wires": 3,
+     "bytes": 844,
+     "keys": [
+      "windows",
+      "winter"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/wo",
+     "path": "k.words/shards/wo.sop",
+     "wires": 7,
+     "bytes": 1450,
+     "keys": [
+      "word",
+      "words"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ye",
+     "path": "k.words/shards/ye.sop",
+     "wires": 3,
+     "bytes": 920,
+     "keys": [
+      "year"
+     ],
+     "sources": [
+      "wordnet-3.1"
      ],
      "license": "CC0-1.0",
      "warnings": []
@@ -601,6 +2341,2983 @@
      ],
      "sources": [
       "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.animals",
+   "version": "1",
+   "schema": "k.animals/schema.sop",
+   "exports": [
+    "k.animals.animal"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.animals/shards/birds",
+     "path": "k.animals/shards/birds.sop",
+     "wires": 70,
+     "bytes": 11125,
+     "keys": [
+      "canary",
+      "crow",
+      "cuckoo",
+      "dove",
+      "duck",
+      "eagle",
+      "emu",
+      "falcon",
+      "flamingo",
+      "goose",
+      "hawk",
+      "hen",
+      "heron",
+      "hummingbird",
+      "kingfisher",
+      "magpie",
+      "nightingale",
+      "ostrich",
+      "owl",
+      "parrot",
+      "peacock",
+      "pelican",
+      "penguin",
+      "pigeon",
+      "robin",
+      "rooster",
+      "seagull",
+      "sparrow",
+      "stork",
+      "swallow",
+      "swan",
+      "toucan",
+      "turkey",
+      "vulture",
+      "woodpecker"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.animals/shards/fish",
+     "path": "k.animals/shards/fish.sop",
+     "wires": 17,
+     "bytes": 2895,
+     "keys": [
+      "carp",
+      "clownfish",
+      "cod",
+      "eel",
+      "goldfish",
+      "herring",
+      "pike",
+      "salmon",
+      "sardine",
+      "seahorse",
+      "shark",
+      "trout",
+      "tuna"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.animals/shards/invertebrates",
+     "path": "k.animals/shards/invertebrates.sop",
+     "wires": 52,
+     "bytes": 7952,
+     "keys": [
+      "ant",
+      "bee",
+      "beetle",
+      "butterfly",
+      "cockroach",
+      "crab",
+      "cricket",
+      "dragonfly",
+      "earthworm",
+      "firefly",
+      "flea",
+      "fly",
+      "grasshopper",
+      "jellyfish",
+      "ladybird",
+      "lobster",
+      "mosquito",
+      "moth",
+      "octopus",
+      "scorpion",
+      "shrimp",
+      "slug",
+      "snail",
+      "spider",
+      "squid",
+      "starfish",
+      "termite",
+      "wasp"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.animals/shards/mammals",
+     "path": "k.animals/shards/mammals.sop",
+     "wires": 129,
+     "bytes": 20478,
+     "keys": [
+      "alpaca",
+      "anteater",
+      "antelope",
+      "badger",
+      "bat",
+      "bear",
+      "beaver",
+      "bison",
+      "blue whale",
+      "boar",
+      "buffalo",
+      "camel",
+      "cat",
+      "cheetah",
+      "chimpanzee",
+      "cow",
+      "deer",
+      "dog",
+      "dolphin",
+      "donkey",
+      "elephant",
+      "fox",
+      "giraffe",
+      "goat",
+      "gorilla",
+      "guinea pig",
+      "hamster",
+      "hedgehog",
+      "hippopotamus",
+      "horse",
+      "hyena",
+      "jaguar",
+      "kangaroo",
+      "koala",
+      "leopard",
+      "lion",
+      "llama",
+      "lynx",
+      "meerkat",
+      "mole",
+      "monkey",
+      "moose",
+      "mouse",
+      "orangutan",
+      "otter",
+      "ox",
+      "panda",
+      "pig",
+      "polar bear",
+      "pony",
+      "porcupine",
+      "rabbit",
+      "raccoon",
+      "rat",
+      "reindeer",
+      "rhinoceros",
+      "seal",
+      "sheep",
+      "skunk",
+      "sloth",
+      "squirrel",
+      "tiger",
+      "walrus",
+      "whale",
+      "wolf",
+      "yak",
+      "zebra"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.animals/shards/reptiles-and-amphibians",
+     "path": "k.animals/shards/reptiles-and-amphibians.sop",
+     "wires": 26,
+     "bytes": 4527,
+     "keys": [
+      "alligator",
+      "chameleon",
+      "crocodile",
+      "frog",
+      "gecko",
+      "iguana",
+      "lizard",
+      "newt",
+      "salamander",
+      "snake",
+      "toad",
+      "tortoise",
+      "turtle"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.body",
+   "version": "1",
+   "schema": "k.body/schema.sop",
+   "exports": [
+    "k.body.part",
+    "k.body.sense"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.body/shards/core",
+     "path": "k.body/shards/core.sop",
+     "wires": 112,
+     "bytes": 12168,
+     "keys": [
+      "ankle",
+      "arm",
+      "artery",
+      "back",
+      "belly",
+      "bladder",
+      "blood",
+      "body",
+      "bone",
+      "brain",
+      "cheek",
+      "chest",
+      "chin",
+      "ear",
+      "elbow",
+      "eye",
+      "eyebrow",
+      "face",
+      "finger",
+      "foot",
+      "forehead",
+      "hair",
+      "hand",
+      "head",
+      "hearing",
+      "heart",
+      "heel",
+      "hip",
+      "intestine",
+      "kidney",
+      "knee",
+      "leg",
+      "lip",
+      "liver",
+      "lung",
+      "mouth",
+      "muscle",
+      "nail",
+      "neck",
+      "nerve",
+      "nose",
+      "rib",
+      "shoulder",
+      "sight",
+      "skeleton",
+      "skin",
+      "skull",
+      "smell",
+      "spine",
+      "stomach",
+      "taste",
+      "thumb",
+      "toe",
+      "tongue",
+      "tooth",
+      "touch",
+      "vein",
+      "wrist"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.commonsense",
+   "version": "1",
+   "schema": "k.commonsense/schema.sop",
+   "exports": [
+    "k.commonsense.placed",
+    "k.commonsense.thing"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.commonsense/shards/core",
+     "path": "k.commonsense/shards/core.sop",
+     "wires": 30,
+     "bytes": 3963,
+     "keys": [
+      "bird",
+      "boat",
+      "car",
+      "cat",
+      "cloud",
+      "dog",
+      "fish",
+      "flower",
+      "grass",
+      "house",
+      "moon",
+      "plane",
+      "star",
+      "sun",
+      "tree"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.feelings",
+   "version": "1",
+   "schema": "k.feelings/schema.sop",
+   "exports": [
+    "k.feelings.feeling"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.feelings/shards/feelings",
+     "path": "k.feelings/shards/feelings.sop",
+     "wires": 60,
+     "bytes": 12966,
+     "keys": [
+      "afraid",
+      "amused",
+      "angry",
+      "ashamed",
+      "bored",
+      "calm",
+      "confused",
+      "curious",
+      "disappointed",
+      "disgusted",
+      "embarrassed",
+      "excited",
+      "frustrated",
+      "grateful",
+      "guilty",
+      "happy",
+      "homesick",
+      "hopeful",
+      "hurt",
+      "jealous",
+      "lonely",
+      "loved",
+      "nervous",
+      "proud",
+      "relieved",
+      "sad",
+      "shy",
+      "surprised",
+      "tired",
+      "worried"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.food",
+   "version": "1",
+   "schema": "k.food/schema.sop",
+   "exports": [
+    "k.food.food"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.food/shards/animal-foods",
+     "path": "k.food/shards/animal-foods.sop",
+     "wires": 34,
+     "bytes": 4438,
+     "keys": [
+      "bacon",
+      "beef",
+      "butter",
+      "cheese",
+      "chicken",
+      "cod",
+      "crab",
+      "cream",
+      "egg",
+      "ham",
+      "herring",
+      "lamb",
+      "lobster",
+      "milk",
+      "mussel",
+      "oyster",
+      "pork",
+      "salmon",
+      "sardine",
+      "sausage",
+      "shrimp",
+      "steak",
+      "tuna",
+      "turkey",
+      "yogurt"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.food/shards/fruit",
+     "path": "k.food/shards/fruit.sop",
+     "wires": 64,
+     "bytes": 8113,
+     "keys": [
+      "apple",
+      "apricot",
+      "avocado",
+      "banana",
+      "blackberry",
+      "blackcurrant",
+      "blueberry",
+      "cherry",
+      "coconut",
+      "date",
+      "fig",
+      "gooseberry",
+      "grape",
+      "grapefruit",
+      "kiwi",
+      "lemon",
+      "lime",
+      "mandarin",
+      "mango",
+      "melon",
+      "olive",
+      "orange",
+      "papaya",
+      "peach",
+      "pear",
+      "pineapple",
+      "plum",
+      "pomegranate",
+      "quince",
+      "raspberry",
+      "strawberry",
+      "watermelon"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.food/shards/grains-nuts-and-pulses",
+     "path": "k.food/shards/grains-nuts-and-pulses.sop",
+     "wires": 41,
+     "bytes": 5221,
+     "keys": [
+      "almond",
+      "barley",
+      "bean",
+      "bread",
+      "bread roll",
+      "cashew",
+      "chestnut",
+      "chickpea",
+      "corn",
+      "flour",
+      "hazelnut",
+      "lentil",
+      "noodles",
+      "oats",
+      "pasta",
+      "peanut",
+      "pecan",
+      "pistachio",
+      "rice",
+      "rye",
+      "soybean",
+      "spaghetti",
+      "toast",
+      "walnut",
+      "wheat"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.food/shards/other",
+     "path": "k.food/shards/other.sop",
+     "wires": 63,
+     "bytes": 8053,
+     "keys": [
+      "apple juice",
+      "basil",
+      "biscuit",
+      "cake",
+      "chocolate",
+      "cinnamon",
+      "coffee",
+      "doughnut",
+      "french fries",
+      "ginger",
+      "hamburger",
+      "honey",
+      "hot chocolate",
+      "hot dog",
+      "ice cream",
+      "jam",
+      "juice",
+      "ketchup",
+      "lemonade",
+      "maple syrup",
+      "marmalade",
+      "milkshake",
+      "mint",
+      "mustard",
+      "olive oil",
+      "omelette",
+      "orange juice",
+      "pancake",
+      "parsley",
+      "pepper",
+      "pie",
+      "pizza",
+      "popcorn",
+      "porridge",
+      "salad",
+      "salt",
+      "sandwich",
+      "soup",
+      "sugar",
+      "sunflower oil",
+      "tea",
+      "tofu",
+      "water"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.food/shards/vegetables",
+     "path": "k.food/shards/vegetables.sop",
+     "wires": 52,
+     "bytes": 7494,
+     "keys": [
+      "artichoke",
+      "asparagus",
+      "aubergine",
+      "beetroot",
+      "bell pepper",
+      "broccoli",
+      "cabbage",
+      "carrot",
+      "cauliflower",
+      "celery",
+      "chilli pepper",
+      "courgette",
+      "cucumber",
+      "garlic",
+      "green bean",
+      "kale",
+      "leek",
+      "lettuce",
+      "mushroom",
+      "onion",
+      "parsnip",
+      "pea",
+      "potato",
+      "pumpkin",
+      "radish",
+      "spinach",
+      "sweet potato",
+      "tomato",
+      "turnip"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.people",
+   "version": "1",
+   "schema": "k.people/schema.sop",
+   "exports": [
+    "k.people.kind",
+    "k.people.role"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.people/shards/kinds",
+     "path": "k.people/shards/kinds.sop",
+     "wires": 16,
+     "bytes": 2758,
+     "keys": [
+      "baby",
+      "boy",
+      "child",
+      "girl",
+      "grandfather",
+      "grandmother",
+      "man",
+      "woman"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.people/shards/roles-family",
+     "path": "k.people/shards/roles-family.sop",
+     "wires": 16,
+     "bytes": 2855,
+     "keys": [
+      "aunt",
+      "brother",
+      "father",
+      "grandfather",
+      "grandmother",
+      "mother",
+      "sister",
+      "uncle"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.people/shards/roles-jobs",
+     "path": "k.people/shards/roles-jobs.sop",
+     "wires": 72,
+     "bytes": 14715,
+     "keys": [
+      "astronaut",
+      "baker",
+      "builder",
+      "bus driver",
+      "carpenter",
+      "cleaner",
+      "cook",
+      "dancer",
+      "dentist",
+      "doctor",
+      "farmer",
+      "firefighter",
+      "fisherman",
+      "footballer",
+      "gardener",
+      "hairdresser",
+      "judge",
+      "librarian",
+      "mechanic",
+      "musician",
+      "nurse",
+      "painter",
+      "photographer",
+      "pilot",
+      "plumber",
+      "police officer",
+      "postman",
+      "sailor",
+      "scientist",
+      "shopkeeper",
+      "singer",
+      "soldier",
+      "swimmer",
+      "teacher",
+      "vet",
+      "waiter"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.people/shards/roles-story",
+     "path": "k.people/shards/roles-story.sop",
+     "wires": 32,
+     "bytes": 6430,
+     "keys": [
+      "clown",
+      "cowboy",
+      "detective",
+      "explorer",
+      "fairy",
+      "father christmas",
+      "king",
+      "knight",
+      "magician",
+      "pirate",
+      "prince",
+      "princess",
+      "queen",
+      "superhero",
+      "witch",
+      "wizard"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.space",
+   "version": "1",
+   "schema": "k.space/schema.sop",
+   "exports": [
+    "k.space.body",
+    "k.space.kind"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.space/shards/kinds",
+     "path": "k.space/shards/kinds.sop",
+     "wires": 16,
+     "bytes": 2131,
+     "keys": [
+      "asteroid",
+      "comet",
+      "dwarf planet",
+      "galaxy",
+      "moon",
+      "planet",
+      "solar system",
+      "star"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.space/shards/solar-system",
+     "path": "k.space/shards/solar-system.sop",
+     "wires": 24,
+     "bytes": 3575,
+     "keys": [
+      "callisto",
+      "deimos",
+      "earth",
+      "europa",
+      "ganymede",
+      "halley's comet",
+      "io",
+      "jupiter",
+      "mars",
+      "mercury",
+      "moon",
+      "neptune",
+      "phobos",
+      "pluto",
+      "saturn",
+      "sun",
+      "titan",
+      "triton",
+      "uranus",
+      "venus"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.space/shards/stars-and-galaxies",
+     "path": "k.space/shards/stars-and-galaxies.sop",
+     "wires": 8,
+     "bytes": 1075,
+     "keys": [
+      "andromeda galaxy",
+      "milky way",
+      "polaris",
+      "proxima centauri",
+      "sirius"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.time",
+   "version": "1",
+   "schema": "k.time/schema.sop",
+   "exports": [
+    "k.time.duration",
+    "k.time.month",
+    "k.time.season",
+    "k.time.weekday"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.time/shards/calendar",
+     "path": "k.time/shards/calendar.sop",
+     "wires": 68,
+     "bytes": 7587,
+     "keys": [
+      "april",
+      "august",
+      "autumn",
+      "century",
+      "common year",
+      "day",
+      "decade",
+      "december",
+      "february",
+      "fortnight",
+      "friday",
+      "hour",
+      "january",
+      "july",
+      "june",
+      "leap year",
+      "march",
+      "may",
+      "millennium",
+      "minute",
+      "monday",
+      "november",
+      "october",
+      "quarter",
+      "saturday",
+      "second",
+      "september",
+      "spring",
+      "summer",
+      "sunday",
+      "thursday",
+      "tuesday",
+      "wednesday",
+      "week",
+      "winter",
+      "year"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.units",
+   "version": "1",
+   "schema": "k.units/schema.sop",
+   "exports": [
+    "k.units.quantity",
+    "k.units.unit"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.units/shards/core",
+     "path": "k.units/shards/core.sop",
+     "wires": 96,
+     "bytes": 12580,
+     "keys": [
+      "acre",
+      "angle",
+      "area",
+      "centilitre",
+      "centimetre",
+      "cubic metre",
+      "day",
+      "decilitre",
+      "decimetre",
+      "degree",
+      "degree celsius",
+      "degree fahrenheit",
+      "foot",
+      "full turn",
+      "gallon",
+      "gram",
+      "hectare",
+      "hour",
+      "inch",
+      "kelvin",
+      "kilogram",
+      "kilometre",
+      "kilometre per hour",
+      "knot",
+      "length",
+      "litre",
+      "mass",
+      "metre",
+      "metre per second",
+      "mile",
+      "mile per hour",
+      "milligram",
+      "millilitre",
+      "millimetre",
+      "minute",
+      "ounce",
+      "pint",
+      "pound",
+      "right angle",
+      "second",
+      "speed",
+      "square centimetre",
+      "square kilometre",
+      "square metre",
+      "tablespoon",
+      "teaspoon",
+      "temperature",
+      "time",
+      "tonne",
+      "volume",
+      "week",
+      "yard"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.geo",
+   "version": "2",
+   "schema": "k.geo/schema.sop",
+   "exports": [
+    "k.geo.city",
+    "k.geo.continent",
+    "k.geo.country",
+    "k.geo.mountain",
+    "k.geo.range",
+    "k.geo.river"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.geo/shards/africa-borders",
+     "path": "k.geo/shards/africa-borders.sop",
+     "wires": 2,
+     "bytes": 674,
+     "keys": [
+      "egypt",
+      "kenya"
+     ],
+     "sources": [
+      "countries-5.1.0"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/africa",
+     "path": "k.geo/shards/africa.sop",
+     "wires": 2,
+     "bytes": 787,
+     "keys": [
+      "egypt",
+      "kenya"
+     ],
+     "sources": [
+      "natural-earth-5.1.2"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/asia-borders",
+     "path": "k.geo/shards/asia-borders.sop",
+     "wires": 2,
+     "bytes": 629,
+     "keys": [
+      "india",
+      "japan"
+     ],
+     "sources": [
+      "countries-5.1.0"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/asia",
+     "path": "k.geo/shards/asia.sop",
+     "wires": 4,
+     "bytes": 1149,
+     "keys": [
+      "india",
+      "japan",
+      "red",
+      "you"
+     ],
+     "sources": [
+      "natural-earth-5.1.2"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/europe-borders",
+     "path": "k.geo/shards/europe-borders.sop",
+     "wires": 3,
+     "bytes": 966,
+     "keys": [
+      "france",
+      "italy",
+      "spain"
+     ],
+     "sources": [
+      "countries-5.1.0"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/europe",
+     "path": "k.geo/shards/europe.sop",
+     "wires": 5,
+     "bytes": 1371,
+     "keys": [
+      "france",
+      "italy",
+      "spain",
+      "paris",
+      "london"
+     ],
+     "sources": [
+      "natural-earth-5.1.2"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/north-america-borders",
+     "path": "k.geo/shards/north-america-borders.sop",
+     "wires": 1,
+     "bytes": 473,
+     "keys": [
+      "canada"
+     ],
+     "sources": [
+      "countries-5.1.0"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/north-america",
+     "path": "k.geo/shards/north-america.sop",
+     "wires": 3,
+     "bytes": 942,
+     "keys": [
+      "canada",
+      "red",
+      "snake"
+     ],
+     "sources": [
+      "natural-earth-5.1.2"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/south-america-borders",
+     "path": "k.geo/shards/south-america-borders.sop",
+     "wires": 1,
+     "bytes": 612,
+     "keys": [
+      "brazil"
+     ],
+     "sources": [
+      "countries-5.1.0"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.geo/shards/south-america",
+     "path": "k.geo/shards/south-america.sop",
+     "wires": 1,
+     "bytes": 548,
+     "keys": [
+      "brazil"
+     ],
+     "sources": [
+      "natural-earth-5.1.2"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.words",
+   "version": "1",
+   "schema": "k.words/schema.sop",
+   "exports": [
+    "k.words.sense"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.words/shards/ma",
+     "path": "k.words/shards/ma.sop",
+     "wires": 19,
+     "bytes": 3663,
+     "keys": [
+      "mansion",
+      "make",
+      "march",
+      "mars",
+      "matrix",
+      "may"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/gl",
+     "path": "k.words/shards/gl.sop",
+     "wires": 1,
+     "bytes": 208,
+     "keys": [
+      "glasses"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sp",
+     "path": "k.words/shards/sp.sop",
+     "wires": 9,
+     "bytes": 1847,
+     "keys": [
+      "spectacles",
+      "space",
+      "spain",
+      "spider"
+     ],
+     "sources": [
+      "fixture-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/an",
+     "path": "k.words/shards/an.sop",
+     "wires": 4,
+     "bytes": 1130,
+     "keys": [
+      "ancient",
+      "animal",
+      "ant"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ap",
+     "path": "k.words/shards/ap.sop",
+     "wires": 2,
+     "bytes": 745,
+     "keys": [
+      "apple"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ar",
+     "path": "k.words/shards/ar.sop",
+     "wires": 6,
+     "bytes": 1440,
+     "keys": [
+      "are",
+      "arm"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ba",
+     "path": "k.words/shards/ba.sop",
+     "wires": 2,
+     "bytes": 800,
+     "keys": [
+      "banana"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/be",
+     "path": "k.words/shards/be.sop",
+     "wires": 2,
+     "bytes": 650,
+     "keys": [
+      "bee"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/bi",
+     "path": "k.words/shards/bi.sop",
+     "wires": 6,
+     "bytes": 1439,
+     "keys": [
+      "bicycle",
+      "bird"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/bo",
+     "path": "k.words/shards/bo.sop",
+     "wires": 14,
+     "bytes": 2920,
+     "keys": [
+      "board",
+      "boat",
+      "body",
+      "bones"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/br",
+     "path": "k.words/shards/br.sop",
+     "wires": 19,
+     "bytes": 4365,
+     "keys": [
+      "brain",
+      "brave",
+      "brazil",
+      "bread",
+      "bridge"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/bu",
+     "path": "k.words/shards/bu.sop",
+     "wires": 6,
+     "bytes": 1484,
+     "keys": [
+      "bus"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ca",
+     "path": "k.words/shards/ca.sop",
+     "wires": 38,
+     "bytes": 7837,
+     "keys": [
+      "cake",
+      "can",
+      "canada",
+      "capital",
+      "car",
+      "card",
+      "cards",
+      "carrot",
+      "castle",
+      "cat",
+      "catalog"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ch",
+     "path": "k.words/shards/ch.sop",
+     "wires": 9,
+     "bytes": 1958,
+     "keys": [
+      "chair",
+      "cheese"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/cl",
+     "path": "k.words/shards/cl.sop",
+     "wires": 2,
+     "bytes": 658,
+     "keys": [
+      "clock"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/co",
+     "path": "k.words/shards/co.sop",
+     "wires": 22,
+     "bytes": 4630,
+     "keys": [
+      "colour",
+      "come",
+      "comet",
+      "correction",
+      "country",
+      "cow",
+      "cows"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/cr",
+     "path": "k.words/shards/cr.sop",
+     "wires": 1,
+     "bytes": 554,
+     "keys": [
+      "crocodile"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/cu",
+     "path": "k.words/shards/cu.sop",
+     "wires": 6,
+     "bytes": 1172,
+     "keys": [
+      "cup"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/da",
+     "path": "k.words/shards/da.sop",
+     "wires": 4,
+     "bytes": 1022,
+     "keys": [
+      "day",
+      "days"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/de",
+     "path": "k.words/shards/de.sop",
+     "wires": 1,
+     "bytes": 477,
+     "keys": [
+      "december"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/do",
+     "path": "k.words/shards/do.sop",
+     "wires": 7,
+     "bytes": 1830,
+     "keys": [
+      "dog",
+      "door"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/du",
+     "path": "k.words/shards/du.sop",
+     "wires": 6,
+     "bytes": 1249,
+     "keys": [
+      "duck"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ea",
+     "path": "k.words/shards/ea.sop",
+     "wires": 11,
+     "bytes": 2195,
+     "keys": [
+      "ear",
+      "earth",
+      "eat"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/eg",
+     "path": "k.words/shards/eg.sop",
+     "wires": 7,
+     "bytes": 2011,
+     "keys": [
+      "egg",
+      "egypt"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ei",
+     "path": "k.words/shards/ei.sop",
+     "wires": 2,
+     "bytes": 600,
+     "keys": [
+      "eighth"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/el",
+     "path": "k.words/shards/el.sop",
+     "wires": 2,
+     "bytes": 617,
+     "keys": [
+      "elephant"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ev",
+     "path": "k.words/shards/ev.sop",
+     "wires": 1,
+     "bytes": 617,
+     "keys": [
+      "everest"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ey",
+     "path": "k.words/shards/ey.sop",
+     "wires": 4,
+     "bytes": 882,
+     "keys": [
+      "eye"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fi",
+     "path": "k.words/shards/fi.sop",
+     "wires": 11,
+     "bytes": 2316,
+     "keys": [
+      "fifth",
+      "first",
+      "fish"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fl",
+     "path": "k.words/shards/fl.sop",
+     "wires": 4,
+     "bytes": 1130,
+     "keys": [
+      "flower"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fo",
+     "path": "k.words/shards/fo.sop",
+     "wires": 9,
+     "bytes": 1906,
+     "keys": [
+      "food",
+      "foot"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/fr",
+     "path": "k.words/shards/fr.sop",
+     "wires": 16,
+     "bytes": 3001,
+     "keys": [
+      "france",
+      "free",
+      "friday",
+      "frog",
+      "fruit"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/gi",
+     "path": "k.words/shards/gi.sop",
+     "wires": 3,
+     "bytes": 786,
+     "keys": [
+      "giant"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/gr",
+     "path": "k.words/shards/gr.sop",
+     "wires": 2,
+     "bytes": 768,
+     "keys": [
+      "gram"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ha",
+     "path": "k.words/shards/ha.sop",
+     "wires": 9,
+     "bytes": 1904,
+     "keys": [
+      "hand",
+      "have"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/he",
+     "path": "k.words/shards/he.sop",
+     "wires": 3,
+     "bytes": 918,
+     "keys": [
+      "heart"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ho",
+     "path": "k.words/shards/ho.sop",
+     "wires": 12,
+     "bytes": 2350,
+     "keys": [
+      "horse",
+      "hour",
+      "house"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/in",
+     "path": "k.words/shards/in.sop",
+     "wires": 9,
+     "bytes": 2070,
+     "keys": [
+      "index",
+      "india",
+      "inside"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/is",
+     "path": "k.words/shards/is.sop",
+     "wires": 2,
+     "bytes": 591,
+     "keys": [
+      "island"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/it",
+     "path": "k.words/shards/it.sop",
+     "wires": 1,
+     "bytes": 618,
+     "keys": [
+      "italy"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ja",
+     "path": "k.words/shards/ja.sop",
+     "wires": 5,
+     "bytes": 1488,
+     "keys": [
+      "january",
+      "japan"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/jo",
+     "path": "k.words/shards/jo.sop",
+     "wires": 3,
+     "bytes": 747,
+     "keys": [
+      "journey"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ju",
+     "path": "k.words/shards/ju.sop",
+     "wires": 3,
+     "bytes": 982,
+     "keys": [
+      "july",
+      "jupiter"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ke",
+     "path": "k.words/shards/ke.sop",
+     "wires": 1,
+     "bytes": 630,
+     "keys": [
+      "kenya"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ki",
+     "path": "k.words/shards/ki.sop",
+     "wires": 7,
+     "bytes": 1501,
+     "keys": [
+      "kind",
+      "kite"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/kn",
+     "path": "k.words/shards/kn.sop",
+     "wires": 5,
+     "bytes": 1234,
+     "keys": [
+      "know",
+      "knowledge"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/la",
+     "path": "k.words/shards/la.sop",
+     "wires": 6,
+     "bytes": 1295,
+     "keys": [
+      "ladder",
+      "lamp"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/le",
+     "path": "k.words/shards/le.sop",
+     "wires": 4,
+     "bytes": 1099,
+     "keys": [
+      "leg",
+      "legs"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/li",
+     "path": "k.words/shards/li.sop",
+     "wires": 12,
+     "bytes": 2350,
+     "keys": [
+      "lighthouse",
+      "like",
+      "lion",
+      "live"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/lo",
+     "path": "k.words/shards/lo.sop",
+     "wires": 9,
+     "bytes": 2128,
+     "keys": [
+      "london",
+      "longer",
+      "look"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/me",
+     "path": "k.words/shards/me.sop",
+     "wires": 10,
+     "bytes": 2408,
+     "keys": [
+      "mean",
+      "mercury",
+      "metre"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/mi",
+     "path": "k.words/shards/mi.sop",
+     "wires": 13,
+     "bytes": 2933,
+     "keys": [
+      "mile",
+      "milk",
+      "minute",
+      "minutes"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/mo",
+     "path": "k.words/shards/mo.sop",
+     "wires": 15,
+     "bytes": 2783,
+     "keys": [
+      "monday",
+      "month",
+      "moon",
+      "mount"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ne",
+     "path": "k.words/shards/ne.sop",
+     "wires": 2,
+     "bytes": 752,
+     "keys": [
+      "neptune"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/no",
+     "path": "k.words/shards/no.sop",
+     "wires": 7,
+     "bytes": 1667,
+     "keys": [
+      "nose",
+      "november"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/oc",
+     "path": "k.words/shards/oc.sop",
+     "wires": 2,
+     "bytes": 647,
+     "keys": [
+      "octopus"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/on",
+     "path": "k.words/shards/on.sop",
+     "wires": 2,
+     "bytes": 622,
+     "keys": [
+      "one"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/op",
+     "path": "k.words/shards/op.sop",
+     "wires": 3,
+     "bytes": 925,
+     "keys": [
+      "opposite"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/or",
+     "path": "k.words/shards/or.sop",
+     "wires": 6,
+     "bytes": 1355,
+     "keys": [
+      "order"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ow",
+     "path": "k.words/shards/ow.sop",
+     "wires": 1,
+     "bytes": 541,
+     "keys": [
+      "owl"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pa",
+     "path": "k.words/shards/pa.sop",
+     "wires": 4,
+     "bytes": 1121,
+     "keys": [
+      "paris",
+      "parts"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pe",
+     "path": "k.words/shards/pe.sop",
+     "wires": 1,
+     "bytes": 521,
+     "keys": [
+      "penguin"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pi",
+     "path": "k.words/shards/pi.sop",
+     "wires": 1,
+     "bytes": 497,
+     "keys": [
+      "pizza"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/pl",
+     "path": "k.words/shards/pl.sop",
+     "wires": 18,
+     "bytes": 4016,
+     "keys": [
+      "plain",
+      "plane",
+      "planet",
+      "plant"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ra",
+     "path": "k.words/shards/ra.sop",
+     "wires": 4,
+     "bytes": 1059,
+     "keys": [
+      "rabbit"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/re",
+     "path": "k.words/shards/re.sop",
+     "wires": 3,
+     "bytes": 1026,
+     "keys": [
+      "red"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ri",
+     "path": "k.words/shards/ri.sop",
+     "wires": 6,
+     "bytes": 1518,
+     "keys": [
+      "rice",
+      "rings",
+      "river"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ro",
+     "path": "k.words/shards/ro.sop",
+     "wires": 13,
+     "bytes": 2775,
+     "keys": [
+      "robot",
+      "rocket",
+      "roof",
+      "rose"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ru",
+     "path": "k.words/shards/ru.sop",
+     "wires": 6,
+     "bytes": 1593,
+     "keys": [
+      "run"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sa",
+     "path": "k.words/shards/sa.sop",
+     "wires": 3,
+     "bytes": 993,
+     "keys": [
+      "sahara",
+      "saturn"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/se",
+     "path": "k.words/shards/se.sop",
+     "wires": 16,
+     "bytes": 3073,
+     "keys": [
+      "season",
+      "seed",
+      "september",
+      "seventh"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sh",
+     "path": "k.words/shards/sh.sop",
+     "wires": 12,
+     "bytes": 2565,
+     "keys": [
+      "shell",
+      "show"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sl",
+     "path": "k.words/shards/sl.sop",
+     "wires": 5,
+     "bytes": 1157,
+     "keys": [
+      "sleep"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/sn",
+     "path": "k.words/shards/sn.sop",
+     "wires": 7,
+     "bytes": 1524,
+     "keys": [
+      "snake",
+      "snowman"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/so",
+     "path": "k.words/shards/so.sop",
+     "wires": 10,
+     "bytes": 1840,
+     "keys": [
+      "sound",
+      "soup"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/st",
+     "path": "k.words/shards/st.sop",
+     "wires": 6,
+     "bytes": 1448,
+     "keys": [
+      "star"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/su",
+     "path": "k.words/shards/su.sop",
+     "wires": 7,
+     "bytes": 1635,
+     "keys": [
+      "sun",
+      "sunday"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ta",
+     "path": "k.words/shards/ta.sop",
+     "wires": 17,
+     "bytes": 3469,
+     "keys": [
+      "table",
+      "tail",
+      "talk"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/te",
+     "path": "k.words/shards/te.sop",
+     "wires": 8,
+     "bytes": 1930,
+     "keys": [
+      "teeth",
+      "tell",
+      "tent"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/th",
+     "path": "k.words/shards/th.sop",
+     "wires": 8,
+     "bytes": 1604,
+     "keys": [
+      "there",
+      "thing",
+      "things",
+      "third"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ti",
+     "path": "k.words/shards/ti.sop",
+     "wires": 6,
+     "bytes": 1357,
+     "keys": [
+      "time"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/to",
+     "path": "k.words/shards/to.sop",
+     "wires": 5,
+     "bytes": 1326,
+     "keys": [
+      "tomato",
+      "tooth"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/tr",
+     "path": "k.words/shards/tr.sop",
+     "wires": 12,
+     "bytes": 2777,
+     "keys": [
+      "train",
+      "tree"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/tu",
+     "path": "k.words/shards/tu.sop",
+     "wires": 1,
+     "bytes": 507,
+     "keys": [
+      "tulip"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/um",
+     "path": "k.words/shards/um.sop",
+     "wires": 3,
+     "bytes": 785,
+     "keys": [
+      "umbrella"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/un",
+     "path": "k.words/shards/un.sop",
+     "wires": 3,
+     "bytes": 713,
+     "keys": [
+      "undo"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ve",
+     "path": "k.words/shards/ve.sop",
+     "wires": 5,
+     "bytes": 1657,
+     "keys": [
+      "vegetable",
+      "venus"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/we",
+     "path": "k.words/shards/we.sop",
+     "wires": 4,
+     "bytes": 1024,
+     "keys": [
+      "wednesday",
+      "week"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/wh",
+     "path": "k.words/shards/wh.sop",
+     "wires": 7,
+     "bytes": 1648,
+     "keys": [
+      "whale",
+      "whisper",
+      "why"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/wi",
+     "path": "k.words/shards/wi.sop",
+     "wires": 3,
+     "bytes": 844,
+     "keys": [
+      "windows",
+      "winter"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/wo",
+     "path": "k.words/shards/wo.sop",
+     "wires": 7,
+     "bytes": 1450,
+     "keys": [
+      "word",
+      "words"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.words/shards/ye",
+     "path": "k.words/shards/ye.sop",
+     "wires": 3,
+     "bytes": 920,
+     "keys": [
+      "year"
+     ],
+     "sources": [
+      "wordnet-3.1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
+   "id": "k.scenes",
+   "version": "1",
+   "schema": "k.scenes/schema.sop",
+   "exports": [
+    "k.scenes.has",
+    "k.scenes.scene",
+    "k.scenes.thing"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.scenes/shards/scenes-nature",
+     "path": "k.scenes/shards/scenes-nature.sop",
+     "wires": 2,
+     "bytes": 1071,
+     "keys": [
+      "river",
+      "island"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/scenes-other",
+     "path": "k.scenes/shards/scenes-other.sop",
+     "wires": 2,
+     "bytes": 997,
+     "keys": [
+      "space",
+      "winter"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/scenes-town",
+     "path": "k.scenes/shards/scenes-town.sop",
+     "wires": 1,
+     "bytes": 915,
+     "keys": [
+      "castle"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-a",
+     "path": "k.scenes/shards/things-a.sop",
+     "wires": 2,
+     "bytes": 645,
+     "keys": [
+      "ant",
+      "apple"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-b",
+     "path": "k.scenes/shards/things-b.sop",
+     "wires": 8,
+     "bytes": 1309,
+     "keys": [
+      "banana",
+      "bee",
+      "bicycle",
+      "bird",
+      "boat",
+      "bread",
+      "bridge",
+      "bus"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-c",
+     "path": "k.scenes/shards/things-c.sop",
+     "wires": 13,
+     "bytes": 1901,
+     "keys": [
+      "cake",
+      "car",
+      "card",
+      "carrot",
+      "castle",
+      "cat",
+      "chair",
+      "cheese",
+      "clock",
+      "comet",
+      "cow",
+      "crocodile",
+      "cup"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-d",
+     "path": "k.scenes/shards/things-d.sop",
+     "wires": 3,
+     "bytes": 752,
+     "keys": [
+      "dog",
+      "door",
+      "duck"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-e",
+     "path": "k.scenes/shards/things-e.sop",
+     "wires": 3,
+     "bytes": 757,
+     "keys": [
+      "earth",
+      "egg",
+      "elephant"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-f",
+     "path": "k.scenes/shards/things-f.sop",
+     "wires": 3,
+     "bytes": 748,
+     "keys": [
+      "fish",
+      "flower",
+      "frog"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-h",
+     "path": "k.scenes/shards/things-h.sop",
+     "wires": 2,
+     "bytes": 639,
+     "keys": [
+      "horse",
+      "house"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-i",
+     "path": "k.scenes/shards/things-i.sop",
+     "wires": 1,
+     "bytes": 531,
+     "keys": [
+      "island"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-j",
+     "path": "k.scenes/shards/things-j.sop",
+     "wires": 1,
+     "bytes": 530,
+     "keys": [
+      "jupiter"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-k",
+     "path": "k.scenes/shards/things-k.sop",
+     "wires": 1,
+     "bytes": 526,
+     "keys": [
+      "kite"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-l",
+     "path": "k.scenes/shards/things-l.sop",
+     "wires": 4,
+     "bytes": 877,
+     "keys": [
+      "ladder",
+      "lamp",
+      "lighthouse",
+      "lion"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-m",
+     "path": "k.scenes/shards/things-m.sop",
+     "wires": 4,
+     "bytes": 857,
+     "keys": [
+      "mars",
+      "mercury",
+      "milk",
+      "moon"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-n",
+     "path": "k.scenes/shards/things-n.sop",
+     "wires": 1,
+     "bytes": 530,
+     "keys": [
+      "neptune"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-o",
+     "path": "k.scenes/shards/things-o.sop",
+     "wires": 2,
+     "bytes": 637,
+     "keys": [
+      "octopus",
+      "owl"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-p",
+     "path": "k.scenes/shards/things-p.sop",
+     "wires": 5,
+     "bytes": 980,
+     "keys": [
+      "penguin",
+      "pizza",
+      "plane",
+      "planet",
+      "plant"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-r",
+     "path": "k.scenes/shards/things-r.sop",
+     "wires": 7,
+     "bytes": 1205,
+     "keys": [
+      "rabbit",
+      "rice",
+      "river",
+      "robot",
+      "rocket",
+      "roof",
+      "rose"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-s",
+     "path": "k.scenes/shards/things-s.sop",
+     "wires": 8,
+     "bytes": 1298,
+     "keys": [
+      "saturn",
+      "shell",
+      "snake",
+      "snowman",
+      "soup",
+      "spider",
+      "star",
+      "sun"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-t",
+     "path": "k.scenes/shards/things-t.sop",
+     "wires": 6,
+     "bytes": 1089,
+     "keys": [
+      "table",
+      "tent",
+      "tomato",
+      "train",
+      "tree",
+      "tulip"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-u",
+     "path": "k.scenes/shards/things-u.sop",
+     "wires": 2,
+     "bytes": 654,
+     "keys": [
+      "uranus",
+      "umbrella"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-v",
+     "path": "k.scenes/shards/things-v.sop",
+     "wires": 1,
+     "bytes": 526,
+     "keys": [
+      "venus"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.scenes/shards/things-w",
+     "path": "k.scenes/shards/things-w.sop",
+     "wires": 1,
+     "bytes": 528,
+     "keys": [
+      "whale"
+     ],
+     "sources": [
+      "hand-core-1"
      ],
      "license": "CC0-1.0",
      "warnings": []

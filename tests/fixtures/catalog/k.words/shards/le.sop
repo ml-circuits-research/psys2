@@ -1,0 +1,9 @@
+# k.words/shards/le: noun and verb senses of the words from "le" to "lexington" (first letters "le").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.leg.noun.1 k.words.sense word=leg pos=noun n=1 gloss="a human limb; commonly used to refer to a whole limb but technically only the part of the limb between the knee and ankle" is_a=limb part_of=body core.source="wordnet 3.1"
+@k.words.leg.noun.2 k.words.sense word=leg pos=noun n=2 gloss="a structure in animals that is similar to a human leg and used for locomotion" is_a=limb core.source="wordnet 3.1"
+@k.words.leg.noun.3 k.words.sense word=leg pos=noun n=3 gloss="one of the supports for a piece of furniture" is_a=support part_of=table part_of=chair part_of=tripod part_of="spinning wheel" part_of="grand piano" part_of="hospital bed" part_of=cot part_of=four-poster core.source="wordnet 3.1"
+@k.words.legs.noun.1 k.words.sense word=legs pos=noun n=1 gloss="staying power" is_a=stamina core.source="wordnet 3.1"

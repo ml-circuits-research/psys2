@@ -5344,3 +5344,76 @@
     alt=undo_the_last_change
     alt=undo_the_last_step
     alt=go_back
+
+@phrase.lang.talk.wh core.phrase
+    doc="Question words that start a question about one fact of a thing (what colour is it, which animal is it)."
+    alt=what
+    alt=which
+
+@phrase.lang.talk.whatis core.phrase
+    doc="Lead-ins of what is X (the thing, or a fact of a thing, follows)."
+    alt=what_is
+    alt=what_are
+    alt=what_s
+    alt=whats
+
+@phrase.lang.talk.where core.phrase
+    doc="Lead-ins of a question about where a thing lives, grows or is found; the thing follows."
+    alt=where_does
+    alt=where_do
+    alt=where_can_i_find
+    alt=where_can_you_find
+    alt=where_would_i_find
+    alt=where_did
+
+@phrase.lang.talk.whereis core.phrase
+    doc="Lead-ins of where is X (a place or a thing)."
+    alt=where_is
+    alt=where_are
+    alt=where_s
+    alt=wheres
+
+@phrase.lang.talk.wheretail core.phrase
+    doc="Closing words of where does X live / grow / come from."
+    alt=live
+    alt=lives
+    alt=come_from
+    alt=comes_from
+    alt=grow
+    alt=grows
+    alt=sleep
+    alt=be_found
+    alt=found
+
+@phrase.lang.talk.nextto core.phrase
+    doc="Relation words of what is next to X (what borders it, what touches it)."
+    alt=next_to
+    alt=beside
+    alt=near
+    alt=bordering
+    alt=borders
+    alt=touching
+    alt=touches
+
+@phrase.lang.talk.isq core.phrase
+    doc="Lead-ins of a yes or no question about what a thing is (is a whale a fish)."
+    alt=is
+    alt=are
+
+@phrase.lang.talk.makeverb core.phrase
+    doc="Closing verbs of what sound / colour does X make / have."
+    alt=make
+    alt=makes
+    alt=have
+    alt=has
+    alt=use
+    alt=uses
+
+@phrase.lang.talk.inunit core.phrase
+    doc="Words between a unit and the thing that holds it (how many minutes are in an hour)."
+    alt=are_in
+    alt=is_in
+    alt=are_there_in
+    alt=fit_in
+    alt=make_up
+    alt=in

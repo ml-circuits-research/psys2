@@ -390,3 +390,128 @@
     priority=14
     example="Undo that."
     doc="Takes back the last change of a card or the last transfer of a card to another tab (one step)."
+
+@pat.talk.ask.noun core.pattern
+    canonical="What colour is a banana?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] {a:words(1)} [$lang.talk.isq] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
+    kind=request
+    tabOnly=true
+    priority=7
+    example="What colour is a tomato?"
+    doc="Frame: what A is X (colour, size, kind...). One slot of the thing, found through the words of the knowledge schemas; a small facts card."
+
+@pat.talk.ask.of core.pattern
+    canonical="What is the capital of France?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatis] [$lang.know.det]? {a:words(1)} of [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
+    kind=request
+    tabOnly=true
+    priority=8
+    example="What is a synonym of big?"
+    example="What is the opposite of hot?"
+    doc="Frame: what is the A of X (capital, synonym, opposite...). One slot of the thing, found through the words of the knowledge schemas."
+
+@pat.talk.ask.verb core.pattern
+    canonical="What does a duck eat?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatdoes] [$lang.know.det]? {o:words(3,noun)} {a:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
+    kind=request
+    tabOnly=true
+    priority=6
+    example="What does the heart do?"
+    example="What does ancient mean?"
+    doc="Frame: what does X A (eat, do, mean...). One slot of the thing, found through the words of the knowledge schemas."
+
+@pat.talk.ask.make core.pattern
+    canonical="What sound does a duck make?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] {a:words(1)} [$lang.know.aux] [$lang.know.det]? {o:words(3,noun)} [$lang.talk.makeverb] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
+    kind=request
+    tabOnly=true
+    priority=7
+    example="What colour does a frog have?"
+    doc="Frame: what A does X make or have. One slot of the thing."
+
+@pat.talk.ask.where core.pattern
+    canonical="Where does a cow live?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.where] [$lang.know.det]? {o:words(3,noun)} [$lang.talk.wheretail] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"where\""
+    kind=request
+    tabOnly=true
+    priority=8
+    example="Where do penguins live?"
+    example="Where does milk come from?"
+    doc="Frame: where does X live, grow or come from. The place slots of the thing."
+
+@pat.talk.ask.whereis core.pattern
+    canonical="Where is Paris?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whereis] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"where\""
+    kind=request
+    tabOnly=true
+    priority=6
+    example="Where is Mount Everest?"
+    doc="Frame: where is X. The place slots of the thing."
+
+@pat.talk.ask.next core.pattern
+    canonical="What is next to Brazil?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatis] [$lang.talk.nextto] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"neighbour\""
+    kind=request
+    tabOnly=true
+    priority=8
+    example="What is next to Italy?"
+    doc="Frame: what is next to X. The neighbour slot of the thing."
+
+@pat.talk.ask.nextwhich core.pattern
+    canonical="Which country is next to Spain?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] {c:words(1)} [$lang.talk.isq] [$lang.talk.nextto] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"neighbour\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="Which country is next to France?"
+    doc="Frame: which K is next to X. The neighbour slot of the thing."
+
+@pat.talk.isa core.pattern
+    canonical="Is a whale a fish?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.isq] [$lang.know.det]? {o:words(2,noun)} [a|an] {c:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.isa arg.o=\"{o}\" arg.c=\"{c}\""
+    kind=request
+    tabOnly=true
+    priority=5
+    example="Is a dog an animal?"
+    example="Is rice a plant?"
+    doc="Frame: is X a Y. Yes or no from the categories of X in the catalog (the kind slots of its records, their types, the is-a of its senses)."
+
+@pat.talk.count.in core.pattern
+    canonical="How many minutes are in an hour?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.count] {p:words(2)} [$lang.talk.inunit] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.count arg.o=\"{o}\" arg.p=\"{p}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="How many centimetres are in a metre?"
+    example="How many days are in a week?"
+    doc="Frame: how many P are in X. A unit of another unit (both with a factor and a quantity), or the count a duration holds."
+
+@pat.talk.ask.for core.pattern
+    canonical="What is a lighthouse for?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatis] [$lang.know.det]? {o:words(3,noun)} for [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"for\""
+    kind=request
+    tabOnly=true
+    priority=7
+    example="What are lungs for?"
+    doc="Frame: what is X for. The purpose slots of the thing (used for, does)."
+
+@pat.talk.has core.pattern
+    canonical="Does a spider have a tail?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.aux] [$lang.know.det]? {o:words(3,noun)} [$lang.know.have] [a|an|any]? {p:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.has arg.o=\"{o}\" arg.p=\"{p}\""
+    kind=request
+    tabOnly=true
+    priority=8
+    example="Do snakes have legs?"
+    doc="Frame: does X have a P. Yes with the count when the catalog or the picture says so, no when the count is zero, else what is not known."

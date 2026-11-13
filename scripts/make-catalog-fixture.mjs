@@ -2,7 +2,7 @@
 // Builds tests/fixtures/catalog/ (the small local copy of the knowledge catalog that tests read; tests never touch the network) from a checkout of the real catalog:
 //   node scripts/make-catalog-fixture.mjs <path to sop-knowledge-worlds/docs/worlds>
 // k.faces: every slot of the hand-written style keeps the variants the presets use plus the first two others; the other worlds are hand-sized samples in the same format.
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 const src = process.argv[2];
 if (!src) { console.error('usage: node scripts/make-catalog-fixture.mjs <catalog docs/worlds folder>'); process.exit(1); }
@@ -48,6 +48,50 @@ put('k.demo/shards/fruits', [`@k.demo.apple k.demo.fruit name=apple colour=red t
 const lay = readFileSync(path.join(src, 'k.layouts/shards/layouts.sop'), 'utf8').split('\n').filter((l) => l.startsWith('@') && (/ layout=face /.test(l) || /^@k\.layouts\.layout\.face /.test(l)));
 const layKeys = ['face', ...lay.map((l) => / name=("[^"]*"|\S+)/.exec(l)?.[1]?.replace(/"/g, '').toLowerCase()).filter(Boolean)];
 put('k.layouts/shards/layouts', `# fixture: the face layout of k.layouts\n\n${lay.join('\n')}\n`, layKeys, ['hand-core-1']);
+// The worlds Talk reads generically (E-T1): the small ones whole (animals, body, commonsense, feelings, food, people, space, time, units); the big ones (k.words, k.geo, k.scenes) keep only the
+// wires that name a word the Talk experiment asks about (scripts/exp-talk.mjs). Each world's schema.sop is copied too: its core.word wires say which words mean which slot.
+const wanted = new Set([...readFileSync(path.join(import.meta.dirname, 'exp-talk.mjs'), 'utf8').matchAll(/'([^'\n]{2,40})'/g)].flatMap((m) => m[1].toLowerCase().replace(/[^a-z' -]/g, ' ').split(/\s+/)).filter((w) => w.length > 2));
+const realIndex = new Map(real.worlds.map((w) => [w.id, w]));
+const wireKeys = (line) => [...line.matchAll(/ (?:name|word)=("[^"]*"|\S+)/g)].map((m) => m[1].replace(/"/g, '').toLowerCase());
+const putMerged = (id, text, keys, sources) => {   // a shard id that a hand-sized sample above already uses is extended, not replaced
+  const old = files[`${id}.sop`];
+  if (!old) return put(id, text, keys, sources);
+  const at = shards.findIndex((x) => x.id === id);
+  files[`${id}.sop`] = `${old.trimEnd()}\n${text.split('\n').filter((l) => l.startsWith('@')).join('\n')}\n`;
+  shards[at].keys = [...new Set([...shards[at].keys, ...keys])];
+  shards[at].wires = files[`${id}.sop`].split('\n').filter((l) => l.startsWith('@')).length; shards[at].bytes = files[`${id}.sop`].length;
+};
+const extra = [];
+for (const id of ['k.animals', 'k.body', 'k.commonsense', 'k.feelings', 'k.food', 'k.people', 'k.space', 'k.time', 'k.units', 'k.geo', 'k.words', 'k.scenes']) {
+  const rw = realIndex.get(id);
+  if (!rw) continue;
+  files[`${id}/schema.sop`] = readFileSync(path.join(src, id, 'schema.sop'), 'utf8');
+  const big = ['k.words', 'k.geo', 'k.scenes'].includes(id);
+  for (const sh of rw.shards) {
+    let text = readFileSync(path.join(src, `${sh.id}.sop`), 'utf8');
+    let keys = sh.keys;
+    if (big) {
+      const lines = text.split('\n').filter((l) => l.startsWith('@') && wireKeys(l).some((k) => wanted.has(k)));
+      if (!lines.length) continue;
+      text = `${text.split('\n').filter((l) => l.startsWith('# ')).join('\n')}\n\n${lines.join('\n')}\n`;
+      keys = [...new Set(lines.flatMap(wireKeys))];
+    }
+    putMerged(sh.id, text, keys, sh.sources);
+  }
+  extra.push({ id, version: rw.version, schema: rw.schema, exports: rw.exports, depends: rw.depends ?? [] });
+}
+// the drawable things the Talk experiment asks about: the small local picture catalog of this repository (knowledge/k.objects), shard by shard
+{
+  const KN = path.join(import.meta.dirname, '../knowledge/k.objects');
+  const vocab = JSON.parse(readFileSync(path.join(KN, 'vocab.json'), 'utf8'));
+  const keysOf = {};
+  for (const [w, ids] of Object.entries(vocab)) for (const id of ids) (keysOf[id] ??= []).push(w);
+  for (const f of readdirSync(path.join(KN, 'shards'))) {
+    const id = `k.objects/shards/${f.replace(/\.sop$/, '')}`;
+    const own = files[`${id}.sop`] ? (t) => t.split('\n').filter((l) => !/^@k\.objects\.house[. ]/.test(l)).join('\n') : (t) => t;   // the hand-sized house of the sample above stays the only house
+    putMerged(id, own(readFileSync(path.join(KN, 'shards', f), 'utf8')), keysOf[id] ?? [], ['hand-core-1']);
+  }
+}
 const byWorld = (id) => shards.filter((s) => s.id.startsWith(`${id}/`));
 const worlds = [
   { id: 'k.faces', version: '1', schema: 'k.faces/schema.sop', exports: faces.exports, depends: [], shards: byWorld('k.faces') },
@@ -55,6 +99,7 @@ const worlds = [
   { id: 'k.words', version: '1', schema: 'k.words/schema.sop', exports: ['k.words.sense'], depends: [], shards: byWorld('k.words') },
   { id: 'k.layouts', version: '1', schema: 'k.layouts/schema.sop', exports: ['k.layouts.layout', 'k.layouts.slot'], depends: [], shards: byWorld('k.layouts') },
   { id: 'k.demo', version: '1', schema: 'k.demo/schema.sop', exports: ['k.demo.fruit'], depends: [], shards: byWorld('k.demo') },
+  ...extra.map((e) => ({ ...e, shards: byWorld(e.id) })),
 ];
 const vocab = {};
 for (const w of worlds) for (const s of w.shards) for (const k of s.keys) (vocab[k.toLowerCase()] ??= []).push(s.id);

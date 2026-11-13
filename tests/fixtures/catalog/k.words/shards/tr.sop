@@ -1,0 +1,17 @@
+# k.words/shards/tr: noun and verb senses of the words from "trace" to "try" (first letters "tr").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.train.noun.1 k.words.sense word=train pos=noun n=1 gloss="public transport provided by a line of railway cars coupled together and drawn by a locomotive" synonym="railroad train" is_a="public transport" core.source="wordnet 3.1"
+@k.words.train.noun.2 k.words.sense word=train pos=noun n=2 gloss="a sequentially ordered set of things or events or ideas in which each successive member is related to the preceding" synonym=string is_a=series core.source="wordnet 3.1"
+@k.words.train.noun.3 k.words.sense word=train pos=noun n=3 gloss="a procession (of wagons or mules or camels) traveling together in single file" synonym=caravan synonym="wagon train" is_a=procession core.source="wordnet 3.1"
+@k.words.train.verb.1 k.words.sense word=train pos=verb n=1 gloss="create by training and teaching" synonym=develop synonym=prepare synonym=educate is_a=teach core.source="wordnet 3.1"
+@k.words.train.verb.2 k.words.sense word=train pos=verb n=2 gloss="undergo training or instruction in preparation for a particular role, function, or profession" synonym=prepare is_a=learn core.source="wordnet 3.1"
+@k.words.train.verb.3 k.words.sense word=train pos=verb n=3 gloss="develop (a child's or animal's) behavior by instruction and practice; especially to teach self-control" synonym=discipline synonym=check synonym=condition is_a=develop core.source="wordnet 3.1"
+@k.words.tree.noun.1 k.words.sense word=tree pos=noun n=1 gloss="a tall perennial woody plant having a main trunk and branches forming a distinct elevated crown; includes both gymnosperms and angiosperms" is_a="woody plant" core.source="wordnet 3.1"
+@k.words.tree.noun.2 k.words.sense word=tree pos=noun n=2 gloss="a figure that branches from a single root" synonym="tree diagram" is_a="plane figure" core.source="wordnet 3.1"
+@k.words.tree.noun.3 k.words.sense word=Tree pos=noun n=3 gloss="English actor and theatrical producer noted for his lavish productions of Shakespeare (1853-1917)" synonym="Sir Herbert Beerbohm Tree" instance_of=actor instance_of="theatrical producer" core.source="wordnet 3.1"
+@k.words.tree.verb.1 k.words.sense word=tree pos=verb n=1 gloss="force a person or an animal into a position from which he cannot escape" synonym=corner is_a=steer core.source="wordnet 3.1"
+@k.words.tree.verb.2 k.words.sense word=tree pos=verb n=2 gloss="plant with trees" is_a=plant core.source="wordnet 3.1"
+@k.words.tree.verb.3 k.words.sense word=tree pos=verb n=3 gloss="chase an animal up a tree" is_a=chase core.source="wordnet 3.1"

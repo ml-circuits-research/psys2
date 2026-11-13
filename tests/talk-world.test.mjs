@@ -1,6 +1,7 @@
 // TALK tab (spec 18): the world `talk` (question frames, cards, topics, how do you know, honest scope), the card renderers and the board layout.
 // A small in-memory catalog stands in for the real one: no network.
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
@@ -26,6 +27,17 @@ const FILES = {
   'k.words/shards/sp.sop': '@k.words.spider.noun.1 k.words.sense word=spider pos=noun n=1 gloss="a predatory arachnid with eight legs" core.source="t"',
   'k.commonsense/shards/core.sop': ['@k.commonsense.elephant k.commonsense.thing name=elephant size=huge at=savanna', '@k.commonsense.mouse k.commonsense.thing name=mouse size=small at=house'].join('\n'),
 };
+// the ordered series (months, weekdays, seasons, planets) are read from the catalog: the time and space worlds of the fixture catalog (index, schemas, shards) join the in-memory files
+{
+  const dir = new URL('./fixtures/catalog/', import.meta.url);
+  const index = JSON.parse(readFileSync(new URL('index.json', dir), 'utf8'));
+  const worlds = index.worlds.filter((w) => ['k.time', 'k.space'].includes(w.id));
+  FILES['index.json'] = JSON.stringify({ worlds });
+  const vocab = JSON.parse(FILES['vocab.json']);
+  for (const w of worlds) for (const sh of w.shards) for (const k of sh.keys) (vocab[k.toLowerCase()] ??= []).push(sh.id);
+  FILES['vocab.json'] = JSON.stringify(vocab);
+  for (const w of worlds) { FILES[w.schema] = readFileSync(new URL(w.schema, dir), 'utf8'); for (const sh of w.shards) FILES[sh.path] = readFileSync(new URL(sh.path, dir), 'utf8'); }
+}
 const source = { text: async (p) => FILES[p] ?? null };
 
 let engine;
@@ -56,7 +68,7 @@ test('with the catalog: counts, bars, no fact', async () => {
   assert.equal(r.text, 'A spider has 8 legs.');
   assert.deepEqual(s.state('talk').cards[0].data, { n: 8, label: 'legs', from: 'gloss' });
   r = await s.send('Which is bigger, a mouse or an elephant?');
-  assert.equal(r.text, 'An elephant is bigger than a mouse.');
+  assert.match(r.text, /^An elephant is bigger than a mouse/);
   const bars = s.state('talk').cards.at(-1);
   assert.equal(bars.kind, 'bars');
   assert.equal(bars.data.big, 1);
@@ -71,7 +83,7 @@ test('with the catalog: counts, bars, no fact', async () => {
 });
 
 test('lines: months, seasons, days, planets and what comes next', async () => {
-  engine.setKnowledge(null);
+  engine.setKnowledge(createFacts({ source }));
   const s = session();
   let r = await s.send('What are the seasons?');
   assert.match(r.text, /Spring, Summer, Autumn and Winter/);
@@ -204,7 +216,7 @@ test('E-T1/E-T3 fixes: "and a X?" keeps one article and reaches the topic, a bar
 });
 
 test('E-T3 fixes: "and before it?" and "and the seasons?" on a line, "no, the other one" after a comparison', async () => {
-  engine.setKnowledge(null);
+  engine.setKnowledge(createFacts({ source }));
   const s = session();
   await s.send('What comes after Mars?');
   let r = await s.send('and before it?');
@@ -213,18 +225,18 @@ test('E-T3 fixes: "and before it?" and "and the seasons?" on a line, "no, the ot
   assert.match(r.text, /Spring, Summer, Autumn and Winter/);
   await s.send('Is Earth bigger than Mars?');
   r = await s.send('no, the other one');
-  assert.match(r.text, /^(?:Mars|Earth) is about [\d,]+ km across\.$/);
+  assert.match(r.text, /^(?:Mars|Earth) is a space body/);
   r = await s.send('no, the other one');
-  assert.match(r.text, /^(?:Mars|Earth) is about/);
+  assert.match(r.text, /^(?:Mars|Earth) is a space body/);
 });
 
 test('avatar reactions (host hook): found is happy, not found is sad, a big number is surprising', async () => {
-  engine.setKnowledge(null);
+  engine.setKnowledge(createFacts({ source }));
   const s = session();
   const m = async (q) => { const r = await s.send(q); return mood(r, r.text); };
   assert.equal(await m('What comes after Mars?'), 'smile');
   assert.equal(await m('What is a blorp?'), null);
-  assert.equal(await m('Is Jupiter bigger than Mars?'), 'surprised');
+  assert.equal(await m('Is Jupiter bigger than Mars?'), 'smile', 'a comparison of two planets is a plain answer now: the number of km across was a table of this tab');
   assert.equal(tab.mood, mood);
   assert.equal(mood({ statuses: [] }, 'hello'), null);
 });

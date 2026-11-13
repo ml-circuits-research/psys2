@@ -1,0 +1,17 @@
+# k.words/shards/li: noun and verb senses of the words from "li" to "lizard" (first letters "li").
+# sources: wordnet 3.1 (Princeton WordNet 3.1; words chosen with frequency-words 2018, the 20,000 most frequent)
+# license: WordNet-3.0
+# script: tools/import/wordnet.mjs
+
+@k.words.lighthouse.noun.1 k.words.sense word=lighthouse pos=noun n=1 gloss="a tower with a light that gives warning of shoals to passing ships" synonym=beacon synonym="beacon light" synonym=pharos is_a=tower core.source="wordnet 3.1"
+@k.words.like.noun.1 k.words.sense word=like pos=noun n=1 gloss="a similar kind" synonym="the like" synonym="the likes of" is_a=kind core.source="wordnet 3.1"
+@k.words.like.noun.2 k.words.sense word=like pos=noun n=2 gloss="a kind of person" synonym=ilk is_a=kind core.source="wordnet 3.1"
+@k.words.like.verb.1 k.words.sense word=like pos=verb n=1 gloss="prefer or wish to do something" synonym=wish synonym=care is_a=desire core.source="wordnet 3.1"
+@k.words.like.verb.2 k.words.sense word=like pos=verb n=2 gloss="find enjoyable or agreeable" core.source="wordnet 3.1"
+@k.words.like.verb.3 k.words.sense word=like pos=verb n=3 gloss="be fond of" core.source="wordnet 3.1"
+@k.words.lion.noun.1 k.words.sense word=lion pos=noun n=1 gloss="large gregarious predatory feline of Africa and India having a tawny coat with a shaggy mane in the male" synonym="king of beasts" synonym="Panthera leo" is_a="big cat" core.source="wordnet 3.1"
+@k.words.lion.noun.2 k.words.sense word=lion pos=noun n=2 gloss="a celebrity who is lionized (much sought after)" synonym="social lion" is_a=celebrity core.source="wordnet 3.1"
+@k.words.lion.noun.3 k.words.sense word=Lion pos=noun n=3 gloss="(astrology) a person who is born while the sun is in Leo" synonym=Leo is_a=person core.source="wordnet 3.1"
+@k.words.live.verb.1 k.words.sense word=live pos=verb n=1 gloss="be an inhabitant of or reside in" synonym=populate synonym=dwell synonym=inhabit is_a=be core.source="wordnet 3.1"
+@k.words.live.verb.2 k.words.sense word=live pos=verb n=2 gloss="lead a certain kind of life; live in a certain style" core.source="wordnet 3.1"
+@k.words.live.verb.3 k.words.sense word=live pos=verb n=3 gloss="continue to live and avoid dying" synonym=survive synonym=last synonym="live on" synonym=go synonym=endure synonym="hold up" synonym="hold out" core.source="wordnet 3.1"

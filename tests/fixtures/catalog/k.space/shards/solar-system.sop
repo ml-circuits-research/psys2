@@ -1,0 +1,30 @@
+# k.space/shards/solar-system: the Sun, the 8 planets, a dwarf planet, 9 named moons and a comet (20 things): what they orbit, order, size, moons, rings, the length of their year.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.space.body.Sun k.space.body name=Sun kind=star in="Milky Way" drawing=sun core.source="hand-core 1"
+@k.space.body.Mercury k.space.body name=Mercury kind=planet orbits=Sun order=1 size=small size_rank=8 group=rocky moons=0 rings=false orbit_years=0.24 colour=grey drawing=Mercury core.source="hand-core 1"
+@k.space.body.Venus k.space.body name=Venus kind=planet orbits=Sun order=2 size=medium size_rank=6 group=rocky moons=0 rings=false orbit_years=0.62 drawing=Venus core.source="hand-core 1"
+@k.space.body.Earth k.space.body name=Earth kind=planet orbits=Sun order=3 size=medium size_rank=5 group=rocky moons=1 rings=false orbit_years=1 colour=blue drawing=Earth core.source="hand-core 1"
+@k.space.body.Mars k.space.body name=Mars kind=planet orbits=Sun order=4 size=small size_rank=7 group=rocky moons=2 rings=false orbit_years=1.88 colour=red drawing=Mars core.source="hand-core 1"
+@k.space.body.Jupiter k.space.body name=Jupiter kind=planet orbits=Sun order=5 size=huge size_rank=1 group=gas moons_about=95 rings=true orbit_years=12 drawing=Jupiter core.source="hand-core 1"
+@k.space.body.Saturn k.space.body name=Saturn kind=planet orbits=Sun order=6 size=huge size_rank=2 group=gas moons_about=270 rings=true orbit_years=29 drawing=Saturn core.source="hand-core 1"
+@k.space.body.Uranus k.space.body name=Uranus kind=planet orbits=Sun order=7 size=large size_rank=3 group=ice moons_about=28 rings=true orbit_years=84 colour=blue drawing=Uranus core.source="hand-core 1"
+@k.space.body.Neptune k.space.body name=Neptune kind=planet orbits=Sun order=8 size=large size_rank=4 group=ice moons_about=16 rings=true orbit_years=165 colour=blue drawing=Neptune core.source="hand-core 1"
+@k.space.body.Pluto k.space.body name=Pluto kind="dwarf planet" orbits=Sun moons=5 rings=false orbit_years=248 drawing=Pluto core.source="hand-core 1"
+@k.space.body.Moon k.space.body name=Moon kind=moon orbits=Earth colour=grey drawing=moon core.source="hand-core 1"
+@k.space.body.Phobos k.space.body name=Phobos kind=moon orbits=Mars core.source="hand-core 1"
+@k.space.body.Deimos k.space.body name=Deimos kind=moon orbits=Mars core.source="hand-core 1"
+@k.space.body.Io k.space.body name=Io kind=moon orbits=Jupiter core.source="hand-core 1"
+@k.space.body.Europa k.space.body name=Europa kind=moon orbits=Jupiter core.source="hand-core 1"
+@k.space.body.Ganymede k.space.body name=Ganymede kind=moon orbits=Jupiter core.source="hand-core 1"
+@k.space.body.Callisto k.space.body name=Callisto kind=moon orbits=Jupiter core.source="hand-core 1"
+@k.space.body.Titan k.space.body name=Titan kind=moon orbits=Saturn core.source="hand-core 1"
+@k.space.body.Triton k.space.body name=Triton kind=moon orbits=Neptune core.source="hand-core 1"
+@k.space.body.Halley_s_Comet k.space.body name="Halley's Comet" kind=comet orbits=Sun orbit_years=76 drawing=comet core.source="hand-core 1"
+
+@k.space.word.Sun core.word text=sun means=Sun of=k.space.body.name core.source="hand-core 1"
+@k.space.word.Earth core.word text="Blue Planet" text=earth text=world means=Earth of=k.space.body.name core.source="hand-core 1"
+@k.space.word.Mars core.word text="Red Planet" means=Mars of=k.space.body.name core.source="hand-core 1"
+@k.space.word.Moon core.word text=moon means=Moon of=k.space.body.name core.source="hand-core 1"
