@@ -247,7 +247,7 @@ export function generate(schema, ns, actsUrl = '../acts/acts.mjs') {
   const ownOps = own.map(([fn, action]) => `@op.${ns}.${fn} core.operation\n    impl=${fn}\n    semantics=action\n    action=${action}\n    doc=${JSON.stringify(`An operation of this world that is not an act (own.mjs: ${fn}).`)}\n`);
   const ops = [note, ...ownOps, ...used.map((a) => `@op.${ns}.${a} core.operation\n    impl=${a}\n    semantics=action\n    action=${ns}.${a}\n    doc=${JSON.stringify(`The act '${a}' (spec 21), applied by the generic executor to this world's schema.`)}\n`)].join('\n');
   const tpl = [note, ...used.map((a) => `@tpl.${ns}.${a} core.template\n    for=action.${ns}.${a}\n    text="{note}"\n`)].join('\n');
-  const opsMjs = `// GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.\nimport { createExecutor, deserializeSchema } from '${actsUrl}';\n${schema.hooks ? `import { hooks } from './${schema.hooks}';\n` : ''}${own.length ? `export * from './own.mjs';\n` : ''}const SCHEMA = ${JSON.stringify(serializeSchema(schema))};\nconst X = createExecutor(deserializeSchema(SCHEMA)${schema.hooks ? ', hooks' : ''});\n${used.map((a) => `export const ${a} = (ctx, args = {}) => X.operation(ctx, '${a}', args);`).join('\n')}\nexport const interceptInput = (ctx, text) => X.interceptInput(ctx, text);\nexport const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);\nexport const executor = X;\n`;
+  const opsMjs = `// GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.\nimport { createExecutor, deserializeSchema } from '${actsUrl}';\n${schema.hooks ? `import { hooks } from './${schema.hooks}';\n` : ''}${own.length ? `export * from './own.mjs';\n` : ''}const SCHEMA = ${JSON.stringify(serializeSchema(schema))};\nconst X = createExecutor(deserializeSchema(SCHEMA)${schema.hooks ? ', hooks' : ''});\n${used.map((a) => `export const ${a} = (ctx, args = {}) => X.operation(ctx, '${a}', args);`).join('\n')}\nexport const interceptInput = (ctx, text) => X.interceptInput(ctx, text);\nexport const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);\nexport const referents = (ctx) => X.referents(ctx);\nexport const executor = X;\n`;
   return { 'lexicon.sop': lex, 'patterns.sop': pats.join('\n'), 'operations.sop': ops, 'templates.sop': tpl, 'ops.mjs': opsMjs };
 }
 export const serializeSchema = (s) => ({ ...s, acts: [...s.acts] });
@@ -305,6 +305,23 @@ export function createExecutor(schema, hooks = {}) {
   const attrsOf = (kind) => Object.values(schema.attrs).filter((a) => a.of.includes(kind.name));
   const defaultOf = (kind, a) => { const d = know.attrDefault?.(kind.name, a.name); if (d !== undefined) return d; if (a.def !== undefined) return a.type === 'number' ? Number(a.def) : a.type === 'bool' ? yes(a.def) : a.def; return a.type === 'number' ? (a.min ?? 0) : a.type === 'enum' ? a.values[0] : undefined; };
 
+  /**
+   * The focus of the dialogue (hook `focus`, else the state's own; M1): when the world's own focus holds nothing, the thing the dialogue module last named in this
+   * world (words, `ctx.dialogueFocus()`) is resolved against the items: "it" after a turn of another tab still means the last thing talked about.
+   */
+  const live = { dlg: null, busy: false };
+  const focusOf = (st) => {
+    const own = hooks.focus?.(st) ?? st.focus;
+    if (own.ids?.length || !live.dlg || live.busy) return own;
+    live.busy = true;
+    try {
+      const d = live.dlg();
+      const r = d?.thing ? resolveOne(st, d.thing, { allowEmpty: true }) : null;
+      if (r?.ids?.length) return { ids: r.ids, place: own.place ?? null, act: own.act ?? null };
+    } catch { /* the world's own focus stands */ } finally { live.busy = false; }
+    return own;
+  };
+
   function init(state) {
     state.items ??= []; state.counter ??= {}; state.history ??= []; state.future ??= []; state.saved ??= {}; state.log ??= []; state.links ??= []; state.groups ??= {}; state.focus ??= { ids: [], place: null, act: null }; state.outbox ??= [];
     return state;
@@ -342,7 +359,7 @@ export function createExecutor(schema, hooks = {}) {
   function resolveOne(st, text, { allowEmpty = false } = {}) {
     const t = toks(text).filter((w) => !DET.has(w) || PRONOUN.has(w));
     if (!t.length) return allowEmpty ? { ids: [] } : { missing: true };
-    if (t.length === 1 && PRONOUN.has(t[0])) { const f = (hooks.focus?.(st) ?? st.focus).ids.filter((id) => st.items.some((i) => i.id === id)); return f.length ? { ids: f, source: 'focus', guess: `I took "${t[0]}" to mean ${labels(f.map((id) => st.items.find((i) => i.id === id)))}, the thing we just talked about` } : { missing: true }; }
+    if (t.length === 1 && PRONOUN.has(t[0])) { const f = focusOf(st).ids.filter((id) => st.items.some((i) => i.id === id)); return f.length ? { ids: f, source: 'focus', guess: `I took "${t[0]}" to mean ${labels(f.map((id) => st.items.find((i) => i.id === id)))}, the thing we just talked about` } : { missing: true }; }
     let all = false, ord = null, n = null; const rest = [];
     for (const w of t) {
       if (w === 'all' || w === 'every' || w === 'each' || w === 'both' || w === 'everything') all = true;
@@ -440,7 +457,7 @@ export function createExecutor(schema, hooks = {}) {
     const guesses = [];
     let r = req.thing ? resolve(st, req.thing) : { missing: true };
     if (r.missing) {
-      const f = (hooks.focus?.(st) ?? st.focus).ids.map((id) => st.items.find((i) => i.id === id)).filter(Boolean);
+      const f = focusOf(st).ids.map((id) => st.items.find((i) => i.id === id)).filter(Boolean);
       if (f.length && !req.thing) { r = { ids: f.map((i) => i.id), source: 'focus' }; guesses.push(`I took ${labels(f)}, the thing we just talked about`); }
       else if (st.items.length === 1) { r = { ids: [st.items[0].id], source: 'scene' }; guesses.push(`I took ${label(st.items[0], true)}, the only thing here`); }
       else if (req.thing) return { reply: say(`${st.items.length ? `Which one do you mean by "${req.thing}"?` : `There is nothing here yet.`} Say it again with a name or a number${st.items.length ? `: ${joinAnd(st.items.slice(0, 4).map((i) => label(i)))}` : ''}.`, { fallback: 'question' }) };
@@ -573,7 +590,7 @@ export function createExecutor(schema, hooks = {}) {
     const t = target(st, req, { act: 'place' }); if (t.reply) return t.reply;
     const items = t.items, guesses = [...t.guesses], diff = emptyDiff();
     let ptxt = req.place; let c = null;
-    if (!ptxt) { const f = hooks.focus?.(st)?.place ?? st.focus.place; if (f) { c = st.items.find((i) => i.id === f); if (c) guesses.push(`I used ${label(c)}, the place we just talked about`); } }
+    if (!ptxt) { const f = focusOf(st).place; if (f) { c = st.items.find((i) => i.id === f); if (c) guesses.push(`I used ${label(c)}, the place we just talked about`); } }
     if (!c) {
       if (!ptxt) return ask(st, `Where should I put ${labels(items)}?`, { type: 'role', role: 'place', req: { ...req, thing: items.map((i) => label(i)).join(' and ') }, guess: `put ${labels(items)}` });
       const r = resolve(st, ptxt);
@@ -716,7 +733,7 @@ export function createExecutor(schema, hooks = {}) {
     for (let len = nouns.length; len >= 1 && !ids; len--) for (let at = 0; at + len <= nouns.length && !ids; at++) { budget.tick('acts.why'); const r = resolve(st, nouns.slice(at, at + len).join(' ')); if (r.ids?.length && r.source === 'said') ids = r.ids; }
     const left = words.filter((w) => isVal(w) && !kindByWord(w));
     let it = ids ? st.items.find((i) => i.id === ids[0]) : null;
-    if (!it && left.length) { const f = (hooks.focus?.(st) ?? st.focus).ids.map((id) => st.items.find((i) => i.id === id)).find(Boolean); if (f) it = f; }   // no thing named: the focus ("why is it blue")
+    if (!it && left.length) { const f = focusOf(st).ids.map((id) => st.items.find((i) => i.id === id)).find(Boolean); if (f) it = f; }   // no thing named: the focus ("why is it blue")
     const attrHit = Object.values(schema.attrs).find((a) => left.some((w) => same(w, a.name) || a.words.includes(w) || valueOf(a, w) !== undefined && a.type !== 'text' && a.type !== 'number'));
     if (!it) return say(`I do not know what "${req.rest}" is about. ${st.last ? `The last thing I did: ${strip(st.last.reply)}, because ${st.last.text ? `you said "${st.last.text}"` : 'you asked'}.` : 'I have not done anything yet.'}`);
     if (attrHit && it.attrs[attrHit.name] !== undefined) {
@@ -769,6 +786,7 @@ export function createExecutor(schema, hooks = {}) {
   // ---- the engine's door ----
   function operation(ctx, act, args = {}) {
     const st = ctx.state;
+    live.dlg = ctx.dialogueFocus ?? null;
     if (st.inputMode === 'confirm') { st.pending = null; st.inputMode = null; }   // a new request cancels an open question
     const req = { act, ...args };
     if (args.amount != null) req.amount = args.amount;
@@ -808,5 +826,11 @@ export function createExecutor(schema, hooks = {}) {
   }
   /** What the engine's hook outOfScope gets: the world's own reader first (hooks.unread(ctx, text) -> a reply string), else the graded last resort. */
   function outOfScope(ctx, text) { const u = hooks.unread?.(ctx, text); return typeof u === 'string' && u ? { say: u } : lastResort(ctx.state, text); }
-  return { run, operation, interceptInput, lastResort, outOfScope, init, resolve, labels, schema };
+  /** What a person can point at (the discourse hook `referents`, M1): the items, the focused ones salient. */
+  function referents(ctx) {
+    const st = init(ctx.state);
+    const sal = new Set(st.focus.ids);
+    return st.items.map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
+  }
+  return { run, operation, interceptInput, lastResort, outOfScope, init, resolve, labels, schema, referents };
 }

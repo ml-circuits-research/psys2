@@ -241,6 +241,12 @@ export class Discourse {
         const seg = hit.res.segments[0];
         const swallowed = Object.values(seg.match.slots ?? {}).some((sl) => (sl.class === 'rest') || (sl.class === 'words' && sl.span[0] < cand.end && sl.span[1] > cand.start && !cand.wild));
         if (swallowed || seg.match.patternId === 'unknown') { this.dialog.isession.form.restore(hit.snap); continue; }
+        // M1: the world must be able to carry the completion out; a reading it would only answer "missing" or refuse ("I can not find a cat in your picture") is not the one meant
+        // (a request is continued by a request, a question by a question; a request whose world cannot do the completion is not continued by it)
+        if (frame.kind === 'request') {
+          if (seg.match.kind && seg.match.kind !== 'request') { this.dialog.isession.form.restore(hit.snap); continue; }
+          try { const st = this.dialog._dryStatuses(hit.res.segments); if (st.length && !st.every((x) => x === 'supported')) { this.dialog.isession.form.restore(hit.snap); continue; } } catch { /* no dry run: take it */ }
+        }
         return this._finish(hit, { kind: 'ellipsis', how: 'replace', slot: cand.slot, slotClass: cand.cls, of: frame.text, fragment: text, rewritten: cand.text, world: frame.world, frameTurn: frame.turn });
       }
     }
@@ -273,6 +279,8 @@ export class Discourse {
       for (const s of [...frame.slots].filter((x) => !['number', 'words', 'rest', 'recent'].includes(x.class)).sort((a, b) => b.start - a.start)) {
         const prev = wordsOf(frame.text.slice(0, s.start)).at(-1)?.toLowerCase();
         const np = DETERMINERS.has(prev) && prev !== 'my' ? `${prev} ${s.text}` : s.text;
+        // a referent the sentence already says is no referent of the pronoun ("why is it blue" is not "why is blue blue": the colour slot of the last frame is a modifier, not a thing)
+        if (wordsOf(text).some((w) => w.toLowerCase() === s.text.toLowerCase())) continue;
         const cand = String(text).slice(0, m.index) + np + String(text).slice(m.index + m[0].length);
         const hit = await this._try(frame.world, cand, opts);
         if (!hit) continue;
