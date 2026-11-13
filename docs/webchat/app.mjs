@@ -1399,7 +1399,7 @@ export async function mountPsys2(element, options = {}) {
       sel.id = `p2-f-${x.id}`;
       return h('div', { class: 'p2-field p2-opt', 'data-experiment': x.id }, h('label', { for: sel.id }, x.label), sel, h('small', { class: 'p2-opt-what' }, `Last measured ${x.date}: ${x.last}`));
     });
-    return h('div', { class: 'p2-field', 'data-option': 'experiments' }, h('strong', {}, o.label), h('small', { class: 'p2-opt-what' }, o.what), ...rows);
+    return h('div', { class: 'p2-field', 'data-option': 'experiments' }, h('strong', {}, o.label), h('small', { class: 'p2-opt-what' }, o.what), h('small', { class: 'p2-opt-when' }, `When: ${o.when}`), ...rows);
   }
   function developerBody() {
     return [

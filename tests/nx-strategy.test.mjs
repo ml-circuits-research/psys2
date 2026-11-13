@@ -32,17 +32,16 @@ const send = (nx, text, extra = {}) => engine.createSession({ formalizer: 'encod
 const GOOD = 'add milk to my list';
 const NONSENSE = 'flurble wibble zzz qux';
 
-test('the default strategy is one constant, hybrid; unknown values fall back to it', () => {
+test('the default strategy is one constant, rules (2026-11-14); unknown values fall back to it', () => {
   assert.equal(DEFAULT_NX_STRATEGY, 'rules');
-  assert.equal(RUNTIME_DEFAULTS.nxStrategy, 'hybrid');
-  assert.equal(DEFAULT_SETTINGS.nxStrategy, 'hybrid');
+  assert.equal(RUNTIME_DEFAULTS.nxStrategy, 'rules');
+  assert.equal(DEFAULT_SETTINGS.nxStrategy, 'rules');
   for (const v of ['hybrid', 'neural', 'rules']) assert.equal(normalizeNxStrategy(v), v);
-  assert.equal(normalizeNxStrategy('x'), 'hybrid');
+  assert.equal(normalizeNxStrategy('x'), 'rules');
   assert.equal(sessionOptions({ ...RUNTIME_DEFAULTS, nxStrategy: 'neural' }).nx, 'neural');
-  assert.equal(migrateSettings({ nxStrategy: 'bogus', settingsVersion: 2 }).settings.nxStrategy, 'hybrid');
-  assert.equal(migrateSettings({ nxStrategy: 'rules', settingsVersion: 2 }).settings.nxStrategy, 'hybrid', 'SETTINGS-COHERENT: an older saved strategy is reset to hybrid once');
-  assert.equal(migrateSettings({ reading: 'rules', settingsVersion: 5 }).settings.nxStrategy, 'rules', 'an explicit v5 choice of the one reading select is kept');
-  assert.equal(migrateSettings(null).settings.nxStrategy, 'hybrid');
+  assert.equal(migrateSettings({ nxStrategy: 'bogus', settingsVersion: 2 }).settings.nxStrategy, 'rules');
+  assert.equal(migrateSettings({ nxStrategy: 'neural', settingsVersion: 2 }).settings.nxStrategy, 'rules', 'an older saved strategy is reset to rules (2026-11-14)');
+    assert.equal(migrateSettings(null).settings.nxStrategy, 'rules');
 });
 
 test('the gates are the NX7 ones: hybrid tau_op 0.99, tau_frame 0.9, negation guard; neural keeps the negation guard', () => {

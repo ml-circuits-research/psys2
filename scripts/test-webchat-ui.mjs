@@ -63,7 +63,7 @@ async function settingsFor(name, viewport, o) {
     check(`${tag}: six tabs in order`, JSON.stringify(dlg.tabs) === JSON.stringify(SETTINGS_TABS), dlg.tabs.join(','));
     check(`${tag}: focus is inside, the page behind is inert`, dlg.focusIn && dlg.inertChat);
     // every tab renders its controls
-    const expect = { reading: ['#p2-f-reading', 'input[type=checkbox]'], languages: ['#p2-f-language', '#p2-f-translation', '#p2-f-languageHint', '#p2-f-voice', '#p2-f-rate', 'input[type=checkbox]'], privacy: ['.p2-plog-list', '.p2-plog-actions', 'select[aria-label="Filter phrases"]', 'input[type=checkbox]'], models: ['.p2-model', '.p2-btn-text', '[data-card=translation]'], developer: ['input[type=checkbox]'], about: ['a[data-source-link=about]', '.p2-credits li'] };
+    const expect = { reading: ['#p2-c-helperModel', 'input[type=checkbox]'], languages: ['#p2-f-language', '#p2-f-translation', '#p2-f-languageHint', '#p2-f-voice', '#p2-f-rate', 'input[type=checkbox]'], privacy: ['.p2-plog-list', '.p2-plog-actions', 'select[aria-label="Filter phrases"]', 'input[type=checkbox]'], models: ['.p2-model', '.p2-btn-text', '[data-card=translation]'], developer: ['input[type=checkbox]'], about: ['a[data-source-link=about]', '.p2-credits li'] };
     for (const t of SETTINGS_TABS) {
       await pg.click(`#p2-st-${t}`);
       await sleep(150);
@@ -98,15 +98,13 @@ async function settingsFor(name, viewport, o) {
     await pg.select('#p2-f-translation', 'rules'); await sleep(60);
     check(`${tag}: translation saves`, (await saved(pg)).translation === 'rules');
     await pg.click('#p2-st-reading');
-    // SETTINGS-COHERENT 2: one select, Hybrid by default, no Formalizer / Reading strategy pair
-    const rd = await pg.evaluate(() => ({ one: !!document.querySelector('#p2-f-reading'), old: !!document.querySelector('#p2-f-formalizer, #p2-f-reading-strategy'), label: document.querySelector('label[for=p2-f-reading]')?.textContent, values: [...document.querySelectorAll('#p2-f-reading option')].map((o) => o.value), shown: document.querySelector('#p2-f-reading')?.value, text: document.querySelector('.p2-modal-body').innerText, labels: [...document.querySelectorAll('.p2-modal-body label')].map((l) => l.textContent.trim()) }));
-    check(`${tag}: one "How I read your messages" select (hybrid | model | rules), the saved choice is shown, no Formalizer or Reading strategy`, rd.one && !rd.old && rd.label === 'How I read your messages' && rd.values.join() === 'hybrid,model,rules' && rd.shown === (await saved(pg)).reading && /Hybrid \(default\)/.test(rd.text) && !rd.labels.some((l) => /^(Formalizer|Reading strategy)$/.test(l)), JSON.stringify({ one: rd.one, old: rd.old, label: rd.label, shown: rd.shown, hy: /Hybrid \(default\)/.test(rd.text), labels: rd.labels.slice(0, 4) }));
-    await pg.select('#p2-f-reading', 'rules'); await sleep(60);
-    check(`${tag}: rules only saves and reaches the session`, (await saved(pg)).reading === 'rules' && (await saved(pg)).formalizer === 'rules' && (await pg.evaluate(() => window.psys2.session.formalizer ?? window.psys2.session.settings?.formalizer ?? 'rules')) === 'rules');
-    await pg.select('#p2-f-reading', 'model'); await sleep(60);
-    check(`${tag}: model first saves (encoder + neural)`, (await saved(pg)).reading === 'model' && (await saved(pg)).nxStrategy === 'neural' && (await saved(pg)).formalizer === 'encoder');
-    await pg.select('#p2-f-reading', 'hybrid'); await sleep(60);
-    check(`${tag}: hybrid saves (encoder + hybrid)`, (await saved(pg)).reading === 'hybrid' && (await saved(pg)).nxStrategy === 'hybrid');
+    // defaults by the numbers (2026-11-14): no who-reads-first select; one helper-model switch (on by default), the garbled-sentence download is off
+    const rd = await pg.evaluate(() => ({ none: !document.querySelector('#p2-f-reading, #p2-f-formalizer, #p2-f-reading-strategy'), helper: document.querySelector('#p2-c-helperModel')?.checked, label: document.querySelector('label[for=p2-c-helperModel], #p2-c-helperModel')?.parentElement?.textContent ?? '', garbled: document.querySelector('#p2-c-normalizer')?.checked }));
+    check(`${tag}: Reading has the helper-model switch (on), no "who reads first" select, the garbled-sentence download is off`, rd.none && rd.helper === true && /Use the helper model for typos and long sentences/.test(rd.label) && rd.garbled === false, JSON.stringify(rd).slice(0, 160));
+    await pg.click('#p2-c-helperModel'); await sleep(60);
+    check(`${tag}: helper model off saves and reaches the session (rules)`, (await saved(pg)).helperModel === false && (await saved(pg)).formalizer === 'rules' && (await saved(pg)).nxStrategy === 'rules');
+    await pg.click('#p2-c-helperModel'); await sleep(60);
+    check(`${tag}: helper model on saves (encoder, rules read)`, (await saved(pg)).helperModel === true && (await saved(pg)).formalizer === 'encoder' && (await saved(pg)).nxStrategy === 'rules');
     // SETTINGS-COHERENT 5: every option says what it does and when; no internal name in a label
     const noteProblems = [];
     for (const t of ['reading', 'languages', 'privacy', 'developer']) {
@@ -120,8 +118,8 @@ async function settingsFor(name, viewport, o) {
     check(`${tag}: the wake word option names the app and the English words only`, /PSys2/.test(wake) && /robot/.test(wake) && !/robotule|asistent|calculator/i.test(wake), wake.replace(/\s+/g, ' ').slice(0, 160));
     // SETTINGS-COHERENT 6: Developer carries the failed experiment with its numbers
     await pg.click('#p2-st-developer'); await sleep(80);
-    const dev = await pg.evaluate(() => document.querySelector('[data-option=editHead]')?.innerText ?? '');
-    check(`${tag}: Developer shows "edit head" off with its measured numbers`, /3 recovered|recovers 3/.test(dev) && /7 misled|misleads 7/.test(dev), dev.replace(/\s+/g, ' ').slice(0, 120));
+    const dev = await pg.evaluate(() => document.querySelector('[data-option=experiments]')?.innerText ?? '');
+    check(`${tag}: Developer shows one Experiments list, each with its last numbers and date, and no edit head`, /Last measured 2026-11-13/.test(dev) && !/reword a part/.test(dev), dev.replace(/\s+/g, ' ').slice(0, 120));
     // SETTINGS-COHERENT 1: the history uses the whole height of its panel (list bottom reaches the buttons, list at least half of the panel)
     await pg.click('#p2-st-privacy'); await sleep(150);
     const hist = await pg.evaluate(() => { const b = document.querySelector('.p2-modal-body').getBoundingClientRect(), l = document.querySelector('.p2-plog-list').getBoundingClientRect(), a = document.querySelector('.p2-plog-actions').getBoundingClientRect(); return { body: [Math.round(b.top), Math.round(b.bottom)], list: [Math.round(l.top), Math.round(l.bottom)], actions: [Math.round(a.top), Math.round(a.bottom)], h: Math.round(l.height), bh: Math.round(b.height) }; });
@@ -188,8 +186,8 @@ async function settingsFor(name, viewport, o) {
     const f = await openChat({ ...o, throttle: 1, viewport, hash: '#settings/reading', settings: { __raw: raw } });
     try {
       await waitModal(f.pg, true);
-      const v = await f.pg.$eval('#p2-f-reading', (x) => x.value).catch(() => null);
-      check(`${tag}: ${label}: How I read your messages shows Hybrid`, v === 'hybrid', String(v));
+      const v = await f.pg.$eval('#p2-c-helperModel', (x) => x.checked).catch(() => null);
+      check(`${tag}: ${label}: the helper-model switch is on`, v === true, String(v));
     } finally { await f.close(); }
   }
 }

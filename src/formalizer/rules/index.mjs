@@ -284,9 +284,10 @@ const JOINER_WORDS = new Set([',', ';', 'and', 'then', 'also', 'but']);
 export function cardCuts(tokens, starters) {
   const cuts = [];
   for (let i = 1; i < tokens.length; i++) {
+    budget.tick('index.cardCuts');
     if (!JOINER_WORDS.has(tokens[i].lower)) continue;
     let j = i;
-    while (j < tokens.length && JOINER_WORDS.has(tokens[j].lower)) j++;
+    while (j < tokens.length && JOINER_WORDS.has(tokens[j].lower)) { budget.tick('index.cardCuts'); j++; }
     const head = tokens[j];
     if (head && head.kind === 'word') {
       const w = head.alt ?? head.lower;
@@ -873,8 +874,8 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     for (let k = 0; k + 1 < bounds.length; k++) {
       budget.tick('rules.cut');
       let piece = tokens.slice(bounds[k], bounds[k + 1]);
-      while (piece.length && JOINER_WORDS.has(piece[piece.length - 1].lower)) piece = piece.slice(0, -1);
-      while (piece.length && JOINER_WORDS.has(piece[0].lower)) piece = piece.slice(1);
+      while (piece.length && JOINER_WORDS.has(piece[piece.length - 1].lower)) { budget.tick('rules.cut'); piece = piece.slice(0, -1); }
+      while (piece.length && JOINER_WORDS.has(piece[0].lower)) { budget.tick('rules.cut'); piece = piece.slice(1); }
       if (!piece.some(isContent)) continue;
       const lead = piece.find(isContent);
       const sub = { ...s, tokens: piece, span: [piece[0].start, piece[piece.length - 1].end], isQuestion: k === bounds.length - 2 ? s.isQuestion : QUESTION_WORDS.has(lead.lower) };
