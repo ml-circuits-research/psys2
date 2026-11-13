@@ -1,0 +1,425 @@
+{
+ "size": "minilm6",
+ "base": "nreimers/MiniLM-L6-H384-uncased",
+ "layers": 6,
+ "params_m": 22.723996,
+ "epochs": 6,
+ "bs": 256,
+ "lr": 0.00015,
+ "train_rows": 224980,
+ "train_seconds": 329.3317680358887,
+ "log": [
+  {
+   "epoch": 1,
+   "loss": 0.6082220584921225,
+   "dev_act": 0.9888,
+   "dev_f1": 0.9898394757409968,
+   "elapsed_s": 60.323100566864014
+  },
+  {
+   "epoch": 2,
+   "loss": 0.037661387181954206,
+   "dev_act": 0.992,
+   "dev_f1": 0.9933933933933934,
+   "elapsed_s": 116.77589631080627
+  },
+  {
+   "epoch": 3,
+   "loss": 0.021392461408588685,
+   "dev_act": 0.9934,
+   "dev_f1": 0.9948945882635594,
+   "elapsed_s": 172.83508777618408
+  },
+  {
+   "epoch": 4,
+   "loss": 0.015583392938035323,
+   "dev_act": 0.9934,
+   "dev_f1": 0.9951354273016636,
+   "elapsed_s": 228.36572337150574
+  },
+  {
+   "epoch": 5,
+   "loss": 0.01183191539647653,
+   "dev_act": 0.9938,
+   "dev_f1": 0.996036512130675,
+   "elapsed_s": 287.35687255859375
+  },
+  {
+   "epoch": 6,
+   "loss": 0.00926913658357771,
+   "dev_act": 0.9944,
+   "dev_f1": 0.9967575357271526,
+   "elapsed_s": 329.1660830974579
+  }
+ ],
+ "acts": [
+  "ask",
+  "change",
+  "connect",
+  "copy",
+  "group",
+  "load",
+  "make",
+  "pick",
+  "place",
+  "redo",
+  "remove",
+  "save",
+  "send",
+  "undo",
+  "none"
+ ],
+ "tags": [
+  "O",
+  "B-thing",
+  "I-thing",
+  "B-set",
+  "I-set",
+  "B-attribute",
+  "I-attribute",
+  "B-value",
+  "I-value",
+  "B-place",
+  "I-place",
+  "B-amount",
+  "I-amount"
+ ],
+ "gpu_bf16": {
+  "dev": {
+   "n": 5000,
+   "act_acc": 0.9944,
+   "span_f1": 0.9967575357271526,
+   "sentence_exact": 0.995,
+   "role_f1": {
+    "thing": 0.9962853849109773,
+    "set": 0.9864986498649865,
+    "attribute": 1.0,
+    "value": 0.9982940975776186,
+    "place": 0.9995376791493297,
+    "amount": 0.9940652818991098
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 133,
+     "act_acc": 0.9924812030075187
+    },
+    "synth.*": {
+     "n": 4432,
+     "act_acc": 0.9948104693140795
+    },
+    "plan.seating": {
+     "n": 143,
+     "act_acc": 0.9790209790209791
+    },
+    "plan.timeline": {
+     "n": 159,
+     "act_acc": 1.0
+    },
+    "test.seating": {
+     "n": 133,
+     "act_acc": 0.9924812030075187
+    }
+   }
+  },
+  "test-seen": {
+   "n": 6016,
+   "act_acc": 0.9950132978723404,
+   "span_f1": 0.997421351211965,
+   "sentence_exact": 0.9960106382978723,
+   "role_f1": {
+    "thing": 0.9972070159758686,
+    "set": 0.9885877318116976,
+    "attribute": 1.0,
+    "value": 0.9991608391608392,
+    "place": 0.9975767366720517,
+    "amount": 1.0
+   },
+   "by_world": {
+    "plan.seating": {
+     "n": 94,
+     "act_acc": 0.9787234042553191
+    },
+    "plan.timeline": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "art.draw": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "test.seating": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "synth.*": {
+     "n": 5640,
+     "act_acc": 0.9950354609929078
+    }
+   }
+  },
+  "test-held": {
+   "n": 5844,
+   "act_acc": 0.9859685147159479,
+   "span_f1": 0.9645140664961637,
+   "sentence_exact": 0.9392539356605065,
+   "role_f1": {
+    "thing": 0.9572904707233065,
+    "set": 0.8753086419753087,
+    "attribute": 0.9961117002474372,
+    "value": 0.9870279619486884,
+    "place": 0.9753547423450336,
+    "amount": 0.9962546816479401
+   },
+   "by_world": {
+    "diagram.sketch": {
+     "n": 3844,
+     "act_acc": 0.9843912591050988
+    },
+    "ui.avatar": {
+     "n": 2000,
+     "act_acc": 0.989
+    }
+   }
+  }
+ },
+ "real": {
+  "test-seen": {
+   "pieces": 219,
+   "messages": 186,
+   "act_acc": 0.8036529680365296,
+   "act_acc_on_accepted": 0.8125,
+   "accepted_pieces": 80,
+   "span_f1": 0.6532663316582915,
+   "none_pieces": 139,
+   "none_precision": 0.9487179487179487,
+   "none_recall": 0.7985611510791367,
+   "message_agreement": 0.7795698924731183,
+   "by_act": {
+    "change": {
+     "n": 11,
+     "acc": 0.8181818181818182
+    },
+    "make": {
+     "n": 46,
+     "acc": 0.8043478260869565
+    },
+    "none": {
+     "n": 139,
+     "acc": 0.7985611510791367
+    },
+    "pick": {
+     "n": 1,
+     "acc": 1.0
+    },
+    "place": {
+     "n": 18,
+     "acc": 0.7777777777777778
+    },
+    "remove": {
+     "n": 2,
+     "acc": 1.0
+    },
+    "save": {
+     "n": 1,
+     "acc": 1.0
+    },
+    "send": {
+     "n": 1,
+     "acc": 1.0
+    }
+   }
+  },
+  "test-held": {
+   "pieces": 189,
+   "messages": 166,
+   "act_acc": 0.5925925925925926,
+   "act_acc_on_accepted": 0.6304347826086957,
+   "accepted_pieces": 92,
+   "span_f1": 0.5882352941176471,
+   "none_pieces": 97,
+   "none_precision": 0.7941176470588235,
+   "none_recall": 0.5567010309278351,
+   "message_agreement": 0.536144578313253,
+   "by_act": {
+    "change": {
+     "n": 9,
+     "acc": 0.8888888888888888
+    },
+    "connect": {
+     "n": 14,
+     "acc": 1.0
+    },
+    "make": {
+     "n": 59,
+     "acc": 0.4915254237288136
+    },
+    "none": {
+     "n": 97,
+     "acc": 0.5567010309278351
+    },
+    "remove": {
+     "n": 7,
+     "acc": 1.0
+    },
+    "undo": {
+     "n": 3,
+     "acc": 0.0
+    }
+   }
+  }
+ },
+ "real_int8_weights": {
+  "test-seen": {
+   "pieces": 219,
+   "messages": 186,
+   "act_acc": 0.7990867579908676,
+   "act_acc_on_accepted": 0.8125,
+   "accepted_pieces": 80,
+   "span_f1": 0.6767676767676768,
+   "none_pieces": 139,
+   "none_precision": 0.9482758620689655,
+   "none_recall": 0.7913669064748201,
+   "message_agreement": 0.7741935483870968,
+   "by_act": {
+    "change": {
+     "n": 11,
+     "acc": 0.8181818181818182
+    },
+    "make": {
+     "n": 46,
+     "acc": 0.8043478260869565
+    },
+    "none": {
+     "n": 139,
+     "acc": 0.7913669064748201
+    },
+    "pick": {
+     "n": 1,
+     "acc": 1.0
+    },
+    "place": {
+     "n": 18,
+     "acc": 0.7777777777777778
+    },
+    "remove": {
+     "n": 2,
+     "acc": 1.0
+    },
+    "save": {
+     "n": 1,
+     "acc": 1.0
+    },
+    "send": {
+     "n": 1,
+     "acc": 1.0
+    }
+   }
+  },
+  "test-held": {
+   "pieces": 189,
+   "messages": 166,
+   "act_acc": 0.582010582010582,
+   "act_acc_on_accepted": 0.6304347826086957,
+   "accepted_pieces": 92,
+   "span_f1": 0.5882352941176471,
+   "none_pieces": 97,
+   "none_precision": 0.7878787878787878,
+   "none_recall": 0.5360824742268041,
+   "message_agreement": 0.5240963855421686,
+   "by_act": {
+    "change": {
+     "n": 9,
+     "acc": 0.8888888888888888
+    },
+    "connect": {
+     "n": 14,
+     "acc": 1.0
+    },
+    "make": {
+     "n": 59,
+     "acc": 0.4915254237288136
+    },
+    "none": {
+     "n": 97,
+     "acc": 0.5360824742268041
+    },
+    "remove": {
+     "n": 7,
+     "acc": 1.0
+    },
+    "undo": {
+     "n": 3,
+     "acc": 0.0
+    }
+   }
+  }
+ },
+ "real_train_pieces": 874,
+ "real_rep": 20,
+ "gpu_int8_weights": {
+  "test-seen": {
+   "n": 6016,
+   "act_acc": 0.9951795212765957,
+   "span_f1": 0.9973184818481848,
+   "sentence_exact": 0.995844414893617,
+   "role_f1": {
+    "thing": 0.9970956210902592,
+    "set": 0.9885877318116976,
+    "attribute": 1.0,
+    "value": 0.9991608391608392,
+    "place": 0.9971740008074284,
+    "amount": 1.0
+   },
+   "by_world": {
+    "plan.seating": {
+     "n": 94,
+     "act_acc": 0.9787234042553191
+    },
+    "plan.timeline": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "art.draw": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "test.seating": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "synth.*": {
+     "n": 5640,
+     "act_acc": 0.9952127659574468
+    }
+   }
+  },
+  "test-held": {
+   "n": 5844,
+   "act_acc": 0.9859685147159479,
+   "span_f1": 0.9644150862987428,
+   "sentence_exact": 0.9394250513347022,
+   "role_f1": {
+    "thing": 0.9571904051417423,
+    "set": 0.8753086419753087,
+    "attribute": 0.9964639321074965,
+    "value": 0.9867435158501441,
+    "place": 0.9746268656716418,
+    "amount": 0.9962546816479401
+   },
+   "by_world": {
+    "diagram.sketch": {
+     "n": 3844,
+     "act_acc": 0.9843912591050988
+    },
+    "ui.avatar": {
+     "n": 2000,
+     "act_acc": 0.989
+    }
+   }
+  }
+ },
+ "onnx": {
+  "fp32_mb": 90.431781,
+  "int8_mb": 22.999687
+ }
+}

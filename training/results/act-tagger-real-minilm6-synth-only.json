@@ -1,0 +1,425 @@
+{
+ "size": "minilm6",
+ "base": "nreimers/MiniLM-L6-H384-uncased",
+ "layers": 6,
+ "params_m": 22.723996,
+ "epochs": 6,
+ "bs": 256,
+ "lr": 0.00015,
+ "train_rows": 207500,
+ "train_seconds": 308.7097885608673,
+ "log": [
+  {
+   "epoch": 1,
+   "loss": 0.5672469575546047,
+   "dev_act": 0.9898,
+   "dev_f1": 0.9909899086977415,
+   "elapsed_s": 52.50065040588379
+  },
+  {
+   "epoch": 2,
+   "loss": 0.034341557872390925,
+   "dev_act": 0.9892,
+   "dev_f1": 0.9935762742390587,
+   "elapsed_s": 102.91598010063171
+  },
+  {
+   "epoch": 3,
+   "loss": 0.021229924077429935,
+   "dev_act": 0.9932,
+   "dev_f1": 0.9947757160871915,
+   "elapsed_s": 153.25262069702148
+  },
+  {
+   "epoch": 4,
+   "loss": 0.015569146998880061,
+   "dev_act": 0.9916,
+   "dev_f1": 0.995434338579839,
+   "elapsed_s": 204.76563334465027
+  },
+  {
+   "epoch": 5,
+   "loss": 0.012185650959906069,
+   "dev_act": 0.9942,
+   "dev_f1": 0.9960374639769453,
+   "elapsed_s": 255.07467818260193
+  },
+  {
+   "epoch": 6,
+   "loss": 0.010070528563326764,
+   "dev_act": 0.9942,
+   "dev_f1": 0.9963369963369964,
+   "elapsed_s": 308.5339148044586
+  }
+ ],
+ "acts": [
+  "ask",
+  "change",
+  "connect",
+  "copy",
+  "group",
+  "load",
+  "make",
+  "pick",
+  "place",
+  "redo",
+  "remove",
+  "save",
+  "send",
+  "undo",
+  "none"
+ ],
+ "tags": [
+  "O",
+  "B-thing",
+  "I-thing",
+  "B-set",
+  "I-set",
+  "B-attribute",
+  "I-attribute",
+  "B-value",
+  "I-value",
+  "B-place",
+  "I-place",
+  "B-amount",
+  "I-amount"
+ ],
+ "gpu_bf16": {
+  "dev": {
+   "n": 5000,
+   "act_acc": 0.9942,
+   "span_f1": 0.9963369963369964,
+   "sentence_exact": 0.9944,
+   "role_f1": {
+    "thing": 0.9964130156290033,
+    "set": 0.9846431797651309,
+    "attribute": 1.0,
+    "value": 0.9976149914821124,
+    "place": 0.9981515711645101,
+    "amount": 0.9925705794947994
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 133,
+     "act_acc": 0.9924812030075187
+    },
+    "synth.*": {
+     "n": 4432,
+     "act_acc": 0.9943592057761733
+    },
+    "plan.seating": {
+     "n": 143,
+     "act_acc": 0.986013986013986
+    },
+    "plan.timeline": {
+     "n": 159,
+     "act_acc": 1.0
+    },
+    "test.seating": {
+     "n": 133,
+     "act_acc": 0.9924812030075187
+    }
+   }
+  },
+  "test-seen": {
+   "n": 6016,
+   "act_acc": 0.9956781914893617,
+   "span_f1": 0.9976793357743283,
+   "sentence_exact": 0.995844414893617,
+   "role_f1": {
+    "thing": 0.9975429975429976,
+    "set": 0.9907076483202287,
+    "attribute": 0.9991189427312775,
+    "value": 0.99916130835896,
+    "place": 0.9983831851253031,
+    "amount": 0.99860529986053
+   },
+   "by_world": {
+    "plan.seating": {
+     "n": 94,
+     "act_acc": 0.9787234042553191
+    },
+    "plan.timeline": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "art.draw": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "test.seating": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "synth.*": {
+     "n": 5640,
+     "act_acc": 0.9957446808510638
+    }
+   }
+  },
+  "test-held": {
+   "n": 5844,
+   "act_acc": 0.9895619438740588,
+   "span_f1": 0.9688596025082368,
+   "sentence_exact": 0.9488364134154689,
+   "role_f1": {
+    "thing": 0.9643879537386923,
+    "set": 0.8725490196078431,
+    "attribute": 0.9978798586572438,
+    "value": 0.9907993099482462,
+    "place": 0.9806547619047619,
+    "amount": 0.9962546816479401
+   },
+   "by_world": {
+    "diagram.sketch": {
+     "n": 3844,
+     "act_acc": 0.9911550468262227
+    },
+    "ui.avatar": {
+     "n": 2000,
+     "act_acc": 0.9865
+    }
+   }
+  }
+ },
+ "real": {
+  "test-seen": {
+   "pieces": 219,
+   "messages": 186,
+   "act_acc": 0.2191780821917808,
+   "act_acc_on_accepted": 0.6,
+   "accepted_pieces": 80,
+   "span_f1": 0.3865546218487395,
+   "none_pieces": 139,
+   "none_precision": 0.0,
+   "none_recall": 0.0,
+   "message_agreement": 0.23118279569892472,
+   "by_act": {
+    "change": {
+     "n": 11,
+     "acc": 0.6363636363636364
+    },
+    "make": {
+     "n": 46,
+     "acc": 0.5
+    },
+    "none": {
+     "n": 139,
+     "acc": 0.0
+    },
+    "pick": {
+     "n": 1,
+     "acc": 1.0
+    },
+    "place": {
+     "n": 18,
+     "acc": 0.7222222222222222
+    },
+    "remove": {
+     "n": 2,
+     "acc": 1.0
+    },
+    "save": {
+     "n": 1,
+     "acc": 1.0
+    },
+    "send": {
+     "n": 1,
+     "acc": 1.0
+    }
+   }
+  },
+  "test-held": {
+   "pieces": 189,
+   "messages": 166,
+   "act_acc": 0.2857142857142857,
+   "act_acc_on_accepted": 0.5869565217391305,
+   "accepted_pieces": 92,
+   "span_f1": 0.41702127659574467,
+   "none_pieces": 97,
+   "none_precision": 0.0,
+   "none_recall": 0.0,
+   "message_agreement": 0.2710843373493976,
+   "by_act": {
+    "change": {
+     "n": 9,
+     "acc": 0.6666666666666666
+    },
+    "connect": {
+     "n": 14,
+     "acc": 1.0
+    },
+    "make": {
+     "n": 59,
+     "acc": 0.423728813559322
+    },
+    "none": {
+     "n": 97,
+     "acc": 0.0
+    },
+    "remove": {
+     "n": 7,
+     "acc": 1.0
+    },
+    "undo": {
+     "n": 3,
+     "acc": 0.6666666666666666
+    }
+   }
+  }
+ },
+ "real_int8_weights": {
+  "test-seen": {
+   "pieces": 219,
+   "messages": 186,
+   "act_acc": 0.2191780821917808,
+   "act_acc_on_accepted": 0.6,
+   "accepted_pieces": 80,
+   "span_f1": 0.3881856540084388,
+   "none_pieces": 139,
+   "none_precision": 0.0,
+   "none_recall": 0.0,
+   "message_agreement": 0.23118279569892472,
+   "by_act": {
+    "change": {
+     "n": 11,
+     "acc": 0.6363636363636364
+    },
+    "make": {
+     "n": 46,
+     "acc": 0.5
+    },
+    "none": {
+     "n": 139,
+     "acc": 0.0
+    },
+    "pick": {
+     "n": 1,
+     "acc": 1.0
+    },
+    "place": {
+     "n": 18,
+     "acc": 0.7222222222222222
+    },
+    "remove": {
+     "n": 2,
+     "acc": 1.0
+    },
+    "save": {
+     "n": 1,
+     "acc": 1.0
+    },
+    "send": {
+     "n": 1,
+     "acc": 1.0
+    }
+   }
+  },
+  "test-held": {
+   "pieces": 189,
+   "messages": 166,
+   "act_acc": 0.2857142857142857,
+   "act_acc_on_accepted": 0.5869565217391305,
+   "accepted_pieces": 92,
+   "span_f1": 0.41702127659574467,
+   "none_pieces": 97,
+   "none_precision": 0.0,
+   "none_recall": 0.0,
+   "message_agreement": 0.2710843373493976,
+   "by_act": {
+    "change": {
+     "n": 9,
+     "acc": 0.6666666666666666
+    },
+    "connect": {
+     "n": 14,
+     "acc": 1.0
+    },
+    "make": {
+     "n": 59,
+     "acc": 0.423728813559322
+    },
+    "none": {
+     "n": 97,
+     "acc": 0.0
+    },
+    "remove": {
+     "n": 7,
+     "acc": 1.0
+    },
+    "undo": {
+     "n": 3,
+     "acc": 0.6666666666666666
+    }
+   }
+  }
+ },
+ "real_train_pieces": 874,
+ "real_rep": 0,
+ "gpu_int8_weights": {
+  "test-seen": {
+   "n": 6016,
+   "act_acc": 0.9955119680851063,
+   "span_f1": 0.9975761951420762,
+   "sentence_exact": 0.9956781914893617,
+   "role_f1": {
+    "thing": 0.9974316024567281,
+    "set": 0.9907076483202287,
+    "attribute": 0.998677831643896,
+    "value": 0.99916130835896,
+    "place": 0.9983831851253031,
+    "amount": 0.99860529986053
+   },
+   "by_world": {
+    "plan.seating": {
+     "n": 94,
+     "act_acc": 0.9787234042553191
+    },
+    "plan.timeline": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "art.draw": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "test.seating": {
+     "n": 94,
+     "act_acc": 1.0
+    },
+    "synth.*": {
+     "n": 5640,
+     "act_acc": 0.9955673758865248
+    }
+   }
+  },
+  "test-held": {
+   "n": 5844,
+   "act_acc": 0.9895619438740588,
+   "span_f1": 0.9690754516471839,
+   "sentence_exact": 0.9493497604380561,
+   "role_f1": {
+    "thing": 0.9646331692800733,
+    "set": 0.8736196319018404,
+    "attribute": 0.9975256274301874,
+    "value": 0.9907993099482462,
+    "place": 0.9814126394052045,
+    "amount": 0.9962546816479401
+   },
+   "by_world": {
+    "diagram.sketch": {
+     "n": 3844,
+     "act_acc": 0.9911550468262227
+    },
+    "ui.avatar": {
+     "n": 2000,
+     "act_acc": 0.9865
+    }
+   }
+  }
+ },
+ "onnx": {
+  "fp32_mb": 90.431781,
+  "int8_mb": 22.999687
+ }
+}
