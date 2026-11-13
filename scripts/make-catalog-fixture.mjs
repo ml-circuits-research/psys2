@@ -44,11 +44,16 @@ put('k.words/shards/ma', `@k.words.mansion.noun.1 k.words.sense word=mansion pos
 put('k.words/shards/gl', `@k.words.glasses.noun.1 k.words.sense word=glasses pos=noun n=1 gloss="optical instrument with a frame that holds a pair of lenses" synonym=spectacles synonym=specs synonym=eyeglasses ${SRC}\n`, ['glasses'], ['fixture-1']);
 put('k.words/shards/sp', `@k.words.spectacles.noun.1 k.words.sense word=spectacles pos=noun n=1 gloss="optical instrument" synonym=eyeglasses synonym=glasses ${SRC}\n`, ['spectacles'], ['fixture-1']);
 put('k.demo/shards/fruits', [`@k.demo.apple k.demo.fruit name=apple colour=red taste=sweet ${SRC}`, `@k.demo.lemon k.demo.fruit name=lemon colour=yellow taste=sour ${SRC}`].join('\n') + '\n', ['apple', 'lemon'], ['fixture-1']);
+// k.layouts: the face layout only (its slots say what each holds: other names of the slots)
+const lay = readFileSync(path.join(src, 'k.layouts/shards/layouts.sop'), 'utf8').split('\n').filter((l) => l.startsWith('@') && (/ layout=face /.test(l) || /^@k\.layouts\.layout\.face /.test(l)));
+const layKeys = ['face', ...lay.map((l) => / name=("[^"]*"|\S+)/.exec(l)?.[1]?.replace(/"/g, '').toLowerCase()).filter(Boolean)];
+put('k.layouts/shards/layouts', `# fixture: the face layout of k.layouts\n\n${lay.join('\n')}\n`, layKeys, ['hand-core-1']);
 const byWorld = (id) => shards.filter((s) => s.id.startsWith(`${id}/`));
 const worlds = [
   { id: 'k.faces', version: '1', schema: 'k.faces/schema.sop', exports: faces.exports, depends: [], shards: byWorld('k.faces') },
   { id: 'k.objects', version: '3', schema: 'k.objects/schema.sop', exports: ['k.objects.object', 'k.objects.part', 'k.objects.stand_in'], depends: [], shards: byWorld('k.objects') },
   { id: 'k.words', version: '1', schema: 'k.words/schema.sop', exports: ['k.words.sense'], depends: [], shards: byWorld('k.words') },
+  { id: 'k.layouts', version: '1', schema: 'k.layouts/schema.sop', exports: ['k.layouts.layout', 'k.layouts.slot'], depends: [], shards: byWorld('k.layouts') },
   { id: 'k.demo', version: '1', schema: 'k.demo/schema.sop', exports: ['k.demo.fruit'], depends: [], shards: byWorld('k.demo') },
 ];
 const vocab = {};

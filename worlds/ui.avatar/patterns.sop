@@ -1,299 +1,3 @@
-@pat.ui.avatar.setpart core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$ui.avatar.g7_give_yourself] [a|an|the|your|some|new|ur]? {v:lex.ui.avatar.options} {n:number?} [$ui.avatar.g12_on]? {p:lex.ui.avatar.parts?} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=12
-    example="Give yourself visor eyes."
-    example="Use the cyclops eye."
-    example="Wear a medical mask."
-    example="Put on glasses."
-    example="Give yourself glasses 3."
-    example="Wear sunglasses."
-    example="I want a dish on top."
-    example="Try a heart on your chest."
-
-@pat.ui.avatar.setpart.after core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$ui.avatar.g7_give_yourself] [a|an|the|your|some|new|ur]? {v:lex.ui.avatar.options} [on|on_your|on_my|on_the|in|in_your|for_your]? {p:lex.ui.avatar.parts} {n:number} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=12
-    example="Give yourself short curly hair."
-    example="Give yourself a moustache 4."
-
-@pat.ui.avatar.resize.grow core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [enlarge|widen|grow|expand|enlarge_your|widen_your|increase|upsize|make_larger|make_bigger] [your|the|ur]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir=bigger"
-    kind=request
-    priority=13
-    example="Enlarge your eyes."
-    example="Increase the eyes."
-
-@pat.ui.avatar.resize.shrink core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [shrink|reduce|narrow|decrease|downsize|make_smaller] [your|the|ur]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir=smaller"
-    kind=request
-    priority=13
-    example="Shrink your eyes."
-    example="Decrease the eyes."
-
-@pat.ui.avatar.setpart.unknown core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|make|set|switch|turn|swap] [your|the|ur]? {p:lex.ui.avatar.parts} [to|into|be|like|with|as]? [a|an|the]? {w:words(4)}"
-    emit="@{_} core.request action=avatar.setPartUnknown arg.part={p} arg.words=\"{w}\""
-    kind=request
-    priority=4
-    example="Make your eyes wobbly."
-
-@pat.ui.avatar.setpart.unknown.prenominal core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|give_yourself|give|get|set|turn] [me|your|the|ur|my|yourself]? [a|an]? {w:lex.ui.avatar.featureadj} {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPartUnknown arg.part={p} arg.words=\"{w}\""
-    kind=request
-    priority=3
-    example="Make dreamy eyes."
-
-@pat.ui.avatar.step.next core.pattern
-    canonical="Try the next mouth."
-    canonical="Show me the next hairstyle."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|show_me|try|switch_to|go_to|use|get|pick|choose|show]? [the|a|an]? [next|following] {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=next"
-    kind=request
-    priority=12
-    example="Next eyes."
-    example="Show me the next hairstyle."
-    example="Try the next mouth."
-
-@pat.ui.avatar.step.prev core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|show_me|try|switch_to|go_to|use|get|pick|choose|show|go_back_to]? [the|a|an]? [previous|prior|earlier] {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
-    kind=request
-    priority=12
-    example="Previous mouth."
-    example="Go back to the previous hair."
-
-@pat.ui.avatar.step.diff core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|show_me|try|switch_to|use|get|pick|choose|show|have|wear]? [a|an|the|some]? [different|another|new|random|other] {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=different"
-    kind=request
-    priority=12
-    example="Different hair."
-    example="Give yourself another mouth."
-    example="Try a random expression."
-
-@pat.ui.avatar.step.change core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|swap|randomize|randomise|shuffle|switch|mix_up|reroll] [your|the|ur]? {p:lex.ui.avatar.parts} [$lang.tail.filler|a_bit]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=different"
-    kind=request
-    priority=11
-    example="Change your hair."
-    example="Randomize your eyes."
-
-@pat.ui.avatar.color.main core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|paint|color|colour|dye|turn] [yourself|urself] {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
-    kind=request
-    priority=13
-    example="Paint yourself pink."
-
-@pat.ui.avatar.color.main2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [turn|go|become|be|get] {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
-    kind=request
-    priority=13
-    example="Turn purple."
-    example="Go orange."
-
-@pat.ui.avatar.color.tone core.pattern
-    canonical="Make your body lighter."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|change] [your|the|ur]? {p:lex.ui.avatar.colorparts} [a_bit|a_little|a_lot|much|even|way]? {t:lex.ui.avatar.tone} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.shiftColor arg.part={p} arg.dir={t}"
-    kind=request
-    priority=14
-    example="Make your body lighter."
-    example="Make your screen a bit darker."
-
-@pat.ui.avatar.color.q2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|wat] [color|colour] [are|r] [you|u] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askColor arg.part=main"
-    kind=request
-    priority=12
-    example="What color are you?"
-
-@pat.ui.avatar.color.list core.pattern
-    canonical="What colors can your screen be?"
-    match="[$lang.lead.filler|pls|plz]? [what|which] [colors|colours|color|colour] [can|could] [your|the|ur] {p:lex.ui.avatar.colorparts} [be|have] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listColors arg.part={p}"
-    kind=request
-    priority=12
-    example="What colors can your screen be?"
-    example="Which colors can your hair have?"
-
-@pat.ui.avatar.color.list2 core.pattern
-    canonical="What colors can you change?"
-    match="[$lang.lead.filler|pls|plz]? [what|which] [colors|colours|color|colour] [can_you_change|can_i_change|can_you_be|can_you_have|can_i_choose|can_i_pick|do_you_have] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listColors"
-    kind=request
-    priority=12
-    example="What colors can you change?"
-
-@pat.ui.avatar.char.set core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [becoming|being|become|turn_into|change_into|transform_into|switch_to|morph_into|go_back_to_being|look_like|be|turn_back_into|change_back_into|i_want_you_to_be|i_want_you_to_become|you_should_be|you_should_become|show_me|i_want_to_see|let_me_see|i_would_like_to_see|i_want_to_be|i_wanna_be|i_want_to_become|i_wanna_become|let_me_be|make_me|make_yourself|turn_me_into|turn_yourself_into|change_me_into|change_yourself_into|transform_me_into|transform_yourself_into|i_want_to_look_like|i_wanna_look_like|dress_up_as|you_be|u_be|be_like|become_like|go_back_to|revert_to|return_to|i_want_you_as|id_like_to_see|can_i_see|may_i_see|i_would_like_you_to_look_like|i_want_you_to_look_like|i_want_you_to_turn_into|i_want_you_to_change_into|i_want_you_to_transform_into] [a|an|the]? {who:lex.ui.avatar.characters} [$lang.tail.filler|instead|next|version]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
-    kind=request
-    priority=12
-    example="Become a person."
-    example="Turn into an emoji."
-    example="Be a robot again."
-    example="Switch to the robot."
-    example="Look like a human."
-    example="I want to see a woman."
-
-@pat.ui.avatar.char.q core.pattern
-    canonical="Which character are you?"
-    match="[$lang.lead.filler|pls|plz]? [which_character_are_you|what_kind_of_avatar_are_you|what_character_do_you_have|which_avatar_are_you|what_avatar_are_you] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askCharacter"
-    kind=request
-    priority=12
-    example="Which character are you?"
-    example="What kind of avatar are you?"
-
-@pat.ui.avatar.char.q2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [are_you|are_you_still|are_u|r_u|r_you] [a|an]? {who:lex.ui.avatar.characters} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askCharacter arg.who={who}"
-    kind=request
-    priority=12
-    example="Are you a robot?"
-    example="Are you an emoji?"
-
-@pat.ui.avatar.char.set2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|turn|switch|make|transform|set|morph|convert] [the|your|my|ur]? [avatar|face|character|robot|picture|look|yourself|you|it|urself|ur_self|u|me|myself|my_avatar|this] [to|into|to_be|into_being|so_it_is|so_you_are|to_look_like|in]? [a|an|the]? {who:lex.ui.avatar.characters} [$lang.tail.filler|instead]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
-    kind=request
-    priority=14
-    example="Change avatar to be a human."
-    example="Turn the face into an emoji."
-    example="Make the avatar a robot again."
-
-@pat.ui.avatar.char.set3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [i_want|i_would_like|i_prefer|give_me|show_me|can_i_have|could_i_have|let_me_have|use|i_wanna|i_wana|gimme] [a|an|the]? {who:lex.ui.avatar.characters} [avatar|face|character|look] [$lang.tail.filler|instead]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
-    kind=request
-    priority=13
-    example="I want a human avatar."
-    example="Give me an emoji face instead."
-
-@pat.ui.avatar.char.list core.pattern
-    canonical="What can you become?"
-    canonical="What can you turn into?"
-    match="[$lang.lead.filler|pls|plz]? [what|wat] [can|could] [you|i|u] [become|turn_into|change_into|be|transform_into] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listCharacters"
-    kind=request
-    priority=12
-    example="What can you become?"
-    example="What can you turn into?"
-
-@pat.ui.avatar.char.list2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] [characters|avatars|styles|kinds_of_avatar] [can_you_be|can_you_become|are_there|do_you_have|can_i_choose|are_available] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listCharacters"
-    kind=request
-    priority=12
-    example="Which characters are there?"
-    example="What avatars do you have?"
-
-@pat.ui.avatar.mood core.pattern
-    canonical="Look a little sad."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [look|be|feel|seem|act|appear|get|become|sound] [a_little|a_bit|very|so|really|quite|more]? {m:lex.ui.avatar.moods} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
-    kind=request
-    priority=11
-    example="Look surprised."
-    example="Be calm."
-    example="Look happy."
-    example="Look a little sad."
-    example="Get angry."
-
-@pat.ui.avatar.mood.subject core.pattern
-    canonical="Make the avatar look scared."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|let|have|get|help] [the|my|your|ur]? [avatar|yourself|robot|character|face] [look|be|feel|seem|appear|become|get|act|sound] [a_little|a_bit|very|so|really|quite|more]? {m:lex.ui.avatar.moods} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
-    kind=request
-    priority=12
-    example="Make the avatar look scared."
-    example="Make yourself look happy."
-    doc="RD2: a message that names the avatar and a mood (\"make the avatar look scared\") works whatever the active tab is."
-
-@pat.ui.avatar.mood.eyes core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [your|ur|the|my]? [eyes|eye] [should|must|will|can|could]? [express|show|convey|display|look|seem|feel|appear|get|turn|become] [a_little|a_bit|very|so|really|quite|more]? {m:lex.ui.avatar.moods} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
-    kind=request
-    priority=11
-    example="Your eyes express fear."
-    example="Eyes look sad."
-
-@pat.ui.avatar.mood.face core.pattern
-    canonical="Show me a surprised face."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|pull|do|show|put_on|give_yourself|give_me|show_me|gimme] [a|an|your|ur]? {m:lex.ui.avatar.moods} [face|expression|look] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
-    kind=request
-    priority=13
-    example="Make a sad face."
-    example="Show me a surprised face."
-
-@pat.ui.avatar.expression core.pattern
-    canonical="Make a big smile."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|let|have|get|give|show|do|pull|put_on|try|set|use]? [the|my|your|ur]? [avatar|yourself|robot|character|face|me]? [to]? [get|have|show|do|make|give|pull|put_on|try]? [a|an|the|your|ur]? {x:lex.ui.avatar.expressions} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood={x}"
-    kind=request
-    priority=11
-    example="Make a big smile."
-    example="Make the avatar get a big smile."
-    example="Big smile."
-    example="Open mouth."
-    example="Tongue out."
-    example="Make a small smile."
-    example="A frown."
-    doc="RP3: an expression named as loose words works on every character that can show it."
-
-@pat.ui.avatar.mood.smile core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [smile|smile_for_me|say_cheese|cheer_up|grin] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood=happy"
-    kind=request
-    priority=11
-    example="Smile."
-    example="Say cheese."
-    example="Cheer up."
-
-@pat.ui.avatar.mood.laugh core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [laugh|giggle|laugh_out_loud] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood=laughing"
-    kind=request
-    priority=11
-    example="Laugh."
-
-@pat.ui.avatar.mood.frown core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [frown|cry|pout] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood=sad"
-    kind=request
-    priority=11
-    example="Frown."
-
-@pat.ui.avatar.mood.q core.pattern
-    canonical="Do you look surprised?"
-    match="[$lang.lead.filler|pls|plz]? [are_you|do_you_look|are_you_feeling|are_you_looking|are_u|r_u|r_you] {m:lex.ui.avatar.moods} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.checkMood arg.mood={m}"
-    kind=request
-    priority=12
-    example="Are you happy?"
-    example="Do you look surprised?"
-
-@pat.ui.avatar.mood.q2 core.pattern
-    canonical="What is your mood?"
-    canonical="How do you feel?"
-    match="[$lang.lead.filler|pls|plz]? [how_do_you_feel|how_are_you_feeling|what_is_your_mood|what_is_your_expression|what_mood_are_you_in|what_is_your_face_doing] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askMood"
-    kind=request
-    priority=12
-    example="How do you feel?"
-    example="What is your mood?"
-
 @pat.ui.avatar.name.set core.pattern
     canonical="Rename yourself to Pixel."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [call_yourself|rename_yourself|name_yourself|rename_yourself_to|name_yourself_as|rename_yourself_as] {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -325,105 +29,6 @@
     kind=request
     priority=12
     example="You are called Ziggy."
-
-@pat.ui.avatar.seed.set core.pattern
-    canonical="Use the seed banana."
-    canonical="Set your seed to 42."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [use|set|change|try|set_the|use_the|change_the|try_the] [the|your|a|ur]? seed [to|as|from]? {s:rest}"
-    emit="@{_} core.request action=avatar.setSeed arg.seed=\"{s}\""
-    kind=request
-    priority=12
-    example="Use the seed banana."
-    example="Set your seed to 42."
-
-@pat.ui.avatar.seed.set2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [draw_yourself|make_yourself|generate_yourself|build_yourself] [from|with|using] [the|a]? seed {s:rest}"
-    emit="@{_} core.request action=avatar.setSeed arg.seed=\"{s}\""
-    kind=request
-    priority=12
-    example="Draw yourself from the seed apple."
-
-@pat.ui.avatar.seed.q core.pattern
-    canonical="What is your seed?"
-    match="[$lang.lead.filler|pls|plz]? [what_is_your_seed|which_seed_are_you_using|what_seed_are_you_using|what_seed_drew_you|tell_me_your_seed|show_me_your_seed|what_seed_do_you_have] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askSeed"
-    kind=request
-    priority=12
-    example="What is your seed?"
-
-@pat.ui.avatar.surprise core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [surprise_me|surprise_us|surprise_me_again|roll_the_dice|shuffle_yourself|randomize_yourself|randomise_yourself|randomize|randomise|shuffle|make_a_random_avatar|pick_a_random_look] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.surprise arg.mode=surprise"
-    kind=request
-    priority=12
-    example="Surprise me."
-    example="Roll the dice."
-    example="Randomize yourself."
-
-@pat.ui.avatar.surprise.look core.pattern
-    canonical="Try a new avatar."
-    canonical="Give yourself a random look."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|get|try|have|make_yourself|show_me|put_on|choose] [a|an]? [new|random|different|surprise] [look|avatar|face|style|appearance] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.surprise arg.mode=surprise"
-    kind=request
-    priority=12
-    example="Give yourself a random look."
-    example="Try a new avatar."
-
-@pat.ui.avatar.everything core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|swap|switch|randomize|randomise|shuffle|redo|redesign|mix_up|reroll] [everything|all|it_all|everything_about_you|your_whole_look|your_whole_face|all_of_it|all_your_parts|yourself|urself|ur_self] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.surprise arg.mode=everything"
-    kind=request
-    priority=12
-    example="Change everything."
-    example="Shuffle your whole look."
-
-@pat.ui.avatar.reset core.pattern
-    canonical="Reset your face."
-    canonical="Go back to normal."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [reset|restore|reset_yourself|reset_your_look|reset_your_avatar|reset_your_face|go_back_to_normal|back_to_normal|go_back_to_default|go_back_to_the_default] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.reset"
-    kind=request
-    priority=12
-    example="Reset yourself."
-    example="Reset your face."
-    example="Go back to normal."
-
-@pat.ui.avatar.reset.all core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [start_over|start_again|reset_everything|reset_all|factory_reset|start_from_scratch|reset_all_characters] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.reset arg.scope=all"
-    kind=request
-    priority=12
-    example="Start over."
-    example="Reset everything."
-
-@pat.ui.avatar.remove core.pattern
-    canonical="Take off your hat."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take_off|remove|lose|drop|ditch|get_rid_of|stop_wearing|take_away|hide|stop_using|take_out|do_not_wear|do_not_use] [your|the|that|a|an|my|these|ur]? {v:lex.ui.avatar.options} {n:number?} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.removePart arg.value={v} arg.text=\"{v}\""
-    kind=request
-    priority=13
-    example="Take off your hat."
-    example="Remove the glasses."
-    example="Lose the moustache."
-
-@pat.ui.avatar.remove.part core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take_off|remove|lose|drop|ditch|get_rid_of|stop_wearing|take_away|hide|stop_using|take_out] [your|the|that|a|an|my|ur]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.removePart arg.part={p}"
-    kind=request
-    priority=14
-    example="Remove your antenna."
-    example="Take off your mask."
-
-@pat.ui.avatar.remove.all core.pattern
-    canonical="Remove all accessories."
-    canonical="Take off everything."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take_off|remove|lose|drop|get_rid_of] [everything|all_of_it|it_all|all_accessories|all_your_accessories|everything_you_are_wearing|all_of_that|everything_you_wear|all_your_things] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.removeAll"
-    kind=request
-    priority=13
-    example="Take off everything."
-    example="Remove all accessories."
 
 @pat.ui.avatar.anim core.pattern
     canonical="Can you dance?"
@@ -464,200 +69,6 @@
     priority=10
     example="Turn around."
 
-@pat.ui.avatar.q.parts core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] [can|could] [i|you|u] [change|customize|customise|modify|adjust|tweak] [about_you|about_yourself|on_you]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askParts"
-    kind=request
-    priority=12
-    example="What can I change?"
-    example="What can you change about yourself?"
-
-@pat.ui.avatar.q.parts2 core.pattern
-    canonical="What parts do you have?"
-    canonical="Which parts can I change?"
-    match="[$lang.lead.filler|pls|plz]? [what|which] [parts|options|features|components|things] [do_you_have|can_i_change|can_you_change|are_there|can_be_changed|can_i_customize|can_i_customise] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askParts"
-    kind=request
-    priority=12
-    example="Which parts can I change?"
-    example="What parts do you have?"
-
-@pat.ui.avatar.q.parts3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [how_can_i_change_you|how_do_i_change_you|how_can_i_customize_you|how_do_i_customize_you|how_do_i_change_your_look] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askParts"
-    kind=request
-    priority=12
-    example="How can I change you?"
-
-@pat.ui.avatar.q.options core.pattern
-    canonical="Which hair can you have?"
-    canonical="What eyes can you have?"
-    match="[$lang.lead.filler|pls|plz]? [what|which] {p:lex.ui.avatar.parts} [can|could] [you|i|u] [have|wear|use|get|show|be|choose|pick|try] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
-    kind=request
-    priority=12
-    example="What eyes can you have?"
-    example="Which hair can you have?"
-    example="What antennas can you use?"
-
-@pat.ui.avatar.q.options.glasses core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] [$ui.avatar.g13_kind_of]? [glasses|sunglasses|eyewear|specs|spectacles|shades|eyepatches] [can|could] [you|i|u] [have|wear|use|get|show|choose|pick|try] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listOptions arg.part=accessory"
-    kind=request
-    priority=12
-    example="What glasses can you have?"
-
-@pat.ui.avatar.q.options.facial core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] [$ui.avatar.g13_kind_of]? [moustaches|mustaches|beards|goatees|moustache|mustache|beard] [can|could] [you|i|u] [have|wear|use|get|show|choose|pick|try|grow] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listOptions arg.part=facial_hair"
-    kind=request
-    priority=12
-    example="What moustaches can you have?"
-
-@pat.ui.avatar.q.options2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] [kind|kinds|type|types|sort|sorts|style|styles|variety|varieties] of {p:lex.ui.avatar.parts} [can_you_have|can_you_wear|can_you_use|can_you_get|are_there|can_i_choose|can_i_pick|can_i_give_you|are_available|exist|are_possible] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
-    kind=request
-    priority=12
-    example="What kinds of masks are there?"
-    example="Which types of eyes can you have?"
-
-@pat.ui.avatar.q.options3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [list|show_me|show|tell_me|name] [me]? [all]? [the]? [possible|available|different|all_the]? {p:lex.ui.avatar.parts} [options|choices|styles|kinds|types|variants]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
-    kind=request
-    priority=11
-    example="List the eyes."
-    example="Show me all the mouth options."
-
-@pat.ui.avatar.q.options4 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|wat] [are|is] [the]? [options|choices|styles|variants] [for]? [your|ur]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
-    kind=request
-    priority=12
-    example="What are the options for your mouth?"
-
-@pat.ui.avatar.q.part core.pattern
-    canonical="Which mouth do you have?"
-    canonical="What eyes do you have?"
-    match="[$lang.lead.filler|pls|plz]? [what|which] [kind|kinds|type|types|sort|sorts|style|styles]? [of]? {p:lex.ui.avatar.parts} [do_you_have|are_you_using|do_you_use|do_you_wear|are_you_wearing|have_you_got|have_you_got_on] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askPart arg.part={p}"
-    kind=request
-    priority=12
-    example="What eyes do you have?"
-    example="What kind of hair do you have?"
-    example="Which mouth do you have?"
-
-@pat.ui.avatar.q.part.is core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|wat] [is|are] [your|the|ur] {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askPart arg.part={p}"
-    kind=request
-    priority=11
-    example="What is your hairstyle?"
-    example="What are your eyes?"
-
-@pat.ui.avatar.q.part2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|how] [is|are] [your|the|ur] {p:lex.ui.avatar.parts} [like|looking] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askPart arg.part={p}"
-    kind=request
-    priority=12
-    example="What are your eyes like?"
-    example="What is your hair like?"
-
-@pat.ui.avatar.q.part3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|wat] do [your|the|ur] {p:lex.ui.avatar.parts} look_like [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askPart arg.part={p}"
-    kind=request
-    priority=12
-    example="What do your eyes look like?"
-
-@pat.ui.avatar.q.has.part core.pattern
-    canonical="Do you have a beard?"
-    match="[$lang.lead.filler|pls|plz]? [$ui.avatar.g8_do_you_have] [a|an|any|some|your|ur]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.hasThing arg.part={p}"
-    kind=request
-    priority=12
-    example="Do you have a beard?"
-    example="Do you have eyes?"
-
-@pat.ui.avatar.q.wearing core.pattern
-    canonical="What are you wearing?"
-    match="[$lang.lead.filler|pls|plz]? [$lang.q.wearing|what_are_you_wearing|what_do_you_wear|what_are_you_wearing_now|what_have_you_got_on|what_do_you_have_on|are_you_wearing_anything|what_accessories_do_you_have|do_you_wear_anything] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askWearing"
-    kind=request
-    priority=12
-    example="What are you wearing?"
-
-@pat.ui.avatar.q.describe core.pattern
-    canonical="Tell me about yourself."
-    canonical="What do you look like?"
-    match="[$lang.lead.filler|pls|plz]? [describe_yourself|describe_you|tell_me_about_yourself|what_do_you_look_like|what_do_you_look_like_now|show_yourself|tell_me_what_you_look_like|describe_your_look|describe_your_avatar|describe_your_face] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.describe"
-    kind=request
-    priority=12
-    example="Describe yourself."
-    example="What do you look like?"
-    example="Tell me about yourself."
-
-@pat.ui.avatar.q.describe2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? describe [yourself|your_look|your_avatar|your_face|what_you_look_like|urself|ur_self] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.describe"
-    kind=request
-    priority=12
-    example="Can you describe yourself?"
-
-@pat.ui.avatar.char.make core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|create|build|give|get|show|let_me_see] [me|us|yourself|my_avatar|the_avatar|my_face|the_face|urself|ur_self]? [a|an|the|my|your|ur]? {who:lex.ui.avatar.characters} [avatar|face|character|version|one]? [$lang.tail.filler|instead]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
-    kind=request
-    priority=9
-    example="Make a human."
-    example="Make me a human avatar."
-    example="Make yourself a human."
-
-@pat.ui.avatar.char.want core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|i_prefer|give_me|use|gimme]? [a|an|the|my]? {who:lex.ui.avatar.characters} [as|for|like|to_be]? [my|an|a|the|your|ur]? [avatar|face|character|look] [$lang.tail.filler|instead]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
-    kind=request
-    priority=12
-    example="I want a human as avatar."
-    example="I want a human as my avatar."
-
-@pat.ui.avatar.char.to core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|switch|go|transform|turn|morph|convert|move] [to|into|in|back_to|back_into] [a|an|the|my]? {who:lex.ui.avatar.characters} [again|instead|now|version|mode|avatar|face]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
-    kind=request
-    priority=12
-    example="Change to emoji."
-    example="Go back to the robot."
-
-@pat.ui.avatar.char.why core.pattern
-    match="[$lang.lead.filler|pls|plz]? [why|why_did|why_have] [you|did_you|have_you|it|u|did_u|have_u]? [turn|turned|change|changed|switch|switched|make|made|become|became|transform|transformed] [it|yourself|the_avatar|me|you|urself|ur_self|u]? [in|into|to]? [a|an|the]? {who:lex.ui.avatar.characters} {r:words(8)?}"
-    emit="@{_} core.request action=avatar.explainSwitch arg.who={who}"
-    kind=request
-    priority=13
-    example="Why did you turn into a robot?"
-    example="Why you turned it in a robot, this is wrong."
-
-@pat.ui.avatar.char.why.bare core.pattern
-    canonical="Why did you change everything?"
-    match="[$lang.lead.filler|pls|plz]? [why|how_come|why_on_earth] [did_you|have_you|you|did_it|has_it|do_you|would_you|did_the_avatar|did_u|have_u|u|do_u|would_u] [turn|turned|change|changed|switch|switched|make|made|become|became|transform|transformed|alter|altered|redo|redid|touch|touched|mess_up|messed_up|do_that|do_it|do_this|did_that|did_it|did_this] [it|that|this|yourself|everything|me|the_avatar|the_look|your_look|your_face|so_much|anything|urself|ur_self]? [again|already|just_now|like_that|that_way|there]? {r:words(8)?}"
-    emit="@{_} core.request action=avatar.explainSwitch"
-    kind=request
-    priority=12
-    example="Why did you change it?"
-    example="Why did you change everything?"
-
-@pat.ui.avatar.char.wrong core.pattern
-    canonical="This is not what I wanted."
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [no|oh_no|hey|ugh|um]? [that_is|that_s|thats|this_is|this_s|it_is|it_s|its|that|this|you_got_it|you_got_that|you_did_it|that_looks|this_looks|it_looks]? [wrong|not_right|incorrect|not_correct|not_what_i_wanted|not_what_i_asked|not_what_i_asked_for|not_what_i_meant|not_good|bad|a_mistake|a_mess|a_bad_change|not_ok|not_okay|not_like_that|not_how_i_wanted_it] [please|pls|again|now|somehow]?"
-    emit="@{_} core.request action=avatar.explainSwitch"
-    kind=request
-    priority=9
-    example="That's wrong."
-    example="This is not what I wanted."
-    example="No, that is not right."
-
 @pat.ui.avatar.undo core.pattern
     canonical="Go back to how you were."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [undo|go_back_one|go_back_one_step|go_back_a_step|step_back|undo_that|undo_it|undo_the_last_change|undo_the_last_look|undo_last_change|undo_my_last_change|revert|revert_that|take_that_back|change_it_back|change_that_back|put_it_back|turn_it_back|go_back_to_how_you_were|go_back_to_how_you_looked|go_back_to_before|go_back_to_the_way_you_were|go_back_to_the_previous_look|go_back_to_your_previous_look|look_like_before|be_like_before|be_how_you_were|be_as_you_were|look_how_you_were|how_you_were|as_you_were|like_before|as_before] [$lang.tail.filler]?"
@@ -674,147 +85,6 @@
     kind=request
     priority=8
     example="Undo."
-
-@pat.ui.avatar.resize.bare core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|get|have] [yourself|everything|things|urself|ur_self]? [$ui.avatar.g11_a_bit]? {s:lex.ui.avatar.size} [$lang.tail.filler|yes]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.resizePart arg.part=eye arg.dir={s} arg.assumed=yes"
-    kind=request
-    priority=10
-    example="Make bigger."
-    example="Make yourself a little smaller."
-
-@pat.ui.avatar.setpart.colored core.pattern
-    canonical="Wear a red hat."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|give_me|get|have|wear|use|add|put_on|try|try_on|i_want|i_would_like|make_yourself|make_me|i_need|gimme|i_wanna|i_wana]? [a|an|the|your|some|new|ur]? {c:lex.ui.avatar.colors} {v:lex.ui.avatar.options} {n:number?} [$ui.avatar.g12_on]? {p:lex.ui.avatar.parts?} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPartColored arg.part={p} arg.value={v} arg.color={c} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=9
-    example="Wear a red hat."
-    example="A red hat."
-
-@pat.ui.avatar.x.color.colorfor core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {c:lex.ui.avatar.colors} [for|on|to]? [the|your|ur|my] {p:lex.ui.avatar.colorparts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
-    kind=request
-    priority=10
-    example="Blue for the body."
-
-@pat.ui.avatar.x.tone.first core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {t:lex.ui.avatar.tone} [for|on|in|to]? [the|your|ur]? {p:lex.ui.avatar.colorparts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.shiftColor arg.part={p} arg.dir={t}"
-    kind=request
-    priority=10
-    example="Lighter body."
-    example="Lighter for the body."
-
-@pat.ui.avatar.x.tone.after core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|have|get|let]? [the|your|ur]? {p:lex.ui.avatar.colorparts} [be|get|go|become]? [a_bit|a_little|a_lot|much|even|way|slightly|just_a_bit|little|bit]? {t:lex.ui.avatar.tone} [a_bit|a_little|a_lot|slightly|bit]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.shiftColor arg.part={p} arg.dir={t}"
-    kind=request
-    priority=11
-    example="Body a little brighter."
-    example="Make the body lighter a bit."
-
-@pat.ui.avatar.x.tone.verb core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [lighten|darken|brighten|pale|deepen] [up|down]? [the|your|ur]? {p:lex.ui.avatar.colorparts} [up|down]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.shiftColor arg.part={p} arg.dir=lighter"
-    kind=request
-    priority=9
-    example="Lighten the body up."
-
-@pat.ui.avatar.x.color.list core.pattern
-    match="[$lang.lead.filler|pls|plz]? [list|show|name|tell|what|which|whats|wat|any|show_me|name_the|list_the|tell_me]? [me]? [the|your|ur|all|all_the|all_of_the]? {p:lex.ui.avatar.colorparts} [color|colour|colors|colours|shades|tones]? [colors|colours|options|choices|shades|list|variants|can_do|you_can_do|you_have|do_you_have|can_be|can_it_be|can_have|you_can_have|are_there|exist] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listColors arg.part={p}"
-    kind=question
-    priority=9
-    example="Hair colors list?"
-    example="Hair color options?"
-
-@pat.ui.avatar.x.char.ask2 core.pattern
-    canonical="What character is on screen?"
-    match="[$lang.lead.filler|pls|plz]? [which|what] [character|avatar|type|kind|form|one] [is|are|am|is_it|are_you|r_u|is_this]? [on_screen|showing|on_the_screen|you|u|this|now|current|right_now|are_you|r_u]? [$lang.tail.filler|currently]?"
-    emit="@{_} core.request action=avatar.askCharacter"
-    kind=question
-    priority=10
-    example="What character is on screen?"
-
-@pat.ui.avatar.x.char.ask3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [are_you|r_u|are_u|u|you_are|you_a]? [the|a|an]? [robot|person|emoji|human|bot]? [or|or_a|or_the] [what|a|an|the]? [robot|person|emoji|human|bot|what]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askCharacter"
-    kind=question
-    priority=5
-    example="Are you the robot or what?"
-    example="U a robot or a person?"
-
-@pat.ui.avatar.x.char.current core.pattern
-    match="[$lang.lead.filler|pls|plz]? [current|present|active|showing|visible] [character|avatar|form|type|kind] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askCharacter"
-    kind=question
-    priority=8
-    example="Current character?"
-
-@pat.ui.avatar.x.char.list core.pattern
-    match="[$lang.lead.filler|pls|plz]? [list|show|name|tell|what|which|who|any|show_me|name_the|list_the|tell_me|options_for|options]? [me]? [the|all|all_the|all_of_the|your|ur|other]? [characters|avatars|forms|kinds_of_you|types_of_you|looks]? [characters|avatars|forms|choices|options|list|kinds|types|can_i_pick|can_you_be|can_i_choose|can_you_turn_into|you_can_be|you_can_turn_into|can_you_take|you_can_take|are_there|exist|there_are|do_you_have|are_available|available] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listCharacters"
-    kind=question
-    priority=9
-    example="List characters."
-    example="Characters list pls."
-    example="What other forms can you take?"
-
-@pat.ui.avatar.x.char.list2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [who|what|which_ones|which|what_forms|what_kinds|what_other_forms] [can|could] [you|u] [be|become|turn_into|change_into|take|look_like|transform_into] [list_them]? [list_them|too|all]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listCharacters"
-    kind=question
-    priority=9
-    example="Who can you be, list them?"
-    example="Which ones can you turn into?"
-
-@pat.ui.avatar.x.char.listx core.pattern
-    match="[$lang.lead.filler|pls|plz]? [what|which] [characters|avatars|forms|kinds|types] [can_i|can_we|could_i|do_i_have_to|are_there_to|exist_to]? [pick|choose|select|use|have|see] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listCharacters"
-    kind=question
-    priority=9
-    example="What characters can I pick?"
-
-@pat.ui.avatar.x.char.go core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [go|switch|be|become|turn|change|transform|morph|go_back_to|back_to]? [into|to]? [a|an|the|my|one|a_real|real|an_actual|actual]? [real|actual]? {who:lex.ui.avatar.characters} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
-    kind=request
-    priority=7
-    example="Change into a real person."
-    example="Go emoji."
-    example="Person please."
-
-@pat.ui.avatar.x.char.should core.pattern
-    match="[$lang.lead.filler|pls|plz]? [you_should_be|you_should_become|u_should_be|i_d_like_you_as|i_would_like_you_as|i_want_you_as|i_want_you_to_be|id_like_you_as|i_d_like|i_would_like|i_want|be] [a|an|the|my]? {who:lex.ui.avatar.characters} [$lang.tail.filler|instead|as_my_avatar]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
-    kind=request
-    priority=9
-    example="U should be a person now."
-
-@pat.ui.avatar.x.mood.ask core.pattern
-    match="[$lang.lead.filler|pls|plz]? [how|what|wat|whats|what_is|how_are|how_r|how_do|how_does|tell_me|show_me]? [do_you|do_u|are_you|r_u|are_u|is_your|is_ur|your|ur|the]? [feel|feeling|feelings|mood|moods|vibe|emotion|emotions|expression|face_mood|mood_of_your_face] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askMood"
-    kind=question
-    priority=7
-    example="Mood?"
-    example="How r u feeling?"
-
-@pat.ui.avatar.x.mood.show core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|do|pull|make|put_on|give_me|gimme|show_me|make_a]? [a|an|the|your|ur]? {m:lex.ui.avatar.moods} [face|expression|look|mode|one] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
-    kind=request
-    priority=9
-    example="Surprised face pls."
-    example="Surprise face!"
-
-@pat.ui.avatar.x.mood.noun core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|make|put_on|give_me|show_me|do] [some]? [surprise|happiness|sadness|joy|anger|fear|calm|calmness] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood=surprised"
-    kind=request
-    priority=4
-    example="Show surprise."
 
 @pat.ui.avatar.x.name.set core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [name|call|rename|dub|label|christen] [yourself|urself|you|u|it|the_avatar|the_robot|this_avatar|this_one] [as|to|by|the_name]? {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -867,765 +137,241 @@
     example="How do I call you?"
     example="What name do you go by?"
 
-@pat.ui.avatar.x.seed.ask core.pattern
-    canonical="What seed is this look from?"
-    match="[$lang.lead.filler|pls|plz]? [what|which|whats|wat|tell_me|show_me|what_is|what_number_is|which_number_is|what_s|your|ur|current|the]? [is|are]? [the|your|ur|this|that]? [look|number|value]? [seed|seed_number|seed_value|seeds] [are_you|r_u|do_you_have|you_have|you_use|you_are_using|are_you_using|is_this_look_from|is_this|are_you_on|gave_you_this_look|this_look_from|did_this_look_come_from|is_it|you_re_using|number|value|is_this_from|drew_you|made_you|made_this_look]? [number|value|from|is_it|rn|now]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askSeed"
-    kind=question
-    priority=7
-    example="Seed?"
-    example="What seed is this look from?"
-    example="Which seed gave you this look?"
+# ---- ONE AVATAR: the generic operations over the slots of the face (facelogic.mjs). No part is named in a pattern: the words after the verb are read over the data of the catalog.
+# On the Avatar tab (tabOnly) the verb alone is enough; anywhere else the sentence must address the avatar ("your", "yourself", "the avatar").
 
-@pat.ui.avatar.x.surprise.a core.pattern
-    match="[$lang.lead.filler|pls|plz]? [random|randomly|surprise|something_random|go_random|totally_random] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.surprise arg.mode=surprise"
+@pat.ui.avatar.add core.pattern
+    canonical="Put on a hat."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [wear|put_on] [me|yourself|myself]? [a|an|the|some|my|your|ur]? {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.add arg.words=\"{w}\""
     kind=request
-    priority=8
-    example="Random please."
-
-@pat.ui.avatar.x.surprise.b core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [random|randomise|randomize|shuffle|mix|mix_up|surprise|roll|redo] [a|an|the|your|ur|me|it|yourself|urself|with|up]? [random|new|surprise|different|brand_new]? [look|outfit|you|yourself|urself|avatar|face|it]? [randomly|at_random|for_me|with_a_new_look|with_a_random_look|up|with_a_surprise]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.surprise arg.mode=surprise"
-    kind=request
-    priority=7
-    example="Shuffle your look."
-    example="Mix it up."
-    example="Randomize your look please."
-
-@pat.ui.avatar.x.everything core.pattern
-    match="[$lang.lead.filler|pls|plz]? [new|different|fresh|all_new|totally_new|completely_new|whole_new|brand_new|change|redo|switch|swap|make|redesign|mix_up|reroll|randomise|randomize] [everything|all|the_whole_thing|the_whole_look|the_whole_you|the_whole_face|all_of_it|all_of_your_parts|all_your_parts|the_whole_avatar|all_parts|you|look] [different|new|else|again|something_else|to_something_else|something_different|up|over]? [now|completely|totally]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.surprise arg.mode=everything"
-    kind=request
-    priority=4
-    example="New everything."
-    example="Redo the whole look."
-    example="All new you."
-
-@pat.ui.avatar.x.everything.b core.pattern
-    match="[$lang.lead.filler|pls|plz]? [everything|all_of_it|the_whole_look|the_whole_thing|all_of_you] [different|new|else|something_else|something_different|changed] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.surprise arg.mode=everything"
-    kind=request
+    tabOnly=true
+    tabClaim=true
     priority=6
-    example="Everything different now."
+    example="Add glasses."
+    example="Wear a hat."
+    example="Give me a beard."
+    example="I want sunglasses."
 
-@pat.ui.avatar.x.mood.check core.pattern
-    canonical="Is your face happy?"
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.say_you|are|r|is|do|does|would_you_say|you|u|your|ur|this|does_this|do_you|do_u|are_you|r_u|are_u|you_look|u_look] [you|u|your_face|ur_face|this|it|look|looking|feel|feeling|seem|like]? [look|looking|feel|feeling|seem|like|a|an]? [like]? [a|an]? {m:lex.ui.avatar.moods} [face|expression|right_now|rn|now|or_nah|or_not|right|today]? [$lang.tail.filler|or_nah|right]?"
-    emit="@{_} core.request action=avatar.checkMood arg.mood={m}"
-    kind=question
-    priority=6
-    example="You happy?"
-    example="Is your face happy?"
-    example="Would you say you look happy?"
-    example="Would you say you are happy?"
-    example="Does this look like a happy face?"
-
-@pat.ui.avatar.x.mood.check2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? {m:lex.ui.avatar.moods} [right_now|rn|now|or_nah|or_not|face_or_nah|face_or_not]"
-    emit="@{_} core.request action=avatar.checkMood arg.mood={m}"
-    kind=question
-    priority=5
-    example="Happy right now?"
-
-@pat.ui.avatar.color.who core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|paint|color|colour|dye|turn|change|i_want|i_would_like|id_like|i_d_like|i_want_you|i_want_you_to_be|i_want_to_be|let_me_be|you_should_be] [me|myself|it|u|you|my_avatar|the_avatar|your_avatar|the_robot|the_character|everything] [to_be|into|to]? [a|an]? {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
-    kind=request
-    priority=12
-    example="Make it red."
-    example="Make me green."
-    example="Turn the avatar blue."
-
-@pat.ui.avatar.setpart.adj_noun core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|u_should|u_can|you_can]? [i_want|i_would_like|id_like|i_d_like|i_need|i_wanna|gimme|give_yourself|give_me|put|place|stick|slap]? [a|an|the|your|my|ur|some|new]? {v:lex.ui.avatar.options} [on|on_top_of|on_your|on_my|on_the|in|up|in_your]? {p:lex.ui.avatar.parts} {n:number?} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=11
-    example="Grill mouth now."
-    example="Dish on top please."
-    example="Put a dish up top."
-
-@pat.ui.avatar.setpart.on core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|u_should|u_can|you_can]? [put|place|have|wear|try|add|get|i_want|i_wanna|gimme|give_yourself]? [a|an|the|some|your]? {v:lex.ui.avatar.options} [on|on_you|on_u|on_urself|on_yourself|on_me] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.value={v} arg.text=\"{v}\""
-    kind=request
-    priority=10
-    example="Shades on you please."
-    example="Put sunglasses on."
-
-@pat.ui.avatar.x2.wear core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [give_yourself|give_urself|give_me|get|have|wear|use|add|put_on|try|try_on|grow|show|show_me|switch_to|change_to|i_want|i_would_like|would_like|i_need|gimme|i_wanna|i_wana|put|place|stick|slap|rock|sport|be_wearing|look_with|come_with|come_in|try_out|test|test_out|go_with|go_for|lets_try|let_me_see|i_wanna_see|i_want_to_see|how_about|what_about|can_i_see|show_yourself_with|show_urself_with|become_with|dress_up_with|dress_up_in|put_on_some|put_on_a|put_on_your|put_on_ur] [$ui.avatar.g10_a]? {v:lex.ui.avatar.options} {n:number?} [on|on_you|on_u|on_yourself|on_urself|on_your_face|on_ur_face|on_your_head|on_ur_head|on_now|on_for_me|on_pls|with_you|for_you|for_u|for_me|too|also|on_too]? [$lang.tail.filler|right_now_thank_you|now_thank_you]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.setPart arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=11
-    example="U should wear sunglasses lol"
-    example="Wear sunglasses right now thank you"
-
-@pat.ui.avatar.x2.bare core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [a|an|the|your|ur|my|some|new|a_pair_of|some_kind_of]? {v:lex.ui.avatar.options} {n:number?} [pls|plz|thx|lol|asap|now_pls|now_plz|for_me|for_me_pls|on_pls|on_plz|on_you_pls|on_you_please|on_you|on_u|on_urself|on_yourself|on_me|on_for_me|on_please|thanks|thank_you|haha|hehe]"
-    emit="@{_} core.request action=avatar.setPart arg.value={v} arg.n={n} arg.text=\"{v}\""
+@pat.ui.avatar.add.you core.pattern
+    canonical="Give yourself a hat."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|give_urself|put_on_yourself|dress_yourself_with|grow_yourself|wear|put_on] [a|an|the|some]? {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.add arg.words=\"{w}\""
     kind=request
     priority=9
-    example="Sunglasses pls"
+    example="Give yourself a hat."
+    example="Give yourself a beard."
 
-@pat.ui.avatar.x2.shades core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [give_yourself|give_urself|get|have|wear|put_on|try|try_on|show|show_me|i_want|i_would_like|i_need|gimme|put|rock|sport|be_wearing|let_me_see|i_wanna_see|i_want_to_see|how_about|what_about]? [the|a|an|your|ur|my]? [shades|sunnies|cool_shades|dark_shades|dark_glasses|sun_glasses|sun_glass|cool_glasses|summer_glasses|sunglasses] [on|on_you|on_u|on_yourself|on_urself|on_now|on_for_me|on_too]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.setPart arg.value=sunglass arg.text=\"sunglasses\""
-    kind=request
-    priority=13
-    example="Shades on you please"
-    example="Put some sunnies on"
-
-@pat.ui.avatar.x2.top core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [$ui.avatar.g6_give_yourself]? [the|a|an|your|ur|my]? {v:lex.ui.avatar.options} {n:number?} [on|on_top_of|up|up_on|at|in|onto|over|at_the|on_the|up_at]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} {n2:number?} [$ui.avatar.g5_of_you]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=12
-    example="Can i have a dish on top of u"
-    example="Would like a dish on the top"
-    example="A dish on top would be nice"
-    example="I wanna see a dish on top"
-
-@pat.ui.avatar.x2.hair.q core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [what|which|wat|whats|what_is|what_s|tell_me|tell_me_what|tell_me_which|tell_me_your|tell_me_ur|tell_me_the|can_you_tell_me|can_you_tell_me_what|can_u_tell_me|can_u_tell_me_what|could_u_tell_me|could_you_tell_me|could_u_tell_me_what|could_you_tell_me_what|can_you_say|can_you_say_what|do_you_know|show_me|show_me_your|show_me_ur|show_me_the|say|say_what|say_your|what_are|what_is_your|what_is_ur|and_what|and_which|so_what|so_which|what_about|how_about|how_s|how_is|which_is|what_s_your] [of]? [your|ur|the]? [kind_of|kind|kinds_of|type_of|types_of|sort_of|sorts_of|style_of|styles_of|kinds|types|sorts|styles|type|sort|style]? [of]? [your|ur|the]? [hair|hairstyle|hair_style|haircut|hairdo|hair_do] [do_you_have|do_u_have|u_have|you_have|u_got|you_got|have_you_got|have_u_got|are_you_wearing|are_u_wearing|are_you_using|do_you_use|do_you_wear|do_u_wear|is_on_you|is_on_u|is_that|is_it|is_yours|are_you_sporting|are_you_rocking|you_wearing|u_wearing|u_got_on|you_got_on|u_have_on|you_have_on|look_like|looks_like|like|is_like|do_you_got|do_u_got|have_you|have_u|got|have|now|currently|right_now|rn|today|atm|do_you_have_now|you_have_now|u_have_now|you_got_now|u_got_now|do_u_have_now|is_it_now|is_it_currently|is_on_you_now|is_on_u_now|are_you_wearing_now|are_u_wearing_now|you_have_right_now|u_have_right_now|you_got_atm|u_got_atm|are_you_wearing_atm|do_you_have_right_now|do_u_have_right_now|do_you_have_at_the_moment|are_you_using_now|are_u_using_now]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.askPart arg.part=hair"
-    kind=question
-    priority=13
-    example="What hair u got"
-    example="Which hairstyle do you have now"
-    example="What sort of hair is on you"
-    example="Tell me ur hair style"
-    example="Could u tell me what hair u have"
-    example="Whats ur hair like"
-    example="What kind of hair u got pls"
-
-@pat.ui.avatar.x2.hair.q2 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [hairstyle|hair_style|haircut|hairdo|hair_type|hair_types|hair_styles|hairstyles|haircuts|hairdos|hair_kinds|hair_options|hair_choices|hair_variants|types_of_hair|kinds_of_hair|styles_of_hair|hair_variety|hair_varieties|hair_types_you_have|hair_style_you_have|hairstyle_you_have|your_hair|ur_hair|your_hairstyle|ur_hairstyle|your_hair_style|ur_hair_style] [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.askPart arg.part=hair"
-    kind=question
-    priority=8
-    example="Hair types?"
-    example="Hairstyle?"
-
-@pat.ui.avatar.x2.has core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [do_you_have|do_u_have|have_you_got|have_u_got|are_you_wearing|are_u_wearing|r_u_wearing|r_you_wearing|do_you_wear|do_u_wear|are_you_using|r_u_using|u_got|you_got|u_have|you_have|is_there|are_there|have_you|have_u|you_wearing|u_wearing|u_sporting|you_sporting|are_you_sporting|r_u_sporting|are_you_rocking|r_u_rocking|do_you_got|do_u_got|have_you_got_any|do_you_have_any|do_u_have_any|got_any|have_any|is_that|do_you_sport|do_you_rock|do_u_sport|do_u_rock|are_you_with|r_u_with|you_with|u_with|does_it_have|you_still_have|u_still_have|do_you_still_have|do_u_still_have|are_you_still_wearing|r_u_still_wearing] [$ui.avatar.g10_a]? {v:lex.ui.avatar.options} {n:number?} [on|on_you|on_u|on_urself|on_yourself|on_me|on_now|now|on_right_now|right_now|rn|today|atm|currently|or_not|or_no|or_nah|or_what|yet|at_all|too|also|already|there|then|here|on_your_face|on_ur_face|on_your_head|on_ur_head|at_the_moment|on_at_the_moment|on_rn|on_atm|or_nope|or_naw|or_nay|or_something]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.hasThing arg.value={v} arg.text=\"{v}\""
-    kind=question
-    priority=13
-    example="R u wearing glasses"
-    example="U got glasses?"
-    example="Is there glasses on you"
-    example="You have glasses or not"
-    example="Do u have glasses on"
-
-@pat.ui.avatar.x2.mood.smile core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [are_you|are_u|r_u|r_you|do_you_look|do_u_look|you_are|u_are|you_look|u_look|is_your_face|is_ur_face|you|u] [smiling|grinning|beaming|smiley|smiling_now|smiling_rn|smiling_right_now|smiling_atm] [$lang.tail.filler|or_nah|or_not|currently|or_no|or_nope]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.checkMood arg.mood=happy"
-    kind=question
-    priority=13
-    example="Are u smiling?"
-
-@pat.ui.avatar.x2.reset1 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [reset|restore|revert|undo|default|normalize|normalise|put_back|set_back|bring_back|change_back|switch_back|turn_back|reset_back|restore_back] [your|the|ur|my]? {p:lex.ui.avatar.parts} [to|back_to|to_the|back_to_the|back_to_its|to_its|back_into|into|as]? [$ui.avatar.g3_normal]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
-    kind=request
-    priority=12
-    example="Can u reset ur mouth to default"
-    example="Reset the mouth pls"
-
-@pat.ui.avatar.x2.reset2 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [your|the|ur|my]? {p:lex.ui.avatar.parts} [back_to|to|back_to_the|to_the|back|go_back_to|goes_back_to|should_go_back_to|should_be|must_be|needs_to_be|to_be|be|is_to_be|should_return_to|return_to|returns_to|reset_to|reset_to_the|restored_to|revert_to|reverted_to|set_to|set_back_to|change_back_to] [$ui.avatar.g3_normal] [$lang.tail.filler]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
-    kind=request
-    priority=12
-    example="Mouth back to normal"
-    example="Mouth to default please"
-
-@pat.ui.avatar.x2.reset3 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [undo|revert|cancel|reverse|take_back|rollback|roll_back|remove] [the|my|your|ur|that|this|last]? [last]? {p:lex.ui.avatar.parts} [change|changes|edit|edits|switch|swap|modification|modifications|thing|update|updates|alteration|alterations|customization|customisation|tweak|tweaks|adjustment|adjustments] [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
-    kind=request
-    priority=12
-    example="Undo the mouth change"
-
-@pat.ui.avatar.x2.reset4 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [go_back_to|return_to|switch_back_to|change_back_to|back_to|bring_back|give_me_back|i_want|i_want_back|i_wanna_have|i_would_like|can_i_have|could_i_have|gimme|put_back|restore|reset|i_need|i_wanna_see|i_want_to_see|let_me_see|show_me|show|bring_back_the|give_back|get_back] [the|my|your|ur]? [$ui.avatar.g3_normal] {p:lex.ui.avatar.parts} [$lang.tail.filler|back|as_before|1_more_time]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
-    kind=request
-    priority=12
-    example="Go back to the normal mouth"
-    example="I want the default mouth again"
-
-@pat.ui.avatar.x2.prev1 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [$ui.avatar.g4_go_to]? [the|a|an|your|ur|my]? [$ui.avatar.g9_previous] [one|1]? [for|of|on|in|with]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
-    kind=request
-    priority=12
-    example="Prev mouth"
-    example="Can you go back to the last mouth"
-
-@pat.ui.avatar.x2.prev2 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [back_one|go_back_one|one_back|one_step_back|step_back|go_back_a_step|back_a_step|back_one_step|go_back|back|go_one_back|go_one_step_back|take_one_step_back|go_back_1|go_back_one_step|step_back_on|step_back_for|undo_one_step_on|undo_one_step_for|rewind|rewind_the|go_back_on|go_back_for|go_back_with|back_1|1_back|1_step_back|back_1_step|go_1_back|go_1_step_back|take_1_step_back|go_back_1_step|undo_1_step_on|undo_1_step_for] [for|on|in|with|of|to]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [one|one_step|a_step|1_step|1]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
-    kind=request
-    priority=12
-    example="Back one for the mouth"
-
-@pat.ui.avatar.x2.prev3 core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [previous|prev|last|before|prior|earlier|former|one_back|one_step_back|a_step_back|back_one|back_one_step|back_a_step|previous_one|the_previous_one|the_last_one|the_one_before|from_before|before_this|before_this_one|one_before|back|backwards|backward|go_back|step_back|1_back|1_step_back|before_that|before_that_one|the_one_from_before|the_previous|the_last|the_earlier_one|the_old_one|previous_please|prev_one|last_one|former_one|prior_one|back_1|back_1_step|previous_1|the_previous_1|the_last_1|the_1_before|before_this_1|1_before|before_that_1|the_1_from_before|the_earlier_1|the_old_1|prev_1|last_1|former_1|prior_1] [one|please|pls|plz|now|for_me|1]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
-    kind=request
-    priority=12
-    example="Mouth previous one pls"
-    example="Mouth one step back"
-    example="The mouth from before, please"
-
-@pat.ui.avatar.x2.prev4 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [go_to|show_me|try|switch_to|use|get|pick|choose|show|go_back_to|back_to|i_want|give_me|take_me_to|let_me_see|i_want_to_see] [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [before|prior_to|preceding|previous_to|that_came_before|from_before|just_before] [this_one|this|that_one|the_current_one|the_current|now|it|the_present_one|the_present|current|this_1|that_1|the_current_1|the_present_1] [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
-    kind=request
-    priority=12
-    example="Go to the mouth before this one"
-
-@pat.ui.avatar.x2.next.hair core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [$ui.avatar.g4_go_to]? [the|a|an|your|ur|my]? [next|following|subsequent|another|new] [$ui.avatar.g15_hair] [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.step arg.part=hairstyle arg.dir=next"
-    kind=request
-    priority=13
-    example="Next hair please"
-    example="Try the following hair"
-    example="Next hair style for me"
-
-@pat.ui.avatar.x2.prev.hair core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [$ui.avatar.g4_go_to]? [the|a|an|your|ur|my]? [$ui.avatar.g9_previous] [$ui.avatar.g15_hair] [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.step arg.part=hairstyle arg.dir=previous"
-    kind=request
-    priority=13
-    example="Previous hair please"
-
-@pat.ui.avatar.x2.next1 core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [next|following|subsequent|next_one|one_forward|forward|step_forward|forwards|the_next_one|the_next|the_following_one|the_following|one_ahead|ahead|one_step_forward|a_step_forward|forward_one|forward_one_step|next_please|next_1|1_forward|the_next_1|the_following_1|1_ahead|1_step_forward|forward_1|forward_1_step] [one|please|pls|plz|now|for_me|1]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
-    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=next"
-    kind=request
-    priority=12
-    example="Mouth next one pls"
-
-@pat.ui.avatar.x2.surprised core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [make|set|turn|change|put|give_me|make_yourself|look|be|act|pull|do|try|i_want|i_wanna_see|i_want_to_see|i_wanna_have|let_me_see|can_i_see|how_about|what_about|go|get|have|look_like|appear|seem|act_like|pretend_to_be|pretend_you_are|pretend_you_re|pretend_to_look] [a|an|the|your|ur|me|you|u|yourself|urself|ur_face|your_face|ur_look|your_look|ur_expression|your_expression]? [face|look|expression|ur_face|your_face]? [to|into|be|look|looking|like|as]? [a|an]? [surprised|shocked|astonished|amazed|stunned|startled] [face|look|expression|look_on_your_face|look_on_ur_face|on_your_face|on_ur_face]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood=surprised"
-    kind=request
-    priority=12
-    example="Make ur face surprised"
-    example="I want to see you surprised"
-    example="Look surprised pls"
-
-@pat.ui.avatar.s2.add.to core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [add|put|stick|attach|place|install|fit|give|mount|pin|glue] [a|an|the|some|new|your|ur|my]? {v:lex.ui.avatar.options} {n:number?} [to|onto|on|on_to|in|at|for|into|on_top_of|to_the|on_the] [your|the|ur|my|ur_own]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=13
-    example="Add vents to your chest."
-    example="Stick a heart on your chest."
-    example="Put a dish on your head."
-
-@pat.ui.avatar.s2.shaped core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$ui.avatar.g7_give_yourself]? [a|an|the|some|new|your|ur|my|a_pair_of|pair_of]? {v:lex.ui.avatar.options} [shaped|style|type|looking|like]? [shaped|style|type|looking]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.text=\"{v}\""
-    kind=request
-    priority=12
-    example="Give me plus shaped eyes."
-    example="Can you give yourself a pair of visor eyes?"
-
-@pat.ui.avatar.s2.remove.thing core.pattern
-    canonical="Remove the thing on your chest."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take_off|remove|lose|drop|ditch|get_rid_of|take_away|hide|take_out|delete|clear|undo] [your|the|that|a|an|my|ur]? [thing|stuff|item|decoration|accessory|piece|part|gadget|gizmo|device|extra|ornament|bit|doodad]? [on|from|off|at|of|in|off_of|on_top_of] [your|the|ur|my]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.removePart arg.part={p}"
-    kind=request
-    priority=13
-    example="Remove the thing on your chest."
-    example="Take the decoration off your chest."
-
-@pat.ui.avatar.s2.color.prefer core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_prefer|i_like|i_would_prefer|i_would_like|i_d_like|id_like|i_want|i_wish|show_me|let_me_see|how_about|what_about|try|maybe|why_not] [you|yourself|u|urself] [to_be|in|as|being|looking|to_look|to_go|to_turn|to_become]? [a|an]? {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
-    kind=request
-    priority=13
-    example="I prefer you in yellow."
-    example="How about you in purple?"
-
-@pat.ui.avatar.s2.tone.should core.pattern
-    canonical="The screen could be lighter."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_wish|i_think|i_prefer|make_sure]? [the|your|my|ur]? {p:lex.ui.avatar.colorparts} [color|colour]? [should_be|must_be|needs_to_be|could_be|can_be|should_look|should_get|should_become|will_be|to_be|be|is|looks|looked|would_be|would_look|could_look|could_get]? [a_bit|a_little|a_lot|much|even|way|slightly|somewhat|just_a_bit|just_a_little|a_touch|a_tad|bit|little]? {t:lex.ui.avatar.tone} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.shiftColor arg.part={p} arg.dir={t}"
-    kind=request
-    priority=14
-    example="Your body should be a bit darker."
-    example="The screen could be lighter."
-
-@pat.ui.avatar.s2.list.parts core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|list|show_me|tell_me|name] [all|all_the|the]? {p:lex.ui.avatar.parts} [are|can_you_have|exist|are_available|are_there|do_you_come_in|can_i_choose|can_i_pick|can_i_have|can_you_wear|can_you_use|can_you_get|there_are|is_there]? [there|available|possible|on_offer|to_choose_from|to_pick|to_choose|exist|can_you_have|can_i_pick]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
-    kind=request
-    priority=14
-    example="What mouths are there?"
-    example="Which eyes can I pick?"
-
-@pat.ui.avatar.s2.back.to core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [go_back_to|back_to|return_to|revert_to|change_back_to|put_back|switch_back_to|set_back_to|go_back_to_the|get_back_to|bring_back|bring_back_the|restore_the|restore] [the|your|ur|my|a|an]? {v:lex.ui.avatar.options} {n:number?} [on|on_your|in|for_your]? {p:lex.ui.avatar.parts?} [again|please|pls]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=13
-    example="Go back to round eyes."
-    example="Switch back to the grill mouth."
-
-@pat.ui.avatar.s2.swap core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|switch|trade|exchange|replace|change|swop] [your|the|ur|my]? {p:lex.ui.avatar.parts} [for|with|to|into|by|out_for] [a|an|the|some|your]? {v:lex.ui.avatar.options} {n:number?} [ones|one|ones_instead|instead|ones_please|ones_pls]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=13
-    example="Swap your eyes for cyclops ones."
-    example="Trade your mouth for a zigzag."
-
-@pat.ui.avatar.s2.wishwear core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_would_like|i_want|i_d_like|id_like|i_wish|i_need|we_want|we_would_like|i_prefer] [you_to|u_to|you_to_be_able_to] [have|wear|use|try|put_on|get|show|grow|sport]? [a|an|the|some|your|new]? {v:lex.ui.avatar.options} {n:number?} [on_top_of|on|at|in|onto|over|on_the_top_of|up_on|for]? [the|your|ur|my]? {p:lex.ui.avatar.parts?} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=13
-    example="I would like you to wear a dish on top of your head."
-    example="I want you to have visor eyes."
-
-@pat.ui.avatar.s2.lookbetter core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_think|i_feel|maybe|i_believe|perhaps|i_guess|i_bet|i_say]? [you|u] [would|will|could|might|d|should]? [look|be|seem] [better|nicer|cooler|good|great|best|cute|cuter|prettier|funnier|happier|neater]? [with|in|if_you_had|if_you_wore|as|having|wearing] [a|an|the|some|your|new]? {v:lex.ui.avatar.options} {n:number?} [shaped]? {p:lex.ui.avatar.parts?} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    kind=request
-    priority=13
-    example="I think you would look better with square eyes."
-
-@pat.ui.avatar.s2.putback core.pattern
-    canonical="Put your eyes back like they were."
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [put|set|change|turn|switch|bring|get|make|restore|move] [your|the|ur|my]? {p:lex.ui.avatar.parts} [back|again]? [back_to|to|like|as|the_way|how|to_how|just_like|exactly_like]? [they_were|it_was|they_used_to_be|it_used_to_be|they_were_before|it_was_before|before|what_they_were|what_it_was|normal|how_they_were|how_it_was|the_way_they_were|the_way_it_was|like_they_were|like_it_was|originally|at_first|the_old_way] [please|pls|plz|thanks|now]?"
-    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
-    kind=request
-    priority=14
-    example="Put your eyes back like they were."
-    example="Change your mouth back to how it was."
-
-@pat.ui.avatar.ask.name core.pattern
-    match="[call_yourself|rename_yourself|name_yourself|change_your_name|give_yourself_a_name|pick_a_name_for_yourself|set_your_name]"
-    emit="@{_} core.request action=chat.ask arg.q=\"What should my name be?\" arg.template=\"rename yourself to <x>\" arg.world=\"ui.avatar\""
-    kind=request
-    priority=15
-    example="Call yourself."
-    doc="Clarification (spec 11 section 3): the new name is missing; asks for it and completes the sentence with the next utterance."
-
-@pat.ui.avatar.resize.should core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.polite|i_wish|make_sure]? [the|your|my|ur]? {p:lex.ui.avatar.parts} [should_be|must_be|needs_to_be|need_to_be|has_to_be|have_to_be|to_be|will_be|shall_be|can_be|could_be|should_get|to_get|is|are|be|get|gets|look|looks]? [a_bit|a_little|a_lot|much|even|way|slightly|a_bit_more]? {s:lex.ui.avatar.size} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir={s}"
-    kind=request
-    priority=12
-    example="The eyes should be bigger."
-    example="I want the eyes larger."
-    example="Eyes much bigger please."
-    example="Your eyes need to be smaller."
-
-@pat.ui.avatar.color.should core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.polite|i_wish|i_prefer|make_sure]? [the|your|my|ur]? {p:lex.ui.avatar.colorparts} [color|colour]? [should_be|must_be|needs_to_be|need_to_be|has_to_be|have_to_be|to_be|will_be|shall_be|can_be|could_be|should_become|to_become|should_turn|to_turn|should_go|to_go|should_look|is|are|be|becomes|turns|goes]? [a|an]? {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
-    kind=request
-    priority=13
-    example="Body color should be red."
-    example="I want the body colour to be blue."
-    example="Your background must be dark gray."
-    example="Hair colour green."
-
-@pat.ui.avatar.color.adj core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|give_me|have|get|wear|use|show_me|pick|choose|i_want|i_would_like|try|make|make_yourself|make_me|i_need|gimme|i_wanna|i_wana]? [a|an|the|your|my|ur]? {c:lex.ui.avatar.colors} {p:lex.ui.avatar.colorparts} [color|colour]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
-    kind=request
-    priority=14
-    example="Give yourself a light green screen."
-    example="Red body colour."
-    example="I want a blue background colour."
-    example="Blue eyes."
-    example="I want a dark gray background."
-
-@pat.ui.avatar.x.color.partfirst core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|can|could]? [make|turn|paint|color|colour|set]? [your|ur|the]? {p:lex.ui.avatar.colorparts} [color|colour]? [to|into|be|become|go|in|a|an|to_be|looking]? {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
+@pat.ui.avatar.add.on core.pattern
+    canonical="Put a hat on yourself."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [put|place|add|stick|draw] [a|an|the|some]? {w:words(4)} [on_yourself|on_your_face|on_your_head|to_yourself|to_your_face|on_the_avatar|on_the_face|to_the_avatar|on_you|on_ur_face]"
+    emit="@{_} core.request action=avatar.add arg.words=\"{w}\""
     kind=request
     priority=10
-    example="Body blue."
-    example="Can your body be blue?"
-    example="I want the body blue."
+    example="Put a hat on yourself."
+    example="Add glasses to your face."
 
-@pat.ui.avatar.x.color.ask3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? {p:lex.ui.avatar.colorparts} [color|colour|shade] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.askColor arg.part={p}"
+@pat.ui.avatar.remove core.pattern
+    canonical="Take off the glasses."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take_off|take_out] [your|the|my|that|a|an|ur]? {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.remove arg.words=\"{w}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=7
+    example="Remove the hat."
+    example="Take off the glasses."
+    example="Get rid of the beard."
+
+@pat.ui.avatar.remove.you core.pattern
+    canonical="Take off your glasses."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [remove|take_off|take_away|take_out|lose|drop|hide|get_rid_of|ditch] [your|ur|yourself_of_your] {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.remove arg.words=\"{w}\""
+    kind=request
+    priority=10
+    example="Take off your glasses."
+    example="Remove your hat."
+
+@pat.ui.avatar.remove.off core.pattern
+    canonical="Take the hat off."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|put|get|pull] [the|your|that|a]? {w:words(4)} [off|away|off_yourself|off_your_face|off_your_head]"
+    emit="@{_} core.request action=avatar.remove arg.words=\"{w}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=8
+    example="Take the glasses off."
+
+@pat.ui.avatar.without core.pattern
+    canonical="Without glasses."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|be|look|draw|show_me]? [yourself|me|it|the_face]? [without|with_no] [a|an|the|any]? {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.remove arg.words=\"{w}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=7
+    example="No glasses."
+    example="Without a hat."
+
+@pat.ui.avatar.change.another core.pattern
+    canonical="Another hat."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|i_want|have|use|put_on|wear]? [another|a_different|a_new|another_one] {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.change arg.dir=different arg.words=\"{w}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=8
+    example="Another nose."
+    example="Try a different hat."
+
+@pat.ui.avatar.change.next core.pattern
+    canonical="The next mouth."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to]? [the|my|your]? [next|following|one_more] {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.change arg.dir=next arg.words=\"{w}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=8
+    example="Next mouth."
+    example="Try the next hat."
+
+@pat.ui.avatar.change.previous core.pattern
+    canonical="The previous nose."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [try|show|give_me|let_me_see|use|go_to|switch_to|change_to|go_back_to]? [the|my|your]? [previous|prior|one_before|last_one_of_the] {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.change arg.dir=previous arg.words=\"{w}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=8
+    example="Previous nose."
+
+@pat.ui.avatar.change.you core.pattern
+    canonical="Change your hat."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|swap|switch|replace|redo|shuffle|randomise|randomize] [your|ur] {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.restyle arg.words=\"{w}\""
+    kind=request
+    priority=10
+    example="Change your nose."
+    example="Swap your glasses."
+
+@pat.ui.avatar.swap.for core.pattern
+    canonical="Swap the glasses for round ones."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|change|switch|replace|exchange] [the|your|my|ur]? {w:words(3)} [for|with|to|into|by] [a|an|the|some]? {v:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.add arg.words=\"{v} {w}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=9
+    example="Swap the glasses for round ones."
+    example="Change the hat to a crown."
+
+@pat.ui.avatar.become core.pattern
+    canonical="Become a woman."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|turn_into|change_into|transform_into|morph_into|look_like] [a|an|the|my|your|ur]? {w:rest} [face|look]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.restyle arg.words=\"{w}\""
+    kind=request
+    tabOnly=true
+    tabClaim=true
+    priority=5
+    example="Become a woman."
+    example="Be Grandma."
+    example="Look happy."
+    example="Load the clown face."
+
+@pat.ui.avatar.become.you core.pattern
+    canonical="Make yourself happy."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|change|paint] [yourself|urself|ur_self|the_avatar|the_face|your_face|ur_face] {w:rest} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.restyle arg.words=\"{w}\""
+    kind=request
+    priority=10
+    example="Make yourself happy."
+    example="Make the avatar a woman."
+    example="Paint yourself green."
+
+@pat.ui.avatar.which core.pattern
+    canonical="What hats are there?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|how_many] {w:words(3)} [are_there|can_you_have|can_you_wear|can_i_pick|can_i_choose|can_you_draw|can_you_put_on|can_i_try|can_you_show]"
+    emit="@{_} core.request action=avatar.which arg.words=\"{w}\""
+    kind=question
+    tabOnly=true
+    tabClaim=true
+    priority=9
+    example="What hats are there?"
+    example="Which noses can you have?"
+
+@pat.ui.avatar.mood.ask core.pattern
+    canonical="How do you look?"
+    match="[$lang.lead.filler|pls|plz]? [how_do_you_feel|how_are_you_feeling|what_is_your_mood|what_is_your_expression|what_mood_are_you_in|how_are_you_looking|how_do_you_look_now] [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.askMood"
     kind=question
     priority=8
-    example="Body colour pls."
+    example="How do you feel?"
+    example="What is your expression?"
 
-@pat.ui.avatar.setpart.noun_first core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite|u_should|u_can|you_can]? [$lang.lead.polite|gimme]? [your|the|my|ur|a|an]? {p:lex.ui.avatar.parts} [to|as|into|like|be|should_be|to_be|with]? [a|an|the]? {v:lex.ui.avatar.options} {n:number?} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+@pat.ui.avatar.self.describe core.pattern
+    canonical="What do you look like?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe_yourself|describe_you|what_do_you_look_like|what_do_you_look_like_now|what_are_you_wearing|what_do_you_have_on|how_do_you_look|tell_me_what_you_look_like|describe_your_face|describe_your_look|describe_your_avatar|what_do_you_wear|what_is_on_your_face|show_yourself] [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.describe"
+    kind=question
+    priority=10
+    example="What do you look like?"
+    example="What are you wearing?"
+
+@pat.ui.avatar.parts core.pattern
+    canonical="What can I change?"
+    match="[$lang.lead.filler|pls|plz]? [what|which] [can|could] [i|you|u] [change|customize|customise|modify|adjust|tweak|wear|put_on] [about_you|about_yourself|on_you]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.parts"
+    kind=question
+    priority=9
+    example="What can I change?"
+
+@pat.ui.avatar.save core.pattern
+    canonical="Save this as Grandma."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [save|keep|remember|store] [this|it|the_face|this_face|your_face|that]? [as|under|with_the_name|as_the_name|called|named] {name:rest}"
+    emit="@{_} core.request action=avatar.save arg.name=\"{name}\""
     kind=request
+    tabOnly=true
+    tabClaim=true
     priority=11
-    example="Mouth grill please."
-    example="I want your mouth as a grill."
-    example="Eyes visor."
-
-@shape.ui.avatar.colour core.shape
-    family=set
-    verb="make|turn|paint|color|colour|change|set|dye|tint"
-    obj="p:lex.ui.avatar.colorparts"
-    val="c:lex.ui.avatar.colors"
-    noun="color|colour"
-    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
-    det="your|the|ur|my"
-    objmod="whole|entire|full|complete"
-    sample="p=eyes;c=blue"
-    priority=14
-    example="Make your eyes blue."
-
-@shape.ui.avatar.colour.ask core.shape
-    family=ask.value
-    obj="p:lex.ui.avatar.colorparts"
-    noun="color|colour|shade|tint|hue"
-    emit="@{_} core.request action=avatar.askColor arg.part={p}"
-    det="your|the|ur|my"
-    sample="p=eyes"
-    priority=12
-    example="What colour are your eyes?"
-
-@shape.ui.avatar.size core.shape
-    family=set
-    verb="make|turn|get|have"
-    obj="p:lex.ui.avatar.parts"
-    val="s:lex.ui.avatar.size"
-    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir={s}"
-    det="your|the|ur|my"
-    mod="$ui.avatar.g11_a_bit"
-    sample="p=eyes;s=bigger"
-    priority=13
-    example="Make your eyes bigger."
-
-@shape.ui.avatar.part core.shape
-    family=set
-    verb="change|make|set|switch|turn|swap|wear|put_on|use|try"
-    obj="p:lex.ui.avatar.parts"
-    val="v:lex.ui.avatar.options"
-    extra="n:number?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
-    det="your|the|ur|my"
-    sample="p=antenna;v=dish"
-    priority=12
-    example="Change your antenna to a dish."
-
-@shape.ui.avatar.gender core.shape
-    family=set
-    verb="make|turn|transform|change|convert|morph|switch|set|turn_into|change_into|transform_into"
-    obj="o:lex.ui.avatar.self"
-    val="g:lex.ui.avatar.gender"
-    link="to|into|be|as|in|like|to_be"
-    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g}"
-    det="the|your|my|ur|this"
-    forms="imp,wish,ind"
-    sample="o=avatar;g=woman"
-    priority=15
-    example="Make the avatar a woman."
-
-@pat.ui.avatar.gender.be core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|turn_into|change_into|transform_into|switch_to|morph_into|look_like|i_want_to_be|i_wanna_be|i_want_you_to_be|you_should_be|be_like|show_me|i_want_to_see|make_me|make_yourself|give_me|i_want] [a|an|the]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|look|version]? [$lang.tail.filler|instead|again]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g} arg.mood={m}"
-    kind=request
-    priority=15
-    example="Become a woman."
-    example="I want to be a happy man."
-
-@pat.ui.avatar.gender.subject core.pattern
-    canonical="The avatar should be a woman."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [now|then|and_now]? [the|my|your|ur] [avatar|character|robot|face] [should|must|can|could|will|shall|has_to|needs_to]? [be|become|turn_into|change_into|transform_into|look_like|be_like] [a|an|the]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|version|one]? [now]? [$lang.tail.filler|instead|again]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g} arg.mood={m}"
-    kind=request
-    priority=15
-    example="The avatar should be a woman."
-    example="Now the avatar should be a happy man."
-    doc="RD2: a sentence that names the avatar and a kind of person works whatever the active tab is."
-
-@pat.ui.avatar.gender.now core.pattern
-    match="[now|then|and_now|and] [in|into|as|like] [a|an|the]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|version|one]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g} arg.mood={m}"
-    kind=request
-    priority=14
-    example="Now in a woman."
-    doc="RD2: the follow-up of an avatar change (\"now in a woman\"); it has literal words, so it is read in any tab."
-
-@pat.ui.avatar.gender.make core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|create|build|give|get|turn|show|let_me_see] [me|us|yourself|the_avatar|my_avatar]? [a|an|the|my|your|ur]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|version|one]? [$lang.tail.filler|instead]? [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g} arg.mood={m}"
-    kind=request
-    priority=15
-    tabOnly=true
-    example="Make a happy man."
-
-@shape.ui.avatar.reset core.shape
-    family=do
-    verb="reset|restore|clear"
-    obj="p:lex.ui.avatar.parts"
-    det="your|the|ur"
-    forms=imp,wish,ind,q
-    sample="p=eyes"
-    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
-    priority=12
-    example="Reset your eyes."
-
-@shape.ui.avatar.has core.shape
-    family=ask.exists
-    verb="have|got|wearing|wear|sporting"
-    pron="you|u|ya"
-    obj="v:lex.ui.avatar.options"
-    sample="v=glasses"
-    emit="@{_} core.request action=avatar.hasThing arg.value={v} arg.text=\"{v}\""
-    priority=12
-    skip=short
-    example="Do you have glasses?"
-
-@shape.ui.avatar.gallery core.shape
-    family=list
-    verb="show|list|display|give|let_me_see|i_want_to_see|open"
-    obj="o:lex.ui.avatar.gallery"
-    det="the|your|ur|all_the|all|my"
-    forms=imp,wish,ind
-    sample="o=character"
-    emit="@{_} core.request action=avatar.listCharacters"
-    priority=12
-    canonical="Show me the characters."
-    example="Show me other avatars."
-    example="Show the gallery."
-
-@pat.ui.avatar.part.number core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|give_me|use|try|set|put|wear|i_want|i_would_like|pick|choose|select|show]? [your|the|my|ur]? {p:lex.ui.avatar.parts} [style|variant|version|type|number|no|option|nr]? {n:number} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.n={n}"
-    kind=request
-    priority=11
-    example="Hair 13."
-    example="Give yourself eyes 5."
-    example="Choose hair style 7."
-
-@pat.ui.avatar.char.styled core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|turn_into|change_into|transform_into|look_like|i_want_to_be|i_wanna_be|show_me|i_want_to_see|make_me|make_yourself|make_the_avatar|give_me|i_want|i_wanna_see|let_me_see|make|turn_the_avatar_into|change_the_avatar_into] [a|an|the]? {m:lex.ui.avatar.moods?} {w:lex.ui.avatar.characters} {g:lex.ui.avatar.gender} [avatar|face|character|look|version]? [$lang.tail.filler|instead|again]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={w} arg.kind={g} arg.mood={m}"
-    kind=request
-    priority=16
-    example="Become a pixel woman."
-    example="Make me a happy cartoon man."
-    example="Show me a portrait girl."
-
-@pat.ui.avatar.gender.with core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|turn_into|change_into|transform_into|look_like|i_want_to_be|i_wanna_be|show_me|i_want_to_see|make_me|make_yourself|make_the_avatar|give_me|i_want|i_wanna_see|let_me_see|make|turn_the_avatar_into|change_the_avatar_into] [a|an|the]? {m:lex.ui.avatar.moods?} {w:lex.ui.avatar.characters?} {g:lex.ui.avatar.gender} [with|and|wearing|that_has|who_has|who_wears] [a|an|some]? {x:lex.ui.avatar.options} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={w} arg.kind={g} arg.mood={m} arg.with={x}"
-    kind=request
-    priority=17
-    example="Make me a woman with glasses."
-    example="Become a man with a beard."
-
-@pat.ui.avatar.gender.without core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|turn_into|change_into|transform_into|look_like|i_want_to_be|i_wanna_be|show_me|i_want_to_see|make_me|make_yourself|make_the_avatar|give_me|i_want|i_wanna_see|let_me_see|make|turn_the_avatar_into|change_the_avatar_into] [a|an|the]? {m:lex.ui.avatar.moods?} {w:lex.ui.avatar.characters?} {g:lex.ui.avatar.gender} [without|with_no|but_without|and_no|no] [a|an|any]? {x:lex.ui.avatar.options} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.setCharacter arg.who={w} arg.kind={g} arg.mood={m} arg.without={x}"
-    kind=request
-    priority=17
-    example="Become a man without a beard."
-    example="Make me a woman without glasses."
-
-@pat.ui.avatar.char.nth core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|pick|choose|take|use|select|i_want|i_would_like|give_me|go_to|switch_to|let_me_see|i_choose|i_pick|i_ll_take|i_will_take|try|i_want_to_see|show_me|select]? [me]? [the|my|number]? {o:ordinal} [character|avatar|picture|option|look|face] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.pickCharacter arg.n={o}"
-    kind=request
-    priority=12
-    example="Show me the fifth avatar."
-    example="Pick the sixth character."
-    example="The second character."
-
-@pat.ui.avatar.char.nth.one core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|pick|choose|take|use|select|i_want|i_would_like|give_me|go_to|switch_to|let_me_see|i_choose|i_pick|i_ll_take|i_will_take|try|i_want_to_see|show_me|select]? [me]? [the|my|number]? {o:ordinal} [one|ones] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.pickCharacter arg.n={o}"
-    kind=request
-    priority=20
-    tabOnly=true
-    canonical="The third one."
-    example="The third one."
-    example="Pick the fourth one."
-
-@pat.ui.avatar.char.step core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|pick|choose|take|use|select|give_me|go_to|switch_to|let_me_see|try|show_me|i_want|i_want_to_see|change_to|move_to]? [me]? [the|a|an|my]? {d:lex.ui.avatar.charstep} [character|avatar|look|one] [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.pickCharacter arg.dir={d}"
-    kind=request
-    priority=12
-    example="Next character."
-    example="Show me another avatar."
-    example="Previous avatar."
-
-# ---- AVATAR-FROM-PARTS: the drawn face (faceops.mjs) ---------------------------------------------------------------------------------------------------
-
-@pat.ui.avatar.face.describe core.pattern
-    canonical="Draw a face with a long nose and small green eyes."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|sketch|draw|paint|create|build|make|give_me|show_me|i_want|let_me_see|try] [me|yourself|a|an|the|my|your]? [face|portrait|sketch|police_sketch] [of|with|like|that_has|which_has|having] {w:rest}"
-    emit="@{_} core.request action=avatar.faceDescribe arg.words=\"{w}\""
-    kind=request
-    priority=14
-    example="Draw a face with a long nose and small green eyes."
-    example="Sketch a face of a woman with curly red hair and glasses."
-    example="Describe a face with thick eyebrows."
-
-@pat.ui.avatar.face.describe.kind core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [describe|sketch|draw|paint|show_me|let_me_see|i_want_to_see] [a|an|the]? {k:lex.ui.avatar.facekinds} [with|having|who_has|that_has]? {w:rest}"
-    emit="@{_} core.request action=avatar.faceDescribe arg.words=\"{k} {w}\""
-    kind=request
-    priority=14
-    example="Draw a woman with a long face and small green eyes."
-    example="Sketch an old man with a white beard."
-
-@pat.ui.avatar.face.describe.bare core.pattern
-    match="[a|an] {k:lex.ui.avatar.facekinds} [with|who_has|that_has|having] {w:rest}"
-    emit="@{_} core.request action=avatar.faceDescribe arg.words=\"{k} {w}\""
-    kind=request
-    priority=6
-    example="A woman with a long face and curly red hair."
-    example="A boy with big ears and glasses."
-
-@pat.ui.avatar.face.start core.pattern
-    canonical="Draw a face."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|use|switch_to|draw|show_me|give_me|start|make|i_want|show] [me|yourself|a|an|the|my]? [drawn|new|vector|custom|parts]? face"
-    emit="@{_} core.request action=avatar.faceStart"
-    kind=request
-    priority=13
-    example="Draw a face."
-    example="Become a drawn face."
-    example="Show me the new face."
-
-@pat.ui.avatar.face.move core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [move|put|bring|push|pull|set|get|make|place|have|keep]? [your|the|ur|my]? {p:lex.ui.avatar.faceparts} {a:lex.ui.avatar.faceamounts} {m:lex.ui.avatar.facemoves} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.faceMove arg.part={p} arg.words=\"{a} {m}\""
-    kind=request
-    tabOnly=true
-    onlyWhile=face.active
-    priority=13
-    example="Move the nose a bit down."
-    example="Put the eyebrows a little higher."
-
-@pat.ui.avatar.face.move.plain core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [move|put|bring|push|pull|set|get|make|place|have|keep]? [your|the|ur|my]? {p:lex.ui.avatar.faceparts} {m:lex.ui.avatar.facemoves} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.faceMove arg.part={p} arg.words=\"{m}\""
-    kind=request
-    tabOnly=true
-    onlyWhile=face.active
-    priority=13
-    example="Eyes closer together."
-    example="Move the nose down."
-    example="Put the eyebrows higher."
-    example="Move your mouth up."
-
-@pat.ui.avatar.face.raise core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {v:lex.ui.avatar.facemoveverbs} [your|the|ur|my]? {p:lex.ui.avatar.faceparts} {a:lex.ui.avatar.faceamounts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.faceMove arg.part={p} arg.words=\"{v} {a}\""
-    kind=request
-    tabOnly=true
-    priority=13
-    example="Lower the mouth a bit."
-
-@pat.ui.avatar.face.raise.plain core.pattern
-    canonical="Raise the eyebrows."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {v:lex.ui.avatar.facemoveverbs} [your|the|ur|my]? {p:lex.ui.avatar.faceparts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.faceMove arg.part={p} arg.words=\"{v}\""
-    kind=request
-    tabOnly=true
-    priority=13
-    example="Raise the eyebrows."
-    example="Lower the mouth."
-
-@pat.ui.avatar.face.nobeard core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [no|without|lose|ditch|drop|skip] [the|your|a|any|ur|my]? {p:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.removePart arg.part={p}"
-    kind=request
-    tabOnly=true
-    priority=12
-    example="No beard."
-    example="Without the beard."
-
-@pat.ui.avatar.face.noglasses core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [no|without|lose|ditch|drop|skip] [the|your|a|any|ur|my]? [glasses|spectacles|shades|sunglasses]"
-    emit="@{_} core.request action=avatar.removePart arg.value=glass arg.text=\"glasses\""
-    kind=request
-    tabOnly=true
-    priority=12
-    example="No glasses."
-    example="Without the glasses."
-
-@pat.ui.avatar.face.adjust core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|get|give_me|i_want|give|have|want]? [your|the|ur|my|me]? {d:lex.ui.avatar.faceadjust} {p:lex.ui.avatar.faceparts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.faceAdjust arg.part={p} arg.dir={d}"
-    kind=request
-    tabOnly=true
-    priority=13
-    example="Longer hair."
-    example="Give me shorter hair."
-    example="Make the nose longer."
-
-@pat.ui.avatar.face.adjust.after core.pattern
-    canonical="Make the hair longer."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|get|let|have|want]? [your|the|ur|my]? {p:lex.ui.avatar.faceparts} [be|a_bit]? {d:lex.ui.avatar.faceadjust} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.faceAdjust arg.part={p} arg.dir={d}"
-    kind=request
-    tabOnly=true
-    priority=13
-    example="Make the hair longer."
-    example="Make your hair shorter please."
-
-@pat.ui.avatar.face.swap.glasses core.pattern
-    canonical="Swap the glasses for round ones."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|change|switch|replace|exchange] [the|your|my|ur]? [glasses|spectacles|shades|sunglasses] [for|to|with|into]? [a|an|the|some]? {w:words(4)}"
-    emit="@{_} core.request action=avatar.faceSetPart arg.part=glass arg.words=\"{w}\""
-    kind=request
-    tabOnly=true
-    priority=12
-    example="Swap the glasses for round ones."
-    example="Change the glasses to square."
-
-@pat.ui.avatar.face.save core.pattern
-    canonical="Save this face as Anna."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [save|keep|store|remember|name] [this|it|the_face|this_face|my_face|me|the_avatar|that|the_drawing]? [as|under|called|named|under_the_name] {n:words(3)}"
-    emit="@{_} core.request action=avatar.faceSave arg.name=\"{n}\""
-    kind=request
-    tabOnly=true
-    priority=13
     example="Save this as Grandma."
-    example="Save this face as Anna."
-    example="Keep it under the name Tom."
 
-@pat.ui.avatar.face.load core.pattern
-    canonical="Load the girl face."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [be|become|look_like|turn_into|go_back_to|bring_back|load|use|switch_to|show_me|show] [the|my]? {n:words(3)} face"
-    emit="@{_} core.request action=avatar.faceLoad arg.name=\"{n}\""
-    kind=request
-    priority=13
-    example="Load the girl face."
-    example="Show me the Grandma face."
-
-@pat.ui.avatar.face.load.bare core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [be|become|bring_back] {n:words(2)}"
-    emit="@{_} core.request action=avatar.faceLoad arg.name=\"{n}\""
+@pat.ui.avatar.list core.pattern
+    canonical="List the faces."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [list|show_me|show|which|what|tell_me] [all]? [the|my|your]? [faces|saved_faces|faces_you_know|faces_i_saved|faces_you_have|faces_are_there|faces_have_i_saved|presets] [do_you_know|have_i_saved|are_there|do_you_have]?"
+    emit="@{_} core.request action=avatar.list"
     kind=request
     tabOnly=true
-    priority=2
-    example="Be Grandma."
-    example="Bring back Anna."
+    tabClaim=true
+    priority=10
+    example="List the faces."
 
-@pat.ui.avatar.face.list core.pattern
-    canonical="Show me my saved faces."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|show_me|show|list|tell_me] [the|my|your|saved|all|are_the|are_my]? [saved|drawn|my|the]? faces [do_you_know|can_you_be|are_there|have_i_saved|have_i_made|you_know|can_you_draw|i_saved]?"
-    emit="@{_} core.request action=avatar.faceList"
+@pat.ui.avatar.surprise core.pattern
+    canonical="Surprise me."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [surprise_me|surprise|randomise|randomize|shuffle|mix_it_up|reroll|redo_everything|give_yourself_a_new_look|try_a_new_look|a_new_look|a_random_face|random_face|new_face|a_new_face|a_random_look|change_everything] [please|pls|plz]?"
+    emit="@{_} core.request action=avatar.surprise"
     kind=request
-    priority=13
-    example="What faces do you know?"
-    example="Show me my saved faces."
+    priority=9
+    example="Surprise me."
+    example="Give yourself a new look."
+
+@pat.ui.avatar.reset core.pattern
+    canonical="Reset your face."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [reset|restore|start_over|go_back_to_normal|back_to_normal|go_back_to_default|reset_yourself|reset_your_face|reset_your_look|reset_your_avatar|reset_the_face] [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.reset"
+    kind=request
+    priority=9
+    example="Reset your face."
+    example="Back to normal."
+
+@pat.ui.avatar.redo core.pattern
+    canonical="Redo."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [redo|redo_that|redo_it|do_it_again|do_that_again|put_it_back_again|undo_the_undo] [please|pls|plz|thanks|now]?"
+    emit="@{_} core.request action=avatar.redo"
+    kind=request
+    tabOnly=true
+    priority=9
+    example="Redo."
+    example="Do it again."
+
+
+

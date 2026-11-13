@@ -908,11 +908,16 @@ function addPartTo(ctx, s, { noun, ord, mods }) {
  * (`ctx.knowledge.peek`), is registered as a drawable thing (its parts as the shared parser read them), so it is drawn like any other thing. The registration lives
  * in the module, as long as the page: a saved picture that names the thing needs the lookup again. No catalog or no hit: nothing happens.
  */
+let drawnNote = null;
 function registerKnown(ctx, noun) {
   try {
     const th = ctx.knowledge?.peek(noun);
     const parts = th?.objects?.[0]?.parts;
-    if (parts?.length) { registerThings(new Map([[th.name, parts]])); return th.name; }
+    if (parts?.length) {
+      registerThings(new Map([[th.name, parts]]));
+      if (th.drawnAs && th.drawnAs !== th.name) drawnNote = { name: th.name, as: th.drawnAs };   // a stand-in: said once, in the reply of the turn
+      return th.name;
+    }
   } catch { /* the plain refusal follows */ }
   return null;
 }
@@ -938,7 +943,7 @@ function openAdd(ctx, s, args) {
   return { done: no(`I don't know how to draw ${plural ? noun : `${a_(noun)} ${noun}`} yet.`, 'unsupported') };
 }
 
-export const add = guard((ctx, args, s) => {
+const addInner = guard((ctx, args, s) => {
   if (args.open !== undefined) { const r = openAdd(ctx, s, args); if (r.done) return r.done; args = r.args; }
   if (!kindOfWord(args.kind)) { const nm = registerKnown(ctx, args.kt ?? args.kind); if (nm) args = { ...args, kind: nm, kt: nm }; }   // a thing of the knowledge catalog (spec 17)
   else { const w = String(args.kt ?? args.kind ?? '').toLowerCase(); if (Object.hasOwn(KIND_WORDS, w) && KIND_WORDS[w] !== w) registerKnown(ctx, w) ?? registerKnown(ctx, w.replace(/s$/, '')); }   // "a ball": the catalog's ball before the circle the word falls back to
@@ -1020,6 +1025,17 @@ export const add = guard((ctx, args, s) => {
   placeNote = null;
   return ok(`${opener(s)} I drew ${phrase}${partNote}${where}${capNote}.${placed}`, { data: { made: s.last.slice() } });
 });
+/** "Draw a villa": a thing with no drawing of its own is drawn by the object of its kind (k.objects.stand_in, or the kind of its word sense); the reply says so once per thing. */
+export const add = (ctx, args = {}) => {
+  drawnNote = null;
+  const r = addInner(ctx, args);
+  const n = drawnNote; drawnNote = null;
+  if (n && r?.status === 'supported' && typeof r.value === 'string') {
+    const s = ensure(ctx), said = (s.drawnAsSaid ??= []);
+    if (!said.includes(n.name)) { said.push(n.name); r.value += ` (${a_(n.name)} ${n.name}, drawn as ${a_(n.as)} ${n.as}.)`; }
+  }
+  return r;
+};
 const describePlacing = (o, place, refs) => {
   if (!o && !place.region) return '';
   if (place.rel && refs[0]) {

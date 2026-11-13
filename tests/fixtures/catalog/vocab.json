@@ -26,7 +26,8 @@
  "eyes": [
   "k.faces/shards/colours",
   "k.faces/shards/plain-eyes",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "green": [
   "k.faces/shards/colours"
@@ -78,7 +79,8 @@
  ],
  "beard": [
   "k.faces/shards/plain-beard",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "full": [
   "k.faces/shards/plain-beard"
@@ -96,7 +98,8 @@
  ],
  "cheeks": [
   "k.faces/shards/plain-cheeks",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "freckles": [
   "k.faces/shards/plain-cheeks"
@@ -116,7 +119,8 @@
  ],
  "earrings": [
   "k.faces/shards/plain-earrings",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "hoop": [
   "k.faces/shards/plain-earrings"
@@ -132,7 +136,8 @@
  ],
  "ears": [
   "k.faces/shards/plain-ears",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "large": [
   "k.faces/shards/plain-ears",
@@ -169,7 +174,8 @@
  ],
  "eyebrows": [
   "k.faces/shards/plain-eyebrows",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "raised": [
   "k.faces/shards/plain-eyebrows"
@@ -205,7 +211,8 @@
  "glasses": [
   "k.faces/shards/plain-glasses",
   "k.faces/shards/slots",
-  "k.words/shards/gl"
+  "k.words/shards/gl",
+  "k.layouts/shards/layouts"
  ],
  "small round": [
   "k.faces/shards/plain-glasses"
@@ -218,7 +225,8 @@
  ],
  "hair_back": [
   "k.faces/shards/plain-hair-back",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "long curly": [
   "k.faces/shards/plain-hair-back"
@@ -246,7 +254,8 @@
  ],
  "hair_front": [
   "k.faces/shards/plain-hair-front",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "long sides": [
   "k.faces/shards/plain-hair-front"
@@ -280,7 +289,8 @@
  ],
  "hat": [
   "k.faces/shards/plain-hat",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "party hat": [
   "k.faces/shards/plain-hat"
@@ -290,7 +300,8 @@
  ],
  "head": [
   "k.faces/shards/plain-head",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "heart": [
   "k.faces/shards/plain-head"
@@ -305,7 +316,8 @@
  ],
  "moustache": [
   "k.faces/shards/plain-moustache",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "thin": [
   "k.faces/shards/plain-moustache",
@@ -328,7 +340,8 @@
  ],
  "mouth": [
   "k.faces/shards/plain-mouth",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "neutral": [
   "k.faces/shards/plain-mouth"
@@ -345,7 +358,8 @@
  ],
  "neck": [
   "k.faces/shards/plain-neck",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "necklace": [
   "k.faces/shards/plain-neck"
@@ -358,7 +372,8 @@
  ],
  "nose": [
   "k.faces/shards/plain-nose",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "hoodie": [
   "k.faces/shards/plain-shoulders"
@@ -371,7 +386,8 @@
  ],
  "shoulders": [
   "k.faces/shards/plain-shoulders",
-  "k.faces/shards/slots"
+  "k.faces/shards/slots",
+  "k.layouts/shards/layouts"
  ],
  "suit": [
   "k.faces/shards/plain-shoulders"
@@ -465,6 +481,10 @@
  ],
  "spectacles": [
   "k.words/shards/sp"
+ ],
+ "face": [
+  "k.layouts/shards/layouts",
+  "k.layouts/shards/layouts"
  ],
  "apple": [
   "k.demo/shards/fruits"

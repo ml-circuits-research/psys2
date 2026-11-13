@@ -5,7 +5,7 @@ import * as M from './morphology.ro.mjs?v=6d391f8fd4';
 import * as L from './lexicon.ro-en.mjs?v=0f4eaf8bf9';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
-import { translateReplySentence } from './replies.en-ro.mjs?v=79771776a5';
+import { translateReplySentence } from './replies.en-ro.mjs?v=b6004eb5e5';
 import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
 import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 

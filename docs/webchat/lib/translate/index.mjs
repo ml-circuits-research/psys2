@@ -10,7 +10,7 @@
 import { tokenize, foldKey } from './normalize.mjs?v=136a228c61';
 import { analyze, placeOf } from './morphology.ro.mjs?v=6d391f8fd4';
 import { translateRoEn } from './ro-en.mjs?v=6c77cff332';
-import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs?v=38f228789a';
+import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs?v=66b55f85b4';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
 // Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;

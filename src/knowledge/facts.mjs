@@ -12,6 +12,7 @@
  */
 
 import { parseLine, parseShard } from './catalog.mjs';
+import { buildFaces } from './faces.mjs';
 
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -175,8 +176,16 @@ export function createFacts({ source, name = 'catalog' }) {
     return out;
   }
 
-  return {
+  let facesData, facesLoading = null;
+  const api = {
     name, find, thing, stats, loadVocab, world, wires,
+    /** The faces of k.faces (src/knowledge/faces.mjs), built once from the catalog; null when it has none (and asked again later). */
+    faces() {
+      facesLoading ??= buildFaces(api).then((d) => { facesData = d; if (!d) { facesLoading = null; } return d; });
+      return facesLoading;
+    },
+    /** The faces already built, or undefined (a synchronous read for operations: `ctx.knowledge.peekFaces()`). */
+    peekFaces: () => facesData,
     /** True when the catalog could not be read last time (offline or too slow): a miss then is "I cannot reach it", not "it does not exist". */
     unreachable: () => down,
     /** The settled lookup of a word, or undefined when it has not been looked up (a synchronous read for operations: `ctx.knowledge.peek`). null = looked up, not known. */
@@ -197,4 +206,5 @@ export function createFacts({ source, name = 'catalog' }) {
       return null;
     },
   };
+  return api;
 }

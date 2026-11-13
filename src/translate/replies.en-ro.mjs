@@ -15,7 +15,6 @@
 
 import { places as PLACE_LIST } from './places.ro-en.mjs';
 import { CANONICAL_RO } from './canonical.en-ro.mjs';
-import { avatarListRo, avatarOptionsRo, AVATAR_PARTS, AVATAR_CHARACTER_RO, AVATAR_CHARACTER_EN } from './avatar.en-ro.mjs';
 const COLOURS = { red: 'roșu', yellow: 'galben', blue: 'albastru', green: 'verde', orange: 'portocaliu', purple: 'mov', violet: 'violet', pink: 'roz', brown: 'maro', black: 'negru', white: 'alb', gray: 'gri', grey: 'gri', turquoise: 'turcoaz', coral: 'coral', beige: 'bej', gold: 'auriu', silver: 'argintiu', tan: 'bronzat' };
 const DAYS = { Monday: 'luni', Tuesday: 'marți', Wednesday: 'miercuri', Thursday: 'joi', Friday: 'vineri', Saturday: 'sâmbătă', Sunday: 'duminică' };
 const MONTHS = { January: 'ianuarie', February: 'februarie', March: 'martie', April: 'aprilie', May: 'mai', June: 'iunie', July: 'iulie', August: 'august', September: 'septembrie', October: 'octombrie', November: 'noiembrie', December: 'decembrie' };
@@ -81,7 +80,6 @@ const SLOTS = {
   dunit: ['(steps|seasons|boxes|levels|stages|items|step|box|item)', mapper(DIAGRAM_UNITS)],
   dcount: ['(one|two|three|four|five|six|seven|eight|nine|ten)', mapper(COUNT_WORDS)],
   tab: [`(${Object.keys(TAB_RO).join('|')})`, (v) => TAB_RO[v] ?? null],   // the title of a tab
-  ...Object.fromEntries(AVATAR_PARTS.map(([, key], i) => [`opt${String.fromCharCode(97 + i)}`, ['(.+?)', (v) => avatarOptionsRo(key, v)]])),   // the options of one avatar part
   n: ['(-?\\d[\\d,.]*)', (v) => v, (v) => (Number(String(v).replace(/,/g, '')) >= 20 ? `${v} de` : v)],
   w: ["([\\p{L}\\d'’\\-]+)", (v) => v],
   lst: ['([a-z][a-z\\- ]*?)', (v) => ({ 'to-do': 'lucruri de făcut', shopping: 'cumpărături', homework: 'teme', reminders: 'memento-uri', school: 'școală', chores: 'treburi' })[v] ?? v],   // the name of a list as the tasks world keeps it
@@ -100,8 +98,6 @@ const SLOTS = {
   mood: ['([a-z]+(?: [a-z]+)?)', (v) => MOOD_RO[v] ?? null],
   np: ['((?:an? |the |\\d+ )?[a-z][a-z \\-\']*?)', (v, sub) => sub(v)],
   t: ['(.+?)', (v, sub) => sub(v)],
-  avl: ['(.+?)', (v) => avatarListRo(v)],   // the avatar's own part phrases (avatar.en-ro.mjs)
-  chr: ['(a robot|a person|an emoji|a portrait|a cartoon|a kid|a pixel person|a pixel robot|a fun emoji)', (v) => AVATAR_CHARACTER_RO[AVATAR_CHARACTER_EN[v]] ?? null],
   nk: ['(\\d[\\d,]*(?:\\.\\d+)?)', (v) => v.replace(/,(?=\d{3}\b)/g, '.'), (v) => (Number(String(v).replace(/,/g, '')) >= 20 ? `${String(v).replace(/,(?=\d{3}\b)/g, '.')} de` : v)],   // a number with English thousands commas (1,106 km): Romanian dots
   tl: ['(.+?)', (v, sub) => { const r = sub(v); return r ? r.replace(/^\p{Lu}/u, (c) => c.toLowerCase()) : r; }],   // free text translated by the grammar, lower case after a colon
   ex: ['([^"]+?)', (v) => exampleRo(v)],   // an example sentence in quotes, in its authored Romanian (canonical.en-ro.mjs), else the entry does not apply
@@ -112,35 +108,11 @@ const SLOTS = {
   q: ['(.+?)', (v) => v],   // the user's own words as stored, copied unchanged
 };
 
-// ---- avatar capability replies (worlds/ui.avatar/ops.mjs: CAPABILITY, EXPRESSION_SAY, MOODS, PERSON_PRESET) ----
-const CAP_NOTES = { "A person's eyes follow the expression": 'Ochii unei persoane urmează expresia', "A person's mouth follows the expression": 'Gura unei persoane urmează expresia', 'A person shows a mood with the expression': 'O persoană arată o stare prin expresie' };
-const CAP_SAY = { 'wide-eyed': 'cu ochii mari', 'sleepy-eyed': 'cu ochii somnoroși', smiling: 'zâmbitoare', beaming: 'radiantă', laughing: 'râzând', sad: 'tristă', 'calm and dreamy': 'liniștită și visătoare', 'closed-eyed': 'cu ochii închiși', angry: 'supărată', furious: 'furioasă', scared: 'speriată', worried: 'îngrijorată', cheeky: 'obraznică', sparkling: 'strălucitoare', suspicious: 'bănuitoare', 'wild-eyed': 'cu privirea sălbatică', serious: 'serioasă', blank: 'fără expresie', cute: 'drăguță', grinning: 'rânjind' };
+// ---- replies of the avatar and the drawing world (worlds/ui.avatar/facelogic.mjs says its parts in the catalog's own words: the generic entries below) ----
 const MOOD_RO = { happy: 'fericit', glad: 'bucuros', cheerful: 'vesel', joyful: 'vesel', excited: 'entuziasmat', delighted: 'încântat', smiling: 'zâmbitor', smiley: 'zâmbitor', laughing: 'râzând', sad: 'trist', unhappy: 'nefericit', upset: 'supărat', worried: 'îngrijorat', concerned: 'îngrijorat', surprised: 'surprins', shocked: 'șocat', amazed: 'uimit', astonished: 'uluit', scared: 'speriat', afraid: 'speriat', fearful: 'înfricoșat', terrified: 'îngrozit', frightened: 'speriat', angry: 'supărat', mad: 'furios', furious: 'furios', annoyed: 'iritat', calm: 'calm', relaxed: 'relaxat', peaceful: 'liniștit', serious: 'serios', neutral: 'neutru', cute: 'drăguț', sleepy: 'somnoros', tired: 'obosit', suspicious: 'bănuitor', cheeky: 'obraznic', bored: 'plictisit', blank: 'fără expresie', smug: 'mulțumit de sine', stressed: 'stresat', 'in love': 'îndrăgostit', loving: 'îndrăgostit' };
-const PRESET_RO = { 'short neat hair and a short beard': 'păr scurt și îngrijit și o barbă scurtă', 'long hair and no beard': 'păr lung și fără barbă', 'twin buns and no beard': 'două coade împletite sus și fără barbă', 'short spiky hair and no beard': 'păr scurt zburlit și fără barbă' };
-const GENDER_RO = { man: 'bărbat', woman: 'femeie', girl: 'fată', boy: 'băiat' };
-const EYE_STYLE_RO = { round: 'rotunzi', square: 'pătrați', visor: 'cu vizieră', cyclops: 'de ciclop', happy: 'fericiți', sleepy: 'somnoroși', plus: 'în formă de plus' };
 const CAP_ENTRIES = [];
-for (const [n, nr] of Object.entries(CAP_NOTES)) for (const [x, xr] of Object.entries(CAP_SAY)) CAP_ENTRIES.push([`${n}, so I made it ${x}.`, `${nr}, așa că am făcut-o ${xr}.`]);
-for (const who of [['A robot', 'Un robot', 'ochii și gura'], ['An emoji', 'Un emoji', 'ochii și gura']]) CAP_ENTRIES.push([`${who[0]} shows its expression with its eyes and mouth, so I set both to look {mood}.`, `${who[1]} își arată expresia prin ${who[2]}, așa că le-am făcut pe amândouă să arate {mood}.`]);
-for (const g of Object.keys(GENDER_RO)) for (const [pe, pr] of Object.entries(PRESET_RO)) {
-  const art = g === 'man' || g === 'boy' ? ['un', 'ca'] : ['o', 'ca'];
-  CAP_ENTRIES.push([`A person shows being ${/^[aeiou]/.test(g) ? 'an' : 'a'} ${g} through hair, so I gave myself ${pe}.`, `O persoană arată că e ${art[0]} ${GENDER_RO[g]} prin păr, așa că mi-am dat ${pr}.`]);
-  CAP_ENTRIES.push([`A person shows being ${/^[aeiou]/.test(g) ? 'an' : 'a'} ${g} through hair, so I gave myself ${pe} and look {mood}.`, `O persoană arată că e ${art[0]} ${GENDER_RO[g]} prin păr, așa că mi-am dat ${pr} și arăt {mood}.`]);
-}
-// refusals of the avatar world (ops.mjs: _setPart, _setPartUnknown): "I do not know eyes like "x". My eyes can be ..."
-const LABEL_RO = { hairstyle: ['coafură', 'coafuri'], eyebrows: ['sprâncene', 'sprâncene'], nose: ['nas', 'nasuri'], beard: ['barbă', 'bărbi'], glasses: ['ochelari', 'ochelari'], eyes: ['ochi', 'ochi'], mouth: ['gură', 'guri'], hat: ['pălărie', 'pălării'], expression: ['expresie', 'expresii'] };
-for (const [en, [sg, pl]] of Object.entries(LABEL_RO)) {
-  CAP_ENTRIES.push([`I do not know ${en} like "{q}".`, `Nu cunosc niciun fel de ${sg} precum "{q}".`]);
-  CAP_ENTRIES.push([`Ask me what ${en} I can have.`, `Întreabă-mă ce ${pl} pot avea.`]);
-}
 CAP_ENTRIES.push(['I cannot draw {np} yet.', 'Încă nu pot desena {np}.'], ['I can draw a cat, a dog, a fish or a bird.', 'Pot desena o pisică, un câine, un pește sau o pasăre.'], ['What would you like?', 'Ce ai vrea?']);
 CAP_ENTRIES.push(['I do not have that part.', 'Nu am această parte.'], ['I do not know how to look like that.', 'Nu știu cum să arăt așa.']);
-AVATAR_PARTS.forEach(([en, , gen, nom], i) => {
-  CAP_ENTRIES.push([`I cannot change the size of my ${en}, but I can change its style.`, `Nu pot schimba mărimea ${gen}, dar îi pot schimba stilul.`]);
-  CAP_ENTRIES.push([`My ${en} can be {opt${String.fromCharCode(97 + i)}}.`, `${nom} {opt${String.fromCharCode(97 + i)}}.`]);
-});
-CAP_ENTRIES.push(['My eyes can be {eyelist}.', 'Ochii mei pot fi {eyelist}.']);
-CAP_ENTRIES.push(['For {cmp} eyes try {eyelist}; say "make your eyes {eye}".', 'Pentru ochi {cmp} încearcă {eyelist}; spune "fă-ți ochii {eye}".']);
 const EXAMPLE_ENTRIES = [
   ['You can say, for example, "in the top right corner", "next to the sun" or "under the tree".', 'Poți spune, de exemplu, "în colțul din dreapta sus", "lângă soare" sau "sub copac".'],
   ['Try "draw a red house".', 'Încearcă "desenează o casă roșie".'],
@@ -210,9 +182,8 @@ const TABLE = [
   ['My screen is {c} now.', 'Ecranul meu este acum {c}.'], ['My background is {c} now.', 'Fundalul meu este acum {c}.'],
   ['My eyes glow {c} now.', 'Ochii mei strălucesc acum {c}.'], ['The sky is {c} now.', 'Cerul este acum {c}.'],
   ['I have {np} now.', 'Acum am {np}.'], ['Now I am {np}.', 'Acum sunt {np}.'],
-  ['Now I am {chr}.', 'Acum sunt {chr}.'], ['I have {avl}.', 'Am {avl}.'], ['I have {avl} now.', 'Acum am {avl}.'], ['I am wearing {avl}.', 'Port {avl}.'], ['I took off {avl}.', 'Mi-am scos {avl}.'],
   ['I am not wearing anything special.', 'Nu port nimic deosebit.'], ['I have nothing extra on me.', 'Nu am nimic în plus pe mine.'],
-  ['I took off {np}.', 'Mi-am scos {np}.'], ['I took away {np}.', 'Am șters {np}.'],
+  ['I took off {np}.', 'Mi-am scos {np}.'], ['I put on {np}.', 'Mi-am pus {np}.'], ['I took away {np}.', 'Am șters {np}.'],
   ['I am wearing {np}.', 'Port {np}.'],
   ['I turned the cat around.', 'Am întors pisica.'],
   ['I am back to my normal look as a robot.', 'Am revenit la înfățișarea mea normală de robot.'],
@@ -576,7 +547,7 @@ const COMPILED = TABLE.map(([en, ro]) => {
     return SLOTS[type][0];
   }).join('');
   return { re: new RegExp(`^${src}$`, 'u'), keys, ro, lit: !keys.length ? en : null };
-}).sort((a, b) => (b.keys.includes('avl') - a.keys.includes('avl')) || b.re.source.length - a.re.source.length);   // the avatar's authored part phrases first, then the most specific
+}).sort((a, b) => b.re.source.length - a.re.source.length);   // the most specific
 
 /**
  * Translate one English sentence (or fragment) by the table.  `sub(text)` translates a free-text slot by the grammar and returns a string or

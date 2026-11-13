@@ -1,81 +1,97 @@
-@tpl.ui.avatar.setPart core.template
-    for=action.avatar.setPart
+@tpl.ui.avatar.add core.template
+    for=action.avatar.add
     text="{value}"
 
-@tpl.ui.avatar.setPartUnknown core.template
-    for=action.avatar.setPartUnknown
+@tpl.ui.avatar.remove core.template
+    for=action.avatar.remove
     text="{value}"
 
-@tpl.ui.avatar.step core.template
-    for=action.avatar.step
+@tpl.ui.avatar.bare core.template
+    for=action.avatar.bare
     text="{value}"
 
-@tpl.ui.avatar.resizePart core.template
-    for=action.avatar.resizePart
+@tpl.ui.avatar.restyle core.template
+    for=action.avatar.restyle
     text="{value}"
 
-@tpl.ui.avatar.resetPart core.template
-    for=action.avatar.resetPart
+@tpl.ui.avatar.change core.template
+    for=action.avatar.change
     text="{value}"
 
-@tpl.ui.avatar.removePart core.template
-    for=action.avatar.removePart
+@tpl.ui.avatar.which core.template
+    for=action.avatar.which
     text="{value}"
 
-@tpl.ui.avatar.removeAll core.template
-    for=action.avatar.removeAll
+@tpl.ui.avatar.colour core.template
+    for=action.avatar.colour
     text="{value}"
 
-@tpl.ui.avatar.setColor core.template
-    for=action.avatar.setColor
+@tpl.ui.avatar.resize core.template
+    for=action.avatar.resize
     text="{value}"
 
-@tpl.ui.avatar.shiftColor core.template
-    for=action.avatar.shiftColor
+@tpl.ui.avatar.move core.template
+    for=action.avatar.move
     text="{value}"
 
-@tpl.ui.avatar.askColor core.template
-    for=action.avatar.askColor
+@tpl.ui.avatar.mood core.template
+    for=action.avatar.mood
     text="{value}"
 
-@tpl.ui.avatar.listColors core.template
-    for=action.avatar.listColors
-    text="{value}"
-
-@tpl.ui.avatar.surprise core.template
-    for=action.avatar.surprise
-    text="{value}"
-
-@tpl.ui.avatar.setSeed core.template
-    for=action.avatar.setSeed
-    text="{value}"
-
-@tpl.ui.avatar.askSeed core.template
-    for=action.avatar.askSeed
-    text="{value}"
-
-@tpl.ui.avatar.setCharacter core.template
-    for=action.avatar.setCharacter
-    text="{value}"
-
-@tpl.ui.avatar.askCharacter core.template
-    for=action.avatar.askCharacter
-    text="{value}"
-
-@tpl.ui.avatar.listCharacters core.template
-    for=action.avatar.listCharacters
-    text="{value}"
-
-@tpl.ui.avatar.setMood core.template
-    for=action.avatar.setMood
+@tpl.ui.avatar.askMood core.template
+    for=action.avatar.askMood
     text="{value}"
 
 @tpl.ui.avatar.checkMood core.template
     for=action.avatar.checkMood
     text="{value}"
 
-@tpl.ui.avatar.askMood core.template
-    for=action.avatar.askMood
+@tpl.ui.avatar.describeFace core.template
+    for=action.avatar.describeFace
+    text="{value}"
+
+@tpl.ui.avatar.describe core.template
+    for=action.avatar.describe
+    text="{value}"
+
+@tpl.ui.avatar.has core.template
+    for=action.avatar.has
+    text="{value}"
+
+@tpl.ui.avatar.parts core.template
+    for=action.avatar.parts
+    text="{value}"
+
+@tpl.ui.avatar.preset core.template
+    for=action.avatar.preset
+    text="{value}"
+
+@tpl.ui.avatar.save core.template
+    for=action.avatar.save
+    text="{value}"
+
+@tpl.ui.avatar.load core.template
+    for=action.avatar.load
+    text="{value}"
+
+@tpl.ui.avatar.list core.template
+    for=action.avatar.list
+    text="{value}"
+
+@tpl.ui.avatar.surprise core.template
+    for=action.avatar.surprise
+    text="{value}"
+
+@tpl.ui.avatar.reset core.template
+    for=action.avatar.reset
+    text="{value}"
+
+@tpl.ui.avatar.undo core.template
+    for=action.avatar.undo
+    text="{value}"
+
+@tpl.ui.avatar.redo core.template
+    for=action.avatar.redo
     text="{value}"
 
 @tpl.ui.avatar.setName core.template
@@ -86,78 +102,15 @@
     for=action.avatar.askName
     text="{value}"
 
-@tpl.ui.avatar.reset core.template
-    for=action.avatar.reset
+@tpl.ui.avatar.nameOf core.template
+    for=action.avatar.nameOf
     text="{value}"
 
 @tpl.ui.avatar.animate core.template
     for=action.avatar.animate
     text="{value}"
 
-@tpl.ui.avatar.askParts core.template
-    for=action.avatar.askParts
+@tpl.ui.avatar.setPartUnknown core.template
+    for=action.avatar.setPartUnknown
     text="{value}"
 
-@tpl.ui.avatar.listOptions core.template
-    for=action.avatar.listOptions
-    text="{value}"
-
-@tpl.ui.avatar.askPart core.template
-    for=action.avatar.askPart
-    text="{value}"
-
-@tpl.ui.avatar.hasThing core.template
-    for=action.avatar.hasThing
-    text="{value}"
-
-@tpl.ui.avatar.askWearing core.template
-    for=action.avatar.askWearing
-    text="{value}"
-
-@tpl.ui.avatar.describe core.template
-    for=action.avatar.describe
-    text="{value}"
-
-@tpl.ui.avatar.undo core.template
-    for=action.avatar.undo
-    text="{value}"
-
-@tpl.ui.avatar.explainSwitch core.template
-    for=action.avatar.explainSwitch
-    text="{value}"
-
-@tpl.ui.avatar.setPartColored core.template
-    for=action.avatar.setPartColored
-    text="{value}"
-
-@tpl.ui.avatar.faceDescribe core.template
-    for=action.avatar.faceDescribe
-    text="{value}"
-
-@tpl.ui.avatar.faceStart core.template
-    for=action.avatar.faceStart
-    text="{value}"
-
-@tpl.ui.avatar.faceLoad core.template
-    for=action.avatar.faceLoad
-    text="{value}"
-
-@tpl.ui.avatar.faceSave core.template
-    for=action.avatar.faceSave
-    text="{value}"
-
-@tpl.ui.avatar.faceList core.template
-    for=action.avatar.faceList
-    text="{value}"
-
-@tpl.ui.avatar.faceMove core.template
-    for=action.avatar.faceMove
-    text="{value}"
-
-@tpl.ui.avatar.faceAdjust core.template
-    for=action.avatar.faceAdjust
-    text="{value}"
-
-@tpl.ui.avatar.faceSetPart core.template
-    for=action.avatar.faceSetPart
-    text="{value}"

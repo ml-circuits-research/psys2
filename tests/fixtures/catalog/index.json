@@ -539,6 +539,49 @@
    ]
   },
   {
+   "id": "k.layouts",
+   "version": "1",
+   "schema": "k.layouts/schema.sop",
+   "exports": [
+    "k.layouts.layout",
+    "k.layouts.slot"
+   ],
+   "depends": [],
+   "shards": [
+    {
+     "id": "k.layouts/shards/layouts",
+     "path": "k.layouts/shards/layouts.sop",
+     "wires": 41,
+     "bytes": 5998,
+     "keys": [
+      "face",
+      "face",
+      "hair_back",
+      "shoulders",
+      "neck",
+      "ears",
+      "head",
+      "cheeks",
+      "beard",
+      "mouth",
+      "moustache",
+      "nose",
+      "eyes",
+      "eyebrows",
+      "glasses",
+      "hair_front",
+      "earrings",
+      "hat"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ]
+  },
+  {
    "id": "k.demo",
    "version": "1",
    "schema": "k.demo/schema.sop",

@@ -68,4 +68,4 @@ export const sampled = (items, { key = (x) => String(x), world = '' } = {}) =>
 export const fullOnly = (opts = {}) => (SUITE === 'full' ? opts : { ...opts, skip: 'full suite only (npm run test:full)' });
 
 /** The avatar starts as a drawn face (2026-11-13); a test about the classic DiceBear characters starts its session as one of them. Returns the session. */
-export const classicAvatar = (s) => { s.setWorldState('ui.avatar', { face: { ...s.state('ui.avatar').face, active: false } }); return s; };
+export const classicAvatar = (s) => s;   // the DiceBear characters are gone: kept so that old tests still read
