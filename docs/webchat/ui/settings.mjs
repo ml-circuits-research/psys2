@@ -1,35 +1,29 @@
 // Webchat settings (spec 06 "Webchat settings"): defaults, the version bump and the one-time migration. Pure, no DOM, so node:test can import it.
 
 import { RUNTIME_DEFAULTS } from '../lib/dialog/runtime-config.mjs';
-import { normalizeNxStrategy } from '../lib/formalizer/nx.mjs';
 import { TIME_LIMIT_DEFAULTS } from '../lib/dialog/time-limits.mjs';
 import { normalize as normalizeLanguage, browserLanguage, EN_VARIANTS } from './language.mjs';
 
 /** Bumped whenever a default changes in a way saved settings must follow once. */
-export const SETTINGS_VERSION = 5;
+export const SETTINGS_VERSION = 6;
 export const SETTINGS_KEY = 'psys2.webchat.settings';
 
-/** SETTINGS-COHERENT 2: the one "How I read your messages" choice. The engine still reads `formalizer` and `nxStrategy`; they are derived from `reading`. */
-export const READING_VALUES = Object.freeze(['hybrid', 'model', 'rules']);
-export const DEFAULT_READING = 'hybrid';
-/** The `reading` value an older pair of settings meant (formalizer 'rules' or strategy 'rules' = rules only; strategy 'neural' = model first; anything else hybrid). */
-export function readingFrom(s) {
-  if (s?.formalizer === 'rules' || s?.nxStrategy === 'rules') return 'rules';
-  if (s?.nxStrategy === 'neural') return 'model';
-  return 'hybrid';
-}
-/** Sets `formalizer` and `nxStrategy` from `reading` (in place; returns the object). */
+/**
+ * Reading (defaults by the numbers, 2026-11-14): the rules read, always; there is no "who reads first" choice (the NX hybrid reader rescued 6 turns and broke 9 of 6,744; model first is measured 126 right fewer).
+ * The one reading choice left is `helperModel`: the small model that segments long messages and hints the world (the engine's `formalizer`: 'encoder' | 'rules'). `nxStrategy` is always 'rules'.
+ */
 export function applyReading(s) {
-  if (!READING_VALUES.includes(s.reading)) s.reading = DEFAULT_READING;
-  s.formalizer = s.reading === 'rules' ? 'rules' : 'encoder';
-  s.nxStrategy = s.reading === 'model' ? 'neural' : s.reading === 'rules' ? 'rules' : 'hybrid';
+  s.helperModel = s.helperModel !== false;
+  s.formalizer = s.helperModel ? 'encoder' : 'rules';
+  s.nxStrategy = 'rules';
+  delete s.reading;
   return s;
 }
 
 export const DEFAULT_SETTINGS = {
   settingsVersion: SETTINGS_VERSION,
   language: 'en',
-  reading: DEFAULT_READING,       // Settings › Reading › How I read your messages: 'hybrid' (default on every device) | 'model' | 'rules'; formalizer and nxStrategy below follow it
+  helperModel: true,              // Settings › Reading › use the helper model for typos and long sentences; formalizer ('encoder' | 'rules') follows it, nxStrategy is always 'rules'
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
   timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
   reasoner: 'matrix',             // Settings › Developer › Reasoner (spec 15): 'matrix' (default; the worlds that ship a matrix answer through the sopworld library) | 'ops' (the fallback); read when the engine starts
@@ -44,6 +38,7 @@ export const DEFAULT_SETTINGS = {
  *   default and not necessarily a choice; every later explicit choice is saved with the current version and respected.
  *   v3 (LANG-FIXED): the language is always 'en' or 'ro': a saved 'auto' (or anything else) becomes the browser language (`ro*` -> ro, otherwise en) and is saved.
  *   v4 (matrix is the default, user decision 2026-11-11): the reasoner was saved as 'ops' by the old default and a saved value cannot tell a choice from that default, so every saved 'ops' becomes 'matrix' once; a later explicit 'ops' is saved with v4 and respected.
+ *   v6 (defaults by the numbers, 2026-11-14): `reading` is gone (rules read; `helperModel` on/off decides whether the small model helps), `normalizer` is off until the user downloads it, `editHead` off, routing A ('dispatcher') becomes C.
  *   v5 (SETTINGS-COHERENT): "Formalizer" and "Reading strategy" became one `reading` choice. Two overlapping selects could not be told apart, so a value saved by either cannot be told from a
  *   confused choice: every saved profile is reset to hybrid once; a later explicit choice is saved with v5 and respected (a v5 profile without `reading` takes it from formalizer / nxStrategy).
  *   The Voice setting `speechLang` is gone: speech follows the selected language; only an English regional variant (en-US / en-GB) is kept, from a saved 'en-GB'.
@@ -67,9 +62,10 @@ export function migrateSettings(saved, navLang = globalThis.navigator?.language)
   if (s.formalizer !== 'rules' && s.formalizer !== 'encoder') s.formalizer = DEFAULT_SETTINGS.formalizer;
   if (from < 4) { if (s.reasoner === 'ops') s.reasoner = 'matrix'; migrated = true; }
   if (s.reasoner !== 'ops') s.reasoner = 'matrix';   // an unknown saved value is the default
-  s.nxStrategy = normalizeNxStrategy(s.nxStrategy);   // ADR-009: an unknown saved value falls back to the default
-  if (from < 5) { s.reading = READING_VALUES.includes(saved?.reading) ? saved.reading : DEFAULT_READING; migrated = true; }   // `reading` never existed before v5: only a test harness or a hand-edited profile has it
-  else if (!READING_VALUES.includes(saved?.reading)) s.reading = readingFrom(s);
+  if (from < 6) {   // defaults by the numbers: the old `reading` choice (hybrid | model | rules) is gone, the normalizer is an optional download (a saved `true` was the old default), the edit head is removed
+    s.helperModel = true; s.normalizer = false; s.editHead = false; delete s.reading; migrated = true;
+  }
+  if (s.routing === 'dispatcher') s.routing = 'symbolic+encoder';   // router A is removed
   applyReading(s);
   return { settings: s, migrated };
 }

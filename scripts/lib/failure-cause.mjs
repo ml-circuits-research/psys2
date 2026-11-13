@@ -6,6 +6,7 @@ export function causeOf(r) {
   const h = r.happened ?? '', cls = r.class ?? '', src = r.source ?? '', lang = r.language ?? 'en';
   if (/^\(no reply\)/.test(h) || h === '') return 'no reply';
   if (/^\(error\)/.test(h)) return 'crash / exception';
+  if (cls.startsWith('robust:')) return `robustness: ${cls.slice(7).replace(':', ' / ')}`;   // scripts/ledger-robustness.mjs: robust:<set>:<cause key>
   if (cls === 'world-routing') return 'wrong world routing (confusion pair)';
   if (src.startsWith('round-trip')) return cls.endsWith('original-fails') ? 'roundtrip: English original not read' : cls.endsWith('reader-gap') ? 'roundtrip: translation kept meaning, reader gap' : cls.endsWith('judge-strict') ? 'roundtrip: answer wording only' : 'roundtrip: translation changed meaning';
   if (/mt-residue|mt-wrong-sense|typo-source/.test(cls)) return 'translation residue / wrong sense / source typo';

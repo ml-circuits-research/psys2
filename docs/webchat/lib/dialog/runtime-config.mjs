@@ -6,19 +6,21 @@
  *   const enc = createRuntime({ engine, settings, load, normalizer, waitForModel });   // encoder strategy, attached and registered
  *   const session = engine.createSession(sessionOptions(settings));
  */
-import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=14c767d34b';
-import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=d1a1512e2e';
+import { createDispatcherFormalizer } from './encoder-dispatch.mjs?v=b69ad4eed6';
+import { createNxStrategy, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=8f7ff31e7a';
 
 /** The shipped defaults of everything that changes what the pipeline answers (the webchat adds UI-only keys on top). */
 export const RUNTIME_DEFAULTS = Object.freeze({
   formalizer: 'encoder',          // the DistilBERT dispatcher validated by the rules; rules answer while it loads or when it cannot load
   encoderAcceptRefused: true,     // accept parses the interpreter refuses by state (for example "move the piece" with no game on)
   partialUnderstanding: true,     // execute what was understood and say what was ignored (7.10)
-  normalizer: true,               // seq2seq phrasing normalizer, a fallback only (7.12, 7.13)
+  normalizer: false,              // seq2seq phrasing normalizer (97 MB), a fallback only (7.12, 7.13); OFF by default since 2026-11-14 (+28 right of 6,099 for 97 MB): an optional download the user starts
   spellcheck: true,               // spell correction against the worlds' vocabulary (7.9)
   bestEffort: true,               // after everything else failed, execute the most sensible reading of loose words and say what was understood (7.15)
   editHead: false,                // the S1 edit head's simplified text as a candidate reading: OFF in the shipped pipeline (review decision e: 3 recovered against 7 misled); the code stays behind this flag
   nxStrategy: DEFAULT_NX_STRATEGY, // who reads first, ADR-009: 'hybrid' (the rules path as shipped, the model reads what it left unparsed, gated) | 'neural' (model first) | 'rules'; used with the encoder formalizer
+  suspectWords: true,             // suspect-word leniency (7.17): a completely read segment the interpreter refuses, with a word one slip from a known word, is also tried spell-corrected
+  reader: 'off',                  // READER-ROUTE (spec 16 section 7, 7.17): measured with the other two switches on, 'fill' loses 2 dialogue turns and 10 typos (it answers "I don't know what a X is" for a typo'd question), so it stays off
   fastPath: false,                // encoder only: skip the model when the rules read the whole message and the interpreter accepts it (PERF; the webchat turns it on)
 });
 
@@ -27,15 +29,15 @@ export const RUNTIME_DEFAULTS = Object.freeze({
  * the encoder's world head unread) | 'symbolic+encoder' (C: meta.worlds with the encoder as one prior; the default, also when missing). `sessionOptions` and `createRuntime` read it from the settings object.
  */
 
-/** The named evaluation modes and the settings each one means. `encoder+n1` is the shipped default. */
+/** The named evaluation modes and the settings each one means. `encoder` is the shipped default (2026-11-14: rules read, the encoder segments and hints in the background, no normalizer); `encoder+n1` adds the optional normalizer. */
 export const MODES = Object.freeze({
   rules: { ...RUNTIME_DEFAULTS, formalizer: 'rules', normalizer: false },
   encoder: { ...RUNTIME_DEFAULTS, formalizer: 'encoder', normalizer: false },
-  'encoder+n1': { ...RUNTIME_DEFAULTS },
+  'encoder+n1': { ...RUNTIME_DEFAULTS, normalizer: true },
   'encoder+fast': { ...RUNTIME_DEFAULTS, normalizer: false, fastPath: true },
-  'encoder+n1+fast': { ...RUNTIME_DEFAULTS, fastPath: true },
+  'encoder+n1+fast': { ...RUNTIME_DEFAULTS, normalizer: true, fastPath: true },
 });
-export const DEFAULT_MODE = 'encoder+n1';
+export const DEFAULT_MODE = 'encoder';
 
 /** Settings of a mode (a fresh copy). */
 export function settingsForMode(mode = DEFAULT_MODE) {
@@ -61,7 +63,7 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.suspectWords === true ? { suspect: true } : {}), ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
+  return { ...(settings.routing ? { routing: settings.routing } : {}), formalizer: settings.formalizer, nx: normalizeNxStrategy(settings.nxStrategy), spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, suspect: settings.suspectWords !== false, ...(settings.reader && settings.reader !== 'off' ? { reader: settings.reader } : {}), ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
 }
 
 /**

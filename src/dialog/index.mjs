@@ -9,7 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs';
 import { loadWorlds } from '../worlds/index.mjs';
 import { validateWorldSet } from '../worlds/validate.mjs';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs';
@@ -34,6 +34,7 @@ import { attachValues } from '../knowledge/values.mjs';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs';
 import { Discourse } from './discourse.mjs';
 import { Dialogue } from './dialogue.mjs';
+import { turnSteps } from './steps.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
@@ -285,7 +286,7 @@ function tooComplexReply(session, text, e, b) {
 export const isModelTimeout = (e) => !!e && e.name !== 'TurnAborted' && (['OrtTimeout', 'AbortError', 'TimeoutError'].includes(e.name) || /timed out|timeout|aborted/i.test(String(e.message ?? e)));
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing, suspect = false } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false, nx = DEFAULT_NX_STRATEGY, worldAware, reader, routing, suspect = true } = {}) {
     this.routing = routing;   // spec 20: dispatcher (default) | symbolic | symbolic+encoder
     this.engine = engine;
     /** World-aware reading (spec 16): 'off' (default) | 'veto' | 'choose' | 'observe'. The environment variable PSYS2_WORLD_AWARE sets the default for command-line tools; an explicit option wins. */
@@ -1714,6 +1715,7 @@ export class DialogSession {
         routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),
         patterns: segments.filter((s) => s.match).map((s) => s.match.patternId),
         operations: icpt ? [...ops, ...icpt.ops] : ops, statuses, wires: [...wires, ...answerWires].map((w) => w.id),
+        steps: turnSteps({ segments, operations: icpt ? [...ops, ...icpt.ops] : ops, statuses, rec: this.dialogue.log.at(-1) }),   // the same vocabulary as docs/system-map.html (src/dialog/steps.mjs)
       },
     };
   }
@@ -1735,7 +1737,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** meta.worlds (spec 20): loaded by `prepareMeta()` (a host that sets `routing` to symbolic awaits it once); null until then. */
     meta: null,
-    prepareMeta: async () => (engine.meta ??= await loadMetaWorlds(set)),
+    prepareMeta: async () => { if (!engine.meta) { engine.meta = await loadMetaWorlds(set); if (engine.meta) registerClauseStarters(set, engine.meta.cards); } return engine.meta; },   // the cards also drive the rules' clause cutter (spec 03 7.17)
     /** Formalizer strategies by id (spec 06); `formalizers` overrides them (tests, an encoder endpoint). */
     formalizers: { rules: createRulesFormalizer(), encoder: createEncoderFormalizer({ endpoint: options.encoderEndpoint ?? null }), ...formalizers },
     /** Problems found at load time and by static validation (empty when everything is consistent). */

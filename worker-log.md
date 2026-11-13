@@ -1407,3 +1407,64 @@ Why the "thin adapters, then delete ours" step was not done: the library's piece
 Proposed order (smallest first, each measured on T1/T2/T3 + Talk E-T1 + knowledge-lookup before the next): (a) after KNOWLEDGE-OUT lands, one session World per session with `std.know`; `learn()` also tells the wire there with `teach` (both stores agree, a test compares them), then `withLearned` reads its wires from the World and the line store goes; (b) `facts.mjs` `wires()` / `schema()` / `series()` answered from catalog-told wires (`createCatalog.into`) while `thing()` keeps the record shape as a view over them; (c) tab worlds to schema worlds one by one (art.draw first: 7 own types, the selection / last-thing rules go to the library), `session.things.sync` shrinks to nothing as the last tab moves. Estimated deletion when all three are done: learned.mjs about 150 of 178, session.things ops/things/view about 400 of 462, facts.mjs wires/schema/series/loading about 150 of 295.
 
 Next migration list from the library's reuse report (`docs/reuse-reports/psys2.md`, sopworld at 4938e83; 157 candidates, top 20: 8 believed): (1) the selection and last-thing rules repeated in art.draw (`ad.d.sel`, `ad.d.last`), diagram.sketch (`dk.d.last`), docs.editor (`ed.d.sel`), docs.reader: "a selection must name a thing that exists", one shared check (score 1.00); (2) orphan-reference denies (art.draw `ad.d.nokind`, data.charts `dc.d.orphan`, docs.editor `ed.d.none`) and no-two-with-the-same-name (`ad.d.twice`, `dk.d.name`, `dk.d.sid`: already `core.type unique=`); (3) the lookup actions of kids.animals (7: canFly/canSwim ...), kids.shapes (describeShape, colorOf), kids.time (monthDays): one generic `ask` act over knowledge (verdict: partly, not a shared module); (4) chess / tic-tac-toe `game` and `move` types (shape 0.80 / 0.75) as one game / move module; (5) `art.draw.tally` ~ `docs.editor.want`: the aggregate is shared, the meaning is not (partly). Reuse number 0 for most worlds (only chess 0.88, media.music 0.82, plan.seating 1.0 reuse from elsewhere).
+
+## 2026-11-14 SYSTEM MAP (generated page, trace vocabulary)
+- `scripts/build-system-map.mjs` generates `docs/system-map.html` (copy `docs/webchat/system-map.html`; `--write`, `--check`; about 25 s because it replays the three owner logs in rules mode). Sections: the seven-step path of a message with module, data and median alternatives; the worlds as inline SVG (library | tabs and content | knowledge; coloured edges fill, lookup, view, layout, tab, ask, route weighted by turns on the logs; dashed grey = `imports=` of world.sop); three numbers per world (hand-written lines without tests.sop and generated files, reuse from `docs/library-reuse-report.md`, share of turns helped by fill, lookup, ask or layout; tab, view and route edges are plumbing).
+- `src/dialog/steps.mjs` (browser-safe) holds the step vocabulary and `turnSteps`; the turn trace now has `trace.steps` (kind, world, act, things, missing, apply, reply). The why sentences were not renamed (tests and logs depend on them); mismatches are listed on the page, section 4.
+- `scripts/eval-owner-log.mjs` `replay` got `onReply` and `onEngine` hooks (no behaviour change). About section of the webchat links to `system-map.html`. `scripts/build-webchat.mjs` copies the page; regenerate with `node scripts/build-system-map.mjs --write` at each landing; `tests/system-map.test.mjs` fails when stale.
+- Medians on the logs (165 messages, 33 not read): kind 1, world 3 (router keeps at most 3), act 1, things 1, missing 0 (3 turns had a gap), apply 1, reply 1.
+- `docs/library-reuse-report.md` is a copy of the library session's report; refresh it when a new one is published.
+- Note: `tests/meta-worlds.test.mjs` size gate fails on origin/main (card diagram.sketch over 40 lines), not caused by this change.
+
+## 2026-11-14 — Q9 defaults (switches on, clause cutter, routing note, facts.thing invariant, robustness ledger) and DEFAULTS BY THE NUMBERS / FEWER OPTIONS
+
+All numbers: `scripts/eval-ablation.mjs`, rules-only unless stated, matrix reasoner, all gold sets together (n about 6,100), through the heavy lock; raw files `scratchpad/abl/d` and `d2`. Format right/n (wrong). Baseline = current main with the three switches explicitly off (`rules-off`). Note: on current main the knowledge set is 123/200 with everything off (it was 133 in the ablation report): ten made-up-word probes ("what is a glimbus") now answer "A has no common second name"; suspect-word leniency and READER-ROUTE fill both hide it, so the knowledge column of those rows is that regression being masked, not a gain of the switch (ledger material, not fixed here).
+
+**Switched defaults (spec 03 7.17, RUNTIME_DEFAULTS, DialogSession, setProto):**
+
+| switch | operational | knowledge | dialogues | typos | loose | para-rt | all right / wrong |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| all off | 1139 (119) | 123 (27) | 2091 (70) | 823/1003 (115) | 335 (166) | 22 (82) | 4983 / 649 |
+| suspect-word leniency ON | 1139 | 133 (20) | 2090 | 830 (101) | 335 | 22 | 4999 / 628 |
+| "also" joiner ON | 1142 (116) | 123 | 2090 | 825 (114) | 335 | 22 | 4987 / 645 |
+| both ON | 1142 | 133 | 2092 | 840 (101) | 335 | 22 | 5014 / 627 |
+| READER-ROUTE fill alone | 1139 | 133 (28) | 2090 | 823 (112) | 335 | 22 | 4992 / 647 |
+| both + fill | 1142 | 131 | 2090 | 830 | 335 | 22 | 5000 / 625 |
+
+Suspect and "also" are ON (`RUNTIME_DEFAULTS.suspectWords`, `DialogSession` default, `PROTO.also`). **READER-ROUTE fill stays OFF** (`reader: 'off'`): the condition "no regression above 1 on the dialogues" fails for the combination that ships (2092 to 2090) and it costs 10 typos on top (a typo'd "what is ..." question is answered "I don't know what a X is": "whats my nmae", "what is the smalles", "how many sides does a hexgaon have"); alone it only masks the knowledge regression above. `invariants.test.mjs` now accepts "zork" or its leniency spelling "fork" in the named part (nothing is executed either way).
+
+**Card-driven clause cutter** (`cardCuts`, `readCut`, `registerClauseStarters` in `src/formalizer/rules/index.mjs`; starters = act / actshared / navact words of the meta.worlds cards, no list in code; used only when the uncut reading left something unread or one reading swallowed the cut, and only when every piece reads completely, in the swallowed case with a pattern at least as specific; pieces may be in different worlds; trace field `cut`):
+
+| config | operational | knowledge | dialogues | typos | all right / wrong |
+| --- | --- | --- | --- | --- | --- |
+| rules, cutter off (`rules-nocut`) | 1142 (116) | 130 | 2090 | 834/999 | 5002 / 626 |
+| rules, cutter on (`rules-C`) | **1150 (108)** | 133 | 2090 | 840/1003 | **5020 / 619** |
+| DistilBERT segmentation (`enc-C`, cutter off) | 1157 | 133 | 2085 | 883 | 5061 / 663 |
+| DistilBERT segmentation (`enc-C`, cutter on) | 1157 | 134 | 2086 | 883 | 5063 / 663 |
+| rules splitter inside the encoder pipeline (`enc-C-segrules`) off / on | 1140 / 1150 | 123 / 133 | 2079 / 2078 | 868 / 867 | 5010 / 5028 |
+
+The model's operational advantage over rule segmentation fell from 19 messages (report) to 7 (1157 against 1150); on dialogues the model is 8 turns better, on typos the segmentation pipeline's spell stage (not the cut) is the rest of its gain.
+
+**Encoder gap (decision 3):** enc-C 5063 (663 wrong) against rules-C 5020 (619 wrong): +43 right of 6,100 = **0.7 point**, over the 0.5 limit; sets: typos +43 (4.3 points), paraphrases-rt +9 (6 points), operational +7, loose-words **-16 (2.5 points worse with the encoder, 216 wrong against 166)**, dialogues -4. The rule needs gap under 0.5 and no set worse by more than 1 point (here the rules-only side is worse by 4 points on typos, the encoder side worse by 2.5 points on loose words): not met, so the encoder stays on in the background (`helperModel` on) and never blocks; first load stays with the 68 MB model. Loose words is the group where it loses: ledger group "robustness: loose-words".
+
+**Routing**: C with the encoder, B (the same setting, no prior available) while the model loads, is missing, failed or switched off: spec 20 and spec 06 say so, PROGRESS note under the bar says it ("until it is ready the world of each message is chosen by the rules and their reasons alone (routing B); when it is ready the model adds its hint (routing C)") and the model failure line says "the rules answer, with the symbolic routing B (no model hint)" (`docs/webchat/app.mjs`; the note API is `ui/progress.mjs`).
+
+**facts.thing (F1, invariant)**: one `thing()` walk visits a lemma at most once and at most 12 lemmas (`MAX_WALK_STEPS`, `stats.walkCuts`, `stats.maxWalk`); `tests/facts-cycle.test.mjs` runs every word of `tests/fixtures/catalog-cycle` (180 kB: the real k.words senses of the online catalog b705b3c reachable from "legs" and "leg" by is_a, 119 words; the walks end with 3 cuts, longest walk 8 lemmas, 112 lookups) with a 5 s settle limit.
+
+**Robustness failures to the ledger** (`scripts/ledger-robustness.mjs --result <ablation json>`, 596 rows appended from `rules-C`, class `robust:<set>:<cause>`, shown by `analyze-failures.mjs` as "robustness: set / cause"): typos 163 (not corrected 62, read as another command 59, corrected to another word 42); loose words 309 (not read 143, read as another intent 97, junk acted on 69); paraphrases-rt 124 (read as another reading 82, phrasing not read 42). No "unknown word" paraphrase rows: the reply text of those rows never says it (the 82 wrong readings are where the vocabulary hole shows).
+
+**DEFAULTS BY THE NUMBERS (owner 2026-11-14):** (1) reading default = rules: `DEFAULT_NX_STRATEGY = 'rules'`, `nxStrategy` always rules in the webchat, hybrid and "model first" are no longer settings (the strategies stay in code for measurement); (2) the normalizer is off (`RUNTIME_DEFAULTS.normalizer false`, `MODES['encoder+n1']` turns it on, `DEFAULT_MODE = 'encoder'`), one optional switch "Help me with garbled sentences" (97 MB, +28 right of 6,100 = 0.5 point) loads it, never in the background by default; (3) encoder stays (see above); (4) options cut. Settings version 6 migrates saved profiles once.
+
+| options (Settings catalogue) | before | after |
+| --- | --- | --- |
+| Reading | 6 (reading with 3 values, fix typos, rephrase, partial, best effort, fast path) | 4 (helper model on/off, fix typos, garbled sentences download, do what I understood and say what I ignored) |
+| Languages and voice | 9 | 9 |
+| Privacy and history | 2 | 2 |
+| Developer | 9 (trace, dev mode, perf, reasoner 2 values, world-aware 4, routing 3, time limits, accept-refused, edit head) | 5 (trace, dev mode, perf, time limits, one Experiments list of 4 with last numbers and date: routing C/B, world-aware, reasoner, accept-refused) |
+| total options | 26 | **20** (plus 4 experiments in one list) |
+
+Removed: model first, NX hybrid reader, edit head, router A, fast-path switch (0 differences), best-effort switch, and the stand-alone Developer options of the experiments. The rule is in spec 06 ("The rule for options") and `tests/settings-coherent.test.mjs` enforces at most 20 options and that the removed ones do not return.
+
+Cold start (computed from the sizes, not re-timed in Chrome; 1 MB/s link, page code and worlds as before): downloaded in the first minutes: before page + worlds + 68.3 MB model + 97.0 MB normalizer (idle-loaded after 30 s on a fast link) = 165.3 MB beyond the page; after page + worlds + 68.3 MB model, the normalizer only when the person asks. Model ready: 68 s (was 68 s, then the normalizer started at 30 s idle and ran to about 165 s); never blocking either way (the rules answer meanwhile, routing B). Phone profile: the helper model can be switched off (the page then loads no model at all: 0 MB beyond the worlds).
+
+Checks (targeted, no full suites): `tests/facts-cycle`, `runtime-config`, `nx-strategy`, `settings-coherent`, `invariants`, `loop-guard` pass; `node src/cli.mjs test-world all` both reasoners: every world passes except the 13 known `diagram.sketch` rows of the previous landing (758/771 on both, identical to the main commit message; the ledger holds them); smoke once: 21.6 s, 3 failures before the fixes above (loop guard on the cutter's loops, the "zork" invariant text), 0 after. `tests/meta-worlds.test.mjs` "size gate" fails on the new diagram.sketch card (not mine, from the diagram switch). The Chrome UI test `scripts/test-webchat-ui.mjs` was updated for the new Reading group and the Experiments list but not run. Not changed (owner decisions made, applied above): NX hybrid default and normalizer default are the decisions (1) and (2) of this block. Test-run time of this task: about 55 minutes in the heavy queue (eval chains 6 + 6 configs, test-world twice, smoke once).

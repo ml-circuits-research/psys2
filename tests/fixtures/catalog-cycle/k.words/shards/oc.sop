@@ -1,0 +1,3 @@
+@k.words.occupation.noun.1 k.words.sense word=occupation pos=noun n=1 gloss="the principal activity in your life that you do to earn money" synonym=business synonym=job synonym="line of work" synonym=line is_a=activity core.source="wordnet 3.1"
+@k.words.occupation.noun.2 k.words.sense word=occupation pos=noun n=2 gloss="the control of a country by military forces of a foreign power" synonym="military control" is_a="social control" core.source="wordnet 3.1"
+@k.words.occupation.noun.3 k.words.sense word=occupation pos=noun n=3 gloss="any activity that occupies a person's attention" is_a=activity core.source="wordnet 3.1"

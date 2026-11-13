@@ -1,0 +1,3 @@
+@k.words.expect.verb.1 k.words.sense word=expect pos=verb n=1 gloss="regard something as probable or likely" synonym=anticipate is_a=evaluate kind_of=evaluate kind_of=think core.source="wordnet 3.1"
+@k.words.expect.verb.2 k.words.sense word=expect pos=verb n=2 gloss="consider obligatory; request and expect" synonym=ask synonym=require is_a=demand kind_of=demand kind_of=request kind_of=communicate kind_of=convey kind_of=transfer kind_of=move core.source="wordnet 3.1"
+@k.words.expect.verb.3 k.words.sense word=expect pos=verb n=3 gloss="look forward to the probable occurrence of" synonym=look synonym=await synonym=wait core.source="wordnet 3.1"

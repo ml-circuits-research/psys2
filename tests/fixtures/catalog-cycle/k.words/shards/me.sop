@@ -1,0 +1,5 @@
+@k.words.message.noun.1 k.words.sense word=message pos=noun n=1 gloss="a communication (usually brief) that is written or spoken or signaled" is_a=communication kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.message.noun.2 k.words.sense word=message pos=noun n=2 gloss="what a communication that is about something is about" synonym=content synonym="subject matter" synonym=substance is_a=communication kind_of=communication kind_of=abstraction kind_of=entity core.source="wordnet 3.1"
+@k.words.message.verb.1 k.words.sense word=message pos=verb n=1 gloss="send a message to" is_a=communicate kind_of=communicate kind_of=convey kind_of=transfer kind_of=move core.source="wordnet 3.1"
+@k.words.message.verb.2 k.words.sense word=message pos=verb n=2 gloss="send as a message" is_a=communicate kind_of=communicate kind_of=convey kind_of=transfer kind_of=move core.source="wordnet 3.1"
+@k.words.message.verb.3 k.words.sense word=message pos=verb n=3 gloss="send a message" is_a=communicate kind_of=communicate kind_of=interact kind_of=act core.source="wordnet 3.1"

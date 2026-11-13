@@ -27,7 +27,7 @@ const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);
 
-export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11-13.jsonl'), checks = join(REPO, 'training/eval/owner-log-checks.json') } = {}) {
+export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11-13.jsonl'), checks = join(REPO, 'training/eval/owner-log-checks.json'), onReply = null, onEngine = null } = {}) {
   const rows = readFileSync(log, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
   let chk = {};
   try { chk = JSON.parse(readFileSync(checks, 'utf8')); } catch { /* no checks yet */ }
@@ -43,6 +43,7 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
     const f = join(kdir, p.replace(/^k\.objects\//, 'k.objects/')); return existsSync(f) ? readFileSync(f, 'utf8') : null;
   } };
   engine.setKnowledge(createFacts({ source }));
+  onEngine?.(engine);
   const settings = settingsForMode('rules');
   let s = null, prevDay = null;
   const out = [];
@@ -75,6 +76,7 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
         rec.failing = bad;
       } else rec.outcome = 'unchecked';
     } else rec.outcome = 'wrong';
+    if (onReply && reply) onReply(rec, reply, s);
     out.push(rec);
   }
   return out;

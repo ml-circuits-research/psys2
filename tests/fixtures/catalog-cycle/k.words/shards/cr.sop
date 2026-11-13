@@ -1,0 +1,3 @@
+@k.words.create.verb.1 k.words.sense word=create pos=verb n=1 gloss="make or cause to be or to become" synonym=make core.source="wordnet 3.1"
+@k.words.create.verb.2 k.words.sense word=create pos=verb n=2 gloss="bring into existence" core.source="wordnet 3.1"
+@k.words.create.verb.3 k.words.sense word=create pos=verb n=3 gloss="pursue a creative activity; be engaged in a creative activity" is_a=act kind_of=act core.source="wordnet 3.1"

@@ -17,6 +17,8 @@ import { buildFaces } from './faces.mjs?v=a8975fe028';
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
 /** The kinds tried when a thing has no drawing of its own (a word can have dozens of senses with a kind each). */
 const MAX_KINDS = 4;
+/** One `thing()` call walks at most this many lemmas through kind-of links, and one lemma at most once per walk (invariant tests/facts-cycle.test.mjs: a kind-of cycle in the catalog ends). */
+const MAX_WALK_STEPS = 12;
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 /** Runs `fn` after a backoff (an unreachable catalog is asked again later, not remembered as empty for the session); the timer never keeps a process alive. */
@@ -48,7 +50,7 @@ const one = (r, k) => r.f[k]?.[0];
 export function createFacts({ source, name = 'catalog' }) {
   let vocab = null, vocabLoading = null;
   const shards = new Map();   // shard id -> Promise<facts[]>
-  const stats = { vocabMs: 0, vocabBytes: 0, shardMs: 0, shardBytes: 0, shardsLoaded: [], lookups: 0, hits: 0 };
+  const stats = { vocabMs: 0, vocabBytes: 0, shardMs: 0, shardBytes: 0, shardsLoaded: [], lookups: 0, hits: 0, walkCuts: 0, maxWalk: 0 };
   const parsed = new Map();   // object shard id -> parsed shard (the shared parser)
   const parsedShard = async (sid) => { if (!parsed.has(sid)) { const lines = await loadShard(sid); try { parsed.set(sid, parseShard(lines.join('\n'))); } catch { parsed.set(sid, null); } } return parsed.get(sid); };
   let index = null, indexLoading = null;   // index.json of the catalog: worlds { id, exports (types), shards: [{ id, keys, sources }] }
@@ -106,13 +108,13 @@ export function createFacts({ source, name = 'catalog' }) {
    * A thing with no drawing of its own is drawn by the object of its kind: the `k.objects.stand_in` wire (a villa by the house), else the first kind its word senses
    * give (`is_a`), at most two steps. Sets `out.drawnAs` (the drawing's name) and `out.objects` (that drawing's parts); nothing when nothing is found.
    */
-  async function drawnAs(out, lemma, depth) {
+  async function drawnAs(out, lemma, depth, walk) {
     if (depth > 1) return;
     const own = out.wires.find((w) => w.type === 'k.objects.stand_in' && String(one(w, 'name')).toLowerCase() === lemma);
     const kinds = [...new Set([own ? one(own, 'drawing') : null, ...(own ? [] : out.senses.flatMap((x) => x.isA))].filter((k) => k && lemmaCandidates(k)[0] !== lemma))].slice(0, MAX_KINDS);   // never the thing itself, a few kinds at most
     for (const k of kinds) {
       budget.tick('facts.drawnAs');
-      const th = await thing(k, depth + 1);
+      const th = await thing(k, depth + 1, walk);
       if (th?.objects.length) { out.drawnAs = th.drawnAs ?? th.name; out.drawnVia = own ? 'stand_in' : 'is_a'; out.objects = th.objects; return; }
     }
   }
@@ -160,10 +162,13 @@ export function createFacts({ source, name = 'catalog' }) {
    * What the catalog knows about one thing, from the shards of its lemma only: drawable objects (parts), the commonsense fact, the word senses.
    * `null` when the vocabulary does not know the word (the plain "I do not know what a X is"). The settled answer is cached, also for a miss.
    */
-  async function thing(word, depth = 0) {
+  async function thing(word, depth = 0, walk = { steps: 0, seen: new Set() }) {
     const key = lemmaCandidates(word)[0];
     if (!key) return null;
     for (const lc of lemmaCandidates(word)) if (things.has(lc)) return things.get(lc);
+    // the step budget and the cap per lemma of one walk: a lemma already on this walk, or the walk's step budget spent, ends the branch (no drawing of its own)
+    if (walk.seen.has(key) || walk.steps >= MAX_WALK_STEPS) { stats.walkCuts++; return null; }
+    walk.seen.add(key); walk.steps++; stats.maxWalk = Math.max(stats.maxWalk, walk.steps);
     stats.lookups++;
     const hit = await find(word);
     if (!hit) { things.set(key, null); return null; }
@@ -193,7 +198,7 @@ export function createFacts({ source, name = 'catalog' }) {
       objects: [...objects.values()].filter((o) => o.parts.length), commonsense: commonsense[0] ?? null, senses,
       wires: others,   // every other wire of its shards that names the lemma (any world: k.scenes, k.people, k.layouts, ...), generically
     };
-    if (!out.objects.length) await drawnAs(out, lemma, depth);   // the depth is carried down: a kind-of cycle (legs is a leg, a leg is legs) must end after two steps
+    if (!out.objects.length) await drawnAs(out, lemma, depth, walk);   // the depth is carried down: a kind-of cycle (legs is a leg, a leg is legs) must end after two steps
     stats.hits++;
     things.set(key, out); things.set(lemma, out);
     return out;
