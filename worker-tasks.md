@@ -3280,3 +3280,15 @@ What it owns, once, for every host:
 **Tests.** `training/eval/owner-log-2026-11-13.jsonl` has 5 new rows of class `space` from the owner's session of 13:09 (first house left and down; further left; the middle house; "not the first one, the middle one"; the right house). Add a generated set of 150 space requests over both hosts (selection × move × relation × layout, with 2 to 6 objects, seeded) with the expected boxes; both reasoners. Chrome probe with screenshots of 12 cases for the reviewer.
 
 **Order:** after P1 and P3 of SCENE-NATURAL; P2 and P4 are built on this module. If sopworld lacks something (ordering, median, a function over a set), write it in questions.md of this repo and continue with a host function; the reviewer passes it to the library.
+
+## Reviewer 2026-11-13 14:40 — UNDO-REDO (owner): redo, and one step per user request
+
+1. **Redo.** There is undo but no redo. Add "redo" (words: redo, do it again after an undo, put it back) and a Redo button next to Undo wherever an Undo button exists. sopworld has labelled marks and redo since 0.11; the ops reasoner needs the same behaviour. A new action after an undo clears the redo list; the reply says what was redone, as undo does.
+2. **Granularity: one step is one request of the user.** The owner sees several of his requests undone together. Rules:
+   - one message that asks one thing = one step, however many objects it changed ("draw 3 houses" is one step);
+   - one message with several requests ("draw a sky and a sun") = one step per request, undone last first; "undo" undoes the last request and says which; "undo all of that" or "undo the whole message" undoes the message;
+   - effects the user did not ask for (the engine's answer in a game, advice, a pond made for a fish) belong to the step of the request that caused them;
+   - never merge two messages into one step.
+   Find where steps are merged today (session undo timeline of RESTORE-1, the grouping added for the chess engine reply) and report the cause.
+3. **"Undo the X"** (undo a named earlier step, not the last): if the step is independent of later ones, undo only it; otherwise say what else would be undone and ask.
+4. Tests in both reasoners and across worlds (undo/redo through a tab switch), a Chrome probe with the Undo/Redo buttons, and rows in the smoke suite.
