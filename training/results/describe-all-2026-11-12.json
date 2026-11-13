@@ -421,6 +421,186 @@
    "ratio": 0.76,
    "testsDefault": "ui.shell: 64/64 passed",
    "testsOnly": "ui.shell: 33/64 passed"
+  },
+  "media.music": {
+   "world": "media.music",
+   "patternLines": 2892,
+   "describeLines": 1281,
+   "words": 267,
+   "base": {
+    "n": 207,
+    "right": 200,
+    "wrong": 3,
+    "nu": 4,
+    "other": 0
+   },
+   "add": {
+    "n": 207,
+    "right": 200,
+    "wrong": 3,
+    "nu": 4,
+    "other": 0
+   },
+   "only": {
+    "n": 207,
+    "right": 149,
+    "wrong": 11,
+    "nu": 47,
+    "other": 0
+   },
+   "ratio": 0.44,
+   "testsDefault": "media.music: 413/413 passed",
+   "testsOnly": "media.music: 177/413 passed"
+  },
+  "data.charts": {
+   "world": "data.charts",
+   "patternLines": 2690,
+   "describeLines": 1277,
+   "words": 283,
+   "base": {
+    "n": 186,
+    "right": 179,
+    "wrong": 4,
+    "nu": 3,
+    "other": 0
+   },
+   "add": {
+    "n": 186,
+    "right": 179,
+    "wrong": 4,
+    "nu": 3,
+    "other": 0
+   },
+   "only": {
+    "n": 186,
+    "right": 133,
+    "wrong": 17,
+    "nu": 36,
+    "other": 0
+   },
+   "ratio": 0.47,
+   "testsDefault": "data.charts: 277/277 passed",
+   "testsOnly": "data.charts: 140/277 passed"
+  },
+  "docs.reader": {
+   "world": "docs.reader",
+   "patternLines": 2514,
+   "describeLines": 644,
+   "words": 121,
+   "base": {
+    "n": 228,
+    "right": 219,
+    "wrong": 1,
+    "nu": 8,
+    "other": 0
+   },
+   "add": {
+    "n": 228,
+    "right": 219,
+    "wrong": 1,
+    "nu": 8,
+    "other": 0
+   },
+   "only": {
+    "n": 228,
+    "right": 164,
+    "wrong": 13,
+    "nu": 51,
+    "other": 0
+   },
+   "ratio": 0.26,
+   "testsDefault": "docs.reader: 209/209 passed",
+   "testsOnly": "docs.reader: 120/209 passed"
+  },
+  "ui.avatar": {
+   "world": "ui.avatar",
+   "patternLines": 1299,
+   "describeLines": 890,
+   "words": 208,
+   "base": {
+    "n": 286,
+    "right": 271,
+    "wrong": 5,
+    "nu": 10,
+    "other": 0
+   },
+   "add": {
+    "n": 286,
+    "right": 272,
+    "wrong": 5,
+    "nu": 9,
+    "other": 0
+   },
+   "only": {
+    "n": 286,
+    "right": 161,
+    "wrong": 19,
+    "nu": 106,
+    "other": 0
+   },
+   "ratio": 0.69,
+   "testsDefault": "ui.avatar: 327/327 passed",
+   "testsOnly": "ui.avatar: 172/327 passed"
+  },
+  "art.draw": {
+   "world": "art.draw",
+   "patternLines": 1353,
+   "describeLines": 1037,
+   "words": 207,
+   "base": {
+    "n": 335,
+    "right": 313,
+    "wrong": 5,
+    "nu": 17,
+    "other": 0
+   },
+   "add": {
+    "n": 335,
+    "right": 313,
+    "wrong": 5,
+    "nu": 17,
+    "other": 0
+   },
+   "only": {
+    "n": 335,
+    "right": 228,
+    "wrong": 49,
+    "nu": 58,
+    "other": 0
+   },
+   "ratio": 0.77,
+   "testsDefault": "art.draw: 577/577 passed",
+   "testsOnly": "art.draw: 271/577 passed"
+  },
+  "diagram.sketch": {
+   "world": "diagram.sketch",
+   "patternLines": 1724,
+   "describeLines": 593,
+   "words": 81,
+   "base": {
+    "n": 35,
+    "right": 29,
+    "wrong": 6,
+    "nu": 0,
+    "other": 0
+   },
+   "add": {
+    "n": 35,
+    "right": 29,
+    "wrong": 6,
+    "nu": 0,
+    "other": 0
+   },
+   "only": {
+    "n": 35,
+    "right": 5,
+    "wrong": 21,
+    "nu": 9,
+    "other": 0
+   },
+   "ratio": 0.34,
+   "testsDefault": "diagram.sketch: 760/760 passed",
+   "testsOnly": "diagram.sketch: 582/760 passed"
   }
  },
  "readerCoverage": {
@@ -507,15 +687,43 @@
    "mapped": 70,
    "warnings": 0,
    "asIs": 70
+  },
+  "media.music": {
+   "words": 267,
+   "mapped": 267,
+   "warnings": 0,
+   "asIs": 228
+  },
+  "data.charts": {
+   "words": 283,
+   "mapped": 283,
+   "warnings": 0,
+   "asIs": 272
+  },
+  "docs.reader": {
+   "words": 121,
+   "mapped": 121,
+   "warnings": 0,
+   "asIs": 121
+  },
+  "ui.avatar": {
+   "words": 208,
+   "mapped": 208,
+   "warnings": 0,
+   "asIs": 188
+  },
+  "art.draw": {
+   "words": 207,
+   "mapped": 207,
+   "warnings": 0,
+   "asIs": 200
+  },
+  "diagram.sketch": {
+   "words": 81,
+   "mapped": 81,
+   "warnings": 0,
+   "asIs": 81
   }
  },
- "notDone": [
-  "media.music",
-  "data.charts",
-  "docs.reader",
-  "ui.avatar",
-  "ui.help",
-  "art.draw",
-  "diagram.sketch"
- ]
+ "notDone": []
 }
