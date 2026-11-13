@@ -20,8 +20,8 @@
  * those of continuation.mjs, and everything else is read from the discourse layer (frames, actions, referents) that it absorbs instead of duplicating:
  * `Discourse._repair`, `_degree`, `_feedback`, `_explain`, `followup.touched`, `continuation.ownWords`.
  *
- * The session as facts (`facts()`): things made and their counts, topics, games and results, places shown. A world takes "the current discussion" as content
- * through `sessionContent(text)`, one implementation for every tab.
+ * The session as facts (`facts()`): things made and their counts, topics, games and results, places shown. A view takes "the current discussion" as content
+ * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs';
 import { GRAMMAR } from './continuation.mjs';
@@ -266,8 +266,7 @@ export class Dialogue {
       if (head && !head.unparsed && !head.ignored?.length) { this._kind = 'correction'; return { rewrite: neg[1], info: { kind: 'repair', how: 'not-clause', dialogue: 'correction', not: neg[2], fragment: text } }; }
     }
 
-    // 7. the session as the content of a request ("a chart about the current discussion")
-    return await this.sessionContent(text, sid);
+    return null;   // "a chart about the current discussion" is not read here: it is a selection of the session things into a view (session.things, spec 23)
   }
 
   tag(r, kind) { r.info = { ...(r.info ?? {}), dialogue: kind }; this._kind = kind; return r; }
@@ -424,55 +423,12 @@ export class Dialogue {
       for (const [noun, count] of by) things.push({ noun, count, world: w.id });
       for (const r of refs) items.push({ id: `${w.id}:${r.id}`, kind: r.kind, noun: r.noun ?? r.kind, world: w.id, aspects: { ...(r.attrs ?? {}) } });   // identity, kind, aspects: the shape a session.things store holds
     }
-    const topics = [...new Set([...(d.topics ?? []), ...this.log.map((r) => r.world)].filter((x) => x && !['ui.shell', 'ui.help', 'kids.common', 'core', 'session.dialogue'].includes(x)))].map((x) => this.worldTitle(x));
+    const topics = [...new Set([...(d.topics ?? []), ...this.log.map((r) => r.world)].filter((x) => x && !['ui.shell', 'ui.help', 'kids.common', 'core'].includes(x) && !/^session\./.test(x)))].map((x) => this.worldTitle(x));
     const games = Object.keys(st).filter((id) => id.startsWith('games.')).map((id) => ({ world: id, title: this.worldTitle(id), status: st[id]?.over ? 'finished' : st[id]?.phase ?? null, result: st[id]?.result ?? st[id]?.winner ?? null })).filter((g) => this.log.some((r) => r.world === g.world));
     const places = [...new Set([].concat(st['geo.map']?.shown ?? st['geo.map']?.places ?? st['geo.map']?.pins ?? []).map((p) => (typeof p === 'string' ? p : p?.name)).filter(Boolean))];
     return { turns: this.log.length, things, items, topics, games, places, asked: this.log.filter((r) => r.kind === 'new').slice(-5).map((r) => r.text) };
   }
 
-  /** The facts in the words of a chart ("cars 12, houses 1"), and in sentences for a document. */
-  factsList(f = this.facts()) { return f.things.map((x) => `${x.noun}s ${x.count}`.replace(/ss /, 's ')); }
-  factsProse(f = this.facts()) {
-    const out = [];
-    if (f.things.length) out.push(`We made ${f.things.map((x) => `${x.count} ${x.noun}${x.count === 1 ? '' : 's'}`).join(', ')}.`);
-    if (f.topics.length) out.push(`We talked about ${f.topics.join(', ')}.`);
-    for (const g of f.games) out.push(`We played ${g.title}${g.result ? `: ${g.result}` : ''}.`);
-    if (f.places.length) out.push(`We looked at ${f.places.join(', ')}.`);
-    return out.join(' ');
-  }
-
-  /**
-   * "a chart about the current discussion": the phrase is replaced by the session as facts, in the form the open tab's world reads completely (a list of counts for a
-   * chart, a sentence for a document), tried in this order. Returns { rewrite } or null.
-   */
-  async sessionContent(text, sid) {
-    const d = this.disc, lang = this.lang;
-    const sess = alts(lang, 'dialogue.session');
-    const ws = tokens(text);
-    const hit = contains(ws, sess);
-    if (!hit || !this.log.length) return null;
-    const m = new RegExp(`\\s*(?:about|of|on|from|with|for|using|based on)?\\s*${hit.join('\\s+')}\\b`, 'i').exec(text);
-    if (!m) return null;
-    const head = strip(text.slice(0, m.index)), tail = text.slice(m.index + m[0].length);
-    const f = this.facts();
-    const forms = [];
-    if (f.things.length) forms.push(`: ${this.factsList(f).join(', ')}`);
-    const prose = this.factsProse(f);
-    if (prose) forms.push(`: ${prose}`, ` with the text ${prose}`, ` saying ${prose}`);
-    // a world that reads the list of counts (a chart) takes it; a world that reads sentences (a document) takes the prose in preference: the richer text wins when the same world reads both
-    let first = null;
-    for (const form of forms) {
-      budget.tick('dialogue.session');
-      const cand = `${head}${form}${tail}`;
-      const seg = await d._readSeg(cand, sid);   // over all worlds: the head ("create a chart") and the content decide which world reads it
-      if (!seg || seg.unparsed || seg.ignored?.length || !this.s._dryStatuses([seg]).every((x) => x === 'supported')) continue;
-      const hit = { rewrite: cand, info: { kind: 'session-content', dialogue: 'content', world: seg.match?.worldId ?? null, facts: f.things.length } };
-      if (!first) { first = hit; if (!prose) break; continue; }
-      if (first.info.world === hit.info.world) return hit;
-    }
-    if (first) return first;
-    return null;
-  }
 
   // ---- continuation and list: complete the request from the focus ---------------------------------------------------------------------------------------------
   /**

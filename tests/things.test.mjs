@@ -8,7 +8,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { parseTeach, learn, withLearned } from '../src/knowledge/learned.mjs';
-import { aspectsOf, sync, find, whyNot, viewByWords, ensure } from '../worlds/session.things/things.mjs';
+import { aspectsOf, sync, find, whyNot, viewByWords, ensure, select } from '../worlds/session.things/things.mjs';
 
 const CAT = path.resolve(import.meta.dirname, 'fixtures/catalog');
 const catalog = () => createFacts({ source: { text: async (p) => { try { return readFileSync(path.join(CAT, p), 'utf8'); } catch { return null; } } } });
@@ -119,5 +119,57 @@ for (const reasoner of ['ops', 'matrix']) {
     await engine.knowledge.thing('villa');
     assert.match((await s.send('What kind of thing is a villa?')).text, /A villa is a kind of house/);
     assert.equal(s.state('session.things').learned.length, 2, 'the taught facts are wires of the session');
+  });
+}
+
+test('select: "what I drew", "the things in the plan" and "the discussion" name sets of things by the view that holds them; a view that counts takes anything', () => {
+  const st = ensure({ things: [
+    { id: 'a', kind: 'house', shown: ['art.draw'], aspects: {} }, { id: 'b', kind: 'table', shown: ['plan.seating'], aspects: {} }, { id: 'c', kind: 'guest', name: 'Ann', shown: ['plan.seating'], aspects: {} },
+  ] });
+  const views = [{ id: 'plan.seating', noun: 'seating plan', words: ['seating', 'plan'] }, { id: 'art.draw', noun: 'drawing board', words: ['draw', 'drawing'] }];
+  assert.deepEqual(select(st, 'what I drew', views).things.map((t) => t.id), ['a']);
+  assert.deepEqual(select(st, 'things in the plan', views).things.map((t) => t.id), ['b', 'c']);
+  assert.equal(select(st, 'the discussion', views).things.length, 3);
+  assert.equal(select(st, 'the discussion', views).session, true);
+  assert.deepEqual(select(st, 'Ann', views).things.map((t) => t.id), ['c']);
+  assert.equal(whyNot({ kind: 'hat', aspects: { visual: 'knowledge' } }, { noun: 'chart', aspects: ['numeric'], counts: true }), null);
+  assert.match(whyNot({ kind: 'hat', aspects: { visual: 'knowledge' } }, { noun: 'timeline', aspects: ['temporal'] }), /has no time to show in the timeline/);
+});
+
+for (const reasoner of ['ops', 'matrix']) {
+  test(`${reasoner}: a chart and a document of "what I drew" / "the discussion" are selections of session things into views (one request each); a document is made with its text in one request; a timeline is a view from a schema alone`, async () => {
+    const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
+    engine.setKnowledge(catalog());
+    for (const w of ['table', 'monday', 'march', 'bicycle']) await engine.knowledge.thing(w);
+    const s = engine.createSession({ language: 'en' });
+    const tab = (t) => s.setWorldState('ui.shell', { activeTab: t });
+    tab('draw'); await s.send('draw 3 cars'); await s.send('draw a house');
+    tab('seating'); await s.send('add a table'); await s.send('add a guest called Ann at table 1');
+    tab('charts');
+    let r = await s.send('make a chart of what I drew');
+    assert.match(r.text, /cars 3 and houses 1/, r.text);
+    const chart = s.state('data.charts').charts[0];
+    assert.deepEqual([chart.labels, chart.datasets[0].data], [['Cars', 'Houses'], [3, 1]]);
+    r = await s.send('create a chart about the current discussion');
+    assert.match(r.text, /tables 1/, r.text);
+    await s.send('undo');
+    assert.deepEqual(s.state('data.charts').charts[0].labels, ['Cars', 'Houses'], 'one step to undo for the whole selection');
+    tab('editor');
+    r = await s.send('create a document about the current discussion');
+    assert.match(r.text, /document called "About the discussion" with \d sections/, r.text);
+    const doc = s.state('docs.editor');
+    assert.ok(doc.blocks.some((b) => b.kind === 'heading' && /drawing/i.test(b.text)) && doc.blocks.some((b) => b.kind === 'heading' && /seating plan/i.test(b.text)), 'one section per view the things come from');
+    assert.ok(doc.blocks.some((b) => b.kind === 'list' && b.items.some((i) => /Ann/.test(i))));
+    r = await s.send('make a document called Holiday with the text "We go to the sea. We swim."');
+    assert.match(r.text, /document called "Holiday" with 1 block/, r.text);
+    assert.equal(s.state('docs.editor').blocks[0].text, 'We go to the sea. We swim.');
+    // the timeline: things with a time only
+    tab('talk');
+    await s.send('What is Monday?');
+    r = await s.send('send it to the timeline');
+    assert.match(r.text, /I put moment Monday in the timeline/, r.text);
+    await s.send('What does a bicycle look like?');
+    r = await s.send('send it to the timeline');
+    assert.match(r.text, /A bicycle has no time to show in the timeline/, r.text);
   });
 }

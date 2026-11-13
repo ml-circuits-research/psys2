@@ -201,3 +201,15 @@
 @tpl.docs.editor.doc_stats core.template
     for=action.doc.stats
     text="{value}"
+
+@tpl.docs.editor.doc_make core.template
+    for=action.doc.make
+    text="{value}"
+
+@tpl.docs.editor.view core.template
+    for=action.docs.editor.view
+    text="{value}"
+
+@tpl.docs.editor.adopt core.template
+    for=action.docs.editor.adopt
+    text="{value}"

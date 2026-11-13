@@ -3153,3 +3153,22 @@
     example="Add text."
     doc="RP3: the text is missing; asks for it (the command words are never written into the document)."
 
+
+@pat.docs.editor.make core.pattern
+    canonical="Make a document called Holiday with the text We go to the sea."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [start|create|make|write|begin|open]? [a|an]? [new]? [document|doc] [called|named|titled|about]? {t:words(6)} [with_the_text|with_text|saying|that_says|containing|reading|with_the_words|:] {c:rest(quotes)}"
+    emit="@{_} core.request action=doc.make arg.title=\"{t}\" arg.content=\"{c}\""
+    kind=request
+    priority=13
+    example="Make a document called Holiday with the text We go to the sea."
+    example="Create a document about cats saying Cats purr."
+    doc="The act make-document: a title and the content in one request."
+
+@pat.docs.editor.make2 core.pattern
+    canonical="Make a document with the text We go to the sea."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [start|create|make|write|begin|open]? [a|an]? [new]? [document|doc] [with_the_text|with_text|saying|that_says|containing|reading|with_the_words|:] {c:rest(quotes)}"
+    emit="@{_} core.request action=doc.make arg.content=\"{c}\""
+    kind=request
+    priority=13
+    example="Make a document saying We go to the sea."
+    doc="The act make-document: the content in one request, the title left as it is."

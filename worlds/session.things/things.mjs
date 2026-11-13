@@ -102,6 +102,7 @@ export function find(state, phrase, last = null) {
 
 /** Why a view cannot show a thing, in plain words, or null when it can: the thing must have at least one aspect the view shows. */
 export function whyNot(thing, view) {
+  if (view.counts) return null;   // a view that counts (a chart) takes anything countable: one more of its kind
   const have = Object.keys(thing.aspects ?? {});
   const shown = view.aspects?.length ? view.aspects : ASPECTS;
   if (have.some((a) => shown.includes(a))) return null;
@@ -125,4 +126,38 @@ export function viewByWords(views, phrase) {
     }
   }
   return best;
+}
+
+// ---- selections: "what I drew", "the things in the plan", "the discussion" -------------------------------------------------------------------------------------
+const SESSION_WORDS = /^(?:the |this |our |that )?(?:current )?(?:discussion|conversation|chat|session)$|^(?:everything|all|all of it|so far|what we (?:said|did|made|talked about))$/;
+/** Verbs of doing and the word of the view that does it (TEMPORARY until k.actions says which tool a verb belongs to): "what I drew" is what the drawing holds. */
+const DID_VIEW_TEMPORARY = { drew: 'draw', drawn: 'draw', draw: 'draw', painted: 'draw', sketched: 'draw', seated: 'seating', planned: 'plan', wrote: 'document', typed: 'document' };
+const DID_ANY = new Set(['made', 'did', 'added', 'built', 'created', 'put', 'placed', 'said', 'have', 'had', 'has', 'got', 'asked']);
+const stem = (w) => lc(w).replace(/(?:ing|ed|es|s)$/, '');
+const sameWord = (a, b) => a === b || (a.length > 2 && b.length > 2 && stem(a) === stem(b));
+/** The view (declared, or a world that keeps things without being a view) a word names, by loose word match. `views`: [{ id, noun, words }]. */
+export function viewByWord(views, word) {
+  const w = lc(word);
+  if (!w) return null;
+  return views.find((v) => [v.noun, v.id.split('.').at(-1), ...(v.words ?? [])].some((x) => lc(x).split(/\s+/).some((y) => sameWord(y, w)))) ?? null;
+}
+/**
+ * The things a selection phrase names, as { things, session, view }: `session` is true for the whole discussion; the things of one view for "what I drew" (the verb names the view),
+ * "the things in the plan" (the place names it); a name or a kind word otherwise (`find`). `views` are the places things come from (declared views and worlds that hold things).
+ */
+export function select(state, phrase, views = [], last = null) {
+  ensure(state);
+  const w = lc(phrase).replace(/[?.!,]+/g, ' ').replace(/\s+/g, ' ').trim();
+  if (SESSION_WORDS.test(w)) return { things: [...state.things], session: true, view: null };
+  const toks = w.replace(/\b(?:the|a|an|my|our|this|that|these|those|things|thing|stuff|items|what|all|of|i|we|you|so|far|in|on|at|from|have|has|had)\b/g, ' ').split(/\s+/).filter(Boolean);
+  const did = (w.match(/\b(?:what|everything|all|things|stuff)\s+(?:that\s+)?(?:i|we|you)\s+(\w+)/) ?? [])[1];
+  if (did) {
+    if (DID_ANY.has(did) && !DID_VIEW_TEMPORARY[did]) return { things: [...state.things], session: true, view: null };
+    const v = DID_VIEW_TEMPORARY[did] ? viewByWord(views, DID_VIEW_TEMPORARY[did]) : null;
+    if (v) return { things: state.things.filter((t) => t.shown.includes(v.id)), session: false, view: v };
+  }
+  if (/\bin\b/.test(w) || !toks.length) {
+    for (const t of toks) { const v = viewByWord(views, t); if (v) return { things: state.things.filter((x) => x.shown.includes(v.id)), session: false, view: v }; }
+  }
+  return { things: find(state, phrase, last), session: false, view: null };
 }

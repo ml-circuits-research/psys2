@@ -1,0 +1,6 @@
+@legend.plan.timeline core.legend
+    namespace=plan.timeline
+    version=0.1.0
+    imports=core
+    imports=acts
+    doc="Moments of a timeline; the state is kept by the generic executor of acts.mjs."

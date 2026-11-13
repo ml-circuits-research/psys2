@@ -165,3 +165,11 @@
 @tpl.data.charts.toDocumentData core.template
     for=action.chart.toDocumentData
     text="{value}"
+
+@tpl.data.charts.view core.template
+    for=action.data.charts.view
+    text="{value}"
+
+@tpl.data.charts.adopt core.template
+    for=action.data.charts.adopt
+    text="{value}"

@@ -1,0 +1,34 @@
+@gen.plan.timeline.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@tpl.plan.timeline.make core.template
+    for=action.plan.timeline.make
+    text="{note}"
+
+@tpl.plan.timeline.remove core.template
+    for=action.plan.timeline.remove
+    text="{note}"
+
+@tpl.plan.timeline.change core.template
+    for=action.plan.timeline.change
+    text="{note}"
+
+@tpl.plan.timeline.send core.template
+    for=action.plan.timeline.send
+    text="{note}"
+
+@tpl.plan.timeline.copy core.template
+    for=action.plan.timeline.copy
+    text="{note}"
+
+@tpl.plan.timeline.ask core.template
+    for=action.plan.timeline.ask
+    text="{note}"
+
+@tpl.plan.timeline.undo core.template
+    for=action.plan.timeline.undo
+    text="{note}"
+
+@tpl.plan.timeline.redo core.template
+    for=action.plan.timeline.redo
+    text="{note}"

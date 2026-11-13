@@ -1164,3 +1164,9 @@
     input="Add the new paragraph."
     expectStatus=supported
     session=rp3ed2
+
+@t.docs.editor.make1 core.test
+    input="Make a document called Holiday with the text We go to the sea."
+    expect="I made a document called \"Holiday\" with 1 block"
+    expectState="title=Holiday"
+    session=mk1

@@ -4,6 +4,7 @@
     legend=$legend.session.things
     imports=world.core
     imports=world.lang.common
+    imports=world.session.dialogue
     formalization=rules
     language=en
     status=fixture

@@ -1,0 +1,62 @@
+@gen.plan.timeline.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@op.plan.timeline.view core.operation
+    impl=view
+    semantics=action
+    action=plan.timeline.view
+    doc="The declaration of this world as a view of the session things (spec 23): its aspects and words."
+
+@op.plan.timeline.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=plan.timeline.adopt
+    doc="Takes a thing of the session store into this world: the act make, then change for each attribute (spec 23)."
+
+@op.plan.timeline.make core.operation
+    impl=make
+    semantics=action
+    action=plan.timeline.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.remove core.operation
+    impl=remove
+    semantics=action
+    action=plan.timeline.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.change core.operation
+    impl=change
+    semantics=action
+    action=plan.timeline.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.send core.operation
+    impl=send
+    semantics=action
+    action=plan.timeline.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.copy core.operation
+    impl=copy
+    semantics=action
+    action=plan.timeline.copy
+    doc="The act 'copy' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.ask core.operation
+    impl=ask
+    semantics=action
+    action=plan.timeline.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.undo core.operation
+    impl=undo
+    semantics=action
+    action=plan.timeline.undo
+    doc="The act 'undo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.redo core.operation
+    impl=redo
+    semantics=action
+    action=plan.timeline.redo
+    doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."

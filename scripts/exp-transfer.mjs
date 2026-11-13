@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-// TRANSFER first slice (spec 23, worker-tasks 21:30): experiments T1 and T2 over three views of the session things: the pilot avatar (worlds-pilot/ui.avatar), the seating plan
-// (worlds/plan.seating) and Talk (worlds/talk). No code per pair of views is involved: every transfer is the one operation things.show (the `send` act of a schema world or Talk's
+// TRANSFER (spec 23, worker-tasks 21:30): experiments T1 and T2 over the views of the session things: the pilot avatar (worlds-pilot/ui.avatar), the seating plan
+// (worlds/plan.seating), Talk (worlds/talk), the chart (worlds/data.charts, numeric: a thing counts as one of its kind), the document (worlds/docs.editor, textual) and, as T6-lite, the
+// timeline (worlds/plan.timeline, a view declared by a schema alone: things with a temporal aspect). The chart, the document and the timeline are columns of the matrix (they take things);
+// they do not yet publish things of their own, so no row is made in them. No code per pair of views is involved: every transfer is the one operation things.show (the `send` act of a schema world or Talk's
 // "send it to X"), judged against EXPECTATIONS written below by hand from common sense, not from the code.
 //   node scripts/exp-transfer.mjs [--reasoner ops|matrix] [--catalog tests/fixtures/catalog] [--out file.jsonl] [--only t1|t2] [--verbose]
 // T1: 30 things made in the three views (10 each) are shown in each of the other two views: 60 cells, each right / not applicable said plainly / wrong.
@@ -22,10 +24,10 @@ const catalog = () => createFacts({ source: { text: async (p) => { try { return 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 engine.setKnowledge(catalog());
 const WITH_DRAW = process.argv.includes('--draw');
-const TAB = { avatar: 'robot', seating: 'seating', talk: 'talk', ...(WITH_DRAW ? { draw: 'draw' } : {}) };
-const WORLD = { avatar: 'ui.avatar', seating: 'plan.seating', talk: 'talk', draw: 'art.draw' };
+const TAB = { avatar: 'robot', seating: 'seating', talk: 'talk', ...(WITH_DRAW ? { draw: 'draw' } : {}), chart: 'charts', doc: 'editor', time: 'talk' };
+const WORLD = { avatar: 'ui.avatar', seating: 'plan.seating', talk: 'talk', draw: 'art.draw', chart: 'data.charts', doc: 'docs.editor', time: 'plan.timeline' };
 const SEND = { avatar: (t, to) => `send the ${t} to the ${to}`, seating: (t, to) => `send ${t} to the ${to}`, talk: (t, to) => `send it to the ${to}`, draw: (t, to) => `send the ${t} to the ${to}` };
-const TO = { avatar: 'avatar', seating: 'seating plan', talk: 'talk', draw: 'drawing' };
+const TO = { avatar: 'avatar', seating: 'seating plan', talk: 'talk', draw: 'drawing', chart: 'chart', doc: 'document', time: 'timeline' };
 
 async function session() {
   const s = engine.createSession({ language: 'en' });
@@ -80,7 +82,11 @@ const DRAW_THINGS = [
 ].map(([m, ref, keep]) => ({ view: 'draw', make: [m], ref, expect: { avatar: 'na', seating: 'na', talk: 'ok' }, keep: { talk: [keep] } }));
 const DRAWABLE = new Set(['hat', 'glasses', 'table', 'bicycle', 'spider', 'house', 'moon']);   // sent to the drawing: a kind of thing it can show
 if (WITH_DRAW) { THINGS.push(...DRAW_THINGS); for (const th of THINGS) if (th.view !== 'draw') { th.expect.draw = DRAWABLE.has(th.ref) ? 'ok' : 'na'; th.keep = { ...(th.keep ?? {}), draw: [] }; } }
-const THING_WARM = ['bicycle', 'spider', 'house', 'comet', 'moon', 'paris', 'france', 'japan', 'hat', 'table', 'glasses', 'beard'];
+// temporal things (T6-lite): made in Talk from the calendar of the knowledge; the timeline takes them, the picture views cannot
+const TIME_THINGS = ['What is Monday?|monday', 'What is winter?|winter', 'What is March?|march', 'What is Tuesday?|tuesday'].map((x) => x.split('|')).map(([m, ref]) => ({ view: 'talk', make: [m], ref, expect: { avatar: 'na', seating: 'na', ...(WITH_DRAW ? { draw: 'na' } : {}) }, keep: {} }));
+THINGS.push(...TIME_THINGS);
+for (const th of THINGS) { th.expect.chart = 'ok'; th.expect.doc = 'ok'; th.expect.time = TIME_THINGS.includes(th) ? 'ok' : 'na'; th.keep = { ...(th.keep ?? {}), doc: th.keep?.talk ?? [] }; if (th.view !== 'talk' || TIME_THINGS.includes(th)) th.expect.talk = th.expect.talk ?? 'ok'; }
+const THING_WARM = ['monday', 'march', 'winter', 'tuesday', 'bicycle', 'spider', 'house', 'comet', 'moon', 'paris', 'france', 'japan', 'hat', 'table', 'glasses', 'beard'];
 
 /** Reads what a view holds after a transfer: the text of its state, to look for the words that must survive. */
 const heldBy = (s, view) => JSON.stringify(s.state(WORLD[view]) ?? {}).toLowerCase();
@@ -93,7 +99,7 @@ const classify = (cell, want, keep, held) => {
 async function t1() {
   const rows = [];
   for (const th of THINGS) {
-    const targets = Object.keys(TAB).filter((v) => v !== th.view);
+    const targets = Object.keys(TAB).filter((v) => v !== th.view);   // every view and every sink, from the view the thing was made in
     for (const to of targets) {
       const s = await session();
       await warm(THING_WARM);
@@ -105,7 +111,8 @@ async function t1() {
       const shown = (r.effects ?? []).find((e) => e.name === 'things.shown');
       const cell = shown?.args?.cells?.[0] ?? { status: 'none', note: r.text };
       const held = heldBy(s, to);
-      const verdict = classify(cell, th.expect[to], th.keep?.[to], held);
+      let verdict = classify(cell, th.expect[to], th.keep?.[to], held);
+      if (to === 'chart' && verdict === 'right') { const c = s.state('data.charts').charts?.[0]; verdict = c && c.datasets[0].data.reduce((a, b) => a + b, 0) === 1 ? 'right' : 'wrong (changed on arrival)'; }
       rows.push({ exp: 'T1', thing: `${th.view}:${th.ref} (${th.make.join('; ')})`, from: th.view, to, text, expect: th.expect[to], got: cell.status, verdict, reply: r.text });
     }
   }
@@ -171,7 +178,10 @@ const tally = (rows) => {
   return c;
 };
 const all = [];
-if (only !== 't2') { const r = await t1(); all.push(...r); console.log(`T1 (${reasoner}): ${r.length} cells`, JSON.stringify(tally(r))); }
+if (only !== 't2') {
+  const r = await t1(); all.push(...r); console.log(`T1 (${reasoner}): ${r.length} cells`, JSON.stringify(tally(r)));
+  for (const to of [...new Set(r.map((x) => x.to))]) console.log(`   into ${to.padEnd(8)} ${JSON.stringify(tally(r.filter((x) => x.to === to)))}`);
+}
 if (only !== 't1') {
   const r = await t2(); all.push(...r);
   const other = r.filter((x) => x.other);
