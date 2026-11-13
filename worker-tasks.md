@@ -3676,3 +3676,20 @@ The cost estimate is accepted; publish the smallest slice of each as it works (S
 3. **Colour and preset + expression in one sentence** ("make green eyes", "an angry boy") fail in the interim reading: do not patch it; they are rows of the acts grid (change attribute; make from preset with a second change). They go to the ledger as class "act phrase" / "two acts in one sentence".
 4. **Undo / redo count only state-changing requests** (a question is not a step).
 Please run the same 14 turns with the catalog reachable and put both columns in worker-log, so the reviewer can separate offline causes from reading causes. Script: /home/claude/shot/av.mjs on the reviewer box; the turn list is the first column above.
+
+## Reviewer 2026-11-13 21:15 — validated at 84e7b16 (smoke); A1–A4, P1 pilot, A5: read and judged
+
+**Verdict on P1 (your table):**
+- **Avatar: passes.** Its own tests 18/18, owner log a on the Avatar tab 6 right / 0 wrong against 2 / 4, hand-written lines 777 → about 145, patterns 40 → 0. **Make the pilot avatar the real one** as soon as these four general pieces are in (none is avatar-specific): (a) acts applied through sopworld `std.acts` (0.18.0 is vendored), (b) act words from `k.actions` by lookup, seed deleted, (c) the **decline** status: a world whose schema does not hold the thing declines and the next world reads ("draw a house" on the Avatar tab), (d) **several acts in one sentence** through `act([...])` ("an angry boy", "put on a hat and make it red"), one undo step. Then rerun the reviewer's 14 turns (20:55 block) online and offline.
+- **Diagram: does not pass yet (192/771).** That is the honest size of what the diagram's own language does beyond the dozen acts. Do not port patterns. Close it with general acts and modules, then measure again: align / arrange / distribute / tidy = the `place` act with the SPACE world and `k.layouts` (the reserved `hooks.layout`); queries = the `ask` act over the schema (which, how many, is A connected to B, what is next to X); templates = `make` from a named arrangement in knowledge (a flow of N steps, a tree, an org chart are `k.layouts` + kinds); "new diagram" = remove all / make. What then remains (facts and rules inside a diagram) is a rule world part and may stay as `own`. Report the 771 by cause group, before and after each of the four, not as one number. Switch the diagram when it is within 5% of today.
+- **Logs: 43 → 35 "not understood" of 165** with two worlds piloted: the direction is right, the size is small because draw, Talk, map, charts and the editor are not on acts yet, and because of fragments (dialogue module) and translation.
+
+**Decisions on your findings:**
+1. Redo cleared by a read-only turn: fix it in the engine for all worlds (a question is not a step; same as the reviewer's probe finding).
+2. "why is it blue" → "why is blue blue": find the substitution; it is a general referent bug (pronoun replaced by the last noun-class word). Ledger group, one fix.
+3. No tab open → generic "did not understand": use the `outOfScope` hook of the last world used. Yes.
+4. The coverage grid is circular while its sentences come from the act forms themselves: generate them from `k.actions` verbs × the schema's kinds and attributes × `k.values` words (and the round-trip paraphraser), judged by the state difference, not by "read". That grid is the feature list.
+5. The fourth owner log is the 13:09 space session (5 rows inside log a): there are three files; correct.
+6. `tests/webchat-debug.test.mjs` 3 failures on `avatar.setColor`: delete or port with the avatar switch.
+
+**Next, in order:** std.acts as the executor; k.actions words; decline; multi-act; avatar switch; the four diagram pieces with the per-group table; P2 with 60 hand-judged requests; P3 data generation. art.draw is the next world to pilot after the diagram numbers are in (it carries most of the owner's logs).
