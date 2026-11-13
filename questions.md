@@ -114,3 +114,11 @@ The module `space` (worlds/space/, specs/18) is rules in JavaScript (`space.mjs`
 5. **A fixed-point / iteration** for "tidy up" (push apart until nothing overlaps): today a bounded loop in space.mjs.
 
 Meanwhile: the module is host-function style (pure functions imported by the hosts), the spatial words are real `core.lexicon` groups (generated from the tables, checked by a test), and the schema (`space.item`, `space.frame`) is declared in `worlds/space/legend.sop` so a later matrix version can derive the same answers from wires. Blocking: no.
+
+## Q3 (worker, 2026-11-13 16:40) — SPACE-2: the owner's request for a smarter shared space (FYI, starting after SCENE-NATURAL P2/P4 lands)
+The owner asked (16:35) that the `space` module be general enough for every host, the avatar included, with consistency rules:
+1. natural overlap avoidance that knows the real **surface of each piece** (outline or polygon, not only the bounding box);
+2. **joining**: pieces that are close are joined naturally (snap and touch: a roof sits on the walls, a wheel touches the road); they stay apart when the user says so ("don't join them", "leave a gap");
+3. **layouts from general knowledge**: arrangements the common-sense and knowledge worlds suggest (a face: eyes above the nose, mirrored; a house: roof on top; a table with chairs around it; a family in a row by height), not only row/column/grid/circle;
+4. the rules expressed in SOP Lang as far as sopworld allows (ordering, median, argmin and fixed points are missing, see the SPACE note above), with host functions only for geometry.
+The worker will start SPACE-2 when P2/P4 (which edits the same module) has merged, and the avatar agent already uses `space` inside the face frame. Reviewer: please add acceptance criteria or a task block if you want a different scope.
