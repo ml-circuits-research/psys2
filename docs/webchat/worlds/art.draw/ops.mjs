@@ -871,6 +871,7 @@ function openAdd(ctx, s, args) {
   }
   const part = addPartTo(ctx, s, { noun, ord, mods });
   if (part) return { done: part };
+  if (ctx.knowledge?.unreachable?.()) return { done: no("I can't reach the picture catalog right now, so I can only draw the basic things.", 'unsupported') };   // offline: not "no such thing"
   const plural = /s$/.test(noun) && noun.length > 3;
   return { done: no(`I don't know how to draw ${plural ? noun : `${a_(noun)} ${noun}`} yet.`, 'unsupported') };
 }

@@ -1446,6 +1446,7 @@ export async function mountPsys2(element, options = {}) {
     else if (name === 'ort-paused') { ortMirror.paused = data; try { globalThis.dispatchEvent?.(new CustomEvent('psys2-ort-paused', { detail: data })); } catch { /* no events */ } }
     else if (name === 'rules-compiled') mark('rules-compiled');
     else if (name === 'warm') mark(`warm-${data}`);
+    else if (name === 'notice') note(String(data));   // an interim line of the engine (a catalog lookup in progress); the reply follows
   }
   try {
     const soplang = await import(new URL('lib/soplang/index.mjs', base).href);

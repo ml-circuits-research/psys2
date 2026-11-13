@@ -47,12 +47,14 @@ export function createFacts({ source, name = 'catalog' }) {
   const stats = { vocabMs: 0, vocabBytes: 0, shardMs: 0, shardBytes: 0, shardsLoaded: [], lookups: 0, hits: 0 };
   const parsed = new Map();   // object shard id -> parsed shard (the shared parser)
   const parsedShard = async (sid) => { if (!parsed.has(sid)) { const lines = await loadShard(sid); try { parsed.set(sid, parseShard(lines.join('\n'))); } catch { parsed.set(sid, null); } } return parsed.get(sid); };
+  let down = false;           // the last read of the vocabulary or of a shard found the catalog unreachable (offline, too slow); cleared by the next good read
   const things = new Map();   // lemma -> thing | null  (settled lookups, readable synchronously through `peek`)
 
   const loadVocab = () => vocabLoading ??= (async () => {
     const t = clock();
     let failed = false;
     try { const txt = await source.text('vocab.json'); stats.vocabBytes = txt?.length ?? 0; failed = !txt; vocab = txt ? JSON.parse(txt) : {}; } catch { failed = true; vocab = {}; }
+    down = failed;
     if (failed) retryLater(() => { vocabLoading = null; vocab = null; things.clear(); });
     stats.vocabMs = clock() - t;
   })();
@@ -63,6 +65,7 @@ export function createFacts({ source, name = 'catalog' }) {
       let txt = null;
       try { txt = await source.text(`${id}.sop`); } catch { /* an unreachable shard is no knowledge */ }
       stats.shardMs += clock() - t; stats.shardBytes += txt?.length ?? 0; stats.shardsLoaded.push(id);
+      if (!txt) down = true;
       if (!txt) retryLater(() => { shards.delete(id); parsed.delete(id); things.clear(); });
       return txt ? txt.split('\n') : [];
     })());
@@ -121,6 +124,8 @@ export function createFacts({ source, name = 'catalog' }) {
 
   return {
     name, find, thing, stats, loadVocab,
+    /** True when the catalog could not be read last time (offline or too slow): a miss then is "I cannot reach it", not "it does not exist". */
+    unreachable: () => down,
     /** The settled lookup of a word, or undefined when it has not been looked up (a synchronous read for operations: `ctx.knowledge.peek`). null = looked up, not known. */
     peek(word) { for (const lc of lemmaCandidates(word)) if (things.has(lc)) return things.get(lc); return undefined; },
     /**

@@ -512,6 +512,8 @@ export const arrange = make({ type: 'command', name: 'arrange' });
 
 // ---- "a diagram shaped like a house" (DRAW-FROM-FACTS) --------------------------------------------------------------------
 const LAYOUT_WORDS = new Set(['row', 'column', 'line', 'grid', 'circle', 'stack', 'cluster', 'ring', 'triangle', 'square', 'pyramid', 'tree', 'layers', 'radial', 'hierarchy', 'organic']);
+/** The part's own primitive where the diagram has one (the roof of a house is a triangle, a sun a circle); every other part shape stays a rectangle. */
+const DIAGRAM_SHAPE_OF = { triangle: 'triangle', circle: 'circle', oval: 'ellipse', ellipse: 'ellipse' };
 const thingOfNoun = (w) => {
   const x = String(w ?? '').toLowerCase().replace(/[^a-z ]/g, '').trim();
   for (const t of [x, x.replace(/ies$/, 'y'), x.replace(/es$/, ''), x.replace(/s$/, '')]) if (Object.hasOwn(THING_WORDS, t)) return THING_WORDS[t];
@@ -541,7 +543,7 @@ export function shapedLike(ctx, args = {}) {
     taken.add(name.toLowerCase());
     const w = Math.max(10, Math.round(p.w * k)), h = Math.max(10, Math.round(p.h * k));
     const cx = 400 + ((p.x + p.w / 2) - (x0 + x1) / 2) * k, cy = 250 + ((p.y + p.h / 2) - (y0 + y1) / 2) * k;
-    return { id: `s${i + 1}`, type: 'command', args: { action: 'create', shape: 'rectangle', name, label: p.name.replace(/_/g, ' '), width: w, height: h, at: `${Math.round(cx)},${Math.round(cy)}` } };
+    return { id: `s${i + 1}`, type: 'command', args: { action: 'create', shape: DIAGRAM_SHAPE_OF[p.shape] ?? 'rectangle', name, label: p.name.replace(/_/g, ' '), width: w, height: h, at: `${Math.round(cx)},${Math.round(cy)}` } };
   });
   const r = execute(ctx, s, nodes);
   if (r.status !== 'supported') return r;

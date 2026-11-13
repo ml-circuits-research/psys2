@@ -2,7 +2,7 @@
 /**
  * Chrome probe of DRAW-FROM-FACTS (spec 07 section 7): the built webchat draws things that are not in the enum of kinds from the catalog of facts, and the built-in kinds
  * side by side (hand-coded | from facts). Screenshots go to training/results/draw-from-facts/ for the reviewer.
- *   node scripts/build-webchat.mjs && PUPPETEER_CORE=<scratch>/node_modules/puppeteer-core node scripts/test-webchat-draw-from-facts.mjs [--only things,parts,sidebyside]
+ *   node scripts/build-webchat.mjs && PUPPETEER_CORE=<scratch>/node_modules/puppeteer-core node scripts/test-webchat-draw-from-facts.mjs [--only things,parts,diagram,catalog,sidebyside]
  * It fails on a page error, on a thing that does not appear on the tab, or on a canvas that stays blank. Not part of `npm test` (it needs Chrome); the matrix scenarios
  * of scripts/test-webchat-matrix.mjs run the same sentences (`--only draw`).
  */
@@ -85,11 +85,38 @@ async function diagram(o) {
   try {
     const r = await c.say('make a diagram shaped like a house');
     check('diagram: shaped like a house', /one box for each of its 6 parts/.test(r.reply), r.reply);
+    const shapes = JSON.parse(await c.state())['diagram.sketch']?.shapes ?? [];
+    const roof = shapes.find((x) => x.name === 'roof'), body = shapes.find((x) => x.name === 'body');
+    check('diagram: the roof is a triangle, the body stays a rectangle', roof?.shape === 'triangle' && body?.shape === 'rectangle', JSON.stringify([roof?.shape, body?.shape]));
     await c.pg.evaluate(() => document.querySelector('.p2-tab[data-tab="diagram"], [data-tab="diagram"]')?.click?.());
     await settle(1200);
     await c.pg.screenshot({ path: path.join(OUT, 'diagram-shaped-like-a-house.png') });
     check('diagram: no page errors', c.errors.length === 0, c.errors[0] ?? '');
   } finally { await c.close(); }
+}
+
+/** The real catalog from the Pages copy: a slow shard is announced, the files land in Cache Storage, and offline the picture catalog is named in the reply. */
+async function catalog(o) {
+  const host = /sop-knowledge-worlds/;
+  const run = async (name, handler, fn) => {
+    const c = await openChat({ ...o, settings: MATRIX, throttle: 1, viewport: { width: 1100, height: 900, deviceScaleFactor: 1 }, beforeGoto: async (pg) => { await pg.setRequestInterception(true); pg.on('request', (rq) => { if (rq.isInterceptResolutionHandled()) return; if (host.test(rq.url())) handler(rq); else rq.continue(); }); } });
+    try { await fn(c); check(`${name}: no page errors`, c.errors.length === 0, c.errors[0] ?? ''); } finally { await c.close(); }
+  };
+  await run('catalog slow', (rq) => { if (/\.sop$/.test(rq.url())) setTimeout(() => rq.continue().catch(() => {}), 1200); else rq.continue(); }, async (c) => {
+    const r = await c.say('draw a pineapple');
+    const notes = await c.pg.$$eval('.p2-msg.is-note .p2-bubble', (e) => e.map((x) => x.innerText));
+    check('catalog slow: "Looking up how a pineapple looks" comes first, the drawing after', notes.includes('Looking up how a pineapple looks…') && /drew a pineapple/.test(r.reply), JSON.stringify(notes) + ' | ' + r.reply);
+    await settle(800);
+    const cached = await c.pg.evaluate(async () => { const out = {}; for (const n of await caches.keys()) if (n.startsWith('psys2-knowledge-') && !n.endsWith('meta')) out[n] = (await (await caches.open(n)).keys()).map((k) => k.url.split('/knowledge/')[1]); return out; });
+    const files = Object.values(cached).flat();
+    check('catalog slow: vocab.json and the shard are in a versioned Cache Storage', Object.keys(cached).length === 1 && files.includes('vocab.json') && files.some((f) => /^k\.objects\/shards\/.+\.sop$/.test(f)), JSON.stringify(cached));
+  });
+  await run('catalog offline', (rq) => rq.abort('internetdisconnected'), async (c) => {
+    const r = await c.say('draw a pineapple');
+    check('catalog offline: the picture catalog is named, nothing is drawn', r.reply === "I can't reach the picture catalog right now, so I can only draw the basic things." && (await objects(c)).length === 0, r.reply);
+    const r2 = await c.say('draw a house');
+    check('catalog offline: the basic things still draw', /house/.test(r2.reply) && (await objects(c)).length === 1, r2.reply);
+  });
 }
 
 /** The 26 built-in kinds, hand-coded | from facts, drawn by the page's own renderer. */
@@ -134,6 +161,7 @@ try {
   if (want('things')) await things(o);
   if (want('parts')) await parts(o);
   if (want('diagram')) await diagram(o);
+  if (want('catalog')) await catalog(o);
   if (want('sidebyside')) await sidebyside(o);
 } catch (e) { failed++; console.log(`FAIL  probe crashed: ${e?.stack ?? e}`); }
 console.log(failed ? `${failed} failed` : 'all passed');

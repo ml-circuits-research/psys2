@@ -130,8 +130,10 @@ async function init(m) {
   // Offline, the 30 hand-written objects vendored in the world (things.catalog.mjs) still draw; lookups of other things then answer as unknown.
   try {
     const [{ createFacts }, { createKnowledgeSource }] = await Promise.all([imp('lib/knowledge/facts.mjs'), imp('lib/loaders/knowledge-source.mjs')]);
-    const src = createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL);
+    const { createCachedSource } = await imp('lib/loaders/knowledge-cache.mjs');
+    const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URL), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
     engine.setKnowledge(createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), KNOWLEDGE_FETCH_MS))]) } }));
+    engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
   if (testHooks) installFaults();
   const rules =(engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
