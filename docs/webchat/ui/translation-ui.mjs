@@ -9,8 +9,8 @@ import { langName, registerLanguages, knownLanguages } from './language.mjs';
 import { browserTranslatorKind, browserTranslatorAvailability } from './translation.mjs';
 
 const CACHE = 'psys2-mt-v1';
-/** A language is listed in the selector only when at least this share of the machine-translated operational sample is read right (scripts/mt-quality.mjs). */
-export const QUALITY_GATE = 70;
+/** The share of the machine-translated operational sample that must be read right (scripts/mt-quality.mjs) for a language to be listed as normal; every other engine language is listed too, labelled "beta" with its number. */
+export const QUALITY_GATE = 80;
 /** Languages that always are listed: English, and Romanian, which has its own rules and templates besides the model. */
 const ALWAYS = ['en', 'ro'];
 const DOWNLOAD_LIMIT_MS = 180000;
@@ -111,14 +111,13 @@ export function createTranslationLayer({ base, h, note = () => {}, onChange = ()
   }
 
   function qualityOf(code) { const q = quality?.languages?.[code]; return q && typeof q.right === 'number' ? q.right : null; }
-  /** The languages the selector offers: English, Romanian, and every registry language that passed the gate (all of them with `showAll`). */
+  /** The languages the selector offers: English and Romanian normally, then every engine language; those under the gate are marked `gated` (shown as "beta" with their number). */
   function listed() {
     const out = [];
     const codes = [...new Set([...ALWAYS, ...Object.keys(registry?.langs ?? {}), ...nativeBoth.keys()])];
     for (const code of codes) {
       const right = qualityOf(code);
       const passes = ALWAYS.includes(code) || (right != null && right >= QUALITY_GATE);
-      if (!passes && !showAll) continue;
       out.push({ code, name: langName(code, { own: true }), english: langName(code), right, gated: !passes, engine: engineOf(code), bytes: registry?.langs?.[code]?.bytes ?? 0 });
     }
     const rank = (c) => (c === 'en' ? 0 : c === 'ro' ? 1 : 2);

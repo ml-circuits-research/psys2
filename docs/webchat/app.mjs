@@ -1258,8 +1258,8 @@ export async function mountPsys2(element, options = {}) {
     const q = tl.quality?.languages ?? {}, reg = tl.registry?.langs ?? {};
     const rows = Object.keys(reg).filter((c) => typeof q[c]?.right === 'number').sort((a, b) => q[b].right - q[a].right);
     return h('div', { class: 'p2-field' }, h('strong', {}, 'Translation languages'),
-      h('p', {}, `Languages come from the translation engine: the browser's Translator where it has both directions with English, otherwise an on-device model (bergamot-translator, Mozilla models, downloaded when you select the language). A language is listed only when ${QUALITY_GATE}% or more of a sample of the operational set is read right after machine translation English → language → English (English itself: ${tl.quality?.englishRight ?? '?'}%). Romanian is always listed: it also has its own rules.`),
-      rows.length ? h('ul', { class: 'p2-credits' }, rows.map((c) => h('li', {}, h('b', {}, langName(c, { own: true })), h('small', {}, ` ${q[c].right}% right${q[c].right >= QUALITY_GATE ? '' : ' (below the gate)'} · ${(reg[c].bytes / 1e6).toFixed(0)} MB`)))) : h('p', {}, 'No quality numbers were found in this build.'));
+      h('p', {}, `Languages come from the translation engine: the browser's Translator where it has both directions with English, otherwise an on-device model (bergamot-translator, Mozilla models, downloaded when you select the language). Every language is listed; those under ${QUALITY_GATE}% of a sample of the operational set read right after machine translation English → language → English are marked beta (English itself: ${tl.quality?.englishRight ?? '?'}%). Romanian is always listed normally: it also has its own rules.`),
+      rows.length ? h('ul', { class: 'p2-credits' }, rows.map((c) => h('li', {}, h('b', {}, langName(c, { own: true })), h('small', {}, ` ${q[c].right}% right${q[c].right >= QUALITY_GATE ? '' : ' (beta)'} · ${(reg[c].bytes / 1e6).toFixed(0)} MB`)))) : h('p', {}, 'No quality numbers were found in this build.'));
   }
   function aboutBody() {
     return [
@@ -1298,7 +1298,7 @@ export async function mountPsys2(element, options = {}) {
   function languageOptions() {
     const list = tl.listed(), cur = language.get();
     if (!list.some((l) => l.code === cur)) list.push({ code: cur, name: langName(cur, { own: true }) });
-    return list.map((l) => [l.code, l.name + (l.gated ? ` (${l.right == null ? 'not measured' : `${l.right}% right`})` : '')]);
+    return list.map((l) => [l.code, l.name + (l.gated ? ` (beta${l.right == null ? '' : `, ${l.right}% right`})` : '')]);
   }
   /** Which engine serves the selected language, its size and its state: the browser Translator, the on-device model, or none. */
   function languageEngineNote() {
@@ -1312,7 +1312,6 @@ export async function mountPsys2(element, options = {}) {
   function languageBody() {
     return [
       field('Language', select(languageOptions(), language.get(), (v) => setLanguage(v)), `The language you talk to me in and I answer in. The same as the selector in the header. ${languageEngineNote()}`),
-      check(`Show every language of the translation engine, also those below the quality gate (${QUALITY_GATE}% of a machine-translated sample read right; experimental)`, settings.showAllLanguages === true, (v) => { settings.showAllLanguages = v; save(); tl.setShowAll(v); renderSettings(); }),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
         `Used when the language is not English. Browser on-device translator: ${translator?.translatorState?.() ?? (browserAvail === 'downloadable' || browserAvail === 'downloading' ? 'downloading… the rules translator is used meanwhile' : browserAvail)}. Its output is checked and falls back to the rules translator.`),
       field('Language hint', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }),
@@ -1511,7 +1510,7 @@ export async function mountPsys2(element, options = {}) {
   setStatus();
 
   // MT-SERIOUS: the model registry loads after the first paint; a saved non-English language starts its model now
-  setTimeout(() => { tl.setShowAll(settings.showAllLanguages === true); tl.init().then(() => { renderLangSelect(); return tl.prepare(language.get()); }).catch((e) => console.warn('translation layer', e)); }, 0);
+  setTimeout(() => { tl.init().then(() => { renderLangSelect(); return tl.prepare(language.get()); }).catch((e) => console.warn('translation layer', e)); }, 0);
 
   // optional capabilities, checked once
   if (browserDetectorKind()) browserDetectorAvailability().then((a) => { detectAvail = a; renderSettings(); });
