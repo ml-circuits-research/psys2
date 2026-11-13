@@ -3676,3 +3676,45 @@ The cost estimate is accepted; publish the smallest slice of each as it works (S
 3. **Colour and preset + expression in one sentence** ("make green eyes", "an angry boy") fail in the interim reading: do not patch it; they are rows of the acts grid (change attribute; make from preset with a second change). They go to the ledger as class "act phrase" / "two acts in one sentence".
 4. **Undo / redo count only state-changing requests** (a question is not a step).
 Please run the same 14 turns with the catalog reachable and put both columns in worker-log, so the reviewer can separate offline causes from reading causes. Script: /home/claude/shot/av.mjs on the reviewer box; the turn list is the first column above.
+
+## Reviewer 2026-11-13 21:15 — validated at 84e7b16 (smoke); A1–A4, P1 pilot, A5: read and judged
+
+**Verdict on P1 (your table):**
+- **Avatar: passes.** Its own tests 18/18, owner log a on the Avatar tab 6 right / 0 wrong against 2 / 4, hand-written lines 777 → about 145, patterns 40 → 0. **Make the pilot avatar the real one** as soon as these four general pieces are in (none is avatar-specific): (a) acts applied through sopworld `std.acts` (0.18.0 is vendored), (b) act words from `k.actions` by lookup, seed deleted, (c) the **decline** status: a world whose schema does not hold the thing declines and the next world reads ("draw a house" on the Avatar tab), (d) **several acts in one sentence** through `act([...])` ("an angry boy", "put on a hat and make it red"), one undo step. Then rerun the reviewer's 14 turns (20:55 block) online and offline.
+- **Diagram: does not pass yet (192/771).** That is the honest size of what the diagram's own language does beyond the dozen acts. Do not port patterns. Close it with general acts and modules, then measure again: align / arrange / distribute / tidy = the `place` act with the SPACE world and `k.layouts` (the reserved `hooks.layout`); queries = the `ask` act over the schema (which, how many, is A connected to B, what is next to X); templates = `make` from a named arrangement in knowledge (a flow of N steps, a tree, an org chart are `k.layouts` + kinds); "new diagram" = remove all / make. What then remains (facts and rules inside a diagram) is a rule world part and may stay as `own`. Report the 771 by cause group, before and after each of the four, not as one number. Switch the diagram when it is within 5% of today.
+- **Logs: 43 → 35 "not understood" of 165** with two worlds piloted: the direction is right, the size is small because draw, Talk, map, charts and the editor are not on acts yet, and because of fragments (dialogue module) and translation.
+
+**Decisions on your findings:**
+1. Redo cleared by a read-only turn: fix it in the engine for all worlds (a question is not a step; same as the reviewer's probe finding).
+2. "why is it blue" → "why is blue blue": find the substitution; it is a general referent bug (pronoun replaced by the last noun-class word). Ledger group, one fix.
+3. No tab open → generic "did not understand": use the `outOfScope` hook of the last world used. Yes.
+4. The coverage grid is circular while its sentences come from the act forms themselves: generate them from `k.actions` verbs × the schema's kinds and attributes × `k.values` words (and the round-trip paraphraser), judged by the state difference, not by "read". That grid is the feature list.
+5. The fourth owner log is the 13:09 space session (5 rows inside log a): there are three files; correct.
+6. `tests/webchat-debug.test.mjs` 3 failures on `avatar.setColor`: delete or port with the avatar switch.
+
+**Next, in order:** std.acts as the executor; k.actions words; decline; multi-act; avatar switch; the four diagram pieces with the per-group table; P2 with 60 hand-judged requests; P3 data generation. art.draw is the next world to pilot after the diagram numbers are in (it carries most of the owner's logs).
+
+## Reviewer 2026-11-13 21:30 — TRANSFER (owner: "the current goal is transfer of knowledge between worlds; stop hard-coding details in each final world"). Proposal + first slice. Objections to questions.md, then build the slice.
+
+**What must transfer, and where it lives so that it does (nothing per pair of worlds):**
+1. **Things.** Today each tab keeps its own things, and moving one to another tab is code per pair (Talk card → drawing, → diagram, → map). Proposal: **one shared store of things for the session** (a module, `session.things`): a thing has an identity, a kind from knowledge, and attributes. A tab does not own things; it is a **view**.
+2. **Aspects.** What a thing can show is decided by its attributes, grouped in aspects: visual (shape, colour, parts), spatial (place, size, relations), relational (links to other things), numeric (count, value, unit), textual (name, description), geographic (where on Earth), temporal (when), social (who, role, feeling). Which kinds have which aspects comes from knowledge (`k.attributes`, `k.geo`, `k.time`, `k.people`), not from the tab.
+3. **Views.** A tab declares in its schema which aspects it shows and how: Drawing = visual + spatial; Diagram = relational + spatial + textual; Charts = numeric; Map = geographic; Document = textual; Talk = any aspect as cards; Avatar = one composite thing (a face), visual with parts. A thing appears in every view whose aspects it has. "Send the car to the diagram", "a chart of what I drew", "a document about the discussion", "show it on the map" need no code: they select things into a view. The acts work on the things; views redraw.
+4. **Facts and rules belong to kinds, not to worlds.** "Fish live in water", "a house stands on the ground", "a villa is a kind of house" are knowledge about kinds (catalog, plus what the user teaches, stored in the same wire format in a local `session.learned` world). Every view gets them through the same delegation tiers: a remark in the drawing, a refusal with a reason in the diagram, an answer in Talk come from one fact.
+5. **Words.** Act phrases (k.actions), kind names and synonyms, value words are shared (ACTS × SCHEMAS): a phrase understood once is understood in every view.
+6. **Abilities.** What one module can compute is offered to all through delegation: layout (space), counting and arithmetic, lookup, translation, drawing a kind. A world asks; it does not reimplement.
+7. **The user.** What the user said about himself and his things (name, "my car is red", saved faces) is `user.profile` knowledge that every view consults at the user tier.
+
+**What a final world then contains:** a schema (kinds or "any kind with aspect X", attributes shown, acts allowed, limits), a renderer, and only what is truly its own (the rules of chess). Report per world the hand-written lines outside those three; the goal is that number going to zero.
+
+**How we measure transfer (generated, both reasoners):**
+- **T1 thing transfer matrix:** for 30 things made in each view, show them in every other view; cell = right / not applicable (no aspect, said so in plain words) / wrong. No per-pair code allowed; today's Talk transfers are the baseline to beat and then delete.
+- **T2 taught-fact transfer:** 20 facts taught in one view ("a villa is a kind of house", "my dog is called Rex", "ducks float"), each used in three other views.
+- **T3 rule transfer:** 20 common-sense facts each producing the right behaviour in drawing, diagram and Talk.
+- **T4 phrase transfer:** the coverage grid from `k.actions` × kinds (already asked).
+- **T5 skill transfer:** a layout from `k.layouts` used in drawing, diagram and avatar (E-S4 / E-S6).
+- **T6 a new view from a schema alone** gets T1–T5 with no code (P2's seating plan, plus a timeline view: things with a temporal aspect in a row by time).
+
+**First slice to build now (small, then measure T1 and T2):** `session.things` with identity and aspects on top of the acts executor (std.acts); the pilot avatar, the seating plan and one existing tab (Talk cards) as views of it; `session.learned` for taught facts with the knowledge tier reading it; the T1 matrix for those three. Then art.draw as a view (with its acts pilot), then charts and the document ("about the current discussion" becomes a selection of session things into those views).
+
+**Not in scope:** rule worlds (games, arithmetic, shop) keep their state; they may publish results as things (a score, a list) but are not views.
