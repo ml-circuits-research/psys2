@@ -19,6 +19,7 @@ import { budget } from './budget.mjs';
 import { restrictedSet } from '../formalizer/spell.mjs';
 import { editDistance } from '../formalizer/rules/normalize.mjs';
 import { foreignFragment } from './continuation.mjs';
+import { liveFromContext } from './meta-worlds.mjs';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */
@@ -213,7 +214,11 @@ async function reviewOne(dialog, seg, mode, rs, before = []) {
     } catch { return seg; }
     if (ref) wa.missing = ref.missing.map((m) => m.name);
     try { const idle = idleGame(dialog, seg); if (idle && await tabReads(dialog, seg)) wa.idle = idle; } catch { /* keep the reading */ }
-    try { const fr = foreignFragment(dialog, seg); if (fr) wa.fragment = fr; } catch { /* keep the reading */ }
+    try {
+      const mw = kinds(mode).has('no-continuation') ? await dialog.engine.prepareMeta?.() : null;   // who may take a piece without a verb is a rule of meta.worlds
+      const fr = foreignFragment(dialog, seg, mw && ((text) => mw.route({ text, live: liveFromContext(dialog.context(), { sceneKeys: ['thing', 'kind', 'name'] }), fragment: true }).blocked));
+      if (fr) wa.fragment = fr;
+    } catch { /* keep the reading */ }
     wa.foreign = foreign;
     seg.wa = wa;
     if (baseMode(mode) === 'observe') return seg;

@@ -1,0 +1,11 @@
+@world.meta.worlds core.world
+    namespace=meta.worlds
+    version=0.1.0
+    legend=$legend.meta.worlds
+    imports=world.core
+    formalization=rules
+    language=en
+    status=fixture
+    title="World of worlds"
+    summary=""
+    doc="A shared module that knows what each world is and picks the world that should take a message, by rules with reasons (WORLD-OF-WORLDS experiment, spec 19). It is not a tab and never a routing candidate: it has no patterns and no operations. kb.sop holds one generated card per world (scripts/build-world-cards.mjs: names, action words, kinds of things, question frames, whether the world needs something running); the host tells it what is live each turn (the open tab, what runs, what the scenes hold, the last action, a question asked) and what the message is made of; matrix.sop holds the rules (named, asked, follow-up, referent, action and kind, open tab, nothing running, no continuation, the encoder as one prior). Every vote carries the rule and its reason, which the trace says in plain words. A new world is added by its card alone. Hand-built platform fixture, not produced by the C1 workflow."
