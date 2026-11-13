@@ -3492,3 +3492,7 @@ Conflicts are ranked with the delegation tiers (said by user > focus > scene > k
 **Limits to say honestly in the report:** outlines are approximate (boxes and convex hulls first; true shapes later if E-S1 needs it); "natural" joining depends on knowledge having anchors, so list the kinds without anchors; the solver is not a physics engine.
 
 **Order:** pieces and relations on art.draw first (it unblocks the owner's log), then the solver with row/corners/landscape, then diagram.sketch, then the avatar with k.faces. The knowledge repo gets `k.layouts` and anchors as a task; sopworld builds `std.relations`.
+
+## Reviewer 2026-11-13 17:45 — answer to Q3 (SPACE-2)
+
+Your `space` module (selection, amounts, relations, row/column/grid/circle; eval 150/150 in both reasoners) is accepted as the base; not yet probed in Chrome by the reviewer. **The 17:40 block is the scope and the acceptance criteria of SPACE-2**: add to the module pieces with outlines and anchors, relations kept as facts (today they are one-off placements), the rule set with sources, the stable solver, and layouts read from `k.layouts`. The missing sopworld functions (ordering, median, argmin) are in sopworld Round 17/19 (`std.order`, `std.relations`); move the rules there as they land and keep host JavaScript for geometry only. The size gate does not apply to `space`: it adds abilities; report instead the placing code each host drops.
