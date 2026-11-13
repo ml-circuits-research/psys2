@@ -209,8 +209,8 @@ export function readIn(lib, rw, text, { limit = 12 } = {}) {
   const r = rw.world.interpret(splits.length === 1 ? splits[0] : splits, { limit });
   if (!r.candidates?.length) return { candidates: [], order: [], f };
   const s = rw.world.score(r.candidates);
-  // the library drops a frame it has no reading for from a split without counting its words (library item in worker-log.md): a split that does not read every frame is no reading
-  const whole = (c) => !c.parts || (Array.isArray(splits[c.split]) && c.parts.length === splits[c.split].length);
+  // since sopworld 0.13.2 (R14.1) a frame the library cannot read stays in the split as an unresolved part (`unread: true`, its words in `unresolved`): a split with such a part is no reading
+  const whole = (c) => !c.parts || !c.parts.some((p) => p.unread);
   const keep = r.candidates.map((c, i) => i).filter((i) => whole(r.candidates[i]));
   const remap = new Map(keep.map((i, k) => [i, k]));
   return { candidates: keep.map((i) => r.candidates[i]), scored: keep.map((i) => s.candidates[i]), order: s.order.filter((i) => remap.has(i)).map((i) => remap.get(i)), ranked: s.ranked ?? null, f, unresolved: r.unresolved ?? [] };
