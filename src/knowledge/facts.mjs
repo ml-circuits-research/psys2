@@ -124,11 +124,11 @@ export function createFacts({ source, name = 'catalog' }) {
    * is a predicate over the index entry), each is read once and parsed with the shared line parser. A wire is `{ id, type, f, shard, source }` (`f`: key -> values,
    * `source`: its core.source). A world added to the catalog is readable with no change here.
    */
-  async function wires(type, { key = null, shard = null } = {}) {
-    const w = await world(type);
+  async function wires(type, { key = null, shard = null, world: inWorld = null } = {}) {
+    const w = await world(inWorld ?? type);   // `world`: a type the index does not export (a `core.word` wire of a world's shards) is read in the shards of that world
     if (!w) return [];
     const k = key == null ? null : String(key).toLowerCase();
-    const memo = shard ? null : `${type}|${k}`;
+    const memo = shard ? null : `${type}|${k}|${inWorld ?? ''}`;
     if (memo && wireMemo.has(memo)) return wireMemo.get(memo);   // the same lookup within one load costs nothing
     const out = [];
     for (const sh of w.shards.filter((x) => (k == null || x.keys?.includes(k)) && (!shard || shard(x)))) {
