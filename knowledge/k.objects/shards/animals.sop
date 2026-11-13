@@ -1,0 +1,81 @@
+# k.objects/shards/animals: cat, dog, fish, bird, butterfly. Parts with a primitive shape, a box in the 0 to 100 frame
+# of the object (x right, y down), a draw order z and typical colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# cat
+@k.objects.cat k.objects.object name=cat core.source="hand-core 1"
+@k.objects.cat.body k.objects.part of=cat name=body shape=oval x=30 y=50 w=50 h=35 z=1 colour=grey colour=black colour=orange core.source="hand-core 1"
+@k.objects.cat.head k.objects.part of=cat name=head shape=circle x=8 y=25 w=34 h=34 z=2 colour=grey colour=black colour=orange left_of=body core.source="hand-core 1"
+@k.objects.cat.left_ear k.objects.part of=cat name=left_ear kind=ear shape=triangle x=10 y=15 w=12 h=14 z=1 colour=grey colour=black colour=orange above=head core.source="hand-core 1"
+@k.objects.cat.right_ear k.objects.part of=cat name=right_ear kind=ear shape=triangle x=28 y=15 w=12 h=14 z=1 colour=grey colour=black colour=orange above=head core.source="hand-core 1"
+@k.objects.cat.left_eye k.objects.part of=cat name=left_eye kind=eye shape=circle x=16 y=36 w=6 h=6 z=3 colour=green inside=head core.source="hand-core 1"
+@k.objects.cat.right_eye k.objects.part of=cat name=right_eye kind=eye shape=circle x=28 y=36 w=6 h=6 z=3 colour=green inside=head core.source="hand-core 1"
+@k.objects.cat.tail k.objects.part of=cat name=tail shape=line x=80 y=35 w=12 h=35 z=0 colour=grey colour=black colour=orange right_of=body core.source="hand-core 1"
+@k.objects.cat.front_leg k.objects.part of=cat name=front_leg kind=leg shape=rectangle x=35 y=80 w=7 h=15 z=0 colour=grey colour=black colour=orange below=body core.source="hand-core 1"
+@k.objects.cat.back_leg k.objects.part of=cat name=back_leg kind=leg shape=rectangle x=68 y=80 w=7 h=15 z=0 colour=grey colour=black colour=orange below=body core.source="hand-core 1"
+@k.objects.cat.tail.p1 k.objects.point part=$k.objects.cat.tail n=1 x=80 y=70 core.source="hand-core 1"
+@k.objects.cat.tail.p2 k.objects.point part=$k.objects.cat.tail n=2 x=90 y=55 core.source="hand-core 1"
+@k.objects.cat.tail.p3 k.objects.point part=$k.objects.cat.tail n=3 x=92 y=35 core.source="hand-core 1"
+
+# dog
+@k.objects.dog k.objects.object name=dog core.source="hand-core 1"
+@k.objects.dog.body k.objects.part of=dog name=body shape=oval x=30 y=45 w=55 h=30 z=1 colour=brown colour=black colour=white core.source="hand-core 1"
+@k.objects.dog.head k.objects.part of=dog name=head shape=circle x=8 y=22 w=32 h=32 z=2 colour=brown colour=black colour=white left_of=body core.source="hand-core 1"
+@k.objects.dog.ear k.objects.part of=dog name=ear shape=oval x=24 y=20 w=10 h=22 z=3 colour=black colour=brown on=head core.source="hand-core 1"
+@k.objects.dog.eye k.objects.part of=dog name=eye shape=circle x=18 y=30 w=5 h=5 z=3 colour=black inside=head core.source="hand-core 1"
+@k.objects.dog.nose k.objects.part of=dog name=nose shape=circle x=9 y=40 w=6 h=6 z=3 colour=black inside=head core.source="hand-core 1"
+@k.objects.dog.tail k.objects.part of=dog name=tail shape=line x=85 y=40 w=10 h=15 z=0 colour=brown colour=black colour=white right_of=body core.source="hand-core 1"
+@k.objects.dog.front_leg k.objects.part of=dog name=front_leg kind=leg shape=rectangle x=36 y=70 w=7 h=25 z=0 colour=brown colour=black colour=white below=body core.source="hand-core 1"
+@k.objects.dog.back_leg k.objects.part of=dog name=back_leg kind=leg shape=rectangle x=74 y=70 w=7 h=25 z=0 colour=brown colour=black colour=white below=body core.source="hand-core 1"
+@k.objects.dog.tail.p1 k.objects.point part=$k.objects.dog.tail n=1 x=85 y=55 core.source="hand-core 1"
+@k.objects.dog.tail.p2 k.objects.point part=$k.objects.dog.tail n=2 x=95 y=40 core.source="hand-core 1"
+
+# fish
+@k.objects.fish k.objects.object name=fish core.source="hand-core 1"
+@k.objects.fish.body k.objects.part of=fish name=body shape=oval x=10 y=30 w=60 h=40 z=1 colour=orange colour=blue colour=grey core.source="hand-core 1"
+@k.objects.fish.tail k.objects.part of=fish name=tail shape=triangle x=68 y=32 w=25 h=36 z=0 colour=orange colour=blue colour=grey pointing=left right_of=body core.source="hand-core 1"
+@k.objects.fish.eye k.objects.part of=fish name=eye shape=circle x=20 y=42 w=7 h=7 z=2 colour=black inside=body core.source="hand-core 1"
+@k.objects.fish.fin k.objects.part of=fish name=fin shape=triangle x=35 y=20 w=15 h=12 z=0 colour=orange colour=blue colour=grey above=body core.source="hand-core 1"
+
+# bird
+@k.objects.bird k.objects.object name=bird core.source="hand-core 1"
+@k.objects.bird.body k.objects.part of=bird name=body shape=oval x=25 y=40 w=50 h=30 z=1 colour=blue colour=brown colour=red core.source="hand-core 1"
+@k.objects.bird.head k.objects.part of=bird name=head shape=circle x=60 y=25 w=25 h=25 z=2 colour=blue colour=brown colour=red right_of=body core.source="hand-core 1"
+@k.objects.bird.beak k.objects.part of=bird name=beak shape=triangle x=84 y=33 w=12 h=8 z=2 colour=orange colour=yellow pointing=right right_of=head core.source="hand-core 1"
+@k.objects.bird.eye k.objects.part of=bird name=eye shape=circle x=72 y=32 w=4 h=4 z=3 colour=black inside=head core.source="hand-core 1"
+@k.objects.bird.wing k.objects.part of=bird name=wing shape=triangle x=35 y=25 w=25 h=27 z=2 colour=blue colour=brown colour=red on=body core.source="hand-core 1"
+@k.objects.bird.tail k.objects.part of=bird name=tail shape=triangle x=10 y=43 w=17 h=14 z=0 colour=blue colour=brown colour=red pointing=right left_of=body core.source="hand-core 1"
+@k.objects.bird.left_leg k.objects.part of=bird name=left_leg kind=leg shape=line x=43 y=69 w=2 h=16 z=0 colour=orange below=body core.source="hand-core 1"
+@k.objects.bird.right_leg k.objects.part of=bird name=right_leg kind=leg shape=line x=55 y=69 w=2 h=16 z=0 colour=orange below=body core.source="hand-core 1"
+@k.objects.bird.left_leg.p1 k.objects.point part=$k.objects.bird.left_leg n=1 x=45 y=69 core.source="hand-core 1"
+@k.objects.bird.left_leg.p2 k.objects.point part=$k.objects.bird.left_leg n=2 x=43 y=85 core.source="hand-core 1"
+@k.objects.bird.right_leg.p1 k.objects.point part=$k.objects.bird.right_leg n=1 x=55 y=69 core.source="hand-core 1"
+@k.objects.bird.right_leg.p2 k.objects.point part=$k.objects.bird.right_leg n=2 x=57 y=85 core.source="hand-core 1"
+
+# butterfly
+@k.objects.butterfly k.objects.object name=butterfly core.source="hand-core 1"
+@k.objects.butterfly.body k.objects.part of=butterfly name=body shape=oval x=46 y=25 w=8 h=50 z=2 colour=black centered=true core.source="hand-core 1"
+@k.objects.butterfly.left_upper_wing k.objects.part of=butterfly name=left_upper_wing kind=wing shape=oval x=10 y=15 w=38 h=35 z=1 colour=purple colour=orange colour=yellow colour=blue left_of=body core.source="hand-core 1"
+@k.objects.butterfly.right_upper_wing k.objects.part of=butterfly name=right_upper_wing kind=wing shape=oval x=52 y=15 w=38 h=35 z=1 colour=purple colour=orange colour=yellow colour=blue right_of=body core.source="hand-core 1"
+@k.objects.butterfly.left_lower_wing k.objects.part of=butterfly name=left_lower_wing kind=wing shape=oval x=18 y=48 w=30 h=30 z=1 colour=purple colour=orange colour=yellow colour=blue left_of=body core.source="hand-core 1"
+@k.objects.butterfly.right_lower_wing k.objects.part of=butterfly name=right_lower_wing kind=wing shape=oval x=52 y=48 w=30 h=30 z=1 colour=purple colour=orange colour=yellow colour=blue right_of=body core.source="hand-core 1"
+@k.objects.butterfly.left_antenna k.objects.part of=butterfly name=left_antenna kind=antenna shape=line x=40 y=10 w=8 h=16 z=2 colour=black above=body core.source="hand-core 1"
+@k.objects.butterfly.right_antenna k.objects.part of=butterfly name=right_antenna kind=antenna shape=line x=52 y=10 w=8 h=16 z=2 colour=black above=body core.source="hand-core 1"
+@k.objects.butterfly.left_antenna.p1 k.objects.point part=$k.objects.butterfly.left_antenna n=1 x=48 y=26 core.source="hand-core 1"
+@k.objects.butterfly.left_antenna.p2 k.objects.point part=$k.objects.butterfly.left_antenna n=2 x=40 y=10 core.source="hand-core 1"
+@k.objects.butterfly.right_antenna.p1 k.objects.point part=$k.objects.butterfly.right_antenna n=1 x=52 y=26 core.source="hand-core 1"
+@k.objects.butterfly.right_antenna.p2 k.objects.point part=$k.objects.butterfly.right_antenna n=2 x=60 y=10 core.source="hand-core 1"
+
+# words
+@k.objects.word.cat core.word text=cat text=cats text=kitten means=cat of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.dog core.word text=dog text=dogs text=puppy means=dog of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.fish core.word text=fish text=fishes means=fish of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.bird core.word text=bird text=birds means=bird of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.butterfly core.word text=butterfly text=butterflies means=butterfly of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.part.antenna core.word text=antenna text=antennae means=antenna of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.ear core.word text=ear text=ears means=ear of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.eye core.word text=eye text=eyes means=eye of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.leg core.word text=leg text=legs means=leg of=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.part.wing core.word text=wing text=wings means=wing of=k.objects.part.kind core.source="hand-core 1"

@@ -1,0 +1,48 @@
+# k.objects/shards/nature: tree, flower, mountain, apple. Parts with a primitive shape, a box in the 0 to 100 frame
+# of the object (x right, y down), a draw order z and typical colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# tree
+@k.objects.tree k.objects.object name=tree core.source="hand-core 1"
+@k.objects.tree.trunk k.objects.part of=tree name=trunk shape=rectangle x=42 y=55 w=16 h=40 z=1 colour=brown below=crown centered=true core.source="hand-core 1"
+@k.objects.tree.crown k.objects.part of=tree name=crown shape=circle x=20 y=5 w=60 h=60 z=2 colour=green above=trunk centered=true core.source="hand-core 1"
+
+# flower
+@k.objects.flower k.objects.object name=flower core.source="hand-core 1"
+@k.objects.flower.stem k.objects.part of=flower name=stem shape=line x=50 y=45 w=0 h=50 z=1 colour=green below=centre core.source="hand-core 1"
+@k.objects.flower.leaf k.objects.part of=flower name=leaf shape=oval x=50 y=65 w=18 h=8 z=1 colour=green right_of=stem core.source="hand-core 1"
+@k.objects.flower.top_petal k.objects.part of=flower name=top_petal kind=petal shape=circle x=40 y=5 w=20 h=20 z=2 colour=pink colour=red colour=yellow above=centre core.source="hand-core 1"
+@k.objects.flower.bottom_petal k.objects.part of=flower name=bottom_petal kind=petal shape=circle x=40 y=35 w=20 h=20 z=2 colour=pink colour=red colour=yellow below=centre core.source="hand-core 1"
+@k.objects.flower.left_petal k.objects.part of=flower name=left_petal kind=petal shape=circle x=25 y=20 w=20 h=20 z=2 colour=pink colour=red colour=yellow left_of=centre core.source="hand-core 1"
+@k.objects.flower.right_petal k.objects.part of=flower name=right_petal kind=petal shape=circle x=55 y=20 w=20 h=20 z=2 colour=pink colour=red colour=yellow right_of=centre core.source="hand-core 1"
+@k.objects.flower.centre k.objects.part of=flower name=centre shape=circle x=42 y=22 w=16 h=16 z=3 colour=yellow centered=true core.source="hand-core 1"
+@k.objects.flower.stem.p1 k.objects.point part=$k.objects.flower.stem n=1 x=50 y=45 core.source="hand-core 1"
+@k.objects.flower.stem.p2 k.objects.point part=$k.objects.flower.stem n=2 x=50 y=95 core.source="hand-core 1"
+
+# mountain
+@k.objects.mountain k.objects.object name=mountain core.source="hand-core 1"
+@k.objects.mountain.body k.objects.part of=mountain name=body shape=triangle x=5 y=15 w=90 h=80 z=1 colour=grey colour=brown centered=true core.source="hand-core 1"
+@k.objects.mountain.snow_cap k.objects.part of=mountain name=snow_cap shape=polygon x=39 y=15 w=22 h=21 z=2 colour=white on=body core.source="hand-core 1"
+@k.objects.mountain.snow_cap.p1 k.objects.point part=$k.objects.mountain.snow_cap n=1 x=50 y=15 core.source="hand-core 1"
+@k.objects.mountain.snow_cap.p2 k.objects.point part=$k.objects.mountain.snow_cap n=2 x=61 y=35 core.source="hand-core 1"
+@k.objects.mountain.snow_cap.p3 k.objects.point part=$k.objects.mountain.snow_cap n=3 x=55 y=31 core.source="hand-core 1"
+@k.objects.mountain.snow_cap.p4 k.objects.point part=$k.objects.mountain.snow_cap n=4 x=50 y=36 core.source="hand-core 1"
+@k.objects.mountain.snow_cap.p5 k.objects.point part=$k.objects.mountain.snow_cap n=5 x=45 y=31 core.source="hand-core 1"
+@k.objects.mountain.snow_cap.p6 k.objects.point part=$k.objects.mountain.snow_cap n=6 x=39 y=35 core.source="hand-core 1"
+
+# apple
+@k.objects.apple k.objects.object name=apple core.source="hand-core 1"
+@k.objects.apple.body k.objects.part of=apple name=body shape=circle x=15 y=20 w=70 h=70 z=1 colour=red colour=green centered=true core.source="hand-core 1"
+@k.objects.apple.stem k.objects.part of=apple name=stem shape=line x=50 y=5 w=4 h=17 z=2 colour=brown above=body core.source="hand-core 1"
+@k.objects.apple.leaf k.objects.part of=apple name=leaf shape=oval x=56 y=6 w=18 h=9 z=2 colour=green right_of=stem core.source="hand-core 1"
+@k.objects.apple.stem.p1 k.objects.point part=$k.objects.apple.stem n=1 x=50 y=22 core.source="hand-core 1"
+@k.objects.apple.stem.p2 k.objects.point part=$k.objects.apple.stem n=2 x=54 y=5 core.source="hand-core 1"
+
+# words
+@k.objects.word.tree core.word text=tree text=trees means=tree of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.flower core.word text=flower text=flowers means=flower of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.mountain core.word text=mountain text=mountains text=hill means=mountain of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.apple core.word text=apple text=apples means=apple of=k.objects.object.name core.source="hand-core 1"
+@k.objects.word.part.petal core.word text=petal text=petals means=petal of=k.objects.part.kind core.source="hand-core 1"
