@@ -12,7 +12,7 @@
 # ---- the state as wires
 @ad.k.o.oid core.slot of=art.draw.object key=oid kind=string required=true
 @ad.k.o.ord core.slot of=art.draw.object key=ord kind=integer required=true
-@ad.k.o.kind core.slot of=art.draw.object key=kind kind=atom enum=circle enum=oval enum=square enum=rectangle enum=triangle enum=star enum=heart enum=line enum=arrow enum=house enum=tree enum=sun enum=cloud enum=car enum=flower enum=cat enum=dog enum=fish enum=bird enum=boat enum=mountain enum=rainbow enum=person enum=balloon enum=rocket enum=moon required=true
+@ad.k.o.kind core.slot of=art.draw.object key=kind kind=atom enum=circle enum=oval enum=square enum=rectangle enum=triangle enum=star enum=heart enum=line enum=arrow enum=house enum=tree enum=sun enum=cloud enum=car enum=flower enum=cat enum=dog enum=fish enum=bird enum=boat enum=mountain enum=rainbow enum=person enum=balloon enum=rocket enum=moon required=true enum=composite
 @ad.k.o.color core.slot of=art.draw.object key=color kind=string required=true
 @ad.k.o.x core.slot of=art.draw.object key=x kind=number
 @ad.k.o.y core.slot of=art.draw.object key=y kind=number

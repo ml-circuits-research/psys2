@@ -1,0 +1,56 @@
+# k.objects: drawable objects: their parts, how the parts sit relative to each other, and a box, a primitive shape, a
+# draw order and a typical colour per part, so that a renderer that has never seen an object can draw it from the
+# facts alone. The frame of every object is 0 to 100 on both axes, x to the right and y downwards.
+# version: 2
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.objects core.module name=k.objects imports=k.commonsense exports=object exports=part exports=point core.source="hand-core 1"
+
+# An object that can be drawn. Its name is an English lemma; the same name in k.commonsense.thing is the same thing.
+@k.objects.object core.type of=k.objects.object shared=true closed=true core.source="hand-core 1"
+@k.objects.object.name core.slot of=k.objects.object key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+# A second drawing of an object that already has one: the same name, and the variant names where it comes from.
+@k.objects.object.variant core.slot of=k.objects.object key=variant id=true kind=atom core.source="hand-core 1"
+
+# A part of an object. One wire per instance: two windows are two parts (left_window, right_window) of kind window.
+@k.objects.part core.type of=k.objects.part shared=true closed=true core.source="hand-core 1"
+@k.objects.part.of core.slot of=k.objects.part key=of id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.objects.part.variant core.slot of=k.objects.part key=variant id=true kind=atom core.source="hand-core 1"
+@k.objects.part.name core.slot of=k.objects.part key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.objects.part.kind core.slot of=k.objects.part key=kind kind=atom core.source="hand-core 1"
+@k.objects.part.shape core.slot of=k.objects.part key=shape required=true enum=rectangle enum=square enum=circle enum=oval enum=triangle enum=line enum=arc enum=polygon core.source="hand-core 1"
+@k.objects.part.x core.slot of=k.objects.part key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.objects.part.y core.slot of=k.objects.part key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.objects.part.w core.slot of=k.objects.part key=w required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.objects.part.h core.slot of=k.objects.part key=h required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.objects.part.z core.slot of=k.objects.part key=z required=true kind=integer core.source="hand-core 1"
+@k.objects.part.colour core.slot of=k.objects.part key=colour required=true many=true enum=black enum=white enum=grey enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown core.source="hand-core 1"
+# The exact colour of an imported part, as a string of the form "#RRGGBB"; `colour` is the nearest name of the list.
+@k.objects.part.rgb core.slot of=k.objects.part key=rgb kind=string core.source="hand-core 1"
+# Who named the part: absent for hand-written parts; `model` when a language model named an imported part by looking at it.
+@k.objects.part.named core.slot of=k.objects.part key=named enum=model core.source="hand-core 1"
+@k.objects.part.pointing core.slot of=k.objects.part key=pointing enum=up enum=down enum=left enum=right core.source="hand-core 1"
+@k.objects.part.opens core.slot of=k.objects.part key=opens enum=up enum=down enum=left enum=right core.source="hand-core 1"
+@k.objects.part.above core.slot of=k.objects.part key=above many=true kind=atom core.source="hand-core 1"
+@k.objects.part.below core.slot of=k.objects.part key=below many=true kind=atom core.source="hand-core 1"
+@k.objects.part.inside core.slot of=k.objects.part key=inside many=true kind=atom core.source="hand-core 1"
+@k.objects.part.left_of core.slot of=k.objects.part key=left_of many=true kind=atom core.source="hand-core 1"
+@k.objects.part.right_of core.slot of=k.objects.part key=right_of many=true kind=atom core.source="hand-core 1"
+@k.objects.part.on core.slot of=k.objects.part key=on many=true kind=atom core.source="hand-core 1"
+@k.objects.part.centered core.slot of=k.objects.part key=centered kind=boolean core.source="hand-core 1"
+
+# A point of a line or polygon part, in the frame of the object, in drawing order. `part` refers to the part wire;
+# `of` always names the object.
+@k.objects.point core.type of=k.objects.point shared=true closed=true core.source="hand-core 1"
+@k.objects.point.part core.slot of=k.objects.point key=part id=true required=true kind=ref to=k.objects.part core.source="hand-core 1"
+@k.objects.point.n core.slot of=k.objects.point key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
+@k.objects.point.x core.slot of=k.objects.point key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.objects.point.y core.slot of=k.objects.point key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+@k.objects.word.object core.word text=object text=objects text=drawing text=picture means=k.objects.object core.source="hand-core 1"
+@k.objects.word.part core.word text=part text=parts means=k.objects.part core.source="hand-core 1"
+@k.objects.word.colour core.word text=colour text=color means=k.objects.part.colour core.source="hand-core 1"
+@k.objects.word.shape core.word text=shape means=k.objects.part.shape core.source="hand-core 1"

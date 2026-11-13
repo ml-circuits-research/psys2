@@ -1,0 +1,766 @@
+{
+ "aeroplane": [
+  "k.objects/shards/vehicles"
+ ],
+ "airplane": [
+  "k.objects/shards/vehicles"
+ ],
+ "airplanes": [
+  "k.objects/shards/vehicles"
+ ],
+ "antenna": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
+ ],
+ "antennae": [
+  "k.objects/shards/animals"
+ ],
+ "apple": [
+  "k.objects/shards/nature"
+ ],
+ "apples": [
+  "k.objects/shards/nature"
+ ],
+ "arm": [
+  "k.objects/shards/figures"
+ ],
+ "arms": [
+  "k.objects/shards/figures"
+ ],
+ "back": [
+  "k.objects/shards/household"
+ ],
+ "back_leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/household"
+ ],
+ "back_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "ball": [
+  "k.objects/shards/figures"
+ ],
+ "balls": [
+  "k.objects/shards/figures"
+ ],
+ "base": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/sky"
+ ],
+ "beak": [
+  "k.objects/shards/animals"
+ ],
+ "bicycle": [
+  "k.objects/shards/vehicles"
+ ],
+ "bicycles": [
+  "k.objects/shards/vehicles"
+ ],
+ "bike": [
+  "k.objects/shards/vehicles"
+ ],
+ "bird": [
+  "k.objects/shards/animals"
+ ],
+ "birds": [
+  "k.objects/shards/animals"
+ ],
+ "boat": [
+  "k.objects/shards/vehicles"
+ ],
+ "boats": [
+  "k.objects/shards/vehicles"
+ ],
+ "body": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "bottom_ball": [
+  "k.objects/shards/figures"
+ ],
+ "bottom_button": [
+  "k.objects/shards/figures"
+ ],
+ "bottom_petal": [
+  "k.objects/shards/nature"
+ ],
+ "bottom_ray": [
+  "k.objects/shards/sky"
+ ],
+ "butterflies": [
+  "k.objects/shards/animals"
+ ],
+ "butterfly": [
+  "k.objects/shards/animals"
+ ],
+ "button": [
+  "k.objects/shards/figures"
+ ],
+ "buttons": [
+  "k.objects/shards/figures"
+ ],
+ "cabin": [
+  "k.objects/shards/vehicles"
+ ],
+ "canopy": [
+  "k.objects/shards/household"
+ ],
+ "cap": [
+  "k.objects/shards/buildings"
+ ],
+ "car": [
+  "k.objects/shards/vehicles"
+ ],
+ "carriage": [
+  "k.objects/shards/vehicles"
+ ],
+ "cars": [
+  "k.objects/shards/vehicles"
+ ],
+ "castle": [
+  "k.objects/shards/buildings"
+ ],
+ "castles": [
+  "k.objects/shards/buildings"
+ ],
+ "cat": [
+  "k.objects/shards/animals"
+ ],
+ "cats": [
+  "k.objects/shards/animals"
+ ],
+ "centre": [
+  "k.objects/shards/nature"
+ ],
+ "chair": [
+  "k.objects/shards/household"
+ ],
+ "chairs": [
+  "k.objects/shards/household"
+ ],
+ "child": [
+  "k.objects/shards/figures"
+ ],
+ "chimney": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "cloud": [
+  "k.objects/shards/sky"
+ ],
+ "clouds": [
+  "k.objects/shards/sky"
+ ],
+ "color": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "colour": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "crescent": [
+  "k.objects/shards/sky"
+ ],
+ "crown": [
+  "k.objects/shards/nature"
+ ],
+ "cup": [
+  "k.objects/shards/household"
+ ],
+ "cups": [
+  "k.objects/shards/household"
+ ],
+ "disc": [
+  "k.objects/shards/sky"
+ ],
+ "dog": [
+  "k.objects/shards/animals"
+ ],
+ "dogs": [
+  "k.objects/shards/animals"
+ ],
+ "door": [
+  "k.objects/shards/buildings"
+ ],
+ "drawing": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "ear": [
+  "k.objects/shards/animals"
+ ],
+ "ears": [
+  "k.objects/shards/animals"
+ ],
+ "engine": [
+  "k.objects/shards/vehicles"
+ ],
+ "eye": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
+ ],
+ "eyes": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
+ ],
+ "far_wing": [
+  "k.objects/shards/vehicles"
+ ],
+ "fin": [
+  "k.objects/shards/animals",
+  "k.objects/shards/vehicles"
+ ],
+ "fins": [
+  "k.objects/shards/vehicles"
+ ],
+ "first_rung": [
+  "k.objects/shards/household"
+ ],
+ "first_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "first_window": [
+  "k.objects/shards/vehicles"
+ ],
+ "fish": [
+  "k.objects/shards/animals"
+ ],
+ "fishes": [
+  "k.objects/shards/animals"
+ ],
+ "flame": [
+  "k.objects/shards/vehicles"
+ ],
+ "flower": [
+  "k.objects/shards/nature"
+ ],
+ "flowers": [
+  "k.objects/shards/nature"
+ ],
+ "fork": [
+  "k.objects/shards/vehicles"
+ ],
+ "fourth_rung": [
+  "k.objects/shards/household"
+ ],
+ "fourth_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "frame": [
+  "k.objects/shards/vehicles"
+ ],
+ "front_leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/household"
+ ],
+ "front_sail": [
+  "k.objects/shards/vehicles"
+ ],
+ "front_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "gate": [
+  "k.objects/shards/buildings"
+ ],
+ "handle": [
+  "k.objects/shards/household"
+ ],
+ "handlebar": [
+  "k.objects/shards/vehicles"
+ ],
+ "hat": [
+  "k.objects/shards/figures"
+ ],
+ "head": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
+ ],
+ "hill": [
+  "k.objects/shards/nature"
+ ],
+ "home": [
+  "k.objects/shards/buildings"
+ ],
+ "hook": [
+  "k.objects/shards/household"
+ ],
+ "house": [
+  "k.objects/shards/buildings"
+ ],
+ "houses": [
+  "k.objects/shards/buildings"
+ ],
+ "hull": [
+  "k.objects/shards/vehicles"
+ ],
+ "kitten": [
+  "k.objects/shards/animals"
+ ],
+ "ladder": [
+  "k.objects/shards/household"
+ ],
+ "ladders": [
+  "k.objects/shards/household"
+ ],
+ "lamp": [
+  "k.objects/shards/buildings"
+ ],
+ "leaf": [
+  "k.objects/shards/nature"
+ ],
+ "left_antenna": [
+  "k.objects/shards/animals"
+ ],
+ "left_arm": [
+  "k.objects/shards/figures"
+ ],
+ "left_ear": [
+  "k.objects/shards/animals"
+ ],
+ "left_eye": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
+ ],
+ "left_fin": [
+  "k.objects/shards/vehicles"
+ ],
+ "left_leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household"
+ ],
+ "left_lower_wing": [
+  "k.objects/shards/animals"
+ ],
+ "left_merlon": [
+  "k.objects/shards/buildings"
+ ],
+ "left_petal": [
+  "k.objects/shards/nature"
+ ],
+ "left_puff": [
+  "k.objects/shards/sky"
+ ],
+ "left_rail": [
+  "k.objects/shards/household"
+ ],
+ "left_ray": [
+  "k.objects/shards/sky"
+ ],
+ "left_roof": [
+  "k.objects/shards/buildings"
+ ],
+ "left_tower": [
+  "k.objects/shards/buildings"
+ ],
+ "left_upper_wing": [
+  "k.objects/shards/animals"
+ ],
+ "left_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "left_window": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household"
+ ],
+ "legs": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household"
+ ],
+ "lighthouse": [
+  "k.objects/shards/buildings"
+ ],
+ "lighthouses": [
+  "k.objects/shards/buildings"
+ ],
+ "main_sail": [
+  "k.objects/shards/vehicles"
+ ],
+ "man": [
+  "k.objects/shards/figures"
+ ],
+ "mast": [
+  "k.objects/shards/vehicles"
+ ],
+ "merlon": [
+  "k.objects/shards/buildings"
+ ],
+ "merlons": [
+  "k.objects/shards/buildings"
+ ],
+ "middle_ball": [
+  "k.objects/shards/figures"
+ ],
+ "middle_merlon": [
+  "k.objects/shards/buildings"
+ ],
+ "middle_puff": [
+  "k.objects/shards/sky"
+ ],
+ "moon": [
+  "k.objects/shards/sky"
+ ],
+ "moons": [
+  "k.objects/shards/sky"
+ ],
+ "mountain": [
+  "k.objects/shards/nature"
+ ],
+ "mountains": [
+  "k.objects/shards/nature"
+ ],
+ "mouth": [
+  "k.objects/shards/figures"
+ ],
+ "mug": [
+  "k.objects/shards/household"
+ ],
+ "near_wing": [
+  "k.objects/shards/vehicles"
+ ],
+ "nose": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/vehicles"
+ ],
+ "object": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "objects": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "part": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "parts": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "people": [
+  "k.objects/shards/figures"
+ ],
+ "person": [
+  "k.objects/shards/figures"
+ ],
+ "petal": [
+  "k.objects/shards/nature"
+ ],
+ "petals": [
+  "k.objects/shards/nature"
+ ],
+ "picture": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "plane": [
+  "k.objects/shards/vehicles"
+ ],
+ "planes": [
+  "k.objects/shards/vehicles"
+ ],
+ "puff": [
+  "k.objects/shards/sky"
+ ],
+ "puffs": [
+  "k.objects/shards/sky"
+ ],
+ "puppy": [
+  "k.objects/shards/animals"
+ ],
+ "rail": [
+  "k.objects/shards/household"
+ ],
+ "rails": [
+  "k.objects/shards/household"
+ ],
+ "ray": [
+  "k.objects/shards/sky"
+ ],
+ "rays": [
+  "k.objects/shards/sky"
+ ],
+ "right_antenna": [
+  "k.objects/shards/animals"
+ ],
+ "right_arm": [
+  "k.objects/shards/figures"
+ ],
+ "right_ear": [
+  "k.objects/shards/animals"
+ ],
+ "right_eye": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures"
+ ],
+ "right_fin": [
+  "k.objects/shards/vehicles"
+ ],
+ "right_leg": [
+  "k.objects/shards/animals",
+  "k.objects/shards/figures",
+  "k.objects/shards/household"
+ ],
+ "right_lower_wing": [
+  "k.objects/shards/animals"
+ ],
+ "right_merlon": [
+  "k.objects/shards/buildings"
+ ],
+ "right_petal": [
+  "k.objects/shards/nature"
+ ],
+ "right_puff": [
+  "k.objects/shards/sky"
+ ],
+ "right_rail": [
+  "k.objects/shards/household"
+ ],
+ "right_ray": [
+  "k.objects/shards/sky"
+ ],
+ "right_roof": [
+  "k.objects/shards/buildings"
+ ],
+ "right_tower": [
+  "k.objects/shards/buildings"
+ ],
+ "right_upper_wing": [
+  "k.objects/shards/animals"
+ ],
+ "right_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "right_window": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "robot": [
+  "k.objects/shards/figures"
+ ],
+ "robots": [
+  "k.objects/shards/figures"
+ ],
+ "rocket": [
+  "k.objects/shards/vehicles"
+ ],
+ "rockets": [
+  "k.objects/shards/vehicles"
+ ],
+ "roof": [
+  "k.objects/shards/buildings"
+ ],
+ "roofs": [
+  "k.objects/shards/buildings"
+ ],
+ "rung": [
+  "k.objects/shards/household"
+ ],
+ "rungs": [
+  "k.objects/shards/household"
+ ],
+ "sail": [
+  "k.objects/shards/vehicles"
+ ],
+ "sailboat": [
+  "k.objects/shards/vehicles"
+ ],
+ "sails": [
+  "k.objects/shards/vehicles"
+ ],
+ "saucer": [
+  "k.objects/shards/household"
+ ],
+ "seat": [
+  "k.objects/shards/household",
+  "k.objects/shards/vehicles"
+ ],
+ "seat_tube": [
+  "k.objects/shards/vehicles"
+ ],
+ "second_rung": [
+  "k.objects/shards/household"
+ ],
+ "second_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "second_window": [
+  "k.objects/shards/vehicles"
+ ],
+ "shape": [
+  "k.objects/shards/animals",
+  "k.objects/shards/buildings",
+  "k.objects/shards/figures",
+  "k.objects/shards/household",
+  "k.objects/shards/nature",
+  "k.objects/shards/sky",
+  "k.objects/shards/vehicles"
+ ],
+ "ship": [
+  "k.objects/shards/vehicles"
+ ],
+ "snow_cap": [
+  "k.objects/shards/nature"
+ ],
+ "snowman": [
+  "k.objects/shards/figures"
+ ],
+ "snowmen": [
+  "k.objects/shards/figures"
+ ],
+ "star": [
+  "k.objects/shards/sky"
+ ],
+ "stars": [
+  "k.objects/shards/sky"
+ ],
+ "stem": [
+  "k.objects/shards/nature"
+ ],
+ "stripe": [
+  "k.objects/shards/buildings"
+ ],
+ "sun": [
+  "k.objects/shards/sky"
+ ],
+ "table": [
+  "k.objects/shards/household"
+ ],
+ "tables": [
+  "k.objects/shards/household"
+ ],
+ "tail": [
+  "k.objects/shards/animals",
+  "k.objects/shards/vehicles"
+ ],
+ "third_rung": [
+  "k.objects/shards/household"
+ ],
+ "third_wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "third_window": [
+  "k.objects/shards/vehicles"
+ ],
+ "top": [
+  "k.objects/shards/household"
+ ],
+ "top_button": [
+  "k.objects/shards/figures"
+ ],
+ "top_petal": [
+  "k.objects/shards/nature"
+ ],
+ "top_ray": [
+  "k.objects/shards/sky"
+ ],
+ "tower": [
+  "k.objects/shards/buildings"
+ ],
+ "towers": [
+  "k.objects/shards/buildings"
+ ],
+ "train": [
+  "k.objects/shards/vehicles"
+ ],
+ "trains": [
+  "k.objects/shards/vehicles"
+ ],
+ "tree": [
+  "k.objects/shards/nature"
+ ],
+ "trees": [
+  "k.objects/shards/nature"
+ ],
+ "trunk": [
+  "k.objects/shards/nature"
+ ],
+ "umbrella": [
+  "k.objects/shards/household"
+ ],
+ "umbrellas": [
+  "k.objects/shards/household"
+ ],
+ "wall": [
+  "k.objects/shards/buildings"
+ ],
+ "wheel": [
+  "k.objects/shards/vehicles"
+ ],
+ "wheels": [
+  "k.objects/shards/vehicles"
+ ],
+ "window": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "windows": [
+  "k.objects/shards/buildings",
+  "k.objects/shards/vehicles"
+ ],
+ "wing": [
+  "k.objects/shards/animals",
+  "k.objects/shards/vehicles"
+ ],
+ "wings": [
+  "k.objects/shards/animals",
+  "k.objects/shards/vehicles"
+ ],
+ "woman": [
+  "k.objects/shards/figures"
+ ]
+}
