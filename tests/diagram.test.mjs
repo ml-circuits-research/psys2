@@ -6,7 +6,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { score } from '../imports/diagram-vss-demo/reference/bench-canon.js';
-import * as ops from '../worlds/diagram.sketch/ops.mjs';
+import * as ops from '../worlds/diagram.sketch/engine.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const WORLD = 'diagram.sketch';
@@ -118,7 +118,7 @@ test('$new and mention(...) of the gold become the shape made last and a descrip
 
 // ---- the engine is loaded lazily, the tab exists ---------------------------------------------------------------------------------------
 test('the engine is not imported statically by ops.mjs and is not preloaded by the page', () => {
-  const src = readFileSync(new URL('../worlds/diagram.sketch/ops.mjs', import.meta.url), 'utf8');
+  const src = readFileSync(new URL('../worlds/diagram.sketch/engine.mjs', import.meta.url), 'utf8');
   assert.ok(!/^import .*engine\//m.test(src), 'ops.mjs must import the engine with import() only');
   assert.match(src, /import\('\.\/engine\/logic\.mjs'\)/);
   assert.match(src, /export const prepare = /);

@@ -21,7 +21,7 @@ const DATA = join(REPO, 'imports/diagram-vss-demo/data');
 const WORLD = 'diagram.sketch';
 const q = (s) => JSON.stringify(String(s));
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-const ops = await import('../worlds/diagram.sketch/ops.mjs');
+const ops = await import('../worlds/diagram.sketch/engine.mjs');
 const K = ops.kit();
 const allActs = new Map(engine.set.list().flatMap((w) => w.patterns.map((p) => [p.id, /action=([\w.]+)/.exec(p.emit ?? '')?.[1] ?? null])));
 const actOfGold = (type, a) => (type === 'question' ? `diagram.ask.${a.ask}` : type === 'fact' ? 'diagram.fact' : type === 'rule' ? 'diagram.rule' : `diagram.${a.action}`).toLowerCase();
