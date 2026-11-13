@@ -10,7 +10,7 @@ import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, createMicLock, measureSpeed, speechSupport } from './ui/speech.mjs';
-import { createLanguage, hintText, LANG_TAGS, langName, langTag, tagOf } from './ui/language.mjs';
+import { createLanguage, hintText, LANG_TAGS, langName, langTag, tagOf, normalize as normLang } from './ui/language.mjs';
 import { createTranslationLayer, QUALITY_GATE } from './ui/translation-ui.mjs';
 import { classifyVoice } from './ui/voice-noise.mjs';
 import { setLexicon, buildLexicon, addressWordsText } from './ui/voice-words.mjs';
@@ -621,7 +621,7 @@ export async function mountPsys2(element, options = {}) {
     const prevAnswer = lastAnswer;   // FB: the answer a spoken "that is wrong" is about
     // LANG-FIXED: an explicit switch command ("vorbește în engleză", "switch to Romanian") is the only thing in a reply that changes the language: it moves the selector
     // visibly, and its own reply is the confirmation. Detection, the reply language and the translator never do.
-    { const asked = reply.state?.[SHELL]?.language; if ((asked === 'en' || asked === 'ro') && asked !== sentLang && language.get() === sentLang) language.set(asked, 'command'); }   // not when the person moved the selector meanwhile
+    { const asked = reply.state?.[SHELL]?.language; if (asked && normLang(asked, null) && asked !== sentLang && language.get() === sentLang) language.set(asked, 'command'); }   // not when the person moved the selector meanwhile
     if (mode === 'typed' && language.get() === sentLang && !reply.knownBad) hintLanguage(text, user);   // not after a switch command
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
 
@@ -1015,7 +1015,7 @@ export async function mountPsys2(element, options = {}) {
     settings.language = lang; langSel.value = lang;
     speech?.refreshLang(); save(); renderSettings();
     session?.setWorldState?.(SHELL, { language: lang });   // the shell world's state follows the selector, so that "speak Romanian" is a change and not a no-op
-    renderLangSelect(); tl.prepare(lang).then(() => { renderSettings(); loadVoiceWords(lang); }, () => {}); loadVoiceWords(lang); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
+    renderLangSelect(); checkBrowserTranslator(lang); tl.prepare(lang).then(() => { renderSettings(); loadVoiceWords(lang); }, () => {}); loadVoiceWords(lang); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
     hintEl?.remove(); hintEl = null;
     if (reason === 'hint') { const said = `Switched to ${langName(lang, { own: false })}.`; localized(said, lang).then((t) => note(t)); }   // a switch command confirms in its own reply, in the new language
   });
@@ -1419,7 +1419,7 @@ export async function mountPsys2(element, options = {}) {
     return [
       optSelect('language', languageOptions(), language.get(), (v) => setLanguage(v), languageEngineNote()),
       optSelect('translation', [['auto', 'Automatic'], ['browser-api', 'Browser translator first'], ['rules', 'Rules only']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); },
-        `Browser translator: ${translator?.translatorState?.() ?? (browserAvail === 'downloadable' || browserAvail === 'downloading' ? 'downloading… the rules are used meanwhile' : browserAvail)}.`),
+        `Browser translator: ${translator?.translatorState?.(language.get(), 'en') ?? (browserAvail === 'downloadable' || browserAvail === 'downloading' ? 'downloading… the rules are used meanwhile' : browserAvail)}.`),
       optSelect('languageHint', [['auto', 'Automatic'], ['browser-api', 'Browser detector'], ['rules', 'Rules only']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }, `Browser language detector: ${detectAvail}.`),
       ...(language.get() === 'en' ? [optSelect('englishVariant', [['en-US', 'English (US)'], ['en-GB', 'English (UK)']], language.variant, (v) => { settings.englishVariant = v; language.setVariant(v); save(); renderSettings(); speech?.refreshLang(); })] : []),
       optSelect('voice', voiceOpts, settings.voice, (v) => { settings.voice = v; save(); }, voiceNote(voices)),
@@ -1611,8 +1611,14 @@ export async function mountPsys2(element, options = {}) {
   // optional capabilities, checked once
   loadVoiceWords(language.get());   // the voice word lists of a language other than English (translated once, cached)
   if (browserDetectorKind()) browserDetectorAvailability().then((a) => { detectAvail = a; renderSettings(); });
-  if (browserTranslatorKind()) browserTranslatorAvailability('ro', 'en').then((a) => { browserAvail = a; if (a === 'downloadable' || a === 'downloading') translator.prepareTranslator?.('ro', 'en').then(renderSettings, () => {}); renderSettings(); });
-  else browserAvail = 'not supported by this browser';
+  /** The browser Translator for the selected language (to English): availability, and a background download where the browser can. Generic: any language, not a fixed one. */
+  function checkBrowserTranslator(lang = language.get()) {
+    if (!browserTranslatorKind()) { browserAvail = 'not supported by this browser'; return; }
+    if (!lang || lang === 'en') { browserAvail = 'not needed for English'; return; }
+    browserAvail = 'checking…';
+    browserTranslatorAvailability(lang, 'en').then((a) => { browserAvail = a; if (a === 'downloadable' || a === 'downloading') translator?.prepareTranslator?.(lang, 'en')?.then(renderSettings, () => {}); renderSettings(); });
+  }
+  checkBrowserTranslator();
 
   if (options.onboarding !== false) {
     const chips = h('div', { class: 'p2-chips-row' }, EXAMPLES.map((ex) => h('button', { class: 'p2-example', type: 'button', onclick: () => { send(ex, 'chip'); input.focus(); } }, ex)));
@@ -1649,7 +1655,7 @@ export async function mountPsys2(element, options = {}) {
   const warm = async () => {
     mark('warm-start');
     try {
-      await engineClient.warm({ phase: 'rules' });   // in the worker: the rules, the Romanian translator tables; a user turn goes first
+      await engineClient.warm({ phase: 'rules' });   // in the worker: the rules and the translator tables; a user turn goes first
       if (destroyed) return;
       modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
       if (dispatcherEnc && settings.formalizer === 'encoder') {

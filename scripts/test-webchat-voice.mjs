@@ -205,7 +205,7 @@ export const SCENARIOS = {
       await c.pg.evaluate(() => { window.__synthMs = 400; });
       await idle(c);
       // stop phrases: nothing is sent, the microphone goes off
-      for (const phrase of ['stop microphone', 'stop the mic', 'mic off', 'turn off the microphone', 'stop listening', "that's all", 'close the mic', 'stop the microphon', 'oprește microfonul', 'opreste microfonul', 'stop microfon', 'închide microfonul', 'gata cu microfonul', 'nu mai asculta']) {
+      for (const phrase of ['stop microphone', 'stop the mic', 'mic off', 'turn off the microphone', 'stop listening', "that's all", 'close the mic', 'stop the microphon']) {   // SETTINGS-COHERENT 3: no hand-written Romanian phrases; other languages come from the translated word lists
         if (!(await live())) { await c.pg.click('button.p2-mic'); await waitRec(c); }
         const before = await users(c);
         await say(c, [phrase], { final: true });
@@ -333,9 +333,9 @@ export const SCENARIOS = {
       const tab = () => c.pg.evaluate(() => document.querySelector('.p2-tab[aria-selected="true"]')?.id ?? null);
       const tab0 = await tab();
       const n = await users(c);
-      for (const f of ['o', 'asta']) { await c.pg.evaluate((t) => window.__sr.final(t), f); await sleep(500); }
+      for (const f of ['the', 'and']) { await c.pg.evaluate((t) => window.__sr.final(t), f); await sleep(500); }
       await sleep(3200);
-      check('fragments ("o", "asta") send nothing and switch no tab', (await users(c)) === n && (await tab()) === tab0, `${(await users(c)) - n} messages`);
+      check('fragments ("the", "and") send nothing and switch no tab', (await users(c)) === n && (await tab()) === tab0, `${(await users(c)) - n} messages`);
       for (const f of ['draw', 'a', 'draw a', 'heart', 'draw a heart']) { await c.pg.evaluate((t) => window.__sr.final(t), f); await sleep(250); }
       const ms = await waitUser(c, n, Date.now(), 12000);
       check('growing finals become one message', ms !== null);
@@ -410,7 +410,7 @@ export const SCENARIOS = {
     const c = await open(o, { language: 'ro' });
     try {
       await c.pg.click('button.p2-mic'); await waitRec(c);
-      const talk = ['să mi spună domnul bujii lui tata', 'Dar cu cine vorbești ce vrei', 'tata ce pot să zic', 'unchiul', 'voi', 'faci tu', 'enervant da', 'scuze'];
+      const talk = ['tell dad the spark plugs are broken', 'but who are you even talking to', 'dad what could I say', 'my uncle', 'you', 'we should go', 'so annoying yeah', 'sorry'];
       const bots0 = await c.pg.$$eval('.p2-msg.is-bot:not(.is-note)', (e) => e.length);
       for (const t of talk) {
         await c.pg.waitForFunction(() => window.__sr.live(), { timeout: 8000, polling: 30 });
@@ -473,7 +473,7 @@ export const SCENARIOS = {
       check('at most one message per utterance', msgs.length <= groups, `${msgs.length} messages / ${groups} utterances`);
       check('queue stayed 0', rp.maxQueue === 0 && (await c.pg.evaluate(() => window.psys2.queue.length)) === 0);
       check('the microphone was never live during a turn', rp.viol === 0, String(rp.viol));
-      const frag = new Set(['o', 'ce', 'de', 'asta', 'mare', 'face', 'tata', 'mama', 'ia']);
+      const frag = new Set(['the', 'and', 'so', 'a']);
       check('no fragment was sent', !msgs.some((m) => frag.has(m.trim().toLowerCase())), msgs.filter((m) => frag.has(m.trim().toLowerCase())).join(','));
       check('no tab switch caused by a fragment', !rp.tabs.some((x) => frag.has(x.msg.trim().toLowerCase().replace(/\s*ro\s*→.*$/, ''))), JSON.stringify(rp.tabs.filter((x) => x.msg.trim().split(/\s+/).length < 2)));
       const st = await c.pg.evaluate(() => JSON.stringify(window.psys2.session.state()));

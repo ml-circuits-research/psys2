@@ -40,7 +40,8 @@ test('the default strategy is one constant, hybrid; unknown values fall back to 
   assert.equal(normalizeNxStrategy('x'), 'hybrid');
   assert.equal(sessionOptions({ ...RUNTIME_DEFAULTS, nxStrategy: 'neural' }).nx, 'neural');
   assert.equal(migrateSettings({ nxStrategy: 'bogus', settingsVersion: 2 }).settings.nxStrategy, 'hybrid');
-  assert.equal(migrateSettings({ nxStrategy: 'rules', settingsVersion: 2 }).settings.nxStrategy, 'rules');
+  assert.equal(migrateSettings({ nxStrategy: 'rules', settingsVersion: 2 }).settings.nxStrategy, 'hybrid', 'SETTINGS-COHERENT: an older saved strategy is reset to hybrid once');
+  assert.equal(migrateSettings({ reading: 'rules', settingsVersion: 5 }).settings.nxStrategy, 'rules', 'an explicit v5 choice of the one reading select is kept');
   assert.equal(migrateSettings(null).settings.nxStrategy, 'hybrid');
 });
 

@@ -74,7 +74,7 @@ export function createLabels(map, container, getContext) {
     ctx.textAlign = 'left';
     for (const [name, lat, lon, pop, cap, cc] of places.cities) {
       if (skip.has(name)) continue;
-      const show = (cap && z >= 4) || pop >= minPop || (z >= 7 && (cc === 'RO' || cc === 'MD'));
+      const show = (cap && z >= 4) || pop >= minPop;   // SETTINGS-COHERENT 3: no country gets more labels than another
       if (!show) continue;
       const p = pt(lat, lon);
       if (p.x < -20 || p.y < -20 || p.x > size.x + 20 || p.y > size.y + 20) continue;
