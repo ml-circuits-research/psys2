@@ -857,7 +857,7 @@ export function createExecutor(schema, hooks = {}) {
    * at the first act that is not done and says why; what the earlier acts did stays one step, so "undo" takes the whole group back.
    */
   let groupSeq = 0;
-  function group(ctx, steps) {
+  function actGroup(ctx, steps) {
     const turn = `grp${++groupSeq}`, results = [], notes = [];
     for (let i = 0; i < steps.length; i++) {
       budget.tick('acts.group');
@@ -940,5 +940,5 @@ export function createExecutor(schema, hooks = {}) {
     const sal = new Set(st.focus.ids);
     return st.items.map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
   }
-  return { run, operation, group, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
+  return { run, operation, group: actGroup, interceptInput, lastResort, outOfScope, accepts, init, resolve, labels, schema, referents };
 }

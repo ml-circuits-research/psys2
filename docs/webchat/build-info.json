@@ -158,7 +158,7 @@
     "lib/worlds/index.mjs": "a6488d7cec0f2bc3",
     "lib/worlds/lexicon.mjs": "65554a59c11250b2",
     "lib/worlds/validate.mjs": "1b1e7561ae0882fa",
-    "worlds/acts/acts.mjs": "5458797fff560bac",
+    "worlds/acts/acts.mjs": "c874fcd4f1fcf568",
     "worlds/acts/forms.more.mjs": "b84a3e4628a9ea69",
     "worlds/acts/matrix.mjs": "f171ec9637fc56e7",
     "worlds/acts/verbs.generated.mjs": "bbb7723a1e9d542e",
@@ -178,7 +178,7 @@
     "worlds/diagram.sketch/engine/templates.mjs": "625a2dc2ee86f062",
     "worlds/diagram.sketch/engine.mjs": "5c87e4cb2eb77661",
     "worlds/diagram.sketch/hooks.mjs": "b479aa98ece958a1",
-    "worlds/diagram.sketch/ops.mjs": "b72048f419885bdf",
+    "worlds/diagram.sketch/ops.mjs": "a714559fe0729caa",
     "worlds/diagram.sketch/own.mjs": "ff3680254a9077bb",
     "worlds/diagram.sketch/refs.mjs": "5d7c74441762a25e",
     "worlds/docs.editor/coverage.md": "532dde81b41608d7",
@@ -251,8 +251,8 @@
     "worlds/media.music/ops.mjs": "52dbd6ce7d8ac70d",
     "worlds/media.music/theory.mjs": "22f906418690fd78",
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
-    "worlds/plan.seating/ops.mjs": "9f60263aaf345f87",
-    "worlds/plan.timeline/ops.mjs": "04efe26eaa4bcf78",
+    "worlds/plan.seating/ops.mjs": "729b116a641a3379",
+    "worlds/plan.timeline/ops.mjs": "cd24fbedfcd0b175",
     "worlds/session.things/ops.mjs": "f287a1ec8547ac3b",
     "worlds/session.things/things.mjs": "826550d0171690a7",
     "worlds/session.things/view.mjs": "e300161a3532f522",
@@ -266,7 +266,7 @@
     "worlds/ui.avatar/facedraw.mjs": "878aba9560358bca",
     "worlds/ui.avatar/facelogic.mjs": "5ee788f809d784c0",
     "worlds/ui.avatar/hooks.mjs": "7f3e6591b427752e",
-    "worlds/ui.avatar/ops.mjs": "a7aa5dd9092ae995",
+    "worlds/ui.avatar/ops.mjs": "085797c225f46da8",
     "worlds/ui.avatar/own.mjs": "c52f7e8ae4afdfc3",
     "worlds/ui.help/coverage.md": "c104d6620e1078d4",
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
@@ -283,6 +283,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T21:21:41.793Z",
-  "commit": "431040fb-dirty"
+  "builtAt": "2026-11-13T21:23:40.891Z",
+  "commit": "32298946-dirty"
 }
