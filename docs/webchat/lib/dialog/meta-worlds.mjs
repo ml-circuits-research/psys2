@@ -52,7 +52,7 @@ const one = (w, k) => attrs(w, k)[0] ?? null;
 export async function loadMetaWorlds(set, { lib = null, priorWeight = 30 } = {}) {
   const w = set.get('meta.worlds');
   if (!w?.raw?.legend || !w.raw.kb || !w.raw.matrix) return null;
-  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=77e11b6770');
+  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=a0e4bac59d');
   const base = new lib.World({});
   for (const [what, text] of [['legend', w.raw.legend], ['kb', w.raw.kb], ['matrix', w.raw.matrix]]) {
     const r = base.load(text);
