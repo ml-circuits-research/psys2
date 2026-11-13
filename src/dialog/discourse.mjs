@@ -20,6 +20,7 @@ import { lastUnfinished } from '../astra/where.mjs';
 import { runDiscussionCommand } from '../astra/session.mjs';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs';
 import { budget } from './budget.mjs';
+import { en } from '../lang/en.mjs';
 import { touchedCount } from './followup.mjs';
 
 export const FRAME_LIMIT = 5;
@@ -44,18 +45,14 @@ const IMPERATIVE_START = /^(?:please\s+)?(?!(?:i|we|you|my|the|a|an|no|nope|wait
 /** Patterns that only ask for a missing subject (`pat.<world>.ask.*`, spec 11 section 3): not a reading of the sentence. */
 const CLARIFY_PATTERN = /\.ask\./;
 
-const ORDINAL_RE = /^the (?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last) /;
+const ORDINAL_RE = new RegExp(`^the (?:${Object.keys(en.ordinals('acts')).join('|')}) `);
 
-const LEADS = [
-  ['and', 'what', 'about'], ['and', 'how', 'about'], ['what', 'about'], ['how', 'about'], ['what', 'of'], ['do', 'the', 'same', 'for'], ['the', 'same', 'goes', 'for'],
-  ['the', 'same', 'for'], ['the', 'same', 'with'], ['same', 'for'], ['same', 'with'], ['do', 'it', 'for'], ['and', 'then'], ['and', 'also'], ['and', 'now'],
-  ['and'], ['now'], ['also'], ['but'],
-];
-const TRAILS = [['as', 'well'], ['too'], ['also'], ['instead']];
-const REPEATS = new Set(['again', 'once more', 'one more time', 'do it again', 'do that again', 'same again', 'the same', 'the same thing', 'same thing', 'and again']);
-const DETERMINERS = new Set(['a', 'an', 'the', 'my', 'your', 'his', 'her', 'its', 'their', 'this', 'that', 'some']);
-const PREPOSITIONS = new Set(['from', 'to', 'in', 'on', 'at', 'with', 'for', 'of', 'by', 'under', 'over', 'near', 'into', 'about', 'behind', 'above', 'below', 'between']);
-const SENTENCE_STARTERS = new Set(['who', 'whom', 'whose', 'what', 'where', 'when', 'why', 'how', 'which', 'is', 'are', 'was', 'were', 'does', 'do', 'did', 'can', 'could', 'will', 'would', 'should', 'has', 'have', 'i', 'you', 'we', 'please']);
+const LEADS = en.leads();
+const TRAILS = en.trails();
+const REPEATS = en.repeats();
+const DETERMINERS = en.words('det', 'discourse');
+const PREPOSITIONS = en.words('prep', 'discourse');
+const SENTENCE_STARTERS = en.starters();
 const wordsOf = (t) => String(t).trim().replace(/[?!.]+$/g, '').split(/\s+/).filter(Boolean);
 const lower = (a) => a.map((w) => w.toLowerCase());
 const startsWith = (ws, phrase) => phrase.every((p, i) => ws[i]?.toLowerCase() === p);
@@ -262,7 +259,7 @@ export class Discourse {
     budget.tick('discourse.pronoun');
     if (!this.frames.length) return null;
     text = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);   // chat spellings of short words ("mke it a siren")
-    const m = String(text).match(/\b(it|that one|this one|that animal|this animal|that shape|this shape|that thing|this thing|them|those|these|that|this)\b/i);
+    const m = String(text).match(en.anaphorRegex('discourse.pronoun'));
     if (!m) return null;
     const read = await this._readSeg(text, sid);
     if (read && !CLARIFY_PATTERN.test(read.match?.patternId ?? '')) return null;   // a sentence some world reads as it is stays as it is (a clarification question lacking its subject is no reading)
@@ -1101,7 +1098,7 @@ export class Discourse {
     if (!m) return null;
     const head = m[1].trim(), rest = m[2].trim();
     const cands = [];
-    const pro = rest.match(/\b(it|that one|this one|that animal|this animal|that thing|this thing|them|those|these)\b/i);
+    const pro = rest.match(en.anaphorRegex('discourse.backto'));
     if (pro) for (const det of ['a', 'the']) cands.push(rest.slice(0, pro.index) + `${det} ${head}` + rest.slice(pro.index + pro[0].length));
     cands.push(rest);
     for (const cand of cands) {

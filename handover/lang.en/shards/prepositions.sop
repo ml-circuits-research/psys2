@@ -1,0 +1,38 @@
+# w.lang.en/shards/prepositions: prepositions as relations. `rel` is the relation the preposition says (the space module and the time module read these: at/in/on/near/above/below/behind/between/from/to), `space` whether it describes a place (static),
+# a goal or source (direction, source) or a way (path); `role` the non-spatial roles (accompaniment, part, purpose, topic). `in=` names the PSys2 list the word belongs to: np.boundary = the words where a coordinated head noun phrase stops
+# (acts.splitThings), acts.rel = the relation words of the act forms, dialogue / discourse = the lists of the dialogue modules, routing.format = "as", "like": a format, not a place.
+# sources: PSys2 (hand-written): worlds/acts, dialogue.mjs, discourse.mjs, routing.mjs; relation names from k.space
+# license: CC0-1.0
+
+@lang.en.prep.at lang.en.prep text=at rel=at space=static in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.on lang.en.prep text=on rel=on space=static support=yes in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.in lang.en.prep text=in rel=in space=static contain=yes in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.into lang.en.prep text=into rel=in space=direction contain=yes in=np.boundary in=acts.rel in=dialogue in=discourse in=routing.format core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.onto lang.en.prep text=onto rel=on space=direction in=np.boundary in=acts.rel in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.to lang.en.prep text=to rel=to space=direction in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.next_to lang.en.prep text=next_to rel=near space=static in=acts.rel core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.near lang.en.prep text=near rel=near space=static in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.beside lang.en.prep text=beside rel=near space=static in=np.boundary in=acts.rel in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.by lang.en.prep text=by rel=near space=static in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.under lang.en.prep text=under rel=below space=static in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.above lang.en.prep text=above rel=above space=static in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.below lang.en.prep text=below rel=below space=static in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.inside lang.en.prep text=inside rel=in space=static contain=yes in=np.boundary in=acts.rel in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.with lang.en.prep text=with rel=with role=accompaniment,instrument in=np.boundary in=acts.rel in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.around lang.en.prep text=around rel=around space=path in=np.boundary in=acts.rel in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.between lang.en.prep text=between rel=between space=static arity=2 in=np.boundary in=acts.rel in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.next lang.en.prep text=next rel=near space=static note="part of next_to" in=np.boundary in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.over lang.en.prep text=over rel=above space=static in=np.boundary in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.behind lang.en.prep text=behind rel=behind space=static in=np.boundary in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.outside lang.en.prep text=outside rel=outside space=static in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.from lang.en.prep text=from rel=from space=source in=np.boundary in=dialogue in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.across lang.en.prep text=across rel=across space=path in=np.boundary in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.along lang.en.prep text=along rel=along space=path in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.toward lang.en.prep text=toward rel=to space=direction in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.towards lang.en.prep text=towards rel=to space=direction in=dialogue core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.of lang.en.prep text=of rel=of role=part,possession in=np.boundary in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.for lang.en.prep text=for rel=for role=beneficiary,purpose in=np.boundary in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.about lang.en.prep text=about rel=about role=topic in=discourse core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.as lang.en.prep text=as rel=as role=role in=routing.format core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.like lang.en.prep text=like rel=like role=similarity in=routing.format core.source="psys2 closed-class sets 2026-11-14"
+@lang.en.prep.resembling lang.en.prep text=resembling rel=like role=similarity in=routing.format core.source="psys2 closed-class sets 2026-11-14"

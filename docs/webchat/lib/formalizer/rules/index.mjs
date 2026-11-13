@@ -7,23 +7,24 @@
  */
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=4e3b339134';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=a107e43628';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=fe5fe63391';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=443330729c';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=64e7a46a5c';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=07dd1fe4f2';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=34ef60e7bf';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=e445741b59';
-import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=2312c641e7';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=c46d74d60c';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=4abcd6f078';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=71111ccbea';
+import { en } from '../../lang/en.mjs?v=445ab3fd8f';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse, serialize } from '../../soplang/index.mjs?v=26885599a7';
 import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=058ecdb0c1';
 
-export { FormSession } from './session.mjs?v=e445741b59';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=34ef60e7bf';
+export { FormSession } from './session.mjs?v=4abcd6f078';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=c46d74d60c';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=fe5fe63391';
-export { compilePattern, matchTokens } from './matcher.mjs?v=443330729c';
-export { singularLemma, pluralize } from './lemma.mjs?v=3f5920ed63';
+export { compilePattern, matchTokens } from './matcher.mjs?v=64e7a46a5c';
+export { singularLemma, pluralize } from './lemma.mjs?v=20d9ef9ad8';
 
 const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */
@@ -592,7 +593,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     if (!ana) return false;
     const last = txt.split(/\s*,\s*|\s+and\s+/i).pop();
     const ts = tokenize(last).filter((t) => t.kind === 'word' || t.kind === 'number');
-    return ts.length >= 2 && !!oneAnaphora(ts, ts.length > 1 ? [{ kind: 'word', lower: 'x' }, { kind: 'word', lower: 'y' }] : [], ana.opts);
+    return ts.length >= 2 && !!en.oneAnaphora(ts, ts.length > 1 ? [{ kind: 'word', lower: 'x' }, { kind: 'word', lower: 'y' }] : [], ana.opts);
   };
 
   /** A parsed segment whose free-text slot swallowed a separator, a correction marker or a repetition. */
@@ -644,7 +645,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const w = selfCorrect(tokens, { whole: true });
       return w ? tryClauses([{ tokens: w.tokens.filter((t) => t.kind !== 'punct'), span: w.region, info: { kind: 'self-correction', source: w.region, dropped: w.dropped, copied: [] } }], null, bar) : null;
     }
-    for (const cand of sharedArgument(toks)) {
+    for (const cand of en.sharedArgument(toks)) {
       const clauses = cand.clauses.map((c, i) => ({ tokens: c.tokens, span: c.own, guard: true, info: { kind: 'shared-argument', source: src, copied: c.copied, ...(sc ? { dropped: sc.dropped } : {}), index: i, of: cand.clauses.length } }));
       const segs = tryClauses(clauses, null, bar);
       if (segs) return segs;
@@ -689,7 +690,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         let ai = i - 1;
         while (ai > 0 && ana.isElliptic(clauses[ai])) { budget.tick('index.expandClauses'); ai--; }
         if (!ana.isElliptic(clauses[ai]) && !parts[ai].unparsed && !isWeak(parts[ai])) {
-          const res = oneAnaphora(ct, clauses[ai], ana.opts);
+          const res = en.oneAnaphora(ct, clauses[ai], ana.opts);
           if (res) {
             const sp = [ct[0].start, ct[ct.length - 1].end];
             for (const cand of res.candidates) {
@@ -714,7 +715,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       }
       const anchorIdx = parts.findIndex((p) => !p.unparsed && !isWeak(p));
       if ((part.unparsed || stray) && anchorIdx >= 0 && anchorIdx < i) {
-        for (const pre of ellipsisPrefixes(clauses[anchorIdx])) {
+        for (const pre of en.ellipsisPrefixes(clauses[anchorIdx])) {
           const sp = [ct[0].start, ct[ct.length - 1].end];
           const segs = tryClauses([{ tokens: [...pre, ...ct.filter((t) => t.kind !== 'punct')], span: sp, guard: true, info: { kind: 'verb-ellipsis', source: sp, copied: [[pre[0].start, pre[pre.length - 1].end]] } }], parts[anchorIdx].match.worldId, bar);
           if (segs) { out.push(...segs); changed = true; return; }
@@ -771,7 +772,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       if (parts.length === 0) { seg = read(here, []); if (!seg) return fail(); }
       else {
         const snap = snapHere;
-        const variants = [{ ts: here, copied: [], own: true }, ...[...ellipsisPrefixes(parts[0].toks)].map((pre) => ({ ts: [...pre, ...here], copied: [[pre[0].start, pre[pre.length - 1].end]], own: false }))];
+        const variants = [{ ts: here, copied: [], own: true }, ...[...en.ellipsisPrefixes(parts[0].toks)].map((pre) => ({ ts: [...pre, ...here], copied: [[pre[0].start, pre[pre.length - 1].end]], own: false }))];
         for (const v of variants) {
           const r = read(v.ts, v.copied);
           if (!r) { form.restore(snap); continue; }

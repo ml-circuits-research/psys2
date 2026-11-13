@@ -3,9 +3,10 @@
  *
  * Both live inside the discussion record (`d.focus`, `d.entities`), so switching discussion restores that discussion's focus.
  */
+import { en } from '../lang/en.mjs?v=445ab3fd8f';
 const plain = (t) => String(t ?? '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
-const PRONOUNS = new Set(['it', 'this', 'that', 'this one', 'that one', 'them', 'those', 'these']);
-const ORDINALS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1 };
+const PRONOUNS = new Set([...en.words('pron', 'astra'), ...en.words('anaphor', 'astra')]);
+const ORDINALS = en.ordinals('acts');
 const STOP = new Set(['the', 'a', 'an', 'my', 'our', 'one', 'ones', 'of', 'to']);
 
 export class Focus {

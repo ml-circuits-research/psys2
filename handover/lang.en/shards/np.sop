@@ -1,0 +1,75 @@
+# w.lang.en/shards/np: the grammar of noun phrases, coordination and anaphora as rules over the categories below (a unification chart grammar: `std.grammar` reads these wires, see std-grammar.md).
+# A rule: lhs (the category built), rhs in order (a suffix ? * + says optional / any number / one or more), head (which rhs the phrase is about), agree (features that must match), emit (what the reading carries).
+# Each rule says in `from` which PSys2 code does today what the rule says. `example` is a sentence the rule reads. Rules with `status=hole` are English the system does not read yet (listed so that the gap is visible).
+# sources: PSys2 worlds/acts/acts.mjs (splitThings, resolve, resolveOne), src/formalizer/rules/expand.mjs (sharedArgument, oneAnaphora, ellipsisPrefixes), src/dialog/discourse.mjs (pronoun, ellipsis), src/dialog/dialogue.mjs
+# license: CC0-1.0
+
+# ---- categories ----
+@lang.en.cat.S lang.en.cat name=S doc="a clause: a request, a question or a statement"
+@lang.en.cat.NP lang.en.cat name=NP doc="a noun phrase: names one or many things, or points at them"
+@lang.en.cat.N lang.en.cat name=N doc="a noun (open class: k.words, a world's kinds); a tail of 1 or 2 nouns is one head (chess board)"
+@lang.en.cat.MOD lang.en.cat name=MOD doc="a modifier before the noun: colour, size, shape, quantity word; its class is the lexicon that holds it"
+@lang.en.cat.DET lang.en.cat name=DET doc="a determiner or quantifier (shards/determiners.sop)"
+@lang.en.cat.NUM lang.en.cat name=NUM doc="a number: digits or a number word (k.values.number)"
+@lang.en.cat.ORD lang.en.cat name=ORD doc="an ordinal: first ... tenth, last (shards/numbers.sop)"
+@lang.en.cat.PRON lang.en.cat name=PRON doc="a pronoun (shards/pronouns.sop)"
+@lang.en.cat.PREP lang.en.cat name=PREP doc="a preposition, a relation (shards/prepositions.sop)"
+@lang.en.cat.PP lang.en.cat name=PP doc="a prepositional phrase: PREP NP"
+@lang.en.cat.CONJ lang.en.cat name=CONJ doc="a coordinator: and, & or a comma in a list"
+@lang.en.cat.NAME lang.en.cat name=NAME doc="a proper name (agents, named things: guest Ann)"
+@lang.en.cat.VP lang.en.cat name=VP doc="a verb and its arguments; the verb is k.actions"
+
+# ---- noun phrases ----
+@lang.en.rule.np.det-n lang.en.rule lhs=NP rhs=DET? rhs=MOD* rhs=N+ head=N agree=number emit="thing" from="acts resolveOne; every world's {thing:words}" example="the big red house"
+@lang.en.rule.np.count-n lang.en.rule lhs=NP rhs=NUM rhs=MOD* rhs=N head=N agree=number emit="amount,thing" from="acts FORMS make.n" example="3 red tables"
+@lang.en.rule.np.numbered lang.en.rule lhs=NP rhs=N rhs=NUM head=N emit="thing,n" from="acts resolveOne (numbered kinds)" example="table 2"
+@lang.en.rule.np.named lang.en.rule lhs=NP rhs=N rhs=NAME head=N emit="thing,name" from="acts resolveOne (named kinds)" example="guest Ann"
+@lang.en.rule.np.ordinal lang.en.rule lhs=NP rhs=DET? rhs=ORD rhs=N head=N emit="thing,ord" from="acts resolveOne; ORDINAL_RE of discourse" example="the third table; the last circle"
+@lang.en.rule.np.all lang.en.rule lhs=NP rhs="[all|every|each|both]" rhs=DET? rhs=N head=N emit="thing,set=all" from="acts resolveOne (all)" example="all the tables; each guest; both eyes"
+@lang.en.rule.np.everything lang.en.rule lhs=NP rhs=everything emit="set=all" from="acts resolveOne" example="everything"
+@lang.en.rule.np.possessive-of lang.en.rule lhs=NP rhs=NP rhs=of rhs=NP head=NP.1 emit="part-of" from="act hooks (parts as kinds), Talk partsof frames" example="the legs of the crocodile"
+@lang.en.rule.np.possessive-s lang.en.rule lhs=NP rhs=NP rhs="'s" rhs=N head=N emit="part-of" from="formalizer index.mjs splits 's into its own token" example="the house's door"
+@lang.en.rule.np.pp lang.en.rule lhs=NP rhs=NP rhs=PP head=NP emit="thing,rel,place" from="acts FORMS ({thing} REL {place})" example="the star next to the house"
+@lang.en.rule.pp lang.en.rule lhs=PP rhs=PREP rhs=NP head=PREP emit="rel,place" from="acts REL_WORDS; prepositions.sop" example="next to the house"
+@lang.en.rule.np.pron lang.en.rule lhs=NP rhs=PRON emit="anaphor" from="acts resolveOne (focus), dialogue PRONOUNS" example="it; them"
+@lang.en.rule.np.dem-one lang.en.rule lhs=NP rhs="[this|that|these|those]" rhs=one|ones emit="anaphor" from="discourse pronoun (that one)" example="that one"
+@lang.en.rule.np.quant-of lang.en.rule lhs=NP rhs="[some|any|many|a few]" rhs=of? rhs=NP emit="partial-set" status=hole example="some of the tables"
+@lang.en.rule.np.relative lang.en.rule lhs=NP rhs=NP rhs="[that|which|who]" rhs=VP status=hole example="the table that is red"
+
+# ---- coordination ----
+@lang.en.rule.coord.np lang.en.rule lhs=NP rhs=NP rhs="[CONJ NP]+" head=NP.1 agree=none emit="set" from="acts splitThings / resolve" example="a sun, a cloud and a man"
+@lang.en.rule.coord.part-start lang.en.rule lhs=NP-part doc="every part after the first starts with a determiner or a number (a, an, the, another, some, my, our, your, one..ten, digits); a part that does not ('red and blue house') joins back into the part before it: the 'and' joins modifiers, not nouns" from="acts splitThings NUMBER_START"
+@lang.en.rule.coord.head-bound lang.en.rule lhs=NP-head doc="the head of a coordinated role stops at its first preposition (shards/prepositions.sop in=np.boundary): 'a sun, a cloud and a man next to the house' shares 'next to the house' among the parts" from="acts splitThings PREP_CUT"
+@lang.en.rule.coord.number-distribute lang.en.rule lhs=NP rhs=N rhs=NUM rhs="[CONJ NUM]+" emit="set,thing=N" from="acts resolve ('tables 1 and 2': a bare number or ordinal takes the kind of the part before it)" example="tables 1 and 2"
+@lang.en.rule.coord.shared-suffix lang.en.rule lhs=S rhs=VP-prefix rhs=NP rhs="[CONJ NP]+" rhs=suffix emit="one clause per head: prefix head suffix" from="expand.mjs sharedArgument" example="make your eyes and body blue"
+@lang.en.rule.coord.clause lang.en.rule lhs=S rhs=S rhs="[joiner S]+" emit="steps" from="index.mjs splitClauses, cardCuts (shards/clauses.sop joiners)" example="draw a house, then make it red"
+@lang.en.rule.coord.adj lang.en.rule lhs=MOD rhs=MOD rhs=CONJ rhs=MOD emit="modifiers" from="matcher: the pattern lexicon slots" example="red and blue house"
+@lang.en.rule.coord.or lang.en.rule lhs=NP rhs=NP rhs=or rhs=NP emit="choice" status=hole example="a red or a blue house"
+@lang.en.rule.coord.except lang.en.rule lhs=NP rhs=NP rhs="[except|but|apart_from]" rhs=NP emit="set-minus" from="phrase lang.except (shards/phrases.sop); kids.shop" example="everything except the tree"
+
+# ---- ellipsis ----
+@lang.en.rule.ellipsis.one lang.en.rule lhs=S rhs=CONJ rhs=DET? rhs=MOD+ rhs="[one|ones]" emit="the anchor clause with its noun and the new modifiers" from="expand.mjs oneAnaphora" example="a green house and a yellow one"
+@lang.en.rule.ellipsis.one-count lang.en.rule lhs=S rhs=CONJ rhs=NUM rhs=MOD* rhs=ones emit="the anchor clause with the count and the new modifiers" from="expand.mjs oneAnaphora" example="and two big ones"
+@lang.en.rule.ellipsis.one-bare lang.en.rule lhs=S rhs=CONJ rhs=one rhs=MOD+ emit="anchor with modifiers" from="expand.mjs oneAnaphora" example="and one yellow"
+@lang.en.rule.ellipsis.one-class lang.en.rule lhs=S doc="anchor modifiers of the same class as a new one are replaced, of another class are kept: 'a big green house and a yellow one' is a big yellow house; the class of a word is the smallest lexicon that holds it" from="expand.mjs oneAnaphora sameClass"
+@lang.en.rule.ellipsis.verb lang.en.rule lhs=S rhs=CONJ rhs=NP rhs=PP? emit="the first 1-2 words of the anchor clause, then this clause" from="expand.mjs ellipsisPrefixes" example="move it left and the tree right"
+@lang.en.rule.ellipsis.fragment lang.en.rule lhs=S rhs=lead? rhs=NP|PP|MOD rhs=trail? emit="the previous frame with one slot replaced" from="discourse.mjs splitFragment, ellipsis (shards/ellipsis.sop)" example="and from Berlin?; the same for the tree; the eyes too"
+@lang.en.rule.ellipsis.repeat lang.en.rule lhs=S rhs=repeat emit="the previous request again" from="discourse.mjs REPEATS" example="again"
+@lang.en.rule.ellipsis.number lang.en.rule lhs=S rhs=NUM emit="the previous request with the number replaced" from="discourse.mjs _candidates (slot class number)" example="and 5?"
+@lang.en.rule.ellipsis.answer lang.en.rule lhs=S rhs=NP|MOD|NUM emit="the missing role of the pending question" from="discourse.mjs fill" example="(asked: which colour?) blue"
+
+# ---- anaphora and reference ----
+@lang.en.rule.anaphora.focus lang.en.rule lhs=NP rhs=PRON doc="a pronoun with no antecedent in the sentence means the dialogue focus (the thing last talked about, in any world); the reply says which it took ('I took it to mean the red star')" from="acts focusOf / resolveOne; session.dialogue"
+@lang.en.rule.anaphora.slot lang.en.rule lhs=S rhs=PRON doc="an unread sentence with a pronoun: the pronoun is replaced by the noun phrase of a typed slot of a recent frame, newest first (with its determiner, 'a duck' for 'it'), and the sentence must then be read completely; a referent the sentence already says is no referent" from="discourse.mjs pronoun"
+@lang.en.rule.anaphora.back-to lang.en.rule lhs=S rhs="back to" rhs=NP rhs="," rhs=S emit="the pronoun of S means NP" from="discourse.mjs _backTo" example="back to the spider, how many legs does it have?"
+@lang.en.rule.anaphora.agent lang.en.rule lhs=NP rhs=PRON doc="he / she / they / him / her / them mean the agent last mentioned with that gender (any for they); I / me / my the user; you / your the assistant" from="formalizer session.mjs resolvePronoun"
+@lang.en.rule.anaphora.deictic lang.en.rule lhs=NP rhs="[here|there|this|that]" doc="here, there, this, that point at the scene or the previous answer ('what day comes after that': that is the value just given)" from="discourse.mjs pronoun; acts PRONOUN there"
+@lang.en.rule.anaphora.other lang.en.rule lhs=NP rhs="[the other|the others|another one]" status=hole example="the other table"
+
+# ---- parameters read by the first slice of PSys2's lang.en module ----
+@lang.en.coord.sep.comma lang.en.coord.sep text="," in=things in=resolve
+@lang.en.coord.sep.and lang.en.coord.sep text=and after-comma=things in=things in=resolve
+@lang.en.coord.sep.amp lang.en.coord.sep text="&" in=things
+@lang.en.coord.param.min-words lang.en.coord.param name=min-words value=3 doc="a role text of fewer than 3 words is not tried as a coordination of noun phrases"
+@lang.en.coord.param.numeral-part lang.en.coord.param name=numeral-part-start value="[0-9]+" doc="digits start a part like a determiner does"
+@lang.en.coord.param.bare-part-pattern lang.en.coord.param name=bare-ordinal-part value="^([0-9]+|first|second|third|fourth|last)$" doc="a part that is only a number or one of these ordinals takes the kind of the part before it"

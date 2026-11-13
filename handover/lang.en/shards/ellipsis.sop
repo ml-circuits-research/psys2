@@ -1,0 +1,80 @@
+# w.lang.en/shards/ellipsis: how an English fragment points back at an earlier sentence. Markers that open or close a fragment ("and what about", "the same for", "too"), whole-sentence repeats ("again"),
+# and the first words that make a message a new sentence instead of a fragment. `order` is the order they are tried (longest first where one marker contains another).
+# sources: PSys2 src/dialog/discourse.mjs (LEADS, TRAILS, REPEATS, SENTENCE_STARTERS), src/formalizer/rules/expand.mjs (verb ellipsis, repetition)
+# license: CC0-1.0
+
+# fragment lead markers: a fragment that starts with one of these continues the previous frame ("And from Berlin?", "the same for the tree")
+@lang.en.ellipsis.lead.1 lang.en.ellipsis.lead order=1 text="and what about"
+@lang.en.ellipsis.lead.2 lang.en.ellipsis.lead order=2 text="and how about"
+@lang.en.ellipsis.lead.3 lang.en.ellipsis.lead order=3 text="what about"
+@lang.en.ellipsis.lead.4 lang.en.ellipsis.lead order=4 text="how about"
+@lang.en.ellipsis.lead.5 lang.en.ellipsis.lead order=5 text="what of"
+@lang.en.ellipsis.lead.6 lang.en.ellipsis.lead order=6 text="do the same for"
+@lang.en.ellipsis.lead.7 lang.en.ellipsis.lead order=7 text="the same goes for"
+@lang.en.ellipsis.lead.8 lang.en.ellipsis.lead order=8 text="the same for"
+@lang.en.ellipsis.lead.9 lang.en.ellipsis.lead order=9 text="the same with"
+@lang.en.ellipsis.lead.10 lang.en.ellipsis.lead order=10 text="same for"
+@lang.en.ellipsis.lead.11 lang.en.ellipsis.lead order=11 text="same with"
+@lang.en.ellipsis.lead.12 lang.en.ellipsis.lead order=12 text="do it for"
+@lang.en.ellipsis.lead.13 lang.en.ellipsis.lead order=13 text="and then"
+@lang.en.ellipsis.lead.14 lang.en.ellipsis.lead order=14 text="and also"
+@lang.en.ellipsis.lead.15 lang.en.ellipsis.lead order=15 text="and now"
+@lang.en.ellipsis.lead.16 lang.en.ellipsis.lead order=16 text=and
+@lang.en.ellipsis.lead.17 lang.en.ellipsis.lead order=17 text=now
+@lang.en.ellipsis.lead.18 lang.en.ellipsis.lead order=18 text=also
+@lang.en.ellipsis.lead.19 lang.en.ellipsis.lead order=19 text=but
+
+# fragment trail markers: "the eyes too", "a cat instead"
+@lang.en.ellipsis.trail.1 lang.en.ellipsis.trail order=1 text="as well"
+@lang.en.ellipsis.trail.2 lang.en.ellipsis.trail order=2 text=too
+@lang.en.ellipsis.trail.3 lang.en.ellipsis.trail order=3 text=also
+@lang.en.ellipsis.trail.4 lang.en.ellipsis.trail order=4 text=instead
+
+# a whole-sentence repeat: the previous request again
+@lang.en.ellipsis.repeat.1 lang.en.ellipsis.repeat text=again
+@lang.en.ellipsis.repeat.2 lang.en.ellipsis.repeat text="once more"
+@lang.en.ellipsis.repeat.3 lang.en.ellipsis.repeat text="one more time"
+@lang.en.ellipsis.repeat.4 lang.en.ellipsis.repeat text="do it again"
+@lang.en.ellipsis.repeat.5 lang.en.ellipsis.repeat text="do that again"
+@lang.en.ellipsis.repeat.6 lang.en.ellipsis.repeat text="same again"
+@lang.en.ellipsis.repeat.7 lang.en.ellipsis.repeat text="the same"
+@lang.en.ellipsis.repeat.8 lang.en.ellipsis.repeat text="the same thing"
+@lang.en.ellipsis.repeat.9 lang.en.ellipsis.repeat text="same thing"
+@lang.en.ellipsis.repeat.10 lang.en.ellipsis.repeat text="and again"
+
+# a first word that opens a full question or sentence: the message is no fragment
+@lang.en.ellipsis.starter.who lang.en.ellipsis.starter text=who
+@lang.en.ellipsis.starter.whom lang.en.ellipsis.starter text=whom
+@lang.en.ellipsis.starter.whose lang.en.ellipsis.starter text=whose
+@lang.en.ellipsis.starter.what lang.en.ellipsis.starter text=what
+@lang.en.ellipsis.starter.where lang.en.ellipsis.starter text=where
+@lang.en.ellipsis.starter.when lang.en.ellipsis.starter text=when
+@lang.en.ellipsis.starter.why lang.en.ellipsis.starter text=why
+@lang.en.ellipsis.starter.how lang.en.ellipsis.starter text=how
+@lang.en.ellipsis.starter.which lang.en.ellipsis.starter text=which
+@lang.en.ellipsis.starter.is lang.en.ellipsis.starter text=is
+@lang.en.ellipsis.starter.are lang.en.ellipsis.starter text=are
+@lang.en.ellipsis.starter.was lang.en.ellipsis.starter text=was
+@lang.en.ellipsis.starter.were lang.en.ellipsis.starter text=were
+@lang.en.ellipsis.starter.does lang.en.ellipsis.starter text=does
+@lang.en.ellipsis.starter.do lang.en.ellipsis.starter text=do
+@lang.en.ellipsis.starter.did lang.en.ellipsis.starter text=did
+@lang.en.ellipsis.starter.can lang.en.ellipsis.starter text=can
+@lang.en.ellipsis.starter.could lang.en.ellipsis.starter text=could
+@lang.en.ellipsis.starter.will lang.en.ellipsis.starter text=will
+@lang.en.ellipsis.starter.would lang.en.ellipsis.starter text=would
+@lang.en.ellipsis.starter.should lang.en.ellipsis.starter text=should
+@lang.en.ellipsis.starter.has lang.en.ellipsis.starter text=has
+@lang.en.ellipsis.starter.have lang.en.ellipsis.starter text=have
+@lang.en.ellipsis.starter.i lang.en.ellipsis.starter text=i
+@lang.en.ellipsis.starter.you lang.en.ellipsis.starter text=you
+@lang.en.ellipsis.starter.we lang.en.ellipsis.starter text=we
+@lang.en.ellipsis.starter.please lang.en.ellipsis.starter text=please
+
+# limits of verb ellipsis, one-anaphora and shared arguments (expand.mjs): how much of the anchor clause may be copied
+@lang.en.ellipsis.param.verb-prefix lang.en.ellipsis.param name=verb-prefix-max value=2 doc="a verb ellipsis copies 1 or 2 words of the anchor clause (draw, put on); never a number, and a 2-word prefix never ends in a determiner"
+@lang.en.ellipsis.param.one-mods lang.en.ellipsis.param name=one-modifiers-max value=3 doc="'and two big green ones': at most 3 modifiers before one/ones"
+@lang.en.ellipsis.param.one-length lang.en.ellipsis.param name=one-clause-words value=2..5 doc="an elliptic noun phrase has 2 to 5 words; its anchor at least 2"
+@lang.en.ellipsis.param.anchor-tail lang.en.ellipsis.param name=anchor-noun-tail-max value=2 doc="the noun tail of the anchor noun phrase is 1 or 2 words (chess board)"
+@lang.en.ellipsis.param.shared-heads lang.en.ellipsis.param name=shared-argument-parts value=2..5 doc="a shared trailing argument or leading verb phrase: 2 to 5 coordinated heads of at most 3 words, suffix 1 or 2 words"
+@lang.en.ellipsis.param.repetition lang.en.ellipsis.param name=repetition value=2..10 doc="a clause ending in 'twice' or 'N times' is that clause N times (expand.mjs repetition)"

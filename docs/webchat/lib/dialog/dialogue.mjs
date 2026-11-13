@@ -24,9 +24,10 @@
  * through `ctx.sessionFacts()` and the operation things.show of session.things (spec 23); this module only offers the facts.
  */
 import { budget } from './budget.mjs?v=123c3e1329';
-import { GRAMMAR } from './continuation.mjs?v=c651104054';
+import { en } from '../lang/en.mjs?v=445ab3fd8f';
+import { GRAMMAR } from './continuation.mjs?v=7b9555f091';
 import { touched } from './followup.mjs?v=1e203c3efd';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=050f8e63e9';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=d39cc67af1';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
 
 const LOG_LIMIT = 60;
@@ -35,9 +36,9 @@ const tokens = (t) => String(t ?? '').toLowerCase().replace(/['’]/g, '').match
 const strip = (t) => String(t ?? '').trim().replace(/[\s.!?]+$/, '');
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const quoted = (t) => `"${strip(t)}"`;
-const DETERMINERS = new Set(['a', 'an', 'the', 'some', 'another', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'my', 'your', 'this', 'that', 'these', 'those', 'many', 'few', 'several']);
-const PREPOSITIONS = new Set(['on', 'in', 'at', 'to', 'into', 'onto', 'under', 'over', 'above', 'below', 'behind', 'near', 'next', 'by', 'beside', 'between', 'inside', 'outside', 'from', 'across', 'around', 'along', 'toward', 'towards']);
-const PRONOUNS = new Set(['it', 'them', 'they', 'this', 'that', 'these', 'those', 'him', 'her']);
+const DETERMINERS = en.words('det', 'dialogue');
+const PREPOSITIONS = en.words('prep', 'dialogue');
+const PRONOUNS = en.words('pron', 'dialogue');
 
 /** A phrase group as arrays of tokens, longest first. */
 const alts = (lang, id) => [...new Set((lang.phrase?.(id) ?? []))].map((a) => a.split(' ').filter(Boolean)).filter((a) => a.length).sort((a, b) => b.length - a.length);
