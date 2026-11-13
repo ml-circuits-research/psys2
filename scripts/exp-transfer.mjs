@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
-process.env.PSYS2_PILOT_ROOTS = path.join(REPO, 'worlds-pilot');   // the pilot avatar shadows worlds/ui.avatar until the executor switch lands
+process.env.PSYS2_PILOT_ROOTS = process.env.PSYS2_T1_ROOTS ?? path.join(REPO, 'worlds-pilot');   // with --draw the drawing board (worlds-pilot/art.draw) is a fourth view   // the pilot avatar shadows worlds/ui.avatar until the executor switch lands
 const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
 const { createEngine } = await import('../src/dialog/index.mjs');
 const { createFacts } = await import('../src/knowledge/facts.mjs');
@@ -21,10 +21,11 @@ const only = arg('--only', null), verbose = process.argv.includes('--verbose');
 const catalog = () => createFacts({ source: { text: async (p) => { try { return readFileSync(path.join(CAT, p), 'utf8'); } catch { return null; } } } });
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 engine.setKnowledge(catalog());
-const TAB = { avatar: 'robot', seating: 'seating', talk: 'talk' };
-const WORLD = { avatar: 'ui.avatar', seating: 'plan.seating', talk: 'talk' };
-const SEND = { avatar: (t, to) => `send the ${t} to the ${to}`, seating: (t, to) => `send ${t} to the ${to}`, talk: (t, to) => `send it to the ${to}` };
-const TO = { avatar: 'avatar', seating: 'seating plan', talk: 'talk' };
+const WITH_DRAW = process.argv.includes('--draw');
+const TAB = { avatar: 'robot', seating: 'seating', talk: 'talk', ...(WITH_DRAW ? { draw: 'draw' } : {}) };
+const WORLD = { avatar: 'ui.avatar', seating: 'plan.seating', talk: 'talk', draw: 'art.draw' };
+const SEND = { avatar: (t, to) => `send the ${t} to the ${to}`, seating: (t, to) => `send ${t} to the ${to}`, talk: (t, to) => `send it to the ${to}`, draw: (t, to) => `send the ${t} to the ${to}` };
+const TO = { avatar: 'avatar', seating: 'seating plan', talk: 'talk', draw: 'drawing' };
 
 async function session() {
   const s = engine.createSession({ language: 'en' });
@@ -72,6 +73,13 @@ const THINGS = [
   { view: 'talk', make: ['What does a hat look like?'], ref: 'hat', expect: { avatar: 'ok', seating: 'na' }, keep: { avatar: ['hat'] } },
   { view: 'talk', make: ['What does a table look like?'], ref: 'table', expect: { avatar: 'na', seating: 'ok' }, keep: { seating: ['table'] } },
 ];
+// the drawing board as a fourth view (--draw): ten things made in it, and what each older thing should do when sent to it (written by hand from common sense: what can be drawn)
+const DRAW_THINGS = [
+  ['draw a red house', 'house', 'red'], ['draw a tree', 'tree', 'tree'], ['draw a big yellow sun', 'sun', 'yellow'], ['draw a cat', 'cat', 'cat'], ['draw a blue car', 'car', 'blue'],
+  ['draw a boat', 'boat', 'boat'], ['draw a green balloon', 'balloon', 'green'], ['draw a star', 'star', 'star'], ['draw a purple flower', 'flower', 'purple'], ['draw a dog', 'dog', 'dog'],
+].map(([m, ref, keep]) => ({ view: 'draw', make: [m], ref, expect: { avatar: 'na', seating: 'na', talk: 'ok' }, keep: { talk: [keep] } }));
+const DRAWABLE = new Set(['hat', 'glasses', 'table', 'bicycle', 'spider', 'house', 'moon']);   // sent to the drawing: a kind of thing it can show
+if (WITH_DRAW) { THINGS.push(...DRAW_THINGS); for (const th of THINGS) if (th.view !== 'draw') { th.expect.draw = DRAWABLE.has(th.ref) ? 'ok' : 'na'; th.keep = { ...(th.keep ?? {}), draw: [] }; } }
 const THING_WARM = ['bicycle', 'spider', 'house', 'comet', 'moon', 'paris', 'france', 'japan', 'hat', 'table', 'glasses', 'beard'];
 
 /** Reads what a view holds after a transfer: the text of its state, to look for the words that must survive. */

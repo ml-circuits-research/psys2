@@ -1,0 +1,116 @@
+@gen.art.draw.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@op.art.draw.add core.operation
+    impl=add
+    semantics=action
+    action=draw.add
+    doc="An operation of this world that is not an act (own.mjs: add)."
+
+@op.art.draw.drawUndo core.operation
+    impl=drawUndo
+    semantics=action
+    action=draw.undo
+    doc="An operation of this world that is not an act (own.mjs: drawUndo)."
+
+@op.art.draw.drawRedo core.operation
+    impl=drawRedo
+    semantics=action
+    action=draw.redo
+    doc="An operation of this world that is not an act (own.mjs: drawRedo)."
+
+@op.art.draw.newDrawing core.operation
+    impl=newDrawing
+    semantics=action
+    action=draw.new
+    doc="An operation of this world that is not an act (own.mjs: newDrawing)."
+
+@op.art.draw.openTab core.operation
+    impl=openTab
+    semantics=action
+    action=draw.open
+    doc="An operation of this world that is not an act (own.mjs: openTab)."
+
+@op.art.draw.view core.operation
+    impl=view
+    semantics=action
+    action=art.draw.view
+    doc="The declaration of this world as a view of the session things (spec 23): its aspects and words."
+
+@op.art.draw.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=art.draw.adopt
+    doc="Takes a thing of the session store into this world: the act make, then change for each attribute (spec 23)."
+
+@op.art.draw.make core.operation
+    impl=make
+    semantics=action
+    action=art.draw.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.remove core.operation
+    impl=remove
+    semantics=action
+    action=art.draw.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.change core.operation
+    impl=change
+    semantics=action
+    action=art.draw.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.place core.operation
+    impl=place
+    semantics=action
+    action=art.draw.place
+    doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.group core.operation
+    impl=group
+    semantics=action
+    action=art.draw.group
+    doc="The act 'group' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.send core.operation
+    impl=send
+    semantics=action
+    action=art.draw.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.pick core.operation
+    impl=pick
+    semantics=action
+    action=art.draw.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.copy core.operation
+    impl=copy
+    semantics=action
+    action=art.draw.copy
+    doc="The act 'copy' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.ask core.operation
+    impl=ask
+    semantics=action
+    action=art.draw.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.undo core.operation
+    impl=undo
+    semantics=action
+    action=art.draw.undo
+    doc="The act 'undo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.redo core.operation
+    impl=redo
+    semantics=action
+    action=art.draw.redo
+    doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.art.draw.save core.operation
+    impl=save
+    semantics=action
+    action=art.draw.save
+    doc="The act 'save' (spec 21), applied by the generic executor to this world's schema."

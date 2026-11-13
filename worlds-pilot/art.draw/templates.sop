@@ -1,0 +1,50 @@
+@gen.art.draw.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@tpl.art.draw.make core.template
+    for=action.art.draw.make
+    text="{note}"
+
+@tpl.art.draw.remove core.template
+    for=action.art.draw.remove
+    text="{note}"
+
+@tpl.art.draw.change core.template
+    for=action.art.draw.change
+    text="{note}"
+
+@tpl.art.draw.place core.template
+    for=action.art.draw.place
+    text="{note}"
+
+@tpl.art.draw.group core.template
+    for=action.art.draw.group
+    text="{note}"
+
+@tpl.art.draw.send core.template
+    for=action.art.draw.send
+    text="{note}"
+
+@tpl.art.draw.pick core.template
+    for=action.art.draw.pick
+    text="{note}"
+
+@tpl.art.draw.copy core.template
+    for=action.art.draw.copy
+    text="{note}"
+
+@tpl.art.draw.ask core.template
+    for=action.art.draw.ask
+    text="{note}"
+
+@tpl.art.draw.undo core.template
+    for=action.art.draw.undo
+    text="{note}"
+
+@tpl.art.draw.redo core.template
+    for=action.art.draw.redo
+    text="{note}"
+
+@tpl.art.draw.save core.template
+    for=action.art.draw.save
+    text="{note}"
