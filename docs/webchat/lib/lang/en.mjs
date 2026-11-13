@@ -16,10 +16,14 @@
  *   bareDistributes(part)    a part that is only a number or an ordinal takes the kind of the part before it ("tables 1 and 2")
  *   sharedArgument(tokens)   shared leading verb phrase / trailing argument of a coordination ("make your eyes and body blue")
  *   ellipsisPrefixes(tokens) the 1-2 first words of an anchor clause that a verb ellipsis copies
+ *   cutWords(also) cardJoiners() sequenceWords(also)   the clause joiners (the splitter's cut words, the card-driven cutter's, "then"/"also" that may follow "and"), frameLeads() leads that keep their comma
+ *   corrections() leadOnly() answers() answerRegex() answerWords()   self-correction markers [[words], needsComma], words of a lead-only clause, bare answers
+ *   questionWords(view)      question-start (first word of a question), wh-lead (fuzzy wh), question-tail (a question after a connective)
+ *   frames(set?)             the argument frames of the acts [{ id, act, mode, match, args, priority, if, lit, tabOnly, tabPriority, example }] in the order of the facts (sets: acts, acts.more, acts.data)
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
 import { parse } from '../soplang/index.mjs?v=c57881f705';
-import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=476f0e950b';
+import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=ef4071c992';
 
 const all = (w, k) => w.attrs[k] ?? [];
 const one = (w, k) => all(w, k)[0];
@@ -103,6 +107,33 @@ export function createLangEn(source = LANG_EN_FACTS) {
     for (const piece of raw) { tick('acts.split'); if (parts.length && !startRe().test(piece.split(/\s+/)[0])) parts[parts.length - 1] += ` and ${piece}`; else parts.push(piece); }
     return parts.length < 2 ? [] : parts.map((x) => ({ head: x, tail }));
   }
+
+  // ---- clauses (handover/lang.en/shards/clauses.sop) ----
+  const joiners = () => of('joiner');
+  /** The words the clause splitter cuts at; `also` off (the ablation switch) drops "also". */
+  const cutWords = (also = true) => cached(`cw:${also}`, () => new Set(joiners().filter((w) => one(w, 'cut') === 'yes' && (also || one(w, 'kind') !== 'addition')).map((w) => one(w, 'text'))));
+  /** The sequence words ("then", "also") that may follow "and" or a comma without a new cut. */
+  const sequenceWords = (also = true) => cached(`sw:${also}`, () => joiners().filter((w) => ['sequence', 'addition'].includes(one(w, 'kind')) && (also || one(w, 'kind') !== 'addition')).map((w) => one(w, 'text')));
+  const cardJoiners = () => cached('cj', () => new Set(joiners().filter((w) => one(w, 'card-cut') === 'yes').map((w) => one(w, 'text'))));
+  const frameLeads = () => cached('fl', () => new Set(of('frame-lead').map((w) => one(w, 'text'))));
+  const corrections = () => cached('co', () => of('correction').map((w) => [one(w, 'text').split(' '), one(w, 'comma') === 'yes']));
+  const leadOnly = () => cached('lo', () => new Set(of('correction.lead').flatMap((w) => all(w, 'text'))));
+  const answers = () => cached('an', () => of('answer').flatMap((w) => all(w, 'text')));
+  const answerRegex = () => cached('ar', () => new RegExp(`^(${answers().join('|')})$`));
+  const answerWords = () => cached('aw', () => [...answers()].sort((a, b) => b.split(' ').length - a.split(' ').length));
+  const questionWords = (view) => cached(`q:${view}`, () => new Set([...words('wh', view), ...words('aux', view)]));
+
+  // ---- argument frames of the acts (handover/lang.en/shards/frames-acts.sop) ----
+  const frames = (set) => cached(`f:${set}`, () => of('frame').filter((w) => !set || one(w, 'set') === set).map((w) => {
+    const f = { id: w.id.slice(`lang.en.frame.${one(w, 'set')}.`.length), act: one(w, 'act'), match: one(w, 'pattern'), args: all(w, 'role'), priority: Number(one(w, 'priority')), example: one(w, 'example') };
+    if (one(w, 'mode')) f.mode = one(w, 'mode');
+    if (one(w, 'needs')) f.if = one(w, 'needs');
+    const lit = Object.keys(w.attrs).filter((k) => k.startsWith('lit.'));
+    if (lit.length) f.lit = Object.fromEntries(lit.map((k) => [k.slice(4), one(w, k)]));
+    if (one(w, 'tab-only')) f.tabOnly = one(w, 'tab-only') === 'yes';
+    if (one(w, 'tab-priority')) f.tabPriority = Number(one(w, 'tab-priority'));
+    return f;
+  }));
 
   const dets = (view) => words('det', view);
   const isSep = (t) => sepWords('resolve').includes(t.lower);
@@ -207,7 +238,7 @@ export function createLangEn(source = LANG_EN_FACTS) {
     return { mods, lead, bare, candidates: out };
   }
 
-  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, facts: () => norm };
+  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, cutWords, sequenceWords, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
 }
 
 /** The English of this build: the facts of handover/lang.en as shipped in en.facts.generated.mjs. */

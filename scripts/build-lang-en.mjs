@@ -12,7 +12,7 @@ import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-export const SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'np'];
+export const SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'np', 'clauses', 'frames-acts'];
 const strip = (t) => t.split('\n').filter((l) => !l.startsWith('#') && l.trim()).join('\n') + '\n';   // comments stay in handover; the module needs the wires
 
 export function render() {

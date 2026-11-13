@@ -63,3 +63,19 @@ test('a module can read another version of the same world: createLangEn takes te
   const wires = Object.values(LANG_EN_FACTS).flatMap((t) => parse(t).wires);
   assert.deepEqual([...createLangEn(wires).words('prep', 'dialogue')], [...en.words('prep', 'dialogue')]);
 });
+
+test('clauses: joiners, frame leads, corrections and question words are facts', () => {
+  assert.deepEqual([...en.cutWords(true)].sort(), [',', 'also', 'and', 'but', 'then']);
+  assert.ok(!en.cutWords(false).has('also') && en.cardJoiners().has(';') && !en.cutWords(true).has(';'));
+  assert.ok(en.frameLeads().has('from now on'));
+  assert.deepEqual(en.corrections()[0], [['no', 'wait'], false]);
+  assert.ok(en.questionWords('question-start').has('did') && !en.questionWords('question-start').has('whose') && en.questionWords('wh-lead').has('whose'));
+  assert.ok(en.answerRegex().test('i dont know') && en.answerWords()[0].split(' ').length >= 4);
+});
+
+test('frames: the argument frames of the acts are facts (238: acts 85, acts.more 91, acts.data 62), the schema worlds generate from them', () => {
+  assert.deepEqual([en.frames('acts').length, en.frames('acts.more').length, en.frames('acts.data').length], [85, 91, 62]);
+  const own = en.frames('acts').find((f) => f.id === 'read.own');
+  assert.deepEqual([own.tabOnly, own.tabPriority, own.args], [true, 30, ['rest']]);
+  assert.deepEqual(en.frames('acts.more').find((f) => f.id === 'ask.near').lit, { rel: 'near' });
+});

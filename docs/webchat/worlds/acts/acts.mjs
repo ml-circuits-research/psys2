@@ -21,13 +21,13 @@
 //   domain.<act>(ctx, req) -> { status, value | note } | undefined   the world's own effect for an act over its own state (the generic executor is used when it returns undefined)
 
 import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
-import { FORMS_MORE, FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=24d59d4971';
-import { FORMS_DATA, FLAGS_DATA } from './forms.data.mjs?v=da75ed791f';   // more forms (flags `valued`, `ordered`): named values said without their name
+import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=c6788150e0';
+import { FLAGS_DATA } from './forms.data.mjs?v=eb47be538d';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=4d49055b41';   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=ea700d2a2b';   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -119,96 +119,7 @@ const allowedActs = (schema, kind) => (kind && schema.kinds[kind]?.acts.length ?
 // ---- the English forms, written once --------------------------------------------------------------------------------------------------------------
 // Notation: L lead-in, D determiner, V.<act> verb group (phrase `acts.verb.<act>` of the module), REL {rel:lex.acts.rel}, ATTR / VALUE / MORE / LESS the world's generated lexicons.
 // `args` are the role arguments the emit carries; `mode` the act's mode. `if` limits a form to worlds that have what it needs. priority: the more specific, the higher.
-export const FORMS = [
-  { id: 'make', act: 'make', match: 'L V.make D {thing:words}', args: ['thing'], priority: 10, example: 'Add a table.' },
-  { id: 'make.place', act: 'make', match: 'L V.make D {thing:words} REL D {place:words}', args: ['thing', 'rel', 'place'], priority: 12, if: 'in', example: 'Add a guest at table 1.' },
-  { id: 'make.n', act: 'make', match: 'L V.make {amount:number} {thing:words}', args: ['amount', 'thing'], priority: 12, example: 'Add 3 tables.' },
-  { id: 'make.name', act: 'make', match: 'L V.make D {thing:words} [called|named] {value:words}', args: ['thing', 'value'], priority: 13, if: 'named', example: 'Add a guest called Ann.' },
-  { id: 'make.name.p', act: 'make', match: 'L V.place D {thing:words} [called|named] {value:rest}', args: ['thing', 'value'], priority: 14, if: 'named', example: 'Place a guest named Ann.' },
-  { id: 'make.name.place', act: 'make', match: 'L V.make D {thing:words} [called|named] {value:words} REL D {place:words}', args: ['thing', 'value', 'rel', 'place'], priority: 14, if: 'in', example: 'Add a guest called Ann at table 1.' },
-  { id: 'remove', act: 'remove', match: 'L V.remove D {thing:words}', args: ['thing'], priority: 10, example: 'Remove the guest Ann.' },
-  { id: 'remove.out', act: 'remove', match: 'L [kick|throw|take|send|get|put] D {thing:words} [out|away|off_the_list]', args: ['thing'], priority: 11, example: 'Kick the guest Ann out.' },
-  { id: 'remove.place', act: 'remove', match: 'L V.remove D {thing:words} [from|out_of|off] D {place:words}', args: ['thing', 'place'], priority: 12, if: 'in', example: 'Remove the guests from table 1.' },
-  { id: 'change.of', act: 'change', mode: 'set', match: 'L V.set D {attribute:ATTR} of D {thing:words} [to|be|as|into]? D {value:words}', args: ['attribute', 'thing', 'value'], priority: 14, if: 'attrs', example: 'Change the colour of table 2 to red.' },
-  { id: 'change.attr', act: 'change', mode: 'set', match: 'L V.set D {thing:words} {attribute:ATTR} [to|be|as|into] D {value:words}', args: ['thing', 'attribute', 'value'], priority: 13, if: 'attrs', example: 'Set table 2 seats to 6.' },
-  { id: 'change.value', act: 'change', mode: 'set', match: 'L V.set D {thing:words} [to|be|as|into]? {value:VALUE}', args: ['thing', 'value'], priority: 12, if: 'values', example: 'Make table 2 blue.' },
-  { id: 'change.add', act: 'change', mode: 'more', match: 'L V.make {amount:number} {attribute:ATTR} to D {thing:words}', args: ['amount', 'attribute', 'thing'], priority: 14, if: 'number', example: 'Add 2 seats to table 1.' },
-  { id: 'change.add1', act: 'change', mode: 'more', match: 'L V.make {attribute:ATTR} to D {thing:words}', args: ['attribute', 'thing'], priority: 13, if: 'number', example: 'Add a seat to table 1.' },
-  { id: 'change.less', act: 'change', mode: 'less', match: 'L V.remove {amount:number} {attribute:ATTR} from D {thing:words}', args: ['amount', 'attribute', 'thing'], priority: 14, if: 'number', example: 'Remove 2 seats from table 1.' },
-  { id: 'change.less1', act: 'change', mode: 'less', match: 'L V.remove D {attribute:ATTR} from D {thing:words}', args: ['attribute', 'thing'], priority: 13, if: 'number', example: 'Remove a seat from table 1.' },
-  { id: 'change.cmp.more', act: 'change', mode: 'more', match: 'L V.set D {thing:words} {value:MORE}', args: ['thing', 'value'], priority: 12, if: 'more', example: 'Make table 1 bigger.' },
-  { id: 'change.cmp.less', act: 'change', mode: 'less', match: 'L V.set D {thing:words} {value:LESS}', args: ['thing', 'value'], priority: 12, if: 'less', example: 'Make table 1 smaller.' },
-  { id: 'place', act: 'place', match: 'L V.place D {thing:words} REL D {place:words}', args: ['thing', 'rel', 'place'], priority: 11, if: 'in', example: 'Put the guest Ann at table 2.' },
-  { id: 'connect', act: 'connect', match: 'L V.connect D {thing:words} [to|with|and] D {place:words}', args: ['thing', 'place'], priority: 11, example: 'Connect table 1 to table 2.' },
-  { id: 'group', act: 'group', mode: 'group', match: 'L V.group D {thing:words} [together]?', args: ['thing'], priority: 10, example: 'Group the tables.' },
-  { id: 'apart', act: 'group', mode: 'apart', match: 'L V.apart D {thing:words}', args: ['thing'], priority: 10, example: 'Take the tables apart.' },
-  { id: 'apart.2', act: 'group', mode: 'apart', match: 'L [take|break|pull|split] D {thing:words} [apart|up]', args: ['thing'], priority: 11, example: 'Take the tables apart.' },
-  { id: 'place.bare', act: 'place', match: 'L V.place D {thing:words}', args: ['thing'], priority: 5, if: 'in', example: 'Move the guest.' },
-  { id: 'change.bare', act: 'change', mode: 'set', match: 'L [change|colour|color|paint|turn|switch|edit] D {thing:words}', args: ['thing'], priority: 5, if: 'attrs', example: 'Change table 2.' },
-  { id: 'connect.bare', act: 'connect', match: 'L V.connect D {thing:words}', args: ['thing'], priority: 5, example: 'Connect table 1.' },
-  { id: 'send.bare', act: 'send', match: 'L V.send D {thing:words}', args: ['thing'], priority: 5, example: 'Send table 1.' },
-  { id: 'pick', act: 'pick', match: 'L V.pick D {thing:words}', args: ['thing'], priority: 10, example: 'Select table 2.' },
-  { id: 'copy', act: 'copy', match: 'L V.copy D {thing:words}', args: ['thing'], priority: 10, example: 'Copy table 2.' },
-  { id: 'send', act: 'send', match: 'L V.send D {thing:words} to D {place:words}', args: ['thing', 'place'], priority: 11, example: 'Send table 2 to the diagram.' },
-  { id: 'ask.what', act: 'ask', mode: 'what', match: '[what|which] [is|are] D {attribute:ATTR} of D {thing:words}', args: ['attribute', 'thing'], priority: 12, if: 'attrs', example: 'What is the colour of table 2?' },
-  { id: 'ask.what.is', act: 'ask', mode: 'what', match: '[what|which] {attribute:ATTR} [is|are] D {thing:words}', args: ['attribute', 'thing'], priority: 12, if: 'attrs', example: 'What colour is table 2?' },
-  { id: 'change.should', act: 'change', mode: 'set', match: 'D {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:VALUE}', args: ['thing', 'value'], priority: 12, if: 'values', example: 'Table 2 should be blue.' },
-  { id: 'change.needs', act: 'change', mode: 'set', match: 'L [i_want|i_need|make|let|give]? D {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:ATTR}', args: ['thing', 'value', 'attribute'], priority: 12, if: 'number', example: 'Table 1 needs 6 seats.' },
-  { id: 'ask.at', act: 'ask', mode: 'what', match: '[what|who] [is|are|sits|sit|stands|stand] [there]? REL D {place:words}', args: ['rel', 'place'], priority: 12, if: 'in', example: 'Who is at table 1?' },
-  { id: 'ask.count.attr', act: 'ask', mode: 'what', match: 'how_many {attribute:ATTR} [does|do|has|have] D {thing:words} [have|has|got]?', args: ['attribute', 'thing'], priority: 14, if: 'number', example: 'How many seats does table 1 have?' },
-  { id: 'ask.count', act: 'ask', mode: 'count', match: 'how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]?', args: ['thing'], priority: 12, example: 'How many tables are there?' },
-  { id: 'ask.count.at', act: 'ask', mode: 'count', match: 'how_many {thing:words} [are|is]? [there]? REL D {place:words}', args: ['thing', 'rel', 'place'], priority: 13, if: 'in', example: 'How many guests are at table 1?' },
-  { id: 'ask.where', act: 'ask', mode: 'where', match: 'where [is|are] D {thing:words}', args: ['thing'], priority: 12, if: 'in', example: 'Where is Ann?' },
-  { id: 'ask.why', act: 'ask', mode: 'why', match: 'why [is|are|did|do|was|were|does] {rest:words}', args: ['rest'], priority: 11, example: 'Why is table 2 blue?' },
-  { id: 'ask.about', act: 'ask', mode: 'describe', match: 'L [describe|tell_me_about|explain] D {thing:rest}', args: ['thing'], priority: 6, if: 'thingask', example: 'Describe the circle.' },
-  { id: 'ask.exists', act: 'ask', mode: 'exists', match: '[is|are] there [any|a|an|some]? {thing:rest}', args: ['thing'], priority: 11, if: 'thingask', example: 'Is there a circle?' },
-  { id: 'ask.last', act: 'ask', mode: 'last', match: 'what [did|have] you [just]? [do|done|change|changed]', args: [], priority: 11, example: 'What did you just do?' },
-  { id: 'undo', act: 'undo', match: '[$lang.undo]', args: [], priority: 16, example: 'Undo that.' },
-  { id: 'redo', act: 'redo', match: '[$lang.redo]', args: [], priority: 16, example: 'Redo that.' },
-  { id: 'save', act: 'save', match: 'L V.save [it|this|everything]? [as|under|called]? {value:words}', args: ['value'], priority: 10, example: 'Save it as lunch.' },
-  { id: 'load', act: 'load', match: 'L V.load D {value:words}', args: ['value'], priority: 10, example: 'Load lunch.' },
-  // forms of a character-like world (flag `self`) and the open-valued ones (be / has / dir / bare): written once, used by every world that sets the flag
-  { id: 'make.self', act: 'make', match: 'L V.make [yourself|myself|urself] D {thing:words}', args: ['thing'], priority: 11, if: 'self', example: 'Give yourself a beard.' },
-  { id: 'make.put', act: 'make', match: 'L [put|place|stick|draw|give] [him|her|it|the_avatar|me|yourself|myself]? D {thing:words}', args: ['thing'], priority: 9, if: 'self', example: 'Give him a beard.' },
-  { id: 'make.on', act: 'make', match: 'L [put|place|add|stick|draw] D {thing:words} [on_yourself|on_your_face|on_your_head|to_yourself|to_your_face|on_you|on_ur_face]', args: ['thing'], priority: 12, if: 'self', example: 'Add glasses to your face.' },
-  { id: 'remove.off', act: 'remove', match: 'L [take|put|get|pull] D {thing:words} [off|away|off_yourself|off_your_face|off_your_head]', args: ['thing'], priority: 12, if: 'self', example: 'Take the glasses off.' },
-  { id: 'remove.without', act: 'remove', match: 'L [make|be|look|draw|show_me]? [yourself|me|it|the_face]? [without|with_no] D {thing:words}', args: ['thing'], priority: 11, if: 'self', example: 'Without a hat.' },
-  { id: 'change.another', act: 'change', mode: 'other', match: 'L [try|show|give_me|let_me_see|i_want|have|use|put_on|wear]? [another|a_different|a_new|another_one] {thing:words}', args: ['thing'], priority: 12, if: 'self', example: 'Try a different hat.' },
-  { id: 'change.next', act: 'change', mode: 'next', match: 'L [try|show|give_me|let_me_see|use|go_to|switch_to|change_to]? D [next|following|one_more] {thing:words}', args: ['thing'], priority: 12, if: 'self', example: 'Try the next hat.' },
-  { id: 'change.prev', act: 'change', mode: 'prev', match: 'L [try|show|give_me|let_me_see|use|go_to|switch_to|change_to|go_back_to]? D [previous|prior|one_before] {thing:words}', args: ['thing'], priority: 12, if: 'self', example: 'Previous nose.' },
-  { id: 'change.swap', act: 'change', mode: 'set', match: 'L [swap|change|switch|replace|exchange] D {thing:words} [for|with|to|into|by] D {value:words}', args: ['thing', 'value'], priority: 11, if: 'be', example: 'Change the hat to a crown.' },
-  { id: 'change.self', act: 'change', mode: 'set', match: 'L [make|turn|change|paint] [yourself|urself|the_avatar|the_face|your_face|ur_face] {value:words}', args: ['value'], priority: 12, if: 'self', example: 'Paint yourself green.' },
-  { id: 'change.be', act: 'change', mode: 'be', match: 'L [be|become|look|feel|turn_into|change_into|transform_into|morph_into|look_like|act_like] D {value:words}', args: ['value'], priority: 10, if: 'be', example: 'Look happy.' },
-  { id: 'change.be.self', act: 'change', mode: 'be', match: 'L [make|let|get] [yourself|urself|myself|the_avatar|the_robot|the_face] [look|feel|be|become]? {value:words}', args: ['value'], priority: 11, if: 'be', example: 'Make yourself happy.' },
-  { id: 'change.should.self', act: 'change', mode: 'be', match: 'D [avatar|robot|face] [should|must|has_to|needs_to|shall] [be|become|look|feel] D {value:words}', args: ['value'], priority: 11, if: 'be', example: 'The avatar should be a clown.' },
-  { id: 'place.dir', act: 'place', match: 'L [move|put|bring|push|pull|take|shift|raise|lower|make] D {thing:words} {rel:lex.acts.dir}', args: ['thing', 'rel'], priority: 13, if: 'dir', example: 'Move the eyes closer together.' },
-  { id: 'place.dir.bare', act: 'place', match: 'D {thing:words} {rel:lex.acts.dir}', args: ['thing', 'rel'], priority: 6, if: 'dir', example: 'Eyes closer together.' },
-  { id: 'ask.has', act: 'ask', mode: 'has', match: '[do|did|can|could] [you|u] [have|got|wear|see|has] D {thing:words}', args: ['thing'], priority: 12, if: 'has', example: 'Do you have glasses?' },
-  { id: 'ask.has.2', act: 'ask', mode: 'has', match: '[have|are] [you|u] [got|wearing|having] D {thing:words}', args: ['thing'], priority: 12, if: 'has', example: 'Are you wearing a hat?' },
-  { id: 'ask.options', act: 'ask', mode: 'options', match: '[what|which] {thing:words} [are_there|can_you_have|can_you_wear|can_i_pick|can_i_choose|can_you_draw|can_you_put_on|can_i_try|can_you_show]', args: ['thing'], priority: 12, if: 'self', example: 'What hats are there?' },
-  { id: 'ask.options.all', act: 'ask', mode: 'options', match: '[what|which] [can|could] [i|you|u] [change|customize|customise|modify|adjust|tweak|wear|put_on] [about_you|about_yourself|on_you]?', args: [], priority: 12, if: 'self', example: 'What can I change?' },
-  { id: 'ask.state', act: 'ask', mode: 'state', match: '[how_do_you_feel|how_are_you_feeling|what_is_your_mood|what_is_your_expression|what_mood_are_you_in|how_are_you_looking|how_do_you_look_now]', args: [], priority: 12, if: 'be', example: 'What is your expression?' },
-  { id: 'ask.describe', act: 'ask', mode: 'describe', match: 'L [describe_yourself|describe_you|what_do_you_look_like|what_do_you_look_like_now|what_are_you_wearing|what_do_you_have_on|how_do_you_look|tell_me_what_you_look_like|describe_your_face|describe_your_look|describe_your_avatar|what_do_you_look_like_today]', args: [], priority: 12, if: 'self', example: 'What are you wearing?' },
-  { id: 'make.random', act: 'make', mode: 'random', match: 'L [surprise|surprise_me|shuffle_yourself|randomise_yourself|randomize_yourself|make_a_random_face|a_random_face|something_random]', args: [], priority: 11, if: 'self', example: 'Surprise me.' },
-  { id: 'remove.reset', act: 'remove', mode: 'all', match: 'L [reset|reset_yourself|start_over|start_again|clear_your_face|go_back_to_normal|go_default]', args: [], priority: 11, if: 'self', example: 'Reset.' },
-  { id: 'change.call', act: 'change', mode: 'set', lit: { attribute: 'name' }, match: 'L [call|name|rename] [yourself|urself|the_avatar] [to|as]? {value:rest}', args: ['value'], priority: 12, if: 'name', example: 'Call yourself Robi.' },
-  { id: 'change.call.2', act: 'change', mode: 'set', lit: { attribute: 'name' }, match: 'L [i_will_call_you|i_am_calling_you|i_call_you|we_will_call_you|from_now_on_i_will_call_you|call_you] {value:rest}', args: ['value'], priority: 12, if: 'name', example: 'I will call you Robi.' },
-  { id: 'change.name.is', act: 'change', mode: 'set', lit: { attribute: 'name' }, match: 'L [from_now_on]? [your|ur] name [is|will_be|shall_be] {value:rest}', args: ['value'], priority: 12, if: 'name', example: 'Your name is Robi.' },
-  { id: 'change.name.called', act: 'change', mode: 'set', lit: { attribute: 'name' }, match: 'L [from_now_on]? [you|u] [are|r] [called|named] {value:rest}', args: ['value'], priority: 12, if: 'name', example: 'You are called Ziggy.' },
-  { id: 'ask.name', act: 'ask', mode: 'what', lit: { attribute: 'name', thing: 'yourself' }, match: 'L [what_is_your_name|what_are_you_called|what_do_i_call_you|what_is_ur_name|tell_me_your_name]', args: [], priority: 12, if: 'name', example: 'What is your name?' },
-  { id: 'place.rel', act: 'place', match: 'L V.place D {thing:words} REL D {place:rest}', args: ['thing', 'rel', 'place'], priority: 12, if: 'rel', example: 'Put the circle next to the square.' },
-  { id: 'place.layout', act: 'place', mode: 'layout', match: 'L [V.place|arrange|lay_out|space_out|distribute|tidy|organise|organize] D {thing:words} [out|up]? [in|into|as|on|along|across]? D {rel:lex.acts.layout}', args: ['thing', 'rel'], priority: 13, if: 'layout', example: 'Line up the circles horizontally.' },
-  { id: 'place.layout.all', act: 'place', mode: 'layout', match: 'L [arrange|lay_out|tidy|organise|organize|space_out|distribute|align] D {thing:words} [out|up]?', args: ['thing'], priority: 8, if: 'layout', example: 'Tidy up the circles.' },
-  // the world's own reader (flag `reader`): in the world's open tab, a sentence its engine reads as a command or question of a family the acts do not name (the engine's `accepts` decides)
-  { id: 'read.own', act: 'own', match: '{rest:rest}', args: ['rest'], priority: 1, tabPriority: 30, tabOnly: true, if: 'reader', example: 'Which shape is the largest?' },
-  // the same reader outside the tab: only for a sentence the world's `accepts` recognises as its own frame (it names the diagram, "shaped like a house"); it is no catch-all of other worlds' sentences
-  { id: 'read.frame', act: 'own', match: '{pre:words} diagram {post:rest}', args: ['pre', 'post'], priority: 30, tabOnly: false, if: 'reader', example: 'Make a diagram shaped like a house.' },
-  { id: 'read.frame.end', act: 'own', match: '{pre:words} diagram', args: ['pre'], priority: 30, tabOnly: false, if: 'reader', example: 'Add a star to the diagram.' },
-  { id: 'read.frame.shaped', act: 'own', match: '{pre:words} [chart|layout|graph|box|boxes] [shaped|laid_out|arranged] [like|as] {post:rest}', args: ['pre', 'post'], priority: 30, tabOnly: false, if: 'reader', example: 'Add a box shaped like a guitar.' },
-  { id: 'read.frame.form', act: 'own', match: '{pre:words} [a|an] [shape|box] in_the [shape|form] of {post:rest}', args: ['pre', 'post'], priority: 30, tabOnly: false, if: 'reader', example: 'Draw a shape in the form of a house.' },
-  { id: 'bare.mod', act: 'make', mode: 'bare', match: 'L D {pre:words} {thing:KIND} [at_me|a_little|twice]?', args: ['pre', 'thing'], priority: 3, if: 'bare', example: 'Round glasses.' },
-  { id: 'bare', act: 'make', mode: 'bare', match: 'L D {thing:KIND} [at_me|a_little|twice]?', args: ['thing'], priority: 3, if: 'bare', example: 'Glasses.' },
-];
+export const FORMS = en.frames('acts');   // the forms are facts: handover/lang.en/shards/frames-acts.sop (sets acts, acts.more, acts.data), read through src/lang/en.mjs
 
 /** The verbs of every act: from the knowledge world k.actions (worlds/acts/verbs.generated.mjs, generated by scripts/build-acts-lexicon.mjs). No local seed. */
 
@@ -236,7 +147,7 @@ const kindWords = (s) => [...new Set(Object.values(s.kinds).flatMap((k) => [k.na
 /** The forms a world gets: those whose condition the schema meets and whose act the world declares. */
 export function formsFor(schema) {
   const c = conditions(schema);
-  return [...FORMS, ...FORMS_MORE, ...FORMS_DATA].filter((f) => schema.acts.has(f.act) && (!f.if || c[f.if]));
+  return en.frames().filter((f) => schema.acts.has(f.act) && (!f.if || c[f.if]));
 }
 // every form may start with a filler ("pls", "so") and end with one ("please", "from now on"): a free capture at the end stops before the tail
 /** Forms whose words say "yourself" / "the avatar" themselves: they claim the sentence for their world on any tab (pattern tabClaim). */

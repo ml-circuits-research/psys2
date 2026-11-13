@@ -7,24 +7,24 @@
  */
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=b0ef9b1423';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=3978a46ba3';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=dc3e6129e7';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=59f68e0a5f';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=4117266ea0';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=0c5b504235';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=61f77532d4';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=274a2c1d00';
-import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=d3ad646497';
-import { en } from '../../lang/en.mjs?v=4d49055b41';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=947753c5ec';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=3fb6032360';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=80c25d9f2d';
+import { en } from '../../lang/en.mjs?v=ea700d2a2b';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse, serialize } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
 
-export { FormSession } from './session.mjs?v=274a2c1d00';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=61f77532d4';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=3978a46ba3';
-export { compilePattern, matchTokens } from './matcher.mjs?v=dc3e6129e7';
-export { singularLemma, pluralize } from './lemma.mjs?v=931d861e63';
+export { FormSession } from './session.mjs?v=3fb6032360';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=947753c5ec';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=4117266ea0';
+export { compilePattern, matchTokens } from './matcher.mjs?v=0c5b504235';
+export { singularLemma, pluralize } from './lemma.mjs?v=f1d6673a2b';
 
 const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */
@@ -210,7 +210,7 @@ const LEAD_INS = [
   'i would like to know', 'i want to know', 'i need to know', 'i wanna know', 'id like to know', 'i am wondering', 'i was wondering',
   'i wonder', 'do you know', 'let me know', 'tell me', 'you know',
 ].map((x) => x.split(' ')).sort((a, b) => b.length - a.length);
-const WH_WORDS = ['how', 'what', 'who', 'where', 'when', 'which', 'why', 'whose', 'whom'];
+const WH_WORDS = [...en.questionWords('wh-lead')];
 
 /**
  * When `tokens` start with an indirect-question lead-in ("tell me", "can you tell me", "I want to know", "do you know" ...) followed by a
@@ -245,13 +245,12 @@ export function splitPossessives(tokens, lex) {
 }
 
 /** A connective followed by a question word inside swallowed free text. */
-const QUESTION_TAIL_RE = /(?:,|\b(?:and|then|but))\s+(?:also\s+)?(?:what|how|who|where|when|which|why|can|could|does|do|is|are|will)\b/i;
+const QUESTION_TAIL_RE = new RegExp(`(?:,|\\b(?:and|then|but))\\s+(?:also\\s+)?(?:${[...en.questionWords('question-tail')].join('|')})\\b`, 'i');
 
 const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 
 /** Words that open a standing rule or a default ("from now on", "by default"): a comma after them does not end a clause. */
-const FRAME_LEADS = new Set(['from now on', 'from here on', 'from then on', 'from today on', 'by default', 'in future', 'in the future', 'as a rule', 'for now', 'always']);
-const isFrameLead = (clause) => FRAME_LEADS.has(clause.filter(isContent).map((t) => t.lower).join(' '));
+const isFrameLead = (clause) => en.frameLeads().has(clause.filter(isContent).map((t) => t.lower).join(' '));
 
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
 /** Experiments of the model ablation (on by default since 2026-11-13; `setProto({ also: false })` switches it off): `also` = "also" joins clauses like "then" ("draw a house, also what do red and yellow make"). */
@@ -259,15 +258,15 @@ const PROTO = { also: true, cutter: true };
 export const setProto = (p = {}) => Object.assign(PROTO, p);
 export function splitClauses(tokens) {
   const clauses = [[]];
-  const joiners = PROTO.also ? ['then', 'also'] : ['then'];
+  const cutAt = en.cutWords(PROTO.also), seq = en.sequenceWords(PROTO.also);
   for (let i = 0; i < tokens.length; i++) {
     budget.tick('index.splitClauses');
     const t = tokens[i];
-    const sep = t.lower === ',' || t.lower === 'and' || joiners.includes(t.lower) || t.lower === 'but';
+    const sep = cutAt.has(t.lower);
     if (!sep) { clauses[clauses.length - 1].push(t); continue; }
     if (t.lower === ',' && isFrameLead(clauses[clauses.length - 1])) continue;   // "From now on, squares should be gray": the frame of a rule belongs to the sentence it opens
-    if (t.lower === 'and' && joiners.includes(tokens[i + 1]?.lower)) i++;
-    if (t.lower === ',' && ['and', 'but', ...joiners].includes(tokens[i + 1]?.lower)) i++;
+    if (t.lower === 'and' && seq.includes(tokens[i + 1]?.lower)) i++;
+    if (t.lower === ',' && cutAt.has(tokens[i + 1]?.lower) && tokens[i + 1].lower !== ',') i++;
     clauses.push([]);
   }
   return clauses.filter((c) => c.some(isContent));
@@ -286,7 +285,7 @@ export function registerClauseStarters(set, cards) {
   for (const c of cards ?? []) for (const w of [...(c.act ?? []), ...(c.actshared ?? []), ...(c.navact ?? [])]) if (/^[a-z]{2,}$/.test(w)) words.add(w);
   STARTERS.set(set.parent ?? set, words);
 }
-const JOINER_WORDS = new Set([',', ';', 'and', 'then', 'also', 'but']);
+const JOINER_WORDS = en.cardJoiners();
 /** Token indices where a new clause starts: the first token after a run of joiners, when it is an act word or a question word, with content on the left and at least two content tokens on the right. */
 export function cardCuts(tokens, starters) {
   const cuts = [];
