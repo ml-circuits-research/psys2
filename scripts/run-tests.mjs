@@ -71,6 +71,7 @@ const SMOKE = [
   'tab-short-names.test.mjs',
   'coherence-both.test.mjs',
   'regression-ab.test.mjs',
+  'undo-redo.test.mjs',
   'routing.test.mjs',
   'reader-route.test.mjs',
   'ab-gate.test.mjs',

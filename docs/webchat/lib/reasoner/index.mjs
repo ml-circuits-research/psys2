@@ -572,11 +572,10 @@ export class ReasonerSession {
     return out;
   }
 
-  /** End of a dialogue turn: a turn that changed the library is kept, with its marks (what "undo that" and the dialogue layer's undo take back). */
-  commitTurn(turn, said = null) {
-    const c = this.cur;
-    this.cur = null;
-    if (c?.turn !== turn) return;
+  /**
+   * The step in progress changed the library? Returns the marks of the instances it moved (what a rewind goes back to), or null for a step that changed nothing.
+   */
+  _moved(c) {
     let changed = this.ops !== c.ops;
     const marks = new Map();
     for (const [id, e] of c.marks) {
@@ -587,15 +586,39 @@ export class ReasonerSession {
       if (moved) changed = true;
       if (moved || (e.birth && !exempt)) marks.set(id, e);   // an instance created in the turn is taken back to its birth even when nothing was told to it
     }
-    if (changed) {
-      // the worlds the turn concerned: the ones whose types it told and the games whose own instance it changed (a game's actions change its instance without a wire of the dialogue)
-      const worlds = new Set(c.owners ?? []);
-      for (const id of marks.keys()) if (this.reasoner.worlds.includes(id) && !this.reasoner.composites.has(id)) worlds.add(id);
-      this.redos = [];
-      this.turns.push({ turn, mark: { marks, ops: c.ops }, worlds: [...worlds], said });
-      this.undone = 0;
-      if (this.turns.length > 40) this.turns.shift();
-    }
+    return changed ? marks : null;
+  }
+  /** Keeps the step `c` as an entry of the timeline (UNDO-REDO: an entry is one request of the user; the requests of one message share its `turn`). */
+  _keep(c, marks, said) {
+    // the worlds the step concerned: the ones whose types it told and the games whose own instance it changed (a game's actions change its instance without a wire of the dialogue)
+    const worlds = new Set(c.owners ?? []);
+    for (const id of marks.keys()) if (this.reasoner.worlds.includes(id) && !this.reasoner.composites.has(id)) worlds.add(id);
+    if (this.ops !== c.ops || [...marks.keys()].some((id) => !this.reasoner.passive.has(id))) this.redos = [];   // a new action makes what was undone final (a visit to another tab, a counter of the help: no action)
+    this.turns.push({ turn: c.turn, mark: { marks, ops: c.ops }, worlds: [...worlds], said, ...(c.snap ? { snap: c.snap } : {}), ...(c.orig ? { orig: c.orig } : {}) });
+    this.undone = 0;
+    if (this.turns.length > 40) this.turns.shift();
+  }
+  /**
+   * UNDO-REDO, one step per request: a message with several requests ("draw a sky and a sun") calls this before each one. What the earlier request changed is kept as
+   * its own entry of the timeline (`said` = the words of that request, `orig` as the user wrote them) and the next request starts from the library as it is now, so "undo" takes back the last
+   * request, not the whole message. `snap` is the state of the worlds that do not derive it from the library, as it was before this request.
+   */
+  beginStep(said = null, snap = null, orig = null) {
+    const c = this.cur;
+    if (!c) return;
+    const marks = this._moved(c);
+    if (marks) this._keep(c, marks, c.said ?? null);
+    this.cur = { turn: c.turn, marks: this._marks(), ops: this.ops, owners: new Set(), said, ...(snap ? { snap } : {}), ...(orig ? { orig } : {}) };
+  }
+  /** The state of the worlds that do not derive theirs from the library (JSON per world), for `beginStep`. */
+  snapOwn(session) { return Object.fromEntries(Object.keys(session.state).filter((w) => !this.reasoner.stateOf.has(w)).map((w) => [w, JSON.stringify(session.state[w])])); }
+  /** End of a dialogue turn: a turn that changed the library is kept, with its marks (what "undo that" and the dialogue layer's undo take back). */
+  commitTurn(turn, said = null) {
+    const c = this.cur;
+    this.cur = null;
+    if (c?.turn !== turn) return;
+    const marks = this._moved(c);
+    if (marks) this._keep(c, marks, c.said ?? said);
   }
   /** The library takes statements out (`retract`: what followed from them goes too) and the session memory with them; false (nothing changed) when the library will not. */
   retractFacts(ids, session, why = 'taken back') {
@@ -992,10 +1015,100 @@ export class ReasonerSession {
     said ??= t.said ?? null;
     const w = t.worlds.length === 1 && this.reasoner.wordsOf.has(t.worlds[0]) ? t.worlds[0] : null;
     const before = w ? this.stateOfWorld(w) : null;
-    const turn = this.undo(session);
+    const group = [];
+    const turn = this.undo(session, group);
     const quote = said ? String(said).replace(/[.!?\s]+$/, '') : '';
+    if (group.length) this.redos.push({ world: w, undo: group, said: t.said ?? null, orig: t.orig ?? null, turn });
     const patch = w ? this.undoPatch(w, before, quote || null) : null;
-    return { turn, value: patch?.value ?? (quote ? `OK, I took that back: "${quote}".` : 'OK, I took that back.'), quote: patch?.value || !quote ? null : quote, openTab: patch?.openTab };
+    return { turn, value: patch?.value ?? (quote ? `OK, I took that back: "${quote}".` : 'OK, I took that back.'), quote: patch?.value || !quote ? null : quote, orig: t.orig ?? null, openTab: patch?.openTab };
+  }
+
+  // ---- UNDO-REDO: redo, the whole message, a named step -----------------------------------------------------------------------------
+
+  /** The world object that speaks for a world id in undo and redo (`undoWords`), or null. */
+  _speaker(id) { return id ? (this.reasoner.wordsOf.get(id) ?? [...this.reasoner.undoOf.values()].find((x) => x.id === id) ?? null) : null; }
+  /**
+   * "Redo": the library goes forward again to what the last undo took out (the undo of an undo; a new action emptied the list). The reply says what was redone, in the
+   * words of the world (`undoWords` with `redo`) or by quoting what the user had said. Null when there is nothing to redo.
+   */
+  redoLast(session) {
+    const r = this.redos.pop();
+    if (!r) return null;
+    const sp = this._speaker(r.world);
+    const before = sp && this.reasoner.stateOf.has(r.world) ? this.stateOfWorld(r.world) : null;
+    for (const f of [...r.undo].reverse()) f();
+    if (r.world) this._state(session, r.world);
+    const quote = r.said ? String(r.said).replace(/[.!?\s]+$/, '') : '';
+    let patch = null;
+    if (sp?.undoWords && sp.redoAction) { try { patch = sp.undoWords({ before: before ?? {}, after: this.reasoner.stateOf.has(r.world) ? this.stateOfWorld(r.world) : null, redo: true, said: quote || null }); } catch { patch = null; } }
+    let value = patch?.value;
+    if (!value) value = quote ? `OK, I did it again: "${quote}".` : 'OK, I did it again.';   // a world with no words of its own: the request that came back is quoted
+    return { value, quote: quote || null, orig: r.orig ?? null, turn: r.turn ?? null, openTab: patch?.openTab };
+  }
+  /** The entries of the last message (its requests, last one first): the tail of the timeline that shares the newest turn number. */
+  lastMessage() {
+    const out = [];
+    for (let k = this.turns.length - 1; k >= 0 && this.turns[k].turn === this.turns.at(-1).turn; k--) out.push(this.turns[k]);
+    return out;
+  }
+  /** "Undo the whole message": every request of the last message that changed anything goes back (one redo takes them all out again). */
+  undoMessage(session) {
+    const g = this.lastMessage();
+    if (!g.length) return null;
+    const first = g.at(-1);
+    const group = [];
+    const turn = first.turn;
+    const worlds = new Set(g.flatMap((t) => t.worlds));
+    const redo = this.rewind(first.mark, session);
+    group.push(redo);
+    this.undone++;
+    this.redos.push({ world: worlds.size === 1 ? [...worlds][0] : null, undo: group, said: g.at(-1).said ?? null, orig: null, turn, whole: g.length });
+    return { turn, count: g.length, said: g.map((t) => t.said).reverse().filter(Boolean) };
+  }
+  /**
+   * The earlier step of the timeline a name points at: the newest entry whose request has all the words (a plural matches its singular), or null. `words` are the
+   * content words of "undo the sun".
+   */
+  findStep(words) {
+    const norm = (w) => String(w).toLowerCase().replace(/(?:ies)$/, 'y').replace(/(?:es|s)$/, '');
+    const want = words.map(norm);
+    for (let k = this.turns.length - 1; k >= 0; k--) {
+      const have = new Set(String(this.turns[k].said ?? '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(' ').filter(Boolean).flatMap((w) => [w, norm(w)]));
+      if (want.every((w) => have.has(w))) return k;
+    }
+    return -1;
+  }
+  /** The later steps that rest on step `k`: the entries after it that moved an instance it moved (or the shared log, or a world it concerned). */
+  dependents(k) {
+    const e = this.turns[k], later = this.turns.slice(k + 1);
+    const insts = new Set(e.mark.marks.keys());
+    const next = later[0];
+    const sharedMoved = !!next && next.mark.ops !== e.mark.ops;   // it told the shared log: the later steps may rest on it
+    return later.filter((t) => sharedMoved || [...t.mark.marks.keys()].some((id) => insts.has(id)) || t.worlds.some((w) => e.worlds.includes(w)));
+  }
+  /**
+   * "Undo the X" when step `k` does not touch what the later steps touch: only that step goes back (its instances to its mark), the others stay as they are.
+   * Returns { turn, said, orig } and keeps a redo that puts it back in its place.
+   */
+  undoStep(session, k) {
+    const e = this.turns[k];
+    const entries = new Map(e.mark.marks);
+    const redo = this._back(entries, this.ops, session);
+    this.turns.splice(k, 1);
+    const again = () => { this.turns.splice(Math.min(k, this.turns.length), 0, e); redo(); };
+    this.redos.push({ world: e.worlds.length === 1 ? e.worlds[0] : null, undo: [again], said: e.said ?? null, orig: e.orig ?? null, turn: e.turn });
+    this.undone++;
+    return { turn: e.turn, said: e.said ?? null, orig: e.orig ?? null };
+  }
+  /** "Undo the X" when later steps rest on it: step `k` and everything after it go back. */
+  undoThrough(session, k) {
+    const e = this.turns[k];
+    const group = [];
+    const redo = this.rewind(e.mark, session);
+    group.push(redo);
+    this.undone++;
+    this.redos.push({ world: null, undo: group, said: e.said ?? null, orig: e.orig ?? null, turn: e.turn });
+    return { turn: e.turn, said: e.said ?? null, orig: e.orig ?? null };
   }
 
   /**
@@ -1009,15 +1122,21 @@ export class ReasonerSession {
     const stateNow = () => this._toState(world.id, inst, undefined);
     const mine = (t) => t.worlds?.includes(world.id);   // a turn that changed this world (a tab switch of the shell or a turn of another world is not one of its steps)
     const before = this.turns.some(mine) ? stateNow() : null;
-    let turn = null, steps = 0;
+    let turn = null, steps = 0, said = null, orig = null;
     const group = [];
     for (let k = 0; this.turns.some(mine) && steps < n && k < 60; k++) {
       const own = mine(this.turns.at(-1));
+      if (!own) {   // UNDO-REDO: a step of another world (a tab switch, a request made elsewhere) is a request of its own, never taken back together with this world's: "undo" goes to it
+        if (!group.length) return this._undoOne(world, session);
+        break;
+      }
+      const t = this.turns.at(-1);
       const was = world.isView ? stateNow() : null;
       turn = this.undo(session, group);
-      if (own) steps += world.isView?.({ before: was, after: stateNow() }) ? 0 : 1;
+      const counted = !world.isView?.({ before: was, after: stateNow() });
+      if (counted) { steps++; if (said === null) { said = t.said ?? null; orig = t.orig ?? null; } }
     }
-    if (group.length) this.redos.push({ world: world.id, undo: group });
+    if (group.length) this.redos.push({ world: world.id, undo: group, said, orig, turn });
     const patch = world.undoWords?.({ before, after: before ? stateNow() : null, steps }) ?? (before ? { value: 'OK, I took that back.' } : { status: 'missing', note: 'There is nothing to undo yet.' });
     this._state(session, world.id);
     return { via: 'core.matrix', status: 'supported', ...patch, undoneTurn: turn };
@@ -1035,14 +1154,10 @@ export class ReasonerSession {
   }
   /** A world's own "redo" action: puts back what the last undo took out (the library as it was before it, with the turns), and says what that was. */
   redoAction(world, session) {
-    const inst = this._inst(world.id);
-    const stateNow = () => this._toState(world.id, inst, undefined);
-    const r = this.redos.at(-1)?.world === world.id ? this.redos.pop() : null;
-    const before = stateNow();
-    if (r) for (const f of [...r.undo].reverse()) f();
-    const patch = r ? (world.undoWords?.({ before, after: stateNow(), redo: true }) ?? { value: 'OK, I did it again.' }) : { status: 'missing', note: 'There is nothing to redo.' };
+    const r = this.redoLast(session);
+    if (!r) return { via: 'core.matrix', status: 'missing', note: world.undoWords?.({ before: null, after: null, redo: true })?.note ?? 'There is nothing to redo.' };
     this._state(session, world.id);
-    return { via: 'core.matrix', status: 'supported', ...patch };
+    return { via: 'core.matrix', status: 'supported', value: r.value, ...(r.openTab ? { openTab: r.openTab } : {}) };
   }
 
   /** The owning world's `voice(ctx)` (fns.mjs) puts the words around the numbers on the envelope (`note`, `unit`, `vars`); the templates stay ours. */

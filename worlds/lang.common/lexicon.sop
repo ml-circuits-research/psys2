@@ -1017,6 +1017,87 @@
     alt=unsure
     alt=clueless
 
+@phrase.lang.redo core.phrase
+    frame=false
+    doc="Put back what an undo took out (ctx.lang.redo, UNDO-REDO): redo, redo that, do it again, put it back."
+    alt=redo
+    alt=redo_that
+    alt=redo_it
+    alt=redo_this
+    alt=redo_the_last_one
+    alt=do_it_again
+    alt=do_that_again
+    alt=put_it_back
+    alt=put_that_back
+    alt=bring_it_back
+    alt=bring_that_back
+    alt=undo_the_undo
+    alt=take_that_back_again
+
+@phrase.lang.undo.all core.phrase
+    frame=false
+    doc="Take back everything the last message asked for (ctx.lang.undoAll, UNDO-REDO): undo all of that, undo the whole message."
+    alt=undo_all
+    alt=undo_all_of_that
+    alt=undo_all_of_it
+    alt=undo_all_that
+    alt=undo_all_this
+    alt=undo_everything
+    alt=undo_it_all
+    alt=undo_that_all
+    alt=undo_the_whole_message
+    alt=undo_that_whole_message
+    alt=undo_the_whole_thing
+    alt=undo_that_whole_thing
+    alt=undo_the_message
+    alt=undo_my_whole_message
+    alt=undo_the_whole_request
+    alt=take_it_all_back
+    alt=take_all_of_that_back
+    alt=take_the_whole_message_back
+    alt=take_back_the_whole_message
+    alt=take_back_all_of_that
+    alt=revert_all_of_that
+    alt=revert_the_whole_message
+
+@phrase.lang.undo.lead core.phrase
+    frame=false
+    doc="The words before the name of an earlier step to take back (ctx.lang.undoNamed, UNDO-REDO): undo the sun, take back the house."
+    alt=undo_the
+    alt=undo_my
+    alt=undo_that
+    alt=undo_this
+    alt=undo_your
+    alt=take_back_the
+    alt=take_back_my
+    alt=take_back_that
+    alt=undo
+
+@phrase.lang.undo.skip core.phrase
+    frame=false
+    doc="Filler words inside the name of an earlier step to take back (ctx.lang.undoNamed): the, a, one, thing, step, request."
+    alt=the
+    alt=a
+    alt=an
+    alt=my
+    alt=your
+    alt=that
+    alt=this
+    alt=one
+    alt=thing
+    alt=step
+    alt=request
+    alt=part
+    alt=bit
+    alt=earlier
+    alt=previous
+    alt=only
+    alt=please
+    alt=pls
+    alt=again
+    alt=draw
+    alt=drawing
+
 @phrase.lang.cancel core.phrase
     frame=false
     doc="Cancellations (ctx.lang.cancel): never mind, forget it, cancel that."

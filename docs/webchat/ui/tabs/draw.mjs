@@ -72,6 +72,7 @@ function paperGrain() {
 
 const ICON = {
   undo: '<svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>',
+  redo: '<svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg>',
   fresh: '<svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M12 11v6M9 14h6"/></svg>',
   save: '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 20h16"/></svg>',
 };
@@ -125,6 +126,7 @@ function make(holder, host) {
   }
   const act = (label, icon, text) => { const b = el('button', 'dr-act', `${ICON[icon]}<span>${label}</span>`); b.type = 'button'; b.addEventListener('click', () => send(text)); actions.append(b); return b; };
   act('Undo', 'undo', 'undo');
+  act('Redo', 'redo', 'redo');
   act('New', 'fresh', 'start a new drawing');
   act('Save PNG', 'save', 'save my drawing as a PNG');
   act('Save SVG', 'save', 'save my drawing as an SVG');

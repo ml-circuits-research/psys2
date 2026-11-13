@@ -201,9 +201,9 @@ export const fns = { drCount, drExists };
 
 // ---- undo and redo: the session timeline, in the words of the board -----------------------------------------------------------------------------------------------
 /** What "undo" and "redo" say once the library went back (or forward). `before` is null when there was nothing to take back. */
-export function undoWords({ before, redo, steps }) {
+export function undoWords({ before, after, redo, steps }) {
   if (!before) return { status: 'missing', note: redo ? 'There is nothing to redo.' : 'There is nothing to undo.' };
-  if (redo) return { value: 'OK, I did it again.', openTab: 'draw' };
+  if (redo) return { value: `OK, I did it again${after?.lastLabel ? ` (${after.lastLabel})` : ''}.`, openTab: 'draw' };
   const label = before.lastLabel;
   return { value: `OK, I undid it${steps > 1 ? ` (${steps} changes)` : label ? ` (${label})` : ''}.`, openTab: 'draw' };
 }
