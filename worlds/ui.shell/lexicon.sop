@@ -25,7 +25,6 @@
     word=chess_board
     word=chessboard
     word=chess_game
-    word=draw
     word=drawing
     word=drawing_board
     word=paint
@@ -50,6 +49,11 @@
     word=cv
     word=resume
     word=my_cv
+
+@lex.ui.shell.verbtabs core.lexicon
+    class=noun
+    doc="Short tab names that are also verbs (open draw): only usable after an explicit open verb, never as a bare word (a bare draw is the drawing command, not a tab switch)."
+    word=draw
 
 @lex.ui.shell.playtabs core.lexicon
     class=noun
