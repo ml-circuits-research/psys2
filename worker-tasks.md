@@ -3496,3 +3496,17 @@ Conflicts are ranked with the delegation tiers (said by user > focus > scene > k
 ## Reviewer 2026-11-13 17:45 — answer to Q3 (SPACE-2)
 
 Your `space` module (selection, amounts, relations, row/column/grid/circle; eval 150/150 in both reasoners) is accepted as the base; not yet probed in Chrome by the reviewer. **The 17:40 block is the scope and the acceptance criteria of SPACE-2**: add to the module pieces with outlines and anchors, relations kept as facts (today they are one-off placements), the rule set with sources, the stable solver, and layouts read from `k.layouts`. The missing sopworld functions (ordering, median, argmin) are in sopworld Round 17/19 (`std.order`, `std.relations`); move the rules there as they land and keep host JavaScript for geometry only. The size gate does not apply to `space`: it adds abilities; report instead the placing code each host drops.
+
+## Reviewer 2026-11-13 18:05 — WORLD-OF-WORLDS results read; SPACE-2, TALK 2, AVATAR-FROM-PARTS, k.faces noted (not test-run by the reviewer, by the owner's rule)
+
+**Routing decision:** the stated rule is not met, but the numbers answer the owner's priority (coherence in dialogue first): C is 82.8 overall against 74.0 for A, +14.8 on dialogue turns, +7.5 on wrong-tab, 100% on minimal pairs, and loses 1.4 on single operational messages. **Make C (symbolic + encoder, 30 points) the default router now**, A stays selectable under Developer. Say in About which router is on.
+
+**Next experiment, on causes not cases (three general changes, same table):**
+1. **Cards from more than patterns.** B fails where the card has no words (arith "less than", greetings, typos). Build the card also from the world's `describe.sop`, its operations and legend, its lexicon with near words, and the knowledge kinds it holds; no hand lists.
+2. **A prior that knows when it does not know.** The encoder prior counts only when its top score is confident and the world is in its label set; for a world without a label the prior is absent, not zero. Report the hold-out again; target: masked C within 5 points of trained C.
+3. **Refusal as evidence.** Use the dry run "would be refused in the present state" (sopworld Round 19) as a rule for every world, replacing the special case for games.
+The 49 "wrong" of C on operational go to the ledger as one group, not fixed singly.
+
+**SPACE-2:** matches the 17:40 block in scope (surfaces, joining with "apart", layouts from knowledge, rules in rules.sop). Still owed from that block: relations kept as facts after the move (moving the swing moves the child), the stability measure (E-S2), layouts read from the knowledge repo's `k.layouts` (arriving) rather than the local `KNOWLEDGE` table, the avatar face-layout command, diagram patterns for around / by height / stack through the module (no new per-tab patterns).
+**AVATAR-FROM-PARTS:** the real `k.faces` is published (16 slots, 134 hand-written variants, 13 presets, 7 expressions, seven imported styles): switch from the stub, then remove the DiceBear library (1.36 MB) once the presets cover the old characters.
+**Usual place and size:** `k.scenes` now has them for 2,033 drawable things, `k.people` has eight kinds of person, and there are hand stand-ins (villa, puddle and 88 more): use them in M3 instead of `common.sense` tables.
