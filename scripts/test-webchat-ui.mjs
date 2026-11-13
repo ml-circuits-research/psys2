@@ -210,7 +210,7 @@ async function ui1For(name, viewport, o) {
     const sp = await pg.evaluate(() => ({ p: document.querySelector('.p2-speaker').getAttribute('aria-pressed'), l: document.querySelector('.p2-speaker').getAttribute('aria-label'), t: document.querySelector('.p2-speaker').title, saved: JSON.parse(localStorage.getItem('psys2.webchat.settings')).speaker }));
     check(`${tag}: the read-aloud toggle says its state and saves (${sp.l})`, sp.p === 'true' && sp.l === 'Read answers aloud: on' && sp.t === sp.l && sp.saved === true);
     await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-languages'); await sleep(100);
-    check(`${tag}: Settings > Voice shows the same switch`, await pg.$eval('#p2-c-read-answers-aloud', (e) => e.checked));
+    check(`${tag}: Settings > Voice shows the same switch`, await pg.$eval('#p2-c-speaker', (e) => e.checked));
     await pg.click('.p2-modal-close'); await waitModal(pg, false);
     await pg.click('.p2-speaker');
     check(`${tag}: toggled off again`, (await pg.$eval('.p2-speaker', (e) => e.getAttribute('aria-label'))) === 'Read answers aloud: off');

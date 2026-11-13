@@ -410,7 +410,7 @@ export const SCENARIOS = {
     const c = await open(o, { language: 'ro' });
     try {
       await c.pg.click('button.p2-mic'); await waitRec(c);
-      const talk = ['tell dad the spark plugs are broken', 'but who are you even talking to', 'dad what could I say', 'my uncle', 'you', 'we should go', 'so annoying yeah', 'sorry'];
+      const talk = ['să mi spună domnul bujii lui tata', 'Dar cu cine vorbești ce vrei', 'tata ce pot să zic', 'unchiul', 'voi', 'faci tu', 'enervant da', 'scuze'];
       const bots0 = await c.pg.$$eval('.p2-msg.is-bot:not(.is-note)', (e) => e.length);
       for (const t of talk) {
         await c.pg.waitForFunction(() => window.__sr.live(), { timeout: 8000, polling: 30 });
@@ -421,7 +421,7 @@ export const SCENARIOS = {
       const ignored = await c.pg.$$eval('.p2-msg.is-ignored', (e) => e.length);
       const replies = await c.pg.$$eval('.p2-msg.is-bot:not(.is-note)', (e) => e.length);
       const dropped = await c.pg.evaluate(() => (window.__psys2VoiceDrops ?? []).length);
-      check('room talk is ignored (greyed or dropped as fragments), never answered', ignored + dropped >= talk.length - 1 && ignored >= 3 && replies === bots0, `${ignored} greyed + ${dropped} fragments of ${talk.length}, ${replies - bots0} replies`);
+      check('room talk is ignored (greyed or dropped as fragments); at most one understood pleasantry ("scuze" = sorry, a complete reading) is answered', ignored + dropped >= talk.length - 1 && ignored >= 3 && replies - bots0 <= 1, `${ignored} greyed + ${dropped} fragments of ${talk.length}, ${replies - bots0} replies`);
       const log = await c.pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]').filter((r) => r.status === 'ignored').length);
       check('the phrase log records `ignored`', log >= 3 && log === ignored, String(log));
       check('no busy veil from the talk', await c.pg.evaluate(() => !window.psys2.veiled));

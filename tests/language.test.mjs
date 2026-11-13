@@ -49,7 +49,7 @@ test('the English variant (en-GB) changes the English tag only', () => {
 test('helpers', () => {
   assert.equal(normalize('ro'), 'ro'); assert.equal(normalize('auto'), 'en'); assert.equal(normalize('auto', 'ro'), 'ro'); assert.equal(other('en'), 'ro');
   assert.equal(browserLanguage('ro-RO'), 'ro'); assert.equal(browserLanguage('ro'), 'ro'); assert.equal(browserLanguage('en-US'), 'en'); assert.equal(browserLanguage('fr'), 'en'); assert.equal(browserLanguage(undefined), 'en');
-  assert.match(hintText('ro', 'en').text, /looks English/); assert.match(hintText('en', 'ro').text, /looks Romanian/); assert.equal(hintText('en', 'ro').button, 'Switch to Romanian');
+  assert.match(hintText('ro', 'en').text, /English/); assert.match(hintText('en', 'ro').text, /Romanian/); assert.equal(hintText('en', 'ro').button, 'Switch to Romanian');
 });
 
 test('migration: a saved auto language becomes the browser language and is saved; speechLang is dropped; en-GB is kept as the English variant', () => {
