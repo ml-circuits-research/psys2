@@ -3759,3 +3759,24 @@ So `worlds/acts`, `worlds/space`, `worlds/session.things`, `worlds/session.dialo
 ## Reviewer 2026-11-13 22:50 — addition to "where the general worlds live" (owner): all general mechanisms go to the library
 
 Owner: every general mechanism for handling and using worlds must be in the sopworld library so other projects can use it. Besides the modules of the 22:40 block, hand over (same `handover/` way): the catalog and lookup loader (`src/knowledge/catalog.mjs`, `facts.mjs`, offline bundle generator), the routing rules of `meta.worlds`, the turn pipeline pieces that are not about English or the UI (dry run, veto, fill, all-or-nothing, graded fallback, why), the schema generators and the coverage grid, the failure-ledger format and grouper. Write `docs/host-boundary.md`: for each directory of `src/` and `worlds/`, one line: stays (application), moves to the library, moves to sop-knowledge-worlds. The library session writes the host contract from its side (its Round 24); the two documents must agree.
+
+## Reviewer 2026-11-13 23:30 — validated at 10e0cdf3 (smoke 62/62 on the reviewer box); TRANSFER slice, M1, P3, art.draw pilot, avatar causes: read; decisions
+
+**Accepted as reported** (reviewer ran only the smoke): session.things + views + session.learned (T1 22 right / 38 not applicable / 0 wrong), M1 session.dialogue, the avatar probe causes (bundled face generated from the catalog, the act belongs to the open tab with its new invariant, undo counts only state changes), the map, charts and document as views, hand-over packages and host boundary.
+
+**P3 verdict: promising, not a swap yet.** On generated data all three sizes transfer to unseen worlds (act 98.8–99.1%, spans within 4.4–5.8 points). On real messages agreement with today's reading is 76–87%, and the label set lacks what real turns have. Next for P3: (a) segment first, as the dispatcher does, then tag each piece; (b) add `none` (not a request to a doing world) and keep `ask` as the question act; (c) add real data: the owner logs, the ledger and round-trip paraphrases, labelled by the acts executor's accepted readings, with two worlds still held out; (d) give the tagger no tab and no history: the world stays chosen symbolically. Candidate size: 6 × 384 (23 MB, 21 ms at 4x), unless (c) separates the sizes. The dispatcher stays until the owner decides on a table from real messages.
+
+**art.draw pilot: not switched, correctly** (77% of its tests, 4 checked log rows worse, 9 more "not understood"). Your cause groups are the plan; decisions:
+1. **Several acts and several things in one sentence** → `act([...])` of std.acts with the engine's segmenter; first, since it is the largest cause of the log regression (also "an angry boy").
+2. **Parts as kinds**: yes: a schema says "the parts of a thing are things" and the part names come from `k.objects` part names and `k.parts` by lookup ("give the house a blue door" is `make` of a part in a thing).
+3. **Open classes are read by lookup, not by a generated lexicon**: a kind slot marked `any=knowledge` matches any word the catalog vocabulary knows as a kind (with its plural and synonyms) at reading time; this is general (one mechanism for kinds, colours, values) and removes "The crocodiles" as a cause. No thousands of words in generated files.
+4. **Phrases of acts** (undo / redo, add, place fillers such as "whip up", "doodle", "slide it over", "go back one step") come from `k.actions` by lookup; what it lacks goes to the knowledge repo as a list by act (write it under `handover/k.actions-missing.md`; the reviewer forwards it). Not from lang.common, which is itself to be emptied into knowledge (KNOWLEDGE-OUT).
+5. **Fillers and politeness around a request** ("um so like … yeah", "would you mind") are the dialogue module's job once, for all worlds, before the act reader.
+6. `accepts` reading the segment text: yes.
+7. **Matrix reasoner for schema worlds**: do not generate a matrix.sop per world; when acts are applied by the library's `std.acts`, both reasoners are the library. This is one more reason to switch the executor now.
+8. "save as SVG", "deselect": attributes and modes of acts in the schema (format of save; pick with none), not patterns.
+Remeasure art.draw after 1–5; switch when within 5% on its tests and not worse on the logs.
+
+**T2 (taught facts) is weak (5 right of 40):** a taught fact must enter at the knowledge tier for every view through the same lookup the catalog uses (session.learned overlay exists): find why 7 of 20 fail even in the view where they were taught; report causes.
+
+**Order now:** std.acts as executor (with act groups) → open classes by lookup → parts as kinds → k.actions phrases → remeasure avatar, diagram, draw → KNOWLEDGE-OUT steps 1–4 → P3 (a–c). Publish (SHIP-NOW) after the avatar switch.
