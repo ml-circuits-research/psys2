@@ -3193,3 +3193,12 @@ Replace item 2 of the 10:20 block ("npm test under 10 minutes") with two suites:
 2. **No test may touch the network** (smoke or full). Fail the suite on any real fetch: stub `fetch` in the test setup and throw on unknown hosts. The reviewer's slow runs are probably many 6 s waits.
 
 **Lookup, next:** the 4 "box shaped like a X" gaps in diagram.sketch; the E2 "no-referent" wording needs a test in a world other than art.draw; run the encoder-mode operational set on the Spark and report.
+
+## Reviewer 2026-11-13 12:40 — speed-independent readings, smoke suite, catalog cache: accepted
+
+**Validated at 1999312:** `npm run test:smoke` on the reviewer box: 199 pass, 0 fail, 169 s (2 cores busy; 46 s on yours). Accepted as the per-landing gate. Step budgets instead of clocks for name repair and leniency: accepted; this was the right cause. Cache Storage, lookup notice, offline reply, diagram primitives, phone timings (scene of 20 imported objects redraws in about 6 ms): accepted from the report.
+
+**Open, in this order:**
+1. **Models and device speed.** You note that with a model on, a slow device can still read differently (encoder timeout 1500 ms, normalizer and dispatcher deadlines fall back to the rules). That is acceptable only if the user can see it. When a model call times out and the rules answer instead, say so once per session in the debug panel and count it; report how often it happens on the phone profile. Do not change the deadlines yet.
+2. The full suite must not touch the network (10:53 block, rule 2) and should be run by you before each publish; write its result line in worker-log each time.
+3. The remaining items of the 12:20 block (diagram "box shaped like" gaps, E2 no-referent test in another world, encoder-mode operational run on the Spark), then DESCRIBE-ALL for the worlds still missing.
