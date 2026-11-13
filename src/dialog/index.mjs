@@ -33,6 +33,7 @@ import { checkValues } from './value-check.mjs';
 import { attachValues } from '../knowledge/values.mjs';
 import { Discourse } from './discourse.mjs';
 import { Dialogue } from './dialogue.mjs';
+import { turnSteps } from './steps.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
@@ -1712,6 +1713,7 @@ export class DialogSession {
         routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),
         patterns: segments.filter((s) => s.match).map((s) => s.match.patternId),
         operations: icpt ? [...ops, ...icpt.ops] : ops, statuses, wires: [...wires, ...answerWires].map((w) => w.id),
+        steps: turnSteps({ segments, operations: icpt ? [...ops, ...icpt.ops] : ops, statuses, rec: this.dialogue.log.at(-1) }),   // the same vocabulary as docs/system-map.html (src/dialog/steps.mjs)
       },
     };
   }

@@ -68,7 +68,7 @@
     "lib/dialog/dispatch-validate.mjs": "cd2d04974b9404fc",
     "lib/dialog/encoder-dispatch.mjs": "dfc958f9dfd6ede1",
     "lib/dialog/followup.mjs": "a80f066b4fada950",
-    "lib/dialog/index.mjs": "a5b2cf6ba3719709",
+    "lib/dialog/index.mjs": "24e1e9fb85f873f8",
     "lib/dialog/knowledge-lookup.mjs": "f66da684fec18dc4",
     "lib/dialog/meta-worlds.mjs": "61d2f7dcc5876958",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -76,6 +76,7 @@
     "lib/dialog/reader-route.mjs": "16adcfb6c72c186e",
     "lib/dialog/runtime-config.mjs": "54766017f8a8998e",
     "lib/dialog/scene-referents.mjs": "41ea7bf2b9cbe452",
+    "lib/dialog/steps.mjs": "d202d74cf9aae3df",
     "lib/dialog/surprise.mjs": "bd76e5f4d59d803e",
     "lib/dialog/symbolic-router.mjs": "5f082f584480afe1",
     "lib/dialog/test-runner.mjs": "57f1e1b13eec65cf",
@@ -281,6 +282,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T20:34:06.959Z",
-  "commit": "0c239e9d"
+  "builtAt": "2026-11-13T20:45:18.931Z",
+  "commit": "ce8e5a87-dirty"
 }

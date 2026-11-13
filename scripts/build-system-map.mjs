@@ -1,0 +1,302 @@
+#!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-only
+/**
+ * Generates `docs/system-map.html` (and the copy `docs/webchat/system-map.html` that the webchat's About section links to): one self-contained page that
+ * shows how a message travels and how the worlds ask each other. Nothing in it is written by hand except the vocabulary notes at the end.
+ *
+ *   1. the path of a message: the fixed steps of src/dialog/steps.mjs (kind of turn, world, act, things, what is missing and who fills it, apply, reply),
+ *      each with the module that decides, the data it decides from, and the number of alternatives it had (median) on the three owner logs (training/eval/owner-log-2026-11-13{,b,c}.jsonl, replayed);
+ *   2. the worlds as a graph (inline SVG): library modules, tab and content worlds, the knowledge catalog; an edge when one asks another (fill, lookup, view, layout, tab, ask),
+ *      weighted by the number of turns it fired on the logs; dashed grey edges are the declared imports (world.sop);
+ *   3. three numbers per world: hand-written lines (generated files excluded), reuse number (docs/library-reuse-report.md, the library's report), share of its turns answered with help from another world.
+ *
+ * Inputs: worlds/*, worlds/meta.worlds/kb.sop (cards), docs/host-boundary.md (roles), docs/library-reuse-report.md, the three owner logs.
+ *
+ *   node scripts/build-system-map.mjs [--write] [--check]      (stdout by default; --check exits 1 when the files on disk are stale)
+ */
+import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { STEPS } from '../src/dialog/steps.mjs';
+
+const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+export const MAP_FILE = join(REPO, 'docs/system-map.html');
+export const MAP_COPY = join(REPO, 'docs/webchat/system-map.html');
+const LOGS = ['', 'b', 'c'];
+const read = (p) => readFileSync(join(REPO, p), 'utf8');
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const median = (a) => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '-');
+
+// ---- static inputs ------------------------------------------------------------------------------------------------------------------------------------
+const worldIds = () => readdirSync(join(REPO, 'worlds')).filter((d) => existsSync(join(REPO, 'worlds', d, 'world.sop'))).sort();
+
+/** World ids -> { kind, tab } from the generated cards. */
+function cards() {
+  const out = {};
+  for (const c of read('worlds/meta.worlds/kb.sop').split(/\n(?=@card\.)/).slice(1)) {
+    const id = /\bid=(\S+)/.exec(c)?.[1];
+    if (id) out[id] = { kind: /\bkind=(\S+)/.exec(c)?.[1] ?? null, tab: /\btab=(\S+)/.exec(c)?.[1] ?? null };
+  }
+  return out;
+}
+
+/** Roles from the `worlds/` table of docs/host-boundary.md: library (lib), knowledge (SKW), stays. */
+function boundary(ids) {
+  const sec = read('docs/host-boundary.md').split(/\n## /).find((s) => s.startsWith('`worlds/`')) ?? '';
+  const out = {};
+  for (const line of sec.split('\n')) {
+    const cells = line.split('|').map((c) => c.trim());
+    if (cells.length < 4 || !cells[1].includes('`')) continue;
+    const verdict = cells[2];
+    const kind = /^lib/.test(verdict) ? 'library' : /^SKW/.test(verdict) ? 'knowledge' : /^stays? \(tabs?\)/.test(verdict) ? 'tab' : /^split/.test(verdict) ? 'split' : /^stays? \(bridge\)/.test(verdict) ? 'bridge' : 'content';
+    for (const m of cells[1].matchAll(/`([^`]+)`/g)) {
+      const name = m[1].replace(/^worlds\//, '').replace(/\/$/, '');
+      const hits = name.includes('*') ? ids.filter((i) => i.startsWith(name.replace(/\*.*$/, ''))) : [name];
+      for (const h of hits) out[h] = { kind, verdict };
+    }
+  }
+  return out;
+}
+
+const GROUP = (id, card, b) => {
+  if (id === 'core' || id === 'lang.common' || id === 'session.conversation') return 'shared';
+  if (b?.kind === 'library') return 'library';
+  if (b?.kind === 'knowledge' || b?.kind === 'split') return 'knowledge';
+  if (card?.kind === 'tab' || b?.kind === 'tab') return 'tab';
+  return 'content';
+};
+
+/** Hand-written lines of a world: non-blank, non-comment lines of its .sop and .mjs files, without tests.sop, generated files (a GENERATED header or `generated` in the name) and vendored code. */
+function handLines(id) {
+  let n = 0;
+  const walk = (dir) => {
+    for (const f of readdirSync(dir).sort()) {
+      const p = join(dir, f);
+      if (statSync(p).isDirectory()) { if (f !== 'vendor' && f !== 'node_modules') walk(p); continue; }
+      if (!/\.(sop|mjs)$/.test(f) || /generated/i.test(f) || f === 'tests.sop') continue;
+      const text = readFileSync(p, 'utf8');
+      if (/GENERATED|generated by/i.test(text.split('\n').slice(0, 4).join('\n'))) continue;
+      n += text.split('\n').filter((l) => l.trim() && !/^\s*(#|\/\/|\*|\/\*)/.test(l)).length;
+    }
+  };
+  walk(join(REPO, 'worlds', id));
+  return n;
+}
+
+/** The library's reuse report (docs/library-reuse-report.md): world -> reuse number. */
+function reuse() {
+  const out = {};
+  const text = read('docs/library-reuse-report.md');
+  const sec = text.split(/\n## /).find((s) => s.startsWith('Reuse per world')) ?? '';
+  for (const line of sec.split('\n')) {
+    const c = line.split('|').map((x) => x.trim());
+    if (c.length >= 9 && /^[a-z]/.test(c[1]) && c[1] !== 'world' && !isNaN(Number(c[8]))) out[c[1]] = { used: Number(c[5]), own: Number(c[6]), other: Number(c[7]), reuse: Number(c[8]) };
+  }
+  return out;
+}
+
+/** Declared imports: world.sop `imports=world.X` and `compose=world.X`. */
+function imports(ids) {
+  const out = [];
+  for (const id of ids) {
+    const t = read(`worlds/${id}/world.sop`);
+    for (const m of new Set([...t.matchAll(/^\s+(?:imports|compose)=world\.(\S+)/gm)].map((x) => x[1]))) if (ids.includes(m) && !['core', 'lang.common'].includes(m)) out.push([id, m]);
+  }
+  return out;
+}
+
+// ---- the replay of the owner logs ---------------------------------------------------------------------------------------------------------------------
+const edgeKind = (world) => (world === 'session.things' ? 'view' : world === 'space' ? 'layout' : world === 'talk' ? 'lookup' : world === 'ui.shell' ? 'tab' : 'ask');
+const HELP = new Set(['fill', 'lookup', 'ask', 'layout']);   // kinds of ask that count as help for the answer; view, tab and route are plumbing
+const opWorld = (op) => /^op\.(.+)\.[^.]+$/.exec(String(typeof op === 'string' ? op : op?.op ?? ''))?.[1] ?? null;
+
+export async function measure() {
+  const { replay } = await import('./eval-owner-log.mjs');
+  const samples = Object.fromEntries(STEPS.map((s) => [s.id, { alt: [], by: {}, ran: 0 }]));
+  const edges = new Map(), perWorld = {};
+  let turns = 0, unparsed = 0, peeks = 0, seen = 0;
+  for (const sfx of LOGS) {
+    await replay({
+      log: join(REPO, `training/eval/owner-log-2026-11-13${sfx}.jsonl`), checks: '/nonexistent',
+      onEngine: (engine) => {
+        const k = engine.knowledge; const peek = k.peek.bind(k);
+        k.peek = (w) => { peeks++; return peek(w); };
+      },
+      onReply: (rec, r, s) => {
+        turns++;
+        const before = seen; seen = peeks;
+        const steps = r.trace.steps ?? [];
+        for (const st of steps) {
+          const a = samples[st.id]; if (!a) continue;
+          const ran = st.id === 'kind' || st.id === 'reply' || st.alternatives.some((n) => n > 0) || (st.id === 'world' && st.pick.length);
+          if (ran) a.ran++;
+          for (const n of st.alternatives) a.alt.push(n);
+          for (const b of [].concat(st.by ?? [])) a.by[b] = (a.by[b] ?? 0) + 1;
+        }
+        const seg = r.segments.find((x) => x.match);
+        const log = s.dialogue.log.at(-1);
+        const world = seg?.match.worldId ?? log?.world ?? null;
+        if (!seg) unparsed++;
+        const fired = new Set();
+        const add = (from, to, kind) => { const k = `${from}\t${to}\t${kind}`; edges.set(k, (edges.get(k) ?? 0) + 1); fired.add(k); };
+        if (world) {
+          if (seg?.routing?.router === 'meta.worlds') add('meta.worlds', world, 'route');
+          if (log?.filled?.length) add(world, 'session.dialogue', 'fill');
+          for (const f of log?.filled ?? []) if (f.source === 'knowledge') add(world, 'knowledge', 'lookup');
+          for (const ow of new Set(r.trace.operations.map(opWorld).filter(Boolean))) if (ow !== world) add(world, ow, edgeKind(ow));
+        }
+        // a thing read from the catalog while reading or answering: the world asked the knowledge catalog
+        if (world && peeks > before && !fired.has(`${world}\tknowledge\tlookup`)) add(world, 'knowledge', 'lookup');
+        if (world) { const w = (perWorld[world] ??= { turns: 0, helped: 0 }); w.turns++; if ([...fired].some((k) => HELP.has(k.split('\t')[2]))) w.helped++; }
+      },
+    });
+  }
+  return { samples, edges: [...edges].map(([k, n]) => { const [from, to, kind] = k.split('\t'); return { from, to, kind, n }; }).sort((a, b) => b.n - a.n || (a.from + a.to).localeCompare(b.from + b.to)), perWorld, turns, unparsed };
+}
+
+// ---- rendering ----------------------------------------------------------------------------------------------------------------------------------------
+const KIND_NOTE = { fill: 'fill: the world asked the dialogue module to fill a missing role', lookup: 'lookup: the world read the knowledge catalog', view: 'view: a thing was put into a tab through session.things', layout: 'layout: space arranged things', tab: 'tab: the shell opened or named a tab', ask: 'ask: an operation of another world ran', route: 'route: meta.worlds chose the world' };
+
+function graphSvg(model) {
+  const { nodes, edges, statics } = model;
+  const cols = { library: 90, mid: 330, knowledge: 570 };
+  const colOf = (n) => (n.group === 'library' || n.group === 'shared' ? 'library' : n.group === 'knowledge' ? 'knowledge' : 'mid');
+  const rows = { library: [], mid: [], knowledge: [] };
+  for (const n of nodes) rows[colOf(n)].push(n);
+  const gap = 26, top = 40;
+  const pos = {};
+  for (const [c, list] of Object.entries(rows)) list.forEach((n, i) => { pos[n.id] = { x: cols[c], y: top + i * gap, w: 130 }; });
+  const H = top + Math.max(...Object.values(rows).map((l) => l.length)) * gap + 10;
+  const maxN = Math.max(1, ...edges.map((e) => e.n));
+  const sw = (n) => (1 + 3 * Math.log2(1 + n) / Math.log2(1 + maxN)).toFixed(2);
+  const path = (a, b) => {
+    const A = pos[a], B = pos[b]; if (!A || !B) return null;
+    const rightward = A.x <= B.x;
+    const x1 = A.x + (A.x === B.x ? A.w / 2 : rightward ? A.w / 2 : -A.w / 2), x2 = B.x + (A.x === B.x ? B.w / 2 : rightward ? -B.w / 2 : B.w / 2);
+    const bow = A.x === B.x ? 70 : (x2 - x1) / 2;
+    return `M${x1},${A.y} C${x1 + (A.x === B.x ? bow : bow)},${A.y} ${x2 - (A.x === B.x ? -bow : bow)},${B.y} ${x2},${B.y}`;
+  };
+  let svg = `<svg viewBox="0 0 660 ${H}" role="img" aria-label="Graph of the worlds and which ask which" xmlns="http://www.w3.org/2000/svg">`;
+  svg += `<text class="col" x="${cols.library}" y="18" text-anchor="middle">library and shared</text><text class="col" x="${cols.mid}" y="18" text-anchor="middle">tabs and content worlds</text><text class="col" x="${cols.knowledge}" y="18" text-anchor="middle">knowledge</text>`;
+  for (const [a, b] of statics) { const d = path(a, b); if (d) svg += `<path class="edge imp" d="${d}"><title>${esc(a)} imports ${esc(b)} (world.sop)</title></path>`; }
+  for (const e of edges) { const d = path(e.from, e.to); if (d) svg += `<path class="edge k-${e.kind}" style="stroke-width:${sw(e.n)}" d="${d}"><title>${esc(e.from)} to ${esc(e.to)}: ${esc(e.kind)}, ${e.n} turn${e.n === 1 ? '' : 's'} on the logs</title></path>`; }
+  for (const n of nodes) {
+    const p = pos[n.id];
+    svg += `<g class="node g-${n.group}"><rect x="${p.x - p.w / 2}" y="${p.y - 10}" width="${p.w}" height="20" rx="4"/><text x="${p.x}" y="${p.y + 4}" text-anchor="middle">${esc(n.id)}</text></g>`;
+  }
+  return `${svg}</svg>`;
+}
+
+const CSS = `:root{--bg:#fbfaf7;--fg:#1d1d1b;--mut:#5c5c55;--line:#d9d6cc;--card:#fff;--acc:#1f5fbf;--lib:#e8f0fb;--tab:#eaf5ea;--cnt:#f6efe0;--kn:#f3e8f5;--sh:#eee;--k-fill:#c0392b;--k-lookup:#7b3fa0;--k-view:#1f7a4d;--k-layout:#b07a00;--k-tab:#555;--k-ask:#1f5fbf;--k-route:#00838f}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#15161a;--fg:#e8e6e0;--mut:#a3a199;--line:#33353b;--card:#1d1f25;--acc:#7aa7ee;--lib:#1c2a40;--tab:#1b2e1f;--cnt:#33291a;--kn:#2c1f33;--sh:#2a2a2a;--k-fill:#ff7a6b;--k-lookup:#c79bea;--k-view:#6ed3a0;--k-layout:#e8b84a;--k-tab:#aaa;--k-ask:#7aa7ee;--k-route:#4dd0e1}}
+:root[data-theme=dark]{--bg:#15161a;--fg:#e8e6e0;--mut:#a3a199;--line:#33353b;--card:#1d1f25;--acc:#7aa7ee;--lib:#1c2a40;--tab:#1b2e1f;--cnt:#33291a;--kn:#2c1f33;--sh:#2a2a2a;--k-fill:#ff7a6b;--k-lookup:#c79bea;--k-view:#6ed3a0;--k-layout:#e8b84a;--k-tab:#aaa;--k-ask:#7aa7ee;--k-route:#4dd0e1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}main{max-width:62rem;margin:0 auto;padding:1rem 16px 3rem}
+h1{font-size:1.5rem;margin:.5rem 0}h2{font-size:1.2rem;margin:2rem 0 .5rem;border-bottom:1px solid var(--line);padding-bottom:.25rem}p,li{max-width:46rem}small,.mut{color:var(--mut)}
+a{color:var(--acc)}code{font-size:.9em;overflow-wrap:anywhere}
+ol.steps{list-style:none;padding:0;margin:0;display:grid;gap:.6rem}ol.steps li{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.6rem .8rem;max-width:none}
+ol.steps b.n{display:inline-block;min-width:1.4rem;color:var(--acc)}ol.steps dl{margin:.3rem 0 0;display:grid;grid-template-columns:7rem 1fr;gap:.1rem .6rem;font-size:.92rem}ol.steps dt{color:var(--mut)}ol.steps dd{margin:0;overflow-wrap:anywhere}
+.big{font-weight:600}.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{text-align:left;padding:.3rem .6rem;border-bottom:1px solid var(--line);white-space:nowrap}td.num,th.num{text-align:right}th{position:sticky;top:0;background:var(--card)}
+svg{display:block;min-width:600px;width:100%;height:auto}svg text{fill:var(--fg);font:11px system-ui,sans-serif}svg .col{fill:var(--mut);font-size:11px}
+.node rect{stroke:var(--line);fill:var(--sh)}.g-library rect{fill:var(--lib)}.g-tab rect{fill:var(--tab)}.g-content rect{fill:var(--cnt)}.g-knowledge rect{fill:var(--kn)}
+.edge{fill:none;stroke-opacity:.75}.edge.imp{stroke:var(--mut);stroke-dasharray:4 4;stroke-width:1;stroke-opacity:.45}
+.k-fill{stroke:var(--k-fill)}.k-lookup{stroke:var(--k-lookup)}.k-view{stroke:var(--k-view)}.k-layout{stroke:var(--k-layout)}.k-tab{stroke:var(--k-tab)}.k-ask{stroke:var(--k-ask)}.k-route{stroke:var(--k-route)}
+.legend{display:flex;flex-wrap:wrap;gap:.3rem 1rem;font-size:.85rem;margin:.5rem 0}.legend i{display:inline-block;width:1.4rem;height:0;border-top:3px solid;vertical-align:middle;margin-right:.3rem}
+.legend .k-fill{border-color:var(--k-fill)}.legend .k-lookup{border-color:var(--k-lookup)}.legend .k-view{border-color:var(--k-view)}.legend .k-layout{border-color:var(--k-layout)}.legend .k-tab{border-color:var(--k-tab)}.legend .k-ask{border-color:var(--k-ask)}.legend .k-route{border-color:var(--k-route)}`;
+
+export function render(m) {
+  const { samples, edges, perWorld, turns, unparsed, worlds, stat } = m;
+  const stepHtml = STEPS.map((st, i) => {
+    const s = samples[st.id];
+    const med = median(s.alt);
+    const by = Object.entries(s.by).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, n]) => `${esc(k)} ${n}`).join(', ');
+    return `<li><span class="big"><b class="n">${i + 1}</b>${esc(st.label)}</span>
+<dl><dt>decides</dt><dd><code>${esc(st.module)}</code></dd><dt>from</dt><dd>${esc(st.data)}</dd>
+<dt>alternatives</dt><dd><span class="big">median ${med == null ? 'n/a' : med}</span>, max ${s.alt.length ? Math.max(...s.alt) : 'n/a'} <small>(${esc(st.measure)}; ran on ${s.ran} of ${turns} turns)</small></dd>
+${by ? `<dt>seen deciding</dt><dd>${by}</dd>` : ''}</dl></li>`;
+  }).join('\n');
+  const rows = worlds.map((w) => {
+    const pw = perWorld[w.id];
+    return `<tr><td>${esc(w.id)}</td><td>${esc(w.group)}</td><td class="num">${w.lines}</td><td class="num">${w.reuse == null ? '-' : w.reuse}</td><td class="num">${pw ? pw.turns : 0}</td><td class="num">${pw ? pct(pw.helped, pw.turns) : '-'}</td></tr>`;
+  }).join('\n');
+  const total = edges.reduce((a, e) => a + e.n, 0);
+  const edgeRows = edges.map((e) => `<tr><td>${esc(e.from)}</td><td>${esc(e.to)}</td><td>${esc(e.kind)}</td><td class="num">${e.n}</td></tr>`).join('\n');
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PSys2 system map</title>
+<style>${CSS}</style></head><body><main>
+<h1>PSys2 system map</h1>
+<p class="mut">Generated by <code>scripts/build-system-map.mjs</code> at each landing; do not edit. Numbers come from replaying the three owner logs (${turns} messages, ${unparsed} not read), the world files, the generated cards (<code>worlds/meta.worlds/kb.sop</code>), <code>docs/host-boundary.md</code> and the library's reuse report.</p>
+
+<h2>1. The path of a message</h2>
+<p>Every message goes through the same fixed sequence of small decisions. Each step has one module that decides it and one kind of data it decides from. The turn trace (<code>trace.steps</code>) and the answer to "why" use these names.</p>
+<ol class="steps">
+${stepHtml}
+</ol>
+
+<h2>2. Who asks whom</h2>
+<p>Each box is a world or a module. A coloured line means that, on the logs, a turn answered by the world on its left or right asked the other one for something; thicker means more turns. Dashed grey lines are the imports declared in <code>world.sop</code>. Hover (or long-press) a line for its count. ${edges.length} kinds of ask fired ${total} times in ${turns} turns.</p>
+<div class="legend">${Object.entries(KIND_NOTE).map(([k, t]) => `<span><i class="k-${k}"></i>${esc(t)}</span>`).join('')}</div>
+<div class="scroll">${graphSvg(stat)}</div>
+<details><summary>The same edges as a table</summary><div class="scroll"><table><thead><tr><th>from</th><th>to</th><th>kind</th><th class="num">turns</th></tr></thead><tbody>
+${edgeRows}</tbody></table></div></details>
+
+<h2>3. Three numbers per world</h2>
+<p><b>Hand-written lines</b>: non-blank, non-comment lines of the world's <code>.sop</code> and <code>.mjs</code> files, tests and generated files left out. <b>Reuse</b>: of the types the world uses, the share that comes from elsewhere (the library's report, <code>docs/library-reuse-report.md</code>; "-" when the report has no row). <b>Turns</b> and <b>helped</b>: turns the world answered on the logs, and the share where another world or the knowledge catalog was asked (a fill, lookup, ask or layout edge fired; opening a tab, mirroring a view and routing are plumbing and do not count).</p>
+<div class="scroll"><table><thead><tr><th>world</th><th>role</th><th class="num">hand-written lines</th><th class="num">reuse</th><th class="num">turns</th><th class="num">helped</th></tr></thead><tbody>
+${rows}</tbody></table></div>
+
+<h2>4. One vocabulary for the trace</h2>
+<p>The trace of a turn (<code>reply.trace</code>, shown in Developer mode) has a <code>steps</code> list with the seven steps above, in this order. The older trace fields map to them as follows:</p>
+<ul>
+<li>kind of turn: <code>trace.discourse.meta</code> and the dialogue log's <code>kind</code> (new, continuation, why, correction, undo ...)</li>
+<li>world: <code>trace.routing</code> (<code>tierName</code>: modal, active-tab, recent, priority, meta.worlds) and <code>trace.router</code></li>
+<li>act: <code>trace.patterns</code></li>
+<li>things: <code>trace.segments[].match.slots</code></li>
+<li>what is missing and who fills it: <code>trace.discourse.pending</code> and the dialogue log's <code>filled</code> (role, value, source)</li>
+<li>apply: <code>trace.operations</code> and <code>trace.effects</code></li>
+<li>reply: <code>trace.replyEnglish</code> and <code>trace.statuses</code></li>
+</ul>
+<p><b>Known mismatches</b> (left as they are because renaming them would change replies that tests and logs depend on):</p>
+<ul>
+<li>The "why" answer says "I read it as a request for the X because it is the tab that was open"; that is step 2 (world). It has no sentence for step 3 (act) or step 4 (things), and the kind of turn is only said for corrections.</li>
+<li>"came from the scene / what we had just talked about / the usual words for that kind of request" is step 5 (what is missing and who fills it); the tiers are named focus, scene, knowledge in the data and said differently in the sentence.</li>
+<li>"What I answered" is step 7 (reply); the offer to undo is step 6 (apply) seen from the other side.</li>
+<li><code>routing.tierName</code> uses its own words (active-tab, recent, priority); in this page they are the answer to "who decides the world".</li>
+<li>The Developer view still groups the trace by module (formalizer, discourse, router) rather than by step.</li>
+</ul>
+
+<h2>How this page is made</h2>
+<p>The generator replays the owner logs in rules mode (<code>scripts/eval-owner-log.mjs</code>), collects <code>trace.steps</code> of every turn, and counts the edges from the dialogue log (fills), the operations of other worlds and the knowledge catalog reads. A test (<code>tests/system-map.test.mjs</code>) fails when this page is stale; <code>node scripts/build-system-map.mjs --write</code> regenerates it, and <code>scripts/build-webchat.mjs</code> copies it into the webchat. Libraries (<code>acts, space, session.things, session.dialogue, meta.worlds</code>) are the modules <code>docs/host-boundary.md</code> marks for the sopworld library.</p>
+</main></body></html>
+`;
+}
+
+export async function generate() {
+  const ids = worldIds();
+  const cd = cards(), bd = boundary(ids), rz = reuse(), imps = imports(ids);
+  const meas = await measure();
+  const worlds = ids.map((id) => ({ id, group: GROUP(id, cd[id], bd[id]), lines: handLines(id), reuse: rz[id]?.reuse ?? null }));
+  const group = Object.fromEntries(worlds.map((w) => [w.id, w.group]));
+  group.knowledge = 'knowledge';
+  const used = new Set();
+  for (const e of meas.edges) { used.add(e.from); used.add(e.to); }
+  for (const [a, b] of imps) { used.add(a); used.add(b); }
+  const nodes = [...used].filter((id) => group[id]).sort((a, b) => a.localeCompare(b)).map((id) => ({ id, group: group[id] }));
+  const nodeIds = new Set(nodes.map((n) => n.id));
+  const stat = { nodes, edges: meas.edges.filter((e) => nodeIds.has(e.from) && nodeIds.has(e.to)), statics: imps.filter(([a, b]) => nodeIds.has(a) && nodeIds.has(b)) };
+  return render({ ...meas, worlds, stat });
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const html = await generate();
+  if (process.argv.includes('--check')) {
+    const stale = [MAP_FILE, MAP_COPY].filter((f) => !existsSync(f) || readFileSync(f, 'utf8') !== html);
+    if (stale.length) { console.error(`stale: ${stale.join(', ')} (node scripts/build-system-map.mjs --write)`); process.exit(1); }
+    console.log('system map is current');
+  } else if (process.argv.includes('--write')) {
+    writeFileSync(MAP_FILE, html); writeFileSync(MAP_COPY, html);
+    console.log(`wrote ${MAP_FILE} and ${MAP_COPY} (${html.length} bytes)`);
+  } else process.stdout.write(html);
+}
