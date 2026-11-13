@@ -492,7 +492,7 @@
     canonical="You are called Ziggy."
 
 @pat.ui.avatar.ask.name core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what_is_your_name|what_are_you_called|who_are_you|what_do_i_call_you|what_is_ur_name|tell_me_your_name] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what_is_your_name|what_are_you_called|what_do_i_call_you|what_is_ur_name|tell_me_your_name] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=ui.avatar.ask arg.mode=what arg.attribute=\"name\" arg.thing=\"yourself\" arg.text=\"{segment}\""
     kind=question
     priority=12

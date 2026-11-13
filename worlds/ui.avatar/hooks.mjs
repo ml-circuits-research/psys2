@@ -41,17 +41,20 @@ function thingsOf(ctx) {
 }
 
 /** DECLINE (spec 21): the words of a reading must be of a face (a slot, a variant, a preset, an expression) or of the stage (a moment) or about the avatar itself; "draw a house" is not, so the next world reads it. */
-function accepts({ action, mode, roles, state, claim }) {
-  if (claim) return true;   // the sentence says "yourself" / "the avatar" itself: it is about this world whatever the other words are ("I cannot look scared yet" is its answer)
+function accepts({ action, mode, roles, state, claim, tab, text }) {
+  const said0 = String(text ?? '').toLowerCase();
+  // a claim needs an explicit word for this world in the sentence itself: "my name is", "who are you", "I am" are not the avatar's unless the sentence says yourself / your / the avatar / the face
+  if (claim) return !text || /\b(yourself|your|urself|ur|the avatar|the robot|the face|this avatar)\b/.test(said0);   // the sentence says "yourself" / "the avatar" itself: it is about this world whatever the other words are ("I cannot look scared yet" is its answer)
   const act = String(action ?? '').split('.').pop();
   if (['undo', 'redo'].includes(act)) return true;
-  if (act === 'save') return /\b(?:this|it|face|me|myself|yourself|as)\b/i.test(String(roles.value ?? '') + ' ' + String(roles.text ?? '')) || !!roles.value;   // "save this as Grandma"
+  if (act === 'save') return /\b(?:face|avatar|yourself|myself)\b/.test(said0) || /^(?:please\s+)?(?:save|store|keep|remember)\s+(?:this|it|me)\b/.test(said0);   // "save this as Grandma", "save this face as X"; "write down milk" and "remember that I am 34" are not
   if (['random', 'all', 'describe', 'state'].includes(mode)) return true;   // no thing is said: "surprise me", "reset", "describe yourself"
   if (['why', 'last'].includes(mode)) return false;                        // the discourse layer explains what was done; the avatar does not take every why
   if (/^name$/i.test(roles.attribute ?? '') || mode === 'what' && !roles.thing && !roles.attribute) return true;   // the name of the avatar
-  const said = [roles.pre, roles.thing, roles.value, roles.attribute, roles.rest].filter(Boolean).join(' ');
+  const said = (act === 'place' ? [roles.thing] : [roles.pre, roles.thing, roles.value, roles.attribute, roles.rest]).filter(Boolean).join(' ');
   if (!said) return true;
   if (act === 'load') { const k = Object.keys(state?.face?.saved ?? {}); if (!(k.some((n) => said.toLowerCase().includes(n)) || F.clausesOf(DEFAULT_FACE, F.tokens(said)).some((c) => c.preset))) return false; }   // "open the weather tab" is not a face
+  if (roles.thing && PRONOUN.test(String(roles.thing).trim()) && state?.face?.lastThing && F.read(DEFAULT_FACE, F.tokens(said)).some((m) => m.type === 'colour' || m.type === 'feature' || m.type === 'slot')) return 'focus';   // "make it red" right after the hat: the avatar holds the focus, it does not yield
   if (PRONOUN.test(said.trim()) || SELF.test(said.trim())) return true;
   if (roles.thing && SELF.test(String(roles.thing).trim()) && !roles.value) return true;
   if (wordsOf(said).some((w) => MOMENTS.has(w))) return true;
@@ -59,9 +62,10 @@ function accepts({ action, mode, roles, state, claim }) {
   if (saved.some((k) => said.toLowerCase().includes(k))) return true;        // "be Grandma": a face the user saved
   // most of the words must be face words (a slot, a variant, a colour, a feature, a preset, an expression): "Place a medium white ellipse named Cloud at 198, 98" has two of seven
   const read = F.read(DEFAULT_FACE, F.tokens(said)), known = read.filter((m) => m.type !== 'word' && m.type !== 'neg').length, unknown = read.filter((m) => m.type === 'word').length;
-  if (known < unknown || (act === 'ask' && unknown > 0)) return false;   // a question about the face uses only face words
+  if (known < unknown || ((act === 'ask' || act === 'place' || act === 'remove') && unknown > 0)) return false;   // a question about the face uses only face words
+  if (roles.thing && PRONOUN.test(String(roles.thing).trim()) && state?.face?.lastThing && read.some((m) => m.type === 'colour' || m.type === 'feature')) return 'focus';   // "make it red" right after the hat
   const cl = F.clausesOf(DEFAULT_FACE, F.tokens(said));
-  return cl.some((c) => c.slots.length || c.preset || c.mood || (act !== 'ask' && c.variant?.length) || (c.colours?.length && (!roles.thing || SELF.test(String(roles.thing).trim()))));
+  return cl.some((c) => c.slots.length || c.preset || c.mood || (act !== 'ask' && c.variant?.length) || (c.colours?.length && (!roles.thing || SELF.test(String(roles.thing).trim()) || (PRONOUN.test(String(roles.thing).trim()) && state?.face?.lastThing))));
 }
 
 export const hooks = {
