@@ -17,6 +17,7 @@ import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
 import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { parse, serialize } from '../../soplang/index.mjs';
 import { budget } from '../../dialog/budget.mjs';
+import { readingVariants, dropStyleIn } from './variants.mjs';
 
 export { FormSession } from './session.mjs';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
@@ -766,7 +767,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     return out;
   };
   for (const s of analyze(text)) {
-    s.tokens = splitPossessives(s.tokens, lex);
+    s.tokens = dropStyleIn(splitPossessives(s.tokens, lex));
     const first = readSentence(s, s.tokens);
     if (first.done) { segments.push(...first.done); continue; }
     // nothing matched: retry once with unknown words corrected to the closest known word (typo tolerance)
@@ -785,6 +786,14 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         continue;
       }
     }
+    // ROUND-TRIP-MINING: the same meaning in another grammatical frame ("Wearing a hat", "He draws two houses", "in italics"): token rewrites, tried only now
+    let third = null;
+    for (const variant of readingVariants(retryTokens, known)) {
+      const r = readSentence(s, variant);
+      if (r.done && !r.done.some((x) => x.unparsed) && !(variant.command && r.done.some((x) => x.match?.kind === 'statement'))
+          && !(variant.personal && !r.done.every((x) => x.match?.worldId === ctx.tabWorld))) { third = r; break; }
+    }
+    if (third) { segments.push(...third.done); continue; }
     segments.push(first.fallback);
   }
   for (const seg of segments) wires.push(...seg.wires);
