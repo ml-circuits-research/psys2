@@ -3795,3 +3795,27 @@ The ablation is exactly the measurement that was missing; accepted. Headline as 
 **What this means for the plan:** the gain is not in bigger models but in the general mechanisms (acts, dialogue, knowledge by lookup). Robustness (typos, loose words, paraphrases: 835/987, 338/643, 22/146 with rules) is the weak side: send those three sets' failures to the ledger by cause; paraphrases-rt at 22–36 of 146 is the largest hole of all and is mostly words: measure it again once act phrases and kinds come from `k.actions` / the catalog by lookup.
 
 **sopworld 0.23.0 is validated** (343 tests): shared things, aspects, views, `show`, `teach` / `forget` with a `taught` tier, `createCatalog` / `bundleReader` / `tools/build-bundle.mjs` (your knowledge loader, taken over: delete yours when vendored), the reuse detector. Its report on your worlds (`docs/reuse-reports/psys2.md` in the library) gives a reuse number of 0 for most worlds; its believed candidates: the selection / last-thing rules repeated in art.draw, diagram.sketch, docs.editor, docs.reader; the lookup actions of the kids.* worlds; game / move of chess and tic-tac-toe. They will come back as `std.*` modules.
+
+## Reviewer 2026-11-14 00:10 — DEFAULTS BY THE NUMBERS and FEWER OPTIONS (owner: "set the defaults according to the numbers, you have a free hand; should we cut options?"); diagram switch; SYSTEM MAP
+
+Validated: smoke 62/62 at f18f5114; sopworld 0.24.0 (354 tests, 0 fail) with `turn` (one request pipeline with graded fallback), `route`, `schemaGrid`, `complete`, `core.use as=`, the ledger tools: vendor it.
+
+**Defaults (from the ablation; Q9 items 1 and 4 are now decided):**
+1. Reading default = **rules** (with M1 and symbolic routing). The NX hybrid reader is no longer the default (it rescues 6 turns and breaks 9 of 6,744).
+2. **T5 normalizer (97 MB): not loaded by default**; one optional download the user starts ("Help me with garbled sentences", with its size and what it gains).
+3. The encoder (68 MB: segmentation and world prior; +60 right, +12 wrong, mostly typos) stays on in the background and never blocks, **until** the card-driven clause cutter and the suspect-word leniency are in and re-measured; if the gap is then under 0.5 point with no set worse by more than 1 point, it becomes optional too and the first load is model-free.
+4. Suspect-word leniency, "also" as a joiner, READER-ROUTE `fill`: on (decided at 23:55).
+
+**Cut options (settings must match what the numbers can tell apart):**
+- Remove: "Model first" (126 fewer right, 136 more wrong), "Edit head" (failed its gate twice), router A, and any reading sub-option whose two values differ by less than 0.3 point on every set. Developer mode keeps a single "experiments" list for what is being measured, each with its last numbers and date; an experiment that loses is deleted, not kept as an option.
+- The user-facing Reading group becomes: language; "use the helper model for typos and long sentences" (on / off, shows size and state); the optional garbled-sentence download; fix typos; say what was ignored. Nothing else.
+- Write the rule in the settings spec: an option exists only while its values differ measurably or the user must choose for a reason other than accuracy (size, privacy, sound).
+- Report the options before and after (count), and the cold-start table again.
+
+**Diagram pilot at 741/771 (96.1%) → switch it** (its own commit, like the avatar), after its hooks stop calling the engine through text; keep the old world one landing for comparison, then delete. art.draw is not switched (81%); continue by causes.
+
+**SYSTEM MAP (owner: "I am losing the overview").** Generate, do not write: one page (`docs/system-map.html`, also in the app under About) built from the schemas, the cards, `docs/host-boundary.md` and the library's reuse report:
+- the path of a message as the fixed sequence of small decisions (kind of turn → world → act → things → what is missing and who fills it → apply → reply), with, for each step, which module decides, from which data, and how many alternatives it had on the owner logs (median);
+- the worlds as a graph: tab views, shared modules (library), knowledge worlds, with an edge when one asks another for something (fill, lookup, view, layout), weighted by how often on the logs;
+- three numbers per world: hand-written lines, reuse number, share of its turns answered with help from another world.
+The trace of one turn ("why") uses the same vocabulary, so the page explains what the trace shows. This page is how the owner and new contributors see what the system has become; regenerate it at each landing.
