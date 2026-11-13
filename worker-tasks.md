@@ -3215,3 +3215,46 @@ The owner cannot understand the Settings options and found language-specific lef
 6. **Defaults follow the gates.** An experiment that passed its gate is on by default; the owner wants the latest accepted work active without ticking boxes. An experiment that failed its gate is not offered as a normal option: move it to Developer with its measured numbers in the text, or remove it. "Edit head" says itself that it "recovers few messages and misleads more": report its numbers (recovered, misled, on which set) in worker-log; until the owner decides, it stays off and moves to Developer. List every option with its default and the reason in worker-log as a table.
 7. **Wrong-world analysis from the owner's history.** Add `scripts/analyze-phrase-log.mjs`: input is the history export of the webchat; output is a table of messages that went to a world other than the active tab or were not understood, grouped by (active tab → chosen world, pattern), with the message texts. The owner will export his history; the reviewer runs the script and writes the tasks. Also add to the export, per message, the active tab, the candidate worlds with their scores and the final choice, if they are not there yet.
 Gates: smoke per commit, full before the publish, Chrome checks for the settings panel in both sizes.
+
+## Reviewer 2026-11-13 13:50 — SCENE-NATURAL (owner's two history exports, analysed; "still too rigid")
+
+**Data:** `training/eval/owner-log-2026-11-13.jsonl`: the owner's 64 real messages (Nov 10 and Nov 13, mostly Romanian, Drawing tab), each with what the app did, a class and, for 36 of them, what he meant (`expected`, written by the reviewer). First replay all of them on today's build and report per message: fixed already, or still wrong. Then fix by the **general means** below. No phrase lists, no rows per message, no encoder retraining. Each principle gets tests with other words than the owner's.
+
+**P1. A fragment continues the conversation in the active tab; it never opens another world.**
+- "crocodilii" (right after "I don't know what corcodilii is") went to Hangman as a word to guess; "sa fie diferite" also went to Hangman; "make it happy" on the Avatar tab went to the diagram; "the leg of the blue crocodile" went to the document editor; half of one drawing request went to the map.
+- Rule: a message with no verb of its own, or a clause cut from a longer message, is read first as (a) the missing piece of the last turn of the active tab (a corrected word, an answer to a question the app asked), (b) a change to the last action. A world that is not the active tab and has nothing running (no game started, no document open, no referent of the message in its state) cannot take such a message. If nothing fits, ask in the active tab. This extends the E2 veto: "another world has no referent for this" is a veto too.
+- One request stays one request: a split may not send a piece without its own verb to another world.
+
+**P2. Follow-ups change the last action.** Read these as operations on the previous turn, in any world that has undo:
+- again / one more / another X ("inca un crocodil") → repeat the last add;
+- more of the same ("si mai sus", "bigger", "further left") → repeat the last move or resize, same things;
+- refine the result ("sa fie diferite", "make them red") → applies to the things the last action made;
+- except / not there ("nu si peste apa") → undo the part of the last action that touches the named thing; never a new unrelated action;
+- keep X ("dar lasa lacul") → restore X if the last action removed or covered it.
+Implement once in the dialogue layer (the discourse memory already knows the last action and its objects), not per world.
+
+**P3. Referents are matched to the scene first, with spelling tolerance.** "corcodiles", "corcodilii", "iraba": the picture had crocodiles; the app spent up to 93,000 spelling steps and still said "I don't know what corcodilii is". Before any dictionary repair, compare an unknown noun (lemma, edit distance up to 2, both the original and the translated word) with the names of the things in the active scene, then with the things the tab can make. Say what was assumed ("I read corcodilii as the crocodiles"), as the app already does for verbs.
+
+**P4. Places are things.** "draw a lake" turned the whole ground into water; then "move the houses above the lake" and "above the water" said "I can't find the lake". "put grass under the houses" was refused ("the sky and the ground stay where they are").
+- A lake, a pond, a river, a road, a field, a patch of grass, a hill are **region objects**: a place, a size, a name; they can be moved, resized, deleted, and used in relations (in, on, above, under, next to, around). Sky and ground stay as full backgrounds only when asked as such ("make the ground green").
+- Relations work on regions and on objects alike: "put the crocodiles in the lake", "the houses above the lake", "grass under the houses" (a grass region below their feet, as wide as the group).
+- "put / place / add / make / I want" + a thing that is not in the picture = add it ("pune si un lac" must not ask where to move it).
+
+**P5. Things can be taken apart and built.** The owner wants to break the composition.
+- **Parts by name**, also for imported objects: "make the legs of the crocodile black". If the object has no part with that name, say which parts it has; never say "composite".
+- **Take apart:** "take the house apart", "separate the roof" → the parts become objects of their own (keep shape, colour, place); undo joins them again.
+- **Build:** "put these together", "this is a boat" → a group with a name, used like any object afterwards (move, copy, "draw another boat").
+- **Variation:** "3 different houses" → vary colour and size (and a variant drawing when the catalog has one); "different" after the fact is P2 refine.
+- "a ball" comes from the catalog (it drew a red circle).
+
+**P6. The reply is as natural as the request.**
+- Broken replies in the log: "Încă nu știu cum să desenez un A." (an article taken as the thing), "Și cerul pământul stă unde sunt. Poți muta lucrurile desena." (translation of a template with holes), "Un compozit nu are picior", "Drew c1.". Add a reply check to the eval: no internal word, no dangling article, a complete sentence in the user's language. Run it over every reply template with the on-device translator and with the rules.
+- A self-repair inside one message ("draw a water ..., a lake") is one request, the last wording wins.
+
+**P7. Translation order.** Most Romanian messages in the log went through `rules-translate` although the browser translator was working on that machine (`translator-in` appears on others), and the rules gave "Still a crocodile" (inca un = one more), "still up" (mai sus = higher), "Put and a lake", "It is different". The owner's rule since 2026-11-12: with a browser Translator available it is the translator; the rules are the fallback without it. Report why the rules ran first here, fix the order, and measure the Romanian set again with the three paths (browser translator, on-device model, rules).
+
+**P8. Older misses to replay** (Nov 10, may be fixed): "make a better layout" drew a new circle; "paint three new nodes" asked what to change; "an old woman" on the Avatar tab was not understood; "how can I change the shape of a diagram" got generic examples; voice with Romanian selected produced English nonsense that was (rightly) ignored: check the recognizer language.
+
+**Cost.** One message took 2.1 s and 389,000 steps, most in spelling and backtracking. After P3 report the step counts of the log again.
+
+**Order:** replay report, P1, P3, P2, P4, P5, P6, P7. SETTINGS-COHERENT (13:20) can run in parallel in another worktree. Gates: smoke per commit, full before publish, A/B clean, and the owner-log set as a new eval (report right / wrong per class before and after).
