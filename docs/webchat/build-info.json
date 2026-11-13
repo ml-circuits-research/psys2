@@ -56,11 +56,11 @@
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "b5d3c84d4136c146",
     "lib/dialog/continuation.mjs": "61c3fb70fb1f2c37",
-    "lib/dialog/discourse.mjs": "0412707565b98245",
+    "lib/dialog/discourse.mjs": "6dffa36a6e52515b",
     "lib/dialog/dispatch-validate.mjs": "28dbbbe5dc619aec",
     "lib/dialog/encoder-dispatch.mjs": "9f83e9fe8fbabe8e",
     "lib/dialog/followup.mjs": "a80f066b4fada950",
-    "lib/dialog/index.mjs": "ad68faee723d66a5",
+    "lib/dialog/index.mjs": "6515693e6f415e7e",
     "lib/dialog/knowledge-lookup.mjs": "f10d72eb135f9cc9",
     "lib/dialog/meta-worlds.mjs": "d7c790249bf8416d",
     "lib/dialog/meta.mjs": "5314f650e6529b5d",
@@ -191,7 +191,7 @@
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/fns.mjs": "16f176dcd3a5d975",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "9bb4a49008d34604",
+    "worlds/index.json": "53874780c22c4409",
     "worlds/kids.animals/coverage.md": "8ea1a62c5dd20175",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/fns.mjs": "9ef8355823579d3e",
@@ -228,7 +228,7 @@
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
     "worlds/space/space.mjs": "f454c54a50ad766e",
     "worlds/talk/cards.mjs": "b2b974f6388a74a4",
-    "worlds/talk/ops.mjs": "e54c17227b69de63",
+    "worlds/talk/ops.mjs": "21f4c4e99cfdef07",
     "worlds/ui.avatar/coverage.md": "7f8a2b93f4fd3dea",
     "worlds/ui.avatar/datagen.mjs": "7b6d8141609ea71b",
     "worlds/ui.avatar/facedata.mjs": "4fd979bbcd2c4e8c",
@@ -251,6 +251,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-13T15:40:15.507Z",
-  "commit": "a8fcfdd"
+  "builtAt": "2026-11-13T16:01:25.701Z",
+  "commit": "fbe9fcb"
 }
