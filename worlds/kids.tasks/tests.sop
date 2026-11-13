@@ -226,7 +226,7 @@
 @t.tasks.n43 core.test
     session=count
     input="add a ruler to my school list"
-    expect="Done!"
+    expect="I added ruler"
 
 @t.tasks.n44 core.test
     session=count
@@ -268,12 +268,12 @@
 @t.tasks.n51 core.test
     session=amb
     input="add read a book to my to-do list"
-    expect="Done!"
+    expect="I added read a book"
 
 @t.tasks.n52 core.test
     session=amb
     input="add read a map to my to-do list"
-    expect="Done!"
+    expect="I added read a map"
 
 @t.tasks.n53 core.test
     session=amb

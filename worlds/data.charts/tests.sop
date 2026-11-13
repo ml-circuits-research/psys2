@@ -1250,7 +1250,7 @@
 
 @t.data.charts.r2127 core.test
     input="Add milk, eggs and bread to my shopping list."
-    expect="Done"
+    expect="I added milk"
     session=r2w
 
 @t.data.charts.r2128 core.test
