@@ -3,9 +3,9 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from './engine.mjs?v=c88a00a02d';
+import * as D from './engine.mjs?v=05a8e2214f';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
-import { splitThings } from '../acts/acts.mjs?v=6383a63a86';
+import { splitThings } from '../acts/acts.mjs?v=07f1419ec1';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=94b5cebde0';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -67,7 +67,11 @@ function acceptsWords({ action, mode, roles, text, state, kindWord }) {
   const act = String(action ?? '').split('.').pop();
   if (!['make', 'remove', 'change', 'place', 'group', 'pick', 'ask', 'copy'].includes(act)) return true;
   const said = roles.thing ?? roles.rest ?? '';
-  if (act === 'ask' && ['describe', 'options'].includes(mode)) return true;
+  if (act === 'ask' && mode === 'options') {   // "show Pariss" is a place of the map, not the list of things to draw: the free words must name the drawing (a thing, a colour, "options", "draw")
+    const ws = words(roles.thing ?? roles.rest ?? '');
+    return !ws.length || ws.some((x) => /^(?:things?|objects?|items?|shapes?|options?|colou?rs?|shades?|paints?|crayons?|draw|drawing|drawn|pictures?|animals?|stuff|available)$/.test(x) || D.kindOfWord(x) != null || D.kindOfWord(x.replace(/s$/, '')) != null || kindWord?.(x) === true);
+  }
+  if (act === 'ask' && mode === 'describe') return true;
   if (act === 'ask' && !said && !roles.place) return false;
   if ((act === 'make' || act === 'change') && !roles.place && TIMES.has(words(said).at(-1) ?? '') && words(said).every((x) => TIMES.has(x) || DET.has(x) || /^(?:it|its|so|be|bright|nice|sunny|a|the)$/.test(x))) return true;   // "make it a sunny day", "change it so its day"
   if (act === 'change' && /^(?:scene|mood|time|sky|picture|drawing|background)$/.test(words(said).at(-1) ?? '') && TIMES.has(words(roles.value).at(-1) ?? '')) return true;   // "change the scene to dawn"

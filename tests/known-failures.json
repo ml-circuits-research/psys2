@@ -279,7 +279,7 @@
     },
     {
       "file": "ellipsis-one.test.mjs",
-      "pattern": "^Romanian: \"f\u0103 o cas\u0103 verde \u0219i una galben\u0103\" draws both houses$",
+      "pattern": "^Romanian: \"fă o casă verde și una galbenă\" draws both houses$",
       "class": "continuation / ellipsis / self-correction -> session.dialogue",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
@@ -333,12 +333,6 @@
     },
     {
       "file": "invariants.test.mjs",
-      "pattern": "^ops: a destructive clause next to a clause that is not understood does not run$",
-      "class": "arbitration between worlds: another world claims what the draw tab no longer reads (an invariant: tab change / refusal by another world)",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "invariants.test.mjs",
       "pattern": "^ops: no message changes the tab unless it names a tab \\(owner-log messages, and a loose why-question\\)$",
       "class": "arbitration between worlds: another world claims what the draw tab no longer reads (an invariant: tab change / refusal by another world)",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
@@ -346,12 +340,6 @@
     {
       "file": "invariants.test.mjs",
       "pattern": "^ops: the world that answers is the world of the open tab unless the message names a world \\(no refusal of another world for an act the tab has\\)$",
-      "class": "arbitration between worlds: another world claims what the draw tab no longer reads (an invariant: tab change / refusal by another world)",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "invariants.test.mjs",
-      "pattern": "^matrix: a destructive clause next to a clause that is not understood does not run$",
       "class": "arbitration between worlds: another world claims what the draw tab no longer reads (an invariant: tab change / refusal by another world)",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
@@ -395,18 +383,6 @@
       "file": "music.test.mjs",
       "pattern": "^media\\.music: loads without problems and its 60\\+ tests pass$",
       "class": "test-world rows of the switch (ledgered per row): the suite that counts them fails",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "network-never-changes-reading.test.mjs",
-      "pattern": "^a catalog whose every fetch is rejected: readings and replies are those of no catalog$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "network-never-changes-reading.test.mjs",
-      "pattern": "^a catalog whose every fetch is hanging: readings and replies are those of no catalog$",
-      "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
@@ -590,48 +566,6 @@
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
     {
-      "file": "undo-redo.test.mjs",
-      "pattern": "^redo puts back what undo took out and says what it was; a new action clears the redo list \\[matrix\\]$",
-      "class": "undo / redo answer names the act -> std.acts timeline wording",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "undo-redo.test.mjs",
-      "pattern": "^a message with two requests is two steps: undo takes back the last request and says which, then the other \\[matrix\\]$",
-      "class": "undo / redo answer names the act -> std.acts timeline wording",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "undo-redo.test.mjs",
-      "pattern": "^a message with two requests is two steps: undo takes back the last request and says which, then the other \\[ops\\]$",
-      "class": "undo / redo answer names the act -> std.acts timeline wording",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "undo-redo.test.mjs",
-      "pattern": "^\"undo the house\" takes back a named earlier step alone when the later ones do not touch it \\[matrix\\]$",
-      "class": "undo / redo answer names the act -> std.acts timeline wording",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "undo-redo.test.mjs",
-      "pattern": "^\"undo the house\" when a later step rests on the same picture asks, and \"yes\" takes both back, \"no\" leaves everything \\[matrix\\]$",
-      "class": "undo / redo answer names the act -> std.acts timeline wording",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "undo-redo.test.mjs",
-      "pattern": "^the timeline entries of a message share its turn and carry the words of each request$",
-      "class": "undo / redo answer names the act -> std.acts timeline wording",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
-      "file": "undo-redo.test.mjs",
-      "pattern": "^the record of a restart keeps one entry per request \\(RESTORE-1 with UNDO-REDO\\)$",
-      "class": "undo / redo answer names the act -> std.acts timeline wording",
-      "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
-    },
-    {
       "file": "world-aware.test.mjs",
       "pattern": "^off: the shipped reply, nothing recorded on the segments$",
       "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
@@ -639,7 +573,7 @@
     },
     {
       "file": "world-aware.test.mjs",
-      "pattern": "^veto: \"f\u0103 p\u0103rul ro\u0219u\" leaves out \"p\u0103rul\": nothing is changed, the reply names the word \\(off: no veto is recorded\\)$",
+      "pattern": "^veto: \"fă părul roșu\" leaves out \"părul\": nothing is changed, the reply names the word \\(off: no veto is recorded\\)$",
       "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
