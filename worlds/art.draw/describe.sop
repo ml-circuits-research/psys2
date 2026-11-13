@@ -1,0 +1,1202 @@
+@describe.add core.describe
+    op=draw.add
+    intent=command
+    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.add.n core.describe.arg
+    of=$describe.add
+    name=n
+    class=number
+    optional=true
+
+@describe.add.m1 core.describe.arg
+    of=$describe.add
+    name=m1
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.add.m2 core.describe.arg
+    of=$describe.add
+    name=m2
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.add.k core.describe.arg
+    of=$describe.add
+    name=k
+    class=lex.art.draw.things
+
+@describe.add.en core.describe.words
+    of=$describe.add
+    lang=en
+    verb=$w.en.draw.draw.add
+    verb=$w.en.sketch.draw.add
+    verb=$w.en.paint.draw.add
+    verb=$w.en.add.draw.add
+    verb=$w.en.create.draw.add
+    rest=$w.en.please.draw.add
+    det.n=$w.en.a.draw.add.n
+    det.n=$w.en.an.draw.add.n
+    det.n=$w.en.another.draw.add.n
+    det.n=$w.en.some.draw.add.n
+    det.n=$w.en.the.draw.add.n
+
+@describe.addn core.describe
+    op=draw.add
+    intent=command
+    emit="@{_} core.request action=draw.add arg.n={n} arg.kind={k} arg.kt=\"{k}\""
+    priority=12
+    frames=short
+
+@describe.addn.k core.describe.arg
+    of=$describe.addn
+    name=k
+    class=lex.art.draw.things
+
+@describe.addn.n core.describe.arg
+    of=$describe.addn
+    name=n
+    class=number
+
+@describe.addn.en core.describe.words
+    of=$describe.addn
+    lang=en
+    prep.n=$w.en.x.draw.add.n
+    prep.n=$w.en.times.draw.add.n
+
+@describe.ground core.describe
+    op=draw.ground
+    intent=command
+    emit="@{_} core.request action=draw.ground arg.g={g}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.ground.g core.describe.arg
+    of=$describe.ground
+    name=g
+    class=lex.art.draw.ground
+
+@describe.ground.en core.describe.words
+    of=$describe.ground
+    lang=en
+    verb=$w.en.add.draw.ground
+    verb=$w.en.put.draw.ground
+    verb=$w.en.draw.draw.ground
+    verb=$w.en.give.draw.ground
+    verb=$w.en.spread.draw.ground
+    verb=$w.en.sprinkle.draw.ground
+    verb=$w.en.scatter.draw.ground
+    verb=$w.en.lay.draw.ground
+    det.g=$w.en.a.draw.ground.g
+    det.g=$w.en.some.draw.ground.g
+    det.g=$w.en.the.draw.ground.g
+
+@describe.scene core.describe
+    op=draw.scene
+    intent=command
+    emit="@{_} core.request action=draw.scene"
+    priority=12
+    frames=phr
+    frames=imp
+
+@describe.scene.en core.describe.words
+    of=$describe.scene
+    lang=en
+    phrase=$phrase.lang.intent.surpriseme
+    verb=$w.en.draw.draw.scene
+    verb=$w.en.sketch.draw.scene
+    verb=$w.en.paint.draw.scene
+    noun=$w.en.picture.draw.scene
+    noun=$w.en.something.draw.scene
+    noun=$w.en.scene.draw.scene
+
+@describe.mood core.describe
+    op=draw.mood
+    intent=command
+    emit="@{_} core.request action=draw.mood arg.w={w}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+    frames=stmt
+
+@describe.mood.w core.describe.arg
+    of=$describe.mood
+    name=w
+    class=lex.art.draw.times
+
+@describe.mood.en core.describe.words
+    of=$describe.mood
+    lang=en
+    verb=$w.en.make.draw.mood
+    verb=$w.en.turn.draw.mood
+    verb=$w.en.set.draw.mood
+    verb=$w.en.change.draw.mood
+    verb=$w.en.switch.draw.mood
+    subject=$w.en.it.draw.mood
+    prep.w=$w.en.it.draw.mood.w
+    prep.w=$w.en.to.draw.mood.w
+    prep.w=$w.en.into.draw.mood.w
+
+@describe.recolor core.describe
+    op=draw.recolor
+    intent=command
+    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.recolor.t core.describe.arg
+    of=$describe.recolor
+    name=t
+    class=lex.art.draw.things
+
+@describe.recolor.sh core.describe.arg
+    of=$describe.recolor
+    name=sh
+    class=lex.art.draw.shades
+    optional=true
+
+@describe.recolor.c core.describe.arg
+    of=$describe.recolor
+    name=c
+    class=lex.art.draw.colors
+
+@describe.recolor.en core.describe.words
+    of=$describe.recolor
+    lang=en
+    verb=$w.en.color.draw.recolor
+    verb=$w.en.colour.draw.recolor
+    verb=$w.en.paint.draw.recolor
+    verb=$w.en.make.draw.recolor
+    verb=$w.en.turn.draw.recolor
+    verb=$w.en.dye.draw.recolor
+    verb=$w.en.fill.draw.recolor
+    verb=$w.en.change.draw.recolor
+    verb=$w.en.set.draw.recolor
+    det.t=$w.en.the.draw.recolor.t
+    det.t=$w.en.my.draw.recolor.t
+    prep.c=$w.en.to.draw.recolor.c
+    prep.c=$w.en.in.draw.recolor.c
+    prep.c=$w.en.into.draw.recolor.c
+    prep.c=$w.en.with.draw.recolor.c
+
+@describe.recolorshort core.describe
+    op=draw.recolor
+    intent=command
+    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
+    priority=12
+    frames=short
+
+@describe.recolorshort.t core.describe.arg
+    of=$describe.recolorshort
+    name=t
+    class=lex.art.draw.things
+
+@describe.recolorshort.sh core.describe.arg
+    of=$describe.recolorshort
+    name=sh
+    class=lex.art.draw.shades
+    optional=true
+
+@describe.recolorshort.c core.describe.arg
+    of=$describe.recolorshort
+    name=c
+    class=lex.art.draw.colors
+
+@describe.recolorshort.en core.describe.words
+    of=$describe.recolorshort
+    lang=en
+    det.t=$w.en.the.draw.recolor.t
+    det.t=$w.en.my.draw.recolor.t
+    prep.c=$w.en.in.draw.recolor.c
+    prep.c=$w.en.is.draw.recolor.c
+    prep.c=$w.en.be.draw.recolor.c
+
+@describe.givepart core.describe
+    op=draw.givePart
+    intent=command
+    emit="@{_} core.request action=draw.givePart arg.t=\"the {t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.givepart.t core.describe.arg
+    of=$describe.givepart
+    name=t
+    class=lex.art.draw.things
+
+@describe.givepart.sh core.describe.arg
+    of=$describe.givepart
+    name=sh
+    class=lex.art.draw.shades
+    optional=true
+
+@describe.givepart.c core.describe.arg
+    of=$describe.givepart
+    name=c
+    class=lex.art.draw.colors
+
+@describe.givepart.part core.describe.arg
+    of=$describe.givepart
+    name=part
+    class=lex.art.draw.parts
+
+@describe.givepart.en core.describe.words
+    of=$describe.givepart
+    lang=en
+    verb=$w.en.give.draw.givePart
+    verb=$w.en.put.draw.givePart
+    det.t=$w.en.the.draw.givePart.t
+    det.t=$w.en.my.draw.givePart.t
+    det.sh=$w.en.a.draw.givePart.sh
+    det.sh=$w.en.an.draw.givePart.sh
+    det.sh=$w.en.some.draw.givePart.sh
+
+@describe.resize core.describe
+    op=draw.resize
+    intent=command
+    emit="@{_} core.request action=draw.resize arg.t=\"the {t}\" arg.amt={amt} arg.d={d}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.resize.t core.describe.arg
+    of=$describe.resize
+    name=t
+    class=lex.art.draw.things
+
+@describe.resize.amt core.describe.arg
+    of=$describe.resize
+    name=amt
+    class=lex.art.draw.amounts
+    optional=true
+
+@describe.resize.d core.describe.arg
+    of=$describe.resize
+    name=d
+    class=lex.art.draw.grow
+
+@describe.resize.en core.describe.words
+    of=$describe.resize
+    lang=en
+    verb=$w.en.make.draw.resize
+    verb=$w.en.get.draw.resize
+    verb=$w.en.let.draw.resize
+    verb=$w.en.turn.draw.resize
+    det.t=$w.en.the.draw.resize.t
+    det.t=$w.en.my.draw.resize.t
+
+@describe.grow core.describe
+    op=draw.resize
+    intent=command
+    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d=bigger"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.grow.t core.describe.arg
+    of=$describe.grow
+    name=t
+    class=lex.art.draw.things
+
+@describe.grow.amt core.describe.arg
+    of=$describe.grow
+    name=amt
+    class=lex.art.draw.amounts
+    optional=true
+
+@describe.grow.en core.describe.words
+    of=$describe.grow
+    lang=en
+    verb=$w.en.enlarge.draw.resize
+    verb=$w.en.grow.draw.resize
+    verb=$w.en.expand.draw.resize
+    verb=$w.en.inflate.draw.resize
+    verb=$w.en.increase.draw.resize
+    verb=$w.en.magnify.draw.resize
+    det.t=$w.en.the.draw.resize.t
+    det.t=$w.en.my.draw.resize.t
+
+@describe.shrink core.describe
+    op=draw.resize
+    intent=command
+    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d=smaller"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.shrink.t core.describe.arg
+    of=$describe.shrink
+    name=t
+    class=lex.art.draw.things
+
+@describe.shrink.amt core.describe.arg
+    of=$describe.shrink
+    name=amt
+    class=lex.art.draw.amounts
+    optional=true
+
+@describe.shrink.en core.describe.words
+    of=$describe.shrink
+    lang=en
+    verb=$w.en.shrink.draw.resize
+    verb=$w.en.reduce.draw.resize
+    verb=$w.en.decrease.draw.resize
+    verb=$w.en.squash.draw.resize
+    verb=$w.en.minimize.draw.resize
+    verb=$w.en.squeeze.draw.resize
+    det.t=$w.en.the.draw.resize.t
+    det.t=$w.en.my.draw.resize.t
+
+@describe.setsize core.describe
+    op=draw.setSize
+    intent=command
+    emit="@{_} core.request action=draw.setSize arg.t=\"the {t}\" arg.s={s}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.setsize.t core.describe.arg
+    of=$describe.setsize
+    name=t
+    class=lex.art.draw.things
+
+@describe.setsize.s core.describe.arg
+    of=$describe.setsize
+    name=s
+    class=lex.art.draw.sizes
+
+@describe.setsize.en core.describe.words
+    of=$describe.setsize
+    lang=en
+    verb=$w.en.make.draw.setSize
+    verb=$w.en.let.draw.setSize
+    verb=$w.en.turn.draw.setSize
+    verb=$w.en.get.draw.setSize
+    det.t=$w.en.the.draw.setSize.t
+    det.t=$w.en.my.draw.setSize.t
+
+@describe.move core.describe
+    op=draw.move
+    intent=command
+    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} {pp} {d}\""
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.move.k core.describe.arg
+    of=$describe.move
+    name=k
+    class=lex.art.draw.things
+
+@describe.move.pp core.describe.arg
+    of=$describe.move
+    name=pp
+    class=lex.art.draw.preps2
+
+@describe.move.d core.describe.arg
+    of=$describe.move
+    name=d
+    class=lex.art.draw.regions
+
+@describe.move.en core.describe.words
+    of=$describe.move
+    lang=en
+    verb=$w.en.move.draw.move
+    verb=$w.en.shift.draw.move
+    verb=$w.en.push.draw.move
+    verb=$w.en.drag.draw.move
+    verb=$w.en.bring.draw.move
+    verb=$w.en.put.draw.move
+    verb=$w.en.place.draw.move
+    verb=$w.en.slide.draw.move
+    verb=$w.en.send.draw.move
+    verb=$w.en.position.draw.move
+    det.k=$w.en.the.draw.move.k
+    det.k=$w.en.my.draw.move.k
+    det.d=$w.en.the.draw.move.d
+    det.d=$w.en.my.draw.move.d
+
+@describe.nudge core.describe
+    op=draw.nudge
+    intent=command
+    emit="@{_} core.request action=draw.nudge arg.t=\"the {k}\" arg.amt={amt} arg.d={d}"
+    priority=13
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.nudge.k core.describe.arg
+    of=$describe.nudge
+    name=k
+    class=lex.art.draw.things
+
+@describe.nudge.amt core.describe.arg
+    of=$describe.nudge
+    name=amt
+    class=lex.art.draw.amounts
+    optional=true
+
+@describe.nudge.d core.describe.arg
+    of=$describe.nudge
+    name=d
+    class=lex.art.draw.moves
+
+@describe.nudge.en core.describe.words
+    of=$describe.nudge
+    lang=en
+    verb=$w.en.make.draw.nudge
+    verb=$w.en.let.draw.nudge
+    verb=$w.en.get.draw.nudge
+    verb=$w.en.move.draw.nudge
+    det.k=$w.en.the.draw.nudge.k
+
+@describe.turn core.describe
+    op=draw.turn
+    intent=command
+    emit="@{_} core.request action=draw.turn arg.verb={v} arg.phrase=\"{t} {d}\""
+    priority=12
+    frames=short
+
+@describe.turn.v core.describe.arg
+    of=$describe.turn
+    name=v
+    class=lex.art.draw.turnverbs
+
+@describe.turn.t core.describe.arg
+    of=$describe.turn
+    name=t
+    class=lex.art.draw.things
+
+@describe.turn.d core.describe.arg
+    of=$describe.turn
+    name=d
+    class=lex.art.draw.turndirs
+
+@describe.turn.en core.describe.words
+    of=$describe.turn
+    lang=en
+    det.t=$w.en.the.draw.turn.t
+    det.t=$w.en.my.draw.turn.t
+
+@describe.clear core.describe
+    op=draw.clearAll
+    intent=command
+    emit="@{_} core.request action=draw.clearAll"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.clear.en core.describe.words
+    of=$describe.clear
+    lang=en
+    verb=$w.en.clear.draw.clearAll
+    verb=$w.en.erase.draw.clearAll
+    verb=$w.en.wipe.draw.clearAll
+    verb=$w.en.empty.draw.clearAll
+    verb=$w.en.delete.draw.clearAll
+    noun=$w.en.everything.draw.clearAll
+    noun=$w.en.picture.draw.clearAll
+    noun=$w.en.drawing.draw.clearAll
+    noun=$w.en.canvas.draw.clearAll
+    noun=$w.en.page.draw.clearAll
+
+@describe.removeit core.describe
+    op=draw.removeIt
+    intent=command
+    emit="@{_} core.request action=draw.removeIt"
+    priority=12
+    frames=imp
+    frames=can
+
+@describe.removeit.en core.describe.words
+    of=$describe.removeit
+    lang=en
+    verb=$w.en.delete.draw.removeIt
+    verb=$w.en.remove.draw.removeIt
+    verb=$w.en.erase.draw.removeIt
+    verb=$w.en.discard.draw.removeIt
+    verb=$w.en.drop.draw.removeIt
+    noun=$w.en.it.draw.removeIt
+    noun=$w.en.that.draw.removeIt
+    noun=$w.en.this.draw.removeIt
+
+@describe.remove core.describe
+    op=draw.remove
+    intent=command
+    emit="@{_} core.request action=draw.remove arg.phrase=\"the {t}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.remove.t core.describe.arg
+    of=$describe.remove
+    name=t
+    class=lex.art.draw.things
+
+@describe.remove.en core.describe.words
+    of=$describe.remove
+    lang=en
+    verb=$w.en.delete.draw.remove
+    verb=$w.en.remove.draw.remove
+    verb=$w.en.erase.draw.remove
+    verb=$w.en.discard.draw.remove
+    verb=$w.en.drop.draw.remove
+    verb=$w.en.lose.draw.remove
+    det.t=$w.en.the.draw.remove.t
+    det.t=$w.en.my.draw.remove.t
+
+@describe.new core.describe
+    op=draw.new
+    intent=command
+    emit="@{_} core.request action=draw.new"
+    priority=12
+    frames=phr
+    frames=imp
+
+@describe.new.en core.describe.words
+    of=$describe.new
+    lang=en
+    phrase=$phrase.lang.intent.newdrawing
+    verb=$w.en.start.draw.new
+    verb=$w.en.begin.draw.new
+    verb=$w.en.open.draw.new
+    noun=$w.en.drawing.draw.new
+    noun=$w.en.picture.draw.new
+    noun=$w.en.canvas.draw.new
+    noun=$w.en.sheet.draw.new
+    noun=$w.en.page.draw.new
+
+@describe.undo core.describe
+    op=draw.undo
+    intent=command
+    emit="@{_} core.request action=draw.undo"
+    priority=12
+    frames=phr
+
+@describe.undo.en core.describe.words
+    of=$describe.undo
+    lang=en
+    phrase=$phrase.lang.intent.undo
+
+@describe.redo core.describe
+    op=draw.redo
+    intent=command
+    emit="@{_} core.request action=draw.redo"
+    priority=12
+    frames=phr
+
+@describe.redo.en core.describe.words
+    of=$describe.redo
+    lang=en
+    phrase=$phrase.lang.intent.redo
+
+@describe.select core.describe
+    op=draw.select
+    intent=command
+    emit="@{_} core.request action=draw.select arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    priority=12
+    frames=imp
+    frames=can
+
+@describe.select.o core.describe.arg
+    of=$describe.select
+    name=o
+    class=lex.art.draw.ordinals
+    optional=true
+
+@describe.select.m1 core.describe.arg
+    of=$describe.select
+    name=m1
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.select.m2 core.describe.arg
+    of=$describe.select
+    name=m2
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.select.k core.describe.arg
+    of=$describe.select
+    name=k
+    class=lex.art.draw.things
+
+@describe.select.en core.describe.words
+    of=$describe.select
+    lang=en
+    verb=$w.en.select.draw.select
+    verb=$w.en.click.draw.select
+    verb=$w.en.pick.draw.select
+    verb=$w.en.choose.draw.select
+    verb=$w.en.tap.draw.select
+    det.o=$w.en.the.draw.select.o
+
+@describe.deselect core.describe
+    op=draw.deselect
+    intent=command
+    emit="@{_} core.request action=draw.deselect"
+    priority=12
+    frames=phr
+
+@describe.deselect.en core.describe.words
+    of=$describe.deselect
+    lang=en
+    phrase=$phrase.lang.intent.deselect
+
+@describe.fill core.describe
+    op=draw.fill
+    intent=command
+    emit="@{_} core.request action=draw.fill arg.t=\"the {t}\" arg.mode={m}"
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.fill.t core.describe.arg
+    of=$describe.fill
+    name=t
+    class=lex.art.draw.things
+
+@describe.fill.m core.describe.arg
+    of=$describe.fill
+    name=m
+    class=lex.art.draw.fillmodes
+
+@describe.fill.en core.describe.words
+    of=$describe.fill
+    lang=en
+    verb=$w.en.make.draw.fill
+    verb=$w.en.turn.draw.fill
+    verb=$w.en.let.draw.fill
+    det.t=$w.en.the.draw.fill.t
+    det.t=$w.en.my.draw.fill.t
+
+@describe.duplicate core.describe
+    op=draw.duplicate
+    intent=command
+    emit="@{_} core.request action=draw.duplicate arg.t=\"{t}\""
+    priority=12
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.duplicate.t core.describe.arg
+    of=$describe.duplicate
+    name=t
+    class=lex.art.draw.things
+
+@describe.duplicate.en core.describe.words
+    of=$describe.duplicate
+    lang=en
+    verb=$w.en.copy.draw.duplicate
+    verb=$w.en.duplicate.draw.duplicate
+    verb=$w.en.clone.draw.duplicate
+    verb=$w.en.double.draw.duplicate
+    verb=$w.en.replicate.draw.duplicate
+    det.t=$w.en.the.draw.duplicate.t
+    det.t=$w.en.my.draw.duplicate.t
+    det.t=$w.en.that.draw.duplicate.t
+    det.t=$w.en.this.draw.duplicate.t
+    det.t=$w.en.copy.draw.duplicate.t
+
+@describe.describe core.describe
+    op=draw.describe
+    intent=query
+    emit="@{_} core.request action=draw.describe"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.describe.en core.describe.words
+    of=$describe.describe
+    lang=en
+    phrase=$phrase.lang.intent.describepicture
+
+@describe.count core.describe
+    op=draw.count
+    intent=query
+    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    priority=12
+    kind=question
+    frames=ask
+    frames=tell
+    frames=imp
+
+@describe.count.m1 core.describe.arg
+    of=$describe.count
+    name=m1
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.count.m2 core.describe.arg
+    of=$describe.count
+    name=m2
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.count.k core.describe.arg
+    of=$describe.count
+    name=k
+    class=lex.art.draw.things
+
+@describe.count.en core.describe.words
+    of=$describe.count
+    lang=en
+    verb=$w.en.count.draw.count
+    verb=$w.en.tally.draw.count
+    tverb=$w.en.are.draw.count
+    tverb=$w.en.is.draw.count
+    ask=$w.en.how.draw.count
+    det.k=$w.en.the.draw.count.k
+
+@describe.where core.describe
+    op=draw.where
+    intent=query
+    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.where.o core.describe.arg
+    of=$describe.where
+    name=o
+    class=lex.art.draw.ordinals
+    optional=true
+
+@describe.where.m1 core.describe.arg
+    of=$describe.where
+    name=m1
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.where.m2 core.describe.arg
+    of=$describe.where
+    name=m2
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.where.k core.describe.arg
+    of=$describe.where
+    name=k
+    class=lex.art.draw.things
+
+@describe.where.en core.describe.words
+    of=$describe.where
+    lang=en
+    ask=$w.en.where.draw.where
+    det.o=$w.en.the.draw.where.o
+    det.o=$w.en.my.draw.where.o
+
+@describe.exists core.describe
+    op=draw.exists
+    intent=query
+    emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.exists.m1 core.describe.arg
+    of=$describe.exists
+    name=m1
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.exists.m2 core.describe.arg
+    of=$describe.exists
+    name=m2
+    class=lex.art.draw.mods
+    optional=true
+
+@describe.exists.k core.describe.arg
+    of=$describe.exists
+    name=k
+    class=lex.art.draw.things
+
+@describe.exists.en core.describe.words
+    of=$describe.exists
+    lang=en
+    ask=$w.en.is.draw.exists
+    ask=$w.en.are.draw.exists
+    ask=$w.en.do.draw.exists
+    ask=$w.en.does.draw.exists
+    prep.m1=$w.en.there.draw.exists.m1
+    det.m1=$w.en.a.draw.exists.m1
+    det.m1=$w.en.an.draw.exists.m1
+    det.m1=$w.en.any.draw.exists.m1
+
+@describe.near core.describe
+    op=draw.near
+    intent=query
+    emit="@{_} core.request action=draw.near arg.t=\"{t}\""
+    priority=12
+    kind=question
+    frames=ask
+
+@describe.near.t core.describe.arg
+    of=$describe.near
+    name=t
+    class=lex.art.draw.things
+
+@describe.near.en core.describe.words
+    of=$describe.near
+    lang=en
+    tverb=$w.en.is.draw.near
+    ask=$w.en.what.draw.near
+    prep.t=$w.en.to.draw.near.t
+    prep.t=$w.en.by.draw.near.t
+    det.t=$w.en.the.draw.near.t
+
+@describe.help core.describe
+    op=draw.help
+    intent=query
+    emit="@{_} core.request action=draw.help"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.help.en core.describe.words
+    of=$describe.help
+    lang=en
+    phrase=$phrase.lang.intent.whatcanidraw
+
+@describe.colors core.describe
+    op=draw.colors
+    intent=query
+    emit="@{_} core.request action=draw.colors"
+    priority=12
+    kind=question
+    frames=phr
+
+@describe.colors.en core.describe.words
+    of=$describe.colors
+    lang=en
+    phrase=$phrase.lang.intent.whatcolors
+
+@describe.save core.describe
+    op=draw.save
+    intent=command
+    emit="@{_} core.request action=draw.save arg.f={f}"
+    priority=12
+    bareVerb=true
+    frames=imp
+    frames=wish
+    frames=can
+
+@describe.save.f core.describe.arg
+    of=$describe.save
+    name=f
+    class=lex.art.draw.formats
+    optional=true
+
+@describe.save.en core.describe.words
+    of=$describe.save
+    lang=en
+    verb=$w.en.save.draw.save
+    verb=$w.en.download.draw.save
+    verb=$w.en.export.draw.save
+    verb=$w.en.keep.draw.save
+    verb=$w.en.store.draw.save
+    verb=$w.en.print.draw.save
+    noun=$w.en.drawing.draw.save
+    noun=$w.en.picture.draw.save
+    noun=$w.en.painting.draw.save
+    noun=$w.en.image.draw.save
+    noun=$w.en.artwork.draw.save
+    prep.f=$w.en.as.draw.save.f
+    prep.f=$w.en.in.draw.save.f
+    prep.f=$w.en.to.draw.save.f
+    det.f=$w.en.a.draw.save.f
+
+@describe.open core.describe
+    op=draw.open
+    intent=command
+    emit="@{_} core.request action=draw.open"
+    priority=12
+    frames=imp
+    frames=can
+
+@describe.open.en core.describe.words
+    of=$describe.open
+    lang=en
+    verb=$w.en.open.draw.open
+    verb=$w.en.show.draw.open
+    noun=$w.en.board.draw.open
+    noun=$w.en.canvas.draw.open
+    noun=$w.en.paint.draw.open
+    noun=$w.en.easel.draw.open
+
+@describe.colorof core.describe
+    op=draw.colorOf
+    intent=query
+    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
+    priority=12
+    kind=question
+    frames=qnoun
+    frames=tell
+    frames=bare
+
+@describe.colorof.t core.describe.arg
+    of=$describe.colorof
+    name=t
+    class=lex.art.draw.targets
+
+@describe.colorof.en core.describe.words
+    of=$describe.colorof
+    lang=en
+    noun=$w.en.color.draw.colorOf
+    noun=$w.en.colour.draw.colorOf
+    prep.t=$w.en.of.draw.colorOf.t
+    prep.t=$w.en.for.draw.colorOf.t
+    det.t=$w.en.the.draw.colorOf.t
+    det.t=$w.en.my.draw.colorOf.t
+    det.t=$w.en.that.draw.colorOf.t
+    det.t=$w.en.this.draw.colorOf.t
+
+@describe.askkind core.describe
+    op=draw.askKind
+    intent=command
+    emit="@{_} core.request action=draw.askKind"
+    priority=12
+    frames=imp
+
+@describe.askkind.en core.describe.words
+    of=$describe.askkind
+    lang=en
+    verb=$w.en.draw.draw.askKind
+    verb=$w.en.sketch.draw.askKind
+    verb=$w.en.paint.draw.askKind
+
+@w.en.draw.draw.add core.word text=draw means=draw.add
+@w.en.sketch.draw.add core.word text=sketch means=draw.add
+@w.en.paint.draw.add core.word text=paint means=draw.add
+@w.en.add.draw.add core.word text=add means=draw.add
+@w.en.create.draw.add core.word text=create means=draw.add
+@w.en.please.draw.add core.word text=please means=draw.add
+@w.en.a.draw.add.n core.word text=a means=draw.add.n
+@w.en.an.draw.add.n core.word text=an means=draw.add.n
+@w.en.another.draw.add.n core.word text=another means=draw.add.n
+@w.en.some.draw.add.n core.word text=some means=draw.add.n
+@w.en.the.draw.add.n core.word text=the means=draw.add.n
+@w.en.x.draw.add.n core.word text=x means=draw.add.n
+@w.en.times.draw.add.n core.word text=times means=draw.add.n
+@w.en.add.draw.ground core.word text=add means=draw.ground
+@w.en.put.draw.ground core.word text=put means=draw.ground
+@w.en.draw.draw.ground core.word text=draw means=draw.ground
+@w.en.give.draw.ground core.word text=give means=draw.ground
+@w.en.spread.draw.ground core.word text=spread means=draw.ground
+@w.en.sprinkle.draw.ground core.word text=sprinkle means=draw.ground
+@w.en.scatter.draw.ground core.word text=scatter means=draw.ground
+@w.en.lay.draw.ground core.word text=lay means=draw.ground
+@w.en.a.draw.ground.g core.word text=a means=draw.ground.g
+@w.en.some.draw.ground.g core.word text=some means=draw.ground.g
+@w.en.the.draw.ground.g core.word text=the means=draw.ground.g
+@w.en.draw.draw.scene core.word text=draw means=draw.scene
+@w.en.sketch.draw.scene core.word text=sketch means=draw.scene
+@w.en.paint.draw.scene core.word text=paint means=draw.scene
+@w.en.picture.draw.scene core.word text=picture means=draw.scene
+@w.en.something.draw.scene core.word text=something means=draw.scene
+@w.en.scene.draw.scene core.word text=scene means=draw.scene
+@w.en.make.draw.mood core.word text=make means=draw.mood
+@w.en.turn.draw.mood core.word text=turn means=draw.mood
+@w.en.set.draw.mood core.word text=set means=draw.mood
+@w.en.change.draw.mood core.word text=change means=draw.mood
+@w.en.switch.draw.mood core.word text=switch means=draw.mood
+@w.en.it.draw.mood core.word text=it means=draw.mood
+@w.en.it.draw.mood.w core.word text=it means=draw.mood.w
+@w.en.to.draw.mood.w core.word text=to means=draw.mood.w
+@w.en.into.draw.mood.w core.word text=into means=draw.mood.w
+@w.en.color.draw.recolor core.word text=color means=draw.recolor
+@w.en.colour.draw.recolor core.word text=colour means=draw.recolor
+@w.en.paint.draw.recolor core.word text=paint means=draw.recolor
+@w.en.make.draw.recolor core.word text=make means=draw.recolor
+@w.en.turn.draw.recolor core.word text=turn means=draw.recolor
+@w.en.dye.draw.recolor core.word text=dye means=draw.recolor
+@w.en.fill.draw.recolor core.word text=fill means=draw.recolor
+@w.en.change.draw.recolor core.word text=change means=draw.recolor
+@w.en.set.draw.recolor core.word text=set means=draw.recolor
+@w.en.the.draw.recolor.t core.word text=the means=draw.recolor.t
+@w.en.my.draw.recolor.t core.word text=my means=draw.recolor.t
+@w.en.to.draw.recolor.c core.word text=to means=draw.recolor.c
+@w.en.in.draw.recolor.c core.word text=in means=draw.recolor.c
+@w.en.into.draw.recolor.c core.word text=into means=draw.recolor.c
+@w.en.with.draw.recolor.c core.word text=with means=draw.recolor.c
+@w.en.is.draw.recolor.c core.word text=is means=draw.recolor.c
+@w.en.be.draw.recolor.c core.word text=be means=draw.recolor.c
+@w.en.give.draw.givePart core.word text=give means=draw.givePart
+@w.en.put.draw.givePart core.word text=put means=draw.givePart
+@w.en.the.draw.givePart.t core.word text=the means=draw.givePart.t
+@w.en.my.draw.givePart.t core.word text=my means=draw.givePart.t
+@w.en.a.draw.givePart.sh core.word text=a means=draw.givePart.sh
+@w.en.an.draw.givePart.sh core.word text=an means=draw.givePart.sh
+@w.en.some.draw.givePart.sh core.word text=some means=draw.givePart.sh
+@w.en.make.draw.resize core.word text=make means=draw.resize
+@w.en.get.draw.resize core.word text=get means=draw.resize
+@w.en.let.draw.resize core.word text=let means=draw.resize
+@w.en.turn.draw.resize core.word text=turn means=draw.resize
+@w.en.the.draw.resize.t core.word text=the means=draw.resize.t
+@w.en.my.draw.resize.t core.word text=my means=draw.resize.t
+@w.en.enlarge.draw.resize core.word text=enlarge means=draw.resize
+@w.en.grow.draw.resize core.word text=grow means=draw.resize
+@w.en.expand.draw.resize core.word text=expand means=draw.resize
+@w.en.inflate.draw.resize core.word text=inflate means=draw.resize
+@w.en.increase.draw.resize core.word text=increase means=draw.resize
+@w.en.magnify.draw.resize core.word text=magnify means=draw.resize
+@w.en.shrink.draw.resize core.word text=shrink means=draw.resize
+@w.en.reduce.draw.resize core.word text=reduce means=draw.resize
+@w.en.decrease.draw.resize core.word text=decrease means=draw.resize
+@w.en.squash.draw.resize core.word text=squash means=draw.resize
+@w.en.minimize.draw.resize core.word text=minimize means=draw.resize
+@w.en.squeeze.draw.resize core.word text=squeeze means=draw.resize
+@w.en.make.draw.setSize core.word text=make means=draw.setSize
+@w.en.let.draw.setSize core.word text=let means=draw.setSize
+@w.en.turn.draw.setSize core.word text=turn means=draw.setSize
+@w.en.get.draw.setSize core.word text=get means=draw.setSize
+@w.en.the.draw.setSize.t core.word text=the means=draw.setSize.t
+@w.en.my.draw.setSize.t core.word text=my means=draw.setSize.t
+@w.en.move.draw.move core.word text=move means=draw.move
+@w.en.shift.draw.move core.word text=shift means=draw.move
+@w.en.push.draw.move core.word text=push means=draw.move
+@w.en.drag.draw.move core.word text=drag means=draw.move
+@w.en.bring.draw.move core.word text=bring means=draw.move
+@w.en.put.draw.move core.word text=put means=draw.move
+@w.en.place.draw.move core.word text=place means=draw.move
+@w.en.slide.draw.move core.word text=slide means=draw.move
+@w.en.send.draw.move core.word text=send means=draw.move
+@w.en.position.draw.move core.word text=position means=draw.move
+@w.en.the.draw.move.k core.word text=the means=draw.move.k
+@w.en.my.draw.move.k core.word text=my means=draw.move.k
+@w.en.the.draw.move.d core.word text=the means=draw.move.d
+@w.en.my.draw.move.d core.word text=my means=draw.move.d
+@w.en.make.draw.nudge core.word text=make means=draw.nudge
+@w.en.let.draw.nudge core.word text=let means=draw.nudge
+@w.en.get.draw.nudge core.word text=get means=draw.nudge
+@w.en.move.draw.nudge core.word text=move means=draw.nudge
+@w.en.the.draw.nudge.k core.word text=the means=draw.nudge.k
+@w.en.the.draw.turn.t core.word text=the means=draw.turn.t
+@w.en.my.draw.turn.t core.word text=my means=draw.turn.t
+@w.en.clear.draw.clearAll core.word text=clear means=draw.clearAll
+@w.en.erase.draw.clearAll core.word text=erase means=draw.clearAll
+@w.en.wipe.draw.clearAll core.word text=wipe means=draw.clearAll
+@w.en.empty.draw.clearAll core.word text=empty means=draw.clearAll
+@w.en.delete.draw.clearAll core.word text=delete means=draw.clearAll
+@w.en.everything.draw.clearAll core.word text=everything means=draw.clearAll
+@w.en.picture.draw.clearAll core.word text=picture means=draw.clearAll
+@w.en.drawing.draw.clearAll core.word text=drawing means=draw.clearAll
+@w.en.canvas.draw.clearAll core.word text=canvas means=draw.clearAll
+@w.en.page.draw.clearAll core.word text=page means=draw.clearAll
+@w.en.delete.draw.removeIt core.word text=delete means=draw.removeIt
+@w.en.remove.draw.removeIt core.word text=remove means=draw.removeIt
+@w.en.erase.draw.removeIt core.word text=erase means=draw.removeIt
+@w.en.discard.draw.removeIt core.word text=discard means=draw.removeIt
+@w.en.drop.draw.removeIt core.word text=drop means=draw.removeIt
+@w.en.it.draw.removeIt core.word text=it means=draw.removeIt
+@w.en.that.draw.removeIt core.word text=that means=draw.removeIt
+@w.en.this.draw.removeIt core.word text=this means=draw.removeIt
+@w.en.delete.draw.remove core.word text=delete means=draw.remove
+@w.en.remove.draw.remove core.word text=remove means=draw.remove
+@w.en.erase.draw.remove core.word text=erase means=draw.remove
+@w.en.discard.draw.remove core.word text=discard means=draw.remove
+@w.en.drop.draw.remove core.word text=drop means=draw.remove
+@w.en.lose.draw.remove core.word text=lose means=draw.remove
+@w.en.the.draw.remove.t core.word text=the means=draw.remove.t
+@w.en.my.draw.remove.t core.word text=my means=draw.remove.t
+@w.en.start.draw.new core.word text=start means=draw.new
+@w.en.begin.draw.new core.word text=begin means=draw.new
+@w.en.open.draw.new core.word text=open means=draw.new
+@w.en.drawing.draw.new core.word text=drawing means=draw.new
+@w.en.picture.draw.new core.word text=picture means=draw.new
+@w.en.canvas.draw.new core.word text=canvas means=draw.new
+@w.en.sheet.draw.new core.word text=sheet means=draw.new
+@w.en.page.draw.new core.word text=page means=draw.new
+@w.en.select.draw.select core.word text=select means=draw.select
+@w.en.click.draw.select core.word text=click means=draw.select
+@w.en.pick.draw.select core.word text=pick means=draw.select
+@w.en.choose.draw.select core.word text=choose means=draw.select
+@w.en.tap.draw.select core.word text=tap means=draw.select
+@w.en.the.draw.select.o core.word text=the means=draw.select.o
+@w.en.make.draw.fill core.word text=make means=draw.fill
+@w.en.turn.draw.fill core.word text=turn means=draw.fill
+@w.en.let.draw.fill core.word text=let means=draw.fill
+@w.en.the.draw.fill.t core.word text=the means=draw.fill.t
+@w.en.my.draw.fill.t core.word text=my means=draw.fill.t
+@w.en.copy.draw.duplicate core.word text=copy means=draw.duplicate
+@w.en.duplicate.draw.duplicate core.word text=duplicate means=draw.duplicate
+@w.en.clone.draw.duplicate core.word text=clone means=draw.duplicate
+@w.en.double.draw.duplicate core.word text=double means=draw.duplicate
+@w.en.replicate.draw.duplicate core.word text=replicate means=draw.duplicate
+@w.en.the.draw.duplicate.t core.word text=the means=draw.duplicate.t
+@w.en.my.draw.duplicate.t core.word text=my means=draw.duplicate.t
+@w.en.that.draw.duplicate.t core.word text=that means=draw.duplicate.t
+@w.en.this.draw.duplicate.t core.word text=this means=draw.duplicate.t
+@w.en.copy.draw.duplicate.t core.word text=copy means=draw.duplicate.t
+@w.en.count.draw.count core.word text=count means=draw.count
+@w.en.tally.draw.count core.word text=tally means=draw.count
+@w.en.are.draw.count core.word text=are means=draw.count
+@w.en.is.draw.count core.word text=is means=draw.count
+@w.en.how.draw.count core.word text=how means=draw.count
+@w.en.the.draw.count.k core.word text=the means=draw.count.k
+@w.en.where.draw.where core.word text=where means=draw.where
+@w.en.the.draw.where.o core.word text=the means=draw.where.o
+@w.en.my.draw.where.o core.word text=my means=draw.where.o
+@w.en.is.draw.exists core.word text=is means=draw.exists
+@w.en.are.draw.exists core.word text=are means=draw.exists
+@w.en.do.draw.exists core.word text=do means=draw.exists
+@w.en.does.draw.exists core.word text=does means=draw.exists
+@w.en.there.draw.exists.m1 core.word text=there means=draw.exists.m1
+@w.en.a.draw.exists.m1 core.word text=a means=draw.exists.m1
+@w.en.an.draw.exists.m1 core.word text=an means=draw.exists.m1
+@w.en.any.draw.exists.m1 core.word text=any means=draw.exists.m1
+@w.en.is.draw.near core.word text=is means=draw.near
+@w.en.what.draw.near core.word text=what means=draw.near
+@w.en.to.draw.near.t core.word text=to means=draw.near.t
+@w.en.by.draw.near.t core.word text=by means=draw.near.t
+@w.en.the.draw.near.t core.word text=the means=draw.near.t
+@w.en.save.draw.save core.word text=save means=draw.save
+@w.en.download.draw.save core.word text=download means=draw.save
+@w.en.export.draw.save core.word text=export means=draw.save
+@w.en.keep.draw.save core.word text=keep means=draw.save
+@w.en.store.draw.save core.word text=store means=draw.save
+@w.en.print.draw.save core.word text=print means=draw.save
+@w.en.drawing.draw.save core.word text=drawing means=draw.save
+@w.en.picture.draw.save core.word text=picture means=draw.save
+@w.en.painting.draw.save core.word text=painting means=draw.save
+@w.en.image.draw.save core.word text=image means=draw.save
+@w.en.artwork.draw.save core.word text=artwork means=draw.save
+@w.en.as.draw.save.f core.word text=as means=draw.save.f
+@w.en.in.draw.save.f core.word text=in means=draw.save.f
+@w.en.to.draw.save.f core.word text=to means=draw.save.f
+@w.en.a.draw.save.f core.word text=a means=draw.save.f
+@w.en.open.draw.open core.word text=open means=draw.open
+@w.en.show.draw.open core.word text=show means=draw.open
+@w.en.board.draw.open core.word text=board means=draw.open
+@w.en.canvas.draw.open core.word text=canvas means=draw.open
+@w.en.paint.draw.open core.word text=paint means=draw.open
+@w.en.easel.draw.open core.word text=easel means=draw.open
+@w.en.color.draw.colorOf core.word text=color means=draw.colorOf
+@w.en.colour.draw.colorOf core.word text=colour means=draw.colorOf
+@w.en.of.draw.colorOf.t core.word text=of means=draw.colorOf.t
+@w.en.for.draw.colorOf.t core.word text=for means=draw.colorOf.t
+@w.en.the.draw.colorOf.t core.word text=the means=draw.colorOf.t
+@w.en.my.draw.colorOf.t core.word text=my means=draw.colorOf.t
+@w.en.that.draw.colorOf.t core.word text=that means=draw.colorOf.t
+@w.en.this.draw.colorOf.t core.word text=this means=draw.colorOf.t
+@w.en.draw.draw.askKind core.word text=draw means=draw.askKind
+@w.en.sketch.draw.askKind core.word text=sketch means=draw.askKind
+@w.en.paint.draw.askKind core.word text=paint means=draw.askKind
