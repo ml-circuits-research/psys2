@@ -243,15 +243,19 @@ const QUESTION_TAIL_RE = /(?:,|\b(?:and|then|but))\s+(?:also\s+)?(?:what|how|who
 const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
+/** Experiments of the model ablation (off by default; `setProto({ also: true })`): `also` = "also" joins clauses like "then" ("draw a house, also what do red and yellow make"). */
+const PROTO = { also: false };
+export const setProto = (p = {}) => Object.assign(PROTO, p);
 export function splitClauses(tokens) {
   const clauses = [[]];
+  const joiners = PROTO.also ? ['then', 'also'] : ['then'];
   for (let i = 0; i < tokens.length; i++) {
     budget.tick('index.splitClauses');
     const t = tokens[i];
-    const sep = t.lower === ',' || t.lower === 'and' || t.lower === 'then' || t.lower === 'but';
+    const sep = t.lower === ',' || t.lower === 'and' || joiners.includes(t.lower) || t.lower === 'but';
     if (!sep) { clauses[clauses.length - 1].push(t); continue; }
-    if (t.lower === 'and' && tokens[i + 1]?.lower === 'then') i++;
-    if (t.lower === ',' && ['and', 'but', 'then'].includes(tokens[i + 1]?.lower)) i++;
+    if (t.lower === 'and' && joiners.includes(tokens[i + 1]?.lower)) i++;
+    if (t.lower === ',' && ['and', 'but', ...joiners].includes(tokens[i + 1]?.lower)) i++;
     clauses.push([]);
   }
   return clauses.filter((c) => c.some(isContent));
@@ -657,7 +661,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     if (changed) return out.some((p) => !p.unparsed) ? { done: out, fallback: null } : null;
     // a catch-all whole reading that swallowed "then ..." while every clause is understood on its own (any worlds), each by a
     // pattern at least as specific: "then" is an explicit sequence, so keep the clauses ("move left twice, then undo")
-    const swallowedThen = whole && clauses.length > 1 && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])then([\s,]|$)/i.test(sl.text ?? ''));
+    const swallowedThen = whole && clauses.length > 1 && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && (PROTO.also ? /(^|[\s,])(then|also)([\s,]|$)/i : /(^|[\s,])then([\s,]|$)/i).test(sl.text ?? ''));
     // a clause that opens with a question word is never the continuation of a command's free text: it needs no priority bar
     const specific = (p, i) => (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) || (i > 0 && QUESTION_WORDS.has(clauses[i][0]?.lower));
     if (swallowedThen && parts.every((p, i) => !p.unparsed && !isWeak(p) && specific(p, i))) return { done: parts, fallback: null };
