@@ -112,7 +112,7 @@ export function repairFromScene(dialog, text, { extra = [] } = {}) {
   for (const t of unknown.slice(0, 6)) {
     budget.tick('scene.word');
     let hit = closest(t.lower, [...scene.keys(), ...extra]);   // the scene first
-    if (!hit && tabNouns.length && t.raw === t.lower) hit = closest(t.lower, tabNouns, 1);   // then the things the tab can make
+    // (the things the open tab can make are left to the dictionary repair: guessing among them rewrote free words such as "bolt" into "boat")
     if (!hit) continue;
     const to = looksPlural(t.lower) && !/s$/.test(hit.name) ? pluralOf(hit.name) : hit.name;
     picks.push({ from: t.raw, to, span: [t.start, t.end], kind: 'scene' });

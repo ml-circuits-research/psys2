@@ -15,12 +15,15 @@ import { budget } from './budget.mjs';
 const tokens = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 
 /** Closed classes that carry no action: articles, pronouns, copulas and auxiliaries, prepositions, conjunctions, particles of agreement and hedging. */
-const GRAMMAR = new Set(['a', 'an', 'the', 'some', 'any', 'one', 'ones', 'it', 'its', 'this', 'that', 'these', 'those', 'there', 'here', 'they', 'them', 'their', 'he', 'him', 'his', 'she', 'her', 'we', 'us', 'our', 'i', 'me', 'my', 'you', 'your',
+const GRAMMAR = new Set(['a', 'an', 'the', 'some', 'any', 'one', 'ones', 'it', 'its', 'this', 'that', 'these', 'those', 'there', 'here', 'they', 'them', 'their', 'he', 'him', 'his', 'she', 'her',
   'is', 'are', 'am', 'was', 'were', 'be', 'been', 'being', 'do', 'does', 'did', 'has', 'have', 'had', 'will', 'would', 'can', 'could', 'should', 'shall', 'may', 'might', 'must',
   'in', 'on', 'at', 'by', 'with', 'without', 'from', 'into', 'onto', 'to', 'of', 'for', 'under', 'over', 'above', 'below', 'near', 'next', 'between', 'around', 'behind', 'inside', 'outside', 'beside', 'than', 'as',
   'and', 'or', 'but', 'not', 'no', 'nor', 'so', 'if', 'then', 'also', 'too', 'only', 'just', 'still', 'even', 'very', 'more', 'most', 'much', 'all', 'both', 'each', 'every', 'other', 'another', 'same', 'such',
   'yes', 'yeah', 'ok', 'okay', 'maybe', 'perhaps', 'probably', 'please', 'pls', 'plz', 'well', 'now', 'again', 'instead', 'right', 'left', 'up', 'down']);
 
+const PERSON = new Set(['i', "i'm", 'im', "i've", "i'd", "i'll", 'we', "we're", 'you', "you're", 'my', 'me', 'our', 'your']);   // a clause with a speaker or an addressee is a statement or a request of its own, whatever words follow
+/** Worlds of navigation, help and shared vocabulary: they act on any message that names their things, whatever tab is open. */
+const ANYWHERE = new Set(['ui.shell', 'ui.help', 'kids.common', 'core', 'lang.common']);
 const PRONOUN = new Set(['it', 'them', 'they']);   // the personal pronouns that stand for a thing; "this tab" is a noun phrase
 
 /**
@@ -46,17 +49,23 @@ export function ownWords(seg) {
 export function foreignFragment(dialog, seg) {
   if (seg.unparsed || !seg.wires?.length) return null;
   const world = seg.match?.worldId;
-  if (!world) return null;
+  if (!world || ANYWHERE.has(world)) return null;
   const ctx = dialog.context();
   const last = dialog.discourse?.frames?.[0]?.world ?? null;
+  if (!last) return null;   // nothing was said before that this could continue: the world that read it answers (a game that is not running says so)
   if (last === world) return null;   // the world of the last action continues its own conversation ("now in a women" after an avatar change)
   if (!ctx.tabWorld || ctx.tabWorld === world || ctx.gameWorld === world || ctx.modalWorld === world) return null;
   if (!(seg.wires ?? []).some((w) => w.type === 'core.request')) return null;   // a question or a statement is not a continuation
   try { if (seg.text && dialog._worldsNamedIn(seg.text).has(world)) return null; } catch { /* keep going */ }
   // A pronoun stands for the last thing talked about, which lives in the world of the last action or in the open tab: another world has no referent for it
   // ("make it happy" on the Avatar tab, after an avatar change, is not about a shape of the diagram)
+  if (tokens(seg.text).some((w) => PERSON.has(w))) return null;
   const pronoun = tokens(seg.text).some((w) => PRONOUN.has(w));
-  if (pronoun && !String(world).startsWith('games.') && (last || ctx.tabWorld)) return { world, why: 'pronoun' };
-  if (ownWords(seg).length) return null;
-  return { world, why: 'no-verb' };
+  const scene = typeof dialog.engine.set.get(world)?.ops?.checkReferents === 'function';   // a world with things to point at; a profile or a game has none
+  const why = pronoun && scene && (last || ctx.tabWorld) ? 'pronoun' : ownWords(seg).length ? null : 'no-verb';
+  if (!why) return null;
+  // A world that can act on the piece is not refused: a bare "top left" starts tic-tac-toe, "Osaka in Japan" is a question of the map. Only a world that has
+  // nothing to act on (no game running, no such thing in the scene: its dry run says missing or refused) cannot take it.
+  try { const st = dialog._dryStatuses([seg]); if (st.length && st.every((x) => x === 'supported')) return null; } catch { return null; }
+  return { world, why };
 }

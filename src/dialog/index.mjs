@@ -33,7 +33,6 @@ import { Discourse } from './discourse.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
-import { foreignFragment } from './continuation.mjs';
 import { repairFromScene } from './scene-referents.mjs';
 import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs';
 import { recognize } from '../astra/moves.mjs';
@@ -1315,16 +1314,19 @@ export class DialogSession {
     }
     // SCENE-NATURAL P3: an unknown noun that names a thing of the scene (or of the open tab) with a slip is read as that thing before any dictionary repair
     let sceneFix = null;
-    if (!icpt && !pre && meta?.reply == null) { try { sceneFix = repairFromScene(this, formalText); } catch { sceneFix = null; } if (sceneFix) formalText = sceneFix.text; }
+    if (!icpt && !pre && meta?.reply == null) {
+      try {
+        sceneFix = repairFromScene(this, formalText);
+        if (sceneFix) {   // a message the rules read completely and a world can carry out as it is needs no repair (a word of a text the user dictates is not a thing of the scene)
+          const probe = await this.engine.formalizers.rules.formalize(formalText, { worlds: set, session: this.isession, source: 'probe', context: this.context(), router: this.engine.router });
+          if (probe.segments.length && probe.segments.every((x) => !x.unparsed && !x.ignored?.length && !x.partial) && this._dryStatuses(probe.segments).every((x) => x === 'supported')) sceneFix = null;
+        }
+      } catch { sceneFix = null; }
+      if (sceneFix) formalText = sceneFix.text;
+    }
     let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial, fastPath: fastPath ?? this.fastPath, nx: nx ?? this.nx }));
     if (meta?.rewrite && !pre) for (const sg of formal.segments) sg.discourse = meta.info;
     if (sceneFix) { const sg = formal.segments.find((x) => !x.unparsed); if (sg) sg.corrections = [...(sg.corrections ?? []), ...sceneFix.corrections]; }
-    // SCENE-NATURAL P1: a piece without a verb of its own that only another world (not the open tab, nothing running) reads continues the conversation of the open
-    // tab: it is tried as the missing piece of the last turn there (below, as for any unreadable single clause); the world-aware veto holds it back otherwise
-    if (!icpt && !pre && !meta && formal.segments.length === 1 && ['veto', 'choose'].includes(baseMode(normalizeWorldAware(worldAware ?? this.worldAware))) && foreignFragment(this, formal.segments[0])) {
-      const sg = formal.segments[0];
-      formal = { ...formal, segments: [{ ...sg, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [], partial: false, bestEffort: null, wa: { ...(sg.wa ?? {}), fragment: true } }] };
-    }
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
       if (pre) formal = { ...pre.res, dispatch: null };
