@@ -6,8 +6,8 @@
 // cannot be (a selected thing that is not there, two things with one id, a kind the board cannot draw), derive what is in the picture (the number of things and of each kind) and refuse a request whose target is not there ("I can not find a green circle in your picture."). Undo and redo are the session timeline's, in the
 // words of the board. Browser-safe; it imports its sibling ops.mjs for the tables (a world is plain files).
 import {
-  initialState, parseNP, splitDest, kindOfWord, describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP, bbox, HORIZON,
-} from './ops.mjs?v=4d86475d0b';
+  initialState, parseNP, splitDest, kindOfWord, kindName, describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP, bbox, HORIZON,
+} from './ops.mjs?v=d8ed401a24';
 
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
@@ -155,7 +155,7 @@ export function guard({ action, args, check }) {
   const text = TARGET[action]?.(args ?? {});
   if (text == null || text === '') return null;
   const np = parseNP(text);
-  if (!noun(np)) return null;
+  if (!noun(np) || String(np.kind).startsWith('composite:')) return null;   // a thing of the catalog is looked for by the operation (the board's kinds are the rules' enum)
   const r = check({ wires: `@dr.q art.draw.want kind=${np.kind} label=${str(describeWanted(np))}` });
   if (r.ok) return null;
   const vs = (r.violations ?? []).filter((x) => x.why);
@@ -172,11 +172,13 @@ function need(ctx, raw) {
   if (!k) return { err: { status: 'unsupported', note: `I do not know what "${args.kind}" is.` } };
   const color = colorFrom(mods(args).filter((m) => isShade(m) || isColorWord(m)));
   const all = ctx.find('art.draw.object');
-  const mine = byOrd(all.filter((w) => (k.kind === '*' || tok(w, 'kind')[0] === k.kind) && (!color || sameColorName(tok(w, 'color')[0], color))));
+  const kindOf = (w) => (tok(w, 'kind')[0] === 'composite' ? `composite:${objOf(w).thing}` : tok(w, 'kind')[0]);   // a thing of the catalog is kind composite, its name in `thing`
+  const mine = byOrd(all.filter((w) => (k.kind === '*' || kindOf(w) === k.kind) && (!color || sameColorName(tok(w, 'color')[0], color))));
   // the number is the library's (the tallies are aggregates of the rules); the object wires are what the answer rests on
   let n = 0;
   if (k.kind === '*' && !color) n = numberOf(ctx.find('art.draw.total')[0]);
   else if (color) n = mine.length;   // a colour is any of 260 names ("dark blue"): counted over the wires, not a group of its own (a group per colour is a rule per name)
+  else if (k.kind.startsWith('composite:')) n = mine.length;   // the tallies are per kind of the board; a catalog thing is counted over its wires
   else n = numberOf(ctx.find('art.draw.tally').find((w) => tok(w, 'kind')[0] === k.kind));
   return { k, color, n, mine, all };
 }
@@ -186,12 +188,12 @@ function drCount(ctx, raw) {
   const desc = `${color ? `${color} ` : ''}${k.kind === '*' ? 'things' : pluralOfKind(k.kind, 2)}`;
   const from = mine.map((w) => w.id);
   if (k.kind === '*') return { value: n === 0 ? (all.length ? `There is nothing ${color ?? ''} in your picture.`.replace('  ', ' ') : 'Your picture is empty. There is nothing in it yet.') : `There ${n === 1 ? `is 1 ${color ? `${color} ` : ''}thing` : `are ${n} ${desc}`} in your picture.`, from, openTab: 'draw' };
-  return { value: n === 0 ? `There are no ${desc} in your picture.` : `There ${n === 1 ? `is 1 ${color ? `${color} ` : ''}${k.kind}` : `are ${n} ${desc}`} in your picture.`, from, openTab: 'draw' };
+  return { value: n === 0 ? `There are no ${desc} in your picture.` : `There ${n === 1 ? `is 1 ${color ? `${color} ` : ''}${kindName(k.kind)}` : `are ${n} ${desc}`} in your picture.`, from, openTab: 'draw' };
 }
 function drExists(ctx, raw) {
   const { err, k, color, n, mine } = need(ctx, raw);
   if (err) return err;
-  const name = `${color ? `${color} ` : ''}${k.kind === '*' ? 'thing' : k.kind}`;
+  const name = `${color ? `${color} ` : ''}${k.kind === '*' ? 'thing' : kindName(k.kind)}`;
   if (!n) return { value: `No, there is no ${name} in your picture yet.`, from: [], openTab: 'draw' };
   return { value: `Yes! There ${n === 1 ? `is ${a_(name)} ${name}` : `are ${n} ${pluralOfKind(name.split(' ').at(-1), n)}`} ${n === 1 ? placePhrase(objOf(mine[0])) : 'in your picture'}.`.replace(/ here\./, '.'), from: mine.map((w) => w.id), openTab: 'draw' };
 }

@@ -457,6 +457,10 @@ export function thingDef(name) {
 }
 const HAND_BUILD = Object.fromEntries(KINDS_FROM_FACTS.map((k) => [k, BUILTIN[k].build]));
 for (const k of KINDS_FROM_FACTS) if (KIND_THINGS[k]) BUILTIN[k].build = () => thingBuild(k, KIND_THINGS);
+/** The parts of an object drawn from the facts of its kind (knowledge/art.draw.kinds), whatever the board draws it from: for the side-by-side pictures. */
+export const partsOfFacts = (obj) => partsOf(obj, (k) => thingBuild(k, KIND_THINGS));
+/** The parts of an object drawn from the hand-coded builder of its kind. */
+export const partsOfHand = (obj) => partsOf(obj, (k) => handCodedParts(k));
 /** The hand-coded parts of a built-in kind (what the facts of knowledge/art.draw.kinds are written from, and what the side-by-side pictures compare with). */
 export const handCodedParts = (kind) => (HAND_BUILD[kind] ?? BUILTIN[kind].build)();
 /** The kinds of the board: the built-in ones, and `composite:<thing>` for every object of the catalog. */
@@ -548,12 +552,12 @@ export const partLabel = (key) => ({ windows: 'windows', wheels: 'wheels', walls
  * Color of a part: the object's own override (obj.parts[name]), else the object color for parts that follow it
  * (m), else the part default. `sh` shifts the lightness, `alt` replaces a default that would equal the object color.
  */
-export function partsOf(obj) {
+export function partsOf(obj, build = null) {
   const kind = kindKey(obj);
   if (!isKind(kind)) return [];
   const override = obj.parts ?? {};
   const hidden = new Set(obj.hide ?? []);
-  const base = withExtras(kind.startsWith(COMPOSITE) ? thingParts(obj.thing) : kindParts(kind), obj.extra);
+  const base = withExtras(build ? build(kind) : kind.startsWith(COMPOSITE) ? thingParts(obj.thing) : kindParts(kind), obj.extra);   // `build`: another source of the parts (the side-by-side pictures)
   return base.filter((p) => !hidden.has(p.n)).map((p) => {
     let color = p.c;
     if (Object.hasOwn(override, p.n)) color = override[p.n];
