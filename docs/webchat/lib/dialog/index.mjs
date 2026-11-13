@@ -9,42 +9,43 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=161e3e3802';
-import { loadWorlds } from '../worlds/index.mjs?v=e9103db16e';
-import { validateWorldSet } from '../worlds/validate.mjs?v=a34c14ab0e';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=e7cdac8c5d';
+import { loadWorlds } from '../worlds/index.mjs?v=7f5d1aecc3';
+import { validateWorldSet } from '../worlds/validate.mjs?v=d19c939fdf';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=34ef60e7bf';
-import { createInterpreter } from '../interpreter/index.mjs?v=929fa811e7';
+import { createInterpreter } from '../interpreter/index.mjs?v=b7813a0dbf';
 import { createReasoner } from '../reasoner/index.mjs?v=6d846f333a';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=599070cee0';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=8f7ff31e7a';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=3ed8e81658';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=81753d2310';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=26885599a7';
-import { splitSentences } from '../formalizer/rules/normalize.mjs?v=f77a3f29d4';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=588f8f71a1';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=ad2ebf0352';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=fe5fe63391';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=fc94fc7832';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=a0cf665a9d';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=e046742b19';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=5ee31b8394';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=72bfa0c18a';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=123c3e1329';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=b56ffdb1c4';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=bda65823ec';
-import { checkValues } from './value-check.mjs?v=dd1aab5da5';
-import { attachValues } from '../knowledge/values.mjs?v=ec4fe4794e';
-import { Discourse } from './discourse.mjs?v=1e9507a4d9';
-import { Dialogue } from './dialogue.mjs?v=9564b3bfcc';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=376e45da63';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=9a80cfcfaf';
+import { checkValues } from './value-check.mjs?v=8de031f0f9';
+import { attachValues } from '../knowledge/values.mjs?v=189c43bb28';
+import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
+import { Discourse } from './discourse.mjs?v=dd53d3e00f';
+import { Dialogue } from './dialogue.mjs?v=c04e300939';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=a372529fba';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=3acb15a579';
-import { repairFromScene } from './scene-referents.mjs?v=54ca9b7c32';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=ebd5d7bc33';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=181f692a6a';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=55532e58d0';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=17a2a448d6';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=c80193a3d0';
+import { repairFromScene } from './scene-referents.mjs?v=719d40cd5c';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=75727d7a51';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=eec880ebab';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=c54a4864de';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=fa5f16eb55';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=f95c81083f';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=2312c641e7';
 
 export { runWorldTests } from './test-runner.mjs?v=84ab4dd2bc';
 
@@ -1730,7 +1731,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   const engine = {
     knowledge: options.knowledge ?? null,
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
-    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
+    setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachArrangement(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** meta.worlds (spec 20): loaded by `prepareMeta()` (a host that sets `routing` to symbolic awaits it once); null until then. */
     meta: null,

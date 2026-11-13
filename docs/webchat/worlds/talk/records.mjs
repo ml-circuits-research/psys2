@@ -54,8 +54,7 @@ export function slotsFor(sc, word) {
 /** The values of the first slot among `slots` that some record of the thing has: { key, type, values, rec } or null. Values are strings (the catalog's text). */
 export function valuesOf(recs, slots) {
   const weak = (r) => /^k\.(?:scenes|commonsense)\./.test(r.type);   // the world that is about the thing itself answers before the one that only places it in a picture
-  const sorted = [...recs.filter((r) => !weak(r)), ...recs.filter(weak)];
-  for (const { key } of slots) for (const rec of sorted) { const v = rec.f[key]; if (v?.length) return { key, type: rec.type, values: v, rec }; }
+  for (const group of [recs.filter((r) => !weak(r)), recs.filter(weak)]) for (const { key } of slots) for (const rec of group) { const v = rec.f[key]; if (v?.length) return { key, type: rec.type, values: v, rec }; }   // every slot of the strong records first
   return null;
 }
 

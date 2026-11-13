@@ -196,7 +196,7 @@ export function createFacts({ source, name = 'catalog' }) {
     // a word form the catalog only lists as `core.word text=<form> means=<name> of=<world>.<type>.name` (the plural "ants" of "ant", "triangular" of "triangle") is the thing of that name
     if (!objects.size && !commonsense.length && others.length && others.every((o) => o.type === 'core.word')) {
       const target = others.map((o) => o.f).find((f) => f.means?.length === 1 && (f.of ?? []).some((x) => /\.(?:name|word)$/.test(x)) && (f.text ?? []).some((t) => t.toLowerCase() === lemma))?.means[0].toLowerCase();
-      if (target && target !== lemma && !walk.seen.has(target)) { const t = await thing(target, depth, walk); things.set(key, t); things.set(lemma, t); return t; }
+      if (target && target !== lemma && !walk.seen.has(target)) { budget.tick('facts.form'); const t = await thing(target, depth, walk); things.set(key, t); things.set(lemma, t); return t; }
     }
     senses.sort((a, b) => a.n - b.n);
     const out = {

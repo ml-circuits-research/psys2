@@ -25,7 +25,7 @@ import { FORMS_MORE, FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=96de33f3e
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 
 export { ACT_VERBS };
-import { colourName } from '../../lib/knowledge/values.mjs?v=ec4fe4794e';   // the one colour reader (k.values)
+import { colourName } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------

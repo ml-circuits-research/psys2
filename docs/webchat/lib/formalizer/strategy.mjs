@@ -6,7 +6,7 @@
  *
  * Everything after formalization is identical whichever strategy produced the wires.
  */
-import { formalize } from './rules/index.mjs?v=161e3e3802';
+import { formalize } from './rules/index.mjs?v=e7cdac8c5d';
 
 /** The rule formalizer (spec 03): always available, supports every world that has patterns. */
 export function createRulesFormalizer() {

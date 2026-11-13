@@ -12,7 +12,7 @@
 //   carriedBy / movePiece          moving a piece moves what is on, in or attached to it, never what is merely next to it
 //   checkMove                      a refusal with a plain reason ("the cow cannot go lower: it is on the ground")
 //   holdsFact / why                does a relation hold now; the fact in plain words with its source
-import { overlaps, gap, boxOf, KNOWLEDGE } from './space.mjs?v=0c5c89b98e';
+import { overlaps, gap, boxOf, KNOWLEDGE } from './space.mjs?v=f98ca4dd42';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const LOOP_MAX = 256;   // no loop of this module runs longer

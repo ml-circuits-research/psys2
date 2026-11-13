@@ -1,7 +1,7 @@
 /** Number words to digits (spec 03 section 1.4). Browser-safe. */
 
 import { budget } from '../../dialog/budget.mjs?v=123c3e1329';
-import { numberInfo, numberWordOf } from '../../knowledge/values.mjs?v=ec4fe4794e';   // the one reader of number words (k.values): no number lexicon in the formalizer
+import { numberInfo, numberWordOf } from '../../knowledge/values.mjs?v=189c43bb28';   // the one reader of number words (k.values): no number lexicon in the formalizer
 // Misspellings people type (fourty, ninty, fiveteen, eightteen) are read as the right number: spelling, not number knowledge.
 const MISSPELLED = { fiveteen: 15, eightteen: 18, fourty: 40, ninty: 90 };
 
