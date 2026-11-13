@@ -9,7 +9,7 @@ import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=5c77e844f2';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=dc30576b7d';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=d81ce01059';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=e06638c0b8';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
 import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=13f79011f0';
@@ -23,7 +23,7 @@ import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
 export { FormSession } from './session.mjs?v=ecf9e29fa8';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=13f79011f0';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=dc30576b7d';
-export { compilePattern, matchTokens } from './matcher.mjs?v=d81ce01059';
+export { compilePattern, matchTokens } from './matcher.mjs?v=e06638c0b8';
 export { singularLemma, pluralize } from './lemma.mjs?v=df6b7975be';
 
 const compiledCache = new WeakMap();
@@ -356,6 +356,19 @@ export function applyCoveragePolicy(matches, total, policy = PATTERN_COVERAGE_PO
 /** True when a match (a ranked match or a segment's `match`) has a free-text target that starts with your / yours / ur / yourself: it addresses the avatar. */
 export const youTarget = (m) => Object.values(m.slots ?? {}).some((s) => (s.class === 'words' || s.class === 'word') && /^(?:your|yours|ur|yourself)$/i.test(String(s.text).split(/\s+/)[0]) && !/\b(?:and|then|but|plus)\b|,/i.test(String(s.text)));   // a coordination ("your eyes and body") is left to the expansion
 
+/** The acts whose thing must already be there and that say nothing else ("remove X": a reading of it that names no such thing is a refusal, not a request for something else; "change X to Y" or "switch to X" carry a value and stay a decline). */
+const REFERENT_ACTS = new Set(['remove']);
+const actionName = (m) => (/action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? '').split('.').pop();
+const FREE_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these', 'those', 'some', 'any', 'all', 'of', 'to', 'from', 'in', 'on', 'it', 'its', 'please']);
+/** Does everything a reading's free-text slots say resolve in the world's own state (every content word occurs in it)? A world with no state resolves nothing. */
+function freeWordsResolve(m, state) {
+  const words = Object.values(m.slots ?? {}).filter((sl) => (sl.class === 'words' || sl.class === 'rest') && sl.text).flatMap((sl) => String(sl.text).toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? []).filter((w) => !FREE_SKIP.has(w));
+  if (!words.length) return true;
+  if (!state) return false;
+  const hay = JSON.stringify(state).toLowerCase();
+  return words.every((w) => hay.includes(w.replace(/s$/, '')));
+}
+
 /** Ranked full matches of every pattern against `tokens` (commas removed), ordered by the routing policy. */
 function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   // Views of the tokens, tried in order until one of them is matched by some pattern (spec 03 section 1.5):
@@ -399,6 +412,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       matches.splice(0, matches.length, ...keep);
     }
   }
+  const ownDeclined = [];
   // DECLINE (spec 21): a world may export `accepts({ action, roles, text, state })`; when it returns false the world does not own this reading ("draw a house" is not a face part),
   // so its match is dropped before routing and the next world reads the message. Pure, and every pass ticks the budget; it only looks at the words of the roles.
   for (let k = matches.length - 1; k >= 0; k--) {
@@ -407,12 +421,26 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     if (typeof acc !== 'function') continue;
     const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
     for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
-    let ok = true, strong = false;
-    try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false; strong = verdict === 'focus'; } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
+    let ok = true, strong = false, refuse = false;
+    try { const verdict = acc({ action: /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(m.pattern.emit ?? '')?.[1] ?? null, claim: !!m.pattern.tabClaim, tab: context?.tabWorld ?? null, roles, text: roles[SEGMENT_SLOT] ?? toks.map((t) => t.lower ?? t.text ?? '').join(' '), state: context?.states?.[m.pattern.worldId] ?? null }); ok = verdict !== false && verdict !== 'refuse'; strong = verdict === 'focus'; refuse = verdict === 'refuse' } catch { ok = true; }   // 'focus': the world holds the focus of the dialogue ("make it red"), so it does not yield
     // a world with a decline hook is a schema world whose forms keep free slots: its catch-all reading yields to a reading of another world that has no free text at all
     // ("Is a square a rectangle?" is the shapes world's, even while the avatar tab is open)
     if (ok && !strong && context?.lastWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && !m.pattern.tabClaim)) ok = false;
-    if (!ok) matches.splice(k, 1);
+    if (!ok) { const [gone] = matches.splice(k, 1); if (gone.pattern.worldId === context?.tabWorld && (refuse || REFERENT_ACTS.has(actionName(gone)))) ownDeclined.push(gone); }   // 'refuse': the world says the reading is its own but names a thing it has not ("draw a unicorn"): it refuses plainly unless another world reads it
+  }
+  // ARBITRATION (spec 20, "Arbitration of generated worlds"). The open tab owns its acts first: when its world read the sentence with an act that needs a thing that is there ("remove X") and declined it
+  // (it has no X), the same words are not another world's either unless that world HAS what the words name: a free-text reading of another world ("remove X from my list") is claimed only when every
+  // word of its free slots resolves in that world's own state (rule 2: open-class slots must resolve); and when no other world does, the tab refuses plainly ("I can't find the X in the picture"),
+  // because the same reading in a tab that has no such thing is a refusal, not a different task (rule 3). A coordination is left to the clause-by-clause leniency stage.
+  if (ownDeclined.length) {
+    for (let k = matches.length - 1; k >= 0; k--) {
+      const m = matches[k];
+      if (m.pattern.worldId === context?.tabWorld || m.pattern.tabClaim || wildTokens(m) === 0 || m.literals > 2 || m.pattern.kind === 'question' || !ownDeclined.some((d) => REFERENT_ACTS.has(actionName(d)))) continue;
+      budget.tick('rules.resolves');
+      if (!freeWordsResolve(m, context?.states?.[m.pattern.worldId])) matches.splice(k, 1);
+    }
+    const plain = ownDeclined.find((d) => !/\band\b|,/i.test(String(Object.values(d.slots ?? {}).map((x) => x.text).join(' '))));
+    if (plain && !set.parent && !matches.some((m) => m.pattern.worldId !== context?.tabWorld)) matches.push(plain);   // (not on a one-world view of the set: nothing else could have read it there, so the restored reading would look like a full reading by the tab)
   }
   // ACT VERB SWALLOWED (TRANSFER, spec 23): a free-text reading whose wildcard slot starts with the verb of an act that another world's act pattern reads in this very sentence ("send table 1
   // to the chart": the chart's data pattern took "send table" as its data) yields to the act. The act pattern names its verb group (`$acts.verb.<act>`) and its action ends with the act, so

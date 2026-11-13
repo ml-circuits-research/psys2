@@ -14,7 +14,7 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=6c91a786a4';
+import { restrictedSet } from '../formalizer/spell.mjs?v=d3942e6c42';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=dc30576b7d';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';

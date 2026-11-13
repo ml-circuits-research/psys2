@@ -5,7 +5,7 @@
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
 import * as D from './engine.mjs?v=98d4ce06e3';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
-import { splitThings } from '../acts/acts.mjs?v=357e69c464';
+import { splitThings } from '../acts/acts.mjs?v=604ad994cd';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=94b5cebde0';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -14,6 +14,7 @@ const words = (t) => { const w = String(t ?? '').toLowerCase().replace(/_/g, ' '
 const PREP = new Set(['with', 'in', 'on', 'at', 'under', 'over', 'next', 'near', 'beside', 'by', 'above', 'below', 'behind', 'between', 'inside', 'to', 'from', 'of', 'for', 'around', 'across', 'and']);
 const DET = new Set(['a', 'an', 'the', 'another', 'my', 'this', 'that', 'one']);
 const QUANTITY = new Set(['some', 'few', 'several', 'couple', 'many', 'lots', 'loads', 'bunch', 'plenty', 'more']);
+const LISTABLE = /^(?:things?|shapes?|colou?rs?|options?|animals?|objects?|items?|pictures?|drawings?|stuff|everything|choices?|paints?|crayons?|shades?|patterns?|styles?|kinds?|types?|sizes?|moods?|scenes?|backgrounds?|grounds?|places?|positions?|parts?|words?|commands?|verbs?)$/;   // class words a listing may name
 const PRONOUN = /^(?:it|them|that|this|those|these|itself|him|her)$/i;
 const rel = (r) => String(r.rel ?? '').replace(/_/g, ' ');
 /** The thing role as the board reads a noun phrase; a place said with it ("the tree on the left") stays part of the phrase. */
@@ -63,22 +64,31 @@ function thingsOf(ctx) {
 /** DECLINE: a reading is the drawing board's when its words are things the board draws (a kind of its own or of the catalog, a part, the sky, the ground, "it") or when the sentence says "draw". */
 // In the open tab the board holds the focus of the dialogue: a reading it accepts does not yield to another world's reading without free text ("draw a sea" is not a chart palette).
 const accepts = (info) => { const v = acceptsWords(info); return v === true && info.tab === 'art.draw' ? 'focus' : v; };
-function acceptsWords({ action, mode, roles, text, state, kindWord }) {
+const np0Known = (k) => D.kindOfWord(k) != null || D.kindOfWord(k.replace(/s$/, '')) != null;
+function acceptsWords({ action, mode, roles, text, state, kindWord, tab }) {   // outside its own tab the board claims only a reading it fully supports (every word of the thing is read); in its tab the leniency stages may ignore a word
   const act = String(action ?? '').split('.').pop();
   if (!['make', 'remove', 'change', 'place', 'group', 'pick', 'ask', 'copy'].includes(act)) return true;
   const said = roles.thing ?? roles.rest ?? '';
-  if (act === 'ask' && mode === 'options') {   // "show Pariss" is a place of the map, not the list of things to draw: the free words must name the drawing (a thing, a colour, "options", "draw")
-    const ws = words(roles.thing ?? roles.rest ?? '');
-    return !ws.length || ws.some((x) => /^(?:things?|objects?|items?|shapes?|options?|colou?rs?|shades?|paints?|crayons?|draw|drawing|drawn|pictures?|animals?|stuff|available)$/.test(x) || D.kindOfWord(x) != null || D.kindOfWord(x.replace(/s$/, '')) != null || kindWord?.(x) === true);
+  // FULL SUPPORT (spec 20, arbitration rule 2): "show Pariss" is not a list of this board's options. A listing is the board's only when every content word of what is listed is a thing, a colour or a class of
+  // things it knows ("show the colours", "list shapes"); a word it cannot resolve ("Pariss", "Bern") is another world's open class.
+  if (act === 'ask' && mode === 'options' && said) {
+    const known = (w) => D.kindOfWord(w) != null || D.kindOfWord(w.replace(/s$/, '')) != null || kindWord?.(w) === true || kindWord?.(w.replace(/s$/, '')) === true || D.isColorWord(w) || D.isShade(w) || LISTABLE.test(w);
+    const head = words(said).filter((w) => !DET.has(w)); const end = head.findIndex((w) => /^(?:can|could|may|do|does|are|is|will|would|i|you|we|u|there|available|have|list|options)$/.test(w));   // only the words before the question's own auxiliaries name what is listed
+    if (!(end < 0 ? head : head.slice(0, end)).filter((w) => !/^(?:all|your|any|some|every|of|in|for|to|me|us|what|which|whats|more|other|different|the|my)$/.test(w)).every(known)) return false;
   }
-  if (act === 'ask' && mode === 'describe') return true;
+  if (act === 'ask' && ['describe', 'options'].includes(mode)) return true;
   if (act === 'ask' && !said && !roles.place) return false;
   if ((act === 'make' || act === 'change') && !roles.place && TIMES.has(words(said).at(-1) ?? '') && words(said).every((x) => TIMES.has(x) || DET.has(x) || /^(?:it|its|so|be|bright|nice|sunny|a|the)$/.test(x))) return true;   // "make it a sunny day", "change it so its day"
   if (act === 'change' && /^(?:scene|mood|time|sky|picture|drawing|background)$/.test(words(said).at(-1) ?? '') && TIMES.has(words(roles.value).at(-1) ?? '')) return true;   // "change the scene to dawn"
+  if (act === 'make' && roles.place && /^(?:with|and|of)$/i.test(String(roles.rel ?? '')) && !String(roles.place).split(/\s*(?:,|\band\b)\s*/i).filter(Boolean).every((c) => D.parseNP(c).known)) return false;   // FULL SUPPORT: "draw a flowchart with Start, Check and Done": what follows "with" must be words this board reads, not names
   if (!said) return true;
   const t = words(text).join(' ');
-  if (act === 'make' && /^(?:please |can you |could you )?(?:draw|sketch|paint|doodle)\b/.test(t)) return true;
+  if (act === 'make' && /^(?:please |can you |could you )?(?:draw|sketch|paint|doodle)\b/.test(t)) {   // "draw" claims whatever follows only when its last word is a thing this board (or the catalog vocabulary) knows: "draw a flowchart with Start, Check and Done" is not a thing it draws, and the world that has flowcharts reads it
+    const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1);
+    return tab !== 'art.draw' || !k || np0Known(k) || kindWord?.(k) === true || kindWord?.(k.replace(/s$/, '')) === true || D.parseNP(roles.thing).known || 'refuse';
+  }
   const np = D.parseNP(said);
+  if (tab && tab !== 'art.draw' && !np.known && !np.pron && !np.special) return false;   // outside its own tab the board claims only a reading it fully supports: every word of the thing is read ("paragraph The cat sat" is not a thing it draws)
   if (D.drawingNP(np) || np.pron || np.special || (PRONOUN.test(words(said)[0] ?? '') && act !== 'make')) return true;   // "it upside down": a pronoun first, the rest is how
   if (act === 'make') { const k = words(roles.thing).filter((x) => !DET.has(x) && !/^\d+$/.test(x)).at(-1); return !!k && (D.kindOfWord(k) != null || D.kindOfWord(k.replace(/s$/, '')) != null || kindWord?.(k) === true); }   // a word of the catalog vocabulary (the schema's kind lexicon) is a thing to draw even before the lookup found its picture
   return !!np.known && (state?.objects ?? []).length > 0;
