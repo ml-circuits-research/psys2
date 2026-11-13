@@ -3550,3 +3550,7 @@ The owner's log misled the reviewer: for "get to to sudan capital" the export sa
 4. **The user's reaction**: the next action within the turn gap (undo, a repeat, a correction, a thumbs tap) linked to the turn, so a later analysis can count "undone" and "repeated" as signs of a wrong result.
 5. Optional and off by default: a small thumbnail of the view per turn (size cap, local only), switchable under Privacy and history.
 `scripts/analyze-phrase-log.mjs` prints a turn as: tab, message, reading, what changed, what was shown, reaction. The ledger takes its "what happened" from these fields. For the Sudan turn say in worker-log what really happened (did the map go to the capital?).
+
+## Reviewer 2026-11-13 19:05 — LOG WHAT HAPPENED: reduced (owner)
+
+Keep it small. Per turn the export needs only: the tab on screen, each reply shown **with the world it came from**, and what that world changed (the state difference in words). Drop item 5 (thumbnails) and the screen-reader description of item 2; item 4 (reaction) only as the next user action already recorded by USER-ACTIONS.
