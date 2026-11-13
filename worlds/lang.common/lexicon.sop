@@ -4769,3 +4769,219 @@
     alt=what_do_you_call_me
     alt=what_am_i_called
     alt=do_you_remember_me
+
+@phrase.lang.talk.lookslike core.phrase
+    doc="Closing words of what does X look like."
+    alt=look_like
+    alt=looks_like
+
+@phrase.lang.talk.whatdoes core.phrase
+    doc="Lead-ins of what does X look like."
+    alt=what_does
+    alt=what_do
+
+@phrase.lang.talk.partsof core.phrase
+    doc="Lead-ins of a question about the parts of a thing; the rest is the thing."
+    alt=what_are_the_parts_of
+    alt=what_are_the_pieces_of
+    alt=what_are_the_parts_in
+    alt=which_parts_are_in
+    alt=what_parts_are_in
+    alt=name_the_parts_of
+    alt=list_the_parts_of
+    alt=show_me_the_parts_of
+    alt=show_the_parts_of
+    alt=parts_of
+    alt=the_parts_of
+
+@phrase.lang.talk.whatparts core.phrase
+    doc="Lead-ins of what parts does X have; the closing word is have or has."
+    alt=what_parts_does
+    alt=what_parts_do
+    alt=which_parts_does
+    alt=which_parts_do
+    alt=what_pieces_does
+    alt=what_pieces_do
+
+@phrase.lang.talk.biggerq core.phrase
+    doc="Lead-ins of which of two things is bigger; the two things follow, joined by or."
+    alt=which_is_bigger
+    alt=which_is_larger
+    alt=which_is_smaller
+    alt=which_is_taller
+    alt=which_is_heavier
+    alt=which_is_longer
+    alt=which_one_is_bigger
+    alt=which_one_is_larger
+    alt=which_one_is_smaller
+    alt=which_one_is_taller
+    alt=which_one_is_heavier
+    alt=which_one_is_longer
+    alt=which_is_the_bigger
+    alt=which_is_the_smaller
+
+@phrase.lang.talk.compar core.phrase
+    doc="Comparatives between two things (is X bigger than Y)."
+    alt=bigger
+    alt=larger
+    alt=smaller
+    alt=taller
+    alt=heavier
+    alt=longer
+    alt=shorter
+
+@phrase.lang.talk.hasmore core.phrase
+    doc="Lead-ins of which of two things has more of a part; the part, then the two things."
+    alt=which_has_more
+    alt=which_has_fewer
+    alt=which_has_less
+    alt=which_one_has_more
+    alt=which_one_has_fewer
+    alt=who_has_more
+
+@phrase.lang.talk.seqlead core.phrase
+    doc="Lead-ins of a request for things that come in order."
+    alt=what_are
+    alt=what_is
+    alt=list
+    alt=name
+    alt=tell_me
+    alt=show_me
+    alt=give_me
+    alt=put
+    alt=say
+    alt=show
+    alt=which_are
+
+@phrase.lang.talk.orderof core.phrase
+    doc="The order of a sequence."
+    alt=the_order_of
+    alt=order_of
+    alt=the_order_of_the
+    alt=what_order_are
+    alt=in_what_order_are
+    alt=in_which_order_are
+
+@phrase.lang.talk.seqtail core.phrase
+    doc="Closing words of a request for a sequence."
+    alt=in_order
+    alt=in_a_row
+    alt=from_the_sun
+    alt=in_the_year
+    alt=in_a_year
+    alt=of_the_year
+    alt=in_a_week
+    alt=of_the_week
+    alt=in_the_week
+    alt=in_the_solar_system
+    alt=of_the_solar_system
+    alt=one_by_one
+    alt=from_the_sun_in_order
+    alt=in_order_from_the_sun
+
+@phrase.lang.talk.after core.phrase
+    doc="Lead-ins of what comes after a month, season, day or planet."
+    alt=what_comes_right_after
+    alt=what_comes_just_after
+    alt=what_comes_after
+    alt=what_month_comes_after
+    alt=what_season_comes_after
+    alt=what_day_comes_after
+    alt=what_planet_comes_after
+    alt=which_month_comes_after
+    alt=which_season_comes_after
+    alt=which_day_comes_after
+    alt=which_planet_comes_after
+    alt=what_is_right_after
+    alt=what_is_after
+    alt=what_follows
+    alt=what_month_is_after
+    alt=what_season_is_after
+    alt=what_day_is_after
+    alt=what_planet_is_after
+    alt=which_planet_is_after
+    alt=which_month_is_after
+
+@phrase.lang.talk.before core.phrase
+    doc="Lead-ins of what comes before a month, season, day or planet."
+    alt=what_comes_right_before
+    alt=what_comes_just_before
+    alt=what_comes_before
+    alt=what_month_comes_before
+    alt=what_season_comes_before
+    alt=what_day_comes_before
+    alt=what_planet_comes_before
+    alt=which_month_comes_before
+    alt=which_season_comes_before
+    alt=which_day_comes_before
+    alt=which_planet_comes_before
+    alt=what_is_right_before
+    alt=what_is_before
+    alt=what_month_is_before
+    alt=what_season_is_before
+    alt=what_day_is_before
+    alt=what_planet_is_before
+    alt=which_planet_is_before
+    alt=which_month_is_before
+
+@phrase.lang.talk.nth core.phrase
+    doc="Lead-ins of which one is the third of a sequence; an ordinal and the sequence follow."
+    alt=what_is_the
+    alt=which_is_the
+    alt=what_s_the
+    alt=whats_the
+    alt=which_one_is_the
+
+@phrase.lang.talk.board core.phrase
+    doc="Asking for the board of topics or what was talked about."
+    alt=what_did_we_talk_about
+    alt=what_have_we_talked_about
+    alt=what_did_we_discuss
+    alt=what_have_we_discussed
+    alt=what_have_we_covered
+    alt=what_did_we_cover
+    alt=show_the_board
+    alt=show_me_the_board
+    alt=show_the_topic_board
+    alt=show_me_the_topic_board
+    alt=show_the_topics
+    alt=show_me_the_topics
+    alt=show_our_topics
+    alt=show_our_talk
+    alt=summarize_our_talk
+    alt=summarise_our_talk
+    alt=our_topics
+    alt=topic_board
+    alt=the_topic_board
+
+@phrase.lang.talk.how core.phrase
+    doc="Asking how an answer is known."
+    alt=how_do_you_know
+    alt=how_do_you_know_that
+    alt=how_do_you_know_this
+    alt=how_did_you_know
+    alt=how_did_you_know_that
+    alt=how_can_you_tell
+    alt=how_do_you_know_it
+    alt=why_do_you_say_that
+    alt=where_did_you_learn_that
+    alt=where_did_you_get_that
+    alt=where_does_that_come_from
+    alt=what_is_your_source
+    alt=what_s_your_source
+    alt=who_told_you
+    alt=who_told_you_that
+    alt=what_is_that_based_on
+
+@phrase.lang.talk.scope core.phrase
+    doc="Asking what this tab can talk about."
+    alt=what_can_we_talk_about
+    alt=what_can_you_talk_about
+    alt=what_do_you_know
+    alt=what_do_you_know_about_things
+    alt=what_can_i_ask
+    alt=what_can_i_ask_you
+    alt=what_topics_do_you_know
+    alt=what_things_do_you_know
+    alt=which_topics_do_you_know
+    alt=what_can_you_tell_me

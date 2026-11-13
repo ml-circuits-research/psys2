@@ -1,0 +1,172 @@
+@pat.talk.look.looks core.pattern
+    canonical="What does a lighthouse look like?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatdoes] [$lang.know.det]? {o:words(3,noun)} [$lang.talk.lookslike] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.look arg.o=\"{o}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="What does a spider look like?"
+    example="What does an apple look like?"
+    example="What do bikes look like?"
+    doc="Frame: what does X look like. The thing is an open slot looked up in the catalog; the answer is one sentence and a drawing of X."
+
+@pat.talk.look.define core.pattern
+    canonical="What is a bicycle?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.define] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.look arg.o=\"{o}\""
+    kind=request
+    tabOnly=true
+    priority=4
+    example="What is a comet?"
+    example="Tell me about the moon."
+    example="What is a spider?"
+    doc="Frame: what is X (or tell me about X). One sentence and the drawing of X when the catalog has one."
+
+@pat.talk.parts.of core.pattern
+    canonical="What are the parts of a house?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.partsof] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.parts arg.o=\"{o}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="What are the parts of a bicycle?"
+    example="Show me the parts of a rocket."
+    doc="Frame: the parts of X. A sentence and a box diagram of the named parts."
+
+@pat.talk.parts.have core.pattern
+    canonical="What parts does a car have?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatparts] [$lang.know.det]? {o:words(3,noun)} [$lang.know.have] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.parts arg.o=\"{o}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="What parts does a boat have?"
+    doc="Frame: what parts does X have."
+
+@pat.talk.parts.made core.pattern
+    canonical="What is a bicycle made of?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [what_is|what_are|what_s|whats] [$lang.know.det]? {o:words(3,noun)} [$lang.know.made] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.parts arg.o=\"{o}\" arg.made=yes"
+    kind=request
+    tabOnly=true
+    priority=10
+    example="What is a house made of?"
+    example="What is a tree made of?"
+    doc="Frame: what is X made of. The material when the catalog says it, and the box diagram of the parts."
+
+@pat.talk.count core.pattern
+    canonical="How many legs does a spider have?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.count] {p:words(2)} [$lang.know.aux] [$lang.know.det]? {o:words(3,noun)} [$lang.know.have] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.count arg.o=\"{o}\" arg.p=\"{p}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="How many wheels does a bicycle have?"
+    example="How many wings does a bird have?"
+    doc="Frame: how many P does X have. A sentence and that many counted icons."
+
+@pat.talk.compare.which core.pattern
+    canonical="Which is bigger, a mouse or an elephant?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.biggerq] [$lang.know.det]? {a:words(2,noun)} or [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.compare arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="Which is bigger, Jupiter or Mars?"
+    example="Which is taller, a giraffe or a horse?"
+    doc="Frame: which of two things is bigger. Two bars."
+
+@pat.talk.compare.than core.pattern
+    canonical="Is a dog bigger than a cat?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [is|are] [$lang.know.det]? {a:words(2,noun)} [$lang.talk.compar] than [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.compare arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="Is Earth bigger than Mars?"
+    doc="Frame: is X bigger than Y. Two bars."
+
+@pat.talk.compare.more core.pattern
+    canonical="Which has more legs, a spider or a cat?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.hasmore] {p:words(1)} [$lang.know.det]? {a:words(2,noun)} or [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.compare arg.a=\"{a}\" arg.b=\"{b}\" arg.p=\"{p}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="Which has more wheels, a car or a bicycle?"
+    doc="Frame: which of two things has more of a part. Two bars of the counts."
+
+@pat.talk.order core.pattern
+    canonical="What are the planets in order?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.seqlead]? [$lang.talk.orderof]? [the|all|our|of_the]? {s:lex.talk.sequences} [$lang.talk.seqtail]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.order arg.s=\"{s}\""
+    kind=request
+    tabOnly=true
+    priority=9
+    example="What are the months?"
+    example="List the seasons."
+    example="What is the order of the planets?"
+    doc="Frame: the order of months, seasons, days or planets. A sentence and a line with points."
+
+@pat.talk.after core.pattern
+    canonical="What comes after March?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.after] {x:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.neighbour arg.x=\"{x}\" arg.dir=after"
+    kind=request
+    tabOnly=true
+    priority=10
+    example="What month comes after May?"
+    example="Which planet is after Mars?"
+    doc="Frame: what comes after X on a line of months, seasons, days or planets."
+
+@pat.talk.before core.pattern
+    canonical="What comes before Friday?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.before] {x:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.neighbour arg.x=\"{x}\" arg.dir=before"
+    kind=request
+    tabOnly=true
+    priority=10
+    example="Which planet is before Earth?"
+    doc="Frame: what comes before X."
+
+@pat.talk.nth core.pattern
+    canonical="What is the third planet from the sun?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.nth] [the]? {n:ordinal} {s:lex.talk.sequences} [$lang.talk.seqtail]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.neighbour arg.n={n} arg.s=\"{s}\""
+    kind=request
+    tabOnly=true
+    priority=11
+    example="Which is the fifth month?"
+    doc="Frame: which one is the Nth of the months, seasons, days or planets."
+
+@pat.talk.board core.pattern
+    canonical="What did we talk about?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.board] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.board"
+    kind=request
+    tabOnly=true
+    priority=11
+    example="Show the topic board."
+    example="What have we talked about?"
+    doc="The board of topics and one line per topic."
+
+@pat.talk.how core.pattern
+    canonical="How do you know?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.how] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.how"
+    kind=request
+    tabOnly=true
+    priority=11
+    example="How do you know that?"
+    example="Where did you learn that?"
+    doc="The path of the last answer in plain words."
+
+@pat.talk.scope core.pattern
+    canonical="What can we talk about?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.scope] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.scope"
+    kind=request
+    tabOnly=true
+    priority=11
+    example="What can I ask?"
+    doc="What this tab can talk about, with suggestions."

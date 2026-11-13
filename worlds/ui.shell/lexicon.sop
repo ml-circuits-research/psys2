@@ -49,6 +49,7 @@
     word=cv
     word=resume
     word=my_cv
+    word=talk
 
 @lex.ui.shell.verbtabs core.lexicon
     class=noun

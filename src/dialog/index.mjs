@@ -1389,6 +1389,17 @@ export class DialogSession {
         if (seg.veto.offer) disc.pending = { type: 'offer', accept: 'rewrite', rewrite: seg.veto.offer.rewrite, world: seg.veto.offer.world, expected: 'yes/no', question: seg.veto.offer.question, turn: this._msg };
         continue;
       }
+      // honest scope: the world of the open tab may refuse a message it cannot talk about, in its own words, with the nearest things it can (hook `outOfScope`, the Talk tab)
+      if (seg.unparsed) {
+        const tw = this.context().tabWorld;
+        const oos = tw ? this.engine.interp.hook(this.isession, tw, 'outOfScope', { text: seg.text }) : undefined;
+        if (typeof oos?.say === 'string' && oos.say) {
+          lines.push([T(oos.say)]);
+          if (oos.suggest?.length) this.isession.effects.push({ name: 'chat.suggest', args: { items: oos.suggest }, world: tw });
+          statuses.push('unsupported');
+          continue;
+        }
+      }
       const waSay = seg.unparsed && waMode !== 'off' && waMode !== 'observe' ? explainUnparsed(this, seg.text) : null;
       if (waSay) { lines.push([T(waSay)]); statuses.push('unsupported'); continue; }
       if (seg.unparsed) {

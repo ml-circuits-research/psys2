@@ -1,0 +1,53 @@
+@op.talk.look core.operation
+    impl=look
+    semantics=action
+    action=talk.look
+    doc="What is X or what does X look like: one plain sentence and a drawing of X made from its parts (the catalog of drawable things). No fact: I do not know that yet, no card."
+
+@op.talk.parts core.operation
+    impl=parts
+    semantics=action
+    action=talk.parts
+    doc="The parts of X or what X is made of: a sentence and a small box diagram of the named parts."
+
+@op.talk.count core.operation
+    impl=count
+    semantics=action
+    action=talk.count
+    doc="How many parts of a kind X has: a sentence and that many counted icons."
+
+@op.talk.compare core.operation
+    impl=compare
+    semantics=action
+    action=talk.compare
+    doc="Which of two things is bigger, or has more of a part: a sentence and two bars."
+
+@op.talk.order core.operation
+    impl=order
+    semantics=action
+    action=talk.order
+    doc="The order of the months, seasons, days or planets from the sun: a sentence and a line with points."
+
+@op.talk.neighbour core.operation
+    impl=neighbour
+    semantics=action
+    action=talk.neighbour
+    doc="What comes after or before a month, season, day or planet, or which one is third: a sentence and the line with the point marked."
+
+@op.talk.board core.operation
+    impl=board
+    semantics=action
+    action=talk.board
+    doc="What did we talk about: one line per topic, and the topic board shown by the tab."
+
+@op.talk.how core.operation
+    impl=howDoYouKnow
+    semantics=action
+    action=talk.how
+    doc="How do you know: the path of the last answer in plain words (the question, what it asks, where the facts came from, the card)."
+
+@op.talk.scope core.operation
+    impl=scope
+    semantics=action
+    action=talk.scope
+    doc="What can we talk about: the opening line and suggestion chips taken from the example questions of this world."

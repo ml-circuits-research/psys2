@@ -1,0 +1,35 @@
+@tpl.talk.look core.template
+    for=action.talk.look
+    text="{value}"
+
+@tpl.talk.parts core.template
+    for=action.talk.parts
+    text="{value}"
+
+@tpl.talk.count core.template
+    for=action.talk.count
+    text="{value}"
+
+@tpl.talk.compare core.template
+    for=action.talk.compare
+    text="{value}"
+
+@tpl.talk.order core.template
+    for=action.talk.order
+    text="{value}"
+
+@tpl.talk.neighbour core.template
+    for=action.talk.neighbour
+    text="{value}"
+
+@tpl.talk.board core.template
+    for=action.talk.board
+    text="{value}"
+
+@tpl.talk.how core.template
+    for=action.talk.how
+    text="{value}"
+
+@tpl.talk.scope core.template
+    for=action.talk.scope
+    text="{value}"

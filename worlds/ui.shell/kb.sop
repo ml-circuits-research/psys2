@@ -12,6 +12,7 @@
 @kb.shell.tab.chess ui.shell.known id=chess title="Chess" world=games.chess core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.tab.map ui.shell.known id=map title="Map" world=geo.map core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.tab.music ui.shell.known id=music title="Music" world=media.music core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
+@kb.shell.tab.talk ui.shell.known id=talk title="Talk" world=talk core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.tab.profile ui.shell.known id=profile title="Profile" world=user.profile core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 
 @kb.shell.alias.robot ui.shell.alias word=robot tab=robot core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
@@ -63,6 +64,7 @@
 @kb.shell.alias.piano ui.shell.alias word=piano tab=music core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.keyboard ui.shell.alias word=keyboard tab=music core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.sheet_music ui.shell.alias word=sheet_music tab=music core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
+@kb.shell.alias.talk ui.shell.alias word=talk tab=talk core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.profile ui.shell.alias word=profile tab=profile core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.about_me ui.shell.alias word=about_me tab=profile core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
 @kb.shell.alias.cv ui.shell.alias word=cv tab=profile core.source="generated:scripts/gen-ui-kb.mjs:ui.shell"
