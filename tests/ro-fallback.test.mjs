@@ -61,7 +61,7 @@ for (const reasoner of ['matrix', 'ops']) {
   });
 }
 
-test('input (P7): with a Translator present it is asked first, even when the rules would have understood; the rules read only when it is missing or fails', async () => {
+test('input (M4): with a Translator present it is asked and its English is a candidate (chosen by understanding); the rules read when it is missing or fails', async () => {
   const calls = [];
   const tr = mk(base, okBackend(calls));
   const s = await session(tr);
@@ -72,8 +72,9 @@ test('input (P7): with a Translator present it is asked first, even when the rul
   // a stub Translator whose answer is checked and accepted is the reading, whatever the rules would say ("inca un" is "one more", never "still a")
   const stub = mk(base, backendOf(async (t, f) => (f === 'ro' ? 'Draw another crocodile' : 'Gata.')));
   const r2 = await (await session(stub)).send('inca un crocodil', { language: 'ro' });
-  assert.equal(r2.trace.english, 'Draw another crocodile');
-  assert.equal(r2.trace.via, 'translator-in');
+  // M4: the Translator's English is one candidate among the others (rules, repaired) and the reader's understanding chooses; all of them are in the trace
+  assert.ok(r2.trace.candidates.some((c) => c.source === 'browser' && c.text === 'Draw another crocodile'));
+  assert.ok(r2.trace.candidates.some((c) => c.chosen));
   // missing or failing Translator: the rules read (and write)
   for (const backend of [backendOf(async () => '', { kind: null }), backendOf(async () => { throw new Error('down'); })]) {
     const rr = await (await session(mk(base, backend))).send('mă cheamă Ana', { language: 'ro' });

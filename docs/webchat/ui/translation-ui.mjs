@@ -129,7 +129,8 @@ export function createTranslationLayer({ base, h, note = () => {}, progress = nu
     if (nativeBoth.has(code)) return 'translator-api';
     return host?.has(code) ? 'on-device-model' : 'none';
   }
-  const needsModel = (code) => code !== 'en' && engineOf(code) === 'on-device-model';
+  /** The on-device model is loaded (lazily, cached, shown in PROGRESS with its MB) whenever the browser Translator cannot serve the language right now: it is missing, or only downloadable. M4 then has the model's candidate. */
+  const needsModel = (code) => code !== 'en' && !!host?.has(code) && nativeBoth.get(code) !== 'available';
 
   /** PROGRESS: with the host's progress service the download is a step of the one panel (no banner of its own); the banner stays for hosts without one (tests). */
   const pgId = (lang) => (progress?.state('translator') === 'active' ? 'translator' : `translator:${lang}`);
@@ -151,7 +152,7 @@ export function createTranslationLayer({ base, h, note = () => {}, progress = nu
   async function prepare(code) {
     await init();
     if (code === 'en') { banner.hidden = true; return; }
-    if (!needsModel(code)) { banner.hidden = true; return; }   // the browser Translator (prepared by the backend) or nothing: no download here
+    if (!needsModel(code)) { banner.hidden = true; return; }   // the browser Translator serves it (prepared by the backend), or no model exists: no download here
     download.set(code, true);
     try { await host.ensure(code); } catch { /* the state and the banner say why */ }
   }

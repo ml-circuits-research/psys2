@@ -51,8 +51,8 @@ function installFaults() {
   const rules = engine.formalizers?.rules;
   if (rules?.formalize) { const f = rules.formalize.bind(rules); rules.formalize = (...a) => { if (faultNow === 'matcher') spin(); return f(...a); }; }
   const tr = engine.translator;
-  // the engine reads with `translator.rules` first (RO-TRANSLATE-FALLBACK) or, translator-first (P7), through `viaBrowser`: all carry the fault hook
-  for (const owner of [tr, tr?.rules]) for (const k of ['translate', 'viaBrowser', 'detectLanguage', 'evidence']) {
+  // M4: the engine reads and writes through the candidates (`candidatesViaMT`, `rules.translate`): all carry the fault hook
+  for (const owner of [tr, tr?.rules]) for (const k of ['translate', 'candidatesViaMT', 'detectLanguage', 'evidence']) {
     if (typeof owner?.[k] !== 'function') continue;
     const f = owner[k].bind(owner);
     owner[k] = (...a) => { if (faultNow === 'translator') spin(); return f(...a); };

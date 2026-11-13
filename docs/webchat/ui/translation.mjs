@@ -45,7 +45,9 @@ export function checkTranslation(src, tgt, { from, to }) {
   // Reply direction (to is not English): the source is our own English reply, the user's names and words are quoted verbatim (never translated), and the app's own
   // capitalised words ("Japan", "Eastern", a song title) are translated or transliterated by the model: only the reading direction checks names
   const reply = to !== 'en';
-  const lostNames = reply || from === 'de' || !latin ? [] : names(src).filter((n) => !keeps(n));
+  // a name written in another script than the target's (Берлин / Berlin, Ана / Ana) is transliterated, so it cannot be compared letter by letter: the check needs the same script on both sides
+  const srcLatin = (String(src).match(/\p{Script=Latin}/gu) ?? []).length >= (String(src).match(/\p{L}/gu) ?? []).length / 2;
+  const lostNames = reply || from === 'de' || !latin || !srcLatin ? [] : names(src).filter((n) => !keeps(n));
   if (lostNames.length) return `names not preserved (${lostNames.join(', ')})`;
   // negation and question words are known for English and Romanian only; for any other language the "?" and the numbers and names are what is checked
   const negOf = (l) => (l === 'en' ? NEG_EN : l === 'ro' ? NEG_RO : null), whOf = (l) => (l === 'en' ? WH_EN : l === 'ro' ? WH_RO : null);
@@ -290,36 +292,14 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
     leftovers: (text, lang) => rules.leftovers?.(text, lang) ?? [],
     supports: (f, t) => rules.supports?.(f, t) ?? true,
     /**
-     * RO-TRANSLATE-FALLBACK. 'auto' (the default) uses the fallback machinery (routes, 'ro-generic' line, bounded calls); WHO goes first is `translatorFirst()` (P7, owner rule
-     * 2026-11-12: with a browser Translator the Translator translates input and output, the rules answer when it is missing, late or fails the checker).
-     * 'browser-api' keeps the old plain order (the Translator, then the rules); 'rules' never uses the Translator. Returns 'fallback' | 'primary' | 'off'.
+     * M4 is the only translation path (spec 06): strategy 'auto' and 'browser-api' mean 'fallback' (candidates: the browser Translator, the on-device model, the rules; checked);
+     * 'rules' never uses a machine translator ('off'). Returns 'fallback' | 'off'.
      */
-    fallbackMode() { const pref = getStrategy(); return pref === 'rules' ? 'off' : pref === 'browser-api' ? 'primary' : 'fallback'; },
-    /** P7: true when the Translator (browser or on-device model) is the FIRST choice, for input and output: strategy 'auto' with a Translator present. The rules then read and write only when it is missing, late or fails the checker. */
-    translatorFirst() { return getStrategy() !== 'rules' && !!backend.translatorKind(); },
+    fallbackMode() { return getStrategy() === 'rules' ? 'off' : 'fallback'; },
     /** True when a Translator for this pair exists in this window (or the page behind the worker bridge), whatever its model state. */
     canTranslate(from, to) { return getStrategy() !== 'rules' && !!backend.translatorKind() && (backend.supports?.(from, to) ?? true); },
     /** Records the route of a turn in `usage` (trace and phrase log): `via` is 'translator-in' | 'translator-out' | 'rules-translate' | 'ro-generic'. */
     note(via, detail = {}) { usage.push({ direction: detail.direction ?? null, requested: getStrategy(), strategy: detail.strategy ?? 'rules', fallback: !!detail.fallback, reason: detail.reason ?? null, via }); },
-    /**
-     * The fallback translation: the on-device Translator only, bounded by the backend's deadline (HANG3), the checker (numbers, names, negation, question form)
-     * and, for English to Romanian, no English words left. Returns the usual translation record, or null when the Translator is absent, late or fails the checker
-     * (the reason is in `usage`). It never throws and never waits beyond the backend deadline.
-     */
-    async viaBrowser(text, { from, to }) {
-      const via = to === 'en' ? 'translator-in' : 'translator-out';
-      const entry = { direction: `${from}->${to}`, requested: getStrategy(), strategy: 'rules', fallback: true, reason: null, via };
-      usage.push(entry);
-      if (getStrategy() === 'rules') { entry.reason = 'the browser Translator is switched off'; return null; }
-      if (!backend.translatorKind() || !(backend.supports?.(from, to) ?? true)) { entry.reason = 'browser API not available'; return null; }
-      try {
-        const out = await backend.translate(text, from, to);
-        const bad = checkTranslation(text, out, { from, to }) ?? (to === 'ro' && rules.leftovers?.(out, 'ro')?.length ? `English words left (${rules.leftovers(out, 'ro').slice(0, 3).join(', ')})` : null);
-        if (bad) { entry.reason = `checker failed: ${bad}`; return null; }
-        entry.strategy = 'browser-api'; entry.fallback = false;
-        return { text: out, alignment: text ? [{ src: [0, text.length], tgt: [0, out.length] }] : [], unknown: [], notes: [`translated by the browser on-device Translator API (${via})`], confidence: 1, strategy: 'browser-api', via };
-      } catch (e) { entry.reason = `browser API error: ${e?.message ?? e}`; return null; }
-    },
     /**
      * M4: one candidate per available machine translator (the browser Translator and the on-device model), each through the checker (numbers, names, negation).
      * [{ source: 'browser' | 'model', text, translation, rejected? }]; never throws; the calls run side by side, each bounded by the backend deadline.
@@ -336,7 +316,7 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
           const out = await backend.translate(text, from, to, src);
           const bad = checkTranslation(text, out, { from, to });
           if (bad) entry.reason = `checker failed: ${bad}`; else { entry.strategy = 'browser-api'; entry.fallback = false; }
-          return { source: src === 'model' ? 'model' : 'browser', text: out, rejected: bad ? `checker: ${bad}` : null,
+          return { source: src === 'model' ? 'model' : 'browser', text: out, rejected: bad ? `checker: ${bad}` : null, ...(bad && /^names not preserved/.test(bad) && to === 'en' ? { soft: true } : {}),   // reading direction: a name that differs (Parys / Paris) is a warning for M4, not a veto
             translation: { text: out, alignment: text ? [{ src: [0, text.length], tgt: [0, String(out).length] }] : [], unknown: [], notes: [`translated by the ${src === 'model' ? 'on-device model' : 'browser on-device Translator API'} (${via})`], confidence: 1, strategy: 'browser-api', via } };
         } catch (e) { entry.reason = `${src} error: ${e?.message ?? e}`; return null; }
       }));
