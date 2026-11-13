@@ -4,6 +4,8 @@ import { execFileSync } from 'node:child_process';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import * as scene from '../worlds/art.draw/scene.mjs';
+import { readFile } from 'node:fs/promises';
+import { createCatalog } from '../src/knowledge/catalog.mjs';
 import { THINGS } from '../worlds/art.draw/things.catalog.mjs';
 
 // DRAW-FROM-FACTS (spec 07 section 7): any thing of the catalog (knowledge/k.objects) is drawn from its parts by the same renderer as the built-in kinds.
@@ -150,4 +152,19 @@ test('diagram.sketch: "a diagram shaped like a house" takes the part boxes as th
   const c = engines.ops.createSession({ language: 'en' });
   await c.send('Draw three rectangles in the diagram.');
   assert.match((await c.send('Arrange the boxes as a circle.')).text, /Arranged 3 shapes as a circle/);
+});
+
+test('the shared catalog access (src/knowledge/catalog.mjs) loads only the shards a lemma needs, once', async () => {
+  const root = new URL('../knowledge/', import.meta.url);
+  const vocab = JSON.parse(await readFile(new URL('k.objects/vocab.json', root), 'utf8'));
+  const reads = [];
+  const cat = createCatalog({ vocab, readShard: (p) => { reads.push(p); return readFile(new URL(`${p}.sop`, root), 'utf8'); } });
+  assert.equal(cat.thingOfWord('castle'), null, 'nothing is known before a load');
+  assert.deepEqual(cat.shardsOf('castles'), ['k.objects/shards/buildings']);
+  const [o] = await cat.load('castles');
+  assert.equal(o.name, 'castle');
+  assert.deepEqual(o.parts.map((p) => p.name).sort(), THINGS.castle.map((p) => p.name).sort(), 'the same parts as the generated module');
+  await cat.load('lighthouse');
+  assert.deepEqual(reads, ['k.objects/shards/buildings'], 'one shard, read once');
+  assert.deepEqual(await cat.load('blorp'), []);
 });

@@ -537,7 +537,7 @@ export function shapedLike(ctx, args = {}) {
   const taken = new Set(s.shapes.flatMap((x) => [x.name.toLowerCase(), (x.id ?? '').toLowerCase()]));
   const nodes = parts.map((p, i) => {
     let name = p.name, n = 1;
-    while (taken.has(name.toLowerCase()) || /^[crsdetxhk]\d+$/i.test(name)) name = `${p.name}${++n}`;
+    while (taken.has(name.toLowerCase()) || /^[crsdetxhk]\d+$/i.test(name)) { budget.tick('diagram.name'); name = `${p.name}${++n}`; }
     taken.add(name.toLowerCase());
     const w = Math.max(10, Math.round(p.w * k)), h = Math.max(10, Math.round(p.h * k));
     const cx = 400 + ((p.x + p.w / 2) - (x0 + x1) / 2) * k, cy = 250 + ((p.y + p.h / 2) - (y0 + y1) / 2) * k;

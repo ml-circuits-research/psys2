@@ -1839,7 +1839,6 @@
     doc="DRAW-FROM-FACTS: the diagram takes the part boxes of a thing of the catalog as its layout (one box per part, labelled with the part name). The thing is an open slot, looked up after the reading."
 
 @pat.diagram.sketch.shaped.arrange core.pattern
-    canonical="Arrange the boxes as a house."
     match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [arrange|lay_out|organize|organise|put|place|rearrange] [the|these|my]? [boxes|shapes|diagram|them] [as|like|into|in_the_shape_of|in_the_form_of] [a|an|the] {o:words(2,noun)}"
     emit="@{_} core.request action=diagram.shapedLike arg.o=\"{o}\""
     kind=request

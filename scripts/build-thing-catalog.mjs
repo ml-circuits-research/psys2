@@ -16,48 +16,8 @@ const SHARDS = join(ROOT, 'knowledge/k.objects/shards');
 const OUT = join(ROOT, 'worlds/art.draw/things.catalog.mjs');
 const KIND_SHARD = join(ROOT, 'knowledge/art.draw.kinds/shards/kinds.sop');
 
-const unq = (t) => (t.startsWith('"') ? JSON.parse(t) : t);
-/** `@id type key=value key=value "quoted value"` -> { id, type, attrs: { key: [values] } } */
-export function parseLine(line) {
-  const m = /^@(\S+)\s+(\S+)\s*(.*)$/.exec(line);
-  if (!m) return null;
-  const attrs = {};
-  for (const t of m[3].matchAll(/([A-Za-z_.]+)=("(?:[^"\\]|\\.)*"|\S+)/g)) (attrs[t[1]] ??= []).push(unq(t[2]));
-  return { id: m[1], type: m[2], attrs };
-}
-const num = (a, k) => Number(a[k][0]);
-
-export function readShard(text) {
-  const objects = new Map(), points = new Map(), words = {}, order = [];
-  for (const line of text.split('\n')) {
-    if (!line.startsWith('@')) continue;
-    const w = parseLine(line);
-    if (!w) continue;
-    if (w.type === 'k.objects.object') objects.set(w.attrs.name[0], []);
-    else if (w.type === 'k.objects.part') {
-      const a = w.attrs, p = { name: a.name[0], shape: a.shape[0], x: num(a, 'x'), y: num(a, 'y'), w: num(a, 'w'), h: num(a, 'h'), z: num(a, 'z'), colour: a.colour ?? ['grey'] };
-      if (a.kind) p.kind = a.kind[0];
-      if (a.rgb) p.rgb = a.rgb[0];
-      if (a.pointing) p.pointing = a.pointing[0];
-      if (a.opens) p.opens = a.opens[0];
-      p.id = w.id; p.of = a.of[0]; order.push(p);
-    } else if (w.type === 'k.objects.point') {
-      const key = w.attrs.part[0].replace(/^\$/, '');
-      if (!points.has(key)) points.set(key, []);
-      points.get(key).push({ n: num(w.attrs, 'n'), x: num(w.attrs, 'x'), y: num(w.attrs, 'y') });
-    } else if (w.type === 'core.word' && w.attrs.of?.[0] === 'k.objects.object.name') {
-      for (const t of w.attrs.text ?? []) words[t] = w.attrs.means[0];
-    }
-  }
-  for (const p of order) {
-    const pts = (points.get(p.id) ?? []).sort((a, b) => a.n - b.n).map((q) => [q.x, q.y]);
-    if (pts.length) p.points = pts;
-    const { id, of, ...rest } = p;
-    (objects.get(of) ?? objects.set(of, []).get(of)).push(rest);
-  }
-  for (const list of objects.values()) list.sort((a, b) => a.z - b.z);
-  return { objects, words };
-}
+import { parseLine, parseShard as readShard } from '../src/knowledge/catalog.mjs';   // the shared catalog access (spec 07 section 7)
+export { parseLine, readShard };
 
 export function build() {
   const things = {}, words = {}, shardOf = {};
