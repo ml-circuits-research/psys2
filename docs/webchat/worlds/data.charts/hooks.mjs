@@ -4,7 +4,7 @@
 // the one thing read from the sentence is the data ("bikes 4 scooters 9"), which is the world's own parser (parseData). Nothing here names a verb, a colour or a type: values come from the
 // colour reader (values.mjs) and the schema's enums, kinds from the schema (executor.schema), bars by the label lookup of the chart.
 import * as C from './chart.mjs?v=241c531da1';
-import * as G from './ops.mjs?v=aa3b27241d';
+import * as G from './ops.mjs?v=1d6035eaf0';
 import { animals } from '../../lib/knowledge/animals.mjs?v=7ef6dd8b71';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_']+/).filter(Boolean);

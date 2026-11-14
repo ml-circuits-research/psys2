@@ -10,11 +10,14 @@
  * Browser-safe: no `node:*`.
  */
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
-import { lexIndex } from '../worlds/lexicon.mjs?v=6912cd6a5d';
-import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=dc2470c516';
-import { FILLER } from './world-aware.mjs?v=27f146a313';
+import { lexIndex } from '../worlds/lexicon.mjs?v=51f71db3b5';
+import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=00235ec115';
+import { FILLER } from './world-aware.mjs?v=42a310b511';
 import { budget } from './budget.mjs?v=00bce6e369';
 
+/** A catalog lookup waits at most LOOKUP_MS; a catalog that does not answer in time is no catalog (the reading is then the rules'), and the turn never waits for it. */
+const LOOKUP_MS = 400;
+const bounded = (p) => new Promise((resolve) => { const t = setTimeout(() => resolve(null), LOOKUP_MS); Promise.resolve(p).then((v) => { clearTimeout(t); resolve(v); }, () => { clearTimeout(t); resolve(null); }); });
 const off = (name) => globalThis.process?.env?.[name] === 'off';
 const toks = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 const FUNCTIONAL = new Set([...FILLER, ...FUNCTION_WORDS, 'what', 'which', 'who', 'where', 'when', 'how', 'does', 'do', 'did', 'is', 'are', 'was', 'were', 'be', 'in', 'on', 'at', 'by', 'with', 'its', 'these', 'those', 'tell', 'say', 'i', 'we']);
@@ -118,7 +121,7 @@ async function alternationText(dialog, seg) {
   let w = dialog._alternationWorld;
   if (w === undefined) {
     try {
-      const rows = await facts.wires('w.lang.en.alternation');
+      const rows = (await bounded(facts.wires('w.lang.en.alternation'))) ?? [];
       w = rows.length ? new lib.World() : null;
       if (w) w.tell(`@t core.type of=w.lang.en.alternation\n${['name', 'from', 'to', 'mode'].map((k, i) => `@t${i} core.slot of=w.lang.en.alternation key=${k} kind=atom kind=string`).join('\n')}\n${rows.map((r, i) => `@a${i} w.lang.en.alternation ${Object.entries(r.f).filter(([k]) => /^(name|from|to|mode)$/.test(k)).map(([k, v]) => `${k}=${JSON.stringify(unq(v[0]))}`).join(' ')}`).join('\n')}`);
     } catch { w = null; }
@@ -147,7 +150,7 @@ async function nearTexts(dialog, seg) {
     // the lemma candidates of the word (possesses -> possess): the catalog's senses are keyed by lemma
     const forms = [...new Set([word, word.replace(/(?:es|s)$/, ''), word.replace(/s$/, ''), word.replace(/ed$/, ''), word.replace(/ed$/, 'e'), word.replace(/ing$/, ''), word.replace(/ies$/, 'y')])].filter((f) => f.length > 2);
     let rows = [];
-    for (const f of forms) { try { rows = await facts.wires('k.words.sense', { key: f }); } catch { rows = []; } if (rows.length) { lemma = f; break; } }
+    for (const f of forms) { try { rows = (await bounded(facts.wires('k.words.sense', { key: f }))) ?? []; } catch { rows = []; } if (rows.length) { lemma = f; break; } }
     const w = new lib.World();
     for (const r of rows.slice(0, 12)) { try { w.tell(`@s${w.wires.size} k.words.sense ${Object.entries(r.f).filter(([k]) => /^(word|pos|n|synonym|is_a|kind_of)$/.test(k)).flatMap(([k, v]) => v.map((x) => `${k}=${JSON.stringify(unq(x))}`)).join(' ')}`); } catch { /* a sense that does not load is not used */ } }
     const near = lib.nearWords(w, lemma ?? word).filter((n) => n.cost <= 3 && (vocab.has(n.word) || vocab.has(lex.lemma(n.word))));

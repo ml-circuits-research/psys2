@@ -20,11 +20,11 @@ const ops = await engineWith('ops');
 test('vendor: the library is the pinned file, unmodified, and passes its own loop scan', () => {
   const notes = readFileSync(path.join(ROOT, 'src/vendor/LICENSES.md'), 'utf8');
   const file = readFileSync(path.join(ROOT, 'src/vendor/sopworld/sopworld.mjs'));
-  assert.match(notes, /4e6ed1f/, 'the commit is named');
-  assert.match(notes, /build `ed9bac68fbf9`/, 'the build is recorded');
+  assert.match(notes, /ed8d808/, 'the commit is named');
+  assert.match(notes, /build `9b8336612971`/, 'the build is recorded');
   assert.match(notes, new RegExp(`${file.length} bytes`), 'the size is recorded');
   assert.match(notes, new RegExp(createHash('sha256').update(file).digest('hex')), 'the sha256 of the vendored file is recorded');
-  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.75\.0 /);
+  assert.match(String(file.subarray(0, 120)), /^\/\/ sopworld 0\.80\.0 /);
   assert.equal(scan(path.join(ROOT, 'src/vendor/sopworld')).join('\n'), '', 'the library\'s own scanner finds no unguarded loop in the vendored file');
   assert.ok(readFileSync(path.join(ROOT, 'src/vendor/sopworld/LICENSE'), 'utf8').startsWith('MIT License'));
 });
@@ -52,7 +52,7 @@ const LEDGERED_DIAGRAM = ["t.diagram.sketch.b.align.k05.b", "t.diagram.sketch.b.
 const LEDGERED_DRAW = ["t.art.draw.dm304","t.art.draw.dm307","t.art.draw.ellipsis2","t.art.draw.f4r03","t.art.draw.f4r04","t.art.draw.f4r05","t.art.draw.f4r07","t.art.draw.p5a05","t.art.draw.p5a06","t.art.draw.pl07","t.art.draw.pl09","t.art.draw.pl10","t.art.draw.r2fill07","t.art.draw.r2help11","t.art.draw.r2help12","t.art.draw.r2move09","t.art.draw.r2move14","t.art.draw.r2move19","t.art.draw.r2move20","t.art.draw.r2move21","t.art.draw.r2move22","t.art.draw.r2move23","t.art.draw.r2recolor19","t.art.draw.r2scene01","t.art.draw.r2scene02","t.art.draw.r2scene03","t.art.draw.r2scene04","t.art.draw.r2scene05","t.art.draw.r2scene06","t.art.draw.r2scene07","t.art.draw.rd08","t.art.draw.rd09","t.art.draw.rd10","t.art.draw.rd11","t.art.draw.rd17","t.art.draw.rp3c","t.art.draw.sh03","t.art.draw.x250"];   // the rows of the art.draw switch on the ledger (training/eval/failures.jsonl, build art-draw-switch): the world's own tests, both reasoners
 const LEDGERED_CHARTS = ["t.data.charts.m04", "t.data.charts.n22", "t.data.charts.n35", "t.data.charts.n90", "t.data.charts.r2033", "t.data.charts.r2086", "t.data.charts.r2087", "t.data.charts.r2105", "t.data.charts.x203", "t.data.charts.x205", "t.data.charts.r2110"];
 test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 9, kids.time 227, kids.animals 46, user.profile 144 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 9], ['kids.time', 227], ['kids.animals', 46], ['user.profile', 144], ['data.charts', 277], ['art.draw', 600], ['diagram.sketch', 773]]) {
+  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 9], ['kids.time', 227], ['kids.animals', 46], ['user.profile', 144], ['data.charts', 277], ['art.draw', 602], ['diagram.sketch', 773]]) {
     const r = await runWorldTests(matrix, id);
     // the 13 rows of the diagram switch and the 10 rows of the data.charts switch are on the ledger (training/eval/failures.jsonl, source "bug-batch diagram switch"); every other row of every world passes
     assert.deepEqual(r.failed.map((f) => f.id).filter((x) => (id !== 'diagram.sketch' || !LEDGERED_DIAGRAM.includes(x)) && (id !== 'data.charts' || !LEDGERED_CHARTS.includes(x)) && (id !== 'art.draw' || !LEDGERED_DRAW.includes(x)) && !(id === 'user.profile' && x === 't.user.profile.dlg04')), [], id);   /* dlg04: on the ledger since KNOWLEDGE-OUT step 5 (spelling: vocabulary counts lost with deleted patterns) */ assert.equal(r.total, n);

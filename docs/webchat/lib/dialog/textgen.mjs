@@ -123,7 +123,7 @@ export function createComposer(lib, world = null) {
       const key = req.seed == null ? null : JSON.stringify([req.type, req.topic, req.chapters, req.subchapters, req.words, req.seed]);
       if (key && memo.has(key)) return memo.get(key);
       const out = this.composeNow(req);
-      if (key) { memo.set(key, out); if (memo.size > 40) memo.delete(memo.keys().next().value); }   // bounded
+      if (key) { memo.set(key, out); if (memo.size > 40) memo.delete(memo.keys().next().value); }
       return out;
     },
     composeNow(req) {
