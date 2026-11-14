@@ -1,7 +1,7 @@
 // Operations of ui.shell: app control and voice settings (spec 07 section 3). Browser-safe: no imports.
 //
 // State (ctx.state): { activeTab, previousTab, speaker, listening, handsFree, rate, language }
-//   activeTab: 'robot' | 'editor' | 'tictactoe' | 'guess' | 'hangman'   (previousTab: the tab before, or null)
+//   activeTab: 'talk' | 'editor' | 'tictactoe' | 'guess' | 'hangman' (any tab id a world declares; the avatar is a popup, not a tab)   (previousTab: the tab before, or null)
 //   rate: speech rate 0.5 .. 2 (1 = normal); language: 'en' | 'ro'
 // Effects: speech.cancel (when the speaker is turned off).
 //
@@ -9,18 +9,20 @@
 //   ctx.request('ui.openTab', { tab: 'editor' })
 
 export const TABS = {
-  robot: { title: 'Avatar', world: 'ui.avatar' },
+  talk: { title: 'Talk', world: 'talk' },
   editor: { title: 'Editor', world: 'docs.editor' },
   tictactoe: { title: 'Tic-tac-toe', world: 'games.tictactoe' },
   guess: { title: 'Guess the animal', world: 'games.guess' },
   hangman: { title: 'Hangman', world: 'games.hangman' },
 };
 export const TAB_OF_WORD = {
-  robot: 'robot', face: 'robot', avatar: 'robot', editor: 'editor', document: 'editor', doc: 'editor',
+  editor: 'editor', document: 'editor', doc: 'editor',
   tic_tac_toe: 'tictactoe', tictactoe: 'tictactoe', noughts_and_cross: 'tictactoe',
   guess: 'guess', guess_the_animal: 'guess', guessing_game: 'guess', twenty_question: 'guess', animal_game: 'guess',
   hangman: 'hangman',
 };
+/** Views that are not tabs: the avatar is an icon beside the input with a popup (the host shows it on the effect `ui.openView`); the state's activeTab never names it. */
+export const VIEWS = { avatar: { title: 'Avatar', world: 'ui.avatar', words: ['robot', 'face', 'avatar'] } };
 export const GAME_ACTIONS = {
   new: { tictactoe: 'ttt.new', guess: 'guess.start', hangman: 'hm.new' },
   giveUp: { tictactoe: 'ttt.giveup', guess: 'guess.giveup', hangman: 'hm.giveup' },
@@ -47,7 +49,7 @@ const resolveTab = (tab) => (TABS[tab] ? tab : TAB_OF_WORD[tab] ?? TAB_OF_WORD[n
 const RATE_MIN = 0.5, RATE_MAX = 2, RATE_STEP = 0.25;
 
 export function initialState() {
-  return { activeTab: 'robot', previousTab: null, speaker: false, listening: false, handsFree: false, rate: 1, language: 'en' };
+  return { activeTab: 'talk', previousTab: null, speaker: false, listening: false, handsFree: false, rate: 1, language: 'en' };
 }
 
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
@@ -64,6 +66,8 @@ function show(ctx, tab) {
 
 export function openTab(ctx, { tab }) {
   refresh(ctx);
+  const view = Object.entries(VIEWS).find(([id, v]) => id === norm(tab) || v.words.includes(norm(tab)))?.[0];
+  if (view) { ctx.effect('ui.openView', { view }); return ok('OK, here is my face. It is the icon beside the input.'); }
   const id = resolveTab(tab);
   if (!id) return no('unsupported', `I do not know a tab called ${tab}.`);
   if (!show(ctx, id)) return ok(`You are already on the ${TABS[id].title} tab.`);

@@ -3,7 +3,7 @@
     expect="I took off a bow"
     expectState="face.slots.hat=none"
     session=a
-    given="ui.shell:activeTab=robot"
+    given="ui.shell:activeTab=robot"   # the avatar popup is the active surface (BUILTIN robot -> ui.avatar in src/dialog/index.mjs context); not a tab
 
 @t.ui.avatar.n01 core.test
     input="Put on a hat."

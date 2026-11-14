@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The one renderer of the avatar: draws a face from the data of `k.faces` (src/knowledge/faces.mjs) the way the catalog describes it (its WORLD.md "How a face is drawn"):
 // slot after slot in the order of the slots, the parts of the chosen variant in the order of their own z, each part with the colour its `tint` names (else its own rgb or
-// colour name); a slot with `mirror` is drawn a second time flipped at x = 50 (pointing and opens swapped). The Avatar tab, the header avatar, the thumbnails of the
+// colour name); a slot with `mirror` is drawn a second time flipped at x = 50 (pointing and opens swapped). The avatar popup, the input-bar icon, the thumbnails of the
 // variants and the contact sheet of the probe all use this function: SVG text, crisp at any size. Browser-safe: no imports.
 //
 //   renderFace(data, face, { size, over, bg, label })   face: the state of ui.avatar (state.face): { slots, colours, paint, adj, expression }
