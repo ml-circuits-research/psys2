@@ -229,11 +229,12 @@ export const SCENARIOS = {
     try {
       const asked = () => c.pg.$$eval('.p2-guess-history li', (l) => l.length);
       const a = await say(c, 'Guess my animal');
-      check('guess: the game starts and asks the first question', /Question 1: Does it have 4 legs\?/.test(a), a.slice(0, 100));
+      const first = /Question 1: ([^?]+\?)/.exec(a)?.[1];   // the first question is the one that splits the animals of the catalog best (KNOWLEDGE-OUT step 5): the game asks it, which one is the catalog's
+      check('guess: the game starts and asks the first question', !!first, a.slice(0, 100));
       const y = await say(c, 'yes');
       check('guess: an answer is on the tab and the next question is asked', /^Good\. Question 2:/.test(y) && (await asked()) === 1, `${y.slice(0, 60)} | ${await asked()}`);
       const u = await say(c, 'undo');
-      check('guess: "undo" takes the answer back and asks that question again', /took back your last answer\. I am asking that question again: Does it have 4 legs\?/.test(u) && (await asked()) === 0, `${u.slice(0, 80)} | ${await asked()}`);
+      check('guess: "undo" takes the answer back and asks that question again', u.includes(`took back your last answer. I am asking that question again: ${first}`) && (await asked()) === 0, `${u.slice(0, 80)} | ${await asked()}`);
       await say(c, 'I give up');
       const r = await say(c, 'yes');
       check('guess: an answer that does not fit the game is refused with the reason', r === 'I am waiting to learn the animal. Tell me, for example: "it was a zebra".', r.slice(0, 80));
@@ -273,7 +274,7 @@ export const SCENARIOS = {
       const m = await say(c, 'Can a zebra swim?');
       check('animals: after the undo the question is open again', /^I don't know whether a zebra can swim\./.test(m), m.slice(0, 80));
       const l = await say(c, 'How many legs does a spider have?');
-      check('animals: a knowledge base fact comes from the library', l === 'A spider has 8 legs.', l);
+      check('animals: a knowledge base fact comes from the library', l.startsWith('A spider has 8 legs.'), l);
       check('animals: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },

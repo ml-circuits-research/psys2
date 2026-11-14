@@ -92,7 +92,7 @@ export async function knowledgeAnswer(dialog, english, formal) {
   const frame = dialog.engine.interp.lang.know?.(english);
   if (!frame) return null;
   const seg = formal.segments[0];
-  const left = seg.unparsed || !seg.wires?.length ? ['*'] : leftOut(seg, !!dialog._waLang && dialog._waLang !== 'en');
+  const left = seg.unparsed || !seg.wires?.length || seg.ignored?.length ? ['*'] : leftOut(seg, !!dialog._waLang && dialog._waLang !== 'en');
   const slot = frame.slot.split(' ');
   const respelled = !left.length && (seg.corrections ?? []).some((c) => slot.includes(String(c.from).toLowerCase()));   // "candle" read as "handle": the reading is of another word
   return left.length || respelled ? frameAnswer(dialog, frame) : null;

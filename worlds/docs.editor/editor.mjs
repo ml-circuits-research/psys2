@@ -116,22 +116,37 @@ function restore(s, sn) {
   s.title = sn.title; s.titleMarks = sn.titleMarks ?? []; s.titleAlign = sn.titleAlign ?? 'left'; s.titleSize = sn.titleSize ?? 0;
   s.blocks = sn.blocks; s.cursor = sn.cursor; s.nextId = sn.nextId; s.selection = sn.selection ?? null; s.dictBlock = null;
 }
+/**
+ * What one history step did, in the world's words, from the two documents it lay between (by block id): "put back the paragraph you deleted", "took out the heading you added". `undoing` says which way
+ * the user is going; `from` is the document now, `to` the one it becomes. null when the difference is not one block (a mark, a title): the caller says the plain sentence.
+ */
+function stepWords(from, to, undoing) {
+  const ids = (d) => new Map((d.blocks ?? []).map((b) => [b.id, b]));
+  const a = ids(from), b = ids(to);
+  const gone = [...a.keys()].filter((id) => !b.has(id)), came = [...b.keys()].filter((id) => !a.has(id));
+  const name = (blk) => (blk.kind === 'list' ? 'list' : blk.kind ?? 'block');
+  if (gone.length === 1 && !came.length) return undoing ? `undid that: the ${name(a.get(gone[0]))} you added is gone` : `deleted the ${name(a.get(gone[0]))}`;
+  if (came.length === 1 && !gone.length) return undoing ? `put back the ${name(b.get(came[0]))} you deleted` : `added the ${name(b.get(came[0]))}`;
+  return null;
+}
 function _undo(ctx, { n } = {}) {
   const s = ctx.state;
   if (!s.history.length) return no('missing', 'There is nothing to undo.');
   // "undo twice": n steps, as many as there are
   const steps = Math.min(Math.max(1, Math.floor(Number(n) || 1)), 20, s.history.length);
+  const said = steps === 1 ? stepWords(snap(s), s.history.at(-1), true) : null;
   for (let i = 0; i < steps; i++) { s.future.push(snap(s)); restore(s, s.history.pop()); }
   show(ctx);
-  return ok(steps === 1 ? 'OK, I undid the last change.' : `OK, I undid the last ${steps} changes.`);
+  return ok(said ? `OK, I ${said}.` : steps === 1 ? 'OK, I undid the last change.' : `OK, I undid the last ${steps} changes.`);
 }
 function _redo(ctx) {
   const s = ctx.state;
   if (!s.future.length) return no('missing', 'There is nothing to redo.');
+  const said = stepWords(snap(s), s.future.at(-1), false);
   s.history.push(snap(s));
   restore(s, s.future.pop());
   show(ctx);
-  return ok('OK, I did it again.');
+  return ok(said ? `OK, I ${said} again.` : 'OK, I did it again.');
 }
 
 // ---- helpers ---------------------------------------------------------------------------------------

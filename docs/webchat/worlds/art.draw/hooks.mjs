@@ -3,7 +3,7 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from './engine.mjs?v=e3334f6ac9';
+import * as D from './engine.mjs?v=9f6afd8929';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
 import { splitThings } from '../acts/acts.mjs?v=dfea3aa2a5';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=3d7b2ae8d5';
@@ -69,6 +69,10 @@ function acceptsWords({ action, mode, roles, text, state, kindWord, tab }) {   /
   const act = String(action ?? '').split('.').pop();
   if (!['make', 'remove', 'change', 'place', 'group', 'pick', 'ask', 'copy'].includes(act)) return true;
   const said = roles.thing ?? roles.rest ?? '';
+  // a question is never a bare kind to draw, in the open tab too ("is the sun under the left house" is not "house"); the questions of the board are its `ask` act
+  if (act === 'make' && mode === 'bare' && /^(?:is|are|was|were|do|does|did|what|which|who|how|where|when|why)\b/.test(words(text).join(' '))) return false;
+  // a bare kind after words that are no request to draw ("I buy a rocket", "what can a bird do") is not the board's outside its own tab: the catch-all `pre` swallowed a sentence of another kind
+  if (act === 'make' && mode === 'bare' && roles.pre && tab !== 'art.draw' && !/\b(?:draw|drawing|make|add|paint|sketch|doodle|create|give|gimme|get|whip|want|wanna|need|like|put|place|set|turn|show|sketching|please|pls)\b/.test(words(roles.pre).join(' '))) return false;
   // FULL SUPPORT (spec 20, arbitration rule 2): "show Pariss" is not a list of this board's options. A listing is the board's only when every content word of what is listed is a thing, a colour or a class of
   // things it knows ("show the colours", "list shapes"); a word it cannot resolve ("Pariss", "Bern") is another world's open class.
   if (act === 'ask' && mode === 'options' && said) {

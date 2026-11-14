@@ -2,9 +2,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { fixtureCatalog } from './helpers.mjs';
 
 // ROUND-TRIP-MINING step 2: the original messages of the round trip that the English reading itself missed (spec 03 section 1c, compound messages)
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
+engine.setKnowledge(await fixtureCatalog());   // the questions of the kids worlds are Talk frames over the catalog
 const say = async (tab, ...texts) => {
   const s = engine.createSession({ language: 'en' });
   if (tab) s.setWorldState('ui.shell', { activeTab: tab });

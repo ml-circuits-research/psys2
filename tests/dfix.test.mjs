@@ -4,8 +4,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { fixtureCatalog } from './helpers.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
+engine.setKnowledge(await fixtureCatalog());   // the questions of the kids worlds are Talk frames over the catalog
 const session = (tab = null) => { const s = engine.createSession({ language: 'en' }); if (tab) s.setWorldState('ui.shell', { activeTab: tab }); return s; };
 const say = async (s, ...texts) => { const out = []; for (const t of texts) out.push(await s.send(t)); return out; };
 

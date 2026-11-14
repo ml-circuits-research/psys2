@@ -358,6 +358,7 @@ export const youTarget = (m) => Object.values(m.slots ?? {}).some((s) => (s.clas
 
 /** The acts whose thing must already be there and that say nothing else ("remove X": a reading of it that names no such thing is a refusal, not a request for something else; "change X to Y" or "switch to X" carry a value and stay a decline). */
 const REFERENT_ACTS = new Set(['remove']);
+const NEEDS_THING = new Set(['make', 'remove', 'change', 'place', 'copy', 'group', 'pick', 'connect']);   // acts of the generated worlds that have no meaning without a thing
 const actionName = (m) => (/action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1] ?? '').split('.').pop();
 const FREE_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these', 'those', 'some', 'any', 'all', 'of', 'to', 'from', 'in', 'on', 'it', 'its', 'please']);
 /** Does everything a reading's free-text slots say resolve in the world's own state (every content word occurs in it)? A world with no state resolves nothing. */
@@ -454,6 +455,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     budget.tick('rules.accepts');
     const m = matches[k], v = verdictOf(m);
     if (!v) continue;
+    // a bare verb of an act that needs a thing ("add please", "remove") is the open tab's to read ("What should I draw?"); a schema world that is not the tab's and does not hold the dialogue does not claim it
+    if (m.pattern.worldId !== context?.tabWorld && context?.lastWorld !== m.pattern.worldId && NEEDS_THING.has(actionName(m)) && !Object.keys(m.slots ?? {}).some((n) => n !== SEGMENT_SLOT) && !/ arg\.(?!text=)\w+=/.test(m.pattern.emit ?? '')) { matches.splice(k, 1); continue; }
     const { strong, refuse, roles } = v;
     let ok = v.ok;
     // a world with a decline hook is a schema world whose forms keep free slots: its catch-all reading yields to a reading of another world that has no free text at all

@@ -5,8 +5,9 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { createFacts, lemmaCandidates } from '../src/knowledge/facts.mjs';
+import { withCatalogIndex } from './helpers.mjs';
 
-const FILES = {
+const RAW = {
   'vocab.json': JSON.stringify({ comet: ['k.objects/shards/sky', 'k.words/shards/co'], spider: ['k.words/shards/sp'], tree: ['k.commonsense/shards/core'], fish: ['k.commonsense/shards/core'], bird: ['k.commonsense/shards/core'] }),
   'k.objects/shards/sky.sop': [
     '@k.objects.comet k.objects.object name=comet',
@@ -21,8 +22,9 @@ const FILES = {
     '@k.commonsense.bird k.commonsense.thing name=bird at=sky can=fly can=sing',
   ].join('\n'),
 };
+const FILES = withCatalogIndex(RAW);
 const reads = [];
-const source = { text: async (p) => { reads.push(p); return FILES[p] ?? null; } };
+const source = { text: async (p) => { reads.push(p); if (process.env.DBGREADS && FILES[p] == null) console.log('MISSING', p); return FILES[p] ?? null; } };
 
 let engine;
 const send = async (msg, tab) => {
@@ -103,8 +105,8 @@ test('drawing: a thing of the catalog is drawn from its parts; no hit is the pla
 
 // An action on a referent that must exist in the world is refused in the world's plain words, whatever the catalog knows (owner, 2026-11-13).
 test('delete / move / connect with a catalog hit: the plain refusal, never a gloss', async () => {
-  const files = { ...FILES, 'vocab.json': JSON.stringify({ ...JSON.parse(FILES['vocab.json']), dragon: ['k.words/shards/dr'], end: ['k.words/shards/dr'] }),
-    'k.words/shards/dr.sop': ['@k.words.dragon.noun.1 k.words.sense word=dragon pos=noun n=1 gloss="a creature of Teutonic mythology" core.source="t"', '@k.words.end.noun.1 k.words.sense word=end pos=noun n=1 gloss="the point where something ends" core.source="t"'].join('\n') };
+  const files = withCatalogIndex({ ...RAW, 'vocab.json': JSON.stringify({ ...JSON.parse(FILES['vocab.json']), dragon: ['k.words/shards/dr'], end: ['k.words/shards/dr'] }),
+    'k.words/shards/dr.sop': ['@k.words.dragon.noun.1 k.words.sense word=dragon pos=noun n=1 gloss="a creature of Teutonic mythology" core.source="t"', '@k.words.end.noun.1 k.words.sense word=end pos=noun n=1 gloss="the point where something ends" core.source="t"'].join('\n') });
   engine.setKnowledge(createFacts({ source: { text: async (p) => files[p] ?? null } }));
   try {
     for (const [msg, tab, plain] of [['delete the dragon', 'draw', /^I can't find .dragon. in the picture/], ['move the dragon to the left', 'draw', /dragon/], ['color the dragon red', 'draw', /dragon/]]) {

@@ -14,8 +14,8 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=2e28796613';
-import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=6f6b94c05d';
+import { restrictedSet } from '../formalizer/spell.mjs?v=d9fa788dc6';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=3f42845f50';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
@@ -1040,7 +1040,13 @@ export class Discourse {
   }
 
   /** The statements an answer rests on, as the user said them ("I worked it out from ..."); with the matrix reasoner they come from the library's explanation. */
-  _because(f) { return f.from?.length ? this._known(f.from) : f.fromLater ? this._known(f.fromLater()) : []; }
+  _because(f) {
+    if (f.from?.length) return this._known(f.from);
+    if (f.fromLater) { const k = this._known(f.fromLater()); if (k.length) return k; }
+    // a question a world answered from its own state (a schema world: no wires of an instance to name): it says what it looked at, its `source` phrase ("the picture")
+    const phrase = f.kind === 'question' && f.reply ? this.dialog.engine.set.get(f.world)?.sourcePhrase : null;
+    return phrase ? this._knownParts([], [phrase]) : [];
+  }
 
   // ---- topic return --------------------------------------------------------------------------------------------------------------
 

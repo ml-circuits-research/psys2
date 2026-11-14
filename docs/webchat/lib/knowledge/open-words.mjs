@@ -13,7 +13,7 @@ import { BUNDLED_GEO } from './bundled-geo.mjs?v=69830abbea';
 
 let attached = null;
 /** The host attaches the catalog of the session (`engine.setKnowledge`); `null` detaches it. */
-export function attachOpenWords(facts) { if (facts !== attached) { firstWait = null; settled = false; } attached = facts ?? null; }
+export function attachOpenWords(facts) { if (facts !== attached) { firstWait = null; settled = false; } attached = facts ?? null; globalThis[Symbol.for('psys2.catalogWords')] = (attached?.peekVocab ? (w) => { const v = attached?.peekVocab?.(); return !!v && Object.hasOwn(v, w); } : null); }
 
 /**
  * Load what the lookups need (the vocabulary, and the part names of k.objects). NEVER blocks a turn on the network: the first call waits a short time for a catalog that answers at once

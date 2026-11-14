@@ -1,5 +1,6 @@
 // Shared helpers for the test suites (not a test file).
 import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createBundleLoader } from '../src/loaders/bundle-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
@@ -66,4 +67,49 @@ export const sampled = (items, { key = (x) => String(x), world = '' } = {}) =>
 
 /** Test options for a test that belongs to the full suite only: `test(name, fullOnly({ timeout }), fn)`. */
 export const fullOnly = (opts = {}) => (SUITE === 'full' ? opts : { ...opts, skip: 'full suite only (npm run test:full)' });
+
+/** The fixture catalog (tests/fixtures/catalog) as the engine's knowledge: the questions of the kids worlds are Talk frames over the catalog (KNOWLEDGE-OUT step 5), so a test that asks them needs one. */
+export async function fixtureCatalog() {
+  const { createFacts } = await import('../src/knowledge/facts.mjs');
+  const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
+  return createFacts({ source: createKnowledgeSource(fileURLToPath(new URL('./fixtures/catalog', import.meta.url))) });
+}
+
+/** In-memory catalog files plus whole worlds of the fixture catalog (tests/fixtures/catalog): index entries, schema, shards and the vocabulary keys of those worlds (`ids` such as ['k.geo']). */
+export function withFixtureWorlds(files, ids) {
+  const dir = new URL('./fixtures/catalog/', import.meta.url);
+  const out = { ...files };
+  const index = JSON.parse(readFileSync(new URL('index.json', dir), 'utf8'));
+  const vocab = JSON.parse(out['vocab.json'] ?? '{}');
+  const worlds = out['index.json'] ? JSON.parse(out['index.json']).worlds : [];
+  for (const w of index.worlds.filter((x) => ids.includes(x.id))) {
+    worlds.push(w);
+    for (const sh of w.shards) for (const k of sh.keys) { const a = (vocab[k.toLowerCase()] ??= []); if (!a.includes(sh.id)) a.push(sh.id); }
+    out[w.schema] = readFileSync(new URL(w.schema, dir), 'utf8');
+    for (const sh of w.shards) out[sh.path] = readFileSync(new URL(sh.path, dir), 'utf8');
+  }
+  out['vocab.json'] = JSON.stringify(vocab);
+  out['index.json'] = JSON.stringify({ worlds });
+  return out;
+}
+
+/**
+ * `index.json` for an in-memory catalog (the knowledge reader finds worlds, types and keys through the index, KNOWLEDGE-ALL-WORLDS): built from the files a test holds, `vocab.json` (word -> shard ids)
+ * and the shards `<world>/shards/<name>.sop`. Returns a copy of `files` with `index.json` added; the worlds of an `index.json` already there are kept.
+ */
+export function withCatalogIndex(files) {
+  const out = { ...files };
+  const vocab = JSON.parse(out['vocab.json'] ?? '{}');
+  const worlds = new Map((out['index.json'] ? JSON.parse(out['index.json']).worlds : []).map((w) => [w.id, w]));
+  for (const [path, text] of Object.entries(out)) {
+    const m = /^(k\.[a-z]+)\/shards\/(.+)\.sop$/.exec(path);
+    if (!m || [...worlds.values()].some((w) => w.shards.some((s) => s.path === path))) continue;
+    const w = worlds.get(m[1]) ?? worlds.set(m[1], { id: m[1], version: '1', exports: [], shards: [] }).get(m[1]);
+    for (const line of String(text).split('\n')) { const t = /^@\S+\s+(\S+)/.exec(line); if (t && !w.exports.includes(t[1])) w.exports.push(t[1]); }
+    const id = `${m[1]}/shards/${m[2]}`;
+    w.shards.push({ id, path, keys: Object.keys(vocab).filter((k) => (vocab[k] ?? []).includes(id)), sources: ['t'] });
+  }
+  out['index.json'] = JSON.stringify({ worlds: [...worlds.values()] });
+  return out;
+}
 

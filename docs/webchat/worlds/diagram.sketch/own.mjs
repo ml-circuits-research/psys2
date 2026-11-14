@@ -5,3 +5,10 @@
 export { prepare, initialState, engineReady, loadEngine, create } from './engine.mjs?v=eeb6f1fa97';
 /** Other worlds (Talk's undo of the last turn of a tab) and the tab's undo button call the diagram by its old action names. */
 export { undo as diagramUndo, redo as diagramRedo } from './engine.mjs?v=eeb6f1fa97';
+import { checkReferents as engineCheck } from './engine.mjs?v=eeb6f1fa97';
+const ENGINE_OP = { make: 'create', remove: 'delete', change: 'set', place: 'move', connect: 'connect', pick: 'select', copy: 'duplicate' };
+/** The read-only referent check the dialog layer calls before an act runs (world-aware veto): a name the diagram does not have is a missing referent, with the offer to add it for a connection. The engine reads the words of the clause (`args.text`). */
+export function checkReferents(ctx, { action, args = {} } = {}) {
+  const op = ENGINE_OP[String(action ?? '').split('.').pop()];
+  return op ? engineCheck(ctx, { action: `diagram.${op}`, args }) : undefined;
+}

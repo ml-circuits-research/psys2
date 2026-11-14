@@ -9,8 +9,9 @@ import { createFacts } from '../src/knowledge/facts.mjs';
 import { cardHtml, treeSvg, factsHtml, drawingSvg, tintOf } from '../worlds/talk/cards.mjs';
 import { layoutParts } from '../worlds/talk/ops.mjs';
 import { anyOverlap } from '../worlds/space/space.mjs';
+import { withCatalogIndex, withFixtureWorlds } from './helpers.mjs';
 
-const FILES = {
+const RAW = {
   'vocab.json': JSON.stringify({ comet: ['k.words/shards/w'], france: ['k.words/shards/w'], romania: ['k.words/shards/w'], japan: ['k.words/shards/w'], italy: ['k.words/shards/w'], paris: ['k.words/shards/w'], spider: ['k.words/shards/w'], moon: ['k.words/shards/w'] }),
   'k.words/shards/w.sop': [
     '@k.words.comet.noun.1 k.words.sense word=comet pos=noun n=1 gloss="a small icy body that travels around the sun" is_a=celestial_body is_a=object core.source="t"',
@@ -23,6 +24,7 @@ const FILES = {
     '@k.words.moon.noun.1 k.words.sense word=moon pos=noun n=1 gloss="the natural satellite of the Earth" core.source="t"',
   ].join('\n'),
 };
+const FILES = withFixtureWorlds(withCatalogIndex(RAW), ['k.geo']);   // the map reads its places from the catalog (geo.map pilot): the fixture catalog's k.geo
 const source = { text: async (p) => FILES[p] ?? null };
 
 const engines = {};
@@ -170,7 +172,7 @@ for (const mode of ['matrix', 'ops']) {
       const before = mapSig(s), t0 = performance.now();
       const r = await s.send('show it on the map');
       const ms = performance.now() - t0;
-      const ok = /Map tab took it/.test(r.text) && String(s.state('geo.map').focus?.name ?? '').toLowerCase() === place;
+      const ok = /Map tab took it|I put a pin on/.test(r.text) && String(s.state('geo.map').focus?.name ?? '').toLowerCase() === place;
       tab(s, 'talk');
       await s.send('undo');
       rec('map', place, ok, mapSig(s) === before, ms);

@@ -139,7 +139,7 @@ export const drawScenarios = ({ openChat, MATRIX, OPS, check, say }) => ({
       const u = await say(c, 'undo');
       check('diagram: "undo" takes the last arrow back and the tab follows', u === 'Undid the last change.' && (await st()).edges.length === 1, `${u.slice(0, 40)} | ${(await st()).edges?.length}`);
       const x = await say(c, 'redo');
-      check('diagram: "redo" puts it back', x === 'OK, I did it again: "connect B to A".' && (await st()).edges.length === 2, `${x.slice(0, 40)} | ${(await st()).edges?.length}`);
+      check('diagram: "redo" puts it back', x === 'Redid it.' && (await st()).edges.length === 2, `${x.slice(0, 40)} | ${(await st()).edges?.length}`);
       await say(c, 'make a tree');
       const t = await st();
       check('diagram: a template adds its shapes and arrows to the tab', t.shapes.length > 4 && t.edges.length > 2, JSON.stringify([t.shapes?.length, t.edges?.length]));

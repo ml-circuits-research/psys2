@@ -4,6 +4,10 @@ import { titleBlock, containers, sentenceRanges, wordRanges, findAll, allTexts, 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 export const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1 };
+/** The refusal of a position the document does not reach, in one wording for every kind: "There is no fifth paragraph; the document has two." */
+const ordinalOf = (n) => Object.keys(ORD).find((k) => ORD[k] === n && k !== 'last') ?? `${n}${n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`;
+const countOf = (c) => ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][c] ?? String(c);
+const noSuch = (label, pos, count) => fail(`There is no ${ordinalOf(pos)} ${label}; the document has ${countOf(count)}.`);
 const ORD_RE = '(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last|\\d+(?:st|nd|rd|th))';
 const BLOCK_KINDS = { paragraph: 'paragraph', heading: 'heading', list: 'list', quote: 'quote', table: 'table', block: null, rule: 'rule', line: 'rule', divider: 'rule' };
 const KIND_LABEL = { paragraph: 'paragraph', heading: 'heading', list: 'list', quote: 'quote', table: 'table', block: 'block', rule: 'line' };
@@ -48,7 +52,7 @@ function blockPick(s, kind, ord, n, scopeBlocks) {
   if (!idxs.length) return fail(`There is no ${label} in the document.`);
   let pos = n !== undefined ? n : ord !== undefined ? ord : 1;
   if (pos === -1) pos = idxs.length;
-  if (!Number.isInteger(pos) || pos < 1 || pos > idxs.length) return fail(idxs.length === 1 ? `There is only one ${label}.` : `There are only ${idxs.length} ${plural(2, label)}.`);
+  if (!Number.isInteger(pos) || pos < 1 || pos > idxs.length) return Number.isInteger(pos) && pos > 0 ? noSuch(label, pos, idxs.length) : fail(`There are only ${idxs.length} ${plural(2, label)}.`);
   return ok({ kind: 'blocks', blocks: [idxs[pos - 1]], desc: ord !== undefined || n !== undefined ? `the ${ord === -1 ? 'last' : n !== undefined ? '' : Object.keys(ORD).find((k) => ORD[k] === pos) ?? `${pos}th`} ${label}`.replace('  ', ' ') : `the ${label}`, pos, total: idxs.length });
 }
 
@@ -68,11 +72,11 @@ function chapterPick(s, word, ord, n, scope) {
   let head;
   if (n !== undefined) {
     head = heads.find((b) => new RegExp(`^(?:chapter|section|part)\\s+${n}(?![\\d])`, 'i').test(b.text)) ?? heads[n - 1];
-    if (!head) return fail(heads.length === 1 ? `There is only one ${word}.` : `There are only ${heads.length} ${word}s.`);
+    if (!head) return noSuch(word, n, heads.length);
   } else {
     const pos = ord === -1 ? heads.length : ord ?? 1;
     head = heads[pos - 1];
-    if (!head) return fail(heads.length === 1 ? `There is only one ${word}.` : `There are only ${heads.length} ${word}s.`);
+    if (!head) return noSuch(word, pos, heads.length);
   }
   const num = n ?? (ord === undefined ? undefined : ord === -1 ? 'last' : heads.indexOf(head) + 1);
   return ok({ kind: 'blocks', blocks: [head], desc: ord === -1 ? `the last ${word}` : `${word} ${num ?? heads.indexOf(head) + 1}`, section: true });
