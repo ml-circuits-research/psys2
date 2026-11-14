@@ -1,0 +1,1566 @@
+{
+ "typed": true,
+ "pairs": 565,
+ "train": 407,
+ "heldOut": 158,
+ "source": "all",
+ "learntOnAll": false,
+ "coverage": {
+  "pairs": 407,
+  "operators": 109,
+  "at80": 28,
+  "at95": 89
+ },
+ "unaligned": 0,
+ "operators": [
+  {
+   "name": "op1",
+   "from": "um {x1} makes {x2} also is egypt in africa",
+   "to": "{x1} does {x2} make",
+   "support": 43,
+   "heldOut": {
+    "pass": 9,
+    "of": 10
+   },
+   "admitted": true,
+   "examples": [
+    "Um what sounds makes a wildebeest, also is Egypt in Africa",
+    "Um what diets makes a cow, also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op2",
+   "from": "um {x1} what <num> plus <num>",
+   "to": "{x1}",
+   "support": 41,
+   "heldOut": {
+    "pass": 11,
+    "of": 11
+   },
+   "admitted": true,
+   "examples": [
+    "Um what sound does a dolphin make what 7 plus 5",
+    "Um what diet does a cow make what 7 plus 5"
+   ]
+  },
+  {
+   "name": "op3",
+   "from": "hey {x1} a {x2} makes {x3}",
+   "to": "{x1} {x2} does {x3} make",
+   "support": 37,
+   "heldOut": {
+    "pass": 14,
+    "of": 15
+   },
+   "admitted": true,
+   "examples": [
+    "Hey what a sound makes a dolphin",
+    "Hey what a sound makes a wildebeest"
+   ]
+  },
+  {
+   "name": "op4",
+   "from": "um {x1} is egypt in africa too",
+   "to": "{x1}",
+   "support": 37,
+   "heldOut": {
+    "pass": 15,
+    "of": 17
+   },
+   "admitted": true,
+   "examples": [
+    "um What sound does a tapir make is Egypt in Africa too",
+    "um What group does a cow make is Egypt in Africa too"
+   ]
+  },
+  {
+   "name": "op5",
+   "from": "how many days are in a week {x1} <attr> makes a <k.animals.animal> and then how many {x2} have",
+   "to": "{x1} {x2} make",
+   "support": 36,
+   "heldOut": {
+    "pass": 15,
+    "of": 15
+   },
+   "admitted": true,
+   "examples": [
+    "how many days are in a week. what diet makes a cow and then how many legs does a spider have",
+    "how many days are in a week. what sound makes a tapir and then how many legs does a spider have"
+   ]
+  },
+  {
+   "name": "op6",
+   "from": "hey {x1} makes {x2}",
+   "to": "{x1} does {x2} make",
+   "support": 35,
+   "heldOut": {
+    "pass": 17,
+    "of": 35
+   },
+   "admitted": true,
+   "examples": [
+    "Hey, what diet makes a cow",
+    "Hey, what sound makes a tapir"
+   ]
+  },
+  {
+   "name": "op7",
+   "from": "is egypt in africa {x1} {x2} makes also what is <num> minus <num>",
+   "to": "{x1} does {x2} make",
+   "support": 35,
+   "heldOut": {
+    "pass": 17,
+    "of": 18
+   },
+   "admitted": true,
+   "examples": [
+    "Is Egypt in Africa what sound a wildebeest makes also what is 20 minus 8?",
+    "Is Egypt in Africa what diet a cow makes also what is 20 minus 8?"
+   ]
+  },
+  {
+   "name": "op8",
+   "from": "is egypt in africa {x1} whatever is <num> min <num>",
+   "to": "{x1}",
+   "support": 33,
+   "heldOut": {
+    "pass": 19,
+    "of": 23
+   },
+   "admitted": true,
+   "examples": [
+    "Is Egypt in Africa, what sound does a dolphin make whatever is 20 min 8?",
+    "Is Egypt in Africa, what sound does a tapir make whatever is 20 min 8?"
+   ]
+  },
+  {
+   "name": "op9",
+   "from": "how many days is in a week {x1} noise {x2} and how many {x3} then has a <k.animals.animal>",
+   "to": "{x1} {x3} {x2}",
+   "support": 4,
+   "heldOut": {
+    "pass": 4,
+    "of": 4
+   },
+   "admitted": true,
+   "examples": [
+    "How many days is in a week. what noise does a cow make and how many legs then has a deer",
+    "How many days is in a week. what noise does a cow make and how many legs then has a wildebeest"
+   ]
+  },
+  {
+   "name": "op10",
+   "from": "{x1} makes {x2} {x3}",
+   "to": "{x1} does {x2} make {x3}",
+   "support": 2,
+   "heldOut": {
+    "pass": 0,
+    "of": 80
+   },
+   "admitted": true,
+   "examples": [
+    "how many days are in a week. what sound makes a cow and then how many legs does a spider have",
+    "Um what sounds makes a cow, also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op11",
+   "from": "{x1} {x2} {x3}",
+   "to": "{x2} {x1} {x3}",
+   "support": 2,
+   "heldOut": {
+    "pass": 0,
+    "of": 157
+   },
+   "admitted": true,
+   "examples": [
+    "plums divide by two",
+    "One quick: what is the capital of Japan"
+   ]
+  },
+  {
+   "name": "op12",
+   "from": "hey {x1} {x2} {x3} makes a {x4}",
+   "to": "{x1} {x3} does {x2} tree {x4} make",
+   "support": 2,
+   "heldOut": {
+    "pass": 0,
+    "of": 15
+   },
+   "admitted": true,
+   "examples": [
+    "Hey what a sound makes a bullfrog",
+    "Hey what a sound makes a raven"
+   ]
+  },
+  {
+   "name": "op13",
+   "from": "um {x1} {x2} what <num> plus <num>",
+   "to": "{x1} tree {x2}",
+   "support": 2,
+   "heldOut": {
+    "pass": 0,
+    "of": 11
+   },
+   "admitted": true,
+   "examples": [
+    "Um what sound does a bullfrog make what 7 plus 5",
+    "Um what sound does a raven make what 7 plus 5"
+   ]
+  },
+  {
+   "name": "op14",
+   "from": "how many days are in a week {x1} <attr> makes a {x2} and then how many {x3} <k.animals.animal> have",
+   "to": "{x1} {x3} tree {x2} make",
+   "support": 2,
+   "heldOut": {
+    "pass": 0,
+    "of": 16
+   },
+   "admitted": true,
+   "examples": [
+    "how many days are in a week. what sound makes a bullfrog and then how many legs does a spider have",
+    "how many days are in a week. what sound makes a raven and then how many legs does a spider have"
+   ]
+  },
+  {
+   "name": "op15",
+   "from": "<attr> you {x1} makes {x2} do",
+   "to": "{x1} does {x2} make",
+   "support": 2,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": true,
+   "examples": [
+    "sound you what sound makes a duck do",
+    "named you what sound makes a duck do"
+   ]
+  },
+  {
+   "name": "op16",
+   "from": "the {x1} of the {x2} {x3}",
+   "to": "{x2} {x1} {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "The color of the body should be red"
+   ]
+  },
+  {
+   "name": "op17",
+   "from": "wearing {x1}",
+   "to": "wear {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Wearing a hat"
+   ]
+  },
+  {
+   "name": "op18",
+   "from": "{x1} much is {x2} {x3} of {x4} to do",
+   "to": "{x1} many {x4} are {x2} to-do {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "How much is left on my list of things to do"
+   ]
+  },
+  {
+   "name": "op19",
+   "from": "thank you the {x1}",
+   "to": "thanks {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Thank you, the bye"
+   ]
+  },
+  {
+   "name": "op20",
+   "from": "{x1} upsides",
+   "to": "{x1} up",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Move the house upsides"
+   ]
+  },
+  {
+   "name": "op21",
+   "from": "{x1} {x2} {x3} {x4} {x5}",
+   "to": "{x2} {x1} {x3} {x5} {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 155
+   },
+   "admitted": false,
+   "examples": [
+    "Blue house and red tree"
+   ]
+  },
+  {
+   "name": "op22",
+   "from": "{x1} did {x2} leave",
+   "to": "{x1} does {x2} have left",
+   "support": 1,
+   "heldOut": {
+    "pass": 1,
+    "of": 1
+   },
+   "admitted": true,
+   "examples": [
+    "Zoe has 14 marbles. Zoe eats 8. How many marbles did Zoe leave?"
+   ]
+  },
+  {
+   "name": "op23",
+   "from": "{x1} a {x2} makes {x3}",
+   "to": "{x1} {x2} does {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 49
+   },
+   "admitted": false,
+   "examples": [
+    "Hey what a sound makes a cow"
+   ]
+  },
+  {
+   "name": "op24",
+   "from": "{x1} she {x2} she {x3} buying {x4}",
+   "to": "{x1} lei {x2} lei {x3} i buy {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I Have 12 She. A pencil costs 2 she. How much money do I have left after buying 2 pencils?"
+   ]
+  },
+  {
+   "name": "op25",
+   "from": "{x1} she {x2} {x3}",
+   "to": "{x1} lei {x2} lei {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I Have 14 She. A kite costs 4. How much money do I have left after I buy 3 kites?"
+   ]
+  },
+  {
+   "name": "op26",
+   "from": "{x1} her {x2} she {x3} what is {x4}",
+   "to": "{x1} lei {x2} lei {x3} whats {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "A ball costs 5 her. if I give 17 she for a ball what is my change"
+   ]
+  },
+  {
+   "name": "op27",
+   "from": "{x1} main {x2} {x3}",
+   "to": "{x1} {x3} major {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Play the main scale G"
+   ]
+  },
+  {
+   "name": "op28",
+   "from": "going {x1}",
+   "to": "go {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Going back"
+   ]
+  },
+  {
+   "name": "op29",
+   "from": "{x1} in {x2}",
+   "to": "{x1} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 91
+   },
+   "admitted": false,
+   "examples": [
+    "make the last paragraph in bold"
+   ]
+  },
+  {
+   "name": "op30",
+   "from": "{x1} bulbs {x2} bulbs {x3}",
+   "to": "{x1} pears {x2} pears {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Zoe has 4 bulbs. Zoe buys 1 more. How many bulbs does Zoe have?"
+   ]
+  },
+  {
+   "name": "op31",
+   "from": "{x1} of {x2}",
+   "to": "{x1} to {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 2
+   },
+   "admitted": false,
+   "examples": [
+    "Knight of c3"
+   ]
+  },
+  {
+   "name": "op32",
+   "from": "{x1} got {x2} bored {x3} rents {x4}",
+   "to": "{x1} have {x2} lei a {x3} lei {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I got 12 bored. Pencil costs 2 rents. How much money do I have left after I buy 2 pencils?"
+   ]
+  },
+  {
+   "name": "op33",
+   "from": "{x1} rented {x2} sorry {x3} what {x4}",
+   "to": "{x1} lei {x2} lei {x3} whats {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "A ball costs 5 rented. if I give 17 sorry for a ball what my change"
+   ]
+  },
+  {
+   "name": "op34",
+   "from": "{x1} makes {x2}",
+   "to": "{x1} do {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 80
+   },
+   "admitted": false,
+   "examples": [
+    "Please, what makes red and yellow"
+   ]
+  },
+  {
+   "name": "op35",
+   "from": "{x1} cord {x2}",
+   "to": "{x1} chord {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "What Cord is C E G"
+   ]
+  },
+  {
+   "name": "op36",
+   "from": "{x1} anything",
+   "to": "{x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Why didn't you understand anything?"
+   ]
+  },
+  {
+   "name": "op37",
+   "from": "{x1} subhead {x2}",
+   "to": "{x1} subheading {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Add a subhead details"
+   ]
+  },
+  {
+   "name": "op38",
+   "from": "{x1} {x2}",
+   "to": "{x2} {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 158
+   },
+   "admitted": false,
+   "examples": [
+    "4 and 8 add"
+   ]
+  },
+  {
+   "name": "op39",
+   "from": "{x1} makes {x2}",
+   "to": "{x1} does {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 80
+   },
+   "admitted": false,
+   "examples": [
+    "Hey, what sound makes a cow"
+   ]
+  },
+  {
+   "name": "op40",
+   "from": "{x1} is {x2} noise {x3} {x4} {x5} has {x6}",
+   "to": "{x1} are {x2} <attr> {x3} {x5} {x4} does {x6} have",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 4
+   },
+   "admitted": false,
+   "examples": [
+    "How many days is in a week. what noise does a cow make and how many legs then has a spider"
+   ]
+  },
+  {
+   "name": "op41",
+   "from": "knights of {x1}",
+   "to": "knight to {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Knights of c3"
+   ]
+  },
+  {
+   "name": "op42",
+   "from": "scratching {x1}",
+   "to": "scratch {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Scratching the last thing I added"
+   ]
+  },
+  {
+   "name": "op43",
+   "from": "{x1}",
+   "to": "{x1} altogether",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 158
+   },
+   "admitted": false,
+   "examples": [
+    "Tom has 11 pencils. Leo has 1 pencil. How many pencils do they have?"
+   ]
+  },
+  {
+   "name": "op44",
+   "from": "being {x1} and {x2} calling {x3}",
+   "to": "be {x1} {x2} call {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "being a human and then calling yourself Anna"
+   ]
+  },
+  {
+   "name": "op45",
+   "from": "{x1} makes noise {x2} {x3}",
+   "to": "{x1} <attr> does {x2} make {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what makes noise a cow also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op46",
+   "from": "{x1} {x2} {x3}",
+   "to": "{x1} then {x2} is {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 158
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sound does a cow make what 7 plus 5"
+   ]
+  },
+  {
+   "name": "op47",
+   "from": "{x1} slate {x2} slates {x3} have bought {x4}",
+   "to": "{x1} lei {x2} lei {x3} buy {x4}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I have 12 slate. A pencil costs 2 slates. How much money do I have left after I have bought 2 pencils?"
+   ]
+  },
+  {
+   "name": "op48",
+   "from": "clearing {x1}",
+   "to": "clear {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Clearing my shopping list"
+   ]
+  },
+  {
+   "name": "op49",
+   "from": "{x1} going",
+   "to": "go {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Red going"
+   ]
+  },
+  {
+   "name": "op50",
+   "from": "what's {x1} when it's {x2} {x3}",
+   "to": "what is {x1} if {x3} is {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "What's the day after tomorrow when it's Monday today"
+   ]
+  },
+  {
+   "name": "op51",
+   "from": "zoe's {x1} on {x2} {x3}",
+   "to": "{x2} has {x1} does zoe have {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Zoe's 14 marbles. Zoe eats 8. How many marbles on Zoe left?"
+   ]
+  },
+  {
+   "name": "op52",
+   "from": "{x1} {x2} pass {x3} the {x4} what is {x5}",
+   "to": "{x1} lei {x3} {x2} {x4} whats {x5}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "A ball costs 5 lei. if I give 17 a pass for the ball what is my change"
+   ]
+  },
+  {
+   "name": "op53",
+   "from": "{x1} makes {x2} do",
+   "to": "{x1} does {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Can you what sound makes a duck do"
+   ]
+  },
+  {
+   "name": "op54",
+   "from": "{x1} another {x2} {x3}",
+   "to": "{x1} {x2} more {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Zoe has 4 pears. Zoe buys another 1. How many pears does Zoe have?"
+   ]
+  },
+  {
+   "name": "op55",
+   "from": "to {x1} {x2}",
+   "to": "{x1} a {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "to be human, then call yourself Anna"
+   ]
+  },
+  {
+   "name": "op56",
+   "from": "{x1} a 14-lei {x2} buying {x3}",
+   "to": "{x1} <num> lei {x2} i buy {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I have a 14-lei. A kite costs 4 lei. How much money do I have left after buying 3 kites?"
+   ]
+  },
+  {
+   "name": "op57",
+   "from": "{x1} there are {x2} sharp",
+   "to": "{x1} has {x2} sharps",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I want to know what key there are 5 sharp"
+   ]
+  },
+  {
+   "name": "op58",
+   "from": "{x1} the {x2}",
+   "to": "{x1} a {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 4
+   },
+   "admitted": false,
+   "examples": [
+    "Add the sun"
+   ]
+  },
+  {
+   "name": "op59",
+   "from": "{x1} myself",
+   "to": "{x1} me",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "What do I get for 10 plus 6 for myself"
+   ]
+  },
+  {
+   "name": "op60",
+   "from": "{x1} is it {x2}",
+   "to": "{x1} {x2} up",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "9 and 6 is it added?"
+   ]
+  },
+  {
+   "name": "op61",
+   "from": "{x1} {x2} too",
+   "to": "{x1} also {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 17
+   },
+   "admitted": false,
+   "examples": [
+    "um What sound does a cow make is Egypt in Africa too"
+   ]
+  },
+  {
+   "name": "op62",
+   "from": "{x1} {x2} makes {x3}",
+   "to": "{x1} does {x2} make {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 79
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa what sound a cow makes also what is 20 minus 8?"
+   ]
+  },
+  {
+   "name": "op63",
+   "from": "{x1} in {x2}",
+   "to": "{x1} at {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 91
+   },
+   "admitted": false,
+   "examples": [
+    "Put the house in 200, 300"
+   ]
+  },
+  {
+   "name": "op64",
+   "from": "{x1} g's {x2}",
+   "to": "{x1} g {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Play the G's major scale"
+   ]
+  },
+  {
+   "name": "op65",
+   "from": "{x1} in italics",
+   "to": "{x1} italic",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "make the paragraph in italics"
+   ]
+  },
+  {
+   "name": "op66",
+   "from": "{x1} {x2} in the shape of",
+   "to": "{x1} shaped {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Give me plus eyes in the shape of"
+   ]
+  },
+  {
+   "name": "op67",
+   "from": "{x1} lions {x2} buying {x3}",
+   "to": "{x1} lei {x2} i buy {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I have 12 lions. A pencil costs 2 lei. How much money do I have left after buying 2 pencils?"
+   ]
+  },
+  {
+   "name": "op68",
+   "from": "{x1} is {x2}",
+   "to": "{x1} has {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 75
+   },
+   "admitted": false,
+   "examples": [
+    "I want to know what key is 5 sharps"
+   ]
+  },
+  {
+   "name": "op69",
+   "from": "{x1} {x2} on a {x3}",
+   "to": "{x1} the {x2} {x3}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Play G on a major scale"
+   ]
+  },
+  {
+   "name": "op70",
+   "from": "{x1}",
+   "to": "the {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 158
+   },
+   "admitted": false,
+   "examples": [
+    "Tempo is too slow."
+   ]
+  },
+  {
+   "name": "op71",
+   "from": "{x1} you're looking {x2} your {x3} eye",
+   "to": "{x1} you would look {x2} {x3} eyes",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "I think you're looking better with your square eye"
+   ]
+  },
+  {
+   "name": "op72",
+   "from": "{x1} it's {x2} {x3}",
+   "to": "{x1} {x3} is {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "What is the day after tomorrow if it's Monday today"
+   ]
+  },
+  {
+   "name": "op73",
+   "from": "{x1}",
+   "to": "move {x1} in the lake",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 158
+   },
+   "admitted": false,
+   "examples": [
+    "The crocodiles"
+   ]
+  },
+  {
+   "name": "op74",
+   "from": "and {x1}",
+   "to": "move the houses {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "And still up"
+   ]
+  },
+  {
+   "name": "op75",
+   "from": "{x1}",
+   "to": "move a <k.animals.animal> {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 158
+   },
+   "admitted": false,
+   "examples": [
+    "On the lake"
+   ]
+  },
+  {
+   "name": "op76",
+   "from": "{x1}",
+   "to": "move the <k.animals.animal> {x1}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 158
+   },
+   "admitted": false,
+   "examples": [
+    "Still in right"
+   ]
+  },
+  {
+   "name": "op77",
+   "from": "hey {x1} {x2} {x3} makes a grizzly {x4}",
+   "to": "{x1} {x3} does {x2} {x4} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Hey what a sound makes a grizzly bear"
+   ]
+  },
+  {
+   "name": "op78",
+   "from": "hey {x1} {x2} {x3} makes a humpback {x4}",
+   "to": "{x1} {x3} does {x2} {x4} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Hey what a sound makes a humpback whale"
+   ]
+  },
+  {
+   "name": "op79",
+   "from": "hey {x1} {x2} {x3} makes a komodo dragon",
+   "to": "{x1} {x3} does {x2} <k.animals.animal> make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Hey what a sound makes a Komodo dragon"
+   ]
+  },
+  {
+   "name": "op80",
+   "from": "hey {x1} makes {x2} grizzly {x3}",
+   "to": "{x1} does {x2} {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Hey, what sound makes a grizzly bear"
+   ]
+  },
+  {
+   "name": "op81",
+   "from": "hey {x1} makes {x2} monitor {x3}",
+   "to": "{x1} does {x2} {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 1
+   },
+   "admitted": false,
+   "examples": [
+    "Hey, what sound makes a monitor lizard"
+   ]
+  },
+  {
+   "name": "op82",
+   "from": "hey {x1} makes {x2} komodo dragon",
+   "to": "{x1} does {x2} <k.animals.animal> make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Hey, what sound makes a Komodo dragon"
+   ]
+  },
+  {
+   "name": "op83",
+   "from": "how many days is in a week {x1} noise {x2} and how many {x3} then has a sea <k.animals.animal>",
+   "to": "{x1} {x3} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "How many days is in a week. what noise does a cow make and how many legs then has a sea turtle"
+   ]
+  },
+  {
+   "name": "op84",
+   "from": "how many days is in a week {x1} noise {x2} and how many {x3} then has a tasmanian devil",
+   "to": "{x1} {x3} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "How many days is in a week. what noise does a cow make and how many legs then has a Tasmanian devil"
+   ]
+  },
+  {
+   "name": "op85",
+   "from": "um {x1} grizzly {x2} what <num> plus <num>",
+   "to": "{x1} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sound does a grizzly bear make what 7 plus 5"
+   ]
+  },
+  {
+   "name": "op86",
+   "from": "um {x1} humpback {x2} what <num> plus <num>",
+   "to": "{x1} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sound does a humpback whale make what 7 plus 5"
+   ]
+  },
+  {
+   "name": "op87",
+   "from": "um {x1} monitor {x2} what <num> plus <num>",
+   "to": "{x1} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sound does a monitor lizard make what 7 plus 5"
+   ]
+  },
+  {
+   "name": "op88",
+   "from": "um {x1} komodo dragon {x2} what <num> plus <num>",
+   "to": "{x1} <k.animals.animal> {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sound does a Komodo dragon make what 7 plus 5"
+   ]
+  },
+  {
+   "name": "op89",
+   "from": "is egypt in africa {x1} monitor {x2} whatever is <num> min <num>",
+   "to": "{x1} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa, what sound does a monitor lizard make whatever is 20 min 8?"
+   ]
+  },
+  {
+   "name": "op90",
+   "from": "is egypt in africa {x1} komodo dragon {x2} whatever is <num> min <num>",
+   "to": "{x1} <k.animals.animal> {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa, what sound does a Komodo dragon make whatever is 20 min 8?"
+   ]
+  },
+  {
+   "name": "op91",
+   "from": "is egypt in africa {x1} {x2} whatever is <num> min <num>",
+   "to": "{x1} tree {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 1,
+    "of": 23
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa, what sound does a bullfrog make whatever is 20 min 8?"
+   ]
+  },
+  {
+   "name": "op92",
+   "from": "how many days are in a week {x1} <attr> makes a humpback <k.animals.animal> and then how many {x2} have",
+   "to": "{x1} {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "how many days are in a week. what sound makes a humpback whale and then how many legs does a spider have"
+   ]
+  },
+  {
+   "name": "op93",
+   "from": "how many days are in a week {x1} <attr> makes a monitor <k.animals.animal> and then how many {x2} have",
+   "to": "{x1} {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "how many days are in a week. what sound makes a monitor lizard and then how many legs does a spider have"
+   ]
+  },
+  {
+   "name": "op94",
+   "from": "how many days are in a week {x1} <attr> makes a {x2} and then how many {x3} <k.animals.animal> have",
+   "to": "{x1} {x3} {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 15,
+    "of": 16
+   },
+   "admitted": false,
+   "examples": [
+    "how many days are in a week. what sound makes a tree frog and then how many legs does a spider have"
+   ]
+  },
+  {
+   "name": "op95",
+   "from": "how many days are in a week {x1} <attr> makes a komodo dragon and then how many {x2} have",
+   "to": "{x1} {x2} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "how many days are in a week. what sound makes a Komodo dragon and then how many legs does a spider have"
+   ]
+  },
+  {
+   "name": "op96",
+   "from": "um {x1} grizzly {x2} is egypt in africa too",
+   "to": "{x1} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "um What sound does a grizzly bear make is Egypt in Africa too"
+   ]
+  },
+  {
+   "name": "op97",
+   "from": "um {x1} humpback {x2} is egypt in africa too",
+   "to": "{x1} {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "um What sound does a humpback whale make is Egypt in Africa too"
+   ]
+  },
+  {
+   "name": "op98",
+   "from": "um {x1} komodo dragon {x2} is egypt in africa too",
+   "to": "{x1} <k.animals.animal> {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "um What sound does a Komodo dragon make is Egypt in Africa too"
+   ]
+  },
+  {
+   "name": "op99",
+   "from": "um {x1} {x2} is egypt in africa too",
+   "to": "{x1} tree {x2}",
+   "support": 1,
+   "heldOut": {
+    "pass": 1,
+    "of": 17
+   },
+   "admitted": false,
+   "examples": [
+    "um What sound does a bullfrog make is Egypt in Africa too"
+   ]
+  },
+  {
+   "name": "op100",
+   "from": "is egypt in africa {x1} {x2} grizzly {x3} makes also what is <num> minus <num>",
+   "to": "{x1} does {x2} {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa what sound a grizzly bear makes also what is 20 minus 8?"
+   ]
+  },
+  {
+   "name": "op101",
+   "from": "is egypt in africa {x1} {x2} humpback {x3} makes also what is <num> minus <num>",
+   "to": "{x1} does {x2} {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa what sound a humpback whale makes also what is 20 minus 8?"
+   ]
+  },
+  {
+   "name": "op102",
+   "from": "is egypt in africa {x1} {x2} monitor {x3} makes also what is <num> minus <num>",
+   "to": "{x1} does {x2} {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa what sound a monitor lizard makes also what is 20 minus 8?"
+   ]
+  },
+  {
+   "name": "op103",
+   "from": "is egypt in africa {x1} {x2} komodo dragon makes also what is <num> minus <num>",
+   "to": "{x1} does {x2} <k.animals.animal> make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa what sound a Komodo dragon makes also what is 20 minus 8?"
+   ]
+  },
+  {
+   "name": "op104",
+   "from": "is egypt in africa {x1} {x2} {x3} makes also what is <num> minus <num>",
+   "to": "{x1} does {x2} tree {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 1,
+    "of": 18
+   },
+   "admitted": false,
+   "examples": [
+    "Is Egypt in Africa what sound a bullfrog makes also what is 20 minus 8?"
+   ]
+  },
+  {
+   "name": "op105",
+   "from": "um {x1} makes {x2} grizzly {x3} also is egypt in africa",
+   "to": "{x1} does {x2} {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sounds makes a grizzly bear, also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op106",
+   "from": "um {x1} makes {x2} humpback {x3} also is egypt in africa",
+   "to": "{x1} does {x2} {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sounds makes a humpback whale, also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op107",
+   "from": "um {x1} makes {x2} monitor {x3} also is egypt in africa",
+   "to": "{x1} does {x2} {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sounds makes a monitor lizard, also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op108",
+   "from": "um {x1} makes {x2} komodo dragon also is egypt in africa",
+   "to": "{x1} does {x2} <k.animals.animal> make",
+   "support": 1,
+   "heldOut": {
+    "pass": 0,
+    "of": 0
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sounds makes a Komodo dragon, also is Egypt in Africa"
+   ]
+  },
+  {
+   "name": "op109",
+   "from": "um {x1} makes {x2} {x3} also is egypt in africa",
+   "to": "{x1} does {x2} tree {x3} make",
+   "support": 1,
+   "heldOut": {
+    "pass": 1,
+    "of": 10
+   },
+   "admitted": false,
+   "examples": [
+    "Um what sounds makes a raven, also is Egypt in Africa"
+   ]
+  }
+ ],
+ "admitted": 16,
+ "supportedAtLeast2": 15,
+ "step": {
+  "heldOutPairsWithAskFrame": 137,
+  "readAlone": 78,
+  "readWithOperators": 83,
+  "readOnlyThroughOperators": 5
+ }
+}

@@ -28,7 +28,7 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=7b06d02ad7')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
-  const lib = await import('../vendor/sopworld/sopworld.mjs?v=f356067868');
+  const lib = await import('../vendor/sopworld/sopworld.mjs?v=8afa911bd6');
   const world = new lib.World();
   world.load(facts.wires);
   const m = lib.morphOf(world, { types: { cls: 'w.lang.ro.class', ending: 'w.lang.ro.ending', irregular: 'w.lang.ro.irregular', fold: 'w.lang.ro.fold', split: 'w.lang.ro.split', template: 'w.lang.ro.template', vowel: 'w.lang.ro.vowel' } });

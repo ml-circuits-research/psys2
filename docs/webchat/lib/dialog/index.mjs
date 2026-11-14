@@ -15,7 +15,7 @@ import { loadWorlds } from '../worlds/index.mjs?v=a56b7c0a0f';
 import { validateWorldSet } from '../worlds/validate.mjs?v=b422872e56';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=99290ab2f5';
 import { createInterpreter } from '../interpreter/index.mjs?v=832ad8a927';
-import { createReasoner } from '../reasoner/index.mjs?v=707afc0676';
+import { createReasoner } from '../reasoner/index.mjs?v=68c8128983';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=afc707c3cb';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6f705bd762';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -38,14 +38,14 @@ import { Discourse } from './discourse.mjs?v=3d8e2f748e';
 import { Dialogue } from './dialogue.mjs?v=4eabf62d0e';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=9e498421a8';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=0026bb5155';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=2e61ced600';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=15c9e71851';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants } from './variants.mjs?v=fd11eaeb1b';
+import { withVariants } from './variants.mjs?v=a0e9a65094';
 import { repairFromScene } from './scene-referents.mjs?v=edd4fbba48';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=95aff280f5';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=02a15b66db';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f32b663a76';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=c3c84220ce';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=5925f8d14a';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=af986d7c09';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1462,7 +1462,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=f356067868').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=8afa911bd6').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.reader (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -1827,6 +1827,9 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`
   const engine = {
     knowledge: options.knowledge ?? null,
+    /** Typed form operators ({ lib, world, operators }) for the step behind PSYS2_FORMOPS=on (spec 16 section 11); null = none. A host that has a typed world gives them; nothing is learnt here. */
+    formOperators: options.formOperators ?? null,
+    setFormOperators(fo) { engine.formOperators = fo ?? null; },
     /** Attach or detach the knowledge catalog after creation (an experiment, the webchat once the catalog is reachable). */
     setKnowledge(cat) { engine.knowledge = cat ?? null; interp.knowledge = cat ?? null; attachValues(cat); attachOpenWords(cat); attachArrangement(cat); },   // the colour and number readers (k.values) take the catalog's words in place of the bundled subset
     set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,

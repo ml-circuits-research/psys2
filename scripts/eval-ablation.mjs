@@ -25,6 +25,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 import { sessionOptions } from '../src/dialog/runtime-config.mjs';
 import { formalize, setProto } from '../src/formalizer/rules/index.mjs';
+import { installFormOperators } from './lib/formops-host.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
 import { createSwitchTranslator } from '../docs/webchat/ui/translation.mjs';
@@ -294,6 +295,7 @@ async function setupEnv(wd) {
     const scratch = engine.createSession({ formalizer: 'rules', language: 'en' }).isession;
     segmenter = (text) => formalize(text, { worlds: engine.set, router: engine.router, source: 'input', session: scratch }).segments.map((s) => s.span);
   }
+  await installFormOperators(engine);   // PSYS2_FORMOPS=on: the typed form operators (spec 16 section 11); nothing otherwise
   const rt = await openNodeRuntime({ engine, mode: cfg.mode, ortPath: wd.ort, ortThreads: wd.ortThreads, overrides: cfg.set, partsExtra: segmenter ? { segmenter } : null });
   return { engine, ownerEngine: engine, settings: rt.settings, info: rt.info, factsOwner, factsFull };
 }
