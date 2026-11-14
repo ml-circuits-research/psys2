@@ -427,3 +427,6 @@ Proposal (for the reviewer and the owner to decide):
 2. Measure every library/knowledge landing on the same curve (paraphrases, schema-alone, grid, held-out) so the curve, not the per-case sets, decides what helps; stop host mechanisms that are not general (they go to the ledger).
 3. Held-out real messages: the frozen set is empty; ask the owner for a fresh phrase-log export so the curve has the set that matters most.
 4. Optional: a small experiment of the MiniLM-type router/normaliser on the 71 failing paraphrases (allowed in C2 as a proposer only) to size how much of the gap is wording vs missing knowledge.
+
+## Q (worker, 2026-11-15) US SSA baby names not fetched
+`https://www.ssa.gov/oact/babynames/names.zip` (and `/OACT/` and the state file) return 403 Access Denied (Akamai edge) for User-Agent "psys2-data-fetch/1.0". I did not work around it (browser User-Agent, mirrors, Wayback) since the task fixed the User-Agent. Options: allow a browser-like User-Agent for this one public-domain file, allow a mirror (archive.org copy of names.zip, data.gov), or the user drops names.zip into the scratchpad. `data/external/given-names/` is not created.

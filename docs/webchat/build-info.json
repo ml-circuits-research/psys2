@@ -1,5 +1,5 @@
 {
-  "version": "89bd7bb1b6",
+  "version": "bcd5737a46",
   "worlds": [
     "acts",
     "art.draw",
@@ -155,7 +155,7 @@
     "lib/legends/index.mjs": "6a57752a88fbd9a7",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
     "lib/loaders/knowledge-cache.mjs": "5afb651adf762afc",
-    "lib/loaders/knowledge-source.mjs": "5aff40c4925ab99b",
+    "lib/loaders/knowledge-source.mjs": "1d30b93e35960ba1",
     "lib/plan/host.mjs": "e55f5be74e41dd35",
     "lib/reasoner/index.mjs": "87f4c3fb1b2d2b92",
     "lib/reasoner/ns.mjs": "024a4cfbf7a15cbd",
@@ -799,8 +799,8 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "e6e3b4bec7f87e94"
   },
-  "builtAt": "2026-11-14T16:24:26.713Z",
-  "commit": "db7da756",
+  "builtAt": "2026-11-14T16:46:17.283Z",
+  "commit": "711f94f0-dirty",
   "assets": {
     "app.mjs": "5f0d043632",
     "coverage-grid.json": "dc56813858",
@@ -908,7 +908,7 @@
     "lib/legends/index.mjs": "db730c4e69",
     "lib/loaders/bundle-loader.mjs": "070984ff45",
     "lib/loaders/knowledge-cache.mjs": "6a9ec0d13e",
-    "lib/loaders/knowledge-source.mjs": "ca671e33cd",
+    "lib/loaders/knowledge-source.mjs": "71d18cb512",
     "lib/plan/host.mjs": "30c3a981b6",
     "lib/reasoner/index.mjs": "707afc0676",
     "lib/reasoner/ns.mjs": "655a807958",
