@@ -5,8 +5,12 @@ import { h } from '../util.mjs';
 const WORLD = 'plan.timeline';
 const CSS = `.pt-row{display:flex;flex-wrap:wrap;gap:0;align-items:flex-start;border-top:3px solid var(--line,#ccd);margin-top:14px}.pt-moment{position:relative;min-width:110px;padding:12px 12px 4px 0}.pt-moment:before{content:"";position:absolute;top:-9px;left:0;width:14px;height:14px;border-radius:50%;background:var(--accent,#4a90d9)}.pt-name{font-weight:650;padding-left:2px}.pt-when{font-size:12px;color:var(--muted,#667)}.pt-empty{color:var(--muted,#667);font-style:italic}`;
 const label = (i) => (i.name ? `${i.name}` : `${i.kind} ${i.n}`);
-/** The moments in a row by time: by `when`, and in the order they came when the times are equal. */
-export const inOrder = (items) => items.map((i, k) => ({ i, k })).sort((a, b) => (Number(a.i.attrs?.when) || 0) - (Number(b.i.attrs?.when) || 0) || a.k - b.k).map((x) => x.i);
+/** The moments in a row by time: a moment the calendar knows (`time`: its cycle, set from k.time) goes with the others of its cycle (months with months, days with days), the groups in the order they came; inside a group by `when`, and in the order they came when the times are equal. */
+export const inOrder = (items) => {
+  const group = (i) => i.time?.cycle ?? '', rank = [];
+  for (const i of items) if (!rank.includes(group(i))) rank.push(group(i));
+  return items.map((i, k) => ({ i, k })).sort((a, b) => rank.indexOf(group(a.i)) - rank.indexOf(group(b.i)) || (Number(a.i.attrs?.when) || 0) - (Number(b.i.attrs?.when) || 0) || a.k - b.k).map((x) => x.i);
+};
 
 function make(holder, host) {
   if (!document.querySelector('style[data-pt-css]')) document.head.append(h('style', { 'data-pt-css': '' }, CSS));

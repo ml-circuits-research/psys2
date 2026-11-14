@@ -608,7 +608,7 @@
 
 @pat.talk.can.det core.pattern
     canonical="Can a penguin fly?"
-    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.canq] [a|an|the] {o:words(3,noun)} {v:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.canq] [a|an] {o:words(3,noun)} {v:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.can arg.o=\"{o}\" arg.v=\"{v}\""
     kind=question
     tabOnly=false

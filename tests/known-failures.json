@@ -582,6 +582,48 @@
       "pattern": "^webchat UI at 390x844 and 1280x800: settings modal",
       "class": "settings coherent: the helper-model switch rows, and the surprise pool (stale: kids questions are Talk frames over the catalog)",
       "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2)"
+    },
+    {
+      "file": "geo-places.test.mjs",
+      "pattern": "^the map reads its collections through its typed needs and builds the index synchronously$",
+      "class": "geo.map switch landing: the bundled places subset is read before the needs settle",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2; rows inherited from the geo.map / media.music landings on main)"
+    },
+    {
+      "file": "knowledge-inventory.test.mjs",
+      "pattern": "^no new general fact, table or lexicon group appears in a world$",
+      "class": "inventory baseline not updated by the geo.map switch (tables ACTS, DEMONYM, THE) and the schema tables grew by 3 characters",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2; rows inherited from the geo.map / media.music landings on main)"
+    },
+    {
+      "file": "knowledge-lookup.test.mjs",
+      "pattern": "^delete / move / connect with a catalog hit: the plain refusal, never a gloss$",
+      "class": "arbitration: \"move the dragon to the left\" is read by media.music (transpose) before the draw refusal",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2; rows inherited from the geo.map / media.music landings on main)"
+    },
+    {
+      "file": "rd10-names-capability.test.mjs",
+      "pattern": "^(?:names: |bare coordinate on the Map tab)",
+      "class": "geo.map switch landing: places in names / coordinates read through the catalog (offline subset), not the old table",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2; rows inherited from the geo.map / media.music landings on main)"
+    },
+    {
+      "file": "reasoner-ui.test.mjs",
+      "pattern": "^ui.help: \"what can you do in the map\\?\"",
+      "class": "geo.map switch landing: the help examples of the map come from generated forms (\"Add a pin\"), not the old canonical examples",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2; rows inherited from the geo.map / media.music landings on main)"
+    },
+    {
+      "file": "translate-equivalence.test.mjs",
+      "pattern": "^Romanian twins formalize to the same wires as their English examples$",
+      "class": "English twins that do not parse without the catalog or the Talk tab (kids questions over frames), and avatar forms; 90% line",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2; rows inherited from the geo.map / media.music landings on main)"
+    },
+    {
+      "file": "ro-fallback-fixes.test.mjs",
+      "pattern": "^small fixes \\((?:matrix|ops)\\)$",
+      "class": "geo.map switch landing: the help examples of the map come from generated forms (\"Add a pin\"), not the old canonical examples",
+      "ledger": "bug-fix batch 2026-11-14 (training/eval/failures.jsonl, build bugfix-batch-2; rows inherited from the geo.map / media.music landings on main)"
     }
   ]
 }

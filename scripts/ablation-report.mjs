@@ -25,7 +25,7 @@ const data = Object.fromEntries(configs.map((c) => {
   return [c, { ...parts[0], rows }];
 }));
 const GOLD = ['operational', 'minimal-pairs', 'knowledge', 'dialogues', 'wrong-tab', 'owner-a', 'typos', 'loose-words', 'paraphrases-rt'];
-const NOGOLD = ['owner-b', 'owner-c', 'ledger'];
+const NOGOLD = ['owner-b', 'owner-c', 'ledger', 'paraphrases-rt-changed'];
 const OUT = ['right', 'wrong', 'asked', 'nu', 'answered'];
 const tally = (rows) => { rows = rows.filter((r) => r.outcome !== 'skip'); const t = { n: rows.length, right: 0, wrong: 0, asked: 0, nu: 0, answered: 0 }; for (const r of rows) t[r.outcome] = (t[r.outcome] ?? 0) + 1; return t; };
 const pct = (a, n) => (n ? Math.round(1000 * a / n) / 10 : 0);

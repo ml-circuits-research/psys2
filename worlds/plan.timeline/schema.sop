@@ -12,6 +12,7 @@
     limit.items=60
     limit.history=30
     tabOnly=yes
+    hooks=hooks.mjs
 
 @time.view acts.view
     aspects=temporal

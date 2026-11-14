@@ -1,6 +1,6 @@
 // Reference resolution of docs.editor: turns a phrase ("the second paragraph", "the word milk", "it") into blocks, text ranges
 // or list items of the current document. Browser-safe.
-import { titleBlock, containers, sentenceRanges, wordRanges, findAll, allTexts, DEFAULT_TITLE } from './model.mjs?v=552e4e972a';
+import { titleBlock, containers, sentenceRanges, wordRanges, findAll, allTexts, DEFAULT_TITLE } from './model.mjs?v=18dd2e9fcc';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 export const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1 };

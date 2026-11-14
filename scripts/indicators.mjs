@@ -27,7 +27,7 @@ const today = () => new Date().toISOString().slice(0, 10);
 export function robustness(file) {
   const rows = JSON.parse(readFileSync(file, 'utf8')).rows;
   const out = {};
-  for (const set of ['typos', 'loose-words', 'paraphrases-rt']) {
+  for (const set of ['typos', 'loose-words', 'paraphrases-rt', 'paraphrases-rt-changed']) {
     const r = rows.filter((x) => x.set === set && x.outcome !== 'skip');
     out[set] = { right: r.filter((x) => x.outcome === 'right').length, total: r.length };
   }

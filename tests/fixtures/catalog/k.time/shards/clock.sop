@@ -1,0 +1,42 @@
+# k.time/shards/clock: the 4 parts of the day and the 24 hours of the clock, each with its position and successor,
+# and words for the hours.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.time.part_of_day.morning k.time.part_of_day name=morning cycle=day n=1 next=afternoon starts_about=5 ends_about=12 core.source="hand-core 1"
+@k.time.part_of_day.afternoon k.time.part_of_day name=afternoon cycle=day n=2 next=evening starts_about=12 ends_about=17 core.source="hand-core 1"
+@k.time.part_of_day.evening k.time.part_of_day name=evening cycle=day n=3 next=night starts_about=17 ends_about=21 core.source="hand-core 1"
+@k.time.part_of_day.night k.time.part_of_day name=night cycle=day n=4 next=morning starts_about=21 ends_about=5 core.source="hand-core 1"
+
+@k.time.hour.h00 k.time.hour name=midnight cycle=clock n=0 next="1 am" hour12=12 am_pm=am part=night core.source="hand-core 1"
+@k.time.hour.h01 k.time.hour name="1 am" cycle=clock n=1 next="2 am" hour12=1 am_pm=am part=night core.source="hand-core 1"
+@k.time.hour.h02 k.time.hour name="2 am" cycle=clock n=2 next="3 am" hour12=2 am_pm=am part=night core.source="hand-core 1"
+@k.time.hour.h03 k.time.hour name="3 am" cycle=clock n=3 next="4 am" hour12=3 am_pm=am part=night core.source="hand-core 1"
+@k.time.hour.h04 k.time.hour name="4 am" cycle=clock n=4 next="5 am" hour12=4 am_pm=am part=night core.source="hand-core 1"
+@k.time.hour.h05 k.time.hour name="5 am" cycle=clock n=5 next="6 am" hour12=5 am_pm=am part=morning core.source="hand-core 1"
+@k.time.hour.h06 k.time.hour name="6 am" cycle=clock n=6 next="7 am" hour12=6 am_pm=am part=morning core.source="hand-core 1"
+@k.time.hour.h07 k.time.hour name="7 am" cycle=clock n=7 next="8 am" hour12=7 am_pm=am part=morning core.source="hand-core 1"
+@k.time.hour.h08 k.time.hour name="8 am" cycle=clock n=8 next="9 am" hour12=8 am_pm=am part=morning core.source="hand-core 1"
+@k.time.hour.h09 k.time.hour name="9 am" cycle=clock n=9 next="10 am" hour12=9 am_pm=am part=morning core.source="hand-core 1"
+@k.time.hour.h10 k.time.hour name="10 am" cycle=clock n=10 next="11 am" hour12=10 am_pm=am part=morning core.source="hand-core 1"
+@k.time.hour.h11 k.time.hour name="11 am" cycle=clock n=11 next=noon hour12=11 am_pm=am part=morning core.source="hand-core 1"
+@k.time.hour.h12 k.time.hour name=noon cycle=clock n=12 next="1 pm" hour12=12 am_pm=pm part=afternoon core.source="hand-core 1"
+@k.time.hour.h13 k.time.hour name="1 pm" cycle=clock n=13 next="2 pm" hour12=1 am_pm=pm part=afternoon core.source="hand-core 1"
+@k.time.hour.h14 k.time.hour name="2 pm" cycle=clock n=14 next="3 pm" hour12=2 am_pm=pm part=afternoon core.source="hand-core 1"
+@k.time.hour.h15 k.time.hour name="3 pm" cycle=clock n=15 next="4 pm" hour12=3 am_pm=pm part=afternoon core.source="hand-core 1"
+@k.time.hour.h16 k.time.hour name="4 pm" cycle=clock n=16 next="5 pm" hour12=4 am_pm=pm part=afternoon core.source="hand-core 1"
+@k.time.hour.h17 k.time.hour name="5 pm" cycle=clock n=17 next="6 pm" hour12=5 am_pm=pm part=evening core.source="hand-core 1"
+@k.time.hour.h18 k.time.hour name="6 pm" cycle=clock n=18 next="7 pm" hour12=6 am_pm=pm part=evening core.source="hand-core 1"
+@k.time.hour.h19 k.time.hour name="7 pm" cycle=clock n=19 next="8 pm" hour12=7 am_pm=pm part=evening core.source="hand-core 1"
+@k.time.hour.h20 k.time.hour name="8 pm" cycle=clock n=20 next="9 pm" hour12=8 am_pm=pm part=evening core.source="hand-core 1"
+@k.time.hour.h21 k.time.hour name="9 pm" cycle=clock n=21 next="10 pm" hour12=9 am_pm=pm part=night core.source="hand-core 1"
+@k.time.hour.h22 k.time.hour name="10 pm" cycle=clock n=22 next="11 pm" hour12=10 am_pm=pm part=night core.source="hand-core 1"
+@k.time.hour.h23 k.time.hour name="11 pm" cycle=clock n=23 next=midnight hour12=11 am_pm=pm part=night core.source="hand-core 1"
+
+@k.time.word.hour.midnight core.word text="12 am" text="twelve at night" means=midnight of=k.time.hour.name core.source="hand-core 1"
+@k.time.word.hour.noon core.word text="12 pm" text=midday text="twelve noon" means=noon of=k.time.hour.name core.source="hand-core 1"
+@k.time.word.part.night core.word text=nighttime text=night-time means=night of=k.time.part_of_day.name core.source="hand-core 1"
+@k.time.word.part.evening core.word text=evenings means=evening of=k.time.part_of_day.name core.source="hand-core 1"
+@k.time.word.part.morning core.word text=mornings means=morning of=k.time.part_of_day.name core.source="hand-core 1"
+@k.time.word.part.afternoon core.word text=afternoons means=afternoon of=k.time.part_of_day.name core.source="hand-core 1"

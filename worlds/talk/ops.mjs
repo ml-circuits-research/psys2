@@ -529,9 +529,6 @@ export function openSlots(ctx, { action, args = {} } = {}) {
 export function listNeeds(ctx, { action, args = {} } = {}) {
   return action === 'talk.list' ? [args.k] : action === 'talk.mix' ? ['mix'] : [];
 }
-/** Host hook: the catalog models this world reads synchronously (the schemas of the knowledge worlds, the ordered series), built by the host before an operation runs. */
-export function needs() { return ['schema', 'series']; 
-}
 
 const words = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
 /**

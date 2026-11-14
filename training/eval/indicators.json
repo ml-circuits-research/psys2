@@ -12,9 +12,15 @@
    "total": 644
   },
   "paraphrases-rt": {
-   "right": 22,
-   "total": 146
-  }
+   "right": 12,
+   "total": 85
+  },
+  "paraphrases-rt-changed": {
+   "right": 3,
+   "total": 61
+  },
+  "paraphrasesNote": "2026-11-14 re-judged by hand: paraphrases-rt = the 85 rows whose meaning equals the original (meaning: same); paraphrases-rt-changed = the 61 rows the machine translation turned into another sentence (meaning: changed), robustness to a wrong translation, not a paraphrase measure; partial re-run (rules-C, the two paraphrase sets only)",
+  "paraphrasesDate": "2026-11-14"
  },
  "richest": {
   "date": "2026-11-13",

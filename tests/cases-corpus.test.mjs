@@ -14,7 +14,7 @@ test('case ids are stable and the corpus is well formed', () => {
   assert.ok(rows.length > 1000);
   for (const r of rows) {
     assert.equal(r.id, caseId(r.source, r.text, r.tab), r.id);
-    assert.ok(['right', 'wrong', 'na', 'unchecked'].includes(r.outcome), r.id);
+    assert.ok(['right', 'wrong', 'na', 'unchecked', 'retired'].includes(r.outcome), r.id);
     if (r.outcome === 'wrong') assert.ok(r.group && r.stage && r.stage === stageOf(r.group), `${r.id} has a group and its stage`);
     const p = last.get(r.id);
     if (p) assert.notEqual(p.outcome, r.outcome, `${r.id}: an observation is appended only when the outcome changed`);

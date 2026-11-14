@@ -8,7 +8,8 @@
 // lexicon is its closed list. Browser-safe: no node imports.
 import { lemmaCandidates } from './facts.mjs';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-import { colourName } from './values.mjs';
+import { colourName, isCoreColour } from './values.mjs';
+import { BUNDLED_GEO } from './bundled-geo.mjs';
 
 let attached = null;
 /** The host attaches the catalog of the session (`engine.setKnowledge`); `null` detaches it. */
@@ -60,6 +61,8 @@ function foldedVocab(vocab) {
   if (foldedFor !== vocab) {
     foldedMap = new Map();
     for (const k of Object.keys(vocab)) { const f = foldOf(k); if (f !== k && !Object.hasOwn(vocab, f)) foldedMap.set(f, vocab[k]); }
+    // a compound name joined by a hyphen is also said by its first part when that part is a name of its own ("Cluj" for Cluj-Napoca), unless the vocabulary already has that word
+    for (const k of Object.keys(vocab)) { const i = k.indexOf('-'); if (i >= 4) { const head = foldOf(k.slice(0, i)); if (/^[a-z]+$/.test(head) && !Object.hasOwn(vocab, head) && !foldedMap.has(head)) foldedMap.set(head, vocab[k]); } }
     foldedFor = vocab;
   }
   return foldedMap;
@@ -70,10 +73,21 @@ function foldedVocab(vocab) {
  * (not only for the doc of the schema: "river", "north" are words of the schema), it is not a colour or a number, and it has no digit (a lexicon word is lower-case ASCII with `_`).
  * Names of several words ("new york", "cape town") are looked up with spaces. A place word read here is only a reading of the sentence; the facts come by lookup (worlds/geo.map/places.mjs).
  */
+let geoKeys = null;
+/** The names of the bundled k.geo subset (countries, capitals, cities of 500,000+, with accent-free spellings and the first part of a hyphenated compound), known before the catalog's vocabulary arrives. */
+function bundledPlaces() {
+  if (geoKeys) return geoKeys;
+  geoKeys = new Set();
+  for (const k of BUNDLED_GEO.keys) {
+    geoKeys.add(k); geoKeys.add(foldOf(k));
+    const i = k.indexOf('-'); if (i >= 4) geoKeys.add(foldOf(k.slice(0, i)));
+  }
+  return geoKeys;
+}
 export function knowsPlace(word, catalogs) {
-  if (!attached?.peekVocab) return false;
-  const vocab = attached.peekVocab();
-  if (!vocab) return false;
+  const vocab = attached?.peekVocab?.();
+  if (!vocab) return catalogs.includes('k.geo') && bundledKnows(word);
+  if (bundledKnows(word) && catalogs.includes('k.geo')) return true;
   const folded = foldedVocab(vocab);   // the vocabulary lists "são paulo" and "chișinău"; people type "sao paulo" and "chisinau"
   let w = String(word).replace(/_/g, ' ');
   for (let step = 0; step < 2; step++) {   // at most one relation is peeled: "the capital of sudan" -> "sudan"
@@ -83,9 +97,19 @@ export function knowsPlace(word, catalogs) {
     if (rel && rel[1] !== 'the' && step === 0) { w = rel[1].replace(/^the /, ''); continue; }
     const sh = [w, w.endsWith('s') ? null : `${w}s`].map((k) => (k && (Object.hasOwn(vocab, k) ? vocab[k] : folded.get(k)))).find(Boolean);
     if (!sh?.some((x) => catalogs.includes(String(x).split('/')[0]) && !/\/schema\.sop$/.test(x))) return false;
-    return !colourName(w);
+    return !isCoreColour(w);   // "red" is a colour; "peru" (only a shade of brown) is the country
   }
   return false;
+}
+
+/** Is `word` a name of the bundled subset (the relation "the capital of X" is peeled as in the vocabulary reading)? Never a core colour. */
+function bundledKnows(word) {
+  let w = String(word).replace(/_/g, ' ');
+  if (w.length < 3 || !/^[a-z][a-z .'-]*$/.test(w)) return false;
+  const rel = /^(?:the )?capital(?: city)? of (.+)$/.exec(w) ?? /^(.+?)(?:['’]s)? capital(?: city)?$/.exec(w);
+  if (rel && rel[1] !== 'the') w = rel[1].replace(/^the /, '');
+  const g = bundledPlaces();
+  return (g.has(w) || g.has(`${w}s`)) && !isCoreColour(w);
 }
 
 /** The probe of an open lexicon: `open=knowledge` + catalogs (kinds of the catalog) or `open=colour` (any colour the one colour reader knows, with its spellings and shorthand). */

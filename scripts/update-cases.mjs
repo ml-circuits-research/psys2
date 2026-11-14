@@ -98,8 +98,22 @@ if (sources.has('grid')) {
   const f = join(REPO, 'docs/webchat/coverage-grid.json');
   if (existsSync(f)) {
     const g = JSON.parse(readFileSync(f, 'utf8'));
-    for (const w of g.worlds) for (const c of w.cells) for (const rs of ['ops', 'matrix']) if (c[rs]) {
-      add({ kind: 'grid', text: c.text, tab: w.id, happened: `${c[`${rs}Reply`] ?? ''} [${c[rs]}]`, expected: c.act === 'ask' ? 'an answer that is not a refusal' : ['make', 'remove', 'change', 'place', 'connect', 'group', 'copy', 'load'].includes(c.act) ? 'the state of the world changes' : 'a reply that is not a refusal', class: `grid:${c.act}`, source: `coverage-grid ${w.id} (${rs})`, outcome: c[rs] === 'miss' ? 'wrong' : 'right', world: w.id, reasoner: rs, act: c.act, verb: c.verb ?? null, grid_kind: c.kind });
+    const CHANGING = ['make', 'remove', 'change', 'place', 'connect', 'group', 'copy', 'load'];
+    if (g.version === 2) {
+      // grid v2 (2026-11-14): sentences the generator can stand behind; a hole counts only when the setup was confirmed (else `unchecked`); a reply of another tab world is a cross-world capture
+      for (const w of g.worlds) for (const c of w.cells) for (const rs of ['ops', 'matrix']) if (c[rs]) {
+        const capture = c[`${rs}Capture`];
+        const miss = c[rs] === 'miss', confirmed = c[`${rs}Setup`] !== false;
+        add({ kind: 'grid', text: c.text, tab: w.tab ?? w.id, happened: `${c[`${rs}Reply`] ?? ''} [${c[rs]}${capture ? `; answered by ${capture}` : ''}${confirmed ? '' : '; setup unconfirmed'}]`,
+          expected: capture ? `the world of the open tab (${w.id}) answers or asks; ${capture} does not take the sentence` : c.act === 'ask' ? 'an answer that is not a refusal' : c.judge === 'reply' ? 'a reply that is not a refusal (a question back is fine)' : CHANGING.includes(c.act) ? 'the state of the world changes' : 'a reply that is not a refusal',
+          class: capture ? 'foreign-world:grid-capture' : `grid:${c.act}`, source: `coverage-grid-v2 ${w.id} (${rs})`, outcome: capture ? 'wrong' : miss ? (confirmed ? 'wrong' : 'unchecked') : 'right', world: w.id, reasoner: rs, act: c.act, verb: c.verb ?? null, grid_kind: c.kind, form: c.form });
+      }
+      // grid v1 had generator defects (placeholders, internal kind names, impossible combinations, an empty state): its rows are retired, not deleted
+      for (const r of last.values()) if (r.kind === 'grid' && /^coverage-grid (?!v2)/.test(r.source ?? '') && r.outcome !== 'retired') add({ kind: 'grid', text: r.text, tab: r.tab, happened: r.happened, expected: r.expected, class: r.class, source: r.source, outcome: 'retired', world: r.world, reasoner: r.reasoner, act: r.act, retired: 'grid v1: the generator, not the system, produced this sentence or its state (2026-11-14)' });
+    } else {
+      for (const w of g.worlds) for (const c of w.cells) for (const rs of ['ops', 'matrix']) if (c[rs]) {
+        add({ kind: 'grid', text: c.text, tab: w.id, happened: `${c[`${rs}Reply`] ?? ''} [${c[rs]}]`, expected: c.act === 'ask' ? 'an answer that is not a refusal' : CHANGING.includes(c.act) ? 'the state of the world changes' : 'a reply that is not a refusal', class: `grid:${c.act}`, source: `coverage-grid ${w.id} (${rs})`, outcome: c[rs] === 'miss' ? 'wrong' : 'right', world: w.id, reasoner: rs, act: c.act, verb: c.verb ?? null, grid_kind: c.kind });
+      }
     }
   }
 }
