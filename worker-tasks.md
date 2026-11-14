@@ -4245,3 +4245,7 @@ Accepted 2b4a777c (live check: build lags main; five types write documents; dice
 ## Reviewer 2026-11-15 02:00 — e46fce18 accepted
 
 Reviewer ran `npm run test:smoke` on e46fce18: 90/90 pass, exit 0. Accepted (the optional probe's miss cached). Still due: vendor 0.94+ (0.97 now: calibrate, harnesses, skills), deploy, and the curve with the inverse operators on/off — the generalisation signal the owner is waiting for.
+
+## Reviewer 2026-11-15 02:30 — readers as voices with a confidence (owner, 18:18)
+
+The library will pool several readers' candidate frames and decide with a confidence (its 02:30 block). PSys2's part: (1) measure each reading path alone on the same sets — rules-C, typed step, readCanonical (0.91), the neural dispatcher + normaliser, the MT path for Romanian — coverage and precision, then the union and the agreement-only precision (this tells how much an ensemble can give before it exists); (2) when the library ships the pooling, make the neural models *voices* (proposals with their scores) instead of a separate route, and use the confidence to ask back below the threshold; report the risk–coverage curve. No classifier now.
