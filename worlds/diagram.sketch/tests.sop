@@ -4920,3 +4920,34 @@
     input="Send Sun to the front"
     expect="Brought Sun to the front."
     session=stack
+
+@t.diagram.sketch.frame.direction.a core.test
+    input="Draw a circle called A, a circle called B, a circle called C."
+    expect="Drew "
+    session=frame.direction
+
+@t.diagram.sketch.frame.direction.b core.test
+    input="Connect A to B."
+    expect="Connected"
+    session=frame.direction
+
+@t.diagram.sketch.frame.direction.c core.test
+    input="Make the arrows go left to right."
+    expect="left to right"
+    session=frame.direction
+
+@t.diagram.sketch.frame.label.a core.test
+    input="Draw a circle called A, a circle called B."
+    expect="Drew "
+    session=frame.label
+
+@t.diagram.sketch.frame.label.b core.test
+    input="Connect A to B."
+    expect="Connected"
+    session=frame.label
+
+@t.diagram.sketch.frame.label.c core.test
+    input="Call the arrow yes."
+    expect="now says “yes”"
+    expectState="edges.length=1"
+    session=frame.label

@@ -10,8 +10,8 @@
  * What a typed world can say about a reading: `unreadBy(typed, match)` = the content words of the free-text slots of the reading that the world's types do not accept (a `thing` that is
  * not a kind of the world, a name that is a question or an act of the world, a value outside its closed set, a number that is not one). A slot nobody typed is free: nothing is unread.
  */
-import { FUNCTION_WORDS } from './spell.mjs?v=1f81ba200d';
-import { lemmaCandidates } from '../knowledge/facts.mjs?v=27f2a9b770';
+import { FUNCTION_WORDS } from './spell.mjs?v=b2652b6101';
+import { lemmaCandidates } from '../knowledge/facts.mjs?v=f9a0600c1d';
 
 const FREE = new Set(['words', 'noun', 'word', 'rest']);
 const lower = (t) => String(t.lower ?? t.raw ?? '').toLowerCase();

@@ -15,15 +15,15 @@
  *
  * Output: { id, text, status: 'understood' | 'not_understood', winner, produced, notUnderstood, why, trace }.
  */
-import { perf } from '../formalizer/perf.mjs?v=8b829ee7df';
-import { guard } from '../formalizer/guard.mjs?v=f0c7a6e6b5';
-import { formalize, FormSession } from '../formalizer/index.mjs?v=cbea14a007';
-import { youTarget } from '../formalizer/rules/index.mjs?v=1f81ba200d';
+import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
+import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
+import { formalize, FormSession } from '../formalizer/index.mjs?v=5e6a1d64bc';
+import { youTarget } from '../formalizer/rules/index.mjs?v=b2652b6101';
 import { serialize } from '../soplang/index.mjs?v=c57881f705';
-import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=1f81ba200d';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=cc81fdd894';
-import { checkValues } from './value-check.mjs?v=e4d16812ca';
-import { wildTokens } from '../formalizer/routing.mjs?v=1f81ba200d';
+import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs?v=b2652b6101';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=ff8a32e83d';
+import { checkValues } from './value-check.mjs?v=961581d8fb';
+import { wildTokens } from '../formalizer/routing.mjs?v=b2652b6101';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 /** Default policy; every weight is an option. */

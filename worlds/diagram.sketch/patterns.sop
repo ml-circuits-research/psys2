@@ -153,8 +153,8 @@
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|break|pull|split] [$acts.det]? {thing:words} [apart|up] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=diagram.sketch.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
-    priority=25
-    tabPriority=33
+    priority=28
+    tabPriority=36
     signal=true
     tabClaim=true
     example="Take the circles apart."
@@ -441,3 +441,78 @@
     signal=true
     tabClaim=true
     example="Glasses."
+
+@pat.diagram.sketch.place.layout.go core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|have|let|get] [$acts.det]? {thing:words} [go|run|point|flow|read|move|all_go|all_point]? {rel:lex.diagram.direction} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=diagram.sketch.place arg.mode=layout arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
+    kind=request
+    priority=29
+    tabPriority=37
+    signal=true
+    tabClaim=true
+    example="Make the arrows go left to right."
+    canonical="Make the arrows go left to right."
+
+@pat.diagram.sketch.place.layout.should core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.det]? {thing:words} [should_go|should_run|should_flow|should_point|must_go|need_to_go|needs_to_go|have_to_go|has_to_go|go|run|flow|point|goes|runs|flows|points] {rel:lex.diagram.direction} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=diagram.sketch.place arg.mode=layout arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
+    kind=request
+    priority=28
+    tabPriority=36
+    signal=true
+    tabClaim=true
+    example="The arrows should go from top to bottom."
+    canonical="The arrows should go from top to bottom."
+
+@pat.diagram.sketch.place.layout.flow core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [flow|go|run|read|point|lay_it_out|lay_everything_out|lay_out_everything] {rel:lex.diagram.direction} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=diagram.sketch.place arg.mode=layout arg.thing=\"everything\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
+    kind=request
+    priority=27
+    tabPriority=35
+    signal=true
+    tabClaim=true
+    example="Flow from left to right."
+
+@pat.diagram.sketch.place.layout.dir core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [arrange|rearrange|lay_out|lay|set_out|draw|redraw|organise|organize|order|orient|put|place] [$acts.det]? {thing:words} [out|up]? {rel:lex.diagram.direction} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=diagram.sketch.place arg.mode=layout arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
+    kind=request
+    priority=28
+    tabPriority=36
+    signal=true
+    tabClaim=true
+    example="Lay the flow out left to right."
+
+@pat.diagram.sketch.change.label.edge core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [label|call|name|mark|title|caption|tag] [$acts.det]? {thing:lex.diagram.edge} [as|with]? {value:words(3)} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.attribute=\"label\" arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=29
+    tabPriority=37
+    signal=true
+    tabClaim=true
+    example="Call the arrow yes."
+    canonical="Call the arrow yes."
+
+@pat.diagram.sketch.change.label.edge.ends core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [label|call|name|mark|title|caption|tag] [$acts.det]? {thing:lex.diagram.edge} {link:lex.diagram.edge.from} {ends:words} [as|with]? {value:words(1)} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.attribute=\"label\" arg.thing=\"{thing}\" arg.link=\"{link}\" arg.ends=\"{ends}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=30
+    tabPriority=38
+    signal=true
+    tabClaim=true
+    example="Label the arrow from A to B no."
+    canonical="Label the arrow from A to B no."
+
+@pat.diagram.sketch.change.label.edge.on core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [write|put|type|place] [the_label|a_label|label|the_word|the_text]? {value:words(3)} [on|onto|next_to|beside|along|by] [$acts.det]? {thing:lex.diagram.edge} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.attribute=\"label\" arg.value=\"{value}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=29
+    tabPriority=37
+    signal=true
+    tabClaim=true
+    example="Write yes on the arrow."
+    canonical="Write yes on the arrow."

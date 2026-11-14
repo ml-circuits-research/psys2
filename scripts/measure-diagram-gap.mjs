@@ -3,7 +3,7 @@
 /**
  * Measures the gap of the diagram world (reviewer block 2026-11-15 04:40, item 1) on training/eval/diagram-gap-2026-11-15.jsonl: 60 diagram requests judged by STATE.
  * One fresh session per request (tab = diagram), both reasoners. Measurement only: nothing here changes behaviour.
- *   node scripts/measure-diagram-gap.mjs [--reasoner ops|matrix|both] [--out <results.json>] [--ledger] [--verbose]
+ *   node scripts/measure-diagram-gap.mjs [--reasoner ops|matrix|both] [--out <results.json>] [--ledger] [--only dg19,dg49] [--verbose]
  *
  * Row: { id, group, kind, request, state?: { shapes: [{name, kind, x, y, label?}], edges: [[from, to, label?]] }, check: {...} }
  *   The `state` is put on the canvas with scattered coordinates (so that an arrangement is not already true); no `state` = an empty canvas.
@@ -179,7 +179,8 @@ function causeOf(row, r) {
 }
 
 async function main() {
-  const rows = readFileSync(SET, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
+  const only = arg('only', null)?.split(',');
+  const rows = readFileSync(SET, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((r) => !only || only.includes(r.id));
   const want = arg('reasoner', 'both');
   const modes = want === 'both' ? ['ops', 'matrix'] : [want];
   const build = (() => { try { return execFileSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: REPO }).toString().trim(); } catch { return 'unknown'; } })();
