@@ -69,17 +69,17 @@ function nounPhrase(keys, i) {
   j++;
   const plural = nn.number === 'pl';
   const def = !(det || count) && !!nn.def;   // a determiner before the noun means indefinite whatever the folded form
-  const adjs = [];
+  const adjs = [], adjsRo = [];   // adjsRo: the Romanian lemmas, for the reply (src/lang/ro.mjs replyRo)
   while (keys[j]) {
     budget.tick('grammar-ro.np');
     const aa = best(analyses(keys[j]), 'adj');
     if (!aa) break;
-    adjs.push(aa.entry.en);
+    adjs.push(aa.entry.en); adjsRo.push(aa.entry.ro);
     j++;
     if (keys[j] === 'si' && best(analyses(keys[j + 1] ?? ''), 'adj')) j++;
   }
   const mass = !!nn.entry.flags?.mass;
-  return { np: { bare: !det && !count && !def && !plural && !mass, det, count, def, plural, noun: nn.entry, adjs, mass }, next: j };
+  return { np: { bare: !det && !count && !def && !plural && !mass, det, count, def, plural, noun: nn.entry, adjs, adjsRo, mass }, next: j };
 }
 
 const vowelStart = (w) => /^[aeiou]/i.test(w) && !/^(uni|use|eu)/i.test(w);
@@ -221,7 +221,7 @@ function parseRequest(keys) {
   const first = nounPhrase(keys, 1);
   if (!first) return null;
   const objs = [first.np]; let i = first.next;
-  let colour = null, rel = null, place = null, dir = null;
+  let colour = null, colourRo = null, rel = null, place = null, dir = null;
   while (i < keys.length) {
     budget.tick('grammar-ro.request');
     if (keys[i] === 'si' || keys[i] === 'cu') { const nx = nounPhrase(keys, i + 1); if (nx) { objs.push(nx.np); i = nx.next; continue; } }
@@ -230,20 +230,20 @@ function parseRequest(keys) {
     const r2 = take(keys, i, REL2) ?? take(keys, i, REL);
     if (r2) { const nx = nounPhrase(keys, i + r2.len); if (nx) { rel = r2.en; place = nx.np.bare ? { ...nx.np, def: true } : nx.np; i = nx.next; continue; } }
     const aa = best(analyses(keys[i]), 'adj');
-    if (aa && !colour) { colour = aa.entry.en; i++; continue; }
+    if (aa && !colour) { colour = aa.entry.en; colourRo = aa.entry.ro; i++; continue; }
     return null;
   }
   // "fa X Y": definite objects and a colour as the complement are a change ("make the house red")
   if (v.en === 'make' && objs.every((o) => o.def) && !rel && !dir) {
     const withAdj = objs.filter((o) => o.adjs.length);
     const strip = (o) => ({ ...o, adjs: [], poss: refl });
-    if (colour && !withAdj.length) return { act: 'change.colour', roles: { things: objs.map(strip), colours: [colour] } };
-    if (!colour && withAdj.length === objs.length) return { act: 'change.colour', roles: { things: objs.map(strip), colours: objs.map((o) => o.adjs[0]) } };
-    if (!colour && withAdj.length === 1 && withAdj[0] === objs.at(-1)) return { act: 'change.colour', roles: { things: objs.map(strip), colours: [objs.at(-1).adjs[0]] } };
+    if (colour && !withAdj.length) return { act: 'change.colour', roles: { things: objs.map(strip), colours: [colour], coloursRo: [colourRo] } };
+    if (!colour && withAdj.length === objs.length) return { act: 'change.colour', roles: { things: objs.map(strip), colours: objs.map((o) => o.adjs[0]), coloursRo: objs.map((o) => o.adjsRo[0]) } };
+    if (!colour && withAdj.length === 1 && withAdj[0] === objs.at(-1)) return { act: 'change.colour', roles: { things: objs.map(strip), colours: [objs.at(-1).adjs[0]], coloursRo: [objs.at(-1).adjsRo[0]] } };
   }
   const where = { ...(rel ? { rel, place } : {}), ...(dir ? { dir } : {}) };
   if (refl && v.en === 'put' && !rel && !dir && !colour) return { act: 'wear', roles: { things: objs } };
-  if (v.act === 'make') return { act: 'make', roles: { verb: v.en === 'make' ? 'draw' : v.en, things: objs, ...(colour ? { colour } : {}), ...where } };
+  if (v.act === 'make') return { act: 'make', roles: { verb: v.en === 'make' ? 'draw' : v.en, things: objs, ...(colour ? { colour, colourRo } : {}), ...where } };
   if (v.act === 'move') return { act: 'move', roles: { thing: objs[0], ...where } };
   if (v.act === 'remove') return { act: 'remove', roles: { verb: v.en, things: objs } };
   if (v.act === 'show') return { act: 'show', roles: { thing: objs[0], me: v.enclitic === 'mi', ...where } };
