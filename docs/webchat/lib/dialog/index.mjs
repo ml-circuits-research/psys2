@@ -40,7 +40,8 @@ import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=571142b803';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=e0f0c7dcc3';
-import { proposeByTypes } from './typed-reader.mjs?v=9db95c1829';
+import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
+import { withVariants } from './variants.mjs?v=1071e1ffd3';
 import { repairFromScene } from './scene-referents.mjs?v=2c0588b572';
 import { loadMetaWorlds } from './meta-worlds.mjs?v=29d5f76675';
 import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=069f2d3db0';
@@ -792,7 +793,7 @@ export class DialogSession {
           out.push({ status: r.status, refused: r.status !== 'supported' ? r.status !== 'missing' : !!env.fallback && !(env.diff?.changed?.length || env.diff?.added?.length || env.diff?.removed?.length), changed: !!(env.diff?.changed?.length || env.diff?.added?.length || env.diff?.removed?.length || env.diff?.moved?.length) });
         }
       }
-    } catch { return []; }
+    } catch { return null; }   // no run: no answer (null), not an empty one
     return out;
   }
 
@@ -802,7 +803,7 @@ export class DialogSession {
     const segments = formal.segments.map((seg) => {
       try {
         if (seg.unparsed || !seg.match?.worldId || !seg.wires?.length) return seg;
-        if (!this._outcomes([seg]).some((x) => x.refused)) return seg;   // only a refused reading is read again
+        if (!this._outcomes([seg])?.some((x) => x.refused)) return seg;   // only a refused reading is read again
         const executor = this.engine.set.get(seg.match.worldId)?.ops?.executor;
         if (!executor?.referents) return seg;
         const out = proposeByTypes(seg, { lib, executor, state: this.isession.state[seg.match.worldId] ?? {}, knowledge: this.engine.knowledge, set: this.engine.set, form: this.isession.form, outcomes: (x) => this._outcomes(x) });
@@ -1577,6 +1578,7 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
+    if (!icpt && !pre && !meta && formal.segments.some((x) => x.unparsed)) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
     if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {

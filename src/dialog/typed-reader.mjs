@@ -95,6 +95,6 @@ export function proposeByTypes(seg, ctx) {
     wires = normalized;
   } catch { return why(10); }
   const out = { ...seg, wires, match: { ...m, slots: nu }, typed: { used: true, from: { thing: thingSlot.text, value: valueSlot.text }, to: { thing: thingText, value: valueWords[0] }, id: thing.id } };
-  const st = ctx.outcomes([out]);
+  const st = ctx.outcomes([out]) ?? [];
   return st.length && st.every((x) => x.status === 'supported' && !x.refused && x.changed) ? out : null;   // the world decides
 }
