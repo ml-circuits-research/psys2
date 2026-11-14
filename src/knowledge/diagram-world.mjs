@@ -6,6 +6,7 @@
 import { BUNDLED_DIAGRAMS } from './bundled-diagrams.mjs';
 import { BUNDLED_GEO } from './bundled-geo.mjs';
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const words = (s) => String(s ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 const low = (s) => String(s ?? '').toLowerCase();
 const bare = (v) => String(v ?? '').replace(/^"|"$/g, '');
@@ -231,7 +232,7 @@ const slug = (label) => String(label).normalize('NFKD').replace(/[^\p{L}\p{N}]+/
  */
 export function engineNodes(d, taken = new Set()) {
   const used = new Set([...taken].map(low)), nameOf = new Map(), nodes = [];
-  const unique = (label) => { let b = slug(label) || 'node', n = b, i = 1; while (used.has(low(n)) || /^[crsdetxhk]\d+$/i.test(n)) n = `${b}_${++i}`; used.add(low(n)); return n; };
+  const unique = (label) => { let b = slug(label) || 'node', n = b, i = 1; while (used.has(low(n)) || /^[crsdetxhk]\d+$/i.test(n)) { budget.tick('diagram.name'); n = `${b}_${++i}`; } used.add(low(n)); return n; };
   const sx = CANVAS.w / (d.extent?.w ?? 100), sy = CANVAS.h / (d.extent?.h ?? 100);
   const place = (n) => {
     const u = unitBox(n.label), w = Math.round(Math.max(44, u.w * sx)), h = 44;
