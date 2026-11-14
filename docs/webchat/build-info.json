@@ -1,5 +1,5 @@
 {
-  "version": "0ca7ebc75b",
+  "version": "2256119e97",
   "worlds": [
     "acts",
     "art.draw",
@@ -142,6 +142,8 @@
     "lib/lang/en.local.mjs": "628bea9678579bd7",
     "lib/lang/en.mjs": "28c19845273d7482",
     "lib/lang/np-resolve.mjs": "d20827684db87331",
+    "lib/lang/ro.facts.generated.mjs": "1e8c5ffbf0e886cb",
+    "lib/lang/ro.mjs": "c3256f92c9492f1f",
     "lib/legends/index.mjs": "6a57752a88fbd9a7",
     "lib/loaders/bundle-loader.mjs": "784ddf4b9edff435",
     "lib/loaders/knowledge-cache.mjs": "5afb651adf762afc",
@@ -153,7 +155,7 @@
     "lib/translate/candidates.mjs": "996bbc3438f7b56d",
     "lib/translate/canonical.en-ro.mjs": "e8ac6d4a2fe6d734",
     "lib/translate/en-ro.mjs": "2f8e9fbc5359c385",
-    "lib/translate/grammar-ro.mjs": "0615811738fcb982",
+    "lib/translate/grammar-ro.mjs": "e687328ae11ed5a3",
     "lib/translate/index.mjs": "11efc84e3dfa1ccb",
     "lib/translate/inflect.en.mjs": "c54249cec2789d10",
     "lib/translate/keep-list.mjs": "f898e35ca8738b84",
@@ -784,8 +786,8 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "31b72fca04a401b8"
   },
-  "builtAt": "2026-11-14T10:38:00.367Z",
-  "commit": "210dafe0",
+  "builtAt": "2026-11-14T10:42:46.731Z",
+  "commit": "3e2cfbfa",
   "assets": {
     "app.mjs": "5f0d043632",
     "coverage-grid.json": "dc56813858",
@@ -880,6 +882,8 @@
     "lib/lang/en.local.mjs": "4352e8ad75",
     "lib/lang/en.mjs": "061a6ba9b3",
     "lib/lang/np-resolve.mjs": "e6ea6f1de7",
+    "lib/lang/ro.facts.generated.mjs": "8848c09dca",
+    "lib/lang/ro.mjs": "6b27646cdd",
     "lib/legends/index.mjs": "db730c4e69",
     "lib/loaders/bundle-loader.mjs": "070984ff45",
     "lib/loaders/knowledge-cache.mjs": "6a9ec0d13e",
@@ -891,7 +895,7 @@
     "lib/translate/candidates.mjs": "4b39ead121",
     "lib/translate/canonical.en-ro.mjs": "2b71c7e520",
     "lib/translate/en-ro.mjs": "330bc93cd1",
-    "lib/translate/grammar-ro.mjs": "d4630fb1cf",
+    "lib/translate/grammar-ro.mjs": "8ebc80636b",
     "lib/translate/index.mjs": "f28caa9d77",
     "lib/translate/inflect.en.mjs": "bb4799b9ff",
     "lib/translate/keep-list.mjs": "f74be6f953",

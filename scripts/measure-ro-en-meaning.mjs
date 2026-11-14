@@ -51,13 +51,16 @@ const sw = { rules: createSwitchTranslator({ rules: rulesT, getStrategy: () => '
 const reader = await openReader({ translator: rulesT });
 const vocab = spellVocabulary(reader.engine.set);
 const isEnglish = englishTest((w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!rulesT.knownEnglish(w));
-let grammar = null;
+let grammar = null, libLex = null, libLex0 = null;
 if (paths.some((p) => p.startsWith('grammar'))) grammar = (await import('../src/translate/grammar-ro.mjs')).grammarRoEn;
+if (paths.some((p) => p.startsWith('grammar-lib'))) { const { openLangRo } = await import('../src/lang/ro.mjs'); libLex = await openLangRo(); libLex0 = await openLangRo({ workaround: false }); }
 
 async function englishOf(path, r) {
   if (path === 'rules') return (await rulesT.translate(r.ro, { from: 'ro', to: 'en' })).text;
   if (path === 'model') return mtMap[r.ro] ?? '';
   if (path === 'grammar') return grammar(r.ro).text;
+  if (path === 'grammar-lib') return grammar(r.ro, { lexicon: libLex }).text;   // frames of the prototype, words from w.lang.ro through std.morph (+ the Q51 workaround)
+  if (path === 'grammar-lib0') return grammar(r.ro, { lexicon: libLex0 }).text;  // the same, the library as it is
   if (path === 'grammar+rules') return grammar(r.ro).text || (await rulesT.translate(r.ro, { from: 'ro', to: 'en' })).text;
   if (path === 'grammar+m4') { const g = grammar(r.ro).text; if (g) return g; return englishOf('m4', r); }
   const t = path === 'm4' ? sw.rules : sw.model;

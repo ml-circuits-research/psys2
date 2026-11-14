@@ -47,3 +47,16 @@ By source (kept %): operational rules 71.3, model 42.9, M4+model 69.4; canon rul
 The browser Translator API does not exist in Node: it is not measured here (the owner's log rows carry its English where it ran; `scripts/m4-measure.mjs --logged` replays it).
 
 On the 1,839 rows the grammar path answered, every path on the same rows: grammar 85.9 kept, rules 79.7, M4+model 74.0, model 58.8 (template rows 90.5 / 81.1 / 75.2 / 62.9; hand-written, non-template rows 83.1 / 81.8 / 74.5 / 49.2).
+
+## Update: the published `w.lang.ro` read with the library (2026-11-14, sopworld 0.62, knowledge 2e6ef36)
+
+The paths `grammar-lib` and `grammar-lib0` keep the prototype's frames (`src/translate/grammar-ro.mjs`) but take the WORDS from the catalog's `w.lang.ro` through the library's `std.morph` (`src/lang/ro.mjs`, bundled by `scripts/build-lang-ro.mjs`, lazy): `grammar-lib0` is the library as it is (its suffix index misses every suffix with a diacritic: "desenează", "mută", Q51), `grammar-lib` adds the host-side workaround (generate the cells of the dictionary file's lemmas and compare folded spellings). The library cannot read Romanian into acts yet: `w.lang.ro` has no `g.rule` grammar and std.grammar 0.62 has no read function over it, so the frames stay local.
+
+| path (9,328 rows) | answers | kept when it answers | kept overall | hand Romanian | talk | real | canon |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| grammar, translator's lexicon (632 lemmas) | 19.7 % | 85.9 % | 16.9 | 25.8 | 22.2 | 26.2 | 3.2 |
+| grammar, w.lang.ro + std.morph + Q51 workaround (255 lemmas) | 14.9 % | 81.8 % | 12.2 | 18.8 | 12.0 | 15.6 | 1.3 |
+| grammar, w.lang.ro + std.morph as it is | 10.7 % | 81.4 % | 8.7 | 13.6 | 12.0 | 5.7 | 1.0 |
+| chain: w.lang.ro grammar, then M4 with the model | 100 % | | 56.3 (shipped chain 55.7) | 66.7 | 70.4 | 41.8 | 57.5 |
+
+Results file: `results-2026-11-14b.json`. Same instrument, same rows; no MT path is replaced.
