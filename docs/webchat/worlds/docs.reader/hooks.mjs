@@ -312,6 +312,7 @@ function accepts({ action, mode, roles = {}, state, tab, text }) {
     const g = globalThis[Symbol.for('psys2.textgen')]?.[act === 'compose' ? 'composer' : 'summarizer'];
     if (tab === 'docs.reader') return true;   // in its own tab the reader answers, and declines plainly while the library lacks the generator
     if (act === 'compose' && !g?.supports?.(text)) return false;   // a type whose genre the knowledge lacks is not this world's to claim outside its own tab
+    if (act === 'compose' && /\breport\b/i.test(String(text ?? '')) && !/\b(?:documents? tab|reader)\b/i.test(String(text ?? ''))) return tab === 'talk';   // spec 20: "write a report about X" is the editor's act (it writes a paragraph into the open document); the reader composes a report in its own tab, in Talk, or when asked for in the Documents tab
     return !!g?.available && (!tab || tab === 'talk' || /\b(?:documents? tab|reader)\b/i.test(String(text ?? '')));
   }
   if (!Object.hasOwn(domain, act)) return true;   // the operations that are not acts (who did what, where did it happen, a count of a name, a search step ...) are read by patterns that name the reader's own frames
