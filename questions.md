@@ -390,3 +390,11 @@ Built as TEMPORARY local code because none of it is published yet (sopworld 0.40
 5. **`k.values`**: comparatives `together` and `apart` (adverbs of the scales distance and width; the catalog has closer, nearer, farther, further, narrower, wider); and bundle `k.values.comparative` in the published subset (the seed is `COMPARATIVES_SEED_TEMPORARY` in `src/knowledge/values.mjs`).
 6. **`k.faces`**: the catalog's mouth variants `open`, `wide`, `small`, `neutral`, `smirk` and eyes `closed`, `looking up`, `downcast`, `sleepy` are what the motion uses; keep their names stable.
 7. Not done here, for the reviewer: the world replies still say "Avatar tab" (`worlds/ui.help`, `worlds/ui.shell`, `worlds/ui.avatar` animate asks to open the tab 'robot'); they should say "the avatar icon". The shell world's state still starts with `activeTab: 'robot'`.
+
+## 2026-11-14 summary and composition (worker, reviewer block 14:45)
+Built the host side against the implied interface; `std.summarize` / `std.compose` do not exist in sopworld 0.57, so nothing is generated and the measurement is blocked. Ask: `handover/textgen/ASK.md`; spec: `specs/26-summary-and-composition.md`.
+1. **`std.summarize`**: kinds `turns` and `text`, result `{ text, sentences: [{ text, source }] }`, at most `maxSentences`; names every world used and taught fact.
+2. **`std.compose`**: result with exact chapters/subchapters and a `source` wire on every sentence; seedable; random topic when empty.
+3. **Decision for the reviewer**: the existing extractive "summarize the story" (`docr.summary`) stays until the library ships; "summarise this" with pasted text (`summarize the following: ...`) and `condense the document` go through `std.summarize` and decline plainly while it is absent. Should the whole-document `docr.summary` move to `std.summarize` too once it exists?
+4. **Which `world` to pass** to both functions (the host passes null today; a composite of the session's worlds is proposed).
+5. The engine runs an operation twice per turn in some paths (the test's fake `compose` was called twice for one command: dry run on a copy of the state, then the real run); a real composer should be cheap enough or the op should memoise by seed.

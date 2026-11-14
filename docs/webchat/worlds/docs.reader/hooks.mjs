@@ -2,7 +2,7 @@
 // docs.reader (spec 21): the hooks of the schema world. The acts (make, remove, change, pick, ask, send) are read by the generated grammar and the frames of `acts.reader`; what an act DOES is the reader
 // engine of read.mjs (the formal document, entities, events, search, the answers, reading aloud with the speech effect). The roles of an act are mapped onto the engine's operations here: the thing role
 // is a phrase about the text ("section 2", "the ending", "Hansel's sister", "the witch"), read by `target` into the engine's own arguments. Nothing here names a verb.
-import * as R from './read.mjs?v=b8202c3b86';
+import * as R from './read.mjs?v=a8a79efab0';
 import { ORDINALS, KIN, singular, cap } from './lang.mjs?v=afa9ef7a36';
 import { en } from '../../lib/lang/en.mjs?v=061a6ba9b3';
 const numerals = en.numerals('acts');

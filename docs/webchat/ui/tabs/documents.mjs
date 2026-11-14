@@ -18,6 +18,10 @@ const CSS = `
 .dr-btn { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 10px; font-size: 13px; font-weight: 650; color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); transition: background .15s, box-shadow .15s; }
 .dr-btn:hover, .dr-btn:focus-visible { background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--accent); }
 .dr-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.dr-compose { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; padding: 10px 14px; }
+.dr-compose[hidden] { display: none; }
+.dr-field { display: grid; gap: 2px; font-size: 12px; color: var(--muted); }
+.dr-field input { font: inherit; font-size: 13px; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); width: 9em; }
 .dr-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .dr-drop { border-radius: 14px; padding: 12px 14px; font-size: 13px; color: var(--muted); background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line); transition: box-shadow .15s, background .15s; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .dr-drop.is-over { box-shadow: inset 0 0 0 2px var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); color: var(--ink); }
@@ -172,6 +176,25 @@ function make(holder, host) {
   btn('Read aloud', 'speak', () => send('read it aloud'), 'Say: read it aloud');
   head.append(titles, actions, picker);
 
+  // std.summarize / std.compose (spec 26): the buttons and the form exist only when the library has them; no fallback. Everything goes through the normal command path.
+  const form = el('form', 'dr-card dr-compose'); form.hidden = true;
+  const field = (label, name, type, value, extra = {}) => { const l = el('label', 'dr-field', `<span>${label}</span>`); const i = el('input'); i.name = name; i.type = type; i.value = value; Object.assign(i, extra); l.append(i); form.append(l); return i; };
+  const fTopic = field('Topic (empty = random)', 'topic', 'text', '', { placeholder: 'volcanoes' });
+  const fCh = field('Chapters', 'chapters', 'number', '3', { min: 1, max: 12 }), fSub = field('Subchapters each', 'subchapters', 'number', '2', { min: 0, max: 6 }), fWords = field('About words', 'words', 'number', '600', { min: 50, max: 5000, step: 50 });
+  const go = el('button', 'dr-btn', '<span>Write it</span>'); go.type = 'submit'; form.append(go);
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const topic = fTopic.value.trim().replace(/[.,;:!?]+$/, '');
+    send(topic ? `write an essay about ${topic} with ${fCh.value} chapters of ${fSub.value} subchapters, about ${fWords.value} words` : 'write a composition about anything');
+    form.hidden = true;
+  });
+  const genBtns = [];
+  host.textGen?.().then((tg) => {
+    if (destroyed) return;
+    if (tg?.summarizer?.available) genBtns.push(btn('Summarise', 'sample', () => send('condense the document'), 'Say: condense the document'));
+    if (tg?.composer?.available) genBtns.push(btn('Compose', 'add', () => { form.hidden = !form.hidden; }, 'Write an essay into a new document'));
+  }, () => { /* no adapters: nothing is shown */ });
+
   const drop = el('div', 'dr-drop');
   const msg = el('span', 'dr-msg');
   drop.innerHTML = '<span><b>Drop a file here</b> (.md, .txt, .pdf, .docx) or use Add file. The file stays in your browser.</span>';
@@ -184,7 +207,7 @@ function make(holder, host) {
   const side = el('div', 'dr-side');
   main.append(view, side);
   const empty = el('div', 'dr-card dr-empty'); empty.hidden = true;
-  holder.append(head, drop, docs, hitsBar, main, empty);
+  holder.append(head, form, drop, docs, hitsBar, main, empty);
 
   const note = (t, bad) => { msg.textContent = t; msg.classList.toggle('is-bad', !!bad); };
   async function addFiles(files) {

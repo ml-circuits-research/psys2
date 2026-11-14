@@ -71,7 +71,7 @@ function ensureWires(ctx, d) {
   try { for (const batch of toSop(d)) ctx.emit(batch); } catch (e) { s.wired.pop(); s.wiredError = String(e?.message ?? e); }
 }
 const sentWire = (d, i) => `${d.id}.s${i + 1}`;
-const fromOf = (d, cite) => cite.slice(0, 12).map((i) => sentWire(d, i));
+const fromOf = (d, cite) => cite.slice(0, 12).flatMap((i) => (d.provenance?.[i] ? [sentWire(d, i), d.provenance[i]] : [sentWire(d, i)]));   // a composed document also names the wire each sentence renders (spec 26)
 
 // ---- answer plumbing ---------------------------------------------------------------------------------------------
 const citeText = (cite) => {

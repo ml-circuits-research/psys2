@@ -1594,3 +1594,13 @@
     word=together word=told word=tomorrow word=trees word=und word=upon word=voice word=waited word=walked word=wall
     word=walls word=warm word=water word=way word=weeks word=well word=went word=wept word=whispered word=white
     word=wide word=window word=windows word=witch word=woman word=woodcutter word=word word=worry word=written
+
+@lex.docs.reader.compkinds core.lexicon
+    class=noun
+    doc="What can be composed in the Documents tab (std.compose, spec 26)"
+    word=essay word=composition word=article word=text word=story word=report word=piece
+
+@lex.docs.reader.anything core.lexicon
+    class=noun
+    doc="Topic words that mean 'choose one at random' (spec 26)"
+    word=anything word=something word=whatever word=random word=nothing_in_particular

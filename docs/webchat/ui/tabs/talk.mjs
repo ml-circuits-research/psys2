@@ -16,6 +16,7 @@ const CSS = `
 .tk-card-panel { background: var(--surface); border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line), 0 10px 30px -16px rgba(20, 40, 50, .28); padding: 16px 18px; }
 .tk-sum { padding: 12px 16px; }
 .tk-sum h3 { margin: 0 0 6px; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.tk-sum-para { margin: 0 0 6px; font-size: 14px; line-height: 1.45; color: var(--ink); }
 .tk-sum-empty { margin: 0; font-size: 13.5px; color: var(--muted); font-style: italic; }
 .tk-sum-sec { margin: 8px 0 0; }
 .tk-sum-sec h4 { margin: 0 0 2px; font-size: 12px; font-weight: 700; color: var(--ink); }
@@ -121,6 +122,7 @@ function make(holder, host) {
   function renderSummary(model) {
     sum.replaceChildren(el('h3', null, 'What we are talking about'));
     if (!model?.sections?.length) { sum.append(el('p', 'tk-sum-empty', 'Nothing yet. Ask or tell me something and it is listed here.')); return; }
+    if (model.paragraph) sum.append(el('p', 'tk-sum-para', esc(model.paragraph)));   // std.summarize, above the structured list; absent while the library has none
     for (const sec of model.sections) {
       const box = el('div', 'tk-sum-sec'); box.dataset.section = sec.id;
       box.append(el('h4', null, esc(sec.title)));

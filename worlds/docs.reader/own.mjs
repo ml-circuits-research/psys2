@@ -7,3 +7,4 @@ export {
   search, searchStep, clearSearch, across, relation, isRelated, read, list, open, close, loadSample, more, sectionExtreme,
   ask as askPassage, pick as pickSection,
 } from './read.mjs';
+export { digest, compose } from './textgen.mjs';

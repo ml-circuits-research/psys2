@@ -2207,3 +2207,58 @@
     sample="n=2"
     emit="@{_} core.request action=docr.summary arg.n={n}"
     priority=24
+
+@pat.docs.reader.digest.doc core.pattern
+    match="[can_you|could_you]? [condense|digest|abridge|summarize|summarise] [the|this|that|my] [open]? {d:lex.docs.reader.docs} [in_a_paragraph|in_a_few_sentences]"
+    emit="@{_} core.request action=docr.digest"
+    kind=request
+    priority=11
+    example="Condense the document in a paragraph."
+
+@pat.docs.reader.digest.text core.pattern
+    match="[can_you|could_you]? [summarize|summarise|condense] [the_following|this_text|following_text] {t:rest}"
+    emit="@{_} core.request action=docr.digest arg.t=\"{t}\""
+    kind=request
+    priority=18
+    tabPriority=26
+    example="Summarize the following: Volcanoes form where hot rock reaches the surface. They can erupt for years."
+
+@pat.docs.reader.compose.any core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on|of] {a:lex.docs.reader.anything} [things]?"
+    emit="@{_} core.request action=docr.compose"
+    kind=request
+    priority=20
+    tabPriority=28
+    example="Write a composition about anything."
+
+@pat.docs.reader.compose.topic core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on] {topic:words}"
+    emit="@{_} core.request action=docr.compose arg.topic=\"{topic}\""
+    kind=request
+    priority=17
+    tabPriority=25
+    example="Write an essay about volcanoes."
+
+@pat.docs.reader.compose.shape core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on] {topic:words} [with|of]? {c:number} chapters [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections]"
+    emit="@{_} core.request action=docr.compose arg.topic=\"{topic}\" arg.chapters={c} arg.subchapters={s}"
+    kind=request
+    priority=21
+    tabPriority=29
+    example="Write an essay about volcanoes with 3 chapters of 2 subchapters."
+
+@pat.docs.reader.compose.shape.size core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on] {topic:words} [with|of]? {c:number} chapters [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections] [about|of|around|roughly]? {w:number} words"
+    emit="@{_} core.request action=docr.compose arg.topic=\"{topic}\" arg.chapters={c} arg.subchapters={s} arg.words={w}"
+    kind=request
+    priority=22
+    tabPriority=30
+    example="Write an essay about volcanoes with 3 chapters of 2 subchapters, about 600 words."
+
+@pat.docs.reader.compose.size core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on] {topic:words} [of|with|about|around|roughly] {w:number} words"
+    emit="@{_} core.request action=docr.compose arg.topic=\"{topic}\" arg.words={w}"
+    kind=request
+    priority=19
+    tabPriority=27
+    example="Write an essay about volcanoes of 400 words."

@@ -6,4 +6,5 @@ export {
   describe, summary, characters, mainCharacter, places, keywords, outline, stats, who, did, happened, where, whereDid, whenDid, whoV, didV, said, saying, part, sentence, count,
   search, searchStep, clearSearch, across, relation, isRelated, read, list, open, close, loadSample, more, sectionExtreme,
   ask as askPassage, pick as pickSection,
-} from './read.mjs?v=b8202c3b86';
+} from './read.mjs?v=a8a79efab0';
+export { digest, compose } from './textgen.mjs?v=42642a8aa6';

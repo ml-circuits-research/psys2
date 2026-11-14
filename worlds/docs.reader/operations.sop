@@ -13,6 +13,18 @@
     action=docr.summary
     doc="An operation of this world that is not an act (own.mjs: summary)."
 
+@op.docs.reader.digest core.operation
+    impl=digest
+    semantics=action
+    action=docr.digest
+    doc="An operation of this world that is not an act (own.mjs: digest)."
+
+@op.docs.reader.compose core.operation
+    impl=compose
+    semantics=action
+    action=docr.compose
+    doc="An operation of this world that is not an act (own.mjs: compose)."
+
 @op.docs.reader.characters core.operation
     impl=characters
     semantics=action
