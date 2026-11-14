@@ -38,6 +38,15 @@
  */
 
 import { en } from '../lang/en.mjs';
+import { completeOn } from './completeness.mjs';
+
+/**
+ * The library's decision for several worlds that read one sentence (sopworld 0.104 `arbitrate` decides with std.decide kind `world`: coverage, then the open tab, then priority). The host
+ * installs the library's `choose` once it is loaded (`setWorldChooser`); without it, or with PSYS2_COMPLETE=off, the tiers below decide alone (spec 20 and ADR-004).
+ */
+let chooser = null;
+export function setWorldChooser(fn) { chooser = typeof fn === 'function' ? fn : null; }
+
 export function emptyContext() {
   return { activeTab: null, tabWorld: null, modalWorld: null, gameWorld: null, recentWorlds: [], lastWorld: null };
 }
@@ -260,12 +269,30 @@ export function createRouter({ id = 'policy', model = null } = {}) {
       // used world; from tier 5 (a world of another tab) it is dropped when the sentence has no literal word beside the coordinate ("Play B3" stays a candidate), so it never becomes a move of a game the user is not playing
       if (ctx.tabWorld) for (let k = list.length - 1; k >= 0; k--) if (list[k].pattern.tabFollow && list[k].tier === 5 && list[k].literals === 0) list.splice(k, 1);
       list.sort((a, b) => a.tier - b.tier || a.sub - b.sub || inTier(wscore)(a, b));
+      // COVERAGE FIRST (spec 20, "Arbitration by coverage"): a world whose best reading leaves content words unread loses to a world that reads more of the sentence; ties keep the order of
+      // the tiers (the open tab, the named world, recent worlds, priority), because the library's tab and priority criteria are fed by that order. Only when a reading has unread words.
+      let coverage = null;
+      if (chooser && completeOn() && list.length > 1 && list.some((m) => m.unread?.length)) {
+        const first = new Map();
+        list.forEach((m, i) => { if (!first.has(m.pattern.worldId)) first.set(m.pattern.worldId, { m, i }); });
+        if (first.size > 1) {
+          const cands = [...first].map(([name, { m, i }]) => ({ name, coverage: 100 - (m.unread?.length ?? 0), active: m.tier <= 3 ? 1 : 0, priority: -i }));
+          try {
+            const c = chooser(null, 'world', cands, { seed: null });
+            const order = c.order.map((x) => x.name);
+            const moved = order[0] !== list[0].pattern.worldId;
+            list.sort((a, b) => order.indexOf(a.pattern.worldId) - order.indexOf(b.pattern.worldId));   // stable: inside a world the tier order stays
+            coverage = { by: 'coverage', moved, ranked: c.ranked.map((r) => ({ world: cands[r.index].name, place: r.place, on: r.on, why: r.why })) };
+          } catch { coverage = null; }
+        }
+      }
       const win = list[0] ?? null;
       const runner = list.find((m) => m !== win && m.pattern.worldId !== win?.pattern.worldId) ?? list[1] ?? null;
       const decision = win ? {
         router: id, tier: win.tier, tierName: TIER_NAMES[win.tier], reason: reasons.get(win),
         contested: list.some((m) => m !== win && m.pattern.worldId !== win.pattern.worldId),
         winner: brief(win), runnerUp: runner ? { ...brief(runner), tier: runner.tier, reason: reasons.get(runner) } : null,
+        ...(coverage ? { arbitration: coverage } : {}),
         context: { activeTab: ctx.activeTab, tabWorld: ctx.tabWorld, gameWorld: ctx.gameWorld, recentWorlds: ctx.recentWorlds },
       } : null;
       return { matches: list, decision };

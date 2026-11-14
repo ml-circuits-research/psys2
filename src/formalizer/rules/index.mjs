@@ -19,6 +19,7 @@ import { en } from '../../lang/en.mjs';   // English: shared argument, verb elli
 import { parse, serialize } from '../../soplang/index.mjs';
 import { budget } from '../../dialog/budget.mjs';
 import { readingVariants, dropStyleIn } from './variants.mjs';
+import { annotateUnread } from '../completeness.mjs';
 
 export { FormSession } from './session.mjs';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
@@ -464,9 +465,9 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       if (isQuestion && p.kind === 'statement') continue;
       if (p.tabOnly && p.worldId !== context?.tabWorld) continue;   // the router drops it anyway; a match of it must not stop the later views ("can you" dropped) from being tried
       if (last && !c.usesFiller) continue;
-      let m = prefilterPasses(c, bag) ? matchTokens(c, view, env) : null;
-      if (!m && noPct && prefilterPasses(c, bagNoPct)) m = matchTokens(c, noPct, env);
-      if (m) matches.push({ pattern: p, order, ...m });
+      let m = prefilterPasses(c, bag) ? matchTokens(c, view, env) : null, mview = view;
+      if (!m && noPct && prefilterPasses(c, bagNoPct)) { m = matchTokens(c, noPct, env); mview = noPct; }
+      if (m) matches.push({ pattern: p, order, view: mview, ...m });
     }
   }
   // "Your" addresses the avatar (COMPUTE-BUDGET C): a free-text target that starts with your / yours / ur / yourself ("make your eyes blue") is the avatar's, never a drawing
@@ -559,6 +560,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
   if (kept.length !== matches.length) matches.splice(0, matches.length, ...kept);
+  annotateUnread(matches, set);
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));
   const score = (id) => worlds.find((w) => w.id === id)?.score ?? 0;
   for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority; }
@@ -667,7 +669,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         }));
         seg.wires = [...entityWires, ...renumbered];
         seg.unparsed = false;
-        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots) };
+        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots), unread: m.unread ?? [] };
         const bestSig = signature(m);
         for (const o of matches) {
           if (o === m || o.pattern.worldId === m.pattern.worldId) continue;

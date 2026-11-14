@@ -1,0 +1,60 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+/**
+ * COMPLETENESS (spec 16 section 12, Q15 items 2 and 3): a reading is FINAL only when every content word of the clause is read by something: a literal of the pattern, a typed
+ * slot, or a free-text role. The words a pattern's `...` skipped, and the content words of a free-text capture that are words of the readers themselves (question words, the verbs of
+ * other acts), are UNREAD. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
+ */
+import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs';
+
+const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
+/** Content words (not function words, not fillers) of a token list. */
+export const contentWordsOf = (tokens) => tokens.filter(word).map((t) => t.lower ?? String(t.raw).toLowerCase()).filter((w) => !FUNCTION_WORDS.has(w));
+
+/**
+ * The switch (PSYS2_COMPLETE): `off` (no consequence: the earlier behaviour), `hold` (the voices run on an incomplete reading, a destructive one is not executed, arbitration is by coverage),
+ * `ask` (as `hold`, and an incomplete reading no voice completed is not executed: a clarifying ask). Default: DEFAULT_MODE.
+ */
+export const DEFAULT_MODE = 'off';
+export const completeMode = () => { const v = globalThis.process?.env?.PSYS2_COMPLETE; return v === 'off' || v === 'hold' || v === 'ask' ? v : DEFAULT_MODE; };
+export const completeOn = () => completeMode() !== 'off';
+/** A segment the rules read, but not completely (content words unread, no voice completed it). */
+export const isIncomplete = (seg) => completeOn() && !!seg && !seg.unparsed && !seg.variant && !!seg.match?.unread?.length;
+
+/** Words that open a question: inside a free-text capture they mean the capture swallowed another clause ("what sound does a cow make what 7"). */
+const STRUCTURAL = new Set(['what', 'which', 'who', 'whom', 'whose', 'where', 'when', 'why', 'how', 'whats', "what's"]);
+
+/**
+ * Unread content words of every candidate reading of one clause (sets `m.unread`; returns nothing). A word is unread by a reading when
+ *  - a `...` skip of its pattern passed over it;
+ *  - it is a question word inside a free-text capture (`words`: the capture swallowed another clause: "what sound does a cow make what 7");
+ *  - it is inside a free-text capture of this reading while a reading of ANOTHER world reads the very same word with its own literal or typed slot ("move the house upsides" in the
+ *    music world: the drawing world has the house). This is the evidence of competition, not a word list: free text that nobody else reads stays free text.
+ * `rest` captures are dictation (free by design) and never count.
+ */
+const CATALOG_WORLDS = new Set(['art.draw', 'talk']);   // the two worlds that take any thing of the knowledge catalog (the `catalog=yes` cards of meta.worlds)
+export function annotateUnread(matches, set = null) {
+  const foreign = set && globalThis.process?.env?.PSYS2_COMPLETE_FOREIGN === '1';
+  const lowerOf = (t) => t.lower ?? String(t.raw).toLowerCase();
+  const content = (t) => word(t) && !FUNCTION_WORDS.has(lowerOf(t));
+  const info = matches.map((m) => {
+    const view = m.view ?? [], hidden = new Set();   // token indexes this reading does not read by structure (skips and free text)
+    for (const [a, b] of m.skipped ?? []) for (let i = a; i < b; i++) hidden.add(i);
+    const loose = [];
+    for (const sl of Object.values(m.slots ?? {})) if ((sl.class === 'words' || sl.class === 'rest') && sl.tokens) for (let i = sl.tokens[0]; i < sl.tokens[1]; i++) { hidden.add(i); if (sl.class === 'words') loose.push(i); }
+    const read = new Set(); view.forEach((t, i) => { if (!hidden.has(i) && content(t)) read.add(lowerOf(t)); });
+    return { m, view, loose, read };
+  });
+  for (const x of info) {
+    const out = [];
+    for (const [a, b] of x.m.skipped ?? []) for (const t of x.view.slice(a, b)) if (content(t)) out.push(lowerOf(t));
+    for (const i of x.loose) {
+      const t = x.view[i]; if (!word(t)) continue;
+      const w = lowerOf(t);
+      if (STRUCTURAL.has(w)) out.push(w);
+      else if (foreign && content(t) && !CATALOG_WORLDS.has(x.m.pattern.worldId) && (() => { try { const v = worldVocabulary(set, x.m.pattern.worldId); return v.nouns?.has(w) && !v.has(w); } catch { return false; } })()) out.push(w);
+      else if (content(t) && info.some((o) => o.m.pattern.worldId !== x.m.pattern.worldId && o.read.has(w))) out.push(w);
+    }
+    x.m.unread = out;
+  }
+  globalThis.__dbg?.(matches);
+}
