@@ -8,7 +8,7 @@
 //     more than one step), restored in place.
 //   - DIFFERENCE: the effect returns what changed (added / removed / changed things, from the world's `referents` signatures) as `diff.effects` of the act.
 // Nothing else is the library's here: the words of the replies, the referents and the state stay the host's (specs/21 section 10 lists what is still bridge).
-import { World } from '../../lib/vendor/sopworld/sopworld.mjs?v=900699a034';
+import { World } from '../../lib/vendor/sopworld/sopworld.mjs?v=1e7afc0b40';
 
 export const EFFECT_ACTS = ['make', 'remove', 'change', 'place', 'connect', 'group', 'copy', 'send'];
 const KIND = 'host';

@@ -119,7 +119,7 @@ export function resolvePhrase(items, text, opts) {
   const kind = words.map((x) => lexicon[x]).find((x) => x?.cat === 'N')?.lemma ?? null;
   const ids = (xs) => xs.map((x) => idOf.get(x));
   if (r.ask === true && r.which?.length === 1) return { ids: ids(r.which), tier: 'user', kind };   // "table 1 or table 1" is one thing
-  if (r.ask === true && r.which?.length) {   // a choice or a part of a set: the library asks, with the things it could be
+  if (r.ask === true && r.which?.length && r.failure !== 'ambiguous') {   // a choice or a part of a set: the library asks, with the things it could be (0.57 marks the plain "which table? there are 3" with ask too: the number and plural rules below read that one)
     const part = /^which (\d+) of/.exec(r.why ?? '');
     return { ask: ids(r.which), how: part ? 'part' : 'choice', ...(part ? { n: Number(part[1]) } : {}), kind };
   }

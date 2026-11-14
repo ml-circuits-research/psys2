@@ -101,6 +101,7 @@ test('goals are read from roles and from the sentence; a place with no relation 
   assert.deepEqual(goalOf('make', { kind: 'house from parts' }, {}), { act: 'make', roles: { kind: 'house', material: 'parts' } });
   assert.equal(goalOf('make', { kind: 'cat' }, { thing: 'cat', place: 'the sun', rel: 'next to' }), null, 'a relation the plan has no word for: the board reads the place itself');
   assert.deepEqual(goalFromText('please set a table for four'), { act: 'make', roles: { kind: 'set a table', number: 4 } });
+  assert.equal(goalOf('make', { kind: 'house' }, { thing: 'house', place: 'a door', rel: 'with' }), null, 'a kind the board draws, with a part: the board reads it (only a goal kind takes "with" as a second thing)');
   assert.equal(goalOf('make', { kind: 'it' }, {}), null);
 });
 
