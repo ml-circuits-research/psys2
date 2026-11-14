@@ -32,6 +32,10 @@ const turnRunning = () => [...active.values()].some((c) => !c.dry);
 let dispatcherEnc = null, normalizerHost = null, dispatcherInfo = null;
 let worldLoader = null, loaders = null, rulesMod = null, wordMod = null, tabWorlds = {}, universe = null;   // LAZY LOADING: the world index, the library modules the loader needs, tab id -> world id, the worlds this page may use (tests)
 const loadedIds = new Set();
+const DEFAULT_DICE_WORLD = 'art.draw';
+let sampler = null;   // the sampler of the session (sopworld std.sample; novelty is kept in it)
+const recentWorlds = [];   // worlds the last replies came from, newest first
+const noteWorlds = (reply) => { for (const x of (reply?.segments ?? [])) { const id = x.match?.worldId ?? x.world; if (id) { const i = recentWorlds.indexOf(id); if (i >= 0) recentWorlds.splice(i, 1); recentWorlds.unshift(id); } } recentWorlds.length = Math.min(recentWorlds.length, 6); };
 const allowed = (id) => !universe || id === 'core' || universe.has(id);
 const absModule = (path, id, kind) => new URL(path, ROOT).href + (ver[`worlds/${id}/${kind}.mjs`] ? `?v=${ver[`worlds/${id}/${kind}.mjs`]}` : '');
 const snaps = new Map();             // undo id -> engine snapshot (a ring: the last SNAP_KEEP)
@@ -294,6 +298,7 @@ const handlers = {
         } else reply = await read();   // the other worlds could not be fetched: the first reading is read again as it was (nothing changed)
       }
       annotateWires(reply);
+      noteWorlds(reply);
       return { reply, state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
     } finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
@@ -340,9 +345,41 @@ const handlers = {
     sendOrt();
     return null;
   },
-  async candidates() {
-    const s = await import(vurl('lib/dialog/surprise.mjs'));
-    return s.candidateExamples(engine);
+  /**
+   * RANDOM as a world (specs/25): the dice, the examples and the action buttons come from sopworld `sample` (std.sample) over the worlds that are loaded and the things of
+   * the session. mode 'one' (the dice): one command for the open tab's world, else a world used lately, else any loaded schema world; 'few': 3-4 commands from the
+   * session's worlds; 'actions': the acts that fit the selected (or newest) thing of the open tab's world. Returns { items: [{ text, world, tab, act, thing }] }.
+   */
+  async sample(m) {
+    const [lib, sm] = await Promise.all([import(vurl('lib/vendor/sopworld/sopworld.mjs')), import(vurl('lib/dialog/sampler.mjs'))]);
+    sampler ??= sm.engineSampler(lib, engine, () => session);
+    if (!sampler.available) return { items: [], available: false };
+    const tabWorld = (m.tab && (tabWorlds[m.tab] ?? worldLoader.ids().find((id) => worldLoader.info(id).tab?.id === m.tab))) || null;
+    const tabOfWorld = (id) => worldLoader.info(id)?.tab?.id ?? ({ 'docs.editor': 'editor' })[id] ?? null;
+    if (tabWorld && !loadedIds.has(tabWorld)) await ensureWorlds([tabWorld], 'dice');
+    const loaded = () => sampler.worlds();
+    const orderOf = () => [...new Set([tabWorld, ...recentWorlds, ...loaded()].filter((id) => id && loaded().includes(id)))];
+    let order = orderOf();
+    if (!order.length && m.mode !== 'actions' && worldLoader.info(DEFAULT_DICE_WORLD)) { await ensureWorlds([DEFAULT_DICE_WORLD], 'dice'); order = orderOf(); }   // nothing sampleable is loaded yet (lazy loading): the drawing board is the smallest general world
+    const item = (r) => ({ text: r.text, world: r.world, tab: tabOfWorld(r.world), act: r.frame?.action ?? null, thing: r.frame?.args?.thing ?? null });
+    const count = Math.min(Math.max(Number(m.count) || 4, 1), 6);
+    if (m.mode === 'actions') {
+      if (!tabWorld || !loaded().includes(tabWorld)) return { items: [], available: true };
+      const things = sampler.thingsOf?.(tabWorld) ?? [];
+      const target = m.thing ?? (things.find((t) => t.salient) ?? things.at(-1))?.id;
+      return { items: target ? sampler.actions({ worldId: tabWorld, thing: target, seed: m.seed, count }).map(item) : [], available: true, thing: target ?? null };
+    }
+    if (m.mode === 'few') {
+      const out = [], texts = new Set();
+      for (const round of [0, 1]) for (const id of order) {
+        if (out.length >= count) break;
+        for (const r of sampler.sample('one', { worldId: id, seed: m.seed != null ? m.seed + out.length + round * 31 : undefined })) if (!texts.has(r.text)) { texts.add(r.text); out.push(item(r)); }
+        if (out.length >= count) break;
+      }
+      return { items: out.slice(0, count), available: true };
+    }
+    for (const id of order) { const r = sampler.dice({ worldId: id, seed: m.seed }); if (r) return { items: [item(r)], available: true }; }
+    return { items: [], available: true };
   },
   async warm(m) {
     const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };

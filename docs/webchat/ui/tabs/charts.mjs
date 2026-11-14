@@ -12,7 +12,6 @@ const VENDOR = new URL('../../vendor/charts/chart.mjs', import.meta.url);
 const OPS_ASSET = 'worlds/data.charts/chart.mjs';
 const TYPE_PILLS = [['bar', 'Bar', 'make it a bar chart'], ['line', 'Line', 'make it a line chart'], ['pie', 'Pie', 'make it a pie chart'], ['doughnut', 'Doughnut', 'make it a doughnut chart'],
   ['radar', 'Radar', 'make it a radar chart'], ['polarArea', 'Polar', 'make it a polar area chart'], ['scatter', 'Scatter', 'make it a scatter plot']];
-const EXAMPLES = ['make a chart: apples 5, pears 3, plums 8', 'chart the prices of the toys', 'compare the legs of the sea animals', 'Tom has 5 apples. Ana has 3 apples. Make a bar chart of what everyone has'];
 const ICON = {
   image: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-8 9"/></svg>',
   table: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>',
@@ -75,9 +74,7 @@ function make(holder, host) {
     if (c) empty.append(el('h3', '', `“${esc(c.title) || 'This chart'}” is empty`), el('p', '', 'Tell me some numbers, or ask for them from the conversation:'));
     else empty.append(el('h3', '', 'No chart yet'), el('p', '', 'Type or say what to chart. I build it from your words and from what I know, and I keep the wires the numbers came from.'));
     const chips = el('div', 'cc-chips');
-    for (const t of c ? ['add apples 5', 'add pears 3 and plums 8'] : EXAMPLES) {
-      const b = el('button', 'cc-chip', `<q>${esc(t)}</q>`); b.type = 'button'; b.addEventListener('click', () => send(t)); chips.append(b);
-    }
+    Promise.resolve(host.sample?.('few', { tab: 'charts', count: 4 })).then((list) => { for (const t of list ?? []) { const b = el('button', 'cc-chip', `<q>${esc(t)}</q>`); b.type = 'button'; b.addEventListener('click', () => send(t)); chips.append(b); } }).catch(() => {});   // from the sampler (spec 25)
     empty.append(chips);
   }
 

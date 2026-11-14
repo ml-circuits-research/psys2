@@ -8,7 +8,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { cardHtml, boardSvg, layoutBoard, drawingSvg, BOARD, esc } from '../worlds/talk/cards.mjs';
-import tab, { CHIPS, mood } from '../docs/webchat/ui/tabs/talk.mjs';
+import tab, { mood } from '../docs/webchat/ui/tabs/talk.mjs';
 
 const FILES = {
   'vocab.json': JSON.stringify({ comet: ['k.objects/shards/sky', 'k.words/shards/co'], spider: ['k.words/shards/sp'], elephant: ['k.commonsense/shards/core'], mouse: ['k.commonsense/shards/core'], lighthouse: ['k.objects/shards/buildings'], tail: ['k.words/shards/co'] }),
@@ -143,17 +143,6 @@ test('honest scope: a plain refusal with two nearest suggestions, no free chat',
   const r2 = await s.send('What can we talk about?');
   assert.match(r2.text, /^I can talk about/);
   assert.ok(r2.effects.find((e) => e.name === 'chat.suggest').args.items.length >= 3);
-});
-
-test('every suggestion chip of the tab is read by the world', async () => {
-  engine.setKnowledge(null);
-  for (const chip of CHIPS) {
-    const s = session();
-    const r = await s.send(chip);
-    assert.notEqual(r.statuses.at(-1), 'unparsed', chip);
-    assert.ok(!/^I cannot talk about that here/.test(r.text), chip);
-    assert.ok(r.answers.length, chip);
-  }
 });
 
 test('the tab plugin declares its world, its effects and no network use', () => {

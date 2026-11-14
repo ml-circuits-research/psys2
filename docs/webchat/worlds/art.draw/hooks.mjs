@@ -3,11 +3,11 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from './engine.mjs?v=396ad0ca0c';
+import * as D from './engine.mjs?v=72624b3636';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
-import { splitThings } from '../acts/acts.mjs?v=5519325163';
+import { splitThings } from '../acts/acts.mjs?v=cb1424f8ca';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=0882bbcd68';
-import * as P from './plan.mjs?v=3757103707';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
+import * as P from './plan.mjs?v=7f128c7d59';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const TAIL = new Set(['there', 'here', 'now', 'added', 'drawn', 'too', 'also', 'please', 'pls', 'plz', 'thx', 'thanks', 'are', 'is', 'again', 'exactly', 'go']);   // words a role slot took that belong to the frame ("how many trees there are")
@@ -237,6 +237,7 @@ export const hooks = {
       if (r.mode === 'describe') return D.describe(ctx, {});
       if (r.mode === 'options') return /colou?r|shade|paint|crayon/.test(String(r.thing ?? '')) ? D.colors(ctx, {}) : D.help(ctx, {});
       if (r.mode === 'what' && r.thing && /^colou?r$/.test(String(r.attribute ?? ''))) return D.colorOfThing(ctx, { t: tOf(r) });
+      if (r.mode === 'what' && r.thing && /^(?:size|fill)$/.test(String(r.attribute ?? ''))) return D.attrOfThing(ctx, { t: tOf(r), attr: String(r.attribute) });
       if (r.mode === 'what' && r.place && /^(?:next to|near|beside|by|around|close to)$/.test(rel(r))) return D.whatsNear(ctx, { t: r.place });
       if (r.mode === 'what' && r.place) return D.spatial(ctx, { text: r.text });
       return undefined;   // why, last: the generic executor

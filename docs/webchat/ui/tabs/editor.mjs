@@ -10,7 +10,6 @@ import { createToolbar } from './editor/toolbar.mjs';
 import { createView, loadTipTap } from './editor/view.mjs';
 
 const ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
-const EXAMPLES = ['add a heading Shopping', 'add a list with milk, eggs and bread', 'make the word milk bold', 'add a table with 3 columns: animal, legs, food', 'fill the table with sea animals', 'add a task buy bread', 'start dictation'];
 const DOC_ICON = '<svg viewBox="0 0 24 32" class="pe-doc-icon" aria-hidden="true"><path fill="#4285f4" d="M2 0h14l8 8v22a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2Z"/><path fill="#a1c2fa" d="M16 0l8 8h-6a2 2 0 0 1-2-2V0Z"/><path fill="#fff" d="M5 15h14v2H5v-2Zm0 4h14v2H5v-2Zm0 4h9v2H5v-2Z"/></svg>';
 const plural = (n, w) => `${n} ${n === 1 ? w : `${w}s`}`;
 
@@ -37,8 +36,10 @@ export default {
     const outlineList = h('ul', {});
     const outline = h('nav', { class: 'pe-outline', 'aria-label': 'Outline' }, h('h4', {}, 'Outline'), outlineList);
     const editorEl = h('div', { class: 'pe-editor' });
-    const chips = EXAMPLES.map((t) => { const b = h('button', { class: 'pe-chip', type: 'button' }, t); b.addEventListener('click', () => host.send(t)); return b; });
-    const empty = h('div', { class: 'pe-empty', hidden: true }, h('p', {}, 'The page is empty. Tell the assistant what to write, or try one of these:'), h('div', { class: 'pe-chips' }, chips));
+    const chips = [];   // filled from the sampler (spec 25)
+    const chipBox = h('div', { class: 'pe-chips' }, chips);
+    Promise.resolve(host.sample?.('few', { tab: 'editor', count: 4 })).then((list) => { for (const t of list ?? []) { const b = h('button', { class: 'pe-chip', type: 'button' }, t); b.addEventListener('click', () => host.send(t)); chipBox.append(b); } }).catch(() => {});
+    const empty = h('div', { class: 'pe-empty', hidden: true }, h('p', {}, 'The page is empty. Tell the assistant what to write, or try one of these:'), chipBox);
     const paper = h('article', { class: 'pe-paper', 'aria-label': 'Document page (read-only; edit by talking to the assistant)' }, editorEl, empty);
     const scroll = h('div', { class: 'pe-scroll' }, paper);
     const stats = h('span', {}); const sel = h('span', { class: 'pe-sel-info' }); const prog = h('span', { class: 'pe-progress', hidden: true }); const undo = h('span', {});

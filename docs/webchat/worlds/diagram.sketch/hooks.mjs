@@ -66,6 +66,7 @@ domain.redo = (ctx) => E.redo(ctx, {});
 export const hooks = {
   domain,
   accepts,
+  referents: (ctx) => E.referents(ctx),   // the shapes a person can point at (the dice and the pronouns read them)
   /** The engine's own reader for a sentence of the open tab that no form read: a string reply, or undefined. */
   unread: (ctx, text) => {
     // a question and a command are the two families (act ask, any other act); the engine's reader decides the rest from the sentence

@@ -1,0 +1,200 @@
+{"world":"art.draw","i":0,"text":"Add a ground.","act":"make","kind":"ground","attr":null,"judged":"ok","reply":"I added grass to the ground."}
+{"world":"art.draw","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (added grass)."}
+{"world":"art.draw","i":2,"text":"Add a sky.","act":"make","kind":"sky","attr":null,"judged":"ok","reply":"I drew a light blue sky behind everything."}
+{"world":"art.draw","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (added the sky)."}
+{"world":"art.draw","i":4,"text":"Add a ground.","act":"make","kind":"ground","attr":null,"judged":"ok","reply":"I added grass to the ground."}
+{"world":"art.draw","i":5,"text":"Add a sky.","act":"make","kind":"sky","attr":null,"judged":"ok","reply":"I drew a light blue sky behind everything."}
+{"world":"art.draw","i":6,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (added the sky)."}
+{"world":"art.draw","i":7,"text":"Add a sunflower.","act":"make","kind":"sunflower","attr":null,"judged":"ok","reply":"I drew a pink flower."}
+{"world":"art.draw","i":8,"text":"Copy the flower.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I made a copy of the flower."}
+{"world":"art.draw","i":9,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (made a copy)."}
+{"world":"art.draw","i":10,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (drew a pink flower)."}
+{"world":"art.draw","i":11,"text":"Add a child.","act":"make","kind":"child","attr":null,"judged":"ok","reply":"I drew a blue person."}
+{"world":"art.draw","i":12,"text":"Set the person size to big.","act":"change","kind":null,"attr":"size","judged":"ok","reply":"The person is big now."}
+{"world":"art.draw","i":13,"text":"Remove the person.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I took away the big blue person."}
+{"world":"art.draw","i":14,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (removed something)."}
+{"world":"art.draw","i":15,"text":"Copy the person.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I made a copy of the person."}
+{"world":"art.draw","i":16,"text":"Add an ellipse.","act":"make","kind":"ellipse","attr":null,"judged":"ok","reply":"I drew a purple oval."}
+{"world":"art.draw","i":17,"text":"Set the oval colour to white.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"The oval is white now."}
+{"world":"art.draw","i":18,"text":"What is the size of the oval?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"The oval is a normal size."}
+{"world":"art.draw","i":19,"text":"Remove the oval.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I took away the white oval."}
+{"world":"art.draw","i":20,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (removed something)."}
+{"world":"art.draw","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (colored it white)."}
+{"world":"art.draw","i":22,"text":"Add a sky.","act":"make","kind":"sky","attr":null,"judged":"ok","reply":"I drew a light blue sky behind everything."}
+{"world":"art.draw","i":23,"text":"What is the colour of the oval?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"The oval is purple."}
+{"world":"art.draw","i":24,"text":"Set the oval size to small.","act":"change","kind":null,"attr":"size","judged":"ok","reply":"The oval is small now."}
+{"world":"data.charts","i":0,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":2,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":4,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":5,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":6,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":8,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":9,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":10,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":12,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":13,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 2\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":14,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":15,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":16,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":17,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":18,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":19,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 2\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":20,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":22,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"data.charts","i":23,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":24,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
+{"world":"diagram.sketch","i":0,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":1,"text":"Set the circle colour to yellow.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"the circle is now yellow."}
+{"world":"diagram.sketch","i":2,"text":"Copy the circle.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":3,"text":"What is the size of c1?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c1 is medium (62×62 px)."}
+{"world":"diagram.sketch","i":4,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":5,"text":"What is the size of c1?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c1 is medium (62×62 px)."}
+{"world":"diagram.sketch","i":6,"text":"What is the size of the white circle?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c3 is medium (62×62 px)."}
+{"world":"diagram.sketch","i":7,"text":"Copy c1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":8,"text":"What is the size of c1?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c1 is medium (62×62 px)."}
+{"world":"diagram.sketch","i":9,"text":"Remove c2.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"Deleted circle 2."}
+{"world":"diagram.sketch","i":10,"text":"Copy the white circle.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":11,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":12,"text":"Remove c1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"Deleted circle 1."}
+{"world":"diagram.sketch","i":13,"text":"Remove the yellow circle.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"Deleted circle 4."}
+{"world":"diagram.sketch","i":14,"text":"What is the size of c6?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c6 is medium (62×62 px)."}
+{"world":"diagram.sketch","i":15,"text":"Copy c3.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":16,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":17,"text":"Set c8 colour to grey.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"circle 8 is now gray."}
+{"world":"diagram.sketch","i":18,"text":"Copy the gray circle.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":19,"text":"Remove c3.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"Deleted circle 3."}
+{"world":"diagram.sketch","i":20,"text":"What is the size of c9?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c9 is medium (62×62 px)."}
+{"world":"diagram.sketch","i":21,"text":"What is the size of c9?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c9 is medium (62×62 px)."}
+{"world":"diagram.sketch","i":22,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":23,"text":"Copy c8.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
+{"world":"diagram.sketch","i":24,"text":"Set c11 colour to blue.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"circle 11 is now blue."}
+{"world":"docs.editor","i":0,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
+{"world":"docs.editor","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
+{"world":"docs.editor","i":2,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"OK, I added a table with 3 columns: Column 1, Column 2 and Column 3."}
+{"world":"docs.editor","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the table you added is gone."}
+{"world":"docs.editor","i":4,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
+{"world":"docs.editor","i":5,"text":"Copy list 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"OK, I copied the list to the clipboard."}
+{"world":"docs.editor","i":6,"text":"Set list 1 order to bottom.","act":"change","kind":null,"attr":"order","judged":"ok","reply":"The list is already at the end."}
+{"world":"docs.editor","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
+{"world":"docs.editor","i":8,"text":"Add a rule.","act":"make","kind":"rule","attr":null,"judged":"ok","reply":"OK, I inserted a horizontal line."}
+{"world":"docs.editor","i":9,"text":"Remove the rule.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I deleted the line."}
+{"world":"docs.editor","i":10,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I put back the rule you deleted."}
+{"world":"docs.editor","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the rule you added is gone."}
+{"world":"docs.editor","i":12,"text":"Add a list.","act":"make","kind":"list","attr":null,"judged":"ok","reply":"OK, I added an empty list. You can change its style or tell me what goes on it."}
+{"world":"docs.editor","i":13,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
+{"world":"docs.editor","i":14,"text":"Add a break.","act":"make","kind":"break","attr":null,"judged":"ok","reply":"OK, I added a page break."}
+{"world":"docs.editor","i":15,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the rule you added is gone."}
+{"world":"docs.editor","i":16,"text":"Add a break.","act":"make","kind":"break","attr":null,"judged":"ok","reply":"OK, I added a page break."}
+{"world":"docs.editor","i":17,"text":"Add a list.","act":"make","kind":"list","attr":null,"judged":"ok","reply":"OK, I added an empty list. You can change its style or tell me what goes on it."}
+{"world":"docs.editor","i":18,"text":"What is the order of list 2?","act":"ask","kind":null,"attr":"order","judged":"fail","reply":"There is no second list; the document has one."}
+{"world":"docs.editor","i":19,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
+{"world":"docs.editor","i":20,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the rule you added is gone."}
+{"world":"docs.editor","i":21,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
+{"world":"docs.editor","i":22,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
+{"world":"docs.editor","i":23,"text":"Add a rule.","act":"make","kind":"rule","attr":null,"judged":"ok","reply":"OK, I inserted a horizontal line."}
+{"world":"docs.editor","i":24,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"OK, I added a table with 3 columns: Column 1, Column 2 and Column 3."}
+{"world":"geo.map","i":0,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":2,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":4,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":5,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":6,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":8,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":9,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":10,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":12,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":13,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":14,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":15,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":17,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":18,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":19,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":20,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":22,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"geo.map","i":23,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
+{"world":"geo.map","i":24,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
+{"world":"media.music","i":0,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":1,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major."}
+{"world":"media.music","i":2,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"London Bridge Is Falling Down\" on the piano at 110 beats per minute. It is in C major."}
+{"world":"media.music","i":3,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":4,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Mary Had a Little Lamb\" on the piano at 110 beats per minute. It is in C major."}
+{"world":"media.music","i":5,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":6,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":7,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Brahms' Lullaby\" on the piano at 80 beats per minute. It is in D major."}
+{"world":"media.music","i":8,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Happy Birthday to You\" on the piano at 100 beats per minute. It is in G major."}
+{"world":"media.music","i":9,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major."}
+{"world":"media.music","i":10,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":11,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":12,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Frère Jacques\" on the piano at 120 beats per minute. It is in C major."}
+{"world":"media.music","i":13,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Old MacDonald Had a Farm\" on the piano at 110 beats per minute. It is in C major."}
+{"world":"media.music","i":14,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Ode to Joy\" on the piano at 108 beats per minute. It is in C major."}
+{"world":"media.music","i":15,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":16,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":17,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":18,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":19,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":20,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Row, Row, Row Your Boat\" on the piano at 100 beats per minute. It is in C major."}
+{"world":"media.music","i":21,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Twinkle, Twinkle, Little Star\" on the piano at 100 beats per minute. It is in C major."}
+{"world":"media.music","i":22,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":23,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
+{"world":"media.music","i":24,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Frère Jacques\" on the piano at 120 beats per minute. It is in C major."}
+{"world":"plan.seating","i":0,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"I added table 1."}
+{"world":"plan.seating","i":1,"text":"Set table 1 shape to round.","act":"change","kind":null,"attr":"shape","judged":"ok","reply":"Table 1 is already shape round; nothing changed."}
+{"world":"plan.seating","i":2,"text":"Add a seat.","act":"make","kind":"seat","attr":null,"judged":"ok","reply":"I added the seat at table 1. (I put it at table 1, the only table with room.)"}
+{"world":"plan.seating","i":3,"text":"Add a seat.","act":"make","kind":"seat","attr":null,"judged":"ok","reply":"I added the seat at table 1. (I put it at table 1, the only table with room.)"}
+{"world":"plan.seating","i":4,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had added the seat at table 1."}
+{"world":"plan.seating","i":5,"text":"Add a seat.","act":"make","kind":"seat","attr":null,"judged":"ok","reply":"I added the seat at table 1. (I put it at table 1, the only table with room.)"}
+{"world":"plan.seating","i":6,"text":"Copy table 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied table 1: the copy is table 2."}
+{"world":"plan.seating","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had copied table 1: the copy is table 2."}
+{"world":"plan.seating","i":8,"text":"Add a guest.","act":"make","kind":"guest","attr":null,"judged":"ok","reply":"I added guest 1 at table 1. (I put it at table 1, the only table with room.)"}
+{"world":"plan.seating","i":9,"text":"Set guest 1 colour to orange.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"I made guest 1 orange (it was white)."}
+{"world":"plan.seating","i":10,"text":"What is the colour of guest 1?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"The colour of guest 1 is orange."}
+{"world":"plan.seating","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had made guest 1 orange."}
+{"world":"plan.seating","i":12,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had added guest 1 at table 1."}
+{"world":"plan.seating","i":13,"text":"Remove table 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed table 1."}
+{"world":"plan.seating","i":14,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had removed table 1."}
+{"world":"plan.seating","i":15,"text":"What is the shape of table 1?","act":"ask","kind":null,"attr":"shape","judged":"ok","reply":"The shape of table 1 is round."}
+{"world":"plan.seating","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had added the seat at table 1."}
+{"world":"plan.seating","i":17,"text":"Remove table 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed table 1."}
+{"world":"plan.seating","i":18,"text":"Copy the seat.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied the seat: the copy is seat."}
+{"world":"plan.seating","i":19,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"I added table 2."}
+{"world":"plan.seating","i":20,"text":"Set table 2 seats to 2.","act":"change","kind":null,"attr":"seats","judged":"ok","reply":"I set the seats of table 2 to 2 (it was 4)."}
+{"world":"plan.seating","i":21,"text":"Add a guest.","act":"make","kind":"guest","attr":null,"judged":"ok","reply":"I added guest 1 at table 2. (I put it at table 2, the only table with room.)"}
+{"world":"plan.seating","i":22,"text":"What is the colour of guest 1?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"The colour of guest 1 is white."}
+{"world":"plan.seating","i":23,"text":"Copy table 2.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied table 2: the copy is table 3."}
+{"world":"plan.seating","i":24,"text":"Remove guest 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed guest 1."}
+{"world":"plan.timeline","i":0,"text":"Add a timeline.","act":"make","kind":"timeline","attr":null,"judged":"ok","reply":"I added timeline 1."}
+{"world":"plan.timeline","i":1,"text":"Set timeline 1 unit to month.","act":"change","kind":null,"attr":"unit","judged":"ok","reply":"I set the unit of timeline 1 to month (it was year)."}
+{"world":"plan.timeline","i":2,"text":"Copy timeline 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied timeline 1: the copy is timeline 2."}
+{"world":"plan.timeline","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had copied timeline 1: the copy is timeline 2."}
+{"world":"plan.timeline","i":4,"text":"Remove timeline 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed timeline 1."}
+{"world":"plan.timeline","i":5,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had removed timeline 1."}
+{"world":"plan.timeline","i":6,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had set the unit of timeline 1 to month."}
+{"world":"plan.timeline","i":7,"text":"Add an event.","act":"make","kind":"event","attr":null,"judged":"ok","reply":"I added event 1 at timeline 1. (I put it at timeline 1, the only timeline with room.)"}
+{"world":"plan.timeline","i":8,"text":"Copy timeline 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied timeline 1: the copy is timeline 2."}
+{"world":"plan.timeline","i":9,"text":"Add an event.","act":"make","kind":"event","attr":null,"judged":"ok","reply":"I added event 2."}
+{"world":"plan.timeline","i":10,"text":"Copy timeline 2.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied timeline 2: the copy is timeline 3."}
+{"world":"plan.timeline","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had copied timeline 2: the copy is timeline 3."}
+{"world":"plan.timeline","i":12,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had added event 2."}
+{"world":"plan.timeline","i":13,"text":"Add a timeline.","act":"make","kind":"timeline","attr":null,"judged":"ok","reply":"I added timeline 3."}
+{"world":"plan.timeline","i":14,"text":"Copy event 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied event 1: the copy is event 2."}
+{"world":"plan.timeline","i":15,"text":"Copy timeline 3.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied timeline 3: the copy is timeline 4."}
+{"world":"plan.timeline","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had copied timeline 3: the copy is timeline 4."}
+{"world":"plan.timeline","i":17,"text":"Remove timeline 3.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed timeline 3."}
+{"world":"plan.timeline","i":18,"text":"Remove event 2.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed event 2."}
+{"world":"plan.timeline","i":19,"text":"Set timeline 2 unit to day.","act":"change","kind":null,"attr":"unit","judged":"ok","reply":"I set the unit of timeline 2 to day (it was year)."}
+{"world":"plan.timeline","i":20,"text":"Remove event 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed event 1."}
+{"world":"plan.timeline","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had removed event 1."}
+{"world":"plan.timeline","i":22,"text":"Copy event 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied event 1: the copy is event 3."}
+{"world":"plan.timeline","i":23,"text":"Remove event 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed event 1."}
+{"world":"plan.timeline","i":24,"text":"What is the unit of timeline 2?","act":"ask","kind":null,"attr":"unit","judged":"ok","reply":"The unit of timeline 2 is day."}

@@ -24,12 +24,12 @@ import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=75b22014a6';
 import { FLAGS_DATA } from './forms.data.mjs?v=54c931cc9e';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
-import { createEffects, EFFECT_ACTS } from './effects.mjs?v=7717f4c736';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
+import { createEffects, EFFECT_ACTS } from './effects.mjs?v=6e66f89116';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
 import { en } from '../../lib/lang/en.mjs?v=061a6ba9b3';
-import { resolvePhrase } from './np-lib.mjs?v=c76914b9ec';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { resolvePhrase } from './np-lib.mjs?v=ee98a42367';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
 import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=e6ea6f1de7';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
@@ -102,7 +102,7 @@ export function parseSchema(wires) {
   if (vw) schema.view = { aspects: vals(vw, 'aspects'), words: vals(vw, 'word') };
   for (const w of wires.filter((x) => x.type === 'acts.kind')) {
     const name = w.id.slice(sw.id.length + 1);
-    schema.kinds[name] = { name, plural: val(w, 'plural') ?? `${name}s`, numbered: yes(val(w, 'numbered')), named: yes(val(w, 'named')), max: val(w, 'max') ? Number(val(w, 'max')) : null, in: val(w, 'in') ?? null, capacity: val(w, 'capacity') ?? null, acts: vals(w, 'acts'), any: val(w, 'any') === 'knowledge', words: vals(w, 'word'), ...(vals(w, 'catalog').length ? { catalog: vals(w, 'catalog') } : {}), ...(vals(w, 'aspect').length ? { aspects: vals(w, 'aspect') } : {}) };   // aspect=: what a thing of this kind has (spec 23)
+    schema.kinds[name] = { name, plural: val(w, 'plural') ?? `${name}s`, numbered: yes(val(w, 'numbered')), named: yes(val(w, 'named')), max: val(w, 'max') ? Number(val(w, 'max')) : null, in: val(w, 'in') ?? null, capacity: val(w, 'capacity') ?? null, acts: vals(w, 'acts'), any: val(w, 'any') === 'knowledge', words: vals(w, 'word'), ...(vals(w, 'catalog').length ? { catalog: vals(w, 'catalog') } : {}), ...(vals(w, 'aspect').length ? { aspects: vals(w, 'aspect') } : {}), ...(vals(w, 'dice.not').length ? { diceNot: vals(w, 'dice.not') } : {}) };   // aspect=: what a thing of this kind has (spec 23); dice.not=<act>: acts the dice (std.sample) must not frame for this kind (it needs words, a second thing, data: spec 25)
   }
   for (const w of wires.filter((x) => x.type === 'acts.attr')) {
     const name = w.id.slice(sw.id.length + 1);

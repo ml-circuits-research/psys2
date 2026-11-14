@@ -60,16 +60,19 @@
     word=pieces
 
 @music.melody acts.kind
+    dice.not=make
     plural=melodies
     word=composition
     word=compositions
 
 @music.note acts.kind
+    dice.not=make
     plural=notes
     word=pitch
     word=pitches
 
 @music.chord acts.kind
+    dice.not=make
     plural=chords
     word=triad
     word=triads

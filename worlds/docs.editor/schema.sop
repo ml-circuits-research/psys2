@@ -70,12 +70,14 @@
     word=subheadings
 
 @doc.freetext acts.kind
+    dice.not=make
     plural=freetexts
     word=text
     word=words
     word=something
 
 @doc.paragraph acts.kind
+    dice.not=make
     plural=paragraphs
     numbered=yes
     word=para
@@ -84,6 +86,7 @@
     word=note
 
 @doc.heading acts.kind
+    dice.not=make
     plural=headings
     numbered=yes
     word=header
@@ -93,6 +96,7 @@
     word=hed
 
 @doc.title acts.kind
+    dice.not=make
     plural=titles
 
 @doc.list acts.kind
@@ -109,6 +113,7 @@
     word=check_list
 
 @doc.item acts.kind
+    dice.not=make
     plural=items
     word=bullet
     word=bullets
@@ -125,6 +130,7 @@
     word=todo
 
 @doc.quote acts.kind
+    dice.not=make
     plural=quotes
     numbered=yes
     word=blockquote
@@ -148,9 +154,11 @@
     word=cols
 
 @doc.sentence acts.kind
+    dice.not=make
     plural=sentences
 
 @doc.word acts.kind
+    dice.not=make
     plural=words
 
 @doc.rule acts.kind

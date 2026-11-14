@@ -2194,6 +2194,17 @@ export const colorOfThing = guard((ctx, args, s) => {
   return ok(withNote(c ? `${cap1(sayObj(o))} is ${c}.` : `${cap1(sayObj(o))} has many colors.`, r));
 });
 
+/** "What is the size of the car?" / "What is the fill of the car?": the asked attribute of one thing, in the words the drawing says it with. */
+export const attrOfThing = guard((ctx, args, s) => {
+  const t = target(s, args.t ?? 'it');
+  if (t.error) return t.error;
+  const { r } = t;
+  const o = r.objs[0];
+  if (!o) return no('I can only say that about the things you drew.');
+  if (args.attr === 'fill') return ok(withNote(`${cap1(sayObj(o))} is ${({ solid: 'solid', crayon: 'filled in with crayon', empty: 'hollow', outline: 'just an outline', scribbled: 'scribbled' })[o.fill] ?? 'filled in'}.`, r));
+  return ok(withNote(`${cap1(sayObj(o))} is ${sizeWord(o) || 'a normal size'}.`, r));
+});
+
 export const help = guard(() => ok('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon, and shapes like a circle, a square, a triangle, a star, a heart, a line or an arrow. Say "draw a red house", "put a big yellow sun in the top right corner" or "make it night".'));
 export const colors = guard(() => ok(`I know ${andList(basicColourNames())} and ${colourNames().length - basicColourNames().length} more colours, like ${andList(['turquoise', 'gold', 'silver', 'coral'].filter(colourName))}, and you can say light or dark, like "dark blue" or "light green".`));
 

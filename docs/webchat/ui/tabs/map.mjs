@@ -29,7 +29,7 @@ function make(holder, host) {
   const chip = h('div', { class: 'geo-chip', hidden: true, 'aria-hidden': 'true' });
   const statusEl = h('div', { class: 'geo-status', 'aria-hidden': 'true' });
   const sr = h('p', { class: 'geo-sr', 'aria-live': 'polite' });
-  const hint = h('div', { class: 'geo-hint' }, 'Try: “show me Paris” · “zoom in” · “how far is Paris from Rome?” · “highlight Romania and its neighbours”');
+  const hint = h('div', { class: 'geo-hint' }, 'Press the dice for a command to try.');
   const offBtn = h('button', { type: 'button', 'aria-pressed': 'true', title: 'Offline country map', onclick: () => host.send('switch to the offline map') }, 'Offline');
   const osmBtn = h('button', { type: 'button', 'aria-pressed': 'false', title: 'Street map (OpenStreetMap tiles, needs internet)', onclick: () => host.send('switch to the street map') }, 'Street map');
   const layers = h('div', { class: 'geo-layers', role: 'group', 'aria-label': 'Base map' }, offBtn, osmBtn);

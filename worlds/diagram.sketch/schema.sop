@@ -58,6 +58,7 @@
     word=dot
 
 @dg.arrow acts.kind
+    dice.not=make
     plural=arrows
     word=line
     word=lines
@@ -68,6 +69,7 @@
     word=edge
 
 @dg.text acts.kind
+    dice.not=make
     plural=texts
     word=label
     word=labels

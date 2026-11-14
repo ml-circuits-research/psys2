@@ -285,8 +285,7 @@ async function surpriseFor(name, viewport, o, clicks = 50) {
   const { pg } = c;
   const tag = name;
   try {
-    const pool = JSON.parse(await pg.evaluate(async () => JSON.stringify(await (await fetch('surprise-pool.json')).json())));
-    const byText = new Map(pool.map((p) => [p.text, p]));
+    // RANDOM (spec 25): no pool file; every press is a std.sample command for the open tab (or a world used lately), judged by the supported status of its reply
     const btn = await pg.evaluate(() => { const b = document.querySelector('.p2-form .p2-die'); return b && { label: b.getAttribute('aria-label'), title: b.title, disabled: b.disabled }; });
     check(`${tag}: a die button next to the input, tooltip = aria-label "Try an example"`, btn?.label === 'Try an example' && btn.title === btn.label && !btn.disabled, JSON.stringify(btn));
     await pg.waitForFunction(() => document.querySelector('.p2-die'), { timeout: 5000 });
@@ -300,11 +299,8 @@ async function surpriseFor(name, viewport, o, clicks = 50) {
       const rec = await c.lastPhrase();
       const text = rec?.text ?? '';
       if (!done || !rec) { bad.push(`${i}: no answer to "${text}"`); continue; }
-      const ex = byText.get(text);
-      if (!ex) bad.push(`${i}: "${text}" is not in the pool`);
+      const ex = null;
       if (picked.at(-1) === text) repeats++;
-      if (ex && ex.world === prevWorld) sameWorldTwice++;
-      prevWorld = ex?.world ?? null;
       picked.push(text);
       if (!(rec.source === 'chip' && rec.example === true)) bad.push(`${i}: "${text}" not logged as an example (${rec.source}, ${rec.example})`);
       if (rec.unparsed || !rec.segments.length || rec.segments.some((s) => s.status !== 'supported')) bad.push(`${i}: "${text}" -> ${rec.segments.map((s) => s.status).join(',') || 'no segments'}`);
@@ -313,8 +309,7 @@ async function surpriseFor(name, viewport, o, clicks = 50) {
     }
     check(`${tag}: ${clicks} clicks, every answer supported and logged as an example`, bad.length === 0, bad.slice(0, 5).join(' | '));
     check(`${tag}: no immediate repeats`, repeats === 0);
-    check(`${tag}: consecutive clicks come from different worlds (${sameWorldTwice} same-world pairs)`, sameWorldTwice === 0);
-    check(`${tag}: ${new Set(picked.map((t) => byText.get(t)?.world)).size} different worlds in ${clicks} clicks`, new Set(picked.map((t) => byText.get(t)?.world)).size >= 10);
+    check(`${tag}: ${new Set(picked).size} different commands in ${clicks} clicks`, new Set(picked).size >= Math.floor(clicks / 3));
     check(`${tag}: the tab switches when expected`, tabMiss.length === 0, tabMiss.slice(0, 5).join(' | '));
     const phrases = await pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]'));
     check(`${tag}: examples stay out of the human phrase count`, phrases.every((r) => r.source === 'chip'));
@@ -324,7 +319,7 @@ async function surpriseFor(name, viewport, o, clicks = 50) {
       await pg.type('input.p2-text', phrase, { delay: 0 }); await pg.keyboard.press('Enter');
       const ok = await pg.waitForFunction((n) => !window.psys2.busy && document.querySelectorAll('.p2-msg.is-user').length >= n + 2 && !document.querySelector('.p2-msg.is-typing'), { timeout: 20000, polling: 20 }, n).then(() => true).catch(() => false);
       const last = await c.lastPhrase();
-      check(`${tag}: "${phrase}" sends an example`, ok && last?.example === true && byText.has(last.text), `${last?.text}`);
+      check(`${tag}: "${phrase}" sends an example`, ok && last?.example === true, `${last?.text}`);
     }
     check(`${tag}: 0 console errors`, c.errors.length === 0 && c.consoleErrors.length === 0, [...c.errors, ...c.consoleErrors].slice(0, 3).join(' | '));
     await shot(c, o, `surprise-${name}`);
