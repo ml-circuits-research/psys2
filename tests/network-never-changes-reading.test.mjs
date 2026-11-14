@@ -47,7 +47,7 @@ for (const mode of ['rejected', 'hanging']) {
       assert.deepEqual(out[i].segments, baseline.out[i].segments, `"${out[i].said}" read differently with fetch ${mode}`);
       if (!OFFLINE.test(out[i].text)) assert.equal(out[i].text, baseline.out[i].text, `"${out[i].said}" answered differently with fetch ${mode}`);
     }
-    // (the map keeps no table of places: with no catalog it knows none, and says so the same way in every mode; the readings above are identical to the no-catalog ones)
+    assert.ok(out[0].segments.every((x) => !x.unparsed) && /Paris/.test(out[0].text), out[0].text);   // the map reads Paris from the bundled k.geo subset, generated from the catalog
     assert.ok(calls.length > 0, 'the catalog was asked (the test exercises the lookup path)');
     const st = engine.knowledgeStats ?? {};
     assert.ok((st.timeouts ?? 0) + (st.failures ?? 0) > 0, 'the failed lookups are counted');

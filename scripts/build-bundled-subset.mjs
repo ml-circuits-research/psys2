@@ -88,5 +88,7 @@ console.log(`bundled-values.mjs ${valuesOut.length} bytes, bundled-objects.mjs $
   writeFileSync(path.join(ROOT, 'src/knowledge/bundled-animals.mjs'), `${banner('k.animals: the animals, their classes and their facts, by the library tool tools/build-bundle.mjs')}export const BUNDLED_ANIMALS = ${JSON.stringify(bundle)};\n`);
 }
 
+{ const r = spawnSync('node', [path.join(ROOT, 'scripts/build-bundled-geo.mjs'), dir], { stdio: 'inherit' }); if (r.status) process.exit(r.status); }   // the k.geo subset the map reads with no network
+
 if (!process.argv.includes('--no-acts')) { const r = spawnSync('node', [path.join(ROOT, 'scripts/build-acts-lexicon.mjs'), dir], { stdio: 'inherit' }); if (r.status) process.exit(r.status); }
 if (!process.argv.includes('--no-face')) { const r = spawnSync('node', [path.join(ROOT, 'scripts/build-default-face.mjs'), dir], { stdio: 'inherit' }); if (r.status) process.exit(r.status); }
