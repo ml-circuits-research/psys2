@@ -1,0 +1,3147 @@
+{
+ "date": "2026-11-14",
+ "method": "see the header of scripts/measure-voices.mjs",
+ "english": {
+  "meta": {
+   "v-rules": {
+    "note": "voice: rules-C alone (typed step, alternations, near words, slot types all off)",
+    "rows": 3144,
+    "wall_ms": 28605
+   },
+   "v-typed": {
+    "note": "voice: rules-C + the typed step (proposeByTypes) only",
+    "rows": 3144,
+    "wall_ms": 30449
+   },
+   "v-formops": {
+    "note": "voice: rules-C + the typed form operators (PSYS2_FORMOPS=on) only",
+    "rows": 3144,
+    "wall_ms": 30851
+   },
+   "v-alt": {
+    "note": "voice: rules-C + the alternation rules (w.lang.en.alternation of the catalog) only",
+    "rows": 3144,
+    "wall_ms": 28868
+   },
+   "v-canon": {
+    "note": "voice: rules-C + readCanonical (0.91 canonicalise: fillers + the catalog alternation rules; PSYS2_CANON=on) only",
+    "rows": 3144,
+    "wall_ms": 28908
+   },
+   "v-enc-n1": {
+    "note": "voice: the neural dispatcher (segmentation + world prior) + the T5 normaliser fallback; the rules read",
+    "rows": 3144,
+    "wall_ms": 81416
+   },
+   "v-neural": {
+    "note": "voice: the neural reader first (NX) + dispatcher + normaliser, symbolic steps off",
+    "rows": 3144,
+    "wall_ms": 75935
+   }
+  },
+  "sets": {
+   "paraphrases-rt": {
+    "n": 85,
+    "paths": {
+     "v-rules": {
+      "n": 85,
+      "answers": 67,
+      "right": 14,
+      "wrong": 53,
+      "coverage": 78.8,
+      "precision": 20.9,
+      "right_of_n": 16.5
+     },
+     "v-typed": {
+      "n": 85,
+      "answers": 67,
+      "right": 14,
+      "wrong": 53,
+      "coverage": 78.8,
+      "precision": 20.9,
+      "right_of_n": 16.5,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-formops": {
+      "n": 85,
+      "answers": 70,
+      "right": 16,
+      "wrong": 54,
+      "coverage": 82.4,
+      "precision": 22.9,
+      "right_of_n": 18.8,
+      "gain_over_baseline": 2,
+      "lost_vs_baseline": 0
+     },
+     "v-alt": {
+      "n": 85,
+      "answers": 67,
+      "right": 14,
+      "wrong": 53,
+      "coverage": 78.8,
+      "precision": 20.9,
+      "right_of_n": 16.5,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-canon": {
+      "n": 85,
+      "answers": 67,
+      "right": 14,
+      "wrong": 53,
+      "coverage": 78.8,
+      "precision": 20.9,
+      "right_of_n": 16.5,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-enc-n1": {
+      "n": 85,
+      "answers": 74,
+      "right": 20,
+      "wrong": 54,
+      "coverage": 87.1,
+      "precision": 27,
+      "right_of_n": 23.5,
+      "gain_over_baseline": 6,
+      "lost_vs_baseline": 0
+     },
+     "v-neural": {
+      "n": 85,
+      "answers": 75,
+      "right": 21,
+      "wrong": 54,
+      "coverage": 88.2,
+      "precision": 28,
+      "right_of_n": 24.7,
+      "gain_over_baseline": 7,
+      "lost_vs_baseline": 0
+     }
+    },
+    "union": {
+     "right": 22,
+     "right_of_n": 25.9,
+     "answered_by_any": 77
+    },
+    "agreement_all": {
+     "n": 85,
+     "answers": 73,
+     "right": 17,
+     "wrong": 56,
+     "coverage": 85.9,
+     "precision": 23.3,
+     "right_of_n": 20
+    },
+    "pairs": {
+     "v-rules x v-typed": {
+      "answers": 59,
+      "coverage": 69.4,
+      "precision": 18.6
+     },
+     "v-rules x v-formops": {
+      "answers": 63,
+      "coverage": 74.1,
+      "precision": 20.6
+     },
+     "v-rules x v-alt": {
+      "answers": 62,
+      "coverage": 72.9,
+      "precision": 21
+     },
+     "v-rules x v-canon": {
+      "answers": 61,
+      "coverage": 71.8,
+      "precision": 18
+     },
+     "v-rules x v-enc-n1": {
+      "answers": 59,
+      "coverage": 69.4,
+      "precision": 22
+     },
+     "v-rules x v-neural": {
+      "answers": 59,
+      "coverage": 69.4,
+      "precision": 22
+     },
+     "v-typed x v-formops": {
+      "answers": 59,
+      "coverage": 69.4,
+      "precision": 18.6
+     },
+     "v-typed x v-alt": {
+      "answers": 59,
+      "coverage": 69.4,
+      "precision": 18.6
+     },
+     "v-typed x v-canon": {
+      "answers": 62,
+      "coverage": 72.9,
+      "precision": 21
+     },
+     "v-typed x v-enc-n1": {
+      "answers": 55,
+      "coverage": 64.7,
+      "precision": 20
+     },
+     "v-typed x v-neural": {
+      "answers": 53,
+      "coverage": 62.4,
+      "precision": 20.8
+     },
+     "v-formops x v-alt": {
+      "answers": 62,
+      "coverage": 72.9,
+      "precision": 21
+     },
+     "v-formops x v-canon": {
+      "answers": 60,
+      "coverage": 70.6,
+      "precision": 18.3
+     },
+     "v-formops x v-enc-n1": {
+      "answers": 59,
+      "coverage": 69.4,
+      "precision": 22
+     },
+     "v-formops x v-neural": {
+      "answers": 57,
+      "coverage": 67.1,
+      "precision": 22.8
+     },
+     "v-alt x v-canon": {
+      "answers": 59,
+      "coverage": 69.4,
+      "precision": 18.6
+     },
+     "v-alt x v-enc-n1": {
+      "answers": 57,
+      "coverage": 67.1,
+      "precision": 22.8
+     },
+     "v-alt x v-neural": {
+      "answers": 55,
+      "coverage": 64.7,
+      "precision": 23.6
+     },
+     "v-canon x v-enc-n1": {
+      "answers": 56,
+      "coverage": 65.9,
+      "precision": 19.6
+     },
+     "v-canon x v-neural": {
+      "answers": 54,
+      "coverage": 63.5,
+      "precision": 20.4
+     },
+     "v-enc-n1 x v-neural": {
+      "answers": 71,
+      "coverage": 83.5,
+      "precision": 26.8
+     }
+    },
+    "families": {
+     "symbolic": {
+      "answers": 70,
+      "right": 16,
+      "coverage": 82.4,
+      "precision": 22.9
+     },
+     "neural": {
+      "answers": 75,
+      "right": 20,
+      "coverage": 88.2,
+      "precision": 26.7
+     }
+    },
+    "agreement_families": {
+     "answers": 59,
+     "right": 13,
+     "coverage": 69.4,
+     "precision": 22
+    },
+    "union_families": {
+     "right": 21,
+     "right_of_n": 24.7
+    }
+   },
+   "paraphrases-rt-changed": {
+    "n": 61,
+    "paths": {
+     "v-rules": {
+      "n": 61,
+      "answers": 45,
+      "right": 3,
+      "wrong": 42,
+      "coverage": 73.8,
+      "precision": 6.7,
+      "right_of_n": 4.9
+     },
+     "v-typed": {
+      "n": 61,
+      "answers": 45,
+      "right": 3,
+      "wrong": 42,
+      "coverage": 73.8,
+      "precision": 6.7,
+      "right_of_n": 4.9,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-formops": {
+      "n": 61,
+      "answers": 45,
+      "right": 3,
+      "wrong": 42,
+      "coverage": 73.8,
+      "precision": 6.7,
+      "right_of_n": 4.9,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-alt": {
+      "n": 61,
+      "answers": 45,
+      "right": 3,
+      "wrong": 42,
+      "coverage": 73.8,
+      "precision": 6.7,
+      "right_of_n": 4.9,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-canon": {
+      "n": 61,
+      "answers": 45,
+      "right": 3,
+      "wrong": 42,
+      "coverage": 73.8,
+      "precision": 6.7,
+      "right_of_n": 4.9,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-enc-n1": {
+      "n": 61,
+      "answers": 51,
+      "right": 6,
+      "wrong": 45,
+      "coverage": 83.6,
+      "precision": 11.8,
+      "right_of_n": 9.8,
+      "gain_over_baseline": 3,
+      "lost_vs_baseline": 0
+     },
+     "v-neural": {
+      "n": 61,
+      "answers": 53,
+      "right": 7,
+      "wrong": 46,
+      "coverage": 86.9,
+      "precision": 13.2,
+      "right_of_n": 11.5,
+      "gain_over_baseline": 4,
+      "lost_vs_baseline": 0
+     }
+    },
+    "union": {
+     "right": 7,
+     "right_of_n": 11.5,
+     "answered_by_any": 53
+    },
+    "agreement_all": {
+     "n": 61,
+     "answers": 49,
+     "right": 5,
+     "wrong": 44,
+     "coverage": 80.3,
+     "precision": 10.2,
+     "right_of_n": 8.2
+    },
+    "pairs": {
+     "v-rules x v-typed": {
+      "answers": 43,
+      "coverage": 70.5,
+      "precision": 7
+     },
+     "v-rules x v-formops": {
+      "answers": 44,
+      "coverage": 72.1,
+      "precision": 6.8
+     },
+     "v-rules x v-alt": {
+      "answers": 41,
+      "coverage": 67.2,
+      "precision": 7.3
+     },
+     "v-rules x v-canon": {
+      "answers": 42,
+      "coverage": 68.9,
+      "precision": 7.1
+     },
+     "v-rules x v-enc-n1": {
+      "answers": 34,
+      "coverage": 55.7,
+      "precision": 8.8
+     },
+     "v-rules x v-neural": {
+      "answers": 31,
+      "coverage": 50.8,
+      "precision": 9.7
+     },
+     "v-typed x v-formops": {
+      "answers": 43,
+      "coverage": 70.5,
+      "precision": 7
+     },
+     "v-typed x v-alt": {
+      "answers": 43,
+      "coverage": 70.5,
+      "precision": 7
+     },
+     "v-typed x v-canon": {
+      "answers": 43,
+      "coverage": 70.5,
+      "precision": 7
+     },
+     "v-typed x v-enc-n1": {
+      "answers": 34,
+      "coverage": 55.7,
+      "precision": 8.8
+     },
+     "v-typed x v-neural": {
+      "answers": 31,
+      "coverage": 50.8,
+      "precision": 9.7
+     },
+     "v-formops x v-alt": {
+      "answers": 41,
+      "coverage": 67.2,
+      "precision": 7.3
+     },
+     "v-formops x v-canon": {
+      "answers": 42,
+      "coverage": 68.9,
+      "precision": 7.1
+     },
+     "v-formops x v-enc-n1": {
+      "answers": 34,
+      "coverage": 55.7,
+      "precision": 8.8
+     },
+     "v-formops x v-neural": {
+      "answers": 32,
+      "coverage": 52.5,
+      "precision": 9.4
+     },
+     "v-alt x v-canon": {
+      "answers": 43,
+      "coverage": 70.5,
+      "precision": 7
+     },
+     "v-alt x v-enc-n1": {
+      "answers": 34,
+      "coverage": 55.7,
+      "precision": 8.8
+     },
+     "v-alt x v-neural": {
+      "answers": 31,
+      "coverage": 50.8,
+      "precision": 9.7
+     },
+     "v-canon x v-enc-n1": {
+      "answers": 33,
+      "coverage": 54.1,
+      "precision": 9.1
+     },
+     "v-canon x v-neural": {
+      "answers": 30,
+      "coverage": 49.2,
+      "precision": 10
+     },
+     "v-enc-n1 x v-neural": {
+      "answers": 46,
+      "coverage": 75.4,
+      "precision": 13
+     }
+    },
+    "families": {
+     "symbolic": {
+      "answers": 45,
+      "right": 3,
+      "coverage": 73.8,
+      "precision": 6.7
+     },
+     "neural": {
+      "answers": 53,
+      "right": 6,
+      "coverage": 86.9,
+      "precision": 11.3
+     }
+    },
+    "agreement_families": {
+     "answers": 34,
+     "right": 3,
+     "coverage": 55.7,
+     "precision": 8.8
+    },
+    "union_families": {
+     "right": 6,
+     "right_of_n": 9.8
+    }
+   },
+   "typos": {
+    "n": 952,
+    "paths": {
+     "v-rules": {
+      "n": 952,
+      "answers": 882,
+      "right": 670,
+      "wrong": 212,
+      "coverage": 92.6,
+      "precision": 76,
+      "right_of_n": 70.4
+     },
+     "v-typed": {
+      "n": 952,
+      "answers": 889,
+      "right": 677,
+      "wrong": 212,
+      "coverage": 93.4,
+      "precision": 76.2,
+      "right_of_n": 71.1,
+      "gain_over_baseline": 7,
+      "lost_vs_baseline": 0
+     },
+     "v-formops": {
+      "n": 952,
+      "answers": 890,
+      "right": 677,
+      "wrong": 213,
+      "coverage": 93.5,
+      "precision": 76.1,
+      "right_of_n": 71.1,
+      "gain_over_baseline": 7,
+      "lost_vs_baseline": 0
+     },
+     "v-alt": {
+      "n": 952,
+      "answers": 889,
+      "right": 677,
+      "wrong": 212,
+      "coverage": 93.4,
+      "precision": 76.2,
+      "right_of_n": 71.1,
+      "gain_over_baseline": 7,
+      "lost_vs_baseline": 0
+     },
+     "v-canon": {
+      "n": 952,
+      "answers": 889,
+      "right": 677,
+      "wrong": 212,
+      "coverage": 93.4,
+      "precision": 76.2,
+      "right_of_n": 71.1,
+      "gain_over_baseline": 7,
+      "lost_vs_baseline": 0
+     },
+     "v-enc-n1": {
+      "n": 952,
+      "answers": 915,
+      "right": 724,
+      "wrong": 191,
+      "coverage": 96.1,
+      "precision": 79.1,
+      "right_of_n": 76.1,
+      "gain_over_baseline": 72,
+      "lost_vs_baseline": 18
+     },
+     "v-neural": {
+      "n": 952,
+      "answers": 915,
+      "right": 690,
+      "wrong": 225,
+      "coverage": 96.1,
+      "precision": 75.4,
+      "right_of_n": 72.5,
+      "gain_over_baseline": 82,
+      "lost_vs_baseline": 62
+     }
+    },
+    "union": {
+     "right": 753,
+     "right_of_n": 79.1,
+     "answered_by_any": 922
+    },
+    "agreement_all": {
+     "n": 952,
+     "answers": 915,
+     "right": 695,
+     "wrong": 220,
+     "coverage": 96.1,
+     "precision": 76,
+     "right_of_n": 73
+    },
+    "pairs": {
+     "v-rules x v-typed": {
+      "answers": 866,
+      "coverage": 91,
+      "precision": 76.3
+     },
+     "v-rules x v-formops": {
+      "answers": 864,
+      "coverage": 90.8,
+      "precision": 76.4
+     },
+     "v-rules x v-alt": {
+      "answers": 866,
+      "coverage": 91,
+      "precision": 76.2
+     },
+     "v-rules x v-canon": {
+      "answers": 863,
+      "coverage": 90.7,
+      "precision": 76.7
+     },
+     "v-rules x v-enc-n1": {
+      "answers": 804,
+      "coverage": 84.5,
+      "precision": 80.5
+     },
+     "v-rules x v-neural": {
+      "answers": 763,
+      "coverage": 80.1,
+      "precision": 78.2
+     },
+     "v-typed x v-formops": {
+      "answers": 865,
+      "coverage": 90.9,
+      "precision": 76.8
+     },
+     "v-typed x v-alt": {
+      "answers": 877,
+      "coverage": 92.1,
+      "precision": 76.4
+     },
+     "v-typed x v-canon": {
+      "answers": 862,
+      "coverage": 90.5,
+      "precision": 77
+     },
+     "v-typed x v-enc-n1": {
+      "answers": 803,
+      "coverage": 84.3,
+      "precision": 80.8
+     },
+     "v-typed x v-neural": {
+      "answers": 765,
+      "coverage": 80.4,
+      "precision": 79
+     },
+     "v-formops x v-alt": {
+      "answers": 871,
+      "coverage": 91.5,
+      "precision": 76.3
+     },
+     "v-formops x v-canon": {
+      "answers": 866,
+      "coverage": 91,
+      "precision": 76.8
+     },
+     "v-formops x v-enc-n1": {
+      "answers": 803,
+      "coverage": 84.3,
+      "precision": 80.4
+     },
+     "v-formops x v-neural": {
+      "answers": 769,
+      "coverage": 80.8,
+      "precision": 78.3
+     },
+     "v-alt x v-canon": {
+      "answers": 870,
+      "coverage": 91.4,
+      "precision": 76.7
+     },
+     "v-alt x v-enc-n1": {
+      "answers": 806,
+      "coverage": 84.7,
+      "precision": 80.4
+     },
+     "v-alt x v-neural": {
+      "answers": 766,
+      "coverage": 80.5,
+      "precision": 78.5
+     },
+     "v-canon x v-enc-n1": {
+      "answers": 802,
+      "coverage": 84.2,
+      "precision": 81
+     },
+     "v-canon x v-neural": {
+      "answers": 760,
+      "coverage": 79.8,
+      "precision": 78.7
+     },
+     "v-enc-n1 x v-neural": {
+      "answers": 861,
+      "coverage": 90.4,
+      "precision": 77.7
+     }
+    },
+    "families": {
+     "symbolic": {
+      "answers": 890,
+      "right": 677,
+      "coverage": 93.5,
+      "precision": 76.1
+     },
+     "neural": {
+      "answers": 918,
+      "right": 727,
+      "coverage": 96.4,
+      "precision": 79.2
+     }
+    },
+    "agreement_families": {
+     "answers": 811,
+     "right": 654,
+     "coverage": 85.2,
+     "precision": 80.6
+    },
+    "union_families": {
+     "right": 745,
+     "right_of_n": 78.3
+    }
+   },
+   "loose-words": {
+    "n": 552,
+    "paths": {
+     "v-rules": {
+      "n": 552,
+      "answers": 378,
+      "right": 225,
+      "wrong": 153,
+      "coverage": 68.5,
+      "precision": 59.5,
+      "right_of_n": 40.8
+     },
+     "v-typed": {
+      "n": 552,
+      "answers": 378,
+      "right": 225,
+      "wrong": 153,
+      "coverage": 68.5,
+      "precision": 59.5,
+      "right_of_n": 40.8,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-formops": {
+      "n": 552,
+      "answers": 400,
+      "right": 239,
+      "wrong": 161,
+      "coverage": 72.5,
+      "precision": 59.8,
+      "right_of_n": 43.3,
+      "gain_over_baseline": 14,
+      "lost_vs_baseline": 0
+     },
+     "v-alt": {
+      "n": 552,
+      "answers": 379,
+      "right": 226,
+      "wrong": 153,
+      "coverage": 68.7,
+      "precision": 59.6,
+      "right_of_n": 40.9,
+      "gain_over_baseline": 1,
+      "lost_vs_baseline": 0
+     },
+     "v-canon": {
+      "n": 552,
+      "answers": 379,
+      "right": 226,
+      "wrong": 153,
+      "coverage": 68.7,
+      "precision": 59.6,
+      "right_of_n": 40.9,
+      "gain_over_baseline": 1,
+      "lost_vs_baseline": 0
+     },
+     "v-enc-n1": {
+      "n": 552,
+      "answers": 415,
+      "right": 222,
+      "wrong": 193,
+      "coverage": 75.2,
+      "precision": 53.5,
+      "right_of_n": 40.2,
+      "gain_over_baseline": 15,
+      "lost_vs_baseline": 18
+     },
+     "v-neural": {
+      "n": 552,
+      "answers": 427,
+      "right": 235,
+      "wrong": 192,
+      "coverage": 77.4,
+      "precision": 55,
+      "right_of_n": 42.6,
+      "gain_over_baseline": 39,
+      "lost_vs_baseline": 29
+     }
+    },
+    "union": {
+     "right": 278,
+     "right_of_n": 50.4,
+     "answered_by_any": 442
+    },
+    "agreement_all": {
+     "n": 552,
+     "answers": 408,
+     "right": 229,
+     "wrong": 179,
+     "coverage": 73.9,
+     "precision": 56.1,
+     "right_of_n": 41.5
+    },
+    "pairs": {
+     "v-rules x v-typed": {
+      "answers": 366,
+      "coverage": 66.3,
+      "precision": 58.7
+     },
+     "v-rules x v-formops": {
+      "answers": 357,
+      "coverage": 64.7,
+      "precision": 60.2
+     },
+     "v-rules x v-alt": {
+      "answers": 366,
+      "coverage": 66.3,
+      "precision": 59
+     },
+     "v-rules x v-canon": {
+      "answers": 364,
+      "coverage": 65.9,
+      "precision": 59.1
+     },
+     "v-rules x v-enc-n1": {
+      "answers": 330,
+      "coverage": 59.8,
+      "precision": 60
+     },
+     "v-rules x v-neural": {
+      "answers": 301,
+      "coverage": 54.5,
+      "precision": 61.8
+     },
+     "v-typed x v-formops": {
+      "answers": 359,
+      "coverage": 65,
+      "precision": 60.4
+     },
+     "v-typed x v-alt": {
+      "answers": 364,
+      "coverage": 65.9,
+      "precision": 59.3
+     },
+     "v-typed x v-canon": {
+      "answers": 364,
+      "coverage": 65.9,
+      "precision": 59.1
+     },
+     "v-typed x v-enc-n1": {
+      "answers": 330,
+      "coverage": 59.8,
+      "precision": 60
+     },
+     "v-typed x v-neural": {
+      "answers": 301,
+      "coverage": 54.5,
+      "precision": 61.8
+     },
+     "v-formops x v-alt": {
+      "answers": 355,
+      "coverage": 64.3,
+      "precision": 60.8
+     },
+     "v-formops x v-canon": {
+      "answers": 357,
+      "coverage": 64.7,
+      "precision": 60.2
+     },
+     "v-formops x v-enc-n1": {
+      "answers": 323,
+      "coverage": 58.5,
+      "precision": 61.3
+     },
+     "v-formops x v-neural": {
+      "answers": 300,
+      "coverage": 54.3,
+      "precision": 62.7
+     },
+     "v-alt x v-canon": {
+      "answers": 361,
+      "coverage": 65.4,
+      "precision": 59.6
+     },
+     "v-alt x v-enc-n1": {
+      "answers": 326,
+      "coverage": 59.1,
+      "precision": 60.4
+     },
+     "v-alt x v-neural": {
+      "answers": 297,
+      "coverage": 53.8,
+      "precision": 62.3
+     },
+     "v-canon x v-enc-n1": {
+      "answers": 329,
+      "coverage": 59.6,
+      "precision": 60.2
+     },
+     "v-canon x v-neural": {
+      "answers": 301,
+      "coverage": 54.5,
+      "precision": 62.1
+     },
+     "v-enc-n1 x v-neural": {
+      "answers": 370,
+      "coverage": 67,
+      "precision": 54.3
+     }
+    },
+    "families": {
+     "symbolic": {
+      "answers": 401,
+      "right": 240,
+      "coverage": 72.6,
+      "precision": 59.9
+     },
+     "neural": {
+      "answers": 429,
+      "right": 233,
+      "coverage": 77.7,
+      "precision": 54.3
+     }
+    },
+    "agreement_families": {
+     "answers": 333,
+     "right": 200,
+     "coverage": 60.3,
+     "precision": 60.1
+    },
+    "union_families": {
+     "right": 264,
+     "right_of_n": 47.8
+    }
+   },
+   "operational": {
+    "n": 1296,
+    "paths": {
+     "v-rules": {
+      "n": 1296,
+      "answers": 1242,
+      "right": 1041,
+      "wrong": 201,
+      "coverage": 95.8,
+      "precision": 83.8,
+      "right_of_n": 80.3
+     },
+     "v-typed": {
+      "n": 1296,
+      "answers": 1242,
+      "right": 1042,
+      "wrong": 200,
+      "coverage": 95.8,
+      "precision": 83.9,
+      "right_of_n": 80.4,
+      "gain_over_baseline": 1,
+      "lost_vs_baseline": 0
+     },
+     "v-formops": {
+      "n": 1296,
+      "answers": 1246,
+      "right": 1041,
+      "wrong": 205,
+      "coverage": 96.1,
+      "precision": 83.5,
+      "right_of_n": 80.3,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-alt": {
+      "n": 1296,
+      "answers": 1242,
+      "right": 1042,
+      "wrong": 200,
+      "coverage": 95.8,
+      "precision": 83.9,
+      "right_of_n": 80.4,
+      "gain_over_baseline": 1,
+      "lost_vs_baseline": 0
+     },
+     "v-canon": {
+      "n": 1296,
+      "answers": 1242,
+      "right": 1042,
+      "wrong": 200,
+      "coverage": 95.8,
+      "precision": 83.9,
+      "right_of_n": 80.4,
+      "gain_over_baseline": 1,
+      "lost_vs_baseline": 0
+     },
+     "v-enc-n1": {
+      "n": 1296,
+      "answers": 1251,
+      "right": 1062,
+      "wrong": 189,
+      "coverage": 96.5,
+      "precision": 84.9,
+      "right_of_n": 81.9,
+      "gain_over_baseline": 27,
+      "lost_vs_baseline": 6
+     },
+     "v-neural": {
+      "n": 1296,
+      "answers": 1247,
+      "right": 1022,
+      "wrong": 225,
+      "coverage": 96.2,
+      "precision": 82,
+      "right_of_n": 78.9,
+      "gain_over_baseline": 29,
+      "lost_vs_baseline": 48
+     }
+    },
+    "union": {
+     "right": 1071,
+     "right_of_n": 82.6,
+     "answered_by_any": 1258
+    },
+    "agreement_all": {
+     "n": 1296,
+     "answers": 1212,
+     "right": 1016,
+     "wrong": 196,
+     "coverage": 93.5,
+     "precision": 83.8,
+     "right_of_n": 78.4
+    },
+    "pairs": {
+     "v-rules x v-typed": {
+      "answers": 1190,
+      "coverage": 91.8,
+      "precision": 84.7
+     },
+     "v-rules x v-formops": {
+      "answers": 1196,
+      "coverage": 92.3,
+      "precision": 84.2
+     },
+     "v-rules x v-alt": {
+      "answers": 1191,
+      "coverage": 91.9,
+      "precision": 84.4
+     },
+     "v-rules x v-canon": {
+      "answers": 1183,
+      "coverage": 91.3,
+      "precision": 84.9
+     },
+     "v-rules x v-enc-n1": {
+      "answers": 1130,
+      "coverage": 87.2,
+      "precision": 87.3
+     },
+     "v-rules x v-neural": {
+      "answers": 1064,
+      "coverage": 82.1,
+      "precision": 87.3
+     },
+     "v-typed x v-formops": {
+      "answers": 1187,
+      "coverage": 91.6,
+      "precision": 84.8
+     },
+     "v-typed x v-alt": {
+      "answers": 1190,
+      "coverage": 91.8,
+      "precision": 84.7
+     },
+     "v-typed x v-canon": {
+      "answers": 1194,
+      "coverage": 92.1,
+      "precision": 84.3
+     },
+     "v-typed x v-enc-n1": {
+      "answers": 1129,
+      "coverage": 87.1,
+      "precision": 87.6
+     },
+     "v-typed x v-neural": {
+      "answers": 1059,
+      "coverage": 81.7,
+      "precision": 87.7
+     },
+     "v-formops x v-alt": {
+      "answers": 1196,
+      "coverage": 92.3,
+      "precision": 84.3
+     },
+     "v-formops x v-canon": {
+      "answers": 1188,
+      "coverage": 91.7,
+      "precision": 84.8
+     },
+     "v-formops x v-enc-n1": {
+      "answers": 1135,
+      "coverage": 87.6,
+      "precision": 87.1
+     },
+     "v-formops x v-neural": {
+      "answers": 1068,
+      "coverage": 82.4,
+      "precision": 87.2
+     },
+     "v-alt x v-canon": {
+      "answers": 1193,
+      "coverage": 92.1,
+      "precision": 84.7
+     },
+     "v-alt x v-enc-n1": {
+      "answers": 1140,
+      "coverage": 88,
+      "precision": 87
+     },
+     "v-alt x v-neural": {
+      "answers": 1069,
+      "coverage": 82.5,
+      "precision": 87.1
+     },
+     "v-canon x v-enc-n1": {
+      "answers": 1132,
+      "coverage": 87.3,
+      "precision": 87.5
+     },
+     "v-canon x v-neural": {
+      "answers": 1060,
+      "coverage": 81.8,
+      "precision": 87.6
+     },
+     "v-enc-n1 x v-neural": {
+      "answers": 1132,
+      "coverage": 87.3,
+      "precision": 85.2
+     }
+    },
+    "families": {
+     "symbolic": {
+      "answers": 1246,
+      "right": 1041,
+      "coverage": 96.1,
+      "precision": 83.5
+     },
+     "neural": {
+      "answers": 1253,
+      "right": 1062,
+      "coverage": 96.7,
+      "precision": 84.8
+     }
+    },
+    "agreement_families": {
+     "answers": 1130,
+     "right": 986,
+     "coverage": 87.2,
+     "precision": 87.3
+    },
+    "union_families": {
+     "right": 1068,
+     "right_of_n": 82.4
+    }
+   },
+   "paraphrases (rt + changed)": {
+    "n": 146,
+    "paths": {
+     "v-rules": {
+      "n": 146,
+      "answers": 112,
+      "right": 17,
+      "wrong": 95,
+      "coverage": 76.7,
+      "precision": 15.2,
+      "right_of_n": 11.6
+     },
+     "v-typed": {
+      "n": 146,
+      "answers": 112,
+      "right": 17,
+      "wrong": 95,
+      "coverage": 76.7,
+      "precision": 15.2,
+      "right_of_n": 11.6,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-formops": {
+      "n": 146,
+      "answers": 115,
+      "right": 19,
+      "wrong": 96,
+      "coverage": 78.8,
+      "precision": 16.5,
+      "right_of_n": 13,
+      "gain_over_baseline": 2,
+      "lost_vs_baseline": 0
+     },
+     "v-alt": {
+      "n": 146,
+      "answers": 112,
+      "right": 17,
+      "wrong": 95,
+      "coverage": 76.7,
+      "precision": 15.2,
+      "right_of_n": 11.6,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-canon": {
+      "n": 146,
+      "answers": 112,
+      "right": 17,
+      "wrong": 95,
+      "coverage": 76.7,
+      "precision": 15.2,
+      "right_of_n": 11.6,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 0
+     },
+     "v-enc-n1": {
+      "n": 146,
+      "answers": 125,
+      "right": 26,
+      "wrong": 99,
+      "coverage": 85.6,
+      "precision": 20.8,
+      "right_of_n": 17.8,
+      "gain_over_baseline": 9,
+      "lost_vs_baseline": 0
+     },
+     "v-neural": {
+      "n": 146,
+      "answers": 128,
+      "right": 28,
+      "wrong": 100,
+      "coverage": 87.7,
+      "precision": 21.9,
+      "right_of_n": 19.2,
+      "gain_over_baseline": 11,
+      "lost_vs_baseline": 0
+     }
+    },
+    "union": {
+     "right": 29,
+     "right_of_n": 19.9,
+     "answered_by_any": 130
+    },
+    "agreement_all": {
+     "n": 146,
+     "answers": 122,
+     "right": 22,
+     "wrong": 100,
+     "coverage": 83.6,
+     "precision": 18,
+     "right_of_n": 15.1
+    },
+    "pairs": {
+     "v-rules x v-typed": {
+      "answers": 102,
+      "coverage": 69.9,
+      "precision": 13.7
+     },
+     "v-rules x v-formops": {
+      "answers": 107,
+      "coverage": 73.3,
+      "precision": 15
+     },
+     "v-rules x v-alt": {
+      "answers": 103,
+      "coverage": 70.5,
+      "precision": 15.5
+     },
+     "v-rules x v-canon": {
+      "answers": 103,
+      "coverage": 70.5,
+      "precision": 13.6
+     },
+     "v-rules x v-enc-n1": {
+      "answers": 93,
+      "coverage": 63.7,
+      "precision": 17.2
+     },
+     "v-rules x v-neural": {
+      "answers": 90,
+      "coverage": 61.6,
+      "precision": 17.8
+     },
+     "v-typed x v-formops": {
+      "answers": 102,
+      "coverage": 69.9,
+      "precision": 13.7
+     },
+     "v-typed x v-alt": {
+      "answers": 102,
+      "coverage": 69.9,
+      "precision": 13.7
+     },
+     "v-typed x v-canon": {
+      "answers": 105,
+      "coverage": 71.9,
+      "precision": 15.2
+     },
+     "v-typed x v-enc-n1": {
+      "answers": 89,
+      "coverage": 61,
+      "precision": 15.7
+     },
+     "v-typed x v-neural": {
+      "answers": 84,
+      "coverage": 57.5,
+      "precision": 16.7
+     },
+     "v-formops x v-alt": {
+      "answers": 103,
+      "coverage": 70.5,
+      "precision": 15.5
+     },
+     "v-formops x v-canon": {
+      "answers": 102,
+      "coverage": 69.9,
+      "precision": 13.7
+     },
+     "v-formops x v-enc-n1": {
+      "answers": 93,
+      "coverage": 63.7,
+      "precision": 17.2
+     },
+     "v-formops x v-neural": {
+      "answers": 89,
+      "coverage": 61,
+      "precision": 18
+     },
+     "v-alt x v-canon": {
+      "answers": 102,
+      "coverage": 69.9,
+      "precision": 13.7
+     },
+     "v-alt x v-enc-n1": {
+      "answers": 91,
+      "coverage": 62.3,
+      "precision": 17.6
+     },
+     "v-alt x v-neural": {
+      "answers": 86,
+      "coverage": 58.9,
+      "precision": 18.6
+     },
+     "v-canon x v-enc-n1": {
+      "answers": 89,
+      "coverage": 61,
+      "precision": 15.7
+     },
+     "v-canon x v-neural": {
+      "answers": 84,
+      "coverage": 57.5,
+      "precision": 16.7
+     },
+     "v-enc-n1 x v-neural": {
+      "answers": 117,
+      "coverage": 80.1,
+      "precision": 21.4
+     }
+    },
+    "families": {
+     "symbolic": {
+      "answers": 115,
+      "right": 19,
+      "coverage": 78.8,
+      "precision": 16.5
+     },
+     "neural": {
+      "answers": 128,
+      "right": 26,
+      "coverage": 87.7,
+      "precision": 20.3
+     }
+    },
+    "agreement_families": {
+     "answers": 93,
+     "right": 16,
+     "coverage": 63.7,
+     "precision": 17.2
+    },
+    "union_families": {
+     "right": 27,
+     "right_of_n": 18.5
+    }
+   },
+   "all": {
+    "n": 2946,
+    "paths": {
+     "v-rules": {
+      "n": 2946,
+      "answers": 2614,
+      "right": 1953,
+      "wrong": 661,
+      "coverage": 88.7,
+      "precision": 74.7,
+      "right_of_n": 66.3
+     },
+     "v-typed": {
+      "n": 2946,
+      "answers": 2621,
+      "right": 1961,
+      "wrong": 660,
+      "coverage": 89,
+      "precision": 74.8,
+      "right_of_n": 66.6,
+      "gain_over_baseline": 8,
+      "lost_vs_baseline": 0
+     },
+     "v-formops": {
+      "n": 2946,
+      "answers": 2651,
+      "right": 1976,
+      "wrong": 675,
+      "coverage": 90,
+      "precision": 74.5,
+      "right_of_n": 67.1,
+      "gain_over_baseline": 23,
+      "lost_vs_baseline": 0
+     },
+     "v-alt": {
+      "n": 2946,
+      "answers": 2622,
+      "right": 1962,
+      "wrong": 660,
+      "coverage": 89,
+      "precision": 74.8,
+      "right_of_n": 66.6,
+      "gain_over_baseline": 9,
+      "lost_vs_baseline": 0
+     },
+     "v-canon": {
+      "n": 2946,
+      "answers": 2622,
+      "right": 1962,
+      "wrong": 660,
+      "coverage": 89,
+      "precision": 74.8,
+      "right_of_n": 66.6,
+      "gain_over_baseline": 9,
+      "lost_vs_baseline": 0
+     },
+     "v-enc-n1": {
+      "n": 2946,
+      "answers": 2706,
+      "right": 2034,
+      "wrong": 672,
+      "coverage": 91.9,
+      "precision": 75.2,
+      "right_of_n": 69,
+      "gain_over_baseline": 123,
+      "lost_vs_baseline": 42
+     },
+     "v-neural": {
+      "n": 2946,
+      "answers": 2717,
+      "right": 1975,
+      "wrong": 742,
+      "coverage": 92.2,
+      "precision": 72.7,
+      "right_of_n": 67,
+      "gain_over_baseline": 161,
+      "lost_vs_baseline": 139
+     }
+    },
+    "union": {
+     "right": 2131,
+     "right_of_n": 72.3,
+     "answered_by_any": 2752
+    },
+    "agreement_all": {
+     "n": 2946,
+     "answers": 2657,
+     "right": 1962,
+     "wrong": 695,
+     "coverage": 90.2,
+     "precision": 73.8,
+     "right_of_n": 66.6
+    },
+    "pairs": {
+     "v-rules x v-typed": {
+      "answers": 2524,
+      "coverage": 85.7,
+      "precision": 75.2
+     },
+     "v-rules x v-formops": {
+      "answers": 2524,
+      "coverage": 85.7,
+      "precision": 75.2
+     },
+     "v-rules x v-alt": {
+      "answers": 2526,
+      "coverage": 85.7,
+      "precision": 75.1
+     },
+     "v-rules x v-canon": {
+      "answers": 2513,
+      "coverage": 85.3,
+      "precision": 75.4
+     },
+     "v-rules x v-enc-n1": {
+      "answers": 2357,
+      "coverage": 80,
+      "precision": 78.4
+     },
+     "v-rules x v-neural": {
+      "answers": 2218,
+      "coverage": 75.3,
+      "precision": 77.9
+     },
+     "v-typed x v-formops": {
+      "answers": 2513,
+      "coverage": 85.3,
+      "precision": 75.7
+     },
+     "v-typed x v-alt": {
+      "answers": 2533,
+      "coverage": 86,
+      "precision": 75.3
+     },
+     "v-typed x v-canon": {
+      "answers": 2525,
+      "coverage": 85.7,
+      "precision": 75.3
+     },
+     "v-typed x v-enc-n1": {
+      "answers": 2351,
+      "coverage": 79.8,
+      "precision": 78.7
+     },
+     "v-typed x v-neural": {
+      "answers": 2209,
+      "coverage": 75,
+      "precision": 78.5
+     },
+     "v-formops x v-alt": {
+      "answers": 2525,
+      "coverage": 85.7,
+      "precision": 75.4
+     },
+     "v-formops x v-canon": {
+      "answers": 2513,
+      "coverage": 85.3,
+      "precision": 75.6
+     },
+     "v-formops x v-enc-n1": {
+      "answers": 2354,
+      "coverage": 79.9,
+      "precision": 78.5
+     },
+     "v-formops x v-neural": {
+      "answers": 2226,
+      "coverage": 75.6,
+      "precision": 78
+     },
+     "v-alt x v-canon": {
+      "answers": 2526,
+      "coverage": 85.7,
+      "precision": 75.5
+     },
+     "v-alt x v-enc-n1": {
+      "answers": 2363,
+      "coverage": 80.2,
+      "precision": 78.4
+     },
+     "v-alt x v-neural": {
+      "answers": 2218,
+      "coverage": 75.3,
+      "precision": 78.1
+     },
+     "v-canon x v-enc-n1": {
+      "answers": 2352,
+      "coverage": 79.8,
+      "precision": 78.8
+     },
+     "v-canon x v-neural": {
+      "answers": 2205,
+      "coverage": 74.8,
+      "precision": 78.4
+     },
+     "v-enc-n1 x v-neural": {
+      "answers": 2480,
+      "coverage": 84.2,
+      "precision": 75
+     }
+    },
+    "families": {
+     "symbolic": {
+      "answers": 2652,
+      "right": 1977,
+      "coverage": 90,
+      "precision": 74.5
+     },
+     "neural": {
+      "answers": 2728,
+      "right": 2048,
+      "coverage": 92.6,
+      "precision": 75.1
+     }
+    },
+    "agreement_families": {
+     "answers": 2367,
+     "right": 1856,
+     "coverage": 80.3,
+     "precision": 78.4
+    },
+    "union_families": {
+     "right": 2104,
+     "right_of_n": 71.4
+    }
+   }
+  },
+  "junk": {
+   "n": 84,
+   "false_answers": {
+    "v-rules": 69,
+    "v-typed": 69,
+    "v-formops": 69,
+    "v-alt": 69,
+    "v-canon": 69,
+    "v-enc-n1": 72,
+    "v-neural": 72
+   }
+  }
+ },
+ "romanian": {
+  "paths": [
+   "rules",
+   "model",
+   "m4+model",
+   "grammar"
+  ],
+  "sets": {
+   "all": {
+    "n": 9328,
+    "paths": {
+     "rules": {
+      "n": 9328,
+      "answers": 7479,
+      "right": 4560,
+      "wrong": 2919,
+      "coverage": 80.2,
+      "precision": 61,
+      "right_of_n": 48.9
+     },
+     "model": {
+      "n": 9328,
+      "answers": 7177,
+      "right": 3948,
+      "wrong": 3229,
+      "coverage": 76.9,
+      "precision": 55,
+      "right_of_n": 42.3,
+      "gain_over_baseline": 1257,
+      "lost_vs_baseline": 1869
+     },
+     "m4+model": {
+      "n": 9328,
+      "answers": 8368,
+      "right": 4985,
+      "wrong": 3383,
+      "coverage": 89.7,
+      "precision": 59.6,
+      "right_of_n": 53.4,
+      "gain_over_baseline": 1226,
+      "lost_vs_baseline": 801
+     },
+     "grammar": {
+      "n": 9328,
+      "answers": 1827,
+      "right": 1405,
+      "wrong": 422,
+      "coverage": 19.6,
+      "precision": 76.9,
+      "right_of_n": 15.1,
+      "gain_over_baseline": 142,
+      "lost_vs_baseline": 3297
+     }
+    },
+    "union": {
+     "right": 5891,
+     "right_of_n": 63.2,
+     "answered_by_any": 8541
+    },
+    "agreement_all": {
+     "n": 9328,
+     "answers": 8038,
+     "right": 4954,
+     "wrong": 3084,
+     "coverage": 86.2,
+     "precision": 61.6,
+     "right_of_n": 53.1
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 3144,
+      "coverage": 33.7,
+      "precision": 85.6
+     },
+     "rules x m4+model": {
+      "answers": 4729,
+      "coverage": 50.7,
+      "precision": 79.5
+     },
+     "rules x grammar": {
+      "answers": 1580,
+      "coverage": 16.9,
+      "precision": 79.9
+     },
+     "model x m4+model": {
+      "answers": 6707,
+      "coverage": 71.9,
+      "precision": 58.2
+     },
+     "model x grammar": {
+      "answers": 1152,
+      "coverage": 12.3,
+      "precision": 80.9
+     },
+     "m4+model x grammar": {
+      "answers": 1422,
+      "coverage": 15.2,
+      "precision": 81.2
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 7479,
+      "right": 4560,
+      "coverage": 80.2,
+      "precision": 61
+     },
+     "grammar": {
+      "answers": 1827,
+      "right": 1405,
+      "coverage": 19.6,
+      "precision": 76.9
+     },
+     "model chain": {
+      "answers": 8383,
+      "right": 4987,
+      "coverage": 89.9,
+      "precision": 59.5
+     }
+    },
+    "agreement_families": {
+     "answers": 4677,
+     "right": 3735,
+     "coverage": 50.1,
+     "precision": 79.9
+    },
+    "union_families": {
+     "right": 5856,
+     "right_of_n": 62.8
+    },
+    "res": {
+     "rules": {
+      "kept": 4560,
+      "act": 1600,
+      "other": 1319,
+      "unread": 1845,
+      "abstain": 4
+     },
+     "model": {
+      "unread": 2151,
+      "kept": 3948,
+      "other": 1384,
+      "act": 1845
+     },
+     "m4+model": {
+      "kept": 4985,
+      "act": 1974,
+      "other": 1409,
+      "unread": 959,
+      "abstain": 1
+     },
+     "grammar": {
+      "kept": 1405,
+      "abstain": 7489,
+      "other": 242,
+      "act": 180,
+      "unread": 12
+     }
+    }
+   },
+   "hand Romanian (operational, canon, real, talk)": {
+    "n": 4109,
+    "paths": {
+     "rules": {
+      "n": 4109,
+      "answers": 3247,
+      "right": 2264,
+      "wrong": 983,
+      "coverage": 79,
+      "precision": 69.7,
+      "right_of_n": 55.1
+     },
+     "model": {
+      "n": 4109,
+      "answers": 2964,
+      "right": 1849,
+      "wrong": 1115,
+      "coverage": 72.1,
+      "precision": 62.4,
+      "right_of_n": 45,
+      "gain_over_baseline": 564,
+      "lost_vs_baseline": 979
+     },
+     "m4+model": {
+      "n": 4109,
+      "answers": 3676,
+      "right": 2531,
+      "wrong": 1145,
+      "coverage": 89.5,
+      "precision": 68.9,
+      "right_of_n": 61.6,
+      "gain_over_baseline": 553,
+      "lost_vs_baseline": 286
+     },
+     "grammar": {
+      "n": 4109,
+      "answers": 518,
+      "right": 386,
+      "wrong": 132,
+      "coverage": 12.6,
+      "precision": 74.5,
+      "right_of_n": 9.4,
+      "gain_over_baseline": 26,
+      "lost_vs_baseline": 1904
+     }
+    },
+    "union": {
+     "right": 2846,
+     "right_of_n": 69.3,
+     "answered_by_any": 3753
+    },
+    "agreement_all": {
+     "n": 4109,
+     "answers": 3595,
+     "right": 2525,
+     "wrong": 1070,
+     "coverage": 87.5,
+     "precision": 70.2,
+     "right_of_n": 61.5
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 1508,
+      "coverage": 36.7,
+      "precision": 85.2
+     },
+     "rules x m4+model": {
+      "answers": 2420,
+      "coverage": 58.9,
+      "precision": 81.7
+     },
+     "rules x grammar": {
+      "answers": 455,
+      "coverage": 11.1,
+      "precision": 79.1
+     },
+     "model x m4+model": {
+      "answers": 2743,
+      "coverage": 66.8,
+      "precision": 66.8
+     },
+     "model x grammar": {
+      "answers": 275,
+      "coverage": 6.7,
+      "precision": 81.5
+     },
+     "m4+model x grammar": {
+      "answers": 406,
+      "coverage": 9.9,
+      "precision": 82.3
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 3247,
+      "right": 2264,
+      "coverage": 79,
+      "precision": 69.7
+     },
+     "grammar": {
+      "answers": 518,
+      "right": 386,
+      "coverage": 12.6,
+      "precision": 74.5
+     },
+     "model chain": {
+      "answers": 3686,
+      "right": 2531,
+      "coverage": 89.7,
+      "precision": 68.7
+     }
+    },
+    "agreement_families": {
+     "answers": 2395,
+     "right": 1965,
+     "coverage": 58.3,
+     "precision": 82
+    },
+    "union_families": {
+     "right": 2831,
+     "right_of_n": 68.9
+    },
+    "res": {
+     "rules": {
+      "kept": 2264,
+      "act": 384,
+      "other": 599,
+      "unread": 859,
+      "abstain": 3
+     },
+     "model": {
+      "unread": 1145,
+      "kept": 1849,
+      "other": 559,
+      "act": 556
+     },
+     "m4+model": {
+      "kept": 2531,
+      "act": 550,
+      "other": 595,
+      "unread": 432,
+      "abstain": 1
+     },
+     "grammar": {
+      "kept": 386,
+      "abstain": 3587,
+      "other": 81,
+      "act": 51,
+      "unread": 4
+     }
+    }
+   },
+   "machine / template Romanian (template, grid, roundtrip)": {
+    "n": 5219,
+    "paths": {
+     "rules": {
+      "n": 5219,
+      "answers": 4232,
+      "right": 2296,
+      "wrong": 1936,
+      "coverage": 81.1,
+      "precision": 54.3,
+      "right_of_n": 44
+     },
+     "model": {
+      "n": 5219,
+      "answers": 4213,
+      "right": 2099,
+      "wrong": 2114,
+      "coverage": 80.7,
+      "precision": 49.8,
+      "right_of_n": 40.2,
+      "gain_over_baseline": 693,
+      "lost_vs_baseline": 890
+     },
+     "m4+model": {
+      "n": 5219,
+      "answers": 4692,
+      "right": 2454,
+      "wrong": 2238,
+      "coverage": 89.9,
+      "precision": 52.3,
+      "right_of_n": 47,
+      "gain_over_baseline": 673,
+      "lost_vs_baseline": 515
+     },
+     "grammar": {
+      "n": 5219,
+      "answers": 1309,
+      "right": 1019,
+      "wrong": 290,
+      "coverage": 25.1,
+      "precision": 77.8,
+      "right_of_n": 19.5,
+      "gain_over_baseline": 116,
+      "lost_vs_baseline": 1393
+     }
+    },
+    "union": {
+     "right": 3045,
+     "right_of_n": 58.3,
+     "answered_by_any": 4788
+    },
+    "agreement_all": {
+     "n": 5219,
+     "answers": 4443,
+     "right": 2429,
+     "wrong": 2014,
+     "coverage": 85.1,
+     "precision": 54.7,
+     "right_of_n": 46.5
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 1636,
+      "coverage": 31.3,
+      "precision": 85.9
+     },
+     "rules x m4+model": {
+      "answers": 2309,
+      "coverage": 44.2,
+      "precision": 77.1
+     },
+     "rules x grammar": {
+      "answers": 1125,
+      "coverage": 21.6,
+      "precision": 80.3
+     },
+     "model x m4+model": {
+      "answers": 3964,
+      "coverage": 76,
+      "precision": 52.3
+     },
+     "model x grammar": {
+      "answers": 877,
+      "coverage": 16.8,
+      "precision": 80.7
+     },
+     "m4+model x grammar": {
+      "answers": 1016,
+      "coverage": 19.5,
+      "precision": 80.7
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 4232,
+      "right": 2296,
+      "coverage": 81.1,
+      "precision": 54.3
+     },
+     "grammar": {
+      "answers": 1309,
+      "right": 1019,
+      "coverage": 25.1,
+      "precision": 77.8
+     },
+     "model chain": {
+      "answers": 4697,
+      "right": 2456,
+      "coverage": 90,
+      "precision": 52.3
+     }
+    },
+    "agreement_families": {
+     "answers": 2282,
+     "right": 1770,
+     "coverage": 43.7,
+     "precision": 77.6
+    },
+    "union_families": {
+     "right": 3025,
+     "right_of_n": 58
+    },
+    "res": {
+     "rules": {
+      "kept": 2296,
+      "act": 1216,
+      "other": 720,
+      "unread": 986,
+      "abstain": 1
+     },
+     "model": {
+      "kept": 2099,
+      "act": 1289,
+      "other": 825,
+      "unread": 1006
+     },
+     "m4+model": {
+      "kept": 2454,
+      "act": 1424,
+      "other": 814,
+      "unread": 527
+     },
+     "grammar": {
+      "kept": 1019,
+      "other": 161,
+      "act": 129,
+      "abstain": 3902,
+      "unread": 8
+     }
+    }
+   },
+   "source operational": {
+    "n": 2222,
+    "paths": {
+     "rules": {
+      "n": 2222,
+      "answers": 1954,
+      "right": 1494,
+      "wrong": 460,
+      "coverage": 87.9,
+      "precision": 76.5,
+      "right_of_n": 67.2
+     },
+     "model": {
+      "n": 2222,
+      "answers": 1515,
+      "right": 929,
+      "wrong": 586,
+      "coverage": 68.2,
+      "precision": 61.3,
+      "right_of_n": 41.8,
+      "gain_over_baseline": 167,
+      "lost_vs_baseline": 732
+     },
+     "m4+model": {
+      "n": 2222,
+      "answers": 2061,
+      "right": 1466,
+      "wrong": 595,
+      "coverage": 92.8,
+      "precision": 71.1,
+      "right_of_n": 66,
+      "gain_over_baseline": 162,
+      "lost_vs_baseline": 190
+     },
+     "grammar": {
+      "n": 2222,
+      "answers": 366,
+      "right": 288,
+      "wrong": 78,
+      "coverage": 16.5,
+      "precision": 78.7,
+      "right_of_n": 13,
+      "gain_over_baseline": 16,
+      "lost_vs_baseline": 1222
+     }
+    },
+    "union": {
+     "right": 1671,
+     "right_of_n": 75.2,
+     "answered_by_any": 2102
+    },
+    "agreement_all": {
+     "n": 2222,
+     "answers": 2025,
+     "right": 1467,
+     "wrong": 558,
+     "coverage": 91.1,
+     "precision": 72.4,
+     "right_of_n": 66
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 893,
+      "coverage": 40.2,
+      "precision": 85.3
+     },
+     "rules x m4+model": {
+      "answers": 1571,
+      "coverage": 70.7,
+      "precision": 83
+     },
+     "rules x grammar": {
+      "answers": 328,
+      "coverage": 14.8,
+      "precision": 82.9
+     },
+     "model x m4+model": {
+      "answers": 1376,
+      "coverage": 61.9,
+      "precision": 67
+     },
+     "model x grammar": {
+      "answers": 186,
+      "coverage": 8.4,
+      "precision": 82.8
+     },
+     "m4+model x grammar": {
+      "answers": 304,
+      "coverage": 13.7,
+      "precision": 84.2
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 1954,
+      "right": 1494,
+      "coverage": 87.9,
+      "precision": 76.5
+     },
+     "grammar": {
+      "answers": 366,
+      "right": 288,
+      "coverage": 16.5,
+      "precision": 78.7
+     },
+     "model chain": {
+      "answers": 2064,
+      "right": 1466,
+      "coverage": 92.9,
+      "precision": 71
+     }
+    },
+    "agreement_families": {
+     "answers": 1558,
+     "right": 1298,
+     "coverage": 70.1,
+     "precision": 83.3
+    },
+    "union_families": {
+     "right": 1665,
+     "right_of_n": 74.9
+    },
+    "res": {
+     "rules": {
+      "kept": 1494,
+      "act": 181,
+      "other": 279,
+      "unread": 266,
+      "abstain": 2
+     },
+     "model": {
+      "unread": 707,
+      "kept": 929,
+      "other": 306,
+      "act": 280
+     },
+     "m4+model": {
+      "kept": 1466,
+      "act": 285,
+      "other": 310,
+      "unread": 161
+     },
+     "grammar": {
+      "kept": 288,
+      "abstain": 1854,
+      "other": 51,
+      "act": 27,
+      "unread": 2
+     }
+    }
+   },
+   "source canon": {
+    "n": 1638,
+    "paths": {
+     "rules": {
+      "n": 1638,
+      "answers": 1105,
+      "right": 677,
+      "wrong": 428,
+      "coverage": 67.5,
+      "precision": 61.3,
+      "right_of_n": 41.3
+     },
+     "model": {
+      "n": 1638,
+      "answers": 1238,
+      "right": 807,
+      "wrong": 431,
+      "coverage": 75.6,
+      "precision": 65.2,
+      "right_of_n": 49.3,
+      "gain_over_baseline": 356,
+      "lost_vs_baseline": 226
+     },
+     "m4+model": {
+      "n": 1638,
+      "answers": 1398,
+      "right": 940,
+      "wrong": 458,
+      "coverage": 85.3,
+      "precision": 67.2,
+      "right_of_n": 57.4,
+      "gain_over_baseline": 347,
+      "lost_vs_baseline": 84
+     },
+     "grammar": {
+      "n": 1638,
+      "answers": 79,
+      "right": 40,
+      "wrong": 39,
+      "coverage": 4.8,
+      "precision": 50.6,
+      "right_of_n": 2.4,
+      "gain_over_baseline": 4,
+      "lost_vs_baseline": 641
+     }
+    },
+    "union": {
+     "right": 1035,
+     "right_of_n": 63.2,
+     "answered_by_any": 1424
+    },
+    "agreement_all": {
+     "n": 1638,
+     "answers": 1371,
+     "right": 939,
+     "wrong": 432,
+     "coverage": 83.7,
+     "precision": 68.5,
+     "right_of_n": 57.3
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 531,
+      "coverage": 32.4,
+      "precision": 84.9
+     },
+     "rules x m4+model": {
+      "answers": 750,
+      "coverage": 45.8,
+      "precision": 79.1
+     },
+     "rules x grammar": {
+      "answers": 64,
+      "coverage": 3.9,
+      "precision": 56.3
+     },
+     "model x m4+model": {
+      "answers": 1171,
+      "coverage": 71.5,
+      "precision": 68.1
+     },
+     "model x grammar": {
+      "answers": 41,
+      "coverage": 2.5,
+      "precision": 61
+     },
+     "m4+model x grammar": {
+      "answers": 47,
+      "coverage": 2.9,
+      "precision": 61.7
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 1105,
+      "right": 677,
+      "coverage": 67.5,
+      "precision": 61.3
+     },
+     "grammar": {
+      "answers": 79,
+      "right": 40,
+      "coverage": 4.8,
+      "precision": 50.6
+     },
+     "model chain": {
+      "answers": 1400,
+      "right": 940,
+      "coverage": 85.5,
+      "precision": 67.1
+     }
+    },
+    "agreement_families": {
+     "answers": 739,
+     "right": 586,
+     "coverage": 45.1,
+     "precision": 79.3
+    },
+    "union_families": {
+     "right": 1026,
+     "right_of_n": 62.6
+    },
+    "res": {
+     "rules": {
+      "kept": 677,
+      "act": 146,
+      "other": 282,
+      "unread": 533
+     },
+     "model": {
+      "kept": 807,
+      "act": 209,
+      "other": 222,
+      "unread": 400
+     },
+     "m4+model": {
+      "kept": 940,
+      "act": 207,
+      "other": 251,
+      "unread": 240
+     },
+     "grammar": {
+      "kept": 40,
+      "act": 14,
+      "abstain": 1557,
+      "other": 25,
+      "unread": 2
+     }
+    }
+   },
+   "source real": {
+    "n": 141,
+    "paths": {
+     "rules": {
+      "n": 141,
+      "answers": 107,
+      "right": 49,
+      "wrong": 58,
+      "coverage": 75.9,
+      "precision": 45.8,
+      "right_of_n": 34.8
+     },
+     "model": {
+      "n": 141,
+      "answers": 114,
+      "right": 52,
+      "wrong": 62,
+      "coverage": 80.9,
+      "precision": 45.6,
+      "right_of_n": 36.9,
+      "gain_over_baseline": 15,
+      "lost_vs_baseline": 12
+     },
+     "m4+model": {
+      "n": 141,
+      "answers": 115,
+      "right": 59,
+      "wrong": 56,
+      "coverage": 81.6,
+      "precision": 51.3,
+      "right_of_n": 41.8,
+      "gain_over_baseline": 18,
+      "lost_vs_baseline": 8
+     },
+     "grammar": {
+      "n": 141,
+      "answers": 48,
+      "right": 36,
+      "wrong": 12,
+      "coverage": 34,
+      "precision": 75,
+      "right_of_n": 25.5,
+      "gain_over_baseline": 6,
+      "lost_vs_baseline": 19
+     }
+    },
+    "union": {
+     "right": 70,
+     "right_of_n": 49.6,
+     "answered_by_any": 124
+    },
+    "agreement_all": {
+     "n": 141,
+     "answers": 103,
+     "right": 53,
+     "wrong": 50,
+     "coverage": 73,
+     "precision": 51.5,
+     "right_of_n": 37.6
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 40,
+      "coverage": 28.4,
+      "precision": 92.5
+     },
+     "rules x m4+model": {
+      "answers": 50,
+      "coverage": 35.5,
+      "precision": 82
+     },
+     "rules x grammar": {
+      "answers": 38,
+      "coverage": 27,
+      "precision": 78.9
+     },
+     "model x m4+model": {
+      "answers": 100,
+      "coverage": 70.9,
+      "precision": 52
+     },
+     "model x grammar": {
+      "answers": 31,
+      "coverage": 22,
+      "precision": 93.5
+     },
+     "m4+model x grammar": {
+      "answers": 35,
+      "coverage": 24.8,
+      "precision": 85.7
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 107,
+      "right": 49,
+      "coverage": 75.9,
+      "precision": 45.8
+     },
+     "grammar": {
+      "answers": 48,
+      "right": 36,
+      "coverage": 34,
+      "precision": 75
+     },
+     "model chain": {
+      "answers": 120,
+      "right": 59,
+      "coverage": 85.1,
+      "precision": 49.2
+     }
+    },
+    "agreement_families": {
+     "answers": 49,
+     "right": 41,
+     "coverage": 34.8,
+     "precision": 83.7
+    },
+    "union_families": {
+     "right": 70,
+     "right_of_n": 49.6
+    },
+    "res": {
+     "rules": {
+      "kept": 49,
+      "act": 39,
+      "other": 19,
+      "unread": 33,
+      "abstain": 1
+     },
+     "model": {
+      "kept": 52,
+      "other": 14,
+      "act": 48,
+      "unread": 27
+     },
+     "m4+model": {
+      "kept": 59,
+      "other": 16,
+      "act": 40,
+      "unread": 25,
+      "abstain": 1
+     },
+     "grammar": {
+      "abstain": 93,
+      "kept": 36,
+      "act": 9,
+      "other": 3
+     }
+    }
+   },
+   "source talk": {
+    "n": 108,
+    "paths": {
+     "rules": {
+      "n": 108,
+      "answers": 81,
+      "right": 44,
+      "wrong": 37,
+      "coverage": 75,
+      "precision": 54.3,
+      "right_of_n": 40.7
+     },
+     "model": {
+      "n": 108,
+      "answers": 97,
+      "right": 61,
+      "wrong": 36,
+      "coverage": 89.8,
+      "precision": 62.9,
+      "right_of_n": 56.5,
+      "gain_over_baseline": 26,
+      "lost_vs_baseline": 9
+     },
+     "m4+model": {
+      "n": 108,
+      "answers": 102,
+      "right": 66,
+      "wrong": 36,
+      "coverage": 94.4,
+      "precision": 64.7,
+      "right_of_n": 61.1,
+      "gain_over_baseline": 26,
+      "lost_vs_baseline": 4
+     },
+     "grammar": {
+      "n": 108,
+      "answers": 25,
+      "right": 22,
+      "wrong": 3,
+      "coverage": 23.1,
+      "precision": 88,
+      "right_of_n": 20.4,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 22
+     }
+    },
+    "union": {
+     "right": 70,
+     "right_of_n": 64.8,
+     "answered_by_any": 103
+    },
+    "agreement_all": {
+     "n": 108,
+     "answers": 96,
+     "right": 66,
+     "wrong": 30,
+     "coverage": 88.9,
+     "precision": 68.8,
+     "right_of_n": 61.1
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 44,
+      "coverage": 40.7,
+      "precision": 79.5
+     },
+     "rules x m4+model": {
+      "answers": 49,
+      "coverage": 45.4,
+      "precision": 81.6
+     },
+     "rules x grammar": {
+      "answers": 25,
+      "coverage": 23.1,
+      "precision": 88
+     },
+     "model x m4+model": {
+      "answers": 96,
+      "coverage": 88.9,
+      "precision": 63.5
+     },
+     "model x grammar": {
+      "answers": 17,
+      "coverage": 15.7,
+      "precision": 94.1
+     },
+     "m4+model x grammar": {
+      "answers": 20,
+      "coverage": 18.5,
+      "precision": 95
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 81,
+      "right": 44,
+      "coverage": 75,
+      "precision": 54.3
+     },
+     "grammar": {
+      "answers": 25,
+      "right": 22,
+      "coverage": 23.1,
+      "precision": 88
+     },
+     "model chain": {
+      "answers": 102,
+      "right": 66,
+      "coverage": 94.4,
+      "precision": 64.7
+     }
+    },
+    "agreement_families": {
+     "answers": 49,
+     "right": 40,
+     "coverage": 45.4,
+     "precision": 81.6
+    },
+    "union_families": {
+     "right": 70,
+     "right_of_n": 64.8
+    },
+    "res": {
+     "rules": {
+      "unread": 27,
+      "other": 19,
+      "kept": 44,
+      "act": 18
+     },
+     "model": {
+      "act": 19,
+      "other": 17,
+      "kept": 61,
+      "unread": 11
+     },
+     "m4+model": {
+      "act": 18,
+      "other": 18,
+      "kept": 66,
+      "unread": 6
+     },
+     "grammar": {
+      "abstain": 83,
+      "kept": 22,
+      "other": 2,
+      "act": 1
+     }
+    }
+   },
+   "source template": {
+    "n": 1368,
+    "paths": {
+     "rules": {
+      "n": 1368,
+      "answers": 1341,
+      "right": 954,
+      "wrong": 387,
+      "coverage": 98,
+      "precision": 71.1,
+      "right_of_n": 69.7
+     },
+     "model": {
+      "n": 1368,
+      "answers": 1221,
+      "right": 733,
+      "wrong": 488,
+      "coverage": 89.3,
+      "precision": 60,
+      "right_of_n": 53.6,
+      "gain_over_baseline": 96,
+      "lost_vs_baseline": 317
+     },
+     "m4+model": {
+      "n": 1368,
+      "answers": 1349,
+      "right": 859,
+      "wrong": 490,
+      "coverage": 98.6,
+      "precision": 63.7,
+      "right_of_n": 62.8,
+      "gain_over_baseline": 96,
+      "lost_vs_baseline": 191
+     },
+     "grammar": {
+      "n": 1368,
+      "answers": 1081,
+      "right": 858,
+      "wrong": 223,
+      "coverage": 79,
+      "precision": 79.4,
+      "right_of_n": 62.7,
+      "gain_over_baseline": 109,
+      "lost_vs_baseline": 205
+     }
+    },
+    "union": {
+     "right": 1104,
+     "right_of_n": 80.7,
+     "answered_by_any": 1366
+    },
+    "agreement_all": {
+     "n": 1368,
+     "answers": 1182,
+     "right": 841,
+     "wrong": 341,
+     "coverage": 86.4,
+     "precision": 71.2,
+     "right_of_n": 61.5
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 748,
+      "coverage": 54.7,
+      "precision": 85.2
+     },
+     "rules x m4+model": {
+      "answers": 908,
+      "coverage": 66.4,
+      "precision": 84
+     },
+     "rules x grammar": {
+      "answers": 915,
+      "coverage": 66.9,
+      "precision": 81.9
+     },
+     "model x m4+model": {
+      "answers": 1184,
+      "coverage": 86.5,
+      "precision": 61.9
+     },
+     "model x grammar": {
+      "answers": 730,
+      "coverage": 53.4,
+      "precision": 80.1
+     },
+     "m4+model x grammar": {
+      "answers": 850,
+      "coverage": 62.1,
+      "precision": 80.7
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 1341,
+      "right": 954,
+      "coverage": 98,
+      "precision": 71.1
+     },
+     "grammar": {
+      "answers": 1081,
+      "right": 858,
+      "coverage": 79,
+      "precision": 79.4
+     },
+     "model chain": {
+      "answers": 1349,
+      "right": 859,
+      "coverage": 98.6,
+      "precision": 63.7
+     }
+    },
+    "agreement_families": {
+     "answers": 885,
+     "right": 755,
+     "coverage": 64.7,
+     "precision": 85.3
+    },
+    "union_families": {
+     "right": 1104,
+     "right_of_n": 80.7
+    },
+    "res": {
+     "rules": {
+      "kept": 954,
+      "act": 246,
+      "other": 141,
+      "unread": 27
+     },
+     "model": {
+      "kept": 733,
+      "act": 257,
+      "other": 231,
+      "unread": 147
+     },
+     "m4+model": {
+      "kept": 859,
+      "act": 254,
+      "other": 236,
+      "unread": 19
+     },
+     "grammar": {
+      "kept": 858,
+      "other": 124,
+      "act": 99,
+      "abstain": 287
+     }
+    }
+   },
+   "source grid": {
+    "n": 3581,
+    "paths": {
+     "rules": {
+      "n": 3581,
+      "answers": 2770,
+      "right": 1281,
+      "wrong": 1489,
+      "coverage": 77.4,
+      "precision": 46.2,
+      "right_of_n": 35.8
+     },
+     "model": {
+      "n": 3581,
+      "answers": 2854,
+      "right": 1316,
+      "wrong": 1538,
+      "coverage": 79.7,
+      "precision": 46.1,
+      "right_of_n": 36.7,
+      "gain_over_baseline": 574,
+      "lost_vs_baseline": 539
+     },
+     "m4+model": {
+      "n": 3581,
+      "answers": 3170,
+      "right": 1519,
+      "wrong": 1651,
+      "coverage": 88.5,
+      "precision": 47.9,
+      "right_of_n": 42.4,
+      "gain_over_baseline": 554,
+      "lost_vs_baseline": 316
+     },
+     "grammar": {
+      "n": 3581,
+      "answers": 207,
+      "right": 150,
+      "wrong": 57,
+      "coverage": 5.8,
+      "precision": 72.5,
+      "right_of_n": 4.2,
+      "gain_over_baseline": 7,
+      "lost_vs_baseline": 1138
+     }
+    },
+    "union": {
+     "right": 1857,
+     "right_of_n": 51.9,
+     "answered_by_any": 3242
+    },
+    "agreement_all": {
+     "n": 3581,
+     "answers": 3092,
+     "right": 1512,
+     "wrong": 1580,
+     "coverage": 86.3,
+     "precision": 48.9,
+     "right_of_n": 42.2
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 856,
+      "coverage": 23.9,
+      "precision": 86.7
+     },
+     "rules x m4+model": {
+      "answers": 1320,
+      "coverage": 36.9,
+      "precision": 73.1
+     },
+     "rules x grammar": {
+      "answers": 194,
+      "coverage": 5.4,
+      "precision": 73.7
+     },
+     "model x m4+model": {
+      "answers": 2660,
+      "coverage": 74.3,
+      "precision": 48.5
+     },
+     "model x grammar": {
+      "answers": 138,
+      "coverage": 3.9,
+      "precision": 84.1
+     },
+     "m4+model x grammar": {
+      "answers": 150,
+      "coverage": 4.2,
+      "precision": 82
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 2770,
+      "right": 1281,
+      "coverage": 77.4,
+      "precision": 46.2
+     },
+     "grammar": {
+      "answers": 207,
+      "right": 150,
+      "coverage": 5.8,
+      "precision": 72.5
+     },
+     "model chain": {
+      "answers": 3175,
+      "right": 1521,
+      "coverage": 88.7,
+      "precision": 47.9
+     }
+    },
+    "agreement_families": {
+     "answers": 1318,
+     "right": 964,
+     "coverage": 36.8,
+     "precision": 73.1
+    },
+    "union_families": {
+     "right": 1837,
+     "right_of_n": 51.3
+    },
+    "res": {
+     "rules": {
+      "kept": 1281,
+      "act": 934,
+      "unread": 811,
+      "other": 555
+     },
+     "model": {
+      "kept": 1316,
+      "act": 972,
+      "unread": 727,
+      "other": 566
+     },
+     "m4+model": {
+      "kept": 1519,
+      "act": 1101,
+      "unread": 411,
+      "other": 550
+     },
+     "grammar": {
+      "kept": 150,
+      "abstain": 3366,
+      "act": 27,
+      "other": 30,
+      "unread": 8
+     }
+    }
+   },
+   "source roundtrip": {
+    "n": 270,
+    "paths": {
+     "rules": {
+      "n": 270,
+      "answers": 121,
+      "right": 61,
+      "wrong": 60,
+      "coverage": 44.8,
+      "precision": 50.4,
+      "right_of_n": 22.6
+     },
+     "model": {
+      "n": 270,
+      "answers": 138,
+      "right": 50,
+      "wrong": 88,
+      "coverage": 51.1,
+      "precision": 36.2,
+      "right_of_n": 18.5,
+      "gain_over_baseline": 23,
+      "lost_vs_baseline": 34
+     },
+     "m4+model": {
+      "n": 270,
+      "answers": 173,
+      "right": 76,
+      "wrong": 97,
+      "coverage": 64.1,
+      "precision": 43.9,
+      "right_of_n": 28.1,
+      "gain_over_baseline": 23,
+      "lost_vs_baseline": 8
+     },
+     "grammar": {
+      "n": 270,
+      "answers": 21,
+      "right": 11,
+      "wrong": 10,
+      "coverage": 7.8,
+      "precision": 52.4,
+      "right_of_n": 4.1,
+      "gain_over_baseline": 0,
+      "lost_vs_baseline": 50
+     }
+    },
+    "union": {
+     "right": 84,
+     "right_of_n": 31.1,
+     "answered_by_any": 180
+    },
+    "agreement_all": {
+     "n": 270,
+     "answers": 169,
+     "right": 76,
+     "wrong": 93,
+     "coverage": 62.6,
+     "precision": 45,
+     "right_of_n": 28.1
+    },
+    "pairs": {
+     "rules x model": {
+      "answers": 32,
+      "coverage": 11.9,
+      "precision": 84.4
+     },
+     "rules x m4+model": {
+      "answers": 81,
+      "coverage": 30,
+      "precision": 65.4
+     },
+     "rules x grammar": {
+      "answers": 16,
+      "coverage": 5.9,
+      "precision": 68.8
+     },
+     "model x m4+model": {
+      "answers": 120,
+      "coverage": 44.4,
+      "precision": 41.7
+     },
+     "model x grammar": {
+      "answers": 9,
+      "coverage": 3.3,
+      "precision": 77.8
+     },
+     "m4+model x grammar": {
+      "answers": 16,
+      "coverage": 5.9,
+      "precision": 68.8
+     }
+    },
+    "families": {
+     "rules translator": {
+      "answers": 121,
+      "right": 61,
+      "coverage": 44.8,
+      "precision": 50.4
+     },
+     "grammar": {
+      "answers": 21,
+      "right": 11,
+      "coverage": 7.8,
+      "precision": 52.4
+     },
+     "model chain": {
+      "answers": 173,
+      "right": 76,
+      "coverage": 64.1,
+      "precision": 43.9
+     }
+    },
+    "agreement_families": {
+     "answers": 79,
+     "right": 51,
+     "coverage": 29.3,
+     "precision": 64.6
+    },
+    "union_families": {
+     "right": 84,
+     "right_of_n": 31.1
+    },
+    "res": {
+     "rules": {
+      "other": 24,
+      "unread": 148,
+      "kept": 61,
+      "act": 36,
+      "abstain": 1
+     },
+     "model": {
+      "other": 28,
+      "act": 60,
+      "unread": 132,
+      "kept": 50
+     },
+     "m4+model": {
+      "other": 28,
+      "unread": 97,
+      "kept": 76,
+      "act": 69
+     },
+     "grammar": {
+      "other": 7,
+      "abstain": 249,
+      "kept": 11,
+      "act": 3
+     }
+    }
+   }
+  }
+ }
+}

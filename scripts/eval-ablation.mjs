@@ -17,6 +17,7 @@
  * Writes <out>/<config>.json = { config, rows: [{ set, id, group, outcome, ms, reply, worlds, reading, ... }] } (rows keep the text and the reply so a later step can classify the rescues).
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isMainThread, workerData } from 'node:worker_threads';
@@ -42,6 +43,8 @@ const REPO = resolve(dirname(SELF), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);
 const L = (f) => readFileSync(join(REPO, f), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
+
+const VOICE_OFF = { PSYS2_TYPED: 'off', PSYS2_ALTERNATIONS: 'off', PSYS2_NEAR: 'off', PSYS2_SLOTS: 'off' };
 
 /** The configurations. `mode` picks the base settings of runtime-config (rules | encoder | encoder+n1); `set` overrides single settings; `seg` = 'rules' replaces the model's segmentation by the rules' clause splitter. */
 export const CONFIGS = {
@@ -76,6 +79,14 @@ export const CONFIGS = {
   'rules-nocut': { note: 'no model; defaults (suspect, also) but the card-driven clause cutter OFF', mode: 'rules', set: {}, proto: { cutter: false } },
   'enc-C-nocut': { note: 'enc-C with the card-driven clause cutter OFF', mode: 'encoder', set: { nxStrategy: 'rules' }, proto: { cutter: false } },
   'enc-C-segrules-nocut': { note: 'enc-C-segrules with the card-driven clause cutter OFF (the rules splitter as it was)', mode: 'encoder', set: { nxStrategy: 'rules' }, seg: 'rules', proto: { cutter: false } },
+  // READING PATHS ALONE (2026-11-15, scripts/measure-voices.mjs): each path with every other symbolic reading step off, so a path is one voice
+  'v-rules': { note: 'voice: rules-C alone (typed step, alternations, near words, slot types all off)', mode: 'rules', set: {}, env: VOICE_OFF },
+  'v-typed': { note: 'voice: rules-C + the typed step (proposeByTypes) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_TYPED: 'on' } },
+  'v-formops': { note: 'voice: rules-C + the typed form operators (PSYS2_FORMOPS=on) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_FORMOPS: 'on' } },
+  'v-alt': { note: 'voice: rules-C + the alternation rules (w.lang.en.alternation of the catalog) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_ALTERNATIONS: 'on' } },
+  'v-canon': { note: 'voice: rules-C + readCanonical (0.91 canonicalise: fillers + the catalog alternation rules; PSYS2_CANON=on) only', mode: 'rules', set: {}, env: { ...VOICE_OFF, PSYS2_ALTERNATIONS: 'on', PSYS2_CANON: 'on' } },
+  'v-enc-n1': { note: 'voice: the neural dispatcher (segmentation + world prior) + the T5 normaliser fallback; the rules read', mode: 'encoder+n1', set: { nxStrategy: 'rules' }, env: VOICE_OFF },
+  'v-neural': { note: 'voice: the neural reader first (NX) + dispatcher + normaliser, symbolic steps off', mode: 'encoder+n1', set: { nxStrategy: 'neural' }, env: VOICE_OFF },
   'enc-neural-n1': { note: 'model first (NX neural) with the normalizer', mode: 'encoder+n1', set: { nxStrategy: 'neural' } },
 };
 
@@ -114,6 +125,14 @@ function buildItems({ sets, limit }) {
 
 // ------------------------------------------------------------------------------------------------ the worker side
 const strip = (s) => JSON.stringify(visibleState(s));
+/** What a reading DID, as a short hash: the visible state afterwards, the answer values and the effects; null when nothing was done (voices measurement: two paths agree when the signatures are equal). */
+const sigHash = (...parts) => createHash('sha1').update(JSON.stringify(parts)).digest('hex').slice(0, 12);
+const sigOfReply = (reply, before, after) => {
+  if (!reply || reply.segments.length === 0 || reply.segments.every((x) => x.unparsed)) return null;
+  const effects = reply.effects.filter((e) => e.name !== 'chat.suggest').map((e) => e.name);
+  const acted = strip(before) !== strip(after) || effects.length > 0 || reply.statuses.some((x) => x === 'supported');
+  return acted ? sigHash(strip(after), reply.answers.map((a) => a.value), effects) : null;
+};
 const CLARIFY = /\?\s*$/;
 function outcomeOf(base, { acted, replyText, statuses }) {
   if (base === 'not_understood') return !acted && (statuses.some((x) => x === 'missing' || x === 'ambiguous') || CLARIFY.test(replyText.trim())) ? 'asked' : 'nu';
@@ -162,7 +181,7 @@ async function runItem(env, it) {
     const r = await sendChecked(s, c, c.message, c.sendLanguage ? { language: c.sendLanguage } : ro ? { language: 'auto' } : undefined);
     if (!r.reply) return [row({ id: c.id, world: c.world, group: groupOf(c.world), text: c.message, outcome: 'wrong', ms: r.ms, error: r.error })];
     const j = judge(c, r, ro);
-    return [row({ id: c.id, world: c.world, group: groupOf(c.world), families: c.families, text: c.message, outcome: j.outcome, ms: r.ms, reply: j.replyText.slice(0, 160), failing: j.failing, ...info(r.reply) })];
+    return [row({ id: c.id, world: c.world, group: groupOf(c.world), families: c.families, text: c.message, outcome: j.outcome, ms: r.ms, reply: j.replyText.slice(0, 160), failing: j.failing, sig: sigOfReply(r.reply, r.before, r.after), ...info(r.reply) })];
   }
   if (it.kind === 'equiv') {
     // the message must do what the reference sentence does in a fresh session (same visible state and answer values); a junk row (no reference) is right when nothing was executed
@@ -185,7 +204,7 @@ async function runItem(env, it) {
       if (!ref.reply || ref.unparsedAll || !ref.acted) return [row({ id: it.id, world: it.world, group: it.group, text: it.message, outcome: 'skip', ms: got.ms })];
       outcome = got.state === ref.state && got.values === ref.values ? 'right' : got.unparsedAll || !got.acted ? (CLARIFY.test(got.text.trim()) ? 'asked' : 'nu') : 'wrong';
     }
-    return [row({ id: it.id, world: it.world, group: it.group, text: it.message, outcome, ms: got.ms, reply: got.text.slice(0, 160), ...info(got.reply) })];
+    return [row({ id: it.id, world: it.world, group: it.group, text: it.message, outcome, ms: got.ms, reply: got.text.slice(0, 160), sig: got.acted && !got.unparsedAll ? sigHash(got.state, got.values) : null, ...info(got.reply) })];
   }
   if (it.kind === 'knowledge') {
     const c = it.c;
