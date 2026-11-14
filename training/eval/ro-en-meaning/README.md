@@ -60,3 +60,19 @@ The paths `grammar-lib` and `grammar-lib0` keep the prototype's frames (`src/tra
 | chain: w.lang.ro grammar, then M4 with the model | 100 % | | 56.3 (shipped chain 55.7) | 66.7 | 70.4 | 41.8 | 57.5 |
 
 Results file: `results-2026-11-14b.json`. Same instrument, same rows; no MT path is replaced.
+
+## Update 2026-11-15: w.lang.ro with the UniMorph dictionary (knowledge 19ca312) and the article (8741e52), library 0.84
+
+Same instrument, same 9,328 rows (`results-2026-11-15.json`, `node scripts/ro-en-table.mjs`). The library fixed Q51 (0.63), so `grammar-lib` is the library as it is (the earlier workaround numbers were identical). Correction: in the earlier run an `analyse(undefined)` call past the end of a sentence threw and the measuring script counted it as an abstention; fixed in `src/lang/ro.mjs`, the numbers did not change.
+
+| path | answers | right when it answers | kept overall | hand Romanian | talk | real | canon |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| grammar, translator's lexicon (632 lemmas) | 19.7 % | 85.9 % | 16.9 | 25.8 | 22.2 | 26.2 | 3.2 |
+| grammar, w.lang.ro hand dictionary (256 lemmas) | 14.9 % | 81.8 % | 12.2 | 18.8 | 12.0 | 15.6 | 1.3 |
+| + the UniMorph dictionary (3,466 lemmas, no senses) | 14.9 % | 81.8 % | 12.2 | 18.8 | 12.0 | 15.6 | 1.3 |
+| + UniMorph with the translator's English for its lemmas (a stand-in for senses) | 17.2 % | 78.8 % | 13.5 | 20.8 | 15.7 | 22.7 | 1.3 |
+| chain: w.lang.ro grammar (hand), then M4 with the model | 100 % | | 56.3 | 66.7 | 70.4 | 41.8 | 57.5 |
+| chain: w.lang.ro + UniMorph + stand-in English, then M4 with the model | 100 % | | 56.5 | 66.9 | 71.3 | 44.0 | 57.5 |
+| M4 with the model (shipped chain) | 100 % | | 55.7 | 65.6 | 70.4 | 41.8 | 58.2 |
+
+**The UniMorph lemmas add nothing to the reading by themselves**: their rows have an empty sense, so a word is analysed to a lemma and a class but has no English to realise, and the grammar path drops it (12.2 % before and after). It reads words only when the host supplies the English (the stand-in gives +1.3 points kept overall, +7 on real owner phrases); the lever is senses in the dictionary (k.words / k.actions ids), not lemmas, and the frames layer.
