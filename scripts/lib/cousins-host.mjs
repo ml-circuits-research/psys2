@@ -7,7 +7,7 @@
  *   expand(lib, world, kase, { degree })    the cases of a case: [{ frame, text, degree, dims, valid, why, dimension }]  (no hand-written lists: every cousin comes from the library)
  *   expectedOf(world, cousin)               what a correct reply must say: { all: [word...] } from the frame's answer (an ask: the values; a find: the names of the holders)
  *   judge(cousin, expected, run)            right | wrong | no_reply, by the reply AND the state (a question must not change the state)
- *   tabulate(rows)                          degree x dimension -> { right, of }
+ *   (tabulate and tableText: the library's, 0.103; scripts/cousins.mjs calls them)
  */
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -108,25 +108,4 @@ export function judge(c, expected, run) {
   if (!stateSame) return { outcome: 'wrong', why: 'a question changed the state' };
   if (missing.length) return { outcome: 'wrong', why: `missing ${missing.map((m) => m[0]).join(', ')}` };
   return { outcome: 'right', why: '' };
-}
-
-/** `rows`: [{ degree, dimension, outcome, reasoner? }] -> Map "degree|dimension" -> { degree, dimension, right, of }, ordered by degree then dimension. */
-export function tabulate(rows) {
-  const m = new Map();
-  for (const r of rows) {
-    const k = `${r.degree}|${r.dimension}`;
-    const e = m.get(k) ?? m.set(k, { degree: r.degree, dimension: r.dimension, right: 0, of: 0 }).get(k);
-    e.of++;
-    if (r.outcome === 'right') e.right++;
-  }
-  return [...m.values()].sort((a, b) => a.degree - b.degree || String(a.dimension).localeCompare(String(b.dimension)));
-}
-
-/** A plain text table of `tabulate` output. */
-export function tableText(entries, { title = '' } = {}) {
-  const w = Math.max(9, ...entries.map((e) => String(e.dimension).length));
-  const lines = [title, `degree  ${'dimension'.padEnd(w)}  right / of`];
-  for (const e of entries) lines.push(`${String(e.degree).padEnd(6)}  ${String(e.dimension).padEnd(w)}  ${e.right} / ${e.of}  (${e.of ? Math.round((1000 * e.right) / e.of) / 10 : 0}%)`);
-  if (!entries.length) lines.push('(no valid cousins)');
-  return lines.filter((l, i) => i || l).join('\n');
 }

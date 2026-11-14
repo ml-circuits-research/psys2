@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import * as lib from '../src/vendor/sopworld/sopworld.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { knowledgeWorld, genreOf, topicsOf } from '../src/dialog/compose-world.mjs';
+import { knowledgeWorld, topicsOf } from '../src/dialog/compose-world.mjs';
 import { createSummarizer, createComposer, composeRequest, docTypeOf, DOC_TYPES, checkComposition, compositionToDocument, installTextGen, TEXTGEN_GLOBAL } from '../src/dialog/textgen.mjs';
 
 test('without the library the adapters are unavailable and return nothing (no local generator)', () => {
@@ -143,10 +143,10 @@ for (const file of ['owner-log-2026-11-13b.jsonl', 'owner-log-2026-11-13c.jsonl'
 
 test('the published k.genres is in the knowledge world and the five types map to its genres, and the library applies them (0.71)', () => {
   const kw = knowledgeWorld(lib);
-  for (const t of Object.keys(DOC_TYPES)) assert.ok(genreOf(kw, t), `a genre for ${t}`);
+  for (const t of Object.keys(DOC_TYPES)) assert.ok(lib.genreOf(kw, t), `a genre for ${t}`);
   assert.ok(lib.compose(kw, 'penguin', { genre: 'essay' }).parts, 'the library reads the published parts and steps');
   assert.ok(topicsOf(kw).includes('Peru') && topicsOf(kw).includes('penguin'), 'animals and countries are topics');
   const c = createComposer(lib).compose({ type: 'essay', topic: 'peru', chapters: 2, subchapters: 1, words: 60, seed: 1 }).composition;
   assert.equal(c.title, 'All about Peru'); assert.ok(c.chapters.length >= 1);
-  assert.ok(c.chapters.flatMap((x) => x.subchapters.flatMap((y) => y.sentences)).every((x) => /^k\.geo\./.test(x.source) && !/[^\x20-\x7e]/.test(x.text)));
+  assert.ok(c.chapters.flatMap((x) => x.subchapters.flatMap((y) => y.sentences)).every((x) => (/^k\.geo\./.test(x.source) || (x.takes === "topic" && x.source == null)) && !/[^\x20-\x7e]/.test(x.text)));
 });

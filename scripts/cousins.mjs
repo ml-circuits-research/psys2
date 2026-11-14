@@ -18,7 +18,8 @@ import { spawnSync } from 'node:child_process';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
-import { resolveLibrary, expand, expectedOf, clauseExpected, judge, tabulate, tableText, DIMENSIONS } from './lib/cousins-host.mjs';
+import { resolveLibrary, expand, expectedOf, clauseExpected, judge, DIMENSIONS } from './lib/cousins-host.mjs';
+import * as VENDORED from '../src/vendor/sopworld/sopworld.mjs';
 import { installFormOperators } from './lib/formops-host.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -121,7 +122,7 @@ function report(res) {
   for (const c of res.perCase ?? []) { const k = c.frame ? c.frame.is : 'none'; const e = by[k] ??= { cases: 0, valid: 0 }; e.cases++; e.valid += c.valid; }
   lines.push(`frames read: ${Object.entries(by).map(([k, e]) => `${k} ${e.cases} case(s) -> ${e.valid} valid cousins`).join('; ') || 'none'}`);
   if (res.skippedWorlds?.length) lines.push(`catalog worlds the library refused to load: ${res.skippedWorlds.join(', ')}`);
-  lines.push(tableText(tabulate(res.rows), { title: 'degree x dimension' }));
+  lines.push('degree x dimension', VENDORED.tableText(VENDORED.tabulate(res.rows.map((r) => ({ degree: r.degree, dim: r.dimension, pass: r.outcome === 'right' })))));   // the library's table (0.103)
   const byDim = {};   // the pattern of breaks, as the library's tester names it: the dimensions that hold and the ones that break
   for (const r of res.rows) { const d = (byDim[r.dimension] ??= { pass: 0, of: 0 }); d.of++; if (r.outcome === 'right') d.pass++; }
   const holds = Object.entries(byDim).filter(([, d]) => d.pass === d.of).map(([k]) => k), breaks = Object.entries(byDim).filter(([, d]) => d.pass < d.of).map(([k]) => k);
