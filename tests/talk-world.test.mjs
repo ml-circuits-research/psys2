@@ -8,7 +8,6 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { cardHtml, boardSvg, layoutBoard, drawingSvg, BOARD, esc } from '../worlds/talk/cards.mjs';
-import tab, { mood } from '../docs/webchat/ui/tabs/talk.mjs';
 
 const FILES = {
   'vocab.json': JSON.stringify({ comet: ['k.objects/shards/sky', 'k.words/shards/co'], spider: ['k.words/shards/sp'], elephant: ['k.commonsense/shards/core'], mouse: ['k.commonsense/shards/core'], lighthouse: ['k.objects/shards/buildings'], tail: ['k.words/shards/co'] }),
@@ -145,12 +144,6 @@ test('honest scope: a plain refusal with two nearest suggestions, no free chat',
   assert.ok(r2.effects.find((e) => e.name === 'chat.suggest').args.items.length >= 3);
 });
 
-test('the tab plugin declares its world, its effects and no network use', () => {
-  assert.equal(tab.id, 'talk');
-  assert.equal(tab.world, 'talk');
-  assert.ok(tab.effects['talk.card'] && tab.effects['talk.board']);
-});
-
 test('card renderers: every kind draws, markup from the knowledge is escaped', () => {
   const parts = [{ name: '<b>x</b>', shape: 'circle', x: 10, y: 10, w: 40, h: 40, z: 1, colour: ['red'] }, { name: 'bad', shape: 'rectangle', x: 0, y: 0, w: 10, h: 10, z: 0, colour: ['"><script>'], rgb: 'javascript:1' }];
   const svg = drawingSvg(parts);
@@ -219,13 +212,3 @@ test('E-T3 fixes: "and before it?" and "and the seasons?" on a line, "no, the ot
   assert.match(r.text, /^(?:Mars|Earth) is a space body/);
 });
 
-test('avatar reactions (host hook): found is happy, not found is sad, a big number is surprising', async () => {
-  engine.setKnowledge(createFacts({ source }));
-  const s = session();
-  const m = async (q) => { const r = await s.send(q); return mood(r, r.text); };
-  assert.equal(await m('What comes after Mars?'), 'smile');
-  assert.equal(await m('What is a blorp?'), null);
-  assert.equal(await m('Is Jupiter bigger than Mars?'), 'smile', 'a comparison of two planets is a plain answer now: the number of km across was a table of this tab');
-  assert.equal(tab.mood, mood);
-  assert.equal(mood({ statuses: [] }, 'hello'), null);
-});

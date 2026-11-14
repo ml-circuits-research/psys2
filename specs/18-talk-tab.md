@@ -1,5 +1,7 @@
 # 18. The Talk tab: a conversation that draws itself
 
+> **Superseded for the UI (2026-11-15):** the Talk page, its topic board and its cards were removed; the summary became a panel of the chat and the context examples became its suggestion chips (spec 06, "Pages, phone layout, reply links"). The world `talk` itself is unchanged.
+
 World `talk` (`worlds/talk`, `status=fixture`, ops strategy: it does not opt in to the matrix, so both reasoner settings give the same answers) and the tab `docs/webchat/ui/tabs/talk.mjs`. Purpose (owner, 2026-11-13): show how worlds and knowledge combine. The frame of the question decides the card; the knowledge supplies the words and the facts by lookup (spec 17); no model takes part and the encoder is not retrained (the frame decides and Talk is the active tab).
 
 This is **stage 1** (frames and renderers, the topic board, "how do you know", honest scope) plus **stage 2** (section 7: cards that change and travel, follow-ups without a subject, the SPACE layout of the parts diagram, the tree card, the user and session cards, experiment E-T4). Not built yet: a map card, and a SPACE layout of the topic board.
