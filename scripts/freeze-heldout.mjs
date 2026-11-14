@@ -31,7 +31,8 @@ import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-export const DIR = join(REPO, 'training/eval/heldout-real');
+export const EVAL_DIR = process.env.PSYS2_EVAL_DIR || join(REPO, 'training/eval');   // the env overrides are for tests only
+export const DIR = process.env.PSYS2_HELDOUT_DIR || join(EVAL_DIR, 'heldout-real');
 const F = (n) => join(DIR, n);
 const HEADER = { _header: 'FROZEN HELD-OUT REAL MESSAGES. Frozen at arrival; measured only; never used to write a rule, a test, a pattern, a lexicon entry or training data. Append-only. See scripts/freeze-heldout.mjs and docs/lessons.md.' };
 const jsonl = (f) => (existsSync(f) ? readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((r) => !r._header) : []);
@@ -57,10 +58,10 @@ export function summary() {
 }
 
 /** Texts workers look at (a message in here is not unseen). */
-function seenTexts() {
+export function seenTexts() {
   const seen = new Set();
   const take = (f) => { try { for (const l of readFileSync(f, 'utf8').split('\n')) { if (!l.trim()) continue; try { const r = JSON.parse(l); for (const k of ['text', 'message', 'original']) if (typeof r[k] === 'string') seen.add(norm(r[k])); } catch { seen.add(norm(l)); } } } catch { /* missing */ } };
-  const ev = join(REPO, 'training/eval');
+  const ev = EVAL_DIR;
   for (const f of readdirSync(ev)) if (/\.(jsonl|txt)$/.test(f)) take(join(ev, f));
   return seen;
 }
@@ -74,21 +75,27 @@ function walk(d, out = []) {
   return out;
 }
 
+/** Freezes new messages (the rule above): `items` are { text, tab?, lang?, time? }. Returns { added: [rows], refused: { duplicate, seen, empty }, seenItems: [items that workers already look at] }. */
+export function freeze(items, { source, arrived = today(), dry = false } = {}) {
+  const have = new Set(rows().map((r) => r.hash)), seen = seenTexts(), added = [], seenItems = [], refused = { duplicate: 0, seen: 0, empty: 0 };
+  for (const it of items) {
+    const text = String(it.text ?? '').trim(), hash = hashOf(text);
+    if (!text) refused.empty++;
+    else if (have.has(hash) || added.some((r) => r.hash === hash)) refused.duplicate++;
+    else if (seen.has(norm(text))) { refused.seen++; seenItems.push(it); }
+    else added.push({ hash, arrived, source, tab: it.tab ?? null, lang: it.lang ?? 'en', time: it.time ?? `${arrived}T00:00:00.000Z`, text });
+  }
+  if (!dry) append(F('rows.jsonl'), added);
+  return { added, refused, seenItems };
+}
+
 async function main() {
   if (has('--add')) {
     const file = arg('--add'), source = arg('--source', file), arrived = arg('--arrived', today());
     const raw = readFileSync(file, 'utf8').split('\n').filter((l) => l.trim());
     const items = raw.map((l) => { try { const r = JSON.parse(l); return typeof r.text === 'string' ? r : null; } catch { return { text: l.trim() }; } }).filter(Boolean);
-    const have = new Set(rows().map((r) => r.hash)), seen = seenTexts(), add = [], refused = { duplicate: 0, seen: 0, empty: 0 };
-    for (const it of items) {
-      const text = it.text.trim(), hash = hashOf(text);
-      if (!text) refused.empty++;
-      else if (have.has(hash) || add.some((r) => r.hash === hash)) refused.duplicate++;
-      else if (seen.has(norm(text))) refused.seen++;
-      else add.push({ hash, arrived, source, tab: it.tab ?? null, lang: it.lang ?? 'en', time: it.time ?? `${arrived}T00:00:00.000Z`, text });
-    }
-    if (!has('--dry')) append(F('rows.jsonl'), add);
-    console.log(`${has('--dry') ? '(dry) ' : ''}frozen ${add.length} of ${items.length} messages from ${source}; refused: ${refused.duplicate} duplicate, ${refused.seen} already seen by workers, ${refused.empty} empty`);
+    const { added, refused } = freeze(items, { source, arrived, dry: has('--dry') });
+    console.log(`${has('--dry') ? '(dry) ' : ''}frozen ${added.length} of ${items.length} messages from ${source}; refused: ${refused.duplicate} duplicate, ${refused.seen} already seen by workers, ${refused.empty} empty`);
     return;
   }
   if (has('--check')) {

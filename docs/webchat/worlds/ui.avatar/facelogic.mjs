@@ -6,8 +6,10 @@
 // State (state.face): { slots: { <slot>: <variant name> | 'none' }, colours: { skin, hair, eyes, clothes: <colour name> }, paint: { <slot>: <colour name> } (a colour for a part without a tint),
 //   adj: { <slot>: { s: scale, dx, dy } }, expression, base (the preset it started from), name, saved: { <key>: { name, slots, colours, paint, adj } }, options (what "which hats are there"
 //   shows), refs (the things of the face: the referents of this world), history / future (undo, redo), n (a counter) }.
-// Browser-safe: imports only the shared space module.
+// Browser-safe: imports the shared space module, the English of the catalog (src/lang/en.mjs: the words a request skips, the negations) and the comparatives of k.values.
 import * as space from '../space/space.mjs?v=f98ca4dd42';
+import { en } from '../../lib/lang/en.mjs?v=eeaa2a6b1f';
+import { comparativeWords } from '../../lib/knowledge/values.mjs?v=a137742733';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export const NONE = 'none';
@@ -19,8 +21,11 @@ const joinOr = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')
 const plain = (t) => String(t).replace(/_/g, ' ');
 const lc = (t) => String(t).toLowerCase();
 const article = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
-const FUNCTION_WORDS = new Set('a an the my your his her their its me you yourself myself please pls plz some one of on to for with and also now just it that this these those i want would like can could do does is are be has have having who then too very really'.split(' '));
-const NEGATIONS = new Set(['no', 'without', 'not', 'never', 'lose', 'minus']);
+// The words a request skips and the words of negation are facts of `w.lang.en` (determiners that are articles, possessives or demonstratives, pronouns, auxiliaries, and the view `face` of
+// the local facts: src/lang/en.local.mjs, asked of the knowledge repository), read here when the module loads; no list of English words lives in this file.
+const detOf = (...kinds) => [...en.facts()].filter((w) => w.type === 'lang.en.det' && kinds.includes(w.attrs.kind?.[0])).map((w) => String(w.attrs.text[0]).toLowerCase());
+const FUNCTION_WORDS = new Set([...detOf('article', 'possessive', 'demonstrative', 'quantifier'), ...en.words('pron'), ...en.words('aux'), ...en.words('fn', 'face')]);
+const NEGATIONS = new Set([...en.words('neg')]);
 const HISTORY = 40;
 
 /** Words of a text: lowercase, letters, digits and the hyphen. */
@@ -361,13 +366,14 @@ export function faceResize(ctx, a, data) {
   for (const o of riders) { const d = (f.adj[o.name] ??= { s: 1, dx: 0, dy: 0 }); d.dy = Math.round((d.dy - (c0.h / 2) * (r - 1)) * 10) / 10; d.s = Math.round(Math.min(SCALE_MAX, Math.max(SCALE_MIN, (d.s ?? 1) * r)) * 100) / 100; }
   return finish(ctx, data, f, `I made my ${plain(nounOf(slot))} ${up ? 'bigger' : 'smaller'}${inside.length || riders.length ? `, and the parts around it follow` : ''}.`);
 }
-const CLOSER = ['closer', 'together', 'nearer', 'narrower'], APART = ['apart', 'wider', 'further', 'farther'];
+const closerWords = () => comparativeWords(['distance', 'width'], 'down'), apartWords = () => comparativeWords(['distance', 'width'], 'up');   // k.values: closer / nearer / narrower, wider / farther / further (and together / apart, asked)
 /** "eyes closer together", "raise the eyebrows", "move the nose down": the SPACE module's move (frame = the face), a part stays within half its size of its anchor. */
 export function faceMove(ctx, a, data) {
   if (!data) return noFaces();
   const f = faceOf(ctx, data), ws = wordsOf(a), cl = clausesOf(data, ws).filter((c) => c.slots.length);
   if (!cl.length) return no('Which part should move? For example "raise the eyebrows".');
   const slot = pickSlot(data, f, cl[0], { wantPresent: true }), s = slotOf(data, slot);
+  const CLOSER = closerWords(), APART = apartWords();
   const closer = ws.some((x) => CLOSER.includes(x)), apart = ws.some((x) => APART.includes(x)) && s.mirror && !ws.some((x) => ['up', 'down', 'higher', 'lower'].includes(x));
   const dirs = ws.map((x) => (s.mirror && closer && CLOSER.includes(x) ? 'right' : s.mirror && apart && APART.includes(x) ? 'left' : ({ raise: 'up', lift: 'up', lower: 'down', drop: 'down', raised: 'up', lowered: 'down' })[x] ?? x));
   if (s.mirror && (closer || apart) && !dirs.some((x) => ['left', 'right'].includes(x))) dirs.push(closer ? 'right' : 'left');

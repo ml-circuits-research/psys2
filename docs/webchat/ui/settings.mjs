@@ -30,7 +30,7 @@ export const DEFAULT_SETTINGS = {
   lazyWorlds: true,               // Settings › Developer › Experiments (specs/06 "Lazy loading"): load the worlds a message needs (default) | false: every world at start (`?psys2lazy=0` does the same); read when the engine starts
   worldAware: 'veto',             // Settings › Developer › World-aware reading (spec 16): 'veto' (default, user decision 2026-11-12) | 'choose' | 'observe' | 'off'
   fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
-  translation: 'auto', languageDetection: 'auto', showAllLanguages: false, englishVariant: 'en-US', voice: '', rate: 1, handsFree: false, keepListening: true, wakeWord: false, speaker: false, showTrace: false, showPerf: false, devMode: false, logPhrases: true, exportButtons: false,
+  translation: 'auto', languageDetection: 'auto', showAllLanguages: false, englishVariant: 'en-US', voice: '', rate: 1, handsFree: false, keepListening: true, wakeWord: false, speaker: false, showTrace: false, showPerf: false, devMode: false, logPhrases: true, exportButtons: false, sendFailures: false, sendFailuresUrl: '', sendFailuresName: '',
 };
 
 /**

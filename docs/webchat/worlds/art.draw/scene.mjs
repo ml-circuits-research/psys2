@@ -8,7 +8,7 @@
 //   rect/ellipse {x,y,w,h}   poly/line/curve {pts:[[x,y]...]}   arc {x,y,w,h,a0,a1} (radians, top half = PI..2*PI)
 
 import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs?v=77966d9c42';
-import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values): no colour table in this world
+import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values): no colour table in this world
 
 export const W = 1000, H = 700;
 // Things the user made by taking a picture apart or putting things together (spec 07): the parts are stored on the object (`shape`) and registered here by key, so every

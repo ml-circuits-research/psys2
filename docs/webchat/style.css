@@ -221,7 +221,8 @@
 /* Phrase log (settings) */
 .p2-plog { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
 /* SETTINGS-COHERENT 1: the history uses the whole height of its panel at every window size (the list grows, the filter and the buttons stay in view) */
-.p2-modal-body > .p2-plog { flex: 1 1 auto; min-height: 22em; }
+.p2-modal-body > .p2-plog { flex: 1 0 auto; min-height: 22em; }   /* grows to fill, never shrinks below its content (a section below it would be overlapped) */
+.p2-modal-body > .p2-plog-sending { flex: none; }
 .p2-plog > * { flex: none; }
 .p2-plog > .p2-plog-list { flex: 1 1 auto; }
 .p2-plog-count { margin: 0; color: var(--muted); font-size: 12px; }
@@ -355,3 +356,27 @@
 .p2-pg-steps .is-failed { color: #c0392b; } .p2-pg-steps .is-active { color: var(--ink); }
 .p2-pg-ms { font-variant-numeric: tabular-nums; }
 .p2-text.is-acting { opacity: .75; }
+
+/* AVATAR ICON in the input bar and its popup (the avatar is not a tab): the icon shows the live face; the popup holds the big face and the same chips, parts, colours and saved faces */
+.p2-avicon { overflow: hidden; padding: 0; background: #e8edf5; box-shadow: inset 0 0 0 1px var(--line); }
+.p2-avicon:hover, .p2-avicon[aria-expanded="true"] { box-shadow: inset 0 0 0 2px var(--accent); }
+.p2-avicon:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.p2-avicon-face { display: block; width: 34px; height: 34px; }
+.p2-avicon-face svg { display: block; width: 100%; height: 100%; }
+.p2-avpop { position: absolute; left: 8px; right: 8px; bottom: 62px; z-index: 6; max-height: calc(100% - 120px); overflow-y: auto; border-radius: 16px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line), 0 14px 40px -12px rgba(20, 30, 60, .35); padding: 8px 12px 14px; }
+.p2-avpop[hidden] { display: none; }
+.p2-avpop-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.p2-avpop-body .p2-avatar-stage { max-height: 40vh; }
+@media (max-width: 720px) { .p2-avpop { left: 4px; right: 4px; } }
+
+/* LEARN FROM USE: screen-reader status for the rating, the spoken expectation, failure marks in the history, the sending setting */
+.p2-sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.p2-fb-field { display: flex; gap: 8px; align-items: flex-start; }
+.p2-fb-field .p2-fb-wanted { flex: 1 1 auto; }
+.p2-fb-mic[aria-pressed="true"] { color: #c0392b; font-weight: 700; }
+@media (pointer: coarse) { .p2-fb-btn { min-width: 36px; height: 34px; font-size: 13px; } }
+.p2-plog-fail { color: #c0392b; font-weight: 600; }
+.p2-plog-item.is-failure { border-left: 3px solid #c0392b; }
+.p2-plog-sending { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.p2-plog-sending input[type="text"], .p2-plog-sending input[type="url"] { width: 100%; box-sizing: border-box; font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--ink); }
+.p2-plog-preview { max-height: 14em; overflow: auto; font-size: 11px; white-space: pre-wrap; word-break: break-all; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--surface-2); }

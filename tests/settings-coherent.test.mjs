@@ -38,7 +38,7 @@ test('reading: every older saved profile follows the new defaults once (rules re
 test('catalogue: every option has a group, what, when, no internal name in the label; failed experiments are in Developer with numbers', () => {
   const groups = new Set(GROUPS.map(([g]) => g));
   assert.deepEqual(GROUPS.map(([, n]) => n), ['Reading', 'Languages and voice', 'Models', 'Privacy and history', 'Developer']);
-  assert.ok(OPTIONS.length <= 20, `fewer options (was 26): ${OPTIONS.length}`);
+  assert.ok(OPTIONS.length <= 21, `fewer options (was 26; 21 with the optional failure sending, 2026-11-14): ${OPTIONS.length}`);
   for (const x of EXPERIMENTS) { assert.match(x.date, /^\d{4}-\d{2}-\d{2}$|^not measured$/, x.id); assert.ok(x.last.length > 20 && x.values.length >= 2, x.id); }
   const ids = new Set();
   for (const o of OPTIONS) {

@@ -24,10 +24,12 @@ import { createEngineClient } from './ui/engine-client.mjs';
 import { normalizeNxStrategy } from './lib/formalizer/nx-strategy.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
+import { turnRecord, summarize, outcomeOf } from './lib/dialog/conversation.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
 import { createFeedback } from './ui/feedback.mjs';
+import { failureReasons, filterFailures, toFailuresJSON, failuresFilename, createFailureSender, validEndpoint, FAILURE_REASON_TEXT } from './ui/failures.mjs';
 import { createProgress } from './ui/progress.mjs';
 import { startAssets, assetUrl, manifest as assetManifest } from './ui/assets.mjs';
 import { createEventLog, describeTarget, tapKind } from './ui/action-log.mjs';
@@ -35,8 +37,9 @@ import { snapshotState, describeChanges } from './ui/state-diff.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
+/** The order of the tabs (owner, 2026-11-14): Talk first, then Drawing and Diagram, the rest as listed. The avatar is not a tab: it is the icon in the input bar. */
+export const TAB_ORDER = ['talk', 'draw', 'diagram', 'map', 'charts', 'editor', 'music', 'chess', 'seating', 'timeline', 'guess', 'hangman', 'tictactoe', 'documents'];
 export const TABS = [
-  { id: 'robot', label: 'Avatar', world: 'ui.avatar', make: createAvatar },
   { id: 'editor', label: 'Editor', world: 'docs.editor', make: createEditor },
   { id: 'tictactoe', label: 'Tic-tac-toe', world: 'games.tictactoe', make: createTicTacToe },
   { id: 'guess', label: 'Guess the animal', world: 'games.guess', make: createGuess },
@@ -110,7 +113,10 @@ export async function mountPsys2(element, options = {}) {
   const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...settings, handsFree: false })); } catch { /* storage unavailable */ } };
   const plugins = await loadTabPlugins(base);
   const builtin = TABS.map((t, i) => ({ order: (i + 1) * 10, ...t }));
-  const allTabs = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
+  const byOrder = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
+  // the owner's order (2026-11-14); a tab not listed goes to the end in its current order
+  const rank = (t) => { const i = TAB_ORDER.indexOf(t.id); return i < 0 ? TAB_ORDER.length : i; };
+  const allTabs = byOrder.map((t, i) => ({ t, i })).sort((a, b) => rank(a.t) - rank(b.t) || a.i - b.i).map((x) => x.t);
   const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
@@ -133,6 +139,7 @@ export async function mountPsys2(element, options = {}) {
       tabBtns[t.id].panel.append(holder);
       panelUI[t.id] = { ui: t.make(holder, hostApi) };
       panelUI[t.id].ui.update?.(states[t.world]);
+      if (lastSummary) panelUI[t.id].ui.setSummary?.(lastSummary);   // the Talk tab made after some turns shows the conversation so far
       if (view === t.id) panelUI[t.id].ui.show?.();
       return panelUI[t.id].ui;
       } finally { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); }
@@ -145,9 +152,13 @@ export async function mountPsys2(element, options = {}) {
   let engine = null, session = null, translator = null, speech = null, engineClient = null, browserBackend = null;
   const stageLog = [], longTasks = [];   // COMPUTE-BUDGET: host stage transitions and every main-thread task over 200 ms (PerformanceObserver 'longtask')
   const hostStage = (stage, recId = null) => { stageLog.push({ at: performance.now(), stage, recId }); if (stageLog.length > 400) stageLog.splice(0, 200); };
-  // a fresh start opens the first tab (Avatar); a returning user gets the tab they last used (kept next to the settings, never sent anywhere). Its world is the one loaded at boot.
+  // a fresh start opens the first tab (Talk); a returning user gets the tab they last used (kept next to the settings, never sent anywhere). Its world is the one loaded at boot.
   const savedTab = (() => { try { const s = options.persist !== false ? localStorage.getItem('psys2.webchat.tab') : null; return s && tabDefs.some((t) => t.id === s) ? s : null; } catch { return null; } })();
   let view = savedTab ?? tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
+  const turnLog = []; let turnCount = 0;   // the turns of this conversation, for the summary of the Talk tab
+  let lastSummary = null;
+  const refreshSummary = () => { try { lastSummary = summarize({ turns: turnLog, states, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title }); panelUI.talk?.ui?.setSummary?.(lastSummary); } catch (e) { console.warn('summary failed', e); } };
+  let avatarUI = null, avatarOpen = false, lastAnswerText = '';   // the avatar is not a tab: an icon in the input bar and its popup
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
   // A speech that never ends must not hold the tabs forever: the veil is lifted after a cap that grows with the text (the speech itself goes on).
@@ -212,12 +223,18 @@ export async function mountPsys2(element, options = {}) {
   const setBody = h('div', { class: 'p2-modal-body', role: 'tabpanel', id: 'p2-set-panel', tabindex: '0' });
   const settingsEl = h('div', { class: 'p2-modal', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'p2-set-title', hidden: true },
     h('div', { class: 'p2-modal-head' }, h('h2', { class: 'p2-modal-title', id: 'p2-set-title' }, 'Settings'), setClose), setTabsEl, setBody);
-  const form = h('form', { class: 'p2-form' }, micBtn, speakerBtn, input, dieBtn, sendBtn);
+  // AVATAR ICON: always visible beside the input; a click opens the popup with the big face and the same manipulation the Avatar tab had
+  const avFace = h('span', { class: 'p2-avicon-face', 'aria-hidden': 'true' });
+  const avBtn = h('button', { class: 'p2-btn p2-avicon', type: 'button', id: 'p2-avicon', title: 'Avatar', 'aria-label': 'Avatar: show the face', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-controls': 'p2-avpop' }, avFace);
+  const avClose = h('button', { class: 'p2-btn-text p2-avpop-close', type: 'button', 'aria-label': 'Close the avatar' }, 'Close');
+  const avBody = h('div', { class: 'p2-avpop-body' });
+  const avPop = h('div', { class: 'p2-avpop', id: 'p2-avpop', role: 'dialog', 'aria-label': 'Avatar', hidden: true }, h('div', { class: 'p2-avpop-head' }, h('strong', {}, 'Avatar'), avClose), avBody);
+  const form = h('form', { class: 'p2-form' }, avBtn, micBtn, speakerBtn, input, dieBtn, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
       h('div', { class: 'p2-tools' }, langSel, gearBtn)),
-    statusEl, progress.element, log, queueEl, dictBar, form,
+    statusEl, progress.element, log, queueEl, dictBar, avPop, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
@@ -260,7 +277,17 @@ export async function mountPsys2(element, options = {}) {
     showTab(id, via);
     if (tabBtns[id] && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
   }
+  /** The avatar popup: opens or closes; closing keeps the state (the avatar world and its face are untouched). */
+  function openAvatar(on = !avatarOpen) {
+    if (!avatarUI) return;
+    avatarOpen = !!on;
+    avPop.hidden = !avatarOpen; avBtn.setAttribute('aria-expanded', String(avatarOpen)); root.classList.toggle('p2-avpop-open', avatarOpen);
+    avatarUI.setVisible(avatarOpen);
+    if (avatarOpen) events.add('avatar', 'open', { zone: 'input-bar' });
+  }
   function showTab(id, via = 'command') {
+    // "open the avatar" shows the popup (the avatar is not a tab any more); an avatar command that only used to switch to the Avatar tab does not: the icon shows the face live
+    if (id === 'robot' && !tabBtns[id]) { if (via === 'card' || via === 'tap' || (via === 'message' && /\b(open|show|go to|switch to|see)\b.*\b(avatar|face|robot)\b/i.test(turn?.text ?? ''))) openAvatar(true); return; }
     if (!tabBtns[id]) return;
     if (id !== view) events.add('tab', id, { via, tabAfter: id });   // USER-ACTIONS: how the tab was opened (tap | key | message | card | example | command)
     view = id;
@@ -396,13 +423,14 @@ export async function mountPsys2(element, options = {}) {
     const changed = [];
     for (const [id, st] of Object.entries(snapshot)) { states[id] = st; changed.push(id); }
     for (const t of tabDefs) if (changed.includes(t.world)) { if (panelUI[t.id]) panelUI[t.id].ui.update(states[t.world]); else if (tabKnown.has(t.id) && tabsLive) makeTab(t); }
+    if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
     if (changed.includes('docs.editor')) syncDictation();
     options.onState?.(states, changed);
   }
   function applyShell(sh) {
     if (!sh) return;
-    if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab, 'start'); } return; } // startup snapshot: do not override saved host settings
+    if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab && tabBtns[sh.activeTab]) { lastShellTab = sh.activeTab; showTab(sh.activeTab, 'start'); } return; }   // the world's first tab 'robot' is no tab: the host's own first tab (Talk) is shown and told to the world after the start // startup snapshot: do not override saved host settings
     if (sh.activeTab && sh.activeTab !== lastShellTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab, turn ? 'message' : 'command'); }
     if (sh.speaker !== undefined && sh.speaker !== lastShell.speaker) setSpeaker(!!sh.speaker, false);
     if (sh.handsFree !== undefined && sh.handsFree !== lastShell.handsFree) setHandsFree(!!sh.handsFree, false);
@@ -531,7 +559,7 @@ export async function mountPsys2(element, options = {}) {
   }
 
   // ---------- sending ----------
-  const robotUI = () => panelUI.robot?.ui;
+  const robotUI = () => avatarUI;
   function serializeWires(wires) {
     const shaped = wires.map((w) => ({ ...w, entries: w.entries.map((e, i) => ({ key: w.sk?.[i] ?? e.key, value: e.value })) }));   // the engine worker adds `sk` (short keys): the legends stay there
     return lib.serialize(shaped);
@@ -578,6 +606,7 @@ export async function mountPsys2(element, options = {}) {
     const tn = turn = { ctl, t0: tPress, text, correction, reason: null, undo: null, mode, recId, shown: [], tabBefore: view, killsBefore: engineClient?.stats.kills.length ?? 0 };
     busy++; setStatus();
     restAvatar(true);
+    tn.thinkT = setTimeout(() => avatarUI?.emit('thinking', { on: true }), 300);   // a turn that takes longer than 300 ms shows the thinking face (motion rules)
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
     const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, thinkingLabel), { className: 'is-typing' });
     typing.msg.removeAttribute('aria-live');
@@ -639,7 +668,7 @@ export async function mountPsys2(element, options = {}) {
         addMessage('bot', `Something went wrong while processing that: ${e?.message ?? e}`, { className: 'is-error' });
       }
     } finally {
-      clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker); clearInputStage();
+      clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker); clearInputStage(); clearTimeout(tn.thinkT); avatarUI?.emit('thinking', { on: false });
       if (typing.msg.isConnected) typing.msg.remove();
       if (turn === tn) { turn = null; lastTurnEnd = performance.now(); hostStage('idle'); restAvatar(false); }
       effectsPending = 0;
@@ -732,16 +761,16 @@ export async function mountPsys2(element, options = {}) {
     if (mode === 'typed' && language.get() === sentLang && !reply.knownBad) hintLanguage(text, user);   // not after a switch command
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
 
-    const avatarChanged = !!reply.state?.['ui.avatar'];
     if (!notUnderstood) applyState(reply.state);   // noise never switches the tab
-    const expressions = reply.statuses ?? [];
-    if (!avatarChanged && robotUI()) {
-      const mood = tabDefs.find((x) => x.id === view)?.mood?.(reply, answer);   // a tab may react to the kind of its own turn (Talk: found, not found, a big number)
-      if (mood) robotUI().express(mood);
-      else if (expressions.includes('missing')) robotUI().express('surprised');
-      else if (expressions.includes('supported')) robotUI().express('smile');
-    }
-    lastAnswerLen = String(answer).length;
+    // MOTION: the reply starts (its text and how it went) and the face moves by the motion rules; a tab may add its own mood (Talk: a big number is surprising)
+    clearTimeout(tn.thinkT);
+    const tabMood = tabDefs.find((x) => x.id === view)?.mood?.(reply, answer);
+    const outcome = outcomeOf(reply);
+    avatarUI?.emit('reply', { text: answer, outcome, mood: tabMood === 'surprised' ? 'surprised' : undefined });
+    // the live summary of the Talk tab: one record per turn, the summary rebuilt from them and the world states
+    turnLog.push(turnRecord(++turnCount, text, reply, { tab: view })); if (turnLog.length > 400) turnLog.splice(0, 100);
+    refreshSummary();
+    lastAnswerLen = String(answer).length; lastAnswerText = String(answer);
     if (settings.speaker && speech && speechSupport.synthesis) speech.speak(answer, { lang: speechLangTag() });
     const tEffects = performance.now();
     hostStage('effects', recId); setInputStage('effects');
@@ -889,6 +918,7 @@ export async function mountPsys2(element, options = {}) {
     const ref = { recId, botMsg, undo, ui: null, local: null, warned: false };
     ref.ui = createFeedback({
       feedback: null, uid: recId ?? String(Math.random()).slice(2, 8),
+      dictation: { lang: speechLangTag, available: () => !mic.listening && !settings.handsFree },
       onChange: (patch) => rateAnswer(ref, patch), canUndo: () => !!ref.undo && lastAnswer === ref && !turn, onUndo: () => undoAnswer(ref),
     });
     botMsg.meta.append(ref.ui.el); botMsg.msg.append(ref.ui.form);
@@ -918,7 +948,7 @@ export async function mountPsys2(element, options = {}) {
     if (!settings.logPhrases) return;
     try {
       const tabWorld = tabDefs.find((t) => t.id === view)?.world ?? null;   // item 7: the world of the open tab, for the wrong-world analysis
-      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}) }));
+      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), replyOutcome: outcomeOf(reply), turnKind: reply?.trace?.discourse?.meta?.dialogue ?? reply?.trace?.discourse?.resolved?.dialogue ?? null, ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}) }));
       else phrases.add({ ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply }), ...(tabWorld ? { tabWorld } : {}) });
     } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
@@ -1039,6 +1069,7 @@ export async function mountPsys2(element, options = {}) {
   });
   on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); askDrop(); } else if (sendBtn.classList.contains('is-stop')) { e.preventDefault(); stopTurn(); } });
   on(input, 'input', syncSendButton);
+  on(input, 'input', () => avatarUI?.emit('typing'));   // MOTION: the person is typing
 
   // ---------- speech ----------
   function startSpeakCap() {
@@ -1092,7 +1123,7 @@ export async function mountPsys2(element, options = {}) {
       flashHint('Microphone off.');
       localized('Microphone off.').then((msg) => { if (msg !== 'Microphone off.') flashHint(msg); if (settings.speaker && speechSupport.synthesis) speech.speak(msg, { lang: speechLangTag() }); });   // the sentence of the selected language, translated once (cached)
     },
-    onState: (s) => { const was = mic.speaking; mic = s; if (s.speaking && !was) startSpeakCap(); else if (!s.speaking) endSpeakCap(); robotUI()?.setSpeaking(s.speaking); setStatus(); },
+    onState: (s) => { const was = mic.speaking; mic = s; if (s.speaking && !was) startSpeakCap(); else if (!s.speaking) endSpeakCap(); robotUI()?.setSpeaking(s.speaking, s.speaking ? lastAnswerText : undefined); setStatus(); },
     onError: (msg) => { note(msg); if (!speech.isListening() && !speech.isPaused()) { settings.handsFree = false; syncMic(); } },
   });
   if (!speechSupport.recognition) {
@@ -1565,7 +1596,31 @@ export async function mountPsys2(element, options = {}) {
     ];
   }
   function privacyBody() {
-    return [phraseLogSection()];
+    return [phraseLogSection(), sendingSection()];
+  }
+  // ---------- send failures (LEARN FROM USE): OFF by default; nothing leaves the device before the person turns it on ----------
+  const failureSender = createFailureSender({ settings: () => settings, records: () => phrases.all(), events: () => events.all(), storage: options.persist !== false ? globalThis.localStorage : null, build: null, onResult: () => { if (!settingsEl.hidden && settingsTab === 'privacy') renderSettings(); } });
+  failureSender.start();
+  cleanups.push(() => failureSender.stop());
+  function sendingSection() {
+    const o = optionById('sendFailures');
+    const on = settings.sendFailures === true;
+    const url = h('input', { type: 'url', id: 'p2-f-sendFailuresUrl', placeholder: 'https://example.org/psys2/failures', autocomplete: 'off', 'aria-label': 'Where to send failures (web address)', value: settings.sendFailuresUrl ?? '' });
+    url.addEventListener('change', () => { settings.sendFailuresUrl = url.value.trim(); save(); renderSettings(); });
+    const name = h('input', { type: 'text', id: 'p2-f-sendFailuresName', placeholder: 'Optional: a name or contact, only if you want to be reachable', autocomplete: 'off', maxlength: '120', 'aria-label': 'Optional name or contact sent with failures', value: settings.sendFailuresName ?? '' });
+    name.addEventListener('change', () => { settings.sendFailuresName = name.value.trim(); save(); renderSettings(); });
+    const check = optCheck('sendFailures', on, (v) => { settings.sendFailures = v; save(); renderSettings(); });
+    const bad = on && !validEndpoint(settings.sendFailuresUrl);
+    const batch = failureSender.preview();
+    const last = failureSender.last;
+    const preview = h('details', { class: 'p2-plog-previewbox' }, h('summary', {}, `Preview of the next batch (${batch.count} ${batch.count === 1 ? 'failure' : 'failures'})`), h('pre', { class: 'p2-plog-preview', tabindex: '0', 'aria-label': 'Next batch to send' }, batch.count ? JSON.stringify(batch, null, 1) : 'Nothing waiting: no new failure since the last batch.'));
+    const sendBtn = h('button', { class: 'p2-btn-text', type: 'button', disabled: on && !bad && batch.count ? null : true, onclick: async () => { const r = await failureSender.sendNow(); toast(r.reason === 'ok' ? `Sent ${r.sent} ${r.sent === 1 ? 'failure' : 'failures'}` : r.reason === 'nothing' ? 'Nothing to send' : `Not sent: ${r.error ?? r.reason}`); renderSettings(); } }, 'Send now');
+    return h('div', { class: 'p2-plog-sending', 'data-section': 'send-failures' }, check,
+      h('label', { for: 'p2-f-sendFailuresUrl' }, 'Address that receives the batches'), url,
+      h('label', { for: 'p2-f-sendFailuresName' }, 'Name or contact (optional)'), name,
+      bad ? h('small', { role: 'alert' }, 'Nothing is sent: the address must start with https:// (or http://localhost for a receiver on this machine).') : null,
+      preview, h('div', { class: 'p2-plog-actions' }, sendBtn),
+      h('small', { class: 'p2-opt-status', role: 'status' }, on ? `On. A batch goes out every 10 minutes when there is a new failure. ${failureSender.sentCount()} sent so far.${last ? (last.ok ? ` Last: ${last.count} sent at ${last.at.slice(11, 16)}.` : ` Last try failed: ${last.error}.`) : ''}` : 'Off: nothing is sent; failures stay in this browser.'));
   }
   function renderSettings() {
     if (settingsEl.hidden) return;
@@ -1596,27 +1651,36 @@ export async function mountPsys2(element, options = {}) {
     saveFile(exportFilename(), body);
     return n;
   }
+  /** "Download failures only": export format 3 with only the failure turns, two turns before and after each, and the events that belong to them. */
+  function exportFailures() {
+    const body = toFailuresJSON(phrases.all(), { events: events.all(), diagnostics: diagnostics() });
+    const n = JSON.parse(body).failureCount;
+    if (!n) { toast('No failures to download yet'); return 0; }
+    saveFile(failuresFilename(), body);
+    return n;
+  }
   function renderPhraseLog() {
-    const all = phrases.all(), shown = filterRecords(all, logFilter).slice().reverse();
+    const all = phrases.all(), reasonsOf = failureReasons(all, events.all()), shown = (logFilter === 'failures' ? all.filter((r) => reasonsOf.has(r.id)) : filterRecords(all, logFilter)).slice().reverse();
     const human = all.filter((r) => r.source !== 'chip').length;
     plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). ${settings.exportButtons === true ? 'Buttons are included in exports.' : 'Buttons are left out of exports unless you tick the box below.'}`;
     plogList.replaceChildren(...(shown.length ? shown : [null]).map((r) => {
       if (!r) return h('li', { class: 'p2-plog-empty' }, all.length ? 'Nothing matches this filter.' : settings.logPhrases ? 'Nothing logged yet. Say or type something.' : 'The log is switched off.');
       const status = summaryStatus(r), worlds = summaryWorlds(r).join(', '), vote = voteOf(r);
-      return h('li', { class: `p2-plog-item is-${status}${vote ? ` has-vote-${vote}` : ''}` },
+      const why = reasonsOf.get(r.id) ?? [];
+      return h('li', { class: `p2-plog-item is-${status}${vote ? ` has-vote-${vote}` : ''}${why.length ? ' is-failure' : ''}` },
         h('span', { class: 'p2-plog-mode', title: MODE_NAME[r.mode], role: 'img', 'aria-label': MODE_NAME[r.mode] }, MODE_ICON[r.mode]),
         h('span', { class: 'p2-plog-body' }, h('span', { class: 'p2-plog-text' }, r.text),
-          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · wanted: ${r.feedback.wanted}` : '')),
+          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · expected: ${r.feedback.wanted}` : '', why.length ? [' · ', h('b', { class: 'p2-plog-fail' }, `failure: ${why.map((x) => FAILURE_REASON_TEXT[x] ?? x).join(', ')}`)] : null)),
         settings.devMode === true ? h('button', { class: 'p2-linkbtn p2-plog-dump', type: 'button', 'aria-label': `Debug dump: ${r.text}`, title: 'Download a debug dump of this message', onclick: () => saveFile(`psys2-debug-dump-${r.id}.json`, `${JSON.stringify({ record: exportRecord(r), turn: dbg?.turnFor?.(r.id) ?? null }, null, 1)}\n`) }, 'debug dump') : null,
         h('button', { class: 'p2-linkbtn', type: 'button', 'aria-label': `Delete: ${r.text}`, title: `Delete: ${r.text}`, onclick: () => { phrases.remove(r.id); renderPhraseLog(); } }, 'Delete'));
     }));
     const btn = (label, fn, cls = 'p2-btn-text') => h('button', { class: cls, type: 'button', onclick: fn }, label);
     plogActions.replaceChildren(...(confirmClear
       ? [h('span', { class: 'p2-plog-confirm', role: 'alert' }, `Delete all ${all.length} entries?`), btn('Yes, clear', () => { phrases.clear(); events.clear(); confirmClear = false; renderPhraseLog(); }, 'p2-btn-text is-danger'), btn('Keep them', () => { confirmClear = false; renderPhraseLog(); })]
-      : [btn('Export JSON', exportPhrases), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
+      : [btn('Export JSON', exportPhrases), btn('Download failures only', exportFailures), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
   }
   function phraseLogSection() {
-    const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only'], ['down', 'Not what I wanted'], ['up', 'Good answers']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });
+    const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only'], ['down', 'Not what I wanted'], ['up', 'Good answers'], ['failures', 'Failures']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });
     fsel.setAttribute('aria-label', 'Filter phrases');
     confirmClear = false;
     renderPhraseLog();
@@ -1761,8 +1825,16 @@ export async function mountPsys2(element, options = {}) {
       tabBtns[t.id].btn.classList.add('is-soon');
     }
   }
+  // the avatar loads with its icon (a small bundled face first, the catalog's set when it arrives)
+  if (known.has('ui.avatar') || options.renderAllTabs) { avatarUI = createAvatar(avBody, hostApi); avatarUI.mirror(avFace, 34); }
+  else avBtn.hidden = true;
+  on(avBtn, 'click', () => openAvatar());
+  on(avClose, 'click', () => { openAvatar(false); avBtn.focus(); });
+  on(avPop, 'keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); openAvatar(false); avBtn.focus(); } });
   try { applyState(session.state?.()); } catch (e) { console.warn('session.state() failed', e); }
-  if (!lastShellTab) showTab(view);
+  for (const t of tabDefs) if (panelUI[t.id] && !states[t.world]) panelUI[t.id].ui.update(undefined);
+  if (avatarUI && !states['ui.avatar']) avatarUI.update(undefined);
+  if (!lastShellTab) { showTab(view, 'start'); lastShellTab = view; session?.setWorldState?.(SHELL, { activeTab: view }); }   // the engine knows the tab the person sees
   tabsLive = true;
   applyEngineSettings();
   setStatus();
@@ -1810,7 +1882,7 @@ export async function mountPsys2(element, options = {}) {
     get micLog() { return micLog; }, micClick,
     /** USER-ACTIONS hook for other features: `actions.record(kind, target, extra)`; `actions.recall(text)` is called by the arrow-key message history (INPUT-HISTORY). */
     actions: { record: (kind, target, extra) => events.add(kind, target, extra), recall: (text) => events.add('recall', text), events: () => events.all() }, progress,
-    destroy() { destroyed = true; engineClient?.destroy(); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
+    destroy() { destroyed = true; engineClient?.destroy(); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); avatarUI?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   // FREEZE: the listening state is never restored; the microphone starts only with a click
   if (settings.devMode === true) { syncDebugButton(); loadDebug(); }   // DBG: developer mode is remembered
