@@ -2353,3 +2353,9 @@ Merged origin/main (sopworld 0.84; Q51 fixed upstream, workaround already gone).
 ## 2026-11-15 Optional probe cached; SSA baby names blocked
 - Fix: the optional `vocab/index.json` probe was asked once per facts instance but the page makes many (engine worker restarts, avatar, draw tab). `createKnowledgeSource` (src/loaders/knowledge-source.mjs) now remembers the miss per catalog URL for the JS context: 404 once per session, 5xx or network error with a doubling backoff (60 s to 15 min); the miss answers null as before, so a reading never changes. Test tests/knowledge-optional-probe.test.mjs (2), smoke exit 0, webchat rebuilt, spec 06 note. A separate worker context (a new Worker) has its own memory and asks once more; the count falls from 11 to about one per context.
 - [DATA] SSA baby names: ssa.gov names.zip answers 403 Access Denied (Akamai) to the generic User-Agent; not fetched, see questions.md.
+
+## 2026-11-15 Thinning audit, phase 2 (worker)
+- Merged origin/main (sopworld 0.94 vendored). Re-checked the audit against 0.94's exports: no new export covers LIB-1..8 (0.91 canonicalise/readCanonical, 0.92 choose, 0.93 only change choice points).
+- Deleted: the host `article` (onsets, VOWELS; 8 lines, +2) in src/lang/en-generate.mjs, now `lib.articleFor(world, w) ?? 'a'`; identical on apple/hour/unicorn/house/umbrella/one.
+- Kept: the host `plural`. `inflectBy` on the compose language world only applies irregulars: the regular rules (`w.lang.en.inflect`: s, es, ies) are not in the bundled compose files, so "cat" stays "cat". Needs the knowledge repository to publish those rule facts (then plural goes too); noted in questions.md.
+- Checks: textgen/sampler/summary tests 27 pass, 1 fail (k.genres test, `title` undefined; fails identically without my change, not mine). test-world all: 68 FAIL lines, equal to baseline. Chat smoke run.
