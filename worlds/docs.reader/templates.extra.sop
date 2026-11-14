@@ -1,0 +1,305 @@
+@tpl.docs.reader.describe core.template
+    for=action.docr.describe
+    text="{value}"
+
+@tpl.docs.reader.describe.ambiguous core.template
+    for=action.docr.describe
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.summary core.template
+    for=action.docr.summary
+    text="{value}"
+
+@tpl.docs.reader.summary.ambiguous core.template
+    for=action.docr.summary
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.characters core.template
+    for=action.docr.characters
+    text="{value}"
+
+@tpl.docs.reader.characters.ambiguous core.template
+    for=action.docr.characters
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.mainCharacter core.template
+    for=action.docr.mainCharacter
+    text="{value}"
+
+@tpl.docs.reader.mainCharacter.ambiguous core.template
+    for=action.docr.mainCharacter
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.places core.template
+    for=action.docr.places
+    text="{value}"
+
+@tpl.docs.reader.places.ambiguous core.template
+    for=action.docr.places
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.keywords core.template
+    for=action.docr.keywords
+    text="{value}"
+
+@tpl.docs.reader.keywords.ambiguous core.template
+    for=action.docr.keywords
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.outline core.template
+    for=action.docr.outline
+    text="{value}"
+
+@tpl.docs.reader.outline.ambiguous core.template
+    for=action.docr.outline
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.stats core.template
+    for=action.docr.stats
+    text="{value}"
+
+@tpl.docs.reader.stats.ambiguous core.template
+    for=action.docr.stats
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.who core.template
+    for=action.docr.who
+    text="{value}"
+
+@tpl.docs.reader.who.ambiguous core.template
+    for=action.docr.who
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.did core.template
+    for=action.docr.did
+    text="{value}"
+
+@tpl.docs.reader.did.ambiguous core.template
+    for=action.docr.did
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.happened core.template
+    for=action.docr.happened
+    text="{value}"
+
+@tpl.docs.reader.happened.ambiguous core.template
+    for=action.docr.happened
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.where core.template
+    for=action.docr.where
+    text="{value}"
+
+@tpl.docs.reader.where.ambiguous core.template
+    for=action.docr.where
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.whereDid core.template
+    for=action.docr.whereDid
+    text="{value}"
+
+@tpl.docs.reader.whereDid.ambiguous core.template
+    for=action.docr.whereDid
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.whenDid core.template
+    for=action.docr.whenDid
+    text="{value}"
+
+@tpl.docs.reader.whenDid.ambiguous core.template
+    for=action.docr.whenDid
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.whoV core.template
+    for=action.docr.whoV
+    text="{value}"
+
+@tpl.docs.reader.whoV.ambiguous core.template
+    for=action.docr.whoV
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.didV core.template
+    for=action.docr.didV
+    text="{value}"
+
+@tpl.docs.reader.didV.ambiguous core.template
+    for=action.docr.didV
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.said core.template
+    for=action.docr.said
+    text="{value}"
+
+@tpl.docs.reader.said.ambiguous core.template
+    for=action.docr.said
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.saying core.template
+    for=action.docr.saying
+    text="{value}"
+
+@tpl.docs.reader.saying.ambiguous core.template
+    for=action.docr.saying
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.part core.template
+    for=action.docr.part
+    text="{value}"
+
+@tpl.docs.reader.part.ambiguous core.template
+    for=action.docr.part
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.sentence core.template
+    for=action.docr.sentence
+    text="{value}"
+
+@tpl.docs.reader.sentence.ambiguous core.template
+    for=action.docr.sentence
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.count core.template
+    for=action.docr.count
+    text="{value}"
+
+@tpl.docs.reader.count.ambiguous core.template
+    for=action.docr.count
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.search core.template
+    for=action.docr.search
+    text="{value}"
+
+@tpl.docs.reader.search.ambiguous core.template
+    for=action.docr.search
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.searchStep core.template
+    for=action.docr.searchStep
+    text="{value}"
+
+@tpl.docs.reader.searchStep.ambiguous core.template
+    for=action.docr.searchStep
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.clearSearch core.template
+    for=action.docr.clearSearch
+    text="{value}"
+
+@tpl.docs.reader.clearSearch.ambiguous core.template
+    for=action.docr.clearSearch
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.across core.template
+    for=action.docr.across
+    text="{value}"
+
+@tpl.docs.reader.across.ambiguous core.template
+    for=action.docr.across
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.relation core.template
+    for=action.docr.relation
+    text="{value}"
+
+@tpl.docs.reader.relation.ambiguous core.template
+    for=action.docr.relation
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.isRelated core.template
+    for=action.docr.isRelated
+    text="{value}"
+
+@tpl.docs.reader.isRelated.ambiguous core.template
+    for=action.docr.isRelated
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.read core.template
+    for=action.docr.read
+    text="{value}"
+
+@tpl.docs.reader.read.ambiguous core.template
+    for=action.docr.read
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.list core.template
+    for=action.docr.list
+    text="{value}"
+
+@tpl.docs.reader.list.ambiguous core.template
+    for=action.docr.list
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.open core.template
+    for=action.docr.open
+    text="{value}"
+
+@tpl.docs.reader.open.ambiguous core.template
+    for=action.docr.open
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.close core.template
+    for=action.docr.close
+    text="{value}"
+
+@tpl.docs.reader.close.ambiguous core.template
+    for=action.docr.close
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.loadSample core.template
+    for=action.docr.loadSample
+    text="{value}"
+
+@tpl.docs.reader.loadSample.ambiguous core.template
+    for=action.docr.loadSample
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.more core.template
+    for=action.docr.more
+    text="{value}"
+
+@tpl.docs.reader.more.ambiguous core.template
+    for=action.docr.more
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.askPassage core.template
+    for=action.docr.askPassage
+    text="{value}"
+
+@tpl.docs.reader.askPassage.ambiguous core.template
+    for=action.docr.askPassage
+    status=ambiguous
+    text="{note}"

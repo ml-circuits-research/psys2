@@ -22,7 +22,7 @@ import {
 
 import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
 import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
-import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=53e6c7198d';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
+import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=e6ea6f1de7';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
 import * as space from '../space/space.mjs?v=f98ca4dd42';
 import * as rel from '../space/pieces.mjs?v=d38d7cc794';
 import * as solver from '../space/solver.mjs?v=3ee41714f0';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
@@ -287,6 +287,21 @@ const guard = (fn) => (ctx, args = {}) => {
     return no(`Oops, I could not do that (${e?.message ?? e}).`, 'error');
   }
 };
+
+/**
+ * ONE REQUEST, ONE UNDO STEP (specs/15 "one step per request", specs/24): `fn(s)` runs several operations of the board, each remembering a step. When it does not return a supported
+ * result the picture is restored as it was and no step is left (all or nothing); otherwise the steps collapse into the first one, labelled `label`, so one "undo" takes the request back.
+ */
+export function oneStep(ctx, label, fn) {
+  const s = ensure(ctx), base = s.history.length, snap = snapshot(s, label);
+  let r;
+  try { r = fn(s); } catch (e) { r = no(`Oops, I could not do that (${e?.message ?? e}).`, 'error'); }
+  if (r?.status !== 'supported') { restore(s, snap); s.history.length = Math.min(s.history.length, base); s.prev = s.history.at(-1) ?? null; return r; }
+  if (s.history.length > base + 1) s.history.splice(base + 1);
+  if (s.history[base]) s.history[base].label = label;
+  s.prev = s.history.at(-1) ?? null;
+  return r;
+}
 
 // ---- describing things ------------------------------------------------------------------------------------------------
 const sizeWord = (o) => {

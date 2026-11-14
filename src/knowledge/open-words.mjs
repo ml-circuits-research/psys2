@@ -37,10 +37,11 @@ export async function ready(text = null) {
 export function knowsKind(word, catalogs) {
   if (!attached?.peekVocab) return false;
   const w = String(word);
-  if (w.length < 3 || !/^[a-z][a-z_]*$/.test(w)) return false;
+  if (w.length < 3 || !/^[a-z][a-z_ ]*$/.test(w)) return false;
   const vocab = attached.peekVocab();
-  if (!vocab || !Object.hasOwn(vocab, w)) return false;
-  if (!(vocab[w] ?? []).some((sh) => catalogs.includes(String(sh).split('/')[0]))) return false;
+  if (!vocab) return false;
+  if (!Object.hasOwn(vocab, w)) { const sp = w.replace(/_/g, ' '); if (sp === w || !Object.hasOwn(vocab, sp)) return false; return (vocab[sp] ?? []).some((sh) => { const id = String(sh); return catalogs.includes(id.split('/')[0]) || catalogs.some((c) => c.includes('/') && id.startsWith(c)); }); }   // a multi-word name (family photo) is a vocabulary key with a space
+  if (!(vocab[w] ?? []).some((sh) => { const id = String(sh); return catalogs.includes(id.split('/')[0]) || catalogs.some((c) => c.includes('/') && id.startsWith(c)); })) return false;   // a catalog is a world (k.objects) or a shard prefix of one (k.scenes/shards/scenes: its scenes, not its things)
   const parts = attached.peekParts?.();
   return !(parts && parts.has(w));
 }

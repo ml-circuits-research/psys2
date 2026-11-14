@@ -1,215 +1,266 @@
+@gen.docs.reader.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
 @op.docs.reader.describe core.operation
     impl=describe
     semantics=action
     action=docr.describe
-    doc="Introduces the active document: size, sections, main characters, places and key words."
+    doc="An operation of this world that is not an act (own.mjs: describe)."
 
 @op.docs.reader.summary core.operation
     impl=summary
     semantics=action
     action=docr.summary
-    doc="Extractive summary: the top-scoring sentences (TF-IDF weights), optionally of one section."
+    doc="An operation of this world that is not an act (own.mjs: summary)."
 
 @op.docs.reader.characters core.operation
     impl=characters
     semantics=action
     action=docr.characters
-    doc="Lists the characters by number of mentions."
+    doc="An operation of this world that is not an act (own.mjs: characters)."
 
 @op.docs.reader.mainCharacter core.operation
     impl=mainCharacter
     semantics=action
     action=docr.mainCharacter
-    doc="The most mentioned character."
+    doc="An operation of this world that is not an act (own.mjs: mainCharacter)."
 
 @op.docs.reader.places core.operation
     impl=places
     semantics=action
     action=docr.places
-    doc="Places (or things with kind=things) by number of mentions."
+    doc="An operation of this world that is not an act (own.mjs: places)."
 
 @op.docs.reader.keywords core.operation
     impl=keywords
     semantics=action
     action=docr.keywords
-    doc="TF-IDF key words."
+    doc="An operation of this world that is not an act (own.mjs: keywords)."
 
 @op.docs.reader.outline core.operation
     impl=outline
     semantics=action
     action=docr.outline
-    doc="Headings of the document with their sentence counts."
+    doc="An operation of this world that is not an act (own.mjs: outline)."
 
 @op.docs.reader.stats core.operation
     impl=stats
     semantics=action
     action=docr.stats
-    doc="Counts of sentences, words, paragraphs, sections or characters."
+    doc="An operation of this world that is not an act (own.mjs: stats)."
 
 @op.docs.reader.who core.operation
     impl=who
     semantics=action
     action=docr.who
-    doc="Describes a character, place or thing: roles, relations, attributes, mentions."
+    doc="An operation of this world that is not an act (own.mjs: who)."
 
 @op.docs.reader.did core.operation
     impl=did
     semantics=action
     action=docr.did
-    doc="What an entity does: its events (agent - verb - object - place)."
+    doc="An operation of this world that is not an act (own.mjs: did)."
 
 @op.docs.reader.happened core.operation
     impl=happened
     semantics=action
     action=docr.happened
-    doc="What happens to an entity: events where it is the object, and how it ends."
+    doc="An operation of this world that is not an act (own.mjs: happened)."
 
 @op.docs.reader.where core.operation
     impl=where
     semantics=action
     action=docr.where
-    doc="Where an entity lives, goes or is, from event places."
+    doc="An operation of this world that is not an act (own.mjs: where)."
 
 @op.docs.reader.whereDid core.operation
     impl=whereDid
     semantics=action
     action=docr.whereDid
-    doc="Where an event happened, found by agent, verb and object words."
+    doc="An operation of this world that is not an act (own.mjs: whereDid)."
 
 @op.docs.reader.whenDid core.operation
     impl=whenDid
     semantics=action
     action=docr.whenDid
-    doc="When an event happened: its time phrase, else its position in the text."
+    doc="An operation of this world that is not an act (own.mjs: whenDid)."
 
 @op.docs.reader.whoV core.operation
     impl=whoV
     semantics=action
     action=docr.whoV
-    doc="Who did a verb to an entity (helped, loved, ate...), from events."
+    doc="An operation of this world that is not an act (own.mjs: whoV)."
 
 @op.docs.reader.didV core.operation
     impl=didV
     semantics=action
     action=docr.didV
-    doc="Whom an entity did a verb to."
+    doc="An operation of this world that is not an act (own.mjs: didV)."
 
 @op.docs.reader.said core.operation
     impl=said
     semantics=action
     action=docr.said
-    doc="Who said the quoted words (dialogue lines with speakers)."
+    doc="An operation of this world that is not an act (own.mjs: said)."
 
 @op.docs.reader.saying core.operation
     impl=saying
     semantics=action
     action=docr.saying
-    doc="What an entity says."
+    doc="An operation of this world that is not an act (own.mjs: saying)."
 
 @op.docs.reader.part core.operation
     impl=part
     semantics=action
     action=docr.part
-    doc="What happens at the beginning, middle or end, or in section N."
+    doc="An operation of this world that is not an act (own.mjs: part)."
 
 @op.docs.reader.sentence core.operation
     impl=sentence
     semantics=action
     action=docr.sentence
-    doc="Shows one sentence by number."
+    doc="An operation of this world that is not an act (own.mjs: sentence)."
 
 @op.docs.reader.count core.operation
     impl=count
     semantics=action
     action=docr.count
-    doc="How many times an entity or word is mentioned."
+    doc="An operation of this world that is not an act (own.mjs: count)."
 
 @op.docs.reader.search core.operation
     impl=search
     semantics=action
     action=docr.search
-    doc="BM25 search over sentences; the hits are highlighted in the tab."
+    doc="An operation of this world that is not an act (own.mjs: search)."
 
 @op.docs.reader.searchStep core.operation
     impl=searchStep
     semantics=action
     action=docr.searchStep
-    doc="Next, previous, first or last search result."
+    doc="An operation of this world that is not an act (own.mjs: searchStep)."
 
 @op.docs.reader.clearSearch core.operation
     impl=clearSearch
     semantics=action
     action=docr.clearSearch
-    doc="Clears search highlights."
+    doc="An operation of this world that is not an act (own.mjs: clearSearch)."
 
 @op.docs.reader.across core.operation
     impl=across
     semantics=action
     action=docr.across
-    doc="Which documents mention something."
+    doc="An operation of this world that is not an act (own.mjs: across)."
 
 @op.docs.reader.relation core.operation
     impl=relation
     semantics=action
     action=docr.relation
-    doc="Who is X's sister, brother, father... from relations found in the text."
+    doc="An operation of this world that is not an act (own.mjs: relation)."
 
 @op.docs.reader.isRelated core.operation
     impl=isRelated
     semantics=action
     action=docr.isRelated
-    doc="How two characters are related."
+    doc="An operation of this world that is not an act (own.mjs: isRelated)."
 
 @op.docs.reader.read core.operation
     impl=read
     semantics=action
     action=docr.read
-    doc="Reads a part of the document aloud (speech.say effect)."
+    doc="An operation of this world that is not an act (own.mjs: read)."
 
 @op.docs.reader.list core.operation
     impl=list
     semantics=action
     action=docr.list
-    doc="Lists the documents."
+    doc="An operation of this world that is not an act (own.mjs: list)."
 
 @op.docs.reader.open core.operation
     impl=open
     semantics=action
     action=docr.open
-    doc="Opens a document by title, tag, format or position."
+    doc="An operation of this world that is not an act (own.mjs: open)."
 
 @op.docs.reader.close core.operation
     impl=close
     semantics=action
     action=docr.close
-    doc="Closes (removes) a document."
+    doc="An operation of this world that is not an act (own.mjs: close)."
 
 @op.docs.reader.loadSample core.operation
     impl=loadSample
     semantics=action
     action=docr.loadSample
-    doc="Opens the bundled sample document."
+    doc="An operation of this world that is not an act (own.mjs: loadSample)."
+
+@op.docs.reader.askPassage core.operation
+    impl=askPassage
+    semantics=action
+    action=docr.askPassage
+    doc="An operation of this world that is not an act (own.mjs: askPassage)."
+
+@op.docs.reader.pickSection core.operation
+    impl=pickSection
+    semantics=action
+    action=docr.pickSection
+    doc="An operation of this world that is not an act (own.mjs: pickSection)."
 
 @op.docs.reader.more core.operation
     impl=more
     semantics=action
     action=docr.more
-    doc="Continues the last answer."
-
-@op.docs.reader.ask core.operation
-    impl=ask
-    semantics=action
-    action=docr.ask
-    doc="Catch-all for questions about the document: closest passage or an honest \"does not say\"."
-
-@op.docs.reader.pick core.operation
-    impl=pick
-    semantics=action
-    action=docr.pick
-    doc="\"the last one\", \"the one before that\": a search result when a search was shown last, else a section."
+    doc="An operation of this world that is not an act (own.mjs: more)."
 
 @op.docs.reader.sectionExtreme core.operation
     impl=sectionExtreme
     semantics=action
     action=docr.sectionExtreme
-    doc="The longest or shortest section of the open document (by words); it becomes the section being read."
+    doc="An operation of this world that is not an act (own.mjs: sectionExtreme)."
+
+@op.docs.reader.view core.operation
+    impl=view
+    semantics=action
+    action=docs.reader.view
+    doc="The declaration of this world as a view of the session things (spec 23): its aspects and words."
+
+@op.docs.reader.adopt core.operation
+    impl=adopt
+    semantics=action
+    action=docs.reader.adopt
+    doc="Takes a thing of the session store into this world: the act make, then change for each attribute (spec 23)."
+
+@op.docs.reader.make core.operation
+    impl=make
+    semantics=action
+    action=docs.reader.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.reader.remove core.operation
+    impl=remove
+    semantics=action
+    action=docs.reader.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.reader.change core.operation
+    impl=change
+    semantics=action
+    action=docs.reader.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.reader.send core.operation
+    impl=send
+    semantics=action
+    action=docs.reader.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.reader.pick core.operation
+    impl=pick
+    semantics=action
+    action=docs.reader.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.reader.ask core.operation
+    impl=ask
+    semantics=action
+    action=docs.reader.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."

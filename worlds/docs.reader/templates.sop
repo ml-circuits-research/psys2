@@ -1,3 +1,31 @@
+@gen.docs.reader.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@tpl.docs.reader.make core.template
+    for=action.docs.reader.make
+    text="{note}"
+
+@tpl.docs.reader.remove core.template
+    for=action.docs.reader.remove
+    text="{note}"
+
+@tpl.docs.reader.change core.template
+    for=action.docs.reader.change
+    text="{note}"
+
+@tpl.docs.reader.send core.template
+    for=action.docs.reader.send
+    text="{note}"
+
+@tpl.docs.reader.pick core.template
+    for=action.docs.reader.pick
+    text="{note}"
+
+@tpl.docs.reader.ask core.template
+    for=action.docs.reader.ask
+    text="{note}"
+
+# ---- templates.extra.sop (hand-written, appended by the generator)
 @tpl.docs.reader.describe core.template
     for=action.docr.describe
     text="{value}"
@@ -295,11 +323,11 @@
     status=ambiguous
     text="{note}"
 
-@tpl.docs.reader.ask core.template
-    for=action.docr.ask
+@tpl.docs.reader.askPassage core.template
+    for=action.docr.askPassage
     text="{value}"
 
-@tpl.docs.reader.ask.ambiguous core.template
-    for=action.docr.ask
+@tpl.docs.reader.askPassage.ambiguous core.template
+    for=action.docr.askPassage
     status=ambiguous
     text="{note}"

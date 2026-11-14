@@ -5,7 +5,8 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
-    reasoner=matrix
+    imports=world.acts
+    imports=world.lang.common
     source="the documents you opened"
     untold=docs.reader.document
     untold=docs.reader.sentence

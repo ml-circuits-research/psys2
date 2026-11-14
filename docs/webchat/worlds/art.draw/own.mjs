@@ -2,10 +2,11 @@
 // art.draw (pilot, spec 21 and 23): what the schema cannot say and other code calls. The drawing board itself (scene.mjs: the renderer's geometry, the scene composition and the
 // drawing from facts; ops.mjs: the scene operations) stays in worlds/art.draw; this file re-exports what the dialog layer and other worlds reach by name and gives the discourse hooks
 // (referents, openSlots, checkReferents) the words of the acts (`art.draw.make` -> the board's `draw.add`). Browser-safe.
-import * as D from './engine.mjs?v=3a006b3f03';
-import { addArgs, tOf } from './hooks.mjs?v=29d7923c8e';
+import * as D from './engine.mjs?v=ae13f8a88a';
+import { addArgs, tOf } from './hooks.mjs?v=860c4ebb34';
+import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=f388482ebf';
 
-export { initialState, summary } from './engine.mjs?v=3a006b3f03';
+export { initialState, summary } from './engine.mjs?v=ae13f8a88a';
 /** Other worlds ask the board by its old action names: Talk draws with draw.add, the chess tab and Talk undo with draw.undo, the tab has "new" and "open". */
 export const add = D.add;
 export const drawUndo = D.undo;
@@ -29,3 +30,22 @@ export function checkReferents(ctx, { action, args = {} } = {}) {
   if (['change', 'place', 'copy', 'group', 'pick', 'ask'].includes(a) && args.thing) return D.checkReferents(ctx, { action: `draw.${a}`, args: { t: tOf(args) } });
   return undefined;
 }
+/** Discourse hook (specs/24): a reading that may be a GOAL (a kind the board has no picture of, or a thing with a place of "on" / "in" / "around"): { goal, words } for the host to load the methods before the board runs, else null. */
+export function planGoal(ctx, { action, args = {} } = {}) {
+  const act = actOf(action);
+  if (act !== 'make' && act !== 'place') return null;
+  if (act === 'place' && args.mode === 'layout') { const goal = layoutGoal(args); return goal ? { goal, words: goalWords(goal) } : null; }
+  if (act === 'place') {   // the thing is in the picture; the methods that put a thing on another are loaded for its words and the place's
+    const g = goalOf('make', { kind: args.thing }, args), t = goalFromText(args.text);
+    if (t && goalWord(t.roles.kind)) return { goal: t, words: goalWords(t) };   // "set a table for four" is read as a place act
+    return g?.roles.place ? { goal: null, words: goalWords(g) } : null;
+  }
+  for (const goal of [goalOf('make', addArgs(args), args), goalFromText(args.text)]) {   // the roles as read, then the sentence's own words ("set a table for four")
+    if (goal && (goal.roles.place || goal.roles.material || !D.kindOfWord(goal.roles.kind) || goalWord(goal.roles.kind))) return { goal, words: goalWords(goal) };
+  }
+  return null;
+}
+/** The things of the picture as the planner's live world (hook of the host). */
+export const planLive = (ctx) => liveOf(ctx.state);
+/** Discourse hook: why the newest change was made, when a plan made it (the method and its steps, from the knowledge that holds them). */
+export const whyPlan = (ctx) => whyOfPlan(ctx);
