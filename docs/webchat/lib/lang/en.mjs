@@ -22,11 +22,12 @@
  *   frames(set?)             the argument frames of the acts [{ id, act, mode, match, args, priority, if, lit, tabOnly, tabPriority, example }] in the order of the facts (sets: acts, acts.more, acts.data)
  *   nounPhrase(text)         the readings of a noun phrase beyond its head noun: { text, choice?: [{ text, alt }], partitive?: { mode: 'ask' | 'all' | 'count', n? }, other?: { plural }, relative?: true }
  *   timeRelation(word)       a temporal preposition as a relation: { rel: 'before', order: 'earlier' | 'later' | 'within', span? }, null for any other word (prepositions.sop in=time)
+ *   timeComparison(text)     "is Monday before Friday" -> { a, b, rel: 'before' | 'after', kinds: ['day'] }: a yes / no question that puts two moments in order (null for anything else; `during` and distances are no order)
  *   negatedRequest(text)     "do not remove table 3" -> { rest: 'remove table 3', leadEnd } (a request that must not be carried out), null for anything else
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
 import { parse } from '../soplang/index.mjs?v=c57881f705';
-import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=2581020668';
+import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=c251a9087c';
 
 const all = (w, k) => w.attrs[k] ?? [];
 const one = (w, k) => all(w, k)[0];
@@ -191,6 +192,32 @@ export function createLangEn(source = LANG_EN_FACTS) {
 
   const timeRelation = (word) => cached(`tr:${word}`, () => { const w = of('prep').find((x) => all(x, 'in').includes('time') && one(x, 'text') === String(word).toLowerCase()); return w ? { rel: one(w, 'rel'), order: one(w, 'order'), ...(one(w, 'span') ? { span: one(w, 'span') } : {}) } : null; });
 
+  /** What kind of moment a phrase names ("the summer", "3 o'clock", "Monday"): a kind of the `lang.en.timeword` facts, null for anything else. */
+  function timeKind(words) {
+    const ws = words.filter((x) => !['the', 'a', 'an', 'this', 'next', 'last'].includes(x));
+    const phrase = ws.join(' ');
+    if (ws.length === 1) { const w = of('timeword').find((x) => one(x, 'text') === phrase); if (w) return one(w, 'kind'); }
+    const c = of('timeword').find((x) => one(x, 'pattern') && new RegExp(one(x, 'pattern')).test(phrase.replace(/(\d) (am|pm)$/, '$1$2')));
+    return c ? one(c, 'kind') : null;
+  }
+  function timeComparison(text) {
+    const raw = wordList(String(text ?? '').replace(/[?.!,]+$/g, ''));
+    const ws = raw.map((x) => x.toLowerCase().replace(/’/g, "'"));
+    const aux = cached('tcaux', () => new Set(['is', 'are', 'was', 'were', 'does', 'do', 'did', 'will', 'would'].filter((x) => of('aux').some((w) => one(w, 'text') === x))));
+    if (ws.length < 4 || !aux.has(ws[0])) return null;
+    for (let i = 2; i < ws.length - 1; i++) {
+      let rel = timeRelation(ws[i]), len = 1;
+      if (!rel && ws[i + 1] === 'than') { rel = timeRelation(`${ws[i]}_than`); len = 2; }
+      if (!rel || !['before', 'after'].includes(rel.rel)) continue;
+      let left = ws.slice(1, i);
+      if (['come', 'comes', 'fall', 'falls', 'happen', 'happens'].includes(left.at(-1))) left = left.slice(0, -1);
+      const right = ws.slice(i + len);
+      const ka = timeKind(left), kb = timeKind(right);
+      if (ka && kb) return { a: raw.slice(1, 1 + left.length).join(' '), b: raw.slice(i + len).join(' '), rel: rel.rel, kinds: [...new Set([ka, kb])] };
+    }
+    return null;
+  }
+
   // ---- negated requests: "do not remove table 3" is no request (clauses.sop lang.en.neg.imperative) ----
   function negatedRequest(text) {
     const src = String(text ?? '').replace(/[.!]+$/, '');
@@ -311,7 +338,7 @@ export function createLangEn(source = LANG_EN_FACTS) {
     return { mods, lead, bare, candidates: out };
   }
 
-  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, cutWords, sequenceWords, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
+  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
 }
 
 /** The English of this build: the facts of handover/lang.en as shipped in en.facts.generated.mjs. */

@@ -7,24 +7,24 @@
  */
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=2026bfa238';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=dc30576b7d';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=e06638c0b8';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=f4946490cd';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=174a89150f';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=713dd5d1a6';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=13f79011f0';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=ecf9e29fa8';
-import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=01b85d5c18';
-import { en } from '../../lang/en.mjs?v=08dd6017a3';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=40599623e0';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=ac4628fba6';
+import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=120e826347';
+import { en } from '../../lang/en.mjs?v=ac07f761ec';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse, serialize } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
 
-export { FormSession } from './session.mjs?v=ecf9e29fa8';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=13f79011f0';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=dc30576b7d';
-export { compilePattern, matchTokens } from './matcher.mjs?v=e06638c0b8';
-export { singularLemma, pluralize } from './lemma.mjs?v=df6b7975be';
+export { FormSession } from './session.mjs?v=ac4628fba6';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=40599623e0';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=174a89150f';
+export { compilePattern, matchTokens } from './matcher.mjs?v=713dd5d1a6';
+export { singularLemma, pluralize } from './lemma.mjs?v=dffec4c3ca';
 
 const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */
@@ -369,6 +369,27 @@ function freeWordsResolve(m, state) {
   return words.every((w) => hay.includes(w.replace(/s$/, '')));
 }
 
+/**
+ * REFERENT EVIDENCE (spec 20, arbitration rule 5): the open tab's reading of an act that needs a thing that is there ("remove milk") names a thing that is NOT in the tab world's own state, while a thing of
+ * that name IS in another world's state (the shopping list holds milk): the other world is the evidence, not the tab. Returns that world's id, or null (the tab's own state has the words, nobody else has them, the
+ * words are no content). The words are the roles' content words; a world holds one when every word is a whole word of its state (the worlds the user worked in lately).
+ */
+function referentElsewhere(m, roles, context, set) {
+  const own = context?.states?.[m.pattern.worldId];
+  const words = Object.values(roles).filter((t) => typeof t === 'string').flatMap((t) => t.toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? []).filter((w) => !FREE_SKIP.has(w) && !/^\d+$/.test(w));
+  if (!words.length) return null;
+  const holds = (state) => { const hay = JSON.stringify(state).toLowerCase(); return words.every((w) => new RegExp(`(^|[^\\p{L}\\p{N}])${w.replace(/s$/, '')}s?([^\\p{L}\\p{N}]|$)`, 'u').test(hay)); };
+  if (own && holds(own)) return null;
+  // the worlds the user has worked in lately (they hold the things of this conversation: a list, a picture, a chart); a world never touched holds sample content, not the user's things
+  for (const id of context?.recentWorlds ?? []) {
+    const state = context?.states?.[id];
+    if (id === m.pattern.worldId || !state || /^(?:ui|session)\./.test(id)) continue;
+    budget.tick('rules.resolves');
+    if (holds(state)) return id;
+  }
+  return null;
+}
+
 /** Ranked full matches of every pattern against `tokens` (commas removed), ordered by the routing policy. */
 function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   // Views of the tokens, tried in order until one of them is matched by some pattern (spec 03 section 1.5):
@@ -426,6 +447,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     // a world with a decline hook is a schema world whose forms keep free slots: its catch-all reading yields to a reading of another world that has no free text at all
     // ("Is a square a rectangle?" is the shapes world's, even while the avatar tab is open)
     if (ok && !strong && context?.lastWorld !== m.pattern.worldId && wildTokens(m) > 0 && matches.some((o) => o.pattern.worldId !== m.pattern.worldId && wildTokens(o) === 0 && !m.pattern.tabClaim)) ok = false;
+    // the thing a "remove" names is not in the tab's own state but is in another world's: the other world holds the evidence (the reading is dropped without a refusal, so that world reads the sentence)
+    if (m.pattern.worldId === context?.tabWorld && REFERENT_ACTS.has(actionName(m)) && referentElsewhere(m, roles, context, set)) { matches.splice(k, 1); continue; }
     if (!ok) { const [gone] = matches.splice(k, 1); if (gone.pattern.worldId === context?.tabWorld && (refuse || REFERENT_ACTS.has(actionName(gone)))) ownDeclined.push(gone); }   // 'refuse': the world says the reading is its own but names a thing it has not ("draw a unicorn"): it refuses plainly unless another world reads it
   }
   // ARBITRATION (spec 20, "Arbitration of generated worlds"). The open tab owns its acts first: when its world read the sentence with an act that needs a thing that is there ("remove X") and declined it

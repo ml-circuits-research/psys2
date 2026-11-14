@@ -257,6 +257,15 @@ export class Dialogue {
     // ... unless a world's own pattern reads the negation ("Dont loop it" is the music world's loop off): the negation words are then in no free capture of the reading
     if (negated && !(await this._negationOwned(text, negated, sid))) return this.tag({ reply: `OK, I will not ${negated.rest}. Nothing changed.`, info: { kind: 'negated-request', rest: negated.rest, dialogue: 'negation' } }, 'negation');
 
+    // 4c. "is Monday before Friday": an ORDER in time, never a distance. No world has published an order in time yet (k.time has the names and positions, no before / after relation),
+    // so the answer is that it can not be compared yet; when the knowledge repository's order lands, this is the one place that asks it instead.
+    const tc = en.timeComparison(text);
+    if (tc) {
+      const names = { day: 'days', month: 'months', season: 'seasons', part: 'parts of the day', clock: 'hours' };
+      const what = tc.kinds.map((k) => names[k]).join(' and ');
+      return this.tag({ reply: `I can not compare ${what} in time yet: I know their names, not their order, so I can not tell whether ${tc.a} comes ${tc.rel} ${tc.b}.`, info: { kind: 'time-order-unknown', rel: tc.rel, kinds: tc.kinds, dialogue: 'time-order' } }, 'time-order');
+    }
+
     // 5. a question about the scene or the history
     const q = this.sceneQuestion(ws, text);
     if (q) return q;
