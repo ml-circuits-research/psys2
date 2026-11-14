@@ -463,6 +463,10 @@ export function resolveNP(s, np, { many = false, ask = false } = {}) {
     if (x.done) return x.done;
   }
   if (np.special === 'everything') { out.objs = s.objects.slice(); out.everything = true; return out; }
+  if (out.special && !np.partOf && out.special !== 'ground') {   // a thing the user made and named like a region ("put them together as a sky") is that thing, not the region
+    const own = s.objects.filter((o) => !o.tag && o.kind === 'composite' && String(kindName(kindKey(o))).toLowerCase() === out.special);
+    if (own.length) { out.objs = own; out.special = null; return out; }
+  }
   if (out.special) return out;
   if (np.pron === 'one') {
     const sel = s.selected && byId(s, s.selected);
