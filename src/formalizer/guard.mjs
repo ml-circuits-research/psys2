@@ -25,6 +25,10 @@ export class TurnAborted extends Error {
 }
 
 let cur = null;
+let waitListener = null;
+
+/** The most time a turn's loading waits may be taken out of its deadline in total (a hung network must still end the turn). */
+export const LOAD_WAIT_CAP_MS = 30000;
 
 export const guard = {
   get active() { return cur !== null; },
@@ -62,6 +66,26 @@ export const guard = {
     }
     if (c.tripped) throw new TurnAborted(c.tripped, c.trippedStage);
   },
+  /**
+   * Runs `work` (a load: catalog shards, vocabulary buckets) and gives its waiting time back to the turn: the hard deadline moves by the time `work` took (at most `LOAD_WAIT_CAP_MS`
+   * in all), so a cold first turn pays for compute, not for the network. Stop still ends the turn at once. The listener (`setWaitListener`) tells the host `start` / `end` with the
+   * total taken out so far, so the page's watchdog does the same. Outside a turn it just runs `work`.
+   */
+  async untimed(work) {
+    const c = cur;
+    if (!c) return work();
+    const w = c.wait ??= { depth: 0, since: 0, used: 0 };
+    if (w.depth++ === 0) { w.since = c.clock(); try { waitListener?.('start', w.used); } catch { /* host events never break a turn */ } }
+    try { return await work(); } finally {
+      if (--w.depth === 0) {
+        const add = Math.max(0, Math.min(c.clock() - w.since, LOAD_WAIT_CAP_MS - w.used));
+        w.used += add; c.hardAt += add; c.softAt += add;
+        try { waitListener?.('end', w.used); } catch { /* ignore */ }
+      }
+    }
+  },
+  /** The host's listener for `untimed` (the engine worker forwards it to the page). */
+  setWaitListener(fn) { waitListener = typeof fn === 'function' ? fn : null; },
   /** True when search loops must stop and keep their best result: the turn was stopped or hit the hard deadline. `softMs` of `install` is accepted but no longer used (a clock must not change a reading). */
   soft() {
     const c = cur;

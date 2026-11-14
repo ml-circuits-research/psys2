@@ -122,6 +122,7 @@ async function init(m) {
     g.guard.check = (stage) => { report(stage); return gc(stage); };
     g.guard.setStage = (stage) => { report(stage); return gs(stage); };
     g.guard.abortable = (p, stage) => { report(stage); return ga(p, stage); }; }
+  g.guard.setWaitListener?.((op) => evt('turn-wait', { op }));   // LOAD-WAIT: a load inside a turn is not compute (guard.untimed): the page pauses its watchdog meanwhile
   // PROGRESS: the page's start-up steps follow the real order (the page ends none of them itself, so a step that never ends is a bug the progress test catches)
   evt('boot-step', { id: 'worlds', op: 'start' });
   // LAZY LOADING: the small routing index (worlds/index.json) now; a world's files when the world is needed. A start loads the always-loaded worlds (the shell and what reading needs), the open

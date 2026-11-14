@@ -12,6 +12,7 @@
 import { leftOut, requestOf } from './world-aware.mjs';
 import { planHostOf } from '../plan/host.mjs';
 import { diagramHostOf } from '../knowledge/diagram-world.mjs';
+import { guard } from '../formalizer/guard.mjs';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -219,7 +220,7 @@ export async function preloadThings(dialog, segments) {
       } catch { /* no knowledge is no hit */ }
     }
   })();
-  await within(dialog, all);   // one bound for the whole preload: a catalog that hangs delays the turn once, by one read's bound, and changes nothing
+  await guard.untimed(() => within(dialog, all));   // the wait for the catalog is not turn compute (guard.untimed); one bound for the whole preload: a catalog that hangs delays the turn once, by one read's bound, and changes nothing
   return done;
 }
 

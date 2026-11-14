@@ -9,9 +9,10 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=30e66a6e20';
+import { leftOut, requestOf } from './world-aware.mjs?v=7ab1ed284c';
 import { planHostOf } from '../plan/host.mjs?v=6db16e1f7d';
 import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=d2fe0ee50c';
+import { guard } from '../formalizer/guard.mjs?v=82a55329d9';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -219,7 +220,7 @@ export async function preloadThings(dialog, segments) {
       } catch { /* no knowledge is no hit */ }
     }
   })();
-  await within(dialog, all);   // one bound for the whole preload: a catalog that hangs delays the turn once, by one read's bound, and changes nothing
+  await guard.untimed(() => within(dialog, all));   // the wait for the catalog is not turn compute (guard.untimed); one bound for the whole preload: a catalog that hangs delays the turn once, by one read's bound, and changes nothing
   return done;
 }
 

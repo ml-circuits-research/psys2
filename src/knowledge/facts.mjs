@@ -167,7 +167,9 @@ export function createFacts({ source, name = 'catalog' }) {
     const memo = shard ? null : `${type}|${k}|${inWorld ?? ''}`;
     if (memo && wireMemo.has(memo)) return wireMemo.get(memo);   // the same lookup within one load costs nothing
     const out = [];
-    for (const sh of w.shards.filter((x) => (k == null || x.keys?.includes(k)) && (!shard || shard(x)))) {
+    const picked = w.shards.filter((x) => (k == null || x.keys?.includes(k)) && (!shard || shard(x)));
+    await Promise.all(picked.map((sh) => loadShard(sh.id)));   // the shards are fetched together (a cold read of a world of 80 shards was 80 round trips in a row), then indexed in order
+    for (const sh of picked) {
       const ix = await wireIndex(sh.id);   // the shard is read and indexed once (by type, then by value): a turn's lookups cost the matches, not the lines
       for (const r of (k == null ? ix.byType.get(type) : ix.byValue.get(k)?.filter((x) => x.type === type)) ?? []) {
         budget.tick('facts.wires');
