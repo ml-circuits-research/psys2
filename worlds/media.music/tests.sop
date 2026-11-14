@@ -2084,3 +2084,8 @@
     input="what key are we in"
     expect="The key is"
     session=msh9
+
+@t.media.music.pitch_of_song core.test
+    input="What is the pitch of the song?"
+    expect="The pitch follows the key"
+    session=zpitch
