@@ -7,6 +7,7 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "test": "node scripts/run-tests.mjs --full",
+    "build:lang": "node scripts/build-lang-en.mjs",
     "test:full": "node scripts/run-tests.mjs --full",
     "test:smoke": "node scripts/run-tests.mjs --smoke",
     "test:fast": "node scripts/run-tests.mjs",
