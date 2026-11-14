@@ -4343,3 +4343,15 @@ Accepted f947d19b (649 real turns, real flag on 2,818 ledger rows, real failures
 ## Reviewer 2026-11-15 08:30 — tab cut, mobile pages, reply chips, Talk merged: accepted; one recheck
 
 Reviewer ran `npm run test:smoke` on ecde5d03: 88/88 pass, exit 0 (smoke now ~14 s); read the landing note (test-world 61 → 59, −49k lines, keyword theft by removed worlds gone) and the phone screenshots. Accepted. **Recheck:** the phone menu screenshot (phone-2-menu.png) was taken before the cut and still lists Chess, Guess the animal, Hangman, Tic-tac-toe, Profile and both Editor and Documents. After the merge the menu must list only Chat, Drawing, Diagram, Map, Charts, Seating, Timeline, Documents, Music, Settings (Talk is merged into the chat): retake the four phone screenshots and the desktop one on the merged tree, deploy, and run the live check's phone part on the deployed page. Then: vendor 0.114 + typedWorldFor per world, measured on the real set; Romanian voice; continuations.
+
+## Reviewer 2026-11-15 08:45 — KIDS WORLDS become serious, reusable worlds (owner, 22:54)
+
+The kids.* worlds (about 1.8 MB: common, shapes, arith, shop, tasks, animals, time) still answer things the catalog does not cover, but as app-specific worlds. Generalise them, then delete them. Split by the usual rule (facts/schemas → knowledge repository, mechanisms → library, bindings/UI → PSys2):
+- **kids.shop** → a shopping list is `w.list` with quantity, unit and price (k.units.currency, k.food items); add/remove/how many/total are list acts.
+- **kids.tasks** → a `w.tasks` world schema (task, status, due, owner, order) in the knowledge repository; "what is left", "mark done" are acts over it.
+- **kids.arith** → arithmetic and word problems as a general capability: numbers and operations are library builtins (`core.calc`); word problems through the library's `storyState` (a story, then a question), with quantities of things from the catalog; no kid-specific lexicon.
+- **kids.time** → `k.time` (days, months, seasons, weekend; already v5) + time arithmetic in the library (`std.time`: "what day is it in 3 days", "how many days until", "which season is March").
+- **kids.shapes** → `k.shapes` + colour mixing as `k.colours` / k.commonsense rules.
+- **kids.animals** → `k.animals` + taught facts in session.things (pets are things of the session).
+- **kids.common** → name/greetings in the conversation world (lang.common, w.lang.en), not a kids world.
+Do: (1) list for each kids world its canonical sentences and which general world must answer each (the audit you did is the start); (2) ask the knowledge repository / library for what is missing (their blocks below); (3) switch the bindings, keep every canonical sentence and every real-set turn passing, then delete the kids worlds. Measure: real headline, canonical sentences, test-world, boot bytes. After the 08:30 recheck and the typed worlds.
