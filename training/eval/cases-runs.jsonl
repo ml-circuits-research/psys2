@@ -14,3 +14,5 @@
 {"run":10,"date":"2026-11-14","build":"e858ee57","added":44,"changed":5,"regressions":[],"fixed":[]}
 {"run":11,"date":"2026-11-14","build":"e7309480","added":9,"changed":1,"regressions":[],"fixed":["5e3a1c9bc5f4"]}
 {"run":12,"date":"2026-11-14","build":"2501e9a2","added":1918,"changed":3,"regressions":[],"fixed":[]}
+{"run":13,"date":"2026-11-14","build":"504c47d3","added":0,"changed":5,"regressions":[],"fixed":[]}
+{"run":14,"date":"2026-11-14","build":"504c47d3","added":0,"changed":41,"regressions":[],"fixed":["3b78d069c96e","3fe7c59bc7bd","3bcaba66b775","82b0ecaacfba","0e6307873534","bbcfb0367335","653a9f6bec8d","07e1c15cb6b8","8d95c1868cd6","5e788b09b4b3","3ce22cdb9520","baccb82b0def","1b4d2fb5cb5c","8effa8d1df99","c8101afb5915","cac7c58c1d1d","699318bf85ea","4b0cd223848d","c25b2f480680","6f3544a50ce3","baea2364dbba","1f31caeeb16f","f45d6768ee41","db857e13b42a","5891288a8978","67e9a1c43a12","1ad89c21afd6","7000afac58f8","205df22ecb78","91f297f3dad1","781dc84bc221","fe9d8d675c4f","a7c61ba87f5f","7795ad8008da","6cf442034fe7","292f81b333df","d1f48c5e568a","cb72f653d8c9","45385514f715","b0add83db06e","10acce7a88db"],"note":"ledger replay of geo-map-switch"}
