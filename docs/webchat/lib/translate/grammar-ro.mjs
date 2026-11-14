@@ -10,7 +10,7 @@
 //                                                                   (the caller then falls back to another path: the grammar ABSTAINS rather than guesses)
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 import { tokenize } from './normalize.mjs?v=6d473eb091';
-import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs?v=957828c2e5';
+import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs?v=af92ea5710';
 
 let RAWS = [], KEYS = [];
 // The lexicon: how a word is analysed. Default: the translator's own (lexicon.ro-en.mjs, morphology.ro.mjs); src/lang/ro.mjs gives one made from the catalog's w.lang.ro with the library's std.morph.

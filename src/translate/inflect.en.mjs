@@ -134,6 +134,3 @@ export function questionFrame({ wh, subject, verb, tense = 'pres', person = 3, n
   const rest = words.filter((x) => x !== aux);
   return [wh, aux?.w, subject, ...rest.map((x) => x.w)].filter(Boolean).join(' ');
 }
-
-export const NUMBER_WORDS_EN = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
-  'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];

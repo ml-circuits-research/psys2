@@ -164,8 +164,6 @@ export function emitKey(emit) {
 
 /** The token of a `core.word` text in a match string: spaces and apostrophes become `_` ("how much" -> how_much). */
 export const wordToken = (text) => String(text).trim().replace(/[\s']+/g, '_');
-/** Diacritics folded away (a language pack's words and the text it reads are both folded: `plătește` = `plateste`). */
-export const foldText = (s) => String(s).normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC');
 const ROLES = ['verb', 'tverb', 'noun', 'ask', 'rest', 'pre', 'mid', 'subject'];
 /** A shared intent group: `phrase=$phrase.lang.intent.newgame` is the group token `$lang.intent.newgame` of the match language. */
 const phraseToken = (ref) => `$${refId(ref).replace(/^phrase\./, '')}`;

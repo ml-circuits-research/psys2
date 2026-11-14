@@ -23,9 +23,9 @@ import {
 import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=a137742733';   // the one colour reader (k.values)
 import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
 import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=0a6979f5b7';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
-import * as space from '../space/space.mjs?v=f98ca4dd42';
-import * as rel from '../space/pieces.mjs?v=d38d7cc794';
-import * as solver from '../space/solver.mjs?v=3ee41714f0';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+import * as space from '../space/space.mjs?v=72e3867df9';
+import * as rel from '../space/pieces.mjs?v=c8d95ac4f1';
+import * as solver from '../space/solver.mjs?v=68f53cdf8f';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
 export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=0882bbcd68';
 

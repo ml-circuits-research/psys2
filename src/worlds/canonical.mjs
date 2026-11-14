@@ -35,9 +35,6 @@ export function isCanonicalSentence(s) {
   return STARTERS.has(low[0]) || SECOND.has(low[1]);
 }
 
-/** Canonical examples of a pattern as the interpreter exposes it ({ examples, canonical }). */
-export const canonicalOf = (p) => (Array.isArray(p?.canonical) ? p.canonical : []);
-
 /** The operation a pattern stands for: its action, or the wire type (with `type`/`seek` for questions). Help covers every operation with a canonical example. */
 export function operationKey(p) {
   const e = String(p?.emit ?? '');

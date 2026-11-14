@@ -16,7 +16,7 @@ import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRo
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { en } from '../../lang/en.mjs';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
-import { parse, serialize } from '../../soplang/index.mjs';
+import { parse } from '../../soplang/index.mjs';
 import { budget } from '../../dialog/budget.mjs';
 import { readingVariants, dropStyleIn } from './variants.mjs';
 import { annotateUnread } from '../completeness.mjs';
@@ -1130,7 +1130,4 @@ function addEntityCore(w, { via, sourceRef, seq, worldId }) {
       { key: 'core.in', value: { kind: 'ref', v: worldId } }],
   };
 }
-
-/** SOP text of formalized wires (helper for the CLI and tests). */
-export const wiresToSop = (wires) => serialize(wires);
 export { PatternError };
