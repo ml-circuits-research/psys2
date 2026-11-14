@@ -18,6 +18,7 @@ import { restrictedSet } from '../formalizer/spell.mjs';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs';
 import { lastUnfinished } from '../astra/where.mjs';
 import { runDiscussionCommand } from '../astra/session.mjs';
+import { tabOfWorld } from '../worlds/index.mjs';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs';
 import { budget } from './budget.mjs';
 import { en } from '../lang/en.mjs';
@@ -31,7 +32,6 @@ const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'kids.common' || w === '
 /** Worlds that never count as a conversation topic and whose state changes are not "actions" (navigation, help, shared vocabulary). */
 const NO_TOPIC = new Set(['ui.shell', 'ui.help', 'kids.common', 'core']);
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
-const BUILTIN_TAB = { 'docs.editor': 'editor' };
 /** First words of an utterance that is a real command or question, not a list item. */
 const UNDO = /^(?:undo|undo that|undo it|take that back|take it back|revert that|cancel that purchase)$/;
 const META_SKIP = new Set(['add', 'remove', 'delete', 'show', 'open', 'what', 'who', 'where', 'when', 'why', 'how', 'undo', 'redo', 'draw', 'play', 'tell', 'is', 'are', 'can', 'do', 'does', 'please', 'make', 'go', 'clear', 'cross', 'check']);
@@ -406,7 +406,7 @@ export class Discourse {
    */
   tabWorld(tab) {
     if (!tab) return null;
-    return this.dialog.engine.set.list().find((w) => (w.tab?.id ?? BUILTIN_TAB[w.id]) === tab && !NO_TOPIC.has(w.id))?.id ?? null;
+    return this.dialog.engine.set.list().find((w) => tabOfWorld(this.dialog.engine.set, w.id) === tab && !NO_TOPIC.has(w.id))?.id ?? null;
   }
 
   /**
@@ -1047,7 +1047,7 @@ export class Discourse {
     if (!world) return null;
     const known = this.topics.includes(world);   // an earlier activity: going there is a return; a world never visited is a digression from the current one
     const w = set.get(world);
-    const tab = w.tab?.id ?? BUILTIN_TAB[world] ?? null;
+    const tab = tabOfWorld(set, world);
     if (tab && d.isession.state['ui.shell']?.activeTab !== tab) { try { interp.runAction(d.isession, 'ui.openTab', { tab }); } catch { /* the shell may be absent */ } }
     const sum = interp.hook(d.isession, world, 'topicSummary', {}) ?? interp.hook(d.isession, world, 'summary', {});
     const last = this.lastByWorld[world];
