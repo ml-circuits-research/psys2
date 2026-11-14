@@ -223,7 +223,7 @@ function soundAlikes(text, tabWorld) {
 }
 
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
-const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
+const BUILTIN_TAB = { 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
 
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);

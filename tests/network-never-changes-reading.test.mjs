@@ -29,7 +29,7 @@ async function run(mode) {
   const out = [];
   for (const [tab, said] of [['map', 'show Pariss'], ['map', 'show New Youk'], ['draw', 'draw a comet'], [null, 'what is a comet'], [null, 'how many legs does a spider have'], ['draw', 'show Pariss on the map']]) {
     const s = engine.createSession({ language: 'en', spell: true, bestEffort: true });
-    if (tab) s.setWorldState('ui.shell', { activeTab: tab });
+    s.setWorldState('ui.shell', { activeTab: tab ?? 'chat' });   // no tab: chat only (the shell's first tab, Talk, has its own wording for an unreachable catalog)
     const r = await s.send(said);
     out.push({ said, text: r.text, segments: r.segments.map((x) => ({ world: x.match?.worldId ?? null, unparsed: !!x.unparsed, corrections: x.corrections ?? [], wires: x.wires ?? null })) });
   }

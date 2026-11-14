@@ -175,14 +175,14 @@ export function describeFace(data, face) {
   const have = data.slots.filter((s) => face.slots[s.name] && face.slots[s.name] !== NONE);
   return joinAnd(have.map((s) => phraseOf(data, face, s.name)));
 }
-/** The things of the face, the referents of this world: the other names of its slots and what it wears now (meta.worlds: the scene of the Avatar tab). */
+/** The things of the face, the referents of this world: the other names of its slots and what it wears now (meta.worlds: the scene of the avatar popup). */
 export function thingsOf(data, face) {
   const ix = indexOf(data), out = new Set();
   for (const [phrase, slots] of ix.slotWords) if (slots.some((s) => face.slots[s] !== undefined)) out.add(phrase);
   for (const s of data.slots) { const n = face.slots[s.name]; if (n && n !== NONE) { out.add(lc(n)); for (const k of slotOf(data, s.name).variants.find((v) => v.name === n)?.features.kind ?? []) out.add(k); } }
   return [...out].filter((x) => /^[a-z][a-z -]*$/.test(x));
 }
-const finish = (ctx, data, f, text) => { f.refs = thingsOf(data, f).map((thing) => ({ thing })); ctx.request?.('ui.openTab', { tab: 'robot' }); return ok(text); };
+const finish = (ctx, data, f, text) => { f.refs = thingsOf(data, f).map((thing) => ({ thing })); return ok(text); };
 
 // ---- choosing a variant -------------------------------------------------------------------------------------------------------------------------------------------
 /** The best variant of a slot for plain feature words: the most words matched; a tie keeps the current one; none when nothing matches. */
@@ -317,7 +317,7 @@ export function faceWhich(ctx, a, data) {
   if (!cl.length) return ok(`I can change my ${joinAnd(data.slots.map((s) => plain(s.name)))}. Ask "what hats are there?" for the choices.`);
   const slot = pickSlot(data, f, cl[0], { wantPresent: true }), names = choices(data, slot);
   f.options = { slot, variants: names };
-  ctx.request?.('ui.openTab', { tab: 'robot' });
+  ctx.effect?.('ui.openView', { view: 'avatar' });   // the choices are chips in the avatar popup
   return ok(`I can draw ${joinAnd(names.map((n) => (n === NONE ? 'none' : plain(n))))} for my ${plain(nounOf(slot))}. Tap one below.`);
 }
 /** Colour: "make the hat red", "green eyes", "darker hair": the colour a part takes, from the colours of the catalog (face colours by their tint; the colours a part offers). */

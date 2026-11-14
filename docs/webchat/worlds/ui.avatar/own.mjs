@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // ui.avatar (spec 21): the operations that are not acts: the name, a moment of the stage (wave, nod, dance ...), and what other worlds call
 // (avatar.nameOf, avatar.setPartUnknown). The face itself is changed by the acts of the schema (hooks.mjs). Browser-safe.
-import * as F from './facelogic.mjs?v=018752f63a';
+import * as F from './facelogic.mjs?v=f7b0397e34';
 import { DEFAULT_FACE } from './default-face.mjs?v=ddb5fca430';
 
 export const ok = (value) => ({ status: 'supported', value });
@@ -32,7 +32,6 @@ export const animate = (ctx, { anim } = {}) => {
   if (!name) return no('I do not know how to do that.');
   if (/^(wink|blink)$/.test(name)) { const d = dataOf(ctx); if (d) return F.faceMood(ctx, { mood: 'wink' }, d); }
   ctx.effect('avatar.animate', { name });
-  ctx.request('ui.openTab', { tab: 'robot' });
   return ok({ wave: 'I wave at you!', nod: 'I nod.', dance: 'I dance!', shake: 'I shake my head.', spin: 'Wheee!', jump: 'I jump!', bounce: 'I bounce!', wiggle: 'I wiggle.' }[name] ?? `OK, ${name}!`);
 };
 /** The drawing world hands "make your nose bigger" over when "your ..." names no object: { part, words: the size word }. */

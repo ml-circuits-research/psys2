@@ -33,7 +33,7 @@ import { checkValues } from './value-check.mjs?v=2ac45d147d';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=58f658f635';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=be5b2d5dcd';
+import { Discourse } from './discourse.mjs?v=7b60370a2b';
 import { Dialogue } from './dialogue.mjs?v=f679fe4d8b';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
@@ -48,7 +48,7 @@ import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=1a2a108ead';
 
-export { runWorldTests } from './test-runner.mjs?v=84ab4dd2bc';
+export { runWorldTests } from './test-runner.mjs?v=1758180027';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
@@ -223,7 +223,7 @@ function soundAlikes(text, tabWorld) {
 }
 
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
-const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
+const BUILTIN_TAB = { 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
 
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);

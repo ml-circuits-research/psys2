@@ -70,8 +70,8 @@ export function openTab(ctx, { tab }) {
   if (view) { ctx.effect('ui.openView', { view }); return ok('OK, here is my face. It is the icon beside the input.'); }
   const id = resolveTab(tab);
   if (!id) return no('unsupported', `I do not know a tab called ${tab}.`);
-  if (!show(ctx, id)) return ok(`You are already on the ${TABS[id].title} tab.`);
-  return ok(`OK, here is the ${TABS[id].title} tab.`);
+  if (!show(ctx, id)) return ok(`You are already on the ${(TABS[id]?.title ?? id)} tab.`);
+  return ok(`OK, here is the ${(TABS[id]?.title ?? id)} tab.`);
 }
 
 export function playGame(ctx, { tab }) {
@@ -81,7 +81,7 @@ export function playGame(ctx, { tab }) {
   if (!GAME_ACTIONS.new[id]) return openTab(ctx, { tab: id });
   show(ctx, id);
   const r = ctx.request(GAME_ACTIONS.new[id], { keep: 'true' });
-  return ok(`OK, let's play ${TABS[id].title === 'Tic-tac-toe' ? 'tic-tac-toe' : TABS[id].title.toLowerCase()}! ${text(r)}`.trim());
+  return ok(`OK, let's play ${(TABS[id]?.title ?? id) === 'Tic-tac-toe' ? 'tic-tac-toe' : (TABS[id]?.title ?? id).toLowerCase()}! ${text(r)}`.trim());
   // (a declared game whose start action fails still opens its tab: see openTab)
 }
 
@@ -96,12 +96,12 @@ export function back(ctx) {
   const target = s.previousTab;
   s.previousTab = s.activeTab;
   s.activeTab = target;
-  return ok(`OK, back to the ${TABS[target].title} tab.`);
+  return ok(`OK, back to the ${(TABS[target]?.title ?? target)} tab.`);
 }
 
 export function whichTab(ctx) {
   refresh(ctx);
-  return ok(`You are on the ${TABS[ctx.state.activeTab].title} tab.`);
+  return ok(`You are on the ${(TABS[ctx.state.activeTab]?.title ?? ctx.state.activeTab)} tab.`);
 }
 
 export function speaker(ctx, { on }) {
@@ -152,7 +152,7 @@ function gameAction(ctx, which, args = {}) {
   refresh(ctx);
   const tab = ctx.state.activeTab;
   const action = GAME_ACTIONS[which][tab];
-  if (!action) return no('missing', `There is no game open on the ${TABS[tab].title} tab. You can say, for example, "let's play hangman".`);
+  if (!action) return no('missing', `There is no game open on the ${(TABS[tab]?.title ?? tab)} tab. You can say, for example, "let's play hangman".`);
   return ctx.request(action, args);
 }
 const relay = (r) => (r.status === 'supported' ? ok(text(r)) : no(r.status, text(r)));

@@ -2,7 +2,6 @@
 # Not taken by the host (kept by the published schema): face.clothes: the name is also a kind of the world (the host names attributes and kinds in one space); one (core.deny): checked by the library world, not by the host executor
 
 @face acts.schema
-    noun="drawn face"
     doc="a drawn face: parts with their variant, colour, size and place, and an expression (taken from the published world schema w.face 1; scripts/import-w-schema.mjs)"
     acts=make
     acts=remove
@@ -12,6 +11,7 @@
     acts=ask
     acts=place
     limit.items=100
+    noun="face"
     hooks=hooks.mjs
     acts=undo
     acts=redo
