@@ -16,10 +16,6 @@ async function run(tab, messages, { lang = 'ro', eng = engine } = {}) {
   return { r, s, status: (r.answers ?? []).map((a) => a.status) };
 }
 
-test('"x și zero" names tic-tac-toe', async () => {
-  for (const m of ['pornește x și zero', 'pornește x și 0']) assert.deepEqual((await run('tictactoe', [m])).status, ['supported'], m);
-});
-
 test('drawing: sound-alike "sare" is the sun, dash, undrawable animal, coordinated adjectives, diminutives', async () => {
   const sun = await run('draw', ['desenează un sare']);
   assert.match(sun.r.text, /soare/);

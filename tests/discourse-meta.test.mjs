@@ -334,18 +334,3 @@ test('a bare yes/no with nothing pending and no game is answered neutrally, not 
     assert.doesNotMatch(r.text, /twenty questions/, t);
   }
 });
-
-test('games.guess keeps its yes/no while the game is on, and a pending offer still takes the answer', async () => {
-  const s = fresh();
-  await s.send('guess my animal');
-  const r = await s.send('yes');
-  assert.doesNotMatch(r.text, /to what\?/);
-  assert.match(r.text, /\?/);   // the game goes on with its next question or guess
-  const idle = fresh();
-  idle.setWorldState('ui.shell', { activeTab: 'guess' });   // on the game's tab without a running game: the game explains itself
-  assert.match((await idle.send('yes')).text, /twenty questions/);
-  const f = fresh();
-  await f.send('draw a red circle');
-  await f.send("that's wrong");   // feedback offers an undo
-  assert.match((await f.send('yes')).text, /undid/i);
-});

@@ -258,8 +258,8 @@ async function writeTabMeta({ outDir, tabFiles }) {
 }
 
 /** The vendor assets a world's tab needs (loaded with the world, never at boot): `vendor/<dir>/` directories of docs/webchat/vendor. */
-const LABELS = { 'kids.arith': 'arithmetic', 'kids.animals': 'animals', 'kids.shop': 'shopping', 'kids.tasks': 'tasks', 'kids.time': 'time', 'kids.shapes': 'shapes', 'user.profile': 'profile', 'games.guess': 'guess the animal', 'games.hangman': 'hangman', 'games.tictactoe': 'tic-tac-toe', 'docs.editor': 'editor', 'docs.reader': 'documents', 'ui.avatar': 'avatar', talk: 'talk', 'plan.seating': 'seating plan', 'plan.timeline': 'timeline', 'diagram.sketch': 'diagram', 'data.charts': 'charts', 'media.music': 'music', 'games.chess': 'chess', 'geo.map': 'map', 'art.draw': 'drawing', space: 'space' };
-export const VENDOR_OF = { 'games.chess': ['chess'], 'geo.map': ['map'], 'docs.editor': ['editor'], 'data.charts': ['charts'], 'art.draw': ['draw'], 'media.music': ['music'], 'docs.reader': ['documents'] };
+const LABELS = { 'kids.arith': 'arithmetic', 'kids.animals': 'animals', 'kids.shop': 'shopping', 'kids.tasks': 'tasks', 'kids.time': 'time', 'kids.shapes': 'shapes', 'docs.editor': 'documents', 'ui.avatar': 'avatar', talk: 'talk', 'plan.seating': 'seating plan', 'plan.timeline': 'timeline', 'diagram.sketch': 'diagram', 'data.charts': 'charts', 'media.music': 'music', 'games.chess': 'chess', 'geo.map': 'map', 'art.draw': 'drawing', space: 'space' };
+export const VENDOR_OF = { 'geo.map': ['map'], 'docs.editor': ['editor'], 'data.charts': ['charts'], 'art.draw': ['draw'], 'media.music': ['music'] };
 
 /**
  * LAZY LOADING (specs/06 "Lazy loading"): `worlds/index.json` is the small routing index, not the worlds: for every world its bundle path, imports, tab and vendor assets, the worlds a start always loads, and
@@ -277,7 +277,7 @@ async function writeWorldIndex({ root, outDir, worldsRoot, bundle, ids, log }) {
     const hash = sha(await readFile(path.join(outDir, 'worlds', id, 'bundle.json'))).slice(0, 10);   // the same string assetHashes gives the file: the worker fetches it as `bundle.json?v=<hash>`
     worlds[id] = { bundle: `worlds/${id}/bundle.json`, hash, label: LABELS[id] ?? id.split('.').at(-1), bytes, imports: w?.imports ?? [], deps: engine.set.available(id), reads: w?.reads ?? [], compose: w?.compose ?? [], tab: w?.tab ? { id: w.tab.id, title: w.tab.title, aliases: w.tab.aliases } : null, title: w?.title ?? id, summary: w?.summaryPhrase ?? null, vendor: (VENDOR_OF[id] ?? []).map((d) => `vendor/${d}/`) };
   }
-  // the actions of the worlds that are not always loaded -> their world: a turn that asked for one nobody loaded (kids.common asks `prof.setName` of user.profile, talk asks `draw.add`) loads the world and is read again
+  // the actions of the worlds that are not always loaded -> their world: a turn that asked for one nobody loaded (talk asks `draw.add`) loads the world and is read again
   const actions = {};
   for (const w of engine.set.list()) if (!ALWAYS.includes(w.id)) for (const o of w.operations ?? []) if (o.semantics === 'action' && o.action) actions[o.action] = w.id;
   const T = 4;   // a word of more than T worlds never loads one by itself (scripts/eval-word-index.mjs)

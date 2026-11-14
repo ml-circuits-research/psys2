@@ -14,15 +14,9 @@ export function assistantName(ctx) {
 
 /** "my name is ben" -> "Ben" (each word capitalized; punctuation at the ends dropped). */
 const properName = (s) => String(s ?? '').trim().replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '').split(/\s+/).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-/** The user's name is one fact: it lives in the profile world (user.profile, field "name") when that world is loaded, else in this world's state. */
-function readName(ctx) {
-  try { const r = ctx.request('prof.nameOf'); if (r?.status === 'supported') return r.value || ''; } catch { /* no profile world */ }
-  return ctx.state?.userName || '';
-}
-function writeName(ctx, name) {
-  try { const r = ctx.request('prof.setName', { name }); if (r?.status === 'supported') return; } catch { /* no profile world */ }
-  ctx.state.userName = name;
-}
+/** The user's name is one fact, kept in this world's state (the Profile world is gone, tab cut 2026-11-15). */
+const readName = (ctx) => ctx.state?.userName || '';
+const writeName = (ctx, name) => { ctx.state.userName = name; };
 /** The user introduces themselves: remember the name ("What is my name?"). */
 /** Words that trail a name in speech ("Ioana, sorry", "Ben lol") and are no part of it. */
 const NAME_TAIL = /(?:[\s,]+(?:sorry|lol|haha|hehe|please|pls|plz|thanks|thx|anyway|though|tho|now|again|ok|okay|btw|my bad))+$/i;

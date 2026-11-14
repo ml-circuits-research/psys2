@@ -78,7 +78,7 @@
     act=world act=compose act=fox act=plan act=reopen act=selection act=uncheck act=whale
     act=unmark act=untick act=food act=italic act=krill act=statistic act=condense act=dictating
     act=hyperlink act=lived
-    actshared=house actshared=write actshared=undo actshared=turn actshared=new actshared=read actshared=stop actshared=start
+    actshared=house actshared=write actshared=undo actshared=new actshared=turn actshared=read actshared=stop actshared=start
     actshared=milk actshared=insert actshared=download actshared=select actshared=animal actshared=apple actshared=legend actshared=plum
     actshared=stacking actshared=kiwis actshared=scale actshared=create actshared=rename actshared=shrink actshared=exchange actshared=resize
     actshared=convert actshared=invert actshared=recolor actshared=recolour actshared=straighten actshared=transform actshared=reverse actshared=revert
@@ -213,9 +213,9 @@
     name=task
     act=list act=finished act=reminder act=milk act=finish act=reading act=didn't act=completed
     act=done act=checked act=ticked act=ditch act=cross act=pending act=complete act=flush
-    act=purge act=todo act=wipe act=yet act=forget act=remind act=undone act=alert
-    act=crossed act=handled act=sorted act=toss act=tick act=ping act=outstanding act=rm
-    act=strike act=kill act=trash act=scratch act=nudge act=alarm act=bin act=hwmany
+    act=purge act=todo act=wipe act=forget act=yet act=remind act=undone act=alert
+    act=crossed act=handled act=sorted act=toss act=tick act=kill act=ping act=outstanding
+    act=rm act=strike act=trash act=scratch act=nudge act=alarm act=bin act=hwmany
     act=jot act=unbought act=dump act=unfinished act=upon act=among act=abolish act=feed
     act=fetched act=memo act=notification act=obliterate act=outta act=uncrossed act=unticked
     actshared=check actshared=drop actshared=clear actshared=delete
@@ -255,9 +255,10 @@
     act=relative act=volume act=bpm act=playing act=semitone act=spell act=hear act=notation
     act=bell act=flute act=hz act=looping act=spelled act=score act=beat act=hit
     act=accidental act=high act=loud act=organ act=signature act=form act=wrote act=freq
-    act=jingle act=louder act=quieter act=replay act=sing act=staff act=stave act=strum
+    act=jingle act=louder act=match act=quieter act=replay act=sing act=staff act=stave
+    act=strum
     actshared=stop actshared=two actshared=apple actshared=legend actshared=plum actshared=stacking actshared=what' actshared=kiwis
-    actshared=speed actshared=spin actshared=contain
+    actshared=speed actshared=spin
     thing=song thing=tune thing=track thing=piece thing=melody thing=composition thing=pitch thing=chord
     thing=triad thing=arpeggio thing=key thing=interval
     thingshared=note thingshared=scale
@@ -356,8 +357,8 @@
     thingshared=shopping thingshared=task thingshared=thing
     frame=how_to frame=what_commands frame=why_did frame=how_were frame=is_psys frame=was_wrong frame=were_you frame=what_else
     frame=what_u frame=which_area
-    frameshared=are_you frameshared=what_can frameshared=how_do frameshared=can_i frameshared=do_you frameshared=what_does frameshared=what_are frameshared=what_was
-    frameshared=did_you frameshared=do_i
+    frameshared=are_you frameshared=what_can frameshared=can_i frameshared=how_do frameshared=do_you frameshared=what_does frameshared=what_are frameshared=what_was
+    frameshared=did_you frameshared=can_you
 
 @card.ui.shell meta.worlds.card
     core.source="generated:meta.worlds/cards"
@@ -366,15 +367,14 @@
     navact=begin navact=choose navact=display navact=doc navact=document navact=game navact=goto navact=launch
     navact=let navact=library navact=open navact=page navact=panel navact=pick navact=play navact=reader
     navact=screen navact=select navact=show navact=start navact=tab navact=view navact=window navact=ya
-    act=setting act=microphone act=free act=phrase act=rate act=game act=sentence act=answer
-    act=pace act=launch act=speed act=deactivate act=handsfree act=listening act=speaker act=exit
-    act=unmute act=mute act=panel act=window act=preference act=reply act=session act=faster
-    act=activate act=screen act=backup act=disable act=go_to act=hint act=mic act=respond
-    act=shut act=switch_off act=switch_on act=turn_off act=turn_on act=pause act=slower act=action
-    act=word act=abort act=dictated act=former act=puzzle act=quiz act=say_it act=switch_to
-    act=take_me_to act=terminate act=utterance
-    actshared=open actshared=tab actshared=speak actshared=view actshared=quit actshared=enable actshared=start actshared=select
-    actshared=begin
+    act=setting act=microphone act=free act=phrase act=rate act=sentence act=answer act=pace
+    act=launch act=speed act=deactivate act=handsfree act=listening act=speaker act=unmute act=mute
+    act=panel act=window act=preference act=reply act=faster act=activate act=screen act=backup
+    act=disable act=exit act=go_to act=mic act=respond act=switch_off act=switch_on act=turn_off
+    act=turn_on act=pause act=slower act=action act=word act=dictated act=former act=game
+    act=say_it act=shut act=switch_to act=take_me_to act=utterance act=return act=dismiss
+    actshared=open actshared=tab actshared=speak actshared=view actshared=enable actshared=start actshared=select actshared=begin
+    actshared=log actshared=command actshared=message actshared=fast actshared=quicker
     thing=editor thing=drawing thing=reader thing=library thing=canvas thing=music thing=piano thing=keyboard
     thing=profile thing=cv thing=resume thing=talk thing=seating thing=english thing=romanian thing=understanding
     thing=language thing=translation thing=voice thing=speech thing=audio thing=sound thing=model thing=developer

@@ -5,4 +5,5 @@
 export {
   initialState, summary, view, adopt, make as makeDocument, dictate, dictateStop, read, download, stats, mentions, isEmpty, whatIs, say, fromList, report, holdings, fillTable, whatSelected, checkTask, countTasks, listTasks,
   addHeading, addList, addParagraph, undo as docUndo, redo as docRedo,
-} from './editor.mjs?v=7e2d4c347c';
+} from './editor.mjs?v=b0e1295bdb';
+export { digest, compose } from './textgen.mjs?v=ecbee93dc9';   // the summary and the composition (spec 26), from the library's std.summarize / std.compose

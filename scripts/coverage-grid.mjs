@@ -27,7 +27,7 @@ const roots = [path.join(REPO, 'worlds-pilot')].filter(existsSync);   // the eng
 // every schema world: the pilots and the real worlds with a schema.sop (the fixture seating world is left out: the real plan.seating reads the same sentences)
 const scan = [path.join(REPO, 'worlds-pilot'), path.join(REPO, 'worlds')].filter(existsSync);
 // declaration-only schemas (declare=yes) are in the grid when the sampler serves them and a reply can be judged: not user.profile (its questions are about stored data: on an empty profile the honest answer is "I do not know yet", which the refusal test reads as a miss)
-const NOT_JUDGEABLE = new Set(['user.profile']);
+const NOT_JUDGEABLE = new Set([]);
 const worlds = scan.flatMap((r) => readdirSync(r).filter((d) => existsSync(path.join(r, d, 'schema.sop')) && d !== 'test.seating' && d !== 'acts' && !NOT_JUDGEABLE.has(d) && (!only || d === only)).map((d) => ({ id: d, dir: path.join(r, d) })));
 const TAB_OVERRIDE = { 'docs.editor': 'editor', 'ui.avatar': 'robot' };   // worlds whose tab is declared by the host, not by world.sop
 const tabWorlds = new Set();   // every world that owns a tab: a reply of one of them to the sentence of another is a cross-world capture

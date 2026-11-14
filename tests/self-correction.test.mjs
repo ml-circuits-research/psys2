@@ -35,28 +35,6 @@ test('plain answers and real negation are left alone', async () => {
   }
 });
 
-test('chess: the abandoned move leaves no history and no other game gets "no"', async () => {
-  const { st, r } = await play('knight to f3, no, knight to c3');
-  assert.deepEqual(st('games.chess').history, ['Nc3']);
-  assert.equal(r.trace.selfCorrections[0].scope, 'command');
-  assert.ok(!/twenty questions/.test(r.text));
-  assert.equal(st('games.guess')?.phase ?? 'idle', 'idle');
-});
-
-test('hangman: only the corrected letter is a guess (tries used)', async () => {
-  const { st } = await play('play hangman', 'e, no, z');
-  const h = st('games.hangman');
-  assert.deepEqual(h.guessed, ['z']);
-  assert.equal(h.wrongLeft, 5);
-});
-
-test('guess: "yes, no wait, no" answers no once', async () => {
-  const { st } = await play('play guess', 'yes, no wait, no');
-  const asked = st('games.guess').asked;
-  assert.equal(asked.length, 1);
-  assert.equal(asked[0].answer, 'no');
-});
-
 test('draw: "a cat, no wait, a dog" adds one object, the dog', async () => {
   const { st } = await play('draw a cat, no wait, a dog');
   const objs = st('art.draw').objects;
@@ -64,22 +42,8 @@ test('draw: "a cat, no wait, a dog" adds one object, the dog', async () => {
   assert.equal(objs[0].kind, 'dog');
 });
 
-test('tictactoe: the abandoned square is never taken and the opponent moves once', async () => {
-  const { st } = await play('play tictactoe', 'top left, no, center');
-  const b = st('games.tictactoe').board;
-  assert.equal(b[4], 'X');
-  assert.equal(b[0], '');
-  assert.equal(b.filter((c) => c === 'X').length, 1);
-  assert.equal(b.filter((c) => c === 'O').length, 1);
-});
-
 test('kids.shop: the price answer uses the corrected number', async () => {
   const { r } = await play('what 3 pencils cost, no, 4 pencils');
   assert.match(r.text, /4 pencils cost 8 lei/);
   assert.ok(!/3 pencils/.test(r.text));
-});
-
-test('a plain "no" still answers the game question', async () => {
-  const { st } = await play('play guess', 'no');
-  assert.equal(st('games.guess').asked[0].answer, 'no');
 });

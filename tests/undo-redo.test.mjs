@@ -30,14 +30,6 @@ both('redo with nothing undone says so', async (r) => {
   assert.match(out[1], /nothing to redo/i);
 });
 
-both('a game: "undo my move" then "redo" plays it again, and the reply names the move', async (r) => {
-  const { s, out } = await run(r, ['play chess', 'e2 to e4', 'undo my move', 'redo', 'undo my move', 'redo', 'redo']);
-  assert.match(out[3], /did it again: "e2 to e4"/);
-  assert.match(out[5], /did it again: "e2 to e4"/);
-  assert.match(out[6], /nothing to redo/i);
-  assert.equal(s.isession.state['games.chess'].history.length >= 1, true, 'the move is back');
-});
-
 both('redo through a tab switch: what was undone in the drawing comes back after visiting another tab', async (r) => {
   const { s, out } = await run(r, ['open the drawing tab', 'draw a house', 'undo', 'open the music tab', 'redo']);
   assert.match(out[4], /did it again/i);

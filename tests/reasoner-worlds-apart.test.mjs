@@ -67,36 +67,6 @@ test('a game does not write into another game: each instance keeps its own wires
 
 const named = (t) => /took back|took that back|forgot/.test(t);
 
-test('undo, hangman: every undo names what it took back, newest first across the instances, and the purchase is back at the end', async () => {
-  const { s, out } = await say(matrix, ['I have 20 lei', 'I buy a ball', 'add milk to my shopping list', 'Play hangman with the word zebra', 'new game', 'Is there a Z?', 'undo', 'undo', 'undo', 'undo', 'undo', 'how much money do I have?']);
-  assert.match(out[6], /took back your last guess/);
-  assert.match(out[7], /took back the new game/);
-  assert.match(out[8], /took back the new game/, 'the first game of the session');
-  assert.match(out[9], /took that back: "add milk to my shopping list"/);
-  assert.match(out[10], /took that back: "I buy a ball"/);
-  assert.match(out[11], /20 lei/);
-  assert.equal(s.isession.rs.turns.length, 1, 'only "I have 20 lei" is left to take back');
-  assert.equal(out.slice(6, 11).filter((t) => !named(t)).length, 0, 'no undo says it took something back without saying what');
-});
-
-test('undo, hangman: after one guess two undos do not both say "your last guess"; when nothing is left it says so', async () => {
-  const { out } = await say(matrix, ['Play hangman with the word zebra', 'Is there an E?', 'undo', 'undo', 'undo', 'undo']);
-  assert.match(out[2], /took back your last guess/);
-  assert.match(out[3], /took back the new game/);
-  assert.match(out[4], /nothing more to undo/i);
-  assert.match(out[5], /nothing more to undo/i);
-});
-
-test('undo, tic-tac-toe: the move, then what came before it in any world, each named, and money changes back', async () => {
-  const { s, out } = await say(matrix, ['I have 20 lei', 'I buy a ball', 'add milk to my shopping list', 'Let\'s play tic tac toe', 'center', 'undo', 'undo', 'undo', 'undo', 'how much money do I have?']);
-  assert.match(out[5], /took back your last move and my answer/);
-  assert.match(out[6], /Let's play tic tac toe|back on the Avatar tab/, 'the start of the game is the shell\'s own turn (the tab switch): a step too');
-  assert.match(out[7], /took that back: "add milk to my shopping list"/);
-  assert.match(out[8], /took that back: "I buy a ball"/);
-  assert.match(out[9], /20 lei/);
-  assert.equal(s.isession.state['games.tictactoe']?.board.filter(Boolean).length ?? 0, 0);
-});
-
 test('undo does not age out while the user undoes: a run of undos is not cut off by the age of the history: the purchase before six additions is reached', async () => {
   const lines = ['I have 20 lei', 'I buy a ball'];
   for (const w of ['milk', 'bread', 'eggs', 'rice', 'salt', 'tea']) lines.push(`add ${w} to my shopping list`);

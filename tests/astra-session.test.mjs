@@ -45,27 +45,6 @@ test('two drawings: new discussion, back to the first, state follows, other worl
   assert.match(b2.text, /^Back to Drawing board 2\./);
 });
 
-test('acceptance: two chess games and a drawing suspended and resumed, also through a saved record', async () => {
-  const s = fresh();
-  await run(s, 'open the chess tab', 'e4', 'open the drawing tab', 'draw a red house', 'open the chess tab');
-  await s.send('new discussion');                        // a second chess game on the chess tab
-  assert.equal(s.state('games.chess').moves?.length ?? 0, 0);
-  await s.send('d4');
-  const backend = memoryBackend();
-  assert.ok(s.saveDiscussions(new Storage(backend)));
-  const r = fresh();
-  assert.ok(r.loadDiscussions(new Storage(backend)));
-  assert.equal(r.discussions({ tab: 'chess' }).length, 2);
-  assert.deepEqual(r.state('games.chess'), s.state('games.chess'));
-  assert.match(shapes(r)[0], /red/);
-  const b = await r.send('back to the first chess game');
-  assert.match(b.text, /^Back to /);
-  assert.notDeepEqual(r.state('games.chess'), s.state('games.chess'));      // game 1 (e4 only) is back
-  assert.equal(JSON.stringify(r.state('games.chess')).includes('d4'), false);
-  assert.match(shapes(r)[0], /red/);                                        // the drawing was not touched
-  assert.equal(r.astra.log.length > 0, true);
-});
-
 test('a single discussion per world: "back to the drawing" and "the first chart" are not discussion commands', async () => {
   const s = fresh();
   await run(s, 'open the drawing tab', 'draw a red house', 'open the chess tab', 'e4');

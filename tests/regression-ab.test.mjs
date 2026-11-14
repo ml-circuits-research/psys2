@@ -44,25 +44,6 @@ for (const mode of ['ops', 'matrix']) {
   });
 }
 
-test('a second undo goes on to the move before (matrix = ops)', async () => {
-  const lines = ["Let's play chess.", 'e4', 'Make your move.', 'now the knight to f3', 'undo', 'undo'];
-  const a = await play('ops', lines), b = await play('matrix', lines);
-  assert.deepEqual(b.chess().history, a.chess().history);
-  assert.equal(b.out[5], a.out[5]);
-});
-
-test('the engine reply that arrives as an observation is no step of the next turn', async () => {
-  const { s, chess } = await play('matrix', ["Let's play chess.", 'e4']);
-  const obs = s.observe({ effect: 'chess.engine.bestmove', ok: true, data: { bestmove: 'b8c6', fen: chess().fen }, world: 'games.chess' });
-  assert.match(obs.text, /I play knight to c6/);
-  assert.deepEqual(chess().history, ['e4', 'Nc6']);
-  assert.match((await s.send('Knight to f3', {})).text, /You play knight to f3/);
-  assert.deepEqual(chess().history, ['e4', 'Nc6', 'Nf3']);
-  assert.match((await s.send('undo', {})).text, /took back your last move\. It is your move\./);
-  assert.deepEqual(chess().history, ['e4', 'Nc6']);
-  assert.equal(chess().pendingEngine, false);
-});
-
 // Q2 item 6: `toState` is cached per instance stamp; a reader gets a copy, so changing it changes nothing, and a change of the instance is seen at once.
 test('toState is computed once per instance state and handed out as a copy', async () => {
   const s = engines.matrix.createSession(sessionOptions(settingsForMode('rules'), { language: 'en' }));

@@ -5,7 +5,7 @@
 //   pos: { <world id>: n }     index of the next example to show for that world (rotates on every help request)
 //   lastUnparsed: { text, world, suggestions } | null     written by the dialog layer when a sentence is not understood
 //   lastHelp: { world, tab } | null
-// Reads the application state of other worlds with ctx.peek (ui.shell: activeTab, activeGame; the game worlds).
+// Reads the application state of other worlds with ctx.peek (ui.shell: activeTab).
 // Effect: chat.suggest { items } asks the host to show the examples as clickable chips.
 //
 // didYouMean({ text, worlds, tabWorld, recentWorlds, limit }) is a pure helper that the dialog layer calls after a
@@ -15,10 +15,7 @@
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const BUILTIN_TABS = {
   talk: { title: 'Talk', world: 'talk' },
-  editor: { title: 'Editor', world: 'docs.editor' },
-  tictactoe: { title: 'Tic-tac-toe', world: 'games.tictactoe', game: true },
-  guess: { title: 'Guess the animal', world: 'games.guess', game: true },
-  hangman: { title: 'Hangman', world: 'games.hangman', game: true },
+  editor: { title: 'Documents', world: 'docs.editor' },
 };
 const BATCH = 5;
 
@@ -72,59 +69,6 @@ function nextExamples(ctx, worldId, n = BATCH) {
 function describeTab(t) {
   const s = String(t.summary ?? '').trim();
   return s ? `The ${t.title} tab lets you ${s}.` : `You are on the ${t.title} tab.`;
-}
-
-const GAMES = {
-  hangman: {
-    name: 'hangman', tab: 'hangman', world: 'games.hangman',
-    rules: 'I pick a secret word and show one blank for each letter. Guess a letter ("is there an E?") or the whole word ("is it elephant?"). You can make six wrong guesses. Ask for "a hint" if you are stuck, say "new game" to start again, or "I give up" to see the word.',
-    status: (s) => {
-      if (!s || s.status === 'idle') return 'No game is running yet. Say "play hangman" to start one.';
-      if (s.status === 'won') return `You won! The word was ${s.word}. Say "new game" to play again.`;
-      if (s.status === 'lost') return `You lost this one. The word was ${s.word}. Say "new game" to play again.`;
-      const guessed = (s.guessed ?? []).length ? ` Letters tried so far: ${s.guessed.join(', ')}.` : '';
-      return `Right now the word looks like ${String(s.masked).replace(/_/g, '-')}, and you have ${s.wrongLeft} wrong ${s.wrongLeft === 1 ? 'guess' : 'guesses'} left.${guessed}`;
-    },
-  },
-  tictactoe: {
-    name: 'tic-tac-toe', tab: 'tictactoe', world: 'games.tictactoe',
-    rules: 'You play X and move first; I play O. Say where to put your mark by name ("top left", "center", "bottom right", "middle row left") or by coordinates ("B2"). Three in a row wins. Say "new game" to restart or "give me a hint" for a good move.',
-    status: (s) => {
-      if (!s) return 'No game is running yet. Say "play tic tac toe" to start one.';
-      const marks = (s.board ?? []).filter(Boolean).length;
-      if (s.winner === 'draw') return 'The last game was a draw. Say "new game" to play again.';
-      if (s.winner) return `${s.winner === s.user ? 'You won' : 'I won'} the last game. Say "new game" to play again.`;
-      if (!marks) return 'The board is empty. Make your first move.';
-      return `There are ${marks} ${marks === 1 ? 'mark' : 'marks'} on the board, and it is ${s.turn === s.user ? 'your' : 'my'} turn.`;
-    },
-  },
-  guess: {
-    name: 'twenty questions', tab: 'guess', world: 'games.guess',
-    rules: 'Think of an animal and keep it secret. I ask up to twenty yes/no questions and then name my guess. Answer "yes", "no" or "I don\'t know". If I fail, you can teach me: "it was a zebra".',
-    status: (s) => {
-      if (!s || s.phase === 'idle') return 'No game is running yet. Say "play twenty questions" to start one.';
-      if (s.phase === 'done') return 'The last game is over. Say "new game" to play again.';
-      return `I have asked ${s.count ?? 0} of ${s.max ?? 20} questions so far.`;
-    },
-  },
-  chess: {
-    name: 'chess', tab: 'chess', world: 'games.chess',
-    rules: 'You play White against me. Say your moves in plain English ("knight to f3", "e2 to e4", "bishop takes c6", "castle kingside"). Ask "what is the best move?" for a hint, "undo" to take a move back, or "resign" to give up.',
-    status: () => 'Say "new game" to start a fresh game.',
-  },
-};
-const GAME_OF_WORD = {
-  hangman: 'hangman', tic_tac_toe: 'tictactoe', tictactoe: 'tictactoe', 'tic-tac-toe': 'tictactoe', noughts_and_crosses: 'tictactoe', chess: 'chess',
-  twenty_questions: 'guess', guess_the_animal: 'guess', guessing_game: 'guess', animal_game: 'guess',
-};
-
-/** The game a help request is about: named, the active game of the app, or the game of the open tab. */
-function gameKey(ctx, named) {
-  if (named) return GAME_OF_WORD[String(named).toLowerCase().replace(/[\s]+/g, '_')] ?? null;
-  const t = tabInfo(ctx);
-  const byWorld = Object.entries(GAMES).find(([, g]) => g.world === t.activeGame)?.[0];
-  if (t.game) return Object.entries(GAMES).find(([, g]) => g.world === t.world)?.[0] ?? (t.world ? `declared:${t.world}` : null);
-  return byWorld ?? null;
 }
 
 // ---------------------------------------------------------------- operations
@@ -196,32 +140,10 @@ export function helpMe(ctx) {
   return ok(`${describeTab(t)}${ex} Ask "what can you do?" for the whole list, "more examples" for others, or "how do I ...?" to find a command.`, { values: r.items });
 }
 
-/** What the open tab is for, and the state of its game. */
+/** What the open tab is for. */
 export function helpAbout(ctx) {
   const t = tabInfo(ctx);
-  const key = gameKey(ctx, null);
-  let extra = '';
-  if (key && GAMES[key]) extra = ` ${GAMES[key].status(ctx.peek?.(GAMES[key].world))}`;
-  return ok(`${describeTab(t)}${extra} Ask "what can I say here?" for examples.`);
-}
-
-/** Rules and current state of a game. */
-export function helpGame(ctx, { game } = {}) {
-  const key = gameKey(ctx, game);
-  if (key && GAMES[key]) {
-    const g = GAMES[key];
-    return ok(`${g.name.charAt(0).toUpperCase() + g.name.slice(1)}: ${g.rules} ${g.status(ctx.peek?.(g.world))}`);
-  }
-  const t = tabInfo(ctx);
-  if (key?.startsWith('declared:')) {
-    const w = (ctx.worlds?.() ?? []).find((x) => x.id === key.slice(9));
-    return ok(`${describeTab(t)} Say "new game" to start, "give me a hint" if you are stuck, or "what can I say here?" for examples.${w ? '' : ''}`);
-  }
-  if (game) return no('unsupported', `I do not know a game called ${game}. I can play tic-tac-toe, twenty questions, hangman and chess.`);
-  const names = ['tic-tac-toe', 'twenty questions', 'hangman'];
-  for (const w of ctx.worlds?.() ?? []) if (w.tab?.kind === 'game' && !GAME_OF_WORD[w.tab.id]) names.push(w.tab.title ?? w.title);
-  if ((ctx.worlds?.() ?? []).some((w) => w.id === 'games.chess')) names.push('chess');
-  return ok(`There is no game open on the ${t.title} tab. I can play ${[...new Set(names)].join(', ').replace(/, ([^,]*)$/, ' and $1')}. Say "let's play hangman", for example, and then ask "how do I play?" again.`);
+  return ok(`${describeTab(t)} Ask "what can I say here?" for examples.`);
 }
 
 // ---------------------------------------------------------------- search over examples ("how do I ...?")

@@ -228,15 +228,3 @@ test('tab tier: a two-clause create whose every clause the Diagram tab reads goe
   assert.equal(r.trace.segmentations[0].tabTier, true);
   assert.deepEqual(winnerWorlds(r), ['diagram.sketch']);
 });
-
-test('a running game takes bare coordinates even when another world spoke last', async () => {
-  const s = engine.createSession({ language: 'en' });
-  for (const m of ['lets play tic tac toe', 'make the avatar a girl', 'make the avatar blue']) await s.send(m);
-  assert.equal(s.context().gameWorld, 'games.tictactoe');
-  const r = await s.send('B1');
-  assert.doesNotMatch(String(r.reply ?? r.answer ?? r.text ?? JSON.stringify(Object.keys(r))), /looks like a game move/);
-  assert.match(String(r.reply ?? r.answer ?? r.text ?? JSON.stringify(Object.keys(r))), /took/i);
-  // no game was played: the offer stays
-  const f = engine.createSession({ language: 'en' });
-  assert.match(String(((x) => x.reply ?? x.answer ?? x.text)(await f.send('B1'))), /looks like a game move/);
-});

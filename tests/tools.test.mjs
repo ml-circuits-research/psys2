@@ -216,64 +216,11 @@ test('tool worlds: status fixture, English, rules, import world.core and world.k
   }
 });
 
-test('tic-tac-toe: easy level wins and blocks; perfect level never loses', async () => {
-  const play = async (session) => {
-    for (let guard = 0; guard < 9 && !session.state('games.tictactoe').winner; guard++) {
-      const b = session.state('games.tictactoe').board;
-      const free = b.map((c, i) => (c ? -1 : i)).filter((i) => i >= 0);
-      const names = ['top left', 'top middle', 'top right', 'middle left', 'center', 'middle right', 'bottom left', 'bottom middle', 'bottom right'];
-      await session.send(`Play ${names[free[0]]}`);
-    }
-    return session.state('games.tictactoe');
-  };
-  const s = real.createSession();
-  await s.send('Set the level to perfect');
-  assert.notEqual((await play(s)).winner, 'X');
-  const t = real.createSession();
-  await t.send('Set the level to perfect');
-  await t.send('Let me go second');
-  assert.notEqual((await play(t)).winner, 'O');
-  // block: user X at A1 and A2, easy system must take A3 on its next move
-  const u = real.createSession();
-  await u.send('Center'); // X center, O somewhere
-  const st = u.state('games.tictactoe');
-  assert.equal(st.board.filter((c) => c === 'O').length, 1);
-  // deterministic: two sessions play the same game
-  const v = real.createSession(), w = real.createSession();
-  for (const m of ['Center', 'Top left', 'Bottom right']) { await v.send(m); await w.send(m); }
-  assert.deepEqual(v.state('games.tictactoe').board, w.state('games.tictactoe').board);
-});
-
 test('document history keeps at most 50 snapshots', async () => {
   const s = real.createSession();
   for (let i = 0; i < 55; i++) await s.send(`Add a paragraph number ${i}`);
   assert.equal(s.state('docs.editor').history.length, 50);
   assert.equal(s.state('docs.editor').blocks.length, 55);
-});
-
-test('guess the animal: the question splits the candidates evenly; learning adds a session fact', async () => {
-  const s = real.createSession();
-  const r = await s.send('Guess my animal');
-  const st = s.state('games.guess');
-  const cur = st.current;
-  assert.ok(Math.abs(cur.yes - cur.no) <= Math.max(2, cur.of * 0.2), JSON.stringify(cur));
-  assert.match(r.text, /Question 1:/);
-  await s.send('I give up');
-  await s.send('It was a quokka');
-  assert.match(s.memory(), /kids\.animals\.animal/);
-  assert.match(s.memory(), /name=quokka/);
-  assert.equal((await s.send('What is a quokka?')).statuses.at(-1) !== undefined, true);
-});
-
-test('hangman: hidden word until the end, six wrong guesses, hints from the knowledge base', async () => {
-  const s = real.createSession();
-  await s.send('Play hangman with the word giraffe');
-  const hint = await s.send('Tell me something about it');
-  assert.match(hint.text, /hint: It is a mammal/);
-  assert.equal(s.state('games.hangman').masked, '_ _ _ _ _ _ _');
-  assert.doesNotMatch((await s.send('How many guesses are left?')).text, /giraffe/);
-  const st = s.state('games.hangman');
-  assert.equal(st.wrongLeft, 6);
 });
 
 test('session.observe lets the originating world react through onObservation', async () => {

@@ -15,11 +15,11 @@ import { pathToFileURL } from 'node:url';
 
 /** Tab id -> the world of that tab (docs/webchat/ui/tabs/*.mjs and TABS in app.mjs); a record that carries `routing.activeWorld` wins. */
 export const TAB_WORLDS = Object.freeze({
-  robot: 'ui.avatar', editor: 'docs.editor', tictactoe: 'games.tictactoe', guess: 'games.guess', hangman: 'games.hangman',
-  chess: 'games.chess', draw: 'art.draw', diagram: 'diagram.sketch', charts: 'data.charts', music: 'media.music', map: 'geo.map',
+  robot: 'ui.avatar', editor: 'docs.editor',
+  draw: 'art.draw', diagram: 'diagram.sketch', charts: 'data.charts', music: 'media.music', map: 'geo.map',
 });
 /** Worlds that answer in every tab: not a wrong world. */
-export const EVERYWHERE = new Set(['ui.shell', 'ui.help', 'core', 'lang.common', 'common.sense', 'session.conversation', 'kids.common', 'user.profile']);
+export const EVERYWHERE = new Set(['ui.shell', 'ui.help', 'core', 'lang.common', 'common.sense', 'session.conversation', 'kids.common']);
 const NOT_UNDERSTOOD = new Set(['unparsed', 'unsupported', 'missing', 'refused', 'ignored', 'stopped', 'timeout']);
 
 const clean = (w) => (w && w !== 'null' && w !== 'undefined' ? String(w) : null);

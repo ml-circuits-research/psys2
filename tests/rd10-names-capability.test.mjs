@@ -126,11 +126,6 @@ test('bare coordinate answered "no" leaves everything as it is; e4 offers chess 
   assert.match((await s.send('no')).text, /leave it as it is/);
   assert.equal(s.state()['ui.shell'].activeTab, 'avatar');
 });
-test('bare coordinate inside a running game is still a move', async () => {
-  const s = open('chess');
-  assert.match((await s.send('e4')).text, /pawn to e4/);
-});
-
 // ---- RD2 without best effort (the CLI default) ----------------------------------------------------------------------------------------
 for (const said of ['the avatar should be a women', 'make the avatar look scared']) {
   test(`RD2 (no best effort): "${said}" with the Charts tab open goes to the avatar`, async () => {

@@ -52,12 +52,6 @@ test('every vote has its rule and a reason in plain words', () => {
   for (const x of r.ranked[0].reasons) { assert.ok(x.rule && x.say && !/[{}?]/.test(x.say), x.say); }
 });
 
-test('naming a world: a message that names the chess game is for chess whatever tab is open', () => {
-  const d = mw.decide({ text: 'rotate the chess board', live: live({ active: 'art.draw' }) });
-  assert.equal(d.world, 'games.chess');
-  assert.match(d.ranked[0].reasons[0].say, /named the chess/);
-});
-
 test('a referent in a scene is strong evidence: "the crocodiles" on another tab are the drawing\'s', () => {
   const d = mw.decide({ text: 'move the crocodiles', live: live({ active: 'games.chess', scene: { 'art.draw': ['crocodile', 'house'] } }) });
   assert.equal(d.world, 'art.draw');
