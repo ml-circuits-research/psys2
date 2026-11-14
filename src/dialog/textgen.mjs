@@ -9,13 +9,13 @@ const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.
 // ---- std.summarize (sopworld >= 0.61): `summarizeLog(entries, { parentOf, length })` returns FRAMES { act, kind, count, kinds?, failed?, salience }; `summarizeText(text, { n })`
 // returns { sentences: [{ text, score, at }], picked: [text] } (extractive). The library does not write English: the frames are rendered here (TEMPORARY verb table, until the
 // language world renders frames) into at most three sentences: what was done, which worlds were used, what was taught.
-const IRREGULAR = { draw: 'drew', make: 'made', put: 'put', take: 'took', give: 'gave', build: 'built', write: 'wrote', buy: 'bought', sit: 'sat', tell: 'told', find: 'found', set: 'set', get: 'got', say: 'said', go: 'went', read: 'read', teach: 'taught', run: 'ran', see: 'saw', color: 'coloured', colour: 'coloured' };
+const IRREGULAR = { make: 'made', draw: 'drew', put: 'put', take: 'took', give: 'gave', build: 'built', write: 'wrote', buy: 'bought', sit: 'sat', tell: 'told', find: 'found', set: 'set', get: 'got', say: 'said', go: 'went', read: 'read', teach: 'taught', run: 'ran', see: 'saw', color: 'coloured', colour: 'coloured' };
 const pastOf = (v) => IRREGULAR[v] ?? (/e$/.test(v) ? `${v}d` : /[^aeiou]y$/.test(v) ? `${v.slice(0, -1)}ied` : `${v}ed`);
-const pluralOf = (w) => (/(?:s|x|z|ch|sh)$/.test(w) ? `${w}es` : /[^aeiou]y$/.test(w) ? `${w.slice(0, -1)}ies` : `${w}s`);
+const PLURAL = { fish: 'fish', sheep: 'sheep', mouse: 'mice', man: 'men', woman: 'women', child: 'children', person: 'people', goose: 'geese', foot: 'feet', tooth: 'teeth' };
+const pluralOf = (w) => PLURAL[w] ?? (/(?:s|x|z|ch|sh)$/.test(w) ? `${w}es` : /[^aeiou]y$/.test(w) ? `${w.slice(0, -1)}ies` : `${w}s`);
 const NUMW = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
 const joinAnd = (a) => (a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
 const nounPhrase = (kind, n) => (n === 1 ? `a ${kind}` : `${NUMW[n] ?? n} ${pluralOf(kind)}`);
-const SKIPWORDS = new Set(['the', 'a', 'an', 'my', 'this', 'that', 'it', 'please', 'some', 'of', 'to', 'in', 'on']);
 
 /** Frames -> one sentence ("You drew two trees and a house"); `failed` counts requests that were not understood or could not be done. */
 export function renderFrames(frames, failed = 0) {
@@ -29,29 +29,11 @@ export function renderFrames(frames, failed = 0) {
 }
 
 const isBad = (t) => ['refused', 'not-understood', 'question-back'].includes(t.outcome);
-/** The entries `summarizeLog` aggregates, from the turn records of `turnRecord` (each turn holds `acts`: [{ verb, kind }]). */
+/** The entries `summarizeLog` aggregates, from the turn records of `turnRecord`: the acts the worlds executed (`acts`: [{ world, act, kind }], from the formalized reading). Failed turns have none and are only counted. */
 export function logEntries(turns) {
   const out = [];
-  for (const t of turns) for (const a of t.acts ?? []) out.push({ act: a.verb, kind: a.kind ?? null, failed: isBad(t), changed: t.outcome === 'done' ? 1 : 0.5 });
+  for (const t of turns) if (!isBad(t)) for (const a of t.acts ?? []) out.push({ act: a.act, kind: a.kind ?? null, changed: 1 });
   return out;
-}
-
-/** The verb and the kinds of a request, for the log entries: the first word of the segment and its noun phrases (one per "and"), a leading number repeating the kind. */
-export function actsOfSegment(text, thingText) {
-  const verb = String(text ?? '').trim().toLowerCase().split(/\s+/)[0]?.replace(/[^a-z]/g, '') ?? '';
-  if (verb.length < 3) return [];
-  const out = [];
-  for (const np of String(thingText ?? '').toLowerCase().split(/\s+and\s+|,/)) {
-    const w = np.trim().split(/\s+/).filter((x) => x && !SKIPWORDS.has(x));
-    if (!w.length) continue;
-    const nw = w.find((x) => /^\d+$/.test(x) || Object.values(NUMW).includes(x));
-    const n = nw === undefined ? 1 : /^\d+$/.test(nw) ? Number(nw) : Number(Object.keys(NUMW).find((k) => NUMW[k] === nw));
-    let kind = w.at(-1).replace(/[^a-z]/g, '');
-    if (kind.length < 3) continue;
-    if (/ies$/.test(kind)) kind = `${kind.slice(0, -3)}y`; else if (/(?:ches|shes|xes|sses)$/.test(kind)) kind = kind.slice(0, -2); else if (/s$/.test(kind) && !/ss$/.test(kind)) kind = kind.slice(0, -1);
-    for (let i = 0; i < Math.min(n, 20); i++) out.push({ verb, kind });
-  }
-  return out.length ? out : [{ verb, kind: null }];
 }
 
 export function createSummarizer(lib, world) {
@@ -67,7 +49,7 @@ export function createSummarizer(lib, world) {
       const entries = logEntries(turns);
       const all = entries.length ? log(entries, { parentOf, length: 'bullets' }) : [];   // failed frames carry a salience bonus and would fill the top three: the failures are counted in the sentence, the frames shown are the best three that worked
       const frames = (Array.isArray(all) ? all : []).filter((f) => !f.failed).slice(0, 3);
-      const failed = entries.length ? entries.filter((e) => e.failed).length : turns.filter(isBad).length;
+      const failed = turns.filter(isBad).length;
       const used = [...new Set(turns.flatMap((t) => t.worlds ?? []))];
       const sentences = [];
       const did = renderFrames(Array.isArray(frames) ? frames : [], failed);

@@ -2047,3 +2047,4 @@ Checks: tests run one file at a time; full `npm test` run three times (31 -> 12 
 
 ## 2026-11-14 16:30 std.summarize switched to the real library (0.61)
 - `createSummarizer` uses `summarizeLog` / `summarizeText`; frames are rendered by `renderFrames` (temporary); `turnRecord` carries `acts`; Talk paragraph and Documents "Summarise" button show when available; `docr.digest` cites the picked sentences. Measurement on owner logs b and c: 2/2 pass (all worlds and taught facts named, <= 3 sentences). Compose still unavailable.
+- Correction (coordinator): the paragraph no longer reads the user's words. `acts` = `executedActs(reply)` (world, act, kind from the executed operation and the world's state); failed turns only counted; taught facts only when `narratable`. Outputs of the b/c replays are in specs/26.

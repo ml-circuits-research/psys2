@@ -109,7 +109,7 @@ test('arbitration: the open editor tab owns "write a report ..."; the reader yie
 // ---- the measurement (reviewer 14:45 item 3, summaries): owner-log b and c replayed; the paragraph names every world used and every taught fact in at most 3 sentences
 import { join } from 'node:path';
 import { replay } from '../scripts/eval-owner-log.mjs';
-import { turnRecord, taughtText } from '../src/dialog/conversation.mjs';
+import { turnRecord, summarize } from '../src/dialog/conversation.mjs';
 for (const file of ['owner-log-2026-11-13b.jsonl', 'owner-log-2026-11-13c.jsonl']) {
   test(`Talk paragraph (std.summarizeLog) after ${file}: names every world and every taught fact, at most 3 sentences`, async () => {
     const turns = [], truth = new Set(); let states = {};
@@ -118,12 +118,15 @@ for (const file of ['owner-log-2026-11-13b.jsonl', 'owner-log-2026-11-13c.jsonl'
       for (const sg of reply.segments) if (!sg.unparsed && sg.routing?.winner?.worldId) truth.add(sg.routing.winner.worldId);
       states = sess.state();
     } });
-    const taught = (states['session.things']?.learned ?? []).map(taughtText);
+    const sum = summarize({ turns, states }), taught = sum.taughtClear;
     const p = createSummarizer(lib, null).turns({ turns, taught, maxSentences: 3 });
     assert.ok(p, 'a paragraph');
     assert.ok(p.sentences.length <= 3 && p.sentences.length >= 1);
     for (const w of truth) assert.ok(p.text.includes(w), `world ${w} is not named: ${p.text}`);
     for (const f of taught) assert.ok(p.text.includes(f), `taught fact "${f}" is not named`);
+    // nothing the world did not understand reaches the paragraph: every word is ASCII English letters, numbers and punctuation, and no kind comes from the user's phrase
+    assert.ok(!/[^\x20-\x7e]/.test(p.text));
+    for (const t of turns) for (const a of t.acts) assert.ok(a.kind === null || /^[a-z]+$/.test(a.kind));
     console.log(`# ${file}: ${p.text}`);
   });
 }
