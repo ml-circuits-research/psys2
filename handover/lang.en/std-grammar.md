@@ -70,3 +70,21 @@ Equality gate used for the first slice: `test-world all` in both reasoners, owne
 
 The spelling stage (one-slip tolerance, chat shorthand `ur`, `u`), translation, number-word reading (`k.values`, the host's number reader), and the answers' wording (`lang.common` UI strings). Other languages are out of scope here:
 translation stays a separate layer in front of the English world (the project rule), so nothing in `w.lang.en` or `std.grammar` is language-specific beyond English.
+
+## 8. Ask 2026-11-14: `resolve(phrase) -> ids + tier` over `std.grammar`
+
+Two PSys2 resolvers (the acts executor, the drawing board) read a noun phrase twice with the same logic; it is now ONE host function, `readNounPhrase(text, domain)` in `src/lang/np-resolve.mjs`, over `en.nounPhrase`.
+What is in it is what the library should own; what stays with the domain is the lookup of a plain phrase among the things of one world.
+
+```
+@fn.grammar.resolve core.function name=grammar.resolve out.kind=map pure=true
+  core.function.arg of=$fn.grammar.resolve name=phrase kind=string
+  core.function.arg of=$fn.grammar.resolve name=things kind=list          # the candidates of the host: { id, kind, attrs, parts, at } (a world's things, or a focus)
+  core.function.arg of=$fn.grammar.resolve name=focus kind=list           # the dialogue focus: pronouns, "the other one" read against it
+  # -> { ids: [..], tier: said | focus | scene | knowledge | default, kind, ask?: "Which do you mean: a or b?", candidates?: [..], guess?: "I took it to mean ..." }
+```
+Semantics that must hold (PSys2's gates measure them; `tests/np-time-referent.test.mjs`): a choice ("table 1 or table 2", "the red or the blue house": a part without its noun takes the last word of the last part) is asked, never both and never the
+last; a part of a set ("some of the tables", "two of them") is the whole set when the count covers it, else asked; "the other one" is the things of the kind that are not the focus; a relative clause with be ("the table that is red") is folded into
+modifiers; a coordination ("tables 1 and 2": a bare number takes the kind of the part before it) is the union; a pronoun is the focus with tier `focus` and a `guess` sentence; every result carries its tier so `std.fill` can rank it
+(said > focus > scene > knowledge > default). The same function reads the time phrases once a world has an order in time (`en.timeRelation`, `en.timeComparison`: "is Monday before Friday" asks the order of the two things, never a distance).
+Until it lands PSys2 keeps the one host resolver; the two domains differ only in the lookup of a plain phrase (kind, number, name, attribute value in the acts; kind, colour, size, place, ordinal in the drawing).

@@ -8,3 +8,4 @@
 {"run":5,"date":"2026-11-14","build":"96b6d0f4","added":31,"changed":0,"regressions":[],"fixed":[]}
 {"run":6,"date":"2026-11-13","build":"979afc7b","added":0,"changed":17,"regressions":[],"fixed":["3e728fff4313","7e80c706e4fc","b57486116973","af653e97dc77","a3ff716f6907","6b91e940693d","5453de0ed408","37a2daf35929","cbdfce1e7e09","72047f0ef495","d61d392d26c4","5e18211baf00","f8bfeafd7184","760befb0d2f9","5f05bcd585be","dcf78210583a","d9bb9d450203"]}
 {"run":7,"date":"2026-11-14","build":"298d5448","added":2,"changed":0,"regressions":[],"fixed":[]}
+{"run":8,"date":"2026-11-14","build":"a019aa1e","added":0,"changed":2,"regressions":[],"fixed":["2dcea612b9b2","245d2a2023a1"]}
