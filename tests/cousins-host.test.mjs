@@ -26,6 +26,7 @@ test('expand: the case is read by the library, its cousins come from the library
   assert.equal(fake.seen.o.degree, 2);
   assert.deepEqual(fake.seen.o.known, ['how many legs does a cow have'], 'the case itself is a known case');
   assert.deepEqual(r.cousins.map((c) => c.dimension), ['filler kind', 'aspect', 'filler kind']);
+  assert.equal(dimensionOf({ dims: ['class'] }), 'filler kind (edge class)');
   assert.equal(dimensionOf({ dims: ['key'] }), 'aspect');
   const none = expand(fake, world, { text: 'draw a king on the throne' });
   assert.equal(none.frame, null);

@@ -1,0 +1,497 @@
+{
+ "library": "vendored",
+ "cases": 489,
+ "learnable": 465,
+ "train": 335,
+ "heldOut": 130,
+ "rules": [
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 37,
+   "train": {
+    "pass": 0,
+    "of": 37
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 485
+   },
+   "sample": [
+    "Hey what a sound makes a cow",
+    "Hey what a sound makes a dolphin"
+   ],
+   "failing": [
+    {
+     "text": "Hey what a sound makes a cow",
+     "got": {
+      "rows": 286
+     },
+     "want": "cow"
+    },
+    {
+     "text": "Hey what a sound makes a dolphin",
+     "got": {
+      "rows": 286
+     },
+     "want": "dolphin"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 31,
+   "train": {
+    "pass": 0,
+    "of": 31
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 414
+   },
+   "sample": [
+    "Hey, what sound makes a cow",
+    "Hey, what sound makes a tapir"
+   ],
+   "failing": [
+    {
+     "text": "Hey, what sound makes a cow",
+     "got": {
+      "rows": 286
+     },
+     "want": "cow"
+    },
+    {
+     "text": "Hey, what sound makes a tapir",
+     "got": {
+      "rows": 286
+     },
+     "want": "tapir"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 6,
+   "train": {
+    "pass": 0,
+    "of": 6
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 73
+   },
+   "sample": [
+    "How many days is in a week. what noise does a cow make and how many legs then has a spider",
+    "How many days is in a week. what noise does a cow make and how many legs then has a deer"
+   ],
+   "failing": [
+    {
+     "text": "How many days is in a week. what noise does a cow make and how many legs then has a spider",
+     "got": {
+      "rows": 286
+     },
+     "want": "spider"
+    },
+    {
+     "text": "How many days is in a week. what noise does a cow make and how many legs then has a deer",
+     "got": {
+      "rows": 286
+     },
+     "want": "cow"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 75,
+   "train": {
+    "pass": 0,
+    "of": 75
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 960
+   },
+   "sample": [
+    "Um what sound does a cow make what 7 plus 5",
+    "Um what sounds makes a cow, also is Egypt in Africa"
+   ],
+   "failing": [
+    {
+     "text": "Um what sound does a cow make what 7 plus 5",
+     "got": {
+      "rows": 286
+     },
+     "want": "cow"
+    },
+    {
+     "text": "Um what sounds makes a cow, also is Egypt in Africa",
+     "got": {
+      "rows": 286
+     },
+     "want": "cow"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 33,
+   "train": {
+    "pass": 0,
+    "of": 33
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 464
+   },
+   "sample": [
+    "how many days are in a week. what sound makes a cow and then how many legs does a spider have",
+    "how many days are in a week. what sound makes a tapir and then how many legs does a spider have"
+   ],
+   "failing": [
+    {
+     "text": "how many days are in a week. what sound makes a cow and then how many legs does a spider have",
+     "got": {
+      "rows": 286
+     },
+     "want": "cow"
+    },
+    {
+     "text": "how many days are in a week. what sound makes a tapir and then how many legs does a spider have",
+     "got": {
+      "rows": 286
+     },
+     "want": "tapir"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 43,
+   "train": {
+    "pass": 0,
+    "of": 43
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 556
+   },
+   "sample": [
+    "um What sound does a cow make is Egypt in Africa too",
+    "Um what sound does a grizzly bear make what 7 plus 5"
+   ],
+   "failing": [
+    {
+     "text": "um What sound does a cow make is Egypt in Africa too",
+     "got": {
+      "rows": 286
+     },
+     "want": "cow"
+    },
+    {
+     "text": "Um what sound does a grizzly bear make what 7 plus 5",
+     "got": {
+      "rows": 286
+     },
+     "want": "panther"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 63,
+   "train": {
+    "pass": 0,
+    "of": 63
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 845
+   },
+   "sample": [
+    "Is Egypt in Africa what sound a cow makes also what is 20 minus 8?",
+    "Is Egypt in Africa, what sound does a dolphin make whatever is 20 min 8?"
+   ],
+   "failing": [
+    {
+     "text": "Is Egypt in Africa what sound a cow makes also what is 20 minus 8?",
+     "got": {
+      "rows": 286
+     },
+     "want": "cow"
+    },
+    {
+     "text": "Is Egypt in Africa, what sound does a dolphin make whatever is 20 min 8?",
+     "got": {
+      "rows": 286
+     },
+     "want": "dolphin"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 4,
+   "train": {
+    "pass": 0,
+    "of": 4
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 41
+   },
+   "sample": [
+    "Hey what a sound makes a grizzly bear",
+    "Hey what a sound makes a humpback whale"
+   ],
+   "failing": [
+    {
+     "text": "Hey what a sound makes a grizzly bear",
+     "got": {
+      "rows": 286
+     },
+     "want": "panther"
+    },
+    {
+     "text": "Hey what a sound makes a humpback whale",
+     "got": {
+      "rows": 286
+     },
+     "want": "whale"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "held-out 0/49",
+   "support": 2,
+   "train": {
+    "pass": 2,
+    "of": 2
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 49
+   },
+   "sample": [
+    "How many days is in a week. what noise does a cow make and how many legs then has a sea turtle",
+    "How many days is in a week. what noise does a cow make and how many legs then has a Tasmanian devil"
+   ],
+   "failing": []
+  },
+  {
+   "admitted": false,
+   "why": "held-out 0/62",
+   "support": 2,
+   "train": {
+    "pass": 2,
+    "of": 2
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 62
+   },
+   "sample": [
+    "Um what diet does a cow make what 7 plus 5",
+    "Um what diets makes a cow, also is Egypt in Africa"
+   ],
+   "failing": []
+  },
+  {
+   "admitted": false,
+   "why": "held-out 0/62",
+   "support": 2,
+   "train": {
+    "pass": 2,
+    "of": 2
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 62
+   },
+   "sample": [
+    "Um what habitat does a cow make what 7 plus 5",
+    "Um what habitats makes a cow, also is Egypt in Africa"
+   ],
+   "failing": []
+  },
+  {
+   "admitted": false,
+   "why": "held-out 0/62",
+   "support": 2,
+   "train": {
+    "pass": 2,
+    "of": 2
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 62
+   },
+   "sample": [
+    "Um what group does a cow make what 7 plus 5",
+    "Um what groups makes a cow, also is Egypt in Africa"
+   ],
+   "failing": []
+  },
+  {
+   "admitted": false,
+   "why": "held-out 0/62",
+   "support": 2,
+   "train": {
+    "pass": 2,
+    "of": 2
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 62
+   },
+   "sample": [
+    "Um what drawing does a cow make what 7 plus 5",
+    "Um what drawings makes a cow, also is Egypt in Africa"
+   ],
+   "failing": []
+  },
+  {
+   "admitted": false,
+   "why": "held-out 0/62",
+   "support": 2,
+   "train": {
+    "pass": 2,
+    "of": 2
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 62
+   },
+   "sample": [
+    "Um what legs does a cow make what 7 plus 5",
+    "Um what legss makes a cow, also is Egypt in Africa"
+   ],
+   "failing": []
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 6,
+   "train": {
+    "pass": 0,
+    "of": 6
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 26
+   },
+   "sample": [
+    "Is Egypt in Africa, what sound does a monitor lizard make whatever is 20 min 8?",
+    "Is Egypt in Africa, what sound does a Komodo dragon make whatever is 20 min 8?"
+   ],
+   "failing": [
+    {
+     "text": "Is Egypt in Africa, what sound does a monitor lizard make whatever is 20 min 8?",
+     "got": {
+      "rows": 286
+     },
+     "want": "opossum"
+    },
+    {
+     "text": "Is Egypt in Africa, what sound does a Komodo dragon make whatever is 20 min 8?",
+     "got": {
+      "rows": 286
+     },
+     "want": "opossum"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 3,
+   "train": {
+    "pass": 0,
+    "of": 3
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 1
+   },
+   "sample": [
+    "how many days are in a week. what sound makes a humpback whale and then how many legs does a spider have",
+    "how many days are in a week. what sound makes a monitor lizard and then how many legs does a spider have"
+   ],
+   "failing": [
+    {
+     "text": "how many days are in a week. what sound makes a humpback whale and then how many legs does a spider have",
+     "got": {
+      "rows": 286
+     },
+     "want": "whale"
+    },
+    {
+     "text": "how many days are in a week. what sound makes a monitor lizard and then how many legs does a spider have",
+     "got": {
+      "rows": 286
+     },
+     "want": "opossum"
+    }
+   ]
+  },
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 3,
+   "train": {
+    "pass": 0,
+    "of": 3
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 25
+   },
+   "sample": [
+    "um What sound does a grizzly bear make is Egypt in Africa too",
+    "um What sound does a humpback whale make is Egypt in Africa too"
+   ],
+   "failing": [
+    {
+     "text": "um What sound does a grizzly bear make is Egypt in Africa too",
+     "got": {
+      "rows": 286
+     },
+     "want": "panther"
+    },
+    {
+     "text": "um What sound does a humpback whale make is Egypt in Africa too",
+     "got": {
+      "rows": 286
+     },
+     "want": "whale"
+    }
+   ]
+  }
+ ],
+ "step": {
+  "heldOut": {
+   "of": 130,
+   "typed": 70,
+   "learned": 0,
+   "either": 70,
+   "wrongByRule": 0
+  },
+  "cousins": {
+   "of": 400,
+   "typed": 400,
+   "learned": 0,
+   "either": 400,
+   "wrongByRule": 0
+  }
+ },
+ "rulesText": []
+}

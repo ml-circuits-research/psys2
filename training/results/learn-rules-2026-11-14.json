@@ -1,0 +1,42 @@
+{
+ "library": "vendored",
+ "cases": 13,
+ "train": 10,
+ "heldOut": 3,
+ "rules": [
+  {
+   "admitted": false,
+   "why": "a training case fails",
+   "support": 3,
+   "train": {
+    "pass": 0,
+    "of": 3
+   },
+   "heldOut": {
+    "pass": 0,
+    "of": 48
+   },
+   "sample": [
+    "Um what sound does a cow make what 7 plus 5",
+    "Um what sounds makes a cow, also is Egypt in Africa"
+   ]
+  }
+ ],
+ "step": {
+  "heldOut": {
+   "of": 3,
+   "typed": 2,
+   "learned": 0,
+   "either": 2,
+   "wrongByRule": 0
+  },
+  "cousins": {
+   "of": 255,
+   "typed": 255,
+   "learned": 0,
+   "either": 255,
+   "wrongByRule": 0
+  }
+ },
+ "rulesText": []
+}

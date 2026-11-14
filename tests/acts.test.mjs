@@ -48,7 +48,11 @@ test('the schema world has no pattern of its own: a schema of under 60 lines, ev
   assert.ok(lines < 60, `schema.sop has ${lines} lines`);
   const pats = readFileSync(path.join(SEAT, 'patterns.sop'), 'utf8');
   assert.match(pats, /^@gen\.test\.seating\.note/);
-  assert.ok((pats.match(/core\.pattern/g) ?? []).length <= 45, 'about 40 patterns, independent of the number of kinds');
+  // derived, not a number: the patterns are generated from the English forms of the acts the schema declares, so there are never more of them than those forms, whatever the number of kinds
+  const declared = new Set([...readFileSync(path.join(SEAT, 'schema.sop'), 'utf8').matchAll(/^\s*acts=(\w+)/gm)].map((m) => m[1]));
+  const forms = A.FORMS.filter((f) => declared.has(f.act)).length;
+  const n = (pats.match(/core\.pattern/g) ?? []).length;
+  assert.ok(n > 0 && n <= forms, `${n} patterns for ${forms} forms of the declared acts`);
 });
 
 test('a wrong schema is reported with the reason', () => {
