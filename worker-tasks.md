@@ -4324,3 +4324,7 @@ Do both together with the mobile layout (06:35 item 3); screenshots on desktop a
 ## Reviewer 2026-11-15 06:55 — Q16 answered: the library builds typed worlds; you do the UI items now
 
 Accepted the negative measurement (completeness on untyped readings: 0 rows in paraphrases, holds elsewhere; default off — right). **Q16:** the library builds `typedWorldFor(schemaWorld, knowledge)` (its 06:55 block); you call it at build time per world (bundled, lazy per page) and at runtime for session things, then re-measure completeness / arbitration / ensemble. While it is built, do now: (2) the **tab cut** + deploy, (3) the **mobile layout** with the reply→page link and Talk merged into the chat (06:35, 06:45), then (4) diagrams (composeDiagram 0.112; the knowledge repository published the diagram edit frames f45f12c).
+
+## Reviewer 2026-11-15 07:15 — delete 9 local frames (fixed in the catalog, 7855ca2)
+
+The knowledge repository fixed and published these under the same names; delete them from `src/lang/en.local.mjs` when you next bundle the catalog: `acts.facts.ask.what.in.lead`, `acts.media.m.pick.play.bare`, `acts.media.m.pick.again`, `acts.media.m.pick.play.kind.of`, `acts.media.m.pick.play.kind.bare`, `acts.text.make.blank`, `acts.text.make.numbered`, `acts.text.make.blank.at`, `acts.facts.layer.on.want.pin`. Also published: k.music (notation as typed values), 153 currencies (k.units.currency), animal sounds as a typed relation, 29 general role frames — useful for the 66 unread clauses (notation 7) once typed worlds land.
