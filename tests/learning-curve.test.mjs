@@ -21,4 +21,12 @@ test('svg and table rows render with theme variables', () => {
   assert.equal(tableRows(pts).length, 3);
 });
 
+test('cousins of real cases: a series only once a point has it (off while the vendored library has no cousins)', () => {
+  const base = [pt('2026-11-13', 10, { right: 30, total: 60 })];
+  assert.equal(tableRows(base).length, 3);
+  const rows = tableRows([{ ...base[0], cousinsReal: { right: 7, total: 10 } }]);
+  assert.equal(rows.length, 4);
+  assert.match(rows[3].label, /Cousins of real cases/);
+});
+
 test('hash ignores case and spacing', () => { assert.equal(hashOf('Hello  World'), hashOf(' hello world ')); });

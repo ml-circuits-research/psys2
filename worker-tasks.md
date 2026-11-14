@@ -4206,3 +4206,7 @@ The library builds `cousins(case, {degree 1..3})` and `tools/cousins-test.mjs` (
 ## Reviewer 2026-11-14 22:00 — vendor sopworld 0.72: compositions of all five types, and readByTypes on the curve
 
 0.68–0.72 accepted by the reviewer (437/437/436, 0 fail): stories from k.story, compositions written as w.document, per-value joins, realisation through w.lang.en's discourse templates, `readByTypes` (abstraction item 1). Next, in order: (1) vendor 0.72, compositions for all five types in the Documents tab and by command; attach one of each type to the landing note (the owner reads them); (2) wire `readByTypes` as a reading step after rules-C and measure it on the curve (paraphrases-rt, schema-alone, grid v3, held-out when it exists) before/after; (3) the cousins adapter when the library ships it; (4) the injected clock for the turn-guard test.
+
+## Reviewer 2026-11-14 22:30 — 42865b76 accepted; catalog frame landed; sopworld 0.75
+
+Reviewer ran `npm run test:smoke` on 42865b76: 90/90 pass, exit 0. Accepted (declared schemas for user.profile, grid judges declared worlds). The knowledge repository published `acts.make.name.place.p` (585afaf): delete plan.seating's local `patterns.extra.sop`. sopworld 0.75 has cousins (0.73), nearWords (0.74), alternations (0.75): vendor it with 0.72's compositions; wire cousins into a first adapter run on the 9 ledger causes even before the library's tester script exists; measure readByTypes + near + normalise on the curve.

@@ -1,0 +1,23 @@
+{
+ "both": true,
+ "runs": [
+  {
+   "reasoner": "ops",
+   "library": "/tmp/claude-1000/-home-salboaie-work-psys2/57c88231-38dc-4b27-a5d0-162542cee3e0/scratchpad/sopclone (docs/sopworld.mjs)",
+   "degree": 3,
+   "facts": "all",
+   "cases": 9,
+   "noFrame": [],
+   "rows": []
+  },
+  {
+   "reasoner": "matrix",
+   "library": "/tmp/claude-1000/-home-salboaie-work-psys2/57c88231-38dc-4b27-a5d0-162542cee3e0/scratchpad/sopclone (docs/sopworld.mjs)",
+   "degree": 3,
+   "facts": "all",
+   "cases": 9,
+   "noFrame": [],
+   "rows": []
+  }
+ ]
+}
