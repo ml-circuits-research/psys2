@@ -303,3 +303,21 @@
     for=action.docr.askPassage
     status=ambiguous
     text="{note}"
+
+@tpl.docs.reader.digest core.template
+    for=action.docr.digest
+    text="{value}"
+
+@tpl.docs.reader.digest.ambiguous core.template
+    for=action.docr.digest
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.reader.compose core.template
+    for=action.docr.compose
+    text="{value}"
+
+@tpl.docs.reader.compose.ambiguous core.template
+    for=action.docr.compose
+    status=ambiguous
+    text="{note}"

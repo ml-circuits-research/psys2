@@ -4,6 +4,8 @@
     hooks=hooks.mjs
     own=describe:docr.describe
     own=summary:docr.summary
+    own=digest:docr.digest
+    own=compose:docr.compose
     own=characters:docr.characters
     own=mainCharacter:docr.mainCharacter
     own=places:docr.places

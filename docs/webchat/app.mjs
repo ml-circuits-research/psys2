@@ -158,7 +158,13 @@ export async function mountPsys2(element, options = {}) {
   let view = savedTab ?? tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
   const turnLog = []; let turnCount = 0;   // the turns of this conversation, for the summary of the Talk tab
   let lastSummary = null;
-  const refreshSummary = () => { try { lastSummary = summarize({ turns: turnLog, states, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title }); panelUI.talk?.ui?.setSummary?.(lastSummary); } catch (e) { console.warn('summary failed', e); } };
+  // std.summarize / std.compose (spec 26): the adapters are unavailable until the library ships them, and then the UI that needs them stays hidden (no fallback text)
+  let textGen = null;
+  const textGenReady = Promise.all([import('./lib/dialog/textgen.mjs'), import('./lib/vendor/sopworld/sopworld.mjs').catch(() => null)])
+    .then(([m, lib]) => { textGen = { summarizer: m.createSummarizer(lib, null), composer: m.createComposer(lib, null) }; return textGen; }).catch(() => { textGen = { summarizer: { available: false }, composer: { available: false } }; return textGen; });
+  textGenReady.then(() => { try { refreshSummary(); } catch { /* the summary is rebuilt after the next turn */ } });
+  const refreshSummary = () => { try { lastSummary = summarize({ turns: turnLog, states, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title });
+    if (textGen?.summarizer?.available && turnLog.length) { const p = textGen.summarizer.turns({ turns: turnLog, taught: lastSummary.taught, maxSentences: 3 }); if (p) lastSummary.paragraph = p.text; } panelUI.talk?.ui?.setSummary?.(lastSummary); } catch (e) { console.warn('summary failed', e); } };
   let avatarUI = null, avatarOpen = false, lastAnswerText = '';   // the avatar is not a tab: an icon in the input bar and its popup
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
@@ -517,6 +523,7 @@ export async function mountPsys2(element, options = {}) {
     speak: (text) => { if (speech && speechSupport.synthesis) speech.speak(String(text), { lang: speechLangTag() }); },
     state: (worldId) => states[worldId],
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
+    textGen: () => textGenReady,   // { summarizer, composer }: each has `available`
     asset: (path) => assetUrl(base, path),   // the file's URL with its content hash (ui/assets.mjs): cached forever under it
     knowledgeUrl: () => settings.knowledgeUrl || '',   // the catalog the engine reads (the avatar tab reads its faces from the same one)
     /** Put an element inside the answer being shown (the Talk tab's cards); false when there is no answer to put it in. */
