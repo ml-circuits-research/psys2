@@ -16,7 +16,7 @@ import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRo
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { en } from '../../lang/en.mjs';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
-import { parse, serialize } from '../../soplang/index.mjs';
+import { parse } from '../../soplang/index.mjs';
 import { budget } from '../../dialog/budget.mjs';
 import { readingVariants, dropStyleIn } from './variants.mjs';
 import { annotateUnread } from '../completeness.mjs';
@@ -669,7 +669,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         }));
         seg.wires = [...entityWires, ...renumbered];
         seg.unparsed = false;
-        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots), unread: m.unread ?? [] };
+        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots), unread: m.unread ?? [], unreadStrict: m.unreadStrict ?? m.unread ?? [] };
         const bestSig = signature(m);
         for (const o of matches) {
           if (o === m || o.pattern.worldId === m.pattern.worldId) continue;
@@ -1111,7 +1111,8 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     for (const variant of readingVariants(retryTokens, known)) {
       const r = readSentence(s, variant);
       if (r.done && !r.done.some((x) => x.unparsed) && !(variant.command && r.done.some((x) => x.match?.kind === 'statement'))
-          && !(variant.personal && !r.done.every((x) => x.match?.worldId === ctx.tabWorld))) { third = r; break; }
+          && !(variant.personal && !r.done.every((x) => x.match?.worldId === ctx.tabWorld))) { third = r; if (variant.command) for (const x of r.done) if (!x.unparsed) x.reframed = 'command';   // a gerund or a dropped subject read as a command: not a full reading for a world other than the open tab's (spec 16 section 14)
+            break; }
     }
     if (third) { segments.push(...third.done); continue; }
     segments.push(first.fallback);
@@ -1130,7 +1131,4 @@ function addEntityCore(w, { via, sourceRef, seq, worldId }) {
       { key: 'core.in', value: { kind: 'ref', v: worldId } }],
   };
 }
-
-/** SOP text of formalized wires (helper for the CLI and tests). */
-export const wiresToSop = (wires) => serialize(wires);
 export { PatternError };

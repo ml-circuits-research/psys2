@@ -19,7 +19,7 @@ import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=c57
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 import { Renderer, fallbackText, listText } from './render.mjs?v=19a4bd4d36';
 import { FormSession } from '../formalizer/rules/session.mjs?v=b56c914a5e';
-import { makeLang } from './lang.mjs?v=b0313edaaa';
+import { makeLang } from './lang.mjs?v=404d50e9dd';
 import { withLearned } from '../knowledge/learned.mjs?v=bb45fdb2e2';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';

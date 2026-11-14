@@ -13,7 +13,7 @@
  * Slope at each landing = change of the share (percentage points) divided by the mechanisms added since the previous point that HAD that measure; "gap" when a measure did not exist then.
  * Reading: curves that rise with each general addition = the symbolic approach generalises. Curves that stay flat while the per-case sets rise = fitting cases; the learned fallback must take more load.
  *
- *   node scripts/learning-curve.mjs [--record ["note"]]    (no flag: print the history with slopes; --record appends a point for this build from the current files)
+ *   node scripts/learning-curve.mjs [--record ["note"]] [--allow-stale]   (--record refuses a REAL-set result whose measured tree is not the current one)    (no flag: print the history with slopes; --record appends a point for this build from the current files)
  */
 import { readFileSync, existsSync, appendFileSync, readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -66,7 +66,7 @@ export async function currentPoint(note = '') {
   const build = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: REPO, encoding: 'utf8' }).stdout.trim();
   const same = ind.robustness?.paraphrasesDate ? ind.robustness['paraphrases-rt'] : null;   // only after the re-judging (meaning kept) does the set mean "paraphrases"
   let real = null;
-  try { const h = realHeadline(); real = h.total ? { right: h.right, total: h.total, turns: h.turns } : null; } catch { /* the real set was not run yet (node scripts/real-set.mjs run) */ }
+  try { const h = realHeadline(); real = h.total ? { right: h.right, total: h.total, turns: h.turns, ...(h.retired?.total ? { retired: h.retired } : {}), measuredOn: h.build, ...(h.stale ? { stale: h.stale } : {}) } : null; } catch { /* the real set was not run yet (node scripts/real-set.mjs run) */ }   // headline = in-scope judged turns; retired (ADR-010) rows are a line of their own; a result not from the current files is flagged
   const rb = ind.robustness?.paraphrasesDate ? ind.robustness : null;
   return { date: new Date().toISOString().slice(0, 10), build, mechanisms: await mechanisms(),
     ...(real ? { real } : {}),
@@ -150,6 +150,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   if (argv.includes('--record')) {
     const note = argv[argv.indexOf('--record') + 1]?.startsWith('--') ? '' : (argv[argv.indexOf('--record') + 1] ?? '');
     const p = await currentPoint(note), last = history().at(-1);
+    if (p.real?.stale && !argv.includes('--allow-stale')) { console.error(`REFUSED: the REAL-set result is not from the current files (${p.real.stale}). Run node scripts/real-set.mjs run --reasoner matrix first, or pass --allow-stale.`); process.exit(1); }
     const same = last && last.build === p.build && JSON.stringify({ ...last, note: '' }) === JSON.stringify({ ...p, note: '' });
     if (same) console.log('no change since the last point; nothing appended');
     else { appendFileSync(FILE, `${JSON.stringify(p)}\n`); console.log('appended', JSON.stringify(p)); }

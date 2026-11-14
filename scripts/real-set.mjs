@@ -18,13 +18,20 @@
  *   node scripts/real-set.mjs run --reasoner matrix|ops      replays every session on the current main (fresh session per session, turns in order), writes training/results/real-2026-11-15-<reasoner>.json
  *   node scripts/real-set.mjs report                         the outcome table of both reasoners + the REAL failures grouped by cause (training/eval/real-failures-2026-11-15.{json,md})
  *   node scripts/real-set.mjs flag                           adds `real: true|false` to every row of training/eval/failures.jsonl by source (idempotent)
- *   node scripts/real-set.mjs record                         prints the series for scripts/learning-curve.mjs (right / judged of the REAL set, matrix reasoner)
+ *   node scripts/real-set.mjs record [--allow-stale]         prints the series for scripts/learning-curve.mjs (right / judged of the REAL set, matrix reasoner); refuses a result file whose
+ *                                                            measured tree is not the current one (scripts/lib/measure-build.mjs) unless --allow-stale
+ *
+ * RETIRED ROWS (ADR-010, the tab cut; reviewer 2026-11-14 23:50): a judged row that needs a removed world (it sits on a removed tab, or its expectation reads a removed world's
+ * state or answer, or the logged reply came from one) is kept with `retired: { reason, tabs, worlds }` and its old check as `check_pre_cut`; its check becomes the clean refusal
+ * (no visible state change, none of the surviving tab worlds acts: `world_not`). Retired rows are not counted in the headline; `report` prints them as a separate line.
+ * Every result file records the build it was measured on (`build`, `tree`).
  */
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { causeOf } from './lib/failure-cause.mjs';
 import { isRealRow, realDialogueIds } from './lib/real-source.mjs';
+import { buildInfo, freshness } from './lib/measure-build.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SET = join(REPO, 'training/eval/real-2026-11-15.jsonl');
@@ -77,12 +84,56 @@ export function build() {
     have.add(norm(text));
     add({ set: 'real-ro.tsv', session: `real-ro.tsv:${src}`, i: rows.length, tab: tab || 'robot', lang: 'ro', text, class: null, logged: {}, judge: 'outcome', source: src });
   }
+  // owner phrase-log exports (training/eval/owner-exports/*.json, format psys2-phrase-log/3): the typed and spoken turns, appended after everything else so the ids above stay
+  const exDir = join(REPO, 'training/eval/owner-exports');
+  for (const f of existsSync(exDir) ? readdirSync(exDir).filter((x) => x.endsWith('.json')).sort() : []) {
+    const name = `owner-exports/${f.replace(/\.json$/, '')}`;
+    (JSON.parse(readFileSync(join(exDir, f), 'utf8')).records ?? []).filter((r) => r.source !== 'dry-run' && r.text).forEach((r, i) => add({ set: name, session: `${name}@${day(r.time)}`, i, tab: r.tab ?? r.routing?.activeTab ?? 'talk', lang: r.lang ?? 'en', mode: r.mode === 'voice' ? 'voice' : undefined, text: r.text, class: null, logged: { status: r.status ?? null, answer: String(r.detail?.answer ?? r.answer ?? '').slice(0, 200), outcome: loggedClass(r.status) }, time: r.time, judge: 'outcome', source: 'owner-export' }));
+  }
+  for (const r of rows) { forbidThieves(r); retire(r); }
   writeFileSync(SET, `${rows.map((r) => JSON.stringify(r)).join('\n')}\n`);
   return rows;
 }
 
+/** An owner-log check that only forbids a reply ("did not understand", "can not find") is met by ANY world's reply: another tab's world answering a transpose question for
+ *  "muta si mai la stinga" passed it. Such a check also gets `world_not` for the tab worlds that cannot own the request (all but the check's world and the tab's world). */
+function forbidThieves(r) {
+  const ex = r.check?.expect;
+  if (r.source !== 'owner-log' || r.judge !== 'state' || !ex || !Object.keys(ex).length || !Object.keys(ex).every((k) => k === 'reply_not')) return;
+  const own = new Set([r.check.world, tabWorldOfRow(r)].filter(Boolean));
+  r.check = { ...r.check, expect: { ...ex, world_not: THIEVES.filter((w) => !own.has(w)) } };
+}
+
+// ---------------------------------------------------------------- retired rows (ADR-010)
+/** The tabs and worlds ADR-010 removed, and the names a user or a reply gives them. */
+export const REMOVED = {
+  tabs: new Set(['chess', 'tictactoe', 'hangman', 'guess', 'profile', 'reader']),
+  worlds: /\b(?:games\.[\w.]+|user\.profile|docs\.reader)\b/,
+  names: /\b(?:hangman|tic[- ]?tac[- ]?toe|noughts and crosses|chess|guess the animal|profile)\b/i,
+};
+/** The surviving worlds with a tab: a retired turn must not be taken by any of them (talk, the Chat tab the removed tabs fall back to, may answer; so may the cross-cutting worlds). */
+const THIEVES = ['art.draw', 'media.music', 'diagram.sketch', 'geo.map', 'data.charts', 'plan.seating', 'plan.timeline', 'docs.editor'];
+function retire(r) {
+  if (r.judge !== 'state' || r.retired) return;
+  const ex = r.check?.expect ?? {};
+  const { world_not: _wn, reply_not: _rn, ...reads } = ex;   // forbidding a removed world is still a valid check
+  const why = [];
+  if (REMOVED.tabs.has(r.tab)) why.push(`typed on the removed ${r.tab} tab`);
+  if (REMOVED.worlds.test(JSON.stringify(reads)) || (REMOVED.worlds.test(r.check?.world ?? '') && Object.keys(reads).some((k) => /state|answer/.test(k) && REMOVED.worlds.test(JSON.stringify(reads[k]))))) why.push('the expectation reads a removed world');
+  else if (REMOVED.worlds.test(r.check?.world ?? '') && JSON.stringify(reads.answer ?? []).length > 2) why.push('the expectation is an answer of a removed world');
+  if (r.check?.regress && (REMOVED.names.test(r.text) || REMOVED.names.test(r.logged?.answer ?? ''))) why.push('the logged reply came from a removed world');
+  if (!why.length) return;
+  r.retired = { reason: `ADR-010 tab cut: ${why.join('; ')}`, tab: r.tab };
+  r.check_pre_cut = r.check;
+  r.check = { world: 'talk', expect: { unchanged: true, world_not: THIEVES.filter((w) => w !== tabWorldOfRow(r)) } };
+}
+/** The world of a row's (surviving) tab: a retired row on a surviving tab may still be read by its own world when nothing changes (a refusal there is clean). */
+const TAB_WORLD = { draw: 'art.draw', drawing: 'art.draw', music: 'media.music', diagram: 'diagram.sketch', map: 'geo.map', charts: 'data.charts', editor: 'docs.editor', documents: 'docs.editor' };
+const tabWorldOfRow = (r) => TAB_WORLD[r.tab] ?? null;
+
 // ---------------------------------------------------------------- run
 async function run(reasoner, { tag = '', bergamot = null, voice = false } = {}) {
+  const build0 = buildInfo(REPO);   // the files measured, taken before the run (spec 16 section 14, "Measurement")
   process.env.PSYS2_REASONER = reasoner;
   const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
   const { createEngine } = await import('../src/dialog/index.mjs');
@@ -118,8 +169,10 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false } = {}) 
     const s = engine.createSession(sessionOptions(settings, { language: 'en' }));
     for (const r of turns) {
       if (r.init) for (const [w, patch] of Object.entries(r.init)) s.setWorldState(w, patch);
-      if (r.tab) s.setWorldState('ui.shell', { activeTab: r.tab });
+      // a removed tab (ADR-010) is shown as the page shows it now: the Chat (Talk) tab
+      if (r.tab) s.setWorldState('ui.shell', { activeTab: REMOVED.tabs.has(r.tab) ? 'talk' : r.tab });
       const before = s.state();
+      const tabWorld = s.context?.().tabWorld ?? null;   // the tab the turn was typed in (read before the turn: a turn that switches tab and acts there is not "its own tab")
       const t0 = performance.now();
       let reply = null, error = null;
       const opts = { ...(r.lang === 'ro' ? { language: 'ro' } : {}), ...(r.mode ? { mode: r.mode } : {}) };
@@ -133,7 +186,6 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false } = {}) 
       const effects = reply.effects.filter((e) => e.name !== 'chat.suggest');
       const stateChanged = strip(before) !== strip(after);
       const acted = stateChanged || effects.length > 0 || reply.statuses.some((x) => x === 'supported');
-      const tabWorld = s.context?.().tabWorld ?? null;
       let outcome;
       if (unparsedAll || (!acted && !reply.statuses.some((x) => ['unsupported', 'conflicting', 'missing', 'unknown'].includes(x)))) outcome = 'not_understood';
       else if (!acted) outcome = reply.statuses.some((x) => x === 'unsupported' || x === 'conflicting') ? 'refused' : 'asked';
@@ -163,7 +215,7 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false } = {}) 
   }
   mt?.reset?.();
   mkdirSync(dirname(RES(reasoner, tag)), { recursive: true });
-  writeFileSync(RES(reasoner, tag), `${JSON.stringify({ reasoner, tag, mt: !!mt, voice, date: new Date().toISOString().slice(0, 10), rows: out }, null, 1)}\n`);
+  writeFileSync(RES(reasoner, tag), `${JSON.stringify({ reasoner, tag, mt: !!mt, voice, date: new Date().toISOString().slice(0, 10), ...build0, rows: out }, null, 1)}\n`);
   console.log(`wrote ${RES(reasoner, tag)} (${out.length} turns)`);
 }
 
@@ -171,9 +223,10 @@ async function run(reasoner, { tag = '', bergamot = null, voice = false } = {}) 
 const OUTCOMES = ['executed', 'refused', 'asked', 'not_understood', 'other_world'];
 export function tableOf(setRows, res) {
   const by = new Map(res.rows.map((x) => [x.id, x]));
-  const t = { turns: 0, judged: 0, right: 0, partly: 0, wrong: 0, open: 0, changed: 0, unjudged: 0, outcome: Object.fromEntries(OUTCOMES.map((o) => [o, 0])), by_source: {} };
+  const t = { turns: 0, judged: 0, right: 0, partly: 0, wrong: 0, open: 0, changed: 0, unjudged: 0, outcome: Object.fromEntries(OUTCOMES.map((o) => [o, 0])), by_source: {}, retired: { judged: 0, right: 0, partly: 0, wrong: 0 } };
   for (const r of setRows) {
     const x = by.get(r.id); if (!x) continue;
+    if (r.retired) { if (['right', 'partly', 'wrong'].includes(x.verdict)) { t.retired.judged++; t.retired[x.verdict]++; } continue; }   // ADR-010: not in the headline, a line of its own
     t.turns++; t.outcome[x.outcome]++;
     const s = (t.by_source[r.set.replace(/^dialogues:.*/, 'real dialogues')] ??= { turns: 0, judged: 0, right: 0 });
     s.turns++;
@@ -184,7 +237,7 @@ export function tableOf(setRows, res) {
 }
 
 /** A failing turn (a work item): judged wrong / partly; an owner-reported turn still open; an unjudged turn nobody understood, refused, or that a world other than the tab's took. */
-const isFailure = (r, x) => x.verdict === 'wrong' || x.verdict === 'partly' || x.verdict === 'open' || (x.verdict === null && ['not_understood', 'refused', 'other_world'].includes(x.outcome));
+const isFailure = (r, x) => !r.retired && (x.verdict === 'wrong' || x.verdict === 'partly' || x.verdict === 'open' || (x.verdict === null && ['not_understood', 'refused', 'other_world'].includes(x.outcome)));
 
 const GENERIC = new Set(['other / wrong result', 'not understood (no cause key)']);
 /** The cause of a real failing turn: the ledger's causeOf, refined for the generic groups by what the reply says. */
@@ -234,7 +287,8 @@ function report() {
     `Caveat: Romanian turns are replayed with the rules translator only (no browser Machine Translation in node), so part of the Romanian causes (1, 2) is the missing translation backend, not the reader.`, '', `Failing turns: matrix ${fm.length}, ops ${fo.length} (${opsOnly.length} fail on ops only). Ledger rows flagged real that are not turns of the set (feedback, live-demo findings): ${extra.length}.`, '', '| # | cause | turns | both | examples |', '| --- | --- | ---: | ---: | --- |',
     ...top.slice(0, 15).map((c, i) => `| ${i + 1} | ${c.cause.replace(/\|/g, '/').slice(0, 150)} | ${c.count} | ${c.both_reasoners} | ${c.examples.slice(0, 3).map((e) => `"${String(e.text).replace(/\|/g, '/').slice(0, 60)}" (${e.tab})`).join('; ')} |`), ''].join('\n');
   writeFileSync(join(REPO, 'training/eval/real-failures-2026-11-15.md'), md);
-  for (const [k, t] of Object.entries(tables)) console.log(`${k}: turns ${t.turns}, judged ${t.judged} (right ${t.right}, partly ${t.partly}, wrong ${t.wrong}), open ${t.open}, changed ${t.changed}, unjudged ${t.unjudged}; outcome ${JSON.stringify(t.outcome)}`);
+  for (const [k, t] of Object.entries(tables)) console.log(`${k}: turns ${t.turns}, judged ${t.judged} (right ${t.right}, partly ${t.partly}, wrong ${t.wrong}), open ${t.open}, changed ${t.changed}, unjudged ${t.unjudged}; outcome ${JSON.stringify(t.outcome)}\n${k} retired (ADR-010, clean refusal expected): ${t.retired.right}/${t.retired.judged} right (partly ${t.retired.partly}, wrong ${t.retired.wrong})`);
+  for (const [k, v] of Object.entries(res)) { const f = freshness(REPO, v); if (!f.fresh) console.log(`WARNING ${k}: ${f.why}`); }
   console.log(md);
 }
 
@@ -250,8 +304,10 @@ function flag() {
 
 /** The headline point of the learning curve: share right of the judged turns of the real set (matrix reasoner, the default). */
 export function headline() {
-  const t = tableOf(jl('training/eval/real-2026-11-15.jsonl'), JSON.parse(readFileSync(RES('matrix'), 'utf8')));
-  return { right: t.right, total: t.judged, turns: t.turns };
+  const res = JSON.parse(readFileSync(RES('matrix'), 'utf8'));
+  const t = tableOf(jl('training/eval/real-2026-11-15.jsonl'), res);
+  const f = freshness(REPO, res);
+  return { right: t.right, total: t.judged, turns: t.turns, retired: { right: t.retired.right, total: t.retired.judged }, build: res.build ?? null, tree: res.tree ?? null, ...(f.fresh ? {} : { stale: f.why }) };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -260,6 +316,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   else if (cmd === 'run') await run(arg('reasoner', 'matrix'), { tag: arg('tag', ''), bergamot: arg('bergamot', null), voice: process.argv.includes('--voice') });
   else if (cmd === 'report') report();
   else if (cmd === 'flag') flag();
-  else if (cmd === 'record') console.log(JSON.stringify(headline()));
+  else if (cmd === 'record') {
+    const h = headline();
+    console.log(JSON.stringify(h));
+    if (h.stale && !process.argv.includes('--allow-stale')) { console.error(`REFUSED: the matrix result is not from the current files (${h.stale}). node scripts/real-set.mjs run --reasoner matrix`); process.exit(1); }
+  }
   else { console.error('usage: real-set.mjs build | run --reasoner matrix|ops | report | flag | record'); process.exit(2); }
 }

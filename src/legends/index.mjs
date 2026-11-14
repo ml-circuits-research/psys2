@@ -298,10 +298,3 @@ export class Legends {
     return value.v;
   }
 }
-
-/** Convenience: build a registry from [{ wires, worldId }]. */
-export function loadLegends(sources) {
-  const l = new Legends();
-  for (const s of sources) l.add(s.wires, { worldId: s.worldId });
-  return l;
-}

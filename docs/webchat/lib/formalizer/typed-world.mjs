@@ -10,7 +10,7 @@
  * What a typed world can say about a reading: `unreadBy(typed, match)` = the content words of the free-text slots of the reading that the world's types do not accept (a `thing` that is
  * not a kind of the world, a name that is a question or an act of the world, a value outside its closed set, a number that is not one). A slot nobody typed is free: nothing is unread.
  */
-import { FUNCTION_WORDS } from './spell.mjs?v=e11634ab8c';
+import { FUNCTION_WORDS } from './spell.mjs?v=c8d5abf8f1';
 import { lemmaCandidates } from '../knowledge/facts.mjs?v=f9a0600c1d';
 
 const FREE = new Set(['words', 'noun', 'word', 'rest']);
@@ -85,8 +85,9 @@ function knows(tw, w, extra) {
 /**
  * The content words of the free-text slots of a reading (`m`: a candidate match with `slots`, `view`, `pattern`) that the typed world of the pattern's world does not accept.
  * `typedFor(id)` gives the bundle. Returns [] when the world has no typed bundle or no slot is typed.
+ * `strict` (the FULL reading a world other than the open tab's needs, spec 16 section 14): a `rest` capture is typed like any other free text (dictation is free only in the tab's own world).
  */
-export function unreadBy(typedFor, m, things = null) {
+export function unreadBy(typedFor, m, things = null, { strict = false } = {}) {
   const tw = typedFor?.(m.pattern.worldId);
   if (!tw) return [];
   const targets = targetsOf(m.pattern), view = m.view ?? [], out = [], extra = things?.(m.pattern.worldId) ?? null;
@@ -105,11 +106,11 @@ export function unreadBy(typedFor, m, things = null) {
       for (const t of words) { const w = lower(t); if (t.kind === 'word' && !FUNCTION_WORDS.has(w) && !tw.views.has(w) && !knows(tw, w, extra)) out.push(w); }
       continue;
     }
-    if (!sig && (argType === 'place' || (argType === 'phrase' && sl.class !== 'rest'))) {   // a noun phrase of the world's kinds: every content word is typed by the world
+    if (!sig && (argType === 'place' || (argType === 'phrase' && (strict || sl.class !== 'rest')))) {   // a noun phrase of the world's kinds: every content word is typed by the world
       for (const t of words) { const w = lower(t); if (t.kind === 'word' && !FUNCTION_WORDS.has(w) && !knows(tw, w, extra)) out.push(w); }
       continue;
     }
-    if (!sig || sl.class === 'rest' && sig.expects !== 'thing' && sig.expects !== 'value') continue;
+    if (!sig || !strict && sl.class === 'rest' && sig.expects !== 'thing' && sig.expects !== 'value') continue;
     const fit = tw.fits?.(target, text) ?? null;
     if (fit && !fit.ok) for (const t of words) { const w = lower(t); if (!FUNCTION_WORDS.has(w)) out.push(w); }
   }

@@ -9,9 +9,10 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
+import { reviewForeign } from './foreign-reading.mjs';
 import { installTextGen } from './textgen.mjs';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs';
-import { loadWorlds } from '../worlds/index.mjs';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs';
 import { validateWorldSet } from '../worlds/validate.mjs';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs';
 import { createInterpreter } from '../interpreter/index.mjs';
@@ -222,13 +223,10 @@ export async function translateParts(parts, translator, lang, userWords = null) 
 /** Romanian words the speech recogniser confuses with a word of the open tab's world (RP5): "un sare" on the Drawing tab is "un soare". */
 const SOUND_ALIKES = { 'art.draw': { sare: 'soare', soar: 'soare', soarele: 'soarele' } };
 function soundAlikes(text, tabWorld) {
-  text = text.replace(/\bx\s+(?:și|si|şi)\s+(?:zero|o|0)\b/gi, 'x și 0').replace(/\b(?:pornește|porneste|lansează|lanseaza|deschide)\s+(?=x și 0\b)/gi, 'începe ');   // the game's name: "x și zero" (the digit is how the world spells it)
   const map = SOUND_ALIKES[tabWorld];
   return map ? text.replace(/\p{L}+/gu, (w) => (Object.hasOwn(map, w.toLowerCase()) ? map[w.toLowerCase()] : w)) : text;
 }
 
-/** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
-const BUILTIN_TAB = { 'docs.editor': 'editor' };
 
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
@@ -962,7 +960,7 @@ export class DialogSession {
     const namedNow = this._worldsNamedIn(`${text} ${fixedText}`);
     return segments.every((x) => {
       const w = x.match?.worldId;
-      if (!w || w === ctx.tabWorld || w === 'ui.shell' || w === 'ui.help' || namedNow.has(w) || !(set.get(w)?.tab || BUILTIN_TAB[w])) return true;
+      if (!w || w === ctx.tabWorld || w === 'ui.shell' || w === 'ui.help' || namedNow.has(w) || !tabOfWorld(set, w)) return true;
       // the world "read" the sentence only if a catch-all does not swallow most of it (a search query, a name sink taking a typo for text)
       const free = Object.values(x.match?.slots ?? {}).filter((sl) => sl.class === 'rest' || sl.class === 'words').reduce((n, sl) => n + (String(sl.text ?? sl.value ?? '').match(/[\p{L}\p{N}]+/gu)?.length ?? 0), 0);
       const total = (x.text ?? text).match(/[\p{L}\p{N}]+/gu)?.length ?? 1;
@@ -1559,7 +1557,8 @@ export class DialogSession {
     }
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
-    const segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    let segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    if (!icpt && !pre && !meta && segments.length) segments = reviewForeign(this, segments, { english: formalText });   // spec 16 section 14: a world other than the open tab's acts only on a full reading; a first-person statement is not a command
     if (this.engine.knowledge && segments.length) { try { await perf.time('knowledge', () => preloadThings(this, segments)); } catch { /* no knowledge is no change */ } }   // spec 17: the open slots of the readings, looked up before the operations run
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
@@ -1650,7 +1649,9 @@ export class DialogSession {
               if (textOf(r) && !r.unknown?.length && !r.untranslatable?.length && !(translator.leftovers?.(textOf(r), lang) ?? []).length) done.push(textOf(r).trim());
             } catch { /* this example stays untranslated */ }
           }
-          exShown = done.length === ex.length ? done : ex;
+          // no machine translator to try them later (not the app's fallback chain): examples the rules cannot translate are left out, so that the not-understood line itself
+          // is shown in the user's language instead of the whole reply reverting to English (RD5: a reply is fully translated or English)
+          exShown = done.length === ex.length ? done : translator.fallbackMode?.() === 'fallback' ? ex : [];
         }
         if (exShown.length) {
           line.push(dym.length ? T(' Did you mean ', { fallback: ' You can say: ' }) : T(' For example: ', { fallback: ' You can say: ' }));
@@ -1679,7 +1680,7 @@ export class DialogSession {
         const idleTab = seg.match?.worldId === 'ui.shell' && /\.bare/.test(seg.match.patternId ?? '') && /^You are already on the .+ tab\.$/.test(rendered) && segments.some((x) => x !== seg && !x.unparsed && x.match?.worldId && x.match.worldId !== 'ui.shell');
         if (!idleTab) lines.push([T(rendered)]);
         statuses.push(r.status);
-        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) { followTab = t; followSeg = seg; } }   // an explicit navigation later in the message wins over the tab of an earlier segment
+        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = tabOfWorld(set, wid); if (wid === 'ui.shell') followTab = null; else if (t) { followTab = t; followSeg = seg; } }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
         if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.from?.length) fr.from = r.envelope.from; else if (r.envelope?.fromLater) fr.fromLater = r.envelope.fromLater; } }

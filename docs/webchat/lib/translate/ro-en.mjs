@@ -3,8 +3,8 @@
 // Pipeline per sentence:  tokens -> number words -> phrase frames -> items (NP, VG, wh, pp ...)
 //                         -> clause splitting -> clause grammar -> pieces with source spans.
 import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=6d473eb091';
-import * as M from './morphology.ro.mjs?v=957828c2e5';
-import * as E from './inflect.en.mjs?v=bb4799b9ff';
+import * as M from './morphology.ro.mjs?v=af92ea5710';
+import * as E from './inflect.en.mjs?v=5b2e62d57a';
 import { FRAMES } from './phrases.ro-en.mjs?v=4d0ff4dd06';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 

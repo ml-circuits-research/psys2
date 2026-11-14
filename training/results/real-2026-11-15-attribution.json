@@ -1,0 +1,1508 @@
+{
+ "question": "real headline 201/253 (f947d19b) vs 142/253 (main 40292c60): where did 59 judged-right turns go?",
+ "method": "node scripts/real-set.mjs run --reasoner matrix|ops (default options: rules translator, no MT, no voice) in git worktrees of each commit; judge files (scripts/real-set.mjs, scripts/lib/{operational-check,visible-state,failure-cause,real-source}.mjs, training/eval/real-2026-11-15.jsonl, dialogues.jsonl) are byte-identical between f947d19b and 40292c60; for commits older than the real set the f947d19b script was copied in.",
+ "runs": {
+  "f947d19b": {
+   "matrix": "201/253",
+   "ops": "201/253",
+   "note": "reproduces the committed result row for row"
+  },
+  "bfc4dfa3": {
+   "matrix": "201/253"
+  },
+  "b9c74694": {
+   "matrix": "201/253",
+   "note": "main just before the tab cut merge (includes phone layout a224e57e)"
+  },
+  "8a629c6f (tab cut branch, parent of the removal)": {
+   "matrix": "201/253",
+   "ops": "201/253"
+  },
+  "4d1793e5 (Tab cut: remove games.*, user.profile, docs.reader)": {
+   "matrix": "142/253",
+   "ops": "142/253"
+  },
+  "b950aba6 (tab cut tip)": {
+   "matrix": "142/253"
+  },
+  "d05ac415": {
+   "matrix": "142/253"
+  },
+  "40292c60 (main: catalog refresh 257536ae, 0.114 b4241aff, first-turn 694418ee, 0.117 ...)": {
+   "matrix": "142/253",
+   "ops": "142/253",
+   "note": "zero judged verdict changes vs 4d1793e5 (38 unjudged reply/outcome changes only)"
+  }
+ },
+ "net": {
+  "lost": 60,
+  "gained": 1,
+  "delta": -59,
+  "commit": "4d1793e5",
+  "gained_turn": "r0066 \"muta si mai la stinga\": wrong -> right, but spurious (media.music answers a transpose question; the owner-log check only forbids \"did not understand\")"
+ },
+ "by_removed_world": {
+  "games.hangman": {
+   "turns": 7,
+   "ids": [
+    "r0154",
+    "r0157",
+    "r0158",
+    "r0159",
+    "r0160",
+    "r0161",
+    "r0162"
+   ]
+  },
+  "user.profile": {
+   "turns": 30,
+   "ids": [
+    "r0485",
+    "r0486",
+    "r0487",
+    "r0488",
+    "r0489",
+    "r0490",
+    "r0491",
+    "r0492",
+    "r0493",
+    "r0494",
+    "r0495",
+    "r0496",
+    "r0497",
+    "r0498",
+    "r0499",
+    "r0500",
+    "r0501",
+    "r0502",
+    "r0503",
+    "r0504",
+    "r0505",
+    "r0507",
+    "r0509",
+    "r0637",
+    "r0638",
+    "r0639",
+    "r0640",
+    "r0647",
+    "r0648",
+    "r0649"
+   ]
+  },
+  "games.guess": {
+   "turns": 3,
+   "ids": [
+    "r0534",
+    "r0535",
+    "r0536"
+   ]
+  },
+  "games.tictactoe": {
+   "turns": 16,
+   "ids": [
+    "r0537",
+    "r0538",
+    "r0539",
+    "r0540",
+    "r0601",
+    "r0604",
+    "r0605",
+    "r0607",
+    "r0608",
+    "r0609",
+    "r0613",
+    "r0614",
+    "r0615",
+    "r0616",
+    "r0617",
+    "r0618"
+   ]
+  },
+  "games.chess": {
+   "turns": 4,
+   "ids": [
+    "r0602",
+    "r0619",
+    "r0620",
+    "r0621"
+   ]
+  }
+ },
+ "categories": {
+  "a_removed_worlds": "60 of 60 lost turns need a world removed by ADR-010 (user.profile 30, games.tictactoe 16, games.hangman 7, games.chess 4, games.guess 3); 75 judged turns of the set in all (73 excluding r0043/r0047 which only forbid hangman). Split headline: in-scope 132/180 -> 133/180; removed-world turns 69/73 -> 9/73.",
+  "b_measurement": [
+   "the default result files training/results/real-2026-11-15-{matrix,ops}.json were written at f947d19b and not re-run after the tab cut; scripts/real-set.mjs record / learning-curve read them, so main kept reporting 201 while every later run (tagged -rules, -voice, -mt, -kidsaudit, and the 0.114 commit message) measured 142. The 201 was right for its build, not wrong: \"stale\" means not re-recorded.",
+   "the set was not re-scoped after ADR-010: 57 judged rows sit on removed tabs and 18 more expect user.profile/games state; the judge counts the removal as 60 failures, among them a correct refusal (r0154 \"There is no hangman game.\", regress check wants executed).",
+   "the runner sets ui.shell.activeTab to removed tabs (chess, hangman, guess, tictactoe, profile: 101 rows); tabWorld is null there, so other_world can never be reported for them (unjudged outcome only); tabWorld is also read after the turn, so a turn that switches tab and acts there counts executed.",
+   "r0066 judged right on a wrong-world reply (check too weak).",
+   "no judge, option, translator or catalog-route change between the two commits affects any judged turn."
+  ],
+  "c_real_regressions": "0 judged turns lost whose expectation is in a surviving world. 8 of the 60 lost turns (plus r0066 and 6 unjudged turns: \"o\" x5 -> media.music, \"No way\" r0210) show surviving worlds acting on out-of-scope turns after the cut (art.draw draws people for \"I have two kids\", cats/dogs for \"I like cats, dogs and horses\", acts with an empty place slot for \"give me a hint\", respells hint->mint; media.music answers \"Reading\", \"No way\" (way->say), \"what do you know about me\" (song \"me\"), \"o\" (note A)). Ledgered as 9 rows real:true in training/eval/failures.jsonl."
+ },
+ "lost": [
+  {
+   "id": "r0154",
+   "set": "owner-log-2026-11-13c",
+   "tab": "editor",
+   "text": "start a hangman game",
+   "removed_world": "games.hangman",
+   "before": {
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "OK, let's play hangman! Hangman! I have chosen a word of 8 letters: - - - - - - - -. You can make 6 wrong guesses. Guess a letter, or the whole word."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "refused",
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "There is no hangman game."
+   },
+   "category": "a+b: correct refusal \"There is no hangman game.\" judged wrong by the regress check (owner ok-turn must still execute)"
+  },
+  {
+   "id": "r0157",
+   "set": "owner-log-2026-11-13c",
+   "tab": "hangman",
+   "text": "i",
+   "removed_world": "games.hangman",
+   "before": {
+    "world": [
+     "games.hangman"
+    ],
+    "reply": "Yes, there is one I! - - i - - - a -"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"i\". For example: \"What should I call you?\" or \"Who am I chatting with?\""
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0158",
+   "set": "owner-log-2026-11-13c",
+   "tab": "hangman",
+   "text": "o",
+   "removed_world": "games.hangman",
+   "before": {
+    "world": [
+     "games.hangman"
+    ],
+    "reply": "No, there is no O. 4 wrong guesses left. - - i - - - a -"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"o\". For example: \"What should I call you?\" or \"Who am I chatting with?\""
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0159",
+   "set": "owner-log-2026-11-13c",
+   "tab": "hangman",
+   "text": "u",
+   "removed_world": "games.hangman",
+   "before": {
+    "world": [
+     "games.hangman"
+    ],
+    "reply": "No, there is no U. 3 wrong guesses left. - - i - - - a -"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"u\". For example: \"What should I call you?\" or \"Who am I chatting with?\""
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0160",
+   "set": "owner-log-2026-11-13c",
+   "tab": "hangman",
+   "text": "r",
+   "removed_world": "games.hangman",
+   "before": {
+    "world": [
+     "games.hangman"
+    ],
+    "reply": "Yes, there is one R! - - i - - r a -"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"r\". For example: \"What should I call you?\" or \"Who am I chatting with?\""
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0161",
+   "set": "owner-log-2026-11-13c",
+   "tab": "hangman",
+   "text": "t",
+   "removed_world": "games.hangman",
+   "before": {
+    "world": [
+     "games.hangman"
+    ],
+    "reply": "Yes, there is one T! - t i - - r a -"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"t\". For example: \"What should I call you?\" or \"Who am I chatting with?\""
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0162",
+   "set": "owner-log-2026-11-13c",
+   "tab": "hangman",
+   "text": "m",
+   "removed_world": "games.hangman",
+   "before": {
+    "world": [
+     "games.hangman"
+    ],
+    "reply": "No, there is no M. 2 wrong guesses left. - t i - - r a -"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"m\". For example: \"What should I call you?\" or \"Who am I chatting with?\""
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0485",
+   "set": "dialogues:dlg.real#rp3-20",
+   "tab": "profile",
+   "text": "get to know me",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Great, let us play \"get to know me\"! I will ask one thing at a time. Say \"skip\" for anything you would rather not answer, or \"stop\" whenever you like. First things first: what name do you like to go by? (0 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"get to know me\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "state:user.profile:active=true"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0486",
+   "set": "dialogues:dlg.real#rp3-20",
+   "tab": "profile",
+   "text": "Sînică",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Sînică, lovely to meet you. Okay, how do you earn your keep these days? What is your role? (1 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Sînică\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.name.v==Sînică"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0487",
+   "set": "dialogues:dlg.real#rp3-20",
+   "tab": "profile",
+   "text": "Researcher",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "A researcher: so you ask the questions nobody has answered yet. So you work in science and research, right?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Researcher\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.role.v==Researcher"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0488",
+   "set": "dialogues:dlg.real#rp3-21",
+   "tab": "profile",
+   "text": "get to know me",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Great, let us play \"get to know me\"! I will ask one thing at a time. Say \"skip\" for anything you would rather not answer, or \"stop\" whenever you like. First things first: what name do you like to go by? (0 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"get to know me\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "state:user.profile:active=true"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0489",
+   "set": "dialogues:dlg.real#rp3-21",
+   "tab": "profile",
+   "text": "Sînică",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Sînică, lovely to meet you. Okay, how do you earn your keep these days? What is your role? (1 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Sînică\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.name.v==Sînică"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0490",
+   "set": "dialogues:dlg.real#rp3-21",
+   "tab": "profile",
+   "text": "Researcher",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "A researcher: so you ask the questions nobody has answered yet. So you work in science and research, right?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Researcher\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.field.src=guessed"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0491",
+   "set": "dialogues:dlg.real#rp3-21",
+   "tab": "profile",
+   "text": "Axiologic",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Axiologic, noted. And is it right that you work in science and research?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Axiologic\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.org.v==Axiologic"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0492",
+   "set": "dialogues:dlg.real#rp3-22",
+   "tab": "profile",
+   "text": "get to know me",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Great, let us play \"get to know me\"! I will ask one thing at a time. Say \"skip\" for anything you would rather not answer, or \"stop\" whenever you like. First things first: what name do you like to go by? (0 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"get to know me\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "state:user.profile:active=true"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0493",
+   "set": "dialogues:dlg.real#rp3-22",
+   "tab": "profile",
+   "text": "Sînică",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Sînică, lovely to meet you. Okay, how do you earn your keep these days? What is your role? (1 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Sînică\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.name.v==Sînică"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0494",
+   "set": "dialogues:dlg.real#rp3-22",
+   "tab": "profile",
+   "text": "Researcher",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "A researcher: so you ask the questions nobody has answered yet. So you work in science and research, right?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Researcher\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.field.src=guessed"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0495",
+   "set": "dialogues:dlg.real#rp3-22",
+   "tab": "profile",
+   "text": "Axiologic",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Axiologic, noted. And is it right that you work in science and research?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Axiologic\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.org.v==Axiologic"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0496",
+   "set": "dialogues:dlg.real#rp3-22",
+   "tab": "profile",
+   "text": "R&D",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Research and development, a field with a lot going on. And what do you do to unwind? (4 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"R&D\". For example: \"Add a song.\" or \"What is the colour of song?\"",
+    "failing": [
+     "state:user.profile:fields.field.v==Research and development"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0497",
+   "set": "dialogues:dlg.real#rp3-22",
+   "tab": "profile",
+   "text": "Reading",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Reading: there is always another book waiting. How did you get into it?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "asked",
+    "world": [
+     "media.music"
+    ],
+    "reply": "I have not played anything yet. Try \"play a C major chord\".",
+    "failing": [
+     "state:user.profile:fields.hobbies.v.0=reading"
+    ]
+   },
+   "category": "a+c: expected by ADR-010, but a surviving non-tab world now acts on it (ledgered real:true)"
+  },
+  {
+   "id": "r0498",
+   "set": "dialogues:dlg.real#rp3-23",
+   "tab": "profile",
+   "text": "get to know me",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Great, let us play \"get to know me\"! I will ask one thing at a time. Say \"skip\" for anything you would rather not answer, or \"stop\" whenever you like. First things first: what name do you like to go by? (0 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"get to know me\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "state:user.profile:active=true"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0499",
+   "set": "dialogues:dlg.real#rp3-23",
+   "tab": "profile",
+   "text": "Sînică",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Sînică, lovely to meet you. Okay, how do you earn your keep these days? What is your role? (1 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Sînică\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.name.v==Sînică"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0500",
+   "set": "dialogues:dlg.real#rp3-23",
+   "tab": "profile",
+   "text": "Researcher",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "A researcher: so you ask the questions nobody has answered yet. So you work in science and research, right?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Researcher\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.field.src=guessed"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0501",
+   "set": "dialogues:dlg.real#rp3-23",
+   "tab": "profile",
+   "text": "Axiologic",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Axiologic, noted. And is it right that you work in science and research?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"Axiologic\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.org.v==Axiologic"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0502",
+   "set": "dialogues:dlg.real#rp3-23",
+   "tab": "profile",
+   "text": "R&D",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Research and development, a field with a lot going on. And what do you do to unwind? (4 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"R&D\". For example: \"Add a song.\" or \"What is the colour of song?\"",
+    "failing": [
+     "state:user.profile:fields.field.v==Research and development"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0503",
+   "set": "dialogues:dlg.real#rp3-23",
+   "tab": "profile",
+   "text": "Reading",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "Reading: there is always another book waiting. How did you get into it?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "asked",
+    "world": [
+     "media.music"
+    ],
+    "reply": "I have not played anything yet. Try \"play a C major chord\".",
+    "failing": [
+     "state:user.profile:fields.hobbies.v.0=reading"
+    ]
+   },
+   "category": "a+c: expected by ADR-010, but a surviving non-tab world now acts on it (ledgered real:true)"
+  },
+  {
+   "id": "r0504",
+   "set": "dialogues:dlg.real#rp3-23",
+   "tab": "profile",
+   "text": "No way",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "No problem. Roughly how long have you been at it? (5 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "asked",
+    "world": [
+     "media.music"
+    ],
+    "reply": "I have not played anything yet. Try \"play a C major chord\". (I read \"way\" as \"say\")",
+    "failing": [
+     "answer:how long"
+    ]
+   },
+   "category": "a+c: expected by ADR-010, but a surviving non-tab world now acts on it (ledgered real:true)"
+  },
+  {
+   "id": "r0505",
+   "set": "dialogues:dlg.real#rp3-23",
+   "tab": "profile",
+   "text": "20",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [],
+    "reply": "20 years: solid. A quarter of the way there! Next: if a friend had to describe your strongest skills, what would they say? (6 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"20\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "state:user.profile:fields.years.v==20"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0507",
+   "set": "dialogues:dlg.real#rp3-24",
+   "tab": "robot",
+   "text": "get to know me",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Great, let us play \"get to know me\"! I will ask one thing at a time. Say \"skip\" for anything you would rather not answer, or \"stop\" whenever you like. First things first: what name do you like to go by? (0 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"get to know me\". For example: \"Add a hat.\" or \"What is the colour of hat?\"",
+    "failing": [
+     "state:user.profile:active=true"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0509",
+   "set": "dialogues:dlg.real#rp3-24",
+   "tab": "robot",
+   "text": "stop",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "OK, you give up, so I win this one. Say \"new game\" to play again."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "executed",
+    "world": [
+     "media.music"
+    ],
+    "reply": "Nothing is playing right now.",
+    "failing": [
+     "state:user.profile:active=false"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0534",
+   "set": "dialogues:dlg.rp3#005",
+   "tab": "guess",
+   "text": "lets play guess the animal",
+   "removed_world": "games.guess",
+   "before": {
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "OK, let's play guess the animal! Think of an animal and I will try to guess it. Answer with yes, no, I don't know or maybe. Question 1: Does it eat only meat?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"lets play guess the animal\". For example: \"A zebra has 4 legs.\" or \"What is my dog called?\"",
+    "failing": [
+     "state:phase=asking"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0535",
+   "set": "dialogues:dlg.rp3#005",
+   "tab": "guess",
+   "text": "yes, it eats meat",
+   "removed_world": "games.guess",
+   "before": {
+    "world": [
+     "games.guess"
+    ],
+    "reply": "Good. Question 2: Can it swim? Noted: it eats meat. Question 2: Can it swim?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"yes, it eats meat\". For example: \"A zebra has 4 legs.\" or \"What is my dog called?\"",
+    "failing": [
+     "state:phase=asking",
+     "answer:Noted",
+     "answer:eats meat",
+     "forbid:answer without \"did not understand\""
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0536",
+   "set": "dialogues:dlg.rp3#005",
+   "tab": "guess",
+   "text": "new game",
+   "removed_world": "games.guess",
+   "before": {
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "Think of an animal and I will try to guess it. Answer with yes, no, I don't know or maybe. Question 1: Does it eat only meat?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"new game\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "state:phase=asking",
+     "state:count=0",
+     "answer:Question 1"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0537",
+   "set": "dialogues:dlg.rp3#006",
+   "tab": "tictactoe",
+   "text": "start x and 0",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "OK, let's play tic-tac-toe! You are X and you go first. I play at the easy level. Say a place like \"center\" or \"top left\", or a coordinate like B2 (letter for the column, number for the row)."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"start x and 0\". For example: \"Where is Ann?\" or \"Undo that.\"",
+    "failing": [
+     "answer:tic-tac-toe",
+     "forbid:answer without \"did not understand\""
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0538",
+   "set": "dialogues:dlg.rp3#006",
+   "tab": "tictactoe",
+   "text": "play the center",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "You took the center. I took top right. Your move."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"play the center\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "state:board.4=X"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0539",
+   "set": "dialogues:dlg.rp3#006",
+   "tab": "tictactoe",
+   "text": "noughts and crosses",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "OK, let's play tic-tac-toe! We are already playing tic-tac-toe. It is your move."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"noughts and crosses\". For example: \"Add milk to my list.\" or \"I just finished my reading.\"",
+    "failing": [
+     "answer:tic-tac-toe",
+     "forbid:answer without \"did not understand\""
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0540",
+   "set": "dialogues:dlg.rp3#006",
+   "tab": "tictactoe",
+   "text": "lets play x and o",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "OK, let's play tic-tac-toe! We are already playing tic-tac-toe. It is your move."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"lets play x and o\". For example: \"Add a song.\" or \"What is the colour of song?\"",
+    "failing": [
+     "answer:tic-tac-toe",
+     "forbid:answer without \"did not understand\""
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0601",
+   "set": "dialogues:dlg.gaps#006",
+   "tab": "tictactoe",
+   "text": "what are tic tac toe's rules",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "ui.help"
+    ],
+    "reply": "Tic-tac-toe: You play X and move first; I play O. Say where to put your mark by name (\"top left\", \"center\", \"bottom right\", \"middle row left\") or by coordinates (\"B2\"). Three in a row wins. Say \"new game\" to restart or \""
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"what are tic tac toe's rules\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "answer:Three in a row wins",
+     "forbid:answer without \"I did not understand\""
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0602",
+   "set": "dialogues:dlg.gaps#006",
+   "tab": "tictactoe",
+   "text": "what are chess's rules",
+   "removed_world": "games.chess",
+   "before": {
+    "world": [
+     "ui.help"
+    ],
+    "reply": "Chess: You play White against me. Say your moves in plain English (\"knight to f3\", \"e2 to e4\", \"bishop takes c6\", \"castle kingside\"). Ask \"what is the best move?\" for a hint, \"undo\" to take a move back, or \"resign\" to gi"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"what are chess's rules\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "answer:knight to f3"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0604",
+   "set": "dialogues:dlg.gaps#007",
+   "tab": "tictactoe",
+   "text": "which one of us goes first",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "X goes first. You are X, so you go first, and I am O."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"which one of us goes first\". Did you mean \"Which minor goes with C major?\"?",
+    "failing": [
+     "answer:X goes first"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0605",
+   "set": "dialogues:dlg.gaps#007",
+   "tab": "tictactoe",
+   "text": "who gets to go first",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "X goes first. You are X, so you go first, and I am O."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"who gets to go first\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "answer:X goes first"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0607",
+   "set": "dialogues:dlg.gaps#008",
+   "tab": "tictactoe",
+   "text": "can u suggest where i play",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "How about the center?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"can u suggest where i play\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "answer:How about",
+     "forbid:answer without \"I did not understand\""
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0608",
+   "set": "dialogues:dlg.gaps#008",
+   "tab": "tictactoe",
+   "text": "let's play tic tac toe",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "OK, let's play tic-tac-toe! You are X and you go first. I play at the easy level. Say a place like \"center\" or \"top left\", or a coordinate like B2 (letter for the column, number for the row)."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"let's play tic tac toe\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "answer:You are X"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0609",
+   "set": "dialogues:dlg.gaps#008",
+   "tab": "tictactoe",
+   "text": "can u suggest where i play",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "How about the center?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"can u suggest where i play\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "answer:How about"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0613",
+   "set": "dialogues:dlg.gaps1#ttt-hint-01",
+   "tab": "tictactoe",
+   "text": "let's play tic tac toe",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "OK, let's play tic-tac-toe! You are X and you go first. I play at the easy level. Say a place like \"center\" or \"top left\", or a coordinate like B2 (letter for the column, number for the row)."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"let's play tic tac toe\". For example: \"What should I call you?\" or \"Who am I chatting with?\"",
+    "failing": [
+     "answer:You are X"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0614",
+   "set": "dialogues:dlg.gaps1#ttt-hint-01",
+   "tab": "tictactoe",
+   "text": "best move for me?",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "How about the center?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"best move for me\". For example: \"Add a chart.\" or \"What is the colour of chart?\"",
+    "failing": [
+     "answer:How about"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0615",
+   "set": "dialogues:dlg.gaps1#ttt-hint-01",
+   "tab": "tictactoe",
+   "text": "what should I play?",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "How about the center?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"what should I play\". Did you mean \"What notes did you play?\" or \"What tunes can you play?\"?",
+    "failing": [
+     "answer:How about"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0616",
+   "set": "dialogues:dlg.gaps1#ttt-hint-02",
+   "tab": "tictactoe",
+   "text": "best move?",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "How about the center?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"best move\". For example: \"Add a chart.\" or \"What is the colour of chart?\"",
+    "failing": [
+     "answer:How about"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0617",
+   "set": "dialogues:dlg.gaps1#ttt-hint-02",
+   "tab": "tictactoe",
+   "text": "what is a good move",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "How about the center?"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"what is a good move\". For example: \"Add a circle.\" or \"What is the colour of circle?\"",
+    "failing": [
+     "answer:How about"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0618",
+   "set": "dialogues:dlg.gaps1#ttt-hint-02",
+   "tab": "tictactoe",
+   "text": "hint",
+   "removed_world": "games.tictactoe",
+   "before": {
+    "world": [
+     "games.tictactoe"
+    ],
+    "reply": "How about the center?"
+   },
+   "after": {
+    "verdict": "partly",
+    "outcome": "executed",
+    "world": [
+     "art.draw"
+    ],
+    "reply": "Change what? Name the thing (there is nothing here yet). (I read \"hint\" as \"mint\")",
+    "failing": [
+     "answer:How about"
+    ]
+   },
+   "category": "a+c: expected by ADR-010, but a surviving non-tab world now acts on it (ledgered real:true)"
+  },
+  {
+   "id": "r0619",
+   "set": "dialogues:dlg.gaps1#chess-hint-01",
+   "tab": "chess",
+   "text": "best move for me?",
+   "removed_world": "games.chess",
+   "before": {
+    "world": [
+     "games.chess"
+    ],
+    "reply": "Let me think about your best move."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"best move for me\". For example: \"Add a chart.\" or \"What is the colour of chart?\"",
+    "failing": [
+     "answer:best move"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0620",
+   "set": "dialogues:dlg.gaps1#chess-hint-01",
+   "tab": "chess",
+   "text": "what is the best move?",
+   "removed_world": "games.chess",
+   "before": {
+    "world": [
+     "games.chess"
+    ],
+    "reply": "Let me think about your best move."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"what is the best move\". For example: \"Add a chart.\" or \"What is the colour of chart?\"",
+    "failing": [
+     "answer:best move"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0621",
+   "set": "dialogues:dlg.gaps1#chess-hint-01",
+   "tab": "chess",
+   "text": "give me a hint",
+   "removed_world": "games.chess",
+   "before": {
+    "world": [
+     "games.chess"
+    ],
+    "reply": "Let me think about your best move."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "executed",
+    "world": [
+     "art.draw"
+    ],
+    "reply": "I do not know a place called \"\" to show things in. I can show things in the drawing, the chart, the document, the map, the seating plan, the timeline, the conversation and the face.",
+    "failing": [
+     "answer:best move"
+    ]
+   },
+   "category": "a+c: expected by ADR-010, but a surviving non-tab world now acts on it (ledgered real:true)"
+  },
+  {
+   "id": "r0637",
+   "set": "dialogues:dlg.cb-c#likes-facts",
+   "tab": null,
+   "text": "I like chess, music and maps",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Chess: a game that rewards patience."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "executed",
+    "world": [
+     "ui.shell"
+    ],
+    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\". OK, here is t",
+    "failing": [
+     "state:user.profile:fields.hobbies.v.length=3",
+     "forbid:ui.shell:activeTab=map"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0638",
+   "set": "dialogues:dlg.cb-c#likes-facts",
+   "tab": null,
+   "text": "I have two kids",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Got it, children: 2."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "other_world",
+    "world": [
+     "art.draw"
+    ],
+    "reply": "I drew 2 blue people. I understood only part of that: I did not use \"I\".",
+    "failing": [
+     "state:user.profile:fields.children.v=2",
+     "forbid:answer without \"blue people\"",
+     "forbid:answer without \"drew\""
+    ]
+   },
+   "category": "a+c: expected by ADR-010, but a surviving non-tab world now acts on it (ledgered real:true)"
+  },
+  {
+   "id": "r0639",
+   "set": "dialogues:dlg.cb-c#likes-facts",
+   "tab": null,
+   "text": "I am 45 years old",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Got it: 45 years old."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I did not understand \"I am 45 years old\". For example: \"Add a pin.\" or \"What is the colour of pin?\"",
+    "failing": [
+     "state:user.profile:fields.age.v=45",
+     "state:user.profile:sensitive.length=0"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0640",
+   "set": "dialogues:dlg.cb-c#likes-facts",
+   "tab": null,
+   "text": "what do you know about me",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Here is what I know about you: age: 45; children: 2; hobbies: chess, music and maps. (3 of 23 known)"
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "asked",
+    "world": [
+     "media.music"
+    ],
+    "reply": "I do not know a song called \"me\". Ask me \"which songs do you know?\".",
+    "failing": [
+     "answer:45",
+     "answer:children"
+    ]
+   },
+   "category": "a+c: expected by ADR-010, but a surviving non-tab world now acts on it (ledgered real:true)"
+  },
+  {
+   "id": "r0647",
+   "set": "dialogues:dlg.cb-c#age-fact",
+   "tab": null,
+   "text": "I am 45 years old",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "45 years old, noted."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
+    "failing": [
+     "state:user.profile:fields.age.v=45",
+     "state:user.profile:sensitive.length=0"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0648",
+   "set": "dialogues:dlg.cb-c#age-fact",
+   "tab": null,
+   "text": "my age is 46",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "Thanks, I will remember that you are 46."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "not_understood",
+    "world": [],
+    "reply": "I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawing.\" or \"Add the wheel too.\".",
+    "failing": [
+     "state:user.profile:fields.age.v=46"
+    ]
+   },
+   "category": "a: expected by ADR-010 (removed world)"
+  },
+  {
+   "id": "r0649",
+   "set": "dialogues:dlg.cb-c#age-fact",
+   "tab": null,
+   "text": "I like cats, dogs and horses",
+   "removed_world": "user.profile",
+   "before": {
+    "world": [
+     "user.profile"
+    ],
+    "reply": "cats, dogs and horses, I like that."
+   },
+   "after": {
+    "verdict": "wrong",
+    "outcome": "other_world",
+    "world": [
+     "art.draw"
+    ],
+    "reply": "I drew 3 orange cats. I drew 3 brown dogs. I cannot talk about that here. I can talk about things you can draw, their parts and sizes, and the order of months, seasons, days and planets. You could ask \"Add it to my drawi",
+    "failing": [
+     "state:user.profile:fields.hobbies.v.length=3",
+     "state:user.profile:fields.age.v=46"
+    ]
+   },
+   "category": "a+c: expected by ADR-010, but a surviving non-tab world now acts on it (ledgered real:true)"
+  }
+ ]
+}

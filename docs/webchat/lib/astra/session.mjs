@@ -6,8 +6,7 @@ import { Astra } from './registry.mjs?v=bde8f4d569';
 import { runCommand, parseCommand } from './where.mjs?v=970c7b26f1';
 import { Agenda, frameFromPending, frameFromModal } from './frames.mjs?v=7f08beebfe';
 import { USER_SCOPE } from './registry.mjs?v=bde8f4d569';
-
-const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor' };
+import { tabOfWorld } from '../worlds/index.mjs?v=eaf542fad5';   // the avatar is not a tab (tab cut, ADR-010): only the Documents tab is built in
 
 /** The Astra of a dialog session: the binding reads `dialog.isession.state` lazily (the session object is replaced by an undo restore). */
 export function createSessionAstra(dialog, { chatKey = 'chat' } = {}) {
@@ -23,7 +22,7 @@ export function createSessionAstra(dialog, { chatKey = 'chat' } = {}) {
   };
   return new Astra({
     binding, chatKey,
-    tabOf: (w) => set().get(w)?.tab?.id ?? BUILTIN_TAB[w] ?? null,
+    tabOf: (w) => tabOfWorld(set(), w),
     titleOf: (w) => String(set().get(w)?.title ?? w).replace(/\s*\(.*\)\s*$/, ''),
   });
 }
@@ -50,8 +49,7 @@ export function runDiscussionCommand(dialog, text, turn) {
   // "back to ...": bring the discussion's tab forward and summarise its world, like a topic return
   const d = r.discussion, inst = astra.instancesOf(d.id)[0];
   const world = inst?.world;
-  const w = world ? dialog.engine.set.get(world) : null;
-  const tab = w?.tab?.id ?? BUILTIN_TAB[world] ?? d.tab;
+  const tab = tabOfWorld(dialog.engine.set, world) ?? d.tab;
   const { interp } = dialog.engine;
   if (tab && dialog.isession.state['ui.shell']?.activeTab !== tab) { try { interp.runAction(dialog.isession, 'ui.openTab', { tab }); } catch { /* the shell may be absent */ } }
   const sum = world ? (interp.hook(dialog.isession, world, 'topicSummary', {}) ?? interp.hook(dialog.isession, world, 'summary', {})) : null;
