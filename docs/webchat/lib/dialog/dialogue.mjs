@@ -394,7 +394,6 @@ export class Dialogue {
     }
     if (!pol || !left.length || new Set(left).size !== 1) return null;
     const bare = left[0];
-    if (!d.list && d._gameAsksYesNo?.()) return null;
     // a word some world reads as a request of its own (a music "stop", a game's "wait") is that request, not a refusal
     try { const raw = await d._readSeg(text, sid); if (raw && !raw.unparsed && this.s._dryStatuses([raw]).every((x) => x === 'supported')) return null; } catch { /* read as a bare answer */ }
     const a = this.recent(2), last = this.log.at(-1);

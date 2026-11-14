@@ -16,7 +16,6 @@
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { restrictedSet } from '../formalizer/spell.mjs?v=4426ef371b';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=41e7c944b4';
 import { foreignFragment } from './continuation.mjs?v=a414b57a5c';
 import { liveFromContext } from './meta-worlds.mjs?v=132aebf41c';
@@ -29,7 +28,7 @@ export const normalizeWorldAware = (v) => (WORLD_AWARE_MODES.includes(v) ? v : D
 export const baseMode = (m) => String(m ?? 'off').replace(/-strict$/, '');
 
 /** The reasons a reading can be vetoed. The default set is the one the measurements support (spec 16, section 6); `-strict` adds `words-partial`; `PSYS2_WA_KINDS` (a comma list) overrides for experiments. */
-export const VETO_KINDS = Object.freeze(['no-referent', 'no-game', 'no-continuation', 'words-best-effort']);
+export const VETO_KINDS = Object.freeze(['no-referent', 'no-continuation', 'words-best-effort']);
 /** `library`: the library's own `veto(result)` on the reading (its reasons except `inconsistent` (the world's refusal, answered), `nothing` and `action-unavailable` (an action the operations carry out)). Not in the default set: opt in with `PSYS2_WA_KINDS`. */
 const kinds = (mode) => {
   const e = globalThis.process?.env?.PSYS2_WA_KINDS;
@@ -81,41 +80,6 @@ function referentsOf(dialog, seg) {
 /** What the reading is: a question (asks a value), a request (an action) or a statement (tells facts). */
 const readingKind = (seg) => ((seg.wires ?? []).some((w) => w.type === 'core.question') ? 'question' : (seg.wires ?? []).some((w) => w.type === 'core.request') ? 'request' : 'statement');
 
-/**
- * A move in a game that is not running, asked from another tab ("put it in the top right corner" on the Drawing tab is not a tic-tac-toe move): the reading's
- * world declares `tabKind=game`, is not the open tab's world, has no game running in this session, and the action is not the one that starts a game. Read-only:
- * the open tab and the running game come from the session context, the kind and the starting action from the world's manifest.
- */
-function idleGame(dialog, seg) {
-  const rq = requestOf(seg);
-  if (!rq?.world || !rq.action) return null;
-  const w = dialog.engine.set.get(rq.world);
-  if (!(w?.tab?.kind === 'game' || String(rq.world).startsWith('games.'))) return null;   // the manifest says tabKind=game; the built-in game tabs (tic-tac-toe, guess, hangman) have no manifest tab, only the games. id prefix
-  const ctx = dialog.context();
-  if (ctx.tabWorld === rq.world || ctx.gameWorld === rq.world || ctx.modalWorld === rq.world) return null;
-  // With no tab open a move the router takes into the game is how a game starts ("Top right" opens tic-tac-toe, as the world tests define): acting is not wrong.
-  if (!ctx.tabWorld) return null;
-  // A message that names the game ("Can u rotate the chess board?") is for that game, whatever tab is open.
-  try { if (seg.text && dialog._worldsNamedIn(seg.text).has(rq.world)) return null; } catch { /* keep going */ }
-  if (rq.action === w.gameControls?.new) return null;
-  return { world: rq.world, title: String(w.title ?? rq.world).replace(/\s*\(.*\)\s*$/, ''), action: rq.action };
-}
-
-/**
- * Whether the open tab's own world reads the message completely (the rules of that world alone). The `no-game` veto needs it: a game move from another tab is
- * only wrong when the open tab has a reading of its own ("put it in the top right corner" on the Drawing tab); when it has none, the router's reading is the
- * only one, and taking the move into the game (opening its tab, starting it) is what the world tests define. Never throws; false when it cannot tell.
- */
-async function tabReads(dialog, seg) {
-  try {
-    const ctx = dialog.context();
-    const w = dialog.engine.set.get(ctx.tabWorld);
-    if (!w?.patterns?.length) return false;
-    const res = await dialog.engine.formalizers.rules.formalize(seg.text, { worlds: restrictedSet(dialog.engine.set, [ctx.tabWorld]), session: dialog.isession, source: 'wa', context: ctx, router: dialog.engine.router });
-    return !!res.segments.length && res.segments.every((x) => !x.unparsed && !x.ignored?.length && !x.partial && !x.bestEffort);
-  } catch { return false; }
-}
-
 /** What the world instances say about one reading: the library's scored candidate, reduced to what the layer uses. */
 function judgeOne(rs, seg, foreign) {
   const left = leftOut(seg, foreign);
@@ -166,7 +130,6 @@ function heldPart(text, missing) {
 /** The reason a reading must not be acted on, from what the world says of it; null when it may stand. */
 export function vetoOf(wa, seg, ref, mode) {
   const k = kinds(mode);
-  if (wa.idle && k.has('no-game')) return { kind: 'no-game', why: `no ${wa.idle.title} game is running and its tab is not open`, say: `We are not playing ${wa.idle.title} right now. Tell me you want to play it, then say your move.`, status: 'missing' };
   if (wa.fragment && k.has('no-continuation')) return { kind: 'no-continuation', why: `a piece without a verb of its own, read by ${wa.fragment.world}, which has nothing running and is not the open tab`, say: `I am not sure how “${seg.text}” fits what we were doing. Please say the whole request.`, status: 'missing' };
   if (ref && k.has('no-referent')) {
     const s = sayMissing(ref);
@@ -226,7 +189,6 @@ async function reviewOne(dialog, seg, mode, rs, before = []) {
       }
     } catch { return seg; }
     if (ref) wa.missing = ref.missing.map((m) => m.name);
-    try { const idle = idleGame(dialog, seg); if (idle && await tabReads(dialog, seg)) wa.idle = idle; } catch { /* keep the reading */ }
     try {
       const mw = kinds(mode).has('no-continuation') ? await dialog.engine.prepareMeta?.() : null;   // who may take a piece without a verb is a rule of meta.worlds
       const fr = foreignFragment(dialog, seg, mw && ((text) => mw.route({ text, live: liveFromContext(dialog.context(), { sceneKeys: ['thing', 'kind', 'name'] }), fragment: true }).blocked));
@@ -266,13 +228,10 @@ export function makePicker(dialog) {
     if (cands.length < 2) return null;
     const r = rs.score(cands.map((c) => ({ wires: c.wires })));
     const id = (c) => `${c.m.pattern.worldId}:${c.m.pattern.id}`;
-    // The host's own criterion, before the library's (spec 16, section 4): a reading that moves in a game that is not running, while another reading exists, comes last.
-    const idle = cands.map((c) => { try { return idleGame(dialog, { wires: c.wires, match: { worldId: c.m.pattern.worldId } }) ? 1 : 0; } catch { return 0; } });
-    r.order = r.order.slice().sort((a, b) => idle[a] - idle[b]);
     const top = r.order[0];
     const note = {
       source: 'rules', host: id(cands[0]), library: id(cands[top]), libraryDefault: id(cands[r.libraryOrder[0]]), disagree: top !== 0, applied: false,
-      readings: cands.map((c, i) => ({ reading: id(c), judged: r.results[i].judged, judgedBy: r.results[i].judgedBy ?? null, ok: r.results[i].ok, lacks: (r.results[i].lacks ?? []).length, idleGame: !!idle[i], place: r.ranked[i].place, why: r.ranked[i].why })),
+      readings: cands.map((c, i) => ({ reading: id(c), judged: r.results[i].judged, judgedBy: r.results[i].judgedBy ?? null, ok: r.results[i].ok, lacks: (r.results[i].lacks ?? []).length, place: r.ranked[i].place, why: r.ranked[i].why })),
     };
     if (top === 0 || baseMode(dialog._wa) !== 'choose') return { matches, note };
     note.applied = true;

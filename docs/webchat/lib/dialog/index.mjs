@@ -34,20 +34,20 @@ import { checkValues } from './value-check.mjs?v=0b1e4a0a04';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=d99ff8a97b';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=cf4f1fcab5';
-import { Discourse } from './discourse.mjs?v=f5aa1a5774';
-import { Dialogue } from './dialogue.mjs?v=7550e6668d';
+import { Discourse } from './discourse.mjs?v=09e0b73187';
+import { Dialogue } from './dialogue.mjs?v=7f2dcbd129';
 import { turnSteps } from './steps.mjs?v=44af51b084';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=11177a0843';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=5a2a056441';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=0ae6273fb0';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=634f8bf3c8';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=37e63aae52';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants } from './variants.mjs?v=2c99eea255';
+import { withVariants } from './variants.mjs?v=495b631f3b';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=4426ef371b';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=4426ef371b';
 import { repairFromScene } from './scene-referents.mjs?v=4169ce12be';
 import { loadMetaWorlds } from './meta-worlds.mjs?v=132aebf41c';
 import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=61e3713844';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=09f68beaaa';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f76f52152a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=970c7b26f1';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -222,7 +222,6 @@ export async function translateParts(parts, translator, lang, userWords = null) 
 /** Romanian words the speech recogniser confuses with a word of the open tab's world (RP5): "un sare" on the Drawing tab is "un soare". */
 const SOUND_ALIKES = { 'art.draw': { sare: 'soare', soar: 'soare', soarele: 'soarele' } };
 function soundAlikes(text, tabWorld) {
-  text = text.replace(/\bx\s+(?:și|si|şi)\s+(?:zero|o|0)\b/gi, 'x și 0').replace(/\b(?:pornește|porneste|lansează|lanseaza|deschide)\s+(?=x și 0\b)/gi, 'începe ');   // the game's name: "x și zero" (the digit is how the world spells it)
   const map = SOUND_ALIKES[tabWorld];
   return map ? text.replace(/\p{L}+/gu, (w) => (Object.hasOwn(map, w.toLowerCase()) ? map[w.toLowerCase()] : w)) : text;
 }
