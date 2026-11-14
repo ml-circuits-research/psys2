@@ -17,6 +17,8 @@ import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openReader } from './lib/meaning.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
+import { analyze as analyzeTr } from '../src/translate/morphology.ro.mjs';
+import { foldKey as foldKeyTr } from '../src/translate/normalize.mjs';
 import { createSwitchTranslator } from '../docs/webchat/ui/translation.mjs';
 import { gatherCandidates, chooseCandidate, englishTest } from '../src/translate/candidates.mjs';
 import { spellVocabulary, FUNCTION_WORDS } from '../src/formalizer/spell.mjs';
@@ -51,16 +53,19 @@ const sw = { rules: createSwitchTranslator({ rules: rulesT, getStrategy: () => '
 const reader = await openReader({ translator: rulesT });
 const vocab = spellVocabulary(reader.engine.set);
 const isEnglish = englishTest((w) => FUNCTION_WORDS.has(w) || vocab.has(w) || !!vocab.nouns?.has(w) || !!rulesT.knownEnglish(w));
-let grammar = null, libLex = null, libLex0 = null;
+let grammar = null, libLex = null, libLex0 = null, libLex1 = null;
+// the English of a lemma the large (UniMorph) dictionary has no sense for: the translator's own lexicon, a stand-in until the dictionary has k.words senses
+const translatorGloss = (lemma, pos) => { const a = analyzeTr(foldKeyTr(lemma)).find((x) => x.pos === pos && (x.entry.ro === lemma || x.entry.inf === lemma)); return a?.entry.en ?? null; };
 if (paths.some((p) => p.startsWith('grammar'))) grammar = (await import('../src/translate/grammar-ro.mjs')).grammarRoEn;
-if (paths.some((p) => p.startsWith('grammar-lib'))) { const { openLangRo } = await import('../src/lang/ro.mjs'); libLex = await openLangRo(); libLex0 = await openLangRo({ workaround: false }); }
+if (paths.some((p) => p.startsWith('grammar-lib'))) { const { openLangRo } = await import('../src/lang/ro.mjs'); libLex = await openLangRo(); libLex0 = await openLangRo({ unimorph: true }); libLex1 = await openLangRo({ unimorph: true, gloss: translatorGloss }); }
 
 async function englishOf(path, r) {
   if (path === 'rules') return (await rulesT.translate(r.ro, { from: 'ro', to: 'en' })).text;
   if (path === 'model') return mtMap[r.ro] ?? '';
   if (path === 'grammar') return grammar(r.ro).text;
   if (path === 'grammar-lib') return grammar(r.ro, { lexicon: libLex }).text;   // frames of the prototype, words from w.lang.ro through std.morph (+ the Q51 workaround)
-  if (path === 'grammar-lib0') return grammar(r.ro, { lexicon: libLex0 }).text;  // the same, the library as it is
+  if (path === 'grammar-um') return grammar(r.ro, { lexicon: libLex0 }).text;   // + the UniMorph dictionary (no senses: it adds words to the analysis only where a sense exists)
+  if (path === 'grammar-um+gl') return grammar(r.ro, { lexicon: libLex1 }).text;   // + the translator's English for the UniMorph lemmas
   if (path === 'grammar+rules') return grammar(r.ro).text || (await rulesT.translate(r.ro, { from: 'ro', to: 'en' })).text;
   if (path === 'grammar+m4') { const g = grammar(r.ro).text; if (g) return g; return englishOf('m4', r); }
   const t = path === 'm4' ? sw.rules : sw.model;
