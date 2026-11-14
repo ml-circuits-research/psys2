@@ -58,6 +58,9 @@
     catalog=k.objects
     catalog=k.animals
     catalog=k.food
+    catalog=k.people/shards/roles
+    catalog=k.scenes/shards/scenes
+    catalog=k.procedures/shards/tasks
     word=house
     word=home
     word=cottage
