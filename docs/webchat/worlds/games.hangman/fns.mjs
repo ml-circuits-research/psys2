@@ -3,7 +3,7 @@
 // matrix.sop; this file is what the library cannot say: the choice of the word (seeded, from the kids.animals names), the hints, the words of the replies
 // (the same sentences ops.mjs says) and the state the tab reads (derived from the wires after every change). Browser-safe; it imports its sibling ops.mjs
 // for the tables (a world is plain files). The registered names are prefixed (hm*): the library keeps one function registry for all worlds.
-import { MAX_WRONG, NOT_PLAYING, initialState, wordList, facts } from './ops.mjs?v=c47cb56182';
+import { MAX_WRONG, NOT_PLAYING, initialState, wordList, facts } from './ops.mjs?v=2959e9c329';
 
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
 const val = (w, k) => un(w?.attrs?.[k]?.[0]);
