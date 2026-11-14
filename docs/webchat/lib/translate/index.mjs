@@ -8,8 +8,8 @@
 // A sentence whose negation or question word could not be mapped is not translated: it is omitted from
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs?v=6d473eb091';
-import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=957828c2e5';
-import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=933224a246';
+import { analyze, placeOf, surfaceForms } from './morphology.ro.mjs?v=af92ea5710';
+import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord, knownEnglishWord } from './en-ro.mjs?v=8feeb16e77';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
 // Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;
@@ -137,7 +137,7 @@ export function detectLanguage(text) {
 // that sets `globalThis.__psys2LazyRoEn` before importing this module loads them on demand: `loadRoEn()` (the host calls it when the language is not English), and a ro -> en `translate` that
 // finds them missing returns a promise that waits for them (every caller of the rules awaits the answer).
 let roEn = null, roEnLoading = null;
-export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= import('./ro-en.mjs?v=017524ce8f').then((m) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }
+export function loadRoEn() { return roEn ? Promise.resolve(roEn) : (roEnLoading ??= import('./ro-en.mjs?v=362ca336ac').then((m) => (roEn = m.translateRoEn), (e) => { roEnLoading = null; throw e; })); }
 /** True when the Romanian -> English rules are in memory. */
 export const roEnLoaded = () => !!roEn;
 if (!globalThis.__psys2LazyRoEn) await loadRoEn();
@@ -173,5 +173,5 @@ export function createTranslator() {
 
 export { foldKey };
 export { normalizeText } from './normalize.mjs?v=6d473eb091';
-export { lemmaOfNoun, analyzeVerbForm, stripAdjAgreement } from './morphology.ro.mjs?v=957828c2e5';
+export { lemmaOfNoun, analyzeVerbForm, stripAdjAgreement } from './morphology.ro.mjs?v=af92ea5710';
 export default { detectLanguage, translate, createTranslator, loadRoEn };

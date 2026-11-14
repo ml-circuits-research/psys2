@@ -51,6 +51,11 @@ export function makeLang(source) {
   /** Drop a trailing softener ("instead", "then", "now", "again") that a command does not need. */
   const stripTrailing = (text) => (TRAILING ? String(text ?? '').replace(TRAILING, '') : String(text ?? ''));
 
+  const moodAlts = [...new Set(phrase('lang.mood.statement'))].sort((a, b) => b.length - a.length);
+  const STATEMENT = moodAlts.length ? new RegExp(`^(?:${moodAlts.map(esc).join('|')})(?: |$)`) : null;
+  /** The first-person statement lead a clause starts with ("i have two kids" -> "i have"), or null: a statement about the speaker, not a command (spec 16 section 14). */
+  const statement = (text) => (STATEMENT ? (plain(stripFiller(text)).match(STATEMENT)?.[0].trim() ?? null) : null);
+
   // ---- ordinals: the order of lex.lang.ordinal is the value (first = 1 ... tenth = 10); "last" and its synonyms are -1 ---------
   const ORDINAL_WORDS = ['', ...source.lexicon('lex.lang.ordinal').map((w) => String(w).toLowerCase()).filter((w) => w !== 'last')];
   const LAST = new Set(['last', ...phrase('lang.ordinal.last')]);
@@ -195,7 +200,7 @@ export function makeLang(source) {
     return null;
   };
 
-  return { phrase, except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+  return { phrase, statement, except, redo, undoAll, undoNamed, know, yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;

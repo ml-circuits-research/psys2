@@ -158,6 +158,7 @@ const TABLE = [
   ['I did not understand', 'Nu am înțeles'], ['Did you mean', 'Ai vrut să spui'], ['For example:', 'De exemplu:'], ['You can say:', 'Poți spune:'],
   ['I took that as:', 'Am înțeles asta:'], ['(I read', '(Am citit'], ['as', 'drept'],
   ['I understood only part of that: I did not use', 'Am înțeles doar o parte din asta: nu am folosit'],
+  ['That sounds like something about you. I cannot keep facts about you here.', 'Sună ca ceva despre tine. Nu pot păstra aici lucruri despre tine.'],
   ['I do not know what you mean by', 'Nu știu ce vrei să spui prin'],
   ['I did not find anyone saying', 'Nu am găsit pe nimeni care să spună'],
   ['I skipped', 'Am sărit peste'], ['because I found no number.', 'pentru că nu am găsit niciun număr.'],

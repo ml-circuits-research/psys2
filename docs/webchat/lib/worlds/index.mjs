@@ -7,10 +7,10 @@
  *   loadOps(id)             -> Promise<object | null>   module namespace of ops.mjs
  */
 import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
-import { Legends } from '../legends/index.mjs?v=db730c4e69';
+import { Legends } from '../legends/index.mjs?v=bd9891747c';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
-import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=f19cebf218';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=b2652b6101';
+import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=956f430777';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=4b583c611f';
 import { lexIndex } from './lexicon.mjs?v=c39cd0a3df';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
@@ -418,3 +418,11 @@ function expandDescriptions(set) {
     }
   }
 }
+
+/**
+ * Tabs of worlds that declare none in their manifest: the Documents tab is built into the page and the shell (worlds/ui.shell/ops.mjs `TABS.editor`).
+ * The one table the engine, the discourse, ASTRA and the page's worker read (architecture review 2026-11-15, A1; it goes when docs.editor declares `tab=editor`).
+ */
+export const BUILTIN_TAB = Object.freeze({ 'docs.editor': 'editor' });
+/** The tab id of a world of `set`: its manifest's `tab=`, else the built-in table; null for a world with no tab. */
+export const tabOfWorld = (set, id) => set?.get?.(id)?.tab?.id ?? BUILTIN_TAB[id] ?? null;

@@ -14,10 +14,11 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=b2652b6101';
+import { restrictedSet } from '../formalizer/spell.mjs?v=4b583c611f';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=41e7c944b4';
 import { lastUnfinished } from '../astra/where.mjs?v=970c7b26f1';
-import { runDiscussionCommand } from '../astra/session.mjs?v=11177a0843';
+import { runDiscussionCommand } from '../astra/session.mjs?v=fd2c5383e5';
+import { tabOfWorld } from '../worlds/index.mjs?v=49bebb37ba';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=aa6dfcad14';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=136be736fc';
@@ -31,7 +32,6 @@ const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'kids.common' || w === '
 /** Worlds that never count as a conversation topic and whose state changes are not "actions" (navigation, help, shared vocabulary). */
 const NO_TOPIC = new Set(['ui.shell', 'ui.help', 'kids.common', 'core']);
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
-const BUILTIN_TAB = { 'docs.editor': 'editor' };
 /** First words of an utterance that is a real command or question, not a list item. */
 const UNDO = /^(?:undo|undo that|undo it|take that back|take it back|revert that|cancel that purchase)$/;
 const META_SKIP = new Set(['add', 'remove', 'delete', 'show', 'open', 'what', 'who', 'where', 'when', 'why', 'how', 'undo', 'redo', 'draw', 'play', 'tell', 'is', 'are', 'can', 'do', 'does', 'please', 'make', 'go', 'clear', 'cross', 'check']);
@@ -406,7 +406,7 @@ export class Discourse {
    */
   tabWorld(tab) {
     if (!tab) return null;
-    return this.dialog.engine.set.list().find((w) => (w.tab?.id ?? BUILTIN_TAB[w.id]) === tab && !NO_TOPIC.has(w.id))?.id ?? null;
+    return this.dialog.engine.set.list().find((w) => tabOfWorld(this.dialog.engine.set, w.id) === tab && !NO_TOPIC.has(w.id))?.id ?? null;
   }
 
   /**
@@ -689,10 +689,10 @@ export class Discourse {
       if (y === 'no' || /^(?:no|nope|nah|not now|not really)(?: (?:thanks|thank you|leave it|keep it|its fine|never mind|leave it as it is|keep it as it is|leave it alone|leave it that way|keep it that way|its ok|its okay))?$/.test(t)) return { reply: 'OK, I will leave it as it is.', info: { kind: 'offer', declined: true } };
     }
     if (pend?.type === 'repair') { const r = await this._repair({ ...pend, content: plain(text) }, sid); if (r) return r; }
-    // 1b. a bare yes/no that answers nothing: no pending question here, no list mode and no game that asks yes/no questions
+    // 1b. a bare yes/no that answers nothing: no pending question here, no list mode
     if (!pend && !this.list) {
       const bare = BARE_YES_NO[t];
-      if (bare && !this._gameAsksYesNo()) return { reply: `${bare === 'yes' ? 'Yes' : 'No'} to what? You can ask me a question, give me a command, or say "help" to see what I can do.`, info: { kind: 'bare', answer: bare } };
+      if (bare) return { reply: `${bare === 'yes' ? 'Yes' : 'No'} to what? You can ask me a question, give me a command, or say "help" to see what I can do.`, info: { kind: 'bare', answer: bare } };
     }
     // discussion commands (spec 13 section 8): only "new discussion", "my discussions" and a reference that names an existing discussion
     if (!this.list) { const ac = runDiscussionCommand(d, text, d._msg); if (ac) return ac; }
@@ -712,7 +712,7 @@ export class Discourse {
     // a world on the open tab may own a question of the "explain" kind (the Talk tab answers "how do you know?" with its own card): `ownsExplain(ctx, { text })` returns true
     const c = c0?.intent === 'explain' && this._tabOwns('ownsExplain', t) ? null : c0;
     // a lone "lol" / "hmm" / "ok" is not a command and not a list item: nothing happens (no world gets to read it as a name, an item or a word)
-    if (c?.intent === 'backchannel' && !pend && !this._gameAsksYesNo()) return { reply: 'Mm-hm. Tell me what you would like to do, or say "help".', status: 'unparsed', info: { kind: 'backchannel' } };
+    if (c?.intent === 'backchannel' && !pend) return { reply: 'Mm-hm. Tell me what you would like to do, or say "help".', status: 'unparsed', info: { kind: 'backchannel' } };
     // 2. list-entry mode: every plain item is added to the list until "that's all"
     if (this.list) {
       if (c?.intent === 'list.end') return this._listEnd();
@@ -828,7 +828,7 @@ export class Discourse {
     if (rs && !top.whole && rs.turns.at(-1)?.turn === top.turn) { rs.undoLast(d.isession, null); rs.redos.pop(); this._restoreOwn(null, top.pre); }   // (a redo is not itself redone)   // the undo was a step of the timeline: take that step back
     else this._setState(top.pre);
     if (act) this.actions.splice(Math.min(top.at ?? 0, this.actions.length), 0, act);
-    if (!act && top.say) { const w = top.worlds.find((x) => x.startsWith('games.')); if (w) this.noteWorld(w, top.say.text, top.say.reply, top.say.turn); return this._redoSay(top.say.text, null, top.say.turn); }
+    if (!act && top.say) return this._redoSay(top.say.text, null, top.say.turn);
     return this._redoSay(act?.text, null, act?.turn);
   }
 
@@ -919,11 +919,6 @@ export class Discourse {
     return this._say([{ text: 'OK, I took back ', translate: true }, this._quoted(act.turn, act.text), { text: ' and what came after it.', translate: true }], { kind: 'undo', of: act.text, through: true });
   }
 
-  /** True while a game that asks or expects yes/no is on: the active game of the host (no world has one since the tab cut of 2026-11-15; the mechanism stays for a future games approach). */
-  _gameAsksYesNo() {
-    return !!this.dialog.context().gameWorld;
-  }
-
   _cancel(pend) {
     const dropped = pend ? pend.type : this.list ? 'list' : null;
     this.list = null;
@@ -962,8 +957,6 @@ export class Discourse {
   _explain(t = '') {
     // "what did you do?" asks about the last thing that CHANGED something (a question later on changed nothing); "why?" asks about the newest turn
     const doing = /^what (?:did you|have you) (?:just )?(?:do|done|change)/.test(t);
-    // inside a running game "why?" is about the game's last question, not about the facts told before it
-    if (!doing) { const tw = this.dialog.context().gameWorld; if (tw && /^games\./.test(tw)) { const r = this.dialog.engine.interp.hook(this.dialog.isession, tw, 'why', { text: 'why' }); const said = r?.text ?? (typeof r?.value === 'string' ? r.value : null); if (said) return this._say([{ text: said, translate: true }], { kind: 'explain', of: t, world: tw, from: [] }); } }
     // the newest turn only told a fact: "why?" asks about the world that fact belongs to, answered from what is known (hook `why` of the world)
     if (!doing && this.lastFacts && this.dialog._msg - this.lastFacts.turn <= 1 && this.lastFacts.turn >= (this.frames[0]?.turn ?? -1)) { const wf = this._whyFact('why'); if (wf) return wf; }
     // matrix strategy: the newest turn was a statement to a world that explains its own facts (`why` of its fns.mjs: the user profile)
@@ -1035,7 +1028,6 @@ export class Discourse {
       // the definition lives in ASTRA (spec 13 section 8): the most recent unfinished activity left for a digression
       return lastUnfinished({ topics: this.topics, lastByWorld: this.lastByWorld, here: this.dialog.context().tabWorld, lastTopic: this.lastTopic });
     }
-    const asksGame = /\bgame\b/.test(target);   // "the animal game" is the guessing game, not the animals quiz
     const words = target.split(' ').filter((w) => !['game', 'tab', 'the', 'my', 'our', 'a', 'to', 'page', 'screen', 'window'].includes(w));
     if (!words.length) return null;
     let best = null, bestScore = 0, bestBonus = 0;
@@ -1043,7 +1035,7 @@ export class Discourse {
       if (NO_TOPIC.has(w.id)) continue;
       const toks = new Set([...w.id.split('.'), ...(w.title ?? '').toLowerCase().split(/\W+/), ...(w.tab ? [w.tab.id, ...(w.tabAliases ?? w.tab.aliases ?? [])] : [])].map((x) => String(x).toLowerCase()).filter(Boolean));
       const score = words.filter((x) => toks.has(x) || toks.has(x.replace(/s$/, '')) || [...toks].some((k) => k.length > 3 && (x.startsWith(k) || k.startsWith(x) && x.length > 3))).length;
-      const bonus = (asksGame && w.id.startsWith('games.') ? 2 : 0) + (this.topics.includes(w.id) ? 1 - this.topics.indexOf(w.id) / 10 : 0);   // game words, then the newest topic
+      const bonus = this.topics.includes(w.id) ? 1 - this.topics.indexOf(w.id) / 10 : 0;   // the newest topic
       if (score > bestScore || (score === bestScore && score > 0 && bonus > bestBonus)) { best = w.id; bestScore = score; bestBonus = bonus; }
     }
     return bestScore === words.length ? best : null;   // every word must name the world ("back to the first chart" is not a topic)
@@ -1055,7 +1047,7 @@ export class Discourse {
     if (!world) return null;
     const known = this.topics.includes(world);   // an earlier activity: going there is a return; a world never visited is a digression from the current one
     const w = set.get(world);
-    const tab = w.tab?.id ?? BUILTIN_TAB[world] ?? null;
+    const tab = tabOfWorld(set, world);
     if (tab && d.isession.state['ui.shell']?.activeTab !== tab) { try { interp.runAction(d.isession, 'ui.openTab', { tab }); } catch { /* the shell may be absent */ } }
     const sum = interp.hook(d.isession, world, 'topicSummary', {}) ?? interp.hook(d.isession, world, 'summary', {});
     const last = this.lastByWorld[world];

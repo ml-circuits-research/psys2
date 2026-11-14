@@ -237,7 +237,6 @@ export function analyzeRaw(raw, diaFree = false) {
   return exact;
 }
 
-export function nameEntry(key) { return nameIndex.get(key) || null; }
 export function isKnownName(key) { return nameIndex.has(key); }
 
 const placeIndex = new Map();
@@ -362,10 +361,6 @@ export function parseNumberAt(keys, i) {
   }
   const b = parseBelow100(keys, i);
   return b;
-}
-
-export function lexiconStats() {
-  return { nouns: nouns.length, verbs: verbs.length, adjectives: adjectives.length, words: words.length, names: names.length, numbers: numberWords.length, forms: index.size };
 }
 
 export { pluralEn };

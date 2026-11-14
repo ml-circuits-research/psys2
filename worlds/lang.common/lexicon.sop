@@ -1007,6 +1007,32 @@
     plural=leu:lei
 
 
+@phrase.lang.mood.statement core.phrase
+    frame=false
+    doc="First-person statement leads (\"i have\", \"i like\", \"i am\"): a clause that starts with one is a statement about the speaker, not a command; ctx.lang.statement reads them (spec 16 section 14). Wishes (\"i want\", \"i would like\", \"i need\") are requests and are not here."
+    alt=i_have
+    alt=i_ve_got
+    alt=ive_got
+    alt=i_have_got
+    alt=i_had
+    alt=i_like
+    alt=i_love
+    alt=i_enjoy
+    alt=i_hate
+    alt=i_dislike
+    alt=i_am
+    alt=i_m
+    alt=im
+    alt=i_was
+    alt=i_live
+    alt=i_work
+    alt=i_own
+    alt=i_know
+    alt=my_name_is
+    alt=my_age_is
+    alt=my_hobby_is
+    alt=my_hobbies_are
+
 @phrase.lang.yes core.phrase
     frame=false
     doc="Affirmative replies. ctx.lang.yesNo answers yes for a whole message that is one of these; the guess patterns and the confirmations read them."

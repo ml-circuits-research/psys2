@@ -363,7 +363,7 @@ const handlers = {
     sampler ??= sm.engineSampler(lib, engine, () => session);
     if (!sampler.available) return { items: [], available: false };
     const tabWorld = (m.tab && (tabWorlds[m.tab] ?? worldLoader.ids().find((id) => worldLoader.info(id).tab?.id === m.tab))) || null;
-    const tabOfWorld = (id) => worldLoader.info(id)?.tab?.id ?? ({ 'docs.editor': 'editor' })[id] ?? null;
+    const tabOfWorld = (id) => worldLoader.info(id)?.tab?.id ?? Object.keys(tabWorlds).find((t) => tabWorlds[t] === id) ?? null;   // the page's tab plugins name the world of each tab (the built-in Documents tab too)
     if (tabWorld && !loadedIds.has(tabWorld)) await ensureWorlds([tabWorld], 'dice');
     const loaded = () => sampler.worlds();
     const orderOf = () => [...new Set([tabWorld, ...recentWorlds, ...loaded()].filter((id) => id && loaded().includes(id)))];
