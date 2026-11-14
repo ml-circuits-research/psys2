@@ -15,3 +15,9 @@
     title="Avatar"
     summary="change my face"
     doc="The avatar of the demo: one face drawn from the parts of the knowledge world k.faces (16 slots, hand-written variants, presets, expressions), changed by voice or text with one generic set of operations over slots: add / wear / put on, remove / take off / without, change / next / another, which ones are there, colour, size, position, expression, describe, presets and saved faces, undo and redo. The slots, variants, accessories and their other names come from the catalog (no list of them here); the host draws the state with one renderer (facedraw.mjs). Platform fixture, not produced by the C1 workflow."
+
+# Typed needs (sopworld 0.39.0, std.schema.needs): what the catalog must have loaded before an operation of this world runs. The host loads them (src/dialog/knowledge-lookup.mjs, needsOf) before the operations of a reading.
+@need.ui.avatar.faces std.schema.needs
+    of=ui.avatar
+    type=k.faces.variant
+    from=k.faces

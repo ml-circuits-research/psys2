@@ -294,6 +294,15 @@ export function createFacts({ source, name = 'catalog' }) {
     /** The wires of a type that `preloadWires` loaded, or undefined (a synchronous read for operations: `ctx.knowledge.peekWires(type)`). */
     peekWires: (type, world = null) => listed.get(type) ?? wireMemo.get(`${type}|null|${world ?? ''}`),   // also the whole-type wires a world's `needs` entry `wires:<type>[@<world>]` settled (the map's countries and cities)
     name, find, thing, stats, loadVocab, world, wires, schema, series,
+    /**
+     * Loads a typed need (`std.schema.needs of= type= from=?`, sopworld 0.39) so that an operation reads it synchronously: the wires of the type (`peekWires`), in the world `from` when it is named; the
+     * types the host builds a model from are the models: `k.faces.*` the faces (`peekFaces`), `core.slot` and `core.word` of no world the schemas of the knowledge worlds and the ordered series (`peekSchema`, `peekSeries`).
+     */
+    async load({ type, from } = {}) {
+      if (from === 'k.faces' || /^k\.faces\./.test(type ?? '')) return api.faces();
+      if (!from && (type === 'core.slot' || type === 'core.word')) { await schema(); return series(); }
+      return wires(type, from ? { world: from } : {});
+    },
     /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
     peekSchema: () => schemaData ?? undefined, peekSeries: () => seriesData ?? undefined,
     /** The faces of k.faces (src/knowledge/faces.mjs), built once from the catalog; null when it has none (and asked again later). */
