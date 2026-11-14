@@ -14,9 +14,10 @@ const HAND = new Set(['authored', 'hand', 'owner']);   // Romanian written by a 
 const chains = {
   'grammar>m4+model': (o) => (o.grammar !== 'abstain' ? o.grammar : o['m4+model']),
   'grammar-lib>m4+model': (o) => (o['grammar-lib'] !== 'abstain' ? o['grammar-lib'] : o['m4+model']),
+  'grammar-um+gl>m4+model': (o) => (o['grammar-um+gl'] !== 'abstain' ? o['grammar-um+gl'] : o['m4+model']),
   'best-of(rules,model,grammar)': (o) => ['rules', 'model', 'grammar'].map((p) => o[p]).find((v) => v === 'kept') ?? o.rules,
 };
-const PATHS = ['rules', 'model', 'm4', 'm4+model', 'grammar', 'grammar+rules', 'grammar+m4', 'grammar>m4+model', 'grammar-lib0', 'grammar-lib', 'grammar-lib>m4+model', 'best-of(rules,model,grammar)'];
+const PATHS = ['rules', 'model', 'm4', 'm4+model', 'grammar', 'grammar+rules', 'grammar+m4', 'grammar>m4+model', 'grammar-lib', 'grammar-um', 'grammar-um+gl', 'grammar-lib>m4+model', 'grammar-um+gl>m4+model', 'best-of(rules,model,grammar)'];
 const verdict = (o, p) => (chains[p] ? chains[p](o) : o[p]);
 const tally = {};
 const bump = (dim, val, p, v) => { const t = ((tally[dim] ??= {})[val] ??= { n: 0 }); (t[p] ??= { kept: 0, act: 0, abstain: 0 }); if (p === PATHS[0]) t.n++; if (v === 'kept') t[p].kept++; else if (v === 'act') t[p].act++; else if (v === 'abstain') t[p].abstain++; };

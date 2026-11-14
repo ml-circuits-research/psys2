@@ -49,7 +49,7 @@ export function createPlanHost(cat) {
     async load(words = []) {
       const set = new Set(words.flatMap((w) => { const x = String(w).toLowerCase(); return [x, x.replace(/s$/, ''), x.replace(/ies$/, 'y')]; }));
       try {
-        lib ??= await import('../vendor/sopworld/sopworld.mjs?v=f356067868');
+        lib ??= await import('../vendor/sopworld/sopworld.mjs?v=8afa911bd6');
         for (const spec of PLAN_WORLDS) await addWorld(spec, set);
         if (!loaded.get('k.procedures')?.shards.size) return false;
         if (built !== version) {
