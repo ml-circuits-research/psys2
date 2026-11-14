@@ -3103,41 +3103,57 @@
     example="Summarize the following: Volcanoes form where hot rock reaches the surface. They can erupt for years."
 
 @pat.docs.reader.compose.any core.pattern
-    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on|of] {a:lex.docs.reader.anything} [things]?"
-    emit="@{_} core.request action=docr.compose"
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.reader.doctypes} [about|on|of] {a:lex.docs.reader.anything} [things]?"
+    emit="@{_} core.request action=docr.compose arg.type={k}"
     kind=request
     priority=20
     tabPriority=28
     example="Write a composition about anything."
 
 @pat.docs.reader.compose.topic core.pattern
-    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on] {topic:words}"
-    emit="@{_} core.request action=docr.compose arg.topic=\"{topic}\""
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.reader.doctypes} [about|on] {topic:words}"
+    emit="@{_} core.request action=docr.compose arg.type={k} arg.topic=\"{topic}\""
     kind=request
     priority=17
     tabPriority=25
     example="Write an essay about volcanoes."
 
 @pat.docs.reader.compose.shape core.pattern
-    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on] {topic:words} [with|of]? {c:number} chapters [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections]"
-    emit="@{_} core.request action=docr.compose arg.topic=\"{topic}\" arg.chapters={c} arg.subchapters={s}"
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.reader.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides] [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections]"
+    emit="@{_} core.request action=docr.compose arg.type={k} arg.topic=\"{topic}\" arg.chapters={c} arg.subchapters={s}"
     kind=request
     priority=21
     tabPriority=29
     example="Write an essay about volcanoes with 3 chapters of 2 subchapters."
 
 @pat.docs.reader.compose.shape.size core.pattern
-    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on] {topic:words} [with|of]? {c:number} chapters [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections] [about|of|around|roughly]? {w:number} words"
-    emit="@{_} core.request action=docr.compose arg.topic=\"{topic}\" arg.chapters={c} arg.subchapters={s} arg.words={w}"
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.reader.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides] [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections] [about|of|around|roughly]? {w:number} words"
+    emit="@{_} core.request action=docr.compose arg.type={k} arg.topic=\"{topic}\" arg.chapters={c} arg.subchapters={s} arg.words={w}"
     kind=request
     priority=22
     tabPriority=30
     example="Write an essay about volcanoes with 3 chapters of 2 subchapters, about 600 words."
 
 @pat.docs.reader.compose.size core.pattern
-    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? {k:lex.docs.reader.compkinds} [about|on] {topic:words} [of|with|about|around|roughly] {w:number} words"
-    emit="@{_} core.request action=docr.compose arg.topic=\"{topic}\" arg.words={w}"
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.reader.doctypes} [about|on] {topic:words} [of|with|about|around|roughly] {w:number} words"
+    emit="@{_} core.request action=docr.compose arg.type={k} arg.topic=\"{topic}\" arg.words={w}"
     kind=request
     priority=19
     tabPriority=27
     example="Write an essay about volcanoes of 400 words."
+
+@pat.docs.reader.compose.type core.pattern
+    match="[can_you|could_you]? [write|compose|create|make] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.reader.doctypes}"
+    emit="@{_} core.request action=docr.compose arg.type={k}"
+    kind=request
+    priority=16
+    tabPriority=24
+    example="Write a short story."
+
+@pat.docs.reader.compose.sections core.pattern
+    match="[can_you|could_you]? [write|compose|create|make] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.reader.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides]"
+    emit="@{_} core.request action=docr.compose arg.type={k} arg.topic=\"{topic}\" arg.chapters={c}"
+    kind=request
+    priority=20
+    tabPriority=28
+    example="Make a presentation about the moon with 5 sections."

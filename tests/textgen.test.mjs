@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import * as lib from '../src/vendor/sopworld/sopworld.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { createSummarizer, createComposer, composeRequest, checkComposition, compositionToDocument, installTextGen, TEXTGEN_GLOBAL } from '../src/dialog/textgen.mjs';
+import { createSummarizer, createComposer, composeRequest, docTypeOf, DOC_TYPES, checkComposition, compositionToDocument, installTextGen, TEXTGEN_GLOBAL } from '../src/dialog/textgen.mjs';
 
 test('without the library the adapters are unavailable and return nothing (no local generator)', () => {
   const s = createSummarizer({}, {}), c = createComposer({}, {});
@@ -17,7 +17,7 @@ test('the vendored sopworld does not export the generators yet (update spec 26 w
   assert.equal(typeof lib.summarize, 'undefined'); assert.equal(typeof lib.compose, 'undefined');
 });
 
-const fakeCompose = (w, req) => ({ title: `On ${req.topic ?? 'chance'}`, topic: req.topic, chapters: Array.from({ length: req.chapters }, (_, i) => ({ title: `Chapter ${i + 1}`,
+const fakeCompose = (w, req) => ({ type: req.type, procedure: `k.procedures.${req.type}`, title: `On ${req.topic ?? 'chance'}`, topic: req.topic, chapters: Array.from({ length: req.chapters }, (_, i) => ({ title: `Chapter ${i + 1}`,
   subchapters: Array.from({ length: req.subchapters }, (_, j) => ({ title: `Part ${i + 1}.${j + 1}`, sentences: [{ text: `Fact ${i}-${j} holds.`, source: `@w${i}${j}` }] })) })) });
 
 test('composeRequest: empty or "anything" means random, counts are clamped; checkComposition demands exact shape and a source per sentence', () => {
@@ -53,7 +53,7 @@ test('with the generators present the roles arrive and the new document keeps th
   try {
     const s = docs();
     const r = await s.send('write an essay about volcanoes with 3 chapters of 2 subchapters, about 600 words');
-    assert.match(r.text, /I wrote "On volcanoes"/);
+    assert.match(r.text, /I wrote the essay "On volcanoes"/);
     assert.deepEqual([calls[0].topic, calls[0].chapters, calls[0].subchapters, calls[0].words], ['volcanoes', 3, 2, 600]);
     const w = s.state()['docs.reader'];
     const d = w.docs.find((x) => x.id === w.active);
@@ -63,4 +63,36 @@ test('with the generators present the roles arrive and the new document keeps th
     const t = await s.send('summarize the following: Volcanoes form where hot rock reaches the surface. They can erupt for years.');
     assert.match(t.text, /In short: Short\./);
   } finally { delete globalThis[TEXTGEN_GLOBAL]; }
+});
+
+test('document types: words map to types, defaults per type, a result without a knowledge procedure or of another type is refused', () => {
+  assert.equal(docTypeOf('scientific article'), 'scientific-article'); assert.equal(docTypeOf('slideshow'), 'presentation'); assert.equal(docTypeOf('composition'), 'essay'); assert.equal(docTypeOf('tale'), 'story');
+  assert.deepEqual(Object.keys(DOC_TYPES), ['essay', 'scientific-article', 'presentation', 'story', 'report']);
+  const p = composeRequest({ type: 'presentation', topic: 'the moon', chapters: 5 });
+  assert.deepEqual([p.type, p.chapters, p.subchapters], ['presentation', 5, 0]);
+  assert.equal(composeRequest({ type: 'story' }).random, true);
+  assert.ok(checkComposition(fakeCompose(null, p), p).ok);
+  assert.ok(/no procedure/.test(checkComposition({ ...fakeCompose(null, p), procedure: undefined }, p).problems.join()));
+  assert.ok(/type/.test(checkComposition({ ...fakeCompose(null, p), type: 'essay' }, p).problems.join()));
+});
+
+test('type commands read into docr.compose with the type role', async () => {
+  const calls = [];
+  installTextGen({ compose: (w, r) => { calls.push(r); return fakeCompose(w, r); } }, null);
+  try {
+    const s = docs();
+    for (const [text, type, topic, chapters] of [['write a short story', 'story', null, 3], ['make a presentation about the moon with 5 sections', 'presentation', 'the moon', 5], ['write a scientific article about bees, 3 chapters', 'scientific-article', 'bees', 3]]) {
+      const n0 = calls.length; const r = await s.send(text);
+      assert.match(r.text, /I wrote the/, text);
+      assert.deepEqual([calls[n0].type, calls[n0].topic, calls[n0].chapters], [type, topic, chapters], text);
+    }
+  } finally { delete globalThis[TEXTGEN_GLOBAL]; }
+});
+
+test('arbitration: the open editor tab owns "write a report ..."; the reader yields without a composer and stays out of another tab with one', async () => {
+  const ed = () => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: 'editor' }); return s; };
+  delete globalThis[TEXTGEN_GLOBAL];
+  assert.doesNotMatch((await ed().send('Write a report about sea animals')).text, /cannot write compositions/);
+  installTextGen({ compose: fakeCompose }, null);
+  try { assert.doesNotMatch((await ed().send('Write a report about sea animals')).text, /I wrote the report/); } finally { delete globalThis[TEXTGEN_GLOBAL]; }
 });

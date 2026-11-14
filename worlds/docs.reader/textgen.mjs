@@ -26,10 +26,10 @@ export function digest(ctx, { t, k } = {}) {
 }
 
 /** Compose an essay into a new document: topic (empty = random), chapters, subchapters, words. */
-export function compose(ctx, { topic, chapters, subchapters, words, seed } = {}) {
+export function compose(ctx, { type, topic, chapters, subchapters, words, seed } = {}) {
   const g = textGen()?.composer;
   if (!g?.available) return no('unsupported', UNAVAILABLE_COMPOSE);
-  const c = g.compose({ topic, chapters: num(chapters, 3), subchapters: subchapters === undefined || subchapters === '' ? 2 : Number(NUM[String(subchapters).toLowerCase()] ?? subchapters), words: num(words, 600), seed });
+  const c = g.compose({ type, topic, chapters: chapters === undefined || chapters === '' ? undefined : num(chapters, 3), subchapters: subchapters === undefined || subchapters === '' ? undefined : Number(NUM[String(subchapters).toLowerCase()] ?? subchapters), words: words === undefined || words === '' ? undefined : num(words, 600), seed });
   if (!c) return no('unsupported', 'I could not write that composition so that every sentence traces to what I know, so I wrote nothing.');
   const out = c.chapters.map((ch) => `## ${ch.title}\n\n${ch.subchapters.map((sc) => `${sc.title ? `### ${sc.title}\n\n` : ''}${sc.sentences.map((s) => s.text).join(' ')}`).join('\n\n')}`);
   const flat = c.chapters.flatMap((ch) => ch.subchapters.flatMap((sc) => sc.sentences));
@@ -40,5 +40,5 @@ export function compose(ctx, { topic, chapters, subchapters, words, seed } = {})
   for (const s of doc.sentences) { const f = flat[j]; if (f && s.text.replace(/\s+/g, ' ').includes(f.text.replace(/\s+/g, ' ').slice(0, 30))) doc.provenance[s.i] = f.source, j++; }
   Object.assign(ctx.state, withDocument(ctx.state, doc));
   const d = ctx.state.docs.find((x) => x.id === ctx.state.active);
-  return ok(`I wrote "${c.title}": ${doc.words} words in ${c.chapters.length} chapters. It is open in the Documents tab; ask "why" about any sentence to see where it comes from.`, { data: { doc: d?.id, composed: true } });
+  return ok(`I wrote the ${String(c.type ?? 'essay').replace(/-/g, ' ')} "${c.title}": ${doc.words} words in ${c.chapters.length} ${c.chapters.length === 1 ? 'chapter' : 'chapters'}. It is open in the Documents tab; ask "why" about any sentence to see where it comes from.`, { data: { doc: d?.id, composed: true } });
 }

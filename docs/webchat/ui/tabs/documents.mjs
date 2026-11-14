@@ -179,13 +179,18 @@ function make(holder, host) {
   // std.summarize / std.compose (spec 26): the buttons and the form exist only when the library has them; no fallback. Everything goes through the normal command path.
   const form = el('form', 'dr-card dr-compose'); form.hidden = true;
   const field = (label, name, type, value, extra = {}) => { const l = el('label', 'dr-field', `<span>${label}</span>`); const i = el('input'); i.name = name; i.type = type; i.value = value; Object.assign(i, extra); l.append(i); form.append(l); return i; };
+  const typeSel = el('label', 'dr-field', '<span>Type</span>'); const fType = el('select'); fType.name = 'type';
+  for (const [v, l] of [['essay', 'Essay'], ['scientific article', 'Scientific article'], ['presentation', 'Presentation'], ['story', 'Story'], ['report', 'Report']]) { const o = el('option'); o.value = v; o.textContent = l; fType.append(o); }
+  typeSel.append(fType); form.append(typeSel);
   const fTopic = field('Topic (empty = random)', 'topic', 'text', '', { placeholder: 'volcanoes' });
   const fCh = field('Chapters', 'chapters', 'number', '3', { min: 1, max: 12 }), fSub = field('Subchapters each', 'subchapters', 'number', '2', { min: 0, max: 6 }), fWords = field('About words', 'words', 'number', '600', { min: 50, max: 5000, step: 50 });
   const go = el('button', 'dr-btn', '<span>Write it</span>'); go.type = 'submit'; form.append(go);
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const topic = fTopic.value.trim().replace(/[.,;:!?]+$/, '');
-    send(topic ? `write an essay about ${topic} with ${fCh.value} chapters of ${fSub.value} subchapters, about ${fWords.value} words` : 'write a composition about anything');
+    const ty = fType.value, unit = ty === 'presentation' ? 'sections' : 'chapters';
+    const subs = Number(fSub.value) > 0 && ty !== 'presentation' && ty !== 'story' ? ` of ${fSub.value} subchapters` : '';
+    send(topic ? `write ${/^[aeiou]/.test(ty) ? 'an' : 'a'} ${ty} about ${topic} with ${fCh.value} ${unit}${subs}${subs ? `, about ${fWords.value} words` : ''}` : `write ${/^[aeiou]/.test(ty) ? 'an' : 'a'} ${ty} about anything`);
     form.hidden = true;
   });
   const genBtns = [];

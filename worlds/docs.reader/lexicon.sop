@@ -1604,3 +1604,8 @@
     class=noun
     doc="Topic words that mean 'choose one at random' (spec 26)"
     word=anything word=something word=whatever word=random word=nothing_in_particular
+
+@lex.docs.reader.doctypes core.lexicon
+    class=noun
+    doc="Types of document std.compose writes (spec 26); the procedure and style of each come from knowledge (k.genres, k.story, k.procedures)"
+    word=essay word=composition word=article word=text word=story word=tale word=report word=piece word=presentation word=slideshow word=scientific_article word=research_article word=scientific_paper

@@ -308,6 +308,11 @@ const STORYNOUN = /\b(?:stor(?:y|ies)|tales?|files?|documents?|docs?|books?|arti
 /** A sentence is the reader's when its tab is open and the words are of the text, when it names a story, a file or a section, or when it asks about a character of the open document while the tab is showing. */
 function accepts({ action, mode, roles = {}, state, tab, text }) {
   const act = String(action ?? '').split('.').pop();
+  if (act === 'compose' || act === 'digest') {   // spec 26: a world that cannot act does not claim a reading another world can execute; the open tab owns its acts (spec 20)
+    const g = globalThis[Symbol.for('psys2.textgen')]?.[act === 'compose' ? 'composer' : 'summarizer'];
+    if (tab === 'docs.reader') return true;   // in its own tab the reader answers, and declines plainly while the library lacks the generator
+    return !!g?.available && (!tab || tab === 'talk' || /\b(?:documents? tab|reader)\b/i.test(String(text ?? '')));
+  }
   if (!Object.hasOwn(domain, act)) return true;   // the operations that are not acts (who did what, where did it happen, a count of a name, a search step ...) are read by patterns that name the reader's own frames
   const on = tab === 'docs.reader';
   const said = [roles.thing, roles.place].filter(Boolean).join(' ').trim();

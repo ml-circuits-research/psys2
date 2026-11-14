@@ -4,7 +4,7 @@
 // Browser-safe: no `node:*` imports; the library module is passed in.
 
 const pick = (lib, name) => (typeof lib?.[name] === 'function' ? lib[name] : typeof lib?.std?.[name] === 'function' ? lib.std[name] : null);
-const clip = (n, lo, hi, def) => Math.min(hi, Math.max(lo, Math.round(Number(n)) || def));
+const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : def)); };
 
 /** @returns {{ available: boolean, turns(input): ?{text, sentences}, text(input): ?{text, sentences} }} */
 export function createSummarizer(lib, world) {
@@ -23,11 +23,24 @@ export function createSummarizer(lib, world) {
   };
 }
 
-/** The composition form / command roles, clamped to what a document can hold. topic empty = random. */
-export function composeRequest({ topic = '', chapters = 3, subchapters = 2, words = 600, seed } = {}) {
+/** The document types of std.compose; their procedure and style come from knowledge (k.genres, k.story, k.procedures composition methods), never from the host. */
+export const DOC_TYPES = {
+  essay: { label: 'Essay', chapters: 3, subchapters: 2, words: 600 },
+  'scientific-article': { label: 'Scientific article', chapters: 4, subchapters: 2, words: 1200 },
+  presentation: { label: 'Presentation', chapters: 5, subchapters: 0, words: 300 },
+  story: { label: 'Story', chapters: 3, subchapters: 0, words: 500 },
+  report: { label: 'Report', chapters: 3, subchapters: 2, words: 800 },
+};
+const TYPE_WORDS = { essay: 'essay', composition: 'essay', text: 'essay', piece: 'essay', article: 'scientific-article', scientific_article: 'scientific-article', research_article: 'scientific-article', scientific_paper: 'scientific-article', presentation: 'presentation', slideshow: 'presentation', slides: 'presentation', story: 'story', tale: 'story', report: 'report' };
+/** A word the person used for a kind of document -> a type of DOC_TYPES (essay when unknown). */
+export const docTypeOf = (w) => (DOC_TYPES[String(w ?? '')] ? String(w) : TYPE_WORDS[String(w ?? '').toLowerCase().replace(/[\s-]+/g, '_')] ?? 'essay');
+
+/** The composition form / command roles, clamped to what a document can hold. topic empty = random; type defaults fill what is not said. */
+export function composeRequest({ type, topic = '', chapters, subchapters, words, seed } = {}) {
+  const ty = docTypeOf(type), d = DOC_TYPES[ty];
   const t = String(topic ?? '').trim();
-  return { topic: /^(?:anything|something|whatever|random|a random thing)?$/i.test(t) ? null : t, random: !t || /^(?:anything|something|whatever|random|a random thing)$/i.test(t),
-    chapters: clip(chapters, 1, 12, 3), subchapters: clip(subchapters, 0, 6, 2), words: clip(words, 50, 5000, 600), seed };
+  return { type: ty, topic: /^(?:anything|something|whatever|random|a random thing)?$/i.test(t) ? null : t, random: !t || /^(?:anything|something|whatever|random|a random thing)$/i.test(t),
+    chapters: clip(chapters ?? d.chapters, 1, 12, d.chapters), subchapters: clip(subchapters ?? d.subchapters, 0, 6, d.subchapters), words: clip(words ?? d.words, 50, 5000, d.words), seed };
 }
 
 /**
@@ -48,7 +61,7 @@ export function createComposer(lib, world) {
 }
 
 function normalise(c) {
-  return { title: String(c.title).trim(), topic: c.topic ?? null, chapters: c.chapters.map((ch) => ({ title: String(ch.title).trim(),
+  return { title: String(c.title).trim(), topic: c.topic ?? null, type: c.type ?? null, procedure: c.procedure, chapters: c.chapters.map((ch) => ({ title: String(ch.title).trim(),
     subchapters: ch.subchapters.map((sc) => ({ title: String(sc.title ?? '').trim(), sentences: sc.sentences.map((s) => ({ text: s.text.trim(), source: s.source, world: s.world ?? null })) })) })) };
 }
 
@@ -56,6 +69,8 @@ function normalise(c) {
 export function checkComposition(c, req) {
   const problems = [];
   if (!c || typeof c.title !== 'string' || !c.title.trim() || !Array.isArray(c.chapters)) return { ok: false, problems: ['no title or chapters'] };
+  if (c.type !== undefined && c.type !== req.type) problems.push(`type ${c.type} != ${req.type}`);
+  if (!c.procedure) problems.push('no procedure: the type\'s method must come from knowledge (k.genres / k.story / k.procedures)');
   if (c.chapters.length !== req.chapters) problems.push(`chapters ${c.chapters.length} != ${req.chapters}`);
   for (const [i, ch] of c.chapters.entries()) {
     if (typeof ch?.title !== 'string' || !ch.title.trim() || !Array.isArray(ch.subchapters)) { problems.push(`chapter ${i + 1} malformed`); continue; }
