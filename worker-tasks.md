@@ -3879,3 +3879,11 @@ Accepted as reported: docs.editor on schema + acts (about 6,800 hand lines out; 
 Remeasure after these four and switch at the rule.
 
 **sopworld 0.31–0.35 validated by the reviewer (377 tests, 0 fail):** `resolve(phrase) -> ids + tier` (0.31), room planner and timetable apps (0.32), corpus 35 (0.33), slot groups / excludes / joins by key (0.34), **`std.know.fill`: knowledge fills any key from any catalog (0.35)**. Vendor 0.35; replace your host resolver by the library's `resolve` over `std.grammar` where it covers it, and fill defaults through `std.know.fill` instead of host lookups. List what remains host code.
+
+## Reviewer 2026-11-14 03:30 — sopworld 0.38.0 validated: two of the geo.map groups are now library features
+
+0.36–0.38 (380 tests, 0 fail): acts on the view itself (`std.schema.view state=`: "zoom in" with no thing) and `ask` over any attribute and relation of schemas and knowledge worlds with the answer's shape (number with unit, list, yes / no). Vendor 0.38 and use them for the geo.map pilot's two groups (view attributes, dropped question families) and for Talk / kids questions over k.attributes. `w.lang.en` is published in the knowledge repo (source psys2 78f45863): read it from the catalog and delete the hand-over copy once the numbers match.
+
+## Reviewer 2026-11-14 03:55 — smoke 62/62 at 54c57018; referents by the library's resolve accepted; k.time order published; sopworld 0.39
+
+Accepted: acts noun phrases read by sopworld `resolve` over `std.grammar` (np-lib adapter; the host keeps bare names). **k.time version 2 is published** in the knowledge repo (7d2b7ae: position, cyclic successor, one rule for before, seasons by hemisphere, parts of the day): replace the "cannot compare yet" branch by the comparison, close the `during` holes, and let plan.timeline sort things with a temporal aspect. **sopworld 0.39.0 validated (382 tests, 0 fail): typed needs** (`std.schema.needs`, `needsOf`, loading in `turn`): use them for the views' catalog needs instead of host preloads. Then the geo.map remeasure (block 03:10) with 0.38–0.39.

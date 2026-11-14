@@ -4,9 +4,14 @@ Task 2 of the reviewer entry "2026-11-14 01:00" (English as a world, questions.m
 sop-knowledge-worlds** so that the knowledge repository can publish it as the world `w.lang.en`, and the library can apply it with `std.grammar` (proposal: [std-grammar.md](std-grammar.md)). English only; open-class words
 (nouns, verbs, adjectives, numbers, colours) are not here, they are `k.words`, `k.actions`, `k.values`.
 
+> **Status 2026-11-14: published, and the hand-over copy is gone.** The catalog (sop-knowledge-worlds) publishes `w.lang.en` (source psys2 78f45863); `src/lang/en.mjs` reads it through the knowledge reader
+> (`langEnFromCatalog`) and from a bundled copy GENERATED FROM THE CATALOG (`node scripts/build-lang-en.mjs <catalog folder>` writes `src/lang/en.facts.generated.mjs`). The shards and `schema.sop` that were here are
+> deleted; what stays is this description (what each PSys2 piece maps to, the holes) and `std-grammar.md`. What the catalog lacks and PSys2 keeps in `src/lang/en.local.mjs` (frames added after the import, the readers'
+> own frames, the time words) and what the catalog has that is not read (core-plurals, hand-morphology, hand-grammar, hand-joins, phrases): docs/lessons.md "w.lang.en from the catalog" and questions.md.
+> The text below was written against the hand-over shards: `np.sop` is the catalog's `grammar.sop` (plain productions), `morphology.sop` `inflect` keys use `_`, frame patterns are `w.lang.en.part` wires.
+
 ```
-schema.sop            module w.lang.en: the types and slots (closed types; the small ones still need their slot lines from the repository's validator pass)
-shards/               determiners  pronouns  prepositions  numbers  morphology  ellipsis  np  clauses  frames-acts  phrases
+(the world itself: the catalog's docs/worlds/w.lang.en: schema.sop, shards/ determiners pronouns prepositions numbers morphology ellipsis clauses grammar frames-acts frames-acts-more frames-acts-data phrases core-plurals hand-*)
 std-grammar.md        the functions that apply the facts (a chart or rule-driven parser) in sopworld's format
 ```
 
@@ -40,8 +45,8 @@ std-grammar.md        the functions that apply the facts (a chart or rule-driven
 ## How PSys2 reads it
 
 `src/lang/en.mjs` is the thin local module: `en.words(type, view)`, `en.ordinals`, `en.refers`, `en.anaphorRegex`, `en.singular(word, set)`, `en.leads/trails/repeats/starters`, `en.splitList`, `en.splitThings`,
-`en.bareDistributes`, `en.sharedArgument`, `en.ellipsisPrefixes`, `en.oneAnaphora`; slice 2: `en.cutWords/sequenceWords/cardJoiners/frameLeads/corrections/leadOnly/answers/answerRegex/answerWords/questionWords`, `en.frames(set)`, `en.nounPhrase`, `en.negatedRequest`, `en.timeRelation`, `en.timeComparison` (slice 3: "is Monday before Friday" from `lang.en.timeword` facts: names of the days, months, seasons, parts of the day, clock hours; to be read from k.time words once the knowledge repository publishes an order in time). `src/lang/np-resolve.mjs` is the one host resolver over `en.nounPhrase` (acts and art.draw both use it; the ask for the library is section 8 of std-grammar.md). It reads wires; `createLangEn(texts|wires)` takes another version of the world (the catalog's, later). After editing a shard:
-`node scripts/build-lang-en.mjs` (`tests/lang-en.test.mjs` fails when the generated file is stale). Gate for the slice: no change in `test-world all` (both reasoners), the owner logs, the robustness sets, the coverage grid
+`en.bareDistributes`, `en.sharedArgument`, `en.ellipsisPrefixes`, `en.oneAnaphora`; slice 2: `en.cutWords/sequenceWords/cardJoiners/frameLeads/corrections/leadOnly/answers/answerRegex/answerWords/questionWords`, `en.frames(set)`, `en.nounPhrase`, `en.negatedRequest`, `en.timeRelation`, `en.timeComparison` (slice 3: "is Monday before Friday" from `lang.en.timeword` facts: names of the days, months, seasons, parts of the day, clock hours; to be read from k.time words once the knowledge repository publishes an order in time). `src/lang/np-resolve.mjs` is the one host resolver over `en.nounPhrase` (acts and art.draw both use it; the ask for the library is section 8 of std-grammar.md). It reads wires; `createLangEn(texts|wires)` takes another version of the world; `langEnFromCatalog(source)` reads the catalog's. After the catalog changes:
+`node scripts/build-lang-en.mjs <catalog folder>` (`tests/lang-en.test.mjs` fails when the generated file is stale, where PSYS2_KNOWLEDGE names the catalog folder). Gate for the slice: no change in `test-world all` (both reasoners), the owner logs, the robustness sets, the coverage grid
 (numbers in worker-log "LANG-EN first slice").
 
 ## Holes the extraction made visible (English the system does not read, or reads in several ways)
