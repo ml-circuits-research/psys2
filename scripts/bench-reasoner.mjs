@@ -25,7 +25,7 @@ const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 &
 const REPS = Number(arg('reps', 5)), LIMIT = Number(arg('limit', 0)) || 0, INSTR = process.argv.includes('--instrument');
 const STRIDE = Number(arg('stride', 1)) || 1, NO_DIALOGUES = process.argv.includes('--no-dialogues');   // --stride 13 --no-dialogues: every 13th operational case (about 100), no dialogues
 const jsonl = (f) => readFileSync(join(REPO, 'training/eval', f), 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
-const FOUR = new Set(['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe']);
+const FOUR = new Set(['kids.shop', 'kids.arith', 'kids.tasks']);
 const settings = settingsForMode('rules');
 const mk = (reasoner) => createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), translator: createTranslator(), options: { reasoner } });
 const engines = { ops: await mk('ops'), matrix: await mk('matrix') };

@@ -6,7 +6,7 @@
 
 @t.ui.shell.n02 core.test
     input="Open the editor."
-    expect="Editor"
+    expect="Documents"
     expectState="activeTab=editor"
     expectState="previousTab=talk"
     session=s
@@ -21,26 +21,6 @@
 @t.ui.shell.n04 core.test
     input="Show me the document"
     expectState="activeTab=editor"
-    session=s
-
-@t.ui.shell.n05 core.test
-    input="Let's play tic tac toe."
-    expect="tic-tac-toe"
-    expectState="activeTab=tictactoe"
-    session=s
-
-@t.ui.shell.n06 core.test
-    input="Can we play twenty questions?"
-    expect="Think of an animal"
-    expectState="activeTab=guess"
-    expectState="games.guess:phase=asking"
-    session=s
-
-@t.ui.shell.n07 core.test
-    input="I want to play hangman"
-    expect="letters"
-    expectState="activeTab=hangman"
-    expectState="games.hangman:status=playing"
     session=s
 
 @t.ui.shell.n08 core.test
@@ -115,41 +95,10 @@
     expectState="activeTab=editor"
     session=s3
 
-@t.ui.shell.n23 core.test
-    input="Open the hangman tab"
-    expectState="activeTab=hangman"
-    session=s3
-
-@t.ui.shell.n25 core.test
-    input="New game"
-    expect="Hangman"
-    expectState="games.hangman:status=playing"
-    session=s3
-
 @t.ui.shell.n26 core.test
     input="Open the robot"
     expectState="activeTab=talk"
     session=s4
-
-@t.ui.shell.n27 core.test
-    input="New game"
-    expectStatus=missing
-    session=s4
-
-@t.ui.shell.n28 core.test
-    input="Let's play a game"
-    expect="tic-tac-toe"
-    session=s5
-
-@t.ui.shell.n29 core.test
-    input="Play tic-tac-toe"
-    expect="let's play tic-tac-toe"
-    session=s6
-
-@t.ui.shell.n30 core.test
-    input="I cannot go on"
-    expectStatus=supported
-    session=s6
 
 @t.ui.shell.n31 core.test
     input="Show my phrase log"
@@ -175,18 +124,6 @@
     session=s10
     given="ui.shell:activeTab=timeline"   # the Talk tab answers this from the catalog, which a test session does not load; the time words are read by the shell world
 
-@t.ui.shell.r01 core.test
-    input="hangman pls"
-    expect="letters"
-    expectState="activeTab=hangman"
-    expectState="games.hangman:status=playing"
-    session=rs1
-
-@t.ui.shell.r02 core.test
-    input="stop game pls"
-    expect="The word was"
-    session=rs1
-
 @t.ui.shell.r03 core.test
     input="i want the editor"
     expectState="activeTab=editor"
@@ -207,21 +144,6 @@
     input="previous screen"
     expectState="activeTab=talk"
     session=rs2
-
-@t.ui.shell.r07 core.test
-    input="can u play tic tac toe with me"
-    expectState="activeTab=tictactoe"
-    session=rs3
-
-@t.ui.shell.r08 core.test
-    input="what games can we play"
-    expect="hangman"
-    session=rs4
-
-@t.ui.shell.r09 core.test
-    input="pick a game"
-    expect="hangman"
-    session=rs4
 
 @t.ui.shell.r10 core.test
     input="speech rate 1.5"
@@ -286,12 +208,12 @@
 @t.ui.shell.x201 core.test
     session=sh1
     input="open the documents tab"
-    expectState="activeTab=documents"
+    expectState="activeTab=editor"
 
 @t.ui.shell.x202 core.test
     session=sh1
     input="show my docs tab"
-    expectState="activeTab=documents"
+    expectState="activeTab=editor"
 
 @t.ui.shell.x203 core.test
     session=sh2
@@ -307,11 +229,6 @@
     input="i want to open the map tab"
     expectState="activeTab=map"
     session=ush2
-
-@t.ui.shell.sh03 core.test
-    input="can i play a hangman game"
-    expectState="activeTab=hangman"
-    session=ush3
 
 @t.ui.shell.set01 core.test
     input="open settings"
@@ -352,11 +269,6 @@
     input="open draw"
     expectState="activeTab=draw"
 
-@t.ui.shell.short2 core.test
-    session=tabshort2
-    input="open chess"
-    expectState="activeTab=chess"
-
 @t.ui.shell.short3 core.test
     session=tabshort3
     input="open map"
@@ -376,11 +288,6 @@
     session=tabshort6
     input="open editor"
     expectState="activeTab=editor"
-
-@t.ui.shell.short7 core.test
-    session=tabshort7
-    input="open profile"
-    expectState="activeTab=profile"
 
 @t.ui.shell.short9 core.test
     session=tabshort9

@@ -38,10 +38,6 @@
     for=action.doc.fromList
     text="{value}"
 
-@tpl.docs.editor.own_report core.template
-    for=action.doc.report
-    text="{value}"
-
 @tpl.docs.editor.own_holdings core.template
     for=action.doc.holdings
     text="{value}"
@@ -86,3 +82,21 @@
     for=action.doc.make
     text="{value}"
 
+
+@tpl.docs.editor.own_digest core.template
+    for=action.doc.digest
+    text="{value}"
+
+@tpl.docs.editor.own_digest.ambiguous core.template
+    for=action.doc.digest
+    status=ambiguous
+    text="{note}"
+
+@tpl.docs.editor.own_compose core.template
+    for=action.doc.compose
+    text="{value}"
+
+@tpl.docs.editor.own_compose.ambiguous core.template
+    for=action.doc.compose
+    status=ambiguous
+    text="{note}"

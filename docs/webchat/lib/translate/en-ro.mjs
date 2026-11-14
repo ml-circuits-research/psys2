@@ -5,8 +5,8 @@ import * as M from './morphology.ro.mjs?v=957828c2e5';
 import * as L from './lexicon.ro-en.mjs?v=0f4eaf8bf9';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
-import { translateReplySentence } from './replies.en-ro.mjs?v=6ed13059ce';
-import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
+import { translateReplySentence } from './replies.en-ro.mjs?v=f172a7ac88';
+import { CANONICAL_RO } from './canonical.en-ro.mjs?v=dcd82cdc4b';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 // ------------------------------------------------------------------ reverse lexicon

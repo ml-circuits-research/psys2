@@ -497,7 +497,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
   }
   /** The voice that would read `lang` (a BCP-47 tag), or null when the device has none: the caller says so in Settings (the default voice is used then). */
   const voiceFor = (lang) => pickVoice(lang) ?? null;
-  // The voice hints of a world that reads a text aloud (docs.reader: speed and voice of the reading, spec 21 section 14): a rate factor and a kind of voice. The device decides the rest: a "female" or "male" voice is a
+  // The voice hints of a world that reads a text aloud (speed and voice of the reading, spec 21 section 14): a rate factor and a kind of voice. The device decides the rest: a "female" or "male" voice is a
   // voice of the language whose name says so when there is one, "deep", "high" and "child" are the pitch.
   const FEMALE = /female|woman|zira|samantha|susan|hazel|karen|moira|fiona|victoria|tessa|google uk english female|google us english/i, MALE = /(?<!fe)male|\bman\b|david|mark|daniel|george|alex|fred|ralph|james|oliver|google uk english male/i;
   const PITCH = { deep: 0.6, high: 1.5, child: 1.8 };

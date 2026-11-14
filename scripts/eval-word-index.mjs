@@ -30,7 +30,7 @@ const every = Number(arg('every', 1)), designs = arg('designs', 'A,B').split(','
 const rd = (f) => readFileSync(join(REPO, f), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
 
 // ---------- the corpus ----------
-const BUILTIN_TAB = { robot: 'ui.avatar', editor: 'docs.editor', tictactoe: 'games.tictactoe', guess: 'games.guess', hangman: 'games.hangman' };
+const BUILTIN_TAB = { robot: 'ui.avatar', editor: 'docs.editor' };
 const cases = [];
 if (which === 'all' || which === 'op') for (const f of ['operational', 'operational-long']) for (const c of rd(`training/eval/${f}.jsonl`)) cases.push({ src: 'op', id: c.id, tab: c.tab, setup: c.setup ?? [], message: c.message, init: c.init });
 if (which === 'all' || which === 'owner') {

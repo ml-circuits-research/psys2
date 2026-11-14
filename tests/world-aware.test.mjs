@@ -84,16 +84,6 @@ test('veto: "switch to klingon" lists the languages the app has, from the ui.she
   assert.doesNotMatch(ok.text, /I do not speak/);
 });
 
-test('veto: a game move while no game runs and another tab is open is not played (no-game)', async () => {
-  const s = await session('veto', 'draw', ['draw a house']);
-  const r = await s.send('I take the middle square');   // (the generated drawing board reads "put it in the top right corner" itself: the open tab owns its acts, spec 20)
-  assert.equal(r.segments[0].veto?.kind, 'no-game');
-  assert.match(r.text, /We are not playing Tic-tac-toe right now/);
-  assert.deepEqual(s.state()['games.tictactoe'].board, ['', '', '', '', '', '', '', '', ''], 'no game was started');
-  const t = await session('veto', 'tictactoe');
-  assert.match((await t.send('put it in the top right corner')).text, /You took top right/, 'on the game tab the move is played');
-});
-
 test('choose: the reading the open tab can take wins over a move in a game that is not running; veto alone keeps the router order', async () => {
   const s = await session('choose', 'draw', ['draw a house']);
   const r = await s.send('put it in the top right corner');

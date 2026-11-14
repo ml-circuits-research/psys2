@@ -18,48 +18,6 @@ async function actionsOn(tab, text) {
   return { r, actions: r.wires.filter((w) => w.type === 'core.request').map((w) => w.entries.find((e) => e.key === 'core.request.action')?.value.v) };
 }
 
-// ---- 1. Q5: game controls emit the active game's own action on a game tab, the shell form elsewhere
-const GAMES = [
-  { tab: 'tictactoe', new: 'ttt.new', hint: 'ttt.hint', giveUp: 'ttt.giveup' },
-  { tab: 'hangman', new: 'hm.new', hint: 'hm.hint', giveUp: 'hm.giveup' },
-  { tab: 'chess', new: 'chess.new', hint: 'chess.hint', giveUp: 'chess.resign' },
-  { tab: 'guess', new: 'guess.start', hint: 'guess.hint', giveUp: 'guess.giveup' },
-];
-const PHRASES = { new: ['New game.', 'Play again.'], hint: ['Give me a hint.', 'Hint please.'], giveUp: ['I give up.', 'Quit the game.'] };
-const SHELL = { new: 'ui.newGame', hint: 'ui.hint', giveUp: 'ui.giveUp' };
-
-for (const g of GAMES) {
-  test(`game controls on the ${g.tab} tab emit the game's own actions`, async () => {
-    for (const control of ['new', 'hint', 'giveUp']) {
-      for (const text of PHRASES[control]) {
-        const { actions, r } = await actionsOn(g.tab, text);
-        assert.deepEqual(actions, [g[control]], `${g.tab}: "${text}" -> ${actions}`);
-        assert.ok(!actions.some((a) => a.startsWith('ui.')), 'no shell form on a game tab');
-        assert.equal(r.trace.routing[0].tier, 3);
-      }
-    }
-  });
-}
-
-test('off a game tab the shell form of the game controls stays', async () => {
-  for (const tab of ['robot', 'draw', 'music', 'documents', null]) {
-    for (const control of ['new', 'hint', 'giveUp']) {
-      const text = PHRASES[control][0];
-      const { actions } = await actionsOn(tab, text);
-      // another world may claim "Give me a hint." off the tab (a game world), but the shell wires must never be game actions
-      if (actions[0]?.startsWith('ui.')) assert.equal(actions[0], SHELL[control], `${tab}: ${text}`);
-    }
-  }
-  assert.deepEqual((await actionsOn('robot', 'I give up.')).actions, ['ui.giveUp']);
-  assert.deepEqual((await actionsOn('draw', 'New game.')).actions, ['ui.newGame']);
-  assert.deepEqual((await actionsOn(null, 'Quit the game.')).actions, ['ui.giveUp']);
-});
-
-test('chess declares its undo action for the game controls (tabUndo)', () => {
-  assert.equal(engine.set.get('games.chess').gameControls.undo, 'chess.undo');
-  assert.equal(engine.set.get('games.tictactoe').gameControls.giveUp, 'ttt.giveup');
-});
-
 // ---- 2. tab-only patterns and tab-only priority
 const cand = (world, id, { priority = 10, literals = 1, skips = 0, slots = {}, emit = '', order = 0, tabOnly = false, tabPriority = null } = {}) =>
   ({ pattern: { id, worldId: world, priority, emit, tabOnly, tabPriority }, literals, skips, slots, order });
@@ -116,11 +74,6 @@ test('a catch-all of another world never beats a specific match of the active ta
   const wild = cand('ui.avatar', 'letUs', { priority: 14, literals: 1, skips: 6, slots: { r: { class: 'rest', tokens: [1, 7] } } });
   assert.ok(!clearlyMoreSpecific(wild, tab));
   assert.equal(route([wild, tab], { tabWorld: 'games.tictactoe' }).decision.winner.patternId, 'level');
-});
-
-test('integration: "let us play level three" on the robot tab reads as a game level, not as chat', async () => {
-  const { r } = await actionsOn('robot', 'let us play level three');
-  assert.notEqual(r.trace.routing[0].winner.worldId, 'ui.avatar');
 });
 
 // ---- 4. bare tempo words yield to the music world

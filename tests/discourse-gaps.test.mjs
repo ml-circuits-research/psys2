@@ -47,55 +47,11 @@ test('a question is nothing to undo: feedback apologises without an undo offer, 
   assert.match(rs[2].text, /leave it/);
 });
 
-test('negative feedback inside chess and tic-tac-toe offers to take the last move back, "yes" undoes it', async () => {
-  for (const [tab, start, move, field] of [['chess', "let's play chess", 'e4', 'history'], ['tictactoe', "let's play tic tac toe", 'center', null]]) {
-    const s = session(tab);
-    const rs = await say(s, start, move, "that's wrong");
-    assert.match(rs[2].text, /take back the last move/); assert.match(rs[2].text, /undo/);
-    assert.equal(rs[2].feedback, 'negative');
-    const world = tab === 'chess' ? 'games.chess' : 'games.tictactoe';
-    await s.send('yes');
-    if (field) assert.equal(s.state(world).history.length, 0); else assert.ok(s.state(world).board.every((c) => !c));
-  }
-});
-
-test('guessing game: "that\'s wrong" is no answer, "no, that\'s wrong" is', async () => {
-  const s = session('guess');
-  const rs = await say(s, 'I am thinking of an animal', 'yes', "that's wrong");
-  assert.match(rs[2].text, /sorry/i);
-  assert.equal(s.state('games.guess').asked.length, 1);
-  await s.send('no, thats wrong');
-  assert.equal(s.state('games.guess').asked.length, 2);
-});
-
-test('guessing game: "wait, I meant yes" corrects the previous answer (no self-correction of a lead word)', async () => {
-  const s = session('guess');
-  const rs = await say(s, 'I am thinking of an animal', 'yes', 'no', 'wait, I meant yes');
-  assert.equal(rs[3].trace.selfCorrections, undefined);
-  assert.equal(s.state('games.guess').asked[1].answer, 'yes');
-  assert.match(rs[3].text, /changed my note/);
-  assert.equal(s.state('games.guess').count, 2);
-  assert.equal(selfCorrect(tokenize('wait, I meant yes', 0, { keepFillers: true })), null);
-});
-
 test('"wait, I meant blue" after a drawing is a repair of the last command', async () => {
   const s = session('draw');
   const rs = await say(s, 'draw a red house', 'wait, I meant blue');
   assert.equal(rs[1].trace.discourse.resolved.kind, 'repair');
   assert.equal(s.state('art.draw').objects[0].color, 'blue');
-});
-
-test('topic return: "back to the animal game" is the guessing game, "where were we" skips the current tab', async () => {
-  const s = session('guess');
-  await say(s, 'I am thinking of an animal', 'yes', "let's play tic tac toe");
-  const r = await s.send('back to the animal game');
-  assert.match(r.text, /Guess the animal/);
-  assert.equal(s.state('ui.shell').activeTab, 'guess');
-  const t = session('draw');
-  await say(t, 'Draw a red house.', 'Open the fairy tale story.');
-  const w = await t.send('Where were we?');
-  assert.equal(t.state('ui.shell').activeTab, 'draw');
-  assert.match(w.text, /house/i);
 });
 
 test('a pronoun in a sentence nobody reads is replaced by the noun of the last question', async () => {
@@ -129,15 +85,4 @@ test('needsState: contents phrasings of the charts world do not take other world
   const d = session();
   await say(d, 'make a chart: apples 5, pears 3');
   assert.match((await d.send('how many apples?')).text, /5/);
-});
-
-test('docs.reader: ellipsis and ordinal references resolve against the open document and the last thing shown', async () => {
-  const s = session('documents');
-  const rs = await say(s, 'Open the fairy tale story.', 'Summarize section 2.', 'And section 4?', 'And the last section?', 'And the first section?', 'And the one before that?', 'Summarize that section.');
-  assert.match(rs[2].text, /Home Again/); assert.match(rs[3].text, /Home Again/); assert.match(rs[4].text, /Poor Woodcutter/);
-  assert.match(rs[5].text, /Section 0|only|first one/);   // before section 1 there is nothing
-  const t = session('documents');
-  const ts = await say(t, 'Open the fairy tale story.', 'Search for bread.', 'and the one after that?', 'the last one', 'Summarize section 3.', 'the last one', 'and the one before that?');
-  assert.match(ts[2].text, /Result 2 of/); assert.match(ts[3].text, /Result 4 of 4/);
-  assert.match(ts[5].text, /Home Again/); assert.match(ts[6].text, /Witch/);
 });

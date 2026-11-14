@@ -32,13 +32,6 @@ test('a bare animal name on the Drawing tab is not a word to guess in a hangman 
   }
 });
 
-test('a running game still takes its own word, with another tab open', async () => {
-  const s = await session('draw', ['draw a house']);
-  await s.send('play hangman');
-  const r = await s.send('the tiger');
-  assert.ok(worldsOf(r).includes('games.hangman') || /hangman|letter|word/i.test(r.text), r.text);
-});
-
 test('a pronoun is about the world of the last action: "make it happy" after an avatar change never reaches the diagram', async () => {
   const s = await session('diagram', ['draw a red circle']);
   s.setWorldState('ui.shell', { activeTab: 'robot' });

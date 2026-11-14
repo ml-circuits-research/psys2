@@ -12,31 +12,24 @@
  *   abduce    matrix: "I got 5 lei back for a book, what did I pay?" answers 17.
  *   setting   Settings > Developer > Reasoner (default matrix) switches the engine to ops (a restart) and the matrix gains disappear.
  *   assume    matrix: "I buy the ball" then "how much money do I have?" says "I assumed 1 ball." once; the phrase log record carries the assumption.
- *   tictactoe matrix: an illegal move is refused with the reason and the tab board does not change, "undo" takes the move back (the board on the tab follows),
  *             "why did you play there?" explains, a finished game refuses moves.
- *   hangman   matrix (stage 2): a repeated letter is answered by the rules and the tab does not change, "undo" takes the last guess back (the letter on the tab is
  *             free again), a finished game refuses guesses and undo reopens it.
- *   guess     matrix (stage 2): the animals still possible follow the answers on the tab, "undo" asks the last question again, a reply that does not fit is refused.
  *   time      matrix (stage 2): the day, the days until a day and the hours between come from the library, an hour the clock does not have is refused with the reason
  *             and the clock keeps its hour, "undo that" says it in the world's words.
  *   animals   matrix (stage 2): a taught fact is answered from the library and "undo that" forgets it in the world's words.
  *   shared    matrix (WORLDS-APART): a name told once is known in the shop, in a game and in arithmetic; "Ana has 3 apples / she eats 1 / how many" is 2.
- *   undo-cross matrix (UNDO-1): one undo history across the instances (hangman, tic-tac-toe, shop, list), each undo names what it took back, money back at the end.
  *   removed   matrix (UNDO-1): "what is on my shopping list?" after a removal is read as the question it is.
- *   profile   matrix (stage 2): two facts that cannot both be right are refused with the reason (and the tab keeps the first), "undo that" says what was forgotten.
  *   romanian  matrix (RO-MATRIX): a Romanian session: undo quotes the user's own words, a bare yes, a refusal, the shop tab name and the profile answer in Romanian.
  *   geomap    matrix (stage 2, one instance per world): the state of the map is wires of the library: the counts and the length of the lines come from rules, a "No" about a
  *             place has the reason of the denies, "zoom to 15" stays at 12, and the world's own undo and redo take the map back and forth (the tab follows).
  *   charts    matrix (stage 2): the totals are rules, "rename apples to pears" is refused with the reason and the chart on the tab keeps its labels, undo and redo follow.
- *   chess     matrix: a move the rules refuse says why (the tab board does not change), the engine's answer is taken over by the library, "why did you play that?" explains, "undo" takes the move and the reply back.
- *   chess-late  matrix (REGRESSION-AB): the engine's late reply is no step of the user's next turn: undo takes back the user's move only (gms#006), "hurry up" then undo goes back to the start (gms#002), "what did you do?" names the undo (doc#035).
  *   music     matrix: a tempo, a key or an instrument the rules refuse says why and the tab keeps its setting, the default tempo is assumed and said once, "undo" and "why?" in the world's words.
  *
  *   restart-undo  matrix (RESTORE-1): a watchdog restart of the engine worker (fault hooks) keeps the library timeline, undo walks back across it.
  *
  *   draw, diagram   matrix (art.draw, diagram.sketch): see scripts/test-webchat-draw-matrix.mjs.
  *
- *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,tictactoe,hangman,guess,time,animals,profile,romanian,shared,undo-cross,removed,geomap,charts,chess,chess-late,music,draw,commonsense,diagram,editor,reader,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
+ *   node scripts/test-webchat-matrix.mjs [--only default,ops,ask,revise,undo,why,abduce,setting,assume,time,animals,romanian,shared,removed,geomap,charts,music,draw,commonsense,diagram,editor,shell,avatar,help] [--throttle 4] [--chrome /usr/bin/chromium]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -167,80 +160,6 @@ export const SCENARIOS = {
       check('assume: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
-  async tictactoe(o) {
-    const c = await openChat({ ...o, settings: MATRIX });
-    try {
-      // the board of the tab, row by row, as a 9-character string: X, O or .
-      const board = () => c.pg.$$eval('.p2-ttt-cell', (cs) => cs.map((x) => (x.classList.contains('is-x') ? 'X' : x.classList.contains('is-o') ? 'O' : '.')).join(''));
-      const marks = (b) => b.replace(/\./g, '').length;
-      const a = await say(c, "Let's play tic tac toe");
-      check('tictactoe: the game starts and its tab is open', /You are X and you go first/.test(a) && (await board()).length === 9, a.slice(0, 80));
-      const m = await say(c, 'center');
-      const b1 = await board();
-      check('tictactoe: my move and the answer are on the tab board', /You took the center\. I took/.test(m) && b1[4] === 'X' && marks(b1) === 2, `${m.slice(0, 60)} | ${b1}`);
-      const r = await say(c, 'center');
-      const b2 = await board();
-      check('tictactoe: a taken square is refused with the reason, and the tab board does not change', r === 'The center is already taken by you. Please pick another place.' && b2 === b1, `${r.slice(0, 80)} | ${b2}`);
-      const w = await say(c, 'why did you play there?');
-      check('tictactoe: "why did you play there?" explains the computer\'s move', /^I played .+ because /.test(w), w.slice(0, 120));
-      const u = await say(c, 'undo');
-      const b3 = await board();
-      check('tictactoe: "undo" takes the move and the answer back, the tab board follows', /took back your last move and my answer/.test(u) && marks(b3) === 0, `${u.slice(0, 60)} | ${b3}`);
-      await say(c, 'top left');
-      const u2 = await say(c, 'oops, take that back');
-      const b4 = await board();
-      check('tictactoe: "oops, take that back" says what it took back and the board is empty again', /took back your last move and my answer/.test(u2) && marks(b4) === 0, `${u2.slice(0, 80)} | ${b4}`);
-      await say(c, 'I give up');
-      const o2 = await say(c, 'bottom right');
-      check('tictactoe: a move after the game is over is refused', o2 === 'The game is over. Say "new game" to play again.' && marks(await board()) === 0, o2.slice(0, 80));
-      await say(c, 'undo');
-      const g = await say(c, 'center');
-      check('tictactoe: undo of the resignation reopens the game', /You took the center\./.test(g) && marks(await board()) === 2, g.slice(0, 80));
-      check('tictactoe: no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-  },
-  async hangman(o) {
-    const c = await openChat({ ...o, settings: MATRIX });
-    try {
-      const word = () => c.pg.$eval('.p2-hang-word', (e) => e.textContent.replace(/\s+/g, ''));
-      const letters = () => c.pg.$$eval('.p2-letter', (cs) => cs.map((x) => (x.classList.contains('is-right') ? 'r' : x.classList.contains('is-wrong') ? 'w' : '.')).join(''));
-      const a = await say(c, 'Play hangman with the word zebra');
-      check('hangman: the game starts and its tab shows a blank word', /Hangman! I have chosen a word of 5 letters/.test(a) && (await word()) === '_____', `${a.slice(0, 60)} | ${await word()}`);
-      const z = await say(c, 'Is there a Z?');
-      check('hangman: a hit is on the tab', /Yes, there is one Z!/.test(z) && (await word()) === 'Z____' && (await letters())[25] === 'r', `${z.slice(0, 50)} | ${await word()}`);
-      const l1 = await letters();
-      const d = await say(c, 'Is there a Z?');
-      check('hangman: a repeated letter is answered and the tab does not change', /^You already tried Z\./.test(d) && (await letters()) === l1 && (await word()) === 'Z____', d.slice(0, 60));
-      await say(c, 'Is there an X?');
-      check('hangman: a miss is marked wrong on the tab', (await letters())[23] === 'w', await letters());
-      const u = await say(c, 'undo');
-      check('hangman: "undo" takes the last guess back, the letter on the tab is free again', /took back your last guess/.test(u) && (await letters())[23] === '.' && (await word()) === 'Z____', `${u.slice(0, 60)} | ${await letters()}`);
-      await say(c, 'I give up');
-      const o2 = await say(c, 'Is there an E?');
-      check('hangman: a guess after the game is refused', /^We are not playing hangman\./.test(o2) && (await word()) === 'ZEBRA', `${o2.slice(0, 60)} | ${await word()}`);
-      await say(c, 'undo');
-      const g = await say(c, 'Is there an E?');
-      check('hangman: undo of the give-up reopens the game', /Yes, there is one E!/.test(g) && (await word()) === 'ZE___', `${g.slice(0, 50)} | ${await word()}`);
-      check('hangman: no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-  },
-  async guess(o) {
-    const c = await openChat({ ...o, settings: MATRIX });
-    try {
-      const asked = () => c.pg.$$eval('.p2-guess-history li', (l) => l.length);
-      const a = await say(c, 'Guess my animal');
-      const first = /Question 1: ([^?]+\?)/.exec(a)?.[1];   // the first question is the one that splits the animals of the catalog best (KNOWLEDGE-OUT step 5): the game asks it, which one is the catalog's
-      check('guess: the game starts and asks the first question', !!first, a.slice(0, 100));
-      const y = await say(c, 'yes');
-      check('guess: an answer is on the tab and the next question is asked', /^Good\. Question 2:/.test(y) && (await asked()) === 1, `${y.slice(0, 60)} | ${await asked()}`);
-      const u = await say(c, 'undo');
-      check('guess: "undo" takes the answer back and asks that question again', u.includes(`took back your last answer. I am asking that question again: ${first}`) && (await asked()) === 0, `${u.slice(0, 80)} | ${await asked()}`);
-      await say(c, 'I give up');
-      const r = await say(c, 'yes');
-      check('guess: an answer that does not fit the game is refused with the reason', r === 'I am waiting to learn the animal. Tell me, for example: "it was a zebra".', r.slice(0, 80));
-      check('guess: no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-  },
   async time(o) {
     const c = await openChat({ ...o, settings: MATRIX });
     try {
@@ -297,46 +216,6 @@ export const SCENARIOS = {
       check('shared: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
-  async 'undo-cross'(o) {
-    // UNDO-1: one history across the instances, newest first, every undo says what it took back; a game with nothing left falls through to the session
-    const c = await openChat({ ...o, settings: MATRIX });
-    try {
-      await say(c, 'I have 20 lei'); await say(c, 'I buy a ball'); await say(c, 'add milk to my shopping list');
-      await say(c, 'Play hangman with the word zebra'); await say(c, 'new game'); await say(c, 'Is there a Z?');
-      const u = [];
-      for (let i = 0; i < 4; i++) u.push(await say(c, 'undo'));
-      check('undo-cross (hangman): the guess is named', /took back your last guess/.test(u[0]), u[0].slice(0, 80));
-      check('undo-cross (hangman): then the new game, not "the last guess" again', /took back the new game/.test(u[1]), u[1].slice(0, 80));
-      check('undo-cross (hangman): then the first game of the session', /took back the new game/.test(u[2]), u[2].slice(0, 80));
-      check('undo-cross (hangman): then the milk, named, from another instance', /took that back: "add milk to my shopping list"/.test(u[3]), u[3].slice(0, 80));
-      const p = await say(c, 'undo');
-      check('undo-cross (hangman): then the purchase', /took that back: "I buy a ball"/.test(p), p.slice(0, 80));
-      const money = await say(c, 'how much money do I have?');
-      check('undo-cross (hangman): the money is back to 20 lei', /20 lei/.test(money), money.slice(0, 60));
-      const none = await say(c, 'undo');
-      check('undo-cross (hangman): "I have 20 lei" goes too, then nothing is left', /took that back: "I have 20 lei"/.test(none), none.slice(0, 80));
-      const end = await say(c, 'undo');
-      check('undo-cross (hangman): when nothing is left it says so', /nothing more to undo/i.test(end), end.slice(0, 80));
-      check('undo-cross (hangman): no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-    const t = await openChat({ ...o, settings: MATRIX });
-    try {
-      await say(t, 'I have 20 lei'); await say(t, 'I buy a ball'); await say(t, 'add milk to my shopping list');
-      await say(t, "Let's play tic tac toe"); await say(t, 'center');
-      const board = () => t.pg.$$eval('.p2-ttt-cell', (cs) => cs.filter((x) => x.classList.contains('is-x') || x.classList.contains('is-o')).length);
-      const u1 = await say(t, 'undo');
-      check('undo-cross (tic-tac-toe): the move and my answer are named, the board is empty', /took back your last move and my answer/.test(u1) && (await board()) === 0, u1.slice(0, 80));
-      const u1b = await say(t, 'undo');
-      check('undo-cross (tic-tac-toe): then the start of the game (the shell\'s own turn), named', /Let's play tic tac toe|back on the Avatar tab/.test(u1b), u1b.slice(0, 80));
-      const u2 = await say(t, 'undo');
-      check('undo-cross (tic-tac-toe): then the milk, named', /took that back: "add milk to my shopping list"/.test(u2), u2.slice(0, 80));
-      const u3 = await say(t, 'undo');
-      check('undo-cross (tic-tac-toe): then the purchase, named', /took that back: "I buy a ball"/.test(u3), u3.slice(0, 80));
-      const money = await say(t, 'how much money do I have?');
-      check('undo-cross (tic-tac-toe): the money is back to 20 lei', /20 lei/.test(money), money.slice(0, 60));
-      check('undo-cross (tic-tac-toe): no page errors', t.errors.length === 0, t.errors[0] ?? '');
-    } finally { await t.close(); }
-  },
   async removed(o) {
     // UNDO-1 item 3: a removed item leaves nothing that hijacks the next question
     const c = await openChat({ ...o, settings: MATRIX });
@@ -345,22 +224,6 @@ export const SCENARIOS = {
       const a = await say(c, 'what is on my shopping list?');
       check('removed: "what is on my shopping list?" after a removal says the list is empty', /^Your shopping list is empty/.test(a) && !/understood only part|is is/.test(a), a.slice(0, 100));
       check('removed: no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-  },
-  async profile(o) {
-    const c = await openChat({ ...o, settings: MATRIX });
-    try {
-      await say(c, 'I am 12 years old.');
-      const r = await say(c, "I've been teaching for 20 years.");
-      check('profile: two facts that cannot both be right are refused with the reason, and the user is asked which is right', r === 'That does not add up. You said you are 12 years old, but also that you have been working for 20 years. Which one is right?', r.slice(0, 160));
-      const k = await say(c, 'What do you know about me?');
-      check('profile: the first fact is kept and the second is not', /age: 12/.test(k) && !/teacher|years of experience/.test(k), k.slice(0, 120));
-      await say(c, 'I am 30 years old.');
-      const t = await say(c, "I've been teaching for 20 years.");
-      check('profile: after the user says which one is right the statement is taken', /teacher/i.test(t), t.slice(0, 80));
-      const u = await say(c, 'undo that');
-      check('profile: "undo that" says what was forgotten', /^OK, I forgot your current role \(teacher\)/.test(u), u.slice(0, 120));
-      check('profile: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
   async romanian(o) {
@@ -449,58 +312,6 @@ export const SCENARIOS = {
     } finally { await c.close(); }
   },
   // ---- games.chess and media.music on the matrix (user decision 2026-11-11: every world moves to sopworld)
-  async chess(o) {
-    const c = await openChat({ ...o, settings: MATRIX });
-    try {
-      const plies = () => c.pg.$$eval('.cx-moves .m', (els) => els.map((e) => e.textContent).filter(Boolean));
-      const waitPlies = async (n, ms = 60000) => { for (let t = 0; t < ms; t += 250) { if ((await plies()).length >= n) return true; await new Promise((r) => setTimeout(r, 250)); } return false; };
-      const a = await say(c, "Let's play chess");
-      check('chess: the game starts and the tab is open', /You are white and you move first/.test(a), a.slice(0, 80));
-      const m = await say(c, 'e4');
-      check('chess: my move is on the tab board', /You play pawn to e4|I play/.test(m) && (await plies())[0] === 'e4', `${m.slice(0, 50)} | ${(await plies()).join(' ')}`);
-      check('chess: the computer\'s answer (Stockfish, or the built-in player) arrives as an observation and is on the board', await waitPlies(2), (await plies()).join(' '));
-      const r = await say(c, 'Rook on a1 to a3');
-      check('chess: a move the rules refuse says why and the board does not change', /^Your rook on a1 is blocked by your pawn on a2\./.test(r) && (await plies()).length === 2, `${r.slice(0, 80)} | ${(await plies()).join(' ')}`);
-      const w = await say(c, 'Why did you play that?');
-      check('chess: "why did you play that?" explains the computer\'s move (the engine\'s move was taken over by the library)', /^I played .+ because .+\./.test(w), w.slice(0, 120));
-      const u = await say(c, 'undo');
-      check('chess: "undo" takes my move and the computer\'s reply back and the tab follows', /^OK, I took back your last move and my reply\./.test(u) && (await plies()).length === 0, `${u.slice(0, 80)} | ${(await plies()).join(' ')}`);
-      const again = await say(c, 'Knight to f3');
-      check('chess: after the undo the game goes on from the start', /You play knight to f3|I play/.test(again) && (await plies())[0] === 'Nf3', `${again.slice(0, 60)} | ${(await plies()).join(' ')}`);
-      check('chess: no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-  },
-  // ---- REGRESSION-AB: the engine's late reply is no step of the user's next turn (a separate block; spec 15, "Late replies are no step of the user's turn"). The browser's engine
-  // answers on its own time, so each row holds whichever way the race goes: the shape after the undo is the same.
-  async 'chess-late'(o) {
-    const c = await openChat({ ...o, settings: MATRIX });
-    try {
-      const plies = () => c.pg.$$eval('.cx-moves .m', (els) => els.map((e) => e.textContent).filter(Boolean));
-      const waitPlies = async (n, ms = 60000) => { for (let t = 0; t < ms; t += 250) { if ((await plies()).length >= n) return true; await new Promise((r) => setTimeout(r, 250)); } return false; };
-      const settled = async (n) => { await waitPlies(n); await new Promise((r) => setTimeout(r, 600)); return plies(); };
-      // dlg.gms#006: e4, "make your move", "now the knight to f3", undo: the knight goes (and the reply to it, when it came), the engine's reply to e4 stays
-      await say(c, "Let's play chess"); await say(c, 'e4'); await say(c, 'Make your move.');
-      const k = await say(c, 'now the knight to f3');
-      check('chess-late (gms#006): the knight is played', /You play knight to f3|I play/.test(k) && await waitPlies(3), k.slice(0, 80));
-      await settled(4);
-      const u = await say(c, 'undo');
-      const after = await plies();
-      check('chess-late (gms#006): undo takes back the knight and keeps the engine\'s reply to e4 (two plies, my move)', /^OK, I took back your last move( and my reply)?\. It is your move\.$/.test(u) && after.length === 2 && after[0] === 'e4', `${u.slice(0, 80)} | ${after.join(' ')}`);
-      // dlg.gms#002: d4, "make your move", "hurry up", undo: back at the start, and the next move is playable
-      await say(c, 'new game'); await say(c, 'd4'); await say(c, 'Make your move.'); await say(c, 'Hurry up.');
-      await settled(2);
-      const u2 = await say(c, 'Undo.');
-      check('chess-late (gms#002): undo takes back my move and the reply: back at the start', /^OK, I took back your last move and my reply\. We are back at the start\. It is your move\.$/.test(u2) && (await plies()).length === 0, `${u2.slice(0, 100)} | ${(await plies()).join(' ')}`);
-      const n2 = await say(c, 'Knight to c3');
-      check('chess-late (gms#002): the next move is played (not "it is not your turn")', /You play knight to c3|I play/.test(n2) && (await plies())[0] === 'Nc3', `${n2.slice(0, 80)} | ${(await plies()).join(' ')}`);
-      // dlg.doc#035: "what did you do?" after an undo names the undo
-      await say(c, 'new game'); await say(c, 'e4'); await say(c, 'What is on the board?');
-      await say(c, 'Undo that.');
-      const d = await say(c, 'What did you do?');
-      check('chess-late (doc#035): "What did you do?" names the undo', /^You said "Undo that"/.test(d), d.slice(0, 100));
-      check('chess-late: no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-  },
   async music(o) {
     const c = await openChat({ ...o, settings: MATRIX });
     try {
@@ -521,38 +332,9 @@ export const SCENARIOS = {
       check('music: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
-  async 'restart-undo'(o) {
-    // RESTORE-1 (spec 15): a watchdog restart of the engine worker keeps the library timeline: undo walks back across it (fault hooks of test-webchat-budget.mjs)
-    const c = await openChat({ ...o, query: '?psys2test=1', settings: { ...MATRIX, timeLimits: { watchdogMs: 2000 } } });
-    const stats = () => c.pg.evaluate(() => JSON.parse(JSON.stringify(window.psys2.engineClient.stats)));
-    try {
-      await c.pg.evaluate(() => { window.__psys2Fault = { 'what is 3 plus 4': 'op' }; });
-      await say(c, 'I have 20 lei'); await say(c, 'I buy a ball'); await say(c, 'add milk to my shopping list');
-      await say(c, 'Play hangman with the word zebra'); await say(c, 'Is there a Z?');
-      const s0 = await stats();
-      await c.pg.type('input.p2-text', 'what is 3 plus 4', { delay: 0 }); await c.pg.keyboard.press('Enter');
-      await c.pg.waitForFunction(() => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing'), { timeout: 20000, polling: 30 });
-      await c.pg.waitForFunction((n) => window.psys2.engineClient.stats.kills.length > n, { timeout: 5000, polling: 20 }, s0.kills.length).catch(() => {});
-      const s1 = await stats();
-      check('restart-undo: the worker was replaced by the watchdog', s1.starts === s0.starts + 1 && s1.kills.length === s0.kills.length + 1, `starts ${s1.starts - s0.starts}`);
-      const u = [];
-      for (let i = 0; i < 3; i++) u.push(await say(c, 'undo'));
-      check('restart-undo: the first undo after the restart names the guess (not "nothing to undo")', /took back your last guess/.test(u[0]), u[0].slice(0, 80));
-      check('restart-undo: then the hangman game', /took back the new game/.test(u[1]), u[1].slice(0, 80));
-      check('restart-undo: then the milk, from another instance', /took that back: "add milk to my shopping list"/.test(u[2]), u[2].slice(0, 80));
-      const p = await say(c, 'undo');
-      check('restart-undo: then the purchase', /took that back: "I buy a ball"/.test(p), p.slice(0, 80));
-      check('restart-undo: the money is back to 20 lei', /20 lei/.test(await say(c, 'how much money do I have?')));
-      const last = await say(c, 'undo');
-      check('restart-undo: "I have 20 lei" goes too', /took that back: "I have 20 lei"/.test(last), last.slice(0, 80));
-      const end = await say(c, 'undo');
-      check('restart-undo: then nothing is left', /nothing more to undo/i.test(end), end.slice(0, 80));
-      check('restart-undo: no page errors', c.errors.length === 0, c.errors[0] ?? '');
-    } finally { await c.close(); }
-  },
 };
 
-// the document worlds' scenarios (scripts/test-webchat-docs.mjs)
+// the editor scenario (scripts/test-webchat-docs.mjs)
 Object.assign(SCENARIOS, docScenarios({ openChat, MATRIX, check, say }));
 // art.draw and diagram.sketch (scripts/test-webchat-draw-matrix.mjs)
 Object.assign(SCENARIOS, drawScenarios({ openChat, MATRIX, OPS, check, say }));

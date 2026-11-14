@@ -15,9 +15,9 @@ const open = () => matrix.createSession(sessionOptions(settingsForMode('rules'),
 const say = async (lines) => { const s = open(); const out = []; for (const l of lines) out.push(await s.send(l, {})); return { s, out, text: out.map((r) => r.text) }; };
 
 test('every instance has a namespace: the conversation, each game, each tab; the library holds qualified ids, the host sees bare ones', async () => {
-  const { s } = await say(['I have 20 lei', 'I buy a ball', "Let's play tic tac toe", 'center', 'open the drawing tab', 'draw a house']);
+  const { s } = await say(['I have 20 lei', 'I buy a ball', 'speak faster', 'open the drawing tab', 'draw a house']);
   const rs = s.isession.rs;
-  for (const id of ['session.conversation', 'games.tictactoe', 'art.draw']) {
+  for (const id of ['session.conversation', 'ui.shell', 'art.draw']) {
     const inst = rs.of(id);
     assert.equal(inst.ns, id, `${id} is its own namespace`);
     const facts = [...inst.raw.wires.keys()];

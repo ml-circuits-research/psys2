@@ -10,45 +10,45 @@
  * Without it all input is treated as English.
  */
 import { installTextGen } from './textgen.mjs?v=c5b4f3a539';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=7f9ce6a7a2';
-import { loadWorlds } from '../worlds/index.mjs?v=fb7e7505b9';
-import { validateWorldSet } from '../worlds/validate.mjs?v=916702f930';
-import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=7f9ce6a7a2';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=a0baba0c86';
+import { loadWorlds } from '../worlds/index.mjs?v=458064e683';
+import { validateWorldSet } from '../worlds/validate.mjs?v=cfb3bfc29f';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=a0baba0c86';
 import { createInterpreter } from '../interpreter/index.mjs?v=3fc6e5a91b';
 import { createReasoner } from '../reasoner/index.mjs?v=7a85f27b22';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=3d6269401c';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=482c0c3181';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=2bb37794c6';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=2891538f7b';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=d9469bade4';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=0db933aba4';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=58b0440b48';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=e27a57408f';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=916d085908';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=4b39ead121';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=7f9ce6a7a2';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=a0baba0c86';
 import { lexIndex } from '../worlds/lexicon.mjs?v=9a10989e46';
 import { perf } from '../formalizer/perf.mjs?v=8b829ee7df';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=f0c7a6e6b5';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=cc81fdd894';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=1a908889ba';
-import { checkValues } from './value-check.mjs?v=ba5315cd8b';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=cb4d93dc2a';
+import { checkValues } from './value-check.mjs?v=3252d34fc5';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3eed01f9f5';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=cfbc60f9f7';
-import { Dialogue } from './dialogue.mjs?v=6af983fc16';
+import { Discourse } from './discourse.mjs?v=1f6fb16ea7';
+import { Dialogue } from './dialogue.mjs?v=80e4a36c66';
 import { turnSteps } from './steps.mjs?v=cfff076267';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=7cc860e515';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=44a5c7c430';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=11177a0843';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=a3b8e9cda0';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=3ef6227864';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants } from './variants.mjs?v=545250d12e';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=7f9ce6a7a2';
-import { repairFromScene } from './scene-referents.mjs?v=297367708f';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=81c207378c';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=3c73cd9d8e';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f00d040b34';
+import { withVariants } from './variants.mjs?v=66321eedb4';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=a0baba0c86';
+import { repairFromScene } from './scene-referents.mjs?v=e95d683f4e';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=58c2aa574c';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=45aa6921b9';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=4912212754';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
-import { panel } from '../astra/where.mjs?v=72e99182f4';
+import { panel } from '../astra/where.mjs?v=970c7b26f1';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=3e8bdd8000';
 
@@ -227,7 +227,7 @@ function soundAlikes(text, tabWorld) {
 }
 
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
-const BUILTIN_TAB = { 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
+const BUILTIN_TAB = { 'docs.editor': 'editor' };
 
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
@@ -245,19 +245,6 @@ const DRY_MAX_WORDS = 25;
 export const LENIENT_MAX_STEPS = 600;   // checks of the leniency stage per message (one per variant or window tried); a step count, not a time, so the reading does not depend on machine speed
 
 const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
-
-/**
- * A game whose world state says it is still being played (a tic-tac-toe board with a free cell and no winner, chess or hangman with status "playing", the
- * guessing game while it asks), whichever world spoke last: a bare coordinate ("B1") is its move. The host's `activeGame` wins when it is set.
- */
-function runningGame(st, last) {
-  const g = last && st[last];
-  if (!g || typeof g !== 'object') return null;
-  const live = last === 'games.tictactoe' ? Array.isArray(g.board) && !g.winner && g.board.some((c) => !c)
-    : last === 'games.chess' || last === 'games.hangman' ? g.status === 'playing'
-    : last === 'games.guess' ? g.phase === 'asking' || g.phase === 'guessing' : false;
-  return live ? last : null;
-}
 
 /** What the trace and the phrase log keep of a turn's compute budget: total ticks, the five busiest sites, and the site that ran out (if any). */
 export function budgetReport(b, e = b.exceeded) {
@@ -330,7 +317,7 @@ export class DialogSession {
    */
   forkForValidation() {
     const s = Object.create(DialogSession.prototype);
-    s.engine = this.engine; s.isession = this.isession.clone(); s.isession.sessionFacts = this.isession.sessionFacts; s._recentWorlds = [...(this._recentWorlds ?? [])]; s._lastGame = this._lastGame;
+    s.engine = this.engine; s.isession = this.isession.clone(); s.isession.sessionFacts = this.isession.sessionFacts; s._recentWorlds = [...(this._recentWorlds ?? [])];
     return s;
   }
 
@@ -509,13 +496,12 @@ export class DialogSession {
   }
 
   context() {
-    const BUILTIN = { robot: 'ui.avatar', avatar: 'ui.avatar', editor: 'docs.editor', tictactoe: 'games.tictactoe', guess: 'games.guess', hangman: 'games.hangman' };
+    const BUILTIN = { robot: 'ui.avatar', avatar: 'ui.avatar', editor: 'docs.editor', documents: 'docs.editor' };
     const st = this.isession.state;
     const activeTab = st['ui.shell']?.activeTab ?? null;
     const tabWorld = activeTab ? (this.engine.set.list().find((w) => w.tab?.id === activeTab)?.id ?? BUILTIN[activeTab] ?? null) : null;
     const modalWorld = Object.keys(st).find((id) => st[id]?.inputMode) ?? null;
-    if (tabWorld?.startsWith('games.')) this._lastGame = tabWorld;   // opening a game tab ("lets play tic tac toe") makes it the game this session plays
-    const gameWorld = st['ui.shell']?.activeGame ?? runningGame(st, this._lastGame);
+    const gameWorld = st['ui.shell']?.activeGame ?? null;
     const recentWorlds = [...(this._recentWorlds ?? [])];
     const ambientWorlds = this.engine.set.list().filter((w) => w.ambient).map((w) => w.id);   // worlds of an always-visible view (the avatar): present on every tab
     const stepWorlds = this.discourse?.actions?.[0]?.worlds ?? [], redoWorlds = this.discourse?.redoStack?.at?.(-1)?.worlds ?? [];   // the worlds of the newest step on the timeline, and of the newest undone step: "undo" / "redo" follow them whichever tab is open
@@ -558,8 +544,6 @@ export class DialogSession {
     // an undo / redo moves along the timeline, it does not put its world in charge of the conversation ("undo that" answered by the tab's world with "nothing to take back"
     // must not make that world the one that reads the next question)
     const ids = segments.filter((s) => !/\.(?:undo|redo)(?:\.|$)/.test(s.match?.patternId ?? '')).map((s) => s.match?.worldId).filter((w) => w && w !== 'ui.shell' && w !== 'kids.common');
-    const game = ids.find((w) => w.startsWith('games.'));
-    if (game) this._lastGame = game;   // the last game this session played: while its state says it is running, bare coordinates are its moves (context().gameWorld)
     this._recentWorlds = [...new Set([...ids.reverse(), ...(this._recentWorlds ?? [])])].slice(0, 3);
   }
 
@@ -1336,7 +1320,7 @@ export class DialogSession {
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
     let rs = null;
     try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
-    return { v: 1, discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null, ...(rs ? { rs } : {}) };
+    return { v: 1, discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
@@ -1346,7 +1330,6 @@ export class DialogSession {
     if (mem.dialogue) this.dialogue.load(mem.dialogue);
     if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
     if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
-    if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
     if (mem.rs && this.isession.rs) {   // after the world states: the timeline of the matrix reasoner
       // the world states the host put in place are the truth: the library derives a matrix world's state from its instances, which never heard of what the host set (the open tab, a toggle), so replaying the timeline would put the older state back
       const keep = structuredClone(this.isession.state);
@@ -1464,7 +1447,7 @@ export class DialogSession {
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
     if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=bebef0d927').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
-    if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.reader (spec 26); unavailable until the library ships them
+    if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
     { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
@@ -1556,19 +1539,6 @@ export class DialogSession {
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
       if (pre) formal = { ...pre.res, dispatch: null };
-    }
-    if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
-      // RD10: a bare coordinate ("B1") with no game running and no game tab open is a game move without a game: offer to start one
-      const cm = /^\s*(?:play\s+)?([a-h])\s*([1-8])\s*[.!]?\s*$/i.exec(english);
-      const gctx = this.context();
-      if (cm && !gctx.gameWorld && !String(gctx.tabWorld ?? '').startsWith('games.')) {
-        const sq = `${cm[1]}${cm[2]}`, label = sq.toUpperCase();
-        const ttt = /^[a-c][1-3]$/i.test(sq);
-        const question = ttt ? 'Do you want to play tic-tac-toe or chess?' : 'Do you want to play chess?';
-        disc.pending = { type: 'offer', accept: 'rewrite', rewrite: ttt ? `play tic tac toe and ${sq}` : `play chess and play ${sq}`, world: ttt ? 'games.tictactoe' : 'games.chess', expected: 'yes/no', question, turn: this._msg };
-        formal = { segments: [], wires: [] };
-        meta = { reply: `${label} looks like a game move. ${question}`, status: 'unparsed', info: { kind: 'offer', offer: 'game', coordinate: label } };
-      }
     }
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       // "open the music tab instead": a trailing softener the command does not need

@@ -16,7 +16,7 @@ export const TABLE_MIN = 10, GROUP_MIN = 8;
 
 /** Worlds that do not hold knowledge of the world at large: the application, the user, the session, the shared phrase library, platform fixtures of a game or a sample. */
 export const EXEMPT = {
-  'ui.help': 'facts about the application', 'ui.shell': 'facts about the application', 'user.profile': 'facts about the user', 'meta.worlds': 'facts about the worlds',
+  'ui.help': 'facts about the application', 'ui.shell': 'facts about the application', 'meta.worlds': 'facts about the worlds',
   'lang.common': 'shared phrase library (ADR-007)', core: 'platform core', 'session.conversation': 'the session', 'session.dialogue': 'the session', 'session.things': 'the session',
 };
 /** Item names that are the world's own sample data (stays, marked as such) or rules of a game. */

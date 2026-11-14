@@ -38,7 +38,7 @@
  */
 
 import { en } from '../lang/en.mjs?v=c93f946ea8';
-import { completeOn } from './completeness.mjs?v=7f9ce6a7a2';
+import { completeOn } from './completeness.mjs?v=a0baba0c86';
 
 /**
  * The library's decision for several worlds that read one sentence (sopworld 0.104 `arbitrate` decides with std.decide kind `world`: coverage, then the open tab, then priority). The host
@@ -69,7 +69,7 @@ export function contextFromFocus(focus = {}) {
 }
 
 /** Tabs of worlds without a `tab=` manifest key (the host's built-in tabs). */
-export const BUILTIN_TAB_WORLDS = { 'ui.avatar': ['avatar', 'robot'], 'docs.editor': ['editor', 'document', 'doc'], 'games.tictactoe': ['tic tac toe', 'tictactoe', 'tic-tac-toe', 'noughts and crosses'], 'games.guess': ['twenty questions', '20 questions', 'guess the animal'], 'games.hangman': ['hangman'] };
+export const BUILTIN_TAB_WORLDS = { 'ui.avatar': ['avatar', 'robot'], 'docs.editor': ['editor', 'document', 'doc'] };
 
 /**
  * Naming tables of a world set (memoized): `names` world id -> phrases (lowercase) that name the world's object or tab, and `tabWorlds` the ids

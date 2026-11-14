@@ -61,12 +61,6 @@
     action=doc.fromList
     doc="An operation of this world that is not an act (own.mjs: fromList)."
 
-@op.docs.editor.report core.operation
-    impl=report
-    semantics=action
-    action=doc.report
-    doc="An operation of this world that is not an act (own.mjs: report)."
-
 @op.docs.editor.whatSelected core.operation
     impl=whatSelected
     semantics=action
@@ -150,6 +144,18 @@
     semantics=action
     action=doc.make
     doc="An operation of this world that is not an act (own.mjs: makeDocument)."
+
+@op.docs.editor.digest core.operation
+    impl=digest
+    semantics=action
+    action=doc.digest
+    doc="An operation of this world that is not an act (own.mjs: digest)."
+
+@op.docs.editor.compose core.operation
+    impl=compose
+    semantics=action
+    action=doc.compose
+    doc="An operation of this world that is not an act (own.mjs: compose)."
 
 @op.docs.editor.make core.operation
     impl=make

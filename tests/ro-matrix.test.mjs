@@ -47,13 +47,3 @@ for (const reasoner of ['matrix', 'ops']) {
     });
   }
 }
-
-test('the English profile reads "how old am I?" and refuses an impossible age with the reason', async () => {
-  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
-  const s = engine.createSession(sessionOptions(settings, { language: 'en' }));
-  const say = async (t) => (await s.send(t, { language: 'en' })).text;
-  assert.match(await say('how old am I?'), /do not know your age/);
-  assert.match(await say('I am 8 years old'), /8/);
-  assert.equal(await say('how old am I?'), 'You are 8 years old.');
-  assert.match(await say('I am 300 years old'), /^That does not add up\. No one is 300 years old\./);
-});

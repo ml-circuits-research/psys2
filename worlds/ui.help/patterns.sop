@@ -104,43 +104,6 @@
     example="What does this tab do?"
     example="Explain this tab."
 
-@pat.ui.help.game core.pattern
-    match="how [do|can|would|should] [i|we|you] [play|win] [this|the|it|that|a]? [game]?"
-    emit="@{_} core.request action=ui.helpGame"
-    kind=question
-    priority=12
-    example="How do I play?"
-    example="How do I play this game?"
-    example="How can I win?"
-
-@pat.ui.help.game2 core.pattern
-    match="[what_are_the_rules|what_are_the_rules_of_this_game|what_are_the_rules_of_the_game|explain_the_rules|tell_me_the_rules|show_me_the_rules|what_is_the_goal|what_is_the_aim|what_is_the_goal_of_the_game|how_does_this_game_work|how_does_the_game_work|how_to_play|how_to_win|explain_the_game|explain_this_game|tell_me_how_to_play|teach_me_to_play|how_do_you_win|what_do_i_do_in_this_game|what_do_i_do_here]"
-    emit="@{_} core.request action=ui.helpGame"
-    kind=question
-    priority=12
-    example="What are the rules?"
-    example="How to play?"
-    example="Explain the rules."
-
-@pat.ui.help.game3 core.pattern
-    canonical="How do I play hangman?"
-    match="how [do|can|would|should] [i|we|you] play [the|a|some|an]? {g:lex.ui.help.games} [game]?"
-    emit="@{_} core.request action=ui.helpGame arg.game={g}"
-    kind=question
-    priority=13
-    example="How do I play hangman?"
-    example="How do I play tic tac toe?"
-    example="How can I play chess?"
-
-@pat.ui.help.game4 core.pattern
-    canonical="Explain the rules of chess."
-    match="[$ui.help.g9_what_are] [the]? [rules|rules_of|rules_for|goal_of|game] [of|for]? [the]? {g:lex.ui.help.games} [game]?"
-    emit="@{_} core.request action=ui.helpGame arg.game={g}"
-    kind=question
-    priority=13
-    example="What are the rules of hangman?"
-    example="Explain the rules of chess."
-
 @pat.ui.help.how core.pattern
     canonical="How do I change the eyes?"
     match="how [do|can|could|would|should|will] [i|we|you] {what:words(8)}"
@@ -294,46 +257,6 @@
     example="Next examples please"
     example="Different ideas"
 
-@pat.ui.help.game5 core.pattern
-    match="[$lang.lead.polite|$lang.lead.filler|tell_me]? [$ui.help.g2_how_do_i_play] [the|a|an|some]? {g:lex.ui.help.games} [game]? [$ui.help.g7_to_me]?"
-    emit="@{_} core.request action=ui.helpGame arg.game={g}"
-    kind=question
-    priority=13
-    example="How to play chess pls"
-    example="Explain chess to me"
-    example="I want to learn chess how do i start"
-    example="How do i move in chess"
-    example="How u play chess"
-    example="Tell me how to play chess"
-    example="Could you explain how i play chess"
-
-@pat.ui.help.game6 core.pattern
-    match="[uh|hm|hey|so|yo]? [$ui.help.g1_what_are]? [$ui.help.g8_the]? [$ui.help.g6_rules_of] [of|for|to|in|on]? [the]? {g:lex.ui.help.games} [game]? [$ui.help.g3_how_to_play]? [$lang.tail.filler|how_to_play|explain|rules|explained]?"
-    emit="@{_} core.request action=ui.helpGame arg.game={g}"
-    kind=question
-    priority=12
-    example="Chess rules pls"
-    example="What are the chess rules"
-    example="Rules of chess?"
-    example="What r the rules of chess"
-    example="Could you go over the chess rules"
-
-@pat.ui.help.game6b core.pattern
-    match="[uh|hm|hey|so|yo]? [$ui.help.g1_what_are]? [$ui.help.g8_the]? [the]? {g:lex.ui.help.games} [game]? [$ui.help.g4_how_to_play] [$lang.tail.filler|how_to_play|explain|rules|explained]?"
-    emit="@{_} core.request action=ui.helpGame arg.game={g}"
-    kind=question
-    priority=12
-    example="Chess how to play"
-
-@pat.ui.help.game7 core.pattern
-    match="[$lang.lead.polite|$lang.lead.filler|tell_me]? [what_are_the_rules|what_r_the_rules|whats_the_goal|what_is_the_goal|what_is_the_aim|what_are_the_rules_of_this_game|what_are_the_rules_of_the_game|explain_the_rules|explain_the_game|explain_this_game|explain_how_to_play|tell_me_the_rules|tell_me_how_to_play|show_me_the_rules|show_me_how_to_play|how_to_play|how_do_i_play|how_do_u_play|how_u_play|how_do_you_play|how_can_i_play|how_do_i_win|how_do_u_win|how_do_you_win|how_to_win|how_can_i_win|how_can_u_win|how_does_this_game_work|how_does_this_work_as_a_game|how_do_i_win_this|what_do_i_do_in_this_game|what_do_i_do_here_in_this_game|i_dont_know_how_to_play|i_do_not_know_how_to_play|dont_know_how_to_play|i_dont_know_the_rules|teach_me_how_to_play|teach_me_the_rules|teach_me_to_play|teach_me_the_game|rules|the_rules|game_rules|the_game_rules|rules_of_the_game|rules_of_this_game|instructions|game_instructions|goal_of_the_game|goal_of_this_game|aim_of_the_game|how_it_works|how_to_play_this_game|how_to_play_the_game|how_to_play_it|how_do_i_play_it|how_do_i_play_this|how_do_i_play_the_game|how_do_i_play_this_game|how_do_we_play|how_do_we_play_this|how_do_we_play_this_game|how_do_we_play_the_game] [$lang.tail.filler|explain|in_detail|first]?"
-    emit="@{_} core.request action=ui.helpGame"
-    kind=question
-    priority=12
-    example="Rules pls"
-    example="Can u explain how to play"
-    example="I dont know how to play"
-
 @pat.ui.help.how4 core.pattern
     match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|i_would_like_to_know|let_me_know|can_you_explain|could_you_explain|can_u_explain|could_u_explain|explain|show_me|teach_me|show_me_how|help_me_understand|tell_me_about|please_explain|please_show_me|can_you_show_me|can_u_show_me|could_you_show_me|i_dont_know|i_do_not_know|i_dont_know_how|dont_know|hey|so|ok_so|um|uh|well|yo] how [to|do_i|can_i|do_you|can_you|do_u|can_u|should_i|would_i|could_i|do_we|can_we|does_one|i_can|i_could|i|u|you|we|one|do_i_even|can_i_even|would_you|could_you|should_we|would_we|could_we|will_i|will_we|is_it_possible_to|am_i_supposed_to|are_you_supposed_to|are_we_supposed_to] {what:words(8)} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
@@ -448,41 +371,6 @@
     priority=7
     example="How to draw a circle pls"
 
-@pat.ui.help.game3.twenty core.pattern
-    match="how [do|can|would|should] [i|we|you] play [the|a|some|an]? [20_questions|20_question|20_q] [game]?"
-    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
-    kind=question
-    priority=13
-    example="What are the rules of twenty questions"
-
-@pat.ui.help.game4.twenty core.pattern
-    match="[$ui.help.g9_what_are] [the]? [rules|rules_of|rules_for|goal_of|game] [of|for]? [the]? [20_questions|20_question|20_q] [game]?"
-    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
-    kind=question
-    priority=13
-    example="What are the rules of twenty questions"
-
-@pat.ui.help.game5.twenty core.pattern
-    match="[$lang.lead.polite|$lang.lead.filler|tell_me]? [$ui.help.g2_how_do_i_play] [the|a|an|some]? [20_questions|20_question|20_q] [game]? [$ui.help.g7_to_me]?"
-    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
-    kind=question
-    priority=13
-    example="How do i play twenty questions"
-
-@pat.ui.help.game6.twenty core.pattern
-    match="[uh|hm|hey|so|yo]? [$ui.help.g1_what_are]? [$ui.help.g8_the]? [$ui.help.g6_rules_of] [of|for|to|in|on]? [the]? [20_questions|20_question|20_q] [game]? [$ui.help.g3_how_to_play]? [$lang.tail.filler|how_to_play|explain|rules|explained]?"
-    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
-    kind=question
-    priority=12
-    example="What are the rules of twenty questions"
-
-@pat.ui.help.game6b.twenty core.pattern
-    match="[uh|hm|hey|so|yo]? [$ui.help.g1_what_are]? [$ui.help.g8_the]? [the]? [20_questions|20_question|20_q] [game]? [$ui.help.g4_how_to_play] [$lang.tail.filler|how_to_play|explain|rules|explained]?"
-    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
-    kind=question
-    priority=12
-    example="What are the rules of twenty questions"
-
 @pat.ui.help.me3 core.pattern
     match="[help|help_me|please_help|halp|oh_no|um|uh|hey] [im_lost|i_am_lost|im_confused|i_am_confused|im_stuck|i_am_stuck|i_need_help|im_so_lost|i_am_so_lost|i_dont_know_what_to_do|where_do_i_start|what_now|what_do_i_do|im_totally_lost|i_am_totally_lost|i_feel_lost|i_dont_get_it|i_dont_understand] [pls|plz|now|here]?"
     emit="@{_} core.request action=ui.helpMe"
@@ -531,30 +419,6 @@
     example="Are you ChatGPT?"
     example="Is this an LLM?"
     example="Do you rely on a server?"
-
-@pat.ui.help.game7p.ttt core.pattern
-    canonical="What are tic tac toe's rules?"
-    match="[$ui.help.g9_what_are]? [the]? [$lang.game.poss.tictactoe] [$lang.game.rules]"
-    emit="@{_} core.request action=ui.helpGame arg.game=\"tic tac toe\""
-    kind=question
-    priority=13
-    example="What are tic tac toe's rules?"
-
-@pat.ui.help.game7p.chess core.pattern
-    canonical="What are chess's rules?"
-    match="[$ui.help.g9_what_are]? [the]? [$lang.game.poss.chess] [$lang.game.rules]"
-    emit="@{_} core.request action=ui.helpGame arg.game=chess"
-    kind=question
-    priority=13
-    example="What are chess's rules?"
-
-@pat.ui.help.game7p.hangman core.pattern
-    canonical="What are hangman's rules?"
-    match="[$ui.help.g9_what_are]? [the]? [$lang.game.poss.hangman] [$lang.game.rules]"
-    emit="@{_} core.request action=ui.helpGame arg.game=hangman"
-    kind=question
-    priority=13
-    example="What are hangman's rules?"
 
 @pat.ui.help.area core.pattern
     canonical="What can you do in the map?"

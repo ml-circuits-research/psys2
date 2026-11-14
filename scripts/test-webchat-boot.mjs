@@ -58,7 +58,7 @@ export function makeServer(getDir) {
 }
 const pathOf = (u) => u.split('?')[0];
 /** The vendor directories of the worlds' tabs (LAZY LOADING): none of them is fetched at a start except the open tab's (the avatar has none). */
-const VENDOR_RE = /^\/vendor\/(chess|map|editor|charts|draw|music|documents)\//;
+const VENDOR_RE = /^\/vendor\/(map|editor|charts|draw|music)\//;
 const bundlesOf = (log) => [...new Set(log.filter((x) => x.status !== 404).map((x) => /^\/worlds\/([^/]+)\/bundle\.json/.exec(x.url)?.[1]).filter(Boolean))];
 const startSet = async (site, tabWorld) => {   // what the index says a start with this tab open loads: always-loaded worlds and the tab's world with its imports
   const idx = JSON.parse(await readFile(path.join(site, 'worlds/index.json'), 'utf8'));
@@ -163,9 +163,9 @@ export const SCENARIOS = {
       check('lazy: the map world is loaded now and the Map tab is on screen', (await loaded()).includes('geo.map') && await pg.evaluate(() => window.psys2.session.state()['ui.shell']?.activeTab === 'map' && !!document.querySelector('#p2-panel-map .p2-tabbody')));
       const r2 = await say('show me paris');
       check('lazy: a second map message fetches no world and no vendor asset again', bundlesOf(r2).length === 0 && !r2.some((x) => VENDOR_RE.test(pathOf(x.url))), r2.map((x) => pathOf(x.url)).slice(0, 4).join(', '));
-      check('lazy: no other tab\'s vendor assets were fetched meanwhile', !s.log.some((x) => /^\/vendor\/(chess|editor|charts|draw|music|documents)\//.test(x.url)));
-      const r3 = await say('open the chess tab');
-      check('lazy: "open the chess tab" loads the chess world and its engine files', (bundlesOf(r3).includes('games.chess') || (await loaded()).includes('games.chess')) && r3.some((x) => /^\/vendor\/chess\//.test(x.url)), r3.map((x) => pathOf(x.url)).join(', '));
+      check('lazy: no other tab\'s vendor assets were fetched meanwhile', !s.log.some((x) => /^\/vendor\/(editor|charts|draw|music)\//.test(x.url)));
+      const r3 = await say('open the charts tab');
+      check('lazy: "open the charts tab" loads the charts world and its library files', (bundlesOf(r3).includes('data.charts') || (await loaded()).includes('data.charts')) && r3.some((x) => /^\/vendor\/charts\//.test(x.url)), r3.map((x) => pathOf(x.url)).join(', '));
       const popups = await popupSeen(pg);
       check('lazy: the popup said what loads, in plain words', popups.every(plainSentence), JSON.stringify(popups.slice(0, 5)));
       await pg.close(); s.srv.close(); await browser.close(); await rm(tmp, { recursive: true, force: true });

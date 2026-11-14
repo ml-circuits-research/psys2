@@ -20,7 +20,7 @@ test('functions: the matrix worlds register no host function (their fns.mjs entr
     assert.equal(b.functions().length, 0, `${w.id}: declared functions`);
     n++;
   }
-  assert.ok(n >= 16);
+  assert.ok(n >= 8);
 });
 
 test('R14.1: a split with a frame the library cannot read is no reading; the host does not count parts against frames', () => {

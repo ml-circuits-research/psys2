@@ -108,17 +108,6 @@
     tabPriority=25
     example="Turn my shopping list into a document."
 
-@pat.docs.editor.report core.pattern
-    canonical="Make a document about farm animals."
-    canonical="Write a report about sea animals."
-    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write|make|create|prepare|compose|build] [me]? [a|the]? [report|document|doc|summary|page] [about|on] {t:rest}"
-    emit="@{_} core.request action=doc.report arg.topic=\"{t}\""
-    kind=request
-    priority=12
-    tabPriority=28
-    example="Write a report about sea animals."
-    example="Make a document about farm animals."
-
 @pat.docs.editor.holdings core.pattern
     canonical="Write down what Tom and Ana have."
     canonical="Write down what everyone has."
@@ -393,3 +382,75 @@
     priority=13
     tabPriority=29
     example="Fill the table with sea animals."
+
+# ---- the summary and the composition (spec 26), moved from docs.reader
+@pat.docs.editor.digest.doc core.pattern
+    match="[can_you|could_you]? [condense|digest|abridge|summarize|summarise] [the|this|that|my] [open]? {d:lex.docs.editor.docwords} [in_a_paragraph|in_a_few_sentences]?"
+    emit="@{_} core.request action=doc.digest"
+    kind=request
+    priority=11
+    example="Condense the document in a paragraph."
+
+@pat.docs.editor.digest.text core.pattern
+    match="[can_you|could_you]? [summarize|summarise|condense] [the_following|this_text|following_text] {t:rest}"
+    emit="@{_} core.request action=doc.digest arg.t=\"{t}\""
+    kind=request
+    priority=18
+    tabPriority=26
+    example="Summarize the following: Volcanoes form where hot rock reaches the surface. They can erupt for years."
+
+@pat.docs.editor.compose.any core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on|of] {a:lex.docs.editor.anything} [things]?"
+    emit="@{_} core.request action=doc.compose arg.type={k}"
+    kind=request
+    priority=20
+    tabPriority=28
+    example="Write a composition about anything."
+
+@pat.docs.editor.compose.topic core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] {topic:words}"
+    emit="@{_} core.request action=doc.compose arg.type={k} arg.topic=\"{topic}\""
+    kind=request
+    priority=17
+    tabPriority=25
+    example="Write an essay about volcanoes."
+
+@pat.docs.editor.compose.shape core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides] [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections]"
+    emit="@{_} core.request action=doc.compose arg.type={k} arg.topic=\"{topic}\" arg.chapters={c} arg.subchapters={s}"
+    kind=request
+    priority=21
+    tabPriority=29
+    example="Write an essay about volcanoes with 3 chapters of 2 subchapters."
+
+@pat.docs.editor.compose.shape.size core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides] [of|with|each_with|and]? {s:number} [subchapters|subsections|sub_chapters|sections] [about|of|around|roughly]? {w:number} words"
+    emit="@{_} core.request action=doc.compose arg.type={k} arg.topic=\"{topic}\" arg.chapters={c} arg.subchapters={s} arg.words={w}"
+    kind=request
+    priority=22
+    tabPriority=30
+    example="Write an essay about volcanoes with 3 chapters of 2 subchapters, about 600 words."
+
+@pat.docs.editor.compose.size core.pattern
+    match="[can_you|could_you]? [write|compose|create] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] {topic:words} [of|with|about|around|roughly] {w:number} words"
+    emit="@{_} core.request action=doc.compose arg.type={k} arg.topic=\"{topic}\" arg.words={w}"
+    kind=request
+    priority=19
+    tabPriority=27
+    example="Write an essay about volcanoes of 400 words."
+
+@pat.docs.editor.compose.type core.pattern
+    match="[can_you|could_you]? [write|compose|create|make] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes}"
+    emit="@{_} core.request action=doc.compose arg.type={k}"
+    kind=request
+    priority=16
+    tabPriority=24
+    example="Write a short story."
+
+@pat.docs.editor.compose.sections core.pattern
+    match="[can_you|could_you]? [write|compose|create|make] [me]? [a|an|the]? [short|little|long|brief]? {k:lex.docs.editor.doctypes} [about|on] {topic:words} [with|of]? {c:number} [chapters|sections|slides]"
+    emit="@{_} core.request action=doc.compose arg.type={k} arg.topic=\"{topic}\" arg.chapters={c}"
+    kind=request
+    priority=20
+    tabPriority=28
+    example="Make a presentation about the moon with 5 sections."

@@ -21,7 +21,7 @@ function restarted(old, eng) {
 }
 const wiresOf = (s) => Object.fromEntries([...s.isession.rs.insts].map(([id, i]) => [id, [...i.world.wires.values()].map((w) => `${w.id}|${w.type}|${JSON.stringify(w.attrs)}`).sort()]));
 
-const SCRIPT = ['Ana has 5 lei', 'Ana buys a ball', 'open the drawing tab', 'Draw a house', 'Make the house red', 'Draw a cat', 'play tic tac toe', 'I play the center', 'I play the top left'];
+const SCRIPT = ['Ana has 5 lei', 'Ana buys a ball', 'open the drawing tab', 'Draw a house', 'Make the house red', 'Draw a cat', 'Tom has 4 lei', 'Tom buys an apple', 'Tom buys a kite'];
 
 test('the record is plain JSON, bounded and reports its size', async () => {
   const s = engine.createSession({ language: 'en' });

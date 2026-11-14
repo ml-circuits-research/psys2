@@ -69,7 +69,7 @@ export function contextFromFocus(focus = {}) {
 }
 
 /** Tabs of worlds without a `tab=` manifest key (the host's built-in tabs). */
-export const BUILTIN_TAB_WORLDS = { 'ui.avatar': ['avatar', 'robot'], 'docs.editor': ['editor', 'document', 'doc'], 'games.tictactoe': ['tic tac toe', 'tictactoe', 'tic-tac-toe', 'noughts and crosses'], 'games.guess': ['twenty questions', '20 questions', 'guess the animal'], 'games.hangman': ['hangman'] };
+export const BUILTIN_TAB_WORLDS = { 'ui.avatar': ['avatar', 'robot'], 'docs.editor': ['editor', 'document', 'doc'] };
 
 /**
  * Naming tables of a world set (memoized): `names` world id -> phrases (lowercase) that name the world's object or tab, and `tabWorlds` the ids

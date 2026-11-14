@@ -196,19 +196,6 @@
     expectEffect=speech.say
     session=g
 
-@t.docs.editor.n38 core.test
-    input="Write a report about sea animals"
-    expect="sea animals"
-    expectState="blocks.0.kind=paragraph"
-    expectState="ui.shell:activeTab=editor"
-    expectEffect=speech.say
-    session=h
-
-@t.docs.editor.n39 core.test
-    input="Write a report about unicorns"
-    expectStatus=missing
-    session=h2
-
 @t.docs.editor.n40 core.test
     input="Tom has 5 apples. Ana gives him 3 apples. Mia has 2 pears."
     expect="OK"
@@ -542,7 +529,7 @@
 
 @t.docs.editor.dm01 core.test
     input="Open the editor tab."
-    expect="Editor"
+    expect="Documents"
     session=dm
 
 @t.docs.editor.dm02 core.test

@@ -261,12 +261,11 @@ const activeTabName = (ctx) => (/on the (.+?) tab/.exec(activeTabText(ctx))?.[1]
  * (ui.whichTab); on the Drawing tab, and on any tab not listed here, the drawing board answers.
  */
 const SHARED = {
-  undo: { editor: ['doc.undo', {}], chess: ['chess.undo', { n: '1', bare: 'true' }], music: ['music.melodyUndo', {}] },
+  undo: { editor: ['doc.undo', {}], music: ['music.melodyUndo', {}] },
   redo: { editor: ['doc.redo', {}] },
   clear: { editor: ['doc.clear', {}] },
   deselect: { editor: ['doc.unselect', {}] },
   removeIt: { editor: ['doc.deleteTarget', { t: 'it' }] },
-  flip: { chess: ['chess.flip', {}] },
 };
 function shared(ctx, what) {
   const entry = SHARED[what]?.[activeTabName(ctx)];

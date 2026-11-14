@@ -26,12 +26,12 @@ import { touchedCount } from './followup.mjs';
 export const FRAME_LIMIT = 5;
 
 /** Worlds whose commands are never remembered as frames: navigation, help, games (own state machines), shared vocabulary. */
-const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'kids.common' || w === 'core' || w.startsWith('games.');
+const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'kids.common' || w === 'core';
 
 /** Worlds that never count as a conversation topic and whose state changes are not "actions" (navigation, help, shared vocabulary). */
 const NO_TOPIC = new Set(['ui.shell', 'ui.help', 'kids.common', 'core']);
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
-const BUILTIN_TAB = { 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
+const BUILTIN_TAB = { 'docs.editor': 'editor' };
 /** First words of an utterance that is a real command or question, not a list item. */
 const UNDO = /^(?:undo|undo that|undo it|take that back|take it back|revert that|cancel that purchase)$/;
 const META_SKIP = new Set(['add', 'remove', 'delete', 'show', 'open', 'what', 'who', 'where', 'when', 'why', 'how', 'undo', 'redo', 'draw', 'play', 'tell', 'is', 'are', 'can', 'do', 'does', 'please', 'make', 'go', 'clear', 'cross', 'check']);
@@ -411,7 +411,7 @@ export class Discourse {
 
   /**
    * Navigation is a conversation topic too: when a turn brought another tab forward, the world of that tab becomes the newest topic
-   * ("open the charts tab", "let's play hangman"), so "where were we?" can go back to it. A turn made of "back to <something>" that
+   * ("open the charts tab"), so "where were we?" can go back to it. A turn made of "back to <something>" that
    * ended on another tab counts as an explicit return (a following "where were we?" stays there, spec 11 section 10).
    */
   noteNavigation({ text, tabBefore, tabAfter, turn }) {
@@ -557,7 +557,7 @@ export class Discourse {
     if (!worlds.length) return null;
     if (!frames.length) {   // a game's turn (games keep their own state machines: no frames)
       if (kind === 'undo') {
-        const w = worlds.find((x) => x.startsWith('games.')) ?? worlds[0], prev = this.prevByWorld?.[w];
+        const w = worlds[0], prev = this.prevByWorld?.[w];
         this.redoStack.push({ turn, worlds, pre: Object.fromEntries(worlds.map((id) => [id, before[id]])), act: null, say: prev && !/undo|take back|revert|retract|rewind/i.test(prev.text) ? { text: prev.text, reply: prev.reply, turn: prev.turn } : null });
         if (this.redoStack.length > 10) this.redoStack.shift();
       } else if (kind !== 'redo' && kind !== 'keep') this.redoStack = [];
@@ -769,7 +769,7 @@ export class Discourse {
       if (env.status === 'supported' && env.value) return { reply: env.value, info: { kind: 'undo', of: null, via: 'core.matrix' } };
     }
     // one timeline across the worlds' instances (spec 15): the newest entry (one request of the user) goes back, whichever world it belonged to, and the reply says
-    // what it was, in the words of that world (a game's "took back your last guess") or by quoting what the user said (their own words, never the English reading)
+    // what it was, in the words of that world or by quoting what the user said (their own words, never the English reading)
     const last = rs.turns.at(-1), turn0 = last.turn;
     const undoWorld = last.worlds?.[0] ?? null;
     const noted = (reply) => { if (undoWorld && reply) this.noteWorld(undoWorld, text, reply, d._msg); };   // "What did you do?" afterwards names the undo, as it does when the world undoes by itself
@@ -919,11 +919,9 @@ export class Discourse {
     return this._say([{ text: 'OK, I took back ', translate: true }, this._quoted(act.turn, act.text), { text: ' and what came after it.', translate: true }], { kind: 'undo', of: act.text, through: true });
   }
 
-  /** True while a game that asks or expects yes/no is on: the guessing game in progress, or a game that is the active game or tab of the host. */
+  /** True while a game that asks or expects yes/no is on: the active game of the host (no world has one since the tab cut of 2026-11-15; the mechanism stays for a future games approach). */
   _gameAsksYesNo() {
-    const st = this.dialog.isession.state, ctx = this.dialog.context();
-    if (['asking', 'guessing', 'learning'].includes(st['games.guess']?.phase)) return true;
-    return !!ctx.gameWorld || ['guess', 'tictactoe', 'hangman', 'chess'].includes(ctx.activeTab);
+    return !!this.dialog.context().gameWorld;
   }
 
   _cancel(pend) {
@@ -932,32 +930,8 @@ export class Discourse {
     return { reply: dropped ? 'OK, never mind. I dropped that question; nothing was changed.' : 'OK, never mind.', info: { kind: 'cancel', dropped } };
   }
 
-  /** The game the user is playing now (open tab or last world), or null. */
-  _activeGame() {
-    const ctx = this.dialog.context();
-    return [ctx.gameWorld, ctx.tabWorld, this.lastWorld].find((w) => w?.startsWith('games.')) ?? null;
-  }
-
-  /**
-   * "that's wrong" / "not what I asked": apologise and, when an action can be taken back, offer to undo it. Inside a game the game decides:
-   * chess and tic-tac-toe offer to take back the last move (the world's own "undo", through the normal pipeline); the guessing game keeps its
-   * answers (the complaint is not a "no") and says how to correct one; when the game itself asked the question ("is it a dog?" and
-   * "that's wrong") or hangman is on, the phrase is the game's own answer and goes to the world.
-   */
+  /** "that's wrong" / "not what I asked": apologise and, when an action can be taken back, offer to undo it. */
   _feedback(t = '') {
-    const game = this._activeGame();
-    const st = this.dialog.isession.state;
-    if (game) {
-      const phase = st[game]?.phase;
-      if (game === 'games.hangman' || (game === 'games.guess' && phase !== 'asking')) return null;   // an answer of the game
-      const info = { kind: 'feedback', polarity: 'negative', game };
-      if (game === 'games.guess' && /^(?:no|nope|nah|oh no)\b/.test(t)) return null;   // "no, that's wrong" answers the question with a no
-      if (game === 'games.guess') return { reply: 'Oh no, sorry about that. If I counted one of your answers wrongly, tell me which one, for example "wait, I meant yes".', feedback: 'negative', info };
-      const moved = (st[game]?.history?.length ?? 0) > 0 || (st[game]?.board ?? []).some((c) => c);
-      if (!moved) return { reply: 'Oh no, sorry about that. Please tell me what you meant.', feedback: 'negative', info };
-      this.pending = { type: 'offer', accept: 'rewrite', rewrite: 'undo', world: game, expected: 'yes/no', question: 'Shall I take back the last move?', turn: this.dialog._msg };
-      return { reply: 'Oh no, sorry about that, I got it wrong. Shall I take back the last move? Say "yes" to undo it, or tell me what you meant.', feedback: 'negative', info: { ...info, offer: 'undo' } };
-    }
     const a = this._recentAction();
     const last = this.lastAnswer;
     if (!last && !a) return null;

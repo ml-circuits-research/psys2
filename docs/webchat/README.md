@@ -30,7 +30,7 @@ The published model is committed in the repo (`docs/webchat/models/dispatcher/{m
 | --- | --- |
 | `index.html` | Standalone page: mounts the app in `<main id="app">`. |
 | `app.mjs` | `mountPsys2`, chat, settings, effect allow-list, speech wiring, state-to-UI mapping. |
-| `ui/robot.mjs`, `editor.mjs`, `games.mjs` | Renderers for the tabs (own SVG/DOM code, no libraries, so no `vendor/` folder). |
+| `ui/robot.mjs`, `editor.mjs` | Renderers for the tabs (own SVG/DOM code, no libraries, so no `vendor/` folder). |
 | `ui/speech.mjs`, `translation.mjs`, `trace.mjs` | Web Speech, translation strategies with checker, trace panel (including the dispatcher candidates). |
 | `ui/dispatcher-host.mjs` | Finds `models/dispatcher/`, lazily loads onnxruntime-web and the model for the Encoder formalizer. |
 

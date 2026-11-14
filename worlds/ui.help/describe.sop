@@ -132,49 +132,10 @@
     noun=$w.en.tab.ui.helpAbout
     noun=$w.en.page.ui.helpAbout
 
-@describe.game core.describe
-    op=ui.helpGame
-    intent=command
-    emit="@{_} core.request action=ui.helpGame"
-    priority=12
-    kind=request
-    frames=phr
-
 @describe.game.en core.describe.words
     of=$describe.game
     lang=en
     phrase=$phrase.lang.intent.howtoplay
-
-@describe.game.of core.describe
-    op=ui.helpGame
-    intent=command
-    emit="@{_} core.request action=ui.helpGame arg.game={g}"
-    priority=13
-    kind=request
-    frames=phr
-    frames=imp
-
-@describe.game.of.g core.describe.arg
-    of=$describe.game.of
-    name=g
-    class=lex.ui.help.games
-
-@describe.game.of.en core.describe.words
-    of=$describe.game.of
-    lang=en
-    phrase=$phrase.lang.intent.howtoplay
-    verb=$w.en.explain.ui.helpGame
-    verb=$w.en.show.ui.helpGame
-    verb=$w.en.tell.ui.helpGame
-    verb=$w.en.teach.ui.helpGame
-    noun=$w.en.rules.ui.helpGame
-    noun=$w.en.goal.ui.helpGame
-    prep.g=$w.en.of.ui.helpGame.g
-    prep.g=$w.en.for.ui.helpGame.g
-    prep.g=$w.en.to_play.ui.helpGame.g
-    det.g=$w.en.the.ui.helpGame.g
-    det.g=$w.en.a.ui.helpGame.g
-    unit.g=$w.en.game.ui.helpGame.g
 
 @describe.how core.describe
     op=ui.helpHow
@@ -280,15 +241,3 @@
 @w.en.describe.ui.helpAbout core.word text=describe means=ui.helpAbout
 @w.en.tab.ui.helpAbout core.word text=tab means=ui.helpAbout
 @w.en.page.ui.helpAbout core.word text=page means=ui.helpAbout
-@w.en.explain.ui.helpGame core.word text=explain means=ui.helpGame
-@w.en.show.ui.helpGame core.word text=show means=ui.helpGame
-@w.en.tell.ui.helpGame core.word text=tell means=ui.helpGame
-@w.en.teach.ui.helpGame core.word text=teach means=ui.helpGame
-@w.en.rules.ui.helpGame core.word text=rules means=ui.helpGame
-@w.en.goal.ui.helpGame core.word text=goal means=ui.helpGame
-@w.en.of.ui.helpGame.g core.word text=of means=ui.helpGame.g
-@w.en.for.ui.helpGame.g core.word text=for means=ui.helpGame.g
-@w.en.to_play.ui.helpGame.g core.word text="to play" means=ui.helpGame.g
-@w.en.the.ui.helpGame.g core.word text=the means=ui.helpGame.g
-@w.en.a.ui.helpGame.g core.word text=a means=ui.helpGame.g
-@w.en.game.ui.helpGame.g core.word text=game means=ui.helpGame.g

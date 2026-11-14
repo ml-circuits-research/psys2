@@ -279,7 +279,7 @@ const handlers = {
         catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
       };
       reply = await read();
-      // a turn that asked for an action of a world that is not loaded (kids.common asks user.profile to keep a name): load that world and read the turn again
+      // a turn that asked for an action of a world that is not loaded (a world asks another world's action): load that world and read the turn again
       const lacking = worldLoader.ofActions(session.takeMissed?.()).filter((id) => !loadedIds.has(id) && allowed(id));
       if (lacking.length) {
         try { session.restore(snap); } catch { /* keep */ }
@@ -326,7 +326,7 @@ const handlers = {
     return mods.lang.suggestSwitch(m.text, mods.lang.normalize(m.selected), { detect: (x) => t.detectLanguage(x), evidence: (x) => t.evidence(x) });
   },
   async observe(m) {
-    const out = await session.observeIn(m.obs, { language: mods.lang.normalize(settings.language) });   // the reaction (the engine's chess move) is shown in the selected language
+    const out = await session.observeIn(m.obs, { language: mods.lang.normalize(settings.language) });   // the reaction (a world's own reaction) is shown in the selected language
     annotateWires(out);
     return { follow: out, state: stateOf() };
   },

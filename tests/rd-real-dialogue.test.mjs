@@ -22,15 +22,11 @@ const NAMED = [
   ['charts', 'Turn the avatar blue.', 'ui.avatar'],
   ['draw', 'Turn the avatar blue.', 'ui.avatar'],
   ['music', 'Turn the avatar blue.', 'ui.avatar'],
-  ['chess', 'Turn the avatar blue.', 'ui.avatar'],
   ['charts', 'Clear the map.', 'geo.map'],
   ['editor', 'Can you change the map to street?', 'geo.map'],
   ['charts', 'Clear the picture.', 'art.draw'],
   ['music', 'Wipe the canvas.', 'art.draw'],
-  ['tictactoe', 'Describe my picture.', 'art.draw'],
-  ['music', 'Describe the story.', 'docs.reader'],
-  ['charts', 'Read the story aloud.', 'docs.reader'],
-  ['draw', 'Can u rotate the chess board?', 'games.chess'],
+  ['charts', 'Describe my picture.', 'art.draw'],
 ];
 test('a message that names a world routes to it whatever tab is open', async () => {
   for (const [tab, text, world] of NAMED) {
@@ -92,27 +88,6 @@ test('bare "next", "more", "another one" follow the active tab; music claims the
   assert.ok(!worldsOf(await open('draw').send('next')).includes('docs.reader'));
 });
 
-test('bare coordinates follow the active game tab and are not claimed by another tab (RD8)', async () => {
-  for (const tab of ['robot', 'draw', 'charts', 'map', 'music', 'documents']) {
-    for (const text of ['b1', 'c1', 'e4']) {
-      const r = await open(tab).send(text);
-      assert.ok(!worldsOf(r).some((w) => w?.startsWith('games.')), `${tab}: "${text}" must not be a game move (${worldsOf(r).join(',')})`);
-    }
-  }
-  assert.ok(worldsOf(await open('chess').send('e4')).includes('games.chess'));
-  const t = open('tictactoe');
-  assert.ok(worldsOf(await t.send('b1')).includes('games.tictactoe'));
-  assert.equal(t.state('games.tictactoe').board[1], 'X');
-  // a chess game in progress (recently used) does not take a coordinate typed on the tic-tac-toe tab
-  const mixed = open('chess');
-  await mixed.send('let us play chess');
-  await mixed.send('e4');
-  mixed.setWorldState('ui.shell', { activeTab: 'tictactoe' });
-  const r = await mixed.send('c1');
-  assert.ok(worldsOf(r).includes('games.tictactoe'), `got ${worldsOf(r).join(',')}`);
-  assert.equal(mixed.state('games.chess').history.length, 1, 'the chess game did not move (only e4, the engine reply is still owed)');
-});
-
 // ---- RD1: the active world first -------------------------------------------------------------------------------------------------
 const SPELL = [
   // [tab, typo, world that reads it, [from, to]]
@@ -160,20 +135,6 @@ test('spellCandidates ranks every neighbour of an unknown word for the world voc
 });
 
 // ---- RD8: the chess engine reply never hangs without a host ---------------------------------------------------------------------
-test('a headless host settles the engine request, so the next command is not "still thinking"', async () => {
-  const s = open('chess');
-  await s.send('let us play chess');
-  const r = await s.send('e4');
-  assert.equal(s.state('games.chess').pendingEngine, true, 'the world waits for a host');
-  const texts = s.settleHeadless(r);
-  assert.equal(texts.length, 1);
-  assert.match(texts[0], /^I play /);
-  assert.equal(s.state('games.chess').pendingEngine, false);
-  assert.equal(s.state('games.chess').history.length, 2);
-  const next = await s.send('knight to f3');
-  assert.doesNotMatch(next.text, /still thinking/);
-});
-
 test('without a headless host the world still falls back after a second command (unchanged contract)', async () => {
   const s = open('chess');
   await s.send('let us play chess');
