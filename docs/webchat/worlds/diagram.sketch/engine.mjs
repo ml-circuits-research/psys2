@@ -161,7 +161,7 @@ const longName = (x) => { const m = ID_RE.exec(idOf(x)); return m ? `${KIND_OF_P
 const nameTokens = (s) => [...new Set(s.shapes.flatMap((x) => [x.name, x.id, longName(x)]).filter(Boolean).concat((s.groups ?? []).map((g) => g.name)))];
 const readerCtx = (s) => ({
   names: nameTokens(s),
-  last: (s.last ?? []).length ? { ref: s.last[s.last.length - 1] } : undefined,
+  last: (s.last ?? []).length ? s.last.slice() : undefined,   // the engine reader takes an array of names (lastRef when one, lastGroup for "them"): a {ref} object was read as no referent, so "make it red" never resolved
   texts: s.shapes.filter((x) => x.label != null && String(x.label).trim() !== '').map((x) => String(x.label)),
 });
 
