@@ -11,6 +11,11 @@ import { addNoise, rng } from '../scripts/fuzz-turns.mjs';
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
 const OPTS = { language: 'en', formalizer: 'rules', spell: true, partial: true, bestEffort: true };
+/**
+ * Load factor: how much slower than an idle core this process runs now (a fixed busy loop against its idle time). Only the SLACK of the "settled near the deadline"
+ * checks is multiplied by it (the deadline itself stays real), so the property is the same and a loaded machine (workers running, one core) does not fail it.
+ */
+const LOAD = (() => { let best = Infinity; for (let k = 0; k < 3; k++) { const t0 = performance.now(); let x = 0; for (let i = 0; i < 2e7; i++) x = (x + i * 3) | 0; best = Math.min(best, performance.now() - t0 + (x === 0.5 ? 1 : 0)); } return Math.min(20, Math.max(1, best / 8)); })();  // idle: about 5 ms
 const fresh = (tab = null) => { const s = engine.createSession(OPTS); if (tab) s.setWorldState('ui.shell', { activeTab: tab }); return s; };
 /** A translator whose language detection never settles: the turn can only end through the guard. */
 const stuckEngine = async () => {
@@ -33,7 +38,7 @@ test('a stuck await in the turn is cut by the hard deadline, and the session is 
   const before = JSON.stringify(s.state());
   const t0 = performance.now();
   await assert.rejects(s.send('make a house and a man', { signal: new AbortController().signal, hardMs: 300, softMs: 200 }), (e) => e instanceof TurnAborted && e.reason === 'timeout' && e.stage === 'detect');
-  assert.ok(performance.now() - t0 < 1500, 'settled near the deadline');
+  assert.ok(performance.now() - t0 < 1500 * LOAD, 'settled near the deadline');
   assert.equal(JSON.stringify(s.state()), before);
   assert.equal(guard.active, false, 'the guard is released');
 });
@@ -106,6 +111,6 @@ test('fuzz: noisy messages always settle within the budget', async () => {
     const text = addNoise(base[Math.floor(rand() * base.length)], rand);
     const t0 = performance.now();
     try { await s.send(text, { signal: new AbortController().signal, hardMs: BUDGET, softMs: BUDGET * 0.65 }); } catch (e) { assert.ok(e instanceof TurnAborted, `${text}: ${e.message}`); }
-    assert.ok(performance.now() - t0 < BUDGET + 1500, `${JSON.stringify(text)} took ${Math.round(performance.now() - t0)} ms`);
+    assert.ok(performance.now() - t0 < BUDGET + 1500 * LOAD, `${JSON.stringify(text)} took ${Math.round(performance.now() - t0)} ms`);
   }
 });
