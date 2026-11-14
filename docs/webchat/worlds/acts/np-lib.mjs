@@ -6,16 +6,36 @@
 // reading the executor's own rules refuse) is left to the executor: it keeps the failure classes of its replies (no such kind, none of that kind, nothing in focus).
 // Browser-safe: no `node:*`.
 import { World, resolve as libResolve } from '../../lib/vendor/sopworld/sopworld.mjs?v=d3a802af16';
-import { LANG_EN_FACTS } from '../../lib/lang/en.facts.generated.mjs?v=e7966482a7';
+import { LANG_EN_FACTS } from '../../lib/lang/en.facts.generated.mjs?v=1ec6c20720';
 
-const SHARDS = ['np', 'determiners', 'numbers', 'prepositions', 'pronouns'];
-const GRAMMAR = { digits: 'NUM', types: { rule: 'lang.en.rule' }, classes: { DET: 'lang.en.det', NUM: 'lang.en.numeral', ORD: 'lang.en.ordinal', PREP: 'lang.en.prep', PRON: 'lang.en.pron' } };
+// the grammar of the catalog world w.lang.en (shards of the bundle): the productions and the closed classes of English noun phrases
+const SHARDS = ['grammar', 'determiners', 'numbers', 'prepositions', 'pronouns'];
 const CATS = { det: 'DET', num: 'NUM', mod: 'MOD', head: 'N', pp: 'PP', ord: 'ORD', name: 'NAME', pron: 'PRON' };
-let BASE = null;   // the grammar world: the facts of English noun phrases, loaded once, forked per call
+// the constructions of noun phrases the library resolves; the others (coordination, "or", "some of", "the other one", relative clauses, anaphora) are read by the host first (src/lang/np-resolve.mjs, en.nounPhrase / splitThings)
+const HOST_READ = /^(coord|anaphora|ellipsis|q)\.|^np\.relative$|^helper\.(?!MODS$|NOUNS$)/;
+/**
+ * The grammar text the library gets: the rules it resolves, and the quantifier category QALL (all, every, each, both) written as the literal alternatives `[all|every|each|both]`, which is how the library
+ * finds a quantifier over a whole set (a category of words is no quantifier to it yet: [LIB] docs/lessons.md).
+ */
+function onlyConstructions(text) {
+  const qall = text.split('\n').filter((l) => / w\.lang\.en\.word /.test(l) && / cat=QALL\b/.test(l)).map((l) => /\btext="?([^"\s]+)/.exec(l)[1]);
+  return text.split('\n').filter((l) => !/^@\S+ w\.lang\.en\.rule /.test(l) || !HOST_READ.test(/ construction=(\S+)/.exec(l)?.[1] ?? ''))
+    .map((l) => (/^@\S+ w\.lang\.en\.rule /.test(l) ? l.replace(/\brhs=QALL\b/g, `rhs="[${qall.join("|")}]"`) : l)).join('\n');
+}
+// the closed classes the library reads as words (the others words of the catalog, partitives, relative pronouns, auxiliaries, are read by the host: a word in two classes, "all", is not ambiguous to the host)
+const CLOSED = new Set(['DET', 'NUM', 'ORD', 'PREP', 'TPREP', 'PRON']);
+let BASE = null, GRAMMAR = null;   // the grammar world: the facts of English noun phrases, loaded once, forked per call; its options: which category is which type (the world's own `w.lang.en.cat` facts)
 const base = () => {
   if (BASE) return BASE;
   const w = new World();
-  for (const s of SHARDS) w.tell(LANG_EN_FACTS[s]);
+  for (const s of SHARDS) w.tell(s === 'grammar' ? onlyConstructions(LANG_EN_FACTS[s]) : LANG_EN_FACTS[s]);
+  const classes = {};
+  let digits;
+  for (const c of w.ofType('w.lang.en.cat')) {
+    if (c.attrs.digits) digits = c.attrs.name[0];
+    if (c.attrs.type && c.attrs.type[0] !== 'w.lang.en.word' && CLOSED.has(c.attrs.name[0])) classes[c.attrs.name[0]] = c.attrs.type[0];
+  }
+  GRAMMAR = { digits, types: { rule: 'w.lang.en.rule', word: 'w.lang.en.word' }, classes };
   return (BASE = w);
 };
 const atom = (s) => String(s).toLowerCase().replace(/[^a-z0-9_.-]+/g, '_');
