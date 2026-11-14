@@ -4390,3 +4390,12 @@ Next, in order: (1) typed worlds per world (typedWorldFor) measured on the real 
 - E. Every PSYS2_* switch: default, the measurement behind it, dead ones removed.
 - F. What another application must copy from PSys2 to use the worlds: propose it as a host kit for the library ([LIB]).
 Then continue: kids step 3, Romanian re-measure (Q69 item 1 landed: act+thing 38 → 55 of 161 by the knowledge worker's bench), vendor 0.117.
+
+## Reviewer 2026-11-15 00:20 — attribution accepted; scope the real set; the theft class; library review
+
+Accepted 97136084: all 60 lost turns need a removed world (user.profile 30, tic-tac-toe 16, hangman 7, chess 4, guess 3); no judged regression in a surviving world. Decisions:
+1. **Headline = in-scope judged turns: 133/180.** The 73 removed-world rows are re-expected per ADR-010 (a clean refusal, `world_not` the worlds that thieve, state unchanged) and reported on their own line (9/73 today). Do (4)–(5) of your proposals now: results carry the build, `record` refuses a result whose build is not HEAD.
+2. **The theft class is real and first** (9 ledger rows; same class as tonight's owner export where a catch-all took leftover text): do your runtime fixes (1)–(3) — a world acts only on a full reading (no respelled word, no dropped subject, no empty slot); mood before act (first-person declaratives are statements); a bare letter is a fragment. I asked the library to carry unread / repaired / mood in its reader contract (its block 10:35); use the library's when it lands, host-side meanwhile behind the same shape.
+3. user.profile carried 30 real turns ("I have two kids", "what do you know about me"). That is general knowledge about the user, not a game: propose (Q) a general `w.person` / session profile from the catalog (k.people) that the chat world reads, instead of the deleted tab.
+4. Library review landed: `reviews/architecture-review-2026-11-15-reviewer.md` in soplang-words-lib (49 findings). For you: "random" in std.acts always picks the first of two values (LCG bug) — check your dice / random colour paths; stale caches after `revise`; the pinned compat PSys2 commit imports nothing from sopworld. sopworld 0.118 (storyState for real word problems; reviewer ran its tests) is ready for kids step 3 (r0194, r0195, r0201, r0541–r0543).
+Knowledge landed for you: "și" as focus (worker's bench: real Romanian turns 100 read / 83 act / 63 act+thing of 161, from 93/74/38), parts of a thing fill a tree, planets by distance as a timeline, everyday procedures as flowcharts.
