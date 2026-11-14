@@ -7,6 +7,7 @@
 // Synchronous by design (the matcher is): the host loads the vocabulary before reading (`ready()`, called by the dialogue at the start of a turn); until then nothing is open and the
 // lexicon is its closed list. Browser-safe: no node imports.
 import { lemmaCandidates } from './facts.mjs';
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 import { colourName } from './values.mjs';
 
 let attached = null;
@@ -71,16 +72,20 @@ function foldedVocab(vocab) {
  */
 export function knowsPlace(word, catalogs) {
   if (!attached?.peekVocab) return false;
-  const w = String(word).replace(/_/g, ' ');
-  if (w.length < 3 || !/^[a-z][a-z .'-]*$/.test(w)) return false;
   const vocab = attached.peekVocab();
   if (!vocab) return false;
-  const rel = /^(?:the )?capital(?: city)? of (.+)$/.exec(w) ?? /^(.+?)(?:['’]s)? capital(?: city)?$/.exec(w);   // a place by the relation k.geo states: "the capital of Sudan", "sudan capital"
-  if (rel && rel[1] !== 'the') return knowsPlace(rel[1].replace(/^the /, '').replace(/ /g, '_'), catalogs);
   const folded = foldedVocab(vocab);   // the vocabulary lists "são paulo" and "chișinău"; people type "sao paulo" and "chisinau"
-  const sh = [w, w.endsWith('s') ? null : `${w}s`].map((k) => (k && (Object.hasOwn(vocab, k) ? vocab[k] : folded.get(k)))).find(Boolean);
-  if (!sh?.some((x) => catalogs.includes(String(x).split('/')[0]) && !/\/schema\.sop$/.test(x))) return false;
-  return !colourName(w);
+  let w = String(word).replace(/_/g, ' ');
+  for (let step = 0; step < 2; step++) {   // at most one relation is peeled: "the capital of sudan" -> "sudan"
+    budget.tick('open-words.place');
+    if (w.length < 3 || !/^[a-z][a-z .'-]*$/.test(w)) return false;
+    const rel = /^(?:the )?capital(?: city)? of (.+)$/.exec(w) ?? /^(.+?)(?:['’]s)? capital(?: city)?$/.exec(w);   // a place by the relation k.geo states: "the capital of Sudan", "sudan capital"
+    if (rel && rel[1] !== 'the' && step === 0) { w = rel[1].replace(/^the /, ''); continue; }
+    const sh = [w, w.endsWith('s') ? null : `${w}s`].map((k) => (k && (Object.hasOwn(vocab, k) ? vocab[k] : folded.get(k)))).find(Boolean);
+    if (!sh?.some((x) => catalogs.includes(String(x).split('/')[0]) && !/\/schema\.sop$/.test(x))) return false;
+    return !colourName(w);
+  }
+  return false;
 }
 
 /** The probe of an open lexicon: `open=knowledge` + catalogs (kinds of the catalog) or `open=colour` (any colour the one colour reader knows, with its spellings and shorthand). */

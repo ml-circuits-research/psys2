@@ -12,7 +12,7 @@
  *                  (legs, food, diet, habitat, class, sound, covering, baby) with `where: { name }` -> { status, value | values, from }. Read from the catalog's bundle, by lookup.
  */
 import { BUNDLED_ANIMALS } from './bundled-animals.mjs?v=79d9d45ee8';
-import { parseLine } from './catalog.mjs?v=698662f5e5';
+import { parseLine } from './catalog.mjs?v=0372695257';
 
 const KEYS = ['class', 'legs', 'covering', 'habitat', 'diet', 'eats', 'can', 'cannot', 'sound', 'baby', 'group'];
 let memo = null;
