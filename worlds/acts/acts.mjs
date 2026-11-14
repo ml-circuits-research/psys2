@@ -28,7 +28,8 @@ import { createEffects, EFFECT_ACTS } from './effects.mjs';   // sopworld std.sc
 
 export { ACT_VERBS };
 import { colourName } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
-import { en } from '../../src/lang/en.mjs';   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../src/lang/en.mjs';
+import { readNounPhrase } from '../../src/lang/np-resolve.mjs';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -294,13 +295,22 @@ export function createExecutor(schema, hooks = {}) {
 
   // ---- referents ----
   /** The things a phrase names: { ids } | { ask } | { none, kindWord } | { unknownKind } with `source` (said | focus | scene) and `guess`. */
+  /** The noun-phrase readings (choice, part of a set, relative clause) are the one host resolver `src/lang/np-resolve.mjs`; this is the domain it looks plain phrases up in: the things of the state. */
+  const domainOf = (st) => ({
+    rec: (t, o) => resolve(st, t, o),
+    refs: (r) => r.ids ?? null,
+    kind: (r) => r.kind,
+    made: (ids, kind, tier) => ({ ids, source: tier, kind }),
+    asked: (ask, ids) => ({ ask, candidates: ids }),
+    sayAll: (ids) => ids.map((id) => label(st.items.find((i) => i.id === id))),
+    tick: () => budget.tick('acts.choice'),
+    partitive: (part, ids) => `Which ${part.mode === 'count' ? `${part.n} of` : 'ones of'} ${joinAnd(ids.map((id) => st.items.find((i) => i.id === id)).filter(Boolean).map((i) => label(i)))}? Say their names or numbers.`,
+    other: (np, o) => resolveOther(st, np, o),
+  });
   function resolve(st, text, opts = {}) {
-    // the readings of a noun phrase beyond its head (facts of handover/lang.en, np.sop; en.nounPhrase): a choice, a part of a set, "the other one", a relative clause
-    const np = en.nounPhrase(text);
-    if (np.choice) return resolveChoice(st, np.choice, opts);
-    if (np.partitive) return resolvePartitive(st, np, opts);
-    if (np.other) return resolveOther(st, np, opts);
-    if (np.relative) text = np.text;
+    const x = readNounPhrase(text, domainOf(st), opts);
+    if (x.done) return x.done;
+    text = x.text;
     const parts = en.splitList(text);
     if (parts.length < 2) return resolveOne(st, text, opts);
     const ids = []; let kind = null;
@@ -313,29 +323,6 @@ export function createExecutor(schema, hooks = {}) {
       for (const id of r.ids) if (!ids.includes(id)) ids.push(id);
     }
     return { ids, source: 'said', kind };
-  }
-  /** "table 1 or table 2": the system never takes both and never takes the last; it asks which. A part without its noun ("the red or the blue house") takes the last word of the last part. */
-  function resolveChoice(st, choice, opts) {
-    const ids = []; let kind = null;
-    for (const part of choice) {
-      budget.tick('acts.choice');
-      let p = part.text;
-      if (kind && en.bareDistributes(p)) p = `${kind} ${p}`;
-      let r = resolve(st, p, opts);
-      if (!r.ids && part.alt) { const r2 = resolve(st, part.alt, opts); if (r2.ids) r = r2; }
-      if (!r.ids) return r;
-      kind ??= r.kind;
-      for (const id of r.ids) if (!ids.includes(id)) ids.push(id);
-    }
-    if (ids.length === 1) return { ids, source: 'said', kind };
-    return { ask: `Which do you mean: ${ids.map((id) => label(st.items.find((i) => i.id === id))).join(' or ')}?`, candidates: ids };
-  }
-  /** "some of the tables", "two of the tables": a part of a set. The whole set when the count covers it ("all of them", "three of the three"), else the system asks which ones. */
-  function resolvePartitive(st, np, opts) {
-    const r = resolve(st, np.text, opts);
-    if (!r.ids || r.ids.length < 2 || np.partitive.mode === 'all' || (np.partitive.mode === 'count' && np.partitive.n >= r.ids.length)) return r;
-    const items = r.ids.map((id) => st.items.find((i) => i.id === id)).filter(Boolean);
-    return { ask: `Which ${np.partitive.mode === 'count' ? `${np.partitive.n} of` : 'ones of'} ${joinAnd(items.map((i) => label(i)))}? Say their names or numbers.`, candidates: r.ids };
   }
   /** "the other table", "the other one", "another one": the things of that kind that are not the dialogue focus (the kind of the focus when none is said). */
   function resolveOther(st, np, opts) {

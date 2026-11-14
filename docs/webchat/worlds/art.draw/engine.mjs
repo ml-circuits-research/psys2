@@ -22,7 +22,7 @@ import {
 
 import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
 import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
-import { en } from '../../lib/lang/en.mjs?v=08dd6017a3';   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
+import { readNounPhrase, foldRelative } from '../../lib/lang/np-resolve.mjs?v=c8c4893cd3';   // the one host resolver of noun phrases   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
 import * as space from '../space/space.mjs?v=f98ca4dd42';
 import * as rel from '../space/pieces.mjs?v=d38d7cc794';
 import * as solver from '../space/solver.mjs?v=3ee41714f0';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
@@ -314,7 +314,7 @@ const DET_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these
 /** Parses words like "the big red tree on the left" into a description of the thing meant. */
 export function parseNP(text) {
   budget.tick('art.np');   // recurses on the words after "of"
-  { const x = en.nounPhrase(text); if (x.relative) text = x.text; }   // "the house that is red" is "the red house"
+  text = foldRelative(text);   // "the house that is red" is "the red house"
   const all = toks(text);
   const np = { text: String(text ?? ''), pron: null, all: false, ordinal: null, size: null, superlative: false, color: null, kind: null, plural: false, part: null, partOf: null, loc: null, pos: null, other: false, count: null, special: null, one: false, known: true };
   if (!all.length) return { ...np, known: false };
@@ -397,23 +397,18 @@ const partColor = (o, part) => (part ? o.parts?.[part] ?? null : null);
 export function resolveNP(s, np, { many = false, ask = false } = {}) {
   budget.tick('art.np', 1 + s.objects.length);   // recurses through np.partOf; each level scans the picture
   const out = { objs: [], special: np.special && np.special !== 'everything' ? np.special : null, np };
-  // a choice ("the red or the blue house") and a part of a set ("some of the houses", "two of them") are asked, never guessed (np.sop, en.nounPhrase)
-  const x = np.text && !np.partOf ? en.nounPhrase(np.text) : null;
-  if (x?.choice) {
-    const found = [];
-    for (const part of x.choice) {
-      let r = resolveNP(s, parseNP(part.text), { many });
-      if (!r.objs.length && part.alt) { const r2 = resolveNP(s, parseNP(part.alt), { many }); if (r2.objs.length) r = r2; }
-      if (!r.objs.length) return r;
-      for (const o of r.objs) if (!found.includes(o)) found.push(o);
-    }
-    if (found.length === 1) return { ...out, objs: found };
-    return { ...out, error: `Which do you mean: ${found.map(sayObj).join(' or ')}?`, missing: true, asked: true };
-  }
-  if (x?.partitive) {
-    const r = resolveNP(s, parseNP(x.text), { many: true });
-    if (r.error || r.special || x.partitive.mode === 'all' || r.objs.length < 2 || (x.partitive.mode === 'count' && x.partitive.n >= r.objs.length)) return r;
-    return { ...out, error: `Which ${x.partitive.mode === 'count' ? `${x.partitive.n} of` : 'ones of'} ${andList(r.objs.map(sayObj))}? Say which, for example "the first one" or "the red one".`, missing: true, asked: true };
+  // a choice ("the red or the blue house") and a part of a set ("some of the houses", "two of them") are asked, never guessed: the one host resolver (src/lang/np-resolve.mjs, en.nounPhrase)
+  if (np.text && !np.partOf) {
+    const x = readNounPhrase(np.text, {
+      rec: (t, o) => resolveNP(s, parseNP(t), o),
+      refs: (r) => (r.error || r.special || !r.objs.length ? null : r.objs),
+      kind: () => null,
+      made: (objs) => ({ ...out, objs }),
+      asked: (error) => ({ ...out, error, missing: true, asked: true }),
+      sayAll: (objs) => objs.map(sayObj),
+      partitive: (part, objs) => `Which ${part.mode === 'count' ? `${part.n} of` : 'ones of'} ${andList(objs.map(sayObj))}? Say which, for example "the first one" or "the red one".`,
+    }, { many });
+    if (x.done) return x.done;
   }
   if (np.special === 'everything') { out.objs = s.objects.slice(); out.everything = true; return out; }
   if (out.special) return out;

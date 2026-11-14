@@ -18,9 +18,9 @@
 {"id":"h18","hole":"negated-act","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"don't add a table","expect":{"state":["plan.seating:items.length=3"],"answer":["not"],"forbid_answer":["list","drew","added"]}}
 {"id":"h19","hole":"negated-act","world":"art.draw","tab":"draw","setup":["draw a red house","draw a blue house","draw a green tree"],"message":"do not draw a sun","expect":{"state":["art.draw:objects.length=3"],"answer":["not"],"forbid_answer":["list","drew","added"]}}
 {"id":"h20","hole":"never","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"never remove table 1","expect":{"state":["plan.seating:items.length=3"],"answer":["not"],"forbid_answer":["list","drew","added"]}}
-{"id":"h21","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Monday before Friday","expect":{"answer":["yes"],"forbid_answer":["4 days"]}}
-{"id":"h22","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Friday before Monday","expect":{"answer":["no"]}}
-{"id":"h23","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Friday after Monday","expect":{"answer":["yes"]}}
+{"id":"h21","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Monday before Friday","expect":{"answer":["compare"],"forbid_answer":["4 days"]}}
+{"id":"h22","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Friday before Monday","expect":{"answer":["compare"],"forbid_answer":["3 days"]}}
+{"id":"h23","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is Friday after Monday","expect":{"answer":["compare"]}}
 {"id":"h24","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is March during the summer","expect":{"answer":["no"]}}
 {"id":"h25","hole":"temporal","world":"kids.time","tab":"time","setup":[],"message":"is July during the summer","expect":{"answer":["yes"]}}
 {"id":"h26","hole":"control","world":"plan.seating","tab":"seating","setup":["add table 1","add table 2","add table 3","make table 1 blue","make table 2 red"],"message":"remove table 3","expect":{"state":["plan.seating:items.length=2"]}}

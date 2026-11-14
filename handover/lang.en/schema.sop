@@ -164,6 +164,12 @@
 @lang.en.coord.sep core.type of=lang.en.coord.sep shared=true closed=true
 @lang.en.coord.param core.type of=lang.en.coord.param shared=true closed=true
 
+# The name of a moment on a line of time (weekday, month, season, part of the day, clock hour by `pattern`): with the temporal prepositions it says "is Monday before Friday" is a question of order, not of distance.
+@lang.en.timeword core.type of=lang.en.timeword shared=true closed=true
+@lang.en.timeword.text core.slot of=lang.en.timeword key=text id=true kind=atom
+@lang.en.timeword.kind core.slot of=lang.en.timeword key=kind required=true enum=day enum=month enum=season enum=part enum=clock
+@lang.en.timeword.pattern core.slot of=lang.en.timeword key=pattern kind=string
+
 # Words of the module (the schema's keys are words too, as the knowledge repository requires).
 @lang.en.word.det core.word text=determiner
 @lang.en.word.pron core.word text=pronoun
