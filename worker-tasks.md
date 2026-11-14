@@ -4050,3 +4050,10 @@ Checked (owner asked where the avatar's shapes come from): `facedraw.mjs` holds 
 5. Smoke + the avatar part of the quick suite at landing; screenshot of the input bar, the popup and the Talk summary after a replayed log, in the landing note.
 
 ## Reviewer 2026-11-14 11:05 — correction to 10:50 item 3 (owner, 06:38): mouth shapes come from `k.motion` only, not from a language world. The text → mouth rule is one general rule in the animation world.
+
+## Reviewer 2026-11-14 11:50 — avatar icon / Talk summary landing accepted; follow-ups
+
+Reviewer ran `npm run test:smoke` on f2ff2e48: 79/79 pass, exit 0; read the six screenshots. Accepted. Follow-ups, small:
+1. **sopworld 0.54 has `std.motion`** (pure, seeded plan + run, priorities, cancel, per-unit streams). Vendor it and make `motion.mjs` a thin call; keep `MOTION_RULES_TEMPORARY` only until `k.motion` is published (a knowledge worker is writing it now; the reviewer will say when).
+2. **Phone popup:** the description under the big face is cut off by the input bar (avatar-icon-phone-popup.png); the popup must fit above the input bar or scroll inside itself.
+3. Then continue the queue: LAZY LOADING next.
