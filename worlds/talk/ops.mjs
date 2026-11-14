@@ -673,6 +673,7 @@ export function send(ctx, { to } = {}) {
   if (!['draw', 'diagram'].includes(to)) {   // every other place (the map too) is a view of the session things: the store decides what it can take (draw and diagram are not views yet)
     if (!topic.thingId) return no('missing', `I have not put the ${name} in the session yet. Ask me about it first.`);
     const r = ctx.request('things.show', { ids: [topic.thingId], to, from: 'talk' });
+    if (r?.status === 'supported') { const view = Object.keys(UNDO_OF).find((k) => new RegExp(`\\b${k}\\b`, 'i').test(String(to))); if (view) push(ctx, { kind: 'send', to: view }); }   // a view with an undo of its own (the map): Talk's "undo" takes the transfer back through it, in both reasoners, as for the drawing and the diagram
     return r?.status === 'supported' ? ok(String(r.value), { values: [name, to] }) : no(r?.status ?? 'unsupported', String(r?.note ?? `I cannot show the ${name} there.`));
   }
   if (to === 'draw') {

@@ -2,7 +2,7 @@
     canonical="What does a lighthouse look like?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatdoes] [$lang.know.det]? {o:words(3,noun)} [$lang.talk.lookslike] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.look arg.o=\"{o}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="What does a spider look like?"
@@ -14,7 +14,7 @@
     canonical="What is a bicycle?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.define] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.look arg.o=\"{o}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=4
     example="What is a comet?"
@@ -26,7 +26,7 @@
     canonical="What are the parts of a house?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.partsof] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.parts arg.o=\"{o}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="What are the parts of a bicycle?"
@@ -37,7 +37,7 @@
     canonical="What parts does a car have?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatparts] [$lang.know.det]? {o:words(3,noun)} [$lang.know.have] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.parts arg.o=\"{o}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="What parts does a boat have?"
@@ -47,7 +47,7 @@
     canonical="What is a bicycle made of?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [what_is|what_are|what_s|whats] [$lang.know.det]? {o:words(3,noun)} [$lang.know.made] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.parts arg.o=\"{o}\" arg.made=yes"
-    kind=request
+    kind=question
     tabOnly=true
     priority=10
     example="What is a house made of?"
@@ -58,7 +58,7 @@
     canonical="How many legs does a spider have?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.count] {p:words(2)} [$lang.know.aux] [$lang.know.det]? {o:words(3,noun)} [$lang.know.have] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.count arg.o=\"{o}\" arg.p=\"{p}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="How many wheels does a bicycle have?"
@@ -69,7 +69,7 @@
     canonical="Which is bigger, a mouse or an elephant?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.biggerq] [$lang.know.det]? {a:words(2,noun)} or [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.compare arg.a=\"{a}\" arg.b=\"{b}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="Which is bigger, Jupiter or Mars?"
@@ -80,7 +80,7 @@
     canonical="Is a dog bigger than a cat?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [is|are] [$lang.know.det]? {a:words(2,noun)} [$lang.talk.compar] than [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.compare arg.a=\"{a}\" arg.b=\"{b}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="Is Earth bigger than Mars?"
@@ -90,7 +90,7 @@
     canonical="Which has more legs, a spider or a cat?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.hasmore] {p:words(1)} [$lang.know.det]? {a:words(2,noun)} or [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.compare arg.a=\"{a}\" arg.b=\"{b}\" arg.p=\"{p}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="Which has more wheels, a car or a bicycle?"
@@ -100,7 +100,7 @@
     canonical="What are the planets in order?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.seqlead]? [$lang.talk.orderof]? [the|all|our|of_the]? {s:lex.talk.sequences} [$lang.talk.seqtail]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.order arg.s=\"{s}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="What are the months?"
@@ -112,7 +112,7 @@
     canonical="What comes after March?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.after] {x:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.neighbour arg.x=\"{x}\" arg.dir=after"
-    kind=request
+    kind=question
     tabOnly=true
     priority=10
     example="What month comes after May?"
@@ -123,7 +123,7 @@
     canonical="What comes before Friday?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.before] {x:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.neighbour arg.x=\"{x}\" arg.dir=before"
-    kind=request
+    kind=question
     tabOnly=true
     priority=10
     example="Which planet is before Earth?"
@@ -133,7 +133,7 @@
     canonical="What is the third planet from the sun?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.nth] [the]? {n:ordinal} {s:lex.talk.sequences} [$lang.talk.seqtail]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.neighbour arg.n={n} arg.s=\"{s}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=11
     example="Which is the fifth month?"
@@ -143,7 +143,7 @@
     canonical="Which planet is the third from the sun?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichseq] {s:lex.talk.sequences} is [the]? {n:ordinal} [$lang.talk.seqtail]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.neighbour arg.n={n} arg.s=\"{s}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=11
     example="Which month is the fifth?"
@@ -164,7 +164,7 @@
     canonical="What did we talk about?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.board] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.board"
-    kind=request
+    kind=question
     tabOnly=true
     priority=11
     example="Show the topic board."
@@ -175,7 +175,7 @@
     canonical="How do you know?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.how] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.how"
-    kind=request
+    kind=question
     tabOnly=true
     priority=11
     example="How do you know that?"
@@ -186,7 +186,7 @@
     canonical="What can we talk about?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.scope] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.scope"
-    kind=request
+    kind=question
     tabOnly=true
     priority=11
     example="What can I ask?"
@@ -196,7 +196,7 @@
     canonical="What does it look like?"
     match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.itlook] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.look"
-    kind=request
+    kind=question
     tabOnly=true
     tabClaim=true
     priority=12
@@ -207,7 +207,7 @@
     canonical="What are its parts?"
     match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.itparts] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.parts"
-    kind=request
+    kind=question
     tabOnly=true
     tabClaim=true
     priority=12
@@ -219,7 +219,7 @@
     canonical="How many wheels does it have?"
     match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [and]? [$lang.know.count] {p:words(2)} [$lang.know.aux] [$lang.talk.it] [$lang.know.have] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.count arg.p=\"{p}\""
-    kind=request
+    kind=question
     tabOnly=true
     tabClaim=true
     priority=12
@@ -230,7 +230,7 @@
     canonical="Is it bigger than Mars?"
     match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [is|are] [$lang.talk.it] [$lang.talk.compar] than [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.compare arg.b=\"{b}\""
-    kind=request
+    kind=question
     tabOnly=true
     tabClaim=true
     priority=12
@@ -241,7 +241,7 @@
     canonical="Bigger than Earth?"
     match="[$lang.connective]? [$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.compar] than [$lang.know.det]? {b:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.compare arg.b=\"{b}\""
-    kind=request
+    kind=question
     tabOnly=true
     tabClaim=true
     priority=11
@@ -342,7 +342,7 @@
     canonical="What kind of thing is a comet?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.kindof] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.kind arg.o=\"{o}\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=10
     example="What type of thing is a spider?"
@@ -352,7 +352,7 @@
     canonical="What do you know about me?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.me] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.me"
-    kind=request
+    kind=question
     tabOnly=true
     tabClaim=true
     priority=14
@@ -363,7 +363,7 @@
     canonical="What did I draw today?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.drawn] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.drawn"
-    kind=request
+    kind=question
     tabOnly=true
     tabClaim=true
     priority=14
@@ -374,7 +374,7 @@
     canonical="How many moves did I make in chess?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.chessmoves] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.moves"
-    kind=request
+    kind=question
     tabOnly=true
     tabClaim=true
     priority=14
@@ -396,8 +396,8 @@
     canonical="What colour is a banana?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] {a:words(1)} [$lang.talk.isq] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=7
     example="What colour is a tomato?"
     doc="Frame: what A is X (colour, size, kind...). One slot of the thing, found through the words of the knowledge schemas; a small facts card."
@@ -406,8 +406,8 @@
     canonical="What is the capital of France?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatis] [$lang.know.det]? {a:words(1)} of [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=8
     example="What is a synonym of big?"
     example="What is the opposite of hot?"
@@ -417,8 +417,8 @@
     canonical="What does a duck eat?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatdoes] [$lang.know.det]? {o:words(3,noun)} {a:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=6
     example="What does the heart do?"
     example="What does ancient mean?"
@@ -428,8 +428,8 @@
     canonical="What sound does a duck make?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] {a:words(1)} [$lang.know.aux] [$lang.know.det]? {o:words(3,noun)} [$lang.talk.makeverb] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"{a}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=7
     example="What colour does a frog have?"
     doc="Frame: what A does X make or have. One slot of the thing."
@@ -438,8 +438,8 @@
     canonical="Where does a cow live?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.where] [$lang.know.det]? {o:words(3,noun)} [$lang.talk.wheretail] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"where\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=8
     example="Where do penguins live?"
     example="Where does milk come from?"
@@ -449,7 +449,7 @@
     canonical="Where is Paris?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whereis] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"where\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=6
     example="Where is Mount Everest?"
@@ -459,7 +459,7 @@
     canonical="What is next to Brazil?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatis] [$lang.talk.nextto] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"neighbour\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=8
     example="What is next to Italy?"
@@ -469,7 +469,7 @@
     canonical="Which country is next to Spain?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] {c:words(1)} [$lang.talk.isq] [$lang.talk.nextto] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"neighbour\""
-    kind=request
+    kind=question
     tabOnly=true
     priority=9
     example="Which country is next to France?"
@@ -479,8 +479,8 @@
     canonical="Is a whale a fish?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.isq] [$lang.know.det]? {o:words(2,noun)} [a|an] {c:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.isa arg.o=\"{o}\" arg.c=\"{c}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=5
     example="Is a dog an animal?"
     example="Is rice a plant?"
@@ -490,8 +490,8 @@
     canonical="How many minutes are in an hour?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.count] {p:words(2)} [$lang.talk.inunit] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.count arg.o=\"{o}\" arg.p=\"{p}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=9
     example="How many centimetres are in a metre?"
     example="How many days are in a week?"
@@ -501,8 +501,8 @@
     canonical="What is a lighthouse for?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatis] [$lang.know.det]? {o:words(3,noun)} for [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"for\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=7
     example="What are lungs for?"
     doc="Frame: what is X for. The purpose slots of the thing (used for, does)."
@@ -511,8 +511,8 @@
     canonical="Does a spider have a tail?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.know.aux] [$lang.know.det]? {o:words(3,noun)} [$lang.know.have] [a|an|any]? {p:words(2)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.has arg.o=\"{o}\" arg.p=\"{p}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=8
     example="Do snakes have legs?"
     doc="Frame: does X have a P. Yes with the count when the catalog or the picture says so, no when the count is zero, else what is not known."
@@ -521,7 +521,7 @@
     canonical="What is a baby cat called?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.babylead] {o:words(3,noun)} [called|named]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"baby\""
-    kind=request
+    kind=question
     tabOnly=false
     priority=10
     example="What is a baby cow called?"
@@ -532,7 +532,7 @@
     canonical="What is a cow covered in?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatis] [$lang.know.det]? {o:words(3,noun)} [$lang.talk.coveredin] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"covering\""
-    kind=request
+    kind=question
     tabOnly=false
     priority=10
     example="What is a duck covered in?"
@@ -543,8 +543,8 @@
     canonical="Which animals are mammals?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichlist] {k:words(1)} [is|are] {v:words(1,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=10
     example="What animals are insects?"
     example="Which colours are primary?"
@@ -555,8 +555,8 @@
     canonical="What are the primary colours?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [what_are|which_are] [the]? {v:words(1,noun)} {k:words(1,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=6
     example="What are the secondary colors?"
     example="What are the red things?"
@@ -566,8 +566,8 @@
     canonical="Which animals eat grass?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichlist] {k:words(1)} {w:lex.talk.listverbs} {v:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\" arg.verb=\"{w}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=10
     example="Which animals live in the sea?"
     example="Which animals can fly?"
@@ -577,7 +577,7 @@
     canonical="What do red and blue make?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [what_do|what_does] {a:words(1)} and {b:words(1)} [make|give|become] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.mix arg.a=\"{a}\" arg.b=\"{b}\""
-    kind=request
+    kind=question
     tabOnly=false
     priority=10
     example="What do yellow and blue make?"
@@ -588,7 +588,7 @@
     canonical="What colour do you get when you mix red and blue?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.mixlead] {a:words(1)} and {b:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.mix arg.a=\"{a}\" arg.b=\"{b}\""
-    kind=request
+    kind=question
     tabOnly=false
     priority=10
     example="What do you get if you mix red and yellow?"
@@ -599,8 +599,8 @@
     canonical="Can a penguin fly?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.canq] [$lang.know.det]? {o:words(3,noun)} {v:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.can arg.o=\"{o}\" arg.v=\"{v}\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=8
     example="Can a bat fly?"
     example="Do penguins swim?"
@@ -610,8 +610,8 @@
     canonical="What kind of animal is a shark?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] [kind|type|sort|class] of {k:words(1)} [is|are] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"class\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=10
     example="What type of animal is a frog?"
     example="What kind of animal is a whale?"
@@ -621,8 +621,8 @@
     canonical="Which shapes have 4 sides?"
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichlist] {k:words(1)} [has|have] {v:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\" arg.verb=\"have\""
-    kind=request
-    tabOnly=true
+    kind=question
+    tabOnly=false
     priority=10
     example="Which shapes have 4 sides?"
     example="Which animals have 6 legs?"

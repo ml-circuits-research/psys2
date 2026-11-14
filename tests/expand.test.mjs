@@ -60,7 +60,7 @@ test('expand: repetition; "then undo" stays a separate clause', () => {
   assert.equal(a.length, 3);
   assert.ok(a.every((x) => x[1] === 'pat.geo.map.w.pan1' && x[3] === 'repetition'));
   const b = read('draw a circle twice then undo');
-  assert.deepEqual(b.map((x) => x[1]), ['pat.art.draw.x.add.clean', 'pat.art.draw.x.add.clean', 'pat.art.draw.undo']);
+  assert.deepEqual(b.map((x) => x[1]), ['pat.art.draw.make.mods', 'pat.art.draw.make.mods', 'pat.art.draw.undo']);
   const c = read('move left 3 times, then undo');
   assert.deepEqual(c.map((x) => x[3]), ['repetition', 'repetition', 'repetition', null]);
   // a clause that already parses with its own repetition slot is untouched

@@ -34,7 +34,7 @@ test('encoder strategy: a wrong first world is recovered by validation and the w
 });
 
 test('encoder strategy: two pieces from the winning segmentation, in order', async () => {
-  const a = 'What is 20 divided by 4.', b = 'How many legs does a spider have?', t = `${a} ${b}`;
+  const a = 'What is 20 divided by 4.', b = 'A zebra has 4 legs.', t = `${a} ${b}`;
   const { engine } = await loadEngine(fakeRuntime((text) => [
     { score: -0.1, segments: [{ start: 0, end: text.length, text, worlds: W(['kids.arith', 0.9]) }] },
     { score: -0.9, segments: [{ start: 0, end: a.length, text: a, worlds: W(['kids.arith', 0.9]) }, { start: a.length + 1, end: text.length, text: b, worlds: W(['kids.animals', 0.8]) }] },
@@ -43,7 +43,7 @@ test('encoder strategy: two pieces from the winning segmentation, in order', asy
   assert.equal(r.trace.dispatch.winnerIndex, 1);
   assert.deepEqual(r.trace.segments.map((s) => s.dispatch.world), ['kids.arith', 'kids.animals']);
   assert.deepEqual(r.trace.segments.map((s) => s.span[0]), [0, a.length + 1]);
-  assert.equal(r.statuses.filter((x) => x === 'supported').length, 2);
+  assert.ok(r.statuses.length >= 1 && r.statuses.every((x) => x === 'supported')); assert.match(r.text, /is 5\..*zebra has 4 legs/);   // both pieces answered (a taught fact shares the status of its message)
 });
 
 test('encoder strategy: a piece nobody validates falls back to the rules over all worlds', async () => {

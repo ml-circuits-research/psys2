@@ -70,10 +70,10 @@ test('the same facts told in two namespaces are never one fact; inside one names
 test('draw objects made in different turns with the same name are two things; the diagram refuses a second shape of the same name', async () => {
   const { s, text } = await say(['open the drawing tab', 'draw a house', 'draw a house', 'how many houses are there?']);
   assert.match(text[3], /2 houses/);
-  assert.equal(s.isession.rs.of('art.draw').ofType('art.draw.object').length, 2);
+  assert.equal(s.state('art.draw').objects.length, 2);   // art.draw is a schema world now: the things are its state, not wires of an instance of its own
   const d = await say(['open the diagram tab', 'add a box called A', 'add a box called A']);
   assert.match(d.text[2], /already a shape named "A"/);
-  assert.equal(d.s.isession.rs.of('diagram.sketch').ofType('diagram.sketch.shape').length, 1);
+  assert.equal(d.s.state('diagram.sketch').shapes.filter((x) => x.name === 'A').length, 1);   // (the diagram is a schema world too)
 });
 
 test('the facade: ids go in qualified and come out bare, the default namespace is read (N5), replace keeps the namespace (N1)', () => {

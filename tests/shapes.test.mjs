@@ -255,33 +255,6 @@ test('real worlds: shapes load without errors and their patterns never use an un
   assert.ok(n >= 30, `generated ${n}`);
 });
 
-test('ui.avatar: every generated form of its colour, size and part shapes reads a sentence of that form', { todo: 'obsolete: the shapes of the old avatar patterns are gone; the generated forms are covered by tests/pilot-avatar.test.mjs and the coverage grid' }, async () => {
-  const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
-  const { loadWorlds } = await import('../src/worlds/index.mjs');
-  const rs = await loadWorlds(createFsLoader({ roots: [DEFAULT_ROOT] }));
-  const rl = lexIndex(rs);
-  const av = rs.get('ui.avatar');
-  const cases = [
-    ['colour.imp', 'make your whole body a bit blue'.replace(' a bit', '')], ['colour.order', 'give me a blue body'], ['colour.wish', 'i want your body to be blue'],
-    ['colour.ind', 'could you maybe paint your body blue'], ['colour.q', 'can your body be blue'], ['colour.short', 'blue body'], ['colour.short.2', 'body blue'],
-    ['colour.state', 'your body should be blue'],
-    ['colour.ask.q', 'what colour are your eyes'], ['colour.ask.q.2', 'what is the colour of your eyes'], ['colour.ask.imp', 'tell me the colour of your eyes'],
-    ['colour.ask.wish', 'i wonder what colour your eyes are'], ['colour.ask.ind', 'do you know the colour of your eyes'], ['colour.ask.order', 'the shade of your eyes'],
-    ['colour.ask.order.2', 'your eyes are what colour'], ['colour.ask.short', 'eyes colour'],
-    ['size.imp', 'make your eyes a bit bigger'], ['size.order', 'give me bigger eyes'], ['size.wish', 'i want your eyes much smaller'], ['size.ind', 'could you maybe make your eyes bigger'],
-    ['size.q', 'can your eyes be bigger'], ['size.short', 'bigger eyes'], ['size.short.2', 'eyes bigger'], ['size.state', 'your eyes should be bigger'],
-    ['part.imp', 'swap your mouth to a grill'], ['part.order', 'give me a grill mouth'], ['part.wish', 'i want your mouth as a grill'], ['part.ind', 'is it possible to change your mouth to a grill'],
-    ['part.q', 'can your mouth be a grill'], ['part.short', 'grill mouth'], ['part.short.2', 'mouth grill'], ['part.state', 'your mouth should be a grill'],
-  ];
-  for (const [id, text] of cases) {
-    const p = av.patterns.find((x) => x.id === `pat.ui.avatar.${id}`);
-    assert.ok(p, `${id} exists`);
-    const c = compilePattern(p.match, rl.phrases);
-    const t = tokenize(text, 0).filter((x) => x.kind !== 'punct' && !x.filler);
-    assert.ok(matchTokens(c, t, makeEnv(text, rs, new FormSession(), rl)), `${id}: "${text}"`);
-  }
-});
-
 test('shapes without an object slot: the noun is the thing (set and ask.value)', () => {
   const forms = (shape) => world.patterns.filter((p) => p.shape === `shape.t.${shape}`).map((p) => p.id.replace('pat.t.', ''));
   assert.ok(!forms('tempo').includes('tempo.order') && !forms('tempo').includes('tempo.short'), 'no word order, no value-first short form without an object');

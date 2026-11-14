@@ -6,6 +6,7 @@ import { createFacts } from '../src/knowledge/facts.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
+import { withCatalogIndex } from './helpers.mjs';
 
 /** A CacheStorage in memory (the parts the module uses). */
 const fakeCaches = () => {
@@ -62,7 +63,7 @@ test('offline: the catalog says it is unreachable, and a thing to draw is answer
 });
 
 test('a slow lookup of a thing to draw tells the user first, a fast one says nothing', async () => {
-  const files = { 'vocab.json': JSON.stringify({ pineapple: ['k.objects/shards/fruit'] }), 'k.objects/shards/fruit.sop': ['@k.objects.pineapple k.objects.object name=pineapple', '@k.objects.pineapple.body k.objects.part of=pineapple name=body shape=circle x=0 y=10 w=60 h=80 z=1 colour=yellow'].join('\n') };
+  const files = withCatalogIndex({ 'vocab.json': JSON.stringify({ pineapple: ['k.objects/shards/fruit'] }), 'k.objects/shards/fruit.sop': ['@k.objects.pineapple k.objects.object name=pineapple', '@k.objects.pineapple.body k.objects.part of=pineapple name=body shape=circle x=0 y=10 w=60 h=80 z=1 colour=yellow'].join('\n') });
   const run = async (delay) => {
     const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner: 'matrix' } });
     engine.setKnowledge(createFacts({ source: { text: async (p) => { await new Promise((r) => setTimeout(r, delay)); return files[p] ?? null; } } }));
@@ -71,7 +72,7 @@ test('a slow lookup of a thing to draw tells the user first, a fast one says not
     const r = await s.send('draw a pineapple');
     return { notices, reply: r.text };
   };
-  const slow = await run(300);   // vocab and shard: about 600 ms in all
+  const slow = await run(400);   // the vocabulary, the index and the part names are read before the sentence (bounded wait, open classes); the drawing's own shard is the lookup the notice covers: one slow read
   assert.deepEqual(slow.notices, ['Looking up how a pineapple looks…']);
   assert.match(slow.reply, /pineapple/i);
   assert.deepEqual((await run(0)).notices, []);
