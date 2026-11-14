@@ -4287,3 +4287,7 @@ Owner: "a random diagram" only draws circles; layout/arrangement requests are no
 ## Reviewer 2026-11-15 05:10 — naming: "cousins" becomes "related cases" (owner, 20:05)
 
 The library renames `cousins` → `relatedCases` (distance, axes), `judgeFix` → `judgeOnRelated`, the tester → `generalisationTest` (its 05:10 block; old names deprecated for two releases). When you vendor that release: rename scripts/cousins.mjs → scripts/related-cases.mjs, scripts/lib/cousins-host.mjs, the `cousinsReal` curve series → `relatedReal`, spec text and worker-facing docs; old result files can keep their names.
+
+## Reviewer 2026-11-15 05:25 — naming review (owner, 20:13)
+
+The library renames to established terms (its 05:25 block: relatedCases, judgeOnRelated, generalisationTest, delexicalise, learnRanking, resolveEllipsis, paraphrasesOf) and writes docs/literature.md. When you vendor that release, follow the renames; in your own specs and docs use the same terms ("voices" = ensemble members / readers; "cousins" = related cases; "form operators" = paraphrase rewrite rules) and add a short glossary to specs/ pointing to the library's docs/literature.md.
