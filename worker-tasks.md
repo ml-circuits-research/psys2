@@ -4134,3 +4134,19 @@ Reviewer ran `npm run test:smoke`: 89/89 pass, exit 0; read the 30 samples. Acce
 2. **Referents hooks** for data.charts, media.music, docs.reader, geo.map (your own follow-up) so they get more than make/undo.
 3. **Weights**: undo only after a change made by the dice's own session and at most ~1 in 10; novelty (kinds/attributes not yet used this session) up.
 4. **Measure again** on 200 presses: executed ≥95 %, **distinct texts ≥150/200, ≥8 acts used where legal, ≥60 kinds, ≥15 attributes**, and the round trip (`read`) on. Send 30 new samples.
+
+## Reviewer 2026-11-14 17:40 — small fetch for the library (the reviewer's sandbox cannot reach the data host)
+
+The library needs a permissive summarisation reference set to measure `std.summarize` (its Q41.2). The reviewer cannot reach huggingface.co or Google Drive. If your machine can: fetch **BillSum** (US Congress bills with their CRS summaries; public-domain US government works, dataset card CC0-1.0), the first 200 items of the `test` split (e.g. `https://datasets-server.huggingface.co/rows?dataset=FiscalNote/billsum&config=default&split=test&offset=0&length=100`, twice), into `training/eval/billsum-test-200.jsonl` (`{id, text, summary, title}`) with a SOURCE note (URL, date, licence). Commit it alone; the library reads it in place from its psys2 checkout. If you cannot reach it either, say so in questions.md and continue.
+
+## Reviewer 2026-11-14 17:55 — DATA FETCHES for the knowledge and library sessions (owner, 11:38: your machine reaches more of the web; theirs reach only package registries and GitHub)
+
+Standing rule from now on: when the knowledge repository or the library needs a dataset or examples, the reviewer writes it here and you fetch it. Put each under `data/external/<name>/` (subsets only, ≤ 20 MB each unless said), with `SOURCE.md`: URL, date fetched, exact licence text or link, what subset and how it was cut. **Licences:** CC0, public domain, MIT/BSD/Apache, CC-BY, CDLA-Permissive are fine; CC-BY-SA and CDLA-Sharing are fine but must stay in their own folder with the licence (the importer keeps it); **never** NC, ND, "research only" or unknown (write "skipped: licence" in SOURCE.md instead). One commit per dataset; no code changes in the same commit. The knowledge and library workers read them in place from a psys2 checkout and import what they use with the licence. Priority order (after the 17:30 RANDOM items, interleave as you like; each is a short job):
+1. **BillSum** test, 200 items (17:40 block) — summary reference set.
+2. **Wikidata (CC0) typical numbers** via the SPARQL endpoint: for the kinds in k.animals (mass, length/height, lifespan, speed), buildings and structures (height), countries and cities (population, area, elevation), planets: one CSV per property, `item, label, value, unit`, a few thousand rows in all. For typical ranges in k.attributes.
+3. **arXiv metadata (CC0)**: 2,000 titles + abstracts across categories (the Kaggle/arXiv OAI metadata) — scientific-article genre: moves in abstracts, register.
+4. **UniMorph Romanian** (`ron`, CC-BY-SA): the inflection table file — to measure w.lang.ro's paradigms on real forms (keep in its own folder).
+5. **Word frequencies**: `wordfreq` English data (CC-BY-SA 4.0) top 50k with frequency bands, or SUBTLEX-US only if its licence is clearly permissive — for word register in k.words.
+6. **Stories**: a permissively licensed set of short stories (e.g. TinyStories, check its licence on the dataset card: take it only if it is CDLA or CC), 1,000 stories — examples to check k.story's structure against.
+7. **ConceptNet 5 English assertions** (CC-BY-SA 4.0) for relations UsedFor, CapableOf, HasPrerequisite, HasSubevent, AtLocation, MadeOf: filtered to English, ≤ 20 MB — candidate facts for composition procedures and k.commonsense (imported only with review).
+Report in worker-log what you fetched and what you skipped for licence.
