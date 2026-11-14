@@ -2463,3 +2463,45 @@
     word=image
     word=picture
     word=file
+
+# The shared lexicons of the catalog frames of shard diagram-frames that this world reads (direction of a layout, the edge noun and the words that begin its ends) (w.lang.en, k.diagrams / w.diagram), named by `lex=` in schema.sop; copied from the catalog, the catalog is the source of truth.
+
+@lex.diagram.edge core.lexicon
+    class=noun
+    doc="Words for an edge of a diagram: w.diagram's words for w.diagram.edge, singular (a reader takes the plural too); derived by tools/lang-en-diagram-frames.mjs."
+    word=arrow
+    word=connector
+    word=edge
+    word=line
+    word=link
+
+@lex.diagram.edge.from core.lexicon
+    class=noun
+    doc="Words that begin the two ends of an edge after its noun (\"the arrow from A to B\", \"the line between A and B\")."
+    word=between
+    word=from
+    word=going_from
+    word=leading_from
+    word=that_goes_from
+    word=which_goes_from
+
+@lex.diagram.direction core.lexicon
+    class=noun
+    doc="Directions of a layout: the arrangement phrases (w.lang.en.arrangement) of a row or column in one direction whose diagram layout is left_right or top_down; derived by tools/lang-en-diagram-frames.mjs."
+    word=across_the_page
+    word=bottom_to_top
+    word=down_the_page
+    word=downwards
+    word=from_bottom_to_top
+    word=from_left_to_right
+    word=from_right_to_left
+    word=from_top_to_bottom
+    word=horizontally
+    word=left_to_right
+    word=one_above_the_other
+    word=one_below_the_other
+    word=one_under_the_other
+    word=right_to_left
+    word=top_to_bottom
+    word=upwards
+    word=vertically

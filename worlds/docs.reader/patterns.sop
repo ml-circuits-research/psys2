@@ -82,7 +82,7 @@
     example="Add 2 seats to document."
 
 @pat.docs.reader.change.add1 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {attribute:lex.docs.reader.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {attribute:lex.docs.reader.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=docs.reader.change arg.mode=more arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
     priority=13
@@ -306,7 +306,7 @@
     example="What can you see in my picture?"
 
 @pat.docs.reader.ask.options core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|list|show|tell_me|show_me|name] [the]? {thing:words} [can_i|could_i|can_you|may_i|do_you_know|are_there|are_available|do_i_have|do_you_have|can_we|is_available|options] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|list|show|tell_me|show_me|name] [the]? {thing:words} [can_i|could_i|can_you|may_i|do_you_know|are_there|are_available|do_i_have|do_you_have|can_we|is_available|options] [use|draw|pick|choose|have|change]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=docs.reader.ask arg.mode=options arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=11
@@ -338,7 +338,7 @@
     example="List the things I can draw."
 
 @pat.docs.reader.ask.options.short core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {thing:words} [list|options|available|are_available|do_i_have|can_i_use] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? {thing:words} [list|options|available|are_available|do_i_have|can_i_use] [please|pls|plz]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=docs.reader.ask arg.mode=options arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=question
     priority=5
