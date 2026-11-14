@@ -1,0 +1,12 @@
+# Declaration only (spec 21 section 6, spec 25): games.hangman keeps its own patterns and operations. This schema serves the dice, the example chips and the action buttons (std.sample):
+# the whole sentences the dice may say are read from the world's own state by the hook `sampleKnowledge` of ops.mjs (declaredExecutor). Nothing is generated except schema.declared.mjs.
+@hangman acts.schema
+    noun="letter"
+    declare=yes
+    doc="Hangman: the letters not asked yet in a game that is on."
+    acts=make
+
+@hangman.letter acts.kind
+    know=letters:*
+    dice.not=make
+    plural=letters

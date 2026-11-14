@@ -5,7 +5,7 @@ import { readFile, writeFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { parse } from '../src/soplang/index.mjs';
 import { isCanonicalSentence } from '../src/worlds/canonical.mjs';
-import { parseSchema, generate, ACT_VERBS, DET_WORDS, REL_WORDS } from '../worlds/acts/acts.mjs';
+import { parseSchema, serializeSchema, generate, ACT_VERBS, DET_WORDS, REL_WORDS } from '../worlds/acts/acts.mjs';
 
 
 // Kinds from the catalog are not generated: a kind with `catalog=` makes the kinds lexicon open (`open=knowledge`), read by lookup (src/knowledge/open-words.mjs, spec 21 section 10).
@@ -18,6 +18,8 @@ export async function build(dir) {
   const ns = path.basename(dir);
   const schema = parseSchema(wires);
   const rel = path.relative(dir, path.resolve(import.meta.dirname, '../worlds/acts/acts.mjs')).split(path.sep).join('/');
+  // a declaration-only schema (declare=yes): the world's files are its own; only the schema as a module is written, for the world's ops.mjs (declaredExecutor)
+  if (schema.declared) return { files: { 'schema.declared.mjs': `// GENERATED from schema.sop by scripts/build-schema-world.mjs (declare=yes). Never edited by hand.\nexport const SCHEMA = ${JSON.stringify(serializeSchema(schema))};\n` }, schema };
   const files = generate(schema, ns, rel, isCanonicalSentence);
   // hand-written vocabulary a world keeps beside the generated one (the legend words of the diagram engine: shape names, colours ...): appended to the generated lexicon.sop
   const extra = await readFile(path.join(dir, 'lexicon.extra.sop'), 'utf8').catch(() => null);

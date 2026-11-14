@@ -564,3 +564,10 @@ export const sensitiveAction = W((ctx, { cat, text, remember }) => {
   return ok('Thanks for telling me. I do not keep things like that unless you say "remember", so I have not stored it.');
 });
 export { sensitiveAction as sensitive };
+
+// ---- the declared schema (schema.sop, declare=yes): read-only requests the profile world answers (taken from its own pattern examples; none changes what is stored)
+import { declaredExecutor } from '../acts/acts.mjs';
+import { SCHEMA } from './schema.declared.mjs';
+export const executor = declaredExecutor(SCHEMA, {
+  sampleKnowledge: () => ({ questions: ['What do you know about me?', 'How well do you know me?', 'How far are we?', 'Ask me something.', 'Can you interview me?'] }),
+});

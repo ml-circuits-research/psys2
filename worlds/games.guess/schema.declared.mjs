@@ -1,0 +1,2 @@
+// GENERATED from schema.sop by scripts/build-schema-world.mjs (declare=yes). Never edited by hand.
+export const SCHEMA = {"id":"guess","noun":"answer","acts":["make"],"limits":{"items":100,"history":30},"kinds":{"answer":{"name":"answer","plural":"answers","numbered":false,"named":false,"max":null,"in":null,"capacity":null,"acts":[],"any":false,"words":[],"diceNot":["make"],"know":[{"list":"answers","verb":"*"}]}},"attrs":{},"doc":"Guess the animal: the answers to the question that is asked, or the start.","tabOnly":false,"declared":true};

@@ -1,0 +1,2 @@
+// GENERATED from schema.sop by scripts/build-schema-world.mjs (declare=yes). Never edited by hand.
+export const SCHEMA = {"id":"hangman","noun":"letter","acts":["make"],"limits":{"items":100,"history":30},"kinds":{"letter":{"name":"letter","plural":"letters","numbered":false,"named":false,"max":null,"in":null,"capacity":null,"acts":[],"any":false,"words":[],"diceNot":["make"],"know":[{"list":"letters","verb":"*"}]}},"attrs":{},"doc":"Hangman: the letters not asked yet in a game that is on.","tabOnly":false,"declared":true};
