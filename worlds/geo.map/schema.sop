@@ -135,6 +135,17 @@
     default=2
     more=closer
     less=farther
+    step=1
+    step_more=closer
+    step_more=in
+    step_less=out
+    step_less=back
+    step_less=away
+    step_less=farther
+    step_less=further
+    reset=normal
+    reset=default
+    reset=original
     word=magnification
 
 @map.centre acts.attr

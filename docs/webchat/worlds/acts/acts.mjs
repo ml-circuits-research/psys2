@@ -24,13 +24,13 @@ import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=75b22014a6';
 import { FLAGS_DATA } from './forms.data.mjs?v=949dc4408a';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
-import { createEffects, EFFECT_ACTS } from './effects.mjs?v=cf2d571188';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
+import { createEffects, EFFECT_ACTS } from './effects.mjs?v=eda4b4e951';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values)
 import { en } from '../../lib/lang/en.mjs?v=d1e2ba22e0';
-import { resolvePhrase } from './np-lib.mjs?v=7879ccdad1';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
-import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=79e16a912f';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { resolvePhrase } from './np-lib.mjs?v=d1f0aa2052';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
+import { foldRelative } from '../../lib/lang/np-resolve.mjs?v=79e16a912f';   // the relative clause folded into modifiers; the rest of noun phrases is the library's (np-lib.mjs)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ export function parseSchema(wires) {
   }
   for (const w of wires.filter((x) => x.type === 'acts.attr')) {
     const name = w.id.slice(sw.id.length + 1);
-    const a = { name, of: vals(w, 'of'), type: val(w, 'type') ?? 'text', values: vals(w, 'values'), min: val(w, 'min') != null ? Number(val(w, 'min')) : null, max: val(w, 'max') != null ? Number(val(w, 'max')) : null, def: val(w, 'default'), more: vals(w, 'more'), less: vals(w, 'less'), words: vals(w, 'word'), step: val(w, 'step') ? Number(val(w, 'step')) : 1 };
+    const a = { name, of: vals(w, 'of'), type: val(w, 'type') ?? 'text', values: vals(w, 'values'), min: val(w, 'min') != null ? Number(val(w, 'min')) : null, max: val(w, 'max') != null ? Number(val(w, 'max')) : null, def: val(w, 'default'), more: vals(w, 'more'), less: vals(w, 'less'), stepMore: vals(w, 'step_more'), stepLess: vals(w, 'step_less'), reset: vals(w, 'reset'), words: vals(w, 'word'), step: val(w, 'step') ? Number(val(w, 'step')) : 1 };
     if (!['number', 'enum', 'colour', 'text', 'bool'].includes(a.type)) throw new Error(`attribute ${name}: unknown type '${a.type}'`);
     if (a.type === 'enum' && !a.values.length) throw new Error(`attribute ${name}: an enum needs values`);
     for (const k of a.of) if (!schema.kinds[k]) throw new Error(`attribute ${name}: unknown kind '${k}'`);
@@ -295,60 +295,42 @@ export function createExecutor(schema, hooks = {}) {
   const attrText = (a, v) => (a.type === 'bool' ? (v ? a.name : `not ${a.name}`) : String(v));
 
   // ---- referents ----
-  /** The things a phrase names: { ids } | { ask } | { none, kindWord } | { unknownKind } with `source` (said | focus | scene) and `guess`. */
-  /** The noun-phrase readings (choice, part of a set, relative clause) are the one host resolver `src/lang/np-resolve.mjs`; this is the domain it looks plain phrases up in: the things of the state. */
-  const domainOf = (st) => ({
-    rec: (t, o) => resolve(st, t, o),
-    refs: (r) => r.ids ?? null,
-    kind: (r) => r.kind,
-    made: (ids, kind, tier) => ({ ids, source: tier, kind }),
-    asked: (ask, ids) => ({ ask, candidates: ids }),
-    sayAll: (ids) => ids.map((id) => label(st.items.find((i) => i.id === id))),
-    tick: () => budget.tick('acts.choice'),
-    partitive: (part, ids) => `Which ${part.mode === 'count' ? `${part.n} of` : 'ones of'} ${joinAnd(ids.map((id) => st.items.find((i) => i.id === id)).filter(Boolean).map((i) => label(i)))}? Say their names or numbers.`,
-    other: (np, o) => resolveOther(st, np, o),
-  });
+  /**
+   * The things a phrase names: { ids } | { ask } | { none, kindWord } | { unknownKind } with `source` (said | focus | scene) and `guess`.
+   * The library reads the whole phrase (sopworld 0.40 `resolve` through `np-lib.mjs`: coordination, a choice that is asked, a part of a set, "the other one", ordinals, numbers, names, pronouns);
+   * the relative clause is folded first ("the table that is red" is "red table"). What it does not read is the host's: the parts of a coordination one by one (so that the part that fails says why),
+   * a bare name, the failure classes of the replies (`resolveHost`).
+   */
   function resolve(st, text, opts = {}) {
-    const x = readNounPhrase(text, domainOf(st), opts);
-    if (x.done) return x.done;
-    text = x.text;
-    const parts = en.splitList(text);
-    if (parts.length < 2) return resolveOne(st, text, opts);
+    text = foldRelative(text);
+    const lib = viaLibrary(st, text);
+    if (lib) return lib;
+    const np = en.nounPhrase(text);
+    const parts = np.choice ? np.choice.map((p) => p.text) : en.splitList(text);
+    if (parts.length < 2) return resolveHost(st, text, opts);
     const ids = []; let kind = null;
     for (let p of parts) {
       budget.tick('acts.coord');
-      if (kind && en.bareDistributes(p)) p = `${kind} ${p}`;   // "tables 1 and 2"
-      const r = resolveOne(st, p, opts);
+      if (kind && en.bareDistributes(p)) p = `${kind} ${p}`;   // "tables 2 and 9": the part that fails says so
+      const r = resolve(st, p, opts);
       if (!r.ids) return r;
       kind ??= r.kind;
       for (const id of r.ids) if (!ids.includes(id)) ids.push(id);
     }
+    if (np.choice && ids.length > 1) return asked(st, { ask: ids, how: 'choice', kind });
     return { ids, source: 'said', kind };
   }
-  /** "the other table", "the other one", "another one": the things of that kind that are not the dialogue focus (the kind of the focus when none is said). */
-  function resolveOther(st, np, opts) {
-    const ws = toks(np.text).filter((w) => !DET.has(w));
-    let kind = null;
-    for (const w of ws) { const h = kindByWord(w); if (h) { kind = h.kind.name; break; } }
-    const focus = focusOf(st).ids.filter((id) => st.items.some((i) => i.id === id));
-    if (!kind && !ws.length) kind = st.items.find((i) => focus.includes(i.id))?.kind ?? null;
-    if (!kind) return ws.length ? resolveOne(st, np.text, opts) : { missing: true };
-    const pool = st.items.filter((i) => i.kind === kind && !focus.includes(i.id));
-    if (!pool.length) return { none: true, kind, kindWord: 'other' };
-    if (pool.length === 1 || np.other.plural) return { ids: pool.map((i) => i.id), source: 'focus', kind, guess: `I took ${labels(pool)} as the other one` };
-    return { ask: `Which other ${kind}: ${joinAnd(pool.map((i) => label(i)))}?`, candidates: pool.map((i) => i.id) };
-  }
-  /** One phrase: the library reads it (sopworld `resolve` over the grammar of `lang.en`, through `np-lib.mjs`); what it does not read is the host's (`resolveHost`: a bare name, the failure classes of the replies). */
-  function resolveOne(st, text, o = {}) {
-    const lib = viaLibrary(st, text);
-    if (!lib) return resolveHost(st, text, o);
-    return lib;
-  }
+  const asked = (st, r) => {
+    const names = joinAnd(r.ask.map((id) => label(st.items.find((i) => i.id === id))).filter(Boolean));
+    if (r.how === 'choice') return { ask: `Which do you mean: ${r.ask.map((id) => label(st.items.find((i) => i.id === id))).join(' or ')}?`, candidates: r.ask };
+    if (r.how === 'part') return { ask: `Which ${r.n != null ? `${r.n} of` : 'ones of'} ${names}? Say their names or numbers.`, candidates: r.ask };
+    return { ask: `Which ${r.kind ?? 'one'}: ${names}?`, candidates: r.ask };
+  };
   function viaLibrary(st, text) {
     const t = toks(text).filter((w) => !DET.has(w) || PRONOUN.has(w));
     if (!t.length || !st.items.length) return null;
     budget.tick('acts.np-lib');
-    const pron = t.length === 1 && PRONOUN.has(t[0]);
+    const pron = t.find((w) => PRONOUN.has(w));
     const vals = new Set(st.items.flatMap((i) => Object.values(i.attrs ?? {})).map((v) => String(v).toLowerCase()));
     let r;
     try {
@@ -356,19 +338,26 @@ export function createExecutor(schema, hooks = {}) {
         kindOf: (w) => { const h = kindByWord(w); return h ? { kind: h.kind.name, plural: h.plural } : null; },
         valueOf: (w) => { if (vals.has(w)) return w; for (const a of Object.values(schema.attrs)) if (a.type === 'enum' || a.type === 'colour') { const v = valueOf(a, w); if (v !== undefined) return v; } return undefined; },
         nameOf: (w) => st.items.find((i) => i.name && (i.name.toLowerCase() === w || same(i.name.toLowerCase(), w)))?.name ?? null,
-        focus: pron ? focusOf(st).ids.filter((id) => st.items.some((i) => i.id === id)) : [],   // only a bare pronoun reads the focus; "the tables" with one in focus is still every table
+        focus: focusOf(st).ids.filter((id) => st.items.some((i) => i.id === id)),   // a pronoun and "the other one" read it (np-lib.mjs); "the tables" with one in focus is still every table
       });
     } catch (e) { if (e?.name === 'BudgetExceeded') throw e; return null; }   // a budget stop is the host's; a phrase the library cannot read is the host's to read
     if (!r) return null;
     const item = (id) => st.items.find((i) => i.id === id);
-    if (r.ask) return { ask: `Which ${r.kind ?? 'one'}: ${joinAnd(r.ask.map((id) => label(item(id))))}?`, candidates: r.ask };
-    if (r.tier === 'focus') return pron ? { ids: r.ids, source: 'focus', guess: `I took "${t[0]}" to mean ${labels(r.ids.map(item))}, the thing we just talked about` } : null;
+    if (r.missing) return { missing: true };
+    if (r.none) return { none: true, kind: r.kind, kindWord: 'other' };
+    if (r.ask) return asked(st, r);
+    if (r.other) {   // "the other one": what is not in focus; one is taken (and said), several are asked unless "the others" was said
+      const kind = st.items.find((i) => i.id === r.ids[0])?.kind;
+      if (r.other.plural || r.ids.length === 1) return { ids: r.ids, source: 'focus', kind, guess: `I took ${labels(r.ids.map(item))} as the other one` };
+      return { ask: `Which other ${kind}: ${joinAnd(r.ids.map((id) => label(item(id))))}?`, candidates: r.ids };
+    }
+    if (r.tier === 'focus') return pron ? { ids: r.ids, source: 'focus', guess: `I took "${pron}" to mean ${labels(r.ids.map(item))}, the thing we just talked about` } : null;
     return { ids: r.ids, source: 'said', kind: r.kind ?? undefined };
   }
   function resolveHost(st, text, { allowEmpty = false } = {}) {
     const t = toks(text).filter((w) => !DET.has(w) || PRONOUN.has(w));
     if (!t.length) return allowEmpty ? { ids: [] } : { missing: true };
-    if (t.length === 1 && PRONOUN.has(t[0])) return { missing: true };   // a pronoun with something in focus was read by the library (`viaLibrary`); with nothing in focus there is nothing to name
+    if ((t.length === 1 || t.at(-2) === 'of') && PRONOUN.has(t.at(-1))) return { missing: true };   // "two of them" with nothing in focus   // a pronoun with something in focus was read by the library (`viaLibrary`); with nothing in focus there is nothing to name
     let all = false, ord = null, n = null; const rest = [];
     for (const w of t) {
       if (w === 'all' || w === 'every' || w === 'each' || w === 'both' || w === 'everything') all = true;

@@ -2,7 +2,9 @@
 // The generic reading of the knowledge catalog for Talk (ACTS x SCHEMAS, KNOWLEDGE-ALL-WORLDS): NO table of any world is written here. A thing is the set of wires of the catalog that
 // carry its name (any world, any type: `th.wires`, `th.commonsense`, `th.senses` of src/knowledge/facts.mjs thing()); what a question word means is read from the `core.word`
 // wires of the schemas (`ctx.knowledge.peekSchema()`: "legs" means k.animals.animal.legs, "capital" means k.geo.country.capital); ordered series (months, planets) come from
-// `ctx.knowledge.peekSeries()`. A world added to the catalog is read with no change here. Browser-safe: no imports.
+// `ctx.knowledge.peekSeries()`. A world added to the catalog is read with no change here. Browser-safe: no `node:*`.
+
+import { askBridge } from '../acts/ask-lib.mjs?v=304b6d8a1c';   // the value of a slot of a record is asked of the library (sopworld `ask`)
 
 const lc = (s) => String(s ?? '').toLowerCase();
 /** The words of a question that ask for a place, a purpose or an action, as the slot names they usually mean: the grammar of the question frames, not a fact of any world. */
@@ -54,10 +56,22 @@ export function slotsFor(sc, word) {
   return out;
 }
 
-/** The values of the first slot among `slots` that some record of the thing has: { key, type, values, rec } or null. Values are strings (the catalog's text). */
+/**
+ * The values of the first slot among `slots` that some record of the thing has: { key, type, values, rec } or null. Values are strings (the catalog's text). The records of the thing are projected to wires
+ * (one `record` thing each, keys prefixed `f_`: `kind`, `name` and `world` are the library's own) and the value is ASKED of the library (`ask thing= attr=`, worlds/acts/ask-lib.mjs); the order in which
+ * records and slots are tried is this module's: the strong records answer before the weak ones.
+ */
+let ASK = null;   // the bridge, made on first use
+const projection = new WeakMap();   // the records of one question -> their wires
 export function valuesOf(recs, slots) {
   const weak = (r) => /^k\.(?:scenes|commonsense)\./.test(r.type) || DRAWN.test(r.type);   // the world that is about the thing itself answers before the one that only places it in a picture
-  for (const group of [recs.filter((r) => !weak(r)), recs.filter(weak)]) for (const { key } of slots) for (const rec of group) { const v = rec.f[key]; if (v?.length) return { key, type: rec.type, values: v, rec }; }   // every slot of the strong records first
+  let things = projection.get(recs);
+  if (!things) projection.set(recs, (things = recs.map((r, i) => ({ id: `r${i}`, attrs: Object.fromEntries(Object.entries(r.f).map(([k, v]) => [`f_${k}`, v])) }))));
+  for (const group of [recs.filter((r) => !weak(r)), recs.filter(weak)]) for (const { key } of slots) for (const rec of group) {   // every slot of the strong records first
+    if (!rec.f[key]?.length) continue;
+    const v = (ASK ??= askBridge('record', null)).ask(things, { thing: `r${recs.indexOf(rec)}`, attr: `f_${key}` }).values;
+    if (v.length) return { key, type: rec.type, values: v, rec };
+  }
   return null;
 }
 
