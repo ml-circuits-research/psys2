@@ -4165,3 +4165,7 @@ Reviewer ran `npm run test:smoke` on d24961c1: 89/89 pass, exit 0; read the 30 n
 2. **"Set the circle colour to cherry." → "Done. But: What should change about circle 3?…"** was judged ok: a reply that both acts and asks back is a defect of the reply (or of the judge). Check the judge: a counter-question after "Done" must not count as executed-clean.
 3. **art.draw objects from the catalog** ("Draw a giraffe") when the catalog is reachable (the live demo): measure once with the catalog route on.
 Next: 17:55 data fetches (BillSum first: the library waits), vendor ≥0.65 and wire compose, then the queue.
+
+## Reviewer 2026-11-14 19:05 — data fetches and compose step B accepted; k.genres is published
+
+Reviewer ran `npm run test:smoke` on 557c8898: 89/89 pass, exit 0. Accepted: BillSum 200, arXiv (CC0), TinyStories (CDLA-Sharing), UniMorph ron (CC BY-SA), wordfreq (CC BY-SA), ConceptNet en (CC BY-SA), each with SOURCE.md; Q51 workaround deleted; compose wired (essays traced, no repetition, but **all "short"**: the knowledge was too thin). Still to fetch: **Wikidata typical numbers** (17:55 item 2). The knowledge repository published **k.genres** (366975e: 5 genres, moves, registers); k.story, w.document, composition procedures and register templates follow. Pull the catalog when each lands; attach one composition of each type to the landing note when the types are available.
