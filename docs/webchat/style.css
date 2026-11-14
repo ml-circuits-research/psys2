@@ -363,11 +363,14 @@
 .p2-avicon:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .p2-avicon-face { display: block; width: 34px; height: 34px; }
 .p2-avicon-face svg { display: block; width: 100%; height: 100%; }
-.p2-avpop { position: absolute; left: 8px; right: 8px; bottom: 62px; z-index: 6; max-height: calc(100% - 120px); overflow-y: auto; border-radius: 16px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line), 0 14px 40px -12px rgba(20, 30, 60, .35); padding: 8px 12px 14px; }
+/* The popup sits ABOVE the input bar and its footer: app.mjs sets --avpop-bottom to the measured height of both (the fallback is the usual one), so it never overlaps them; the head (Close) stays, the body scrolls inside the popup when the screen is small */
+.p2-avpop { position: absolute; left: 8px; right: 8px; bottom: var(--avpop-bottom, 92px); z-index: 6; max-height: calc(100% - var(--avpop-bottom, 92px) - 64px); display: flex; flex-direction: column; overflow: hidden; border-radius: 16px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line), 0 14px 40px -12px rgba(20, 30, 60, .35); padding: 8px 12px 10px; }
 .p2-avpop[hidden] { display: none; }
-.p2-avpop-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.p2-avpop-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; flex: 0 0 auto; }
+.p2-avpop-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-bottom: 4px; }
 .p2-avpop-body .p2-avatar-stage { max-height: 40vh; }
-@media (max-width: 720px) { .p2-avpop { left: 4px; right: 4px; } }
+@media (max-width: 720px) { .p2-avpop { left: 4px; right: 4px; } .p2-avpop-body .p2-avatar-stage { width: min(100%, 28vh); max-height: none; } }
+.p2-avpop-body > * { flex-shrink: 0; }
 
 /* LEARN FROM USE: screen-reader status for the rating, the spoken expectation, failure marks in the history, the sending setting */
 .p2-sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
