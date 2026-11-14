@@ -311,6 +311,7 @@ function accepts({ action, mode, roles = {}, state, tab, text }) {
   if (act === 'compose' || act === 'digest') {   // spec 26: a world that cannot act does not claim a reading another world can execute; the open tab owns its acts (spec 20)
     const g = globalThis[Symbol.for('psys2.textgen')]?.[act === 'compose' ? 'composer' : 'summarizer'];
     if (tab === 'docs.reader') return true;   // in its own tab the reader answers, and declines plainly while the library lacks the generator
+    if (act === 'compose' && !g?.supports?.(text)) return false;   // a type whose genre the knowledge lacks is not this world's to claim outside its own tab
     return !!g?.available && (!tab || tab === 'talk' || /\b(?:documents? tab|reader)\b/i.test(String(text ?? '')));
   }
   if (!Object.hasOwn(domain, act)) return true;   // the operations that are not acts (who did what, where did it happen, a count of a name, a search step ...) are read by patterns that name the reader's own frames

@@ -3,6 +3,8 @@
 // releases them, `available` is false, every call returns null and the UI hides what needs them: there is NO local generator and NO fallback text here.
 // Browser-safe: no `node:*` imports; the library module is passed in.
 
+import { knowledgeWorld, genreOf, randomTopics, realiseFrame, chapterTitle } from './compose-world.mjs?v=a0b5480d5f';
+
 const pick = (lib, name) => (typeof lib?.[name] === 'function' ? lib[name] : typeof lib?.std?.[name] === 'function' ? lib.std[name] : null);
 const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : def)); };
 
@@ -92,41 +94,65 @@ export function composeRequest({ type, topic = '', chapters, subchapters, words,
 }
 
 /**
- * @returns {{ available: boolean, compose(req): ?{ title, topic, chapters: [{ title, subchapters: [{ title, sentences: [{ text, source }] }] }] } }}
- * Every sentence must carry its `source` (the wire of the claim it renders); a composition with an unsourced sentence is refused (no invented claims).
+ * The composer over the real `std.compose` (sopworld >= 0.64): `compose(world, topic, { genre, size: { chapters, sections, sentences }, seed, realise })` returns frames
+ * `{ genre, topic, chapters: [{ title, interest, sections: [{ interest, sentences: [{ move, fact, about, cites, text? }] }] }], short? }`; it is language-free and cites the wire of every claim.
+ * The host maps the request onto it (type -> genre only when the knowledge holds that genre; sections = subchapters, sentences from the words asked), realises each frame in English
+ * (src/dialog/compose-world.mjs) and returns `{ composition }` or `{ why }` (nothing is written when it cannot be done). When the knowledge is short of what was asked, the library says so
+ * (`short`) and the composition is the smaller one it could write, never padded.
  */
-export function createComposer(lib, world) {
-  // STEP B: sopworld 0.65 has `compose(world, topic, { genre, size, seed, realise, measures })`, not the interface assumed in spec 26; until the adapter is switched to it, the composer is unavailable (the wrong call must not be made).
-  const fn = null;
+export function createComposer(lib, world = null) {
+  const fn = pick(lib, 'compose');
+  const TYPE_RE = /\b(scientific[ _-]article|research[ _-]article|scientific[ _-]paper|presentation|slideshow|essay|composition|article|story|tale|report|piece|text)\b/i;
   return {
     available: Boolean(fn),
+    /** Can a request in these words be executed (the composer exists and the knowledge holds the genre of its type, the essay needing none)? A world that cannot act does not claim the reading. */
+    supports(text) {
+      if (!fn) return false;
+      const t = docTypeOf(TYPE_RE.exec(String(text ?? ''))?.[1]?.replace(/[ -]/g, '_'));
+      return t === 'essay' || !!genreOf(world ?? knowledgeWorld(lib), t);
+    },
     compose(input = {}) {
-      if (!fn) return null;
+      if (!fn) return { why: 'the library has no composer' };
       const req = composeRequest(input);
-      const c = fn(world, req);
-      return checkComposition(c, req).ok ? normalise(c) : null;
+      const kw = world ?? knowledgeWorld(lib);
+      const genre = genreOf(kw, req.type);
+      if (!genre && req.type !== 'essay') return { why: `the knowledge has no genre for a ${DOC_TYPES[req.type].label.toLowerCase()} yet (no k.genres.genre ${req.type}), so I cannot write one by the book` };
+      const topics = req.topic ? [req.topic] : randomTopics(lib, kw, req.seed ?? Date.now() % 100000);
+      if (!topics.length) return { why: 'the knowledge has no subject to write about' };
+      const sections = Math.max(1, req.subchapters);
+      const sentences = clip(req.words / (req.chapters * sections * 16), 1, 8, 3);
+      let c = null, topic = null;
+      for (const t of topics) {   // a random topic is the best by interest that the knowledge can fill
+        topic = t;
+        c = fn(kw, t, { ...(genre ? { genre } : {}), size: { chapters: req.chapters, sections, sentences }, seed: Number(req.seed) || 1, realise: realiseFrame });
+        if (c?.why || c?.chapters?.length) break;
+      }
+      if (c?.why) return { why: c.why };
+      const chk = checkComposition(c, req);
+      if (!chk.ok) return { why: c?.chapters?.length ? `I could not write that so that every sentence reads and traces to what I know (${chk.problems[0]})` : `I know nothing about ${topic} in my knowledge yet` };
+      return { composition: normalise(c, req, topic) };
     },
   };
 }
 
-function normalise(c) {
-  return { title: String(c.title).trim(), topic: c.topic ?? null, type: c.type ?? null, procedure: c.procedure, chapters: c.chapters.map((ch) => ({ title: String(ch.title).trim(),
-    subchapters: ch.subchapters.map((sc) => ({ title: String(sc.title ?? '').trim(), sentences: sc.sentences.map((s) => ({ text: s.text.trim(), source: s.source, world: s.world ?? null })) })) })) };
+function normalise(c, req, topic) {
+  return { title: `All about the ${topic}`, topic, type: req.type, genre: c.genre ?? null, short: c.short ?? [], chapters: c.chapters.map((ch) => ({ title: chapterTitle(ch.title),
+    subchapters: ch.sections.map((sc, i) => ({ title: req.subchapters ? `Part ${i + 1}` : '', sentences: sc.sentences.map((s) => ({ text: s.text.trim(), source: s.cites, move: s.move })) })) })) };
 }
 
-/** Shape check against the request: exact chapter / subchapter counts, every sentence sourced and free of placeholders. Returns { ok, problems }. */
+/** Shape check of the library's frames: at least one chapter, no more than asked, every frame realised (a sentence) and citing a wire; a shorter result is allowed only when the library says `short`. */
 export function checkComposition(c, req) {
   const problems = [];
-  if (!c || typeof c.title !== 'string' || !c.title.trim() || !Array.isArray(c.chapters)) return { ok: false, problems: ['no title or chapters'] };
-  if (c.type !== undefined && c.type !== req.type) problems.push(`type ${c.type} != ${req.type}`);
-  if (!c.procedure) problems.push('no procedure: the type\'s method must come from knowledge (k.genres / k.story / k.procedures)');
-  if (c.chapters.length !== req.chapters) problems.push(`chapters ${c.chapters.length} != ${req.chapters}`);
+  if (!c || !Array.isArray(c.chapters) || !c.chapters.length) return { ok: false, problems: ['no chapters'] };
+  if (c.chapters.length > req.chapters) problems.push(`chapters ${c.chapters.length} > ${req.chapters}`);
+  if (c.chapters.length < req.chapters && !c.short?.length) problems.push(`chapters ${c.chapters.length} < ${req.chapters} and not said to be short`);
+  const seen = new Set();
   for (const [i, ch] of c.chapters.entries()) {
-    if (typeof ch?.title !== 'string' || !ch.title.trim() || !Array.isArray(ch.subchapters)) { problems.push(`chapter ${i + 1} malformed`); continue; }
-    if (ch.subchapters.length !== req.subchapters && !(req.subchapters === 0 && ch.subchapters.length === 1)) problems.push(`chapter ${i + 1}: subchapters ${ch.subchapters.length} != ${req.subchapters}`);
-    for (const sc of ch.subchapters) for (const s of Array.isArray(sc?.sentences) ? sc.sentences : []) {
+    if (!Array.isArray(ch?.sections) || !ch.sections.length) { problems.push(`chapter ${i + 1} malformed`); continue; }
+    for (const sc of ch.sections) for (const s of Array.isArray(sc?.sentences) ? sc.sentences : []) {
       if (typeof s?.text !== 'string' || !s.text.trim() || /[<{}]|\bundefined\b/.test(s.text)) problems.push('empty or placeholder sentence');
-      else if (!s.source) problems.push(`unsourced sentence: "${s.text.slice(0, 40)}"`);
+      else if (!s.cites) problems.push(`uncited sentence: "${s.text.slice(0, 40)}"`);
+      else if (seen.has(s.cites)) problems.push(`fact said twice: ${s.cites}`); else seen.add(s.cites);
     }
   }
   return { ok: problems.length === 0, problems };
