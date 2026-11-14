@@ -24,7 +24,7 @@ import { createEngineClient } from './ui/engine-client.mjs';
 import { normalizeNxStrategy } from './lib/formalizer/nx-strategy.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
-import { turnRecord, summarize, outcomeOf } from './lib/dialog/conversation.mjs';
+import { turnRecord, summarize, outcomeOf, executedActs } from './lib/dialog/conversation.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
@@ -37,8 +37,8 @@ import { snapshotState, describeChanges } from './ui/state-diff.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
-/** The order of the tabs (owner, 2026-11-14): Talk first, then Drawing and Diagram, the rest as listed. The avatar is not a tab: it is the icon in the input bar. */
-export const TAB_ORDER = ['talk', 'draw', 'diagram', 'map', 'charts', 'editor', 'music', 'chess', 'seating', 'timeline', 'guess', 'hangman', 'tictactoe', 'documents'];
+/** The order of the pages (owner, 2026-11-15): Drawing and Diagram first, the rest as listed (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
+export const TAB_ORDER = ['draw', 'diagram', 'map', 'charts', 'seating', 'timeline', 'documents', 'music', 'editor', 'chess', 'guess', 'hangman', 'tictactoe'];
 export const TABS = [
   { id: 'editor', label: 'Editor', world: 'docs.editor', make: createEditor },
   { id: 'tictactoe', label: 'Tic-tac-toe', world: 'games.tictactoe', make: createTicTacToe },
@@ -79,6 +79,7 @@ const ICON = {
   close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4 6.4 5Z"/></svg>',
   die: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm-4 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM8 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>',
   stop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6Z"/></svg>',
+  menu: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z"/></svg>',
 };
 const icon = (name) => { const s = document.createElement('span'); s.className = 'p2-icon'; s.innerHTML = ICON[name]; return s; };
 const time = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -134,10 +135,9 @@ export async function mountPsys2(element, options = {}) {
       if (destroyed) return null;
       const holder = h('div', { class: 'p2-tabbody' });
       tabBtns[t.id].panel.append(holder);
-      if (t.id !== 'talk') { const die = h('button', { class: 'p2-btn p2-tabdice', type: 'button', 'aria-label': 'Random command for this tab', title: 'Random command for this tab' }, icon('die')); die.addEventListener('click', () => rollDice(t.id)); tabBtns[t.id].panel.append(die); }   // a tab that fills the screen has its own small dice
+      { const die = h('button', { class: 'p2-btn p2-tabdice', type: 'button', 'aria-label': 'Random command for this tab', title: 'Random command for this tab' }, icon('die')); die.addEventListener('click', () => rollDice(t.id)); tabBtns[t.id].panel.append(die); }   // a tab that fills the screen has its own small dice
       panelUI[t.id] = { ui: t.make(holder, hostApi) };
       panelUI[t.id].ui.update?.(states[t.world]);
-      if (lastSummary) panelUI[t.id].ui.setSummary?.(lastSummary);   // the Talk tab made after some turns shows the conversation so far
       if (view === t.id) panelUI[t.id].ui.show?.();
       return panelUI[t.id].ui;
       } finally { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); }
@@ -152,7 +152,12 @@ export async function mountPsys2(element, options = {}) {
   const hostStage = (stage, recId = null) => { stageLog.push({ at: performance.now(), stage, recId }); if (stageLog.length > 400) stageLog.splice(0, 200); };
   // a fresh start opens the first tab (Talk); a returning user gets the tab they last used (kept next to the settings, never sent anywhere). Its world is the one loaded at boot.
   const savedTab = (() => { try { const s = options.persist !== false ? localStorage.getItem('psys2.webchat.tab') : null; return s && tabDefs.some((t) => t.id === s) ? s : null; } catch { return null; } })();
-  let view = savedTab ?? tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
+  // PHONE: the media query is the only thing that decides the layout; `page` is what the phone shows ('chat' or a tab id); `view` stays the tab the world and the desktop pane use
+  const phoneMq = typeof matchMedia === 'function' ? matchMedia('(max-width: 760px)') : null;
+  let phone = !!phoneMq?.matches;
+  const hashPage = (() => { try { const id = options.persist !== false && phone ? decodeURIComponent(String(location.hash).slice(1)) : ''; return tabDefs.some((t) => t.id === id) ? id : null; } catch { return null; } })();
+  let page = hashPage ?? 'chat';
+  let view = hashPage ?? savedTab ?? tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
   const turnLog = []; let turnCount = 0;   // the turns of this conversation, for the summary of the Talk tab
   let lastSummary = null;
   // std.summarize / std.compose (spec 26): the adapters are unavailable until the library ships them, and then the UI that needs them stays hidden (no fallback text)
@@ -161,7 +166,7 @@ export async function mountPsys2(element, options = {}) {
     .then(([m, lib]) => { textGen = { summarizer: m.createSummarizer(lib, null), composer: m.createComposer(lib, null) }; return textGen; }).catch(() => { textGen = { summarizer: { available: false }, composer: { available: false } }; return textGen; });
   textGenReady.then(() => { try { refreshSummary(); } catch { /* the summary is rebuilt after the next turn */ } });
   const refreshSummary = () => { try { lastSummary = summarize({ turns: turnLog, states, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title });
-    if (textGen?.summarizer?.available && turnLog.length) { const p = textGen.summarizer.turns({ turns: turnLog, taught: lastSummary.taughtClear, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title ?? id, maxSentences: 3 }); if (p) lastSummary.paragraph = p.text; } panelUI.talk?.ui?.setSummary?.(lastSummary); } catch (e) { console.warn('summary failed', e); } };
+    if (textGen?.summarizer?.available && turnLog.length) { const p = textGen.summarizer.turns({ turns: turnLog, taught: lastSummary.taughtClear, labelOf: (id) => engine?.worlds?.().find((w) => w.id === id)?.title ?? id, maxSentences: 3 }); if (p) lastSummary.paragraph = p.text; } renderSummaryPanel(); } catch (e) { console.warn('summary failed', e); } };
   let avatarUI = null, avatarOpen = false, lastAnswerText = '';   // the avatar is not a tab: an icon in the input bar and its popup
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
@@ -234,12 +239,24 @@ export async function mountPsys2(element, options = {}) {
   const avBody = h('div', { class: 'p2-avpop-body' });
   const avPop = h('div', { class: 'p2-avpop', id: 'p2-avpop', role: 'dialog', 'aria-label': 'Avatar', hidden: true }, h('div', { class: 'p2-avpop-head' }, h('strong', {}, 'Avatar'), avClose), avBody);
   const exBar = h('div', { class: 'p2-exbar', role: 'group', 'aria-label': 'Suggestions', hidden: true });   // RANDOM (spec 25): examples from the session on Talk, the acts that fit the selected thing on the other tabs
+  // PHONE LAYOUT (owner, 2026-11-15): on a phone every page takes the whole screen and the chat history is one of them; a hamburger menu lists the pages, the input bar stays on every page.
+  // Desktop keeps the chat beside the current page. The page list is built from the tab registry, so a removed tab disappears from the menu by itself.
+  const burgerBtn = h('button', { class: 'p2-btn p2-burger', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': 'p2-menu', 'aria-label': 'Pages', title: 'Pages' }, icon('menu'));
+  const pageTitle = h('strong', { class: 'p2-pagetitle', 'aria-live': 'polite' }, 'Chat');
+  const menuEl = h('nav', { class: 'p2-menu', id: 'p2-menu', role: 'menu', 'aria-label': 'Pages', hidden: true });
+  const toastEl = h('button', { class: 'p2-toast', type: 'button', hidden: true, 'aria-label': 'Open the chat to read the whole reply' });
+  // the summary of the conversation (it was the Talk page): a collapsible panel at the top of the chat, filled after every turn
+  const sumBody = h('div', { class: 'p2-sum-body' });
+  const sumPanel = h('details', { class: 'p2-sum', 'aria-label': 'What we are talking about', hidden: true }, h('summary', {}, 'What we are talking about'), sumBody);
   const form = h('form', { class: 'p2-form' }, avBtn, micBtn, speakerBtn, input, dieBtn, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
+      burgerBtn,
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
-      h('div', { class: 'p2-tools' }, langSel, gearBtn)),
-    statusEl, progress.element, log, queueEl, dictBar, avPop, exBar, form,
+      pageTitle,
+      h('div', { class: 'p2-tools' }, langSel, gearBtn),
+      menuEl),
+    statusEl, progress.element, sumPanel, log, toastEl, queueEl, dictBar, avPop, exBar, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
@@ -282,9 +299,80 @@ export async function mountPsys2(element, options = {}) {
     showTab(id, via);
     if (tabBtns[id] && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
   }
+  // ---------- pages (phone) ----------
+  const pageName = (id) => (id === 'chat' ? 'Chat' : tabDefs.find((t) => t.id === id)?.label ?? id);
+  const pushPage = (id) => { if (options.persist === false) return; try { history.pushState({ p2page: id }, '', `#${id}`); } catch { /* no history */ } };
+  function syncPageUI() {
+    root.classList.toggle('is-phone', phone); root.dataset.page = phone ? page : view ?? '';
+    root.classList.toggle('p2-on-chat', phone && page === 'chat');
+    pageTitle.textContent = pageName(page);
+    for (const b of menuEl.querySelectorAll('[data-page]')) { if (b.dataset.page === page) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); }
+    if (phone && page === 'chat') scrollDown();
+  }
+  function renderMenu() {
+    const items = [{ id: 'chat', label: 'Chat' }, ...tabDefs.map((t) => ({ id: t.id, label: t.label }))];
+    menuEl.replaceChildren(...items.map((it) => h('button', { class: 'p2-menu-item', type: 'button', role: 'menuitem', 'data-page': it.id, onclick: () => { setPage(it.id, { via: 'menu' }); } }, it.label)),
+      h('button', { class: 'p2-menu-item', type: 'button', role: 'menuitem', 'data-page': 'settings', onclick: () => { closeMenu(); openSettings(); } }, 'Settings'));
+  }
+  function closeMenu() { if (menuEl.hidden) return; menuEl.hidden = true; burgerBtn.setAttribute('aria-expanded', 'false'); }
+  function toggleMenu() { const open = menuEl.hidden; menuEl.hidden = !open; burgerBtn.setAttribute('aria-expanded', String(open)); if (open) menuEl.querySelector('[aria-current]')?.focus(); }
+  renderMenu();
+  on(burgerBtn, 'click', toggleMenu);
+  on(document, 'click', (e) => { if (!menuEl.hidden && !menuEl.contains(e.target) && !burgerBtn.contains(e.target)) closeMenu(); });
+  on(menuEl, 'keydown', (e) => { if (e.key === 'Escape') { closeMenu(); burgerBtn.focus(); } });
+  /** Shows a page on a phone ('chat' or a tab); on a desktop a tab only. One history entry per page, so Back returns to the page before. */
+  function setPage(id, { push = true, via = 'menu' } = {}) {
+    if (id !== 'chat' && !tabBtns[id]) return;
+    if (!phone) { if (id !== 'chat') userTab(id, via); return; }
+    const was = page; page = id; closeMenu(); hideToast();
+    if (id === 'chat') panelUI[view]?.ui?.hide?.(); else { showTab(id, via); if (lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); } }
+    syncPageUI(); refreshSuggestions();
+    if (push && was !== id) pushPage(id);
+  }
+  on(window, 'popstate', () => {
+    if (!phone || !settingsEl.hidden) return;
+    let id = history.state?.p2page ?? decodeURIComponent(String(location.hash).slice(1));
+    if (id !== 'chat' && !tabBtns[id]) id = 'chat';
+    if (id !== page) setPage(id, { push: false, via: 'back' });
+  });
+  if (phoneMq) on(phoneMq, 'change', () => {
+    phone = phoneMq.matches; if (phone) page = 'chat'; closeMenu(); hideToast(); syncPageUI();
+    if (phone) panelUI[view]?.ui?.hide?.(); else panelUI[view]?.ui?.show?.();
+  });
+  // the short reply on a page that is not the chat: it fades by itself, a tap opens the chat
+  let toastT = 0;
+  function hideToast() { clearTimeout(toastT); toastEl.hidden = true; }
+  function showToast(text) {
+    const t = String(text ?? '').replace(/\s+/g, ' ').trim(); if (!t) return;
+    toastEl.textContent = t.length > 160 ? `${t.slice(0, 157)}…` : t; toastEl.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(hideToast, 9000);
+  }
+  on(toastEl, 'click', () => setPage('chat'));
+  /** The pages a reply belongs to: the worlds of the acts it executed (the same source the summary uses), else the winners of its routing; a world without a page, or a reply that did nothing, has none. */
+  function replyPages(reply) {
+    if (!['done', 'answer', 'already'].includes(outcomeOf(reply))) return [];
+    const acts = [...new Set(executedActs(reply).map((a) => a.world))];
+    const worlds = acts.length ? acts : [...new Set((reply?.segments ?? []).filter((sg) => !sg.unparsed).map((sg) => sg.routing?.winner?.worldId).filter(Boolean))];
+    const ids = [];
+    for (const w of worlds) { const t = tabDefs.find((d) => d.world === w); if (t && tabKnown.has(t.id) && !ids.includes(t.id)) ids.push(t.id); }
+    return ids.slice(0, 2);
+  }
+  function pageChips(reply) {
+    return replyPages(reply).map((id) => h('button', { class: 'p2-pagechip', type: 'button', title: `Open the ${pageName(id)} page`, 'data-page': id, onclick: () => { if (phone) setPage(id, { via: 'chip' }); else userTab(id, 'chip'); } }, pageName(id)));
+  }
+  /** The summary of the conversation, the collapsible panel at the top of the chat (it was the Talk page). */
+  function renderSummaryPanel() {
+    const m = lastSummary;
+    sumPanel.hidden = !turnLog.length || !m?.sections?.length;
+    if (sumPanel.hidden) { sumBody.replaceChildren(); return; }
+    const nodes = [];
+    if (m.paragraph) nodes.push(h('p', { class: 'p2-sum-para' }, m.paragraph));   // std.summarize, above the structured list; absent while the library has none
+    for (const sec of m.sections) nodes.push(h('div', { class: 'p2-sum-sec', 'data-section': sec.id }, h('h4', {}, sec.title), h('ul', {}, ...sec.lines.map((l) => h('li', {}, l.text)))));
+    sumBody.replaceChildren(...nodes);
+  }
   /** The popup rests on the input bar: its bottom is the height of the form and the footer below the chat's content (measured, since they wrap on a phone and scale with the font). */
   function placeAvatarPopup() {
-    const c = chat.getBoundingClientRect(), f = form.getBoundingClientRect();
+    const c = (phone ? root : chat).getBoundingClientRect(), f = form.getBoundingClientRect();
     if (c.height > 0 && f.height > 0) avPop.style.setProperty('--avpop-bottom', `${Math.ceil(c.bottom - f.top) + 6}px`);
   }
   window.addEventListener('resize', () => { if (avatarOpen) placeAvatarPopup(); });
@@ -311,6 +399,8 @@ export async function mountPsys2(element, options = {}) {
       if (active) ui?.show?.();
     }
     syncDebugButton();
+    if (phone && page !== 'chat' && page !== id) { page = id; pushPage(id); }   // a command on a page that opens another page moves the phone there; from the chat the chat stays (the reply carries a link)
+    syncPageUI();
     refreshSuggestions();
     const def = tabDefs.find((t) => t.id === id);
     if (def && !panelUI[id]) makeTab(def);
@@ -456,6 +546,7 @@ export async function mountPsys2(element, options = {}) {
   const toast = (text) => { const t = h('div', { class: 'p2-toast', role: 'status' }, text); chat.append(t); setTimeout(() => t.remove(), 2600); };
   let currentBot = null; // the bot message of the reply being processed (chat.suggest adds chips to it)
   const ALLOW = {
+    'talk.card': async () => ({ ok: true }), 'talk.board': async () => ({ ok: true }),   // the Talk page is gone (its summary is a panel of the chat): the world's card and board effects have nothing to show
     'speech.say': async ({ text, lang, rate, voice }) => {
       if (!speechSupport.synthesis || !speech) return { ok: false, detail: 'speech synthesis is not supported by this browser' };
       if (!String(text ?? '').trim()) return { ok: false, detail: 'no text' };
@@ -772,6 +863,7 @@ export async function mountPsys2(element, options = {}) {
       else lastNU = { at: nowT, n: 1, el: botMsg.msg, badge: botMsg.meta.appendChild(h('span', { class: 'p2-took' }, '')) };
     }
     currentBot = botMsg;
+    if (!notUnderstood) { try { botMsg.meta.append(...pageChips(reply)); } catch (e) { console.warn('page chip', e); } if (phone && page !== 'chat') showToast(answer); }
     const prevAnswer = lastAnswer;   // FB: the answer a spoken "that is wrong" is about
     // LANG-FIXED: an explicit switch command ("vorbește în engleză", "switch to Romanian") is the only thing in a reply that changes the language: it moves the selector
     // visibly, and its own reply is the confirmation. Detection, the reply language and the translator never do.
@@ -1088,14 +1180,15 @@ export async function mountPsys2(element, options = {}) {
     if (ex.tab && ex.tab !== 'robot' && tabBtns[ex.tab] && view !== ex.tab) userTab(ex.tab, 'example');
     send(ex.text, 'chip', { example: true });
   }
-  on(dieBtn, 'click', () => { rollDice(view); });
+  on(dieBtn, 'click', () => { rollDice(phone && page === 'chat' ? 'talk' : view); });
   let sugSeq = 0;
   /** Talk: 3-4 example commands from the context; another tab: the acts that fit its selected (or newest) thing. Refreshed after every turn and on every tab change. */
   async function refreshSuggestions() {
     if (destroyed || !engineClient || options.suggestions === false) return;
-    const my = ++sugSeq, tab = view, talk = tab === 'talk' || !tab;
+    const my = ++sugSeq, onChat = phone && page === 'chat', tab = onChat ? 'talk' : view, talk = onChat || !tab;
     let items = [];
     try { items = await sampleItems(talk ? 'few' : 'actions', { tab, count: talk ? 4 : 5 }); } catch { items = []; }
+    if (!items.length && !talk) { try { items = await sampleItems('few', { tab: 'talk', count: 4 }); } catch { items = []; } }   // a page with no acts of its own shows the examples of the conversation
     if (my !== sugSeq || destroyed) return;
     exBar.replaceChildren(...items.map((it) => h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && it.tab !== 'robot' && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)));
     exBar.hidden = !items.length;

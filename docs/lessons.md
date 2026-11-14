@@ -439,3 +439,8 @@ Own tests (matrix) 410 -> 452 of 454; ledger rows 41 of 43 closed, by seven mech
 - The dice needed no new kind: a knowledge list on an existing kind (`know=diagrams:*` on `text`, dice.not=make) and a `sampleKnowledge` of whole sentences that the reader reads back. 30/30 presses executed.
 - Moving the engine's own `placeFree` out of the way for a composed diagram fixed "too complex" (the per-turn budget) on a canvas with shapes: the layout is explicit, so nothing needs to be found a free spot.
 - Bundling a shard of a newer catalog into the language bundle is not free: it regenerates every shard and makes the schema worlds stale. Pin by catalog commit and bundle in one step with the worlds that read it.
+
+## 2026-11-15 One layout switch in JS, one source for page links
+- A phone layout that must keep the input bar on every page while the chat and the tools are sibling elements is cheapest as `display: contents` on the chat section plus `order` in one flex column, switched by a class the media query sets from JS (`is-phone`): no markup moved, the desktop CSS untouched, and Chrome tests can read the class and `data-page`.
+- A page link on a reply must come from what the turn executed (`executedActs`), mapped to the tab whose world it is; routing winners only as a fallback and only for replies that did something. Greetings route to a world too, so the outcome gate matters as much as the source.
+- When a page is removed, remove its effects' consumers too: the world still emits `talk.card`, so the host keeps no-op handlers instead of failing the turn.
