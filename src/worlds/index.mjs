@@ -187,7 +187,7 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
   w.guard = guard;
   w.stateKey = stateKey;
   w.isView = isView;
-  for (const [k, f] of [['legend', 'legend.sop'], ['kb', 'kb.sop'], ['matrix', 'matrix.sop'], ['mapping', 'mapping.sop']]) if (files[f] != null) w.raw[k] = files[f];
+  for (const [k, f] of [['legend', 'legend.sop'], ['kb', 'kb.sop'], ['matrix', 'matrix.sop'], ['mapping', 'mapping.sop'], ['typed', 'typed.json']]) if (files[f] != null) w.raw[k] = files[f];   // typed.json: the typed world of the world (spec 16 section 13), read lazily by src/formalizer/typed-world.mjs
   if (matrix && /\breasoner=matrix\b/.test(files['world.sop'] ?? '')) {
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
     for (const [base, extra] of Object.entries(MATRIX_EXTRAS)) if (files[extra] != null) files[base] = base === 'templates.sop' ? files[extra] + '\n' + (files[base] ?? '') : (files[base] ?? '') + '\n' + files[extra];
@@ -278,7 +278,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
   for (const id of ids) {
     const files = {};
     const matrix = reasoner === 'matrix';
-    await Promise.all([...FILES, 'describe.sop', ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
+    await Promise.all([...FILES, 'describe.sop', 'typed.json', ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
     let ops = null, fns = null, voice = null, toState = null, adopt = null, guard = null, isView = null, stateKey = null, assumed = null, undoWords = null, closeOffer = null, problem = null, whyWords = null;
     if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; adopt = m?.adopt ?? null; guard = m?.guard ?? null; isView = m?.isView ?? null; stateKey = m?.stateKey ?? null; assumed = m?.assumed ?? null; undoWords = m?.undoWords ?? null; closeOffer = m?.closeOffer ?? null; problem = m?.problem ?? null; whyWords = m?.why ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }

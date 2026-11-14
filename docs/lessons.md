@@ -444,3 +444,9 @@ Own tests (matrix) 410 -> 452 of 454; ledger rows 41 of 43 closed, by seven mech
 - A phone layout that must keep the input bar on every page while the chat and the tools are sibling elements is cheapest as `display: contents` on the chat section plus `order` in one flex column, switched by a class the media query sets from JS (`is-phone`): no markup moved, the desktop CSS untouched, and Chrome tests can read the class and `data-page`.
 - A page link on a reply must come from what the turn executed (`executedActs`), mapped to the tab whose world it is; routing winners only as a fallback and only for replies that did something. Greetings route to a world too, so the outcome gate matters as much as the source.
 - When a page is removed, remove its effects' consumers too: the world still emits `talk.card`, so the host keeps no-op handlers instead of failing the turn.
+
+## 2026-11-15 Typed worlds: the same mechanism, a better signal
+- Completeness and arbitration by coverage did nothing useful on untyped readings (test-world 61 -> 83) and help on typed ones (59 -> 58, five diagram rows fixed, real set unchanged): the mechanism was right, the unread-word signal was wrong. When a mechanism measures badly, check the signal it reads before removing it.
+- A world must be represented in arbitration by its best-covered reading of a tier, not by its first match: a catch-all that hands the sentence to the world's own reader otherwise hides the world's whole reading.
+- Never cache derived data by a state object's identity when worlds mutate their state in place: the cache silently goes stale. Memoise per turn instead.
+- A committed result file can be stale relative to the tree (201/253 committed vs 142/253 on the same code): always re-run the baseline with the switch off before comparing.

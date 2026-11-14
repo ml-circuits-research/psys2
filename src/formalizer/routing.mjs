@@ -275,13 +275,15 @@ export function createRouter({ id = 'policy', model = null } = {}) {
       if (chooser && completeOn() && list.length > 1 && list.some((m) => m.unread?.length)) {
         const first = new Map();
         list.forEach((m, i) => { if (!first.has(m.pattern.worldId)) first.set(m.pattern.worldId, { m, i }); });
+        // a world's reading is its best-covered one among its readings of the same tier (a catch-all that hands the sentence to the world's own reader does not hide a frame that reads it whole)
+        list.forEach((m, i) => { const f = first.get(m.pattern.worldId); if (m.tier === f.m.tier && m.sub === f.m.sub && (m.unread?.length ?? 0) < (f.m.unread?.length ?? 0)) first.set(m.pattern.worldId, { m, i }); });
         if (first.size > 1) {
           const cands = [...first].map(([name, { m, i }]) => ({ name, coverage: 100 - (m.unread?.length ?? 0), active: m.tier <= 3 ? 1 : 0, priority: -i }));
           try {
             const c = chooser(null, 'world', cands, { seed: null });
             const order = c.order.map((x) => x.name);
             const moved = order[0] !== list[0].pattern.worldId;
-            list.sort((a, b) => order.indexOf(a.pattern.worldId) - order.indexOf(b.pattern.worldId));   // stable: inside a world the tier order stays
+            list.sort((a, b) => order.indexOf(a.pattern.worldId) - order.indexOf(b.pattern.worldId) || (first.get(b.pattern.worldId)?.m === b ? 1 : 0) - (first.get(a.pattern.worldId)?.m === a ? 1 : 0));   // stable: inside a world the tier order stays, its best-covered reading first
             coverage = { by: 'coverage', moved, ranked: c.ranked.map((r) => ({ world: cands[r.index].name, place: r.place, on: r.on, why: r.why })) };
           } catch { coverage = null; }
         }

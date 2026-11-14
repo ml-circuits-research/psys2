@@ -2,9 +2,10 @@
 /**
  * COMPLETENESS (spec 16 section 12, Q15 items 2 and 3): a reading is FINAL only when every content word of the clause is read by something: a literal of the pattern, a typed
  * slot, or a free-text role. The words a pattern's `...` skipped, and the content words of a free-text capture that are words of the readers themselves (question words, the verbs of
- * other acts), are UNREAD. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
+ * other acts), are UNREAD; with the typed worlds (spec 16 section 13, the default source) a free-text slot is unread when its world's types do not accept its words. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
  */
 import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs';
+import { unreadBy, thingWordsOf } from './typed-world.mjs';
 
 const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 /** Content words (not function words, not fillers) of a token list. */
@@ -12,11 +13,16 @@ export const contentWordsOf = (tokens) => tokens.filter(word).map((t) => t.lower
 
 /**
  * The switch (PSYS2_COMPLETE): `off` (no consequence: the earlier behaviour), `hold` (the readers run on an incomplete reading, a destructive one is not executed, arbitration is by coverage),
- * `ask` (as `hold`, and an incomplete reading no voice completed is not executed: a clarifying ask). Default: DEFAULT_MODE.
+ * `ask` (as `hold`, and an incomplete reading no voice completed is not executed: a clarifying ask). Default: DEFAULT_MODE (`hold` since the typed worlds, spec 16 section 13).
  */
-export const DEFAULT_MODE = 'off';
+export const DEFAULT_MODE = 'hold';
 export const completeMode = () => { const v = globalThis.process?.env?.PSYS2_COMPLETE; return v === 'off' || v === 'hold' || v === 'ask' ? v : DEFAULT_MODE; };
 export const completeOn = () => completeMode() !== 'off';
+/**
+ * Where the free-text part of `unread` comes from (PSYS2_COMPLETE_SRC): `typed` (default: the typed world of the reading's world, spec 16 section 13: a slot is unread when the world's types do not
+ * accept its words) or `heuristic` (the earlier untyped test: a question word inside a free capture, or a word another world's reading reads). The skipped ranges (`...`) count in both.
+ */
+export const completeSource = () => (globalThis.process?.env?.PSYS2_COMPLETE_SRC === 'heuristic' ? 'heuristic' : 'typed');
 /** A segment the rules read, but not completely (content words unread, no voice completed it). */
 export const isIncomplete = (seg) => completeOn() && !!seg && !seg.unparsed && !seg.variant && !!seg.match?.unread?.length;
 
@@ -32,8 +38,11 @@ const STRUCTURAL = new Set(['what', 'which', 'who', 'whom', 'whose', 'where', 'w
  * `rest` captures are dictation (free by design) and never count.
  */
 const CATALOG_WORLDS = new Set(['art.draw', 'talk']);   // the two worlds that take any thing of the knowledge catalog (the `catalog=yes` cards of meta.worlds)
-export function annotateUnread(matches, set = null) {
+export function annotateUnread(matches, set = null, context = null) {
   const foreign = set && globalThis.process?.env?.PSYS2_COMPLETE_FOREIGN === '1';
+  const typed = completeSource() === 'typed';
+  const typedFor = typed && set?.typedFor ? (id) => set.typedFor(id) : null;
+  const thingMemo = new Map(), things = (id) => { if (!thingMemo.has(id)) thingMemo.set(id, thingWordsOf(set, id, context)); return thingMemo.get(id); };   // once per world per sentence
   const lowerOf = (t) => t.lower ?? String(t.raw).toLowerCase();
   const content = (t) => word(t) && !FUNCTION_WORDS.has(lowerOf(t));
   const info = matches.map((m) => {
@@ -47,6 +56,7 @@ export function annotateUnread(matches, set = null) {
   for (const x of info) {
     const out = [];
     for (const [a, b] of x.m.skipped ?? []) for (const t of x.view.slice(a, b)) if (content(t)) out.push(lowerOf(t));
+    if (typed) { for (const w of unreadBy(typedFor, x.m, things)) out.push(w); x.m.unread = out; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out)); continue; }   // the typed world decides what its slots accept
     for (const i of x.loose) {
       const t = x.view[i]; if (!word(t)) continue;
       const w = lowerOf(t);
@@ -54,6 +64,6 @@ export function annotateUnread(matches, set = null) {
       else if (foreign && content(t) && !CATALOG_WORLDS.has(x.m.pattern.worldId) && (() => { try { const v = worldVocabulary(set, x.m.pattern.worldId); return v.nouns?.has(w) && !v.has(w); } catch { return false; } })()) out.push(w);
       else if (content(t) && info.some((o) => o.m.pattern.worldId !== x.m.pattern.worldId && o.read.has(w))) out.push(w);
     }
-    x.m.unread = out;
+    x.m.unread = out; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out));
   }
 }
