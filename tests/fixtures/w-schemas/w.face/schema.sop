@@ -1,0 +1,150 @@
+# w.face: a world schema: a drawn face, built from parts a user adds, removes, recolours, resizes and moves (an
+# avatar, a character, a portrait). Its kinds are the places of a face in k.faces (one kind per slot name); what a
+# part looks like is a variant of k.faces, read from there with its shapes, never written here. Declared in the
+# library's std.schema format; the acts of std.acts drive it; one deny keeps one part of each kind on a face; it
+# has no function of its own (the drawing is the host's renderer, as for k.objects).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
+
+@w.face core.module name=w.face version=1 exports=face exports=part exports=hair_back exports=shoulders exports=clothes exports=neck exports=ears exports=head exports=cheeks exports=beard exports=mouth exports=moustache exports=nose exports=eyes exports=eyebrows exports=glasses exports=hair_front exports=earrings exports=hat exports=accessories core.source="hand-core 1"
+@w.face.world std.schema.world name=w.face doc="a drawn face: parts with their variant, colour, size and place, and an expression" core.source="hand-core 1"
+
+# A face. `name` what it is called; `style` the style of k.faces its parts are drawn in (`k.faces.slot.style`:
+# plain, micah, pixel-art ...; a face does not mix styles); `preset` the k.faces preset it started from (child,
+# robot, queen); `skin`, `hair_colour`, `eye_colour`, `clothes` the names of k.faces colours of that use (the keys of
+# `k.faces.preset`, so a preset is copied key for key); the parts take their colour from these by their `tint` in
+# k.faces. `expression` is a mode, not a part: the name of a k.faces expression (happy, sad, wink, talking) whose
+# variants of mouth, eyebrows and eyes are drawn over the face's own while it is set; the parts keep their own
+# variants, so leaving the mode (removing `expression`, or undo) shows them again. No expression: the face is calm.
+@w.face.face core.type of=w.face.face extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.face.face.name core.slot of=w.face.face key=name kind=atom kind=string core.source="hand-core 1"
+@w.face.face.style core.slot of=w.face.face key=style kind=atom kind=string default=plain core.source="hand-core 1"
+@w.face.face.preset core.slot of=w.face.face key=preset kind=atom kind=string core.source="hand-core 1"
+@w.face.face.skin core.slot of=w.face.face key=skin kind=atom kind=string core.source="hand-core 1"
+@w.face.face.hair_colour core.slot of=w.face.face key=hair_colour kind=atom kind=string core.source="hand-core 1"
+@w.face.face.eye_colour core.slot of=w.face.face key=eye_colour kind=atom kind=string core.source="hand-core 1"
+@w.face.face.clothes core.slot of=w.face.face key=clothes kind=atom kind=string core.source="hand-core 1"
+@w.face.face.expression core.slot of=w.face.face key=expression kind=atom kind=string core.source="hand-core 1"
+
+# A part of a face, the parent of every kind of part. `face` refers to the face it belongs to (a host with one face
+# may leave it out); `variant` names a k.faces variant of the part's slot in the face's style (`k.faces.variant`,
+# identity slot and name: "round", "big smile", "micah mouth smile"), whose parts are the shapes drawn; `colour`
+# paints the part over the face colour its tint names (any colour name of k.values); `size` scales it about its
+# centre, 1 as the style draws it (0.6 to 1.5, by tenths); `x` and `y` move it from its place in the slot's box, in
+# the 0 to 100 frame of the face (x to the right, y downwards: "raise the eyebrows" is less y). A pair (eyes, ears)
+# is one part drawn twice, mirrored at the middle: `x` moves the side on the viewer's left, so more x brings the two
+# closer together.
+@w.face.part core.type of=w.face.part extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.face.part.face core.slot of=w.face.part key=face type=w.face.face core.source="hand-core 1"
+@w.face.part.variant core.slot of=w.face.part key=variant kind=atom kind=string core.source="hand-core 1"
+@w.face.part.colour core.slot of=w.face.part key=colour kind=atom kind=string core.source="hand-core 1"
+@w.face.part.size core.slot of=w.face.part key=size kind=number min=0.6 max=1.5 step=0.1 default=1 core.source="hand-core 1"
+@w.face.part.x core.slot of=w.face.part key=x kind=number min=-50 max=50 step=1 default=0 core.source="hand-core 1"
+@w.face.part.y core.slot of=w.face.part key=y kind=number min=-50 max=50 step=1 default=0 core.source="hand-core 1"
+
+# The kinds of part: one per slot name of k.faces (every style together; a style has some of them). Each takes the
+# keys of w.face.part.
+@w.face.hair_back core.type of=w.face.hair_back extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.shoulders core.type of=w.face.shoulders extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.clothes core.type of=w.face.clothes extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.neck core.type of=w.face.neck extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.ears core.type of=w.face.ears extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.head core.type of=w.face.head extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.cheeks core.type of=w.face.cheeks extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.beard core.type of=w.face.beard extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.mouth core.type of=w.face.mouth extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.moustache core.type of=w.face.moustache extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.nose core.type of=w.face.nose extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.eyes core.type of=w.face.eyes extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.eyebrows core.type of=w.face.eyebrows extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.glasses core.type of=w.face.glasses extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.hair_front core.type of=w.face.hair_front extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.earrings core.type of=w.face.earrings extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.hat core.type of=w.face.hat extends=w.face.part closed=true core.source="hand-core 1"
+@w.face.accessories core.type of=w.face.accessories extends=w.face.part closed=true core.source="hand-core 1"
+
+# The kinds and the acts. A face is made, changed (its colours, style, expression), copied, asked about and removed;
+# a part is made (added to the face), removed (taken off), changed (variant, colour, size), placed (moved), picked
+# and asked about. A face has one part of each kind (a deny: a second hat is refused; to change the hat, change its
+# variant). At most 10 faces and 10 parts of each kind.
+@w.face.kind.face std.schema.kind of=w.face.face world=w.face acts=make acts=remove acts=change acts=copy acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.hair_back std.schema.kind of=w.face.hair_back world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.shoulders std.schema.kind of=w.face.shoulders world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.clothes std.schema.kind of=w.face.clothes world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.neck std.schema.kind of=w.face.neck world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.ears std.schema.kind of=w.face.ears world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.head std.schema.kind of=w.face.head world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.cheeks std.schema.kind of=w.face.cheeks world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.beard std.schema.kind of=w.face.beard world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.mouth std.schema.kind of=w.face.mouth world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.moustache std.schema.kind of=w.face.moustache world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.nose std.schema.kind of=w.face.nose world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.eyes std.schema.kind of=w.face.eyes world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.eyebrows std.schema.kind of=w.face.eyebrows world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.glasses std.schema.kind of=w.face.glasses world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.hair_front std.schema.kind of=w.face.hair_front world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.earrings std.schema.kind of=w.face.earrings world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.hat std.schema.kind of=w.face.hat world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.kind.accessories std.schema.kind of=w.face.accessories world=w.face acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.face.one.first w.face.part kind=?kind face=?face
+@w.face.one.second w.face.part kind=?kind face=?face
+@w.face.one.other core.check fn=neq args=$w.face.one.first args=$w.face.one.second
+@w.face.one core.deny when=$w.face.one.first when=$w.face.one.second if=$w.face.one.other why="A face has one part of each kind: this face has a ?kind already." core.source="hand-core 1"
+@w.face.limit.face std.schema.limit of=w.face.face max=10 core.source="hand-core 1"
+@w.face.limit.hair_back std.schema.limit of=w.face.hair_back max=10 core.source="hand-core 1"
+@w.face.limit.shoulders std.schema.limit of=w.face.shoulders max=10 core.source="hand-core 1"
+@w.face.limit.clothes std.schema.limit of=w.face.clothes max=10 core.source="hand-core 1"
+@w.face.limit.neck std.schema.limit of=w.face.neck max=10 core.source="hand-core 1"
+@w.face.limit.ears std.schema.limit of=w.face.ears max=10 core.source="hand-core 1"
+@w.face.limit.head std.schema.limit of=w.face.head max=10 core.source="hand-core 1"
+@w.face.limit.cheeks std.schema.limit of=w.face.cheeks max=10 core.source="hand-core 1"
+@w.face.limit.beard std.schema.limit of=w.face.beard max=10 core.source="hand-core 1"
+@w.face.limit.mouth std.schema.limit of=w.face.mouth max=10 core.source="hand-core 1"
+@w.face.limit.moustache std.schema.limit of=w.face.moustache max=10 core.source="hand-core 1"
+@w.face.limit.nose std.schema.limit of=w.face.nose max=10 core.source="hand-core 1"
+@w.face.limit.eyes std.schema.limit of=w.face.eyes max=10 core.source="hand-core 1"
+@w.face.limit.eyebrows std.schema.limit of=w.face.eyebrows max=10 core.source="hand-core 1"
+@w.face.limit.glasses std.schema.limit of=w.face.glasses max=10 core.source="hand-core 1"
+@w.face.limit.hair_front std.schema.limit of=w.face.hair_front max=10 core.source="hand-core 1"
+@w.face.limit.earrings std.schema.limit of=w.face.earrings max=10 core.source="hand-core 1"
+@w.face.limit.hat std.schema.limit of=w.face.hat max=10 core.source="hand-core 1"
+@w.face.limit.accessories std.schema.limit of=w.face.accessories max=10 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.
+@w.face.word.world core.word text=face text=avatar text="face maker" text="avatar maker" text="drawn face" means=w.face of=std.schema.world.name core.source="hand-core 1"
+@w.face.word.face core.word text=face text=faces text=avatar text=avatars means=w.face.face core.source="hand-core 1"
+@w.face.word.part core.word text=part text=parts text="part of the face" means=w.face.part core.source="hand-core 1"
+@w.face.word.hair_back core.word text="back hair" text="long hair" text=ponytail text=bun means=w.face.hair_back core.source="hand-core 1"
+@w.face.word.shoulders core.word text=shoulders text=clothes text=shirt text=top means=w.face.shoulders core.source="hand-core 1"
+@w.face.word.clothes core.word text=clothes text=outfit text=shirt means=w.face.clothes core.source="hand-core 1"
+@w.face.word.neck core.word text=neck means=w.face.neck core.source="hand-core 1"
+@w.face.word.ears core.word text=ear text=ears means=w.face.ears core.source="hand-core 1"
+@w.face.word.head core.word text=head text="head shape" text="face shape" means=w.face.head core.source="hand-core 1"
+@w.face.word.cheeks core.word text=cheek text=cheeks text=blush text=freckles means=w.face.cheeks core.source="hand-core 1"
+@w.face.word.beard core.word text=beard text=beards means=w.face.beard core.source="hand-core 1"
+@w.face.word.mouth core.word text=mouth text=lips text=smile means=w.face.mouth core.source="hand-core 1"
+@w.face.word.moustache core.word text=moustache text=mustache means=w.face.moustache core.source="hand-core 1"
+@w.face.word.nose core.word text=nose means=w.face.nose core.source="hand-core 1"
+@w.face.word.eyes core.word text=eye text=eyes means=w.face.eyes core.source="hand-core 1"
+@w.face.word.eyebrows core.word text=eyebrow text=eyebrows text=brows means=w.face.eyebrows core.source="hand-core 1"
+@w.face.word.glasses core.word text=glasses text=spectacles text=sunglasses text=specs means=w.face.glasses core.source="hand-core 1"
+@w.face.word.hair_front core.word text=hair text=fringe text=bangs text=hairstyle means=w.face.hair_front core.source="hand-core 1"
+@w.face.word.earrings core.word text=earring text=earrings means=w.face.earrings core.source="hand-core 1"
+@w.face.word.hat core.word text=hat text=cap text=helmet text=crown means=w.face.hat core.source="hand-core 1"
+@w.face.word.accessories core.word text=accessory text=accessories means=w.face.accessories core.source="hand-core 1"
+@w.face.word.face.name core.word text=name text=called means=w.face.face.name core.source="hand-core 1"
+@w.face.word.face.style core.word text=style text=drawn means=w.face.face.style core.source="hand-core 1"
+@w.face.word.face.preset core.word text=preset text=character text="start from" means=w.face.face.preset core.source="hand-core 1"
+@w.face.word.face.skin core.word text=skin text="skin colour" text="skin color" text=complexion means=w.face.face.skin core.source="hand-core 1"
+@w.face.word.face.hair_colour core.word text="hair colour" text="hair color" means=w.face.face.hair_colour core.source="hand-core 1"
+@w.face.word.face.eye_colour core.word text="eye colour" text="eye color" means=w.face.face.eye_colour core.source="hand-core 1"
+@w.face.word.face.clothes core.word text="clothes colour" text="clothes color" means=w.face.face.clothes core.source="hand-core 1"
+@w.face.word.face.expression core.word text=expression text=mood text=look text=feeling means=w.face.face.expression core.source="hand-core 1"
+@w.face.word.part.face core.word text=of text=whose means=w.face.part.face core.source="hand-core 1"
+@w.face.word.part.variant core.word text=variant text=kind text=type text=look means=w.face.part.variant core.source="hand-core 1"
+@w.face.word.part.colour core.word text=colour text=color text=coloured text=colored means=w.face.part.colour core.source="hand-core 1"
+@w.face.word.part.size core.word text=size text=big text=small text=bigger text=smaller text=larger means=w.face.part.size core.source="hand-core 1"
+@w.face.word.part.x core.word text=left text=right text=sideways text=closer text=apart means=w.face.part.x core.source="hand-core 1"
+@w.face.word.part.y core.word text=up text=down text=higher text=lower text=raise means=w.face.part.y core.source="hand-core 1"

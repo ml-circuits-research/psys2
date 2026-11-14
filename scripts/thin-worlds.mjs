@@ -25,7 +25,7 @@ const isGenerated = (f, text) => /generated/i.test(f) || /GENERATED|Generated (f
 
 /** The kind of a hand-written file: schema | hooks | own | extra | other (renderer, engine, data) | language (patterns, lexicon ... written by hand) | null (skipped). */
 export function kindOf(f) {
-  if (f === 'schema.sop') return 'schema';
+  if (f === 'schema.sop' || f === 'schema.host.sop') return 'schema';   // schema.host.sop: the host's own part of a schema taken from a published w.* world
   if (f === 'hooks.mjs') return 'hooks';
   if (f === 'own.mjs') return 'own';
   if (/\.extra\.sop$/.test(f)) return 'extra';

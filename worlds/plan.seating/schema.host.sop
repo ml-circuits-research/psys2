@@ -1,0 +1,40 @@
+# The host's own part of the seating world (truly own): what the published schema w.seating cannot say. The rest of schema.sop is generated from the catalog
+# (scripts/import-w-schema.mjs <catalog> w.seating worlds/plan.seating).
+# Deviations from w.seating 2 (to ask of the knowledge repo): a guest is at a TABLE here (in=table capacity=seats), the published schema puts a guest on a seat; `seats` defaults to 4; `colour` is not published.
+@seat acts.schema
+    acts=send
+    acts=undo
+    acts=redo
+    acts=save
+    acts=load
+    limit.history=30
+    tabOnly=yes
+
+@seat.view acts.view
+    aspects=relational
+    aspects=numeric
+    aspects=social
+    word=seating
+    word=seating_plan
+
+@seat.table acts.kind
+    numbered=yes
+
+@seat.guest acts.kind
+    in=table
+    capacity=seats
+    aspect=social
+    word=person
+    word=people
+
+@seat.seats acts.attr
+    default=4
+    more=bigger
+    less=smaller
+
+@seat.colour acts.attr
+    of=table
+    of=guest
+    type=colour
+    default=white
+    word=color

@@ -9,7 +9,7 @@ const label = (i) => (i.name ? `${i.name}` : `${i.kind} ${i.n}`);
 export const inOrder = (items) => {
   const group = (i) => i.time?.cycle ?? '', rank = [];
   for (const i of items) if (!rank.includes(group(i))) rank.push(group(i));
-  return items.map((i, k) => ({ i, k })).sort((a, b) => rank.indexOf(group(a.i)) - rank.indexOf(group(b.i)) || (Number(a.i.attrs?.when) || 0) - (Number(b.i.attrs?.when) || 0) || a.k - b.k).map((x) => x.i);
+  return items.map((i, k) => ({ i, k })).sort((a, b) => rank.indexOf(group(a.i)) - rank.indexOf(group(b.i)) || (Number(a.i.attrs?.at) || 0) - (Number(b.i.attrs?.at) || 0) || a.k - b.k).map((x) => x.i);
 };
 
 function make(holder, host) {
@@ -21,7 +21,7 @@ function make(holder, host) {
     root.replaceChildren();
     const items = state?.items ?? [];
     if (!items.length) { root.append(h('p', { class: 'pt-empty' }, 'The timeline is empty. Send it a day, a month or a season: "send it to the timeline".')); return; }
-    root.append(h('div', { class: 'pt-row' }, ...inOrder(items).map((i) => h('div', { class: 'pt-moment' }, h('div', { class: 'pt-name' }, label(i)), h('div', { class: 'pt-when' }, `time ${i.attrs?.when ?? '?'}`)))));
+    root.append(h('div', { class: 'pt-row' }, ...inOrder(items).map((i) => h('div', { class: 'pt-moment' }, h('div', { class: 'pt-name' }, label(i)), h('div', { class: 'pt-when' }, `time ${i.attrs?.at ?? '?'}`)))));
   };
   render();
   return {

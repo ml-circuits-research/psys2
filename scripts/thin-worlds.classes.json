@@ -126,11 +126,11 @@
     { "part": "datagen.mjs", "verdict": "truly own" }
   ] },
   "plan.seating": { "parts": [
-    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.seating 2 (published)" }
+    { "part": "schema.host.sop", "verdict": "truly own", "note": "host acts (send, undo, redo, save, load), view words, the colour attribute (not in w.seating: asked of the knowledge repo); the rest of schema.sop is generated from w.seating 2" }
   ] },
   "plan.timeline": { "parts": [
-    { "part": "hooks.mjs", "verdict": "truly own", "note": "k.time position of a moment named by a time of the calendar" },
-    { "part": "schema.sop", "verdict": "general -> w.* schema", "to": "w.timeline 2 (published)" }
+    { "part": "hooks.mjs", "verdict": "truly own", "note": "k.time position of an event named by a time of the calendar" },
+    { "part": "schema.host.sop", "verdict": "truly own", "note": "host acts, view words, more / less words of `at`; the rest of schema.sop is generated from w.timeline 2" }
   ] },
   "talk": { "parts": [
     { "part": "cards.mjs", "verdict": "truly own", "note": "card drawing" },
@@ -144,6 +144,7 @@
     { "part": "facedraw.mjs", "verdict": "truly own", "note": "the renderer; no coordinates, it draws from k.faces" },
     { "part": "facelogic.mjs", "verdict": "general -> library", "to": "std.acts hooks over a catalog of variants (choices, presets, expression as a mode); its word lists go to w.lang.en / k.values" },
     { "part": "hooks.mjs", "verdict": "truly own" },
+    { "part": "schema.host.sop", "verdict": "truly own", "note": "host acts, own operations, flags, the moments of the stage, size words; the rest of schema.sop is generated from w.face 1" },
     { "part": "motion.mjs", "verdict": "general -> library", "to": "std.motion over k.motion (host scheduler glue)" },
     { "part": "own.mjs", "verdict": "truly own", "note": "name, animate" }
   ] },
