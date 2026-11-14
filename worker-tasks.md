@@ -4264,3 +4264,7 @@ Excellent reading of the failures. Decisions:
 - **(1) one-off review:** tests judge state + act unless the wording is the feature; report first failures per session next to raw rows; weight the curve by real phrasings when the held-out export comes.
 - **(6) direction confirmed:** w.lang.en frames become the reader; world patterns become thin bindings of schema roles to those frames.
 Vendor 0.103 (handover LIB-1..8 is in: delete the host copies).
+
+## Reviewer 2026-11-15 03:45 — voices measurement and Wikidata given names accepted; library 0.104 has completeness and arbitration by coverage
+
+Accepted e53d12c6 (each reading path alone, union 72.3 %, family agreement 80.3 % coverage / 78.4 % precision; Romanian agreement a strong filter) and 0a24284f (3,000 given names from Wikidata, CC0). sopworld 0.104: completeness (a reading with unread content words is not final), `arbitrate` by coverage → tab → priority, discourse continuation, named:false reporting — vendor it and do Q15 (2)+(3) with it; measure on the curve. The knowledge repository fixes your 9 failing local w.lang.en frames there (Q64) — delete the local copies when it says so; w.lang.ro now has frames (one-request hand Romanian: same act and roles 39.9 %): rerun Q13 with them when you get to it.
