@@ -231,14 +231,14 @@ export function createRouter({ id = 'policy', model = null } = {}) {
       const bestTab = [...tabMatches].sort(inTier(wscore))[0] ?? null;
       const tabClaimed = tabMatches.some((m) => m.pattern.tabClaim);   // a pattern of the tab's world that claims its phrase even when the message names another world
       const overriding = bestTab ? list.filter((m) => !isNav(m) && !ofTab(m) && clearlyMoreSpecific(m, bestTab, ctx)) : [];
-      // an ambient world (an always-visible view that is not a tab: the avatar) is on every tab. Its own fully read sentence (no wildcard beyond its literals) beats the
+      // an ambient world (an always-visible view that is not a tab: the avatar) is on every tab. Its own fully read sentence (less free text than the tab's reading) beats the
       // tab world's generic frame ("put on a hat" is the face's, not Talk's "put ... on a hat" send); a specific reading of the tab world (at least as many literals, no catch-all) still wins
       const ambients = ctx.ambientWorlds ?? [];
       const stepKind = (m) => { const a = actionOf(m) ?? ''; return /\.undo$/.test(a) ? 'undo' : /\.redo$/.test(a) ? 'redo' : null; };
       // "undo" / "redo" follow the timeline: the world that made the newest step (or whose step was undone last) takes it back, whichever tab is open, unless the tab's world made it too
       const followsStep = (m) => { const k = stepKind(m), ws = k === 'undo' ? ctx.stepWorlds : k === 'redo' ? ctx.redoWorlds : null; return !!ws?.length && ws.includes(m.pattern.worldId) && m.pattern.worldId !== ctx.tabWorld && !(ctx.tabWorld && ws.includes(ctx.tabWorld)); };
       const ambientWins = (m) => ambients.includes(m.pattern.worldId) && m.pattern.worldId !== ctx.tabWorld && !stepKind(m) && wildTokens(m) <= m.literals
-        && (!bestTab || wildTokens(bestTab) > bestTab.literals || m.literals >= bestTab.literals);
+        && (!bestTab || wildTokens(m) < wildTokens(bestTab));   // it reads the sentence with strictly less free text than the tab's reading (a tie, a game control or a command of the tab without free text is not displaced)
       const reasons = new Map();
       for (const m of list) {
         const w = m.pattern.worldId;

@@ -27,7 +27,7 @@ import { budget } from './budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=eeaa2a6b1f';
 import { GRAMMAR } from './continuation.mjs?v=e170808923';
 import { touched } from './followup.mjs?v=88af56c068';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=b5bc92b405';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=c0e4009005';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
 import { compareTimes, loadTime } from '../knowledge/time.mjs?v=25af79c1b8';
 

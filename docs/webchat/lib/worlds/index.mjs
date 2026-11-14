@@ -10,7 +10,7 @@ import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
 import { Legends } from '../legends/index.mjs?v=db730c4e69';
 import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
 import { describePatterns, descriptionFor, readDescriptionWires, slotDeclarations, emitKey, EN } from './describe.mjs?v=f19cebf218';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=98fae0a7b4';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=6a42b3a2cd';
 import { lexIndex } from './lexicon.mjs?v=b87a7fb377';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
@@ -74,6 +74,8 @@ export class World {
   get undoAction() { return txt(this.manifest ?? { entries: [] }, 'undo') ?? null; }
   /** The action that takes an undo back (`redo=<action>` in world.sop; with `undo=`): the host layer re-applies what the last undo took out, or null. */
   get redoAction() { return txt(this.manifest ?? { entries: [] }, 'redo') ?? null; }
+  /** A world shown in an always-visible view that is not a tab (the avatar in the input bar): `ambient=true`. For routing it is present on every tab: its own fully read sentences win over a tab world's generic frame, and its undo / redo answer when it made the last step. */
+  get ambient() { return txt(this.manifest ?? { entries: [] }, 'ambient') === 'true'; }
   /** A world whose state follows the other worlds (the shell's tab: an editor brings its tab forward): what another world's request changed in it is not a step of the turn, so undoing that turn leaves it alone (`passive=true`). Only a turn of its own undoes its changes. */
   get passive() { return txt(this.manifest ?? { entries: [] }, 'passive') === 'true'; }
   /** Wire types the world's operations emit that only the session memory keeps (`untold=<type>`, repeatable): the library does not hold them (facts the engine reads from its own state: the sentences of a document). */

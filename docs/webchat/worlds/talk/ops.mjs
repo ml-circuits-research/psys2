@@ -793,3 +793,15 @@ export function undo(ctx) {
   if (!r || r.status !== 'supported') return no('missing', `The ${tab ?? 'other'} tab had nothing to take back.`);
   return ok(`OK, I took it back out of the ${tab} tab.`, { values: [tab] });
 }
+
+/**
+ * Decline hook (spec 21): Talk accepts every reading of its frames, except a send whose free words name no place. Having a hook puts the world under the generic yield rule of the rule formalizer: its reading with free text (a catch-all
+ * frame such as "what A is X" or "how many X does Y have") gives way to the reading of another world that has no free text at all ("how much is 11 times 2" is the arithmetic's), unless the
+ * conversation is already in Talk (`lastWorld`) or the pattern claims its phrase (`tabClaim`). Talk is the default tab, so without this its frames took every question the other worlds read whole.
+ */
+// Where a card can be sent: the words that name a view or a tab. "put on glasses" is not a send: its three free words name no place, so the reading is declined and the face reads it.
+const PLACES = /\b(?:draw|drawing|drawings|picture|pictures|canvas|board|diagram|diagrams|flowchart|sketch|map|maps|chart|charts|graph|graphs|document|documents|doc|docs|editor|page|reader|seating|plan|guests|timeline|schedule|calendar|conversation|talk|chat|face|avatar|music|songs|notes|profile|list|shop|shopping|tasks|session)\b/i;
+// The frames that ask what a THING is or has ("what is Paris", "what colour is a banana") hold the focus: they are the tab's own business and do not yield. The other frames (counts, orders, neighbours, comparisons) are
+// generic over their free words and give way to a world that reads the sentence whole ("how many apples does Tom have", "what day comes after Monday").
+const THING_FRAMES = new Set(['talk.look', 'talk.parts', 'talk.kind', 'talk.isa', 'talk.has', 'talk.can']);   // `talk.ask` ("what A is X", any attribute) is generic and yields; a thing with a digit in it ("3 plus 4") is no thing
+export const accepts = ({ action, roles } = {}) => (action === 'talk.send' ? (roles?.to == null || PLACES.test(String(roles.to))) : THING_FRAMES.has(action) && !/\d/.test(String(roles?.o ?? '')) ? 'focus' : true);

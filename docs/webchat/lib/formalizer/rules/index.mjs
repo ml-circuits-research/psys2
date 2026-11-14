@@ -12,7 +12,7 @@ import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDist
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=4e6f97e760';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=652a720c2d';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=168793af04';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=9a77f8ec23';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=1a2a108ead';
 import { en } from '../../lang/en.mjs?v=eeaa2a6b1f';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
@@ -21,7 +21,7 @@ import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
 
 export { FormSession } from './session.mjs?v=9a77f8ec23';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=652a720c2d';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=168793af04';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=26e548acf9';
 export { compilePattern, matchTokens } from './matcher.mjs?v=4e6f97e760';
 export { singularLemma, pluralize } from './lemma.mjs?v=848810e3e1';
