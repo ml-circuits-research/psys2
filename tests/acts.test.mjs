@@ -342,7 +342,7 @@ test('formsFor: a frame with a role or a shared lexicon the world does not read,
   const ids = (s) => new Set(A.formsFor(s).map((f) => f.id));
   const p = ids(plain);
   for (const id of ['make.part', 'make.material', 'change.from', 'ask.compare', 'redo.thing', 'deselect', 'place.layout.go', 'change.label.edge']) assert.ok(!p.has(id), id);
-  assert.ok(p.has('make') && p.has('undo.thing'));
+  assert.ok(p.has('make') && p.has('undo') && !p.has('undo.thing') && !p.has('copy.place'));
   // a world that says it reads the role and defines the lexicons gets the frames
   const dia = A.parseSchema(parse(readFileSync(path.join(DEFAULT_ROOT, 'diagram.sketch/schema.sop'), 'utf8')).wires);
   const d = ids(dia);

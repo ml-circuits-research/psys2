@@ -454,33 +454,3 @@
     tabOnly=true
     example="Put a guest named Maria at table 1."
     canonical="Put a guest named Maria at table 1."
-
-@pat.plan.seating.copy.place core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=plan.seating.copy arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    tabPriority=20
-    tabOnly=true
-    example="Copy the star to the corner."
-    canonical="Copy the star to the corner."
-
-@pat.plan.seating.undo.thing core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.undo] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=plan.seating.undo arg.thing=\"{thing}\" arg.text=\"{segment}\""
-    kind=request
-    priority=9
-    tabPriority=17
-    tabOnly=true
-    example="Undo the colour change."
-    canonical="Undo the colour change."
-
-@pat.plan.seating.save.place core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [$acts.det]? {thing:words} [to|in|on|into] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=plan.seating.save arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
-    kind=request
-    priority=10
-    tabPriority=18
-    tabOnly=true
-    example="Save the drawing to my files."
-    canonical="Save the drawing to my files."

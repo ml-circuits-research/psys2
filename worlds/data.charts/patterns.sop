@@ -1014,7 +1014,7 @@
     example="Chart without a title."
 
 @pat.data.charts.change.number core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [set|put|update|correct|fix|make|put_down] [$acts.det]? {thing:words} [to|be|as|at|equal_to|up_to]? {value:number} [now|instead|please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set|set|put|update|correct|fix|make|put_down] [$acts.det]? {thing:words} [to|be|as|at|equal_to|up_to]? {value:number} [now|instead|please|pls]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=data.charts.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
     kind=request
     priority=12
@@ -1328,24 +1328,6 @@
     priority=15
     tabPriority=23
     example="Put a guest named Maria at chart."
-
-@pat.data.charts.copy.place core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=data.charts.copy arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    tabPriority=20
-    example="Copy the star to the corner."
-    canonical="Copy the star to the corner."
-
-@pat.data.charts.undo.thing core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.undo] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=data.charts.undo arg.thing=\"{thing}\" arg.text=\"{segment}\""
-    kind=request
-    priority=9
-    tabPriority=17
-    example="Undo the colour change."
-    canonical="Undo the colour change."
 
 # ---- patterns.extra.sop (hand-written, appended by the generator)
 @pat.data.charts.create.refresh core.pattern

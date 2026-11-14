@@ -2,11 +2,11 @@
 // art.draw (pilot, spec 21 and 23): what the schema cannot say and other code calls. The drawing board itself (scene.mjs: the renderer's geometry, the scene composition and the
 // drawing from facts; ops.mjs: the scene operations) stays in worlds/art.draw; this file re-exports what the dialog layer and other worlds reach by name and gives the discourse hooks
 // (referents, openSlots, checkReferents) the words of the acts (`art.draw.make` -> the board's `draw.add`). Browser-safe.
-import * as D from './engine.mjs?v=8c949c5100';
-import { addArgs, tOf } from './hooks.mjs?v=5dfa180aa6';
-import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=30f25777c5';
+import * as D from './engine.mjs?v=a803f96cff';
+import { addArgs, tOf } from './hooks.mjs?v=c953408210';
+import { goalOf, goalFromText, goalWord, goalWords, layoutGoal, liveOf, whyPlan as whyOfPlan } from './plan.mjs?v=bf2f8d81a7';
 
-export { initialState, summary } from './engine.mjs?v=8c949c5100';
+export { initialState, summary } from './engine.mjs?v=a803f96cff';
 /** Other worlds ask the board by its old action names: Talk draws with draw.add, the chess tab and Talk undo with draw.undo, the tab has "new" and "open". */
 export const add = D.add;
 export const drawUndo = D.undo;

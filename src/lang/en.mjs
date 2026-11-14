@@ -66,7 +66,8 @@ function patternOf(parts, lex) {
       case 'verb': return `V.${VERB_GROUP[one(p, 'act')] ?? one(p, 'act')}`;
       case 'phrase': return `[$lang.${one(p, 'phrase')}]${opt}`;
       case 'lexicon': return `${lexical(one(p, 'lexicon'))}${opt}`;
-      case 'word': { const ws = all(p, 'word').map(chunk); return ws.length === 1 && !opt ? ws[0] : `[${ws.join('|')}]${opt}`; }
+      case 'word': { const ws = all(p, 'word').map(chunk); if (one(p, 'act')) ws.unshift(`V.${VERB_GROUP[one(p, 'act')] ?? one(p, 'act')}`);   // a word part that names an act (`act=change`) also takes the verbs of that act, as the frames did before the catalog dropped the V.<group> pseudo-word from the list
+        return ws.length === 1 && !opt ? ws[0] : `[${ws.join('|')}]${opt}`; }
       case 'role': {
         const takes = one(p, 'takes');
         if (takes === 'prep' && one(p, 'role') === 'rel') return 'REL';
@@ -97,6 +98,11 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
       for (const f of fixedOf.get(name) ?? []) w.attrs[`lit.${one(f, 'role')}`] = [one(f, 'value')];
       w.id = `lang.en.frame.${name}`;
     }
+  }
+  // `lang.en.tune` (en.local.mjs): this application's priority for a frame of the catalog (`frame=<name> priority=N tab-priority=N`): the catalog's priorities are its own order, the readers here depend on theirs
+  for (const tu of norm.filter((w) => w.type === 'lang.en.tune')) {
+    const fr = norm.find((w) => w.type === 'lang.en.frame' && one(w, 'name') === one(tu, 'frame'));
+    if (fr) for (const k of ['priority', 'tab-priority']) if (one(tu, k) != null) fr.attrs[k] = [one(tu, k)];
   }
   const placed = [];
   for (const w of norm) {

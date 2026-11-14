@@ -315,7 +315,7 @@
     example="Eyes closer together."
 
 @pat.art.draw.place.layout core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [arrange|lay_out|space_out|distribute|tidy|organise|organize] [$acts.det]? {thing:words} [out|up]? [in|into|as|on|along|across]? [$acts.det]? {rel:lex.acts.layout} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place|arrange|lay_out|space_out|distribute|tidy|organise|organize] [$acts.det]? {thing:words} [out|up]? [in|into|as|on|along|across]? [$acts.det]? {rel:lex.acts.layout} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.place arg.mode=layout arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.text=\"{segment}\""
     kind=request
     priority=13
@@ -893,7 +893,7 @@
     example="Twice as big."
 
 @pat.art.draw.place.dir.amt core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [move|put|bring|push|pull|take|shift|raise|lower|make|nudge|needs_to_go|should_go|needs_to_move|should_move|goes|go]? [$acts.det]? {thing:words} {amount:lex.space.amounts?} [to_the|to|towards]? {rel:lex.acts.dir} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place|move|put|bring|push|pull|take|shift|raise|lower|make|nudge|needs_to_go|should_go|needs_to_move|should_move|goes|go]? [$acts.det]? {thing:words} {amount:lex.space.amounts?} [to_the|to|towards]? {rel:lex.acts.dir} {amount2:lex.space.amounts?} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=art.draw.place arg.thing=\"{thing}\" arg.amount=\"{amount}\" arg.rel=\"{rel}\" arg.amount2=\"{amount2}\" arg.text=\"{segment}\""
     kind=request
     priority=13
@@ -1145,30 +1145,3 @@
     priority=15
     tabPriority=23
     example="Put a guest named Maria at house."
-
-@pat.art.draw.copy.place core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=art.draw.copy arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
-    kind=request
-    priority=12
-    tabPriority=20
-    example="Copy the star to the corner."
-    canonical="Copy the star to the corner."
-
-@pat.art.draw.undo.thing core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.undo] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=art.draw.undo arg.thing=\"{thing}\" arg.text=\"{segment}\""
-    kind=request
-    priority=9
-    tabPriority=17
-    example="Undo the colour change."
-    canonical="Undo the colour change."
-
-@pat.art.draw.save.place core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [$acts.det]? {thing:words} [to|in|on|into] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=art.draw.save arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
-    kind=request
-    priority=10
-    tabPriority=18
-    example="Save the drawing to my files."
-    canonical="Save the drawing to my files."
