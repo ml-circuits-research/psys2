@@ -123,7 +123,7 @@ function nthWord(s, ord, scopeBlocks) {
 export function resolve(s, phrase, opts = {}) {
   budget.tick('target.resolve');
   const raw = String(phrase ?? '').trim().replace(/[.!?]+$/, '').replace(/\s+/g, ' ');
-  let p = raw.toLowerCase();
+  let p = raw.toLowerCase().replace(/\b(?:paras?|grafs?)\b/g, 'paragraph').replace(/\bhed\b/g, 'heading');   // chat abbreviations of the block kinds
   if (!p) return fail('What do you mean?');
   if (PRONOUN.test(p)) return fromSelection(s);
   const tk = p.match(THIS_KIND);

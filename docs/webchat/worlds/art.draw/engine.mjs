@@ -22,7 +22,7 @@ import {
 
 import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
 import { habitat, adviceFor } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
-import { en } from '../../lib/lang/en.mjs?v=08dd6017a3';   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=9bb300846a';   // English noun-phrase readings: relative clause, "some of", "or" (facts of handover/lang.en)
 import * as space from '../space/space.mjs?v=f98ca4dd42';
 import * as rel from '../space/pieces.mjs?v=d38d7cc794';
 import * as solver from '../space/solver.mjs?v=3ee41714f0';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
