@@ -77,3 +77,15 @@
 @tpl.talk.has core.template
     for=action.talk.has
     text="{value}"
+
+@tpl.talk.list core.template
+    for=action.talk.list
+    text="{value}"
+
+@tpl.talk.mix core.template
+    for=action.talk.mix
+    text="{value}"
+
+@tpl.talk.can core.template
+    for=action.talk.can
+    text="{value}"

@@ -111,7 +111,6 @@ test('F1 acceptance: the music examples keep their own values', async () => {
 const pairs = [
   ['kids.time', 'time', 'What day is 3 days after Monday?', 'What day is 5 days after Monday?', 'where.by=5', 'where.by=3'],
   ['kids.time', 'time', 'What time is 2 hours after 5 o clock?', 'What time is 4 hours after 5 o clock?', 'where.shift=4', 'where.shift=2'],
-  ['kids.shapes', 'shapes', 'Which shape has 3 sides?', 'Which shape has 4 sides?', 'where.sides=4', 'where.sides=3'],
   ['kids.shop', 'shop', 'How much are 2 pencils?', 'How much are 5 pencils?', 'where.count=5', 'where.count=2'],
   ['geo.map', 'map', 'top 3 biggest cities in japan', 'top 5 biggest cities in japan', 'arg.n=5', 'arg.n=3'],
   ['kids.arith', 'arith', 'What is 3 plus 4?', 'What is 3 plus 5?', 'where.b=5', 'where.b=4'],

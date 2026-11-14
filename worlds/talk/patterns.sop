@@ -516,3 +516,115 @@
     priority=8
     example="Do snakes have legs?"
     doc="Frame: does X have a P. Yes with the count when the catalog or the picture says so, no when the count is zero, else what is not known."
+
+@pat.talk.ask.baby core.pattern
+    canonical="What is a baby cat called?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.babylead] {o:words(3,noun)} [called|named]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"baby\""
+    kind=request
+    tabOnly=false
+    priority=10
+    example="What is a baby cow called?"
+    example="What do you call a baby kangaroo?"
+    doc="Frame: what is a baby X called. The baby slot of the thing, whatever world of the catalog holds it."
+
+@pat.talk.ask.covered core.pattern
+    canonical="What is a cow covered in?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whatis] [$lang.know.det]? {o:words(3,noun)} [$lang.talk.coveredin] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"covering\""
+    kind=request
+    tabOnly=false
+    priority=10
+    example="What is a duck covered in?"
+    example="What is a snake covered with?"
+    doc="Frame: what is X covered in. The covering slot of the thing."
+
+@pat.talk.list.which core.pattern
+    canonical="Which animals are mammals?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichlist] {k:words(1)} [is|are] {v:words(1,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\""
+    kind=request
+    tabOnly=true
+    priority=10
+    example="What animals are insects?"
+    example="Which colours are primary?"
+    example="Which things are red?"
+    doc="Frame: which K are V. The names of the catalog's K whose slot holds V (class, diet, kind, colour)."
+
+@pat.talk.list.the core.pattern
+    canonical="What are the primary colours?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [what_are|which_are] [the]? {v:words(1,noun)} {k:words(1,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\""
+    kind=request
+    tabOnly=true
+    priority=6
+    example="What are the secondary colors?"
+    example="What are the red things?"
+    doc="Frame: what are the V K. The same listing, the adjective first."
+
+@pat.talk.list.verb core.pattern
+    canonical="Which animals eat grass?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichlist] {k:words(1)} {w:lex.talk.listverbs} {v:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\" arg.verb=\"{w}\""
+    kind=request
+    tabOnly=true
+    priority=10
+    example="Which animals live in the sea?"
+    example="Which animals can fly?"
+    doc="Frame: which K eat / live in / can V. The names whose slot of that verb holds V."
+
+@pat.talk.mix.make core.pattern
+    canonical="What do red and blue make?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [what_do|what_does] {a:words(1)} and {b:words(1)} [make|give|become] [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.mix arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    tabOnly=false
+    priority=10
+    example="What do yellow and blue make?"
+    example="What do red and white make?"
+    doc="Frame: what do A and B make. The mix facts of the catalog, in either order."
+
+@pat.talk.mix.get core.pattern
+    canonical="What colour do you get when you mix red and blue?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.mixlead] {a:words(1)} and {b:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.mix arg.a=\"{a}\" arg.b=\"{b}\""
+    kind=request
+    tabOnly=false
+    priority=10
+    example="What do you get if you mix red and yellow?"
+    example="What happens when you mix blue and yellow?"
+    doc="Frame: what do you get when you mix A and B."
+
+@pat.talk.can core.pattern
+    canonical="Can a penguin fly?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.canq] [$lang.know.det]? {o:words(3,noun)} {v:words(1)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.can arg.o=\"{o}\" arg.v=\"{v}\""
+    kind=request
+    tabOnly=true
+    priority=8
+    example="Can a bat fly?"
+    example="Do penguins swim?"
+    doc="Frame: can X V. Yes when the can slot of the thing says V, no when its cannot slot does, else what is not known."
+
+@pat.talk.ask.kindof core.pattern
+    canonical="What kind of animal is a shark?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.wh] [kind|type|sort|class] of {k:words(1)} [is|are] [$lang.know.det]? {o:words(3,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.ask arg.o=\"{o}\" arg.a=\"class\""
+    kind=request
+    tabOnly=true
+    priority=10
+    example="What type of animal is a frog?"
+    example="What kind of animal is a whale?"
+    doc="Frame: what kind of K is X. The class slot of the thing."
+
+@pat.talk.list.has core.pattern
+    canonical="Which shapes have 4 sides?"
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.talk.whichlist] {k:words(1)} [has|have] {v:words(2,noun)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=talk.list arg.k=\"{k}\" arg.v=\"{v}\" arg.verb=\"have\""
+    kind=request
+    tabOnly=true
+    priority=10
+    example="Which shapes have 4 sides?"
+    example="Which animals have 6 legs?"
+    example="Which shapes have no corners?"
+    doc="Frame: which K have N P. The names whose numeric slot P holds N (sides, corners, legs); no P is zero."

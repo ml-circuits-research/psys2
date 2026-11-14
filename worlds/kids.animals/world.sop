@@ -6,14 +6,9 @@
     imports=world.kids.common
     formalization=rules
     reasoner=matrix
-    ops=kids.animals.animal.is_a
-    ops=kids.animals.animal.lives
-    ops=kids.animals.animal.covered
-    ops=kids.animals.animal.summary
-    ops=kids.animals.animal.matching
     source="what I know about animals"
     language=en
     status=fixture
     title="Animals (primary school)"
     summary="talk about animals"
-    doc="About 65 common animals: class, legs, diet and foods, habitat, flying and swimming, sound, covering and baby names. Children can teach new facts and pets. Explicit no (refuted) is kept apart from unknown. Hand-built platform fixture, not produced by the C1 workflow."
+    doc="What a child teaches about animals (a fact such as \"a zebra can swim\", a pet such as \"my dog is called Rex\") and taking it back. The animals themselves and their facts (class, legs, diet and food, habitat, abilities, sound, covering, baby names) are the knowledge catalog's (k.animals), answered by the Talk tab's frames and read by the games by lookup; this world holds no knowledge base and no question pattern. Explicit no (refuted) is kept apart from unknown. Hand-built platform fixture, not produced by the C1 workflow."

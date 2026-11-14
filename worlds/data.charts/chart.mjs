@@ -12,12 +12,13 @@
 // Effects: charts.download { filename, format, chart } (handled by the tab: canvas toDataURL), file.download, clipboard.copy,
 //   speech.say { text }.
 // Cross-world: ctx.request('ui.openTab', { tab: 'charts' }) after every change; data is read with ctx.find / ctx.ask from
-//   kids.arith (holdings), kids.shop (prices), kids.tasks (list entries) and kids.animals (legs). Every number of such a chart
+//   kids.arith (holdings), kids.shop (prices), kids.tasks (list entries) and the animals of the catalog (legs). Every number of such a chart
 //   comes from wires, and the chart keeps their ids in `source`. Numbers typed by the user keep the id of the request wire.
 //   doc.addHeading / doc.addList of docs.editor are used by "put the chart data in the document"; doc.addImage (not offered yet)
 //   is probed by "put the chart in the document".
 // The pure helpers at the bottom (chartView, csv) are also imported by the tab, so the tab draws exactly what the state says.
 
+import { ask as askAnimals } from '../../src/knowledge/animals.mjs';   // the animals of the catalog (k.animals), read by lookup from a bundle generated from it
 import { colourName, colourHex } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const TAB = 'charts';
@@ -316,8 +317,7 @@ function buildList(ctx, { list }) {
 
 const HABITATS = { sea: 'sea', ocean: 'sea', farm: 'farm', forest: 'forest', wood: 'forest', river: 'river', jungle: 'jungle', desert: 'desert', polar: 'polar', arctic: 'polar', home: 'home', pet: 'home', garden: 'garden', savanna: 'savanna', grassland: 'grassland', mountain: 'mountain' };
 const CLASSES = { mammal: 'mammal', bird: 'bird', fish: 'fish', insect: 'insect', bug: 'insect', reptile: 'reptile', amphibian: 'amphibian', arachnid: 'arachnid' };
-const ANIMAL = 'kids.animals.animal';
-/** kids.animals legs -> one bar per animal (a group such as sea animals, or named animals). */
+/** The legs of animals (k.animals) -> one bar per animal (a group such as sea animals, or named animals). */
 function buildLegs(ctx, { what }) {
   const raw = String(what ?? '').trim();
   const known = ctx.lexicon('lex.kids.animals.names');
@@ -334,14 +334,14 @@ function buildLegs(ctx, { what }) {
       else if (w === 'swimming' || w === 'swimmer') where.can_swim = 'true';
     }
     if (!Object.keys(where).length) return { env: no('missing', `I do not know a group of animals called "${raw}". Try the sea animals, the farm animals, the birds, the insects, or name some animals.`) };
-    const found = ctx.ask({ type: ANIMAL, seek: 'matching', where, mode: 'list' });
+    const found = askAnimals({ seek: 'matching', where, mode: 'list' });
     if (found.status !== 'supported' || !found.values?.length) return { env: no('missing', `I do not know any ${raw} in my knowledge base yet.`) };
     names = found.values;
     groupText = bareWords(raw).join(' ');
   }
   const labels = [], data = [], from = [];
   for (const n of names) {
-    const r = ctx.ask({ type: ANIMAL, seek: 'legs', where: { name: n } });
+    const r = askAnimals({ seek: 'legs', where: { name: n } });
     if (r.status !== 'supported') continue;
     labels.push(cap(sp(n))); data.push(Number(r.value)); from.push(...(r.from ?? []));
   }

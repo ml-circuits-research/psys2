@@ -329,14 +329,14 @@ test('table: delete a row or a column, with marks following', async () => {
   assert.equal(c.st.blocks[0].rows[0].length, 2);
   assert.equal((await run('Add a row: a, b')).status, 'missing');
 });
-test('table: "fill the table with sea animals" asks kids.animals and keeps the wire ids', async () => {
+test('table: "fill the table with sea animals" asks the animals of the catalog and keeps where the facts came from', async () => {
   const { st, text } = await run('Add a table with 3 columns: animal, legs, food', 'Fill the table with sea animals');
   const rows = st.blocks[0].rows;
   assert.ok(rows.length > 3, text);
-  assert.ok(rows.some((r) => r[0] === 'Whale'));
-  assert.ok(st.blocks[0].from.length > 3);
-  const whale = rows.find((r) => r[0] === 'Whale');
-  assert.equal(whale[1], '0');
+  assert.ok(rows.some((r) => r[0] === 'Shark'));
+  assert.deepEqual(st.blocks[0].from, ['k.animals']);
+  const shark = rows.find((r) => r[0] === 'Shark');
+  assert.equal(shark[1], '0');
 });
 test('table: fill with no table makes one; unknown groups and columns are explained', async () => {
   const a = await run('Fill the table with farm animals');

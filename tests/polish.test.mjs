@@ -79,12 +79,8 @@ test('lemmatizer keeps -us/-ss/-is singulars and maps -uses plurals back', () =>
   assert.equal(pluralize('bus'), 'buses');
 });
 
-test('kids.animals knows the octopus and the walrus; kids.shapes still handles the rhombus', async () => {
-  assert.equal((await say(['How many legs does an octopus have?'])).text, 'An octopus has 8 legs.');
-  assert.equal((await say(['How many legs do octopuses have?'])).text, 'An octopus has 8 legs.');
-  assert.equal((await say(['Can a walrus swim?'])).text, 'Yes, a walrus can swim.');
-  assert.equal((await say(['What does a walrus eat?'])).text, 'Walruses eat clams and fish.');
-  assert.equal((await say(['A rhombus has 4 sides.', 'How many sides does a rhombus have?'])).text.includes('4'), true);
+test('kids.shapes still takes what a child teaches about a rhombus (the octopus, the walrus and the sides are the catalog\'s: Talk frames, tests/talk-kids-frames.test.mjs)', async () => {
+  assert.match((await say(['A rhombus has 4 sides.'])).text, /^OK/);
   assert.deepEqual(real.problems(), []);
 });
 

@@ -9,9 +9,9 @@ const engine = await createEngine({ loader: createFsLoader() });
 const rec = async (text, extra = {}) => buildRecord({ text, tab: 'robot', reply: await engine.createSession().send(text, { language: 'en' }), ...extra });
 
 test('record from a real reply', async () => {
-  const r = await rec('How many legs does a spider have?');
-  assert.equal(r.segments[0].world, 'kids.animals');
-  assert.match(r.segments[0].pattern, /^pat\.kids\.animals\.(x\.legs\.how|legs\.q)$/);   // a hand-written or a shape pattern reads it (legs1 was replaced by the legs shape)
+  const r = await rec('What day comes after Monday?');
+  assert.equal(r.segments[0].world, 'kids.time');
+  assert.match(r.segments[0].pattern, /^pat\.kids\.time\./);
   assert.equal(r.segments[0].status, 'supported');
   assert.equal(r.unparsed, false); assert.equal(r.source, 'human'); assert.equal(r.formalizer, 'rules');
   const bad = await rec('blah zorp quux', { mode: 'voice' });
@@ -22,7 +22,7 @@ test('cap drops the oldest, filters, JSONL and text', async () => {
   let l = [];
   for (let i = 0; i < 7; i++) l = appendCapped(l, { id: String(i), text: `t${i}`, segments: [] }, 5);
   assert.deepEqual(l.map((r) => r.id), ['2', '3', '4', '5', '6']);
-  const a = await rec('How many legs does a spider have?'), b = await rec('blah zorp quux', { mode: 'voice' }), c = await rec('Open the editor', { mode: 'chip' });
+  const a = await rec('What day comes after Monday?'), b = await rec('blah zorp quux', { mode: 'voice' }), c = await rec('Open the editor', { mode: 'chip' });
   const all = [a, b, c];
   assert.deepEqual(filterRecords(all, 'misses'), [b]);
   assert.deepEqual(filterRecords(all, 'voice'), [b]);
@@ -31,7 +31,7 @@ test('cap drops the oldest, filters, JSONL and text', async () => {
   for (const k of ['english', 'lang', 'mode', 'status', 'tab', 'text', 'time', 'worlds', 'id', 'segments', 'source']) assert.ok(k in lines[0], k);   // the export is the complete record
   assert.equal(lines[1].status, 'unparsed');
   assert.equal(toJSONL(all, { includeChips: true }).trim().split('\n').length, 3);
-  assert.deepEqual(JSON.parse(toJSON(all)).records.map((r) => r.text), ['How many legs does a spider have?', 'blah zorp quux']);
+  assert.deepEqual(JSON.parse(toJSON(all)).records.map((r) => r.text), ['What day comes after Monday?', 'blah zorp quux']);
   assert.match(exportFilename(new Date('2026-11-08T10:00:00Z')), /^psys2-phrases-20261108\.json$/);
 });
 

@@ -135,3 +135,21 @@
     semantics=action
     action=talk.adopt
     doc="Take a thing of the session store into the conversation: a picture when it has a look, a list of what is known otherwise."
+
+@op.talk.list core.operation
+    impl=listWhich
+    semantics=action
+    action=talk.list
+    doc="Which K are V (which animals are mammals, which colours are primary, what things are red): the wires of the type the word K means in the schemas, filtered by the slot whose declared values include V. A K that is not a type is a question about one thing."
+
+@op.talk.mix core.operation
+    impl=mix
+    semantics=action
+    action=talk.mix
+    doc="What do A and B make (red and blue): the mix facts of the knowledge catalog, in either order."
+
+@op.talk.can core.operation
+    impl=canDo
+    semantics=action
+    action=talk.can
+    doc="Can X V: yes when the can slot of the thing (any world of the catalog, the common sense facts) says V, no when its cannot slot does, else what is not known."

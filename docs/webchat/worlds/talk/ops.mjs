@@ -12,8 +12,8 @@
 import { THINGS, THING_WORDS } from '../art.draw/things.catalog.mjs?v=77966d9c42';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
 import { habitatSentence } from '../../lib/knowledge/commonsense.mjs?v=7fdbc6c294';
-import { colourName } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
-import * as R from './records.mjs?v=0a501bb260';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
+import { colourName, numberValue } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
+import * as R from './records.mjs?v=f3e5e4949b';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;
@@ -301,7 +301,7 @@ export function neighbour(ctx, { x, dir, n, s } = {}) {
 }
 
 // ---------------------------------------------------------------- one slot of a thing, found through the schemas (no world is named here)
-const VERB_SLOTS = { does: (n, v) => `${cap(n)} ${v}.`, can: (n, v) => `${cap(n)} can ${v}.`, used_for: (n, v) => `${cap(n)} is used for ${v}.`, is_a: (n, v) => `${cap(n)} is ${/^[aeiou]/i.test(v) ? 'an' : 'a'} ${v}.` };
+const VERB_SLOTS = { baby: (n, v) => `A baby ${String(n).replace(/^[Tt]he /, '')} is called ${an(v)}.`, covering: (n, v) => `${cap(n)} is covered in ${v}.`, sound: (n, v) => `${cap(n)} goes ${v}.`, does: (n, v) => `${cap(n)} ${v}.`, can: (n, v) => `${cap(n)} can ${v}.`, used_for: (n, v) => `${cap(n)} is used for ${v}.`, is_a: (n, v) => `${cap(n)} is ${/^[aeiou]/i.test(v) ? 'an' : 'a'} ${v}.` };
 /** The sentence for one slot of a thing: a verb-like slot (eats, comes from) reads as a verb, any other as "The habitat of the cow is farm". */
 function slotSentence(ctx, r, hit, attr, recs) {
   const sc = ctx.knowledge?.peekSchema?.();
@@ -346,12 +346,19 @@ export function has(ctx, { o, p } = {}) {
   if (!subject) return no('missing', NO_TOPIC);
   const r = lookup(ctx, subject);
   if (!r) return dontKnow(ctx, false);
-  const what = clean(p), one = singular(what);
+  const asked = /^(\S+) (.+)$/.exec(clean(p));   // "4 legs", "two wings": a count given in the question is checked against the fact
+  const given = asked ? (/^\d+$/.test(asked[1]) ? Number(asked[1]) : numberValue(asked[1], 'cardinal')) : null;
+  const what = given !== null && Number.isFinite(given) ? clean(asked[2]) : clean(p), one = singular(what);
   const topic = topicFor(ctx, r.name);
   const c = countOf(ctx, r, what);
+  if (given !== null && Number.isFinite(given) && c) {
+    const said = c.n === given ? `Yes, ${an(r.name)} has ${c.about ? 'about ' : ''}${given} ${given === 1 ? one : what}.` : `No, ${an(r.name)} has ${c.about ? 'about ' : ''}${c.n} ${c.n === 1 ? one : what}, not ${given}.`;
+    topic.say ||= brief(said);
+    return ok(said, { values: [c.n === given ? 'yes' : 'no'] });
+  }
   const pictured = r.parts.some((x) => x.name === one || String(x.name).endsWith(`_${one}`));
   const text = c ? (c.n === 0 ? `No, ${an(r.name)} has no ${what}.` : `Yes, ${an(r.name)} has ${c.about ? 'about ' : ''}${c.n} ${c.n === 1 ? one : what}.`) : pictured ? `Yes, my picture of ${an(r.name)} has ${an(one)}.` : '';
-  if (!text) return no('missing', `I know what ${an(r.name)} is, but not whether it has ${an(one)}.`);
+  if (!text) return no('missing', given !== null && Number.isFinite(given) ? `I know what ${an(r.name)} is, but not whether it has ${given} ${what}.` : `I know what ${an(r.name)} is, but not whether it has ${an(one)}.`);
   topic.say ||= brief(text);
   return ok(text, { values: [c?.n ?? 1] });
 }
@@ -366,12 +373,87 @@ export function isa(ctx, { o, c } = {}) {
   const { own, all: cats } = R.categories(r.th, recs);
   const want = clean(c), sing = singular(want);
   const topic = topicFor(ctx, r.name);
+  // a value some slot of the thing's own records declares (a carnivore is a value of `diet`, a mammal of `class`): the slot of the thing answers, yes or no with what it is
+  const holding = R.slotsHolding(ctx.knowledge?.peekSchema?.(), want);
+  const own1 = holding.map((h) => ({ h, rec: recs.find((x) => x.type === h.type && x.f[h.key]?.length) })).find((x) => x.rec);
+  if (own1) {
+    const vals = own1.rec.f[own1.h.key].map((v) => String(v).replace(/_/g, ' '));
+    const yes = vals.some((v) => [want, sing].includes(v.toLowerCase()));
+    const said = yes ? `Yes, ${an(r.name)} is ${an(sing)}.` : `No, ${an(r.name)} is ${list(vals.map(an))}, not ${an(sing)}.`;
+    topic.say ||= brief(said);
+    return ok(said, { values: [yes ? 'yes' : 'no'] });
+  }
   if (!cats.size) return no('missing', NONE);
   const yes = [want, sing].some((x) => cats.has(x));
   const mine = [...(own.size ? own : cats)].filter((x) => x && x !== 'thing' && x !== 'sense').slice(0, 3);
   const text = yes ? `Yes, ${an(r.name)} is ${an(sing)}.` : own.size ? `No. ${cap(an(r.name))} is ${list(mine.map(an))}, not ${an(sing)}.` : `I do not know that. I only know that ${an(r.name)} is ${list(mine.map(an))}.`;
   topic.say ||= brief(text);
   return ok(text, { values: [yes ? 'yes' : 'no'] });
+}
+
+/** Can X V (can a penguin fly, do penguins swim): the `can` and `cannot` slots of the thing's records say it; a verb neither says is not known (a missing key says nothing). */
+export function canDo(ctx, { o, v } = {}) {
+  const subject = subj(ctx, o);
+  if (!subject) return no('missing', NO_TOPIC);
+  const r = lookup(ctx, subject);
+  if (!r) return dontKnow(ctx, false);
+  const verb = clean(v).replace(/^to /, '');
+  const recs = R.records(r.th, r.name);
+  const has = (key) => recs.some((x) => (x.f[key] ?? []).some((y) => String(y).toLowerCase() === verb));
+  const topic = topicFor(ctx, r.name);
+  const text = has('can') ? `Yes, ${an(r.name)} can ${verb}.` : has('cannot') ? `No, ${an(r.name)} cannot ${verb}.` : '';
+  if (!text) return no('missing', `I don't know whether ${an(r.name)} can ${verb}.`);
+  topic.say ||= brief(text);
+  return ok(text, { values: [has('can') ? 'yes' : 'no'] });
+}
+
+/**
+ * Which K are V ("which animals are mammals", "which colours are primary", "what things are red"): the wires of the type the word K means in the schemas, filtered by the slot whose declared values
+ * include V. The wires were loaded by the host through `listNeeds`. A K that is no type, or a V no slot holds, is a question about one thing and is answered as one ("what colour is grass").
+ */
+export function listWhich(ctx, { k, v, verb } = {}) {
+  if (/^(?:the|a|an|all|some|these|those|our|my)$/.test(String(v ?? '').trim().toLowerCase())) return look(ctx, { o: k });   // "what are the seasons": no adjective, a thing
+  const sc = ctx.knowledge?.peekSchema?.();
+  const types = R.typesFor(sc, clean(k)), value = clean(v);
+  // a verb ("eat grass", "live in the sea", "can fly") names the slot that holds the value; otherwise the slot is the one whose declared values include it ("mammal", "primary")
+  // "have 4 sides", "have no corners": a count and the slot of the part it counts (sides, corners, legs)
+  const counted = verb === 'have' ? /^(no|\d+|[a-z]+) ([a-z]+)$/.exec(value) : null;
+  const countOf_ = counted ? (counted[1] === 'no' ? 0 : /^\d+$/.test(counted[1]) ? Number(counted[1]) : numberValue(counted[1], 'cardinal')) : null;
+  if (counted && countOf_ !== null && Number.isFinite(countOf_)) {
+    const slots = R.slotsFor(sc, counted[2]).filter((x) => types.includes(x.type) && x.key !== '*');
+    const names = slots.length ? R.namesWith((t) => ctx.knowledge?.peekWires?.(t), slots, String(countOf_)) : [];
+    if (!names.length) return no('missing', NONE);
+    const shown = names.slice(0, 12).map((x) => x.name);
+    const text = `${cap(clean(k))} with ${countOf_ === 0 ? 'no' : countOf_} ${counted[2]}${names.length > shown.length ? ` (showing ${shown.length} of ${names.length})` : ''}: ${list(shown)}.`;
+    const topic = topicFor(ctx, `${counted[2]} ${countOf_}`);
+    addCard(ctx, topic, { kind: 'facts', thing: clean(k), title: cap(`${clean(k)} with ${countOf_} ${counted[2]}`), data: { rows: [{ k: `${clean(k)} with ${countOf_ === 0 ? 'no' : countOf_} ${counted[2]}`, v: shown.join(', ') }] }, how: howOf({ frame: `which ${clean(k)} have ${countOf_} ${counted[2]}`, words: `${clean(k)} with ${countOf_} ${counted[2]}`, things: [clean(k)], sources: [{ what: `the ${String(slots[0].type).split('.').slice(0, 2).join('.').replace(/^k\./, '')} knowledge`, part: '' }], card: 'a small list with the names' }) }, text);
+    return ok(text, { values: shown });
+  }
+  const picks = verb ? R.slotsFor(sc, clean(verb).replace(/^(?:live|lives) (?:in|on)$/, 'live').replace(/s$/, '')).filter((x) => types.includes(x.type)) : R.slotsHolding(sc, value, types);
+  const plural = /s$/.test(clean(k));
+  const names = plural && picks.length ? R.namesWith((t) => ctx.knowledge?.peekWires?.(t), picks, value) : [];
+  if (!names.length) return (plural && picks.length) || verb ? no('missing', NONE) : ask(ctx, { o: v, a: k });
+  const shown = names.slice(0, 12).map((x) => x.name);
+  const rel = verb ? clean(verb) : 'are';
+  const text = `${cap(clean(k))} that ${rel} ${value}${names.length > shown.length ? ` (showing ${shown.length} of ${names.length})` : ''}: ${list(shown)}.`;
+  const topic = topicFor(ctx, value);
+  addCard(ctx, topic, { kind: 'facts', thing: value, title: cap(`${value} ${clean(k)}`), data: { rows: [{ k: `${clean(k)} that ${rel} ${value}`, v: shown.join(', ') }] }, how: howOf({ frame: `which ${clean(k)} ${rel} ${value}`, words: `${clean(k)} that ${rel} ${value}`, things: [value],sources: [{ what: `the ${String(picks[0].type).split('.').slice(0, 2).join('.').replace(/^k\./, '')} knowledge`, part: '' }], card: 'a small list with the names' }) }, text);
+  return ok(text, { values: shown });
+}
+
+/** What do A and B make (red and blue): the `gives` of the mix wire that has both, in either order; the wires of the type "mix" were loaded by the host. */
+export function mix(ctx, { a, b } = {}) {
+  const x = clean(a), y = clean(b);
+  const types = R.typesFor(ctx.knowledge?.peekSchema?.(), 'mix');
+  for (const t of types) for (const w of ctx.knowledge?.peekWires?.(t) ?? []) {
+    const p = String(w.f.a?.[0] ?? '').toLowerCase(), q = String(w.f.b?.[0] ?? '').toLowerCase(), g = w.f.gives?.[0];
+    if (!g || !((p === x && q === y) || (p === y && q === x))) continue;
+    const text = `${cap(x)} and ${y} make ${g}.`;
+    const topic = topicFor(ctx, g);
+    topic.say ||= brief(text);
+    return ok(text, { values: [g] });
+  }
+  return no('missing', ctx.knowledge?.peekWires?.(types[0]) ? `I do not know what ${x} and ${y} make.` : NONE);
 }
 
 /** "No, the other one": of the two things of the last comparison, the one the conversation is not on; it is shown as "what is X". */
@@ -438,8 +520,12 @@ export function scope(ctx) {
 // ---------------------------------------------------------------- host hooks
 /** Spec 17: the things of a request that the host should look up in the catalog before the operation runs. */
 export function openSlots(ctx, { action, args = {} } = {}) {
-  const names = action === 'talk.look' || action === 'talk.parts' || action === 'talk.kind' || action === 'talk.ask' ? [args.o] : action === 'talk.count' ? [args.o, args.p] : action === 'talk.isa' ? [args.o, args.c] : action === 'talk.has' ? [args.o] : action === 'talk.change' ? [args.x] : action === 'talk.compare' ? [args.a, args.b] : action === 'talk.neighbour' ? [args.x] : [];
+  const names = action === 'talk.look' || action === 'talk.parts' || action === 'talk.kind' || action === 'talk.ask' ? [args.o] : action === 'talk.count' ? [args.o, args.p] : action === 'talk.isa' ? [args.o, args.c] : action === 'talk.can' ? [args.o] : action === 'talk.list' ? [args.v] : action === 'talk.has' ? [args.o] : action === 'talk.change' ? [args.x] : action === 'talk.compare' ? [args.a, args.b] : action === 'talk.neighbour' ? [args.x] : [];
   return names.map(clean).filter((n) => n && n.split(' ').length <= 3 && !PRON.test(n));
+}
+/** Host hook: the words of the types whose wires an operation lists or looks up (loaded before it runs, `ctx.knowledge.peekWires`). */
+export function listNeeds(ctx, { action, args = {} } = {}) {
+  return action === 'talk.list' ? [args.k] : action === 'talk.mix' ? ['mix'] : [];
 }
 /** Host hook: the catalog models this world reads synchronously (the schemas of the knowledge worlds, the ordered series), built by the host before an operation runs. */
 export function needs() { return ['schema', 'series']; 

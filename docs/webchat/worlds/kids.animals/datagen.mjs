@@ -110,49 +110,7 @@ const T = [];
 const add = (group, ph, make, extra = {}) => T.push({ group, ph, make, ...extra });
 const withA = (need, f) => (r, x) => { const a = A(r, x, need); return a ? f(r, x, a) : null; };
 
-add('animals.q.legs', 'question', withA('legs', (r, x, a) => ({ text: pick(r, [`How many legs does ${NP(r, a)} have?`, `How many legs has ${NP(r, a)}?`, `How many legs do ${sp(plural(nm(a)))} have?`, `Tell me how many legs ${NP(r, a)} has.`]), expect: E(Q('legs', { name: nm(a) })) })));
-add('animals.q.legs.exists', 'question', withA('legs', (r, x, a) => { const n = pick(r, [a.legs[0], String(2 * N(r, 5))]);
-  return { text: `Does ${NP(r, a)} have ${n} legs?`, expect: E(Q('legs', { name: nm(a), legs: n }, { mode: 'exists' })) }; }));
 function N(r, hi) { return 1 + Math.floor(r() * hi); }
-add('animals.q.food', 'question', withA('food', (r, x, a) => ({ text: pick(r, [`What does ${NP(r, a)} eat?`, `What do ${sp(plural(nm(a)))} eat?`, `What food does ${NP(r, a)} ${pick(r, ['eat', 'like', 'need'])}?`, `Tell me what ${NP(r, a)} eats.`]), expect: E(Q('food', { name: nm(a) }, { mode: 'list' })) })));
-add('animals.q.food.exists', 'question', withA('food', (r, x, a) => { const f = pick(r, [...a.food.filter((v) => v !== 'plants'), 'pizza']);
-  return { text: `Does ${NP(r, a)} eat ${f}?`, expect: E(Q('food', { name: nm(a), food: f }, { mode: 'exists' })) }; }));
-add('animals.q.isa', 'question', (r, x) => { const a = A(r, x), k = pick(r, x.lex('lex.kids.animals.kinds', KINDS_FB)), kind = chance(r, 0.3);
-  return { text: `Is ${NP(r, a)} ${kind ? `a kind of ${sp(k)}` : `${art(k)} ${sp(k)}`}?`, expect: E(Q('is_a', { name: nm(a), is_a: k })) }; });
-add('animals.q.kind', 'question', (r, x) => { const a = A(r, x);
-  return { text: `What ${pick(r, ['kind', 'type', 'sort', 'class'])} of animal is ${NP(r, a)}?`, expect: E(Q('class', { name: nm(a) })) }; });
-add('animals.q.ability', 'question', (r, x) => { const a = A(r, x), ab = pick(r, ABS);
-  const t = pick(r, [`Can ${NP(r, a)} ${ab}?`, `${chance(r, 0.5) ? 'Does ' + NP(r, a) : 'Do ' + sp(plural(nm(a)))} ${ab}?`, `Is ${NP(r, a)} able to ${ab}?`]);
-  return { text: t, expect: E(Q('can_' + ab, { name: nm(a) })) }; });
-add('animals.q.summary', 'question', (r, x) => { const n = pick(r, ANIM(x)), A_ = `${art(sp(n))} ${sp(n)}`;
-  return { text: pick(r, [`What is ${A_}?`, `Tell me about ${A_}.`, `Describe ${A_}.`, `What can you tell me about ${A_}?`, `What is ${A_} like?`, `What are ${sp(plural(n))} like?`]), expect: E(Q('summary', { name: n })) }; });
-add('animals.q.covering', 'question', withA('covering', (r, x, a) => ({ text: pick(r, [`What is ${NP(r, a)} covered in?`, `What covering does ${NP(r, a)} have?`]), expect: E(Q('covered', { name: nm(a) })) })));
-add('animals.q.live', 'question', (r, x) => { const a = A(r, x);
-  return { text: pick(r, [`Where does ${NP(r, a)} live?`, `Where do ${sp(plural(nm(a)))} live?`, `Where can ${pick(r, ['I', 'we', 'you'])} ${pick(r, ['find', 'see', 'meet'])} ${NP(r, a)}?`, `Where is ${NP(r, a)} found?`]), expect: E(Q('lives', { name: nm(a) })) }; });
-add('animals.q.sound', 'question', (r, x) => { const a = A(r, x);
-  return { text: pick(r, [`What sound does ${NP(r, a)} make?`, `What does ${NP(r, a)} say?`, `What noise does ${NP(r, a)} make?`, `How does ${NP(r, a)} sound?`]), expect: E(Q('sound', { name: nm(a) })) }; });
-add('animals.q.baby', 'question', (r, x) => { const a = A(r, x);
-  return { text: pick(r, [`What is a baby ${sp(nm(a))} called?`, `What do you call a baby ${sp(nm(a))}?`, `What is the name of a baby ${sp(nm(a))}?`]), expect: E(Q('baby', { name: nm(a) })) }; });
-add('animals.q.baby.reverse', 'question', (r, x) => { const b = pick(r, x.lex('lex.kids.animals.babies', ['puppy', 'kitten', 'calf', 'lamb', 'foal', 'cub']));
-  return { text: pick(r, [`What is ${art(b)} ${b}?`, `Which animals have a baby called ${art(b)} ${b}?`, `What animals have a baby called the ${b}?`]), expect: E(Q('name', { baby: b }, { mode: 'list' })) }; });
-add('animals.q.search.habitat', 'question', (r, x) => { const h = pick(r, HABS), c = pick(r, x.lex('lex.kids.animals.classes', CLASSES_FB));
-  const det = pick(r, ['the ', 'a ', '']), prep = pick(r, ['in', 'on', 'at', 'near']);
-  return chance(r, 0.35) ? { text: `Which ${plural(c)} live ${prep} ${det}${h}?`, expect: E(Q('matching', { class: c, habitat: h })) }
-    : { text: pick(r, [`Which animals live ${prep} ${det}${h}?`, `Name an animal that lives ${prep} ${det}${h}.`, `Which animals can be found ${prep} ${det}${h}?`]), expect: E(Q('matching', { habitat: h })) }; });
-add('animals.q.search.legs', 'question', (r) => { const n = pick(r, [0, 2, 4, 6, 8]);
-  return { text: n === 0 ? 'Which animals have no legs?' : pick(r, [`Which animals have ${n} legs?`, `Name an animal with ${n} legs.`, `What animals have ${nt(r, n)} legs?`]), expect: E(Q('matching', { legs: n })) }; });
-add('animals.q.search.class', 'question', (r, x) => { const c = pick(r, x.lex('lex.kids.animals.classes', CLASSES_FB));
-  return { text: pick(r, [`Which animals are ${plural(c)}?`, `Name ${art(c)} ${c}.`, `What animals are ${plural(c)}?`]), expect: E(Q('matching', { class: c })) }; });
-add('animals.q.search.diet', 'question', (r, x) => { const d = pick(r, x.lex('lex.kids.animals.diets', DIETS));
-  return { text: pick(r, [`Which animals are ${plural(d)}?`, `Name ${art(d)} ${d}.`, `Which animals are ${art(d)} ${d}?`]), expect: E(Q('matching', { diet: d })) }; });
-add('animals.q.search.ability', 'negation', (r, x) => { const ab = pick(r, ABS), neg = chance(r, 0.5), c = pick(r, x.lex('lex.kids.animals.classes', CLASSES_FB)), v = neg ? 'cannot' : 'can';
-  const k = `can_${ab}`, val = neg ? 'false' : 'true';
-  return chance(r, 0.5) ? { text: pick(r, [`Which animals ${v} ${ab}?`, `Name an animal that ${v} ${ab}.`]), expect: E(Q('matching', { [k]: val })) }
-    : { text: pick(r, [`Which ${plural(c)} ${v} ${ab}?`, `Name ${art(c)} ${c} that ${v} ${ab}.`]), expect: E(Q('matching', { class: c, [k]: val })) }; });
-add('animals.q.search.attribute', 'question', withA('food', (r, x, a) => { const k = pick(r, ['food', 'sound', 'covering']), v = a[k]?.[0];
-  if (!v) return null;
-  const text = k === 'food' ? `Which animals eat ${v}?` : k === 'sound' ? `Which animal ${pick(r, ['says', 'makes', 'goes'])} ${v}?` : `Which animals have ${plural(v)}?`;
-  return { text, expect: E(Q('matching', { [k]: v })) }; }));
 // statements that teach facts
 add('animals.t.legs', 'statement', withA('legs', (r, x, a) => ({ text: `${chance(r, 0.5) ? NP(r, a).replace(/^./, (c) => c.toUpperCase()) + ' has' : cap(plural(nm(a))) + ' have'} ${a.legs[0]} legs.`, expect: E(F(nm(a), { legs: a.legs[0] })) })));
 add('animals.t.food', 'statement', withA('food', (r, x, a) => { const f = pick(r, a.food);
@@ -169,9 +127,6 @@ add('animals.t.sound', 'statement', withA('sound', (r, x, a) => ({ text: `${cap(
 add('animals.t.baby', 'statement', withA('baby', (r, x, a) => ({ text: `${pick(r, ['A', 'The'])} baby ${sp(nm(a))} is called ${art(a.baby[0])} ${a.baby[0]}.`, expect: E(F(nm(a), { baby: a.baby[0] })) })));
 add('animals.t.covering', 'statement', withA('covering', (r, x, a) => { const c = a.covering[0];
   return { text: chance(r, 0.5) ? `${cap(plural(sp(nm(a))))} have ${plural(c)}.` : `${cap(NP(r, a))} is covered in ${c === 'wool' || c === 'fur' ? c : plural(c)}.`, expect: E(F(nm(a), { covering: c })) }; }));
-for (const [g, mkq] of [['legs', (z) => [`How many legs does ${art(z)} ${z} have?`, Q('legs', { name: z })]], ['food', (z) => [`What does ${art(z)} ${z} eat?`, Q('food', { name: z }, { mode: 'list' })]], ['live', (z) => [`Where does ${art(z)} ${z} live?`, Q('lives', { name: z })]]]) {
-  add(`animals.new-vocabulary.${g}`, 'new-vocabulary', (r) => { const z = pick(r, ['quokka', 'axolotl', 'capybara', 'meerkat', 'lemur', 'narwhal']), [text, w] = mkq(z); return { text, expect: E(w) }; });
-}
 const QP = (seek, where, extra = {}) => { const w = Q(seek, where, extra); w[1].type = T_ + 'pet'; return w; };
 // pets
 add('animals.pet.statement', 'statement', (r, x) => { const k = pick(r, ['dog', 'cat', 'rabbit', 'hamster', 'parrot', 'goldfish', 'tortoise']), n = pick(r, PETS);
@@ -192,14 +147,6 @@ add('animals.ood', 'out-of-domain', (r, x) => { const p = x.person(r);
   return { text: pick(r, [`${p.name} has 5 apples.`, 'How much does a ball cost?', 'What day is tomorrow?', 'What is 7 plus 5?', 'How many sides does a hexagon have?', 'Add milk to my shopping list.', 'Open the editor.', 'Play hangman.', 'What color is the sky?', 'Hello!', 'Is a square a rectangle?', 'What do red and yellow make?']), negative: true }; });
 
 // ---- rule sweep: realistic phrasing families (short noun-first forms, chat words, word orders), see worlds/kids.animals/coverage.md
-add('animals.wording.legs', 'question', withA('legs', (r, x, a) => { const n = sp(nm(a)); return { text: pick(r, [`${n} legs?`, `legs on ${NP(r, a)}`, `count ${n} legs`, `${n} leg number`, `${sp(plural(nm(a)))} how many legs pls`, `how many legs on ${NP(r, a)}`, `how many legs has ${NP(r, a)} got`, `can you say how many legs ${NP(r, a)} has`, `tell me the legs of ${NP(r, a)}`, `${n} legs how many`]), expect: E(Q('legs', { name: nm(a) })) }; }));
-add('animals.wording.food', 'question', withA('food', (r, x, a) => { const n = sp(nm(a)); return { text: pick(r, [`${n} food?`, `${n} diet pls`, `what is the diet of ${NP(r, a)}`, `what do ${sp(plural(nm(a)))} usually eat`, `${sp(plural(nm(a)))} eat what`, `which foods do ${sp(plural(nm(a)))} like`, `what is ${NP(r, a)} eating`]), expect: E(Q('food', { name: nm(a) }, { mode: 'list' })) }; }));
-add('animals.wording.sound', 'question', (r, x) => { const a = A(r, x), n = sp(nm(a)); return { text: pick(r, [`${n} sound?`, `${n} say?`, `what's the ${n} sound`, `tell me the sound ${NP(r, a)} makes`, `can you tell me what ${NP(r, a)} says`, `${sp(plural(nm(a)))} say what`]), expect: E(Q('sound', { name: nm(a) })) }; });
-add('animals.wording.baby', 'question', (r, x) => { const a = A(r, x), n = sp(nm(a)); return { text: pick(r, [`baby ${n} name?`, `${n} baby?`, `whats a baby ${n} called`, `what do you call the baby of a ${n}`]), expect: E(Q('baby', { name: nm(a) })) }; });
-add('animals.wording.baby.reverse', 'question', (r, x) => { const b = pick(r, ['calf', 'puppy', 'kitten', 'lamb', 'foal', 'cub']); return { text: pick(r, [`${b}?`, `whats a ${b}`, `${b} meaning`, `who is a ${b}`, `can you tell me what a ${b} is`]), expect: E(Q('name', { baby: b }, { mode: 'list' })) }; });
-add('animals.wording.search.legs', 'question', (r) => { const n = pick(r, [2, 4, 6, 8]); return { text: pick(r, [`animals with ${nt(r, n, 0.3)} legs`, `${n} legs animals`, `list animals that have ${n} legs`, `show me animals with ${n} legs`, `which animals got ${n} legs`, `${n} legged animals?`]), expect: E(Q('matching', { legs: n })) }; });
-add('animals.wording.diet.yesno', 'question', (r, x) => { const a = A(r, x); const d = pick(r, [['plants', 'herbivore'], ['a plant eater', 'herbivore'], ['a veggie eater', 'herbivore']]); return { text: d[0].startsWith('a ') ? `is ${NP(r, a)} ${d[0]}` : `does ${NP(r, a)} eat ${d[0]}`, expect: E(Q('is_a', { name: nm(a), is_a: d[1] })) }; });
-add('animals.wording.ability', 'question', (r, x) => { const a = A(r, x), ab = pick(r, ABS); return { text: pick(r, [`can u tell me if ${NP(r, a)} can ${ab}`, `${nm(a)} ${ab}?`, `${NP(r, a)} can ${ab} right`, `can you check if ${NP(r, a)} can ${ab}`]), expect: E(Q('can_' + ab, { name: nm(a) })) }; });
 add('animals.wording.pets', 'statement', (r) => { const k = pick(r, ['dog', 'cat', 'rabbit', 'hamster']), n = pick(r, ['Rex', 'Bella', 'Luna', 'Buddy']); return { text: pick(r, [`my ${k} is ${n}`, `${n} is my ${k}`, `the ${k} is named ${n}`, `my ${k}s name is ${n}`, `name of my ${k}: ${n}`, `${n} is the name of my ${k}`, `i named my ${k} ${n}`, `${n} is the ${k}`]), expect: E([T_ + 'pet', { owner: '$e.user', kind: k, called: '$e.' + n.toLowerCase() }]) }; });
 add('animals.wording.pets.ask', 'question', (r) => ({ text: pick(r, ['whats my pets name', 'my pet name?', 'what did i call my pet', 'name of my pet?', 'how is my pet called', 'remind me my pets name', 'what is my pet named', 'can you tell me what my pet is called']), expect: E(QP('called', { owner: '$e.user' })) }));
 add('animals.wording.teach', 'statement', withA('legs', (r, x, a) => ({ text: pick(r, [`remember ${NP(r, a)} has ${a.legs[0]} legs`, `fyi ${sp(nm(a))} ${a.legs[0]} legs`, `just so you know ${NP(r, a)} has ${a.legs[0]} legs`, `${NP(r, a)} got ${a.legs[0]} legs`]), expect: E(F(nm(a), { legs: a.legs[0] })) })));
