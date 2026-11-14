@@ -145,12 +145,12 @@ test('RP5c: the capability dry run awaits the lazy engine of the world it checks
   } finally { Object.defineProperty(world, 'ops', { value: origOps, configurable: true, writable: true }); }
 });
 
-test('RO-PHONE 4: "desenează o diagramă" draws a sample and both the English and the Romanian reply are plain words, no ids', async () => {
+test('RO-PHONE 4: "desenează o diagramă" draws a sample (a kind of diagram about a topic of the knowledge, spec 14 section 9) and both the English and the Romanian reply are plain words, no ids', async () => {
   const ro = await run('diagram', ['desenează o diagramă']);
   assert.deepEqual(ro.status, ['supported']);
-  assert.match(ro.r.text, /^Am desenat o diagramă aleatorie de tip \S+, cu \S+ \S+\.$/);
+  assert.match(ro.r.text, /^Am desenat o diagramă aleatorie de tip .+, cu \S+ \S+\.(?: Este despre .+\.)?$/);
   assert.ok(ro.s.state()['diagram.sketch'].shapes.length >= 3);
   const en = await run('diagram', ['make a random diagram'], { lang: 'en' });
-  assert.match(en.r.text, /^I drew a random \w+ diagram with \w+ \w+\.$/);
+  assert.match(en.r.text, /^I drew a random .+ diagram with \w+ \w+\.(?: It is about .+\.)?$/);
   assert.doesNotMatch(en.r.text, /\b[a-z]\d\b/);
 });
