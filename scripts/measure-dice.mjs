@@ -30,6 +30,18 @@ const stateOf = (s) => JSON.stringify(Object.fromEntries(Object.entries(s.state(
 const CHANGES = new Set(['make', 'remove', 'change', 'copy', 'undo', 'redo']);
 
 const engine = await createEngine({ loader: createFsLoader() });
+// --catalog <url>: the route the live page takes (engine-worker.mjs): the knowledge catalog over HTTP, layered on the bundled subset; the drawing board then draws things of the catalog
+const catalogUrl = arg('catalog', null);
+if (catalogUrl) {
+  const { createFacts } = await import('../src/knowledge/facts.mjs');
+  const { createKnowledgeSource, knowledgeTimeoutMs } = await import('../src/loaders/knowledge-source.mjs');
+  const { createLayeredSource } = await import('../src/knowledge/bundled-source.mjs');
+  const src = createKnowledgeSource(catalogUrl);
+  const facts = createFacts({ source: createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), knowledgeTimeoutMs(p) + 2000))]) }) });
+  engine.setKnowledge(facts);
+  await facts.thing?.('giraffe');   // loads the vocabulary
+  console.log(`catalog ${catalogUrl}: vocabulary ${Object.keys(facts.peekVocab?.() ?? {}).length} lemmas, unreachable=${facts.unreachable()}`);
+}
 const worlds = engine.set.list().filter((w) => w.ops?.executor?.schema && w.id !== 'ui.avatar' && (!only || w.id === only));   // the avatar is a popup with no things of its own: its dice falls back to a world used lately
 const tabWorldIds = new Set(engine.set.list().filter((w) => w.manifest?.entries?.some((e) => e.key === 'tab') || w.id === 'docs.editor').map((w) => w.id));
 const rows = [], noSample = [];
@@ -56,7 +68,7 @@ for (const w of worlds) {
     const capture = answered.find((id) => id !== w.id && tabWorldIds.has(id)) ?? null;
     let ok;
     if (capture) ok = false;
-    else if (CHANGES.has(act)) ok = before !== after && !/did not understand|did not catch/i.test(reply.text ?? '') && !/\?\s*$/.test((reply.text ?? '').trim());   // a counter-question ("Which shape should I label?") is not an executed act
+    else if (CHANGES.has(act)) ok = before !== after && !/did not understand|did not catch/i.test(reply.text ?? '') && !/\?(?:\s|$)|\bDone\.? But:/.test(reply.text ?? '');   // a counter-question anywhere in the reply ("Which shape should I label?", "Done. But: What should change about circle 3?") is not an executed act
     else ok = !REFUSAL.test(reply.text ?? '') && replySupported(reply);
     rows.push({ world: w.id, i, text: sample.text, act, kind: sample.frame.args?.kind ?? null, attr: sample.frame.args?.attr ?? null, judged: ok ? 'ok' : 'fail', roundTrip: rt, ...(capture ? { capture } : {}), reply: String(reply.text ?? '').slice(0, 160) });
   }

@@ -49,6 +49,7 @@
     word=sketch
 
 @pic.thing acts.kind
+    know=things
     plural=things
     any=knowledge
     in=thing

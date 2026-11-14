@@ -3,7 +3,7 @@
 // weighted by recency and novelty; this module only (1) states a tab's world to the library (its schema and the things the session holds, as facts), (2) renders a frame as
 // a sentence, and (3) keeps a host check that a change really changes something. There is NO generator of our own: no list of examples, no placeholders to fill.
 // Browser-safe: no `node:*` imports; the library module and the world registry are passed in.
-import { colourWordSet } from '../knowledge/values.mjs?v=a137742733';
+import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=a137742733';
 
 const NOT_SAMPLED = new Set(['place', 'connect', 'group', 'send', 'save', 'load', 'redo']);   // acts the library cannot frame (a place, a second thing, a host act): left to typing
 const FUNCTION_WORDS = new Set(['to', 'from', 'at', 'until', 'in', 'on', 'by', 'of']);   // attributes named like prepositions cannot be said in "Set X <attr> to V"
@@ -145,7 +145,8 @@ export function createSampler(lib, { worldOf, thingsOf, historyOf, knowledgeOf }
     const undoOk = mine.n > 0 && hist > 0 && roll(seed0, 5) < 0.1;
     // how a person points at one thing: the world's own label; when another thing has the same label, its colour or its name (a label that stays ambiguous is not used)
     const own = (t) => (w.executor?.labels ? w.executor.labels([{ id: t.id, kind: t.kind, n: t.n, name: t.name ?? null, attrs: t.attrs ?? {} }]) : `the ${t.kind}`);
-    const labelOf = (t) => {
+    const labelOf = (t0) => { const l = labelOf0(t0); return l && l.replace(/composite:/g, ''); };   // a thing of the catalog is a "composite:pier" in the state, a pier in words
+    const labelOf0 = (t) => {
       if (t.say) return t.say;   // the world says how a person points at the thing
       const base = own(t), same = things.filter((x) => own(x) === base);
       if (same.length < 2) return base;
@@ -193,7 +194,8 @@ export function engineSampler(lib, engine, session) {
     historyOf: (id) => session().state(id)?.history?.length ?? 0,
     knowledgeOf: (id) => {
       const lists = {};
-      try { lists.colours = [...colourWordSet()]; } catch { /* no colours: the schema's own */ }
+      try { const readable = new Set(colourLexiconWords()); lists.colours = [...colourWordSet()].filter((c) => readable.has(c)); }   // the colours the readers take as colour words (not "cherry", a fruit)
+      catch { /* no colours: the schema's own */ }
       try { Object.assign(lists, schemaWorld(id)?.sampleKnowledge?.({ state: session().state(id) ?? {}, knowledge: engine.knowledge }) ?? {}); } catch { /* the world's lists are optional */ }
       return lists;
     },

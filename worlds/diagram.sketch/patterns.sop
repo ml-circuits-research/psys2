@@ -95,46 +95,6 @@
     example="Make circle blue."
     canonical="Make circle blue."
 
-@pat.diagram.sketch.change.add core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.diagram.sketch.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=diagram.sketch.change arg.mode=more arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
-    kind=request
-    priority=28
-    tabPriority=36
-    signal=true
-    tabClaim=true
-    example="Add 2 seats to circle."
-
-@pat.diagram.sketch.change.add1 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {attribute:lex.diagram.sketch.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=diagram.sketch.change arg.mode=more arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
-    kind=request
-    priority=27
-    tabPriority=35
-    signal=true
-    tabClaim=true
-    example="Add a seat to circle."
-
-@pat.diagram.sketch.change.less core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] {amount:number} {attribute:lex.diagram.sketch.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=diagram.sketch.change arg.mode=less arg.amount=\"{amount}\" arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
-    kind=request
-    priority=28
-    tabPriority=36
-    signal=true
-    tabClaim=true
-    example="Remove 2 seats from circle."
-
-@pat.diagram.sketch.change.less1 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {attribute:lex.diagram.sketch.attrs} from [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=diagram.sketch.change arg.mode=less arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
-    kind=request
-    priority=27
-    tabPriority=35
-    signal=true
-    tabClaim=true
-    example="Remove a seat from circle."
-
 @pat.diagram.sketch.change.cmp.more core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} {value:lex.diagram.sketch.more} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=diagram.sketch.change arg.mode=more arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
@@ -274,26 +234,6 @@
     signal=true
     tabClaim=true
     example="circle should be blue."
-
-@pat.diagram.sketch.change.needs core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want|i_need|make|let|give]? [$acts.det]? {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:lex.diagram.sketch.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=diagram.sketch.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.attribute=\"{attribute}\" arg.text=\"{segment}\""
-    kind=request
-    priority=26
-    tabPriority=34
-    signal=true
-    tabClaim=true
-    example="circle needs 6 seats."
-
-@pat.diagram.sketch.ask.count.attr core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {attribute:lex.diagram.sketch.attrs} [does|do|has|have] [$acts.det]? {thing:words} [have|has|got]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
-    emit="@{_} core.request action=diagram.sketch.ask arg.mode=what arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
-    kind=question
-    priority=28
-    tabPriority=36
-    signal=true
-    tabClaim=true
-    example="How many seats does circle have?"
 
 @pat.diagram.sketch.ask.count core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|do_i_have|have_i_got|is]? [there]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"

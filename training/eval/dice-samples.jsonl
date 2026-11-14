@@ -34,7 +34,7 @@
 {"world":"data.charts","i":10,"text":"Set the chart sort to asc.","act":"change","kind":null,"attr":"sort","judged":"ok","roundTrip":true,"reply":"OK, the chart is sorted from the smallest to the biggest."}
 {"world":"data.charts","i":11,"text":"Add eagle 2.","act":"make","kind":"add_eagle_2","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added eagle (2)."}
 {"world":"data.charts","i":12,"text":"Set the chart axis to sideways.","act":"change","kind":null,"attr":"axis","judged":"ok","roundTrip":true,"reply":"The chart is already horizontal."}
-{"world":"data.charts","i":13,"text":"Set the chart colour to grey.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"OK, the chart is grey now."}
+{"world":"data.charts","i":13,"text":"Set the chart colour to green.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"OK, the chart is green now."}
 {"world":"data.charts","i":14,"text":"Set the chart palette to forest.","act":"change","kind":null,"attr":"palette","judged":"ok","roundTrip":true,"reply":"OK, the chart uses forest colors now."}
 {"world":"data.charts","i":15,"text":"Add parrot 2.","act":"make","kind":"add_parrot_2","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added parrot (2)."}
 {"world":"data.charts","i":16,"text":"Add mite 8.","act":"make","kind":"add_mite_8","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added mite (8)."}
@@ -45,28 +45,28 @@
 {"world":"data.charts","i":21,"text":"Make a pie chart of the legs of the jungle animals.","act":"make","kind":"make_a_pie_chart_of_the_legs_of_the_jungle_animals","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, here is a pie chart of the legs of jungle animals with 9 items. It is open in the Charts tab."}
 {"world":"data.charts","i":22,"text":"Make a bar chart of the legs of the river animals.","act":"make","kind":"make_a_bar_chart_of_the_legs_of_the_river_animals","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, here is a bar chart of the legs of river animals with 12 items. It is open in the Charts tab."}
 {"world":"diagram.sketch","i":0,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
-{"world":"diagram.sketch","i":1,"text":"Set the circle size to 10.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 1? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":1,"text":"Set the circle size to huge.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"the circle is now huge."}
 {"world":"diagram.sketch","i":2,"text":"What is the colour of the circle?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"c1 is white."}
 {"world":"diagram.sketch","i":3,"text":"Copy the circle.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
 {"world":"diagram.sketch","i":4,"text":"What is the colour of c2?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"c2 is white."}
 {"world":"diagram.sketch","i":5,"text":"Remove c1.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Deleted circle 1."}
-{"world":"diagram.sketch","i":6,"text":"Set the circle size to 2.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 2? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":6,"text":"Set the circle size to tiny.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"the circle is now tiny."}
 {"world":"diagram.sketch","i":7,"text":"Remove the circle.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Deleted circle 2."}
 {"world":"diagram.sketch","i":8,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
-{"world":"diagram.sketch","i":9,"text":"Set the circle size to 3.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":10,"text":"Set the circle size to 9.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":11,"text":"What is the size of the circle?","act":"ask","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"c3 is medium (62×62 px)."}
-{"world":"diagram.sketch","i":12,"text":"Set the circle size to 1.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":13,"text":"Set the circle size to 8.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":14,"text":"Set the circle colour to thistle.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":15,"text":"Set the circle colour to cherry.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":16,"text":"Set the circle colour to sapphire.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":17,"text":"Set the circle size to 5.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":18,"text":"Set the circle colour to rust.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":19,"text":"Set the circle colour to plum.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":20,"text":"Set the circle size to 6.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":21,"text":"Set the circle size to 7.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
-{"world":"diagram.sketch","i":22,"text":"Copy the circle.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
+{"world":"diagram.sketch","i":9,"text":"Set the circle size to small.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"the circle is now small."}
+{"world":"diagram.sketch","i":10,"text":"Set the circle colour to yellow.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"the circle is now yellow."}
+{"world":"diagram.sketch","i":11,"text":"What is the size of the circle?","act":"ask","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"c3 is small (44×44 px)."}
+{"world":"diagram.sketch","i":12,"text":"Set the circle colour to indigo.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"the circle is now indigo."}
+{"world":"diagram.sketch","i":13,"text":"Set the circle size to large.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"the circle is now large."}
+{"world":"diagram.sketch","i":14,"text":"Set the circle colour to black.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"the circle is now black."}
+{"world":"diagram.sketch","i":15,"text":"Set the circle size to huge.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"the circle is now huge."}
+{"world":"diagram.sketch","i":16,"text":"Set the circle colour to lime.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"the circle is now lime."}
+{"world":"diagram.sketch","i":17,"text":"Set the circle size to medium.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"the circle is now medium."}
+{"world":"diagram.sketch","i":18,"text":"Set the circle colour to pink.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"the circle is now pink."}
+{"world":"diagram.sketch","i":19,"text":"Set the circle colour to green.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"the circle is now green."}
+{"world":"diagram.sketch","i":20,"text":"Remove the circle.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Deleted circle 3."}
+{"world":"diagram.sketch","i":21,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
+{"world":"diagram.sketch","i":22,"text":"Set the circle colour to magenta.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"the circle is now magenta."}
 {"world":"docs.editor","i":0,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
 {"world":"docs.editor","i":1,"text":"Remove the list.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I deleted the list."}
 {"world":"docs.editor","i":2,"text":"Add a list.","act":"make","kind":"list","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added an empty list. You can change its style or tell me what goes on it."}
@@ -171,15 +171,15 @@
 {"world":"plan.seating","i":9,"text":"Remove table 1.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed table 1."}
 {"world":"plan.seating","i":10,"text":"What is the colour of guest 1?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The colour of guest 1 is white."}
 {"world":"plan.seating","i":11,"text":"What is the shape of table 2?","act":"ask","kind":null,"attr":"shape","judged":"ok","roundTrip":true,"reply":"The shape of table 2 is round."}
-{"world":"plan.seating","i":12,"text":"Set guest 1 colour to sienna.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made guest 1 sienna (it was white)."}
+{"world":"plan.seating","i":12,"text":"Set guest 1 colour to red.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made guest 1 red (it was white)."}
 {"world":"plan.seating","i":13,"text":"Remove table 2.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed table 2."}
 {"world":"plan.seating","i":14,"text":"Copy guest 1.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied guest 1: the copy is guest 2."}
 {"world":"plan.seating","i":15,"text":"Remove guest 2.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed guest 2."}
 {"world":"plan.seating","i":16,"text":"Remove guest 1.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed guest 1."}
 {"world":"plan.seating","i":17,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","roundTrip":true,"reply":"I added table 3."}
 {"world":"plan.seating","i":18,"text":"What is the colour of table 3?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The colour of table 3 is white."}
-{"world":"plan.seating","i":19,"text":"Set table 3 colour to lilac.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made table 3 lilac (it was white)."}
-{"world":"plan.seating","i":20,"text":"Set table 3 colour to peach.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made table 3 peach (it was lilac)."}
+{"world":"plan.seating","i":19,"text":"Set table 3 colour to aqua.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made table 3 aqua (it was white)."}
+{"world":"plan.seating","i":20,"text":"Set table 3 colour to apricot.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made table 3 apricot (it was aqua)."}
 {"world":"plan.seating","i":21,"text":"Copy table 3.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied table 3: the copy is table 4."}
 {"world":"plan.seating","i":22,"text":"Copy table 4.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied table 4: the copy is table 5."}
 {"world":"plan.timeline","i":0,"text":"Add a timeline.","act":"make","kind":"timeline","attr":null,"judged":"ok","roundTrip":true,"reply":"I added timeline 1."}

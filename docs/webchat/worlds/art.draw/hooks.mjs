@@ -137,7 +137,19 @@ function tryPlan(ctx, act, r) {
   return res;
 }
 
+/**
+ * What the dice may draw from the knowledge catalog (spec 25): the lemmas of the catalog's vocabulary that have a drawing (a shard of k.objects) and are plain singular words.
+ * Empty while the catalog is not attached or its vocabulary not loaded (the dice then draws the built-in nouns).
+ */
+function sampleKnowledge(ctx) {
+  const v = ctx?.knowledge?.peekVocab?.();
+  if (!v) return {};
+  const things = Object.entries(v).filter(([w, shards]) => /^[a-z]{3,}$/.test(w) && shards.some((s) => /^k\.objects\//.test(s)) && !/(?:s|ae)$/.test(w))
+    .map(([w]) => `${/^[aeiou]/.test(w) ? 'an' : 'a'} ${w}`);
+  return { things };
+}
 export const hooks = {
+  sampleKnowledge,
   thingsOf,
   before: (ctx, act, req) => { if (typeof req.thing === 'string') { req.said = req.thing; if (P.goalWord(req.thing)) req.keep = true; } },   // the knowledge tier may rewrite the thing to the kind it is of ("farm" -> "thing"): a plan needs the words as said
   afterGroup: (st) => { st.prev = st.history.at(-1) ?? null; },   // one undo step per message: the picture before the newest step is the one the grouped step left
