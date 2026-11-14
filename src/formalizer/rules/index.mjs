@@ -503,7 +503,10 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       budget.tick('rules.kindelsewhere');
       const m = matches[k], ws = noun(m), own = kindsOf(m.pattern.worldId);
       if (!ws || !own || m.pattern.tabClaim || context?.lastWorld === m.pattern.worldId || ws.some((w) => own.has(w))) continue;   // a world the conversation is in keeps its reading
-      if (matches.some((o) => o.pattern.worldId !== m.pattern.worldId && kindsOf(o.pattern.worldId) && ws.some((w) => Set.prototype.has.call(kindsOf(o.pattern.worldId), w)))) matches.splice(k, 1);   // the other world's own list (an open lexicon answers `has` for the whole catalog)
+      // the other world's own list (an open lexicon answers `has` for the whole catalog), and only for the word the other world calls ITSELF by (its schema noun: "map", "document"): "add a cottage" in the seating
+      // tab is the plan's to refuse, not the drawing's to take, although "cottage" is a kind of the drawing too
+      const selfWords = (id) => String(set.get(id)?.ops?.executor?.schema?.noun ?? '').toLowerCase().split(/\s+/).filter(Boolean);
+      if (matches.some((o) => o.pattern.worldId !== m.pattern.worldId && kindsOf(o.pattern.worldId) && ws.some((w) => Set.prototype.has.call(kindsOf(o.pattern.worldId), w) && selfWords(o.pattern.worldId).some((n) => n === w || `${n}s` === w || n === `${w}s`)))) matches.splice(k, 1);
     }
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);

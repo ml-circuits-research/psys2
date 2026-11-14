@@ -6,6 +6,7 @@ import * as M from './map.mjs';
 import { knowsPlace } from '../../src/knowledge/open-words.mjs';
 import { keyOf, lookup, peekIndex } from './places.mjs';
 import * as G from './ops.mjs';
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 import { ACT_VERBS } from '../../worlds/acts/acts.mjs';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'’-]+/).filter(Boolean);
@@ -113,8 +114,9 @@ function placePhrase(text) {
 function placesIn(text) {
   const ws = wordsOf(String(text ?? '').replace(/[?!.,]/g, ' ')), out = [];
   for (let i = 0; i < ws.length;) {
+    budget.tick('geo.placesIn');
     let n = Math.min(4, ws.length - i);
-    for (; n >= 1; n--) { const x = ws.slice(i, i + n).join(' '); if (!/\b(?:and|to|with)\b/.test(x) && !PRONOUN.test(x) && !directionOf(x) && isPlace(x)) { out.push(x); break; } }
+    for (; n >= 1; n--) { budget.tick('geo.placesIn'); const x = ws.slice(i, i + n).join(' '); if (!/\b(?:and|to|with)\b/.test(x) && !PRONOUN.test(x) && !directionOf(x) && isPlace(x)) { out.push(x); break; } }
     i += n >= 1 ? n : 1;
   }
   return out;
