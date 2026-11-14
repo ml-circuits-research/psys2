@@ -38,6 +38,7 @@
     own=transposeTo:music.transposeTo
     own=volume:music.volume
     sample=song
+    thing=current:song
     playable=yes
     valued=yes
     scale=yes
@@ -50,6 +51,8 @@
     acts=redo
 
 @music.song acts.kind
+    dice.not=change
+    dice.not=remove
     plural=songs
     named=yes
     word=tune
@@ -80,6 +83,7 @@
     word=arpeggios
 
 @music.scale acts.kind
+    dice.not=remove
     plural=scales
 
 @music.tempo acts.attr

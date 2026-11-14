@@ -141,7 +141,7 @@ export function engineSampler(lib, engine, session) {
     worldOf: (id) => { const x = schemaWorld(id); return x?.schema ? { schema: x.schema, executor: x } : null; },
     historyOf: (id) => session().state(id)?.history?.length ?? 0,
     thingsOf: (id) => {
-      try { return schemaWorld(id).referents({ state: session().state(id) ?? {}, knowledge: engine.knowledge }).map((r) => ({ id: r.id, kind: r.kind, noun: r.noun, n: Number(/(\d+)$/.exec(r.id)?.[1]) || undefined, attrs: r.attrs, salient: !!r.salient })); } catch { return []; }
+      try { return schemaWorld(id).referents({ state: session().state(id) ?? {}, knowledge: engine.knowledge }).map((r) => ({ id: r.id, kind: r.kind, noun: r.noun, name: r.name, n: r.n ?? (Number(/(\d+)$/.exec(r.id)?.[1]) || undefined), attrs: r.attrs, salient: !!r.salient })); } catch { return []; }
     },
   });
   /** Ids of the worlds the dice can draw from (a schema world with a sampleable kind), and a map tab id -> world id. */

@@ -5,7 +5,7 @@
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
 import * as D from './engine.mjs?v=72624b3636';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
-import { splitThings } from '../acts/acts.mjs?v=cb1424f8ca';
+import { splitThings } from '../acts/acts.mjs?v=436e76d2ce';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=0882bbcd68';
 import * as P from './plan.mjs?v=7f128c7d59';   // goals reached by plans from knowledge (specs/24): the methods are k.procedures, the planner the library's
 

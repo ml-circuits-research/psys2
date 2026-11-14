@@ -61,6 +61,16 @@ test('actions for a selected thing name acts that fit it, examples are three or 
   assert.ok(few.length >= 3 && few.length <= 4, `${few.length}`);
 });
 
+test('every schema world publishes its referents from its state (thing= in schema.sop): charts, pins, documents, list numbers', async () => {
+  const s = open('charts'); await s.send('Add a chart.', { language: 'en', formalizer: 'rules', tab: 'data.charts' });
+  const refs = (w, st) => engine.set.list().find((y) => y.id === w).ops.referents({ state: st ?? s.state(w) ?? {} });
+  assert.deepEqual(refs('data.charts').map((r) => `${r.kind}${r.n}`), ['chart1']);
+  assert.ok(refs('docs.reader', { docs: [{ id: 'd1', title: 'Tale' }] }).some((r) => r.kind === 'document' && r.name === 'Tale'), 'the reader publishes its documents');
+  assert.ok(refs('geo.map', { markers: [{ id: 'm1', name: 'Point 1' }], highlighted: [] }).some((r) => r.kind === 'pin' && r.n === 1));
+  const ed = refs('docs.editor', { blocks: [{ id: 'b7', kind: 'list' }, { id: 'b9', kind: 'paragraph' }, { id: 'b12', kind: 'list' }] });
+  assert.deepEqual(ed.map((r) => r.n), [1, 1, 2], 'list 2 is the second list, not the digits of an id');
+});
+
 test('a frame without a sentence (a place is needed) is not rendered', () => {
   assert.equal(realise({ action: 'place', args: {} }, { kinds: {} }, new Map(), () => 'x'), null);
   assert.equal(realise({ action: 'ask', args: { thing: 't_0' } }, { kinds: {} }, new Map([['t_0', { id: 'o1' }]]), () => 'the house'), null, 'a question with no attribute has no form every world reads');

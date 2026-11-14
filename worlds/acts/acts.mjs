@@ -95,6 +95,7 @@ export function parseSchema(wires) {
   if (Object.keys(flags).length) schema.flags = flags;   // self: the world is a character ("yourself"); dir: direction words for place; be: "be / look X"; has: "do you have X"; bare: a bare thing is a request
   if (val(sw, 'boost')) schema.boost = Number(val(sw, 'boost'));
   if (val(sw, 'sample')) schema.sample = val(sw, 'sample');
+  if (vals(sw, 'thing').length) schema.things = vals(sw, 'thing').map((t) => { const [path, kind, id, name, only] = String(t).split(':'); return { path, kind, ...(id ? { id } : {}), ...(name ? { name } : {}), ...(only === 'dice' ? { diceOnly: true } : {}) }; });   // thing=<state path>:<kind>[:<id key>[:<name key>]]: where the world keeps the things a person can point at when they are not `state.items` (spec 25: the referents are derived from the schema and the state, the same way in every world)
   if (vals(sw, 'canonical').length) schema.canonical = vals(sw, 'canonical');   // frame-id prefixes whose examples are offered as help (a reader's "Add a document." is a true but useless example): `canonical=r.` marks the frames of the set that names its own
   if (val(sw, 'hooks')) schema.hooks = val(sw, 'hooks');   // a sibling module with the world's hooks (knowledge, domain effects, projection): host code the schema cannot say
   if (vals(sw, 'own').length) schema.own = vals(sw, 'own');   // "<export>:<action>": operations of the world that are not acts (a name, a moment of the stage), exported by own.mjs
@@ -904,6 +905,27 @@ export function createExecutor(schema, hooks = {}) {
   function referents(ctx) {
     if (hooks.referents) return hooks.referents(ctx);   // a world whose things are not `state.items` (the drawing board) names its own
     const st = ctx.state;   // a reading never changes the state: no init here
+    if (schema.things?.length) return [...stateItems(st), ...schema.things.flatMap((d) => thingsAt(st, d))];
+    return stateItems(st);
+  }
+  /** The things at one `thing=` declaration of the schema: an array (or one object) of the state; the kind is the entry's own `kind` when the schema has it; the attributes are the schema's, taken from the entry. */
+  function thingsAt(st, d) {
+    const at = d.path.split('.').reduce((o, k) => (o == null ? o : o[k]), st);
+    const list = Array.isArray(at) ? at : at && typeof at === 'object' ? [at] : [];
+    const out = [];
+    for (const [i, e] of list.entries()) {
+      budget.tick('acts.things');
+      if (!e || typeof e !== 'object') continue;
+      const kind = schema.kinds[e.kind] ? e.kind : d.kind;
+      const name = schema.kinds[kind]?.named ? (d.name ? e[d.name] : e.name ?? e.title) : null;   // a numbered kind is pointed at by its number
+      const id = String(e[d.id ?? 'id'] ?? name ?? kind);
+      const attrs = {};
+      for (const a of Object.values(schema.attrs)) if (a.of.includes(kind) && ['string', 'number', 'boolean'].includes(typeof e[a.name])) attrs[a.name] = e[a.name];
+      out.push({ id, kind, noun: kind, n: i + 1, words: [kind, schema.kinds[kind]?.plural].filter(Boolean), name: name ? String(name) : undefined, ...(d.diceOnly ? { pointer: false } : {}), attrs, salient: false, sig: JSON.stringify(e) });
+    }
+    return out;
+  }
+  function stateItems(st) {
     const sal = new Set(st.focus?.ids ?? []);
     return (st.items ?? []).map((i) => ({ id: i.id, kind: i.kind, noun: schema.kinds[i.kind]?.name ?? i.kind, words: [i.kind, schema.kinds[i.kind]?.plural].filter(Boolean), attrs: {}, salient: sal.has(i.id), sig: JSON.stringify([i.kind, i.n, i.name, i.attrs, i.place]) }));
   }
