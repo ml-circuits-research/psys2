@@ -19,7 +19,7 @@ import { lexIndex } from '../worlds/lexicon.mjs?v=51f71db3b5';
 import { parseNumberRun, isNumberWord } from '../formalizer/rules/numbers.mjs?v=e4898df942';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { editDistance } from '../formalizer/rules/normalize.mjs?v=46af8fc979';
-import { FILLER, leftOut } from './world-aware.mjs?v=fcf945ba37';
+import { FILLER, leftOut } from './world-aware.mjs?v=1f91f5df18';
 
 /**
  * What the reader may take (measured, spec 16 section 7.4): `freeText` (an argument that takes any words, class `rest`/`noun`/`words`: the descriptions cover only part of a world, so

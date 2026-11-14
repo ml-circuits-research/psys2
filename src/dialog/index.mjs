@@ -40,6 +40,7 @@ import { turnSteps } from './steps.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs';
 import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs';
+import { proposeByTypes } from './typed-reader.mjs';
 import { repairFromScene } from './scene-referents.mjs';
 import { loadMetaWorlds } from './meta-worlds.mjs';
 import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs';
@@ -770,6 +771,44 @@ export class DialogSession {
       } catch { /* keep the reading */ }
       segments.push(seg);
     }
+    return { ...formal, segments, wires: segments.flatMap((x) => x.wires ?? []) };
+  }
+
+  /**
+   * TYPED READING (spec 16 section 9): a clause the rules read and the world refused is read again by the types of its words (`src/dialog/typed-reader.mjs`, the library's typed
+   * lexicon). It proposes; the proposal replaces the reading only when the world then supports it. Never throws: a failure keeps the reading.
+   */
+  /** What the world says to segments on a fork of the session (nothing reaches the real one): per wire `{ status, refused, changed }`; `refused` is the world's own refusal (an answer with a `fallback` code and no change: "1 to day is not a unit I know"). */
+  _outcomes(segments) {
+    const out = [];
+    try {
+      const f = this.forkForValidation();
+      for (const seg of segments) {
+        f.isession.add(seg.wires);
+        for (const w of seg.wires) {
+          const r = this.engine.interp.resolve(f.isession, w);
+          if (!r?.status) continue;
+          const env = r.envelope ?? {};
+          out.push({ status: r.status, refused: r.status !== 'supported' ? r.status !== 'missing' : !!env.fallback && !(env.diff?.changed?.length || env.diff?.added?.length || env.diff?.removed?.length), changed: !!(env.diff?.changed?.length || env.diff?.added?.length || env.diff?.removed?.length || env.diff?.moved?.length) });
+        }
+      }
+    } catch { return []; }
+    return out;
+  }
+
+  _withTypedReader(formal) {
+    const lib = this.engine.sopworld;
+    if (!lib?.typedLexicon || globalThis.process?.env?.PSYS2_TYPED === 'off') return formal;   // PSYS2_TYPED=off: the step is skipped (before/after measurements)
+    const segments = formal.segments.map((seg) => {
+      try {
+        if (seg.unparsed || !seg.match?.worldId || !seg.wires?.length) return seg;
+        if (!this._outcomes([seg]).some((x) => x.refused)) return seg;   // only a refused reading is read again
+        const executor = this.engine.set.get(seg.match.worldId)?.ops?.executor;
+        if (!executor?.referents) return seg;
+        const out = proposeByTypes(seg, { lib, executor, state: this.isession.state[seg.match.worldId] ?? {}, knowledge: this.engine.knowledge, set: this.engine.set, form: this.isession.form, outcomes: (x) => this._outcomes(x) });
+        return out ?? seg;
+      } catch { return seg; }
+    });
     return { ...formal, segments, wires: segments.flatMap((x) => x.wires ?? []) };
   }
 
@@ -1538,6 +1577,7 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
+    if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
       let ka = null; try { ka = await perf.time('knowledge', () => knowledgeAnswer(this, english, formal)); } catch { /* no knowledge is no change */ }

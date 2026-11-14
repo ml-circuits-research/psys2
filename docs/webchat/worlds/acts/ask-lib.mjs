@@ -4,7 +4,7 @@
 // declares the kind of a schema to the library ONCE (its attributes as slots: type, many), PROJECTS the host's things to `std.schema.thing` wires (once per list of things: the projection is kept on the list
 // that was given, so a new catalog index is a new projection), and asks. The words of the answer stay the host's: the library says WHAT is true (a list, a number, yes or no), the host says it in a sentence.
 // Browser-safe: no `node:*`.
-import { World } from '../../lib/vendor/sopworld/sopworld.mjs?v=0afc66e540';
+import { World } from '../../lib/vendor/sopworld/sopworld.mjs?v=9bf075bbf5';
 
 const q = (v) => `"${String(v).replace(/"/g, "'").replace(/\s+/g, ' ')}"`;
 const slotOf = (type, a) => `@s.${a.name} core.slot of=${type} key=${a.name} ${a.type === 'number' ? 'kind=number' : a.type === 'bool' ? 'kind=boolean' : 'kind=any'}${a.many ? ' many=true' : ''}`;

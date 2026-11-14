@@ -15,7 +15,7 @@ import { loadWorlds } from '../worlds/index.mjs?v=a56b7c0a0f';
 import { validateWorldSet } from '../worlds/validate.mjs?v=b422872e56';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=99290ab2f5';
 import { createInterpreter } from '../interpreter/index.mjs?v=832ad8a927';
-import { createReasoner } from '../reasoner/index.mjs?v=a926fcb7bb';
+import { createReasoner } from '../reasoner/index.mjs?v=a6d16d70b9';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=afc707c3cb';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6f705bd762';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -38,12 +38,13 @@ import { Discourse } from './discourse.mjs?v=3d8e2f748e';
 import { Dialogue } from './dialogue.mjs?v=4eabf62d0e';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=692125e174';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=b41191f96f';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=52a4242c7f';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=d712554c96';
+import { proposeByTypes } from './typed-reader.mjs?v=9db95c1829';
 import { repairFromScene } from './scene-referents.mjs?v=edd4fbba48';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=879a720cfd';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ccb047f8ce';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=fcf945ba37';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=1b7337fb51';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ceed397800';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=1f91f5df18';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -773,6 +774,44 @@ export class DialogSession {
     return { ...formal, segments, wires: segments.flatMap((x) => x.wires ?? []) };
   }
 
+  /**
+   * TYPED READING (spec 16 section 9): a clause the rules read and the world refused is read again by the types of its words (`src/dialog/typed-reader.mjs`, the library's typed
+   * lexicon). It proposes; the proposal replaces the reading only when the world then supports it. Never throws: a failure keeps the reading.
+   */
+  /** What the world says to segments on a fork of the session (nothing reaches the real one): per wire `{ status, refused, changed }`; `refused` is the world's own refusal (an answer with a `fallback` code and no change: "1 to day is not a unit I know"). */
+  _outcomes(segments) {
+    const out = [];
+    try {
+      const f = this.forkForValidation();
+      for (const seg of segments) {
+        f.isession.add(seg.wires);
+        for (const w of seg.wires) {
+          const r = this.engine.interp.resolve(f.isession, w);
+          if (!r?.status) continue;
+          const env = r.envelope ?? {};
+          out.push({ status: r.status, refused: r.status !== 'supported' ? r.status !== 'missing' : !!env.fallback && !(env.diff?.changed?.length || env.diff?.added?.length || env.diff?.removed?.length), changed: !!(env.diff?.changed?.length || env.diff?.added?.length || env.diff?.removed?.length || env.diff?.moved?.length) });
+        }
+      }
+    } catch { return []; }
+    return out;
+  }
+
+  _withTypedReader(formal) {
+    const lib = this.engine.sopworld;
+    if (!lib?.typedLexicon || globalThis.process?.env?.PSYS2_TYPED === 'off') return formal;   // PSYS2_TYPED=off: the step is skipped (before/after measurements)
+    const segments = formal.segments.map((seg) => {
+      try {
+        if (seg.unparsed || !seg.match?.worldId || !seg.wires?.length) return seg;
+        if (!this._outcomes([seg]).some((x) => x.refused)) return seg;   // only a refused reading is read again
+        const executor = this.engine.set.get(seg.match.worldId)?.ops?.executor;
+        if (!executor?.referents) return seg;
+        const out = proposeByTypes(seg, { lib, executor, state: this.isession.state[seg.match.worldId] ?? {}, knowledge: this.engine.knowledge, set: this.engine.set, form: this.isession.form, outcomes: (x) => this._outcomes(x) });
+        return out ?? seg;
+      } catch { return seg; }
+    });
+    return { ...formal, segments, wires: segments.flatMap((x) => x.wires ?? []) };
+  }
+
   async _withBestEffort(formal, opts) {
     const segments = [];
     for (const seg of formal.segments) {
@@ -1422,7 +1461,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, reader, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=0afc66e540').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=9bf075bbf5').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.reader (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -1538,6 +1577,7 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
+    if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
       let ka = null; try { ka = await perf.time('knowledge', () => knowledgeAnswer(this, english, formal)); } catch { /* no knowledge is no change */ }

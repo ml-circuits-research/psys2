@@ -156,6 +156,20 @@ A host-run action (one the operations carry out and the matrix does not declare)
 - **Measurement** (`training/results/e2-arg-slots-2026-11-12.md`): with `chess.level n` declared, 28 more readings are judged (`fallback`), none changes outcome, 0 new wrong in `veto` (default) and `choose`.
 
 
+
+## 9. The typed reading step (abstraction round item 1; sopworld 0.72 `typedLexicon`)
+
+Code: `src/dialog/typed-reader.mjs`, the stage `_withTypedReader` of `src/dialog/index.mjs` (after the rules, the best-effort and the reader route, before the knowledge lookup and the world-aware review). Tests: `tests/typed-reader.test.mjs`.
+
+**What it does.** A clause the rules read completely and the world REFUSED is read again by the types of its words. "Change the unit of timeline 1 to day." is read by the frame `acts.change.of` with the thing "timeline" and the value "1 to day" (a free-text role stops at the number): the world answers "1 to day is not a unit I know". The step types the world from its own facts (each thing of the session as a wire with its label "timeline 1", its kind and attributes; each value an attribute can take, from the schema or, for a colour, from the colours the readers take), asks the library's `typedLexicon` for the type of every word, and reads the free-text roles of the refused reading again from the words they took together: the role of the type thing takes the words that name a thing of the session, the role of the type value takes the word typed as a value of the attribute the reading holds, and what is left must be function words (to, of, the). Word order only splits the words; the types assign them.
+
+**It proposes; the world decides; all or nothing.**
+1. It runs only when the world refuses (a run on a fork of the session, `_outcomes`: an answer with a `fallback` code and no change). A reading the world accepts, an unparsed clause and a clause nobody read are never touched.
+2. Every word of the region must be placed, both roles filled, the wires rebuilt with the world's own pattern (`buildWires`) must validate, and the world must then act on the new reading on the fork (supported, not refused, something changed). Otherwise the original reading stays, whole.
+3. No sentence is generated, nothing is told to any world, and no pattern, word list or lexicon entry is added: the same step reads every schema world (plan.timeline, plan.seating, art.draw ...). The segment carries `typed: { from, to, id }`.
+
+**Library limit.** `readByTypes` returns `ask`, `find` and `act` frames whose act arguments are things; it has no frame for "set an attribute to a value", so this step uses the library's typing (`typedLexicon`) and assembles the arguments by type itself. Unparsed clauses (the paraphrases of the learning curve: "cow sound?") need the frames of `readByTypes` mapped to the world's wires: not done.
+
 ## Cousins of a case (measurement, `scripts/cousins.mjs`, 2026-11-14)
 
 A failure is a class, and a fix is judged on its cousins (owner, 2026-11-14). The library gives the cases: `cousins(world, { text, frame }, { degree, read, known, n, seed })` lifts a case up the kinds (a filler to its kind and the kind's parent) and along the keys (the other aspects of the same holder), comes down to other members and keeps the valid ones (an answer exists, the new wording reads back to the same frame, not a known case). Degree 1 = siblings, 2 = first cousins, 3 = further. The frame comes from `readByTypes(world, text)`. The host adds only what the library cannot know: the pipeline, the judge and the table. **There is no hand-written cousin list anywhere, not even a temporary one.**

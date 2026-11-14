@@ -5,7 +5,7 @@
 // The game is a set of wires: one `ttt.game` (user, level, seed) and one `ttt.move` per mark on the board. Everything else is derived by the matrix.
 // The registered names are prefixed (ttt*): the library keeps one function registry for all worlds.
 // Browser-safe. It imports its sibling ops.mjs for the shared tables and the minimax (a world is plain files).
-import { NAMES, LEVEL_OF, other, bestMove, findWin, chooseEasy, intro, ending, placeIndex } from './ops.mjs?v=dbca2c00d4';
+import { NAMES, LEVEL_OF, other, bestMove, findWin, chooseEasy, intro, ending, placeIndex } from './ops.mjs?v=1ca7719d28';
 
 const GAME = 'ttt.g';
 const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
