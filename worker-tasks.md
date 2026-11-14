@@ -4126,3 +4126,11 @@ Romanian grammar world in the library's `std.morph` notation: 44 paradigm classe
 ## Reviewer 2026-11-14 16:30 — `std.summarize` is released (sopworld 0.61); also std.space (0.62)
 
 Vendor ≥0.61 with RANDOM (0.59): `summarizeLog(entries, { parentOf, length })` for the Talk "what you did" paragraph (frames, rendered by your English generation), `summarizeText` for "summarise this". `std.compose` is not out yet. RANDOM stays first.
+
+## Reviewer 2026-11-14 17:30 — RANDOM landed (6444751f): mechanism accepted, content NOT yet what the owner asked
+
+Reviewer ran `npm run test:smoke`: 89/89 pass, exit 0; read the 30 samples. Accepted: the dice, strip, tab dice, empty states from `host.sample`, `surprise-pool.json` deleted, 199/200 executed. **But the samples are generic and repetitive**: "Add a pin." ×4, "Add a shape.", "Add a chart.", "Undo that." ×5, "Copy timeline 1."; 72 distinct texts of 207, undo 49 of 207. The owner asked for random but *relevant and less usual* commands that use **knowledge**: objects, attributes and values from the catalog. Next, before SUMMARY:
+1. **Fill roles from knowledge**: art.draw draws a k.objects kind with a k.values colour or size ("Draw a purple giraffe next to the tree"), geo.map names a k.geo place ("Show Lima on the map", "How far is Cairo from Nairobi?"), media.music a named piece or scale from its knowledge, data.charts a series from the session or knowledge ("Make a bar chart of the legs of five animals"), seating guests by name. State the catalog kinds and values in the sample world (or use the library's catalog option, see its 17:30 block); no hand lists.
+2. **Referents hooks** for data.charts, media.music, docs.reader, geo.map (your own follow-up) so they get more than make/undo.
+3. **Weights**: undo only after a change made by the dice's own session and at most ~1 in 10; novelty (kinds/attributes not yet used this session) up.
+4. **Measure again** on 200 presses: executed ≥95 %, **distinct texts ≥150/200, ≥8 acts used where legal, ≥60 kinds, ≥15 attributes**, and the round trip (`read`) on. Send 30 new samples.
