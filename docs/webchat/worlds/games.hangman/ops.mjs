@@ -8,7 +8,7 @@
 // Cross-world: ctx.request('ui.openTab', { tab: 'hangman' }).
 
 export const MAX_WRONG = 6;
-import { animals as catalogAnimals, animalNames } from '../../lib/knowledge/animals.mjs?v=4c24cc5100';
+import { animals as catalogAnimals, animalNames } from '../../lib/knowledge/animals.mjs?v=7ef6dd8b71';
 
 // where an animal lives, said as a child says it: the habitat word as the catalog has it, with the preposition of the few that take "on" ("on a farm", "on the ice"); no table of habitats
 const ON = new Set(['farm', 'savanna', 'ice', 'beach', 'tundra', 'cliff', 'island']);

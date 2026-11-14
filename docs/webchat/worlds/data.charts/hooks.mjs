@@ -3,8 +3,8 @@
 // the chart state of chart.mjs (the renderer, the readers of the other worlds, the statistics). The roles of an act are mapped onto those operations here; the words of the user are not read again:
 // the one thing read from the sentence is the data ("bikes 4 scooters 9"), which is the world's own parser (parseData). Nothing here names a verb, a colour or a type: values come from the
 // colour reader (values.mjs) and the schema's enums, kinds from the schema (executor.schema), bars by the label lookup of the chart.
-import * as C from './chart.mjs?v=6e52098125';
-import * as G from './ops.mjs?v=727bd4d891';   // circular on purpose: only used inside functions, when the executor exists
+import * as C from './chart.mjs?v=c801ad2201';
+import * as G from './ops.mjs?v=83ceedbf0f';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_']+/).filter(Boolean);
 const PRONOUN = /^(?:it|them|that|this|those|these|everything|all|each|every|one|ones|this one|that one|em)$/;

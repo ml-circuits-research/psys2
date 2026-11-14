@@ -15,7 +15,7 @@
  *   numberWords(kind)       the number words of a kind, or every one
  *   numberWordOf(n, kind)   12 -> "twelve", 3 -> "third" (ordinal)
  */
-import { parseLine } from './catalog.mjs?v=698662f5e5';
+import { parseLine } from './catalog.mjs?v=0372695257';
 import { BUNDLED_VALUES } from './bundled-values.mjs?v=d9555c35e1';
 
 const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();

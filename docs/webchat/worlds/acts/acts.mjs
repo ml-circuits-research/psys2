@@ -22,14 +22,14 @@
 
 import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=c6788150e0';
-import { FLAGS_DATA } from './forms.data.mjs?v=2e90a5450b';   // more forms (flags `valued`, `ordered`): named values said without their name
+import { FLAGS_DATA } from './forms.data.mjs?v=0df7819d1a';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 import { createEffects, EFFECT_ACTS } from './effects.mjs?v=c81f50c5a8';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
-import { colourName } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=57ad919666';
-import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=a04b8d18bd';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { colourName } from '../../lib/knowledge/values.mjs?v=89992abfaf';   // the one colour reader (k.values)
+import { en } from '../../lib/lang/en.mjs?v=3d429f211d';
+import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=cc27880734';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -826,11 +826,12 @@ export function createExecutor(schema, hooks = {}) {
       const lib = EFFECT_ACTS.includes(act) ? fx().sentence(ctx, [act], [() => dom(ctx, req) ?? { declined: true }], (o) => o.declined || o.status === 'supported') : null;
       const r = lib ? (lib.results[0]?.declined ? undefined : lib.results[0]) : dom(ctx, req);
       if (r) {
-        init(st);
-        if (r.status === 'supported') { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
+        if (!hooks.noState) init(st);   // `noState`: the world keeps its own state shape (the map's `focus` is a place, not the executor's selection) and no act log
+        if (r.status === 'supported' && !hooks.noState) { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
         return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
       }
     }
+    if (hooks.noState) return { status: 'missing', note: `I cannot do that on the ${schema.noun}.`, value: `I cannot do that on the ${schema.noun}.` };   // a world with its own state answers every act through its domain hooks
     const res = run(st, req);
     return { status: 'supported', note: res.note, value: res.note, ...(res.effect ? { effect: res.effect } : {}), fallback: res.fallback, diff: res.diff };
   }

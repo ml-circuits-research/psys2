@@ -150,8 +150,8 @@ export async function preloadThings(dialog, segments) {
       const rq = requestOf(seg);
       // the reading's world says which slots of its action are open (a thing it has no picture of); `thing` is the generic argument of the same idea
       if (rq?.world) {
-        const need = dialog.engine.interp.hook(dialog.isession, rq.world, 'needs', {}, { state: dialog.isession.state[rq.world] ?? {} });   // catalog models the world reads synchronously (the avatar's faces)
-        for (const n of Array.isArray(need) ? need : []) if (['faces', 'schema', 'series'].includes(n)) needs.add(n);
+        const need = dialog.engine.interp.hook(dialog.isession, rq.world, 'needs', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });   // catalog models the world reads synchronously (the avatar's faces); `wires:<type>`: every wire of a type (the map's cities)
+        for (const n of Array.isArray(need) ? need : []) if (['faces', 'schema', 'series'].includes(n) || /^wires:[a-z][a-z0-9_.]*(?:@[a-z][a-z0-9_.]*)?$/i.test(n)) needs.add(n);
         const slots = dialog.engine.interp.hook(dialog.isession, rq.world, 'openSlots', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
         for (const n of Array.isArray(slots) ? slots : []) if (n && String(n).split(/\s+/).length <= 3) { names.add(String(n)); drawNames.add(String(n)); }
         // the words of the types whose wires the operation lists or looks up ("animals", "mix"): the catalog loads the wires of the types the schemas' words mean (`preloadWires`)
@@ -159,12 +159,23 @@ export async function preloadThings(dialog, segments) {
         for (const n of Array.isArray(listWords) ? listWords : []) if (n && String(n).split(/\s+/).length <= 2) lists.add(String(n).toLowerCase());
         if (rq.args.thing) names.add(String(rq.args.thing).toLowerCase());
       }
+      // a request that hands things to a VIEW (`things.show ... to=map`) is read by the store's world: the view's own `needs` (the map's places) are loaded before it adopts them
+      if (rq?.args?.to) {
+        const to = String(rq.args.to).toLowerCase();
+        for (const w of dialog.engine.set.list()) {
+          if (typeof w.ops?.needs !== 'function' || typeof w.ops?.view !== 'function' || w.id === rq.world) continue;
+          const v = dialog.engine.interp.hook(dialog.isession, w.id, 'view', {}, { state: dialog.isession.state[w.id] ?? {} })?.value;
+          if (!(v?.words ?? []).some((x) => to.includes(String(x).toLowerCase()))) continue;
+          const need = dialog.engine.interp.hook(dialog.isession, w.id, 'needs', { action: 'view', args: {} }, { state: dialog.isession.state[w.id] ?? {} });
+          for (const n of Array.isArray(need) ? need : []) if (['faces', 'schema', 'series'].includes(n) || /^wires:[a-z][a-z0-9_.]*(?:@[a-z][a-z0-9_.]*)?$/i.test(n)) needs.add(n);
+        }
+      }
       for (const w of leftOut(seg, foreign).slice(0, 3)) names.add(w);
     } catch { /* a reading that cannot be inspected needs nothing */ }
   }
   const done = [];
   const all = (async () => {
-    for (const n of needs) { try { await cat[n]?.(); } catch { /* no model is no change */ } }
+    for (const n of needs) { try { if (n.startsWith('wires:')) { const [t, w] = n.slice(6).split('@'); await cat.wires?.(t, w ? { world: w } : {}); } else await cat[n]?.(); } catch { /* no model is no change */ } }
     for (const n of [...lists].slice(0, 3)) { try { await cat.preloadWires?.(n); } catch { /* no list is no answer */ } }
     for (const n of [...names].slice(0, 6)) {
       try {

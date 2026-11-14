@@ -1,0 +1,29 @@
+# k.geo/shards/oceania-borders: Oceania: the neighbours, the area in square kilometres and whether it is landlocked, for 24 countries and territories, and the capital of those for which Natural Earth marks none. Tell it with the shard oceania: the facts of one country merge.
+# sources: countries 5.1.0 (mledoze/countries, ODbL-1.0)
+# license: ODbL-1.0
+# script: tools/import/geo.mjs
+
+@k.geo.borders.ASM k.geo.country name="American Samoa" capital="Pago Pago" area=199 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.AUS k.geo.country name=Australia area=7692024 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.COK k.geo.country name="Cook Islands" capital=Avarua area=236 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.FJI k.geo.country name=Fiji area=18272 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.PYF k.geo.country name="French Polynesia" capital=Papeetē area=4167 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.GUM k.geo.country name=Guam capital=Hagåtña area=549 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.KIR k.geo.country name=Kiribati area=811 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.MHL k.geo.country name="Marshall Islands" area=181 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.FSM k.geo.country name=Micronesia area=702 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.NRU k.geo.country name=Nauru capital=Yaren area=21 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.NCL k.geo.country name="New Caledonia" capital=Nouméa area=18575 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.NZL k.geo.country name="New Zealand" area=270467 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.NIU k.geo.country name=Niue capital=Alofi area=260 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.NFK k.geo.country name="Norfolk Island" capital=Kingston area=36 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.MNP k.geo.country name="Northern Mariana Islands" capital=Saipan area=464 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.PLW k.geo.country name=Palau area=459 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.PNG k.geo.country name="Papua New Guinea" neighbour=Indonesia area=462840 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.PCN k.geo.country name="Pitcairn Islands" capital=Adamstown area=47 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.WSM k.geo.country name=Samoa area=2842 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.SLB k.geo.country name="Solomon Islands" area=28896 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.TON k.geo.country name=Tonga area=747 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.TUV k.geo.country name=Tuvalu area=26 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.VUT k.geo.country name=Vanuatu area=12189 landlocked=false core.source="countries 5.1.0"
+@k.geo.borders.WLF k.geo.country name="Wallis and Futuna Islands" capital=Mata-Utu area=142 landlocked=false core.source="countries 5.1.0"

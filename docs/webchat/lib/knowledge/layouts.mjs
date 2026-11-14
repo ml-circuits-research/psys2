@@ -13,8 +13,8 @@
  * A layout whose name is a built-in generator of solver.mjs (row, column, grid, ring, corners, stack, flow, tree, landscape, scatter, face) is computed by it; any other
  * layout that has slot boxes is solved from its places (`places`), no code. The local table `FALLBACK` is used only when the catalog has no layouts or no network.
  */
-import { parseLine } from './catalog.mjs?v=698662f5e5';
-import { createFacts } from './facts.mjs?v=15eb94a409';
+import { parseLine } from './catalog.mjs?v=0372695257';
+import { createFacts } from './facts.mjs?v=ae0362232e';
 
 export const GENERATORS = ['row', 'column', 'grid', 'ring', 'corners', 'stack', 'flow', 'tree', 'landscape', 'scatter', 'face', 'height'];
 

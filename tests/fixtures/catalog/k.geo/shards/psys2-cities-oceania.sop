@@ -1,0 +1,13 @@
+# k.geo/shards/psys2-cities-oceania: Oceania: 7 more cities with country, population and place, that the continent shard does not have.
+# sources: geonames all-the-cities-3.1.0 (GeoNames, CC-BY-4.0, https://www.geonames.org), as carried by the PSys2 world geo.map
+# sources: psys2-worlds 6b63b2ba (the selection: the largest cities and the capitals)
+# license: CC-BY-4.0
+# script: tools/import/psys2.mjs
+
+@k.geo.psys2.city.AU.Gold_Coast k.geo.city name="Gold Coast" country=Australia population=591473 lat=-28 lon=153.43 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.CC.West_Island k.geo.city name="West Island" country="Cocos (Keeling) Islands" capital_of="Cocos (Keeling) Islands" population=120 lat=-12.16 lon=96.82 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.CX.Flying_Fish_Cove k.geo.city name="Flying Fish Cove" country="Christmas Island" capital_of="Christmas Island" population=500 lat=-10.42 lon=105.68 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NF.Kingston k.geo.city name=Kingston country="Norfolk Island" population=880 lat=-29.05 lon=167.97 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.NR.Yaren k.geo.city name=Yaren country=Nauru population=1100 lat=-0.55 lon=166.93 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.PN.Adamstown k.geo.city name=Adamstown country="Pitcairn Islands" population=46 lat=-25.07 lon=-130.1 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"
+@k.geo.psys2.city.WF.Mata-Utu k.geo.city name=Mata-Utu country="Wallis and Futuna Islands" population=1200 lat=-13.28 lon=-176.17 core.source="geonames all-the-cities-3.1.0" core.source="psys2-worlds 6b63b2ba"

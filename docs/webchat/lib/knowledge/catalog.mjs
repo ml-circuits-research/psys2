@@ -20,7 +20,7 @@ export function parseLine(line) {
   const m = /^@(\S+)\s+(\S+)\s*(.*)$/.exec(line);
   if (!m) return null;
   const attrs = {};
-  for (const t of m[3].matchAll(/([A-Za-z_.]+)=("(?:[^"\\]|\\.)*"|\S+)/g)) (attrs[t[1]] ??= []).push(unq(t[2]));
+  for (const t of m[3].matchAll(/([A-Za-z_][A-Za-z0-9_.]*)=("(?:[^"\\]|\\.)*"|\S+)/g)) (attrs[t[1]] ??= []).push(unq(t[2]));
   return { id: m[1], type: m[2], attrs };
 }
 const num = (a, k) => Number(a[k][0]);

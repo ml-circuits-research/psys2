@@ -11,7 +11,7 @@
  * A hit says only WHICH knowledge to load. It never decides the world of a message (spec 17, section 3).
  */
 
-import { parseLine, parseShard } from './catalog.mjs?v=698662f5e5';
+import { parseLine, parseShard } from './catalog.mjs?v=0372695257';
 import { buildFaces } from './faces.mjs?v=a8975fe028';
 
 const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
@@ -292,7 +292,7 @@ export function createFacts({ source, name = 'catalog' }) {
   const api = {
     preloadWires,
     /** The wires of a type that `preloadWires` loaded, or undefined (a synchronous read for operations: `ctx.knowledge.peekWires(type)`). */
-    peekWires: (type) => listed.get(type),
+    peekWires: (type, world = null) => listed.get(type) ?? wireMemo.get(`${type}|null|${world ?? ''}`),   // also the whole-type wires a world's `needs` entry `wires:<type>[@<world>]` settled (the map's countries and cities)
     name, find, thing, stats, loadVocab, world, wires, schema, series,
     /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
     peekSchema: () => schemaData ?? undefined, peekSeries: () => seriesData ?? undefined,

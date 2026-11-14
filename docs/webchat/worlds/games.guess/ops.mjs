@@ -11,7 +11,7 @@
 // for the split and survive a "no" answer but not a "yes".
 // Effects: none. Cross-world: ctx.request('ui.openTab', { tab: 'guess' }).
 
-import { animals as catalogAnimals } from '../../lib/knowledge/animals.mjs?v=4c24cc5100';
+import { animals as catalogAnimals } from '../../lib/knowledge/animals.mjs?v=7ef6dd8b71';
 
 export const FEATURES = ['class', 'legs', 'fly', 'swim', 'habitat', 'diet', 'covering'];
 // where an animal lives, said as a child says it: the habitat word as the catalog has it, with the preposition of the few that take "on" ("on a farm", "on the ice"); no table of habitats

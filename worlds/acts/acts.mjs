@@ -826,11 +826,12 @@ export function createExecutor(schema, hooks = {}) {
       const lib = EFFECT_ACTS.includes(act) ? fx().sentence(ctx, [act], [() => dom(ctx, req) ?? { declined: true }], (o) => o.declined || o.status === 'supported') : null;
       const r = lib ? (lib.results[0]?.declined ? undefined : lib.results[0]) : dom(ctx, req);
       if (r) {
-        init(st);
-        if (r.status === 'supported') { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
+        if (!hooks.noState) init(st);   // `noState`: the world keeps its own state shape (the map's `focus` is a place, not the executor's selection) and no act log
+        if (r.status === 'supported' && !hooks.noState) { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
         return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
       }
     }
+    if (hooks.noState) return { status: 'missing', note: `I cannot do that on the ${schema.noun}.`, value: `I cannot do that on the ${schema.noun}.` };   // a world with its own state answers every act through its domain hooks
     const res = run(st, req);
     return { status: 'supported', note: res.note, value: res.note, ...(res.effect ? { effect: res.effect } : {}), fallback: res.fallback, diff: res.diff };
   }

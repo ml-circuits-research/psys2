@@ -292,7 +292,7 @@ export function createFacts({ source, name = 'catalog' }) {
   const api = {
     preloadWires,
     /** The wires of a type that `preloadWires` loaded, or undefined (a synchronous read for operations: `ctx.knowledge.peekWires(type)`). */
-    peekWires: (type) => listed.get(type),
+    peekWires: (type, world = null) => listed.get(type) ?? wireMemo.get(`${type}|null|${world ?? ''}`),   // also the whole-type wires a world's `needs` entry `wires:<type>[@<world>]` settled (the map's countries and cities)
     name, find, thing, stats, loadVocab, world, wires, schema, series,
     /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
     peekSchema: () => schemaData ?? undefined, peekSeries: () => seriesData ?? undefined,
