@@ -5,10 +5,349 @@
 
 @t.session.things.n2 core.test
     input="My dog is called Rex."
-    expect="your dog is called Rex"
+    expect="Your dog is called Rex."
     session=a
 
 @t.session.things.n3 core.test
     input="Ducks float."
     expect="OK, ducks float"
     session=a
+
+# Ported from kids.animals (deleted 2026-11-14, plan H3: pets and taught facts are session.things). Wording changes only: a "can / cannot" lesson is said back as taught.
+
+@t.session.things.animals.n38 core.test
+    session=animals.zebra
+    input="A zebra has 4 legs."
+    expect="OK, a zebra has 4 legs."
+
+
+@t.session.things.animals.n39 core.test
+    session=animals.zebra
+    input="How many legs does a zebra have?"
+    expect="A zebra has 4 legs."
+
+
+@t.session.things.animals.n40 core.test
+    session=animals.zebra
+    input="Zebras eat grass."
+    expect="OK, zebras eat grass."
+
+
+@t.session.things.animals.n45 core.test
+    session=animals.refute
+    input="A zebra cannot swim."
+    expect="OK, a zebra cannot swim."
+
+
+@t.session.things.animals.n48 core.test
+    session=animals.refute
+    input="A zebra can swim."
+    expect="OK"
+
+
+@t.session.things.animals.n50 core.test
+    session=animals.conflict
+    input="A spider has 6 legs."
+    expect="OK, a spider has 6 legs."
+
+
+@t.session.things.animals.n52 core.test
+    session=animals.wrongclass
+    input="A whale is a fish."
+    expect="OK, a whale is a fish."
+
+
+@t.session.things.animals.n54 core.test
+    session=animals.newanimal
+    input="A numbat is a mammal."
+    expect="OK, a numbat is a mammal."
+
+
+@t.session.things.animals.n55 core.test
+    session=animals.newanimal
+    input="Numbats eat insects."
+    expect="OK, numbats eat insects."
+
+
+@t.session.things.animals.n58 core.test
+    session=animals.newanimal
+    input="A baby numbat is called a pup."
+    expect="OK, a baby numbat is called a pup."
+
+
+@t.session.things.animals.n60 core.test
+    session=animals.pets
+    input="What is my dog called?"
+    expectStatus=missing
+
+
+@t.session.things.animals.n61 core.test
+    session=animals.pets
+    input="My dog is called Rex."
+    expect="Nice! Your dog is called Rex."
+
+
+@t.session.things.animals.n62 core.test
+    session=animals.pets
+    input="What is my dog called?"
+    expect="Your dog is called Rex."
+
+
+@t.session.things.animals.n63 core.test
+    session=animals.pets
+    input="Who is Rex?"
+    expect="Rex is your dog."
+
+
+@t.session.things.animals.n64 core.test
+    session=animals.pets
+    input="I have a cat called Tom."
+    expect="Your cat is called Tom."
+
+
+@t.session.things.animals.n65 core.test
+    session=animals.pets
+    input="What pets do I have?"
+    expect="You have a dog and a cat."
+
+
+@t.session.things.animals.n66 core.test
+    session=animals.pets
+    input="Do I have a hamster?"
+    expectStatus=missing
+
+
+@t.session.things.animals.n67 core.test
+    session=animals.pets
+    input="Do I have a cat?"
+    expect="Yes, you have a cat."
+
+
+@t.session.things.animals.n68 core.test
+    session=animals.pets
+    input="What is my pet called?"
+    expectStatus=conflicting
+    doc="two pets, so the question about my pet is ambiguous"
+
+
+@t.session.things.animals.n69 core.test
+    session=animals.pets
+    input="What is my cat called?"
+    expect="Your cat is called Tom."
+
+
+@t.session.things.animals.n70 core.test
+    session=animals.chat
+    input="Hello!"
+    expect="Hello"
+
+
+@t.session.things.animals.s088 core.test
+    input="what is my dog called"
+    expect="I don't know what your dog is called. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=called"
+
+
+@t.session.things.animals.s089 core.test
+    input="what is my pets name"
+    expect="I don't know your pet's name yet. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=called"
+
+
+@t.session.things.animals.s090 core.test
+    input="my dogs name?"
+    expect="I don't know what your dog is called. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=called"
+
+
+@t.session.things.animals.s091 core.test
+    input="do i have a dog"
+    expect="I don't know whether you have a dog. You can tell me: I have a dog called Rex."
+    doc="rule sweep probe: seek=kind"
+
+
+@t.session.things.animals.s092 core.test
+    input="which pets do i have"
+    expect="You have not told me about any pets yet. You can say: I have a cat called Tom."
+    doc="rule sweep probe: seek=kind"
+
+
+@t.session.things.animals.s093 core.test
+    input="who is Rex"
+    expect="I don't know who Rex is yet. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=kind"
+
+
+@t.session.things.animals.s094 core.test
+    input="what pet is Rex"
+    expect="I don't know who Rex is yet. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=kind"
+
+
+@t.session.things.animals.s126 core.test
+    input="My dog is called Rex. whats my pets name"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.s127 core.test
+    input="My dog is called Rex. my pet name?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.s128 core.test
+    input="My dog is called Rex. what did i call my pet?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.s129 core.test
+    input="My dog is called Rex. name of my pet?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.s130 core.test
+    input="My dog is called Rex. how is my pet called?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.s131 core.test
+    input="My dog is called Rex. what's my dogs name?"
+    expect="Your dog is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.s132 core.test
+    input="My dog is called Rex. remind me my pets name"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.s133 core.test
+    input="My dog is called Rex. what is my pet named?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.s134 core.test
+    input="My dog is called Rex. can you tell me what my pet is called?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+
+@t.session.things.animals.x22 core.test
+    input="Is a whale a mammal or a fish?"
+    expect="mammal"
+
+
+@t.session.things.animals.x23 core.test
+    input="is a bat a bird or a mammal"
+    expect="mammal"
+
+
+@t.session.things.animals.m01 core.test
+    session=animals.kam1
+    input="A zebra can swim."
+    expect="OK, a zebra can swim."
+    doc="SOPWORLD stage 2: what a child teaches is a wire of the library"
+
+
+@t.session.things.animals.m03 core.test
+    session=animals.kam1
+    input="undo that"
+    expect="OK, I forgot what you taught me about zebras."
+    doc="undo goes back through the library and says it in the world's words"
+
+
+@t.session.things.animals.m05 core.test
+    session=animals.kam2
+    input="My dog is called Rex."
+    expect="Your dog is called Rex."
+
+
+@t.session.things.animals.m06 core.test
+    session=animals.kam2
+    input="undo that"
+    expect="OK, I forgot your dog Rex."
+
+
+@t.session.things.animals.m07 core.test
+    session=animals.kam2
+    input="What is my dog called?"
+    expectStatus=missing
+
+
+@t.session.things.animals.m08 core.test
+    session=animals.kam3
+    input="A spider has 6 legs."
+    expect="a spider has 6 legs"
+
+# Ported from kids.shapes (deleted 2026-11-14, plan H3: statements read by type). Wording changes only; with the catalog loaded, a mix not taught is the catalog's (maroon), a taught one wins.
+
+@t.session.things.shapes.n23 core.test
+    input="What do red and black make?"
+    expect="Red and black make maroon."
+
+
+@t.session.things.shapes.n43 core.test
+    session=shapes.teach
+    input="A trapezium has 4 sides."
+    expect="OK, a trapezium has 4 sides."
+
+
+@t.session.things.shapes.n47 core.test
+    session=shapes.conflict
+    input="A square has 5 sides."
+    expect="OK, a square has 5 sides."
+
+
+@t.session.things.shapes.n51 core.test
+    session=shapes.colors
+    input="Zebras are black and white."
+    expect="OK, zebras are black and white."
+
+
+@t.session.things.shapes.n55 core.test
+    session=shapes.mixing
+    input="What do black and red make?"
+    expect="Black and red make maroon."
+
+
+@t.session.things.shapes.n56 core.test
+    session=shapes.mixing
+    input="Black and red make brown."
+    expect="OK, black and red make brown."
+
+
+@t.session.things.shapes.n60 core.test
+    session=shapes.shapeof
+    input="A ruler is a rectangle."
+    expect="OK, a ruler is a rectangle."
+
+
+@t.session.things.shapes.m02 core.test
+    session=shapes.ksm1
+    input="A trapezium has 4 sides."
+    expect="OK, a trapezium has 4 sides."
+
+
+@t.session.things.shapes.m04 core.test
+    session=shapes.ksm1
+    input="undo"
+    expect="OK, I forgot what you taught me about trapeziums."
+    expectStatus=supported
+
+@t.session.things.shapes.n57 core.test
+    session=shapes.mixing
+    input="What do black and red make?"
+    expect="Black and red make brown."
+    doc="The taught tier: the mix the user taught wins over the catalog's (maroon) in this session (reviewer 2026-11-14 23:25)."
+
+@t.session.things.shapes.n48 core.test
+    session=shapes.conflict
+    input="How many sides does a square have?"
+    expect="A square has 5 sides."
+    doc="The taught tier: the count the user taught wins over the catalog's in this session."

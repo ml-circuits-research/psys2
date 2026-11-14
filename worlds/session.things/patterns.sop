@@ -112,3 +112,177 @@
     priority=14
     example="Put the places we talked about on the map."
     doc="The things of the discussion that have one aspect (places are the geographic ones) into the view named; the noun names the aspect, no kind of thing is listed here."
+
+@pat.session.things.count core.pattern
+    canonical="A zebra has 4 legs."
+    canonical="A rhombus has 4 sides."
+    match="[$lang.teach.lead]? [a|an|the] {a:words(2)} [has|have|has_got|have_got] {n:number} {p:noun}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="A zebra has 4 legs."
+    example="A rhombus has 4 sides."
+    doc="Teach a count of a thing (legs, sides, corners): read by type into the catalog slot the counted word means (k.animals.animal legs, k.shapes.shape sides)."
+
+@pat.session.things.count.plural core.pattern
+    match="[$lang.teach.lead]? {a:lex.session.things.kinds} [have|has] {n:number} {p:noun}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Spiders have 8 legs."
+    doc="Teach a count of a kind said with a bare plural the catalog knows."
+
+@pat.session.things.colour core.pattern
+    match="[$lang.teach.lead]? [a|an|the]? {a:noun} [is|are] {c:lex.session.things.colour}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="A strawberry is red."
+    doc="Teach the colour of a thing (k.attributes.thing colour, by type)."
+
+@pat.session.things.colour2 core.pattern
+    canonical="Zebras are black and white."
+    match="[$lang.teach.lead]? [a|an|the]? {a:noun} [is|are] {c:lex.session.things.colour} and {d:lex.session.things.colour}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    example="Zebras are black and white."
+    doc="Teach two colours of a thing."
+
+@pat.session.things.mix core.pattern
+    canonical="Black and red make brown."
+    match="[$lang.teach.lead]? {a:lex.session.things.colour} [and|with|plus] {b:lex.session.things.colour} [$lang.teach.make] {r:lex.session.things.colour}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Black and red make brown."
+    doc="Teach a colour mix (k.colours.mix a b gives): the lesson wins over the catalog's mix in this session (the taught tier)."
+
+@pat.session.things.eat core.pattern
+    match="[$lang.teach.lead]? [a|an|the]? {a:noun} [$lang.teach.eat] {f:word}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Zebras eat grass."
+    doc="Teach what a kind eats (the slot the verb means: k.animals.animal eats)."
+
+@pat.session.things.eat2 core.pattern
+    match="[$lang.teach.lead]? [a|an|the]? {a:noun} [$lang.teach.eat] {f:word} and {g:word}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    example="Zebras eat grass and leaves."
+    doc="Teach two things a kind eats."
+
+@pat.session.things.say core.pattern
+    match="[$lang.teach.lead]? [a|an|the]? {a:noun} [$lang.teach.say] {s:word}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="Ducks say quack."
+    doc="Teach the sound of a kind (k.animals.animal sound)."
+
+@pat.session.things.baby core.pattern
+    match="[$lang.teach.lead]? [a|an|the]? [baby|young] {a:noun} [is|are] called [a|an]? {b:word}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="A baby zebra is called a foal."
+    doc="Teach the name of the young of a kind (k.animals.animal baby)."
+
+@pat.session.things.covered core.pattern
+    match="[$lang.teach.lead]? [a|an|the]? {a:noun} [is|are] covered_in {c:word}"
+    emit="@{_} core.request action=things.learn arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    example="A zebra is covered in fur."
+    doc="Teach what covers a kind (k.animals.animal covering)."
+
+@pat.session.things.own.called core.pattern
+    canonical="What is my dog called?"
+    match="[$lang.own.recall]? [what|whats|how] [is|was|are]? my {k:noun} [is]? [$lang.own.called]"
+    emit="@{_} core.request action=things.own arg.seek=called arg.kind=\"{k}\""
+    kind=request
+    priority=12
+    example="What is my dog called?"
+    example="Can you tell me what my pet is called?"
+    doc="The name of a thing of the user (a pet: any animal the user named)."
+
+@pat.session.things.own.name core.pattern
+    canonical="Name of my pet?"
+    match="[$lang.own.recall]? [what|whats]? [is|was]? [the]? [name|names|nickname] [of|for] my {k:noun}"
+    emit="@{_} core.request action=things.own arg.seek=called arg.kind=\"{k}\""
+    kind=request
+    priority=12
+    example="Name of my pet?"
+    example="What is the name of my dog?"
+    doc="The name of a thing of the user."
+
+@pat.session.things.own.name2 core.pattern
+    match="[$lang.own.recall]? [what|whats]? [is|was]? my {k:noun} ['s]? [name|names|nickname]"
+    emit="@{_} core.request action=things.own arg.seek=called arg.kind=\"{k}\""
+    kind=request
+    priority=12
+    example="What's my dog's name?"
+    example="My pet name?"
+    example="Remind me my pet's name."
+    doc="The name of a thing of the user."
+
+@pat.session.things.own.didcall core.pattern
+    match="[what|how] [did|do] [i|we] [call|name] my {k:noun} [again]?"
+    emit="@{_} core.request action=things.own arg.seek=called arg.kind=\"{k}\""
+    kind=request
+    priority=12
+    example="What did I call my pet?"
+    doc="The name of a thing of the user."
+
+@pat.session.things.own.list core.pattern
+    canonical="What pets do I have?"
+    match="[what|which] [pets|animals] [do|did] [i|we] have"
+    emit="@{_} core.request action=things.own arg.seek=list"
+    kind=request
+    priority=12
+    example="What pets do I have?"
+    doc="The pets of the user: the things they named whose kind is an animal."
+
+@pat.session.things.own.exists core.pattern
+    canonical="Do I have a dog?"
+    match="[do|did] [i|we] have [a|an|any]? {k:noun}"
+    emit="@{_} core.request action=things.own arg.seek=exists arg.kind=\"{k}\""
+    kind=request
+    priority=12
+    example="Do I have a dog?"
+    doc="Whether the user told about a thing of that kind."
+
+@pat.session.things.own.who core.pattern
+    match="who is {n:agent}"
+    emit="@{_} core.request action=things.own arg.seek=kind arg.called=\"{n}\""
+    kind=request
+    priority=12
+    example="Who is Rex?"
+    doc="Which thing of the user has this name (Rex is your dog)."
+
+@pat.session.things.own.what core.pattern
+    match="[what|which] [pet|animal|kind_of_pet|kind_of_animal] is {n:agent}"
+    emit="@{_} core.request action=things.own arg.seek=kind arg.called=\"{n}\""
+    kind=request
+    priority=12
+    example="What pet is Rex?"
+    doc="Which thing of the user has this name."
+
+@pat.session.things.own.isa core.pattern
+    match="is {n:agent} [a|an|my] {k:noun}"
+    emit="@{_} core.request action=things.own arg.seek=kind arg.called=\"{n}\" arg.kind=\"{k}\""
+    kind=request
+    priority=11
+    example="Is Rex a dog?"
+    doc="Whether the thing of the user with this name is of that kind."
+
+@pat.session.things.undo core.pattern
+    match="[$lang.undo|forget_that|forget_it|forget_what_i_said|forget_what_i_taught_you]"
+    emit="@{_} core.request action=things.undo"
+    kind=request
+    priority=9
+    example="Undo that."
+    example="Forget that."
+    doc="Takes back the newest lesson (only after a lesson: \"undo\" follows the world of the newest step)."

@@ -166,7 +166,8 @@
  "drop": [
   "k.faces/shards/plain-earrings",
   "k.actions/shards/actions-hands",
-  "k.actions/shards/verbs-place"
+  "k.actions/shards/verbs-place",
+  "k.shapes/shards/shapes"
  ],
  "earrings": [
   "k.faces/shards/plain-earrings",
@@ -221,7 +222,10 @@
   "k.faces/shards/plain-eyes",
   "k.faces/shards/plain-glasses",
   "k.faces/shards/plain-head",
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/derived",
+  "k.shapes/shards/psys2",
+  "k.shapes/shards/shapes"
  ],
  "arched": [
   "k.faces/shards/plain-eyebrows"
@@ -264,7 +268,8 @@
  "oval": [
   "k.faces/shards/plain-eyes",
   "k.faces/shards/plain-head",
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "surprised": [
   "k.faces/shards/plain-eyes",
@@ -382,7 +387,8 @@
   "k.words/shards/he",
   "k.body/shards/core",
   "k.values/shards/shapes",
-  "k.words/shards/he"
+  "k.words/shards/he",
+  "k.shapes/shards/shapes"
  ],
  "long": [
   "k.faces/shards/plain-head",
@@ -646,7 +652,8 @@
   "k.words/shards/co-1",
   "k.actions/shards/actions-make-change",
   "k.actions/shards/verbs-change",
-  "k.words/shards/co-1"
+  "k.words/shards/co-1",
+  "k.attributes/shards/attributes"
  ],
  "door": [
   "k.objects/shards/buildings",
@@ -736,7 +743,8 @@
   "k.objects/shards/sky",
   "k.objects/shards/vehicles",
   "k.actions/shards/acts",
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "parts": [
   "k.objects/shards/buildings",
@@ -748,7 +756,8 @@
   "k.objects/shards/vehicles",
   "k.words/shards/pa",
   "k.actions/shards/acts",
-  "k.words/shards/pa"
+  "k.words/shards/pa",
+  "k.attributes/shards/attributes"
  ],
  "picture": [
   "k.objects/shards/buildings",
@@ -927,7 +936,8 @@
   "k.objects/shards/household",
   "k.words/shards/le",
   "k.units/shards/measures",
-  "k.words/shards/le"
+  "k.words/shards/le",
+  "k.attributes/shards/attributes"
  ],
  "puppy": [
   "k.objects/shards/animals"
@@ -1001,7 +1011,8 @@
   "k.objects/shards/figures"
  ],
  "person": [
-  "k.objects/shards/figures"
+  "k.objects/shards/figures",
+  "k.attributes/shards/attributes"
  ],
  "right_arm": [
   "k.objects/shards/figures"
@@ -1216,7 +1227,8 @@
  ],
  "crescent": [
   "k.objects/shards/sky",
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "disc": [
   "k.objects/shards/sky"
@@ -1269,7 +1281,8 @@
   "k.space/shards/kinds",
   "k.values/shards/shapes",
   "k.words/shards/st",
-  "k.scenes/shards/things-s"
+  "k.scenes/shards/things-s",
+  "k.shapes/shards/shapes"
  ],
  "stars": [
   "k.objects/shards/sky"
@@ -1455,7 +1468,8 @@
   "k.objects/shards/vehicles"
  ],
  "wheels": [
-  "k.objects/shards/vehicles"
+  "k.objects/shards/vehicles",
+  "k.attributes/shards/attributes"
  ],
  "mansion": [
   "k.words/shards/ma",
@@ -1542,13 +1556,15 @@
  "animal": [
   "k.words/shards/an",
   "k.units/shards/measures",
-  "k.words/shards/an"
+  "k.words/shards/an",
+  "k.attributes/shards/attributes"
  ],
  "ant": [
   "k.words/shards/an",
   "k.animals/shards/invertebrates",
   "k.words/shards/an",
-  "k.scenes/shards/things-a"
+  "k.scenes/shards/things-a",
+  "k.attributes/shards/things-living"
  ],
  "are": [
   "k.words/shards/ar",
@@ -1564,7 +1580,8 @@
   "k.words/shards/be",
   "k.animals/shards/invertebrates",
   "k.words/shards/be",
-  "k.scenes/shards/things-b"
+  "k.scenes/shards/things-b",
+  "k.attributes/shards/things-living"
  ],
  "before": [
   "k.words/shards/be",
@@ -1633,7 +1650,8 @@
  ],
  "can": [
   "k.words/shards/ca",
-  "k.words/shards/ca"
+  "k.words/shards/ca",
+  "k.attributes/shards/attributes"
  ],
  "canada": [
   "k.words/shards/ca",
@@ -1702,7 +1720,8 @@
   "k.words/shards/co-2",
   "k.animals/shards/mammals",
   "k.words/shards/co-2",
-  "k.scenes/shards/things-c"
+  "k.scenes/shards/things-c",
+  "k.attributes/shards/things-living"
  ],
  "cows": [
   "k.words/shards/co-2",
@@ -1712,7 +1731,8 @@
   "k.words/shards/cr",
   "k.animals/shards/reptiles-and-amphibians",
   "k.words/shards/cr",
-  "k.scenes/shards/things-c"
+  "k.scenes/shards/things-c",
+  "k.attributes/shards/things-living"
  ],
  "day": [
   "k.words/shards/da",
@@ -1769,7 +1789,8 @@
   "k.words/shards/el",
   "k.animals/shards/mammals",
   "k.words/shards/el",
-  "k.scenes/shards/things-e"
+  "k.scenes/shards/things-e",
+  "k.attributes/shards/things-living"
  ],
  "everest": [
   "k.words/shards/ev",
@@ -1793,7 +1814,8 @@
  ],
  "food": [
   "k.words/shards/fo",
-  "k.words/shards/fo"
+  "k.words/shards/fo",
+  "k.attributes/shards/attributes"
  ],
  "foot": [
   "k.words/shards/fo",
@@ -1821,7 +1843,8 @@
   "k.words/shards/fr",
   "k.animals/shards/reptiles-and-amphibians",
   "k.words/shards/fr",
-  "k.scenes/shards/things-f"
+  "k.scenes/shards/things-f",
+  "k.attributes/shards/things-living"
  ],
  "fruit": [
   "k.words/shards/fr",
@@ -1931,7 +1954,8 @@
  "kind": [
   "k.words/shards/ki",
   "k.actions/shards/acts",
-  "k.words/shards/ki"
+  "k.words/shards/ki",
+  "k.attributes/shards/attributes"
  ],
  "kite": [
   "k.words/shards/ki",
@@ -2083,7 +2107,8 @@
   "k.words/shards/pe",
   "k.animals/shards/birds",
   "k.words/shards/pe",
-  "k.scenes/shards/things-p"
+  "k.scenes/shards/things-p",
+  "k.attributes/shards/things-living"
  ],
  "pizza": [
   "k.words/shards/pi",
@@ -2101,7 +2126,8 @@
   "k.words/shards/pl",
   "k.actions/shards/actions-make-change",
   "k.words/shards/pl",
-  "k.scenes/shards/things-p"
+  "k.scenes/shards/things-p",
+  "k.attributes/shards/attributes"
  ],
  "rabbit": [
   "k.words/shards/ra",
@@ -2151,7 +2177,8 @@
  ],
  "season": [
   "k.words/shards/se",
-  "k.words/shards/se"
+  "k.words/shards/se",
+  "k.attributes/shards/attributes"
  ],
  "seed": [
   "k.words/shards/se",
@@ -2194,7 +2221,8 @@
  "sound": [
   "k.words/shards/so",
   "k.actions/shards/actions-body-social-nature",
-  "k.words/shards/so"
+  "k.words/shards/so",
+  "k.attributes/shards/attributes"
  ],
  "soup": [
   "k.words/shards/so",
@@ -2248,7 +2276,8 @@
  "time": [
   "k.words/shards/ti",
   "k.units/shards/core",
-  "k.words/shards/ti"
+  "k.words/shards/ti",
+  "k.attributes/shards/attributes"
  ],
  "tiny": [
   "k.words/shards/ti",
@@ -2353,7 +2382,8 @@
  "ring": [
   "k.layouts/shards/names",
   "k.actions/shards/actions-body-social-nature",
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "scatter": [
   "k.layouts/shards/names",
@@ -2368,7 +2398,8 @@
  ],
  "pyramid": [
   "k.layouts/shards/names",
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "flow": [
   "k.layouts/shards/names",
@@ -2500,7 +2531,8 @@
   "k.actions/shards/actions-body-social-nature"
  ],
  "drink": [
-  "k.actions/shards/actions-body-social-nature"
+  "k.actions/shards/actions-body-social-nature",
+  "k.attributes/shards/attributes"
  ],
  "drizzle": [
   "k.actions/shards/actions-body-social-nature"
@@ -3049,7 +3081,8 @@
  "place": [
   "k.actions/shards/actions-hands",
   "k.actions/shards/acts",
-  "k.actions/shards/verbs-place"
+  "k.actions/shards/verbs-place",
+  "k.attributes/shards/attributes"
  ],
  "pour": [
   "k.actions/shards/actions-hands"
@@ -4301,7 +4334,8 @@
   "k.actions/shards/verbs-load"
  ],
  "material": [
-  "k.actions/shards/acts"
+  "k.actions/shards/acts",
+  "k.attributes/shards/attributes"
  ],
  "means": [
   "k.actions/shards/acts"
@@ -4309,7 +4343,8 @@
  "name": [
   "k.actions/shards/acts",
   "k.actions/shards/verbs-ask",
-  "k.actions/shards/verbs-change"
+  "k.actions/shards/verbs-change",
+  "k.attributes/shards/attributes"
  ],
  "old value": [
   "k.actions/shards/acts"
@@ -4332,7 +4367,8 @@
   "k.actions/shards/acts"
  ],
  "tool": [
-  "k.actions/shards/acts"
+  "k.actions/shards/acts",
+  "k.attributes/shards/attributes"
  ],
  "topic": [
   "k.actions/shards/acts"
@@ -4664,7 +4700,8 @@
   "k.actions/shards/verbs-make"
  ],
  "at": [
-  "k.actions/shards/verbs-pick"
+  "k.actions/shards/verbs-pick",
+  "k.attributes/shards/attributes"
  ],
  "highlight": [
   "k.actions/shards/verbs-pick"
@@ -4905,16 +4942,19 @@
   "k.animals/shards/birds"
  ],
  "blackbird": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "bluebird": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "buzzard": [
   "k.animals/shards/birds"
  ],
  "canary": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "cardinal": [
   "k.animals/shards/birds",
@@ -4936,13 +4976,15 @@
   "k.animals/shards/birds"
  ],
  "crow": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "cuckoo": [
   "k.animals/shards/birds"
  ],
  "dove": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "eagle": [
   "k.animals/shards/birds"
@@ -4957,7 +4999,8 @@
   "k.animals/shards/birds"
  ],
  "flamingo": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "goose": [
   "k.animals/shards/birds"
@@ -5021,7 +5064,8 @@
   "k.animals/shards/birds"
  ],
  "peacock": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "pelican": [
   "k.animals/shards/birds"
@@ -5030,7 +5074,8 @@
   "k.animals/shards/birds"
  ],
  "pigeon": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "puffin": [
   "k.animals/shards/birds"
@@ -5039,7 +5084,8 @@
   "k.animals/shards/birds"
  ],
  "raven": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "roadrunner": [
   "k.animals/shards/birds"
@@ -5051,7 +5097,8 @@
   "k.animals/shards/birds"
  ],
  "seagull": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "sparrow": [
   "k.animals/shards/birds"
@@ -5060,14 +5107,16 @@
   "k.animals/shards/birds"
  ],
  "stork": [
-  "k.animals/shards/birds"
+  "k.animals/shards/birds",
+  "k.attributes/shards/things-living"
  ],
  "swallow": [
   "k.animals/shards/birds"
  ],
  "swan": [
   "k.animals/shards/birds",
-  "k.geo/shards/oceania"
+  "k.geo/shards/oceania",
+  "k.attributes/shards/things-living"
  ],
  "swift": [
   "k.animals/shards/birds"
@@ -5131,7 +5180,8 @@
   "k.animals/shards/fish"
  ],
  "goldfish": [
-  "k.animals/shards/fish"
+  "k.animals/shards/fish",
+  "k.attributes/shards/things-living"
  ],
  "great white shark": [
   "k.animals/shards/fish"
@@ -5184,7 +5234,8 @@
   "k.animals/shards/fish"
  ],
  "shark": [
-  "k.animals/shards/fish"
+  "k.animals/shards/fish",
+  "k.attributes/shards/things-living"
  ],
  "stingray": [
   "k.animals/shards/fish"
@@ -5268,7 +5319,8 @@
   "k.animals/shards/invertebrates"
  ],
  "grasshopper": [
-  "k.animals/shards/invertebrates"
+  "k.animals/shards/invertebrates",
+  "k.attributes/shards/things-living"
  ],
  "hermit crab": [
   "k.animals/shards/invertebrates"
@@ -5286,7 +5338,8 @@
   "k.animals/shards/invertebrates"
  ],
  "ladybird": [
-  "k.animals/shards/invertebrates"
+  "k.animals/shards/invertebrates",
+  "k.attributes/shards/things-living"
  ],
  "leech": [
   "k.animals/shards/invertebrates"
@@ -5368,7 +5421,8 @@
   "k.animals/shards/invertebrates"
  ],
  "wasp": [
-  "k.animals/shards/invertebrates"
+  "k.animals/shards/invertebrates",
+  "k.attributes/shards/things-living"
  ],
  "weevil": [
   "k.animals/shards/invertebrates"
@@ -5398,21 +5452,25 @@
   "k.animals/shards/mammals"
  ],
  "bat": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "bear": [
   "k.animals/shards/mammals",
-  "k.geo/shards/north-america"
+  "k.geo/shards/north-america",
+  "k.attributes/shards/things-living"
  ],
  "beaver": [
   "k.animals/shards/mammals",
-  "k.geo/shards/north-america"
+  "k.geo/shards/north-america",
+  "k.attributes/shards/things-living"
  ],
  "beluga": [
   "k.animals/shards/mammals"
  ],
  "bison": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "blue whale": [
   "k.animals/shards/mammals"
@@ -5430,13 +5488,15 @@
   "k.animals/shards/mammals"
  ],
  "camel": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "capybara": [
   "k.animals/shards/mammals"
  ],
  "cheetah": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "chimpanzee": [
   "k.animals/shards/mammals"
@@ -5454,16 +5514,19 @@
   "k.animals/shards/mammals"
  ],
  "deer": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "dingo": [
   "k.animals/shards/mammals"
  ],
  "dolphin": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "donkey": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "echidna": [
   "k.animals/shards/mammals"
@@ -5476,7 +5539,8 @@
  ],
  "fox": [
   "k.animals/shards/mammals",
-  "k.geo/shards/north-america"
+  "k.geo/shards/north-america",
+  "k.attributes/shards/things-living"
  ],
  "gazelle": [
   "k.animals/shards/mammals"
@@ -5488,13 +5552,15 @@
   "k.animals/shards/mammals"
  ],
  "giraffe": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "goat": [
   "k.animals/shards/mammals"
  ],
  "gorilla": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "grizzly bear": [
   "k.animals/shards/mammals"
@@ -5513,10 +5579,12 @@
   "k.animals/shards/mammals"
  ],
  "hedgehog": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "hippopotamus": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "humpback whale": [
   "k.animals/shards/mammals"
@@ -5537,10 +5605,12 @@
   "k.animals/shards/mammals"
  ],
  "kangaroo": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "koala": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "lemming": [
   "k.animals/shards/mammals"
@@ -5549,7 +5619,8 @@
   "k.animals/shards/mammals"
  ],
  "leopard": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "llama": [
   "k.animals/shards/mammals"
@@ -5576,14 +5647,17 @@
   "k.animals/shards/mammals"
  ],
  "monkey": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "moose": [
   "k.animals/shards/mammals",
-  "k.geo/shards/north-america"
+  "k.geo/shards/north-america",
+  "k.attributes/shards/things-living"
  ],
  "mouse": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "mule": [
   "k.animals/shards/mammals"
@@ -5607,31 +5681,37 @@
   "k.animals/shards/mammals"
  ],
  "orca": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "otter": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "ox": [
   "k.animals/shards/mammals"
  ],
  "panda": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "pangolin": [
   "k.animals/shards/mammals"
  ],
  "panther": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "pig": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "platypus": [
   "k.animals/shards/mammals"
  ],
  "polar bear": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "pony": [
   "k.animals/shards/mammals"
@@ -5656,25 +5736,30 @@
   "k.animals/shards/mammals"
  ],
  "reindeer": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "rhinoceros": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "sea lion": [
   "k.animals/shards/mammals"
  ],
  "seal": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "sheep": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "shrew": [
   "k.animals/shards/mammals"
  ],
  "skunk": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "sloth": [
   "k.animals/shards/mammals"
@@ -5698,7 +5783,8 @@
   "k.animals/shards/mammals"
  ],
  "tiger": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "vole": [
   "k.animals/shards/mammals"
@@ -5716,7 +5802,8 @@
   "k.animals/shards/mammals"
  ],
  "wolf": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "wombat": [
   "k.animals/shards/mammals"
@@ -5725,10 +5812,12 @@
   "k.animals/shards/mammals"
  ],
  "zebra": [
-  "k.animals/shards/mammals"
+  "k.animals/shards/mammals",
+  "k.attributes/shards/things-living"
  ],
  "alligator": [
-  "k.animals/shards/reptiles-and-amphibians"
+  "k.animals/shards/reptiles-and-amphibians",
+  "k.attributes/shards/things-living"
  ],
  "anaconda": [
   "k.animals/shards/reptiles-and-amphibians"
@@ -5797,7 +5886,8 @@
   "k.animals/shards/reptiles-and-amphibians"
  ],
  "turtle": [
-  "k.animals/shards/reptiles-and-amphibians"
+  "k.animals/shards/reptiles-and-amphibians",
+  "k.attributes/shards/things-living"
  ],
  "viper": [
   "k.animals/shards/reptiles-and-amphibians"
@@ -6928,7 +7018,8 @@
   "k.people/shards/roles-story"
  ],
  "father christmas": [
-  "k.people/shards/roles-story"
+  "k.people/shards/roles-story",
+  "k.attributes/shards/things-living"
  ],
  "king": [
   "k.people/shards/roles-story"
@@ -7101,7 +7192,8 @@
  ],
  "area": [
   "k.units/shards/core",
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "centilitre": [
   "k.units/shards/core"
@@ -7154,7 +7246,8 @@
  ],
  "length": [
   "k.units/shards/core",
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.attributes/shards/attributes"
  ],
  "light year": [
   "k.units/shards/core"
@@ -7194,7 +7287,8 @@
  ],
  "speed": [
   "k.units/shards/core",
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.attributes/shards/attributes"
  ],
  "square centimetre": [
   "k.units/shards/core"
@@ -7213,7 +7307,8 @@
  ],
  "temperature": [
   "k.units/shards/core",
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.attributes/shards/attributes"
  ],
  "tonne": [
   "k.units/shards/core"
@@ -7231,7 +7326,8 @@
   "k.units/shards/measures"
  ],
  "area_about": [
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "child_count": [
   "k.units/shards/measures"
@@ -7255,17 +7351,20 @@
   "k.units/shards/measures"
  ],
  "diameter_about": [
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "distance_about": [
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "east": [
   "k.units/shards/measures",
   "k.values/shards/directions"
  ],
  "elevation": [
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "k.animals": [
   "k.units/shards/measures"
@@ -7286,7 +7385,8 @@
   "k.units/shards/measures"
  ],
  "length_about": [
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "light_years_about": [
   "k.units/shards/measures"
@@ -7324,10 +7424,12 @@
   "k.values/shards/directions"
  ],
  "temperature_about": [
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "weight_about": [
-  "k.units/shards/measures"
+  "k.units/shards/measures",
+  "k.attributes/shards/attributes"
  ],
  "west": [
   "k.units/shards/measures",
@@ -8482,7 +8584,8 @@
   "k.values/shards/scales"
  ],
  "distance": [
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.attributes/shards/attributes"
  ],
  "extremely": [
   "k.values/shards/scales"
@@ -8536,7 +8639,8 @@
   "k.values/shards/scales"
  ],
  "height": [
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.attributes/shards/attributes"
  ],
  "higher": [
   "k.values/shards/scales"
@@ -8652,7 +8756,8 @@
   "k.values/shards/scales"
  ],
  "size": [
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.attributes/shards/attributes"
  ],
  "slightly": [
   "k.values/shards/scales"
@@ -8722,7 +8827,8 @@
   "k.values/shards/scales"
  ],
  "weight": [
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "k.attributes/shards/attributes"
  ],
  "wider": [
   "k.values/shards/scales"
@@ -8767,67 +8873,98 @@
   "k.values/shards/sets"
  ],
  "arc": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "arrow": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "circle": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "cone": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "cross": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "cube": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/derived",
+  "k.shapes/shards/shapes"
  ],
  "cuboid": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "cylinder": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "diamond": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "hexagon": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/derived",
+  "k.shapes/shards/psys2",
+  "k.shapes/shards/shapes"
  ],
  "line": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "octagon": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/derived",
+  "k.shapes/shards/psys2",
+  "k.shapes/shards/shapes"
  ],
  "parallelogram": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "pentagon": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/derived",
+  "k.shapes/shards/psys2",
+  "k.shapes/shards/shapes"
  ],
  "rectangle": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/derived",
+  "k.shapes/shards/psys2",
+  "k.shapes/shards/shapes"
  ],
  "semicircle": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "sphere": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "spiral": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "trapezoid": [
   "k.values/shards/shapes"
  ],
  "triangle": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/derived",
+  "k.shapes/shards/psys2",
+  "k.shapes/shards/shapes"
  ],
  "zigzag": [
-  "k.values/shards/shapes"
+  "k.values/shards/shapes",
+  "k.shapes/shards/shapes"
  ],
  "algeria": [
   "k.geo/shards/africa-borders",
@@ -20925,5 +21062,295 @@
  ],
  "weekend": [
   "k.time/shards/psys2"
+ ],
+ "quadrilateral": [
+  "k.shapes/shards/derived",
+  "k.shapes/shards/psys2"
+ ],
+ "rhombus": [
+  "k.shapes/shards/derived",
+  "k.shapes/shards/psys2"
+ ],
+ "cloud shape": [
+  "k.shapes/shards/shapes"
+ ],
+ "egg shape": [
+  "k.shapes/shards/shapes"
+ ],
+ "hemisphere": [
+  "k.shapes/shards/shapes"
+ ],
+ "polygon": [
+  "k.shapes/shards/shapes"
+ ],
+ "prism": [
+  "k.shapes/shards/shapes"
+ ],
+ "torus": [
+  "k.shapes/shards/shapes"
+ ],
+ "trapezium": [
+  "k.shapes/shards/shapes"
+ ],
+ "wavy line": [
+  "k.shapes/shards/shapes"
+ ],
+ "a": [
+  "k.attributes/shards/attributes"
+ ],
+ "age": [
+  "k.attributes/shards/attributes"
+ ],
+ "appliance": [
+  "k.attributes/shards/attributes"
+ ],
+ "bold": [
+  "k.attributes/shards/attributes"
+ ],
+ "building": [
+  "k.attributes/shards/attributes"
+ ],
+ "cannot": [
+  "k.attributes/shards/attributes"
+ ],
+ "class": [
+  "k.attributes/shards/attributes"
+ ],
+ "clothing": [
+  "k.attributes/shards/attributes"
+ ],
+ "container": [
+  "k.attributes/shards/attributes"
+ ],
+ "covering": [
+  "k.attributes/shards/attributes"
+ ],
+ "creature": [
+  "k.attributes/shards/attributes"
+ ],
+ "device": [
+  "k.attributes/shards/attributes"
+ ],
+ "drawn_colour": [
+  "k.attributes/shards/attributes"
+ ],
+ "eats": [
+  "k.attributes/shards/attributes"
+ ],
+ "furniture": [
+  "k.attributes/shards/attributes"
+ ],
+ "grouped": [
+  "k.attributes/shards/attributes"
+ ],
+ "habitat": [
+  "k.attributes/shards/attributes"
+ ],
+ "has": [
+  "k.attributes/shards/attributes"
+ ],
+ "height_about": [
+  "k.attributes/shards/attributes"
+ ],
+ "highlighted": [
+  "k.attributes/shards/attributes"
+ ],
+ "instrument": [
+  "k.attributes/shards/attributes"
+ ],
+ "jewellery": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.animals.animal": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.attributes.drawn": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.attributes.number": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.attributes.thing": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.attributes.usage": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.body.part": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.commonsense.thing": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.food.food": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.geo.continent": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.geo.country": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.geo.desert": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.geo.lake": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.geo.mountain": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.geo.river": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.geo.sea": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.layouts.joins": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.objects.part": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.parts.inherited": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.parts.usual": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.parts.whole": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.people.kind": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.scenes.scene": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.scenes.thing": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.shapes.shape": [
+  "k.attributes/shards/attributes"
+ ],
+ "k.space.body": [
+  "k.attributes/shards/attributes"
+ ],
+ "landform": [
+  "k.attributes/shards/attributes"
+ ],
+ "lives": [
+  "k.attributes/shards/attributes"
+ ],
+ "locked": [
+  "k.attributes/shards/attributes"
+ ],
+ "machine": [
+  "k.attributes/shards/attributes"
+ ],
+ "made_of": [
+  "k.attributes/shards/attributes"
+ ],
+ "natural thing": [
+  "k.attributes/shards/attributes"
+ ],
+ "pinned": [
+  "k.attributes/shards/attributes"
+ ],
+ "price": [
+  "k.attributes/shards/attributes"
+ ],
+ "price_class": [
+  "k.attributes/shards/attributes"
+ ],
+ "selected": [
+  "k.attributes/shards/attributes"
+ ],
+ "sides": [
+  "k.attributes/shards/attributes"
+ ],
+ "size_about": [
+  "k.attributes/shards/attributes"
+ ],
+ "sky": [
+  "k.attributes/shards/attributes"
+ ],
+ "speed_about": [
+  "k.attributes/shards/attributes"
+ ],
+ "speed_class": [
+  "k.attributes/shards/attributes"
+ ],
+ "stacked": [
+  "k.attributes/shards/attributes"
+ ],
+ "switched_on": [
+  "k.attributes/shards/attributes"
+ ],
+ "tableware": [
+  "k.attributes/shards/attributes"
+ ],
+ "toy": [
+  "k.attributes/shards/attributes"
+ ],
+ "used_by": [
+  "k.attributes/shards/attributes"
+ ],
+ "used_for": [
+  "k.attributes/shards/attributes"
+ ],
+ "user": [
+  "k.attributes/shards/attributes"
+ ],
+ "vehicle": [
+  "k.attributes/shards/attributes"
+ ],
+ "visible": [
+  "k.attributes/shards/attributes"
+ ],
+ "weapon": [
+  "k.attributes/shards/attributes"
+ ],
+ "weather": [
+  "k.attributes/shards/attributes"
+ ],
+ "weight_class": [
+  "k.attributes/shards/attributes"
+ ],
+ "caterpillar": [
+  "k.attributes/shards/things-living"
+ ],
+ "chick": [
+  "k.attributes/shards/things-living"
+ ],
+ "dragon": [
+  "k.attributes/shards/things-living"
+ ],
+ "ghost": [
+  "k.attributes/shards/things-living"
+ ],
+ "hippo": [
+  "k.attributes/shards/things-living"
+ ],
+ "killer whale": [
+  "k.attributes/shards/things-living"
+ ],
+ "lady beetle": [
+  "k.attributes/shards/things-living"
+ ],
+ "ladybug": [
+  "k.attributes/shards/things-living"
+ ],
+ "mammoth": [
+  "k.attributes/shards/things-living"
+ ],
+ "rhino": [
+  "k.attributes/shards/things-living"
+ ],
+ "unicorn": [
+  "k.attributes/shards/things-living"
+ ],
+ "worm": [
+  "k.attributes/shards/things-living"
  ]
 }

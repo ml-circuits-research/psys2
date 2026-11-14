@@ -9,3 +9,11 @@
 @tpl.session.things.list core.template
     for=action.things.list
     text="{value}"
+
+@tpl.session.things.own core.template
+    for=action.things.own
+    text="{value}"
+
+@tpl.session.things.undo core.template
+    for=action.things.undo
+    text="{value}"

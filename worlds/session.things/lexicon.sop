@@ -81,3 +81,30 @@
     word=conversation
     word=map
     word=atlas
+
+@lex.session.things.colour core.lexicon
+    class=modifier
+    open=colour
+    doc="Colours, for a lesson about the colour of a thing or a mix (zebras are black and white; black and red make brown): any colour the one colour reader knows (open=colour), with the core ones listed."
+    word=red
+    word=orange
+    word=yellow
+    word=green
+    word=blue
+    word=purple
+    word=pink
+    word=brown
+    word=black
+    word=white
+    word=grey
+    word=gray
+
+@lex.session.things.kinds core.lexicon
+    class=noun
+    open=knowledge
+    catalog=k.animals
+    catalog=k.shapes
+    catalog=k.objects
+    doc="Kinds of things the catalog knows (animals, shapes, objects), for a lesson said with a bare plural (spiders have 8 legs): open to the catalog, no list of its own."
+    word=animal
+    word=shape

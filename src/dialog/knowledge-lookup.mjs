@@ -22,7 +22,12 @@ const list = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', '
 const firstClause = (g) => String(g).split(/;\s*/)[0].replace(/^\([^)]*\)\s*/, '').trim();
 
 
-export const knowledgeOf = (dialog) => dialog?.engine?.knowledge ?? null;
+/** The catalog as this session reads it: the shared catalog with what the session was taught overlaid (the taught tier, src/knowledge/learned.mjs), or the bare catalog without a session. */
+export const knowledgeOf = (dialog) => {
+  const base = dialog?.engine?.knowledge ?? null;
+  if (!base || !dialog.isession || typeof dialog.engine.interp?._knowledgeFor !== 'function') return base;
+  return dialog.engine.interp._knowledgeFor(dialog.isession) ?? base;
+};
 
 /** The answer to a frame about a thing the catalog knows: `{ text, status }`; the plain "I don't know" when the thing says nothing about the question. */
 export function answerFrom(frame, th, catalog) {

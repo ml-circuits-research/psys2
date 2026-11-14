@@ -1,6 +1,6 @@
 // Generator of training examples for data.charts (spec 08). Browser-safe, imports nothing.
 // Chart types, colors, shades, palettes, positions and the sort words come from the world's own lexicons (`context.lexicons`),
-// things to chart from kids.arith, kids.shop and kids.animals lexicons; small embedded lists are the fallback. The expected
+// things to chart from kids.arith and kids.shop lexicons (the animals are the embedded list of catalog animals); small embedded lists are the fallback. The expected
 // circuit of every text is known independently of the formalizer: one core.request with the action and arguments the matching
 // pattern family emits (arguments in emit order, undefined values left out). Negatives are sentences of other worlds and
 // near misses that this world must not take.
@@ -45,7 +45,7 @@ export function generate({ rng: r, count = 300, context } = {}) {
   const big = FB.big.filter((w) => extent.includes(w)), small = FB.small.filter((w) => extent.includes(w));
   const items = lx('lex.kids.arith.items', FB.items).filter((w) => !w.includes('_'));
   const shop = lx('lex.kids.shop.items', FB.shop).filter((w) => !w.includes('_'));
-  const animals = lx('lex.kids.animals.names', FB.animals).filter((w) => !w.includes('_') && !/(fish|sheep|deer|mouse|goose|wolf|ant|ox)$/.test(w));
+  const animals = FB.animals.filter((w) => !w.includes('_') && !/(fish|sheep|deer|mouse|goose|wolf|ant|ox)$/.test(w));
   const label = () => pick(r, FB.labels);
   const labels2 = () => { const a = label(); let b = label(); while (b === a) b = label(); return [a, b]; };
   const type = () => pick(r, types);

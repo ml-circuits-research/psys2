@@ -15,31 +15,31 @@ const SENSES = [{ id: 's1', type: 'k.words.sense', f: { word: ['possess'], pos: 
 test('near words: an unknown verb that the word senses make a synonym of "have" is read as it, and the world accepts the reading', async () => {
   engine.setKnowledge(facts(SENSES));
   try {
-    const s = session('kids.animals');
-    const r = await s.send('A zebra possesses 4 legs.');
-    assert.match(r.text, /a zebra has 4 legs/i);
+    const s = session('chat');
+    const r = await s.send('What pets do I possess?');
+    assert.match(r.text, /not told me about any pets/i);   // kids.animals left for session.things (2026-11-14): the user's own things are asked with "have"
     assert.equal(r.segments[0].variant?.via, 'near');
     assert.equal(r.segments[0].variant?.as, 'have');
   } finally { engine.setKnowledge(null); }
 });
 
 test('near words: without the catalog nothing changes (the clause stays unread)', async () => {
-  const r = await session('kids.animals').send('A zebra possesses 4 legs.');
+  const r = await session('chat').send('What pets do I possess?');
   assert.ok(r.segments[0].unparsed);
 });
 
 test('near words: the switch PSYS2_NEAR=off skips the step', async () => {
   engine.setKnowledge(facts(SENSES));
   process.env.PSYS2_NEAR = 'off';
-  try { const r = await session('kids.animals').send('A zebra possesses 4 legs.'); assert.ok(r.segments[0].unparsed); } finally { delete process.env.PSYS2_NEAR; engine.setKnowledge(null); }
+  try { const r = await session('chat').send('What pets do I possess?'); assert.ok(r.segments[0].unparsed); } finally { delete process.env.PSYS2_NEAR; engine.setKnowledge(null); }
 });
 
 test('all or nothing: a word with no near word the worlds know stays unread', async () => {
   engine.setKnowledge(facts(SENSES));
-  try { const r = await session('kids.animals').send('A zebra frobnicates 4 legs.'); assert.ok(r.segments[0].unparsed); } finally { engine.setKnowledge(null); }
+  try { const r = await session('chat').send('What pets do I frobnicate?'); assert.ok(r.segments[0].unparsed); } finally { engine.setKnowledge(null); }
 });
 
 test('alternations: with no w.lang.en.alternation rule in the catalog the step does nothing (the rules are knowledge, never ours)', async () => {
   engine.setKnowledge(facts([]));
-  try { const r = await session('kids.animals').send('Could you please say that a zebra has 4 legs?'); assert.ok(r.segments.some((x) => x.unparsed) || !r.segments.some((x) => x.variant?.via === 'alternation')); } finally { engine.setKnowledge(null); }
+  try { const r = await session('chat').send('Could you please say that a zebra has 4 legs?'); assert.ok(r.segments.some((x) => x.unparsed) || !r.segments.some((x) => x.variant?.via === 'alternation')); } finally { engine.setKnowledge(null); }
 });

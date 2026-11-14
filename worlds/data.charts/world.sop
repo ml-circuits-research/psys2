@@ -7,7 +7,6 @@
     imports=world.kids.arith
     imports=world.kids.shop
     imports=world.kids.tasks
-    imports=world.kids.animals
     formalization=rules
     imports=world.acts
     imports=world.lang.common
