@@ -4095,3 +4095,7 @@ No hard-coded examples. The library is asked for `std.sample` (random frames con
 4. **Tabs that fill the screen** (Drawing, Diagram, Map, Charts, editor, games…) get their own small dice that generates a random command in that tab.
 5. **Delete what this replaces:** `surprise-pool.json` (214 hand-validated texts, a 25-minute build step), hard-coded welcome examples and per-tab example lists; and the coverage-grid generator uses the same sampler (its placeholders and nonsense combinations were a defect of a separate generator).
 6. **Measure:** of 200 dice samples across tabs: the share understood and executed without refusal, judged by state (target ≥ 95 %), distinct acts / kinds / attributes, no placeholder or nonsense text (attach 30 random samples to the landing note for the reviewer to read). Until `std.sample` is released, write the host side against its described interface, do not build a local generator.
+
+## Reviewer 2026-11-14 14:30 — avatar on k.motion accepted (708a9f8d)
+
+Reviewer ran `npm run test:smoke` on 708a9f8d: 89/89 pass, exit 0; `MOTION_RULES_TEMPORARY` is gone and motion.mjs (113 lines) only keeps the host's event log and clock over `std.motion` + `k.motion`. Accepted. Next: 13:55 item 1 (the 9 plan failures by cause), `ro-en.mjs` out of the English boot, then RANDOM (14:15) when `std.sample` lands, learning curve, grid/paraphrase, Q13.
