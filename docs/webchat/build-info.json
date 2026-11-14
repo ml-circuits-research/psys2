@@ -1,5 +1,5 @@
 {
-  "version": "9af58df991",
+  "version": "4230db9cef",
   "worlds": [
     "acts",
     "art.draw",
@@ -78,6 +78,7 @@
     "lib/dialog/reader-route.mjs": "6bae85743102f48d",
     "lib/dialog/runtime-config.mjs": "55e931b422397344",
     "lib/dialog/runtime-defaults.mjs": "d421545d321134bd",
+    "lib/dialog/sampler.mjs": "58e8fa4e5cb5d9e8",
     "lib/dialog/scene-referents.mjs": "ae803909234a1376",
     "lib/dialog/steps.mjs": "d202d74cf9aae3df",
     "lib/dialog/surprise.mjs": "bd76e5f4d59d803e",
@@ -781,8 +782,8 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "dd68772a69bc2308"
   },
-  "builtAt": "2026-11-14T08:24:04.839Z",
-  "commit": "751dd0f4-dirty",
+  "builtAt": "2026-11-14T08:51:48.490Z",
+  "commit": "36ddc14f",
   "assets": {
     "app.mjs": "11bf04548f",
     "coverage-grid.json": "c328c9ce48",
@@ -813,6 +814,7 @@
     "lib/dialog/reader-route.mjs": "fdd5cf573d",
     "lib/dialog/runtime-config.mjs": "c1f0436478",
     "lib/dialog/runtime-defaults.mjs": "3a55de5f9e",
+    "lib/dialog/sampler.mjs": "b065b4ab49",
     "lib/dialog/scene-referents.mjs": "a9eaa2c3ef",
     "lib/dialog/steps.mjs": "cfff076267",
     "lib/dialog/surprise.mjs": "470e6b3ca1",
