@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// The flags and lexicons of the more English forms of the acts (the forms themselves are facts: handover/lang.en/shards/frames-acts.sop, set acts.more), used by every schema world that sets the flag named in `if` (spec 21, art.draw pilot). Each group is a way
+// The flags and lexicons of the more English forms of the acts (the forms themselves are facts: catalog w.lang.en shard frames-acts-more), used by every schema world that sets the flag named in `if` (spec 21, art.draw pilot). Each group is a way
 // people ask for the same acts: with a wish ("I want a red house"), as a question about what is there ("is there a tree?", "describe my picture"), counted or located in other words,
 // with an amount ("a bit smaller"), turned, cleared, a surprise. The notation is that of FORMS (L lead-in, D determiner, V.<act>, REL, `{role:ATTR|VALUE|KIND|MORE|LESS|TURN|NOUN}`),
 // `{x:lexicon?}` is optional. Roles beyond the six (`m1`, `m2`: modifier words before a kind, `kind`) are joined back into the thing by the world's hooks. No imports: browser-safe.

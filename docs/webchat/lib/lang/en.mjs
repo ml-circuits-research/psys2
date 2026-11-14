@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * The thin local `lang.en` module (first slice of "English as a world", questions.md Q10): what PSys2 knows about English noun phrases, coordination, ellipsis and anaphora is read from FACTS
- * (the shards of handover/lang.en, in the format of the knowledge repository's `w.lang.en`) instead of being written again in every module that needs a determiner list. The few algorithms that apply
+ * (the knowledge catalog's world `w.lang.en`, sop-knowledge-worlds docs/worlds/w.lang.en) instead of being written again in every module that needs a determiner list. The few algorithms that apply
  * the facts (split a coordination, copy a shared argument, expand a one-anaphora) live here until the library's `std.grammar` reads the same facts as a chart grammar (handover/lang.en/std-grammar.md).
- * Browser-safe: no `node:*`; the facts come from a generated module (scripts/build-lang-en.mjs) or are passed in as texts / wires (`createLangEn`), so a host can load the catalog's version of the same world.
+ * Browser-safe: no `node:*`. `langEnFromCatalog(source)` reads the shards through the knowledge source (the catalog, when reachable); `en` is the bundled copy GENERATED FROM THE CATALOG by scripts/build-lang-en.mjs
+ * (first paint, offline, tests) plus src/lang/en.local.mjs (what the catalog does not have yet). The reader adapts the catalog's format: types `w.lang.en.*`, keys with `_` (`unless_suffix`), frame patterns as
+ * `w.lang.en.part` wires, ranges as `min` / `max`, the temporal prepositions as a type of their own, the coordination rules split.
  *
  *   words(type, view)        the words of facts `lang.en.<type>` that belong to a view: words('det', 'dialogue'); a view is one list some module used (the `in=` entries of the shard)
  *   ordinals(view)           { first: 1, ... last: -1 }            numerals(view)  { zero: 0, ... }
@@ -16,7 +18,7 @@
  *   bareDistributes(part)    a part that is only a number or an ordinal takes the kind of the part before it ("tables 1 and 2")
  *   sharedArgument(tokens)   shared leading verb phrase / trailing argument of a coordination ("make your eyes and body blue")
  *   ellipsisPrefixes(tokens) the 1-2 first words of an anchor clause that a verb ellipsis copies
- *   cutWords(also) cardJoiners() sequenceWords(also)   the clause joiners (the splitter's cut words, the card-driven cutter's, "then"/"also" that may follow "and"), frameLeads() leads that keep their comma
+ *   cutWords(also) cardJoiners() sequenceWords(also) joinerKeeps()   the clause joiners (the splitter's cut words, the card-driven cutter's, "then"/"also" that may follow "and"), frameLeads() leads that keep their comma
  *   corrections() leadOnly() answers() answerRegex() answerWords()   self-correction markers [[words], needsComma], words of a lead-only clause, bare answers
  *   questionWords(view)      question-start (first word of a question), wh-lead (fuzzy wh), question-tail (a question after a connective)
  *   frames(set?)             the argument frames of the acts [{ id, act, mode, match, args, priority, if, lit, tabOnly, tabPriority, example }] in the order of the facts (sets: acts, acts.more, acts.data)
@@ -27,17 +29,83 @@
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
 import { parse } from '../soplang/index.mjs?v=c57881f705';
-import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=4d9ef010e6';
+import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=1ec6c20720';
+import { LANG_EN_LOCAL } from './en.local.mjs?v=a473fcb03c';
 
 const all = (w, k) => w.attrs[k] ?? [];
 const one = (w, k) => all(w, k)[0];
 const isWord = (t) => t.kind === 'word' || t.kind === 'number';
 const span = (toks) => [Math.min(...toks.map((t) => t.start)), Math.max(...toks.map((t) => t.end))];
 
-/** Reads wires from SOP texts ({ name: text }) or from wires already parsed. The attrs of a wire are { key: [values] }; a value is a string. */
-export function createLangEn(source = LANG_EN_FACTS) {
-  const wires = Array.isArray(source) ? source : Object.values(source).flatMap((text) => parse(text).wires);
-  const norm = wires.map((w) => { const attrs = {}; for (const e of w.entries ?? []) (attrs[e.key] ??= []).push(e.value.v); return { id: w.id, type: w.type, attrs }; });
+/** The shards of the catalog world `w.lang.en` this module reads. The others (core-plurals, hand-morphology, hand-grammar, hand-joins, phrases) are catalog additions that would change what the readers answer: not read (docs/lessons.md). */
+export const LANG_EN_SHARDS = ['determiners', 'pronouns', 'prepositions', 'numbers', 'morphology', 'ellipsis', 'clauses', 'grammar', 'frames-acts', 'frames-acts-more', 'frames-acts-data'];
+/** The catalog's act names of the verb groups of the act grammar: the act `change` is the group `set`, `take apart` is `apart`. */
+const VERB_GROUP = { change: 'set', 'take apart': 'apart' };
+/** The lexicons a schema world generates (`lexicon=attribute` is its ATTR); the shared lexicons are the catalog's `w.lang.en.lex` names. */
+const LEXICON_ROLE = { attribute: 'ATTR', value: 'VALUE', kind: 'KIND', more: 'MORE', less: 'LESS', turn: 'TURN', factor: 'FACTOR', noun: 'NOUN' };
+
+/** The catalog's wire as this module reads it: id and type without the `w.` prefix, keys with `-` for `_` (`unless_suffix` is `unless-suffix`). */
+function adapt(w) {
+  const attrs = {};
+  for (const e of w.entries ?? []) (attrs[e.key.replace(/_/g, '-')] ??= []).push(e.value.v);
+  const type = w.type.replace(/^w\./, '').replace(/_/g, '-');
+  // a multi-word preposition is one chunk for the readers ("next_to"), as the patterns of the acts write it
+  if (/^lang\.en\.prep(\.time)?$/.test(type)) attrs.text = (attrs.text ?? []).map((t) => t.replace(/ /g, '_'));
+  return { id: w.id.replace(/^w\./, ''), type, attrs };
+}
+
+/** `L V.make D {thing:words} REL D {place:words}` as the schema worlds read a frame: rebuilt from the parts of the catalog's frame (`w.lang.en.part`, in order); `lex` are the names of the shared lexicons. */
+function patternOf(parts, lex) {
+  const chunk = (x) => x.replace(/[ ']/g, '_');
+  const lexical = (n) => (lex.has(n) ? `lex.${n}` : LEXICON_ROLE[n] ?? n);
+  return parts.map((p) => {
+    const opt = one(p, 'optional') === 'yes' ? '?' : '';
+    switch (one(p, 'is')) {
+      case 'lead': return 'L';
+      case 'det': return 'D';
+      case 'verb': return `V.${VERB_GROUP[one(p, 'act')] ?? one(p, 'act')}`;
+      case 'phrase': return `[$lang.${one(p, 'phrase')}]${opt}`;
+      case 'lexicon': return `${lexical(one(p, 'lexicon'))}${opt}`;
+      case 'word': { const ws = all(p, 'word').map(chunk); return ws.length === 1 && !opt ? ws[0] : `[${ws.join('|')}]${opt}`; }
+      case 'role': {
+        const takes = one(p, 'takes');
+        if (takes === 'prep' && one(p, 'role') === 'rel') return 'REL';
+        return `{${one(p, 'role')}:${takes === 'lexicon' ? lexical(one(p, 'lexicon')) : takes}${one(p, 'max-words') ? `(${one(p, 'max-words')})` : ''}${opt}}`;
+      }
+      default: throw new Error(`lang.en: unknown frame part ${one(p, 'is')}`);
+    }
+  }).join(' ');
+}
+
+/**
+ * Reads wires of the catalog world `w.lang.en` from SOP texts ({ name: text }) or wires already parsed (the bundle of `scripts/build-lang-en.mjs`, or the shards read through the knowledge source: `langEnFromCatalog`).
+ * `local` are the facts this application keeps until the catalog has them (src/lang/en.local.mjs): the frames of the editor and of facts by lookup, the readers' own frames, the time words.
+ */
+export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
+  const parsed = (src) => (Array.isArray(src) ? src : Object.values(src).flatMap((text) => parse(text).wires));
+  const norm = [...parsed(source), ...(local ? parsed(local) : [])].map(adapt);
+  // a frame of the catalog is a frame wire and its parts: the pattern is rebuilt (a frame of `local` may carry its `pattern` as written, `after=` puts it behind the named frame)
+  const lexNames = new Set(norm.filter((w) => w.type === 'lang.en.lex').map((w) => one(w, 'name')));
+  const partsOf = new Map(), fixedOf = new Map();
+  const group = (m, w) => (m.get(one(w, 'frame')) ?? m.set(one(w, 'frame'), []).get(one(w, 'frame'))).push(w);
+  for (const w of norm) { if (w.type === 'lang.en.part') group(partsOf, w); else if (w.type === 'lang.en.fixed') group(fixedOf, w); }
+  for (const w of norm) {
+    if (w.type === 'lang.en.prep.time') w.type = 'lang.en.prep';
+    else if (w.type === 'lang.en.frame') {
+      const name = one(w, 'name');
+      if (!w.attrs.pattern) w.attrs.pattern = [patternOf((partsOf.get(name) ?? []).sort((a, b) => Number(one(a, 'at')) - Number(one(b, 'at'))), lexNames)];
+      for (const f of fixedOf.get(name) ?? []) w.attrs[`lit.${one(f, 'role')}`] = [one(f, 'value')];
+      w.id = `lang.en.frame.${name}`;
+    }
+  }
+  const placed = [];
+  for (const w of norm) {
+    const after = w.type === 'lang.en.frame' ? one(w, 'after') : null;
+    if (after == null) { placed.push(w); continue; }
+    const at = placed.findLastIndex((x) => one(x, 'name') === after || one(x, 'after') === after);
+    placed.splice(at < 0 ? placed.length : at + 1, 0, w);
+  }
+  norm.splice(0, norm.length, ...placed);
   const byType = new Map();
   for (const w of norm) (byType.get(w.type) ?? byType.set(w.type, []).get(w.type)).push(w);
   const of = (type) => byType.get(`lang.en.${type}`) ?? [];
@@ -67,7 +135,7 @@ export function createLangEn(source = LANG_EN_FACTS) {
       if (r.attrs['min-length'] && !(w.length >= Number(one(r, 'min-length')))) continue;
       const sfx = all(r, 'suffix');
       let hit = sfx.length ? sfx.find((s) => w.endsWith(s)) : null;
-      if (one(r, 'pattern') === 'us-plural') hit = w === 'buses' || exceptions('us-plural-suffix', 'stem').some((s) => w.endsWith(`${s}es`)) ? 'es' : null;
+      if (one(r, 'exception') === 'us-plural') hit = exceptions('us-plural-word', 'word').includes(w) || exceptions('us-plural-suffix', 'stem').some((s) => w.endsWith(`${s}es`)) ? 'es' : null;
       if (!hit) continue;
       if (all(r, 'unless-suffix').some((s) => w.endsWith(s))) continue;
       if (one(r, 'unless-is-singular') === 'yes' && w.endsWith('is') && !exceptions('is-plural', 'stem').some((s) => w.endsWith(`${s}s`))) continue;
@@ -87,7 +155,8 @@ export function createLangEn(source = LANG_EN_FACTS) {
 
   // ---- coordination ----
   const sepWords = (view) => cached(`s:${view}`, () => of('coord.sep').filter((w) => all(w, 'in').includes(view)).map((w) => one(w, 'text')));
-  const coordParam = (name) => one(of('coord.param').find((w) => one(w, 'name') === name), 'value');
+  /** A coordination limit: a `value`, or a pattern of digits and words (`digits=yes`, `word=first`: a part that is only a number or one of the words). */
+  const coordParam = (name) => { const w = of('coord.param').find((x) => one(x, 'name') === name); if (one(w, 'value') != null) return one(w, 'value'); const ws = all(w, 'word'); return ws.length ? `^(${['[0-9]+', ...ws].join('|')})$` : '[0-9]+'; };
   const sepRe = (view) => cached(`sr:${view}`, () => {
     const ws = sepWords(view).filter((s) => s !== ','), afterComma = of('coord.sep').filter((w) => all(w, 'in').includes(view) && all(w, 'after-comma').includes(view)).map((w) => one(w, 'text'));
     const comma = sepWords(view).includes(',') ? `\\s*,\\s*${afterComma.length ? `(?:${afterComma.join('|')}\\s+)?` : ''}` : null;
@@ -112,12 +181,14 @@ export function createLangEn(source = LANG_EN_FACTS) {
     return parts.length < 2 ? [] : parts.map((x) => ({ head: x, tail }));
   }
 
-  // ---- clauses (handover/lang.en/shards/clauses.sop) ----
+  // ---- clauses (shard clauses of w.lang.en) ----
   const joiners = () => of('joiner');
   /** The words the clause splitter cuts at; `also` off (the ablation switch) drops "also". */
   const cutWords = (also = true) => cached(`cw:${also}`, () => new Set(joiners().filter((w) => one(w, 'cut') === 'yes' && (also || one(w, 'kind') !== 'addition')).map((w) => one(w, 'text'))));
   /** The sequence words ("then", "also") that may follow "and" or a comma without a new cut. */
   const sequenceWords = (also = true) => cached(`sw:${also}`, () => joiners().filter((w) => ['sequence', 'addition'].includes(one(w, 'kind')) && (also || one(w, 'kind') !== 'addition')).map((w) => one(w, 'text')));
+  /** Words after `and` that continue the noun phrase before it ('and its neighbours'): the splitter and the card-driven cutter do not cut there. */
+  const joinerKeeps = () => cached('jk', () => new Set(of('joiner.keep').flatMap((w) => all(w, 'text'))));
   const cardJoiners = () => cached('cj', () => new Set(joiners().filter((w) => one(w, 'card-cut') === 'yes').map((w) => one(w, 'text'))));
   const frameLeads = () => cached('fl', () => new Set(of('frame-lead').map((w) => one(w, 'text'))));
   const corrections = () => cached('co', () => of('correction').map((w) => [one(w, 'text').split(' '), one(w, 'comma') === 'yes']));
@@ -127,7 +198,7 @@ export function createLangEn(source = LANG_EN_FACTS) {
   const answerWords = () => cached('aw', () => [...answers()].sort((a, b) => b.split(' ').length - a.split(' ').length));
   const questionWords = (view) => cached(`q:${view}`, () => new Set([...words('wh', view), ...words('aux', view)]));
 
-  // ---- argument frames of the acts (handover/lang.en/shards/frames-acts.sop) ----
+  // ---- argument frames of the acts (shards frames-acts* of w.lang.en, and the local frames) ----
   const frames = (set) => cached(`f:${set}`, () => of('frame').filter((w) => !set || one(w, 'set') === set).map((w) => {
     const f = { id: w.id.slice(`lang.en.frame.${one(w, 'set')}.`.length), act: one(w, 'act'), match: one(w, 'pattern'), args: all(w, 'role'), priority: Number(one(w, 'priority')), example: one(w, 'example') };
     if (one(w, 'mode')) f.mode = one(w, 'mode');
@@ -338,8 +409,20 @@ export function createLangEn(source = LANG_EN_FACTS) {
     return { mods, lead, bare, candidates: out };
   }
 
-  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
+  return { words, ordinals, numerals, refers, anaphorRegex, singular, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, joinerKeeps, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
 }
 
-/** The English of this build: the facts of handover/lang.en as shipped in en.facts.generated.mjs. */
+/**
+ * The English of the catalog, read through the knowledge source (`{ text(path) }` over the catalog folder or its URL, src/loaders/knowledge-source.mjs): the shards of `w.lang.en` (LANG_EN_SHARDS) and the lexicon names
+ * of phrases.sop. Returns a reader like `en`, or null when a shard cannot be read (the bundled `en` stays in use). A host that reaches the catalog may swap it in; it answers what the bundle answers (tests/lang-en.test.mjs).
+ */
+export async function langEnFromCatalog(source) {
+  const texts = {};
+  for (const s of LANG_EN_SHARDS) { const t = await source.text(`w.lang.en/shards/${s}.sop`); if (!t) return null; texts[s] = t; }
+  const phrases = await source.text('w.lang.en/shards/phrases.sop');
+  if (phrases) texts.lexicons = phrases.split('\n').filter((l) => / w\.lang\.en\.lex /.test(l)).join('\n');
+  return createLangEn(texts);
+}
+
+/** The English of this build: the catalog's `w.lang.en` as bundled in en.facts.generated.mjs, with the local additions of en.local.mjs. */
 export const en = createLangEn();

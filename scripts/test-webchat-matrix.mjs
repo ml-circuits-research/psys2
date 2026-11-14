@@ -404,13 +404,12 @@ export const SCENARIOS = {
       await say(c, 'mark Paris'); await say(c, 'mark Rome');
       const d = await say(c, 'how far is Rome from Paris');
       const t = await say(c, 'how long are the lines in total');
-      check('geomap: the counts and the length of the lines come from the library', /^There are 2 markers and 1 line on the map; the lines add up to 1,107 km\.$/.test(t), `${d.slice(0, 40)} | ${t.slice(0, 100)}`);
+      // (the matrix-only totals of the lines and the "why?" naming the kb of the world went with the matrix of geo.map: it is a schema world now, spec 21 section 12)
       const s1 = await st();
       check('geomap: the tab state has both markers and the line', s1.markers?.length === 2 && s1.lines?.length === 1, JSON.stringify([s1.markers?.length, s1.lines?.length]));
       const n = await say(c, 'Is Paris in Germany?');
       check('geomap: a "No" has the reason of the denies', n === 'No, Paris is not in Germany; it is in France.', n.slice(0, 80));
       const w = await say(c, 'why?');
-      check('geomap: "why?" names the source of the world', /what I know about places/.test(w), w.slice(0, 120));
       await say(c, 'street map');
       await say(c, 'zoom to 15');
       const s2 = await st();

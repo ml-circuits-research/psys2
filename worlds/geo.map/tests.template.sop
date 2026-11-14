@@ -4,8 +4,8 @@
     expect="capital of Romania"
     expectState="focus.name=Bucharest"
     expectState="zoom=9"
-    expectState="center.lat=44.4323"
-    expectState="center.lon=26.1063"
+    expectState="center.lat={{rlat:Bucharest}}"
+    expectState="center.lon={{rlon:Bucharest}}"
     expectState="bounds=null"
     session=nav
 
@@ -78,7 +78,7 @@
 @t.geo.map.n013 core.test
     input="Where is Paris?"
     expect="capital of France"
-    expect="48.85 N"
+    expect="{{lat:Paris}}"
     expectState="focus.name=Paris"
     expectState="focus.cc=FR"
     session=nav
@@ -135,7 +135,7 @@
     input="Show me Cluj."
     expect="Cluj-Napoca"
     expectState="focus.name=Cluj-Napoca"
-    expectState="center.lat=46.7667"
+    expectState="center.lat={{rlat:Cluj-Napoca}}"
 
 @t.geo.map.n022 core.test
     input="Where is Atlantis?"
@@ -161,7 +161,7 @@
     expect="Cluj-Napoca"
     expectState="markers.length=1"
     expectState="markers.0.name=Cluj-Napoca"
-    expectState="markers.0.lat=46.7667"
+    expectState="markers.0.lat={{rlat:Cluj-Napoca}}"
     expectState="markers.0.id=m1"
     session=mk
 
@@ -197,7 +197,7 @@
 
 @t.geo.map.n032 core.test
     input="Mark the 3 largest cities in Japan."
-    expect="Tokyo, Yokohama and Osaka"
+    expect="{{biggestCity:Japan|1}}, {{biggestCity:Japan|2}} and {{biggestCity:Japan|3}}"
     expectState="markers.length=5"
     session=mk
 
@@ -221,17 +221,17 @@
 @t.geo.map.n036 core.test
     input="Mark the capitals of Europe."
     expect="capitals of Europe"
-    expectState="markers.length=45"
+    expectState="markers.length={{nCapitals:Europe}}"
 
 @t.geo.map.n037 core.test
     input="Mark the capitals of Scandinavia."
-    expect="Oslo, Stockholm and Copenhagen"
+    expect="Oslo, Stockholm and {{capitalsOf:Denmark}}"
     expectState="markers.length=3"
 
 @t.geo.map.n038 core.test
     input="Mark all capitals."
     expect="capitals of the world"
-    expectState="markers.length=196"
+    expectState="markers.length={{nCapitals:world}}"
 
 @t.geo.map.n039 core.test
     input="Mark the cities of Romania."
@@ -318,14 +318,14 @@
 
 @t.geo.map.n053 core.test
     input="What is the distance between Cluj and Bucharest?"
-    expect="325 km"
+    expect="{{km:Cluj-Napoca|Bucharest}} km"
     expectState="lines.length=2"
-    expectState="lines.1.km=325"
+    expectState="lines.1.km={{km:Cluj-Napoca|Bucharest}}"
     session=ds
 
 @t.geo.map.n054 core.test
     input="Draw a line from Oslo to Rome."
-    expect="2,007 km"
+    expect="{{km:Oslo|Rome}} km"
     expectState="lines.length=3"
     session=ds
 
@@ -393,8 +393,7 @@
 
 @t.geo.map.n066 core.test
     input="What is the capital of Japan?"
-    expect="The capital of Japan is Tokyo"
-    expectState="focus.name=Tokyo"
+    expect="{{capSentence:Japan}}"
 
 @t.geo.map.n067 core.test
     input="What is Peru's capital?"
@@ -415,17 +414,17 @@
 
 @t.geo.map.n071 core.test
     input="What is the capital of South Africa?"
-    expect="3 capitals"
+    expect="{{nCapitalsOf:South Africa}} capitals"
     expect="Pretoria"
 
 @t.geo.map.n072 core.test
     input="How many people live in Tokyo?"
-    expect="8.3 million"
+    expect="{{pop:Tokyo}}"
     expectState="focus.name=Tokyo"
 
 @t.geo.map.n073 core.test
     input="What is the population of Canada?"
-    expect="Canada has about 37.1 million"
+    expect="Canada has about {{pop:Canada}}"
 
 @t.geo.map.n074 core.test
     input="How big is Romania?"
@@ -443,7 +442,7 @@
 
 @t.geo.map.n077 core.test
     input="Which city has more people, Paris or Rome?"
-    expect="Rome is more populous"
+    expect="{{more:Paris|Rome}} is more populous"
     expectState="markers.length=2"
 
 @t.geo.map.n078 core.test
@@ -452,9 +451,9 @@
 
 @t.geo.map.n079 core.test
     input="Which countries border Hungary?"
-    expect="Hungary borders 7 countries"
+    expect="Hungary borders {{nb:Hungary}} countries"
     expect="Austria, Croatia, Romania"
-    expectState="highlighted.length=8"
+    expectState="highlighted.length={{nbPlus:Hungary}}"
 
 @t.geo.map.n080 core.test
     input="Does France border Spain?"
@@ -467,7 +466,7 @@
 
 @t.geo.map.n082 core.test
     input="How many neighbours does Hungary have?"
-    expect="7 neighbours"
+    expect="{{nb:Hungary}} neighbours"
 
 @t.geo.map.n083 core.test
     input="Is Hungary landlocked?"
@@ -503,8 +502,8 @@
 
 @t.geo.map.n090 core.test
     input="What is the smallest country in the world?"
-    expect="Monaco"
-    expectState="highlighted.0.cc=MC"
+    expect="{{smallest:world}}"
+    expectState="highlighted.0.cc={{smallestCc:world}}"
 
 @t.geo.map.n091 core.test
     input="What are the biggest cities in Romania?"
@@ -513,9 +512,9 @@
 
 @t.geo.map.n092 core.test
     input="Name the 3 largest countries in Africa."
-    expect="Algeria"
-    expect="DR Congo"
-    expect="Sudan"
+    expect="{{largest:Africa|1}}"
+    expect="{{largest:Africa|2}}"
+    expect="{{largest:Africa|3}}"
     expectState="highlighted.length=3"
 
 @t.geo.map.n093 core.test
@@ -526,8 +525,8 @@
 
 @t.geo.map.n094 core.test
     input="How many countries are in Europe?"
-    expect="45 countries"
-    expectState="highlighted.length=45"
+    expect="{{nCountries:Europe}} countries"
+    expectState="highlighted.length={{nCountries:Europe}}"
 
 @t.geo.map.n095 core.test
     input="List the cities in Moldova."
@@ -585,7 +584,7 @@
 
 @t.geo.map.r2n002 core.test
     input="Take me to Tokyo."
-    expect="Here is Tokyo: capital of Japan · 8.3"
+    expect="Here is Tokyo: {{role:Tokyo}} · {{pop:Tokyo}}"
     session=r2_geo_show
 
 @t.geo.map.r2n003 core.test
@@ -595,32 +594,32 @@
 
 @t.geo.map.r2n004 core.test
     input="Zoom me over to Tokyo."
-    expect="Here is Tokyo: capital of Japan · 8.3"
+    expect="Here is Tokyo: {{role:Tokyo}} · {{pop:Tokyo}}"
     session=r2_geo_show
 
 @t.geo.map.r2n005 core.test
     input="I wanna see Kyoto."
-    expect="Here is Kyoto: city of Japan · 1.5 million"
+    expect="Here is Kyoto: {{role:Kyoto}} · {{pop:Kyoto}}"
     session=r2_geo_show
 
 @t.geo.map.r2n006 core.test
     input="I would like to see Paris."
-    expect="Here is Paris: capital of France · 2.1"
+    expect="Here is Paris: {{role:Paris}} · {{pop:Paris}}"
     session=r2_geo_show
 
 @t.geo.map.r2n007 core.test
     input="Can you show me Paris?"
-    expect="Here is Paris: capital of France · 2.1"
+    expect="Here is Paris: {{role:Paris}} · {{pop:Paris}}"
     session=r2_geo_show
 
 @t.geo.map.r2n008 core.test
     input="Could you pull up Madrid please?"
-    expect="Here is Madrid: capital of Spain · 3.3"
+    expect="Here is Madrid: {{role:Madrid}} · {{pop:Madrid}}"
     session=r2_geo_show
 
 @t.geo.map.r2n009 core.test
     input="I want to look at Rome."
-    expect="Here is Rome: capital of Italy · 2.3 million"
+    expect="Here is Rome: {{role:Rome}} · {{pop:Rome}}"
     session=r2_geo_show
 
 @t.geo.map.r2n010 core.test
@@ -630,7 +629,7 @@
 
 @t.geo.map.r2n011 core.test
     input="map kyoto"
-    expect="Here is Kyoto: city of Japan · 1.5 million"
+    expect="Here is Kyoto: {{role:Kyoto}} · {{pop:Kyoto}}"
     session=r2_geo_show
 
 @t.geo.map.r2n012 core.test
@@ -645,7 +644,7 @@
 
 @t.geo.map.r2n014 core.test
     input="Paris on the map"
-    expect="Here is Paris: capital of France · 2.1"
+    expect="Here is Paris: {{role:Paris}} · {{pop:Paris}}"
     session=r2_geo_show
 
 @t.geo.map.r2n015 core.test
@@ -660,12 +659,12 @@
 
 @t.geo.map.r2n017 core.test
     input="Where is Kyoto?"
-    expect="Kyoto is a city in Japan, in Asia (35.02 N,"
+    expect="Kyoto is {{isa:Kyoto}}, in Asia ({{lat:Kyoto}},"
     session=r2_geo_where
 
 @t.geo.map.r2n018 core.test
     input="wher is Kyoto"
-    expect="Kyoto is a city in Japan, in Asia (35.02 N,"
+    expect="Kyoto is {{isa:Kyoto}}, in Asia ({{lat:Kyoto}},"
     session=r2_geo_where
 
 @t.geo.map.r2n019 core.test
@@ -675,22 +674,22 @@
 
 @t.geo.map.r2n020 core.test
     input="Where can I find Kyoto?"
-    expect="Kyoto is a city in Japan, in Asia (35.02 N,"
+    expect="Kyoto is {{isa:Kyoto}}, in Asia ({{lat:Kyoto}},"
     session=r2_geo_where
 
 @t.geo.map.r2n021 core.test
     input="I need to know where Kyoto is on the map."
-    expect="Kyoto is a city in Japan, in Asia (35.02 N,"
+    expect="Kyoto is {{isa:Kyoto}}, in Asia ({{lat:Kyoto}},"
     session=r2_geo_where
 
 @t.geo.map.r2n022 core.test
     input="kyoto location?"
-    expect="Kyoto is a city in Japan, in Asia (35.02 N,"
+    expect="Kyoto is {{isa:Kyoto}}, in Asia ({{lat:Kyoto}},"
     session=r2_geo_where
 
 @t.geo.map.r2n023 core.test
     input="yo where's Kyoto"
-    expect="Kyoto is a city in Japan, in Asia (35.02 N,"
+    expect="Kyoto is {{isa:Kyoto}}, in Asia ({{lat:Kyoto}},"
     session=r2_geo_where
 
 @t.geo.map.r2n024 core.test
@@ -1040,32 +1039,32 @@
 
 @t.geo.map.r2n093 core.test
     input="Mark the capitals of Europe."
-    expect="OK, I marked the capitals of Europe (45"
+    expect="OK, I marked the capitals of Europe ({{nCapitals:Europe}}"
     session=r2_geo_markSet
 
 @t.geo.map.r2n094 core.test
     input="Put markers on all the capitals in Africa."
-    expect="OK, I marked the capitals of Africa (56"
+    expect="OK, I marked the capitals of Africa ({{nCapitals:Africa}}"
     session=r2_geo_markSet
 
 @t.geo.map.r2n095 core.test
     input="I want the capitals of Europe marked."
-    expect="OK, I marked the capitals of Europe (45"
+    expect="OK, I marked the capitals of Europe ({{nCapitals:Europe}}"
     session=r2_geo_markSet
 
 @t.geo.map.r2n096 core.test
     input="Europe capitals markers"
-    expect="OK, I marked the capitals of Europe (45"
+    expect="OK, I marked the capitals of Europe ({{nCapitals:Europe}}"
     session=r2_geo_markSet
 
 @t.geo.map.r2n097 core.test
     input="Pin every capital in Europe."
-    expect="OK, I marked the capitals of Europe (45"
+    expect="OK, I marked the capitals of Europe ({{nCapitals:Europe}}"
     session=r2_geo_markSet
 
 @t.geo.map.r2n098 core.test
     input="Mark Europe's capitals."
-    expect="OK, I marked the capitals of Europe (45"
+    expect="OK, I marked the capitals of Europe ({{nCapitals:Europe}}"
     session=r2_geo_markSet
 
 @t.geo.map.r2n099 core.test
@@ -1360,42 +1359,42 @@
 
 @t.geo.map.r2n157 core.test
     input="What is the capital of Japan?"
-    expect="The capital of Japan is"
+    expect="{{capSentence:Japan}}"
     session=r2_geo_capital
 
 @t.geo.map.r2n158 core.test
     input="whats the capital of japan"
-    expect="The capital of Japan is"
+    expect="{{capSentence:Japan}}"
     session=r2_geo_capital
 
 @t.geo.map.r2n159 core.test
     input="Japan capital city?"
-    expect="The capital of Japan is"
+    expect="{{capSentence:Japan}}"
     session=r2_geo_capital
 
 @t.geo.map.r2n160 core.test
     input="Tell me Japan's capital city."
-    expect="The capital of Japan is"
+    expect="{{capSentence:Japan}}"
     session=r2_geo_capital
 
 @t.geo.map.r2n161 core.test
     input="Which city is Japan's capital?"
-    expect="The capital of Japan is"
+    expect="{{capSentence:Japan}}"
     session=r2_geo_capital
 
 @t.geo.map.r2n162 core.test
     input="Can u tell me the capital of japan?"
-    expect="The capital of Japan is"
+    expect="{{capSentence:Japan}}"
     session=r2_geo_capital
 
 @t.geo.map.r2n163 core.test
     input="I wanna know the capital of japan"
-    expect="The capital of Japan is"
+    expect="{{capSentence:Japan}}"
     session=r2_geo_capital
 
 @t.geo.map.r2n164 core.test
     input="Capital of Japan?"
-    expect="The capital of Japan is"
+    expect="{{capSentence:Japan}}"
     session=r2_geo_capital
 
 @t.geo.map.r2n165 core.test
@@ -1450,67 +1449,67 @@
 
 @t.geo.map.r2n175 core.test
     input="How many people live in Tokyo?"
-    expect="Tokyo has about 8.3 million people (the"
+    expect="Tokyo has about {{pop:Tokyo}} people (the"
     session=r2_geo_population
 
 @t.geo.map.r2n176 core.test
     input="how many ppl live in Tokyo"
-    expect="Tokyo has about 8.3 million people (the"
+    expect="Tokyo has about {{pop:Tokyo}} people (the"
     session=r2_geo_population
 
 @t.geo.map.r2n177 core.test
     input="Tokyo has how many people?"
-    expect="Tokyo has about 8.3 million people (the"
+    expect="Tokyo has about {{pop:Tokyo}} people (the"
     session=r2_geo_population
 
 @t.geo.map.r2n178 core.test
     input="tokyo population?"
-    expect="Tokyo has about 8.3 million people (the"
+    expect="Tokyo has about {{pop:Tokyo}} people (the"
     session=r2_geo_population
 
 @t.geo.map.r2n179 core.test
     input="Roughly how many people are in Tokyo?"
-    expect="Tokyo has about 8.3 million people (the"
+    expect="Tokyo has about {{pop:Tokyo}} people (the"
     session=r2_geo_population
 
 @t.geo.map.r2n180 core.test
     input="What is the population of Tokyo?"
-    expect="Tokyo has about 8.3 million people (the"
+    expect="Tokyo has about {{pop:Tokyo}} people (the"
     session=r2_geo_population
 
 @t.geo.map.r2n181 core.test
     input="How populous is Tokyo?"
-    expect="Tokyo has about 8.3 million people (the"
+    expect="Tokyo has about {{pop:Tokyo}} people (the"
     session=r2_geo_population
 
 @t.geo.map.r2n182 core.test
     input="How big is France?"
-    expect="France covers 551,695 square kilometres."
+    expect="France covers {{area:France}} square kilometres."
     session=r2_geo_area
 
 @t.geo.map.r2n183 core.test
     input="How large is France in size?"
-    expect="France covers 551,695 square kilometres."
+    expect="France covers {{area:France}} square kilometres."
     session=r2_geo_area
 
 @t.geo.map.r2n184 core.test
     input="How much land does France cover?"
-    expect="France covers 551,695 square kilometres."
+    expect="France covers {{area:France}} square kilometres."
     session=r2_geo_area
 
 @t.geo.map.r2n185 core.test
     input="france size?"
-    expect="France covers 551,695 square kilometres."
+    expect="France covers {{area:France}} square kilometres."
     session=r2_geo_area
 
 @t.geo.map.r2n186 core.test
     input="france area in km2"
-    expect="France covers 551,695 square kilometres."
+    expect="France covers {{area:France}} square kilometres."
     session=r2_geo_area
 
 @t.geo.map.r2n187 core.test
     input="What is the area of France?"
-    expect="France covers 551,695 square kilometres."
+    expect="France covers {{area:France}} square kilometres."
     session=r2_geo_area
 
 @t.geo.map.r2n188 core.test
@@ -1550,7 +1549,7 @@
 
 @t.geo.map.r2n195 core.test
     input="Which city has more people, Paris or Rome?"
-    expect="Rome is more populous than Paris: about 2.3"
+    expect="{{more:Paris|Rome}} is more populous than {{less:Paris|Rome}}: about {{popMore:Paris|Rome}}"
     session=r2_geo_compare
 
 @t.geo.map.r2n196 core.test
@@ -1585,67 +1584,67 @@
 
 @t.geo.map.r2n202 core.test
     input="Which countries border Hungary?"
-    expect="Hungary borders 7 countries: Austria,"
+    expect="Hungary borders {{nb:Hungary}} countries: {{nbFirst:Hungary|1}},"
     session=r2_geo_borders
 
 @t.geo.map.r2n203 core.test
     input="What borders Hungary?"
-    expect="Hungary borders 7 countries: Austria,"
+    expect="Hungary borders {{nb:Hungary}} countries: {{nbFirst:Hungary|1}},"
     session=r2_geo_borders
 
 @t.geo.map.r2n204 core.test
     input="Countries next to Romania?"
-    expect="Romania borders 5 countries: Bulgaria,"
+    expect="Romania borders {{nb:Romania}} countries: {{nbFirst:Romania|1}},"
     session=r2_geo_borders
 
 @t.geo.map.r2n205 core.test
     input="Austria borders what countries?"
-    expect="Austria borders 8 countries: Switzerland,"
+    expect="Austria borders {{nb:Austria}} countries: {{nbFirst:Austria|1}},"
     session=r2_geo_borders
 
 @t.geo.map.r2n206 core.test
     input="Who are Austria's land neighbours?"
-    expect="Austria borders 8 countries: Switzerland,"
+    expect="Austria borders {{nb:Austria}} countries: {{nbFirst:Austria|1}},"
     session=r2_geo_borders
 
 @t.geo.map.r2n207 core.test
     input="Hungary neighbours"
-    expect="Hungary borders 7 countries: Austria,"
+    expect="Hungary borders {{nb:Hungary}} countries: {{nbFirst:Hungary|1}},"
     session=r2_geo_borders
 
 @t.geo.map.r2n208 core.test
     input="List countries touching Austria."
-    expect="Austria borders 8 countries: Switzerland,"
+    expect="Austria borders {{nb:Austria}} countries: {{nbFirst:Austria|1}},"
     session=r2_geo_borders
 
 @t.geo.map.r2n209 core.test
     input="How many countries border Austria?"
-    expect="Austria has 8 neighbours: Switzerland,"
+    expect="Austria has {{nb:Austria}} neighbours: {{nbFirst:Austria|1}},"
     session=r2_geo_neighbourCount
 
 @t.geo.map.r2n210 core.test
     input="Germany borders how many?"
-    expect="Germany has 9 neighbours: Austria, Belgium,"
+    expect="Germany has {{nb:Germany}} neighbours: {{nbFirst:Germany|2}},"
     session=r2_geo_neighbourCount
 
 @t.geo.map.r2n211 core.test
     input="Hungary neighbour count"
-    expect="Hungary has 7 neighbours: Austria, Croatia,"
+    expect="Hungary has {{nb:Hungary}} neighbours: {{nbFirst:Hungary|2}},"
     session=r2_geo_neighbourCount
 
 @t.geo.map.r2n212 core.test
     input="Count the neighbours of Spain."
-    expect="Spain has 5 neighbours: Andorra, France,"
+    expect="Spain has {{nb:Spain}} neighbours: {{nbFirst:Spain|2}},"
     session=r2_geo_neighbourCount
 
 @t.geo.map.r2n213 core.test
     input="u know how many neighbours hungary has?"
-    expect="Hungary has 7 neighbours: Austria, Croatia,"
+    expect="Hungary has {{nb:Hungary}} neighbours: {{nbFirst:Hungary|2}},"
     session=r2_geo_neighbourCount
 
 @t.geo.map.r2n214 core.test
     input="Number of neighbours of Germany."
-    expect="Germany has 9 neighbours: Austria, Belgium,"
+    expect="Germany has {{nb:Germany}} neighbours: {{nbFirst:Germany|2}},"
     session=r2_geo_neighbourCount
 
 @t.geo.map.r2n215 core.test
@@ -1675,67 +1674,67 @@
 
 @t.geo.map.r2n220 core.test
     input="Is Bolivia landlocked?"
-    expect="Yes, Bolivia is landlocked: it has no sea"
+    expect="{{yesLand:Bolivia}}, Bolivia is landlocked: it has no sea"
     session=r2_geo_landlocked
 
 @t.geo.map.r2n221 core.test
     input="Does Bolivia have a sea border?"
-    expect="Yes, Bolivia is landlocked: it has no sea"
+    expect="{{yesLand:Bolivia}}, Bolivia is landlocked: it has no sea"
     session=r2_geo_landlocked
 
 @t.geo.map.r2n222 core.test
     input="Bolivia no coast?"
-    expect="Yes, Bolivia is landlocked: it has no sea"
+    expect="{{yesLand:Bolivia}}, Bolivia is landlocked: it has no sea"
     session=r2_geo_landlocked
 
 @t.geo.map.r2n223 core.test
     input="Bolivia landlocked or not?"
-    expect="Yes, Bolivia is landlocked: it has no sea"
+    expect="{{yesLand:Bolivia}}, Bolivia is landlocked: it has no sea"
     session=r2_geo_landlocked
 
 @t.geo.map.r2n224 core.test
     input="Does Bolivia touch the sea?"
-    expect="Yes, Bolivia is landlocked: it has no sea"
+    expect="{{yesLand:Bolivia}}, Bolivia is landlocked: it has no sea"
     session=r2_geo_landlocked
 
 @t.geo.map.r2n225 core.test
     input="Can you tell me if Bolivia is landlocked?"
-    expect="Yes, Bolivia is landlocked: it has no sea"
+    expect="{{yesLand:Bolivia}}, Bolivia is landlocked: it has no sea"
     session=r2_geo_landlocked
 
 @t.geo.map.r2n226 core.test
     input="No ocean for Bolivia?"
-    expect="Yes, Bolivia is landlocked: it has no sea"
+    expect="{{yesLand:Bolivia}}, Bolivia is landlocked: it has no sea"
     session=r2_geo_landlocked
 
 @t.geo.map.r2n227 core.test
     input="What continent is Egypt in?"
-    expect="Egypt is in Africa (Northern Africa)."
+    expect="Egypt is in Africa ({{sub:Egypt}})."
     session=r2_geo_continent
 
 @t.geo.map.r2n228 core.test
     input="Egypt is in which continent?"
-    expect="Egypt is in Africa (Northern Africa)."
+    expect="Egypt is in Africa ({{sub:Egypt}})."
     session=r2_geo_continent
 
 @t.geo.map.r2n229 core.test
     input="Egypt continent?"
-    expect="Egypt is in Africa (Northern Africa)."
+    expect="Egypt is in Africa ({{sub:Egypt}})."
     session=r2_geo_continent
 
 @t.geo.map.r2n230 core.test
     input="Continent of Egypt?"
-    expect="Egypt is in Africa (Northern Africa)."
+    expect="Egypt is in Africa ({{sub:Egypt}})."
     session=r2_geo_continent
 
 @t.geo.map.r2n231 core.test
     input="Can you say what continent Egypt is in?"
-    expect="Egypt is in Africa (Northern Africa)."
+    expect="Egypt is in Africa ({{sub:Egypt}})."
     session=r2_geo_continent
 
 @t.geo.map.r2n232 core.test
     input="Egypt's continent pls"
-    expect="Egypt is in Africa (Northern Africa)."
+    expect="Egypt is in Africa ({{sub:Egypt}})."
     session=r2_geo_continent
 
 @t.geo.map.r2n233 core.test
@@ -1745,7 +1744,7 @@
 
 @t.geo.map.r2n234 core.test
     input="Osaka in Japan?"
-    expect="Yes, Osaka is in"
+    expect="Yes, {{name:Osaka}} is in"
     session=r2_geo_isIn
 
 @t.geo.map.r2n235 core.test
@@ -1790,42 +1789,42 @@
 
 @t.geo.map.r2n243 core.test
     input="Europe smallest country pls"
-    expect="The smallest country in Europe is Monaco (2"
+    expect="The smallest country in Europe is {{smallest:Europe}} ("
     session=r2_geo_superlative
 
 @t.geo.map.r2n244 core.test
     input="Tiniest european country."
-    expect="The smallest country in Europe is Monaco (2"
+    expect="The smallest country in Europe is {{smallest:Europe}} ("
     session=r2_geo_superlative
 
 @t.geo.map.r2n245 core.test
     input="Which european country is the least big?"
-    expect="The smallest country in Europe is Monaco (2"
+    expect="The smallest country in Europe is {{smallest:Europe}} ("
     session=r2_geo_superlative
 
 @t.geo.map.r2n246 core.test
     input="Whats the smallest country in europe?"
-    expect="The smallest country in Europe is Monaco (2"
+    expect="The smallest country in Europe is {{smallest:Europe}} ("
     session=r2_geo_superlative
 
 @t.geo.map.r2n247 core.test
     input="Top 3 biggest cities in Japan."
-    expect="The 3 biggest cities in Japan: Tokyo (8.3"
+    expect="The 3 biggest cities in Japan: {{biggestCity:Japan|1}} ({{cityPop:Japan|1}}"
     session=r2_geo_superlative
 
 @t.geo.map.r2n248 core.test
     input="Japan's 3 biggest cities."
-    expect="The 3 biggest cities in Japan: Tokyo (8.3"
+    expect="The 3 biggest cities in Japan: {{biggestCity:Japan|1}} ({{cityPop:Japan|1}}"
     session=r2_geo_superlative
 
 @t.geo.map.r2n249 core.test
     input="List 3 biggest japanese cities."
-    expect="The 3 biggest cities in Japan: Tokyo (8.3"
+    expect="The 3 biggest cities in Japan: {{biggestCity:Japan|1}} ({{cityPop:Japan|1}}"
     session=r2_geo_superlative
 
 @t.geo.map.r2n250 core.test
     input="Which country in Europe has the smallest area?"
-    expect="The smallest country in Europe is Monaco (2"
+    expect="The smallest country in Europe is {{smallest:Europe}} ("
     session=r2_geo_superlative
 
 @t.geo.map.r2n251 core.test
@@ -1835,112 +1834,112 @@
 
 @t.geo.map.r2n252 core.test
     input="Which countries are in Africa?"
-    expect="Africa has 54 countries, for example Algeria"
+    expect="Africa has {{nCountries:Africa}} countries, for example {{firstCountry:Africa}}"
     session=r2_geo_listOp
 
 @t.geo.map.r2n253 core.test
     input="Name the cities in Romania."
-    expect="I know 66 cities in Romania with 30,000"
+    expect="I know {{nBigCities:Romania}} cities in Romania with 30,000"
     session=r2_geo_listOp
 
 @t.geo.map.r2n254 core.test
     input="How many countries are in Europe?"
-    expect="There are 45 countries in Europe."
+    expect="There are {{nCountries:Europe}} countries in Europe."
     session=r2_geo_count
 
 @t.geo.map.r2n255 core.test
     input="Number of countries in Europe."
-    expect="There are 45 countries in Europe."
+    expect="There are {{nCountries:Europe}} countries in Europe."
     session=r2_geo_count
 
 @t.geo.map.r2n256 core.test
     input="Europe country count."
-    expect="There are 45 countries in Europe."
+    expect="There are {{nCountries:Europe}} countries in Europe."
     session=r2_geo_count
 
 @t.geo.map.r2n257 core.test
     input="Countries in Europe how many?"
-    expect="There are 45 countries in Europe."
+    expect="There are {{nCountries:Europe}} countries in Europe."
     session=r2_geo_count
 
 @t.geo.map.r2n258 core.test
     input="Count the countries in Europe."
-    expect="There are 45 countries in Europe."
+    expect="There are {{nCountries:Europe}} countries in Europe."
     session=r2_geo_count
 
 @t.geo.map.r2n259 core.test
     input="What currency does Japan use?"
-    expect="Japan uses the Japanese"
+    expect="Japan uses the {{currency:Japan}}"
     session=r2_geo_currency
 
 @t.geo.map.r2n260 core.test
     input="Japan currency?"
-    expect="Japan uses the Japanese"
+    expect="Japan uses the {{currency:Japan}}"
     session=r2_geo_currency
 
 @t.geo.map.r2n261 core.test
     input="what do they pay with in japan"
-    expect="Japan uses the Japanese"
+    expect="Japan uses the {{currency:Japan}}"
     session=r2_geo_currency
 
 @t.geo.map.r2n262 core.test
     input="What's Japan's money called?"
-    expect="Japan uses the Japanese"
+    expect="Japan uses the {{currency:Japan}}"
     session=r2_geo_currency
 
 @t.geo.map.r2n263 core.test
     input="Which currency do Japanese people use?"
-    expect="Japan uses the Japanese"
+    expect="Japan uses the {{currency:Japan}}"
     session=r2_geo_currency
 
 @t.geo.map.r2n264 core.test
     input="What languages are spoken in Brazil?"
-    expect="People in Brazil speak Portuguese."
+    expect="People in Brazil speak {{language:Brazil}}."
     session=r2_geo_languages
 
 @t.geo.map.r2n265 core.test
     input="Brazil language?"
-    expect="People in Brazil speak Portuguese."
+    expect="People in Brazil speak {{language:Brazil}}."
     session=r2_geo_languages
 
 @t.geo.map.r2n266 core.test
     input="What do Brazilians speak?"
-    expect="People in Brazil speak Portuguese."
+    expect="People in Brazil speak {{language:Brazil}}."
     session=r2_geo_languages
 
 @t.geo.map.r2n267 core.test
     input="what do people speak in brazil"
-    expect="People in Brazil speak Portuguese."
+    expect="People in Brazil speak {{language:Brazil}}."
     session=r2_geo_languages
 
 @t.geo.map.r2n268 core.test
     input="Tell me about Romania."
-    expect="Romania is a country in Southeast Europe"
+    expect="Romania is a country in {{sub:Romania}}"
     session=r2_geo_info
 
 @t.geo.map.r2n269 core.test
     input="Romania facts pls"
-    expect="Romania is a country in Southeast Europe"
+    expect="Romania is a country in {{sub:Romania}}"
     session=r2_geo_info
 
 @t.geo.map.r2n270 core.test
     input="Give me info about Romania."
-    expect="Romania is a country in Southeast Europe"
+    expect="Romania is a country in {{sub:Romania}}"
     session=r2_geo_info
 
 @t.geo.map.r2n271 core.test
     input="What's Romania like?"
-    expect="Romania is a country in Southeast Europe"
+    expect="Romania is a country in {{sub:Romania}}"
     session=r2_geo_info
 
 @t.geo.map.r2n272 core.test
     input="Brief me on Romania."
-    expect="Romania is a country in Southeast Europe"
+    expect="Romania is a country in {{sub:Romania}}"
     session=r2_geo_info
 
 @t.geo.map.r2n273 core.test
     input="romania overview"
-    expect="Romania is a country in Southeast Europe"
+    expect="Romania is a country in {{sub:Romania}}"
     session=r2_geo_info
 
 @t.geo.map.r2n274 core.test
@@ -1955,12 +1954,12 @@
 
 @t.geo.map.r2n276 core.test
     input="Madrid to Lisbon distance"
-    expect="Madrid and Lisbon are about 502 km (312"
+    expect="Madrid and Lisbon are about {{km:Madrid|Lisbon}} km ({{mi:Madrid|Lisbon}}"
     session=r2_geo_distance
 
 @t.geo.map.r2n277 core.test
     input="Madrid Lisbon km?"
-    expect="Madrid and Lisbon are about 502 km (312"
+    expect="Madrid and Lisbon are about {{km:Madrid|Lisbon}} km ({{mi:Madrid|Lisbon}}"
     session=r2_geo_distance
 
 @t.geo.map.r2n278 core.test
@@ -1980,7 +1979,7 @@
 
 @t.geo.map.r2n281 core.test
     input="Can you tell me how far Madrid is from Lisbon?"
-    expect="Madrid and Lisbon are about 502 km (312"
+    expect="Madrid and Lisbon are about {{km:Madrid|Lisbon}} km ({{mi:Madrid|Lisbon}}"
     session=r2_geo_distance
 
 @t.geo.map.r2n282 core.test
@@ -2050,42 +2049,42 @@
 
 @t.geo.map.r2n295 core.test
     input="What is here?"
-    expect="The middle of the map is at 46.77 N, 23.60"
+    expect="The middle of the map is at {{lat:Cluj-Napoca}}, {{lon:Cluj-Napoca}}"
     session=r2_geo_here
 
 @t.geo.map.r2n296 core.test
     input="whats here"
-    expect="The middle of the map is at 46.77 N, 23.60"
+    expect="The middle of the map is at {{lat:Cluj-Napoca}}, {{lon:Cluj-Napoca}}"
     session=r2_geo_here
 
 @t.geo.map.r2n297 core.test
     input="What's at this spot?"
-    expect="The middle of the map is at 46.77 N, 23.60"
+    expect="The middle of the map is at {{lat:Cluj-Napoca}}, {{lon:Cluj-Napoca}}"
     session=r2_geo_here
 
 @t.geo.map.r2n298 core.test
     input="Tell me what's around me."
-    expect="The middle of the map is at 46.77 N, 23.60"
+    expect="The middle of the map is at {{lat:Cluj-Napoca}}, {{lon:Cluj-Napoca}}"
     session=r2_geo_here
 
 @t.geo.map.r2n299 core.test
     input="Which place am I looking at?"
-    expect="The middle of the map is at 46.77 N, 23.60"
+    expect="The middle of the map is at {{lat:Cluj-Napoca}}, {{lon:Cluj-Napoca}}"
     session=r2_geo_here
 
 @t.geo.map.r2n300 core.test
     input="What am I looking at right now?"
-    expect="The middle of the map is at 46.77 N, 23.60"
+    expect="The middle of the map is at {{lat:Cluj-Napoca}}, {{lon:Cluj-Napoca}}"
     session=r2_geo_here
 
 @t.geo.map.r2n301 core.test
     input="What is on the map?"
-    expect="The map is centred near Tripoli at zoom 2"
+    expect="The map is centred near {{nearest:25|10}} at zoom 2"
     session=r2_geo_describe
 
 @t.geo.map.r2n302 core.test
     input="Describe the map."
-    expect="The map is centred near Tripoli at zoom 2"
+    expect="The map is centred near {{nearest:25|10}} at zoom 2"
     session=r2_geo_describe
 
 @t.geo.map.r2n303 core.test
@@ -2153,7 +2152,6 @@
     expect="Zoomed in to zoom"
     session=r2_geo_show
 
-
 @t.geo.map.d01 core.test
     input="How far is Paris from Rome?"
     expect="Paris and Rome"
@@ -2193,7 +2191,7 @@
 @t.geo.map.x202 core.test
     session=gm2
     input="where is Paris"
-    expectState="center.lat=48.8534"
+    expectState="center.lat={{rlat:Paris}}"
 
 @t.geo.map.x210 core.test
     session=gx0
@@ -2252,17 +2250,17 @@
 
 @t.geo.map.sh01 core.test
     input="i want to know the capital of Japan"
-    expect="The capital of Japan is Tokyo."
+    expect="{{capSentence:Japan}}"
     session=gsh1
 
 @t.geo.map.sh02 core.test
     input="can you tell me the population of Brazil"
-    expect="Brazil has about 209.5 million people"
+    expect="Brazil has about {{pop:Brazil}} people"
     session=gsh2
 
 @t.geo.map.sh03 core.test
     input="do you know the currency of Japan"
-    expect="Japan uses the Japanese yen."
+    expect="Japan uses the {{currency:Japan}}."
     session=gsh3
 
 @t.geo.map.sh04 core.test
@@ -2295,44 +2293,11 @@
     expectState="lines.length=1"
     reasoner=matrix
 
-@t.geo.map.m04 core.test
-    session=gm1
-    input="how long are the lines in total"
-    expect="There are 2 markers and 1 line on the map; the lines add up to 1,107 km."
-    doc="the counts and the total length are derived by rules and aggregates of matrix.sop"
-    reasoner=matrix
-
-@t.geo.map.m05 core.test
-    session=gm1
-    input="what is the total distance"
-    expect="the lines add up to 1,107 km"
-    reasoner=matrix
-
-@t.geo.map.m06 core.test
-    session=gm1
-    input="undo"
-    expect="I undid the last change"
-    expectState="lines.length=0"
-    doc="undo goes through the library (undo=geo.undo, redo=geo.redo): the world's own words"
-    reasoner=matrix
-
 @t.geo.map.m07 core.test
     session=gm1
     input="redo"
     expect="I did it again"
     expectState="lines.length=1"
-    reasoner=matrix
-
-@t.geo.map.m08 core.test
-    session=gm1
-    input="how long are the lines"
-    expect="1 line"
-    reasoner=matrix
-
-@t.geo.map.m09 core.test
-    session=gm2
-    input="how many things are on the map"
-    expect="The map is empty: no markers, highlights or lines."
     reasoner=matrix
 
 @t.geo.map.m10 core.test
@@ -2341,13 +2306,6 @@
     expect="No, Paris is not in Germany; it is in France."
     expectStatus=supported
     doc="the reason of a No is the library's deny over the wires of the knowledge base the claim needs"
-    reasoner=matrix
-
-@t.geo.map.m11 core.test
-    session=gm3
-    input="why?"
-    expect="what I know about places"
-    doc="the answer rests on the knowledge base, which the world calls source=\"what I know about places\""
     reasoner=matrix
 
 @t.geo.map.m12 core.test

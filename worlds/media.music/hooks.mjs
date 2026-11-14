@@ -184,7 +184,8 @@ function decline({ action, mode, roles = {}, tab, text, state }) {
     if (mode !== 'play' && !['song', 'chord', 'scale', 'note', 'melody', 'seq', 'current', 'random', 'instrument'].includes(rd.type) && !R.readSetting(said)) return false;   // a verb of selection ("open the music tab", "pick a table") is the music's only for a thing it can play
     const ok = !['unknown', 'none'].includes(rd.type) && rd.type !== 'seq';
     if (rd.type === 'seq') return on || rd.args.text.split(/\s+/).length > 1;
-    if (rd.type === 'song' || rd.type === 'chord' || rd.type === 'scale') return true;
+    if (rd.type === 'song') return 'focus';   // a title of the library is the music's: it does not yield to another world's "give me X"
+    if (rd.type === 'chord' || rd.type === 'scale') return true;
     if (rd.type === 'note') return 'focus';   // ("Play B3" is also a move of tic-tac-toe: the playNote operation hands it over when the music tab is not open; the routing decides)
     if (ok) return on || MUSICAL.test(String(text ?? ''));
     // an unknown title on the music tab is a song the library does not have ("play Yesterday"), unless it is a move of the board ("play the queen to d5": the pieces and squares are another world's words)

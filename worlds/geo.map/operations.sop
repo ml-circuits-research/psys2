@@ -1,300 +1,254 @@
-@op.geo.map.show core.operation
+@gen.geo.map.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
+
+@op.geo.map.showPlace core.operation
     impl=showPlace
     semantics=action
     action=geo.show
-    doc="Map action geo.show: see ops.mjs"
-
-@op.geo.map.where core.operation
-    impl=where
-    semantics=action
-    action=geo.where
-    doc="Map action geo.where: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: showPlace)."
 
 @op.geo.map.coords core.operation
     impl=coords
     semantics=action
     action=geo.coords
-    doc="Map action geo.coords: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: coords)."
 
 @op.geo.map.zoom core.operation
     impl=zoom
     semantics=action
     action=geo.zoom
-    doc="Map action geo.zoom: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: zoom)."
 
 @op.geo.map.zoomTo core.operation
     impl=zoomTo
     semantics=action
     action=geo.zoomTo
-    doc="Map action geo.zoomTo: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: zoomTo)."
 
 @op.geo.map.pan core.operation
     impl=pan
     semantics=action
     action=geo.pan
-    doc="Map action geo.pan: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: pan)."
 
 @op.geo.map.world core.operation
     impl=world
     semantics=action
     action=geo.world
-    doc="Map action geo.world: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: world)."
 
 @op.geo.map.reset core.operation
     impl=reset
     semantics=action
     action=geo.reset
-    doc="Map action geo.reset: see ops.mjs"
-
-@op.geo.map.clearAll core.operation
-    impl=clearAll
-    semantics=action
-    action=geo.clearAll
-    doc="Map action geo.clearAll: see ops.mjs"
-
-@op.geo.map.mark core.operation
-    impl=mark
-    semantics=action
-    action=geo.mark
-    doc="Map action geo.mark: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: reset)."
 
 @op.geo.map.markHere core.operation
     impl=markHere
     semantics=action
     action=geo.markHere
-    doc="Map action geo.markHere: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: markHere)."
 
 @op.geo.map.markSet core.operation
     impl=markSet
     semantics=action
     action=geo.markSet
-    doc="Map action geo.markSet: see ops.mjs"
-
-@op.geo.map.clearMarkers core.operation
-    impl=clearMarkers
-    semantics=action
-    action=geo.clearMarkers
-    doc="Map action geo.clearMarkers: see ops.mjs"
-
-@op.geo.map.highlight core.operation
-    impl=highlightPlaces
-    semantics=action
-    action=geo.highlight
-    doc="Map action geo.highlight: see ops.mjs"
-
-@op.geo.map.clearHighlight core.operation
-    impl=clearHighlight
-    semantics=action
-    action=geo.clearHighlight
-    doc="Map action geo.clearHighlight: see ops.mjs"
-
-@op.geo.map.clearLines core.operation
-    impl=clearLines
-    semantics=action
-    action=geo.clearLines
-    doc="Map action geo.clearLines: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: markSet)."
 
 @op.geo.map.layer core.operation
     impl=layer
     semantics=action
     action=geo.layer
-    doc="Map action geo.layer: see ops.mjs"
-
-@op.geo.map.capital core.operation
-    impl=capital
-    semantics=action
-    action=geo.capital
-    doc="Map action geo.capital: see ops.mjs"
-
-@op.geo.map.capitalOfWhich core.operation
-    impl=capitalOfWhich
-    semantics=action
-    action=geo.capitalOfWhich
-    doc="Map action geo.capitalOfWhich: see ops.mjs"
-
-@op.geo.map.isCapital core.operation
-    impl=isCapital
-    semantics=action
-    action=geo.isCapital
-    doc="Map action geo.isCapital: see ops.mjs"
-
-@op.geo.map.population core.operation
-    impl=population
-    semantics=action
-    action=geo.population
-    doc="Map action geo.population: see ops.mjs"
-
-@op.geo.map.area core.operation
-    impl=area
-    semantics=action
-    action=geo.area
-    doc="Map action geo.area: see ops.mjs"
-
-@op.geo.map.compare core.operation
-    impl=compare
-    semantics=action
-    action=geo.compare
-    doc="Map action geo.compare: see ops.mjs"
-
-@op.geo.map.compareYN core.operation
-    impl=compareYN
-    semantics=action
-    action=geo.compareYN
-    doc="Map action geo.compareYN: see ops.mjs"
-
-@op.geo.map.borders core.operation
-    impl=borders
-    semantics=action
-    action=geo.borders
-    doc="Map action geo.borders: see ops.mjs"
-
-@op.geo.map.neighbourCount core.operation
-    impl=neighbourCount
-    semantics=action
-    action=geo.neighbourCount
-    doc="Map action geo.neighbourCount: see ops.mjs"
-
-@op.geo.map.borderYN core.operation
-    impl=borderYN
-    semantics=action
-    action=geo.borderYN
-    doc="Map action geo.borderYN: see ops.mjs"
-
-@op.geo.map.landlocked core.operation
-    impl=landlocked
-    semantics=action
-    action=geo.landlocked
-    doc="Map action geo.landlocked: see ops.mjs"
-
-@op.geo.map.continent core.operation
-    impl=continent
-    semantics=action
-    action=geo.continent
-    doc="Map action geo.continent: see ops.mjs"
-
-@op.geo.map.isIn core.operation
-    impl=isIn
-    semantics=action
-    action=geo.isIn
-    doc="Map action geo.isIn: see ops.mjs"
-
-@op.geo.map.country core.operation
-    impl=country
-    semantics=action
-    action=geo.country
-    doc="Map action geo.country: see ops.mjs"
-
-@op.geo.map.superlative core.operation
-    impl=superlative
-    semantics=action
-    action=geo.superlative
-    doc="Map action geo.superlative: see ops.mjs"
-
-@op.geo.map.listOp core.operation
-    impl=listOp
-    semantics=action
-    action=geo.listOp
-    doc="Map action geo.listOp: see ops.mjs"
-
-@op.geo.map.count core.operation
-    impl=count
-    semantics=action
-    action=geo.count
-    doc="Map action geo.count: see ops.mjs"
-
-@op.geo.map.currency core.operation
-    impl=currency
-    semantics=action
-    action=geo.currency
-    doc="Map action geo.currency: see ops.mjs"
-
-@op.geo.map.languages core.operation
-    impl=languages
-    semantics=action
-    action=geo.languages
-    doc="Map action geo.languages: see ops.mjs"
-
-@op.geo.map.info core.operation
-    impl=info
-    semantics=action
-    action=geo.info
-    doc="Map action geo.info: see ops.mjs"
-
-@op.geo.map.distance core.operation
-    impl=distance
-    semantics=action
-    action=geo.distance
-    doc="Map action geo.distance: see ops.mjs"
-
-@op.geo.map.distanceFrom core.operation
-    impl=distanceFrom
-    semantics=action
-    action=geo.distanceFrom
-    doc="Map action geo.distanceFrom: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: layer)."
 
 @op.geo.map.locate core.operation
     impl=locate
     semantics=action
     action=geo.locate
-    doc="Map action geo.locate: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: locate)."
 
 @op.geo.map.here core.operation
     impl=here
     semantics=action
     action=geo.here
-    doc="Map action geo.here: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: here)."
 
-@op.geo.map.describe core.operation
-    impl=describe
+@op.geo.map.distance core.operation
+    impl=distance
     semantics=action
-    action=geo.describe
-    doc="Map action geo.describe: see ops.mjs"
+    action=geo.distance
+    doc="An operation of this world that is not an act (own.mjs: distance)."
+
+@op.geo.map.distanceFrom core.operation
+    impl=distanceFrom
+    semantics=action
+    action=geo.distanceFrom
+    doc="An operation of this world that is not an act (own.mjs: distanceFrom)."
+
+@op.geo.map.compare core.operation
+    impl=compare
+    semantics=action
+    action=geo.compare
+    doc="An operation of this world that is not an act (own.mjs: compare)."
+
+@op.geo.map.compareYN core.operation
+    impl=compareYN
+    semantics=action
+    action=geo.compareYN
+    doc="An operation of this world that is not an act (own.mjs: compareYN)."
+
+@op.geo.map.borderYN core.operation
+    impl=borderYN
+    semantics=action
+    action=geo.borderYN
+    doc="An operation of this world that is not an act (own.mjs: borderYN)."
+
+@op.geo.map.isIn core.operation
+    impl=isIn
+    semantics=action
+    action=geo.isIn
+    doc="An operation of this world that is not an act (own.mjs: isIn)."
+
+@op.geo.map.isCapital core.operation
+    impl=isCapital
+    semantics=action
+    action=geo.isCapital
+    doc="An operation of this world that is not an act (own.mjs: isCapital)."
+
+@op.geo.map.capitalOfWhich core.operation
+    impl=capitalOfWhich
+    semantics=action
+    action=geo.capitalOfWhich
+    doc="An operation of this world that is not an act (own.mjs: capitalOfWhich)."
+
+@op.geo.map.superlative core.operation
+    impl=superlative
+    semantics=action
+    action=geo.superlative
+    doc="An operation of this world that is not an act (own.mjs: superlative)."
+
+@op.geo.map.listOp core.operation
+    impl=listOp
+    semantics=action
+    action=geo.listOp
+    doc="An operation of this world that is not an act (own.mjs: listOp)."
+
+@op.geo.map.count core.operation
+    impl=count
+    semantics=action
+    action=geo.count
+    doc="An operation of this world that is not an act (own.mjs: count)."
+
+@op.geo.map.info core.operation
+    impl=info
+    semantics=action
+    action=geo.info
+    doc="An operation of this world that is not an act (own.mjs: info)."
 
 @op.geo.map.markers core.operation
     impl=markers
     semantics=action
     action=geo.markers
-    doc="Map action geo.markers: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: markers)."
 
 @op.geo.map.highlights core.operation
     impl=highlights
     semantics=action
     action=geo.highlights
-    doc="Map action geo.highlights: see ops.mjs"
+    doc="An operation of this world that is not an act (own.mjs: highlights)."
 
-@op.geo.map.unknown core.operation
-    impl=unknown
+@op.geo.map.describe core.operation
+    impl=describe
     semantics=action
-    action=geo.unknown
-    doc="Map action geo.unknown: see ops.mjs"
-
+    action=geo.describe
+    doc="An operation of this world that is not an act (own.mjs: describe)."
 
 @op.geo.map.askPlace core.operation
     impl=askPlace
     semantics=action
     action=geo.askPlace
-    doc="Clarification for a map command without a place: asks which place and opens a pending expectation (spec 11)."
+    doc="An operation of this world that is not an act (own.mjs: askPlace)."
 
-@op.geo.map.undo core.operation
-    impl=undo
+@op.geo.map.unknown core.operation
+    impl=unknown
     semantics=action
-    action=geo.undo
-    doc="Undoes the last change to the map (view, markers, highlights, lines, layer); the history is kept in the world state."
-
-@op.geo.map.redo core.operation
-    impl=redo
-    semantics=action
-    action=geo.redo
-    doc="Does the undone change again."
+    action=geo.unknown
+    doc="An operation of this world that is not an act (own.mjs: unknown)."
 
 @op.geo.map.view core.operation
     impl=view
     semantics=action
     action=geo.map.view
-    doc="The declaration of the map as a view of the session things (spec 23): the geographic aspect; one request for a whole selection."
+    doc="An operation of this world that is not an act (own.mjs: view)."
 
 @op.geo.map.adopt core.operation
     impl=adopt
     semantics=action
     action=geo.map.adopt
-    doc="Take things of the session store onto the map as pins, where the map knows their place (by name, by kind, or by the lat and lon they carry); what has no known place is said plainly."
+    doc="An operation of this world that is not an act (own.mjs: adopt)."
+
+@op.geo.map.mapUndo core.operation
+    impl=mapUndo
+    semantics=action
+    action=geo.undo
+    doc="An operation of this world that is not an act (own.mjs: mapUndo)."
+
+@op.geo.map.mapRedo core.operation
+    impl=mapRedo
+    semantics=action
+    action=geo.redo
+    doc="An operation of this world that is not an act (own.mjs: mapRedo)."
+
+@op.geo.map.make core.operation
+    impl=make
+    semantics=action
+    action=geo.map.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.geo.map.remove core.operation
+    impl=remove
+    semantics=action
+    action=geo.map.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.geo.map.change core.operation
+    impl=change
+    semantics=action
+    action=geo.map.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.geo.map.place core.operation
+    impl=place
+    semantics=action
+    action=geo.map.place
+    doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."
+
+@op.geo.map.send core.operation
+    impl=send
+    semantics=action
+    action=geo.map.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.geo.map.pick core.operation
+    impl=pick
+    semantics=action
+    action=geo.map.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
+
+@op.geo.map.ask core.operation
+    impl=ask
+    semantics=action
+    action=geo.map.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."
+
+@op.geo.map.undo core.operation
+    impl=undo
+    semantics=action
+    action=geo.map.undo
+    doc="The act 'undo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.geo.map.redo core.operation
+    impl=redo
+    semantics=action
+    action=geo.map.redo
+    doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."

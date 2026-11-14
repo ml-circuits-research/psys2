@@ -1,27 +1,50 @@
-// The thin lang.en module (src/lang/en.mjs) reads the English facts of handover/lang.en: the generated bundle is fresh, every wire parses, and the module answers the questions its callers ask.
+// The thin lang.en module (src/lang/en.mjs) reads the English facts of the catalog world w.lang.en: the generated bundle is fresh, every wire parses, and the module answers the questions its callers ask.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { parse } from '../src/soplang/index.mjs';
 import { render } from '../scripts/build-lang-en.mjs';
-import { en, createLangEn } from '../src/lang/en.mjs';
+import { en, createLangEn, langEnFromCatalog } from '../src/lang/en.mjs';
+import { LANG_EN_LOCAL } from '../src/lang/en.local.mjs';
 import { LANG_EN_FACTS } from '../src/lang/en.facts.generated.mjs';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-test('the generated facts module is fresh (node scripts/build-lang-en.mjs)', () => {
-  assert.equal(readFileSync(join(REPO, 'src/lang/en.facts.generated.mjs'), 'utf8'), render());
+// the catalog checkout (docs/worlds of sop-knowledge-worlds): PSYS2_KNOWLEDGE, a folder; the freshness and the equality of the catalog reader with the bundle are checked only where it is at hand
+const CATALOG = process.env.PSYS2_KNOWLEDGE && !/^https?:/.test(process.env.PSYS2_KNOWLEDGE) ? process.env.PSYS2_KNOWLEDGE : null;
+
+test('the generated facts module is fresh against the catalog (node scripts/build-lang-en.mjs <catalog>)', { skip: !CATALOG && 'no catalog folder in PSYS2_KNOWLEDGE' }, () => {
+  assert.equal(readFileSync(join(REPO, 'src/lang/en.facts.generated.mjs'), 'utf8'), render(CATALOG));
 });
 
-test('every shard of handover/lang.en parses with no error and carries only lang.en wires', () => {
-  const dir = join(REPO, 'handover/lang.en');
-  for (const f of [...readdirSync(join(dir, 'shards')).map((x) => `shards/${x}`), 'schema.sop']) {
-    const r = parse(readFileSync(join(dir, f), 'utf8'));
+test('every bundled shard parses with no error and carries only w.lang.en wires; the local facts too', () => {
+  for (const [f, text] of [...Object.entries(LANG_EN_FACTS), ...Object.entries(LANG_EN_LOCAL)]) {
+    const r = parse(text);
     assert.deepEqual(r.errors, [], f);
-    for (const w of r.wires) assert.ok(/^(lang\.en\.|core\.|w\.lang\.en)/.test(`${w.id} ${w.type}`) || /^core\./.test(w.type), `${f}: ${w.id}`);
+    for (const w of r.wires) assert.ok(/^w\.lang\.en\./.test(w.type), `${f}: ${w.id} ${w.type}`);
   }
+  assert.ok(!Object.keys(LANG_EN_FACTS).some((s) => /^(core-plurals|hand-)/.test(s)), 'catalog additions that change what the readers answer are not bundled');
+});
+
+test('the reader through the knowledge source answers what the bundle answers', async () => {
+  const source = { text: async (p) => { const s = /w\.lang\.en\/shards\/([^/]+)\.sop$/.exec(p)?.[1]; return s === 'phrases' ? LANG_EN_FACTS.lexicons : LANG_EN_FACTS[s] ?? null; } };
+  const viaCatalog = await langEnFromCatalog(source);
+  const catalogOnly = createLangEn(LANG_EN_FACTS, null);   // the local frames are the bundle's addition: the catalog's own are 233
+  assert.equal(catalogOnly.frames().length, 233);
+  assert.deepEqual(viaCatalog.frames(), en.frames());
+  assert.equal(viaCatalog.timeRelation('before').rel, 'before');
+  assert.deepEqual([...viaCatalog.words('det', 'acts')], [...en.words('det', 'acts')]);
+  assert.equal(viaCatalog.singular('buses', 'lemma'), en.singular('buses', 'lemma'));
+  assert.equal(await langEnFromCatalog({ text: async () => null }), null);
+});
+
+test('the reader of the catalog folder answers what the bundle answers, frames included', { skip: !CATALOG && 'no catalog folder in PSYS2_KNOWLEDGE' }, async () => {
+  const { createKnowledgeSource } = await import('../src/loaders/knowledge-source.mjs');
+  const live = await langEnFromCatalog(createKnowledgeSource(CATALOG));
+  assert.deepEqual(live.frames(), en.frames());
+  for (const [t, v] of [['det', 'acts'], ['prep', 'dialogue'], ['prep', 'time'], ['pron', 'matcher']]) assert.deepEqual([...live.words(t, v)], [...en.words(t, v)]);
 });
 
 test('words by view: the lists the modules used to write again', () => {
@@ -58,7 +81,7 @@ test('ellipsis markers keep their order (longest marker first)', () => {
 });
 
 test('a module can read another version of the same world: createLangEn takes texts or wires', () => {
-  const other = createLangEn({ determiners: LANG_EN_FACTS.determiners, np: LANG_EN_FACTS.np, prepositions: LANG_EN_FACTS.prepositions, numbers: LANG_EN_FACTS.numbers, pronouns: LANG_EN_FACTS.pronouns, morphology: LANG_EN_FACTS.morphology, ellipsis: LANG_EN_FACTS.ellipsis });
+  const other = createLangEn({ determiners: LANG_EN_FACTS.determiners, prepositions: LANG_EN_FACTS.prepositions, numbers: LANG_EN_FACTS.numbers, pronouns: LANG_EN_FACTS.pronouns, morphology: LANG_EN_FACTS.morphology, ellipsis: LANG_EN_FACTS.ellipsis, grammar: LANG_EN_FACTS.grammar, lexicons: LANG_EN_FACTS.lexicons });
   assert.deepEqual([...other.words('det', 'acts')], [...en.words('det', 'acts')]);
   const wires = Object.values(LANG_EN_FACTS).flatMap((t) => parse(t).wires);
   assert.deepEqual([...createLangEn(wires).words('prep', 'dialogue')], [...en.words('prep', 'dialogue')]);
@@ -73,7 +96,7 @@ test('clauses: joiners, frame leads, corrections and question words are facts', 
   assert.ok(en.answerRegex().test('i dont know') && en.answerWords()[0].split(' ').length >= 4);
 });
 
-test('frames: the argument frames of the acts are facts (238: acts 85, acts.more 91, acts.data 62), the schema worlds generate from them', () => {
+test('frames: the argument frames of the acts are facts (272: 233 of the catalog and 39 local: acts 85, acts.more 91, acts.data 62, acts.text 27, acts.facts 7), the schema worlds generate from them', () => {
   assert.deepEqual([en.frames('acts').length, en.frames('acts.more').length, en.frames('acts.data').length], [85, 91, 62]);
   const own = en.frames('acts').find((f) => f.id === 'read.own');
   assert.deepEqual([own.tabOnly, own.tabPriority, own.args], [true, 30, ['rest']]);

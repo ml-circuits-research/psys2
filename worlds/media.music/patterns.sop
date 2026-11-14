@@ -903,8 +903,8 @@
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [play|hear|listen_to|put_on|spin|fire_up|queue|queue_up|give_me|sing|hum|strum|blast|crank|let_me_hear|let_us_hear|i_want_to_hear|i_wanna_hear|i_d_like_to_hear|id_like_to_hear|can_i_hear|could_i_hear|i_want_you_to_play|i_wanna_listen_to|i_want_to_listen_to|play_me|how_about|what_about|tap|hit|try_playing|start_playing|play_back|perform|run_through|go_through|run_up|go_up|arpeggiate|spread|spread_out|ding|ring|ping|tinkle|pluck|bang|press|sound|let_me_hear_the|i_want_to_hear_the|hear_the] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=media.music.pick arg.mode=play arg.thing=\"{thing}\" arg.text=\"{segment}\""
     kind=request
-    priority=12
-    tabPriority=20
+    priority=14
+    tabPriority=22
     example="Play Ode to Joy."
     canonical="Play Ode to Joy."
 
@@ -2459,6 +2459,33 @@
     example="Play a C major scale up and down."
     example="Play the scale."
     example="Play a blues scale."
+
+# ---- a weak play verb ("give me", "put on") with a title of the library: typed slots, so that the verb is read as the music's own
+@pat.media.music.song.weak core.pattern
+    canonical="Give me Ode to Joy."
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {title:lex.media.music.songtitles}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{title}\""
+    kind=request
+    priority=10
+    tabPriority=21
+    example="Give me Ode to Joy."
+    example="Put on Happy Birthday."
+
+@pat.media.music.song.weak.long core.pattern
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {t1:lex.media.music.songstarts} {rest:words(5)}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{t1} {rest}\""
+    kind=request
+    priority=10
+    tabPriority=21
+    example="Give me twinkle twinkle little star."
+
+@pat.media.music.song.weak.start core.pattern
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {t1:lex.media.music.songstarts}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{t1}\""
+    kind=request
+    priority=10
+    tabPriority=21
+    example="Put on Frere Jacques."
 
 # ---- fallback readings of the families the acts also read (priority below the generated forms; each one is removed when the frames read its sentences)
 @pat.media.music.note.explicit core.pattern

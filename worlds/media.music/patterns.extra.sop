@@ -1348,6 +1348,33 @@
     example="Play the scale."
     example="Play a blues scale."
 
+# ---- a weak play verb ("give me", "put on") with a title of the library: typed slots, so that the verb is read as the music's own
+@pat.media.music.song.weak core.pattern
+    canonical="Give me Ode to Joy."
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {title:lex.media.music.songtitles}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{title}\""
+    kind=request
+    priority=10
+    tabPriority=21
+    example="Give me Ode to Joy."
+    example="Put on Happy Birthday."
+
+@pat.media.music.song.weak.long core.pattern
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {t1:lex.media.music.songstarts} {rest:words(5)}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{t1} {rest}\""
+    kind=request
+    priority=10
+    tabPriority=21
+    example="Give me twinkle twinkle little star."
+
+@pat.media.music.song.weak.start core.pattern
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {t1:lex.media.music.songstarts}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{t1}\""
+    kind=request
+    priority=10
+    tabPriority=21
+    example="Put on Frere Jacques."
+
 # ---- fallback readings of the families the acts also read (priority below the generated forms; each one is removed when the frames read its sentences)
 @pat.media.music.note.explicit core.pattern
     canonical="Play the note B 2."
