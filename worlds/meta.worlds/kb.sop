@@ -34,7 +34,7 @@
     act=outrun act=photo act=represent act=screenshot act=text act=annotate act=avg act=cherry
     act=communicate
     actshared=house actshared=leg actshared=copy actshared=draw actshared=download actshared=stacking actshared=against actshared=versus
-    actshared=vs actshared=update actshared=create actshared=rename actshared=build actshared=hide actshared=scale actshared=include
+    actshared=vs actshared=update actshared=create actshared=build actshared=rename actshared=hide actshared=scale actshared=include
     actshared=convert actshared=share actshared=stat
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
     thing=radar thing=polar thing=scatter thing=aquamarine thing=chartreuse thing=terracotta thing=burlywood thing=firebrick
@@ -124,9 +124,9 @@
     act=army act=destination act=force act=men act=strength act=target act=taken act=difficulty
     act=cap act=kingside act=longside act=permitted act=perspective act=queenside act=sacrificed act=shortside
     act=via act=winning act=skill act=engine act=material act=orientation act=ply act=retreat
-    act=possibility act=played act=dead act=evaluation
+    act=possibility act=played act=dead act=evaluation act=fen
     actshared=move actshared=play actshared=game actshared=new actshared=playing actshared=grab actshared=beat actshared=option
-    actshared=two actshared=place actshared=allowed actshared=land actshared=reach actshared=choice
+    actshared=two actshared=allowed actshared=land actshared=reach actshared=choice
     thing=pawn thing=knight thing=bishop thing=rook thing=queen thing=king thing=night thing=kngt
     thing=knite thing=nite thing=horsey thing=bish thing=pown thing=rok thing=alpha thing=bravo
     thing=charlie thing=delta thing=echo thing=foxtrot thing=golf thing=hotel thing=dee thing=eff
@@ -365,11 +365,11 @@
     id=plan.seating kind=tab run=none tab=seating
     name=seating name=seating_plan
     act=bridge
-    actshared=lunch actshared=connect actshared=hook actshared=relocate actshared=tie actshared=bind actshared=couple actshared=tape
-    actshared=fasten actshared=glue actshared=join actshared=nail actshared=relate actshared=attach actshared=group actshared=pin
-    actshared=clip actshared=recover actshared=retrieve actshared=bundle actshared=detach actshared=disconnect actshared=import actshared=sever
-    actshared=ungroup actshared=unhook actshared=unlink actshared=categorize actshared=disassemble actshared=dismantle actshared=lump actshared=merge
-    actshared=pair actshared=reload actshared=slice actshared=uncouple actshared=unfasten actshared=untie
+    actshared=lunch actshared=connect actshared=hook actshared=tie actshared=bind actshared=couple actshared=tape actshared=fasten
+    actshared=glue actshared=join actshared=nail actshared=relate actshared=attach actshared=group actshared=pin actshared=clip
+    actshared=recover actshared=retrieve actshared=bundle actshared=detach actshared=disconnect actshared=import actshared=sever actshared=ungroup
+    actshared=unhook actshared=unlink actshared=categorize actshared=disassemble actshared=dismantle actshared=lump actshared=merge actshared=pair
+    actshared=reload actshared=slice actshared=uncouple actshared=unfasten actshared=untie
     thing=seat thing=chair thing=guest
     thingshared=table thingshared=place thingshared=person thingshared=people
     frame=is_table

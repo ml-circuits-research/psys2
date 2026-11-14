@@ -9,8 +9,9 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=1e82798e72';
-import { planHostOf } from '../plan/host.mjs?v=e867a0857c';
+import { leftOut, requestOf } from './world-aware.mjs?v=f00d040b34';
+import { planHostOf } from '../plan/host.mjs?v=6db16e1f7d';
+import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=e5f0523d68';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];
@@ -167,7 +168,7 @@ async function preparePlan(dialog, cat, { goal, words, world }) {
 export async function preloadThings(dialog, segments) {
   const cat = knowledgeOf(dialog);
   if (!cat) return [];
-  const names = new Set(), drawNames = new Set(), needs = new Map(), lists = new Set(), plans = [];
+  const names = new Set(), drawNames = new Set(), needs = new Map(), lists = new Set(), plans = [], diagrams = [];
   const foreign = !!dialog._waLang && dialog._waLang !== 'en';
   for (const seg of segments ?? []) {
     if (seg.unparsed) continue;
@@ -184,6 +185,9 @@ export async function preloadThings(dialog, segments) {
         // a reading that may be a GOAL (specs/24): the methods it can use are loaded (and the kinds the plan makes asked of the catalog) before the world runs it
         const goal = dialog.engine.interp.hook(dialog.isession, rq.world, 'planGoal', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
         if (goal?.words?.length) plans.push({ ...goal, world: rq.world });
+        // a request for a diagram of a kind about a topic (spec 14 section 9): the catalog's diagram knowledge for the topic's words is loaded before the world composes it
+        const dg = dialog.engine.interp.hook(dialog.isession, rq.world, 'diagramGoal', { action: rq.action, args: rq.args }, { state: dialog.isession.state[rq.world] ?? {} });
+        if (dg) diagrams.push(dg);
         if (rq.args.thing) names.add(String(rq.args.thing).toLowerCase());
       }
       // a request that hands things to a VIEW (`things.show ... to=map`) is read by the store's world: the view's own typed needs (the map's places) are loaded before it adopts them
@@ -204,6 +208,7 @@ export async function preloadThings(dialog, segments) {
   const done = [];
   const all = (async () => {
     for (const n of needs.values()) { try { await cat.load?.(n); } catch { /* no model is no change */ } }
+    for (const g of diagrams.slice(0, 1)) { try { await diagramHostOf(cat)?.load(g.words); } catch { /* no live knowledge is no change: the bundled subset composes */ } }
     for (const g of plans.slice(0, 1)) { try { await preparePlan(dialog, cat, g); } catch { /* no plan is no change: the world's own reading goes on */ } }
     for (const n of [...lists].slice(0, 3)) { try { await cat.preloadWires?.(n); } catch { /* no list is no answer */ } }
     for (const n of [...names].slice(0, 6)) {
