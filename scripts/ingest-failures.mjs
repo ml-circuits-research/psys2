@@ -56,7 +56,7 @@ export function readBatch(raw) {
 
 const happenedOf = (e) => `${e.reply || '(no reply recorded)'} [user-feedback: ${e.reasons.join(', ') || 'failure'}${e.next ? `; next message: "${e.next}"` : ''}]`;
 const expectedOf = (e) => e.expected ?? `(the person gave no expectation; reasons: ${e.reasons.join(', ') || 'failure'}${e.next ? `; their next message was "${e.next}"` : ''})`;
-const ledgerRow = (e, build) => ({ text: e.text, tab: e.tab, language: 'en', happened: clip(happenedOf(e), 300), expected: expectedOf(e), class: 'unclassified', source: SOURCE, first_seen: today(), build, was_passing: false, reasons: e.reasons });
+const ledgerRow = (e, build) => ({ real: true, text: e.text, tab: e.tab, language: 'en', happened: clip(happenedOf(e), 300), expected: expectedOf(e), class: 'unclassified', source: SOURCE, first_seen: today(), build, was_passing: false, reasons: e.reasons });
 
 /**
  * Ingests entries. Returns { frozen, ledger, duplicates, empty } counts. `files` = { ledger } (the failure ledger path). The order is the rule: freeze FIRST.
