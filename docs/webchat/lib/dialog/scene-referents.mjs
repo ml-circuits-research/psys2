@@ -11,8 +11,8 @@
  * Work is counted in steps (`budget.tick`), never in milliseconds.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { spellVocabulary, protectedWordsOf, isKnownWord } from '../formalizer/spell.mjs?v=1a01cfb0f4';
-import { nameIndex } from '../formalizer/names.mjs?v=236aedeb15';
+import { spellVocabulary, protectedWordsOf, isKnownWord } from '../formalizer/spell.mjs?v=08d91eccd8';
+import { nameIndex } from '../formalizer/names.mjs?v=c75e6910e7';
 import { lexIndex } from '../worlds/lexicon.mjs?v=d845fb4f7c';
 
 const WORD = /[\p{L}]+/gu;

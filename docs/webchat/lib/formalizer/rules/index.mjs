@@ -490,8 +490,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     for (let k = matches.length - 1; k >= 0; k--) {
       budget.tick('rules.kindelsewhere');
       const m = matches[k], ws = noun(m), own = kindsOf(m.pattern.worldId);
-      if (!ws || !own || m.pattern.tabClaim || ws.some((w) => own.has(w))) continue;
-      if (matches.some((o) => o.pattern.worldId !== m.pattern.worldId && kindsOf(o.pattern.worldId) && ws.some((w) => kindsOf(o.pattern.worldId).has(w)))) matches.splice(k, 1);
+      if (!ws || !own || m.pattern.tabClaim || context?.lastWorld === m.pattern.worldId || ws.some((w) => own.has(w))) continue;   // a world the conversation is in keeps its reading
+      if (matches.some((o) => o.pattern.worldId !== m.pattern.worldId && kindsOf(o.pattern.worldId) && ws.some((w) => Set.prototype.has.call(kindsOf(o.pattern.worldId), w)))) matches.splice(k, 1);   // the other world's own list (an open lexicon answers `has` for the whole catalog)
     }
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);

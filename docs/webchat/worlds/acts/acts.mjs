@@ -24,11 +24,12 @@ import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=c6788150e0';
 import { FLAGS_DATA } from './forms.data.mjs?v=0df7819d1a';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
-import { createEffects, EFFECT_ACTS } from './effects.mjs?v=c81f50c5a8';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
+import { createEffects, EFFECT_ACTS } from './effects.mjs?v=14acca6d95';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=ebf19b103c';   // the one colour reader (k.values)
 import { en } from '../../lib/lang/en.mjs?v=cbf67c9c08';
+import { resolvePhrase } from './np-lib.mjs?v=f99bdcf96b';   // sopworld resolve(phrase) over std.grammar (0.31): the executor's things as wires, the library reads the phrase
 import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=4d08d54237';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
@@ -337,10 +338,37 @@ export function createExecutor(schema, hooks = {}) {
     if (pool.length === 1 || np.other.plural) return { ids: pool.map((i) => i.id), source: 'focus', kind, guess: `I took ${labels(pool)} as the other one` };
     return { ask: `Which other ${kind}: ${joinAnd(pool.map((i) => label(i)))}?`, candidates: pool.map((i) => i.id) };
   }
-  function resolveOne(st, text, { allowEmpty = false } = {}) {
+  /** One phrase: the library reads it (sopworld `resolve` over the grammar of `lang.en`, through `np-lib.mjs`); what it does not read is the host's (`resolveHost`: a bare name, the failure classes of the replies). */
+  function resolveOne(st, text, o = {}) {
+    const lib = viaLibrary(st, text);
+    if (!lib) return resolveHost(st, text, o);
+    return lib;
+  }
+  function viaLibrary(st, text) {
+    const t = toks(text).filter((w) => !DET.has(w) || PRONOUN.has(w));
+    if (!t.length || !st.items.length) return null;
+    budget.tick('acts.np-lib');
+    const pron = t.length === 1 && PRONOUN.has(t[0]);
+    const vals = new Set(st.items.flatMap((i) => Object.values(i.attrs ?? {})).map((v) => String(v).toLowerCase()));
+    let r;
+    try {
+      r = resolvePhrase(st.items, text, {
+        kindOf: (w) => { const h = kindByWord(w); return h ? { kind: h.kind.name, plural: h.plural } : null; },
+        valueOf: (w) => { if (vals.has(w)) return w; for (const a of Object.values(schema.attrs)) if (a.type === 'enum' || a.type === 'colour') { const v = valueOf(a, w); if (v !== undefined) return v; } return undefined; },
+        nameOf: (w) => st.items.find((i) => i.name && (i.name.toLowerCase() === w || same(i.name.toLowerCase(), w)))?.name ?? null,
+        focus: pron ? focusOf(st).ids.filter((id) => st.items.some((i) => i.id === id)) : [],   // only a bare pronoun reads the focus; "the tables" with one in focus is still every table
+      });
+    } catch (e) { if (e?.name === 'BudgetExceeded') throw e; return null; }   // a budget stop is the host's; a phrase the library cannot read is the host's to read
+    if (!r) return null;
+    const item = (id) => st.items.find((i) => i.id === id);
+    if (r.ask) return { ask: `Which ${r.kind ?? 'one'}: ${joinAnd(r.ask.map((id) => label(item(id))))}?`, candidates: r.ask };
+    if (r.tier === 'focus') return pron ? { ids: r.ids, source: 'focus', guess: `I took "${t[0]}" to mean ${labels(r.ids.map(item))}, the thing we just talked about` } : null;
+    return { ids: r.ids, source: 'said', kind: r.kind ?? undefined };
+  }
+  function resolveHost(st, text, { allowEmpty = false } = {}) {
     const t = toks(text).filter((w) => !DET.has(w) || PRONOUN.has(w));
     if (!t.length) return allowEmpty ? { ids: [] } : { missing: true };
-    if (t.length === 1 && PRONOUN.has(t[0])) { const f = focusOf(st).ids.filter((id) => st.items.some((i) => i.id === id)); return f.length ? { ids: f, source: 'focus', guess: `I took "${t[0]}" to mean ${labels(f.map((id) => st.items.find((i) => i.id === id)))}, the thing we just talked about` } : { missing: true }; }
+    if (t.length === 1 && PRONOUN.has(t[0])) return { missing: true };   // a pronoun with something in focus was read by the library (`viaLibrary`); with nothing in focus there is nothing to name
     let all = false, ord = null, n = null; const rest = [];
     for (const w of t) {
       if (w === 'all' || w === 'every' || w === 'each' || w === 'both' || w === 'everything') all = true;
