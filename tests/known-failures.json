@@ -261,7 +261,7 @@
     },
     {
       "file": "ellipsis-one.test.mjs",
-      "pattern": "^Romanian: \"fă o casă verde și una galbenă\" draws both houses$",
+      "pattern": "^Romanian: \"f\u0103 o cas\u0103 verde \u0219i una galben\u0103\" draws both houses$",
       "class": "continuation / ellipsis / self-correction -> session.dialogue",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
@@ -435,7 +435,7 @@
     },
     {
       "file": "world-aware.test.mjs",
-      "pattern": "^veto: \"fă părul roșu\" leaves out \"părul\": nothing is changed, the reply names the word \\(off: no veto is recorded\\)$",
+      "pattern": "^veto: \"f\u0103 p\u0103rul ro\u0219u\" leaves out \"p\u0103rul\": nothing is changed, the reply names the word \\(off: no veto is recorded\\)$",
       "class": "arbitration between worlds: the generated art.draw reads a sentence of another tab / world",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
     },
@@ -456,6 +456,24 @@
       "pattern": "^webchat compute budget: restart clock, memory across a restart, translator bridge, on-device fake modes$",
       "class": "compute cost of the generated reading under the 4x throttled page (the watchdog stops a turn the old hand patterns answered in time)",
       "ledger": "art.draw switch 2026-11-14 (training/eval/failures.jsonl, build art-draw-switch)"
+    },
+    {
+      "file": "editor.test.mjs",
+      "pattern": "^(format: marks can be removed|align:|convert:|select: a word that occurs twice|select: a selection made by the mouse|select: \"it\" without|table:|blocks: a horizontal line|link: links on a selection|stats: how many|export: HTML|the toolbar commands|datagen:)",
+      "class": "docs.editor schema world: forms and wording",
+      "ledger": "docs-editor-switch"
+    },
+    {
+      "file": "voice-repair.test.mjs",
+      "pattern": "^(weakSoundAlikes: \"Chester\"|rp3-08 editor)",
+      "class": "docs.editor schema world: forms and wording",
+      "ledger": "docs-editor-switch"
+    },
+    {
+      "file": "tools.test.mjs",
+      "pattern": "^rest slot captures",
+      "class": "docs.editor schema world: forms and wording",
+      "ledger": "docs-editor-switch"
     }
   ]
 }

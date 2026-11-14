@@ -1,0 +1,88 @@
+@tpl.docs.editor.own_dictate core.template
+    for=action.doc.dictate
+    text="{value}"
+
+@tpl.docs.editor.own_dictateStop core.template
+    for=action.doc.dictateStop
+    text="{value}"
+
+@tpl.docs.editor.own_read core.template
+    for=action.doc.read
+    text="{value}"
+
+@tpl.docs.editor.own_download core.template
+    for=action.doc.download
+    text="{value}"
+
+@tpl.docs.editor.own_stats core.template
+    for=action.doc.stats
+    text="{value}"
+
+@tpl.docs.editor.own_mentions core.template
+    for=action.doc.mentions
+    text="{value}"
+
+@tpl.docs.editor.own_isEmpty core.template
+    for=action.doc.isEmpty
+    text="{value}"
+
+@tpl.docs.editor.own_whatIs core.template
+    for=action.doc.whatIs
+    text="{value}"
+
+@tpl.docs.editor.own_say core.template
+    for=action.doc.say
+    text="{value}"
+
+@tpl.docs.editor.own_fromList core.template
+    for=action.doc.fromList
+    text="{value}"
+
+@tpl.docs.editor.own_report core.template
+    for=action.doc.report
+    text="{value}"
+
+@tpl.docs.editor.own_holdings core.template
+    for=action.doc.holdings
+    text="{value}"
+
+@tpl.docs.editor.own_whatSelected core.template
+    for=action.doc.whatSelected
+    text="{value}"
+
+@tpl.docs.editor.own_checkTask core.template
+    for=action.doc.checkTask
+    text="{value}"
+
+@tpl.docs.editor.own_countTasks core.template
+    for=action.doc.countTasks
+    text="{value}"
+
+@tpl.docs.editor.own_listTasks core.template
+    for=action.doc.listTasks
+    text="{value}"
+
+@tpl.docs.editor.own_addHeading core.template
+    for=action.doc.addHeading
+    text="{value}"
+
+@tpl.docs.editor.own_addList core.template
+    for=action.doc.addList
+    text="{value}"
+
+@tpl.docs.editor.own_addParagraph core.template
+    for=action.doc.addParagraph
+    text="{value}"
+
+@tpl.docs.editor.own_undo core.template
+    for=action.doc.undo
+    text="{value}"
+
+@tpl.docs.editor.own_redo core.template
+    for=action.doc.redo
+    text="{value}"
+
+@tpl.docs.editor.own_make core.template
+    for=action.doc.make
+    text="{value}"
+

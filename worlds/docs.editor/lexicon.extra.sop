@@ -1,0 +1,108 @@
+@phrase.docs.editor.g21_can_u core.phrase
+    doc="World-local group used by 102 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_u
+    alt=can_you
+    alt=could_u
+    alt=could_you
+    alt=will_you
+    alt=would_you
+    alt=will_u
+    alt=would_u
+
+@phrase.docs.editor.g26_pls core.phrase
+    doc="World-local group used by 88 patterns (made by scripts/migrate-macros.mjs)."
+    alt=pls
+    alt=plz
+    alt=thanks
+    alt=thank_you
+    alt=now
+    alt=for_me
+    alt=right_now
+
+@lex.docs.editor.formats core.lexicon
+    class=noun
+    word=text
+    word=markdown
+    word=txt
+    word=md
+    word=plain_text
+    word=html
+    word=json
+    word=web_page
+
+@lex.docs.editor.ordinals core.lexicon
+    class=noun
+    extends=$lex.lang.ordinal
+
+@lex.docs.editor.blockkinds core.lexicon
+    class=noun
+    word=paragraph
+    word=heading
+    word=list
+    word=block
+    word=title
+    word=item
+    word=word
+    word=sentence
+    word=quote
+    word=table
+    word=task
+    word=row
+    word=column
+    word=link
+    word=character
+    word=chapter
+    word=section
+
+@phrase.docs.editor.g61_selection core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=selection
+    alt=selected_text
+    alt=selected_part
+    alt=this
+    alt=that
+
+@phrase.docs.editor.g56_left core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=left
+    alt=open
+    alt=unchecked
+    alt=remaining
+    alt=undone
+    alt=unfinished
+    alt=not_done
+    alt=still_open
+
+@phrase.docs.editor.g1_we_could core.phrase
+    doc="World-local group used by 243 patterns (made by scripts/migrate-macros.mjs)."
+    alt=we_could
+    alt=you_can
+    alt=u_can
+    alt=u_should
+    alt=you_could
+    alt=do_you_mind
+    alt=try_to
+    alt=time_to
+    alt=we_should
+    alt=we_need_to
+    alt=i_have_to
+    alt=i_will
+    alt=ill
+
+@phrase.docs.editor.g2_immediately core.phrase
+    doc="World-local group used by 212 patterns (made by scripts/migrate-macros.mjs)."
+    alt=immediately
+    alt=here
+    alt=pls_thx
+    alt=for_me_now
+    alt=for_me_pls
+    alt=will_you
+    alt=can_you
+    alt=could_you
+
+@lex.docs.editor.chapterkinds core.lexicon
+    class=noun
+    word=chapter
+    word=section

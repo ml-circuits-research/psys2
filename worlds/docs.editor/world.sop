@@ -8,7 +8,8 @@
     imports=world.kids.animals
     imports=world.kids.arith
     formalization=rules
-    reasoner=matrix
+    imports=world.acts
+    imports=world.lang.common
     undo=doc.undo
     redo=doc.redo
     source="the document"

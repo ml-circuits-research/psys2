@@ -1,353 +1,224 @@
-@op.docs.editor.addHeading core.operation
-    impl=addHeading
-    semantics=action
-    action=doc.addHeading
-    doc="Adds a heading block. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.addParagraph core.operation
-    impl=addParagraph
-    semantics=action
-    action=doc.addParagraph
-    doc="Adds a paragraph block. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.addList core.operation
-    impl=addList
-    semantics=action
-    action=doc.addList
-    doc="Adds a list block (items split at commas and \"and\"). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.delete core.operation
-    impl=delete
-    semantics=action
-    action=doc.delete
-    doc="Deletes a block by kind and position. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.deleteSentence core.operation
-    impl=deleteSentence
-    semantics=action
-    action=doc.deleteSentence
-    doc="Deletes the last sentence of the last paragraph. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.clear core.operation
-    impl=clear
-    semantics=action
-    action=doc.clear
-    doc="Clears the whole document. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.replace core.operation
-    impl=replace
-    semantics=action
-    action=doc.replace
-    doc="Replaces a text everywhere in the document. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.move core.operation
-    impl=move
-    semantics=action
-    action=doc.move
-    doc="Moves a block to the top, to the end, or one step up or down. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.setTitle core.operation
-    impl=setTitle
-    semantics=action
-    action=doc.setTitle
-    doc="Sets the title. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.newDoc core.operation
-    impl=newDoc
-    semantics=action
-    action=doc.newDoc
-    doc="Starts a new empty document. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.undo core.operation
-    impl=undo
-    semantics=action
-    action=doc.undo
-    doc="Undoes the last change (history of at most 50). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.redo core.operation
-    impl=redo
-    semantics=action
-    action=doc.redo
-    doc="Redoes an undone change. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.read core.operation
-    impl=read
-    semantics=action
-    action=doc.read
-    doc="Reads the document, a block or the title aloud (effect speech.say). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.copy core.operation
-    impl=copy
-    semantics=action
-    action=doc.copy
-    doc="Copies the document or a block (effect clipboard.copy). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.download core.operation
-    impl=download
-    semantics=action
-    action=doc.download
-    doc="Downloads the document as text or markdown (effect file.download). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.count core.operation
-    impl=count
-    semantics=action
-    action=doc.count
-    doc="Counts paragraphs, headings, lists, items, words or sentences. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.askTitle core.operation
-    impl=askTitle
-    semantics=action
-    action=doc.askTitle
-    doc="Tells the title. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.whatIs core.operation
-    impl=whatIs
-    semantics=action
-    action=doc.whatIs
-    doc="Tells the text of one block. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.say core.operation
-    impl=say
-    semantics=action
-    action=doc.say
-    doc="Tells the text of the document. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.mentions core.operation
-    impl=mentions
-    semantics=action
-    action=doc.mentions
-    doc="Yes or no: does the document mention a word? Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.isEmpty core.operation
-    impl=isEmpty
-    semantics=action
-    action=doc.isEmpty
-    doc="Yes or no: is the document empty? Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+@gen.docs.editor.note core.note
+    text="Generated from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand; tests/acts.test.mjs fails when it is stale."
 
 @op.docs.editor.dictate core.operation
     impl=dictate
     semantics=action
     action=doc.dictate
-    doc="Starts dictation: the next messages go into the document (modal input, interceptInput). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    doc="An operation of this world that is not an act (own.mjs: dictate)."
 
 @op.docs.editor.dictateStop core.operation
     impl=dictateStop
     semantics=action
     action=doc.dictateStop
-    doc="Stops dictation. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    doc="An operation of this world that is not an act (own.mjs: dictateStop)."
 
-@op.docs.editor.fromList core.operation
-    impl=fromList
+@op.docs.editor.read core.operation
+    impl=read
     semantics=action
-    action=doc.fromList
-    doc="Creates a document from a kids.tasks list (reads the kids.tasks.entry wires; blocks keep the wire ids). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    action=doc.read
+    doc="An operation of this world that is not an act (own.mjs: read)."
 
-@op.docs.editor.report core.operation
-    impl=report
+@op.docs.editor.download core.operation
+    impl=download
     semantics=action
-    action=doc.report
-    doc="Creates a report about animals: asks kids.animals which animals match the topic (ctx.ask matching) and what each one is like (ctx.ask summary). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.holdings core.operation
-    impl=holdings
-    semantics=action
-    action=doc.holdings
-    doc="Creates a document of what people have: reads kids.arith holdings and asks the computed counts (ctx.ask count). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.addQuote core.operation
-    impl=addQuote
-    semantics=action
-    action=doc.addQuote
-    doc="Adds a block quote. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.addRule core.operation
-    impl=addRule
-    semantics=action
-    action=doc.addRule
-    doc="Inserts a horizontal line. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.addTable core.operation
-    impl=addTable
-    semantics=action
-    action=doc.addTable
-    doc="Adds a table (columns from names or a count; rows optional). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.addRow core.operation
-    impl=addRow
-    semantics=action
-    action=doc.addRow
-    doc="Adds a row to the table (values split at commas and the word and). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.addColumn core.operation
-    impl=addColumn
-    semantics=action
-    action=doc.addColumn
-    doc="Adds a column to the table. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.deleteRow core.operation
-    impl=deleteRow
-    semantics=action
-    action=doc.deleteRow
-    doc="Deletes a table row by position or content. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.deleteColumn core.operation
-    impl=deleteColumn
-    semantics=action
-    action=doc.deleteColumn
-    doc="Deletes a table column by position or header. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.setCell core.operation
-    impl=setCell
-    semantics=action
-    action=doc.setCell
-    doc="Sets one table cell by row and column number. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.fillTable core.operation
-    impl=fillTable
-    semantics=action
-    action=doc.fillTable
-    doc="Fills the table with animals of a group: asks kids.animals (ctx.ask matching and one ask per column); the table keeps the source wire ids. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.addTask core.operation
-    impl=addTask
-    semantics=action
-    action=doc.addTask
-    doc="Adds a checkable task to the last task list (creating one when needed). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.checkTask core.operation
-    impl=checkTask
-    semantics=action
-    action=doc.checkTask
-    doc="Checks or unchecks tasks by position, text or all. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.countTasks core.operation
-    impl=countTasks
-    semantics=action
-    action=doc.countTasks
-    doc="Tells how many tasks are done or still open. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.listTasks core.operation
-    impl=listTasks
-    semantics=action
-    action=doc.listTasks
-    doc="Lists the tasks that are done or still open. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.format core.operation
-    impl=format
-    semantics=action
-    action=doc.format
-    doc="Applies or removes a mark (bold, italic, underline, strike, code, highlight with a color) on a reference: a block, a sentence, a word, the selection (it). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.clearFormat core.operation
-    impl=clearFormat
-    semantics=action
-    action=doc.clearFormat
-    doc="Removes all inline formatting from a reference. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.link core.operation
-    impl=link
-    semantics=action
-    action=doc.link
-    doc="Adds or removes a link on a reference. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.size core.operation
-    impl=size
-    semantics=action
-    action=doc.size
-    doc="Makes a title or heading bigger or smaller. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.align core.operation
-    impl=align
-    semantics=action
-    action=doc.align
-    doc="Aligns a block: left, center, right, justify. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.convert core.operation
-    impl=convert
-    semantics=action
-    action=doc.convert
-    doc="Turns a block into a paragraph, heading (level 1 to 3), quote, bullet list, numbered list or task list. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.select core.operation
-    impl=select
-    semantics=action
-    action=doc.select
-    doc="Selects a reference (block, sentence, word, item); later commands act on it. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.unselect core.operation
-    impl=unselect
-    semantics=action
-    action=doc.unselect
-    doc="Clears the selection. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.whatSelected core.operation
-    impl=whatSelected
-    semantics=action
-    action=doc.whatSelected
-    doc="Tells what is selected. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.goto core.operation
-    impl=goto
-    semantics=action
-    action=doc.goto
-    doc="Moves the cursor to the top, the end or a block. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
-
-@op.docs.editor.deleteTarget core.operation
-    impl=deleteTarget
-    semantics=action
-    action=doc.deleteTarget
-    doc="Deletes a reference (the selection, a word, a sentence, an item, a block). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    action=doc.download
+    doc="An operation of this world that is not an act (own.mjs: download)."
 
 @op.docs.editor.stats core.operation
     impl=stats
     semantics=action
     action=doc.stats
-    doc="Tells words, characters, sentences, paragraphs, tasks and reading time. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    doc="An operation of this world that is not an act (own.mjs: stats)."
 
-@op.docs.editor.write core.operation
-    impl=write
+@op.docs.editor.mentions core.operation
+    impl=mentions
     semantics=action
-    action=doc.write
-    doc="Writes free text into the document, whole: into the empty paragraph a new line made, or as a new paragraph; mode=continue adds to the last paragraph. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    action=doc.mentions
+    doc="An operation of this world that is not an act (own.mjs: mentions)."
 
-@op.docs.editor.newBlank core.operation
-    impl=newBlank
+@op.docs.editor.isEmpty core.operation
+    impl=isEmpty
     semantics=action
-    action=doc.newBlank
-    doc="Adds an empty paragraph (new line, new paragraph), optionally under, after or before a reference (the title, chapter 2, the second paragraph). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    action=doc.isEmpty
+    doc="An operation of this world that is not an act (own.mjs: isEmpty)."
 
-@op.docs.editor.pageBreak core.operation
-    impl=pageBreak
+@op.docs.editor.whatIs core.operation
+    impl=whatIs
     semantics=action
-    action=doc.pageBreak
-    doc="Adds a page break. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    action=doc.whatIs
+    doc="An operation of this world that is not an act (own.mjs: whatIs)."
 
-@op.docs.editor.addItem core.operation
-    impl=addItem
+@op.docs.editor.say core.operation
+    impl=say
     semantics=action
-    action=doc.addItem
-    doc="Adds one bullet, numbered or task item: to the list being written, or to a new list. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    action=doc.say
+    doc="An operation of this world that is not an act (own.mjs: say)."
 
-@op.docs.editor.addStructure core.operation
-    impl=addStructure
+@op.docs.editor.fromList core.operation
+    impl=fromList
     semantics=action
-    action=doc.addStructure
-    doc="Adds several empty structures in order from a list (a header, two chapters, a paragraph): headings with a placeholder, chapters numbered, empty paragraphs and lists. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+    action=doc.fromList
+    doc="An operation of this world that is not an act (own.mjs: fromList)."
 
-@op.docs.editor.make core.operation
-    impl=make
+@op.docs.editor.report core.operation
+    impl=report
     semantics=action
-    action=doc.make
-    doc="The act make-document: a new document with its title and its content (a text, and/or sections with a heading, paragraphs and a list) in one request, one step to undo. Brings the editor tab forward."
+    action=doc.report
+    doc="An operation of this world that is not an act (own.mjs: report)."
+
+@op.docs.editor.whatSelected core.operation
+    impl=whatSelected
+    semantics=action
+    action=doc.whatSelected
+    doc="An operation of this world that is not an act (own.mjs: whatSelected)."
+
+@op.docs.editor.fillTable core.operation
+    impl=fillTable
+    semantics=action
+    action=doc.fillTable
+    doc="An operation of this world that is not an act (own.mjs: fillTable)."
+
+@op.docs.editor.checkTask core.operation
+    impl=checkTask
+    semantics=action
+    action=doc.checkTask
+    doc="An operation of this world that is not an act (own.mjs: checkTask)."
+
+@op.docs.editor.countTasks core.operation
+    impl=countTasks
+    semantics=action
+    action=doc.countTasks
+    doc="An operation of this world that is not an act (own.mjs: countTasks)."
+
+@op.docs.editor.listTasks core.operation
+    impl=listTasks
+    semantics=action
+    action=doc.listTasks
+    doc="An operation of this world that is not an act (own.mjs: listTasks)."
+
+@op.docs.editor.holdings core.operation
+    impl=holdings
+    semantics=action
+    action=doc.holdings
+    doc="An operation of this world that is not an act (own.mjs: holdings)."
+
+@op.docs.editor.addHeading core.operation
+    impl=addHeading
+    semantics=action
+    action=doc.addHeading
+    doc="An operation of this world that is not an act (own.mjs: addHeading)."
+
+@op.docs.editor.addList core.operation
+    impl=addList
+    semantics=action
+    action=doc.addList
+    doc="An operation of this world that is not an act (own.mjs: addList)."
+
+@op.docs.editor.addParagraph core.operation
+    impl=addParagraph
+    semantics=action
+    action=doc.addParagraph
+    doc="An operation of this world that is not an act (own.mjs: addParagraph)."
+
+@op.docs.editor.docUndo core.operation
+    impl=docUndo
+    semantics=action
+    action=doc.undo
+    doc="An operation of this world that is not an act (own.mjs: docUndo)."
+
+@op.docs.editor.docRedo core.operation
+    impl=docRedo
+    semantics=action
+    action=doc.redo
+    doc="An operation of this world that is not an act (own.mjs: docRedo)."
 
 @op.docs.editor.view core.operation
     impl=view
     semantics=action
     action=docs.editor.view
-    doc="The declaration of the editor as a view of the session things (spec 23): the textual aspect; it takes a whole selection in one request and the facts of the discussion."
+    doc="An operation of this world that is not an act (own.mjs: view)."
 
 @op.docs.editor.adopt core.operation
     impl=adopt
     semantics=action
     action=docs.editor.adopt
-    doc="Take things of the session store (and, for the discussion, its topics, games and places) into a document: a new one titled after what it is about, or sections of the open one for things sent one by one."
+    doc="An operation of this world that is not an act (own.mjs: adopt)."
+
+@op.docs.editor.makeDocument core.operation
+    impl=makeDocument
+    semantics=action
+    action=doc.make
+    doc="An operation of this world that is not an act (own.mjs: makeDocument)."
+
+@op.docs.editor.make core.operation
+    impl=make
+    semantics=action
+    action=docs.editor.make
+    doc="The act 'make' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.remove core.operation
+    impl=remove
+    semantics=action
+    action=docs.editor.remove
+    doc="The act 'remove' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.change core.operation
+    impl=change
+    semantics=action
+    action=docs.editor.change
+    doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.place core.operation
+    impl=place
+    semantics=action
+    action=docs.editor.place
+    doc="The act 'place' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.group core.operation
+    impl=group
+    semantics=action
+    action=docs.editor.group
+    doc="The act 'group' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.send core.operation
+    impl=send
+    semantics=action
+    action=docs.editor.send
+    doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.pick core.operation
+    impl=pick
+    semantics=action
+    action=docs.editor.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.copy core.operation
+    impl=copy
+    semantics=action
+    action=docs.editor.copy
+    doc="The act 'copy' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.ask core.operation
+    impl=ask
+    semantics=action
+    action=docs.editor.ask
+    doc="The act 'ask' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.undo core.operation
+    impl=undo
+    semantics=action
+    action=docs.editor.undo
+    doc="The act 'undo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.redo core.operation
+    impl=redo
+    semantics=action
+    action=docs.editor.redo
+    doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.docs.editor.save core.operation
+    impl=save
+    semantics=action
+    action=docs.editor.save
+    doc="The act 'save' (spec 21), applied by the generic executor to this world's schema."

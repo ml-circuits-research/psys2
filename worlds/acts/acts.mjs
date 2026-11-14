@@ -851,6 +851,8 @@ export function createExecutor(schema, hooks = {}) {
   const looksLikeCommand = (t) => { const w = toks(t).filter((x) => !['please', 'can', 'you', 'could'].includes(x)); return w.length > 0 && VERBS.has(w[0]) && !kindByWord(w[0]); };
   /** The one question the executor asked: a role (the answer is the role) or a guessed act (yes / no). */
   function interceptInput(ctx, text) {
+    const own = hooks.intercept?.(ctx, text);   // a world with its own modal input (the editor's dictation) reads the message first
+    if (own?.handled) return own;
     const st = ctx.state;
     if (st.inputMode !== 'confirm' || !st.pending) return { handled: false };
     const p = st.pending; st.pending = null; st.inputMode = null;
