@@ -68,8 +68,10 @@ export async function currentPoint(note = '') {
   let real = null;
   try { const h = realHeadline(); real = h.total ? { right: h.right, total: h.total, turns: h.turns } : null; } catch { /* the real set was not run yet (node scripts/real-set.mjs run) */ }
   const rb = ind.robustness?.paraphrasesDate ? ind.robustness : null;
+  const boot = bootCost();
   return { date: new Date().toISOString().slice(0, 10), build, mechanisms: await mechanisms(),
     ...(real ? { real } : {}),
+    ...(boot ? { boot } : {}),
     ...(rb?.['loose-words'] ? { looseWords: { right: rb['loose-words'].right, total: rb['loose-words'].total } } : {}),
     ...(rb?.typos ? { typos: { right: rb.typos.right, total: rb.typos.total } } : {}),
     heldout: h.judged ? { right: h.right, total: h.judged, frozen: h.total } : null,
@@ -77,6 +79,18 @@ export async function currentPoint(note = '') {
     seating60: ind.seating60 ? { right: ind.seating60.right, total: ind.seating60.total } : null,
     ...(related ? { relatedReal: { right: related.right, total: related.total } } : {}), note };
 }
+
+/**
+ * BOOT COST PER PAGE (owner export 2026-11-14 22:43, finding 6), from training/eval/boot-cost-no-apis.json (scripts/measure-boot.mjs --no-browser-apis: a phone browser without the Translator
+ * API, as the owner's Android Chrome): per page and language, the reasoner start, the megabytes fetched and the translation model's share. Not a share right: printed with the point, no slope.
+ */
+export function bootCost() {
+  const f = join(REPO, 'training/eval/boot-cost-no-apis.json');
+  if (!existsSync(f)) return null;
+  const j = JSON.parse(readFileSync(f, 'utf8'));
+  return { measured: j.build, profile: j.profile, pages: Object.fromEntries(Object.entries(j.pages ?? {}).map(([k, v]) => [k, { reasonerMs: v.reasonerMs, mb: v.mb, translationModelMb: v.translationModelMb }])) };
+}
+const bootText = (b) => (b ? Object.entries(b.pages).map(([k, v]) => `${k} ${v.mb} MB${v.translationModelMb ? ` (model ${v.translationModelMb})` : ''} reasoner ${v.reasonerMs} ms`).join('; ') : 'gap');
 
 /** Slope of each series at each point: percentage points per added mechanism since the previous point that had the measure (null = first point or a gap). */
 export function slopes(pts0 = history()) {
@@ -155,6 +169,6 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     else { appendFileSync(FILE, `${JSON.stringify(p)}\n`); console.log('appended', JSON.stringify(p)); }
   }
   const pts = history(), sl = slopes(pts);
-  pts.forEach((p, i) => console.log(`${p.date} ${p.build} mech=${p.mechanisms.total}${p.backfilled ? ' (backfilled)' : ''}\n${active(pts).map((s) => `   ${s.label}: ${pctText(p[s.key])}; slope: ${slopeText(sl[i][s.key])}`).join('\n')}`));
+  pts.forEach((p, i) => console.log(`${p.date} ${p.build} mech=${p.mechanisms.total}${p.backfilled ? ' (backfilled)' : ''}\n${active(pts).map((s) => `   ${s.label}: ${pctText(p[s.key])}; slope: ${slopeText(sl[i][s.key])}`).join('\n')}${p.boot ? `\n   Boot cost per page (phone profile): ${bootText(p.boot)}` : ''}`));
   process.exit(0);
 }
