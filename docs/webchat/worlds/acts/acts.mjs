@@ -510,6 +510,7 @@ export function createExecutor(schema, hooks = {}) {
     if (mods.some((w) => /^\d+$/.test(w)) && k.numbered) guesses.push(`I numbered it in order, not ${mods.find((w) => /^\d+$/.test(w))}`);
     if (name && st.items.some((i) => i.kind === k.name && i.name?.toLowerCase() === name.toLowerCase())) return say(`There is already a ${k.name} ${name}; a name is used once.`, { fallback: 'limit' });
     if (hit.via === 'knowledge' && hit.as) guesses.push(`I have no ${hit.word}, so I used a ${hit.as}`);
+    if (name && amount > 1) { guesses.push(`I did not keep the name ${name}: a name is for one ${k.name}`); name = null; }
     const made = [];
     for (let i = 0; i < amount; i++) {
       const it = newItem(st, k, { name: amount === 1 ? name : null });
@@ -704,7 +705,7 @@ export function createExecutor(schema, hooks = {}) {
     if (mode === 'count') {
       let r = req.thing ? resolve(st, req.thing, { allowEmpty: true }) : { ids: [] };
       let pool;
-      const kw = toks(req.thing).map((w) => kindByWord(w)).find(Boolean);
+      const kw = toks(req.thing).map((w) => kindByWord(w) ?? kindByWord(singular(w))).find(Boolean);
       if (r.unknownKind || (!kw && r.none)) return notHere(r.unknownKind ?? r.kindWord, 'ask');
       pool = kw ? st.items.filter((i) => i.kind === kw.kind.name) : st.items;
       if (req.place) { const p = resolve(st, req.place); if (p.ids?.length) pool = pool.filter((i) => p.ids.includes(i.place?.ref)); else return say(`There is no ${req.place} here.`, { fallback: 'none' }); }
@@ -784,7 +785,7 @@ export function createExecutor(schema, hooks = {}) {
     const st = { items: [], ...state }; const t = toks(text);   // read only: a guess never initialises the state
     const verb = t.find((w) => Object.entries(ACT_VERBS).some(([a, vs]) => vs.includes(w) || same(w, vs.find((x) => !x.includes('_') && x.length > 3) ?? '')));
     const act = verb ? Object.entries(ACT_VERBS).find(([a, vs]) => vs.includes(verb))?.[0] : null;
-    const kw = t.map((w) => kindByWord(w)).find(Boolean);
+    const kw = t.map((w) => kindByWord(w) ?? kindByWord(singular(w))).find(Boolean);
     const thing = kw ? (st.items.find((i) => i.kind === kw.kind.name) ? label(st.items.find((i) => i.kind === kw.kind.name)) : kw.kind.name) : null;
     const actOk = act && schema.acts.has(act === 'set' ? 'change' : act === 'apart' ? 'group' : act) ? (act === 'set' ? 'change' : act === 'apart' ? 'group' : act) : null;
     const verbs = joinAnd([...schema.acts].filter((a) => ACTS[a].verb && !['undo', 'redo'].includes(a)).map((a) => ACTS[a].verb).slice(0, 6));
@@ -842,12 +843,20 @@ export function createExecutor(schema, hooks = {}) {
     const note = `${joinAnd(notes.map((n, i) => (i ? n.replace(/^I (?:drew|added|made|put|moved|removed|changed|took)\b\s*/i, '') : n)))}.`;
     return { ...last, note, value: note };
   }
+  /** The name the sentence gave to a thing whose kind is not `named` (the world's own effect cannot hold it): null when there is none or the kind keeps names. */
+  function unkeptName(req) {
+    if (!req.value || typeof req.thing !== 'string') return null;
+    const kind = toks(req.thing).filter((w) => !DET.has(w)).map((w) => kindByWord(w) ?? kindByWord(singular(w))).find(Boolean)?.kind;
+    if (!kind || kind.named) return null;
+    return String(req.value).trim().replace(/\b\w/g, (c) => c.toUpperCase()) || null;
+  }
   function operation0(ctx, act, args = {}) {
     const st = ctx.state;
     live.dlg = ctx.dialogueFocus ?? null;
     if (st.inputMode === 'confirm') { st.pending = null; st.inputMode = null; }   // a new request cancels an open question
     const req = { act, ...args };
     if (args.amount != null) req.amount = args.amount;
+    if (act === 'make' && !req.value && typeof req.thing === 'string') { const nm = /^(.+?)\s+(?:named|called)\s+(?:an?\s+|the\s+)?([^,;]+?)\s*$/i.exec(req.thing.trim()); if (nm) { req.thing = nm[1]; req.value = nm[2]; } }   // "a cat called Rex" read as one noun phrase: the name is a role of its own
     req.text ??= ctx.segment?.text ?? ctx.text ?? null;
     const dom = hooks.domain?.[act];   // the world's own effect for this act (host code over its own state): a result of { status, value | note }, or undefined to use the generic executor
     if (dom) {
@@ -857,6 +866,7 @@ export function createExecutor(schema, hooks = {}) {
       if (r) {
         if (!hooks.noState) init(st);   // `noState`: the world keeps its own state shape (the map's `focus` is a place, not the executor's selection) and no act log
         if (r.status === 'supported' && !hooks.noState) { st.log.push({ act, mode: req.mode ?? null, text: req.text, roles: roleView(req), diff: null, reply: String(r.value ?? r.note ?? ''), guesses: [] }); if (st.log.length > 50) st.log.shift(); st.lastAct = st.log[st.log.length - 1]; }
+        if (r.status === 'supported' && act === 'make') { const lost = unkeptName(req); const t = String(r.value ?? r.note ?? ''); if (lost && !t.toLowerCase().includes(lost.toLowerCase())) { const said = /^[^.!?]*\.$/.test(t) ? `${t.slice(0, -1)}; I did not keep the name ${lost}.` : `${t} I did not keep the name ${lost}.`; r.value = said; r.note = said; } }   // a name said for a thing of a kind that is not `named` is never dropped silently (spec 21)
         return r.status === 'supported' ? { status: 'supported', note: r.value ?? r.note, value: r.value ?? r.note, ...(r.effect ? { effect: r.effect } : {}), ...(lib?.diff ? { diff: lib.diff } : {}) } : { status: r.status, note: r.note ?? r.value, value: r.note ?? r.value };
       }
     }
