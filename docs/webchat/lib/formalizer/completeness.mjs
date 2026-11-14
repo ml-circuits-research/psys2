@@ -4,8 +4,8 @@
  * slot, or a free-text role. The words a pattern's `...` skipped, and the content words of a free-text capture that are words of the readers themselves (question words, the verbs of
  * other acts), are UNREAD; with the typed worlds (spec 16 section 13, the default source) a free-text slot is unread when its world's types do not accept its words. Browser-safe. `PSYS2_COMPLETE=off` turns the consequences off for A/B runs (the measurement is still recorded on the segment).
  */
-import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=4426ef371b';
-import { unreadBy, thingWordsOf } from './typed-world.mjs?v=4426ef371b';
+import { FUNCTION_WORDS, worldVocabulary } from './spell.mjs?v=4b583c611f';
+import { unreadBy, thingWordsOf } from './typed-world.mjs?v=4b583c611f';
 
 const word = (t) => (t.kind === 'word' || t.kind === 'number') && !t.filler;
 /** Content words (not function words, not fillers) of a token list. */
@@ -56,7 +56,7 @@ export function annotateUnread(matches, set = null, context = null) {
   for (const x of info) {
     const out = [];
     for (const [a, b] of x.m.skipped ?? []) for (const t of x.view.slice(a, b)) if (content(t)) out.push(lowerOf(t));
-    if (typed) { for (const w of unreadBy(typedFor, x.m, things)) out.push(w); x.m.unread = out; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out)); continue; }   // the typed world decides what its slots accept
+    if (typed) { const skip = [...out]; for (const w of unreadBy(typedFor, x.m, things)) out.push(w); x.m.unread = out; x.m.unreadStrict = [...new Set([...skip, ...unreadBy(typedFor, x.m, things, { strict: true })])]; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out)); continue; }   // the typed world decides what its slots accept; unreadStrict: what a world other than the open tab's leaves unread (rest typed too, spec 16 section 14)
     for (const i of x.loose) {
       const t = x.view[i]; if (!word(t)) continue;
       const w = lowerOf(t);
@@ -64,6 +64,6 @@ export function annotateUnread(matches, set = null, context = null) {
       else if (foreign && content(t) && !CATALOG_WORLDS.has(x.m.pattern.worldId) && (() => { try { const v = worldVocabulary(set, x.m.pattern.worldId); return v.nouns?.has(w) && !v.has(w); } catch { return false; } })()) out.push(w);
       else if (content(t) && info.some((o) => o.m.pattern.worldId !== x.m.pattern.worldId && o.read.has(w))) out.push(w);
     }
-    x.m.unread = out; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out));
+    x.m.unread = out; x.m.unreadStrict = out; if (globalThis.process?.env?.DBG_UNREAD) console.error('unread', x.m.pattern.id, JSON.stringify(out));
   }
 }

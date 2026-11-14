@@ -9,6 +9,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
+import { reviewForeign } from './foreign-reading.mjs';
 import { installTextGen } from './textgen.mjs';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs';
 import { loadWorlds, tabOfWorld } from '../worlds/index.mjs';
@@ -1556,7 +1557,8 @@ export class DialogSession {
     }
     const { wires, dispatch, encoderError } = formal;
     const waMode = normalizeWorldAware(worldAware ?? this.worldAware);
-    const segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    let segments = !icpt && !pre && !meta && waMode !== 'off' ? await reviewSegments(this, formal.segments, { mode: waMode, english }) : formal.segments;   // spec 16: the readings are judged against the world instances before anything is executed
+    if (!icpt && !pre && !meta && segments.length) segments = reviewForeign(this, segments, { english: formalText });   // spec 16 section 14: a world other than the open tab's acts only on a full reading; a first-person statement is not a command
     if (this.engine.knowledge && segments.length) { try { await perf.time('knowledge', () => preloadThings(this, segments)); } catch { /* no knowledge is no change */ } }   // spec 17: the open slots of the readings, looked up before the operations run
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
@@ -1647,7 +1649,9 @@ export class DialogSession {
               if (textOf(r) && !r.unknown?.length && !r.untranslatable?.length && !(translator.leftovers?.(textOf(r), lang) ?? []).length) done.push(textOf(r).trim());
             } catch { /* this example stays untranslated */ }
           }
-          exShown = done.length === ex.length ? done : ex;
+          // no machine translator to try them later (not the app's fallback chain): examples the rules cannot translate are left out, so that the not-understood line itself
+          // is shown in the user's language instead of the whole reply reverting to English (RD5: a reply is fully translated or English)
+          exShown = done.length === ex.length ? done : translator.fallbackMode?.() === 'fallback' ? ex : [];
         }
         if (exShown.length) {
           line.push(dym.length ? T(' Did you mean ', { fallback: ' You can say: ' }) : T(' For example: ', { fallback: ' You can say: ' }));
