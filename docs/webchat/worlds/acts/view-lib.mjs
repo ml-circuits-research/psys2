@@ -4,7 +4,7 @@
 // as slots: type, bounds, step, default, enum values), PROJECTS the host's current values to the view's wire for one act (a fork of the declaration: nothing is kept), lets the library check the value
 // (bounds, enum) and compute it (`by=more|less`, `amount=`), and gives the new values back for the host to write. The words of the replies and the effects on the rest of the state (the bounds of
 // the picture, the focus) stay the host's. Browser-safe: no `node:*`.
-import { World } from '../../lib/vendor/sopworld/sopworld.mjs?v=f356067868';
+import { World } from '../../lib/vendor/sopworld/sopworld.mjs?v=9de9c8fd7b';
 
 const slotOf = (a) => {
   const base = `@s.${a.name} core.slot of=VIEW key=${a.name}`;

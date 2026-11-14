@@ -12,7 +12,7 @@
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
 import { lexIndex } from '../worlds/lexicon.mjs?v=51f71db3b5';
 import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=00235ec115';
-import { FILLER } from './world-aware.mjs?v=f32b663a76';
+import { FILLER } from './world-aware.mjs?v=42fd1765e3';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 /** A catalog lookup waits at most LOOKUP_MS; a catalog that does not answer in time is no catalog (the reading is then the rules'), and the turn never waits for it. */

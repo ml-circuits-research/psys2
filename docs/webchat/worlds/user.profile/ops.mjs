@@ -566,7 +566,7 @@ export const sensitiveAction = W((ctx, { cat, text, remember }) => {
 export { sensitiveAction as sensitive };
 
 // ---- the declared schema (schema.sop, declare=yes): read-only requests the profile world answers (the examples of its own question patterns, read at load time)
-import { declaredExecutor } from '../acts/acts.mjs?v=24119144eb';
+import { declaredExecutor } from '../acts/acts.mjs?v=50af2cf24e';
 import { SCHEMA } from './schema.declared.mjs?v=9b75d8e7a9';
 export const executor = declaredExecutor(SCHEMA, {
   // the examples of the world's own patterns of kind=question (read-only requests: they store nothing), read from the loaded world, not copied
