@@ -25,7 +25,16 @@ test('every bundled shard parses with no error and carries only w.lang.en wires;
     assert.deepEqual(r.errors, [], f);
     for (const w of r.wires) assert.ok(/^w\.lang\.en\./.test(w.type), `${f}: ${w.id} ${w.type}`);
   }
-  assert.ok(!Object.keys(LANG_EN_FACTS).some((s) => /^(core-plurals|hand-)/.test(s)), 'catalog additions that change what the readers answer are not bundled');
+  for (const s of ['core-plurals', 'hand-morphology', 'hand-grammar']) assert.ok(LANG_EN_FACTS[s], `${s} is read (2026-11-14: the corpus shows no right-to-wrong row)`);
+});
+
+test('the catalog plurals and the past of be are read: analysis, antenna, aquarium; "the table that was red" reads as a relative clause, "the table was red" stays a statement', () => {
+  assert.equal(en.singular('analyses', 'lemma'), 'analysis');
+  assert.equal(en.singular('antennae', 'lemma'), 'antenna');
+  assert.equal(en.singular('aquaria', 'lemma'), 'aquarium');
+  assert.equal(en.singular('people', 'lemma'), 'person');
+  assert.deepEqual(en.nounPhrase('the tables which were red'), { text: 'red the tables', relative: true });
+  assert.deepEqual(en.nounPhrase('the table was red'), { text: 'the table was red' });
 });
 
 test('the reader through the knowledge source answers what the bundle answers', async () => {

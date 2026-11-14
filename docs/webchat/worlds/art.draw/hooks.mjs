@@ -3,9 +3,9 @@
 // grammar; what an act DOES on the picture is the scene of worlds/art.draw (ops.mjs: the scene operations, the noun-phrase resolution, the placement over the space module; scene.mjs: the
 // renderer's geometry and the drawing from facts). The roles of an act are joined back into the words those operations read. Nothing here names a kind, a colour or a part: kinds and
 // stand-ins come from the knowledge catalog through the board (`registerKnown`), colours from the renderer's palette, places and layouts from the space module.
-import * as D from './engine.mjs?v=c6cf2b4ce9';
+import * as D from './engine.mjs?v=e3334f6ac9';
 import * as space from '../space/space.mjs?v=f98ca4dd42';
-import { splitThings } from '../acts/acts.mjs?v=e9853e331d';
+import { splitThings } from '../acts/acts.mjs?v=dfea3aa2a5';
 import { partsOf, kindKey, kindName } from './scene.mjs?v=3d7b2ae8d5';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
