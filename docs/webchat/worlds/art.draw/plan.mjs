@@ -5,8 +5,8 @@
 // No kind, scene, role, anchor or slot is named in this file.
 import * as D from './engine.mjs?v=ae13f8a88a';
 import { kindKey, kindName, W, H } from './scene.mjs?v=0882bbcd68';
-import { planHostOf } from '../../lib/plan/host.mjs?v=5eb5e1772a';
-import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=e7f0886c6c';
+import { planHostOf } from '../../lib/plan/host.mjs?v=c5390aa5a0';
+import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=d2a0d80d94';
 import { COUNTS } from '../space/space.mjs?v=f98ca4dd42';
 
 const REL = { on: 'on', 'on top of': 'on', onto: 'on', in: 'in', inside: 'in', into: 'in', around: 'around', at: 'at' };
