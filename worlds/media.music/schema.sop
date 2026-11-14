@@ -51,6 +51,8 @@
     acts=redo
 
 @music.song acts.kind
+    dice.not=make
+    know=songs:play
     dice.not=change
     dice.not=remove
     plural=songs
@@ -75,6 +77,8 @@
     word=pitches
 
 @music.chord acts.kind
+    know=chords:play
+    dice.not=remove
     dice.not=make
     plural=chords
     word=triad
@@ -83,6 +87,8 @@
     word=arpeggios
 
 @music.scale acts.kind
+    dice.not=make
+    know=scales:play
     dice.not=remove
     plural=scales
 

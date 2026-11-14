@@ -140,6 +140,7 @@
     numbered=yes
 
 @doc.cell acts.kind
+    dice.not=make
     plural=cells
     in=table
 

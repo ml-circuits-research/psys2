@@ -4,7 +4,8 @@
 // (a note, a chord, a scale, a transposition). Nothing here names a verb.
 import * as M from './music.mjs';
 import * as R from './reader.mjs';
-import { knownSong } from './songs.mjs';
+import { knownSong, SONG_NAMES } from './songs.mjs';
+import * as T from './theory.mjs';
 
 const no = (note, status = 'unsupported') => ({ status, note });
 const ctxFind = (ctx) => (t) => M.findSong(ctx, t);
@@ -208,4 +209,16 @@ function decline({ action, mode, roles = {}, tab, text, state }) {
 
 if (globalThis.process?.env?.MU_DEBUG) for (const k of Object.keys(domain)) { const f = domain[k]; domain[k] = (ctx, r) => { console.error('DOMAIN', k, JSON.stringify({ ...r, request: undefined })); return f(ctx, r); }; }
 const acceptsDebug = (info) => { const v = accepts(info); if (globalThis.process?.env?.MU_DEBUG) console.error('ACCEPTS', JSON.stringify({ action: info.action, mode: info.mode, tab: info.tab, roles: info.roles, v })); return v; };
-export const hooks = { domain, accepts: acceptsDebug, noState: true };
+/**
+ * What the dice may play from the knowledge of the music world (spec 25): the library songs (their titles), and the scales and chords the theory module knows, on every pitch class. Read from songs.mjs and
+ * theory.mjs (the types and letters are theirs), never listed here.
+ */
+function sampleKnowledge() {
+  const cap = (s) => s.replace(/\b[a-z]/g, (c) => c.toUpperCase());
+  const songs = [...new Set(SONG_NAMES.filter((n) => n.split(' ').length > 2 || n === 'frere jacques'))].map(cap);
+  const roots = T.LETTERS.flatMap((l) => [l, ...(l === 'E' || l === 'B' ? [] : [`${l}#`])]);   // E# and B# are F and C
+  const scaleTypes = [...new Set(Object.values(T.SCALE_TYPES).map((v) => v[1]))];
+  const chordTypes = [...new Set(Object.values(T.CHORD_TYPES).map((v) => v[1]))].filter((n) => !/^(?:power|half-diminished|suspended .*|dominant ninth)$/.test(n));   // the reader does not take these spoken forms yet (ledgered)
+  return { songs, scales: roots.flatMap((r) => scaleTypes.map((t) => `the ${r} ${t} scale`)), chords: roots.flatMap((r) => chordTypes.map((t) => `${/^[A-Z]/.test(r) && r === 'A' ? 'an' : 'a'} ${r} ${t} chord`)) };
+}
+export const hooks = { domain, accepts: acceptsDebug, noState: true, sampleKnowledge };

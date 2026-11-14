@@ -2,13 +2,13 @@
 // geo.map (spec 21 section 12): the hooks of the schema world. The acts (make, remove, change, pick, ask, send, undo, redo) are read by the generated grammar; what an act DOES on the map is the
 // operations of map.mjs (the projection and zoom fitting, the view state, the distances). The roles of an act are mapped onto those operations here; the places named in them come by lookup from
 // the catalog (places.mjs), never from a table of this world. Nothing here lists a place, a verb or a colour: kinds and attributes come from the schema, place words from the catalog vocabulary.
-import * as M from './map.mjs?v=2f209821d5';
+import * as M from './map.mjs?v=40abfdc6dc';
 import { knowsPlace, provideBundledGeo } from '../../lib/knowledge/open-words.mjs?v=3eed01f9f5';
 import { BUNDLED_GEO } from '../../lib/knowledge/bundled-geo.mjs?v=69830abbea';
 import { keyOf, lookup, peekIndex } from './places.mjs?v=953a0c9f2d';
-import * as G from './ops.mjs?v=2f209821d5';
+import * as G from './ops.mjs?v=40abfdc6dc';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=436e76d2ce';   // circular on purpose: only used inside functions, when the executor exists
+import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=de5810ab58';   // circular on purpose: only used inside functions, when the executor exists
 
 provideBundledGeo(BUNDLED_GEO);   // the open-words reader knows the bundled places once this world is loaded (LAZY-LOAD-3)
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'’-]+/).filter(Boolean);
@@ -340,4 +340,16 @@ function coordinates({ action, mode, roles = {} }) {
   return /\band\b|,/i.test(said) && !roles.attribute && placesIn(said).length > 1 && isPlace(said);
 }
 
-export const hooks = { domain, accepts, coordinates, noState: true };
+/**
+ * What the dice may name from the knowledge of the map (spec 25): the countries and the biggest cities of the catalog (the bundled subset offline) and the distances between capitals.
+ * Read from the place index, never listed here.
+ */
+function sampleKnowledge() {
+  const D = peekIndex();
+  if (!D) return {};
+  const caps = [...D.capitalOf.values()].map((l) => l[0]).filter((c) => c?.name);
+  const pairs = [];
+  for (let i = 0; i < caps.length && pairs.length < 80; i++) { const b = caps[(i * 7 + 3) % caps.length]; if (b !== caps[i]) pairs.push({ text: `How far is ${caps[i].name} from ${b.name}?`, act: 'ask' }); }
+  return { places: [...D.countries.map((c) => c.name), ...[...D.cities].sort((a, b) => b.pop - a.pop).slice(0, 400).map((c) => c.name)].filter((n) => /^[A-Za-z][A-Za-z .'-]*$/.test(n)), distances: pairs };
+}
+export const hooks = { domain, accepts, coordinates, noState: true, sampleKnowledge };
