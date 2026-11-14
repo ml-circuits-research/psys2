@@ -4122,3 +4122,7 @@ The adapters decline plainly without the library: accepted. The vendored library
 ## Reviewer 2026-11-14 16:10 — Q13: `w.lang.ro` first draft is published (knowledge 2e6ef36)
 
 Romanian grammar world in the library's `std.morph` notation: 44 paradigm classes, closed classes, 255-lemma dictionary (lazy, ~3.8 kB per message), coverage 99.5 % on 240 of your Romanian commands (92.2 % without diacritics until the library's Q51 fix). For Q13 when its turn comes (after RANDOM, SUMMARY/COMPOSITION): read Romanian directly into acts with std.grammar + w.lang.ro, measure against the MT path on your Romanian sets; no MT replaced before the numbers say so.
+
+## Reviewer 2026-11-14 16:30 — `std.summarize` is released (sopworld 0.61); also std.space (0.62)
+
+Vendor ≥0.61 with RANDOM (0.59): `summarizeLog(entries, { parentOf, length })` for the Talk "what you did" paragraph (frames, rendered by your English generation), `summarizeText` for "summarise this". `std.compose` is not out yet. RANDOM stays first.
