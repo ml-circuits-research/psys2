@@ -350,7 +350,7 @@ export class Interpreter {
         if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
         if (action === 'ui.openTab' && session.noTabFollow && op.worldId !== 'ui.shell') return { status: 'supported', value: null, note: 'the reading is loose and names no world: no tab is brought forward' };   // invariant (c): a world's own "show me my tab" is a tab change like any other
         const target = this._actionOp(action);
-        if (!target) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
+        if (!target) { this._missed(session, action); return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` }; }
         if (session.rs) session.rs.live = { request: (a, args2) => this.runAction(session, a, args2), batch: session.batch ?? null, checkpoint: (prefix) => session.rs.checkpoint(prefix) };
         const viaLibrary = session.rs?.request(action, args, session);   // an action the matrix reasoner answers (spec 15) is answered by it whoever asks
         if (viaLibrary) { session.rs.syncTo(session); this._libraryExtras(session, viaLibrary, action); return viaLibrary; }
@@ -370,8 +370,8 @@ export class Interpreter {
       knowledge: this._knowledgeFor(session),   // the catalog with what this session was taught overlaid (spec 23, session.learned)
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
-      /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. */
-      worlds: () => this.set.list().map((w) => ({ id: w.id, title: w.title, summary: w.summaryPhrase, status: w.status, doc: w.doc, tab: w.tab })),
+      /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. LAZY LOADING: what the help world lists ("what can you do?") depends on every world, so its call is recorded (`takeMissed`: '*worlds'). */
+      worlds: () => { if (op.worldId === 'ui.help') this._missed(session, '*worlds'); return this.set.list().map((w) => ({ id: w.id, title: w.title, summary: w.summaryPhrase, status: w.status, doc: w.doc, tab: w.tab })); },
     };
     return ctx;
   }
@@ -393,6 +393,9 @@ export class Interpreter {
       delete env.effects;
     }
   }
+
+  /** LAZY LOADING: an action no loaded world has is answered "unsupported"; the host reads the names after a turn (`DialogSession.takeMissed`) and, when the world that has the action is not loaded yet, loads it and reads the turn again. */
+  _missed(session, action) { (session.missed ??= new Set()).add(String(action)); }
 
   /** The action operation (semantics=action) whose id or action name is `action`. */
   _actionOp(action) {
@@ -480,7 +483,7 @@ export class Interpreter {
    */
   runAction(session, action, args = {}) {
     const op = this._actionOp(action);
-    if (!op) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
+    if (!op) { this._missed(session, action); return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` }; }
     const st = { depth: 0, visited: 0, ops: [] };
     return this._runOp(session, op, { wire: null, action, args, where: {}, mode: 'value' }, {}, st, { ...args });
   }
@@ -499,7 +502,7 @@ export class Interpreter {
       session.rs.syncTo(session);   // answered by the library (spec 15); what its actions wrote is copied to the session memory
       this._libraryExtras(session, envelope, action);   // a game's action brings its tab forward, as its operation did, and queues the effects it asked for
     }
-    else if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
+    else if (!op) { this._missed(session, action); envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` }; }
     else if (op && (envelope = session.rs?.guardRequest(session, op.worldId, action, args) ?? null)) {   // a world's rules say the target does not exist (spec 15, `guard`)
       envelope = { ...envelope, reason: envelope.reason ?? 'precondition_failed', from: [] };
     } else {

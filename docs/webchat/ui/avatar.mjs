@@ -4,7 +4,7 @@
 // motion only, generated from the catalog); the full set replaces it when it arrives. The world holds the state (state.face: a variant for each slot, colours, size and place,
 // expression); this module only draws it: the big face (in the popup of the icon in the input bar), the small face of the icon, the expression chips, the faces of the catalog and
 // the saved ones, and the variants of a part as small pictures to tap (a tap is typed into the chat like any other command).
-// The face MOVES by rules: the host emits events (reply with its text and outcome, thinking, typing, the voice speaking) and worlds/ui.avatar/motion.mjs (TEMPORARY, until
+// The face MOVES by rules: the host emits events (reply with its text and outcome, thinking, typing, the voice speaking) and worlds/ui.avatar/motion.mjs (a thin call of the library's std.motion; the rules are TEMPORARY, until
 // k.motion and std.motion exist) answers which eyes, brows and mouth to lay over the face now. Nothing moves while the page is hidden, and prefers-reduced-motion is honoured.
 const KNOWLEDGE_URL = 'https://ml-circuits-research.github.io/sop-knowledge-worlds/worlds';
 const FADE_MS = 380;
@@ -94,10 +94,10 @@ export function createAvatar(container, host = null) {
     if (loading || destroyed || full) return;
     loading = (async () => {
       try {
-        const [draw, logic, { DEFAULT_FACE }, motionMod, { createFacts }, { createKnowledgeSource }, { createCachedSource }] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs'].map((p) => import(asset(p))));
+        const [draw, logic, { DEFAULT_FACE }, motionMod, { createFacts }, { createKnowledgeSource }, { createCachedSource }, lib] = await Promise.all(['worlds/ui.avatar/facedraw.mjs', 'worlds/ui.avatar/facelogic.mjs', 'worlds/ui.avatar/default-face.mjs', 'worlds/ui.avatar/motion.mjs', 'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/loaders/knowledge-cache.mjs', 'lib/vendor/sopworld/sopworld.mjs'].map((p) => import(asset(p))));
         const src = createCachedSource({ source: createKnowledgeSource(host?.knowledgeUrl?.() || KNOWLEDGE_URL), caches: globalThis.caches });
         const facts = createFacts({ source: { text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((r) => setTimeout(() => r(null), 6000))]) } });
-        mods = { draw, logic, motionMod }; data = DEFAULT_FACE; shown = ''; startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network
+        mods = { draw, logic, motionMod, lib }; data = DEFAULT_FACE; shown = ''; startMotion(); draw_();   // the bundled fallback face first: the avatar never waits for the network
         host?.progress?.start?.('faces', 'Loading the face set', { quiet: true });   // PROGRESS: recorded, never shown while it loads (the fallback face is already drawn: this is an upgrade); said only when it cannot be had
         const d = await facts.faces();
         if (!d) throw new Error('no faces in the catalog');
@@ -121,7 +121,7 @@ export function createAvatar(container, host = null) {
   const has = (slot, name) => !!data?.slots.find((s) => s.name === slot)?.variants.some((v) => v.name === name && v.parts?.length !== 0);
   function startMotion() {
     if (!mods?.motionMod || motion) return;
-    motion = mods.motionMod.createMotion({ seed: host?.motionSeed ?? (Math.floor(Math.random() * 1e9) | 1), has, reduced: !!reducedQuery?.matches, t0: now() });
+    motion = mods.motionMod.createMotion({ lib: mods.lib, seed: host?.motionSeed ?? (Math.floor(Math.random() * 1e9) | 1), has, reduced: !!reducedQuery?.matches, t0: now() });
     tick();
   }
   reducedQuery?.addEventListener?.('change', () => { motion = null; frameKey = ''; startMotion(); });   // the preference changed: a new scheduler

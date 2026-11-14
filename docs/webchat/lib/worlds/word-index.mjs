@@ -13,7 +13,7 @@
  * Query side: `queryWords(text)` is the normalized message (each word, its lemma, the pairs and triples of lemmas joined with `_`: the same atoms the router and the cards use,
  * `messageWords` of src/dialog/meta-worlds.mjs) and the spelling candidates of words nobody knows (`spellingCandidates`).
  */
-import { messageWords, lemma } from '../dialog/meta-worlds.mjs?v=482876fff5';
+import { messageWords, lemma } from '../dialog/meta-worlds.mjs?v=c4b39a3aa4';
 
 export { messageWords, lemma };
 
@@ -64,7 +64,20 @@ const edits1 = (w) => {
   return out;
 };
 /** The words one edit away from `w` (insert, delete, replace, swap), lowercase letters only. A deletion at the front changes the bucket: callers fetch every bucket these give. */
-export const spellingCandidates = (w) => (/^[a-z]{4,}$/.test(w) ? [...edits1(w)] : []);
+/**
+ * LAZY LOADING: is a first reading, made with the worlds loaded so far, one that a world not loaded might have read otherwise? Then the host loads every world and reads the message again.
+ * Not complete: nothing understood; a word left out, unparsed or guessed (a spelling correction); a status other than supported; and a SWALLOW: a free-text slot (`words`, `rest`) of three words or
+ * more that holds a joiner (then, also, ;) or a question word ("what is the capital of {Japan then how many days are in a week}"): a world that is not loaded may read the part after it, and the
+ * loaded world took it as the name of a thing (measured: 24 of the 35 readings that looked complete and differed from a full start).
+ */
+const SWALLOW = /(?:^|[\s,;])(?:then|also|afterwards|next|plus|what|whats|how|which|who|whom|whose|where|when|why)(?=[\s,;?]|$)|;/i;
+export function readingIncomplete(reply) {
+  if (!reply?.segments?.length) return true;
+  if (reply.segments.some((x) => x.unparsed || x.corrections?.length || x.ignored?.length)) return true;
+  if ((reply.statuses ?? []).some((x) => x !== 'supported')) return true;
+  return reply.segments.some((x) => Object.values(x.match?.slots ?? {}).some((sl) => (sl.class === 'rest' || sl.class === 'words') && String(sl.text ?? '').trim().split(/\s+/).length >= 3 && SWALLOW.test(String(sl.text))));
+}
+export const spellingCandidates =(w) => (/^[a-z]{4,}$/.test(w) ? [...edits1(w)] : []);
 
 /** Words of the message that are worth asking about: no digits-only, at most `max`. */
 export function queryWords(text, { max = 60 } = {}) {
