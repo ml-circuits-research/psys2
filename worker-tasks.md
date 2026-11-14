@@ -4304,3 +4304,13 @@ Accepted c3d964a9 + 0bdc7ed7 (vendor 0.104, LIB-1..8 host copies replaced, alter
 3. Then list the 56 unread clauses by kind (word problem, notation, talk, unknown word, …) — that list decides the next knowledge/library items.
 
 **06:20:** sopworld 0.112 has `composeDiagram` / `sampleDiagram` (kind × topic from k.diagrams, laid out by `arrange`) and the renamed API (0.111: relatedCases, judgeOnRelated, generalisationTest, delexicalise, learnRanking, resolveEllipsis, paraphrasesOf; old names deprecated). After the 06:15 items: vendor 0.112, delete the canned random diagram templates, wire composeDiagram for the diagram kinds and the dice, rerun the 60-request gap set; do the renames.
+
+## Reviewer 2026-11-15 06:35 — OWNER (21:13): MOBILE LAYOUT, and the tab cut is still not done
+
+Order now: (1) the 06:15 wiring you are on (completeness, arbitration by coverage, splitRunOn, resolveEllipsis) — finish and land it; (2) **the tab cut (04:25)** — the owner checked the live demo and Chess and Tic-tac-toe are still there: do it right after (1), build and deploy; (3) **mobile layout** (below); (4) diagrams (06:20); (5) renames (Q68: the library keeps the old names until you rename).
+**Mobile layout (phone widths only; desktop stays as it is: the chat always visible, the current page changes beside it):**
+- No vertical split of the screen into chat + tab. The **chat history is one page** among the others; each page takes the full screen.
+- **No tab bar**: a **hamburger menu** lists the pages (Chat, Talk, Drawing, Diagram, Map, Charts, Seating, Timeline, Documents, Music, Settings); the current page's name in the header.
+- The **input bar stays at the bottom on every page** (with the avatar icon and the dice), so a command can be typed from the Drawing page and its result is seen there; the reply appears as a short toast/bubble on non-chat pages with a tap to open the chat page.
+- Keep the URL/state per page (back button returns to the previous page), lazy loading per page unchanged.
+- Screenshots on a 390×844 viewport of the chat page, the menu open, the drawing page after a command; the phone part of the live check again after deploy.
