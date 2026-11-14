@@ -4268,3 +4268,26 @@ Vendor 0.103 (handover LIB-1..8 is in: delete the host copies).
 ## Reviewer 2026-11-15 03:45 — voices measurement and Wikidata given names accepted; library 0.104 has completeness and arbitration by coverage
 
 Accepted e53d12c6 (each reading path alone, union 72.3 %, family agreement 80.3 % coverage / 78.4 % precision; Romanian agreement a strong filter) and 0a24284f (3,000 given names from Wikidata, CC0). sopworld 0.104: completeness (a reading with unread content words is not final), `arbitrate` by coverage → tab → priority, discourse continuation, named:false reporting — vendor it and do Q15 (2)+(3) with it; measure on the curve. The knowledge repository fixes your 9 failing local w.lang.en frames there (Q64) — delete the local copies when it says so; w.lang.ro now has frames (one-request hand Romanian: same act and roles 39.9 %): rerun Q13 with them when you get to it.
+
+## Reviewer 2026-11-15 04:25 — FEWER TABS (owner, 19:37); after the Q15 (2)+(3) measurement lands
+
+Owner: several tabs are not relevant and are not maintained; games and document analysis would need their own approach. Decision (reversible: it stays in git history; tag the commit before removal `pre-tab-cut`):
+- **Remove** the tabs and their worlds, patterns, words, tests, specs and assets: **Chess** (games.chess, stockfish), **Tic-tac-toe**, **Hangman**, **Guess the animal**, **Profile** (keep the user's name/settings in Settings if anything still needs it), and **document analysis** (docs.reader's file search, read aloud, sample texts: the Hansel and Gretel sample).
+- **Keep** Talk, Drawing, Diagram, Map, Charts, Seating, Timeline, Music (if it passes its tests; otherwise say so and we decide), and **one Documents tab** = docs.editor + the composition and summary features (the w.document output), so composition keeps its home.
+- **kids.*** worlds have no tab: audit what still answers through them (animal legs, arithmetic, time, shapes) against the catalog; keep only what the catalog does not cover, list the rest for removal.
+- Measure before/after: test-world failures (68 now), smoke time, boot requests/bytes, arbitration errors in the ledger (keyword theft by chess/tic-tac-toe/avatar), lines removed. Report in the landing note. Smoke must stay green; invariant tests that only tested removed worlds go with them.
+
+## Reviewer 2026-11-15 04:40 — DIAGRAMS must be smarter (owner, 19:41); Music stays out of scope (owner: never tested it — keep it, do not invest)
+
+Owner: "a random diagram" only draws circles; layout/arrangement requests are not understood; with this much knowledge the diagram should be smarter. Plan across the repositories (knowledge: diagram kinds as facts; library: diagrams composed from knowledge; PSys2: diagram.sketch as a thin world over them). PSys2 first:
+1. **Measure the gap now**: a set of 60 diagram requests judged by state — arrangements ("arrange them in a circle / grid / row / column / tree", "align the boxes left", "space them evenly", "put the start at the top", "make the arrows go left to right"), diagram kinds ("make a flowchart of making tea", "a tree of the parts of a car", "a cycle of the seasons", "a timeline of the planets by distance", "a mind map about bees", "a Venn diagram of birds and animals that fly"), edits ("make the decision a diamond", "connect A to C", "label the arrow yes"), and "make a random diagram" ×10 (record what it draws). Report per group; ledger rows by cause.
+2. **Random diagrams** from the sampler + knowledge (once the knowledge repository publishes diagram kinds): a random diagram = a diagram kind × a topic whose knowledge has that structure (parts → tree, order → sequence/timeline, cycle facts → cycle, procedure → flowchart, kinds → Venn/tree), never "a circle".
+3. **Arrangements** through the existing layout knowledge (k.layouts, std.space single placement 0.62, the coordination hook 77ad606c) and w.lang.en frames, not diagram-local patterns; anything missing goes to the library/knowledge as asks.
+
+## Reviewer 2026-11-15 05:10 — naming: "cousins" becomes "related cases" (owner, 20:05)
+
+The library renames `cousins` → `relatedCases` (distance, axes), `judgeFix` → `judgeOnRelated`, the tester → `generalisationTest` (its 05:10 block; old names deprecated for two releases). When you vendor that release: rename scripts/cousins.mjs → scripts/related-cases.mjs, scripts/lib/cousins-host.mjs, the `cousinsReal` curve series → `relatedReal`, spec text and worker-facing docs; old result files can keep their names.
+
+## Reviewer 2026-11-15 05:25 — naming review (owner, 20:13)
+
+The library renames to established terms (its 05:25 block: relatedCases, judgeOnRelated, generalisationTest, delexicalise, learnRanking, resolveEllipsis, paraphrasesOf) and writes docs/literature.md. When you vendor that release, follow the renames; in your own specs and docs use the same terms ("voices" = ensemble members / readers; "cousins" = related cases; "form operators" = paraphrase rewrite rules) and add a short glossary to specs/ pointing to the library's docs/literature.md.
