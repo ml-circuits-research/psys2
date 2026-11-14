@@ -516,7 +516,17 @@ export class DialogSession {
     const recentWorlds = [...(this._recentWorlds ?? [])];
     const ambientWorlds = this.engine.set.list().filter((w) => w.ambient).map((w) => w.id);   // worlds of an always-visible view (the avatar): present on every tab
     const stepWorlds = this.discourse?.actions?.[0]?.worlds ?? [], redoWorlds = this.discourse?.redoStack?.at?.(-1)?.worlds ?? [];   // the worlds of the newest step on the timeline, and of the newest undone step: "undo" / "redo" follow them whichever tab is open
-    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, ambientWorlds, stepWorlds, redoWorlds, states: st, asked: this.discourse?.pending?.world ?? null, lastAction: this.discourse?.frames?.[0]?.world ?? null };   // asked and lastAction: what meta.worlds reads (a question the world asked; the world of the last request)
+    const project = (segments) => {   // the states and the worlds after these readings are carried out, on a copy of the session (spec 03 "Clauses in sequence")
+      const f = this.forkForValidation(), worlds = [];
+      for (const seg of segments) {
+        f.isession.add(seg.wires);
+        for (const w of seg.wires) { const r = this.engine.interp.resolve(f.isession, w); if (r?.status && r.status !== 'supported') return null; }
+        const id = seg.match?.worldId ?? seg.match?.pattern?.worldId ?? seg.routing?.winner?.worldId;
+        if (id && !worlds.includes(id)) worlds.unshift(id);
+      }
+      return { states: f.isession.state, worlds };
+    };
+    return { project, activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, ambientWorlds, stepWorlds, redoWorlds, states: st, asked: this.discourse?.pending?.world ?? null, lastAction: this.discourse?.frames?.[0]?.world ?? null };   // asked and lastAction: what meta.worlds reads (a question the world asked; the world of the last request)
   }
 
   /** Legacy focus map derived from the context: +3 for the tab world, +1 for each recent world. */
