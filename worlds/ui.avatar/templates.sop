@@ -13,8 +13,20 @@
     for=action.ui.avatar.change
     text="{note}"
 
+@tpl.ui.avatar.place core.template
+    for=action.ui.avatar.place
+    text="{note}"
+
 @tpl.ui.avatar.send core.template
     for=action.ui.avatar.send
+    text="{note}"
+
+@tpl.ui.avatar.pick core.template
+    for=action.ui.avatar.pick
+    text="{note}"
+
+@tpl.ui.avatar.copy core.template
+    for=action.ui.avatar.copy
     text="{note}"
 
 @tpl.ui.avatar.ask core.template
@@ -35,8 +47,4 @@
 
 @tpl.ui.avatar.load core.template
     for=action.ui.avatar.load
-    text="{note}"
-
-@tpl.ui.avatar.place core.template
-    for=action.ui.avatar.place
     text="{note}"

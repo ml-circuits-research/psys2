@@ -14,8 +14,7 @@
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const BUILTIN_TABS = {
-  robot: { title: 'Avatar', world: 'ui.avatar' },
-  avatar: { title: 'Avatar', world: 'ui.avatar' },
+  talk: { title: 'Talk', world: 'talk' },
   editor: { title: 'Editor', world: 'docs.editor' },
   tictactoe: { title: 'Tic-tac-toe', world: 'games.tictactoe', game: true },
   guess: { title: 'Guess the animal', world: 'games.guess', game: true },
@@ -34,7 +33,7 @@ const lowerFirst = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 // ---------------------------------------------------------------- tabs and games
 function tabInfo(ctx) {
   const shell = ctx.peek?.('ui.shell') ?? {};
-  const id = shell.activeTab ?? 'robot';
+  const id = shell.activeTab ?? 'talk';
   const worlds = ctx.worlds?.() ?? [];
   const declared = worlds.find((w) => w.tab?.id === id);
   let info;
@@ -325,7 +324,7 @@ export function helpHow(ctx, { what } = {}) {
   const items = best.map((b) => b.ex);
   ctx.state.lastHelp = { world: best[0].world.id, tab: t.id };
   suggest(ctx, items);
-  const where = best[0].world.id !== t.world && best[0].world.tab?.title ? ` (on the ${best[0].world.tab.title} tab)` : best[0].world.id === 'ui.avatar' && t.world !== 'ui.avatar' ? ' (on the Avatar tab)' : '';
+  const where = best[0].world.id !== t.world && best[0].world.tab?.title ? ` (on the ${best[0].world.tab.title} tab)` : best[0].world.id === 'ui.avatar' && t.world !== 'ui.avatar' ? ' (click the face beside the input)' : '';
   void recent;
   return ok(`You can try, for example: ${joinOr(items.map(quote))}${where}.`, { values: items });
 }

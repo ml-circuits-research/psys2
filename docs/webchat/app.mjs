@@ -490,6 +490,7 @@ export async function mountPsys2(element, options = {}) {
       return { ok: false, detail: `unknown phrase log command "${what}"` };
     },
     'settings': async ({ action, tab }) => { if (action === 'close') closeSettings(); else openSettings(tab); return { ok: true }; },
+    'ui.openView': async ({ view }) => { if (view === 'avatar') openAvatar(true); return { ok: view === 'avatar' }; },   // a view that is not a tab (the avatar popup), asked for by the shell world
     'avatar.animate': async (args) => { robotUI()?.animate?.(args); return { ok: !!robotUI() }; },
     'chat.surprise': async () => {   // the voice equivalent of the die button; waits for the current turn (the one that carries this effect) to end
       let tries = 0;

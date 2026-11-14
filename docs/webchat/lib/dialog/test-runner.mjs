@@ -1,5 +1,7 @@
 /** Runs a world's tests.sop through a dialog engine (spec 02 Tests). Browser-safe. */
 
+/** The tab id of a session with no tab (the app's chat-only mode): no world owns it, so no world is favoured. */
+const CHAT_ONLY = 'chat';
 const natural = (a, b) => a.localeCompare(b, 'en', { numeric: true });
 
 /** Value at a dot path inside a state object (array indexes and `length` work); undefined when absent. */
@@ -37,7 +39,12 @@ export async function runWorldTests(engine, worldId) {
     result.total++;
     if (t.language !== 'en' && !engine.translator) { result.skipped.push({ id: t.id, reason: 'no translator available' }); continue; }
     let s = t.session ? sessions.get(t.session) : null;
-    if (!s) { s = engine.createSession({ language: 'en' }); if (t.session) sessions.set(t.session, s); applyGiven(s, t); }
+    if (!s) {
+      s = engine.createSession({ language: 'en' }); if (t.session) sessions.set(t.session, s);
+      // A world is tested alone, in chat only: the shell's first tab (Talk) answers the questions of other worlds by design, so a session of a world that is not about the tabs starts on no tab.
+      if (!/^ui\./.test(worldId) && s.state('ui.shell')) s.setWorldState('ui.shell', { activeTab: CHAT_ONLY });
+      applyGiven(s, t);
+    }
     try {
       const reply = await s.send(t.input, { language: t.language });
       const last = reply.answers.at(-1);

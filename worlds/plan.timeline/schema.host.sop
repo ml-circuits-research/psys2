@@ -1,0 +1,27 @@
+# The host's own part of the timeline world (truly own): what the published schema w.timeline cannot say. The rest of schema.sop is generated from the catalog
+# (scripts/import-w-schema.mjs <catalog> w.timeline worlds/plan.timeline).
+@time acts.schema
+    noun="timeline"
+    acts=send
+    acts=undo
+    acts=redo
+    acts=save
+    acts=load
+    limit.history=30
+    tabOnly=yes
+    hooks=hooks.mjs
+
+@time.view acts.view
+    aspects=temporal
+    word=timeline
+    word=time_line
+    word=calendar
+
+@time.event acts.kind
+    named=yes
+    aspect=temporal
+
+@time.at acts.attr
+    more=later
+    less=earlier
+    default=0

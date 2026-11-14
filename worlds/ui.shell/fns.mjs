@@ -40,7 +40,7 @@ const isInitial = (s) => {
 /** The wire a state asks for: attrs of the one ui.shell.view, or null for the initial state (nothing told yet). */
 function viewOf(s) {
   const attrs = {
-    tab: [atom(s.activeTab ?? 'robot')], prev: [s.previousTab ? atom(s.previousTab) : 'none'], speaker: [String(!!s.speaker)], listening: [String(!!s.listening)], handsfree: [String(!!s.handsFree)],
+    tab: [atom(s.activeTab ?? 'talk')], prev: [s.previousTab ? atom(s.previousTab) : 'none'], speaker: [String(!!s.speaker)], listening: [String(!!s.listening)], handsfree: [String(!!s.handsFree)],
     rate: [String(Math.round((s.rate ?? 1) * 100))], lang: [s.language === 'ro' ? 'ro' : 'en'], rest: [str(JSON.stringify(restOf(s)))],
   };
   return attrs;

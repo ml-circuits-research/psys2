@@ -31,11 +31,29 @@
     action=plan.timeline.change
     doc="The act 'change' (spec 21), applied by the generic executor to this world's schema."
 
+@op.plan.timeline.connect core.operation
+    impl=connect
+    semantics=action
+    action=plan.timeline.connect
+    doc="The act 'connect' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.group core.operation
+    impl=group
+    semantics=action
+    action=plan.timeline.group
+    doc="The act 'group' (spec 21), applied by the generic executor to this world's schema."
+
 @op.plan.timeline.send core.operation
     impl=send
     semantics=action
     action=plan.timeline.send
     doc="The act 'send' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.pick core.operation
+    impl=pick
+    semantics=action
+    action=plan.timeline.pick
+    doc="The act 'pick' (spec 21), applied by the generic executor to this world's schema."
 
 @op.plan.timeline.copy core.operation
     impl=copy
@@ -60,3 +78,15 @@
     semantics=action
     action=plan.timeline.redo
     doc="The act 'redo' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.save core.operation
+    impl=save
+    semantics=action
+    action=plan.timeline.save
+    doc="The act 'save' (spec 21), applied by the generic executor to this world's schema."
+
+@op.plan.timeline.load core.operation
+    impl=load
+    semantics=action
+    action=plan.timeline.load
+    doc="The act 'load' (spec 21), applied by the generic executor to this world's schema."

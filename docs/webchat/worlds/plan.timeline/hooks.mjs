@@ -9,10 +9,10 @@ export const hooks = {
   after(ctx, act, req, r) {
     if (r?.status && r.status !== 'supported') return r;
     for (const it of ctx.state?.items ?? []) {
-      if (it.kind !== 'moment' || 'time' in it) continue;
+      if (it.kind !== 'event' || 'time' in it) continue;
       const p = it.name ? timePosition(it.name) : null;
       it.time = p ? { cycle: p.cycle, kind: p.kind } : null;
-      if (p) it.attrs = { ...(it.attrs ?? {}), when: p.n };
+      if (p) it.attrs = { ...(it.attrs ?? {}), at: p.n };
     }
     return r;
   },

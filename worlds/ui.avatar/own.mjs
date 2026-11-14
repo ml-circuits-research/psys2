@@ -32,7 +32,6 @@ export const animate = (ctx, { anim } = {}) => {
   if (!name) return no('I do not know how to do that.');
   if (/^(wink|blink)$/.test(name)) { const d = dataOf(ctx); if (d) return F.faceMood(ctx, { mood: 'wink' }, d); }
   ctx.effect('avatar.animate', { name });
-  ctx.request('ui.openTab', { tab: 'robot' });
   return ok({ wave: 'I wave at you!', nod: 'I nod.', dance: 'I dance!', shake: 'I shake my head.', spin: 'Wheee!', jump: 'I jump!', bounce: 'I bounce!', wiggle: 'I wiggle.' }[name] ?? `OK, ${name}!`);
 };
 /** The drawing world hands "make your nose bigger" over when "your ..." names no object: { part, words: the size word }. */

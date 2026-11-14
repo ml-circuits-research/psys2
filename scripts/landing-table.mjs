@@ -28,6 +28,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { readCorpus, readRuns, latest } from './lib/cases-corpus.mjs';
 import { read as readIndicators } from './indicators.mjs';
+import { thinRows, toMarkdown as thinMarkdown, toHtml as thinHtml } from './thin-worlds.mjs';
 import { tableRows as curveRows, html as curveHtml } from './learning-curve.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -176,12 +177,12 @@ export async function compute({ meas, worlds } = {}) {
     { label: 'T1 things / T2 taught facts / T3 rules', value: `T1: ${tallyText(t('T1'))}; T2: ${tallyText(t('T2'))}; T3: ${tallyText(t('T3'))}` },
     { label: 'Grid judged by state or answer', value: grid ? `${grid.total - grid.holes - (grid.unconfirmed ?? 0)} of ${fmt(grid.total)}` : '-' },
   ];
-  return { rows, guard, regressions: lastRun?.regressions.length ?? 0 };
+  return { rows, guard, regressions: lastRun?.regressions.length ?? 0, thin: thinRows(worlds) };   // thin: one row per live world with a tab (scripts/thin-worlds.mjs, worker-tasks THIN LIVE WORLDS item 1)
 }
 
 export function toMarkdown(t) {
   const cell = (s) => String(s).replace(/\|/g, '/');
-  return `| measure | value | detail |\n| --- | --- | --- |\n${t.rows.map((r) => `| ${cell(r.label)} | ${cell(r.value)} | ${cell(r.detail)} |`).join('\n')}\n\nGuard (accuracy sets, must not fall, not the goal):\n\n| set | result |\n| --- | --- |\n${t.guard.map((g) => `| ${cell(g.label)} | ${cell(g.value)} |`).join('\n')}\n`;
+  return `| measure | value | detail |\n| --- | --- | --- |\n${t.rows.map((r) => `| ${cell(r.label)} | ${cell(r.value)} | ${cell(r.detail)} |`).join('\n')}\n\nGuard (accuracy sets, must not fall, not the goal):\n\n| set | result |\n| --- | --- |\n${t.guard.map((g) => `| ${cell(g.label)} | ${cell(g.value)} |`).join('\n')}\n${t.thin ? `\nThin live worlds (one row per tab world; own lines by kind, imports, reuse, verdict per own part):\n\n${thinMarkdown(t.thin)}\n` : ''}`;
 }
 
 export function toHtml(t) {
@@ -193,7 +194,7 @@ ${curveHtml()}
 <p><b>Guard</b> (must not fall; not the goal)</p>
 <div class="scroll"><table><thead><tr><th>set</th><th>result</th></tr></thead><tbody>
 ${t.guard.map((g) => `<tr><td>${esc(g.label)}</td><td style="white-space:normal">${esc(g.value)}</td></tr>`).join('\n')}</tbody></table></div>
-`;
+${t.thin ? thinHtml(t.thin) : ''}`;
 }
 
 export async function landingHtml(args) { return toHtml(await compute(args)); }

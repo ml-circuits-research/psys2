@@ -5,7 +5,7 @@
 // operations (or the host: a click on a tab, a toggle) changed, `guard` asks the rules whether the tab, the game, the language or the Settings tab a request
 // names exists, `undoWords` says what an undo took back in the world's words. What the app has (tabs, words, games, languages) is the knowledge base kb.sop,
 // generated from the manifests by scripts/gen-ui-kb.mjs. Browser-safe; it imports its sibling ops.mjs only for the initial state and the word normalizer.
-import { initialState, norm } from './ops.mjs?v=509dcced7c';
+import { initialState, norm } from './ops.mjs?v=5df096bf8c';
 
 const dec = (t) => (typeof t === 'string' && t.startsWith('"') ? JSON.parse(t) : t);
 const str = (v) => JSON.stringify(String(v));
@@ -40,7 +40,7 @@ const isInitial = (s) => {
 /** The wire a state asks for: attrs of the one ui.shell.view, or null for the initial state (nothing told yet). */
 function viewOf(s) {
   const attrs = {
-    tab: [atom(s.activeTab ?? 'robot')], prev: [s.previousTab ? atom(s.previousTab) : 'none'], speaker: [String(!!s.speaker)], listening: [String(!!s.listening)], handsfree: [String(!!s.handsFree)],
+    tab: [atom(s.activeTab ?? 'talk')], prev: [s.previousTab ? atom(s.previousTab) : 'none'], speaker: [String(!!s.speaker)], listening: [String(!!s.listening)], handsfree: [String(!!s.handsFree)],
     rate: [String(Math.round((s.rate ?? 1) * 100))], lang: [s.language === 'ro' ? 'ro' : 'en'], rest: [str(JSON.stringify(restOf(s)))],
   };
   return attrs;

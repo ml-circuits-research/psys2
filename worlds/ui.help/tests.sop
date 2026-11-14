@@ -1,14 +1,14 @@
 @t.ui.help.n01 core.test
     input="What can I say here?"
-    expect="On the Avatar tab"
+    expect="On the Talk tab"
     expect="you can say, for example"
     expectEffect=chat.suggest
     session=a
 
 @t.ui.help.n02 core.test
     input="What can I say here?"
-    expect="On the Avatar tab"
-    expectState="lastHelp.tab=robot"
+    expect="On the Talk tab"
+    expectState="lastHelp.tab=talk"
     session=a
 
 @t.ui.help.sp01 core.test
@@ -30,7 +30,7 @@
 
 @t.ui.help.n03 core.test
     input="More examples"
-    expect="more things you can say on the Avatar tab"
+    expect="more things you can say on the Talk tab"
     session=a
 
 @t.ui.help.n04 core.test
@@ -45,18 +45,18 @@
 
 @t.ui.help.n06 core.test
     input="Help"
-    expect="The Avatar tab lets you change my face"
+    expect="The Talk tab"
     expect="You can say"
     session=a
 
 @t.ui.help.n07 core.test
     input="I am lost"
-    expect="Avatar tab"
+    expect="Talk tab"
     session=a
 
 @t.ui.help.n08 core.test
     input="What does this tab do?"
-    expect="The Avatar tab lets you change my face"
+    expect="The Talk tab"
     session=a
 
 @t.ui.help.n09 core.test
@@ -88,7 +88,7 @@
 
 @t.ui.help.n16 core.test
     input="How do I play?"
-    expect="There is no game open on the Avatar tab"
+    expect="There is no game open on the Talk tab"
     expect="hangman"
     session=a
 
@@ -112,13 +112,14 @@
 @t.ui.help.n20 core.test
     input="Zorb flimbles quickly"
     expectStatus=unparsed
-    session=a
+    session=a2
+    given="ui.shell:activeTab=timeline"   # a tab that does not answer chat: what is tested is the help for an unparsed message
 
 @t.ui.help.n21 core.test
     input="Why didn't you understand?"
     expect="I did not understand \"Zorb flimbles quickly\""
-    expect="none of the commands I know matches"
-    session=a
+    expect="could not read it as a whole request"
+    session=a2
 
 @t.ui.help.n22 core.test
     input="Is there an"
@@ -126,7 +127,7 @@
     expectStatus=unparsed
     expectState="lastUnparsed.text=Is there an"
     expectEffect=chat.suggest
-    session=a
+    session=a2
 
 @t.ui.help.n22b core.test
     input="Hangmn"
@@ -137,7 +138,7 @@
 @t.ui.help.n23 core.test
     input="What did I do wrong?"
     expect="Did you mean"
-    session=a
+    session=a2
 
 @t.ui.help.n24 core.test
     input="Open the editor"
@@ -290,6 +291,7 @@
     input="what u can do"
     expect="I can chat"
     session=rh3
+    given="ui.shell:activeTab=timeline"   # a tab that does not answer chat: what is tested is the help for an unparsed message
 
 @t.ui.help.r06 core.test
     input="tell me what you can do"
@@ -318,22 +320,22 @@
 
 @t.ui.help.r11 core.test
     input="im lost"
-    expect="Avatar tab"
+    expect="Talk tab"
     session=rh5
 
 @t.ui.help.r12 core.test
     input="help i am lost"
-    expect="Avatar tab"
+    expect="Talk tab"
     session=rh5
 
 @t.ui.help.r13 core.test
     input="whats this tab for"
-    expect="The Avatar tab lets you change my face"
+    expect="The Talk tab"
     session=rh5
 
 @t.ui.help.r14 core.test
     input="what can i do on this page"
-    expect="The Avatar tab lets you change my face"
+    expect="The Talk tab"
     session=rh5
 
 @t.ui.help.r15 core.test
@@ -345,6 +347,7 @@
     input="zorb flimbles quickly"
     expect="I did not understand"
     session=rh7
+    given="ui.shell:activeTab=timeline"   # a tab that does not answer chat: what is tested is the help for an unparsed message
 
 @t.ui.help.r17 core.test
     input="why u no understand"
@@ -395,6 +398,7 @@
     input="what is psys2"
     expect="neurosymbolic"
     session=hid6
+    given="ui.shell:activeTab=timeline"   # a tab that does not answer chat: what is tested is the help for an unparsed message
 
 @t.ui.help.id07 core.test
     input="do you use an llm"

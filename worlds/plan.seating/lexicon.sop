@@ -6,6 +6,12 @@
     doc="Kinds of things of this world (from schema.sop)"
     word=table
     word=tables
+    word=seat
+    word=seats
+    word=chair
+    word=chairs
+    word=place
+    word=places
     word=guest
     word=guests
     word=person
@@ -14,8 +20,24 @@
 @lex.plan.seating.attrs core.lexicon
     class=modifier
     doc="Attributes (from schema.sop)"
+    word=shape
+    word=round
+    word=square
+    word=long
     word=seats
-    word=seat
+    word=how_many_seats
+    word=size
+    word=x
+    word=stands
+    word=y
+    word=n
+    word=number
+    word=position
+    word=party
+    word=family
+    word=side
+    word=note
+    word=notes
     word=colour
     word=color
 
@@ -23,7 +45,9 @@
     class=modifier
     doc="Values the attributes take (from schema.sop; a colour attribute with no listed values takes the shared colour lexicon)"
     extends=$lex.lang.colour
-
+    word=round
+    word=square
+    word=long
 
 @lex.plan.seating.more core.lexicon
     class=modifier

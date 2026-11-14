@@ -10,6 +10,15 @@
     tabOnly=true
     example="Add a table."
 
+@pat.plan.timeline.make.place core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.make arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Add a guest at table 1."
+
 @pat.plan.timeline.make.n core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=plan.timeline.make arg.amount=\"{amount}\" arg.thing=\"{thing}\" arg.text=\"{segment}\""
@@ -37,6 +46,15 @@
     tabOnly=true
     example="Place a guest named Ann."
 
+@pat.plan.timeline.make.name.place core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    tabOnly=true
+    example="Add a guest called Ann at table 1."
+
 @pat.plan.timeline.remove core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=plan.timeline.remove arg.thing=\"{thing}\" arg.text=\"{segment}\""
@@ -55,6 +73,15 @@
     tabOnly=true
     example="Kick the guest Ann out."
 
+@pat.plan.timeline.remove.place core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.remove] [$acts.det]? {thing:words} [from|out_of|off] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.remove arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Remove the guests from table 1."
+
 @pat.plan.timeline.change.of core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {attribute:lex.plan.timeline.attrs} of [$acts.det]? {thing:words} [to|be|as|into]? [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.attribute=\"{attribute}\" arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
@@ -72,6 +99,15 @@
     tabPriority=21
     tabOnly=true
     example="Set table 2 seats to 6."
+
+@pat.plan.timeline.change.value core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.set] [$acts.det]? {thing:words} [to|be|as|into]? {value:lex.plan.timeline.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Make table 2 blue."
 
 @pat.plan.timeline.change.add core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make] {amount:number} {attribute:lex.plan.timeline.attrs} to [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -127,6 +163,42 @@
     tabOnly=true
     example="Make table 1 smaller."
 
+@pat.plan.timeline.connect core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:words} [to|with|and] [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.connect arg.thing=\"{thing}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    tabOnly=true
+    example="Connect table 1 to table 2."
+
+@pat.plan.timeline.group core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.group] [$acts.det]? {thing:words} [together]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.group arg.mode=group arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    tabOnly=true
+    example="Group the tables."
+
+@pat.plan.timeline.apart core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.apart] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    tabOnly=true
+    example="Take the tables apart."
+
+@pat.plan.timeline.apart.2 core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take|break|pull|split] [$acts.det]? {thing:words} [apart|up] [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.group arg.mode=apart arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=11
+    tabPriority=19
+    tabOnly=true
+    example="Take the tables apart."
+
 @pat.plan.timeline.change.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [change|colour|color|paint|turn|switch|edit] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.thing=\"{thing}\" arg.text=\"{segment}\""
@@ -136,6 +208,15 @@
     tabOnly=true
     example="Change table 2."
 
+@pat.plan.timeline.connect.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.connect] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.connect arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=5
+    tabPriority=13
+    tabOnly=true
+    example="Connect table 1."
+
 @pat.plan.timeline.send.bare core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.send] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=plan.timeline.send arg.thing=\"{thing}\" arg.text=\"{segment}\""
@@ -144,6 +225,15 @@
     tabPriority=13
     tabOnly=true
     example="Send table 1."
+
+@pat.plan.timeline.pick core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.pick] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.pick arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    tabOnly=true
+    example="Select table 2."
 
 @pat.plan.timeline.copy core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.copy] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -181,6 +271,15 @@
     tabOnly=true
     example="What colour is table 2?"
 
+@pat.plan.timeline.change.should core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$acts.det]? {thing:words} [should|must|has_to|needs_to] [be|become|turn] {value:lex.plan.timeline.values} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Table 2 should be blue."
+
 @pat.plan.timeline.change.needs core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_want|i_need|make|let|give]? [$acts.det]? {thing:words} [needs|to_have|should_have|must_have|has|gets] {value:number} {attribute:lex.plan.timeline.attrs} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=plan.timeline.change arg.mode=set arg.thing=\"{thing}\" arg.value=\"{value}\" arg.attribute=\"{attribute}\" arg.text=\"{segment}\""
@@ -189,6 +288,15 @@
     tabPriority=20
     tabOnly=true
     example="Table 1 needs 6 seats."
+
+@pat.plan.timeline.ask.at core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [what|who] [is|are|sits|sit|stands|stand] [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=what arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Who is at table 1?"
 
 @pat.plan.timeline.ask.count.attr core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {attribute:lex.plan.timeline.attrs} [does|do|has|have] [$acts.det]? {thing:words} [have|has|got]? [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -207,6 +315,25 @@
     tabPriority=20
     tabOnly=true
     example="How many tables are there?"
+
+@pat.plan.timeline.ask.count.at core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? how_many {thing:words} [are|is]? [there]? {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=count arg.thing=\"{thing}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=question
+    priority=13
+    tabPriority=21
+    tabOnly=true
+    example="How many guests are at table 1?"
+
+@pat.plan.timeline.ask.where core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? where [is|are] [$acts.det]? {thing:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.ask arg.mode=where arg.thing=\"{thing}\" arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Where is Ann?"
+    canonical="Where is Ann?"
 
 @pat.plan.timeline.ask.why core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? why [is|are|did|do|was|were|does] {rest:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
@@ -246,3 +373,23 @@
     tabOnly=true
     example="Redo that."
     canonical="Redo that."
+
+@pat.plan.timeline.save core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.save] [it|this|everything]? [as|under|called]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.save arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    tabOnly=true
+    example="Save it as lunch."
+    canonical="Save it as lunch."
+
+@pat.plan.timeline.load core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.load] [$acts.det]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=plan.timeline.load arg.value=\"{value}\" arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    tabOnly=true
+    example="Load lunch."
+    canonical="Load lunch."

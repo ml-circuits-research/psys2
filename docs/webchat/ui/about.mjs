@@ -6,7 +6,7 @@ export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
 
 /** [name, version, licence, used by]. Keep in step with docs/webchat/vendor/README.md. */
 export const CREDITS = [
-  ['k.faces (hand-written face parts, sop-knowledge-worlds)', 'catalog', 'CC0 1.0', 'Avatar tab'],
+  ['k.faces (hand-written face parts, sop-knowledge-worlds)', 'catalog', 'CC0 1.0', 'avatar popup'],
   ['TipTap and ProseMirror', '3.33.0', 'MIT', 'Editor tab'],
   ['chessground, Stockfish 19 lite', 'see vendor/chess/LICENSES.md', 'GPL-3.0', 'Chess tab'],
   ['Tone.js, abcjs', '15.1.22 / 6.7.2', 'MIT', 'Music tab'],
