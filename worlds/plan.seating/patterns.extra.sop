@@ -1,7 +1,8 @@
-# "Put a guest named Maria at table 1.": the place-verb form of the named add with a place. The catalog frame acts.make.name.place takes only the verb "make" (add, make, create ...)
-# so the frame acts.make.name.p (place verb, value = rest) read "Maria at table 1" as the name. Same shape, place verbs, one priority higher than acts.make.name.p.
+# "Put a guest named Maria at table 1.": the named add with a place, for make AND place verbs. The catalog frame acts.make.name.place takes the make verbs only, so the frame
+# acts.make.name.p (place verbs, value = rest) read "Maria at table 1" as the name (questions.md, "catalog frame: place-verb form of the named add"). No phrasing of its own:
+# the verbs are the act's (acts.verb.*), the naming word is lang.named.call (lang.common), the place word is lex.acts.rel. One priority above acts.make.name.p.
 @pat.plan.seating.make.name.place.p core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make|$acts.verb.place] [$acts.det]? {thing:words} [$lang.named.call] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=plan.seating.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
     kind=request
     priority=15

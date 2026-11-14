@@ -34,7 +34,7 @@
     act=outrun act=photo act=represent act=screenshot act=text act=annotate act=avg act=cherry
     act=communicate
     actshared=house actshared=leg actshared=copy actshared=draw actshared=download actshared=stacking actshared=against actshared=versus
-    actshared=vs actshared=update actshared=create actshared=build actshared=rename actshared=hide actshared=scale actshared=include
+    actshared=vs actshared=update actshared=create actshared=rename actshared=build actshared=hide actshared=scale actshared=include
     actshared=convert actshared=share actshared=stat
     thing=plot thing=point thing=bar thing=slice thing=segment thing=pie thing=doughnut thing=donut
     thing=radar thing=polar thing=scatter thing=aquamarine thing=chartreuse thing=terracotta thing=burlywood thing=firebrick
