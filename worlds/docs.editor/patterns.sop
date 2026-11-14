@@ -1427,6 +1427,14 @@
     example="Stop sorting."
     canonical="Stop sorting."
 
+@pat.docs.editor.make.name.place.p core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.place] [$acts.det]? {thing:words} [called|named] {value:words} {rel:lex.acts.rel} [$acts.det]? {place:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=docs.editor.make arg.thing=\"{thing}\" arg.value=\"{value}\" arg.rel=\"{rel}\" arg.place=\"{place}\" arg.text=\"{segment}\""
+    kind=request
+    priority=15
+    tabPriority=23
+    example="Put a guest named Maria at document."
+
 @pat.docs.editor.make.text core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$acts.verb.make|write|type|put_in|put|create|start|begin|new|insert]? [a|an|another|one_more|1_more|some]? [new]? {thing:lex.docs.editor.kinds} [saying|called|named|titled|that_says|that_reads|reading|with_the_text|with|of|containing|including|about|says]? {value:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=docs.editor.make arg.mode=text arg.thing=\"{thing}\" arg.value=\"{value}\" arg.text=\"{segment}\""
