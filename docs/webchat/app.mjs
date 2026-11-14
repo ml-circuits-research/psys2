@@ -29,6 +29,7 @@ import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLi
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
 import { createFeedback } from './ui/feedback.mjs';
+import { failureReasons, filterFailures, toFailuresJSON, failuresFilename, createFailureSender, validEndpoint, FAILURE_REASON_TEXT } from './ui/failures.mjs';
 import { createProgress } from './ui/progress.mjs';
 import { startAssets, assetUrl, manifest as assetManifest } from './ui/assets.mjs';
 import { createEventLog, describeTarget, tapKind } from './ui/action-log.mjs';
@@ -917,6 +918,7 @@ export async function mountPsys2(element, options = {}) {
     const ref = { recId, botMsg, undo, ui: null, local: null, warned: false };
     ref.ui = createFeedback({
       feedback: null, uid: recId ?? String(Math.random()).slice(2, 8),
+      dictation: { lang: speechLangTag, available: () => !mic.listening && !settings.handsFree },
       onChange: (patch) => rateAnswer(ref, patch), canUndo: () => !!ref.undo && lastAnswer === ref && !turn, onUndo: () => undoAnswer(ref),
     });
     botMsg.meta.append(ref.ui.el); botMsg.msg.append(ref.ui.form);
@@ -946,7 +948,7 @@ export async function mountPsys2(element, options = {}) {
     if (!settings.logPhrases) return;
     try {
       const tabWorld = tabDefs.find((t) => t.id === view)?.world ?? null;   // item 7: the world of the open tab, for the wrong-world analysis
-      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}) }));
+      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), replyOutcome: outcomeOf(reply), turnKind: reply?.trace?.discourse?.meta?.dialogue ?? reply?.trace?.discourse?.resolved?.dialogue ?? null, ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}) }));
       else phrases.add({ ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply }), ...(tabWorld ? { tabWorld } : {}) });
     } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
@@ -1594,7 +1596,31 @@ export async function mountPsys2(element, options = {}) {
     ];
   }
   function privacyBody() {
-    return [phraseLogSection()];
+    return [phraseLogSection(), sendingSection()];
+  }
+  // ---------- send failures (LEARN FROM USE): OFF by default; nothing leaves the device before the person turns it on ----------
+  const failureSender = createFailureSender({ settings: () => settings, records: () => phrases.all(), events: () => events.all(), storage: options.persist !== false ? globalThis.localStorage : null, build: null, onResult: () => { if (!settingsEl.hidden && settingsTab === 'privacy') renderSettings(); } });
+  failureSender.start();
+  cleanups.push(() => failureSender.stop());
+  function sendingSection() {
+    const o = optionById('sendFailures');
+    const on = settings.sendFailures === true;
+    const url = h('input', { type: 'url', id: 'p2-f-sendFailuresUrl', placeholder: 'https://example.org/psys2/failures', autocomplete: 'off', 'aria-label': 'Where to send failures (web address)', value: settings.sendFailuresUrl ?? '' });
+    url.addEventListener('change', () => { settings.sendFailuresUrl = url.value.trim(); save(); renderSettings(); });
+    const name = h('input', { type: 'text', id: 'p2-f-sendFailuresName', placeholder: 'Optional: a name or contact, only if you want to be reachable', autocomplete: 'off', maxlength: '120', 'aria-label': 'Optional name or contact sent with failures', value: settings.sendFailuresName ?? '' });
+    name.addEventListener('change', () => { settings.sendFailuresName = name.value.trim(); save(); renderSettings(); });
+    const check = optCheck('sendFailures', on, (v) => { settings.sendFailures = v; save(); renderSettings(); });
+    const bad = on && !validEndpoint(settings.sendFailuresUrl);
+    const batch = failureSender.preview();
+    const last = failureSender.last;
+    const preview = h('details', { class: 'p2-plog-previewbox' }, h('summary', {}, `Preview of the next batch (${batch.count} ${batch.count === 1 ? 'failure' : 'failures'})`), h('pre', { class: 'p2-plog-preview', tabindex: '0', 'aria-label': 'Next batch to send' }, batch.count ? JSON.stringify(batch, null, 1) : 'Nothing waiting: no new failure since the last batch.'));
+    const sendBtn = h('button', { class: 'p2-btn-text', type: 'button', disabled: on && !bad && batch.count ? null : true, onclick: async () => { const r = await failureSender.sendNow(); toast(r.reason === 'ok' ? `Sent ${r.sent} ${r.sent === 1 ? 'failure' : 'failures'}` : r.reason === 'nothing' ? 'Nothing to send' : `Not sent: ${r.error ?? r.reason}`); renderSettings(); } }, 'Send now');
+    return h('div', { class: 'p2-plog-sending', 'data-section': 'send-failures' }, check,
+      h('label', { for: 'p2-f-sendFailuresUrl' }, 'Address that receives the batches'), url,
+      h('label', { for: 'p2-f-sendFailuresName' }, 'Name or contact (optional)'), name,
+      bad ? h('small', { role: 'alert' }, 'Nothing is sent: the address must start with https:// (or http://localhost for a receiver on this machine).') : null,
+      preview, h('div', { class: 'p2-plog-actions' }, sendBtn),
+      h('small', { class: 'p2-opt-status', role: 'status' }, on ? `On. A batch goes out every 10 minutes when there is a new failure. ${failureSender.sentCount()} sent so far.${last ? (last.ok ? ` Last: ${last.count} sent at ${last.at.slice(11, 16)}.` : ` Last try failed: ${last.error}.`) : ''}` : 'Off: nothing is sent; failures stay in this browser.'));
   }
   function renderSettings() {
     if (settingsEl.hidden) return;
@@ -1625,27 +1651,36 @@ export async function mountPsys2(element, options = {}) {
     saveFile(exportFilename(), body);
     return n;
   }
+  /** "Download failures only": export format 3 with only the failure turns, two turns before and after each, and the events that belong to them. */
+  function exportFailures() {
+    const body = toFailuresJSON(phrases.all(), { events: events.all(), diagnostics: diagnostics() });
+    const n = JSON.parse(body).failureCount;
+    if (!n) { toast('No failures to download yet'); return 0; }
+    saveFile(failuresFilename(), body);
+    return n;
+  }
   function renderPhraseLog() {
-    const all = phrases.all(), shown = filterRecords(all, logFilter).slice().reverse();
+    const all = phrases.all(), reasonsOf = failureReasons(all, events.all()), shown = (logFilter === 'failures' ? all.filter((r) => reasonsOf.has(r.id)) : filterRecords(all, logFilter)).slice().reverse();
     const human = all.filter((r) => r.source !== 'chip').length;
     plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). ${settings.exportButtons === true ? 'Buttons are included in exports.' : 'Buttons are left out of exports unless you tick the box below.'}`;
     plogList.replaceChildren(...(shown.length ? shown : [null]).map((r) => {
       if (!r) return h('li', { class: 'p2-plog-empty' }, all.length ? 'Nothing matches this filter.' : settings.logPhrases ? 'Nothing logged yet. Say or type something.' : 'The log is switched off.');
       const status = summaryStatus(r), worlds = summaryWorlds(r).join(', '), vote = voteOf(r);
-      return h('li', { class: `p2-plog-item is-${status}${vote ? ` has-vote-${vote}` : ''}` },
+      const why = reasonsOf.get(r.id) ?? [];
+      return h('li', { class: `p2-plog-item is-${status}${vote ? ` has-vote-${vote}` : ''}${why.length ? ' is-failure' : ''}` },
         h('span', { class: 'p2-plog-mode', title: MODE_NAME[r.mode], role: 'img', 'aria-label': MODE_NAME[r.mode] }, MODE_ICON[r.mode]),
         h('span', { class: 'p2-plog-body' }, h('span', { class: 'p2-plog-text' }, r.text),
-          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · wanted: ${r.feedback.wanted}` : '')),
+          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · expected: ${r.feedback.wanted}` : '', why.length ? [' · ', h('b', { class: 'p2-plog-fail' }, `failure: ${why.map((x) => FAILURE_REASON_TEXT[x] ?? x).join(', ')}`)] : null)),
         settings.devMode === true ? h('button', { class: 'p2-linkbtn p2-plog-dump', type: 'button', 'aria-label': `Debug dump: ${r.text}`, title: 'Download a debug dump of this message', onclick: () => saveFile(`psys2-debug-dump-${r.id}.json`, `${JSON.stringify({ record: exportRecord(r), turn: dbg?.turnFor?.(r.id) ?? null }, null, 1)}\n`) }, 'debug dump') : null,
         h('button', { class: 'p2-linkbtn', type: 'button', 'aria-label': `Delete: ${r.text}`, title: `Delete: ${r.text}`, onclick: () => { phrases.remove(r.id); renderPhraseLog(); } }, 'Delete'));
     }));
     const btn = (label, fn, cls = 'p2-btn-text') => h('button', { class: cls, type: 'button', onclick: fn }, label);
     plogActions.replaceChildren(...(confirmClear
       ? [h('span', { class: 'p2-plog-confirm', role: 'alert' }, `Delete all ${all.length} entries?`), btn('Yes, clear', () => { phrases.clear(); events.clear(); confirmClear = false; renderPhraseLog(); }, 'p2-btn-text is-danger'), btn('Keep them', () => { confirmClear = false; renderPhraseLog(); })]
-      : [btn('Export JSON', exportPhrases), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
+      : [btn('Export JSON', exportPhrases), btn('Download failures only', exportFailures), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
   }
   function phraseLogSection() {
-    const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only'], ['down', 'Not what I wanted'], ['up', 'Good answers']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });
+    const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only'], ['down', 'Not what I wanted'], ['up', 'Good answers'], ['failures', 'Failures']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });
     fsel.setAttribute('aria-label', 'Filter phrases');
     confirmClear = false;
     renderPhraseLog();

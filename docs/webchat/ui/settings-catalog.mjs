@@ -90,6 +90,11 @@ export const OPTIONS = Object.freeze([
   { id: 'exportButtons', group: 'privacy', key: 'exportButtons', label: 'Include button presses in exports', default: false,
     what: 'Adds the messages that came from buttons and the example die to the exported file.',
     when: 'Leave it off: they are not your own phrasing.', details: 'Records with source chip.', reason: 'Buttons are not human phrasing.' },
+  { id: 'sendFailures', group: 'privacy', key: 'sendFailures', label: 'Send failures to improve the system', default: false,
+    what: 'Only the turns that failed (not understood and then rephrased, disliked, undone at once, or corrected next) are sent, one record each, in small batches, to the address you give below: the message, the language, the tab, how I read it, my reply, what changed and what you said you expected. No other history, no events, no identity unless you type a name. You can see the next batch before it goes and send it by hand.',
+    when: 'Turn it on if you want to help the system learn from what did not work, and you trust the address. Nothing is sent while it is off, and failures stay in this browser.',
+    details: 'Format psys2-failures/1 (specs/06 "Learn from use"); periodic batches every 10 minutes while on; ids already sent are not sent again; https only (http to this machine for a local receiver).',
+    reason: 'Owner decision 2026-11-14: learning from use is optional and off by default; nothing leaves the device before the person turns it on.' },
   // ---- Developer ----
   { id: 'showTrace', group: 'developer', key: 'showTrace', label: 'Show how each answer was made', default: false,
     what: 'Opens, under every answer, the list of the parts of your message with the rule or model that read each one.',
