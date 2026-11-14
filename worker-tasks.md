@@ -4268,3 +4268,11 @@ Vendor 0.103 (handover LIB-1..8 is in: delete the host copies).
 ## Reviewer 2026-11-15 03:45 — voices measurement and Wikidata given names accepted; library 0.104 has completeness and arbitration by coverage
 
 Accepted e53d12c6 (each reading path alone, union 72.3 %, family agreement 80.3 % coverage / 78.4 % precision; Romanian agreement a strong filter) and 0a24284f (3,000 given names from Wikidata, CC0). sopworld 0.104: completeness (a reading with unread content words is not final), `arbitrate` by coverage → tab → priority, discourse continuation, named:false reporting — vendor it and do Q15 (2)+(3) with it; measure on the curve. The knowledge repository fixes your 9 failing local w.lang.en frames there (Q64) — delete the local copies when it says so; w.lang.ro now has frames (one-request hand Romanian: same act and roles 39.9 %): rerun Q13 with them when you get to it.
+
+## Reviewer 2026-11-15 04:25 — FEWER TABS (owner, 19:37); after the Q15 (2)+(3) measurement lands
+
+Owner: several tabs are not relevant and are not maintained; games and document analysis would need their own approach. Decision (reversible: it stays in git history; tag the commit before removal `pre-tab-cut`):
+- **Remove** the tabs and their worlds, patterns, words, tests, specs and assets: **Chess** (games.chess, stockfish), **Tic-tac-toe**, **Hangman**, **Guess the animal**, **Profile** (keep the user's name/settings in Settings if anything still needs it), and **document analysis** (docs.reader's file search, read aloud, sample texts: the Hansel and Gretel sample).
+- **Keep** Talk, Drawing, Diagram, Map, Charts, Seating, Timeline, Music (if it passes its tests; otherwise say so and we decide), and **one Documents tab** = docs.editor + the composition and summary features (the w.document output), so composition keeps its home.
+- **kids.*** worlds have no tab: audit what still answers through them (animal legs, arithmetic, time, shapes) against the catalog; keep only what the catalog does not cover, list the rest for removal.
+- Measure before/after: test-world failures (68 now), smoke time, boot requests/bytes, arbitration errors in the ledger (keyword theft by chess/tic-tac-toe/avatar), lines removed. Report in the landing note. Smoke must stay green; invariant tests that only tested removed worlds go with them.
