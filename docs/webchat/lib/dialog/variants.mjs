@@ -11,12 +11,14 @@
  *                           words are the rest, no content word may be left over (the frame of `readByTypes`, assembled from the world's lexicons instead of a typed fact world)
  * Browser-safe: no `node:*`.
  */
+import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs?v=50ff331b8a';
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
 import { lexIndex } from '../worlds/lexicon.mjs?v=9a10989e46';
-import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=1b562a7934';
-import { FILLER } from './world-aware.mjs?v=2290d74ead';
+import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=50ff331b8a';
+import { FILLER } from './world-aware.mjs?v=1e82798e72';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { formOperatorTexts } from './form-operators.mjs?v=4807498111';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=50ff331b8a';
 
 /** A catalog lookup waits at most LOOKUP_MS; a catalog that does not answer in time is no catalog (the reading is then the rules'), and the turn never waits for it. */
 const LOOKUP_MS = 400;
@@ -114,7 +116,7 @@ function bySlotTypes(dialog, seg, ctx) {
 
 async function reread(dialog, seg, text, opts, via, extra = {}) {
   const res = await dialog.engine.formalizers.rules.formalize(text, { ...opts, worlds: opts.worlds ?? dialog.engine.set });
-  if (!res.segments.length || res.segments.some((x) => x.unparsed || x.partial || x.ignored?.length)) return null;
+  if (!res.segments.length || res.segments.some((x) => x.unparsed || x.partial || x.ignored?.length || x.match?.unread?.length)) return null;   // a variant must be a COMPLETE reading
   const segs = res.segments.map((x) => ({ ...x, span: seg.span, strategy: 'rules', variant: { via, from: seg.text, to: text, ...extra } }));
   return accepted(dialog, segs) ? segs : null;
 }
@@ -181,6 +183,40 @@ async function nearTexts(dialog, seg) {
   return out.sort((a, b) => a.cost - b.cost).slice(0, 4);
 }
 
+// ---- run-on sentences: the library's splitRunOn, each clause read by the rules ------------------------------------------------------------------------------
+
+const OPENERS = ['what', 'how', 'which', 'who', 'where', 'when', 'why'];   // words that open a clause (the library's own advice: question words; a language world's class would add more)
+const SPLITTERS = ['and then', 'and also', 'also', 'then', 'but'];
+
+/**
+ * `splitRunOn` (sopworld 0.101) cuts a run-on or compound clause where its clauses read best, each clause read by the rules (the reader below: a clause scores its words read, minus a penalty per
+ * word left unread). The clauses are read again as segments; the usual contract holds (every clause complete, the world accepts all of them, otherwise the original stays whole).
+ */
+function runOnSegments(dialog, seg, opts) {
+  const lib = dialog.engine.sopworld;
+  if (!lib?.splitRunOn || toks(seg.text).length < 5 || toks(seg.text).length > 40) return null;
+  const form = dialog.isession.form;
+  const reader = (_w, t) => {   // the rules read the clause on a scratch dialogue state; the state is put back
+    const snap = form.snapshot();
+    try {
+      const res = rulesFormalize(t, { ...opts, worlds: opts.worlds ?? dialog.engine.set, session: dialog.isession, source: 'runon' });
+      const ok = res.segments.length > 0 && res.segments.every((x) => !x.unparsed && !x.partial && !x.ignored?.length);
+      const unread = res.segments.flatMap((x) => x.match?.unread ?? []);
+      return ok ? { best: { clause: t }, unread, frames: [{ words: toks(t).filter((w) => !FUNCTIONAL.has(w) && !unread.includes(w)) }] } : { best: null, unread: [] };
+    } catch { return { best: null, unread: [] }; } finally { form.restore(snap); }
+  };
+  let parts;
+  try { parts = lib.splitRunOn(new lib.World(), seg.text, { openers: OPENERS, splitters: SPLITTERS, reader }); } catch { return null; }
+  if (!parts || parts.length < 2 || parts.some((p) => !p.frame || p.unread?.length)) return null;
+  const segs = [];
+  for (const p of parts) {
+    const res = rulesFormalize(p.text, { ...opts, worlds: opts.worlds ?? dialog.engine.set, session: dialog.isession, source: 'runon' });
+    if (!res.segments.length || res.segments.some((x) => x.unparsed || x.partial || x.ignored?.length || x.match?.unread?.length)) return null;
+    segs.push(...res.segments.map((x) => ({ ...x, span: seg.span, strategy: 'rules', variant: { via: 'run-on', from: seg.text, to: p.text } })));
+  }
+  return accepted(dialog, segs) ? segs : null;
+}
+
 /**
  * The unparsed clauses of `formal` read again by the three steps, each behind its switch; a clause keeps its reading when no step finds exactly one the world accepts.
  * `opts`: the formalizer options of the turn ({ worlds, session, source, context, router }).
@@ -190,7 +226,7 @@ export async function withVariants(dialog, formal, opts) {
   const segments = [];
   for (const seg of formal.segments) {
     let out = null;
-    if (seg.unparsed && seg.text) {
+    if ((seg.unparsed || isIncomplete(seg)) && seg.text) {   // an incomplete reading is not final: it goes to the same voices as an unread clause (spec 16 section 12)
       budget.tick('variants.segment');
       try {
         if (!out && on('PSYS2_FORMOPS')) {   // typed form operators (spec 16 section 11): the clause rewritten by the admitted operators, each candidate read by the rules, the world decides, two different readings: none
@@ -206,6 +242,7 @@ export async function withVariants(dialog, formal, opts) {
           if (readings.size === 1) out = [...readings.values()][0];   // two different readings of the same unknown word: none
         }
         if (!out && !off('PSYS2_SLOTS')) { const s = bySlotTypes(dialog, seg, ctx); if (s) out = [s]; }
+        if (!out && completeMode() !== 'off' && !off('PSYS2_RUNON')) out = runOnSegments(dialog, seg, opts);   // spec 16 section 12: a run-on clause cut where its parts read best
       } catch { out = null; }
     }
     if (out) segments.push(...out); else segments.push(seg);

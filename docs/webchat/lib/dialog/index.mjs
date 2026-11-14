@@ -10,42 +10,43 @@
  * Without it all input is treated as English.
  */
 import { installTextGen } from './textgen.mjs?v=c5b4f3a539';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=558cff57fa';
-import { loadWorlds } from '../worlds/index.mjs?v=35c1623c4d';
-import { validateWorldSet } from '../worlds/validate.mjs?v=2337dc54fc';
-import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=a30a19738f';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=50ff331b8a';
+import { loadWorlds } from '../worlds/index.mjs?v=e0410e2924';
+import { validateWorldSet } from '../worlds/validate.mjs?v=5d5a0f7605';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=50ff331b8a';
 import { createInterpreter } from '../interpreter/index.mjs?v=3fc6e5a91b';
 import { createReasoner } from '../reasoner/index.mjs?v=572c81f2d5';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=447b7afb5a';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=c0404a7303';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=878d27dd5c';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=2c44b974c5';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=d9469bade4';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=0f40775443';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=58ce3cf6a2';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=98d5f4653a';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=ce7cca71b9';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=4b39ead121';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=1b562a7934';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=50ff331b8a';
 import { lexIndex } from '../worlds/lexicon.mjs?v=9a10989e46';
 import { perf } from '../formalizer/perf.mjs?v=8b829ee7df';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=f0c7a6e6b5';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=cc81fdd894';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=b888013fd0';
-import { checkValues } from './value-check.mjs?v=c8b7156deb';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=60b9e5352a';
+import { checkValues } from './value-check.mjs?v=205646be5f';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3eed01f9f5';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=806d6893c9';
-import { Dialogue } from './dialogue.mjs?v=84192ab38b';
+import { Discourse } from './discourse.mjs?v=35c13441e1';
+import { Dialogue } from './dialogue.mjs?v=38ce18203e';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=8961e080e1';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=d5e18b117e';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=3f2f0976a7';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=10bb4a0bf2';
 import { proposeByTypes } from './typed-reader.mjs?v=7812db5b24';
-import { withVariants } from './variants.mjs?v=fd8297e492';
-import { repairFromScene } from './scene-referents.mjs?v=f9e8bf2055';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=d2c672acc9';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=f14225da3c';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=2290d74ead';
+import { withVariants } from './variants.mjs?v=10fcd6e6cc';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=50ff331b8a';
+import { repairFromScene } from './scene-referents.mjs?v=c8a26844d9';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=ae37a22015';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=71c416e372';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=1e82798e72';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1578,7 +1579,7 @@ export class DialogSession {
       formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router });
     }
     { const rm = normalizeReader(reader ?? this.reader); if (!icpt && !pre && !meta && rm !== 'off' && formal.segments.length) formal = await perf.time('reader', () => this._withReader(formal, rm)); }   // spec 16 section 7: the library's reader as a third source
-    if (!icpt && !pre && !meta && formal.segments.some((x) => x.unparsed)) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
+    if (!icpt && !pre && !meta && formal.segments.some((x) => x.unparsed || isIncomplete(x))) { try { formal = await perf.time('variants', () => withVariants(this, formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this._router })); } catch (e) { if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e; } }   // spec 16 section 10: an unparsed clause read again (alternations, near words, slot types), the world deciding
     if (!icpt && !pre && !meta && formal.segments.length) formal = await perf.time('typed', async () => this._withTypedReader(formal));   // spec 16 section 9: a refused reading is read again by the types of its words
     // spec 17: a knowledge question ("what is a comet?") whose thing the reading leaves out is answered from the catalog by the conversation; the frame decided, the hit only loads
     if (!icpt && !pre && !meta && this.engine.knowledge && formal.segments.length) {
@@ -1608,12 +1609,19 @@ export class DialogSession {
     // the reply names the understood part and what was not understood. Decided from the wires' action names (clearAll, remove, delete, reset ...), for every world alike.
     const heldDestructive = new Set();
     if (!icpt && !pre && !meta) {
-      const open = segments.filter((x) => x.unparsed && !fillerOnly(x.text) && !x.veto?.say);
-      if (open.length) for (const x of segments) if (!x.unparsed && (isDestructive(x) || x.ignored?.length || x.partial || x.bestEffort)) heldDestructive.add(x);   // a clause read only in part (words ignored) next to one not read at all is held too: "You should change this voila ... ta-da ..." must not start a chess game
+      const open = segments.filter((x) => (x.unparsed && !fillerOnly(x.text) && !x.veto?.say) || isIncomplete(x));   // a clause read only in part is half-read too (spec 16 section 12)
+      if (open.length) for (const x of segments) if (!x.unparsed && !open.includes(x) && (isDestructive(x) || x.ignored?.length || x.partial || x.bestEffort)) heldDestructive.add(x);   // a clause read only in part (words ignored) next to one not read at all is held too: "You should change this voila ... ta-da ..." must not start a chess game
     }
     for (const seg of segments) {
+      // COMPLETENESS (spec 16 section 12): a reading that leaves content words unread is not final. No voice completed it: a destructive one is never executed, and with PSYS2_COMPLETE=ask none is; the person is asked
+      if (isIncomplete(seg) && (completeMode() === 'ask' || isDestructive(seg))) {
+        const unread = [...new Set(seg.match.unread)];
+        lines.push([T('I understood only part of '), { text: `"${seg.text}"`, translate: false, quote: true }, T(': I did not use '), ...unread.flatMap((w, k) => [...(k ? [T(' and ')] : []), { text: `"${w}"`, translate: false, quote: true }]), T(', so I did not do it. What did you mean?')]);
+        statuses.push('missing');
+        continue;
+      }
       if (heldDestructive.has(seg)) {
-        const open = segments.find((x) => x.unparsed && !fillerOnly(x.text));
+        const open = segments.find((x) => (x.unparsed && !fillerOnly(x.text)) || isIncomplete(x));
         const q = (t) => lang === 'en' ? t : originalSentence(text, { text: t, span: segments.find((y) => y.text === t)?.span }, translation?.alignment);
         lines.push([T('I understood '), { text: `"${q(seg.text)}"`, translate: false, quote: true }, T(' but I did not do it, because I did not understand '), { text: `"${q(open.text)}"`, translate: false, quote: true }, T('. Say the first part on its own and I will do it.')]);
         statuses.push('missing');
@@ -1822,6 +1830,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=57f58b18a7')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`

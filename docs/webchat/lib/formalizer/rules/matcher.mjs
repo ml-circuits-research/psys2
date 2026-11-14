@@ -234,6 +234,7 @@ function matchTokensRaw(compiled, tokens, env) {
   const n = tokens.length - (!compiled.hasQ && tokens[tokens.length - 1]?.kind === 'qmark' ? 1 : 0);
   const slots = {};
   let literals = 0, skips = 0, frameLiterals = 0;
+  const skipped = [];   // token ranges [from, to) the pattern's `...` skip elements passed over (words no role reads; spec 16 section 12)
 
   /** Token index after matching the literal words at tokens[i], or -1. A token matches by `lower` or by `alt` (the original number word, `u`); operator symbols and their words are one literal. */
   const matchWords = (words, i) => {
@@ -318,13 +319,15 @@ function matchTokensRaw(compiled, tokens, env) {
     // skip: lazy 0..4
     for (let len = 0; len <= 4 && i + len <= n; len++) {
       skips += len;
+      if (len) skipped.push([i, i + len]);
       if (run(k + 1, i + len)) return true;
+      if (len) skipped.pop();
       skips -= len;
     }
     return false;
   }
 
-  return run(0, 0) ? { slots: { ...slots }, literals, skips, frameLiterals } : null;
+  return run(0, 0) ? { slots: { ...slots }, literals, skips, frameLiterals, skipped: skipped.slice() } : null;
 }
 
 /** The fields of a token that a match can depend on (positions index `env.text`). */

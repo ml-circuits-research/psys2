@@ -56,5 +56,4 @@ export function annotateUnread(matches, set = null) {
     }
     x.m.unread = out;
   }
-  globalThis.__dbg?.(matches);
 }
