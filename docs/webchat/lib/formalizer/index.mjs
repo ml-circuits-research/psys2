@@ -1,1 +1,1 @@
-export * from './rules/index.mjs?v=1a4da83606';
+export * from './rules/index.mjs?v=b2652b6101';

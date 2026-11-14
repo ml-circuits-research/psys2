@@ -4367,3 +4367,26 @@ Accepted 5d447e79 (kids audit: 139 canonical sentences, 43 real turns, plan in d
 sopworld 0.117.0 is out (reviewer ran npm test: 506 pass, 0 fail): the deprecated names of 0.111 are gone, so vendor it only after a grep for the old names on your tree; `calibrate` maps confidence to probability (isotonic, Platt). Use it in the ensemble measurement.
 
 Next, in order: (1) typed worlds per world (typedWorldFor) measured on the real set: completeness, arbitration, ensemble; (2) kids step 3 with what already exists (host items H1–H7), switching each kids world off as its general world answers its real rows, and measuring boot bytes; (3) Romanian re-measure when w.lang.ro's Q69 facts land.
+
+## Reviewer 2026-11-14 23:50 — typed worlds accepted; OWNER: overnight ARCHITECTURE REVIEW; new owner export (diagram "ridiculously weak")
+
+**Accepted** 7d4712ae / 8d9e0206 (typed worlds per world; diagram gap 44 → 48/60; arrangements 5/5). Reviewer ran smoke on f8442845: 88/88 (190 s here under load; yours 14 s).
+
+**Measurement integrity, first task tonight.** The log says the real set is 142/253, and the committed 201/253 was stale since the tab cut. The owner was told 79.4 %. Explain the 59 rows: per row, the cause (tab deleted: chess / tic-tac-toe / document analysis; routing change; true regression). Rows of deleted tabs are retired from the judged set (kept in the file, flag `retired`, not counted); true regressions are real ledger rows and come first. Add a test that fails when a committed result file is older than the tree it claims to measure (tree hash in the result file).
+
+**New owner export** (real, headline): `training/eval/owner-exports/phrase-log-2026-11-14T2243.json`, 2 typed turns on the phone. Add both to the real set. Findings, each a class and not a point fix:
+1. "deseneaza o diagrama in forma de casa" → one circle, "A făcut un cerc.", owner: "ridicol". The reading is `pat.diagram.sketch.read.frame` → `diagram.sketch.own` with `arg.pre="Draw a"` and `arg.post="in house form"`, marked `complete: true`, score 1. A catch-all pattern that swallows unread words and calls itself complete defeats completeness, arbitration and the ensemble. Rule: a reading whose arguments are raw leftover text is incomplete; list every such catch-all pattern in every world (grep `arg.pre` / `arg.post` / `arg.text` only) and make them last-resort readings that ask or say what was not understood. Then the content: "a diagram in the shape of a house" = arrangement by a k.objects outline (nodes placed on the outline of a house); ask [KNOW]/[LIB] only for what is missing (`arrange` 0.110 takes shapes; an outline of an object as an arrangement path may be new).
+2. The reply "A făcut un cerc." is third person and says nothing of what was not done; the first reply mixes "tine" with "Puteți / faceți". One register for Romanian replies (informal singular), and a reply names what it left out.
+3. "deseneaza ceva random" took 6.8 s, of which `knowledge` 6,002 ms (3 calls). Find what loads; budget for a first drawing on the phone: under 2 s.
+4. The same turn changed `plan.seating` and `plan.timeline` ("{…} (was none)") and sent view effects to their tabs. A turn must not touch worlds it does not address: find the cause (session.things propagation?) and add an invariant test (a turn's changes ⊆ addressed worlds + session.things).
+5. Chip "Add a weapon." after a sunny scene with a house and a dog. Suggestion chips come from the scene's kinds and the next-step knowledge, not a random k.objects category; no weapons by default.
+6. Events show the reasoner start at 6.3 s and a 29.7 MB translation model loaded on a drawing page; record boot cost per page in the curve.
+
+**OVERNIGHT ARCHITECTURE REVIEW (owner, 23:40):** "review the architecture in all three zones, fix every mistake found; after so many changes there are serious slips and chances to unify and generalise; work all night, experiments, widen the knowledge, generalise the mechanisms into a reusable system." Three review agents of mine are reading the three repositories now; their findings arrive here as numbered tasks. Meanwhile your own review, written to `docs/architecture-review-2026-11-15.md` and fixed as you go (measure before/after, real set first):
+- A. One world contract (schema, acts, views, typed world, renderer); list special cases by world id in shared code and remove them.
+- B. Host code that duplicates sopworld (readers, normalisers, rankers, ellipsis, lemma rules): delete or raise [LIB].
+- C. Host data that duplicates the catalog (lexicons, frames, lists): delete or raise [KNOW].
+- D. Two paths for one job (ops vs matrix, voices, translation vs Romanian frames, patterns vs frames): one default, the other deleted or a named diagnostic.
+- E. Every PSYS2_* switch: default, the measurement behind it, dead ones removed.
+- F. What another application must copy from PSys2 to use the worlds: propose it as a host kit for the library ([LIB]).
+Then continue: kids step 3, Romanian re-measure (Q69 item 1 landed: act+thing 38 → 55 of 161 by the knowledge worker's bench), vendor 0.117.

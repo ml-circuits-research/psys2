@@ -560,7 +560,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
   if (kept.length !== matches.length) matches.splice(0, matches.length, ...kept);
-  annotateUnread(matches, set);
+  annotateUnread(matches, set, context);
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));
   const score = (id) => worlds.find((w) => w.id === id)?.score ?? 0;
   for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority; }

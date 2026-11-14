@@ -1,0 +1,915 @@
+{
+ "format": "psys2-phrase-log/3",
+ "exported": "2026-11-14T22:43:04.257Z",
+ "count": 2,
+ "diagnostics": {
+  "longTasks": [
+   {
+    "at": "2026-11-14T22:40:56.018Z",
+    "ms": 347,
+    "stage": "idle",
+    "engineStage": null,
+    "tab": "draw"
+   }
+  ],
+  "engine": {
+   "starts": 1,
+   "kills": [],
+   "crashes": 0,
+   "sends": 5,
+   "dryRuns": 0,
+   "refused": 0,
+   "restartsThisTurn": 0,
+   "startTimeouts": 0,
+   "bad": []
+  },
+  "ort": {
+   "restarts": 0,
+   "stats": {
+    "requests": 32,
+    "responses": 32,
+    "timeouts": 0,
+    "aborts": 0,
+    "restarts": 0,
+    "pauses": 0,
+    "cancelled": 0,
+    "byLabel": {
+     "create dispatcher": 1,
+     "dispatcher": 31
+    }
+   }
+  }
+ },
+ "eventCount": 37,
+ "events": [
+  {
+   "id": "emwgubtixgrh",
+   "time": "2026-11-14T20:10:43.641Z",
+   "kind": "tap",
+   "target": "Close settings",
+   "tab": "talk",
+   "tabAfter": "talk",
+   "zone": "settings",
+   "what": "button"
+  },
+  {
+   "id": "emwguepp2k6o",
+   "time": "2026-11-14T20:12:58.646Z",
+   "kind": "tab",
+   "target": "tictactoe",
+   "tab": "talk",
+   "tabAfter": "tictactoe",
+   "via": "tap"
+  },
+  {
+   "id": "emwgusfk145u",
+   "time": "2026-11-14T20:23:38.689Z",
+   "kind": "tab",
+   "target": "talk",
+   "tab": "tictactoe",
+   "tabAfter": "talk",
+   "via": "tap"
+  },
+  {
+   "id": "emwgzozjnsie",
+   "time": "2026-11-14T22:40:56.051Z",
+   "kind": "step",
+   "target": "Loading the page code",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "page",
+   "ms": 948,
+   "bytes": 494384,
+   "ok": true
+  },
+  {
+   "id": "emwgzp1yrtmi",
+   "time": "2026-11-14T22:40:59.187Z",
+   "kind": "step",
+   "target": "Loaded 28 worlds",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "worlds",
+   "ms": 1592,
+   "bytes": 3996903,
+   "ok": true
+  },
+  {
+   "id": "emwgzp6qczik",
+   "time": "2026-11-14T22:41:05.364Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwgzp6tno5p",
+   "time": "2026-11-14T22:41:05.483Z",
+   "kind": "step",
+   "target": "Starting the reasoner",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "reasoner",
+   "ms": 6295,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwgzp79ejdo",
+   "time": "2026-11-14T22:41:06.050Z",
+   "kind": "step",
+   "target": "Voices: 92 found",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "voices",
+   "ms": 18,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwgzp80yfbm",
+   "time": "2026-11-14T22:41:07.042Z",
+   "kind": "tap",
+   "target": "Drawing",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwgzp82zuk0",
+   "time": "2026-11-14T22:41:07.115Z",
+   "kind": "step",
+   "target": "Loading the Romanian translation model",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "translator",
+   "ms": 1067,
+   "bytes": 29729171,
+   "ok": true
+  },
+  {
+   "id": "emwgzp88lsyh",
+   "time": "2026-11-14T22:41:07.317Z",
+   "kind": "step",
+   "target": "Face set loaded",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "faces",
+   "ms": 1044,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwgzp8j5t7x",
+   "time": "2026-11-14T22:41:07.697Z",
+   "kind": "step",
+   "target": "Reading model: loads when a message needs it",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "model",
+   "ms": 0,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwgzp8j8pxz",
+   "time": "2026-11-14T22:41:07.700Z",
+   "kind": "step",
+   "target": "Reading the knowledge catalog index",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "catalog",
+   "ms": 3,
+   "bytes": 3336511,
+   "ok": true
+  },
+  {
+   "id": "emwgzp9i3581",
+   "time": "2026-11-14T22:41:08.955Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwgzpgtmw6b",
+   "time": "2026-11-14T22:41:18.442Z",
+   "kind": "message",
+   "target": "deseneaza ceva random",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "typed",
+   "recId": "pmwgzpgtl0tzl"
+  },
+  {
+   "id": "emwgzplanmdi",
+   "time": "2026-11-14T22:41:24.239Z",
+   "kind": "tap",
+   "target": "Add a weapon.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "chip"
+  },
+  {
+   "id": "emwgzpm348t1",
+   "time": "2026-11-14T22:41:25.264Z",
+   "kind": "message",
+   "target": "Add a weapon.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "chip",
+   "recId": "pmwgzpm33gyix"
+  },
+  {
+   "id": "emwgzpnv34kv",
+   "time": "2026-11-14T22:41:27.567Z",
+   "kind": "step",
+   "target": "Reading model loaded",
+   "tab": null,
+   "tabAfter": "draw",
+   "stepId": "model",
+   "ms": 1682,
+   "bytes": null,
+   "ok": true
+  },
+  {
+   "id": "emwgzpsq0703",
+   "time": "2026-11-14T22:41:33.864Z",
+   "kind": "tap",
+   "target": "Change the colour of the sun to yellow.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "chip"
+  },
+  {
+   "id": "emwgzpsrjqm8",
+   "time": "2026-11-14T22:41:33.919Z",
+   "kind": "message",
+   "target": "Change the colour of the sun to yellow.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "chip",
+   "recId": "pmwgzpsr1ee22"
+  },
+  {
+   "id": "emwgzpxojpi1",
+   "time": "2026-11-14T22:41:40.291Z",
+   "kind": "tap",
+   "target": "Change the size of the sun to giant.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "chip"
+  },
+  {
+   "id": "emwgzpyaw1v1",
+   "time": "2026-11-14T22:41:41.096Z",
+   "kind": "message",
+   "target": "Change the size of the sun to giant.",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "mode": "chip",
+   "recId": "pmwgzpyaujfc1"
+  },
+  {
+   "id": "emwgzq5zba9p",
+   "time": "2026-11-14T22:41:51.047Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "draw",
+   "tabAfter": "draw",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwgzq7uv18q",
+   "time": "2026-11-14T22:41:53.479Z",
+   "kind": "tap",
+   "target": "Diagram",
+   "tab": "draw",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwgzq7uv0f6",
+   "time": "2026-11-14T22:41:53.479Z",
+   "kind": "tab",
+   "target": "diagram",
+   "tab": "draw",
+   "tabAfter": "diagram",
+   "via": "menu"
+  },
+  {
+   "id": "emwgzq8z949d",
+   "time": "2026-11-14T22:41:54.933Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwgzqho174k",
+   "time": "2026-11-14T22:42:06.193Z",
+   "kind": "message",
+   "target": "deseneaza o diagrama in forma de casa",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "mode": "typed",
+   "recId": "pmwgzqho025zv"
+  },
+  {
+   "id": "emwgzqnom7aw",
+   "time": "2026-11-14T22:42:13.990Z",
+   "kind": "tap",
+   "target": "Message",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "input",
+   "what": "button"
+  },
+  {
+   "id": "emwgzqrb19lo",
+   "time": "2026-11-14T22:42:18.685Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwgzqswk2jy",
+   "time": "2026-11-14T22:42:20.756Z",
+   "kind": "tap",
+   "target": "Chat",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwgzqwkqmft",
+   "time": "2026-11-14T22:42:25.514Z",
+   "kind": "tap",
+   "target": "Not what I wanted",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwgzr20mrw5",
+   "time": "2026-11-14T22:42:32.566Z",
+   "kind": "tap",
+   "target": "did too little",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "chat",
+   "what": "chip"
+  },
+  {
+   "id": "emwgzr30jpyw",
+   "time": "2026-11-14T22:42:33.859Z",
+   "kind": "tap",
+   "target": "What did you expect? (optional)",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwgzrgm9yxt",
+   "time": "2026-11-14T22:42:51.489Z",
+   "kind": "tap",
+   "target": "Done",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": "chat",
+   "what": "button"
+  },
+  {
+   "id": "emwgzrhvutru",
+   "time": "2026-11-14T22:42:53.130Z",
+   "kind": "tap",
+   "target": "Pages",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwgzrjaplto",
+   "time": "2026-11-14T22:42:54.961Z",
+   "kind": "tap",
+   "target": "Settings",
+   "tab": "diagram",
+   "tabAfter": "diagram",
+   "zone": null,
+   "what": "button"
+  },
+  {
+   "id": "emwgzrqgvkx7",
+   "time": "2026-11-14T22:43:04.255Z",
+   "kind": "tap",
+   "target": "Export JSON",
+   "tab": "diagram",
+   "tabAfter": null,
+   "zone": "p2-set-panel",
+   "what": "button"
+  }
+ ],
+ "records": [
+  {
+   "text": "deseneaza ceva random",
+   "lang": "ro",
+   "english": "Draw something random",
+   "mode": "typed",
+   "tab": "draw",
+   "worlds": [
+    "art.draw"
+   ],
+   "status": "supported",
+   "time": "2026-11-14T22:41:18.441Z",
+   "routing": {
+    "activeTab": "draw",
+    "activeWorld": "art.draw",
+    "chosen": [
+     "art.draw"
+    ],
+    "pieces": [
+     {
+      "text": "Draw something random",
+      "chosen": "art.draw",
+      "pattern": "pat.art.draw.make.random.any",
+      "candidates": []
+     }
+    ]
+   },
+   "id": "pmwgzpgtl0tzl",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "rules",
+   "feedback": null,
+   "selectedLang": "ro",
+   "via": [
+    "translator-in",
+    "translator-out"
+   ],
+   "candidates": [
+    {
+     "source": "model",
+     "text": "Draw something random",
+     "chosen": true
+    }
+   ],
+   "replyOutcome": "done",
+   "turnKind": null,
+   "tabWorld": "art.draw",
+   "detail": {
+    "tab": "draw",
+    "worlds": [
+     "art.draw"
+    ],
+    "status": null,
+    "readings": [
+     {
+      "text": "Draw something random",
+      "world": "art.draw",
+      "pattern": "pat.art.draw.make.random.any",
+      "strategy": "rules",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [],
+      "wires": "@t1_w1 core.request\n    action=art.draw.make\n    arg.mode=random\n    arg.text=\"Draw something random\"\n    core.via=$pat.art.draw.make.random.any\n    core.source=\"msg1#0-21\"\n    core.seq=2\n    core.in=$art.draw\n"
+     }
+    ],
+    "answer": "Am desenat o scenă însorită pentru tine: un soare galben, 2 nori, un munte gri, o casă albastră, 2 copaci verzi, 2 flori roz, un câine maro și o pasăre albastră. Puteți schimba orice, de exemplu \"faceți casa albastră\".",
+    "effects": [],
+    "budget": {
+     "ticks": 60449,
+     "top": {
+      "facts.index": 42328,
+      "index.chain": 5291,
+      "art.place": 3428,
+      "candidates.repair": 3081,
+      "translate.frame": 2559
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "776e6922",
+     "after": "bf7b8a24"
+    },
+    "perf": {
+     "totalMs": 6818,
+     "engineMs": 6746,
+     "stages": {
+      "correct": {
+       "n": 1,
+       "ms": 0
+      },
+      "dialogue": {
+       "n": 2,
+       "ms": 0.5
+      },
+      "discourse": {
+       "n": 2,
+       "ms": 1.2
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0.1
+      },
+      "rules": {
+       "n": 1,
+       "ms": 49.6
+      },
+      "formalize": {
+       "n": 1,
+       "ms": 73.9
+      },
+      "typed": {
+       "n": 1,
+       "ms": 4.4
+      },
+      "knowledge": {
+       "n": 3,
+       "ms": 6002.5
+      },
+      "interpret": {
+       "n": 1,
+       "ms": 20.4
+      }
+     },
+     "render": 71.6,
+     "effects": 0.4
+    }
+   },
+   "happened": {
+    "tabAfter": "draw",
+    "shown": [
+     {
+      "text": "Am desenat o scenă însorită pentru tine: un soare galben, 2 nori, un munte gri, o casă albastră, 2 copaci verzi, 2 flori roz, un câine maro și o pasăre albastră. Puteți schimba orice, de exemplu \"faceți casa albastră\".",
+      "world": "art.draw"
+     }
+    ],
+    "changes": [
+     {
+      "world": "art.draw",
+      "changes": [
+       "objects: +1 sun",
+       "objects: +2 clouds",
+       "objects: +1 mountain",
+       "objects: +1 house",
+       "objects: +2 trees",
+       "objects: +2 flowers",
+       "objects: +1 dog",
+       "objects: +1 bird"
+      ]
+     },
+     {
+      "world": "session.things",
+      "changes": [
+       "things: +1 sun",
+       "things: +2 clouds",
+       "things: +1 mountain",
+       "things: +1 house",
+       "things: +2 trees",
+       "things: +2 flowers",
+       "things: +1 dog",
+       "things: +1 bird"
+      ]
+     },
+     {
+      "world": "plan.seating",
+      "changes": [
+       " {…} (was none)"
+      ]
+     },
+     {
+      "world": "plan.timeline",
+      "changes": [
+       " {…} (was none)"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "draw",
+      "world": "art.draw"
+     },
+     {
+      "kind": "view",
+      "tab": "seating",
+      "world": "plan.seating"
+     },
+     {
+      "kind": "view",
+      "tab": "timeline",
+      "world": "plan.timeline"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 60449,
+    "top": {
+     "facts.index": 42328,
+     "index.chain": 5291,
+     "art.place": 3428,
+     "candidates.repair": 3081,
+     "translate.frame": 2559
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Add a weapon.",
+    "afterMs": 5798,
+    "tab": "draw"
+   },
+   "segments": [
+    {
+     "text": "Draw something random",
+     "status": "supported",
+     "world": "art.draw",
+     "pattern": "pat.art.draw.make.random.any",
+     "unparsed": false,
+     "strategy": "rules"
+    }
+   ]
+  },
+  {
+   "text": "deseneaza o diagrama in forma de casa",
+   "lang": "ro",
+   "english": "Draw a diagram in house form",
+   "mode": "typed",
+   "tab": "diagram",
+   "worlds": [
+    "diagram.sketch"
+   ],
+   "status": "supported",
+   "time": "2026-11-14T22:42:06.192Z",
+   "routing": {
+    "activeTab": "diagram",
+    "activeWorld": "diagram.sketch",
+    "chosen": [
+     "diagram.sketch"
+    ],
+    "pieces": [
+     {
+      "text": "Draw a diagram in house form",
+      "chosen": "diagram.sketch",
+      "pattern": "pat.diagram.sketch.read.frame",
+      "candidates": [
+       {
+        "world": "diagram.sketch",
+        "score": 1,
+        "valid": true
+       }
+      ]
+     }
+    ]
+   },
+   "id": "pmwgzqho025zv",
+   "source": "human",
+   "unparsed": false,
+   "formalizer": "encoder",
+   "feedback": {
+    "vote": "down",
+    "reasons": [
+     "too-little"
+    ],
+    "wanted": "am cerut o diagrama i  forma de casa, a dsenat un verc, e ridic",
+    "correction": null,
+    "time": "2026-11-14T22:42:25.518Z"
+   },
+   "selectedLang": "ro",
+   "via": [
+    "translator-in",
+    "translator-out"
+   ],
+   "candidates": [
+    {
+     "source": "model",
+     "text": "Draw a diagram in house form",
+     "issues": 1,
+     "chosen": true
+    },
+    {
+     "source": "rules",
+     "text": "Draw a house shaped diagram",
+     "issues": 1
+    },
+    {
+     "source": "repaired-model",
+     "text": "Draw a diagram in house shape",
+     "repaired": "desenează o diagrama in forma de casa",
+     "issues": 1
+    }
+   ],
+   "replyOutcome": "done",
+   "turnKind": null,
+   "tabWorld": "diagram.sketch",
+   "detail": {
+    "tab": "diagram",
+    "worlds": [
+     "diagram.sketch"
+    ],
+    "status": "understood",
+    "readings": [
+     {
+      "text": "Draw a diagram in house form",
+      "world": "diagram.sketch",
+      "pattern": "pat.diagram.sketch.read.frame",
+      "strategy": "encoder",
+      "unparsed": false,
+      "complete": true,
+      "refusal": null,
+      "candidates": [
+       {
+        "world": "diagram.sketch",
+        "score": 1,
+        "valid": true,
+        "variant": "original"
+       }
+      ],
+      "wires": "@t5_w7 core.request\n    action=diagram.sketch.own\n    arg.pre=\"Draw a\"\n    arg.post=\"in house form\"\n    arg.text=\"Draw a diagram in house form\"\n    core.via=$pat.diagram.sketch.read.frame\n    core.source=\"msg5#0-28\"\n    core.seq=16\n    core.in=$diagram.sketch\n"
+     }
+    ],
+    "answer": "A făcut un cerc.",
+    "effects": [],
+    "budget": {
+     "ticks": 34768,
+     "top": {
+      "matcher.backtrack": 13763,
+      "translate.frame": 6007,
+      "facts.index": 4886,
+      "rules.pattern": 2157,
+      "index.chain": 1623
+     }
+    },
+    "budgetExceeded": null,
+    "state": {
+     "before": "ca7d80b8",
+     "after": "94506583"
+    },
+    "perf": {
+     "totalMs": 1593,
+     "engineMs": 1529,
+     "stages": {
+      "correct": {
+       "n": 3,
+       "ms": 0
+      },
+      "dialogue": {
+       "n": 6,
+       "ms": 1.2
+      },
+      "discourse": {
+       "n": 6,
+       "ms": 2.1
+      },
+      "encoder.available": {
+       "n": 1,
+       "ms": 0
+      },
+      "encoder.prepare": {
+       "n": 1,
+       "ms": 0
+      },
+      "tokenize": {
+       "n": 8,
+       "ms": 6.1
+      },
+      "ort": {
+       "n": 8,
+       "ms": 1010.3
+      },
+      "predict": {
+       "n": 1,
+       "ms": 1026.1
+      },
+      "seed.replay": {
+       "n": 2,
+       "ms": 0
+      },
+      "rules": {
+       "n": 2,
+       "ms": 97.5
+      },
+      "formalize": {
+       "n": 3,
+       "ms": 1440.8
+      },
+      "typed": {
+       "n": 3,
+       "ms": 14.4
+      },
+      "knowledge": {
+       "n": 9,
+       "ms": 0.6
+      },
+      "interpret": {
+       "n": 3,
+       "ms": 8.4
+      },
+      "seed": {
+       "n": 2,
+       "ms": 145.3
+      },
+      "check": {
+       "n": 1,
+       "ms": 0
+      },
+      "check.formalize": {
+       "n": 1,
+       "ms": 2.2
+      },
+      "validate": {
+       "n": 1,
+       "ms": 179
+      },
+      "rules.final": {
+       "n": 1,
+       "ms": 2
+      },
+      "encoder": {
+       "n": 1,
+       "ms": 1306
+      }
+     },
+     "render": 63.8,
+     "effects": 0.2
+    }
+   },
+   "happened": {
+    "tabAfter": "diagram",
+    "shown": [
+     {
+      "text": "A făcut un cerc.",
+      "world": "diagram.sketch"
+     }
+    ],
+    "changes": [
+     {
+      "world": "diagram.sketch",
+      "changes": [
+       "shapes: +1 circle",
+       "order 1 (was 0)",
+       "last: +1 item",
+       "kept note ",
+       "items: 0 items",
+       "counter {…} (was none)",
+       "saved {…} (was none)",
+       "log: 1 item"
+      ]
+     }
+    ],
+    "viewEffects": [
+     {
+      "kind": "view",
+      "tab": "diagram",
+      "world": "diagram.sketch"
+     }
+    ]
+   },
+   "budget": {
+    "ticks": 34768,
+    "top": {
+     "matcher.backtrack": 13763,
+     "translate.frame": 6007,
+     "facts.index": 4886,
+     "rules.pattern": 2157,
+     "index.chain": 1623
+    }
+   },
+   "reaction": {
+    "kind": "tap",
+    "target": "Message",
+    "afterMs": 7798,
+    "tab": "diagram"
+   },
+   "segments": [
+    {
+     "text": "Draw a diagram in house form",
+     "status": "supported",
+     "world": "diagram.sketch",
+     "pattern": "pat.diagram.sketch.read.frame",
+     "unparsed": false,
+     "strategy": "encoder"
+    }
+   ]
+  }
+ ]
+}
