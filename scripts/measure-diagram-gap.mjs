@@ -215,7 +215,7 @@ async function main() {
     const out = [];
     for (const mode of modes) for (const r of all[mode]) {
       if (r.outcome === 'right') continue;
-      const src = arg('source', 'DIAG-KNOW scripts/measure-diagram-gap.mjs (diagram.sketch, composed from knowledge, sopworld 0.113)');
+      const src = arg('source', 'DIAG-KNOW scripts/measure-diagram-gap.mjs (diagram.sketch, composed from knowledge, sopworld 0.114)');
       if (have.has(`${src}|${r.request}|${mode}`)) continue;
       const row = byId[r.id];
       out.push(JSON.stringify({ text: r.request, tab: 'diagram', language: 'en', happened: `${r.reply} [${r.outcome}: ${r.why ?? 'state unchanged'}; ${r.shapes} shapes, ${r.edges} arrows]`, expected: row.expect, class: `diagram-gap:${row.group}:${row.kind}`, cause: causeOf(row, r), reasoner: mode, source: src, first_seen: new Date().toISOString().slice(0, 10), build }));
