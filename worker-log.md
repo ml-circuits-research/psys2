@@ -2469,3 +2469,17 @@ Script: `scripts/check-live-mobile.mjs --expect 09d5dec2b6` (waits for Pages, th
 - **Drawing page after "draw a house and a sun":** toast "I drew a yellow house and a yellow sun.", one page chip in the chat, example chips under it; summary panel visible on the chat page.
 - **Phone part of the live check:** avatar popup opens with a face inside the viewport and closes; a story from the Documents page (now the editor: `.pe-compose` form, Compose button) writes "I wrote the story ... 87 words in 5 chapters"; 5 dice presses on Drawing all answered (copy sun, add star, copy star, undo, redo).
 - **Errors:** 0 page errors, 0 failed requests; one console error, a 503 fetching a script (github.io, transient). **One failure:** "put on a hat" as the first turn of a fresh phone session answers "Stopped a runaway computation in stage end after 8.0 s." (so does "wear glasses"); after any earlier turn it works ("I drew a brown hat."). Ledgered by cause in training/eval/failures.jsonl. Also: the Send button showed the red Stop square in the menu screenshot (taken right after boot, engine still busy).
+
+
+## 2026-11-15 KIDS → GENERAL WORLDS, steps 1-2: audit and asks (reviewer 08:45; no runtime change)
+Audit in `docs/kids-generalisation-plan.md`, asks in questions.md Q18. Sources: the 139 `canonical=` sentences of the seven kids worlds (common 16, shapes 4, arith 39, shop 25, tasks 25, animals 8, time 22), the real set replayed on this tree (`node scripts/real-set.mjs run --reasoner matrix --tag -kidsaudit`, training/results/real-2026-11-15-matrix-kidsaudit.json), sopworld 0.114.0, and the live catalog (index 8c85b4288d43). Probe (scratchpad only): each canonical sentence in a fresh session with set-up turns where needed, catalog live, once with all worlds and once with the six content kids worlds hidden from the loader.
+| world | canonical | by itself now | right with the content kids worlds hidden | gaps K / L / H (sentences) | real turns |
+|---|---|---|---|---|---|
+| kids.common | 16 | 15 (1 -> Talk, fails) | 14 (itself) | 13 / 0 / 16 | 19 |
+| kids.shapes | 4 | 4 | 0 | 2 / 4 / 4 | 0 |
+| kids.arith | 39 | 39 | 0 | 33 / 29 / 0 | 13 (7 are profile-tab answers wrongly read as bee problems) |
+| kids.shop | 25 | 25 | 0 | 25 / 21 / 5 | 8 |
+| kids.tasks | 25 | 23 | 0 | 25 / 2 / 0 | 1 |
+| kids.animals | 8 | 8 | 3 (session.things) | 4 / 1 / 5 | 0 |
+| kids.time | 22 | 19 (+1 Talk right) | 1 (Talk) | 18 / 14 / 4 | 2 |
+Fail on main today: "Who is speaking to me?", "What lists do I have?", "What's still open for me?", "What are the weekend days?", "What is the time?". Distinct asks: 10 [KNOW] (w.list, w.tasks, conversation frames, arithmetic words, typed possession effects of k.actions, list/task/wallet frames, clock words, shapes/colours of things, pets, question word orders), 5 [LIB] (storyState for real word problems, std.time, list totals / provenance / default list, contrast of a kind, statements by type as taught facts), 7 host items. Real rows that need an ask: K1, K2, K3, K4, K5, K6, K7, K10, L1, L2, L3, L4. Real turns in a target's domain that nobody answers: r0244, r0610, r0611. Runtime bytes of the kids worlds in the browser build: 1,539,400 (bundle + ops + fns; kids.shop 557,222). kids.common is in `always`, and session.conversation composes the other six. Switch order for step 3: animals, shapes, time, tasks, arith, shop, common (imports untangled first: art.draw, data.charts, docs.editor, session.conversation, 12 importers of kids.common).
