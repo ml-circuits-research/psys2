@@ -12,12 +12,9 @@ test('lang.ro analyses a noun form to its lemma, features and the English of its
   const g = ro.analyse('copacului', 'copacului')[0];
   assert.equal(g.entry.en, 'tree'); assert.equal(g.gen, true);
 });
-const bareLib = await openLangRo({ workaround: false });
-test('lang.ro: a verb with a diacritic suffix is analysed through the Q51 workaround, not by the library alone', () => {
-  const plain = ro.analyse('deseneaza', 'desenează').find((x) => x.pos === 'verb');
-  assert.equal(plain?.entry.en, 'draw');
-  const bare = bareLib.analyse('deseneaza', 'desenează').find((x) => x.pos === 'verb');
-  assert.equal(bare, undefined, 'the library 0.62 alone misses it (Q51); when this fails the workaround can be deleted');
+test('lang.ro: a verb with a diacritic suffix, with and without the diacritics, is analysed by the library alone (Q51 is fixed in sopworld >= 0.63; the host workaround is gone)', () => {
+  assert.equal(ro.analyse('deseneaza', 'desenează').find((x) => x.pos === 'verb')?.entry.en, 'draw');
+  assert.equal(ro.analyse('deseneaza', 'deseneaza').find((x) => x.pos === 'verb')?.entry.en, 'draw');
 });
 test('lang.ro: a clitic hyphen is split off a verb', () => {
   const a = ro.analyse('arata-mi', 'arată-mi').find((x) => x.pos === 'verb');

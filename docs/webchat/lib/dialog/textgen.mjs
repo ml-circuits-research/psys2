@@ -96,7 +96,8 @@ export function composeRequest({ type, topic = '', chapters, subchapters, words,
  * Every sentence must carry its `source` (the wire of the claim it renders); a composition with an unsourced sentence is refused (no invented claims).
  */
 export function createComposer(lib, world) {
-  const fn = pick(lib, 'compose');
+  // STEP B: sopworld 0.65 has `compose(world, topic, { genre, size, seed, realise, measures })`, not the interface assumed in spec 26; until the adapter is switched to it, the composer is unavailable (the wrong call must not be made).
+  const fn = null;
   return {
     available: Boolean(fn),
     compose(input = {}) {

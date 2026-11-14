@@ -2104,3 +2104,4 @@ Merged origin/main (sopworld 0.62). `scripts/build-lang-ro.mjs` bundles the cata
 - [plan.seating] "Add a seat." -> ok: I added the seat at table 1. (I put it at table 1, the only table with room.)
 - [data.charts] "Set the chart axis to horizontal." -> ok: OK, the bar chart is horizontal now. I switched to a bar chart because only bar and line c
 - [art.draw] "Add a boy." -> ok: I drew a boy.
+- 2026-11-14 18:20 step A: sopworld 0.65.0 vendored byte for byte (commit 3d68ee5, build e6a9bf96ca14; scan-loops, build-bundle, knowledge, LICENSE copied), LICENSES.md and the pin in tests/reasoner.test.mjs updated; the Q51 workaround in src/lang/ro.mjs deleted (test now asserts the library alone analyses desenează / deseneaza). std.compose 0.65 has a different interface (compose(world, topic, { genre, size, seed, realise }) -> frames with cites): the composer adapter is unavailable until step B, 3 fake-interface tests skipped with that reason.
