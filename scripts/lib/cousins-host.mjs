@@ -71,6 +71,30 @@ export function expectedOf(world, c) {
   return { all: values.map(formsOf) };
 }
 
+/**
+ * Per-clause judge (library 0.88 `tools/cousins-test.mjs`: "a compound text passes only when the host's answer holds every clause's answer"): the answer of each clause the system cut
+ * the text into, from the world as oracle. `clauses` = the texts of the segments of the run. A clause's answer is, in this order: the answer of the frame `readByTypes` reads in it (an ask or a
+ * find of the typed world), an arithmetic clause ("what is 20 minus 8", "what 7 plus 5"), a yes/no question about a place ("is Egypt in Africa": yes), a count of the calendar ("how many days are in
+ * a week": 7); a clause none of these answer is not judged (counted in `skipped`). Returns `{ all: [forms...], skipped }` to ADD to `expectedOf`; values already expected are not repeated.
+ */
+export function clauseExpected(lib, world, clauses, already, read = READ) {
+  const have = new Set(already.all.map((f) => f[0])), all = [];
+  let skipped = 0;
+  const add = (v) => { const fs = formsOf(v); if (!have.has(fs[0])) { have.add(fs[0]); all.push(fs); } };
+  for (const clause of clauses ?? []) {
+    const t = String(clause).toLowerCase();
+    const a = /(\d+)\s*(plus|minus|min|times)\s*(\d+)/.exec(t);
+    if (a) { const [x, y] = [Number(a[1]), Number(a[3])]; add(a[2] === 'plus' ? x + y : a[2] === 'times' ? x * y : x - y); continue; }
+    if (/\bhow many days\b.*\bin a week\b/.test(t)) { add(7); continue; }
+    if (/^\W*(is|are)\b.*\bin\b/.test(t) && /\b(egypt|africa|paris|france|europe|asia)\b/.test(t)) { add('yes'); continue; }
+    let b = null;
+    try { b = lib.readByTypes(world, clause, read).best; } catch { b = null; }
+    if (b && (b.is === 'ask' || b.is === 'find') && b.answer?.length) { for (const v of expectedOf(world, { frame: b }).all) if (!have.has(v[0])) { have.add(v[0]); all.push(v); } continue; }
+    skipped++;
+  }
+  return { all, skipped };
+}
+
 const has = (reply, form) => new RegExp(`(^|[^\\p{L}\\p{N}])${form.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^\\p{L}\\p{N}])`, 'iu').test(reply);
 
 /**

@@ -12,10 +12,32 @@ export const knowledgeLocation = () => globalThis.process?.env?.PSYS2_KNOWLEDGE 
  */
 export const knowledgeTimeoutMs = (path) => (/^(index|vocab)\.json$/.test(path) ? 25000 : 8000);
 
-export function createKnowledgeSource(location) {
+/**
+ * Files a catalog may or may not publish (the lazy-loading index of the vocabulary buckets): a miss is remembered so the console is not flooded with the same 404.
+ * A 404 holds for the whole session (this JS context); a 5xx or a network error is a temporary miss with a doubling backoff (OPTIONAL_BACKOFF_MS .. OPTIONAL_BACKOFF_MAX_MS).
+ * The remembered miss answers `null`, exactly what the failed request would have answered: the network never changes a reading, it only stops being asked.
+ */
+export const OPTIONAL_PATHS = new Set(['vocab/index.json']);
+export const OPTIONAL_BACKOFF_MS = 60000, OPTIONAL_BACKOFF_MAX_MS = 900000;
+const optionalMisses = new Map();   // `${base}/${path}` -> { until, wait } (until: Infinity for a 404)
+/** For tests: forget the remembered misses. */
+export const resetOptionalMisses = () => optionalMisses.clear();
+
+export function createKnowledgeSource(location, { now = () => Date.now() } = {}) {
   const base = String(location).replace(/\/+$/, '');
   if (/^https?:\/\//i.test(base)) {
-    return { text: async (p) => { const r = await fetch(`${base}/${p}`, { signal: globalThis.AbortSignal?.timeout?.(knowledgeTimeoutMs(p)) }); return r.ok ? r.text() : null; } };
+    return { text: async (p) => {
+      const optional = OPTIONAL_PATHS.has(p), k = `${base}/${p}`;
+      const m = optional ? optionalMisses.get(k) : null;
+      if (m && now() < m.until) return null;
+      const miss = (until, wait) => { optionalMisses.set(k, { until, wait }); return null; };
+      const backoff = () => { const wait = Math.min(OPTIONAL_BACKOFF_MAX_MS, (m?.wait ?? OPTIONAL_BACKOFF_MS / 2) * 2); return miss(now() + wait, wait); };
+      let r;
+      try { r = await fetch(k, { signal: globalThis.AbortSignal?.timeout?.(knowledgeTimeoutMs(p)) }); } catch (e) { if (optional) return backoff(); throw e; }
+      if (r.ok) { if (optional) optionalMisses.delete(k); return r.text(); }
+      if (optional) return r.status === 404 ? miss(Infinity, 0) : backoff();
+      return null;
+    } };
   }
   return {
     text: async (p) => {

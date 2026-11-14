@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { installFormOperators } from './lib/formops-host.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : d; };
@@ -42,6 +43,7 @@ const loader = createFsLoader({ roots: [DEFAULT_ROOT] });
 const list = loader.listWorlds.bind(loader);
 if (process.argv.includes('--only')) loader.listWorlds = async () => (await list()).filter((id) => IDS.includes(id));   // --only: the seating plan alone; default: every world, the tab of the plan open
 const engine = await createEngine({ loader, options: { reasoner: arg('--reasoner', 'matrix') } });
+await installFormOperators(engine);   // PSYS2_FORMOPS=on: typed form operators (spec 16 section 11)
 
 const rows = [];
 for (let c = 1; c <= CONVERSATIONS.length; c++) {

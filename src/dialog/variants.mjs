@@ -3,6 +3,8 @@
  * READING STEPS FOR UNPARSED CLAUSES (spec 16 section 10; sopworld 0.74 `nearWords`, 0.75 `normalise`): the paraphrase gap. Each step proposes another reading of a clause nobody read;
  * the world decides (a run on a fork must support the new reading and must not end in the world's own refusal); all or nothing (a clause with two different acceptable readings
  * keeps none); nothing is told to a world, no sentence is generated, nothing is added to a pattern or a lexicon. One switch per step for A/B runs:
+ *   PSYS2_FORMOPS=on        (off unless set) typed form operators: the operators the library's `learnFormOperators({ world })` admitted rewrite the clause (src/dialog/form-operators.mjs), the rules read each candidate; the first step
+ *   PSYS2_CANON=on          (off unless set) inverse operators at read time: `canonicalise` drops the learnt fillers at the start and end of the clause and applies the alternation rules, the rules read the result
  *   PSYS2_ALTERNATIONS=off  alternations: `normalise` over the `w.lang.en.alternation` rules of the language world (passive, wrappers, question and command, dative shift), then the rules read the canonical form
  *   PSYS2_NEAR=off          near words: an unknown word that the word senses of the catalog (k.words) make a synonym or a kind of a word the worlds know (cost 3 at most) is read as that word
  *   PSYS2_SLOTS=off         slot types: the words of the clause are assigned to the typed slots of a pattern of the worlds by their lexicons, whatever their order; the pattern's own words and the function
@@ -14,11 +16,13 @@ import { lexIndex } from '../worlds/lexicon.mjs';
 import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { FILLER } from './world-aware.mjs';
 import { budget } from './budget.mjs';
+import { formOperatorTexts } from './form-operators.mjs';
 
 /** A catalog lookup waits at most LOOKUP_MS; a catalog that does not answer in time is no catalog (the reading is then the rules'), and the turn never waits for it. */
 const LOOKUP_MS = 400;
 const bounded = (p) => new Promise((resolve) => { const t = setTimeout(() => resolve(null), LOOKUP_MS); Promise.resolve(p).then((v) => { clearTimeout(t); resolve(v); }, () => { clearTimeout(t); resolve(null); }); });
 const off = (name) => globalThis.process?.env?.[name] === 'off';
+const on = (name) => globalThis.process?.env?.[name] === 'on';   // a step that is off unless asked for
 const toks = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
 const FUNCTIONAL = new Set([...FILLER, ...FUNCTION_WORDS, 'what', 'which', 'who', 'where', 'when', 'how', 'does', 'do', 'did', 'is', 'are', 'was', 'were', 'be', 'in', 'on', 'at', 'by', 'with', 'its', 'these', 'those', 'tell', 'say', 'i', 'we']);
 const unq = (v) => String(v).replace(/^"|"$/g, '');
@@ -115,7 +119,8 @@ async function reread(dialog, seg, text, opts, via, extra = {}) {
   return accepted(dialog, segs) ? segs : null;
 }
 
-async function alternationText(dialog, seg) {
+/** The library World of the catalog's `w.lang.en.alternation` rules (null when it publishes none); built once per dialogue. */
+async function alternationWorld(dialog) {
   const lib = dialog.engine.sopworld, facts = dialog.engine.knowledge;
   if (!lib?.normalise || !facts?.wires) return null;
   let w = dialog._alternationWorld;
@@ -127,9 +132,26 @@ async function alternationText(dialog, seg) {
     } catch { w = null; }
     dialog._alternationWorld = w;
   }
+  return w;
+}
+
+async function alternationText(dialog, seg) {
+  const lib = dialog.engine.sopworld, w = await alternationWorld(dialog);
   if (!w) return null;
   const r = lib.normalise(w, seg.text);
   return r?.applied?.length && r.text && r.text !== seg.text ? { text: r.text, applied: r.applied } : null;
+}
+
+/** The inverse operators at read time (sopworld 0.91 `canonicalise`): the learnt filler words dropped at the start and end of the clause, then the alternation rules; one clause (the clause splitter has cut already). */
+async function canonicalText(dialog, seg) {
+  const fo = dialog.engine.formOperators;
+  if (!fo?.lib?.canonicalise || !fo.fillers?.length) return null;
+  const w = (await alternationWorld(dialog)) ?? fo.world;
+  if (!w) return null;
+  const r = fo.lib.canonicalise(w, seg.text, { fillers: fo.fillers, splitters: [] });
+  if (r.clauses.length !== 1) return null;
+  const c = r.clauses[0];
+  return c.text && c.text !== toks(seg.text).join(' ') ? { text: c.text, applied: c.applied, dropped: r.dropped } : null;
 }
 
 async function nearTexts(dialog, seg) {
@@ -171,6 +193,12 @@ export async function withVariants(dialog, formal, opts) {
     if (seg.unparsed && seg.text) {
       budget.tick('variants.segment');
       try {
+        if (!out && on('PSYS2_FORMOPS')) {   // typed form operators (spec 16 section 11): the clause rewritten by the admitted operators, each candidate read by the rules, the world decides, two different readings: none
+          const readings = new Map();
+          for (const t of formOperatorTexts(dialog.engine.formOperators, seg.text)) { const r = await reread(dialog, seg, t, opts, 'form-operator', { operator: true }); if (r) readings.set(sigOf(r.flatMap((x) => x.wires)), r); }
+          if (readings.size === 1) out = [...readings.values()][0];
+        }
+        if (!out && on('PSYS2_CANON')) { const c = await canonicalText(dialog, seg); if (c) out = await reread(dialog, seg, c.text, opts, 'canonical', { applied: c.applied, dropped: c.dropped }); }   // inverse operators (spec 16 section 11)
         if (!out && !off('PSYS2_ALTERNATIONS')) { const a = await alternationText(dialog, seg); if (a) out = await reread(dialog, seg, a.text, opts, 'alternation', { applied: a.applied }); }
         if (!out && !off('PSYS2_NEAR')) {
           const readings = new Map();

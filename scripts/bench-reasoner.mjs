@@ -23,6 +23,7 @@ import { groupOf } from './lib/world-groups.mjs';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const REPS = Number(arg('reps', 5)), LIMIT = Number(arg('limit', 0)) || 0, INSTR = process.argv.includes('--instrument');
+const STRIDE = Number(arg('stride', 1)) || 1, NO_DIALOGUES = process.argv.includes('--no-dialogues');   // --stride 13 --no-dialogues: every 13th operational case (about 100), no dialogues
 const jsonl = (f) => readFileSync(join(REPO, 'training/eval', f), 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
 const FOUR = new Set(['kids.shop', 'kids.arith', 'kids.tasks', 'games.tictactoe']);
 const settings = settingsForMode('rules');
@@ -31,9 +32,9 @@ const engines = { ops: await mk('ops'), matrix: await mk('matrix') };
 
 const step = (m) => (typeof m === 'string' ? m : m.message ?? m.text);
 const sess = [];
-let cases = jsonl('operational.jsonl'); if (LIMIT) cases = cases.slice(0, LIMIT);
+let cases = jsonl('operational.jsonl'); if (STRIDE > 1) cases = cases.filter((_, i) => i % STRIDE === 0); if (LIMIT) cases = cases.slice(0, LIMIT);
 for (const c of cases) sess.push({ world: c.world, tab: c.tab, init: c.init, turns: [...(c.setup ?? []).map(step), c.message] });
-let dl = jsonl('dialogues.jsonl'); if (LIMIT) dl = dl.slice(0, LIMIT);
+let dl = NO_DIALOGUES ? [] : jsonl('dialogues.jsonl'); if (LIMIT) dl = dl.slice(0, LIMIT);
 for (const d of dl) sess.push({ world: d.world, tab: d.tab, init: d.init, turns: d.turns.map((t) => t.message) });
 const grp = (w) => (FOUR.has(w) ? 'four' : groupOf(w) === 'kids' ? 'kids-other' : groupOf(w));
 
