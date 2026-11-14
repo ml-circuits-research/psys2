@@ -3973,3 +3973,11 @@ Plus **library modules** (`std.*`: acts, fill, focus, relations, turn, know, gra
 In Romanian (for the owner): schema lumii, lume de cunoaștere, lume vie.
 
 Use these names in specs, docs, the system map, the landing table and the code comments you touch (no mass renaming of code identifiers needed): tab worlds become "live worlds shown in views", their schemas are world schemas (to move to sop-knowledge-worlds as `w.*` when general).
+
+## Reviewer 2026-11-14 06:20 — after LOADING and the LIVE-STATE invariant: THIN LIVE WORLDS (owner)
+
+**Owner:** the demo's own worlds must be as small as possible and use the knowledge worlds as much as possible; raise reuse between worlds. Queue this after the loading work and the live-state invariant.
+1. **Per tab world, one table** (generated, in the landing table): its own wires and lines by kind (schema, hooks, own, extras: patterns / lexicon / templates .extra), what it imports (std.*, w.*, k.*), the reuse number, and for every own part one of: *truly own* (renderer, engine), *general → library*, *general → w.* schema in sop-knowledge-worlds*, *knowledge → k.**.
+2. **Move the general parts out**: the schemas of plan.seating, plan.timeline (already published as `w.seating`, `w.timeline`: read those and delete the local copies), and the parts of the tab schemas that any drawing / diagram / chart / document / map application would share (shapes and connectors, series and points, blocks and sections, places and layers) as `w.*` schemas proposed to the knowledge repo through `handover/`; the extras (`patterns.extra.sop` and friends: 44 in the editor, the map's layer frames) re-examined: each either an act frame in `w.lang.en`, a view attribute (`std.schema.view`), an `ask` frame, or truly own.
+3. **Use knowledge everywhere a world now has a list**: colours, sizes, units, shapes, layouts, people, places, time, act verbs, value words; a world never declares a value list that a knowledge world has.
+4. Report per landing: own lines and wires per world before / after, reuse number per world before / after, extras left. Target direction: every tab world shrinking each landing; the reuse mean rising from 0.16.
