@@ -84,8 +84,8 @@ The tab is a TipTap (ProseMirror) editor (MIT, vendored in `docs/webchat/vendor/
 
 ### Games (voice- or chat-controlled)
 - `games.tictactoe` — state `{ board: 9 cells 'X'|'O'|'', user: 'X', turn, winner, level: 'easy'|'perfect' }`; moves by name ("top left", "center", "bottom right", "middle row left") or coordinates ("B2"); the system answers with its move (minimax for `perfect`); "new game", "who is winning?", "let me go second".
-- `games.guess` — twenty questions where **PSys2 guesses the user's animal** by asking yes/no questions chosen from the kids.animals knowledge base (split the remaining candidates as evenly as possible); answers "yes", "no", "I don't know"; at the end it names the animal or admits defeat and asks the user to teach it ("it was a zebra" → a session fact). Shows the knowledge base and planning at work.
-- `games.hangman` — a word from the kids.animals or kids.shapes lexicon; "is there an E?", "the letter R", "is it elephant?", "give me a hint" (a fact about the animal from the KB).
+- `games.guess` — twenty questions where **PSys2 guesses the user's animal** by asking yes/no questions chosen from the animals of the knowledge catalog (`k.animals`, read by lookup from a bundle generated from it at build time: `src/knowledge/animals.mjs`, `scripts/build-bundled-subset.mjs`) (split the remaining candidates as evenly as possible); answers "yes", "no", "I don't know"; at the end it names the animal or admits defeat and asks the user to teach it ("it was a zebra" → a session fact). Shows the knowledge base and planning at work.
+- `games.hangman` — a word from the animal names of the knowledge catalog (`k.animals`); "is there an E?", "the letter R", "is it elephant?", "give me a hint" (a fact of the catalog about the animal).
 
 ### Implementation notes (fixtures in `worlds/`)
 - Cross-world calls: `ctx.request('ui.openTab', { tab })` brings a tab forward (every changing command of the avatar, editor and games does it); games are started by `ui.playGame` / `ui.newGame` through `ctx.request('ttt.new' | 'guess.start' | 'hm.new')`. Worlds export `initialState()` so the host can read every state before the first message.

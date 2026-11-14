@@ -1,3 +1,5 @@
+> KNOWLEDGE-OUT step 5: this world no longer answers questions or holds a knowledge base. The text below describes the coverage before that change (the questions it lists are now the Talk tab's frames over the knowledge catalog); only the teaching and pet statements remain here.
+
 # kids.animals: request-shape catalogue (R2)
 
 Status: **S** = supported by general patterns, with tests in `tests.sop` (`t.animals.*`; `s###` come from the rule sweep); **U** = unsupported, with the reason.

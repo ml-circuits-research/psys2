@@ -271,8 +271,28 @@ export function createFacts({ source, name = 'catalog' }) {
     return seriesLoading;
   }
 
+  /**
+   * Every wire of the types a word means ("animals" means k.animals.animal, "colours" means k.colours.colour, "mix" means k.colours.mix), loaded once so that an operation can list or look up
+   * in them synchronously (`peekWires(type)`): the answer to "which animals are mammals" and "what do red and blue make" is a read of the wires of a type, found through the schemas' own words.
+   */
+  const listed = new Map();   // type id -> wires
+  async function preloadWires(word) {
+    const sc = await schema();
+    const w = String(word ?? '').toLowerCase().trim();
+    const out = [];
+    for (const cand of new Set([w, lemmaCandidates(w).at(-1)])) for (const m of sc.slotWords.get(cand) ?? []) {
+      if (!sc.slots.has(m) || listed.has(m)) { if (listed.has(m)) out.push(m); continue; }
+      listed.set(m, await wires(m));
+      out.push(m);
+    }
+    return out;
+  }
+
   let facesData, facesLoading = null, partsData, partsLoading = null;
   const api = {
+    preloadWires,
+    /** The wires of a type that `preloadWires` loaded, or undefined (a synchronous read for operations: `ctx.knowledge.peekWires(type)`). */
+    peekWires: (type) => listed.get(type),
     name, find, thing, stats, loadVocab, world, wires, schema, series,
     /** The schema and the series already built, or undefined (synchronous reads for operations: \`ctx.knowledge.peekSchema()\`, \`peekSeries()\`). */
     peekSchema: () => schemaData ?? undefined, peekSeries: () => seriesData ?? undefined,

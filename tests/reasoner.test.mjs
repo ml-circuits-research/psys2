@@ -51,8 +51,8 @@ test('matrix mode: the worlds that opt in, the library loads without problems, t
 
 const LEDGERED_DIAGRAM = ["t.diagram.sketch.b.align.k05.b", "t.diagram.sketch.b.arrange.k06.b", "t.diagram.sketch.b.ask_path.k02.b", "t.diagram.sketch.b.create.k06.b", "t.diagram.sketch.b.delete.k04.b", "t.diagram.sketch.b.disconnect.k04.b", "t.diagram.sketch.b.group.k02.b", "t.diagram.sketch.b.group.k05.b", "t.diagram.sketch.b.move.k03.b", "t.diagram.sketch.b.rule.k06.b", "t.diagram.sketch.b.snap.k06.b", "t.diagram.sketch.b.undo.k04.b", "t.diagram.sketch.ex.star.n001"];
 const LEDGERED_CHARTS = ["t.data.charts.m04", "t.data.charts.n22", "t.data.charts.n35", "t.data.charts.n90", "t.data.charts.r2033", "t.data.charts.r2086", "t.data.charts.r2087", "t.data.charts.r2105", "t.data.charts.x203", "t.data.charts.x205"];
-test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 484, kids.time 227, kids.animals 508, user.profile 144 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
-  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 484], ['kids.time', 227], ['kids.animals', 508], ['user.profile', 144], ['geo.map', 459], ['data.charts', 277], ['art.draw', 600], ['diagram.sketch', 771]]) {
+test('parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243, games.tictactoe 173, games.hangman 154, games.guess 130, kids.shapes 9, kids.time 227, kids.animals 47, user.profile 144 (the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)', async () => {
+  for (const [id, n] of [['kids.shop', 168], ['kids.tasks', 241], ['kids.arith', 243], ['games.tictactoe', 173], ['games.hangman', 154], ['games.guess', 130], ['kids.shapes', 9], ['kids.time', 227], ['kids.animals', 47], ['user.profile', 144], ['geo.map', 459], ['data.charts', 277], ['art.draw', 600], ['diagram.sketch', 771]]) {
     const r = await runWorldTests(matrix, id);
     // the 13 rows of the diagram switch and the 10 rows of the data.charts switch are on the ledger (training/eval/failures.jsonl, source "bug-batch diagram switch"); every other row of every world passes
     assert.deepEqual(r.failed.map((f) => f.id).filter((x) => (id !== 'diagram.sketch' || !LEDGERED_DIAGRAM.includes(x)) && (id !== 'data.charts' || !LEDGERED_CHARTS.includes(x))), [], id); assert.equal(r.total, n);
@@ -566,7 +566,7 @@ test('games.guess: the rules in the matrix: the animals still possible, the ques
 test('games.guess: a taught animal is a wire of the library (kids.animals.animal) and the next game asks about it; undo forgets it', async () => {
   const { s } = await say(matrix, ['I am thinking of an animal.', 'yes', 'no', 'I give up', 'it was a quokka']);
   const lib = s.isession.rs.of('games.guess');
-  assert.deepEqual(lib.ofType('kids.animals.animal').filter((w) => w.attrs.name[0] === 'quokka').map((w) => w.attrs.legs?.[0]), ['4']);
+  assert.deepEqual(lib.ofType('kids.animals.animal').filter((w) => w.attrs.name[0] === 'quokka').map((w) => w.attrs.diet?.[0]), ['carnivore']);   // the first question of a game is the catalog's ("Does it eat only meat?"), answered yes
   assert.deepEqual(s.isession.state['games.guess'].learned.map((l) => l.name), ['quokka']);
   await s.send('new game', {});
   assert.ok(s.isession.state['games.guess'].candidates.includes('quokka'), 'the new game starts with the taught animal');
@@ -583,7 +583,7 @@ test('games.guess: undo goes back through the library: a clue, an answer (the qu
   assert.match((await s.send('undo', {})).text, /^OK, I took that back: "it eats meat"\./);
   assert.equal(s.isession.state['games.guess'].evidence.length, 0);
   const r = await s.send('undo', {});
-  assert.match(r.text, /^OK, I took back your last answer\. I am asking that question again: Does it have 4 legs\?$/);
+  assert.match(r.text, /^OK, I took back your last answer\. I am asking that question again: Does it eat only meat\?$/);
   assert.equal(s.isession.state['games.guess'].count, 0);
   assert.deepEqual(r.statuses, ['supported']);
   sameAsLibrary(s, ['games.guess']);
@@ -610,34 +610,16 @@ test('kids.shapes: a scripted session says the same as the ops reasoner, word fo
   assert.deepEqual(matrix.reasoner.buildAll(), []);
 });
 
-test('kids.shapes: the questions the matrix answers come from the library, the checks and the lookups it leaves (ops=) from the operations', async () => {
-  const s = matrix.createSession({ language: 'en' });
-  const via = async (text) => { const r = await s.send(text, {}); return r.answers?.[0]?.envelope?.via ?? null; };
-  assert.equal(await via('Describe a circle'), 'core.matrix');
-  assert.equal(await via('Is a rectangle a square?'), 'core.matrix');
-  assert.equal(await via('How many sides does a hexagon have?'), 'core.matrix');
-  assert.notEqual(await via('Is a banana red?'), 'core.matrix', 'a check carries the value it seeks');
-  assert.notEqual(await via('What do red and yellow make?'), 'core.matrix');
-  const lib = s.isession.rs.of('kids.shapes');
-  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'circle').map((w) => w.attrs.summary), [['round']]);
-  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'hexagon').map((w) => w.attrs.summary), [['flat']]);
-});
-
-test('kids.shapes: a taught fact is a wire of the library: the rules read it (flat), a question answers from it, undo takes it back', async () => {
+test('kids.shapes: a taught fact is a wire of the library and undo takes it back (the questions about shapes and colours are the Talk tab\'s frames over the catalog)', async () => {
   const { s } = await say(matrix, ['A trapezium has 4 sides.']);
   const lib = s.isession.rs.of('kids.shapes');
-  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'trapezium').map((w) => w.attrs.summary), [['flat']]);
-  assert.equal((await s.send('How many sides does a trapezium have?', {})).text, 'A trapezium has 4 sides.');
+  assert.deepEqual(lib.ofType('kids.shapes.shape').filter((w) => w.attrs.name?.[0] === 'trapezium').map((w) => w.attrs.sides), [['4']]);
   assert.match((await s.send('undo', {})).text, /^OK, I took that back/);
   assert.equal(lib.ofType('kids.shapes.shape').some((w) => w.attrs.name?.[0] === 'trapezium'), false);
-  assert.deepEqual((await s.send('How many sides does a trapezium have?', {})).statuses, ['missing']);
 });
 
-test('"why?" names the source of a world\'s own facts by world: the price list for the shop, what I know about shapes and colors, a general phrase otherwise', async () => {
+test('"why?" names the source of a world\'s own facts: the price list for the shop, a general phrase otherwise', async () => {
   for (const eng of [ops, matrix]) {
-    const a = await say(eng, ['How many sides does a hexagon have?', 'why?']);
-    assert.match(a.out[1], /I worked that out from what I know about shapes and colors\.$/);
-    assert.doesNotMatch(a.out[1], /price list/);
     const b = await say(eng, ['I have 20 lei', 'How much does a ball cost?', 'why?']);
     assert.doesNotMatch(b.out[2], /about animals|shapes/);
   }
@@ -713,21 +695,14 @@ test('kids.animals: a scripted session says the same as the ops reasoner, word f
   assert.deepEqual(matrix.reasoner.buildAll(), []);
 });
 
-test('kids.animals: the questions the library can answer come from it, the ones it leaves (ops=) from the operations; what was taught is a wire and goes with undo', async () => {
+test('kids.animals: what was taught is a wire and goes with undo (the questions about animals are the Talk tab\'s frames over the catalog)', async () => {
   const s = matrix.createSession({ language: 'en' });
-  const via = async (text) => { const r = await s.send(text, {}); return r.answers?.[0]?.envelope?.via ?? null; };
-  assert.equal(await via('How many legs does a spider have?'), 'core.matrix');
-  assert.equal(await via('Can a bat fly?'), 'core.matrix');
-  assert.equal(await via('What does a rabbit eat?'), 'core.matrix');
-  assert.notEqual(await via('Is a whale a fish?'), 'core.matrix', 'a check carries the value it seeks');
-  assert.notEqual(await via('Describe a dolphin'), 'core.matrix');
   const lib = s.isession.rs.of('kids.animals');
   await s.send('A zebra can swim.', {});
   assert.deepEqual(s.isession.state['kids.animals'], { taught: [{ name: 'zebra', facts: ['can_swim=true'] }], pets: [] });
-  assert.ok(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra' && !String(w.id).startsWith('kb.')));
+  assert.ok(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra'));
   assert.equal((await s.send('undo that', {})).text, 'OK, I forgot what you taught me about zebras.');
-  assert.equal(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra' && w.attrs.can_swim?.[0] === 'true' && !String(w.id).startsWith('kb.')), false);
-  assert.deepEqual((await s.send('Can a zebra swim?', {})).statuses, ['missing']);
+  assert.equal(lib.ofType('kids.animals.animal').some((w) => w.attrs.name?.[0] === 'zebra' && w.attrs.can_swim?.[0] === 'true'), false);
   sameAsLibrary(s, ['kids.animals']);
 });
 

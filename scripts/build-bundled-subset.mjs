@@ -7,7 +7,7 @@
 //   node scripts/build-bundled-subset.mjs <catalog folder (docs/worlds of sop-knowledge-worlds)> [--no-acts] [--no-face]
 // Writes src/knowledge/bundled-values.mjs and bundled-objects.mjs: shard texts in the catalog's own format (path -> text) plus the index entries. The catalog replaces it when reachable
 // (src/knowledge/bundled-source.mjs layers the two), and the colour and number readers (src/knowledge/values.mjs) are seeded from it.
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, unlinkSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { createFacts } from '../src/knowledge/facts.mjs';
@@ -76,6 +76,17 @@ console.log(`bundled-arrangement.mjs: ${arrangement.on.length} rests-on pairs, $
 const out = valuesOut + objectsOut;
 console.log('no drawing in the catalog for:', KIND_ORDER.filter((k) => !kept.includes(k)).join(', '));
 console.log(`bundled-values.mjs ${valuesOut.length} bytes, bundled-objects.mjs ${objectsOut.length} bytes: ${colours.length} colours, ${numbers.length} numbers, ${kept.length} drawings (${objects.length} wires), ${out.length} bytes`);
+
+// the animals the games read (guess, hangman): the whole of k.animals as an offline bundle written by the LIBRARY's own tool (tools/build-bundle.mjs), wrapped as a module so that a world reads it
+// synchronously (src/knowledge/animals.mjs), the way a kb.sop was read. Nothing of it is edited by hand.
+{
+  const tmp = path.join(ROOT, 'src/knowledge/.animals.bundle.json');
+  const r = spawnSync('node', [path.join(ROOT, 'src/vendor/sopworld/tools/build-bundle.mjs'), dir, tmp, 'k.animals'], { stdio: 'inherit' });
+  if (r.status) process.exit(r.status);
+  const bundle = JSON.parse(readFileSync(tmp, 'utf8'));
+  unlinkSync(tmp);
+  writeFileSync(path.join(ROOT, 'src/knowledge/bundled-animals.mjs'), `${banner('k.animals: the animals, their classes and their facts, by the library tool tools/build-bundle.mjs')}export const BUNDLED_ANIMALS = ${JSON.stringify(bundle)};\n`);
+}
 
 if (!process.argv.includes('--no-acts')) { const r = spawnSync('node', [path.join(ROOT, 'scripts/build-acts-lexicon.mjs'), dir], { stdio: 'inherit' }); if (r.status) process.exit(r.status); }
 if (!process.argv.includes('--no-face')) { const r = spawnSync('node', [path.join(ROOT, 'scripts/build-default-face.mjs'), dir], { stdio: 'inherit' }); if (r.status) process.exit(r.status); }

@@ -276,8 +276,8 @@
     expect="5"
 
 @t.user.profile.t049 core.test
-    input="How many legs does a spider have?"
-    expect="8"
+    input="What day comes after Monday?"
+    expect="Tuesday"
 
 @t.user.profile.t050 core.test
     input="What is the capital of France?"

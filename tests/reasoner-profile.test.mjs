@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// kids.animals and user.profile on the matrix (spec 15): the library's answers for several values (the reason lives/covered/is_a stay in ops.mjs), and
-// "why?" about a profile fact explained from the library instance, in English and Romanian, with ops unchanged.
+// user.profile on the matrix (spec 15): "why?" about a profile fact explained from the library instance, in English and Romanian, with ops unchanged. (The animals questions this file
+// used to test, several values and conflicting taught facts through kids.animals, moved with the knowledge: Talk frames over the catalog, tests/talk-kids-frames.test.mjs.)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
@@ -13,29 +13,6 @@ const matrix = await engineWith('matrix');
 const ops = await engineWith('ops');
 const session = (e, language = 'en') => e.createSession(sessionOptions(settingsForMode('rules'), { language }));
 const say = async (s, line, language = 'en') => (await s.send(line, language === 'en' ? {} : { language })).text;
-
-test('animals: the library answers several values only in mode=list (a value-mode query is a conflict), so lives/covered/is_a stay in ops', async () => {
-  const s = session(matrix);
-  await say(s, 'What do lions eat?');   // creates the kids.animals instance
-  const w = s.isession.rs.of('kids.animals');
-  const habitats = w.query({ type: 'kids.animals.animal', seek: 'habitat', where: { name: 'dog' } });
-  assert.equal(habitats.status, 'supported', 'sopworld 0.7.0 (R6.1): a many=true key answers all its values in value mode');
-  assert.ok(habitats.values.length > 1);
-  const list = w.query({ type: 'kids.animals.animal', seek: 'habitat', where: { name: 'dog' }, mode: 'list' });
-  assert.equal(list.status, 'supported');
-  assert.ok(list.values.length > 1);
-  // the question wires of the patterns (shared with ops) carry no mode, and a template without a mode renders value questions only: the sentence stays in ops.mjs
-  assert.equal(matrix.set.get('kids.animals').reasoner, 'matrix');
-  assert.ok(matrix.reasoner.opsKeys.has('kids.animals.animal.lives') && matrix.reasoner.opsKeys.has('kids.animals.animal.covered') && matrix.reasoner.opsKeys.has('kids.animals.animal.is_a'));
-});
-
-test('animals: a conflicting taught fact is kept and reported by the library (both strategies say the same)', async () => {
-  for (const e of [matrix, ops]) {
-    const s = session(e);
-    await say(s, 'A spider has 6 legs.');
-    assert.match(await say(s, 'How many legs does a spider have?'), /conflicting information about the legs of a spider: 8 and 6/);
-  }
-});
 
 test('profile: "why?" about a fact says the fact, the statement that told it and quotes the user as typed; ops keeps the generic explanation', async () => {
   const s = session(matrix);

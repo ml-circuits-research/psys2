@@ -12,7 +12,7 @@ const msg = (text, segmentations) => ({ id: 't', text, context: { tab: null, rec
 const hallucinating = (rewrite) => { const calls = []; const f = async ({ text }) => { calls.push(text); return [{ text: rewrite(text), score: -0.05 }]; }; f.calls = calls; return f; };
 
 const cases = [
-  ['colours', 'wat do red and yelow mak', 'wat do red', 'yelow mak', 'What do red and red make?', 'kids.shapes'],
+  ['colours', 'wat do red and yelow mak', 'wat do red', 'yelow mak', 'What do red and red make?', 'talk'],
   ['operands', 'wat is 2 and 3 plus 4', 'wat is 2', '3 plus 4', 'What is 2 and 2 plus 4?', 'kids.arith'],
   ['objects', 'wat do 2 pencils and 3 pencils cost', 'wat do 2 pencils', '3 pencils cost', 'What do 2 pencils and 2 pencils cost?', 'kids.tasks'],
   ['cities', 'weather in pariss and london', 'weather in pariss', 'london', 'weather in paris and paris', 'geo.map'],
@@ -38,8 +38,8 @@ for (const [label, full, head, tail, halluc, world] of cases) {
 test('the colour case: the complete spell reading wins and the normalizer is never asked', async () => {
   const full = 'wat do red and yelow mak';
   const nz = hallucinating(() => 'What do red and red make?');
-  const split = { score: -0.1, segments: [piece('wat do red', W(['kids.shapes', 0.8])), piece('yelow mak', W(['kids.shapes', 0.8]), 15)] };
-  const whole = { score: -0.5, segments: [piece(full, W(['kids.shapes', 0.8]))] };
+  const split = { score: -0.1, segments: [piece('wat do red', W(['talk', 0.8])), piece('yelow mak', W(['talk', 0.8]), 15)] };
+  const whole = { score: -0.5, segments: [piece(full, W(['talk', 0.8]))] };
   const r = await createDispatchValidator({ engine, normalizer: nz }).validate(msg(full, [split, whole]));
   assert.equal(r.status, 'understood');
   assert.equal(r.winner.index, 1);
@@ -76,9 +76,9 @@ test('a cut inside a clause read through a lower-ranked world is a weak cut (cla
 });
 
 test('a delimited split of clean top-ranked readings stays class 0', async () => {
-  const t = 'What is 20 divided by 4. How many legs does a spider have?';
-  const a = 'What is 20 divided by 4.', b = 'How many legs does a spider have?';
-  const r = await createDispatchValidator({ engine }).validate(msg(t, [{ score: -0.1, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['kids.animals', 0.8]), t.indexOf(b))] }]));
+  const t = 'What is 20 divided by 4. What day comes after Monday?';
+  const a = 'What is 20 divided by 4.', b = 'What day comes after Monday?';
+  const r = await createDispatchValidator({ engine }).validate(msg(t, [{ score: -0.1, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['kids.time', 0.8]), t.indexOf(b))] }]));
   assert.equal(r.trace.segmentations[0].tier, 0);
 });
 

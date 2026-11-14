@@ -96,41 +96,6 @@ const add = (group, ph, make, extra = {}) => T.push({ group, ph, make, ...extra 
 const pl = (p) => p + 's';
 const SIDES = { triangle: 3, square: 4, rectangle: 4, pentagon: 5, hexagon: 6, octagon: 8, rhombus: 4 };
 
-add('shapes.q.parts', 'question', (r, x) => { const s = pick(r, shapes(x)), p = pick(r, PARTS), A = NP(r, s);
-  return { text: pick(r, [`How many ${pl(p)} does ${A} have?`, `How many ${pl(p)} has ${A}?`, `Tell me how many ${pl(p)} ${A} has.`, `How many ${pl(p)} do ${plural(s)} have?`]), expect: E(Q('shape', pl(p), { name: s })) }; });
-add('shapes.q.parts.new-vocabulary', 'new-vocabulary', (r) => { const s = pick(r, ['trapezium', 'heptagon', 'decagon', 'kite', 'parallelogram']), p = pick(r, PARTS);
-  return { text: `How many ${pl(p)} does ${art(s)} ${s} have?`, expect: E(Q('shape', pl(p), { name: s })) }; });
-add('shapes.q.parts.exists', 'question', (r, x) => { const s = pick(r, shapes(x)), p = pick(r, PARTS), n = chance(r, 0.5) ? (SIDES[s] ?? 4) : 3 + Math.floor(r() * 6);
-  return { text: `Does ${NP(r, s)} have ${nt(r, n, 0.1)} ${pl(p)}?`, expect: E(Q('shape', pl(p), { name: s, [pl(p)]: n }, { mode: 'exists' })) }; });
-add('shapes.q.which', 'question', (r) => { const p = pick(r, PARTS), n = 3 + Math.floor(r() * 6);
-  return { text: pick(r, [`Which shape has ${n} ${pl(p)}?`, `What shapes have ${n} ${pl(p)}?`, `Name a shape with ${n} ${pl(p)}.`, `Name some shapes that have ${n} ${pl(p)}.`]), expect: E(Q('shape', 'name', { [pl(p)]: n }, { mode: 'list' })) }; });
-add('shapes.q.which.none', 'negation', (r) => { const p = pick(r, PARTS);
-  return { text: `Which shapes have no ${pl(p)}?`, expect: E(Q('shape', 'name', { [pl(p)]: 0 }, { mode: 'list' })) }; });
-add('shapes.q.summary', 'question', (r, x) => { const s = pick(r, shapes(x));
-  return { text: pick(r, [`What is ${NP(r, s)}?`, `Tell me about ${NP(r, s)}.`, `Describe ${NP(r, s)}.`, `What is ${NP(r, s)} like?`, `What are ${plural(s)} like?`]), expect: E(Q('shape', 'summary', { name: s })) }; });
-add('shapes.q.family', 'question', (r, x) => { const s = pick(r, shapes(x)), k = pick(r, kinds(x));
-  const t = pick(r, [`Is ${NP(r, s)} ${art(k)} ${k}?`, `Is ${NP(r, s)} a kind of ${k}?`, `Does ${NP(r, s)} count as ${art(k)} ${k}?`, `Are ${plural(s)} ${plural(k)}?`]);
-  return { text: t, expect: E(Q('family', 'holds', { shape: s, kind: k })) }; });
-add('shapes.q.family.round', 'question', (r, x) => { const s = pick(r, shapes(x));
-  return { text: pick(r, [`Is ${NP(r, s)} round?`, `Is ${NP(r, s)} a round shape?`]), expect: E(Q('family', 'holds', { shape: s, kind: 'round_shape' })) }; });
-add('shapes.q.thing-shape', 'question', (r, x) => { const t = pick(r, things(x)), s = pick(r, shapes(x));
-  return chance(r, 0.5) ? { text: `What shape is ${NP(r, t)}?`, expect: E(Q('thing', 'shape', { name: t })) }
-    : { text: pick(r, [`What is shaped like ${NP(r, s)}?`, `Where do we see ${NP(r, s)}?`, `Where can I find ${NP(r, s)}?`]), expect: E(Q('thing', 'name', { shape: s }, { mode: 'list' })) }; });
-add('shapes.q.color-of', 'question', (r, x) => { const t = pick(r, things(x));
-  return { text: pick(r, [`What ${pick(r, ['color', 'colour'])} is ${NP(r, t)}?`, `What is the ${pick(r, ['color', 'colour'])} of ${NP(r, t)}?`]), expect: E(Q('thing', 'color', { name: t })) }; });
-add('shapes.q.is-color', 'question', (r, x) => { const t = pick(r, things(x)), c = pick(r, colors(x));
-  return { text: `Is ${NP(r, t)} ${C(c)}?`, expect: E(Q('thing', 'is_color', { name: t, is_color: c })) }; });
-add('shapes.q.things-of-color', 'question', (r, x) => { const c = pick(r, colors(x));
-  return { text: pick(r, [`What things are ${C(c)}?`, `Which things are ${C(c)}?`, `Name something ${C(c)}.`, `Tell me some things ${C(c)}.`, `Which things have the color ${C(c)}?`]), expect: E(Q('thing', 'name', { color: c }, { mode: 'list' })) }; });
-add('shapes.q.colorkind', 'question', (r, x) => { const c = pick(r, colors(x)), k = pick(r, cks(x));
-  const w = pick(r, [[`Is ${C(c)} ${art(k)} ${k} color?`, Q('color', 'is_kind', { name: c, is_kind: k })], [`What ${pick(r, ['kind', 'type', 'sort'])} of color is ${C(c)}?`, Q('color', 'kind', { name: c })],
-    [`Which colors are ${k}?`, Q('color', 'name', { kind: k }, { mode: 'list' })], [`What are the ${k} colors?`, Q('color', 'name', { kind: k }, { mode: 'list' })], [`Name the ${k} colors.`, Q('color', 'name', { kind: k }, { mode: 'list' })], [`How many ${k} colors are there?`, Q('color', 'name', { kind: k }, { mode: 'count' })]]);
-  return { text: w[0], expect: E(w[1]) }; });
-add('shapes.q.mix', 'question', (r, x) => { let a = pick(r, colors(x)), b = pick(r, colors(x)); while (b === a) b = pick(r, colors(x));
-  const t = pick(r, [`What do ${C(a)} and ${C(b)} make?`, `What ${pick(r, ['color', 'colour'])} do ${C(a)} and ${C(b)} make?`, `What do you get if you mix ${C(a)} and ${C(b)}?`, `What color do I get when I mix ${C(a)} and ${C(b)}?`, `What happens if I mix ${C(a)} and ${C(b)}?`, `What is ${C(a)} mixed with ${C(b)}?`, `Mix ${C(a)} and ${C(b)}.`, `What color is made by mixing ${C(a)} and ${C(b)}?`]);
-  return { text: t, expect: E(Q('mix', 'result', { first: a, second: b })) }; });
-add('shapes.q.recipe', 'question', (r, x) => { const c = pick(r, colors(x));
-  return { text: pick(r, [`How do I make ${C(c)}?`, `How can we make ${C(c)}?`, `Which colors make ${C(c)}?`, `What do I mix to get ${C(c)}?`, `What should I mix to make ${C(c)}?`]), expect: E(Q('mix', 'recipe', { result: c })) }; });
 // statements
 add('shapes.t.sides', 'statement', (r) => { const s = pick(r, ['rhombus', 'kite', 'trapezium', 'heptagon', 'star']), p = pick(r, PARTS), n = 3 + Math.floor(r() * 8);
   return { text: `${cap(NP(r, s))} has ${n} ${pl(p)}.`, expect: E(F('shape', { name: s, [pl(p)]: n })) }; });
@@ -155,15 +120,6 @@ add('shapes.ood', 'out-of-domain', (r, x) => { const p = x.person(r);
   return { text: pick(r, [`${p.name} has 5 apples.`, 'How much does a ball cost?', 'What day is tomorrow?', 'What does a rabbit eat?', 'What is 7 plus 5?', 'Add milk to my shopping list.', 'Open the editor.', 'Play hangman.', 'Hello!', 'Is a whale a fish?', 'Where does a camel live?', 'What sound does a cow make?']), negative: true }; });
 
 // ---- rule sweep: realistic phrasing families (short noun-first forms, chat words, word orders), see worlds/kids.shapes/coverage.md
-add('shapes.wording.parts', 'question', (r, x) => { const s = pick(r, shapes(x)), p = pick(r, PARTS); return { text: pick(r, [`${s} ${pl(p)}?`, `${pl(p)} of ${NP(r, s)}`, `count ${s} ${pl(p)}`, `how many ${pl(p)} on ${NP(r, s)}`, `${s} how many ${pl(p)}`, `${s} ${pl(p)} how many`, `number of ${pl(p)} of ${NP(r, s)}`, `can you say how many ${pl(p)} ${NP(r, s)} has`]), expect: E(Q('shape', pl(p), { name: s })) }; });
-add('shapes.wording.which', 'question', (r) => { const p = pick(r, PARTS), n = 3 + Math.floor(r() * 6); return { text: pick(r, [`shapes with ${n} ${pl(p)}`, `show me shapes with ${n} ${pl(p)}`, `which polygon has exactly ${n} ${pl(p)}`]), expect: E(Q('shape', 'name', { [pl(p)]: n }, { mode: 'list' })) }; });
-add('shapes.wording.summary', 'question', (r, x) => { const s = pick(r, shapes(x)); return { text: pick(r, [`${s}?`, `${s} info`, `${s} description pls`, `whats a ${s}`, `give me a ${s} summary`, `can you describe ${NP(r, s)} for me`, `teach me about ${plural(s)}`]), expect: E(Q('shape', 'summary', { name: s })) }; });
-add('shapes.wording.family', 'question', (r, x) => { const s = pick(r, shapes(x)), k = pick(r, kinds(x)); return { text: pick(r, [`${s} ${art(k)} ${k}?`, `${s} ${k}?`, `${NP(r, s)} is ${art(k)} ${k} right`, `${plural(s)} ${plural(k)} same?`]), expect: E(Q('family', 'holds', { shape: s, kind: k })) }; });
-add('shapes.wording.color-of', 'question', (r, x) => { const t = pick(r, things(x)); return { text: pick(r, [`${sp(t)} color?`, `${sp(t)} colour pls`, `tell me the ${sp(t)} color`, `can you say what color ${NP(r, t)} is`]), expect: E(Q('thing', 'color', { name: t })) }; });
-add('shapes.wording.is-color', 'question', (r, x) => { const t = pick(r, things(x)), c = pick(r, colors(x)); return { text: pick(r, [`is ${sp(t)} ${C(c)}`, `${sp(t)} ${C(c)}?`, `${NP(r, t)} could be ${C(c)} right`, `is ${NP(r, t)} a ${C(c)} thing`]), expect: E(Q('thing', 'is_color', { name: t, is_color: c })) }; });
-add('shapes.wording.colorkind', 'question', (r, x) => { const c = pick(r, colors(x)), k = pick(r, cks(x)); return { text: pick(r, [`${k} color ${C(c)} right?`, `${k}: ${C(c)}?`, `${k} ${C(c)}?`, `is ${C(c)} ${k} or ${pick(r, cks(x).filter((y) => y !== k))}`]), expect: E(Q('color', 'is_kind', { name: c, is_kind: k })) }; });
-add('shapes.wording.recipe', 'question', (r, x) => { const c = pick(r, colors(x)); return { text: pick(r, [`which two colors make ${C(c)}`, `how can i make ${C(c)} paint`, `${C(c)} how made?`, `what mixes into ${C(c)}`, `get ${C(c)} by mixing what`, `make ${C(c)} how`, `recipe for ${C(c)}`, `${C(c)} is made of what`]), expect: E(Q('mix', 'recipe', { result: c })) }; });
-add('shapes.wording.mix', 'question', (r, x) => { let a = pick(r, colors(x)), b = pick(r, colors(x)); while (b === a) b = pick(r, colors(x)); return { text: pick(r, [`${C(a)} ${C(b)} mix?`, `whats ${C(a)} plus ${C(b)}`, `${C(a)} and ${C(b)} make what`, `what happens when you mix ${C(a)} and ${C(b)}`]), expect: E(Q('mix', 'result', { first: a, second: b })) }; });
 add('shapes.wording.teach', 'statement', (r, x) => { const t = pick(r, things(x)), c = pick(r, colors(x)); return { text: pick(r, [`remember ${NP(r, t)} is ${C(c)}`, `fyi ${sp(t)} is ${C(c)}`]), expect: E(F('thing', { name: t, color: c })) }; });
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context));

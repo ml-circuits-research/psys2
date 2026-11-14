@@ -3,33 +3,22 @@
 //
 // State (ctx.state): { phase: 'idle'|'asking'|'guessing'|'learning'|'done', candidates: [names], asked: [{feature, value, text, answer}],
 //   count, max: 20, current: { feature, value, text, yes, no, of } | null, guess, rejected: [names], solved, learned: [{ name, traits, not }] }
-// The animals are read lazily at question time from the knowledge base of kids.animals through ctx.find
-// (type kids.animals.animal; wires of one name are merged). Only when that world is absent is the small
-// FALLBACK_KB below used.
+// The animals are the knowledge catalog's (k.animals), read by lookup at question time from the bundle generated from the catalog at build time (src/knowledge/animals.mjs: the library's
+// build-bundle, read synchronously); what the player taught the game ("it was a zebra") is added from the wires of type kids.animals.animal and from `learned`. No animal is listed here.
 //
 // Question choice: every (feature, value) pair among the candidates is a possible yes/no question; the one whose
 // "yes" and "no" groups are the most even is asked (ties: feature order, then value). Unknown facts count as "no"
 // for the split and survive a "no" answer but not a "yes".
 // Effects: none. Cross-world: ctx.request('ui.openTab', { tab: 'guess' }).
 
-export const FEATURES = ['class', 'legs', 'fly', 'swim', 'habitat', 'diet', 'covering'];
-const HABITAT = { sea: 'in the sea', farm: 'on a farm', forest: 'in the forest', river: 'in or near rivers', jungle: 'in the jungle', desert: 'in the desert', polar: 'in the polar regions', home: 'at home', garden: 'in the garden', savanna: 'on the savanna', grassland: 'in grasslands', mountain: 'in the mountains' };
-const COVER = { fur: 'Does it have fur?', feather: 'Does it have feathers?', scale: 'Does it have scales?', skin: 'Does it have bare skin?', shell: 'Does it have a shell?', wool: 'Does it have wool?', spine: 'Does it have spines?' };
-const DIET = { herbivore: 'Does it eat only plants?', carnivore: 'Does it eat only meat?', omnivore: 'Does it eat both plants and meat?' };
+import { animals as catalogAnimals } from '../../lib/knowledge/animals.mjs?v=4c24cc5100';
 
-// FALLBACK KB: used only when no kids.animals.animal wire is available.
-const FALLBACK_KB = [
-  { name: 'dog', class: ['mammal'], legs: ['4'], fly: [false], swim: [true], habitat: ['home', 'farm'], diet: ['omnivore'], covering: ['fur'] },
-  { name: 'cat', class: ['mammal'], legs: ['4'], fly: [false], swim: [], habitat: ['home'], diet: ['carnivore'], covering: ['fur'] },
-  { name: 'cow', class: ['mammal'], legs: ['4'], fly: [false], swim: [], habitat: ['farm'], diet: ['herbivore'], covering: ['fur'] },
-  { name: 'eagle', class: ['bird'], legs: ['2'], fly: [true], swim: [false], habitat: ['mountain'], diet: ['carnivore'], covering: ['feather'] },
-  { name: 'penguin', class: ['bird'], legs: ['2'], fly: [false], swim: [true], habitat: ['polar', 'sea'], diet: ['carnivore'], covering: ['feather'] },
-  { name: 'shark', class: ['fish'], legs: ['0'], fly: [false], swim: [true], habitat: ['sea'], diet: ['carnivore'], covering: ['skin'] },
-  { name: 'snake', class: ['reptile'], legs: ['0'], fly: [false], swim: [], habitat: ['jungle', 'desert'], diet: ['carnivore'], covering: ['scale'] },
-  { name: 'frog', class: ['amphibian'], legs: ['4'], fly: [false], swim: [true], habitat: ['river'], diet: ['carnivore'], covering: ['skin'] },
-  { name: 'bee', class: ['insect'], legs: ['6'], fly: [true], swim: [false], habitat: ['garden'], diet: ['herbivore'], covering: [] },
-  { name: 'spider', class: ['arachnid'], legs: ['8'], fly: [false], swim: [], habitat: ['garden', 'home'], diet: ['carnivore'], covering: [] },
-];
+export const FEATURES = ['class', 'legs', 'fly', 'swim', 'habitat', 'diet', 'covering'];
+// where an animal lives, said as a child says it: the habitat word as the catalog has it, with the preposition of the few that take "on" ("on a farm", "on the ice"); no table of habitats
+const ON = new Set(['farm', 'savanna', 'ice', 'beach', 'tundra', 'cliff', 'island']);
+export const habitatPhrase = (h) => (ON.has(h) ? `on ${h === 'farm' ? 'a farm' : `the ${h}`}` : h === 'house' ? 'in a house' : `in the ${String(h).replace(/_/g, ' ')}`);
+const COVER = { fur: 'Does it have fur?', hair: 'Does it have hair?', feather: 'Does it have feathers?', feathers: 'Does it have feathers?', scale: 'Does it have scales?', scales: 'Does it have scales?', skin: 'Does it have bare skin?', shell: 'Does it have a shell?', wool: 'Does it have wool?', spine: 'Does it have spines?', spines: 'Does it have spines?' };
+const DIET = { herbivore: 'Does it eat only plants?', carnivore: 'Does it eat only meat?', omnivore: 'Does it eat both plants and meat?' };
 
 export function initialState() {
   return { phase: 'idle', candidates: [], asked: [], count: 0, max: 20, current: null, guess: null, rejected: [], solved: null, learned: [], evidence: [] };
@@ -41,13 +30,23 @@ export const words = (s) => String(s).replace(/_/g, ' ');
 export const an = (w) => (/^[aeiou]/i.test(w) ? 'an ' : 'a ') + words(w);
 const uniq = (a) => [...new Set(a)];
 
-/** Merged animal profiles: [{ name, class, legs, fly, swim, habitat, diet, covering }]; values are arrays (unknown = empty). */
+/** Merged animal profiles: [{ name, class, legs, fly, swim, habitat, diet, covering }]; values are arrays (unknown = empty). The catalog's animals, then what the dialogue taught, then what the player taught the game. */
 export function readAnimals(ctx, learned) {
   const map = new Map();
-  for (const w of ctx.find('kids.animals.animal')) {
+  const blank = (name) => ({ name, class: [], legs: [], fly: [], swim: [], habitat: [], diet: [], covering: [], not: [] });
+  for (const a of catalogAnimals().values()) {   // k.animals: `can` / `cannot` hold the verbs (fly, swim); a verb left out says nothing
+    const p = blank(a.name.replace(/ /g, '_'));   // a name with a space is told as a word (polar_bear), as the old knowledge base wrote it
+    p.class.push(...a.class); p.legs.push(...a.legs); p.habitat.push(...a.habitat); p.diet.push(...a.diet); p.covering.push(...a.covering);
+    if (a.can.includes('fly')) p.fly.push(true);
+    if (a.cannot.includes('fly')) p.fly.push(false);
+    if (a.can.includes('swim')) p.swim.push(true);
+    if (a.cannot.includes('swim')) p.swim.push(false);
+    map.set(p.name, p);
+  }
+  for (const w of ctx.find('kids.animals.animal')) {   // the animals the dialogue taught (wires of the session)
     const name = ctx.val(w, 'name');
     if (!name) continue;
-    if (!map.has(name)) map.set(name, { name, class: [], legs: [], fly: [], swim: [], habitat: [], diet: [], covering: [], not: [] });
+    if (!map.has(name)) map.set(name, blank(name));
     const p = map.get(name);
     p.class.push(...ctx.vals(w, 'class'));
     p.legs.push(...ctx.vals(w, 'legs').map(String));
@@ -57,9 +56,8 @@ export function readAnimals(ctx, learned) {
     p.diet.push(...ctx.vals(w, 'diet'));
     p.covering.push(...ctx.vals(w, 'covering'));
   }
-  if (!map.size) for (const f of FALLBACK_KB) map.set(f.name, { ...structuredClone(f), not: [] });
   for (const l of learned ?? []) {
-    if (!map.has(l.name)) map.set(l.name, { name: l.name, class: [], legs: [], fly: [], swim: [], habitat: [], diet: [], covering: [], not: [] });
+    if (!map.has(l.name)) map.set(l.name, blank(l.name));
     const p = map.get(l.name);
     p.not.push(...(l.not ?? []));
     for (const [f, vs] of Object.entries(l.traits ?? {})) for (const v of vs) {
@@ -85,7 +83,7 @@ function questionText(f, v) {
     case 'legs': return v === '0' ? 'Does it have no legs?' : `Does it have ${v} ${v === '1' ? 'leg' : 'legs'}?`;
     case 'fly': return 'Can it fly?';
     case 'swim': return 'Can it swim?';
-    case 'habitat': return `Does it live ${HABITAT[v] ?? `in the ${words(v)}`}?`;
+    case 'habitat': return `Does it live ${habitatPhrase(v)}?`;
     case 'diet': return DIET[v] ?? `Is it ${an(v)}?`;
     default: return COVER[v] ?? `Is its body covered with ${words(v)}?`;
   }

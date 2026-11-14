@@ -8,7 +8,7 @@
  * The wires written: a kind-of fact is a word sense (`k.words.sense ... is_a=`), an ability or a habitat is a commonsense fact (`k.commonsense.thing ... can= / cannot= / at= / made_of=`), a thing of
  * the user is `session.learned.own kind= name= owner=user`.
  */
-import { parseFact, lemmaCandidates } from './facts.mjs?v=0391718f14';
+import { parseFact, lemmaCandidates } from './facts.mjs?v=15eb94a409';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 // TEMPORARY (until k.actions / k.commonsense carry the abilities of kinds): the verbs read as an ability when a bare plural says them ("ducks float"). Other forms need no list.
@@ -38,7 +38,7 @@ export function parseTeach(text) {
     if (!a || !b || a === b || /\b(?:and|or)\b/.test(a + b)) return null;
     return { form: 'is_a', subject: a, object: b, line: `k.words.sense word=${q(a)} pos=noun n=0 gloss=${q(`a kind of ${b}`)} is_a=${q(b)}`, say: `OK, ${a === 'a' ? '' : 'a '}${a} is a kind of ${b}.` };
   }
-  if ((m = /^(.+?) (?:can't|cant|cannot|can not) (\w+)$/.exec(t))) { const a = lemmaOf(m[1]); return { form: 'cannot', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} cannot=${q(m[2])}`, say: `OK, ${m[1]} cannot ${m[2]}.` }; }
+  if ((m = /^(.+?) (?:can't|cant|cannot|can not) (\w+)$/.exec(t)) && !/^(?:what|who|which|how|where|when|why)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'cannot', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} cannot=${q(m[2])}`, say: `OK, ${m[1]} cannot ${m[2]}.` }; }
   if ((m = /^(.+?) can (\w+(?: \w+)?)$/.exec(t)) && !/^(?:what|who|which|how|where|when|why|you|i|we|can)\b/.test(m[1])) { const a = lemmaOf(m[1]); return { form: 'can', subject: a, object: m[2], line: `k.commonsense.thing name=${q(a)} can=${q(m[2])}`, say: `OK, ${m[1]} can ${m[2]}.` }; }
   if ((m = /^(.+?) (?:live|lives|stay|stays|sleep|sleeps|stand|stands|grow|grows|float|floats|swim|swims|fly|flies|drive|drives|run|runs) (?:in|on|at|under|near) (.+)$/.exec(t)) && !/^(?:where|who|what|which|how|do|does|i|we|you)\b/.test(m[1])) { const a = lemmaOf(m[1]), b = strip(m[2]); return { form: 'at', subject: a, object: b, line: `k.commonsense.thing name=${q(a)} at=${q(b)}`, say: `OK, ${m[0]}.` }; }
   if ((m = /^(.+?) (?:is|are) made (?:of|from|out of) (.+)$/.exec(t))) { const a = lemmaOf(m[1]), b = strip(m[2]); return { form: 'made_of', subject: a, object: b, line: `k.commonsense.thing name=${q(a)} made_of=${q(b)}`, say: `OK, ${m[1]} is made of ${b}.` }; }

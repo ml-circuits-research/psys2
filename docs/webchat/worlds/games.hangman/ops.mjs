@@ -2,24 +2,18 @@
 //
 // State (ctx.state): { word, masked, guessed: [every letter tried], wrong: [wrong letters and words], wrongLeft: 6, status: 'idle'|'playing'|'won'|'lost', hints, seed }
 //   The host must render `masked` ("_ e _ _ _") and show `word` only when status is 'won' or 'lost'.
-// Words: the single alphabetic words of the kids.animals lexicon (ctx.lexicon) and of its knowledge base (ctx.find),
-// 3 to 12 letters; FALLBACK_WORDS below is used only when that world is absent. The word is chosen with a seeded
-// pseudo-random generator whose seed lives in the state, so games are reproducible; arg word chooses it explicitly.
-// Hints are facts about the animal read from kids.animals (FALLBACK_FACTS for the fallback words).
+// Words: the single alphabetic names of the animals of the knowledge catalog (k.animals, read by lookup from the bundle generated from it at build time: src/knowledge/animals.mjs) and of the
+// animals the dialogue taught (ctx.find), 3 to 12 letters. The word is chosen with a seeded pseudo-random generator whose seed lives in the state, so games are reproducible; arg word chooses it explicitly.
+// Hints are the facts of the catalog about the animal (class, legs, habitat, covering, diet, what it can and cannot do, the sound).
 // Cross-world: ctx.request('ui.openTab', { tab: 'hangman' }).
 
 export const MAX_WRONG = 6;
-// FALLBACK: used only when kids.animals is not loaded.
-const FALLBACK_WORDS = ['elephant', 'giraffe', 'penguin', 'dolphin', 'butterfly', 'kangaroo', 'crocodile', 'zebra', 'tiger', 'spider'];
-const FALLBACK_FACTS = {
-  elephant: ['It is a mammal.', 'It has 4 legs.', 'It lives on the savanna.'], giraffe: ['It is a mammal.', 'It has 4 legs.', 'It lives on the savanna.'],
-  penguin: ['It is a bird.', 'It cannot fly.', 'It can swim.'], dolphin: ['It is a mammal.', 'It can swim.', 'It lives in the sea.'],
-  butterfly: ['It is an insect.', 'It has 6 legs.', 'It can fly.'], kangaroo: ['It is a mammal.', 'It has 2 legs.', 'It lives in the desert.'],
-  crocodile: ['It is a reptile.', 'It can swim.', 'It has scales.'], zebra: ['It is a mammal.', 'It has 4 legs.', 'It lives on the savanna.'],
-  tiger: ['It is a mammal.', 'It has 4 legs.', 'It eats only meat.'], spider: ['It has 8 legs.', 'It cannot fly.', 'It lives in the garden.'],
-};
-const HABITAT = { sea: 'in the sea', farm: 'on a farm', forest: 'in the forest', river: 'in or near rivers', jungle: 'in the jungle', desert: 'in the desert', polar: 'in the polar regions', home: 'at home', garden: 'in the garden', savanna: 'on the savanna', grassland: 'in grasslands', mountain: 'in the mountains' };
-const COVER = { fur: 'It has fur.', feather: 'It has feathers.', scale: 'It has scales.', skin: 'It has bare skin.', shell: 'It has a shell.', wool: 'It has wool.', spine: 'It has spines.' };
+import { animals as catalogAnimals, animalNames } from '../../lib/knowledge/animals.mjs?v=4c24cc5100';
+
+// where an animal lives, said as a child says it: the habitat word as the catalog has it, with the preposition of the few that take "on" ("on a farm", "on the ice"); no table of habitats
+const ON = new Set(['farm', 'savanna', 'ice', 'beach', 'tundra', 'cliff', 'island']);
+export const habitatPhrase = (h) => (ON.has(h) ? `on ${h === 'farm' ? 'a farm' : `the ${h}`}` : h === 'house' ? 'in a house' : `in the ${String(h).replace(/_/g, ' ')}`);
+const COVER = { fur: 'It has fur.', hair: 'It has hair.', feather: 'It has feathers.', feathers: 'It has feathers.', scales: 'It has scales.', spines: 'It has spines.', scale: 'It has scales.', skin: 'It has bare skin.', shell: 'It has a shell.', wool: 'It has wool.', spine: 'It has spines.' };
 const DIET = { herbivore: 'It eats only plants.', carnivore: 'It eats only meat.', omnivore: 'It eats both plants and meat.' };
 
 export function initialState() {
@@ -32,11 +26,9 @@ export const NOT_PLAYING = 'We are not playing hangman. Say "play hangman" to st
 const show = (ctx) => ctx.request('ui.openTab', { tab: 'hangman' });
 
 export function wordList(ctx) {
-  const names = new Set();
-  for (const w of ctx.lexicon('lex.kids.animals.names')) names.add(w);
+  const names = new Set(animalNames());
   for (const w of ctx.find('kids.animals.animal')) { const n = ctx.val(w, 'name'); if (n) names.add(n); }
-  const list = [...names].filter((n) => /^[a-z]{3,12}$/.test(n));
-  return list.length ? list.sort() : FALLBACK_WORDS.slice();
+  return [...names].filter((n) => /^[a-z]{3,12}$/.test(n)).sort();
 }
 
 // Replies show blanks as '-' because the renderer turns '_' into a space; the state keeps '_'.
@@ -105,26 +97,28 @@ export function word(ctx, { word: w }) {
   return ok(`No, it is not ${g}. ${s.wrongLeft} wrong ${s.wrongLeft === 1 ? 'guess' : 'guesses'} left. ${shown(s)}`);
 }
 
-/** Facts about the animal, in a fixed order, from the kids.animals knowledge base. */
+/** Facts about the animal, in a fixed order: the catalog's (k.animals) and what the dialogue taught. */
 export function facts(ctx, name) {
+  const a = catalogAnimals().get(name);
   const ws = ctx.find('kids.animals.animal', { name });
-  if (!ws.length) return FALLBACK_FACTS[name] ?? [];
+  if (!a && !ws.length) return [];
   const vals = (k) => [...new Set(ws.flatMap((w) => ctx.vals(w, k)))];
   const out = [];
-  const [cls] = vals('class');
+  const cls = a?.class[0] ?? vals('class')[0];
   if (cls) out.push(`It is ${/^[aeiou]/.test(cls) ? 'an' : 'a'} ${cls}.`);
-  const [legs] = vals('legs');
+  const legs = a?.legs[0] !== undefined ? Number(a.legs[0]) : vals('legs')[0];
   if (legs !== undefined) out.push(legs === 0 ? 'It has no legs.' : `It has ${legs} ${legs === 1 ? 'leg' : 'legs'}.`);
-  const hab = vals('habitat');
-  if (hab.length) out.push(`It lives ${HABITAT[hab[0]] ?? `in the ${hab[0]}`}.`);
-  const cov = vals('covering');
+  const hab = [...(a?.habitat ?? []), ...vals('habitat')];
+  if (hab.length) out.push(`It lives ${habitatPhrase(hab[0])}.`);
+  const cov = [...(a?.covering ?? []), ...vals('covering')];
   if (cov.length) out.push(COVER[cov[0]] ?? `It is covered with ${cov[0]}.`);
-  const [diet] = vals('diet');
+  const diet = a?.diet[0] ?? vals('diet')[0];
   if (diet) out.push(DIET[diet] ?? `It is ${diet}.`);
-  const fly = vals('can_fly'), swim = vals('can_swim');
+  const fly = a?.can.includes('fly') ? [true] : a?.cannot.includes('fly') ? [false] : vals('can_fly');
+  const swim = a?.can.includes('swim') ? [true] : a?.cannot.includes('swim') ? [false] : vals('can_swim');
   if (fly.length) out.push(fly.includes(true) ? 'It can fly.' : 'It cannot fly.');
   if (swim.length) out.push(swim.includes(true) ? 'It can swim.' : 'It cannot swim.');
-  const [sound] = vals('sound');
+  const sound = a?.sound[0] ?? vals('sound')[0];
   if (sound) out.push(`It says "${sound}".`);
   return out;
 }

@@ -25,3 +25,10 @@ The pilot world `worlds-pilot/geo.map` keeps no knowledge base: countries, citie
 - k.animals: habitat words (the old world said home, farm, savanna, polar regions; the catalog says house, desert, ...), foods as the book lists them, `cannot` for flightless birds (penguin is there; others missing), the plural class names, the `which animals are mammals` listing needs `class` on every animal.
 - k.time: relative days (today, tomorrow, yesterday) need a clock, they stay in kids.time; `February has 28 days, 29 in a leap year` is one number in the catalog.
 - k.shapes / k.colours: the primary colours as a list, `a stop sign is an octagon` (thing to shape), two usual colours of a thing (apples red and green).
+
+## Found by step 5 (the Talk frames over the catalog)
+
+- `k.shapes.shape.thing` (a stop sign is an octagon, a plate is a circle) is not in `vocab.json`: the vocabulary lists the names of a shape, not the values of `thing`, so a question "what shape is a stop sign" cannot find the shard from the thing. Wanted: the values of `thing` as keys of the shape shards (or `k.shapes.thing` wires keyed by the thing).
+- `k.colours.colour kind=primary|secondary` exists only in the psys2 shard; the colour shard has no `kind`, so "is red a primary colour" needs the value `primary` found through the schema enum of `kind` (done in Talk) and every colour of a family should carry its kind.
+- Habitat words of `k.animals.animal`: `house` and `ice` where a child's book says home and polar regions; the games and the editor map two of them (home, polar). A `core.word` synonym per habitat would let every host read "home".
+- `k.animals.animal.can` / `cannot` for flightless birds other than the penguin (ostrich, emu, kiwi, dodo ... have no `cannot=fly`): "can an ostrich fly" answers "I don't know whether".
