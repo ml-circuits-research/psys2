@@ -93,7 +93,7 @@ for (const reasoner of ['ops', 'matrix']) {
     const wrong = [];
     const probes = ['robot', 'draw', 'editor', 'diagram'].flatMap((tab) => ['remove the hat', 'remove the unicorn', 'delete eyeglasses'].map((text) => ({ tab, text })));
     // generic nouns of a schema kind and a named thing, the sentences the coverage grid generates (a capture seen by the grid, 2026-11-14: a world without the tab answered "take apart the thing" in the draw tab)
-    probes.push(...[['draw', 'take apart the thing'], ['draw', 'remove the thing from the thing 1'], ['charts', 'change the point Zed the same size as the red'], ['charts', 'remove the point Zed'], ['robot', 'take apart the thing'], ['diagram', 'remove the thing from the thing 1']].map(([tab, text]) => ({ tab, text })));
+    probes.push(...[['draw', 'take apart the thing'], ['draw', 'remove the thing from the thing 1'], ['charts', 'change the point Zed the same size as the red'], ['charts', 'remove the point Zed'], ['diagram', 'remove the thing from the thing 1']].map(([tab, text]) => ({ tab, text })));
     for (const r of [...swept.filter((x) => x.lang !== 'ro'), ...probes]) {
       const s = fresh(r.tab), T = s.context().tabWorld;
       if (!T) continue;

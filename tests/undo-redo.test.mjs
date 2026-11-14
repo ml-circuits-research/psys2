@@ -121,12 +121,7 @@ both('"undo the unicorn" names nothing that was done: the sentence is left to th
   assert.doesNotMatch(out[2], /took back|would also/);
 });
 
-test('matrix: "undo" in a tab takes back the newest request, not the last request of that tab together with the ones of other worlds', async () => {
-  const { s, out } = await run('matrix', ['open the drawing tab', 'draw a house', 'open the music tab', 'make it faster', 'what is in the picture?', 'undo']);
-  assert.match(out[5], /tempo is back to 100/);
-  assert.equal(sceneOf(s), 'house', 'the house is a request of its own: it stays');
-  assert.equal(s.isession.state['media.music'].tempo, 100);
-});
+// (the test of "undo" taking back a tempo change over a drawing was a matrix music test: media.music is no longer a matrix world, its settings undo is its own, spec 21 section 13)
 
 test('the timeline entries of a message share its turn and carry the words of each request', async () => {
   // a world on the library (the shop): the drawing keeps its own history in both reasoners, its two requests are two entries of that history (tests above)
