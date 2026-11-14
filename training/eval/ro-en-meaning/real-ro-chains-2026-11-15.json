@@ -1,0 +1,154 @@
+{
+ "rules": {
+  "ro": {
+   "turns": 291,
+   "judged": 60,
+   "right": 50,
+   "partly": 0,
+   "wrong": 10,
+   "open": 13,
+   "outcome": {
+    "executed": 187,
+    "refused": 3,
+    "asked": 6,
+    "not_understood": 83,
+    "other_world": 12
+   },
+   "failing": 95
+  },
+  "en": {
+   "turns": 358,
+   "judged": 193,
+   "right": 92,
+   "failing": 160
+  },
+  "ro_causes": {
+   "translation residue / wrong sense / source typo": 33,
+   "acted on a partly understood sentence": 1,
+   "unknown kind (no drawing / stand-in)": 2,
+   "Romanian turn not read (translation or reader)": 44,
+   "amount / relation / set distribution": 3,
+   "continuation / correction / why-question": 6,
+   "unknown word (a word of the request is not known)": 6
+  }
+ },
+ "voice": {
+  "ro": {
+   "turns": 291,
+   "judged": 60,
+   "right": 50,
+   "partly": 0,
+   "wrong": 10,
+   "open": 13,
+   "outcome": {
+    "executed": 187,
+    "refused": 3,
+    "asked": 6,
+    "not_understood": 83,
+    "other_world": 12
+   },
+   "failing": 95
+  },
+  "en": {
+   "turns": 358,
+   "judged": 193,
+   "right": 92,
+   "failing": 160
+  },
+  "ro_causes": {
+   "translation residue / wrong sense / source typo": 33,
+   "acted on a partly understood sentence": 1,
+   "unknown kind (no drawing / stand-in)": 2,
+   "Romanian turn not read (translation or reader)": 44,
+   "amount / relation / set distribution": 3,
+   "continuation / correction / why-question": 6,
+   "unknown word (a word of the request is not known)": 6
+  }
+ },
+ "mt": {
+  "ro": {
+   "turns": 291,
+   "judged": 60,
+   "right": 50,
+   "partly": 0,
+   "wrong": 10,
+   "open": 12,
+   "outcome": {
+    "executed": 194,
+    "refused": 3,
+    "asked": 7,
+    "not_understood": 80,
+    "other_world": 7
+   },
+   "failing": 89
+  },
+  "en": {
+   "turns": 358,
+   "judged": 193,
+   "right": 92,
+   "failing": 160
+  },
+  "ro_causes": {
+   "Romanian turn not read (translation or reader)": 51,
+   "acted on a partly understood sentence": 1,
+   "foreign-world reading": 1,
+   "unknown kind (no drawing / stand-in)": 2,
+   "continuation / correction / why-question": 7,
+   "translation residue / wrong sense / source typo": 25,
+   "amount / relation / set distribution": 2
+  }
+ },
+ "mtvoice": {
+  "ro": {
+   "turns": 291,
+   "judged": 60,
+   "right": 50,
+   "partly": 0,
+   "wrong": 10,
+   "open": 12,
+   "outcome": {
+    "executed": 194,
+    "refused": 3,
+    "asked": 7,
+    "not_understood": 80,
+    "other_world": 7
+   },
+   "failing": 89
+  },
+  "en": {
+   "turns": 358,
+   "judged": 193,
+   "right": 92,
+   "failing": 160
+  },
+  "ro_causes": {
+   "Romanian turn not read (translation or reader)": 51,
+   "acted on a partly understood sentence": 1,
+   "foreign-world reading": 1,
+   "unknown kind (no drawing / stand-in)": 2,
+   "continuation / correction / why-question": 7,
+   "translation residue / wrong sense / source typo": 25,
+   "amount / relation / set distribution": 2
+  }
+ },
+ "rules->mt": {
+  "better": 17,
+  "worse": 11,
+  "ex": [
+   "pune si un lac -> executed/right",
+   "nu prima acasa, cea din mijloc -> executed/right",
+   "ar trebui sa schimbi aceste voila si ta-da ca faci numai prostii oricum -> executed/changed",
+   "nu ai desenat o feita tu mai inainte? -> executed/changed"
+  ]
+ },
+ "rules->voice": {
+  "better": 0,
+  "worse": 0,
+  "ex": []
+ },
+ "mt->mtvoice": {
+  "better": 0,
+  "worse": 0,
+  "ex": []
+ }
+}

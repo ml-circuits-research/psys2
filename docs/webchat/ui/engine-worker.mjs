@@ -140,7 +140,10 @@ async function init(m) {
   const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
   // MT keep-list (spec 05): the app's own words (currency, names, titles, tab names) are placeholders around the model; the engine and session exist by the first call
   { const kl = await imp('lib/translate/keep-list.mjs'); const raw = backend.translate; backend.translate = kl.protectedTranslate(raw, () => (engine ? { keep: kl.keepListOf(engine.set), extra: kl.sessionNames(session) } : null)); }
-  const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
+  // Q13: the Romanian grammar voice (setting `roGrammar`, off by default): loaded on its first Romanian message, the language world and the library only then
+  let roVoice = null;
+  const roGrammarVoice = { name: 'grammar', async propose(t, o) { roVoice ??= (await imp('lib/translate/voice-ro.mjs')).createRoGrammarVoice(); return roVoice.propose(t, o); } };
+  const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS, voices: () => (settings.roGrammar ? [roGrammarVoice] : []) });
   evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleBytes, count: startIds.length });
   evt('boot-step', { id: 'reasoner', op: 'start' });
   engine = await dialog.createEngine({ loader: loadersMod.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'ops' ? 'ops' : 'matrix' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts

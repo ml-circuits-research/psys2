@@ -28,7 +28,7 @@ import { isRealRow, realDialogueIds } from './lib/real-source.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SET = join(REPO, 'training/eval/real-2026-11-15.jsonl');
-const RES = (r) => join(REPO, `training/results/real-2026-11-15-${r}.json`);
+const RES = (r, tag = '') => join(REPO, `training/results/real-2026-11-15-${r}${tag}.json`);
 const jl = (f) => readFileSync(join(REPO, f), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const norm = (s) => String(s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
@@ -82,7 +82,7 @@ export function build() {
 }
 
 // ---------------------------------------------------------------- run
-async function run(reasoner) {
+async function run(reasoner, { tag = '', bergamot = null, voice = false } = {}) {
   process.env.PSYS2_REASONER = reasoner;
   const { createFsLoader, DEFAULT_ROOT } = await import('../src/loaders/fs-loader.mjs');
   const { createEngine } = await import('../src/dialog/index.mjs');
@@ -93,7 +93,12 @@ async function run(reasoner) {
   const { evaluateCase, classify } = await import('./lib/operational-check.mjs');
   const { createFacts } = await import('../src/knowledge/facts.mjs');
   const rules = createTranslator();
-  const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', backend: { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
+  // --bergamot <cacheDir>: the on-device model (Bergamot ro-en / en-ro in node) as the MT source, as the shipped chain has it (the browser Translator API does not exist in node); --voice: the Romanian grammar voice (src/translate/voice-ro.mjs)
+  let mt = null;
+  if (bergamot) { const { createNodeMt } = await import('./lib/mt-node.mjs'); mt = await createNodeMt({ cacheDir: bergamot }); await mt.ensure('ro'); }
+  const roVoice = voice ? (await import('../src/translate/voice-ro.mjs')).createRoGrammarVoice() : null;
+  const mtBackend = { translatorKind: () => 'mt', detectorKind: () => null, supports: () => true, sources: async () => ['model'], translate: (t, f, to) => mt?.translate(t, f, to), detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'ready' };
+  const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', voices: () => (roVoice ? [roVoice] : []), backend: mt ? mtBackend : { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator });
   const kdir = join(REPO, 'knowledge'), fx = join(REPO, 'training/eval/owner-log-knowledge');   // the owner's catalog: repository copy plus the crocodile fixture (as scripts/eval-owner-log.mjs)
   const source = { text: async (p) => {
@@ -156,9 +161,10 @@ async function run(reasoner) {
       out.push(rec);
     }
   }
-  mkdirSync(dirname(RES(reasoner)), { recursive: true });
-  writeFileSync(RES(reasoner), `${JSON.stringify({ reasoner, date: new Date().toISOString().slice(0, 10), rows: out }, null, 1)}\n`);
-  console.log(`wrote ${RES(reasoner)} (${out.length} turns)`);
+  mt?.reset?.();
+  mkdirSync(dirname(RES(reasoner, tag)), { recursive: true });
+  writeFileSync(RES(reasoner, tag), `${JSON.stringify({ reasoner, tag, mt: !!mt, voice, date: new Date().toISOString().slice(0, 10), rows: out }, null, 1)}\n`);
+  console.log(`wrote ${RES(reasoner, tag)} (${out.length} turns)`);
 }
 
 // ---------------------------------------------------------------- report
@@ -251,7 +257,7 @@ export function headline() {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const cmd = process.argv[2];
   if (cmd === 'build') { const r = build(); console.log(`real set: ${r.length} turns in ${new Set(r.map((x) => x.session)).size} sessions -> ${SET}`); }
-  else if (cmd === 'run') await run(arg('reasoner', 'matrix'));
+  else if (cmd === 'run') await run(arg('reasoner', 'matrix'), { tag: arg('tag', ''), bergamot: arg('bergamot', null), voice: process.argv.includes('--voice') });
   else if (cmd === 'report') report();
   else if (cmd === 'flag') flag();
   else if (cmd === 'record') console.log(JSON.stringify(headline()));

@@ -256,7 +256,7 @@ export function createRemoteBackend({ kinds, call, deadlineMs = kinds?.mt ? REMO
  * LANG-FIXED: detectLanguage() is NOT part of a turn any more (the selected language is the language of every message). It is used only for the one-line
  * "this looks like English, switch?" hint after a typed message (ui/language.mjs suggestSwitch), through the engine worker's `hint` request.
  */
-export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy = () => 'auto', backend = createBrowserBackend(), languages = DEFAULT_LANGS }) {
+export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy = () => 'auto', backend = createBrowserBackend(), languages = DEFAULT_LANGS, voices = () => [] }) {
   const SUPPORTED = new Set(languages);
   const usage = [];
   const detectUsage = [];
@@ -321,6 +321,17 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
         } catch (e) { entry.reason = `${src} error: ${e?.message ?? e}`; return null; }
       }));
       return done.filter(Boolean);
+    },
+    /**
+     * Q13: the grammar VOICES (src/translate/voice-ro.mjs) propose next to the translators: [{ source: 'grammar', text, translation }]; a voice abstains with null (a sentence outside its frames);
+     * `voices()` is empty while the setting is off. Never throws. The M4 choice hears them first and the reader still decides.
+     */
+    async candidatesViaVoices(text, { from, to }) {
+      const out = [];
+      for (const v of voices() ?? []) {
+        try { const p = await v.propose(text, { from, to }); if (p?.text) out.push({ source: v.name ?? 'voice', text: p.text, frame: p.frame, translation: { text: p.text, alignment: text ? [{ src: [0, text.length], tgt: [0, p.text.length] }] : [], unknown: [], notes: ['read into a frame by the grammar voice'], confidence: 1 } }); } catch { /* a voice that fails abstains */ }
+      }
+      return out;
     },
     async translate(text, opts) {
       const { from, to } = opts;

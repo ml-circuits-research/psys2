@@ -163,6 +163,8 @@ export async function gatherCandidates(text, { from, to = 'en', translator, abor
   const viaMT = async (s) => { try { return (await abortable(translator?.candidatesViaMT?.(s, { from, to }) ?? [], 'translate')) ?? []; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return []; } };
   const viaRules = async (s) => { if (!hasRules) return null; try { const r = await abortable(rules.translate(s, { from, to }), 'translate'); return textOf(r) && !r?.untranslatable?.length ? r : null; } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; return null; } };
   budget.tick('candidates.gather');
+  // Q13: the grammar voices propose first (they abstain outside their frames); the choice below still takes a candidate only if the reader understands it
+  try { for (const v of (await abortable(translator?.candidatesViaVoices?.(text, { from, to }) ?? [], 'translate')) ?? []) add(v.source, v.translation ?? v.text, { voice: true, frame: v.frame }); } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded') throw e; }
   const mt = await viaMT(text);
   for (const m of mt) add(m.source, m.translation ?? m.text, m.rejected ? { rejected: m.rejected, ...(m.soft ? { soft: true } : {}) } : {});
   const r = await viaRules(text);
