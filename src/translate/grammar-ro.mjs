@@ -8,6 +8,7 @@
 //   realiseEn(frame)   -> string                                    English from the frame
 //   grammarRoEn(text)  -> { text, ok, frame, notes }                a message of one or more sentences; text '' when any sentence is outside the covered shapes
 //                                                                   (the caller then falls back to another path: the grammar ABSTAINS rather than guesses)
+import { budget } from '../dialog/budget.mjs';
 import { tokenize } from './normalize.mjs';
 import { analyze, analyzeRaw, parseNumberAt, placeOf, pluralEn, isKnownName } from './morphology.ro.mjs';
 
@@ -67,6 +68,7 @@ function nounPhrase(keys, i) {
   const def = !(det || count) && !!nn.def;   // a determiner before the noun means indefinite whatever the folded form
   const adjs = [];
   while (keys[j]) {
+    budget.tick('grammar-ro.np');
     const aa = best(analyses(keys[j]), 'adj');
     if (!aa) break;
     adjs.push(aa.entry.en);
@@ -97,11 +99,12 @@ function cleanKeys(toks0) {
   const toks = toks0.filter((t) => t.kind !== 'punct');
   let keys = toks.map((t) => (t.kind === 'num' ? t.value : t.key)), raws = toks.map((t) => t.raw);
   for (let again = true; again;) {
+    budget.tick('grammar-ro.clean');
     again = false;
     for (const p of LEAD) { const pk = p.split(' '); if (pk.every((w, n) => keys[n] === w) && keys.length > pk.length) { keys = keys.slice(pk.length); raws = raws.slice(pk.length); again = true; break; } }
     if (!again && FILLER.has(keys[0]) && keys.length > 1) { keys = keys.slice(1); raws = raws.slice(1); again = true; }
   }
-  for (const p of ['te rog', 'va rog', 'mersi', 'multumesc']) { const pk = p.split(' '); for (let i = 0; i + pk.length <= keys.length; i++) if (pk.every((w, n) => keys[i + n] === w)) { keys.splice(i, pk.length); raws.splice(i, pk.length); break; } }
+  for (const p of ['te rog', 'va rog', 'mersi', 'multumesc']) { const pk = p.split(' '); for (let i = 0; i + pk.length <= keys.length; i++) { budget.tick('grammar-ro.polite'); if (pk.every((w, n) => keys[i + n] === w)) { keys.splice(i, pk.length); raws.splice(i, pk.length); break; } } }
   return { keys, raws };
 }
 
@@ -217,6 +220,7 @@ function parseRequest(keys) {
   const objs = [first.np]; let i = first.next;
   let colour = null, rel = null, place = null, dir = null;
   while (i < keys.length) {
+    budget.tick('grammar-ro.request');
     if (keys[i] === 'si' || keys[i] === 'cu') { const nx = nounPhrase(keys, i + 1); if (nx) { objs.push(nx.np); i = nx.next; continue; } }
     const d = take(keys, i, DIR);
     if (d) { dir = d.en; i += d.len; continue; }
