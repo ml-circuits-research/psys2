@@ -24,7 +24,7 @@
  *   frames(set?)             the argument frames of the acts [{ id, act, mode, match, args, priority, if, lit, tabOnly, tabPriority, example }] in the order of the facts (sets: acts, acts.more, acts.data)
  *   nounPhrase(text)         the readings of a noun phrase beyond its head noun: { text, choice?: [{ text, alt }], partitive?: { mode: 'ask' | 'all' | 'count', n? }, other?: { plural }, relative?: true }
  *   timeRelation(word)       a temporal preposition as a relation: { rel: 'before', order: 'earlier' | 'later' | 'within', span? }, null for any other word (prepositions.sop in=time)
- *   timeComparison(text)     "is Monday before Friday" -> { a, b, rel: 'before' | 'after', kinds: ['day'] }: a yes / no question that puts two moments in order (null for anything else; `during` and distances are no order)
+ *   timeComparison(text)     "is Monday before Friday" -> { a, b, rel: 'before' | 'after' | 'during', hemisphere? }: the shape of a yes / no question about two moments (null for anything else; whether a and b are moments is src/knowledge/time.mjs, which reads k.time)
  *   negatedRequest(text)     "do not remove table 3" -> { rest: 'remove table 3', leadEnd } (a request that must not be carried out), null for anything else
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
@@ -79,7 +79,7 @@ function patternOf(parts, lex) {
 
 /**
  * Reads wires of the catalog world `w.lang.en` from SOP texts ({ name: text }) or wires already parsed (the bundle of `scripts/build-lang-en.mjs`, or the shards read through the knowledge source: `langEnFromCatalog`).
- * `local` are the facts this application keeps until the catalog has them (src/lang/en.local.mjs): the frames of the editor and of facts by lookup, the readers' own frames, the time words.
+ * `local` are the facts this application keeps until the catalog has them (src/lang/en.local.mjs): the frames of the editor and of facts by lookup, the readers own frames.
  */
 export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
   const parsed = (src) => (Array.isArray(src) ? src : Object.values(src).flatMap((text) => parse(text).wires));
@@ -261,14 +261,10 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
 
   const timeRelation = (word) => cached(`tr:${word}`, () => { const w = of('prep').find((x) => all(x, 'in').includes('time') && one(x, 'text') === String(word).toLowerCase()); return w ? { rel: one(w, 'rel'), order: one(w, 'order'), ...(one(w, 'span') ? { span: one(w, 'span') } : {}) } : null; });
 
-  /** What kind of moment a phrase names ("the summer", "3 o'clock", "Monday"): a kind of the `lang.en.timeword` facts, null for anything else. */
-  function timeKind(words) {
-    const ws = words.filter((x) => !['the', 'a', 'an', 'this', 'next', 'last'].includes(x));
-    const phrase = ws.join(' ');
-    if (ws.length === 1) { const w = of('timeword').find((x) => one(x, 'text') === phrase); if (w) return one(w, 'kind'); }
-    const c = of('timeword').find((x) => one(x, 'pattern') && new RegExp(one(x, 'pattern')).test(phrase.replace(/(\d) (am|pm)$/, '$1$2')));
-    return c ? one(c, 'kind') : null;
-  }
+  /**
+   * The shape of a question that puts two moments in relation (`prepositions.sop in=time`): "is Monday before Friday", "does spring come after winter", "is July during the summer in the south".
+   * Whether the two phrases ARE moments is the calendar's to say (src/knowledge/time.mjs reads k.time): this only cuts the sentence. `hemisphere` is said at its end ("in the southern hemisphere", "in the north").
+   */
   function timeComparison(text) {
     const raw = wordList(String(text ?? '').replace(/[?.!,]+$/g, ''));
     const ws = raw.map((x) => x.toLowerCase().replace(/’/g, "'"));
@@ -277,12 +273,14 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
     for (let i = 2; i < ws.length - 1; i++) {
       let rel = timeRelation(ws[i]), len = 1;
       if (!rel && ws[i + 1] === 'than') { rel = timeRelation(`${ws[i]}_than`); len = 2; }
-      if (!rel || !['before', 'after'].includes(rel.rel)) continue;
+      if (!rel || !['before', 'after', 'during'].includes(rel.rel)) continue;
       let left = ws.slice(1, i);
       if (['come', 'comes', 'fall', 'falls', 'happen', 'happens'].includes(left.at(-1))) left = left.slice(0, -1);
-      const right = ws.slice(i + len);
-      const ka = timeKind(left), kb = timeKind(right);
-      if (ka && kb) return { a: raw.slice(1, 1 + left.length).join(' '), b: raw.slice(i + len).join(' '), rel: rel.rel, kinds: [...new Set([ka, kb])] };
+      let end = ws.length, hemisphere = null;
+      const h = /^(?:in|on) (?:the )?(north|south|northern|southern)(?: hemisphere)?$/.exec(ws.slice(-4).join(' ')) ?? /^(?:in|on) (?:the )?(north|south|northern|southern)(?: hemisphere)?$/.exec(ws.slice(-3).join(' '));
+      if (h) { hemisphere = h[1].startsWith('north') ? 'north' : 'south'; end = ws.length - (h[0].split(' ').length); }
+      if (!left.length || end <= i + len) continue;
+      return { a: raw.slice(1, 1 + left.length).join(' '), b: raw.slice(i + len, end).join(' '), rel: rel.rel, ...(hemisphere ? { hemisphere } : {}) };
     }
     return null;
   }

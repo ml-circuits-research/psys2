@@ -4925,12 +4925,18 @@
   },
   {
    "id": "k.time",
-   "version": "1",
+   "version": "2",
    "schema": "k.time/schema.sop",
    "exports": [
+    "k.time.before",
+    "k.time.cycle",
     "k.time.duration",
+    "k.time.hour",
     "k.time.month",
+    "k.time.ordered",
+    "k.time.part_of_day",
     "k.time.season",
+    "k.time.season_in",
     "k.time.weekday"
    ],
    "depends": [],
@@ -4938,13 +4944,14 @@
     {
      "id": "k.time/shards/calendar",
      "path": "k.time/shards/calendar.sop",
-     "wires": 68,
-     "bytes": 7587,
+     "wires": 88,
+     "bytes": 10475,
      "keys": [
       "april",
       "august",
       "autumn",
       "century",
+      "clock",
       "common year",
       "day",
       "decade",
@@ -4962,10 +4969,12 @@
       "millennium",
       "minute",
       "monday",
+      "month",
       "november",
       "october",
       "quarter",
       "saturday",
+      "seasons",
       "second",
       "september",
       "spring",
@@ -4980,6 +4989,62 @@
      ],
      "sources": [
       "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.time/shards/clock",
+     "path": "k.time/shards/clock.sop",
+     "wires": 34,
+     "bytes": 4622,
+     "keys": [
+      "1 am",
+      "1 pm",
+      "10 am",
+      "10 pm",
+      "11 am",
+      "11 pm",
+      "2 am",
+      "2 pm",
+      "3 am",
+      "3 pm",
+      "4 am",
+      "4 pm",
+      "5 am",
+      "5 pm",
+      "6 am",
+      "6 pm",
+      "7 am",
+      "7 pm",
+      "8 am",
+      "8 pm",
+      "9 am",
+      "9 pm",
+      "afternoon",
+      "evening",
+      "midnight",
+      "morning",
+      "night",
+      "noon"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.time/shards/psys2",
+     "path": "k.time/shards/psys2.sop",
+     "wires": 1,
+     "bytes": 382,
+     "keys": [
+      "day",
+      "weekend"
+     ],
+     "sources": [
+      "psys2-worlds-6b63b2ba"
      ],
      "license": "CC0-1.0",
      "warnings": []
