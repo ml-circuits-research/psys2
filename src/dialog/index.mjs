@@ -43,6 +43,7 @@ import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-l
 import { proposeByTypes } from './typed-reader.mjs';
 import { withVariants } from './variants.mjs';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs';
+import { createTypedWorlds } from '../formalizer/typed-world.mjs';
 import { repairFromScene } from './scene-referents.mjs';
 import { loadMetaWorlds } from './meta-worlds.mjs';
 import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs';
@@ -1793,6 +1794,16 @@ export class DialogSession {
   }
 }
 
+/** The typed worlds of a world set (spec 16 section 13), built lazily from each world's typed.json once the library is loaded (`engine.sopworld`); `set.typedFor(worldId, { things })`. */
+function attachTyped(engine, set) {
+  set.typedFor = (id, o) => {
+    const lib = engine.sopworld;
+    if (!lib) return null;
+    set._typedWorlds ??= createTypedWorlds({ lib, set });
+    return set._typedWorlds.typedFor(id, o);
+  };
+}
+
 /** Create the dialog engine: loads and checks all worlds. */
 export async function createEngine({ loader, translator = null, options = {}, formalizers = {} }) {
   // Reasoner switch (spec 15): 'matrix' (default) or 'ops' (the fallback; the worlds that say reasoner=matrix answer through the sopworld library). The option wins over PSYS2_REASONER.
@@ -1831,6 +1842,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
       const ninterp = createInterpreter(nset, { ...options, reasoner: nreasoner });
       ninterp.knowledge = engine.knowledge;
       set = nset; reasoner = nreasoner; interp = ninterp;
+      attachTyped(engine, nset);
       engine.set = nset; engine.reasoner = nreasoner; engine.interp = ninterp; engine.loader = newLoader; engine.meta = null;
       attachOpenWords(engine.knowledge);
       if (hadMeta) await engine.prepareMeta();
@@ -1856,5 +1868,6 @@ export async function createEngine({ loader, translator = null, options = {}, fo
       return r;
     },
   };
+  attachTyped(engine, set);
   return engine;
 }
