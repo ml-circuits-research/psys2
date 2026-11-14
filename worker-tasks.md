@@ -4085,3 +4085,13 @@ Reviewer ran `npm run test:smoke` on 54ddaf7f: 89/89 pass, exit 0, and read the 
 1. The 9 still wrong go to the failure ledger **grouped by cause** (goal not recognised: "with" as a place; method missing an anchor: throne; existing thing not reused: the scarf on the girl drawn again; …); each cause gets one general fix in the right repo (a method or anchor → knowledge ask; reuse of an existing referent → planner binding `live=` / PSys2 goal reading), not point fixes.
 2. Still open from 13:15: vendor sopworld 0.57 (≥0.56) and read `k.motion`, delete `MOTION_RULES_TEMPORARY`; `ro-en.mjs` out of the English boot.
 3. Then learning curve, grid/paraphrase, Q13.
+
+## Reviewer 2026-11-14 14:15 — RANDOM as a world: the dice, Talk examples and tab buttons from `std.sample` (owner, 09:42); after the 13:55 items 1–2
+
+No hard-coded examples. The library is asked for `std.sample` (random frames constrained by schemas, state and knowledge, weighted by recency and novelty, rendered by the language world and kept only if they read back to the same frame and a dry run is not refused). In PSys2:
+1. **The dice in the input bar** gives one random command for the open tab's world or a recently used one (not from `surprise-pool.json`).
+2. **Talk:** 3–4 example commands chosen from the context (the topics and worlds of the session, less usual things), refreshed each turn; the welcome examples also come from the sampler.
+3. **Action buttons in every tab:** the acts relevant to the selected or most recent thing of that view (e.g. on a drawn house: colour, move, take apart, add a door), from `sample(..., 'actions')`, not per-tab lists.
+4. **Tabs that fill the screen** (Drawing, Diagram, Map, Charts, editor, games…) get their own small dice that generates a random command in that tab.
+5. **Delete what this replaces:** `surprise-pool.json` (214 hand-validated texts, a 25-minute build step), hard-coded welcome examples and per-tab example lists; and the coverage-grid generator uses the same sampler (its placeholders and nonsense combinations were a defect of a separate generator).
+6. **Measure:** of 200 dice samples across tabs: the share understood and executed without refusal, judged by state (target ≥ 95 %), distinct acts / kinds / attributes, no placeholder or nonsense text (attach 30 random samples to the landing note for the reviewer to read). Until `std.sample` is released, write the host side against its described interface, do not build a local generator.
