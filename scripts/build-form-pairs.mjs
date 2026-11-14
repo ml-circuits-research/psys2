@@ -14,8 +14,9 @@
  *                   failed turn's annotation says what was meant. judged "unsure": same fragment test, no annotation on the failed turn.
  *                   Other adjacent pairs are dropped (not shown to be a rephrasing). The logs carry no correction flags (those exist only
  *                   in live phrase records), so adjacency plus annotations is the evidence. Non-English turns are used through their `english` field.
- *   cousins         failed cousins (outcome != right) of results/cousins/*.json against their canonical case. A cousin changes a filler or an
- *                   aspect, so same_meaning is false (judged "reading": the library generated the change). Both reasoners are merged.
+ *   cousins         failed cousins of the loose-wording cases (results/cousins/2026-11-14-paraphrases-animal-sound.json) paired with the PASSING canonical
+ *                   of the same meaning: the clean-wording run (2026-11-14-clean-animal-sound.json, "what sound does a cow make", degree 3, matrix) cousin
+ *                   with the same (key, answer) = same filler and aspect. same_meaning true. Rows without a passing canonical, and compound cases, are dropped and counted.
  * Records are deduped on (canonical, variant); the first source wins.
  */
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -56,13 +57,25 @@ export function ownerPairs(turns, file) {
   return out;
 }
 
-export function cousinPairs(result, file) {
-  const out = [];
-  for (const run of result.runs ?? []) for (const w of run.rows ?? []) {
+const keyOf = (w) => `${w.key}\u0000${JSON.stringify([...(w.answer ?? [])].sort())}`;
+const COMPOUND = /\b(and|also|then)\b|\d|\./i;
+/**
+ * Failed cousins of the loose-wording cases against the PASSING canonical of the same meaning: the clean-wording run's passing cousin with the
+ * same (key, answer), i.e. the same filler and aspect. Kept only when the variant failed and the canonical passed; same_meaning is true.
+ * Loose cases with another clause (a second question, digits) are kept but marked judged:"unsure". Returns { pairs, dropped }.
+ */
+export function cousinPairs(loose, clean, file) {
+  const passing = new Map();
+  for (const run of clean.runs ?? [clean]) for (const w of run.rows ?? []) if (w.outcome === 'right' && w.text && !passing.has(keyOf(w))) passing.set(keyOf(w), norm(w.text));
+  const pairs = [], dropped = { noPassingCanonical: 0, compound: 0 };
+  for (const run of loose.runs ?? []) for (const w of run.rows ?? []) {
     if (w.outcome === 'right' || !w.case || !w.text) continue;
-    out.push({ canonical: norm(w.case), variant: norm(w.text), same_meaning: false, source: 'cousins', judged: 'reading', dimension: w.dimension, id: file });
+    const c = passing.get(keyOf(w));
+    if (!c) { dropped.noPassingCanonical++; continue; }
+    // a case with another clause (a second question, digits) still asks the one request the judge scores, but carries extra words: unsure
+    pairs.push({ canonical: c, variant: norm(w.text), same_meaning: true, source: 'cousins', judged: COMPOUND.test(w.case) ? 'unsure' : 'reading', dimension: w.dimension, id: file });
   }
-  return out;
+  return { pairs, dropped };
 }
 
 export function dedupe(pairs) {
@@ -76,11 +89,15 @@ export function dedupe(pairs) {
   return out;
 }
 
+const LOOSE = '2026-11-14-paraphrases-animal-sound.json', CLEAN = '2026-11-14-clean-animal-sound.json';
 export function build() {
   const all = [...paraphrasePairs(jsonl(`${EV}/paraphrases-rt-2026-11-12.jsonl`))];
   for (const f of readdirSync(resolve(REPO, EV)).filter((n) => /^owner-log-.*\.jsonl$/.test(n)).sort()) all.push(...ownerPairs(jsonl(`${EV}/${f}`), f));
   const cdir = resolve(REPO, 'training/results/cousins');
-  for (const f of readdirSync(cdir).filter((n) => n.endsWith('.json')).sort()) all.push(...cousinPairs(JSON.parse(readFileSync(resolve(cdir, f), 'utf8')), f));
+  const clean = JSON.parse(readFileSync(resolve(cdir, CLEAN), 'utf8'));
+  const { pairs, dropped } = cousinPairs(JSON.parse(readFileSync(resolve(cdir, LOOSE), 'utf8')), clean, LOOSE);
+  all.push(...pairs);
+  build.dropped = dropped;
   return dedupe(all);
 }
 
@@ -93,4 +110,5 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   for (const p of pairs) { const k = `${p.source} same_meaning=${p.same_meaning}${p.judged === 'unsure' ? ' (unsure)' : ''}`; c[k] = (c[k] || 0) + 1; }
   console.log(`${pairs.length} pairs -> ${out}`);
   console.log(c);
+  console.log('cousin rows dropped:', build.dropped);
 }

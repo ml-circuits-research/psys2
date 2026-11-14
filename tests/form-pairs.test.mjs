@@ -20,8 +20,14 @@ test('owner pairs: fragment then fix in the same tab', () => {
   assert.equal(p[0].judged, 'reading');
 });
 
-test('cousins: only failed ones, deduped across reasoners', () => {
-  const row = (outcome) => ({ case: 'a b', text: 'a c', outcome, dimension: 'filler kind' });
-  const r = { runs: [{ rows: [row('wrong'), row('right')] }, { rows: [row('wrong')] }] };
-  assert.equal(dedupe(cousinPairs(r, 'f')).length, 1);
+test('cousins: failed loose variant paired with the passing clean canonical of the same key and answer', () => {
+  const w = (text, outcome, key = 'sound', answer = ['moo'], c = 'Hey what a sound makes a cow') => ({ case: c, text, outcome, key, answer, dimension: 'filler kind' });
+  const loose = { runs: [{ rows: [w('Hey what a sound makes a dog', 'wrong'), w('Hey what a sound makes a cat', 'wrong', 'sound', ['meow']), w('x', 'right'), w('Um sound a dog', 'wrong', 'sound', ['moo'], 'Um 7 plus 5')] }, { rows: [w('Hey what a sound makes a dog', 'wrong')] }] };
+  const clean = { runs: [{ rows: [w('what sound does a dog make', 'right'), w('what sound does a pig make', 'wrong', 'sound', ['oink'])] }] };
+  const { pairs, dropped } = cousinPairs(loose, clean, 'f');
+  assert.equal(dedupe(pairs).length, 2);
+  assert.equal(pairs[0].canonical, 'what sound does a dog make');
+  assert.equal(pairs[0].same_meaning, true);
+  assert.equal(dropped.noPassingCanonical, 1);
+  assert.deepEqual(dedupe(pairs).map((p) => p.judged), ['reading', 'unsure']);
 });
