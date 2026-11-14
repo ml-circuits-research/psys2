@@ -13,6 +13,8 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { operationKey } from '../src/worlds/canonical.mjs';
 import { buildWebchat } from '../scripts/build-webchat.mjs';
+import { createFacts } from '../src/knowledge/facts.mjs';
+import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
 
 const engineWith = (reasoner) => createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), options: { reasoner } });
 const engines = { ops: await engineWith('ops'), matrix: await engineWith('matrix') };   // each world set is loaded once for the whole file
@@ -42,6 +44,9 @@ for (const [mode, e] of Object.entries(engines)) {
     const bad = [];
     let n = 0;
     for (const w of e.set.list().filter((x) => x.patterns.length)) {
+      // a world that reads the catalog (the map: every place is a name of k.geo) is understood with the local fixture catalog; the others with none
+      const reads = typeof w.ops?.needs === 'function' || w.lexicons.some((l) => l.open);
+      e.setKnowledge(reads ? createFacts({ source: createKnowledgeSource(path.join(DEFAULT_ROOT, '../tests/fixtures/catalog')) }) : null);
       for (const c of picks(w)) {
         n++;
         const s = e.createSession({ language: 'en' });
@@ -50,6 +55,7 @@ for (const [mode, e] of Object.entries(engines)) {
         if (!r.segments.length || r.segments.some((x) => (x.unparsed && x.veto?.kind !== 'no-referent') || (!x.veto && x.match?.worldId !== w.id))) bad.push(`${w.id}: ${c}`);
       }
     }
+    e.setKnowledge(null);
     assert.ok(n >= 30, `only ${n} canonical messages`);
     assert.deepEqual(bad, []);
   });
