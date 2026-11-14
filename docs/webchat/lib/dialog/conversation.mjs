@@ -19,14 +19,36 @@ export function outcomeOf(reply) {
   return 'done';
 }
 
+/**
+ * What the turn executed, from the formalized reading and its result (not from the user's words): one entry per thing an answer added or changed, { world, act, kind }, where `world.act`
+ * is the operation that ran (`op.art.draw.make`) and the kind is the kind the world's own state records for that thing (a lake, a cloud). Only answers that were supported count; a turn that
+ * was refused or not understood has none (it is only counted by its outcome).
+ */
+export function executedActs(reply) {
+  const out = [], states = reply?.state ?? {};
+  const kindOf = (world, id) => { for (const v of Object.values(states[world] ?? {})) if (Array.isArray(v)) { const o = v.find((x) => x && x.id === id); if (o) return typeof o.kind === 'string' ? o.kind : null; } return null; };
+  for (const a of reply?.answers ?? []) {
+    const m = /^op\.(.+)\.([A-Za-z]+)$/.exec(String(a.via ?? ''));
+    if (a.status !== 'supported' || !m) continue;
+    const ids = [...(a.envelope?.diff?.added ?? []), ...(a.envelope?.diff?.changed ?? [])].map((x) => (typeof x === 'string' ? x : x?.id)).filter(Boolean);
+    for (const id of ids.slice(0, 40)) out.push({ world: m[1], act: m[2], kind: kindOf(m[1], id) });
+  }
+  return out;
+}
+
+/** A taught fact the paragraph may state: a relation the knowledge world recorded in English (`word is_a kind`, `your kind is called name`); anything else (free attributes of an unknown word) is stored but not narrated. */
+const CLEAR = /^@\S+\s+(?:k\.words\.sense\s+word="[A-Za-z][A-Za-z ]*"\s+is_a="[A-Za-z][A-Za-z ]*"|session\.learned\.own\s+kind="[A-Za-z][A-Za-z ]*"\s+name="[A-Za-z][A-Za-z ]*")/;
+export const narratable = (wire) => CLEAR.test(String(wire).trim());
+
 /** The compact record of one turn (what the summary needs, nothing more). */
 export function turnRecord(n, text, reply, { tab = null } = {}) {
   const segs = reply?.segments ?? [];
   const worlds = [...new Set(segs.filter((s) => !s.unparsed).map((s) => s.routing?.winner?.worldId).filter(Boolean))];
   const answers = reply?.answers ?? [];
   const pending = reply?.trace?.discourse?.pending ?? null;
+  const acts = executedActs(reply);
   return {
-    n, text: String(text ?? '').slice(0, 200), tab, outcome: outcomeOf(reply), worlds,
+    n, text: String(text ?? '').slice(0, 200), tab, outcome: outcomeOf(reply), worlds, acts,
     answer: String(reply?.text ?? '').replace(/\s+/g, ' ').slice(0, 200),
     asked: answers.filter((a) => a.status === 'missing' && /\?\s*$/.test(String(a.text ?? '').trim())).map((a) => String(a.text).trim().slice(0, 160)),
     pending: (pending?.type === 'fill' || pending?.type === 'confirm') && String(pending.text ?? '').trim() ? `${pending.type === 'confirm' ? 'waiting for a yes or no' : 'waiting for the missing part'} of "${String(pending.text ?? '').slice(0, 100)}"` : null,
@@ -86,5 +108,5 @@ export function summarize({ turns = [], states = {}, labelOf = (id) => SHARED[id
     { id: 'trouble', title: 'Could not do or asked back', lines: shownTrouble },
     { id: 'open', title: 'Open', lines: open },
   ].filter((s) => s.lines.length);
-  return { sections, worlds: [...byWorld.keys()], taught, turns: turns.length, last: LAST(turns, 1)[0]?.n ?? 0 };
+  return { sections, worlds: [...byWorld.keys()], taught, taughtClear: (states['session.things']?.learned ?? []).filter(narratable).map(taughtText), turns: turns.length, last: LAST(turns, 1)[0]?.n ?? 0 };
 }

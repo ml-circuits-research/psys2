@@ -22,7 +22,8 @@ export function digest(ctx, { t, k } = {}) {
   const text = pasted || d.sentences.map((s) => s.text).join(' ');
   const r = g.text({ text, doc: d?.id ?? null, maxSentences: num(k, 3) });
   if (!r) return no('unsupported', 'I could not make a summary of that.');
-  return ok(`In short: ${r.text}`, { from: r.sentences.map((s) => s.source).filter(Boolean).slice(0, 12), data: { digest: true, doc: d?.id ?? null } });
+  const from = d ? r.sentences.map((s) => d.sentences[s.at]).filter(Boolean).map((x) => `${d.id}.s${x.i + 1}`).slice(0, 12) : [];   // the picked sentences are the document's own: cite them
+  return ok(`In short: ${r.text}`, { from, data: { digest: true, doc: d?.id ?? null, cite: d ? r.sentences.map((s) => s.at) : [] } });
 }
 
 /** Compose an essay into a new document: topic (empty = random), chapters, subchapters, words. */
