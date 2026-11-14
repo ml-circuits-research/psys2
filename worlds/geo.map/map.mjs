@@ -83,8 +83,8 @@ function db(ctx) {
 }
 const EMPTY = { byKey: new Map(), byCc: new Map(), cities: [], countries: [], regions: [], capitalOf: new Map(), citiesOf: new Map(), empty: true };
 /** Demonym adjectives (japanese, brazilian ...) -> the country key; used when the language layer captured an adjective instead of a place. */
-const DEMONYM = { japanese: 'japan', brazilian: 'brazil', romanian: 'romania', german: 'germany', french: 'france', spanish: 'spain', italian: 'italy', portuguese: 'portugal', polish: 'poland', hungarian: 'hungary', austrian: 'austria', swiss: 'switzerland', dutch: 'netherland', belgian: 'belgium', british: 'uk', american: 'usa', canadian: 'canada', mexican: 'mexico', argentinian: 'argentina', argentine: 'argentina', chilean: 'chile', peruvian: 'peru', colombian: 'colombia', bolivian: 'bolivia', chinese: 'china', indian: 'india', russian: 'russia', ukrainian: 'ukraine', turkish: 'turkiye', egyptian: 'egypt', nigerian: 'nigeria', kenyan: 'kenya', ethiopian: 'ethiopia', moroccan: 'morocco', australian: 'australia', greek: 'greece', swedish: 'sweden', norwegian: 'norway', danish: 'denmark', finnish: 'finland', irish: 'ireland', czech: 'czech_republic', serbian: 'serbia', bulgarian: 'bulgaria', croatian: 'croatia', slovak: 'slovakia', vietnamese: 'vietnam', thai: 'thailand', indonesian: 'indonesia', korean: 'south_korea', iranian: 'iran', iraqi: 'iraq', israeli: 'israel', saudi: 'saudi_arabia', pakistani: 'pakistan', bangladeshi: 'bangladesh', filipino: 'philippine', cuban: 'cuba', venezuelan: 'venezuela' };
-const place = (D, key) => (key === undefined ? null : lookup(D, key) ?? lookup(D, DEMONYM[String(key)]));
+export const DEMONYM = { japanese: 'japan', brazilian: 'brazil', romanian: 'romania', german: 'germany', french: 'france', spanish: 'spain', italian: 'italy', portuguese: 'portugal', polish: 'poland', hungarian: 'hungary', austrian: 'austria', swiss: 'switzerland', dutch: 'netherland', belgian: 'belgium', british: 'uk', american: 'usa', canadian: 'canada', mexican: 'mexico', argentinian: 'argentina', argentine: 'argentina', chilean: 'chile', peruvian: 'peru', colombian: 'colombia', bolivian: 'bolivia', chinese: 'china', indian: 'india', russian: 'russia', ukrainian: 'ukraine', turkish: 'turkiye', egyptian: 'egypt', nigerian: 'nigeria', kenyan: 'kenya', ethiopian: 'ethiopia', moroccan: 'morocco', australian: 'australia', greek: 'greece', swedish: 'sweden', norwegian: 'norway', danish: 'denmark', finnish: 'finland', irish: 'ireland', czech: 'czech_republic', serbian: 'serbia', bulgarian: 'bulgaria', croatian: 'croatia', slovak: 'slovakia', vietnamese: 'vietnam', thai: 'thailand', indonesian: 'indonesia', korean: 'south_korea', iranian: 'iran', iraqi: 'iraq', israeli: 'israel', saudi: 'saudi_arabia', pakistani: 'pakistan', bangladeshi: 'bangladesh', filipino: 'philippine', cuban: 'cuba', venezuelan: 'venezuela' };
+const place = (D, key) => { if (key === undefined) return null; const w = String(key).toLowerCase().replace(/_(?:people|folks|citizens)$/, '').replace(/s$/, ''); return lookup(D, key) ?? lookup(D, DEMONYM[String(key)] ?? DEMONYM[w]); };
 const the = (e) => (e.kind === 'country' && THE.has(e.name) ? `the ${e.name}` : e.name);
 const theCap = (e) => { const t = the(e); return t.charAt(0).toUpperCase() + t.slice(1); };
 const countryOf = (D, e) => (e?.kind === 'country' ? e : e?.kind === 'city' ? D.byCc.get(e.cc) ?? null : null);
@@ -363,6 +363,7 @@ function _highlightPlaces(ctx, args) {
     }
   }
   cs = [...new Map(cs.map((c) => [c.cc, c])).values()];
+  if (args.ind === 'true') cs = cs.filter((c) => c.ind);   // "the countries of South America": the independent states, as the count and the list say
   if (!cs.length) return no('missing', 'There is nothing to highlight there.');
   tab(ctx);
   const added = highlight(s, cs, false);
@@ -492,7 +493,7 @@ export function area(ctx, { p }) {
 const MEASURE = { bigger: ['auto', 1], larger: ['auto', 1], smaller: ['auto', -1], greater: ['auto', 1], more_populous: ['pop', 1], more_populated: ['pop', 1], less_populous: ['pop', -1],
   less_populated: ['pop', -1], more_people: ['pop', 1], fewer_people: ['pop', -1], more_person: ['pop', 1], fewer_person: ['pop', -1], bigger_population: ['pop', 1], larger_population: ['pop', 1], smaller_population: ['pop', -1],
   more_inhabitant: ['pop', 1], fewer_inhabitant: ['pop', -1] };
-const SUPER = { largest: ['auto', 1], biggest: ['auto', 1], greatest: ['auto', 1], smallest: ['auto', -1], tiniest: ['auto', -1], most_populous: ['pop', 1], most_populated: ['pop', 1],
+export const SUPER = { largest: ['auto', 1], biggest: ['auto', 1], greatest: ['auto', 1], smallest: ['auto', -1], tiniest: ['auto', -1], most_populous: ['pop', 1], most_populated: ['pop', 1],
   least_populated: ['pop', -1], least_populous: ['pop', -1], main: ['pop', 1], major: ['pop', 1], top: ['pop', 1] };
 const valueOf = (e, dim) => (dim === 'area' ? e.area : e.pop);
 const dimFor = (x, y, want) => {

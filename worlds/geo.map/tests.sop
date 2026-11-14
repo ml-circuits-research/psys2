@@ -2294,6 +2294,14 @@
     expectState="lines.length=1"
     reasoner=matrix
 
+@t.geo.map.m06 core.test
+    session=gm1
+    input="undo"
+    expect="I undid"
+    expectState="lines.length=0"
+    doc="m07 redoes this undo (the rows m04-m06 of the matrix were removed with it, which left the redo with nothing to redo)"
+    reasoner=matrix
+
 @t.geo.map.m07 core.test
     session=gm1
     input="redo"

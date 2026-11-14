@@ -134,7 +134,11 @@
     max=18
     default=2
     more=closer
+    more=nearer
     less=farther
+    less=further
+    less=back
+    less=away
     word=magnification
 
 @map.centre acts.attr
@@ -206,3 +210,18 @@
     word=coast
     word=sea
     word=ocean
+
+@map.location acts.attr
+    of=place
+    type=text
+    word=position
+    word=whereabouts
+    word=coordinates
+
+@map.distance acts.attr
+    of=place
+    type=number
+    word=kilometres
+    word=kilometers
+    word=km
+    word=miles
