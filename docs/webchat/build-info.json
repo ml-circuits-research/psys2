@@ -1,5 +1,5 @@
 {
-  "version": "0de35a813e",
+  "version": "d4eb74d2b8",
   "worlds": [
     "acts",
     "art.draw",
@@ -774,8 +774,8 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "eec9f83cdc88ee2e"
   },
-  "builtAt": "2026-11-14T05:41:07.497Z",
-  "commit": "a6b6fc50-dirty",
+  "builtAt": "2026-11-14T05:46:06.848Z",
+  "commit": "0f3abbfe-dirty",
   "assets": {
     "app.mjs": "b83abc8457",
     "coverage-grid.json": "63a716d3df",
@@ -977,7 +977,7 @@
     "ui/util.mjs": "d063fcad3e",
     "ui/voice-noise.mjs": "cb0f741404",
     "ui/voice-words.mjs": "4b1e311d09",
-    "ui/world-loader.mjs": "6e0e5f8362",
+    "ui/world-loader.mjs": "b1632273c5",
     "vendor/bergamot/bergamot-translator-worker.js": "cf3192f885",
     "vendor/bergamot/bergamot-translator-worker.wasm": "95a2b58dd6",
     "vendor/bergamot/LICENSES.md": "98bef6fc01",

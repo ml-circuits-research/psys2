@@ -17,10 +17,15 @@ export function createWorldLoader({ indexHash, fetchJson, bag, on = () => {} }) 
   const T = () => index?.T ?? 2;
 
   const need = () => { if (!index) throw new Error('world index not loaded'); return index; };
-  const closure = (ids) => {
-    const out = new Set();
-    const add = (id) => { const w = need().worlds[id]; if (!w || out.has(id)) return; for (const d of w.deps ?? [id]) out.add(d); out.add(id); for (const r of w.reads ?? []) add(r); };
-    for (const id of ids) add(id);
+  const closure = (ids) => {   // the worlds and what they import, and the worlds they read the facts of (a queue, no recursion)
+    const out = new Set(), queue = [...ids];
+    for (let n = 0; queue.length && n < 5000; n++) {
+      const id = queue.pop(), w = need().worlds[id];
+      if (!w || out.has(id)) continue;
+      for (const d of w.deps ?? [id]) out.add(d);
+      out.add(id);
+      queue.push(...(w.reads ?? []));
+    }
     return out;
   };
   const bucketOf = (w) => { const c = String(w).replace(/[^a-z0-9]/g, ''); return (c.slice(0, 2) || '_').padEnd(2, '_'); };

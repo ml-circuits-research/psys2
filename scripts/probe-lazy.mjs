@@ -6,6 +6,7 @@ import { openChat } from './test-webchat-turns.mjs';
 
 const lines = process.argv.slice(2);
 const c = await openChat({ throttle: 1, settings: { formalizer: 'rules', normalizer: false, showTrace: false, reasoner: 'matrix' }, viewport: { width: 1100, height: 800 } });
+c.pg.on('framenavigated', (f) => { if (f === c.pg.mainFrame()) console.log('NAVIGATED', f.url()); });
 try {
   const loaded = () => c.pg.evaluate(() => window.psys2.engine?.loaded?.() ?? []);
   console.log('boot loaded:', (await loaded()).join(','));
