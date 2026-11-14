@@ -403,3 +403,7 @@ Own tests (matrix) 410 -> 452 of 454; ledger rows 41 of 43 closed, by seven mech
 - The knowledge repository published `acts.make.name.place.p` in a new shard (`w.lang.en/shards/hand-frames.sop`), not in `frames-acts`. Regenerating the bundle from the catalog is not enough: the shard name has to be added to `LANG_EN_SHARDS` (src/lang/en.mjs) first, or both the generator and the live reader skip it. Check the commit's file list, not only the frame name.
 - The live catalog URL did not serve the frame yet (the page deploy lags the commit); the raw files at the commit did. Build from the commit's `docs/worlds` when the page is behind.
 - After the frame is bundled, every schema world with `named=yes` and a container regenerates its own pattern (`node scripts/build-schema-world.mjs <dir>`): a hand `patterns.extra.sop` is deleted and the generated `patterns.sop` carries the catalog's pattern. Test-world counts of all eight touched worlds were unchanged.
+
+## 2026-11-15 A thinning audit compares exports, not file names
+- Of eleven host modules that look general, the library (0.90) covers only the plural and article helpers (`inflectBy`, `articleFor`); the rest (list joining, fact-to-clause, act sentences, frame rendering, genre/topic lookup, typed role re-reading, slot-type assignment, reply judging) are general but absent, so they are hand-over items rather than deletions.
+- Read the library's `host-contract.md` "must not rebuild" table first: it is the library's own claim of what it covers, and checking it against the exports takes minutes.
