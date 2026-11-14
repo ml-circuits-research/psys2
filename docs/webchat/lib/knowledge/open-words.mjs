@@ -6,7 +6,7 @@
 //
 // Synchronous by design (the matcher is): the host loads the vocabulary before reading (`ready()`, called by the dialogue at the start of a turn); until then nothing is open and the
 // lexicon is its closed list. Browser-safe: no node imports.
-import { lemmaCandidates } from './facts.mjs?v=e4a79e5a24';
+import { lemmaCandidates } from './facts.mjs?v=27f2a9b770';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 import { colourName, isCoreColour } from './values.mjs?v=a137742733';
 
@@ -41,7 +41,9 @@ export function knowsKind(word, catalogs) {
   const vocab = attached.peekVocab();
   if (!vocab) return false;
   if (!Object.hasOwn(vocab, w)) { const sp = w.replace(/_/g, ' '); if (sp === w || !Object.hasOwn(vocab, sp)) return false; return (vocab[sp] ?? []).some((sh) => { const id = String(sh); return catalogs.includes(id.split('/')[0]) || catalogs.some((c) => c.includes('/') && id.startsWith(c)); }); }   // a multi-word name (family photo) is a vocabulary key with a space
-  if (!(vocab[w] ?? []).some((sh) => { const id = String(sh); return catalogs.includes(id.split('/')[0]) || catalogs.some((c) => c.includes('/') && id.startsWith(c)); })) return false;   // a catalog is a world (k.objects) or a shard prefix of one (k.scenes/shards/scenes: its scenes, not its things)
+  const claims = (vocab[w] ?? []).map(String).filter((id) => catalogs.includes(id.split('/')[0]) || catalogs.some((c) => c.includes('/') && id.startsWith(c)));   // a catalog is a world (k.objects) or a shard prefix of one (k.scenes/shards/scenes: its scenes, not its things)
+  if (!claims.length) return false;
+  if (claims.some((id) => !id.startsWith('k.objects'))) return true;   // a word that a world of things (k.wearables, k.people, k.animals) names as a kind of its own is a kind, even when a drawing also has a part of that name (a scarf is a wearable and the scarf of a snowman)
   const parts = attached.peekParts?.();
   return !(parts && parts.has(w));
 }

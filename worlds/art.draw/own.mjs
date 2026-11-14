@@ -27,6 +27,7 @@ export function checkReferents(ctx, { action, args = {} } = {}) {
   if (a === 'ask' && ['options', 'describe'].includes(String(args.mode ?? ''))) return undefined;   // "what colour options do I have": a question about the board, not a thing in it
   if (a === 'change' && (WHOLE.test(String(args.thing ?? '').trim()) || /^(?:it|them|that|this)\b/i.test(String(args.thing ?? '').trim()))) return undefined;   // the whole scene, or a pronoun the dialogue resolves
   if (a === 'remove') return D.checkReferents(ctx, { action: 'draw.remove', args: { phrase: args.thing ?? '' } });
+  if (a === 'place' && args.thing && args.place && goalWord(args.thing) && !D.parseNP(args.thing).known) return undefined;   // a thing of the catalog that is not drawn, put somewhere ("put a scarf on the girl"): the plan makes it there, there is nothing to find
   if (['change', 'place', 'copy', 'group', 'pick', 'ask'].includes(a) && args.thing) return D.checkReferents(ctx, { action: `draw.${a}`, args: { t: tOf(args) } });
   return undefined;
 }

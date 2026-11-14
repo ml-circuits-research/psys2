@@ -3,10 +3,10 @@
 // code in this world. The methods are knowledge (k.procedures), the planner is the library's (src/plan/host.mjs); what is left here is what only the board can do: run one act of a plan on the
 // picture (make = the board's add, place at an anchor or a slot = the boxes k.layouts and k.wearables state, in the frame of the thing), all or nothing, one undo step, and say it in words.
 // No kind, scene, role, anchor or slot is named in this file.
-import * as D from './engine.mjs?v=ae13f8a88a';
+import * as D from './engine.mjs?v=396ad0ca0c';
 import { kindKey, kindName, W, H } from './scene.mjs?v=0882bbcd68';
-import { planHostOf } from '../../lib/plan/host.mjs?v=5eb5e1772a';
-import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=e7f0886c6c';
+import { planHostOf } from '../../lib/plan/host.mjs?v=37dac1569e';
+import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=3eed01f9f5';
 import { COUNTS } from '../space/space.mjs?v=f98ca4dd42';
 
 const REL = { on: 'on', 'on top of': 'on', onto: 'on', in: 'in', inside: 'in', into: 'in', around: 'around', at: 'at' };
@@ -17,9 +17,9 @@ const plural = (kind, n) => (n === 1 ? kind : D.pluralOfKind(kind, n));
 const an = (k) => (/[^s]s$/.test(k) ? k : `${/^[aeiou]/.test(k) ? 'an' : 'a'} ${k}`);   // "boots" take no article
 const andList = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
 /** The catalog words that name a goal: the scenes, the roles of people and the named tasks (the same `catalog=` lines as the kinds lexicon of schema.sop). */
-const GOAL_CATALOGS = ['k.people/shards/roles', 'k.scenes/shards/scenes', 'k.procedures/shards/tasks'];
+const GOAL_CATALOGS = ['k.wearables/shards/wearables', 'k.people/shards/roles', 'k.scenes/shards/scenes', 'k.procedures/shards/tasks'];
 /** True when the phrase (or its last word) is a goal word of the catalog: "farm", "doctor", "family photo". Synchronous (the vocabulary is loaded before the sentence is read). */
-export const goalWord = (phrase) => { const w = norm(phrase).split(' ').filter(Boolean), tries = [w.join('_'), w.at(-1)]; return tries.some((x) => x && [x, sing(x)].some((y) => knowsKind(y, GOAL_CATALOGS))); };
+export const goalWord = (phrase) => { const w = norm(phrase).replace(/\s+for\s+(?:\d+|\w+)$/, (m) => (/^\d+$/.test(m.trim().split(' ')[1]) || Object.hasOwn(COUNTS, m.trim().split(' ')[1]) ? '' : m)).split(' ').filter(Boolean), tries = [w.join('_'), w.at(-1)]; return tries.some((x) => x && [x, sing(x)].some((y) => knowsKind(y, GOAL_CATALOGS))); };
 const GROUND = new Set(['ground', 'sky', 'background', 'horizon']);
 
 /** The goal of a reading, in the planner's terms, or null: `a` = the board's add arguments (kind, n, where), `r` = the act's roles. Pure. */
@@ -30,6 +30,8 @@ export function goalOf(act, a = {}, r = {}) {
   if (!kind || /^(?:it|them|one|things?|something)$/.test(kind)) return null;
   const rel = REL[String(r.rel ?? '').replace(/_/g, ' ')];
   const place = r.place ? norm(r.place) : '';
+  // "a queen with a crown": "with" is no place but a second thing the first has; for a kind that is itself a goal (a role, a scene) the goal is that kind and `also` the thing it should have (the plan of the kind may already have it)
+  if (String(r.rel ?? '') === 'with' && place && !a.raw && goalWord(kind) && !place.includes(' and ') && !place.includes(',')) return { act, roles: { kind, ...(Number(a.n ?? r.amount) > 1 ? { number: Number(a.n ?? r.amount) } : {}) }, also: place };
   const parts = /^(.*\S)\s+from\s+parts?$/.exec(kind);   // "a house from parts"
   if (parts) return { act, roles: { kind: parts[1], material: 'parts' } };
   const roles = { kind };
@@ -48,12 +50,19 @@ export function goalFromText(text) {
 /** The things of the picture as the planner's live world: [{ id, kind }]. */
 export const liveOf = (state) => (state?.objects ?? []).filter((o) => !o.tag).map((o) => ({ id: o.id, kind: String(kindName(kindKey(o))).toLowerCase().replace(/ /g, '_') }));
 /** The words a goal can be found by in the catalog index (its keys). */
-export const goalWords = (goal) => [goal.roles.kind, ...goal.roles.kind.split(' '), goal.roles.place?.value].filter(Boolean).flatMap((w) => [w, sing(w)]);
+export const goalWords = (goal) => [goal.roles.kind, ...goal.roles.kind.split(' '), goal.roles.place?.value, goal.also].filter(Boolean).flatMap((w) => [w, sing(w)]);
 
 /** The goal with its kind said as the knowledge names it ("group photo" is the "family photo" of k.procedures). */
 export function canonGoal(ctx, goal) {
   const host = planHostOf(ctx.knowledge);
   return host?.ready() && goal.roles.kind ? { ...goal, roles: { ...goal.roles, kind: host.canonical(goal.roles.kind) } } : goal;
+}
+/** The second thing of "a queen with a crown", after the plan of the queen is done: the goal of that thing on the thing the plan made first, or null when the plan already made it (a queen wears a crown). */
+export function alsoGoal(ctx, goal) {
+  if (!goal.also) return null;
+  const made = ctx.state.last ?? [], first = ctx.state.objects.find((o) => o.id === made[0]);
+  if (!first || made.some((id) => String(kindName(kindKey(ctx.state.objects.find((o) => o.id === id) ?? {}))).toLowerCase() === goal.also)) return null;
+  return { act: 'make', roles: { kind: goal.also, place: { value: String(kindName(kindKey(first))).toLowerCase().replace(/ /g, '_'), rel: 'on' } } };
 }
 /** The plan of a goal in this picture, or null (nothing loaded, no method fits, a role is missing). */
 export function planFor(ctx, goal) {
@@ -160,7 +169,8 @@ export function runPlan(ctx, goal, { p, host }, said0) {
     const put = [...putBy].slice(0, 4).map(([k, n]) => { const [what, name, on] = k.split('|'); return `the ${n > 1 ? `${n} ${plural(what, n)}` : what} on the ${name} of the ${on}`; });
     const grouped = placed.filter((x) => x.group).map((x) => `They are one thing now: a ${x.group}.`);
     const pv = goal.roles.place?.value;
-    if (pv && !p.requests.some((q) => (q.action === 'make' && q.args.kind === pv) || (q.action === 'place' && String(q.args.of ?? '').replace(/\d+$/, '') === pv) || (q.action === 'make' && String(q.args.of ?? '').replace(/\d+$/, '') === pv))) {   // the method has nothing to do with the place said: say so, do not claim it
+    const isPv = (id) => { const x = String(id ?? ''); if (x.replace(/\d+$/, '') === pv) return true; const o = byId(x); return !!o && kindOf(o).replace(/ /g, '_') === pv.replace(/ /g, '_'); };   // the place is a plan id ("swing1") or a thing of the picture
+    if (pv && !p.requests.some((q) => (q.action === 'make' && q.args.kind === pv) || (q.action === 'place' && isPv(q.args.of)) || (q.action === 'make' && isPv(q.args.of)))) {   // the method has nothing to do with the place said: say so, do not claim it
       said = `${an(goal.roles.kind)}`;
       left.push(`putting it ${goal.roles.place.rel} the ${pv} (my knowledge has no way for that yet)`);
     }

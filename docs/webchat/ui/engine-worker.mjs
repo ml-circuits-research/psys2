@@ -103,13 +103,15 @@ async function init(m) {
   testHooks = m.testHooks === true;
   settings = { ...(m.settings ?? {}) };
   const imp = (rel) => import(vurl(rel));
+  globalThis.__psys2LazyRoEn = true;   // the Romanian -> English rules (140 KB) load with the Romanian path only (lib/translate/index.mjs: loadRoEn), not at boot of an English session
   const [dialog, loadersMod, translate, soplang, rc, g, tl, hosts, lang, rulesM, wordIdx, wlMod] = await Promise.all([imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/translate/index.mjs'), imp('lib/soplang/index.mjs'),
     imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), Promise.all([imp('ui/dispatcher-host.mjs'), imp('ui/normalizer-host.mjs'), imp('ui/translation.mjs')]), imp('ui/language.mjs'), imp('lib/formalizer/rules/index.mjs'), imp('lib/worlds/word-index.mjs'), imp('ui/world-loader.mjs')]);
   loaders = loadersMod; rulesMod = rulesM; wordMod = wordIdx;
   tabWorlds = m.tabWorlds ?? {}; universe = m.onlyWorlds ? new Set(m.onlyWorlds) : null;
   const [dh, nh, tr] = hosts;
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
-  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang };
+  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, translate };
+  if (lang.normalize(settings.language) !== 'en') translate.loadRoEn?.().catch(() => {});   // a saved Romanian session: the rules start loading at once
   // the guard reports its stage to the page at once (postMessage from synchronous code is delivered while the loop runs): a killed turn says where it was
   { let last = ''; const report = (stage) => { if (stage && stage !== last) { last = stage; evt('stage', stage); } };   // a few dozen changes per turn
     const gc = g.guard.check.bind(g.guard), gs = g.guard.setStage.bind(g.guard), ga = g.guard.abortable.bind(g.guard);
@@ -257,7 +259,7 @@ const handlers = {
     if (m.settings) applySettings(m.settings);
     // LAZY LOADING: the open tab's world and the worlds the words of the message say it needs, before the turn is read
     // a message in another language is read through its English candidates, which a partial world set can mistake for understood: every world is loaded for it (the word index is English)
-    try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') await ensureWorlds(worldLoader.ids(), 'language'); else { const plan = await worldLoader.plan(m.text); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
+    try { const lang = mods.lang.normalize(m.opts?.language ?? m.settings?.language ?? settings.language); if (lang !== 'en') { await mods.translate.loadRoEn?.(); await ensureWorlds(worldLoader.ids(), 'language'); } else { const plan = await worldLoader.plan(m.text); await ensureWorlds([activeWorld(), ...plan.ids].filter(Boolean), 'message'); } } catch (e) { console.warn('world plan failed', e); }
     let snap = session.snapshot();
     if (m.undoId != null) { snaps.set(m.undoId, snap); if (snaps.size > SNAP_KEEP) snaps.delete(snaps.keys().next().value); }
     let budget = null;
@@ -302,6 +304,7 @@ const handlers = {
     faultNow = testHooks ? (m.fault ?? null) : null;
     try {
       const budget = budgetMod.createBudget ? (() => { try { return budgetMod.createBudget(m.limits ?? undefined); } catch { return null; } })() : null;
+      if (mods.lang.normalize(m.opts?.language ?? settings.language) !== 'en') await mods.translate.loadRoEn?.();
       const res = await session.dryRead(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? settings.language), signal: ctl.signal, ...(budget ? { budget } : {}) });
       return annotateWires(res);
     } finally { active.delete(m.id); faultNow = null; }
@@ -347,7 +350,7 @@ const handlers = {
       const tr = engine.translator?.rules;
       if (tr) {
         tr.detectLanguage?.('repede: câte zile are iunie?');
-        tr.translate('repede: câte zile are iunie?', { from: 'ro', to: 'en' });
+        if (mods.lang.normalize(settings.language) !== 'en') await tr.translate('repede: câte zile are iunie?', { from: 'ro', to: 'en' });   // the Romanian rules are not loaded for an English session
         await sleep(0); await idle();
         tr.translate('There are 30 days in June.', { from: 'en', to: 'ro' });
       }

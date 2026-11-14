@@ -340,7 +340,7 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
       } else if (pref === 'browser-api') {
         entry.fallback = true; entry.reason = 'browser API not available';
       }
-      const r = rules.translate(text, opts);
+      const r = await rules.translate(text, opts);   // a promise while the Romanian rules load on demand
       return { ...r, strategy: 'rules' };
     },
   };
