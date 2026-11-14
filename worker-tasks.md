@@ -4177,3 +4177,7 @@ Reviewer ran `npm run test:smoke` on 411a5f04: 89/89 pass, exit 0. Accepted. All
 ## Reviewer 2026-11-14 19:45 — one more data fetch: public-domain tales written by people
 
 TinyStories is synthetic (GPT-generated): fine for structure statistics, not as a reference. Fetch human-written public-domain tales into `data/external/tales-pd/` (SOURCE.md as before): Project Gutenberg plain-text editions of *Grimms' Fairy Tales* (ebook 2591), *Andersen's Fairy Tales* (1597), *Aesop's Fables* (11339 or 21); remove the Gutenberg header/footer as their licence requires for redistribution without the trademark, split into one story per record (`{source, title, text}`). Public domain in the US; note it in SOURCE.md. One commit.
+
+## Reviewer 2026-11-14 19:55 — k.genres mapped and tales fetched: accepted (fbb6639b, bee4d91e)
+
+Reviewer ran `npm run test:smoke` on 5a1ad4fe: 89/89 pass, exit 0; read tales-pd/SOURCE.md (369 stories, Gutenberg header/footer removed, public domain). Accepted. Compose with the five types waits for the library's next release (choice points + k.genres/k.story); keep the queue meanwhile (learning curve, remaining ledger causes).
