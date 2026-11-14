@@ -1,0 +1,78 @@
+# w.lang.ro dictionary, lemmas starting with c: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+cadran	noun:n.n._-e	n	k.words.dial.noun.1		dial
+câine	noun:n.m.e-i	m	k.words.dog.noun.1		dog
+cal	noun:irregular	m	k.words.horse.noun.1	pl=cai	horse
+calcula	verb:v.az		k.words.calculate.verb.1		calculate
+cald	adj:irregular			forms=cald,caldă,calzi,calde	warm
+cămilă	noun:n.f.ă-e	f	k.words.camel.noun.1		camel
+cânta	verb:v.a		k.words.sing.verb.1		sing
+cântec	noun:n.n._-e	n	k.words.song.noun.1		song
+cap	noun:irregular	n	k.words.head.noun.1	pl=capete	head
+capăt	noun:irregular	n	k.words.end.noun.1	pl=capete	end
+capitală	noun:n.f.ă-e	f	k.words.capital.noun.1		capital
+capră	noun:n.f.ă-e	f	k.words.goat.noun.1		goat
+captură	noun:n.f.ă-i	f	k.words.capture.noun.1		capture
+carnivor	noun:n.n._-e	n			carnivore
+casă	noun:n.f.ă-e	f	k.words.house.noun.1		house
+câștiga	verb:v.a		k.words.win.verb.1		win
+căsuță	noun:n.f.ă-e	f	k.words.house.noun.1		house
+căuta	verb:irregular		k.actions.verb.ask.look_for	pres=caut cauți caută căutăm căutați caută	look for
+ceas	noun:n.n._-uri	n	k.words.clock.noun.1		clock
+central	adj:a._-ă-i-e				central
+centru	noun:irregular	n	k.words.center.noun.1	pl=centre	center
+cer	noun:n.n._-uri	n	k.words.sky.noun.1		sky
+cerc	noun:n.n._-uri	n	k.words.circle.noun.1		circle
+cheie	noun:irregular	f	k.words.key.noun.1	pl=chei	key
+cheltui	verb:v.is		k.words.spend.verb.1		spend
+chema	verb:v.a		k.actions.verb.change.call		call
+chestie	noun:n.f.ie-ii	f	k.words.thing.noun.1		thing
+ciclop	noun:n.m._-i	m	k.words.cyclops.noun.1		cyclops
+cină	noun:n.f.ă-e	f	k.words.dinner.noun.1		dinner
+circular	adj:a._-ă-i-e				pie
+cireașă	noun:irregular	f	k.words.cherry.noun.1	pl=cireșe	cherry
+citi	verb:v.is		k.actions.verb.load.read		read
+clipi	verb:irregular		k.words.blink.verb.1	pres=clipesc clipești clipește clipim clipiți clipesc	blink
+coadă	noun:irregular	f	k.words.tail.noun.1	pl=cozi	tail
+coafură	noun:n.f.ă-i	f	k.words.hairstyle.noun.1		hairstyle
+coloană	noun:n.f.ă-e	f	k.words.column.noun.1		column
+colora	verb:v.az		k.actions.verb.change.color		color
+colorat	adj:a.t-tă-ți-te				colored
+colț	noun:n.n._-uri	n	k.words.corner.noun.1		corner
+comandă	noun:irregular	f	k.words.command.noun.1	pl=comenzi	command
+companie	noun:n.f.ie-ii	f	k.words.company.noun.1		company
+compara	verb:v.a		k.actions.verb.ask.compare		compare
+complet	adj:a.t-tă-ți-te				complete
+computer	noun:n.n._-e	n	k.words.computer.noun.1		computer
+comun	adj:a._-ă-i-e				common
+conecta	verb:v.az		k.actions.verb.connect.connect		connect
+conține	verb:irregular		k.words.contain.verb.1	pres=conțin conții conține conținem conțineți conțin	contain
+conținut	noun:n.n._-uri	n	k.words.content.noun.1		content
+contur	noun:n.n._-uri	n	k.words.outline.noun.1		outline
+coordonată	noun:n.f.ă-e	f	k.words.coordinate.noun.1		coordinate
+copac	noun:n.m._-i	m	k.words.tree.noun.1		tree
+copia	verb:v.az		k.actions.verb.copy.copy		copy
+copie	noun:n.f.ie-ii	f	k.words.copy.noun.1		copy
+copil	noun:irregular	m	k.words.child.noun.1	pl=copii	child
+corect	adj:a.t-tă-ți-te				correct
+corp	noun:n.n._-uri	n	k.words.body.noun.1		body
+costa	verb:irregular		k.words.cost.verb.1	pres=cost costi costă costăm costați costă	cost
+covor	noun:n.n.r-are	n	k.words.carpet.noun.1		carpet
+crede	verb:irregular		k.words.believe.verb.1	pres=cred crezi crede credem credeți cred	believe
+creion	noun:n.n.n-ane	n	k.words.pencil.noun.1		pencil
+crește	verb:irregular		k.words.grow.verb.1	pres=cresc crești crește creștem creșteți cresc	grow
+crocodil	noun:n.m._-i	m	k.words.crocodile.noun.1		crocodile
+cub	noun:n.n._-uri	n	k.words.cube.noun.1		cube
+culoare	noun:n.f.are-ri	f	k.words.color.noun.1		color
+cumpăra	verb:v.a		k.words.buy.verb.1		buy
+cumpărături	noun:n.f._-_	f	k.words.shopping.noun.1		shopping
+cunoaște	verb:irregular		k.words.know.verb.1	pres=cunosc cunoști cunoaște cunoaștem cunoașteți cunosc	know
+cuptor	noun:n.n.r-are	n	k.words.oven.noun.1		oven
+curat	adj:a.t-tă-ți-te				clean
+curăța	verb:v.a		k.words.clean.verb.1		clean
+cursiv	adj:a._-ă-i-e				italic
+cușcă	noun:irregular	f	k.words.cage.noun.1	pl=cuști	cage
+cuvânt	noun:irregular	n	k.words.word.noun.1	pl=cuvinte	word
+cvartă	noun:n.f.ă-e	f	k.words.fourth.noun.1		fourth
+cvintă	noun:n.f.ă-e	f	k.words.fifth.noun.1		fifth

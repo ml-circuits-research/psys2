@@ -1,0 +1,9 @@
+# w.lang.ro dictionary, lemmas starting with h: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+haină	noun:n.f.ă-e	f	k.words.coat.noun.1		coat
+hartă	noun:irregular	f	k.words.map.noun.1	pl=hărți	map
+hârtie	noun:n.f.ie-ii	f	k.words.paper.noun.1		paper
+hertz	noun:n.m._-i	m			hertz
+hexagon	noun:n.n.n-ane	n	k.words.hexagon.noun.1		hexagon
+hrăni	verb:v.is		k.words.feed.verb.1		feed

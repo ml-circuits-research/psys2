@@ -1,0 +1,4 @@
+# w.lang.ro dictionary, lemmas starting with w: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+weekend	noun:n.n._-uri	n	k.words.weekend.noun.1		weekend

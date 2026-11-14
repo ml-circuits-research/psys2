@@ -1,0 +1,46 @@
+# w.lang.ro dictionary, lemmas starting with a: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+abțibild	noun:n.n._-uri	n	k.words.sticker.noun.1		sticker
+accesoriu	noun:irregular	n	k.words.accessory.noun.1	pl=accesorii	accessory
+același	adj:irregular			forms=același,aceeași,aceiași,aceleași	same
+acoperi	verb:irregular		k.words.cover.verb.1	pres=acopăr acoperi acoperă acoperim acoperiți acoperă	cover
+acoperiș	noun:n.n._-uri	n	k.words.roof.noun.1		roof
+acoperit	adj:a.t-tă-ți-te				covered
+acord	noun:n.n._-uri	n	k.words.chord.noun.1		chord
+acorduri	noun:n.n._-_	n			chords
+acțiune	noun:n.f.e-i	f	k.words.action.noun.1		action
+adăuga	verb:irregular		k.actions.verb.make.add	pres=adaug adaugi adaugă adăugăm adăugați adaugă	add
+adevărat	adj:a.t-tă-ți-te				true
+aduna	verb:v.a		k.actions.verb.make.add		add
+aer	noun:n.n._-_	n	k.words.air.noun.1		air
+ajuta	verb:v.a		k.words.help.verb.1		help
+ajutor	noun:n.n._-_	n	k.words.help.noun.1		help
+alb	adj:a._-ă-i-e		k.colours.psys2.white		white
+albastru	adj:irregular		k.colours.psys2.blue	forms=albastru,albastră,albaștri,albastre	blue
+albină	noun:n.f.ă-e	f	k.words.bee.noun.1		bee
+album	noun:n.n._-e	n	k.words.album.noun.1		album
+alege	verb:irregular		k.actions.verb.pick.choose	pres=aleg alegi alege alegem alegeți aleg	choose
+alerga	verb:irregular		k.words.run.verb.1	pres=alerg alergi aleargă alergăm alergați aleargă	run
+alimente	noun:n.f._-_	f			groceries
+amesteca	verb:v.a		k.words.mix.verb.1		mix
+aminti	verb:v.is		k.words.remind.verb.1		remind
+amuzant	adj:a.t-tă-ți-te				funny
+an	noun:n.m._-i	m	k.words.year.noun.1		year
+animal	noun:n.n._-e	n	k.words.animal.noun.1		animal
+anotimp	noun:n.n._-uri	n	k.words.season.noun.1		season
+antenă	noun:n.f.ă-e	f	k.words.antenna.noun.1		antenna
+anterior	adj:irregular			forms=anterior,anterioară,anteriori,anterioare	previous
+anula	verb:v.az		k.actions.verb.undo.undo		undo
+apă	noun:n.f.ă-e	f	k.words.water.noun.1		water
+apărea	verb:irregular		k.words.appear.verb.1	pres=apar apari apare apărem apăreți apar	appear
+apus	noun:n.n._-uri	n	k.words.sunset.noun.1		sunset
+arăta	verb:irregular		k.actions.verb.change.show	pres=arăt arăți arată arătăm arătați arată	show
+asculta	verb:v.a		k.words.listen.verb.1		listen
+ascunde	verb:irregular		k.actions.verb.change.hide	pres=ascund ascunzi ascunde ascundem ascundeți ascund	hide
+ascuțit	adj:a.t-tă-ți-te				sharp
+aspect	noun:n.n._-e	n	k.words.look.noun.1		look
+autobuz	noun:n.n._-e	n	k.words.bus.noun.1		bus
+auzi	verb:irregular		k.words.hear.verb.1	pres=aud auzi aude auzim auziți aud	hear
+avatar	noun:irregular	m	k.words.avatar.noun.1	pl=avatare	avatar
+avea	verb:irregular		k.words.have.verb.1	pres=am ai are avem aveți au	have

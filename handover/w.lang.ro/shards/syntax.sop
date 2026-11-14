@@ -1,0 +1,76 @@
+# w.lang.ro/shards/syntax: the frames of the acts in Romanian word order. `frame` is the w.lang.en frame (the SAME act and roles); `part` lines say how Romanian orders and inflects them:
+#  - the verb comes first in a request (imperative 2sg: desenează, fă, mută, șterge, adaugă, pune, arată); with a polite lead-in the verb is a subjunctive ("poți să desenezi", "aș vrea să muți")
+#  - the clitic is attached to the verb with a hyphen: fă-ți ochii verzi, arată-mi un robot, pune-ți o pălărie (a dative of the user or of the avatar: "your" in English)
+#  - an adjective FOLLOWS the noun and agrees in gender, number and case: o casă roșie, doi copaci verzi, casele roșii; a colour as the complement of "fă" is the object's adjective (fă casa roșie = make the house red)
+#  - a definite noun carries the enclitic article (casa, copacul); a bare singular count noun after a preposition is read as definite (în lac = in the lake); the genitive follows a noun that needs it (capitala Franței, deasupra lacului)
+#  - negation: "nu" directly before the verb (nu muta casa = do not move the house); a negative answer "nu, verde" corrects the last colour
+#  - a question keeps the word order of the statement: the question word first (câte picioare are un păianjen, care este capitala Franței), the subject after the verb in "are"/"este" questions
+#  - possession and quantity as "has": "Ana are 8 creioane" = Ana has 8 pencils; a number above 19 takes "de" (20 de creioane); doi/două agree with the noun's gender
+#  - coordination: "și", "sau", "iar" (and, or, whereas); "una verde" is one-anaphora (a green one): the pronoun "una" stands for the noun of the first conjunct
+#  - ellipsis and corrections: "mai sus" / "mai jos" (higher / lower) and "și mai sus" (even higher) continue the last move; "nu prima casă, cea din mijloc" is a correction of the object
+# source: hand-core 1; PSys2 src/translate/phrases.commands.ro-en.mjs (the command frames of the rules translator) and the frames of src/translate/grammar-ro.mjs
+# license: CC0-1.0
+
+# ---- requests ----
+@w.lang.ro.frame.make w.lang.ro.frame name=ro.make frame=acts.make act=make role=thing priority=10 example="Desenează o casă roșie." core.source="hand-core 1"
+@w.lang.ro.part.make.1 w.lang.ro.part frame=ro.make at=1 is=lead phrase=lead.polite optional=yes core.source="hand-core 1"
+@w.lang.ro.part.make.2 w.lang.ro.part frame=ro.make at=2 is=verb role=act mood=imperative core.source="hand-core 1"
+@w.lang.ro.part.make.3 w.lang.ro.part frame=ro.make at=3 is=det optional=yes core.source="hand-core 1"
+@w.lang.ro.part.make.4 w.lang.ro.part frame=ro.make at=4 is=role role=thing case=nomacc def=any core.source="hand-core 1"
+@w.lang.ro.part.make.5 w.lang.ro.part frame=ro.make at=5 is=adj role=thing agrees_with=thing optional=yes core.source="hand-core 1"
+@w.lang.ro.frame.make_place w.lang.ro.frame name=ro.make.place frame=acts.make.place act=make role=thing role=rel role=place priority=12 example="Desenează o casă lângă un copac." core.source="hand-core 1"
+@w.lang.ro.part.make_place.1 w.lang.ro.part frame=ro.make.place at=1 is=verb role=act mood=imperative core.source="hand-core 1"
+@w.lang.ro.part.make_place.2 w.lang.ro.part frame=ro.make.place at=2 is=role role=thing case=nomacc def=any core.source="hand-core 1"
+@w.lang.ro.part.make_place.3 w.lang.ro.part frame=ro.make.place at=3 is=prep role=rel core.source="hand-core 1"
+@w.lang.ro.part.make_place.4 w.lang.ro.part frame=ro.make.place at=4 is=role role=place case=acc def=any core.source="hand-core 1"
+@w.lang.ro.frame.change_value w.lang.ro.frame name=ro.change.value frame=acts.change.value act=change role=thing role=value priority=11 example="Fă casa roșie." core.source="hand-core 1"
+@w.lang.ro.part.change_value.1 w.lang.ro.part frame=ro.change.value at=1 is=verb role=act mood=imperative core.source="hand-core 1"
+@w.lang.ro.part.change_value.2 w.lang.ro.part frame=ro.change.value at=2 is=role role=thing case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.part.change_value.3 w.lang.ro.part frame=ro.change.value at=3 is=role role=value agrees_with=thing core.source="hand-core 1"
+@w.lang.ro.frame.place w.lang.ro.frame name=ro.place frame=acts.place act=place role=thing role=rel role=place priority=11 example="Mută casa lângă copac." core.source="hand-core 1"
+@w.lang.ro.part.place.1 w.lang.ro.part frame=ro.place at=1 is=verb role=act mood=imperative core.source="hand-core 1"
+@w.lang.ro.part.place.2 w.lang.ro.part frame=ro.place at=2 is=role role=thing case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.part.place.3 w.lang.ro.part frame=ro.place at=3 is=prep role=rel core.source="hand-core 1"
+@w.lang.ro.part.place.4 w.lang.ro.part frame=ro.place at=4 is=role role=place case=acc def=any core.source="hand-core 1"
+@w.lang.ro.frame.remove w.lang.ro.frame name=ro.remove frame=acts.remove act=remove role=thing priority=10 example="Șterge casa." core.source="hand-core 1"
+@w.lang.ro.part.remove.1 w.lang.ro.part frame=ro.remove at=1 is=verb role=act mood=imperative core.source="hand-core 1"
+@w.lang.ro.part.remove.2 w.lang.ro.part frame=ro.remove at=2 is=role role=thing case=nomacc def=yes core.source="hand-core 1"
+
+# ---- questions ----
+@w.lang.ro.frame.ask_what_is w.lang.ro.frame name=ro.ask.what.is frame=acts.ask.what.is act=ask role=thing priority=10 example="Ce este un cort?" core.source="hand-core 1"
+@w.lang.ro.part.ask_what_is.1 w.lang.ro.part frame=ro.ask.what.is at=1 is=wh phrase=ce core.source="hand-core 1"
+@w.lang.ro.part.ask_what_is.2 w.lang.ro.part frame=ro.ask.what.is at=2 is=word phrase=copula core.source="hand-core 1"
+@w.lang.ro.part.ask_what_is.3 w.lang.ro.part frame=ro.ask.what.is at=3 is=role role=thing case=nomacc def=any core.source="hand-core 1"
+@w.lang.ro.frame.ask_where w.lang.ro.frame name=ro.ask.where frame=acts.ask.where act=ask role=thing priority=10 example="Unde este Franța?" core.source="hand-core 1"
+@w.lang.ro.part.ask_where.1 w.lang.ro.part frame=ro.ask.where at=1 is=wh phrase=unde core.source="hand-core 1"
+@w.lang.ro.part.ask_where.2 w.lang.ro.part frame=ro.ask.where at=2 is=word phrase=copula core.source="hand-core 1"
+@w.lang.ro.part.ask_where.3 w.lang.ro.part frame=ro.ask.where at=3 is=role role=thing case=nomacc def=any core.source="hand-core 1"
+@w.lang.ro.frame.ask_count_attr w.lang.ro.frame name=ro.ask.count.attr frame=acts.ask.count.attr act=ask role=attribute role=thing priority=10 example="Câte picioare are un păianjen?" core.source="hand-core 1"
+@w.lang.ro.part.ask_count_attr.1 w.lang.ro.part frame=ro.ask.count.attr at=1 is=wh phrase=câte core.source="hand-core 1"
+@w.lang.ro.part.ask_count_attr.2 w.lang.ro.part frame=ro.ask.count.attr at=2 is=role role=attribute case=nomacc def=no agrees_with=wh core.source="hand-core 1"
+@w.lang.ro.part.ask_count_attr.3 w.lang.ro.part frame=ro.ask.count.attr at=3 is=verb role=has mood=indicative core.source="hand-core 1"
+@w.lang.ro.part.ask_count_attr.4 w.lang.ro.part frame=ro.ask.count.attr at=4 is=role role=thing case=nomacc def=any core.source="hand-core 1"
+@w.lang.ro.frame.ask_count_at w.lang.ro.frame name=ro.ask.count.at frame=acts.ask.count.at act=ask role=thing role=place priority=10 example="Câți invitați sunt la masa 1?" core.source="hand-core 1"
+@w.lang.ro.frame.ask_capital w.lang.ro.frame name=ro.ask.capital frame=acts.ask.what.is act=ask role=attribute role=thing priority=12 example="Care este capitala Franței?" core.source="hand-core 1"
+@w.lang.ro.part.ask_capital.1 w.lang.ro.part frame=ro.ask.capital at=1 is=wh phrase=care core.source="hand-core 1"
+@w.lang.ro.part.ask_capital.2 w.lang.ro.part frame=ro.ask.capital at=2 is=word phrase=copula core.source="hand-core 1"
+@w.lang.ro.part.ask_capital.3 w.lang.ro.part frame=ro.ask.capital at=3 is=role role=attribute case=nomacc def=yes core.source="hand-core 1"
+@w.lang.ro.part.ask_capital.4 w.lang.ro.part frame=ro.ask.capital at=4 is=role role=thing case=gendat def=any core.source="hand-core 1"
+@w.lang.ro.frame.ask_calc w.lang.ro.frame name=ro.ask.calc frame=acts.data.ask.calc act=ask role=a role=op role=b priority=10 example="Cât face 3 plus 4?" core.source="hand-core 1"
+@w.lang.ro.part.ask_calc.1 w.lang.ro.part frame=ro.ask.calc at=1 is=wh phrase=cât core.source="hand-core 1"
+@w.lang.ro.part.ask_calc.2 w.lang.ro.part frame=ro.ask.calc at=2 is=verb role=act mood=indicative core.source="hand-core 1"
+@w.lang.ro.part.ask_calc.3 w.lang.ro.part frame=ro.ask.calc at=3 is=role role=a core.source="hand-core 1"
+@w.lang.ro.part.ask_calc.4 w.lang.ro.part frame=ro.ask.calc at=4 is=word role=op core.source="hand-core 1"
+@w.lang.ro.part.ask_calc.5 w.lang.ro.part frame=ro.ask.calc at=5 is=role role=b core.source="hand-core 1"
+
+# ---- realisation templates: an act and its roles said in Romanian (generation direction of the same frames) ----
+# `{thing}` is the filler in the case and definiteness the frame part asks for; `{value@thing}` an adjective agreeing with the thing; `{rel}` the preposition of the relation and `{place:case=acc}` the place in the case it governs.
+@w.lang.ro.template.make w.lang.ro.template act=make shape=bare text="desenează {thing:def=no}" core.source="hand-core 1"
+@w.lang.ro.template.make_value w.lang.ro.template act=make shape=value text="desenează {thing:def=no} {value@thing}" core.source="hand-core 1"
+@w.lang.ro.template.make_place w.lang.ro.template act=make shape=place text="desenează {thing:def=no} {rel} {place:case=acc}" core.source="hand-core 1"
+@w.lang.ro.template.change_value w.lang.ro.template act=change shape=value text="fă {thing:def=yes} {value@thing}" core.source="hand-core 1"
+@w.lang.ro.template.place w.lang.ro.template act=place shape=place text="mută {thing:def=yes} {rel} {place:case=acc}" core.source="hand-core 1"
+@w.lang.ro.template.remove w.lang.ro.template act=remove shape=bare text="șterge {thing:def=yes}" core.source="hand-core 1"
+@w.lang.ro.template.ask_capital w.lang.ro.template act=ask shape=capital text="care este capitala {thing:case=gendat}?" core.source="hand-core 1"
+@w.lang.ro.template.ask_calc w.lang.ro.template act=ask shape=calc text="cât face {a} {op} {b}?" core.source="hand-core 1"
+@w.lang.ro.template.done_make w.lang.ro.template act=reply.done.make shape=bare text="Am desenat {thing:def=no}." core.source="hand-core 1"

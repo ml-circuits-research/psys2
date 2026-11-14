@@ -1,0 +1,35 @@
+# w.lang.ro dictionary, lemmas starting with t: lemma<TAB>pos:class<TAB>gender<TAB>sense<TAB>forms-if-listed (irregular: the forms no paradigm covers)
+# source: PSys2 src/translate/lexicon.ro-en.mjs (hand-written for the app; CC0-1.0), lemmas the app's Romanian sets need
+# sense: a k.words / k.colours sense id or a k.actions verb id; empty = no sense in the catalog yet (the English gloss in the last column)
+tab	noun:n.n._-uri	n	k.words.tab.noun.1		tab
+tabel	noun:n.n._-e	n	k.words.table.noun.1		table
+tablă	noun:n.f.ă-e	f	k.words.board.noun.1		board
+tablou	noun:n.n._-ri	n	k.words.picture.noun.1		picture
+tăia	verb:irregular		k.actions.verb.take_apart.cut	pres=tai tai taie tăiem tăiați taie	cut
+țară	noun:irregular	f	k.words.country.noun.1	pl=țări	country
+tare	adj:irregular			forms=tare,tare,tari,tari	hard
+tată	noun:irregular	m	k.words.father.noun.1	pl=tați	father
+temă	noun:n.f.ă-e	f	k.words.homework.noun.1		homework
+tempo	noun:n.n._-uri	n	k.words.tempo.noun.1		tempo
+termina	verb:v.a		k.words.finish.verb.1		finish
+țestoasă	noun:n.f.ă-e	f	k.words.turtle.noun.1		turtle
+text	noun:n.n._-e	n	k.words.text.noun.1		text
+timp	noun:n.n._-_	n	k.words.time.noun.1		time
+ține	verb:irregular		k.words.hold.verb.1	pres=țin ții ține ținem țineți țin	hold
+tip	noun:n.n._-uri	n	k.words.type.noun.1		type
+titlu	noun:n.n._-ri	n	k.words.heading.noun.1		heading
+toamnă	noun:n.f.ă-e	f	k.words.autumn.noun.1		autumn
+tonalitate	noun:irregular	f	k.words.key.noun.1	pl=tonalități	key
+tort	noun:n.n._-uri	n	k.words.cake.noun.1		cake
+total	noun:n.n._-uri	n	k.words.total.noun.1		total
+total	adj:a._-ă-i-e				total
+trăi	verb:irregular		k.words.live.verb.1	pres=trăiesc trăiești trăiește trăim trăiți trăiesc	live
+transforma	verb:v.az		k.actions.verb.change.turn		turn
+treaptă	noun:irregular	f	k.words.step.noun.1	pl=trepte	step
+trebui	verb:irregular			pres=trebuie trebuie trebuie trebuie trebuie trebuie	must
+trece	verb:irregular		k.words.pass.verb.1	pres=trec treci trece trecem treceți trec	pass
+tren	noun:n.n._-uri	n	k.words.train.noun.1		train
+trist	adj:irregular			forms=trist,tristă,triști,triste	sad
+triunghi	noun:n.n._-uri	n	k.words.triangle.noun.1		triangle
+tunsoare	noun:n.f.are-ri	f	k.words.haircut.noun.1		haircut
+turn	noun:n.n._-uri	n	k.words.rook.noun.1		rook
