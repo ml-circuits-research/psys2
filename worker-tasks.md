@@ -3954,3 +3954,22 @@ What goes in either design: for each **world**, the normalized words it answers 
 - **A: Bloom filters**, one per world and one per catalog shard, about 10 bits per entry (1% false positives); a false positive costs one extra fetch. Small and simple; cannot list words (no help for spelling correction).
 - **B: an exact index split by prefix**: the current `vocab.json` (word → shard ids) cut into buckets by the first two letters, each bucket fetched on demand and cached by hash; plus the list of known words is what the spelling corrector needs anyway. No false positives; a bucket is fetched once per prefix.
 Build both (they are small), measure on the owner logs, the operational set and the Talk questions: bytes fetched at boot and per turn, fetches per turn, false negatives (a needed shard not fetched), false positives, and the spelling corrector's needs. Choose by the numbers; a mix (A for worlds, B for knowledge) is acceptable.
+
+## Reviewer 2026-11-14 06:00 — LIVE-STATE INVARIANT (owner's avatar bug) into the smoke suite; NAMES for the kinds of worlds
+
+**Owner's bug:** on the Avatar tab, "wink", then another expression, then "wink" again answers that the avatar is already winking, while the picture shows it is not. The live world's state and what the view shows disagree, and "already X" was answered from stale state.
+**General invariant, all worlds on schema + acts and the rest, both reasoners, in the smoke suite:**
+1. **Round trip A → B → A**: for each attribute or mode of a live world (expression, colour, size, place, layer, chart type, map zoom, editor style …), set A, set B, set A again: the third request changes the state back to A (it is not refused as "already A"), and the view's rendered state equals the live world's state after each step.
+2. **"Already" only when true**: any reply that says a thing already has a value is checked against the current state of the live world.
+3. **Undo / redo of the round trip** gives B, then A.
+4. **Rendered = state**: a check that reads the view's model (what is drawn) and compares it with the world state after every turn of the invariant sweep.
+Generate the cases from the schemas (every attribute with two values) rather than writing them per world; find the cause of the avatar bug (an expression kept as an overlay outside the state? a second copy of the face?) and fix it in general.
+
+**Names for the three kinds of worlds (owner asked; reviewer proposal, to be used in every repository and in the library docs):**
+1. **world schema** — what a kind of world is: its kinds of things, attributes, value types, acts, limits, rules and the words for them; no particular things. Reusable; lives in sop-knowledge-worlds as `w.*` (seating plan, timeline, list, and the schemas of the demo tabs once general). In the library: `std.schema`.
+2. **knowledge world** — facts about the world at large (animals, places, colours, English grammar), true for everyone, no session state; lives in sop-knowledge-worlds as `k.*` (and `w.lang.en` is a knowledge world about a language).
+3. **live world** — one running instance of a world schema in a session: the things the user made, their current values, the focus, the history and undo, temporary and particular; it reads knowledge worlds and follows its schema. A tab shows a live world through a **view**.
+Plus **library modules** (`std.*`: acts, fill, focus, relations, turn, know, grammar): mechanisms, not worlds.
+In Romanian (for the owner): schema lumii, lume de cunoaștere, lume vie.
+
+Use these names in specs, docs, the system map, the landing table and the code comments you touch (no mass renaming of code identifiers needed): tab worlds become "live worlds shown in views", their schemas are world schemas (to move to sop-knowledge-worlds as `w.*` when general).
