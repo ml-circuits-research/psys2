@@ -29,7 +29,7 @@ async function setup() {
     return JSON.parse(text);
   };
   const bag = (t) => new Set([...rules.messageBag(t), ...wordIdx.queryWords(t)]);
-  ctx = { out, url, index, createBundleLoader, createEngine, fetchJson, fetched, failing, bag, absModule: (p) => url(p) };
+  ctx = { wordIdx, out, url, index, createBundleLoader, createEngine, fetchJson, fetched, failing, bag, absModule: (p) => url(p) };
   return ctx;
 }
 test.after(async () => { if (ctx) await rm(ctx.out, { recursive: true, force: true }); });
@@ -42,26 +42,32 @@ const lazyEngine = async (c, tabWorld) => {
   await wl.bundles(start); start.forEach((i) => loaded.add(i));
   const engine = await c.createEngine({ loader: c.createBundleLoader(wl.bundleOf(start, c.absModule)) });
   let session = engine.createSession({ language: 'en' });
-  const state = { engine, wl, loaded, get session() { return session; } };
+  const snaps = new Map();   // undo id -> snapshot (the worker's `snaps`)
+  const state = { engine, wl, loaded, snaps, get session() { return session; } };
   /** What the worker does (docs/webchat/ui/engine-worker.mjs ensureWorlds): fetch, replace the world set, give the session its state and memory back. A failed fetch changes nothing. */
   state.ensure = async (ids) => {
     const want = wl.closure([...ids]);
     const missing = [...want].filter((i) => !loaded.has(i));
     if (!missing.length) return [];
     try { await wl.bundles(want); } catch { return []; }
-    const st = structuredClone(session.state()), mem = session.memoryJSON();
     await engine.reload(c.createBundleLoader(wl.bundleOf([...loaded, ...missing], c.absModule)));
+    const st = structuredClone(session.state()), mem = session.memoryJSON();   // read after the awaits: what the page set while the worlds loaded is kept
+    const old = session, portable = [...snaps].map(([k, sn]) => [k, old.portableSnapshot(sn)]);
     missing.forEach((i) => loaded.add(i));
     session = engine.createSession({ language: 'en' });
-    session.isession.state = st; session.restoreMemory(mem);
+    session.isession.state = { ...session.isession.state, ...st }; session.restoreMemory(mem);
+    snaps.clear(); for (const [k, rec] of portable) snaps.set(k, session.adoptSnapshot(rec));
     return missing;
   };
-  const incomplete = (r) => !r.segments?.length || r.segments.some((x) => x.unparsed || x.corrections?.length || x.ignored?.length) || (r.statuses ?? []).some((x) => x !== 'supported');
+  const incomplete = (r) => c.wordIdx.readingIncomplete(r);
   state.send = async (text) => {
     const plan = await wl.plan(text);
     await state.ensure(plan.ids);
     const snap = session.snapshot();
+    snaps.set(state.nextId = (state.nextId ?? 0) + 1, snap);
     let r = await session.send(text, { undo: snap });
+    const lacking = wl.ofActions(session.takeMissed()).filter((i) => !loaded.has(i));   // an action of a world that is not loaded: load it, read again (the worker does the same)
+    if (lacking.length) { session.restore(snap); await state.ensure(lacking); r = await session.send(text); }
     if (incomplete(r) && loaded.size < wl.ids().length) {
       session.restore(snap);
       const added = await state.ensure(wl.ids());
@@ -119,7 +125,7 @@ test('the lazy engine reads like the full engine: complete readings directly, in
   const fs_ = full.createSession({ language: 'en' });
   const lazy = await lazyEngine(c, 'ui.avatar');
   const startSize = lazy.loaded.size;
-  for (const text of ['hello', 'What is 7 plus 5?', 'open the map', 'what is the weather today', 'How many legs does a spider have?', 'put a hat on the avatar']) {
+  for (const text of ['hello', 'What is 7 plus 5?', 'open the map', 'what is the weather today', 'How many legs does a spider have?', 'put a hat on the avatar', 'what is the capital of Japan then how many days are in a week', 'I want to play hangman', 'what can you do', 'hi im Ben']) {
     const want = await fs_.send(text), got = await lazy.send(text);
     assert.equal(got.text, want.text, `"${text}"`);
   }
@@ -138,4 +144,53 @@ test('a lazy fetch that fails never changes a reading: the engine reads with the
     }
     assert.equal(a.loaded.size, b.loaded.size, 'nothing was added by the failed fetches');
   } finally { c.failing.clear(); }
+});
+
+test('UNDO AFTER A RELOAD: the snapshots of earlier turns survive a world load (draw, a message that loads another world, undo takes back the drawing)', async () => {
+  const c = await setup();
+  const lz = await lazyEngine(c, 'ui.avatar');
+  const scene = () => (lz.session.state()['art.draw']?.objects ?? []).map((o) => o.kind).join(',');
+  await lz.send('open the drawing board');
+  await lz.send('draw a house');
+  const drawId = lz.nextId;
+  assert.equal(scene(), 'house');
+  const before = lz.loaded.size;
+  await lz.send('open the map');           // loads geo.map: the engine is reloaded and the session made again
+  assert.ok(lz.loaded.size > before, 'a world was loaded');
+  assert.equal(scene(), 'house', 'the drawing stays');
+  const snap = lz.snaps.get(drawId);
+  assert.ok(snap, 'the snapshot of the drawing turn is still there');
+  lz.session.restore(snap);                // what the worker\'s undo does with the turn\'s snapshot
+  assert.equal(scene(), '', 'the page undo of the drawing turn takes the drawing back');
+  // and the dialogue-level undo (the timeline travels with the memory)
+  const lz2 = await lazyEngine(c, 'ui.avatar');
+  await lz2.send('open the drawing board'); await lz2.send('draw a house');
+  const n0 = lz2.loaded.size;
+  await lz2.send('How many legs does a spider have?');   // a question that loads worlds
+  assert.ok(lz2.loaded.size > n0, 'worlds were loaded');
+  const u = await lz2.send('undo');
+  assert.match(u.text, /undid/i);
+  assert.deepEqual(lz2.session.state()['art.draw']?.objects ?? [], [], 'the chat "undo" takes the drawing back across the reload');
+});
+
+test('a world loaded later has its initial state, as in a full start (the old state is laid over the new session, not put in place of it)', async () => {
+  const c = await setup();
+  const wl = createWorldLoader({ indexHash: null, fetchJson: c.fetchJson, bag: c.bag });
+  await wl.init(); await wl.bundles(wl.ids());
+  const full = (await c.createEngine({ loader: c.createBundleLoader(wl.bundleOf(wl.ids(), c.absModule)) })).createSession({ language: 'en' });
+  const lz = await lazyEngine(c, 'ui.avatar');
+  await lz.ensure(wl.ids());
+  assert.deepEqual(Object.keys(lz.session.state()).sort(), Object.keys(full.state()).sort(), 'every world has its state after loading every world');
+  assert.deepEqual(lz.session.state().talk, full.state().talk);
+});
+
+test('a state the page sets while a world is loading is kept (a tab click during the load of the tab world)', async () => {
+  const c = await setup();
+  const lz = await lazyEngine(c, 'ui.avatar');
+  const loading = lz.ensure(['art.draw']);
+  lz.session.setWorldState('ui.shell', { activeTab: 'draw' });   // the click arrives while the bundles are fetched
+  await loading;
+  assert.equal(lz.session.state()['ui.shell'].activeTab, 'draw');
+  const r = await lz.send('Start a new page.');
+  assert.match(r.text, /fresh sheet/i);
 });

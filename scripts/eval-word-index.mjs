@@ -21,7 +21,7 @@ import { buildWorldIndex, ALWAYS as ALWAYS0 } from './lib/world-index-build.mjs'
 const ALWAYS = [...ALWAYS0, ...(process.env.WI_ALWAYS_PLUS ? process.env.WI_ALWAYS_PLUS.split(',') : [])];   // experiment: more always-loaded worlds
 import { invert } from './lib/world-words.mjs';
 import { messageBag } from '../src/formalizer/rules/index.mjs';
-import { queryWords, bloomHas, spellingCandidates, bucketOf } from '../src/worlds/word-index.mjs';
+import { queryWords, bloomHas, spellingCandidates, bucketOf, readingIncomplete } from '../src/worlds/word-index.mjs';
 import { visibleState } from './lib/visible-state.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -61,6 +61,7 @@ const subsetEngine = async (ids) => {
   if (!engines.has(key)) { if (engines.size >= 24) engines.delete(engines.keys().next().value); const keep = new Set(ids); engines.set(key, createEngine({ loader: { ...loader, listWorlds: async () => (await loader.listWorlds()).filter((i) => keep.has(i)) } })); }
   return engines.get(key);
 };
+const actionOwner = new Map(full.set.list().flatMap((w) => (w.operations ?? []).filter((o) => o.semantics === 'action' && o.action).map((o) => [o.action, w.id])));   // action -> world: a turn that asked for an action nobody loaded is read again (lazy loading)
 const closure = (set, ids) => { const out = new Set(); for (const id of ids) for (const x of set.available(id)) out.add(x); for (const id of [...out]) { const w = set.get(id); for (const x of w?.reads ?? []) if (set.get(x)) for (const y of set.available(x)) out.add(y); } return out; };
 
 const useKeys = process.argv.includes('--keys');   // the index of the patterns' prefilter keys (sound, but it loads almost every world); default: the words of the worlds, a word of more than T worlds says nothing
@@ -117,9 +118,10 @@ async function play(engine, c, only = null) {
   let prev = vis();
   for (const m of [...c.setup, c.message]) {
     let r; try { r = await s.send(m); } catch (e) { outs.push({ t: `ERR ${e.message}`, st: {}, ch: [], eff: '' }); continue; }
+    if (only) for (const a of s.takeMissed()) if (a === '*worlds' ? only.size < allIds.length : actionOwner.get(a) && !only.has(actionOwner.get(a))) esc = true;
     const now = vis(), changed = Object.keys(now).filter((k) => now[k] !== prev[k]).sort(); prev = now;
     outs.push({ t: r.text, st: now, ch: changed, eff: (r.effects ?? []).map((e) => e.name).join(',') });
-    if (!r.segments?.length || r.segments.some((x) => x.unparsed || x.corrections?.length || x.ignored?.length || (process.env.WI_CONTESTED && (x.routing?.contested || (process.env.WI_CONTESTED === '2' && x.routing?.runnerUp)))) || (r.statuses ?? []).some((x) => x !== 'supported' && !(process.env.WI_MISSING_OK && x === 'missing'))) esc = true;
+    if (readingIncomplete(r) || (process.env.WI_CONTESTED && r.segments?.some((x) => x.routing?.contested || (process.env.WI_CONTESTED === '2' && x.routing?.runnerUp)))) esc = true;
     for (const sg of r.trace?.segments ?? []) {
       if (sg.match?.worldId) used.add(sg.match.worldId);
       if (sg.routing?.winner?.worldId) used.add(sg.routing.winner.worldId);
@@ -136,7 +138,7 @@ for (const c of sample) truth.set(c.id, await play(full, c));
 console.log(`full set played in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 
 const results = [];
-for (const design of designs) for (const T of Ts) for (const spell of design === 'B' ? [true, false] : [false]) {
+for (const design of designs) for (const T of Ts) for (const spell of design === 'B' ? (process.argv.includes('--nospell') ? [false] : [true, false]) : [false]) {
   const name = `${design}${spell ? '+spell' : ''} T=${T}`;
   const row = { name, n: 0, fnBehaviour: 0, fnRaw: 0, escalated: 0, escBytes: 0, fnSuggestOnly: 0, fnStrict: 0, fnStrictOnlyUsed: 0, worlds: 0, bytes: 0, fp: 0, spellMsgs: 0, unknownWords: 0, bucketBytesPerMsg: 0, fnBySrc: {}, escBySrc: {}, nBySrc: {}, fnExamples: [] };
   const seenBuckets = new Set(); let sessionBucketBytes = 0;
@@ -157,7 +159,7 @@ for (const design of designs) for (const T of Ts) for (const spell of design ===
     if (diffS) row.fnRaw++;
     const diff = diffS && !escalated;
     if (diffRaw && !diffS) row.fnSuggestOnly++;
-    if (diff && process.env.WI_DEBUG && row.fnExamples.length < 12) console.log('DIFF', c.message, '\n   got ', got.outs.map((o) => o.t).join(' // ').slice(0, 300), '\n   want', want.outs.map((o) => o.t).join(' // ').slice(0, 300), '\n   loaded', [...ids].filter((i) => !ALWAYS.includes(i)).join(','));
+    if (diff && process.env.WI_DEBUG) console.log('DIFF', `[${c.src}/${c.tab ?? ''}]`, c.message, '\n   got ', got.outs.map((o) => o.t).join(' // ').slice(0, 300), '\n   want', want.outs.map((o) => o.t).join(' // ').slice(0, 300), '\n   loaded', [...ids].filter((i) => !ALWAYS.includes(i)).join(','), '| need', [...want.used].join(','), '| eff', got.outs.map((o) => o.eff).join(';'), '/', want.outs.map((o) => o.eff).join(';'), '| changed', got.outs.map((o) => o.ch.join()).join(';'), '/', want.outs.map((o) => o.ch.join()).join(';'));
     if (diff) { row.fnBehaviour++; row.fnBySrc[c.src] = (row.fnBySrc[c.src] ?? 0) + 1; if (row.fnExamples.length < 12) row.fnExamples.push(`${c.src} [${c.tab ?? ''}] ${c.message}  | need ${[...want.used].join(',')}`); }
     const miss = [...want.used].filter((u) => !ids.has(u) && full.set.get(u));
     const missC = [...want.considered].filter((u) => !ids.has(u) && full.set.get(u));

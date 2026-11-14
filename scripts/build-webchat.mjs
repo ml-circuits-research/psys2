@@ -278,13 +278,16 @@ async function writeWorldIndex({ root, outDir, worldsRoot, bundle, ids, log }) {
     const hash = sha(await readFile(path.join(outDir, 'worlds', id, 'bundle.json'))).slice(0, 10);   // the same string assetHashes gives the file: the worker fetches it as `bundle.json?v=<hash>`
     worlds[id] = { bundle: `worlds/${id}/bundle.json`, hash, label: LABELS[id] ?? id.split('.').at(-1), bytes, imports: w?.imports ?? [], deps: engine.set.available(id), reads: w?.reads ?? [], compose: w?.compose ?? [], tab: w?.tab ? { id: w.tab.id, title: w.tab.title, aliases: w.tab.aliases } : null, title: w?.title ?? id, summary: w?.summaryPhrase ?? null, vendor: (VENDOR_OF[id] ?? []).map((d) => `vendor/${d}/`) };
   }
+  // the actions of the worlds that are not always loaded -> their world: a turn that asked for one nobody loaded (kids.common asks `prof.setName` of user.profile, talk asks `draw.add`) loads the world and is read again
+  const actions = {};
+  for (const w of engine.set.list()) if (!ALWAYS.includes(w.id)) for (const o of w.operations ?? []) if (o.semantics === 'action' && o.action) actions[o.action] = w.id;
   const T = 4;   // a word of more than T worlds never loads one by itself (scripts/eval-word-index.mjs)
   await mkdir(path.join(outDir, 'worlds/words'), { recursive: true });
   const buckets = {};
   for (const [bk, entries] of Object.entries(ix.buckets)) { const txt = JSON.stringify(entries); await writeFile(path.join(outDir, 'worlds/words', `${bk}.json`), txt); buckets[bk] = sha(Buffer.from(txt)).slice(0, 10); }   // bucket -> hash: the worker fetches `words/<bk>.json?v=<hash>`
   const bloomTxt = JSON.stringify(ix.bloom);
   await writeFile(path.join(outDir, 'worlds/words.bloom.json'), bloomTxt);
-  await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify({ version: 2, always: ALWAYS, T, words: { design: 'B', ids: ix.ids, buckets, bloom: { path: 'worlds/words.bloom.json', hash: sha(Buffer.from(bloomTxt)).slice(0, 10) } }, worlds }) + '\n');
+  await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify({ version: 2, always: ALWAYS, T, actions, words: { design: 'B', ids: ix.ids, buckets, bloom: { path: 'worlds/words.bloom.json', hash: sha(Buffer.from(bloomTxt)).slice(0, 10) } }, worlds }) + '\n');
   log?.(`webchat: world index ${ids.length} worlds, ${ix.inv.size} words, ${Object.keys(ix.buckets).length} buckets`);
 }
 

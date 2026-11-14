@@ -52,7 +52,7 @@ test('catalogue: every option has a group, what, when, no internal name in the l
   for (const gone of ['editHead', 'reading', 'fastPath', 'bestEffort', 'routing', 'worldAware', 'reasoner']) assert.ok(!OPTIONS.some((o) => o.id === gone), `${gone} is no option any more`);
   assert.equal(OPTIONS.find((o) => o.id === 'normalizer').default, false);
   assert.match(OPTIONS.find((o) => o.id === 'normalizer').label, /garbled sentences/);
-  assert.deepEqual(EXPERIMENTS.map((x) => x.id), ['routing', 'worldAware', 'reasoner', 'acceptRefused']);
+  assert.deepEqual(EXPERIMENTS.map((x) => x.id), ['routing', 'worldAware', 'reasoner', 'lazyWorlds', 'acceptRefused']);
   assert.ok(!EXPERIMENTS.find((x) => x.id === 'routing').values.some(([v]) => v === 'dispatcher'), 'router A is removed');
   assert.match(defaultsTable(), /\| Reading \| Use the helper model for typos and long sentences \| `true` \|/);
 });
