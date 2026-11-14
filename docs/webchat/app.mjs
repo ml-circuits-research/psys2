@@ -71,10 +71,6 @@ export const TOO_COMPLEX = 'That was too complex for me. Try a shorter sentence.
 export const TOO_LONG = 'That took too long, I stopped it.';
 export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
 export const BUSY_HINT = 'Wait for the answer or press Stop.';
-const EXAMPLES = [
-  'Become a person', 'Let’s play tic tac toe', 'Open the editor and start dictation', 'How many legs does a spider have?',
-  'Tom has 5 apples. He gives 2 to Ana. How many apples does Tom have?',
-];
 const ICON = {
   mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V22h2v-3.08A7 7 0 0 0 19 12h-2Z"/></svg>',
   speaker: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Z"/></svg>',
@@ -138,6 +134,7 @@ export async function mountPsys2(element, options = {}) {
       if (destroyed) return null;
       const holder = h('div', { class: 'p2-tabbody' });
       tabBtns[t.id].panel.append(holder);
+      if (t.id !== 'talk') { const die = h('button', { class: 'p2-btn p2-tabdice', type: 'button', 'aria-label': 'Random command for this tab', title: 'Random command for this tab' }, icon('die')); die.addEventListener('click', () => rollDice(t.id)); tabBtns[t.id].panel.append(die); }   // a tab that fills the screen has its own small dice
       panelUI[t.id] = { ui: t.make(holder, hostApi) };
       panelUI[t.id].ui.update?.(states[t.world]);
       if (lastSummary) panelUI[t.id].ui.setSummary?.(lastSummary);   // the Talk tab made after some turns shows the conversation so far
@@ -236,12 +233,13 @@ export async function mountPsys2(element, options = {}) {
   const avClose = h('button', { class: 'p2-btn-text p2-avpop-close', type: 'button', title: 'Close the avatar', 'aria-label': 'Close the avatar' }, 'Close');
   const avBody = h('div', { class: 'p2-avpop-body' });
   const avPop = h('div', { class: 'p2-avpop', id: 'p2-avpop', role: 'dialog', 'aria-label': 'Avatar', hidden: true }, h('div', { class: 'p2-avpop-head' }, h('strong', {}, 'Avatar'), avClose), avBody);
+  const exBar = h('div', { class: 'p2-exbar', role: 'group', 'aria-label': 'Suggestions', hidden: true });   // RANDOM (spec 25): examples from the session on Talk, the acts that fit the selected thing on the other tabs
   const form = h('form', { class: 'p2-form' }, avBtn, micBtn, speakerBtn, input, dieBtn, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
       h('div', { class: 'p2-tools' }, langSel, gearBtn)),
-    statusEl, progress.element, log, queueEl, dictBar, avPop, form,
+    statusEl, progress.element, log, queueEl, dictBar, avPop, exBar, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
@@ -313,6 +311,7 @@ export async function mountPsys2(element, options = {}) {
       if (active) ui?.show?.();
     }
     syncDebugButton();
+    refreshSuggestions();
     const def = tabDefs.find((t) => t.id === id);
     if (def && !panelUI[id]) makeTab(def);
   }
@@ -515,6 +514,8 @@ export async function mountPsys2(element, options = {}) {
   };
   /** What tab plugins may use: send a command through the language layer, speak, read/patch world state, load assets. */
   const hostApi = {
+    /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
+    sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
     send: (text) => send(String(text), 'chip'),   // ignored (with a hint) while a turn runs
     /** A card or control that moves the person to another tab (a transferred card): logged as a tab opened by a card. */
     openTab: (id) => { userTab(id, 'card'); },
@@ -686,7 +687,7 @@ export async function mountPsys2(element, options = {}) {
     } finally {
       clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker); clearInputStage(); clearTimeout(tn.thinkT); avatarUI?.emit('thinking', { on: false });
       if (typing.msg.isConnected) typing.msg.remove();
-      if (turn === tn) { turn = null; lastTurnEnd = performance.now(); hostStage('idle'); restAvatar(false); }
+      if (turn === tn) { turn = null; lastTurnEnd = performance.now(); hostStage('idle'); restAvatar(false); setTimeout(() => refreshSuggestions(), 0); }
       effectsPending = 0;
       busy = Math.max(0, busy - 1); setStatus(); scrollDown();
       queueMicrotask(() => { if (!turn && !destroyed) drainQueue(); });   // the next waiting message runs now
@@ -1074,16 +1075,31 @@ export async function mountPsys2(element, options = {}) {
   // typing or tapping the field cancels a pending spoken send; the text stays for editing
   on(input, 'input', () => { if (speech?.hasPending()) speech.cancelPending(input.value); });
   on(input, 'pointerdown', () => { if (speech?.hasPending()) speech.cancelPending(input.value || undefined); });
-  // SURPRISE: the die button sends a canonical example as if typed (logged as a button example, not human phrasing); the tab follows through the shell state.
-  let surprisePicker = null;
-  on(dieBtn, 'click', () => {
+  // RANDOM AS A WORLD (spec 25): the dice, the examples and the action buttons are drawn by sopworld std.sample (engine worker op 'sample'): legal in the state of the session, weighted by
+  // recency and novelty, rendered in English and read back. There is no list of examples in the host.
+  const sample = (mode, extra = {}) => (engineClient ? engineClient.call('sample', { mode, tab: view, ...extra }).catch(() => ({ items: [] })) : Promise.resolve({ items: [] }));
+  const sampleItems = (mode, extra) => sample(mode, extra).then((r) => r?.items ?? []);
+  async function rollDice(tab = view) {
     if (turn) { flashHint(BUSY_HINT); return; }
-    const ex = surprisePicker?.next();
-    if (!ex) { flashHint('No examples are available yet.'); return; }
-    // an example is shown on the tab it was recorded for: a short one ("Add a table.", "Add a bullet: milk.") means something else on the drawing tab, which would read it itself
+    const r = await sample('one', { tab });
+    const ex = r?.items?.[0];
+    if (!ex) { flashHint(r?.available === false ? 'The random command needs the sampler library.' : 'No random command is available for this tab yet.'); return; }
+    // a command of another world is shown on that world's tab: a short one ("Add a table.") means something else on the drawing tab, which would read it itself
     if (ex.tab && ex.tab !== 'robot' && tabBtns[ex.tab] && view !== ex.tab) userTab(ex.tab, 'example');
     send(ex.text, 'chip', { example: true });
-  });
+  }
+  on(dieBtn, 'click', () => { rollDice(view); });
+  let sugSeq = 0;
+  /** Talk: 3-4 example commands from the context; another tab: the acts that fit its selected (or newest) thing. Refreshed after every turn and on every tab change. */
+  async function refreshSuggestions() {
+    if (destroyed || !engineClient || options.suggestions === false) return;
+    const my = ++sugSeq, tab = view, talk = tab === 'talk' || !tab;
+    let items = [];
+    try { items = await sampleItems(talk ? 'few' : 'actions', { tab, count: talk ? 4 : 5 }); } catch { items = []; }
+    if (my !== sugSeq || destroyed) return;
+    exBar.replaceChildren(...items.map((it) => h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && it.tab !== 'robot' && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)));
+    exBar.hidden = !items.length;
+  }
   on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); askDrop(); } else if (sendBtn.classList.contains('is-stop')) { e.preventDefault(); stopTurn(); } });
   on(input, 'input', syncSendButton);
   on(input, 'input', () => avatarUI?.emit('typing'));   // MOTION: the person is typing
@@ -1823,15 +1839,6 @@ export async function mountPsys2(element, options = {}) {
   }
   if (destroyed) return { settings, destroy() {} };
 
-  // the pool loads in the background; the die button is ready a moment after the page
-  (async () => {
-    try {
-      const [{ createSurprisePicker }, pool] = await Promise.all([import(new URL('lib/dialog/surprise.mjs', base).href),
-        fetch(assetUrl(base, 'surprise-pool.json')).then((r) => (r.ok ? r.json() : null)).catch(() => null)]);
-      surprisePicker = createSurprisePicker(Array.isArray(pool) && pool.length ? pool : await engineClient.call('candidates'));   // unvalidated fallback: the build writes the validated pool
-    } catch (e) { console.warn('surprise pool unavailable', e); }
-  })();
-
   const known = new Set(engine.worlds().map((w) => w.id));
   for (const t of tabDefs) {
     const { panel } = tabBtns[t.id];
@@ -1889,8 +1896,9 @@ export async function mountPsys2(element, options = {}) {
   checkBrowserTranslator();
 
   if (options.onboarding !== false) {
-    const chips = h('div', { class: 'p2-chips-row' }, EXAMPLES.map((ex) => h('button', { class: 'p2-example', type: 'button', onclick: () => { send(ex, 'chip'); input.focus(); } }, ex)));
+    const chips = h('div', { class: 'p2-chips-row' });   // the welcome examples come from the sampler too, a moment after the page
     addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
+    sampleItems('few', { tab: 'talk', count: 4 }).then((items) => { for (const it of items) chips.append(h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)); }).catch(() => {});
   }
   const handle = {
     engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => showTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },

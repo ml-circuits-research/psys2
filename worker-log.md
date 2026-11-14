@@ -2004,3 +2004,43 @@ Checks: tests run one file at a time; full `npm test` run three times (31 -> 12 
 - Browser host: Talk paragraph slot above the structured list (`app.mjs` -> `summary.paragraph`), Documents buttons Summarise / Compose and the form, all hidden until the adapters are available.
 - Spec 26, `handover/textgen/ASK.md`, questions.md entry. Tests: `tests/textgen.test.mjs`. Measurement (20 compositions, owner-log b/c summaries) BLOCKED until the library ships both functions.
 - 2026-11-14 15:00 amendment (document types): `type` role in `composeRequest`/`docr.compose`, lexicon `doctypes`, patterns for "write a short story", "make a presentation about the moon with 5 sections", "write a scientific article about bees, 3 chapters", Type select in the Documents form; `checkComposition` also requires `procedure` and a matching `type`. Spec 26, ASK, questions.md extended; per-type measurement (5 each) BLOCKED until the library ships.
+
+## 2026-11-14 RANDOM as a world, with sopworld 0.59 `std.sample` (worker)
+**Vendor:** sopworld 0.59.0 (commit 494a5dd, build baf0100991f6, 688381 bytes) byte for byte; LICENSES.md and the pin test updated. 0.59 regressions: none found (tests/reasoner.test.mjs 52/52; `test-world` counts of art.draw, docs.editor, docs.reader, geo.map, media.music, data.charts and diagram.sketch are identical to a clean origin/main checkout: 571/600, 208/222, 207/209, 452/454, 399/401, 266/277, 755/771).
+**Library interface confirmed from the source (`docs/sopworld.mjs` 0.59):** `sample(world, { seed, n, mode: 'one'|'few'|'actions', prefer: { world, thing }, seen, realise, read })` on a `World` the host builds (std.schema.kind / core.slot / std.schema.kinds / things as wires); returns `{ frames, tried, kept, roundTrip? }`. It offers `undo` even when the host has nothing to undo, and a `kind=` attribute on a thing wire is read as its kind (a thing typed `thing` with `kind=house` is a house kind with no acts: the host writes the schema kind there).
+**Landed:** `src/dialog/sampler.mjs` (`sampleWorldOf`, `realise`, `createSampler`, `engineSampler`); worker op `sample` (modes one / few / actions; recent worlds; loads the tab's world); app: dice (`rollDice`), suggestion strip (`refreshSuggestions`: Talk examples, other tabs' acts for the selected thing), a small dice in every tab panel but Talk, welcome examples and empty states of Talk / Charts / Editor / Documents from `host.sample`; schema attribute `dice.not=<act>` (acts.kind) used in docs.editor, docs.reader, diagram.sketch, geo.map, media.music, ui.avatar and regenerated; `referents` hook for diagram.sketch (the shapes were not pointable); art.draw `attrOfThing` (the questions "What is the size / fill of the car?" answered "There is no thing here."); coverage grid v3 = walks of the sampler (the old forms x verbs x kinds generator is deleted). **Deleted:** `docs/webchat/surprise-pool.json`, `src/dialog/surprise.mjs`, `tests/surprise.test.mjs`, the pool step of `scripts/build-webchat.mjs`, `EXAMPLES` of app / charts / editor / documents, `CHIPS` of Talk (and the test that read them), the hints "Try: ..." of the map and the editor view. `scripts/test-webchat-ui.mjs` (Chrome, not run here) no longer reads the pool.
+**Measurement (`node scripts/measure-dice.mjs --per 23`, rows in `training/eval/dice-samples.jsonl`):** 207 presses across 9 tab worlds, each in one session with its tab open, judged by state (a changing act changes the state of any world except the conversation bookkeeping and does not end in a counter-question; a question is answered and supported): **207/207 = 100 %** (target 95 %). Diversity: 6 acts (make 101, undo 49, change 19, copy 13, ask 13, remove 12), 22 kinds, 9 attributes, 72 distinct texts of 207. The first runs were 31 %, 60 %, 88 %, 86 % and 89.5 % before the causes below were fixed (all in the host's statement of the world, none in the library): the tab was not open in the measurement; kinds that need words or a second thing (`dice.not`); a `kind` attribute that made the library see an open kind with no acts; things unreachable because the referent kind is a noun (circle) of a schema kind (shape) and diagram.sketch had no `referents`; two things with the same label ("Remove the person." asked back "which one"); the library's `undo` filtered by the host's history (with mode `one` six tries yielded nothing: the host now asks for 8+ frames and filters); art.draw could not answer "What is the size of the X?".
+**Honest limits:** worlds with no `referents` (data.charts, media.music, docs.reader, geo.map) only get make and undo (the library cannot choose a thing that is not stated): they need a `referents` hook each (see the follow-up in questions.md); ui.avatar has no sampleable kind (its dice falls back to another world); Talk's profile tab still has a short list of its own (`user.profile` is not a schema world); the round trip (`read`) is not used, the measurement judges by state.
+**Update (same branch): vendored 0.62.0 instead of 0.59.0** (commit e526a6a, build 673c2175e802, 701506 bytes; 0.63.0 exists in the checkout but only 0.62 is accepted). Same procedure, LICENSES.md and the pin test updated. No regression from 0.60-0.62: reasoner/sampler tests 58/58; `test-world` counts unchanged (art.draw 571/600, docs.editor 208/222, docs.reader 207/209, geo.map 452/454, media.music 399/401, data.charts 266/277, diagram.sketch 755/771); the dice measurement is 199/200 = 99.5 % with 0.62 (25 presses in each of 8 tab worlds; docs.reader has no sampleable kind: its `make` is done by the editor, so the dice falls back). `std.summarize` / `std.space` are not wired (separate step).
+
+**30 random dice samples (for the reviewer to read; world, text, judgement, reply):**
+- [geo.map] "Add a pin." -> ok: OK, I put a marker here (25.00 N, 10.00 E).
+- [media.music] "Add a song." -> ok: Playing "Ode to Joy" on the piano at 108 beats per minute. It is in C major.
+- [media.music] "Add a scale." -> ok: Playing the C major scale upwards: C D E F G A B C, on the piano.
+- [data.charts] "Add a chart." -> ok: OK, a new empty bar chart called "Chart 1". Add data, for example: "add apples 5
+- [art.draw] "Add a ground." -> ok: I added grass to the ground.
+- [art.draw] "What is the size of the oval?" -> ok: The oval is a normal size.
+- [diagram.sketch] "Add a shape." -> ok: Drew a circle.
+- [geo.map] "Add a pin." -> ok: OK, I put a marker here (25.00 N, 10.00 E).
+- [art.draw] "Undo that." -> ok: OK, I undid it (removed something).
+- [diagram.sketch] "Set the circle colour to yellow." -> ok: the circle is now yellow.
+- [diagram.sketch] "Set c8 colour to grey." -> ok: circle 8 is now gray.
+- [plan.timeline] "Undo that." -> ok: I undid that: I had set the unit of timeline 1 to month.
+- [geo.map] "Undo that." -> ok: OK, I undid the last change to the map.
+- [docs.editor] "Undo that." -> ok: OK, I undid that: the list you added is gone.
+- [docs.editor] "Undo that." -> ok: OK, I put back the rule you deleted.
+- [art.draw] "Set the oval size to small." -> ok: The oval is small now.
+- [geo.map] "Add a pin." -> ok: OK, I put a marker here (25.00 N, 10.00 E).
+- [docs.editor] "Remove the rule." -> ok: OK, I deleted the line.
+- [plan.seating] "Copy table 1." -> ok: I copied table 1: the copy is table 2.
+- [data.charts] "Add a chart." -> ok: OK, a new empty bar chart called "Chart 2". Add data, for example: "add apples 5
+- [diagram.sketch] "Copy c1." -> ok: Drew a circle.
+- [plan.timeline] "Copy timeline 1." -> ok: I copied timeline 1: the copy is timeline 2.
+- [art.draw] "Set the person size to big." -> ok: The person is big now.
+- [diagram.sketch] "Add a shape." -> ok: Drew a circle.
+- [plan.timeline] "Copy event 1." -> ok: I copied event 1: the copy is event 3.
+- [docs.editor] "Undo that." -> ok: OK, I undid that: the rule you added is gone.
+- [plan.seating] "What is the colour of guest 1?" -> ok: The colour of guest 1 is white.
+- [art.draw] "Add an ellipse." -> ok: I drew a purple oval.
+- [plan.timeline] "Copy timeline 3." -> ok: I copied timeline 3: the copy is timeline 4.
+- [geo.map] "Add a pin." -> ok: OK, I put a marker here (25.00 N, 10.00 E).

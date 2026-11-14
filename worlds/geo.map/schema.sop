@@ -57,6 +57,7 @@
     limit.history=30
 
 @map.place acts.kind
+    dice.not=make
     plural=places
     named=yes
     in=view
@@ -93,6 +94,7 @@
     word=flags
 
 @map.route acts.kind
+    dice.not=make
     plural=routes
     word=line
     word=lines
@@ -100,11 +102,13 @@
     word=distance_line
 
 @map.label acts.kind
+    dice.not=make
     plural=labels
     word=caption
     word=note
 
 @map.view acts.kind
+    dice.not=make
     plural=views
     word=map
     word=maps

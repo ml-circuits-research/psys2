@@ -99,7 +99,7 @@ if (sources.has('grid')) {
   if (existsSync(f)) {
     const g = JSON.parse(readFileSync(f, 'utf8'));
     const CHANGING = ['make', 'remove', 'change', 'place', 'connect', 'group', 'copy', 'load'];
-    if (g.version === 2) {
+    if (g.version >= 2) {
       // grid v2 (2026-11-14): sentences the generator can stand behind; a hole counts only when the setup was confirmed (else `unchecked`); a reply of another tab world is a cross-world capture
       for (const w of g.worlds) for (const c of w.cells) for (const rs of ['ops', 'matrix']) if (c[rs]) {
         const capture = c[`${rs}Capture`];

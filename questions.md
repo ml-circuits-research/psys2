@@ -401,3 +401,9 @@ Built the host side against the implied interface; `std.summarize` / `std.compos
 
 ## 2026-11-14 document types for `std.compose` (reviewer block 15:00)
 Added `type` (essay, scientific-article, presentation, story, report) to the request, commands, form and the adapter's shape check; ask and spec 26 extended. Needed from the library/knowledge: `std.compose` honours `type`, takes procedure and style from `k.genres` / `k.story` / `k.procedures`, returns `type` and `procedure` (wire of the method). Counts left unset are the library's defaults for the type (the host's `DOC_TYPES` defaults are only for the commands that omit them; confirm they should be the library's). Per-type measurement (5 each) is blocked until the library ships.
+
+## 2026-11-14 RANDOM as a world: follow-ups for the reviewer (worker)
+1. `referents` hooks for data.charts, media.music, docs.reader and geo.map (the things the dice and the pronouns can point at). Without them their dice offers only "Add a ..." and "Undo that.". Each is a few lines like diagram.sketch's (`E.referents(ctx)`); the measurement shows what it buys.
+2. `realise`: the sampler renders a frame with six host templates ("Add a K.", "Set L attr to V."). They should be frames of w.lang.en (a `realise` frame per act) so the language world is the only renderer; the library's `read` hook then closes the round trip (`roundTrip` rate). Ask for the catalog.
+3. Library: `sample(mode 'one')` offers `undo` with no history in the host's sense (the library's log has the host's loading acts), and a frame for `make` of a kind with required text is drawn although the host cannot give the text; both are filtered by the host now (`dice.not` and the history check). A `std.schema.kind ... needs=text` declaration would let the library do it.
+4. user.profile and the games are not schema worlds: their dice and example chips (the Profile tab keeps five of its own) need a schema or a `std.schema` declaration to be sampled.

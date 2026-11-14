@@ -39,7 +39,7 @@ export function createEditor(container) {
       if (st.title) page.append(h('h2', { class: 'p2-doc-title' }, st.title));
       if (!st.title && !blocks.length) {
         page.append(h('p', { class: 'p2-empty' }, 'The document is empty.'),
-          h('p', { class: 'p2-empty' }, 'Try: “add a heading Shopping”, “add a list with milk, eggs and bread” or “start dictation”.'));
+          h('p', { class: 'p2-empty' }, 'Press the dice for a command to try.'));
       }
       let cursorEl = null;
       blocks.forEach((b, i) => {

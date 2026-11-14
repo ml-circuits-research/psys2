@@ -237,6 +237,7 @@ export const hooks = {
       if (r.mode === 'describe') return D.describe(ctx, {});
       if (r.mode === 'options') return /colou?r|shade|paint|crayon/.test(String(r.thing ?? '')) ? D.colors(ctx, {}) : D.help(ctx, {});
       if (r.mode === 'what' && r.thing && /^colou?r$/.test(String(r.attribute ?? ''))) return D.colorOfThing(ctx, { t: tOf(r) });
+      if (r.mode === 'what' && r.thing && /^(?:size|fill)$/.test(String(r.attribute ?? ''))) return D.attrOfThing(ctx, { t: tOf(r), attr: String(r.attribute) });
       if (r.mode === 'what' && r.place && /^(?:next to|near|beside|by|around|close to)$/.test(rel(r))) return D.whatsNear(ctx, { t: r.place });
       if (r.mode === 'what' && r.place) return D.spatial(ctx, { text: r.text });
       return undefined;   // why, last: the generic executor

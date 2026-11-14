@@ -5,11 +5,6 @@
 const WORLD = 'talk';
 const CARDS = 'worlds/talk/cards.mjs';
 const OPENING = 'I can talk about things you can draw, their parts, how many parts they have, which of two things is bigger, and the order of the months, seasons, days and planets. Ask me, and I answer with a sentence and a small picture.';
-/** The suggestion chips: example questions of the world (tests/talk-world.test.mjs checks that the world reads every one). */
-export const CHIPS = [
-  'What does a lighthouse look like?', 'What are the parts of a bicycle?', 'How many legs does a spider have?', 'Which is bigger, Jupiter or Mars?',
-  'What are the planets in order?', 'What comes after March?',
-];
 
 const CSS = `
 .tk-root { display: grid; gap: 14px; max-width: 1080px; }
@@ -107,8 +102,8 @@ function make(holder, host) {
   const sum = el('section', 'tk-card-panel tk-sum'); sum.setAttribute('aria-label', 'What this conversation is about');
   const open = el('section', 'tk-card-panel');
   open.append(el('p', 'tk-open', esc(OPENING)));
-  const chips = el('div', 'tk-chips');
-  for (const c of CHIPS) { const b = el('button', 'tk-chip', esc(c)); b.type = 'button'; b.addEventListener('click', () => send(c)); chips.append(b); }
+  const chips = el('div', 'tk-chips');   // examples from the session, drawn by the sampler (spec 25), not a list of the tab
+  Promise.resolve(host.sample?.('few', { tab: 'talk', count: 4 })).then((list) => { for (const c of list ?? []) { const b = el('button', 'tk-chip', esc(c)); b.type = 'button'; b.addEventListener('click', () => send(c)); chips.append(b); } }).catch(() => {});
   open.append(chips, el('p', 'tk-priv', 'What you type stays on this device. I only read the shared picture catalog when I need a thing. When I do not know something I say so, and I draw no picture.'));
   const boardSec = el('section', 'tk-card-panel tk-boardsec');
   const head = el('div', 'tk-head', '<h3>Topics we talked about</h3>');

@@ -55,6 +55,12 @@
 .p2-chips-row { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; white-space: normal; }
 .p2-example { text-align: left; padding: 6px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); cursor: pointer; }
 .p2-example:hover { border-color: var(--accent); }
+/* RANDOM (spec 25): suggestions above the input (examples on Talk, the acts that fit the selected thing elsewhere) and the small dice of a tab */
+.p2-exbar { display: flex; gap: 6px; padding: 6px 10px 0; overflow-x: auto; scrollbar-width: thin; flex-wrap: nowrap; }
+.p2-exbar[hidden] { display: none; }
+.p2-exbar .p2-example { white-space: nowrap; flex: 0 0 auto; font-size: 13px; padding: 4px 10px; }
+.p2-tabdice { position: absolute; top: 8px; right: 10px; z-index: 5; width: 32px; height: 32px; padding: 4px; opacity: .85; }
+.p2-tabdice:hover, .p2-tabdice:focus-visible { opacity: 1; }
 .p2-form { display: flex; gap: 6px; align-items: center; padding: 8px; background: var(--surface); border-top: 1px solid var(--line); }
 .p2-text { flex: 1; min-width: 0; height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface-2); }
 .p2-form { gap: 4px; }

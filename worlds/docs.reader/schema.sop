@@ -59,6 +59,7 @@
     word=documents
 
 @reader.document acts.kind
+    dice.not=make
     plural=documents
     named=yes
     word=doc
@@ -73,6 +74,7 @@
     word=paper
 
 @reader.story acts.kind
+    dice.not=make
     plural=stories
     word=tale
     word=tales
@@ -80,10 +82,12 @@
     word=narrative
 
 @reader.page acts.kind
+    dice.not=make
     plural=pages
     numbered=yes
 
 @reader.chapter acts.kind
+    dice.not=make
     plural=chapters
     numbered=yes
     word=section
@@ -94,23 +98,27 @@
     word=parts
 
 @reader.paragraph acts.kind
+    dice.not=make
     plural=paragraphs
     numbered=yes
     word=para
     word=paras
 
 @reader.sentence acts.kind
+    dice.not=make
     plural=sentences
     numbered=yes
     word=line
     word=lines
 
 @reader.word acts.kind
+    dice.not=make
     plural=words
     word=term
     word=terms
 
 @reader.character acts.kind
+    dice.not=make
     plural=characters
     named=yes
     word=person
@@ -121,17 +129,20 @@
     word=cast
 
 @reader.question acts.kind
+    dice.not=make
     plural=questions
     word=query
     word=queries
 
 @reader.bookmark acts.kind
+    dice.not=make
     plural=bookmarks
     numbered=yes
     word=marker
     word=markers
 
 @reader.note acts.kind
+    dice.not=make
     plural=notes
     numbered=yes
     word=comment

@@ -34,6 +34,7 @@
     limit.history=40
 
 @face.face acts.kind
+    dice.not=make
     plural=faces
     named=yes
     word=avatar
@@ -334,6 +335,7 @@
     word=robot
 
 @face.moment acts.kind
+    dice.not=make
     plural=moments
     word=wink
     word=nod

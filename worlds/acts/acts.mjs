@@ -102,7 +102,7 @@ export function parseSchema(wires) {
   if (vw) schema.view = { aspects: vals(vw, 'aspects'), words: vals(vw, 'word') };
   for (const w of wires.filter((x) => x.type === 'acts.kind')) {
     const name = w.id.slice(sw.id.length + 1);
-    schema.kinds[name] = { name, plural: val(w, 'plural') ?? `${name}s`, numbered: yes(val(w, 'numbered')), named: yes(val(w, 'named')), max: val(w, 'max') ? Number(val(w, 'max')) : null, in: val(w, 'in') ?? null, capacity: val(w, 'capacity') ?? null, acts: vals(w, 'acts'), any: val(w, 'any') === 'knowledge', words: vals(w, 'word'), ...(vals(w, 'catalog').length ? { catalog: vals(w, 'catalog') } : {}), ...(vals(w, 'aspect').length ? { aspects: vals(w, 'aspect') } : {}) };   // aspect=: what a thing of this kind has (spec 23)
+    schema.kinds[name] = { name, plural: val(w, 'plural') ?? `${name}s`, numbered: yes(val(w, 'numbered')), named: yes(val(w, 'named')), max: val(w, 'max') ? Number(val(w, 'max')) : null, in: val(w, 'in') ?? null, capacity: val(w, 'capacity') ?? null, acts: vals(w, 'acts'), any: val(w, 'any') === 'knowledge', words: vals(w, 'word'), ...(vals(w, 'catalog').length ? { catalog: vals(w, 'catalog') } : {}), ...(vals(w, 'aspect').length ? { aspects: vals(w, 'aspect') } : {}), ...(vals(w, 'dice.not').length ? { diceNot: vals(w, 'dice.not') } : {}) };   // aspect=: what a thing of this kind has (spec 23); dice.not=<act>: acts the dice (std.sample) must not frame for this kind (it needs words, a second thing, data: spec 25)
   }
   for (const w of wires.filter((x) => x.type === 'acts.attr')) {
     const name = w.id.slice(sw.id.length + 1);

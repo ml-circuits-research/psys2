@@ -7,7 +7,6 @@
 const OPS_ASSET = 'worlds/docs.reader/ops.mjs';
 const VENDOR = (f) => new URL(`../../vendor/documents/${f}`, import.meta.url).href;
 const MAX_BYTES = 12 * 1024 * 1024;
-const EXAMPLES = ['what is this story about', 'who are the characters', 'who is the main character', 'what did the witch do', 'where did they live', 'find "bread"', 'give me the outline', 'read the ending aloud'];
 
 const CSS = `
 .dr-root { display: grid; gap: 14px; max-width: 1080px; }
@@ -350,7 +349,7 @@ function make(holder, host) {
     if (!s.last && !cited.size) {
       const b = el('div', 'dr-card dr-box'); b.append(el('h4', '', 'Try asking'));
       const w = el('div', 'dr-chips'); w.style.flexDirection = 'column'; w.style.alignItems = 'flex-start';
-      for (const t of EXAMPLES) { const c = el('button', 'dr-chip', `<q>${esc(t)}</q>`); c.type = 'button'; c.addEventListener('click', () => send(t)); w.append(c); }
+      Promise.resolve(host.sample?.('few', { tab: 'documents', count: 4 })).then((list) => { for (const t of list ?? []) { const c = el('button', 'dr-chip', `<q>${esc(t)}</q>`); c.type = 'button'; c.addEventListener('click', () => send(t)); w.append(c); } }).catch(() => {});   // from the sampler (spec 25)
       b.append(w); side.append(b);
     }
   }
