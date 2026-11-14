@@ -4,9 +4,9 @@
 // the user's sentence is not read again: the thing role goes to the engine's resolver as the words it is ("the second paragraph", "the word milk"), the attribute is the one whose enum holds the
 // value (style, align, type ...; a colour is a highlight), the kind is the schema's. Nothing here names a verb.
 import * as E from './editor.mjs?v=7f95118da6';
-import * as G from './ops.mjs?v=6d0dde426e';   // circular on purpose: only used inside functions, when the executor exists
+import * as G from './ops.mjs?v=d4fede190e';   // circular on purpose: only used inside functions, when the executor exists
 import { colourName } from '../../lib/knowledge/values.mjs?v=189c43bb28';
-import { en } from '../../lib/lang/en.mjs?v=9bb300846a';
+import { en } from '../../lib/lang/en.mjs?v=57ad919666';
 const numerals = en.numerals('acts');
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'-]+/).filter(Boolean);

@@ -22,14 +22,14 @@
 
 import { ACT_VERBS } from './verbs.generated.mjs?v=b363aaaa66';
 import { FLAGS_MORE, TURN_WORDS } from './forms.more.mjs?v=c6788150e0';
-import { FLAGS_DATA } from './forms.data.mjs?v=eb47be538d';   // more forms (flags `valued`, `ordered`): named values said without their name
+import { FLAGS_DATA } from './forms.data.mjs?v=2e90a5450b';   // more forms (flags `valued`, `ordered`): named values said without their name
 import { matrixSop, matrixTemplates } from './matrix.mjs?v=2e52cfd9a6';
 import { createEffects, EFFECT_ACTS } from './effects.mjs?v=c81f50c5a8';   // sopworld std.schema.effect: the host's acts as library effects (sentences all or nothing, the difference)
 
 export { ACT_VERBS };
 import { colourName } from '../../lib/knowledge/values.mjs?v=189c43bb28';   // the one colour reader (k.values)
-import { en } from '../../lib/lang/en.mjs?v=ac07f761ec';
-import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=c8c4893cd3';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
+import { en } from '../../lib/lang/en.mjs?v=57ad919666';
+import { readNounPhrase } from '../../lib/lang/np-resolve.mjs?v=a04b8d18bd';   // the one host resolver of noun phrases (choice, part of a set, relative clause)   // English: determiners, pronouns, ordinals, number words, plurals, coordination (facts of handover/lang.en)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 
 // ---- the acts and their roles ---------------------------------------------------------------------------------------------------------------------------
@@ -838,6 +838,8 @@ export function createExecutor(schema, hooks = {}) {
   const looksLikeCommand = (t) => { const w = toks(t).filter((x) => !['please', 'can', 'you', 'could'].includes(x)); return w.length > 0 && VERBS.has(w[0]) && !kindByWord(w[0]); };
   /** The one question the executor asked: a role (the answer is the role) or a guessed act (yes / no). */
   function interceptInput(ctx, text) {
+    const own = hooks.intercept?.(ctx, text);   // a world with its own modal input (the editor's dictation) reads the message first
+    if (own?.handled) return own;
     const st = ctx.state;
     if (st.inputMode !== 'confirm' || !st.pending) return { handled: false };
     const p = st.pending; st.pending = null; st.inputMode = null;
