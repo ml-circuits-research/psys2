@@ -1,5 +1,5 @@
 {
-  "version": "da3d960faa",
+  "version": "f09d92a001",
   "worlds": [
     "acts",
     "art.draw",
@@ -153,6 +153,7 @@
     "lib/translate/candidates.mjs": "996bbc3438f7b56d",
     "lib/translate/canonical.en-ro.mjs": "e8ac6d4a2fe6d734",
     "lib/translate/en-ro.mjs": "2f8e9fbc5359c385",
+    "lib/translate/grammar-ro.mjs": "0615811738fcb982",
     "lib/translate/index.mjs": "11efc84e3dfa1ccb",
     "lib/translate/inflect.en.mjs": "c54249cec2789d10",
     "lib/translate/keep-list.mjs": "f898e35ca8738b84",
@@ -782,8 +783,8 @@
     "worlds/words/zo.json": "3761b1887d22fef8",
     "worlds/words.bloom.json": "dd68772a69bc2308"
   },
-  "builtAt": "2026-11-14T09:00:45.841Z",
-  "commit": "e783dfd0",
+  "builtAt": "2026-11-14T09:10:22.801Z",
+  "commit": "39673737",
   "assets": {
     "app.mjs": "11bf04548f",
     "coverage-grid.json": "c328c9ce48",
@@ -889,6 +890,7 @@
     "lib/translate/candidates.mjs": "4b39ead121",
     "lib/translate/canonical.en-ro.mjs": "2b71c7e520",
     "lib/translate/en-ro.mjs": "330bc93cd1",
+    "lib/translate/grammar-ro.mjs": "d4630fb1cf",
     "lib/translate/index.mjs": "f28caa9d77",
     "lib/translate/inflect.en.mjs": "bb4799b9ff",
     "lib/translate/keep-list.mjs": "f74be6f953",
