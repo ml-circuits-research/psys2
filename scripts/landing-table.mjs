@@ -97,8 +97,13 @@ function gridSummary() {
   const f = join(REPO, 'docs/webchat/coverage-grid.json');
   if (!existsSync(f)) return null;
   const g = JSON.parse(readFileSync(f, 'utf8'));
-  const worlds = g.worlds.map((w) => ({ id: w.id, total: w.cells.length, holes: w.cells.filter((c) => c.ops === 'miss' || c.matrix === 'miss').length }));
-  return { worlds, total: worlds.reduce((a, w) => a + w.total, 0), holes: worlds.reduce((a, w) => a + w.holes, 0) };
+  const miss = (c) => c.ops === 'miss' || c.matrix === 'miss', conf = (c) => c.opsSetup !== false && c.matrixSetup !== false;
+  // v2 (2026-11-14): holes counted when the setup was confirmed; unconfirmed holes, cross-world captures and generator errors reported apart
+  const worlds = g.worlds.map((w) => ({ id: w.id, total: w.cells.length, holes: w.cells.filter((c) => miss(c) && conf(c)).length, unconfirmed: w.cells.filter((c) => miss(c) && !conf(c)).length,
+    captures: w.cells.filter((c) => c.opsCapture || c.matrixCapture).length, generatorErrors: (w.generatorErrors ?? []).length }));
+  const sum = (k) => worlds.reduce((a, w) => a + (w[k] ?? 0), 0);
+  return { version: g.version ?? 1, worlds, total: sum('total'), holes: sum('holes'), unconfirmed: sum('unconfirmed'), captures: sum('captures'), generatorErrors: sum('generatorErrors'),
+    previous: g.previous ? { generated: g.previous.generated?.slice(0, 10), total: g.previous.worlds.reduce((a, w) => a + w.total, 0), holes: g.previous.worlds.reduce((a, w) => a + w.holes, 0) } : null };
 }
 
 const tally = (rows) => { const t = { right: 0, wrong: 0, na: 0, unchecked: 0 }; for (const r of rows) t[r.outcome] = (t[r.outcome] ?? 0) + 1; return t; };
@@ -123,9 +128,9 @@ export async function compute({ meas, worlds } = {}) {
   rows.push({ label: 'Hand-written language lines in tab worlds', value: fmt(lang), detail: `${tabs.length} tab worlds; most: ${tabLines.filter((w) => w.language).slice(0, 5).map((w) => `${w.id} ${fmt(w.language)}`).join(', ')}; with code: ${fmt(tabLines.reduce((a, w) => a + w.code, 0))} lines of .mjs, ${fmt(tabLines.reduce((a, w) => a + w.schema, 0))} of schema` });
   rows.push({ label: 'General lines still in PSys2', value: fmt(gl.total), detail: `SOP ${fmt(gl.sop)}, code ${fmt(gl.code)}, generators ${fmt(gl.generators)} (docs/host-boundary.md; the world modules counted live)${inv ? `; knowledge still in worlds: ${inv.items} items, ${fmt(inv.words)} words (${inv.withCounterpart} with a catalog counterpart)` : ''}` });
   rows.push({ label: 'Reuse number per world (mean)', value: reuseMean == null ? '-' : reuseMean.toFixed(2), detail: `${reuseRows.length} worlds in the library report; ${reuseRows.filter((w) => w.reuse > 0).map((w) => `${w.id} ${w.reuse}`).join(', ') || 'none above 0'}; the rest 0` });
-  rows.push({ label: 'Coverage grid holes', value: grid ? `${grid.holes} of ${fmt(grid.total)}` : '-', detail: grid ? `judged by the state difference (k.actions verbs x kinds x values): ${grid.worlds.map((w) => `${w.id}${sw.pilots.includes(w.id) && !sw.switched.includes(w.id) ? ' (pilot)' : ''} ${w.holes}/${w.total}`).join(', ')}` : 'no docs/webchat/coverage-grid.json' });
+  rows.push({ label: 'Coverage grid holes', value: grid ? `${grid.holes} of ${fmt(grid.total)}` : '-', detail: grid ? `${grid.version === 2 ? `grid v2: every placeholder filled from the schema, verbs x kinds x values that knowledge allows, a setup per cell, the world's tab open; ${grid.generatorErrors} generator errors (counted apart, never a case), ${grid.unconfirmed} further misses with an unconfirmed setup, ${grid.captures} cross-world captures. ` : ''}${grid.previous ? `Grid v1 (${grid.previous.generated}, a generator with defects) said ${grid.previous.holes} of ${fmt(grid.previous.total)}: not comparable. ` : ''}Per world: ${grid.worlds.map((w) => `${w.id}${sw.pilots.includes(w.id) && !sw.switched.includes(w.id) ? ' (pilot)' : ''} ${w.holes}/${w.total}${w.unconfirmed ? ` (+${w.unconfirmed} unconfirmed)` : ''}`).join(', ')}` : 'no docs/webchat/coverage-grid.json' });
 
-  const corpus = readCorpus(), last = latest(corpus), cases = [...last.values()];
+  const corpus = readCorpus(), last = latest(corpus), cases = [...last.values()].filter((c) => c.outcome !== 'retired');   // retired: rows of the grid v1 generator, kept in the file, not counted
   const helped = Object.values(meas.perWorld).reduce((a, w) => a + w.helped, 0), turns = Object.values(meas.perWorld).reduce((a, w) => a + w.turns, 0);
   const crossGroups = cases.filter((c) => c.outcome === 'wrong' && /^(wrong world routing|foreign-world reading)/.test(c.group ?? ''));
   const transferWrong = cases.filter((c) => c.kind === 'transfer' && c.outcome === 'wrong');
@@ -142,7 +147,11 @@ export async function compute({ meas, worlds } = {}) {
   // the scaling indicators of Q10 item 1 (owner-agreed): recorded by scripts/indicators.mjs, the captures counted here from the corpus
   const ind = readIndicators();
   if (ind.seating60) rows.push({ label: 'New world from a schema alone: natural requests right', value: `${ind.seating60.right} of ${ind.seating60.total}`, detail: `plan.seating (schema.sop only), 60 requests written without seeing the grammar (scripts/exp-seating.mjs), judged by hand ${ind.seating60.date}${ind.seating60.read != null ? `; the rules read ${ind.seating60.read} of ${ind.seating60.readOf} (${ind.seating60.readDate})` : ''}${ind.seating60.note ? `; ${ind.seating60.note}` : ''}` });
-  if (ind.robustness) { const r = ind.robustness; rows.push({ label: 'Robustness sets (rules config)', value: ['typos', 'loose-words', 'paraphrases-rt'].map((k) => `${k} ${r[k].right}/${r[k].total}`).join(', '), detail: `${['typos', 'loose-words', 'paraphrases-rt'].map((k) => `${k} ${pct(r[k].right, r[k].total)}`).join(', ')}; end to end through the shared pipeline, skipped rows not counted (scripts/eval-ablation.mjs ${r.config}, ${r.date}, build ${r.build})` }); }
+  if (ind.robustness) {
+    const r = ind.robustness, three = ['typos', 'loose-words', 'paraphrases-rt'];
+    rows.push({ label: 'Robustness sets (rules config)', value: three.map((k) => `${k} ${r[k].right}/${r[k].total}`).join(', '), detail: `${three.map((k) => `${k} ${pct(r[k].right, r[k].total)}`).join(', ')}; end to end through the shared pipeline, skipped rows not counted (scripts/eval-ablation.mjs ${r.config}, ${r.date}, build ${r.build}); paraphrases-rt = only the rows whose meaning equals the original's (re-judged by hand ${r.paraphrasesDate ?? ''})` });
+    if (r['paraphrases-rt-changed']) rows.push({ label: 'Robustness to a wrong translation (meaning changed)', value: `paraphrases-rt-changed ${r['paraphrases-rt-changed'].right}/${r['paraphrases-rt-changed'].total}`, detail: `${pct(r['paraphrases-rt-changed'].right, r['paraphrases-rt-changed'].total)}; the machine translation turned these sentences into another sentence (a changed noun, a lost verb, a statement for a question), the expectation stays the original's: a different test from a paraphrase, reported apart so the paraphrase number means what it says (${r.paraphrasesDate ?? ''})` });
+  }
   const captures = cases.filter((c) => c.outcome === 'wrong' && /^(wrong world routing|foreign-world reading)/.test(c.group ?? ''));
   rows.push({ label: 'Cross-world captures (target 0)', value: String(captures.length), detail: `cases of the corpus where a world answered another world's sentence or the wrong world took it (groups "foreign-world reading" ${captures.filter((c) => /^foreign/.test(c.group)).length}, "wrong world routing" ${captures.filter((c) => /^wrong world/.test(c.group)).length}); the invariants test and test-world catch them at the landing` });
   if (ind.richest?.total) rows.push({ label: 'Richest world on acts: its own tests', value: `${ind.richest.world} ${pct(ind.richest.right, ind.richest.total)}`, detail: `${ind.richest.right} of ${ind.richest.total} tests of ${ind.richest.world}${ind.richest.where === 'worlds-pilot' ? ' (the schema pilot, worlds-pilot)' : ' (the switched world)'}, ${ind.richest.schemaLines} schema lines; the switch of the world to schema + acts is the proof (${ind.richest.date})` });
@@ -160,7 +169,7 @@ export async function compute({ meas, worlds } = {}) {
   const guard = [
     { label: 'Owner log a / b / c (replayed)', value: `a: ${tallyText(owner(''))}; b: ${tallyText(owner('b'))}; c: ${tallyText(owner('c'))}` },
     { label: 'T1 things / T2 taught facts / T3 rules', value: `T1: ${tallyText(t('T1'))}; T2: ${tallyText(t('T2'))}; T3: ${tallyText(t('T3'))}` },
-    { label: 'Grid judged by state or answer', value: grid ? `${grid.total - grid.holes} of ${fmt(grid.total)}` : '-' },
+    { label: 'Grid judged by state or answer', value: grid ? `${grid.total - grid.holes - (grid.unconfirmed ?? 0)} of ${fmt(grid.total)}` : '-' },
   ];
   return { rows, guard, regressions: lastRun?.regressions.length ?? 0 };
 }
