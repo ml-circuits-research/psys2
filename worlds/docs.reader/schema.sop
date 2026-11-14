@@ -1,0 +1,188 @@
+@reader acts.schema
+    noun="story"
+    doc="The document reader as a schema (spec 21): documents the user opened (a story, a file, a book), their chapters (sections), paragraphs, sentences and words, the characters found in them, and the questions asked about them. A document is read aloud (speed and voice are attributes of the reading), gone through (pick: read, next, previous, go to), asked about (who, what, where, how many, a summary), bookmarked and annotated (make), closed (remove) and shown to other tabs (send). The reader engine (the formal document of analyze.mjs, entities, events, dialogue, relations, TF-IDF and BM25 search, the answers: read.mjs) and the speech effect are the world's own code; the schema only says what is said. A view of the session things with the textual aspect (spec 23)."
+    hooks=hooks.mjs
+    own=describe:docr.describe
+    own=summary:docr.summary
+    own=characters:docr.characters
+    own=mainCharacter:docr.mainCharacter
+    own=places:docr.places
+    own=keywords:docr.keywords
+    own=outline:docr.outline
+    own=stats:docr.stats
+    own=who:docr.who
+    own=did:docr.did
+    own=happened:docr.happened
+    own=where:docr.where
+    own=whereDid:docr.whereDid
+    own=whenDid:docr.whenDid
+    own=whoV:docr.whoV
+    own=didV:docr.didV
+    own=said:docr.said
+    own=saying:docr.saying
+    own=part:docr.part
+    own=sentence:docr.sentence
+    own=count:docr.count
+    own=search:docr.search
+    own=searchStep:docr.searchStep
+    own=clearSearch:docr.clearSearch
+    own=across:docr.across
+    own=relation:docr.relation
+    own=isRelated:docr.isRelated
+    own=read:docr.read
+    own=list:docr.list
+    own=open:docr.open
+    own=close:docr.close
+    own=loadSample:docr.loadSample
+    own=askPassage:docr.askPassage
+    own=pickSection:docr.pickSection
+    own=more:docr.more
+    own=sectionExtreme:docr.sectionExtreme
+    sample=document
+    readable=yes
+    canonical=r.
+    list=yes
+    say=yes
+    acts=make
+    acts=remove
+    acts=change
+    acts=pick
+    acts=ask
+    acts=send
+
+@reader.view acts.view
+    aspects=textual
+    word=story
+    word=reader
+    word=documents
+
+@reader.document acts.kind
+    plural=documents
+    named=yes
+    word=doc
+    word=docs
+    word=file
+    word=files
+    word=book
+    word=books
+    word=text
+    word=article
+    word=essay
+    word=paper
+
+@reader.story acts.kind
+    plural=stories
+    word=tale
+    word=tales
+    word=fairy_tale
+    word=narrative
+
+@reader.page acts.kind
+    plural=pages
+    numbered=yes
+
+@reader.chapter acts.kind
+    plural=chapters
+    numbered=yes
+    word=section
+    word=sections
+    word=heading
+    word=headings
+    word=part
+    word=parts
+
+@reader.paragraph acts.kind
+    plural=paragraphs
+    numbered=yes
+    word=para
+    word=paras
+
+@reader.sentence acts.kind
+    plural=sentences
+    numbered=yes
+    word=line
+    word=lines
+
+@reader.word acts.kind
+    plural=words
+    word=term
+    word=terms
+
+@reader.character acts.kind
+    plural=characters
+    named=yes
+    word=person
+    word=people
+    word=hero
+    word=heroes
+    word=protagonist
+    word=cast
+
+@reader.question acts.kind
+    plural=questions
+    word=query
+    word=queries
+
+@reader.bookmark acts.kind
+    plural=bookmarks
+    numbered=yes
+    word=marker
+    word=markers
+
+@reader.note acts.kind
+    plural=notes
+    numbered=yes
+    word=comment
+    word=comments
+    word=annotation
+    word=annotations
+
+@reader.title acts.attr
+    of=document
+    of=story
+    of=chapter
+    type=text
+
+@reader.author acts.attr
+    of=document
+    of=story
+    type=text
+    word=writer
+
+@reader.position acts.attr
+    of=document
+    of=story
+    of=chapter
+    of=paragraph
+    of=sentence
+    type=number
+    min=1
+
+@reader.speed acts.attr
+    of=document
+    of=story
+    of=chapter
+    of=paragraph
+    of=sentence
+    type=number
+    min=0.5
+    max=2
+    default=1
+    more=faster
+    more=quicker
+    less=slower
+    word=pace
+
+@reader.voice acts.attr
+    of=document
+    of=story
+    of=chapter
+    of=paragraph
+    of=sentence
+    type=enum
+    values=default
+    values=female
+    values=male
+    values=deep
+    values=high
+    values=child
