@@ -27,7 +27,7 @@ const REFUSAL = /did not understand|did not catch|I can't find|I can not find|I 
 // The state a change is judged by: every world's state except the conversation's own bookkeeping (the turn log, the dialogue focus, the shell, the speech settings), which changes on every turn whatever was said.
 const META = new Set(['session.conversation', 'session.dialogue', 'ui.shell', 'talk', 'ui.help', 'user.profile', 'meta.worlds', 'session.things']);
 const stateOf = (s) => JSON.stringify(Object.fromEntries(Object.entries(s.state() ?? {}).filter(([k]) => !META.has(k))));
-const CHANGES = new Set(['make', 'remove', 'change', 'copy', 'undo']);
+const CHANGES = new Set(['make', 'remove', 'change', 'copy', 'undo', 'redo']);
 
 const engine = await createEngine({ loader: createFsLoader() });
 const worlds = engine.set.list().filter((w) => w.ops?.executor?.schema && w.id !== 'ui.avatar' && (!only || w.id === only));   // the avatar is a popup with no things of its own: its dice falls back to a world used lately
@@ -44,6 +44,9 @@ for (const w of worlds) {
     const sample = sampler.dice({ worldId: w.id, seed: seed0 * 1000 + i });
     if (!sample) { rows.push({ world: w.id, i, text: null, judged: 'no-sample' }); continue; }
     const before = stateOf(s);
+    // round trip (the library's `read`): the sentence must be read back as one whole message by the world's rules, on a copy of the session
+    let rt = null;
+    try { rt = !!(await s.dryRead(sample.text, { language: 'en' }))?.complete; } catch { rt = false; }
     let reply;
     try { reply = await s.send(sample.text, { language: 'en', formalizer: 'rules', tab: w.id }); } catch (e) { rows.push({ world: w.id, i, text: sample.text, judged: 'error', error: String(e.message) }); continue; }
     const after = stateOf(s);
@@ -55,7 +58,7 @@ for (const w of worlds) {
     if (capture) ok = false;
     else if (CHANGES.has(act)) ok = before !== after && !/did not understand|did not catch/i.test(reply.text ?? '') && !/\?\s*$/.test((reply.text ?? '').trim());   // a counter-question ("Which shape should I label?") is not an executed act
     else ok = !REFUSAL.test(reply.text ?? '') && replySupported(reply);
-    rows.push({ world: w.id, i, text: sample.text, act, kind: sample.frame.args?.kind ?? null, attr: sample.frame.args?.attr ?? null, judged: ok ? 'ok' : 'fail', ...(capture ? { capture } : {}), reply: String(reply.text ?? '').slice(0, 160) });
+    rows.push({ world: w.id, i, text: sample.text, act, kind: sample.frame.args?.kind ?? null, attr: sample.frame.args?.attr ?? null, judged: ok ? 'ok' : 'fail', roundTrip: rt, ...(capture ? { capture } : {}), reply: String(reply.text ?? '').slice(0, 160) });
   }
 }
 if (noSample.length) console.log(`no sampleable kind (dice falls back to another world): ${noSample.join(', ')}`);
@@ -64,6 +67,8 @@ for (const r of rows) { const b = (by[r.world] ??= { n: 0, ok: 0, nosample: 0 })
 for (const [id, b] of Object.entries(by)) console.log(`${id.padEnd(16)} ${b.ok}/${b.n} ok${b.nosample ? ` (${b.nosample} without a sample)` : ''}`);
 const tot = rows.length, ok = rows.filter((r) => r.judged === 'ok').length;
 const div = (f) => new Set(rows.filter((r) => r.judged !== 'no-sample').map(f).filter(Boolean)).size;
+const rts = rows.filter((r) => r.roundTrip !== undefined && r.roundTrip !== null), rtOk = rts.filter((r) => r.roundTrip).length;
+console.log(`round trip (dry read complete): ${rtOk}/${rts.length}; distinct texts ${new Set(rows.map((r) => r.text).filter(Boolean)).size}/${rows.length}; kinds ${new Set(rows.map((r) => r.kind).filter(Boolean)).size}`);
 console.log(`TOTAL ${ok}/${tot} = ${(100 * ok / tot).toFixed(1)}%  distinct acts ${div((r) => r.act)} kinds ${div((r) => r.kind)} attrs ${div((r) => r.attr)}`);
 for (const r of rows.filter((r) => r.judged !== 'ok').slice(0, +arg('show', 15))) console.log('  FAIL', r.world, JSON.stringify(r.text), '->', r.judged, JSON.stringify(r.reply ?? r.error ?? ''));
 if (outFile) writeFileSync(outFile, rows.map((r) => JSON.stringify(r)).join('\n') + '\n');

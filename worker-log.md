@@ -2064,3 +2064,43 @@ Checks: tests run one file at a time; full `npm test` run three times (31 -> 12 
 - **Not done in this step** (reviewer's scope extension, items 1, 3, 4): filling roles from knowledge, weights, the 200-press measurement with round trip.
 ## 2026-11-14 Q13 W.LANG.RO LIBRARY: the published w.lang.ro read with std.morph, grammar path on it, measured on the meaning set
 Merged origin/main (sopworld 0.62). `scripts/build-lang-ro.mjs` bundles the catalog world (src/lang/ro.facts.generated.mjs, lazy), `src/lang/ro.mjs` is the host side over std.morph (Q51 workaround labelled, deletable), `grammar-ro.mjs` takes a lexicon option (kept: the library has no Romanian reader, no g.rule grammar in w.lang.ro). Measured on the 9,328 rows (README in training/eval/ro-en-meaning): w.lang.ro grammar alone 12.2 % kept (answers 14.9 %, right 81.8 % when it answers; the library as it is 8.7 %), translator-lexicon grammar 16.9 %, chain with M4+model 56.3 % against the shipped 55.7 %. No MT path replaced. Tests: lang-ro 5, grammar-ro 12, loop-guard. Asks: Romanian g.rule grammar + read function (library/knowledge), Q51, a bigger dictionary.
+
+## 2026-11-14 RANDOM from knowledge, weights, round trip (worker; reviewer 17:30 items 1, 3, 4)
+- **Mechanism (spec 25 updated):** `know=<list>[:<verb>]` on a kind in `schema.sop`, `hooks.sampleKnowledge(ctx)` per world (read from the world's own knowledge: place index, songs.mjs/theory.mjs, k.animals through the chart reader's groups, the open document's keywords and sections), colours from k.values for every colour attribute. The library has one open-kind declaration per world (`std.schema.kinds`, a second one is a conflict) and takes plain tokens as names: entries are named by slug, the host keeps the text. Seeded subsets of 30 entries per list per press.
+- **Weights:** undo only after the dice's own change and about 1 in 10 (a seeded roll; the plain hash of neighbouring seeds was correlated, so the roll hashes twice); redo right after its own undo; kind/act novelty counted double; a sentence shown is not repeated while tries remain. Editor referents carry `say` ("the second paragraph"), single things say "the document" / "the chart" (the id `b4` was used as a label and is not a sentence).
+- **Found and fixed on the way:** data.charts could not answer "What is the type / axis / sort / palette / legend of the chart?" for a chart with data (it looked for a bar called "chart"): `chart.settingOf`. A chart is addressed only while open (`thing=...:active=active`).
+- **Measurement (`node scripts/measure-dice.mjs --per 23`, 207 presses over 9 tab worlds, rows in `training/eval/dice-samples.jsonl`):** executed 205/207 = 99.0 % (target 95), round trip (`dryRead` complete) 205/207, distinct 192/207 (about 185/200; target 150), acts 8 (make 70, ask 43, change 44, remove 21, copy 17, undo 5, redo 5, pick 2), kinds 81 (target 60), attributes 19 (target 15). Before (first RANDOM report): distinct 72/207, acts 6, kinds 22, attributes 9.
+- **`test-world`:** data.charts 266/277, geo.map 452/454, media.music 399/401, docs.reader 207/209, docs.editor 208/222, art.draw 571/600, diagram.sketch 755/771, plan.seating 7/7, plan.timeline 4/4 (all equal to origin/main). `tests/sampler.test.mjs` 10/10.
+- **Not done / limits:** art.draw objects ("Draw a giraffe") need the knowledge catalog, absent here: it still draws its built-in nouns with colours from k.values; seating guests by name (no name source); the library's `read` stays unused (synchronous) and the round trip is measured host-side. Ledger rows added (pitch of a song, table order at its bound, unread chord forms, reader context; chart settings fixed).
+
+**30 new random dice samples:**
+- [geo.map] "Show Moldova." -> ok: Moldova is a country in Eastern Europe (47.43 N, 28.49 E). Its capital is Chișinău.
+- [diagram.sketch] "Set the circle colour to cherry." -> ok: Done. But: What should change about circle 3? Try a color, size, shape, outline or label.
+- [docs.reader] "Search for house." -> ok: 8 results for "house": 1. sentence 27: It led them to a little house in a clearing. | 2. s
+- [plan.timeline] "Add a timeline." -> ok: I added timeline 5.
+- [media.music] "What is the instrument of the chord?" -> ok: I am playing the piano.
+- [docs.reader] "Search for piece." -> ok: 1 result for "piece": 1. sentence 30: Hansel ate a piece of the roof and Gretel ate a piec
+- [plan.seating] "What is the colour of table 3?" -> ok: The colour of table 3 is white.
+- [plan.timeline] "Remove event 1." -> ok: I removed event 1.
+- [art.draw] "Set the dog fill to outlined." -> ok: The dog is just an outline now.
+- [plan.timeline] "Copy timeline 6." -> ok: I copied timeline 6: the copy is timeline 7.
+- [data.charts] "What is the palette of the chart?" -> ok: The chart "Legs of savanna animals" uses the forest palette.
+- [data.charts] "Add parrot 2." -> ok: OK, I added parrot (2).
+- [plan.timeline] "Remove timeline 3." -> ok: I removed timeline 3.
+- [art.draw] "Add a child." -> ok: I drew a blue person.
+- [docs.editor] "Add a break." -> ok: OK, I added a page break.
+- [art.draw] "Add a circle." -> ok: I drew a red circle.
+- [art.draw] "Add an ellipse." -> ok: I drew a purple oval.
+- [media.music] "Set the chord volume to 39." -> ok: OK, the volume is 39 percent.
+- [plan.timeline] "Remove event 2." -> ok: I removed event 2.
+- [plan.seating] "What is the seats of table 1?" -> ok: Table 1 has 40 seats.
+- [media.music] "Set the scale volume to 22." -> ok: OK, the volume is 22 percent.
+- [art.draw] "What is the colour of the dog?" -> ok: The dog is brown.
+- [geo.map] "How far is Moroni from Bishkek?" -> ok: Moroni and Bishkek are about 6,855 km (4,260 miles) apart, as the crow flies.
+- [docs.reader] "Summarize section 3." -> ok: Section 3, "The Witch's Oven": Hansel held out a thin bone instead of his finger. The witc
+- [data.charts] "Make a pie chart of the legs of the jungle animals." -> ok: OK, here is a pie chart of the legs of jungle animals with 9 items. It is open in the Char
+- [plan.seating] "Copy table 3." -> ok: I copied table 3: the copy is table 4.
+- [art.draw] "Remove the oval." -> ok: I took away the purple oval.
+- [plan.seating] "Add a seat." -> ok: I added the seat at table 1. (I put it at table 1, the only table with room.)
+- [data.charts] "Set the chart axis to horizontal." -> ok: OK, the bar chart is horizontal now. I switched to a bar chart because only bar and line c
+- [art.draw] "Add a boy." -> ok: I drew a boy.

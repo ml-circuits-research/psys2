@@ -1,225 +1,207 @@
-{"world":"art.draw","i":0,"text":"Add a ground.","act":"make","kind":"ground","attr":null,"judged":"ok","reply":"I added grass to the ground."}
-{"world":"art.draw","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (added grass)."}
-{"world":"art.draw","i":2,"text":"Add a sky.","act":"make","kind":"sky","attr":null,"judged":"ok","reply":"I drew a light blue sky behind everything."}
-{"world":"art.draw","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (added the sky)."}
-{"world":"art.draw","i":4,"text":"Add a ground.","act":"make","kind":"ground","attr":null,"judged":"ok","reply":"I added grass to the ground."}
-{"world":"art.draw","i":5,"text":"Add a sky.","act":"make","kind":"sky","attr":null,"judged":"ok","reply":"I drew a light blue sky behind everything."}
-{"world":"art.draw","i":6,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (added the sky)."}
-{"world":"art.draw","i":7,"text":"Add a sunflower.","act":"make","kind":"sunflower","attr":null,"judged":"ok","reply":"I drew a pink flower."}
-{"world":"art.draw","i":8,"text":"Copy the flower.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I made a copy of the flower."}
-{"world":"art.draw","i":9,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (made a copy)."}
-{"world":"art.draw","i":10,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (drew a pink flower)."}
-{"world":"art.draw","i":11,"text":"Add a child.","act":"make","kind":"child","attr":null,"judged":"ok","reply":"I drew a blue person."}
-{"world":"art.draw","i":12,"text":"Set the person size to big.","act":"change","kind":null,"attr":"size","judged":"ok","reply":"The person is big now."}
-{"world":"art.draw","i":13,"text":"Remove the person.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I took away the big blue person."}
-{"world":"art.draw","i":14,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (removed something)."}
-{"world":"art.draw","i":15,"text":"Copy the person.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I made a copy of the person."}
-{"world":"art.draw","i":16,"text":"Add an ellipse.","act":"make","kind":"ellipse","attr":null,"judged":"ok","reply":"I drew a purple oval."}
-{"world":"art.draw","i":17,"text":"Set the oval colour to white.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"The oval is white now."}
-{"world":"art.draw","i":18,"text":"What is the size of the oval?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"The oval is a normal size."}
-{"world":"art.draw","i":19,"text":"Remove the oval.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I took away the white oval."}
-{"world":"art.draw","i":20,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (removed something)."}
-{"world":"art.draw","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid it (colored it white)."}
-{"world":"art.draw","i":22,"text":"Add a sky.","act":"make","kind":"sky","attr":null,"judged":"ok","reply":"I drew a light blue sky behind everything."}
-{"world":"art.draw","i":23,"text":"What is the colour of the oval?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"The oval is purple."}
-{"world":"art.draw","i":24,"text":"Set the oval size to small.","act":"change","kind":null,"attr":"size","judged":"ok","reply":"The oval is small now."}
-{"world":"data.charts","i":0,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":1,"text":"Remove chart 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I deleted the chart \"Chart 1\". There are no charts left."}
-{"world":"data.charts","i":2,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":4,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":5,"text":"What is the sort of chart 1?","act":"ask","kind":null,"attr":"sort","judged":"fail","reply":"The chart \"Chart 1\" is empty. Add something, for example: \"add bananas 4\"."}
-{"world":"data.charts","i":6,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":7,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":8,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":9,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":10,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":11,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":12,"text":"Set chart 1 colour to brown.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"OK, here is a bar chart with 1 item: colour to brown 1."}
-{"world":"data.charts","i":13,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 2\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":14,"text":"Set chart 2 palette to default.","act":"change","kind":null,"attr":"palette","judged":"ok","reply":"OK, here is a bar chart with 1 item: palette to default 2."}
-{"world":"data.charts","i":15,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":17,"text":"Remove chart 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I deleted the chart \"Chart 2\". There are no charts left."}
-{"world":"data.charts","i":18,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":19,"text":"Remove chart 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I deleted the chart \"Chart 2\". There are no charts left."}
-{"world":"data.charts","i":20,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":22,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"data.charts","i":23,"text":"Add a chart.","act":"make","kind":"chart","attr":null,"judged":"ok","reply":"OK, a new empty bar chart called \"Chart 1\". Add data, for example: \"add apples 5\"."}
-{"world":"data.charts","i":24,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the chart."}
-{"world":"diagram.sketch","i":0,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":1,"text":"Set the circle colour to yellow.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"the circle is now yellow."}
-{"world":"diagram.sketch","i":2,"text":"Copy the circle.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":3,"text":"What is the size of c1?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c1 is medium (62×62 px)."}
-{"world":"diagram.sketch","i":4,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":5,"text":"What is the size of c1?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c1 is medium (62×62 px)."}
-{"world":"diagram.sketch","i":6,"text":"What is the size of the white circle?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c3 is medium (62×62 px)."}
-{"world":"diagram.sketch","i":7,"text":"Copy c1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":8,"text":"What is the size of c1?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c1 is medium (62×62 px)."}
-{"world":"diagram.sketch","i":9,"text":"Remove c2.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"Deleted circle 2."}
-{"world":"diagram.sketch","i":10,"text":"Copy the white circle.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":11,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":12,"text":"Remove c1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"Deleted circle 1."}
-{"world":"diagram.sketch","i":13,"text":"Remove the yellow circle.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"Deleted circle 4."}
-{"world":"diagram.sketch","i":14,"text":"What is the size of c6?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c6 is medium (62×62 px)."}
-{"world":"diagram.sketch","i":15,"text":"Copy c3.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":16,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":17,"text":"Set c8 colour to grey.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"circle 8 is now gray."}
-{"world":"diagram.sketch","i":18,"text":"Copy the gray circle.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":19,"text":"Remove c3.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"Deleted circle 3."}
-{"world":"diagram.sketch","i":20,"text":"What is the size of c9?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c9 is medium (62×62 px)."}
-{"world":"diagram.sketch","i":21,"text":"What is the size of c9?","act":"ask","kind":null,"attr":"size","judged":"ok","reply":"c9 is medium (62×62 px)."}
-{"world":"diagram.sketch","i":22,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":23,"text":"Copy c8.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"Drew a circle."}
-{"world":"diagram.sketch","i":24,"text":"Set c11 colour to blue.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"circle 11 is now blue."}
-{"world":"docs.editor","i":0,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
-{"world":"docs.editor","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
-{"world":"docs.editor","i":2,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"OK, I added a table with 3 columns: Column 1, Column 2 and Column 3."}
-{"world":"docs.editor","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the table you added is gone."}
-{"world":"docs.editor","i":4,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
-{"world":"docs.editor","i":5,"text":"Copy list 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"OK, I copied the list to the clipboard."}
-{"world":"docs.editor","i":6,"text":"Set list 1 order to bottom.","act":"change","kind":null,"attr":"order","judged":"ok","reply":"The list is already at the end."}
-{"world":"docs.editor","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
-{"world":"docs.editor","i":8,"text":"Add a rule.","act":"make","kind":"rule","attr":null,"judged":"ok","reply":"OK, I inserted a horizontal line."}
-{"world":"docs.editor","i":9,"text":"Remove the rule.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I deleted the line."}
-{"world":"docs.editor","i":10,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I put back the rule you deleted."}
-{"world":"docs.editor","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the rule you added is gone."}
-{"world":"docs.editor","i":12,"text":"Add a list.","act":"make","kind":"list","attr":null,"judged":"ok","reply":"OK, I added an empty list. You can change its style or tell me what goes on it."}
-{"world":"docs.editor","i":13,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
-{"world":"docs.editor","i":14,"text":"Add a break.","act":"make","kind":"break","attr":null,"judged":"ok","reply":"OK, I added a page break."}
-{"world":"docs.editor","i":15,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the rule you added is gone."}
-{"world":"docs.editor","i":16,"text":"Add a break.","act":"make","kind":"break","attr":null,"judged":"ok","reply":"OK, I added a page break."}
-{"world":"docs.editor","i":17,"text":"Add a list.","act":"make","kind":"list","attr":null,"judged":"ok","reply":"OK, I added an empty list. You can change its style or tell me what goes on it."}
-{"world":"docs.editor","i":18,"text":"What is the order of list 1?","act":"ask","kind":null,"attr":"order","judged":"ok","reply":"The list says: "}
-{"world":"docs.editor","i":19,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
-{"world":"docs.editor","i":20,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the rule you added is gone."}
-{"world":"docs.editor","i":21,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
-{"world":"docs.editor","i":22,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid that: the list you added is gone."}
-{"world":"docs.editor","i":23,"text":"Add a rule.","act":"make","kind":"rule","attr":null,"judged":"ok","reply":"OK, I inserted a horizontal line."}
-{"world":"docs.editor","i":24,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"OK, I added a table with 3 columns: Column 1, Column 2 and Column 3."}
-{"world":"docs.reader","i":0,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":1,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":2,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":3,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":4,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":5,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":6,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":7,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":8,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":9,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":10,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":11,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":12,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"docs.reader","i":13,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":14,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"docs.reader","i":15,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"docs.reader","i":16,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"docs.reader","i":17,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":18,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"docs.reader","i":19,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"docs.reader","i":20,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"docs.reader","i":21,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":22,"text":"What is the voice of document Hansel and Gretel?","act":"ask","kind":null,"attr":"voice","judged":"ok","reply":"I read with the default voice."}
-{"world":"docs.reader","i":23,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"docs.reader","i":24,"text":"What is the speed of document Hansel and Gretel?","act":"ask","kind":null,"attr":"speed","judged":"ok","reply":"I read at speed 1 (normal)."}
-{"world":"geo.map","i":0,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":1,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":2,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":4,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":5,"text":"What is the colour of the pin?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"There is 1 marker: Point 1."}
-{"world":"geo.map","i":6,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":7,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":8,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":9,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":10,"text":"What is the colour of the pin?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"There is 1 marker: Point 1."}
-{"world":"geo.map","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":12,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":13,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":14,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":15,"text":"Remove the pin.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I removed the marker."}
-{"world":"geo.map","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":17,"text":"Remove the pin.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"OK, I removed the marker."}
-{"world":"geo.map","i":18,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":19,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":20,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":22,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"geo.map","i":23,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"OK, I undid the last change to the map."}
-{"world":"geo.map","i":24,"text":"Add a pin.","act":"make","kind":"pin","attr":null,"judged":"ok","reply":"OK, I put a marker here (25.00 N, 10.00 E)."}
-{"world":"media.music","i":0,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":1,"text":"Set the scale instrument to violin.","act":"change","kind":null,"attr":"instrument","judged":"ok","reply":"OK, now playing on the strings."}
-{"world":"media.music","i":2,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Twinkle, Twinkle, Little Star\" on the strings at 100 beats per minute. It is in C major."}
-{"world":"media.music","i":3,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the strings."}
-{"world":"media.music","i":4,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Frère Jacques\" on the strings at 120 beats per minute. It is in C major."}
-{"world":"media.music","i":5,"text":"What is the volume of song Frère Jacques?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 70 percent."}
-{"world":"media.music","i":6,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the strings."}
-{"world":"media.music","i":7,"text":"Set the scale volume to 43.","act":"change","kind":null,"attr":"volume","judged":"ok","reply":"OK, the volume is 43 percent."}
-{"world":"media.music","i":8,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the strings."}
-{"world":"media.music","i":9,"text":"What is the instrument of the scale?","act":"ask","kind":null,"attr":"instrument","judged":"ok","reply":"I am playing the strings."}
-{"world":"media.music","i":10,"text":"Set the scale volume to 32.","act":"change","kind":null,"attr":"volume","judged":"ok","reply":"OK, the volume is 32 percent."}
-{"world":"media.music","i":11,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Twinkle, Twinkle, Little Star\" on the strings at 100 beats per minute. It is in C major."}
-{"world":"media.music","i":12,"text":"What is the volume of song Twinkle, Twinkle, Little Star?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 32 percent."}
-{"world":"media.music","i":13,"text":"What is the tempo of song Twinkle, Twinkle, Little Star?","act":"ask","kind":null,"attr":"tempo","judged":"ok","reply":"\"Twinkle, Twinkle, Little Star\" is usually played at 100 beats per minute."}
-{"world":"media.music","i":14,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the strings."}
-{"world":"media.music","i":15,"text":"Set the scale volume to 54.","act":"change","kind":null,"attr":"volume","judged":"ok","reply":"OK, the volume is 54 percent."}
-{"world":"media.music","i":16,"text":"What is the volume of the scale?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 54 percent."}
-{"world":"media.music","i":17,"text":"Set the scale instrument to piano.","act":"change","kind":null,"attr":"instrument","judged":"ok","reply":"OK, now playing on the piano."}
-{"world":"media.music","i":18,"text":"Add a scale.","act":"make","kind":"scale","attr":null,"judged":"ok","reply":"Playing the C major scale upwards: C D E F G A B C, on the piano."}
-{"world":"media.music","i":19,"text":"What is the volume of the scale?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 54 percent."}
-{"world":"media.music","i":20,"text":"What is the volume of the scale?","act":"ask","kind":null,"attr":"volume","judged":"ok","reply":"The volume is 54 percent."}
-{"world":"media.music","i":21,"text":"Set the scale volume to 9.","act":"change","kind":null,"attr":"volume","judged":"ok","reply":"OK, the volume is 9 percent."}
-{"world":"media.music","i":22,"text":"Add a song.","act":"make","kind":"song","attr":null,"judged":"ok","reply":"Playing \"Old MacDonald Had a Farm\" on the piano at 110 beats per minute. It is in C major."}
-{"world":"media.music","i":23,"text":"What is the tempo of song Old MacDonald Had a Farm?","act":"ask","kind":null,"attr":"tempo","judged":"ok","reply":"\"Old MacDonald Had a Farm\" is usually played at 110 beats per minute."}
-{"world":"media.music","i":24,"text":"What is the instrument of song Old MacDonald Had a Farm?","act":"ask","kind":null,"attr":"instrument","judged":"ok","reply":"I am playing the piano."}
-{"world":"plan.seating","i":0,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"I added table 1."}
-{"world":"plan.seating","i":1,"text":"Set table 1 shape to round.","act":"change","kind":null,"attr":"shape","judged":"ok","reply":"Table 1 is already shape round; nothing changed."}
-{"world":"plan.seating","i":2,"text":"Add a seat.","act":"make","kind":"seat","attr":null,"judged":"ok","reply":"I added the seat at table 1. (I put it at table 1, the only table with room.)"}
-{"world":"plan.seating","i":3,"text":"Add a seat.","act":"make","kind":"seat","attr":null,"judged":"ok","reply":"I added the seat at table 1. (I put it at table 1, the only table with room.)"}
-{"world":"plan.seating","i":4,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had added the seat at table 1."}
-{"world":"plan.seating","i":5,"text":"Add a seat.","act":"make","kind":"seat","attr":null,"judged":"ok","reply":"I added the seat at table 1. (I put it at table 1, the only table with room.)"}
-{"world":"plan.seating","i":6,"text":"Copy table 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied table 1: the copy is table 2."}
-{"world":"plan.seating","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had copied table 1: the copy is table 2."}
-{"world":"plan.seating","i":8,"text":"Add a guest.","act":"make","kind":"guest","attr":null,"judged":"ok","reply":"I added guest 1 at table 1. (I put it at table 1, the only table with room.)"}
-{"world":"plan.seating","i":9,"text":"Set guest 1 colour to orange.","act":"change","kind":null,"attr":"colour","judged":"ok","reply":"I made guest 1 orange (it was white)."}
-{"world":"plan.seating","i":10,"text":"What is the colour of guest 1?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"The colour of guest 1 is orange."}
-{"world":"plan.seating","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had made guest 1 orange."}
-{"world":"plan.seating","i":12,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had added guest 1 at table 1."}
-{"world":"plan.seating","i":13,"text":"Remove table 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed table 1."}
-{"world":"plan.seating","i":14,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had removed table 1."}
-{"world":"plan.seating","i":15,"text":"What is the shape of table 1?","act":"ask","kind":null,"attr":"shape","judged":"ok","reply":"The shape of table 1 is round."}
-{"world":"plan.seating","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had added the seat at table 1."}
-{"world":"plan.seating","i":17,"text":"Remove table 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed table 1."}
-{"world":"plan.seating","i":18,"text":"Copy the seat.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied the seat: the copy is seat."}
-{"world":"plan.seating","i":19,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","reply":"I added table 2."}
-{"world":"plan.seating","i":20,"text":"Set table 2 seats to 2.","act":"change","kind":null,"attr":"seats","judged":"ok","reply":"I set the seats of table 2 to 2 (it was 4)."}
-{"world":"plan.seating","i":21,"text":"Add a guest.","act":"make","kind":"guest","attr":null,"judged":"ok","reply":"I added guest 1 at table 2. (I put it at table 2, the only table with room.)"}
-{"world":"plan.seating","i":22,"text":"What is the colour of guest 1?","act":"ask","kind":null,"attr":"colour","judged":"ok","reply":"The colour of guest 1 is white."}
-{"world":"plan.seating","i":23,"text":"Copy table 2.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied table 2: the copy is table 3."}
-{"world":"plan.seating","i":24,"text":"Remove guest 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed guest 1."}
-{"world":"plan.timeline","i":0,"text":"Add a timeline.","act":"make","kind":"timeline","attr":null,"judged":"ok","reply":"I added timeline 1."}
-{"world":"plan.timeline","i":1,"text":"Set timeline 1 unit to month.","act":"change","kind":null,"attr":"unit","judged":"ok","reply":"I set the unit of timeline 1 to month (it was year)."}
-{"world":"plan.timeline","i":2,"text":"Copy timeline 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied timeline 1: the copy is timeline 2."}
-{"world":"plan.timeline","i":3,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had copied timeline 1: the copy is timeline 2."}
-{"world":"plan.timeline","i":4,"text":"Remove timeline 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed timeline 1."}
-{"world":"plan.timeline","i":5,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had removed timeline 1."}
-{"world":"plan.timeline","i":6,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had set the unit of timeline 1 to month."}
-{"world":"plan.timeline","i":7,"text":"Add an event.","act":"make","kind":"event","attr":null,"judged":"ok","reply":"I added event 1 at timeline 1. (I put it at timeline 1, the only timeline with room.)"}
-{"world":"plan.timeline","i":8,"text":"Copy timeline 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied timeline 1: the copy is timeline 2."}
-{"world":"plan.timeline","i":9,"text":"Add an event.","act":"make","kind":"event","attr":null,"judged":"ok","reply":"I added event 2."}
-{"world":"plan.timeline","i":10,"text":"Copy timeline 2.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied timeline 2: the copy is timeline 3."}
-{"world":"plan.timeline","i":11,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had copied timeline 2: the copy is timeline 3."}
-{"world":"plan.timeline","i":12,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had added event 2."}
-{"world":"plan.timeline","i":13,"text":"Add a timeline.","act":"make","kind":"timeline","attr":null,"judged":"ok","reply":"I added timeline 3."}
-{"world":"plan.timeline","i":14,"text":"Copy event 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied event 1: the copy is event 2."}
-{"world":"plan.timeline","i":15,"text":"Copy timeline 3.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied timeline 3: the copy is timeline 4."}
-{"world":"plan.timeline","i":16,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had copied timeline 3: the copy is timeline 4."}
-{"world":"plan.timeline","i":17,"text":"Remove timeline 3.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed timeline 3."}
-{"world":"plan.timeline","i":18,"text":"Remove event 2.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed event 2."}
-{"world":"plan.timeline","i":19,"text":"Set timeline 2 unit to day.","act":"change","kind":null,"attr":"unit","judged":"ok","reply":"I set the unit of timeline 2 to day (it was year)."}
-{"world":"plan.timeline","i":20,"text":"Remove event 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed event 1."}
-{"world":"plan.timeline","i":21,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","reply":"I undid that: I had removed event 1."}
-{"world":"plan.timeline","i":22,"text":"Copy event 1.","act":"copy","kind":null,"attr":null,"judged":"ok","reply":"I copied event 1: the copy is event 3."}
-{"world":"plan.timeline","i":23,"text":"Remove event 1.","act":"remove","kind":null,"attr":null,"judged":"ok","reply":"I removed event 1."}
-{"world":"plan.timeline","i":24,"text":"What is the unit of timeline 2?","act":"ask","kind":null,"attr":"unit","judged":"ok","reply":"The unit of timeline 2 is day."}
+{"world":"art.draw","i":0,"text":"Add a sky.","act":"make","kind":"sky","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a light blue sky behind everything."}
+{"world":"art.draw","i":1,"text":"Add a ground.","act":"make","kind":"ground","attr":null,"judged":"ok","roundTrip":true,"reply":"I added grass to the ground."}
+{"world":"art.draw","i":2,"text":"Add a woman.","act":"make","kind":"woman","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a woman."}
+{"world":"art.draw","i":3,"text":"Copy the person.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I made a copy of the woman."}
+{"world":"art.draw","i":4,"text":"Add a boy.","act":"make","kind":"boy","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a boy."}
+{"world":"art.draw","i":5,"text":"Add a circle.","act":"make","kind":"circle","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a red circle."}
+{"world":"art.draw","i":6,"text":"Remove the circle.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I took away the red circle."}
+{"world":"art.draw","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I undid it (removed something)."}
+{"world":"art.draw","i":8,"text":"Redo that.","act":"redo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I did it again (removed something)."}
+{"world":"art.draw","i":9,"text":"Add a kitty.","act":"make","kind":"kitty","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew an orange cat."}
+{"world":"art.draw","i":10,"text":"Remove the cat.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I took away the orange cat."}
+{"world":"art.draw","i":11,"text":"Add a child.","act":"make","kind":"child","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a blue person."}
+{"world":"art.draw","i":12,"text":"Add a dog.","act":"make","kind":"dog","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a brown dog."}
+{"world":"art.draw","i":13,"text":"What is the colour of the dog?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The dog is brown."}
+{"world":"art.draw","i":14,"text":"Set the dog fill to outlined.","act":"change","kind":null,"attr":"fill","judged":"ok","roundTrip":true,"reply":"The dog is just an outline now."}
+{"world":"art.draw","i":15,"text":"What is the fill of the dog?","act":"ask","kind":null,"attr":"fill","judged":"ok","roundTrip":true,"reply":"The dog is just an outline."}
+{"world":"art.draw","i":16,"text":"Add an ellipse.","act":"make","kind":"ellipse","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a purple oval."}
+{"world":"art.draw","i":17,"text":"Remove the oval.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I took away the purple oval."}
+{"world":"art.draw","i":18,"text":"Copy the dog.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I made a copy of the dog."}
+{"world":"art.draw","i":19,"text":"Add a sun.","act":"make","kind":"sun","attr":null,"judged":"ok","roundTrip":true,"reply":"I drew a yellow sun."}
+{"world":"art.draw","i":20,"text":"Set the sun size to tiny.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"The sun is tiny now."}
+{"world":"art.draw","i":21,"text":"Set the sun fill to filled.","act":"change","kind":null,"attr":"fill","judged":"ok","roundTrip":true,"reply":"The sun is filled in now."}
+{"world":"art.draw","i":22,"text":"What is the size of the sun?","act":"ask","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"The sun is tiny."}
+{"world":"data.charts","i":0,"text":"Make a pie chart of the legs of the savanna animals.","act":"make","kind":"make_a_pie_chart_of_the_legs_of_the_savanna_animals","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, here is a pie chart of the legs of savanna animals with 12 items. It is open in the Charts tab."}
+{"world":"data.charts","i":1,"text":"Copy the chart.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I made a copy called \"Legs of savanna animals copy\". You can change it without touching the first one."}
+{"world":"data.charts","i":2,"text":"What is the axis of the chart?","act":"ask","kind":null,"attr":"axis","judged":"ok","roundTrip":true,"reply":"The chart \"Legs of savanna animals copy\" is drawn upright."}
+{"world":"data.charts","i":3,"text":"Set the chart palette to default.","act":"change","kind":null,"attr":"palette","judged":"ok","roundTrip":true,"reply":"OK, I went back to the default colors."}
+{"world":"data.charts","i":4,"text":"Remove the chart.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I deleted the chart \"Legs of savanna animals copy\". One chart is left."}
+{"world":"data.charts","i":5,"text":"What is the colour of the chart?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The bars of \"Legs of savanna animals\" are in the default colour."}
+{"world":"data.charts","i":6,"text":"Add bluebird 2.","act":"make","kind":"add_bluebird_2","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added bluebird (2)."}
+{"world":"data.charts","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I undid the last change to the chart."}
+{"world":"data.charts","i":8,"text":"Redo that.","act":"redo","kind":null,"attr":null,"judged":"fail","roundTrip":true,"reply":"The chart \"Legs of savanna animals\" is already up to date."}
+{"world":"data.charts","i":9,"text":"Set the chart axis to horizontal.","act":"change","kind":null,"attr":"axis","judged":"ok","roundTrip":true,"reply":"OK, the bar chart is horizontal now. I switched to a bar chart because only bar and line charts can lie down."}
+{"world":"data.charts","i":10,"text":"Set the chart sort to asc.","act":"change","kind":null,"attr":"sort","judged":"ok","roundTrip":true,"reply":"OK, the chart is sorted from the smallest to the biggest."}
+{"world":"data.charts","i":11,"text":"Add eagle 2.","act":"make","kind":"add_eagle_2","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added eagle (2)."}
+{"world":"data.charts","i":12,"text":"Set the chart axis to sideways.","act":"change","kind":null,"attr":"axis","judged":"ok","roundTrip":true,"reply":"The chart is already horizontal."}
+{"world":"data.charts","i":13,"text":"Set the chart colour to grey.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"OK, the chart is grey now."}
+{"world":"data.charts","i":14,"text":"Set the chart palette to forest.","act":"change","kind":null,"attr":"palette","judged":"ok","roundTrip":true,"reply":"OK, the chart uses forest colors now."}
+{"world":"data.charts","i":15,"text":"Add parrot 2.","act":"make","kind":"add_parrot_2","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added parrot (2)."}
+{"world":"data.charts","i":16,"text":"Add mite 8.","act":"make","kind":"add_mite_8","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added mite (8)."}
+{"world":"data.charts","i":17,"text":"Set the chart axis to sideway.","act":"change","kind":null,"attr":"axis","judged":"ok","roundTrip":true,"reply":"The chart is already horizontal."}
+{"world":"data.charts","i":18,"text":"What is the sort of the chart?","act":"ask","kind":null,"attr":"sort","judged":"ok","roundTrip":true,"reply":"The chart \"Legs of savanna animals\" is sorted from the smallest."}
+{"world":"data.charts","i":19,"text":"What is the palette of the chart?","act":"ask","kind":null,"attr":"palette","judged":"ok","roundTrip":true,"reply":"The chart \"Legs of savanna animals\" uses the forest palette."}
+{"world":"data.charts","i":20,"text":"What is the type of the chart?","act":"ask","kind":null,"attr":"type","judged":"ok","roundTrip":true,"reply":"The chart \"Legs of savanna animals\" is a bar chart."}
+{"world":"data.charts","i":21,"text":"Make a pie chart of the legs of the jungle animals.","act":"make","kind":"make_a_pie_chart_of_the_legs_of_the_jungle_animals","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, here is a pie chart of the legs of jungle animals with 9 items. It is open in the Charts tab."}
+{"world":"data.charts","i":22,"text":"Make a bar chart of the legs of the river animals.","act":"make","kind":"make_a_bar_chart_of_the_legs_of_the_river_animals","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, here is a bar chart of the legs of river animals with 12 items. It is open in the Charts tab."}
+{"world":"diagram.sketch","i":0,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
+{"world":"diagram.sketch","i":1,"text":"Set the circle size to 10.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 1? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":2,"text":"What is the colour of the circle?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"c1 is white."}
+{"world":"diagram.sketch","i":3,"text":"Copy the circle.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
+{"world":"diagram.sketch","i":4,"text":"What is the colour of c2?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"c2 is white."}
+{"world":"diagram.sketch","i":5,"text":"Remove c1.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Deleted circle 1."}
+{"world":"diagram.sketch","i":6,"text":"Set the circle size to 2.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 2? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":7,"text":"Remove the circle.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Deleted circle 2."}
+{"world":"diagram.sketch","i":8,"text":"Add a shape.","act":"make","kind":"shape","attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
+{"world":"diagram.sketch","i":9,"text":"Set the circle size to 3.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":10,"text":"Set the circle size to 9.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":11,"text":"What is the size of the circle?","act":"ask","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"c3 is medium (62×62 px)."}
+{"world":"diagram.sketch","i":12,"text":"Set the circle size to 1.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":13,"text":"Set the circle size to 8.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":14,"text":"Set the circle colour to thistle.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":15,"text":"Set the circle colour to cherry.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":16,"text":"Set the circle colour to sapphire.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":17,"text":"Set the circle size to 5.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":18,"text":"Set the circle colour to rust.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":19,"text":"Set the circle colour to plum.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":20,"text":"Set the circle size to 6.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":21,"text":"Set the circle size to 7.","act":"change","kind":null,"attr":"size","judged":"ok","roundTrip":true,"reply":"Done. But: What should change about circle 3? Try a color, size, shape, outline or label."}
+{"world":"diagram.sketch","i":22,"text":"Copy the circle.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"Drew a circle."}
+{"world":"docs.editor","i":0,"text":"Add a task.","act":"make","kind":"task","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added an empty task list. You can change its style or tell me what goes on it."}
+{"world":"docs.editor","i":1,"text":"Remove the list.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I deleted the list."}
+{"world":"docs.editor","i":2,"text":"Add a list.","act":"make","kind":"list","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added an empty list. You can change its style or tell me what goes on it."}
+{"world":"docs.editor","i":3,"text":"Copy the list.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I copied the list to the clipboard."}
+{"world":"docs.editor","i":4,"text":"What is the type of the list?","act":"ask","kind":null,"attr":"type","judged":"ok","roundTrip":true,"reply":"The list says: "}
+{"world":"docs.editor","i":5,"text":"Set the list style to bulleted.","act":"change","kind":null,"attr":"style","judged":"ok","roundTrip":true,"reply":"The list already is a bullet list."}
+{"world":"docs.editor","i":6,"text":"What is the style of the list?","act":"ask","kind":null,"attr":"style","judged":"ok","roundTrip":true,"reply":"The list says: "}
+{"world":"docs.editor","i":7,"text":"Add a rule.","act":"make","kind":"rule","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I inserted a horizontal line."}
+{"world":"docs.editor","i":8,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I undid that: the rule you added is gone."}
+{"world":"docs.editor","i":9,"text":"Redo that.","act":"redo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added the rule again."}
+{"world":"docs.editor","i":10,"text":"Add a break.","act":"make","kind":"break","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added a page break."}
+{"world":"docs.editor","i":11,"text":"Remove the second rule.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I deleted the second line."}
+{"world":"docs.editor","i":12,"text":"Add a section.","act":"make","kind":"section","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I started section 1."}
+{"world":"docs.editor","i":13,"text":"Copy the heading.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I copied the heading to the clipboard."}
+{"world":"docs.editor","i":14,"text":"Set the heading order to bottom.","act":"change","kind":null,"attr":"order","judged":"ok","roundTrip":true,"reply":"The heading is already at the end."}
+{"world":"docs.editor","i":15,"text":"What is the highlight of the heading?","act":"ask","kind":null,"attr":"highlight","judged":"ok","roundTrip":true,"reply":"The heading says: Section 1."}
+{"world":"docs.editor","i":16,"text":"Copy the rule.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I copied the line to the clipboard."}
+{"world":"docs.editor","i":17,"text":"What is the style of the heading?","act":"ask","kind":null,"attr":"style","judged":"ok","roundTrip":true,"reply":"The heading says: Section 1."}
+{"world":"docs.editor","i":18,"text":"Remove the rule.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I deleted the line."}
+{"world":"docs.editor","i":19,"text":"What is the align of the list?","act":"ask","kind":null,"attr":"align","judged":"ok","roundTrip":true,"reply":"The list says: "}
+{"world":"docs.editor","i":20,"text":"Set the heading type to blockquote.","act":"change","kind":null,"attr":"type","judged":"ok","roundTrip":true,"reply":"OK, I turned the heading into a quote."}
+{"world":"docs.editor","i":21,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I added a table with 3 columns: Column 1, Column 2 and Column 3."}
+{"world":"docs.editor","i":22,"text":"Remove the quote.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I deleted the quote."}
+{"world":"docs.reader","i":0,"text":"What is the voice of the document?","act":"ask","kind":null,"attr":"voice","judged":"ok","roundTrip":true,"reply":"I read with the default voice."}
+{"world":"docs.reader","i":1,"text":"Search for crumb.","act":"make","kind":"search_for_crumb","attr":null,"judged":"ok","roundTrip":true,"reply":"2 results for \"crumb\": 1. sentence 23: The birds ate every crumb. | 2. sentence 22: This time Hansel had no pebbles, so he scattered crumbs of bread on the path"}
+{"world":"docs.reader","i":2,"text":"Summarize section 1.","act":"ask","kind":"summarize_section_1","attr":null,"judged":"ok","roundTrip":true,"reply":"Section 1, \"The Poor Woodcutter\": Once upon a time a poor woodcutter lived at the edge of a great forest with his two children and their stepmother. In the morn"}
+{"world":"docs.reader","i":3,"text":"Search for stepmother.","act":"make","kind":"search_for_stepmother","attr":null,"judged":"ok","roundTrip":true,"reply":"6 results for \"stepmother\": 1. sentence 64: The stepmother was dead. | 2. sentence 5: The stepmother was cruel and she hated the children. | 3. sentence 6: One "}
+{"world":"docs.reader","i":4,"text":"Search for cage.","act":"make","kind":"search_for_cage","attr":null,"judged":"ok","roundTrip":true,"reply":"3 results for \"cage\": 1. sentence 54: Gretel ran to the cage and set her brother free. | 2. sentence 38: Early the next morning the witch locked Hansel in a sma"}
+{"world":"docs.reader","i":5,"text":"What is the speed of the document?","act":"ask","kind":null,"attr":"speed","judged":"ok","roundTrip":true,"reply":"I read at speed 1 (normal)."}
+{"world":"docs.reader","i":6,"text":"Search for set.","act":"make","kind":"search_for_set","attr":null,"judged":"ok","roundTrip":true,"reply":"2 results for \"set\": 1. sentence 58: They filled their pockets and their aprons and set off for home. | 2. sentence 54: Gretel ran to the cage and set her broth"}
+{"world":"docs.reader","i":7,"text":"Search for window.","act":"make","kind":"search_for_window","attr":null,"judged":"ok","roundTrip":true,"reply":"2 results for \"window\": 1. sentence 29: The windows were made of clear sugar. | 2. sentence 30: Hansel ate a piece of the roof and Gretel ate a piece of the win"}
+{"world":"docs.reader","i":8,"text":"Summarize section 3.","act":"ask","kind":"summarize_section_3","attr":null,"judged":"ok","roundTrip":true,"reply":"Section 3, \"The Witch's Oven\": Hansel held out a thin bone instead of his finger. The witch could not see well, so she thought the bone was his finger. (sentenc"}
+{"world":"docs.reader","i":9,"text":"Read section 3.","act":"pick","kind":"read_section_3","attr":null,"judged":"ok","roundTrip":true,"reply":"Reading section 3, \"The Witch's Oven\" (21 sentences)."}
+{"world":"docs.reader","i":10,"text":"Search for nibble.","act":"make","kind":"search_for_nibble","attr":null,"judged":"ok","roundTrip":true,"reply":"1 result for \"nibble\": 1. sentence 31: \"Nibble, nibble, little mouse, who is nibbling at my house?\" called a voice from inside."}
+{"world":"docs.reader","i":11,"text":"Search for woodcutter.","act":"make","kind":"search_for_woodcutter","attr":null,"judged":"ok","roundTrip":true,"reply":"3 results for \"woodcutter\": 1. sentence 3: The woodcutter was their father. | 2. sentence 61: Soon they saw the woodcutter's house through the trees. | 3. sente"}
+{"world":"docs.reader","i":12,"text":"Read section 4.","act":"pick","kind":"read_section_4","attr":null,"judged":"ok","roundTrip":true,"reply":"Reading section 4, \"Home Again\" (8 sentences)."}
+{"world":"docs.reader","i":13,"text":"Search for finger.","act":"make","kind":"search_for_finger","attr":null,"judged":"ok","roundTrip":true,"reply":"3 results for \"finger\": 1. sentence 43: Hansel held out a thin bone instead of his finger. | 2. sentence 44: The witch could not see well, so she thought the bo"}
+{"world":"docs.reader","i":14,"text":"Search for father.","act":"make","kind":"search_for_father","attr":null,"judged":"ok","roundTrip":true,"reply":"10 results for \"father\": 1. sentence 3: The woodcutter was their father. | 2. sentence 6: One evening the stepmother spoke to the father. | 3. sentence 9: The f"}
+{"world":"docs.reader","i":15,"text":"Search for piece.","act":"make","kind":"search_for_piece","attr":null,"judged":"ok","roundTrip":true,"reply":"1 result for \"piece\": 1. sentence 30: Hansel ate a piece of the roof and Gretel ate a piece of the window."}
+{"world":"docs.reader","i":16,"text":"Search for pebble.","act":"make","kind":"search_for_pebble","attr":null,"judged":"ok","roundTrip":true,"reply":"4 results for \"pebble\": 1. sentence 16: Hansel dropped a pebble on the path every few steps. | 2. sentence 19: The white pebbles shone in the moonlight and show"}
+{"world":"docs.reader","i":17,"text":"Summarize section 2.","act":"ask","kind":"summarize_section_2","attr":null,"judged":"ok","roundTrip":true,"reply":"Section 2, \"Lost in the Forest\": A few days later the stepmother made the father take the children into the forest again. They did not know that the witch built"}
+{"world":"docs.reader","i":18,"text":"Search for fat.","act":"make","kind":"search_for_fat","attr":null,"judged":"ok","roundTrip":true,"reply":"2 results for \"fat\": 1. sentence 41: \"I will eat him when he is fat.\" | 2. sentence 42: Every day the witch came to the cage and said, \"Hansel, put out your fin"}
+{"world":"docs.reader","i":19,"text":"Search for thin.","act":"make","kind":"search_for_thin","attr":null,"judged":"ok","roundTrip":true,"reply":"3 results for \"thin\": 1. sentence 45: She was angry that Hansel stayed so thin. | 2. sentence 10: Hansel heard every word through the thin wall of the bedroom. "}
+{"world":"docs.reader","i":20,"text":"Search for house.","act":"make","kind":"search_for_house","attr":null,"judged":"ok","roundTrip":true,"reply":"8 results for \"house\": 1. sentence 27: It led them to a little house in a clearing. | 2. sentence 36: Hansel and Gretel followed her into the house. | 3. senten"}
+{"world":"docs.reader","i":21,"text":"Search for bone.","act":"make","kind":"search_for_bone","attr":null,"judged":"ok","roundTrip":true,"reply":"2 results for \"bone\": 1. sentence 43: Hansel held out a thin bone instead of his finger. | 2. sentence 44: The witch could not see well, so she thought the bone"}
+{"world":"docs.reader","i":22,"text":"Search for clear.","act":"make","kind":"search_for_clear","attr":null,"judged":"ok","roundTrip":true,"reply":"2 results for \"clear\": 1. sentence 27: It led them to a little house in a clearing. | 2. sentence 29: The windows were made of clear sugar."}
+{"world":"geo.map","i":0,"text":"Show Ankara.","act":"make","kind":"ankara","attr":null,"judged":"ok","roundTrip":true,"reply":"Ankara is the capital of Turkey, in Asia (39.93 N, 32.86 E), with about 3.7 million people."}
+{"world":"geo.map","i":1,"text":"How far is Ouagadougou from Monrovia?","act":"ask","kind":"how_far_is_ouagadougou_from_monrovia","attr":null,"judged":"ok","roundTrip":true,"reply":"Ouagadougou and Monrovia are about 1,220 km (758 miles) apart, as the crow flies."}
+{"world":"geo.map","i":2,"text":"How far is Cairo from Sanaa?","act":"ask","kind":"how_far_is_cairo_from_sanaa","attr":null,"judged":"ok","roundTrip":true,"reply":"Cairo and Sanaa are about 2,102 km (1,306 miles) apart, as the crow flies."}
+{"world":"geo.map","i":3,"text":"How far is Luanda from Ouagadougou?","act":"ask","kind":"how_far_is_luanda_from_ouagadougou","attr":null,"judged":"ok","roundTrip":true,"reply":"Luanda and Ouagadougou are about 2,867 km (1,782 miles) apart, as the crow flies."}
+{"world":"geo.map","i":4,"text":"Show San Antonio.","act":"make","kind":"san_antonio","attr":null,"judged":"ok","roundTrip":false,"reply":"San Antonio is a city in the United States, in North America (29.42 N, 98.49 W), with about 1.5 million people."}
+{"world":"geo.map","i":5,"text":"How far is Port Louis from Banjul?","act":"ask","kind":"how_far_is_port_louis_from_banjul","attr":null,"judged":"ok","roundTrip":true,"reply":"Port Louis and Banjul are about 8,919 km (5,542 miles) apart, as the crow flies."}
+{"world":"geo.map","i":6,"text":"How far is Bissau from Bridgetown?","act":"ask","kind":"how_far_is_bissau_from_bridgetown","attr":null,"judged":"ok","roundTrip":true,"reply":"Bissau and Bridgetown are about 4,775 km (2,967 miles) apart, as the crow flies."}
+{"world":"geo.map","i":7,"text":"How far is Colombo from Bratislava?","act":"ask","kind":"how_far_is_colombo_from_bratislava","attr":null,"judged":"ok","roundTrip":true,"reply":"Colombo and Bratislava are about 7,433 km (4,618 miles) apart, as the crow flies."}
+{"world":"geo.map","i":8,"text":"Show Moldova.","act":"make","kind":"moldova","attr":null,"judged":"ok","roundTrip":true,"reply":"Moldova is a country in Eastern Europe (47.43 N, 28.49 E). Its capital is Chișinău."}
+{"world":"geo.map","i":9,"text":"Show Ordos.","act":"make","kind":"ordos","attr":null,"judged":"ok","roundTrip":true,"reply":"Ordos is a city in China, in Asia (39.61 N, 109.78 E), with about 1.9 million people."}
+{"world":"geo.map","i":10,"text":"Show Russia.","act":"make","kind":"russia","attr":null,"judged":"ok","roundTrip":true,"reply":"Russia is a country in Eastern Europe (58.25 N, 44.69 E). Its capital is Moscow."}
+{"world":"geo.map","i":11,"text":"How far is Moroni from Bishkek?","act":"ask","kind":"how_far_is_moroni_from_bishkek","attr":null,"judged":"ok","roundTrip":true,"reply":"Moroni and Bishkek are about 6,855 km (4,260 miles) apart, as the crow flies."}
+{"world":"geo.map","i":12,"text":"Show Burundi.","act":"make","kind":"burundi","attr":null,"judged":"ok","roundTrip":true,"reply":"Burundi is a country in Eastern Africa (3.33 S, 29.92 E). Its capital is Bujumbura."}
+{"world":"geo.map","i":13,"text":"How far is Kampala from Vatican City?","act":"ask","kind":"how_far_is_kampala_from_vatican_city","attr":null,"judged":"ok","roundTrip":true,"reply":"Kampala and Vatican are about 5,045 km (3,135 miles) apart, measured between their centres, as the crow flies."}
+{"world":"geo.map","i":14,"text":"Show Suzhou.","act":"make","kind":"suzhou","attr":null,"judged":"ok","roundTrip":true,"reply":"Suzhou is a city in China, in Asia (31.30 N, 120.60 E), with about 5.3 million people."}
+{"world":"geo.map","i":15,"text":"Show North Korea.","act":"make","kind":"north_korea","attr":null,"judged":"ok","roundTrip":true,"reply":"North Korea is a country in Eastern Asia (39.89 N, 126.44 E). Its capital is Pyongyang."}
+{"world":"geo.map","i":16,"text":"Show Cambodia.","act":"make","kind":"cambodia","attr":null,"judged":"ok","roundTrip":true,"reply":"Cambodia is a country in South-Eastern Asia (12.65 N, 104.50 E). Its capital is Phnom Penh."}
+{"world":"geo.map","i":17,"text":"How far is Bishkek from Hanoi?","act":"ask","kind":"how_far_is_bishkek_from_hanoi","attr":null,"judged":"ok","roundTrip":true,"reply":"Bishkek and Hanoi are about 3,783 km (2,350 miles) apart, as the crow flies."}
+{"world":"geo.map","i":18,"text":"How far is Khartoum from Beijing?","act":"ask","kind":"how_far_is_khartoum_from_beijing","attr":null,"judged":"ok","roundTrip":true,"reply":"Khartoum and Beijing are about 8,388 km (5,212 miles) apart, as the crow flies."}
+{"world":"geo.map","i":19,"text":"How far is New Delhi from Bloemfontein?","act":"ask","kind":"how_far_is_new_delhi_from_bloemfontein","attr":null,"judged":"ok","roundTrip":true,"reply":"New Delhi and Bloemfontein are about 8,397 km (5,218 miles) apart, as the crow flies."}
+{"world":"geo.map","i":20,"text":"Show Guatemala.","act":"make","kind":"guatemala","attr":null,"judged":"ok","roundTrip":true,"reply":"Guatemala is a country in Central America, North America (14.98 N, 90.50 W). Its capital is Guatemala City."}
+{"world":"geo.map","i":21,"text":"Show Casablanca.","act":"make","kind":"casablanca","attr":null,"judged":"ok","roundTrip":true,"reply":"Casablanca is a city in Morocco, in Africa (33.60 N, 7.62 W), with about 3.2 million people."}
+{"world":"geo.map","i":22,"text":"Show Doha.","act":"make","kind":"doha","attr":null,"judged":"ok","roundTrip":true,"reply":"Doha is the capital of Qatar, in Asia (25.29 N, 51.53 E), with about 1.4 million people."}
+{"world":"media.music","i":0,"text":"Play a A# major seventh chord.","act":"make","kind":"a_a_major_seventh_chord","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing an A major seventh chord: A C# E G#, on the piano."}
+{"world":"media.music","i":1,"text":"What is the instrument of the chord?","act":"ask","kind":null,"attr":"instrument","judged":"ok","roundTrip":true,"reply":"I am playing the piano."}
+{"world":"media.music","i":2,"text":"Set the chord volume to 39.","act":"change","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"OK, the volume is 39 percent."}
+{"world":"media.music","i":3,"text":"Play the C# major pentatonic scale.","act":"make","kind":"the_c_major_pentatonic_scale","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing the C# major pentatonic scale upwards: C# D# E# G# A# C#, on the piano."}
+{"world":"media.music","i":4,"text":"Set the scale volume to 56.","act":"change","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"OK, the volume is 56 percent."}
+{"world":"media.music","i":5,"text":"Play the G aeolian scale.","act":"make","kind":"the_g_aeolian_scale","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing the G aeolian scale upwards: G A Bb C D Eb F G, on the piano."}
+{"world":"media.music","i":6,"text":"Play a F dominant seventh chord.","act":"make","kind":"a_f_dominant_seventh_chord","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing an F dominant seventh chord: F A C Eb, on the piano."}
+{"world":"media.music","i":7,"text":"What is the volume of the chord?","act":"ask","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"The volume is 56 percent."}
+{"world":"media.music","i":8,"text":"Set the chord instrument to piano.","act":"change","kind":null,"attr":"instrument","judged":"ok","roundTrip":true,"reply":"OK, now playing on the piano."}
+{"world":"media.music","i":9,"text":"Set the chord instrument to violin.","act":"change","kind":null,"attr":"instrument","judged":"ok","roundTrip":true,"reply":"OK, now playing on the strings."}
+{"world":"media.music","i":10,"text":"Play Are You Sleeping.","act":"make","kind":"are_you_sleeping","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing \"Frère Jacques\" on the strings at 120 beats per minute. It is in C major."}
+{"world":"media.music","i":11,"text":"Play the A# dorian scale.","act":"make","kind":"the_a_dorian_scale","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing the A# dorian scale upwards: A# B# C# D# E# F## G# A#, on the strings."}
+{"world":"media.music","i":12,"text":"What is the instrument of the scale?","act":"ask","kind":null,"attr":"instrument","judged":"ok","roundTrip":true,"reply":"I am playing the strings."}
+{"world":"media.music","i":13,"text":"Set the scale volume to 22.","act":"change","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"OK, the volume is 22 percent."}
+{"world":"media.music","i":14,"text":"Set the scale volume to 34.","act":"change","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"OK, the volume is 34 percent."}
+{"world":"media.music","i":15,"text":"Set the scale volume to 31.","act":"change","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"OK, the volume is 31 percent."}
+{"world":"media.music","i":16,"text":"Play a E minor sixth chord.","act":"make","kind":"a_e_minor_sixth_chord","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing an E minor sixth chord: E G B C#, on the strings."}
+{"world":"media.music","i":17,"text":"Set the chord volume to 18.","act":"change","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"OK, the volume is 18 percent."}
+{"world":"media.music","i":18,"text":"Set the chord volume to 8.","act":"change","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"OK, the volume is 8 percent."}
+{"world":"media.music","i":19,"text":"Play the F whole tone scale.","act":"make","kind":"the_f_whole_tone_scale","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing the F whole tone scale upwards: F G A B C# D# F, on the strings."}
+{"world":"media.music","i":20,"text":"What is the volume of the scale?","act":"ask","kind":null,"attr":"volume","judged":"ok","roundTrip":true,"reply":"The volume is 8 percent."}
+{"world":"media.music","i":21,"text":"Play Row Your Boat.","act":"make","kind":"row_your_boat","attr":null,"judged":"ok","roundTrip":true,"reply":"Playing \"Row, Row, Row Your Boat\" on the strings at 100 beats per minute. It is in C major."}
+{"world":"media.music","i":22,"text":"What is the pitch of the song?","act":"ask","kind":null,"attr":"pitch","judged":"fail","roundTrip":false,"reply":"I do not know a song called \"what is the pitch of the song\". I know Twinkle, Twinkle, Little Star, Happy Birthday to You, Ode to Joy, Frère Jacques and Mary Had"}
+{"world":"plan.seating","i":0,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","roundTrip":true,"reply":"I added table 1."}
+{"world":"plan.seating","i":1,"text":"Set table 1 seats to 40.","act":"change","kind":null,"attr":"seats","judged":"ok","roundTrip":true,"reply":"I set the seats of table 1 to 40 (it was 4)."}
+{"world":"plan.seating","i":2,"text":"Add a seat.","act":"make","kind":"seat","attr":null,"judged":"ok","roundTrip":true,"reply":"I added the seat at table 1. (I put it at table 1, the only table with room.)"}
+{"world":"plan.seating","i":3,"text":"Remove the seat.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed the seat."}
+{"world":"plan.seating","i":4,"text":"What is the seats of table 1?","act":"ask","kind":null,"attr":"seats","judged":"ok","roundTrip":true,"reply":"Table 1 has 40 seats."}
+{"world":"plan.seating","i":5,"text":"Add a guest.","act":"make","kind":"guest","attr":null,"judged":"ok","roundTrip":true,"reply":"I added guest 1 at table 1. (I put it at table 1, the only table with room.)"}
+{"world":"plan.seating","i":6,"text":"Copy table 1.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied table 1: the copy is table 2."}
+{"world":"plan.seating","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I undid that: I had copied table 1: the copy is table 2."}
+{"world":"plan.seating","i":8,"text":"Redo that.","act":"redo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I did it again: \"Copy table 1\"."}
+{"world":"plan.seating","i":9,"text":"Remove table 1.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed table 1."}
+{"world":"plan.seating","i":10,"text":"What is the colour of guest 1?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The colour of guest 1 is white."}
+{"world":"plan.seating","i":11,"text":"What is the shape of table 2?","act":"ask","kind":null,"attr":"shape","judged":"ok","roundTrip":true,"reply":"The shape of table 2 is round."}
+{"world":"plan.seating","i":12,"text":"Set guest 1 colour to sienna.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made guest 1 sienna (it was white)."}
+{"world":"plan.seating","i":13,"text":"Remove table 2.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed table 2."}
+{"world":"plan.seating","i":14,"text":"Copy guest 1.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied guest 1: the copy is guest 2."}
+{"world":"plan.seating","i":15,"text":"Remove guest 2.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed guest 2."}
+{"world":"plan.seating","i":16,"text":"Remove guest 1.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed guest 1."}
+{"world":"plan.seating","i":17,"text":"Add a table.","act":"make","kind":"table","attr":null,"judged":"ok","roundTrip":true,"reply":"I added table 3."}
+{"world":"plan.seating","i":18,"text":"What is the colour of table 3?","act":"ask","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"The colour of table 3 is white."}
+{"world":"plan.seating","i":19,"text":"Set table 3 colour to lilac.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made table 3 lilac (it was white)."}
+{"world":"plan.seating","i":20,"text":"Set table 3 colour to peach.","act":"change","kind":null,"attr":"colour","judged":"ok","roundTrip":true,"reply":"I made table 3 peach (it was lilac)."}
+{"world":"plan.seating","i":21,"text":"Copy table 3.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied table 3: the copy is table 4."}
+{"world":"plan.seating","i":22,"text":"Copy table 4.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied table 4: the copy is table 5."}
+{"world":"plan.timeline","i":0,"text":"Add a timeline.","act":"make","kind":"timeline","attr":null,"judged":"ok","roundTrip":true,"reply":"I added timeline 1."}
+{"world":"plan.timeline","i":1,"text":"Set timeline 1 unit to month.","act":"change","kind":null,"attr":"unit","judged":"ok","roundTrip":true,"reply":"I set the unit of timeline 1 to month (it was year)."}
+{"world":"plan.timeline","i":2,"text":"Add an event.","act":"make","kind":"event","attr":null,"judged":"ok","roundTrip":true,"reply":"I added event 1 at timeline 1. (I put it at timeline 1, the only timeline with room.)"}
+{"world":"plan.timeline","i":3,"text":"Copy event 1.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied event 1: the copy is event 2."}
+{"world":"plan.timeline","i":4,"text":"Remove event 2.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed event 2."}
+{"world":"plan.timeline","i":5,"text":"Remove event 1.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed event 1."}
+{"world":"plan.timeline","i":6,"text":"Set timeline 1 unit to minute.","act":"change","kind":null,"attr":"unit","judged":"ok","roundTrip":true,"reply":"I set the unit of timeline 1 to minute (it was month)."}
+{"world":"plan.timeline","i":7,"text":"Undo that.","act":"undo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I undid that: I had set the unit of timeline 1 to minute."}
+{"world":"plan.timeline","i":8,"text":"Redo that.","act":"redo","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"OK, I did it again: \"Set timeline 1 unit to minute\"."}
+{"world":"plan.timeline","i":9,"text":"Copy timeline 1.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied timeline 1: the copy is timeline 2."}
+{"world":"plan.timeline","i":10,"text":"What is the unit of timeline 2?","act":"ask","kind":null,"attr":"unit","judged":"ok","roundTrip":true,"reply":"The unit of timeline 2 is minute."}
+{"world":"plan.timeline","i":11,"text":"Remove timeline 2.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed timeline 2."}
+{"world":"plan.timeline","i":12,"text":"Set timeline 1 unit to day.","act":"change","kind":null,"attr":"unit","judged":"ok","roundTrip":true,"reply":"I set the unit of timeline 1 to day (it was minute)."}
+{"world":"plan.timeline","i":13,"text":"Remove timeline 1.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed timeline 1."}
+{"world":"plan.timeline","i":14,"text":"Add a timeline.","act":"make","kind":"timeline","attr":null,"judged":"ok","roundTrip":true,"reply":"I added timeline 3."}
+{"world":"plan.timeline","i":15,"text":"Copy timeline 3.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied timeline 3: the copy is timeline 4."}
+{"world":"plan.timeline","i":16,"text":"What is the unit of timeline 3?","act":"ask","kind":null,"attr":"unit","judged":"ok","roundTrip":true,"reply":"The unit of timeline 3 is year."}
+{"world":"plan.timeline","i":17,"text":"Remove timeline 4.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed timeline 4."}
+{"world":"plan.timeline","i":18,"text":"Set timeline 3 unit to day.","act":"change","kind":null,"attr":"unit","judged":"ok","roundTrip":true,"reply":"I set the unit of timeline 3 to day (it was year)."}
+{"world":"plan.timeline","i":19,"text":"Remove timeline 3.","act":"remove","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I removed timeline 3."}
+{"world":"plan.timeline","i":20,"text":"Add a timeline.","act":"make","kind":"timeline","attr":null,"judged":"ok","roundTrip":true,"reply":"I added timeline 5."}
+{"world":"plan.timeline","i":21,"text":"Copy timeline 5.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied timeline 5: the copy is timeline 6."}
+{"world":"plan.timeline","i":22,"text":"Copy timeline 6.","act":"copy","kind":null,"attr":null,"judged":"ok","roundTrip":true,"reply":"I copied timeline 6: the copy is timeline 7."}

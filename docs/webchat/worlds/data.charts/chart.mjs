@@ -317,6 +317,8 @@ function buildList(ctx, { list }) {
 
 const HABITATS = { sea: 'sea', ocean: 'sea', farm: 'farm', forest: 'forest', wood: 'forest', river: 'river', jungle: 'jungle', desert: 'desert', polar: 'polar', arctic: 'polar', home: 'home', pet: 'home', garden: 'garden', savanna: 'savanna', grassland: 'grassland', mountain: 'mountain' };
 const CLASSES = { mammal: 'mammal', bird: 'bird', fish: 'fish', insect: 'insect', bug: 'insect', reptile: 'reptile', amphibian: 'amphibian', arachnid: 'arachnid' };
+/** The groups of animals the legs reader takes (the habitats and the classes it knows): for the dice. */
+export const legGroups = () => ({ habitats: [...new Set(Object.values(HABITATS))], classes: [...new Set(Object.values(CLASSES))] });
 /** The legs of animals (k.animals) -> one bar per animal (a group such as sea animals, or named animals). */
 function buildLegs(ctx, { what }) {
   const raw = String(what ?? '').trim();
@@ -739,6 +741,23 @@ function summary(c) {
   const top = c.labels.filter((_, i) => t[i] === big);
   const name = c.title ? ` called "${c.title}"` : '';
   return `${/^[aeiou]/.test(kindWord(c)) ? 'An' : 'A'} ${kindWord(c)}${name} with ${c.labels.length} ${c.labels.length === 1 ? 'item' : 'items'}${multi(c) ? ` and ${c.datasets.length} series (${c.datasets.map((d) => d.label).join(', ')})` : ''}: ${joinAnd(items)}. The biggest is ${joinAnd(top)}.`;
+}
+/** A setting of the open chart as a sentence ("What is the type of the chart?"): type, axis, sort, palette, legend, stacked, title, colour. */
+export function settingOf(ctx, { attr }) {
+  const c = current(ctx);
+  if (!c) return no('missing', NONE);
+  const o = c.options ?? {};
+  const say = {
+    type: `The chart "${c.title}" is a ${c.type} chart.`,
+    title: `The chart is called "${c.title}".`,
+    axis: `The chart "${c.title}" is drawn ${o.horizontal ? 'sideways' : 'upright'}.`,
+    sort: `The chart "${c.title}" is ${o.sort ? `sorted ${o.sort === 'desc' ? 'from the biggest' : 'from the smallest'}` : 'not sorted'}.`,
+    palette: `The chart "${c.title}" uses the ${o.palette ?? 'default'} palette.`,
+    legend: `The legend of "${c.title}" is ${o.showLegend === false ? 'hidden' : 'shown'}.`,
+    stacked: `The chart "${c.title}" is ${o.stacked ? '' : 'not '}stacked.`,
+    colour: `The bars of "${c.title}" are ${c.datasets?.[0]?.color ?? 'in the default colour'}.`,
+  }[attr];
+  return say ? ok(say) : undefined;
 }
 export function describe(ctx) {
   const r = needData(ctx);

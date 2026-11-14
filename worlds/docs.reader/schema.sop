@@ -90,6 +90,7 @@
     numbered=yes
 
 @reader.chapter acts.kind
+    know=sections:*
     dice.not=make
     plural=chapters
     numbered=yes
@@ -132,6 +133,7 @@
     word=cast
 
 @reader.question acts.kind
+    know=search:*
     dice.not=make
     plural=questions
     word=query
