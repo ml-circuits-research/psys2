@@ -18,8 +18,8 @@
  */
 import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=bceb69c353';
 import { isColourWord } from '../knowledge/values.mjs?v=ebf19b103c';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=30b019d8d3';
-import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=9d90795560';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=6e59e9dff8';
+import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=a056df2f5b';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 export const COLORS = { has: (w) => isColourWord(w) };   // the colour names of the catalog (the one reader, k.values), single words

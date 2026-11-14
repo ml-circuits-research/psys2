@@ -5,8 +5,8 @@
 import * as M from './map.mjs?v=40f5cacf40';
 import { knowsPlace } from '../../lib/knowledge/open-words.mjs?v=cc592651d5';
 import { keyOf } from './places.mjs?v=cf4d58a990';
-import * as G from './ops.mjs?v=3482c42b66';
-import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=8e07fc1315';   // circular on purpose: only used inside functions, when the executor exists
+import * as G from './ops.mjs?v=5e639ebe7a';
+import { ACT_VERBS } from '../../worlds/acts/acts.mjs?v=c64082a31c';   // circular on purpose: only used inside functions, when the executor exists
 
 const wordsOf = (t) => String(t ?? '').toLowerCase().split(/[^a-z0-9_'’-]+/).filter(Boolean);
 const DET = /^(?:the|a|an|my|our|this|that|these|those|another|new|all|some|any)\s+/;

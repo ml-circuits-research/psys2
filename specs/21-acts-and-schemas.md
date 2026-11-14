@@ -23,7 +23,7 @@ Roles (same everywhere): `thing` (what), `set` (several things: "all", "the gues
 | undo / redo | one step per request | | |
 | save / load | name the state / restore it | value = name | |
 
-The English forms of the acts are written ONCE, as `core.phrase` groups in `worlds/acts/lexicon.sop` (verbs) and as FACTS, one `lang.en.frame` per way of saying an act (`handover/lang.en/shards/frames-acts.sop`, sets `acts`, `acts.more`, `acts.data`), read through `src/lang/en.mjs` (`en.frames()`; `acts.mjs FORMS` is `en.frames('acts')`). The schema worlds generate their patterns from these facts. The seed verbs are local and marked `seed=temporary`: they are deleted when the knowledge repo's `k.actions` (verb -> act, roles) is read through the catalog.
+The English forms of the acts are written ONCE, as `core.phrase` groups in `worlds/acts/lexicon.sop` (verbs) and as FACTS, one `w.lang.en.frame` (with its `w.lang.en.part` wires) per way of saying an act (the catalog world `w.lang.en`, shards `frames-acts`, `-more`, `-data`, sets `acts`, `acts.more`, `acts.data`; the frames the catalog does not have yet, sets `acts.text`, `acts.facts` and the readers' own, are in `src/lang/en.local.mjs`), read through `src/lang/en.mjs` (`en.frames()`; `acts.mjs FORMS` is `en.frames('acts')`). The schema worlds generate their patterns from these facts. The seed verbs are local and marked `seed=temporary`: they are deleted when the knowledge repo's `k.actions` (verb -> act, roles) is read through the catalog.
 
 ## 3. The schema (SOP Lang, `schema.sop`)
 ```
