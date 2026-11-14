@@ -68,6 +68,7 @@ const SMOKE = [
   'no-romanian-in-worlds.test.mjs',    // nothing but English in worlds/
   'loop-guard.test.mjs',               // a loop never runs away
   'turn-guard.test.mjs',               // a turn always settles (deadline, stop): the reply comes
+  'live-state.test.mjs',               // the live-state invariant: round trips A-B-A-B of every attribute of the world schemas never meet a stale "already"; undo / redo; the view draws the state
 ];
 const files = all.filter((f) => {
   if (smoke) return SMOKE.includes(f);

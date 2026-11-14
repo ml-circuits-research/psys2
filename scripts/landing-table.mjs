@@ -3,9 +3,9 @@
 /**
  * The one table of the MEASURES THAT COUNT (worker-tasks, standing direction of 2026-11-14), GENERATED, never typed:
  *
- *   1. worlds on schema + acts (count)                     worlds/<w>/schema.sop (the generated or hand-declared schema worlds), pilots listed apart
- *   2. hand-written language lines in tab worlds           patterns / lexicon / templates / operations ... of every tab world, generated files and tests left out
- *   3. general lines still in PSys2                        docs/host-boundary.md "General lines still in PSys2" (live count for the world modules) + the knowledge inventory
+ *   1. worlds on schema + acts (count)                     worlds/<w>/schema.sop (the world schemas; each runs as a live world on schema + acts), pilots listed apart
+ *   2. hand-written language lines in live worlds (shown in views)   patterns / lexicon / templates / operations ... of every live world with a tab, generated files and tests left out
+ *   3. general lines still in PSys2                        docs/host-boundary.md "General lines still in PSys2" (live count for the library modules) + the knowledge inventory
  *   4. reuse number per world                              docs/library-reuse-report.md (the library's report, a copy)
  *   5. coverage grid holes                                 docs/webchat/coverage-grid.json (scripts/coverage-grid.mjs): k.actions verbs x kinds x values, judged by the state difference
  *   6. cross-world turns                                   on the owner logs (replayed, from build-system-map) and the failure ledger (cross-world causes)
@@ -14,6 +14,8 @@
  *   9. the scaling indicators of Q10 item 1                a new world from a schema alone (60 natural requests), the robustness sets (rules config), cross-world captures (target 0), the richest world on acts:
  *                                                          training/eval/indicators.json (scripts/indicators.mjs), the captures counted live from the corpus
  * Accuracy sets appear as a guard column only (owner logs, T1-T3, grid judged): they must not fall, they are not the goal.
+ * Names (reviewer 2026-11-14): world schema = what a kind of world is; knowledge world = facts true for everyone (k.*); live world = one running instance of a schema in a session, shown in a view;
+ * library modules (std.*) = mechanisms, not worlds.
  * Smoke and test-world are run separately and are not part of this table.
  *
  *   node scripts/landing-table.mjs [--log] [--json]       (markdown on stdout; --log appends it to worker-log.md as a new entry)
@@ -124,9 +126,9 @@ export async function compute({ meas, worlds } = {}) {
   const reuseRows = worlds.filter((w) => w.reuseRow);
   const reuseMean = reuseRows.length ? reuseRows.reduce((a, w) => a + w.reuse, 0) / reuseRows.length : null;
   const rows = [];
-  rows.push({ label: 'Worlds on schema + acts', value: String(sw.switched.length), detail: `${sw.switched.join(', ')}${sw.pilots.length ? `; pilot, not switched: ${sw.pilots.join(', ')}` : ''}${acts.acts != null ? `; ${acts.acts} acts, ${acts.verbGroups} verb groups in worlds/acts` : ''}` });
-  rows.push({ label: 'Hand-written language lines in tab worlds', value: fmt(lang), detail: `${tabs.length} tab worlds; most: ${tabLines.filter((w) => w.language).slice(0, 5).map((w) => `${w.id} ${fmt(w.language)}`).join(', ')}; with code: ${fmt(tabLines.reduce((a, w) => a + w.code, 0))} lines of .mjs, ${fmt(tabLines.reduce((a, w) => a + w.schema, 0))} of schema` });
-  rows.push({ label: 'General lines still in PSys2', value: fmt(gl.total), detail: `SOP ${fmt(gl.sop)}, code ${fmt(gl.code)}, generators ${fmt(gl.generators)} (docs/host-boundary.md; the world modules counted live)${inv ? `; knowledge still in worlds: ${inv.items} items, ${fmt(inv.words)} words (${inv.withCounterpart} with a catalog counterpart)` : ''}` });
+  rows.push({ label: 'Live worlds on a world schema + acts', value: String(sw.switched.length), detail: `${sw.switched.join(', ')}${sw.pilots.length ? `; pilot, not switched: ${sw.pilots.join(', ')}` : ''}${acts.acts != null ? `; ${acts.acts} acts, ${acts.verbGroups} verb groups in worlds/acts` : ''}` });
+  rows.push({ label: 'Hand-written language lines in live worlds (shown in views)', value: fmt(lang), detail: `${tabs.length} live worlds; most: ${tabLines.filter((w) => w.language).slice(0, 5).map((w) => `${w.id} ${fmt(w.language)}`).join(', ')}; with code: ${fmt(tabLines.reduce((a, w) => a + w.code, 0))} lines of .mjs, ${fmt(tabLines.reduce((a, w) => a + w.schema, 0))} of schema` });
+  rows.push({ label: 'General lines still in PSys2', value: fmt(gl.total), detail: `SOP ${fmt(gl.sop)}, code ${fmt(gl.code)}, generators ${fmt(gl.generators)} (docs/host-boundary.md; the library modules counted live)${inv ? `; knowledge still in worlds: ${inv.items} items, ${fmt(inv.words)} words (${inv.withCounterpart} with a catalog counterpart)` : ''}` });
   rows.push({ label: 'Reuse number per world (mean)', value: reuseMean == null ? '-' : reuseMean.toFixed(2), detail: `${reuseRows.length} worlds in the library report; ${reuseRows.filter((w) => w.reuse > 0).map((w) => `${w.id} ${w.reuse}`).join(', ') || 'none above 0'}; the rest 0` });
   rows.push({ label: 'Coverage grid holes', value: grid ? `${grid.holes} of ${fmt(grid.total)}` : '-', detail: grid ? `${grid.version === 2 ? `grid v2: every placeholder filled from the schema, verbs x kinds x values that knowledge allows, a setup per cell, the world's tab open; ${grid.generatorErrors} generator errors (counted apart, never a case), ${grid.unconfirmed} further misses with an unconfirmed setup, ${grid.captures} cross-world captures. ` : ''}${grid.previous ? `Grid v1 (${grid.previous.generated}, a generator with defects) said ${grid.previous.holes} of ${fmt(grid.previous.total)}: not comparable. ` : ''}Per world: ${grid.worlds.map((w) => `${w.id}${sw.pilots.includes(w.id) && !sw.switched.includes(w.id) ? ' (pilot)' : ''} ${w.holes}/${w.total}${w.unconfirmed ? ` (+${w.unconfirmed} unconfirmed)` : ''}`).join(', ')}` : 'no docs/webchat/coverage-grid.json' });
 

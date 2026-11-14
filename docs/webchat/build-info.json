@@ -294,11 +294,11 @@
     "worlds/talk/ops.mjs": "23e75e5e99486fff",
     "worlds/talk/records.mjs": "5bd966cce96fda23",
     "worlds/ui.avatar/default-face.mjs": "bb16812ba264b9e2",
-    "worlds/ui.avatar/facedraw.mjs": "878aba9560358bca",
-    "worlds/ui.avatar/facelogic.mjs": "0078dadcc707ccb3",
-    "worlds/ui.avatar/hooks.mjs": "00fc087c673ed37e",
-    "worlds/ui.avatar/ops.mjs": "0791c4ce120e3528",
-    "worlds/ui.avatar/own.mjs": "bce1bd1a92f08e4c",
+    "worlds/ui.avatar/facedraw.mjs": "7a12f8fd6437c3f1",
+    "worlds/ui.avatar/facelogic.mjs": "38cc1a95ffb9e814",
+    "worlds/ui.avatar/hooks.mjs": "f8a62f1fb8ff7ce4",
+    "worlds/ui.avatar/ops.mjs": "7f6e48160544f359",
+    "worlds/ui.avatar/own.mjs": "20d691d33753f953",
     "worlds/ui.help/coverage.md": "c104d6620e1078d4",
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
     "worlds/ui.help/fns.mjs": "8a4ce7e2f3ef5a5a",
@@ -314,6 +314,6 @@
     "worlds/user.profile/ops.mjs": "b25a205993e50803",
     "worlds/user.profile/understand.mjs": "b6efb7946158c72f"
   },
-  "builtAt": "2026-11-14T03:15:10.455Z",
-  "commit": "c9c68f49"
+  "builtAt": "2026-11-14T03:31:58.490Z",
+  "commit": "787f2e07-dirty"
 }
