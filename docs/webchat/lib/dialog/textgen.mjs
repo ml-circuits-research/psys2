@@ -4,7 +4,7 @@
 // Browser-safe: no `node:*` imports; the library module is passed in.
 
 import { knowledgeWorld, languageWorld, genreOf, randomTopics, topicIndex } from './compose-world.mjs?v=7e48e1d104';
-import { englishOf, joinList as list } from '../lang/en-generate.mjs?v=735b7ec142';
+import { englishOf, joinList as list } from '../lang/en-generate.mjs?v=868b5c174f';
 
 const pick = (lib, name) => (typeof lib?.[name] === 'function' ? lib[name] : typeof lib?.std?.[name] === 'function' ? lib.std[name] : null);
 const clip = (n, lo, hi, def) => { const v = Math.round(Number(n)); return Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : def)); };

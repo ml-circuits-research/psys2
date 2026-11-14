@@ -5,7 +5,7 @@
 // Browser-safe: no `node:*` imports; the library module and the world registry are passed in.
 import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=a137742733';
 import { languageWorld } from './compose-world.mjs?v=7e48e1d104';
-import { englishOf } from '../lang/en-generate.mjs?v=735b7ec142';
+import { englishOf } from '../lang/en-generate.mjs?v=868b5c174f';
 
 const NOT_SAMPLED = new Set(['place', 'connect', 'group', 'send', 'save', 'load', 'redo']);   // acts the library cannot frame (a place, a second thing, a host act): left to typing
 const FUNCTION_WORDS = new Set(['to', 'from', 'at', 'until', 'in', 'on', 'by', 'of']);   // attributes named like prepositions cannot be said in "Set X <attr> to V"
