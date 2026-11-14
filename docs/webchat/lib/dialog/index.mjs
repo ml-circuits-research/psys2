@@ -10,40 +10,40 @@
  * Without it all input is treated as English.
  */
 import { installTextGen } from './textgen.mjs?v=e9612a6969';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=16c6ce3890';
-import { loadWorlds } from '../worlds/index.mjs?v=1969f41018';
-import { validateWorldSet } from '../worlds/validate.mjs?v=26cbe732cf';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=51b6091042';
+import { loadWorlds } from '../worlds/index.mjs?v=92d55208ca';
+import { validateWorldSet } from '../worlds/validate.mjs?v=d2c457f590';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=3e5e6bf7a2';
 import { createInterpreter } from '../interpreter/index.mjs?v=380fbd270b';
 import { createReasoner } from '../reasoner/index.mjs?v=40b199eb34';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=339f715865';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=33ef5b6cd6';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=619768a781';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=bd23f13722';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=3ec9167cca';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=2dab968090';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=35c436d436';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=d2ac1cf00b';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=d6951c11dd';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=4b39ead121';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=0635fd344a';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=0a74a9db9f';
 import { lexIndex } from '../worlds/lexicon.mjs?v=6912cd6a5d';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=14d5d2cbdd';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=79d50acc7f';
-import { checkValues } from './value-check.mjs?v=39923488a2';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=1e01da6431';
+import { checkValues } from './value-check.mjs?v=8530c99a2b';
 import { attachValues } from '../knowledge/values.mjs?v=a137742733';
 import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=3eed01f9f5';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=bba6531ae9';
-import { Dialogue } from './dialogue.mjs?v=6e308df652';
+import { Discourse } from './discourse.mjs?v=9900b88a3c';
+import { Dialogue } from './dialogue.mjs?v=f9a4cda320';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=c8d42b7a7b';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=edac4f4e06';
-import { repairFromScene } from './scene-referents.mjs?v=4362f8b561';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=dc639ea189';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=43c26c7fa2';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=ca231b6de2';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=9f173a36a6';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=5e823cdd9b';
+import { repairFromScene } from './scene-referents.mjs?v=26f17fd82a';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=cfd6d463ec';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=6421c59cad';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f028282e05';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -516,7 +516,17 @@ export class DialogSession {
     const recentWorlds = [...(this._recentWorlds ?? [])];
     const ambientWorlds = this.engine.set.list().filter((w) => w.ambient).map((w) => w.id);   // worlds of an always-visible view (the avatar): present on every tab
     const stepWorlds = this.discourse?.actions?.[0]?.worlds ?? [], redoWorlds = this.discourse?.redoStack?.at?.(-1)?.worlds ?? [];   // the worlds of the newest step on the timeline, and of the newest undone step: "undo" / "redo" follow them whichever tab is open
-    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, ambientWorlds, stepWorlds, redoWorlds, states: st, asked: this.discourse?.pending?.world ?? null, lastAction: this.discourse?.frames?.[0]?.world ?? null };   // asked and lastAction: what meta.worlds reads (a question the world asked; the world of the last request)
+    const project = (segments) => {   // the states and the worlds after these readings are carried out, on a copy of the session (spec 03 "Clauses in sequence")
+      const f = this.forkForValidation(), worlds = [];
+      for (const seg of segments) {
+        f.isession.add(seg.wires);
+        for (const w of seg.wires) { const r = this.engine.interp.resolve(f.isession, w); if (r?.status && r.status !== 'supported') return null; }
+        const id = seg.match?.worldId ?? seg.match?.pattern?.worldId ?? seg.routing?.winner?.worldId;
+        if (id && !worlds.includes(id)) worlds.unshift(id);
+      }
+      return { states: f.isession.state, worlds };
+    };
+    return { project, activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, ambientWorlds, stepWorlds, redoWorlds, states: st, asked: this.discourse?.pending?.world ?? null, lastAction: this.discourse?.frames?.[0]?.world ?? null };   // asked and lastAction: what meta.worlds reads (a question the world asked; the world of the last request)
   }
 
   /** Legacy focus map derived from the context: +3 for the tab world, +1 for each recent world. */

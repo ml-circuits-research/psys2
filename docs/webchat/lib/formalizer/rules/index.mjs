@@ -486,6 +486,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     if (verdicts.has(m)) return verdicts.get(m);
     const acc = set.get(m.pattern.worldId)?.ops?.accepts;
     if (typeof acc !== 'function') { verdicts.set(m, null); return null; }
+    // the clauses of a sentence that this world read as a whole are read in sequence for it (`ctx.ownedBy`, readInSequence): it owns each of them, whatever its hook says of a clause alone
+    if (context?.ownedBy && context.ownedBy === m.pattern.worldId) { const own = { ok: true, strong: true, refuse: false, roles: {} }; verdicts.set(m, own); return own; }
       const roles = Object.fromEntries(Object.entries(m.slots ?? {}).map(([n, sl]) => [n, sl.text]));
       for (const lit of String(m.pattern.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];   // the literal roles of a form (arg.attribute="name")
     let ok = true, strong = false, refuse = false;
@@ -932,6 +934,39 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     for (const lit of String(pat.emit ?? '').matchAll(/ arg\.(\w+)=\\?"([^"{}\\]*)\\?"/g)) if (!(lit[1] in roles) && lit[1] !== 'mode') roles[lit[1]] = lit[2];
     try { return co({ action: /action=([\w.]+)/.exec(pat.emit ?? '')?.[1] ?? null, mode: /arg\.mode=(\w+)/.exec(pat.emit ?? '')?.[1] ?? null, roles }); } catch { return false; }
   };
+  /**
+   * CLAUSES IN SEQUENCE (spec 03 "Clauses in sequence"): the clauses of one sentence read one after the other, each over the state (and the recent worlds) that the clauses before it leave
+   * ("add a list and make it numbered": the second clause's "it" is the list the first makes, which is not there yet when the sentence is typed). `ctx.project` (the dialog's dry run on a
+   * copy of the session) carries the readings so far out; the context is put back at the end, so nothing is committed. A clause that cannot be read, or carried out, ends the reading: null (all or nothing). Without `ctx.project` (a plain formalizer call) this is the old reading, every clause alone.
+   */
+  const SEQUEL_PRONOUNS = new Set(['it', 'them', 'this', 'that', 'these', 'those']);
+  /** `read(i)` reads piece i and answers its segments (an array, or null when it is not read); `bad(segments)` ends the loop. Answers the segment arrays read; `strict`: null when a piece before another cannot be carried out, else the later pieces are read over the state as it was (the old reading). */
+  const inSequence = (count, read, { owner = null, strict = false, bad = (r) => !r || r.some((x) => x.unparsed) } = {}) => {
+    const saved = { states: ctx.states, recentWorlds: ctx.recentWorlds, lastWorld: ctx.lastWorld, ownedBy: ctx.ownedBy };
+    ctx.ownedBy = owner;
+    const outs = [];
+    try {
+      for (let idx = 0; idx < count; idx++) {
+        if (idx > 0 && typeof ctx.project === 'function' && !bad(outs[idx - 1], idx - 1)) {
+          let proj = null;
+          try { proj = ctx.project(outs.flat()); } catch { proj = null; }
+          if (proj?.states) {
+            ctx.states = proj.states;
+            const ws = [...new Set([...(proj.worlds ?? []), ...saved.recentWorlds])];
+            ctx.recentWorlds = ws; ctx.lastWorld = ws[0] ?? saved.lastWorld;
+          } else if (strict) return null;   // what comes before cannot be carried out (it asks for something, or is refused): the rest cannot be read over it
+        }
+        const r = read(idx);
+        outs.push(r);
+        if (bad(r, idx)) break;
+      }
+    } finally { ctx.states = saved.states; ctx.recentWorlds = saved.recentWorlds; ctx.lastWorld = saved.lastWorld; ctx.ownedBy = saved.ownedBy; }
+    return outs;
+  };
+  const readInSequence = (clauses, questionOf, owner = null) => {
+    const outs = inSequence(clauses.length, (idx) => [readGroup(clauses[idx], questionOf(clauses[idx], idx))], { owner, strict: true });
+    return outs && outs.length === clauses.length ? outs.flat() : null;
+  };
   const readSentencePlain = (s, tokens) => {
     const whole = readGroup(tokens, s.isQuestion);
     const clauses = splitClauses(tokens);
@@ -941,18 +976,31 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       // reading is a catch-all: prefer the clause-by-clause reading when every clause is understood on its own by a pattern
       // of at least the same priority, all of the same world (so a list "a, b and c" of one world is never split across worlds).
       // (not when the world takes that coordination as one act: its hook `coordinates` says so, "show Paris and Rome" is one view of both, not two views one after the other)
+      const qOf = (c, idx) => QUESTION_WORDS.has(firstWord(c)) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)));
       const swallowed = clauses.length > 1 && !coordinatedWhole(whole.match) && Object.values(whole.match?.slots ?? {}).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|then|but)([\s,]|$)|,/i.test(sl.text ?? ''));
       if (swallowed) {
-        const parts = clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(firstWord(c)) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)))));
+        const parts = clauses.map((c, idx) => readGroup(c, qOf(c, idx)));
         // clauses of one world, or a command followed by a question of another world ("add a heading Shopping and what is 2 plus 2"), or a
         // command of another world that is read almost entirely by fixed words ("play twinkle twinkle and draw a house"); a question clause needs no priority bar
         const sameWorld = (p) => p.match?.worldId === parts[0].match?.worldId;
         const isQ = (i) => i > 0 && QUESTION_WORDS.has(firstWord(clauses[i]));
         const ownCommand = (p, i) => i > 0 && clauses[i].filter(isContent).length >= 3 && fixedCoverage(p.match, clauses[i].filter(isContent).length) >= 0.5;
-        if (parts.every((p, i) => !p.unparsed && ((p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) || isQ(i)) && (i === 0 || sameWorld(p) || isQ(i) || ownCommand(p, i)))) return { done: parts, fallback: null };
+        const accepted = (ps) => ps.every((p, i) => !p.unparsed && ((p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) || isQ(i)) && (i === 0 || sameWorld(p) || isQ(i) || ownCommand(p, i)));
+        if (accepted(parts)) return { done: parts, fallback: null };
       }
       const cut = splitSwallowedCommand(tokens, whole);
       if (cut) return { done: cut, fallback: null };
+      if (swallowed) {
+        // a later clause names a thing by a pronoun ("add a list and make it numbered"): the clauses are read in sequence, each over what the ones before it made. All or nothing: every clause
+        // is read, all by the world that read the sentence (the bar of priority above is for sentences that are one catch-all; here the sentence is a chain, and it is the chain that is read)
+        if (typeof ctx.project === 'function' && whole.match?.worldId && clauses.slice(1).some((c) => c.some((t) => t.kind === 'word' && SEQUEL_PRONOUNS.has(t.lower)))) {
+          const snap = form.snapshot();
+          const seq = readInSequence(clauses, qOf, whole.match.worldId);
+          // the whole chain must also be carried out (the last clause too: its pronoun must find the thing at run time, not only when read)
+          if (seq && seq.every((p) => !p.unparsed && p.match?.worldId === whole.match.worldId) && (() => { try { return !!ctx.project(seq); } catch { return false; } })()) return { done: seq, fallback: null };
+          form.restore(snap);
+        }
+      }
       return { done: [{ ...whole, span: s.span, text: s.text }], fallback: null };
     }
     // an indirect question ("tell me what is 3 plus 4"): read the bare question (the original was tried first)
@@ -1012,7 +1060,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const swallowed = !!whole && !whole.unparsed && !!whole.match && !coordinatedWhole(whole.match) && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && sl.span && cuts.some((ci) => tokens[ci].start >= sl.span[0] && tokens[ci].end <= sl.span[1]));
     if (!unread && !swallowed) return null;
     form.restore(stateBefore);
-    const bounds = [0, ...cuts, tokens.length], out = [];
+    const bounds = [0, ...cuts, tokens.length], pieces = [];
     for (let k = 0; k + 1 < bounds.length; k++) {
       budget.tick('rules.cut');
       let piece = tokens.slice(bounds[k], bounds[k + 1]);
@@ -1020,12 +1068,14 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       while (piece.length && JOINER_WORDS.has(piece[0].lower)) { budget.tick('rules.cut'); piece = piece.slice(1); }
       if (!piece.some(isContent)) continue;
       const lead = piece.find(isContent);
-      const sub = { ...s, tokens: piece, span: [piece[0].start, piece[piece.length - 1].end], isQuestion: k === bounds.length - 2 ? s.isQuestion : QUESTION_WORDS.has(lead.lower) };
-      const r = readSentence(sub, piece);
-      if (!r.done || r.done.some((x) => x.unparsed || (!unread && !QUESTION_WORDS.has(lead.lower) && (x.match?.priority ?? 0) < (whole.match?.priority ?? 0)))) { form.restore(stateAfter); return null; }
-      for (const x of r.done) x.cut = { by: 'cards', piece: k };
-      out.push(...r.done);
+      pieces.push({ k, piece, lead, sub: { ...s, tokens: piece, span: [piece[0].start, piece[piece.length - 1].end], isQuestion: k === bounds.length - 2 ? s.isQuestion : QUESTION_WORDS.has(lead.lower) } });
     }
+    // the pieces are read in sequence (spec 03 "Clauses in sequence"): each over the state the ones before it leave
+    const bad = (r, idx) => !r || r.some((x) => x.unparsed || (!unread && !QUESTION_WORDS.has(pieces[idx].lead.lower) && (x.match?.priority ?? 0) < (whole.match?.priority ?? 0)));
+    const outs = inSequence(pieces.length, (idx) => readSentence(pieces[idx].sub, pieces[idx].piece).done, { bad });
+    if (!outs || outs.length < pieces.length || outs.some((r, idx) => bad(r, idx))) { form.restore(stateAfter); return null; }   // one piece unread, or the ones before it cannot be carried out: nothing is cut
+    const out = [];
+    outs.forEach((r, idx) => { for (const x of r) x.cut = { by: 'cards', piece: pieces[idx].k }; out.push(...r); });
     return out.length > 1 ? out : (form.restore(stateAfter), null);
   };
   for (const s of analyze(text)) {
