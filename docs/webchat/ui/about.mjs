@@ -7,16 +7,14 @@ export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
 /** [name, version, licence, used by]. Keep in step with docs/webchat/vendor/README.md. */
 export const CREDITS = [
   ['k.faces (hand-written face parts, sop-knowledge-worlds)', 'catalog', 'CC0 1.0', 'avatar popup'],
-  ['TipTap and ProseMirror', '3.33.0', 'MIT', 'Editor tab'],
-  ['chessground, Stockfish 19 lite', 'see vendor/chess/LICENSES.md', 'GPL-3.0', 'Chess tab'],
+  ['TipTap and ProseMirror', '3.33.0', 'MIT', 'Documents tab'],
   ['Tone.js, abcjs', '15.1.22 / 6.7.2', 'MIT', 'Music tab'],
   ['Leaflet; Natural Earth; GeoNames', '1.9.4', 'BSD-2 / public domain / CC BY 4.0', 'Map tab (OpenStreetMap tiles online: ODbL)'],
   ['Chart.js, @kurkle/color', '4.6.1 / 0.3.4', 'MIT', 'Charts tab'],
   ['rough.js', '4.6.6', 'MIT', 'Drawing tab'],
-  ['PDF.js, mammoth.js', '6.5.438 / 1.13.0', 'Apache-2.0 / BSD-2', 'Documents tab'],
   ['ONNX Runtime Web (WASM, CPU)', '1.31.1', 'MIT', 'runs the two small models in your browser'],
   ['bergamot-translator (WASM) and the Mozilla Firefox Translations models (downloaded when a language is selected)', '0.4.9', 'MPL-2.0', 'on-device translation where the browser has no Translator'],
-  ['chess.js, tonal (inside the worlds)', 'see worlds/*/vendor', 'BSD-2 / MIT', 'chess and music rules'],
+  ['tonal (inside the worlds)', 'see worlds/*/vendor', 'MIT', 'music rules'],
   ['DistilBERT (distilbert-base-uncased), fine-tuned by this project', 'dispatcher', 'Apache-2.0', 'the dispatcher model'],
   ['FLAN-T5 small (google/flan-t5-small), fine-tuned by this project', 'normalizer', 'Apache-2.0', 'the phrasing normalizer'],
 ];
@@ -30,7 +28,7 @@ export const GREETING = 'Hi, I am PSys2, a neurosymbolic assistant that runs ent
 export const ABOUT_SECTIONS = [
   ['What PSys2 is', 'PSys2 is a neurosymbolic assistant that runs entirely in your browser. There is no server and no large language model: two small neural models (about 160 MB together, cached in your browser) work with formal rules and small knowledge worlds.'],
   ['What neurosymbolic means here', 'The neural part reads: a DistilBERT dispatcher cuts your message into parts and proposes which world each part belongs to, and a small FLAN-T5 normalizer may propose a simpler wording when nothing else reads a sentence. The symbolic part decides: rules turn a part into formal wires (SOP Lang), the interpreter runs them on a world, and the answer is written from templates.'],
-  ['Which world takes a message', 'Rules decide which world (drawing, chess, shop ...) takes your message, and each choice has a reason you can read in the trace: what is open, what you named, what was said before, the words of the worlds. The small neural model is only a hint that counts when the rules have little to go on. This is the default; Settings > Developer can switch back to the older way, where the model proposes and the rules check.'],
+  ['Which world takes a message', 'Rules decide which world (drawing, map, shop ...) takes your message, and each choice has a reason you can read in the trace: what is open, what you named, what was said before, the words of the worlds. The small neural model is only a hint that counts when the rules have little to go on. This is the default; Settings > Developer can switch back to the older way, where the model proposes and the rules check.'],
   ['Why the symbolic layer makes it safe', 'The neural models only propose. A proposal is used only if the rules read it, a value checker confirms that its numbers, names and negations are the ones you said, and a world accepts it. Nothing runs unless a world validates it, so I do what I understood and tell you what I did not.'],
 ];
 /** Measured accuracy (training/RESULTS.md, authored operational set of 1240 messages; Romanian set of 2480 cases). */
