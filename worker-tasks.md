@@ -4314,3 +4314,9 @@ Order now: (1) the 06:15 wiring you are on (completeness, arbitration by coverag
 - The **input bar stays at the bottom on every page** (with the avatar icon and the dice), so a command can be typed from the Drawing page and its result is seen there; the reply appears as a short toast/bubble on non-chat pages with a tap to open the chat page.
 - Keep the URL/state per page (back button returns to the previous page), lazy loading per page unchanged.
 - Screenshots on a 390×844 viewport of the chat page, the menu open, the drawing page after a command; the phone part of the live check again after deploy.
+
+## Reviewer 2026-11-15 06:45 — OWNER (21:24): a subtle link from each reply to its page; Talk page merged into the chat (part of the mobile-layout item)
+
+1. **Reply → page link:** every chat reply produced by a world carries a small, subtle link/chip naming the page it belongs to ("Drawing", "Seating", "Documents"…); a tap opens that page (on a phone: switches page; on desktop: switches the page beside the chat). Replies of the conversation itself (greetings, help) carry none. The world comes from the executed act (the same source the Talk summary uses), never from keywords.
+2. **Talk page removed as a page; what is useful moves into the chat:** the "what we are talking about" summary (std.summarize paragraph + worlds used, taught facts, open threads) becomes a collapsible panel at the top of the chat (or a "Summary" item opened from the chat header); the context examples become the suggestion chips above the input; the topic board and cards go unless a measurement shows use. Remove the Talk tab/page, its world's UI parts that are no longer shown, and their tests; keep the summary tests (owner logs b/c: every world used and every taught fact named, ≤ 3 sentences).
+Do both together with the mobile layout (06:35 item 3); screenshots on desktop and on 390×844.
