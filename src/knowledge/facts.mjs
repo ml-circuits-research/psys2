@@ -66,6 +66,35 @@ export function createFacts({ source, name = 'catalog' }) {
     stats.vocabMs = clock() - t;
   })();
 
+  // LAZY LOADING (specs/06 "Lazy loading", "the catalog by the same index"): a catalog that publishes `vocab/index.json` (buckets of the vocabulary cut by the first two letters of a lemma,
+  // `vocab/<bucket>.json`, scripts/build-catalog-vocab.mjs) is read bucket by bucket, only the ones the words of a message fall in; without it the whole `vocab.json` is read, as before.
+  let vocabIndex, vocabIndexLoading = null;   // undefined: not asked yet; null: this catalog has no buckets; else its index
+  const buckets = new Map();
+  const foldKey = (w) => String(w).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const bucketKey = (w) => (foldKey(w).slice(0, 2) || '_').padEnd(2, '_');
+  const loadVocabIndex = () => vocabIndexLoading ??= (async () => {
+    try { const txt = await source.text('vocab/index.json'); vocabIndex = txt && !source.fellBack?.('vocab/index.json') ? (JSON.parse(txt).buckets ? JSON.parse(txt) : null) : null; } catch { vocabIndex = null; }
+  })();
+  /** Loads what the vocabulary needs for these words (their lemma candidates): the buckets of their first letters, or the whole file when the catalog has no buckets. */
+  const loadVocabFor = async (words) => {
+    await loadVocabIndex();
+    if (!vocabIndex) return loadVocab();
+    vocab ??= {};
+    const want = new Set();
+    for (const w of words) for (const l of lemmaCandidates(w)) want.add(bucketKey(l));
+    await Promise.all([...want].filter((b) => vocabIndex.buckets[b]).map((b) => {
+      if (!buckets.has(b)) buckets.set(b, (async () => {
+        const t0 = clock();
+        let txt = null;
+        try { txt = await source.text(`vocab/${b}.json`); } catch { txt = null; }
+        stats.vocabBytes += txt?.length ?? 0; stats.vocabMs += clock() - t0; stats.vocabBuckets = (stats.vocabBuckets ?? 0) + 1;
+        if (!txt || source.fellBack?.(`vocab/${b}.json`)) { down = true; buckets.delete(b); retryLater(() => {}); return; }
+        try { Object.assign(vocab, JSON.parse(txt)); } catch { buckets.delete(b); }
+      })());
+      return buckets.get(b);
+    }));
+  };
+
   const loadIndex = () => indexLoading ??= (async () => {
     let failed = false;
     try { const txt = await source.text('index.json'); failed = !txt || !!source.fellBack?.('index.json'); index = txt ? JSON.parse(txt) : { worlds: [] }; } catch { failed = true; index = { worlds: [] }; }
@@ -151,7 +180,7 @@ export function createFacts({ source, name = 'catalog' }) {
 
   /** `{ word, lemma, shards }` for the first lemma candidate the vocabulary knows, else null. No shard is loaded. */
   async function find(word) {
-    await loadVocab();
+    await loadVocabFor([word]);
     for (const lemma of lemmaCandidates(word)) {
       const sh = Object.hasOwn(vocab, lemma) ? vocab[lemma] : null;
       if (sh?.length) return { word, lemma, shards: sh };
@@ -293,7 +322,7 @@ export function createFacts({ source, name = 'catalog' }) {
     preloadWires,
     /** The wires of a type that `preloadWires` loaded, or undefined (a synchronous read for operations: `ctx.knowledge.peekWires(type)`). */
     peekWires: (type, world = null) => listed.get(type) ?? wireMemo.get(`${type}|null|${world ?? ''}`),   // also the whole-type wires a world's `needs` entry `wires:<type>[@<world>]` settled (the map's countries and cities)
-    name, find, thing, stats, loadVocab, world, wires, schema, series,
+    name, find, thing, stats, loadVocab, loadVocabFor, world, wires, schema, series,
     /**
      * Loads a typed need (`std.schema.needs of= type= from=?`, sopworld 0.39) so that an operation reads it synchronously: the wires of the type (`peekWires`), in the world `from` when it is named; the
      * types the host builds a model from are the models: `k.faces.*` the faces (`peekFaces`), `core.slot` and `core.word` of no world the schemas of the knowledge worlds and the ordered series (`peekSchema`, `peekSeries`).
@@ -312,6 +341,8 @@ export function createFacts({ source, name = 'catalog' }) {
     },
     /** The faces already built, or undefined (a synchronous read for operations: `ctx.knowledge.peekFaces()`). */
     peekFaces: () => facesData,
+    /** True when the catalog is read by vocabulary buckets (its `vocab/index.json` exists): `ready()` then loads the buckets of each message. */
+    vocabBuckets: () => !!vocabIndex,
     /** The vocabulary (lemma -> shard ids) once loaded, else null (a synchronous read for the open classes of the readers, src/knowledge/open-words.mjs). */
     peekVocab: () => vocab,
     /** Names of the parts of objects (k.objects.part: roof, door, wheel), read once from the k.objects shards; `peekParts()` is the set once loaded, else undefined. */

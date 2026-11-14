@@ -18,11 +18,12 @@ export function buildWorldIndex(set, { bitsPerEntry = 10, mode = 'keys' } = {}) 
   const idx = new Map(ids.map((id, i) => [id, i]));
   const vocab = worldWords(set);
   const pk = patternKeys(set);
-  const keys = new Map(), always = [];
+  const keys = new Map(), always = [], strong = new Map();   // strong: the names a user opens a world's tab by ("map", "drawing", "chess"): they load the world whatever else uses the word
+  const addStrong = (w, id) => { if (w.length > 1) (strong.get(w) ?? strong.set(w, []).get(w)).push(idx.get(id)); };
   for (const id of ids) {
     const ks = new Set(pk.get(id)?.keys ?? []);
     const w = set.get(id);
-    if (w?.tab) for (const x of [w.tab.id, w.tab.title, ...(w.tab.aliases ?? [])]) { const a = atom(x); if (a) { ks.add(a); for (const part of a.split('_')) if (part.length > 2) ks.add(part); } }
+    if (w?.tab) for (const x of [w.tab.id, w.tab.title, ...(w.tab.aliases ?? [])]) { const a = atom(x); if (a) { ks.add(a); addStrong(a, id); for (const part of a.split('_')) if (part.length > 2) { ks.add(part); addStrong(part, id); } } }
     keys.set(id, ks);
     if (pk.get(id)?.always) always.push(id);
   }
@@ -31,6 +32,7 @@ export function buildWorldIndex(set, { bitsPerEntry = 10, mode = 'keys' } = {}) 
   const bloom = { ids, filters: ids.map((id) => bloomBuild(src.get(id) ?? [], { bitsPerEntry })) };
   const entries = new Map();
   for (const [w, list] of inv) entries.set(w, list.map((id) => idx.get(id)).sort((a, b) => a - b));
+  for (const [w, list] of strong) entries.set(`!${w}`, [...new Set(list)].sort((a, b) => a - b));   // `!word`: strong entries live in the same bucket as the word
   const buckets = bucketsBuild(entries);
-  return { ids, words: src, vocab, keys, always, patternStats: Object.fromEntries(ids.map((id) => [id, pk.get(id) ? { patterns: pk.get(id).patterns, always: pk.get(id).always, keys: pk.get(id).keys.size } : null])), inv, bloom, buckets, index: { ids, buckets: Object.fromEntries(Object.entries(buckets).map(([k, v]) => [k, Object.keys(v).length])) } };
+  return { ids, strong, words: src, vocab, keys, always, patternStats: Object.fromEntries(ids.map((id) => [id, pk.get(id) ? { patterns: pk.get(id).patterns, always: pk.get(id).always, keys: pk.get(id).keys.size } : null])), inv, bloom, buckets, index: { ids, buckets: Object.fromEntries(Object.entries(buckets).map(([k, v]) => [k, Object.keys(v).length])) } };
 }

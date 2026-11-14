@@ -122,7 +122,8 @@ async function init(m) {
   const fetchJson = async (rel, hash) => { const r = await fetch(abs(rel) + (hash ? `?v=${hash}` : ''), { cache: 'default' }); if (!r.ok) throw new Error(`${rel}: HTTP ${r.status}`); return r.json(); };
   worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson, bag: (text) => new Set([...rulesM.messageBag(text), ...wordIdx.queryWords(text)]) });
   await worldLoader.init();
-  const startIds = [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })].filter((id) => allowed(id));
+  // `?psys2lazy=0` (tests, a comparison with the full set): every world is loaded at start, as before lazy loading
+  const startIds = (m.lazyWorlds === false ? worldLoader.ids() : [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })]).filter((id) => allowed(id));
   await worldLoader.bundles(startIds);
   for (const id of startIds) loadedIds.add(id);
   const bundle = worldLoader.bundleOf(startIds, absModule);

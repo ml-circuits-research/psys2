@@ -51,7 +51,11 @@ export function createWorldLoader({ indexHash, fetchJson, bag, on = () => {} }) 
       const loaded = await Promise.all(wanted.map(loadBucket));
       const by = new Map(wanted.map((b, i) => [b, loaded[i]]));
       const ids = need().words.ids, out = new Set();
-      for (const w of words) { const hit = by.get(bucketOf(w))?.[w]; if (hit && hit.length <= T()) for (const i of hit) out.add(ids[i]); }
+      for (const w of words) {
+        const b = by.get(bucketOf(w)), hit = b?.[w], strong = b?.[`!${w}`];
+        if (strong) for (const i of strong) out.add(ids[i]);   // the name of a world's tab: it loads the world
+        if (hit && hit.length <= T()) for (const i of hit) out.add(ids[i]);
+      }
       return { ids: out, buckets: wanted.length };
     },
     /** The worlds a start loads. `state`: world id -> state (a restart restores them: a world that has state or memory is loaded again). */

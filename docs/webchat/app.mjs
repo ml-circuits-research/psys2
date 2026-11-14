@@ -115,6 +115,7 @@ export async function mountPsys2(element, options = {}) {
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
   let tabsLive = false;   // set once the boot state was shown: after that, a turn that changes a tab's world makes the tab (the changed worlds only; a world that merely loaded does not)
+  const makingTabs = new Set();   // tab UIs being made: the turn that opened the tab waits for them (before its reply is final)
   const tabKnown = new Set(), tabMade = new Map();   // LAZY LOADING: tab ids whose world exists in this build; tab id -> Promise of its UI (made once)
   /**
    * The tab's UI, made on first use: the tab opens, a message makes its world act, or an effect of the tab arrives. Making it loads the tab's world (the engine adds it) and its vendor assets
@@ -123,6 +124,8 @@ export async function mountPsys2(element, options = {}) {
   function makeTab(t) {
     if (!tabKnown.has(t.id)) return Promise.resolve(null);
     if (!tabMade.has(t.id)) tabMade.set(t.id, (async () => {
+      effectsPending++; updateBusy();   // the tab's UI is part of the turn that opened it: the host is busy (and a test or a voice turn waits) until it is there
+      try {
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
       if (!options.renderAllTabs && engineClient) { try { const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab' }); for (const id of r?.added ?? []) loadedWorlds.add(id); } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
       if (destroyed) return null;
@@ -132,8 +135,11 @@ export async function mountPsys2(element, options = {}) {
       panelUI[t.id].ui.update?.(states[t.world]);
       if (view === t.id) panelUI[t.id].ui.show?.();
       return panelUI[t.id].ui;
+      } finally { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); }
     })());
-    return tabMade.get(t.id);
+    const p = tabMade.get(t.id);
+    if (!panelUI[t.id]) { makingTabs.add(p); p.finally(() => makingTabs.delete(p)).catch(() => {}); }
+    return p;
   }
   const loadedWorlds = new Set(), loadedLog = [];   // LAZY LOADING: the worlds the engine holds, and what was loaded on demand
   let engine = null, session = null, translator = null, speech = null, engineClient = null, browserBackend = null;
@@ -155,7 +161,7 @@ export async function mountPsys2(element, options = {}) {
   const progress = createProgress({ storage: options.persist !== false ? globalThis.localStorage : null, localize: (t) => localized(t), details: () => settings.devMode === true,
     onStep: (r) => events.add('step', r.label, { stepId: r.id, ms: r.ms, bytes: r.bytes, ok: r.ok, ...(r.error ? { error: r.error } : {}), tab: null, tabAfter: null }) });
   progress.plan('startup', [{ id: 'page', label: 'Loading the page code' }, { id: 'worlds', label: 'Loading the worlds' }, { id: 'reasoner', label: 'Starting the reasoner' }, { id: 'model', label: 'Loading the reading model' },
-    { id: 'translator', label: 'Loading the translator' }, { id: 'catalog', label: 'Reading the knowledge catalog index' }, { id: 'voices', label: 'Finding voices' }]);
+    { id: 'translator', label: 'Loading the translator' }, { id: 'catalog', label: 'Knowledge catalog' }, { id: 'voices', label: 'Finding voices' }]);
   progress.start('page', 'Loading the page code');
   progress.end('page', { ms: Math.round(tEntry), bytes: (() => { try { return performance.getEntriesByType('resource').filter((r) => /\.m?js(\?|$)/.test(r.name)).reduce((a, r) => a + (r.transferSize || r.encodedBodySize || 0), 0); } catch { return null; } })() });
   let logFilter = 'all', confirmClear = false;
@@ -738,6 +744,7 @@ export async function mountPsys2(element, options = {}) {
     hostStage('effects', recId); setInputStage('effects');
     let effects;
     try { effects = await runEffects(reply.effects); } catch (e) { botMsg.msg.remove(); throw e; }   // stopped while the effects ran: the answer is withdrawn
+    if (makingTabs.size) { try { await withDeadline(Promise.all([...makingTabs]), LIMITS.effectMs, { signal: turn?.ctl.signal ?? null, label: 'tab' }); } catch { /* a tab that is slow to appear does not hold the turn */ } }
     const effectsMs = performance.now() - tEffects;
     let stateAfter = null;
     try { stateAfter = hashState(session.state?.() ?? null); } catch { /* ignore */ }
@@ -841,8 +848,14 @@ export async function mountPsys2(element, options = {}) {
     if (introEngine) return introEngine;
     try {
       const [dialog, loaders] = await Promise.all([import(new URL('lib/dialog/index.mjs', base).href), import(new URL('lib/loaders/bundle-loader.mjs', base).href)]);
-      const bundle = await (await fetch(new URL('worlds/index.json', base))).json();
-      for (const [id, w] of Object.entries(bundle.worlds)) { if (options.worlds && id !== 'core' && !options.worlds.includes(id)) delete bundle.worlds[id]; else { if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, base).href; if (w.fnsUrl) w.fnsUrl = new URL(w.fnsUrl, base).href; } }
+      // LAZY LOADING: worlds/index.json is the routing index; the debug view reads every world, so every bundle is fetched here (developer mode only, hashed URLs, cached by the service worker)
+      const idx = await (await fetch(assetUrl(base, 'worlds/index.json'))).json();
+      const bundle = { worlds: {} };
+      await Promise.all(Object.entries(idx.worlds).filter(([id]) => !(options.worlds && id !== 'core' && !options.worlds.includes(id))).map(async ([id, w]) => {
+        const b = await (await fetch(assetUrl(base, w.bundle))).json();
+        if (b.opsUrl) b.opsUrl = new URL(b.opsUrl, base).href; if (b.fnsUrl) b.fnsUrl = new URL(b.fnsUrl, base).href;
+        bundle.worlds[id] = b;
+      }));
       introEngine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator: null });
     } catch (e) { console.warn('debug: worlds not available', e); }
     return introEngine;
@@ -1707,7 +1720,7 @@ export async function mountPsys2(element, options = {}) {
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
     progress.start('worlds', 'Loading the worlds');
     // LAZY LOADING: the worker reads the small routing index and loads the always-loaded worlds and the open tab's world; every other world loads when a tab opens, when the words of a message say so, or when the user names it
-    const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, tabWorld: tabDefs.find((t) => t.id === view)?.world ?? null, tabWorlds: Object.fromEntries(tabDefs.map((t) => [t.id, t.world])), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, tabWorld: tabDefs.find((t) => t.id === view)?.world ?? null, tabWorlds: Object.fromEntries(tabDefs.map((t) => [t.id, t.world])), onlyWorlds: options.worlds ?? null, lazyWorlds: !/[?&]psys2lazy=0/.test(globalThis.location?.search ?? ''), dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
     for (const id of info.worlds) loadedWorlds.add(id);
     for (const id of ['worlds', 'reasoner']) if (progress.state(id) !== 'done') progress.end(id, id === 'worlds' ? { label: `Loaded ${info.worlds.length} worlds` } : {});   // the worker ends them as it goes; whatever it did not end is over now (a step must never stay open after the boot)
     engine = { worlds: () => (info.known ?? info.worlds).map((id) => ({ id })), loaded: () => [...loadedWorlds], problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
@@ -1816,11 +1829,23 @@ export async function mountPsys2(element, options = {}) {
       if (!destroyed) normalizerHost.prepare().catch(() => {});
     }, NORMALIZER_IDLE_MS);
   };
+  /** Resolves when the main thread has been quiet: the browser says it is idle, no long task in the last second, no turn. Gives up after `maxMs` (a busy page must not hold the models back for ever). */
+  const idleCpu = async (maxMs = 20000) => {
+    const t0 = performance.now();
+    for (;;) {
+      await new Promise((res) => (typeof requestIdleCallback === 'function' ? requestIdleCallback(res, { timeout: 2000 }) : setTimeout(res, 300)));
+      const last = longTasks.at(-1);
+      if ((!turn && !(last && performance.now() - ((last.startTime ?? 0) + (last.duration ?? 0)) < 1000)) || performance.now() - t0 > maxMs || destroyed) return;
+      await sleep(250);
+    }
+  };
   const warm = async () => {
     mark('warm-start');
     try {
       await engineClient.warm({ phase: 'rules' });   // in the worker: the rules and the translator tables; a user turn goes first
       if (destroyed) return;
+      // the models start on an idle CPU, after the first paint and only when the setting is on (the rules answer meanwhile): no long task for a second and no turn running (bounded wait)
+      if (dispatcherEnc && settings.formalizer === 'encoder') { await idleCpu(); if (destroyed) return; }
       modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
       if (dispatcherEnc && settings.formalizer === 'encoder') {
         await dispatcherEnc.prepare(); mark('dispatcher-ready');
@@ -1829,10 +1854,9 @@ export async function mountPsys2(element, options = {}) {
       } else progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' });
     } catch { /* warm-up is best effort */ }
     if (destroyed) return;
-    // PROGRESS: the knowledge catalog's index (vocabulary, about 1.3 MB, cached): the last start-up step, and the place where an unreachable catalog is said once
-    progress.start('catalog', 'Reading the knowledge catalog index');
-    try { const r = await engineClient.call('catalog'); if (r?.ok) progress.end('catalog', { bytes: r.bytes ?? null }); else progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available'); }
-    catch { progress.fail('catalog', 'The picture catalog could not be reached', 'only the basic drawings are available'); }
+    // LAZY LOADING: the knowledge catalog is not read at start-up (its vocabulary was about 1.3 MB): a message that names a thing reads the vocabulary bucket of its words, then the shards of the thing
+    // (src/knowledge/facts.mjs); an unreachable catalog is said when a turn needs it (the "I can't reach the picture catalog" line), not before.
+    progress.end('catalog', { ms: 0, label: 'Knowledge catalog: read when a message needs it' });
   };
   setTimeout(() => { if (!destroyed) warm(); }, 100);
   return handle;

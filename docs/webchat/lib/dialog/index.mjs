@@ -9,40 +9,40 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=bdafc99fff';
-import { loadWorlds } from '../worlds/index.mjs?v=378e18a206';
-import { validateWorldSet } from '../worlds/validate.mjs?v=5985b05586';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=73d39760e2';
+import { loadWorlds } from '../worlds/index.mjs?v=d03aa082db';
+import { validateWorldSet } from '../worlds/validate.mjs?v=3561d281af';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=afd45c9e41';
-import { createInterpreter } from '../interpreter/index.mjs?v=4e7eb68b08';
+import { createInterpreter } from '../interpreter/index.mjs?v=997c96634e';
 import { createReasoner } from '../reasoner/index.mjs?v=bf67d6db1e';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ca4dd95aa8';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=f822e4a175';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ac2356ed4b';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=2fdd1a4ee1';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
 import { splitSentences } from '../formalizer/rules/normalize.mjs?v=6e86079e49';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=417b6bc817';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=d15844d005';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=d8eb7f88b3';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=b5840ba08f';
 import { gatherCandidates, chooseCandidate, englishTest } from '../translate/candidates.mjs?v=4b39ead121';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=3b0c7f268f';
-import { lexIndex } from '../worlds/lexicon.mjs?v=bb669c2500';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=2f5cdb8fce';
+import { lexIndex } from '../worlds/lexicon.mjs?v=0e0ddd8add';
 import { perf } from '../formalizer/perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=eb1a66f556';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=4bb6e6209a';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=1fbafed261';
-import { checkValues } from './value-check.mjs?v=b4dfed6134';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=b0dd0d786f';
+import { checkValues } from './value-check.mjs?v=8e9ee60be0';
 import { attachValues } from '../knowledge/values.mjs?v=ebf19b103c';
-import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=e1858148f1';
+import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=a0faf592b2';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=f6a995963d';
-import { Discourse } from './discourse.mjs?v=7a3d529e61';
-import { Dialogue } from './dialogue.mjs?v=ab488ac423';
+import { Discourse } from './discourse.mjs?v=cc47c02ccb';
+import { Dialogue } from './dialogue.mjs?v=d25514f1cf';
 import { turnSteps } from './steps.mjs?v=cfff076267';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
-import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=4729064418';
-import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=ab74ba436b';
-import { repairFromScene } from './scene-referents.mjs?v=5214f8e541';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=cfb3552fae';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=d733c05258';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=61c71b7d02';
+import { normalizeReader, readerSegments, chooseReader } from './reader-route.mjs?v=7429afe36b';
+import { knowledgeAnswer, knowledgeFallback, preloadThings } from './knowledge-lookup.mjs?v=deb88dcb2d';
+import { repairFromScene } from './scene-referents.mjs?v=9e06121e03';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=7aab67b3bc';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=b1e6614cbb';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=d9737ef2ab';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1244,7 +1244,7 @@ export class DialogSession {
     const tb = opts.budget ?? createBudget();
     const bt = installBudget(tb, { force: !!opts.budget });
     const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
-    if (this.engine.knowledge) await openWordsReady();   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
+    if (this.engine.knowledge) await openWordsReady(text);   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
     try {
       const reply = await this._send(text, opts);
       // INVARIANT (every turn gets a reply): a message that produced no words at all (bare punctuation, an empty reading) is answered, quoting what was typed

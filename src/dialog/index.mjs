@@ -1244,7 +1244,7 @@ export class DialogSession {
     const tb = opts.budget ?? createBudget();
     const bt = installBudget(tb, { force: !!opts.budget });
     const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
-    if (this.engine.knowledge) await openWordsReady();   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
+    if (this.engine.knowledge) await openWordsReady(text);   // open classes (lexicons with open=knowledge) are read by lookup: the vocabulary is loaded before the sentence is read
     try {
       const reply = await this._send(text, opts);
       // INVARIANT (every turn gets a reply): a message that produced no words at all (bare punctuation, an empty reading) is answered, quoting what was typed

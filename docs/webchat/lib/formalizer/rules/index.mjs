@@ -7,7 +7,7 @@
  */
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=bb669c2500';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=0e0ddd8add';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=6e86079e49';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=7d9c263741';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';

@@ -17,7 +17,8 @@ import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
-import { buildWorldIndex, ALWAYS } from './lib/world-index-build.mjs';
+import { buildWorldIndex, ALWAYS as ALWAYS0 } from './lib/world-index-build.mjs';
+const ALWAYS = [...ALWAYS0, ...(process.env.WI_ALWAYS_PLUS ? process.env.WI_ALWAYS_PLUS.split(',') : [])];   // experiment: more always-loaded worlds
 import { invert } from './lib/world-words.mjs';
 import { messageBag } from '../src/formalizer/rules/index.mjs';
 import { queryWords, bloomHas, spellingCandidates, bucketOf } from '../src/worlds/word-index.mjs';
@@ -87,6 +88,7 @@ function plan(design, T, text, spell) {
     touched.add(bucketOf(w));
     const ids = idsOf(design, w) ?? [];
     if (useKeys || ids.length <= T) for (const i of ids) need.add(i);
+    for (const i of ix.strong.get(w) ?? []) need.add(i);   // the names a user opens a world's tab by
   }
   if (spell && design === 'B') {   // B lists its words: a word nobody knows is tried with its spelling candidates
     for (const w of qs) {
@@ -117,7 +119,7 @@ async function play(engine, c, only = null) {
     let r; try { r = await s.send(m); } catch (e) { outs.push({ t: `ERR ${e.message}`, st: {}, ch: [], eff: '' }); continue; }
     const now = vis(), changed = Object.keys(now).filter((k) => now[k] !== prev[k]).sort(); prev = now;
     outs.push({ t: r.text, st: now, ch: changed, eff: (r.effects ?? []).map((e) => e.name).join(',') });
-    if (!r.segments?.length || r.segments.some((x) => x.unparsed || x.corrections?.length || x.ignored?.length) || (r.statuses ?? []).some((x) => x !== 'supported')) esc = true;
+    if (!r.segments?.length || r.segments.some((x) => x.unparsed || x.corrections?.length || x.ignored?.length || (process.env.WI_CONTESTED && (x.routing?.contested || (process.env.WI_CONTESTED === '2' && x.routing?.runnerUp)))) || (r.statuses ?? []).some((x) => x !== 'supported' && !(process.env.WI_MISSING_OK && x === 'missing'))) esc = true;
     for (const sg of r.trace?.segments ?? []) {
       if (sg.match?.worldId) used.add(sg.match.worldId);
       if (sg.routing?.winner?.worldId) used.add(sg.routing.winner.worldId);
@@ -136,7 +138,7 @@ console.log(`full set played in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 const results = [];
 for (const design of designs) for (const T of Ts) for (const spell of design === 'B' ? [true, false] : [false]) {
   const name = `${design}${spell ? '+spell' : ''} T=${T}`;
-  const row = { name, n: 0, fnBehaviour: 0, fnRaw: 0, escalated: 0, escBytes: 0, fnSuggestOnly: 0, fnStrict: 0, fnStrictOnlyUsed: 0, worlds: 0, bytes: 0, fp: 0, spellMsgs: 0, unknownWords: 0, bucketBytesPerMsg: 0, fnBySrc: {}, fnExamples: [] };
+  const row = { name, n: 0, fnBehaviour: 0, fnRaw: 0, escalated: 0, escBytes: 0, fnSuggestOnly: 0, fnStrict: 0, fnStrictOnlyUsed: 0, worlds: 0, bytes: 0, fp: 0, spellMsgs: 0, unknownWords: 0, bucketBytesPerMsg: 0, fnBySrc: {}, escBySrc: {}, nBySrc: {}, fnExamples: [] };
   const seenBuckets = new Set(); let sessionBucketBytes = 0;
   for (const c of sample) {
     const p = plan(design, T, [...c.setup, c.message].join(' . '), spell);
@@ -144,14 +146,14 @@ for (const design of designs) for (const T of Ts) for (const spell of design ===
     const ids = closure(full.set, [...ALWAYS, ...(tw ? [tw] : []), ...p.need]);
     const eng = await subsetEngine([...ids]);
     const got = await play(eng, c, ids), want = truth.get(c.id);
-    row.n++;
+    row.n++; row.nBySrc[c.src] = (row.nBySrc[c.src] ?? 0) + 1;
     const loadedExtra = [...ids].filter((i) => !ALWAYS.includes(i) && i !== tw);
     row.worlds += loadedExtra.length; row.bytes += sizeOf(loadedExtra);
     const sg = (s) => s.replace(/ ?Did you mean [^?]*\?\??/g, ' ~').replace(/ ?For example: "[^"]*"( or "[^"]*")?/g, ' ~').replace(/\s+/g, ' ').trim();
     const diffOf = (strip) => got.outs.length !== want.outs.length || got.outs.some((g, i) => { const w = want.outs[i]; return (strip ? sg(g.t) !== sg(w.t) : g.t !== w.t) || g.eff !== w.eff || g.ch.join() !== w.ch.filter((k) => ids.has(k)).join() || Object.keys(g.st).some((k) => g.st[k] !== w.st[k]); });
     const diffRaw = diffOf(false); const diffS = diffOf(true);
     const escalated = got.esc;   // two-pass: a first reading that is not complete is read again with every world (so it is the full reading)
-    if (escalated) { row.escalated++; row.escBytes += sizeOf(allIds) - sizeOf(loadedExtra); }
+    if (escalated) { row.escBySrc[c.src] = (row.escBySrc[c.src] ?? 0) + 1; row.escalated++; row.escBytes += sizeOf(allIds) - sizeOf(loadedExtra); }
     if (diffS) row.fnRaw++;
     const diff = diffS && !escalated;
     if (diffRaw && !diffS) row.fnSuggestOnly++;
