@@ -80,6 +80,8 @@ export function buildIndex(kn) {
   for (const [t, c] of byName) { add(c, t.replace(/ /g, '_')); add(c, singKey(t.replace(/ /g, '_'))); }
   for (const r of regions) { for (const k of r.keys) add(r, k); sing(r, r.name.replace(/^the /, '')); }
   for (const c of [...cities].sort((a, b) => b.pop - a.pop)) sing(c, c.name);
+  // a hyphenated compound name is also said by its first part (Cluj-Napoca: "Cluj"), when no other name has that key (the open place lexicon reads the same rule)
+  for (const c of [...cities].sort((a, b) => b.pop - a.pop)) { const i = c.name.indexOf('-'); if (i >= 4 && /^[A-Za-z]+$/.test(fold(c.name.slice(0, i)))) add(c, keyOf(c.name.slice(0, i))); }
   const D = { byKey, byCc, cities, countries, regions, capitalOf, citiesOf };
   CACHE = { src: cw, srcCities: ci, D };
   return D;

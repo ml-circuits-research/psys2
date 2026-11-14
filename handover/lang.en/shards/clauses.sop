@@ -10,6 +10,7 @@
 @lang.en.joiner.then lang.en.joiner text=then kind=sequence cut=yes card-cut=yes note="explicit order: the clauses are kept as separate steps"
 @lang.en.joiner.also lang.en.joiner text=also kind=addition cut=yes card-cut=yes note="joins like then (model ablation 2026-11-13, on by default)"
 @lang.en.joiner.but lang.en.joiner text=but kind=contrast cut=yes card-cut=yes
+@lang.en.joiner.keep lang.en.joiner.keep text=its note="'and its neighbours', 'and its roof': a possessive that points back at the noun before the joiner continues the noun phrase, it never opens a clause (a coordination of noun phrases, 'Highlight Romania and its neighbours')"
 @lang.en.joiner.run lang.en.joiner.rule doc="a run of joiners counts as one (', and then'); the first token after the run opens the next clause"
 
 # ---- frame leads: the words before a comma that open a standing rule or default; the comma after them does not end a clause ("From now on, squares are gray") ----

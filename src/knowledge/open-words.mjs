@@ -8,7 +8,7 @@
 // lexicon is its closed list. Browser-safe: no node imports.
 import { lemmaCandidates } from './facts.mjs';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-import { colourName } from './values.mjs';
+import { colourName, isCoreColour } from './values.mjs';
 
 let attached = null;
 /** The host attaches the catalog of the session (`engine.setKnowledge`); `null` detaches it. */
@@ -60,6 +60,8 @@ function foldedVocab(vocab) {
   if (foldedFor !== vocab) {
     foldedMap = new Map();
     for (const k of Object.keys(vocab)) { const f = foldOf(k); if (f !== k && !Object.hasOwn(vocab, f)) foldedMap.set(f, vocab[k]); }
+    // a compound name joined by a hyphen is also said by its first part when that part is a name of its own ("Cluj" for Cluj-Napoca), unless the vocabulary already has that word
+    for (const k of Object.keys(vocab)) { const i = k.indexOf('-'); if (i >= 4) { const head = foldOf(k.slice(0, i)); if (/^[a-z]+$/.test(head) && !Object.hasOwn(vocab, head) && !foldedMap.has(head)) foldedMap.set(head, vocab[k]); } }
     foldedFor = vocab;
   }
   return foldedMap;
@@ -83,7 +85,7 @@ export function knowsPlace(word, catalogs) {
     if (rel && rel[1] !== 'the' && step === 0) { w = rel[1].replace(/^the /, ''); continue; }
     const sh = [w, w.endsWith('s') ? null : `${w}s`].map((k) => (k && (Object.hasOwn(vocab, k) ? vocab[k] : folded.get(k)))).find(Boolean);
     if (!sh?.some((x) => catalogs.includes(String(x).split('/')[0]) && !/\/schema\.sop$/.test(x))) return false;
-    return !colourName(w);
+    return !isCoreColour(w);   // "red" is a colour; "peru" (only a shade of brown) is the country
   }
   return false;
 }

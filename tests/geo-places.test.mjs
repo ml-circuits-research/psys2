@@ -9,7 +9,7 @@ import { createFacts } from '../src/knowledge/facts.mjs';
 import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
 import { attachOpenWords, ready, knowsPlace } from '../src/knowledge/open-words.mjs';
 import { parseLine } from '../src/knowledge/catalog.mjs';
-import { buildIndex, lookup, keyOf, NEEDS } from '../worlds-pilot/geo.map/places.mjs';
+import { buildIndex, lookup, keyOf, NEEDS } from '../worlds/geo.map/places.mjs';
 
 const CAT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'fixtures/catalog');
 const facts = createFacts({ source: createKnowledgeSource(CAT) });
