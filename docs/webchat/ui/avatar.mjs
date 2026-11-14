@@ -115,8 +115,8 @@ export function createAvatar(container, host = null) {
 
   const faceOf = () => (state?.face?.v === 2 ? state.face : mods.logic.newFace(data));
   const over = () => (talkPhase && speaking ? { mouth: talkPhase === 'alt' ? data.expressions.talking?.mouthAlt : data.expressions.talking?.over.mouth } : null);
-  const exprOf = () => (transient === 'surprised' ? 'surprised' : transient === 'smile' ? 'happy' : null);
-  const svgOf = (face, size) => mods.draw.renderFace(data, exprOf() && data.expressions[exprOf()] ? { ...face, expression: exprOf() } : face, { size, over: over(), bg: size ? undefined : '#e8edf5', label: `${state?.name ?? 'Avatar'}, a drawn face with ${mods.logic.describeFace(data, face)}` });
+  const exprOf = (face) => mods.draw.shownExpression(face, transient) || null;   // the render model: the state's expression wins over the flash
+  const svgOf = (face, size) => mods.draw.renderFace(data, exprOf(face) && data.expressions[exprOf(face)] ? { ...face, expression: exprOf(face) } : face, { size, over: over(), bg: size ? undefined : '#e8edf5', label: `${state?.name ?? 'Avatar'}, a drawn face with ${mods.logic.describeFace(data, face)}` });
 
   function paint(svg, fade) {
     if (svg === lastSvg) return;
@@ -175,7 +175,7 @@ export function createAvatar(container, host = null) {
   load();
   draw();
   return {
-    update(next) { state = next ?? state; draw(); },
+    update(next) { state = next ?? state; if (state?.face?.expression) { clearTimeout(transientTimer); transient = null; } draw(); },
     /** Short-lived mood from the status of a reply (not stored): 'smile' or 'surprised'. */
     express(kind, ms = 2200) {
       if (!['smile', 'surprised'].includes(kind) || !data) return;

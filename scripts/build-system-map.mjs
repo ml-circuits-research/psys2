@@ -6,7 +6,7 @@
  *
  *   1. the path of a message: the fixed steps of src/dialog/steps.mjs (kind of turn, world, act, things, what is missing and who fills it, apply, reply),
  *      each with the module that decides, the data it decides from, and the number of alternatives it had (median) on the three owner logs (training/eval/owner-log-2026-11-13{,b,c}.jsonl, replayed);
- *   2. the worlds as a graph (inline SVG): library modules, tab and content worlds, the knowledge catalog; an edge when one asks another (fill, lookup, view, layout, tab, ask),
+ *   2. the worlds as a graph (inline SVG): library modules, live worlds shown in views (tabs) and other live worlds, knowledge worlds (the catalog); an edge when one asks another (fill, lookup, view, layout, tab, ask),
  *      weighted by the number of turns it fired on the logs; dashed grey edges are the declared imports (world.sop);
  *   3. three numbers per world: hand-written lines (generated files excluded), reuse number (docs/library-reuse-report.md, the library's report), share of its turns answered with help from another world.
  *
@@ -178,7 +178,7 @@ function graphSvg(model) {
     return `M${x1},${A.y} C${x1 + (A.x === B.x ? bow : bow)},${A.y} ${x2 - (A.x === B.x ? -bow : bow)},${B.y} ${x2},${B.y}`;
   };
   let svg = `<svg viewBox="0 0 660 ${H}" role="img" aria-label="Graph of the worlds and which ask which" xmlns="http://www.w3.org/2000/svg">`;
-  svg += `<text class="col" x="${cols.library}" y="18" text-anchor="middle">library and shared</text><text class="col" x="${cols.mid}" y="18" text-anchor="middle">tabs and content worlds</text><text class="col" x="${cols.knowledge}" y="18" text-anchor="middle">knowledge</text>`;
+  svg += `<text class="col" x="${cols.library}" y="18" text-anchor="middle">library modules and shared</text><text class="col" x="${cols.mid}" y="18" text-anchor="middle">live worlds (tabs and content)</text><text class="col" x="${cols.knowledge}" y="18" text-anchor="middle">knowledge worlds</text>`;
   for (const [a, b] of statics) { const d = path(a, b); if (d) svg += `<path class="edge imp" d="${d}"><title>${esc(a)} imports ${esc(b)} (world.sop)</title></path>`; }
   for (const e of edges) { const d = path(e.from, e.to); if (d) svg += `<path class="edge k-${e.kind}" style="stroke-width:${sw(e.n)}" d="${d}"><title>${esc(e.from)} to ${esc(e.to)}: ${esc(e.kind)}, ${e.n} turn${e.n === 1 ? '' : 's'} on the logs</title></path>`; }
   for (const n of nodes) {
@@ -244,6 +244,7 @@ ${stepHtml}
 ${edgeRows}</tbody></table></div></details>
 
 <h2>3. Three numbers per world</h2>
+<p><b>Names</b>: a <i>world schema</i> says what a kind of world is (kinds, attributes, acts, limits, words; no particular things); a <i>knowledge world</i> holds facts true for everyone (<code>k.*</code>, no session state); a <i>live world</i> is one running instance of a world schema in a session (the things the user made, focus, history), shown in a <i>view</i> (a tab); <i>library modules</i> (<code>std.*</code>) are mechanisms, not worlds.</p>
 <p><b>Hand-written lines</b>: non-blank, non-comment lines of the world's <code>.sop</code> and <code>.mjs</code> files, tests and generated files left out. <b>Reuse</b>: of the types the world uses, the share that comes from elsewhere (the library's report, <code>docs/library-reuse-report.md</code>; "-" when the report has no row). <b>Turns</b> and <b>helped</b>: turns the world answered on the logs, and the share where another world or the knowledge catalog was asked (a fill, lookup, ask or layout edge fired; opening a tab, mirroring a view and routing are plumbing and do not count).</p>
 <div class="scroll"><table><thead><tr><th>world</th><th>role</th><th class="num">hand-written lines</th><th class="num">reuse</th><th class="num">turns</th><th class="num">helped</th></tr></thead><tbody>
 ${rows}</tbody></table></div>

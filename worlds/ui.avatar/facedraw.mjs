@@ -25,6 +25,13 @@ export function variantFor(data, face, slotName, side = 'left', over = null) {
   return slot.variants.find((v) => v.name === name) ?? null;
 }
 
+/**
+ * RENDER MODEL (live-state invariant): the expression the view draws for a state of the live world. The state is the only source: a short-lived reaction of the view
+ * (the 'smile' / 'surprised' flash after a reply) is drawn only while the state holds no expression, so the picture never disagrees with an "already winking" answer.
+ * The view (docs/webchat/ui/avatar.mjs) and tests/live-state.test.mjs both call this.
+ */
+export const shownExpression = (face, transient = null) => face?.expression || (transient === 'surprised' ? 'surprised' : transient === 'smile' ? 'happy' : '');
+
 const colourEntry = (data, of, name) => data.colours[of]?.[name] ?? Object.values(data.colours[of] ?? {})[0];
 
 /** The colour a part is drawn with: the face colour its tint names, a colour chosen for the slot (`paint`) when the part offers it, else its own rgb or colour name. */

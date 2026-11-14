@@ -2,6 +2,15 @@
 
 Goal: show PSys2 as an agent that *does things* with client-side tools, controlled entirely by voice or text, with no LLM: the same formalize → plan → execute → observe loop as every other world (vision §8, effectful operations), applied to an app. The end use cases are a chatbot embedded in a website, and a tool to talk with a document and create documents from the context of the conversation.
 
+## 0. Names (reviewer 2026-11-14)
+- **world schema**: what a kind of world is (kinds of things, attributes, value types, acts, limits, rules, words); no particular things. Reusable (`w.*` in sop-knowledge-worlds, `std.schema` in the library).
+- **knowledge world**: facts about the world at large (`k.*`, `w.lang.en`), true for everyone, no session state.
+- **live world**: one running instance of a world schema in a session (the user's things, current values, focus, history, undo); it reads knowledge worlds and follows its schema. A tab shows a live world through a **view**.
+- **library modules** (`std.*`: acts, fill, focus, relations, turn, know, grammar): mechanisms, not worlds.
+Where older text says "tab world" it means a live world shown in a view.
+
+**Live-state invariant** (`tests/live-state.test.mjs`, in smoke): for every attribute with two values of every world schema, and for the avatar's expressions, the round trip B, A, B, A changes the live world each time; a reply "already X" is true of the live world; undo gives the previous value and redo the next; and what a view draws is a function of the live world only (the render model, for example `shownExpression` in `worlds/ui.avatar/facedraw.mjs`). A short-lived reaction of a view (a flash of "smile") never overrides a value the live world holds.
+
 ## 1. Principle: worlds own state, the host renders it
 - Every tool world keeps its state in `ctx.state` (spec 04), a plain JSON object per world and session. Operations with `semantics=action` change it. Tests and the CLI check the state directly, so tool worlds are as testable as any other world.
 - The **host** (the webchat page, or a website embedding PSys2) only renders state and executes **effects** that cannot be state (speaking a text now, copying to the clipboard, downloading a file, focusing an element).

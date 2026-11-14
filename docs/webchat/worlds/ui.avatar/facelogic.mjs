@@ -71,6 +71,8 @@ export function read(data, words) {
   const ix = indexOf(data), ws = words.filter((w) => !FUNCTION_WORDS.has(w) || NEGATIONS.has(w));
   const out = [];
   const has = (map, phrase) => { for (const f of forms(phrase.split(' ').at(-1))) { const p = [...phrase.split(' ').slice(0, -1), f].join(' '); if (map.has(p)) return map.get(p); } return null; };
+  // a word that is both a variant of a slot and an expression ("surprised": eyes and mood) is the expression unless the sentence names a part of the face ("look surprised" is the mood, "surprised eyes" the variant)
+  const namesPart = ws.some((w) => has(ix.slotWords, w));
   for (let i = 0; i < ws.length;) {
     budget.tick('faces.read');
     let hit = null;
@@ -79,6 +81,7 @@ export function read(data, words) {
       let m;
       if (n === 1 && NEGATIONS.has(ws[i])) hit = { n, m: { type: 'neg' } };
       else if ((m = has(ix.presetWords, phrase)) && (n > 1 || !has(ix.variantWords, phrase) && !has(ix.slotWords, phrase))) hit = { n, m: { type: 'preset', name: m[0] } };
+      else if (n === 1 && !namesPart && (m = has(ix.moodWords, phrase)) && has(ix.variantWords, phrase)) hit = { n, m: { type: 'mood', name: m[0] } };
       else if ((m = has(ix.variantWords, phrase))) hit = { n, m: { type: 'variant', options: m, word: n === 1 ? phrase : null } };
       else if ((m = has(ix.slotWords, phrase))) hit = { n, m: { type: 'slot', slots: m } };
       else if ((m = has(ix.moodWords, phrase))) hit = { n, m: { type: 'mood', name: m[0] } };
