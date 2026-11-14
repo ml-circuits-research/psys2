@@ -20,7 +20,11 @@ test('webchat build produces a bundle the browser loader can run', async () => {
     const url = (p) => pathToFileURL(path.join(out, p)).href;
     const { createBundleLoader } = await import(url('lib/loaders/bundle-loader.mjs'));
     const { createEngine } = await import(url('lib/dialog/index.mjs'));
-    const bundle = JSON.parse(await readFile(path.join(out, 'worlds/index.json'), 'utf8'));
+    // worlds/index.json is the small routing index (LAZY LOADING); every world's files are in its own bundle.json
+    const index = JSON.parse(await readFile(path.join(out, 'worlds/index.json'), 'utf8'));
+    assert.ok((await stat(path.join(out, 'worlds/index.json'))).size < 100000, 'the index of worlds is small');
+    const bundle = { worlds: {} };
+    for (const id of Object.keys(index.worlds)) bundle.worlds[id] = JSON.parse(await readFile(path.join(out, index.worlds[id].bundle), 'utf8'));
     for (const w of Object.values(bundle.worlds)) {
       if (w.opsUrl) w.opsUrl = url(path.posix.join('worlds', w.opsUrl.split('/')[1], 'ops.mjs'));
       if (w.fnsUrl) w.fnsUrl = url(path.posix.join('worlds', w.fnsUrl.split('/')[1], 'fns.mjs'));   // matrix is the default reasoner: the functions of the matrix worlds load

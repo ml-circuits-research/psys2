@@ -7,7 +7,7 @@
  */
 import { guard } from '../guard.mjs?v=eb1a66f556';
 import { perf } from '../perf.mjs?v=b75de4ae38';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=3b553325a7';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=cf048e031a';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=3f42845f50';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=fea2155379';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
@@ -107,6 +107,49 @@ function patternIndex(set) {
       },
     };
   });
+}
+
+/**
+ * LAZY LOADING (specs/06 "Lazy loading"): the words each world is indexed under by the pattern prefilter, per world: `{ keys: Set(word), always: n, patterns: n }`. A world can only claim a message
+ * (match one of its patterns) whose bag of words holds one of its keys, or when it has patterns without any mandatory literal (`always`). Same choice as `patternIndex`: every pattern is filed under the
+ * words of its rarest mandatory set (`freq`), so the keys are sound (never miss a pattern that could match) and selective. Memoized.
+ */
+export function patternKeys(set) {
+  return set.memo('patternKeys', () => {
+    const recs = [], freq = new Map();
+    for (const { p } of allPatterns(set)) {
+      const cc = compiled(p, set).compiled;
+      if (!cc) continue;
+      const needs = prefilterNeeds(cc);
+      recs.push({ p, needs });
+      const seen = new Set();
+      for (const n of needs) for (const w of n) if (!seen.has(w)) { seen.add(w); freq.set(w, (freq.get(w) ?? 0) + 1); }
+    }
+    const byWorld = new Map();
+    for (const w of set.list()) byWorld.set(w.id, { keys: new Set(), always: 0, patterns: 0 });
+    for (const { p, needs } of recs) {
+      const e = byWorld.get(p.worldId) ?? byWorld.set(p.worldId, { keys: new Set(), always: 0, patterns: 0 }).get(p.worldId);
+      e.patterns++;
+      if (!needs.length) {   // only slots: a message that fills a closed lexicon slot ("Egypt", "red") is what can reach it; other slot classes cannot be keyed
+        const lexIds = (compiled(p, set).compiled?.elements ?? []).filter((el) => el.t === 'slot' && !el.optional && /^lex\./.test(el.cls)).map((el) => el.cls.replace(/^lex\./, ''));
+        let keyed = false;
+        for (const id of lexIds) { const l = lexIndex(set).lexicons.get(id) ?? lexIndex(set).lexicons.get(`lex.${id}`); if (l) { keyed = true; for (const x of Set.prototype.values.call(l.words)) for (const part of String(x).toLowerCase().split('_')) if (part) e.keys.add(part); } }
+        if (!keyed) e.always++;
+        continue;
+      }
+      let best = null, bestCost = Infinity;
+      for (const n of needs) { let cost = 0; for (const w of n) cost += freq.get(w) ?? 0; if (cost < bestCost) { bestCost = cost; best = n; } }
+      for (const w of best) e.keys.add(w);
+    }
+    return byWorld;
+  });
+}
+
+/** The bag of words the pattern prefilter sees for a whole message (every sentence, each token's lower form and its alternative form): what `patternKeys` are tested against. */
+export function messageBag(text) {
+  const bag = new Set();
+  for (const s of analyze(String(text ?? ''))) for (const w of wordBag(s.tokens)) bag.add(w);
+  return bag;
 }
 
 /**

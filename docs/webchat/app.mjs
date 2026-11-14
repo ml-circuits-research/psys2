@@ -21,7 +21,7 @@ import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel } from './ui/normalizer-host.mjs';
 import { createEngineClient } from './ui/engine-client.mjs';
-import { normalizeNxStrategy } from './lib/formalizer/nx.mjs';
+import { normalizeNxStrategy } from './lib/formalizer/nx-strategy.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
@@ -48,6 +48,13 @@ export const TABS = [
  * effects?: { [effectName]: async (args, { ui, host }) -> { ok, detail?, data? } } }.
  */
 async function loadTabPlugins(base) {
+  // LAZY LOADING: ui/tabs/meta.json lists the tabs (id, label, world, order, effect names); a tab's module, its world modules and its vendor assets load when the tab is first used (makeTab)
+  try {
+    const v = globalThis.__psys2Mod?.['ui/tabs/meta.json'];
+    const r = v ? await fetch(new URL('ui/tabs/meta.json', base).href + `?v=${v}`) : null;
+    const meta = r?.ok ? await r.json() : null;
+    if (Array.isArray(meta) && meta.length) return meta.map((m) => ({ id: m.id, label: m.label, world: m.world, order: m.order, file: m.file, effectNames: m.effects ?? [], make: null }));
+  } catch { /* the old way below */ }
   let list = [];
   try { const v = globalThis.__psys2Mod?.['ui/tabs/index.json']; const r = await fetch(new URL('ui/tabs/index.json', base).href + (v ? `?v=${v}` : '')); if (r.ok) list = await r.json(); } catch { return []; }
   // in parallel (PERF round 2): one round trip, not one per tab
@@ -107,10 +114,40 @@ export async function mountPsys2(element, options = {}) {
   const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
+  let tabsLive = false;   // set once the boot state was shown: after that, a turn that changes a tab's world makes the tab (the changed worlds only; a world that merely loaded does not)
+  const makingTabs = new Set();   // tab UIs being made: the turn that opened the tab waits for them (before its reply is final)
+  const tabKnown = new Set(), tabMade = new Map();   // LAZY LOADING: tab ids whose world exists in this build; tab id -> Promise of its UI (made once)
+  /**
+   * The tab's UI, made on first use: the tab opens, a message makes its world act, or an effect of the tab arrives. Making it loads the tab's world (the engine adds it) and its vendor assets
+   * (a chess engine, map shapes, the editor, the chart library): none of them is fetched at boot except the open tab's.
+   */
+  function makeTab(t) {
+    if (!tabKnown.has(t.id)) return Promise.resolve(null);
+    if (!tabMade.has(t.id)) tabMade.set(t.id, (async () => {
+      effectsPending++; updateBusy();   // the tab's UI is part of the turn that opened it: the host is busy (and a test or a voice turn waits) until it is there
+      try {
+      if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
+      if (!options.renderAllTabs && engineClient) { try { const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab' }); for (const id of r?.added ?? []) loadedWorlds.add(id); } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
+      if (destroyed) return null;
+      const holder = h('div', { class: 'p2-tabbody' });
+      tabBtns[t.id].panel.append(holder);
+      panelUI[t.id] = { ui: t.make(holder, hostApi) };
+      panelUI[t.id].ui.update?.(states[t.world]);
+      if (view === t.id) panelUI[t.id].ui.show?.();
+      return panelUI[t.id].ui;
+      } finally { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); }
+    })());
+    const p = tabMade.get(t.id);
+    if (!panelUI[t.id]) { makingTabs.add(p); p.finally(() => makingTabs.delete(p)).catch(() => {}); }
+    return p;
+  }
+  const loadedWorlds = new Set(), loadedLog = [];   // LAZY LOADING: the worlds the engine holds, and what was loaded on demand
   let engine = null, session = null, translator = null, speech = null, engineClient = null, browserBackend = null;
   const stageLog = [], longTasks = [];   // COMPUTE-BUDGET: host stage transitions and every main-thread task over 200 ms (PerformanceObserver 'longtask')
   const hostStage = (stage, recId = null) => { stageLog.push({ at: performance.now(), stage, recId }); if (stageLog.length > 400) stageLog.splice(0, 200); };
-  let view = tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
+  // a fresh start opens the first tab (Avatar); a returning user gets the tab they last used (kept next to the settings, never sent anywhere). Its world is the one loaded at boot.
+  const savedTab = (() => { try { const s = options.persist !== false ? localStorage.getItem('psys2.webchat.tab') : null; return s && tabDefs.some((t) => t.id === s) ? s : null; } catch { return null; } })();
+  let view = savedTab ?? tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
   // A speech that never ends must not hold the tabs forever: the veil is lifted after a cap that grows with the text (the speech itself goes on).
@@ -126,7 +163,7 @@ export async function mountPsys2(element, options = {}) {
   const progress = createProgress({ storage: options.persist !== false ? globalThis.localStorage : null, localize: (t) => localized(t), details: () => settings.devMode === true,
     onStep: (r) => events.add('step', r.label, { stepId: r.id, ms: r.ms, bytes: r.bytes, ok: r.ok, ...(r.error ? { error: r.error } : {}), tab: null, tabAfter: null }) });
   progress.plan('startup', [{ id: 'page', label: 'Loading the page code' }, { id: 'worlds', label: 'Loading the worlds' }, { id: 'reasoner', label: 'Starting the reasoner' }, { id: 'model', label: 'Loading the reading model' },
-    { id: 'translator', label: 'Loading the translator' }, { id: 'catalog', label: 'Reading the knowledge catalog index' }, { id: 'voices', label: 'Finding voices' }]);
+    { id: 'translator', label: 'Loading the translator' }, { id: 'catalog', label: 'Knowledge catalog' }, { id: 'voices', label: 'Finding voices' }]);
   progress.start('page', 'Loading the page code');
   progress.end('page', { ms: Math.round(tEntry), bytes: (() => { try { return performance.getEntriesByType('resource').filter((r) => /\.m?js(\?|$)/.test(r.name)).reduce((a, r) => a + (r.transferSize || r.encodedBodySize || 0), 0); } catch { return null; } })() });
   let logFilter = 'all', confirmClear = false;
@@ -227,6 +264,7 @@ export async function mountPsys2(element, options = {}) {
     if (!tabBtns[id]) return;
     if (id !== view) events.add('tab', id, { via, tabAfter: id });   // USER-ACTIONS: how the tab was opened (tap | key | message | card | example | command)
     view = id;
+    try { if (options.persist !== false && via !== 'start') localStorage.setItem('psys2.webchat.tab', id); } catch { /* storage unavailable */ }
     for (const [k, { btn, panel }] of Object.entries(tabBtns)) {
       const active = k === id, ui = panelUI[k]?.ui;
       if (!active && !panel.hidden) ui?.hide?.(); // before hiding: lets a tab stop drawing into a zero-size box
@@ -234,6 +272,8 @@ export async function mountPsys2(element, options = {}) {
       if (active) ui?.show?.();
     }
     syncDebugButton();
+    const def = tabDefs.find((t) => t.id === id);
+    if (def && !panelUI[id]) makeTab(def);
   }
 
   // ---------- chat ----------
@@ -355,7 +395,7 @@ export async function mountPsys2(element, options = {}) {
     if (!snapshot || typeof snapshot !== 'object') return;
     const changed = [];
     for (const [id, st] of Object.entries(snapshot)) { states[id] = st; changed.push(id); }
-    for (const t of tabDefs) if (changed.includes(t.world)) panelUI[t.id]?.ui?.update(states[t.world]);
+    for (const t of tabDefs) if (changed.includes(t.world)) { if (panelUI[t.id]) panelUI[t.id].ui.update(states[t.world]); else if (tabKnown.has(t.id) && tabsLive) makeTab(t); }
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
     if (changed.includes('docs.editor')) syncDictation();
     options.onState?.(states, changed);
@@ -454,8 +494,8 @@ export async function mountPsys2(element, options = {}) {
     onBusy: (fn) => { busyListeners.add(fn); return () => busyListeners.delete(fn); },
   };
   // Effects declared by tab plugins: the tab's UI executes them (a chess engine, a synthesizer, a map...).
-  for (const t of tabDefs) for (const [name, fn] of Object.entries(t.effects ?? {})) {
-    if (!Object.hasOwn(ALLOW, name)) ALLOW[name] = (args, signal) => fn(args, { ui: panelUI[t.id]?.ui, host: hostApi, signal });
+  for (const t of tabDefs) for (const name of [...Object.keys(t.effects ?? {}), ...(t.effectNames ?? [])]) {
+    if (!Object.hasOwn(ALLOW, name)) ALLOW[name] = async (args, signal) => { if (!panelUI[t.id]) await makeTab(t); return t.effects[name](args, { ui: panelUI[t.id]?.ui, host: hostApi, signal }); };
   }
   /** Report an observation to the engine and render the world's reaction (vision §8: action -> effect -> observation). */
   async function observeAndFollow(obs, depth = 0) {
@@ -707,6 +747,7 @@ export async function mountPsys2(element, options = {}) {
     hostStage('effects', recId); setInputStage('effects');
     let effects;
     try { effects = await runEffects(reply.effects); } catch (e) { botMsg.msg.remove(); throw e; }   // stopped while the effects ran: the answer is withdrawn
+    if (makingTabs.size) { try { await withDeadline(Promise.all([...makingTabs]), LIMITS.effectMs, { signal: turn?.ctl.signal ?? null, label: 'tab' }); } catch { /* a tab that is slow to appear does not hold the turn */ } }
     const effectsMs = performance.now() - tEffects;
     let stateAfter = null;
     try { stateAfter = hashState(session.state?.() ?? null); } catch { /* ignore */ }
@@ -810,8 +851,14 @@ export async function mountPsys2(element, options = {}) {
     if (introEngine) return introEngine;
     try {
       const [dialog, loaders] = await Promise.all([import(new URL('lib/dialog/index.mjs', base).href), import(new URL('lib/loaders/bundle-loader.mjs', base).href)]);
-      const bundle = await (await fetch(new URL('worlds/index.json', base))).json();
-      for (const [id, w] of Object.entries(bundle.worlds)) { if (options.worlds && id !== 'core' && !options.worlds.includes(id)) delete bundle.worlds[id]; else { if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, base).href; if (w.fnsUrl) w.fnsUrl = new URL(w.fnsUrl, base).href; } }
+      // LAZY LOADING: worlds/index.json is the routing index; the debug view reads every world, so every bundle is fetched here (developer mode only, hashed URLs, cached by the service worker)
+      const idx = await (await fetch(assetUrl(base, 'worlds/index.json'))).json();
+      const bundle = { worlds: {} };
+      await Promise.all(Object.entries(idx.worlds).filter(([id]) => !(options.worlds && id !== 'core' && !options.worlds.includes(id))).map(async ([id, w]) => {
+        const b = await (await fetch(assetUrl(base, w.bundle))).json();
+        if (b.opsUrl) b.opsUrl = new URL(b.opsUrl, base).href; if (b.fnsUrl) b.fnsUrl = new URL(b.fnsUrl, base).href;
+        bundle.worlds[id] = b;
+      }));
       introEngine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator: null });
     } catch (e) { console.warn('debug: worlds not available', e); }
     return introEngine;
@@ -1637,6 +1684,9 @@ export async function mountPsys2(element, options = {}) {
       if (data.op === 'start') progress.start(data.id, data.id === 'worlds' ? 'Loading the worlds' : 'Starting the reasoner');
       else if (data.id === 'worlds') progress.end('worlds', { bytes: data.bytes ?? null, label: `Loaded ${data.count} worlds` });
       else progress.end(data.id);
+    } else if (name === 'world-load') {   // LAZY LOADING: a world loads on demand ("Loading the drawing world…"): one plain sentence, gone when the world is in
+      if (data.op === 'start') progress.start(data.id, data.label); else if (data.op === 'end') progress.end(data.id, { bytes: data.bytes ?? null, label: data.label }); else progress.fail(data.id, `Could not load the ${String(data.label ?? 'world').replace(/^Loading the |…$/g, '')}`, 'the worlds that are loaded still work', { label: data.label });
+    } else if (name === 'worlds-loaded') { for (const id of data.ids ?? []) loadedWorlds.add(id); loadedLog.push({ ids: data.ids, why: data.why, at: Math.round(performance.now()) });
     } else if (name === 'load') {   // PROGRESS: a knowledge shard that takes a moment ("Loading drawings: noto money 02")
       const m = /^k\.([a-z]+)\/(?:shards\/)?(.+)\.sop$/.exec(String(data.path)), kind = { objects: 'drawings', words: 'word senses', geo: 'places', commonsense: 'common-sense facts' }[m?.[1]] ?? 'knowledge';
       const id = `shard:${data.path}`, label = `Loading ${kind}: ${String(m?.[2] ?? data.path).replace(/[-_]+/g, ' ')}`;
@@ -1671,16 +1721,16 @@ export async function mountPsys2(element, options = {}) {
     // The browser Translation API lives on the window, not in a worker: the page answers the worker's requests for it (deadline, then the rules).
     translator = { get usage() { return engineClient.usage; }, get detectUsage() { return engineClient.detection; }, resetUsage() { engineClient.resetUsage(); },
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
-    const worldsVer = globalThis.__psys2Mod?.['worlds/index.json'];
     progress.start('worlds', 'Loading the worlds');
-    const worldsBytes = await (globalThis.__psys2Early?.worlds ?? undefined);   // the one fetch of worlds/index.json (index.html); the worker reads it from here
-    const info = await engineClient.boot({ worldsBytes, browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    // LAZY LOADING: the worker reads the small routing index and loads the always-loaded worlds and the open tab's world; every other world loads when a tab opens, when the words of a message say so, or when the user names it
+    const info = await engineClient.boot({ browser: { translator: browserBackend.translatorKind(), detector: browserDetectorKind(), mt: true }, tabWorld: tabDefs.find((t) => t.id === view)?.world ?? null, tabWorlds: Object.fromEntries(tabDefs.map((t) => [t.id, t.world])), onlyWorlds: options.worlds ?? null, lazyWorlds: !/[?&]psys2lazy=0/.test(globalThis.location?.search ?? ''), dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    for (const id of info.worlds) loadedWorlds.add(id);
     for (const id of ['worlds', 'reasoner']) if (progress.state(id) !== 'done') progress.end(id, id === 'worlds' ? { label: `Loaded ${info.worlds.length} worlds` } : {});   // the worker ends them as it goes; whatever it did not end is over now (a step must never stay open after the boot)
-    engine = { worlds: () => info.worlds.map((id) => ({ id })), problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
+    engine = { worlds: () => (info.known ?? info.worlds).map((id) => ({ id })), loaded: () => [...loadedWorlds], problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
     session = engineClient.session; mark('session');
-    session.setWorldState?.(SHELL, { language: language.get() });   // the shell world's language state starts as the selector (LANG-FIXED)
+    session.setWorldState?.(SHELL, { language: language.get(), ...(savedTab ? { activeTab: savedTab } : {}) });   // the shell world's language state starts as the selector (LANG-FIXED)
   } catch (e) {
     console.error(e);
     progress.fail('worlds', `PSys2 could not start: ${e?.message ?? e}`, '');
@@ -1700,13 +1750,11 @@ export async function mountPsys2(element, options = {}) {
     } catch (e) { console.warn('surprise pool unavailable', e); }
   })();
 
-  const loaded = new Set(engine.worlds().map((w) => w.id));
+  const known = new Set(engine.worlds().map((w) => w.id));
   for (const t of tabDefs) {
     const { panel } = tabBtns[t.id];
-    if (loaded.has(t.world) || options.renderAllTabs) { // renderAllTabs: development aid to test the renderers without the worlds
-      const holder = h('div', { class: 'p2-tabbody' });
-      panel.append(holder);
-      panelUI[t.id] = { ui: t.make(holder, hostApi) };
+    if (known.has(t.world) || options.renderAllTabs) { // renderAllTabs: development aid to test the renderers without the worlds
+      tabKnown.add(t.id);   // its UI (and its vendor assets) are made when the tab opens or its world is used (makeTab), never at boot
     } else {
       panel.append(h('div', { class: 'p2-placeholder' }, h('h3', {}, `${t.label} is not in this build`),
         h('p', {}, `The world “${t.world}” was not found, so this tab has nothing to show yet. Add the world and run `, h('code', {}, 'npm run build:webchat'), ' again.')));
@@ -1714,8 +1762,8 @@ export async function mountPsys2(element, options = {}) {
     }
   }
   try { applyState(session.state?.()); } catch (e) { console.warn('session.state() failed', e); }
-  for (const t of tabDefs) if (panelUI[t.id] && !states[t.world]) panelUI[t.id].ui.update(undefined);
   if (!lastShellTab) showTab(view);
+  tabsLive = true;
   applyEngineSettings();
   setStatus();
 
@@ -1784,11 +1832,23 @@ export async function mountPsys2(element, options = {}) {
       if (!destroyed) normalizerHost.prepare().catch(() => {});
     }, NORMALIZER_IDLE_MS);
   };
+  /** Resolves when the main thread has been quiet: the browser says it is idle, no long task in the last second, no turn. Gives up after `maxMs` (a busy page must not hold the models back for ever). */
+  const idleCpu = async (maxMs = 20000) => {
+    const t0 = performance.now();
+    for (;;) {
+      await new Promise((res) => (typeof requestIdleCallback === 'function' ? requestIdleCallback(res, { timeout: 2000 }) : setTimeout(res, 300)));
+      const last = longTasks.at(-1);
+      if ((!turn && !(last && performance.now() - ((last.startTime ?? 0) + (last.duration ?? 0)) < 1000)) || performance.now() - t0 > maxMs || destroyed) return;
+      await sleep(250);
+    }
+  };
   const warm = async () => {
     mark('warm-start');
     try {
       await engineClient.warm({ phase: 'rules' });   // in the worker: the rules and the translator tables; a user turn goes first
       if (destroyed) return;
+      // the models start on an idle CPU, after the first paint and only when the setting is on (the rules answer meanwhile): no long task for a second and no turn running (bounded wait)
+      if (dispatcherEnc && settings.formalizer === 'encoder') { await idleCpu(); if (destroyed) return; }
       modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
       if (dispatcherEnc && settings.formalizer === 'encoder') {
         await dispatcherEnc.prepare(); mark('dispatcher-ready');
@@ -1797,7 +1857,7 @@ export async function mountPsys2(element, options = {}) {
       } else progress.end('model', { ms: 0, label: 'Reading model: not used (the rules read)' });
     } catch { /* warm-up is best effort */ }
     if (destroyed) return;
-    // PROGRESS: the knowledge catalog's index (vocabulary, about 1.3 MB, cached): the last start-up step, and the place where an unreachable catalog is said once
+    // PROGRESS: the knowledge catalog's index (cached by version; the vocabulary is read by buckets, per message): the last start-up step, and the place where an unreachable catalog is said once
     // an unreachable catalog is asked again (4 s, 12 s, 30 s, then every minute) until it answers; the notice is said once and goes away when it does
     progress.start('catalog', 'Reading the knowledge catalog index');
     const askCatalog = async (refresh) => { try { const r = await engineClient.call('catalog', { refresh }); return r?.ok ? r : null; } catch { return null; } };

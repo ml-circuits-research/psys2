@@ -22,23 +22,21 @@
  * Worlds the model is not trained on (user.profile) are read by the rules only: no pattern of such a world is a candidate, and in `neural` a
  * message that an untrained world's rules read is left to the rules path.
  */
-import { lexIndex } from '../worlds/lexicon.mjs?v=3b553325a7';
-import { compilePattern, formalize } from './rules/index.mjs?v=6733698db0';
+import { lexIndex } from '../worlds/lexicon.mjs?v=cf048e031a';
+import { compilePattern, formalize } from './rules/index.mjs?v=36e847fd5b';
 import { candidateSegmentations } from './dispatcher-runtime.mjs?v=5cb07e6405';
 import { atom } from '../soplang/index.mjs?v=c57881f705';
 import { perf } from './perf.mjs?v=b75de4ae38';
 import { guard, TurnAborted } from './guard.mjs?v=eb1a66f556';
 
-/** The strategies and the one constant that picks the default. */
-export const NX_STRATEGIES = Object.freeze(['hybrid', 'neural', 'rules']);
-export const DEFAULT_NX_STRATEGY = 'rules';   // owner decision 2026-11-14 (defaults by the numbers): the rules read; hybrid rescued 6 turns and broke 9 of 6,744, neural is 126 right fewer. The strategies stay for measurement only (no setting offers them).
+import { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from './nx-strategy.mjs?v=079cade33c';
+export { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy };
 /** NX7 gate for the hybrid strategy (A3, with the negation guard); the neural strategy uses the negation guard and a minimum word coverage (0.6). */
 export const NX_GATES = Object.freeze({
   hybrid: Object.freeze({ tauOp: 0.99, tauFrame: 0.9, spans: true, noNeg: true }),
   // the model reads the whole message here, so a reading that leaves most words of the segment unread (a clause it did not model) is refused
   neural: Object.freeze({ tauOp: 0, tauFrame: 0, spans: true, noNeg: true, minCover: 0.6 }),
 });
-export const normalizeNxStrategy = (v) => (NX_STRATEGIES.includes(v) ? v : DEFAULT_NX_STRATEGY);
 
 
 

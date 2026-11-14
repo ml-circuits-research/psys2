@@ -6,7 +6,7 @@
 //
 // Synchronous by design (the matcher is): the host loads the vocabulary before reading (`ready()`, called by the dialogue at the start of a turn); until then nothing is open and the
 // lexicon is its closed list. Browser-safe: no node imports.
-import { lemmaCandidates } from './facts.mjs?v=279aa43ecc';
+import { lemmaCandidates } from './facts.mjs?v=7749101003';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 import { colourName, isCoreColour } from './values.mjs?v=ebf19b103c';
 import { BUNDLED_GEO } from './bundled-geo.mjs?v=69830abbea';
@@ -22,10 +22,13 @@ export function attachOpenWords(facts) { if (facts !== attached) { firstWait = n
  */
 let firstWait = null, settled = false;
 const WAIT_MS = 250;
-export async function ready() {
-  if (!attached || settled) return;
+export async function ready(text = null) {
+  if (!attached) return;
   const facts = attached;
-  const load = (async () => { try { await facts.loadVocab?.(); await facts.loadParts?.(); } catch { /* an unreachable catalog opens nothing */ } settled = facts === attached; })();
+  // a catalog with vocabulary buckets is read for the words of this message only (every turn); a whole-file catalog is read once
+  if (settled && !(text && facts.loadVocabFor && facts.vocabBuckets?.())) return;
+  const load = (async () => { try { if (text && facts.loadVocabFor) await facts.loadVocabFor(String(text).toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? []); else await facts.loadVocab?.(); await facts.loadParts?.(); } catch { /* an unreachable catalog opens nothing */ } settled = facts === attached; })();
+  if (settled) { await Promise.race([load, new Promise((res) => setTimeout(res, 600))]); return; }
   if (firstWait) return;   // already waited once: a pending load is not waited for again
   firstWait = new Promise((res) => setTimeout(res, WAIT_MS));
   await Promise.race([load, firstWait]);

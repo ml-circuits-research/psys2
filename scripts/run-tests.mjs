@@ -63,7 +63,9 @@ const SMOKE = [
   'invariants.test.mjs',               // every turn gets a reply; nothing destructive on a partly understood sentence; no tab change without a named tab (both reasoners)
   'smoke.test.mjs',                    // every world loads in both reasoners; the built webchat is fresh
   'build-versioning.test.mjs',         // the build loads: module versions and import maps agree
-  'webchat-assets.test.mjs',           // the build manifest covers every asset; cache reset keeps user data; stale page reloads once; start-up steps all end
+  'lazy-loading.test.mjs',             // the routing index, a start without other tabs' worlds or vendor assets, worlds on demand by their words, the second reading, a failed lazy fetch changes no reading
+  'catalog-vocab-buckets.test.mjs',    // the catalog vocabulary read by buckets gives the finds of the whole file
+  'webchat-assets.test.mjs',         // the build manifest covers every asset; cache reset keeps user data; stale page reloads once; start-up steps all end
   'network-never-changes-reading.test.mjs',   // no network effect on a reading
   'undo-redo.test.mjs',                // undo / redo
   'no-romanian-in-worlds.test.mjs',    // nothing but English in worlds/
