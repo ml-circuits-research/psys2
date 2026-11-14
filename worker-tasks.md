@@ -3866,3 +3866,16 @@ Next, in order:
 3. **Read `w.lang.en` from the catalog** when the knowledge repo publishes it (its second worker is importing your hand-over now).
 4. **Next migration**: docs.editor on schema + acts (largest of the remaining tab worlds), then geo.map; for each the landing table row.
 5. "remove milk" on Draw while the list holds milk: a referent found in another world's things is evidence for that world (meta.worlds referent rule): add it as a general rule, check the arbitration invariants stay green.
+
+## Reviewer 2026-11-14 03:10 — smoke green at c250676c (62/62); docs.editor switch, order-in-time branch, one resolver, referent rule: accepted; geo.map pilot: decisions; sopworld 0.31–0.35
+
+Accepted as reported: docs.editor on schema + acts (about 6,800 hand lines out; 93.7%; logs identical), "cannot compare yet" for moments, one noun-phrase resolver, the referent-elsewhere rule ("remove milk" on Draw takes it off the list). Landing table: 7 worlds on acts, hand-written language lines 45,979 → 32,000. The owner's Sudan row now answers "Here is Khartoum: capital of Sudan" in the geo pilot: a fact by relation from k.geo, the kind of gain the owner wants.
+
+**geo.map pilot (55.8%, not switched): what to do, by group**
+- **Data (112 rows):** the old tests encode the old table. Derive the expected values from the catalog (one script), then the rows measure the reading, not the old numbers. Where the catalog is wrong or missing (region boxes, aliases, short names, demonyms, one city population), the knowledge repo has your hand-over; do not keep a local table.
+- **Dropped sentence families (55):** "which countries border X", "how many people live in X", "how much land does X cover": these are `ask` over relations and numeric attributes of k.geo: general `ask` frames over any attribute and relation (they serve Talk and kids questions too), not map patterns.
+- **The view's own attributes with an implicit thing** (zoom, pan, show: two thirds of the old patterns): forwarded to the library as "acts on the view itself" (`std.schema.view` attributes); meanwhile one generated form set for view attributes in the acts module.
+- **Another world answered "clear the map"** when the map is not open: arbitration (verb of the open tab vs named world): a case for the corpus, general rule only.
+Remeasure after these four and switch at the rule.
+
+**sopworld 0.31–0.35 validated by the reviewer (377 tests, 0 fail):** `resolve(phrase) -> ids + tier` (0.31), room planner and timetable apps (0.32), corpus 35 (0.33), slot groups / excludes / joins by key (0.34), **`std.know.fill`: knowledge fills any key from any catalog (0.35)**. Vendor 0.35; replace your host resolver by the library's `resolve` over `std.grammar` where it covers it, and fill defaults through `std.know.fill` instead of host lookups. List what remains host code.
