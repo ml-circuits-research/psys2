@@ -1,0 +1,131 @@
+@tpl.media.music.playNote core.template
+    for=action.music.playNote
+    text="{value}"
+
+@tpl.media.music.playScale core.template
+    for=action.music.playScale
+    text="{value}"
+
+@tpl.media.music.playAny core.template
+    for=action.music.playAny
+    text="{value}"
+
+@tpl.media.music.random core.template
+    for=action.music.random
+    text="{value}"
+
+@tpl.media.music.replay core.template
+    for=action.music.replay
+    text="{value}"
+
+@tpl.media.music.stop core.template
+    for=action.music.stop
+    text="{value}"
+
+@tpl.media.music.tempo core.template
+    for=action.music.tempo
+    text="{value}"
+
+@tpl.media.music.volume core.template
+    for=action.music.volume
+    text="{value}"
+
+@tpl.media.music.instrument core.template
+    for=action.music.instrument
+    text="{value}"
+
+@tpl.media.music.octave core.template
+    for=action.music.octave
+    text="{value}"
+
+@tpl.media.music.transpose core.template
+    for=action.music.transpose
+    text="{value}"
+
+@tpl.media.music.transposeTo core.template
+    for=action.music.transposeTo
+    text="{value}"
+
+@tpl.media.music.key core.template
+    for=action.music.key
+    text="{value}"
+
+@tpl.media.music.melodySet core.template
+    for=action.music.melodySet
+    text="{value}"
+
+@tpl.media.music.melodyShow core.template
+    for=action.music.melodyShow
+    text="{value}"
+
+@tpl.media.music.showNotes core.template
+    for=action.music.showNotes
+    text="{value}"
+
+@tpl.media.music.showScore core.template
+    for=action.music.showScore
+    text="{value}"
+
+@tpl.media.music.listSongs core.template
+    for=action.music.listSongs
+    text="{value}"
+
+@tpl.media.music.listInstruments core.template
+    for=action.music.listInstruments
+    text="{value}"
+
+@tpl.media.music.listTypes core.template
+    for=action.music.listTypes
+    text="{value}"
+
+@tpl.media.music.scaleNotes core.template
+    for=action.music.scaleNotes
+    text="{value}"
+
+@tpl.media.music.chordNotes core.template
+    for=action.music.chordNotes
+    text="{value}"
+
+@tpl.media.music.chordName core.template
+    for=action.music.chordName
+    text="{value}"
+
+@tpl.media.music.keySig core.template
+    for=action.music.keySig
+    text="{value}"
+
+@tpl.media.music.keyWith core.template
+    for=action.music.keyWith
+    text="{value}"
+
+@tpl.media.music.interval core.template
+    for=action.music.interval
+    text="{value}"
+
+@tpl.media.music.above core.template
+    for=action.music.above
+    text="{value}"
+
+@tpl.media.music.relative core.template
+    for=action.music.relative
+    text="{value}"
+
+@tpl.media.music.keyChords core.template
+    for=action.music.keyChords
+    text="{value}"
+
+@tpl.media.music.frequency core.template
+    for=action.music.frequency
+    text="{value}"
+
+@tpl.media.music.enharmonic core.template
+    for=action.music.enharmonic
+    text="{value}"
+
+@tpl.media.music.status core.template
+    for=action.music.status
+    text="{value}"
+
+@tpl.media.music.songInfo core.template
+    for=action.music.songInfo
+    text="{value}"
