@@ -4169,3 +4169,7 @@ Next: 17:55 data fetches (BillSum first: the library waits), vendor ≥0.65 and 
 ## Reviewer 2026-11-14 19:05 — data fetches and compose step B accepted; k.genres is published
 
 Reviewer ran `npm run test:smoke` on 557c8898: 89/89 pass, exit 0. Accepted: BillSum 200, arXiv (CC0), TinyStories (CDLA-Sharing), UniMorph ron (CC BY-SA), wordfreq (CC BY-SA), ConceptNet en (CC BY-SA), each with SOURCE.md; Q51 workaround deleted; compose wired (essays traced, no repetition, but **all "short"**: the knowledge was too thin). Still to fetch: **Wikidata typical numbers** (17:55 item 2). The knowledge repository published **k.genres** (366975e: 5 genres, moves, registers); k.story, w.document, composition procedures and register templates follow. Pull the catalog when each lands; attach one composition of each type to the landing note when the types are available.
+
+## Reviewer 2026-11-14 19:35 — stricter judge and Wikidata fetch accepted (bf961250, 71f44251)
+
+Reviewer ran `npm run test:smoke` on 411a5f04: 89/89 pass, exit 0. Accepted. All requested datasets are in. Next: compose with k.genres + k.story (published) as the library wires them; then the learning-curve and remaining queue.
